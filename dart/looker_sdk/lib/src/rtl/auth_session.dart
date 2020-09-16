@@ -5,9 +5,11 @@ import 'transport.dart';
 class AuthSession {
   Transport transport;
   AuthToken _authToken = AuthToken();
-  String _apiPath = "/api/$defaultApiVersion";
+  String _apiPath;
 
-  AuthSession(Transport this.transport) {}
+  AuthSession(Transport this.transport) {
+    _apiPath = "/api/${transport.settings.version}";
+  }
 
   get apiPath {
     return _apiPath;
@@ -32,6 +34,10 @@ class AuthSession {
     return _authToken;
   }
 
+  // AuthAccessToken jsonHandler(Map json) {
+  //   return AuthAccessToken.fromJson(json);
+  // }
+
   Future<void> login([dynamic sudoId]) async {
     if (sudoId != null) {
       throw UnimplementedError("support for sudo");
@@ -46,15 +52,31 @@ class AuthSession {
           credentials["client_secret"] == null) {
         throw Exception("credentials required");
       }
-      AuthAccessToken token = await ok(transport.request(HttpMethod.post,
-          "/login", null, credentials, null, AuthAccessToken()));
+
+      AuthAccessToken jsonHandler(dynamic json) {
+        return AuthAccessToken.fromJson(json);
+      }
+
+      AuthAccessToken token = await ok(transport.request(
+          jsonHandler,
+          HttpMethod.post,
+          "/api/${transport.settings.version}/login",
+          null,
+          credentials,
+          null));
       this._authToken.setAccessToken(token);
     }
   }
 
   Future<bool> logout() async {
+    Function jsonHandler = (Map json) => json;
     try {
-      await ok(transport.request(HttpMethod.delete, "/logout", null, null,
+      await ok(transport.request(
+          jsonHandler,
+          HttpMethod.delete,
+          "/logout",
+          null,
+          null,
           {"Authorization": "Bearer ${_authToken.accessToken.accessToken}"}));
       return true;
     } catch (exception) {

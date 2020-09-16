@@ -1,67 +1,79 @@
 import 'package:looker_sdk/looker_rtl.dart';
 import 'package:looker_sdk/src/rtl/sdk.dart';
+import 'package:looker_sdk/src/sdk/3.1/models.dart' as models31;
+import 'package:looker_sdk/src/sdk/4.0/models.dart' as models40;
 
 void main() async {
+  // await run31();
+  await run40();
+}
+
+void run40() async {
+  Looker40SDK sdk = await Sdk.create40Sdk({
+    "base_url": "https://self-signed.looker.com:19999",
+    "credentials_callback": credentialsCallback
+  });
+  try {
+    List<models40.DBConnection> connections =
+        await sdk.ok(sdk.all_connections());
+    connections.forEach((connection) => print(connection.name));
+    models40.DBConnection connection =
+        await sdk.ok(sdk.connection(connections[0].name, "name,host,port"));
+    print(
+        "name=${connection.name} host=${connection.host} port=${connection.port}");
+    models40.WriteDBConnection newConnection = models40.WriteDBConnection();
+    SDKResponse resp = await sdk.connection("TestConnection");
+    if (resp.statusCode == 200) {
+      print("TestConnection already exists");
+    } else {
+      newConnection.name = 'TestConnection';
+      newConnection.dialect_name = "mysql";
+      newConnection.host = "db1.looker.com";
+      newConnection.port = 3306;
+      newConnection.username = "looker_demoX";
+      newConnection.password = "look_your_data";
+      newConnection.database = "demo_db2";
+      newConnection.tmp_db_name = "looker_demo_scratch";
+      connection = await sdk.ok(sdk.create_connection(newConnection));
+      print("created ${connection.name}");
+    }
+    models40.WriteDBConnection updateConnection = models40.WriteDBConnection();
+    updateConnection.username = "looker_demo";
+    connection =
+        await sdk.ok(sdk.update_connection("TestConnection", updateConnection));
+    print("Connection updated: username=${connection.username}");
+    List<models40.DBConnectionTestResult> testResults = await sdk
+        .ok(sdk.test_connection("TestConnection", DelimList(["connect"])));
+    if (testResults.length == 0) {
+      print("No connection tests run");
+    } else {
+      testResults.forEach((i) => print("test result: ${i.name}=${i.message}"));
+    }
+    String deleteResult = await sdk.ok(sdk.delete_connection("TestConnection"));
+    print("Delete result $deleteResult");
+  } catch (error, stacktrace) {
+    print(error);
+    print(stacktrace);
+  }
+}
+
+void run31() async {
   Looker31SDK sdk = await Sdk.create31Sdk({
     "base_url": "https://self-signed.looker.com:19999",
     "credentials_callback": credentialsCallback
   });
   try {
-    // var result = await sdk.ok(sdk.all_connections());
-    var result = await sdk.all_connections();
+    List<models31.DBConnection> result = await sdk.ok(sdk.all_connections());
     print(result);
-  } catch (error) {
+  } catch (error, stacktrace) {
     print(error);
+    print(stacktrace);
   }
 }
 
 Map credentialsCallback() {
   return {
-    "client_id": "Nbwy5Y66vnvrZv7ZRDvN",
-    "client_secret": "nmj6VskXQwBzqVTnDtJ6cmjj"
+    "client_id": "get from looker instance",
+    "client_secret": "get from looker instance"
   };
 }
-
-// void main() {
-//   // all_connections();
-//   print("Hello World");
-//   Transport t = Transport();
-//   print(t);
-//   var p = Parent("John");
-//   p.p();
-//   p.t();
-//   p.t("XXX", true);
-//   var c = Child("Jack");
-//   c.p();
-//   String s = "Sam";
-//   print(s);
-//   String w = "ABCD";
-//   print(w);
-// }
-
-// class Parent {
-//   String name;
-
-//   Parent(String this.name) {}
-
-//   p() {
-//     print(name);
-//   }
-
-//   t([String s, /* */ bool b]) {
-//     if (b == null) {
-//       print("bool null");
-//     } else {
-//       print(b);
-//     }
-//     if (s == null) {
-//       print("String null");
-//     } else {
-//       print(s);
-//     }
-//   }
-// }
-
-// class Child extends Parent {
-//   Child(String name) : super(name) {}
-// }

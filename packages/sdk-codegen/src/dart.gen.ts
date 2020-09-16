@@ -115,12 +115,17 @@ class ${this.sdkClassName()}Stream extends APIMethods {
   modelsPrologue(_indent: string) {
     return `
 // ${this.warnEditing()}
-
 `
   }
 
   modelsEpilogue(_indent: string) {
     return ''
+  }
+
+  describeProperty(property: IProperty) {
+    return `${property.description || property.name}${
+      property.readOnly ? ' (read-only)' : ''
+    }`
   }
 
   // TODO create methodHeader and typeHeader
@@ -254,9 +259,35 @@ class ${this.sdkClassName()}Stream extends APIMethods {
     return (
       this.methodSignature(indent, method) +
       this.encodePathParams(bump, method) +
+      this.responseHandler(method) +
       this.httpCall(bump, method) +
       `\n${indent}}`
     )
+  }
+
+  responseHandler(method: IMethod) {
+    const type = this.typeMap(method.type)
+    if (type.name === 'List<DBConnection>') {
+      console.log(method.type.className)
+    }
+    let returnVerb = ''
+    let convert = ''
+    if (type.name !== 'void') {
+      returnVerb = 'return'
+      if (!method.type.customType) {
+        convert = 'json;'
+      } else if (method.type.className === 'ArrayType') {
+        const map = this.typeMap(method.type?.elementType!)
+        convert = `json.map<${map.name}>((i) => ${map.name}.fromJson(i)).toList();`
+      } else {
+        convert = `${type.name}.fromJson(json);`
+      }
+    }
+    return `
+      ${type.name} responseHandler(dynamic json) {
+        ${returnVerb} ${convert}
+      } 
+    `
   }
 
   streamerSignature(indent: string, method: IMethod) {
@@ -268,6 +299,7 @@ class ${this.sdkClassName()}Stream extends APIMethods {
     return (
       this.streamerSignature(indent, method) +
       this.encodePathParams(bump, method) +
+      this.responseHandler(method) +
       this.streamCall(bump, method) +
       `\n${indent}}`
     )
@@ -308,9 +340,103 @@ class ${this.sdkClassName()}Stream extends APIMethods {
     return (
       this.typeSignature(indent, type) +
       propertyValues +
+      this.defaultConstructor(type) +
+      this.toJson(type) +
+      this.fromJson(type) +
       this.construct(indent, type) +
       `${this.endTypeStr ? indent : ''}${ender}`
     )
+  }
+
+  defaultConstructor(type: IType) {
+    return type instanceof EnumType
+      ? ''
+      : `
+    
+    ${type.name}() {}
+    `
+  }
+
+  toJson(type: IType) {
+    let toJson = ''
+    if (!(type instanceof EnumType)) {
+      const props: string[] = []
+      Object.values(type.properties).forEach((prop) => {
+        const name = prop.name === 'default' ? 'default_value' : prop.name
+        if (prop.type.customType) {
+          if (prop.type.className === 'ArrayType') {
+            // props.push(
+            //   `${name} = source['${prop.name}'] == null ? null : (source['${prop.name}'] as List).map((i) => ${prop.type.customType}.fromJson(i)).toList()`
+            // )
+          } else {
+            // props.push(
+            //   `${name} = source['${prop.name}'] == null ? null : ${prop.type.customType}.fromJson(source['${prop.name}'])`
+            // )
+          }
+        } else {
+          if (prop.type.className === 'ArrayType') {
+            // const listType = this.typeMap(prop.type?.elementType!).name
+            // props.push(
+            //   `${name} = source['${prop.name}'] == null ? null : source['${prop.name}'].map<${listType}>((i) => i as ${listType}).toList()`
+            // )
+          } else {
+            props.push(`'${prop.name}' : ${name}`)
+          }
+        }
+      })
+      toJson = `
+      Map toJson() => 
+      {
+        ${props.join(',\n')}
+      };
+      `
+    }
+    return toJson
+  }
+
+  fromJson(type: IType) {
+    let fromJson = ''
+    if (!(type instanceof EnumType)) {
+      const props: string[] = []
+      Object.values(type.properties).forEach((prop) => {
+        const name = prop.name === 'default' ? 'default_value' : prop.name
+        if (prop.type.customType) {
+          if (prop.type.className === 'ArrayType') {
+            props.push(
+              `${name} = source['${prop.name}'] == null ? null : (source['${prop.name}'] as List).map((i) => ${prop.type.customType}.fromJson(i)).toList()`
+            )
+          } else {
+            props.push(
+              `${name} = source['${prop.name}'] == null ? null : ${prop.type.customType}.fromJson(source['${prop.name}'])`
+            )
+          }
+        } else {
+          if (prop.type.className === 'ArrayType') {
+            const listType = this.typeMap(prop.type?.elementType!).name
+            props.push(
+              `${name} = source['${prop.name}'] == null ? null : source['${prop.name}'].map<${listType}>((i) => i as ${listType}).toList()`
+            )
+          } else {
+            const propType = this.typeMap(prop.type!).name
+            if (propType === 'String') {
+              // Dart is very picky about types. For type to string
+              props.push(
+                `${name} = source['${prop.name}'] == null ? null : source['${prop.name}'].toString()`
+              )
+            } else {
+              props.push(`${name} = source['${prop.name}']`)
+            }
+          }
+        }
+      })
+      if (props.length > 0) {
+        fromJson = `
+        ${type.name}.fromJson(Map source)
+          : ${props.join(',\n')};
+        `
+      }
+    }
+    return fromJson
   }
 
   errorResponses(_indent: string, _method: IMethod) {
@@ -407,14 +533,32 @@ class ${this.sdkClassName()}Stream extends APIMethods {
     // let result = this.argFill('', 'options')
     // let result = this.argFill('', this.argGroup(indent, method.cookieArgs, request))
     // result = this.argFill(result, this.argGroup(indent, method.headerArgs, request))
-    let result = this.argFill(
-      '',
-      method.bodyArg ? `${request}${method.bodyArg}` : this.nullStr
-    )
+    let result = this.argFill('', this.bodyArg(method, request))
     result = this.argFill(
       result,
       this.argGroup(indent, method.queryArgs, request)
     )
+    return result
+  }
+
+  bodyArg(method: IMethod, request: String) {
+    let result = this.nullStr
+    if (method.bodyArg) {
+      if (method.bodyParams.length > 0) {
+        const bodyParam = method.bodyParams[0]
+        if (
+          bodyParam.type.className === 'ArrayType' ||
+          bodyParam.type.className === 'IntrinsicType' ||
+          bodyParam.type.className === 'HashType'
+        ) {
+          result = `${request}${method.bodyArg}`
+        } else {
+          result = `${request}${method.bodyArg} == null ? null : ${request}${method.bodyArg} .toJson()`
+        }
+      } else {
+        result = `${request}${method.bodyArg}`
+      }
+    }
     return result
   }
 
@@ -427,7 +571,9 @@ class ${this.sdkClassName()}Stream extends APIMethods {
     // const errors = this.errorResponses(indent, method)
     return `${bump}return ${this.it(
       method.httpMethod.toLowerCase()
-    )}(${this.httpPath(method.endpoint, request)}${args ? ', ' + args : ''});`
+    )}(responseHandler, ${this.httpPath(method.endpoint, request)}${
+      args ? ', ' + args : ''
+    });`
   }
 
   streamCall(indent: string, method: IMethod) {
@@ -438,7 +584,9 @@ class ${this.sdkClassName()}Stream extends APIMethods {
     // const errors = this.errorResponses(indent, method)
     return `${bump}return ${this.it(
       method.httpMethod.toLowerCase()
-    )}(${this.httpPath(method.endpoint, request)}${args ? ', ' + args : ''});`
+    )}(responseHandler, ${this.httpPath(method.endpoint, request)}${
+      args ? ', ' + args : ''
+    });`
   }
 
   summary(indent: string, text: string | undefined) {
@@ -495,8 +643,8 @@ class ${this.sdkClassName()}Stream extends APIMethods {
         case 'ArrayType':
           return { default: this.nullStr, name: `List<${map.name}>` }
         case 'HashType': {
-          const mapName =
-            type.elementType.name === 'string' ? 'dynamic' : map.name // TODO fix bad API spec, like MergeQuery vis_config
+          const mapName = 'dynamic'
+          // type.elementType.name === 'string' ? 'dynamic' : map.name // TODO fix bad API spec, like MergeQuery vis_config
           // TODO figure out this bizarre string template error either in IntelliJ or Typescript
           // return {name: `Map<String,${map.name}>`, default: '{}'}
           return { default: this.nullStr, name: 'Map<String' + `,${mapName}>` }

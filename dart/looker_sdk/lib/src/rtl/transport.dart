@@ -1,5 +1,4 @@
 import 'dart:convert';
-import 'dart:mirrors';
 import 'package:http/http.dart' as http;
 import 'package:looker_sdk/looker_rtl.dart';
 import 'api_settings.dart';
@@ -15,28 +14,15 @@ class SDKResponse<T> {
   T _result;
   int _statusCode;
   String _statusText;
+  dynamic _rawResult;
 
-  SDKResponse.createFromHttpResponse(http.Response response,
-      [Function<T>() create]) {
-    var statusCode = response.statusCode;
-    var statusText = response.reasonPhrase;
-    var responseBody = jsonDecode(response.body);
-    print('Response status: ${statusCode}');
-    // print('Response body: ${responseBody}');
-    print('Response body is Map: ${responseBody is Map}');
-    print('Response body is List: ${responseBody is List}');
-    _ok = statusCode >= 200 && statusCode <= 299;
-    _statusCode = statusCode;
-    _statusText = statusText;
-    _statusCode = statusCode;
-    if (result == null) {
-      _result = responseBody as T;
-    } else {
-      _result = result;
-      var reflectedClass = reflect(_result);
-      reflectedClass.invoke(Symbol('populateFromMap'), [responseBody]);
-    }
-  }
+  SDKResponse(bool ok, int statusCode, String statusText,
+      [dynamic result, dynamic rawResult])
+      : _ok = ok,
+        _statusCode = statusCode,
+        _statusText = statusText,
+        _result = result as T,
+        _rawResult = rawResult;
 
   get ok {
     return _ok;
@@ -53,6 +39,14 @@ class SDKResponse<T> {
   get statusText {
     return _statusText;
   }
+
+  get rawResult {
+    return _rawResult;
+  }
+
+  get decodedRawResult {
+    return _rawResult == null ? null : json.decode(_rawResult);
+  }
 }
 
 class Transport {
@@ -65,47 +59,70 @@ class Transport {
     throw UnimplementedError("rawRequest");
   }
 
-  Future<SDKResponse<T>> request<T>(HttpMethod method, String path,
-      [Map queryParams,
-      Map body,
-      Map<String, String> headers,
-      // T responseInstance,
-      Function<T>() create]) async {
-    print(">>>>> invoke $path");
+  Future<SDKResponse<T>> request<T>(
+      T Function(dynamic json) responseHandler, HttpMethod method, String path,
+      [Map queryParams, dynamic body, Map<String, String> headers]) async {
+    var fullPath = makePath(path, queryParams);
     switch (method) {
       case HttpMethod.get:
-        print(path);
-        print(headers);
-        var response =
-            await http.get("${settings.baseUrl}$path", headers: headers);
-        return SDKResponse<T>.createFromHttpResponse(
-            response, responseInstance);
-        break;
+        var response = await http.get(fullPath, headers: headers);
+        return handleResponse(response, responseHandler);
       case HttpMethod.post:
-        print(json.encode(body));
-        http.Response response = await http.post("${settings.baseUrl}$path",
-            headers: headers, body: body);
-        return SDKResponse<T>.createFromHttpResponse(
-            response, responseInstance);
-        break;
+        http.Response response =
+            await http.post(fullPath, headers: headers, body: body);
+        return handleResponse(response, responseHandler);
       case HttpMethod.patch:
-        throw UnimplementedError("patch");
-        break;
+        http.Response response =
+            await http.patch(fullPath, headers: headers, body: body);
+        return handleResponse(response, responseHandler);
       case HttpMethod.delete:
-        throw UnimplementedError("delete");
-        break;
+        var response = await http.delete(fullPath, headers: headers);
+        return handleResponse(response, responseHandler);
       case HttpMethod.put:
-        throw UnimplementedError("put");
-        break;
+        http.Response response =
+            await http.put(fullPath, headers: headers, body: body);
+        return handleResponse(response, responseHandler);
       case HttpMethod.head:
         throw UnimplementedError("head");
-        break;
     }
-    throw UnimplementedError("how did I get hear");
+    throw UnimplementedError("how did I get here?");
+  }
+
+  String makePath(String path, [Map queryParams]) {
+    var queryString = "";
+    if (queryParams != null) {
+      List params = [];
+      queryParams.forEach((name, value) {
+        if (value != null) {
+          params.add(
+              "${Uri.encodeComponent(name)}=${Uri.encodeComponent(value.toString())}");
+        }
+      });
+      if (params.length > 0) {
+        queryString = "?${params.join("&")}";
+      }
+    }
+    return "${settings.baseUrl}$path$queryString";
   }
 
   Future<SDKResponse> stream(Function callback, HttpMethod method, String path,
       [Map queryParams, Map body, Map options]) async {
     throw UnimplementedError("stream");
+  }
+
+  SDKResponse<T> handleResponse<T>(
+      http.Response response, T Function(dynamic response) responseHandler) {
+    var ok = response.statusCode >= 200 && response.statusCode <= 299;
+    var result = null;
+    if (ok) {
+      if (response.headers["content-type"] == "application/json") {
+        var json = jsonDecode(response.body);
+        result = responseHandler(json);
+      } else {
+        result = response.body;
+      }
+    }
+    return SDKResponse(
+        ok, response.statusCode, response.reasonPhrase, result, response.body);
   }
 }

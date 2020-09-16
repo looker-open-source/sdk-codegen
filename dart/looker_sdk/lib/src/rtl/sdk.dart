@@ -5,7 +5,7 @@ class Sdk {
   static Looker40SDK _40Sdk;
 
   static Future<Looker31SDK> create31Sdk(Map config) async {
-    ApiSettings settings = ApiSettings.fromMap(config);
+    ApiSettings settings = ApiSettings.fromMap(apiVersion31, config);
     Transport transport = Transport(settings);
     AuthSession authSession = AuthSession(transport);
     await authSession.login();
@@ -21,7 +21,7 @@ class Sdk {
   }
 
   static Future<Looker40SDK> create40Sdk(Map config) async {
-    ApiSettings settings = ApiSettings.fromMap(config);
+    ApiSettings settings = ApiSettings.fromMap(apiVersion40, config);
     Transport transport = Transport(settings);
     AuthSession authSession = AuthSession(transport);
     await authSession.login();

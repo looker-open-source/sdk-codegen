@@ -3,11 +3,10 @@ class AuthAccessToken {
   String _tokenType;
   int _expiresIn;
 
-  populateFromMap(Map map) {
-    _accessToken = map["access_token"];
-    _tokenType = map["token_type"];
-    _expiresIn = map["expires_in"];
-  }
+  AuthAccessToken.fromJson(Map map)
+      : _accessToken = map["access_token"],
+        _tokenType = map["token_type"],
+        _expiresIn = map["expires_in"];
 
   get accessToken {
     return _accessToken;

@@ -78,8 +78,12 @@ class Looker31SDKStream extends APIMethods {
      * @param {String} client_secret client_secret part of API3 Key.
      */
       String client_secret]) async {
-    return this.post(
-        "/login", {"client_id": client_id, "client_secret": client_secret});
+    AccessToken responseHandler(dynamic json) {
+      return AccessToken.fromJson(json);
+    }
+
+    return this.post(responseHandler, "/login",
+        {"client_id": client_id, "client_secret": client_secret});
   }
 
   /**
@@ -112,7 +116,13 @@ class Looker31SDKStream extends APIMethods {
      */
       bool associative]) async {
     var path_user_id = encodeParam(user_id);
-    return this.post("/login/${path_user_id}", {"associative": associative});
+
+    AccessToken responseHandler(dynamic json) {
+      return AccessToken.fromJson(json);
+    }
+
+    return this.post(responseHandler, "/login/${path_user_id}",
+        {"associative": associative});
   }
 
   /**
@@ -121,7 +131,11 @@ class Looker31SDKStream extends APIMethods {
    * DELETE /logout -> ByteArray
    */
   Future<SDKResponse<String>> logout() async {
-    return this.delete("/logout");
+    String responseHandler(dynamic json) {
+      return json;
+    }
+
+    return this.delete(responseHandler, "/logout");
   }
 
   //endregion ApiAuth: API Authentication
@@ -171,7 +185,12 @@ class Looker31SDKStream extends APIMethods {
      * @param {EmbedSsoParams} body
      */
       EmbedSsoParams body) async {
-    return this.post("/embed/sso_url", null, body);
+    EmbedUrlResponse responseHandler(dynamic json) {
+      return EmbedUrlResponse.fromJson(json);
+    }
+
+    return this.post(responseHandler, "/embed/sso_url", null,
+        body == null ? null : body.toJson());
   }
 
   /**
@@ -195,7 +214,11 @@ class Looker31SDKStream extends APIMethods {
    * GET /ldap_config -> ByteArray
    */
   Future<SDKResponse<LDAPConfig>> ldap_config() async {
-    return this.get("/ldap_config");
+    LDAPConfig responseHandler(dynamic json) {
+      return LDAPConfig.fromJson(json);
+    }
+
+    return this.get(responseHandler, "/ldap_config");
   }
 
   /**
@@ -218,7 +241,12 @@ class Looker31SDKStream extends APIMethods {
      * @param {WriteLDAPConfig} body
      */
       WriteLDAPConfig body) async {
-    return this.patch("/ldap_config", null, body);
+    LDAPConfig responseHandler(dynamic json) {
+      return LDAPConfig.fromJson(json);
+    }
+
+    return this.patch(responseHandler, "/ldap_config", null,
+        body == null ? null : body.toJson());
   }
 
   /**
@@ -248,7 +276,12 @@ class Looker31SDKStream extends APIMethods {
      * @param {WriteLDAPConfig} body
      */
       WriteLDAPConfig body) async {
-    return this.put("/ldap_config/test_connection", null, body);
+    LDAPConfigTestResult responseHandler(dynamic json) {
+      return LDAPConfigTestResult.fromJson(json);
+    }
+
+    return this.put(responseHandler, "/ldap_config/test_connection", null,
+        body == null ? null : body.toJson());
   }
 
   /**
@@ -280,7 +313,12 @@ class Looker31SDKStream extends APIMethods {
      * @param {WriteLDAPConfig} body
      */
       WriteLDAPConfig body) async {
-    return this.put("/ldap_config/test_auth", null, body);
+    LDAPConfigTestResult responseHandler(dynamic json) {
+      return LDAPConfigTestResult.fromJson(json);
+    }
+
+    return this.put(responseHandler, "/ldap_config/test_auth", null,
+        body == null ? null : body.toJson());
   }
 
   /**
@@ -301,7 +339,12 @@ class Looker31SDKStream extends APIMethods {
      * @param {WriteLDAPConfig} body
      */
       WriteLDAPConfig body) async {
-    return this.put("/ldap_config/test_user_info", null, body);
+    LDAPConfigTestResult responseHandler(dynamic json) {
+      return LDAPConfigTestResult.fromJson(json);
+    }
+
+    return this.put(responseHandler, "/ldap_config/test_user_info", null,
+        body == null ? null : body.toJson());
   }
 
   /**
@@ -322,7 +365,12 @@ class Looker31SDKStream extends APIMethods {
      * @param {WriteLDAPConfig} body
      */
       WriteLDAPConfig body) async {
-    return this.put("/ldap_config/test_user_auth", null, body);
+    LDAPConfigTestResult responseHandler(dynamic json) {
+      return LDAPConfigTestResult.fromJson(json);
+    }
+
+    return this.put(responseHandler, "/ldap_config/test_user_auth", null,
+        body == null ? null : body.toJson());
   }
 
   /**
@@ -342,7 +390,11 @@ class Looker31SDKStream extends APIMethods {
    * GET /oidc_config -> ByteArray
    */
   Future<SDKResponse<OIDCConfig>> oidc_config() async {
-    return this.get("/oidc_config");
+    OIDCConfig responseHandler(dynamic json) {
+      return OIDCConfig.fromJson(json);
+    }
+
+    return this.get(responseHandler, "/oidc_config");
   }
 
   /**
@@ -363,7 +415,12 @@ class Looker31SDKStream extends APIMethods {
      * @param {WriteOIDCConfig} body
      */
       WriteOIDCConfig body) async {
-    return this.patch("/oidc_config", null, body);
+    OIDCConfig responseHandler(dynamic json) {
+      return OIDCConfig.fromJson(json);
+    }
+
+    return this.patch(responseHandler, "/oidc_config", null,
+        body == null ? null : body.toJson());
   }
 
   /**
@@ -377,7 +434,12 @@ class Looker31SDKStream extends APIMethods {
      */
       String test_slug) async {
     var path_test_slug = encodeParam(test_slug);
-    return this.get("/oidc_test_configs/${path_test_slug}");
+
+    OIDCConfig responseHandler(dynamic json) {
+      return OIDCConfig.fromJson(json);
+    }
+
+    return this.get(responseHandler, "/oidc_test_configs/${path_test_slug}");
   }
 
   /**
@@ -391,7 +453,12 @@ class Looker31SDKStream extends APIMethods {
      */
       String test_slug) async {
     var path_test_slug = encodeParam(test_slug);
-    return this.delete("/oidc_test_configs/${path_test_slug}");
+
+    String responseHandler(dynamic json) {
+      return json;
+    }
+
+    return this.delete(responseHandler, "/oidc_test_configs/${path_test_slug}");
   }
 
   /**
@@ -404,7 +471,12 @@ class Looker31SDKStream extends APIMethods {
      * @param {WriteOIDCConfig} body
      */
       WriteOIDCConfig body) async {
-    return this.post("/oidc_test_configs", null, body);
+    OIDCConfig responseHandler(dynamic json) {
+      return OIDCConfig.fromJson(json);
+    }
+
+    return this.post(responseHandler, "/oidc_test_configs", null,
+        body == null ? null : body.toJson());
   }
 
   /**
@@ -413,7 +485,11 @@ class Looker31SDKStream extends APIMethods {
    * GET /password_config -> ByteArray
    */
   Future<SDKResponse<PasswordConfig>> password_config() async {
-    return this.get("/password_config");
+    PasswordConfig responseHandler(dynamic json) {
+      return PasswordConfig.fromJson(json);
+    }
+
+    return this.get(responseHandler, "/password_config");
   }
 
   /**
@@ -426,7 +502,12 @@ class Looker31SDKStream extends APIMethods {
      * @param {WritePasswordConfig} body
      */
       WritePasswordConfig body) async {
-    return this.patch("/password_config", null, body);
+    PasswordConfig responseHandler(dynamic json) {
+      return PasswordConfig.fromJson(json);
+    }
+
+    return this.patch(responseHandler, "/password_config", null,
+        body == null ? null : body.toJson());
   }
 
   /**
@@ -436,7 +517,11 @@ class Looker31SDKStream extends APIMethods {
    */
   Future<SDKResponse<String>>
       force_password_reset_at_next_login_for_all_users() async {
-    return this.put(
+    String responseHandler(dynamic json) {
+      return json;
+    }
+
+    return this.put(responseHandler,
         "/password_config/force_password_reset_at_next_login_for_all_users");
   }
 
@@ -457,7 +542,11 @@ class Looker31SDKStream extends APIMethods {
    * GET /saml_config -> ByteArray
    */
   Future<SDKResponse<SamlConfig>> saml_config() async {
-    return this.get("/saml_config");
+    SamlConfig responseHandler(dynamic json) {
+      return SamlConfig.fromJson(json);
+    }
+
+    return this.get(responseHandler, "/saml_config");
   }
 
   /**
@@ -478,7 +567,12 @@ class Looker31SDKStream extends APIMethods {
      * @param {WriteSamlConfig} body
      */
       WriteSamlConfig body) async {
-    return this.patch("/saml_config", null, body);
+    SamlConfig responseHandler(dynamic json) {
+      return SamlConfig.fromJson(json);
+    }
+
+    return this.patch(responseHandler, "/saml_config", null,
+        body == null ? null : body.toJson());
   }
 
   /**
@@ -492,7 +586,12 @@ class Looker31SDKStream extends APIMethods {
      */
       String test_slug) async {
     var path_test_slug = encodeParam(test_slug);
-    return this.get("/saml_test_configs/${path_test_slug}");
+
+    SamlConfig responseHandler(dynamic json) {
+      return SamlConfig.fromJson(json);
+    }
+
+    return this.get(responseHandler, "/saml_test_configs/${path_test_slug}");
   }
 
   /**
@@ -506,7 +605,12 @@ class Looker31SDKStream extends APIMethods {
      */
       String test_slug) async {
     var path_test_slug = encodeParam(test_slug);
-    return this.delete("/saml_test_configs/${path_test_slug}");
+
+    String responseHandler(dynamic json) {
+      return json;
+    }
+
+    return this.delete(responseHandler, "/saml_test_configs/${path_test_slug}");
   }
 
   /**
@@ -519,7 +623,12 @@ class Looker31SDKStream extends APIMethods {
      * @param {WriteSamlConfig} body
      */
       WriteSamlConfig body) async {
-    return this.post("/saml_test_configs", null, body);
+    SamlConfig responseHandler(dynamic json) {
+      return SamlConfig.fromJson(json);
+    }
+
+    return this.post(responseHandler, "/saml_test_configs", null,
+        body == null ? null : body.toJson());
   }
 
   /**
@@ -532,7 +641,11 @@ class Looker31SDKStream extends APIMethods {
      * @param {String} body
      */
       String body) async {
-    return this.post("/parse_saml_idp_metadata", null, body);
+    SamlMetadataParseResult responseHandler(dynamic json) {
+      return SamlMetadataParseResult.fromJson(json);
+    }
+
+    return this.post(responseHandler, "/parse_saml_idp_metadata", null, body);
   }
 
   /**
@@ -548,7 +661,12 @@ class Looker31SDKStream extends APIMethods {
      * @param {String} body
      */
           String body) async {
-    return this.post("/fetch_and_parse_saml_idp_metadata", null, body);
+    SamlMetadataParseResult responseHandler(dynamic json) {
+      return SamlMetadataParseResult.fromJson(json);
+    }
+
+    return this.post(
+        responseHandler, "/fetch_and_parse_saml_idp_metadata", null, body);
   }
 
   /**
@@ -557,7 +675,11 @@ class Looker31SDKStream extends APIMethods {
    * GET /session_config -> ByteArray
    */
   Future<SDKResponse<SessionConfig>> session_config() async {
-    return this.get("/session_config");
+    SessionConfig responseHandler(dynamic json) {
+      return SessionConfig.fromJson(json);
+    }
+
+    return this.get(responseHandler, "/session_config");
   }
 
   /**
@@ -570,7 +692,12 @@ class Looker31SDKStream extends APIMethods {
      * @param {WriteSessionConfig} body
      */
       WriteSessionConfig body) async {
-    return this.patch("/session_config", null, body);
+    SessionConfig responseHandler(dynamic json) {
+      return SessionConfig.fromJson(json);
+    }
+
+    return this.patch(responseHandler, "/session_config", null,
+        body == null ? null : body.toJson());
   }
 
   /**
@@ -583,7 +710,14 @@ class Looker31SDKStream extends APIMethods {
      * @param {String} fields Include only these fields in the response
      */
       String fields]) async {
-    return this.get("/user_login_lockouts", {"fields": fields});
+    List<UserLoginLockout> responseHandler(dynamic json) {
+      return json
+          .map<UserLoginLockout>((i) => UserLoginLockout.fromJson(i))
+          .toList();
+    }
+
+    return this
+        .get(responseHandler, "/user_login_lockouts", {"fields": fields});
   }
 
   /**
@@ -628,7 +762,13 @@ class Looker31SDKStream extends APIMethods {
      * @param {bool} filter_or Combine given search criteria in a boolean OR expression
      */
       bool filter_or]) async {
-    return this.get("/user_login_lockouts/search", {
+    List<UserLoginLockout> responseHandler(dynamic json) {
+      return json
+          .map<UserLoginLockout>((i) => UserLoginLockout.fromJson(i))
+          .toList();
+    }
+
+    return this.get(responseHandler, "/user_login_lockouts/search", {
       "fields": fields,
       "page": page,
       "per_page": per_page,
@@ -652,7 +792,12 @@ class Looker31SDKStream extends APIMethods {
      */
       String key) async {
     var path_key = encodeParam(key);
-    return this.delete("/user_login_lockout/${path_key}");
+
+    String responseHandler(dynamic json) {
+      return json;
+    }
+
+    return this.delete(responseHandler, "/user_login_lockout/${path_key}");
   }
 
   //endregion Auth: Manage User Authentication Configuration
@@ -676,7 +821,13 @@ class Looker31SDKStream extends APIMethods {
      * @param {String} fields Requested fields.
      */
       String fields]) async {
-    return this.get("/color_collections", {"fields": fields});
+    List<ColorCollection> responseHandler(dynamic json) {
+      return json
+          .map<ColorCollection>((i) => ColorCollection.fromJson(i))
+          .toList();
+    }
+
+    return this.get(responseHandler, "/color_collections", {"fields": fields});
   }
 
   /**
@@ -697,7 +848,12 @@ class Looker31SDKStream extends APIMethods {
      * @param {WriteColorCollection} body
      */
       WriteColorCollection body) async {
-    return this.post("/color_collections", null, body);
+    ColorCollection responseHandler(dynamic json) {
+      return ColorCollection.fromJson(json);
+    }
+
+    return this.post(responseHandler, "/color_collections", null,
+        body == null ? null : body.toJson());
   }
 
   /**
@@ -715,7 +871,14 @@ class Looker31SDKStream extends APIMethods {
      * @param {String} fields Requested fields.
      */
       String fields]) async {
-    return this.get("/color_collections/custom", {"fields": fields});
+    List<ColorCollection> responseHandler(dynamic json) {
+      return json
+          .map<ColorCollection>((i) => ColorCollection.fromJson(i))
+          .toList();
+    }
+
+    return this
+        .get(responseHandler, "/color_collections/custom", {"fields": fields});
   }
 
   /**
@@ -733,7 +896,14 @@ class Looker31SDKStream extends APIMethods {
      * @param {String} fields Requested fields.
      */
       String fields]) async {
-    return this.get("/color_collections/standard", {"fields": fields});
+    List<ColorCollection> responseHandler(dynamic json) {
+      return json
+          .map<ColorCollection>((i) => ColorCollection.fromJson(i))
+          .toList();
+    }
+
+    return this.get(
+        responseHandler, "/color_collections/standard", {"fields": fields});
   }
 
   /**
@@ -746,7 +916,11 @@ class Looker31SDKStream extends APIMethods {
    * GET /color_collections/default -> ByteArray
    */
   Future<SDKResponse<ColorCollection>> default_color_collection() async {
-    return this.get("/color_collections/default");
+    ColorCollection responseHandler(dynamic json) {
+      return ColorCollection.fromJson(json);
+    }
+
+    return this.get(responseHandler, "/color_collections/default");
   }
 
   /**
@@ -762,8 +936,12 @@ class Looker31SDKStream extends APIMethods {
      * @param {String} collection_id ID of color collection to set as default
      */
       String collection_id) async {
-    return this
-        .put("/color_collections/default", {"collection_id": collection_id});
+    ColorCollection responseHandler(dynamic json) {
+      return ColorCollection.fromJson(json);
+    }
+
+    return this.put(responseHandler, "/color_collections/default",
+        {"collection_id": collection_id});
   }
 
   /**
@@ -790,8 +968,13 @@ class Looker31SDKStream extends APIMethods {
      */
       String fields]) async {
     var path_collection_id = encodeParam(collection_id);
-    return this
-        .get("/color_collections/${path_collection_id}", {"fields": fields});
+
+    ColorCollection responseHandler(dynamic json) {
+      return ColorCollection.fromJson(json);
+    }
+
+    return this.get(responseHandler, "/color_collections/${path_collection_id}",
+        {"fields": fields});
   }
 
   /**
@@ -810,7 +993,16 @@ class Looker31SDKStream extends APIMethods {
      */
       WriteColorCollection body) async {
     var path_collection_id = encodeParam(collection_id);
-    return this.patch("/color_collections/${path_collection_id}", null, body);
+
+    ColorCollection responseHandler(dynamic json) {
+      return ColorCollection.fromJson(json);
+    }
+
+    return this.patch(
+        responseHandler,
+        "/color_collections/${path_collection_id}",
+        null,
+        body == null ? null : body.toJson());
   }
 
   /**
@@ -831,7 +1023,13 @@ class Looker31SDKStream extends APIMethods {
      */
       String collection_id) async {
     var path_collection_id = encodeParam(collection_id);
-    return this.delete("/color_collections/${path_collection_id}");
+
+    String responseHandler(dynamic json) {
+      return json;
+    }
+
+    return this
+        .delete(responseHandler, "/color_collections/${path_collection_id}");
   }
 
   //endregion ColorCollection: Manage Color Collections
@@ -844,7 +1042,11 @@ class Looker31SDKStream extends APIMethods {
    * GET /backup_configuration -> ByteArray
    */
   Future<SDKResponse<BackupConfiguration>> backup_configuration() async {
-    return this.get("/backup_configuration");
+    BackupConfiguration responseHandler(dynamic json) {
+      return BackupConfiguration.fromJson(json);
+    }
+
+    return this.get(responseHandler, "/backup_configuration");
   }
 
   /**
@@ -857,7 +1059,12 @@ class Looker31SDKStream extends APIMethods {
      * @param {WriteBackupConfiguration} body
      */
       WriteBackupConfiguration body) async {
-    return this.patch("/backup_configuration", null, body);
+    BackupConfiguration responseHandler(dynamic json) {
+      return BackupConfiguration.fromJson(json);
+    }
+
+    return this.patch(responseHandler, "/backup_configuration", null,
+        body == null ? null : body.toJson());
   }
 
   /**
@@ -866,7 +1073,11 @@ class Looker31SDKStream extends APIMethods {
    * GET /cloud_storage -> ByteArray
    */
   Future<SDKResponse<BackupConfiguration>> cloud_storage_configuration() async {
-    return this.get("/cloud_storage");
+    BackupConfiguration responseHandler(dynamic json) {
+      return BackupConfiguration.fromJson(json);
+    }
+
+    return this.get(responseHandler, "/cloud_storage");
   }
 
   /**
@@ -879,7 +1090,12 @@ class Looker31SDKStream extends APIMethods {
      * @param {WriteBackupConfiguration} body
      */
       WriteBackupConfiguration body) async {
-    return this.patch("/cloud_storage", null, body);
+    BackupConfiguration responseHandler(dynamic json) {
+      return BackupConfiguration.fromJson(json);
+    }
+
+    return this.patch(responseHandler, "/cloud_storage", null,
+        body == null ? null : body.toJson());
   }
 
   /**
@@ -888,7 +1104,11 @@ class Looker31SDKStream extends APIMethods {
    * GET /custom_welcome_email -> ByteArray
    */
   Future<SDKResponse<CustomWelcomeEmail>> custom_welcome_email() async {
-    return this.get("/custom_welcome_email");
+    CustomWelcomeEmail responseHandler(dynamic json) {
+      return CustomWelcomeEmail.fromJson(json);
+    }
+
+    return this.get(responseHandler, "/custom_welcome_email");
   }
 
   /**
@@ -905,8 +1125,15 @@ class Looker31SDKStream extends APIMethods {
      * @param {bool} send_test_welcome_email If true a test email with the content from the request will be sent to the current user after saving
      */
       bool send_test_welcome_email]) async {
-    return this.patch("/custom_welcome_email",
-        {"send_test_welcome_email": send_test_welcome_email}, body);
+    CustomWelcomeEmail responseHandler(dynamic json) {
+      return CustomWelcomeEmail.fromJson(json);
+    }
+
+    return this.patch(
+        responseHandler,
+        "/custom_welcome_email",
+        {"send_test_welcome_email": send_test_welcome_email},
+        body == null ? null : body.toJson());
   }
 
   /**
@@ -919,7 +1146,12 @@ class Looker31SDKStream extends APIMethods {
      * @param {WelcomeEmailTest} body
      */
       WelcomeEmailTest body) async {
-    return this.put("/custom_welcome_email_test", null, body);
+    WelcomeEmailTest responseHandler(dynamic json) {
+      return WelcomeEmailTest.fromJson(json);
+    }
+
+    return this.put(responseHandler, "/custom_welcome_email_test", null,
+        body == null ? null : body.toJson());
   }
 
   /**
@@ -928,7 +1160,11 @@ class Looker31SDKStream extends APIMethods {
    * GET /digest_emails_enabled -> ByteArray
    */
   Future<SDKResponse<DigestEmails>> digest_emails_enabled() async {
-    return this.get("/digest_emails_enabled");
+    DigestEmails responseHandler(dynamic json) {
+      return DigestEmails.fromJson(json);
+    }
+
+    return this.get(responseHandler, "/digest_emails_enabled");
   }
 
   /**
@@ -941,7 +1177,12 @@ class Looker31SDKStream extends APIMethods {
      * @param {DigestEmails} body
      */
       DigestEmails body) async {
-    return this.patch("/digest_emails_enabled", null, body);
+    DigestEmails responseHandler(dynamic json) {
+      return DigestEmails.fromJson(json);
+    }
+
+    return this.patch(responseHandler, "/digest_emails_enabled", null,
+        body == null ? null : body.toJson());
   }
 
   /**
@@ -952,7 +1193,11 @@ class Looker31SDKStream extends APIMethods {
    * POST /digest_email_send -> ByteArray
    */
   Future<SDKResponse<DigestEmailSend>> create_digest_email_send() async {
-    return this.post("/digest_email_send");
+    DigestEmailSend responseHandler(dynamic json) {
+      return DigestEmailSend.fromJson(json);
+    }
+
+    return this.post(responseHandler, "/digest_email_send");
   }
 
   /**
@@ -962,7 +1207,11 @@ class Looker31SDKStream extends APIMethods {
    */
   Future<SDKResponse<InternalHelpResourcesContent>>
       internal_help_resources_content() async {
-    return this.get("/internal_help_resources_content");
+    InternalHelpResourcesContent responseHandler(dynamic json) {
+      return InternalHelpResourcesContent.fromJson(json);
+    }
+
+    return this.get(responseHandler, "/internal_help_resources_content");
   }
 
   /**
@@ -976,7 +1225,12 @@ class Looker31SDKStream extends APIMethods {
      * @param {WriteInternalHelpResourcesContent} body
      */
           WriteInternalHelpResourcesContent body) async {
-    return this.patch("/internal_help_resources_content", null, body);
+    InternalHelpResourcesContent responseHandler(dynamic json) {
+      return InternalHelpResourcesContent.fromJson(json);
+    }
+
+    return this.patch(responseHandler, "/internal_help_resources_content", null,
+        body == null ? null : body.toJson());
   }
 
   /**
@@ -985,7 +1239,11 @@ class Looker31SDKStream extends APIMethods {
    * GET /internal_help_resources_enabled -> ByteArray
    */
   Future<SDKResponse<InternalHelpResources>> internal_help_resources() async {
-    return this.get("/internal_help_resources_enabled");
+    InternalHelpResources responseHandler(dynamic json) {
+      return InternalHelpResources.fromJson(json);
+    }
+
+    return this.get(responseHandler, "/internal_help_resources_enabled");
   }
 
   /**
@@ -998,7 +1256,12 @@ class Looker31SDKStream extends APIMethods {
      * @param {WriteInternalHelpResources} body
      */
       WriteInternalHelpResources body) async {
-    return this.patch("/internal_help_resources", null, body);
+    InternalHelpResources responseHandler(dynamic json) {
+      return InternalHelpResources.fromJson(json);
+    }
+
+    return this.patch(responseHandler, "/internal_help_resources", null,
+        body == null ? null : body.toJson());
   }
 
   /**
@@ -1007,7 +1270,11 @@ class Looker31SDKStream extends APIMethods {
    * GET /legacy_features -> ByteArray
    */
   Future<SDKResponse<List<LegacyFeature>>> all_legacy_features() async {
-    return this.get("/legacy_features");
+    List<LegacyFeature> responseHandler(dynamic json) {
+      return json.map<LegacyFeature>((i) => LegacyFeature.fromJson(i)).toList();
+    }
+
+    return this.get(responseHandler, "/legacy_features");
   }
 
   /**
@@ -1021,7 +1288,13 @@ class Looker31SDKStream extends APIMethods {
      */
       int legacy_feature_id) async {
     var path_legacy_feature_id = encodeParam(legacy_feature_id);
-    return this.get("/legacy_features/${path_legacy_feature_id}");
+
+    LegacyFeature responseHandler(dynamic json) {
+      return LegacyFeature.fromJson(json);
+    }
+
+    return this
+        .get(responseHandler, "/legacy_features/${path_legacy_feature_id}");
   }
 
   /**
@@ -1039,7 +1312,16 @@ class Looker31SDKStream extends APIMethods {
      */
       WriteLegacyFeature body) async {
     var path_legacy_feature_id = encodeParam(legacy_feature_id);
-    return this.patch("/legacy_features/${path_legacy_feature_id}", null, body);
+
+    LegacyFeature responseHandler(dynamic json) {
+      return LegacyFeature.fromJson(json);
+    }
+
+    return this.patch(
+        responseHandler,
+        "/legacy_features/${path_legacy_feature_id}",
+        null,
+        body == null ? null : body.toJson());
   }
 
   /**
@@ -1048,7 +1330,11 @@ class Looker31SDKStream extends APIMethods {
    * GET /locales -> ByteArray
    */
   Future<SDKResponse<List<Locale>>> all_locales() async {
-    return this.get("/locales");
+    List<Locale> responseHandler(dynamic json) {
+      return json.map<Locale>((i) => Locale.fromJson(i)).toList();
+    }
+
+    return this.get(responseHandler, "/locales");
   }
 
   /**
@@ -1057,7 +1343,11 @@ class Looker31SDKStream extends APIMethods {
    * GET /timezones -> ByteArray
    */
   Future<SDKResponse<List<Timezone>>> all_timezones() async {
-    return this.get("/timezones");
+    List<Timezone> responseHandler(dynamic json) {
+      return json.map<Timezone>((i) => Timezone.fromJson(i)).toList();
+    }
+
+    return this.get(responseHandler, "/timezones");
   }
 
   /**
@@ -1070,7 +1360,11 @@ class Looker31SDKStream extends APIMethods {
      * @param {String} fields Requested fields.
      */
       String fields]) async {
-    return this.get("/versions", {"fields": fields});
+    ApiVersion responseHandler(dynamic json) {
+      return ApiVersion.fromJson(json);
+    }
+
+    return this.get(responseHandler, "/versions", {"fields": fields});
   }
 
   /**
@@ -1084,7 +1378,12 @@ class Looker31SDKStream extends APIMethods {
      * @param {String} fields Requested fields.
      */
       String fields]) async {
-    return this.get("/whitelabel_configuration", {"fields": fields});
+    WhitelabelConfiguration responseHandler(dynamic json) {
+      return WhitelabelConfiguration.fromJson(json);
+    }
+
+    return this
+        .get(responseHandler, "/whitelabel_configuration", {"fields": fields});
   }
 
   /**
@@ -1097,7 +1396,12 @@ class Looker31SDKStream extends APIMethods {
      * @param {WriteWhitelabelConfiguration} body
      */
       WriteWhitelabelConfiguration body) async {
-    return this.put("/whitelabel_configuration", null, body);
+    WhitelabelConfiguration responseHandler(dynamic json) {
+      return WhitelabelConfiguration.fromJson(json);
+    }
+
+    return this.put(responseHandler, "/whitelabel_configuration", null,
+        body == null ? null : body.toJson());
   }
 
   //endregion Config: Manage General Configuration
@@ -1114,7 +1418,11 @@ class Looker31SDKStream extends APIMethods {
      * @param {String} fields Requested fields.
      */
       String fields]) async {
-    return this.get("/connections", {"fields": fields});
+    List<DBConnection> responseHandler(dynamic json) {
+      return json.map<DBConnection>((i) => DBConnection.fromJson(i)).toList();
+    }
+
+    return this.get(responseHandler, "/connections", {"fields": fields});
   }
 
   /**
@@ -1127,7 +1435,12 @@ class Looker31SDKStream extends APIMethods {
      * @param {WriteDBConnection} body
      */
       WriteDBConnection body) async {
-    return this.post("/connections", null, body);
+    DBConnection responseHandler(dynamic json) {
+      return DBConnection.fromJson(json);
+    }
+
+    return this.post(responseHandler, "/connections", null,
+        body == null ? null : body.toJson());
   }
 
   /**
@@ -1145,7 +1458,13 @@ class Looker31SDKStream extends APIMethods {
      */
       String fields]) async {
     var path_connection_name = encodeParam(connection_name);
-    return this.get("/connections/${path_connection_name}", {"fields": fields});
+
+    DBConnection responseHandler(dynamic json) {
+      return DBConnection.fromJson(json);
+    }
+
+    return this.get(responseHandler, "/connections/${path_connection_name}",
+        {"fields": fields});
   }
 
   /**
@@ -1163,7 +1482,13 @@ class Looker31SDKStream extends APIMethods {
      */
       WriteDBConnection body) async {
     var path_connection_name = encodeParam(connection_name);
-    return this.patch("/connections/${path_connection_name}", null, body);
+
+    DBConnection responseHandler(dynamic json) {
+      return DBConnection.fromJson(json);
+    }
+
+    return this.patch(responseHandler, "/connections/${path_connection_name}",
+        null, body == null ? null : body.toJson());
   }
 
   /**
@@ -1177,7 +1502,12 @@ class Looker31SDKStream extends APIMethods {
      */
       String connection_name) async {
     var path_connection_name = encodeParam(connection_name);
-    return this.delete("/connections/${path_connection_name}");
+
+    String responseHandler(dynamic json) {
+      return json;
+    }
+
+    return this.delete(responseHandler, "/connections/${path_connection_name}");
   }
 
   /**
@@ -1196,7 +1526,12 @@ class Looker31SDKStream extends APIMethods {
       String override_context) async {
     var path_connection_name = encodeParam(connection_name);
     var path_override_context = encodeParam(override_context);
-    return this.delete(
+
+    String responseHandler(dynamic json) {
+      return json;
+    }
+
+    return this.delete(responseHandler,
         "/connections/${path_connection_name}/connection_override/${path_override_context}");
   }
 
@@ -1222,8 +1557,16 @@ class Looker31SDKStream extends APIMethods {
      */
       DelimList<String> tests]) async {
     var path_connection_name = encodeParam(connection_name);
-    return this
-        .put("/connections/${path_connection_name}/test", {"tests": tests});
+
+    List<DBConnectionTestResult> responseHandler(dynamic json) {
+      return json
+          .map<DBConnectionTestResult>(
+              (i) => DBConnectionTestResult.fromJson(i))
+          .toList();
+    }
+
+    return this.put(responseHandler,
+        "/connections/${path_connection_name}/test", {"tests": tests});
   }
 
   /**
@@ -1247,7 +1590,15 @@ class Looker31SDKStream extends APIMethods {
      * @param {DelimList<String>} tests Array of names of tests to run
      */
       DelimList<String> tests]) async {
-    return this.put("/connections/test", {"tests": tests}, body);
+    List<DBConnectionTestResult> responseHandler(dynamic json) {
+      return json
+          .map<DBConnectionTestResult>(
+              (i) => DBConnectionTestResult.fromJson(i))
+          .toList();
+    }
+
+    return this.put(responseHandler, "/connections/test", {"tests": tests},
+        body == null ? null : body.toJson());
   }
 
   /**
@@ -1260,7 +1611,11 @@ class Looker31SDKStream extends APIMethods {
      * @param {String} fields Requested fields.
      */
       String fields]) async {
-    return this.get("/dialect_info", {"fields": fields});
+    List<DialectInfo> responseHandler(dynamic json) {
+      return json.map<DialectInfo>((i) => DialectInfo.fromJson(i)).toList();
+    }
+
+    return this.get(responseHandler, "/dialect_info", {"fields": fields});
   }
 
   //endregion Connection: Manage Database Connections
@@ -1334,7 +1689,13 @@ class Looker31SDKStream extends APIMethods {
      * @param {bool} filter_or Combine given search criteria in a boolean OR expression
      */
       bool filter_or]) async {
-    return this.get("/content_favorite/search", {
+    List<ContentFavorite> responseHandler(dynamic json) {
+      return json
+          .map<ContentFavorite>((i) => ContentFavorite.fromJson(i))
+          .toList();
+    }
+
+    return this.get(responseHandler, "/content_favorite/search", {
       "id": id,
       "user_id": user_id,
       "content_metadata_id": content_metadata_id,
@@ -1363,7 +1724,12 @@ class Looker31SDKStream extends APIMethods {
      */
       String fields]) async {
     var path_content_favorite_id = encodeParam(content_favorite_id);
-    return this.get(
+
+    ContentFavorite responseHandler(dynamic json) {
+      return ContentFavorite.fromJson(json);
+    }
+
+    return this.get(responseHandler,
         "/content_favorite/${path_content_favorite_id}", {"fields": fields});
   }
 
@@ -1378,7 +1744,13 @@ class Looker31SDKStream extends APIMethods {
      */
       int content_favorite_id) async {
     var path_content_favorite_id = encodeParam(content_favorite_id);
-    return this.delete("/content_favorite/${path_content_favorite_id}");
+
+    String responseHandler(dynamic json) {
+      return json;
+    }
+
+    return this.delete(
+        responseHandler, "/content_favorite/${path_content_favorite_id}");
   }
 
   /**
@@ -1391,7 +1763,12 @@ class Looker31SDKStream extends APIMethods {
      * @param {WriteContentFavorite} body
      */
       WriteContentFavorite body) async {
-    return this.post("/content_favorite", null, body);
+    ContentFavorite responseHandler(dynamic json) {
+      return ContentFavorite.fromJson(json);
+    }
+
+    return this.post(responseHandler, "/content_favorite", null,
+        body == null ? null : body.toJson());
   }
 
   /**
@@ -1408,8 +1785,12 @@ class Looker31SDKStream extends APIMethods {
      * @param {String} fields Requested fields.
      */
       String fields]) async {
-    return this
-        .get("/content_metadata", {"parent_id": parent_id, "fields": fields});
+    List<ContentMeta> responseHandler(dynamic json) {
+      return json.map<ContentMeta>((i) => ContentMeta.fromJson(i)).toList();
+    }
+
+    return this.get(responseHandler, "/content_metadata",
+        {"parent_id": parent_id, "fields": fields});
   }
 
   /**
@@ -1427,7 +1808,12 @@ class Looker31SDKStream extends APIMethods {
      */
       String fields]) async {
     var path_content_metadata_id = encodeParam(content_metadata_id);
-    return this.get(
+
+    ContentMeta responseHandler(dynamic json) {
+      return ContentMeta.fromJson(json);
+    }
+
+    return this.get(responseHandler,
         "/content_metadata/${path_content_metadata_id}", {"fields": fields});
   }
 
@@ -1446,8 +1832,16 @@ class Looker31SDKStream extends APIMethods {
      */
       WriteContentMeta body) async {
     var path_content_metadata_id = encodeParam(content_metadata_id);
-    return this
-        .patch("/content_metadata/${path_content_metadata_id}", null, body);
+
+    ContentMeta responseHandler(dynamic json) {
+      return ContentMeta.fromJson(json);
+    }
+
+    return this.patch(
+        responseHandler,
+        "/content_metadata/${path_content_metadata_id}",
+        null,
+        body == null ? null : body.toJson());
   }
 
   /**
@@ -1464,7 +1858,13 @@ class Looker31SDKStream extends APIMethods {
      * @param {String} fields Requested fields.
      */
       String fields]) async {
-    return this.get("/content_metadata_access",
+    List<ContentMetaGroupUser> responseHandler(dynamic json) {
+      return json
+          .map<ContentMetaGroupUser>((i) => ContentMetaGroupUser.fromJson(i))
+          .toList();
+    }
+
+    return this.get(responseHandler, "/content_metadata_access",
         {"content_metadata_id": content_metadata_id, "fields": fields});
   }
 
@@ -1482,10 +1882,15 @@ class Looker31SDKStream extends APIMethods {
      * @param {bool} send_boards_notification_email Optionally sends notification email when granting access to a board.
      */
       bool send_boards_notification_email]) async {
+    ContentMetaGroupUser responseHandler(dynamic json) {
+      return ContentMetaGroupUser.fromJson(json);
+    }
+
     return this.post(
+        responseHandler,
         "/content_metadata_access",
         {"send_boards_notification_email": send_boards_notification_email},
-        body);
+        body == null ? null : body.toJson());
   }
 
   /**
@@ -1504,10 +1909,16 @@ class Looker31SDKStream extends APIMethods {
       ContentMetaGroupUser body) async {
     var path_content_metadata_access_id =
         encodeParam(content_metadata_access_id);
+
+    ContentMetaGroupUser responseHandler(dynamic json) {
+      return ContentMetaGroupUser.fromJson(json);
+    }
+
     return this.put(
+        responseHandler,
         "/content_metadata_access/${path_content_metadata_access_id}",
         null,
-        body);
+        body == null ? null : body.toJson());
   }
 
   /**
@@ -1522,8 +1933,13 @@ class Looker31SDKStream extends APIMethods {
       int content_metadata_access_id) async {
     var path_content_metadata_access_id =
         encodeParam(content_metadata_access_id);
-    return this
-        .delete("/content_metadata_access/${path_content_metadata_access_id}");
+
+    String responseHandler(dynamic json) {
+      return json;
+    }
+
+    return this.delete(responseHandler,
+        "/content_metadata_access/${path_content_metadata_access_id}");
   }
 
   /**
@@ -1563,7 +1979,14 @@ class Looker31SDKStream extends APIMethods {
       int height]) async {
     var path_type = encodeParam(type);
     var path_resource_id = encodeParam(resource_id);
-    return this.get("/content_thumbnail/${path_type}/${path_resource_id}",
+
+    String responseHandler(dynamic json) {
+      return json;
+    }
+
+    return this.get(
+        responseHandler,
+        "/content_thumbnail/${path_type}/${path_resource_id}",
         {"reload": reload, "format": format, "width": width, "height": height});
   }
 
@@ -1580,7 +2003,11 @@ class Looker31SDKStream extends APIMethods {
      * @param {String} fields Requested fields.
      */
       String fields]) async {
-    return this.get("/content_validation", {"fields": fields});
+    ContentValidation responseHandler(dynamic json) {
+      return ContentValidation.fromJson(json);
+    }
+
+    return this.get(responseHandler, "/content_validation", {"fields": fields});
   }
 
   /**
@@ -1662,7 +2089,11 @@ class Looker31SDKStream extends APIMethods {
      * @param {bool} filter_or Combine given search criteria in a boolean OR expression
      */
       bool filter_or]) async {
-    return this.get("/content_view/search", {
+    List<ContentView> responseHandler(dynamic json) {
+      return json.map<ContentView>((i) => ContentView.fromJson(i)).toList();
+    }
+
+    return this.get(responseHandler, "/content_view/search", {
       "view_count": view_count,
       "group_id": group_id,
       "look_id": look_id,
@@ -1704,7 +2135,14 @@ class Looker31SDKStream extends APIMethods {
       String reload]) async {
     var path_type = encodeParam(type);
     var path_resource_id = encodeParam(resource_id);
-    return this.get("/vector_thumbnail/${path_type}/${path_resource_id}",
+
+    String responseHandler(dynamic json) {
+      return json;
+    }
+
+    return this.get(
+        responseHandler,
+        "/vector_thumbnail/${path_type}/${path_resource_id}",
         {"reload": reload});
   }
 
@@ -1728,7 +2166,11 @@ class Looker31SDKStream extends APIMethods {
      * @param {String} fields Requested fields.
      */
       String fields]) async {
-    return this.get("/dashboards", {"fields": fields});
+    List<DashboardBase> responseHandler(dynamic json) {
+      return json.map<DashboardBase>((i) => DashboardBase.fromJson(i)).toList();
+    }
+
+    return this.get(responseHandler, "/dashboards", {"fields": fields});
   }
 
   /**
@@ -1754,7 +2196,12 @@ class Looker31SDKStream extends APIMethods {
      * @param {WriteDashboard} body
      */
       WriteDashboard body) async {
-    return this.post("/dashboards", null, body);
+    Dashboard responseHandler(dynamic json) {
+      return Dashboard.fromJson(json);
+    }
+
+    return this.post(responseHandler, "/dashboards", null,
+        body == null ? null : body.toJson());
   }
 
   /**
@@ -1867,7 +2314,11 @@ class Looker31SDKStream extends APIMethods {
      * @param {bool} filter_or Combine given search criteria in a boolean OR expression
      */
       bool filter_or]) async {
-    return this.get("/dashboards/search", {
+    List<Dashboard> responseHandler(dynamic json) {
+      return json.map<Dashboard>((i) => Dashboard.fromJson(i)).toList();
+    }
+
+    return this.get(responseHandler, "/dashboards/search", {
       "id": id,
       "slug": slug,
       "title": title,
@@ -1925,10 +2376,16 @@ class Looker31SDKStream extends APIMethods {
       bool raw_locale]) async {
     var path_lookml_dashboard_id = encodeParam(lookml_dashboard_id);
     var path_space_id = encodeParam(space_id);
+
+    Dashboard responseHandler(dynamic json) {
+      return Dashboard.fromJson(json);
+    }
+
     return this.post(
+        responseHandler,
         "/dashboards/${path_lookml_dashboard_id}/import/${path_space_id}",
         {"raw_locale": raw_locale},
-        body);
+        body == null ? null : body.toJson());
   }
 
   /**
@@ -1958,8 +2415,16 @@ class Looker31SDKStream extends APIMethods {
      */
       bool raw_locale]) async {
     var path_lookml_dashboard_id = encodeParam(lookml_dashboard_id);
-    return this.patch("/dashboards/${path_lookml_dashboard_id}/sync",
-        {"raw_locale": raw_locale}, body);
+
+    List<int> responseHandler(dynamic json) {
+      return json;
+    }
+
+    return this.patch(
+        responseHandler,
+        "/dashboards/${path_lookml_dashboard_id}/sync",
+        {"raw_locale": raw_locale},
+        body == null ? null : body.toJson());
   }
 
   /**
@@ -1983,7 +2448,13 @@ class Looker31SDKStream extends APIMethods {
      */
       String fields]) async {
     var path_dashboard_id = encodeParam(dashboard_id);
-    return this.get("/dashboards/${path_dashboard_id}", {"fields": fields});
+
+    Dashboard responseHandler(dynamic json) {
+      return Dashboard.fromJson(json);
+    }
+
+    return this.get(responseHandler, "/dashboards/${path_dashboard_id}",
+        {"fields": fields});
   }
 
   /**
@@ -2010,7 +2481,13 @@ class Looker31SDKStream extends APIMethods {
      */
       WriteDashboard body) async {
     var path_dashboard_id = encodeParam(dashboard_id);
-    return this.patch("/dashboards/${path_dashboard_id}", null, body);
+
+    Dashboard responseHandler(dynamic json) {
+      return Dashboard.fromJson(json);
+    }
+
+    return this.patch(responseHandler, "/dashboards/${path_dashboard_id}", null,
+        body == null ? null : body.toJson());
   }
 
   /**
@@ -2030,7 +2507,12 @@ class Looker31SDKStream extends APIMethods {
      */
       String dashboard_id) async {
     var path_dashboard_id = encodeParam(dashboard_id);
-    return this.delete("/dashboards/${path_dashboard_id}");
+
+    String responseHandler(dynamic json) {
+      return json;
+    }
+
+    return this.delete(responseHandler, "/dashboards/${path_dashboard_id}");
   }
 
   /**
@@ -2047,7 +2529,13 @@ class Looker31SDKStream extends APIMethods {
      */
           String dashboard_id) async {
     var path_dashboard_id = encodeParam(dashboard_id);
-    return this.get("/dashboards/aggregate_table_lookml/${path_dashboard_id}");
+
+    DashboardAggregateTableLookml responseHandler(dynamic json) {
+      return DashboardAggregateTableLookml.fromJson(json);
+    }
+
+    return this.get(responseHandler,
+        "/dashboards/aggregate_table_lookml/${path_dashboard_id}");
   }
 
   /**
@@ -2063,7 +2551,12 @@ class Looker31SDKStream extends APIMethods {
      */
       String dashboard_id) async {
     var path_dashboard_id = encodeParam(dashboard_id);
-    return this.get("/dashboards/lookml/${path_dashboard_id}");
+
+    DashboardLookml responseHandler(dynamic json) {
+      return DashboardLookml.fromJson(json);
+    }
+
+    return this.get(responseHandler, "/dashboards/lookml/${path_dashboard_id}");
   }
 
   /**
@@ -2123,7 +2616,13 @@ class Looker31SDKStream extends APIMethods {
      * @param {String} sorts Fields to sort by. Sortable fields: [:look_id, :dashboard_id, :deleted, :title]
      */
       String sorts]) async {
-    return this.get("/dashboard_elements/search", {
+    List<DashboardElement> responseHandler(dynamic json) {
+      return json
+          .map<DashboardElement>((i) => DashboardElement.fromJson(i))
+          .toList();
+    }
+
+    return this.get(responseHandler, "/dashboard_elements/search", {
       "dashboard_id": dashboard_id,
       "look_id": look_id,
       "title": title,
@@ -2149,7 +2648,12 @@ class Looker31SDKStream extends APIMethods {
      */
       String fields]) async {
     var path_dashboard_element_id = encodeParam(dashboard_element_id);
-    return this.get(
+
+    DashboardElement responseHandler(dynamic json) {
+      return DashboardElement.fromJson(json);
+    }
+
+    return this.get(responseHandler,
         "/dashboard_elements/${path_dashboard_element_id}", {"fields": fields});
   }
 
@@ -2172,8 +2676,16 @@ class Looker31SDKStream extends APIMethods {
      */
       String fields]) async {
     var path_dashboard_element_id = encodeParam(dashboard_element_id);
-    return this.patch("/dashboard_elements/${path_dashboard_element_id}",
-        {"fields": fields}, body);
+
+    DashboardElement responseHandler(dynamic json) {
+      return DashboardElement.fromJson(json);
+    }
+
+    return this.patch(
+        responseHandler,
+        "/dashboard_elements/${path_dashboard_element_id}",
+        {"fields": fields},
+        body == null ? null : body.toJson());
   }
 
   /**
@@ -2187,7 +2699,13 @@ class Looker31SDKStream extends APIMethods {
      */
       String dashboard_element_id) async {
     var path_dashboard_element_id = encodeParam(dashboard_element_id);
-    return this.delete("/dashboard_elements/${path_dashboard_element_id}");
+
+    String responseHandler(dynamic json) {
+      return json;
+    }
+
+    return this.delete(
+        responseHandler, "/dashboard_elements/${path_dashboard_element_id}");
   }
 
   /**
@@ -2205,7 +2723,16 @@ class Looker31SDKStream extends APIMethods {
      */
       String fields]) async {
     var path_dashboard_id = encodeParam(dashboard_id);
-    return this.get("/dashboards/${path_dashboard_id}/dashboard_elements",
+
+    List<DashboardElement> responseHandler(dynamic json) {
+      return json
+          .map<DashboardElement>((i) => DashboardElement.fromJson(i))
+          .toList();
+    }
+
+    return this.get(
+        responseHandler,
+        "/dashboards/${path_dashboard_id}/dashboard_elements",
         {"fields": fields});
   }
 
@@ -2223,7 +2750,12 @@ class Looker31SDKStream extends APIMethods {
      * @param {String} fields Requested fields.
      */
       String fields]) async {
-    return this.post("/dashboard_elements", {"fields": fields}, body);
+    DashboardElement responseHandler(dynamic json) {
+      return DashboardElement.fromJson(json);
+    }
+
+    return this.post(responseHandler, "/dashboard_elements", {"fields": fields},
+        body == null ? null : body.toJson());
   }
 
   /**
@@ -2241,7 +2773,12 @@ class Looker31SDKStream extends APIMethods {
      */
       String fields]) async {
     var path_dashboard_filter_id = encodeParam(dashboard_filter_id);
-    return this.get(
+
+    DashboardFilter responseHandler(dynamic json) {
+      return DashboardFilter.fromJson(json);
+    }
+
+    return this.get(responseHandler,
         "/dashboard_filters/${path_dashboard_filter_id}", {"fields": fields});
   }
 
@@ -2264,8 +2801,16 @@ class Looker31SDKStream extends APIMethods {
      */
       String fields]) async {
     var path_dashboard_filter_id = encodeParam(dashboard_filter_id);
-    return this.patch("/dashboard_filters/${path_dashboard_filter_id}",
-        {"fields": fields}, body);
+
+    DashboardFilter responseHandler(dynamic json) {
+      return DashboardFilter.fromJson(json);
+    }
+
+    return this.patch(
+        responseHandler,
+        "/dashboard_filters/${path_dashboard_filter_id}",
+        {"fields": fields},
+        body == null ? null : body.toJson());
   }
 
   /**
@@ -2279,7 +2824,13 @@ class Looker31SDKStream extends APIMethods {
      */
       String dashboard_filter_id) async {
     var path_dashboard_filter_id = encodeParam(dashboard_filter_id);
-    return this.delete("/dashboard_filters/${path_dashboard_filter_id}");
+
+    String responseHandler(dynamic json) {
+      return json;
+    }
+
+    return this.delete(
+        responseHandler, "/dashboard_filters/${path_dashboard_filter_id}");
   }
 
   /**
@@ -2297,7 +2848,16 @@ class Looker31SDKStream extends APIMethods {
      */
       String fields]) async {
     var path_dashboard_id = encodeParam(dashboard_id);
-    return this.get("/dashboards/${path_dashboard_id}/dashboard_filters",
+
+    List<DashboardFilter> responseHandler(dynamic json) {
+      return json
+          .map<DashboardFilter>((i) => DashboardFilter.fromJson(i))
+          .toList();
+    }
+
+    return this.get(
+        responseHandler,
+        "/dashboards/${path_dashboard_id}/dashboard_filters",
         {"fields": fields});
   }
 
@@ -2315,7 +2875,12 @@ class Looker31SDKStream extends APIMethods {
      * @param {String} fields Requested fields
      */
       String fields]) async {
-    return this.post("/dashboard_filters", {"fields": fields}, body);
+    DashboardFilter responseHandler(dynamic json) {
+      return DashboardFilter.fromJson(json);
+    }
+
+    return this.post(responseHandler, "/dashboard_filters", {"fields": fields},
+        body == null ? null : body.toJson());
   }
 
   /**
@@ -2334,7 +2899,13 @@ class Looker31SDKStream extends APIMethods {
       String fields]) async {
     var path_dashboard_layout_component_id =
         encodeParam(dashboard_layout_component_id);
+
+    DashboardLayoutComponent responseHandler(dynamic json) {
+      return DashboardLayoutComponent.fromJson(json);
+    }
+
     return this.get(
+        responseHandler,
         "/dashboard_layout_components/${path_dashboard_layout_component_id}",
         {"fields": fields});
   }
@@ -2359,10 +2930,16 @@ class Looker31SDKStream extends APIMethods {
       String fields]) async {
     var path_dashboard_layout_component_id =
         encodeParam(dashboard_layout_component_id);
+
+    DashboardLayoutComponent responseHandler(dynamic json) {
+      return DashboardLayoutComponent.fromJson(json);
+    }
+
     return this.patch(
+        responseHandler,
         "/dashboard_layout_components/${path_dashboard_layout_component_id}",
         {"fields": fields},
-        body);
+        body == null ? null : body.toJson());
   }
 
   /**
@@ -2381,7 +2958,16 @@ class Looker31SDKStream extends APIMethods {
      */
           String fields]) async {
     var path_dashboard_layout_id = encodeParam(dashboard_layout_id);
+
+    List<DashboardLayoutComponent> responseHandler(dynamic json) {
+      return json
+          .map<DashboardLayoutComponent>(
+              (i) => DashboardLayoutComponent.fromJson(i))
+          .toList();
+    }
+
     return this.get(
+        responseHandler,
         "/dashboard_layouts/${path_dashboard_layout_id}/dashboard_layout_components",
         {"fields": fields});
   }
@@ -2401,7 +2987,12 @@ class Looker31SDKStream extends APIMethods {
      */
       String fields]) async {
     var path_dashboard_layout_id = encodeParam(dashboard_layout_id);
-    return this.get(
+
+    DashboardLayout responseHandler(dynamic json) {
+      return DashboardLayout.fromJson(json);
+    }
+
+    return this.get(responseHandler,
         "/dashboard_layouts/${path_dashboard_layout_id}", {"fields": fields});
   }
 
@@ -2424,8 +3015,16 @@ class Looker31SDKStream extends APIMethods {
      */
       String fields]) async {
     var path_dashboard_layout_id = encodeParam(dashboard_layout_id);
-    return this.patch("/dashboard_layouts/${path_dashboard_layout_id}",
-        {"fields": fields}, body);
+
+    DashboardLayout responseHandler(dynamic json) {
+      return DashboardLayout.fromJson(json);
+    }
+
+    return this.patch(
+        responseHandler,
+        "/dashboard_layouts/${path_dashboard_layout_id}",
+        {"fields": fields},
+        body == null ? null : body.toJson());
   }
 
   /**
@@ -2439,7 +3038,13 @@ class Looker31SDKStream extends APIMethods {
      */
       String dashboard_layout_id) async {
     var path_dashboard_layout_id = encodeParam(dashboard_layout_id);
-    return this.delete("/dashboard_layouts/${path_dashboard_layout_id}");
+
+    String responseHandler(dynamic json) {
+      return json;
+    }
+
+    return this.delete(
+        responseHandler, "/dashboard_layouts/${path_dashboard_layout_id}");
   }
 
   /**
@@ -2457,7 +3062,16 @@ class Looker31SDKStream extends APIMethods {
      */
       String fields]) async {
     var path_dashboard_id = encodeParam(dashboard_id);
-    return this.get("/dashboards/${path_dashboard_id}/dashboard_layouts",
+
+    List<DashboardLayout> responseHandler(dynamic json) {
+      return json
+          .map<DashboardLayout>((i) => DashboardLayout.fromJson(i))
+          .toList();
+    }
+
+    return this.get(
+        responseHandler,
+        "/dashboards/${path_dashboard_id}/dashboard_layouts",
         {"fields": fields});
   }
 
@@ -2475,7 +3089,12 @@ class Looker31SDKStream extends APIMethods {
      * @param {String} fields Requested fields.
      */
       String fields]) async {
-    return this.post("/dashboard_layouts", {"fields": fields}, body);
+    DashboardLayout responseHandler(dynamic json) {
+      return DashboardLayout.fromJson(json);
+    }
+
+    return this.post(responseHandler, "/dashboard_layouts", {"fields": fields},
+        body == null ? null : body.toJson());
   }
 
   //endregion Dashboard: Manage Dashboards
@@ -2492,7 +3111,12 @@ class Looker31SDKStream extends APIMethods {
      * @param {DataActionRequest} body
      */
       DataActionRequest body) async {
-    return this.post("/data_actions", null, body);
+    DataActionResponse responseHandler(dynamic json) {
+      return DataActionResponse.fromJson(json);
+    }
+
+    return this.post(responseHandler, "/data_actions", null,
+        body == null ? null : body.toJson());
   }
 
   /**
@@ -2505,7 +3129,11 @@ class Looker31SDKStream extends APIMethods {
      * @param {Map<String,dynamic>} body
      */
       Map<String, dynamic> body) async {
-    return this.post("/data_actions/form", null, body);
+    DataActionForm responseHandler(dynamic json) {
+      return DataActionForm.fromJson(json);
+    }
+
+    return this.post(responseHandler, "/data_actions/form", null, body);
   }
 
   //endregion DataAction: Run Data Actions
@@ -2518,7 +3146,11 @@ class Looker31SDKStream extends APIMethods {
    * GET /datagroups -> ByteArray
    */
   Future<SDKResponse<List<Datagroup>>> all_datagroups() async {
-    return this.get("/datagroups");
+    List<Datagroup> responseHandler(dynamic json) {
+      return json.map<Datagroup>((i) => Datagroup.fromJson(i)).toList();
+    }
+
+    return this.get(responseHandler, "/datagroups");
   }
 
   /**
@@ -2532,7 +3164,12 @@ class Looker31SDKStream extends APIMethods {
      */
       String datagroup_id) async {
     var path_datagroup_id = encodeParam(datagroup_id);
-    return this.get("/datagroups/${path_datagroup_id}");
+
+    Datagroup responseHandler(dynamic json) {
+      return Datagroup.fromJson(json);
+    }
+
+    return this.get(responseHandler, "/datagroups/${path_datagroup_id}");
   }
 
   /**
@@ -2550,7 +3187,13 @@ class Looker31SDKStream extends APIMethods {
      */
       WriteDatagroup body) async {
     var path_datagroup_id = encodeParam(datagroup_id);
-    return this.patch("/datagroups/${path_datagroup_id}", null, body);
+
+    Datagroup responseHandler(dynamic json) {
+      return Datagroup.fromJson(json);
+    }
+
+    return this.patch(responseHandler, "/datagroups/${path_datagroup_id}", null,
+        body == null ? null : body.toJson());
   }
 
   //endregion Datagroup: Manage Datagroups
@@ -2607,7 +3250,11 @@ class Looker31SDKStream extends APIMethods {
      * @param {bool} filter_or Combine given search criteria in a boolean OR expression
      */
       bool filter_or]) async {
-    return this.get("/folders/search", {
+    List<Folder> responseHandler(dynamic json) {
+      return json.map<Folder>((i) => Folder.fromJson(i)).toList();
+    }
+
+    return this.get(responseHandler, "/folders/search", {
       "fields": fields,
       "page": page,
       "per_page": per_page,
@@ -2637,7 +3284,13 @@ class Looker31SDKStream extends APIMethods {
      */
       String fields]) async {
     var path_folder_id = encodeParam(folder_id);
-    return this.get("/folders/${path_folder_id}", {"fields": fields});
+
+    Folder responseHandler(dynamic json) {
+      return Folder.fromJson(json);
+    }
+
+    return this
+        .get(responseHandler, "/folders/${path_folder_id}", {"fields": fields});
   }
 
   /**
@@ -2655,7 +3308,13 @@ class Looker31SDKStream extends APIMethods {
      */
       UpdateFolder body) async {
     var path_folder_id = encodeParam(folder_id);
-    return this.patch("/folders/${path_folder_id}", null, body);
+
+    Folder responseHandler(dynamic json) {
+      return Folder.fromJson(json);
+    }
+
+    return this.patch(responseHandler, "/folders/${path_folder_id}", null,
+        body == null ? null : body.toJson());
   }
 
   /**
@@ -2670,7 +3329,12 @@ class Looker31SDKStream extends APIMethods {
      */
       String folder_id) async {
     var path_folder_id = encodeParam(folder_id);
-    return this.delete("/folders/${path_folder_id}");
+
+    String responseHandler(dynamic json) {
+      return json;
+    }
+
+    return this.delete(responseHandler, "/folders/${path_folder_id}");
   }
 
   /**
@@ -2683,7 +3347,11 @@ class Looker31SDKStream extends APIMethods {
      * @param {String} fields Requested fields.
      */
       String fields]) async {
-    return this.get("/folders", {"fields": fields});
+    List<Folder> responseHandler(dynamic json) {
+      return json.map<Folder>((i) => Folder.fromJson(i)).toList();
+    }
+
+    return this.get(responseHandler, "/folders", {"fields": fields});
   }
 
   /**
@@ -2699,7 +3367,12 @@ class Looker31SDKStream extends APIMethods {
      * @param {CreateFolder} body
      */
       CreateFolder body) async {
-    return this.post("/folders", null, body);
+    Folder responseHandler(dynamic json) {
+      return Folder.fromJson(json);
+    }
+
+    return this.post(
+        responseHandler, "/folders", null, body == null ? null : body.toJson());
   }
 
   /**
@@ -2729,7 +3402,12 @@ class Looker31SDKStream extends APIMethods {
      */
       String sorts]) async {
     var path_folder_id = encodeParam(folder_id);
-    return this.get("/folders/${path_folder_id}/children",
+
+    List<Folder> responseHandler(dynamic json) {
+      return json.map<Folder>((i) => Folder.fromJson(i)).toList();
+    }
+
+    return this.get(responseHandler, "/folders/${path_folder_id}/children",
         {"fields": fields, "page": page, "per_page": per_page, "sorts": sorts});
   }
 
@@ -2756,7 +3434,14 @@ class Looker31SDKStream extends APIMethods {
      */
       String name]) async {
     var path_folder_id = encodeParam(folder_id);
-    return this.get("/folders/${path_folder_id}/children/search",
+
+    List<Folder> responseHandler(dynamic json) {
+      return json.map<Folder>((i) => Folder.fromJson(i)).toList();
+    }
+
+    return this.get(
+        responseHandler,
+        "/folders/${path_folder_id}/children/search",
         {"fields": fields, "sorts": sorts, "name": name});
   }
 
@@ -2775,7 +3460,13 @@ class Looker31SDKStream extends APIMethods {
      */
       String fields]) async {
     var path_folder_id = encodeParam(folder_id);
-    return this.get("/folders/${path_folder_id}/parent", {"fields": fields});
+
+    Folder responseHandler(dynamic json) {
+      return Folder.fromJson(json);
+    }
+
+    return this.get(responseHandler, "/folders/${path_folder_id}/parent",
+        {"fields": fields});
   }
 
   /**
@@ -2793,7 +3484,13 @@ class Looker31SDKStream extends APIMethods {
      */
       String fields]) async {
     var path_folder_id = encodeParam(folder_id);
-    return this.get("/folders/${path_folder_id}/ancestors", {"fields": fields});
+
+    List<Folder> responseHandler(dynamic json) {
+      return json.map<Folder>((i) => Folder.fromJson(i)).toList();
+    }
+
+    return this.get(responseHandler, "/folders/${path_folder_id}/ancestors",
+        {"fields": fields});
   }
 
   /**
@@ -2811,7 +3508,13 @@ class Looker31SDKStream extends APIMethods {
      */
       String fields]) async {
     var path_folder_id = encodeParam(folder_id);
-    return this.get("/folders/${path_folder_id}/looks", {"fields": fields});
+
+    List<LookWithQuery> responseHandler(dynamic json) {
+      return json.map<LookWithQuery>((i) => LookWithQuery.fromJson(i)).toList();
+    }
+
+    return this.get(responseHandler, "/folders/${path_folder_id}/looks",
+        {"fields": fields});
   }
 
   /**
@@ -2829,8 +3532,13 @@ class Looker31SDKStream extends APIMethods {
      */
       String fields]) async {
     var path_folder_id = encodeParam(folder_id);
-    return this
-        .get("/folders/${path_folder_id}/dashboards", {"fields": fields});
+
+    List<Dashboard> responseHandler(dynamic json) {
+      return json.map<Dashboard>((i) => Dashboard.fromJson(i)).toList();
+    }
+
+    return this.get(responseHandler, "/folders/${path_folder_id}/dashboards",
+        {"fields": fields});
   }
 
   //endregion Folder: Manage Folders
@@ -2871,7 +3579,11 @@ class Looker31SDKStream extends APIMethods {
      * @param {bool} can_add_to_content_metadata Select only groups that either can/cannot be given access to content.
      */
       bool can_add_to_content_metadata]) async {
-    return this.get("/groups", {
+    List<Group> responseHandler(dynamic json) {
+      return json.map<Group>((i) => Group.fromJson(i)).toList();
+    }
+
+    return this.get(responseHandler, "/groups", {
       "fields": fields,
       "page": page,
       "per_page": per_page,
@@ -2896,7 +3608,12 @@ class Looker31SDKStream extends APIMethods {
      * @param {String} fields Requested fields.
      */
       String fields]) async {
-    return this.post("/groups", {"fields": fields}, body);
+    Group responseHandler(dynamic json) {
+      return Group.fromJson(json);
+    }
+
+    return this.post(responseHandler, "/groups", {"fields": fields},
+        body == null ? null : body.toJson());
   }
 
   /**
@@ -2968,7 +3685,11 @@ class Looker31SDKStream extends APIMethods {
      * @param {bool} externally_orphaned Match group externally_orphaned.
      */
       bool externally_orphaned]) async {
-    return this.get("/groups/search", {
+    List<Group> responseHandler(dynamic json) {
+      return json.map<Group>((i) => Group.fromJson(i)).toList();
+    }
+
+    return this.get(responseHandler, "/groups/search", {
       "fields": fields,
       "limit": limit,
       "offset": offset,
@@ -2997,7 +3718,13 @@ class Looker31SDKStream extends APIMethods {
      */
       String fields]) async {
     var path_group_id = encodeParam(group_id);
-    return this.get("/groups/${path_group_id}", {"fields": fields});
+
+    Group responseHandler(dynamic json) {
+      return Group.fromJson(json);
+    }
+
+    return this
+        .get(responseHandler, "/groups/${path_group_id}", {"fields": fields});
   }
 
   /**
@@ -3019,7 +3746,13 @@ class Looker31SDKStream extends APIMethods {
      */
       String fields]) async {
     var path_group_id = encodeParam(group_id);
-    return this.patch("/groups/${path_group_id}", {"fields": fields}, body);
+
+    Group responseHandler(dynamic json) {
+      return Group.fromJson(json);
+    }
+
+    return this.patch(responseHandler, "/groups/${path_group_id}",
+        {"fields": fields}, body == null ? null : body.toJson());
   }
 
   /**
@@ -3033,7 +3766,12 @@ class Looker31SDKStream extends APIMethods {
      */
       int group_id) async {
     var path_group_id = encodeParam(group_id);
-    return this.delete("/groups/${path_group_id}");
+
+    String responseHandler(dynamic json) {
+      return json;
+    }
+
+    return this.delete(responseHandler, "/groups/${path_group_id}");
   }
 
   /**
@@ -3051,7 +3789,13 @@ class Looker31SDKStream extends APIMethods {
      */
       String fields]) async {
     var path_group_id = encodeParam(group_id);
-    return this.get("/groups/${path_group_id}/groups", {"fields": fields});
+
+    List<Group> responseHandler(dynamic json) {
+      return json.map<Group>((i) => Group.fromJson(i)).toList();
+    }
+
+    return this.get(
+        responseHandler, "/groups/${path_group_id}/groups", {"fields": fields});
   }
 
   /**
@@ -3069,7 +3813,13 @@ class Looker31SDKStream extends APIMethods {
      */
       GroupIdForGroupInclusion body) async {
     var path_group_id = encodeParam(group_id);
-    return this.post("/groups/${path_group_id}/groups", null, body);
+
+    Group responseHandler(dynamic json) {
+      return Group.fromJson(json);
+    }
+
+    return this.post(responseHandler, "/groups/${path_group_id}/groups", null,
+        body == null ? null : body.toJson());
   }
 
   /**
@@ -3099,7 +3849,12 @@ class Looker31SDKStream extends APIMethods {
      */
       String sorts]) async {
     var path_group_id = encodeParam(group_id);
-    return this.get("/groups/${path_group_id}/users",
+
+    List<User> responseHandler(dynamic json) {
+      return json.map<User>((i) => User.fromJson(i)).toList();
+    }
+
+    return this.get(responseHandler, "/groups/${path_group_id}/users",
         {"fields": fields, "page": page, "per_page": per_page, "sorts": sorts});
   }
 
@@ -3118,7 +3873,13 @@ class Looker31SDKStream extends APIMethods {
      */
       GroupIdForGroupUserInclusion body) async {
     var path_group_id = encodeParam(group_id);
-    return this.post("/groups/${path_group_id}/users", null, body);
+
+    User responseHandler(dynamic json) {
+      return User.fromJson(json);
+    }
+
+    return this.post(responseHandler, "/groups/${path_group_id}/users", null,
+        body == null ? null : body.toJson());
   }
 
   /**
@@ -3137,7 +3898,10 @@ class Looker31SDKStream extends APIMethods {
       int user_id) async {
     var path_group_id = encodeParam(group_id);
     var path_user_id = encodeParam(user_id);
-    return this.delete("/groups/${path_group_id}/users/${path_user_id}");
+
+    void responseHandler(dynamic json) {}
+    return this.delete(
+        responseHandler, "/groups/${path_group_id}/users/${path_user_id}");
   }
 
   /**
@@ -3156,8 +3920,10 @@ class Looker31SDKStream extends APIMethods {
       int deleting_group_id) async {
     var path_group_id = encodeParam(group_id);
     var path_deleting_group_id = encodeParam(deleting_group_id);
-    return this
-        .delete("/groups/${path_group_id}/groups/${path_deleting_group_id}");
+
+    void responseHandler(dynamic json) {}
+    return this.delete(responseHandler,
+        "/groups/${path_group_id}/groups/${path_deleting_group_id}");
   }
 
   /**
@@ -3183,10 +3949,16 @@ class Looker31SDKStream extends APIMethods {
           UserAttributeGroupValue body) async {
     var path_group_id = encodeParam(group_id);
     var path_user_attribute_id = encodeParam(user_attribute_id);
+
+    UserAttributeGroupValue responseHandler(dynamic json) {
+      return UserAttributeGroupValue.fromJson(json);
+    }
+
     return this.patch(
+        responseHandler,
         "/groups/${path_group_id}/attribute_values/${path_user_attribute_id}",
         null,
-        body);
+        body == null ? null : body.toJson());
   }
 
   /**
@@ -3205,7 +3977,9 @@ class Looker31SDKStream extends APIMethods {
       int user_attribute_id) async {
     var path_group_id = encodeParam(group_id);
     var path_user_attribute_id = encodeParam(user_attribute_id);
-    return this.delete(
+
+    void responseHandler(dynamic json) {}
+    return this.delete(responseHandler,
         "/groups/${path_group_id}/attribute_values/${path_user_attribute_id}");
   }
 
@@ -3223,7 +3997,11 @@ class Looker31SDKStream extends APIMethods {
      * @param {String} fields Requested fields.
      */
       String fields]) async {
-    return this.get("/homepages", {"fields": fields});
+    List<Homepage> responseHandler(dynamic json) {
+      return json.map<Homepage>((i) => Homepage.fromJson(i)).toList();
+    }
+
+    return this.get(responseHandler, "/homepages", {"fields": fields});
   }
 
   /**
@@ -3240,7 +4018,12 @@ class Looker31SDKStream extends APIMethods {
      * @param {String} fields Requested fields.
      */
       String fields]) async {
-    return this.post("/homepages", {"fields": fields}, body);
+    Homepage responseHandler(dynamic json) {
+      return Homepage.fromJson(json);
+    }
+
+    return this.post(responseHandler, "/homepages", {"fields": fields},
+        body == null ? null : body.toJson());
   }
 
   /**
@@ -3322,7 +4105,11 @@ class Looker31SDKStream extends APIMethods {
      * @param {bool} filter_or Combine given search criteria in a boolean OR expression
      */
       bool filter_or]) async {
-    return this.get("/homepages/search", {
+    List<Homepage> responseHandler(dynamic json) {
+      return json.map<Homepage>((i) => Homepage.fromJson(i)).toList();
+    }
+
+    return this.get(responseHandler, "/homepages/search", {
       "title": title,
       "created_at": created_at,
       "first_name": first_name,
@@ -3354,7 +4141,13 @@ class Looker31SDKStream extends APIMethods {
      */
       String fields]) async {
     var path_homepage_id = encodeParam(homepage_id);
-    return this.get("/homepages/${path_homepage_id}", {"fields": fields});
+
+    Homepage responseHandler(dynamic json) {
+      return Homepage.fromJson(json);
+    }
+
+    return this.get(
+        responseHandler, "/homepages/${path_homepage_id}", {"fields": fields});
   }
 
   /**
@@ -3376,8 +4169,13 @@ class Looker31SDKStream extends APIMethods {
      */
       String fields]) async {
     var path_homepage_id = encodeParam(homepage_id);
-    return this
-        .patch("/homepages/${path_homepage_id}", {"fields": fields}, body);
+
+    Homepage responseHandler(dynamic json) {
+      return Homepage.fromJson(json);
+    }
+
+    return this.patch(responseHandler, "/homepages/${path_homepage_id}",
+        {"fields": fields}, body == null ? null : body.toJson());
   }
 
   /**
@@ -3391,7 +4189,12 @@ class Looker31SDKStream extends APIMethods {
      */
       int homepage_id) async {
     var path_homepage_id = encodeParam(homepage_id);
-    return this.delete("/homepages/${path_homepage_id}");
+
+    String responseHandler(dynamic json) {
+      return json;
+    }
+
+    return this.delete(responseHandler, "/homepages/${path_homepage_id}");
   }
 
   /**
@@ -3412,7 +4215,11 @@ class Looker31SDKStream extends APIMethods {
      * @param {String} homepage_section_id Filter to a specific homepage section
      */
       String homepage_section_id]) async {
-    return this.get("/homepage_items", {
+    List<HomepageItem> responseHandler(dynamic json) {
+      return json.map<HomepageItem>((i) => HomepageItem.fromJson(i)).toList();
+    }
+
+    return this.get(responseHandler, "/homepage_items", {
       "fields": fields,
       "sorts": sorts,
       "homepage_section_id": homepage_section_id
@@ -3433,7 +4240,12 @@ class Looker31SDKStream extends APIMethods {
      * @param {String} fields Requested fields.
      */
       String fields]) async {
-    return this.post("/homepage_items", {"fields": fields}, body);
+    HomepageItem responseHandler(dynamic json) {
+      return HomepageItem.fromJson(json);
+    }
+
+    return this.post(responseHandler, "/homepage_items", {"fields": fields},
+        body == null ? null : body.toJson());
   }
 
   /**
@@ -3451,8 +4263,13 @@ class Looker31SDKStream extends APIMethods {
      */
       String fields]) async {
     var path_homepage_item_id = encodeParam(homepage_item_id);
-    return this
-        .get("/homepage_items/${path_homepage_item_id}", {"fields": fields});
+
+    HomepageItem responseHandler(dynamic json) {
+      return HomepageItem.fromJson(json);
+    }
+
+    return this.get(responseHandler, "/homepage_items/${path_homepage_item_id}",
+        {"fields": fields});
   }
 
   /**
@@ -3474,8 +4291,16 @@ class Looker31SDKStream extends APIMethods {
      */
       String fields]) async {
     var path_homepage_item_id = encodeParam(homepage_item_id);
+
+    HomepageItem responseHandler(dynamic json) {
+      return HomepageItem.fromJson(json);
+    }
+
     return this.patch(
-        "/homepage_items/${path_homepage_item_id}", {"fields": fields}, body);
+        responseHandler,
+        "/homepage_items/${path_homepage_item_id}",
+        {"fields": fields},
+        body == null ? null : body.toJson());
   }
 
   /**
@@ -3489,7 +4314,13 @@ class Looker31SDKStream extends APIMethods {
      */
       int homepage_item_id) async {
     var path_homepage_item_id = encodeParam(homepage_item_id);
-    return this.delete("/homepage_items/${path_homepage_item_id}");
+
+    String responseHandler(dynamic json) {
+      return json;
+    }
+
+    return this
+        .delete(responseHandler, "/homepage_items/${path_homepage_item_id}");
   }
 
   /**
@@ -3506,7 +4337,14 @@ class Looker31SDKStream extends APIMethods {
      * @param {String} sorts Fields to sort by.
      */
       String sorts]) async {
-    return this.get("/homepage_sections", {"fields": fields, "sorts": sorts});
+    List<HomepageSection> responseHandler(dynamic json) {
+      return json
+          .map<HomepageSection>((i) => HomepageSection.fromJson(i))
+          .toList();
+    }
+
+    return this.get(responseHandler, "/homepage_sections",
+        {"fields": fields, "sorts": sorts});
   }
 
   /**
@@ -3523,7 +4361,12 @@ class Looker31SDKStream extends APIMethods {
      * @param {String} fields Requested fields.
      */
       String fields]) async {
-    return this.post("/homepage_sections", {"fields": fields}, body);
+    HomepageSection responseHandler(dynamic json) {
+      return HomepageSection.fromJson(json);
+    }
+
+    return this.post(responseHandler, "/homepage_sections", {"fields": fields},
+        body == null ? null : body.toJson());
   }
 
   /**
@@ -3541,7 +4384,12 @@ class Looker31SDKStream extends APIMethods {
      */
       String fields]) async {
     var path_homepage_section_id = encodeParam(homepage_section_id);
-    return this.get(
+
+    HomepageSection responseHandler(dynamic json) {
+      return HomepageSection.fromJson(json);
+    }
+
+    return this.get(responseHandler,
         "/homepage_sections/${path_homepage_section_id}", {"fields": fields});
   }
 
@@ -3564,8 +4412,16 @@ class Looker31SDKStream extends APIMethods {
      */
       String fields]) async {
     var path_homepage_section_id = encodeParam(homepage_section_id);
-    return this.patch("/homepage_sections/${path_homepage_section_id}",
-        {"fields": fields}, body);
+
+    HomepageSection responseHandler(dynamic json) {
+      return HomepageSection.fromJson(json);
+    }
+
+    return this.patch(
+        responseHandler,
+        "/homepage_sections/${path_homepage_section_id}",
+        {"fields": fields},
+        body == null ? null : body.toJson());
   }
 
   /**
@@ -3579,7 +4435,13 @@ class Looker31SDKStream extends APIMethods {
      */
       int homepage_section_id) async {
     var path_homepage_section_id = encodeParam(homepage_section_id);
-    return this.delete("/homepage_sections/${path_homepage_section_id}");
+
+    String responseHandler(dynamic json) {
+      return json;
+    }
+
+    return this.delete(
+        responseHandler, "/homepage_sections/${path_homepage_section_id}");
   }
 
   /**
@@ -3592,7 +4454,14 @@ class Looker31SDKStream extends APIMethods {
      * @param {String} fields Requested fields.
      */
       String fields]) async {
-    return this.get("/primary_homepage_sections", {"fields": fields});
+    List<HomepageSection> responseHandler(dynamic json) {
+      return json
+          .map<HomepageSection>((i) => HomepageSection.fromJson(i))
+          .toList();
+    }
+
+    return this
+        .get(responseHandler, "/primary_homepage_sections", {"fields": fields});
   }
 
   //endregion Homepage: Manage Homepage
@@ -3609,7 +4478,13 @@ class Looker31SDKStream extends APIMethods {
      * @param {String} fields Requested fields.
      */
       String fields]) async {
-    return this.get("/integration_hubs", {"fields": fields});
+    List<IntegrationHub> responseHandler(dynamic json) {
+      return json
+          .map<IntegrationHub>((i) => IntegrationHub.fromJson(i))
+          .toList();
+    }
+
+    return this.get(responseHandler, "/integration_hubs", {"fields": fields});
   }
 
   /**
@@ -3628,7 +4503,12 @@ class Looker31SDKStream extends APIMethods {
      * @param {String} fields Requested fields.
      */
       String fields]) async {
-    return this.post("/integration_hubs", {"fields": fields}, body);
+    IntegrationHub responseHandler(dynamic json) {
+      return IntegrationHub.fromJson(json);
+    }
+
+    return this.post(responseHandler, "/integration_hubs", {"fields": fields},
+        body == null ? null : body.toJson());
   }
 
   /**
@@ -3646,7 +4526,12 @@ class Looker31SDKStream extends APIMethods {
      */
       String fields]) async {
     var path_integration_hub_id = encodeParam(integration_hub_id);
-    return this.get(
+
+    IntegrationHub responseHandler(dynamic json) {
+      return IntegrationHub.fromJson(json);
+    }
+
+    return this.get(responseHandler,
         "/integration_hubs/${path_integration_hub_id}", {"fields": fields});
   }
 
@@ -3671,8 +4556,16 @@ class Looker31SDKStream extends APIMethods {
      */
       String fields]) async {
     var path_integration_hub_id = encodeParam(integration_hub_id);
-    return this.patch("/integration_hubs/${path_integration_hub_id}",
-        {"fields": fields}, body);
+
+    IntegrationHub responseHandler(dynamic json) {
+      return IntegrationHub.fromJson(json);
+    }
+
+    return this.patch(
+        responseHandler,
+        "/integration_hubs/${path_integration_hub_id}",
+        {"fields": fields},
+        body == null ? null : body.toJson());
   }
 
   /**
@@ -3686,7 +4579,13 @@ class Looker31SDKStream extends APIMethods {
      */
       int integration_hub_id) async {
     var path_integration_hub_id = encodeParam(integration_hub_id);
-    return this.delete("/integration_hubs/${path_integration_hub_id}");
+
+    String responseHandler(dynamic json) {
+      return json;
+    }
+
+    return this.delete(
+        responseHandler, "/integration_hubs/${path_integration_hub_id}");
   }
 
   /**
@@ -3700,7 +4599,12 @@ class Looker31SDKStream extends APIMethods {
      */
       int integration_hub_id) async {
     var path_integration_hub_id = encodeParam(integration_hub_id);
-    return this.post(
+
+    IntegrationHub responseHandler(dynamic json) {
+      return IntegrationHub.fromJson(json);
+    }
+
+    return this.post(responseHandler,
         "/integration_hubs/${path_integration_hub_id}/accept_legal_agreement");
   }
 
@@ -3718,7 +4622,11 @@ class Looker31SDKStream extends APIMethods {
      * @param {String} integration_hub_id Filter to a specific provider
      */
       String integration_hub_id]) async {
-    return this.get("/integrations",
+    List<Integration> responseHandler(dynamic json) {
+      return json.map<Integration>((i) => Integration.fromJson(i)).toList();
+    }
+
+    return this.get(responseHandler, "/integrations",
         {"fields": fields, "integration_hub_id": integration_hub_id});
   }
 
@@ -3737,7 +4645,13 @@ class Looker31SDKStream extends APIMethods {
      */
       String fields]) async {
     var path_integration_id = encodeParam(integration_id);
-    return this.get("/integrations/${path_integration_id}", {"fields": fields});
+
+    Integration responseHandler(dynamic json) {
+      return Integration.fromJson(json);
+    }
+
+    return this.get(responseHandler, "/integrations/${path_integration_id}",
+        {"fields": fields});
   }
 
   /**
@@ -3759,8 +4673,13 @@ class Looker31SDKStream extends APIMethods {
      */
       String fields]) async {
     var path_integration_id = encodeParam(integration_id);
-    return this.patch(
-        "/integrations/${path_integration_id}", {"fields": fields}, body);
+
+    Integration responseHandler(dynamic json) {
+      return Integration.fromJson(json);
+    }
+
+    return this.patch(responseHandler, "/integrations/${path_integration_id}",
+        {"fields": fields}, body == null ? null : body.toJson());
   }
 
   /**
@@ -3778,7 +4697,13 @@ class Looker31SDKStream extends APIMethods {
      */
       Map<String, dynamic> body]) async {
     var path_integration_id = encodeParam(integration_id);
-    return this.post("/integrations/${path_integration_id}/form", null, body);
+
+    DataActionForm responseHandler(dynamic json) {
+      return DataActionForm.fromJson(json);
+    }
+
+    return this.post(responseHandler,
+        "/integrations/${path_integration_id}/form", null, body);
   }
 
   /**
@@ -3792,7 +4717,13 @@ class Looker31SDKStream extends APIMethods {
      */
       String integration_id) async {
     var path_integration_id = encodeParam(integration_id);
-    return this.post("/integrations/${path_integration_id}/test");
+
+    IntegrationTestResult responseHandler(dynamic json) {
+      return IntegrationTestResult.fromJson(json);
+    }
+
+    return this
+        .post(responseHandler, "/integrations/${path_integration_id}/test");
   }
 
   //endregion Integration: Manage Integrations
@@ -3815,7 +4746,11 @@ class Looker31SDKStream extends APIMethods {
      * @param {String} fields Requested fields.
      */
       String fields]) async {
-    return this.get("/looks", {"fields": fields});
+    List<Look> responseHandler(dynamic json) {
+      return json.map<Look>((i) => Look.fromJson(i)).toList();
+    }
+
+    return this.get(responseHandler, "/looks", {"fields": fields});
   }
 
   /**
@@ -3838,7 +4773,12 @@ class Looker31SDKStream extends APIMethods {
      * @param {String} fields Requested fields.
      */
       String fields]) async {
-    return this.post("/looks", {"fields": fields}, body);
+    LookWithQuery responseHandler(dynamic json) {
+      return LookWithQuery.fromJson(json);
+    }
+
+    return this.post(responseHandler, "/looks", {"fields": fields},
+        body == null ? null : body.toJson());
   }
 
   /**
@@ -3941,7 +4881,11 @@ class Looker31SDKStream extends APIMethods {
      * @param {bool} filter_or Combine given search criteria in a boolean OR expression
      */
       bool filter_or]) async {
-    return this.get("/looks/search", {
+    List<Look> responseHandler(dynamic json) {
+      return json.map<Look>((i) => Look.fromJson(i)).toList();
+    }
+
+    return this.get(responseHandler, "/looks/search", {
       "id": id,
       "title": title,
       "description": description,
@@ -3979,7 +4923,13 @@ class Looker31SDKStream extends APIMethods {
      */
       String fields]) async {
     var path_look_id = encodeParam(look_id);
-    return this.get("/looks/${path_look_id}", {"fields": fields});
+
+    LookWithQuery responseHandler(dynamic json) {
+      return LookWithQuery.fromJson(json);
+    }
+
+    return this
+        .get(responseHandler, "/looks/${path_look_id}", {"fields": fields});
   }
 
   /**
@@ -4020,7 +4970,13 @@ class Looker31SDKStream extends APIMethods {
      */
       String fields]) async {
     var path_look_id = encodeParam(look_id);
-    return this.patch("/looks/${path_look_id}", {"fields": fields}, body);
+
+    LookWithQuery responseHandler(dynamic json) {
+      return LookWithQuery.fromJson(json);
+    }
+
+    return this.patch(responseHandler, "/looks/${path_look_id}",
+        {"fields": fields}, body == null ? null : body.toJson());
   }
 
   /**
@@ -4040,7 +4996,12 @@ class Looker31SDKStream extends APIMethods {
      */
       int look_id) async {
     var path_look_id = encodeParam(look_id);
-    return this.delete("/looks/${path_look_id}");
+
+    String responseHandler(dynamic json) {
+      return json;
+    }
+
+    return this.delete(responseHandler, "/looks/${path_look_id}");
   }
 
   /**
@@ -4126,7 +5087,13 @@ class Looker31SDKStream extends APIMethods {
       bool server_table_calcs]) async {
     var path_look_id = encodeParam(look_id);
     var path_result_format = encodeParam(result_format);
-    return this.get("/looks/${path_look_id}/run/${path_result_format}", {
+
+    String responseHandler(dynamic json) {
+      return json;
+    }
+
+    return this.get(
+        responseHandler, "/looks/${path_look_id}/run/${path_result_format}", {
       "limit": limit,
       "apply_formatting": apply_formatting,
       "apply_vis": apply_vis,
@@ -4156,7 +5123,11 @@ class Looker31SDKStream extends APIMethods {
      * @param {String} fields Requested fields.
      */
       String fields]) async {
-    return this.get("/lookml_models", {"fields": fields});
+    List<LookmlModel> responseHandler(dynamic json) {
+      return json.map<LookmlModel>((i) => LookmlModel.fromJson(i)).toList();
+    }
+
+    return this.get(responseHandler, "/lookml_models", {"fields": fields});
   }
 
   /**
@@ -4169,7 +5140,12 @@ class Looker31SDKStream extends APIMethods {
      * @param {WriteLookmlModel} body
      */
       WriteLookmlModel body) async {
-    return this.post("/lookml_models", null, body);
+    LookmlModel responseHandler(dynamic json) {
+      return LookmlModel.fromJson(json);
+    }
+
+    return this.post(responseHandler, "/lookml_models", null,
+        body == null ? null : body.toJson());
   }
 
   /**
@@ -4187,8 +5163,13 @@ class Looker31SDKStream extends APIMethods {
      */
       String fields]) async {
     var path_lookml_model_name = encodeParam(lookml_model_name);
-    return this
-        .get("/lookml_models/${path_lookml_model_name}", {"fields": fields});
+
+    LookmlModel responseHandler(dynamic json) {
+      return LookmlModel.fromJson(json);
+    }
+
+    return this.get(responseHandler, "/lookml_models/${path_lookml_model_name}",
+        {"fields": fields});
   }
 
   /**
@@ -4206,7 +5187,16 @@ class Looker31SDKStream extends APIMethods {
      */
       WriteLookmlModel body) async {
     var path_lookml_model_name = encodeParam(lookml_model_name);
-    return this.patch("/lookml_models/${path_lookml_model_name}", null, body);
+
+    LookmlModel responseHandler(dynamic json) {
+      return LookmlModel.fromJson(json);
+    }
+
+    return this.patch(
+        responseHandler,
+        "/lookml_models/${path_lookml_model_name}",
+        null,
+        body == null ? null : body.toJson());
   }
 
   /**
@@ -4220,7 +5210,13 @@ class Looker31SDKStream extends APIMethods {
      */
       String lookml_model_name) async {
     var path_lookml_model_name = encodeParam(lookml_model_name);
-    return this.delete("/lookml_models/${path_lookml_model_name}");
+
+    String responseHandler(dynamic json) {
+      return json;
+    }
+
+    return this
+        .delete(responseHandler, "/lookml_models/${path_lookml_model_name}");
   }
 
   /**
@@ -4243,7 +5239,13 @@ class Looker31SDKStream extends APIMethods {
       String fields]) async {
     var path_lookml_model_name = encodeParam(lookml_model_name);
     var path_explore_name = encodeParam(explore_name);
+
+    LookmlModelExplore responseHandler(dynamic json) {
+      return LookmlModelExplore.fromJson(json);
+    }
+
     return this.get(
+        responseHandler,
         "/lookml_models/${path_lookml_model_name}/explores/${path_explore_name}",
         {"fields": fields});
   }
@@ -4265,7 +5267,13 @@ class Looker31SDKStream extends APIMethods {
      */
       String project_id) async {
     var path_project_id = encodeParam(project_id);
-    return this.get("/projects/${path_project_id}/git_branches");
+
+    List<GitBranch> responseHandler(dynamic json) {
+      return json.map<GitBranch>((i) => GitBranch.fromJson(i)).toList();
+    }
+
+    return this
+        .get(responseHandler, "/projects/${path_project_id}/git_branches");
   }
 
   /**
@@ -4281,7 +5289,12 @@ class Looker31SDKStream extends APIMethods {
      */
       String project_id) async {
     var path_project_id = encodeParam(project_id);
-    return this.get("/projects/${path_project_id}/git_branch");
+
+    GitBranch responseHandler(dynamic json) {
+      return GitBranch.fromJson(json);
+    }
+
+    return this.get(responseHandler, "/projects/${path_project_id}/git_branch");
   }
 
   /**
@@ -4307,7 +5320,13 @@ class Looker31SDKStream extends APIMethods {
      */
       WriteGitBranch body) async {
     var path_project_id = encodeParam(project_id);
-    return this.put("/projects/${path_project_id}/git_branch", null, body);
+
+    GitBranch responseHandler(dynamic json) {
+      return GitBranch.fromJson(json);
+    }
+
+    return this.put(responseHandler, "/projects/${path_project_id}/git_branch",
+        null, body == null ? null : body.toJson());
   }
 
   /**
@@ -4332,7 +5351,13 @@ class Looker31SDKStream extends APIMethods {
      */
       WriteGitBranch body) async {
     var path_project_id = encodeParam(project_id);
-    return this.post("/projects/${path_project_id}/git_branch", null, body);
+
+    GitBranch responseHandler(dynamic json) {
+      return GitBranch.fromJson(json);
+    }
+
+    return this.post(responseHandler, "/projects/${path_project_id}/git_branch",
+        null, body == null ? null : body.toJson());
   }
 
   /**
@@ -4353,8 +5378,13 @@ class Looker31SDKStream extends APIMethods {
       String branch_name) async {
     var path_project_id = encodeParam(project_id);
     var path_branch_name = encodeParam(branch_name);
-    return this
-        .get("/projects/${path_project_id}/git_branch/${path_branch_name}");
+
+    GitBranch responseHandler(dynamic json) {
+      return GitBranch.fromJson(json);
+    }
+
+    return this.get(responseHandler,
+        "/projects/${path_project_id}/git_branch/${path_branch_name}");
   }
 
   /**
@@ -4375,8 +5405,13 @@ class Looker31SDKStream extends APIMethods {
       String branch_name) async {
     var path_project_id = encodeParam(project_id);
     var path_branch_name = encodeParam(branch_name);
-    return this
-        .delete("/projects/${path_project_id}/git_branch/${path_branch_name}");
+
+    String responseHandler(dynamic json) {
+      return json;
+    }
+
+    return this.delete(responseHandler,
+        "/projects/${path_project_id}/git_branch/${path_branch_name}");
   }
 
   /**
@@ -4406,7 +5441,14 @@ class Looker31SDKStream extends APIMethods {
      */
       String ref]) async {
     var path_project_id = encodeParam(project_id);
-    return this.post("/projects/${path_project_id}/deploy_ref_to_production",
+
+    String responseHandler(dynamic json) {
+      return json;
+    }
+
+    return this.post(
+        responseHandler,
+        "/projects/${path_project_id}/deploy_ref_to_production",
         {"branch": branch, "ref": ref});
   }
 
@@ -4432,7 +5474,13 @@ class Looker31SDKStream extends APIMethods {
      */
       String project_id) async {
     var path_project_id = encodeParam(project_id);
-    return this.post("/projects/${path_project_id}/deploy_to_production");
+
+    String responseHandler(dynamic json) {
+      return json;
+    }
+
+    return this.post(
+        responseHandler, "/projects/${path_project_id}/deploy_to_production");
   }
 
   /**
@@ -4448,7 +5496,13 @@ class Looker31SDKStream extends APIMethods {
      */
       String project_id) async {
     var path_project_id = encodeParam(project_id);
-    return this.post("/projects/${path_project_id}/reset_to_production");
+
+    String responseHandler(dynamic json) {
+      return json;
+    }
+
+    return this.post(
+        responseHandler, "/projects/${path_project_id}/reset_to_production");
   }
 
   /**
@@ -4464,7 +5518,13 @@ class Looker31SDKStream extends APIMethods {
      */
       String project_id) async {
     var path_project_id = encodeParam(project_id);
-    return this.post("/projects/${path_project_id}/reset_to_remote");
+
+    String responseHandler(dynamic json) {
+      return json;
+    }
+
+    return this
+        .post(responseHandler, "/projects/${path_project_id}/reset_to_remote");
   }
 
   /**
@@ -4479,7 +5539,11 @@ class Looker31SDKStream extends APIMethods {
      * @param {String} fields Requested fields
      */
       String fields]) async {
-    return this.get("/projects", {"fields": fields});
+    List<Project> responseHandler(dynamic json) {
+      return json.map<Project>((i) => Project.fromJson(i)).toList();
+    }
+
+    return this.get(responseHandler, "/projects", {"fields": fields});
   }
 
   /**
@@ -4498,7 +5562,12 @@ class Looker31SDKStream extends APIMethods {
      * @param {WriteProject} body
      */
       WriteProject body) async {
-    return this.post("/projects", null, body);
+    Project responseHandler(dynamic json) {
+      return Project.fromJson(json);
+    }
+
+    return this.post(responseHandler, "/projects", null,
+        body == null ? null : body.toJson());
   }
 
   /**
@@ -4518,7 +5587,13 @@ class Looker31SDKStream extends APIMethods {
      */
       String fields]) async {
     var path_project_id = encodeParam(project_id);
-    return this.get("/projects/${path_project_id}", {"fields": fields});
+
+    Project responseHandler(dynamic json) {
+      return Project.fromJson(json);
+    }
+
+    return this.get(
+        responseHandler, "/projects/${path_project_id}", {"fields": fields});
   }
 
   /**
@@ -4561,7 +5636,13 @@ class Looker31SDKStream extends APIMethods {
      */
       String fields]) async {
     var path_project_id = encodeParam(project_id);
-    return this.patch("/projects/${path_project_id}", {"fields": fields}, body);
+
+    Project responseHandler(dynamic json) {
+      return Project.fromJson(json);
+    }
+
+    return this.patch(responseHandler, "/projects/${path_project_id}",
+        {"fields": fields}, body == null ? null : body.toJson());
   }
 
   /**
@@ -4577,7 +5658,12 @@ class Looker31SDKStream extends APIMethods {
      */
       String project_id) async {
     var path_project_id = encodeParam(project_id);
-    return this.get("/projects/${path_project_id}/manifest");
+
+    Manifest responseHandler(dynamic json) {
+      return Manifest.fromJson(json);
+    }
+
+    return this.get(responseHandler, "/projects/${path_project_id}/manifest");
   }
 
   /**
@@ -4593,7 +5679,13 @@ class Looker31SDKStream extends APIMethods {
      */
       String project_id) async {
     var path_project_id = encodeParam(project_id);
-    return this.get("/projects/${path_project_id}/git/deploy_key");
+
+    String responseHandler(dynamic json) {
+      return json;
+    }
+
+    return this
+        .get(responseHandler, "/projects/${path_project_id}/git/deploy_key");
   }
 
   /**
@@ -4615,7 +5707,13 @@ class Looker31SDKStream extends APIMethods {
      */
       String project_id) async {
     var path_project_id = encodeParam(project_id);
-    return this.post("/projects/${path_project_id}/git/deploy_key");
+
+    String responseHandler(dynamic json) {
+      return json;
+    }
+
+    return this
+        .post(responseHandler, "/projects/${path_project_id}/git/deploy_key");
   }
 
   /**
@@ -4644,8 +5742,13 @@ class Looker31SDKStream extends APIMethods {
      */
       String fields]) async {
     var path_project_id = encodeParam(project_id);
-    return this
-        .get("/projects/${path_project_id}/validate", {"fields": fields});
+
+    ProjectValidationCache responseHandler(dynamic json) {
+      return ProjectValidationCache.fromJson(json);
+    }
+
+    return this.get(responseHandler, "/projects/${path_project_id}/validate",
+        {"fields": fields});
   }
 
   /**
@@ -4671,8 +5774,13 @@ class Looker31SDKStream extends APIMethods {
      */
       String fields]) async {
     var path_project_id = encodeParam(project_id);
-    return this
-        .post("/projects/${path_project_id}/validate", {"fields": fields});
+
+    ProjectValidation responseHandler(dynamic json) {
+      return ProjectValidation.fromJson(json);
+    }
+
+    return this.post(responseHandler, "/projects/${path_project_id}/validate",
+        {"fields": fields});
   }
 
   /**
@@ -4692,7 +5800,12 @@ class Looker31SDKStream extends APIMethods {
      */
       String fields]) async {
     var path_project_id = encodeParam(project_id);
-    return this.get(
+
+    ProjectWorkspace responseHandler(dynamic json) {
+      return ProjectWorkspace.fromJson(json);
+    }
+
+    return this.get(responseHandler,
         "/projects/${path_project_id}/current_workspace", {"fields": fields});
   }
 
@@ -4713,7 +5826,13 @@ class Looker31SDKStream extends APIMethods {
      */
       String fields]) async {
     var path_project_id = encodeParam(project_id);
-    return this.get("/projects/${path_project_id}/files", {"fields": fields});
+
+    List<ProjectFile> responseHandler(dynamic json) {
+      return json.map<ProjectFile>((i) => ProjectFile.fromJson(i)).toList();
+    }
+
+    return this.get(responseHandler, "/projects/${path_project_id}/files",
+        {"fields": fields});
   }
 
   /**
@@ -4737,7 +5856,12 @@ class Looker31SDKStream extends APIMethods {
      */
       String fields]) async {
     var path_project_id = encodeParam(project_id);
-    return this.get("/projects/${path_project_id}/files/file",
+
+    ProjectFile responseHandler(dynamic json) {
+      return ProjectFile.fromJson(json);
+    }
+
+    return this.get(responseHandler, "/projects/${path_project_id}/files/file",
         {"file_id": file_id, "fields": fields});
   }
 
@@ -4765,7 +5889,16 @@ class Looker31SDKStream extends APIMethods {
      */
       String remote_url]) async {
     var path_project_id = encodeParam(project_id);
-    return this.get("/projects/${path_project_id}/git_connection_tests",
+
+    List<GitConnectionTest> responseHandler(dynamic json) {
+      return json
+          .map<GitConnectionTest>((i) => GitConnectionTest.fromJson(i))
+          .toList();
+    }
+
+    return this.get(
+        responseHandler,
+        "/projects/${path_project_id}/git_connection_tests",
         {"remote_url": remote_url});
   }
 
@@ -4795,7 +5928,13 @@ class Looker31SDKStream extends APIMethods {
       String remote_url]) async {
     var path_project_id = encodeParam(project_id);
     var path_test_id = encodeParam(test_id);
+
+    GitConnectionTestResult responseHandler(dynamic json) {
+      return GitConnectionTestResult.fromJson(json);
+    }
+
     return this.get(
+        responseHandler,
         "/projects/${path_project_id}/git_connection_tests/${path_test_id}",
         {"remote_url": remote_url});
   }
@@ -4819,8 +5958,13 @@ class Looker31SDKStream extends APIMethods {
      */
       String file_id]) async {
     var path_project_id = encodeParam(project_id);
-    return this
-        .get("/projects/${path_project_id}/lookml_tests", {"file_id": file_id});
+
+    List<LookmlTest> responseHandler(dynamic json) {
+      return json.map<LookmlTest>((i) => LookmlTest.fromJson(i)).toList();
+    }
+
+    return this.get(responseHandler,
+        "/projects/${path_project_id}/lookml_tests", {"file_id": file_id});
   }
 
   /**
@@ -4848,7 +5992,16 @@ class Looker31SDKStream extends APIMethods {
      */
       String model]) async {
     var path_project_id = encodeParam(project_id);
-    return this.get("/projects/${path_project_id}/lookml_tests/run",
+
+    List<LookmlTestResult> responseHandler(dynamic json) {
+      return json
+          .map<LookmlTestResult>((i) => LookmlTestResult.fromJson(i))
+          .toList();
+    }
+
+    return this.get(
+        responseHandler,
+        "/projects/${path_project_id}/lookml_tests/run",
         {"file_id": file_id, "test": test, "model": model});
   }
 
@@ -4877,10 +6030,16 @@ class Looker31SDKStream extends APIMethods {
       WriteRepositoryCredential body) async {
     var path_root_project_id = encodeParam(root_project_id);
     var path_credential_id = encodeParam(credential_id);
+
+    RepositoryCredential responseHandler(dynamic json) {
+      return RepositoryCredential.fromJson(json);
+    }
+
     return this.put(
+        responseHandler,
         "/projects/${path_root_project_id}/credential/${path_credential_id}",
         null,
-        body);
+        body == null ? null : body.toJson());
   }
 
   /**
@@ -4904,7 +6063,12 @@ class Looker31SDKStream extends APIMethods {
       String credential_id) async {
     var path_root_project_id = encodeParam(root_project_id);
     var path_credential_id = encodeParam(credential_id);
-    return this.delete(
+
+    String responseHandler(dynamic json) {
+      return json;
+    }
+
+    return this.delete(responseHandler,
         "/projects/${path_root_project_id}/credential/${path_credential_id}");
   }
 
@@ -4922,7 +6086,15 @@ class Looker31SDKStream extends APIMethods {
      */
           String root_project_id) async {
     var path_root_project_id = encodeParam(root_project_id);
-    return this.get("/projects/${path_root_project_id}/credentials");
+
+    List<RepositoryCredential> responseHandler(dynamic json) {
+      return json
+          .map<RepositoryCredential>((i) => RepositoryCredential.fromJson(i))
+          .toList();
+    }
+
+    return this
+        .get(responseHandler, "/projects/${path_root_project_id}/credentials");
   }
 
   //endregion Project: Manage Projects
@@ -4996,7 +6168,12 @@ class Looker31SDKStream extends APIMethods {
      * @param {String} fields Requested fields
      */
       String fields]) async {
+    QueryTask responseHandler(dynamic json) {
+      return QueryTask.fromJson(json);
+    }
+
     return this.post(
+        responseHandler,
         "/query_tasks",
         {
           "limit": limit,
@@ -5013,7 +6190,7 @@ class Looker31SDKStream extends APIMethods {
           "server_table_calcs": server_table_calcs,
           "fields": fields
         },
-        body);
+        body == null ? null : body.toJson());
   }
 
   /**
@@ -5032,8 +6209,12 @@ class Looker31SDKStream extends APIMethods {
      * @param {DelimList<String>} query_task_ids List of Query Task IDs
      */
       DelimList<String> query_task_ids) async {
-    return this
-        .get("/query_tasks/multi_results", {"query_task_ids": query_task_ids});
+    Map<String, dynamic> responseHandler(dynamic json) {
+      return json;
+    }
+
+    return this.get(responseHandler, "/query_tasks/multi_results",
+        {"query_task_ids": query_task_ids});
   }
 
   /**
@@ -5057,7 +6238,13 @@ class Looker31SDKStream extends APIMethods {
      */
       String fields]) async {
     var path_query_task_id = encodeParam(query_task_id);
-    return this.get("/query_tasks/${path_query_task_id}", {"fields": fields});
+
+    QueryTask responseHandler(dynamic json) {
+      return QueryTask.fromJson(json);
+    }
+
+    return this.get(responseHandler, "/query_tasks/${path_query_task_id}",
+        {"fields": fields});
   }
 
   /**
@@ -5093,7 +6280,13 @@ class Looker31SDKStream extends APIMethods {
      */
       String query_task_id) async {
     var path_query_task_id = encodeParam(query_task_id);
-    return this.get("/query_tasks/${path_query_task_id}/results");
+
+    String responseHandler(dynamic json) {
+      return json;
+    }
+
+    return this
+        .get(responseHandler, "/query_tasks/${path_query_task_id}/results");
   }
 
   /**
@@ -5127,7 +6320,13 @@ class Looker31SDKStream extends APIMethods {
      */
       String fields]) async {
     var path_query_id = encodeParam(query_id);
-    return this.get("/queries/${path_query_id}", {"fields": fields});
+
+    Query responseHandler(dynamic json) {
+      return Query.fromJson(json);
+    }
+
+    return this
+        .get(responseHandler, "/queries/${path_query_id}", {"fields": fields});
   }
 
   /**
@@ -5161,7 +6360,13 @@ class Looker31SDKStream extends APIMethods {
      */
       String fields]) async {
     var path_slug = encodeParam(slug);
-    return this.get("/queries/slug/${path_slug}", {"fields": fields});
+
+    Query responseHandler(dynamic json) {
+      return Query.fromJson(json);
+    }
+
+    return this
+        .get(responseHandler, "/queries/slug/${path_slug}", {"fields": fields});
   }
 
   /**
@@ -5185,7 +6390,12 @@ class Looker31SDKStream extends APIMethods {
      * @param {String} fields Requested fields.
      */
       String fields]) async {
-    return this.post("/queries", {"fields": fields}, body);
+    Query responseHandler(dynamic json) {
+      return Query.fromJson(json);
+    }
+
+    return this.post(responseHandler, "/queries", {"fields": fields},
+        body == null ? null : body.toJson());
   }
 
   /**
@@ -5274,7 +6484,13 @@ class Looker31SDKStream extends APIMethods {
       bool server_table_calcs]) async {
     var path_query_id = encodeParam(query_id);
     var path_result_format = encodeParam(result_format);
-    return this.get("/queries/${path_query_id}/run/${path_result_format}", {
+
+    String responseHandler(dynamic json) {
+      return json;
+    }
+
+    return this.get(responseHandler,
+        "/queries/${path_query_id}/run/${path_result_format}", {
       "limit": limit,
       "apply_formatting": apply_formatting,
       "apply_vis": apply_vis,
@@ -5404,7 +6620,13 @@ class Looker31SDKStream extends APIMethods {
      */
       bool server_table_calcs]) async {
     var path_result_format = encodeParam(result_format);
+
+    String responseHandler(dynamic json) {
+      return json;
+    }
+
     return this.post(
+        responseHandler,
         "/queries/run/${path_result_format}",
         {
           "limit": limit,
@@ -5420,7 +6642,7 @@ class Looker31SDKStream extends APIMethods {
           "rebuild_pdts": rebuild_pdts,
           "server_table_calcs": server_table_calcs
         },
-        body);
+        body == null ? null : body.toJson());
   }
 
   /**
@@ -5497,7 +6719,12 @@ class Looker31SDKStream extends APIMethods {
     var path_model_name = encodeParam(model_name);
     var path_view_name = encodeParam(view_name);
     var path_result_format = encodeParam(result_format);
-    return this.get(
+
+    String responseHandler(dynamic json) {
+      return json;
+    }
+
+    return this.get(responseHandler,
         "/queries/models/${path_model_name}/views/${path_view_name}/run/${path_result_format}");
   }
 
@@ -5518,8 +6745,13 @@ class Looker31SDKStream extends APIMethods {
      */
       String fields]) async {
     var path_merge_query_id = encodeParam(merge_query_id);
-    return this
-        .get("/merge_queries/${path_merge_query_id}", {"fields": fields});
+
+    MergeQuery responseHandler(dynamic json) {
+      return MergeQuery.fromJson(json);
+    }
+
+    return this.get(responseHandler, "/merge_queries/${path_merge_query_id}",
+        {"fields": fields});
   }
 
   /**
@@ -5552,7 +6784,12 @@ class Looker31SDKStream extends APIMethods {
      * @param {String} fields Requested fields
      */
       String fields]) async {
-    return this.post("/merge_queries", {"fields": fields}, body);
+    MergeQuery responseHandler(dynamic json) {
+      return MergeQuery.fromJson(json);
+    }
+
+    return this.post(responseHandler, "/merge_queries", {"fields": fields},
+        body == null ? null : body.toJson());
   }
 
   /**
@@ -5561,7 +6798,13 @@ class Looker31SDKStream extends APIMethods {
    * GET /running_queries -> ByteArray
    */
   Future<SDKResponse<List<RunningQueries>>> all_running_queries() async {
-    return this.get("/running_queries");
+    List<RunningQueries> responseHandler(dynamic json) {
+      return json
+          .map<RunningQueries>((i) => RunningQueries.fromJson(i))
+          .toList();
+    }
+
+    return this.get(responseHandler, "/running_queries");
   }
 
   /**
@@ -5575,7 +6818,13 @@ class Looker31SDKStream extends APIMethods {
      */
       String query_task_id) async {
     var path_query_task_id = encodeParam(query_task_id);
-    return this.delete("/running_queries/${path_query_task_id}");
+
+    String responseHandler(dynamic json) {
+      return json;
+    }
+
+    return this
+        .delete(responseHandler, "/running_queries/${path_query_task_id}");
   }
 
   /**
@@ -5589,7 +6838,12 @@ class Looker31SDKStream extends APIMethods {
      */
       String slug) async {
     var path_slug = encodeParam(slug);
-    return this.get("/sql_queries/${path_slug}");
+
+    SqlQuery responseHandler(dynamic json) {
+      return SqlQuery.fromJson(json);
+    }
+
+    return this.get(responseHandler, "/sql_queries/${path_slug}");
   }
 
   /**
@@ -5604,7 +6858,12 @@ class Looker31SDKStream extends APIMethods {
      * @param {SqlQueryCreate} body
      */
       SqlQueryCreate body) async {
-    return this.post("/sql_queries", null, body);
+    SqlQuery responseHandler(dynamic json) {
+      return SqlQuery.fromJson(json);
+    }
+
+    return this.post(responseHandler, "/sql_queries", null,
+        body == null ? null : body.toJson());
   }
 
   /**
@@ -5629,7 +6888,14 @@ class Looker31SDKStream extends APIMethods {
       String download]) async {
     var path_slug = encodeParam(slug);
     var path_result_format = encodeParam(result_format);
-    return this.post("/sql_queries/${path_slug}/run/${path_result_format}",
+
+    String responseHandler(dynamic json) {
+      return json;
+    }
+
+    return this.post(
+        responseHandler,
+        "/sql_queries/${path_slug}/run/${path_result_format}",
         {"download": download});
   }
 
@@ -5683,7 +6949,13 @@ class Looker31SDKStream extends APIMethods {
       bool pdf_landscape]) async {
     var path_dashboard_id = encodeParam(dashboard_id);
     var path_result_format = encodeParam(result_format);
+
+    RenderTask responseHandler(dynamic json) {
+      return RenderTask.fromJson(json);
+    }
+
     return this.post(
+        responseHandler,
         "/render_tasks/lookml_dashboards/${path_dashboard_id}/${path_result_format}",
         {
           "width": width,
@@ -5692,7 +6964,7 @@ class Looker31SDKStream extends APIMethods {
           "pdf_paper_size": pdf_paper_size,
           "pdf_landscape": pdf_landscape
         },
-        body);
+        body == null ? null : body.toJson());
   }
 
   /**
@@ -5727,7 +6999,13 @@ class Looker31SDKStream extends APIMethods {
       String fields]) async {
     var path_look_id = encodeParam(look_id);
     var path_result_format = encodeParam(result_format);
+
+    RenderTask responseHandler(dynamic json) {
+      return RenderTask.fromJson(json);
+    }
+
     return this.post(
+        responseHandler,
         "/render_tasks/looks/${path_look_id}/${path_result_format}",
         {"width": width, "height": height, "fields": fields});
   }
@@ -5764,7 +7042,13 @@ class Looker31SDKStream extends APIMethods {
       String fields]) async {
     var path_query_id = encodeParam(query_id);
     var path_result_format = encodeParam(result_format);
+
+    RenderTask responseHandler(dynamic json) {
+      return RenderTask.fromJson(json);
+    }
+
     return this.post(
+        responseHandler,
         "/render_tasks/queries/${path_query_id}/${path_result_format}",
         {"width": width, "height": height, "fields": fields});
   }
@@ -5813,7 +7097,13 @@ class Looker31SDKStream extends APIMethods {
       bool pdf_landscape]) async {
     var path_dashboard_id = encodeParam(dashboard_id);
     var path_result_format = encodeParam(result_format);
+
+    RenderTask responseHandler(dynamic json) {
+      return RenderTask.fromJson(json);
+    }
+
     return this.post(
+        responseHandler,
         "/render_tasks/dashboards/${path_dashboard_id}/${path_result_format}",
         {
           "width": width,
@@ -5822,7 +7112,7 @@ class Looker31SDKStream extends APIMethods {
           "pdf_paper_size": pdf_paper_size,
           "pdf_landscape": pdf_landscape
         },
-        body);
+        body == null ? null : body.toJson());
   }
 
   /**
@@ -5844,7 +7134,13 @@ class Looker31SDKStream extends APIMethods {
      */
       String fields]) async {
     var path_render_task_id = encodeParam(render_task_id);
-    return this.get("/render_tasks/${path_render_task_id}", {"fields": fields});
+
+    RenderTask responseHandler(dynamic json) {
+      return RenderTask.fromJson(json);
+    }
+
+    return this.get(responseHandler, "/render_tasks/${path_render_task_id}",
+        {"fields": fields});
   }
 
   /**
@@ -5876,7 +7172,13 @@ class Looker31SDKStream extends APIMethods {
      */
       String render_task_id) async {
     var path_render_task_id = encodeParam(render_task_id);
-    return this.get("/render_tasks/${path_render_task_id}/results");
+
+    String responseHandler(dynamic json) {
+      return json;
+    }
+
+    return this
+        .get(responseHandler, "/render_tasks/${path_render_task_id}/results");
   }
 
   //endregion RenderTask: Manage Render Tasks
@@ -5946,7 +7248,11 @@ class Looker31SDKStream extends APIMethods {
      * @param {bool} filter_or Combine given search criteria in a boolean OR expression.
      */
       bool filter_or]) async {
-    return this.get("/model_sets/search", {
+    List<ModelSet> responseHandler(dynamic json) {
+      return json.map<ModelSet>((i) => ModelSet.fromJson(i)).toList();
+    }
+
+    return this.get(responseHandler, "/model_sets/search", {
       "fields": fields,
       "limit": limit,
       "offset": offset,
@@ -5974,7 +7280,13 @@ class Looker31SDKStream extends APIMethods {
      */
       String fields]) async {
     var path_model_set_id = encodeParam(model_set_id);
-    return this.get("/model_sets/${path_model_set_id}", {"fields": fields});
+
+    ModelSet responseHandler(dynamic json) {
+      return ModelSet.fromJson(json);
+    }
+
+    return this.get(responseHandler, "/model_sets/${path_model_set_id}",
+        {"fields": fields});
   }
 
   /**
@@ -5992,7 +7304,13 @@ class Looker31SDKStream extends APIMethods {
      */
       WriteModelSet body) async {
     var path_model_set_id = encodeParam(model_set_id);
-    return this.patch("/model_sets/${path_model_set_id}", null, body);
+
+    ModelSet responseHandler(dynamic json) {
+      return ModelSet.fromJson(json);
+    }
+
+    return this.patch(responseHandler, "/model_sets/${path_model_set_id}", null,
+        body == null ? null : body.toJson());
   }
 
   /**
@@ -6006,7 +7324,12 @@ class Looker31SDKStream extends APIMethods {
      */
       int model_set_id) async {
     var path_model_set_id = encodeParam(model_set_id);
-    return this.delete("/model_sets/${path_model_set_id}");
+
+    String responseHandler(dynamic json) {
+      return json;
+    }
+
+    return this.delete(responseHandler, "/model_sets/${path_model_set_id}");
   }
 
   /**
@@ -6019,7 +7342,11 @@ class Looker31SDKStream extends APIMethods {
      * @param {String} fields Requested fields.
      */
       String fields]) async {
-    return this.get("/model_sets", {"fields": fields});
+    List<ModelSet> responseHandler(dynamic json) {
+      return json.map<ModelSet>((i) => ModelSet.fromJson(i)).toList();
+    }
+
+    return this.get(responseHandler, "/model_sets", {"fields": fields});
   }
 
   /**
@@ -6032,7 +7359,12 @@ class Looker31SDKStream extends APIMethods {
      * @param {WriteModelSet} body
      */
       WriteModelSet body) async {
-    return this.post("/model_sets", null, body);
+    ModelSet responseHandler(dynamic json) {
+      return ModelSet.fromJson(json);
+    }
+
+    return this.post(responseHandler, "/model_sets", null,
+        body == null ? null : body.toJson());
   }
 
   /**
@@ -6041,7 +7373,11 @@ class Looker31SDKStream extends APIMethods {
    * GET /permissions -> ByteArray
    */
   Future<SDKResponse<List<Permission>>> all_permissions() async {
-    return this.get("/permissions");
+    List<Permission> responseHandler(dynamic json) {
+      return json.map<Permission>((i) => Permission.fromJson(i)).toList();
+    }
+
+    return this.get(responseHandler, "/permissions");
   }
 
   /**
@@ -6107,7 +7443,11 @@ class Looker31SDKStream extends APIMethods {
      * @param {bool} filter_or Combine given search criteria in a boolean OR expression.
      */
       bool filter_or]) async {
-    return this.get("/permission_sets/search", {
+    List<PermissionSet> responseHandler(dynamic json) {
+      return json.map<PermissionSet>((i) => PermissionSet.fromJson(i)).toList();
+    }
+
+    return this.get(responseHandler, "/permission_sets/search", {
       "fields": fields,
       "limit": limit,
       "offset": offset,
@@ -6135,8 +7475,13 @@ class Looker31SDKStream extends APIMethods {
      */
       String fields]) async {
     var path_permission_set_id = encodeParam(permission_set_id);
-    return this
-        .get("/permission_sets/${path_permission_set_id}", {"fields": fields});
+
+    PermissionSet responseHandler(dynamic json) {
+      return PermissionSet.fromJson(json);
+    }
+
+    return this.get(responseHandler,
+        "/permission_sets/${path_permission_set_id}", {"fields": fields});
   }
 
   /**
@@ -6154,7 +7499,16 @@ class Looker31SDKStream extends APIMethods {
      */
       WritePermissionSet body) async {
     var path_permission_set_id = encodeParam(permission_set_id);
-    return this.patch("/permission_sets/${path_permission_set_id}", null, body);
+
+    PermissionSet responseHandler(dynamic json) {
+      return PermissionSet.fromJson(json);
+    }
+
+    return this.patch(
+        responseHandler,
+        "/permission_sets/${path_permission_set_id}",
+        null,
+        body == null ? null : body.toJson());
   }
 
   /**
@@ -6168,7 +7522,13 @@ class Looker31SDKStream extends APIMethods {
      */
       int permission_set_id) async {
     var path_permission_set_id = encodeParam(permission_set_id);
-    return this.delete("/permission_sets/${path_permission_set_id}");
+
+    String responseHandler(dynamic json) {
+      return json;
+    }
+
+    return this
+        .delete(responseHandler, "/permission_sets/${path_permission_set_id}");
   }
 
   /**
@@ -6181,7 +7541,11 @@ class Looker31SDKStream extends APIMethods {
      * @param {String} fields Requested fields.
      */
       String fields]) async {
-    return this.get("/permission_sets", {"fields": fields});
+    List<PermissionSet> responseHandler(dynamic json) {
+      return json.map<PermissionSet>((i) => PermissionSet.fromJson(i)).toList();
+    }
+
+    return this.get(responseHandler, "/permission_sets", {"fields": fields});
   }
 
   /**
@@ -6194,7 +7558,12 @@ class Looker31SDKStream extends APIMethods {
      * @param {WritePermissionSet} body
      */
       WritePermissionSet body) async {
-    return this.post("/permission_sets", null, body);
+    PermissionSet responseHandler(dynamic json) {
+      return PermissionSet.fromJson(json);
+    }
+
+    return this.post(responseHandler, "/permission_sets", null,
+        body == null ? null : body.toJson());
   }
 
   /**
@@ -6211,7 +7580,11 @@ class Looker31SDKStream extends APIMethods {
      * @param {DelimList<int>} ids Optional list of ids to get specific roles.
      */
       DelimList<int> ids]) async {
-    return this.get("/roles", {"fields": fields, "ids": ids});
+    List<Role> responseHandler(dynamic json) {
+      return json.map<Role>((i) => Role.fromJson(i)).toList();
+    }
+
+    return this.get(responseHandler, "/roles", {"fields": fields, "ids": ids});
   }
 
   /**
@@ -6224,7 +7597,12 @@ class Looker31SDKStream extends APIMethods {
      * @param {WriteRole} body
      */
       WriteRole body) async {
-    return this.post("/roles", null, body);
+    Role responseHandler(dynamic json) {
+      return Role.fromJson(json);
+    }
+
+    return this.post(
+        responseHandler, "/roles", null, body == null ? null : body.toJson());
   }
 
   /**
@@ -6288,7 +7666,11 @@ class Looker31SDKStream extends APIMethods {
      * @param {bool} filter_or Combine given search criteria in a boolean OR expression.
      */
       bool filter_or]) async {
-    return this.get("/roles/search", {
+    List<Role> responseHandler(dynamic json) {
+      return json.map<Role>((i) => Role.fromJson(i)).toList();
+    }
+
+    return this.get(responseHandler, "/roles/search", {
       "fields": fields,
       "limit": limit,
       "offset": offset,
@@ -6311,7 +7693,12 @@ class Looker31SDKStream extends APIMethods {
      */
       int role_id) async {
     var path_role_id = encodeParam(role_id);
-    return this.get("/roles/${path_role_id}");
+
+    Role responseHandler(dynamic json) {
+      return Role.fromJson(json);
+    }
+
+    return this.get(responseHandler, "/roles/${path_role_id}");
   }
 
   /**
@@ -6329,7 +7716,13 @@ class Looker31SDKStream extends APIMethods {
      */
       WriteRole body) async {
     var path_role_id = encodeParam(role_id);
-    return this.patch("/roles/${path_role_id}", null, body);
+
+    Role responseHandler(dynamic json) {
+      return Role.fromJson(json);
+    }
+
+    return this.patch(responseHandler, "/roles/${path_role_id}", null,
+        body == null ? null : body.toJson());
   }
 
   /**
@@ -6343,7 +7736,12 @@ class Looker31SDKStream extends APIMethods {
      */
       int role_id) async {
     var path_role_id = encodeParam(role_id);
-    return this.delete("/roles/${path_role_id}");
+
+    String responseHandler(dynamic json) {
+      return json;
+    }
+
+    return this.delete(responseHandler, "/roles/${path_role_id}");
   }
 
   /**
@@ -6361,7 +7759,13 @@ class Looker31SDKStream extends APIMethods {
      */
       String fields]) async {
     var path_role_id = encodeParam(role_id);
-    return this.get("/roles/${path_role_id}/groups", {"fields": fields});
+
+    List<Group> responseHandler(dynamic json) {
+      return json.map<Group>((i) => Group.fromJson(i)).toList();
+    }
+
+    return this.get(
+        responseHandler, "/roles/${path_role_id}/groups", {"fields": fields});
   }
 
   /**
@@ -6379,7 +7783,13 @@ class Looker31SDKStream extends APIMethods {
      */
       List<int> body) async {
     var path_role_id = encodeParam(role_id);
-    return this.put("/roles/${path_role_id}/groups", null, body);
+
+    List<Group> responseHandler(dynamic json) {
+      return json.map<Group>((i) => Group.fromJson(i)).toList();
+    }
+
+    return this
+        .put(responseHandler, "/roles/${path_role_id}/groups", null, body);
   }
 
   /**
@@ -6401,7 +7811,12 @@ class Looker31SDKStream extends APIMethods {
      */
       bool direct_association_only]) async {
     var path_role_id = encodeParam(role_id);
-    return this.get("/roles/${path_role_id}/users",
+
+    List<User> responseHandler(dynamic json) {
+      return json.map<User>((i) => User.fromJson(i)).toList();
+    }
+
+    return this.get(responseHandler, "/roles/${path_role_id}/users",
         {"fields": fields, "direct_association_only": direct_association_only});
   }
 
@@ -6420,7 +7835,13 @@ class Looker31SDKStream extends APIMethods {
      */
       List<int> body) async {
     var path_role_id = encodeParam(role_id);
-    return this.put("/roles/${path_role_id}/users", null, body);
+
+    List<User> responseHandler(dynamic json) {
+      return json.map<User>((i) => User.fromJson(i)).toList();
+    }
+
+    return this
+        .put(responseHandler, "/roles/${path_role_id}/users", null, body);
   }
 
   //endregion Role: Manage Roles
@@ -6444,8 +7865,13 @@ class Looker31SDKStream extends APIMethods {
      */
       String fields]) async {
     var path_space_id = encodeParam(space_id);
-    return this
-        .get("/scheduled_plans/space/${path_space_id}", {"fields": fields});
+
+    List<ScheduledPlan> responseHandler(dynamic json) {
+      return json.map<ScheduledPlan>((i) => ScheduledPlan.fromJson(i)).toList();
+    }
+
+    return this.get(responseHandler, "/scheduled_plans/space/${path_space_id}",
+        {"fields": fields});
   }
 
   /**
@@ -6465,8 +7891,13 @@ class Looker31SDKStream extends APIMethods {
      */
       String fields]) async {
     var path_scheduled_plan_id = encodeParam(scheduled_plan_id);
-    return this
-        .get("/scheduled_plans/${path_scheduled_plan_id}", {"fields": fields});
+
+    ScheduledPlan responseHandler(dynamic json) {
+      return ScheduledPlan.fromJson(json);
+    }
+
+    return this.get(responseHandler,
+        "/scheduled_plans/${path_scheduled_plan_id}", {"fields": fields});
   }
 
   /**
@@ -6525,7 +7956,16 @@ class Looker31SDKStream extends APIMethods {
      */
       WriteScheduledPlan body) async {
     var path_scheduled_plan_id = encodeParam(scheduled_plan_id);
-    return this.patch("/scheduled_plans/${path_scheduled_plan_id}", null, body);
+
+    ScheduledPlan responseHandler(dynamic json) {
+      return ScheduledPlan.fromJson(json);
+    }
+
+    return this.patch(
+        responseHandler,
+        "/scheduled_plans/${path_scheduled_plan_id}",
+        null,
+        body == null ? null : body.toJson());
   }
 
   /**
@@ -6543,7 +7983,13 @@ class Looker31SDKStream extends APIMethods {
      */
       int scheduled_plan_id) async {
     var path_scheduled_plan_id = encodeParam(scheduled_plan_id);
-    return this.delete("/scheduled_plans/${path_scheduled_plan_id}");
+
+    String responseHandler(dynamic json) {
+      return json;
+    }
+
+    return this
+        .delete(responseHandler, "/scheduled_plans/${path_scheduled_plan_id}");
   }
 
   /**
@@ -6574,7 +8020,11 @@ class Looker31SDKStream extends APIMethods {
      * @param {bool} all_users Return scheduled plans belonging to all users (caller needs see_schedules permission)
      */
       bool all_users]) async {
-    return this.get("/scheduled_plans",
+    List<ScheduledPlan> responseHandler(dynamic json) {
+      return json.map<ScheduledPlan>((i) => ScheduledPlan.fromJson(i)).toList();
+    }
+
+    return this.get(responseHandler, "/scheduled_plans",
         {"user_id": user_id, "fields": fields, "all_users": all_users});
   }
 
@@ -6645,7 +8095,12 @@ class Looker31SDKStream extends APIMethods {
      * @param {WriteScheduledPlan} body
      */
       WriteScheduledPlan body) async {
-    return this.post("/scheduled_plans", null, body);
+    ScheduledPlan responseHandler(dynamic json) {
+      return ScheduledPlan.fromJson(json);
+    }
+
+    return this.post(responseHandler, "/scheduled_plans", null,
+        body == null ? null : body.toJson());
   }
 
   /**
@@ -6694,7 +8149,12 @@ class Looker31SDKStream extends APIMethods {
      * @param {WriteScheduledPlan} body
      */
       WriteScheduledPlan body) async {
-    return this.post("/scheduled_plans/run_once", null, body);
+    ScheduledPlan responseHandler(dynamic json) {
+      return ScheduledPlan.fromJson(json);
+    }
+
+    return this.post(responseHandler, "/scheduled_plans/run_once", null,
+        body == null ? null : body.toJson());
   }
 
   /**
@@ -6730,7 +8190,12 @@ class Looker31SDKStream extends APIMethods {
      */
       bool all_users]) async {
     var path_look_id = encodeParam(look_id);
-    return this.get("/scheduled_plans/look/${path_look_id}",
+
+    List<ScheduledPlan> responseHandler(dynamic json) {
+      return json.map<ScheduledPlan>((i) => ScheduledPlan.fromJson(i)).toList();
+    }
+
+    return this.get(responseHandler, "/scheduled_plans/look/${path_look_id}",
         {"user_id": user_id, "fields": fields, "all_users": all_users});
   }
 
@@ -6767,7 +8232,14 @@ class Looker31SDKStream extends APIMethods {
      */
       String fields]) async {
     var path_dashboard_id = encodeParam(dashboard_id);
-    return this.get("/scheduled_plans/dashboard/${path_dashboard_id}",
+
+    List<ScheduledPlan> responseHandler(dynamic json) {
+      return json.map<ScheduledPlan>((i) => ScheduledPlan.fromJson(i)).toList();
+    }
+
+    return this.get(
+        responseHandler,
+        "/scheduled_plans/dashboard/${path_dashboard_id}",
         {"user_id": user_id, "all_users": all_users, "fields": fields});
   }
 
@@ -6804,7 +8276,13 @@ class Looker31SDKStream extends APIMethods {
      */
       bool all_users]) async {
     var path_lookml_dashboard_id = encodeParam(lookml_dashboard_id);
+
+    List<ScheduledPlan> responseHandler(dynamic json) {
+      return json.map<ScheduledPlan>((i) => ScheduledPlan.fromJson(i)).toList();
+    }
+
     return this.get(
+        responseHandler,
         "/scheduled_plans/lookml_dashboard/${path_lookml_dashboard_id}",
         {"user_id": user_id, "fields": fields, "all_users": all_users});
   }
@@ -6870,8 +8348,16 @@ class Looker31SDKStream extends APIMethods {
      */
       WriteScheduledPlan body]) async {
     var path_scheduled_plan_id = encodeParam(scheduled_plan_id);
+
+    ScheduledPlan responseHandler(dynamic json) {
+      return ScheduledPlan.fromJson(json);
+    }
+
     return this.post(
-        "/scheduled_plans/${path_scheduled_plan_id}/run_once", null, body);
+        responseHandler,
+        "/scheduled_plans/${path_scheduled_plan_id}/run_once",
+        null,
+        body == null ? null : body.toJson());
   }
 
   //endregion ScheduledPlan: Manage Scheduled Plans
@@ -6886,7 +8372,11 @@ class Looker31SDKStream extends APIMethods {
    * GET /session -> ByteArray
    */
   Future<SDKResponse<ApiSession>> session() async {
-    return this.get("/session");
+    ApiSession responseHandler(dynamic json) {
+      return ApiSession.fromJson(json);
+    }
+
+    return this.get(responseHandler, "/session");
   }
 
   /**
@@ -6918,7 +8408,12 @@ class Looker31SDKStream extends APIMethods {
      * @param {WriteApiSession} body
      */
       WriteApiSession body) async {
-    return this.patch("/session", null, body);
+    ApiSession responseHandler(dynamic json) {
+      return ApiSession.fromJson(json);
+    }
+
+    return this.patch(
+        responseHandler, "/session", null, body == null ? null : body.toJson());
   }
 
   //endregion Session: Session Information
@@ -7003,7 +8498,11 @@ class Looker31SDKStream extends APIMethods {
      * @param {bool} filter_or Combine given search criteria in a boolean OR expression
      */
       bool filter_or]) async {
-    return this.get("/spaces/search", {
+    List<Space> responseHandler(dynamic json) {
+      return json.map<Space>((i) => Space.fromJson(i)).toList();
+    }
+
+    return this.get(responseHandler, "/spaces/search", {
       "fields": fields,
       "page": page,
       "per_page": per_page,
@@ -7033,7 +8532,13 @@ class Looker31SDKStream extends APIMethods {
      */
       String fields]) async {
     var path_space_id = encodeParam(space_id);
-    return this.get("/spaces/${path_space_id}", {"fields": fields});
+
+    Space responseHandler(dynamic json) {
+      return Space.fromJson(json);
+    }
+
+    return this
+        .get(responseHandler, "/spaces/${path_space_id}", {"fields": fields});
   }
 
   /**
@@ -7051,7 +8556,13 @@ class Looker31SDKStream extends APIMethods {
      */
       UpdateSpace body) async {
     var path_space_id = encodeParam(space_id);
-    return this.patch("/spaces/${path_space_id}", null, body);
+
+    Space responseHandler(dynamic json) {
+      return Space.fromJson(json);
+    }
+
+    return this.patch(responseHandler, "/spaces/${path_space_id}", null,
+        body == null ? null : body.toJson());
   }
 
   /**
@@ -7066,7 +8577,12 @@ class Looker31SDKStream extends APIMethods {
      */
       String space_id) async {
     var path_space_id = encodeParam(space_id);
-    return this.delete("/spaces/${path_space_id}");
+
+    String responseHandler(dynamic json) {
+      return json;
+    }
+
+    return this.delete(responseHandler, "/spaces/${path_space_id}");
   }
 
   /**
@@ -7079,7 +8595,11 @@ class Looker31SDKStream extends APIMethods {
      * @param {String} fields Requested fields.
      */
       String fields]) async {
-    return this.get("/spaces", {"fields": fields});
+    List<SpaceBase> responseHandler(dynamic json) {
+      return json.map<SpaceBase>((i) => SpaceBase.fromJson(i)).toList();
+    }
+
+    return this.get(responseHandler, "/spaces", {"fields": fields});
   }
 
   /**
@@ -7095,7 +8615,12 @@ class Looker31SDKStream extends APIMethods {
      * @param {CreateSpace} body
      */
       CreateSpace body) async {
-    return this.post("/spaces", null, body);
+    Space responseHandler(dynamic json) {
+      return Space.fromJson(json);
+    }
+
+    return this.post(
+        responseHandler, "/spaces", null, body == null ? null : body.toJson());
   }
 
   /**
@@ -7125,7 +8650,12 @@ class Looker31SDKStream extends APIMethods {
      */
       String sorts]) async {
     var path_space_id = encodeParam(space_id);
-    return this.get("/spaces/${path_space_id}/children",
+
+    List<Space> responseHandler(dynamic json) {
+      return json.map<Space>((i) => Space.fromJson(i)).toList();
+    }
+
+    return this.get(responseHandler, "/spaces/${path_space_id}/children",
         {"fields": fields, "page": page, "per_page": per_page, "sorts": sorts});
   }
 
@@ -7152,7 +8682,12 @@ class Looker31SDKStream extends APIMethods {
      */
       String name]) async {
     var path_space_id = encodeParam(space_id);
-    return this.get("/spaces/${path_space_id}/children/search",
+
+    List<Space> responseHandler(dynamic json) {
+      return json.map<Space>((i) => Space.fromJson(i)).toList();
+    }
+
+    return this.get(responseHandler, "/spaces/${path_space_id}/children/search",
         {"fields": fields, "sorts": sorts, "name": name});
   }
 
@@ -7171,7 +8706,13 @@ class Looker31SDKStream extends APIMethods {
      */
       String fields]) async {
     var path_space_id = encodeParam(space_id);
-    return this.get("/spaces/${path_space_id}/parent", {"fields": fields});
+
+    Space responseHandler(dynamic json) {
+      return Space.fromJson(json);
+    }
+
+    return this.get(
+        responseHandler, "/spaces/${path_space_id}/parent", {"fields": fields});
   }
 
   /**
@@ -7189,7 +8730,13 @@ class Looker31SDKStream extends APIMethods {
      */
       String fields]) async {
     var path_space_id = encodeParam(space_id);
-    return this.get("/spaces/${path_space_id}/ancestors", {"fields": fields});
+
+    List<Space> responseHandler(dynamic json) {
+      return json.map<Space>((i) => Space.fromJson(i)).toList();
+    }
+
+    return this.get(responseHandler, "/spaces/${path_space_id}/ancestors",
+        {"fields": fields});
   }
 
   /**
@@ -7207,7 +8754,13 @@ class Looker31SDKStream extends APIMethods {
      */
       String fields]) async {
     var path_space_id = encodeParam(space_id);
-    return this.get("/spaces/${path_space_id}/looks", {"fields": fields});
+
+    List<LookWithQuery> responseHandler(dynamic json) {
+      return json.map<LookWithQuery>((i) => LookWithQuery.fromJson(i)).toList();
+    }
+
+    return this.get(
+        responseHandler, "/spaces/${path_space_id}/looks", {"fields": fields});
   }
 
   /**
@@ -7225,7 +8778,13 @@ class Looker31SDKStream extends APIMethods {
      */
       String fields]) async {
     var path_space_id = encodeParam(space_id);
-    return this.get("/spaces/${path_space_id}/dashboards", {"fields": fields});
+
+    List<Dashboard> responseHandler(dynamic json) {
+      return json.map<Dashboard>((i) => Dashboard.fromJson(i)).toList();
+    }
+
+    return this.get(responseHandler, "/spaces/${path_space_id}/dashboards",
+        {"fields": fields});
   }
 
   //endregion Space: Manage Spaces
@@ -7248,7 +8807,11 @@ class Looker31SDKStream extends APIMethods {
      * @param {String} fields Requested fields.
      */
       String fields]) async {
-    return this.get("/themes", {"fields": fields});
+    List<Theme> responseHandler(dynamic json) {
+      return json.map<Theme>((i) => Theme.fromJson(i)).toList();
+    }
+
+    return this.get(responseHandler, "/themes", {"fields": fields});
   }
 
   /**
@@ -7275,7 +8838,12 @@ class Looker31SDKStream extends APIMethods {
      * @param {WriteTheme} body
      */
       WriteTheme body) async {
-    return this.post("/themes", null, body);
+    Theme responseHandler(dynamic json) {
+      return Theme.fromJson(json);
+    }
+
+    return this.post(
+        responseHandler, "/themes", null, body == null ? null : body.toJson());
   }
 
   /**
@@ -7357,7 +8925,11 @@ class Looker31SDKStream extends APIMethods {
      * @param {bool} filter_or Combine given search criteria in a boolean OR expression
      */
       bool filter_or]) async {
-    return this.get("/themes/search", {
+    List<Theme> responseHandler(dynamic json) {
+      return json.map<Theme>((i) => Theme.fromJson(i)).toList();
+    }
+
+    return this.get(responseHandler, "/themes/search", {
       "id": id,
       "name": name,
       "begin_at": begin_at,
@@ -7386,7 +8958,11 @@ class Looker31SDKStream extends APIMethods {
      * @param {DateTime} ts Timestamp representing the target datetime for the active period. Defaults to 'now'
      */
       DateTime ts]) async {
-    return this.get("/themes/default", {"ts": ts});
+    Theme responseHandler(dynamic json) {
+      return Theme.fromJson(json);
+    }
+
+    return this.get(responseHandler, "/themes/default", {"ts": ts});
   }
 
   /**
@@ -7409,7 +8985,11 @@ class Looker31SDKStream extends APIMethods {
      * @param {String} name Name of theme to set as default
      */
       String name) async {
-    return this.put("/themes/default", {"name": name});
+    Theme responseHandler(dynamic json) {
+      return Theme.fromJson(json);
+    }
+
+    return this.put(responseHandler, "/themes/default", {"name": name});
   }
 
   /**
@@ -7438,8 +9018,12 @@ class Looker31SDKStream extends APIMethods {
      * @param {String} fields Requested fields.
      */
       String fields]) async {
-    return this
-        .get("/themes/active", {"name": name, "ts": ts, "fields": fields});
+    List<Theme> responseHandler(dynamic json) {
+      return json.map<Theme>((i) => Theme.fromJson(i)).toList();
+    }
+
+    return this.get(responseHandler, "/themes/active",
+        {"name": name, "ts": ts, "fields": fields});
   }
 
   /**
@@ -7461,7 +9045,12 @@ class Looker31SDKStream extends APIMethods {
      * @param {DateTime} ts Timestamp representing the target datetime for the active period. Defaults to 'now'
      */
       DateTime ts]) async {
-    return this.get("/themes/theme_or_default", {"name": name, "ts": ts});
+    Theme responseHandler(dynamic json) {
+      return Theme.fromJson(json);
+    }
+
+    return this.get(
+        responseHandler, "/themes/theme_or_default", {"name": name, "ts": ts});
   }
 
   /**
@@ -7480,7 +9069,12 @@ class Looker31SDKStream extends APIMethods {
      * @param {WriteTheme} body
      */
       WriteTheme body) async {
-    return this.post("/themes/validate", null, body);
+    ValidationError responseHandler(dynamic json) {
+      return ValidationError.fromJson(json);
+    }
+
+    return this.post(responseHandler, "/themes/validate", null,
+        body == null ? null : body.toJson());
   }
 
   /**
@@ -7502,7 +9096,13 @@ class Looker31SDKStream extends APIMethods {
      */
       String fields]) async {
     var path_theme_id = encodeParam(theme_id);
-    return this.get("/themes/${path_theme_id}", {"fields": fields});
+
+    Theme responseHandler(dynamic json) {
+      return Theme.fromJson(json);
+    }
+
+    return this
+        .get(responseHandler, "/themes/${path_theme_id}", {"fields": fields});
   }
 
   /**
@@ -7522,7 +9122,13 @@ class Looker31SDKStream extends APIMethods {
      */
       WriteTheme body) async {
     var path_theme_id = encodeParam(theme_id);
-    return this.patch("/themes/${path_theme_id}", null, body);
+
+    Theme responseHandler(dynamic json) {
+      return Theme.fromJson(json);
+    }
+
+    return this.patch(responseHandler, "/themes/${path_theme_id}", null,
+        body == null ? null : body.toJson());
   }
 
   /**
@@ -7544,7 +9150,12 @@ class Looker31SDKStream extends APIMethods {
      */
       String theme_id) async {
     var path_theme_id = encodeParam(theme_id);
-    return this.delete("/themes/${path_theme_id}");
+
+    String responseHandler(dynamic json) {
+      return json;
+    }
+
+    return this.delete(responseHandler, "/themes/${path_theme_id}");
   }
 
   //endregion Theme: Manage Themes
@@ -7561,7 +9172,11 @@ class Looker31SDKStream extends APIMethods {
      * @param {String} fields Requested fields.
      */
       String fields]) async {
-    return this.get("/user", {"fields": fields});
+    User responseHandler(dynamic json) {
+      return User.fromJson(json);
+    }
+
+    return this.get(responseHandler, "/user", {"fields": fields});
   }
 
   /**
@@ -7590,7 +9205,11 @@ class Looker31SDKStream extends APIMethods {
      * @param {DelimList<int>} ids Optional list of ids to get specific users.
      */
       DelimList<int> ids]) async {
-    return this.get("/users", {
+    List<User> responseHandler(dynamic json) {
+      return json.map<User>((i) => User.fromJson(i)).toList();
+    }
+
+    return this.get(responseHandler, "/users", {
       "fields": fields,
       "page": page,
       "per_page": per_page,
@@ -7613,7 +9232,12 @@ class Looker31SDKStream extends APIMethods {
      * @param {String} fields Requested fields.
      */
       String fields]) async {
-    return this.post("/users", {"fields": fields}, body);
+    User responseHandler(dynamic json) {
+      return User.fromJson(json);
+    }
+
+    return this.post(responseHandler, "/users", {"fields": fields},
+        body == null ? null : body.toJson());
   }
 
   /**
@@ -7703,7 +9327,11 @@ class Looker31SDKStream extends APIMethods {
      * @param {int} group_id Search for users who are direct members of this group
      */
       int group_id]) async {
-    return this.get("/users/search", {
+    List<User> responseHandler(dynamic json) {
+      return json.map<User>((i) => User.fromJson(i)).toList();
+    }
+
+    return this.get(responseHandler, "/users/search", {
       "fields": fields,
       "page": page,
       "per_page": per_page,
@@ -7776,7 +9404,12 @@ class Looker31SDKStream extends APIMethods {
      */
       bool is_disabled]) async {
     var path_pattern = encodeParam(pattern);
-    return this.get("/users/search/names/${path_pattern}", {
+
+    List<User> responseHandler(dynamic json) {
+      return json.map<User>((i) => User.fromJson(i)).toList();
+    }
+
+    return this.get(responseHandler, "/users/search/names/${path_pattern}", {
       "fields": fields,
       "page": page,
       "per_page": per_page,
@@ -7809,7 +9442,13 @@ class Looker31SDKStream extends APIMethods {
      */
       String fields]) async {
     var path_user_id = encodeParam(user_id);
-    return this.get("/users/${path_user_id}", {"fields": fields});
+
+    User responseHandler(dynamic json) {
+      return User.fromJson(json);
+    }
+
+    return this
+        .get(responseHandler, "/users/${path_user_id}", {"fields": fields});
   }
 
   /**
@@ -7831,7 +9470,13 @@ class Looker31SDKStream extends APIMethods {
      */
       String fields]) async {
     var path_user_id = encodeParam(user_id);
-    return this.patch("/users/${path_user_id}", {"fields": fields}, body);
+
+    User responseHandler(dynamic json) {
+      return User.fromJson(json);
+    }
+
+    return this.patch(responseHandler, "/users/${path_user_id}",
+        {"fields": fields}, body == null ? null : body.toJson());
   }
 
   /**
@@ -7847,7 +9492,12 @@ class Looker31SDKStream extends APIMethods {
      */
       int user_id) async {
     var path_user_id = encodeParam(user_id);
-    return this.delete("/users/${path_user_id}");
+
+    String responseHandler(dynamic json) {
+      return json;
+    }
+
+    return this.delete(responseHandler, "/users/${path_user_id}");
   }
 
   /**
@@ -7897,7 +9547,13 @@ class Looker31SDKStream extends APIMethods {
       String fields]) async {
     var path_credential_type = encodeParam(credential_type);
     var path_credential_id = encodeParam(credential_id);
+
+    User responseHandler(dynamic json) {
+      return User.fromJson(json);
+    }
+
     return this.get(
+        responseHandler,
         "/users/credential/${path_credential_type}/${path_credential_id}",
         {"fields": fields});
   }
@@ -7917,8 +9573,13 @@ class Looker31SDKStream extends APIMethods {
      */
       String fields]) async {
     var path_user_id = encodeParam(user_id);
-    return this
-        .get("/users/${path_user_id}/credentials_email", {"fields": fields});
+
+    CredentialsEmail responseHandler(dynamic json) {
+      return CredentialsEmail.fromJson(json);
+    }
+
+    return this.get(responseHandler, "/users/${path_user_id}/credentials_email",
+        {"fields": fields});
   }
 
   /**
@@ -7940,8 +9601,16 @@ class Looker31SDKStream extends APIMethods {
      */
       String fields]) async {
     var path_user_id = encodeParam(user_id);
+
+    CredentialsEmail responseHandler(dynamic json) {
+      return CredentialsEmail.fromJson(json);
+    }
+
     return this.post(
-        "/users/${path_user_id}/credentials_email", {"fields": fields}, body);
+        responseHandler,
+        "/users/${path_user_id}/credentials_email",
+        {"fields": fields},
+        body == null ? null : body.toJson());
   }
 
   /**
@@ -7963,8 +9632,16 @@ class Looker31SDKStream extends APIMethods {
      */
       String fields]) async {
     var path_user_id = encodeParam(user_id);
+
+    CredentialsEmail responseHandler(dynamic json) {
+      return CredentialsEmail.fromJson(json);
+    }
+
     return this.patch(
-        "/users/${path_user_id}/credentials_email", {"fields": fields}, body);
+        responseHandler,
+        "/users/${path_user_id}/credentials_email",
+        {"fields": fields},
+        body == null ? null : body.toJson());
   }
 
   /**
@@ -7978,7 +9655,13 @@ class Looker31SDKStream extends APIMethods {
      */
       int user_id) async {
     var path_user_id = encodeParam(user_id);
-    return this.delete("/users/${path_user_id}/credentials_email");
+
+    String responseHandler(dynamic json) {
+      return json;
+    }
+
+    return this
+        .delete(responseHandler, "/users/${path_user_id}/credentials_email");
   }
 
   /**
@@ -7996,8 +9679,13 @@ class Looker31SDKStream extends APIMethods {
      */
       String fields]) async {
     var path_user_id = encodeParam(user_id);
-    return this
-        .get("/users/${path_user_id}/credentials_totp", {"fields": fields});
+
+    CredentialsTotp responseHandler(dynamic json) {
+      return CredentialsTotp.fromJson(json);
+    }
+
+    return this.get(responseHandler, "/users/${path_user_id}/credentials_totp",
+        {"fields": fields});
   }
 
   /**
@@ -8019,8 +9707,13 @@ class Looker31SDKStream extends APIMethods {
      */
       String fields]) async {
     var path_user_id = encodeParam(user_id);
-    return this.post(
-        "/users/${path_user_id}/credentials_totp", {"fields": fields}, body);
+
+    CredentialsTotp responseHandler(dynamic json) {
+      return CredentialsTotp.fromJson(json);
+    }
+
+    return this.post(responseHandler, "/users/${path_user_id}/credentials_totp",
+        {"fields": fields}, body == null ? null : body.toJson());
   }
 
   /**
@@ -8034,7 +9727,13 @@ class Looker31SDKStream extends APIMethods {
      */
       int user_id) async {
     var path_user_id = encodeParam(user_id);
-    return this.delete("/users/${path_user_id}/credentials_totp");
+
+    String responseHandler(dynamic json) {
+      return json;
+    }
+
+    return this
+        .delete(responseHandler, "/users/${path_user_id}/credentials_totp");
   }
 
   /**
@@ -8052,8 +9751,13 @@ class Looker31SDKStream extends APIMethods {
      */
       String fields]) async {
     var path_user_id = encodeParam(user_id);
-    return this
-        .get("/users/${path_user_id}/credentials_ldap", {"fields": fields});
+
+    CredentialsLDAP responseHandler(dynamic json) {
+      return CredentialsLDAP.fromJson(json);
+    }
+
+    return this.get(responseHandler, "/users/${path_user_id}/credentials_ldap",
+        {"fields": fields});
   }
 
   /**
@@ -8067,7 +9771,13 @@ class Looker31SDKStream extends APIMethods {
      */
       int user_id) async {
     var path_user_id = encodeParam(user_id);
-    return this.delete("/users/${path_user_id}/credentials_ldap");
+
+    String responseHandler(dynamic json) {
+      return json;
+    }
+
+    return this
+        .delete(responseHandler, "/users/${path_user_id}/credentials_ldap");
   }
 
   /**
@@ -8085,8 +9795,13 @@ class Looker31SDKStream extends APIMethods {
      */
       String fields]) async {
     var path_user_id = encodeParam(user_id);
-    return this
-        .get("/users/${path_user_id}/credentials_google", {"fields": fields});
+
+    CredentialsGoogle responseHandler(dynamic json) {
+      return CredentialsGoogle.fromJson(json);
+    }
+
+    return this.get(responseHandler,
+        "/users/${path_user_id}/credentials_google", {"fields": fields});
   }
 
   /**
@@ -8100,7 +9815,13 @@ class Looker31SDKStream extends APIMethods {
      */
       int user_id) async {
     var path_user_id = encodeParam(user_id);
-    return this.delete("/users/${path_user_id}/credentials_google");
+
+    String responseHandler(dynamic json) {
+      return json;
+    }
+
+    return this
+        .delete(responseHandler, "/users/${path_user_id}/credentials_google");
   }
 
   /**
@@ -8118,8 +9839,13 @@ class Looker31SDKStream extends APIMethods {
      */
       String fields]) async {
     var path_user_id = encodeParam(user_id);
-    return this
-        .get("/users/${path_user_id}/credentials_saml", {"fields": fields});
+
+    CredentialsSaml responseHandler(dynamic json) {
+      return CredentialsSaml.fromJson(json);
+    }
+
+    return this.get(responseHandler, "/users/${path_user_id}/credentials_saml",
+        {"fields": fields});
   }
 
   /**
@@ -8133,7 +9859,13 @@ class Looker31SDKStream extends APIMethods {
      */
       int user_id) async {
     var path_user_id = encodeParam(user_id);
-    return this.delete("/users/${path_user_id}/credentials_saml");
+
+    String responseHandler(dynamic json) {
+      return json;
+    }
+
+    return this
+        .delete(responseHandler, "/users/${path_user_id}/credentials_saml");
   }
 
   /**
@@ -8151,8 +9883,13 @@ class Looker31SDKStream extends APIMethods {
      */
       String fields]) async {
     var path_user_id = encodeParam(user_id);
-    return this
-        .get("/users/${path_user_id}/credentials_oidc", {"fields": fields});
+
+    CredentialsOIDC responseHandler(dynamic json) {
+      return CredentialsOIDC.fromJson(json);
+    }
+
+    return this.get(responseHandler, "/users/${path_user_id}/credentials_oidc",
+        {"fields": fields});
   }
 
   /**
@@ -8166,7 +9903,13 @@ class Looker31SDKStream extends APIMethods {
      */
       int user_id) async {
     var path_user_id = encodeParam(user_id);
-    return this.delete("/users/${path_user_id}/credentials_oidc");
+
+    String responseHandler(dynamic json) {
+      return json;
+    }
+
+    return this
+        .delete(responseHandler, "/users/${path_user_id}/credentials_oidc");
   }
 
   /**
@@ -8189,7 +9932,13 @@ class Looker31SDKStream extends APIMethods {
       String fields]) async {
     var path_user_id = encodeParam(user_id);
     var path_credentials_api3_id = encodeParam(credentials_api3_id);
+
+    CredentialsApi3 responseHandler(dynamic json) {
+      return CredentialsApi3.fromJson(json);
+    }
+
     return this.get(
+        responseHandler,
         "/users/${path_user_id}/credentials_api3/${path_credentials_api3_id}",
         {"fields": fields});
   }
@@ -8210,7 +9959,12 @@ class Looker31SDKStream extends APIMethods {
       int credentials_api3_id) async {
     var path_user_id = encodeParam(user_id);
     var path_credentials_api3_id = encodeParam(credentials_api3_id);
-    return this.delete(
+
+    String responseHandler(dynamic json) {
+      return json;
+    }
+
+    return this.delete(responseHandler,
         "/users/${path_user_id}/credentials_api3/${path_credentials_api3_id}");
   }
 
@@ -8229,8 +9983,15 @@ class Looker31SDKStream extends APIMethods {
      */
       String fields]) async {
     var path_user_id = encodeParam(user_id);
-    return this
-        .get("/users/${path_user_id}/credentials_api3", {"fields": fields});
+
+    List<CredentialsApi3> responseHandler(dynamic json) {
+      return json
+          .map<CredentialsApi3>((i) => CredentialsApi3.fromJson(i))
+          .toList();
+    }
+
+    return this.get(responseHandler, "/users/${path_user_id}/credentials_api3",
+        {"fields": fields});
   }
 
   /**
@@ -8252,8 +10013,13 @@ class Looker31SDKStream extends APIMethods {
      */
       String fields]) async {
     var path_user_id = encodeParam(user_id);
-    return this.post(
-        "/users/${path_user_id}/credentials_api3", {"fields": fields}, body);
+
+    CredentialsApi3 responseHandler(dynamic json) {
+      return CredentialsApi3.fromJson(json);
+    }
+
+    return this.post(responseHandler, "/users/${path_user_id}/credentials_api3",
+        {"fields": fields}, body == null ? null : body.toJson());
   }
 
   /**
@@ -8276,7 +10042,13 @@ class Looker31SDKStream extends APIMethods {
       String fields]) async {
     var path_user_id = encodeParam(user_id);
     var path_credentials_embed_id = encodeParam(credentials_embed_id);
+
+    CredentialsEmbed responseHandler(dynamic json) {
+      return CredentialsEmbed.fromJson(json);
+    }
+
     return this.get(
+        responseHandler,
         "/users/${path_user_id}/credentials_embed/${path_credentials_embed_id}",
         {"fields": fields});
   }
@@ -8297,7 +10069,12 @@ class Looker31SDKStream extends APIMethods {
       int credentials_embed_id) async {
     var path_user_id = encodeParam(user_id);
     var path_credentials_embed_id = encodeParam(credentials_embed_id);
-    return this.delete(
+
+    String responseHandler(dynamic json) {
+      return json;
+    }
+
+    return this.delete(responseHandler,
         "/users/${path_user_id}/credentials_embed/${path_credentials_embed_id}");
   }
 
@@ -8316,8 +10093,15 @@ class Looker31SDKStream extends APIMethods {
      */
       String fields]) async {
     var path_user_id = encodeParam(user_id);
-    return this
-        .get("/users/${path_user_id}/credentials_embed", {"fields": fields});
+
+    List<CredentialsEmbed> responseHandler(dynamic json) {
+      return json
+          .map<CredentialsEmbed>((i) => CredentialsEmbed.fromJson(i))
+          .toList();
+    }
+
+    return this.get(responseHandler, "/users/${path_user_id}/credentials_embed",
+        {"fields": fields});
   }
 
   /**
@@ -8335,7 +10119,12 @@ class Looker31SDKStream extends APIMethods {
      */
       String fields]) async {
     var path_user_id = encodeParam(user_id);
-    return this.get(
+
+    CredentialsLookerOpenid responseHandler(dynamic json) {
+      return CredentialsLookerOpenid.fromJson(json);
+    }
+
+    return this.get(responseHandler,
         "/users/${path_user_id}/credentials_looker_openid", {"fields": fields});
   }
 
@@ -8350,7 +10139,13 @@ class Looker31SDKStream extends APIMethods {
      */
       int user_id) async {
     var path_user_id = encodeParam(user_id);
-    return this.delete("/users/${path_user_id}/credentials_looker_openid");
+
+    String responseHandler(dynamic json) {
+      return json;
+    }
+
+    return this.delete(
+        responseHandler, "/users/${path_user_id}/credentials_looker_openid");
   }
 
   /**
@@ -8373,7 +10168,14 @@ class Looker31SDKStream extends APIMethods {
       String fields]) async {
     var path_user_id = encodeParam(user_id);
     var path_session_id = encodeParam(session_id);
-    return this.get("/users/${path_user_id}/sessions/${path_session_id}",
+
+    Session responseHandler(dynamic json) {
+      return Session.fromJson(json);
+    }
+
+    return this.get(
+        responseHandler,
+        "/users/${path_user_id}/sessions/${path_session_id}",
         {"fields": fields});
   }
 
@@ -8393,7 +10195,13 @@ class Looker31SDKStream extends APIMethods {
       int session_id) async {
     var path_user_id = encodeParam(user_id);
     var path_session_id = encodeParam(session_id);
-    return this.delete("/users/${path_user_id}/sessions/${path_session_id}");
+
+    String responseHandler(dynamic json) {
+      return json;
+    }
+
+    return this.delete(
+        responseHandler, "/users/${path_user_id}/sessions/${path_session_id}");
   }
 
   /**
@@ -8411,7 +10219,13 @@ class Looker31SDKStream extends APIMethods {
      */
       String fields]) async {
     var path_user_id = encodeParam(user_id);
-    return this.get("/users/${path_user_id}/sessions", {"fields": fields});
+
+    List<Session> responseHandler(dynamic json) {
+      return json.map<Session>((i) => Session.fromJson(i)).toList();
+    }
+
+    return this.get(
+        responseHandler, "/users/${path_user_id}/sessions", {"fields": fields});
   }
 
   /**
@@ -8442,7 +10256,14 @@ class Looker31SDKStream extends APIMethods {
      */
           String fields]) async {
     var path_user_id = encodeParam(user_id);
-    return this.post("/users/${path_user_id}/credentials_email/password_reset",
+
+    CredentialsEmail responseHandler(dynamic json) {
+      return CredentialsEmail.fromJson(json);
+    }
+
+    return this.post(
+        responseHandler,
+        "/users/${path_user_id}/credentials_email/password_reset",
         {"expires": expires, "fields": fields});
   }
 
@@ -8465,7 +10286,12 @@ class Looker31SDKStream extends APIMethods {
      */
       bool direct_association_only]) async {
     var path_user_id = encodeParam(user_id);
-    return this.get("/users/${path_user_id}/roles",
+
+    List<Role> responseHandler(dynamic json) {
+      return json.map<Role>((i) => Role.fromJson(i)).toList();
+    }
+
+    return this.get(responseHandler, "/users/${path_user_id}/roles",
         {"fields": fields, "direct_association_only": direct_association_only});
   }
 
@@ -8488,7 +10314,13 @@ class Looker31SDKStream extends APIMethods {
      */
       String fields]) async {
     var path_user_id = encodeParam(user_id);
-    return this.put("/users/${path_user_id}/roles", {"fields": fields}, body);
+
+    List<Role> responseHandler(dynamic json) {
+      return json.map<Role>((i) => Role.fromJson(i)).toList();
+    }
+
+    return this.put(responseHandler, "/users/${path_user_id}/roles",
+        {"fields": fields}, body);
   }
 
   /**
@@ -8533,7 +10365,16 @@ class Looker31SDKStream extends APIMethods {
      */
       bool include_unset]) async {
     var path_user_id = encodeParam(user_id);
-    return this.get("/users/${path_user_id}/attribute_values", {
+
+    List<UserAttributeWithValue> responseHandler(dynamic json) {
+      return json
+          .map<UserAttributeWithValue>(
+              (i) => UserAttributeWithValue.fromJson(i))
+          .toList();
+    }
+
+    return this
+        .get(responseHandler, "/users/${path_user_id}/attribute_values", {
       "fields": fields,
       "user_attribute_ids": user_attribute_ids,
       "all_values": all_values,
@@ -8563,10 +10404,16 @@ class Looker31SDKStream extends APIMethods {
       WriteUserAttributeWithValue body) async {
     var path_user_id = encodeParam(user_id);
     var path_user_attribute_id = encodeParam(user_attribute_id);
+
+    UserAttributeWithValue responseHandler(dynamic json) {
+      return UserAttributeWithValue.fromJson(json);
+    }
+
     return this.patch(
+        responseHandler,
         "/users/${path_user_id}/attribute_values/${path_user_attribute_id}",
         null,
-        body);
+        body == null ? null : body.toJson());
   }
 
   /**
@@ -8590,7 +10437,9 @@ class Looker31SDKStream extends APIMethods {
       int user_attribute_id) async {
     var path_user_id = encodeParam(user_id);
     var path_user_attribute_id = encodeParam(user_attribute_id);
-    return this.delete(
+
+    void responseHandler(dynamic json) {}
+    return this.delete(responseHandler,
         "/users/${path_user_id}/attribute_values/${path_user_attribute_id}");
   }
 
@@ -8612,7 +10461,12 @@ class Looker31SDKStream extends APIMethods {
      * @param {String} sorts Fields to order the results by. Sortable fields include: name, label
      */
       String sorts]) async {
-    return this.get("/user_attributes", {"fields": fields, "sorts": sorts});
+    List<UserAttribute> responseHandler(dynamic json) {
+      return json.map<UserAttribute>((i) => UserAttribute.fromJson(i)).toList();
+    }
+
+    return this.get(responseHandler, "/user_attributes",
+        {"fields": fields, "sorts": sorts});
   }
 
   /**
@@ -8638,7 +10492,12 @@ class Looker31SDKStream extends APIMethods {
      * @param {String} fields Requested fields.
      */
       String fields]) async {
-    return this.post("/user_attributes", {"fields": fields}, body);
+    UserAttribute responseHandler(dynamic json) {
+      return UserAttribute.fromJson(json);
+    }
+
+    return this.post(responseHandler, "/user_attributes", {"fields": fields},
+        body == null ? null : body.toJson());
   }
 
   /**
@@ -8656,8 +10515,13 @@ class Looker31SDKStream extends APIMethods {
      */
       String fields]) async {
     var path_user_attribute_id = encodeParam(user_attribute_id);
-    return this
-        .get("/user_attributes/${path_user_attribute_id}", {"fields": fields});
+
+    UserAttribute responseHandler(dynamic json) {
+      return UserAttribute.fromJson(json);
+    }
+
+    return this.get(responseHandler,
+        "/user_attributes/${path_user_attribute_id}", {"fields": fields});
   }
 
   /**
@@ -8679,8 +10543,16 @@ class Looker31SDKStream extends APIMethods {
      */
       String fields]) async {
     var path_user_attribute_id = encodeParam(user_attribute_id);
+
+    UserAttribute responseHandler(dynamic json) {
+      return UserAttribute.fromJson(json);
+    }
+
     return this.patch(
-        "/user_attributes/${path_user_attribute_id}", {"fields": fields}, body);
+        responseHandler,
+        "/user_attributes/${path_user_attribute_id}",
+        {"fields": fields},
+        body == null ? null : body.toJson());
   }
 
   /**
@@ -8694,7 +10566,13 @@ class Looker31SDKStream extends APIMethods {
      */
       int user_attribute_id) async {
     var path_user_attribute_id = encodeParam(user_attribute_id);
-    return this.delete("/user_attributes/${path_user_attribute_id}");
+
+    String responseHandler(dynamic json) {
+      return json;
+    }
+
+    return this
+        .delete(responseHandler, "/user_attributes/${path_user_attribute_id}");
   }
 
   /**
@@ -8719,7 +10597,17 @@ class Looker31SDKStream extends APIMethods {
      */
           String fields]) async {
     var path_user_attribute_id = encodeParam(user_attribute_id);
-    return this.get("/user_attributes/${path_user_attribute_id}/group_values",
+
+    List<UserAttributeGroupValue> responseHandler(dynamic json) {
+      return json
+          .map<UserAttributeGroupValue>(
+              (i) => UserAttributeGroupValue.fromJson(i))
+          .toList();
+    }
+
+    return this.get(
+        responseHandler,
+        "/user_attributes/${path_user_attribute_id}/group_values",
         {"fields": fields});
   }
 
@@ -8758,7 +10646,15 @@ class Looker31SDKStream extends APIMethods {
      */
           List<UserAttributeGroupValue> body) async {
     var path_user_attribute_id = encodeParam(user_attribute_id);
-    return this.post(
+
+    List<UserAttributeGroupValue> responseHandler(dynamic json) {
+      return json
+          .map<UserAttributeGroupValue>(
+              (i) => UserAttributeGroupValue.fromJson(i))
+          .toList();
+    }
+
+    return this.post(responseHandler,
         "/user_attributes/${path_user_attribute_id}/group_values", null, body);
   }
 
@@ -8774,7 +10670,11 @@ class Looker31SDKStream extends APIMethods {
    * GET /workspaces -> ByteArray
    */
   Future<SDKResponse<List<Workspace>>> all_workspaces() async {
-    return this.get("/workspaces");
+    List<Workspace> responseHandler(dynamic json) {
+      return json.map<Workspace>((i) => Workspace.fromJson(i)).toList();
+    }
+
+    return this.get(responseHandler, "/workspaces");
   }
 
   /**
@@ -8816,7 +10716,12 @@ class Looker31SDKStream extends APIMethods {
      */
       String workspace_id) async {
     var path_workspace_id = encodeParam(workspace_id);
-    return this.get("/workspaces/${path_workspace_id}");
+
+    Workspace responseHandler(dynamic json) {
+      return Workspace.fromJson(json);
+    }
+
+    return this.get(responseHandler, "/workspaces/${path_workspace_id}");
   }
 
   //endregion Workspace: Manage Workspaces

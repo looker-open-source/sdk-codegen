@@ -43,6 +43,23 @@ class AccessToken {
    * Number of seconds before the token expires (read-only)
    */
   int expires_in;
+
+  AccessToken() {}
+
+  Map toJson() => {
+        'access_token': access_token,
+        'token_type': token_type,
+        'expires_in': expires_in
+      };
+
+  AccessToken.fromJson(Map source)
+      : access_token = source['access_token'] == null
+            ? null
+            : source['access_token'].toString(),
+        token_type = source['token_type'] == null
+            ? null
+            : source['token_type'].toString(),
+        expires_in = source['expires_in'];
 }
 
 /**
@@ -54,7 +71,7 @@ class ApiSession {
   /**
    * Operations the current user is able to perform on this object (read-only)
    */
-  Map<String, bool> can;
+  Map<String, dynamic> can;
   /**
    * The id of active workspace for this session
    */
@@ -63,6 +80,18 @@ class ApiSession {
    * The id of the actual user in the case when this session represents one user sudo'ing as another (read-only)
    */
   int sudo_user_id;
+
+  ApiSession() {}
+
+  Map toJson() =>
+      {'can': can, 'workspace_id': workspace_id, 'sudo_user_id': sudo_user_id};
+
+  ApiSession.fromJson(Map source)
+      : can = source['can'],
+        workspace_id = source['workspace_id'] == null
+            ? null
+            : source['workspace_id'].toString(),
+        sudo_user_id = source['sudo_user_id'];
 }
 
 class ApiVersion {
@@ -70,11 +99,31 @@ class ApiVersion {
    * Current Looker release version number (read-only)
    */
   String looker_release_version;
+  /**
+   * current_version
+   */
   ApiVersionElement current_version;
   /**
    * Array of versions supported by this Looker instance (read-only)
    */
   List<ApiVersionElement> supported_versions;
+
+  ApiVersion() {}
+
+  Map toJson() => {'looker_release_version': looker_release_version};
+
+  ApiVersion.fromJson(Map source)
+      : looker_release_version = source['looker_release_version'] == null
+            ? null
+            : source['looker_release_version'].toString(),
+        current_version = source['current_version'] == null
+            ? null
+            : ApiVersionElement.fromJson(source['current_version']),
+        supported_versions = source['supported_versions'] == null
+            ? null
+            : (source['supported_versions'] as List)
+                .map((i) => ApiVersionElement.fromJson(i))
+                .toList();
 }
 
 class ApiVersionElement {
@@ -94,13 +143,33 @@ class ApiVersionElement {
    * Url for swagger.json for this version (read-only)
    */
   String swagger_url;
+
+  ApiVersionElement() {}
+
+  Map toJson() => {
+        'version': version,
+        'full_version': full_version,
+        'status': status,
+        'swagger_url': swagger_url
+      };
+
+  ApiVersionElement.fromJson(Map source)
+      : version =
+            source['version'] == null ? null : source['version'].toString(),
+        full_version = source['full_version'] == null
+            ? null
+            : source['full_version'].toString(),
+        status = source['status'] == null ? null : source['status'].toString(),
+        swagger_url = source['swagger_url'] == null
+            ? null
+            : source['swagger_url'].toString();
 }
 
 class BackupConfiguration {
   /**
    * Operations the current user is able to perform on this object (read-only)
    */
-  Map<String, bool> can;
+  Map<String, dynamic> can;
   /**
    * Type of backup: looker-s3 or custom-s3
    */
@@ -125,6 +194,35 @@ class BackupConfiguration {
    * Link to get this item (read-only)
    */
   String url;
+
+  BackupConfiguration() {}
+
+  Map toJson() => {
+        'can': can,
+        'type': type,
+        'custom_s3_bucket': custom_s3_bucket,
+        'custom_s3_bucket_region': custom_s3_bucket_region,
+        'custom_s3_key': custom_s3_key,
+        'custom_s3_secret': custom_s3_secret,
+        'url': url
+      };
+
+  BackupConfiguration.fromJson(Map source)
+      : can = source['can'],
+        type = source['type'] == null ? null : source['type'].toString(),
+        custom_s3_bucket = source['custom_s3_bucket'] == null
+            ? null
+            : source['custom_s3_bucket'].toString(),
+        custom_s3_bucket_region = source['custom_s3_bucket_region'] == null
+            ? null
+            : source['custom_s3_bucket_region'].toString(),
+        custom_s3_key = source['custom_s3_key'] == null
+            ? null
+            : source['custom_s3_key'].toString(),
+        custom_s3_secret = source['custom_s3_secret'] == null
+            ? null
+            : source['custom_s3_secret'].toString(),
+        url = source['url'] == null ? null : source['url'].toString();
 }
 
 /**
@@ -153,6 +251,29 @@ class ColorCollection {
    * Array of diverging palette definitions
    */
   List<ContinuousPalette> divergingPalettes;
+
+  ColorCollection() {}
+
+  Map toJson() => {'id': id, 'label': label};
+
+  ColorCollection.fromJson(Map source)
+      : id = source['id'] == null ? null : source['id'].toString(),
+        label = source['label'] == null ? null : source['label'].toString(),
+        categoricalPalettes = source['categoricalPalettes'] == null
+            ? null
+            : (source['categoricalPalettes'] as List)
+                .map((i) => DiscretePalette.fromJson(i))
+                .toList(),
+        sequentialPalettes = source['sequentialPalettes'] == null
+            ? null
+            : (source['sequentialPalettes'] as List)
+                .map((i) => ContinuousPalette.fromJson(i))
+                .toList(),
+        divergingPalettes = source['divergingPalettes'] == null
+            ? null
+            : (source['divergingPalettes'] as List)
+                .map((i) => ContinuousPalette.fromJson(i))
+                .toList();
 }
 
 class ColorStop {
@@ -164,6 +285,14 @@ class ColorStop {
    * Offset in continuous palette (0 to 100)
    */
   int offset;
+
+  ColorStop() {}
+
+  Map toJson() => {'color': color, 'offset': offset};
+
+  ColorStop.fromJson(Map source)
+      : color = source['color'] == null ? null : source['color'].toString(),
+        offset = source['offset'];
 }
 
 class ContentFavorite {
@@ -187,15 +316,43 @@ class ContentFavorite {
    * Id of a dashboard (read-only)
    */
   int dashboard_id;
+  /**
+   * look
+   */
   LookBasic look;
+  /**
+   * dashboard
+   */
   DashboardBase dashboard;
+
+  ContentFavorite() {}
+
+  Map toJson() => {
+        'id': id,
+        'user_id': user_id,
+        'content_metadata_id': content_metadata_id,
+        'look_id': look_id,
+        'dashboard_id': dashboard_id
+      };
+
+  ContentFavorite.fromJson(Map source)
+      : id = source['id'],
+        user_id = source['user_id'],
+        content_metadata_id = source['content_metadata_id'],
+        look_id = source['look_id'],
+        dashboard_id = source['dashboard_id'],
+        look =
+            source['look'] == null ? null : LookBasic.fromJson(source['look']),
+        dashboard = source['dashboard'] == null
+            ? null
+            : DashboardBase.fromJson(source['dashboard']);
 }
 
 class ContentMeta {
   /**
    * Operations the current user is able to perform on this object (read-only)
    */
-  Map<String, bool> can;
+  Map<String, dynamic> can;
   /**
    * Unique Id (read-only)
    */
@@ -240,13 +397,50 @@ class ContentMeta {
    * Id of associated space when content_type is "space" (read-only)
    */
   String space_id;
+
+  ContentMeta() {}
+
+  Map toJson() => {
+        'can': can,
+        'id': id,
+        'name': name,
+        'parent_id': parent_id,
+        'dashboard_id': dashboard_id,
+        'look_id': look_id,
+        'folder_id': folder_id,
+        'content_type': content_type,
+        'inherits': inherits,
+        'inheriting_id': inheriting_id,
+        'slug': slug,
+        'space_id': space_id
+      };
+
+  ContentMeta.fromJson(Map source)
+      : can = source['can'],
+        id = source['id'],
+        name = source['name'] == null ? null : source['name'].toString(),
+        parent_id = source['parent_id'],
+        dashboard_id = source['dashboard_id'] == null
+            ? null
+            : source['dashboard_id'].toString(),
+        look_id = source['look_id'],
+        folder_id =
+            source['folder_id'] == null ? null : source['folder_id'].toString(),
+        content_type = source['content_type'] == null
+            ? null
+            : source['content_type'].toString(),
+        inherits = source['inherits'],
+        inheriting_id = source['inheriting_id'],
+        slug = source['slug'] == null ? null : source['slug'].toString(),
+        space_id =
+            source['space_id'] == null ? null : source['space_id'].toString();
 }
 
 class ContentMetaGroupUser {
   /**
    * Operations the current user is able to perform on this object (read-only)
    */
-  Map<String, bool> can;
+  Map<String, dynamic> can;
   /**
    * Unique Id (read-only)
    */
@@ -267,6 +461,27 @@ class ContentMetaGroupUser {
    * ID of associated user (read-only)
    */
   int user_id;
+
+  ContentMetaGroupUser() {}
+
+  Map toJson() => {
+        'can': can,
+        'id': id,
+        'content_metadata_id': content_metadata_id,
+        'permission_type': permission_type,
+        'group_id': group_id,
+        'user_id': user_id
+      };
+
+  ContentMetaGroupUser.fromJson(Map source)
+      : can = source['can'],
+        id = source['id'] == null ? null : source['id'].toString(),
+        content_metadata_id = source['content_metadata_id'] == null
+            ? null
+            : source['content_metadata_id'].toString(),
+        permission_type = source['permission_type'],
+        group_id = source['group_id'],
+        user_id = source['user_id'];
 }
 
 class ContentValidation {
@@ -302,6 +517,36 @@ class ContentValidation {
    * The number of explores used across all content validated (read-only)
    */
   int total_explores_validated;
+
+  ContentValidation() {}
+
+  Map toJson() => {
+        'computation_time': computation_time,
+        'total_looks_validated': total_looks_validated,
+        'total_dashboard_elements_validated':
+            total_dashboard_elements_validated,
+        'total_dashboard_filters_validated': total_dashboard_filters_validated,
+        'total_scheduled_plans_validated': total_scheduled_plans_validated,
+        'total_alerts_validated': total_alerts_validated,
+        'total_explores_validated': total_explores_validated
+      };
+
+  ContentValidation.fromJson(Map source)
+      : content_with_errors = source['content_with_errors'] == null
+            ? null
+            : (source['content_with_errors'] as List)
+                .map((i) => ContentValidatorError.fromJson(i))
+                .toList(),
+        computation_time = source['computation_time'],
+        total_looks_validated = source['total_looks_validated'],
+        total_dashboard_elements_validated =
+            source['total_dashboard_elements_validated'],
+        total_dashboard_filters_validated =
+            source['total_dashboard_filters_validated'],
+        total_scheduled_plans_validated =
+            source['total_scheduled_plans_validated'],
+        total_alerts_validated = source['total_alerts_validated'],
+        total_explores_validated = source['total_explores_validated'];
 }
 
 class ContentValidationAlert {
@@ -321,6 +566,27 @@ class ContentValidationAlert {
    * An optional, user-defined title for the alert
    */
   String custom_title;
+
+  ContentValidationAlert() {}
+
+  Map toJson() => {
+        'id': id,
+        'lookml_dashboard_id': lookml_dashboard_id,
+        'lookml_link_id': lookml_link_id,
+        'custom_title': custom_title
+      };
+
+  ContentValidationAlert.fromJson(Map source)
+      : id = source['id'],
+        lookml_dashboard_id = source['lookml_dashboard_id'] == null
+            ? null
+            : source['lookml_dashboard_id'].toString(),
+        lookml_link_id = source['lookml_link_id'] == null
+            ? null
+            : source['lookml_link_id'].toString(),
+        custom_title = source['custom_title'] == null
+            ? null
+            : source['custom_title'].toString();
 }
 
 class ContentValidationDashboard {
@@ -332,12 +598,35 @@ class ContentValidationDashboard {
    * Unique Id (read-only)
    */
   String id;
+  /**
+   * folder
+   */
   ContentValidationFolder folder;
   /**
    * Dashboard Title
    */
   String title;
+  /**
+   * space
+   */
   ContentValidationSpace space;
+
+  ContentValidationDashboard() {}
+
+  Map toJson() => {'description': description, 'id': id, 'title': title};
+
+  ContentValidationDashboard.fromJson(Map source)
+      : description = source['description'] == null
+            ? null
+            : source['description'].toString(),
+        id = source['id'] == null ? null : source['id'].toString(),
+        folder = source['folder'] == null
+            ? null
+            : ContentValidationFolder.fromJson(source['folder']),
+        title = source['title'] == null ? null : source['title'].toString(),
+        space = source['space'] == null
+            ? null
+            : ContentValidationSpace.fromJson(source['space']);
 }
 
 class ContentValidationDashboardElement {
@@ -397,6 +686,56 @@ class ContentValidationDashboardElement {
    * Type
    */
   String type;
+
+  ContentValidationDashboardElement() {}
+
+  Map toJson() => {
+        'body_text': body_text,
+        'dashboard_id': dashboard_id,
+        'id': id,
+        'look_id': look_id,
+        'note_display': note_display,
+        'note_state': note_state,
+        'note_text': note_text,
+        'note_text_as_html': note_text_as_html,
+        'query_id': query_id,
+        'subtitle_text': subtitle_text,
+        'title': title,
+        'title_hidden': title_hidden,
+        'title_text': title_text,
+        'type': type
+      };
+
+  ContentValidationDashboardElement.fromJson(Map source)
+      : body_text =
+            source['body_text'] == null ? null : source['body_text'].toString(),
+        dashboard_id = source['dashboard_id'] == null
+            ? null
+            : source['dashboard_id'].toString(),
+        id = source['id'] == null ? null : source['id'].toString(),
+        look_id =
+            source['look_id'] == null ? null : source['look_id'].toString(),
+        note_display = source['note_display'] == null
+            ? null
+            : source['note_display'].toString(),
+        note_state = source['note_state'] == null
+            ? null
+            : source['note_state'].toString(),
+        note_text =
+            source['note_text'] == null ? null : source['note_text'].toString(),
+        note_text_as_html = source['note_text_as_html'] == null
+            ? null
+            : source['note_text_as_html'].toString(),
+        query_id = source['query_id'],
+        subtitle_text = source['subtitle_text'] == null
+            ? null
+            : source['subtitle_text'].toString(),
+        title = source['title'] == null ? null : source['title'].toString(),
+        title_hidden = source['title_hidden'],
+        title_text = source['title_text'] == null
+            ? null
+            : source['title_text'].toString(),
+        type = source['type'] == null ? null : source['type'].toString();
 }
 
 class ContentValidationDashboardFilter {
@@ -436,6 +775,37 @@ class ContentValidationDashboardFilter {
    * Dimension of filter (required if type = field)
    */
   String dimension;
+
+  ContentValidationDashboardFilter() {}
+
+  Map toJson() => {
+        'id': id,
+        'dashboard_id': dashboard_id,
+        'name': name,
+        'title': title,
+        'type': type,
+        'default_value': default_value,
+        'model': model,
+        'explore': explore,
+        'dimension': dimension
+      };
+
+  ContentValidationDashboardFilter.fromJson(Map source)
+      : id = source['id'] == null ? null : source['id'].toString(),
+        dashboard_id = source['dashboard_id'] == null
+            ? null
+            : source['dashboard_id'].toString(),
+        name = source['name'] == null ? null : source['name'].toString(),
+        title = source['title'] == null ? null : source['title'].toString(),
+        type = source['type'] == null ? null : source['type'].toString(),
+        default_value = source['default_value'] == null
+            ? null
+            : source['default_value'].toString(),
+        model = source['model'] == null ? null : source['model'].toString(),
+        explore =
+            source['explore'] == null ? null : source['explore'].toString(),
+        dimension =
+            source['dimension'] == null ? null : source['dimension'].toString();
 }
 
 class ContentValidationError {
@@ -459,6 +829,30 @@ class ContentValidationError {
    * Whether this validation error is removable (read-only)
    */
   bool removable;
+
+  ContentValidationError() {}
+
+  Map toJson() => {
+        'message': message,
+        'field_name': field_name,
+        'model_name': model_name,
+        'explore_name': explore_name,
+        'removable': removable
+      };
+
+  ContentValidationError.fromJson(Map source)
+      : message =
+            source['message'] == null ? null : source['message'].toString(),
+        field_name = source['field_name'] == null
+            ? null
+            : source['field_name'].toString(),
+        model_name = source['model_name'] == null
+            ? null
+            : source['model_name'].toString(),
+        explore_name = source['explore_name'] == null
+            ? null
+            : source['explore_name'].toString(),
+        removable = source['removable'];
 }
 
 class ContentValidationFolder {
@@ -470,6 +864,14 @@ class ContentValidationFolder {
    * Unique Id (read-only)
    */
   String id;
+
+  ContentValidationFolder() {}
+
+  Map toJson() => {'name': name, 'id': id};
+
+  ContentValidationFolder.fromJson(Map source)
+      : name = source['name'] == null ? null : source['name'].toString(),
+        id = source['id'] == null ? null : source['id'].toString();
 }
 
 class ContentValidationLook {
@@ -481,8 +883,28 @@ class ContentValidationLook {
    * Look Title
    */
   String title;
+  /**
+   * folder
+   */
   ContentValidationFolder folder;
+  /**
+   * space
+   */
   ContentValidationSpace space;
+
+  ContentValidationLook() {}
+
+  Map toJson() => {'id': id, 'title': title};
+
+  ContentValidationLook.fromJson(Map source)
+      : id = source['id'],
+        title = source['title'] == null ? null : source['title'].toString(),
+        folder = source['folder'] == null
+            ? null
+            : ContentValidationFolder.fromJson(source['folder']),
+        space = source['space'] == null
+            ? null
+            : ContentValidationSpace.fromJson(source['space']);
 }
 
 class ContentValidationLookMLDashboard {
@@ -498,7 +920,23 @@ class ContentValidationLookMLDashboard {
    * ID of Space (read-only)
    */
   String space_id;
+  /**
+   * space
+   */
   SpaceBase space;
+
+  ContentValidationLookMLDashboard() {}
+
+  Map toJson() => {'id': id, 'title': title, 'space_id': space_id};
+
+  ContentValidationLookMLDashboard.fromJson(Map source)
+      : id = source['id'] == null ? null : source['id'].toString(),
+        title = source['title'] == null ? null : source['title'].toString(),
+        space_id =
+            source['space_id'] == null ? null : source['space_id'].toString(),
+        space = source['space'] == null
+            ? null
+            : SpaceBase.fromJson(source['space']);
 }
 
 class ContentValidationLookMLDashboardElement {
@@ -510,6 +948,16 @@ class ContentValidationLookMLDashboardElement {
    * Title of the LookML Dashboard Element (read-only)
    */
   String title;
+
+  ContentValidationLookMLDashboardElement() {}
+
+  Map toJson() => {'lookml_link_id': lookml_link_id, 'title': title};
+
+  ContentValidationLookMLDashboardElement.fromJson(Map source)
+      : lookml_link_id = source['lookml_link_id'] == null
+            ? null
+            : source['lookml_link_id'].toString(),
+        title = source['title'] == null ? null : source['title'].toString();
 }
 
 class ContentValidationScheduledPlan {
@@ -525,6 +973,15 @@ class ContentValidationScheduledPlan {
    * Unique Id (read-only)
    */
   int id;
+
+  ContentValidationScheduledPlan() {}
+
+  Map toJson() => {'name': name, 'look_id': look_id, 'id': id};
+
+  ContentValidationScheduledPlan.fromJson(Map source)
+      : name = source['name'] == null ? null : source['name'].toString(),
+        look_id = source['look_id'],
+        id = source['id'];
 }
 
 class ContentValidationSpace {
@@ -536,16 +993,48 @@ class ContentValidationSpace {
    * Unique Id (read-only)
    */
   String id;
+
+  ContentValidationSpace() {}
+
+  Map toJson() => {'name': name, 'id': id};
+
+  ContentValidationSpace.fromJson(Map source)
+      : name = source['name'] == null ? null : source['name'].toString(),
+        id = source['id'] == null ? null : source['id'].toString();
 }
 
 class ContentValidatorError {
+  /**
+   * look
+   */
   ContentValidationLook look;
+  /**
+   * dashboard
+   */
   ContentValidationDashboard dashboard;
+  /**
+   * dashboard_element
+   */
   ContentValidationDashboardElement dashboard_element;
+  /**
+   * dashboard_filter
+   */
   ContentValidationDashboardFilter dashboard_filter;
+  /**
+   * scheduled_plan
+   */
   ContentValidationScheduledPlan scheduled_plan;
+  /**
+   * alert
+   */
   ContentValidationAlert alert;
+  /**
+   * lookml_dashboard
+   */
   ContentValidationLookMLDashboard lookml_dashboard;
+  /**
+   * lookml_dashboard_element
+   */
   ContentValidationLookMLDashboardElement lookml_dashboard_element;
   /**
    * A list of errors found for this piece of content (read-only)
@@ -555,13 +1044,53 @@ class ContentValidatorError {
    * An id unique to this piece of content for this validation run (read-only)
    */
   String id;
+
+  ContentValidatorError() {}
+
+  Map toJson() => {'id': id};
+
+  ContentValidatorError.fromJson(Map source)
+      : look = source['look'] == null
+            ? null
+            : ContentValidationLook.fromJson(source['look']),
+        dashboard = source['dashboard'] == null
+            ? null
+            : ContentValidationDashboard.fromJson(source['dashboard']),
+        dashboard_element = source['dashboard_element'] == null
+            ? null
+            : ContentValidationDashboardElement.fromJson(
+                source['dashboard_element']),
+        dashboard_filter = source['dashboard_filter'] == null
+            ? null
+            : ContentValidationDashboardFilter.fromJson(
+                source['dashboard_filter']),
+        scheduled_plan = source['scheduled_plan'] == null
+            ? null
+            : ContentValidationScheduledPlan.fromJson(source['scheduled_plan']),
+        alert = source['alert'] == null
+            ? null
+            : ContentValidationAlert.fromJson(source['alert']),
+        lookml_dashboard = source['lookml_dashboard'] == null
+            ? null
+            : ContentValidationLookMLDashboard.fromJson(
+                source['lookml_dashboard']),
+        lookml_dashboard_element = source['lookml_dashboard_element'] == null
+            ? null
+            : ContentValidationLookMLDashboardElement.fromJson(
+                source['lookml_dashboard_element']),
+        errors = source['errors'] == null
+            ? null
+            : (source['errors'] as List)
+                .map((i) => ContentValidationError.fromJson(i))
+                .toList(),
+        id = source['id'] == null ? null : source['id'].toString();
 }
 
 class ContentView {
   /**
    * Operations the current user is able to perform on this object (read-only)
    */
-  Map<String, bool> can;
+  Map<String, dynamic> can;
   /**
    * Unique Id (read-only)
    */
@@ -602,6 +1131,39 @@ class ContentView {
    * Week start date for the view and favorite count during that given week (read-only)
    */
   String start_of_week_date;
+
+  ContentView() {}
+
+  Map toJson() => {
+        'can': can,
+        'id': id,
+        'look_id': look_id,
+        'dashboard_id': dashboard_id,
+        'content_metadata_id': content_metadata_id,
+        'user_id': user_id,
+        'group_id': group_id,
+        'view_count': view_count,
+        'favorite_count': favorite_count,
+        'last_viewed_at': last_viewed_at,
+        'start_of_week_date': start_of_week_date
+      };
+
+  ContentView.fromJson(Map source)
+      : can = source['can'],
+        id = source['id'],
+        look_id = source['look_id'],
+        dashboard_id = source['dashboard_id'],
+        content_metadata_id = source['content_metadata_id'],
+        user_id = source['user_id'],
+        group_id = source['group_id'],
+        view_count = source['view_count'],
+        favorite_count = source['favorite_count'],
+        last_viewed_at = source['last_viewed_at'] == null
+            ? null
+            : source['last_viewed_at'].toString(),
+        start_of_week_date = source['start_of_week_date'] == null
+            ? null
+            : source['start_of_week_date'].toString();
 }
 
 class ContinuousPalette {
@@ -621,6 +1183,20 @@ class ContinuousPalette {
    * Array of ColorStops in the palette
    */
   List<ColorStop> stops;
+
+  ContinuousPalette() {}
+
+  Map toJson() => {'id': id, 'label': label, 'type': type};
+
+  ContinuousPalette.fromJson(Map source)
+      : id = source['id'] == null ? null : source['id'].toString(),
+        label = source['label'] == null ? null : source['label'].toString(),
+        type = source['type'] == null ? null : source['type'].toString(),
+        stops = source['stops'] == null
+            ? null
+            : (source['stops'] as List)
+                .map((i) => ColorStop.fromJson(i))
+                .toList();
 }
 
 class CreateDashboardFilter {
@@ -684,6 +1260,52 @@ class CreateDashboardFilter {
    * The visual configuration for this filter. Used to set up how the UI for this filter should appear.
    */
   Map<String, dynamic> ui_config;
+
+  CreateDashboardFilter() {}
+
+  Map toJson() => {
+        'id': id,
+        'dashboard_id': dashboard_id,
+        'name': name,
+        'title': title,
+        'type': type,
+        'default_value': default_value,
+        'model': model,
+        'explore': explore,
+        'dimension': dimension,
+        'field': field,
+        'row': row,
+        'allow_multiple_values': allow_multiple_values,
+        'required': required,
+        'ui_config': ui_config
+      };
+
+  CreateDashboardFilter.fromJson(Map source)
+      : id = source['id'] == null ? null : source['id'].toString(),
+        dashboard_id = source['dashboard_id'] == null
+            ? null
+            : source['dashboard_id'].toString(),
+        name = source['name'] == null ? null : source['name'].toString(),
+        title = source['title'] == null ? null : source['title'].toString(),
+        type = source['type'] == null ? null : source['type'].toString(),
+        default_value = source['default_value'] == null
+            ? null
+            : source['default_value'].toString(),
+        model = source['model'] == null ? null : source['model'].toString(),
+        explore =
+            source['explore'] == null ? null : source['explore'].toString(),
+        dimension =
+            source['dimension'] == null ? null : source['dimension'].toString(),
+        field = source['field'],
+        row = source['row'],
+        listens_to_filters = source['listens_to_filters'] == null
+            ? null
+            : source['listens_to_filters']
+                .map<String>((i) => i as String)
+                .toList(),
+        allow_multiple_values = source['allow_multiple_values'],
+        required = source['required'],
+        ui_config = source['ui_config'];
 }
 
 class CreateDashboardRenderTask {
@@ -695,6 +1317,21 @@ class CreateDashboardRenderTask {
    * Dashboard layout style: single_column or tiled
    */
   String dashboard_style;
+
+  CreateDashboardRenderTask() {}
+
+  Map toJson() => {
+        'dashboard_filters': dashboard_filters,
+        'dashboard_style': dashboard_style
+      };
+
+  CreateDashboardRenderTask.fromJson(Map source)
+      : dashboard_filters = source['dashboard_filters'] == null
+            ? null
+            : source['dashboard_filters'].toString(),
+        dashboard_style = source['dashboard_style'] == null
+            ? null
+            : source['dashboard_style'].toString();
 }
 
 class CreateFolder {
@@ -706,13 +1343,22 @@ class CreateFolder {
    * Id of Parent. If the parent id is null, this is a root-level entry
    */
   String parent_id;
+
+  CreateFolder() {}
+
+  Map toJson() => {'name': name, 'parent_id': parent_id};
+
+  CreateFolder.fromJson(Map source)
+      : name = source['name'] == null ? null : source['name'].toString(),
+        parent_id =
+            source['parent_id'] == null ? null : source['parent_id'].toString();
 }
 
 class CreateQueryTask {
   /**
    * Operations the current user is able to perform on this object (read-only)
    */
-  Map<String, bool> can;
+  Map<String, dynamic> can;
   /**
    * Id of query to run
    */
@@ -737,6 +1383,29 @@ class CreateQueryTask {
    * Id of dashboard associated with query.
    */
   String dashboard_id;
+
+  CreateQueryTask() {}
+
+  Map toJson() => {
+        'can': can,
+        'query_id': query_id,
+        'result_format': result_format,
+        'source': source,
+        'deferred': deferred,
+        'look_id': look_id,
+        'dashboard_id': dashboard_id
+      };
+
+  CreateQueryTask.fromJson(Map source)
+      : can = source['can'],
+        query_id = source['query_id'],
+        result_format = source['result_format'],
+        source = source['source'] == null ? null : source['source'].toString(),
+        deferred = source['deferred'],
+        look_id = source['look_id'],
+        dashboard_id = source['dashboard_id'] == null
+            ? null
+            : source['dashboard_id'].toString();
 }
 
 class CreateSpace {
@@ -748,13 +1417,22 @@ class CreateSpace {
    * Id of Parent. If the parent id is null, this is a root-level entry
    */
   String parent_id;
+
+  CreateSpace() {}
+
+  Map toJson() => {'name': name, 'parent_id': parent_id};
+
+  CreateSpace.fromJson(Map source)
+      : name = source['name'] == null ? null : source['name'].toString(),
+        parent_id =
+            source['parent_id'] == null ? null : source['parent_id'].toString();
 }
 
 class CredentialsApi3 {
   /**
    * Operations the current user is able to perform on this object (read-only)
    */
-  Map<String, bool> can;
+  Map<String, dynamic> can;
   /**
    * Unique Id (read-only)
    */
@@ -779,13 +1457,37 @@ class CredentialsApi3 {
    * Link to get this item (read-only)
    */
   String url;
+
+  CredentialsApi3() {}
+
+  Map toJson() => {
+        'can': can,
+        'id': id,
+        'client_id': client_id,
+        'created_at': created_at,
+        'is_disabled': is_disabled,
+        'type': type,
+        'url': url
+      };
+
+  CredentialsApi3.fromJson(Map source)
+      : can = source['can'],
+        id = source['id'],
+        client_id =
+            source['client_id'] == null ? null : source['client_id'].toString(),
+        created_at = source['created_at'] == null
+            ? null
+            : source['created_at'].toString(),
+        is_disabled = source['is_disabled'],
+        type = source['type'] == null ? null : source['type'].toString(),
+        url = source['url'] == null ? null : source['url'].toString();
 }
 
 class CredentialsEmail {
   /**
    * Operations the current user is able to perform on this object (read-only)
    */
-  Map<String, bool> can;
+  Map<String, dynamic> can;
   /**
    * Timestamp for the creation of this credential (read-only)
    */
@@ -822,13 +1524,49 @@ class CredentialsEmail {
    * Link to get this user (read-only)
    */
   String user_url;
+
+  CredentialsEmail() {}
+
+  Map toJson() => {
+        'can': can,
+        'created_at': created_at,
+        'email': email,
+        'forced_password_reset_at_next_login':
+            forced_password_reset_at_next_login,
+        'is_disabled': is_disabled,
+        'logged_in_at': logged_in_at,
+        'password_reset_url': password_reset_url,
+        'type': type,
+        'url': url,
+        'user_url': user_url
+      };
+
+  CredentialsEmail.fromJson(Map source)
+      : can = source['can'],
+        created_at = source['created_at'] == null
+            ? null
+            : source['created_at'].toString(),
+        email = source['email'] == null ? null : source['email'].toString(),
+        forced_password_reset_at_next_login =
+            source['forced_password_reset_at_next_login'],
+        is_disabled = source['is_disabled'],
+        logged_in_at = source['logged_in_at'] == null
+            ? null
+            : source['logged_in_at'].toString(),
+        password_reset_url = source['password_reset_url'] == null
+            ? null
+            : source['password_reset_url'].toString(),
+        type = source['type'] == null ? null : source['type'].toString(),
+        url = source['url'] == null ? null : source['url'].toString(),
+        user_url =
+            source['user_url'] == null ? null : source['user_url'].toString();
 }
 
 class CredentialsEmbed {
   /**
    * Operations the current user is able to perform on this object (read-only)
    */
-  Map<String, bool> can;
+  Map<String, dynamic> can;
   /**
    * Timestamp for the creation of this credential (read-only)
    */
@@ -861,13 +1599,46 @@ class CredentialsEmbed {
    * Link to get this item (read-only)
    */
   String url;
+
+  CredentialsEmbed() {}
+
+  Map toJson() => {
+        'can': can,
+        'created_at': created_at,
+        'external_group_id': external_group_id,
+        'external_user_id': external_user_id,
+        'id': id,
+        'is_disabled': is_disabled,
+        'logged_in_at': logged_in_at,
+        'type': type,
+        'url': url
+      };
+
+  CredentialsEmbed.fromJson(Map source)
+      : can = source['can'],
+        created_at = source['created_at'] == null
+            ? null
+            : source['created_at'].toString(),
+        external_group_id = source['external_group_id'] == null
+            ? null
+            : source['external_group_id'].toString(),
+        external_user_id = source['external_user_id'] == null
+            ? null
+            : source['external_user_id'].toString(),
+        id = source['id'],
+        is_disabled = source['is_disabled'],
+        logged_in_at = source['logged_in_at'] == null
+            ? null
+            : source['logged_in_at'].toString(),
+        type = source['type'] == null ? null : source['type'].toString(),
+        url = source['url'] == null ? null : source['url'].toString();
 }
 
 class CredentialsGoogle {
   /**
    * Operations the current user is able to perform on this object (read-only)
    */
-  Map<String, bool> can;
+  Map<String, dynamic> can;
   /**
    * Timestamp for the creation of this credential (read-only)
    */
@@ -900,13 +1671,44 @@ class CredentialsGoogle {
    * Link to get this item (read-only)
    */
   String url;
+
+  CredentialsGoogle() {}
+
+  Map toJson() => {
+        'can': can,
+        'created_at': created_at,
+        'domain': domain,
+        'email': email,
+        'google_user_id': google_user_id,
+        'is_disabled': is_disabled,
+        'logged_in_at': logged_in_at,
+        'type': type,
+        'url': url
+      };
+
+  CredentialsGoogle.fromJson(Map source)
+      : can = source['can'],
+        created_at = source['created_at'] == null
+            ? null
+            : source['created_at'].toString(),
+        domain = source['domain'] == null ? null : source['domain'].toString(),
+        email = source['email'] == null ? null : source['email'].toString(),
+        google_user_id = source['google_user_id'] == null
+            ? null
+            : source['google_user_id'].toString(),
+        is_disabled = source['is_disabled'],
+        logged_in_at = source['logged_in_at'] == null
+            ? null
+            : source['logged_in_at'].toString(),
+        type = source['type'] == null ? null : source['type'].toString(),
+        url = source['url'] == null ? null : source['url'].toString();
 }
 
 class CredentialsLDAP {
   /**
    * Operations the current user is able to perform on this object (read-only)
    */
-  Map<String, bool> can;
+  Map<String, dynamic> can;
   /**
    * Timestamp for the creation of this credential (read-only)
    */
@@ -939,13 +1741,44 @@ class CredentialsLDAP {
    * Link to get this item (read-only)
    */
   String url;
+
+  CredentialsLDAP() {}
+
+  Map toJson() => {
+        'can': can,
+        'created_at': created_at,
+        'email': email,
+        'is_disabled': is_disabled,
+        'ldap_dn': ldap_dn,
+        'ldap_id': ldap_id,
+        'logged_in_at': logged_in_at,
+        'type': type,
+        'url': url
+      };
+
+  CredentialsLDAP.fromJson(Map source)
+      : can = source['can'],
+        created_at = source['created_at'] == null
+            ? null
+            : source['created_at'].toString(),
+        email = source['email'] == null ? null : source['email'].toString(),
+        is_disabled = source['is_disabled'],
+        ldap_dn =
+            source['ldap_dn'] == null ? null : source['ldap_dn'].toString(),
+        ldap_id =
+            source['ldap_id'] == null ? null : source['ldap_id'].toString(),
+        logged_in_at = source['logged_in_at'] == null
+            ? null
+            : source['logged_in_at'].toString(),
+        type = source['type'] == null ? null : source['type'].toString(),
+        url = source['url'] == null ? null : source['url'].toString();
 }
 
 class CredentialsLookerOpenid {
   /**
    * Operations the current user is able to perform on this object (read-only)
    */
-  Map<String, bool> can;
+  Map<String, dynamic> can;
   /**
    * Timestamp for the creation of this credential (read-only)
    */
@@ -978,13 +1811,45 @@ class CredentialsLookerOpenid {
    * Link to get this user (read-only)
    */
   String user_url;
+
+  CredentialsLookerOpenid() {}
+
+  Map toJson() => {
+        'can': can,
+        'created_at': created_at,
+        'email': email,
+        'is_disabled': is_disabled,
+        'logged_in_at': logged_in_at,
+        'logged_in_ip': logged_in_ip,
+        'type': type,
+        'url': url,
+        'user_url': user_url
+      };
+
+  CredentialsLookerOpenid.fromJson(Map source)
+      : can = source['can'],
+        created_at = source['created_at'] == null
+            ? null
+            : source['created_at'].toString(),
+        email = source['email'] == null ? null : source['email'].toString(),
+        is_disabled = source['is_disabled'],
+        logged_in_at = source['logged_in_at'] == null
+            ? null
+            : source['logged_in_at'].toString(),
+        logged_in_ip = source['logged_in_ip'] == null
+            ? null
+            : source['logged_in_ip'].toString(),
+        type = source['type'] == null ? null : source['type'].toString(),
+        url = source['url'] == null ? null : source['url'].toString(),
+        user_url =
+            source['user_url'] == null ? null : source['user_url'].toString();
 }
 
 class CredentialsOIDC {
   /**
    * Operations the current user is able to perform on this object (read-only)
    */
-  Map<String, bool> can;
+  Map<String, dynamic> can;
   /**
    * Timestamp for the creation of this credential (read-only)
    */
@@ -1013,13 +1878,42 @@ class CredentialsOIDC {
    * Link to get this item (read-only)
    */
   String url;
+
+  CredentialsOIDC() {}
+
+  Map toJson() => {
+        'can': can,
+        'created_at': created_at,
+        'email': email,
+        'is_disabled': is_disabled,
+        'logged_in_at': logged_in_at,
+        'oidc_user_id': oidc_user_id,
+        'type': type,
+        'url': url
+      };
+
+  CredentialsOIDC.fromJson(Map source)
+      : can = source['can'],
+        created_at = source['created_at'] == null
+            ? null
+            : source['created_at'].toString(),
+        email = source['email'] == null ? null : source['email'].toString(),
+        is_disabled = source['is_disabled'],
+        logged_in_at = source['logged_in_at'] == null
+            ? null
+            : source['logged_in_at'].toString(),
+        oidc_user_id = source['oidc_user_id'] == null
+            ? null
+            : source['oidc_user_id'].toString(),
+        type = source['type'] == null ? null : source['type'].toString(),
+        url = source['url'] == null ? null : source['url'].toString();
 }
 
 class CredentialsSaml {
   /**
    * Operations the current user is able to perform on this object (read-only)
    */
-  Map<String, bool> can;
+  Map<String, dynamic> can;
   /**
    * Timestamp for the creation of this credential (read-only)
    */
@@ -1048,13 +1942,42 @@ class CredentialsSaml {
    * Link to get this item (read-only)
    */
   String url;
+
+  CredentialsSaml() {}
+
+  Map toJson() => {
+        'can': can,
+        'created_at': created_at,
+        'email': email,
+        'is_disabled': is_disabled,
+        'logged_in_at': logged_in_at,
+        'saml_user_id': saml_user_id,
+        'type': type,
+        'url': url
+      };
+
+  CredentialsSaml.fromJson(Map source)
+      : can = source['can'],
+        created_at = source['created_at'] == null
+            ? null
+            : source['created_at'].toString(),
+        email = source['email'] == null ? null : source['email'].toString(),
+        is_disabled = source['is_disabled'],
+        logged_in_at = source['logged_in_at'] == null
+            ? null
+            : source['logged_in_at'].toString(),
+        saml_user_id = source['saml_user_id'] == null
+            ? null
+            : source['saml_user_id'].toString(),
+        type = source['type'] == null ? null : source['type'].toString(),
+        url = source['url'] == null ? null : source['url'].toString();
 }
 
 class CredentialsTotp {
   /**
    * Operations the current user is able to perform on this object (read-only)
    */
-  Map<String, bool> can;
+  Map<String, dynamic> can;
   /**
    * Timestamp for the creation of this credential (read-only)
    */
@@ -1075,13 +1998,34 @@ class CredentialsTotp {
    * Link to get this item (read-only)
    */
   String url;
+
+  CredentialsTotp() {}
+
+  Map toJson() => {
+        'can': can,
+        'created_at': created_at,
+        'is_disabled': is_disabled,
+        'type': type,
+        'verified': verified,
+        'url': url
+      };
+
+  CredentialsTotp.fromJson(Map source)
+      : can = source['can'],
+        created_at = source['created_at'] == null
+            ? null
+            : source['created_at'].toString(),
+        is_disabled = source['is_disabled'],
+        type = source['type'] == null ? null : source['type'].toString(),
+        verified = source['verified'],
+        url = source['url'] == null ? null : source['url'].toString();
 }
 
 class CustomWelcomeEmail {
   /**
    * Operations the current user is able to perform on this object (read-only)
    */
-  Map<String, bool> can;
+  Map<String, dynamic> can;
   /**
    * If true, custom email content will replace the default body of welcome emails
    */
@@ -1098,13 +2042,32 @@ class CustomWelcomeEmail {
    * The text to appear in the header line of the email body.
    */
   String header;
+
+  CustomWelcomeEmail() {}
+
+  Map toJson() => {
+        'can': can,
+        'enabled': enabled,
+        'content': content,
+        'subject': subject,
+        'header': header
+      };
+
+  CustomWelcomeEmail.fromJson(Map source)
+      : can = source['can'],
+        enabled = source['enabled'],
+        content =
+            source['content'] == null ? null : source['content'].toString(),
+        subject =
+            source['subject'] == null ? null : source['subject'].toString(),
+        header = source['header'] == null ? null : source['header'].toString();
 }
 
 class Dashboard {
   /**
    * Operations the current user is able to perform on this object (read-only)
    */
-  Map<String, bool> can;
+  Map<String, dynamic> can;
   /**
    * Content Favorite Id (read-only)
    */
@@ -1125,6 +2088,9 @@ class Dashboard {
    * Unique Id (read-only)
    */
   String id;
+  /**
+   * model
+   */
   LookModel model;
   /**
    * Timezone in which the Dashboard will run by default.
@@ -1142,6 +2108,9 @@ class Dashboard {
    * Refresh Interval in milliseconds (read-only)
    */
   int refresh_interval_to_i;
+  /**
+   * folder
+   */
   FolderBase folder;
   /**
    * Dashboard Title
@@ -1151,6 +2120,9 @@ class Dashboard {
    * Id of User (read-only)
    */
   int user_id;
+  /**
+   * space
+   */
   SpaceBase space;
   /**
    * Background color
@@ -1252,11 +2224,143 @@ class Dashboard {
    * Number of times viewed in the Looker web UI (read-only)
    */
   int view_count;
+  /**
+   * appearance
+   */
   DashboardAppearance appearance;
   /**
    * The preferred route for viewing this dashboard (ie: dashboards or dashboards-next)
    */
   String preferred_viewer;
+
+  Dashboard() {}
+
+  Map toJson() => {
+        'can': can,
+        'content_favorite_id': content_favorite_id,
+        'content_metadata_id': content_metadata_id,
+        'description': description,
+        'hidden': hidden,
+        'id': id,
+        'query_timezone': query_timezone,
+        'readonly': readonly,
+        'refresh_interval': refresh_interval,
+        'refresh_interval_to_i': refresh_interval_to_i,
+        'title': title,
+        'user_id': user_id,
+        'background_color': background_color,
+        'created_at': created_at,
+        'crossfilter_enabled': crossfilter_enabled,
+        'deleted': deleted,
+        'deleted_at': deleted_at,
+        'deleter_id': deleter_id,
+        'edit_uri': edit_uri,
+        'favorite_count': favorite_count,
+        'last_accessed_at': last_accessed_at,
+        'last_viewed_at': last_viewed_at,
+        'load_configuration': load_configuration,
+        'lookml_link_id': lookml_link_id,
+        'show_filters_bar': show_filters_bar,
+        'show_title': show_title,
+        'slug': slug,
+        'space_id': space_id,
+        'folder_id': folder_id,
+        'text_tile_text_color': text_tile_text_color,
+        'tile_background_color': tile_background_color,
+        'tile_text_color': tile_text_color,
+        'title_color': title_color,
+        'view_count': view_count,
+        'preferred_viewer': preferred_viewer
+      };
+
+  Dashboard.fromJson(Map source)
+      : can = source['can'],
+        content_favorite_id = source['content_favorite_id'],
+        content_metadata_id = source['content_metadata_id'],
+        description = source['description'] == null
+            ? null
+            : source['description'].toString(),
+        hidden = source['hidden'],
+        id = source['id'] == null ? null : source['id'].toString(),
+        model = source['model'] == null
+            ? null
+            : LookModel.fromJson(source['model']),
+        query_timezone = source['query_timezone'] == null
+            ? null
+            : source['query_timezone'].toString(),
+        readonly = source['readonly'],
+        refresh_interval = source['refresh_interval'] == null
+            ? null
+            : source['refresh_interval'].toString(),
+        refresh_interval_to_i = source['refresh_interval_to_i'],
+        folder = source['folder'] == null
+            ? null
+            : FolderBase.fromJson(source['folder']),
+        title = source['title'] == null ? null : source['title'].toString(),
+        user_id = source['user_id'],
+        space = source['space'] == null
+            ? null
+            : SpaceBase.fromJson(source['space']),
+        background_color = source['background_color'] == null
+            ? null
+            : source['background_color'].toString(),
+        created_at = source['created_at'],
+        crossfilter_enabled = source['crossfilter_enabled'],
+        dashboard_elements = source['dashboard_elements'] == null
+            ? null
+            : (source['dashboard_elements'] as List)
+                .map((i) => DashboardElement.fromJson(i))
+                .toList(),
+        dashboard_filters = source['dashboard_filters'] == null
+            ? null
+            : (source['dashboard_filters'] as List)
+                .map((i) => DashboardFilter.fromJson(i))
+                .toList(),
+        dashboard_layouts = source['dashboard_layouts'] == null
+            ? null
+            : (source['dashboard_layouts'] as List)
+                .map((i) => DashboardLayout.fromJson(i))
+                .toList(),
+        deleted = source['deleted'],
+        deleted_at = source['deleted_at'],
+        deleter_id = source['deleter_id'],
+        edit_uri =
+            source['edit_uri'] == null ? null : source['edit_uri'].toString(),
+        favorite_count = source['favorite_count'],
+        last_accessed_at = source['last_accessed_at'],
+        last_viewed_at = source['last_viewed_at'],
+        load_configuration = source['load_configuration'] == null
+            ? null
+            : source['load_configuration'].toString(),
+        lookml_link_id = source['lookml_link_id'] == null
+            ? null
+            : source['lookml_link_id'].toString(),
+        show_filters_bar = source['show_filters_bar'],
+        show_title = source['show_title'],
+        slug = source['slug'] == null ? null : source['slug'].toString(),
+        space_id =
+            source['space_id'] == null ? null : source['space_id'].toString(),
+        folder_id =
+            source['folder_id'] == null ? null : source['folder_id'].toString(),
+        text_tile_text_color = source['text_tile_text_color'] == null
+            ? null
+            : source['text_tile_text_color'].toString(),
+        tile_background_color = source['tile_background_color'] == null
+            ? null
+            : source['tile_background_color'].toString(),
+        tile_text_color = source['tile_text_color'] == null
+            ? null
+            : source['tile_text_color'].toString(),
+        title_color = source['title_color'] == null
+            ? null
+            : source['title_color'].toString(),
+        view_count = source['view_count'],
+        appearance = source['appearance'] == null
+            ? null
+            : DashboardAppearance.fromJson(source['appearance']),
+        preferred_viewer = source['preferred_viewer'] == null
+            ? null
+            : source['preferred_viewer'].toString();
 }
 
 class DashboardAggregateTableLookml {
@@ -1268,6 +2372,21 @@ class DashboardAggregateTableLookml {
    * Aggregate Table LookML (read-only)
    */
   String aggregate_table_lookml;
+
+  DashboardAggregateTableLookml() {}
+
+  Map toJson() => {
+        'dashboard_id': dashboard_id,
+        'aggregate_table_lookml': aggregate_table_lookml
+      };
+
+  DashboardAggregateTableLookml.fromJson(Map source)
+      : dashboard_id = source['dashboard_id'] == null
+            ? null
+            : source['dashboard_id'].toString(),
+        aggregate_table_lookml = source['aggregate_table_lookml'] == null
+            ? null
+            : source['aggregate_table_lookml'].toString();
 }
 
 class DashboardAppearance {
@@ -1299,13 +2418,41 @@ class DashboardAppearance {
    * Key color
    */
   String key_color;
+
+  DashboardAppearance() {}
+
+  Map toJson() => {
+        'page_side_margins': page_side_margins,
+        'page_background_color': page_background_color,
+        'tile_title_alignment': tile_title_alignment,
+        'tile_space_between': tile_space_between,
+        'tile_background_color': tile_background_color,
+        'tile_shadow': tile_shadow,
+        'key_color': key_color
+      };
+
+  DashboardAppearance.fromJson(Map source)
+      : page_side_margins = source['page_side_margins'],
+        page_background_color = source['page_background_color'] == null
+            ? null
+            : source['page_background_color'].toString(),
+        tile_title_alignment = source['tile_title_alignment'] == null
+            ? null
+            : source['tile_title_alignment'].toString(),
+        tile_space_between = source['tile_space_between'],
+        tile_background_color = source['tile_background_color'] == null
+            ? null
+            : source['tile_background_color'].toString(),
+        tile_shadow = source['tile_shadow'],
+        key_color =
+            source['key_color'] == null ? null : source['key_color'].toString();
 }
 
 class DashboardBase {
   /**
    * Operations the current user is able to perform on this object (read-only)
    */
-  Map<String, bool> can;
+  Map<String, dynamic> can;
   /**
    * Content Favorite Id (read-only)
    */
@@ -1326,6 +2473,9 @@ class DashboardBase {
    * Unique Id (read-only)
    */
   String id;
+  /**
+   * model
+   */
   LookModel model;
   /**
    * Timezone in which the Dashboard will run by default. (read-only)
@@ -1343,6 +2493,9 @@ class DashboardBase {
    * Refresh Interval in milliseconds (read-only)
    */
   int refresh_interval_to_i;
+  /**
+   * folder
+   */
   FolderBase folder;
   /**
    * Dashboard Title (read-only)
@@ -1352,14 +2505,63 @@ class DashboardBase {
    * Id of User (read-only)
    */
   int user_id;
+  /**
+   * space
+   */
   SpaceBase space;
+
+  DashboardBase() {}
+
+  Map toJson() => {
+        'can': can,
+        'content_favorite_id': content_favorite_id,
+        'content_metadata_id': content_metadata_id,
+        'description': description,
+        'hidden': hidden,
+        'id': id,
+        'query_timezone': query_timezone,
+        'readonly': readonly,
+        'refresh_interval': refresh_interval,
+        'refresh_interval_to_i': refresh_interval_to_i,
+        'title': title,
+        'user_id': user_id
+      };
+
+  DashboardBase.fromJson(Map source)
+      : can = source['can'],
+        content_favorite_id = source['content_favorite_id'],
+        content_metadata_id = source['content_metadata_id'],
+        description = source['description'] == null
+            ? null
+            : source['description'].toString(),
+        hidden = source['hidden'],
+        id = source['id'] == null ? null : source['id'].toString(),
+        model = source['model'] == null
+            ? null
+            : LookModel.fromJson(source['model']),
+        query_timezone = source['query_timezone'] == null
+            ? null
+            : source['query_timezone'].toString(),
+        readonly = source['readonly'],
+        refresh_interval = source['refresh_interval'] == null
+            ? null
+            : source['refresh_interval'].toString(),
+        refresh_interval_to_i = source['refresh_interval_to_i'],
+        folder = source['folder'] == null
+            ? null
+            : FolderBase.fromJson(source['folder']),
+        title = source['title'] == null ? null : source['title'].toString(),
+        user_id = source['user_id'],
+        space = source['space'] == null
+            ? null
+            : SpaceBase.fromJson(source['space']);
 }
 
 class DashboardElement {
   /**
    * Operations the current user is able to perform on this object (read-only)
    */
-  Map<String, bool> can;
+  Map<String, dynamic> can;
   /**
    * Text tile body text
    */
@@ -1380,6 +2582,9 @@ class DashboardElement {
    * Unique Id (read-only)
    */
   String id;
+  /**
+   * look
+   */
   LookWithQuery look;
   /**
    * Id Of Look
@@ -1409,6 +2614,9 @@ class DashboardElement {
    * Note Text as Html (read-only)
    */
   String note_text_as_html;
+  /**
+   * query
+   */
   Query query;
   /**
    * Id Of Query
@@ -1422,6 +2630,9 @@ class DashboardElement {
    * Refresh Interval as integer (read-only)
    */
   int refresh_interval_to_i;
+  /**
+   * result_maker
+   */
   ResultMakerWithIdVisConfigAndDynamicFields result_maker;
   /**
    * ID of the ResultMakerLookup entry.
@@ -1459,13 +2670,107 @@ class DashboardElement {
    * Text tile subtitle text as Html (read-only)
    */
   String subtitle_text_as_html;
+
+  DashboardElement() {}
+
+  Map toJson() => {
+        'can': can,
+        'body_text': body_text,
+        'body_text_as_html': body_text_as_html,
+        'dashboard_id': dashboard_id,
+        'edit_uri': edit_uri,
+        'id': id,
+        'look_id': look_id,
+        'lookml_link_id': lookml_link_id,
+        'merge_result_id': merge_result_id,
+        'note_display': note_display,
+        'note_state': note_state,
+        'note_text': note_text,
+        'note_text_as_html': note_text_as_html,
+        'query_id': query_id,
+        'refresh_interval': refresh_interval,
+        'refresh_interval_to_i': refresh_interval_to_i,
+        'result_maker_id': result_maker_id,
+        'subtitle_text': subtitle_text,
+        'title': title,
+        'title_hidden': title_hidden,
+        'title_text': title_text,
+        'type': type,
+        'alert_count': alert_count,
+        'title_text_as_html': title_text_as_html,
+        'subtitle_text_as_html': subtitle_text_as_html
+      };
+
+  DashboardElement.fromJson(Map source)
+      : can = source['can'],
+        body_text =
+            source['body_text'] == null ? null : source['body_text'].toString(),
+        body_text_as_html = source['body_text_as_html'] == null
+            ? null
+            : source['body_text_as_html'].toString(),
+        dashboard_id = source['dashboard_id'] == null
+            ? null
+            : source['dashboard_id'].toString(),
+        edit_uri =
+            source['edit_uri'] == null ? null : source['edit_uri'].toString(),
+        id = source['id'] == null ? null : source['id'].toString(),
+        look = source['look'] == null
+            ? null
+            : LookWithQuery.fromJson(source['look']),
+        look_id =
+            source['look_id'] == null ? null : source['look_id'].toString(),
+        lookml_link_id = source['lookml_link_id'] == null
+            ? null
+            : source['lookml_link_id'].toString(),
+        merge_result_id = source['merge_result_id'] == null
+            ? null
+            : source['merge_result_id'].toString(),
+        note_display = source['note_display'] == null
+            ? null
+            : source['note_display'].toString(),
+        note_state = source['note_state'] == null
+            ? null
+            : source['note_state'].toString(),
+        note_text =
+            source['note_text'] == null ? null : source['note_text'].toString(),
+        note_text_as_html = source['note_text_as_html'] == null
+            ? null
+            : source['note_text_as_html'].toString(),
+        query =
+            source['query'] == null ? null : Query.fromJson(source['query']),
+        query_id = source['query_id'],
+        refresh_interval = source['refresh_interval'] == null
+            ? null
+            : source['refresh_interval'].toString(),
+        refresh_interval_to_i = source['refresh_interval_to_i'],
+        result_maker = source['result_maker'] == null
+            ? null
+            : ResultMakerWithIdVisConfigAndDynamicFields.fromJson(
+                source['result_maker']),
+        result_maker_id = source['result_maker_id'],
+        subtitle_text = source['subtitle_text'] == null
+            ? null
+            : source['subtitle_text'].toString(),
+        title = source['title'] == null ? null : source['title'].toString(),
+        title_hidden = source['title_hidden'],
+        title_text = source['title_text'] == null
+            ? null
+            : source['title_text'].toString(),
+        type = source['type'] == null ? null : source['type'].toString(),
+        alert_count = source['alert_count'],
+        title_text_as_html = source['title_text_as_html'] == null
+            ? null
+            : source['title_text_as_html'].toString(),
+        subtitle_text_as_html = source['subtitle_text_as_html'] == null
+            ? null
+            : source['subtitle_text_as_html'].toString();
 }
 
 class DashboardFilter {
   /**
    * Operations the current user is able to perform on this object (read-only)
    */
-  Map<String, bool> can;
+  Map<String, dynamic> can;
   /**
    * Unique Id (read-only)
    */
@@ -1526,13 +2831,61 @@ class DashboardFilter {
    * The visual configuration for this filter. Used to set up how the UI for this filter should appear.
    */
   Map<String, dynamic> ui_config;
+
+  DashboardFilter() {}
+
+  Map toJson() => {
+        'can': can,
+        'id': id,
+        'dashboard_id': dashboard_id,
+        'name': name,
+        'title': title,
+        'type': type,
+        'default_value': default_value,
+        'model': model,
+        'explore': explore,
+        'dimension': dimension,
+        'field': field,
+        'row': row,
+        'allow_multiple_values': allow_multiple_values,
+        'required': required,
+        'ui_config': ui_config
+      };
+
+  DashboardFilter.fromJson(Map source)
+      : can = source['can'],
+        id = source['id'] == null ? null : source['id'].toString(),
+        dashboard_id = source['dashboard_id'] == null
+            ? null
+            : source['dashboard_id'].toString(),
+        name = source['name'] == null ? null : source['name'].toString(),
+        title = source['title'] == null ? null : source['title'].toString(),
+        type = source['type'] == null ? null : source['type'].toString(),
+        default_value = source['default_value'] == null
+            ? null
+            : source['default_value'].toString(),
+        model = source['model'] == null ? null : source['model'].toString(),
+        explore =
+            source['explore'] == null ? null : source['explore'].toString(),
+        dimension =
+            source['dimension'] == null ? null : source['dimension'].toString(),
+        field = source['field'],
+        row = source['row'],
+        listens_to_filters = source['listens_to_filters'] == null
+            ? null
+            : source['listens_to_filters']
+                .map<String>((i) => i as String)
+                .toList(),
+        allow_multiple_values = source['allow_multiple_values'],
+        required = source['required'],
+        ui_config = source['ui_config'];
 }
 
 class DashboardLayout {
   /**
    * Operations the current user is able to perform on this object (read-only)
    */
-  Map<String, bool> can;
+  Map<String, dynamic> can;
   /**
    * Unique Id (read-only)
    */
@@ -1569,13 +2922,48 @@ class DashboardLayout {
    * Components (read-only)
    */
   List<DashboardLayoutComponent> dashboard_layout_components;
+
+  DashboardLayout() {}
+
+  Map toJson() => {
+        'can': can,
+        'id': id,
+        'dashboard_id': dashboard_id,
+        'type': type,
+        'active': active,
+        'column_width': column_width,
+        'width': width,
+        'deleted': deleted,
+        'dashboard_title': dashboard_title
+      };
+
+  DashboardLayout.fromJson(Map source)
+      : can = source['can'],
+        id = source['id'] == null ? null : source['id'].toString(),
+        dashboard_id = source['dashboard_id'] == null
+            ? null
+            : source['dashboard_id'].toString(),
+        type = source['type'] == null ? null : source['type'].toString(),
+        active = source['active'],
+        column_width = source['column_width'],
+        width = source['width'],
+        deleted = source['deleted'],
+        dashboard_title = source['dashboard_title'] == null
+            ? null
+            : source['dashboard_title'].toString(),
+        dashboard_layout_components =
+            source['dashboard_layout_components'] == null
+                ? null
+                : (source['dashboard_layout_components'] as List)
+                    .map((i) => DashboardLayoutComponent.fromJson(i))
+                    .toList();
 }
 
 class DashboardLayoutComponent {
   /**
    * Operations the current user is able to perform on this object (read-only)
    */
-  Map<String, bool> can;
+  Map<String, dynamic> can;
   /**
    * Unique Id (read-only)
    */
@@ -1620,6 +3008,44 @@ class DashboardLayoutComponent {
    * Visualization type, extracted from a query's vis_config (read-only)
    */
   String vis_type;
+
+  DashboardLayoutComponent() {}
+
+  Map toJson() => {
+        'can': can,
+        'id': id,
+        'dashboard_layout_id': dashboard_layout_id,
+        'dashboard_element_id': dashboard_element_id,
+        'row': row,
+        'column': column,
+        'width': width,
+        'height': height,
+        'deleted': deleted,
+        'element_title': element_title,
+        'element_title_hidden': element_title_hidden,
+        'vis_type': vis_type
+      };
+
+  DashboardLayoutComponent.fromJson(Map source)
+      : can = source['can'],
+        id = source['id'] == null ? null : source['id'].toString(),
+        dashboard_layout_id = source['dashboard_layout_id'] == null
+            ? null
+            : source['dashboard_layout_id'].toString(),
+        dashboard_element_id = source['dashboard_element_id'] == null
+            ? null
+            : source['dashboard_element_id'].toString(),
+        row = source['row'],
+        column = source['column'],
+        width = source['width'],
+        height = source['height'],
+        deleted = source['deleted'],
+        element_title = source['element_title'] == null
+            ? null
+            : source['element_title'].toString(),
+        element_title_hidden = source['element_title_hidden'],
+        vis_type =
+            source['vis_type'] == null ? null : source['vis_type'].toString();
 }
 
 class DashboardLookml {
@@ -1631,14 +3057,41 @@ class DashboardLookml {
    * lookml of UDD (read-only)
    */
   String lookml;
+
+  DashboardLookml() {}
+
+  Map toJson() => {'dashboard_id': dashboard_id, 'lookml': lookml};
+
+  DashboardLookml.fromJson(Map source)
+      : dashboard_id = source['dashboard_id'] == null
+            ? null
+            : source['dashboard_id'].toString(),
+        lookml = source['lookml'] == null ? null : source['lookml'].toString();
 }
 
 class DataActionForm {
+  /**
+   * state
+   */
   DataActionUserState state;
   /**
    * Array of form fields. (read-only)
    */
   List<DataActionFormField> fields;
+
+  DataActionForm() {}
+
+  Map toJson() => {};
+
+  DataActionForm.fromJson(Map source)
+      : state = source['state'] == null
+            ? null
+            : DataActionUserState.fromJson(source['state']),
+        fields = source['fields'] == null
+            ? null
+            : (source['fields'] as List)
+                .map((i) => DataActionFormField.fromJson(i))
+                .toList();
 }
 
 class DataActionFormField {
@@ -1678,6 +3131,38 @@ class DataActionFormField {
    * If the form type is 'select', a list of options to be selected from. (read-only)
    */
   List<DataActionFormSelectOption> options;
+
+  DataActionFormField() {}
+
+  Map toJson() => {
+        'name': name,
+        'label': label,
+        'description': description,
+        'type': type,
+        'default': default_value,
+        'oauth_url': oauth_url,
+        'interactive': interactive,
+        'required': required
+      };
+
+  DataActionFormField.fromJson(Map source)
+      : name = source['name'] == null ? null : source['name'].toString(),
+        label = source['label'] == null ? null : source['label'].toString(),
+        description = source['description'] == null
+            ? null
+            : source['description'].toString(),
+        type = source['type'] == null ? null : source['type'].toString(),
+        default_value =
+            source['default'] == null ? null : source['default'].toString(),
+        oauth_url =
+            source['oauth_url'] == null ? null : source['oauth_url'].toString(),
+        interactive = source['interactive'],
+        required = source['required'],
+        options = source['options'] == null
+            ? null
+            : (source['options'] as List)
+                .map((i) => DataActionFormSelectOption.fromJson(i))
+                .toList();
 }
 
 class DataActionFormSelectOption {
@@ -1689,6 +3174,14 @@ class DataActionFormSelectOption {
    * Human-readable label (read-only)
    */
   String label;
+
+  DataActionFormSelectOption() {}
+
+  Map toJson() => {'name': name, 'label': label};
+
+  DataActionFormSelectOption.fromJson(Map source)
+      : name = source['name'] == null ? null : source['name'].toString(),
+        label = source['label'] == null ? null : source['label'].toString();
 }
 
 class DataActionRequest {
@@ -1700,6 +3193,14 @@ class DataActionRequest {
    * User input for any form values the data action might use.
    */
   Map<String, dynamic> form_values;
+
+  DataActionRequest() {}
+
+  Map toJson() => {'action': action, 'form_values': form_values};
+
+  DataActionRequest.fromJson(Map source)
+      : action = source['action'],
+        form_values = source['form_values'];
 }
 
 class DataActionResponse {
@@ -1715,11 +3216,35 @@ class DataActionResponse {
    * When true, indicates that the client should refresh (rerun) the source query because the data may have been changed by the action. (read-only)
    */
   bool refresh_query;
+  /**
+   * validation_errors
+   */
   ValidationError validation_errors;
   /**
    * Optional message returned by the data action server describing the state of the action that took place. This can be used to implement custom failure messages. If a failure is related to a particular form field, the server should send back a validation error instead. The Looker web UI does not currently display any message if the action indicates 'success', but may do so in the future. (read-only)
    */
   String message;
+
+  DataActionResponse() {}
+
+  Map toJson() => {
+        'webhook_id': webhook_id,
+        'success': success,
+        'refresh_query': refresh_query,
+        'message': message
+      };
+
+  DataActionResponse.fromJson(Map source)
+      : webhook_id = source['webhook_id'] == null
+            ? null
+            : source['webhook_id'].toString(),
+        success = source['success'],
+        refresh_query = source['refresh_query'],
+        validation_errors = source['validation_errors'] == null
+            ? null
+            : ValidationError.fromJson(source['validation_errors']),
+        message =
+            source['message'] == null ? null : source['message'].toString();
 }
 
 class DataActionUserState {
@@ -1731,13 +3256,21 @@ class DataActionUserState {
    * Time in seconds until the state needs to be refreshed (read-only)
    */
   int refresh_time;
+
+  DataActionUserState() {}
+
+  Map toJson() => {'data': data, 'refresh_time': refresh_time};
+
+  DataActionUserState.fromJson(Map source)
+      : data = source['data'] == null ? null : source['data'].toString(),
+        refresh_time = source['refresh_time'];
 }
 
 class Datagroup {
   /**
    * Operations the current user is able to perform on this object (read-only)
    */
-  Map<String, bool> can;
+  Map<String, dynamic> can;
   /**
    * UNIX timestamp at which this entry was created. (read-only)
    */
@@ -1774,17 +3307,53 @@ class Datagroup {
    * UNIX timestamp at which this entry became triggered. Cannot be in the future.
    */
   int triggered_at;
+
+  Datagroup() {}
+
+  Map toJson() => {
+        'can': can,
+        'created_at': created_at,
+        'id': id,
+        'model_name': model_name,
+        'name': name,
+        'stale_before': stale_before,
+        'trigger_check_at': trigger_check_at,
+        'trigger_error': trigger_error,
+        'trigger_value': trigger_value,
+        'triggered_at': triggered_at
+      };
+
+  Datagroup.fromJson(Map source)
+      : can = source['can'],
+        created_at = source['created_at'],
+        id = source['id'] == null ? null : source['id'].toString(),
+        model_name = source['model_name'] == null
+            ? null
+            : source['model_name'].toString(),
+        name = source['name'] == null ? null : source['name'].toString(),
+        stale_before = source['stale_before'],
+        trigger_check_at = source['trigger_check_at'],
+        trigger_error = source['trigger_error'] == null
+            ? null
+            : source['trigger_error'].toString(),
+        trigger_value = source['trigger_value'] == null
+            ? null
+            : source['trigger_value'].toString(),
+        triggered_at = source['triggered_at'];
 }
 
 class DBConnection {
   /**
    * Operations the current user is able to perform on this object (read-only)
    */
-  Map<String, bool> can;
+  Map<String, dynamic> can;
   /**
    * Name of the connection. Also used as the unique identifier
    */
   String name;
+  /**
+   * dialect
+   */
   Dialect dialect;
   /**
    * SQL Runner snippets for this connection (read-only)
@@ -1906,27 +3475,163 @@ class DBConnection {
    * SQL statements (semicolon separated) to issue after connecting to the database. Requires `custom_after_connect_statements` license feature
    */
   String after_connect_statements;
+  /**
+   * pdt_context_override
+   */
   DBConnectionOverride pdt_context_override;
   /**
    * Is this connection created and managed by Looker (read-only)
    */
   bool managed;
+
+  DBConnection() {}
+
+  Map toJson() => {
+        'can': can,
+        'name': name,
+        'host': host,
+        'port': port,
+        'username': username,
+        'password': password,
+        'uses_oauth': uses_oauth,
+        'certificate': certificate,
+        'file_type': file_type,
+        'database': database,
+        'db_timezone': db_timezone,
+        'query_timezone': query_timezone,
+        'schema': schema,
+        'max_connections': max_connections,
+        'max_billing_gigabytes': max_billing_gigabytes,
+        'ssl': ssl,
+        'verify_ssl': verify_ssl,
+        'tmp_db_name': tmp_db_name,
+        'jdbc_additional_params': jdbc_additional_params,
+        'pool_timeout': pool_timeout,
+        'dialect_name': dialect_name,
+        'created_at': created_at,
+        'user_id': user_id,
+        'example': example,
+        'user_db_credentials': user_db_credentials,
+        'maintenance_cron': maintenance_cron,
+        'last_regen_at': last_regen_at,
+        'last_reap_at': last_reap_at,
+        'sql_runner_precache_tables': sql_runner_precache_tables,
+        'after_connect_statements': after_connect_statements,
+        'managed': managed
+      };
+
+  DBConnection.fromJson(Map source)
+      : can = source['can'],
+        name = source['name'] == null ? null : source['name'].toString(),
+        dialect = source['dialect'] == null
+            ? null
+            : Dialect.fromJson(source['dialect']),
+        snippets = source['snippets'] == null
+            ? null
+            : (source['snippets'] as List)
+                .map((i) => Snippet.fromJson(i))
+                .toList(),
+        host = source['host'] == null ? null : source['host'].toString(),
+        port = source['port'] == null ? null : source['port'].toString(),
+        username =
+            source['username'] == null ? null : source['username'].toString(),
+        password =
+            source['password'] == null ? null : source['password'].toString(),
+        uses_oauth = source['uses_oauth'],
+        certificate = source['certificate'] == null
+            ? null
+            : source['certificate'].toString(),
+        file_type =
+            source['file_type'] == null ? null : source['file_type'].toString(),
+        database =
+            source['database'] == null ? null : source['database'].toString(),
+        db_timezone = source['db_timezone'] == null
+            ? null
+            : source['db_timezone'].toString(),
+        query_timezone = source['query_timezone'] == null
+            ? null
+            : source['query_timezone'].toString(),
+        schema = source['schema'] == null ? null : source['schema'].toString(),
+        max_connections = source['max_connections'],
+        max_billing_gigabytes = source['max_billing_gigabytes'] == null
+            ? null
+            : source['max_billing_gigabytes'].toString(),
+        ssl = source['ssl'],
+        verify_ssl = source['verify_ssl'],
+        tmp_db_name = source['tmp_db_name'] == null
+            ? null
+            : source['tmp_db_name'].toString(),
+        jdbc_additional_params = source['jdbc_additional_params'] == null
+            ? null
+            : source['jdbc_additional_params'].toString(),
+        pool_timeout = source['pool_timeout'],
+        dialect_name = source['dialect_name'] == null
+            ? null
+            : source['dialect_name'].toString(),
+        created_at = source['created_at'] == null
+            ? null
+            : source['created_at'].toString(),
+        user_id =
+            source['user_id'] == null ? null : source['user_id'].toString(),
+        example = source['example'],
+        user_db_credentials = source['user_db_credentials'],
+        user_attribute_fields = source['user_attribute_fields'] == null
+            ? null
+            : source['user_attribute_fields']
+                .map<String>((i) => i as String)
+                .toList(),
+        maintenance_cron = source['maintenance_cron'] == null
+            ? null
+            : source['maintenance_cron'].toString(),
+        last_regen_at = source['last_regen_at'] == null
+            ? null
+            : source['last_regen_at'].toString(),
+        last_reap_at = source['last_reap_at'] == null
+            ? null
+            : source['last_reap_at'].toString(),
+        sql_runner_precache_tables = source['sql_runner_precache_tables'],
+        after_connect_statements = source['after_connect_statements'] == null
+            ? null
+            : source['after_connect_statements'].toString(),
+        pdt_context_override = source['pdt_context_override'] == null
+            ? null
+            : DBConnectionOverride.fromJson(source['pdt_context_override']),
+        managed = source['managed'];
 }
 
 class DBConnectionBase {
   /**
    * Operations the current user is able to perform on this object (read-only)
    */
-  Map<String, bool> can;
+  Map<String, dynamic> can;
   /**
    * Name of the connection. Also used as the unique identifier (read-only)
    */
   String name;
+  /**
+   * dialect
+   */
   Dialect dialect;
   /**
    * SQL Runner snippets for this connection (read-only)
    */
   List<Snippet> snippets;
+
+  DBConnectionBase() {}
+
+  Map toJson() => {'can': can, 'name': name};
+
+  DBConnectionBase.fromJson(Map source)
+      : can = source['can'],
+        name = source['name'] == null ? null : source['name'].toString(),
+        dialect = source['dialect'] == null
+            ? null
+            : Dialect.fromJson(source['dialect']),
+        snippets = source['snippets'] == null
+            ? null
+            : (source['snippets'] as List)
+                .map((i) => Snippet.fromJson(i))
+                .toList();
 }
 
 class DBConnectionOverride {
@@ -1978,13 +3683,55 @@ class DBConnectionOverride {
    * SQL statements (semicolon separated) to issue after connecting to the database. Requires `custom_after_connect_statements` license feature
    */
   String after_connect_statements;
+
+  DBConnectionOverride() {}
+
+  Map toJson() => {
+        'context': context,
+        'host': host,
+        'port': port,
+        'username': username,
+        'password': password,
+        'has_password': has_password,
+        'certificate': certificate,
+        'file_type': file_type,
+        'database': database,
+        'schema': schema,
+        'jdbc_additional_params': jdbc_additional_params,
+        'after_connect_statements': after_connect_statements
+      };
+
+  DBConnectionOverride.fromJson(Map source)
+      : context =
+            source['context'] == null ? null : source['context'].toString(),
+        host = source['host'] == null ? null : source['host'].toString(),
+        port = source['port'] == null ? null : source['port'].toString(),
+        username =
+            source['username'] == null ? null : source['username'].toString(),
+        password =
+            source['password'] == null ? null : source['password'].toString(),
+        has_password = source['has_password'],
+        certificate = source['certificate'] == null
+            ? null
+            : source['certificate'].toString(),
+        file_type =
+            source['file_type'] == null ? null : source['file_type'].toString(),
+        database =
+            source['database'] == null ? null : source['database'].toString(),
+        schema = source['schema'] == null ? null : source['schema'].toString(),
+        jdbc_additional_params = source['jdbc_additional_params'] == null
+            ? null
+            : source['jdbc_additional_params'].toString(),
+        after_connect_statements = source['after_connect_statements'] == null
+            ? null
+            : source['after_connect_statements'].toString();
 }
 
 class DBConnectionTestResult {
   /**
    * Operations the current user is able to perform on this object (read-only)
    */
-  Map<String, bool> can;
+  Map<String, dynamic> can;
   /**
    * JDBC connection string. (only populated in the 'connect' test) (read-only)
    */
@@ -2001,6 +3748,26 @@ class DBConnectionTestResult {
    * Result code of test (read-only)
    */
   String status;
+
+  DBConnectionTestResult() {}
+
+  Map toJson() => {
+        'can': can,
+        'connection_string': connection_string,
+        'message': message,
+        'name': name,
+        'status': status
+      };
+
+  DBConnectionTestResult.fromJson(Map source)
+      : can = source['can'],
+        connection_string = source['connection_string'] == null
+            ? null
+            : source['connection_string'].toString(),
+        message =
+            source['message'] == null ? null : source['message'].toString(),
+        name = source['name'] == null ? null : source['name'].toString(),
+        status = source['status'] == null ? null : source['status'].toString();
 }
 
 class DelegateOauthTest {
@@ -2020,6 +3787,23 @@ class DelegateOauthTest {
    * Whether or not the test was successful (read-only)
    */
   bool success;
+
+  DelegateOauthTest() {}
+
+  Map toJson() => {
+        'name': name,
+        'installation_target_id': installation_target_id,
+        'installation_id': installation_id,
+        'success': success
+      };
+
+  DelegateOauthTest.fromJson(Map source)
+      : name = source['name'] == null ? null : source['name'].toString(),
+        installation_target_id = source['installation_target_id'] == null
+            ? null
+            : source['installation_target_id'].toString(),
+        installation_id = source['installation_id'],
+        success = source['success'];
 }
 
 /**
@@ -2080,13 +3864,59 @@ class Dialect {
    * Does the database have client SSL support settable through the JDBC string explicitly? (read-only)
    */
   bool has_ssl_support;
+
+  Dialect() {}
+
+  Map toJson() => {
+        'name': name,
+        'label': label,
+        'supports_cost_estimate': supports_cost_estimate,
+        'persistent_table_indexes': persistent_table_indexes,
+        'persistent_table_sortkeys': persistent_table_sortkeys,
+        'persistent_table_distkey': persistent_table_distkey,
+        'supports_streaming': supports_streaming,
+        'automatically_run_sql_runner_snippets':
+            automatically_run_sql_runner_snippets,
+        'supports_inducer': supports_inducer,
+        'supports_multiple_databases': supports_multiple_databases,
+        'supports_persistent_derived_tables':
+            supports_persistent_derived_tables,
+        'has_ssl_support': has_ssl_support
+      };
+
+  Dialect.fromJson(Map source)
+      : name = source['name'] == null ? null : source['name'].toString(),
+        label = source['label'] == null ? null : source['label'].toString(),
+        supports_cost_estimate = source['supports_cost_estimate'],
+        persistent_table_indexes = source['persistent_table_indexes'] == null
+            ? null
+            : source['persistent_table_indexes'].toString(),
+        persistent_table_sortkeys = source['persistent_table_sortkeys'] == null
+            ? null
+            : source['persistent_table_sortkeys'].toString(),
+        persistent_table_distkey = source['persistent_table_distkey'] == null
+            ? null
+            : source['persistent_table_distkey'].toString(),
+        supports_streaming = source['supports_streaming'],
+        automatically_run_sql_runner_snippets =
+            source['automatically_run_sql_runner_snippets'],
+        connection_tests = source['connection_tests'] == null
+            ? null
+            : source['connection_tests']
+                .map<String>((i) => i as String)
+                .toList(),
+        supports_inducer = source['supports_inducer'],
+        supports_multiple_databases = source['supports_multiple_databases'],
+        supports_persistent_derived_tables =
+            source['supports_persistent_derived_tables'],
+        has_ssl_support = source['has_ssl_support'];
 }
 
 class DialectInfo {
   /**
    * Operations the current user is able to perform on this object (read-only)
    */
-  Map<String, bool> can;
+  Map<String, dynamic> can;
   /**
    * Default number max connections (read-only)
    */
@@ -2111,7 +3941,41 @@ class DialectInfo {
    * The name of the dialect (read-only)
    */
   String name;
+  /**
+   * supported_options
+   */
   DialectInfoOptions supported_options;
+
+  DialectInfo() {}
+
+  Map toJson() => {
+        'can': can,
+        'default_max_connections': default_max_connections,
+        'default_port': default_port,
+        'installed': installed,
+        'label': label,
+        'label_for_database_equivalent': label_for_database_equivalent,
+        'name': name
+      };
+
+  DialectInfo.fromJson(Map source)
+      : can = source['can'],
+        default_max_connections = source['default_max_connections'] == null
+            ? null
+            : source['default_max_connections'].toString(),
+        default_port = source['default_port'] == null
+            ? null
+            : source['default_port'].toString(),
+        installed = source['installed'],
+        label = source['label'] == null ? null : source['label'].toString(),
+        label_for_database_equivalent =
+            source['label_for_database_equivalent'] == null
+                ? null
+                : source['label_for_database_equivalent'].toString(),
+        name = source['name'] == null ? null : source['name'].toString(),
+        supported_options = source['supported_options'] == null
+            ? null
+            : DialectInfoOptions.fromJson(source['supported_options']);
 }
 
 class DialectInfoOptions {
@@ -2158,7 +4022,36 @@ class DialectInfoOptions {
   /**
    * Operations the current user is able to perform on this object (read-only)
    */
-  Map<String, bool> can;
+  Map<String, dynamic> can;
+
+  DialectInfoOptions() {}
+
+  Map toJson() => {
+        'additional_params': additional_params,
+        'auth': auth,
+        'host': host,
+        'oauth_credentials': oauth_credentials,
+        'project_name': project_name,
+        'schema': schema,
+        'ssl': ssl,
+        'timezone': timezone,
+        'tmp_table': tmp_table,
+        'username_required': username_required,
+        'can': can
+      };
+
+  DialectInfoOptions.fromJson(Map source)
+      : additional_params = source['additional_params'],
+        auth = source['auth'],
+        host = source['host'],
+        oauth_credentials = source['oauth_credentials'],
+        project_name = source['project_name'],
+        schema = source['schema'],
+        ssl = source['ssl'],
+        timezone = source['timezone'],
+        tmp_table = source['tmp_table'],
+        username_required = source['username_required'],
+        can = source['can'];
 }
 
 class DigestEmails {
@@ -2166,6 +4059,12 @@ class DigestEmails {
    * Whether or not digest emails are enabled
    */
   bool is_enabled;
+
+  DigestEmails() {}
+
+  Map toJson() => {'is_enabled': is_enabled};
+
+  DigestEmails.fromJson(Map source) : is_enabled = source['is_enabled'];
 }
 
 class DigestEmailSend {
@@ -2173,6 +4072,13 @@ class DigestEmailSend {
    * True if content was successfully generated and delivered
    */
   bool configuration_delivered;
+
+  DigestEmailSend() {}
+
+  Map toJson() => {'configuration_delivered': configuration_delivered};
+
+  DigestEmailSend.fromJson(Map source)
+      : configuration_delivered = source['configuration_delivered'];
 }
 
 class DiscretePalette {
@@ -2192,6 +4098,18 @@ class DiscretePalette {
    * Array of colors in the palette
    */
   List<String> colors;
+
+  DiscretePalette() {}
+
+  Map toJson() => {'id': id, 'label': label, 'type': type};
+
+  DiscretePalette.fromJson(Map source)
+      : id = source['id'] == null ? null : source['id'].toString(),
+        label = source['label'] == null ? null : source['label'].toString(),
+        type = source['type'] == null ? null : source['type'].toString(),
+        colors = source['colors'] == null
+            ? null
+            : source['colors'].map<String>((i) => i as String).toList();
 }
 
 class EmbedSsoParams {
@@ -2247,6 +4165,51 @@ class EmbedSsoParams {
    * Id of the embed secret to use to sign this SSO url. If specified, the value must be an id of a valid (active) secret defined in the Looker instance. If not specified, the URL will be signed with the newest active embed secret defined in the Looker instance.
    */
   int secret_id;
+
+  EmbedSsoParams() {}
+
+  Map toJson() => {
+        'target_url': target_url,
+        'session_length': session_length,
+        'force_logout_login': force_logout_login,
+        'external_user_id': external_user_id,
+        'first_name': first_name,
+        'last_name': last_name,
+        'user_timezone': user_timezone,
+        'external_group_id': external_group_id,
+        'user_attributes': user_attributes,
+        'secret_id': secret_id
+      };
+
+  EmbedSsoParams.fromJson(Map source)
+      : target_url = source['target_url'] == null
+            ? null
+            : source['target_url'].toString(),
+        session_length = source['session_length'],
+        force_logout_login = source['force_logout_login'],
+        external_user_id = source['external_user_id'] == null
+            ? null
+            : source['external_user_id'].toString(),
+        first_name = source['first_name'] == null
+            ? null
+            : source['first_name'].toString(),
+        last_name =
+            source['last_name'] == null ? null : source['last_name'].toString(),
+        user_timezone = source['user_timezone'] == null
+            ? null
+            : source['user_timezone'].toString(),
+        permissions = source['permissions'] == null
+            ? null
+            : source['permissions'].map<String>((i) => i as String).toList(),
+        models = source['models'] == null
+            ? null
+            : source['models'].map<String>((i) => i as String).toList(),
+        group_ids = source['group_ids'] == null
+            ? null
+            : source['group_ids'].map<int>((i) => i as int).toList(),
+        external_group_id = source['external_group_id'],
+        user_attributes = source['user_attributes'],
+        secret_id = source['secret_id'];
 }
 
 class EmbedUrlResponse {
@@ -2254,6 +4217,13 @@ class EmbedUrlResponse {
    * The embed URL. Any modification to this string will make the URL unusable. (read-only)
    */
   String url;
+
+  EmbedUrlResponse() {}
+
+  Map toJson() => {'url': url};
+
+  EmbedUrlResponse.fromJson(Map source)
+      : url = source['url'] == null ? null : source['url'].toString();
 }
 
 class Error {
@@ -2265,6 +4235,17 @@ class Error {
    * Documentation link (read-only)
    */
   String documentation_url;
+
+  Error() {}
+
+  Map toJson() => {'message': message, 'documentation_url': documentation_url};
+
+  Error.fromJson(Map source)
+      : message =
+            source['message'] == null ? null : source['message'].toString(),
+        documentation_url = source['documentation_url'] == null
+            ? null
+            : source['documentation_url'].toString();
 }
 
 /**
@@ -2336,7 +4317,7 @@ class Folder {
   /**
    * Operations the current user is able to perform on this object (read-only)
    */
-  Map<String, bool> can;
+  Map<String, dynamic> can;
   /**
    * Dashboards (read-only)
    */
@@ -2345,6 +4326,58 @@ class Folder {
    * Looks (read-only)
    */
   List<LookWithDashboards> looks;
+
+  Folder() {}
+
+  Map toJson() => {
+        'name': name,
+        'parent_id': parent_id,
+        'id': id,
+        'content_metadata_id': content_metadata_id,
+        'created_at': created_at,
+        'creator_id': creator_id,
+        'child_count': child_count,
+        'external_id': external_id,
+        'is_embed': is_embed,
+        'is_embed_shared_root': is_embed_shared_root,
+        'is_embed_users_root': is_embed_users_root,
+        'is_personal': is_personal,
+        'is_personal_descendant': is_personal_descendant,
+        'is_shared_root': is_shared_root,
+        'is_users_root': is_users_root,
+        'can': can
+      };
+
+  Folder.fromJson(Map source)
+      : name = source['name'] == null ? null : source['name'].toString(),
+        parent_id =
+            source['parent_id'] == null ? null : source['parent_id'].toString(),
+        id = source['id'] == null ? null : source['id'].toString(),
+        content_metadata_id = source['content_metadata_id'],
+        created_at = source['created_at'],
+        creator_id = source['creator_id'],
+        child_count = source['child_count'],
+        external_id = source['external_id'] == null
+            ? null
+            : source['external_id'].toString(),
+        is_embed = source['is_embed'],
+        is_embed_shared_root = source['is_embed_shared_root'],
+        is_embed_users_root = source['is_embed_users_root'],
+        is_personal = source['is_personal'],
+        is_personal_descendant = source['is_personal_descendant'],
+        is_shared_root = source['is_shared_root'],
+        is_users_root = source['is_users_root'],
+        can = source['can'],
+        dashboards = source['dashboards'] == null
+            ? null
+            : (source['dashboards'] as List)
+                .map((i) => DashboardBase.fromJson(i))
+                .toList(),
+        looks = source['looks'] == null
+            ? null
+            : (source['looks'] as List)
+                .map((i) => LookWithDashboards.fromJson(i))
+                .toList();
 }
 
 class FolderBase {
@@ -2411,7 +4444,49 @@ class FolderBase {
   /**
    * Operations the current user is able to perform on this object (read-only)
    */
-  Map<String, bool> can;
+  Map<String, dynamic> can;
+
+  FolderBase() {}
+
+  Map toJson() => {
+        'name': name,
+        'parent_id': parent_id,
+        'id': id,
+        'content_metadata_id': content_metadata_id,
+        'created_at': created_at,
+        'creator_id': creator_id,
+        'child_count': child_count,
+        'external_id': external_id,
+        'is_embed': is_embed,
+        'is_embed_shared_root': is_embed_shared_root,
+        'is_embed_users_root': is_embed_users_root,
+        'is_personal': is_personal,
+        'is_personal_descendant': is_personal_descendant,
+        'is_shared_root': is_shared_root,
+        'is_users_root': is_users_root,
+        'can': can
+      };
+
+  FolderBase.fromJson(Map source)
+      : name = source['name'] == null ? null : source['name'].toString(),
+        parent_id =
+            source['parent_id'] == null ? null : source['parent_id'].toString(),
+        id = source['id'] == null ? null : source['id'].toString(),
+        content_metadata_id = source['content_metadata_id'],
+        created_at = source['created_at'],
+        creator_id = source['creator_id'],
+        child_count = source['child_count'],
+        external_id = source['external_id'] == null
+            ? null
+            : source['external_id'].toString(),
+        is_embed = source['is_embed'],
+        is_embed_shared_root = source['is_embed_shared_root'],
+        is_embed_users_root = source['is_embed_users_root'],
+        is_personal = source['is_personal'],
+        is_personal_descendant = source['is_personal_descendant'],
+        is_shared_root = source['is_shared_root'],
+        is_users_root = source['is_users_root'],
+        can = source['can'];
 }
 
 /**
@@ -2428,7 +4503,7 @@ class GitBranch {
   /**
    * Operations the current user is able to perform on this object (read-only)
    */
-  Map<String, bool> can;
+  Map<String, dynamic> can;
   /**
    * The short name on the local. Updating `name` results in `git checkout <new_name>`
    */
@@ -2493,13 +4568,61 @@ class GitBranch {
    * The resolved ref of this branch remote. (read-only)
    */
   String remote_ref;
+
+  GitBranch() {}
+
+  Map toJson() => {
+        'can': can,
+        'name': name,
+        'remote': remote,
+        'remote_name': remote_name,
+        'error': error,
+        'message': message,
+        'owner_name': owner_name,
+        'readonly': readonly,
+        'personal': personal,
+        'is_local': is_local,
+        'is_remote': is_remote,
+        'is_production': is_production,
+        'ahead_count': ahead_count,
+        'behind_count': behind_count,
+        'commit_at': commit_at,
+        'ref': ref,
+        'remote_ref': remote_ref
+      };
+
+  GitBranch.fromJson(Map source)
+      : can = source['can'],
+        name = source['name'] == null ? null : source['name'].toString(),
+        remote = source['remote'] == null ? null : source['remote'].toString(),
+        remote_name = source['remote_name'] == null
+            ? null
+            : source['remote_name'].toString(),
+        error = source['error'] == null ? null : source['error'].toString(),
+        message =
+            source['message'] == null ? null : source['message'].toString(),
+        owner_name = source['owner_name'] == null
+            ? null
+            : source['owner_name'].toString(),
+        readonly = source['readonly'],
+        personal = source['personal'],
+        is_local = source['is_local'],
+        is_remote = source['is_remote'],
+        is_production = source['is_production'],
+        ahead_count = source['ahead_count'],
+        behind_count = source['behind_count'],
+        commit_at = source['commit_at'],
+        ref = source['ref'] == null ? null : source['ref'].toString(),
+        remote_ref = source['remote_ref'] == null
+            ? null
+            : source['remote_ref'].toString();
 }
 
 class GitConnectionTest {
   /**
    * Operations the current user is able to perform on this object (read-only)
    */
-  Map<String, bool> can;
+  Map<String, dynamic> can;
   /**
    * Human readable string describing the test (read-only)
    */
@@ -2508,13 +4631,24 @@ class GitConnectionTest {
    * A short string, uniquely naming this test (read-only)
    */
   String id;
+
+  GitConnectionTest() {}
+
+  Map toJson() => {'can': can, 'description': description, 'id': id};
+
+  GitConnectionTest.fromJson(Map source)
+      : can = source['can'],
+        description = source['description'] == null
+            ? null
+            : source['description'].toString(),
+        id = source['id'] == null ? null : source['id'].toString();
 }
 
 class GitConnectionTestResult {
   /**
    * Operations the current user is able to perform on this object (read-only)
    */
-  Map<String, bool> can;
+  Map<String, dynamic> can;
   /**
    * A short string, uniquely naming this test (read-only)
    */
@@ -2527,6 +4661,17 @@ class GitConnectionTestResult {
    * Either 'pass' or 'fail' (read-only)
    */
   String status;
+
+  GitConnectionTestResult() {}
+
+  Map toJson() => {'can': can, 'id': id, 'message': message, 'status': status};
+
+  GitConnectionTestResult.fromJson(Map source)
+      : can = source['can'],
+        id = source['id'] == null ? null : source['id'].toString(),
+        message =
+            source['message'] == null ? null : source['message'].toString(),
+        status = source['status'] == null ? null : source['status'].toString();
 }
 
 class GitStatus {
@@ -2549,14 +4694,31 @@ class GitStatus {
   /**
    * Operations the current user is able to perform on this object (read-only)
    */
-  Map<String, bool> can;
+  Map<String, dynamic> can;
+
+  GitStatus() {}
+
+  Map toJson() => {
+        'action': action,
+        'conflict': conflict,
+        'revertable': revertable,
+        'text': text,
+        'can': can
+      };
+
+  GitStatus.fromJson(Map source)
+      : action = source['action'] == null ? null : source['action'].toString(),
+        conflict = source['conflict'],
+        revertable = source['revertable'],
+        text = source['text'] == null ? null : source['text'].toString(),
+        can = source['can'];
 }
 
 class Group {
   /**
    * Operations the current user is able to perform on this object (read-only)
    */
-  Map<String, bool> can;
+  Map<String, dynamic> can;
   /**
    * Group can be used in content access controls
    */
@@ -2589,6 +4751,33 @@ class Group {
    * Number of users included in this group (read-only)
    */
   int user_count;
+
+  Group() {}
+
+  Map toJson() => {
+        'can': can,
+        'can_add_to_content_metadata': can_add_to_content_metadata,
+        'contains_current_user': contains_current_user,
+        'external_group_id': external_group_id,
+        'externally_managed': externally_managed,
+        'id': id,
+        'include_by_default': include_by_default,
+        'name': name,
+        'user_count': user_count
+      };
+
+  Group.fromJson(Map source)
+      : can = source['can'],
+        can_add_to_content_metadata = source['can_add_to_content_metadata'],
+        contains_current_user = source['contains_current_user'],
+        external_group_id = source['external_group_id'] == null
+            ? null
+            : source['external_group_id'].toString(),
+        externally_managed = source['externally_managed'],
+        id = source['id'],
+        include_by_default = source['include_by_default'],
+        name = source['name'] == null ? null : source['name'].toString(),
+        user_count = source['user_count'];
 }
 
 class GroupIdForGroupInclusion {
@@ -2596,6 +4785,12 @@ class GroupIdForGroupInclusion {
    * Id of group (read-only)
    */
   int group_id;
+
+  GroupIdForGroupInclusion() {}
+
+  Map toJson() => {'group_id': group_id};
+
+  GroupIdForGroupInclusion.fromJson(Map source) : group_id = source['group_id'];
 }
 
 class GroupIdForGroupUserInclusion {
@@ -2603,13 +4798,20 @@ class GroupIdForGroupUserInclusion {
    * Id of user (read-only)
    */
   int user_id;
+
+  GroupIdForGroupUserInclusion() {}
+
+  Map toJson() => {'user_id': user_id};
+
+  GroupIdForGroupUserInclusion.fromJson(Map source)
+      : user_id = source['user_id'];
 }
 
 class Homepage {
   /**
    * Operations the current user is able to perform on this object (read-only)
    */
-  Map<String, bool> can;
+  Map<String, dynamic> can;
   /**
    * Id of associated content_metadata record (read-only)
    */
@@ -2654,13 +4856,50 @@ class Homepage {
    * Whether the homepage is the primary homepage or not (read-only)
    */
   bool primary_homepage;
+
+  Homepage() {}
+
+  Map toJson() => {
+        'can': can,
+        'content_metadata_id': content_metadata_id,
+        'created_at': created_at,
+        'deleted_at': deleted_at,
+        'description': description,
+        'id': id,
+        'title': title,
+        'updated_at': updated_at,
+        'user_id': user_id,
+        'primary_homepage': primary_homepage
+      };
+
+  Homepage.fromJson(Map source)
+      : can = source['can'],
+        content_metadata_id = source['content_metadata_id'],
+        created_at = source['created_at'],
+        deleted_at = source['deleted_at'],
+        description = source['description'] == null
+            ? null
+            : source['description'].toString(),
+        homepage_sections = source['homepage_sections'] == null
+            ? null
+            : (source['homepage_sections'] as List)
+                .map((i) => HomepageSection.fromJson(i))
+                .toList(),
+        id = source['id'] == null ? null : source['id'].toString(),
+        section_order = source['section_order'] == null
+            ? null
+            : source['section_order'].map<int>((i) => i as int).toList(),
+        title = source['title'] == null ? null : source['title'].toString(),
+        updated_at = source['updated_at'],
+        user_id = source['user_id'],
+        primary_homepage = source['primary_homepage'];
 }
 
 class HomepageItem {
   /**
    * Operations the current user is able to perform on this object (read-only)
    */
-  Map<String, bool> can;
+  Map<String, dynamic> can;
   /**
    * Name of user who created the content this item is based on (read-only)
    */
@@ -2769,13 +5008,98 @@ class HomepageItem {
    * Number of times content has been viewed, if present (read-only)
    */
   int view_count;
+
+  HomepageItem() {}
+
+  Map toJson() => {
+        'can': can,
+        'content_created_by': content_created_by,
+        'content_favorite_id': content_favorite_id,
+        'content_metadata_id': content_metadata_id,
+        'content_updated_at': content_updated_at,
+        'custom_description': custom_description,
+        'custom_image_data_base64': custom_image_data_base64,
+        'custom_image_url': custom_image_url,
+        'custom_title': custom_title,
+        'custom_url': custom_url,
+        'dashboard_id': dashboard_id,
+        'description': description,
+        'favorite_count': favorite_count,
+        'homepage_section_id': homepage_section_id,
+        'id': id,
+        'image_url': image_url,
+        'location': location,
+        'look_id': look_id,
+        'lookml_dashboard_id': lookml_dashboard_id,
+        'order': order,
+        'section_fetch_time': section_fetch_time,
+        'title': title,
+        'url': url,
+        'use_custom_description': use_custom_description,
+        'use_custom_image': use_custom_image,
+        'use_custom_title': use_custom_title,
+        'use_custom_url': use_custom_url,
+        'view_count': view_count
+      };
+
+  HomepageItem.fromJson(Map source)
+      : can = source['can'],
+        content_created_by = source['content_created_by'] == null
+            ? null
+            : source['content_created_by'].toString(),
+        content_favorite_id = source['content_favorite_id'],
+        content_metadata_id = source['content_metadata_id'],
+        content_updated_at = source['content_updated_at'] == null
+            ? null
+            : source['content_updated_at'].toString(),
+        custom_description = source['custom_description'] == null
+            ? null
+            : source['custom_description'].toString(),
+        custom_image_data_base64 = source['custom_image_data_base64'] == null
+            ? null
+            : source['custom_image_data_base64'].toString(),
+        custom_image_url = source['custom_image_url'] == null
+            ? null
+            : source['custom_image_url'].toString(),
+        custom_title = source['custom_title'] == null
+            ? null
+            : source['custom_title'].toString(),
+        custom_url = source['custom_url'] == null
+            ? null
+            : source['custom_url'].toString(),
+        dashboard_id = source['dashboard_id'],
+        description = source['description'] == null
+            ? null
+            : source['description'].toString(),
+        favorite_count = source['favorite_count'],
+        homepage_section_id = source['homepage_section_id'] == null
+            ? null
+            : source['homepage_section_id'].toString(),
+        id = source['id'] == null ? null : source['id'].toString(),
+        image_url =
+            source['image_url'] == null ? null : source['image_url'].toString(),
+        location =
+            source['location'] == null ? null : source['location'].toString(),
+        look_id = source['look_id'],
+        lookml_dashboard_id = source['lookml_dashboard_id'] == null
+            ? null
+            : source['lookml_dashboard_id'].toString(),
+        order = source['order'],
+        section_fetch_time = source['section_fetch_time'],
+        title = source['title'] == null ? null : source['title'].toString(),
+        url = source['url'] == null ? null : source['url'].toString(),
+        use_custom_description = source['use_custom_description'],
+        use_custom_image = source['use_custom_image'],
+        use_custom_title = source['use_custom_title'],
+        use_custom_url = source['use_custom_url'],
+        view_count = source['view_count'];
 }
 
 class HomepageSection {
   /**
    * Operations the current user is able to perform on this object (read-only)
    */
-  Map<String, bool> can;
+  Map<String, dynamic> can;
   /**
    * Time at which this section was created. (read-only)
    */
@@ -2820,6 +5144,45 @@ class HomepageSection {
    * Description of the content found in this section.
    */
   String description;
+
+  HomepageSection() {}
+
+  Map toJson() => {
+        'can': can,
+        'created_at': created_at,
+        'deleted_at': deleted_at,
+        'detail_url': detail_url,
+        'homepage_id': homepage_id,
+        'id': id,
+        'is_header': is_header,
+        'title': title,
+        'updated_at': updated_at,
+        'description': description
+      };
+
+  HomepageSection.fromJson(Map source)
+      : can = source['can'],
+        created_at = source['created_at'],
+        deleted_at = source['deleted_at'],
+        detail_url = source['detail_url'] == null
+            ? null
+            : source['detail_url'].toString(),
+        homepage_id = source['homepage_id'],
+        homepage_items = source['homepage_items'] == null
+            ? null
+            : (source['homepage_items'] as List)
+                .map((i) => HomepageItem.fromJson(i))
+                .toList(),
+        id = source['id'] == null ? null : source['id'].toString(),
+        is_header = source['is_header'],
+        item_order = source['item_order'] == null
+            ? null
+            : source['item_order'].map<int>((i) => i as int).toList(),
+        title = source['title'] == null ? null : source['title'].toString(),
+        updated_at = source['updated_at'],
+        description = source['description'] == null
+            ? null
+            : source['description'].toString();
 }
 
 class ImportedProject {
@@ -2842,14 +5205,31 @@ class ImportedProject {
   /**
    * Operations the current user is able to perform on this object (read-only)
    */
-  Map<String, bool> can;
+  Map<String, dynamic> can;
+
+  ImportedProject() {}
+
+  Map toJson() => {
+        'name': name,
+        'url': url,
+        'ref': ref,
+        'is_remote': is_remote,
+        'can': can
+      };
+
+  ImportedProject.fromJson(Map source)
+      : name = source['name'] == null ? null : source['name'].toString(),
+        url = source['url'] == null ? null : source['url'].toString(),
+        ref = source['ref'] == null ? null : source['ref'].toString(),
+        is_remote = source['is_remote'],
+        can = source['can'];
 }
 
 class Integration {
   /**
    * Operations the current user is able to perform on this object (read-only)
    */
-  Map<String, bool> can;
+  Map<String, dynamic> can;
   /**
    * ID of the integration. (read-only)
    */
@@ -2914,13 +5294,69 @@ class Integration {
    * Whether the integration is available to users.
    */
   List<int> installed_delegate_oauth_targets;
+
+  Integration() {}
+
+  Map toJson() => {
+        'can': can,
+        'id': id,
+        'integration_hub_id': integration_hub_id,
+        'label': label,
+        'description': description,
+        'enabled': enabled,
+        'supported_formats': supported_formats,
+        'supported_action_types': supported_action_types,
+        'supported_formattings': supported_formattings,
+        'supported_visualization_formattings':
+            supported_visualization_formattings,
+        'supported_download_settings': supported_download_settings,
+        'icon_url': icon_url,
+        'uses_oauth': uses_oauth,
+        'delegate_oauth': delegate_oauth
+      };
+
+  Integration.fromJson(Map source)
+      : can = source['can'],
+        id = source['id'] == null ? null : source['id'].toString(),
+        integration_hub_id = source['integration_hub_id'],
+        label = source['label'] == null ? null : source['label'].toString(),
+        description = source['description'] == null
+            ? null
+            : source['description'].toString(),
+        enabled = source['enabled'],
+        params = source['params'] == null
+            ? null
+            : (source['params'] as List)
+                .map((i) => IntegrationParam.fromJson(i))
+                .toList(),
+        supported_formats = source['supported_formats'],
+        supported_action_types = source['supported_action_types'],
+        supported_formattings = source['supported_formattings'],
+        supported_visualization_formattings =
+            source['supported_visualization_formattings'],
+        supported_download_settings = source['supported_download_settings'],
+        icon_url =
+            source['icon_url'] == null ? null : source['icon_url'].toString(),
+        uses_oauth = source['uses_oauth'],
+        required_fields = source['required_fields'] == null
+            ? null
+            : (source['required_fields'] as List)
+                .map((i) => IntegrationRequiredField.fromJson(i))
+                .toList(),
+        delegate_oauth = source['delegate_oauth'],
+        installed_delegate_oauth_targets =
+            source['installed_delegate_oauth_targets'] == null
+                ? null
+                : source['installed_delegate_oauth_targets']
+                    .map<int>((i) => i as int)
+                    .toList();
 }
 
 class IntegrationHub {
   /**
    * Operations the current user is able to perform on this object (read-only)
    */
-  Map<String, bool> can;
+  Map<String, dynamic> can;
   /**
    * ID of the hub. (read-only)
    */
@@ -2961,6 +5397,41 @@ class IntegrationHub {
    * The legal agreement text for this integration hub. (read-only)
    */
   String legal_agreement_text;
+
+  IntegrationHub() {}
+
+  Map toJson() => {
+        'can': can,
+        'id': id,
+        'url': url,
+        'label': label,
+        'official': official,
+        'fetch_error_message': fetch_error_message,
+        'authorization_token': authorization_token,
+        'has_authorization_token': has_authorization_token,
+        'legal_agreement_signed': legal_agreement_signed,
+        'legal_agreement_required': legal_agreement_required,
+        'legal_agreement_text': legal_agreement_text
+      };
+
+  IntegrationHub.fromJson(Map source)
+      : can = source['can'],
+        id = source['id'],
+        url = source['url'] == null ? null : source['url'].toString(),
+        label = source['label'] == null ? null : source['label'].toString(),
+        official = source['official'],
+        fetch_error_message = source['fetch_error_message'] == null
+            ? null
+            : source['fetch_error_message'].toString(),
+        authorization_token = source['authorization_token'] == null
+            ? null
+            : source['authorization_token'].toString(),
+        has_authorization_token = source['has_authorization_token'],
+        legal_agreement_signed = source['legal_agreement_signed'],
+        legal_agreement_required = source['legal_agreement_required'],
+        legal_agreement_text = source['legal_agreement_text'] == null
+            ? null
+            : source['legal_agreement_text'].toString();
 }
 
 class IntegrationParam {
@@ -3004,6 +5475,39 @@ class IntegrationParam {
    * When present, the param represents the oauth url the user will be taken to. (read-only)
    */
   String delegate_oauth_url;
+
+  IntegrationParam() {}
+
+  Map toJson() => {
+        'name': name,
+        'label': label,
+        'description': description,
+        'required': required,
+        'has_value': has_value,
+        'value': value,
+        'user_attribute_name': user_attribute_name,
+        'sensitive': sensitive,
+        'per_user': per_user,
+        'delegate_oauth_url': delegate_oauth_url
+      };
+
+  IntegrationParam.fromJson(Map source)
+      : name = source['name'] == null ? null : source['name'].toString(),
+        label = source['label'] == null ? null : source['label'].toString(),
+        description = source['description'] == null
+            ? null
+            : source['description'].toString(),
+        required = source['required'],
+        has_value = source['has_value'],
+        value = source['value'] == null ? null : source['value'].toString(),
+        user_attribute_name = source['user_attribute_name'] == null
+            ? null
+            : source['user_attribute_name'].toString(),
+        sensitive = source['sensitive'],
+        per_user = source['per_user'],
+        delegate_oauth_url = source['delegate_oauth_url'] == null
+            ? null
+            : source['delegate_oauth_url'].toString();
 }
 
 class IntegrationRequiredField {
@@ -3019,6 +5523,19 @@ class IntegrationRequiredField {
    * If present, supercedes 'tag' and matches a field that has all of the provided tags. (read-only)
    */
   List<String> all_tags;
+
+  IntegrationRequiredField() {}
+
+  Map toJson() => {'tag': tag};
+
+  IntegrationRequiredField.fromJson(Map source)
+      : tag = source['tag'] == null ? null : source['tag'].toString(),
+        any_tag = source['any_tag'] == null
+            ? null
+            : source['any_tag'].map<String>((i) => i as String).toList(),
+        all_tags = source['all_tags'] == null
+            ? null
+            : source['all_tags'].map<String>((i) => i as String).toList();
 }
 
 class IntegrationTestResult {
@@ -3034,24 +5551,46 @@ class IntegrationTestResult {
    * An array of connection test result for delegate oauth actions. (read-only)
    */
   List<DelegateOauthTest> delegate_oauth_result;
+
+  IntegrationTestResult() {}
+
+  Map toJson() => {'success': success, 'message': message};
+
+  IntegrationTestResult.fromJson(Map source)
+      : success = source['success'],
+        message =
+            source['message'] == null ? null : source['message'].toString(),
+        delegate_oauth_result = source['delegate_oauth_result'] == null
+            ? null
+            : (source['delegate_oauth_result'] as List)
+                .map((i) => DelegateOauthTest.fromJson(i))
+                .toList();
 }
 
 class InternalHelpResources {
   /**
    * Operations the current user is able to perform on this object (read-only)
    */
-  Map<String, bool> can;
+  Map<String, dynamic> can;
   /**
    * If true and internal help resources content is not blank then the link for internal help resources will be shown in the help menu and the content displayed within Looker
    */
   bool enabled;
+
+  InternalHelpResources() {}
+
+  Map toJson() => {'can': can, 'enabled': enabled};
+
+  InternalHelpResources.fromJson(Map source)
+      : can = source['can'],
+        enabled = source['enabled'];
 }
 
 class InternalHelpResourcesContent {
   /**
    * Operations the current user is able to perform on this object (read-only)
    */
-  Map<String, bool> can;
+  Map<String, dynamic> can;
   /**
    * Text to display in the help menu item which will display the internal help resources
    */
@@ -3060,13 +5599,30 @@ class InternalHelpResourcesContent {
    * Content to be displayed in the internal help resources page/modal
    */
   String markdown_content;
+
+  InternalHelpResourcesContent() {}
+
+  Map toJson() => {
+        'can': can,
+        'organization_name': organization_name,
+        'markdown_content': markdown_content
+      };
+
+  InternalHelpResourcesContent.fromJson(Map source)
+      : can = source['can'],
+        organization_name = source['organization_name'] == null
+            ? null
+            : source['organization_name'].toString(),
+        markdown_content = source['markdown_content'] == null
+            ? null
+            : source['markdown_content'].toString();
 }
 
 class LDAPConfig {
   /**
    * Operations the current user is able to perform on this object (read-only)
    */
-  Map<String, bool> can;
+  Map<String, dynamic> can;
   /**
    * Allow alternate email-based login via '/login/email' for admins and for specified users with the 'login_special_email' permission. This option is useful as a fallback during ldap setup, if ldap config problems occur later, or if you need to support some users who are not in your ldap directory. Looker email/password logins are always disabled for regular users when ldap is enabled.
    */
@@ -3235,6 +5791,170 @@ class LDAPConfig {
    * Link to get this item (read-only)
    */
   String url;
+
+  LDAPConfig() {}
+
+  Map toJson() => {
+        'can': can,
+        'alternate_email_login_allowed': alternate_email_login_allowed,
+        'auth_password': auth_password,
+        'auth_requires_role': auth_requires_role,
+        'auth_username': auth_username,
+        'connection_host': connection_host,
+        'connection_port': connection_port,
+        'connection_tls': connection_tls,
+        'connection_tls_no_verify': connection_tls_no_verify,
+        'enabled': enabled,
+        'force_no_page': force_no_page,
+        'groups_base_dn': groups_base_dn,
+        'groups_finder_type': groups_finder_type,
+        'groups_member_attribute': groups_member_attribute,
+        'groups_objectclasses': groups_objectclasses,
+        'groups_user_attribute': groups_user_attribute,
+        'has_auth_password': has_auth_password,
+        'merge_new_users_by_email': merge_new_users_by_email,
+        'modified_at': modified_at,
+        'modified_by': modified_by,
+        'set_roles_from_groups': set_roles_from_groups,
+        'test_ldap_password': test_ldap_password,
+        'test_ldap_user': test_ldap_user,
+        'user_attribute_map_email': user_attribute_map_email,
+        'user_attribute_map_first_name': user_attribute_map_first_name,
+        'user_attribute_map_last_name': user_attribute_map_last_name,
+        'user_attribute_map_ldap_id': user_attribute_map_ldap_id,
+        'user_bind_base_dn': user_bind_base_dn,
+        'user_custom_filter': user_custom_filter,
+        'user_id_attribute_names': user_id_attribute_names,
+        'user_objectclass': user_objectclass,
+        'allow_normal_group_membership': allow_normal_group_membership,
+        'allow_roles_from_normal_groups': allow_roles_from_normal_groups,
+        'allow_direct_roles': allow_direct_roles,
+        'url': url
+      };
+
+  LDAPConfig.fromJson(Map source)
+      : can = source['can'],
+        alternate_email_login_allowed = source['alternate_email_login_allowed'],
+        auth_password = source['auth_password'] == null
+            ? null
+            : source['auth_password'].toString(),
+        auth_requires_role = source['auth_requires_role'],
+        auth_username = source['auth_username'] == null
+            ? null
+            : source['auth_username'].toString(),
+        connection_host = source['connection_host'] == null
+            ? null
+            : source['connection_host'].toString(),
+        connection_port = source['connection_port'] == null
+            ? null
+            : source['connection_port'].toString(),
+        connection_tls = source['connection_tls'],
+        connection_tls_no_verify = source['connection_tls_no_verify'],
+        default_new_user_group_ids =
+            source['default_new_user_group_ids'] == null
+                ? null
+                : source['default_new_user_group_ids']
+                    .map<int>((i) => i as int)
+                    .toList(),
+        default_new_user_groups = source['default_new_user_groups'] == null
+            ? null
+            : (source['default_new_user_groups'] as List)
+                .map((i) => Group.fromJson(i))
+                .toList(),
+        default_new_user_role_ids = source['default_new_user_role_ids'] == null
+            ? null
+            : source['default_new_user_role_ids']
+                .map<int>((i) => i as int)
+                .toList(),
+        default_new_user_roles = source['default_new_user_roles'] == null
+            ? null
+            : (source['default_new_user_roles'] as List)
+                .map((i) => Role.fromJson(i))
+                .toList(),
+        enabled = source['enabled'],
+        force_no_page = source['force_no_page'],
+        groups = source['groups'] == null
+            ? null
+            : (source['groups'] as List)
+                .map((i) => LDAPGroupRead.fromJson(i))
+                .toList(),
+        groups_base_dn = source['groups_base_dn'] == null
+            ? null
+            : source['groups_base_dn'].toString(),
+        groups_finder_type = source['groups_finder_type'] == null
+            ? null
+            : source['groups_finder_type'].toString(),
+        groups_member_attribute = source['groups_member_attribute'] == null
+            ? null
+            : source['groups_member_attribute'].toString(),
+        groups_objectclasses = source['groups_objectclasses'] == null
+            ? null
+            : source['groups_objectclasses'].toString(),
+        groups_user_attribute = source['groups_user_attribute'] == null
+            ? null
+            : source['groups_user_attribute'].toString(),
+        groups_with_role_ids = source['groups_with_role_ids'] == null
+            ? null
+            : (source['groups_with_role_ids'] as List)
+                .map((i) => LDAPGroupWrite.fromJson(i))
+                .toList(),
+        has_auth_password = source['has_auth_password'],
+        merge_new_users_by_email = source['merge_new_users_by_email'],
+        modified_at = source['modified_at'] == null
+            ? null
+            : source['modified_at'].toString(),
+        modified_by = source['modified_by'] == null
+            ? null
+            : source['modified_by'].toString(),
+        set_roles_from_groups = source['set_roles_from_groups'],
+        test_ldap_password = source['test_ldap_password'] == null
+            ? null
+            : source['test_ldap_password'].toString(),
+        test_ldap_user = source['test_ldap_user'] == null
+            ? null
+            : source['test_ldap_user'].toString(),
+        user_attribute_map_email = source['user_attribute_map_email'] == null
+            ? null
+            : source['user_attribute_map_email'].toString(),
+        user_attribute_map_first_name =
+            source['user_attribute_map_first_name'] == null
+                ? null
+                : source['user_attribute_map_first_name'].toString(),
+        user_attribute_map_last_name =
+            source['user_attribute_map_last_name'] == null
+                ? null
+                : source['user_attribute_map_last_name'].toString(),
+        user_attribute_map_ldap_id =
+            source['user_attribute_map_ldap_id'] == null
+                ? null
+                : source['user_attribute_map_ldap_id'].toString(),
+        user_attributes = source['user_attributes'] == null
+            ? null
+            : (source['user_attributes'] as List)
+                .map((i) => LDAPUserAttributeRead.fromJson(i))
+                .toList(),
+        user_attributes_with_ids = source['user_attributes_with_ids'] == null
+            ? null
+            : (source['user_attributes_with_ids'] as List)
+                .map((i) => LDAPUserAttributeWrite.fromJson(i))
+                .toList(),
+        user_bind_base_dn = source['user_bind_base_dn'] == null
+            ? null
+            : source['user_bind_base_dn'].toString(),
+        user_custom_filter = source['user_custom_filter'] == null
+            ? null
+            : source['user_custom_filter'].toString(),
+        user_id_attribute_names = source['user_id_attribute_names'] == null
+            ? null
+            : source['user_id_attribute_names'].toString(),
+        user_objectclass = source['user_objectclass'] == null
+            ? null
+            : source['user_objectclass'].toString(),
+        allow_normal_group_membership = source['allow_normal_group_membership'],
+        allow_roles_from_normal_groups =
+            source['allow_roles_from_normal_groups'],
+        allow_direct_roles = source['allow_direct_roles'],
+        url = source['url'] == null ? null : source['url'].toString();
 }
 
 class LDAPConfigTestIssue {
@@ -3249,7 +5969,18 @@ class LDAPConfigTestIssue {
   /**
    * Operations the current user is able to perform on this object (read-only)
    */
-  Map<String, bool> can;
+  Map<String, dynamic> can;
+
+  LDAPConfigTestIssue() {}
+
+  Map toJson() => {'severity': severity, 'message': message, 'can': can};
+
+  LDAPConfigTestIssue.fromJson(Map source)
+      : severity =
+            source['severity'] == null ? null : source['severity'].toString(),
+        message =
+            source['message'] == null ? null : source['message'].toString(),
+        can = source['can'];
 }
 
 class LDAPConfigTestResult {
@@ -3273,11 +6004,40 @@ class LDAPConfigTestResult {
    * A more detailed trace of incremental results during auth tests (read-only)
    */
   String trace;
+  /**
+   * user
+   */
   LDAPUser user;
   /**
    * Link to ldap config (read-only)
    */
   String url;
+
+  LDAPConfigTestResult() {}
+
+  Map toJson() => {
+        'details': details,
+        'message': message,
+        'status': status,
+        'trace': trace,
+        'url': url
+      };
+
+  LDAPConfigTestResult.fromJson(Map source)
+      : details =
+            source['details'] == null ? null : source['details'].toString(),
+        issues = source['issues'] == null
+            ? null
+            : (source['issues'] as List)
+                .map((i) => LDAPConfigTestIssue.fromJson(i))
+                .toList(),
+        message =
+            source['message'] == null ? null : source['message'].toString(),
+        status = source['status'] == null ? null : source['status'].toString(),
+        trace = source['trace'] == null ? null : source['trace'].toString(),
+        user =
+            source['user'] == null ? null : LDAPUser.fromJson(source['user']),
+        url = source['url'] == null ? null : source['url'].toString();
 }
 
 class LDAPGroupRead {
@@ -3305,6 +6065,28 @@ class LDAPGroupRead {
    * Link to ldap config (read-only)
    */
   String url;
+
+  LDAPGroupRead() {}
+
+  Map toJson() => {
+        'id': id,
+        'looker_group_id': looker_group_id,
+        'looker_group_name': looker_group_name,
+        'name': name,
+        'url': url
+      };
+
+  LDAPGroupRead.fromJson(Map source)
+      : id = source['id'],
+        looker_group_id = source['looker_group_id'],
+        looker_group_name = source['looker_group_name'] == null
+            ? null
+            : source['looker_group_name'].toString(),
+        name = source['name'] == null ? null : source['name'].toString(),
+        roles = source['roles'] == null
+            ? null
+            : (source['roles'] as List).map((i) => Role.fromJson(i)).toList(),
+        url = source['url'] == null ? null : source['url'].toString();
 }
 
 class LDAPGroupWrite {
@@ -3332,6 +6114,28 @@ class LDAPGroupWrite {
    * Link to ldap config (read-only)
    */
   String url;
+
+  LDAPGroupWrite() {}
+
+  Map toJson() => {
+        'id': id,
+        'looker_group_id': looker_group_id,
+        'looker_group_name': looker_group_name,
+        'name': name,
+        'url': url
+      };
+
+  LDAPGroupWrite.fromJson(Map source)
+      : id = source['id'],
+        looker_group_id = source['looker_group_id'],
+        looker_group_name = source['looker_group_name'] == null
+            ? null
+            : source['looker_group_name'].toString(),
+        name = source['name'] == null ? null : source['name'].toString(),
+        role_ids = source['role_ids'] == null
+            ? null
+            : source['role_ids'].map<int>((i) => i as int).toList(),
+        url = source['url'] == null ? null : source['url'].toString();
 }
 
 class LDAPUser {
@@ -3374,11 +6178,48 @@ class LDAPUser {
   /**
    * Operations the current user is able to perform on this object (read-only)
    */
-  Map<String, bool> can;
+  Map<String, dynamic> can;
   /**
    * Link to ldap config (read-only)
    */
   String url;
+
+  LDAPUser() {}
+
+  Map toJson() => {
+        'attributes': attributes,
+        'email': email,
+        'first_name': first_name,
+        'last_name': last_name,
+        'ldap_dn': ldap_dn,
+        'ldap_id': ldap_id,
+        'can': can,
+        'url': url
+      };
+
+  LDAPUser.fromJson(Map source)
+      : all_emails = source['all_emails'] == null
+            ? null
+            : source['all_emails'].map<String>((i) => i as String).toList(),
+        attributes = source['attributes'],
+        email = source['email'] == null ? null : source['email'].toString(),
+        first_name = source['first_name'] == null
+            ? null
+            : source['first_name'].toString(),
+        groups = source['groups'] == null
+            ? null
+            : source['groups'].map<String>((i) => i as String).toList(),
+        last_name =
+            source['last_name'] == null ? null : source['last_name'].toString(),
+        ldap_dn =
+            source['ldap_dn'] == null ? null : source['ldap_dn'].toString(),
+        ldap_id =
+            source['ldap_id'] == null ? null : source['ldap_id'].toString(),
+        roles = source['roles'] == null
+            ? null
+            : source['roles'].map<String>((i) => i as String).toList(),
+        can = source['can'],
+        url = source['url'] == null ? null : source['url'].toString();
 }
 
 class LDAPUserAttributeRead {
@@ -3398,6 +6239,20 @@ class LDAPUserAttributeRead {
    * Link to ldap config (read-only)
    */
   String url;
+
+  LDAPUserAttributeRead() {}
+
+  Map toJson() => {'name': name, 'required': required, 'url': url};
+
+  LDAPUserAttributeRead.fromJson(Map source)
+      : name = source['name'] == null ? null : source['name'].toString(),
+        required = source['required'],
+        user_attributes = source['user_attributes'] == null
+            ? null
+            : (source['user_attributes'] as List)
+                .map((i) => UserAttribute.fromJson(i))
+                .toList(),
+        url = source['url'] == null ? null : source['url'].toString();
 }
 
 class LDAPUserAttributeWrite {
@@ -3417,13 +6272,25 @@ class LDAPUserAttributeWrite {
    * Link to ldap config (read-only)
    */
   String url;
+
+  LDAPUserAttributeWrite() {}
+
+  Map toJson() => {'name': name, 'required': required, 'url': url};
+
+  LDAPUserAttributeWrite.fromJson(Map source)
+      : name = source['name'] == null ? null : source['name'].toString(),
+        required = source['required'],
+        user_attribute_ids = source['user_attribute_ids'] == null
+            ? null
+            : source['user_attribute_ids'].map<int>((i) => i as int).toList(),
+        url = source['url'] == null ? null : source['url'].toString();
 }
 
 class LegacyFeature {
   /**
    * Operations the current user is able to perform on this object (read-only)
    */
-  Map<String, bool> can;
+  Map<String, dynamic> can;
   /**
    * Unique Id (read-only)
    */
@@ -3472,6 +6339,50 @@ class LegacyFeature {
    * Whether this legacy feature may have been automatically disabled when upgrading to the current version. (read-only)
    */
   bool has_disabled_on_upgrade;
+
+  LegacyFeature() {}
+
+  Map toJson() => {
+        'can': can,
+        'id': id,
+        'name': name,
+        'description': description,
+        'enabled_locally': enabled_locally,
+        'enabled': enabled,
+        'disallowed_as_of_version': disallowed_as_of_version,
+        'disable_on_upgrade_to_version': disable_on_upgrade_to_version,
+        'end_of_life_version': end_of_life_version,
+        'documentation_url': documentation_url,
+        'approximate_disable_date': approximate_disable_date,
+        'approximate_end_of_life_date': approximate_end_of_life_date,
+        'has_disabled_on_upgrade': has_disabled_on_upgrade
+      };
+
+  LegacyFeature.fromJson(Map source)
+      : can = source['can'],
+        id = source['id'] == null ? null : source['id'].toString(),
+        name = source['name'] == null ? null : source['name'].toString(),
+        description = source['description'] == null
+            ? null
+            : source['description'].toString(),
+        enabled_locally = source['enabled_locally'],
+        enabled = source['enabled'],
+        disallowed_as_of_version = source['disallowed_as_of_version'] == null
+            ? null
+            : source['disallowed_as_of_version'].toString(),
+        disable_on_upgrade_to_version =
+            source['disable_on_upgrade_to_version'] == null
+                ? null
+                : source['disable_on_upgrade_to_version'].toString(),
+        end_of_life_version = source['end_of_life_version'] == null
+            ? null
+            : source['end_of_life_version'].toString(),
+        documentation_url = source['documentation_url'] == null
+            ? null
+            : source['documentation_url'].toString(),
+        approximate_disable_date = source['approximate_disable_date'],
+        approximate_end_of_life_date = source['approximate_end_of_life_date'],
+        has_disabled_on_upgrade = source['has_disabled_on_upgrade'];
 }
 
 class Locale {
@@ -3487,6 +6398,20 @@ class Locale {
    * Name of Locale in English (read-only)
    */
   String english_name;
+
+  Locale() {}
+
+  Map toJson() =>
+      {'code': code, 'native_name': native_name, 'english_name': english_name};
+
+  Locale.fromJson(Map source)
+      : code = source['code'] == null ? null : source['code'].toString(),
+        native_name = source['native_name'] == null
+            ? null
+            : source['native_name'].toString(),
+        english_name = source['english_name'] == null
+            ? null
+            : source['english_name'].toString();
 }
 
 class LocalizationSettings {
@@ -3501,14 +6426,31 @@ class LocalizationSettings {
   /**
    * Operations the current user is able to perform on this object (read-only)
    */
-  Map<String, bool> can;
+  Map<String, dynamic> can;
+
+  LocalizationSettings() {}
+
+  Map toJson() => {
+        'default_locale': default_locale,
+        'localization_level': localization_level,
+        'can': can
+      };
+
+  LocalizationSettings.fromJson(Map source)
+      : default_locale = source['default_locale'] == null
+            ? null
+            : source['default_locale'].toString(),
+        localization_level = source['localization_level'] == null
+            ? null
+            : source['localization_level'].toString(),
+        can = source['can'];
 }
 
 class Look {
   /**
    * Operations the current user is able to perform on this object (read-only)
    */
-  Map<String, bool> can;
+  Map<String, dynamic> can;
   /**
    * Id of content metadata (read-only)
    */
@@ -3581,6 +6523,9 @@ class Look {
    * Time last viewed in the Looker web UI (read-only)
    */
   DateTime last_viewed_at;
+  /**
+   * model
+   */
   LookModel model;
   /**
    * Is Public
@@ -3602,6 +6547,9 @@ class Look {
    * Short Url (read-only)
    */
   String short_url;
+  /**
+   * folder
+   */
   FolderBase folder;
   /**
    * Folder Id
@@ -3619,19 +6567,118 @@ class Look {
    * Number of times viewed in the Looker web UI (read-only)
    */
   int view_count;
+  /**
+   * user
+   */
   UserIdOnly user;
   /**
    * Space Id
    */
   String space_id;
+  /**
+   * space
+   */
   SpaceBase space;
+
+  Look() {}
+
+  Map toJson() => {
+        'can': can,
+        'content_metadata_id': content_metadata_id,
+        'id': id,
+        'title': title,
+        'content_favorite_id': content_favorite_id,
+        'created_at': created_at,
+        'deleted': deleted,
+        'deleted_at': deleted_at,
+        'deleter_id': deleter_id,
+        'description': description,
+        'embed_url': embed_url,
+        'excel_file_url': excel_file_url,
+        'favorite_count': favorite_count,
+        'google_spreadsheet_formula': google_spreadsheet_formula,
+        'image_embed_url': image_embed_url,
+        'is_run_on_load': is_run_on_load,
+        'last_accessed_at': last_accessed_at,
+        'last_updater_id': last_updater_id,
+        'last_viewed_at': last_viewed_at,
+        'public': public,
+        'public_slug': public_slug,
+        'public_url': public_url,
+        'query_id': query_id,
+        'short_url': short_url,
+        'folder_id': folder_id,
+        'updated_at': updated_at,
+        'user_id': user_id,
+        'view_count': view_count,
+        'space_id': space_id
+      };
+
+  Look.fromJson(Map source)
+      : can = source['can'],
+        content_metadata_id = source['content_metadata_id'],
+        id = source['id'],
+        title = source['title'] == null ? null : source['title'].toString(),
+        content_favorite_id = source['content_favorite_id'],
+        created_at = source['created_at'],
+        deleted = source['deleted'],
+        deleted_at = source['deleted_at'],
+        deleter_id = source['deleter_id'],
+        description = source['description'] == null
+            ? null
+            : source['description'].toString(),
+        embed_url =
+            source['embed_url'] == null ? null : source['embed_url'].toString(),
+        excel_file_url = source['excel_file_url'] == null
+            ? null
+            : source['excel_file_url'].toString(),
+        favorite_count = source['favorite_count'],
+        google_spreadsheet_formula =
+            source['google_spreadsheet_formula'] == null
+                ? null
+                : source['google_spreadsheet_formula'].toString(),
+        image_embed_url = source['image_embed_url'] == null
+            ? null
+            : source['image_embed_url'].toString(),
+        is_run_on_load = source['is_run_on_load'],
+        last_accessed_at = source['last_accessed_at'],
+        last_updater_id = source['last_updater_id'],
+        last_viewed_at = source['last_viewed_at'],
+        model = source['model'] == null
+            ? null
+            : LookModel.fromJson(source['model']),
+        public = source['public'],
+        public_slug = source['public_slug'] == null
+            ? null
+            : source['public_slug'].toString(),
+        public_url = source['public_url'] == null
+            ? null
+            : source['public_url'].toString(),
+        query_id = source['query_id'],
+        short_url =
+            source['short_url'] == null ? null : source['short_url'].toString(),
+        folder = source['folder'] == null
+            ? null
+            : FolderBase.fromJson(source['folder']),
+        folder_id =
+            source['folder_id'] == null ? null : source['folder_id'].toString(),
+        updated_at = source['updated_at'],
+        user_id = source['user_id'],
+        view_count = source['view_count'],
+        user =
+            source['user'] == null ? null : UserIdOnly.fromJson(source['user']),
+        space_id =
+            source['space_id'] == null ? null : source['space_id'].toString(),
+        space = source['space'] == null
+            ? null
+            : SpaceBase.fromJson(source['space']);
 }
 
 class LookBasic {
   /**
    * Operations the current user is able to perform on this object (read-only)
    */
-  Map<String, bool> can;
+  Map<String, dynamic> can;
   /**
    * Id of content metadata (read-only)
    */
@@ -3644,13 +6691,28 @@ class LookBasic {
    * Look Title (read-only)
    */
   String title;
+
+  LookBasic() {}
+
+  Map toJson() => {
+        'can': can,
+        'content_metadata_id': content_metadata_id,
+        'id': id,
+        'title': title
+      };
+
+  LookBasic.fromJson(Map source)
+      : can = source['can'],
+        content_metadata_id = source['content_metadata_id'],
+        id = source['id'],
+        title = source['title'] == null ? null : source['title'].toString();
 }
 
 class LookmlModel {
   /**
    * Operations the current user is able to perform on this object (read-only)
    */
-  Map<String, bool> can;
+  Map<String, dynamic> can;
   /**
    * Array of names of connections this model is allowed to use
    */
@@ -3679,6 +6741,38 @@ class LookmlModel {
    * Is this model allowed to use all current and future connections
    */
   bool unlimited_db_connections;
+
+  LookmlModel() {}
+
+  Map toJson() => {
+        'can': can,
+        'has_content': has_content,
+        'label': label,
+        'name': name,
+        'project_name': project_name,
+        'unlimited_db_connections': unlimited_db_connections
+      };
+
+  LookmlModel.fromJson(Map source)
+      : can = source['can'],
+        allowed_db_connection_names =
+            source['allowed_db_connection_names'] == null
+                ? null
+                : source['allowed_db_connection_names']
+                    .map<String>((i) => i as String)
+                    .toList(),
+        explores = source['explores'] == null
+            ? null
+            : (source['explores'] as List)
+                .map((i) => LookmlModelNavExplore.fromJson(i))
+                .toList(),
+        has_content = source['has_content'],
+        label = source['label'] == null ? null : source['label'].toString(),
+        name = source['name'] == null ? null : source['name'].toString(),
+        project_name = source['project_name'] == null
+            ? null
+            : source['project_name'].toString(),
+        unlimited_db_connections = source['unlimited_db_connections'];
 }
 
 class LookmlModelExplore {
@@ -3802,6 +6896,9 @@ class LookmlModelExplore {
    * Errors (read-only)
    */
   List<LookmlModelExploreError> errors;
+  /**
+   * fields
+   */
   LookmlModelExploreFieldset fields;
   /**
    * Views joined into this explore (read-only)
@@ -3815,6 +6912,130 @@ class LookmlModelExplore {
    * An array of items describing which custom measure types are supported for creating a custom measure 'based_on' each possible dimension type. (read-only)
    */
   List<LookmlModelExploreSupportedMeasureType> supported_measure_types;
+
+  LookmlModelExplore() {}
+
+  Map toJson() => {
+        'id': id,
+        'name': name,
+        'description': description,
+        'label': label,
+        'can_total': can_total,
+        'can_save': can_save,
+        'can_explain': can_explain,
+        'can_pivot_in_db': can_pivot_in_db,
+        'can_subtotal': can_subtotal,
+        'has_timezone_support': has_timezone_support,
+        'supports_cost_estimate': supports_cost_estimate,
+        'connection_name': connection_name,
+        'null_sort_treatment': null_sort_treatment,
+        'source_file': source_file,
+        'project_name': project_name,
+        'model_name': model_name,
+        'view_name': view_name,
+        'hidden': hidden,
+        'sql_table_name': sql_table_name,
+        'group_label': group_label
+      };
+
+  LookmlModelExplore.fromJson(Map source)
+      : id = source['id'] == null ? null : source['id'].toString(),
+        name = source['name'] == null ? null : source['name'].toString(),
+        description = source['description'] == null
+            ? null
+            : source['description'].toString(),
+        label = source['label'] == null ? null : source['label'].toString(),
+        scopes = source['scopes'] == null
+            ? null
+            : source['scopes'].map<String>((i) => i as String).toList(),
+        can_total = source['can_total'],
+        can_save = source['can_save'],
+        can_explain = source['can_explain'],
+        can_pivot_in_db = source['can_pivot_in_db'],
+        can_subtotal = source['can_subtotal'],
+        has_timezone_support = source['has_timezone_support'],
+        supports_cost_estimate = source['supports_cost_estimate'],
+        connection_name = source['connection_name'] == null
+            ? null
+            : source['connection_name'].toString(),
+        null_sort_treatment = source['null_sort_treatment'] == null
+            ? null
+            : source['null_sort_treatment'].toString(),
+        files = source['files'] == null
+            ? null
+            : source['files'].map<String>((i) => i as String).toList(),
+        source_file = source['source_file'] == null
+            ? null
+            : source['source_file'].toString(),
+        project_name = source['project_name'] == null
+            ? null
+            : source['project_name'].toString(),
+        model_name = source['model_name'] == null
+            ? null
+            : source['model_name'].toString(),
+        view_name =
+            source['view_name'] == null ? null : source['view_name'].toString(),
+        hidden = source['hidden'],
+        sql_table_name = source['sql_table_name'] == null
+            ? null
+            : source['sql_table_name'].toString(),
+        access_filter_fields = source['access_filter_fields'] == null
+            ? null
+            : source['access_filter_fields']
+                .map<String>((i) => i as String)
+                .toList(),
+        access_filters = source['access_filters'] == null
+            ? null
+            : (source['access_filters'] as List)
+                .map((i) => LookmlModelExploreAccessFilter.fromJson(i))
+                .toList(),
+        aliases = source['aliases'] == null
+            ? null
+            : (source['aliases'] as List)
+                .map((i) => LookmlModelExploreAlias.fromJson(i))
+                .toList(),
+        always_filter = source['always_filter'] == null
+            ? null
+            : (source['always_filter'] as List)
+                .map((i) => LookmlModelExploreAlwaysFilter.fromJson(i))
+                .toList(),
+        conditionally_filter = source['conditionally_filter'] == null
+            ? null
+            : (source['conditionally_filter'] as List)
+                .map((i) => LookmlModelExploreConditionallyFilter.fromJson(i))
+                .toList(),
+        index_fields = source['index_fields'] == null
+            ? null
+            : source['index_fields'].map<String>((i) => i as String).toList(),
+        sets = source['sets'] == null
+            ? null
+            : (source['sets'] as List)
+                .map((i) => LookmlModelExploreSet.fromJson(i))
+                .toList(),
+        tags = source['tags'] == null
+            ? null
+            : source['tags'].map<String>((i) => i as String).toList(),
+        errors = source['errors'] == null
+            ? null
+            : (source['errors'] as List)
+                .map((i) => LookmlModelExploreError.fromJson(i))
+                .toList(),
+        fields = source['fields'] == null
+            ? null
+            : LookmlModelExploreFieldset.fromJson(source['fields']),
+        joins = source['joins'] == null
+            ? null
+            : (source['joins'] as List)
+                .map((i) => LookmlModelExploreJoins.fromJson(i))
+                .toList(),
+        group_label = source['group_label'] == null
+            ? null
+            : source['group_label'].toString(),
+        supported_measure_types = source['supported_measure_types'] == null
+            ? null
+            : (source['supported_measure_types'] as List)
+                .map((i) => LookmlModelExploreSupportedMeasureType.fromJson(i))
+                .toList();
 }
 
 class LookmlModelExploreAccessFilter {
@@ -3826,6 +7047,16 @@ class LookmlModelExploreAccessFilter {
    * User attribute name (read-only)
    */
   String user_attribute;
+
+  LookmlModelExploreAccessFilter() {}
+
+  Map toJson() => {'field': field, 'user_attribute': user_attribute};
+
+  LookmlModelExploreAccessFilter.fromJson(Map source)
+      : field = source['field'] == null ? null : source['field'].toString(),
+        user_attribute = source['user_attribute'] == null
+            ? null
+            : source['user_attribute'].toString();
 }
 
 class LookmlModelExploreAlias {
@@ -3837,6 +7068,14 @@ class LookmlModelExploreAlias {
    * Value (read-only)
    */
   String value;
+
+  LookmlModelExploreAlias() {}
+
+  Map toJson() => {'name': name, 'value': value};
+
+  LookmlModelExploreAlias.fromJson(Map source)
+      : name = source['name'] == null ? null : source['name'].toString(),
+        value = source['value'] == null ? null : source['value'].toString();
 }
 
 class LookmlModelExploreAlwaysFilter {
@@ -3848,6 +7087,14 @@ class LookmlModelExploreAlwaysFilter {
    * Value (read-only)
    */
   String value;
+
+  LookmlModelExploreAlwaysFilter() {}
+
+  Map toJson() => {'name': name, 'value': value};
+
+  LookmlModelExploreAlwaysFilter.fromJson(Map source)
+      : name = source['name'] == null ? null : source['name'].toString(),
+        value = source['value'] == null ? null : source['value'].toString();
 }
 
 class LookmlModelExploreConditionallyFilter {
@@ -3859,6 +7106,14 @@ class LookmlModelExploreConditionallyFilter {
    * Value (read-only)
    */
   String value;
+
+  LookmlModelExploreConditionallyFilter() {}
+
+  Map toJson() => {'name': name, 'value': value};
+
+  LookmlModelExploreConditionallyFilter.fromJson(Map source)
+      : name = source['name'] == null ? null : source['name'].toString(),
+        value = source['value'] == null ? null : source['value'].toString();
 }
 
 class LookmlModelExploreError {
@@ -3878,6 +7133,23 @@ class LookmlModelExploreError {
    * Is this a field error (read-only)
    */
   bool field_error;
+
+  LookmlModelExploreError() {}
+
+  Map toJson() => {
+        'message': message,
+        'details': details,
+        'error_pos': error_pos,
+        'field_error': field_error
+      };
+
+  LookmlModelExploreError.fromJson(Map source)
+      : message =
+            source['message'] == null ? null : source['message'].toString(),
+        details = source['details'],
+        error_pos =
+            source['error_pos'] == null ? null : source['error_pos'].toString(),
+        field_error = source['field_error'];
 }
 
 class LookmlModelExploreField {
@@ -3953,6 +7225,9 @@ class LookmlModelExploreField {
    * Whether this field can be time filtered. (read-only)
    */
   bool can_time_filter;
+  /**
+   * time_interval
+   */
   LookmlModelExploreFieldTimeInterval time_interval;
   /**
    * Fully-qualified human-readable label of the field. (read-only)
@@ -3970,6 +7245,9 @@ class LookmlModelExploreField {
    * A URL linking to the definition of this field in the LookML IDE. (read-only)
    */
   String lookml_link;
+  /**
+   * map_layer
+   */
   LookmlModelExploreFieldMapLayer map_layer;
   /**
    * Whether this field is a measure. (read-only)
@@ -4079,6 +7357,157 @@ class LookmlModelExploreField {
    * The name of the starting day of the week. Valid values are: "monday", "tuesday", "wednesday", "thursday", "friday", "saturday", "sunday". (read-only)
    */
   WeekStartDay week_start_day;
+
+  LookmlModelExploreField() {}
+
+  Map toJson() => {
+        'align': align,
+        'can_filter': can_filter,
+        'category': category,
+        'default_filter_value': default_filter_value,
+        'description': description,
+        'error': error,
+        'field_group_label': field_group_label,
+        'field_group_variant': field_group_variant,
+        'fill_style': fill_style,
+        'fiscal_month_offset': fiscal_month_offset,
+        'has_allowed_values': has_allowed_values,
+        'hidden': hidden,
+        'is_filter': is_filter,
+        'is_fiscal': is_fiscal,
+        'is_numeric': is_numeric,
+        'is_timeframe': is_timeframe,
+        'can_time_filter': can_time_filter,
+        'label': label,
+        'label_from_parameter': label_from_parameter,
+        'label_short': label_short,
+        'lookml_link': lookml_link,
+        'measure': measure,
+        'name': name,
+        'strict_value_format': strict_value_format,
+        'parameter': parameter,
+        'permanent': permanent,
+        'primary_key': primary_key,
+        'project_name': project_name,
+        'requires_refresh_on_sort': requires_refresh_on_sort,
+        'scope': scope,
+        'sortable': sortable,
+        'source_file': source_file,
+        'source_file_path': source_file_path,
+        'sql': sql,
+        'suggest_dimension': suggest_dimension,
+        'suggest_explore': suggest_explore,
+        'suggestable': suggestable,
+        'type': type,
+        'user_attribute_filter_types': user_attribute_filter_types,
+        'value_format': value_format,
+        'view': view,
+        'view_label': view_label,
+        'dynamic': dynamic,
+        'week_start_day': week_start_day
+      };
+
+  LookmlModelExploreField.fromJson(Map source)
+      : align = source['align'],
+        can_filter = source['can_filter'],
+        category = source['category'],
+        default_filter_value = source['default_filter_value'] == null
+            ? null
+            : source['default_filter_value'].toString(),
+        description = source['description'] == null
+            ? null
+            : source['description'].toString(),
+        enumerations = source['enumerations'] == null
+            ? null
+            : (source['enumerations'] as List)
+                .map((i) => LookmlModelExploreFieldEnumeration.fromJson(i))
+                .toList(),
+        error = source['error'] == null ? null : source['error'].toString(),
+        field_group_label = source['field_group_label'] == null
+            ? null
+            : source['field_group_label'].toString(),
+        field_group_variant = source['field_group_variant'] == null
+            ? null
+            : source['field_group_variant'].toString(),
+        fill_style = source['fill_style'],
+        fiscal_month_offset = source['fiscal_month_offset'],
+        has_allowed_values = source['has_allowed_values'],
+        hidden = source['hidden'],
+        is_filter = source['is_filter'],
+        is_fiscal = source['is_fiscal'],
+        is_numeric = source['is_numeric'],
+        is_timeframe = source['is_timeframe'],
+        can_time_filter = source['can_time_filter'],
+        time_interval = source['time_interval'] == null
+            ? null
+            : LookmlModelExploreFieldTimeInterval.fromJson(
+                source['time_interval']),
+        label = source['label'] == null ? null : source['label'].toString(),
+        label_from_parameter = source['label_from_parameter'] == null
+            ? null
+            : source['label_from_parameter'].toString(),
+        label_short = source['label_short'] == null
+            ? null
+            : source['label_short'].toString(),
+        lookml_link = source['lookml_link'] == null
+            ? null
+            : source['lookml_link'].toString(),
+        map_layer = source['map_layer'] == null
+            ? null
+            : LookmlModelExploreFieldMapLayer.fromJson(source['map_layer']),
+        measure = source['measure'],
+        name = source['name'] == null ? null : source['name'].toString(),
+        strict_value_format = source['strict_value_format'],
+        parameter = source['parameter'],
+        permanent = source['permanent'],
+        primary_key = source['primary_key'],
+        project_name = source['project_name'] == null
+            ? null
+            : source['project_name'].toString(),
+        requires_refresh_on_sort = source['requires_refresh_on_sort'],
+        scope = source['scope'] == null ? null : source['scope'].toString(),
+        sortable = source['sortable'],
+        source_file = source['source_file'] == null
+            ? null
+            : source['source_file'].toString(),
+        source_file_path = source['source_file_path'] == null
+            ? null
+            : source['source_file_path'].toString(),
+        sql = source['sql'] == null ? null : source['sql'].toString(),
+        sql_case = source['sql_case'] == null
+            ? null
+            : (source['sql_case'] as List)
+                .map((i) => LookmlModelExploreFieldSqlCase.fromJson(i))
+                .toList(),
+        filters = source['filters'] == null
+            ? null
+            : (source['filters'] as List)
+                .map((i) => LookmlModelExploreFieldMeasureFilters.fromJson(i))
+                .toList(),
+        suggest_dimension = source['suggest_dimension'] == null
+            ? null
+            : source['suggest_dimension'].toString(),
+        suggest_explore = source['suggest_explore'] == null
+            ? null
+            : source['suggest_explore'].toString(),
+        suggestable = source['suggestable'],
+        suggestions = source['suggestions'] == null
+            ? null
+            : source['suggestions'].map<String>((i) => i as String).toList(),
+        tags = source['tags'] == null
+            ? null
+            : source['tags'].map<String>((i) => i as String).toList(),
+        type = source['type'] == null ? null : source['type'].toString(),
+        user_attribute_filter_types = source['user_attribute_filter_types'],
+        value_format = source['value_format'] == null
+            ? null
+            : source['value_format'].toString(),
+        view = source['view'] == null ? null : source['view'].toString(),
+        view_label = source['view_label'] == null
+            ? null
+            : source['view_label'].toString(),
+        dynamic = source['dynamic'],
+        week_start_day = source['week_start_day'];
 }
 
 class LookmlModelExploreFieldEnumeration {
@@ -4090,6 +7519,14 @@ class LookmlModelExploreFieldEnumeration {
    * Value (read-only)
    */
   dynamic value;
+
+  LookmlModelExploreFieldEnumeration() {}
+
+  Map toJson() => {'label': label, 'value': value};
+
+  LookmlModelExploreFieldEnumeration.fromJson(Map source)
+      : label = source['label'] == null ? null : source['label'].toString(),
+        value = source['value'];
 }
 
 class LookmlModelExploreFieldMapLayer {
@@ -4133,6 +7570,43 @@ class LookmlModelExploreFieldMapLayer {
    * The maximum zoom level that the map layer may be displayed at, for visualizations that support zooming. (read-only)
    */
   int min_zoom_level;
+
+  LookmlModelExploreFieldMapLayer() {}
+
+  Map toJson() => {
+        'url': url,
+        'name': name,
+        'feature_key': feature_key,
+        'property_key': property_key,
+        'property_label_key': property_label_key,
+        'projection': projection,
+        'format': format,
+        'extents_json_url': extents_json_url,
+        'max_zoom_level': max_zoom_level,
+        'min_zoom_level': min_zoom_level
+      };
+
+  LookmlModelExploreFieldMapLayer.fromJson(Map source)
+      : url = source['url'] == null ? null : source['url'].toString(),
+        name = source['name'] == null ? null : source['name'].toString(),
+        feature_key = source['feature_key'] == null
+            ? null
+            : source['feature_key'].toString(),
+        property_key = source['property_key'] == null
+            ? null
+            : source['property_key'].toString(),
+        property_label_key = source['property_label_key'] == null
+            ? null
+            : source['property_label_key'].toString(),
+        projection = source['projection'] == null
+            ? null
+            : source['projection'].toString(),
+        format = source['format'],
+        extents_json_url = source['extents_json_url'] == null
+            ? null
+            : source['extents_json_url'].toString(),
+        max_zoom_level = source['max_zoom_level'],
+        min_zoom_level = source['min_zoom_level'];
 }
 
 class LookmlModelExploreFieldMeasureFilters {
@@ -4144,6 +7618,15 @@ class LookmlModelExploreFieldMeasureFilters {
    * Filter condition value (read-only)
    */
   String condition;
+
+  LookmlModelExploreFieldMeasureFilters() {}
+
+  Map toJson() => {'field': field, 'condition': condition};
+
+  LookmlModelExploreFieldMeasureFilters.fromJson(Map source)
+      : field = source['field'] == null ? null : source['field'].toString(),
+        condition =
+            source['condition'] == null ? null : source['condition'].toString();
 }
 
 class LookmlModelExploreFieldset {
@@ -4163,6 +7646,32 @@ class LookmlModelExploreFieldset {
    * Array of parameters (read-only)
    */
   List<LookmlModelExploreField> parameters;
+
+  LookmlModelExploreFieldset() {}
+
+  Map toJson() => {};
+
+  LookmlModelExploreFieldset.fromJson(Map source)
+      : dimensions = source['dimensions'] == null
+            ? null
+            : (source['dimensions'] as List)
+                .map((i) => LookmlModelExploreField.fromJson(i))
+                .toList(),
+        measures = source['measures'] == null
+            ? null
+            : (source['measures'] as List)
+                .map((i) => LookmlModelExploreField.fromJson(i))
+                .toList(),
+        filters = source['filters'] == null
+            ? null
+            : (source['filters'] as List)
+                .map((i) => LookmlModelExploreField.fromJson(i))
+                .toList(),
+        parameters = source['parameters'] == null
+            ? null
+            : (source['parameters'] as List)
+                .map((i) => LookmlModelExploreField.fromJson(i))
+                .toList();
 }
 
 class LookmlModelExploreFieldSqlCase {
@@ -4174,6 +7683,15 @@ class LookmlModelExploreFieldSqlCase {
    * SQL Case condition expression (read-only)
    */
   String condition;
+
+  LookmlModelExploreFieldSqlCase() {}
+
+  Map toJson() => {'value': value, 'condition': condition};
+
+  LookmlModelExploreFieldSqlCase.fromJson(Map source)
+      : value = source['value'] == null ? null : source['value'].toString(),
+        condition =
+            source['condition'] == null ? null : source['condition'].toString();
 }
 
 class LookmlModelExploreFieldTimeInterval {
@@ -4185,6 +7703,14 @@ class LookmlModelExploreFieldTimeInterval {
    * The number of intervals this field represents a grouping of. (read-only)
    */
   int count;
+
+  LookmlModelExploreFieldTimeInterval() {}
+
+  Map toJson() => {'name': name, 'count': count};
+
+  LookmlModelExploreFieldTimeInterval.fromJson(Map source)
+      : name = source['name'],
+        count = source['count'];
 }
 
 class LookmlModelExploreJoins {
@@ -4240,6 +7766,54 @@ class LookmlModelExploreJoins {
    * Label to display in UI selectors (read-only)
    */
   String view_label;
+
+  LookmlModelExploreJoins() {}
+
+  Map toJson() => {
+        'name': name,
+        'foreign_key': foreign_key,
+        'from': from,
+        'outer_only': outer_only,
+        'relationship': relationship,
+        'sql_foreign_key': sql_foreign_key,
+        'sql_on': sql_on,
+        'sql_table_name': sql_table_name,
+        'type': type,
+        'view_label': view_label
+      };
+
+  LookmlModelExploreJoins.fromJson(Map source)
+      : name = source['name'] == null ? null : source['name'].toString(),
+        dependent_fields = source['dependent_fields'] == null
+            ? null
+            : source['dependent_fields']
+                .map<String>((i) => i as String)
+                .toList(),
+        fields = source['fields'] == null
+            ? null
+            : source['fields'].map<String>((i) => i as String).toList(),
+        foreign_key = source['foreign_key'] == null
+            ? null
+            : source['foreign_key'].toString(),
+        from = source['from'] == null ? null : source['from'].toString(),
+        outer_only = source['outer_only'],
+        relationship = source['relationship'] == null
+            ? null
+            : source['relationship'].toString(),
+        required_joins = source['required_joins'] == null
+            ? null
+            : source['required_joins'].map<String>((i) => i as String).toList(),
+        sql_foreign_key = source['sql_foreign_key'] == null
+            ? null
+            : source['sql_foreign_key'].toString(),
+        sql_on = source['sql_on'] == null ? null : source['sql_on'].toString(),
+        sql_table_name = source['sql_table_name'] == null
+            ? null
+            : source['sql_table_name'].toString(),
+        type = source['type'] == null ? null : source['type'].toString(),
+        view_label = source['view_label'] == null
+            ? null
+            : source['view_label'].toString();
 }
 
 class LookmlModelExploreSet {
@@ -4251,17 +7825,39 @@ class LookmlModelExploreSet {
    * Value set (read-only)
    */
   List<String> value;
+
+  LookmlModelExploreSet() {}
+
+  Map toJson() => {'name': name};
+
+  LookmlModelExploreSet.fromJson(Map source)
+      : name = source['name'] == null ? null : source['name'].toString(),
+        value = source['value'] == null
+            ? null
+            : source['value'].map<String>((i) => i as String).toList();
 }
 
 class LookmlModelExploreSupportedMeasureType {
   /**
-   * (read-only)
+   * dimension_type (read-only)
    */
   String dimension_type;
   /**
-   * (read-only)
+   * measure_types (read-only)
    */
   List<String> measure_types;
+
+  LookmlModelExploreSupportedMeasureType() {}
+
+  Map toJson() => {'dimension_type': dimension_type};
+
+  LookmlModelExploreSupportedMeasureType.fromJson(Map source)
+      : dimension_type = source['dimension_type'] == null
+            ? null
+            : source['dimension_type'].toString(),
+        measure_types = source['measure_types'] == null
+            ? null
+            : source['measure_types'].map<String>((i) => i as String).toList();
 }
 
 class LookmlModelNavExplore {
@@ -4288,14 +7884,37 @@ class LookmlModelNavExplore {
   /**
    * Operations the current user is able to perform on this object (read-only)
    */
-  Map<String, bool> can;
+  Map<String, dynamic> can;
+
+  LookmlModelNavExplore() {}
+
+  Map toJson() => {
+        'name': name,
+        'description': description,
+        'label': label,
+        'hidden': hidden,
+        'group_label': group_label,
+        'can': can
+      };
+
+  LookmlModelNavExplore.fromJson(Map source)
+      : name = source['name'] == null ? null : source['name'].toString(),
+        description = source['description'] == null
+            ? null
+            : source['description'].toString(),
+        label = source['label'] == null ? null : source['label'].toString(),
+        hidden = source['hidden'],
+        group_label = source['group_label'] == null
+            ? null
+            : source['group_label'].toString(),
+        can = source['can'];
 }
 
 class LookmlTest {
   /**
    * Operations the current user is able to perform on this object (read-only)
    */
-  Map<String, bool> can;
+  Map<String, dynamic> can;
   /**
    * Name of model containing this test. (read-only)
    */
@@ -4320,13 +7939,40 @@ class LookmlTest {
    * Line number of this test in LookML. (read-only)
    */
   int line;
+
+  LookmlTest() {}
+
+  Map toJson() => {
+        'can': can,
+        'model_name': model_name,
+        'name': name,
+        'explore_name': explore_name,
+        'query_url_params': query_url_params,
+        'file': file,
+        'line': line
+      };
+
+  LookmlTest.fromJson(Map source)
+      : can = source['can'],
+        model_name = source['model_name'] == null
+            ? null
+            : source['model_name'].toString(),
+        name = source['name'] == null ? null : source['name'].toString(),
+        explore_name = source['explore_name'] == null
+            ? null
+            : source['explore_name'].toString(),
+        query_url_params = source['query_url_params'] == null
+            ? null
+            : source['query_url_params'].toString(),
+        file = source['file'] == null ? null : source['file'].toString(),
+        line = source['line'];
 }
 
 class LookmlTestResult {
   /**
    * Operations the current user is able to perform on this object (read-only)
    */
-  Map<String, bool> can;
+  Map<String, dynamic> can;
   /**
    * Name of model containing this test. (read-only)
    */
@@ -4355,6 +8001,38 @@ class LookmlTestResult {
    * True if this test passsed without errors. (read-only)
    */
   bool success;
+
+  LookmlTestResult() {}
+
+  Map toJson() => {
+        'can': can,
+        'model_name': model_name,
+        'test_name': test_name,
+        'assertions_count': assertions_count,
+        'assertions_failed': assertions_failed,
+        'success': success
+      };
+
+  LookmlTestResult.fromJson(Map source)
+      : can = source['can'],
+        model_name = source['model_name'] == null
+            ? null
+            : source['model_name'].toString(),
+        test_name =
+            source['test_name'] == null ? null : source['test_name'].toString(),
+        assertions_count = source['assertions_count'],
+        assertions_failed = source['assertions_failed'],
+        errors = source['errors'] == null
+            ? null
+            : (source['errors'] as List)
+                .map((i) => ProjectError.fromJson(i))
+                .toList(),
+        warnings = source['warnings'] == null
+            ? null
+            : (source['warnings'] as List)
+                .map((i) => ProjectError.fromJson(i))
+                .toList(),
+        success = source['success'];
 }
 
 class LookModel {
@@ -4366,13 +8044,21 @@ class LookModel {
    * Model Label (read-only)
    */
   String label;
+
+  LookModel() {}
+
+  Map toJson() => {'id': id, 'label': label};
+
+  LookModel.fromJson(Map source)
+      : id = source['id'] == null ? null : source['id'].toString(),
+        label = source['label'] == null ? null : source['label'].toString();
 }
 
 class LookWithDashboards {
   /**
    * Operations the current user is able to perform on this object (read-only)
    */
-  Map<String, bool> can;
+  Map<String, dynamic> can;
   /**
    * Id of content metadata (read-only)
    */
@@ -4445,6 +8131,9 @@ class LookWithDashboards {
    * Time last viewed in the Looker web UI (read-only)
    */
   DateTime last_viewed_at;
+  /**
+   * model
+   */
   LookModel model;
   /**
    * Is Public
@@ -4466,6 +8155,9 @@ class LookWithDashboards {
    * Short Url (read-only)
    */
   String short_url;
+  /**
+   * folder
+   */
   FolderBase folder;
   /**
    * Folder Id
@@ -4483,23 +8175,127 @@ class LookWithDashboards {
    * Number of times viewed in the Looker web UI (read-only)
    */
   int view_count;
+  /**
+   * user
+   */
   UserIdOnly user;
   /**
    * Space Id
    */
   String space_id;
+  /**
+   * space
+   */
   SpaceBase space;
   /**
    * Dashboards (read-only)
    */
   List<DashboardBase> dashboards;
+
+  LookWithDashboards() {}
+
+  Map toJson() => {
+        'can': can,
+        'content_metadata_id': content_metadata_id,
+        'id': id,
+        'title': title,
+        'content_favorite_id': content_favorite_id,
+        'created_at': created_at,
+        'deleted': deleted,
+        'deleted_at': deleted_at,
+        'deleter_id': deleter_id,
+        'description': description,
+        'embed_url': embed_url,
+        'excel_file_url': excel_file_url,
+        'favorite_count': favorite_count,
+        'google_spreadsheet_formula': google_spreadsheet_formula,
+        'image_embed_url': image_embed_url,
+        'is_run_on_load': is_run_on_load,
+        'last_accessed_at': last_accessed_at,
+        'last_updater_id': last_updater_id,
+        'last_viewed_at': last_viewed_at,
+        'public': public,
+        'public_slug': public_slug,
+        'public_url': public_url,
+        'query_id': query_id,
+        'short_url': short_url,
+        'folder_id': folder_id,
+        'updated_at': updated_at,
+        'user_id': user_id,
+        'view_count': view_count,
+        'space_id': space_id
+      };
+
+  LookWithDashboards.fromJson(Map source)
+      : can = source['can'],
+        content_metadata_id = source['content_metadata_id'],
+        id = source['id'],
+        title = source['title'] == null ? null : source['title'].toString(),
+        content_favorite_id = source['content_favorite_id'],
+        created_at = source['created_at'],
+        deleted = source['deleted'],
+        deleted_at = source['deleted_at'],
+        deleter_id = source['deleter_id'],
+        description = source['description'] == null
+            ? null
+            : source['description'].toString(),
+        embed_url =
+            source['embed_url'] == null ? null : source['embed_url'].toString(),
+        excel_file_url = source['excel_file_url'] == null
+            ? null
+            : source['excel_file_url'].toString(),
+        favorite_count = source['favorite_count'],
+        google_spreadsheet_formula =
+            source['google_spreadsheet_formula'] == null
+                ? null
+                : source['google_spreadsheet_formula'].toString(),
+        image_embed_url = source['image_embed_url'] == null
+            ? null
+            : source['image_embed_url'].toString(),
+        is_run_on_load = source['is_run_on_load'],
+        last_accessed_at = source['last_accessed_at'],
+        last_updater_id = source['last_updater_id'],
+        last_viewed_at = source['last_viewed_at'],
+        model = source['model'] == null
+            ? null
+            : LookModel.fromJson(source['model']),
+        public = source['public'],
+        public_slug = source['public_slug'] == null
+            ? null
+            : source['public_slug'].toString(),
+        public_url = source['public_url'] == null
+            ? null
+            : source['public_url'].toString(),
+        query_id = source['query_id'],
+        short_url =
+            source['short_url'] == null ? null : source['short_url'].toString(),
+        folder = source['folder'] == null
+            ? null
+            : FolderBase.fromJson(source['folder']),
+        folder_id =
+            source['folder_id'] == null ? null : source['folder_id'].toString(),
+        updated_at = source['updated_at'],
+        user_id = source['user_id'],
+        view_count = source['view_count'],
+        user =
+            source['user'] == null ? null : UserIdOnly.fromJson(source['user']),
+        space_id =
+            source['space_id'] == null ? null : source['space_id'].toString(),
+        space = source['space'] == null
+            ? null
+            : SpaceBase.fromJson(source['space']),
+        dashboards = source['dashboards'] == null
+            ? null
+            : (source['dashboards'] as List)
+                .map((i) => DashboardBase.fromJson(i))
+                .toList();
 }
 
 class LookWithQuery {
   /**
    * Operations the current user is able to perform on this object (read-only)
    */
-  Map<String, bool> can;
+  Map<String, dynamic> can;
   /**
    * Id of content metadata (read-only)
    */
@@ -4572,6 +8368,9 @@ class LookWithQuery {
    * Time last viewed in the Looker web UI (read-only)
    */
   DateTime last_viewed_at;
+  /**
+   * model
+   */
   LookModel model;
   /**
    * Is Public
@@ -4593,6 +8392,9 @@ class LookWithQuery {
    * Short Url (read-only)
    */
   String short_url;
+  /**
+   * folder
+   */
   FolderBase folder;
   /**
    * Folder Id
@@ -4610,24 +8412,130 @@ class LookWithQuery {
    * Number of times viewed in the Looker web UI (read-only)
    */
   int view_count;
+  /**
+   * user
+   */
   UserIdOnly user;
   /**
    * Space Id
    */
   String space_id;
+  /**
+   * space
+   */
   SpaceBase space;
+  /**
+   * query
+   */
   Query query;
   /**
    * Url (read-only)
    */
   String url;
+
+  LookWithQuery() {}
+
+  Map toJson() => {
+        'can': can,
+        'content_metadata_id': content_metadata_id,
+        'id': id,
+        'title': title,
+        'content_favorite_id': content_favorite_id,
+        'created_at': created_at,
+        'deleted': deleted,
+        'deleted_at': deleted_at,
+        'deleter_id': deleter_id,
+        'description': description,
+        'embed_url': embed_url,
+        'excel_file_url': excel_file_url,
+        'favorite_count': favorite_count,
+        'google_spreadsheet_formula': google_spreadsheet_formula,
+        'image_embed_url': image_embed_url,
+        'is_run_on_load': is_run_on_load,
+        'last_accessed_at': last_accessed_at,
+        'last_updater_id': last_updater_id,
+        'last_viewed_at': last_viewed_at,
+        'public': public,
+        'public_slug': public_slug,
+        'public_url': public_url,
+        'query_id': query_id,
+        'short_url': short_url,
+        'folder_id': folder_id,
+        'updated_at': updated_at,
+        'user_id': user_id,
+        'view_count': view_count,
+        'space_id': space_id,
+        'url': url
+      };
+
+  LookWithQuery.fromJson(Map source)
+      : can = source['can'],
+        content_metadata_id = source['content_metadata_id'],
+        id = source['id'],
+        title = source['title'] == null ? null : source['title'].toString(),
+        content_favorite_id = source['content_favorite_id'],
+        created_at = source['created_at'],
+        deleted = source['deleted'],
+        deleted_at = source['deleted_at'],
+        deleter_id = source['deleter_id'],
+        description = source['description'] == null
+            ? null
+            : source['description'].toString(),
+        embed_url =
+            source['embed_url'] == null ? null : source['embed_url'].toString(),
+        excel_file_url = source['excel_file_url'] == null
+            ? null
+            : source['excel_file_url'].toString(),
+        favorite_count = source['favorite_count'],
+        google_spreadsheet_formula =
+            source['google_spreadsheet_formula'] == null
+                ? null
+                : source['google_spreadsheet_formula'].toString(),
+        image_embed_url = source['image_embed_url'] == null
+            ? null
+            : source['image_embed_url'].toString(),
+        is_run_on_load = source['is_run_on_load'],
+        last_accessed_at = source['last_accessed_at'],
+        last_updater_id = source['last_updater_id'],
+        last_viewed_at = source['last_viewed_at'],
+        model = source['model'] == null
+            ? null
+            : LookModel.fromJson(source['model']),
+        public = source['public'],
+        public_slug = source['public_slug'] == null
+            ? null
+            : source['public_slug'].toString(),
+        public_url = source['public_url'] == null
+            ? null
+            : source['public_url'].toString(),
+        query_id = source['query_id'],
+        short_url =
+            source['short_url'] == null ? null : source['short_url'].toString(),
+        folder = source['folder'] == null
+            ? null
+            : FolderBase.fromJson(source['folder']),
+        folder_id =
+            source['folder_id'] == null ? null : source['folder_id'].toString(),
+        updated_at = source['updated_at'],
+        user_id = source['user_id'],
+        view_count = source['view_count'],
+        user =
+            source['user'] == null ? null : UserIdOnly.fromJson(source['user']),
+        space_id =
+            source['space_id'] == null ? null : source['space_id'].toString(),
+        space = source['space'] == null
+            ? null
+            : SpaceBase.fromJson(source['space']),
+        query =
+            source['query'] == null ? null : Query.fromJson(source['query']),
+        url = source['url'] == null ? null : source['url'].toString();
 }
 
 class Manifest {
   /**
    * Operations the current user is able to perform on this object (read-only)
    */
-  Map<String, bool> can;
+  Map<String, dynamic> can;
   /**
    * Manifest project name (read-only)
    */
@@ -4636,7 +8544,26 @@ class Manifest {
    * Imports for a project (read-only)
    */
   List<ImportedProject> imports;
+  /**
+   * localization_settings
+   */
   LocalizationSettings localization_settings;
+
+  Manifest() {}
+
+  Map toJson() => {'can': can, 'name': name};
+
+  Manifest.fromJson(Map source)
+      : can = source['can'],
+        name = source['name'] == null ? null : source['name'].toString(),
+        imports = source['imports'] == null
+            ? null
+            : (source['imports'] as List)
+                .map((i) => ImportedProject.fromJson(i))
+                .toList(),
+        localization_settings = source['localization_settings'] == null
+            ? null
+            : LocalizationSettings.fromJson(source['localization_settings']);
 }
 
 class MergeFields {
@@ -4648,13 +8575,26 @@ class MergeFields {
    * Field name from the source query
    */
   String source_field_name;
+
+  MergeFields() {}
+
+  Map toJson() =>
+      {'field_name': field_name, 'source_field_name': source_field_name};
+
+  MergeFields.fromJson(Map source)
+      : field_name = source['field_name'] == null
+            ? null
+            : source['field_name'].toString(),
+        source_field_name = source['source_field_name'] == null
+            ? null
+            : source['source_field_name'].toString();
 }
 
 class MergeQuery {
   /**
    * Operations the current user is able to perform on this object (read-only)
    */
-  Map<String, bool> can;
+  Map<String, dynamic> can;
   /**
    * Column Limit
    */
@@ -4691,6 +8631,42 @@ class MergeQuery {
    * Visualization Config
    */
   Map<String, dynamic> vis_config;
+
+  MergeQuery() {}
+
+  Map toJson() => {
+        'can': can,
+        'column_limit': column_limit,
+        'dynamic_fields': dynamic_fields,
+        'id': id,
+        'result_maker_id': result_maker_id,
+        'total': total,
+        'vis_config': vis_config
+      };
+
+  MergeQuery.fromJson(Map source)
+      : can = source['can'],
+        column_limit = source['column_limit'] == null
+            ? null
+            : source['column_limit'].toString(),
+        dynamic_fields = source['dynamic_fields'] == null
+            ? null
+            : source['dynamic_fields'].toString(),
+        id = source['id'] == null ? null : source['id'].toString(),
+        pivots = source['pivots'] == null
+            ? null
+            : source['pivots'].map<String>((i) => i as String).toList(),
+        result_maker_id = source['result_maker_id'],
+        sorts = source['sorts'] == null
+            ? null
+            : source['sorts'].map<String>((i) => i as String).toList(),
+        source_queries = source['source_queries'] == null
+            ? null
+            : (source['source_queries'] as List)
+                .map((i) => MergeQuerySourceQuery.fromJson(i))
+                .toList(),
+        total = source['total'],
+        vis_config = source['vis_config'];
 }
 
 class MergeQuerySourceQuery {
@@ -4706,25 +8682,41 @@ class MergeQuerySourceQuery {
    * Id of the query to merge
    */
   int query_id;
+
+  MergeQuerySourceQuery() {}
+
+  Map toJson() => {'name': name, 'query_id': query_id};
+
+  MergeQuerySourceQuery.fromJson(Map source)
+      : merge_fields = source['merge_fields'] == null
+            ? null
+            : (source['merge_fields'] as List)
+                .map((i) => MergeFields.fromJson(i))
+                .toList(),
+        name = source['name'] == null ? null : source['name'].toString(),
+        query_id = source['query_id'];
 }
 
 class ModelSet {
   /**
    * Operations the current user is able to perform on this object (read-only)
    */
-  Map<String, bool> can;
+  Map<String, dynamic> can;
   /**
-   * (read-only)
+   * all_access (read-only)
    */
   bool all_access;
   /**
-   * (read-only)
+   * built_in (read-only)
    */
   bool built_in;
   /**
    * Unique Id (read-only)
    */
   int id;
+  /**
+   * models
+   */
   List<String> models;
   /**
    * Name of ModelSet
@@ -4734,6 +8726,28 @@ class ModelSet {
    * Link to get this item (read-only)
    */
   String url;
+
+  ModelSet() {}
+
+  Map toJson() => {
+        'can': can,
+        'all_access': all_access,
+        'built_in': built_in,
+        'id': id,
+        'name': name,
+        'url': url
+      };
+
+  ModelSet.fromJson(Map source)
+      : can = source['can'],
+        all_access = source['all_access'],
+        built_in = source['built_in'],
+        id = source['id'],
+        models = source['models'] == null
+            ? null
+            : source['models'].map<String>((i) => i as String).toList(),
+        name = source['name'] == null ? null : source['name'].toString(),
+        url = source['url'] == null ? null : source['url'].toString();
 }
 
 class ModelsNotValidated {
@@ -4745,6 +8759,16 @@ class ModelsNotValidated {
    * Project file (read-only)
    */
   String project_file_id;
+
+  ModelsNotValidated() {}
+
+  Map toJson() => {'name': name, 'project_file_id': project_file_id};
+
+  ModelsNotValidated.fromJson(Map source)
+      : name = source['name'] == null ? null : source['name'].toString(),
+        project_file_id = source['project_file_id'] == null
+            ? null
+            : source['project_file_id'].toString();
 }
 
 /**
@@ -4766,7 +8790,7 @@ class OIDCConfig {
   /**
    * Operations the current user is able to perform on this object (read-only)
    */
-  Map<String, bool> can;
+  Map<String, dynamic> can;
   /**
    * Allow alternate email-based login via '/login/email' for admins and for specified users with the 'login_special_email' permission. This option is useful as a fallback during ldap setup, if ldap config problems occur later, or if you need to support some users who are not in your ldap directory. Looker email/password logins are always disabled for regular users when ldap is enabled.
    */
@@ -4895,6 +8919,128 @@ class OIDCConfig {
    * Link to get this item (read-only)
    */
   String url;
+
+  OIDCConfig() {}
+
+  Map toJson() => {
+        'can': can,
+        'alternate_email_login_allowed': alternate_email_login_allowed,
+        'audience': audience,
+        'auth_requires_role': auth_requires_role,
+        'authorization_endpoint': authorization_endpoint,
+        'enabled': enabled,
+        'groups_attribute': groups_attribute,
+        'identifier': identifier,
+        'issuer': issuer,
+        'modified_at': modified_at,
+        'modified_by': modified_by,
+        'new_user_migration_types': new_user_migration_types,
+        'secret': secret,
+        'set_roles_from_groups': set_roles_from_groups,
+        'test_slug': test_slug,
+        'token_endpoint': token_endpoint,
+        'user_attribute_map_email': user_attribute_map_email,
+        'user_attribute_map_first_name': user_attribute_map_first_name,
+        'user_attribute_map_last_name': user_attribute_map_last_name,
+        'userinfo_endpoint': userinfo_endpoint,
+        'allow_normal_group_membership': allow_normal_group_membership,
+        'allow_roles_from_normal_groups': allow_roles_from_normal_groups,
+        'allow_direct_roles': allow_direct_roles,
+        'url': url
+      };
+
+  OIDCConfig.fromJson(Map source)
+      : can = source['can'],
+        alternate_email_login_allowed = source['alternate_email_login_allowed'],
+        audience =
+            source['audience'] == null ? null : source['audience'].toString(),
+        auth_requires_role = source['auth_requires_role'],
+        authorization_endpoint = source['authorization_endpoint'] == null
+            ? null
+            : source['authorization_endpoint'].toString(),
+        default_new_user_group_ids =
+            source['default_new_user_group_ids'] == null
+                ? null
+                : source['default_new_user_group_ids']
+                    .map<int>((i) => i as int)
+                    .toList(),
+        default_new_user_groups = source['default_new_user_groups'] == null
+            ? null
+            : (source['default_new_user_groups'] as List)
+                .map((i) => Group.fromJson(i))
+                .toList(),
+        default_new_user_role_ids = source['default_new_user_role_ids'] == null
+            ? null
+            : source['default_new_user_role_ids']
+                .map<int>((i) => i as int)
+                .toList(),
+        default_new_user_roles = source['default_new_user_roles'] == null
+            ? null
+            : (source['default_new_user_roles'] as List)
+                .map((i) => Role.fromJson(i))
+                .toList(),
+        enabled = source['enabled'],
+        groups = source['groups'] == null
+            ? null
+            : (source['groups'] as List)
+                .map((i) => OIDCGroupRead.fromJson(i))
+                .toList(),
+        groups_attribute = source['groups_attribute'] == null
+            ? null
+            : source['groups_attribute'].toString(),
+        groups_with_role_ids = source['groups_with_role_ids'] == null
+            ? null
+            : (source['groups_with_role_ids'] as List)
+                .map((i) => OIDCGroupWrite.fromJson(i))
+                .toList(),
+        identifier = source['identifier'] == null
+            ? null
+            : source['identifier'].toString(),
+        issuer = source['issuer'] == null ? null : source['issuer'].toString(),
+        modified_at = source['modified_at'],
+        modified_by = source['modified_by'],
+        new_user_migration_types = source['new_user_migration_types'] == null
+            ? null
+            : source['new_user_migration_types'].toString(),
+        scopes = source['scopes'] == null
+            ? null
+            : source['scopes'].map<String>((i) => i as String).toList(),
+        secret = source['secret'] == null ? null : source['secret'].toString(),
+        set_roles_from_groups = source['set_roles_from_groups'],
+        test_slug =
+            source['test_slug'] == null ? null : source['test_slug'].toString(),
+        token_endpoint = source['token_endpoint'] == null
+            ? null
+            : source['token_endpoint'].toString(),
+        user_attribute_map_email = source['user_attribute_map_email'] == null
+            ? null
+            : source['user_attribute_map_email'].toString(),
+        user_attribute_map_first_name =
+            source['user_attribute_map_first_name'] == null
+                ? null
+                : source['user_attribute_map_first_name'].toString(),
+        user_attribute_map_last_name =
+            source['user_attribute_map_last_name'] == null
+                ? null
+                : source['user_attribute_map_last_name'].toString(),
+        user_attributes = source['user_attributes'] == null
+            ? null
+            : (source['user_attributes'] as List)
+                .map((i) => OIDCUserAttributeRead.fromJson(i))
+                .toList(),
+        user_attributes_with_ids = source['user_attributes_with_ids'] == null
+            ? null
+            : (source['user_attributes_with_ids'] as List)
+                .map((i) => OIDCUserAttributeWrite.fromJson(i))
+                .toList(),
+        userinfo_endpoint = source['userinfo_endpoint'] == null
+            ? null
+            : source['userinfo_endpoint'].toString(),
+        allow_normal_group_membership = source['allow_normal_group_membership'],
+        allow_roles_from_normal_groups =
+            source['allow_roles_from_normal_groups'],
+        allow_direct_roles = source['allow_direct_roles'],
+        url = source['url'] == null ? null : source['url'].toString();
 }
 
 class OIDCGroupRead {
@@ -4918,6 +9064,26 @@ class OIDCGroupRead {
    * Looker Roles (read-only)
    */
   List<Role> roles;
+
+  OIDCGroupRead() {}
+
+  Map toJson() => {
+        'id': id,
+        'looker_group_id': looker_group_id,
+        'looker_group_name': looker_group_name,
+        'name': name
+      };
+
+  OIDCGroupRead.fromJson(Map source)
+      : id = source['id'],
+        looker_group_id = source['looker_group_id'],
+        looker_group_name = source['looker_group_name'] == null
+            ? null
+            : source['looker_group_name'].toString(),
+        name = source['name'] == null ? null : source['name'].toString(),
+        roles = source['roles'] == null
+            ? null
+            : (source['roles'] as List).map((i) => Role.fromJson(i)).toList();
 }
 
 class OIDCGroupWrite {
@@ -4944,7 +9110,29 @@ class OIDCGroupWrite {
   /**
    * Operations the current user is able to perform on this object (read-only)
    */
-  Map<String, bool> can;
+  Map<String, dynamic> can;
+
+  OIDCGroupWrite() {}
+
+  Map toJson() => {
+        'id': id,
+        'looker_group_id': looker_group_id,
+        'looker_group_name': looker_group_name,
+        'name': name,
+        'can': can
+      };
+
+  OIDCGroupWrite.fromJson(Map source)
+      : id = source['id'],
+        looker_group_id = source['looker_group_id'],
+        looker_group_name = source['looker_group_name'] == null
+            ? null
+            : source['looker_group_name'].toString(),
+        name = source['name'] == null ? null : source['name'].toString(),
+        role_ids = source['role_ids'] == null
+            ? null
+            : source['role_ids'].map<int>((i) => i as int).toList(),
+        can = source['can'];
 }
 
 class OIDCUserAttributeRead {
@@ -4960,6 +9148,19 @@ class OIDCUserAttributeRead {
    * Looker User Attributes (read-only)
    */
   List<UserAttribute> user_attributes;
+
+  OIDCUserAttributeRead() {}
+
+  Map toJson() => {'name': name, 'required': required};
+
+  OIDCUserAttributeRead.fromJson(Map source)
+      : name = source['name'] == null ? null : source['name'].toString(),
+        required = source['required'],
+        user_attributes = source['user_attributes'] == null
+            ? null
+            : (source['user_attributes'] as List)
+                .map((i) => UserAttribute.fromJson(i))
+                .toList();
 }
 
 class OIDCUserAttributeWrite {
@@ -4978,14 +9179,26 @@ class OIDCUserAttributeWrite {
   /**
    * Operations the current user is able to perform on this object (read-only)
    */
-  Map<String, bool> can;
+  Map<String, dynamic> can;
+
+  OIDCUserAttributeWrite() {}
+
+  Map toJson() => {'name': name, 'required': required, 'can': can};
+
+  OIDCUserAttributeWrite.fromJson(Map source)
+      : name = source['name'] == null ? null : source['name'].toString(),
+        required = source['required'],
+        user_attribute_ids = source['user_attribute_ids'] == null
+            ? null
+            : source['user_attribute_ids'].map<int>((i) => i as int).toList(),
+        can = source['can'];
 }
 
 class PasswordConfig {
   /**
    * Operations the current user is able to perform on this object (read-only)
    */
-  Map<String, bool> can;
+  Map<String, dynamic> can;
   /**
    * Minimum number of characters required for a new password.  Must be between 7 and 100
    */
@@ -5002,13 +9215,30 @@ class PasswordConfig {
    * Require at least one special character
    */
   bool require_special;
+
+  PasswordConfig() {}
+
+  Map toJson() => {
+        'can': can,
+        'min_length': min_length,
+        'require_numeric': require_numeric,
+        'require_upperlower': require_upperlower,
+        'require_special': require_special
+      };
+
+  PasswordConfig.fromJson(Map source)
+      : can = source['can'],
+        min_length = source['min_length'],
+        require_numeric = source['require_numeric'],
+        require_upperlower = source['require_upperlower'],
+        require_special = source['require_special'];
 }
 
 class Permission {
   /**
    * Operations the current user is able to perform on this object (read-only)
    */
-  Map<String, bool> can;
+  Map<String, dynamic> can;
   /**
    * Permission symbol (read-only)
    */
@@ -5021,19 +9251,38 @@ class Permission {
    * Description (read-only)
    */
   String description;
+
+  Permission() {}
+
+  Map toJson() => {
+        'can': can,
+        'permission': permission,
+        'parent': parent,
+        'description': description
+      };
+
+  Permission.fromJson(Map source)
+      : can = source['can'],
+        permission = source['permission'] == null
+            ? null
+            : source['permission'].toString(),
+        parent = source['parent'] == null ? null : source['parent'].toString(),
+        description = source['description'] == null
+            ? null
+            : source['description'].toString();
 }
 
 class PermissionSet {
   /**
    * Operations the current user is able to perform on this object (read-only)
    */
-  Map<String, bool> can;
+  Map<String, dynamic> can;
   /**
-   * (read-only)
+   * all_access (read-only)
    */
   bool all_access;
   /**
-   * (read-only)
+   * built_in (read-only)
    */
   bool built_in;
   /**
@@ -5044,11 +9293,36 @@ class PermissionSet {
    * Name of PermissionSet
    */
   String name;
+  /**
+   * permissions
+   */
   List<String> permissions;
   /**
    * Link to get this item (read-only)
    */
   String url;
+
+  PermissionSet() {}
+
+  Map toJson() => {
+        'can': can,
+        'all_access': all_access,
+        'built_in': built_in,
+        'id': id,
+        'name': name,
+        'url': url
+      };
+
+  PermissionSet.fromJson(Map source)
+      : can = source['can'],
+        all_access = source['all_access'],
+        built_in = source['built_in'],
+        id = source['id'],
+        name = source['name'] == null ? null : source['name'].toString(),
+        permissions = source['permissions'] == null
+            ? null
+            : source['permissions'].map<String>((i) => i as String).toList(),
+        url = source['url'] == null ? null : source['url'].toString();
 }
 
 /**
@@ -5060,7 +9334,7 @@ class Project {
   /**
    * Operations the current user is able to perform on this object (read-only)
    */
-  Map<String, bool> can;
+  Map<String, dynamic> can;
   /**
    * Project Id (read-only)
    */
@@ -5133,6 +9407,70 @@ class Project {
    * If true the project is an example project and cannot be modified (read-only)
    */
   bool is_example;
+
+  Project() {}
+
+  Map toJson() => {
+        'can': can,
+        'id': id,
+        'name': name,
+        'uses_git': uses_git,
+        'git_remote_url': git_remote_url,
+        'git_username': git_username,
+        'git_password': git_password,
+        'git_username_user_attribute': git_username_user_attribute,
+        'git_password_user_attribute': git_password_user_attribute,
+        'git_service_name': git_service_name,
+        'git_application_server_http_port': git_application_server_http_port,
+        'git_application_server_http_scheme':
+            git_application_server_http_scheme,
+        'deploy_secret': deploy_secret,
+        'unset_deploy_secret': unset_deploy_secret,
+        'pull_request_mode': pull_request_mode,
+        'validation_required': validation_required,
+        'git_release_mgmt_enabled': git_release_mgmt_enabled,
+        'allow_warnings': allow_warnings,
+        'is_example': is_example
+      };
+
+  Project.fromJson(Map source)
+      : can = source['can'],
+        id = source['id'] == null ? null : source['id'].toString(),
+        name = source['name'] == null ? null : source['name'].toString(),
+        uses_git = source['uses_git'],
+        git_remote_url = source['git_remote_url'] == null
+            ? null
+            : source['git_remote_url'].toString(),
+        git_username = source['git_username'] == null
+            ? null
+            : source['git_username'].toString(),
+        git_password = source['git_password'] == null
+            ? null
+            : source['git_password'].toString(),
+        git_username_user_attribute =
+            source['git_username_user_attribute'] == null
+                ? null
+                : source['git_username_user_attribute'].toString(),
+        git_password_user_attribute =
+            source['git_password_user_attribute'] == null
+                ? null
+                : source['git_password_user_attribute'].toString(),
+        git_service_name = source['git_service_name'] == null
+            ? null
+            : source['git_service_name'].toString(),
+        git_application_server_http_port =
+            source['git_application_server_http_port'],
+        git_application_server_http_scheme =
+            source['git_application_server_http_scheme'],
+        deploy_secret = source['deploy_secret'] == null
+            ? null
+            : source['deploy_secret'].toString(),
+        unset_deploy_secret = source['unset_deploy_secret'],
+        pull_request_mode = source['pull_request_mode'],
+        validation_required = source['validation_required'],
+        git_release_mgmt_enabled = source['git_release_mgmt_enabled'],
+        allow_warnings = source['allow_warnings'],
+        is_example = source['is_example'];
 }
 
 class ProjectError {
@@ -5184,13 +9522,54 @@ class ProjectError {
    * A version of the error message that does not contain potentially sensitive information. Suitable for situations in which messages are stored or sent to consumers outside of Looker, such as external logs. Sanitized messages will display "(?)" where sensitive information would appear in the corresponding non-sanitized message (read-only)
    */
   String sanitized_message;
+
+  ProjectError() {}
+
+  Map toJson() => {
+        'code': code,
+        'severity': severity,
+        'kind': kind,
+        'message': message,
+        'field_name': field_name,
+        'file_path': file_path,
+        'line_number': line_number,
+        'model_id': model_id,
+        'explore': explore,
+        'help_url': help_url,
+        'params': params,
+        'sanitized_message': sanitized_message
+      };
+
+  ProjectError.fromJson(Map source)
+      : code = source['code'] == null ? null : source['code'].toString(),
+        severity =
+            source['severity'] == null ? null : source['severity'].toString(),
+        kind = source['kind'] == null ? null : source['kind'].toString(),
+        message =
+            source['message'] == null ? null : source['message'].toString(),
+        field_name = source['field_name'] == null
+            ? null
+            : source['field_name'].toString(),
+        file_path =
+            source['file_path'] == null ? null : source['file_path'].toString(),
+        line_number = source['line_number'],
+        model_id =
+            source['model_id'] == null ? null : source['model_id'].toString(),
+        explore =
+            source['explore'] == null ? null : source['explore'].toString(),
+        help_url =
+            source['help_url'] == null ? null : source['help_url'].toString(),
+        params = source['params'],
+        sanitized_message = source['sanitized_message'] == null
+            ? null
+            : source['sanitized_message'].toString();
 }
 
 class ProjectFile {
   /**
    * Operations the current user is able to perform on this object (read-only)
    */
-  Map<String, bool> can;
+  Map<String, dynamic> can;
   /**
    * An opaque token uniquely identifying a file within a project. Avoid parsing or decomposing the text of this token. This token is stable within a Looker release but may change between Looker releases (read-only)
    */
@@ -5219,7 +9598,38 @@ class ProjectFile {
    * State of editability for the file. (read-only)
    */
   bool editable;
+  /**
+   * git_status
+   */
   GitStatus git_status;
+
+  ProjectFile() {}
+
+  Map toJson() => {
+        'can': can,
+        'id': id,
+        'path': path,
+        'title': title,
+        'type': type,
+        'extension': extension,
+        'mime_type': mime_type,
+        'editable': editable
+      };
+
+  ProjectFile.fromJson(Map source)
+      : can = source['can'],
+        id = source['id'] == null ? null : source['id'].toString(),
+        path = source['path'] == null ? null : source['path'].toString(),
+        title = source['title'] == null ? null : source['title'].toString(),
+        type = source['type'] == null ? null : source['type'].toString(),
+        extension =
+            source['extension'] == null ? null : source['extension'].toString(),
+        mime_type =
+            source['mime_type'] == null ? null : source['mime_type'].toString(),
+        editable = source['editable'],
+        git_status = source['git_status'] == null
+            ? null
+            : GitStatus.fromJson(source['git_status']);
 }
 
 class ProjectValidation {
@@ -5239,6 +9649,27 @@ class ProjectValidation {
    * Duration of project validation in seconds (read-only)
    */
   double computation_time;
+
+  ProjectValidation() {}
+
+  Map toJson() =>
+      {'project_digest': project_digest, 'computation_time': computation_time};
+
+  ProjectValidation.fromJson(Map source)
+      : errors = source['errors'] == null
+            ? null
+            : (source['errors'] as List)
+                .map((i) => ProjectError.fromJson(i))
+                .toList(),
+        project_digest = source['project_digest'] == null
+            ? null
+            : source['project_digest'].toString(),
+        models_not_validated = source['models_not_validated'] == null
+            ? null
+            : (source['models_not_validated'] as List)
+                .map((i) => ModelsNotValidated.fromJson(i))
+                .toList(),
+        computation_time = source['computation_time'];
 }
 
 class ProjectValidationCache {
@@ -5262,13 +9693,38 @@ class ProjectValidationCache {
    * If true, the cached project validation results are no longer accurate because the project has changed since the cached results were calculated (read-only)
    */
   bool stale;
+
+  ProjectValidationCache() {}
+
+  Map toJson() => {
+        'project_digest': project_digest,
+        'computation_time': computation_time,
+        'stale': stale
+      };
+
+  ProjectValidationCache.fromJson(Map source)
+      : errors = source['errors'] == null
+            ? null
+            : (source['errors'] as List)
+                .map((i) => ProjectError.fromJson(i))
+                .toList(),
+        project_digest = source['project_digest'] == null
+            ? null
+            : source['project_digest'].toString(),
+        models_not_validated = source['models_not_validated'] == null
+            ? null
+            : (source['models_not_validated'] as List)
+                .map((i) => ModelsNotValidated.fromJson(i))
+                .toList(),
+        computation_time = source['computation_time'],
+        stale = source['stale'];
 }
 
 class ProjectWorkspace {
   /**
    * Operations the current user is able to perform on this object (read-only)
    */
-  Map<String, bool> can;
+  Map<String, dynamic> can;
   /**
    * The id of the project (read-only)
    */
@@ -5289,11 +9745,47 @@ class ProjectWorkspace {
    * Status of the dependencies in your project. Valid values are: "lock_optional", "lock_required", "lock_error", "install_none". (read-only)
    */
   DependencyStatus dependency_status;
+  /**
+   * git_branch
+   */
   GitBranch git_branch;
   /**
    * The lookml syntax used by all files in this project (read-only)
    */
   String lookml_type;
+
+  ProjectWorkspace() {}
+
+  Map toJson() => {
+        'can': can,
+        'project_id': project_id,
+        'workspace_id': workspace_id,
+        'git_status': git_status,
+        'git_head': git_head,
+        'dependency_status': dependency_status,
+        'lookml_type': lookml_type
+      };
+
+  ProjectWorkspace.fromJson(Map source)
+      : can = source['can'],
+        project_id = source['project_id'] == null
+            ? null
+            : source['project_id'].toString(),
+        workspace_id = source['workspace_id'] == null
+            ? null
+            : source['workspace_id'].toString(),
+        git_status = source['git_status'] == null
+            ? null
+            : source['git_status'].toString(),
+        git_head =
+            source['git_head'] == null ? null : source['git_head'].toString(),
+        dependency_status = source['dependency_status'],
+        git_branch = source['git_branch'] == null
+            ? null
+            : GitBranch.fromJson(source['git_branch']),
+        lookml_type = source['lookml_type'] == null
+            ? null
+            : source['lookml_type'].toString();
 }
 
 /**
@@ -5305,7 +9797,7 @@ class Query {
   /**
    * Operations the current user is able to perform on this object (read-only)
    */
-  Map<String, bool> can;
+  Map<String, dynamic> can;
   /**
    * Unique Id (read-only)
    */
@@ -5410,13 +9902,94 @@ class Query {
    * (DEPRECATED) Runtime (Deprecated)
    */
   double runtime;
+
+  Query() {}
+
+  Map toJson() => {
+        'can': can,
+        'id': id,
+        'model': model,
+        'view': view,
+        'filters': filters,
+        'filter_expression': filter_expression,
+        'limit': limit,
+        'column_limit': column_limit,
+        'total': total,
+        'row_total': row_total,
+        'vis_config': vis_config,
+        'filter_config': filter_config,
+        'visible_ui_sections': visible_ui_sections,
+        'slug': slug,
+        'dynamic_fields': dynamic_fields,
+        'client_id': client_id,
+        'share_url': share_url,
+        'expanded_share_url': expanded_share_url,
+        'url': url,
+        'query_timezone': query_timezone,
+        'has_table_calculations': has_table_calculations,
+        'runtime': runtime
+      };
+
+  Query.fromJson(Map source)
+      : can = source['can'],
+        id = source['id'],
+        model = source['model'] == null ? null : source['model'].toString(),
+        view = source['view'] == null ? null : source['view'].toString(),
+        fields = source['fields'] == null
+            ? null
+            : source['fields'].map<String>((i) => i as String).toList(),
+        pivots = source['pivots'] == null
+            ? null
+            : source['pivots'].map<String>((i) => i as String).toList(),
+        fill_fields = source['fill_fields'] == null
+            ? null
+            : source['fill_fields'].map<String>((i) => i as String).toList(),
+        filters = source['filters'],
+        filter_expression = source['filter_expression'] == null
+            ? null
+            : source['filter_expression'].toString(),
+        sorts = source['sorts'] == null
+            ? null
+            : source['sorts'].map<String>((i) => i as String).toList(),
+        limit = source['limit'] == null ? null : source['limit'].toString(),
+        column_limit = source['column_limit'] == null
+            ? null
+            : source['column_limit'].toString(),
+        total = source['total'],
+        row_total =
+            source['row_total'] == null ? null : source['row_total'].toString(),
+        subtotals = source['subtotals'] == null
+            ? null
+            : source['subtotals'].map<String>((i) => i as String).toList(),
+        vis_config = source['vis_config'],
+        filter_config = source['filter_config'],
+        visible_ui_sections = source['visible_ui_sections'] == null
+            ? null
+            : source['visible_ui_sections'].toString(),
+        slug = source['slug'] == null ? null : source['slug'].toString(),
+        dynamic_fields = source['dynamic_fields'] == null
+            ? null
+            : source['dynamic_fields'].toString(),
+        client_id =
+            source['client_id'] == null ? null : source['client_id'].toString(),
+        share_url =
+            source['share_url'] == null ? null : source['share_url'].toString(),
+        expanded_share_url = source['expanded_share_url'] == null
+            ? null
+            : source['expanded_share_url'].toString(),
+        url = source['url'] == null ? null : source['url'].toString(),
+        query_timezone = source['query_timezone'] == null
+            ? null
+            : source['query_timezone'].toString(),
+        has_table_calculations = source['has_table_calculations'],
+        runtime = source['runtime'];
 }
 
 class QueryTask {
   /**
    * Operations the current user is able to perform on this object (read-only)
    */
-  Map<String, bool> can;
+  Map<String, dynamic> can;
   /**
    * Unique Id (read-only)
    */
@@ -5425,6 +9998,9 @@ class QueryTask {
    * Id of query
    */
   int query_id;
+  /**
+   * query
+   */
   Query query;
   /**
    * whether or not to generate links in the query response.
@@ -5486,13 +10062,67 @@ class QueryTask {
    * The data format of the query results. (read-only)
    */
   String result_format;
+
+  QueryTask() {}
+
+  Map toJson() => {
+        'can': can,
+        'id': id,
+        'query_id': query_id,
+        'generate_links': generate_links,
+        'force_production': force_production,
+        'path_prefix': path_prefix,
+        'cache': cache,
+        'server_table_calcs': server_table_calcs,
+        'cache_only': cache_only,
+        'cache_key': cache_key,
+        'status': status,
+        'source': source,
+        'runtime': runtime,
+        'rebuild_pdts': rebuild_pdts,
+        'result_source': result_source,
+        'look_id': look_id,
+        'dashboard_id': dashboard_id,
+        'result_format': result_format
+      };
+
+  QueryTask.fromJson(Map source)
+      : can = source['can'],
+        id = source['id'] == null ? null : source['id'].toString(),
+        query_id = source['query_id'],
+        query =
+            source['query'] == null ? null : Query.fromJson(source['query']),
+        generate_links = source['generate_links'],
+        force_production = source['force_production'],
+        path_prefix = source['path_prefix'] == null
+            ? null
+            : source['path_prefix'].toString(),
+        cache = source['cache'],
+        server_table_calcs = source['server_table_calcs'],
+        cache_only = source['cache_only'],
+        cache_key =
+            source['cache_key'] == null ? null : source['cache_key'].toString(),
+        status = source['status'] == null ? null : source['status'].toString(),
+        source = source['source'] == null ? null : source['source'].toString(),
+        runtime = source['runtime'],
+        rebuild_pdts = source['rebuild_pdts'],
+        result_source = source['result_source'] == null
+            ? null
+            : source['result_source'].toString(),
+        look_id = source['look_id'],
+        dashboard_id = source['dashboard_id'] == null
+            ? null
+            : source['dashboard_id'].toString(),
+        result_format = source['result_format'] == null
+            ? null
+            : source['result_format'].toString();
 }
 
 class RenderTask {
   /**
    * Operations the current user is able to perform on this object (read-only)
    */
-  Map<String, bool> can;
+  Map<String, dynamic> can;
   /**
    * Date/Time render task was created (read-only)
    */
@@ -5565,13 +10195,72 @@ class RenderTask {
    * Output width in pixels (read-only)
    */
   int width;
+
+  RenderTask() {}
+
+  Map toJson() => {
+        'can': can,
+        'created_at': created_at,
+        'dashboard_filters': dashboard_filters,
+        'dashboard_id': dashboard_id,
+        'dashboard_style': dashboard_style,
+        'finalized_at': finalized_at,
+        'height': height,
+        'id': id,
+        'look_id': look_id,
+        'lookml_dashboard_id': lookml_dashboard_id,
+        'query_id': query_id,
+        'query_runtime': query_runtime,
+        'render_runtime': render_runtime,
+        'result_format': result_format,
+        'runtime': runtime,
+        'status': status,
+        'status_detail': status_detail,
+        'user_id': user_id,
+        'width': width
+      };
+
+  RenderTask.fromJson(Map source)
+      : can = source['can'],
+        created_at = source['created_at'] == null
+            ? null
+            : source['created_at'].toString(),
+        dashboard_filters = source['dashboard_filters'] == null
+            ? null
+            : source['dashboard_filters'].toString(),
+        dashboard_id = source['dashboard_id'],
+        dashboard_style = source['dashboard_style'] == null
+            ? null
+            : source['dashboard_style'].toString(),
+        finalized_at = source['finalized_at'] == null
+            ? null
+            : source['finalized_at'].toString(),
+        height = source['height'],
+        id = source['id'] == null ? null : source['id'].toString(),
+        look_id = source['look_id'],
+        lookml_dashboard_id = source['lookml_dashboard_id'] == null
+            ? null
+            : source['lookml_dashboard_id'].toString(),
+        query_id = source['query_id'],
+        query_runtime = source['query_runtime'],
+        render_runtime = source['render_runtime'],
+        result_format = source['result_format'] == null
+            ? null
+            : source['result_format'].toString(),
+        runtime = source['runtime'],
+        status = source['status'] == null ? null : source['status'].toString(),
+        status_detail = source['status_detail'] == null
+            ? null
+            : source['status_detail'].toString(),
+        user_id = source['user_id'],
+        width = source['width'];
 }
 
 class RepositoryCredential {
   /**
    * Operations the current user is able to perform on this object (read-only)
    */
-  Map<String, bool> can;
+  Map<String, dynamic> can;
   /**
    * Unique Id (read-only)
    */
@@ -5600,6 +10289,39 @@ class RepositoryCredential {
    * Whether the credentials have been configured for the Git Repository. (read-only)
    */
   bool is_configured;
+
+  RepositoryCredential() {}
+
+  Map toJson() => {
+        'can': can,
+        'id': id,
+        'root_project_id': root_project_id,
+        'remote_url': remote_url,
+        'git_username': git_username,
+        'git_password': git_password,
+        'ssh_public_key': ssh_public_key,
+        'is_configured': is_configured
+      };
+
+  RepositoryCredential.fromJson(Map source)
+      : can = source['can'],
+        id = source['id'] == null ? null : source['id'].toString(),
+        root_project_id = source['root_project_id'] == null
+            ? null
+            : source['root_project_id'].toString(),
+        remote_url = source['remote_url'] == null
+            ? null
+            : source['remote_url'].toString(),
+        git_username = source['git_username'] == null
+            ? null
+            : source['git_username'].toString(),
+        git_password = source['git_password'] == null
+            ? null
+            : source['git_password'].toString(),
+        ssh_public_key = source['ssh_public_key'] == null
+            ? null
+            : source['ssh_public_key'].toString(),
+        is_configured = source['is_configured'];
 }
 
 /**
@@ -5635,6 +10357,20 @@ class ResultMakerFilterables {
    * array of dashboard_filter_name: and field: objects. (read-only)
    */
   List<ResultMakerFilterablesListen> listen;
+
+  ResultMakerFilterables() {}
+
+  Map toJson() => {'model': model, 'view': view, 'name': name};
+
+  ResultMakerFilterables.fromJson(Map source)
+      : model = source['model'] == null ? null : source['model'].toString(),
+        view = source['view'] == null ? null : source['view'].toString(),
+        name = source['name'] == null ? null : source['name'].toString(),
+        listen = source['listen'] == null
+            ? null
+            : (source['listen'] as List)
+                .map((i) => ResultMakerFilterablesListen.fromJson(i))
+                .toList();
 }
 
 class ResultMakerFilterablesListen {
@@ -5646,6 +10382,17 @@ class ResultMakerFilterablesListen {
    * The name of the field in the filterable to filter with the value of the dashboard filter.
    */
   String field;
+
+  ResultMakerFilterablesListen() {}
+
+  Map toJson() =>
+      {'dashboard_filter_name': dashboard_filter_name, 'field': field};
+
+  ResultMakerFilterablesListen.fromJson(Map source)
+      : dashboard_filter_name = source['dashboard_filter_name'] == null
+            ? null
+            : source['dashboard_filter_name'].toString(),
+        field = source['field'] == null ? null : source['field'].toString();
 }
 
 class ResultMakerWithIdVisConfigAndDynamicFields {
@@ -5681,18 +10428,58 @@ class ResultMakerWithIdVisConfigAndDynamicFields {
    * ID of SQL Query if this is a SQL Runner Query (read-only)
    */
   String sql_query_id;
+  /**
+   * query
+   */
   Query query;
   /**
    * Vis config of the constituent Query, or Merge Query. (read-only)
    */
   Map<String, dynamic> vis_config;
+
+  ResultMakerWithIdVisConfigAndDynamicFields() {}
+
+  Map toJson() => {
+        'id': id,
+        'dynamic_fields': dynamic_fields,
+        'merge_result_id': merge_result_id,
+        'total': total,
+        'query_id': query_id,
+        'sql_query_id': sql_query_id,
+        'vis_config': vis_config
+      };
+
+  ResultMakerWithIdVisConfigAndDynamicFields.fromJson(Map source)
+      : id = source['id'],
+        dynamic_fields = source['dynamic_fields'] == null
+            ? null
+            : source['dynamic_fields'].toString(),
+        filterables = source['filterables'] == null
+            ? null
+            : (source['filterables'] as List)
+                .map((i) => ResultMakerFilterables.fromJson(i))
+                .toList(),
+        sorts = source['sorts'] == null
+            ? null
+            : source['sorts'].map<String>((i) => i as String).toList(),
+        merge_result_id = source['merge_result_id'] == null
+            ? null
+            : source['merge_result_id'].toString(),
+        total = source['total'],
+        query_id = source['query_id'],
+        sql_query_id = source['sql_query_id'] == null
+            ? null
+            : source['sql_query_id'].toString(),
+        query =
+            source['query'] == null ? null : Query.fromJson(source['query']),
+        vis_config = source['vis_config'];
 }
 
 class Role {
   /**
    * Operations the current user is able to perform on this object (read-only)
    */
-  Map<String, bool> can;
+  Map<String, dynamic> can;
   /**
    * Unique Id (read-only)
    */
@@ -5701,11 +10488,17 @@ class Role {
    * Name of Role
    */
   String name;
+  /**
+   * permission_set
+   */
   PermissionSet permission_set;
   /**
    * (Write-Only) Id of permission set
    */
   int permission_set_id;
+  /**
+   * model_set
+   */
   ModelSet model_set;
   /**
    * (Write-Only) Id of model set
@@ -5719,20 +10512,60 @@ class Role {
    * Link to get list of users with this role (read-only)
    */
   String users_url;
+
+  Role() {}
+
+  Map toJson() => {
+        'can': can,
+        'id': id,
+        'name': name,
+        'permission_set_id': permission_set_id,
+        'model_set_id': model_set_id,
+        'url': url,
+        'users_url': users_url
+      };
+
+  Role.fromJson(Map source)
+      : can = source['can'],
+        id = source['id'],
+        name = source['name'] == null ? null : source['name'].toString(),
+        permission_set = source['permission_set'] == null
+            ? null
+            : PermissionSet.fromJson(source['permission_set']),
+        permission_set_id = source['permission_set_id'],
+        model_set = source['model_set'] == null
+            ? null
+            : ModelSet.fromJson(source['model_set']),
+        model_set_id = source['model_set_id'],
+        url = source['url'] == null ? null : source['url'].toString(),
+        users_url =
+            source['users_url'] == null ? null : source['users_url'].toString();
 }
 
 class RunningQueries {
   /**
    * Operations the current user is able to perform on this object (read-only)
    */
-  Map<String, bool> can;
+  Map<String, dynamic> can;
   /**
    * Unique Id (read-only)
    */
   int id;
+  /**
+   * user
+   */
   UserPublic user;
+  /**
+   * query
+   */
   Query query;
+  /**
+   * sql_query
+   */
   SqlQuery sql_query;
+  /**
+   * look
+   */
   LookBasic look;
   /**
    * Date/Time Query was initiated (read-only)
@@ -5794,13 +10627,78 @@ class RunningQueries {
    * SQL text of the query as run (read-only)
    */
   String sql;
+
+  RunningQueries() {}
+
+  Map toJson() => {
+        'can': can,
+        'id': id,
+        'created_at': created_at,
+        'completed_at': completed_at,
+        'query_id': query_id,
+        'source': source,
+        'node_id': node_id,
+        'slug': slug,
+        'query_task_id': query_task_id,
+        'cache_key': cache_key,
+        'connection_name': connection_name,
+        'dialect': dialect,
+        'connection_id': connection_id,
+        'message': message,
+        'status': status,
+        'runtime': runtime,
+        'sql': sql
+      };
+
+  RunningQueries.fromJson(Map source)
+      : can = source['can'],
+        id = source['id'],
+        user =
+            source['user'] == null ? null : UserPublic.fromJson(source['user']),
+        query =
+            source['query'] == null ? null : Query.fromJson(source['query']),
+        sql_query = source['sql_query'] == null
+            ? null
+            : SqlQuery.fromJson(source['sql_query']),
+        look =
+            source['look'] == null ? null : LookBasic.fromJson(source['look']),
+        created_at = source['created_at'] == null
+            ? null
+            : source['created_at'].toString(),
+        completed_at = source['completed_at'] == null
+            ? null
+            : source['completed_at'].toString(),
+        query_id =
+            source['query_id'] == null ? null : source['query_id'].toString(),
+        source = source['source'] == null ? null : source['source'].toString(),
+        node_id =
+            source['node_id'] == null ? null : source['node_id'].toString(),
+        slug = source['slug'] == null ? null : source['slug'].toString(),
+        query_task_id = source['query_task_id'] == null
+            ? null
+            : source['query_task_id'].toString(),
+        cache_key =
+            source['cache_key'] == null ? null : source['cache_key'].toString(),
+        connection_name = source['connection_name'] == null
+            ? null
+            : source['connection_name'].toString(),
+        dialect =
+            source['dialect'] == null ? null : source['dialect'].toString(),
+        connection_id = source['connection_id'] == null
+            ? null
+            : source['connection_id'].toString(),
+        message =
+            source['message'] == null ? null : source['message'].toString(),
+        status = source['status'] == null ? null : source['status'].toString(),
+        runtime = source['runtime'],
+        sql = source['sql'] == null ? null : source['sql'].toString();
 }
 
 class SamlConfig {
   /**
    * Operations the current user is able to perform on this object (read-only)
    */
-  Map<String, bool> can;
+  Map<String, dynamic> can;
   /**
    * Enable/Disable Saml authentication for the server
    */
@@ -5929,6 +10827,132 @@ class SamlConfig {
    * Link to get this item (read-only)
    */
   String url;
+
+  SamlConfig() {}
+
+  Map toJson() => {
+        'can': can,
+        'enabled': enabled,
+        'idp_cert': idp_cert,
+        'idp_url': idp_url,
+        'idp_issuer': idp_issuer,
+        'idp_audience': idp_audience,
+        'allowed_clock_drift': allowed_clock_drift,
+        'user_attribute_map_email': user_attribute_map_email,
+        'user_attribute_map_first_name': user_attribute_map_first_name,
+        'user_attribute_map_last_name': user_attribute_map_last_name,
+        'new_user_migration_types': new_user_migration_types,
+        'alternate_email_login_allowed': alternate_email_login_allowed,
+        'test_slug': test_slug,
+        'modified_at': modified_at,
+        'modified_by': modified_by,
+        'set_roles_from_groups': set_roles_from_groups,
+        'groups_attribute': groups_attribute,
+        'auth_requires_role': auth_requires_role,
+        'groups_finder_type': groups_finder_type,
+        'groups_member_value': groups_member_value,
+        'bypass_login_page': bypass_login_page,
+        'allow_normal_group_membership': allow_normal_group_membership,
+        'allow_roles_from_normal_groups': allow_roles_from_normal_groups,
+        'allow_direct_roles': allow_direct_roles,
+        'url': url
+      };
+
+  SamlConfig.fromJson(Map source)
+      : can = source['can'],
+        enabled = source['enabled'],
+        idp_cert =
+            source['idp_cert'] == null ? null : source['idp_cert'].toString(),
+        idp_url =
+            source['idp_url'] == null ? null : source['idp_url'].toString(),
+        idp_issuer = source['idp_issuer'] == null
+            ? null
+            : source['idp_issuer'].toString(),
+        idp_audience = source['idp_audience'] == null
+            ? null
+            : source['idp_audience'].toString(),
+        allowed_clock_drift = source['allowed_clock_drift'],
+        user_attribute_map_email = source['user_attribute_map_email'] == null
+            ? null
+            : source['user_attribute_map_email'].toString(),
+        user_attribute_map_first_name =
+            source['user_attribute_map_first_name'] == null
+                ? null
+                : source['user_attribute_map_first_name'].toString(),
+        user_attribute_map_last_name =
+            source['user_attribute_map_last_name'] == null
+                ? null
+                : source['user_attribute_map_last_name'].toString(),
+        new_user_migration_types = source['new_user_migration_types'] == null
+            ? null
+            : source['new_user_migration_types'].toString(),
+        alternate_email_login_allowed = source['alternate_email_login_allowed'],
+        test_slug =
+            source['test_slug'] == null ? null : source['test_slug'].toString(),
+        modified_at = source['modified_at'] == null
+            ? null
+            : source['modified_at'].toString(),
+        modified_by = source['modified_by'] == null
+            ? null
+            : source['modified_by'].toString(),
+        default_new_user_roles = source['default_new_user_roles'] == null
+            ? null
+            : (source['default_new_user_roles'] as List)
+                .map((i) => Role.fromJson(i))
+                .toList(),
+        default_new_user_groups = source['default_new_user_groups'] == null
+            ? null
+            : (source['default_new_user_groups'] as List)
+                .map((i) => Group.fromJson(i))
+                .toList(),
+        default_new_user_role_ids = source['default_new_user_role_ids'] == null
+            ? null
+            : source['default_new_user_role_ids']
+                .map<int>((i) => i as int)
+                .toList(),
+        default_new_user_group_ids =
+            source['default_new_user_group_ids'] == null
+                ? null
+                : source['default_new_user_group_ids']
+                    .map<int>((i) => i as int)
+                    .toList(),
+        set_roles_from_groups = source['set_roles_from_groups'],
+        groups_attribute = source['groups_attribute'] == null
+            ? null
+            : source['groups_attribute'].toString(),
+        groups = source['groups'] == null
+            ? null
+            : (source['groups'] as List)
+                .map((i) => SamlGroupRead.fromJson(i))
+                .toList(),
+        groups_with_role_ids = source['groups_with_role_ids'] == null
+            ? null
+            : (source['groups_with_role_ids'] as List)
+                .map((i) => SamlGroupWrite.fromJson(i))
+                .toList(),
+        auth_requires_role = source['auth_requires_role'],
+        user_attributes = source['user_attributes'] == null
+            ? null
+            : (source['user_attributes'] as List)
+                .map((i) => SamlUserAttributeRead.fromJson(i))
+                .toList(),
+        user_attributes_with_ids = source['user_attributes_with_ids'] == null
+            ? null
+            : (source['user_attributes_with_ids'] as List)
+                .map((i) => SamlUserAttributeWrite.fromJson(i))
+                .toList(),
+        groups_finder_type = source['groups_finder_type'] == null
+            ? null
+            : source['groups_finder_type'].toString(),
+        groups_member_value = source['groups_member_value'] == null
+            ? null
+            : source['groups_member_value'].toString(),
+        bypass_login_page = source['bypass_login_page'],
+        allow_normal_group_membership = source['allow_normal_group_membership'],
+        allow_roles_from_normal_groups =
+            source['allow_roles_from_normal_groups'],
+        allow_direct_roles = source['allow_direct_roles'],
+        url = source['url'] == null ? null : source['url'].toString();
 }
 
 class SamlGroupRead {
@@ -5956,6 +10980,28 @@ class SamlGroupRead {
    * Link to saml config (read-only)
    */
   String url;
+
+  SamlGroupRead() {}
+
+  Map toJson() => {
+        'id': id,
+        'looker_group_id': looker_group_id,
+        'looker_group_name': looker_group_name,
+        'name': name,
+        'url': url
+      };
+
+  SamlGroupRead.fromJson(Map source)
+      : id = source['id'],
+        looker_group_id = source['looker_group_id'],
+        looker_group_name = source['looker_group_name'] == null
+            ? null
+            : source['looker_group_name'].toString(),
+        name = source['name'] == null ? null : source['name'].toString(),
+        roles = source['roles'] == null
+            ? null
+            : (source['roles'] as List).map((i) => Role.fromJson(i)).toList(),
+        url = source['url'] == null ? null : source['url'].toString();
 }
 
 class SamlGroupWrite {
@@ -5983,13 +11029,35 @@ class SamlGroupWrite {
    * Link to saml config (read-only)
    */
   String url;
+
+  SamlGroupWrite() {}
+
+  Map toJson() => {
+        'id': id,
+        'looker_group_id': looker_group_id,
+        'looker_group_name': looker_group_name,
+        'name': name,
+        'url': url
+      };
+
+  SamlGroupWrite.fromJson(Map source)
+      : id = source['id'],
+        looker_group_id = source['looker_group_id'],
+        looker_group_name = source['looker_group_name'] == null
+            ? null
+            : source['looker_group_name'].toString(),
+        name = source['name'] == null ? null : source['name'].toString(),
+        role_ids = source['role_ids'] == null
+            ? null
+            : source['role_ids'].map<int>((i) => i as int).toList(),
+        url = source['url'] == null ? null : source['url'].toString();
 }
 
 class SamlMetadataParseResult {
   /**
    * Operations the current user is able to perform on this object (read-only)
    */
-  Map<String, bool> can;
+  Map<String, dynamic> can;
   /**
    * Identify Provider Issuer (read-only)
    */
@@ -6002,6 +11070,25 @@ class SamlMetadataParseResult {
    * Identify Provider Certificate (read-only)
    */
   String idp_cert;
+
+  SamlMetadataParseResult() {}
+
+  Map toJson() => {
+        'can': can,
+        'idp_issuer': idp_issuer,
+        'idp_url': idp_url,
+        'idp_cert': idp_cert
+      };
+
+  SamlMetadataParseResult.fromJson(Map source)
+      : can = source['can'],
+        idp_issuer = source['idp_issuer'] == null
+            ? null
+            : source['idp_issuer'].toString(),
+        idp_url =
+            source['idp_url'] == null ? null : source['idp_url'].toString(),
+        idp_cert =
+            source['idp_cert'] == null ? null : source['idp_cert'].toString();
 }
 
 class SamlUserAttributeRead {
@@ -6021,6 +11108,20 @@ class SamlUserAttributeRead {
    * Link to saml config (read-only)
    */
   String url;
+
+  SamlUserAttributeRead() {}
+
+  Map toJson() => {'name': name, 'required': required, 'url': url};
+
+  SamlUserAttributeRead.fromJson(Map source)
+      : name = source['name'] == null ? null : source['name'].toString(),
+        required = source['required'],
+        user_attributes = source['user_attributes'] == null
+            ? null
+            : (source['user_attributes'] as List)
+                .map((i) => UserAttribute.fromJson(i))
+                .toList(),
+        url = source['url'] == null ? null : source['url'].toString();
 }
 
 class SamlUserAttributeWrite {
@@ -6040,6 +11141,18 @@ class SamlUserAttributeWrite {
    * Link to saml config (read-only)
    */
   String url;
+
+  SamlUserAttributeWrite() {}
+
+  Map toJson() => {'name': name, 'required': required, 'url': url};
+
+  SamlUserAttributeWrite.fromJson(Map source)
+      : name = source['name'] == null ? null : source['name'].toString(),
+        required = source['required'],
+        user_attribute_ids = source['user_attribute_ids'] == null
+            ? null
+            : source['user_attribute_ids'].map<int>((i) => i as int).toList(),
+        url = source['url'] == null ? null : source['url'].toString();
 }
 
 class ScheduledPlan {
@@ -6163,6 +11276,9 @@ class ScheduledPlan {
    * Title (read-only)
    */
   String title;
+  /**
+   * user
+   */
   UserPublic user;
   /**
    * When the ScheduledPlan will next run (null if running once) (read-only)
@@ -6175,7 +11291,100 @@ class ScheduledPlan {
   /**
    * Operations the current user is able to perform on this object (read-only)
    */
-  Map<String, bool> can;
+  Map<String, dynamic> can;
+
+  ScheduledPlan() {}
+
+  Map toJson() => {
+        'name': name,
+        'user_id': user_id,
+        'run_as_recipient': run_as_recipient,
+        'enabled': enabled,
+        'look_id': look_id,
+        'dashboard_id': dashboard_id,
+        'lookml_dashboard_id': lookml_dashboard_id,
+        'filters_string': filters_string,
+        'dashboard_filters': dashboard_filters,
+        'require_results': require_results,
+        'require_no_results': require_no_results,
+        'require_change': require_change,
+        'send_all_results': send_all_results,
+        'crontab': crontab,
+        'datagroup': datagroup,
+        'timezone': timezone,
+        'query_id': query_id,
+        'run_once': run_once,
+        'include_links': include_links,
+        'pdf_paper_size': pdf_paper_size,
+        'pdf_landscape': pdf_landscape,
+        'embed': embed,
+        'color_theme': color_theme,
+        'long_tables': long_tables,
+        'inline_table_width': inline_table_width,
+        'id': id,
+        'created_at': created_at,
+        'updated_at': updated_at,
+        'title': title,
+        'next_run_at': next_run_at,
+        'last_run_at': last_run_at,
+        'can': can
+      };
+
+  ScheduledPlan.fromJson(Map source)
+      : name = source['name'] == null ? null : source['name'].toString(),
+        user_id = source['user_id'],
+        run_as_recipient = source['run_as_recipient'],
+        enabled = source['enabled'],
+        look_id = source['look_id'],
+        dashboard_id = source['dashboard_id'],
+        lookml_dashboard_id = source['lookml_dashboard_id'] == null
+            ? null
+            : source['lookml_dashboard_id'].toString(),
+        filters_string = source['filters_string'] == null
+            ? null
+            : source['filters_string'].toString(),
+        dashboard_filters = source['dashboard_filters'] == null
+            ? null
+            : source['dashboard_filters'].toString(),
+        require_results = source['require_results'],
+        require_no_results = source['require_no_results'],
+        require_change = source['require_change'],
+        send_all_results = source['send_all_results'],
+        crontab =
+            source['crontab'] == null ? null : source['crontab'].toString(),
+        datagroup =
+            source['datagroup'] == null ? null : source['datagroup'].toString(),
+        timezone =
+            source['timezone'] == null ? null : source['timezone'].toString(),
+        query_id =
+            source['query_id'] == null ? null : source['query_id'].toString(),
+        scheduled_plan_destination =
+            source['scheduled_plan_destination'] == null
+                ? null
+                : (source['scheduled_plan_destination'] as List)
+                    .map((i) => ScheduledPlanDestination.fromJson(i))
+                    .toList(),
+        run_once = source['run_once'],
+        include_links = source['include_links'],
+        pdf_paper_size = source['pdf_paper_size'] == null
+            ? null
+            : source['pdf_paper_size'].toString(),
+        pdf_landscape = source['pdf_landscape'],
+        embed = source['embed'],
+        color_theme = source['color_theme'] == null
+            ? null
+            : source['color_theme'].toString(),
+        long_tables = source['long_tables'],
+        inline_table_width = source['inline_table_width'],
+        id = source['id'],
+        created_at = source['created_at'],
+        updated_at = source['updated_at'],
+        title = source['title'] == null ? null : source['title'].toString(),
+        user =
+            source['user'] == null ? null : UserPublic.fromJson(source['user']),
+        next_run_at = source['next_run_at'],
+        last_run_at = source['last_run_at'],
+        can = source['can'];
 }
 
 class ScheduledPlanDestination {
@@ -6223,13 +11432,48 @@ class ScheduledPlanDestination {
    * Optional message to be included in scheduled emails
    */
   String message;
+
+  ScheduledPlanDestination() {}
+
+  Map toJson() => {
+        'id': id,
+        'scheduled_plan_id': scheduled_plan_id,
+        'format': format,
+        'apply_formatting': apply_formatting,
+        'apply_vis': apply_vis,
+        'address': address,
+        'looker_recipient': looker_recipient,
+        'type': type,
+        'parameters': parameters,
+        'secret_parameters': secret_parameters,
+        'message': message
+      };
+
+  ScheduledPlanDestination.fromJson(Map source)
+      : id = source['id'],
+        scheduled_plan_id = source['scheduled_plan_id'],
+        format = source['format'] == null ? null : source['format'].toString(),
+        apply_formatting = source['apply_formatting'],
+        apply_vis = source['apply_vis'],
+        address =
+            source['address'] == null ? null : source['address'].toString(),
+        looker_recipient = source['looker_recipient'],
+        type = source['type'] == null ? null : source['type'].toString(),
+        parameters = source['parameters'] == null
+            ? null
+            : source['parameters'].toString(),
+        secret_parameters = source['secret_parameters'] == null
+            ? null
+            : source['secret_parameters'].toString(),
+        message =
+            source['message'] == null ? null : source['message'].toString();
 }
 
 class Session {
   /**
    * Operations the current user is able to perform on this object (read-only)
    */
-  Map<String, bool> can;
+  Map<String, dynamic> can;
   /**
    * Unique Id (read-only)
    */
@@ -6286,13 +11530,64 @@ class Session {
    * Link to get this item (read-only)
    */
   String url;
+
+  Session() {}
+
+  Map toJson() => {
+        'can': can,
+        'id': id,
+        'ip_address': ip_address,
+        'browser': browser,
+        'operating_system': operating_system,
+        'city': city,
+        'state': state,
+        'country': country,
+        'credentials_type': credentials_type,
+        'extended_at': extended_at,
+        'extended_count': extended_count,
+        'sudo_user_id': sudo_user_id,
+        'created_at': created_at,
+        'expires_at': expires_at,
+        'url': url
+      };
+
+  Session.fromJson(Map source)
+      : can = source['can'],
+        id = source['id'],
+        ip_address = source['ip_address'] == null
+            ? null
+            : source['ip_address'].toString(),
+        browser =
+            source['browser'] == null ? null : source['browser'].toString(),
+        operating_system = source['operating_system'] == null
+            ? null
+            : source['operating_system'].toString(),
+        city = source['city'] == null ? null : source['city'].toString(),
+        state = source['state'] == null ? null : source['state'].toString(),
+        country =
+            source['country'] == null ? null : source['country'].toString(),
+        credentials_type = source['credentials_type'] == null
+            ? null
+            : source['credentials_type'].toString(),
+        extended_at = source['extended_at'] == null
+            ? null
+            : source['extended_at'].toString(),
+        extended_count = source['extended_count'],
+        sudo_user_id = source['sudo_user_id'],
+        created_at = source['created_at'] == null
+            ? null
+            : source['created_at'].toString(),
+        expires_at = source['expires_at'] == null
+            ? null
+            : source['expires_at'].toString(),
+        url = source['url'] == null ? null : source['url'].toString();
 }
 
 class SessionConfig {
   /**
    * Operations the current user is able to perform on this object (read-only)
    */
-  Map<String, bool> can;
+  Map<String, dynamic> can;
   /**
    * Allow users to have persistent sessions when they login
    */
@@ -6313,6 +11608,25 @@ class SessionConfig {
    * Track location of session when user logs in.
    */
   bool track_session_location;
+
+  SessionConfig() {}
+
+  Map toJson() => {
+        'can': can,
+        'allow_persistent_sessions': allow_persistent_sessions,
+        'session_minutes': session_minutes,
+        'unlimited_sessions_per_user': unlimited_sessions_per_user,
+        'use_inactivity_based_logout': use_inactivity_based_logout,
+        'track_session_location': track_session_location
+      };
+
+  SessionConfig.fromJson(Map source)
+      : can = source['can'],
+        allow_persistent_sessions = source['allow_persistent_sessions'],
+        session_minutes = source['session_minutes'],
+        unlimited_sessions_per_user = source['unlimited_sessions_per_user'],
+        use_inactivity_based_logout = source['use_inactivity_based_logout'],
+        track_session_location = source['track_session_location'];
 }
 
 class Snippet {
@@ -6331,7 +11645,17 @@ class Snippet {
   /**
    * Operations the current user is able to perform on this object (read-only)
    */
-  Map<String, bool> can;
+  Map<String, dynamic> can;
+
+  Snippet() {}
+
+  Map toJson() => {'name': name, 'label': label, 'sql': sql, 'can': can};
+
+  Snippet.fromJson(Map source)
+      : name = source['name'] == null ? null : source['name'].toString(),
+        label = source['label'] == null ? null : source['label'].toString(),
+        sql = source['sql'] == null ? null : source['sql'].toString(),
+        can = source['can'];
 }
 
 class Space {
@@ -6398,7 +11722,7 @@ class Space {
   /**
    * Operations the current user is able to perform on this object (read-only)
    */
-  Map<String, bool> can;
+  Map<String, dynamic> can;
   /**
    * Dashboards (read-only)
    */
@@ -6407,6 +11731,58 @@ class Space {
    * Looks (read-only)
    */
   List<LookWithDashboards> looks;
+
+  Space() {}
+
+  Map toJson() => {
+        'name': name,
+        'parent_id': parent_id,
+        'id': id,
+        'content_metadata_id': content_metadata_id,
+        'created_at': created_at,
+        'creator_id': creator_id,
+        'child_count': child_count,
+        'external_id': external_id,
+        'is_embed': is_embed,
+        'is_embed_shared_root': is_embed_shared_root,
+        'is_embed_users_root': is_embed_users_root,
+        'is_personal': is_personal,
+        'is_personal_descendant': is_personal_descendant,
+        'is_shared_root': is_shared_root,
+        'is_users_root': is_users_root,
+        'can': can
+      };
+
+  Space.fromJson(Map source)
+      : name = source['name'] == null ? null : source['name'].toString(),
+        parent_id =
+            source['parent_id'] == null ? null : source['parent_id'].toString(),
+        id = source['id'] == null ? null : source['id'].toString(),
+        content_metadata_id = source['content_metadata_id'],
+        created_at = source['created_at'],
+        creator_id = source['creator_id'],
+        child_count = source['child_count'],
+        external_id = source['external_id'] == null
+            ? null
+            : source['external_id'].toString(),
+        is_embed = source['is_embed'],
+        is_embed_shared_root = source['is_embed_shared_root'],
+        is_embed_users_root = source['is_embed_users_root'],
+        is_personal = source['is_personal'],
+        is_personal_descendant = source['is_personal_descendant'],
+        is_shared_root = source['is_shared_root'],
+        is_users_root = source['is_users_root'],
+        can = source['can'],
+        dashboards = source['dashboards'] == null
+            ? null
+            : (source['dashboards'] as List)
+                .map((i) => DashboardBase.fromJson(i))
+                .toList(),
+        looks = source['looks'] == null
+            ? null
+            : (source['looks'] as List)
+                .map((i) => LookWithDashboards.fromJson(i))
+                .toList();
 }
 
 class SpaceBase {
@@ -6473,14 +11849,56 @@ class SpaceBase {
   /**
    * Operations the current user is able to perform on this object (read-only)
    */
-  Map<String, bool> can;
+  Map<String, dynamic> can;
+
+  SpaceBase() {}
+
+  Map toJson() => {
+        'name': name,
+        'parent_id': parent_id,
+        'id': id,
+        'content_metadata_id': content_metadata_id,
+        'created_at': created_at,
+        'creator_id': creator_id,
+        'child_count': child_count,
+        'external_id': external_id,
+        'is_embed': is_embed,
+        'is_embed_shared_root': is_embed_shared_root,
+        'is_embed_users_root': is_embed_users_root,
+        'is_personal': is_personal,
+        'is_personal_descendant': is_personal_descendant,
+        'is_shared_root': is_shared_root,
+        'is_users_root': is_users_root,
+        'can': can
+      };
+
+  SpaceBase.fromJson(Map source)
+      : name = source['name'] == null ? null : source['name'].toString(),
+        parent_id =
+            source['parent_id'] == null ? null : source['parent_id'].toString(),
+        id = source['id'] == null ? null : source['id'].toString(),
+        content_metadata_id = source['content_metadata_id'],
+        created_at = source['created_at'],
+        creator_id = source['creator_id'],
+        child_count = source['child_count'],
+        external_id = source['external_id'] == null
+            ? null
+            : source['external_id'].toString(),
+        is_embed = source['is_embed'],
+        is_embed_shared_root = source['is_embed_shared_root'],
+        is_embed_users_root = source['is_embed_users_root'],
+        is_personal = source['is_personal'],
+        is_personal_descendant = source['is_personal_descendant'],
+        is_shared_root = source['is_shared_root'],
+        is_users_root = source['is_users_root'],
+        can = source['can'];
 }
 
 class SqlQuery {
   /**
    * Operations the current user is able to perform on this object (read-only)
    */
-  Map<String, bool> can;
+  Map<String, dynamic> can;
   /**
    * The identifier of the SQL query (read-only)
    */
@@ -6505,11 +11923,17 @@ class SqlQuery {
    * The most recent time this query was run (read-only)
    */
   String last_run_at;
+  /**
+   * connection
+   */
   DBConnectionBase connection;
   /**
    * Model name this query uses (read-only)
    */
   String model_name;
+  /**
+   * creator
+   */
   UserPublic creator;
   /**
    * Explore page URL for this SQL query (read-only)
@@ -6527,6 +11951,49 @@ class SqlQuery {
    * ID of the ResultMakerLookup entry.
    */
   int result_maker_id;
+
+  SqlQuery() {}
+
+  Map toJson() => {
+        'can': can,
+        'slug': slug,
+        'last_runtime': last_runtime,
+        'run_count': run_count,
+        'browser_limit': browser_limit,
+        'sql': sql,
+        'last_run_at': last_run_at,
+        'model_name': model_name,
+        'explore_url': explore_url,
+        'plaintext': plaintext,
+        'vis_config': vis_config,
+        'result_maker_id': result_maker_id
+      };
+
+  SqlQuery.fromJson(Map source)
+      : can = source['can'],
+        slug = source['slug'] == null ? null : source['slug'].toString(),
+        last_runtime = source['last_runtime'],
+        run_count = source['run_count'],
+        browser_limit = source['browser_limit'],
+        sql = source['sql'] == null ? null : source['sql'].toString(),
+        last_run_at = source['last_run_at'] == null
+            ? null
+            : source['last_run_at'].toString(),
+        connection = source['connection'] == null
+            ? null
+            : DBConnectionBase.fromJson(source['connection']),
+        model_name = source['model_name'] == null
+            ? null
+            : source['model_name'].toString(),
+        creator = source['creator'] == null
+            ? null
+            : UserPublic.fromJson(source['creator']),
+        explore_url = source['explore_url'] == null
+            ? null
+            : source['explore_url'].toString(),
+        plaintext = source['plaintext'],
+        vis_config = source['vis_config'],
+        result_maker_id = source['result_maker_id'];
 }
 
 class SqlQueryCreate {
@@ -6550,6 +12017,29 @@ class SqlQueryCreate {
    * Visualization configuration properties. These properties are typically opaque and differ based on the type of visualization used. There is no specified set of allowed keys. The values can be any type supported by JSON. A "type" key with a string value is often present, and is used by Looker to determine which visualization to present. Visualizations ignore unknown vis_config properties.
    */
   Map<String, dynamic> vis_config;
+
+  SqlQueryCreate() {}
+
+  Map toJson() => {
+        'connection_name': connection_name,
+        'connection_id': connection_id,
+        'model_name': model_name,
+        'sql': sql,
+        'vis_config': vis_config
+      };
+
+  SqlQueryCreate.fromJson(Map source)
+      : connection_name = source['connection_name'] == null
+            ? null
+            : source['connection_name'].toString(),
+        connection_id = source['connection_id'] == null
+            ? null
+            : source['connection_id'].toString(),
+        model_name = source['model_name'] == null
+            ? null
+            : source['model_name'].toString(),
+        sql = source['sql'] == null ? null : source['sql'].toString(),
+        vis_config = source['vis_config'];
 }
 
 /**
@@ -6595,7 +12085,7 @@ class Theme {
   /**
    * Operations the current user is able to perform on this object (read-only)
    */
-  Map<String, bool> can;
+  Map<String, dynamic> can;
   /**
    * Timestamp for when this theme becomes active. Null=always
    */
@@ -6612,7 +12102,30 @@ class Theme {
    * Name of theme. Can only be alphanumeric and underscores.
    */
   String name;
+  /**
+   * settings
+   */
   ThemeSettings settings;
+
+  Theme() {}
+
+  Map toJson() => {
+        'can': can,
+        'begin_at': begin_at,
+        'end_at': end_at,
+        'id': id,
+        'name': name
+      };
+
+  Theme.fromJson(Map source)
+      : can = source['can'],
+        begin_at = source['begin_at'],
+        end_at = source['end_at'],
+        id = source['id'],
+        name = source['name'] == null ? null : source['name'].toString(),
+        settings = source['settings'] == null
+            ? null
+            : ThemeSettings.fromJson(source['settings']);
 }
 
 class ThemeSettings {
@@ -6684,6 +12197,75 @@ class ThemeSettings {
    * Toggles the tile shadow (New Dashboards)
    */
   bool tile_shadow;
+
+  ThemeSettings() {}
+
+  Map toJson() => {
+        'background_color': background_color,
+        'base_font_size': base_font_size,
+        'color_collection_id': color_collection_id,
+        'font_color': font_color,
+        'font_family': font_family,
+        'font_source': font_source,
+        'info_button_color': info_button_color,
+        'primary_button_color': primary_button_color,
+        'show_filters_bar': show_filters_bar,
+        'show_title': show_title,
+        'text_tile_text_color': text_tile_text_color,
+        'tile_background_color': tile_background_color,
+        'tile_text_color': tile_text_color,
+        'title_color': title_color,
+        'warn_button_color': warn_button_color,
+        'tile_title_alignment': tile_title_alignment,
+        'tile_shadow': tile_shadow
+      };
+
+  ThemeSettings.fromJson(Map source)
+      : background_color = source['background_color'] == null
+            ? null
+            : source['background_color'].toString(),
+        base_font_size = source['base_font_size'] == null
+            ? null
+            : source['base_font_size'].toString(),
+        color_collection_id = source['color_collection_id'] == null
+            ? null
+            : source['color_collection_id'].toString(),
+        font_color = source['font_color'] == null
+            ? null
+            : source['font_color'].toString(),
+        font_family = source['font_family'] == null
+            ? null
+            : source['font_family'].toString(),
+        font_source = source['font_source'] == null
+            ? null
+            : source['font_source'].toString(),
+        info_button_color = source['info_button_color'] == null
+            ? null
+            : source['info_button_color'].toString(),
+        primary_button_color = source['primary_button_color'] == null
+            ? null
+            : source['primary_button_color'].toString(),
+        show_filters_bar = source['show_filters_bar'],
+        show_title = source['show_title'],
+        text_tile_text_color = source['text_tile_text_color'] == null
+            ? null
+            : source['text_tile_text_color'].toString(),
+        tile_background_color = source['tile_background_color'] == null
+            ? null
+            : source['tile_background_color'].toString(),
+        tile_text_color = source['tile_text_color'] == null
+            ? null
+            : source['tile_text_color'].toString(),
+        title_color = source['title_color'] == null
+            ? null
+            : source['title_color'].toString(),
+        warn_button_color = source['warn_button_color'] == null
+            ? null
+            : source['warn_button_color'].toString(),
+        tile_title_alignment = source['tile_title_alignment'] == null
+            ? null
+            : source['tile_title_alignment'].toString(),
+        tile_shadow = source['tile_shadow'];
 }
 
 class Timezone {
@@ -6699,6 +12281,15 @@ class Timezone {
    * Timezone group (e.g Common, Other, etc.) (read-only)
    */
   String group;
+
+  Timezone() {}
+
+  Map toJson() => {'value': value, 'label': label, 'group': group};
+
+  Timezone.fromJson(Map source)
+      : value = source['value'] == null ? null : source['value'].toString(),
+        label = source['label'] == null ? null : source['label'].toString(),
+        group = source['group'] == null ? null : source['group'].toString();
 }
 
 class UpdateFolder {
@@ -6710,6 +12301,15 @@ class UpdateFolder {
    * Id of Parent. If the parent id is null, this is a root-level entry
    */
   String parent_id;
+
+  UpdateFolder() {}
+
+  Map toJson() => {'name': name, 'parent_id': parent_id};
+
+  UpdateFolder.fromJson(Map source)
+      : name = source['name'] == null ? null : source['name'].toString(),
+        parent_id =
+            source['parent_id'] == null ? null : source['parent_id'].toString();
 }
 
 class UpdateSpace {
@@ -6721,13 +12321,22 @@ class UpdateSpace {
    * Id of Parent. If the parent id is null, this is a root-level entry
    */
   String parent_id;
+
+  UpdateSpace() {}
+
+  Map toJson() => {'name': name, 'parent_id': parent_id};
+
+  UpdateSpace.fromJson(Map source)
+      : name = source['name'] == null ? null : source['name'].toString(),
+        parent_id =
+            source['parent_id'] == null ? null : source['parent_id'].toString();
 }
 
 class User {
   /**
    * Operations the current user is able to perform on this object (read-only)
    */
-  Map<String, bool> can;
+  Map<String, dynamic> can;
   /**
    * URL for the avatar image (may be generic) (read-only)
    */
@@ -6740,16 +12349,37 @@ class User {
    * API 3 credentials (read-only)
    */
   List<CredentialsApi3> credentials_api3;
+  /**
+   * credentials_email
+   */
   CredentialsEmail credentials_email;
   /**
    * Embed credentials (read-only)
    */
   List<CredentialsEmbed> credentials_embed;
+  /**
+   * credentials_google
+   */
   CredentialsGoogle credentials_google;
+  /**
+   * credentials_ldap
+   */
   CredentialsLDAP credentials_ldap;
+  /**
+   * credentials_looker_openid
+   */
   CredentialsLookerOpenid credentials_looker_openid;
+  /**
+   * credentials_oidc
+   */
   CredentialsOIDC credentials_oidc;
+  /**
+   * credentials_saml
+   */
   CredentialsSaml credentials_saml;
+  /**
+   * credentials_totp
+   */
   CredentialsTotp credentials_totp;
   /**
    * Full name for display (available only if both first_name and last_name are set) (read-only)
@@ -6851,13 +12481,130 @@ class User {
    * Link to get this item (read-only)
    */
   String url;
+
+  User() {}
+
+  Map toJson() => {
+        'can': can,
+        'avatar_url': avatar_url,
+        'avatar_url_without_sizing': avatar_url_without_sizing,
+        'display_name': display_name,
+        'email': email,
+        'embed_group_space_id': embed_group_space_id,
+        'first_name': first_name,
+        'home_space_id': home_space_id,
+        'home_folder_id': home_folder_id,
+        'id': id,
+        'is_disabled': is_disabled,
+        'last_name': last_name,
+        'locale': locale,
+        'models_dir_validated': models_dir_validated,
+        'personal_space_id': personal_space_id,
+        'personal_folder_id': personal_folder_id,
+        'presumed_looker_employee': presumed_looker_employee,
+        'ui_state': ui_state,
+        'verified_looker_employee': verified_looker_employee,
+        'roles_externally_managed': roles_externally_managed,
+        'allow_direct_roles': allow_direct_roles,
+        'allow_normal_group_membership': allow_normal_group_membership,
+        'allow_roles_from_normal_groups': allow_roles_from_normal_groups,
+        'url': url
+      };
+
+  User.fromJson(Map source)
+      : can = source['can'],
+        avatar_url = source['avatar_url'] == null
+            ? null
+            : source['avatar_url'].toString(),
+        avatar_url_without_sizing = source['avatar_url_without_sizing'] == null
+            ? null
+            : source['avatar_url_without_sizing'].toString(),
+        credentials_api3 = source['credentials_api3'] == null
+            ? null
+            : (source['credentials_api3'] as List)
+                .map((i) => CredentialsApi3.fromJson(i))
+                .toList(),
+        credentials_email = source['credentials_email'] == null
+            ? null
+            : CredentialsEmail.fromJson(source['credentials_email']),
+        credentials_embed = source['credentials_embed'] == null
+            ? null
+            : (source['credentials_embed'] as List)
+                .map((i) => CredentialsEmbed.fromJson(i))
+                .toList(),
+        credentials_google = source['credentials_google'] == null
+            ? null
+            : CredentialsGoogle.fromJson(source['credentials_google']),
+        credentials_ldap = source['credentials_ldap'] == null
+            ? null
+            : CredentialsLDAP.fromJson(source['credentials_ldap']),
+        credentials_looker_openid = source['credentials_looker_openid'] == null
+            ? null
+            : CredentialsLookerOpenid.fromJson(
+                source['credentials_looker_openid']),
+        credentials_oidc = source['credentials_oidc'] == null
+            ? null
+            : CredentialsOIDC.fromJson(source['credentials_oidc']),
+        credentials_saml = source['credentials_saml'] == null
+            ? null
+            : CredentialsSaml.fromJson(source['credentials_saml']),
+        credentials_totp = source['credentials_totp'] == null
+            ? null
+            : CredentialsTotp.fromJson(source['credentials_totp']),
+        display_name = source['display_name'] == null
+            ? null
+            : source['display_name'].toString(),
+        email = source['email'] == null ? null : source['email'].toString(),
+        embed_group_space_id = source['embed_group_space_id'],
+        first_name = source['first_name'] == null
+            ? null
+            : source['first_name'].toString(),
+        group_ids = source['group_ids'] == null
+            ? null
+            : source['group_ids'].map<int>((i) => i as int).toList(),
+        home_space_id = source['home_space_id'] == null
+            ? null
+            : source['home_space_id'].toString(),
+        home_folder_id = source['home_folder_id'] == null
+            ? null
+            : source['home_folder_id'].toString(),
+        id = source['id'],
+        is_disabled = source['is_disabled'],
+        last_name =
+            source['last_name'] == null ? null : source['last_name'].toString(),
+        locale = source['locale'] == null ? null : source['locale'].toString(),
+        looker_versions = source['looker_versions'] == null
+            ? null
+            : source['looker_versions']
+                .map<String>((i) => i as String)
+                .toList(),
+        models_dir_validated = source['models_dir_validated'],
+        personal_space_id = source['personal_space_id'],
+        personal_folder_id = source['personal_folder_id'],
+        presumed_looker_employee = source['presumed_looker_employee'],
+        role_ids = source['role_ids'] == null
+            ? null
+            : source['role_ids'].map<int>((i) => i as int).toList(),
+        sessions = source['sessions'] == null
+            ? null
+            : (source['sessions'] as List)
+                .map((i) => Session.fromJson(i))
+                .toList(),
+        ui_state = source['ui_state'],
+        verified_looker_employee = source['verified_looker_employee'],
+        roles_externally_managed = source['roles_externally_managed'],
+        allow_direct_roles = source['allow_direct_roles'],
+        allow_normal_group_membership = source['allow_normal_group_membership'],
+        allow_roles_from_normal_groups =
+            source['allow_roles_from_normal_groups'],
+        url = source['url'] == null ? null : source['url'].toString();
 }
 
 class UserAttribute {
   /**
    * Operations the current user is able to perform on this object (read-only)
    */
-  Map<String, bool> can;
+  Map<String, dynamic> can;
   /**
    * Unique Id (read-only)
    */
@@ -6902,6 +12649,42 @@ class UserAttribute {
    * Destinations to which a hidden attribute may be sent. Once set, cannot be edited.
    */
   String hidden_value_domain_whitelist;
+
+  UserAttribute() {}
+
+  Map toJson() => {
+        'can': can,
+        'id': id,
+        'name': name,
+        'label': label,
+        'type': type,
+        'default_value': default_value,
+        'is_system': is_system,
+        'is_permanent': is_permanent,
+        'value_is_hidden': value_is_hidden,
+        'user_can_view': user_can_view,
+        'user_can_edit': user_can_edit,
+        'hidden_value_domain_whitelist': hidden_value_domain_whitelist
+      };
+
+  UserAttribute.fromJson(Map source)
+      : can = source['can'],
+        id = source['id'],
+        name = source['name'] == null ? null : source['name'].toString(),
+        label = source['label'] == null ? null : source['label'].toString(),
+        type = source['type'] == null ? null : source['type'].toString(),
+        default_value = source['default_value'] == null
+            ? null
+            : source['default_value'].toString(),
+        is_system = source['is_system'],
+        is_permanent = source['is_permanent'],
+        value_is_hidden = source['value_is_hidden'],
+        user_can_view = source['user_can_view'],
+        user_can_edit = source['user_can_edit'],
+        hidden_value_domain_whitelist =
+            source['hidden_value_domain_whitelist'] == null
+                ? null
+                : source['hidden_value_domain_whitelist'].toString();
 }
 
 /**
@@ -6923,7 +12706,7 @@ class UserAttributeGroupValue {
   /**
    * Operations the current user is able to perform on this object (read-only)
    */
-  Map<String, bool> can;
+  Map<String, dynamic> can;
   /**
    * Unique Id of this group-attribute relation (read-only)
    */
@@ -6948,13 +12731,34 @@ class UserAttributeGroupValue {
    * Value of user attribute for group (read-only)
    */
   String value;
+
+  UserAttributeGroupValue() {}
+
+  Map toJson() => {
+        'can': can,
+        'id': id,
+        'group_id': group_id,
+        'user_attribute_id': user_attribute_id,
+        'value_is_hidden': value_is_hidden,
+        'rank': rank,
+        'value': value
+      };
+
+  UserAttributeGroupValue.fromJson(Map source)
+      : can = source['can'],
+        id = source['id'],
+        group_id = source['group_id'],
+        user_attribute_id = source['user_attribute_id'],
+        value_is_hidden = source['value_is_hidden'],
+        rank = source['rank'],
+        value = source['value'] == null ? null : source['value'].toString();
 }
 
 class UserAttributeWithValue {
   /**
    * Operations the current user is able to perform on this object (read-only)
    */
-  Map<String, bool> can;
+  Map<String, dynamic> can;
   /**
    * Name of user attribute (read-only)
    */
@@ -6995,6 +12799,38 @@ class UserAttributeWithValue {
    * If this user attribute is hidden, whitelist of destinations to which it may be sent. (read-only)
    */
   String hidden_value_domain_whitelist;
+
+  UserAttributeWithValue() {}
+
+  Map toJson() => {
+        'can': can,
+        'name': name,
+        'label': label,
+        'rank': rank,
+        'value': value,
+        'user_id': user_id,
+        'user_can_edit': user_can_edit,
+        'value_is_hidden': value_is_hidden,
+        'user_attribute_id': user_attribute_id,
+        'source': source,
+        'hidden_value_domain_whitelist': hidden_value_domain_whitelist
+      };
+
+  UserAttributeWithValue.fromJson(Map source)
+      : can = source['can'],
+        name = source['name'] == null ? null : source['name'].toString(),
+        label = source['label'] == null ? null : source['label'].toString(),
+        rank = source['rank'],
+        value = source['value'] == null ? null : source['value'].toString(),
+        user_id = source['user_id'],
+        user_can_edit = source['user_can_edit'],
+        value_is_hidden = source['value_is_hidden'],
+        user_attribute_id = source['user_attribute_id'],
+        source = source['source'] == null ? null : source['source'].toString(),
+        hidden_value_domain_whitelist =
+            source['hidden_value_domain_whitelist'] == null
+                ? null
+                : source['hidden_value_domain_whitelist'].toString();
 }
 
 class UserIdOnly {
@@ -7002,13 +12838,19 @@ class UserIdOnly {
    * Unique Id (read-only)
    */
   int id;
+
+  UserIdOnly() {}
+
+  Map toJson() => {'id': id};
+
+  UserIdOnly.fromJson(Map source) : id = source['id'];
 }
 
 class UserLoginLockout {
   /**
    * Operations the current user is able to perform on this object (read-only)
    */
-  Map<String, bool> can;
+  Map<String, dynamic> can;
   /**
    * Hash of user's client id (read-only)
    */
@@ -7045,13 +12887,43 @@ class UserLoginLockout {
    * Time when lockout was triggered (read-only)
    */
   DateTime lockout_at;
+
+  UserLoginLockout() {}
+
+  Map toJson() => {
+        'can': can,
+        'key': key,
+        'auth_type': auth_type,
+        'ip': ip,
+        'user_id': user_id,
+        'remote_id': remote_id,
+        'full_name': full_name,
+        'email': email,
+        'fail_count': fail_count,
+        'lockout_at': lockout_at
+      };
+
+  UserLoginLockout.fromJson(Map source)
+      : can = source['can'],
+        key = source['key'] == null ? null : source['key'].toString(),
+        auth_type =
+            source['auth_type'] == null ? null : source['auth_type'].toString(),
+        ip = source['ip'] == null ? null : source['ip'].toString(),
+        user_id = source['user_id'],
+        remote_id =
+            source['remote_id'] == null ? null : source['remote_id'].toString(),
+        full_name =
+            source['full_name'] == null ? null : source['full_name'].toString(),
+        email = source['email'] == null ? null : source['email'].toString(),
+        fail_count = source['fail_count'],
+        lockout_at = source['lockout_at'];
 }
 
 class UserPublic {
   /**
    * Operations the current user is able to perform on this object (read-only)
    */
-  Map<String, bool> can;
+  Map<String, dynamic> can;
   /**
    * Unique Id (read-only)
    */
@@ -7076,6 +12948,34 @@ class UserPublic {
    * Link to get this item (read-only)
    */
   String url;
+
+  UserPublic() {}
+
+  Map toJson() => {
+        'can': can,
+        'id': id,
+        'first_name': first_name,
+        'last_name': last_name,
+        'display_name': display_name,
+        'avatar_url': avatar_url,
+        'url': url
+      };
+
+  UserPublic.fromJson(Map source)
+      : can = source['can'],
+        id = source['id'],
+        first_name = source['first_name'] == null
+            ? null
+            : source['first_name'].toString(),
+        last_name =
+            source['last_name'] == null ? null : source['last_name'].toString(),
+        display_name = source['display_name'] == null
+            ? null
+            : source['display_name'].toString(),
+        avatar_url = source['avatar_url'] == null
+            ? null
+            : source['avatar_url'].toString(),
+        url = source['url'] == null ? null : source['url'].toString();
 }
 
 class ValidationError {
@@ -7091,6 +12991,22 @@ class ValidationError {
    * Documentation link (read-only)
    */
   String documentation_url;
+
+  ValidationError() {}
+
+  Map toJson() => {'message': message, 'documentation_url': documentation_url};
+
+  ValidationError.fromJson(Map source)
+      : message =
+            source['message'] == null ? null : source['message'].toString(),
+        errors = source['errors'] == null
+            ? null
+            : (source['errors'] as List)
+                .map((i) => ValidationErrorDetail.fromJson(i))
+                .toList(),
+        documentation_url = source['documentation_url'] == null
+            ? null
+            : source['documentation_url'].toString();
 }
 
 class ValidationErrorDetail {
@@ -7110,6 +13026,24 @@ class ValidationErrorDetail {
    * Documentation link (read-only)
    */
   String documentation_url;
+
+  ValidationErrorDetail() {}
+
+  Map toJson() => {
+        'field': field,
+        'code': code,
+        'message': message,
+        'documentation_url': documentation_url
+      };
+
+  ValidationErrorDetail.fromJson(Map source)
+      : field = source['field'] == null ? null : source['field'].toString(),
+        code = source['code'] == null ? null : source['code'].toString(),
+        message =
+            source['message'] == null ? null : source['message'].toString(),
+        documentation_url = source['documentation_url'] == null
+            ? null
+            : source['documentation_url'].toString();
 }
 
 /**
@@ -7138,13 +13072,24 @@ class WelcomeEmailTest {
    * The header that would be sent in the body of a custom welcome email
    */
   String header;
+
+  WelcomeEmailTest() {}
+
+  Map toJson() => {'content': content, 'subject': subject, 'header': header};
+
+  WelcomeEmailTest.fromJson(Map source)
+      : content =
+            source['content'] == null ? null : source['content'].toString(),
+        subject =
+            source['subject'] == null ? null : source['subject'].toString(),
+        header = source['header'] == null ? null : source['header'].toString();
 }
 
 class WhitelabelConfiguration {
   /**
    * Operations the current user is able to perform on this object (read-only)
    */
-  Map<String, bool> can;
+  Map<String, dynamic> can;
   /**
    * Unique Id (read-only)
    */
@@ -7209,13 +13154,62 @@ class WhitelabelConfiguration {
    * Remove Looker mentions in home folder page when you don’t have any items saved
    */
   bool folders_mentions;
+
+  WhitelabelConfiguration() {}
+
+  Map toJson() => {
+        'can': can,
+        'id': id,
+        'logo_file': logo_file,
+        'logo_url': logo_url,
+        'favicon_file': favicon_file,
+        'favicon_url': favicon_url,
+        'default_title': default_title,
+        'show_help_menu': show_help_menu,
+        'show_docs': show_docs,
+        'show_email_sub_options': show_email_sub_options,
+        'allow_looker_mentions': allow_looker_mentions,
+        'allow_looker_links': allow_looker_links,
+        'custom_welcome_email_advanced': custom_welcome_email_advanced,
+        'setup_mentions': setup_mentions,
+        'alerts_logo': alerts_logo,
+        'alerts_links': alerts_links,
+        'folders_mentions': folders_mentions
+      };
+
+  WhitelabelConfiguration.fromJson(Map source)
+      : can = source['can'],
+        id = source['id'],
+        logo_file =
+            source['logo_file'] == null ? null : source['logo_file'].toString(),
+        logo_url =
+            source['logo_url'] == null ? null : source['logo_url'].toString(),
+        favicon_file = source['favicon_file'] == null
+            ? null
+            : source['favicon_file'].toString(),
+        favicon_url = source['favicon_url'] == null
+            ? null
+            : source['favicon_url'].toString(),
+        default_title = source['default_title'] == null
+            ? null
+            : source['default_title'].toString(),
+        show_help_menu = source['show_help_menu'],
+        show_docs = source['show_docs'],
+        show_email_sub_options = source['show_email_sub_options'],
+        allow_looker_mentions = source['allow_looker_mentions'],
+        allow_looker_links = source['allow_looker_links'],
+        custom_welcome_email_advanced = source['custom_welcome_email_advanced'],
+        setup_mentions = source['setup_mentions'],
+        alerts_logo = source['alerts_logo'],
+        alerts_links = source['alerts_links'],
+        folders_mentions = source['folders_mentions'];
 }
 
 class Workspace {
   /**
    * Operations the current user is able to perform on this object (read-only)
    */
-  Map<String, bool> can;
+  Map<String, dynamic> can;
   /**
    * The unique id of this user workspace. Predefined workspace ids include "production" and "dev" (read-only)
    */
@@ -7224,6 +13218,19 @@ class Workspace {
    * The local state of each project in the workspace (read-only)
    */
   List<Project> projects;
+
+  Workspace() {}
+
+  Map toJson() => {'can': can, 'id': id};
+
+  Workspace.fromJson(Map source)
+      : can = source['can'],
+        id = source['id'] == null ? null : source['id'].toString(),
+        projects = source['projects'] == null
+            ? null
+            : (source['projects'] as List)
+                .map((i) => Project.fromJson(i))
+                .toList();
 }
 
 /**
@@ -7235,6 +13242,15 @@ class WriteApiSession {
    * The id of active workspace for this session
    */
   String workspace_id;
+
+  WriteApiSession() {}
+
+  Map toJson() => {'workspace_id': workspace_id};
+
+  WriteApiSession.fromJson(Map source)
+      : workspace_id = source['workspace_id'] == null
+            ? null
+            : source['workspace_id'].toString();
 }
 
 /**
@@ -7262,6 +13278,31 @@ class WriteBackupConfiguration {
    * (Write-Only) AWS S3 secret used for custom-s3 backups
    */
   String custom_s3_secret;
+
+  WriteBackupConfiguration() {}
+
+  Map toJson() => {
+        'type': type,
+        'custom_s3_bucket': custom_s3_bucket,
+        'custom_s3_bucket_region': custom_s3_bucket_region,
+        'custom_s3_key': custom_s3_key,
+        'custom_s3_secret': custom_s3_secret
+      };
+
+  WriteBackupConfiguration.fromJson(Map source)
+      : type = source['type'] == null ? null : source['type'].toString(),
+        custom_s3_bucket = source['custom_s3_bucket'] == null
+            ? null
+            : source['custom_s3_bucket'].toString(),
+        custom_s3_bucket_region = source['custom_s3_bucket_region'] == null
+            ? null
+            : source['custom_s3_bucket_region'].toString(),
+        custom_s3_key = source['custom_s3_key'] == null
+            ? null
+            : source['custom_s3_key'].toString(),
+        custom_s3_secret = source['custom_s3_secret'] == null
+            ? null
+            : source['custom_s3_secret'].toString();
 }
 
 /**
@@ -7285,6 +13326,28 @@ class WriteColorCollection {
    * Array of diverging palette definitions
    */
   List<ContinuousPalette> divergingPalettes;
+
+  WriteColorCollection() {}
+
+  Map toJson() => {'label': label};
+
+  WriteColorCollection.fromJson(Map source)
+      : label = source['label'] == null ? null : source['label'].toString(),
+        categoricalPalettes = source['categoricalPalettes'] == null
+            ? null
+            : (source['categoricalPalettes'] as List)
+                .map((i) => DiscretePalette.fromJson(i))
+                .toList(),
+        sequentialPalettes = source['sequentialPalettes'] == null
+            ? null
+            : (source['sequentialPalettes'] as List)
+                .map((i) => ContinuousPalette.fromJson(i))
+                .toList(),
+        divergingPalettes = source['divergingPalettes'] == null
+            ? null
+            : (source['divergingPalettes'] as List)
+                .map((i) => ContinuousPalette.fromJson(i))
+                .toList();
 }
 
 /**
@@ -7300,7 +13363,22 @@ class WriteContentFavorite {
    * Content Metadata Id associated with this ContentFavorite
    */
   int content_metadata_id;
+  /**
+   * dashboard
+   */
   WriteDashboardBase dashboard;
+
+  WriteContentFavorite() {}
+
+  Map toJson() =>
+      {'user_id': user_id, 'content_metadata_id': content_metadata_id};
+
+  WriteContentFavorite.fromJson(Map source)
+      : user_id = source['user_id'],
+        content_metadata_id = source['content_metadata_id'],
+        dashboard = source['dashboard'] == null
+            ? null
+            : WriteDashboardBase.fromJson(source['dashboard']);
 }
 
 /**
@@ -7312,6 +13390,12 @@ class WriteContentMeta {
    * Whether content inherits its access levels from parent
    */
   bool inherits;
+
+  WriteContentMeta() {}
+
+  Map toJson() => {'inherits': inherits};
+
+  WriteContentMeta.fromJson(Map source) : inherits = source['inherits'];
 }
 
 /**
@@ -7371,6 +13455,48 @@ class WriteCreateDashboardFilter {
    * The visual configuration for this filter. Used to set up how the UI for this filter should appear.
    */
   Map<String, dynamic> ui_config;
+
+  WriteCreateDashboardFilter() {}
+
+  Map toJson() => {
+        'dashboard_id': dashboard_id,
+        'name': name,
+        'title': title,
+        'type': type,
+        'default_value': default_value,
+        'model': model,
+        'explore': explore,
+        'dimension': dimension,
+        'row': row,
+        'allow_multiple_values': allow_multiple_values,
+        'required': required,
+        'ui_config': ui_config
+      };
+
+  WriteCreateDashboardFilter.fromJson(Map source)
+      : dashboard_id = source['dashboard_id'] == null
+            ? null
+            : source['dashboard_id'].toString(),
+        name = source['name'] == null ? null : source['name'].toString(),
+        title = source['title'] == null ? null : source['title'].toString(),
+        type = source['type'] == null ? null : source['type'].toString(),
+        default_value = source['default_value'] == null
+            ? null
+            : source['default_value'].toString(),
+        model = source['model'] == null ? null : source['model'].toString(),
+        explore =
+            source['explore'] == null ? null : source['explore'].toString(),
+        dimension =
+            source['dimension'] == null ? null : source['dimension'].toString(),
+        row = source['row'],
+        listens_to_filters = source['listens_to_filters'] == null
+            ? null
+            : source['listens_to_filters']
+                .map<String>((i) => i as String)
+                .toList(),
+        allow_multiple_values = source['allow_multiple_values'],
+        required = source['required'],
+        ui_config = source['ui_config'];
 }
 
 /**
@@ -7402,6 +13528,27 @@ class WriteCreateQueryTask {
    * Id of dashboard associated with query.
    */
   String dashboard_id;
+
+  WriteCreateQueryTask() {}
+
+  Map toJson() => {
+        'query_id': query_id,
+        'result_format': result_format,
+        'source': source,
+        'deferred': deferred,
+        'look_id': look_id,
+        'dashboard_id': dashboard_id
+      };
+
+  WriteCreateQueryTask.fromJson(Map source)
+      : query_id = source['query_id'],
+        result_format = source['result_format'],
+        source = source['source'] == null ? null : source['source'].toString(),
+        deferred = source['deferred'],
+        look_id = source['look_id'],
+        dashboard_id = source['dashboard_id'] == null
+            ? null
+            : source['dashboard_id'].toString();
 }
 
 /**
@@ -7417,6 +13564,19 @@ class WriteCredentialsEmail {
    * Force the user to change their password upon their next login
    */
   bool forced_password_reset_at_next_login;
+
+  WriteCredentialsEmail() {}
+
+  Map toJson() => {
+        'email': email,
+        'forced_password_reset_at_next_login':
+            forced_password_reset_at_next_login
+      };
+
+  WriteCredentialsEmail.fromJson(Map source)
+      : email = source['email'] == null ? null : source['email'].toString(),
+        forced_password_reset_at_next_login =
+            source['forced_password_reset_at_next_login'];
 }
 
 /**
@@ -7440,6 +13600,23 @@ class WriteCustomWelcomeEmail {
    * The text to appear in the header line of the email body.
    */
   String header;
+
+  WriteCustomWelcomeEmail() {}
+
+  Map toJson() => {
+        'enabled': enabled,
+        'content': content,
+        'subject': subject,
+        'header': header
+      };
+
+  WriteCustomWelcomeEmail.fromJson(Map source)
+      : enabled = source['enabled'],
+        content =
+            source['content'] == null ? null : source['content'].toString(),
+        subject =
+            source['subject'] == null ? null : source['subject'].toString(),
+        header = source['header'] == null ? null : source['header'].toString();
 }
 
 /**
@@ -7463,11 +13640,17 @@ class WriteDashboard {
    * Refresh Interval, as a time duration phrase like "2 hours 30 minutes". A number with no time units will be interpreted as whole seconds.
    */
   String refresh_interval;
+  /**
+   * folder
+   */
   WriteFolderBase folder;
   /**
    * Dashboard Title
    */
   String title;
+  /**
+   * space
+   */
   WriteSpaceBase space;
   /**
    * Background color
@@ -7525,11 +13708,94 @@ class WriteDashboard {
    * Title color
    */
   String title_color;
+  /**
+   * appearance
+   */
   DashboardAppearance appearance;
   /**
    * The preferred route for viewing this dashboard (ie: dashboards or dashboards-next)
    */
   String preferred_viewer;
+
+  WriteDashboard() {}
+
+  Map toJson() => {
+        'description': description,
+        'hidden': hidden,
+        'query_timezone': query_timezone,
+        'refresh_interval': refresh_interval,
+        'title': title,
+        'background_color': background_color,
+        'crossfilter_enabled': crossfilter_enabled,
+        'deleted': deleted,
+        'load_configuration': load_configuration,
+        'lookml_link_id': lookml_link_id,
+        'show_filters_bar': show_filters_bar,
+        'show_title': show_title,
+        'slug': slug,
+        'space_id': space_id,
+        'folder_id': folder_id,
+        'text_tile_text_color': text_tile_text_color,
+        'tile_background_color': tile_background_color,
+        'tile_text_color': tile_text_color,
+        'title_color': title_color,
+        'preferred_viewer': preferred_viewer
+      };
+
+  WriteDashboard.fromJson(Map source)
+      : description = source['description'] == null
+            ? null
+            : source['description'].toString(),
+        hidden = source['hidden'],
+        query_timezone = source['query_timezone'] == null
+            ? null
+            : source['query_timezone'].toString(),
+        refresh_interval = source['refresh_interval'] == null
+            ? null
+            : source['refresh_interval'].toString(),
+        folder = source['folder'] == null
+            ? null
+            : WriteFolderBase.fromJson(source['folder']),
+        title = source['title'] == null ? null : source['title'].toString(),
+        space = source['space'] == null
+            ? null
+            : WriteSpaceBase.fromJson(source['space']),
+        background_color = source['background_color'] == null
+            ? null
+            : source['background_color'].toString(),
+        crossfilter_enabled = source['crossfilter_enabled'],
+        deleted = source['deleted'],
+        load_configuration = source['load_configuration'] == null
+            ? null
+            : source['load_configuration'].toString(),
+        lookml_link_id = source['lookml_link_id'] == null
+            ? null
+            : source['lookml_link_id'].toString(),
+        show_filters_bar = source['show_filters_bar'],
+        show_title = source['show_title'],
+        slug = source['slug'] == null ? null : source['slug'].toString(),
+        space_id =
+            source['space_id'] == null ? null : source['space_id'].toString(),
+        folder_id =
+            source['folder_id'] == null ? null : source['folder_id'].toString(),
+        text_tile_text_color = source['text_tile_text_color'] == null
+            ? null
+            : source['text_tile_text_color'].toString(),
+        tile_background_color = source['tile_background_color'] == null
+            ? null
+            : source['tile_background_color'].toString(),
+        tile_text_color = source['tile_text_color'] == null
+            ? null
+            : source['tile_text_color'].toString(),
+        title_color = source['title_color'] == null
+            ? null
+            : source['title_color'].toString(),
+        appearance = source['appearance'] == null
+            ? null
+            : DashboardAppearance.fromJson(source['appearance']),
+        preferred_viewer = source['preferred_viewer'] == null
+            ? null
+            : source['preferred_viewer'].toString();
 }
 
 /**
@@ -7537,8 +13803,26 @@ class WriteDashboard {
  * can, content_favorite_id, content_metadata_id, description, hidden, id, model, query_timezone, readonly, refresh_interval, refresh_interval_to_i, title, user_id
  */
 class WriteDashboardBase {
+  /**
+   * folder
+   */
   WriteFolderBase folder;
+  /**
+   * space
+   */
   WriteSpaceBase space;
+
+  WriteDashboardBase() {}
+
+  Map toJson() => {};
+
+  WriteDashboardBase.fromJson(Map source)
+      : folder = source['folder'] == null
+            ? null
+            : WriteFolderBase.fromJson(source['folder']),
+        space = source['space'] == null
+            ? null
+            : WriteSpaceBase.fromJson(source['space']);
 }
 
 /**
@@ -7554,6 +13838,9 @@ class WriteDashboardElement {
    * Id of Dashboard
    */
   String dashboard_id;
+  /**
+   * look
+   */
   WriteLookWithQuery look;
   /**
    * Id Of Look
@@ -7575,6 +13862,9 @@ class WriteDashboardElement {
    * Note Text
    */
   String note_text;
+  /**
+   * query
+   */
   WriteQuery query;
   /**
    * Id Of Query
@@ -7584,6 +13874,9 @@ class WriteDashboardElement {
    * Refresh Interval
    */
   String refresh_interval;
+  /**
+   * result_maker
+   */
   WriteResultMakerWithIdVisConfigAndDynamicFields result_maker;
   /**
    * ID of the ResultMakerLookup entry.
@@ -7609,6 +13902,70 @@ class WriteDashboardElement {
    * Type
    */
   String type;
+
+  WriteDashboardElement() {}
+
+  Map toJson() => {
+        'body_text': body_text,
+        'dashboard_id': dashboard_id,
+        'look_id': look_id,
+        'merge_result_id': merge_result_id,
+        'note_display': note_display,
+        'note_state': note_state,
+        'note_text': note_text,
+        'query_id': query_id,
+        'refresh_interval': refresh_interval,
+        'result_maker_id': result_maker_id,
+        'subtitle_text': subtitle_text,
+        'title': title,
+        'title_hidden': title_hidden,
+        'title_text': title_text,
+        'type': type
+      };
+
+  WriteDashboardElement.fromJson(Map source)
+      : body_text =
+            source['body_text'] == null ? null : source['body_text'].toString(),
+        dashboard_id = source['dashboard_id'] == null
+            ? null
+            : source['dashboard_id'].toString(),
+        look = source['look'] == null
+            ? null
+            : WriteLookWithQuery.fromJson(source['look']),
+        look_id =
+            source['look_id'] == null ? null : source['look_id'].toString(),
+        merge_result_id = source['merge_result_id'] == null
+            ? null
+            : source['merge_result_id'].toString(),
+        note_display = source['note_display'] == null
+            ? null
+            : source['note_display'].toString(),
+        note_state = source['note_state'] == null
+            ? null
+            : source['note_state'].toString(),
+        note_text =
+            source['note_text'] == null ? null : source['note_text'].toString(),
+        query = source['query'] == null
+            ? null
+            : WriteQuery.fromJson(source['query']),
+        query_id = source['query_id'],
+        refresh_interval = source['refresh_interval'] == null
+            ? null
+            : source['refresh_interval'].toString(),
+        result_maker = source['result_maker'] == null
+            ? null
+            : WriteResultMakerWithIdVisConfigAndDynamicFields.fromJson(
+                source['result_maker']),
+        result_maker_id = source['result_maker_id'],
+        subtitle_text = source['subtitle_text'] == null
+            ? null
+            : source['subtitle_text'].toString(),
+        title = source['title'] == null ? null : source['title'].toString(),
+        title_hidden = source['title_hidden'],
+        title_text = source['title_text'] == null
+            ? null
+            : source['title_text'].toString(),
+        type = source['type'] == null ? null : source['type'].toString();
 }
 
 /**
@@ -7664,6 +14021,44 @@ class WriteDashboardFilter {
    * The visual configuration for this filter. Used to set up how the UI for this filter should appear.
    */
   Map<String, dynamic> ui_config;
+
+  WriteDashboardFilter() {}
+
+  Map toJson() => {
+        'name': name,
+        'title': title,
+        'type': type,
+        'default_value': default_value,
+        'model': model,
+        'explore': explore,
+        'dimension': dimension,
+        'row': row,
+        'allow_multiple_values': allow_multiple_values,
+        'required': required,
+        'ui_config': ui_config
+      };
+
+  WriteDashboardFilter.fromJson(Map source)
+      : name = source['name'] == null ? null : source['name'].toString(),
+        title = source['title'] == null ? null : source['title'].toString(),
+        type = source['type'] == null ? null : source['type'].toString(),
+        default_value = source['default_value'] == null
+            ? null
+            : source['default_value'].toString(),
+        model = source['model'] == null ? null : source['model'].toString(),
+        explore =
+            source['explore'] == null ? null : source['explore'].toString(),
+        dimension =
+            source['dimension'] == null ? null : source['dimension'].toString(),
+        row = source['row'],
+        listens_to_filters = source['listens_to_filters'] == null
+            ? null
+            : source['listens_to_filters']
+                .map<String>((i) => i as String)
+                .toList(),
+        allow_multiple_values = source['allow_multiple_values'],
+        required = source['required'],
+        ui_config = source['ui_config'];
 }
 
 /**
@@ -7691,6 +14086,25 @@ class WriteDashboardLayout {
    * Width
    */
   int width;
+
+  WriteDashboardLayout() {}
+
+  Map toJson() => {
+        'dashboard_id': dashboard_id,
+        'type': type,
+        'active': active,
+        'column_width': column_width,
+        'width': width
+      };
+
+  WriteDashboardLayout.fromJson(Map source)
+      : dashboard_id = source['dashboard_id'] == null
+            ? null
+            : source['dashboard_id'].toString(),
+        type = source['type'] == null ? null : source['type'].toString(),
+        active = source['active'],
+        column_width = source['column_width'],
+        width = source['width'];
 }
 
 /**
@@ -7722,6 +14136,29 @@ class WriteDashboardLayoutComponent {
    * Height
    */
   int height;
+
+  WriteDashboardLayoutComponent() {}
+
+  Map toJson() => {
+        'dashboard_layout_id': dashboard_layout_id,
+        'dashboard_element_id': dashboard_element_id,
+        'row': row,
+        'column': column,
+        'width': width,
+        'height': height
+      };
+
+  WriteDashboardLayoutComponent.fromJson(Map source)
+      : dashboard_layout_id = source['dashboard_layout_id'] == null
+            ? null
+            : source['dashboard_layout_id'].toString(),
+        dashboard_element_id = source['dashboard_element_id'] == null
+            ? null
+            : source['dashboard_element_id'].toString(),
+        row = source['row'],
+        column = source['column'],
+        width = source['width'],
+        height = source['height'];
 }
 
 /**
@@ -7737,6 +14174,14 @@ class WriteDatagroup {
    * UNIX timestamp at which this entry became triggered. Cannot be in the future.
    */
   int triggered_at;
+
+  WriteDatagroup() {}
+
+  Map toJson() => {'stale_before': stale_before, 'triggered_at': triggered_at};
+
+  WriteDatagroup.fromJson(Map source)
+      : stale_before = source['stale_before'],
+        triggered_at = source['triggered_at'];
 }
 
 /**
@@ -7840,7 +14285,94 @@ class WriteDBConnection {
    * SQL statements (semicolon separated) to issue after connecting to the database. Requires `custom_after_connect_statements` license feature
    */
   String after_connect_statements;
+  /**
+   * pdt_context_override
+   */
   WriteDBConnectionOverride pdt_context_override;
+
+  WriteDBConnection() {}
+
+  Map toJson() => {
+        'name': name,
+        'host': host,
+        'port': port,
+        'username': username,
+        'password': password,
+        'certificate': certificate,
+        'file_type': file_type,
+        'database': database,
+        'db_timezone': db_timezone,
+        'query_timezone': query_timezone,
+        'schema': schema,
+        'max_connections': max_connections,
+        'max_billing_gigabytes': max_billing_gigabytes,
+        'ssl': ssl,
+        'verify_ssl': verify_ssl,
+        'tmp_db_name': tmp_db_name,
+        'jdbc_additional_params': jdbc_additional_params,
+        'pool_timeout': pool_timeout,
+        'dialect_name': dialect_name,
+        'user_db_credentials': user_db_credentials,
+        'maintenance_cron': maintenance_cron,
+        'sql_runner_precache_tables': sql_runner_precache_tables,
+        'after_connect_statements': after_connect_statements
+      };
+
+  WriteDBConnection.fromJson(Map source)
+      : name = source['name'] == null ? null : source['name'].toString(),
+        host = source['host'] == null ? null : source['host'].toString(),
+        port = source['port'] == null ? null : source['port'].toString(),
+        username =
+            source['username'] == null ? null : source['username'].toString(),
+        password =
+            source['password'] == null ? null : source['password'].toString(),
+        certificate = source['certificate'] == null
+            ? null
+            : source['certificate'].toString(),
+        file_type =
+            source['file_type'] == null ? null : source['file_type'].toString(),
+        database =
+            source['database'] == null ? null : source['database'].toString(),
+        db_timezone = source['db_timezone'] == null
+            ? null
+            : source['db_timezone'].toString(),
+        query_timezone = source['query_timezone'] == null
+            ? null
+            : source['query_timezone'].toString(),
+        schema = source['schema'] == null ? null : source['schema'].toString(),
+        max_connections = source['max_connections'],
+        max_billing_gigabytes = source['max_billing_gigabytes'] == null
+            ? null
+            : source['max_billing_gigabytes'].toString(),
+        ssl = source['ssl'],
+        verify_ssl = source['verify_ssl'],
+        tmp_db_name = source['tmp_db_name'] == null
+            ? null
+            : source['tmp_db_name'].toString(),
+        jdbc_additional_params = source['jdbc_additional_params'] == null
+            ? null
+            : source['jdbc_additional_params'].toString(),
+        pool_timeout = source['pool_timeout'],
+        dialect_name = source['dialect_name'] == null
+            ? null
+            : source['dialect_name'].toString(),
+        user_db_credentials = source['user_db_credentials'],
+        user_attribute_fields = source['user_attribute_fields'] == null
+            ? null
+            : source['user_attribute_fields']
+                .map<String>((i) => i as String)
+                .toList(),
+        maintenance_cron = source['maintenance_cron'] == null
+            ? null
+            : source['maintenance_cron'].toString(),
+        sql_runner_precache_tables = source['sql_runner_precache_tables'],
+        after_connect_statements = source['after_connect_statements'] == null
+            ? null
+            : source['after_connect_statements'].toString(),
+        pdt_context_override = source['pdt_context_override'] == null
+            ? null
+            : WriteDBConnectionOverride.fromJson(
+                source['pdt_context_override']);
 }
 
 /**
@@ -7892,6 +14424,46 @@ class WriteDBConnectionOverride {
    * SQL statements (semicolon separated) to issue after connecting to the database. Requires `custom_after_connect_statements` license feature
    */
   String after_connect_statements;
+
+  WriteDBConnectionOverride() {}
+
+  Map toJson() => {
+        'context': context,
+        'host': host,
+        'port': port,
+        'username': username,
+        'password': password,
+        'certificate': certificate,
+        'file_type': file_type,
+        'database': database,
+        'schema': schema,
+        'jdbc_additional_params': jdbc_additional_params,
+        'after_connect_statements': after_connect_statements
+      };
+
+  WriteDBConnectionOverride.fromJson(Map source)
+      : context =
+            source['context'] == null ? null : source['context'].toString(),
+        host = source['host'] == null ? null : source['host'].toString(),
+        port = source['port'] == null ? null : source['port'].toString(),
+        username =
+            source['username'] == null ? null : source['username'].toString(),
+        password =
+            source['password'] == null ? null : source['password'].toString(),
+        certificate = source['certificate'] == null
+            ? null
+            : source['certificate'].toString(),
+        file_type =
+            source['file_type'] == null ? null : source['file_type'].toString(),
+        database =
+            source['database'] == null ? null : source['database'].toString(),
+        schema = source['schema'] == null ? null : source['schema'].toString(),
+        jdbc_additional_params = source['jdbc_additional_params'] == null
+            ? null
+            : source['jdbc_additional_params'].toString(),
+        after_connect_statements = source['after_connect_statements'] == null
+            ? null
+            : source['after_connect_statements'].toString();
 }
 
 /**
@@ -7907,6 +14479,15 @@ class WriteFolderBase {
    * Id of Parent. If the parent id is null, this is a root-level entry
    */
   String parent_id;
+
+  WriteFolderBase() {}
+
+  Map toJson() => {'name': name, 'parent_id': parent_id};
+
+  WriteFolderBase.fromJson(Map source)
+      : name = source['name'] == null ? null : source['name'].toString(),
+        parent_id =
+            source['parent_id'] == null ? null : source['parent_id'].toString();
 }
 
 /**
@@ -7922,6 +14503,14 @@ class WriteGitBranch {
    * The resolved ref of this branch. Updating `ref` results in `git reset --hard <new_ref>``.
    */
   String ref;
+
+  WriteGitBranch() {}
+
+  Map toJson() => {'name': name, 'ref': ref};
+
+  WriteGitBranch.fromJson(Map source)
+      : name = source['name'] == null ? null : source['name'].toString(),
+        ref = source['ref'] == null ? null : source['ref'].toString();
 }
 
 /**
@@ -7937,6 +14526,17 @@ class WriteGroup {
    * Name of group
    */
   String name;
+
+  WriteGroup() {}
+
+  Map toJson() => {
+        'can_add_to_content_metadata': can_add_to_content_metadata,
+        'name': name
+      };
+
+  WriteGroup.fromJson(Map source)
+      : can_add_to_content_metadata = source['can_add_to_content_metadata'],
+        name = source['name'] == null ? null : source['name'].toString();
 }
 
 /**
@@ -7960,6 +14560,21 @@ class WriteHomepage {
    * Title of the homepage
    */
   String title;
+
+  WriteHomepage() {}
+
+  Map toJson() =>
+      {'deleted_at': deleted_at, 'description': description, 'title': title};
+
+  WriteHomepage.fromJson(Map source)
+      : deleted_at = source['deleted_at'],
+        description = source['description'] == null
+            ? null
+            : source['description'].toString(),
+        section_order = source['section_order'] == null
+            ? null
+            : source['section_order'].map<int>((i) => i as int).toList(),
+        title = source['title'] == null ? null : source['title'].toString();
 }
 
 /**
@@ -8019,6 +14634,51 @@ class WriteHomepageItem {
    * Whether the custom url should be used instead of the content url, if the item is associated with content
    */
   bool use_custom_url;
+
+  WriteHomepageItem() {}
+
+  Map toJson() => {
+        'custom_description': custom_description,
+        'custom_image_data_base64': custom_image_data_base64,
+        'custom_title': custom_title,
+        'custom_url': custom_url,
+        'dashboard_id': dashboard_id,
+        'homepage_section_id': homepage_section_id,
+        'look_id': look_id,
+        'lookml_dashboard_id': lookml_dashboard_id,
+        'order': order,
+        'use_custom_description': use_custom_description,
+        'use_custom_image': use_custom_image,
+        'use_custom_title': use_custom_title,
+        'use_custom_url': use_custom_url
+      };
+
+  WriteHomepageItem.fromJson(Map source)
+      : custom_description = source['custom_description'] == null
+            ? null
+            : source['custom_description'].toString(),
+        custom_image_data_base64 = source['custom_image_data_base64'] == null
+            ? null
+            : source['custom_image_data_base64'].toString(),
+        custom_title = source['custom_title'] == null
+            ? null
+            : source['custom_title'].toString(),
+        custom_url = source['custom_url'] == null
+            ? null
+            : source['custom_url'].toString(),
+        dashboard_id = source['dashboard_id'],
+        homepage_section_id = source['homepage_section_id'] == null
+            ? null
+            : source['homepage_section_id'].toString(),
+        look_id = source['look_id'],
+        lookml_dashboard_id = source['lookml_dashboard_id'] == null
+            ? null
+            : source['lookml_dashboard_id'].toString(),
+        order = source['order'],
+        use_custom_description = source['use_custom_description'],
+        use_custom_image = source['use_custom_image'],
+        use_custom_title = source['use_custom_title'],
+        use_custom_url = source['use_custom_url'];
 }
 
 /**
@@ -8046,6 +14706,26 @@ class WriteHomepageSection {
    * Description of the content found in this section.
    */
   String description;
+
+  WriteHomepageSection() {}
+
+  Map toJson() => {
+        'deleted_at': deleted_at,
+        'homepage_id': homepage_id,
+        'title': title,
+        'description': description
+      };
+
+  WriteHomepageSection.fromJson(Map source)
+      : deleted_at = source['deleted_at'],
+        homepage_id = source['homepage_id'],
+        item_order = source['item_order'] == null
+            ? null
+            : source['item_order'].map<int>((i) => i as int).toList(),
+        title = source['title'] == null ? null : source['title'].toString(),
+        description = source['description'] == null
+            ? null
+            : source['description'].toString();
 }
 
 /**
@@ -8065,6 +14745,24 @@ class WriteIntegration {
    * Whether the integration is available to users.
    */
   List<int> installed_delegate_oauth_targets;
+
+  WriteIntegration() {}
+
+  Map toJson() => {'enabled': enabled};
+
+  WriteIntegration.fromJson(Map source)
+      : enabled = source['enabled'],
+        params = source['params'] == null
+            ? null
+            : (source['params'] as List)
+                .map((i) => IntegrationParam.fromJson(i))
+                .toList(),
+        installed_delegate_oauth_targets =
+            source['installed_delegate_oauth_targets'] == null
+                ? null
+                : source['installed_delegate_oauth_targets']
+                    .map<int>((i) => i as int)
+                    .toList();
 }
 
 /**
@@ -8080,6 +14778,16 @@ class WriteIntegrationHub {
    * (Write-Only) An authorization key that will be sent to the integration hub on every request.
    */
   String authorization_token;
+
+  WriteIntegrationHub() {}
+
+  Map toJson() => {'url': url, 'authorization_token': authorization_token};
+
+  WriteIntegrationHub.fromJson(Map source)
+      : url = source['url'] == null ? null : source['url'].toString(),
+        authorization_token = source['authorization_token'] == null
+            ? null
+            : source['authorization_token'].toString();
 }
 
 /**
@@ -8091,6 +14799,12 @@ class WriteInternalHelpResources {
    * If true and internal help resources content is not blank then the link for internal help resources will be shown in the help menu and the content displayed within Looker
    */
   bool enabled;
+
+  WriteInternalHelpResources() {}
+
+  Map toJson() => {'enabled': enabled};
+
+  WriteInternalHelpResources.fromJson(Map source) : enabled = source['enabled'];
 }
 
 /**
@@ -8106,6 +14820,21 @@ class WriteInternalHelpResourcesContent {
    * Content to be displayed in the internal help resources page/modal
    */
   String markdown_content;
+
+  WriteInternalHelpResourcesContent() {}
+
+  Map toJson() => {
+        'organization_name': organization_name,
+        'markdown_content': markdown_content
+      };
+
+  WriteInternalHelpResourcesContent.fromJson(Map source)
+      : organization_name = source['organization_name'] == null
+            ? null
+            : source['organization_name'].toString(),
+        markdown_content = source['markdown_content'] == null
+            ? null
+            : source['markdown_content'].toString();
 }
 
 /**
@@ -8249,6 +14978,136 @@ class WriteLDAPConfig {
    * Allows roles to be directly assigned to LDAP auth'd users.
    */
   bool allow_direct_roles;
+
+  WriteLDAPConfig() {}
+
+  Map toJson() => {
+        'alternate_email_login_allowed': alternate_email_login_allowed,
+        'auth_password': auth_password,
+        'auth_requires_role': auth_requires_role,
+        'auth_username': auth_username,
+        'connection_host': connection_host,
+        'connection_port': connection_port,
+        'connection_tls': connection_tls,
+        'connection_tls_no_verify': connection_tls_no_verify,
+        'enabled': enabled,
+        'force_no_page': force_no_page,
+        'groups_base_dn': groups_base_dn,
+        'groups_finder_type': groups_finder_type,
+        'groups_member_attribute': groups_member_attribute,
+        'groups_objectclasses': groups_objectclasses,
+        'groups_user_attribute': groups_user_attribute,
+        'merge_new_users_by_email': merge_new_users_by_email,
+        'set_roles_from_groups': set_roles_from_groups,
+        'test_ldap_password': test_ldap_password,
+        'test_ldap_user': test_ldap_user,
+        'user_attribute_map_email': user_attribute_map_email,
+        'user_attribute_map_first_name': user_attribute_map_first_name,
+        'user_attribute_map_last_name': user_attribute_map_last_name,
+        'user_attribute_map_ldap_id': user_attribute_map_ldap_id,
+        'user_bind_base_dn': user_bind_base_dn,
+        'user_custom_filter': user_custom_filter,
+        'user_id_attribute_names': user_id_attribute_names,
+        'user_objectclass': user_objectclass,
+        'allow_normal_group_membership': allow_normal_group_membership,
+        'allow_roles_from_normal_groups': allow_roles_from_normal_groups,
+        'allow_direct_roles': allow_direct_roles
+      };
+
+  WriteLDAPConfig.fromJson(Map source)
+      : alternate_email_login_allowed = source['alternate_email_login_allowed'],
+        auth_password = source['auth_password'] == null
+            ? null
+            : source['auth_password'].toString(),
+        auth_requires_role = source['auth_requires_role'],
+        auth_username = source['auth_username'] == null
+            ? null
+            : source['auth_username'].toString(),
+        connection_host = source['connection_host'] == null
+            ? null
+            : source['connection_host'].toString(),
+        connection_port = source['connection_port'] == null
+            ? null
+            : source['connection_port'].toString(),
+        connection_tls = source['connection_tls'],
+        connection_tls_no_verify = source['connection_tls_no_verify'],
+        default_new_user_group_ids =
+            source['default_new_user_group_ids'] == null
+                ? null
+                : source['default_new_user_group_ids']
+                    .map<int>((i) => i as int)
+                    .toList(),
+        default_new_user_role_ids = source['default_new_user_role_ids'] == null
+            ? null
+            : source['default_new_user_role_ids']
+                .map<int>((i) => i as int)
+                .toList(),
+        enabled = source['enabled'],
+        force_no_page = source['force_no_page'],
+        groups_base_dn = source['groups_base_dn'] == null
+            ? null
+            : source['groups_base_dn'].toString(),
+        groups_finder_type = source['groups_finder_type'] == null
+            ? null
+            : source['groups_finder_type'].toString(),
+        groups_member_attribute = source['groups_member_attribute'] == null
+            ? null
+            : source['groups_member_attribute'].toString(),
+        groups_objectclasses = source['groups_objectclasses'] == null
+            ? null
+            : source['groups_objectclasses'].toString(),
+        groups_user_attribute = source['groups_user_attribute'] == null
+            ? null
+            : source['groups_user_attribute'].toString(),
+        groups_with_role_ids = source['groups_with_role_ids'] == null
+            ? null
+            : (source['groups_with_role_ids'] as List)
+                .map((i) => LDAPGroupWrite.fromJson(i))
+                .toList(),
+        merge_new_users_by_email = source['merge_new_users_by_email'],
+        set_roles_from_groups = source['set_roles_from_groups'],
+        test_ldap_password = source['test_ldap_password'] == null
+            ? null
+            : source['test_ldap_password'].toString(),
+        test_ldap_user = source['test_ldap_user'] == null
+            ? null
+            : source['test_ldap_user'].toString(),
+        user_attribute_map_email = source['user_attribute_map_email'] == null
+            ? null
+            : source['user_attribute_map_email'].toString(),
+        user_attribute_map_first_name =
+            source['user_attribute_map_first_name'] == null
+                ? null
+                : source['user_attribute_map_first_name'].toString(),
+        user_attribute_map_last_name =
+            source['user_attribute_map_last_name'] == null
+                ? null
+                : source['user_attribute_map_last_name'].toString(),
+        user_attribute_map_ldap_id =
+            source['user_attribute_map_ldap_id'] == null
+                ? null
+                : source['user_attribute_map_ldap_id'].toString(),
+        user_attributes_with_ids = source['user_attributes_with_ids'] == null
+            ? null
+            : (source['user_attributes_with_ids'] as List)
+                .map((i) => LDAPUserAttributeWrite.fromJson(i))
+                .toList(),
+        user_bind_base_dn = source['user_bind_base_dn'] == null
+            ? null
+            : source['user_bind_base_dn'].toString(),
+        user_custom_filter = source['user_custom_filter'] == null
+            ? null
+            : source['user_custom_filter'].toString(),
+        user_id_attribute_names = source['user_id_attribute_names'] == null
+            ? null
+            : source['user_id_attribute_names'].toString(),
+        user_objectclass = source['user_objectclass'] == null
+            ? null
+            : source['user_objectclass'].toString(),
+        allow_normal_group_membership = source['allow_normal_group_membership'],
+        allow_roles_from_normal_groups =
+            source['allow_roles_from_normal_groups'],
+        allow_direct_roles = source['allow_direct_roles'];
 }
 
 /**
@@ -8260,6 +15119,13 @@ class WriteLegacyFeature {
    * Whether this feature has been enabled by a user
    */
   bool enabled_locally;
+
+  WriteLegacyFeature() {}
+
+  Map toJson() => {'enabled_locally': enabled_locally};
+
+  WriteLegacyFeature.fromJson(Map source)
+      : enabled_locally = source['enabled_locally'];
 }
 
 /**
@@ -8283,6 +15149,27 @@ class WriteLookmlModel {
    * Is this model allowed to use all current and future connections
    */
   bool unlimited_db_connections;
+
+  WriteLookmlModel() {}
+
+  Map toJson() => {
+        'name': name,
+        'project_name': project_name,
+        'unlimited_db_connections': unlimited_db_connections
+      };
+
+  WriteLookmlModel.fromJson(Map source)
+      : allowed_db_connection_names =
+            source['allowed_db_connection_names'] == null
+                ? null
+                : source['allowed_db_connection_names']
+                    .map<String>((i) => i as String)
+                    .toList(),
+        name = source['name'] == null ? null : source['name'].toString(),
+        project_name = source['project_name'] == null
+            ? null
+            : source['project_name'].toString(),
+        unlimited_db_connections = source['unlimited_db_connections'];
 }
 
 /**
@@ -8314,6 +15201,9 @@ class WriteLookWithQuery {
    * Query Id
    */
   int query_id;
+  /**
+   * folder
+   */
   WriteFolderBase folder;
   /**
    * Folder Id
@@ -8327,8 +15217,52 @@ class WriteLookWithQuery {
    * Space Id
    */
   String space_id;
+  /**
+   * space
+   */
   WriteSpaceBase space;
+  /**
+   * query
+   */
   WriteQuery query;
+
+  WriteLookWithQuery() {}
+
+  Map toJson() => {
+        'title': title,
+        'deleted': deleted,
+        'description': description,
+        'is_run_on_load': is_run_on_load,
+        'public': public,
+        'query_id': query_id,
+        'folder_id': folder_id,
+        'user_id': user_id,
+        'space_id': space_id
+      };
+
+  WriteLookWithQuery.fromJson(Map source)
+      : title = source['title'] == null ? null : source['title'].toString(),
+        deleted = source['deleted'],
+        description = source['description'] == null
+            ? null
+            : source['description'].toString(),
+        is_run_on_load = source['is_run_on_load'],
+        public = source['public'],
+        query_id = source['query_id'],
+        folder = source['folder'] == null
+            ? null
+            : WriteFolderBase.fromJson(source['folder']),
+        folder_id =
+            source['folder_id'] == null ? null : source['folder_id'].toString(),
+        user_id = source['user_id'],
+        space_id =
+            source['space_id'] == null ? null : source['space_id'].toString(),
+        space = source['space'] == null
+            ? null
+            : WriteSpaceBase.fromJson(source['space']),
+        query = source['query'] == null
+            ? null
+            : WriteQuery.fromJson(source['query']);
 }
 
 /**
@@ -8364,6 +15298,36 @@ class WriteMergeQuery {
    * Visualization Config
    */
   Map<String, dynamic> vis_config;
+
+  WriteMergeQuery() {}
+
+  Map toJson() => {
+        'column_limit': column_limit,
+        'dynamic_fields': dynamic_fields,
+        'total': total,
+        'vis_config': vis_config
+      };
+
+  WriteMergeQuery.fromJson(Map source)
+      : column_limit = source['column_limit'] == null
+            ? null
+            : source['column_limit'].toString(),
+        dynamic_fields = source['dynamic_fields'] == null
+            ? null
+            : source['dynamic_fields'].toString(),
+        pivots = source['pivots'] == null
+            ? null
+            : source['pivots'].map<String>((i) => i as String).toList(),
+        sorts = source['sorts'] == null
+            ? null
+            : source['sorts'].map<String>((i) => i as String).toList(),
+        source_queries = source['source_queries'] == null
+            ? null
+            : (source['source_queries'] as List)
+                .map((i) => MergeQuerySourceQuery.fromJson(i))
+                .toList(),
+        total = source['total'],
+        vis_config = source['vis_config'];
 }
 
 /**
@@ -8371,11 +15335,24 @@ class WriteMergeQuery {
  * can, all_access, built_in, id, url
  */
 class WriteModelSet {
+  /**
+   * models
+   */
   List<String> models;
   /**
    * Name of ModelSet
    */
   String name;
+
+  WriteModelSet() {}
+
+  Map toJson() => {'name': name};
+
+  WriteModelSet.fromJson(Map source)
+      : models = source['models'] == null
+            ? null
+            : source['models'].map<String>((i) => i as String).toList(),
+        name = source['name'] == null ? null : source['name'].toString();
 }
 
 /**
@@ -8479,6 +15456,97 @@ class WriteOIDCConfig {
    * Allows roles to be directly assigned to OIDC auth'd users.
    */
   bool allow_direct_roles;
+
+  WriteOIDCConfig() {}
+
+  Map toJson() => {
+        'alternate_email_login_allowed': alternate_email_login_allowed,
+        'audience': audience,
+        'auth_requires_role': auth_requires_role,
+        'authorization_endpoint': authorization_endpoint,
+        'enabled': enabled,
+        'groups_attribute': groups_attribute,
+        'identifier': identifier,
+        'issuer': issuer,
+        'new_user_migration_types': new_user_migration_types,
+        'secret': secret,
+        'set_roles_from_groups': set_roles_from_groups,
+        'token_endpoint': token_endpoint,
+        'user_attribute_map_email': user_attribute_map_email,
+        'user_attribute_map_first_name': user_attribute_map_first_name,
+        'user_attribute_map_last_name': user_attribute_map_last_name,
+        'userinfo_endpoint': userinfo_endpoint,
+        'allow_normal_group_membership': allow_normal_group_membership,
+        'allow_roles_from_normal_groups': allow_roles_from_normal_groups,
+        'allow_direct_roles': allow_direct_roles
+      };
+
+  WriteOIDCConfig.fromJson(Map source)
+      : alternate_email_login_allowed = source['alternate_email_login_allowed'],
+        audience =
+            source['audience'] == null ? null : source['audience'].toString(),
+        auth_requires_role = source['auth_requires_role'],
+        authorization_endpoint = source['authorization_endpoint'] == null
+            ? null
+            : source['authorization_endpoint'].toString(),
+        default_new_user_group_ids =
+            source['default_new_user_group_ids'] == null
+                ? null
+                : source['default_new_user_group_ids']
+                    .map<int>((i) => i as int)
+                    .toList(),
+        default_new_user_role_ids = source['default_new_user_role_ids'] == null
+            ? null
+            : source['default_new_user_role_ids']
+                .map<int>((i) => i as int)
+                .toList(),
+        enabled = source['enabled'],
+        groups_attribute = source['groups_attribute'] == null
+            ? null
+            : source['groups_attribute'].toString(),
+        groups_with_role_ids = source['groups_with_role_ids'] == null
+            ? null
+            : (source['groups_with_role_ids'] as List)
+                .map((i) => OIDCGroupWrite.fromJson(i))
+                .toList(),
+        identifier = source['identifier'] == null
+            ? null
+            : source['identifier'].toString(),
+        issuer = source['issuer'] == null ? null : source['issuer'].toString(),
+        new_user_migration_types = source['new_user_migration_types'] == null
+            ? null
+            : source['new_user_migration_types'].toString(),
+        scopes = source['scopes'] == null
+            ? null
+            : source['scopes'].map<String>((i) => i as String).toList(),
+        secret = source['secret'] == null ? null : source['secret'].toString(),
+        set_roles_from_groups = source['set_roles_from_groups'],
+        token_endpoint = source['token_endpoint'] == null
+            ? null
+            : source['token_endpoint'].toString(),
+        user_attribute_map_email = source['user_attribute_map_email'] == null
+            ? null
+            : source['user_attribute_map_email'].toString(),
+        user_attribute_map_first_name =
+            source['user_attribute_map_first_name'] == null
+                ? null
+                : source['user_attribute_map_first_name'].toString(),
+        user_attribute_map_last_name =
+            source['user_attribute_map_last_name'] == null
+                ? null
+                : source['user_attribute_map_last_name'].toString(),
+        user_attributes_with_ids = source['user_attributes_with_ids'] == null
+            ? null
+            : (source['user_attributes_with_ids'] as List)
+                .map((i) => OIDCUserAttributeWrite.fromJson(i))
+                .toList(),
+        userinfo_endpoint = source['userinfo_endpoint'] == null
+            ? null
+            : source['userinfo_endpoint'].toString(),
+        allow_normal_group_membership = source['allow_normal_group_membership'],
+        allow_roles_from_normal_groups =
+            source['allow_roles_from_normal_groups'],
+        allow_direct_roles = source['allow_direct_roles'];
 }
 
 /**
@@ -8502,6 +15570,21 @@ class WritePasswordConfig {
    * Require at least one special character
    */
   bool require_special;
+
+  WritePasswordConfig() {}
+
+  Map toJson() => {
+        'min_length': min_length,
+        'require_numeric': require_numeric,
+        'require_upperlower': require_upperlower,
+        'require_special': require_special
+      };
+
+  WritePasswordConfig.fromJson(Map source)
+      : min_length = source['min_length'],
+        require_numeric = source['require_numeric'],
+        require_upperlower = source['require_upperlower'],
+        require_special = source['require_special'];
 }
 
 /**
@@ -8513,7 +15596,20 @@ class WritePermissionSet {
    * Name of PermissionSet
    */
   String name;
+  /**
+   * permissions
+   */
   List<String> permissions;
+
+  WritePermissionSet() {}
+
+  Map toJson() => {'name': name};
+
+  WritePermissionSet.fromJson(Map source)
+      : name = source['name'] == null ? null : source['name'].toString(),
+        permissions = source['permissions'] == null
+            ? null
+            : source['permissions'].map<String>((i) => i as String).toList();
 }
 
 /**
@@ -8581,6 +15677,62 @@ class WriteProject {
    * Validation policy: If true, the project can be committed with warnings when `validation_required` is true. (`allow_warnings` does nothing if `validation_required` is false).
    */
   bool allow_warnings;
+
+  WriteProject() {}
+
+  Map toJson() => {
+        'name': name,
+        'git_remote_url': git_remote_url,
+        'git_username': git_username,
+        'git_password': git_password,
+        'git_username_user_attribute': git_username_user_attribute,
+        'git_password_user_attribute': git_password_user_attribute,
+        'git_service_name': git_service_name,
+        'git_application_server_http_port': git_application_server_http_port,
+        'git_application_server_http_scheme':
+            git_application_server_http_scheme,
+        'deploy_secret': deploy_secret,
+        'unset_deploy_secret': unset_deploy_secret,
+        'pull_request_mode': pull_request_mode,
+        'validation_required': validation_required,
+        'git_release_mgmt_enabled': git_release_mgmt_enabled,
+        'allow_warnings': allow_warnings
+      };
+
+  WriteProject.fromJson(Map source)
+      : name = source['name'] == null ? null : source['name'].toString(),
+        git_remote_url = source['git_remote_url'] == null
+            ? null
+            : source['git_remote_url'].toString(),
+        git_username = source['git_username'] == null
+            ? null
+            : source['git_username'].toString(),
+        git_password = source['git_password'] == null
+            ? null
+            : source['git_password'].toString(),
+        git_username_user_attribute =
+            source['git_username_user_attribute'] == null
+                ? null
+                : source['git_username_user_attribute'].toString(),
+        git_password_user_attribute =
+            source['git_password_user_attribute'] == null
+                ? null
+                : source['git_password_user_attribute'].toString(),
+        git_service_name = source['git_service_name'] == null
+            ? null
+            : source['git_service_name'].toString(),
+        git_application_server_http_port =
+            source['git_application_server_http_port'],
+        git_application_server_http_scheme =
+            source['git_application_server_http_scheme'],
+        deploy_secret = source['deploy_secret'] == null
+            ? null
+            : source['deploy_secret'].toString(),
+        unset_deploy_secret = source['unset_deploy_secret'],
+        pull_request_mode = source['pull_request_mode'],
+        validation_required = source['validation_required'],
+        git_release_mgmt_enabled = source['git_release_mgmt_enabled'],
+        allow_warnings = source['allow_warnings'];
 }
 
 /**
@@ -8668,6 +15820,70 @@ class WriteQuery {
    * (DEPRECATED) Runtime (Deprecated)
    */
   double runtime;
+
+  WriteQuery() {}
+
+  Map toJson() => {
+        'model': model,
+        'view': view,
+        'filters': filters,
+        'filter_expression': filter_expression,
+        'limit': limit,
+        'column_limit': column_limit,
+        'total': total,
+        'row_total': row_total,
+        'vis_config': vis_config,
+        'filter_config': filter_config,
+        'visible_ui_sections': visible_ui_sections,
+        'dynamic_fields': dynamic_fields,
+        'client_id': client_id,
+        'query_timezone': query_timezone,
+        'runtime': runtime
+      };
+
+  WriteQuery.fromJson(Map source)
+      : model = source['model'] == null ? null : source['model'].toString(),
+        view = source['view'] == null ? null : source['view'].toString(),
+        fields = source['fields'] == null
+            ? null
+            : source['fields'].map<String>((i) => i as String).toList(),
+        pivots = source['pivots'] == null
+            ? null
+            : source['pivots'].map<String>((i) => i as String).toList(),
+        fill_fields = source['fill_fields'] == null
+            ? null
+            : source['fill_fields'].map<String>((i) => i as String).toList(),
+        filters = source['filters'],
+        filter_expression = source['filter_expression'] == null
+            ? null
+            : source['filter_expression'].toString(),
+        sorts = source['sorts'] == null
+            ? null
+            : source['sorts'].map<String>((i) => i as String).toList(),
+        limit = source['limit'] == null ? null : source['limit'].toString(),
+        column_limit = source['column_limit'] == null
+            ? null
+            : source['column_limit'].toString(),
+        total = source['total'],
+        row_total =
+            source['row_total'] == null ? null : source['row_total'].toString(),
+        subtotals = source['subtotals'] == null
+            ? null
+            : source['subtotals'].map<String>((i) => i as String).toList(),
+        vis_config = source['vis_config'],
+        filter_config = source['filter_config'],
+        visible_ui_sections = source['visible_ui_sections'] == null
+            ? null
+            : source['visible_ui_sections'].toString(),
+        dynamic_fields = source['dynamic_fields'] == null
+            ? null
+            : source['dynamic_fields'].toString(),
+        client_id =
+            source['client_id'] == null ? null : source['client_id'].toString(),
+        query_timezone = source['query_timezone'] == null
+            ? null
+            : source['query_timezone'].toString(),
+        runtime = source['runtime'];
 }
 
 /**
@@ -8687,6 +15903,25 @@ class WriteRepositoryCredential {
    * Public deploy key for SSH authentication.
    */
   String ssh_public_key;
+
+  WriteRepositoryCredential() {}
+
+  Map toJson() => {
+        'git_username': git_username,
+        'git_password': git_password,
+        'ssh_public_key': ssh_public_key
+      };
+
+  WriteRepositoryCredential.fromJson(Map source)
+      : git_username = source['git_username'] == null
+            ? null
+            : source['git_username'].toString(),
+        git_password = source['git_password'] == null
+            ? null
+            : source['git_password'].toString(),
+        ssh_public_key = source['ssh_public_key'] == null
+            ? null
+            : source['ssh_public_key'].toString();
 }
 
 /**
@@ -8694,7 +15929,19 @@ class WriteRepositoryCredential {
  * id, dynamic_fields, filterables, sorts, merge_result_id, total, query_id, sql_query_id, vis_config
  */
 class WriteResultMakerWithIdVisConfigAndDynamicFields {
+  /**
+   * query
+   */
   WriteQuery query;
+
+  WriteResultMakerWithIdVisConfigAndDynamicFields() {}
+
+  Map toJson() => {};
+
+  WriteResultMakerWithIdVisConfigAndDynamicFields.fromJson(Map source)
+      : query = source['query'] == null
+            ? null
+            : WriteQuery.fromJson(source['query']);
 }
 
 /**
@@ -8706,16 +15953,41 @@ class WriteRole {
    * Name of Role
    */
   String name;
+  /**
+   * permission_set
+   */
   WritePermissionSet permission_set;
   /**
    * (Write-Only) Id of permission set
    */
   int permission_set_id;
+  /**
+   * model_set
+   */
   WriteModelSet model_set;
   /**
    * (Write-Only) Id of model set
    */
   int model_set_id;
+
+  WriteRole() {}
+
+  Map toJson() => {
+        'name': name,
+        'permission_set_id': permission_set_id,
+        'model_set_id': model_set_id
+      };
+
+  WriteRole.fromJson(Map source)
+      : name = source['name'] == null ? null : source['name'].toString(),
+        permission_set = source['permission_set'] == null
+            ? null
+            : WritePermissionSet.fromJson(source['permission_set']),
+        permission_set_id = source['permission_set_id'],
+        model_set = source['model_set'] == null
+            ? null
+            : WriteModelSet.fromJson(source['model_set']),
+        model_set_id = source['model_set_id'];
 }
 
 /**
@@ -8819,6 +16091,97 @@ class WriteSamlConfig {
    * Allows roles to be directly assigned to SAML auth'd users.
    */
   bool allow_direct_roles;
+
+  WriteSamlConfig() {}
+
+  Map toJson() => {
+        'enabled': enabled,
+        'idp_cert': idp_cert,
+        'idp_url': idp_url,
+        'idp_issuer': idp_issuer,
+        'idp_audience': idp_audience,
+        'allowed_clock_drift': allowed_clock_drift,
+        'user_attribute_map_email': user_attribute_map_email,
+        'user_attribute_map_first_name': user_attribute_map_first_name,
+        'user_attribute_map_last_name': user_attribute_map_last_name,
+        'new_user_migration_types': new_user_migration_types,
+        'alternate_email_login_allowed': alternate_email_login_allowed,
+        'set_roles_from_groups': set_roles_from_groups,
+        'groups_attribute': groups_attribute,
+        'auth_requires_role': auth_requires_role,
+        'groups_finder_type': groups_finder_type,
+        'groups_member_value': groups_member_value,
+        'bypass_login_page': bypass_login_page,
+        'allow_normal_group_membership': allow_normal_group_membership,
+        'allow_roles_from_normal_groups': allow_roles_from_normal_groups,
+        'allow_direct_roles': allow_direct_roles
+      };
+
+  WriteSamlConfig.fromJson(Map source)
+      : enabled = source['enabled'],
+        idp_cert =
+            source['idp_cert'] == null ? null : source['idp_cert'].toString(),
+        idp_url =
+            source['idp_url'] == null ? null : source['idp_url'].toString(),
+        idp_issuer = source['idp_issuer'] == null
+            ? null
+            : source['idp_issuer'].toString(),
+        idp_audience = source['idp_audience'] == null
+            ? null
+            : source['idp_audience'].toString(),
+        allowed_clock_drift = source['allowed_clock_drift'],
+        user_attribute_map_email = source['user_attribute_map_email'] == null
+            ? null
+            : source['user_attribute_map_email'].toString(),
+        user_attribute_map_first_name =
+            source['user_attribute_map_first_name'] == null
+                ? null
+                : source['user_attribute_map_first_name'].toString(),
+        user_attribute_map_last_name =
+            source['user_attribute_map_last_name'] == null
+                ? null
+                : source['user_attribute_map_last_name'].toString(),
+        new_user_migration_types = source['new_user_migration_types'] == null
+            ? null
+            : source['new_user_migration_types'].toString(),
+        alternate_email_login_allowed = source['alternate_email_login_allowed'],
+        default_new_user_role_ids = source['default_new_user_role_ids'] == null
+            ? null
+            : source['default_new_user_role_ids']
+                .map<int>((i) => i as int)
+                .toList(),
+        default_new_user_group_ids =
+            source['default_new_user_group_ids'] == null
+                ? null
+                : source['default_new_user_group_ids']
+                    .map<int>((i) => i as int)
+                    .toList(),
+        set_roles_from_groups = source['set_roles_from_groups'],
+        groups_attribute = source['groups_attribute'] == null
+            ? null
+            : source['groups_attribute'].toString(),
+        groups_with_role_ids = source['groups_with_role_ids'] == null
+            ? null
+            : (source['groups_with_role_ids'] as List)
+                .map((i) => SamlGroupWrite.fromJson(i))
+                .toList(),
+        auth_requires_role = source['auth_requires_role'],
+        user_attributes_with_ids = source['user_attributes_with_ids'] == null
+            ? null
+            : (source['user_attributes_with_ids'] as List)
+                .map((i) => SamlUserAttributeWrite.fromJson(i))
+                .toList(),
+        groups_finder_type = source['groups_finder_type'] == null
+            ? null
+            : source['groups_finder_type'].toString(),
+        groups_member_value = source['groups_member_value'] == null
+            ? null
+            : source['groups_member_value'].toString(),
+        bypass_login_page = source['bypass_login_page'],
+        allow_normal_group_membership = source['allow_normal_group_membership'],
+        allow_roles_from_normal_groups =
+            source['allow_roles_from_normal_groups'],
+        allow_direct_roles = source['allow_direct_roles'];
 }
 
 /**
@@ -8930,6 +16293,83 @@ class WriteScheduledPlan {
    * The pixel width at which we render the inline table visualizations
    */
   int inline_table_width;
+
+  WriteScheduledPlan() {}
+
+  Map toJson() => {
+        'name': name,
+        'user_id': user_id,
+        'run_as_recipient': run_as_recipient,
+        'enabled': enabled,
+        'look_id': look_id,
+        'dashboard_id': dashboard_id,
+        'lookml_dashboard_id': lookml_dashboard_id,
+        'filters_string': filters_string,
+        'dashboard_filters': dashboard_filters,
+        'require_results': require_results,
+        'require_no_results': require_no_results,
+        'require_change': require_change,
+        'send_all_results': send_all_results,
+        'crontab': crontab,
+        'datagroup': datagroup,
+        'timezone': timezone,
+        'query_id': query_id,
+        'run_once': run_once,
+        'include_links': include_links,
+        'pdf_paper_size': pdf_paper_size,
+        'pdf_landscape': pdf_landscape,
+        'embed': embed,
+        'color_theme': color_theme,
+        'long_tables': long_tables,
+        'inline_table_width': inline_table_width
+      };
+
+  WriteScheduledPlan.fromJson(Map source)
+      : name = source['name'] == null ? null : source['name'].toString(),
+        user_id = source['user_id'],
+        run_as_recipient = source['run_as_recipient'],
+        enabled = source['enabled'],
+        look_id = source['look_id'],
+        dashboard_id = source['dashboard_id'],
+        lookml_dashboard_id = source['lookml_dashboard_id'] == null
+            ? null
+            : source['lookml_dashboard_id'].toString(),
+        filters_string = source['filters_string'] == null
+            ? null
+            : source['filters_string'].toString(),
+        dashboard_filters = source['dashboard_filters'] == null
+            ? null
+            : source['dashboard_filters'].toString(),
+        require_results = source['require_results'],
+        require_no_results = source['require_no_results'],
+        require_change = source['require_change'],
+        send_all_results = source['send_all_results'],
+        crontab =
+            source['crontab'] == null ? null : source['crontab'].toString(),
+        datagroup =
+            source['datagroup'] == null ? null : source['datagroup'].toString(),
+        timezone =
+            source['timezone'] == null ? null : source['timezone'].toString(),
+        query_id =
+            source['query_id'] == null ? null : source['query_id'].toString(),
+        scheduled_plan_destination =
+            source['scheduled_plan_destination'] == null
+                ? null
+                : (source['scheduled_plan_destination'] as List)
+                    .map((i) => ScheduledPlanDestination.fromJson(i))
+                    .toList(),
+        run_once = source['run_once'],
+        include_links = source['include_links'],
+        pdf_paper_size = source['pdf_paper_size'] == null
+            ? null
+            : source['pdf_paper_size'].toString(),
+        pdf_landscape = source['pdf_landscape'],
+        embed = source['embed'],
+        color_theme = source['color_theme'] == null
+            ? null
+            : source['color_theme'].toString(),
+        long_tables = source['long_tables'],
+        inline_table_width = source['inline_table_width'];
 }
 
 /**
@@ -8957,6 +16397,23 @@ class WriteSessionConfig {
    * Track location of session when user logs in.
    */
   bool track_session_location;
+
+  WriteSessionConfig() {}
+
+  Map toJson() => {
+        'allow_persistent_sessions': allow_persistent_sessions,
+        'session_minutes': session_minutes,
+        'unlimited_sessions_per_user': unlimited_sessions_per_user,
+        'use_inactivity_based_logout': use_inactivity_based_logout,
+        'track_session_location': track_session_location
+      };
+
+  WriteSessionConfig.fromJson(Map source)
+      : allow_persistent_sessions = source['allow_persistent_sessions'],
+        session_minutes = source['session_minutes'],
+        unlimited_sessions_per_user = source['unlimited_sessions_per_user'],
+        use_inactivity_based_logout = source['use_inactivity_based_logout'],
+        track_session_location = source['track_session_location'];
 }
 
 /**
@@ -8972,6 +16429,15 @@ class WriteSpaceBase {
    * Id of Parent. If the parent id is null, this is a root-level entry
    */
   String parent_id;
+
+  WriteSpaceBase() {}
+
+  Map toJson() => {'name': name, 'parent_id': parent_id};
+
+  WriteSpaceBase.fromJson(Map source)
+      : name = source['name'] == null ? null : source['name'].toString(),
+        parent_id =
+            source['parent_id'] == null ? null : source['parent_id'].toString();
 }
 
 /**
@@ -8991,7 +16457,22 @@ class WriteTheme {
    * Name of theme. Can only be alphanumeric and underscores.
    */
   String name;
+  /**
+   * settings
+   */
   ThemeSettings settings;
+
+  WriteTheme() {}
+
+  Map toJson() => {'begin_at': begin_at, 'end_at': end_at, 'name': name};
+
+  WriteTheme.fromJson(Map source)
+      : begin_at = source['begin_at'],
+        end_at = source['end_at'],
+        name = source['name'] == null ? null : source['name'].toString(),
+        settings = source['settings'] == null
+            ? null
+            : ThemeSettings.fromJson(source['settings']);
 }
 
 /**
@@ -8999,6 +16480,9 @@ class WriteTheme {
  * can, avatar_url, avatar_url_without_sizing, credentials_api3, credentials_embed, credentials_google, credentials_ldap, credentials_looker_openid, credentials_oidc, credentials_saml, credentials_totp, display_name, email, embed_group_space_id, group_ids, id, looker_versions, personal_space_id, personal_folder_id, presumed_looker_employee, role_ids, sessions, verified_looker_employee, roles_externally_managed, allow_direct_roles, allow_normal_group_membership, allow_roles_from_normal_groups, url
  */
 class WriteUser {
+  /**
+   * credentials_email
+   */
   WriteCredentialsEmail credentials_email;
   /**
    * First name
@@ -9032,6 +16516,39 @@ class WriteUser {
    * Per user dictionary of undocumented state information owned by the Looker UI.
    */
   Map<String, dynamic> ui_state;
+
+  WriteUser() {}
+
+  Map toJson() => {
+        'first_name': first_name,
+        'home_space_id': home_space_id,
+        'home_folder_id': home_folder_id,
+        'is_disabled': is_disabled,
+        'last_name': last_name,
+        'locale': locale,
+        'models_dir_validated': models_dir_validated,
+        'ui_state': ui_state
+      };
+
+  WriteUser.fromJson(Map source)
+      : credentials_email = source['credentials_email'] == null
+            ? null
+            : WriteCredentialsEmail.fromJson(source['credentials_email']),
+        first_name = source['first_name'] == null
+            ? null
+            : source['first_name'].toString(),
+        home_space_id = source['home_space_id'] == null
+            ? null
+            : source['home_space_id'].toString(),
+        home_folder_id = source['home_folder_id'] == null
+            ? null
+            : source['home_folder_id'].toString(),
+        is_disabled = source['is_disabled'],
+        last_name =
+            source['last_name'] == null ? null : source['last_name'].toString(),
+        locale = source['locale'] == null ? null : source['locale'].toString(),
+        models_dir_validated = source['models_dir_validated'],
+        ui_state = source['ui_state'];
 }
 
 /**
@@ -9071,6 +16588,34 @@ class WriteUserAttribute {
    * Destinations to which a hidden attribute may be sent. Once set, cannot be edited.
    */
   String hidden_value_domain_whitelist;
+
+  WriteUserAttribute() {}
+
+  Map toJson() => {
+        'name': name,
+        'label': label,
+        'type': type,
+        'default_value': default_value,
+        'value_is_hidden': value_is_hidden,
+        'user_can_view': user_can_view,
+        'user_can_edit': user_can_edit,
+        'hidden_value_domain_whitelist': hidden_value_domain_whitelist
+      };
+
+  WriteUserAttribute.fromJson(Map source)
+      : name = source['name'] == null ? null : source['name'].toString(),
+        label = source['label'] == null ? null : source['label'].toString(),
+        type = source['type'] == null ? null : source['type'].toString(),
+        default_value = source['default_value'] == null
+            ? null
+            : source['default_value'].toString(),
+        value_is_hidden = source['value_is_hidden'],
+        user_can_view = source['user_can_view'],
+        user_can_edit = source['user_can_edit'],
+        hidden_value_domain_whitelist =
+            source['hidden_value_domain_whitelist'] == null
+                ? null
+                : source['hidden_value_domain_whitelist'].toString();
 }
 
 /**
@@ -9082,6 +16627,13 @@ class WriteUserAttributeWithValue {
    * Value of attribute for user
    */
   String value;
+
+  WriteUserAttributeWithValue() {}
+
+  Map toJson() => {'value': value};
+
+  WriteUserAttributeWithValue.fromJson(Map source)
+      : value = source['value'] == null ? null : source['value'].toString();
 }
 
 /**
@@ -9141,4 +16693,42 @@ class WriteWhitelabelConfiguration {
    * Remove Looker mentions in home folder page when you don’t have any items saved
    */
   bool folders_mentions;
+
+  WriteWhitelabelConfiguration() {}
+
+  Map toJson() => {
+        'logo_file': logo_file,
+        'favicon_file': favicon_file,
+        'default_title': default_title,
+        'show_help_menu': show_help_menu,
+        'show_docs': show_docs,
+        'show_email_sub_options': show_email_sub_options,
+        'allow_looker_mentions': allow_looker_mentions,
+        'allow_looker_links': allow_looker_links,
+        'custom_welcome_email_advanced': custom_welcome_email_advanced,
+        'setup_mentions': setup_mentions,
+        'alerts_logo': alerts_logo,
+        'alerts_links': alerts_links,
+        'folders_mentions': folders_mentions
+      };
+
+  WriteWhitelabelConfiguration.fromJson(Map source)
+      : logo_file =
+            source['logo_file'] == null ? null : source['logo_file'].toString(),
+        favicon_file = source['favicon_file'] == null
+            ? null
+            : source['favicon_file'].toString(),
+        default_title = source['default_title'] == null
+            ? null
+            : source['default_title'].toString(),
+        show_help_menu = source['show_help_menu'],
+        show_docs = source['show_docs'],
+        show_email_sub_options = source['show_email_sub_options'],
+        allow_looker_mentions = source['allow_looker_mentions'],
+        allow_looker_links = source['allow_looker_links'],
+        custom_welcome_email_advanced = source['custom_welcome_email_advanced'],
+        setup_mentions = source['setup_mentions'],
+        alerts_logo = source['alerts_logo'],
+        alerts_links = source['alerts_links'],
+        folders_mentions = source['folders_mentions'];
 }
