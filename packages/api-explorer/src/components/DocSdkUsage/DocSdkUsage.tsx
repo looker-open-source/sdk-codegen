@@ -26,9 +26,9 @@
 import React, { FC } from 'react'
 import { TabList, Tab, TabPanels, TabPanel, useTabs } from '@looker/components'
 import { ApiModel, IMethod } from '@looker/sdk-codegen'
+import { getGenerators } from '@looker/run-it'
 
 import { CollapserCard } from '../Collapser'
-import { getGenerators } from '../DocSDKs'
 import { DocExamples } from './DocExamples'
 
 interface DocExamplesProps {

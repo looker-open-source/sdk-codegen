@@ -24,4 +24,3 @@
 
  */
 export { DocSDKs } from './DocSDKs'
-export { getGenerators } from './utils'
