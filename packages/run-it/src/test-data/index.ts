@@ -31,3 +31,4 @@ export {
   testUnknownResponse,
   testErrorResponse,
 } from './responses'
+export { api, specs } from './specs'
