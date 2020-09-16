@@ -24,9 +24,10 @@
 
  */
 
-import React, { FC, ReactElement } from 'react'
+import React, { FC, ReactElement, useState } from 'react'
 import {
   ActionList,
+  Pagination,
   Tab,
   TabList,
   TabPanel,
@@ -40,12 +41,31 @@ interface DataGridProps {
   data: any[]
   /** Component to render "raw" output */
   raw: ReactElement<any> | ReactElement[]
+  /** Number of rows per page. Defaults to 15 */
+  pageSize?: number
 }
 
-export const DataGrid: FC<DataGridProps> = ({ data, raw }) => {
+export const DataGrid: FC<DataGridProps> = ({ data, raw, pageSize = 15 }) => {
   const tabs = useTabs()
   const headers = gridHeaders(data)
-  const rows = gridRows(data)
+  const [page, setPage] = useState(1)
+  const pageCount = Math.round((data.length - 1) / pageSize)
+  // const rows = gridRows(data)
+  // const {
+  //   onSelect,
+  //   onSelectAll,
+  //   selections,
+  //   setSelections,
+  // } = useActionListSelectManager(pageItemIds)
+
+  // The +1 is to skip the header row
+  const pageItemData = data.slice(
+    (page - 1) * pageSize + 1,
+    page * pageSize + 1
+  )
+  // const pageItemIds = pageItemData.map((_, index) => gridRowId(index))
+  const pageItems = gridRows(pageItemData)
+
   return (
     <>
       <TabList {...tabs}>
@@ -55,11 +75,56 @@ export const DataGrid: FC<DataGridProps> = ({ data, raw }) => {
       <TabPanels {...tabs} pt="0">
         <TabPanel key="grid">
           <ActionList key="datagrid" columns={headers}>
-            {rows}
+            {pageItems}
           </ActionList>
+          <Pagination
+            current={page}
+            pages={pageCount}
+            onChange={(nextPage) => {
+              setPage(nextPage)
+            }}
+          />
         </TabPanel>
         <TabPanel key="raw">{raw}</TabPanel>
       </TabPanels>
     </>
   )
 }
+//   const allItems = [...data].map(({ id }) => String(id))
+//   const onTotalSelectAll = () => setSelections(allItems)
+//   const onTotalClearAll = () => setSelections([])
+//
+//   const bulkActionsConfig = {
+//     actions: (
+//       <ActionListItemAction
+//         onClick={() => alert(`Selected Items: ${selections}`)}
+//       >
+//         View Selected Item IDs
+//       </ActionListItemAction>
+//     ),
+//     onTotalClearAll,
+//     onTotalSelectAll,
+//     pageCount: pageItems.length,
+//     totalCount: allItems.length,
+//   }
+//
+//   return (
+//     <Flex flexDirection="column" alignItems="center">
+//       <Box width="100%" mb="10px">
+//         <ActionList
+//           bulk={bulkActionsConfig}
+//           select={{
+//             onClickRowSelect: true,
+//             onSelect,
+//             onSelectAll,
+//             selectedItems: selections,
+//             pageItems: pageItemIds,
+//           }}
+//           columns={columns}
+//         >
+//           {pageItems}
+//         </ActionList>
+//       </Box>
+//     </Flex>
+//   )
+// }

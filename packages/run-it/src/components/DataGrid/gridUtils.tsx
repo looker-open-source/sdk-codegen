@@ -68,6 +68,9 @@ export const gridHeaders = (data: any[]) => {
   return result as ActionListColumns
 }
 
+export const gridRowId = (index: number) => `row.${index}`
+export const gridCellId = (rowId: string, index: number) => `${rowId}.${index}`
+
 /**
  * Generates PerfTable rows from an array of resource load times
  * @param data A array of resource load times
@@ -78,10 +81,10 @@ export const gridRows = (data: any[]) => {
   const result: JSX.Element[] = []
   const rows = data.slice(1) // Skip the header row
   rows.map((row, index) => {
-    const id = `row.${index}`
+    const id = gridRowId(index)
     const cells: any = []
     row.map((item: any, index: number) => {
-      const key = `${id}.${index}`
+      const key = gridCellId(id, index)
       const cell = <ActionListItemColumn key={key}>{item}</ActionListItemColumn>
       cells.push(cell)
     })
