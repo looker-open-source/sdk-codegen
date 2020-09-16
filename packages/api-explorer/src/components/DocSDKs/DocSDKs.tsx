@@ -28,9 +28,10 @@ import React, { FC, useState } from 'react'
 import { Tab, TabList, TabPanel, TabPanels, useTabs } from '@looker/components'
 import { IMethod, IType, ApiModel } from '@looker/sdk-codegen'
 
+import { getGenerators } from '@looker/run-it'
 import { DocCode } from '../DocCode'
 import { CollapserCard } from '../Collapser'
-import { getGenerators, noComment } from './utils'
+import { noComment } from './utils'
 
 interface LanguageSDKProps {
   /** API spec */

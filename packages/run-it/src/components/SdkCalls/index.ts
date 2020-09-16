@@ -23,15 +23,6 @@
  SOFTWARE.
 
  */
-import { IMethod } from '@looker/sdk-codegen'
-import { clone } from 'lodash'
 
-/**
- * Given a method create a copy and remove its description
- * @param method An SDK method
- */
-export const noComment = (method: IMethod): IMethod => {
-  const copy = clone(method)
-  copy.description = ''
-  return copy
-}
+export { getGenerators } from './callUtils'
+export { SdkCalls } from './SdkCalls'

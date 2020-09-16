@@ -23,15 +23,19 @@
  SOFTWARE.
 
  */
-import { IMethod } from '@looker/sdk-codegen'
-import { clone } from 'lodash'
+import { ApiModel, KeyedCollection, CodeGen } from '@looker/sdk-codegen'
+import { codeGenerators } from '@looker/sdk-codegen'
 
 /**
- * Given a method create a copy and remove its description
- * @param method An SDK method
+ * Returns a collection of generators for all supported (non legacy) languages
+ * @param api Api spec
  */
-export const noComment = (method: IMethod): IMethod => {
-  const copy = clone(method)
-  copy.description = ''
-  return copy
+export const getGenerators = (api: ApiModel): KeyedCollection<CodeGen> => {
+  const codeGens = {}
+  codeGenerators
+    .filter((x) => x.factory !== undefined)
+    .forEach((gen) => {
+      codeGens[gen.label || gen.language] = gen.factory!(api)
+    })
+  return codeGens
 }

@@ -27,14 +27,13 @@
 import {
   Arg,
   EnumType,
-  IMappedType,
   IMethod,
   IParameter,
   IProperty,
   IType,
   strBody,
 } from './sdkModels'
-import { CodeGen } from './codeGen'
+import { CodeGen, IMappedType } from './codeGen'
 
 export class PythonGen extends CodeGen {
   codePath = './python/'

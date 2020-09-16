@@ -44,6 +44,7 @@ import {
 } from '@looker/components'
 import { Looker40SDK } from '@looker/sdk/lib/browser'
 import { IRawResponse } from '@looker/sdk-rtl/lib/browser'
+import { ApiModel, IMethod } from '@looker/sdk-codegen'
 import {
   RequestForm,
   ShowResponse,
@@ -51,6 +52,7 @@ import {
   LoginForm,
   Loading,
   RunItConfigurator,
+  SdkCalls,
 } from './components'
 import {
   createRequestParams,
@@ -139,21 +141,23 @@ export const PerfTab: FC<PerfTabProps> = ({ isExtension }) => {
 }
 
 interface RunItProps {
+  /** spec model to use for sdk call generation */
+  api: ApiModel
   /** An array of parameters associated with a given endpoint */
   inputs: RunItInput[]
-  /** HTTP Method */
-  httpMethod: RunItHttpMethod
-  /** Request path with path params in curly braces e.g. /looks/{look_id}/run/{result_format} */
-  endpoint: string
+  /** Method to test */
+  method: IMethod
 }
 
 type ResponseContent = IRawResponse | undefined
 
 /**
- * Given an array of inputs, an HTTP method, an endpoint and an api version (specKey) it renders a REST request form
+ * Given an array of inputs, a method, and an api model it renders a REST request form
  * which on submit performs a REST request and renders the response with the appropriate MIME type handler
  */
-export const RunIt: FC<RunItProps> = ({ inputs, httpMethod, endpoint }) => {
+export const RunIt: FC<RunItProps> = ({ api, inputs, method }) => {
+  const httpMethod = method.httpMethod as RunItHttpMethod
+  const endpoint = method.endpoint
   const { sdk, configurator, basePath } = useContext(RunItContext)
 
   const [requestContent, setRequestContent] = useState({})
@@ -222,6 +226,7 @@ export const RunIt: FC<RunItProps> = ({ inputs, httpMethod, endpoint }) => {
         <Tab key="request">Request</Tab>
         <Tab key="response">Response</Tab>
         <PerfTab isExtension={!configIsNeeded} />
+        <Tab key="makeTheCall">Code</Tab>
       </TabList>
       <TabPanels {...tabs}>
         <TabPanel key="request">
@@ -268,6 +273,9 @@ export const RunIt: FC<RunItProps> = ({ inputs, httpMethod, endpoint }) => {
           isExtension={!configIsNeeded}
           configurator={configurator}
         />
+        <TabPanel key="makeTheCall">
+          <SdkCalls api={api} method={method} inputs={requestContent} />
+        </TabPanel>
       </TabPanels>
     </Box>
   )
