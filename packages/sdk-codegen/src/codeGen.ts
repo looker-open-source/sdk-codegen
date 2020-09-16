@@ -875,7 +875,7 @@ export abstract class CodeGen implements ICodeGen {
   }
 
   makeTheCall(_method: IMethod, _inputs: ArgValues) {
-    return `No call generator is defined for this language`
+    return this.commentHeader('', `Not yet available`)
   }
 
   abstract encodePathParams(indent: string, method: IMethod): string

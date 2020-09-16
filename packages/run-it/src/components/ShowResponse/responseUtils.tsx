@@ -36,7 +36,12 @@ import { parseCsv, parseJson } from '../DataGrid/gridUtils'
 import { DataGrid } from '../DataGrid'
 
 /**
- * A handler for JSON type responses
+ * Show JSON responses
+ *
+ * Shows the JSON in a syntax-highlighted fashion
+ * If the JSON is parseable as 2D row/column data it will also be shown in grid
+ * @param response
+ * @constructor
  */
 const ShowJSON = (response: IRawResponse) => {
   const content = response.body.toString()
@@ -59,6 +64,11 @@ const ShowText = (response: IRawResponse) => (
   </pre>
 )
 
+/**
+ * Show CSV grid and raw data
+ * @param response HTTP response to parse and display
+ * @constructor
+ */
 const ShowCSV = (response: IRawResponse) => {
   const raw = <pre>{response.body.toString()}</pre>
   const data = parseCsv(response.body.toString())
