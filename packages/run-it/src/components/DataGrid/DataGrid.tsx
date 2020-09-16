@@ -24,19 +24,42 @@
 
  */
 
-export { RequestForm } from './RequestForm'
-export { ShowResponse } from './ShowResponse'
-export { MethodBadge } from './MethodBadge'
-export {
-  defaultConfigurator,
-  ConfigForm,
-  RunItConfigurator,
-  validateUrl,
-  validLocation,
-  RunItConfigKey,
-  RunItValuesKey,
-} from './ConfigForm'
-export { LoginForm } from './LoginForm'
-export { Loading } from './Loading'
-export { getGenerators, SdkCalls } from './SdkCalls'
-export { DataGrid } from './DataGrid'
+import React, { FC, ReactElement } from 'react'
+import {
+  ActionList,
+  Tab,
+  TabList,
+  TabPanel,
+  TabPanels,
+  useTabs,
+} from '@looker/components'
+import { gridHeaders, gridRows } from './gridUtils'
+
+interface DataGridProps {
+  /** grid data. First row is header names. All other rows are data */
+  data: any[]
+  /** Component to render "raw" output */
+  raw: ReactElement<any> | ReactElement[]
+}
+
+export const DataGrid: FC<DataGridProps> = ({ data, raw }) => {
+  const tabs = useTabs()
+  const headers = gridHeaders(data)
+  const rows = gridRows(data)
+  return (
+    <>
+      <TabList {...tabs}>
+        <Tab key="grid">Grid</Tab>
+        <Tab key="raw">Raw</Tab>
+      </TabList>
+      <TabPanels {...tabs} pt="0">
+        <TabPanel key="grid">
+          <ActionList key="datagrid" columns={headers}>
+            {rows}
+          </ActionList>
+        </TabPanel>
+        <TabPanel key="raw">{raw}</TabPanel>
+      </TabPanels>
+    </>
+  )
+}

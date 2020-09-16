@@ -32,26 +32,38 @@ import {
 import { Paragraph } from '@looker/components'
 
 import { CodeStructure } from '../CodeStructure'
+import { parseCsv, parseJson } from '../DataGrid/gridUtils'
+import { DataGrid } from '../DataGrid'
 
 /**
  * A handler for JSON type responses
  */
-const ShowJSON = (response: IRawResponse) => (
-  <CodeStructure
-    code={JSON.stringify(JSON.parse(response.body), null, 2)}
-    language={'json'}
-  />
-)
+const ShowJSON = (response: IRawResponse) => {
+  const content = response.body.toString()
+  const data = parseJson(content)
+  const raw = (
+    <CodeStructure
+      code={JSON.stringify(JSON.parse(response.body), null, 2)}
+      language={'json'}
+    />
+  )
+  if (data.data.length === 0) return raw
+  return <DataGrid data={data.data} raw={raw} />
+}
 
-/**
- * A handler for text type responses
- */
+/** A handler for text type responses */
 const ShowText = (response: IRawResponse) => (
   <pre>
     {response.statusMessage !== 'OK' && response.statusMessage}
     {response.body.toString()}
   </pre>
 )
+
+const ShowCSV = (response: IRawResponse) => {
+  const raw = <pre>{response.body.toString()}</pre>
+  const data = parseCsv(response.body.toString())
+  return <DataGrid data={data.data} raw={raw} />
+}
 
 /** A handler for image type responses */
 const ShowImage = (response: IRawResponse) => {
@@ -110,8 +122,13 @@ export const responseHandlers: Responder[] = [
   },
   {
     label: 'html',
-    isRecognized: (contentType) => RegExp(/text\/html/g).test(contentType),
+    isRecognized: (contentType) => /text\/html/g.test(contentType),
     component: (response) => ShowHTML(response),
+  },
+  {
+    label: 'csv',
+    isRecognized: (contentType) => /text\/csv/g.test(contentType),
+    component: (response) => ShowCSV(response),
   },
   // SVG would normally be considered a "string" because of the xml tag, so it must be checked before text
   {
