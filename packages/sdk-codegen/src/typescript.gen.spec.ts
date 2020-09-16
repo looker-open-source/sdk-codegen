@@ -29,13 +29,13 @@ import {
   IRequestCreateQueryTask,
   IWriteLookWithQuery,
   ResultFormat,
-  DelimArray,
   IWriteMergeQuery,
   IMergeQuerySourceQuery,
   ISqlQueryCreate,
   IDictionary,
   IAccessToken,
 } from '@looker/sdk/lib/browser'
+import { DelimArray } from '@looker/sdk-rtl'
 import { TestConfig } from './testUtils'
 import { TypescriptGen } from './typescript.gen'
 import { EnumType, titleCase } from './sdkModels'

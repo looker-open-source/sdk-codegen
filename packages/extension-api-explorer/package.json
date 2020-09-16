@@ -4,6 +4,7 @@
   "description": "Looker API Explorer extension version  ",
   "main": "index.js",
   "license": "MIT",
+  "homepage": "https://github.com/looker-open-source/sdk-codegen/tree/master/packages/extension-api-explorer",
   "scripts": {
     "bundle": "tsc && webpack --config webpack.prod.config.js",
     "deploy": "bin/deploy",
@@ -14,7 +15,7 @@
     "@looker/api-explorer": "^0.1.0-alpha",
     "@looker/extension-sdk": "^0.10.0",
     "@looker/extension-sdk-react": "^0.6.0",
-    "@looker/sdk": "^0.3.4-beta.2",
+    "@looker/sdk": "^0.3.4-beta.1",
     "@looker/run-it": "^0.1.0-alpha",
     "react": "^16.13.1",
     "react-dom": "^16.13.1",

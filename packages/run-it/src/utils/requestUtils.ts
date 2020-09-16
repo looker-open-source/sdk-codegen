@@ -24,7 +24,8 @@
 
  */
 
-import { IRawResponse, Looker31SDK, Looker40SDK } from '@looker/sdk/lib/browser'
+import { Looker31SDK, Looker40SDK } from '@looker/sdk/lib/browser'
+import { IRawResponse } from '@looker/sdk-rtl/lib/browser'
 
 import { RunItHttpMethod, RunItInput, RunItValues } from '../RunIt'
 import { runItSDK } from './RunItSDK'

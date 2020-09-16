@@ -15,6 +15,7 @@
     "url": "git+https://github.com/looker-open-source/sdk-codegen.git",
     "directory": "packages/api-explorer"
   },
+  "homepage": "https://github.com/looker-open-source/sdk-codegen/tree/master/packages/run-it",
   "bugs": {
     "url": "https://github.com/looker-open-source/sdk-codegen/issues?q=is%3Aopen+is%3Aissue+project%3Alooker-open-source%2Fsdk-codegen%2F7"
   },
@@ -46,7 +47,8 @@
   "dependencies": {
     "@looker/components": "^0.9.11",
     "@looker/design-tokens": "0.9.10",
-    "@looker/sdk": "^0.3.4-beta.2",
+    "@looker/sdk": "^0.3.4-beta.1",
+    "@looker/sdk-rtl": "^0.3.4-beta.2",
     "@looker/sdk-codegen": "^0.1.2-alpha.18+551e4fe",
     "@looker/sdk-codegen-utils": "^0.1.0-alpha.2",
     "@types/readable-stream": "^2.3.5",

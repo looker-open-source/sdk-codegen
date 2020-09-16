@@ -33,7 +33,7 @@ import {
   ITransportSettings,
   sdkOk,
   sdkError,
-} from '@looker/sdk'
+} from '@looker/sdk-rtl'
 import { fail, quit, isFileSync, utf8Encoding, isDirSync } from './nodeUtils'
 import { ISDKConfigProps } from './sdkConfig'
 import { convertSpec } from './convert'

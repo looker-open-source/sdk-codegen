@@ -20,7 +20,7 @@
   "bugs": {
     "url": "https://github.com/looker-open-source/sdk-codegen/issues"
   },
-  "homepage": "https://github.com/looker-open-source/sdk-codegen/",
+  "homepage": "https://github.com/looker-open-source/sdk-codegen/tree/master/packages/sdk-codegen-scripts",
   "private": false,
   "scripts": {
     "docs": "typedoc --mode file --out docs",
@@ -28,7 +28,8 @@
 
   },
   "dependencies": {
-    "@looker/sdk": "^0.3.4-beta.2",
+    "@looker/sdk": "^0.3.4-beta.1",
+    "@looker/sdk-rtl": "^0.3.4-beta.2",
     "@looker/sdk-codegen": "^0.1.2-alpha.18+551e4fe",
     "@looker/sdk-codegen-utils": "^0.1.0-alpha.2",
     "cross-env": "^7.0.2",
