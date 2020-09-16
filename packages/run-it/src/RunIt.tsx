@@ -51,7 +51,6 @@ import {
   ConfigForm,
   LoginForm,
   Loading,
-  RunItConfigurator,
   SdkCalls,
 } from './components'
 import {
@@ -61,8 +60,7 @@ import {
   sdkNeedsConfig,
   RunItSettings,
 } from './utils'
-import { PerfTracker } from './components/PerfTracker/PerfTracker'
-import { PerfTimings } from './components/PerfTracker/perfUtils'
+import { PerfTracker, PerfTimings } from './components/PerfTracker'
 import { RunItContext } from '.'
 
 export type RunItHttpMethod = 'GET' | 'PUT' | 'POST' | 'PATCH' | 'DELETE'
@@ -109,37 +107,6 @@ export interface IStorageValue {
   value: string
 }
 
-interface PerfTabPanelProps {
-  perf: PerfTimings
-  /** Is this running in an extension? */
-  isExtension: boolean
-  /** Configuration provider */
-  configurator: RunItConfigurator
-}
-
-export const PerfTabPanel: FC<PerfTabPanelProps> = ({
-  perf,
-  isExtension,
-  configurator,
-}) => {
-  if (isExtension) return <></>
-  return (
-    <TabPanel key="performance">
-      <PerfTracker perf={perf} configurator={configurator} />
-    </TabPanel>
-  )
-}
-
-interface PerfTabProps {
-  /** Is this running in an extension? */
-  isExtension: boolean
-}
-
-export const PerfTab: FC<PerfTabProps> = ({ isExtension }) => {
-  if (isExtension) return <></>
-  return <Tab key="performance">Performance</Tab>
-}
-
 interface RunItProps {
   /** spec model to use for sdk call generation */
   api: ApiModel
@@ -166,17 +133,18 @@ export const RunIt: FC<RunItProps> = ({ api, inputs, method }) => {
   const [responseContent, setResponseContent] = useState<ResponseContent>(
     undefined
   )
+  const [isExtension, setIsExtension] = useState<boolean>(false)
   const [hasConfig, setHasConfig] = useState<boolean>(true)
   const [needsAuth, setNeedsAuth] = useState<boolean>(true)
   const tabs = useTabs()
-  let configIsNeeded = false
 
   const perf = new PerfTimings()
 
   useEffect(() => {
     if (sdk && sdk instanceof Looker40SDK) {
       const settings = sdk.authSession.settings as RunItSettings
-      configIsNeeded = sdkNeedsConfig(sdk)
+      const configIsNeeded = sdkNeedsConfig(sdk)
+      setIsExtension(!configIsNeeded)
       setHasConfig(!configIsNeeded || settings.authIsConfigured())
       setNeedsAuth(configIsNeeded && !sdk.authSession.isAuthenticated())
     } else {
@@ -225,7 +193,7 @@ export const RunIt: FC<RunItProps> = ({ api, inputs, method }) => {
       <TabList {...tabs}>
         <Tab key="request">Request</Tab>
         <Tab key="response">Response</Tab>
-        <PerfTab isExtension={!configIsNeeded} />
+        {isExtension ? <></> : <Tab key="performance">Performance</Tab>}
         <Tab key="makeTheCall">Code</Tab>
       </TabList>
       <TabPanels {...tabs}>
@@ -268,11 +236,13 @@ export const RunIt: FC<RunItProps> = ({ api, inputs, method }) => {
             />
           )}
         </TabPanel>
-        <PerfTabPanel
-          perf={perf}
-          isExtension={!configIsNeeded}
-          configurator={configurator}
-        />
+        {isExtension ? (
+          <></>
+        ) : (
+          <TabPanel key="performance">
+            <PerfTracker perf={perf} configurator={configurator} />
+          </TabPanel>
+        )}
         <TabPanel key="makeTheCall">
           <SdkCalls api={api} method={method} inputs={requestContent} />
         </TabPanel>
