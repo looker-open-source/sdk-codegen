@@ -53,7 +53,7 @@ export const DocSdkUsage: FC<DocExamplesProps> = ({ api, method }) => {
           ))}
         </TabList>
         <TabPanels {...tabs} pt="0">
-          {Object.entries(generators).map(([language, gen]) => (
+          {Object.entries(generators).map(([language, _]) => (
             <TabPanel key={language}>
               <DocExamples
                 language={language}

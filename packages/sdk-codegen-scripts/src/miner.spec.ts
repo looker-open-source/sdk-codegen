@@ -25,7 +25,16 @@
  */
 
 import path from 'path'
-import { CodeMiner, getAllFiles, getCodeFiles, Miner, SDKCalls } from './miner'
+import { SDKCalls } from '@looker/sdk-codegen'
+import {
+  CodeMiner,
+  getAllFiles,
+  getCodeFiles,
+  getCommitHash,
+  getRemoteHttpOrigin,
+  MarkdownMiner,
+  Miner,
+} from './miner'
 
 describe('example mining', () => {
   const sourcePath = path.join(__dirname, '/../../../examples')
@@ -43,10 +52,77 @@ describe('example mining', () => {
     })
   })
 
+  describe('link info functions', () => {
+    it('getCommitHash', () => {
+      const actual = getCommitHash()
+      expect(actual).toBeDefined()
+      expect(actual.length).toEqual(40)
+    })
+    it('getRemoteHttpOrigin', () => {
+      const actual = getRemoteHttpOrigin()
+      expect(actual).toEqual(
+        'https://github.com/looker-open-source/sdk-codegen'
+      )
+    })
+  })
+
+  describe('MarkdownMiner', () => {
+    const marker = new MarkdownMiner()
+    it('ignores http and https links', () => {
+      const ignore1 = 'http://foo.bar/.ts'
+      const ignore2 = 'HTTPS://foo.bar/.ts'
+      expect(marker.ignoreLink(ignore1)).toEqual(true)
+      expect(marker.ignoreLink(ignore2)).toEqual(true)
+    })
+    it('strips hash information from a file name', () => {
+      const expected = 'example/typescript/user.ts'
+      const hashed = 'example/typescript/user.ts#L1:L2'
+      expect(marker.stripSearch(hashed)).toEqual(expected)
+    })
+    it('accepts a source code file', () => {
+      const accept1 = 'example/typescript/user.ts'
+      const accept2 = 'example/typescript/user.ts#L1:L2'
+      expect(marker.ignoreLink(accept1)).toEqual(false)
+      expect(marker.ignoreLink(accept2)).toEqual(false)
+    })
+    it('processes standard url patterns', () => {
+      const md = '[summary1](example.ts#strip me!)'
+      const actual = marker.mineContent('example/typescript/README.md', md)
+      expect(actual.length).toEqual(1)
+      const first = actual[0]
+      expect(first.summary).toEqual('summary1')
+      expect(first.sourceFile).toEqual('example/typescript/example.ts')
+    })
+    it('processes link url patterns', () => {
+      const md =
+        'Logout all users on the instance [[link]](logout_all_users.rb)'
+      const actual = marker.mineContent('example/ruby/README.md', md)
+      expect(actual.length).toEqual(1)
+      const first = actual[0]
+      expect(first.summary).toEqual('Logout all users on the instance')
+      expect(first.sourceFile).toEqual('example/ruby/logout_all_users.rb')
+    })
+    it('processes link url patterns and strips leading dash', () => {
+      const md =
+        '\t  -  Logout all users on the instance [[link]](logout_all_users.rb)'
+      const actual = marker.mineContent('example/ruby/README.md', md)
+      expect(actual.length).toEqual(1)
+      const first = actual[0]
+      expect(first.summary).toEqual('Logout all users on the instance')
+      expect(first.sourceFile).toEqual('example/ruby/logout_all_users.rb')
+    })
+    it('processes a file', () => {
+      const fileName = exampleFile('ruby/README.md')
+      const actual = marker.mineFile(fileName)
+      expect(actual.length).toBeGreaterThanOrEqual(20)
+    })
+  })
+
   describe('CodeMiner', () => {
     const coder = new CodeMiner()
     const probe = (code: string, expected: SDKCalls) => {
-      expect(coder.mineCode(code)).toEqual(expected)
+      const actual = coder.mineCode(code)
+      expect(actual).toEqual(expected)
     }
 
     it('is empty for no sdk calls', () => {
@@ -56,27 +132,22 @@ describe('example mining', () => {
       probe('foo.one()\nbar.two()\nboo.three()', [])
     })
 
-    it('finds ts calls', () => {
+    it('ignores ok and finds ts calls', () => {
       probe(`const value = await sdk.ok(sdk.me())`, [
-        { sdk: 'sdk', operationId: 'ok', line: 1, column: 20 },
         { sdk: 'sdk', operationId: 'me', line: 1, column: 27 },
       ])
     })
 
-    it('finds kotlin calls', () => {
+    it('ignores ok and finds kotlin calls', () => {
       probe(`val look = sdk.ok<Look>(sdk.create_look(WriteLookWithQuery(`, [
-        { sdk: 'sdk', operationId: 'ok', line: 1, column: 11 },
         { sdk: 'sdk', operationId: 'create_look', line: 1, column: 24 },
       ])
     })
 
-    it('ignores comments', () => {
+    it.skip('ignores comments and ok', () => {
       probe(
         `// this is a code comment sdk.comment()\nconst value = await coreSDK.ok(coreSDK.me())`,
-        [
-          { sdk: 'coreSDK', operationId: 'ok', line: 2, column: 20 },
-          { sdk: 'coreSDK', operationId: 'me', line: 2, column: 33 },
-        ]
+        [{ sdk: 'coreSDK', operationId: 'me', line: 2, column: 33 }]
       )
     })
 
@@ -123,7 +194,7 @@ describe('example mining', () => {
       })
     })
 
-    it('processes', () => {
+    it('processes files', () => {
       const miner = new Miner(sourcePath)
       const actual = miner.motherLode
       expect(actual).toBeDefined()

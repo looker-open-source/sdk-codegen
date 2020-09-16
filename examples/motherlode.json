@@ -1,95 +1,133 @@
 {
-  "commitHash": "TODO",
-  "nuggets": {
-    "init31": {
-      "operationId": "init31",
-      "calls": {
-        ".py": [
-          {
-            "sourceFile": "examples/python/content_validator_comparison.py",
-            "column": 6,
-            "line": 9
-          },
-          {
-            "sourceFile": "examples/python/create_db_connections.py",
-            "column": 6,
-            "line": 13
-          },
-          {
-            "sourceFile": "examples/python/disable_users_by_email.py",
-            "column": 6,
-            "line": 14
-          },
-          {
-            "sourceFile": "examples/python/download_dashboard_pdf.py",
-            "column": 6,
-            "line": 13
-          },
-          {
-            "sourceFile": "examples/python/download_look.py",
-            "column": 6,
-            "line": 10
-          },
-          {
-            "sourceFile": "examples/python/download_tile.py",
-            "column": 6,
-            "line": 9
-          },
-          {
-            "sourceFile": "examples/python/hackathon_app/looker.py",
-            "column": 10,
-            "line": 77
-          },
-          {
-            "sourceFile": "examples/python/hackathon_app/looker.py",
-            "column": 10,
-            "line": 126
-          },
-          {
-            "sourceFile": "examples/python/hackathon_app/looker.py",
-            "column": 10,
-            "line": 208
-          },
-          {
-            "sourceFile": "examples/python/hackathon_app/tests/integration/test_looker.py",
-            "column": 10,
-            "line": 13
-          },
-          {
-            "sourceFile": "examples/python/logout_all_users.py",
-            "column": 6,
-            "line": 7
-          },
-          {
-            "sourceFile": "examples/python/lookml_model_explore.py",
-            "column": 10,
-            "line": 11
-          },
-          {
-            "sourceFile": "examples/python/run_look_with_filters.py",
-            "column": 6,
-            "line": 10
-          },
-          {
-            "sourceFile": "examples/python/soft_delete_dashboard.py",
-            "column": 6,
-            "line": 9
-          },
-          {
-            "sourceFile": "examples/python/test_connection.py",
-            "column": 6,
-            "line": 10
-          }
-        ],
-        ".ts": [
-          {
-            "sourceFile": "examples/typescript/customConfigReader.ts",
-            "column": 14,
-            "line": 53
-          }
-        ]
-      }
+  "commitHash": "bfca52d2c8ba85018f76548158fd1dd90aa1f64a",
+  "remoteOrigin": "https://github.com/looker-open-source/sdk-codegen",
+  "summaries": {
+    "examples/python/test_connection.py": {
+      "summary": "Test a specified connection",
+      "sourceFile": "examples/python/test_connection.py"
     },
+    "examples/python/soft_delete_dashboard.py": {
+      "summary": "Soft delete dashboard",
+      "sourceFile": "examples/python/soft_delete_dashboard.py"
+    },
+    "examples/python/download_tile.py": {
+      "summary": "Download dashboard tile in specified format",
+      "sourceFile": "examples/python/download_tile.py"
+    },
+    "examples/python/download_look.py": {
+      "summary": "Download look in specified format",
+      "sourceFile": "examples/python/download_look.py"
+    },
+    "examples/python/download_dashboard_pdf.py": {
+      "summary": "Generate and download dashboard PDFs",
+      "sourceFile": "examples/python/download_dashboard_pdf.py"
+    },
+    "examples/python/logout_all_users.py": {
+      "summary": "Disable all active user sessions",
+      "sourceFile": "examples/python/logout_all_users.py"
+    },
+    "examples/ruby/logout_all_users.rb": {
+      "summary": "Logout all users on the instance",
+      "sourceFile": "examples/ruby/logout_all_users.rb"
+    },
+    "examples/ruby/disable_users.rb": {
+      "summary": "Disable users in the instance",
+      "sourceFile": "examples/ruby/disable_users.rb"
+    },
+    "examples/ruby/users_list_and_auth_types.rb": {
+      "summary": "Get a list of all users and their auth credentials",
+      "sourceFile": "examples/ruby/users_list_and_auth_types.rb"
+    },
+    "examples/ruby/all_users_to_group.rb": {
+      "summary": "Add all users to a group",
+      "sourceFile": "examples/ruby/all_users_to_group.rb"
+    },
+    "examples/ruby/all_git_branches.rb": {
+      "summary": "Get a list of all the Git branches in the projects",
+      "sourceFile": "examples/ruby/all_git_branches.rb"
+    },
+    "examples/ruby/validate_projects.rb": {
+      "summary": "Validates the Looker **Projects** (LookML)",
+      "sourceFile": "examples/ruby/validate_projects.rb"
+    },
+    "examples/ruby/list_files_per_project.rb": {
+      "summary": "Get a list of all files per projects",
+      "sourceFile": "examples/ruby/list_files_per_project.rb"
+    },
+    "examples/ruby/render_look_png.rb": {
+      "summary": "Render a Look as in PNG format",
+      "sourceFile": "examples/ruby/render_look_png.rb"
+    },
+    "examples/ruby/schedule_once_to_gcs.rb": {
+      "summary": "Create a schedule to run once to Google Cloud Storage",
+      "sourceFile": "examples/ruby/schedule_once_to_gcs.rb"
+    },
+    "examples/ruby/stream_to_s3.rb": {
+      "summary": "Stream results to S3 bucket",
+      "sourceFile": "examples/ruby/stream_to_s3.rb"
+    },
+    "examples/ruby/rerun_failed_email_schedules.rb": {
+      "summary": "Re-run the failed schedules to email",
+      "sourceFile": "examples/ruby/rerun_failed_email_schedules.rb"
+    },
+    "examples/ruby/download_dashboard.rb": {
+      "summary": "Download all dashboard tiles as tabs in one Excel file",
+      "sourceFile": "examples/ruby/download_dashboard.rb"
+    },
+    "examples/ruby/test_integrations.rb": {
+      "summary": "Test the integrations",
+      "sourceFile": "examples/ruby/test_integrations.rb"
+    },
+    "examples/ruby/update_look.rb": {
+      "summary": "Template to update Look",
+      "sourceFile": "examples/ruby/update_look.rb"
+    },
+    "examples/ruby/master/dev_vs_prod.rb": {
+      "summary": "Automated testing for Look output between Development mode and Production mode",
+      "sourceFile": "examples/ruby/master/dev_vs_prod.rb"
+    },
+    "examples/ruby/validate_content.rb": {
+      "summary": "Validates the Looker **Content**",
+      "sourceFile": "examples/ruby/validate_content.rb"
+    },
+    "examples/ruby/delete_unused_content.rb": {
+      "summary": "Delete old Looks",
+      "sourceFile": "examples/ruby/delete_unused_content.rb"
+    },
+    "examples/ruby/kill_all_running_queries.rb": {
+      "summary": "Kill all running queries in the instance",
+      "sourceFile": "examples/ruby/kill_all_running_queries.rb"
+    },
+    "examples/ruby/test_all_connections.rb": {
+      "summary": "Test database connections",
+      "sourceFile": "examples/ruby/test_all_connections.rb"
+    },
+    "examples/typescript/dual.ts": {
+      "summary": "multiple APIs",
+      "sourceFile": "examples/typescript/dual.ts"
+    },
+    "examples/typescript/customConfigReader.ts": {
+      "summary": "custom configReader",
+      "sourceFile": "examples/typescript/customConfigReader.ts"
+    },
+    "examples/typescript/utils.ts": {
+      "summary": "SDK utilities",
+      "sourceFile": "examples/typescript/utils.ts"
+    },
+    "examples/typescript/sudoAsUser.ts": {
+      "summary": "sudo as user",
+      "sourceFile": "examples/typescript/sudoAsUser.ts"
+    },
+    "examples/typescript/downloadTile.ts": {
+      "summary": "download a dashboard tile by name",
+      "sourceFile": "examples/typescript/downloadTile.ts"
+    },
+    "examples/typescript/downloadDashboard.ts": {
+      "summary": "download a dashboard by name",
+      "sourceFile": "examples/typescript/downloadDashboard.ts"
+    }
+  },
+  "nuggets": {
     "all_spaces": {
       "operationId": "all_spaces",
       "calls": {
@@ -1097,80 +1135,6 @@
             "sourceFile": "examples/ruby/validate_projects.rb",
             "column": 25,
             "line": 22
-          }
-        ]
-      }
-    },
-    "ok": {
-      "operationId": "ok",
-      "calls": {
-        ".swift": [
-          {
-            "sourceFile": "examples/swift/sample-swift-sdk/sample-swift-sdk/Dashboards.swift",
-            "column": 25,
-            "line": 28
-          }
-        ],
-        ".ts": [
-          {
-            "sourceFile": "examples/typescript/customConfigReader.ts",
-            "column": 19,
-            "line": 59
-          },
-          {
-            "sourceFile": "examples/typescript/downloadDashboard.ts",
-            "column": 23,
-            "line": 95
-          },
-          {
-            "sourceFile": "examples/typescript/downloadTile.ts",
-            "column": 21,
-            "line": 106
-          },
-          {
-            "sourceFile": "examples/typescript/dual.ts",
-            "column": 42,
-            "line": 40
-          },
-          {
-            "sourceFile": "examples/typescript/dual.ts",
-            "column": 60,
-            "line": 40
-          },
-          {
-            "sourceFile": "examples/typescript/sudoAsUser.ts",
-            "column": 20,
-            "line": 67
-          },
-          {
-            "sourceFile": "examples/typescript/sudoAsUser.ts",
-            "column": 19,
-            "line": 84
-          },
-          {
-            "sourceFile": "examples/typescript/sudoAsUser.ts",
-            "column": 23,
-            "line": 94
-          },
-          {
-            "sourceFile": "examples/typescript/utils.ts",
-            "column": 23,
-            "line": 36
-          },
-          {
-            "sourceFile": "examples/typescript/utils.ts",
-            "column": 22,
-            "line": 39
-          },
-          {
-            "sourceFile": "examples/typescript/utils.ts",
-            "column": 23,
-            "line": 130
-          },
-          {
-            "sourceFile": "examples/typescript/utils.ts",
-            "column": 15,
-            "line": 141
           }
         ]
       }

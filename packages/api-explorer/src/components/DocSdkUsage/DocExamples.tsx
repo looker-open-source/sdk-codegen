@@ -24,11 +24,11 @@
 
  */
 import React, { FC } from 'react'
-import { Link } from '@looker/components'
-import { IFileCall } from '@looker/sdk-codegen-scripts/lib/miner'
+import { Link, Text } from '@looker/components'
+import { exampleLink, IExampleLink, IFileCall } from '@looker/sdk-codegen'
 
 // eslint-disable-next-line @typescript-eslint/no-var-requires
-const index = require('../../../../../examples/motherlode.json').nuggets
+const lode = require('../../../../../examples/motherlode.json')
 
 interface DocExamplesProps {
   /** Language example should be in */
@@ -52,33 +52,40 @@ const getLanguageExtension = (language: string) => {
       return '.swift'
     case 'kotlin':
       return '.kt'
+    case 'dart':
+      return '.dart'
+    case 'go':
+      return '.go'
     default:
       return ''
   }
 }
-
-interface IExample extends IFileCall {}
 
 /**
  * Searches for examples containing operationId usages in the given language
  * @param language Language example should be in
  * @param operationId Method's operationId to search for
  */
-const findExamples = (language: string, operationId: string): IExample[] => {
-  const allMethodExamples = index[operationId]
+const findExamples = (
+  language: string,
+  operationId: string
+): IExampleLink[] => {
+  const allMethodExamples = lode.nuggets[operationId]
   const ext = getLanguageExtension(language)
-  let matches
+  const links: IExampleLink[] = []
 
   if (allMethodExamples && ext) {
-    matches = allMethodExamples.calls[ext]
+    const calls = allMethodExamples.calls[ext]
+    if (calls) {
+      calls.forEach((call: IFileCall) => links.push(exampleLink(lode, call)))
+    }
   }
 
-  return matches
+  return links
 }
 
 // TODO: asynchronously fetch index at first render. Report if not available in this component
-// TODO: Replace link href with full github link to source file
-// TODO: Replace link text to example summary
+// TODO don't show the SDK Examples card at all if no examples are loaded. This keeps API Explorer more agnostic for other adopters.
 /**
  * Renders links to source files referencing the operationId in the given language
  */
@@ -94,9 +101,19 @@ export const DocExamples: FC<DocExamplesProps> = ({
         examples.length > 0 &&
         examples.map((example, index) => (
           <li key={index}>
-            <Link href={example.sourceFile}>{example.sourceFile}</Link>
+            <Link href={example.permalink}>{example.description}</Link>
           </li>
         ))}
+      {(!examples || examples.length === 0) && (
+        <>
+          <Text>
+            No examples found for {language}. Please{' '}
+            <Link href="https://github.com/looker-open-source/sdk-codegen/tree/master/examples">
+              add some!
+            </Link>
+          </Text>
+        </>
+      )}
     </>
   )
 }

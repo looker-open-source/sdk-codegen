@@ -26,103 +26,142 @@
 
 import * as fs from 'fs'
 import path from 'path'
-import { KeyedCollection } from '@looker/sdk-codegen'
+import { execSync } from 'child_process'
 import { warn } from '@looker/sdk-codegen-utils'
-
-export interface ISDKCall {
-  /** SDK variable name for the call found */
-  sdk: string
-
-  /** Name of the method/operationId */
-  operationId: string
-
-  /** Source code line number */
-  line: number
-
-  /** Source code column number where method name was found */
-  column: number
-}
-
-export type SDKCalls = ISDKCall[]
-
-export interface ISummary {
-  /** relative file name */
-  sourceFile: string
-  /** summary extracted from md, rst, or other doc file */
-  summary: string
-}
-
-export interface IFileCall {
-  /** relative file name */
-  sourceFile: string
-  /** line number for source code call */
-  line: number
-  /** Optional column number for source code call. Maybe we don't need this datum */
-  column?: number
-}
-
-/**
-{ "me": {
-  ".ts": {
-    [
-      { 
-        "hash": "TODO",
-        "sourceFile": "foo.ts",
-        "line": 1,
-        "column": 5,
-      }
-    ]
-    }
-  }
-}
- */
-
-export type FileCalls = IFileCall[]
-
-export type LanguageCalls = KeyedCollection<FileCalls>
-
-export interface INugget {
-  operationId: string
-  calls: LanguageCalls
-}
-
-export type Nuggets = KeyedCollection<INugget>
+import {
+  IFileCall,
+  IMine,
+  INugget,
+  ISDKCall,
+  ISummary,
+  Nuggets,
+  SDKCalls,
+  Summaries,
+} from '@looker/sdk-codegen'
 
 export interface IFileMine {
   mineFile(fileName: string): SDKCalls
   mineCode(code: string): SDKCalls
+  ignoreCall(call: ISDKCall): boolean
 }
 
 export interface IDocMine {
   mineFile(fileName: string): ISummary[]
+  mineContent(sourceFile: string, content: string): ISummary[]
+  ignoreLink(fileName: string): boolean
 }
 
 const readFile = (fileName: string) =>
   fs.readFileSync(fileName, { encoding: 'utf-8' })
 
 const sdkPattern = /(\b[a-z0-9_]*sdk)\.\s*([a-z0-9_]*)\s*[(<]/gi
-const mdPattern = /\[(.*)]\((.*)\)/gi
-const linkPattern = /^(.*)\[\[link]]\((.*)\)/gi
+const mdPattern = /\[(.*)]\((.*)\)/gim
+const linkPattern = /^(.*)\[\[link]]\((.*)\)/gim
 
 export type IMiners = { [key: string]: IFileMine | IDocMine }
 
+/** file-filtering lambda for `getAllFiles()` and `getCodeFiles()` */
+export type FileFilter = (fileName: string) => boolean
+
+/**
+ * Filter to include every file that has a non-empty file name
+ * @param fileName name of file to check
+ */
+export const filterAllFiles = (fileName: string) => fileName.trim().length > 0
+
+/**
+ * Filter for code files
+ * @param fileName name of file from which to extract its extension
+ */
+export const filterCodeFiles = (fileName: string) => {
+  const ext = path.extname(fileName).toLocaleLowerCase()
+  // eslint-disable-next-line @typescript-eslint/no-use-before-define
+  return ext in fileMiners
+}
+
+/**
+ * Finds all file recursively
+ * @param searchPath starting directory for file search
+ * @param listOfFiles list of current files already found
+ * @param filter lambda for file inclusion in results. truthy includes the file
+ */
+export const getAllFiles = (
+  searchPath: string,
+  listOfFiles: string[] = [],
+  filter: FileFilter = filterAllFiles
+) => {
+  const files = fs.readdirSync(searchPath)
+
+  files.forEach((file) => {
+    if (fs.statSync(searchPath + '/' + file).isDirectory()) {
+      listOfFiles = getAllFiles(searchPath + '/' + file, listOfFiles, filter)
+    } else {
+      if (filter(file)) listOfFiles.push(path.join(searchPath, '/', file))
+    }
+  })
+
+  return listOfFiles
+}
+
+/**
+ * Find all source code files recursively
+ * @param searchPath starting directory for file search
+ * @param listOfFiles list of source code files that can be mined
+ */
+export const getCodeFiles = (
+  searchPath: string,
+  listOfFiles: string[] = []
+) => {
+  return getAllFiles(searchPath, listOfFiles, filterCodeFiles)
+}
+
+/** get the trimmed output of the command as a UTF-8 string */
+export const execRead = (command: string) => {
+  return execSync(command, { encoding: 'utf-8' }).trim()
+}
+
+/** get this git repository's current commit hash */
+export const getCommitHash = () => execRead('git rev-parse HEAD')
+
+/** get the remote origin url for this repository */
+export const getRemoteOrigin = () => {
+  return execRead('git remote get-url origin')
+}
+
+/**
+ * Convert this github repository's git address to an HTTP url
+ */
+export const getRemoteHttpOrigin = () => {
+  const origin = getRemoteOrigin()
+  const extractor = /git@github\.com:(.*)\.git/gi
+  const match = extractor.exec(origin)
+  if (!match) return ''
+  return `https://github.com/${match[1]}`
+}
+
 export class CodeMiner implements IFileMine {
-  mineCode(code: string): SDKCalls {
-    const lines = code.split('\n')
+  static ignoreOps = new Set<string>(['ok', 'init31', 'init40'])
+  ignoreCall(call: ISDKCall): boolean {
+    if (!/sdk/i.test(call.sdk)) return true
+    return CodeMiner.ignoreOps.has(call.operationId)
+  }
+
+  mineCode(sourceCode: string): SDKCalls {
+    const lines = sourceCode.split('\n')
     const result: SDKCalls = []
     lines.forEach((line, index) => {
       let match = sdkPattern.exec(line)
       while (match !== null) {
-        // TODO need to ignore source code comments
+        // TODO need to ignore source code comments?
         if (match && match.length > 2) {
-          const sdkRef = match[1]
-          if (/sdk$/i.test(sdkRef)) {
-            const call: ISDKCall = {
-              sdk: sdkRef,
-              operationId: match[2],
-              line: index + 1,
-              column: match.index,
-            }
+          const sdkRef = match[1].trim()
+          const call: ISDKCall = {
+            sdk: sdkRef,
+            operationId: match[2].trim(),
+            line: index + 1,
+            column: match.index,
+          }
+          if (!this.ignoreCall(call)) {
             result.push(call)
           }
         }
@@ -137,90 +176,124 @@ export class CodeMiner implements IFileMine {
   }
 }
 
-export class MdMiner implements IDocMine {
-  mineFile(fileName: string): ISummary[] {
+/**
+ * Processes markdown files and extracts links to source code to use as summaries
+ */
+export class MarkdownMiner implements IDocMine {
+  ignoreLink(linkFile: string): boolean {
+    linkFile = this.stripSearch(linkFile)
+    const notCode = !filterCodeFiles(linkFile)
+    const isHttp = /^(http|https):/gi.test(linkFile)
+    return notCode || isHttp
+  }
+
+  /**
+   * Remove leading - from a string
+   * @param value string to process
+   */
+  noDash(value: string) {
+    value = value.trim()
+    const dasher = /^\s*-\s*(.*)/g
+    if (dasher.test(value)) {
+      value = value.replace(dasher, '$1').trim()
+    }
+    return value
+  }
+
+  stripSearch(fileName: string) {
+    fileName = fileName.trim()
+    const match = /(.*)#.*/gi.exec(fileName)
+    if (match) return match[1]
+    return fileName
+  }
+
+  /**
+   * Fully qualify the path for `linkFile`
+   * @param sourceFileName
+   * @param linkFile
+   */
+  sourcerer(sourceFileName: string, linkFile: string) {
+    linkFile = this.stripSearch(linkFile)
+    const base = path.dirname(sourceFileName)
+    return path.join(base, '/', linkFile)
+  }
+
+  /**
+   * Get all links from content
+   * @param fileName fully qualified source file name
+   * @param content markdown to parse
+   */
+  mineContent(fileName: string, content: string): ISummary[] {
     const result: ISummary[] = []
-    const contents = readFile(fileName)
-    const directMatches = mdPattern.exec(contents)
-    if (directMatches) {
-      directMatches.forEach((value, _pos) => {
-        const summary = { sourceFile: value, summary: value }
-        result.push(summary)
-      })
+    let match = mdPattern.exec(content)
+    let linkFile: string
+    while (match !== null) {
+      const summary = this.noDash(match[1])
+      linkFile = this.stripSearch(match[2])
+      if (!this.ignoreLink(linkFile)) {
+        if (
+          summary.localeCompare('[link]', undefined, {
+            sensitivity: 'base',
+          }) !== 0
+        ) {
+          linkFile = this.sourcerer(fileName, linkFile)
+          result.push({ summary, sourceFile: linkFile })
+        }
+      }
+      match = mdPattern.exec(content)
     }
 
-    const linkMatches = linkPattern.exec(contents)
-    if (linkMatches) {
-      linkMatches.forEach((value, _pos) => {
-        const summary = { sourceFile: value, summary: value }
-        result.push(summary)
-      })
+    match = linkPattern.exec(content)
+    while (match != null) {
+      const summary = this.noDash(match[1])
+      linkFile = this.stripSearch(match[2])
+      if (!this.ignoreLink(linkFile)) {
+        linkFile = this.sourcerer(fileName, linkFile)
+        result.push({ summary, sourceFile: linkFile })
+      }
+      match = linkPattern.exec(content)
     }
     return result
   }
+
+  mineFile(fileName: string): ISummary[] {
+    return this.mineContent(fileName, readFile(fileName))
+  }
 }
 
+// TODO replace these extension keys with a regex match lookup for fle extension?
 const fileMiners: IMiners = {
   '.cs': new CodeMiner(),
   '.kt': new CodeMiner(),
   '.py': new CodeMiner(),
   '.swift': new CodeMiner(),
   '.ts': new CodeMiner(),
+  '.tsx': new CodeMiner(),
   '.rb': new CodeMiner(),
-  '.md': new MdMiner(),
-  '.rst': new MdMiner(), // TODO .rst miner
+  '.md': new MarkdownMiner(),
+  '.dart': new CodeMiner(),
+  // '.rst': new MarkdownMiner(), // TODO .rst miner? Probably not needed
 }
-
-export type FileFilter = (fileName: string) => boolean
-
-export const allFiles = (fileName: string) => fileName.trim().length > 0
-
-export const codeFiles = (fileName: string) => {
-  const ext = path.extname(fileName)
-  return ext in fileMiners
-}
-
-export const getAllFiles = (
-  dirPath: string,
-  listOfFiles: string[] = [],
-  filter: FileFilter = allFiles
-) => {
-  const files = fs.readdirSync(dirPath)
-
-  files.forEach((file) => {
-    if (fs.statSync(dirPath + '/' + file).isDirectory()) {
-      listOfFiles = getAllFiles(dirPath + '/' + file, listOfFiles, filter)
-    } else {
-      if (filter(file)) listOfFiles.push(path.join(dirPath, '/', file))
-    }
-  })
-
-  return listOfFiles
-}
-
-export const getCodeFiles = (dirPath: string, listOfFiles: string[] = []) => {
-  return getAllFiles(dirPath, listOfFiles, codeFiles)
-}
-
-export const getCommitHash = () => 'TODO'
-
-export interface IMine {
-  commitHash: string
-  nuggets: Nuggets
-}
-
 export class Miner {
-  summaries: KeyedCollection<string> = {}
+  summaries: Summaries = {}
   nuggets: Nuggets = {}
   commitHash: string = getCommitHash()
-  motherLode: IMine
+  remoteOrigin: string = getRemoteHttpOrigin()
 
   constructor(public readonly sourcePath: string) {
     this.execute(sourcePath)
-    this.motherLode = { commitHash: this.commitHash, nuggets: this.nuggets }
   }
 
-  addCall(ext: string, fileName: string, call: ISDKCall | ISummary) {
+  get motherLode(): IMine {
+    return {
+      commitHash: this.commitHash,
+      remoteOrigin: this.remoteOrigin,
+      summaries: this.summaries,
+      nuggets: this.nuggets,
+    }
+  }
+
+  addCall(ext: string, relativeFile: string, call: ISDKCall | ISummary) {
     function addFileCall(nugget: INugget) {
       // Extension is key for language
       let fileCalls = nugget.calls[ext]
@@ -229,7 +302,7 @@ export class Miner {
       }
       const sdkCall = call as ISDKCall
       const fileCall: IFileCall = {
-        sourceFile: fileName,
+        sourceFile: relativeFile,
         column: sdkCall.column,
         line: sdkCall.line,
       }
@@ -247,7 +320,8 @@ export class Miner {
 
     if ('summary' in call) {
       const s = call as ISummary
-      this.summaries[s.sourceFile] = s.summary
+      s.sourceFile = Miner.relate(this.sourcePath, s.sourceFile)
+      this.summaries[s.sourceFile] = s
     } else {
       let nugget: INugget = this.nuggets[call.operationId]
       if (!nugget) {
