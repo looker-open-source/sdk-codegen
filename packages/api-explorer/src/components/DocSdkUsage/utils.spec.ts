@@ -23,20 +23,14 @@
  SOFTWARE.
 
  */
+import { IMine } from '@looker/sdk-codegen'
+import { findExamples } from './DocExamples'
 
-import { createContext, Dispatch } from 'react'
-import { SearchState, SearchAction, defaultSearchState } from '../../reducers'
+describe('DocExamples utils', () => {
+  const lode: IMine = JSON.parse('../../../../../examples/motherlode.json')
 
-interface SearchContextProps {
-  searchSettings: SearchState
-  setSearchSettings: Dispatch<SearchAction>
-}
-
-export const defaultSearchContextValue: SearchContextProps = {
-  searchSettings: defaultSearchState,
-  setSearchSettings: () => undefined,
-}
-
-export const SearchContext = createContext<SearchContextProps>(
-  defaultSearchContextValue
-)
+  test('findExamples finds examples', () => {
+    const actual = findExamples(lode, 'csharp', 'me')
+    expect(actual).toBeDefined()
+  })
+})

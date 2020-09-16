@@ -41,6 +41,7 @@
     "lint:es": "eslint 'packages/**/*.ts{,x}' --cache",
     "lint:ts": "tsc",
     "lint-staged": "yarn exec lint-staged",
+    "refresh": "SUPPRESS_NO_CONFIG_WARNING=1 ts-node -O '{ \"module\": \"commonjs\", \"target\": \"es2019\" }' packages/api-explorer/scripts/refresh_specs.ts",
     "test": "yarn jest",
     "test:ts": "yarn jest --reporters=default --reporters=jest-junit",
     "test:iphone": "xcodebuild test -project swift/looker/looker.xcodeproj -scheme looker-Package -sdk iphonesimulator -destination 'platform=iOS Simulator,name=iPhone 11,OS=13.4.1' | xcpretty --test --color",

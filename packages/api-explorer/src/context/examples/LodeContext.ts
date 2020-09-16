@@ -23,20 +23,18 @@
  SOFTWARE.
 
  */
+import { createContext } from 'react'
+import { IMine } from '@looker/sdk-codegen/'
 
-import { createContext, Dispatch } from 'react'
-import { SearchState, SearchAction, defaultSearchState } from '../../reducers'
+interface LodeContextProps extends IMine {}
 
-interface SearchContextProps {
-  searchSettings: SearchState
-  setSearchSettings: Dispatch<SearchAction>
+export const defaultLodeContextValue: LodeContextProps = {
+  commitHash: '',
+  nuggets: {},
+  summaries: {},
+  remoteOrigin: '',
 }
 
-export const defaultSearchContextValue: SearchContextProps = {
-  searchSettings: defaultSearchState,
-  setSearchSettings: () => undefined,
-}
-
-export const SearchContext = createContext<SearchContextProps>(
-  defaultSearchContextValue
+export const LodeContext = createContext<LodeContextProps>(
+  defaultLodeContextValue
 )

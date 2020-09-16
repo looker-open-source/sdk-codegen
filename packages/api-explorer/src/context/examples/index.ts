@@ -23,20 +23,4 @@
  SOFTWARE.
 
  */
-
-import { createContext, Dispatch } from 'react'
-import { SearchState, SearchAction, defaultSearchState } from '../../reducers'
-
-interface SearchContextProps {
-  searchSettings: SearchState
-  setSearchSettings: Dispatch<SearchAction>
-}
-
-export const defaultSearchContextValue: SearchContextProps = {
-  searchSettings: defaultSearchState,
-  setSearchSettings: () => undefined,
-}
-
-export const SearchContext = createContext<SearchContextProps>(
-  defaultSearchContextValue
-)
+export { defaultLodeContextValue, LodeContext } from './LodeContext'
