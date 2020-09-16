@@ -26,7 +26,8 @@
 
 import { TestConfig } from './testUtils'
 import { PythonGen } from './python.gen'
-import { IEnumType, IMappedType, IType } from './sdkModels'
+import { IEnumType, IType } from './sdkModels'
+import { IMappedType } from './codeGen'
 
 const config = TestConfig()
 const apiTestModel = config.apiTestModel

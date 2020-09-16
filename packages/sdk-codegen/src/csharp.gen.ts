@@ -25,9 +25,8 @@
  */
 
 import { commentBlock } from '@looker/sdk-codegen-utils'
-import { CodeGen } from './codeGen'
+import { CodeGen, IMappedType } from './codeGen'
 import {
-  IMappedType,
   IMethod,
   IParameter,
   IType,

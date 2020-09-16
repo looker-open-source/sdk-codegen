@@ -27,8 +27,8 @@
 import { commentBlock } from '@looker/sdk-codegen-utils'
 import {
   Arg,
+  ArgValues,
   EnumType,
-  IMappedType,
   IMethod,
   IParameter,
   IProperty,
@@ -36,7 +36,7 @@ import {
   IType,
   strBody,
 } from './sdkModels'
-import { CodeGen } from './codeGen'
+import { CodeAssignment, CodeGen, IMappedType, trimInputs } from './codeGen'
 
 /**
  * TypeScript code generator
@@ -198,13 +198,20 @@ export interface IDictionary<T> {
     )
   }
 
+  makeTheCall(method: IMethod, inputs: ArgValues): string {
+    inputs = trimInputs(inputs)
+    const resp = `let response = await sdk.ok(sdk.${method.name}(`
+    const args = this.assignParams(method, inputs)
+    return `${resp}${args}))`
+  }
+
   methodHeaderDeclaration(indent: string, method: IMethod, streamer = false) {
     const mapped = this.typeMap(method.type)
     const head = method.description?.trim()
     let headComment =
       (head ? `${head}\n\n` : '') +
       `${method.httpMethod} ${method.endpoint} -> ${mapped.name}`
-    let fragment = ''
+    let fragment: string
     const requestType = this.requestTypeName(method)
     const bump = indent + this.indentStr
 
@@ -451,6 +458,7 @@ export interface IDictionary<T> {
     super.typeMap(type)
     const mt = ''
 
+    const asString: CodeAssignment = (_, v) => `'${v}'`
     const tsTypes: Record<string, IMappedType> = {
       any: { default: mt, name: 'any' },
       boolean: { default: mt, name: 'boolean' },
@@ -465,11 +473,11 @@ export interface IDictionary<T> {
       integer: { default: mt, name: 'number' },
       number: { default: mt, name: 'number' },
       object: { default: mt, name: 'any' },
-      password: { default: mt, name: 'Password' },
-      string: { default: mt, name: 'string' },
-      uri: { default: mt, name: 'Url' },
-      url: { default: mt, name: 'Url' },
-      void: { default: mt, name: 'void' },
+      password: { default: mt, name: 'Password', asVal: asString },
+      string: { default: mt, name: 'string', asVal: asString },
+      uri: { default: mt, name: 'Url', asVal: asString },
+      url: { default: mt, name: 'Url', asVal: asString },
+      void: { default: mt, name: 'void', asVal: (_i, _v: any) => '' },
     }
 
     if (type.elementType) {
@@ -477,13 +485,29 @@ export interface IDictionary<T> {
       const map = this.typeMap(type.elementType)
       switch (type.className) {
         case 'ArrayType':
-          return { default: '[]', name: `${map.name}[]` }
+          return {
+            default: '[]',
+            name: `${map.name}[]`,
+            asVal: (indent, v) => this.arrayValue(indent, type, v),
+          }
         case 'HashType':
-          return { default: '{}', name: `IDictionary<${map.name}>` }
+          return {
+            default: '{}',
+            name: `IDictionary<${map.name}>`,
+            asVal: (indent, value) => this.hashValue(indent, value),
+          }
         case 'DelimArrayType':
-          return { default: '', name: `DelimArray<${map.name}>` }
+          return {
+            default: '',
+            name: `DelimArray<${map.name}>`,
+            asVal: (_, v) => `new DelimArray<${map.name}>([${v}])`,
+          }
         case 'EnumType':
-          return { default: '', name: this.typeName(type) }
+          return {
+            default: '',
+            name: this.typeName(type),
+            asVal: (_, v) => `${type.name}.${v}`,
+          }
       }
       throw new Error(`Don't know how to handle: ${JSON.stringify(type)}`)
     }
