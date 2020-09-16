@@ -47,13 +47,46 @@ export interface IVersionInfo {
 }
 
 /**
+ * Removes all empty input values
+ * @param inputs current inputs
+ * @returns inputs with all "empty" values removed so the key no longer exists
+ */
+export const trimInputs = (inputs: any): any => {
+  function isEmpty(value: any) {
+    if (Array.isArray(value)) return value.length === 0
+    if (value === undefined) return true
+    if (value === null) return true
+    if (value === '') return true
+    if (value instanceof Object) return Object.keys(value).length === 0
+    return false
+  }
+
+  let result: any
+  if (isEmpty(inputs)) return {}
+  if (Array.isArray(inputs)) {
+    result = []
+    Object.values(inputs).forEach((v: any) => result.push(trimInputs(v)))
+  } else if (inputs instanceof Object) {
+    result = {}
+    Object.entries(inputs).forEach(([key, value]) => {
+      const trimmed = trimInputs(value)
+      if (!isEmpty(trimmed)) {
+        result[key] = trimmed
+      }
+    })
+  } else {
+    // Scalar value
+    result = inputs
+  }
+  return result
+}
+
+/**
  * Function pattern for creating source code assignment expressions
  */
 export type CodeAssignment = (indent: string, value: any) => string
 
-/**
- * Language-specific type mapping
- */
+/** Language-specific type mapping */
 export interface IMappedType {
   /** language's name for the type */
   name: string
@@ -841,10 +874,8 @@ export abstract class CodeGen implements ICodeGen {
     return this.argIndent(indent, args, this.hashOpen, this.hashClose)
   }
 
-  makeTheCall(method: IMethod, inputs: ArgValues) {
-    return `No call generator defined for ${method.name} with ${JSON.stringify(
-      inputs
-    )}`
+  makeTheCall(_method: IMethod, _inputs: ArgValues) {
+    return `No call generator is defined for this language`
   }
 
   abstract encodePathParams(indent: string, method: IMethod): string

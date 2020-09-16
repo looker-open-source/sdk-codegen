@@ -27,7 +27,7 @@
 import React, { FC, useContext } from 'react'
 import { Space, useToggle, FlexItem, Flex } from '@looker/components'
 import { useParams } from 'react-router-dom'
-import { RunIt, RunItHttpMethod, RunItContext } from '@looker/run-it'
+import { RunIt, RunItContext } from '@looker/run-it'
 import { ApiModel, typeRefs } from '@looker/sdk-codegen'
 
 import {
@@ -86,11 +86,7 @@ export const MethodScene: FC<DocMethodProps> = ({ api }) => {
       </FlexItem>
       {sdk && value && (
         <FlexItem flex="1">
-          <RunIt
-            inputs={createInputs(api, method)}
-            httpMethod={method.httpMethod as RunItHttpMethod}
-            endpoint={method.endpoint}
-          />
+          <RunIt api={api} inputs={createInputs(api, method)} method={method} />
         </FlexItem>
       )}
     </Flex>

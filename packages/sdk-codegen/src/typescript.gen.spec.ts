@@ -39,6 +39,7 @@ import { DelimArray } from '@looker/sdk-rtl'
 import { TestConfig } from './testUtils'
 import { TypescriptGen } from './typescript.gen'
 import { EnumType, titleCase } from './sdkModels'
+import { trimInputs } from './codeGen'
 
 const config = TestConfig()
 const apiTestModel = config.apiTestModel
@@ -47,6 +48,55 @@ const gen = new TypescriptGen(apiTestModel)
 const indent = ''
 
 describe('typescript generator', () => {
+  describe('trimInputs tests here instead of CodeGen', () => {
+    it('trims top level', () => {
+      const inputs = {
+        one: undefined,
+        two: 'assigned',
+        three: true,
+        four: false,
+        five: '',
+        six: {},
+        seven: [],
+      }
+      const expected = { two: 'assigned', three: true, four: false }
+      const actual = trimInputs(inputs)
+      expect(actual).toEqual(expected)
+    })
+
+    it('assigns arrays', () => {
+      const inputs = {
+        zero: [0, 1, 2, 3],
+      }
+      const expected = {
+        zero: [0, 1, 2, 3],
+      }
+      const actual = trimInputs(inputs)
+      expect(actual).toEqual(expected)
+    })
+
+    it('trims nested levels', () => {
+      const inputs = {
+        zero: [0, 1, 2, 3],
+        one: undefined,
+        two: 'assigned',
+        three: true,
+        four: false,
+        five: '',
+        six: { a: true, b: 0, c: null },
+      }
+      const expected = {
+        zero: [0, 1, 2, 3],
+        two: 'assigned',
+        three: true,
+        four: false,
+        six: { a: true, b: 0 },
+      }
+      const actual = trimInputs(inputs)
+      expect(actual).toEqual(expected)
+    })
+  })
+
   it('comment header', () => {
     const text = 'line 1\nline 2'
     let actual = gen.commentHeader(indent, text)

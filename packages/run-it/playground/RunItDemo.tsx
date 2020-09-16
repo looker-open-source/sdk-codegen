@@ -34,12 +34,11 @@ import {
   Card,
   Flex,
 } from '@looker/components'
-import { RunIt, RunItHttpMethod } from '../src'
+import { RunIt } from '../src'
 
 import { specs } from '../../api-explorer/src/test-data'
 import { createInputs } from '../../api-explorer/src/scenes/MethodScene/utils'
 import { OAuthScene } from '../src/scenes'
-import { runItSDK } from '../src/utils'
 
 export const RunItDemo: FC = () => {
   const specKey = '4.0'
@@ -82,14 +81,9 @@ export const RunItDemo: FC = () => {
                 onChange={handleSelection}
               />
             </Space>
-            <RunIt
-              specKey={specKey}
-              inputs={inputs}
-              httpMethod={method.httpMethod as RunItHttpMethod}
-              endpoint={method.endpoint}
-            />
+            <RunIt api={api} inputs={inputs} method={method} />
             <Route path="/oauth">
-              <OAuthScene sdk={runItSDK} />
+              <OAuthScene />
             </Route>
           </Card>
         </Flex>

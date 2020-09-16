@@ -36,7 +36,7 @@ import {
   IType,
   strBody,
 } from './sdkModels'
-import { CodeAssignment, CodeGen, IMappedType } from './codeGen'
+import { CodeAssignment, CodeGen, IMappedType, trimInputs } from './codeGen'
 
 /**
  * TypeScript code generator
@@ -199,6 +199,7 @@ export interface IDictionary<T> {
   }
 
   makeTheCall(method: IMethod, inputs: ArgValues): string {
+    inputs = trimInputs(inputs)
     const resp = `let response = await sdk.ok(sdk.${method.name}(`
     const args = this.assignParams(method, inputs)
     return `${resp}${args}))`
