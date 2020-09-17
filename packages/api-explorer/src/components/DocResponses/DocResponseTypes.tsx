@@ -41,11 +41,12 @@ interface DocResponseTypesProps {
  */
 export const DocResponseTypes: FC<DocResponseTypesProps> = ({ responses }) => {
   const mediaTypes = Object.keys(responses)
-  const [mediaType, setMediaType] = useState(mediaTypes[0])
+  const [selectedMediaType, setSelectedMediaType] = useState(mediaTypes[0])
   const [resps, setResps] = useState(responses)
 
   useEffect(() => {
-    setMediaType(mediaTypes[0])
+    /** When new responses are passed, update the default selected media type */
+    setSelectedMediaType(mediaTypes[0])
     setResps(responses)
   }, [responses])
 
@@ -53,8 +54,8 @@ export const DocResponseTypes: FC<DocResponseTypesProps> = ({ responses }) => {
   return (
     <>
       <ButtonToggle
-        value={mediaType}
-        onChange={setMediaType}
+        value={selectedMediaType}
+        onChange={setSelectedMediaType}
         mt="large"
         mb="large"
       >
@@ -63,7 +64,11 @@ export const DocResponseTypes: FC<DocResponseTypesProps> = ({ responses }) => {
         ))}
       </ButtonToggle>
       <DocCode
-        code={JSON.stringify(copyAndCleanResponse(resps[mediaType]), null, 2)}
+        code={JSON.stringify(
+          copyAndCleanResponse(resps[selectedMediaType]),
+          null,
+          2
+        )}
       />
     </>
   )
