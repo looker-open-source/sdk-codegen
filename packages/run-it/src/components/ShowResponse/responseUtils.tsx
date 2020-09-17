@@ -110,6 +110,12 @@ const ShowUnknown = (response: IRawResponse) => (
   </Paragraph>
 )
 
+/** Displays a PDF inside the page */
+const ShowPDF = (response: IRawResponse) => {
+  // TODO display a PDF, maybe similar to https://github.com/wojtekmaj/react-pdf/blob/master/sample/webpack/Sample.jsx
+  return ShowUnknown(response)
+}
+
 interface Responder {
   /** A label indicating the supported MIME type(s) */
   label: string
@@ -146,6 +152,13 @@ export const responseHandlers: Responder[] = [
     isRecognized: (contentType) =>
       RegExp(/image\/(png|jpg|jpeg|svg\+xml)/).test(contentType),
     component: (response) => ShowImage(response),
+  },
+  {
+    // render task: 9d52f842b2c3f474970123302b2fa7e0
+    label: 'pdf',
+    isRecognized: (contentType) =>
+      RegExp(/application\/pdf/g).test(contentType),
+    component: (response) => ShowPDF(response),
   },
   {
     label: 'text',
