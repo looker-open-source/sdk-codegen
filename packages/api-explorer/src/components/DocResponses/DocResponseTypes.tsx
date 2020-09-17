@@ -23,7 +23,7 @@
  SOFTWARE.
 
  */
-import React, { FC, useState } from 'react'
+import React, { FC, useState, useEffect } from 'react'
 import { ButtonToggle, ButtonItem } from '@looker/components'
 import { KeyedCollection, IMethodResponse } from '@looker/sdk-codegen'
 
@@ -42,7 +42,14 @@ interface DocResponseTypesProps {
 export const DocResponseTypes: FC<DocResponseTypesProps> = ({ responses }) => {
   const mediaTypes = Object.keys(responses)
   const [mediaType, setMediaType] = useState(mediaTypes[0])
+  const [resps, setResps] = useState(responses)
 
+  useEffect(() => {
+    setMediaType(mediaTypes[0])
+    setResps(responses)
+  }, [responses])
+
+  // TODO: Account for endpoints with no responses (e.g. delete a custom cmd)
   return (
     <>
       <ButtonToggle
@@ -56,11 +63,7 @@ export const DocResponseTypes: FC<DocResponseTypesProps> = ({ responses }) => {
         ))}
       </ButtonToggle>
       <DocCode
-        code={JSON.stringify(
-          copyAndCleanResponse(responses[mediaType]),
-          null,
-          2
-        )}
+        code={JSON.stringify(copyAndCleanResponse(resps[mediaType]), null, 2)}
       />
     </>
   )
