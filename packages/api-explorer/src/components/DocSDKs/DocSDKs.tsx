@@ -24,7 +24,7 @@
 
  */
 
-import React, { FC, useState } from 'react'
+import React, { FC, useState, useEffect } from 'react'
 import { Tab, TabList, TabPanel, TabPanels, useTabs } from '@looker/components'
 import { IMethod, IType, ApiModel } from '@looker/sdk-codegen'
 
@@ -48,7 +48,11 @@ interface LanguageSDKProps {
 export const DocSDKs: FC<LanguageSDKProps> = ({ api, method, type }) => {
   const tabs = useTabs()
   const generators = getGenerators(api)
-  const [item] = useState(method ? noComment(method) : type!)
+  const [item, setItem] = useState(method ? noComment(method) : type!)
+
+  useEffect(() => {
+    setItem(method ? noComment(method) : type!)
+  }, [method, type])
 
   return (
     <CollapserCard heading="SDK declarations">

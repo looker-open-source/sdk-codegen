@@ -23,8 +23,7 @@
  SOFTWARE.
 
  */
-
-import React, { FC, useEffect, useState } from 'react'
+import React, { FC, useState, useEffect } from 'react'
 import { ButtonToggle, ButtonItem } from '@looker/components'
 import { KeyedCollection, IMethodResponse } from '@looker/sdk-codegen'
 
@@ -36,43 +35,27 @@ interface DocResponseTypesProps {
 }
 
 /**
- * Temporary handler for state change lag when switching from an endpoint that is missing the first mediaType
- * from the last endpoint
- *
- * @param responses all method responses
- * @param mediaType missing media type (which shows the state lag
- */
-const responseNotFound = (
-  responses: KeyedCollection<IMethodResponse>,
-  mediaType: string
-) => {
-  const types = Object.keys(responses)
-  const notFound = `Response mediaType ${mediaType} not found. Available types are: ${types.join(
-    ', '
-  )}`
-  return <span>{notFound}</span>
-}
-
-/**
  * Given a collection of media types (keys) and responses (values) for a response code, generate a group of buttons for
  * toggling media type and render the response
  * @param response
  */
 export const DocResponseTypes: FC<DocResponseTypesProps> = ({ responses }) => {
-  const [mediaTypes, setMediaTypes] = useState(Object.keys(responses))
-  const [mediaType, setMediaType] = useState(mediaTypes[0])
+  const mediaTypes = Object.keys(responses)
+  const [selectedMediaType, setSelectedMediaType] = useState(mediaTypes[0])
+  const [resps, setResps] = useState(responses)
 
   useEffect(() => {
-    const keys = Object.keys(responses)
-    setMediaTypes(Object.keys(responses))
-    setMediaType(keys.length > 0 ? keys[0] : '')
+    /** When new responses are passed, update the default selected media type */
+    setSelectedMediaType(mediaTypes[0])
+    setResps(responses)
   }, [responses])
 
+  // TODO: Account for endpoints with no responses (e.g. delete a custom cmd)
   return (
     <>
       <ButtonToggle
-        value={mediaType}
-        onChange={setMediaType}
+        value={selectedMediaType}
+        onChange={setSelectedMediaType}
         mt="large"
         mb="large"
       >
@@ -80,16 +63,13 @@ export const DocResponseTypes: FC<DocResponseTypesProps> = ({ responses }) => {
           <ButtonItem key={mediaType}>{mediaType}</ButtonItem>
         ))}
       </ButtonToggle>
-      {responses[mediaType] && (
-        <DocCode
-          code={JSON.stringify(
-            copyAndCleanResponse(responses[mediaType]),
-            null,
-            2
-          )}
-        />
-      )}
-      {!responses[mediaType] && responseNotFound(responses, mediaType)}
+      <DocCode
+        code={JSON.stringify(
+          copyAndCleanResponse(resps[selectedMediaType]),
+          null,
+          2
+        )}
+      />
     </>
   )
 }
