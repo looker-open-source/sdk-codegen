@@ -74,4 +74,4 @@ export const remapHashURL = (specKey: string, url: string) =>
  * Returns transformed url
  */
 export const transformURL = (specKey: string, url: string) =>
-  remapHashURL(specKey, cleanURL(url))
+  url ? remapHashURL(specKey, cleanURL(url)) : url
