@@ -24,7 +24,7 @@
 
  */
 
-import React, { FC, useContext } from 'react'
+import React, { FC, useContext, useState, useEffect } from 'react'
 import { Space, useToggle, FlexItem, Flex } from '@looker/components'
 import { useParams } from 'react-router-dom'
 import { RunIt, RunItContext } from '@looker/run-it'
@@ -56,9 +56,13 @@ interface DocMethodParams {
 export const MethodScene: FC<DocMethodProps> = ({ api }) => {
   const { sdk } = useContext(RunItContext)
   const { methodName, specKey } = useParams<DocMethodParams>()
-  const method = api.methods[methodName]
-  const seeTypes = typeRefs(api, method.customTypes)
   const { value, toggle } = useToggle()
+  const [method, setMethod] = useState(api.methods[methodName])
+  const seeTypes = typeRefs(api, method.customTypes)
+
+  useEffect(() => {
+    setMethod(api.methods[methodName])
+  }, [methodName])
 
   return (
     <Flex>
