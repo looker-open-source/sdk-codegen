@@ -2230,6 +2230,17 @@
     polished "^3.6.5"
     styled-system "^5.1.5"
 
+"@looker/design-tokens@^0.9.12":
+  version "0.9.12"
+  resolved "https://registry.yarnpkg.com/@looker/design-tokens/-/design-tokens-0.9.12.tgz#cba33f2e9d836d32a9001e5418768096dc0edb89"
+  integrity sha512-UqDyDiCVkTNitWcknHn/Qykcn7/nm+TwhXT5GSx4Yi+HON+TW1D8PsKd566T7F89dA74+SbjR/hp27zdaCRfCg==
+  dependencies:
+    "@styled-system/props" "^5.1.5"
+    "@types/styled-system" "^5.1.10"
+    lodash "^4.17.20"
+    polished "^3.6.5"
+    styled-system "^5.1.5"
+
 "@looker/eslint-config@^1.0.14":
   version "1.0.16"
   resolved "https://registry.yarnpkg.com/@looker/eslint-config/-/eslint-config-1.0.16.tgz#6221efeb686b7c82f82817975892895599a231a7"
@@ -3063,7 +3074,7 @@
     "@types/react-native" "*"
     csstype "^2.2.0"
 
-"@types/styled-system@^5.1.9":
+"@types/styled-system@^5.1.10", "@types/styled-system@^5.1.9":
   version "5.1.10"
   resolved "https://registry.yarnpkg.com/@types/styled-system/-/styled-system-5.1.10.tgz#dcf5690dd837ca49b8de1f23cb99d510c7f4ecb3"
   integrity sha512-OmVjC9OzyUckAgdavJBc+t5oCJrNXTlzWl9vo2x47leqpX1REq2qJC49SEtzbu1OnWSzcD68Uq3Aj8TeX+Kvtg==
@@ -9752,6 +9763,11 @@ lodash@^4.15.0, lodash@^4.17.11, lodash@^4.17.12, lodash@^4.17.14, lodash@^4.17.
   version "4.17.19"
   resolved "https://registry.yarnpkg.com/lodash/-/lodash-4.17.19.tgz#e48ddedbe30b3321783c5b4301fbd353bc1e4a4b"
   integrity sha512-JNvd8XER9GQX0v2qJgsaN/mzFCNA5BRe/j8JN9d+tWyGLSodKQHKFicdwNYzWwI3wjRnaKPsGj1XkBjx/F96DQ==
+
+lodash@^4.17.20:
+  version "4.17.20"
+  resolved "https://registry.yarnpkg.com/lodash/-/lodash-4.17.20.tgz#b44a9b6297bcb698f1c51a3545a2b3b368d59c52"
+  integrity sha512-PlhdFcillOINfeV7Ni6oF1TAEayyZBoZ8bcshTHqOYJYlrqzRK5hagpagky5o4HfCzzd1TRkXPMFq6cKk9rGmA==
 
 log-symbols@^2.2.0:
   version "2.2.0"

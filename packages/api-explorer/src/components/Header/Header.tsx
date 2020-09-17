@@ -25,48 +25,72 @@
  */
 
 import React, { FC, Dispatch } from 'react'
+import styled from 'styled-components'
 import { NavLink } from 'react-router-dom'
-import { FlexItem, Space, Text } from '@looker/components'
-
+import {
+  Icon,
+  Flex,
+  FlexItem,
+  Space,
+  Text,
+  IconButton,
+} from '@looker/components'
 import { SpecItems } from '../../ApiExplorer'
 import { SpecState, SpecAction } from '../../reducers'
 import { Search } from '../Search'
-import { HeaderWrapper } from '../ExplorerStyle'
-import { ApixHeading } from '../common'
-import { Logo } from './svg'
 import { ApiSpecSelector } from './ApiSpecSelector'
 
 interface HeaderProps {
   specs: SpecItems
   spec: SpecState
   specDispatch: Dispatch<SpecAction>
+  toggleNavigation: () => void
+  className?: string
 }
 
-export const Header: FC<HeaderProps> = ({ specs, spec, specDispatch }) => (
-  <HeaderWrapper>
-    <Space between>
-      <FlexItem flex="0 0 20rem" pr="large">
-        <ApixHeading fontSize="xxlarge">
-          <NavLink to={`/${spec.key}`}>
-            <Space gap="small">
-              <Logo />
-              <Text color="key" fontSize="xlarge" fontWeight="light">
-                API Explorer
-              </Text>
-            </Space>
-          </NavLink>
-        </ApixHeading>
-      </FlexItem>
-      <FlexItem flex="1" px="large">
-        <Search api={spec.api} specKey={spec.key} />
-      </FlexItem>
-      <FlexItem flexBasis="20rem" pl="large">
-        <ApiSpecSelector
-          specs={specs}
-          spec={spec}
-          specDispatch={specDispatch}
-        />
-      </FlexItem>
-    </Space>
-  </HeaderWrapper>
+export const HeaderLayout: FC<HeaderProps> = ({
+  className,
+  specs,
+  spec,
+  specDispatch,
+  toggleNavigation,
+}) => (
+  <Space between className={className}>
+    <Flex width="20rem" pr="large" alignItems="center">
+      <IconButton
+        size="small"
+        onClick={toggleNavigation}
+        icon="Hamburger"
+        label="Toggle Navigation"
+        mr="medium"
+      />
+
+      <NavLink to={`/${spec.key}`}>
+        <Space gap="small">
+          <Icon
+            name="LookerLogo"
+            alt="Looker"
+            color="text5"
+            style={{ width: '82px' }}
+          />
+          <Text color="key" fontSize="xlarge" fontWeight="light">
+            API Explorer
+          </Text>
+        </Space>
+      </NavLink>
+    </Flex>
+    <FlexItem flex="1" px="large">
+      <Search api={spec.api} specKey={spec.key} />
+    </FlexItem>
+    <FlexItem flexBasis="20rem" pl="large">
+      <ApiSpecSelector specs={specs} spec={spec} specDispatch={specDispatch} />
+    </FlexItem>
+  </Space>
 )
+
+export const Header = styled(HeaderLayout)`
+  height: 100%;
+  border-bottom: 1px solid ${({ theme }) => theme.colors.ui2};
+  padding-left: ${({ theme }) => theme.space.small};
+  padding-right: ${({ theme }) => theme.space.large};
+`

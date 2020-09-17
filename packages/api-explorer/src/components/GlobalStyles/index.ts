@@ -24,4 +24,4 @@
 
  */
 
-export { RunItWrapper } from './RunItStyle'
+export * from './GlobalStyles'

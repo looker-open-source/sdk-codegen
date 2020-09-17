@@ -31,16 +31,7 @@ import React, {
   useState,
   useEffect,
 } from 'react'
-import {
-  TabList,
-  useTabs,
-  TabPanels,
-  Tab,
-  TabPanel,
-  Text,
-  Heading,
-  Space,
-} from '@looker/components'
+import { TabList, useTabs, TabPanels, Tab, TabPanel } from '@looker/components'
 import { IRawResponse, Looker40SDK } from '@looker/sdk/lib/browser'
 import {
   RequestForm,
@@ -49,8 +40,6 @@ import {
   LoginForm,
   Loading,
   RunItConfigurator,
-  RunItWrapper,
-  MethodBadge,
 } from './components'
 import {
   createRequestParams,
@@ -214,21 +203,13 @@ export const RunIt: FC<RunItProps> = ({ inputs, httpMethod, endpoint }) => {
   if (!sdk) return <></>
 
   return (
-    <RunItWrapper>
-      <Heading>
-        <Space>
-          <MethodBadge textAlign="center" compact type={httpMethod}>
-            {httpMethod}
-          </MethodBadge>
-          <Text>{endpoint}</Text>
-        </Space>
-      </Heading>
-      <TabList {...tabs}>
+    <>
+      <TabList distribute {...tabs}>
         <Tab key="request">Request</Tab>
         <Tab key="response">Response</Tab>
         <PerfTab isExtension={!configIsNeeded} />
       </TabList>
-      <TabPanels {...tabs}>
+      <TabPanels px="xxlarge" {...tabs}>
         <TabPanel key="request">
           {!needsAuth && hasConfig && (
             <RequestForm
@@ -274,6 +255,6 @@ export const RunIt: FC<RunItProps> = ({ inputs, httpMethod, endpoint }) => {
           configurator={configurator}
         />
       </TabPanels>
-    </RunItWrapper>
+    </>
   )
 }

@@ -24,16 +24,15 @@
 
  */
 
-/**
- * Defines all RunIt styles
- */
-import styled from 'styled-components'
-import { Box } from '@looker/components'
+import { createGlobalStyle } from 'styled-components'
 
-export const RunItWrapper = styled(Box)`
-  background-color: ${({ theme }) => theme.colors.ui5};
-  color: ${({ theme }) => theme.colors.onInverse};
+export const GlobalStyles = createGlobalStyle`
+  .codeMarker {
+    background: yellow;
+    position: absolute;
+  }
+
+  .hi {
+    background: yellow;
+  }
 `
-RunItWrapper.defaultProps = {
-  p: 'large',
-}
