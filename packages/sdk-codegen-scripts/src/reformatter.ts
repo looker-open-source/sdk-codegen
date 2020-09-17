@@ -210,13 +210,13 @@ class DartFormatter extends BaseFormatter {
   errorMessage = 'dartfmt command not found. have dart tools been installed?'
 
   reformat(files: string[]): string {
-    const pipEnvExists = run(
+    const dartfmtExists = run(
       'command',
       ['-v', 'dartfmt'],
       this.errorMessage,
       true
     )
-    if (pipEnvExists.includes('dartfmt')) {
+    if (dartfmtExists.includes('dartfmt')) {
       files.forEach((f) => {
         run('dartfmt', [f, '-w'], `Failed to format ${f}`)
       })

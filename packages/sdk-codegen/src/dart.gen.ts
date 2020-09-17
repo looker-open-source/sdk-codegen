@@ -43,7 +43,7 @@ export class DartGen extends CodeGen {
   codePath = './dart/looker_sdk/lib/src'
   packagePath = ''
   sdkPath = 'sdk'
-  itself = 'this'
+  itself = ''
   fileExtension = '.dart'
   commentStr = '// '
   nullStr = 'null'
@@ -103,7 +103,7 @@ import 'models.dart';
 
 class ${this.sdkClassName()}Stream extends APIMethods {
 
-    ${this.sdkClassName()}Stream(AuthSession authSession) : super(authSession) {}
+    ${this.sdkClassName()}Stream(AuthSession authSession) : super(authSession);
   
 `
   }
@@ -129,20 +129,16 @@ class ${this.sdkClassName()}Stream extends APIMethods {
   }
 
   // TODO create methodHeader and typeHeader
-  commentHeader(indent: string, text: string | undefined, commentStr = ' * ') {
+  commentHeader(indent: string, text: string | undefined, commentStr = '/// ') {
     if (!text) return ''
     if (commentStr === ' ') {
-      return `${indent}/**\n\n${commentBlock(
+      return `${indent}/*\n\n${commentBlock(
         text,
         indent,
         commentStr
       )}\n\n${indent} */\n`
     }
-    return `${indent}/**\n${commentBlock(
-      text,
-      indent,
-      commentStr
-    )}\n${indent} */\n`
+    return `${indent}${commentBlock(text, indent, commentStr)}\n`
   }
 
   beginRegion(indent: string, description: string): string {
@@ -353,7 +349,7 @@ class ${this.sdkClassName()}Stream extends APIMethods {
       ? ''
       : `
     
-    ${type.name}() {}
+    ${type.name}();
     `
   }
 
@@ -449,8 +445,8 @@ class ${this.sdkClassName()}Stream extends APIMethods {
   httpPath(path: string, prefix?: string) {
     prefix = prefix || ''
     if (path.indexOf('{') >= 0)
-      return '"' + path.replace(/{/gi, '${path_' + prefix) + '"'
-    return `"${path}"`
+      return "'" + path.replace(/{/gi, '${path_' + prefix) + "'"
+    return `'${path}'`
   }
 
   argGroup(indent: string, args: Arg[], prefix?: string) {
@@ -459,9 +455,9 @@ class ${this.sdkClassName()}Stream extends APIMethods {
     for (const arg of args) {
       const reserved = this.reserve(arg)
       if (prefix) {
-        hash.push(`"${reserved}": ${this.accessor(arg, prefix)}`)
+        hash.push(`'${reserved}': ${this.accessor(arg, prefix)}`)
       } else {
-        hash.push(`"${reserved}": ${reserved}`)
+        hash.push(`'${reserved}': ${reserved}`)
       }
     }
     return `\n${indent}{${hash.join(this.argDelimiter)}}`

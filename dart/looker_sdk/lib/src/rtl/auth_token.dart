@@ -1,22 +1,22 @@
 class AuthAccessToken {
-  String _accessToken;
-  String _tokenType;
-  int _expiresIn;
+  final String _accessToken;
+  final String _tokenType;
+  final int _expiresIn;
 
   AuthAccessToken.fromJson(Map map)
-      : _accessToken = map["access_token"],
-        _tokenType = map["token_type"],
-        _expiresIn = map["expires_in"];
+      : _accessToken = map['access_token'],
+        _tokenType = map['token_type'],
+        _expiresIn = map['expires_in'];
 
-  get accessToken {
+  String get accessToken {
     return _accessToken;
   }
 
-  get tokenType {
+  String get tokenType {
     return _tokenType;
   }
 
-  get expiresIn {
+  int get expiresIn {
     return _expiresIn;
   }
 }
@@ -24,9 +24,9 @@ class AuthAccessToken {
 class AuthToken {
   AuthAccessToken accessToken;
 
-  AuthToken() {}
+  AuthToken();
 
-  AuthToken.withToken(AuthAccessToken this.accessToken) {}
+  AuthToken.withToken(this.accessToken);
 
   bool isActive() {
     return accessToken != null;
