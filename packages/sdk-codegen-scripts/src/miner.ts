@@ -100,7 +100,10 @@ export const getAllFiles = (
       if (!skipFolder(file))
         listOfFiles = getAllFiles(searchPath + '/' + file, listOfFiles, filter)
     } else {
-      if (filter(file)) listOfFiles.push(path.join(searchPath, '/', file))
+      if (filter(file)) {
+        const fileName = path.join(searchPath, '/', file)
+        listOfFiles.push(fileName)
+      }
     }
   })
 
@@ -268,7 +271,6 @@ export class MarkdownMiner implements IDocMine {
   }
 }
 
-// TODO replace these extension keys with a regex match lookup for fle extension?
 const fileMiners: IMiners = {
   '.cs': new CodeMiner(),
   '.kt': new CodeMiner(),
@@ -346,11 +348,10 @@ export class Miner {
    * @param sourcePath original file search path
    * @param fileName fully qualified name of found file
    *
-   * @example `Miner.relate('/a/b/c/', '/a/b/c/d.txt')` returns '/c/d.txt'
+   * @example `Miner.relate('/a/b/c/', '/a/b/c/d.txt')` returns 'd.txt'
    */
   public static relate(sourcePath: string, fileName: string) {
-    const lastPath = path.basename(sourcePath)
-    return path.join(lastPath, '/', path.relative(sourcePath, fileName))
+    return path.relative(sourcePath, fileName)
   }
 
   processFile(fileName: string) {

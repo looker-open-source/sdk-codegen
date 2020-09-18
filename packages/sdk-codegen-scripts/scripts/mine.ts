@@ -30,7 +30,8 @@ import { Miner } from '../src/miner'
 ;(() => {
   const args = process.argv.splice(2)
   const total = args.length
-  const sourcePath = total < 1 ? path.join(__dirname, '/../../../') : args[0]
+  const root = path.join(__dirname, '/../../../')
+  const sourcePath = total < 1 ? root : path.join(root, args[0])
   const indexFile = path.join(sourcePath, '/motherlode.json')
   console.log(`Mining ${sourcePath} ...`)
   const miner = new Miner(sourcePath)
@@ -39,8 +40,6 @@ import { Miner } from '../src/miner'
     encoding: 'utf-8',
   })
   console.log(
-    `${
-      Object.entries(result.nuggets).length
-    } nuggets and written to ${indexFile}`
+    `${Object.entries(result.nuggets).length} nuggets written to ${indexFile}`
   )
 })()

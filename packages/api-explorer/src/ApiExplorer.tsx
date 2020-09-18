@@ -27,8 +27,8 @@
 import React, { FC, useReducer, useState, useEffect } from 'react'
 import { ComponentsProvider } from '@looker/components'
 import { ApiModel, KeyedCollection } from '@looker/sdk-codegen'
-
 import { Looker40SDK, Looker31SDK } from '@looker/sdk/lib/browser'
+
 import { SearchContext, LodeContext, defaultLodeContextValue } from './context'
 import { getLoded } from './utils'
 import {
@@ -63,7 +63,7 @@ export interface ApiExplorerProps {
   lodeUrl?: string
 }
 
-// TODO update the lodeUrl
+// TODO update the lodeUrl to master when ready to merge
 const ApiExplorer: FC<ApiExplorerProps> = ({
   specs,
   lodeUrl = 'https://raw.githubusercontent.com/looker-open-source/sdk-codegen/jk/miner/motherlode.json',

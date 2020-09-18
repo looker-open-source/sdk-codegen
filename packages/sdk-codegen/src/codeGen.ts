@@ -25,6 +25,7 @@
  */
 
 import { commentBlock } from '@looker/sdk-codegen-utils'
+import { DelimArray } from '@looker/sdk-rtl/lib/browser'
 import {
   ApiModel,
   Arg,
@@ -63,6 +64,7 @@ export const trimInputs = (inputs: any): any => {
 
   let result: any
   if (isEmpty(inputs)) return {}
+  if (inputs instanceof DelimArray) return inputs
   if (Array.isArray(inputs)) {
     result = []
     Object.values(inputs).forEach((v: any) => result.push(trimInputs(v)))

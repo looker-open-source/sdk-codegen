@@ -23,90 +23,28 @@
  SOFTWARE.
 
  */
-import React, { FC, useContext } from 'react'
+import React, { FC } from 'react'
 import { List, Link, Text, Tooltip, ListItem } from '@looker/components'
-import {
-  exampleLink,
-  IExampleLink,
-  IFileCall,
-  IMine,
-} from '@looker/sdk-codegen'
-import { LodeContext } from '../../context'
+import { findExamples, IMine } from '@looker/sdk-codegen'
 import ReactMarkdown from 'react-markdown'
 
-// eslint-disable-next-line @typescript-eslint/no-var-requires
-// const lode = require('../../../../../examples/motherlode.json')
-
 interface DocExamplesProps {
+  /** mined examples */
+  lode: IMine
   /** Language example should be in */
   language: string
   /** Method operation id */
   operationId: string
 }
 
-const getLanguageExtension = (language: string) => {
-  switch (language.toLowerCase()) {
-    case 'typescript':
-      return '.ts'
-    case 'csharp':
-    case 'c#':
-      return '.cs'
-    case 'ruby':
-      return '.rb'
-    case 'python':
-      return '.py'
-    case 'swift':
-      return '.swift'
-    case 'kotlin':
-      return '.kt'
-    case 'dart':
-      return '.dart'
-    case 'go':
-      return '.go'
-    default:
-      return ''
-  }
-}
-
-/**
- * Searches for examples containing operationId usages in the given language
- * @param lode All example data
- * @param language Language example should be in
- * @param operationId Method's operationId to search for
- */
-export const findExamples = (
-  lode: IMine,
-  language: string,
-  operationId: string
-): IExampleLink[] => {
-  const allMethodExamples = lode.nuggets[operationId]
-  const ext = getLanguageExtension(language)
-  const links: IExampleLink[] = []
-
-  if (allMethodExamples && ext) {
-    const calls = allMethodExamples.calls[ext]
-    if (calls) {
-      calls.forEach((call: IFileCall) => {
-        const link = exampleLink(lode, call)
-        if (link) {
-          links.push(exampleLink(lode, call))
-        }
-      })
-    }
-  }
-  return links.sort((a, b) => a.permalink.localeCompare(b.permalink))
-}
-
-// TODO: asynchronously fetch index at first render. Report if not available in this component
-// TODO don't show the SDK Examples card at all if no examples are loaded. This keeps API Explorer more agnostic for other adopters.
 /**
  * Renders links to source files referencing the operationId in the given language
  */
 export const DocExamples: FC<DocExamplesProps> = ({
+  lode,
   language,
   operationId,
 }) => {
-  const lode = useContext(LodeContext)
   const examples = findExamples(lode, language, operationId)
 
   return (

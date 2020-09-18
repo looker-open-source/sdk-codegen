@@ -23,16 +23,15 @@
  SOFTWARE.
 
  */
-import React, { FC } from 'react'
+import React, { FC, useContext } from 'react'
 import { TabList, Tab, TabPanels, TabPanel, useTabs } from '@looker/components'
-import { ApiModel, IMethod } from '@looker/sdk-codegen'
-import { getGenerators } from '@looker/run-it'
+import { findExampleLanguages, IMethod } from '@looker/sdk-codegen'
 
 import { CollapserCard } from '../Collapser'
+import { LodeContext } from '../../context/examples'
 import { DocExamples } from './DocExamples'
 
-interface DocExamplesProps {
-  api: ApiModel
+interface DocSdkUsageProps {
   method: IMethod
 }
 
@@ -40,22 +39,25 @@ interface DocExamplesProps {
  *  Given an SDK method, searches the examples index for its usages in various languages and renders
  *  links to the source files
  */
-export const DocSdkUsage: FC<DocExamplesProps> = ({ api, method }) => {
+export const DocSdkUsage: FC<DocSdkUsageProps> = ({ method }) => {
   const tabs = useTabs()
-  const generators = getGenerators(api)
+  const lode = useContext(LodeContext)
+  const languages = findExampleLanguages(lode, method.name)
+  if (languages.length === 0) return <></>
 
   return (
     <CollapserCard heading="SDK Examples">
       <>
         <TabList {...tabs}>
-          {Object.keys(generators).map((language) => (
+          {languages.map((language) => (
             <Tab key={language}>{language}</Tab>
           ))}
         </TabList>
         <TabPanels {...tabs} pt="0">
-          {Object.entries(generators).map(([language, _]) => (
+          {languages.map((language) => (
             <TabPanel key={language}>
               <DocExamples
+                lode={lode}
                 language={language}
                 operationId={method.operationId}
               />

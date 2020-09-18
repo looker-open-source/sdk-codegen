@@ -24,17 +24,28 @@
 
  */
 import * as fs from 'fs'
-import { IMine } from '@looker/sdk-codegen'
+import path from 'path'
+import { IMine, findExamples, findExampleLanguages } from './exampleInfo'
 
-import { findExamples } from './DocExamples'
+const fileName = path.join(__dirname, '../../../motherlode.json')
+const file = fs.readFileSync(fileName, { encoding: 'utf-8' })
+const lode: IMine = JSON.parse(file)
+const op = 'render_task'
 
-// TODO: fix test
-describe.skip('DocExamples utils', () => {
-  const file = fs.readFileSync('../../../../../examples/motherlode.json')
-  const lode: IMine = JSON.parse(JSON.stringify(file))
-
-  test('findExamples finds examples', () => {
-    const actual = findExamples(lode, 'csharp', 'me')
+describe('exampleInfo', () => {
+  it('finds language examples for "render_task"', () => {
+    const actual = findExampleLanguages(lode, op)
     expect(actual).toBeDefined()
+    expect(actual).toEqual(['Python', 'Typescript', 'Kotlin', 'Ruby'])
+    actual.forEach((language) => {
+      const ex = findExamples(lode, language, op)
+      expect(ex).toBeDefined()
+      expect(ex.length).toBeGreaterThan(0)
+    })
+  })
+  it('findExamples finds examples', () => {
+    const actual = findExamples(lode, 'typescript', 'me')
+    expect(actual).toBeDefined()
+    expect(actual.length).toBeGreaterThan(0)
   })
 })

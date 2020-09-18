@@ -149,3 +149,88 @@ export const exampleLink = (lode: IMine, call: IFileCall): IExampleLink => {
     tooltip: `${call.sourceFile} line ${call.line}`,
   }
 }
+
+/** map file extension to language name */
+export const extensionToLanguage = {
+  '.py': 'Python',
+  '.ts': 'Typescript',
+  '.tsx': 'Typescript',
+  '.cs': 'C#',
+  '.kt': 'Kotlin',
+  '.swift': 'Swift',
+  '.rb': 'Ruby',
+  '.dart': 'Dart',
+  '.go': 'Go',
+  '.md': 'Markdown',
+}
+
+/**
+ * Return the recognized file extensions for the requested language
+ * @param language
+ */
+export const getLanguageExtensions = (language: string): string[] => {
+  switch (language.toLowerCase()) {
+    case 'ts':
+    case 'typescript':
+      return ['.ts', 'tsx']
+    case 'csharp':
+    case 'c#':
+      return ['.cs']
+    case 'ruby':
+      return ['.rb']
+    case 'python':
+      return ['.py']
+    case 'swift':
+      return ['.swift']
+    case 'kotlin':
+      return ['.kt']
+    case 'dart':
+      return ['.dart']
+    case 'go':
+      return ['.go']
+    default:
+      return []
+  }
+}
+
+export const findExampleLanguages = (lode: IMine, methodName: string) => {
+  const all = lode.nuggets[methodName]
+  if (!all) return []
+  const result = new Set<string>()
+  const keys = Object.keys(extensionToLanguage)
+  keys.forEach((key) => {
+    if (all.calls[key]) result.add(extensionToLanguage[key])
+  })
+  return Array.from(result)
+}
+
+/**
+ * Searches for examples containing operationId usages in the given language
+ * @param lode All example data
+ * @param language Language example should be in
+ * @param operationId Method's operationId to search for
+ */
+export const findExamples = (
+  lode: IMine,
+  language: string,
+  operationId: string
+): IExampleLink[] => {
+  const all = lode.nuggets[operationId]
+  const exts = getLanguageExtensions(language)
+  const links: IExampleLink[] = []
+
+  if (all && exts.length > 0) {
+    exts.forEach((ext) => {
+      const calls = all.calls[ext]
+      if (calls) {
+        calls.forEach((call: IFileCall) => {
+          const link = exampleLink(lode, call)
+          if (link) {
+            links.push(exampleLink(lode, call))
+          }
+        })
+      }
+    })
+  }
+  return links.sort((a, b) => a.permalink.localeCompare(b.permalink))
+}

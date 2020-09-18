@@ -214,19 +214,9 @@ describe('example mining', () => {
   })
 
   describe('Miner', () => {
-    describe('relate', () => {
-      it('relates to subdirectory', () => {
-        const source = '/a/b/c/d/examples'
-        const full = '/a/b/c/d/examples/python/foo.py'
-        const actual = Miner.relate(source, full)
-        expect(actual).toEqual('examples/python/foo.py')
-      })
-      it('relates to parent directory', () => {
-        const source = '/a/b/c/d/examples'
-        const full = '/a/b/c/examples/python/foo.py'
-        const actual = Miner.relate(source, full)
-        expect(actual).toEqual('../examples/python/foo.py')
-      })
+    it('relate', () => {
+      expect(Miner.relate('/a/b/c/', '/a/b/c/d.txt')).toEqual('d.txt')
+      expect(Miner.relate('/a/b/c/', '/a/b/c/d/e.txt')).toEqual('d/e.txt')
     })
 
     it('processes files', () => {

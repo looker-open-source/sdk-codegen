@@ -75,6 +75,14 @@ describe('typescript generator', () => {
       expect(actual).toEqual(expected)
     })
 
+    it('returns DelimArray', () => {
+      const inputs: IRequestAllUsers = {
+        ids: new DelimArray<number>([1, 2, 3]),
+      }
+      const actual = trimInputs(inputs)
+      expect(actual).toEqual(inputs)
+    })
+
     it('trims nested levels', () => {
       const inputs = {
         zero: [0, 1, 2, 3],
