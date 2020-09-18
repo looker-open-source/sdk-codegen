@@ -55,8 +55,8 @@ const readFile = (fileName: string) =>
   fs.readFileSync(fileName, { encoding: 'utf-8' })
 
 const sdkPattern = /(\b[a-z0-9_]*sdk)\.\s*([a-z0-9_]*)\s*[(<]/gi
-const mdPattern = /\[(.+)](\((.+)\))*?/gim
-const linkPattern = /.*\[\[link]]\((.*)\)*?/gim
+const mdPattern = /(\[(.+?)\]\((.+?)\))/gim
+const linkPattern = /(.*)\[\[link\]\]\((.+?)\)/gim
 
 export type IMiners = { [key: string]: IFileMine | IDocMine }
 
@@ -195,15 +195,16 @@ export class MarkdownMiner implements IDocMine {
     value = value.trim()
     const dasher = /^\s*-\s*(.*)/g
     if (dasher.test(value)) {
-      value = value.replace(dasher, '$1').trim()
+      value = value.replace(dasher, '$1')
     }
-    return value
+    return value.trim()
   }
 
   stripSearch(fileName: string) {
     fileName = fileName.trim()
     const match = /(.*)#.*/gi.exec(fileName)
-    if (match) return match[1]
+    if (match) fileName = match[1]
+    if (fileName.startsWith('/')) fileName = fileName.substr(1)
     return fileName
   }
 
@@ -228,8 +229,8 @@ export class MarkdownMiner implements IDocMine {
     let match = mdPattern.exec(content)
     let linkFile: string
     while (match !== null) {
-      const summary = this.noDash(match[1])
-      linkFile = this.stripSearch(match[2])
+      const summary = this.noDash(match[2])
+      linkFile = this.stripSearch(match[3])
       if (!this.ignoreLink(linkFile)) {
         if (
           summary.localeCompare('[link]', undefined, {
