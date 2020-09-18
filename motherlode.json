@@ -211,7 +211,7 @@
       "sourceFile": "sdk-codegen/examples/typescript/utils.ts"
     },
     "sdk-codegen/examples/typescript/sudoAsUser.ts": {
-      "summary": "sudo as user",
+      "summary": "`sudo` as user",
       "sourceFile": "sdk-codegen/examples/typescript/sudoAsUser.ts"
     },
     "sdk-codegen/examples/typescript/downloadTile.ts": {

@@ -32,6 +32,7 @@ import {
   IMine,
 } from '@looker/sdk-codegen'
 import { LodeContext } from '../../context'
+import ReactMarkdown from 'react-markdown'
 
 // eslint-disable-next-line @typescript-eslint/no-var-requires
 // const lode = require('../../../../../examples/motherlode.json')
@@ -115,7 +116,9 @@ export const DocExamples: FC<DocExamplesProps> = ({
           {examples.map((example, index) => (
             <ListItem key={index}>
               <Tooltip content={example.tooltip} placement="right">
-                <Link href={example.permalink}>{example.description}</Link>
+                <Link href={example.permalink}>
+                  <ReactMarkdown source={example.description} />
+                </Link>
               </Tooltip>
             </ListItem>
           ))}
