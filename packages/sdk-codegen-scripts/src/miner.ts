@@ -180,9 +180,11 @@ export class CodeMiner implements IFileMine {
  * Processes markdown files and extracts links to source code to use as summaries
  */
 export class MarkdownMiner implements IDocMine {
+  // TODO ensure summaries don't include markdown files
   ignoreLink(linkFile: string): boolean {
     linkFile = this.stripSearch(linkFile)
-    const notCode = !filterCodeFiles(linkFile)
+    const ext = path.extname(linkFile).toLocaleLowerCase()
+    const notCode = ext === '.md' || !filterCodeFiles(linkFile)
     const isHttp = /^(http|https):/gi.test(linkFile)
     return notCode || isHttp
   }
@@ -204,7 +206,6 @@ export class MarkdownMiner implements IDocMine {
     fileName = fileName.trim()
     const match = /(.*)#.*/gi.exec(fileName)
     if (match) fileName = match[1]
-    if (fileName.startsWith('/')) fileName = fileName.substr(1)
     return fileName
   }
 
@@ -215,6 +216,7 @@ export class MarkdownMiner implements IDocMine {
    */
   sourcerer(sourceFileName: string, linkFile: string) {
     linkFile = this.stripSearch(linkFile)
+    if (linkFile.startsWith('/')) return linkFile.substr(1)
     const base = path.dirname(sourceFileName)
     return path.join(base, '/', linkFile)
   }

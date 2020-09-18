@@ -1,114 +1,102 @@
 {
-  "commitHash": "ce7d8d8ee4ca0782a722ac1a582aea114814c589",
+  "commitHash": "b94ebe67aa26605a1d0037fcb7355a58eca1145d",
   "remoteOrigin": "https://github.com/looker-open-source/sdk-codegen",
   "summaries": {
-    "sdk-codegen/packages/sdk/README.md": {
-      "summary": "packages/sdk/README.md",
-      "sourceFile": "sdk-codegen/packages/sdk/README.md"
-    },
     "sdk-codegen/packages/sdk-codegen/src/codeGenerators.ts": {
       "summary": "`codeGenerators.ts`",
       "sourceFile": "sdk-codegen/packages/sdk-codegen/src/codeGenerators.ts"
     },
-    "sdk-codegen/csharp/docs/byosdk.md": {
-      "summary": "Build Your Own SDK",
-      "sourceFile": "sdk-codegen/csharp/docs/byosdk.md"
+    "sdk-codegen/packages/sdk-codegen/src/codeGen.ts": {
+      "summary": "codeGen.ts",
+      "sourceFile": "sdk-codegen/packages/sdk-codegen/src/codeGen.ts"
     },
-    "sdk-codegen/docs/packages/sdk-codegen/src/codeGen.ts": {
-      "summary": "Python](/packages/sdk-codegen/src/python.gen.ts) and [Typescript](/packages/sdk-codegen/src/typescript.gen.ts) descend from a common class declared in [codeGen.ts",
-      "sourceFile": "sdk-codegen/docs/packages/sdk-codegen/src/codeGen.ts"
-    },
-    "sdk-codegen/docs/packages/sdk-codegen/src/python.gen.ts": {
-      "summary": "Typescript](/packages/sdk-codegen/src/typescript.gen.ts) or [Python",
-      "sourceFile": "sdk-codegen/docs/packages/sdk-codegen/src/python.gen.ts"
-    },
-    "sdk-codegen/docs/docs/rationale.md": {
-      "summary": "request structures",
-      "sourceFile": "sdk-codegen/docs/docs/rationale.md"
-    },
-    "sdk-codegen/docs/README.md": {
-      "summary": "Precedence rules",
-      "sourceFile": "sdk-codegen/docs/README.md"
-    },
-    "sdk-codegen/docs/packages/sdk-rtl/src/apiSettings.ts": {
-      "summary": "`apiSettings.ts`",
-      "sourceFile": "sdk-codegen/docs/packages/sdk-rtl/src/apiSettings.ts"
-    },
-    "sdk-codegen/docs/packages/sdk-rtl/src/transport.ts": {
-      "summary": "transport.ts",
-      "sourceFile": "sdk-codegen/docs/packages/sdk-rtl/src/transport.ts"
-    },
-    "sdk-codegen/docs/packages/sdk-rtl/src/nodeSession.ts": {
-      "summary": "`NodeSession`",
-      "sourceFile": "sdk-codegen/docs/packages/sdk-rtl/src/nodeSession.ts"
-    },
-    "sdk-codegen/docs/packages/sdk-rtl/src/CSRFSession.ts": {
-      "summary": "`CSRFSession`",
-      "sourceFile": "sdk-codegen/docs/packages/sdk-rtl/src/CSRFSession.ts"
-    },
-    "sdk-codegen/docs/packages/sdk-rtl/src/browserSession.ts": {
-      "summary": "`BrowserSession`",
-      "sourceFile": "sdk-codegen/docs/packages/sdk-rtl/src/browserSession.ts"
-    },
-    "sdk-codegen/docs/packages/sdk-rtl/src/oauthSession.ts": {
-      "summary": "`OAuthSession`",
-      "sourceFile": "sdk-codegen/docs/packages/sdk-rtl/src/oauthSession.ts"
-    },
-    "sdk-codegen/docs/packages/sdk-rtl/src/proxySession.ts": {
-      "summary": "`ProxySession`",
-      "sourceFile": "sdk-codegen/docs/packages/sdk-rtl/src/proxySession.ts"
-    },
-    "sdk-codegen/docs/packages/sdk-codegen/src/sdkModels.ts": {
-      "summary": "`sdkModels.ts`",
-      "sourceFile": "sdk-codegen/docs/packages/sdk-codegen/src/sdkModels.ts"
-    },
-    "sdk-codegen/docs/packages/sdk-codegen/src/typescript.gen.ts": {
+    "sdk-codegen/packages/sdk-codegen/src/typescript.gen.ts": {
       "summary": "Typescript generator",
-      "sourceFile": "sdk-codegen/docs/packages/sdk-codegen/src/typescript.gen.ts"
+      "sourceFile": "sdk-codegen/packages/sdk-codegen/src/typescript.gen.ts"
     },
-    "sdk-codegen/docs/packages/sdk/src/sdk/4.0/methods.ts": {
+    "sdk-codegen/packages/sdk-codegen/src/python.gen.ts": {
+      "summary": "Python generator",
+      "sourceFile": "sdk-codegen/packages/sdk-codegen/src/python.gen.ts"
+    },
+    "sdk-codegen/packages/sdk-rtl/src/apiSettings.ts": {
+      "summary": "`apiSettings.ts`",
+      "sourceFile": "sdk-codegen/packages/sdk-rtl/src/apiSettings.ts"
+    },
+    "sdk-codegen/packages/sdk-rtl/src/transport.ts": {
+      "summary": "transport.ts",
+      "sourceFile": "sdk-codegen/packages/sdk-rtl/src/transport.ts"
+    },
+    "sdk-codegen/packages/sdk-rtl/src/nodeSession.ts": {
+      "summary": "`NodeSession`",
+      "sourceFile": "sdk-codegen/packages/sdk-rtl/src/nodeSession.ts"
+    },
+    "sdk-codegen/packages/sdk-rtl/src/CSRFSession.ts": {
+      "summary": "`CSRFSession`",
+      "sourceFile": "sdk-codegen/packages/sdk-rtl/src/CSRFSession.ts"
+    },
+    "sdk-codegen/packages/sdk-rtl/src/browserSession.ts": {
+      "summary": "`BrowserSession`",
+      "sourceFile": "sdk-codegen/packages/sdk-rtl/src/browserSession.ts"
+    },
+    "sdk-codegen/packages/sdk-rtl/src/oauthSession.ts": {
+      "summary": "`OAuthSession`",
+      "sourceFile": "sdk-codegen/packages/sdk-rtl/src/oauthSession.ts"
+    },
+    "sdk-codegen/packages/sdk-rtl/src/proxySession.ts": {
+      "summary": "`ProxySession`",
+      "sourceFile": "sdk-codegen/packages/sdk-rtl/src/proxySession.ts"
+    },
+    "sdk-codegen/packages/sdk-codegen/src/sdkModels.ts": {
+      "summary": "`sdkModels.ts`",
+      "sourceFile": "sdk-codegen/packages/sdk-codegen/src/sdkModels.ts"
+    },
+    "sdk-codegen/packages/sdk/src/sdk/4.0/methods.ts": {
       "summary": "`methods.ts`",
-      "sourceFile": "sdk-codegen/docs/packages/sdk/src/sdk/4.0/methods.ts"
+      "sourceFile": "sdk-codegen/packages/sdk/src/sdk/4.0/methods.ts"
     },
-    "sdk-codegen/docs/packages/sdk/src/sdk/4.0/models.ts": {
+    "sdk-codegen/packages/sdk/src/sdk/4.0/models.ts": {
       "summary": "`models.ts`",
-      "sourceFile": "sdk-codegen/docs/packages/sdk/src/sdk/4.0/models.ts"
+      "sourceFile": "sdk-codegen/packages/sdk/src/sdk/4.0/models.ts"
     },
-    "sdk-codegen/docs/packages/sdk/src/sdk/4.0/streams.ts": {
+    "sdk-codegen/packages/sdk/src/sdk/4.0/streams.ts": {
       "summary": "`streams.ts`",
-      "sourceFile": "sdk-codegen/docs/packages/sdk/src/sdk/4.0/streams.ts"
+      "sourceFile": "sdk-codegen/packages/sdk/src/sdk/4.0/streams.ts"
     },
-    "sdk-codegen/docs/packages/sdk-codegen-scripts/src/reformatter.ts": {
+    "sdk-codegen/packages/sdk-rtl/src/constants.ts": {
+      "summary": "`constants.ts`",
+      "sourceFile": "sdk-codegen/packages/sdk-rtl/src/constants.ts"
+    },
+    "sdk-codegen/packages/sdk-codegen-scripts/src/reformatter.ts": {
       "summary": "`reformatter.ts`",
-      "sourceFile": "sdk-codegen/docs/packages/sdk-codegen-scripts/src/reformatter.ts"
+      "sourceFile": "sdk-codegen/packages/sdk-codegen-scripts/src/reformatter.ts"
     },
-    "sdk-codegen/docs/packages/sdk-codegen/src/sdkModels.spec.ts": {
+    "sdk-codegen/packages/sdk-codegen/src/sdkModels.spec.ts": {
       "summary": "`sdkModels.spec.ts`",
-      "sourceFile": "sdk-codegen/docs/packages/sdk-codegen/src/sdkModels.spec.ts"
+      "sourceFile": "sdk-codegen/packages/sdk-codegen/src/sdkModels.spec.ts"
     },
-    "sdk-codegen/docs/packages/sdk-codegen/src/python.gen.spec.ts": {
+    "sdk-codegen/packages/sdk-codegen/src/python.gen.spec.ts": {
       "summary": "`python.gen.spec.ts`",
-      "sourceFile": "sdk-codegen/docs/packages/sdk-codegen/src/python.gen.spec.ts"
+      "sourceFile": "sdk-codegen/packages/sdk-codegen/src/python.gen.spec.ts"
     },
-    "sdk-codegen/docs/packages/sdk/src/test/methods.spec.ts": {
+    "sdk-codegen/packages/sdk/src/test/methods.spec.ts": {
       "summary": "`methods.spec.ts`",
-      "sourceFile": "sdk-codegen/docs/packages/sdk/src/test/methods.spec.ts"
+      "sourceFile": "sdk-codegen/packages/sdk/src/test/methods.spec.ts"
     },
-    "sdk-codegen/docs/python/tests/integration/api40/test_methods.py": {
+    "sdk-codegen/python/tests/integration/api40/test_methods.py": {
       "summary": "`test_methods.py`",
-      "sourceFile": "sdk-codegen/docs/python/tests/integration/api40/test_methods.py"
+      "sourceFile": "sdk-codegen/python/tests/integration/api40/test_methods.py"
     },
-    "sdk-codegen/docs/packages/api-explorer/scripts/register.ts": {
+    "sdk-codegen/packages/api-explorer/scripts/register.ts": {
       "summary": "OAuth application registration",
-      "sourceFile": "sdk-codegen/docs/packages/api-explorer/scripts/register.ts"
+      "sourceFile": "sdk-codegen/packages/api-explorer/scripts/register.ts"
     },
-    "sdk-codegen/docs/packages/run-it/src/utils/RunItSDK.ts": {
+    "sdk-codegen/packages/run-it/src/utils/RunItSDK.ts": {
       "summary": "RunIt readConfig() override",
-      "sourceFile": "sdk-codegen/docs/packages/run-it/src/utils/RunItSDK.ts"
+      "sourceFile": "sdk-codegen/packages/run-it/src/utils/RunItSDK.ts"
     },
-    "sdk-codegen/docs/packages/run-it/src/scenes/OAuthScene/OAuthScene.tsx": {
+    "sdk-codegen/packages/run-it/src/scenes/OAuthScene/OAuthScene.tsx": {
       "summary": "OAuthScene.tsx",
-      "sourceFile": "sdk-codegen/docs/packages/run-it/src/scenes/OAuthScene/OAuthScene.tsx"
+      "sourceFile": "sdk-codegen/packages/run-it/src/scenes/OAuthScene/OAuthScene.tsx"
     },
     "sdk-codegen/examples/python/test_connection.py": {
       "summary": "Test a specified connection",
@@ -234,89 +222,9 @@
       "summary": "download a dashboard by name",
       "sourceFile": "sdk-codegen/examples/typescript/downloadDashboard.ts"
     },
-    "sdk-codegen/node_modules/@babel/cli/node_modules/commander/changelogs/CHANGELOG-1.md": {
-      "summary": "1.x",
-      "sourceFile": "sdk-codegen/node_modules/@babel/cli/node_modules/commander/changelogs/CHANGELOG-1.md"
-    },
-    "sdk-codegen/node_modules/@babel/cli/node_modules/commander/changelogs/CHANGELOG-0.md": {
-      "summary": "0.x",
-      "sourceFile": "sdk-codegen/node_modules/@babel/cli/node_modules/commander/changelogs/CHANGELOG-0.md"
-    },
-    "sdk-codegen/node_modules/@babel/cli/node_modules/commander/Readme_zh-CN.md": {
-      "summary": "简体中文",
-      "sourceFile": "sdk-codegen/node_modules/@babel/cli/node_modules/commander/Readme_zh-CN.md"
-    },
-    "sdk-codegen/node_modules/@bcoe/v8-coverage/LICENSE.md": {
-      "summary": "MIT License",
-      "sourceFile": "sdk-codegen/node_modules/@bcoe/v8-coverage/LICENSE.md"
-    },
-    "sdk-codegen/node_modules/@bcoe/v8-coverage/dist/lib/LICENSE.md": {
-      "summary": "MIT License",
-      "sourceFile": "sdk-codegen/node_modules/@bcoe/v8-coverage/dist/lib/LICENSE.md"
-    },
-    "sdk-codegen/node_modules/@evocateur/libnpmaccess/CHANGELOG.md": {
-      "summary": "Changelog",
-      "sourceFile": "sdk-codegen/node_modules/@evocateur/libnpmaccess/CHANGELOG.md"
-    },
-    "sdk-codegen/node_modules/@evocateur/npm-registry-fetch/CHANGELOG.md": {
-      "summary": "Changelog",
-      "sourceFile": "sdk-codegen/node_modules/@evocateur/npm-registry-fetch/CHANGELOG.md"
-    },
-    "sdk-codegen/node_modules/@evocateur/pacote/CONTRIBUTING.md": {
-      "summary": "Contributor Guide",
-      "sourceFile": "sdk-codegen/node_modules/@evocateur/pacote/CONTRIBUTING.md"
-    },
-    "sdk-codegen/node_modules/@lerna/cli/node_modules/yargs/docs/api.md": {
-      "summary": "Yargs' API",
-      "sourceFile": "sdk-codegen/node_modules/@lerna/cli/node_modules/yargs/docs/api.md"
-    },
-    "sdk-codegen/node_modules/@lerna/cli/node_modules/yargs/docs/typescript.md": {
-      "summary": "docs",
-      "sourceFile": "sdk-codegen/node_modules/@lerna/cli/node_modules/yargs/docs/typescript.md"
-    },
-    "sdk-codegen/node_modules/@lerna/cli/node_modules/yargs/docs/examples.md": {
-      "summary": "Examples",
-      "sourceFile": "sdk-codegen/node_modules/@lerna/cli/node_modules/yargs/docs/examples.md"
-    },
-    "sdk-codegen/node_modules/@lerna/cli/node_modules/yargs/docs/tricks.md": {
-      "summary": "Quotes",
-      "sourceFile": "sdk-codegen/node_modules/@lerna/cli/node_modules/yargs/docs/tricks.md"
-    },
-    "sdk-codegen/node_modules/@lerna/cli/node_modules/yargs/docs/advanced.md": {
-      "summary": "Customizing Yargs' Parser",
-      "sourceFile": "sdk-codegen/node_modules/@lerna/cli/node_modules/yargs/docs/advanced.md"
-    },
-    "sdk-codegen/node_modules/@lerna/cli/node_modules/yargs/contributing.md": {
-      "summary": "Contributing",
-      "sourceFile": "sdk-codegen/node_modules/@lerna/cli/node_modules/yargs/contributing.md"
-    },
-    "sdk-codegen/node_modules/@lerna/project/node_modules/cosmiconfig/CODE_OF_CONDUCT.md": {
-      "summary": "Contributor Code of Conduct",
-      "sourceFile": "sdk-codegen/node_modules/@lerna/project/node_modules/cosmiconfig/CODE_OF_CONDUCT.md"
-    },
-    "sdk-codegen/node_modules/@looker/components/looker-open-source/components/blob/master/packages/www/src/MDX/Pre/allComponents.ts": {
+    "sdk-codegen/looker-open-source/components/blob/master/packages/www/src/MDX/Pre/allComponents.ts": {
       "summary": "allComponents.ts",
-      "sourceFile": "sdk-codegen/node_modules/@looker/components/looker-open-source/components/blob/master/packages/www/src/MDX/Pre/allComponents.ts"
-    },
-    "sdk-codegen/node_modules/@looker/eslint-config/prettier/README.md": {
-      "summary": "Prettier-specific README",
-      "sourceFile": "sdk-codegen/node_modules/@looker/eslint-config/prettier/README.md"
-    },
-    "sdk-codegen/node_modules/@looker/eslint-config/node_modules/prettier/CONTRIBUTING.md": {
-      "summary": "CONTRIBUTING.md",
-      "sourceFile": "sdk-codegen/node_modules/@looker/eslint-config/node_modules/prettier/CONTRIBUTING.md"
-    },
-    "sdk-codegen/node_modules/@looker/extension-sdk/node_modules/readable-stream/README.md": {
-      "summary": "README.md",
-      "sourceFile": "sdk-codegen/node_modules/@looker/extension-sdk/node_modules/readable-stream/README.md"
-    },
-    "sdk-codegen/node_modules/@looker/prettier-config/node_modules/prettier/CONTRIBUTING.md": {
-      "summary": "CONTRIBUTING.md",
-      "sourceFile": "sdk-codegen/node_modules/@looker/prettier-config/node_modules/prettier/CONTRIBUTING.md"
-    },
-    "sdk-codegen/node_modules/@looker/sdk/node_modules/readable-stream/README.md": {
-      "summary": "README.md",
-      "sourceFile": "sdk-codegen/node_modules/@looker/sdk/node_modules/readable-stream/README.md"
+      "sourceFile": "sdk-codegen/looker-open-source/components/blob/master/packages/www/src/MDX/Pre/allComponents.ts"
     },
     "sdk-codegen/node_modules/@looker/sdk-codegen-scripts/src/legacy.ts": {
       "summary": "legacy.ts",
@@ -326,20 +234,20 @@
       "summary": "sdkGen.ts",
       "sourceFile": "sdk-codegen/node_modules/@looker/sdk-codegen-scripts/src/sdkGen.ts"
     },
+    "sdk-codegen/node_modules/@looker/sdk-codegen-scripts/src/specConvert.ts": {
+      "summary": "specConvert.ts",
+      "sourceFile": "sdk-codegen/node_modules/@looker/sdk-codegen-scripts/src/specConvert.ts"
+    },
     "sdk-codegen/node_modules/@looker/sdk-codegen-scripts/src/yamlToJson.ts": {
       "summary": "yamlToJson.ts",
       "sourceFile": "sdk-codegen/node_modules/@looker/sdk-codegen-scripts/src/yamlToJson.ts"
     },
-    "sdk-codegen/node_modules/@looker/sdk-codegen-scripts/node_modules/prettier/CONTRIBUTING.md": {
-      "summary": "CONTRIBUTING.md",
-      "sourceFile": "sdk-codegen/node_modules/@looker/sdk-codegen-scripts/node_modules/prettier/CONTRIBUTING.md"
-    },
-    "sdk-codegen/node_modules/@looker/sdk-rtl/node_modules/readable-stream/README.md": {
-      "summary": "README.md",
-      "sourceFile": "sdk-codegen/node_modules/@looker/sdk-rtl/node_modules/readable-stream/README.md"
+    "sdk-codegen/node_modules/@nodelib/fs.scandir/src/types/index.ts": {
+      "summary": "`fs.Dirent`",
+      "sourceFile": "sdk-codegen/node_modules/@nodelib/fs.scandir/src/types/index.ts"
     },
     "sdk-codegen/node_modules/@nodelib/fs.scandir/src/utils/fs.ts": {
-      "summary": "`fs.Dirent`](./src/types/index.ts) class. On Node.js below 10.10 will be emulated by [`DirentFromStats`",
+      "summary": "`DirentFromStats`",
       "sourceFile": "sdk-codegen/node_modules/@nodelib/fs.scandir/src/utils/fs.ts"
     },
     "sdk-codegen/node_modules/@nodelib/fs.scandir/src/adapters/fs.ts": {
@@ -358,42 +266,6 @@
       "summary": "`ErrorFilterFunction`",
       "sourceFile": "sdk-codegen/node_modules/@nodelib/fs.walk/src/settings.ts"
     },
-    "sdk-codegen/node_modules/@octokit/plugin-paginate-rest/CONTRIBUTING.md": {
-      "summary": "CONTRIBUTING.md",
-      "sourceFile": "sdk-codegen/node_modules/@octokit/plugin-paginate-rest/CONTRIBUTING.md"
-    },
-    "sdk-codegen/node_modules/@octokit/plugin-paginate-rest/node_modules/@octokit/types/CONTRIBUTING.md": {
-      "summary": "CONTRIBUTING.md",
-      "sourceFile": "sdk-codegen/node_modules/@octokit/plugin-paginate-rest/node_modules/@octokit/types/CONTRIBUTING.md"
-    },
-    "sdk-codegen/node_modules/@octokit/plugin-request-log/CONTRIBUTING.md": {
-      "summary": "CONTRIBUTING.md",
-      "sourceFile": "sdk-codegen/node_modules/@octokit/plugin-request-log/CONTRIBUTING.md"
-    },
-    "sdk-codegen/node_modules/@octokit/plugin-rest-endpoint-methods/CONTRIBUTING.md": {
-      "summary": "CONTRIBUTING.md",
-      "sourceFile": "sdk-codegen/node_modules/@octokit/plugin-rest-endpoint-methods/CONTRIBUTING.md"
-    },
-    "sdk-codegen/node_modules/@octokit/plugin-rest-endpoint-methods/node_modules/@octokit/types/CONTRIBUTING.md": {
-      "summary": "CONTRIBUTING.md",
-      "sourceFile": "sdk-codegen/node_modules/@octokit/plugin-rest-endpoint-methods/node_modules/@octokit/types/CONTRIBUTING.md"
-    },
-    "sdk-codegen/node_modules/@octokit/request-error/node_modules/@octokit/types/CONTRIBUTING.md": {
-      "summary": "CONTRIBUTING.md",
-      "sourceFile": "sdk-codegen/node_modules/@octokit/request-error/node_modules/@octokit/types/CONTRIBUTING.md"
-    },
-    "sdk-codegen/node_modules/@octokit/rest/CONTRIBUTING.md": {
-      "summary": "CONTRIBUTING.md",
-      "sourceFile": "sdk-codegen/node_modules/@octokit/rest/CONTRIBUTING.md"
-    },
-    "sdk-codegen/node_modules/@octokit/rest/node_modules/universal-user-agent/LICENSE.md": {
-      "summary": "ISC",
-      "sourceFile": "sdk-codegen/node_modules/@octokit/rest/node_modules/universal-user-agent/LICENSE.md"
-    },
-    "sdk-codegen/node_modules/@octokit/types/CONTRIBUTING.md": {
-      "summary": "CONTRIBUTING.md",
-      "sourceFile": "sdk-codegen/node_modules/@octokit/types/CONTRIBUTING.md"
-    },
     "sdk-codegen/node_modules/@stoplight/json-ref-resolver/src/__tests__/resolver.spec.ts": {
       "summary": "example test",
       "sourceFile": "sdk-codegen/node_modules/@stoplight/json-ref-resolver/src/__tests__/resolver.spec.ts"
@@ -401,46 +273,6 @@
     "sdk-codegen/node_modules/@stoplight/json-ref-resolver/src/types.ts": {
       "summary": "src/types.ts",
       "sourceFile": "sdk-codegen/node_modules/@stoplight/json-ref-resolver/src/types.ts"
-    },
-    "sdk-codegen/node_modules/@stoplight/json-ref-resolver/CONTRIBUTING.md": {
-      "summary": "contributing docs",
-      "sourceFile": "sdk-codegen/node_modules/@stoplight/json-ref-resolver/CONTRIBUTING.md"
-    },
-    "sdk-codegen/node_modules/@stoplight/spectral/CONTRIBUTING.md": {
-      "summary": "CONTRIBUTING.md",
-      "sourceFile": "sdk-codegen/node_modules/@stoplight/spectral/CONTRIBUTING.md"
-    },
-    "sdk-codegen/node_modules/@stoplight/spectral/node_modules/yargs/docs/CHANGELOG-historical.md": {
-      "summary": "Historical Versions",
-      "sourceFile": "sdk-codegen/node_modules/@stoplight/spectral/node_modules/yargs/docs/CHANGELOG-historical.md"
-    },
-    "sdk-codegen/node_modules/@stoplight/spectral/node_modules/yargs/docs/api.md": {
-      "summary": "Yargs' API",
-      "sourceFile": "sdk-codegen/node_modules/@stoplight/spectral/node_modules/yargs/docs/api.md"
-    },
-    "sdk-codegen/node_modules/@stoplight/spectral/node_modules/yargs/docs/typescript.md": {
-      "summary": "docs",
-      "sourceFile": "sdk-codegen/node_modules/@stoplight/spectral/node_modules/yargs/docs/typescript.md"
-    },
-    "sdk-codegen/node_modules/@stoplight/spectral/node_modules/yargs/docs/webpack.md": {
-      "summary": "docs",
-      "sourceFile": "sdk-codegen/node_modules/@stoplight/spectral/node_modules/yargs/docs/webpack.md"
-    },
-    "sdk-codegen/node_modules/@stoplight/spectral/node_modules/yargs/docs/examples.md": {
-      "summary": "Examples",
-      "sourceFile": "sdk-codegen/node_modules/@stoplight/spectral/node_modules/yargs/docs/examples.md"
-    },
-    "sdk-codegen/node_modules/@stoplight/spectral/node_modules/yargs/docs/tricks.md": {
-      "summary": "Quotes",
-      "sourceFile": "sdk-codegen/node_modules/@stoplight/spectral/node_modules/yargs/docs/tricks.md"
-    },
-    "sdk-codegen/node_modules/@stoplight/spectral/node_modules/yargs/docs/advanced.md": {
-      "summary": "Customizing Yargs' Parser",
-      "sourceFile": "sdk-codegen/node_modules/@stoplight/spectral/node_modules/yargs/docs/advanced.md"
-    },
-    "sdk-codegen/node_modules/@stoplight/spectral/node_modules/yargs/contributing.md": {
-      "summary": "Contributing",
-      "sourceFile": "sdk-codegen/node_modules/@stoplight/spectral/node_modules/yargs/contributing.md"
     },
     "sdk-codegen/node_modules/@stoplight/yaml/src/getJsonPathForPosition.ts": {
       "summary": "getJsonPathForPosition",
@@ -454,402 +286,6 @@
       "summary": "parseWithPointers",
       "sourceFile": "sdk-codegen/node_modules/@stoplight/yaml/src/parseWithPointers.ts"
     },
-    "sdk-codegen/node_modules/docs/getting-started/linting/README.md": {
-      "summary": "You can find our Getting Started docs here",
-      "sourceFile": "sdk-codegen/node_modules/docs/getting-started/linting/README.md"
-    },
-    "sdk-codegen/node_modules/docs/getting-started/linting/FAQ.md": {
-      "summary": "You can find our FAQ / Troubleshooting docs here",
-      "sourceFile": "sdk-codegen/node_modules/docs/getting-started/linting/FAQ.md"
-    },
-    "sdk-codegen/node_modules/docs/getting-started/linting/TYPED_LINTING.md": {
-      "summary": "You can read more about linting with type information here",
-      "sourceFile": "sdk-codegen/node_modules/docs/getting-started/linting/TYPED_LINTING.md"
-    },
-    "sdk-codegen/node_modules/@typescript-eslint/eslint-plugin/docs/rules/adjacent-overload-signatures.md": {
-      "summary": "`@typescript-eslint/adjacent-overload-signatures`",
-      "sourceFile": "sdk-codegen/node_modules/@typescript-eslint/eslint-plugin/docs/rules/adjacent-overload-signatures.md"
-    },
-    "sdk-codegen/node_modules/@typescript-eslint/eslint-plugin/docs/rules/array-type.md": {
-      "summary": "`@typescript-eslint/array-type`",
-      "sourceFile": "sdk-codegen/node_modules/@typescript-eslint/eslint-plugin/docs/rules/array-type.md"
-    },
-    "sdk-codegen/node_modules/@typescript-eslint/eslint-plugin/docs/rules/await-thenable.md": {
-      "summary": "`@typescript-eslint/await-thenable`",
-      "sourceFile": "sdk-codegen/node_modules/@typescript-eslint/eslint-plugin/docs/rules/await-thenable.md"
-    },
-    "sdk-codegen/node_modules/@typescript-eslint/eslint-plugin/docs/rules/ban-ts-comment.md": {
-      "summary": "`ban-ts-comment`",
-      "sourceFile": "sdk-codegen/node_modules/@typescript-eslint/eslint-plugin/docs/rules/ban-ts-comment.md"
-    },
-    "sdk-codegen/node_modules/@typescript-eslint/eslint-plugin/docs/rules/ban-types.md": {
-      "summary": "`@typescript-eslint/ban-types`",
-      "sourceFile": "sdk-codegen/node_modules/@typescript-eslint/eslint-plugin/docs/rules/ban-types.md"
-    },
-    "sdk-codegen/node_modules/@typescript-eslint/eslint-plugin/docs/rules/class-literal-property-style.md": {
-      "summary": "`@typescript-eslint/class-literal-property-style`",
-      "sourceFile": "sdk-codegen/node_modules/@typescript-eslint/eslint-plugin/docs/rules/class-literal-property-style.md"
-    },
-    "sdk-codegen/node_modules/@typescript-eslint/eslint-plugin/docs/rules/consistent-type-assertions.md": {
-      "summary": "`@typescript-eslint/consistent-type-assertions`",
-      "sourceFile": "sdk-codegen/node_modules/@typescript-eslint/eslint-plugin/docs/rules/consistent-type-assertions.md"
-    },
-    "sdk-codegen/node_modules/@typescript-eslint/eslint-plugin/docs/rules/consistent-type-definitions.md": {
-      "summary": "`@typescript-eslint/consistent-type-definitions`",
-      "sourceFile": "sdk-codegen/node_modules/@typescript-eslint/eslint-plugin/docs/rules/consistent-type-definitions.md"
-    },
-    "sdk-codegen/node_modules/@typescript-eslint/eslint-plugin/docs/rules/explicit-function-return-type.md": {
-      "summary": "`@typescript-eslint/explicit-function-return-type`",
-      "sourceFile": "sdk-codegen/node_modules/@typescript-eslint/eslint-plugin/docs/rules/explicit-function-return-type.md"
-    },
-    "sdk-codegen/node_modules/@typescript-eslint/eslint-plugin/docs/rules/explicit-member-accessibility.md": {
-      "summary": "`@typescript-eslint/explicit-member-accessibility`",
-      "sourceFile": "sdk-codegen/node_modules/@typescript-eslint/eslint-plugin/docs/rules/explicit-member-accessibility.md"
-    },
-    "sdk-codegen/node_modules/@typescript-eslint/eslint-plugin/docs/rules/explicit-module-boundary-types.md": {
-      "summary": "`explicit-module-boundary-types`",
-      "sourceFile": "sdk-codegen/node_modules/@typescript-eslint/eslint-plugin/docs/rules/explicit-module-boundary-types.md"
-    },
-    "sdk-codegen/node_modules/@typescript-eslint/eslint-plugin/docs/rules/member-delimiter-style.md": {
-      "summary": "`@typescript-eslint/member-delimiter-style`",
-      "sourceFile": "sdk-codegen/node_modules/@typescript-eslint/eslint-plugin/docs/rules/member-delimiter-style.md"
-    },
-    "sdk-codegen/node_modules/@typescript-eslint/eslint-plugin/docs/rules/member-ordering.md": {
-      "summary": "`@typescript-eslint/member-ordering`",
-      "sourceFile": "sdk-codegen/node_modules/@typescript-eslint/eslint-plugin/docs/rules/member-ordering.md"
-    },
-    "sdk-codegen/node_modules/@typescript-eslint/eslint-plugin/docs/rules/method-signature-style.md": {
-      "summary": "`@typescript-eslint/method-signature-style`",
-      "sourceFile": "sdk-codegen/node_modules/@typescript-eslint/eslint-plugin/docs/rules/method-signature-style.md"
-    },
-    "sdk-codegen/node_modules/@typescript-eslint/eslint-plugin/docs/rules/naming-convention.md": {
-      "summary": "`naming-convention`",
-      "sourceFile": "sdk-codegen/node_modules/@typescript-eslint/eslint-plugin/docs/rules/naming-convention.md"
-    },
-    "sdk-codegen/node_modules/@typescript-eslint/eslint-plugin/docs/rules/no-dynamic-delete.md": {
-      "summary": "`@typescript-eslint/no-dynamic-delete`",
-      "sourceFile": "sdk-codegen/node_modules/@typescript-eslint/eslint-plugin/docs/rules/no-dynamic-delete.md"
-    },
-    "sdk-codegen/node_modules/@typescript-eslint/eslint-plugin/docs/rules/no-empty-interface.md": {
-      "summary": "`@typescript-eslint/no-empty-interface`",
-      "sourceFile": "sdk-codegen/node_modules/@typescript-eslint/eslint-plugin/docs/rules/no-empty-interface.md"
-    },
-    "sdk-codegen/node_modules/@typescript-eslint/eslint-plugin/docs/rules/no-explicit-any.md": {
-      "summary": "`no-explicit-any`",
-      "sourceFile": "sdk-codegen/node_modules/@typescript-eslint/eslint-plugin/docs/rules/no-explicit-any.md"
-    },
-    "sdk-codegen/node_modules/@typescript-eslint/eslint-plugin/docs/rules/no-extra-non-null-assertion.md": {
-      "summary": "`@typescript-eslint/no-extra-non-null-assertion`",
-      "sourceFile": "sdk-codegen/node_modules/@typescript-eslint/eslint-plugin/docs/rules/no-extra-non-null-assertion.md"
-    },
-    "sdk-codegen/node_modules/@typescript-eslint/eslint-plugin/docs/rules/no-extraneous-class.md": {
-      "summary": "`@typescript-eslint/no-extraneous-class`",
-      "sourceFile": "sdk-codegen/node_modules/@typescript-eslint/eslint-plugin/docs/rules/no-extraneous-class.md"
-    },
-    "sdk-codegen/node_modules/@typescript-eslint/eslint-plugin/docs/rules/no-floating-promises.md": {
-      "summary": "`no-floating-promises`",
-      "sourceFile": "sdk-codegen/node_modules/@typescript-eslint/eslint-plugin/docs/rules/no-floating-promises.md"
-    },
-    "sdk-codegen/node_modules/@typescript-eslint/eslint-plugin/docs/rules/no-for-in-array.md": {
-      "summary": "`@typescript-eslint/no-for-in-array`",
-      "sourceFile": "sdk-codegen/node_modules/@typescript-eslint/eslint-plugin/docs/rules/no-for-in-array.md"
-    },
-    "sdk-codegen/node_modules/@typescript-eslint/eslint-plugin/docs/rules/no-inferrable-types.md": {
-      "summary": "`@typescript-eslint/no-inferrable-types`",
-      "sourceFile": "sdk-codegen/node_modules/@typescript-eslint/eslint-plugin/docs/rules/no-inferrable-types.md"
-    },
-    "sdk-codegen/node_modules/@typescript-eslint/eslint-plugin/docs/rules/no-invalid-void-type.md": {
-      "summary": "`@typescript-eslint/no-invalid-void-type`",
-      "sourceFile": "sdk-codegen/node_modules/@typescript-eslint/eslint-plugin/docs/rules/no-invalid-void-type.md"
-    },
-    "sdk-codegen/node_modules/@typescript-eslint/eslint-plugin/docs/rules/no-misused-new.md": {
-      "summary": "`@typescript-eslint/no-misused-new`",
-      "sourceFile": "sdk-codegen/node_modules/@typescript-eslint/eslint-plugin/docs/rules/no-misused-new.md"
-    },
-    "sdk-codegen/node_modules/@typescript-eslint/eslint-plugin/docs/rules/no-misused-promises.md": {
-      "summary": "`@typescript-eslint/no-misused-promises`",
-      "sourceFile": "sdk-codegen/node_modules/@typescript-eslint/eslint-plugin/docs/rules/no-misused-promises.md"
-    },
-    "sdk-codegen/node_modules/@typescript-eslint/eslint-plugin/docs/rules/no-namespace.md": {
-      "summary": "`@typescript-eslint/no-namespace`",
-      "sourceFile": "sdk-codegen/node_modules/@typescript-eslint/eslint-plugin/docs/rules/no-namespace.md"
-    },
-    "sdk-codegen/node_modules/@typescript-eslint/eslint-plugin/docs/rules/no-non-null-asserted-optional-chain.md": {
-      "summary": "`@typescript-eslint/no-non-null-asserted-optional-chain`",
-      "sourceFile": "sdk-codegen/node_modules/@typescript-eslint/eslint-plugin/docs/rules/no-non-null-asserted-optional-chain.md"
-    },
-    "sdk-codegen/node_modules/@typescript-eslint/eslint-plugin/docs/rules/no-non-null-assertion.md": {
-      "summary": "`@typescript-eslint/no-non-null-assertion`",
-      "sourceFile": "sdk-codegen/node_modules/@typescript-eslint/eslint-plugin/docs/rules/no-non-null-assertion.md"
-    },
-    "sdk-codegen/node_modules/@typescript-eslint/eslint-plugin/docs/rules/no-parameter-properties.md": {
-      "summary": "`@typescript-eslint/no-parameter-properties`",
-      "sourceFile": "sdk-codegen/node_modules/@typescript-eslint/eslint-plugin/docs/rules/no-parameter-properties.md"
-    },
-    "sdk-codegen/node_modules/@typescript-eslint/eslint-plugin/docs/rules/no-this-alias.md": {
-      "summary": "`@typescript-eslint/no-this-alias`",
-      "sourceFile": "sdk-codegen/node_modules/@typescript-eslint/eslint-plugin/docs/rules/no-this-alias.md"
-    },
-    "sdk-codegen/node_modules/@typescript-eslint/eslint-plugin/docs/rules/no-throw-literal.md": {
-      "summary": "`@typescript-eslint/no-throw-literal`",
-      "sourceFile": "sdk-codegen/node_modules/@typescript-eslint/eslint-plugin/docs/rules/no-throw-literal.md"
-    },
-    "sdk-codegen/node_modules/@typescript-eslint/eslint-plugin/docs/rules/no-type-alias.md": {
-      "summary": "`@typescript-eslint/no-type-alias`",
-      "sourceFile": "sdk-codegen/node_modules/@typescript-eslint/eslint-plugin/docs/rules/no-type-alias.md"
-    },
-    "sdk-codegen/node_modules/@typescript-eslint/eslint-plugin/docs/rules/no-unnecessary-boolean-literal-compare.md": {
-      "summary": "`@typescript-eslint/no-unnecessary-boolean-literal-compare`",
-      "sourceFile": "sdk-codegen/node_modules/@typescript-eslint/eslint-plugin/docs/rules/no-unnecessary-boolean-literal-compare.md"
-    },
-    "sdk-codegen/node_modules/@typescript-eslint/eslint-plugin/docs/rules/no-unnecessary-condition.md": {
-      "summary": "no-unnecessary-condition",
-      "sourceFile": "sdk-codegen/node_modules/@typescript-eslint/eslint-plugin/docs/rules/no-unnecessary-condition.md"
-    },
-    "sdk-codegen/node_modules/@typescript-eslint/eslint-plugin/docs/rules/no-unnecessary-qualifier.md": {
-      "summary": "`@typescript-eslint/no-unnecessary-qualifier`",
-      "sourceFile": "sdk-codegen/node_modules/@typescript-eslint/eslint-plugin/docs/rules/no-unnecessary-qualifier.md"
-    },
-    "sdk-codegen/node_modules/@typescript-eslint/eslint-plugin/docs/rules/no-unnecessary-type-arguments.md": {
-      "summary": "`@typescript-eslint/no-unnecessary-type-arguments`",
-      "sourceFile": "sdk-codegen/node_modules/@typescript-eslint/eslint-plugin/docs/rules/no-unnecessary-type-arguments.md"
-    },
-    "sdk-codegen/node_modules/@typescript-eslint/eslint-plugin/docs/rules/no-unnecessary-type-assertion.md": {
-      "summary": "`@typescript-eslint/no-unnecessary-type-assertion`",
-      "sourceFile": "sdk-codegen/node_modules/@typescript-eslint/eslint-plugin/docs/rules/no-unnecessary-type-assertion.md"
-    },
-    "sdk-codegen/node_modules/@typescript-eslint/eslint-plugin/docs/rules/no-unsafe-assignment.md": {
-      "summary": "`@typescript-eslint/no-unsafe-assignment`",
-      "sourceFile": "sdk-codegen/node_modules/@typescript-eslint/eslint-plugin/docs/rules/no-unsafe-assignment.md"
-    },
-    "sdk-codegen/node_modules/@typescript-eslint/eslint-plugin/docs/rules/no-unsafe-call.md": {
-      "summary": "`@typescript-eslint/no-unsafe-call`",
-      "sourceFile": "sdk-codegen/node_modules/@typescript-eslint/eslint-plugin/docs/rules/no-unsafe-call.md"
-    },
-    "sdk-codegen/node_modules/@typescript-eslint/eslint-plugin/docs/rules/no-unsafe-member-access.md": {
-      "summary": "`@typescript-eslint/no-unsafe-member-access`",
-      "sourceFile": "sdk-codegen/node_modules/@typescript-eslint/eslint-plugin/docs/rules/no-unsafe-member-access.md"
-    },
-    "sdk-codegen/node_modules/@typescript-eslint/eslint-plugin/docs/rules/no-unsafe-return.md": {
-      "summary": "`@typescript-eslint/no-unsafe-return`",
-      "sourceFile": "sdk-codegen/node_modules/@typescript-eslint/eslint-plugin/docs/rules/no-unsafe-return.md"
-    },
-    "sdk-codegen/node_modules/@typescript-eslint/eslint-plugin/docs/rules/no-unused-vars-experimental.md": {
-      "summary": "`@typescript-eslint/no-unused-vars-experimental`",
-      "sourceFile": "sdk-codegen/node_modules/@typescript-eslint/eslint-plugin/docs/rules/no-unused-vars-experimental.md"
-    },
-    "sdk-codegen/node_modules/@typescript-eslint/eslint-plugin/docs/rules/no-var-requires.md": {
-      "summary": "`@typescript-eslint/no-var-requires`",
-      "sourceFile": "sdk-codegen/node_modules/@typescript-eslint/eslint-plugin/docs/rules/no-var-requires.md"
-    },
-    "sdk-codegen/node_modules/@typescript-eslint/eslint-plugin/docs/rules/prefer-as-const.md": {
-      "summary": "`@typescript-eslint/prefer-as-const`",
-      "sourceFile": "sdk-codegen/node_modules/@typescript-eslint/eslint-plugin/docs/rules/prefer-as-const.md"
-    },
-    "sdk-codegen/node_modules/@typescript-eslint/eslint-plugin/docs/rules/prefer-for-of.md": {
-      "summary": "`@typescript-eslint/prefer-for-of`",
-      "sourceFile": "sdk-codegen/node_modules/@typescript-eslint/eslint-plugin/docs/rules/prefer-for-of.md"
-    },
-    "sdk-codegen/node_modules/@typescript-eslint/eslint-plugin/docs/rules/prefer-function-type.md": {
-      "summary": "`@typescript-eslint/prefer-function-type`",
-      "sourceFile": "sdk-codegen/node_modules/@typescript-eslint/eslint-plugin/docs/rules/prefer-function-type.md"
-    },
-    "sdk-codegen/node_modules/@typescript-eslint/eslint-plugin/docs/rules/prefer-includes.md": {
-      "summary": "`@typescript-eslint/prefer-includes`",
-      "sourceFile": "sdk-codegen/node_modules/@typescript-eslint/eslint-plugin/docs/rules/prefer-includes.md"
-    },
-    "sdk-codegen/node_modules/@typescript-eslint/eslint-plugin/docs/rules/prefer-namespace-keyword.md": {
-      "summary": "`@typescript-eslint/prefer-namespace-keyword`",
-      "sourceFile": "sdk-codegen/node_modules/@typescript-eslint/eslint-plugin/docs/rules/prefer-namespace-keyword.md"
-    },
-    "sdk-codegen/node_modules/@typescript-eslint/eslint-plugin/docs/rules/prefer-nullish-coalescing.md": {
-      "summary": "`@typescript-eslint/prefer-nullish-coalescing`",
-      "sourceFile": "sdk-codegen/node_modules/@typescript-eslint/eslint-plugin/docs/rules/prefer-nullish-coalescing.md"
-    },
-    "sdk-codegen/node_modules/@typescript-eslint/eslint-plugin/docs/rules/prefer-optional-chain.md": {
-      "summary": "`@typescript-eslint/prefer-optional-chain`",
-      "sourceFile": "sdk-codegen/node_modules/@typescript-eslint/eslint-plugin/docs/rules/prefer-optional-chain.md"
-    },
-    "sdk-codegen/node_modules/@typescript-eslint/eslint-plugin/docs/rules/prefer-readonly.md": {
-      "summary": "`@typescript-eslint/prefer-readonly`",
-      "sourceFile": "sdk-codegen/node_modules/@typescript-eslint/eslint-plugin/docs/rules/prefer-readonly.md"
-    },
-    "sdk-codegen/node_modules/@typescript-eslint/eslint-plugin/docs/rules/prefer-readonly-parameter-types.md": {
-      "summary": "`@typescript-eslint/prefer-readonly-parameter-types`",
-      "sourceFile": "sdk-codegen/node_modules/@typescript-eslint/eslint-plugin/docs/rules/prefer-readonly-parameter-types.md"
-    },
-    "sdk-codegen/node_modules/@typescript-eslint/eslint-plugin/docs/rules/prefer-reduce-type-parameter.md": {
-      "summary": "`@typescript-eslint/prefer-reduce-type-parameter`",
-      "sourceFile": "sdk-codegen/node_modules/@typescript-eslint/eslint-plugin/docs/rules/prefer-reduce-type-parameter.md"
-    },
-    "sdk-codegen/node_modules/@typescript-eslint/eslint-plugin/docs/rules/prefer-regexp-exec.md": {
-      "summary": "`@typescript-eslint/prefer-regexp-exec`",
-      "sourceFile": "sdk-codegen/node_modules/@typescript-eslint/eslint-plugin/docs/rules/prefer-regexp-exec.md"
-    },
-    "sdk-codegen/node_modules/@typescript-eslint/eslint-plugin/docs/rules/prefer-string-starts-ends-with.md": {
-      "summary": "`@typescript-eslint/prefer-string-starts-ends-with`",
-      "sourceFile": "sdk-codegen/node_modules/@typescript-eslint/eslint-plugin/docs/rules/prefer-string-starts-ends-with.md"
-    },
-    "sdk-codegen/node_modules/@typescript-eslint/eslint-plugin/docs/rules/prefer-ts-expect-error.md": {
-      "summary": "`@typescript-eslint/prefer-ts-expect-error`",
-      "sourceFile": "sdk-codegen/node_modules/@typescript-eslint/eslint-plugin/docs/rules/prefer-ts-expect-error.md"
-    },
-    "sdk-codegen/node_modules/@typescript-eslint/eslint-plugin/docs/rules/promise-function-async.md": {
-      "summary": "`@typescript-eslint/promise-function-async`",
-      "sourceFile": "sdk-codegen/node_modules/@typescript-eslint/eslint-plugin/docs/rules/promise-function-async.md"
-    },
-    "sdk-codegen/node_modules/@typescript-eslint/eslint-plugin/docs/rules/require-array-sort-compare.md": {
-      "summary": "`@typescript-eslint/require-array-sort-compare`",
-      "sourceFile": "sdk-codegen/node_modules/@typescript-eslint/eslint-plugin/docs/rules/require-array-sort-compare.md"
-    },
-    "sdk-codegen/node_modules/@typescript-eslint/eslint-plugin/docs/rules/restrict-plus-operands.md": {
-      "summary": "`@typescript-eslint/restrict-plus-operands`",
-      "sourceFile": "sdk-codegen/node_modules/@typescript-eslint/eslint-plugin/docs/rules/restrict-plus-operands.md"
-    },
-    "sdk-codegen/node_modules/@typescript-eslint/eslint-plugin/docs/rules/restrict-template-expressions.md": {
-      "summary": "`restrict-plus-operands`](./restrict-plus-operands.md) and [`restrict-template-expressions`",
-      "sourceFile": "sdk-codegen/node_modules/@typescript-eslint/eslint-plugin/docs/rules/restrict-template-expressions.md"
-    },
-    "sdk-codegen/node_modules/@typescript-eslint/eslint-plugin/docs/rules/strict-boolean-expressions.md": {
-      "summary": "strict-boolean-expressions",
-      "sourceFile": "sdk-codegen/node_modules/@typescript-eslint/eslint-plugin/docs/rules/strict-boolean-expressions.md"
-    },
-    "sdk-codegen/node_modules/@typescript-eslint/eslint-plugin/docs/rules/switch-exhaustiveness-check.md": {
-      "summary": "`@typescript-eslint/switch-exhaustiveness-check`",
-      "sourceFile": "sdk-codegen/node_modules/@typescript-eslint/eslint-plugin/docs/rules/switch-exhaustiveness-check.md"
-    },
-    "sdk-codegen/node_modules/@typescript-eslint/eslint-plugin/docs/rules/triple-slash-reference.md": {
-      "summary": "`@typescript-eslint/triple-slash-reference`",
-      "sourceFile": "sdk-codegen/node_modules/@typescript-eslint/eslint-plugin/docs/rules/triple-slash-reference.md"
-    },
-    "sdk-codegen/node_modules/@typescript-eslint/eslint-plugin/docs/rules/type-annotation-spacing.md": {
-      "summary": "`@typescript-eslint/type-annotation-spacing`",
-      "sourceFile": "sdk-codegen/node_modules/@typescript-eslint/eslint-plugin/docs/rules/type-annotation-spacing.md"
-    },
-    "sdk-codegen/node_modules/@typescript-eslint/eslint-plugin/docs/rules/typedef.md": {
-      "summary": "`@typescript-eslint/typedef`",
-      "sourceFile": "sdk-codegen/node_modules/@typescript-eslint/eslint-plugin/docs/rules/typedef.md"
-    },
-    "sdk-codegen/node_modules/@typescript-eslint/eslint-plugin/docs/rules/unbound-method.md": {
-      "summary": "`@typescript-eslint/unbound-method`",
-      "sourceFile": "sdk-codegen/node_modules/@typescript-eslint/eslint-plugin/docs/rules/unbound-method.md"
-    },
-    "sdk-codegen/node_modules/@typescript-eslint/eslint-plugin/docs/rules/unified-signatures.md": {
-      "summary": "`@typescript-eslint/unified-signatures`",
-      "sourceFile": "sdk-codegen/node_modules/@typescript-eslint/eslint-plugin/docs/rules/unified-signatures.md"
-    },
-    "sdk-codegen/node_modules/@typescript-eslint/eslint-plugin/docs/rules/brace-style.md": {
-      "summary": "`@typescript-eslint/brace-style`",
-      "sourceFile": "sdk-codegen/node_modules/@typescript-eslint/eslint-plugin/docs/rules/brace-style.md"
-    },
-    "sdk-codegen/node_modules/@typescript-eslint/eslint-plugin/docs/rules/comma-spacing.md": {
-      "summary": "`@typescript-eslint/comma-spacing`",
-      "sourceFile": "sdk-codegen/node_modules/@typescript-eslint/eslint-plugin/docs/rules/comma-spacing.md"
-    },
-    "sdk-codegen/node_modules/@typescript-eslint/eslint-plugin/docs/rules/default-param-last.md": {
-      "summary": "`@typescript-eslint/default-param-last`",
-      "sourceFile": "sdk-codegen/node_modules/@typescript-eslint/eslint-plugin/docs/rules/default-param-last.md"
-    },
-    "sdk-codegen/node_modules/@typescript-eslint/eslint-plugin/docs/rules/dot-notation.md": {
-      "summary": "`@typescript-eslint/dot-notation`",
-      "sourceFile": "sdk-codegen/node_modules/@typescript-eslint/eslint-plugin/docs/rules/dot-notation.md"
-    },
-    "sdk-codegen/node_modules/@typescript-eslint/eslint-plugin/docs/rules/func-call-spacing.md": {
-      "summary": "`@typescript-eslint/func-call-spacing`",
-      "sourceFile": "sdk-codegen/node_modules/@typescript-eslint/eslint-plugin/docs/rules/func-call-spacing.md"
-    },
-    "sdk-codegen/node_modules/@typescript-eslint/eslint-plugin/docs/rules/indent.md": {
-      "summary": "`@typescript-eslint/indent`",
-      "sourceFile": "sdk-codegen/node_modules/@typescript-eslint/eslint-plugin/docs/rules/indent.md"
-    },
-    "sdk-codegen/node_modules/@typescript-eslint/eslint-plugin/docs/rules/init-declarations.md": {
-      "summary": "`@typescript-eslint/init-declarations`",
-      "sourceFile": "sdk-codegen/node_modules/@typescript-eslint/eslint-plugin/docs/rules/init-declarations.md"
-    },
-    "sdk-codegen/node_modules/@typescript-eslint/eslint-plugin/docs/rules/keyword-spacing.md": {
-      "summary": "`@typescript-eslint/keyword-spacing`",
-      "sourceFile": "sdk-codegen/node_modules/@typescript-eslint/eslint-plugin/docs/rules/keyword-spacing.md"
-    },
-    "sdk-codegen/node_modules/@typescript-eslint/eslint-plugin/docs/rules/lines-between-class-members.md": {
-      "summary": "`@typescript-eslint/lines-between-class-members`",
-      "sourceFile": "sdk-codegen/node_modules/@typescript-eslint/eslint-plugin/docs/rules/lines-between-class-members.md"
-    },
-    "sdk-codegen/node_modules/@typescript-eslint/eslint-plugin/docs/rules/no-array-constructor.md": {
-      "summary": "`@typescript-eslint/no-array-constructor`",
-      "sourceFile": "sdk-codegen/node_modules/@typescript-eslint/eslint-plugin/docs/rules/no-array-constructor.md"
-    },
-    "sdk-codegen/node_modules/@typescript-eslint/eslint-plugin/docs/rules/no-dupe-class-members.md": {
-      "summary": "`@typescript-eslint/no-dupe-class-members`",
-      "sourceFile": "sdk-codegen/node_modules/@typescript-eslint/eslint-plugin/docs/rules/no-dupe-class-members.md"
-    },
-    "sdk-codegen/node_modules/@typescript-eslint/eslint-plugin/docs/rules/no-empty-function.md": {
-      "summary": "`@typescript-eslint/no-empty-function`",
-      "sourceFile": "sdk-codegen/node_modules/@typescript-eslint/eslint-plugin/docs/rules/no-empty-function.md"
-    },
-    "sdk-codegen/node_modules/@typescript-eslint/eslint-plugin/docs/rules/no-extra-parens.md": {
-      "summary": "`@typescript-eslint/no-extra-parens`",
-      "sourceFile": "sdk-codegen/node_modules/@typescript-eslint/eslint-plugin/docs/rules/no-extra-parens.md"
-    },
-    "sdk-codegen/node_modules/@typescript-eslint/eslint-plugin/docs/rules/no-extra-semi.md": {
-      "summary": "`@typescript-eslint/no-extra-semi`",
-      "sourceFile": "sdk-codegen/node_modules/@typescript-eslint/eslint-plugin/docs/rules/no-extra-semi.md"
-    },
-    "sdk-codegen/node_modules/@typescript-eslint/eslint-plugin/docs/rules/no-invalid-this.md": {
-      "summary": "`@typescript-eslint/no-invalid-this`",
-      "sourceFile": "sdk-codegen/node_modules/@typescript-eslint/eslint-plugin/docs/rules/no-invalid-this.md"
-    },
-    "sdk-codegen/node_modules/@typescript-eslint/eslint-plugin/docs/rules/no-magic-numbers.md": {
-      "summary": "`@typescript-eslint/no-magic-numbers`",
-      "sourceFile": "sdk-codegen/node_modules/@typescript-eslint/eslint-plugin/docs/rules/no-magic-numbers.md"
-    },
-    "sdk-codegen/node_modules/@typescript-eslint/eslint-plugin/docs/rules/no-unused-expressions.md": {
-      "summary": "`@typescript-eslint/no-unused-expressions`",
-      "sourceFile": "sdk-codegen/node_modules/@typescript-eslint/eslint-plugin/docs/rules/no-unused-expressions.md"
-    },
-    "sdk-codegen/node_modules/@typescript-eslint/eslint-plugin/docs/rules/no-unused-vars.md": {
-      "summary": "`@typescript-eslint/no-unused-vars`",
-      "sourceFile": "sdk-codegen/node_modules/@typescript-eslint/eslint-plugin/docs/rules/no-unused-vars.md"
-    },
-    "sdk-codegen/node_modules/@typescript-eslint/eslint-plugin/docs/rules/no-use-before-define.md": {
-      "summary": "`@typescript-eslint/no-use-before-define`",
-      "sourceFile": "sdk-codegen/node_modules/@typescript-eslint/eslint-plugin/docs/rules/no-use-before-define.md"
-    },
-    "sdk-codegen/node_modules/@typescript-eslint/eslint-plugin/docs/rules/no-useless-constructor.md": {
-      "summary": "`@typescript-eslint/no-useless-constructor`",
-      "sourceFile": "sdk-codegen/node_modules/@typescript-eslint/eslint-plugin/docs/rules/no-useless-constructor.md"
-    },
-    "sdk-codegen/node_modules/@typescript-eslint/eslint-plugin/docs/rules/quotes.md": {
-      "summary": "`@typescript-eslint/quotes`",
-      "sourceFile": "sdk-codegen/node_modules/@typescript-eslint/eslint-plugin/docs/rules/quotes.md"
-    },
-    "sdk-codegen/node_modules/@typescript-eslint/eslint-plugin/docs/rules/require-await.md": {
-      "summary": "`@typescript-eslint/require-await`",
-      "sourceFile": "sdk-codegen/node_modules/@typescript-eslint/eslint-plugin/docs/rules/require-await.md"
-    },
-    "sdk-codegen/node_modules/@typescript-eslint/eslint-plugin/docs/rules/return-await.md": {
-      "summary": "`@typescript-eslint/return-await`",
-      "sourceFile": "sdk-codegen/node_modules/@typescript-eslint/eslint-plugin/docs/rules/return-await.md"
-    },
-    "sdk-codegen/node_modules/@typescript-eslint/eslint-plugin/docs/rules/semi.md": {
-      "summary": "`@typescript-eslint/semi`",
-      "sourceFile": "sdk-codegen/node_modules/@typescript-eslint/eslint-plugin/docs/rules/semi.md"
-    },
-    "sdk-codegen/node_modules/@typescript-eslint/eslint-plugin/docs/rules/space-before-function-paren.md": {
-      "summary": "`@typescript-eslint/space-before-function-paren`",
-      "sourceFile": "sdk-codegen/node_modules/@typescript-eslint/eslint-plugin/docs/rules/space-before-function-paren.md"
-    },
-    "sdk-codegen/node_modules/CONTRIBUTING.md": {
-      "summary": "See the contributing guide here",
-      "sourceFile": "sdk-codegen/node_modules/CONTRIBUTING.md"
-    },
-    "sdk-codegen/node_modules/@typescript-eslint/eslint-plugin/docs/rules/no-untyped-public-signature.md": {
-      "summary": "`no-untyped-public-signature`",
-      "sourceFile": "sdk-codegen/node_modules/@typescript-eslint/eslint-plugin/docs/rules/no-untyped-public-signature.md"
-    },
-    "sdk-codegen/node_modules/@typescript-eslint/eslint-plugin/docs/rules/no-triple-slash-reference.md": {
-      "summary": "`no-triple-slash-reference`",
-      "sourceFile": "sdk-codegen/node_modules/@typescript-eslint/eslint-plugin/docs/rules/no-triple-slash-reference.md"
-    },
     "sdk-codegen/node_modules/@typescript-eslint/typescript-estree/src/ts-estree/ts-estree.ts": {
       "summary": "`TSESTree`",
       "sourceFile": "sdk-codegen/node_modules/@typescript-eslint/typescript-estree/src/ts-estree/ts-estree.ts"
@@ -862,13 +298,13 @@
       "summary": "`ParserServices`",
       "sourceFile": "sdk-codegen/node_modules/@typescript-eslint/typescript-estree/src/parser-options.ts"
     },
-    "sdk-codegen/node_modules/ansi-escapes/node_modules/type-fest/.github/contributing.md": {
-      "summary": "contributing guidelines",
-      "sourceFile": "sdk-codegen/node_modules/ansi-escapes/node_modules/type-fest/.github/contributing.md"
-    },
     "sdk-codegen/node_modules/ansi-escapes/node_modules/type-fest/source/basic.d.ts": {
-      "summary": "`JsonValue`",
+      "summary": "`ObservableLike`",
       "sourceFile": "sdk-codegen/node_modules/ansi-escapes/node_modules/type-fest/source/basic.d.ts"
+    },
+    "sdk-codegen/node_modules/ansi-escapes/node_modules/type-fest/source/except.d.ts": {
+      "summary": "`Except`",
+      "sourceFile": "sdk-codegen/node_modules/ansi-escapes/node_modules/type-fest/source/except.d.ts"
     },
     "sdk-codegen/node_modules/ansi-escapes/node_modules/type-fest/source/mutable.d.ts": {
       "summary": "`Mutable`",
@@ -890,9 +326,25 @@
       "summary": "`RequireExactlyOne`",
       "sourceFile": "sdk-codegen/node_modules/ansi-escapes/node_modules/type-fest/source/require-exactly-one.d.ts"
     },
+    "sdk-codegen/node_modules/ansi-escapes/node_modules/type-fest/source/partial-deep.d.ts": {
+      "summary": "`PartialDeep`",
+      "sourceFile": "sdk-codegen/node_modules/ansi-escapes/node_modules/type-fest/source/partial-deep.d.ts"
+    },
+    "sdk-codegen/node_modules/ansi-escapes/node_modules/type-fest/source/readonly-deep.d.ts": {
+      "summary": "`ReadonlyDeep`",
+      "sourceFile": "sdk-codegen/node_modules/ansi-escapes/node_modules/type-fest/source/readonly-deep.d.ts"
+    },
+    "sdk-codegen/node_modules/ansi-escapes/node_modules/type-fest/source/literal-union.d.ts": {
+      "summary": "`LiteralUnion`",
+      "sourceFile": "sdk-codegen/node_modules/ansi-escapes/node_modules/type-fest/source/literal-union.d.ts"
+    },
     "sdk-codegen/node_modules/ansi-escapes/node_modules/type-fest/source/promisable.d.ts": {
       "summary": "`Promisable`",
       "sourceFile": "sdk-codegen/node_modules/ansi-escapes/node_modules/type-fest/source/promisable.d.ts"
+    },
+    "sdk-codegen/node_modules/ansi-escapes/node_modules/type-fest/source/opaque.d.ts": {
+      "summary": "`Opaque`",
+      "sourceFile": "sdk-codegen/node_modules/ansi-escapes/node_modules/type-fest/source/opaque.d.ts"
     },
     "sdk-codegen/node_modules/ansi-escapes/node_modules/type-fest/source/set-optional.d.ts": {
       "summary": "`SetOptional`",
@@ -922,9 +374,13 @@
       "summary": "`ConditionalExcept`",
       "sourceFile": "sdk-codegen/node_modules/ansi-escapes/node_modules/type-fest/source/conditional-except.d.ts"
     },
-    "sdk-codegen/node_modules/arg/LICENSE.md": {
-      "summary": "MIT License",
-      "sourceFile": "sdk-codegen/node_modules/arg/LICENSE.md"
+    "sdk-codegen/node_modules/ansi-escapes/node_modules/type-fest/source/package-json.d.ts": {
+      "summary": "`PackageJson`",
+      "sourceFile": "sdk-codegen/node_modules/ansi-escapes/node_modules/type-fest/source/package-json.d.ts"
+    },
+    "sdk-codegen/node_modules/ansi-escapes/node_modules/type-fest/source/tsconfig-json.d.ts": {
+      "summary": "`TsConfigJson`",
+      "sourceFile": "sdk-codegen/node_modules/ansi-escapes/node_modules/type-fest/source/tsconfig-json.d.ts"
     },
     "sdk-codegen/node_modules/ast-types/lib/scope.ts": {
       "summary": "scope.ts",
@@ -978,85 +434,13 @@
       "summary": "typescripts.ts",
       "sourceFile": "sdk-codegen/node_modules/ast-types/def/typescripts.ts"
     },
-    "sdk-codegen/node_modules/babel-loader/node_modules/schema-utils/.github/CONTRIBUTING.md": {
-      "summary": "CONTRIBUTING",
-      "sourceFile": "sdk-codegen/node_modules/babel-loader/node_modules/schema-utils/.github/CONTRIBUTING.md"
-    },
-    "sdk-codegen/node_modules/babel-plugin-macros/other/docs/user.md": {
-      "summary": "`other/docs/user.md`",
-      "sourceFile": "sdk-codegen/node_modules/babel-plugin-macros/other/docs/user.md"
-    },
-    "sdk-codegen/node_modules/babel-plugin-macros/other/docs/author.md": {
-      "summary": "`other/docs/author.md`",
-      "sourceFile": "sdk-codegen/node_modules/babel-plugin-macros/other/docs/author.md"
-    },
-    "sdk-codegen/node_modules/babel-plugin-styled-components/LICENSE.md": {
-      "summary": "LICENSE.md",
-      "sourceFile": "sdk-codegen/node_modules/babel-plugin-styled-components/LICENSE.md"
-    },
-    "sdk-codegen/node_modules/babel-runtime/node_modules/core-js/CHANGELOG.md": {
-      "summary": "Changelog",
-      "sourceFile": "sdk-codegen/node_modules/babel-runtime/node_modules/core-js/CHANGELOG.md"
-    },
-    "sdk-codegen/node_modules/before-after-hook/examples/test-mock-example.md": {
-      "summary": "Test mock example",
-      "sourceFile": "sdk-codegen/node_modules/before-after-hook/examples/test-mock-example.md"
-    },
-    "sdk-codegen/node_modules/big.js/CONTRIBUTING.md": {
-      "summary": "[Contribute",
-      "sourceFile": "sdk-codegen/node_modules/big.js/CONTRIBUTING.md"
-    },
-    "sdk-codegen/node_modules/browserify-sign/node_modules/readable-stream/README.md": {
-      "summary": "README.md",
-      "sourceFile": "sdk-codegen/node_modules/browserify-sign/node_modules/readable-stream/README.md"
-    },
-    "sdk-codegen/node_modules/cacache/README.md": {
-      "summary": "English",
-      "sourceFile": "sdk-codegen/node_modules/cacache/README.md"
-    },
-    "sdk-codegen/node_modules/cacache/CONTRIBUTING.md": {
-      "summary": "Submit a PR",
-      "sourceFile": "sdk-codegen/node_modules/cacache/CONTRIBUTING.md"
-    },
-    "sdk-codegen/node_modules/cacache/README.es.md": {
-      "summary": "español",
-      "sourceFile": "sdk-codegen/node_modules/cacache/README.es.md"
-    },
-    "sdk-codegen/node_modules/cacache/CODE_OF_CONDUCT.md": {
-      "summary": "Code of Conduct",
-      "sourceFile": "sdk-codegen/node_modules/cacache/CODE_OF_CONDUCT.md"
-    },
-    "sdk-codegen/node_modules/cacache/CHANGELOG.md": {
-      "summary": "Changelog",
-      "sourceFile": "sdk-codegen/node_modules/cacache/CHANGELOG.md"
-    },
-    "sdk-codegen/node_modules/chokidar/node_modules/define-property/changelog.md": {
-      "summary": "the CHANGELOG",
-      "sourceFile": "sdk-codegen/node_modules/chokidar/node_modules/define-property/changelog.md"
-    },
-    "sdk-codegen/node_modules/chokidar/node_modules/micromatch/.github/contributing.md": {
-      "summary": "contributing guide",
-      "sourceFile": "sdk-codegen/node_modules/chokidar/node_modules/micromatch/.github/contributing.md"
-    },
-    "sdk-codegen/node_modules/colorette/LICENSE.md": {
-      "summary": "MIT",
-      "sourceFile": "sdk-codegen/node_modules/colorette/LICENSE.md"
-    },
-    "sdk-codegen/node_modules/conventional-changelog-core/node_modules/readable-stream/README.md": {
-      "summary": "README.md",
-      "sourceFile": "sdk-codegen/node_modules/conventional-changelog-core/node_modules/readable-stream/README.md"
-    },
-    "sdk-codegen/node_modules/conventional-changelog-writer/node_modules/readable-stream/README.md": {
-      "summary": "README.md",
-      "sourceFile": "sdk-codegen/node_modules/conventional-changelog-writer/node_modules/readable-stream/README.md"
-    },
-    "sdk-codegen/node_modules/conventional-changelog-writer/node_modules/type-fest/.github/contributing.md": {
-      "summary": "contributing guidelines",
-      "sourceFile": "sdk-codegen/node_modules/conventional-changelog-writer/node_modules/type-fest/.github/contributing.md"
-    },
     "sdk-codegen/node_modules/conventional-changelog-writer/node_modules/type-fest/source/basic.d.ts": {
-      "summary": "`JsonValue`",
+      "summary": "`ObservableLike`",
       "sourceFile": "sdk-codegen/node_modules/conventional-changelog-writer/node_modules/type-fest/source/basic.d.ts"
+    },
+    "sdk-codegen/node_modules/conventional-changelog-writer/node_modules/type-fest/source/except.d.ts": {
+      "summary": "`Except`",
+      "sourceFile": "sdk-codegen/node_modules/conventional-changelog-writer/node_modules/type-fest/source/except.d.ts"
     },
     "sdk-codegen/node_modules/conventional-changelog-writer/node_modules/type-fest/source/mutable.d.ts": {
       "summary": "`Mutable`",
@@ -1078,9 +462,25 @@
       "summary": "`RequireExactlyOne`",
       "sourceFile": "sdk-codegen/node_modules/conventional-changelog-writer/node_modules/type-fest/source/require-exactly-one.d.ts"
     },
+    "sdk-codegen/node_modules/conventional-changelog-writer/node_modules/type-fest/source/partial-deep.d.ts": {
+      "summary": "`PartialDeep`",
+      "sourceFile": "sdk-codegen/node_modules/conventional-changelog-writer/node_modules/type-fest/source/partial-deep.d.ts"
+    },
+    "sdk-codegen/node_modules/conventional-changelog-writer/node_modules/type-fest/source/readonly-deep.d.ts": {
+      "summary": "`ReadonlyDeep`",
+      "sourceFile": "sdk-codegen/node_modules/conventional-changelog-writer/node_modules/type-fest/source/readonly-deep.d.ts"
+    },
+    "sdk-codegen/node_modules/conventional-changelog-writer/node_modules/type-fest/source/literal-union.d.ts": {
+      "summary": "`LiteralUnion`",
+      "sourceFile": "sdk-codegen/node_modules/conventional-changelog-writer/node_modules/type-fest/source/literal-union.d.ts"
+    },
     "sdk-codegen/node_modules/conventional-changelog-writer/node_modules/type-fest/source/promisable.d.ts": {
       "summary": "`Promisable`",
       "sourceFile": "sdk-codegen/node_modules/conventional-changelog-writer/node_modules/type-fest/source/promisable.d.ts"
+    },
+    "sdk-codegen/node_modules/conventional-changelog-writer/node_modules/type-fest/source/opaque.d.ts": {
+      "summary": "`Opaque`",
+      "sourceFile": "sdk-codegen/node_modules/conventional-changelog-writer/node_modules/type-fest/source/opaque.d.ts"
     },
     "sdk-codegen/node_modules/conventional-changelog-writer/node_modules/type-fest/source/set-optional.d.ts": {
       "summary": "`SetOptional`",
@@ -1122,17 +522,21 @@
       "summary": "`Stringified`",
       "sourceFile": "sdk-codegen/node_modules/conventional-changelog-writer/node_modules/type-fest/source/stringified.d.ts"
     },
-    "sdk-codegen/node_modules/conventional-commits-parser/node_modules/readable-stream/README.md": {
-      "summary": "README.md",
-      "sourceFile": "sdk-codegen/node_modules/conventional-commits-parser/node_modules/readable-stream/README.md"
+    "sdk-codegen/node_modules/conventional-changelog-writer/node_modules/type-fest/source/package-json.d.ts": {
+      "summary": "`PackageJson`",
+      "sourceFile": "sdk-codegen/node_modules/conventional-changelog-writer/node_modules/type-fest/source/package-json.d.ts"
     },
-    "sdk-codegen/node_modules/conventional-commits-parser/node_modules/type-fest/.github/contributing.md": {
-      "summary": "contributing guidelines",
-      "sourceFile": "sdk-codegen/node_modules/conventional-commits-parser/node_modules/type-fest/.github/contributing.md"
+    "sdk-codegen/node_modules/conventional-changelog-writer/node_modules/type-fest/source/tsconfig-json.d.ts": {
+      "summary": "`TsConfigJson`",
+      "sourceFile": "sdk-codegen/node_modules/conventional-changelog-writer/node_modules/type-fest/source/tsconfig-json.d.ts"
     },
     "sdk-codegen/node_modules/conventional-commits-parser/node_modules/type-fest/source/basic.d.ts": {
-      "summary": "`JsonValue`",
+      "summary": "`ObservableLike`",
       "sourceFile": "sdk-codegen/node_modules/conventional-commits-parser/node_modules/type-fest/source/basic.d.ts"
+    },
+    "sdk-codegen/node_modules/conventional-commits-parser/node_modules/type-fest/source/except.d.ts": {
+      "summary": "`Except`",
+      "sourceFile": "sdk-codegen/node_modules/conventional-commits-parser/node_modules/type-fest/source/except.d.ts"
     },
     "sdk-codegen/node_modules/conventional-commits-parser/node_modules/type-fest/source/mutable.d.ts": {
       "summary": "`Mutable`",
@@ -1154,9 +558,25 @@
       "summary": "`RequireExactlyOne`",
       "sourceFile": "sdk-codegen/node_modules/conventional-commits-parser/node_modules/type-fest/source/require-exactly-one.d.ts"
     },
+    "sdk-codegen/node_modules/conventional-commits-parser/node_modules/type-fest/source/partial-deep.d.ts": {
+      "summary": "`PartialDeep`",
+      "sourceFile": "sdk-codegen/node_modules/conventional-commits-parser/node_modules/type-fest/source/partial-deep.d.ts"
+    },
+    "sdk-codegen/node_modules/conventional-commits-parser/node_modules/type-fest/source/readonly-deep.d.ts": {
+      "summary": "`ReadonlyDeep`",
+      "sourceFile": "sdk-codegen/node_modules/conventional-commits-parser/node_modules/type-fest/source/readonly-deep.d.ts"
+    },
+    "sdk-codegen/node_modules/conventional-commits-parser/node_modules/type-fest/source/literal-union.d.ts": {
+      "summary": "`LiteralUnion`",
+      "sourceFile": "sdk-codegen/node_modules/conventional-commits-parser/node_modules/type-fest/source/literal-union.d.ts"
+    },
     "sdk-codegen/node_modules/conventional-commits-parser/node_modules/type-fest/source/promisable.d.ts": {
       "summary": "`Promisable`",
       "sourceFile": "sdk-codegen/node_modules/conventional-commits-parser/node_modules/type-fest/source/promisable.d.ts"
+    },
+    "sdk-codegen/node_modules/conventional-commits-parser/node_modules/type-fest/source/opaque.d.ts": {
+      "summary": "`Opaque`",
+      "sourceFile": "sdk-codegen/node_modules/conventional-commits-parser/node_modules/type-fest/source/opaque.d.ts"
     },
     "sdk-codegen/node_modules/conventional-commits-parser/node_modules/type-fest/source/set-optional.d.ts": {
       "summary": "`SetOptional`",
@@ -1198,857 +618,17 @@
       "summary": "`Stringified`",
       "sourceFile": "sdk-codegen/node_modules/conventional-commits-parser/node_modules/type-fest/source/stringified.d.ts"
     },
-    "sdk-codegen/node_modules/conventional-recommended-bump/node_modules/readable-stream/README.md": {
-      "summary": "README.md",
-      "sourceFile": "sdk-codegen/node_modules/conventional-recommended-bump/node_modules/readable-stream/README.md"
-    },
-    "sdk-codegen/node_modules/cosmiconfig/CODE_OF_CONDUCT.md": {
-      "summary": "Contributor Code of Conduct",
-      "sourceFile": "sdk-codegen/node_modules/cosmiconfig/CODE_OF_CONDUCT.md"
-    },
-    "sdk-codegen/node_modules/css-loader/.github/CONTRIBUTING.md": {
-      "summary": "CONTRIBUTING",
-      "sourceFile": "sdk-codegen/node_modules/css-loader/.github/CONTRIBUTING.md"
-    },
-    "sdk-codegen/node_modules/css-loader/node_modules/schema-utils/.github/CONTRIBUTING.md": {
-      "summary": "CONTRIBUTING",
-      "sourceFile": "sdk-codegen/node_modules/css-loader/node_modules/schema-utils/.github/CONTRIBUTING.md"
-    },
-    "sdk-codegen/node_modules/css-to-react-native/LICENSE.md": {
-      "summary": "LICENSE.md",
-      "sourceFile": "sdk-codegen/node_modules/css-to-react-native/LICENSE.md"
-    },
-    "sdk-codegen/node_modules/date-fns/docs/unicodeTokens.md": {
-      "summary": "Unicode Tokens doc",
-      "sourceFile": "sdk-codegen/node_modules/date-fns/docs/unicodeTokens.md"
-    },
-    "sdk-codegen/node_modules/dom-accessibility-api/tests/README.md": {
-      "summary": "the test readme",
-      "sourceFile": "sdk-codegen/node_modules/dom-accessibility-api/tests/README.md"
-    },
-    "sdk-codegen/node_modules/enquirer/CHANGELOG.md": {
-      "summary": "CHANGELOG.md",
-      "sourceFile": "sdk-codegen/node_modules/enquirer/CHANGELOG.md"
-    },
-    "sdk-codegen/node_modules/enzyme/docs/guides/migration-from-2-to-3.md": {
-      "summary": "migration guide",
-      "sourceFile": "sdk-codegen/node_modules/enzyme/docs/guides/migration-from-2-to-3.md"
-    },
-    "sdk-codegen/node_modules/enzyme/docs/installation/README.md": {
-      "summary": "Installation",
-      "sourceFile": "sdk-codegen/node_modules/enzyme/docs/installation/README.md"
-    },
-    "sdk-codegen/node_modules/enzyme/docs/guides/mocha.md": {
-      "summary": "Using Enzyme with Mocha",
-      "sourceFile": "sdk-codegen/node_modules/enzyme/docs/guides/mocha.md"
-    },
-    "sdk-codegen/node_modules/enzyme/docs/guides/karma.md": {
-      "summary": "Using Enzyme with Karma",
-      "sourceFile": "sdk-codegen/node_modules/enzyme/docs/guides/karma.md"
-    },
-    "sdk-codegen/node_modules/enzyme/docs/guides/browserify.md": {
-      "summary": "Using Enzyme with Browserify",
-      "sourceFile": "sdk-codegen/node_modules/enzyme/docs/guides/browserify.md"
-    },
-    "sdk-codegen/node_modules/enzyme/docs/guides/systemjs.md": {
-      "summary": "Using Enzyme with SystemJS",
-      "sourceFile": "sdk-codegen/node_modules/enzyme/docs/guides/systemjs.md"
-    },
-    "sdk-codegen/node_modules/enzyme/docs/guides/webpack.md": {
-      "summary": "Using Enzyme with Webpack",
-      "sourceFile": "sdk-codegen/node_modules/enzyme/docs/guides/webpack.md"
-    },
-    "sdk-codegen/node_modules/enzyme/docs/guides/jsdom.md": {
-      "summary": "Using Enzyme with JSDOM",
-      "sourceFile": "sdk-codegen/node_modules/enzyme/docs/guides/jsdom.md"
-    },
-    "sdk-codegen/node_modules/enzyme/docs/guides/react-native.md": {
-      "summary": "Using Enzyme with React Native",
-      "sourceFile": "sdk-codegen/node_modules/enzyme/docs/guides/react-native.md"
-    },
-    "sdk-codegen/node_modules/enzyme/docs/guides/jest.md": {
-      "summary": "Using Enzyme with Jest",
-      "sourceFile": "sdk-codegen/node_modules/enzyme/docs/guides/jest.md"
-    },
-    "sdk-codegen/node_modules/enzyme/docs/guides/lab.md": {
-      "summary": "Using Enzyme with Lab",
-      "sourceFile": "sdk-codegen/node_modules/enzyme/docs/guides/lab.md"
-    },
-    "sdk-codegen/node_modules/enzyme/docs/guides/tape-ava.md": {
-      "summary": "Using Enzyme with Tape and AVA",
-      "sourceFile": "sdk-codegen/node_modules/enzyme/docs/guides/tape-ava.md"
-    },
-    "sdk-codegen/node_modules/enzyme/docs/api/shallow.md": {
-      "summary": "API Documentation",
-      "sourceFile": "sdk-codegen/node_modules/enzyme/docs/api/shallow.md"
-    },
-    "sdk-codegen/node_modules/enzyme/docs/api/mount.md": {
-      "summary": "API Documentation",
-      "sourceFile": "sdk-codegen/node_modules/enzyme/docs/api/mount.md"
-    },
-    "sdk-codegen/node_modules/enzyme/docs/api/render.md": {
-      "summary": "API Documentation",
-      "sourceFile": "sdk-codegen/node_modules/enzyme/docs/api/render.md"
-    },
-    "sdk-codegen/node_modules/enzyme/docs/future.md": {
-      "summary": "Enzyme Future",
-      "sourceFile": "sdk-codegen/node_modules/enzyme/docs/future.md"
-    },
-    "sdk-codegen/node_modules/enzyme/CONTRIBUTING.md": {
-      "summary": "Contributors Guide",
-      "sourceFile": "sdk-codegen/node_modules/enzyme/CONTRIBUTING.md"
-    },
-    "sdk-codegen/node_modules/enzyme/INTHEWILD.md": {
-      "summary": "here",
-      "sourceFile": "sdk-codegen/node_modules/enzyme/INTHEWILD.md"
-    },
-    "sdk-codegen/node_modules/enzyme/LICENSE.md": {
-      "summary": "MIT",
-      "sourceFile": "sdk-codegen/node_modules/enzyme/LICENSE.md"
-    },
-    "sdk-codegen/node_modules/enzyme-adapter-react-16/docs/guides/migration-from-2-to-3.md": {
-      "summary": "migration guide",
-      "sourceFile": "sdk-codegen/node_modules/enzyme-adapter-react-16/docs/guides/migration-from-2-to-3.md"
-    },
-    "sdk-codegen/node_modules/enzyme-adapter-react-16/docs/installation/README.md": {
-      "summary": "Installation",
-      "sourceFile": "sdk-codegen/node_modules/enzyme-adapter-react-16/docs/installation/README.md"
-    },
-    "sdk-codegen/node_modules/enzyme-adapter-react-16/docs/guides/mocha.md": {
-      "summary": "Using Enzyme with Mocha",
-      "sourceFile": "sdk-codegen/node_modules/enzyme-adapter-react-16/docs/guides/mocha.md"
-    },
-    "sdk-codegen/node_modules/enzyme-adapter-react-16/docs/guides/karma.md": {
-      "summary": "Using Enzyme with Karma",
-      "sourceFile": "sdk-codegen/node_modules/enzyme-adapter-react-16/docs/guides/karma.md"
-    },
-    "sdk-codegen/node_modules/enzyme-adapter-react-16/docs/guides/browserify.md": {
-      "summary": "Using Enzyme with Browserify",
-      "sourceFile": "sdk-codegen/node_modules/enzyme-adapter-react-16/docs/guides/browserify.md"
-    },
-    "sdk-codegen/node_modules/enzyme-adapter-react-16/docs/guides/systemjs.md": {
-      "summary": "Using Enzyme with SystemJS",
-      "sourceFile": "sdk-codegen/node_modules/enzyme-adapter-react-16/docs/guides/systemjs.md"
-    },
-    "sdk-codegen/node_modules/enzyme-adapter-react-16/docs/guides/webpack.md": {
-      "summary": "Using Enzyme with Webpack",
-      "sourceFile": "sdk-codegen/node_modules/enzyme-adapter-react-16/docs/guides/webpack.md"
-    },
-    "sdk-codegen/node_modules/enzyme-adapter-react-16/docs/guides/jsdom.md": {
-      "summary": "Using Enzyme with JSDOM",
-      "sourceFile": "sdk-codegen/node_modules/enzyme-adapter-react-16/docs/guides/jsdom.md"
-    },
-    "sdk-codegen/node_modules/enzyme-adapter-react-16/docs/guides/react-native.md": {
-      "summary": "Using Enzyme with React Native",
-      "sourceFile": "sdk-codegen/node_modules/enzyme-adapter-react-16/docs/guides/react-native.md"
-    },
-    "sdk-codegen/node_modules/enzyme-adapter-react-16/docs/guides/jest.md": {
-      "summary": "Using Enzyme with Jest",
-      "sourceFile": "sdk-codegen/node_modules/enzyme-adapter-react-16/docs/guides/jest.md"
-    },
-    "sdk-codegen/node_modules/enzyme-adapter-react-16/docs/guides/lab.md": {
-      "summary": "Using Enzyme with Lab",
-      "sourceFile": "sdk-codegen/node_modules/enzyme-adapter-react-16/docs/guides/lab.md"
-    },
-    "sdk-codegen/node_modules/enzyme-adapter-react-16/docs/guides/tape-ava.md": {
-      "summary": "Using Enzyme with Tape and AVA",
-      "sourceFile": "sdk-codegen/node_modules/enzyme-adapter-react-16/docs/guides/tape-ava.md"
-    },
-    "sdk-codegen/node_modules/enzyme-adapter-react-16/docs/api/shallow.md": {
-      "summary": "API Documentation",
-      "sourceFile": "sdk-codegen/node_modules/enzyme-adapter-react-16/docs/api/shallow.md"
-    },
-    "sdk-codegen/node_modules/enzyme-adapter-react-16/docs/api/mount.md": {
-      "summary": "API Documentation",
-      "sourceFile": "sdk-codegen/node_modules/enzyme-adapter-react-16/docs/api/mount.md"
-    },
-    "sdk-codegen/node_modules/enzyme-adapter-react-16/docs/api/render.md": {
-      "summary": "API Documentation",
-      "sourceFile": "sdk-codegen/node_modules/enzyme-adapter-react-16/docs/api/render.md"
-    },
-    "sdk-codegen/node_modules/enzyme-adapter-react-16/docs/future.md": {
-      "summary": "Enzyme Future",
-      "sourceFile": "sdk-codegen/node_modules/enzyme-adapter-react-16/docs/future.md"
-    },
-    "sdk-codegen/node_modules/enzyme-adapter-react-16/CONTRIBUTING.md": {
-      "summary": "Contributors Guide",
-      "sourceFile": "sdk-codegen/node_modules/enzyme-adapter-react-16/CONTRIBUTING.md"
-    },
-    "sdk-codegen/node_modules/enzyme-adapter-react-16/INTHEWILD.md": {
-      "summary": "here",
-      "sourceFile": "sdk-codegen/node_modules/enzyme-adapter-react-16/INTHEWILD.md"
-    },
-    "sdk-codegen/node_modules/enzyme-adapter-react-16/LICENSE.md": {
-      "summary": "MIT",
-      "sourceFile": "sdk-codegen/node_modules/enzyme-adapter-react-16/LICENSE.md"
-    },
-    "sdk-codegen/node_modules/enzyme-adapter-utils/docs/guides/migration-from-2-to-3.md": {
-      "summary": "migration guide",
-      "sourceFile": "sdk-codegen/node_modules/enzyme-adapter-utils/docs/guides/migration-from-2-to-3.md"
-    },
-    "sdk-codegen/node_modules/enzyme-adapter-utils/docs/installation/README.md": {
-      "summary": "Installation",
-      "sourceFile": "sdk-codegen/node_modules/enzyme-adapter-utils/docs/installation/README.md"
-    },
-    "sdk-codegen/node_modules/enzyme-adapter-utils/docs/guides/mocha.md": {
-      "summary": "Using Enzyme with Mocha",
-      "sourceFile": "sdk-codegen/node_modules/enzyme-adapter-utils/docs/guides/mocha.md"
-    },
-    "sdk-codegen/node_modules/enzyme-adapter-utils/docs/guides/karma.md": {
-      "summary": "Using Enzyme with Karma",
-      "sourceFile": "sdk-codegen/node_modules/enzyme-adapter-utils/docs/guides/karma.md"
-    },
-    "sdk-codegen/node_modules/enzyme-adapter-utils/docs/guides/browserify.md": {
-      "summary": "Using Enzyme with Browserify",
-      "sourceFile": "sdk-codegen/node_modules/enzyme-adapter-utils/docs/guides/browserify.md"
-    },
-    "sdk-codegen/node_modules/enzyme-adapter-utils/docs/guides/systemjs.md": {
-      "summary": "Using Enzyme with SystemJS",
-      "sourceFile": "sdk-codegen/node_modules/enzyme-adapter-utils/docs/guides/systemjs.md"
-    },
-    "sdk-codegen/node_modules/enzyme-adapter-utils/docs/guides/webpack.md": {
-      "summary": "Using Enzyme with Webpack",
-      "sourceFile": "sdk-codegen/node_modules/enzyme-adapter-utils/docs/guides/webpack.md"
-    },
-    "sdk-codegen/node_modules/enzyme-adapter-utils/docs/guides/jsdom.md": {
-      "summary": "Using Enzyme with JSDOM",
-      "sourceFile": "sdk-codegen/node_modules/enzyme-adapter-utils/docs/guides/jsdom.md"
-    },
-    "sdk-codegen/node_modules/enzyme-adapter-utils/docs/guides/react-native.md": {
-      "summary": "Using Enzyme with React Native",
-      "sourceFile": "sdk-codegen/node_modules/enzyme-adapter-utils/docs/guides/react-native.md"
-    },
-    "sdk-codegen/node_modules/enzyme-adapter-utils/docs/guides/jest.md": {
-      "summary": "Using Enzyme with Jest",
-      "sourceFile": "sdk-codegen/node_modules/enzyme-adapter-utils/docs/guides/jest.md"
-    },
-    "sdk-codegen/node_modules/enzyme-adapter-utils/docs/guides/lab.md": {
-      "summary": "Using Enzyme with Lab",
-      "sourceFile": "sdk-codegen/node_modules/enzyme-adapter-utils/docs/guides/lab.md"
-    },
-    "sdk-codegen/node_modules/enzyme-adapter-utils/docs/guides/tape-ava.md": {
-      "summary": "Using Enzyme with Tape and AVA",
-      "sourceFile": "sdk-codegen/node_modules/enzyme-adapter-utils/docs/guides/tape-ava.md"
-    },
-    "sdk-codegen/node_modules/enzyme-adapter-utils/docs/api/shallow.md": {
-      "summary": "API Documentation",
-      "sourceFile": "sdk-codegen/node_modules/enzyme-adapter-utils/docs/api/shallow.md"
-    },
-    "sdk-codegen/node_modules/enzyme-adapter-utils/docs/api/mount.md": {
-      "summary": "API Documentation",
-      "sourceFile": "sdk-codegen/node_modules/enzyme-adapter-utils/docs/api/mount.md"
-    },
-    "sdk-codegen/node_modules/enzyme-adapter-utils/docs/api/render.md": {
-      "summary": "API Documentation",
-      "sourceFile": "sdk-codegen/node_modules/enzyme-adapter-utils/docs/api/render.md"
-    },
-    "sdk-codegen/node_modules/enzyme-adapter-utils/docs/future.md": {
-      "summary": "Enzyme Future",
-      "sourceFile": "sdk-codegen/node_modules/enzyme-adapter-utils/docs/future.md"
-    },
-    "sdk-codegen/node_modules/enzyme-adapter-utils/CONTRIBUTING.md": {
-      "summary": "Contributors Guide",
-      "sourceFile": "sdk-codegen/node_modules/enzyme-adapter-utils/CONTRIBUTING.md"
-    },
-    "sdk-codegen/node_modules/enzyme-adapter-utils/INTHEWILD.md": {
-      "summary": "here",
-      "sourceFile": "sdk-codegen/node_modules/enzyme-adapter-utils/INTHEWILD.md"
-    },
-    "sdk-codegen/node_modules/enzyme-adapter-utils/LICENSE.md": {
-      "summary": "MIT",
-      "sourceFile": "sdk-codegen/node_modules/enzyme-adapter-utils/LICENSE.md"
-    },
-    "sdk-codegen/node_modules/eslint-mdx/CHANGELOG.md": {
-      "summary": "CHANGELOG.md",
-      "sourceFile": "sdk-codegen/node_modules/eslint-mdx/CHANGELOG.md"
-    },
-    "sdk-codegen/node_modules/eslint-plugin-import/resolvers/README.md": {
-      "summary": "spec",
-      "sourceFile": "sdk-codegen/node_modules/eslint-plugin-import/resolvers/README.md"
-    },
-    "sdk-codegen/node_modules/eslint-plugin-import/memo-parser/README.md": {
-      "summary": "parser",
-      "sourceFile": "sdk-codegen/node_modules/eslint-plugin-import/memo-parser/README.md"
-    },
-    "sdk-codegen/node_modules/eslint-plugin-import/docs/rules/no-unresolved.md": {
-      "summary": "`no-unresolved` options",
-      "sourceFile": "sdk-codegen/node_modules/eslint-plugin-import/docs/rules/no-unresolved.md"
-    },
-    "sdk-codegen/node_modules/eslint-plugin-import/CHANGELOG.md": {
-      "summary": "**Unreleased**",
-      "sourceFile": "sdk-codegen/node_modules/eslint-plugin-import/CHANGELOG.md"
-    },
-    "sdk-codegen/node_modules/eslint-plugin-import/docs/rules/no-commonjs.md": {
-      "summary": "`no-commonjs`",
-      "sourceFile": "sdk-codegen/node_modules/eslint-plugin-import/docs/rules/no-commonjs.md"
-    },
-    "sdk-codegen/node_modules/eslint-plugin-import/docs/rules/no-amd.md": {
-      "summary": "`no-amd`",
-      "sourceFile": "sdk-codegen/node_modules/eslint-plugin-import/docs/rules/no-amd.md"
-    },
-    "sdk-codegen/node_modules/eslint-plugin-import/README.md": {
-      "summary": "Resolver plugins",
-      "sourceFile": "sdk-codegen/node_modules/eslint-plugin-import/README.md"
-    },
-    "sdk-codegen/node_modules/eslint-plugin-mdx/CHANGELOG.md": {
-      "summary": "CHANGELOG.md",
-      "sourceFile": "sdk-codegen/node_modules/eslint-plugin-mdx/CHANGELOG.md"
-    },
-    "sdk-codegen/node_modules/eslint-plugin-node/docs/rules/no-callback-literal.md": {
-      "summary": "node/no-callback-literal",
-      "sourceFile": "sdk-codegen/node_modules/eslint-plugin-node/docs/rules/no-callback-literal.md"
-    },
-    "sdk-codegen/node_modules/eslint-plugin-node/docs/rules/no-exports-assign.md": {
-      "summary": "node/no-exports-assign",
-      "sourceFile": "sdk-codegen/node_modules/eslint-plugin-node/docs/rules/no-exports-assign.md"
-    },
-    "sdk-codegen/node_modules/eslint-plugin-node/docs/rules/no-extraneous-import.md": {
-      "summary": "node/no-extraneous-import",
-      "sourceFile": "sdk-codegen/node_modules/eslint-plugin-node/docs/rules/no-extraneous-import.md"
-    },
-    "sdk-codegen/node_modules/eslint-plugin-node/docs/rules/no-missing-import.md": {
-      "summary": "node/no-missing-import",
-      "sourceFile": "sdk-codegen/node_modules/eslint-plugin-node/docs/rules/no-missing-import.md"
-    },
-    "sdk-codegen/node_modules/eslint-plugin-node/docs/rules/no-unpublished-bin.md": {
-      "summary": "node/no-unpublished-bin",
-      "sourceFile": "sdk-codegen/node_modules/eslint-plugin-node/docs/rules/no-unpublished-bin.md"
-    },
-    "sdk-codegen/node_modules/eslint-plugin-node/docs/rules/no-unpublished-import.md": {
-      "summary": "node/no-unpublished-import",
-      "sourceFile": "sdk-codegen/node_modules/eslint-plugin-node/docs/rules/no-unpublished-import.md"
-    },
-    "sdk-codegen/node_modules/eslint-plugin-node/docs/rules/no-unsupported-features/es-builtins.md": {
-      "summary": "node/no-unsupported-features](./docs/rules/no-unsupported-features.md) | [node/no-unsupported-features/es-syntax](./docs/rules/no-unsupported-features/es-syntax.md) and [node/no-unsupported-features/es-builtins",
-      "sourceFile": "sdk-codegen/node_modules/eslint-plugin-node/docs/rules/no-unsupported-features/es-builtins.md"
-    },
-    "sdk-codegen/node_modules/eslint-plugin-node/docs/rules/no-unsupported-features/es-syntax.md": {
-      "summary": "node/no-unsupported-features/es-syntax",
-      "sourceFile": "sdk-codegen/node_modules/eslint-plugin-node/docs/rules/no-unsupported-features/es-syntax.md"
-    },
-    "sdk-codegen/node_modules/eslint-plugin-node/docs/rules/no-unsupported-features/node-builtins.md": {
-      "summary": "node/no-unsupported-features/node-builtins",
-      "sourceFile": "sdk-codegen/node_modules/eslint-plugin-node/docs/rules/no-unsupported-features/node-builtins.md"
-    },
-    "sdk-codegen/node_modules/eslint-plugin-node/docs/rules/shebang.md": {
-      "summary": "node/shebang",
-      "sourceFile": "sdk-codegen/node_modules/eslint-plugin-node/docs/rules/shebang.md"
-    },
-    "sdk-codegen/node_modules/eslint-plugin-node/docs/rules/no-deprecated-api.md": {
-      "summary": "node/no-deprecated-api",
-      "sourceFile": "sdk-codegen/node_modules/eslint-plugin-node/docs/rules/no-deprecated-api.md"
-    },
-    "sdk-codegen/node_modules/eslint-plugin-node/docs/rules/exports-style.md": {
-      "summary": "node/exports-style",
-      "sourceFile": "sdk-codegen/node_modules/eslint-plugin-node/docs/rules/exports-style.md"
-    },
-    "sdk-codegen/node_modules/eslint-plugin-node/docs/rules/file-extension-in-import.md": {
-      "summary": "node/file-extension-in-import",
-      "sourceFile": "sdk-codegen/node_modules/eslint-plugin-node/docs/rules/file-extension-in-import.md"
-    },
-    "sdk-codegen/node_modules/eslint-plugin-react/README.md": {
-      "summary": "`jsx-uses-vars`][] is not enabled by default anymore, see [documentation",
-      "sourceFile": "sdk-codegen/node_modules/eslint-plugin-react/README.md"
-    },
-    "sdk-codegen/node_modules/eslint-plugin-react/docs/rules/jsx-wrap-multilines.md": {
-      "summary": "`jsx-wrap-multilines`][] now checks arrow functions without block body. It can be deactivated in [rule options",
-      "sourceFile": "sdk-codegen/node_modules/eslint-plugin-react/docs/rules/jsx-wrap-multilines.md"
-    },
-    "sdk-codegen/node_modules/eslint-plugin-react/docs/rules/jsx-no-undef.md": {
-      "summary": "react/jsx-no-undef",
-      "sourceFile": "sdk-codegen/node_modules/eslint-plugin-react/docs/rules/jsx-no-undef.md"
-    },
-    "sdk-codegen/node_modules/eslint-plugin-react/docs/rules/display-name.md": {
-      "summary": "react/display-name",
-      "sourceFile": "sdk-codegen/node_modules/eslint-plugin-react/docs/rules/display-name.md"
-    },
-    "sdk-codegen/node_modules/eslint-plugin-react/docs/rules/boolean-prop-naming.md": {
-      "summary": "react/boolean-prop-naming",
-      "sourceFile": "sdk-codegen/node_modules/eslint-plugin-react/docs/rules/boolean-prop-naming.md"
-    },
-    "sdk-codegen/node_modules/eslint-plugin-react/docs/rules/button-has-type.md": {
-      "summary": "react/button-has-type",
-      "sourceFile": "sdk-codegen/node_modules/eslint-plugin-react/docs/rules/button-has-type.md"
-    },
-    "sdk-codegen/node_modules/eslint-plugin-react/docs/rules/default-props-match-prop-types.md": {
-      "summary": "react/default-props-match-prop-types",
-      "sourceFile": "sdk-codegen/node_modules/eslint-plugin-react/docs/rules/default-props-match-prop-types.md"
-    },
-    "sdk-codegen/node_modules/eslint-plugin-react/docs/rules/destructuring-assignment.md": {
-      "summary": "react/destructuring-assignment",
-      "sourceFile": "sdk-codegen/node_modules/eslint-plugin-react/docs/rules/destructuring-assignment.md"
-    },
-    "sdk-codegen/node_modules/eslint-plugin-react/docs/rules/forbid-component-props.md": {
-      "summary": "react/forbid-component-props",
-      "sourceFile": "sdk-codegen/node_modules/eslint-plugin-react/docs/rules/forbid-component-props.md"
-    },
-    "sdk-codegen/node_modules/eslint-plugin-react/docs/rules/forbid-dom-props.md": {
-      "summary": "react/forbid-dom-props",
-      "sourceFile": "sdk-codegen/node_modules/eslint-plugin-react/docs/rules/forbid-dom-props.md"
-    },
-    "sdk-codegen/node_modules/eslint-plugin-react/docs/rules/forbid-elements.md": {
-      "summary": "react/forbid-elements",
-      "sourceFile": "sdk-codegen/node_modules/eslint-plugin-react/docs/rules/forbid-elements.md"
-    },
-    "sdk-codegen/node_modules/eslint-plugin-react/docs/rules/forbid-foreign-prop-types.md": {
-      "summary": "react/forbid-foreign-prop-types",
-      "sourceFile": "sdk-codegen/node_modules/eslint-plugin-react/docs/rules/forbid-foreign-prop-types.md"
-    },
-    "sdk-codegen/node_modules/eslint-plugin-react/docs/rules/forbid-prop-types.md": {
-      "summary": "react/forbid-prop-types",
-      "sourceFile": "sdk-codegen/node_modules/eslint-plugin-react/docs/rules/forbid-prop-types.md"
-    },
-    "sdk-codegen/node_modules/eslint-plugin-react/docs/rules/no-access-state-in-setstate.md": {
-      "summary": "react/no-access-state-in-setstate",
-      "sourceFile": "sdk-codegen/node_modules/eslint-plugin-react/docs/rules/no-access-state-in-setstate.md"
-    },
-    "sdk-codegen/node_modules/eslint-plugin-react/docs/rules/no-adjacent-inline-elements.md": {
-      "summary": "react/no-adjacent-inline-elements",
-      "sourceFile": "sdk-codegen/node_modules/eslint-plugin-react/docs/rules/no-adjacent-inline-elements.md"
-    },
-    "sdk-codegen/node_modules/eslint-plugin-react/docs/rules/no-array-index-key.md": {
-      "summary": "react/no-array-index-key",
-      "sourceFile": "sdk-codegen/node_modules/eslint-plugin-react/docs/rules/no-array-index-key.md"
-    },
-    "sdk-codegen/node_modules/eslint-plugin-react/docs/rules/no-children-prop.md": {
-      "summary": "react/no-children-prop",
-      "sourceFile": "sdk-codegen/node_modules/eslint-plugin-react/docs/rules/no-children-prop.md"
-    },
-    "sdk-codegen/node_modules/eslint-plugin-react/docs/rules/no-danger.md": {
-      "summary": "react/no-danger",
-      "sourceFile": "sdk-codegen/node_modules/eslint-plugin-react/docs/rules/no-danger.md"
-    },
-    "sdk-codegen/node_modules/eslint-plugin-react/docs/rules/no-danger-with-children.md": {
-      "summary": "react/no-danger-with-children",
-      "sourceFile": "sdk-codegen/node_modules/eslint-plugin-react/docs/rules/no-danger-with-children.md"
-    },
-    "sdk-codegen/node_modules/eslint-plugin-react/docs/rules/no-deprecated.md": {
-      "summary": "react/no-deprecated",
-      "sourceFile": "sdk-codegen/node_modules/eslint-plugin-react/docs/rules/no-deprecated.md"
-    },
-    "sdk-codegen/node_modules/eslint-plugin-react/docs/rules/no-did-mount-set-state.md": {
-      "summary": "react/no-did-mount-set-state",
-      "sourceFile": "sdk-codegen/node_modules/eslint-plugin-react/docs/rules/no-did-mount-set-state.md"
-    },
-    "sdk-codegen/node_modules/eslint-plugin-react/docs/rules/no-did-update-set-state.md": {
-      "summary": "react/no-did-update-set-state",
-      "sourceFile": "sdk-codegen/node_modules/eslint-plugin-react/docs/rules/no-did-update-set-state.md"
-    },
-    "sdk-codegen/node_modules/eslint-plugin-react/docs/rules/no-direct-mutation-state.md": {
-      "summary": "react/no-direct-mutation-state",
-      "sourceFile": "sdk-codegen/node_modules/eslint-plugin-react/docs/rules/no-direct-mutation-state.md"
-    },
-    "sdk-codegen/node_modules/eslint-plugin-react/docs/rules/no-find-dom-node.md": {
-      "summary": "react/no-find-dom-node",
-      "sourceFile": "sdk-codegen/node_modules/eslint-plugin-react/docs/rules/no-find-dom-node.md"
-    },
-    "sdk-codegen/node_modules/eslint-plugin-react/docs/rules/no-is-mounted.md": {
-      "summary": "react/no-is-mounted",
-      "sourceFile": "sdk-codegen/node_modules/eslint-plugin-react/docs/rules/no-is-mounted.md"
-    },
-    "sdk-codegen/node_modules/eslint-plugin-react/docs/rules/no-multi-comp.md": {
-      "summary": "react/no-multi-comp",
-      "sourceFile": "sdk-codegen/node_modules/eslint-plugin-react/docs/rules/no-multi-comp.md"
-    },
-    "sdk-codegen/node_modules/eslint-plugin-react/docs/rules/no-redundant-should-component-update.md": {
-      "summary": "react/no-redundant-should-component-update",
-      "sourceFile": "sdk-codegen/node_modules/eslint-plugin-react/docs/rules/no-redundant-should-component-update.md"
-    },
-    "sdk-codegen/node_modules/eslint-plugin-react/docs/rules/no-render-return-value.md": {
-      "summary": "react/no-render-return-value",
-      "sourceFile": "sdk-codegen/node_modules/eslint-plugin-react/docs/rules/no-render-return-value.md"
-    },
-    "sdk-codegen/node_modules/eslint-plugin-react/docs/rules/no-set-state.md": {
-      "summary": "react/no-set-state",
-      "sourceFile": "sdk-codegen/node_modules/eslint-plugin-react/docs/rules/no-set-state.md"
-    },
-    "sdk-codegen/node_modules/eslint-plugin-react/docs/rules/no-string-refs.md": {
-      "summary": "react/no-string-refs",
-      "sourceFile": "sdk-codegen/node_modules/eslint-plugin-react/docs/rules/no-string-refs.md"
-    },
-    "sdk-codegen/node_modules/eslint-plugin-react/docs/rules/no-this-in-sfc.md": {
-      "summary": "react/no-this-in-sfc",
-      "sourceFile": "sdk-codegen/node_modules/eslint-plugin-react/docs/rules/no-this-in-sfc.md"
-    },
-    "sdk-codegen/node_modules/eslint-plugin-react/docs/rules/no-typos.md": {
-      "summary": "react/no-typos",
-      "sourceFile": "sdk-codegen/node_modules/eslint-plugin-react/docs/rules/no-typos.md"
-    },
-    "sdk-codegen/node_modules/eslint-plugin-react/docs/rules/no-unescaped-entities.md": {
-      "summary": "react/no-unescaped-entities",
-      "sourceFile": "sdk-codegen/node_modules/eslint-plugin-react/docs/rules/no-unescaped-entities.md"
-    },
-    "sdk-codegen/node_modules/eslint-plugin-react/docs/rules/no-unsafe.md": {
-      "summary": "react/no-unsafe",
-      "sourceFile": "sdk-codegen/node_modules/eslint-plugin-react/docs/rules/no-unsafe.md"
-    },
-    "sdk-codegen/node_modules/eslint-plugin-react/docs/rules/no-unused-prop-types.md": {
-      "summary": "react/no-unused-prop-types",
-      "sourceFile": "sdk-codegen/node_modules/eslint-plugin-react/docs/rules/no-unused-prop-types.md"
-    },
-    "sdk-codegen/node_modules/eslint-plugin-react/docs/rules/no-unused-state.md": {
-      "summary": "react/no-unused-state",
-      "sourceFile": "sdk-codegen/node_modules/eslint-plugin-react/docs/rules/no-unused-state.md"
-    },
-    "sdk-codegen/node_modules/eslint-plugin-react/docs/rules/no-will-update-set-state.md": {
-      "summary": "react/no-will-update-set-state",
-      "sourceFile": "sdk-codegen/node_modules/eslint-plugin-react/docs/rules/no-will-update-set-state.md"
-    },
-    "sdk-codegen/node_modules/eslint-plugin-react/docs/rules/prefer-es6-class.md": {
-      "summary": "react/prefer-es6-class",
-      "sourceFile": "sdk-codegen/node_modules/eslint-plugin-react/docs/rules/prefer-es6-class.md"
-    },
-    "sdk-codegen/node_modules/eslint-plugin-react/docs/rules/prefer-stateless-function.md": {
-      "summary": "react/prefer-stateless-function",
-      "sourceFile": "sdk-codegen/node_modules/eslint-plugin-react/docs/rules/prefer-stateless-function.md"
-    },
-    "sdk-codegen/node_modules/eslint-plugin-react/docs/rules/prop-types.md": {
-      "summary": "react/prop-types",
-      "sourceFile": "sdk-codegen/node_modules/eslint-plugin-react/docs/rules/prop-types.md"
-    },
-    "sdk-codegen/node_modules/eslint-plugin-react/docs/rules/react-in-jsx-scope.md": {
-      "summary": "react/react-in-jsx-scope",
-      "sourceFile": "sdk-codegen/node_modules/eslint-plugin-react/docs/rules/react-in-jsx-scope.md"
-    },
-    "sdk-codegen/node_modules/eslint-plugin-react/docs/rules/require-default-props.md": {
-      "summary": "react/require-default-props",
-      "sourceFile": "sdk-codegen/node_modules/eslint-plugin-react/docs/rules/require-default-props.md"
-    },
-    "sdk-codegen/node_modules/eslint-plugin-react/docs/rules/require-optimization.md": {
-      "summary": "react/require-optimization",
-      "sourceFile": "sdk-codegen/node_modules/eslint-plugin-react/docs/rules/require-optimization.md"
-    },
-    "sdk-codegen/node_modules/eslint-plugin-react/docs/rules/require-render-return.md": {
-      "summary": "react/require-render-return",
-      "sourceFile": "sdk-codegen/node_modules/eslint-plugin-react/docs/rules/require-render-return.md"
-    },
-    "sdk-codegen/node_modules/eslint-plugin-react/docs/rules/sort-comp.md": {
-      "summary": "react/sort-comp",
-      "sourceFile": "sdk-codegen/node_modules/eslint-plugin-react/docs/rules/sort-comp.md"
-    },
-    "sdk-codegen/node_modules/eslint-plugin-react/docs/rules/sort-prop-types.md": {
-      "summary": "react/sort-prop-types",
-      "sourceFile": "sdk-codegen/node_modules/eslint-plugin-react/docs/rules/sort-prop-types.md"
-    },
-    "sdk-codegen/node_modules/eslint-plugin-react/docs/rules/state-in-constructor.md": {
-      "summary": "react/state-in-constructor",
-      "sourceFile": "sdk-codegen/node_modules/eslint-plugin-react/docs/rules/state-in-constructor.md"
-    },
-    "sdk-codegen/node_modules/eslint-plugin-react/docs/rules/static-property-placement.md": {
-      "summary": "react/static-property-placement",
-      "sourceFile": "sdk-codegen/node_modules/eslint-plugin-react/docs/rules/static-property-placement.md"
-    },
-    "sdk-codegen/node_modules/eslint-plugin-react/docs/rules/style-prop-object.md": {
-      "summary": "react/style-prop-object",
-      "sourceFile": "sdk-codegen/node_modules/eslint-plugin-react/docs/rules/style-prop-object.md"
-    },
-    "sdk-codegen/node_modules/eslint-plugin-react/docs/rules/jsx-child-element-spacing.md": {
-      "summary": "react/jsx-child-element-spacing",
-      "sourceFile": "sdk-codegen/node_modules/eslint-plugin-react/docs/rules/jsx-child-element-spacing.md"
-    },
-    "sdk-codegen/node_modules/eslint-plugin-react/docs/rules/jsx-filename-extension.md": {
-      "summary": "react/jsx-filename-extension",
-      "sourceFile": "sdk-codegen/node_modules/eslint-plugin-react/docs/rules/jsx-filename-extension.md"
-    },
-    "sdk-codegen/node_modules/eslint-plugin-react/docs/rules/jsx-handler-names.md": {
-      "summary": "react/jsx-handler-names",
-      "sourceFile": "sdk-codegen/node_modules/eslint-plugin-react/docs/rules/jsx-handler-names.md"
-    },
-    "sdk-codegen/node_modules/eslint-plugin-react/docs/rules/jsx-key.md": {
-      "summary": "react/jsx-key",
-      "sourceFile": "sdk-codegen/node_modules/eslint-plugin-react/docs/rules/jsx-key.md"
-    },
-    "sdk-codegen/node_modules/eslint-plugin-react/docs/rules/jsx-max-depth.md": {
-      "summary": "react/jsx-max-depth",
-      "sourceFile": "sdk-codegen/node_modules/eslint-plugin-react/docs/rules/jsx-max-depth.md"
-    },
-    "sdk-codegen/node_modules/eslint-plugin-react/docs/rules/jsx-no-bind.md": {
-      "summary": "react/jsx-no-bind",
-      "sourceFile": "sdk-codegen/node_modules/eslint-plugin-react/docs/rules/jsx-no-bind.md"
-    },
-    "sdk-codegen/node_modules/eslint-plugin-react/docs/rules/jsx-no-comment-textnodes.md": {
-      "summary": "react/jsx-no-comment-textnodes",
-      "sourceFile": "sdk-codegen/node_modules/eslint-plugin-react/docs/rules/jsx-no-comment-textnodes.md"
-    },
-    "sdk-codegen/node_modules/eslint-plugin-react/docs/rules/jsx-no-duplicate-props.md": {
-      "summary": "react/jsx-no-duplicate-props",
-      "sourceFile": "sdk-codegen/node_modules/eslint-plugin-react/docs/rules/jsx-no-duplicate-props.md"
-    },
-    "sdk-codegen/node_modules/eslint-plugin-react/docs/rules/jsx-no-literals.md": {
-      "summary": "react/jsx-no-literals",
-      "sourceFile": "sdk-codegen/node_modules/eslint-plugin-react/docs/rules/jsx-no-literals.md"
-    },
-    "sdk-codegen/node_modules/eslint-plugin-react/docs/rules/jsx-no-script-url.md": {
-      "summary": "react/jsx-no-script-url",
-      "sourceFile": "sdk-codegen/node_modules/eslint-plugin-react/docs/rules/jsx-no-script-url.md"
-    },
-    "sdk-codegen/node_modules/eslint-plugin-react/docs/rules/jsx-no-target-blank.md": {
-      "summary": "react/jsx-no-target-blank",
-      "sourceFile": "sdk-codegen/node_modules/eslint-plugin-react/docs/rules/jsx-no-target-blank.md"
-    },
-    "sdk-codegen/node_modules/eslint-plugin-react/docs/rules/jsx-pascal-case.md": {
-      "summary": "react/jsx-pascal-case",
-      "sourceFile": "sdk-codegen/node_modules/eslint-plugin-react/docs/rules/jsx-pascal-case.md"
-    },
-    "sdk-codegen/node_modules/eslint-plugin-react/docs/rules/jsx-props-no-spreading.md": {
-      "summary": "react/jsx-props-no-spreading",
-      "sourceFile": "sdk-codegen/node_modules/eslint-plugin-react/docs/rules/jsx-props-no-spreading.md"
-    },
-    "sdk-codegen/node_modules/eslint-plugin-react/docs/rules/jsx-sort-default-props.md": {
-      "summary": "react/jsx-sort-default-props",
-      "sourceFile": "sdk-codegen/node_modules/eslint-plugin-react/docs/rules/jsx-sort-default-props.md"
-    },
-    "sdk-codegen/node_modules/eslint-plugin-react/docs/rules/jsx-uses-react.md": {
-      "summary": "react/jsx-uses-react",
-      "sourceFile": "sdk-codegen/node_modules/eslint-plugin-react/docs/rules/jsx-uses-react.md"
-    },
-    "sdk-codegen/node_modules/eslint-plugin-react/docs/rules/jsx-uses-vars.md": {
-      "summary": "react/jsx-uses-vars",
-      "sourceFile": "sdk-codegen/node_modules/eslint-plugin-react/docs/rules/jsx-uses-vars.md"
-    },
-    "sdk-codegen/node_modules/eslint-plugin-react/docs/rules/no-unknown-property.md": {
-      "summary": "react/no-unknown-property",
-      "sourceFile": "sdk-codegen/node_modules/eslint-plugin-react/docs/rules/no-unknown-property.md"
-    },
-    "sdk-codegen/node_modules/express/Security.md": {
-      "summary": "Security Policies and Procedures",
-      "sourceFile": "sdk-codegen/node_modules/express/Security.md"
-    },
-    "sdk-codegen/node_modules/express/Contributing.md": {
-      "summary": "Contributing Guide",
-      "sourceFile": "sdk-codegen/node_modules/express/Contributing.md"
-    },
-    "sdk-codegen/node_modules/findup-sync/node_modules/define-property/changelog.md": {
-      "summary": "the CHANGELOG",
-      "sourceFile": "sdk-codegen/node_modules/findup-sync/node_modules/define-property/changelog.md"
-    },
-    "sdk-codegen/node_modules/findup-sync/node_modules/micromatch/.github/contributing.md": {
-      "summary": "contributing guide",
-      "sourceFile": "sdk-codegen/node_modules/findup-sync/node_modules/micromatch/.github/contributing.md"
-    },
-    "sdk-codegen/node_modules/flat-cache/changelog.md": {
-      "summary": "changelog",
-      "sourceFile": "sdk-codegen/node_modules/flat-cache/changelog.md"
-    },
-    "sdk-codegen/node_modules/fs-extra/docs/copy.md": {
-      "summary": "copy",
-      "sourceFile": "sdk-codegen/node_modules/fs-extra/docs/copy.md"
-    },
-    "sdk-codegen/node_modules/fs-extra/docs/emptyDir.md": {
-      "summary": "emptyDir",
-      "sourceFile": "sdk-codegen/node_modules/fs-extra/docs/emptyDir.md"
-    },
-    "sdk-codegen/node_modules/fs-extra/docs/ensureFile.md": {
-      "summary": "ensureFile",
-      "sourceFile": "sdk-codegen/node_modules/fs-extra/docs/ensureFile.md"
-    },
-    "sdk-codegen/node_modules/fs-extra/docs/ensureDir.md": {
-      "summary": "mkdirs",
-      "sourceFile": "sdk-codegen/node_modules/fs-extra/docs/ensureDir.md"
-    },
-    "sdk-codegen/node_modules/fs-extra/docs/ensureLink.md": {
-      "summary": "ensureLink",
-      "sourceFile": "sdk-codegen/node_modules/fs-extra/docs/ensureLink.md"
-    },
-    "sdk-codegen/node_modules/fs-extra/docs/ensureSymlink.md": {
-      "summary": "ensureSymlink",
-      "sourceFile": "sdk-codegen/node_modules/fs-extra/docs/ensureSymlink.md"
-    },
-    "sdk-codegen/node_modules/fs-extra/docs/move.md": {
-      "summary": "move",
-      "sourceFile": "sdk-codegen/node_modules/fs-extra/docs/move.md"
-    },
-    "sdk-codegen/node_modules/fs-extra/docs/outputFile.md": {
-      "summary": "outputFile",
-      "sourceFile": "sdk-codegen/node_modules/fs-extra/docs/outputFile.md"
-    },
-    "sdk-codegen/node_modules/fs-extra/docs/outputJson.md": {
-      "summary": "outputJson",
-      "sourceFile": "sdk-codegen/node_modules/fs-extra/docs/outputJson.md"
-    },
-    "sdk-codegen/node_modules/fs-extra/docs/pathExists.md": {
-      "summary": "pathExists",
-      "sourceFile": "sdk-codegen/node_modules/fs-extra/docs/pathExists.md"
-    },
-    "sdk-codegen/node_modules/fs-extra/docs/readJson.md": {
-      "summary": "readJson",
-      "sourceFile": "sdk-codegen/node_modules/fs-extra/docs/readJson.md"
-    },
-    "sdk-codegen/node_modules/fs-extra/docs/remove.md": {
-      "summary": "remove",
-      "sourceFile": "sdk-codegen/node_modules/fs-extra/docs/remove.md"
-    },
-    "sdk-codegen/node_modules/fs-extra/docs/writeJson.md": {
-      "summary": "writeJson",
-      "sourceFile": "sdk-codegen/node_modules/fs-extra/docs/writeJson.md"
-    },
-    "sdk-codegen/node_modules/fs-extra/docs/copy-sync.md": {
-      "summary": "copySync",
-      "sourceFile": "sdk-codegen/node_modules/fs-extra/docs/copy-sync.md"
-    },
-    "sdk-codegen/node_modules/fs-extra/docs/emptyDir-sync.md": {
-      "summary": "emptyDirSync",
-      "sourceFile": "sdk-codegen/node_modules/fs-extra/docs/emptyDir-sync.md"
-    },
-    "sdk-codegen/node_modules/fs-extra/docs/ensureFile-sync.md": {
-      "summary": "ensureFileSync",
-      "sourceFile": "sdk-codegen/node_modules/fs-extra/docs/ensureFile-sync.md"
-    },
-    "sdk-codegen/node_modules/fs-extra/docs/ensureDir-sync.md": {
-      "summary": "mkdirsSync",
-      "sourceFile": "sdk-codegen/node_modules/fs-extra/docs/ensureDir-sync.md"
-    },
-    "sdk-codegen/node_modules/fs-extra/docs/ensureLink-sync.md": {
-      "summary": "ensureLinkSync",
-      "sourceFile": "sdk-codegen/node_modules/fs-extra/docs/ensureLink-sync.md"
-    },
-    "sdk-codegen/node_modules/fs-extra/docs/ensureSymlink-sync.md": {
-      "summary": "ensureSymlinkSync",
-      "sourceFile": "sdk-codegen/node_modules/fs-extra/docs/ensureSymlink-sync.md"
-    },
-    "sdk-codegen/node_modules/fs-extra/docs/move-sync.md": {
-      "summary": "moveSync",
-      "sourceFile": "sdk-codegen/node_modules/fs-extra/docs/move-sync.md"
-    },
-    "sdk-codegen/node_modules/fs-extra/docs/outputFile-sync.md": {
-      "summary": "outputFileSync",
-      "sourceFile": "sdk-codegen/node_modules/fs-extra/docs/outputFile-sync.md"
-    },
-    "sdk-codegen/node_modules/fs-extra/docs/outputJson-sync.md": {
-      "summary": "outputJsonSync",
-      "sourceFile": "sdk-codegen/node_modules/fs-extra/docs/outputJson-sync.md"
-    },
-    "sdk-codegen/node_modules/fs-extra/docs/pathExists-sync.md": {
-      "summary": "pathExistsSync",
-      "sourceFile": "sdk-codegen/node_modules/fs-extra/docs/pathExists-sync.md"
-    },
-    "sdk-codegen/node_modules/fs-extra/docs/readJson-sync.md": {
-      "summary": "readJsonSync",
-      "sourceFile": "sdk-codegen/node_modules/fs-extra/docs/readJson-sync.md"
-    },
-    "sdk-codegen/node_modules/fs-extra/docs/remove-sync.md": {
-      "summary": "removeSync",
-      "sourceFile": "sdk-codegen/node_modules/fs-extra/docs/remove-sync.md"
-    },
-    "sdk-codegen/node_modules/fs-extra/docs/writeJson-sync.md": {
-      "summary": "writeJsonSync",
-      "sourceFile": "sdk-codegen/node_modules/fs-extra/docs/writeJson-sync.md"
-    },
-    "sdk-codegen/node_modules/fs-extra/docs/fs-read-write.md": {
-      "summary": "notes on `fs.read()` & `fs.write()`",
-      "sourceFile": "sdk-codegen/node_modules/fs-extra/docs/fs-read-write.md"
-    },
-    "sdk-codegen/node_modules/globby/node_modules/define-property/changelog.md": {
-      "summary": "the CHANGELOG",
-      "sourceFile": "sdk-codegen/node_modules/globby/node_modules/define-property/changelog.md"
-    },
-    "sdk-codegen/node_modules/globby/node_modules/micromatch/.github/contributing.md": {
-      "summary": "contributing guide",
-      "sourceFile": "sdk-codegen/node_modules/globby/node_modules/micromatch/.github/contributing.md"
-    },
-    "sdk-codegen/node_modules/globjoin/CHANGELOG.md": {
-      "summary": "Changelog",
-      "sourceFile": "sdk-codegen/node_modules/globjoin/CHANGELOG.md"
-    },
-    "sdk-codegen/node_modules/gonzales-pe/README.md": {
-      "summary": "Readme",
-      "sourceFile": "sdk-codegen/node_modules/gonzales-pe/README.md"
-    },
-    "sdk-codegen/node_modules/har-validator/docs/async.md": {
-      "summary": "callback API",
-      "sourceFile": "sdk-codegen/node_modules/har-validator/docs/async.md"
-    },
-    "sdk-codegen/node_modules/hash-base/node_modules/readable-stream/README.md": {
-      "summary": "README.md",
-      "sourceFile": "sdk-codegen/node_modules/hash-base/node_modules/readable-stream/README.md"
-    },
-    "sdk-codegen/node_modules/history/CONTRIBUTING.md": {
-      "summary": "our contributing guidelines",
-      "sourceFile": "sdk-codegen/node_modules/history/CONTRIBUTING.md"
-    },
-    "sdk-codegen/node_modules/homedir-polyfill/contributing.md": {
-      "summary": "contributing guide",
-      "sourceFile": "sdk-codegen/node_modules/homedir-polyfill/contributing.md"
-    },
-    "sdk-codegen/node_modules/html-to-react/node_modules/domutils/docs/README.md": {
-      "summary": "Documentation:",
-      "sourceFile": "sdk-codegen/node_modules/html-to-react/node_modules/domutils/docs/README.md"
-    },
-    "sdk-codegen/node_modules/htmlparser2/node_modules/readable-stream/README.md": {
-      "summary": "README.md",
-      "sourceFile": "sdk-codegen/node_modules/htmlparser2/node_modules/readable-stream/README.md"
-    },
-    "sdk-codegen/node_modules/http-proxy/UPGRADING.md": {
-      "summary": "here",
-      "sourceFile": "sdk-codegen/node_modules/http-proxy/UPGRADING.md"
-    },
-    "sdk-codegen/node_modules/http-proxy-middleware/node_modules/define-property/changelog.md": {
-      "summary": "the CHANGELOG",
-      "sourceFile": "sdk-codegen/node_modules/http-proxy-middleware/node_modules/define-property/changelog.md"
-    },
-    "sdk-codegen/node_modules/http-proxy-middleware/node_modules/micromatch/.github/contributing.md": {
-      "summary": "contributing guide",
-      "sourceFile": "sdk-codegen/node_modules/http-proxy-middleware/node_modules/micromatch/.github/contributing.md"
-    },
-    "sdk-codegen/node_modules/http-signature/http_signing.md": {
-      "summary": "HTTP Signature Scheme",
-      "sourceFile": "sdk-codegen/node_modules/http-signature/http_signing.md"
-    },
-    "sdk-codegen/node_modules/human-signals/CODE_OF_CONDUCT.md": {
-      "summary": "Code of conduct",
-      "sourceFile": "sdk-codegen/node_modules/human-signals/CODE_OF_CONDUCT.md"
-    },
-    "sdk-codegen/node_modules/human-signals/CONTRIBUTING.md": {
-      "summary": "guidelines",
-      "sourceFile": "sdk-codegen/node_modules/human-signals/CONTRIBUTING.md"
-    },
-    "sdk-codegen/node_modules/istanbul-lib-instrument/v0-changes.md": {
-      "summary": "v0-changes.md",
-      "sourceFile": "sdk-codegen/node_modules/istanbul-lib-instrument/v0-changes.md"
-    },
-    "sdk-codegen/node_modules/json-parse-better-errors/CONTRIBUTING.md": {
-      "summary": "Contributor Guide",
-      "sourceFile": "sdk-codegen/node_modules/json-parse-better-errors/CONTRIBUTING.md"
-    },
-    "sdk-codegen/node_modules/json-parse-better-errors/CODE_OF_CONDUCT.md": {
-      "summary": "Code of Conduct",
-      "sourceFile": "sdk-codegen/node_modules/json-parse-better-errors/CODE_OF_CONDUCT.md"
-    },
-    "sdk-codegen/node_modules/json-parse-better-errors/CHANGELOG.md": {
-      "summary": "Changelog",
-      "sourceFile": "sdk-codegen/node_modules/json-parse-better-errors/CHANGELOG.md"
-    },
-    "sdk-codegen/node_modules/json5/README.md": {
-      "summary": "usage documentation",
-      "sourceFile": "sdk-codegen/node_modules/json5/README.md"
-    },
-    "sdk-codegen/node_modules/json5/LICENSE.md": {
-      "summary": "LICENSE.md",
-      "sourceFile": "sdk-codegen/node_modules/json5/LICENSE.md"
-    },
-    "sdk-codegen/node_modules/jsprim/CONTRIBUTING.md": {
-      "summary": "contribution guidelines",
-      "sourceFile": "sdk-codegen/node_modules/jsprim/CONTRIBUTING.md"
-    },
-    "sdk-codegen/node_modules/lint-staged/node_modules/commander/changelogs/CHANGELOG-2.md": {
-      "summary": "2.x",
-      "sourceFile": "sdk-codegen/node_modules/lint-staged/node_modules/commander/changelogs/CHANGELOG-2.md"
-    },
-    "sdk-codegen/node_modules/lint-staged/node_modules/commander/changelogs/CHANGELOG-1.md": {
-      "summary": "1.x",
-      "sourceFile": "sdk-codegen/node_modules/lint-staged/node_modules/commander/changelogs/CHANGELOG-1.md"
-    },
-    "sdk-codegen/node_modules/lint-staged/node_modules/commander/changelogs/CHANGELOG-0.md": {
-      "summary": "0.x",
-      "sourceFile": "sdk-codegen/node_modules/lint-staged/node_modules/commander/changelogs/CHANGELOG-0.md"
-    },
-    "sdk-codegen/node_modules/lint-staged/node_modules/commander/Readme_zh-CN.md": {
-      "summary": "简体中文",
-      "sourceFile": "sdk-codegen/node_modules/lint-staged/node_modules/commander/Readme_zh-CN.md"
-    },
-    "sdk-codegen/node_modules/listr2/CHANGELOG.md": {
-      "summary": "the entry in changelog.",
-      "sourceFile": "sdk-codegen/node_modules/listr2/CHANGELOG.md"
+    "sdk-codegen/node_modules/conventional-commits-parser/node_modules/type-fest/source/package-json.d.ts": {
+      "summary": "`PackageJson`",
+      "sourceFile": "sdk-codegen/node_modules/conventional-commits-parser/node_modules/type-fest/source/package-json.d.ts"
+    },
+    "sdk-codegen/node_modules/conventional-commits-parser/node_modules/type-fest/source/tsconfig-json.d.ts": {
+      "summary": "`TsConfigJson`",
+      "sourceFile": "sdk-codegen/node_modules/conventional-commits-parser/node_modules/type-fest/source/tsconfig-json.d.ts"
+    },
+    "sdk-codegen/node_modules/fast-glob/src/managers/tasks.ts": {
+      "summary": "`Task`",
+      "sourceFile": "sdk-codegen/node_modules/fast-glob/src/managers/tasks.ts"
     },
     "sdk-codegen/node_modules/listr2/examples/subtasks.example.ts": {
       "summary": "examples section",
@@ -2090,165 +670,21 @@
       "summary": "verbose renderer",
       "sourceFile": "sdk-codegen/node_modules/listr2/src/renderer/verbose.renderer.ts"
     },
-    "sdk-codegen/node_modules/load-json-file/node_modules/type-fest/.github/contributing.md": {
-      "summary": "contributing guidelines",
-      "sourceFile": "sdk-codegen/node_modules/load-json-file/node_modules/type-fest/.github/contributing.md"
-    },
     "sdk-codegen/node_modules/load-json-file/node_modules/type-fest/index.d.ts": {
       "summary": "types file",
       "sourceFile": "sdk-codegen/node_modules/load-json-file/node_modules/type-fest/index.d.ts"
-    },
-    "sdk-codegen/node_modules/loader-utils/node_modules/json5/README.md": {
-      "summary": "usage documentation",
-      "sourceFile": "sdk-codegen/node_modules/loader-utils/node_modules/json5/README.md"
-    },
-    "sdk-codegen/node_modules/loader-utils/node_modules/json5/LICENSE.md": {
-      "summary": "LICENSE.md",
-      "sourceFile": "sdk-codegen/node_modules/loader-utils/node_modules/json5/LICENSE.md"
-    },
-    "sdk-codegen/node_modules/make-fetch-happen/CONTRIBUTING.md": {
-      "summary": "Contributor Guide",
-      "sourceFile": "sdk-codegen/node_modules/make-fetch-happen/CONTRIBUTING.md"
-    },
-    "sdk-codegen/node_modules/make-fetch-happen/CODE_OF_CONDUCT.md": {
-      "summary": "Code of Conduct",
-      "sourceFile": "sdk-codegen/node_modules/make-fetch-happen/CODE_OF_CONDUCT.md"
-    },
-    "sdk-codegen/node_modules/make-fetch-happen/CHANGELOG.md": {
-      "summary": "Changelog",
-      "sourceFile": "sdk-codegen/node_modules/make-fetch-happen/CHANGELOG.md"
-    },
-    "sdk-codegen/node_modules/micromatch/.github/contributing.md": {
-      "summary": "contributing guide",
-      "sourceFile": "sdk-codegen/node_modules/micromatch/.github/contributing.md"
-    },
-    "sdk-codegen/node_modules/micromatch/node_modules/braces/CHANGELOG.md": {
-      "summary": "changelog",
-      "sourceFile": "sdk-codegen/node_modules/micromatch/node_modules/braces/CHANGELOG.md"
-    },
-    "sdk-codegen/node_modules/nanomatch/.github/contributing.md": {
-      "summary": "contributing guide",
-      "sourceFile": "sdk-codegen/node_modules/nanomatch/.github/contributing.md"
-    },
-    "sdk-codegen/node_modules/nanomatch/node_modules/define-property/changelog.md": {
-      "summary": "the CHANGELOG",
-      "sourceFile": "sdk-codegen/node_modules/nanomatch/node_modules/define-property/changelog.md"
-    },
-    "sdk-codegen/node_modules/nearley/.github/CONTRIBUTING.md": {
-      "summary": "this document",
-      "sourceFile": "sdk-codegen/node_modules/nearley/.github/CONTRIBUTING.md"
-    },
-    "sdk-codegen/node_modules/node-fetch/ERROR-HANDLING.md": {
-      "summary": "error handling document",
-      "sourceFile": "sdk-codegen/node_modules/node-fetch/ERROR-HANDLING.md"
-    },
-    "sdk-codegen/node_modules/node-fetch/LIMITS.md": {
-      "summary": "Known Differences",
-      "sourceFile": "sdk-codegen/node_modules/node-fetch/LIMITS.md"
-    },
-    "sdk-codegen/node_modules/node-fetch/UPGRADE-GUIDE.md": {
-      "summary": "`1.x` readme](https://github.com/bitinn/node-fetch/blob/1.x/README.md), [changelog](https://github.com/bitinn/node-fetch/blob/1.x/CHANGELOG.md) and [2.x upgrade guide",
-      "sourceFile": "sdk-codegen/node_modules/node-fetch/UPGRADE-GUIDE.md"
-    },
-    "sdk-codegen/node_modules/node-fetch-h2/ERROR-HANDLING.md": {
-      "summary": "error handling document",
-      "sourceFile": "sdk-codegen/node_modules/node-fetch-h2/ERROR-HANDLING.md"
-    },
-    "sdk-codegen/node_modules/node-fetch-h2/LIMITS.md": {
-      "summary": "Known Differences",
-      "sourceFile": "sdk-codegen/node_modules/node-fetch-h2/LIMITS.md"
-    },
-    "sdk-codegen/node_modules/node-fetch-h2/UPGRADE-GUIDE.md": {
-      "summary": "see `1.x` readme](https://github.com/bitinn/node-fetch/blob/1.x/README.md), [changelog](https://github.com/bitinn/node-fetch/blob/1.x/CHANGELOG.md) and [2.x upgrade guide",
-      "sourceFile": "sdk-codegen/node_modules/node-fetch-h2/UPGRADE-GUIDE.md"
-    },
-    "sdk-codegen/node_modules/node-forge/flash/README.md": {
-      "summary": "flash README",
-      "sourceFile": "sdk-codegen/node_modules/node-forge/flash/README.md"
-    },
-    "sdk-codegen/node_modules/node-gyp/macOS_Catalina.md": {
-      "summary": "macOS_Catalina.md",
-      "sourceFile": "sdk-codegen/node_modules/node-gyp/macOS_Catalina.md"
-    },
-    "sdk-codegen/node_modules/node-notifier/DECISION_FLOW.md": {
-      "summary": "reporter flow chart",
-      "sourceFile": "sdk-codegen/node_modules/node-notifier/DECISION_FLOW.md"
-    },
-    "sdk-codegen/node_modules/npm-run-all/docs/run-p.md": {
-      "summary": "index](../README.md) | [npm-run-all](npm-run-all.md) | [run-s](run-s.md) | [run-p",
-      "sourceFile": "sdk-codegen/node_modules/npm-run-all/docs/run-p.md"
-    },
-    "sdk-codegen/node_modules/npm-run-all/docs/node-api.md": {
-      "summary": "index](../README.md) | [npm-run-all](npm-run-all.md) | run-s | [run-p](run-p.md) | [Node API",
-      "sourceFile": "sdk-codegen/node_modules/npm-run-all/docs/node-api.md"
-    },
-    "sdk-codegen/node_modules/oas-linter/docs/options.md": {
-      "summary": "documentation",
-      "sourceFile": "sdk-codegen/node_modules/oas-linter/docs/options.md"
-    },
-    "sdk-codegen/node_modules/oas-resolver/docs/options.md": {
-      "summary": "documentation",
-      "sourceFile": "sdk-codegen/node_modules/oas-resolver/docs/options.md"
-    },
-    "sdk-codegen/node_modules/oas-validator/docs/options.md": {
-      "summary": "documentation",
-      "sourceFile": "sdk-codegen/node_modules/oas-validator/docs/options.md"
-    },
-    "sdk-codegen/node_modules/parse-passwd/contributing.md": {
-      "summary": "contributing guide",
-      "sourceFile": "sdk-codegen/node_modules/parse-passwd/contributing.md"
     },
     "sdk-codegen/node_modules/path-to-regexp/index.d.ts": {
       "summary": "`.d.ts`",
       "sourceFile": "sdk-codegen/node_modules/path-to-regexp/index.d.ts"
     },
-    "sdk-codegen/node_modules/picomatch/.github/contributing.md": {
-      "summary": "contributing guide",
-      "sourceFile": "sdk-codegen/node_modules/picomatch/.github/contributing.md"
-    },
-    "sdk-codegen/node_modules/polished/CONTRIBUTING.md": {
-      "summary": "[Contribute",
-      "sourceFile": "sdk-codegen/node_modules/polished/CONTRIBUTING.md"
-    },
-    "sdk-codegen/node_modules/polished/LICENSE.md": {
-      "summary": "LICENSE.md",
-      "sourceFile": "sdk-codegen/node_modules/polished/LICENSE.md"
-    },
-    "sdk-codegen/node_modules/postcss/README-cn.md": {
-      "summary": "`README-cn.md`",
-      "sourceFile": "sdk-codegen/node_modules/postcss/README-cn.md"
-    },
-    "sdk-codegen/node_modules/postcss/CONTRIBUTING.md": {
-      "summary": "Our contributing guidelines",
-      "sourceFile": "sdk-codegen/node_modules/postcss/CONTRIBUTING.md"
-    },
-    "sdk-codegen/node_modules/postcss-selector-parser/API.md": {
-      "summary": "API.md",
-      "sourceFile": "sdk-codegen/node_modules/postcss-selector-parser/API.md"
-    },
-    "sdk-codegen/node_modules/prettier/CONTRIBUTING.md": {
-      "summary": "CONTRIBUTING.md",
-      "sourceFile": "sdk-codegen/node_modules/prettier/CONTRIBUTING.md"
-    },
-    "sdk-codegen/node_modules/react-google-charts/CONTRIBUTING.md": {
-      "summary": "CONTRIBUTING.md",
-      "sourceFile": "sdk-codegen/node_modules/react-google-charts/CONTRIBUTING.md"
-    },
-    "sdk-codegen/node_modules/react-markdown/CHANGELOG.md": {
-      "summary": "CHANGELOG",
-      "sourceFile": "sdk-codegen/node_modules/react-markdown/CHANGELOG.md"
-    },
-    "sdk-codegen/node_modules/react-transition-group/Migration.md": {
-      "summary": "Migration guide from v1",
-      "sourceFile": "sdk-codegen/node_modules/react-transition-group/Migration.md"
-    },
-    "sdk-codegen/node_modules/read-pkg-up/node_modules/read-pkg/node_modules/type-fest/.github/contributing.md": {
-      "summary": "contributing guidelines",
-      "sourceFile": "sdk-codegen/node_modules/read-pkg-up/node_modules/read-pkg/node_modules/type-fest/.github/contributing.md"
-    },
     "sdk-codegen/node_modules/read-pkg-up/node_modules/read-pkg/node_modules/type-fest/source/basic.d.ts": {
-      "summary": "`JsonValue`",
+      "summary": "`ObservableLike`",
       "sourceFile": "sdk-codegen/node_modules/read-pkg-up/node_modules/read-pkg/node_modules/type-fest/source/basic.d.ts"
+    },
+    "sdk-codegen/node_modules/read-pkg-up/node_modules/read-pkg/node_modules/type-fest/source/except.d.ts": {
+      "summary": "`Except`",
+      "sourceFile": "sdk-codegen/node_modules/read-pkg-up/node_modules/read-pkg/node_modules/type-fest/source/except.d.ts"
     },
     "sdk-codegen/node_modules/read-pkg-up/node_modules/read-pkg/node_modules/type-fest/source/mutable.d.ts": {
       "summary": "`Mutable`",
@@ -2270,677 +706,29 @@
       "summary": "`ReadonlyDeep`",
       "sourceFile": "sdk-codegen/node_modules/read-pkg-up/node_modules/read-pkg/node_modules/type-fest/source/readonly-deep.d.ts"
     },
+    "sdk-codegen/node_modules/read-pkg-up/node_modules/read-pkg/node_modules/type-fest/source/literal-union.d.ts": {
+      "summary": "`LiteralUnion`",
+      "sourceFile": "sdk-codegen/node_modules/read-pkg-up/node_modules/read-pkg/node_modules/type-fest/source/literal-union.d.ts"
+    },
     "sdk-codegen/node_modules/read-pkg-up/node_modules/read-pkg/node_modules/type-fest/source/promisable.d.ts": {
       "summary": "`Promisable`",
       "sourceFile": "sdk-codegen/node_modules/read-pkg-up/node_modules/read-pkg/node_modules/type-fest/source/promisable.d.ts"
     },
-    "sdk-codegen/node_modules/readable-stream/README.md": {
-      "summary": "README.md",
-      "sourceFile": "sdk-codegen/node_modules/readable-stream/README.md"
-    },
-    "sdk-codegen/node_modules/readdirp/node_modules/define-property/changelog.md": {
-      "summary": "the CHANGELOG",
-      "sourceFile": "sdk-codegen/node_modules/readdirp/node_modules/define-property/changelog.md"
-    },
-    "sdk-codegen/node_modules/readdirp/node_modules/micromatch/.github/contributing.md": {
-      "summary": "contributing guide",
-      "sourceFile": "sdk-codegen/node_modules/readdirp/node_modules/micromatch/.github/contributing.md"
-    },
-    "sdk-codegen/node_modules/rebass/LICENSE.md": {
-      "summary": "Contributing](CONTRIBUTING.md) | [MIT License",
-      "sourceFile": "sdk-codegen/node_modules/rebass/LICENSE.md"
-    },
-    "sdk-codegen/node_modules/reflexbox/LICENSE.md": {
-      "summary": "MIT License",
-      "sourceFile": "sdk-codegen/node_modules/reflexbox/LICENSE.md"
-    },
-    "sdk-codegen/node_modules/regexpu-core/property-escapes.md": {
-      "summary": "support for Unicode property escapes",
-      "sourceFile": "sdk-codegen/node_modules/regexpu-core/property-escapes.md"
-    },
-    "sdk-codegen/node_modules/rxjs/docs_app/content/guide/v6/migration.md": {
-      "summary": "Current home is MIGRATION.md",
-      "sourceFile": "sdk-codegen/node_modules/rxjs/docs_app/content/guide/v6/migration.md"
-    },
-    "sdk-codegen/node_modules/rxjs/CODE_OF_CONDUCT.md": {
-      "summary": "Contributor Code of Conduct",
-      "sourceFile": "sdk-codegen/node_modules/rxjs/CODE_OF_CONDUCT.md"
-    },
-    "sdk-codegen/node_modules/rxjs/CONTRIBUTING.md": {
-      "summary": "Contribution Guidelines",
-      "sourceFile": "sdk-codegen/node_modules/rxjs/CONTRIBUTING.md"
-    },
-    "sdk-codegen/node_modules/rxjs/doc_app/content/maintainer-guidelines.md": {
-      "summary": "Maintainer Guidelines",
-      "sourceFile": "sdk-codegen/node_modules/rxjs/doc_app/content/maintainer-guidelines.md"
-    },
-    "sdk-codegen/node_modules/rxjs/_esm2015/docs_app/content/guide/v6/migration.md": {
-      "summary": "Current home is MIGRATION.md",
-      "sourceFile": "sdk-codegen/node_modules/rxjs/_esm2015/docs_app/content/guide/v6/migration.md"
-    },
-    "sdk-codegen/node_modules/rxjs/_esm2015/CODE_OF_CONDUCT.md": {
-      "summary": "Contributor Code of Conduct",
-      "sourceFile": "sdk-codegen/node_modules/rxjs/_esm2015/CODE_OF_CONDUCT.md"
-    },
-    "sdk-codegen/node_modules/rxjs/_esm2015/CONTRIBUTING.md": {
-      "summary": "Contribution Guidelines",
-      "sourceFile": "sdk-codegen/node_modules/rxjs/_esm2015/CONTRIBUTING.md"
-    },
-    "sdk-codegen/node_modules/rxjs/_esm2015/doc_app/content/maintainer-guidelines.md": {
-      "summary": "Maintainer Guidelines",
-      "sourceFile": "sdk-codegen/node_modules/rxjs/_esm2015/doc_app/content/maintainer-guidelines.md"
-    },
-    "sdk-codegen/node_modules/rxjs/_esm5/docs_app/content/guide/v6/migration.md": {
-      "summary": "Current home is MIGRATION.md",
-      "sourceFile": "sdk-codegen/node_modules/rxjs/_esm5/docs_app/content/guide/v6/migration.md"
-    },
-    "sdk-codegen/node_modules/rxjs/_esm5/CODE_OF_CONDUCT.md": {
-      "summary": "Contributor Code of Conduct",
-      "sourceFile": "sdk-codegen/node_modules/rxjs/_esm5/CODE_OF_CONDUCT.md"
-    },
-    "sdk-codegen/node_modules/rxjs/_esm5/CONTRIBUTING.md": {
-      "summary": "Contribution Guidelines",
-      "sourceFile": "sdk-codegen/node_modules/rxjs/_esm5/CONTRIBUTING.md"
-    },
-    "sdk-codegen/node_modules/rxjs/_esm5/doc_app/content/maintainer-guidelines.md": {
-      "summary": "Maintainer Guidelines",
-      "sourceFile": "sdk-codegen/node_modules/rxjs/_esm5/doc_app/content/maintainer-guidelines.md"
-    },
-    "sdk-codegen/node_modules/rxjs/src/docs_app/content/guide/v6/migration.md": {
-      "summary": "Current home is MIGRATION.md",
-      "sourceFile": "sdk-codegen/node_modules/rxjs/src/docs_app/content/guide/v6/migration.md"
-    },
-    "sdk-codegen/node_modules/rxjs/src/CODE_OF_CONDUCT.md": {
-      "summary": "Contributor Code of Conduct",
-      "sourceFile": "sdk-codegen/node_modules/rxjs/src/CODE_OF_CONDUCT.md"
-    },
-    "sdk-codegen/node_modules/rxjs/src/CONTRIBUTING.md": {
-      "summary": "Contribution Guidelines",
-      "sourceFile": "sdk-codegen/node_modules/rxjs/src/CONTRIBUTING.md"
-    },
-    "sdk-codegen/node_modules/rxjs/src/doc_app/content/maintainer-guidelines.md": {
-      "summary": "Maintainer Guidelines",
-      "sourceFile": "sdk-codegen/node_modules/rxjs/src/doc_app/content/maintainer-guidelines.md"
-    },
-    "sdk-codegen/node_modules/sane/node_modules/define-property/changelog.md": {
-      "summary": "the CHANGELOG",
-      "sourceFile": "sdk-codegen/node_modules/sane/node_modules/define-property/changelog.md"
-    },
-    "sdk-codegen/node_modules/sane/node_modules/micromatch/.github/contributing.md": {
-      "summary": "contributing guide",
-      "sourceFile": "sdk-codegen/node_modules/sane/node_modules/micromatch/.github/contributing.md"
-    },
-    "sdk-codegen/node_modules/should/CONTRIBUTING.md": {
-      "summary": "CONTRIBUTING",
-      "sourceFile": "sdk-codegen/node_modules/should/CONTRIBUTING.md"
-    },
-    "sdk-codegen/node_modules/snapdragon-node/.github/contributing.md": {
-      "summary": "contributing guide",
-      "sourceFile": "sdk-codegen/node_modules/snapdragon-node/.github/contributing.md"
-    },
-    "sdk-codegen/node_modules/snapdragon-util/.github/contributing.md": {
-      "summary": "contributing guide",
-      "sourceFile": "sdk-codegen/node_modules/snapdragon-util/.github/contributing.md"
-    },
-    "sdk-codegen/node_modules/socks/docs/index.md": {
-      "summary": "Documentation",
-      "sourceFile": "sdk-codegen/node_modules/socks/docs/index.md"
-    },
-    "sdk-codegen/node_modules/socks/docs/migratingFromV1.md": {
-      "summary": "here",
-      "sourceFile": "sdk-codegen/node_modules/socks/docs/migratingFromV1.md"
-    },
-    "sdk-codegen/node_modules/socks/docs/examples/typescript/connectExample.md": {
-      "summary": "Connect command",
-      "sourceFile": "sdk-codegen/node_modules/socks/docs/examples/typescript/connectExample.md"
-    },
-    "sdk-codegen/node_modules/socks/docs/examples/typescript/bindExample.md": {
-      "summary": "Bind command",
-      "sourceFile": "sdk-codegen/node_modules/socks/docs/examples/typescript/bindExample.md"
-    },
-    "sdk-codegen/node_modules/socks/docs/examples/typescript/associateExample.md": {
-      "summary": "Associate command",
-      "sourceFile": "sdk-codegen/node_modules/socks/docs/examples/typescript/associateExample.md"
-    },
-    "sdk-codegen/node_modules/socks/docs/examples/javascript/connectExample.md": {
-      "summary": "Connect command",
-      "sourceFile": "sdk-codegen/node_modules/socks/docs/examples/javascript/connectExample.md"
-    },
-    "sdk-codegen/node_modules/socks/docs/examples/javascript/bindExample.md": {
-      "summary": "Bind command",
-      "sourceFile": "sdk-codegen/node_modules/socks/docs/examples/javascript/bindExample.md"
-    },
-    "sdk-codegen/node_modules/socks/docs/examples/javascript/associateExample.md": {
-      "summary": "Associate command",
-      "sourceFile": "sdk-codegen/node_modules/socks/docs/examples/javascript/associateExample.md"
-    },
-    "sdk-codegen/node_modules/socks/docs/examples/index.md": {
-      "summary": "Code Examples",
-      "sourceFile": "sdk-codegen/node_modules/socks/docs/examples/index.md"
-    },
-    "sdk-codegen/node_modules/spdy-transport/node_modules/readable-stream/README.md": {
-      "summary": "README.md",
-      "sourceFile": "sdk-codegen/node_modules/spdy-transport/node_modules/readable-stream/README.md"
-    },
-    "sdk-codegen/node_modules/style-loader/.github/CONTRIBUTING.md": {
-      "summary": "CONTRIBUTING",
-      "sourceFile": "sdk-codegen/node_modules/style-loader/.github/CONTRIBUTING.md"
-    },
-    "sdk-codegen/node_modules/style-loader/node_modules/schema-utils/.github/CONTRIBUTING.md": {
-      "summary": "CONTRIBUTING",
-      "sourceFile": "sdk-codegen/node_modules/style-loader/node_modules/schema-utils/.github/CONTRIBUTING.md"
-    },
-    "sdk-codegen/node_modules/styled-components/CONTRIBUTING.md": {
-      "summary": "[Contribute",
-      "sourceFile": "sdk-codegen/node_modules/styled-components/CONTRIBUTING.md"
-    },
-    "sdk-codegen/node_modules/styled-components/CODE_OF_CONDUCT.md": {
-      "summary": "Code of Conduct",
-      "sourceFile": "sdk-codegen/node_modules/styled-components/CODE_OF_CONDUCT.md"
-    },
-    "sdk-codegen/node_modules/styled-system/LICENSE.md": {
-      "summary": "MIT License",
-      "sourceFile": "sdk-codegen/node_modules/styled-system/LICENSE.md"
-    },
-    "sdk-codegen/node_modules/stylelint/docs/user-guide/rules/list.md": {
-      "summary": "possible errors](rules/list.md#possible-errors) and [stylistic issues",
-      "sourceFile": "sdk-codegen/node_modules/stylelint/docs/user-guide/rules/list.md"
-    },
-    "sdk-codegen/node_modules/stylelint/docs/user-guide/configure.md": {
-      "summary": "`defaultSeverity`",
-      "sourceFile": "sdk-codegen/node_modules/stylelint/docs/user-guide/configure.md"
-    },
-    "sdk-codegen/node_modules/stylelint/docs/about/syntaxes.md": {
-      "summary": "PostCSS syntax",
-      "sourceFile": "sdk-codegen/node_modules/stylelint/docs/about/syntaxes.md"
-    },
-    "sdk-codegen/node_modules/stylelint/docs/developer-guide/rules.md": {
-      "summary": "Rules",
-      "sourceFile": "sdk-codegen/node_modules/stylelint/docs/developer-guide/rules.md"
-    },
-    "sdk-codegen/node_modules/stylelint/docs/user-guide/get-started.md": {
-      "summary": "Get started",
-      "sourceFile": "sdk-codegen/node_modules/stylelint/docs/user-guide/get-started.md"
-    },
-    "sdk-codegen/node_modules/stylelint/CONTRIBUTING.md": {
-      "summary": "contribute code",
-      "sourceFile": "sdk-codegen/node_modules/stylelint/CONTRIBUTING.md"
-    },
-    "sdk-codegen/node_modules/stylelint/docs/developer-guide/syntaxes.md": {
-      "summary": "Syntaxes",
-      "sourceFile": "sdk-codegen/node_modules/stylelint/docs/developer-guide/syntaxes.md"
-    },
-    "sdk-codegen/node_modules/stylelint/docs/developer-guide/plugins.md": {
-      "summary": "Plugins",
-      "sourceFile": "sdk-codegen/node_modules/stylelint/docs/developer-guide/plugins.md"
-    },
-    "sdk-codegen/node_modules/stylelint/docs/developer-guide/formatters.md": {
-      "summary": "Developer Guide",
-      "sourceFile": "sdk-codegen/node_modules/stylelint/docs/developer-guide/formatters.md"
-    },
-    "sdk-codegen/node_modules/stylelint/docs/user-guide/rules/about.md": {
-      "summary": "About",
-      "sourceFile": "sdk-codegen/node_modules/stylelint/docs/user-guide/rules/about.md"
-    },
-    "sdk-codegen/node_modules/stylelint/docs/maintainer-guide/pull-requests.md": {
-      "summary": "Pull requests",
-      "sourceFile": "sdk-codegen/node_modules/stylelint/docs/maintainer-guide/pull-requests.md"
-    },
-    "sdk-codegen/node_modules/stylelint/CHANGELOG.md": {
-      "summary": "changelog",
-      "sourceFile": "sdk-codegen/node_modules/stylelint/CHANGELOG.md"
-    },
-    "sdk-codegen/node_modules/stylelint/docs/user-guide/rules/combine.md": {
-      "summary": "Combine",
-      "sourceFile": "sdk-codegen/node_modules/stylelint/docs/user-guide/rules/combine.md"
-    },
-    "sdk-codegen/node_modules/stylelint/docs/user-guide/rules/regex.md": {
-      "summary": "Regex",
-      "sourceFile": "sdk-codegen/node_modules/stylelint/docs/user-guide/rules/regex.md"
-    },
-    "sdk-codegen/node_modules/stylelint/docs/user-guide/usage/cli.md": {
-      "summary": "CLI",
-      "sourceFile": "sdk-codegen/node_modules/stylelint/docs/user-guide/usage/cli.md"
-    },
-    "sdk-codegen/node_modules/stylelint/docs/user-guide/usage/node-api.md": {
-      "summary": "`invalidScopeDisables`",
-      "sourceFile": "sdk-codegen/node_modules/stylelint/docs/user-guide/usage/node-api.md"
-    },
-    "sdk-codegen/node_modules/stylelint/docs/user-guide/usage/postcss-plugin.md": {
-      "summary": "PostCSS plugin",
-      "sourceFile": "sdk-codegen/node_modules/stylelint/docs/user-guide/usage/postcss-plugin.md"
-    },
-    "sdk-codegen/node_modules/stylelint/docs/user-guide/usage/options.md": {
-      "summary": "`fix` option",
-      "sourceFile": "sdk-codegen/node_modules/stylelint/docs/user-guide/usage/options.md"
-    },
-    "sdk-codegen/node_modules/stylelint/docs/user-guide/integrations/editor.md": {
-      "summary": "Editor",
-      "sourceFile": "sdk-codegen/node_modules/stylelint/docs/user-guide/integrations/editor.md"
-    },
-    "sdk-codegen/node_modules/stylelint/docs/user-guide/integrations/task-runner.md": {
-      "summary": "Task runner",
-      "sourceFile": "sdk-codegen/node_modules/stylelint/docs/user-guide/integrations/task-runner.md"
-    },
-    "sdk-codegen/node_modules/stylelint/docs/user-guide/integrations/other.md": {
-      "summary": "Other",
-      "sourceFile": "sdk-codegen/node_modules/stylelint/docs/user-guide/integrations/other.md"
-    },
-    "sdk-codegen/node_modules/stylelint/docs/user-guide/ignore-code.md": {
-      "summary": "`.stylelintignore`",
-      "sourceFile": "sdk-codegen/node_modules/stylelint/docs/user-guide/ignore-code.md"
-    },
-    "sdk-codegen/node_modules/stylelint/docs/user-guide/errors.md": {
-      "summary": "Errors",
-      "sourceFile": "sdk-codegen/node_modules/stylelint/docs/user-guide/errors.md"
-    },
-    "sdk-codegen/node_modules/stylelint/docs/developer-guide/system-tests.md": {
-      "summary": "System tests",
-      "sourceFile": "sdk-codegen/node_modules/stylelint/docs/developer-guide/system-tests.md"
-    },
-    "sdk-codegen/node_modules/stylelint/docs/developer-guide/processors.md": {
-      "summary": "Processors",
-      "sourceFile": "sdk-codegen/node_modules/stylelint/docs/developer-guide/processors.md"
-    },
-    "sdk-codegen/node_modules/stylelint/docs/maintainer-guide/issues.md": {
-      "summary": "Issues",
-      "sourceFile": "sdk-codegen/node_modules/stylelint/docs/maintainer-guide/issues.md"
-    },
-    "sdk-codegen/node_modules/stylelint/docs/maintainer-guide/releases.md": {
-      "summary": "Releases",
-      "sourceFile": "sdk-codegen/node_modules/stylelint/docs/maintainer-guide/releases.md"
-    },
-    "sdk-codegen/node_modules/stylelint/docs/about/linting.md": {
-      "summary": "Linting",
-      "sourceFile": "sdk-codegen/node_modules/stylelint/docs/about/linting.md"
-    },
-    "sdk-codegen/node_modules/stylelint/docs/about/semantic-versioning.md": {
-      "summary": "Semantic versioning",
-      "sourceFile": "sdk-codegen/node_modules/stylelint/docs/about/semantic-versioning.md"
-    },
-    "sdk-codegen/node_modules/stylelint/docs/about/vision.md": {
-      "summary": "Vision",
-      "sourceFile": "sdk-codegen/node_modules/stylelint/docs/about/vision.md"
-    },
-    "sdk-codegen/node_modules/stylelint/lib/rules/selector-max-id/README.md": {
-      "summary": "`selector-max-id`",
-      "sourceFile": "sdk-codegen/node_modules/stylelint/lib/rules/selector-max-id/README.md"
-    },
-    "sdk-codegen/node_modules/stylelint/lib/rules/color-no-invalid-hex/README.md": {
-      "summary": "`color-no-invalid-hex`",
-      "sourceFile": "sdk-codegen/node_modules/stylelint/lib/rules/color-no-invalid-hex/README.md"
-    },
-    "sdk-codegen/node_modules/stylelint/lib/rules/font-family-no-duplicate-names/README.md": {
-      "summary": "`font-family-no-duplicate-names`",
-      "sourceFile": "sdk-codegen/node_modules/stylelint/lib/rules/font-family-no-duplicate-names/README.md"
-    },
-    "sdk-codegen/node_modules/stylelint/lib/rules/font-family-no-missing-generic-family-keyword/README.md": {
-      "summary": "`font-family-no-missing-generic-family-keyword`",
-      "sourceFile": "sdk-codegen/node_modules/stylelint/lib/rules/font-family-no-missing-generic-family-keyword/README.md"
-    },
-    "sdk-codegen/node_modules/stylelint/lib/rules/function-calc-no-invalid/README.md": {
-      "summary": "`function-calc-no-invalid`",
-      "sourceFile": "sdk-codegen/node_modules/stylelint/lib/rules/function-calc-no-invalid/README.md"
-    },
-    "sdk-codegen/node_modules/stylelint/lib/rules/function-calc-no-unspaced-operator/README.md": {
-      "summary": "`function-calc-no-unspaced-operator`",
-      "sourceFile": "sdk-codegen/node_modules/stylelint/lib/rules/function-calc-no-unspaced-operator/README.md"
-    },
-    "sdk-codegen/node_modules/stylelint/lib/rules/unit-no-unknown/README.md": {
-      "summary": "`unit-no-unknown`",
-      "sourceFile": "sdk-codegen/node_modules/stylelint/lib/rules/unit-no-unknown/README.md"
-    },
-    "sdk-codegen/node_modules/stylelint/lib/rules/property-no-unknown/README.md": {
-      "summary": "`property-no-unknown`",
-      "sourceFile": "sdk-codegen/node_modules/stylelint/lib/rules/property-no-unknown/README.md"
-    },
-    "sdk-codegen/node_modules/stylelint/lib/rules/keyframe-declaration-no-important/README.md": {
-      "summary": "`keyframe-declaration-no-important`",
-      "sourceFile": "sdk-codegen/node_modules/stylelint/lib/rules/keyframe-declaration-no-important/README.md"
-    },
-    "sdk-codegen/node_modules/stylelint/lib/rules/declaration-block-no-duplicate-properties/README.md": {
-      "summary": "`declaration-block-no-duplicate-properties`",
-      "sourceFile": "sdk-codegen/node_modules/stylelint/lib/rules/declaration-block-no-duplicate-properties/README.md"
-    },
-    "sdk-codegen/node_modules/stylelint/lib/rules/declaration-block-no-shorthand-property-overrides/README.md": {
-      "summary": "`declaration-block-no-shorthand-property-overrides`",
-      "sourceFile": "sdk-codegen/node_modules/stylelint/lib/rules/declaration-block-no-shorthand-property-overrides/README.md"
-    },
-    "sdk-codegen/node_modules/stylelint/lib/rules/block-no-empty/README.md": {
-      "summary": "`block-no-empty`",
-      "sourceFile": "sdk-codegen/node_modules/stylelint/lib/rules/block-no-empty/README.md"
-    },
-    "sdk-codegen/node_modules/stylelint/lib/rules/selector-pseudo-class-no-unknown/README.md": {
-      "summary": "`selector-pseudo-class-no-unknown`",
-      "sourceFile": "sdk-codegen/node_modules/stylelint/lib/rules/selector-pseudo-class-no-unknown/README.md"
-    },
-    "sdk-codegen/node_modules/stylelint/lib/rules/selector-pseudo-element-no-unknown/README.md": {
-      "summary": "`selector-pseudo-element-no-unknown`",
-      "sourceFile": "sdk-codegen/node_modules/stylelint/lib/rules/selector-pseudo-element-no-unknown/README.md"
-    },
-    "sdk-codegen/node_modules/stylelint/lib/rules/selector-type-no-unknown/README.md": {
-      "summary": "`selector-type-no-unknown`",
-      "sourceFile": "sdk-codegen/node_modules/stylelint/lib/rules/selector-type-no-unknown/README.md"
-    },
-    "sdk-codegen/node_modules/stylelint/lib/rules/media-feature-name-no-unknown/README.md": {
-      "summary": "`media-feature-name-no-unknown`",
-      "sourceFile": "sdk-codegen/node_modules/stylelint/lib/rules/media-feature-name-no-unknown/README.md"
-    },
-    "sdk-codegen/node_modules/stylelint/lib/rules/at-rule-no-unknown/README.md": {
-      "summary": "`at-rule-no-unknown`",
-      "sourceFile": "sdk-codegen/node_modules/stylelint/lib/rules/at-rule-no-unknown/README.md"
-    },
-    "sdk-codegen/node_modules/stylelint/lib/rules/comment-no-empty/README.md": {
-      "summary": "`comment-no-empty`",
-      "sourceFile": "sdk-codegen/node_modules/stylelint/lib/rules/comment-no-empty/README.md"
-    },
-    "sdk-codegen/node_modules/stylelint/lib/rules/no-descending-specificity/README.md": {
-      "summary": "`no-descending-specificity`",
-      "sourceFile": "sdk-codegen/node_modules/stylelint/lib/rules/no-descending-specificity/README.md"
-    },
-    "sdk-codegen/node_modules/stylelint/lib/rules/no-duplicate-at-import-rules/README.md": {
-      "summary": "`no-duplicate-at-import-rules`",
-      "sourceFile": "sdk-codegen/node_modules/stylelint/lib/rules/no-duplicate-at-import-rules/README.md"
-    },
-    "sdk-codegen/node_modules/stylelint/lib/rules/no-duplicate-selectors/README.md": {
-      "summary": "`no-duplicate-selectors`",
-      "sourceFile": "sdk-codegen/node_modules/stylelint/lib/rules/no-duplicate-selectors/README.md"
-    },
-    "sdk-codegen/node_modules/stylelint/lib/rules/no-empty-source/README.md": {
-      "summary": "`no-empty-source`",
-      "sourceFile": "sdk-codegen/node_modules/stylelint/lib/rules/no-empty-source/README.md"
-    },
-    "sdk-codegen/node_modules/stylelint/lib/rules/color-no-hex/README.md": {
-      "summary": "`color-no-hex`",
-      "sourceFile": "sdk-codegen/node_modules/stylelint/lib/rules/color-no-hex/README.md"
-    },
-    "sdk-codegen/node_modules/stylelint/lib/rules/function-blacklist/README.md": {
-      "summary": "`function-blacklist`",
-      "sourceFile": "sdk-codegen/node_modules/stylelint/lib/rules/function-blacklist/README.md"
-    },
-    "sdk-codegen/node_modules/stylelint/lib/rules/function-url-no-scheme-relative/README.md": {
-      "summary": "`function-url-no-scheme-relative`",
-      "sourceFile": "sdk-codegen/node_modules/stylelint/lib/rules/function-url-no-scheme-relative/README.md"
-    },
-    "sdk-codegen/node_modules/stylelint/lib/rules/function-url-scheme-blacklist/README.md": {
-      "summary": "`function-url-scheme-blacklist`",
-      "sourceFile": "sdk-codegen/node_modules/stylelint/lib/rules/function-url-scheme-blacklist/README.md"
-    },
-    "sdk-codegen/node_modules/stylelint/lib/rules/function-url-scheme-whitelist/README.md": {
-      "summary": "`function-url-scheme-whitelist`",
-      "sourceFile": "sdk-codegen/node_modules/stylelint/lib/rules/function-url-scheme-whitelist/README.md"
-    },
-    "sdk-codegen/node_modules/stylelint/lib/rules/function-whitelist/README.md": {
-      "summary": "`function-whitelist`",
-      "sourceFile": "sdk-codegen/node_modules/stylelint/lib/rules/function-whitelist/README.md"
-    },
-    "sdk-codegen/node_modules/stylelint/lib/rules/keyframes-name-pattern/README.md": {
-      "summary": "`keyframes-name-pattern`",
-      "sourceFile": "sdk-codegen/node_modules/stylelint/lib/rules/keyframes-name-pattern/README.md"
-    },
-    "sdk-codegen/node_modules/stylelint/lib/rules/number-max-precision/README.md": {
-      "summary": "`number-max-precision`",
-      "sourceFile": "sdk-codegen/node_modules/stylelint/lib/rules/number-max-precision/README.md"
-    },
-    "sdk-codegen/node_modules/stylelint/lib/rules/time-min-milliseconds/README.md": {
-      "summary": "`time-min-milliseconds`",
-      "sourceFile": "sdk-codegen/node_modules/stylelint/lib/rules/time-min-milliseconds/README.md"
-    },
-    "sdk-codegen/node_modules/stylelint/lib/rules/unit-blacklist/README.md": {
-      "summary": "`unit-blacklist`",
-      "sourceFile": "sdk-codegen/node_modules/stylelint/lib/rules/unit-blacklist/README.md"
-    },
-    "sdk-codegen/node_modules/stylelint/lib/rules/unit-whitelist/README.md": {
-      "summary": "`unit-whitelist`",
-      "sourceFile": "sdk-codegen/node_modules/stylelint/lib/rules/unit-whitelist/README.md"
-    },
-    "sdk-codegen/node_modules/stylelint/lib/rules/value-no-vendor-prefix/README.md": {
-      "summary": "`value-no-vendor-prefix`",
-      "sourceFile": "sdk-codegen/node_modules/stylelint/lib/rules/value-no-vendor-prefix/README.md"
-    },
-    "sdk-codegen/node_modules/stylelint/lib/rules/custom-property-pattern/README.md": {
-      "summary": "`custom-property-pattern`",
-      "sourceFile": "sdk-codegen/node_modules/stylelint/lib/rules/custom-property-pattern/README.md"
-    },
-    "sdk-codegen/node_modules/stylelint/lib/rules/property-blacklist/README.md": {
-      "summary": "`property-blacklist`",
-      "sourceFile": "sdk-codegen/node_modules/stylelint/lib/rules/property-blacklist/README.md"
-    },
-    "sdk-codegen/node_modules/stylelint/lib/rules/property-no-vendor-prefix/README.md": {
-      "summary": "`property-no-vendor-prefix`",
-      "sourceFile": "sdk-codegen/node_modules/stylelint/lib/rules/property-no-vendor-prefix/README.md"
-    },
-    "sdk-codegen/node_modules/stylelint/lib/rules/property-whitelist/README.md": {
-      "summary": "`property-whitelist`",
-      "sourceFile": "sdk-codegen/node_modules/stylelint/lib/rules/property-whitelist/README.md"
-    },
-    "sdk-codegen/node_modules/stylelint/lib/rules/declaration-block-no-redundant-longhand-properties/README.md": {
-      "summary": "`declaration-block-no-redundant-longhand-properties`",
-      "sourceFile": "sdk-codegen/node_modules/stylelint/lib/rules/declaration-block-no-redundant-longhand-properties/README.md"
-    },
-    "sdk-codegen/node_modules/stylelint/lib/rules/declaration-no-important/README.md": {
-      "summary": "`declaration-no-important`",
-      "sourceFile": "sdk-codegen/node_modules/stylelint/lib/rules/declaration-no-important/README.md"
-    },
-    "sdk-codegen/node_modules/stylelint/lib/rules/declaration-property-unit-blacklist/README.md": {
-      "summary": "`declaration-property-unit-blacklist`",
-      "sourceFile": "sdk-codegen/node_modules/stylelint/lib/rules/declaration-property-unit-blacklist/README.md"
-    },
-    "sdk-codegen/node_modules/stylelint/lib/rules/declaration-property-unit-whitelist/README.md": {
-      "summary": "`declaration-property-unit-whitelist`",
-      "sourceFile": "sdk-codegen/node_modules/stylelint/lib/rules/declaration-property-unit-whitelist/README.md"
-    },
-    "sdk-codegen/node_modules/stylelint/lib/rules/declaration-property-value-blacklist/README.md": {
-      "summary": "`declaration-property-value-blacklist`",
-      "sourceFile": "sdk-codegen/node_modules/stylelint/lib/rules/declaration-property-value-blacklist/README.md"
-    },
-    "sdk-codegen/node_modules/stylelint/lib/rules/declaration-property-value-whitelist/README.md": {
-      "summary": "`declaration-property-value-whitelist`",
-      "sourceFile": "sdk-codegen/node_modules/stylelint/lib/rules/declaration-property-value-whitelist/README.md"
-    },
-    "sdk-codegen/node_modules/stylelint/lib/rules/declaration-block-single-line-max-declarations/README.md": {
-      "summary": "`declaration-block-single-line-max-declarations`",
-      "sourceFile": "sdk-codegen/node_modules/stylelint/lib/rules/declaration-block-single-line-max-declarations/README.md"
-    },
-    "sdk-codegen/node_modules/stylelint/lib/rules/selector-attribute-operator-blacklist/README.md": {
-      "summary": "`selector-attribute-operator-blacklist`",
-      "sourceFile": "sdk-codegen/node_modules/stylelint/lib/rules/selector-attribute-operator-blacklist/README.md"
-    },
-    "sdk-codegen/node_modules/stylelint/lib/rules/selector-attribute-operator-whitelist/README.md": {
-      "summary": "`selector-attribute-operator-whitelist`",
-      "sourceFile": "sdk-codegen/node_modules/stylelint/lib/rules/selector-attribute-operator-whitelist/README.md"
-    },
-    "sdk-codegen/node_modules/stylelint/lib/rules/selector-class-pattern/README.md": {
-      "summary": "`selector-class-pattern`",
-      "sourceFile": "sdk-codegen/node_modules/stylelint/lib/rules/selector-class-pattern/README.md"
-    },
-    "sdk-codegen/node_modules/stylelint/lib/rules/selector-combinator-blacklist/README.md": {
-      "summary": "`selector-combinator-blacklist`",
-      "sourceFile": "sdk-codegen/node_modules/stylelint/lib/rules/selector-combinator-blacklist/README.md"
-    },
-    "sdk-codegen/node_modules/stylelint/lib/rules/selector-combinator-whitelist/README.md": {
-      "summary": "`selector-combinator-whitelist`",
-      "sourceFile": "sdk-codegen/node_modules/stylelint/lib/rules/selector-combinator-whitelist/README.md"
-    },
-    "sdk-codegen/node_modules/stylelint/lib/rules/selector-id-pattern/README.md": {
-      "summary": "`selector-id-pattern`",
-      "sourceFile": "sdk-codegen/node_modules/stylelint/lib/rules/selector-id-pattern/README.md"
-    },
-    "sdk-codegen/node_modules/stylelint/lib/rules/selector-max-attribute/README.md": {
-      "summary": "`selector-max-attribute`",
-      "sourceFile": "sdk-codegen/node_modules/stylelint/lib/rules/selector-max-attribute/README.md"
-    },
-    "sdk-codegen/node_modules/stylelint/lib/rules/selector-max-class/README.md": {
-      "summary": "`selector-max-class`",
-      "sourceFile": "sdk-codegen/node_modules/stylelint/lib/rules/selector-max-class/README.md"
-    },
-    "sdk-codegen/node_modules/stylelint/lib/rules/selector-max-combinators/README.md": {
-      "summary": "`selector-max-combinators`",
-      "sourceFile": "sdk-codegen/node_modules/stylelint/lib/rules/selector-max-combinators/README.md"
-    },
-    "sdk-codegen/node_modules/stylelint/lib/rules/selector-max-compound-selectors/README.md": {
-      "summary": "`selector-max-compound-selectors`",
-      "sourceFile": "sdk-codegen/node_modules/stylelint/lib/rules/selector-max-compound-selectors/README.md"
-    },
-    "sdk-codegen/node_modules/stylelint/lib/rules/selector-max-pseudo-class/README.md": {
-      "summary": "`selector-max-pseudo-class`",
-      "sourceFile": "sdk-codegen/node_modules/stylelint/lib/rules/selector-max-pseudo-class/README.md"
-    },
-    "sdk-codegen/node_modules/stylelint/lib/rules/selector-max-specificity/README.md": {
-      "summary": "`selector-max-specificity`",
-      "sourceFile": "sdk-codegen/node_modules/stylelint/lib/rules/selector-max-specificity/README.md"
-    },
-    "sdk-codegen/node_modules/stylelint/lib/rules/selector-max-type/README.md": {
-      "summary": "`selector-max-type`",
-      "sourceFile": "sdk-codegen/node_modules/stylelint/lib/rules/selector-max-type/README.md"
-    },
-    "sdk-codegen/node_modules/stylelint/lib/rules/selector-max-universal/README.md": {
-      "summary": "`selector-max-universal`",
-      "sourceFile": "sdk-codegen/node_modules/stylelint/lib/rules/selector-max-universal/README.md"
-    },
-    "sdk-codegen/node_modules/stylelint/lib/rules/selector-nested-pattern/README.md": {
-      "summary": "`selector-nested-pattern`",
-      "sourceFile": "sdk-codegen/node_modules/stylelint/lib/rules/selector-nested-pattern/README.md"
-    },
-    "sdk-codegen/node_modules/stylelint/lib/rules/selector-no-qualifying-type/README.md": {
-      "summary": "`selector-no-qualifying-type`",
-      "sourceFile": "sdk-codegen/node_modules/stylelint/lib/rules/selector-no-qualifying-type/README.md"
-    },
-    "sdk-codegen/node_modules/stylelint/lib/rules/selector-no-vendor-prefix/README.md": {
-      "summary": "`selector-no-vendor-prefix`",
-      "sourceFile": "sdk-codegen/node_modules/stylelint/lib/rules/selector-no-vendor-prefix/README.md"
-    },
-    "sdk-codegen/node_modules/stylelint/lib/rules/selector-pseudo-class-blacklist/README.md": {
-      "summary": "`selector-pseudo-class-blacklist`",
-      "sourceFile": "sdk-codegen/node_modules/stylelint/lib/rules/selector-pseudo-class-blacklist/README.md"
-    },
-    "sdk-codegen/node_modules/stylelint/lib/rules/selector-pseudo-class-whitelist/README.md": {
-      "summary": "`selector-pseudo-class-whitelist`",
-      "sourceFile": "sdk-codegen/node_modules/stylelint/lib/rules/selector-pseudo-class-whitelist/README.md"
-    },
-    "sdk-codegen/node_modules/stylelint/lib/rules/selector-pseudo-element-blacklist/README.md": {
-      "summary": "`selector-pseudo-element-blacklist`",
-      "sourceFile": "sdk-codegen/node_modules/stylelint/lib/rules/selector-pseudo-element-blacklist/README.md"
-    },
-    "sdk-codegen/node_modules/stylelint/lib/rules/selector-pseudo-element-whitelist/README.md": {
-      "summary": "`selector-pseudo-element-whitelist`",
-      "sourceFile": "sdk-codegen/node_modules/stylelint/lib/rules/selector-pseudo-element-whitelist/README.md"
-    },
-    "sdk-codegen/node_modules/stylelint/lib/rules/media-feature-name-blacklist/README.md": {
-      "summary": "`media-feature-name-blacklist`",
-      "sourceFile": "sdk-codegen/node_modules/stylelint/lib/rules/media-feature-name-blacklist/README.md"
-    },
-    "sdk-codegen/node_modules/stylelint/lib/rules/media-feature-name-no-vendor-prefix/README.md": {
-      "summary": "`media-feature-name-no-vendor-prefix`",
-      "sourceFile": "sdk-codegen/node_modules/stylelint/lib/rules/media-feature-name-no-vendor-prefix/README.md"
-    },
-    "sdk-codegen/node_modules/stylelint/lib/rules/media-feature-name-value-whitelist/README.md": {
-      "summary": "`media-feature-name-value-whitelist`",
-      "sourceFile": "sdk-codegen/node_modules/stylelint/lib/rules/media-feature-name-value-whitelist/README.md"
-    },
-    "sdk-codegen/node_modules/stylelint/lib/rules/media-feature-name-whitelist/README.md": {
-      "summary": "`media-feature-name-whitelist`",
-      "sourceFile": "sdk-codegen/node_modules/stylelint/lib/rules/media-feature-name-whitelist/README.md"
-    },
-    "sdk-codegen/node_modules/stylelint/lib/rules/custom-media-pattern/README.md": {
-      "summary": "`custom-media-pattern`",
-      "sourceFile": "sdk-codegen/node_modules/stylelint/lib/rules/custom-media-pattern/README.md"
-    },
-    "sdk-codegen/node_modules/stylelint/lib/rules/at-rule-blacklist/README.md": {
-      "summary": "`at-rule-blacklist`",
-      "sourceFile": "sdk-codegen/node_modules/stylelint/lib/rules/at-rule-blacklist/README.md"
-    },
-    "sdk-codegen/node_modules/stylelint/lib/rules/at-rule-no-vendor-prefix/README.md": {
-      "summary": "`at-rule-no-vendor-prefix`",
-      "sourceFile": "sdk-codegen/node_modules/stylelint/lib/rules/at-rule-no-vendor-prefix/README.md"
-    },
-    "sdk-codegen/node_modules/stylelint/lib/rules/at-rule-property-requirelist/README.md": {
-      "summary": "`at-rule-property-requirelist`",
-      "sourceFile": "sdk-codegen/node_modules/stylelint/lib/rules/at-rule-property-requirelist/README.md"
-    },
-    "sdk-codegen/node_modules/stylelint/lib/rules/at-rule-whitelist/README.md": {
-      "summary": "`at-rule-whitelist`",
-      "sourceFile": "sdk-codegen/node_modules/stylelint/lib/rules/at-rule-whitelist/README.md"
-    },
-    "sdk-codegen/node_modules/stylelint/lib/rules/comment-word-blacklist/README.md": {
-      "summary": "`comment-word-blacklist`",
-      "sourceFile": "sdk-codegen/node_modules/stylelint/lib/rules/comment-word-blacklist/README.md"
-    },
-    "sdk-codegen/node_modules/stylelint/lib/rules/max-nesting-depth/README.md": {
-      "summary": "`max-nesting-depth`",
-      "sourceFile": "sdk-codegen/node_modules/stylelint/lib/rules/max-nesting-depth/README.md"
-    },
-    "sdk-codegen/node_modules/stylelint/lib/rules/no-unknown-animations/README.md": {
-      "summary": "`no-unknown-animations`",
-      "sourceFile": "sdk-codegen/node_modules/stylelint/lib/rules/no-unknown-animations/README.md"
-    },
-    "sdk-codegen/node_modules/stylelint/lib/rules/font-family-name-quotes/README.md": {
-      "summary": "`font-family-name-quotes`",
-      "sourceFile": "sdk-codegen/node_modules/stylelint/lib/rules/font-family-name-quotes/README.md"
-    },
-    "sdk-codegen/node_modules/stylelint/lib/rules/function-url-quotes/README.md": {
-      "summary": "`function-url-quotes`",
-      "sourceFile": "sdk-codegen/node_modules/stylelint/lib/rules/function-url-quotes/README.md"
-    },
-    "sdk-codegen/node_modules/stylelint/lib/rules/value-list-comma-newline-before/README.md": {
-      "summary": "`value-list-comma-newline-before`",
-      "sourceFile": "sdk-codegen/node_modules/stylelint/lib/rules/value-list-comma-newline-before/README.md"
-    },
-    "sdk-codegen/node_modules/stylelint/lib/rules/declaration-block-semicolon-newline-before/README.md": {
-      "summary": "`declaration-block-semicolon-newline-before`",
-      "sourceFile": "sdk-codegen/node_modules/stylelint/lib/rules/declaration-block-semicolon-newline-before/README.md"
-    },
-    "sdk-codegen/node_modules/stylelint/lib/rules/block-closing-brace-space-after/README.md": {
-      "summary": "`block-closing-brace-space-after`",
-      "sourceFile": "sdk-codegen/node_modules/stylelint/lib/rules/block-closing-brace-space-after/README.md"
-    },
-    "sdk-codegen/node_modules/stylelint/lib/rules/selector-attribute-quotes/README.md": {
-      "summary": "`selector-attribute-quotes`",
-      "sourceFile": "sdk-codegen/node_modules/stylelint/lib/rules/selector-attribute-quotes/README.md"
-    },
-    "sdk-codegen/node_modules/stylelint/lib/rules/media-query-list-comma-newline-before/README.md": {
-      "summary": "`media-query-list-comma-newline-before`",
-      "sourceFile": "sdk-codegen/node_modules/stylelint/lib/rules/media-query-list-comma-newline-before/README.md"
-    },
-    "sdk-codegen/node_modules/stylelint/lib/rules/at-rule-name-newline-after/README.md": {
-      "summary": "`at-rule-name-newline-after`",
-      "sourceFile": "sdk-codegen/node_modules/stylelint/lib/rules/at-rule-name-newline-after/README.md"
-    },
-    "sdk-codegen/node_modules/stylelint/lib/rules/at-rule-semicolon-space-before/README.md": {
-      "summary": "`at-rule-semicolon-space-before`",
-      "sourceFile": "sdk-codegen/node_modules/stylelint/lib/rules/at-rule-semicolon-space-before/README.md"
-    },
-    "sdk-codegen/node_modules/stylelint/lib/rules/max-line-length/README.md": {
-      "summary": "`max-line-length`",
-      "sourceFile": "sdk-codegen/node_modules/stylelint/lib/rules/max-line-length/README.md"
-    },
-    "sdk-codegen/node_modules/stylelint/lib/rules/unicode-bom/README.md": {
-      "summary": "`unicode-bom`",
-      "sourceFile": "sdk-codegen/node_modules/stylelint/lib/rules/unicode-bom/README.md"
-    },
-    "sdk-codegen/node_modules/stylelint/lib/rules/indentation/README.md": {
-      "summary": "`fix` option](../../../docs/user-guide/usage/options.md#fix) can automatically fix all of the problems reported by this rule. We recommend to enable [`indentation`",
-      "sourceFile": "sdk-codegen/node_modules/stylelint/lib/rules/indentation/README.md"
-    },
-    "sdk-codegen/node_modules/stylelint/lib/rules/block-opening-brace-newline-before/README.md": {
-      "summary": "combining rules](../../../docs/user-guide/rules/combine.md) for more information on using this rule with [`block-opening-brace-newline-before`",
-      "sourceFile": "sdk-codegen/node_modules/stylelint/lib/rules/block-opening-brace-newline-before/README.md"
-    },
-    "sdk-codegen/node_modules/stylelint/lib/rules/block-opening-brace-newline-after/README.md": {
-      "summary": "combining rules](../../../docs/user-guide/rules/combine.md) for more information on using this rule with [`block-opening-brace-newline-after`",
-      "sourceFile": "sdk-codegen/node_modules/stylelint/lib/rules/block-opening-brace-newline-after/README.md"
-    },
-    "sdk-codegen/node_modules/stylelint/lib/rules/custom-property-empty-line-before/README.md": {
-      "summary": "`custom-property-empty-line-before`",
-      "sourceFile": "sdk-codegen/node_modules/stylelint/lib/rules/custom-property-empty-line-before/README.md"
-    },
-    "sdk-codegen/node_modules/stylelint/node_modules/type-fest/.github/contributing.md": {
-      "summary": "contributing guidelines",
-      "sourceFile": "sdk-codegen/node_modules/stylelint/node_modules/type-fest/.github/contributing.md"
+    "sdk-codegen/node_modules/read-pkg-up/node_modules/read-pkg/node_modules/type-fest/source/package-json.d.ts": {
+      "summary": "`PackageJson`",
+      "sourceFile": "sdk-codegen/node_modules/read-pkg-up/node_modules/read-pkg/node_modules/type-fest/source/package-json.d.ts"
+    },
+    "sdk-codegen/node_modules/stylelint/node_modules/fast-glob/src/managers/tasks.ts": {
+      "summary": "`Task`",
+      "sourceFile": "sdk-codegen/node_modules/stylelint/node_modules/fast-glob/src/managers/tasks.ts"
     },
     "sdk-codegen/node_modules/stylelint/node_modules/type-fest/source/basic.d.ts": {
-      "summary": "`JsonValue`",
+      "summary": "`ObservableLike`",
       "sourceFile": "sdk-codegen/node_modules/stylelint/node_modules/type-fest/source/basic.d.ts"
+    },
+    "sdk-codegen/node_modules/stylelint/node_modules/type-fest/source/except.d.ts": {
+      "summary": "`Except`",
+      "sourceFile": "sdk-codegen/node_modules/stylelint/node_modules/type-fest/source/except.d.ts"
     },
     "sdk-codegen/node_modules/stylelint/node_modules/type-fest/source/mutable.d.ts": {
       "summary": "`Mutable`",
@@ -2962,9 +750,25 @@
       "summary": "`RequireExactlyOne`",
       "sourceFile": "sdk-codegen/node_modules/stylelint/node_modules/type-fest/source/require-exactly-one.d.ts"
     },
+    "sdk-codegen/node_modules/stylelint/node_modules/type-fest/source/partial-deep.d.ts": {
+      "summary": "`PartialDeep`",
+      "sourceFile": "sdk-codegen/node_modules/stylelint/node_modules/type-fest/source/partial-deep.d.ts"
+    },
+    "sdk-codegen/node_modules/stylelint/node_modules/type-fest/source/readonly-deep.d.ts": {
+      "summary": "`ReadonlyDeep`",
+      "sourceFile": "sdk-codegen/node_modules/stylelint/node_modules/type-fest/source/readonly-deep.d.ts"
+    },
+    "sdk-codegen/node_modules/stylelint/node_modules/type-fest/source/literal-union.d.ts": {
+      "summary": "`LiteralUnion`",
+      "sourceFile": "sdk-codegen/node_modules/stylelint/node_modules/type-fest/source/literal-union.d.ts"
+    },
     "sdk-codegen/node_modules/stylelint/node_modules/type-fest/source/promisable.d.ts": {
       "summary": "`Promisable`",
       "sourceFile": "sdk-codegen/node_modules/stylelint/node_modules/type-fest/source/promisable.d.ts"
+    },
+    "sdk-codegen/node_modules/stylelint/node_modules/type-fest/source/opaque.d.ts": {
+      "summary": "`Opaque`",
+      "sourceFile": "sdk-codegen/node_modules/stylelint/node_modules/type-fest/source/opaque.d.ts"
     },
     "sdk-codegen/node_modules/stylelint/node_modules/type-fest/source/set-optional.d.ts": {
       "summary": "`SetOptional`",
@@ -3006,73 +810,21 @@
       "summary": "`Stringified`",
       "sourceFile": "sdk-codegen/node_modules/stylelint/node_modules/type-fest/source/stringified.d.ts"
     },
-    "sdk-codegen/node_modules/stylelint-config-recommended/CHANGELOG.md": {
-      "summary": "Changelog",
-      "sourceFile": "sdk-codegen/node_modules/stylelint-config-recommended/CHANGELOG.md"
+    "sdk-codegen/node_modules/stylelint/node_modules/type-fest/source/package-json.d.ts": {
+      "summary": "`PackageJson`",
+      "sourceFile": "sdk-codegen/node_modules/stylelint/node_modules/type-fest/source/package-json.d.ts"
     },
-    "sdk-codegen/node_modules/stylelint-processor-styled-components/LICENSE.md": {
-      "summary": "LICENSE.md",
-      "sourceFile": "sdk-codegen/node_modules/stylelint-processor-styled-components/LICENSE.md"
-    },
-    "sdk-codegen/node_modules/swagger2openapi/docs/options.md": {
-      "summary": "documentation",
-      "sourceFile": "sdk-codegen/node_modules/swagger2openapi/docs/options.md"
-    },
-    "sdk-codegen/node_modules/swagger2openapi/docs/browser.md": {
-      "summary": "initial documentation",
-      "sourceFile": "sdk-codegen/node_modules/swagger2openapi/docs/browser.md"
-    },
-    "sdk-codegen/node_modules/symbol-tree/api.md": {
-      "summary": "api.md",
-      "sourceFile": "sdk-codegen/node_modules/symbol-tree/api.md"
-    },
-    "sdk-codegen/node_modules/terser/CONTRIBUTING.md": {
-      "summary": "[Contribute",
-      "sourceFile": "sdk-codegen/node_modules/terser/CONTRIBUTING.md"
-    },
-    "sdk-codegen/node_modules/terser-webpack-plugin/.github/CONTRIBUTING.md": {
-      "summary": "CONTRIBUTING",
-      "sourceFile": "sdk-codegen/node_modules/terser-webpack-plugin/.github/CONTRIBUTING.md"
-    },
-    "sdk-codegen/node_modules/to-regex/node_modules/define-property/changelog.md": {
-      "summary": "the CHANGELOG",
-      "sourceFile": "sdk-codegen/node_modules/to-regex/node_modules/define-property/changelog.md"
-    },
-    "sdk-codegen/node_modules/ts-jest/TROUBLESHOOTING.md": {
-      "summary": "<img src=\"./docs/assets/img/troubleshooting.png\" align=\"left\" height=\"24\"> Before reporting any issue, be sure to check the troubleshooting page",
-      "sourceFile": "sdk-codegen/node_modules/ts-jest/TROUBLESHOOTING.md"
-    },
-    "sdk-codegen/node_modules/ts-jest/CONTRIBUTING.md": {
-      "summary": "CONTRIBUTING.md",
-      "sourceFile": "sdk-codegen/node_modules/ts-jest/CONTRIBUTING.md"
-    },
-    "sdk-codegen/node_modules/ts-jest/LICENSE.md": {
-      "summary": "LICENSE.md",
-      "sourceFile": "sdk-codegen/node_modules/ts-jest/LICENSE.md"
-    },
-    "sdk-codegen/node_modules/ts-loader/CONTRIBUTING.md": {
-      "summary": "contributor's guide",
-      "sourceFile": "sdk-codegen/node_modules/ts-loader/CONTRIBUTING.md"
-    },
-    "sdk-codegen/node_modules/tsconfig-paths/node_modules/json5/README.md": {
-      "summary": "usage documentation",
-      "sourceFile": "sdk-codegen/node_modules/tsconfig-paths/node_modules/json5/README.md"
-    },
-    "sdk-codegen/node_modules/tsconfig-paths/node_modules/json5/LICENSE.md": {
-      "summary": "LICENSE.md",
-      "sourceFile": "sdk-codegen/node_modules/tsconfig-paths/node_modules/json5/LICENSE.md"
-    },
-    "sdk-codegen/node_modules/tsutils/README.md": {
-      "summary": "README.md",
-      "sourceFile": "sdk-codegen/node_modules/tsutils/README.md"
-    },
-    "sdk-codegen/node_modules/type-fest/.github/contributing.md": {
-      "summary": "contributing guidelines",
-      "sourceFile": "sdk-codegen/node_modules/type-fest/.github/contributing.md"
+    "sdk-codegen/node_modules/stylelint/node_modules/type-fest/source/tsconfig-json.d.ts": {
+      "summary": "`TsConfigJson`",
+      "sourceFile": "sdk-codegen/node_modules/stylelint/node_modules/type-fest/source/tsconfig-json.d.ts"
     },
     "sdk-codegen/node_modules/type-fest/source/basic.d.ts": {
-      "summary": "`JsonValue`",
+      "summary": "`ObservableLike`",
       "sourceFile": "sdk-codegen/node_modules/type-fest/source/basic.d.ts"
+    },
+    "sdk-codegen/node_modules/type-fest/source/except.d.ts": {
+      "summary": "`Except`",
+      "sourceFile": "sdk-codegen/node_modules/type-fest/source/except.d.ts"
     },
     "sdk-codegen/node_modules/type-fest/source/mutable.d.ts": {
       "summary": "`Mutable`",
@@ -3094,9 +846,25 @@
       "summary": "`RequireExactlyOne`",
       "sourceFile": "sdk-codegen/node_modules/type-fest/source/require-one.d.ts"
     },
+    "sdk-codegen/node_modules/type-fest/source/partial-deep.d.ts": {
+      "summary": "`PartialDeep`",
+      "sourceFile": "sdk-codegen/node_modules/type-fest/source/partial-deep.d.ts"
+    },
+    "sdk-codegen/node_modules/type-fest/source/readonly-deep.d.ts": {
+      "summary": "`ReadonlyDeep`",
+      "sourceFile": "sdk-codegen/node_modules/type-fest/source/readonly-deep.d.ts"
+    },
+    "sdk-codegen/node_modules/type-fest/source/literal-union.d.ts": {
+      "summary": "`LiteralUnion`",
+      "sourceFile": "sdk-codegen/node_modules/type-fest/source/literal-union.d.ts"
+    },
     "sdk-codegen/node_modules/type-fest/source/promisable.d.ts": {
       "summary": "`Promisable`",
       "sourceFile": "sdk-codegen/node_modules/type-fest/source/promisable.d.ts"
+    },
+    "sdk-codegen/node_modules/type-fest/source/opaque.d.ts": {
+      "summary": "`Opaque`",
+      "sourceFile": "sdk-codegen/node_modules/type-fest/source/opaque.d.ts"
     },
     "sdk-codegen/node_modules/type-fest/source/set-optional.d.ts": {
       "summary": "`SetOptional`",
@@ -3106,173 +874,9 @@
       "summary": "`SetRequired`",
       "sourceFile": "sdk-codegen/node_modules/type-fest/source/set-required.d.ts"
     },
-    "sdk-codegen/node_modules/universal-user-agent/LICENSE.md": {
-      "summary": "ISC",
-      "sourceFile": "sdk-codegen/node_modules/universal-user-agent/LICENSE.md"
-    },
-    "sdk-codegen/node_modules/urijs/CHANGELOG.md": {
-      "summary": "Changelog",
-      "sourceFile": "sdk-codegen/node_modules/urijs/CHANGELOG.md"
-    },
-    "sdk-codegen/node_modules/utility-types/CONTRIBUTING.md": {
-      "summary": "CONTRIBUTING.md",
-      "sourceFile": "sdk-codegen/node_modules/utility-types/CONTRIBUTING.md"
-    },
-    "sdk-codegen/node_modules/verror/CONTRIBUTING.md": {
-      "summary": "contribution guidelines",
-      "sourceFile": "sdk-codegen/node_modules/verror/CONTRIBUTING.md"
-    },
-    "sdk-codegen/node_modules/watchpack/node_modules/braces/CHANGELOG.md": {
-      "summary": "changelog",
-      "sourceFile": "sdk-codegen/node_modules/watchpack/node_modules/braces/CHANGELOG.md"
-    },
-    "sdk-codegen/node_modules/watchpack/node_modules/chokidar/.github/full_changelog.md": {
-      "summary": "`full_changelog.md`",
-      "sourceFile": "sdk-codegen/node_modules/watchpack/node_modules/chokidar/.github/full_changelog.md"
-    },
-    "sdk-codegen/node_modules/webpack/node_modules/define-property/changelog.md": {
-      "summary": "the CHANGELOG",
-      "sourceFile": "sdk-codegen/node_modules/webpack/node_modules/define-property/changelog.md"
-    },
-    "sdk-codegen/node_modules/webpack/node_modules/micromatch/.github/contributing.md": {
-      "summary": "contributing guide",
-      "sourceFile": "sdk-codegen/node_modules/webpack/node_modules/micromatch/.github/contributing.md"
-    },
-    "sdk-codegen/node_modules/webpack-cli/packages/init/README.md": {
-      "summary": "`webpack-cli init`",
-      "sourceFile": "sdk-codegen/node_modules/webpack-cli/packages/init/README.md"
-    },
-    "sdk-codegen/node_modules/webpack-cli/packages/info/README.md": {
-      "summary": "`webpack-cli info`",
-      "sourceFile": "sdk-codegen/node_modules/webpack-cli/packages/info/README.md"
-    },
-    "sdk-codegen/node_modules/webpack-cli/packages/migrate/README.md": {
-      "summary": "`webpack-cli migrate`",
-      "sourceFile": "sdk-codegen/node_modules/webpack-cli/packages/migrate/README.md"
-    },
-    "sdk-codegen/node_modules/webpack-cli/packages/generate-plugin/README.md": {
-      "summary": "`webpack-cli generate-plugin`",
-      "sourceFile": "sdk-codegen/node_modules/webpack-cli/packages/generate-plugin/README.md"
-    },
-    "sdk-codegen/node_modules/webpack-cli/packages/generate-loader/README.md": {
-      "summary": "`webpack-cli generate-loader`",
-      "sourceFile": "sdk-codegen/node_modules/webpack-cli/packages/generate-loader/README.md"
-    },
-    "sdk-codegen/node_modules/webpack-cli/packages/serve/README.md": {
-      "summary": "`webpack-cli serve`",
-      "sourceFile": "sdk-codegen/node_modules/webpack-cli/packages/serve/README.md"
-    },
-    "sdk-codegen/node_modules/webpack-cli/packages/utils/README.md": {
-      "summary": "`utils`",
-      "sourceFile": "sdk-codegen/node_modules/webpack-cli/packages/utils/README.md"
-    },
-    "sdk-codegen/node_modules/webpack-cli/packages/generators/README.md": {
-      "summary": "`generators`",
-      "sourceFile": "sdk-codegen/node_modules/webpack-cli/packages/generators/README.md"
-    },
-    "sdk-codegen/node_modules/webpack-cli/packages/webpack-scaffold/README.md": {
-      "summary": "`webpack-scaffold`",
-      "sourceFile": "sdk-codegen/node_modules/webpack-cli/packages/webpack-scaffold/README.md"
-    },
-    "sdk-codegen/node_modules/webpack-cli/.github/CONTRIBUTING.md": {
-      "summary": "documentation on contributing",
-      "sourceFile": "sdk-codegen/node_modules/webpack-cli/.github/CONTRIBUTING.md"
-    },
-    "sdk-codegen/node_modules/webpack-cli/node_modules/yargs/docs/api.md": {
-      "summary": "Yargs' API",
-      "sourceFile": "sdk-codegen/node_modules/webpack-cli/node_modules/yargs/docs/api.md"
-    },
-    "sdk-codegen/node_modules/webpack-cli/node_modules/yargs/docs/examples.md": {
-      "summary": "Examples",
-      "sourceFile": "sdk-codegen/node_modules/webpack-cli/node_modules/yargs/docs/examples.md"
-    },
-    "sdk-codegen/node_modules/webpack-cli/node_modules/yargs/docs/tricks.md": {
-      "summary": "Objects",
-      "sourceFile": "sdk-codegen/node_modules/webpack-cli/node_modules/yargs/docs/tricks.md"
-    },
-    "sdk-codegen/node_modules/webpack-cli/node_modules/yargs/docs/advanced.md": {
-      "summary": "Customizing Yargs' Parser",
-      "sourceFile": "sdk-codegen/node_modules/webpack-cli/node_modules/yargs/docs/advanced.md"
-    },
-    "sdk-codegen/node_modules/webpack-cli/node_modules/yargs/contributing.md": {
-      "summary": "Contributing",
-      "sourceFile": "sdk-codegen/node_modules/webpack-cli/node_modules/yargs/contributing.md"
-    },
-    "sdk-codegen/node_modules/webpack-dev-middleware/.github/CONTRIBUTING.md": {
-      "summary": "CONTRIBUTING",
-      "sourceFile": "sdk-codegen/node_modules/webpack-dev-middleware/.github/CONTRIBUTING.md"
-    },
-    "sdk-codegen/node_modules/webpack-dev-server/CONTRIBUTING.md": {
-      "summary": "CONTRIBUTING.md",
-      "sourceFile": "sdk-codegen/node_modules/webpack-dev-server/CONTRIBUTING.md"
-    },
-    "sdk-codegen/node_modules/webpack-dev-server/node_modules/ws/doc/ws.md": {
-      "summary": "`/doc/ws.md`",
-      "sourceFile": "sdk-codegen/node_modules/webpack-dev-server/node_modules/ws/doc/ws.md"
-    },
-    "sdk-codegen/node_modules/webpack-dev-server/node_modules/yargs/docs/api.md": {
-      "summary": "Yargs' API",
-      "sourceFile": "sdk-codegen/node_modules/webpack-dev-server/node_modules/yargs/docs/api.md"
-    },
-    "sdk-codegen/node_modules/webpack-dev-server/node_modules/yargs/docs/examples.md": {
-      "summary": "Examples",
-      "sourceFile": "sdk-codegen/node_modules/webpack-dev-server/node_modules/yargs/docs/examples.md"
-    },
-    "sdk-codegen/node_modules/webpack-dev-server/node_modules/yargs/docs/tricks.md": {
-      "summary": "Objects",
-      "sourceFile": "sdk-codegen/node_modules/webpack-dev-server/node_modules/yargs/docs/tricks.md"
-    },
-    "sdk-codegen/node_modules/webpack-dev-server/node_modules/yargs/docs/advanced.md": {
-      "summary": "Customizing Yargs' Parser",
-      "sourceFile": "sdk-codegen/node_modules/webpack-dev-server/node_modules/yargs/docs/advanced.md"
-    },
-    "sdk-codegen/node_modules/webpack-dev-server/node_modules/yargs/contributing.md": {
-      "summary": "Contributing",
-      "sourceFile": "sdk-codegen/node_modules/webpack-dev-server/node_modules/yargs/contributing.md"
-    },
-    "sdk-codegen/node_modules/webpack-log/CONTRIBUTING.md": {
-      "summary": "CONTRIBUTING.md",
-      "sourceFile": "sdk-codegen/node_modules/webpack-log/CONTRIBUTING.md"
-    },
-    "sdk-codegen/node_modules/ws/doc/ws.md": {
-      "summary": "`/doc/ws.md`",
-      "sourceFile": "sdk-codegen/node_modules/ws/doc/ws.md"
-    },
-    "sdk-codegen/node_modules/yargs/docs/CHANGELOG-historical.md": {
-      "summary": "Historical Versions",
-      "sourceFile": "sdk-codegen/node_modules/yargs/docs/CHANGELOG-historical.md"
-    },
-    "sdk-codegen/node_modules/yargs/docs/api.md": {
-      "summary": "Yargs' API",
-      "sourceFile": "sdk-codegen/node_modules/yargs/docs/api.md"
-    },
-    "sdk-codegen/node_modules/yargs/docs/typescript.md": {
-      "summary": "docs",
-      "sourceFile": "sdk-codegen/node_modules/yargs/docs/typescript.md"
-    },
-    "sdk-codegen/node_modules/yargs/docs/webpack.md": {
-      "summary": "docs",
-      "sourceFile": "sdk-codegen/node_modules/yargs/docs/webpack.md"
-    },
-    "sdk-codegen/node_modules/yargs/docs/examples.md": {
-      "summary": "Examples",
-      "sourceFile": "sdk-codegen/node_modules/yargs/docs/examples.md"
-    },
-    "sdk-codegen/node_modules/yargs/docs/tricks.md": {
-      "summary": "Quotes",
-      "sourceFile": "sdk-codegen/node_modules/yargs/docs/tricks.md"
-    },
-    "sdk-codegen/node_modules/yargs/docs/advanced.md": {
-      "summary": "Customizing Yargs' Parser",
-      "sourceFile": "sdk-codegen/node_modules/yargs/docs/advanced.md"
-    },
-    "sdk-codegen/node_modules/yargs/contributing.md": {
-      "summary": "Contributing",
-      "sourceFile": "sdk-codegen/node_modules/yargs/contributing.md"
-    },
-    "sdk-codegen/packages/sdk/node_modules/readable-stream/README.md": {
-      "summary": "README.md",
-      "sourceFile": "sdk-codegen/packages/sdk/node_modules/readable-stream/README.md"
+    "sdk-codegen/node_modules/type-fest/source/package-json.d.ts": {
+      "summary": "`PackageJson`",
+      "sourceFile": "sdk-codegen/node_modules/type-fest/source/package-json.d.ts"
     },
     "sdk-codegen/packages/sdk-codegen-scripts/src/legacy.ts": {
       "summary": "legacy.ts",
@@ -3282,17 +886,13 @@
       "summary": "sdkGen.ts",
       "sourceFile": "sdk-codegen/packages/sdk-codegen-scripts/src/sdkGen.ts"
     },
+    "sdk-codegen/packages/sdk-codegen-scripts/src/specConvert.ts": {
+      "summary": "specConvert.ts",
+      "sourceFile": "sdk-codegen/packages/sdk-codegen-scripts/src/specConvert.ts"
+    },
     "sdk-codegen/packages/sdk-codegen-scripts/src/yamlToJson.ts": {
       "summary": "yamlToJson.ts",
       "sourceFile": "sdk-codegen/packages/sdk-codegen-scripts/src/yamlToJson.ts"
-    },
-    "sdk-codegen/packages/sdk-codegen-scripts/node_modules/prettier/CONTRIBUTING.md": {
-      "summary": "CONTRIBUTING.md",
-      "sourceFile": "sdk-codegen/packages/sdk-codegen-scripts/node_modules/prettier/CONTRIBUTING.md"
-    },
-    "sdk-codegen/packages/sdk-rtl/node_modules/readable-stream/README.md": {
-      "summary": "README.md",
-      "sourceFile": "sdk-codegen/packages/sdk-rtl/node_modules/readable-stream/README.md"
     },
     "sdk-codegen/swift/looker/Tests/lookerTests/modelsTests.swift": {
       "summary": "modelsTests.swift",
@@ -3578,12 +1178,12 @@
           {
             "sourceFile": "sdk-codegen/node_modules/@looker/sdk-codegen-scripts/src/miner.spec.ts",
             "column": 40,
-            "line": 136
+            "line": 171
           },
           {
             "sourceFile": "sdk-codegen/node_modules/@looker/sdk-codegen-scripts/src/miner.spec.ts",
             "column": 81,
-            "line": 149
+            "line": 184
           },
           {
             "sourceFile": "sdk-codegen/packages/sdk/src/test/methods.spec.ts",
@@ -3638,12 +1238,12 @@
           {
             "sourceFile": "sdk-codegen/packages/sdk-codegen-scripts/src/miner.spec.ts",
             "column": 40,
-            "line": 136
+            "line": 171
           },
           {
             "sourceFile": "sdk-codegen/packages/sdk-codegen-scripts/src/miner.spec.ts",
             "column": 81,
-            "line": 149
+            "line": 184
           }
         ],
         ".kt": [
@@ -5914,7 +3514,7 @@
           {
             "sourceFile": "sdk-codegen/node_modules/@looker/sdk-codegen-scripts/src/miner.spec.ts",
             "column": 37,
-            "line": 142
+            "line": 177
           },
           {
             "sourceFile": "sdk-codegen/node_modules/@looker/sdk-rtl/src/apiMethods.ts",
@@ -5929,7 +3529,7 @@
           {
             "sourceFile": "sdk-codegen/packages/sdk-codegen-scripts/src/miner.spec.ts",
             "column": 37,
-            "line": 142
+            "line": 177
           },
           {
             "sourceFile": "sdk-codegen/packages/sdk-rtl/src/apiMethods.ts",
@@ -7141,12 +4741,12 @@
           {
             "sourceFile": "sdk-codegen/node_modules/@looker/sdk-codegen-scripts/src/miner.spec.ts",
             "column": 35,
-            "line": 149
+            "line": 184
           },
           {
             "sourceFile": "sdk-codegen/packages/sdk-codegen-scripts/src/miner.spec.ts",
             "column": 35,
-            "line": 149
+            "line": 184
           }
         ]
       }

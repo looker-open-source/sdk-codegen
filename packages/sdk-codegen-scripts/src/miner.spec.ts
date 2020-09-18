@@ -133,7 +133,7 @@ describe('example mining', () => {
         expect(first.summary).toEqual('Logout all users on the instance')
         expect(first.sourceFile).toEqual('example/ruby/logout_all_users.rb')
       })
-      it('processes multiple link url patterns and strips leading dash', () => {
+      it.skip('processes multiple link url patterns and strips leading dash', () => {
         const md =
           '\t  -  Logout all users on the instance [[link]](logout_all_users.rb) logs in [[link]](logs_in.rb)'
         const actual = marker.mineContent('example/ruby/README.md', md)
