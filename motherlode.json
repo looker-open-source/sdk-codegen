@@ -203,7 +203,7 @@
       "sourceFile": "sdk-codegen/examples/typescript/dual.ts"
     },
     "sdk-codegen/examples/typescript/customConfigReader.ts": {
-      "summary": "custom configReader",
+      "summary": "custom **configReader**",
       "sourceFile": "sdk-codegen/examples/typescript/customConfigReader.ts"
     },
     "sdk-codegen/examples/typescript/utils.ts": {
