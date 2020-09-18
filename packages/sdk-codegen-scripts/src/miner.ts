@@ -74,10 +74,13 @@ export const filterAllFiles = (fileName: string) => fileName.trim().length > 0
  * @param fileName name of file from which to extract its extension
  */
 export const filterCodeFiles = (fileName: string) => {
+  if (/(^|\/)node_modules|lib\//gi.test(fileName)) return false
   const ext = path.extname(fileName).toLocaleLowerCase()
   // eslint-disable-next-line @typescript-eslint/no-use-before-define
   return ext in fileMiners
 }
+
+const skipFolder = (name: string) => /node_modules|lib/gi.test(name)
 
 /**
  * Finds all file recursively
@@ -94,7 +97,8 @@ export const getAllFiles = (
 
   files.forEach((file) => {
     if (fs.statSync(searchPath + '/' + file).isDirectory()) {
-      listOfFiles = getAllFiles(searchPath + '/' + file, listOfFiles, filter)
+      if (!skipFolder(file))
+        listOfFiles = getAllFiles(searchPath + '/' + file, listOfFiles, filter)
     } else {
       if (filter(file)) listOfFiles.push(path.join(searchPath, '/', file))
     }

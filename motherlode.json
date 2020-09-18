@@ -1,5 +1,5 @@
 {
-  "commitHash": "b94ebe67aa26605a1d0037fcb7355a58eca1145d",
+  "commitHash": "b5c8394dcbc8728e2ff34cbb3971580ddbb5fde8",
   "remoteOrigin": "https://github.com/looker-open-source/sdk-codegen",
   "summaries": {
     "sdk-codegen/packages/sdk-codegen/src/codeGenerators.ts": {
@@ -203,7 +203,7 @@
       "sourceFile": "sdk-codegen/examples/typescript/dual.ts"
     },
     "sdk-codegen/examples/typescript/customConfigReader.ts": {
-      "summary": "custom **configReader**",
+      "summary": "custom configReader",
       "sourceFile": "sdk-codegen/examples/typescript/customConfigReader.ts"
     },
     "sdk-codegen/examples/typescript/utils.ts": {
@@ -211,7 +211,7 @@
       "sourceFile": "sdk-codegen/examples/typescript/utils.ts"
     },
     "sdk-codegen/examples/typescript/sudoAsUser.ts": {
-      "summary": "`sudo` as user",
+      "summary": "sudo as user",
       "sourceFile": "sdk-codegen/examples/typescript/sudoAsUser.ts"
     },
     "sdk-codegen/examples/typescript/downloadTile.ts": {
@@ -221,662 +221,6 @@
     "sdk-codegen/examples/typescript/downloadDashboard.ts": {
       "summary": "download a dashboard by name",
       "sourceFile": "sdk-codegen/examples/typescript/downloadDashboard.ts"
-    },
-    "sdk-codegen/looker-open-source/components/blob/master/packages/www/src/MDX/Pre/allComponents.ts": {
-      "summary": "allComponents.ts",
-      "sourceFile": "sdk-codegen/looker-open-source/components/blob/master/packages/www/src/MDX/Pre/allComponents.ts"
-    },
-    "sdk-codegen/node_modules/@looker/sdk-codegen-scripts/src/legacy.ts": {
-      "summary": "legacy.ts",
-      "sourceFile": "sdk-codegen/node_modules/@looker/sdk-codegen-scripts/src/legacy.ts"
-    },
-    "sdk-codegen/node_modules/@looker/sdk-codegen-scripts/src/sdkGen.ts": {
-      "summary": "sdkGen.ts",
-      "sourceFile": "sdk-codegen/node_modules/@looker/sdk-codegen-scripts/src/sdkGen.ts"
-    },
-    "sdk-codegen/node_modules/@looker/sdk-codegen-scripts/src/specConvert.ts": {
-      "summary": "specConvert.ts",
-      "sourceFile": "sdk-codegen/node_modules/@looker/sdk-codegen-scripts/src/specConvert.ts"
-    },
-    "sdk-codegen/node_modules/@looker/sdk-codegen-scripts/src/yamlToJson.ts": {
-      "summary": "yamlToJson.ts",
-      "sourceFile": "sdk-codegen/node_modules/@looker/sdk-codegen-scripts/src/yamlToJson.ts"
-    },
-    "sdk-codegen/node_modules/@nodelib/fs.scandir/src/types/index.ts": {
-      "summary": "`fs.Dirent`",
-      "sourceFile": "sdk-codegen/node_modules/@nodelib/fs.scandir/src/types/index.ts"
-    },
-    "sdk-codegen/node_modules/@nodelib/fs.scandir/src/utils/fs.ts": {
-      "summary": "`DirentFromStats`",
-      "sourceFile": "sdk-codegen/node_modules/@nodelib/fs.scandir/src/utils/fs.ts"
-    },
-    "sdk-codegen/node_modules/@nodelib/fs.scandir/src/adapters/fs.ts": {
-      "summary": "`FileSystemAdapter`",
-      "sourceFile": "sdk-codegen/node_modules/@nodelib/fs.scandir/src/adapters/fs.ts"
-    },
-    "sdk-codegen/node_modules/@nodelib/fs.stat/src/adapters/fs.ts": {
-      "summary": "`FileSystemAdapter`",
-      "sourceFile": "sdk-codegen/node_modules/@nodelib/fs.stat/src/adapters/fs.ts"
-    },
-    "sdk-codegen/node_modules/@nodelib/fs.walk/src/types/index.ts": {
-      "summary": "`fs.Dirent`",
-      "sourceFile": "sdk-codegen/node_modules/@nodelib/fs.walk/src/types/index.ts"
-    },
-    "sdk-codegen/node_modules/@nodelib/fs.walk/src/settings.ts": {
-      "summary": "`ErrorFilterFunction`",
-      "sourceFile": "sdk-codegen/node_modules/@nodelib/fs.walk/src/settings.ts"
-    },
-    "sdk-codegen/node_modules/@stoplight/json-ref-resolver/src/__tests__/resolver.spec.ts": {
-      "summary": "example test",
-      "sourceFile": "sdk-codegen/node_modules/@stoplight/json-ref-resolver/src/__tests__/resolver.spec.ts"
-    },
-    "sdk-codegen/node_modules/@stoplight/json-ref-resolver/src/types.ts": {
-      "summary": "src/types.ts",
-      "sourceFile": "sdk-codegen/node_modules/@stoplight/json-ref-resolver/src/types.ts"
-    },
-    "sdk-codegen/node_modules/@stoplight/yaml/src/getJsonPathForPosition.ts": {
-      "summary": "getJsonPathForPosition",
-      "sourceFile": "sdk-codegen/node_modules/@stoplight/yaml/src/getJsonPathForPosition.ts"
-    },
-    "sdk-codegen/node_modules/@stoplight/yaml/src/getLocationForJsonPath.ts": {
-      "summary": "getLocationForJsonPath",
-      "sourceFile": "sdk-codegen/node_modules/@stoplight/yaml/src/getLocationForJsonPath.ts"
-    },
-    "sdk-codegen/node_modules/@stoplight/yaml/src/parseWithPointers.ts": {
-      "summary": "parseWithPointers",
-      "sourceFile": "sdk-codegen/node_modules/@stoplight/yaml/src/parseWithPointers.ts"
-    },
-    "sdk-codegen/node_modules/@typescript-eslint/typescript-estree/src/ts-estree/ts-estree.ts": {
-      "summary": "`TSESTree`",
-      "sourceFile": "sdk-codegen/node_modules/@typescript-eslint/typescript-estree/src/ts-estree/ts-estree.ts"
-    },
-    "sdk-codegen/node_modules/@typescript-eslint/typescript-estree/src/ts-estree/ast-node-types.ts": {
-      "summary": "`AST_TOKEN_TYPES`",
-      "sourceFile": "sdk-codegen/node_modules/@typescript-eslint/typescript-estree/src/ts-estree/ast-node-types.ts"
-    },
-    "sdk-codegen/node_modules/@typescript-eslint/typescript-estree/src/parser-options.ts": {
-      "summary": "`ParserServices`",
-      "sourceFile": "sdk-codegen/node_modules/@typescript-eslint/typescript-estree/src/parser-options.ts"
-    },
-    "sdk-codegen/node_modules/ansi-escapes/node_modules/type-fest/source/basic.d.ts": {
-      "summary": "`ObservableLike`",
-      "sourceFile": "sdk-codegen/node_modules/ansi-escapes/node_modules/type-fest/source/basic.d.ts"
-    },
-    "sdk-codegen/node_modules/ansi-escapes/node_modules/type-fest/source/except.d.ts": {
-      "summary": "`Except`",
-      "sourceFile": "sdk-codegen/node_modules/ansi-escapes/node_modules/type-fest/source/except.d.ts"
-    },
-    "sdk-codegen/node_modules/ansi-escapes/node_modules/type-fest/source/mutable.d.ts": {
-      "summary": "`Mutable`",
-      "sourceFile": "sdk-codegen/node_modules/ansi-escapes/node_modules/type-fest/source/mutable.d.ts"
-    },
-    "sdk-codegen/node_modules/ansi-escapes/node_modules/type-fest/source/merge.d.ts": {
-      "summary": "`Merge`",
-      "sourceFile": "sdk-codegen/node_modules/ansi-escapes/node_modules/type-fest/source/merge.d.ts"
-    },
-    "sdk-codegen/node_modules/ansi-escapes/node_modules/type-fest/source/merge-exclusive.d.ts": {
-      "summary": "`MergeExclusive`",
-      "sourceFile": "sdk-codegen/node_modules/ansi-escapes/node_modules/type-fest/source/merge-exclusive.d.ts"
-    },
-    "sdk-codegen/node_modules/ansi-escapes/node_modules/type-fest/source/require-at-least-one.d.ts": {
-      "summary": "`RequireAtLeastOne`",
-      "sourceFile": "sdk-codegen/node_modules/ansi-escapes/node_modules/type-fest/source/require-at-least-one.d.ts"
-    },
-    "sdk-codegen/node_modules/ansi-escapes/node_modules/type-fest/source/require-exactly-one.d.ts": {
-      "summary": "`RequireExactlyOne`",
-      "sourceFile": "sdk-codegen/node_modules/ansi-escapes/node_modules/type-fest/source/require-exactly-one.d.ts"
-    },
-    "sdk-codegen/node_modules/ansi-escapes/node_modules/type-fest/source/partial-deep.d.ts": {
-      "summary": "`PartialDeep`",
-      "sourceFile": "sdk-codegen/node_modules/ansi-escapes/node_modules/type-fest/source/partial-deep.d.ts"
-    },
-    "sdk-codegen/node_modules/ansi-escapes/node_modules/type-fest/source/readonly-deep.d.ts": {
-      "summary": "`ReadonlyDeep`",
-      "sourceFile": "sdk-codegen/node_modules/ansi-escapes/node_modules/type-fest/source/readonly-deep.d.ts"
-    },
-    "sdk-codegen/node_modules/ansi-escapes/node_modules/type-fest/source/literal-union.d.ts": {
-      "summary": "`LiteralUnion`",
-      "sourceFile": "sdk-codegen/node_modules/ansi-escapes/node_modules/type-fest/source/literal-union.d.ts"
-    },
-    "sdk-codegen/node_modules/ansi-escapes/node_modules/type-fest/source/promisable.d.ts": {
-      "summary": "`Promisable`",
-      "sourceFile": "sdk-codegen/node_modules/ansi-escapes/node_modules/type-fest/source/promisable.d.ts"
-    },
-    "sdk-codegen/node_modules/ansi-escapes/node_modules/type-fest/source/opaque.d.ts": {
-      "summary": "`Opaque`",
-      "sourceFile": "sdk-codegen/node_modules/ansi-escapes/node_modules/type-fest/source/opaque.d.ts"
-    },
-    "sdk-codegen/node_modules/ansi-escapes/node_modules/type-fest/source/set-optional.d.ts": {
-      "summary": "`SetOptional`",
-      "sourceFile": "sdk-codegen/node_modules/ansi-escapes/node_modules/type-fest/source/set-optional.d.ts"
-    },
-    "sdk-codegen/node_modules/ansi-escapes/node_modules/type-fest/source/set-required.d.ts": {
-      "summary": "`SetRequired`",
-      "sourceFile": "sdk-codegen/node_modules/ansi-escapes/node_modules/type-fest/source/set-required.d.ts"
-    },
-    "sdk-codegen/node_modules/ansi-escapes/node_modules/type-fest/source/promise-value.d.ts": {
-      "summary": "`PromiseValue`",
-      "sourceFile": "sdk-codegen/node_modules/ansi-escapes/node_modules/type-fest/source/promise-value.d.ts"
-    },
-    "sdk-codegen/node_modules/ansi-escapes/node_modules/type-fest/source/async-return-type.d.ts": {
-      "summary": "`AsyncReturnType`",
-      "sourceFile": "sdk-codegen/node_modules/ansi-escapes/node_modules/type-fest/source/async-return-type.d.ts"
-    },
-    "sdk-codegen/node_modules/ansi-escapes/node_modules/type-fest/source/conditional-keys.d.ts": {
-      "summary": "`ConditionalKeys`",
-      "sourceFile": "sdk-codegen/node_modules/ansi-escapes/node_modules/type-fest/source/conditional-keys.d.ts"
-    },
-    "sdk-codegen/node_modules/ansi-escapes/node_modules/type-fest/source/conditional-pick.d.ts": {
-      "summary": "`ConditionalPick`",
-      "sourceFile": "sdk-codegen/node_modules/ansi-escapes/node_modules/type-fest/source/conditional-pick.d.ts"
-    },
-    "sdk-codegen/node_modules/ansi-escapes/node_modules/type-fest/source/conditional-except.d.ts": {
-      "summary": "`ConditionalExcept`",
-      "sourceFile": "sdk-codegen/node_modules/ansi-escapes/node_modules/type-fest/source/conditional-except.d.ts"
-    },
-    "sdk-codegen/node_modules/ansi-escapes/node_modules/type-fest/source/package-json.d.ts": {
-      "summary": "`PackageJson`",
-      "sourceFile": "sdk-codegen/node_modules/ansi-escapes/node_modules/type-fest/source/package-json.d.ts"
-    },
-    "sdk-codegen/node_modules/ansi-escapes/node_modules/type-fest/source/tsconfig-json.d.ts": {
-      "summary": "`TsConfigJson`",
-      "sourceFile": "sdk-codegen/node_modules/ansi-escapes/node_modules/type-fest/source/tsconfig-json.d.ts"
-    },
-    "sdk-codegen/node_modules/ast-types/lib/scope.ts": {
-      "summary": "scope.ts",
-      "sourceFile": "sdk-codegen/node_modules/ast-types/lib/scope.ts"
-    },
-    "sdk-codegen/node_modules/ast-types/def/babel-core.ts": {
-      "summary": "babel-core.ts",
-      "sourceFile": "sdk-codegen/node_modules/ast-types/def/babel-core.ts"
-    },
-    "sdk-codegen/node_modules/ast-types/def/babel.ts": {
-      "summary": "babel.ts",
-      "sourceFile": "sdk-codegen/node_modules/ast-types/def/babel.ts"
-    },
-    "sdk-codegen/node_modules/ast-types/def/core.ts": {
-      "summary": "core.ts",
-      "sourceFile": "sdk-codegen/node_modules/ast-types/def/core.ts"
-    },
-    "sdk-codegen/node_modules/ast-types/def/es-proposals.ts": {
-      "summary": "es-proposals.ts",
-      "sourceFile": "sdk-codegen/node_modules/ast-types/def/es-proposals.ts"
-    },
-    "sdk-codegen/node_modules/ast-types/def/es6.ts": {
-      "summary": "es6.ts",
-      "sourceFile": "sdk-codegen/node_modules/ast-types/def/es6.ts"
-    },
-    "sdk-codegen/node_modules/ast-types/def/es7.ts": {
-      "summary": "es7.ts",
-      "sourceFile": "sdk-codegen/node_modules/ast-types/def/es7.ts"
-    },
-    "sdk-codegen/node_modules/ast-types/def/es2020.ts": {
-      "summary": "es2020.ts",
-      "sourceFile": "sdk-codegen/node_modules/ast-types/def/es2020.ts"
-    },
-    "sdk-codegen/node_modules/ast-types/def/esprima.ts": {
-      "summary": "esprima.ts",
-      "sourceFile": "sdk-codegen/node_modules/ast-types/def/esprima.ts"
-    },
-    "sdk-codegen/node_modules/ast-types/def/flow.ts": {
-      "summary": "flow.ts",
-      "sourceFile": "sdk-codegen/node_modules/ast-types/def/flow.ts"
-    },
-    "sdk-codegen/node_modules/ast-types/def/jsx.ts": {
-      "summary": "jsx.ts",
-      "sourceFile": "sdk-codegen/node_modules/ast-types/def/jsx.ts"
-    },
-    "sdk-codegen/node_modules/ast-types/def/type-annotations.ts": {
-      "summary": "type-annotations.ts",
-      "sourceFile": "sdk-codegen/node_modules/ast-types/def/type-annotations.ts"
-    },
-    "sdk-codegen/node_modules/ast-types/def/typescripts.ts": {
-      "summary": "typescripts.ts",
-      "sourceFile": "sdk-codegen/node_modules/ast-types/def/typescripts.ts"
-    },
-    "sdk-codegen/node_modules/conventional-changelog-writer/node_modules/type-fest/source/basic.d.ts": {
-      "summary": "`ObservableLike`",
-      "sourceFile": "sdk-codegen/node_modules/conventional-changelog-writer/node_modules/type-fest/source/basic.d.ts"
-    },
-    "sdk-codegen/node_modules/conventional-changelog-writer/node_modules/type-fest/source/except.d.ts": {
-      "summary": "`Except`",
-      "sourceFile": "sdk-codegen/node_modules/conventional-changelog-writer/node_modules/type-fest/source/except.d.ts"
-    },
-    "sdk-codegen/node_modules/conventional-changelog-writer/node_modules/type-fest/source/mutable.d.ts": {
-      "summary": "`Mutable`",
-      "sourceFile": "sdk-codegen/node_modules/conventional-changelog-writer/node_modules/type-fest/source/mutable.d.ts"
-    },
-    "sdk-codegen/node_modules/conventional-changelog-writer/node_modules/type-fest/source/merge.d.ts": {
-      "summary": "`Merge`",
-      "sourceFile": "sdk-codegen/node_modules/conventional-changelog-writer/node_modules/type-fest/source/merge.d.ts"
-    },
-    "sdk-codegen/node_modules/conventional-changelog-writer/node_modules/type-fest/source/merge-exclusive.d.ts": {
-      "summary": "`MergeExclusive`",
-      "sourceFile": "sdk-codegen/node_modules/conventional-changelog-writer/node_modules/type-fest/source/merge-exclusive.d.ts"
-    },
-    "sdk-codegen/node_modules/conventional-changelog-writer/node_modules/type-fest/source/require-at-least-one.d.ts": {
-      "summary": "`RequireAtLeastOne`",
-      "sourceFile": "sdk-codegen/node_modules/conventional-changelog-writer/node_modules/type-fest/source/require-at-least-one.d.ts"
-    },
-    "sdk-codegen/node_modules/conventional-changelog-writer/node_modules/type-fest/source/require-exactly-one.d.ts": {
-      "summary": "`RequireExactlyOne`",
-      "sourceFile": "sdk-codegen/node_modules/conventional-changelog-writer/node_modules/type-fest/source/require-exactly-one.d.ts"
-    },
-    "sdk-codegen/node_modules/conventional-changelog-writer/node_modules/type-fest/source/partial-deep.d.ts": {
-      "summary": "`PartialDeep`",
-      "sourceFile": "sdk-codegen/node_modules/conventional-changelog-writer/node_modules/type-fest/source/partial-deep.d.ts"
-    },
-    "sdk-codegen/node_modules/conventional-changelog-writer/node_modules/type-fest/source/readonly-deep.d.ts": {
-      "summary": "`ReadonlyDeep`",
-      "sourceFile": "sdk-codegen/node_modules/conventional-changelog-writer/node_modules/type-fest/source/readonly-deep.d.ts"
-    },
-    "sdk-codegen/node_modules/conventional-changelog-writer/node_modules/type-fest/source/literal-union.d.ts": {
-      "summary": "`LiteralUnion`",
-      "sourceFile": "sdk-codegen/node_modules/conventional-changelog-writer/node_modules/type-fest/source/literal-union.d.ts"
-    },
-    "sdk-codegen/node_modules/conventional-changelog-writer/node_modules/type-fest/source/promisable.d.ts": {
-      "summary": "`Promisable`",
-      "sourceFile": "sdk-codegen/node_modules/conventional-changelog-writer/node_modules/type-fest/source/promisable.d.ts"
-    },
-    "sdk-codegen/node_modules/conventional-changelog-writer/node_modules/type-fest/source/opaque.d.ts": {
-      "summary": "`Opaque`",
-      "sourceFile": "sdk-codegen/node_modules/conventional-changelog-writer/node_modules/type-fest/source/opaque.d.ts"
-    },
-    "sdk-codegen/node_modules/conventional-changelog-writer/node_modules/type-fest/source/set-optional.d.ts": {
-      "summary": "`SetOptional`",
-      "sourceFile": "sdk-codegen/node_modules/conventional-changelog-writer/node_modules/type-fest/source/set-optional.d.ts"
-    },
-    "sdk-codegen/node_modules/conventional-changelog-writer/node_modules/type-fest/source/set-required.d.ts": {
-      "summary": "`SetRequired`",
-      "sourceFile": "sdk-codegen/node_modules/conventional-changelog-writer/node_modules/type-fest/source/set-required.d.ts"
-    },
-    "sdk-codegen/node_modules/conventional-changelog-writer/node_modules/type-fest/source/value-of.d.ts": {
-      "summary": "`ValueOf`",
-      "sourceFile": "sdk-codegen/node_modules/conventional-changelog-writer/node_modules/type-fest/source/value-of.d.ts"
-    },
-    "sdk-codegen/node_modules/conventional-changelog-writer/node_modules/type-fest/source/promise-value.d.ts": {
-      "summary": "`PromiseValue`",
-      "sourceFile": "sdk-codegen/node_modules/conventional-changelog-writer/node_modules/type-fest/source/promise-value.d.ts"
-    },
-    "sdk-codegen/node_modules/conventional-changelog-writer/node_modules/type-fest/source/async-return-type.d.ts": {
-      "summary": "`AsyncReturnType`",
-      "sourceFile": "sdk-codegen/node_modules/conventional-changelog-writer/node_modules/type-fest/source/async-return-type.d.ts"
-    },
-    "sdk-codegen/node_modules/conventional-changelog-writer/node_modules/type-fest/source/conditional-keys.d.ts": {
-      "summary": "`ConditionalKeys`",
-      "sourceFile": "sdk-codegen/node_modules/conventional-changelog-writer/node_modules/type-fest/source/conditional-keys.d.ts"
-    },
-    "sdk-codegen/node_modules/conventional-changelog-writer/node_modules/type-fest/source/conditional-pick.d.ts": {
-      "summary": "`ConditionalPick`",
-      "sourceFile": "sdk-codegen/node_modules/conventional-changelog-writer/node_modules/type-fest/source/conditional-pick.d.ts"
-    },
-    "sdk-codegen/node_modules/conventional-changelog-writer/node_modules/type-fest/source/conditional-except.d.ts": {
-      "summary": "`ConditionalExcept`",
-      "sourceFile": "sdk-codegen/node_modules/conventional-changelog-writer/node_modules/type-fest/source/conditional-except.d.ts"
-    },
-    "sdk-codegen/node_modules/conventional-changelog-writer/node_modules/type-fest/source/union-to-intersection.d.ts": {
-      "summary": "`UnionToIntersection`",
-      "sourceFile": "sdk-codegen/node_modules/conventional-changelog-writer/node_modules/type-fest/source/union-to-intersection.d.ts"
-    },
-    "sdk-codegen/node_modules/conventional-changelog-writer/node_modules/type-fest/source/stringified.d.ts": {
-      "summary": "`Stringified`",
-      "sourceFile": "sdk-codegen/node_modules/conventional-changelog-writer/node_modules/type-fest/source/stringified.d.ts"
-    },
-    "sdk-codegen/node_modules/conventional-changelog-writer/node_modules/type-fest/source/package-json.d.ts": {
-      "summary": "`PackageJson`",
-      "sourceFile": "sdk-codegen/node_modules/conventional-changelog-writer/node_modules/type-fest/source/package-json.d.ts"
-    },
-    "sdk-codegen/node_modules/conventional-changelog-writer/node_modules/type-fest/source/tsconfig-json.d.ts": {
-      "summary": "`TsConfigJson`",
-      "sourceFile": "sdk-codegen/node_modules/conventional-changelog-writer/node_modules/type-fest/source/tsconfig-json.d.ts"
-    },
-    "sdk-codegen/node_modules/conventional-commits-parser/node_modules/type-fest/source/basic.d.ts": {
-      "summary": "`ObservableLike`",
-      "sourceFile": "sdk-codegen/node_modules/conventional-commits-parser/node_modules/type-fest/source/basic.d.ts"
-    },
-    "sdk-codegen/node_modules/conventional-commits-parser/node_modules/type-fest/source/except.d.ts": {
-      "summary": "`Except`",
-      "sourceFile": "sdk-codegen/node_modules/conventional-commits-parser/node_modules/type-fest/source/except.d.ts"
-    },
-    "sdk-codegen/node_modules/conventional-commits-parser/node_modules/type-fest/source/mutable.d.ts": {
-      "summary": "`Mutable`",
-      "sourceFile": "sdk-codegen/node_modules/conventional-commits-parser/node_modules/type-fest/source/mutable.d.ts"
-    },
-    "sdk-codegen/node_modules/conventional-commits-parser/node_modules/type-fest/source/merge.d.ts": {
-      "summary": "`Merge`",
-      "sourceFile": "sdk-codegen/node_modules/conventional-commits-parser/node_modules/type-fest/source/merge.d.ts"
-    },
-    "sdk-codegen/node_modules/conventional-commits-parser/node_modules/type-fest/source/merge-exclusive.d.ts": {
-      "summary": "`MergeExclusive`",
-      "sourceFile": "sdk-codegen/node_modules/conventional-commits-parser/node_modules/type-fest/source/merge-exclusive.d.ts"
-    },
-    "sdk-codegen/node_modules/conventional-commits-parser/node_modules/type-fest/source/require-at-least-one.d.ts": {
-      "summary": "`RequireAtLeastOne`",
-      "sourceFile": "sdk-codegen/node_modules/conventional-commits-parser/node_modules/type-fest/source/require-at-least-one.d.ts"
-    },
-    "sdk-codegen/node_modules/conventional-commits-parser/node_modules/type-fest/source/require-exactly-one.d.ts": {
-      "summary": "`RequireExactlyOne`",
-      "sourceFile": "sdk-codegen/node_modules/conventional-commits-parser/node_modules/type-fest/source/require-exactly-one.d.ts"
-    },
-    "sdk-codegen/node_modules/conventional-commits-parser/node_modules/type-fest/source/partial-deep.d.ts": {
-      "summary": "`PartialDeep`",
-      "sourceFile": "sdk-codegen/node_modules/conventional-commits-parser/node_modules/type-fest/source/partial-deep.d.ts"
-    },
-    "sdk-codegen/node_modules/conventional-commits-parser/node_modules/type-fest/source/readonly-deep.d.ts": {
-      "summary": "`ReadonlyDeep`",
-      "sourceFile": "sdk-codegen/node_modules/conventional-commits-parser/node_modules/type-fest/source/readonly-deep.d.ts"
-    },
-    "sdk-codegen/node_modules/conventional-commits-parser/node_modules/type-fest/source/literal-union.d.ts": {
-      "summary": "`LiteralUnion`",
-      "sourceFile": "sdk-codegen/node_modules/conventional-commits-parser/node_modules/type-fest/source/literal-union.d.ts"
-    },
-    "sdk-codegen/node_modules/conventional-commits-parser/node_modules/type-fest/source/promisable.d.ts": {
-      "summary": "`Promisable`",
-      "sourceFile": "sdk-codegen/node_modules/conventional-commits-parser/node_modules/type-fest/source/promisable.d.ts"
-    },
-    "sdk-codegen/node_modules/conventional-commits-parser/node_modules/type-fest/source/opaque.d.ts": {
-      "summary": "`Opaque`",
-      "sourceFile": "sdk-codegen/node_modules/conventional-commits-parser/node_modules/type-fest/source/opaque.d.ts"
-    },
-    "sdk-codegen/node_modules/conventional-commits-parser/node_modules/type-fest/source/set-optional.d.ts": {
-      "summary": "`SetOptional`",
-      "sourceFile": "sdk-codegen/node_modules/conventional-commits-parser/node_modules/type-fest/source/set-optional.d.ts"
-    },
-    "sdk-codegen/node_modules/conventional-commits-parser/node_modules/type-fest/source/set-required.d.ts": {
-      "summary": "`SetRequired`",
-      "sourceFile": "sdk-codegen/node_modules/conventional-commits-parser/node_modules/type-fest/source/set-required.d.ts"
-    },
-    "sdk-codegen/node_modules/conventional-commits-parser/node_modules/type-fest/source/value-of.d.ts": {
-      "summary": "`ValueOf`",
-      "sourceFile": "sdk-codegen/node_modules/conventional-commits-parser/node_modules/type-fest/source/value-of.d.ts"
-    },
-    "sdk-codegen/node_modules/conventional-commits-parser/node_modules/type-fest/source/promise-value.d.ts": {
-      "summary": "`PromiseValue`",
-      "sourceFile": "sdk-codegen/node_modules/conventional-commits-parser/node_modules/type-fest/source/promise-value.d.ts"
-    },
-    "sdk-codegen/node_modules/conventional-commits-parser/node_modules/type-fest/source/async-return-type.d.ts": {
-      "summary": "`AsyncReturnType`",
-      "sourceFile": "sdk-codegen/node_modules/conventional-commits-parser/node_modules/type-fest/source/async-return-type.d.ts"
-    },
-    "sdk-codegen/node_modules/conventional-commits-parser/node_modules/type-fest/source/conditional-keys.d.ts": {
-      "summary": "`ConditionalKeys`",
-      "sourceFile": "sdk-codegen/node_modules/conventional-commits-parser/node_modules/type-fest/source/conditional-keys.d.ts"
-    },
-    "sdk-codegen/node_modules/conventional-commits-parser/node_modules/type-fest/source/conditional-pick.d.ts": {
-      "summary": "`ConditionalPick`",
-      "sourceFile": "sdk-codegen/node_modules/conventional-commits-parser/node_modules/type-fest/source/conditional-pick.d.ts"
-    },
-    "sdk-codegen/node_modules/conventional-commits-parser/node_modules/type-fest/source/conditional-except.d.ts": {
-      "summary": "`ConditionalExcept`",
-      "sourceFile": "sdk-codegen/node_modules/conventional-commits-parser/node_modules/type-fest/source/conditional-except.d.ts"
-    },
-    "sdk-codegen/node_modules/conventional-commits-parser/node_modules/type-fest/source/union-to-intersection.d.ts": {
-      "summary": "`UnionToIntersection`",
-      "sourceFile": "sdk-codegen/node_modules/conventional-commits-parser/node_modules/type-fest/source/union-to-intersection.d.ts"
-    },
-    "sdk-codegen/node_modules/conventional-commits-parser/node_modules/type-fest/source/stringified.d.ts": {
-      "summary": "`Stringified`",
-      "sourceFile": "sdk-codegen/node_modules/conventional-commits-parser/node_modules/type-fest/source/stringified.d.ts"
-    },
-    "sdk-codegen/node_modules/conventional-commits-parser/node_modules/type-fest/source/package-json.d.ts": {
-      "summary": "`PackageJson`",
-      "sourceFile": "sdk-codegen/node_modules/conventional-commits-parser/node_modules/type-fest/source/package-json.d.ts"
-    },
-    "sdk-codegen/node_modules/conventional-commits-parser/node_modules/type-fest/source/tsconfig-json.d.ts": {
-      "summary": "`TsConfigJson`",
-      "sourceFile": "sdk-codegen/node_modules/conventional-commits-parser/node_modules/type-fest/source/tsconfig-json.d.ts"
-    },
-    "sdk-codegen/node_modules/fast-glob/src/managers/tasks.ts": {
-      "summary": "`Task`",
-      "sourceFile": "sdk-codegen/node_modules/fast-glob/src/managers/tasks.ts"
-    },
-    "sdk-codegen/node_modules/listr2/examples/subtasks.example.ts": {
-      "summary": "examples section",
-      "sourceFile": "sdk-codegen/node_modules/listr2/examples/subtasks.example.ts"
-    },
-    "sdk-codegen/node_modules/listr2/examples/get-user-input.example.ts": {
-      "summary": "examples section",
-      "sourceFile": "sdk-codegen/node_modules/listr2/examples/get-user-input.example.ts"
-    },
-    "sdk-codegen/node_modules/listr2/examples/task-enable.example.ts": {
-      "summary": "examples section",
-      "sourceFile": "sdk-codegen/node_modules/listr2/examples/task-enable.example.ts"
-    },
-    "sdk-codegen/node_modules/listr2/examples/task-skip.example.ts": {
-      "summary": "examples section",
-      "sourceFile": "sdk-codegen/node_modules/listr2/examples/task-skip.example.ts"
-    },
-    "sdk-codegen/node_modules/listr2/examples/show-output.example.ts": {
-      "summary": "examples section",
-      "sourceFile": "sdk-codegen/node_modules/listr2/examples/show-output.example.ts"
-    },
-    "sdk-codegen/node_modules/listr2/examples/stream.example.ts": {
-      "summary": "examples section",
-      "sourceFile": "sdk-codegen/node_modules/listr2/examples/stream.example.ts"
-    },
-    "sdk-codegen/node_modules/listr2/examples/manager.example.ts": {
-      "summary": "examples section",
-      "sourceFile": "sdk-codegen/node_modules/listr2/examples/manager.example.ts"
-    },
-    "sdk-codegen/node_modules/listr2/examples/renderer-fallback.example.ts": {
-      "summary": "examples section",
-      "sourceFile": "sdk-codegen/node_modules/listr2/examples/renderer-fallback.example.ts"
-    },
-    "sdk-codegen/node_modules/listr2/src/renderer/default.renderer.ts": {
-      "summary": "default renderer",
-      "sourceFile": "sdk-codegen/node_modules/listr2/src/renderer/default.renderer.ts"
-    },
-    "sdk-codegen/node_modules/listr2/src/renderer/verbose.renderer.ts": {
-      "summary": "verbose renderer",
-      "sourceFile": "sdk-codegen/node_modules/listr2/src/renderer/verbose.renderer.ts"
-    },
-    "sdk-codegen/node_modules/load-json-file/node_modules/type-fest/index.d.ts": {
-      "summary": "types file",
-      "sourceFile": "sdk-codegen/node_modules/load-json-file/node_modules/type-fest/index.d.ts"
-    },
-    "sdk-codegen/node_modules/path-to-regexp/index.d.ts": {
-      "summary": "`.d.ts`",
-      "sourceFile": "sdk-codegen/node_modules/path-to-regexp/index.d.ts"
-    },
-    "sdk-codegen/node_modules/read-pkg-up/node_modules/read-pkg/node_modules/type-fest/source/basic.d.ts": {
-      "summary": "`ObservableLike`",
-      "sourceFile": "sdk-codegen/node_modules/read-pkg-up/node_modules/read-pkg/node_modules/type-fest/source/basic.d.ts"
-    },
-    "sdk-codegen/node_modules/read-pkg-up/node_modules/read-pkg/node_modules/type-fest/source/except.d.ts": {
-      "summary": "`Except`",
-      "sourceFile": "sdk-codegen/node_modules/read-pkg-up/node_modules/read-pkg/node_modules/type-fest/source/except.d.ts"
-    },
-    "sdk-codegen/node_modules/read-pkg-up/node_modules/read-pkg/node_modules/type-fest/source/mutable.d.ts": {
-      "summary": "`Mutable`",
-      "sourceFile": "sdk-codegen/node_modules/read-pkg-up/node_modules/read-pkg/node_modules/type-fest/source/mutable.d.ts"
-    },
-    "sdk-codegen/node_modules/read-pkg-up/node_modules/read-pkg/node_modules/type-fest/source/merge.d.ts": {
-      "summary": "`Merge`",
-      "sourceFile": "sdk-codegen/node_modules/read-pkg-up/node_modules/read-pkg/node_modules/type-fest/source/merge.d.ts"
-    },
-    "sdk-codegen/node_modules/read-pkg-up/node_modules/read-pkg/node_modules/type-fest/source/merge-exclusive.d.ts": {
-      "summary": "`MergeExclusive`",
-      "sourceFile": "sdk-codegen/node_modules/read-pkg-up/node_modules/read-pkg/node_modules/type-fest/source/merge-exclusive.d.ts"
-    },
-    "sdk-codegen/node_modules/read-pkg-up/node_modules/read-pkg/node_modules/type-fest/source/require-at-least-one.d.ts": {
-      "summary": "`RequireAtLeastOne`",
-      "sourceFile": "sdk-codegen/node_modules/read-pkg-up/node_modules/read-pkg/node_modules/type-fest/source/require-at-least-one.d.ts"
-    },
-    "sdk-codegen/node_modules/read-pkg-up/node_modules/read-pkg/node_modules/type-fest/source/readonly-deep.d.ts": {
-      "summary": "`ReadonlyDeep`",
-      "sourceFile": "sdk-codegen/node_modules/read-pkg-up/node_modules/read-pkg/node_modules/type-fest/source/readonly-deep.d.ts"
-    },
-    "sdk-codegen/node_modules/read-pkg-up/node_modules/read-pkg/node_modules/type-fest/source/literal-union.d.ts": {
-      "summary": "`LiteralUnion`",
-      "sourceFile": "sdk-codegen/node_modules/read-pkg-up/node_modules/read-pkg/node_modules/type-fest/source/literal-union.d.ts"
-    },
-    "sdk-codegen/node_modules/read-pkg-up/node_modules/read-pkg/node_modules/type-fest/source/promisable.d.ts": {
-      "summary": "`Promisable`",
-      "sourceFile": "sdk-codegen/node_modules/read-pkg-up/node_modules/read-pkg/node_modules/type-fest/source/promisable.d.ts"
-    },
-    "sdk-codegen/node_modules/read-pkg-up/node_modules/read-pkg/node_modules/type-fest/source/package-json.d.ts": {
-      "summary": "`PackageJson`",
-      "sourceFile": "sdk-codegen/node_modules/read-pkg-up/node_modules/read-pkg/node_modules/type-fest/source/package-json.d.ts"
-    },
-    "sdk-codegen/node_modules/stylelint/node_modules/fast-glob/src/managers/tasks.ts": {
-      "summary": "`Task`",
-      "sourceFile": "sdk-codegen/node_modules/stylelint/node_modules/fast-glob/src/managers/tasks.ts"
-    },
-    "sdk-codegen/node_modules/stylelint/node_modules/type-fest/source/basic.d.ts": {
-      "summary": "`ObservableLike`",
-      "sourceFile": "sdk-codegen/node_modules/stylelint/node_modules/type-fest/source/basic.d.ts"
-    },
-    "sdk-codegen/node_modules/stylelint/node_modules/type-fest/source/except.d.ts": {
-      "summary": "`Except`",
-      "sourceFile": "sdk-codegen/node_modules/stylelint/node_modules/type-fest/source/except.d.ts"
-    },
-    "sdk-codegen/node_modules/stylelint/node_modules/type-fest/source/mutable.d.ts": {
-      "summary": "`Mutable`",
-      "sourceFile": "sdk-codegen/node_modules/stylelint/node_modules/type-fest/source/mutable.d.ts"
-    },
-    "sdk-codegen/node_modules/stylelint/node_modules/type-fest/source/merge.d.ts": {
-      "summary": "`Merge`",
-      "sourceFile": "sdk-codegen/node_modules/stylelint/node_modules/type-fest/source/merge.d.ts"
-    },
-    "sdk-codegen/node_modules/stylelint/node_modules/type-fest/source/merge-exclusive.d.ts": {
-      "summary": "`MergeExclusive`",
-      "sourceFile": "sdk-codegen/node_modules/stylelint/node_modules/type-fest/source/merge-exclusive.d.ts"
-    },
-    "sdk-codegen/node_modules/stylelint/node_modules/type-fest/source/require-at-least-one.d.ts": {
-      "summary": "`RequireAtLeastOne`",
-      "sourceFile": "sdk-codegen/node_modules/stylelint/node_modules/type-fest/source/require-at-least-one.d.ts"
-    },
-    "sdk-codegen/node_modules/stylelint/node_modules/type-fest/source/require-exactly-one.d.ts": {
-      "summary": "`RequireExactlyOne`",
-      "sourceFile": "sdk-codegen/node_modules/stylelint/node_modules/type-fest/source/require-exactly-one.d.ts"
-    },
-    "sdk-codegen/node_modules/stylelint/node_modules/type-fest/source/partial-deep.d.ts": {
-      "summary": "`PartialDeep`",
-      "sourceFile": "sdk-codegen/node_modules/stylelint/node_modules/type-fest/source/partial-deep.d.ts"
-    },
-    "sdk-codegen/node_modules/stylelint/node_modules/type-fest/source/readonly-deep.d.ts": {
-      "summary": "`ReadonlyDeep`",
-      "sourceFile": "sdk-codegen/node_modules/stylelint/node_modules/type-fest/source/readonly-deep.d.ts"
-    },
-    "sdk-codegen/node_modules/stylelint/node_modules/type-fest/source/literal-union.d.ts": {
-      "summary": "`LiteralUnion`",
-      "sourceFile": "sdk-codegen/node_modules/stylelint/node_modules/type-fest/source/literal-union.d.ts"
-    },
-    "sdk-codegen/node_modules/stylelint/node_modules/type-fest/source/promisable.d.ts": {
-      "summary": "`Promisable`",
-      "sourceFile": "sdk-codegen/node_modules/stylelint/node_modules/type-fest/source/promisable.d.ts"
-    },
-    "sdk-codegen/node_modules/stylelint/node_modules/type-fest/source/opaque.d.ts": {
-      "summary": "`Opaque`",
-      "sourceFile": "sdk-codegen/node_modules/stylelint/node_modules/type-fest/source/opaque.d.ts"
-    },
-    "sdk-codegen/node_modules/stylelint/node_modules/type-fest/source/set-optional.d.ts": {
-      "summary": "`SetOptional`",
-      "sourceFile": "sdk-codegen/node_modules/stylelint/node_modules/type-fest/source/set-optional.d.ts"
-    },
-    "sdk-codegen/node_modules/stylelint/node_modules/type-fest/source/set-required.d.ts": {
-      "summary": "`SetRequired`",
-      "sourceFile": "sdk-codegen/node_modules/stylelint/node_modules/type-fest/source/set-required.d.ts"
-    },
-    "sdk-codegen/node_modules/stylelint/node_modules/type-fest/source/value-of.d.ts": {
-      "summary": "`ValueOf`",
-      "sourceFile": "sdk-codegen/node_modules/stylelint/node_modules/type-fest/source/value-of.d.ts"
-    },
-    "sdk-codegen/node_modules/stylelint/node_modules/type-fest/source/promise-value.d.ts": {
-      "summary": "`PromiseValue`",
-      "sourceFile": "sdk-codegen/node_modules/stylelint/node_modules/type-fest/source/promise-value.d.ts"
-    },
-    "sdk-codegen/node_modules/stylelint/node_modules/type-fest/source/async-return-type.d.ts": {
-      "summary": "`AsyncReturnType`",
-      "sourceFile": "sdk-codegen/node_modules/stylelint/node_modules/type-fest/source/async-return-type.d.ts"
-    },
-    "sdk-codegen/node_modules/stylelint/node_modules/type-fest/source/conditional-keys.d.ts": {
-      "summary": "`ConditionalKeys`",
-      "sourceFile": "sdk-codegen/node_modules/stylelint/node_modules/type-fest/source/conditional-keys.d.ts"
-    },
-    "sdk-codegen/node_modules/stylelint/node_modules/type-fest/source/conditional-pick.d.ts": {
-      "summary": "`ConditionalPick`",
-      "sourceFile": "sdk-codegen/node_modules/stylelint/node_modules/type-fest/source/conditional-pick.d.ts"
-    },
-    "sdk-codegen/node_modules/stylelint/node_modules/type-fest/source/conditional-except.d.ts": {
-      "summary": "`ConditionalExcept`",
-      "sourceFile": "sdk-codegen/node_modules/stylelint/node_modules/type-fest/source/conditional-except.d.ts"
-    },
-    "sdk-codegen/node_modules/stylelint/node_modules/type-fest/source/union-to-intersection.d.ts": {
-      "summary": "`UnionToIntersection`",
-      "sourceFile": "sdk-codegen/node_modules/stylelint/node_modules/type-fest/source/union-to-intersection.d.ts"
-    },
-    "sdk-codegen/node_modules/stylelint/node_modules/type-fest/source/stringified.d.ts": {
-      "summary": "`Stringified`",
-      "sourceFile": "sdk-codegen/node_modules/stylelint/node_modules/type-fest/source/stringified.d.ts"
-    },
-    "sdk-codegen/node_modules/stylelint/node_modules/type-fest/source/package-json.d.ts": {
-      "summary": "`PackageJson`",
-      "sourceFile": "sdk-codegen/node_modules/stylelint/node_modules/type-fest/source/package-json.d.ts"
-    },
-    "sdk-codegen/node_modules/stylelint/node_modules/type-fest/source/tsconfig-json.d.ts": {
-      "summary": "`TsConfigJson`",
-      "sourceFile": "sdk-codegen/node_modules/stylelint/node_modules/type-fest/source/tsconfig-json.d.ts"
-    },
-    "sdk-codegen/node_modules/type-fest/source/basic.d.ts": {
-      "summary": "`ObservableLike`",
-      "sourceFile": "sdk-codegen/node_modules/type-fest/source/basic.d.ts"
-    },
-    "sdk-codegen/node_modules/type-fest/source/except.d.ts": {
-      "summary": "`Except`",
-      "sourceFile": "sdk-codegen/node_modules/type-fest/source/except.d.ts"
-    },
-    "sdk-codegen/node_modules/type-fest/source/mutable.d.ts": {
-      "summary": "`Mutable`",
-      "sourceFile": "sdk-codegen/node_modules/type-fest/source/mutable.d.ts"
-    },
-    "sdk-codegen/node_modules/type-fest/source/merge.d.ts": {
-      "summary": "`Merge`",
-      "sourceFile": "sdk-codegen/node_modules/type-fest/source/merge.d.ts"
-    },
-    "sdk-codegen/node_modules/type-fest/source/merge-exclusive.d.ts": {
-      "summary": "`MergeExclusive`",
-      "sourceFile": "sdk-codegen/node_modules/type-fest/source/merge-exclusive.d.ts"
-    },
-    "sdk-codegen/node_modules/type-fest/source/require-at-least-one.d.ts": {
-      "summary": "`RequireAtLeastOne`",
-      "sourceFile": "sdk-codegen/node_modules/type-fest/source/require-at-least-one.d.ts"
-    },
-    "sdk-codegen/node_modules/type-fest/source/require-one.d.ts": {
-      "summary": "`RequireExactlyOne`",
-      "sourceFile": "sdk-codegen/node_modules/type-fest/source/require-one.d.ts"
-    },
-    "sdk-codegen/node_modules/type-fest/source/partial-deep.d.ts": {
-      "summary": "`PartialDeep`",
-      "sourceFile": "sdk-codegen/node_modules/type-fest/source/partial-deep.d.ts"
-    },
-    "sdk-codegen/node_modules/type-fest/source/readonly-deep.d.ts": {
-      "summary": "`ReadonlyDeep`",
-      "sourceFile": "sdk-codegen/node_modules/type-fest/source/readonly-deep.d.ts"
-    },
-    "sdk-codegen/node_modules/type-fest/source/literal-union.d.ts": {
-      "summary": "`LiteralUnion`",
-      "sourceFile": "sdk-codegen/node_modules/type-fest/source/literal-union.d.ts"
-    },
-    "sdk-codegen/node_modules/type-fest/source/promisable.d.ts": {
-      "summary": "`Promisable`",
-      "sourceFile": "sdk-codegen/node_modules/type-fest/source/promisable.d.ts"
-    },
-    "sdk-codegen/node_modules/type-fest/source/opaque.d.ts": {
-      "summary": "`Opaque`",
-      "sourceFile": "sdk-codegen/node_modules/type-fest/source/opaque.d.ts"
-    },
-    "sdk-codegen/node_modules/type-fest/source/set-optional.d.ts": {
-      "summary": "`SetOptional`",
-      "sourceFile": "sdk-codegen/node_modules/type-fest/source/set-optional.d.ts"
-    },
-    "sdk-codegen/node_modules/type-fest/source/set-required.d.ts": {
-      "summary": "`SetRequired`",
-      "sourceFile": "sdk-codegen/node_modules/type-fest/source/set-required.d.ts"
-    },
-    "sdk-codegen/node_modules/type-fest/source/package-json.d.ts": {
-      "summary": "`PackageJson`",
-      "sourceFile": "sdk-codegen/node_modules/type-fest/source/package-json.d.ts"
     },
     "sdk-codegen/packages/sdk-codegen-scripts/src/legacy.ts": {
       "summary": "legacy.ts",
@@ -1126,66 +470,6 @@
             "line": 94
           },
           {
-            "sourceFile": "sdk-codegen/node_modules/@looker/sdk/src/test/methods.spec.ts",
-            "column": 34,
-            "line": 242
-          },
-          {
-            "sourceFile": "sdk-codegen/node_modules/@looker/sdk/src/test/methods.spec.ts",
-            "column": 34,
-            "line": 252
-          },
-          {
-            "sourceFile": "sdk-codegen/node_modules/@looker/sdk/src/test/methods.spec.ts",
-            "column": 37,
-            "line": 275
-          },
-          {
-            "sourceFile": "sdk-codegen/node_modules/@looker/sdk/src/test/methods.spec.ts",
-            "column": 34,
-            "line": 290
-          },
-          {
-            "sourceFile": "sdk-codegen/node_modules/@looker/sdk/src/test/methods.spec.ts",
-            "column": 30,
-            "line": 295
-          },
-          {
-            "sourceFile": "sdk-codegen/node_modules/@looker/sdk/src/test/methods.spec.ts",
-            "column": 34,
-            "line": 300
-          },
-          {
-            "sourceFile": "sdk-codegen/node_modules/@looker/sdk/src/test/methods.spec.ts",
-            "column": 30,
-            "line": 306
-          },
-          {
-            "sourceFile": "sdk-codegen/node_modules/@looker/sdk/src/test/methods.spec.ts",
-            "column": 30,
-            "line": 311
-          },
-          {
-            "sourceFile": "sdk-codegen/node_modules/@looker/sdk/src/test/methods.spec.ts",
-            "column": 32,
-            "line": 729
-          },
-          {
-            "sourceFile": "sdk-codegen/node_modules/@looker/sdk/src/test/methods.spec.ts",
-            "column": 30,
-            "line": 915
-          },
-          {
-            "sourceFile": "sdk-codegen/node_modules/@looker/sdk-codegen-scripts/src/miner.spec.ts",
-            "column": 40,
-            "line": 171
-          },
-          {
-            "sourceFile": "sdk-codegen/node_modules/@looker/sdk-codegen-scripts/src/miner.spec.ts",
-            "column": 81,
-            "line": 184
-          },
-          {
             "sourceFile": "sdk-codegen/packages/sdk/src/test/methods.spec.ts",
             "column": 34,
             "line": 242
@@ -1301,31 +585,6 @@
         ],
         ".ts": [
           {
-            "sourceFile": "sdk-codegen/node_modules/@looker/sdk/src/sdk/3.1/methods.ts",
-            "column": 16,
-            "line": 6209
-          },
-          {
-            "sourceFile": "sdk-codegen/node_modules/@looker/sdk/src/sdk/3.1/streams.ts",
-            "column": 16,
-            "line": 6976
-          },
-          {
-            "sourceFile": "sdk-codegen/node_modules/@looker/sdk/src/sdk/4.0/methods.ts",
-            "column": 16,
-            "line": 6911
-          },
-          {
-            "sourceFile": "sdk-codegen/node_modules/@looker/sdk/src/sdk/4.0/streams.ts",
-            "column": 16,
-            "line": 7761
-          },
-          {
-            "sourceFile": "sdk-codegen/node_modules/@looker/sdk-codegen/src/python.gen.spec.ts",
-            "column": 13,
-            "line": 295
-          },
-          {
             "sourceFile": "sdk-codegen/packages/sdk/src/sdk/3.1/methods.ts",
             "column": 16,
             "line": 6209
@@ -1415,26 +674,6 @@
           }
         ],
         ".ts": [
-          {
-            "sourceFile": "sdk-codegen/node_modules/@looker/sdk/src/sdk/3.1/methods.ts",
-            "column": 6,
-            "line": 8628
-          },
-          {
-            "sourceFile": "sdk-codegen/node_modules/@looker/sdk/src/sdk/3.1/streams.ts",
-            "column": 6,
-            "line": 9689
-          },
-          {
-            "sourceFile": "sdk-codegen/node_modules/@looker/sdk/src/sdk/4.0/methods.ts",
-            "column": 6,
-            "line": 8987
-          },
-          {
-            "sourceFile": "sdk-codegen/node_modules/@looker/sdk/src/sdk/4.0/streams.ts",
-            "column": 6,
-            "line": 10087
-          },
           {
             "sourceFile": "sdk-codegen/packages/sdk/src/sdk/3.1/methods.ts",
             "column": 6,
@@ -1633,21 +872,6 @@
         ],
         ".ts": [
           {
-            "sourceFile": "sdk-codegen/node_modules/@looker/sdk/src/test/methods.spec.ts",
-            "column": 23,
-            "line": 174
-          },
-          {
-            "sourceFile": "sdk-codegen/node_modules/@looker/sdk/src/test/methods.spec.ts",
-            "column": 12,
-            "line": 408
-          },
-          {
-            "sourceFile": "sdk-codegen/node_modules/@looker/sdk/src/test/methods.spec.ts",
-            "column": 12,
-            "line": 419
-          },
-          {
             "sourceFile": "sdk-codegen/packages/sdk/src/test/methods.spec.ts",
             "column": 23,
             "line": 174
@@ -1752,31 +976,6 @@
             "line": 68
           },
           {
-            "sourceFile": "sdk-codegen/node_modules/@looker/sdk/src/test/methods.spec.ts",
-            "column": 8,
-            "line": 161
-          },
-          {
-            "sourceFile": "sdk-codegen/node_modules/@looker/sdk/src/test/methods.spec.ts",
-            "column": 10,
-            "line": 166
-          },
-          {
-            "sourceFile": "sdk-codegen/node_modules/@looker/sdk/src/test/methods.spec.ts",
-            "column": 8,
-            "line": 205
-          },
-          {
-            "sourceFile": "sdk-codegen/node_modules/@looker/sdk/src/test/methods.spec.ts",
-            "column": 10,
-            "line": 209
-          },
-          {
-            "sourceFile": "sdk-codegen/node_modules/@looker/sdk/src/test/methods.spec.ts",
-            "column": 8,
-            "line": 449
-          },
-          {
             "sourceFile": "sdk-codegen/packages/sdk/src/test/methods.spec.ts",
             "column": 8,
             "line": 161
@@ -1836,16 +1035,6 @@
             "sourceFile": "sdk-codegen/examples/typescript/utils.ts",
             "column": 30,
             "line": 36
-          },
-          {
-            "sourceFile": "sdk-codegen/node_modules/@looker/sdk/src/test/methods.spec.ts",
-            "column": 36,
-            "line": 229
-          },
-          {
-            "sourceFile": "sdk-codegen/node_modules/@looker/sdk/src/test/methods.spec.ts",
-            "column": 38,
-            "line": 744
           },
           {
             "sourceFile": "sdk-codegen/packages/sdk/src/test/methods.spec.ts",
@@ -1935,11 +1124,6 @@
             "line": 130
           },
           {
-            "sourceFile": "sdk-codegen/node_modules/@looker/sdk/src/test/methods.spec.ts",
-            "column": 33,
-            "line": 100
-          },
-          {
             "sourceFile": "sdk-codegen/packages/sdk/src/test/methods.spec.ts",
             "column": 33,
             "line": 100
@@ -1986,11 +1170,6 @@
             "sourceFile": "sdk-codegen/examples/typescript/utils.ts",
             "column": 22,
             "line": 141
-          },
-          {
-            "sourceFile": "sdk-codegen/node_modules/@looker/sdk/src/test/methods.spec.ts",
-            "column": 33,
-            "line": 113
           },
           {
             "sourceFile": "sdk-codegen/packages/sdk/src/test/methods.spec.ts",
@@ -2071,21 +1250,6 @@
         ],
         ".ts": [
           {
-            "sourceFile": "sdk-codegen/node_modules/@looker/sdk/src/test/methods.spec.ts",
-            "column": 34,
-            "line": 334
-          },
-          {
-            "sourceFile": "sdk-codegen/node_modules/@looker/sdk/src/test/methods.spec.ts",
-            "column": 8,
-            "line": 346
-          },
-          {
-            "sourceFile": "sdk-codegen/node_modules/@looker/sdk/src/test/methods.spec.ts",
-            "column": 8,
-            "line": 362
-          },
-          {
             "sourceFile": "sdk-codegen/packages/sdk/src/test/methods.spec.ts",
             "column": 34,
             "line": 334
@@ -2137,11 +1301,6 @@
             "sourceFile": "sdk-codegen/examples/typescript/downloadTile.ts",
             "column": 4,
             "line": 107
-          },
-          {
-            "sourceFile": "sdk-codegen/node_modules/@looker/sdk/src/test/methods.spec.ts",
-            "column": 31,
-            "line": 89
           },
           {
             "sourceFile": "sdk-codegen/packages/sdk/src/test/methods.spec.ts",
@@ -2250,16 +1409,6 @@
         ],
         ".ts": [
           {
-            "sourceFile": "sdk-codegen/node_modules/@looker/sdk/src/test/methods.spec.ts",
-            "column": 10,
-            "line": 180
-          },
-          {
-            "sourceFile": "sdk-codegen/node_modules/@looker/sdk/src/test/methods.spec.ts",
-            "column": 12,
-            "line": 395
-          },
-          {
             "sourceFile": "sdk-codegen/packages/sdk/src/test/methods.spec.ts",
             "column": 10,
             "line": 180
@@ -2346,16 +1495,6 @@
           }
         ],
         ".ts": [
-          {
-            "sourceFile": "sdk-codegen/node_modules/@looker/sdk/src/test/methods.spec.ts",
-            "column": 21,
-            "line": 193
-          },
-          {
-            "sourceFile": "sdk-codegen/node_modules/@looker/sdk/src/test/methods.spec.ts",
-            "column": 12,
-            "line": 427
-          },
           {
             "sourceFile": "sdk-codegen/packages/sdk/src/test/methods.spec.ts",
             "column": 21,
@@ -2520,16 +1659,6 @@
         ],
         ".ts": [
           {
-            "sourceFile": "sdk-codegen/node_modules/@looker/sdk/src/test/methods.spec.ts",
-            "column": 23,
-            "line": 218
-          },
-          {
-            "sourceFile": "sdk-codegen/node_modules/@looker/sdk/src/test/methods.spec.ts",
-            "column": 38,
-            "line": 430
-          },
-          {
             "sourceFile": "sdk-codegen/packages/sdk/src/test/methods.spec.ts",
             "column": 23,
             "line": 218
@@ -2609,21 +1738,6 @@
           }
         ],
         ".ts": [
-          {
-            "sourceFile": "sdk-codegen/node_modules/@looker/sdk/src/test/methods.spec.ts",
-            "column": 10,
-            "line": 271
-          },
-          {
-            "sourceFile": "sdk-codegen/node_modules/@looker/sdk/src/test/methods.spec.ts",
-            "column": 33,
-            "line": 483
-          },
-          {
-            "sourceFile": "sdk-codegen/node_modules/@looker/sdk-codegen/src/typescript.gen.spec.ts",
-            "column": 52,
-            "line": 246
-          },
           {
             "sourceFile": "sdk-codegen/packages/sdk/src/test/methods.spec.ts",
             "column": 10,
@@ -2731,11 +1845,6 @@
         ],
         ".ts": [
           {
-            "sourceFile": "sdk-codegen/node_modules/@looker/sdk-codegen/src/typescript.gen.spec.ts",
-            "column": 52,
-            "line": 177
-          },
-          {
             "sourceFile": "sdk-codegen/packages/sdk-codegen/src/typescript.gen.spec.ts",
             "column": 52,
             "line": 177
@@ -2804,21 +1913,6 @@
         ],
         ".ts": [
           {
-            "sourceFile": "sdk-codegen/node_modules/@looker/sdk/src/test/methods.spec.ts",
-            "column": 36,
-            "line": 651
-          },
-          {
-            "sourceFile": "sdk-codegen/node_modules/@looker/sdk/src/test/methods.spec.ts",
-            "column": 35,
-            "line": 662
-          },
-          {
-            "sourceFile": "sdk-codegen/node_modules/@looker/sdk/src/test/methods.spec.ts",
-            "column": 40,
-            "line": 688
-          },
-          {
             "sourceFile": "sdk-codegen/packages/sdk/src/test/methods.spec.ts",
             "column": 36,
             "line": 651
@@ -2847,11 +1941,6 @@
           }
         ],
         ".ts": [
-          {
-            "sourceFile": "sdk-codegen/node_modules/@looker/sdk/src/test/methods.spec.ts",
-            "column": 23,
-            "line": 232
-          },
           {
             "sourceFile": "sdk-codegen/packages/sdk/src/test/methods.spec.ts",
             "column": 23,
@@ -2961,11 +2050,6 @@
         ],
         ".ts": [
           {
-            "sourceFile": "sdk-codegen/node_modules/@looker/sdk/src/test/methods.spec.ts",
-            "column": 35,
-            "line": 984
-          },
-          {
             "sourceFile": "sdk-codegen/packages/sdk/src/test/methods.spec.ts",
             "column": 35,
             "line": 984
@@ -3023,21 +2107,6 @@
           }
         ],
         ".ts": [
-          {
-            "sourceFile": "sdk-codegen/node_modules/@looker/sdk/src/test/methods.spec.ts",
-            "column": 10,
-            "line": 988
-          },
-          {
-            "sourceFile": "sdk-codegen/node_modules/@looker/sdk-codegen/src/typescript.gen.spec.ts",
-            "column": 52,
-            "line": 169
-          },
-          {
-            "sourceFile": "sdk-codegen/node_modules/@looker/sdk-codegen/src/typescript.gen.spec.ts",
-            "column": 52,
-            "line": 212
-          },
           {
             "sourceFile": "sdk-codegen/packages/sdk/src/test/methods.spec.ts",
             "column": 10,
@@ -3111,11 +2180,6 @@
           }
         ],
         ".ts": [
-          {
-            "sourceFile": "sdk-codegen/node_modules/@looker/sdk/src/test/methods.spec.ts",
-            "column": 28,
-            "line": 194
-          },
           {
             "sourceFile": "sdk-codegen/packages/sdk/src/test/methods.spec.ts",
             "column": 28,
@@ -3356,21 +2420,6 @@
         ],
         ".ts": [
           {
-            "sourceFile": "sdk-codegen/node_modules/@looker/sdk/src/test/methods.spec.ts",
-            "column": 37,
-            "line": 577
-          },
-          {
-            "sourceFile": "sdk-codegen/node_modules/@looker/sdk/src/test/methods.spec.ts",
-            "column": 12,
-            "line": 738
-          },
-          {
-            "sourceFile": "sdk-codegen/node_modules/@looker/sdk/src/test/methods.spec.ts",
-            "column": 35,
-            "line": 967
-          },
-          {
             "sourceFile": "sdk-codegen/packages/sdk/src/test/methods.spec.ts",
             "column": 37,
             "line": 577
@@ -3454,11 +2503,6 @@
         ],
         ".ts": [
           {
-            "sourceFile": "sdk-codegen/node_modules/@looker/sdk-codegen/src/typescript.gen.spec.ts",
-            "column": 52,
-            "line": 194
-          },
-          {
             "sourceFile": "sdk-codegen/packages/sdk-codegen/src/typescript.gen.spec.ts",
             "column": 52,
             "line": 194
@@ -3512,21 +2556,6 @@
         ],
         ".ts": [
           {
-            "sourceFile": "sdk-codegen/node_modules/@looker/sdk-codegen-scripts/src/miner.spec.ts",
-            "column": 37,
-            "line": 177
-          },
-          {
-            "sourceFile": "sdk-codegen/node_modules/@looker/sdk-rtl/src/apiMethods.ts",
-            "column": 28,
-            "line": 92
-          },
-          {
-            "sourceFile": "sdk-codegen/node_modules/@looker/sdk-rtl/src/transport.ts",
-            "column": 25,
-            "line": 472
-          },
-          {
             "sourceFile": "sdk-codegen/packages/sdk-codegen-scripts/src/miner.spec.ts",
             "column": 37,
             "line": 177
@@ -3573,11 +2602,6 @@
         ],
         ".ts": [
           {
-            "sourceFile": "sdk-codegen/node_modules/@looker/sdk/src/test/methods.spec.ts",
-            "column": 38,
-            "line": 876
-          },
-          {
             "sourceFile": "sdk-codegen/packages/sdk/src/test/methods.spec.ts",
             "column": 38,
             "line": 876
@@ -3603,11 +2627,6 @@
           }
         ],
         ".ts": [
-          {
-            "sourceFile": "sdk-codegen/node_modules/@looker/sdk/src/test/methods.spec.ts",
-            "column": 12,
-            "line": 747
-          },
           {
             "sourceFile": "sdk-codegen/packages/sdk/src/test/methods.spec.ts",
             "column": 12,
@@ -3763,31 +2782,6 @@
         ],
         ".ts": [
           {
-            "sourceFile": "sdk-codegen/node_modules/@looker/sdk/src/test/methods.spec.ts",
-            "column": 14,
-            "line": 583
-          },
-          {
-            "sourceFile": "sdk-codegen/node_modules/@looker/sdk/src/test/methods.spec.ts",
-            "column": 14,
-            "line": 593
-          },
-          {
-            "sourceFile": "sdk-codegen/node_modules/@looker/sdk/src/test/methods.spec.ts",
-            "column": 14,
-            "line": 596
-          },
-          {
-            "sourceFile": "sdk-codegen/node_modules/@looker/sdk/src/test/methods.spec.ts",
-            "column": 10,
-            "line": 969
-          },
-          {
-            "sourceFile": "sdk-codegen/node_modules/@looker/sdk/src/test/methods.spec.ts",
-            "column": 13,
-            "line": 974
-          },
-          {
             "sourceFile": "sdk-codegen/packages/sdk/src/test/methods.spec.ts",
             "column": 14,
             "line": 583
@@ -3881,11 +2875,6 @@
         ],
         ".ts": [
           {
-            "sourceFile": "sdk-codegen/node_modules/@looker/sdk-codegen/src/typescript.gen.spec.ts",
-            "column": 52,
-            "line": 229
-          },
-          {
             "sourceFile": "sdk-codegen/packages/sdk-codegen/src/typescript.gen.spec.ts",
             "column": 52,
             "line": 229
@@ -3947,11 +2936,6 @@
           }
         ],
         ".ts": [
-          {
-            "sourceFile": "sdk-codegen/node_modules/@looker/sdk/src/test/methods.spec.ts",
-            "column": 40,
-            "line": 538
-          },
           {
             "sourceFile": "sdk-codegen/packages/sdk/src/test/methods.spec.ts",
             "column": 40,
@@ -4385,11 +3369,6 @@
       "calls": {
         ".ts": [
           {
-            "sourceFile": "sdk-codegen/node_modules/@looker/api-explorer/scripts/utils.ts",
-            "column": 27,
-            "line": 83
-          },
-          {
             "sourceFile": "sdk-codegen/packages/api-explorer/scripts/utils.ts",
             "column": 27,
             "line": 83
@@ -4401,11 +3380,6 @@
       "operationId": "update_oauth_client_app",
       "calls": {
         ".ts": [
-          {
-            "sourceFile": "sdk-codegen/node_modules/@looker/api-explorer/scripts/utils.ts",
-            "column": 23,
-            "line": 85
-          },
           {
             "sourceFile": "sdk-codegen/packages/api-explorer/scripts/utils.ts",
             "column": 23,
@@ -4419,50 +3393,9 @@
       "calls": {
         ".ts": [
           {
-            "sourceFile": "sdk-codegen/node_modules/@looker/api-explorer/scripts/utils.ts",
-            "column": 31,
-            "line": 90
-          },
-          {
             "sourceFile": "sdk-codegen/packages/api-explorer/scripts/utils.ts",
             "column": 31,
             "line": 90
-          }
-        ]
-      }
-    },
-    "create31Client": {
-      "operationId": "create31Client",
-      "calls": {
-        ".tsx": [
-          {
-            "sourceFile": "sdk-codegen/node_modules/@looker/extension-sdk-react/src/components/ExtensionProvider/ExtensionProvider.tsx",
-            "column": 39,
-            "line": 89
-          }
-        ]
-      }
-    },
-    "create40Client": {
-      "operationId": "create40Client",
-      "calls": {
-        ".tsx": [
-          {
-            "sourceFile": "sdk-codegen/node_modules/@looker/extension-sdk-react/src/components/ExtensionProvider/ExtensionProvider.tsx",
-            "column": 39,
-            "line": 90
-          }
-        ]
-      }
-    },
-    "closeHostPopovers": {
-      "operationId": "closeHostPopovers",
-      "calls": {
-        ".tsx": [
-          {
-            "sourceFile": "sdk-codegen/node_modules/@looker/extension-sdk-react/src/components/ExtensionProvider/ExtensionProvider.tsx",
-            "column": 22,
-            "line": 122
           }
         ]
       }
@@ -4471,16 +3404,6 @@
       "operationId": "createClient",
       "calls": {
         ".ts": [
-          {
-            "sourceFile": "sdk-codegen/node_modules/@looker/sdk/src/extensionSdk.ts",
-            "column": 5,
-            "line": 43
-          },
-          {
-            "sourceFile": "sdk-codegen/node_modules/@looker/sdk/src/extensionSdk.ts",
-            "column": 5,
-            "line": 45
-          },
           {
             "sourceFile": "sdk-codegen/packages/sdk/src/extensionSdk.ts",
             "column": 5,
@@ -4498,26 +3421,6 @@
       "operationId": "search_users_names",
       "calls": {
         ".ts": [
-          {
-            "sourceFile": "sdk-codegen/node_modules/@looker/sdk/src/test/methods.spec.ts",
-            "column": 10,
-            "line": 460
-          },
-          {
-            "sourceFile": "sdk-codegen/node_modules/@looker/sdk/src/test/methods.spec.ts",
-            "column": 10,
-            "line": 475
-          },
-          {
-            "sourceFile": "sdk-codegen/node_modules/@looker/sdk/src/test/methods.spec.ts",
-            "column": 10,
-            "line": 505
-          },
-          {
-            "sourceFile": "sdk-codegen/node_modules/@looker/sdk/src/test/methods.spec.ts",
-            "column": 10,
-            "line": 516
-          },
           {
             "sourceFile": "sdk-codegen/packages/sdk/src/test/methods.spec.ts",
             "column": 10,
@@ -4598,16 +3501,6 @@
       "calls": {
         ".ts": [
           {
-            "sourceFile": "sdk-codegen/node_modules/@looker/sdk/src/test/methods.spec.ts",
-            "column": 12,
-            "line": 803
-          },
-          {
-            "sourceFile": "sdk-codegen/node_modules/@looker/sdk/src/test/methods.spec.ts",
-            "column": 12,
-            "line": 811
-          },
-          {
             "sourceFile": "sdk-codegen/packages/sdk/src/test/methods.spec.ts",
             "column": 12,
             "line": 803
@@ -4647,11 +3540,6 @@
       "calls": {
         ".ts": [
           {
-            "sourceFile": "sdk-codegen/node_modules/@looker/sdk/src/test/methods.spec.ts",
-            "column": 14,
-            "line": 818
-          },
-          {
             "sourceFile": "sdk-codegen/packages/sdk/src/test/methods.spec.ts",
             "column": 14,
             "line": 818
@@ -4675,11 +3563,6 @@
       "operationId": "create_dashboard_element",
       "calls": {
         ".ts": [
-          {
-            "sourceFile": "sdk-codegen/node_modules/@looker/sdk/src/test/methods.spec.ts",
-            "column": 14,
-            "line": 847
-          },
           {
             "sourceFile": "sdk-codegen/packages/sdk/src/test/methods.spec.ts",
             "column": 14,
@@ -4705,11 +3588,6 @@
       "calls": {
         ".ts": [
           {
-            "sourceFile": "sdk-codegen/node_modules/@looker/sdk-codegen/src/typescript.gen.spec.ts",
-            "column": 52,
-            "line": 283
-          },
-          {
             "sourceFile": "sdk-codegen/packages/sdk-codegen/src/typescript.gen.spec.ts",
             "column": 52,
             "line": 283
@@ -4721,11 +3599,6 @@
       "operationId": "create_sql_query",
       "calls": {
         ".ts": [
-          {
-            "sourceFile": "sdk-codegen/node_modules/@looker/sdk-codegen/src/typescript.gen.spec.ts",
-            "column": 52,
-            "line": 328
-          },
           {
             "sourceFile": "sdk-codegen/packages/sdk-codegen/src/typescript.gen.spec.ts",
             "column": 52,
@@ -4739,11 +3612,6 @@
       "calls": {
         ".ts": [
           {
-            "sourceFile": "sdk-codegen/node_modules/@looker/sdk-codegen-scripts/src/miner.spec.ts",
-            "column": 35,
-            "line": 184
-          },
-          {
             "sourceFile": "sdk-codegen/packages/sdk-codegen-scripts/src/miner.spec.ts",
             "column": 35,
             "line": 184
@@ -4755,11 +3623,6 @@
       "operationId": "render",
       "calls": {
         ".ts": [
-          {
-            "sourceFile": "sdk-codegen/node_modules/@looker/sdk-codegen-scripts/src/sdkGen.ts",
-            "column": 21,
-            "line": 145
-          },
           {
             "sourceFile": "sdk-codegen/packages/sdk-codegen-scripts/src/sdkGen.ts",
             "column": 21,
