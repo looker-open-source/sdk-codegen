@@ -26,6 +26,7 @@
 
 import { Looker31SDK, Looker40SDK } from '@looker/sdk/lib/browser'
 import { IRawResponse } from '@looker/sdk-rtl/lib/browser'
+import { cloneDeep } from 'lodash'
 
 import { RunItHttpMethod, RunItInput, RunItValues } from '../RunIt'
 import { runItSDK } from './RunItSDK'
@@ -53,6 +54,25 @@ export const pathify = (path: string, pathParams?: RunItValues): string => {
   return result
 }
 
+export const prepareInputs = (
+  inputs: RunItInput[],
+  requestContent: RunItValues
+) => {
+  const result = cloneDeep(requestContent)
+  for (const input of inputs) {
+    const name = input.name
+    if (input.location === 'body') {
+      try {
+        result[name] = JSON.parse(result[name])
+      } catch (e) {
+        /** Treat as x-www-form-urlencoded */
+        result[name] = requestContent[name]
+      }
+    }
+  }
+  return result
+}
+
 /**
  * Takes all form input values and categorizes them based on their request location
  * @param inputs RunIt form inputs
@@ -65,23 +85,19 @@ export const createRequestParams = (
 ) => {
   const pathParams = {}
   const queryParams = {}
+  const prepped = prepareInputs(inputs, requestContent)
   let body
   for (const input of inputs) {
     const name = input.name
     switch (input.location) {
       case 'path':
-        pathParams[name] = requestContent[name]
+        pathParams[name] = prepped[name]
         break
       case 'query':
-        queryParams[name] = requestContent[name]
+        queryParams[name] = prepped[name]
         break
       case 'body':
-        try {
-          body = JSON.parse(requestContent[name])
-        } catch (e) {
-          /** Treat as x-www-form-urlencoded */
-          body = requestContent[name]
-        }
+        body = prepped[name]
         break
       default:
         throw new Error(`Invalid input location: '${input.location}'`)

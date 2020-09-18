@@ -61,6 +61,7 @@ import {
   RunItSettings,
 } from './utils'
 import { PerfTracker, PerfTimings } from './components/PerfTracker'
+import { prepareInputs } from './utils/requestUtils'
 import { RunItContext } from '.'
 
 export type RunItHttpMethod = 'GET' | 'PUT' | 'POST' | 'PATCH' | 'DELETE'
@@ -245,7 +246,11 @@ export const RunIt: FC<RunItProps> = ({ api, inputs, method }) => {
           </TabPanel>
         )}
         <TabPanel key="makeTheCall">
-          <SdkCalls api={api} method={method} inputs={requestContent} />
+          <SdkCalls
+            api={api}
+            method={method}
+            inputs={prepareInputs(inputs, requestContent)}
+          />
         </TabPanel>
       </TabPanels>
     </Box>
