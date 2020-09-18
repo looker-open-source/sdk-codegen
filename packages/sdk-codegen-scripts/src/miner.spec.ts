@@ -111,6 +111,22 @@ describe('example mining', () => {
       expect(first.summary).toEqual('Logout all users on the instance')
       expect(first.sourceFile).toEqual('example/ruby/logout_all_users.rb')
     })
+    it('processes multiple refs on the same line', () => {
+      const md =
+        'generators like [Typescript](/packages/sdk-codegen/src/typescript.gen.ts) or [Python](/packages/sdk-codegen/src/python.gen.ts) are useful'
+      const actual = marker.mineContent('packages/sdk-codegen/README.md', md)
+      expect(actual.length).toEqual(2)
+      const first = actual[0]
+      expect(first.summary).toEqual('Typescript')
+      expect(first.sourceFile).toEqual(
+        'packages/sdk-codegen/src/typescript.gen.ts'
+      )
+      const second = actual[1]
+      expect(second.summary).toEqual('Python')
+      expect(second.sourceFile).toEqual(
+        'packages/sdk-codegen/src/python.gen.ts'
+      )
+    })
     it('processes a file', () => {
       const fileName = exampleFile('ruby/README.md')
       const actual = marker.mineFile(fileName)

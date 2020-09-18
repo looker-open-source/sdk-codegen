@@ -55,8 +55,8 @@ const readFile = (fileName: string) =>
   fs.readFileSync(fileName, { encoding: 'utf-8' })
 
 const sdkPattern = /(\b[a-z0-9_]*sdk)\.\s*([a-z0-9_]*)\s*[(<]/gi
-const mdPattern = /\[(.*)]\((.*)\)/gim
-const linkPattern = /^(.*)\[\[link]]\((.*)\)/gim
+const mdPattern = /\[(.+)](\((.+)\))*?/gim
+const linkPattern = /.*\[\[link]]\((.*)\)*?/gim
 
 export type IMiners = { [key: string]: IFileMine | IDocMine }
 
@@ -272,8 +272,10 @@ const fileMiners: IMiners = {
   '.rb': new CodeMiner(),
   '.md': new MarkdownMiner(),
   '.dart': new CodeMiner(),
+  // '.go': new CodeMiner(),
   // '.rst': new MarkdownMiner(), // TODO .rst miner? Probably not needed
 }
+
 export class Miner {
   summaries: Summaries = {}
   nuggets: Nuggets = {}
