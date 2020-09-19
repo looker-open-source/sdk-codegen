@@ -8,14 +8,14 @@ import (
 var defaultSectionName string = "Looker"
 
 type ApiSettings struct {
-	BaseUrl      string
-	VerifySsl    bool
-	Timeout      int32
-	AgentTag     string
-	FileName     string
-	ClientId     string
-	ClientSecret string
-	ApiVersion   string
+	BaseUrl      string `ini:"base_url"`
+	VerifySsl    bool   `ini:"verify_ssl"`
+	Timeout      int32  `ini:"timeout"`
+	AgentTag     string `ini:"agent_tag"`
+	FileName     string `ini:"file_name"`
+	ClientId     string `ini:"client_id"`
+	ClientSecret string `ini:"client_secret"`
+	ApiVersion   string `ini:"api_version"`
 	SectionName  string `ini:"-"` //don't read this from file
 }
 
