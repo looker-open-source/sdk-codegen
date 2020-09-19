@@ -318,6 +318,19 @@ class CsharpFormatter extends BaseFormatter {
   }
 }
 
+class GoFormatter extends BaseFormatter {
+  // TODO C# formatter https://github.com/dotnet/format
+  constructor() {
+    super('Go')
+  }
+
+  versionStamp() {
+    return warn(
+        'Skipping SDK version updating - not implemented for Go.'
+    )
+  }
+}
+
 type IFormatFiles = { [key: string]: string[] }
 
 type IFormatters = { [key: string]: IReformat }
@@ -328,6 +341,7 @@ const fileFormatters: IFormatters = {
   '.py': new PythonFormatter(),
   '.swift': new SwiftFormatter(),
   '.ts': new TypescriptFormatter(),
+  '.go': new GoFormatter(),
 }
 
 export class FilesFormatter {

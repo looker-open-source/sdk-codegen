@@ -31,6 +31,7 @@ import { KotlinGen } from './kotlin.gen'
 import { SwiftGen } from './swift.gen'
 import { PythonGen } from './python.gen'
 import { TypescriptGen } from './typescript.gen'
+import { GoGen } from './go.gen'
 
 export interface IGeneratorSpec {
   /** name of language SDK to generate */
@@ -78,7 +79,8 @@ export const Generators: Array<IGeneratorSpec> = [
     language: 'Swift',
   },
   {
-    factory: undefined,
+    factory: (api: ApiModel, versions?: IVersionInfo) =>
+      new GoGen(api, versions),
     language: 'Go',
     legacy: 'go',
     options: '-papiPackage=Looker -ppackageName=looker',
