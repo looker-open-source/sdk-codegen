@@ -66,6 +66,10 @@ export class DartGen extends CodeGen {
     return this.apiVersion === this.defaultApi
   }
 
+  supportsMultiApi() {
+    return false
+  }
+
   // TODO create `defaultPackageName` property in CodeGen
   sdkClassName() {
     return `Looker${this.apiRef}SDK`
@@ -83,7 +87,7 @@ export class DartGen extends CodeGen {
   methodsPrologue(_indent: string) {
     return `
 // ${this.warnEditing()}
-import 'package:looker_sdk/looker_rtl.dart';
+import 'package:looker_sdk/looker_sdk.dart';
 import 'models.dart';
 
 class ${this.sdkClassName()} extends APIMethods {
@@ -98,7 +102,7 @@ class ${this.sdkClassName()} extends APIMethods {
   streamsPrologue(_indent: string): string {
     return `
 // ${this.warnEditing()}
-import 'package:looker_sdk/looker_rtl.dart';
+import 'package:looker_sdk/looker_sdk.dart';
 import 'models.dart';
 
 class ${this.sdkClassName()}Stream extends APIMethods {

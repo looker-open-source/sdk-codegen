@@ -1,16 +1,14 @@
-import 'package:looker_sdk/looker_rtl.dart';
-import 'package:looker_sdk/src/rtl/sdk.dart';
-import 'package:looker_sdk/src/sdk/4.0/models.dart';
+import 'package:looker_sdk/looker_sdk.dart';
+import 'package:dotenv/dotenv.dart' show load, env;
 
 void main() async {
+  load();
   await run40();
 }
 
 void run40() async {
-  var sdk = await Sdk.create40Sdk({
-    'base_url': 'https://self-signed.looker.com:19999',
-    'credentials_callback': credentialsCallback
-  });
+  var sdk = await Sdk.create40Sdk(
+      {'base_url': env['URL'], 'credentials_callback': credentialsCallback});
   try {
     var connections = await sdk.ok(sdk.all_connections());
     connections.forEach((connection) => print(connection.name));
@@ -55,8 +53,5 @@ void run40() async {
 }
 
 Map credentialsCallback() {
-  return {
-    'client_id': 'get from looker instance',
-    'client_secret': 'get from looker instance'
-  };
+  return {'client_id': env['CLIENT_ID'], 'client_secret': env['CLIENT_SECRET']};
 }

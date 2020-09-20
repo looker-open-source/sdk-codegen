@@ -1,6 +1,6 @@
 import 'dart:convert';
 import 'package:http/http.dart' as http;
-import 'package:looker_sdk/looker_rtl.dart';
+import 'package:looker_sdk/looker_sdk.dart';
 import 'api_settings.dart';
 
 enum HttpMethod { get, head, delete, post, put, patch }

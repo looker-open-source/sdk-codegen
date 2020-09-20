@@ -1,4 +1,4 @@
-import 'package:looker_sdk/looker_rtl.dart';
+import 'package:looker_sdk/looker_sdk.dart';
 
 import 'transport.dart';
 
