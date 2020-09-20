@@ -1,6 +1,6 @@
 import 'package:looker_sdk/looker_rtl.dart';
 import 'package:looker_sdk/src/rtl/sdk.dart';
-import 'package:looker_sdk/src/sdk/4.0/models.dart' as models40;
+import 'package:looker_sdk/src/sdk/4.0/models.dart';
 
 void main() async {
   await run40();
@@ -18,7 +18,7 @@ void run40() async {
         await sdk.ok(sdk.connection(connections[0].name, 'name,host,port'));
     print(
         'name=${connection.name} host=${connection.host} port=${connection.port}');
-    var newConnection = models40.WriteDBConnection();
+    var newConnection = WriteDBConnection();
     SDKResponse resp = await sdk.connection('TestConnection');
     if (resp.statusCode == 200) {
       print('TestConnection already exists');
@@ -34,7 +34,7 @@ void run40() async {
       connection = await sdk.ok(sdk.create_connection(newConnection));
       print('created ${connection.name}');
     }
-    var updateConnection = models40.WriteDBConnection();
+    var updateConnection = WriteDBConnection();
     updateConnection.username = 'looker_demo';
     connection =
         await sdk.ok(sdk.update_connection('TestConnection', updateConnection));
@@ -56,7 +56,7 @@ void run40() async {
 
 Map credentialsCallback() {
   return {
-    'client_id': 'get from looker instance',
-    'client_secret': 'get from looker instance'
+    'client_id': 'Nbwy5Y66vnvrZv7ZRDvN',
+    'client_secret': 'nmj6VskXQwBzqVTnDtJ6cmjj'
   };
 }
