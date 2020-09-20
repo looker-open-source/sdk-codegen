@@ -56,7 +56,7 @@ void run40() async {
 
 Map credentialsCallback() {
   return {
-    'client_id': 'Nbwy5Y66vnvrZv7ZRDvN',
-    'client_secret': 'nmj6VskXQwBzqVTnDtJ6cmjj'
+    'client_id': 'get from looker instance',
+    'client_secret': 'get from looker instance'
   };
 }
