@@ -30,28 +30,19 @@ import { rootIni } from './utils'
 
 const localConfig = rootIni()
 
-/**
- *
- * @type {NodeSettingsIniFile} Settings retrieved from the configuration file
- */
+/** Settings retrieved from the configuration file */
 const settings = new NodeSettingsIniFile(localConfig, 'Looker')
 
 /**
  * Automatic authentication support for the Node SDK
- * @type {NodeSession} Initialized node-based session manager
+ * Initialized node-based session manager
  */
 const session = new NodeSession(settings)
 
-/**
- * Initialized SDK object
- * @type {LookerSDK} SDK object configured for use with Node
- */
+/** Initialized SDK object for the Node runtime */
 const sdk = new LookerSDK(session)
 
-/**
- *
- * @type {string} email matching pattern for searching users
- */
+/** email matching pattern for searching users */
 const emailPattern = 'test%'
 
 /**

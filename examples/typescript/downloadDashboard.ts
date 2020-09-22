@@ -33,10 +33,6 @@ import {
 import { NodeSettingsIniFile, NodeSession } from '@looker/sdk-rtl'
 import { getDashboard, rootIni, waitForRender } from './utils'
 
-/**
- *
- * @type {string} Local configuration file name, one directory above
- */
 const localConfig = rootIni()
 
 /**
