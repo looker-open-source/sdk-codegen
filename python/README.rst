@@ -3,7 +3,7 @@ Looker SDK
 ===========
 
 The Looker SDK for Python provides a convenient way to communicate with the
-Looker API available on your Looker server. The library requires python3.7+
+Looker API available on your Looker server. The library requires python3.6+
 and is annotated using the typing module.
 
 **DISCLAIMER**: This is a *beta* version of the Looker SDK, using a completely
@@ -21,10 +21,19 @@ Basic Usage
 
 
     sdk = looker_sdk.init31()  # or init40() for v4.0 API
-    # and away you go
     my_user = sdk.me()
-    new_user = looker_sdk.models.WriteUser(first_name="Jane", last_name="Doe")
-    sdk.create_user(body=new_user)
+
+    # output can be treated like a dictionary
+    print(my_user["first_name"])
+    # or a model instance (User in this case)
+    print(my_user.first_name)
+
+    # input methods can take either model instances like WriteUser
+    sdk.create_user(
+        body=looker_sdk.models.WriteUser(first_name="Jane", last_name="Doe")
+    )
+    # or plain dictionaries
+    sdk.create_user(body={"first_name": "Jane", last_name: "Doe"})
 
 
 sample project setup
@@ -116,3 +125,7 @@ For any ``.ini`` setting you can use an environment variable instead. It takes t
 Code example
 ============
 `See many python sdk examples in our examples repo <https://github.com/looker-open-source/sdk-examples/tree/master/python>`_
+
+Changelog
+============
+`Located in our github repo <https://github.com/looker-open-source/sdk-codegen/tree/master/python/CHANGELOG.md>`_
