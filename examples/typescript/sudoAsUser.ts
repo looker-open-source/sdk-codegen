@@ -26,12 +26,9 @@
 
 import { Looker40SDK as LookerSDK } from '@looker/sdk'
 import { NodeSettingsIniFile, NodeSession, IAuthSession } from '@looker/sdk-rtl'
+import { rootIni } from './utils'
 
-/**
- *
- * @type {string} Local configuration file name, one directory above
- */
-const localConfig = '../../looker.ini'
+const localConfig = rootIni()
 
 /**
  *
@@ -55,7 +52,7 @@ const sdk = new LookerSDK(session)
  *
  * @type {string} email matching pattern for searching users
  */
-const matchDomain = '%@looker.com'
+const emailPattern = 'test%'
 
 /**
  * Find a different user than the specified user
@@ -87,7 +84,7 @@ const anyoneButMe = async (userId: number, emailPattern: string) => {
     return
   }
   console.log({ me })
-  const sudoUser = await anyoneButMe(me.id!, matchDomain)
+  const sudoUser = await anyoneButMe(me.id!, emailPattern)
   if (sudoUser) {
     const auth = sdk.authSession as IAuthSession
     await auth.login(sudoUser.id)

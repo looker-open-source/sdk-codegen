@@ -7,7 +7,7 @@ The examples in this folder use `yarn`. If you don't have `yarn` installed alrea
 Use
 
 ```bash
-yarn ts-node {filename} [other command-line options]
+yarn example example/typescript/{filename} [other command-line options]
 ```
 
 to run a Typescript SDK example file.

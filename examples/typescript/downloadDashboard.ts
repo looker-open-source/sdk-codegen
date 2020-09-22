@@ -31,13 +31,13 @@ import {
   IRequestCreateDashboardRenderTask,
 } from '@looker/sdk'
 import { NodeSettingsIniFile, NodeSession } from '@looker/sdk-rtl'
-import { getDashboard, waitForRender } from './utils'
+import { getDashboard, rootIni, waitForRender } from './utils'
 
 /**
  *
  * @type {string} Local configuration file name, one directory above
  */
-const localConfig = '../../looker.ini'
+const localConfig = rootIni()
 
 /**
  *

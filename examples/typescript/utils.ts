@@ -24,7 +24,25 @@
 
  */
 
+import path from 'path'
 import { Looker40SDK as LookerSDK, IDashboard, IRenderTask } from '@looker/sdk'
+
+/**
+ * Resolve a file name relative to the root of the repository
+ * @param fileName to path to the root relative to the examples folder
+ */
+export const rootFile = (fileName: string) => {
+  const result = path.join(__dirname, '/../..', fileName)
+  return result
+}
+
+/**
+ * Path the ini file name to the root folder of the repository
+ * @param fileName name of ini file. defaults to `looker.ini`
+ */
+export const rootIni = (fileName = 'looker.ini') => {
+  return rootFile(fileName)
+}
 
 /**
  * Find a dashboard by title

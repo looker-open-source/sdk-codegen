@@ -24,6 +24,7 @@
     "legacy": "ts-node -O '{ \"module\": \"commonjs\", \"target\": \"es2019\" }' packages/sdk-codegen-scripts/src/legacy.ts",
     "sdk": "NODE_CONFIG_DIR=./packages/sdk-codegen-scripts/config ts-node -O '{ \"module\": \"commonjs\", \"target\": \"es2019\" }' packages/sdk-codegen-scripts/src/sdkGen.ts",
     "jsonify": "ts-node -O '{ \"module\": \"commonjs\", \"target\": \"es2019\" }' packages/sdk-codegen-scripts/src/yamlToJson.ts",
+    "example": "ts-node -O '{ \"module\": \"commonjs\", \"target\": \"es2019\" }'",
     "view": "yarn api-explorer",
     "wipe": "rm -rf api spec",
     "prebuild": "yarn clean",
