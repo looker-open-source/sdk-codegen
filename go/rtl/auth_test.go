@@ -52,7 +52,7 @@ func TestNewAccessToken(t *testing.T) {
 }
 
 func TestAuthSession_login(t *testing.T) {
-	cfg, err := NewSettingsFromFile("testdata/real.ini", nil)
+	cfg, err := NewSettingsFromFile("../../looker.ini", nil)
 	if err != nil {
 		t.Error(err)
 	}

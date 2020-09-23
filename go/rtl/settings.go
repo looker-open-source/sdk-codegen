@@ -16,7 +16,6 @@ type ApiSettings struct {
 	ClientId     string `ini:"client_id"`
 	ClientSecret string `ini:"client_secret"`
 	ApiVersion   string `ini:"api_version"`
-	SectionName  string `ini:"-"` //don't read this from file
 }
 
 func NewSettingsFromFile(file string, section *string) (ApiSettings, error) {
@@ -25,7 +24,6 @@ func NewSettingsFromFile(file string, section *string) (ApiSettings, error) {
 	}
 
 	s := ApiSettings{
-		SectionName: *section,
 		VerifySsl:   true,
 		ApiVersion:  DefaultApiVersion,
 	}

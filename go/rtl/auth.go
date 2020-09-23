@@ -87,10 +87,10 @@ func (s *AuthSession) Authenticate(req *http.Request) error {
 	return nil
 }
 
-func (s *AuthSession) Do(result interface{}, method, path string, reqPars map[string]interface{}, body interface{}, options *ApiSettings) error {
+func (s *AuthSession) Do(result interface{}, method, ver, path string, reqPars map[string]interface{},  body interface{}, options *ApiSettings) error {
 
 	// prepare URL
-	u := fmt.Sprintf("%s/api/%s%s", s.Config.BaseUrl, s.Config.ApiVersion, path)
+	u := fmt.Sprintf("%s/api%s%s", s.Config.BaseUrl, ver, path)
 
 	bodyString := serializeBody(body)
 

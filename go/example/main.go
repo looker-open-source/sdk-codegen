@@ -8,7 +8,7 @@ import (
 
 func main() {
 	// Read settings from ini file
-	cfg, err := rtl.NewSettingsFromFile("testdata/real.ini", nil)
+	cfg, err := rtl.NewSettingsFromFile("../../looker.ini", nil)
 	if err != nil {
 		panic(err)
 	}

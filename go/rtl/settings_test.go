@@ -31,7 +31,6 @@ func TestNewSettingsFromFile(t *testing.T) {
 				ClientId:     "client-id",
 				ClientSecret: "client-secret",
 				ApiVersion:   "10.0",
-				SectionName:  "Looker",
 			},
 			wantErr: false,
 		},
