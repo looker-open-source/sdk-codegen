@@ -1,0 +1,40 @@
+{
+  "name": "@looker/wholly-sheet",
+  "version": "0.1.0-alpha.2",
+  "description": "Google sheets API wrapper for data table mimicking",
+  "main": "lib/index.js",
+  "typings": "lib/index.d.ts",
+  "files": [
+    "lib"
+  ],
+  "author": "Looker",
+  "license": "MIT",
+  "private": true,
+  "publishConfig": {
+    "access": "public"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/looker-open-source/sdk-codegen.git",
+    "directory": "packages/wholly-sheet"
+  },
+  "bugs": {
+    "url": "https://github.com/looker-open-source/sdk-codegen/issues"
+  },
+  "homepage": "https://github.com/looker-open-source/sdk-codegen/tree/master/packages/wholly-sheet",
+  "keywords": [
+    "Looker",
+    "SDK",
+    "codegen"
+  ],
+  "scripts": {
+    "watch": "yarn lerna exec --scope @looker/wholly-sheet --stream 'BABEL_ENV=build babel src --root-mode upward --out-dir lib --source-maps --extensions .ts,.tsx --no-comments --watch'"
+  },
+  "resolutions": {
+    "typescript": "3.8.2"
+  },
+  "dependencies": {
+    "googleapis": "^60.0.1",
+    "google-auth-library": "^6.1.0"
+  }
+}
