@@ -50,20 +50,12 @@ export const DataGrid: FC<DataGridProps> = ({ data, raw, pageSize = 15 }) => {
   const headers = gridHeaders(data)
   const [page, setPage] = useState(1)
   const pageCount = Math.round((data.length - 1) / pageSize)
-  // const rows = gridRows(data)
-  // const {
-  //   onSelect,
-  //   onSelectAll,
-  //   selections,
-  //   setSelections,
-  // } = useActionListSelectManager(pageItemIds)
 
   // The +1 is to skip the header row
   const pageItemData = data.slice(
     (page - 1) * pageSize + 1,
     page * pageSize + 1
   )
-  // const pageItemIds = pageItemData.map((_, index) => gridRowId(index))
   const pageItems = gridRows(pageItemData)
 
   return (
@@ -90,41 +82,3 @@ export const DataGrid: FC<DataGridProps> = ({ data, raw, pageSize = 15 }) => {
     </>
   )
 }
-//   const allItems = [...data].map(({ id }) => String(id))
-//   const onTotalSelectAll = () => setSelections(allItems)
-//   const onTotalClearAll = () => setSelections([])
-//
-//   const bulkActionsConfig = {
-//     actions: (
-//       <ActionListItemAction
-//         onClick={() => alert(`Selected Items: ${selections}`)}
-//       >
-//         View Selected Item IDs
-//       </ActionListItemAction>
-//     ),
-//     onTotalClearAll,
-//     onTotalSelectAll,
-//     pageCount: pageItems.length,
-//     totalCount: allItems.length,
-//   }
-//
-//   return (
-//     <Flex flexDirection="column" alignItems="center">
-//       <Box width="100%" mb="10px">
-//         <ActionList
-//           bulk={bulkActionsConfig}
-//           select={{
-//             onClickRowSelect: true,
-//             onSelect,
-//             onSelectAll,
-//             selectedItems: selections,
-//             pageItems: pageItemIds,
-//           }}
-//           columns={columns}
-//         >
-//           {pageItems}
-//         </ActionList>
-//       </Box>
-//     </Flex>
-//   )
-// }
