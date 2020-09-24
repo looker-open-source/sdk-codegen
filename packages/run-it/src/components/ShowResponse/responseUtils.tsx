@@ -41,7 +41,6 @@ import { DataGrid } from '../DataGrid'
  * Shows the JSON in a syntax-highlighted fashion
  * If the JSON is parseable as 2D row/column data it will also be shown in grid
  * @param response
- * @constructor
  */
 const ShowJSON = (response: IRawResponse) => {
   const content = response.body.toString()
