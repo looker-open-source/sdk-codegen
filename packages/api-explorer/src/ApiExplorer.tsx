@@ -65,7 +65,7 @@ export interface ApiExplorerProps {
 
 const ApiExplorer: FC<ApiExplorerProps> = ({
   specs,
-  lodeUrl = 'https://raw.githubusercontent.com/looker-open-source/sdk-codegen/jk/miner/motherlode.json',
+  lodeUrl = 'https://raw.githubusercontent.com/looker-open-source/sdk-codegen/tree/master/motherlode.json',
 }) => {
   const [spec, specDispatch] = useReducer(
     specReducer,
