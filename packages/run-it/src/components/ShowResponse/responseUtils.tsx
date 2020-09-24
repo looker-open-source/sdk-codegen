@@ -32,8 +32,7 @@ import {
 import { Paragraph } from '@looker/components'
 
 import { CodeStructure } from '../CodeStructure'
-import { parseCsv, parseJson } from '../DataGrid/gridUtils'
-import { DataGrid } from '../DataGrid'
+import { DataGrid, parseCsv, parseJson } from '../DataGrid'
 
 /**
  * Show JSON responses
