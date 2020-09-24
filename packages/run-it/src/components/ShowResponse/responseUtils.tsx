@@ -66,7 +66,6 @@ const ShowText = (response: IRawResponse) => (
 /**
  * Show CSV grid and raw data
  * @param response HTTP response to parse and display
- * @constructor
  */
 const ShowCSV = (response: IRawResponse) => {
   const raw = <pre>{response.body.toString()}</pre>
