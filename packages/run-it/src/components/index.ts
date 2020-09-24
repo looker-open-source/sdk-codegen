@@ -39,3 +39,4 @@ export {
 export { LoginForm } from './LoginForm'
 export { Loading } from './Loading'
 export { getGenerators, SdkCalls } from './SdkCalls'
+export { DataGrid } from './DataGrid'

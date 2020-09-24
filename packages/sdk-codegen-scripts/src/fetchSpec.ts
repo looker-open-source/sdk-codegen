@@ -25,7 +25,7 @@
  */
 
 import * as fs from 'fs'
-import { log, warn } from '@looker/sdk-codegen-utils'
+import { danger, log, warn } from '@looker/sdk-codegen-utils'
 import { IVersionInfo } from '@looker/sdk-codegen'
 import {
   NodeTransport,
@@ -110,6 +110,10 @@ const logoutUrl = (props: ISDKConfigProps) =>
   `${props.base_url}/api/${props.api_version}/logout`
 
 export const supportedVersion = (version: string, versions: any) => {
+  if (!('supported_versions' in versions)) {
+    danger('Could not find supported versions')
+    return undefined
+  }
   const found = Object.entries(versions.supported_versions).find(
     ([, value]) => (value as any).version === version
   )

@@ -23,25 +23,29 @@
  SOFTWARE.
 
  */
-import { ApiModel } from '@looker/sdk-codegen'
+import * as fs from 'fs'
+import path from 'path'
+import { IMine, findExamples, findExampleLanguages } from './exampleInfo'
 
-import { SpecItems } from '../ApiExplorer'
-import { initDefaultSpecState } from '../reducers'
+const fileName = path.join(__dirname, '../../../motherlode.json')
+const file = fs.readFileSync(fileName, { encoding: 'utf-8' })
+const lode: IMine = JSON.parse(file)
+const op = 'render_task'
 
-export const specs: SpecItems = {
-  '3.1': {
-    status: 'current',
-    specURL: 'https://self-signed.looker.com:19999/api/3.1/swagger.json',
-    specContent: require('../../../../spec/Looker.3.1.oas.json'),
-  },
-  '4.0': {
-    isDefault: true,
-    status: 'experimental',
-    specURL: 'https://self-signed.looker.com:19999/api/4.0/swagger.json',
-    specContent: require('../../../../spec/Looker.4.0.oas.json'),
-  },
-}
-
-export const specState = initDefaultSpecState(specs)
-
-export const api = ApiModel.fromJson(specs['3.1'].specContent)
+describe('exampleInfo', () => {
+  it('finds language examples for "render_task"', () => {
+    const actual = findExampleLanguages(lode, op)
+    expect(actual).toBeDefined()
+    expect(actual).toEqual(['Python', 'Typescript', 'Kotlin', 'Ruby'])
+    actual.forEach((language) => {
+      const ex = findExamples(lode, language, op)
+      expect(ex).toBeDefined()
+      expect(ex.length).toBeGreaterThan(0)
+    })
+  })
+  it('findExamples finds examples', () => {
+    const actual = findExamples(lode, 'typescript', 'me')
+    expect(actual).toBeDefined()
+    expect(actual.length).toBeGreaterThan(0)
+  })
+})

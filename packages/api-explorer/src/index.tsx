@@ -31,22 +31,22 @@ import ReactDOM from 'react-dom'
 import { SpecItems } from './ApiExplorer'
 import { StandaloneApiExplorer } from './StandaloneApiExplorer'
 
-const specs: SpecItems = {
+export const specs: SpecItems = {
   '3.0': {
     status: 'stable',
     specURL: 'https://self-signed.looker.com:19999/api/3.0/swagger.json',
-    specContent: require('../specs/Looker.3.0.oas.json'),
+    specContent: require('../../../spec/Looker.3.0.oas.json'),
   },
   '3.1': {
     status: 'current',
     specURL: 'https://self-signed.looker.com:19999/api/3.1/swagger.json',
-    specContent: require('../specs/Looker.3.1.oas.json'),
+    specContent: require('../../../spec/Looker.3.1.oas.json'),
   },
   '4.0': {
     status: 'experimental',
     isDefault: true,
     specURL: 'https://self-signed.looker.com:19999/api/4.0/swagger.json',
-    specContent: require('../specs/Looker.4.0.oas.json'),
+    specContent: require('../../../spec/Looker.4.0.oas.json'),
   },
 }
 

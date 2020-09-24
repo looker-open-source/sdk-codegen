@@ -24,12 +24,13 @@
 
  */
 
-import React, { FC, useReducer, useState } from 'react'
+import React, { FC, useReducer, useState, useEffect } from 'react'
 import { ComponentsProvider } from '@looker/components'
 import { ApiModel, KeyedCollection } from '@looker/sdk-codegen'
-
 import { Looker40SDK, Looker31SDK } from '@looker/sdk/lib/browser'
-import { SearchContext } from './context'
+
+import { SearchContext, LodeContext, defaultLodeContextValue } from './context'
+import { getLoded } from './utils'
 import {
   Header,
   Main,
@@ -59,9 +60,13 @@ export type SpecItems = KeyedCollection<SpecItem>
 export interface ApiExplorerProps {
   specs: SpecItems
   sdk?: Looker31SDK | Looker40SDK
+  lodeUrl?: string
 }
 
-const ApiExplorer: FC<ApiExplorerProps> = ({ specs }) => {
+const ApiExplorer: FC<ApiExplorerProps> = ({
+  specs,
+  lodeUrl = 'https://raw.githubusercontent.com/looker-open-source/sdk-codegen/tree/master/motherlode.json',
+}) => {
   const [spec, specDispatch] = useReducer(
     specReducer,
     initDefaultSpecState(specs)
@@ -71,28 +76,36 @@ const ApiExplorer: FC<ApiExplorerProps> = ({ specs }) => {
     defaultSearchState
   )
 
+  const [lode, setLode] = useState(defaultLodeContextValue)
+
   const [isSideNavOpen, setSideNavOpen] = useState(true)
   const handleSideNavToggle = () => {
     setSideNavOpen(!isSideNavOpen)
   }
 
+  useEffect(() => {
+    getLoded(lodeUrl).then((resp) => setLode(resp))
+  }, [lodeUrl])
+
   return (
     <ComponentsProvider>
-      <SearchContext.Provider value={{ searchSettings, setSearchSettings }}>
-        <Header specs={specs} spec={spec} specDispatch={specDispatch} />
-        <PageLayout open={isSideNavOpen}>
-          {isSideNavOpen && <SideNav api={spec.api} specKey={spec.key} />}
-          <SideNavDivider open={isSideNavOpen}>
-            <SideNavToggle
-              onClick={handleSideNavToggle}
-              isOpen={isSideNavOpen}
-            />
-          </SideNavDivider>
-          <Main>
-            <AppRouter api={spec.api} specKey={spec.key} />
-          </Main>
-        </PageLayout>
-      </SearchContext.Provider>
+      <LodeContext.Provider value={{ ...lode }}>
+        <SearchContext.Provider value={{ searchSettings, setSearchSettings }}>
+          <Header specs={specs} spec={spec} specDispatch={specDispatch} />
+          <PageLayout open={isSideNavOpen}>
+            {isSideNavOpen && <SideNav api={spec.api} specKey={spec.key} />}
+            <SideNavDivider open={isSideNavOpen}>
+              <SideNavToggle
+                onClick={handleSideNavToggle}
+                isOpen={isSideNavOpen}
+              />
+            </SideNavDivider>
+            <Main>
+              <AppRouter api={spec.api} specKey={spec.key} />
+            </Main>
+          </PageLayout>
+        </SearchContext.Provider>
+      </LodeContext.Provider>
     </ComponentsProvider>
   )
 }

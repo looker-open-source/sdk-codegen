@@ -28,9 +28,10 @@ import React from 'react'
 import { renderWithTheme } from '@looker/components-test-utils'
 import { screen, waitFor } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
+import { ApiModel, IMethod } from '@looker/sdk-codegen'
 
-import { RunIt, RunItHttpMethod, RunItInput } from './RunIt'
-import { testTextResponse } from './test-data'
+import { RunIt, RunItInput } from './RunIt'
+import { api, testTextResponse } from './test-data'
 import { initRunItSdk, RunItSettings } from './utils'
 import {
   defaultConfigurator,
@@ -79,9 +80,9 @@ describe('RunIt', () => {
   ]
 
   const renderRunIt = (
+    _api: ApiModel = api,
     inputs = runItInputs,
-    method: RunItHttpMethod = 'POST',
-    endpoint = '/run_query/{result_format}'
+    method: IMethod = api.methods.run_inline_query
   ) => {
     renderWithTheme(
       <RunItProvider
@@ -89,7 +90,7 @@ describe('RunIt', () => {
         configurator={defaultConfigurator}
         basePath="/api/4.0"
       >
-        <RunIt inputs={inputs} httpMethod={method} endpoint={endpoint} />
+        <RunIt api={_api} inputs={inputs} method={method} />
       </RunItProvider>
     )
   }
@@ -106,7 +107,7 @@ describe('RunIt', () => {
     test('it renders endpoint, request and response tabs, and form inputs', () => {
       renderRunIt()
       expect(screen.getByRole('heading')).toHaveTextContent(
-        'POST /run_query/{result_format}'
+        'POST /queries/run/{result_format}'
       )
       expect(screen.getByRole('tab', { name: 'Request' })).toBeInTheDocument()
       expect(screen.getByRole('tab', { name: 'Response' })).toBeInTheDocument()

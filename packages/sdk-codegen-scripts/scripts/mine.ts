@@ -23,25 +23,23 @@
  SOFTWARE.
 
  */
-import { ApiModel } from '@looker/sdk-codegen'
 
-import { SpecItems } from '../ApiExplorer'
-import { initDefaultSpecState } from '../reducers'
-
-export const specs: SpecItems = {
-  '3.1': {
-    status: 'current',
-    specURL: 'https://self-signed.looker.com:19999/api/3.1/swagger.json',
-    specContent: require('../../../../spec/Looker.3.1.oas.json'),
-  },
-  '4.0': {
-    isDefault: true,
-    status: 'experimental',
-    specURL: 'https://self-signed.looker.com:19999/api/4.0/swagger.json',
-    specContent: require('../../../../spec/Looker.4.0.oas.json'),
-  },
-}
-
-export const specState = initDefaultSpecState(specs)
-
-export const api = ApiModel.fromJson(specs['3.1'].specContent)
+import * as path from 'path'
+import * as fs from 'fs'
+import { Miner } from '../src/miner'
+;(() => {
+  const args = process.argv.splice(2)
+  const total = args.length
+  const root = path.join(__dirname, '/../../../')
+  const sourcePath = total < 1 ? root : path.join(root, args[0])
+  const indexFile = path.join(sourcePath, '/motherlode.json')
+  console.log(`Mining ${sourcePath} ...`)
+  const miner = new Miner(sourcePath)
+  const result = miner.execute()
+  fs.writeFileSync(indexFile, JSON.stringify(result, null, 2), {
+    encoding: 'utf-8',
+  })
+  console.log(
+    `${Object.entries(result.nuggets).length} nuggets written to ${indexFile}`
+  )
+})()

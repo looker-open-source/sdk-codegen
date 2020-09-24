@@ -38,14 +38,14 @@ const supportedApiVersions = ['3.0', '3.1', '4.0']
 
 export const apixSpecFileName = (fileName: string) => {
   const p = path.parse(fileName)
-  return `${__dirname}/../specs/${p.base}`
+  return `${__dirname}/../../../spec/${p.base}`
 }
 
-const copySpec = (fileName: string) => {
-  const dest = apixSpecFileName(fileName)
-  fs.copyFileSync(fileName, dest)
-  console.info(`Copied ${fileName} to ${dest}`)
-}
+// const copySpec = (fileName: string) => {
+//   const dest = apixSpecFileName(fileName)
+//   fs.copyFileSync(fileName, dest)
+//   console.info(`Copied ${fileName} to ${dest}`)
+// }
 
 export const updateSpecs = async (apiVersions = supportedApiVersions) => {
   console.info(`Updating the specs folder with APIs ${apiVersions.join()} ...`)
@@ -60,8 +60,6 @@ export const updateSpecs = async (apiVersions = supportedApiVersions) => {
     )
     if (!specFile) {
       console.error(`Could not fetch spec for API ${v} from ${props.base_url}`)
-    } else {
-      copySpec(specFile)
     }
   }
 }

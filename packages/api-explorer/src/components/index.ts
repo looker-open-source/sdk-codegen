@@ -34,6 +34,7 @@ export { DocRateLimited } from './DocRateLimited'
 export { DocReferences } from './DocReferences'
 export { DocResponses } from './DocResponses'
 export { DocSDKs } from './DocSDKs'
+export { DocSdkUsage } from './DocSdkUsage'
 export { DocStatus } from './DocStatus'
 export { DocTitle } from './DocTitle'
 export {

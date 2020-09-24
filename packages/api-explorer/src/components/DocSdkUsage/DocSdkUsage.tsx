@@ -23,44 +23,48 @@
  SOFTWARE.
 
  */
+import React, { FC, useContext } from 'react'
+import { TabList, Tab, TabPanels, TabPanel, useTabs } from '@looker/components'
+import { findExampleLanguages, IMethod } from '@looker/sdk-codegen'
 
-import { ApiModel, IMethod, trimInputs } from '@looker/sdk-codegen'
-import React, { FC } from 'react'
-import { Tab, TabList, TabPanel, TabPanels, useTabs } from '@looker/components'
-import { RunItValues } from '../../RunIt'
-import { CodeStructure } from '../CodeStructure'
-import { getGenerators } from './callUtils'
+import { CollapserCard } from '../Collapser'
+import { LodeContext } from '../../context/examples'
+import { DocExamples } from './DocExamples'
 
-interface SdkCallsProps {
-  /** API spec */
-  api: ApiModel
-  /** current method */
+interface DocSdkUsageProps {
   method: IMethod
-  /** Entered RunIt form values */
-  inputs: RunItValues
 }
 
-export const SdkCalls: FC<SdkCallsProps> = ({ api, method, inputs }) => {
+/**
+ *  Given an SDK method, searches the examples index for its usages in various languages and renders
+ *  links to the source files
+ */
+export const DocSdkUsage: FC<DocSdkUsageProps> = ({ method }) => {
   const tabs = useTabs()
-  const generators = getGenerators(api)
-  const trimmed = trimInputs(inputs)
+  const lode = useContext(LodeContext)
+  const languages = findExampleLanguages(lode, method.name)
+  if (languages.length === 0) return <></>
+
   return (
-    <>
-      <TabList {...tabs}>
-        {Object.keys(generators).map((language) => (
-          <Tab key={language}>{language}</Tab>
-        ))}
-      </TabList>
-      <TabPanels {...tabs} pt="0">
-        {Object.entries(generators).map(([language, gen]) => {
-          const code = gen.makeTheCall(method, trimmed)
-          return (
+    <CollapserCard heading="SDK Examples">
+      <>
+        <TabList {...tabs}>
+          {languages.map((language) => (
+            <Tab key={language}>{language}</Tab>
+          ))}
+        </TabList>
+        <TabPanels {...tabs} pt="0">
+          {languages.map((language) => (
             <TabPanel key={language}>
-              <CodeStructure code={code} language={language} />
+              <DocExamples
+                lode={lode}
+                language={language}
+                operationId={method.operationId}
+              />
             </TabPanel>
-          )
-        })}
-      </TabPanels>
-    </>
+          ))}
+        </TabPanels>
+      </>
+    </CollapserCard>
   )
 }

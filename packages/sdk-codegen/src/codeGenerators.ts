@@ -34,6 +34,8 @@ import { TypescriptGen } from './typescript.gen'
 import { GoGen } from './go.gen'
 
 export interface IGeneratorSpec {
+  /** source code file extension regex */
+  extension: RegExp
   /** name of language SDK to generate */
   language: string
   /** label/alias for language. e.g. C# for csharp */
@@ -54,29 +56,34 @@ export const Generators: Array<IGeneratorSpec> = [
     factory: (api: ApiModel, versions?: IVersionInfo) =>
       new PythonGen(api, versions),
     language: 'Python',
+    extension: /\.py/gi,
   },
   {
     factory: (api: ApiModel, versions?: IVersionInfo) =>
       new TypescriptGen(api, versions),
     language: 'Typescript',
+    extension: /\.ts(x?)/gi,
   },
   {
     factory: (api: ApiModel, versions?: IVersionInfo) =>
       new KotlinGen(api, versions),
     language: 'Kotlin',
+    extension: /\.kt/gi,
   },
   {
     factory: (api: ApiModel, versions?: IVersionInfo) =>
       new CSharpGen(api, versions),
-    language: 'csharp',
+    language: 'Csharp',
     label: 'C#',
     legacy: 'csharp',
     options: '-papiPackage=Looker -ppackageName=looker',
+    extension: /\.cs/gi,
   },
   {
     factory: (api: ApiModel, versions?: IVersionInfo) =>
       new SwiftGen(api, versions),
     language: 'Swift',
+    extension: /\.swift/gi,
   },
   {
     factory: (api: ApiModel, versions?: IVersionInfo) =>
@@ -84,6 +91,7 @@ export const Generators: Array<IGeneratorSpec> = [
     language: 'Go',
     legacy: 'go',
     options: '-papiPackage=Looker -ppackageName=looker',
+    extension: /\.go/gi,
   },
   // {
   //   language: 'php',
@@ -117,17 +125,18 @@ export const Generators: Array<IGeneratorSpec> = [
 export const codeGenerators = Generators.filter((x) => x.factory !== undefined)
 
 /**
- * Matches the code generator based on the language name or alias
- * @param language/label to find in the generator list
- * @returns undefined if the language/label isn't found, otherwise the generator entry
+ * Matches the code generator based on the language name, alias, or file extension
+ * @param target label/language/file extension to find in the generator list
+ * @returns undefined if the label/language/extension isn't found, otherwise the generator entry
  */
-export const findGenerator = (language: string) => {
-  language = language.toLocaleLowerCase()
+export const findGenerator = (target: string) => {
+  target = target.toLocaleLowerCase()
   // Convenience alias
   return codeGenerators.find(
     (item) =>
-      item.language.toLocaleLowerCase() === language ||
-      item.label?.toLocaleLowerCase() === language
+      target.match(item.extension) ||
+      item.language.toLocaleLowerCase() === target ||
+      item.label?.toLocaleLowerCase() === target
   )
 }
 

@@ -52,7 +52,7 @@ export const highlightMarkdown = (pattern: string, content: string): string => {
  * @returns a clean url
  */
 const cleanURL = (url: string) =>
-  url.replace(/<mark>/gi, '').replace(/<\/mark>/gi, '')
+  (url || '').replace(/<mark>/gi, '').replace(/<\/mark>/gi, '')
 
 /**
  * Remaps tag/method a hashbang url to match the MethodScene route.
@@ -61,7 +61,7 @@ const cleanURL = (url: string) =>
  * @returns the cleaned and remapped hashbang url
  */
 export const remapHashURL = (specKey: string, url: string) =>
-  url
+  (url || '')
     // #!/:navVersion?/:methodTag/:methodName
     .replace(/#!\/(:?\d+\.\d+\/)?(\w+)\/(\w+)/gi, `/${specKey}/methods/$2/$3`)
     // #!/:navVersion/:methodTag
@@ -74,4 +74,4 @@ export const remapHashURL = (specKey: string, url: string) =>
  * Returns transformed url
  */
 export const transformURL = (specKey: string, url: string) =>
-  url ? remapHashURL(specKey, cleanURL(url)) : url
+  remapHashURL(specKey, cleanURL(url))
