@@ -49,11 +49,11 @@ extension String {
 }
 
 public struct Constants {
-    static let lookerVersion = "7.14"
-    static let apiVersion = "4.0"
-    static let defaultApiVersion = "4.0" // Swift requires API 4.0
-    static let sdkVersion = #"\#(apiVersion).\#(lookerVersion)"#
-    static let environmentPrefix = "LOOKERSDK"
+    public static let lookerVersion = "7.14"
+    public static let apiVersion = "4.0"
+    public static let defaultApiVersion = "4.0" // Swift requires API 4.0
+    public static let sdkVersion = #"\#(apiVersion).\#(lookerVersion)"#
+    public static let environmentPrefix = "LOOKERSDK"
 
     static let matchCharset = #";.*charset="#
 
