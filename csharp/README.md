@@ -16,3 +16,5 @@ Look# has:
 **NOTE**: We used JetBrains Rider instead of VS Code, which provided much better developer tools for C#. 
 
 **WARNING**: This SDK isn't even in alpha status yet. We've still got lots of tuning to do.
+
+**WARNING**: Look# is currently only "community supported" via issues or questions in this repository. It will eventually reach "officially supported by Looker" status in the future. The date for official support has not yet been established.

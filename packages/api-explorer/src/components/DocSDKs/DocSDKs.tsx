@@ -55,7 +55,7 @@ export const DocSDKs: FC<LanguageSDKProps> = ({ api, method, type }) => {
   }, [method, type])
 
   return (
-    <CollapserCard heading="Language SDK declarations">
+    <CollapserCard heading="SDK declarations">
       <>
         <TabList {...tabs}>
           {Object.keys(generators).map((language) => (

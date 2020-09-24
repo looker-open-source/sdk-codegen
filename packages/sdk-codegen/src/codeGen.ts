@@ -25,6 +25,7 @@
  */
 
 import { commentBlock } from '@looker/sdk-codegen-utils'
+import { DelimArray } from '@looker/sdk-rtl/lib/browser'
 import {
   ApiModel,
   Arg,
@@ -63,6 +64,7 @@ export const trimInputs = (inputs: any): any => {
 
   let result: any
   if (isEmpty(inputs)) return {}
+  if (inputs instanceof DelimArray) return inputs
   if (Array.isArray(inputs)) {
     result = []
     Object.values(inputs).forEach((v: any) => result.push(trimInputs(v)))
@@ -875,7 +877,7 @@ export abstract class CodeGen implements ICodeGen {
   }
 
   makeTheCall(_method: IMethod, _inputs: ArgValues) {
-    return `No call generator is defined for this language`
+    return this.commentHeader('', `Not yet available`)
   }
 
   abstract encodePathParams(indent: string, method: IMethod): string

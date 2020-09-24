@@ -26,15 +26,9 @@
 
 import { ApiModel, IMethod, trimInputs } from '@looker/sdk-codegen'
 import React, { FC } from 'react'
-import {
-  CodeBlock,
-  Tab,
-  TabList,
-  TabPanel,
-  TabPanels,
-  useTabs,
-} from '@looker/components'
+import { Tab, TabList, TabPanel, TabPanels, useTabs } from '@looker/components'
 import { RunItValues } from '../../RunIt'
+import { CodeStructure } from '../CodeStructure'
 import { getGenerators } from './callUtils'
 
 interface SdkCallsProps {
@@ -62,7 +56,7 @@ export const SdkCalls: FC<SdkCallsProps> = ({ api, method, inputs }) => {
           const code = gen.makeTheCall(method, trimmed)
           return (
             <TabPanel key={language}>
-              <CodeBlock>{code} </CodeBlock>
+              <CodeStructure code={code} language={language} />
             </TabPanel>
           )
         })}

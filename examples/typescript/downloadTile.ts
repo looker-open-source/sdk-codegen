@@ -32,13 +32,9 @@ import {
   IRequestRunQuery,
 } from '@looker/sdk'
 import { NodeSettingsIniFile, NodeSession } from '@looker/sdk-rtl'
-import { getDashboard, getDashboardTile, waitForRender } from './utils'
+import { getDashboard, getDashboardTile, rootIni, waitForRender } from './utils'
 
-/**
- *
- * @type {string} Local configuration file name, one directory above
- */
-const localConfig = '../../looker.ini'
+const localConfig = rootIni()
 
 /**
  *

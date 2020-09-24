@@ -34,10 +34,14 @@ describe('generator factory', () => {
       const actual = findGenerator('not here')
       expect(actual).not.toBeDefined()
     })
+    it('returns undefined for empty target', () => {
+      const actual = findGenerator('')
+      expect(actual).not.toBeDefined()
+    })
     it('returns generator by language name', () => {
       const actual = findGenerator('csharp')
       expect(actual).toBeDefined()
-      expect(actual?.language).toEqual('csharp')
+      expect(actual?.language).toEqual('Csharp')
     })
     it('returns generator with language name in any casing', () => {
       let actual = findGenerator('Kotlin')
@@ -53,7 +57,15 @@ describe('generator factory', () => {
     it('returns generator by language label', () => {
       const actual = findGenerator('c#')
       expect(actual).toBeDefined()
-      expect(actual?.language).toEqual('csharp')
+      expect(actual?.language).toEqual('Csharp')
+    })
+    it('returns generator by file extension', () => {
+      let actual = findGenerator('.ts')
+      expect(actual).toBeDefined()
+      expect(actual?.language).toEqual('Typescript')
+      actual = findGenerator('.TSX')
+      expect(actual).toBeDefined()
+      expect(actual?.language).toEqual('Typescript')
     })
   })
 

@@ -9,8 +9,8 @@ The high-level steps for building a new Language SDK include:
 1. Create the language/platform [run-time library](#run-time-library) (RTL)
 
 1. Create the Language SDK [code generator](#code-generator) by descending from
-   [codeGen.ts](/packages/sdk-codegen/src/codeGen.ts) or one of the existing
-   generators like [Typescript](/packages/sdk-codegen/src/typescript.gen.ts) or [Python](/packages/sdk-codegen/src/python.gen.ts)
+   [codeGen.ts](/packages/sdk-codegen/src/codeGen.ts) or perhaps the
+   [Typescript generator](/packages/sdk-codegen/src/typescript.gen.ts) or [Python generator](/packages/sdk-codegen/src/python.gen.ts)
 
 1. Create [unit](#unit-tests) and [functional](#functional-or-integration-tests) tests
 

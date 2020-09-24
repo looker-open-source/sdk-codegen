@@ -26,36 +26,24 @@
 
 import { Looker40SDK as LookerSDK } from '@looker/sdk'
 import { NodeSettingsIniFile, NodeSession, IAuthSession } from '@looker/sdk-rtl'
+import { rootIni } from './utils'
 
-/**
- *
- * @type {string} Local configuration file name, one directory above
- */
-const localConfig = '../../looker.ini'
+const localConfig = rootIni()
 
-/**
- *
- * @type {NodeSettingsIniFile} Settings retrieved from the configuration file
- */
+/** Settings retrieved from the configuration file */
 const settings = new NodeSettingsIniFile(localConfig, 'Looker')
 
 /**
  * Automatic authentication support for the Node SDK
- * @type {NodeSession} Initialized node-based session manager
+ * Initialized node-based session manager
  */
 const session = new NodeSession(settings)
 
-/**
- * Initialized SDK object
- * @type {LookerSDK} SDK object configured for use with Node
- */
+/** Initialized SDK object for the Node runtime */
 const sdk = new LookerSDK(session)
 
-/**
- *
- * @type {string} email matching pattern for searching users
- */
-const matchDomain = '%@looker.com'
+/** email matching pattern for searching users */
+const emailPattern = 'test%'
 
 /**
  * Find a different user than the specified user
@@ -87,7 +75,7 @@ const anyoneButMe = async (userId: number, emailPattern: string) => {
     return
   }
   console.log({ me })
-  const sudoUser = await anyoneButMe(me.id!, matchDomain)
+  const sudoUser = await anyoneButMe(me.id!, emailPattern)
   if (sudoUser) {
     const auth = sdk.authSession as IAuthSession
     await auth.login(sudoUser.id)
