@@ -25,6 +25,7 @@
  */
 
 import { HttpMethod, ITransport } from '@looker/sdk-rtl/lib/browser'
+import { parseResponse } from '@looker/sdk-rtl'
 
 export const defaultScopes = [
   'https://www.googleapis.com/auth/drive',
@@ -36,24 +37,84 @@ export const defaultScopes = [
 
 // https://developers.google.com/sheets/api/reference/rest
 
+// Manually recreated type/interface declarations that are NOT complete
+export interface IGridProperties {
+  rowCount: number
+  columnCount: number
+}
+
+export interface ISheetTabProperties {
+  sheetId: number
+  title: string
+  index: number
+  sheetType: string
+  gridProperties: IGridProperties
+}
+
+export interface ISheetTab {
+  properties: ISheetTabProperties
+  data: any // TODO maybe type this also?
+}
+
+export interface ISheetProperties {
+  title: string
+  local: string
+  autoRecalc: string
+  timeZone: string
+}
+
+export interface ISheet {
+  /** id of the spreadsheet */
+  spreadsheetId: string
+  /** Sheet metadata */
+  properties: ISheetProperties
+  /** Individual sheet tabs */
+  sheets: ISheetTab[]
+  /** Url where sheet can be viewed */
+  spreadsheetUrl: string
+}
+
 export class SheetSDK {
   constructor(
     public readonly transport: ITransport,
     public readonly apiKey: string,
-    public id: string
-  ) {}
-
-  async request(method: HttpMethod, api: string) {
-    const path = `https://sheets.googleapis.com/v4/spreadsheets/${encodeURIComponent(
-      this.id
-    )}${api}?key=${this.apiKey}`
-    const response = await this.transport.rawRequest(method, path)
-    return response.body
+    public sheetId: string
+  ) {
+    this.apiKey = encodeURIComponent(apiKey)
+    this.sheetId = encodeURIComponent(sheetId)
   }
 
+  async request(method: HttpMethod, api = '') {
+    const key = (api.includes('?') ? '&' : '?') + `key=${this.apiKey}`
+    const path = `https://sheets.googleapis.com/v4/spreadsheets/${this.sheetId}${api}${key}`
+    const raw = await this.transport.rawRequest(method, path)
+    const response = await parseResponse(raw)
+    if (!raw.ok) throw new Error(response)
+    return response
+  }
+
+  /**
+   * retrieve the entire sheet
+   * **NOTE**: this response is cast to the ISheet interface so some properties may be hidden
+   */
+  async all() {
+    const api = '?includeGridData=true'
+    const result = await this.request('GET', api)
+    return result as ISheet
+  }
+
+  /**
+   * Get the values collection from the sheet. Defaults to all values in the sheet
+   * @param range
+   */
   async values(range = '!A1:end') {
     const api = range ? `/values/${range}` : ''
-    return await this.request('GET', api)
+    const sheet = await this.request('GET', api)
+    return sheet.values
+  }
+
+  async tabValues(tabName: string, range = '!A1:end') {
+    return await this.values(`${tabName}${range}`)
   }
 }
 

@@ -33,13 +33,30 @@ const credFile = path.join(__dirname, '/', 'google-creds.json')
 const creds = fs.readFileSync(credFile, { encoding: 'utf-8' })
 const cred = JSON.parse(creds)
 const transport = new NodeTransport(DefaultSettings())
+const sheets = new SheetSDK(transport, cred.api_key, cred.sheet_id)
 
 describe('SheetConnection', () => {
-  test('can connect', async () => {
-    const sheets = new SheetSDK(transport, cred.api_key, cred.sheet_id)
+  test('can get sheet', async () => {
+    const actual = await sheets.all()
+    expect(actual).toBeDefined()
+    expect(actual.spreadsheetId).toEqual(cred.sheet_id)
+    expect(actual.properties).toBeDefined()
+    expect(actual.sheets).toBeDefined()
+    expect(actual.sheets.length).toBeGreaterThan(0)
+    expect(actual.spreadsheetUrl).toBeDefined()
+  })
+  test('can get default sheet values', async () => {
     const actual = await sheets.values()
     expect(actual).toBeDefined()
-    expect(actual.range).toBeDefined()
-    // const actual = await SheetConnection.build(creds)
+    expect(actual.length).toBeGreaterThan(0)
+    expect(actual[0].length).toBeGreaterThan(0)
+  })
+  test('can get sheet tab values', async () => {
+    const all = await sheets.all()
+    for (const sheet of all.sheets) {
+      const actual = await sheets.tabValues(sheet.properties.title)
+      expect(actual).toBeDefined()
+      expect(actual.length).toBeGreaterThan(0)
+    }
   })
 })
