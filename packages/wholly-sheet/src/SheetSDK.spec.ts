@@ -39,6 +39,7 @@ describe('SheetConnection', () => {
     const sheets = new SheetSDK(transport, cred.api_key, cred.sheet_id)
     const actual = await sheets.values()
     expect(actual).toBeDefined()
+    expect(actual.range).toBeDefined()
     // const actual = await SheetConnection.build(creds)
   })
 })
