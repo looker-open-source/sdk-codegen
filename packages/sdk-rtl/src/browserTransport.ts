@@ -56,7 +56,7 @@ export class BrowserCryptoHash implements ICryptoHash {
   fromBase64(str: string) {
     return atob(str)
       .split('')
-      .map(function(c) {
+      .map(function (c) {
         return c.charCodeAt(0)
       })
   }
@@ -379,7 +379,7 @@ export class BrowserTransport extends BaseTransport {
  * Process the response based on content type
  * @param res response to process
  */
-async function parseResponse(res: IRawResponse) {
+export const parseResponse = async (res: IRawResponse) => {
   const perfMark = res.startMark || ''
   if (res.contentType.match(/application\/json/g)) {
     try {

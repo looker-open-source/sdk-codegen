@@ -24,10 +24,6 @@
 
  */
 
-import { google } from 'googleapis'
-
-const sheets = google.sheets_v4
-
 export interface ISheetModel {
   id?: string
 }
@@ -52,14 +48,12 @@ export interface IWhollySheet {
 
 // https://github.com/gsuitedevs/node-samples/blob/master/sheets/snippets/test/helpers.js
 
-export class Sheets {
-  constructor(public readonly sheetId: string, credConfig: string) {
-    const scopes = [
-      "https://www.googleapis.com/auth/drive",
-      "https://www.googleapis.com/auth/drive.file",
-      "https://www.googleapis.com/auth/spreadsheets",
-    ]
-    const credentials = google.get
+export class SheetData {
+  id: string
+  constructor(public readonly sheetId: string, public connection: sheets_v4.Sheets) {
+    this.id = sheetId
+    this.client = connection.spreadsheets.values.get()
+
   }
 }
 

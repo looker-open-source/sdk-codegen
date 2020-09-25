@@ -34,7 +34,7 @@
     "typescript": "3.8.2"
   },
   "dependencies": {
-    "googleapis": "^60.0.1",
-    "google-auth-library": "^6.1.0"
+    "@looker/sdk": "^0.3.4-beta.1",
+    "@looker/sdk-rtl": "^0.3.4-beta.1"
   }
 }
