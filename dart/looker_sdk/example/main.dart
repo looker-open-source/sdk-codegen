@@ -3,12 +3,27 @@ import 'package:dotenv/dotenv.dart' show load, env;
 
 void main() async {
   load();
-  await run40();
+  var sdk = await createSdk();
+  await runDashboardApis(sdk);
+  await runConnectionApis(sdk);
 }
 
-void run40() async {
-  var sdk = await Sdk.create40Sdk(
+Future<Looker40SDK> createSdk() async {
+  return await Sdk.create40Sdk(
       {'base_url': env['URL'], 'credentials_callback': credentialsCallback});
+}
+
+void runDashboardApis(Looker40SDK sdk) async {
+  try {
+    var dashboards = await sdk.ok(sdk.all_dashboards());
+    dashboards.forEach((dashboard) => print(dashboard.title));
+  } catch (error, stacktrace) {
+    print(error);
+    print(stacktrace);
+  }
+}
+
+void runConnectionApis(Looker40SDK sdk) async {
   try {
     var connections = await sdk.ok(sdk.all_connections());
     connections.forEach((connection) => print(connection.name));

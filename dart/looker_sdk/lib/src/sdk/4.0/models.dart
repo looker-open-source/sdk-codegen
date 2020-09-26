@@ -258,8 +258,12 @@ class Board {
   Board.fromJson(Map source)
       : can = source['can'],
         content_metadata_id = source['content_metadata_id'],
-        created_at = source['created_at'],
-        deleted_at = source['deleted_at'],
+        created_at = source['created_at'] == null
+            ? null
+            : DateTime.parse(source['created_at']),
+        deleted_at = source['deleted_at'] == null
+            ? null
+            : DateTime.parse(source['deleted_at']),
         description = source['description'] == null
             ? null
             : source['description'].toString(),
@@ -273,7 +277,9 @@ class Board {
             ? null
             : source['section_order'].map<int>((i) => i as int).toList(),
         title = source['title'] == null ? null : source['title'].toString(),
-        updated_at = source['updated_at'],
+        updated_at = source['updated_at'] == null
+            ? null
+            : DateTime.parse(source['updated_at']),
         user_id = source['user_id'],
         primary_homepage = source['primary_homepage'];
 }
@@ -427,8 +433,12 @@ class BoardSection {
 
   BoardSection.fromJson(Map source)
       : can = source['can'],
-        created_at = source['created_at'],
-        deleted_at = source['deleted_at'],
+        created_at = source['created_at'] == null
+            ? null
+            : DateTime.parse(source['created_at']),
+        deleted_at = source['deleted_at'] == null
+            ? null
+            : DateTime.parse(source['deleted_at']),
         description = source['description'] == null
             ? null
             : source['description'].toString(),
@@ -443,7 +453,9 @@ class BoardSection {
             ? null
             : source['item_order'].map<int>((i) => i as int).toList(),
         title = source['title'] == null ? null : source['title'].toString(),
-        updated_at = source['updated_at'];
+        updated_at = source['updated_at'] == null
+            ? null
+            : DateTime.parse(source['updated_at']);
 }
 
 /// Field category Valid values are: "parameter", "filter", "measure", "dimension".
@@ -2199,7 +2211,9 @@ class Dashboard {
         background_color = source['background_color'] == null
             ? null
             : source['background_color'].toString(),
-        created_at = source['created_at'],
+        created_at = source['created_at'] == null
+            ? null
+            : DateTime.parse(source['created_at']),
         crossfilter_enabled = source['crossfilter_enabled'],
         dashboard_elements = source['dashboard_elements'] == null
             ? null
@@ -2217,13 +2231,19 @@ class Dashboard {
                 .map((i) => DashboardLayout.fromJson(i))
                 .toList(),
         deleted = source['deleted'],
-        deleted_at = source['deleted_at'],
+        deleted_at = source['deleted_at'] == null
+            ? null
+            : DateTime.parse(source['deleted_at']),
         deleter_id = source['deleter_id'],
         edit_uri =
             source['edit_uri'] == null ? null : source['edit_uri'].toString(),
         favorite_count = source['favorite_count'],
-        last_accessed_at = source['last_accessed_at'],
-        last_viewed_at = source['last_viewed_at'],
+        last_accessed_at = source['last_accessed_at'] == null
+            ? null
+            : DateTime.parse(source['last_accessed_at']),
+        last_viewed_at = source['last_viewed_at'] == null
+            ? null
+            : DateTime.parse(source['last_viewed_at']),
         load_configuration = source['load_configuration'] == null
             ? null
             : source['load_configuration'].toString(),
@@ -3988,7 +4008,9 @@ class Folder {
             source['parent_id'] == null ? null : source['parent_id'].toString(),
         id = source['id'] == null ? null : source['id'].toString(),
         content_metadata_id = source['content_metadata_id'],
-        created_at = source['created_at'],
+        created_at = source['created_at'] == null
+            ? null
+            : DateTime.parse(source['created_at']),
         creator_id = source['creator_id'],
         child_count = source['child_count'],
         external_id = source['external_id'] == null
@@ -4090,7 +4112,9 @@ class FolderBase {
             source['parent_id'] == null ? null : source['parent_id'].toString(),
         id = source['id'] == null ? null : source['id'].toString(),
         content_metadata_id = source['content_metadata_id'],
-        created_at = source['created_at'],
+        created_at = source['created_at'] == null
+            ? null
+            : DateTime.parse(source['created_at']),
         creator_id = source['creator_id'],
         child_count = source['child_count'],
         external_id = source['external_id'] == null
@@ -4653,8 +4677,12 @@ class HomepageSection {
 
   HomepageSection.fromJson(Map source)
       : can = source['can'],
-        created_at = source['created_at'],
-        deleted_at = source['deleted_at'],
+        created_at = source['created_at'] == null
+            ? null
+            : DateTime.parse(source['created_at']),
+        deleted_at = source['deleted_at'] == null
+            ? null
+            : DateTime.parse(source['deleted_at']),
         detail_url = source['detail_url'] == null
             ? null
             : source['detail_url'].toString(),
@@ -4670,7 +4698,9 @@ class HomepageSection {
             ? null
             : source['item_order'].map<int>((i) => i as int).toList(),
         title = source['title'] == null ? null : source['title'].toString(),
-        updated_at = source['updated_at'],
+        updated_at = source['updated_at'] == null
+            ? null
+            : DateTime.parse(source['updated_at']),
         description = source['description'] == null
             ? null
             : source['description'].toString();
@@ -5685,8 +5715,13 @@ class LegacyFeature {
         documentation_url = source['documentation_url'] == null
             ? null
             : source['documentation_url'].toString(),
-        approximate_disable_date = source['approximate_disable_date'],
-        approximate_end_of_life_date = source['approximate_end_of_life_date'],
+        approximate_disable_date = source['approximate_disable_date'] == null
+            ? null
+            : DateTime.parse(source['approximate_disable_date']),
+        approximate_end_of_life_date =
+            source['approximate_end_of_life_date'] == null
+                ? null
+                : DateTime.parse(source['approximate_end_of_life_date']),
         has_disabled_on_upgrade = source['has_disabled_on_upgrade'];
 }
 
@@ -5872,9 +5907,13 @@ class Look {
         title = source['title'] == null ? null : source['title'].toString(),
         user_id = source['user_id'],
         content_favorite_id = source['content_favorite_id'],
-        created_at = source['created_at'],
+        created_at = source['created_at'] == null
+            ? null
+            : DateTime.parse(source['created_at']),
         deleted = source['deleted'],
-        deleted_at = source['deleted_at'],
+        deleted_at = source['deleted_at'] == null
+            ? null
+            : DateTime.parse(source['deleted_at']),
         deleter_id = source['deleter_id'],
         description = source['description'] == null
             ? null
@@ -5893,9 +5932,13 @@ class Look {
             ? null
             : source['image_embed_url'].toString(),
         is_run_on_load = source['is_run_on_load'],
-        last_accessed_at = source['last_accessed_at'],
+        last_accessed_at = source['last_accessed_at'] == null
+            ? null
+            : DateTime.parse(source['last_accessed_at']),
         last_updater_id = source['last_updater_id'],
-        last_viewed_at = source['last_viewed_at'],
+        last_viewed_at = source['last_viewed_at'] == null
+            ? null
+            : DateTime.parse(source['last_viewed_at']),
         model = source['model'] == null
             ? null
             : LookModel.fromJson(source['model']),
@@ -5914,7 +5957,9 @@ class Look {
             : FolderBase.fromJson(source['folder']),
         folder_id =
             source['folder_id'] == null ? null : source['folder_id'].toString(),
-        updated_at = source['updated_at'],
+        updated_at = source['updated_at'] == null
+            ? null
+            : DateTime.parse(source['updated_at']),
         view_count = source['view_count'];
 }
 
@@ -7266,9 +7311,13 @@ class LookWithDashboards {
         title = source['title'] == null ? null : source['title'].toString(),
         user_id = source['user_id'],
         content_favorite_id = source['content_favorite_id'],
-        created_at = source['created_at'],
+        created_at = source['created_at'] == null
+            ? null
+            : DateTime.parse(source['created_at']),
         deleted = source['deleted'],
-        deleted_at = source['deleted_at'],
+        deleted_at = source['deleted_at'] == null
+            ? null
+            : DateTime.parse(source['deleted_at']),
         deleter_id = source['deleter_id'],
         description = source['description'] == null
             ? null
@@ -7287,9 +7336,13 @@ class LookWithDashboards {
             ? null
             : source['image_embed_url'].toString(),
         is_run_on_load = source['is_run_on_load'],
-        last_accessed_at = source['last_accessed_at'],
+        last_accessed_at = source['last_accessed_at'] == null
+            ? null
+            : DateTime.parse(source['last_accessed_at']),
         last_updater_id = source['last_updater_id'],
-        last_viewed_at = source['last_viewed_at'],
+        last_viewed_at = source['last_viewed_at'] == null
+            ? null
+            : DateTime.parse(source['last_viewed_at']),
         model = source['model'] == null
             ? null
             : LookModel.fromJson(source['model']),
@@ -7308,7 +7361,9 @@ class LookWithDashboards {
             : FolderBase.fromJson(source['folder']),
         folder_id =
             source['folder_id'] == null ? null : source['folder_id'].toString(),
-        updated_at = source['updated_at'],
+        updated_at = source['updated_at'] == null
+            ? null
+            : DateTime.parse(source['updated_at']),
         view_count = source['view_count'],
         dashboards = source['dashboards'] == null
             ? null
@@ -7455,9 +7510,13 @@ class LookWithQuery {
         title = source['title'] == null ? null : source['title'].toString(),
         user_id = source['user_id'],
         content_favorite_id = source['content_favorite_id'],
-        created_at = source['created_at'],
+        created_at = source['created_at'] == null
+            ? null
+            : DateTime.parse(source['created_at']),
         deleted = source['deleted'],
-        deleted_at = source['deleted_at'],
+        deleted_at = source['deleted_at'] == null
+            ? null
+            : DateTime.parse(source['deleted_at']),
         deleter_id = source['deleter_id'],
         description = source['description'] == null
             ? null
@@ -7476,9 +7535,13 @@ class LookWithQuery {
             ? null
             : source['image_embed_url'].toString(),
         is_run_on_load = source['is_run_on_load'],
-        last_accessed_at = source['last_accessed_at'],
+        last_accessed_at = source['last_accessed_at'] == null
+            ? null
+            : DateTime.parse(source['last_accessed_at']),
         last_updater_id = source['last_updater_id'],
-        last_viewed_at = source['last_viewed_at'],
+        last_viewed_at = source['last_viewed_at'] == null
+            ? null
+            : DateTime.parse(source['last_viewed_at']),
         model = source['model'] == null
             ? null
             : LookModel.fromJson(source['model']),
@@ -7497,7 +7560,9 @@ class LookWithQuery {
             : FolderBase.fromJson(source['folder']),
         folder_id =
             source['folder_id'] == null ? null : source['folder_id'].toString(),
-        updated_at = source['updated_at'],
+        updated_at = source['updated_at'] == null
+            ? null
+            : DateTime.parse(source['updated_at']),
         view_count = source['view_count'],
         query =
             source['query'] == null ? null : Query.fromJson(source['query']),
@@ -7780,7 +7845,9 @@ class OauthClientApp {
             : source['description'].toString(),
         enabled = source['enabled'],
         group_id = source['group_id'],
-        tokens_invalid_before = source['tokens_invalid_before'],
+        tokens_invalid_before = source['tokens_invalid_before'] == null
+            ? null
+            : DateTime.parse(source['tokens_invalid_before']),
         activated_users = source['activated_users'] == null
             ? null
             : (source['activated_users'] as List)
@@ -7965,7 +8032,9 @@ class OIDCConfig {
             ? null
             : source['identifier'].toString(),
         issuer = source['issuer'] == null ? null : source['issuer'].toString(),
-        modified_at = source['modified_at'],
+        modified_at = source['modified_at'] == null
+            ? null
+            : DateTime.parse(source['modified_at']),
         modified_by = source['modified_by'],
         new_user_migration_types = source['new_user_migration_types'] == null
             ? null
@@ -10002,13 +10071,21 @@ class ScheduledPlan {
         long_tables = source['long_tables'],
         inline_table_width = source['inline_table_width'],
         id = source['id'],
-        created_at = source['created_at'],
-        updated_at = source['updated_at'],
+        created_at = source['created_at'] == null
+            ? null
+            : DateTime.parse(source['created_at']),
+        updated_at = source['updated_at'] == null
+            ? null
+            : DateTime.parse(source['updated_at']),
         title = source['title'] == null ? null : source['title'].toString(),
         user =
             source['user'] == null ? null : UserPublic.fromJson(source['user']),
-        next_run_at = source['next_run_at'],
-        last_run_at = source['last_run_at'],
+        next_run_at = source['next_run_at'] == null
+            ? null
+            : DateTime.parse(source['next_run_at']),
+        last_run_at = source['last_run_at'] == null
+            ? null
+            : DateTime.parse(source['last_run_at']),
         can = source['can'];
 }
 
@@ -10585,8 +10662,11 @@ class Theme {
 
   Theme.fromJson(Map source)
       : can = source['can'],
-        begin_at = source['begin_at'],
-        end_at = source['end_at'],
+        begin_at = source['begin_at'] == null
+            ? null
+            : DateTime.parse(source['begin_at']),
+        end_at =
+            source['end_at'] == null ? null : DateTime.parse(source['end_at']),
         id = source['id'],
         name = source['name'] == null ? null : source['name'].toString(),
         settings = source['settings'] == null
@@ -11246,7 +11326,9 @@ class UserLoginLockout {
             source['full_name'] == null ? null : source['full_name'].toString(),
         email = source['email'] == null ? null : source['email'].toString(),
         fail_count = source['fail_count'],
-        lockout_at = source['lockout_at'];
+        lockout_at = source['lockout_at'] == null
+            ? null
+            : DateTime.parse(source['lockout_at']);
 }
 
 class UserPublic {
@@ -11599,7 +11681,9 @@ class WriteBoard {
       {'deleted_at': deleted_at, 'description': description, 'title': title};
 
   WriteBoard.fromJson(Map source)
-      : deleted_at = source['deleted_at'],
+      : deleted_at = source['deleted_at'] == null
+            ? null
+            : DateTime.parse(source['deleted_at']),
         description = source['description'] == null
             ? null
             : source['description'].toString(),
@@ -11675,7 +11759,9 @@ class WriteBoardSection {
       };
 
   WriteBoardSection.fromJson(Map source)
-      : deleted_at = source['deleted_at'],
+      : deleted_at = source['deleted_at'] == null
+            ? null
+            : DateTime.parse(source['deleted_at']),
         description = source['description'] == null
             ? null
             : source['description'].toString(),
@@ -14319,8 +14405,11 @@ class WriteTheme {
   Map toJson() => {'begin_at': begin_at, 'end_at': end_at, 'name': name};
 
   WriteTheme.fromJson(Map source)
-      : begin_at = source['begin_at'],
-        end_at = source['end_at'],
+      : begin_at = source['begin_at'] == null
+            ? null
+            : DateTime.parse(source['begin_at']),
+        end_at =
+            source['end_at'] == null ? null : DateTime.parse(source['end_at']),
         name = source['name'] == null ? null : source['name'].toString(),
         settings = source['settings'] == null
             ? null

@@ -423,6 +423,10 @@ class ${this.sdkClassName()}Stream extends APIMethods {
               props.push(
                 `${name} = source['${prop.name}'] == null ? null : source['${prop.name}'].toString()`
               )
+            } else if (propType === 'DateTime') {
+              props.push(
+                `${name} = source['${prop.name}'] == null ? null : DateTime.parse(source['${prop.name}'])`
+              )
             } else {
               props.push(`${name} = source['${prop.name}']`)
             }
