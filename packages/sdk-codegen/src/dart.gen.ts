@@ -230,10 +230,12 @@ class ${this.sdkClassName()}Stream extends APIMethods {
     } else if (method.responseIsBinary()) {
       headComment += `\n\n**Note**: Binary content is returned by this method.\n`
     }
+    const returnType =
+      !method.returnType && !method.type.customType ? 'dynamic' : type.name
     // const callback = `callback: (readable: Readable) => Promise<${type.name}>,`
     const header =
       this.commentHeader(indent, headComment) +
-      `${indent}Future<SDKResponse<${type.name}>>  ${method.name}(`
+      `${indent}Future<SDKResponse<${returnType}>>  ${method.name}(`
     // + (streamer ? `\n${bump}${callback}` : '')
 
     return header + fragment + `) async {\n`
@@ -267,11 +269,10 @@ class ${this.sdkClassName()}Stream extends APIMethods {
 
   responseHandler(method: IMethod) {
     const type = this.typeMap(method.type)
-    if (type.name === 'List<DBConnection>') {
-      console.log(method.type.className)
-    }
     let returnVerb = ''
     let convert = ''
+    const returnType =
+      !method.returnType && !method.type.customType ? 'dynamic' : type.name
     if (type.name !== 'void') {
       returnVerb = 'return'
       if (!method.type.customType) {
@@ -284,7 +285,7 @@ class ${this.sdkClassName()}Stream extends APIMethods {
       }
     }
     return `
-      ${type.name} responseHandler(dynamic json) {
+      ${returnType} responseHandler(dynamic json) {
         ${returnVerb} ${convert}
       } 
     `

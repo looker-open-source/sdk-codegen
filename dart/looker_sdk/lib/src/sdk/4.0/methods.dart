@@ -531,7 +531,7 @@ class Looker40SDK extends APIMethods {
   /// Activating a user for an app that the user is already activated with returns a success response.
   ///
   /// POST /oauth_client_apps/{client_guid}/users/{user_id} -> String
-  Future<SDKResponse<String>> activate_app_user(
+  Future<SDKResponse<dynamic>> activate_app_user(
 
       /// @param {String} client_guid The unique id of this application
       String client_guid,
@@ -545,7 +545,7 @@ class Looker40SDK extends APIMethods {
     var path_client_guid = encodeParam(client_guid);
     var path_user_id = encodeParam(user_id);
 
-    String responseHandler(dynamic json) {
+    dynamic responseHandler(dynamic json) {
       return json;
     }
 
@@ -2606,7 +2606,7 @@ class Looker40SDK extends APIMethods {
   /// GET /content_thumbnail/{type}/{resource_id} -> String
   ///
   /// **Note**: Binary content may be returned by this method.
-  Future<SDKResponse<String>> content_thumbnail(
+  Future<SDKResponse<dynamic>> content_thumbnail(
 
       /// @param {String} type Either dashboard or look
       String type,
@@ -2629,7 +2629,7 @@ class Looker40SDK extends APIMethods {
     var path_type = encodeParam(type);
     var path_resource_id = encodeParam(resource_id);
 
-    String responseHandler(dynamic json) {
+    dynamic responseHandler(dynamic json) {
       return json;
     }
 
@@ -4957,7 +4957,7 @@ class Looker40SDK extends APIMethods {
   /// GET /looks/{look_id}/run/{result_format} -> String
   ///
   /// **Note**: Binary content may be returned by this method.
-  Future<SDKResponse<String>> run_look(
+  Future<SDKResponse<dynamic>> run_look(
 
       /// @param {int} look_id Id of look
       int look_id,
@@ -5004,7 +5004,7 @@ class Looker40SDK extends APIMethods {
     var path_look_id = encodeParam(look_id);
     var path_result_format = encodeParam(result_format);
 
-    String responseHandler(dynamic json) {
+    dynamic responseHandler(dynamic json) {
       return json;
     }
 
@@ -5156,7 +5156,7 @@ class Looker40SDK extends APIMethods {
   ///       2. The project will then write out a lockfile including each remote_dependency with its resolved ref.
   ///
   /// POST /projects/{project_id}/manifest/lock_all -> String
-  Future<SDKResponse<String>> lock_all(
+  Future<SDKResponse<dynamic>> lock_all(
 
       /// @param {String} project_id Id of project
       String project_id,
@@ -5166,7 +5166,7 @@ class Looker40SDK extends APIMethods {
       String fields]) async {
     var path_project_id = encodeParam(project_id);
 
-    String responseHandler(dynamic json) {
+    dynamic responseHandler(dynamic json) {
       return json;
     }
 
@@ -5322,7 +5322,7 @@ class Looker40SDK extends APIMethods {
   /// Can only specify either a branch or a ref.
   ///
   /// POST /projects/{project_id}/deploy_ref_to_production -> String
-  Future<SDKResponse<String>> deploy_ref_to_production(
+  Future<SDKResponse<dynamic>> deploy_ref_to_production(
 
       /// @param {String} project_id Id of project
       String project_id,
@@ -5335,7 +5335,7 @@ class Looker40SDK extends APIMethods {
       String ref]) async {
     var path_project_id = encodeParam(project_id);
 
-    String responseHandler(dynamic json) {
+    dynamic responseHandler(dynamic json) {
       return json;
     }
 
@@ -5359,13 +5359,13 @@ class Looker40SDK extends APIMethods {
   /// 3. Pull the production branch into the production project.
   ///
   /// POST /projects/{project_id}/deploy_to_production -> String
-  Future<SDKResponse<String>> deploy_to_production(
+  Future<SDKResponse<dynamic>> deploy_to_production(
 
       /// @param {String} project_id Id of project
       String project_id) async {
     var path_project_id = encodeParam(project_id);
 
-    String responseHandler(dynamic json) {
+    dynamic responseHandler(dynamic json) {
       return json;
     }
 
@@ -5378,13 +5378,13 @@ class Looker40SDK extends APIMethods {
   /// **DANGER** this will delete any changes that have not been pushed to a remote repository.
   ///
   /// POST /projects/{project_id}/reset_to_production -> String
-  Future<SDKResponse<String>> reset_project_to_production(
+  Future<SDKResponse<dynamic>> reset_project_to_production(
 
       /// @param {String} project_id Id of project
       String project_id) async {
     var path_project_id = encodeParam(project_id);
 
-    String responseHandler(dynamic json) {
+    dynamic responseHandler(dynamic json) {
       return json;
     }
 
@@ -5397,13 +5397,13 @@ class Looker40SDK extends APIMethods {
   /// **DANGER** this will delete any changes that have not been pushed to a remote repository.
   ///
   /// POST /projects/{project_id}/reset_to_remote -> String
-  Future<SDKResponse<String>> reset_project_to_remote(
+  Future<SDKResponse<dynamic>> reset_project_to_remote(
 
       /// @param {String} project_id Id of project
       String project_id) async {
     var path_project_id = encodeParam(project_id);
 
-    String responseHandler(dynamic json) {
+    dynamic responseHandler(dynamic json) {
       return json;
     }
 
@@ -6067,13 +6067,13 @@ class Looker40SDK extends APIMethods {
   /// These data formats can only carry row data, and error info is not row data.
   ///
   /// GET /query_tasks/{query_task_id}/results -> String
-  Future<SDKResponse<String>> query_task_results(
+  Future<SDKResponse<dynamic>> query_task_results(
 
       /// @param {String} query_task_id ID of the Query Task
       String query_task_id) async {
     var path_query_task_id = encodeParam(query_task_id);
 
-    String responseHandler(dynamic json) {
+    dynamic responseHandler(dynamic json) {
       return json;
     }
 
@@ -6205,7 +6205,7 @@ class Looker40SDK extends APIMethods {
   /// GET /queries/{query_id}/run/{result_format} -> String
   ///
   /// **Note**: Binary content may be returned by this method.
-  Future<SDKResponse<String>> run_query(
+  Future<SDKResponse<dynamic>> run_query(
 
       /// @param {int} query_id Id of query
       int query_id,
@@ -6252,7 +6252,7 @@ class Looker40SDK extends APIMethods {
     var path_query_id = encodeParam(query_id);
     var path_result_format = encodeParam(result_format);
 
-    String responseHandler(dynamic json) {
+    dynamic responseHandler(dynamic json) {
       return json;
     }
 
@@ -6327,7 +6327,7 @@ class Looker40SDK extends APIMethods {
   /// POST /queries/run/{result_format} -> String
   ///
   /// **Note**: Binary content may be returned by this method.
-  Future<SDKResponse<String>> run_inline_query(
+  Future<SDKResponse<dynamic>> run_inline_query(
 
       /// @param {String} result_format Format of result
       String result_format,
@@ -6373,7 +6373,7 @@ class Looker40SDK extends APIMethods {
       bool server_table_calcs]) async {
     var path_result_format = encodeParam(result_format);
 
-    String responseHandler(dynamic json) {
+    dynamic responseHandler(dynamic json) {
       return json;
     }
 
@@ -6453,7 +6453,7 @@ class Looker40SDK extends APIMethods {
   /// GET /queries/models/{model_name}/views/{view_name}/run/{result_format} -> String
   ///
   /// **Note**: Binary content may be returned by this method.
-  Future<SDKResponse<String>> run_url_encoded_query(
+  Future<SDKResponse<dynamic>> run_url_encoded_query(
 
       /// @param {String} model_name Model name
       String model_name,
@@ -6467,7 +6467,7 @@ class Looker40SDK extends APIMethods {
     var path_view_name = encodeParam(view_name);
     var path_result_format = encodeParam(result_format);
 
-    String responseHandler(dynamic json) {
+    dynamic responseHandler(dynamic json) {
       return json;
     }
 
@@ -6600,7 +6600,7 @@ class Looker40SDK extends APIMethods {
   /// POST /sql_queries/{slug}/run/{result_format} -> String
   ///
   /// **Note**: Binary content may be returned by this method.
-  Future<SDKResponse<String>> run_sql_query(
+  Future<SDKResponse<dynamic>> run_sql_query(
 
       /// @param {String} slug slug of query
       String slug,
@@ -6614,7 +6614,7 @@ class Looker40SDK extends APIMethods {
     var path_slug = encodeParam(slug);
     var path_result_format = encodeParam(result_format);
 
-    String responseHandler(dynamic json) {
+    dynamic responseHandler(dynamic json) {
       return json;
     }
 
@@ -6805,13 +6805,13 @@ class Looker40SDK extends APIMethods {
   /// GET /render_tasks/{render_task_id}/results -> String
   ///
   /// **Note**: Binary content is returned by this method.
-  Future<SDKResponse<String>> render_task_results(
+  Future<SDKResponse<dynamic>> render_task_results(
 
       /// @param {String} render_task_id Id of render task
       String render_task_id) async {
     var path_render_task_id = encodeParam(render_task_id);
 
-    String responseHandler(dynamic json) {
+    dynamic responseHandler(dynamic json) {
       return json;
     }
 
