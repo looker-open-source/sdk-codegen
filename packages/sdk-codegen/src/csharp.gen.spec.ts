@@ -146,26 +146,9 @@ describe('c# generator', () => {
           .user_attribute_filter_types.type
       const actual = gen.declareType('', type)
       const expected = `/// An array of user attribute types that are allowed to be used in filters on this field. Valid values are: "advanced_filter_string", "advanced_filter_number", "advanced_filter_datetime", "string", "number", "datetime", "relative_url", "yesno", "zipcode".
-public enum UserAttributeFilterTypes
+public class UserAttributeFilterTypes[] : SdkModel
 {
-  [EnumMember(Value = "advanced_filter_string")]
-  advanced_filter_string,
-  [EnumMember(Value = "advanced_filter_number")]
-  advanced_filter_number,
-  [EnumMember(Value = "advanced_filter_datetime")]
-  advanced_filter_datetime,
-  [EnumMember(Value = "string")]
-  @string,
-  [EnumMember(Value = "number")]
-  number,
-  [EnumMember(Value = "datetime")]
-  datetime,
-  [EnumMember(Value = "relative_url")]
-  relative_url,
-  [EnumMember(Value = "yesno")]
-  yesno,
-  [EnumMember(Value = "zipcode")]
-  zipcode
+
 }`
       expect(actual).toEqual(expected)
     })

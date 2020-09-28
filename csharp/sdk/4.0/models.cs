@@ -1827,20 +1827,15 @@ public class Integration : SdkModel
   /// <summary>Array of params for the integration.</summary>
   public IntegrationParam[]? @params { get; set; } = null;
   /// <summary>A list of data formats the integration supports. If unspecified, the default is all data formats. Valid values are: "txt", "csv", "inline_json", "json", "json_label", "json_detail", "json_detail_lite_stream", "xlsx", "html", "wysiwyg_pdf", "assembled_pdf", "wysiwyg_png", "csv_zip". (read-only)</summary>
-  [JsonConverter(typeof(StringEnumConverter))]
-  public SupportedFormats? supported_formats { get; set; }
+  public SupportedFormats[]? supported_formats { get; set; } = null;
   /// <summary>A list of action types the integration supports. Valid values are: "cell", "query", "dashboard". (read-only)</summary>
-  [JsonConverter(typeof(StringEnumConverter))]
-  public SupportedActionTypes? supported_action_types { get; set; }
+  public SupportedActionTypes[]? supported_action_types { get; set; } = null;
   /// <summary>A list of formatting options the integration supports. If unspecified, defaults to all formats. Valid values are: "formatted", "unformatted". (read-only)</summary>
-  [JsonConverter(typeof(StringEnumConverter))]
-  public SupportedFormattings? supported_formattings { get; set; }
+  public SupportedFormattings[]? supported_formattings { get; set; } = null;
   /// <summary>A list of visualization formatting options the integration supports. If unspecified, defaults to all formats. Valid values are: "apply", "noapply". (read-only)</summary>
-  [JsonConverter(typeof(StringEnumConverter))]
-  public SupportedVisualizationFormattings? supported_visualization_formattings { get; set; }
+  public SupportedVisualizationFormattings[]? supported_visualization_formattings { get; set; } = null;
   /// <summary>A list of all the download mechanisms the integration supports. The order of values is not significant: Looker will select the most appropriate supported download mechanism for a given query. The integration must ensure it can handle any of the mechanisms it claims to support. If unspecified, this defaults to all download setting values. Valid values are: "push", "url". (read-only)</summary>
-  [JsonConverter(typeof(StringEnumConverter))]
-  public SupportedDownloadSettings? supported_download_settings { get; set; }
+  public SupportedDownloadSettings[]? supported_download_settings { get; set; } = null;
   /// <summary>URL to an icon for the integration. (read-only)</summary>
   public string? icon_url { get; set; } = null;
   /// <summary>Whether the integration uses oauth. (read-only)</summary>
@@ -2504,8 +2499,7 @@ public class LookmlModelExploreField : SdkModel
   /// <summary>The LookML type of the field. (read-only)</summary>
   public string? type { get; set; } = null;
   /// <summary>An array of user attribute types that are allowed to be used in filters on this field. Valid values are: "advanced_filter_string", "advanced_filter_number", "advanced_filter_datetime", "string", "number", "datetime", "relative_url", "yesno", "zipcode". (read-only)</summary>
-  [JsonConverter(typeof(StringEnumConverter))]
-  public UserAttributeFilterTypes? user_attribute_filter_types { get; set; }
+  public UserAttributeFilterTypes[]? user_attribute_filter_types { get; set; } = null;
   /// <summary>If specified, the LookML value format string for formatting values of this field. (read-only)</summary>
   public string? value_format { get; set; } = null;
   /// <summary>The name of the view this field belongs to. (read-only)</summary>

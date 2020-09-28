@@ -4019,13 +4019,13 @@ class Integration(model.Model):
     description: Optional[str] = None
     enabled: Optional[bool] = None
     params: Optional[Sequence["IntegrationParam"]] = None
-    supported_formats: Optional["SupportedFormats"] = None
-    supported_action_types: Optional["SupportedActionTypes"] = None
-    supported_formattings: Optional["SupportedFormattings"] = None
+    supported_formats: Optional[Sequence["SupportedFormats"]] = None
+    supported_action_types: Optional[Sequence["SupportedActionTypes"]] = None
+    supported_formattings: Optional[Sequence["SupportedFormattings"]] = None
     supported_visualization_formattings: Optional[
-        "SupportedVisualizationFormattings"
+        Sequence["SupportedVisualizationFormattings"]
     ] = None
-    supported_download_settings: Optional["SupportedDownloadSettings"] = None
+    supported_download_settings: Optional[Sequence["SupportedDownloadSettings"]] = None
     icon_url: Optional[str] = None
     uses_oauth: Optional[bool] = None
     required_fields: Optional[Sequence["IntegrationRequiredField"]] = None
@@ -4042,13 +4042,15 @@ class Integration(model.Model):
         description: Optional[str] = None,
         enabled: Optional[bool] = None,
         params: Optional[Sequence["IntegrationParam"]] = None,
-        supported_formats: Optional["SupportedFormats"] = None,
-        supported_action_types: Optional["SupportedActionTypes"] = None,
-        supported_formattings: Optional["SupportedFormattings"] = None,
+        supported_formats: Optional[Sequence["SupportedFormats"]] = None,
+        supported_action_types: Optional[Sequence["SupportedActionTypes"]] = None,
+        supported_formattings: Optional[Sequence["SupportedFormattings"]] = None,
         supported_visualization_formattings: Optional[
-            "SupportedVisualizationFormattings"
+            Sequence["SupportedVisualizationFormattings"]
         ] = None,
-        supported_download_settings: Optional["SupportedDownloadSettings"] = None,
+        supported_download_settings: Optional[
+            Sequence["SupportedDownloadSettings"]
+        ] = None,
         icon_url: Optional[str] = None,
         uses_oauth: Optional[bool] = None,
         required_fields: Optional[Sequence["IntegrationRequiredField"]] = None,
@@ -5414,7 +5416,7 @@ class LookmlModelExploreField(model.Model):
     suggestions: Optional[Sequence[str]] = None
     tags: Optional[Sequence[str]] = None
     type: Optional[str] = None
-    user_attribute_filter_types: Optional["UserAttributeFilterTypes"] = None
+    user_attribute_filter_types: Optional[Sequence["UserAttributeFilterTypes"]] = None
     value_format: Optional[str] = None
     view: Optional[str] = None
     view_label: Optional[str] = None
@@ -5469,7 +5471,9 @@ class LookmlModelExploreField(model.Model):
         suggestions: Optional[Sequence[str]] = None,
         tags: Optional[Sequence[str]] = None,
         type: Optional[str] = None,
-        user_attribute_filter_types: Optional["UserAttributeFilterTypes"] = None,
+        user_attribute_filter_types: Optional[
+            Sequence["UserAttributeFilterTypes"]
+        ] = None,
         value_format: Optional[str] = None,
         view: Optional[str] = None,
         view_label: Optional[str] = None,

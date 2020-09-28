@@ -844,6 +844,29 @@ export enum Align {
   right = 'right'
 }`)
       })
+      it('array of enums', () => {
+        const type = apiTestModel.types.RequiredResponseWithEnums
+        const actual = gen.declareType(indent, type)
+        expect(actual).toEqual(`export interface IRequiredResponseWithEnums {
+  /**
+   * Id of query to run
+   */
+  query_id: number
+  /**
+   * Desired async query result format. Valid values are: "inline_json", "json", "json_detail", "json_fe", "csv", "html", "md", "txt", "xlsx", "gsxml".
+   */
+  result_format: ResultFormat
+  /**
+   * An array of user attribute types that are allowed to be used in filters on this field. Valid values are: "advanced_filter_string", "advanced_filter_number", "advanced_filter_datetime", "string", "number", "datetime", "relative_url", "yesno", "zipcode". (read-only)
+   */
+  an_array_of_enums?: AnArrayOfEnums[]
+  user: IUserPublic
+  /**
+   * Roles assigned to group (read-only)
+   */
+  roles?: IRole[]
+}`)
+      })
     })
   })
 })

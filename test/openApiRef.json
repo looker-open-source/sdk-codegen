@@ -29328,7 +29328,7 @@
         },
         "x-looker-status": "beta"
       },
-      "RequiredResponseWithSingleEnum": {
+      "RequiredResponseWithEnums": {
         "properties": {
           "query_id": {
             "type": "integer",
@@ -29352,6 +29352,24 @@
             ],
             "description": "Desired async query result format. Valid values are: \"inline_json\", \"json\", \"json_detail\", \"json_fe\", \"csv\", \"html\", \"md\", \"txt\", \"xlsx\", \"gsxml\".",
             "nullable": true
+          },
+          "an_array_of_enums": {
+            "type": "array",
+            "items": { "type": "string" },
+            "readOnly": true,
+            "x-looker-values": [
+              "advanced_filter_string",
+              "advanced_filter_number",
+              "advanced_filter_datetime",
+              "string",
+              "number",
+              "datetime",
+              "relative_url",
+              "yesno",
+              "zipcode"
+            ],
+            "description": "An array of user attribute types that are allowed to be used in filters on this field. Valid values are: \"advanced_filter_string\", \"advanced_filter_number\", \"advanced_filter_datetime\", \"string\", \"number\", \"datetime\", \"relative_url\", \"yesno\", \"zipcode\".",
+            "nullable": false
           },
           "user": { "$ref": "#/components/schemas/UserPublic" },
           "roles": {

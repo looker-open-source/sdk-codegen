@@ -3079,23 +3079,23 @@ data class Integration (
   /**
    * A list of data formats the integration supports. If unspecified, the default is all data formats. Valid values are: "txt", "csv", "inline_json", "json", "json_label", "json_detail", "json_detail_lite_stream", "xlsx", "html", "wysiwyg_pdf", "assembled_pdf", "wysiwyg_png", "csv_zip". (read-only)
    */
-  var supported_formats: SupportedFormats? = null,
+  var supported_formats: Array<SupportedFormats>? = null,
   /**
    * A list of action types the integration supports. Valid values are: "cell", "query", "dashboard". (read-only)
    */
-  var supported_action_types: SupportedActionTypes? = null,
+  var supported_action_types: Array<SupportedActionTypes>? = null,
   /**
    * A list of formatting options the integration supports. If unspecified, defaults to all formats. Valid values are: "formatted", "unformatted". (read-only)
    */
-  var supported_formattings: SupportedFormattings? = null,
+  var supported_formattings: Array<SupportedFormattings>? = null,
   /**
    * A list of visualization formatting options the integration supports. If unspecified, defaults to all formats. Valid values are: "apply", "noapply". (read-only)
    */
-  var supported_visualization_formattings: SupportedVisualizationFormattings? = null,
+  var supported_visualization_formattings: Array<SupportedVisualizationFormattings>? = null,
   /**
    * A list of all the download mechanisms the integration supports. The order of values is not significant: Looker will select the most appropriate supported download mechanism for a given query. The integration must ensure it can handle any of the mechanisms it claims to support. If unspecified, this defaults to all download setting values. Valid values are: "push", "url". (read-only)
    */
-  var supported_download_settings: SupportedDownloadSettings? = null,
+  var supported_download_settings: Array<SupportedDownloadSettings>? = null,
   /**
    * URL to an icon for the integration. (read-only)
    */
@@ -4266,7 +4266,7 @@ data class LookmlModelExploreField (
   /**
    * An array of user attribute types that are allowed to be used in filters on this field. Valid values are: "advanced_filter_string", "advanced_filter_number", "advanced_filter_datetime", "string", "number", "datetime", "relative_url", "yesno", "zipcode". (read-only)
    */
-  var user_attribute_filter_types: UserAttributeFilterTypes? = null,
+  var user_attribute_filter_types: Array<UserAttributeFilterTypes>? = null,
   /**
    * If specified, the LookML value format string for formatting values of this field. (read-only)
    */
