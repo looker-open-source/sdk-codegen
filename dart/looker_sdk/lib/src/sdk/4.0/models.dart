@@ -245,12 +245,12 @@ class Board {
   Map toJson() => {
         'can': can,
         'content_metadata_id': content_metadata_id,
-        'created_at': created_at,
-        'deleted_at': deleted_at,
+        'created_at': created_at == null ? null : created_at.toString(),
+        'deleted_at': deleted_at == null ? null : deleted_at.toString(),
         'description': description,
         'id': id,
         'title': title,
-        'updated_at': updated_at,
+        'updated_at': updated_at == null ? null : updated_at.toString(),
         'user_id': user_id,
         'primary_homepage': primary_homepage
       };
@@ -422,13 +422,13 @@ class BoardSection {
 
   Map toJson() => {
         'can': can,
-        'created_at': created_at,
-        'deleted_at': deleted_at,
+        'created_at': created_at == null ? null : created_at.toString(),
+        'deleted_at': deleted_at == null ? null : deleted_at.toString(),
         'description': description,
         'board_id': board_id,
         'id': id,
         'title': title,
-        'updated_at': updated_at
+        'updated_at': updated_at == null ? null : updated_at.toString()
       };
 
   BoardSection.fromJson(Map source)
@@ -2160,15 +2160,17 @@ class Dashboard {
         'title': title,
         'user_id': user_id,
         'background_color': background_color,
-        'created_at': created_at,
+        'created_at': created_at == null ? null : created_at.toString(),
         'crossfilter_enabled': crossfilter_enabled,
         'deleted': deleted,
-        'deleted_at': deleted_at,
+        'deleted_at': deleted_at == null ? null : deleted_at.toString(),
         'deleter_id': deleter_id,
         'edit_uri': edit_uri,
         'favorite_count': favorite_count,
-        'last_accessed_at': last_accessed_at,
-        'last_viewed_at': last_viewed_at,
+        'last_accessed_at':
+            last_accessed_at == null ? null : last_accessed_at.toString(),
+        'last_viewed_at':
+            last_viewed_at == null ? null : last_viewed_at.toString(),
         'load_configuration': load_configuration,
         'lookml_link_id': lookml_link_id,
         'show_filters_bar': show_filters_bar,
@@ -3988,7 +3990,7 @@ class Folder {
         'parent_id': parent_id,
         'id': id,
         'content_metadata_id': content_metadata_id,
-        'created_at': created_at,
+        'created_at': created_at == null ? null : created_at.toString(),
         'creator_id': creator_id,
         'child_count': child_count,
         'external_id': external_id,
@@ -4092,7 +4094,7 @@ class FolderBase {
         'parent_id': parent_id,
         'id': id,
         'content_metadata_id': content_metadata_id,
-        'created_at': created_at,
+        'created_at': created_at == null ? null : created_at.toString(),
         'creator_id': creator_id,
         'child_count': child_count,
         'external_id': external_id,
@@ -4664,14 +4666,14 @@ class HomepageSection {
 
   Map toJson() => {
         'can': can,
-        'created_at': created_at,
-        'deleted_at': deleted_at,
+        'created_at': created_at == null ? null : created_at.toString(),
+        'deleted_at': deleted_at == null ? null : deleted_at.toString(),
         'detail_url': detail_url,
         'homepage_id': homepage_id,
         'id': id,
         'is_header': is_header,
         'title': title,
-        'updated_at': updated_at,
+        'updated_at': updated_at == null ? null : updated_at.toString(),
         'description': description
       };
 
@@ -5688,8 +5690,12 @@ class LegacyFeature {
         'disable_on_upgrade_to_version': disable_on_upgrade_to_version,
         'end_of_life_version': end_of_life_version,
         'documentation_url': documentation_url,
-        'approximate_disable_date': approximate_disable_date,
-        'approximate_end_of_life_date': approximate_end_of_life_date,
+        'approximate_disable_date': approximate_disable_date == null
+            ? null
+            : approximate_disable_date.toString(),
+        'approximate_end_of_life_date': approximate_end_of_life_date == null
+            ? null
+            : approximate_end_of_life_date.toString(),
         'has_disabled_on_upgrade': has_disabled_on_upgrade
       };
 
@@ -5876,9 +5882,9 @@ class Look {
         'title': title,
         'user_id': user_id,
         'content_favorite_id': content_favorite_id,
-        'created_at': created_at,
+        'created_at': created_at == null ? null : created_at.toString(),
         'deleted': deleted,
-        'deleted_at': deleted_at,
+        'deleted_at': deleted_at == null ? null : deleted_at.toString(),
         'deleter_id': deleter_id,
         'description': description,
         'embed_url': embed_url,
@@ -5887,16 +5893,18 @@ class Look {
         'google_spreadsheet_formula': google_spreadsheet_formula,
         'image_embed_url': image_embed_url,
         'is_run_on_load': is_run_on_load,
-        'last_accessed_at': last_accessed_at,
+        'last_accessed_at':
+            last_accessed_at == null ? null : last_accessed_at.toString(),
         'last_updater_id': last_updater_id,
-        'last_viewed_at': last_viewed_at,
+        'last_viewed_at':
+            last_viewed_at == null ? null : last_viewed_at.toString(),
         'public': public,
         'public_slug': public_slug,
         'public_url': public_url,
         'query_id': query_id,
         'short_url': short_url,
         'folder_id': folder_id,
-        'updated_at': updated_at,
+        'updated_at': updated_at == null ? null : updated_at.toString(),
         'view_count': view_count
       };
 
@@ -7280,9 +7288,9 @@ class LookWithDashboards {
         'title': title,
         'user_id': user_id,
         'content_favorite_id': content_favorite_id,
-        'created_at': created_at,
+        'created_at': created_at == null ? null : created_at.toString(),
         'deleted': deleted,
-        'deleted_at': deleted_at,
+        'deleted_at': deleted_at == null ? null : deleted_at.toString(),
         'deleter_id': deleter_id,
         'description': description,
         'embed_url': embed_url,
@@ -7291,16 +7299,18 @@ class LookWithDashboards {
         'google_spreadsheet_formula': google_spreadsheet_formula,
         'image_embed_url': image_embed_url,
         'is_run_on_load': is_run_on_load,
-        'last_accessed_at': last_accessed_at,
+        'last_accessed_at':
+            last_accessed_at == null ? null : last_accessed_at.toString(),
         'last_updater_id': last_updater_id,
-        'last_viewed_at': last_viewed_at,
+        'last_viewed_at':
+            last_viewed_at == null ? null : last_viewed_at.toString(),
         'public': public,
         'public_slug': public_slug,
         'public_url': public_url,
         'query_id': query_id,
         'short_url': short_url,
         'folder_id': folder_id,
-        'updated_at': updated_at,
+        'updated_at': updated_at == null ? null : updated_at.toString(),
         'view_count': view_count
       };
 
@@ -7478,9 +7488,9 @@ class LookWithQuery {
         'title': title,
         'user_id': user_id,
         'content_favorite_id': content_favorite_id,
-        'created_at': created_at,
+        'created_at': created_at == null ? null : created_at.toString(),
         'deleted': deleted,
-        'deleted_at': deleted_at,
+        'deleted_at': deleted_at == null ? null : deleted_at.toString(),
         'deleter_id': deleter_id,
         'description': description,
         'embed_url': embed_url,
@@ -7489,16 +7499,18 @@ class LookWithQuery {
         'google_spreadsheet_formula': google_spreadsheet_formula,
         'image_embed_url': image_embed_url,
         'is_run_on_load': is_run_on_load,
-        'last_accessed_at': last_accessed_at,
+        'last_accessed_at':
+            last_accessed_at == null ? null : last_accessed_at.toString(),
         'last_updater_id': last_updater_id,
-        'last_viewed_at': last_viewed_at,
+        'last_viewed_at':
+            last_viewed_at == null ? null : last_viewed_at.toString(),
         'public': public,
         'public_slug': public_slug,
         'public_url': public_url,
         'query_id': query_id,
         'short_url': short_url,
         'folder_id': folder_id,
-        'updated_at': updated_at,
+        'updated_at': updated_at == null ? null : updated_at.toString(),
         'view_count': view_count,
         'url': url
       };
@@ -7826,7 +7838,9 @@ class OauthClientApp {
         'description': description,
         'enabled': enabled,
         'group_id': group_id,
-        'tokens_invalid_before': tokens_invalid_before
+        'tokens_invalid_before': tokens_invalid_before == null
+            ? null
+            : tokens_invalid_before.toString()
       };
 
   OauthClientApp.fromJson(Map source)
@@ -7967,7 +7981,7 @@ class OIDCConfig {
         'groups_attribute': groups_attribute,
         'identifier': identifier,
         'issuer': issuer,
-        'modified_at': modified_at,
+        'modified_at': modified_at == null ? null : modified_at.toString(),
         'modified_by': modified_by,
         'new_user_migration_types': new_user_migration_types,
         'secret': secret,
@@ -10016,11 +10030,11 @@ class ScheduledPlan {
         'long_tables': long_tables,
         'inline_table_width': inline_table_width,
         'id': id,
-        'created_at': created_at,
-        'updated_at': updated_at,
+        'created_at': created_at == null ? null : created_at.toString(),
+        'updated_at': updated_at == null ? null : updated_at.toString(),
         'title': title,
-        'next_run_at': next_run_at,
-        'last_run_at': last_run_at,
+        'next_run_at': next_run_at == null ? null : next_run_at.toString(),
+        'last_run_at': last_run_at == null ? null : last_run_at.toString(),
         'can': can
       };
 
@@ -10654,8 +10668,8 @@ class Theme {
 
   Map toJson() => {
         'can': can,
-        'begin_at': begin_at,
-        'end_at': end_at,
+        'begin_at': begin_at == null ? null : begin_at.toString(),
+        'end_at': end_at == null ? null : end_at.toString(),
         'id': id,
         'name': name
       };
@@ -11310,7 +11324,7 @@ class UserLoginLockout {
         'full_name': full_name,
         'email': email,
         'fail_count': fail_count,
-        'lockout_at': lockout_at
+        'lockout_at': lockout_at == null ? null : lockout_at.toString()
       };
 
   UserLoginLockout.fromJson(Map source)
@@ -11677,8 +11691,11 @@ class WriteBoard {
 
   WriteBoard();
 
-  Map toJson() =>
-      {'deleted_at': deleted_at, 'description': description, 'title': title};
+  Map toJson() => {
+        'deleted_at': deleted_at == null ? null : deleted_at.toString(),
+        'description': description,
+        'title': title
+      };
 
   WriteBoard.fromJson(Map source)
       : deleted_at = source['deleted_at'] == null
@@ -11752,7 +11769,7 @@ class WriteBoardSection {
   WriteBoardSection();
 
   Map toJson() => {
-        'deleted_at': deleted_at,
+        'deleted_at': deleted_at == null ? null : deleted_at.toString(),
         'description': description,
         'board_id': board_id,
         'title': title
@@ -14402,7 +14419,11 @@ class WriteTheme {
 
   WriteTheme();
 
-  Map toJson() => {'begin_at': begin_at, 'end_at': end_at, 'name': name};
+  Map toJson() => {
+        'begin_at': begin_at == null ? null : begin_at.toString(),
+        'end_at': end_at == null ? null : end_at.toString(),
+        'name': name
+      };
 
   WriteTheme.fromJson(Map source)
       : begin_at = source['begin_at'] == null

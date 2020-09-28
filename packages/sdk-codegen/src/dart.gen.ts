@@ -381,7 +381,14 @@ class ${this.sdkClassName()}Stream extends APIMethods {
             //   `${name} = source['${prop.name}'] == null ? null : source['${prop.name}'].map<${listType}>((i) => i as ${listType}).toList()`
             // )
           } else {
-            props.push(`'${prop.name}' : ${name}`)
+            const mapped = this.typeMap(prop.type)
+            if (mapped.name === 'DateTime') {
+              props.push(
+                `'${prop.name}' : ${name} == null ? null : ${name}.toString()`
+              )
+            } else {
+              props.push(`'${prop.name}' : ${name}`)
+            }
           }
         }
       })
