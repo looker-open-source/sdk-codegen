@@ -37,23 +37,102 @@ export const defaultScopes = [
 
 // https://developers.google.com/sheets/api/reference/rest
 
+/** Key/value pairs for tab data */
+export type RowValues = Record<string, any>
+
+/** name of the property that tracks the row's position in the tab sheet */
+export const rowPosition = 'row'
+
+export interface IRowModel extends RowValues {
+  row: number
+  keyName: string
+  id: string
+}
+
+/** All keyed data values for a tab */
+export type TabData = IRowModel[]
+
 // Manually recreated type/interface declarations that are NOT complete
-export interface IGridProperties {
+export interface ITabGridProperties {
   rowCount: number
   columnCount: number
 }
 
-export interface ISheetTabProperties {
+export interface ITabProperties {
   sheetId: number
   title: string
   index: number
   sheetType: string
-  gridProperties: IGridProperties
+  gridProperties: ITabGridProperties
+}
+
+export interface ICellValue {
+  stringValue: string
+}
+
+export interface ICellTextFormat {
+  fontFamily: string
+}
+
+export interface ICellFormat {
+  verticalAlignment: string
+  textFormat: ICellTextFormat
+}
+
+export interface ICellData {
+  userEnteredValue: ICellValue
+  effectiveValue: ICellValue
+  formattedValue: string
+  userEnteredFormat: ICellFormat
+  // effectiveFormat: {
+  //   "backgroundColor": {
+  //     "red": 1,
+  //     "green": 1,
+  //     "blue": 1
+  //   },
+  //   "padding": {
+  //     "top": 2,
+  //     "right": 3,
+  //     "bottom": 2,
+  //     "left": 3
+  //   },
+  //   "horizontalAlignment": "LEFT",
+  //   "verticalAlignment": "BOTTOM",
+  //   "wrapStrategy": "OVERFLOW_CELL",
+  //   "textFormat": {
+  //     "foregroundColor": {},
+  //     "fontFamily": "Arial",
+  //     "fontSize": 10,
+  //     "bold": false,
+  //     "italic": false,
+  //     "strikethrough": false,
+  //     "underline": false,
+  //     "foregroundColorStyle": {
+  //       "rgbColor": {}
+  //     }
+  //   },
+  //   "hyperlinkDisplayType": "PLAIN_TEXT",
+  //   "backgroundColorStyle": {
+  //     "rgbColor": {
+  //       "red": 1,
+  //       "green": 1,
+  //       "blue": 1
+  //     }
+  //   }
+  // }
+}
+
+export interface ITabRowData {
+  values: ICellData[]
+}
+
+export interface ITabData {
+  rowData: ITabRowData[]
 }
 
 export interface ISheetTab {
-  properties: ISheetTabProperties
-  data: any // TODO maybe type this also?
+  properties: ITabProperties
+  data: ITabData
 }
 
 export interface ISheetProperties {
@@ -63,6 +142,8 @@ export interface ISheetProperties {
   timeZone: string
 }
 
+export type TabKeyedData = Record<string, TabData>
+
 export interface ISheet {
   /** id of the spreadsheet */
   spreadsheetId: string
@@ -70,9 +151,62 @@ export interface ISheet {
   properties: ISheetProperties
   /** Individual sheet tabs */
   sheets: ISheetTab[]
+  /** All tabs data loaded into a keyed collection of TabData */
+  tabs: TabKeyedData
   /** Url where sheet can be viewed */
   spreadsheetUrl: string
 }
+
+export const tabName = (tab: string | ISheetTab) => {
+  if (typeof tab === 'string') return tab
+  return tab.properties.title
+}
+
+export const loadTabValues = (tab: ISheetTab, keyName = 'id'): TabData => {
+  const result: TabData = []
+  const rowData = tab.data[0].rowData
+  if (rowData.length < 1) return result
+
+  // Get column headers
+  const header: string[] = []
+  const values = rowData[0].values
+  for (let i = 0; i < values.length; i++) {
+    const cell = values[i]
+    // Are we at an empty header column?
+    if (!cell.formattedValue) break
+    header.push(cell.formattedValue)
+  }
+
+  // Index row data
+  for (let rowIndex = 1; rowIndex < rowData.length; rowIndex++) {
+    const r = rowData[rowIndex]
+    const row = {}
+    row[rowPosition] = rowIndex + 1
+    header.forEach((colName, index) => {
+      if (index < r.values.length) {
+        const cell: ICellData = r.values[index]
+        // Only assign cells with values
+        if (cell.formattedValue) row[colName] = cell.formattedValue
+      }
+    })
+
+    // An empty data row means we've hit the last row of data
+    // some tabs have thousands of rows of no data
+    if (Object.keys(row).length === 1) {
+      break
+    }
+
+    if (!row[keyName]) {
+      throw new Error(
+        `Tab ${tabName(tab)} row ${rowIndex + 1} has no key column '${keyName}'`
+      )
+    }
+    result.push(row as IRowModel)
+  }
+  return result
+}
+
+// https://developers.google.com/sheets/api/reference/rest/v4/spreadsheets.values
 
 export class SheetSDK {
   constructor(
@@ -97,10 +231,25 @@ export class SheetSDK {
    * retrieve the entire sheet
    * **NOTE**: this response is cast to the ISheet interface so some properties may be hidden
    */
-  async all() {
+  async read() {
     const api = '?includeGridData=true'
-    const result = await this.request('GET', api)
-    return result as ISheet
+    const result = (await this.request('GET', api)) as ISheet
+    return result
+  }
+
+  /**
+   * Index the raw sheet into tab data
+   * @param doc Sheet to index
+   */
+  async index(doc?: ISheet) {
+    if (!doc) doc = await this.read()
+    if (doc) {
+      doc.tabs = {}
+      // eslint-disable-next-line @typescript-eslint/ban-ts-ignore
+      // @ts-ignore
+      doc.sheets.forEach((tab) => (doc.tabs[tabName(tab)] = loadTabValues(tab)))
+    }
+    return doc
   }
 
   /**
@@ -113,8 +262,8 @@ export class SheetSDK {
     return sheet.values
   }
 
-  async tabValues(tabName: string, range = '!A1:end') {
-    return await this.values(`${tabName}${range}`)
+  async tabValues(tab: string | ISheetTab, range = '!A1:end') {
+    return await this.values(`${tabName(tab)}${range}`)
   }
 }
 

@@ -27,7 +27,7 @@
 import * as fs from 'fs'
 import path from 'path'
 import { NodeTransport, DefaultSettings } from '@looker/sdk-rtl'
-import { SheetSDK } from './SheetSDK'
+import { SheetSDK, tabName } from './SheetSDK'
 
 const credFile = path.join(__dirname, '/', 'google-creds.json')
 const creds = fs.readFileSync(credFile, { encoding: 'utf-8' })
@@ -37,7 +37,7 @@ const sheets = new SheetSDK(transport, cred.api_key, cred.sheet_id)
 
 describe('SheetConnection', () => {
   test('can get sheet', async () => {
-    const actual = await sheets.all()
+    const actual = await sheets.read()
     expect(actual).toBeDefined()
     expect(actual.spreadsheetId).toEqual(cred.sheet_id)
     expect(actual.properties).toBeDefined()
@@ -52,11 +52,28 @@ describe('SheetConnection', () => {
     expect(actual[0].length).toBeGreaterThan(0)
   })
   test('can get sheet tab values', async () => {
-    const all = await sheets.all()
+    const all = await sheets.read()
     for (const sheet of all.sheets) {
       const actual = await sheets.tabValues(sheet.properties.title)
       expect(actual).toBeDefined()
       expect(actual.length).toBeGreaterThan(0)
     }
   })
+  test('can index tab values', async () => {
+    const doc = await sheets.index()
+    expect(doc).toBeDefined()
+    expect(doc.sheets.length).toBeGreaterThan(0)
+    expect(Object.entries(doc.tabs).length).toEqual(doc.sheets.length)
+    doc.sheets.forEach((t) => {
+      const tab = doc.tabs[tabName(t)]
+      expect(tab).toBeDefined()
+      // No empty data rows
+      tab.forEach((row) => expect(Object.keys(row).length).toBeGreaterThan(0))
+    })
+    const sheetFile = path.join(__dirname, '/', 'tabs.json')
+    const json = JSON.stringify(doc.tabs, null, 2)
+    fs.writeFileSync(sheetFile, json, {
+      encoding: 'utf-8',
+    })
+  }, 10000)
 })

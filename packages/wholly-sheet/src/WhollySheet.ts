@@ -24,60 +24,57 @@
 
  */
 
-export interface ISheetModel {
-  id?: string
-}
+import { IRowModel, SheetSDK, TabData } from './SheetSDK'
 
 export interface IWhollySheet {
-  /** This is probably the GSheet API client structure? */
-  client: any
-  /** Id of the spreadsheet to use */
-  spreadsheetId: string
-  /** Name of the sheet/table to use */
-  sheetName: string
+  /** Initialized REST-based GSheets SDK */
+  sheets: SheetSDK
+  /** Name of the tab */
+  name: string
   /** Name of the key column that represents the "id" */
   keyColumn: string
-  /** Range expression for retrieving the entire sheet */
-  range: string
-  save<T>(model: T): T
-  create<T>(model: T): T
-  update<T>(model: T): T
-  rows<T>(): T[]
-  find<T>(value: any, key?: string): T | undefined
+  /** All data in the sheet */
+  rows: TabData
+  save<T extends IRowModel>(model: T): T
+  create<T extends IRowModel>(model: T): T
+  update<T extends IRowModel>(model: T): T
+  find<T extends IRowModel>(value: any, columnName?: string): T | undefined
 }
 
 // https://github.com/gsuitedevs/node-samples/blob/master/sheets/snippets/test/helpers.js
 
-export class SheetData {
-  id: string
-  constructor(public readonly sheetId: string, public connection: sheets_v4.Sheets) {
-    this.id = sheetId
-    this.client = connection.spreadsheets.values.get()
-
-  }
-}
-
 /** CRUF (no delete) operations for a GSheet */
-export class WhollySheet<T> implements IWhollySheet {
-  public readonly range: string
+export class WhollySheet implements IWhollySheet {
   constructor(
-    public readonly client: any,
-    public readonly spreadsheetId: string,
-    public readonly sheetName: string,
+    public readonly sheets: SheetSDK,
+    public readonly name: string,
+    public readonly rows: TabData,
     public readonly keyColumn: string
-  ) {
-    this.range = `${sheetName}!A1:end`
+  ) {}
+
+  private notYet(method: string) {
+    throw new Error(`${method} not implemented`)
   }
 
-  save<T>(model: T): T {
+  save<T extends IRowModel>(model: T): T {
     if (model.id) return this.update<T>(model)
     return this.create<T>(model)
   }
 
-  create<T>(model: T): T {
-    sheets.
+  create<T extends IRowModel>(model: T): T {
+    this.notYet('create')
+    return model
   }
-  update<T>(model: T): T {}
-  rows<T>(model: T): T {}
-  find<T>(model: T): T {}
+
+  update<T extends IRowModel>(model: T): T {
+    this.notYet('create')
+    return model
+  }
+
+  find<T extends IRowModel>(value: any, columnName?: string): T | undefined {
+    if (!value) return undefined
+    if (typeof value === 'number')
+      return this.rows.find((r) => r.row === value) as T
+    return this.rows.find((r) => r[columnName || this.keyColumn] === value) as T
+  }
 }
