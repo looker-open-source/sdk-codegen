@@ -25,13 +25,12 @@
  */
 
 import { commentBlock } from '@looker/sdk-codegen-utils'
-import { CodeGen, IVersionInfo } from './codeGen'
+import { CodeGen, IMappedType, IVersionInfo } from './codeGen'
 import {
   ApiModel,
   Arg,
   EnumType,
   EnumValueType,
-  IMappedType,
   IMethod,
   IParameter,
   IProperty,
