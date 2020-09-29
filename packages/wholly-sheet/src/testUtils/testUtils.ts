@@ -23,23 +23,14 @@
  SOFTWARE.
 
  */
-
-import * as path from 'path'
 import * as fs from 'fs'
-import { Miner } from '../src/miner'
-;(() => {
-  const args = process.argv.slice(2)
-  const total = args.length
-  const root = path.join(__dirname, '/../../../')
-  const sourcePath = total < 1 ? root : path.join(root, args[0])
-  const indexFile = path.join(sourcePath, '/motherlode.json')
-  console.log(`Mining ${sourcePath} ...`)
-  const miner = new Miner(sourcePath)
-  const result = miner.execute()
-  fs.writeFileSync(indexFile, JSON.stringify(result, null, 2), {
-    encoding: 'utf-8',
-  })
-  console.log(
-    `${Object.entries(result.nuggets).length} nuggets written to ${indexFile}`
-  )
-})()
+import path from 'path'
+import { NodeTransport, DefaultSettings } from '@looker/sdk-rtl'
+import { SheetSDK } from '../SheetSDK'
+
+const credFile = path.join(__dirname, '../google-creds.json')
+const creds = fs.readFileSync(credFile, { encoding: 'utf-8' })
+const transport = new NodeTransport(DefaultSettings())
+export const cred = JSON.parse(creds)
+export const sheets = new SheetSDK(transport, cred.api_key, cred.sheet_id)
+export const sheetTimeout = 10000

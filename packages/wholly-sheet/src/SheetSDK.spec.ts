@@ -25,55 +25,60 @@
  */
 
 import * as fs from 'fs'
-import path from 'path'
-import { NodeTransport, DefaultSettings } from '@looker/sdk-rtl'
-import { SheetSDK, tabName } from './SheetSDK'
-
-const credFile = path.join(__dirname, '/', 'google-creds.json')
-const creds = fs.readFileSync(credFile, { encoding: 'utf-8' })
-const cred = JSON.parse(creds)
-const transport = new NodeTransport(DefaultSettings())
-const sheets = new SheetSDK(transport, cred.api_key, cred.sheet_id)
+import * as path from 'path'
+import { cred, sheets, sheetTimeout } from './testUtils/testUtils'
+import { tabName } from './SheetSDK'
 
 describe('SheetConnection', () => {
-  test('can get sheet', async () => {
-    const actual = await sheets.read()
-    expect(actual).toBeDefined()
-    expect(actual.spreadsheetId).toEqual(cred.sheet_id)
-    expect(actual.properties).toBeDefined()
-    expect(actual.sheets).toBeDefined()
-    expect(actual.sheets.length).toBeGreaterThan(0)
-    expect(actual.spreadsheetUrl).toBeDefined()
-  })
-  test('can get default sheet values', async () => {
-    const actual = await sheets.values()
-    expect(actual).toBeDefined()
-    expect(actual.length).toBeGreaterThan(0)
-    expect(actual[0].length).toBeGreaterThan(0)
-  })
-  test('can get sheet tab values', async () => {
-    const all = await sheets.read()
-    for (const sheet of all.sheets) {
-      const actual = await sheets.tabValues(sheet.properties.title)
+  it(
+    'can get sheet',
+    async () => {
+      const actual = await sheets.read()
       expect(actual).toBeDefined()
-      expect(actual.length).toBeGreaterThan(0)
-    }
-  })
-  test('can index tab values', async () => {
-    const doc = await sheets.index()
-    expect(doc).toBeDefined()
-    expect(doc.sheets.length).toBeGreaterThan(0)
-    expect(Object.entries(doc.tabs).length).toEqual(doc.sheets.length)
-    doc.sheets.forEach((t) => {
-      const tab = doc.tabs[tabName(t)]
-      expect(tab).toBeDefined()
-      // No empty data rows
-      tab.forEach((row) => expect(Object.keys(row).length).toBeGreaterThan(0))
-    })
-    const sheetFile = path.join(__dirname, '/', 'tabs.json')
-    const json = JSON.stringify(doc.tabs, null, 2)
-    fs.writeFileSync(sheetFile, json, {
-      encoding: 'utf-8',
-    })
-  }, 10000)
+      expect(actual.spreadsheetId).toEqual(cred.sheet_id)
+      expect(actual.properties).toBeDefined()
+      expect(actual.sheets).toBeDefined()
+      expect(actual.sheets.length).toBeGreaterThan(0)
+      expect(actual.spreadsheetUrl).toBeDefined()
+    },
+    sheetTimeout
+  )
+  // test('can get default sheet values', async () => {
+  //   const actual = await sheets.values()
+  //   expect(actual).toBeDefined()
+  //   expect(actual.length).toBeGreaterThan(0)
+  //   expect(actual[0].length).toBeGreaterThan(0)
+  // })
+  // test('can get sheet tab values', async () => {
+  //   for (const sheet of doc.sheets) {
+  //     const actual = await sheets.tabValues(sheet.properties.title)
+  //     expect(actual).toBeDefined()
+  //     expect(actual.length).toBeGreaterThan(0)
+  //   }
+  // })
+  it(
+    'can index tab values',
+    async () => {
+      const actual = await sheets.index()
+      expect(actual).toBeDefined()
+      expect(actual.sheets.length).toBeGreaterThan(0)
+      expect(Object.entries(actual.tabs).length).toEqual(actual.sheets.length)
+      actual.sheets.forEach((t) => {
+        const tab = actual.tabs[tabName(t)]
+        expect(tab).toBeDefined()
+        expect(tab.header).toBeDefined()
+        expect(tab.header.length).toBeGreaterThan(0)
+        // No empty data rows
+        tab.rows.forEach((row) =>
+          expect(Object.keys(row).length).toBeGreaterThan(0)
+        )
+      })
+      const sheetFile = path.join(__dirname, '/', 'tabs.json')
+      const json = JSON.stringify(actual.tabs, null, 2)
+      fs.writeFileSync(sheetFile, json, {
+        encoding: 'utf-8',
+      })
+    },
+    sheetTimeout
+  )
 })

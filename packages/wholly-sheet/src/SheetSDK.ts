@@ -25,7 +25,7 @@
  */
 
 import { HttpMethod, ITransport } from '@looker/sdk-rtl/lib/browser'
-import { parseResponse } from '@looker/sdk-rtl'
+import { boolDefault, parseResponse } from '@looker/sdk-rtl'
 
 export const defaultScopes = [
   'https://www.googleapis.com/auth/drive',
@@ -37,20 +37,113 @@ export const defaultScopes = [
 
 // https://developers.google.com/sheets/api/reference/rest
 
+export const noDate = new Date(-8640000000000000)
+
 /** Key/value pairs for tab data */
 export type RowValues = Record<string, any>
+
+/** Sheet (tab) column header definition */
+export type ColumnHeaders = string[]
 
 /** name of the property that tracks the row's position in the tab sheet */
 export const rowPosition = 'row'
 
+/** Keyed data for a sheet row */
 export interface IRowModel extends RowValues {
   row: number
-  keyName: string
   id: string
+  assign(values: any): IRowModel
+  /** All keys for this object */
+  keys(): ColumnHeaders
+  /** The sheet Column Headers keys for this model */
+  header(): ColumnHeaders
 }
 
-/** All keyed data values for a tab */
-export type TabData = IRowModel[]
+export class RowModel<T extends IRowModel> implements IRowModel {
+  row: number
+  id: string
+
+  protected constructor(values?: any) {
+    this.row = 0
+    this.id = ''
+    if (values) {
+      if (values.row) this.row = values.row
+      if (values.id) this.id = values.id
+    }
+  }
+
+  /**
+   * Ugly, but creating a reference type to derive keys and type should work correctly.
+   * It must start with row and id values
+   */
+  // abstract ref(): any
+
+  keys(): ColumnHeaders {
+    return Object.keys(this)
+  }
+
+  header(): ColumnHeaders {
+    // remove `row`
+    return this.keys().slice(1)
+  }
+
+  typeCast(key: string, value: any) {
+    if (!value) return undefined
+    if (typeof this[key] === 'string') {
+      return value.toString()
+    }
+    if (typeof this[key] === 'number') {
+      const isInt = /^([+-]?[1-9]\d*|0)$/
+      if (value.toString().match(isInt)) {
+        return parseInt(value, 10)
+      }
+      return parseFloat(value)
+    }
+    if (typeof this[key] === 'boolean') {
+      return boolDefault(value, false)
+    }
+    if (this[key] instanceof Date) {
+      return new Date(value)
+    }
+    return this.toString()
+  }
+
+  assign(values: any): T {
+    if (values) {
+      const keys = this.header()
+      if (Array.isArray(values)) {
+        // Assign by position
+        values.forEach((val, index) => {
+          const key = keys[index]
+          const value = this.typeCast(key, val)
+          this[key] = value
+        })
+      } else {
+        // Assign by name
+        Object.entries(values).forEach(([key, val]) => {
+          if (key in this) {
+            this[key] = this.typeCast(key, val)
+          }
+        })
+      }
+    }
+    return (this as unknown) as T
+  }
+}
+
+// TODO figure out the Typescript magic for this to work
+export type RowModelFactory<T extends IRowModel> = { new (values?: any): T }
+
+// export const RowModelCreator: RowModelFactory<IRowModel> = (values?: any) =>
+//   new RowModel(values)
+
+/** Keyed data for a tab, and the tab's header row */
+export interface ITabTable {
+  /** Array of header names, in column order */
+  header: ColumnHeaders
+  /** Parsed data for the tab */
+  rows: IRowModel[]
+}
 
 // Manually recreated type/interface declarations that are NOT complete
 export interface ITabGridProperties {
@@ -142,7 +235,7 @@ export interface ISheetProperties {
   timeZone: string
 }
 
-export type TabKeyedData = Record<string, TabData>
+export type TabTables = Record<string, ITabTable>
 
 export interface ISheet {
   /** id of the spreadsheet */
@@ -152,7 +245,7 @@ export interface ISheet {
   /** Individual sheet tabs */
   sheets: ISheetTab[]
   /** All tabs data loaded into a keyed collection of TabData */
-  tabs: TabKeyedData
+  tabs: TabTables
   /** Url where sheet can be viewed */
   spreadsheetUrl: string
 }
@@ -162,19 +255,29 @@ export const tabName = (tab: string | ISheetTab) => {
   return tab.properties.title
 }
 
-export const loadTabValues = (tab: ISheetTab, keyName = 'id'): TabData => {
-  const result: TabData = []
+/**
+ * Loads the GSheet data from a sheet (tab) into a header name collection and data rows
+ *
+ * NOTE: data collection stops when a blank row is encountered, or or at the end of all rows.
+ *
+ * @param tab GSheet sheet to process
+ * @param keyName Optional key column name. Defaults to id
+ */
+export const loadTabTable = (tab: ISheetTab, keyName = 'id'): ITabTable => {
+  const result: ITabTable = {
+    header: [],
+    rows: [],
+  }
   const rowData = tab.data[0].rowData
   if (rowData.length < 1) return result
 
   // Get column headers
-  const header: string[] = []
   const values = rowData[0].values
   for (let i = 0; i < values.length; i++) {
     const cell = values[i]
     // Are we at an empty header column?
     if (!cell.formattedValue) break
-    header.push(cell.formattedValue)
+    result.header.push(cell.formattedValue)
   }
 
   // Index row data
@@ -182,7 +285,7 @@ export const loadTabValues = (tab: ISheetTab, keyName = 'id'): TabData => {
     const r = rowData[rowIndex]
     const row = {}
     row[rowPosition] = rowIndex + 1
-    header.forEach((colName, index) => {
+    result.header.forEach((colName, index) => {
       if (index < r.values.length) {
         const cell: ICellData = r.values[index]
         // Only assign cells with values
@@ -201,7 +304,7 @@ export const loadTabValues = (tab: ISheetTab, keyName = 'id'): TabData => {
         `Tab ${tabName(tab)} row ${rowIndex + 1} has no key column '${keyName}'`
       )
     }
-    result.push(row as IRowModel)
+    result.rows.push(row as IRowModel)
   }
   return result
 }
@@ -218,10 +321,10 @@ export class SheetSDK {
     this.sheetId = encodeURIComponent(sheetId)
   }
 
-  async request(method: HttpMethod, api = '') {
+  async request(method: HttpMethod, api = '', body: any = undefined) {
     const key = (api.includes('?') ? '&' : '?') + `key=${this.apiKey}`
     const path = `https://sheets.googleapis.com/v4/spreadsheets/${this.sheetId}${api}${key}`
-    const raw = await this.transport.rawRequest(method, path)
+    const raw = await this.transport.rawRequest(method, path, undefined, body)
     const response = await parseResponse(raw)
     if (!raw.ok) throw new Error(response)
     return response
@@ -247,24 +350,54 @@ export class SheetSDK {
       doc.tabs = {}
       // eslint-disable-next-line @typescript-eslint/ban-ts-ignore
       // @ts-ignore
-      doc.sheets.forEach((tab) => (doc.tabs[tabName(tab)] = loadTabValues(tab)))
+      doc.sheets.forEach((tab) => (doc.tabs[tabName(tab)] = loadTabTable(tab)))
     }
     return doc
   }
 
+  // /**
+  //  * Get the values collection from the sheet. Defaults to all values in the sheet
+  //  * @param range
+  //  */
+  // async values(range = '!A1:end') {
+  //   const api = range ? `/values/${range}` : ''
+  //   const sheet = await this.request('GET', api)
+  //   return sheet.values
+  // }
+
   /**
-   * Get the values collection from the sheet. Defaults to all values in the sheet
-   * @param range
+   * Perform an update or create operation on a row
+   *
+   * TBD: Delete?
+   * @param method HttpMethod to perform
+   * @param tab name or tab object
+   * @param row row to change
+   * @param values values to set in the row
+   * @private
    */
-  async values(range = '!A1:end') {
-    const api = range ? `/values/${range}` : ''
-    const sheet = await this.request('GET', api)
-    return sheet.values
+  private async changeRow(
+    method: HttpMethod,
+    tab: string | ISheetTab,
+    row: number,
+    values: any[]
+  ) {
+    const body = { values }
+    const name = tabName(tab)
+    const api = `/values/${name}!A${row}:end?valueInputOption=RAW`
+    await this.request(method, api, body)
   }
 
-  async tabValues(tab: string | ISheetTab, range = '!A1:end') {
-    return await this.values(`${tabName(tab)}${range}`)
+  async updateRow(tab: string | ISheetTab, row: number, values: any[]) {
+    return await this.changeRow('PUT', tab, row, values)
   }
+
+  async createRow(tab: string | ISheetTab, row: number, values: any[]) {
+    return await this.changeRow('POST', tab, row, values)
+  }
+
+  // async tabValues(tab: string | ISheetTab, range = '!A1:end') {
+  //   return await this.values(`${tabName(tab)}${range}`)
+  // }
 }
 
 // const response = await extensionSDK.serverProxy(
