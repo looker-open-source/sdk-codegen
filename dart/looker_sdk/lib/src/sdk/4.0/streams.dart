@@ -66,13 +66,13 @@ class Looker40SDKStream extends APIMethods {
   ///
   /// POST /login -> ByteArray
   Future<SDKResponse<AccessToken>> login(
-      [
+      {
 
       /// @param {String} client_id client_id part of API3 Key.
       String client_id,
 
       /// @param {String} client_secret client_secret part of API3 Key.
-      String client_secret]) async {
+      String client_secret}) async {
     AccessToken responseHandler(dynamic json) {
       return AccessToken.fromJson(json);
     }
@@ -103,10 +103,10 @@ class Looker40SDKStream extends APIMethods {
 
       /// @param {int} user_id Id of user.
       int user_id,
-      [
+      {
 
       /// @param {bool} associative When true (default), API calls using the returned access_token are attributed to the admin user who created the access_token. When false, API activity is attributed to the user the access_token runs as. False requires a looker license.
-      bool associative]) async {
+      bool associative}) async {
     var path_user_id = encodeParam(user_id);
 
     AccessToken responseHandler(dynamic json) {
@@ -386,10 +386,10 @@ class Looker40SDKStream extends APIMethods {
   ///
   /// GET /oauth_client_apps -> ByteArray
   Future<SDKResponse<List<OauthClientApp>>> all_oauth_client_apps(
-      [
+      {
 
       /// @param {String} fields Requested fields.
-      String fields]) async {
+      String fields}) async {
     List<OauthClientApp> responseHandler(dynamic json) {
       return json
           .map<OauthClientApp>((i) => OauthClientApp.fromJson(i))
@@ -408,10 +408,10 @@ class Looker40SDKStream extends APIMethods {
 
       /// @param {String} client_guid The unique id of this application
       String client_guid,
-      [
+      {
 
       /// @param {String} fields Requested fields.
-      String fields]) async {
+      String fields}) async {
     var path_client_guid = encodeParam(client_guid);
 
     OauthClientApp responseHandler(dynamic json) {
@@ -437,10 +437,10 @@ class Looker40SDKStream extends APIMethods {
 
       /// @param {WriteOauthClientApp} body
       WriteOauthClientApp body,
-      [
+      {
 
       /// @param {String} fields Requested fields.
-      String fields]) async {
+      String fields}) async {
     var path_client_guid = encodeParam(client_guid);
 
     OauthClientApp responseHandler(dynamic json) {
@@ -463,10 +463,10 @@ class Looker40SDKStream extends APIMethods {
 
       /// @param {WriteOauthClientApp} body
       WriteOauthClientApp body,
-      [
+      {
 
       /// @param {String} fields Requested fields.
-      String fields]) async {
+      String fields}) async {
     var path_client_guid = encodeParam(client_guid);
 
     OauthClientApp responseHandler(dynamic json) {
@@ -534,10 +534,10 @@ class Looker40SDKStream extends APIMethods {
 
       /// @param {int} user_id The id of the user to enable use of this app
       int user_id,
-      [
+      {
 
       /// @param {String} fields Requested fields.
-      String fields]) async {
+      String fields}) async {
     var path_client_guid = encodeParam(client_guid);
     var path_user_id = encodeParam(user_id);
 
@@ -570,10 +570,10 @@ class Looker40SDKStream extends APIMethods {
 
       /// @param {int} user_id The id of the user to enable use of this app
       int user_id,
-      [
+      {
 
       /// @param {String} fields Requested fields.
-      String fields]) async {
+      String fields}) async {
     var path_client_guid = encodeParam(client_guid);
     var path_user_id = encodeParam(user_id);
 
@@ -872,10 +872,10 @@ class Looker40SDKStream extends APIMethods {
   ///
   /// GET /user_login_lockouts -> ByteArray
   Future<SDKResponse<List<UserLoginLockout>>> all_user_login_lockouts(
-      [
+      {
 
       /// @param {String} fields Include only these fields in the response
-      String fields]) async {
+      String fields}) async {
     List<UserLoginLockout> responseHandler(dynamic json) {
       return json
           .map<UserLoginLockout>((i) => UserLoginLockout.fromJson(i))
@@ -889,7 +889,7 @@ class Looker40SDKStream extends APIMethods {
   ///
   /// GET /user_login_lockouts/search -> ByteArray
   Future<SDKResponse<List<UserLoginLockout>>> search_user_login_lockouts(
-      [
+      {
 
       /// @param {String} fields Include only these fields in the response
       String fields,
@@ -916,7 +916,7 @@ class Looker40SDKStream extends APIMethods {
       String remote_id,
 
       /// @param {bool} filter_or Combine given search criteria in a boolean OR expression
-      bool filter_or]) async {
+      bool filter_or}) async {
     List<UserLoginLockout> responseHandler(dynamic json) {
       return json
           .map<UserLoginLockout>((i) => UserLoginLockout.fromJson(i))
@@ -960,10 +960,10 @@ class Looker40SDKStream extends APIMethods {
   ///
   /// GET /boards -> ByteArray
   Future<SDKResponse<List<Board>>> all_boards(
-      [
+      {
 
       /// @param {String} fields Requested fields.
-      String fields]) async {
+      String fields}) async {
     List<Board> responseHandler(dynamic json) {
       return json.map<Board>((i) => Board.fromJson(i)).toList();
     }
@@ -978,10 +978,10 @@ class Looker40SDKStream extends APIMethods {
 
       /// @param {WriteBoard} body
       WriteBoard body,
-      [
+      {
 
       /// @param {String} fields Requested fields.
-      String fields]) async {
+      String fields}) async {
     Board responseHandler(dynamic json) {
       return Board.fromJson(json);
     }
@@ -1015,7 +1015,7 @@ class Looker40SDKStream extends APIMethods {
   ///
   /// GET /boards/search -> ByteArray
   Future<SDKResponse<List<Board>>> search_boards(
-      [
+      {
 
       /// @param {String} title Matches board title.
       String title,
@@ -1054,7 +1054,7 @@ class Looker40SDKStream extends APIMethods {
       int limit,
 
       /// @param {bool} filter_or Combine given search criteria in a boolean OR expression
-      bool filter_or]) async {
+      bool filter_or}) async {
     List<Board> responseHandler(dynamic json) {
       return json.map<Board>((i) => Board.fromJson(i)).toList();
     }
@@ -1083,10 +1083,10 @@ class Looker40SDKStream extends APIMethods {
 
       /// @param {int} board_id Id of board
       int board_id,
-      [
+      {
 
       /// @param {String} fields Requested fields.
-      String fields]) async {
+      String fields}) async {
     var path_board_id = encodeParam(board_id);
 
     Board responseHandler(dynamic json) {
@@ -1106,10 +1106,10 @@ class Looker40SDKStream extends APIMethods {
 
       /// @param {WriteBoard} body
       WriteBoard body,
-      [
+      {
 
       /// @param {String} fields Requested fields.
-      String fields]) async {
+      String fields}) async {
     var path_board_id = encodeParam(board_id);
 
     Board responseHandler(dynamic json) {
@@ -1140,7 +1140,7 @@ class Looker40SDKStream extends APIMethods {
   ///
   /// GET /board_items -> ByteArray
   Future<SDKResponse<List<BoardItem>>> all_board_items(
-      [
+      {
 
       /// @param {String} fields Requested fields.
       String fields,
@@ -1149,7 +1149,7 @@ class Looker40SDKStream extends APIMethods {
       String sorts,
 
       /// @param {String} board_section_id Filter to a specific board section
-      String board_section_id]) async {
+      String board_section_id}) async {
     List<BoardItem> responseHandler(dynamic json) {
       return json.map<BoardItem>((i) => BoardItem.fromJson(i)).toList();
     }
@@ -1168,10 +1168,10 @@ class Looker40SDKStream extends APIMethods {
 
       /// @param {WriteBoardItem} body
       WriteBoardItem body,
-      [
+      {
 
       /// @param {String} fields Requested fields.
-      String fields]) async {
+      String fields}) async {
     BoardItem responseHandler(dynamic json) {
       return BoardItem.fromJson(json);
     }
@@ -1187,10 +1187,10 @@ class Looker40SDKStream extends APIMethods {
 
       /// @param {int} board_item_id Id of board item
       int board_item_id,
-      [
+      {
 
       /// @param {String} fields Requested fields.
-      String fields]) async {
+      String fields}) async {
     var path_board_item_id = encodeParam(board_item_id);
 
     BoardItem responseHandler(dynamic json) {
@@ -1211,10 +1211,10 @@ class Looker40SDKStream extends APIMethods {
 
       /// @param {WriteBoardItem} body
       WriteBoardItem body,
-      [
+      {
 
       /// @param {String} fields Requested fields.
-      String fields]) async {
+      String fields}) async {
     var path_board_item_id = encodeParam(board_item_id);
 
     BoardItem responseHandler(dynamic json) {
@@ -1245,13 +1245,13 @@ class Looker40SDKStream extends APIMethods {
   ///
   /// GET /board_sections -> ByteArray
   Future<SDKResponse<List<BoardSection>>> all_board_sections(
-      [
+      {
 
       /// @param {String} fields Requested fields.
       String fields,
 
       /// @param {String} sorts Fields to sort by.
-      String sorts]) async {
+      String sorts}) async {
     List<BoardSection> responseHandler(dynamic json) {
       return json.map<BoardSection>((i) => BoardSection.fromJson(i)).toList();
     }
@@ -1267,10 +1267,10 @@ class Looker40SDKStream extends APIMethods {
 
       /// @param {WriteBoardSection} body
       WriteBoardSection body,
-      [
+      {
 
       /// @param {String} fields Requested fields.
-      String fields]) async {
+      String fields}) async {
     BoardSection responseHandler(dynamic json) {
       return BoardSection.fromJson(json);
     }
@@ -1286,10 +1286,10 @@ class Looker40SDKStream extends APIMethods {
 
       /// @param {int} board_section_id Id of board section
       int board_section_id,
-      [
+      {
 
       /// @param {String} fields Requested fields.
-      String fields]) async {
+      String fields}) async {
     var path_board_section_id = encodeParam(board_section_id);
 
     BoardSection responseHandler(dynamic json) {
@@ -1310,10 +1310,10 @@ class Looker40SDKStream extends APIMethods {
 
       /// @param {WriteBoardSection} body
       WriteBoardSection body,
-      [
+      {
 
       /// @param {String} fields Requested fields.
-      String fields]) async {
+      String fields}) async {
     var path_board_section_id = encodeParam(board_section_id);
 
     BoardSection responseHandler(dynamic json) {
@@ -1355,10 +1355,10 @@ class Looker40SDKStream extends APIMethods {
   ///
   /// GET /color_collections -> ByteArray
   Future<SDKResponse<List<ColorCollection>>> all_color_collections(
-      [
+      {
 
       /// @param {String} fields Requested fields.
-      String fields]) async {
+      String fields}) async {
     List<ColorCollection> responseHandler(dynamic json) {
       return json
           .map<ColorCollection>((i) => ColorCollection.fromJson(i))
@@ -1400,10 +1400,10 @@ class Looker40SDKStream extends APIMethods {
   ///
   /// GET /color_collections/custom -> ByteArray
   Future<SDKResponse<List<ColorCollection>>> color_collections_custom(
-      [
+      {
 
       /// @param {String} fields Requested fields.
-      String fields]) async {
+      String fields}) async {
     List<ColorCollection> responseHandler(dynamic json) {
       return json
           .map<ColorCollection>((i) => ColorCollection.fromJson(i))
@@ -1423,10 +1423,10 @@ class Looker40SDKStream extends APIMethods {
   ///
   /// GET /color_collections/standard -> ByteArray
   Future<SDKResponse<List<ColorCollection>>> color_collections_standard(
-      [
+      {
 
       /// @param {String} fields Requested fields.
-      String fields]) async {
+      String fields}) async {
     List<ColorCollection> responseHandler(dynamic json) {
       return json
           .map<ColorCollection>((i) => ColorCollection.fromJson(i))
@@ -1486,10 +1486,10 @@ class Looker40SDKStream extends APIMethods {
 
       /// @param {String} collection_id Id of Color Collection
       String collection_id,
-      [
+      {
 
       /// @param {String} fields Requested fields.
-      String fields]) async {
+      String fields}) async {
     var path_collection_id = encodeParam(collection_id);
 
     ColorCollection responseHandler(dynamic json) {
@@ -1552,7 +1552,7 @@ class Looker40SDKStream extends APIMethods {
   ///
   /// GET /commands -> ByteArray
   Future<SDKResponse<List<Command>>> get_all_commands(
-      [
+      {
 
       /// @param {String} content_id Id of the associated content. This must be accompanied with content_type.
       String content_id,
@@ -1561,7 +1561,7 @@ class Looker40SDKStream extends APIMethods {
       String content_type,
 
       /// @param {int} limit Number of results to return.
-      int limit]) async {
+      int limit}) async {
     List<Command> responseHandler(dynamic json) {
       return json.map<Command>((i) => Command.fromJson(i)).toList();
     }
@@ -1674,10 +1674,10 @@ class Looker40SDKStream extends APIMethods {
 
       /// @param {WriteCustomWelcomeEmail} body
       WriteCustomWelcomeEmail body,
-      [
+      {
 
       /// @param {bool} send_test_welcome_email If true a test email with the content from the request will be sent to the current user after saving
-      bool send_test_welcome_email]) async {
+      bool send_test_welcome_email}) async {
     CustomWelcomeEmail responseHandler(dynamic json) {
       return CustomWelcomeEmail.fromJson(json);
     }
@@ -1870,10 +1870,10 @@ class Looker40SDKStream extends APIMethods {
   ///
   /// GET /versions -> ByteArray
   Future<SDKResponse<ApiVersion>> versions(
-      [
+      {
 
       /// @param {String} fields Requested fields.
-      String fields]) async {
+      String fields}) async {
     ApiVersion responseHandler(dynamic json) {
       return ApiVersion.fromJson(json);
     }
@@ -1886,10 +1886,10 @@ class Looker40SDKStream extends APIMethods {
   ///
   /// GET /whitelabel_configuration -> ByteArray
   Future<SDKResponse<WhitelabelConfiguration>> whitelabel_configuration(
-      [
+      {
 
       /// @param {String} fields Requested fields.
-      String fields]) async {
+      String fields}) async {
     WhitelabelConfiguration responseHandler(dynamic json) {
       return WhitelabelConfiguration.fromJson(json);
     }
@@ -1921,10 +1921,10 @@ class Looker40SDKStream extends APIMethods {
   ///
   /// GET /connections -> ByteArray
   Future<SDKResponse<List<DBConnection>>> all_connections(
-      [
+      {
 
       /// @param {String} fields Requested fields.
-      String fields]) async {
+      String fields}) async {
     List<DBConnection> responseHandler(dynamic json) {
       return json.map<DBConnection>((i) => DBConnection.fromJson(i)).toList();
     }
@@ -1954,10 +1954,10 @@ class Looker40SDKStream extends APIMethods {
 
       /// @param {String} connection_name Name of connection
       String connection_name,
-      [
+      {
 
       /// @param {String} fields Requested fields.
-      String fields]) async {
+      String fields}) async {
     var path_connection_name = encodeParam(connection_name);
 
     DBConnection responseHandler(dynamic json) {
@@ -2039,10 +2039,10 @@ class Looker40SDKStream extends APIMethods {
 
       /// @param {String} connection_name Name of connection
       String connection_name,
-      [
+      {
 
       /// @param {DelimList<String>} tests Array of names of tests to run
-      DelimList<String> tests]) async {
+      DelimList<String> tests}) async {
     var path_connection_name = encodeParam(connection_name);
 
     List<DBConnectionTestResult> responseHandler(dynamic json) {
@@ -2070,10 +2070,10 @@ class Looker40SDKStream extends APIMethods {
 
       /// @param {WriteDBConnection} body
       WriteDBConnection body,
-      [
+      {
 
       /// @param {DelimList<String>} tests Array of names of tests to run
-      DelimList<String> tests]) async {
+      DelimList<String> tests}) async {
     List<DBConnectionTestResult> responseHandler(dynamic json) {
       return json
           .map<DBConnectionTestResult>(
@@ -2089,10 +2089,10 @@ class Looker40SDKStream extends APIMethods {
   ///
   /// GET /dialect_info -> ByteArray
   Future<SDKResponse<List<DialectInfo>>> all_dialect_infos(
-      [
+      {
 
       /// @param {String} fields Requested fields.
-      String fields]) async {
+      String fields}) async {
     List<DialectInfo> responseHandler(dynamic json) {
       return json.map<DialectInfo>((i) => DialectInfo.fromJson(i)).toList();
     }
@@ -2104,10 +2104,10 @@ class Looker40SDKStream extends APIMethods {
   ///
   /// GET /ssh_servers -> ByteArray
   Future<SDKResponse<List<SshServer>>> all_ssh_servers(
-      [
+      {
 
       /// @param {String} fields Requested fields.
-      String fields]) async {
+      String fields}) async {
     List<SshServer> responseHandler(dynamic json) {
       return json.map<SshServer>((i) => SshServer.fromJson(i)).toList();
     }
@@ -2202,10 +2202,10 @@ class Looker40SDKStream extends APIMethods {
   ///
   /// GET /ssh_tunnels -> ByteArray
   Future<SDKResponse<List<SshTunnel>>> all_ssh_tunnels(
-      [
+      {
 
       /// @param {String} fields Requested fields.
-      String fields]) async {
+      String fields}) async {
     List<SshTunnel> responseHandler(dynamic json) {
       return json.map<SshTunnel>((i) => SshTunnel.fromJson(i)).toList();
     }
@@ -2338,7 +2338,7 @@ class Looker40SDKStream extends APIMethods {
   ///
   /// GET /content_favorite/search -> ByteArray
   Future<SDKResponse<List<ContentFavorite>>> search_content_favorites(
-      [
+      {
 
       /// @param {int} id Match content favorite id(s)
       int id,
@@ -2371,7 +2371,7 @@ class Looker40SDKStream extends APIMethods {
       String fields,
 
       /// @param {bool} filter_or Combine given search criteria in a boolean OR expression
-      bool filter_or]) async {
+      bool filter_or}) async {
     List<ContentFavorite> responseHandler(dynamic json) {
       return json
           .map<ContentFavorite>((i) => ContentFavorite.fromJson(i))
@@ -2400,10 +2400,10 @@ class Looker40SDKStream extends APIMethods {
 
       /// @param {int} content_favorite_id Id of favorite content
       int content_favorite_id,
-      [
+      {
 
       /// @param {String} fields Requested fields.
-      String fields]) async {
+      String fields}) async {
     var path_content_favorite_id = encodeParam(content_favorite_id);
 
     ContentFavorite responseHandler(dynamic json) {
@@ -2453,10 +2453,10 @@ class Looker40SDKStream extends APIMethods {
 
       /// @param {int} parent_id Parent space of content.
       int parent_id,
-      [
+      {
 
       /// @param {String} fields Requested fields.
-      String fields]) async {
+      String fields}) async {
     List<ContentMeta> responseHandler(dynamic json) {
       return json.map<ContentMeta>((i) => ContentMeta.fromJson(i)).toList();
     }
@@ -2472,10 +2472,10 @@ class Looker40SDKStream extends APIMethods {
 
       /// @param {int} content_metadata_id Id of content metadata
       int content_metadata_id,
-      [
+      {
 
       /// @param {String} fields Requested fields.
-      String fields]) async {
+      String fields}) async {
     var path_content_metadata_id = encodeParam(content_metadata_id);
 
     ContentMeta responseHandler(dynamic json) {
@@ -2516,10 +2516,10 @@ class Looker40SDKStream extends APIMethods {
 
       /// @param {int} content_metadata_id Id of content metadata
       int content_metadata_id,
-      [
+      {
 
       /// @param {String} fields Requested fields.
-      String fields]) async {
+      String fields}) async {
     List<ContentMetaGroupUser> responseHandler(dynamic json) {
       return json
           .map<ContentMetaGroupUser>((i) => ContentMetaGroupUser.fromJson(i))
@@ -2537,10 +2537,10 @@ class Looker40SDKStream extends APIMethods {
 
       /// @param {ContentMetaGroupUser} body
       ContentMetaGroupUser body,
-      [
+      {
 
       /// @param {bool} send_boards_notification_email Optionally sends notification email when granting access to a board.
-      bool send_boards_notification_email]) async {
+      bool send_boards_notification_email}) async {
     ContentMetaGroupUser responseHandler(dynamic json) {
       return ContentMetaGroupUser.fromJson(json);
     }
@@ -2609,7 +2609,7 @@ class Looker40SDKStream extends APIMethods {
 
       /// @param {String} resource_id ID of the dashboard or look to render
       String resource_id,
-      [
+      {
 
       /// @param {String} reload Whether or not to refresh the rendered image with the latest content
       String reload,
@@ -2621,7 +2621,7 @@ class Looker40SDKStream extends APIMethods {
       int width,
 
       /// @param {int} height The height of the image if format is supplied
-      int height]) async {
+      int height}) async {
     var path_type = encodeParam(type);
     var path_resource_id = encodeParam(resource_id);
 
@@ -2642,10 +2642,10 @@ class Looker40SDKStream extends APIMethods {
   ///
   /// GET /content_validation -> ByteArray
   Future<SDKResponse<ContentValidation>> content_validation(
-      [
+      {
 
       /// @param {String} fields Requested fields.
-      String fields]) async {
+      String fields}) async {
     ContentValidation responseHandler(dynamic json) {
       return ContentValidation.fromJson(json);
     }
@@ -2678,7 +2678,7 @@ class Looker40SDKStream extends APIMethods {
   ///
   /// GET /content_view/search -> ByteArray
   Future<SDKResponse<List<ContentView>>> search_content_views(
-      [
+      {
 
       /// @param {String} view_count Match view count
       String view_count,
@@ -2717,7 +2717,7 @@ class Looker40SDKStream extends APIMethods {
       String sorts,
 
       /// @param {bool} filter_or Combine given search criteria in a boolean OR expression
-      bool filter_or]) async {
+      bool filter_or}) async {
     List<ContentView> responseHandler(dynamic json) {
       return json.map<ContentView>((i) => ContentView.fromJson(i)).toList();
     }
@@ -2754,10 +2754,10 @@ class Looker40SDKStream extends APIMethods {
 
       /// @param {String} resource_id ID of the dashboard or look to render
       String resource_id,
-      [
+      {
 
       /// @param {String} reload Whether or not to refresh the rendered image with the latest content
-      String reload]) async {
+      String reload}) async {
     var path_type = encodeParam(type);
     var path_resource_id = encodeParam(resource_id);
 
@@ -2785,10 +2785,10 @@ class Looker40SDKStream extends APIMethods {
   ///
   /// GET /dashboards -> ByteArray
   Future<SDKResponse<List<DashboardBase>>> all_dashboards(
-      [
+      {
 
       /// @param {String} fields Requested fields.
-      String fields]) async {
+      String fields}) async {
     List<DashboardBase> responseHandler(dynamic json) {
       return json.map<DashboardBase>((i) => DashboardBase.fromJson(i)).toList();
     }
@@ -2856,7 +2856,7 @@ class Looker40SDKStream extends APIMethods {
   ///
   /// GET /dashboards/search -> ByteArray
   Future<SDKResponse<List<Dashboard>>> search_dashboards(
-      [
+      {
 
       /// @param {String} id Match dashboard id.
       String id,
@@ -2913,7 +2913,7 @@ class Looker40SDKStream extends APIMethods {
       String sorts,
 
       /// @param {bool} filter_or Combine given search criteria in a boolean OR expression
-      bool filter_or]) async {
+      bool filter_or}) async {
     List<Dashboard> responseHandler(dynamic json) {
       return json.map<Dashboard>((i) => Dashboard.fromJson(i)).toList();
     }
@@ -2962,13 +2962,13 @@ class Looker40SDKStream extends APIMethods {
 
       /// @param {String} space_id Id of space to import the dashboard to
       String space_id,
-      [
+      {
 
       /// @param {WriteDashboard} body
       WriteDashboard body,
 
       /// @param {bool} raw_locale If true, and this dashboard is localized, export it with the raw keys, not localized.
-      bool raw_locale]) async {
+      bool raw_locale}) async {
     var path_lookml_dashboard_id = encodeParam(lookml_dashboard_id);
     var path_space_id = encodeParam(space_id);
 
@@ -3001,10 +3001,10 @@ class Looker40SDKStream extends APIMethods {
 
       /// @param {WriteDashboard} body
       WriteDashboard body,
-      [
+      {
 
       /// @param {bool} raw_locale If true, and this dashboard is localized, export it with the raw keys, not localized.
-      bool raw_locale]) async {
+      bool raw_locale}) async {
     var path_lookml_dashboard_id = encodeParam(lookml_dashboard_id);
 
     List<int> responseHandler(dynamic json) {
@@ -3031,10 +3031,10 @@ class Looker40SDKStream extends APIMethods {
 
       /// @param {String} dashboard_id Id of dashboard
       String dashboard_id,
-      [
+      {
 
       /// @param {String} fields Requested fields.
-      String fields]) async {
+      String fields}) async {
     var path_dashboard_id = encodeParam(dashboard_id);
 
     Dashboard responseHandler(dynamic json) {
@@ -3161,7 +3161,7 @@ class Looker40SDKStream extends APIMethods {
   ///
   /// GET /dashboard_elements/search -> ByteArray
   Future<SDKResponse<List<DashboardElement>>> search_dashboard_elements(
-      [
+      {
 
       /// @param {int} dashboard_id Select elements that refer to a given dashboard id
       int dashboard_id,
@@ -3182,7 +3182,7 @@ class Looker40SDKStream extends APIMethods {
       bool filter_or,
 
       /// @param {String} sorts Fields to sort by. Sortable fields: [:look_id, :dashboard_id, :deleted, :title]
-      String sorts]) async {
+      String sorts}) async {
     List<DashboardElement> responseHandler(dynamic json) {
       return json
           .map<DashboardElement>((i) => DashboardElement.fromJson(i))
@@ -3207,10 +3207,10 @@ class Looker40SDKStream extends APIMethods {
 
       /// @param {String} dashboard_element_id Id of dashboard element
       String dashboard_element_id,
-      [
+      {
 
       /// @param {String} fields Requested fields.
-      String fields]) async {
+      String fields}) async {
     var path_dashboard_element_id = encodeParam(dashboard_element_id);
 
     DashboardElement responseHandler(dynamic json) {
@@ -3231,10 +3231,10 @@ class Looker40SDKStream extends APIMethods {
 
       /// @param {WriteDashboardElement} body
       WriteDashboardElement body,
-      [
+      {
 
       /// @param {String} fields Requested fields.
-      String fields]) async {
+      String fields}) async {
     var path_dashboard_element_id = encodeParam(dashboard_element_id);
 
     DashboardElement responseHandler(dynamic json) {
@@ -3272,10 +3272,10 @@ class Looker40SDKStream extends APIMethods {
 
       /// @param {String} dashboard_id Id of dashboard
       String dashboard_id,
-      [
+      {
 
       /// @param {String} fields Requested fields.
-      String fields]) async {
+      String fields}) async {
     var path_dashboard_id = encodeParam(dashboard_id);
 
     List<DashboardElement> responseHandler(dynamic json) {
@@ -3297,10 +3297,10 @@ class Looker40SDKStream extends APIMethods {
 
       /// @param {WriteDashboardElement} body
       WriteDashboardElement body,
-      [
+      {
 
       /// @param {String} fields Requested fields.
-      String fields]) async {
+      String fields}) async {
     DashboardElement responseHandler(dynamic json) {
       return DashboardElement.fromJson(json);
     }
@@ -3316,10 +3316,10 @@ class Looker40SDKStream extends APIMethods {
 
       /// @param {String} dashboard_filter_id Id of dashboard filters
       String dashboard_filter_id,
-      [
+      {
 
       /// @param {String} fields Requested fields.
-      String fields]) async {
+      String fields}) async {
     var path_dashboard_filter_id = encodeParam(dashboard_filter_id);
 
     DashboardFilter responseHandler(dynamic json) {
@@ -3340,10 +3340,10 @@ class Looker40SDKStream extends APIMethods {
 
       /// @param {WriteDashboardFilter} body
       WriteDashboardFilter body,
-      [
+      {
 
       /// @param {String} fields Requested fields.
-      String fields]) async {
+      String fields}) async {
     var path_dashboard_filter_id = encodeParam(dashboard_filter_id);
 
     DashboardFilter responseHandler(dynamic json) {
@@ -3381,10 +3381,10 @@ class Looker40SDKStream extends APIMethods {
 
       /// @param {String} dashboard_id Id of dashboard
       String dashboard_id,
-      [
+      {
 
       /// @param {String} fields Requested fields.
-      String fields]) async {
+      String fields}) async {
     var path_dashboard_id = encodeParam(dashboard_id);
 
     List<DashboardFilter> responseHandler(dynamic json) {
@@ -3406,10 +3406,10 @@ class Looker40SDKStream extends APIMethods {
 
       /// @param {WriteCreateDashboardFilter} body
       WriteCreateDashboardFilter body,
-      [
+      {
 
       /// @param {String} fields Requested fields
-      String fields]) async {
+      String fields}) async {
     DashboardFilter responseHandler(dynamic json) {
       return DashboardFilter.fromJson(json);
     }
@@ -3425,10 +3425,10 @@ class Looker40SDKStream extends APIMethods {
 
       /// @param {String} dashboard_layout_component_id Id of dashboard layout component
       String dashboard_layout_component_id,
-      [
+      {
 
       /// @param {String} fields Requested fields.
-      String fields]) async {
+      String fields}) async {
     var path_dashboard_layout_component_id =
         encodeParam(dashboard_layout_component_id);
 
@@ -3452,10 +3452,10 @@ class Looker40SDKStream extends APIMethods {
 
       /// @param {WriteDashboardLayoutComponent} body
       WriteDashboardLayoutComponent body,
-      [
+      {
 
       /// @param {String} fields Requested fields.
-      String fields]) async {
+      String fields}) async {
     var path_dashboard_layout_component_id =
         encodeParam(dashboard_layout_component_id);
 
@@ -3478,10 +3478,10 @@ class Looker40SDKStream extends APIMethods {
 
           /// @param {String} dashboard_layout_id Id of dashboard layout component
           String dashboard_layout_id,
-          [
+          {
 
           /// @param {String} fields Requested fields.
-          String fields]) async {
+          String fields}) async {
     var path_dashboard_layout_id = encodeParam(dashboard_layout_id);
 
     List<DashboardLayoutComponent> responseHandler(dynamic json) {
@@ -3504,10 +3504,10 @@ class Looker40SDKStream extends APIMethods {
 
       /// @param {String} dashboard_layout_id Id of dashboard layouts
       String dashboard_layout_id,
-      [
+      {
 
       /// @param {String} fields Requested fields.
-      String fields]) async {
+      String fields}) async {
     var path_dashboard_layout_id = encodeParam(dashboard_layout_id);
 
     DashboardLayout responseHandler(dynamic json) {
@@ -3528,10 +3528,10 @@ class Looker40SDKStream extends APIMethods {
 
       /// @param {WriteDashboardLayout} body
       WriteDashboardLayout body,
-      [
+      {
 
       /// @param {String} fields Requested fields.
-      String fields]) async {
+      String fields}) async {
     var path_dashboard_layout_id = encodeParam(dashboard_layout_id);
 
     DashboardLayout responseHandler(dynamic json) {
@@ -3569,10 +3569,10 @@ class Looker40SDKStream extends APIMethods {
 
       /// @param {String} dashboard_id Id of dashboard
       String dashboard_id,
-      [
+      {
 
       /// @param {String} fields Requested fields.
-      String fields]) async {
+      String fields}) async {
     var path_dashboard_id = encodeParam(dashboard_id);
 
     List<DashboardLayout> responseHandler(dynamic json) {
@@ -3594,10 +3594,10 @@ class Looker40SDKStream extends APIMethods {
 
       /// @param {WriteDashboardLayout} body
       WriteDashboardLayout body,
-      [
+      {
 
       /// @param {String} fields Requested fields.
-      String fields]) async {
+      String fields}) async {
     DashboardLayout responseHandler(dynamic json) {
       return DashboardLayout.fromJson(json);
     }
@@ -3698,7 +3698,7 @@ class Looker40SDKStream extends APIMethods {
   ///
   /// GET /folders/search -> ByteArray
   Future<SDKResponse<List<Folder>>> search_folders(
-      [
+      {
 
       /// @param {String} fields Requested fields.
       String fields,
@@ -3731,7 +3731,7 @@ class Looker40SDKStream extends APIMethods {
       String creator_id,
 
       /// @param {bool} filter_or Combine given search criteria in a boolean OR expression
-      bool filter_or]) async {
+      bool filter_or}) async {
     List<Folder> responseHandler(dynamic json) {
       return json.map<Folder>((i) => Folder.fromJson(i)).toList();
     }
@@ -3758,10 +3758,10 @@ class Looker40SDKStream extends APIMethods {
 
       /// @param {String} folder_id Id of folder
       String folder_id,
-      [
+      {
 
       /// @param {String} fields Requested fields.
-      String fields]) async {
+      String fields}) async {
     var path_folder_id = encodeParam(folder_id);
 
     Folder responseHandler(dynamic json) {
@@ -3813,10 +3813,10 @@ class Looker40SDKStream extends APIMethods {
   ///
   /// GET /folders -> ByteArray
   Future<SDKResponse<List<Folder>>> all_folders(
-      [
+      {
 
       /// @param {String} fields Requested fields.
-      String fields]) async {
+      String fields}) async {
     List<Folder> responseHandler(dynamic json) {
       return json.map<Folder>((i) => Folder.fromJson(i)).toList();
     }
@@ -3849,7 +3849,7 @@ class Looker40SDKStream extends APIMethods {
 
       /// @param {String} folder_id Id of folder
       String folder_id,
-      [
+      {
 
       /// @param {String} fields Requested fields.
       String fields,
@@ -3861,7 +3861,7 @@ class Looker40SDKStream extends APIMethods {
       int per_page,
 
       /// @param {String} sorts Fields to sort by.
-      String sorts]) async {
+      String sorts}) async {
     var path_folder_id = encodeParam(folder_id);
 
     List<Folder> responseHandler(dynamic json) {
@@ -3879,7 +3879,7 @@ class Looker40SDKStream extends APIMethods {
 
       /// @param {String} folder_id Id of folder
       String folder_id,
-      [
+      {
 
       /// @param {String} fields Requested fields.
       String fields,
@@ -3888,7 +3888,7 @@ class Looker40SDKStream extends APIMethods {
       String sorts,
 
       /// @param {String} name Match folder name.
-      String name]) async {
+      String name}) async {
     var path_folder_id = encodeParam(folder_id);
 
     List<Folder> responseHandler(dynamic json) {
@@ -3906,10 +3906,10 @@ class Looker40SDKStream extends APIMethods {
 
       /// @param {String} folder_id Id of folder
       String folder_id,
-      [
+      {
 
       /// @param {String} fields Requested fields.
-      String fields]) async {
+      String fields}) async {
     var path_folder_id = encodeParam(folder_id);
 
     Folder responseHandler(dynamic json) {
@@ -3927,10 +3927,10 @@ class Looker40SDKStream extends APIMethods {
 
       /// @param {String} folder_id Id of folder
       String folder_id,
-      [
+      {
 
       /// @param {String} fields Requested fields.
-      String fields]) async {
+      String fields}) async {
     var path_folder_id = encodeParam(folder_id);
 
     List<Folder> responseHandler(dynamic json) {
@@ -3948,10 +3948,10 @@ class Looker40SDKStream extends APIMethods {
 
       /// @param {String} folder_id Id of folder
       String folder_id,
-      [
+      {
 
       /// @param {String} fields Requested fields.
-      String fields]) async {
+      String fields}) async {
     var path_folder_id = encodeParam(folder_id);
 
     List<LookWithQuery> responseHandler(dynamic json) {
@@ -3969,10 +3969,10 @@ class Looker40SDKStream extends APIMethods {
 
       /// @param {String} folder_id Id of folder
       String folder_id,
-      [
+      {
 
       /// @param {String} fields Requested fields.
-      String fields]) async {
+      String fields}) async {
     var path_folder_id = encodeParam(folder_id);
 
     List<Dashboard> responseHandler(dynamic json) {
@@ -3991,7 +3991,7 @@ class Looker40SDKStream extends APIMethods {
   ///
   /// GET /groups -> ByteArray
   Future<SDKResponse<List<Group>>> all_groups(
-      [
+      {
 
       /// @param {String} fields Requested fields.
       String fields,
@@ -4012,7 +4012,7 @@ class Looker40SDKStream extends APIMethods {
       int content_metadata_id,
 
       /// @param {bool} can_add_to_content_metadata Select only groups that either can/cannot be given access to content.
-      bool can_add_to_content_metadata]) async {
+      bool can_add_to_content_metadata}) async {
     List<Group> responseHandler(dynamic json) {
       return json.map<Group>((i) => Group.fromJson(i)).toList();
     }
@@ -4035,10 +4035,10 @@ class Looker40SDKStream extends APIMethods {
 
       /// @param {WriteGroup} body
       WriteGroup body,
-      [
+      {
 
       /// @param {String} fields Requested fields.
-      String fields]) async {
+      String fields}) async {
     Group responseHandler(dynamic json) {
       return Group.fromJson(json);
     }
@@ -4074,7 +4074,7 @@ class Looker40SDKStream extends APIMethods {
   ///
   /// GET /groups/search -> ByteArray
   Future<SDKResponse<List<Group>>> search_groups(
-      [
+      {
 
       /// @param {String} fields Requested fields.
       String fields,
@@ -4104,7 +4104,7 @@ class Looker40SDKStream extends APIMethods {
       bool externally_managed,
 
       /// @param {bool} externally_orphaned Match group externally_orphaned.
-      bool externally_orphaned]) async {
+      bool externally_orphaned}) async {
     List<Group> responseHandler(dynamic json) {
       return json.map<Group>((i) => Group.fromJson(i)).toList();
     }
@@ -4150,7 +4150,7 @@ class Looker40SDKStream extends APIMethods {
   ///
   /// GET /groups/search/with_roles -> ByteArray
   Future<SDKResponse<List<GroupSearch>>> search_groups_with_roles(
-      [
+      {
 
       /// @param {String} fields Requested fields.
       String fields,
@@ -4180,7 +4180,7 @@ class Looker40SDKStream extends APIMethods {
       bool externally_managed,
 
       /// @param {bool} externally_orphaned Match group externally_orphaned.
-      bool externally_orphaned]) async {
+      bool externally_orphaned}) async {
     List<GroupSearch> responseHandler(dynamic json) {
       return json.map<GroupSearch>((i) => GroupSearch.fromJson(i)).toList();
     }
@@ -4206,10 +4206,10 @@ class Looker40SDKStream extends APIMethods {
 
       /// @param {int} group_id Id of group
       int group_id,
-      [
+      {
 
       /// @param {String} fields Requested fields.
-      String fields]) async {
+      String fields}) async {
     var path_group_id = encodeParam(group_id);
 
     Group responseHandler(dynamic json) {
@@ -4229,10 +4229,10 @@ class Looker40SDKStream extends APIMethods {
 
       /// @param {WriteGroup} body
       WriteGroup body,
-      [
+      {
 
       /// @param {String} fields Requested fields.
-      String fields]) async {
+      String fields}) async {
     var path_group_id = encodeParam(group_id);
 
     Group responseHandler(dynamic json) {
@@ -4266,10 +4266,10 @@ class Looker40SDKStream extends APIMethods {
 
       /// @param {int} group_id Id of group
       int group_id,
-      [
+      {
 
       /// @param {String} fields Requested fields.
-      String fields]) async {
+      String fields}) async {
     var path_group_id = encodeParam(group_id);
 
     List<Group> responseHandler(dynamic json) {
@@ -4307,7 +4307,7 @@ class Looker40SDKStream extends APIMethods {
 
       /// @param {int} group_id Id of group
       int group_id,
-      [
+      {
 
       /// @param {String} fields Requested fields.
       String fields,
@@ -4319,7 +4319,7 @@ class Looker40SDKStream extends APIMethods {
       int per_page,
 
       /// @param {String} sorts Fields to sort by.
-      String sorts]) async {
+      String sorts}) async {
     var path_group_id = encodeParam(group_id);
 
     List<User> responseHandler(dynamic json) {
@@ -4442,10 +4442,10 @@ class Looker40SDKStream extends APIMethods {
   ///
   /// GET /primary_homepage_sections -> ByteArray
   Future<SDKResponse<List<HomepageSection>>> all_primary_homepage_sections(
-      [
+      {
 
       /// @param {String} fields Requested fields.
-      String fields]) async {
+      String fields}) async {
     List<HomepageSection> responseHandler(dynamic json) {
       return json
           .map<HomepageSection>((i) => HomepageSection.fromJson(i))
@@ -4464,10 +4464,10 @@ class Looker40SDKStream extends APIMethods {
   ///
   /// GET /integration_hubs -> ByteArray
   Future<SDKResponse<List<IntegrationHub>>> all_integration_hubs(
-      [
+      {
 
       /// @param {String} fields Requested fields.
-      String fields]) async {
+      String fields}) async {
     List<IntegrationHub> responseHandler(dynamic json) {
       return json
           .map<IntegrationHub>((i) => IntegrationHub.fromJson(i))
@@ -4486,10 +4486,10 @@ class Looker40SDKStream extends APIMethods {
 
       /// @param {WriteIntegrationHub} body
       WriteIntegrationHub body,
-      [
+      {
 
       /// @param {String} fields Requested fields.
-      String fields]) async {
+      String fields}) async {
     IntegrationHub responseHandler(dynamic json) {
       return IntegrationHub.fromJson(json);
     }
@@ -4505,10 +4505,10 @@ class Looker40SDKStream extends APIMethods {
 
       /// @param {int} integration_hub_id Id of Integration Hub
       int integration_hub_id,
-      [
+      {
 
       /// @param {String} fields Requested fields.
-      String fields]) async {
+      String fields}) async {
     var path_integration_hub_id = encodeParam(integration_hub_id);
 
     IntegrationHub responseHandler(dynamic json) {
@@ -4531,10 +4531,10 @@ class Looker40SDKStream extends APIMethods {
 
       /// @param {WriteIntegrationHub} body
       WriteIntegrationHub body,
-      [
+      {
 
       /// @param {String} fields Requested fields.
-      String fields]) async {
+      String fields}) async {
     var path_integration_hub_id = encodeParam(integration_hub_id);
 
     IntegrationHub responseHandler(dynamic json) {
@@ -4586,13 +4586,13 @@ class Looker40SDKStream extends APIMethods {
   ///
   /// GET /integrations -> ByteArray
   Future<SDKResponse<List<Integration>>> all_integrations(
-      [
+      {
 
       /// @param {String} fields Requested fields.
       String fields,
 
       /// @param {String} integration_hub_id Filter to a specific provider
-      String integration_hub_id]) async {
+      String integration_hub_id}) async {
     List<Integration> responseHandler(dynamic json) {
       return json.map<Integration>((i) => Integration.fromJson(i)).toList();
     }
@@ -4608,10 +4608,10 @@ class Looker40SDKStream extends APIMethods {
 
       /// @param {String} integration_id Id of integration
       String integration_id,
-      [
+      {
 
       /// @param {String} fields Requested fields.
-      String fields]) async {
+      String fields}) async {
     var path_integration_id = encodeParam(integration_id);
 
     Integration responseHandler(dynamic json) {
@@ -4632,10 +4632,10 @@ class Looker40SDKStream extends APIMethods {
 
       /// @param {WriteIntegration} body
       WriteIntegration body,
-      [
+      {
 
       /// @param {String} fields Requested fields.
-      String fields]) async {
+      String fields}) async {
     var path_integration_id = encodeParam(integration_id);
 
     Integration responseHandler(dynamic json) {
@@ -4653,10 +4653,10 @@ class Looker40SDKStream extends APIMethods {
 
       /// @param {String} integration_id Id of integration
       String integration_id,
-      [
+      {
 
       /// @param {Map<String,dynamic>} body
-      Map<String, dynamic> body]) async {
+      Map<String, dynamic> body}) async {
     var path_integration_id = encodeParam(integration_id);
 
     DataActionForm responseHandler(dynamic json) {
@@ -4697,10 +4697,10 @@ class Looker40SDKStream extends APIMethods {
   ///
   /// GET /looks -> ByteArray
   Future<SDKResponse<List<Look>>> all_looks(
-      [
+      {
 
       /// @param {String} fields Requested fields.
-      String fields]) async {
+      String fields}) async {
     List<Look> responseHandler(dynamic json) {
       return json.map<Look>((i) => Look.fromJson(i)).toList();
     }
@@ -4721,10 +4721,10 @@ class Looker40SDKStream extends APIMethods {
 
       /// @param {WriteLookWithQuery} body
       WriteLookWithQuery body,
-      [
+      {
 
       /// @param {String} fields Requested fields.
-      String fields]) async {
+      String fields}) async {
     LookWithQuery responseHandler(dynamic json) {
       return LookWithQuery.fromJson(json);
     }
@@ -4763,7 +4763,7 @@ class Looker40SDKStream extends APIMethods {
   ///
   /// GET /looks/search -> ByteArray
   Future<SDKResponse<List<Look>>> search_looks(
-      [
+      {
 
       /// @param {String} id Match look id.
       String id,
@@ -4817,7 +4817,7 @@ class Looker40SDKStream extends APIMethods {
       String sorts,
 
       /// @param {bool} filter_or Combine given search criteria in a boolean OR expression
-      bool filter_or]) async {
+      bool filter_or}) async {
     List<Look> responseHandler(dynamic json) {
       return json.map<Look>((i) => Look.fromJson(i)).toList();
     }
@@ -4853,10 +4853,10 @@ class Looker40SDKStream extends APIMethods {
 
       /// @param {int} look_id Id of look
       int look_id,
-      [
+      {
 
       /// @param {String} fields Requested fields.
-      String fields]) async {
+      String fields}) async {
     var path_look_id = encodeParam(look_id);
 
     LookWithQuery responseHandler(dynamic json) {
@@ -4895,10 +4895,10 @@ class Looker40SDKStream extends APIMethods {
 
       /// @param {WriteLookWithQuery} body
       WriteLookWithQuery body,
-      [
+      {
 
       /// @param {String} fields Requested fields.
-      String fields]) async {
+      String fields}) async {
     var path_look_id = encodeParam(look_id);
 
     LookWithQuery responseHandler(dynamic json) {
@@ -4960,7 +4960,7 @@ class Looker40SDKStream extends APIMethods {
 
       /// @param {String} result_format Format of result
       String result_format,
-      [
+      {
 
       /// @param {int} limit Row limit (may override the limit in the saved query).
       int limit,
@@ -4996,7 +4996,7 @@ class Looker40SDKStream extends APIMethods {
       bool rebuild_pdts,
 
       /// @param {bool} server_table_calcs Perform table calculations on query results
-      bool server_table_calcs]) async {
+      bool server_table_calcs}) async {
     var path_look_id = encodeParam(look_id);
     var path_result_format = encodeParam(result_format);
 
@@ -5029,10 +5029,10 @@ class Looker40SDKStream extends APIMethods {
   ///
   /// GET /lookml_models -> ByteArray
   Future<SDKResponse<List<LookmlModel>>> all_lookml_models(
-      [
+      {
 
       /// @param {String} fields Requested fields.
-      String fields]) async {
+      String fields}) async {
     List<LookmlModel> responseHandler(dynamic json) {
       return json.map<LookmlModel>((i) => LookmlModel.fromJson(i)).toList();
     }
@@ -5062,10 +5062,10 @@ class Looker40SDKStream extends APIMethods {
 
       /// @param {String} lookml_model_name Name of lookml model.
       String lookml_model_name,
-      [
+      {
 
       /// @param {String} fields Requested fields.
-      String fields]) async {
+      String fields}) async {
     var path_lookml_model_name = encodeParam(lookml_model_name);
 
     LookmlModel responseHandler(dynamic json) {
@@ -5122,10 +5122,10 @@ class Looker40SDKStream extends APIMethods {
 
       /// @param {String} explore_name Name of explore.
       String explore_name,
-      [
+      {
 
       /// @param {String} fields Requested fields.
-      String fields]) async {
+      String fields}) async {
     var path_lookml_model_name = encodeParam(lookml_model_name);
     var path_explore_name = encodeParam(explore_name);
 
@@ -5156,10 +5156,10 @@ class Looker40SDKStream extends APIMethods {
 
       /// @param {String} project_id Id of project
       String project_id,
-      [
+      {
 
       /// @param {String} fields Requested fields
-      String fields]) async {
+      String fields}) async {
     var path_project_id = encodeParam(project_id);
 
     dynamic responseHandler(dynamic json) {
@@ -5322,13 +5322,13 @@ class Looker40SDKStream extends APIMethods {
 
       /// @param {String} project_id Id of project
       String project_id,
-      [
+      {
 
       /// @param {String} branch Branch to deploy to production
       String branch,
 
       /// @param {String} ref Ref to deploy to production
-      String ref]) async {
+      String ref}) async {
     var path_project_id = encodeParam(project_id);
 
     dynamic responseHandler(dynamic json) {
@@ -5413,10 +5413,10 @@ class Looker40SDKStream extends APIMethods {
   ///
   /// GET /projects -> ByteArray
   Future<SDKResponse<List<Project>>> all_projects(
-      [
+      {
 
       /// @param {String} fields Requested fields
-      String fields]) async {
+      String fields}) async {
     List<Project> responseHandler(dynamic json) {
       return json.map<Project>((i) => Project.fromJson(i)).toList();
     }
@@ -5454,10 +5454,10 @@ class Looker40SDKStream extends APIMethods {
 
       /// @param {String} project_id Project Id
       String project_id,
-      [
+      {
 
       /// @param {String} fields Requested fields
-      String fields]) async {
+      String fields}) async {
     var path_project_id = encodeParam(project_id);
 
     Project responseHandler(dynamic json) {
@@ -5499,10 +5499,10 @@ class Looker40SDKStream extends APIMethods {
 
       /// @param {WriteProject} body
       WriteProject body,
-      [
+      {
 
       /// @param {String} fields Requested fields
-      String fields]) async {
+      String fields}) async {
     var path_project_id = encodeParam(project_id);
 
     Project responseHandler(dynamic json) {
@@ -5591,10 +5591,10 @@ class Looker40SDKStream extends APIMethods {
 
       /// @param {String} project_id Project Id
       String project_id,
-      [
+      {
 
       /// @param {String} fields Requested fields
-      String fields]) async {
+      String fields}) async {
     var path_project_id = encodeParam(project_id);
 
     ProjectValidationCache responseHandler(dynamic json) {
@@ -5620,10 +5620,10 @@ class Looker40SDKStream extends APIMethods {
 
       /// @param {String} project_id Project Id
       String project_id,
-      [
+      {
 
       /// @param {String} fields Requested fields
-      String fields]) async {
+      String fields}) async {
     var path_project_id = encodeParam(project_id);
 
     ProjectValidation responseHandler(dynamic json) {
@@ -5643,10 +5643,10 @@ class Looker40SDKStream extends APIMethods {
 
       /// @param {String} project_id Project Id
       String project_id,
-      [
+      {
 
       /// @param {String} fields Requested fields
-      String fields]) async {
+      String fields}) async {
     var path_project_id = encodeParam(project_id);
 
     ProjectWorkspace responseHandler(dynamic json) {
@@ -5666,10 +5666,10 @@ class Looker40SDKStream extends APIMethods {
 
       /// @param {String} project_id Project Id
       String project_id,
-      [
+      {
 
       /// @param {String} fields Requested fields
-      String fields]) async {
+      String fields}) async {
     var path_project_id = encodeParam(project_id);
 
     List<ProjectFile> responseHandler(dynamic json) {
@@ -5692,10 +5692,10 @@ class Looker40SDKStream extends APIMethods {
 
       /// @param {String} file_id File Id
       String file_id,
-      [
+      {
 
       /// @param {String} fields Requested fields
-      String fields]) async {
+      String fields}) async {
     var path_project_id = encodeParam(project_id);
 
     ProjectFile responseHandler(dynamic json) {
@@ -5722,10 +5722,10 @@ class Looker40SDKStream extends APIMethods {
 
       /// @param {String} project_id Project Id
       String project_id,
-      [
+      {
 
       /// @param {String} remote_url (Optional: leave blank for root project) The remote url for remote dependency to test.
-      String remote_url]) async {
+      String remote_url}) async {
     var path_project_id = encodeParam(project_id);
 
     List<GitConnectionTest> responseHandler(dynamic json) {
@@ -5756,10 +5756,10 @@ class Looker40SDKStream extends APIMethods {
 
       /// @param {String} test_id Test Id
       String test_id,
-      [
+      {
 
       /// @param {String} remote_url (Optional: leave blank for root project) The remote url for remote dependency to test.
-      String remote_url]) async {
+      String remote_url}) async {
     var path_project_id = encodeParam(project_id);
     var path_test_id = encodeParam(test_id);
 
@@ -5784,10 +5784,10 @@ class Looker40SDKStream extends APIMethods {
 
       /// @param {String} project_id Project Id
       String project_id,
-      [
+      {
 
       /// @param {String} file_id File Id
-      String file_id]) async {
+      String file_id}) async {
     var path_project_id = encodeParam(project_id);
 
     List<LookmlTest> responseHandler(dynamic json) {
@@ -5807,7 +5807,7 @@ class Looker40SDKStream extends APIMethods {
 
       /// @param {String} project_id Project Id
       String project_id,
-      [
+      {
 
       /// @param {String} file_id File Name
       String file_id,
@@ -5816,7 +5816,7 @@ class Looker40SDKStream extends APIMethods {
       String test,
 
       /// @param {String} model Model Name
-      String model]) async {
+      String model}) async {
     var path_project_id = encodeParam(project_id);
 
     List<LookmlTestResult> responseHandler(dynamic json) {
@@ -5925,7 +5925,7 @@ class Looker40SDKStream extends APIMethods {
 
       /// @param {WriteCreateQueryTask} body
       WriteCreateQueryTask body,
-      [
+      {
 
       /// @param {int} limit Row limit (may override the limit in the saved query).
       int limit,
@@ -5964,7 +5964,7 @@ class Looker40SDKStream extends APIMethods {
       bool server_table_calcs,
 
       /// @param {String} fields Requested fields
-      String fields]) async {
+      String fields}) async {
     QueryTask responseHandler(dynamic json) {
       return QueryTask.fromJson(json);
     }
@@ -6024,10 +6024,10 @@ class Looker40SDKStream extends APIMethods {
 
       /// @param {String} query_task_id ID of the Query Task
       String query_task_id,
-      [
+      {
 
       /// @param {String} fields Requested fields.
-      String fields]) async {
+      String fields}) async {
     var path_query_task_id = encodeParam(query_task_id);
 
     QueryTask responseHandler(dynamic json) {
@@ -6099,10 +6099,10 @@ class Looker40SDKStream extends APIMethods {
 
       /// @param {int} query_id Id of query
       int query_id,
-      [
+      {
 
       /// @param {String} fields Requested fields.
-      String fields]) async {
+      String fields}) async {
     var path_query_id = encodeParam(query_id);
 
     Query responseHandler(dynamic json) {
@@ -6136,10 +6136,10 @@ class Looker40SDKStream extends APIMethods {
 
       /// @param {String} slug Slug of query
       String slug,
-      [
+      {
 
       /// @param {String} fields Requested fields.
-      String fields]) async {
+      String fields}) async {
     var path_slug = encodeParam(slug);
 
     Query responseHandler(dynamic json) {
@@ -6164,10 +6164,10 @@ class Looker40SDKStream extends APIMethods {
 
       /// @param {WriteQuery} body
       WriteQuery body,
-      [
+      {
 
       /// @param {String} fields Requested fields.
-      String fields]) async {
+      String fields}) async {
     Query responseHandler(dynamic json) {
       return Query.fromJson(json);
     }
@@ -6208,7 +6208,7 @@ class Looker40SDKStream extends APIMethods {
 
       /// @param {String} result_format Format of result
       String result_format,
-      [
+      {
 
       /// @param {int} limit Row limit (may override the limit in the saved query).
       int limit,
@@ -6244,7 +6244,7 @@ class Looker40SDKStream extends APIMethods {
       bool rebuild_pdts,
 
       /// @param {bool} server_table_calcs Perform table calculations on query results
-      bool server_table_calcs]) async {
+      bool server_table_calcs}) async {
     var path_query_id = encodeParam(query_id);
     var path_result_format = encodeParam(result_format);
 
@@ -6330,7 +6330,7 @@ class Looker40SDKStream extends APIMethods {
 
       /// @param {WriteQuery} body
       WriteQuery body,
-      [
+      {
 
       /// @param {int} limit Row limit (may override the limit in the saved query).
       int limit,
@@ -6366,7 +6366,7 @@ class Looker40SDKStream extends APIMethods {
       bool rebuild_pdts,
 
       /// @param {bool} server_table_calcs Perform table calculations on query results
-      bool server_table_calcs]) async {
+      bool server_table_calcs}) async {
     var path_result_format = encodeParam(result_format);
 
     dynamic responseHandler(dynamic json) {
@@ -6480,10 +6480,10 @@ class Looker40SDKStream extends APIMethods {
 
       /// @param {String} merge_query_id Merge Query Id
       String merge_query_id,
-      [
+      {
 
       /// @param {String} fields Requested fields
-      String fields]) async {
+      String fields}) async {
     var path_merge_query_id = encodeParam(merge_query_id);
 
     MergeQuery responseHandler(dynamic json) {
@@ -6514,13 +6514,13 @@ class Looker40SDKStream extends APIMethods {
   ///
   /// POST /merge_queries -> ByteArray
   Future<SDKResponse<MergeQuery>> create_merge_query(
-      [
+      {
 
       /// @param {WriteMergeQuery} body
       WriteMergeQuery body,
 
       /// @param {String} fields Requested fields
-      String fields]) async {
+      String fields}) async {
     MergeQuery responseHandler(dynamic json) {
       return MergeQuery.fromJson(json);
     }
@@ -6603,10 +6603,10 @@ class Looker40SDKStream extends APIMethods {
 
       /// @param {String} result_format Format of result, options are: ["inline_json", "json", "json_detail", "json_fe", "csv", "html", "md", "txt", "xlsx", "gsxml", "json_label"]
       String result_format,
-      [
+      {
 
       /// @param {String} download Defaults to false. If set to true, the HTTP response will have content-disposition and other headers set to make the HTTP response behave as a downloadable attachment instead of as inline content.
-      String download]) async {
+      String download}) async {
     var path_slug = encodeParam(slug);
     var path_result_format = encodeParam(result_format);
 
@@ -6644,10 +6644,10 @@ class Looker40SDKStream extends APIMethods {
 
       /// @param {int} height Output height in pixels
       int height,
-      [
+      {
 
       /// @param {String} fields Requested fields.
-      String fields]) async {
+      String fields}) async {
     var path_look_id = encodeParam(look_id);
     var path_result_format = encodeParam(result_format);
 
@@ -6681,10 +6681,10 @@ class Looker40SDKStream extends APIMethods {
 
       /// @param {int} height Output height in pixels
       int height,
-      [
+      {
 
       /// @param {String} fields Requested fields.
-      String fields]) async {
+      String fields}) async {
     var path_query_id = encodeParam(query_id);
     var path_result_format = encodeParam(result_format);
 
@@ -6721,7 +6721,7 @@ class Looker40SDKStream extends APIMethods {
 
       /// @param {int} height Output height in pixels
       int height,
-      [
+      {
 
       /// @param {String} fields Requested fields.
       String fields,
@@ -6733,7 +6733,7 @@ class Looker40SDKStream extends APIMethods {
       bool pdf_landscape,
 
       /// @param {bool} long_tables Whether or not to expand table vis to full length
-      bool long_tables]) async {
+      bool long_tables}) async {
     var path_dashboard_id = encodeParam(dashboard_id);
     var path_result_format = encodeParam(result_format);
 
@@ -6766,10 +6766,10 @@ class Looker40SDKStream extends APIMethods {
 
       /// @param {String} render_task_id Id of render task
       String render_task_id,
-      [
+      {
 
       /// @param {String} fields Requested fields.
-      String fields]) async {
+      String fields}) async {
     var path_render_task_id = encodeParam(render_task_id);
 
     RenderTask responseHandler(dynamic json) {
@@ -6843,7 +6843,7 @@ class Looker40SDKStream extends APIMethods {
   ///
   /// GET /model_sets/search -> ByteArray
   Future<SDKResponse<List<ModelSet>>> search_model_sets(
-      [
+      {
 
       /// @param {String} fields Requested fields.
       String fields,
@@ -6870,7 +6870,7 @@ class Looker40SDKStream extends APIMethods {
       bool built_in,
 
       /// @param {bool} filter_or Combine given search criteria in a boolean OR expression.
-      bool filter_or]) async {
+      bool filter_or}) async {
     List<ModelSet> responseHandler(dynamic json) {
       return json.map<ModelSet>((i) => ModelSet.fromJson(i)).toList();
     }
@@ -6895,10 +6895,10 @@ class Looker40SDKStream extends APIMethods {
 
       /// @param {int} model_set_id Id of model set
       int model_set_id,
-      [
+      {
 
       /// @param {String} fields Requested fields.
-      String fields]) async {
+      String fields}) async {
     var path_model_set_id = encodeParam(model_set_id);
 
     ModelSet responseHandler(dynamic json) {
@@ -6949,10 +6949,10 @@ class Looker40SDKStream extends APIMethods {
   ///
   /// GET /model_sets -> ByteArray
   Future<SDKResponse<List<ModelSet>>> all_model_sets(
-      [
+      {
 
       /// @param {String} fields Requested fields.
-      String fields]) async {
+      String fields}) async {
     List<ModelSet> responseHandler(dynamic json) {
       return json.map<ModelSet>((i) => ModelSet.fromJson(i)).toList();
     }
@@ -7011,7 +7011,7 @@ class Looker40SDKStream extends APIMethods {
   ///
   /// GET /permission_sets/search -> ByteArray
   Future<SDKResponse<List<PermissionSet>>> search_permission_sets(
-      [
+      {
 
       /// @param {String} fields Requested fields.
       String fields,
@@ -7038,7 +7038,7 @@ class Looker40SDKStream extends APIMethods {
       bool built_in,
 
       /// @param {bool} filter_or Combine given search criteria in a boolean OR expression.
-      bool filter_or]) async {
+      bool filter_or}) async {
     List<PermissionSet> responseHandler(dynamic json) {
       return json.map<PermissionSet>((i) => PermissionSet.fromJson(i)).toList();
     }
@@ -7063,10 +7063,10 @@ class Looker40SDKStream extends APIMethods {
 
       /// @param {int} permission_set_id Id of permission set
       int permission_set_id,
-      [
+      {
 
       /// @param {String} fields Requested fields.
-      String fields]) async {
+      String fields}) async {
     var path_permission_set_id = encodeParam(permission_set_id);
 
     PermissionSet responseHandler(dynamic json) {
@@ -7118,10 +7118,10 @@ class Looker40SDKStream extends APIMethods {
   ///
   /// GET /permission_sets -> ByteArray
   Future<SDKResponse<List<PermissionSet>>> all_permission_sets(
-      [
+      {
 
       /// @param {String} fields Requested fields.
-      String fields]) async {
+      String fields}) async {
     List<PermissionSet> responseHandler(dynamic json) {
       return json.map<PermissionSet>((i) => PermissionSet.fromJson(i)).toList();
     }
@@ -7148,13 +7148,13 @@ class Looker40SDKStream extends APIMethods {
   ///
   /// GET /roles -> ByteArray
   Future<SDKResponse<List<Role>>> all_roles(
-      [
+      {
 
       /// @param {String} fields Requested fields.
       String fields,
 
       /// @param {DelimList<int>} ids Optional list of ids to get specific roles.
-      DelimList<int> ids]) async {
+      DelimList<int> ids}) async {
     List<Role> responseHandler(dynamic json) {
       return json.map<Role>((i) => Role.fromJson(i)).toList();
     }
@@ -7204,7 +7204,7 @@ class Looker40SDKStream extends APIMethods {
   ///
   /// GET /roles/search -> ByteArray
   Future<SDKResponse<List<Role>>> search_roles(
-      [
+      {
 
       /// @param {String} fields Requested fields.
       String fields,
@@ -7228,7 +7228,7 @@ class Looker40SDKStream extends APIMethods {
       bool built_in,
 
       /// @param {bool} filter_or Combine given search criteria in a boolean OR expression.
-      bool filter_or]) async {
+      bool filter_or}) async {
     List<Role> responseHandler(dynamic json) {
       return json.map<Role>((i) => Role.fromJson(i)).toList();
     }
@@ -7304,10 +7304,10 @@ class Looker40SDKStream extends APIMethods {
 
       /// @param {int} role_id id of role
       int role_id,
-      [
+      {
 
       /// @param {String} fields Requested fields.
-      String fields]) async {
+      String fields}) async {
     var path_role_id = encodeParam(role_id);
 
     List<Group> responseHandler(dynamic json) {
@@ -7344,13 +7344,13 @@ class Looker40SDKStream extends APIMethods {
 
       /// @param {int} role_id id of user
       int role_id,
-      [
+      {
 
       /// @param {String} fields Requested fields.
       String fields,
 
       /// @param {bool} direct_association_only Get only users associated directly with the role: exclude those only associated through groups.
-      bool direct_association_only]) async {
+      bool direct_association_only}) async {
     var path_role_id = encodeParam(role_id);
 
     List<User> responseHandler(dynamic json) {
@@ -7393,10 +7393,10 @@ class Looker40SDKStream extends APIMethods {
 
       /// @param {int} space_id Space Id
       int space_id,
-      [
+      {
 
       /// @param {String} fields Requested fields.
-      String fields]) async {
+      String fields}) async {
     var path_space_id = encodeParam(space_id);
 
     List<ScheduledPlan> responseHandler(dynamic json) {
@@ -7416,10 +7416,10 @@ class Looker40SDKStream extends APIMethods {
 
       /// @param {int} scheduled_plan_id Scheduled Plan Id
       int scheduled_plan_id,
-      [
+      {
 
       /// @param {String} fields Requested fields.
-      String fields]) async {
+      String fields}) async {
     var path_scheduled_plan_id = encodeParam(scheduled_plan_id);
 
     ScheduledPlan responseHandler(dynamic json) {
@@ -7526,7 +7526,7 @@ class Looker40SDKStream extends APIMethods {
   ///
   /// GET /scheduled_plans -> ByteArray
   Future<SDKResponse<List<ScheduledPlan>>> all_scheduled_plans(
-      [
+      {
 
       /// @param {int} user_id Return scheduled plans belonging to this user_id. If not provided, returns scheduled plans owned by the caller.
       int user_id,
@@ -7535,7 +7535,7 @@ class Looker40SDKStream extends APIMethods {
       String fields,
 
       /// @param {bool} all_users Return scheduled plans belonging to all users (caller needs see_schedules permission)
-      bool all_users]) async {
+      bool all_users}) async {
     List<ScheduledPlan> responseHandler(dynamic json) {
       return json.map<ScheduledPlan>((i) => ScheduledPlan.fromJson(i)).toList();
     }
@@ -7684,7 +7684,7 @@ class Looker40SDKStream extends APIMethods {
 
       /// @param {int} look_id Look Id
       int look_id,
-      [
+      {
 
       /// @param {int} user_id User Id (default is requesting user if not specified)
       int user_id,
@@ -7693,7 +7693,7 @@ class Looker40SDKStream extends APIMethods {
       String fields,
 
       /// @param {bool} all_users Return scheduled plans belonging to all users for the look
-      bool all_users]) async {
+      bool all_users}) async {
     var path_look_id = encodeParam(look_id);
 
     List<ScheduledPlan> responseHandler(dynamic json) {
@@ -7721,7 +7721,7 @@ class Looker40SDKStream extends APIMethods {
 
       /// @param {int} dashboard_id Dashboard Id
       int dashboard_id,
-      [
+      {
 
       /// @param {int} user_id User Id (default is requesting user if not specified)
       int user_id,
@@ -7730,7 +7730,7 @@ class Looker40SDKStream extends APIMethods {
       bool all_users,
 
       /// @param {String} fields Requested fields.
-      String fields]) async {
+      String fields}) async {
     var path_dashboard_id = encodeParam(dashboard_id);
 
     List<ScheduledPlan> responseHandler(dynamic json) {
@@ -7760,7 +7760,7 @@ class Looker40SDKStream extends APIMethods {
 
       /// @param {int} lookml_dashboard_id LookML Dashboard Id
       int lookml_dashboard_id,
-      [
+      {
 
       /// @param {int} user_id User Id (default is requesting user if not specified)
       int user_id,
@@ -7769,7 +7769,7 @@ class Looker40SDKStream extends APIMethods {
       String fields,
 
       /// @param {bool} all_users Return scheduled plans belonging to all users for the dashboard
-      bool all_users]) async {
+      bool all_users}) async {
     var path_lookml_dashboard_id = encodeParam(lookml_dashboard_id);
 
     List<ScheduledPlan> responseHandler(dynamic json) {
@@ -7835,10 +7835,10 @@ class Looker40SDKStream extends APIMethods {
 
       /// @param {int} scheduled_plan_id Id of schedule plan to copy and run
       int scheduled_plan_id,
-      [
+      {
 
       /// @param {WriteScheduledPlan} body
-      WriteScheduledPlan body]) async {
+      WriteScheduledPlan body}) async {
     var path_scheduled_plan_id = encodeParam(scheduled_plan_id);
 
     ScheduledPlan responseHandler(dynamic json) {
@@ -7917,10 +7917,10 @@ class Looker40SDKStream extends APIMethods {
   ///
   /// GET /themes -> ByteArray
   Future<SDKResponse<List<Theme>>> all_themes(
-      [
+      {
 
       /// @param {String} fields Requested fields.
-      String fields]) async {
+      String fields}) async {
     List<Theme> responseHandler(dynamic json) {
       return json.map<Theme>((i) => Theme.fromJson(i)).toList();
     }
@@ -7998,7 +7998,7 @@ class Looker40SDKStream extends APIMethods {
   ///
   /// GET /themes/search -> ByteArray
   Future<SDKResponse<List<Theme>>> search_themes(
-      [
+      {
 
       /// @param {int} id Match theme id.
       int id,
@@ -8025,7 +8025,7 @@ class Looker40SDKStream extends APIMethods {
       String fields,
 
       /// @param {bool} filter_or Combine given search criteria in a boolean OR expression
-      bool filter_or]) async {
+      bool filter_or}) async {
     List<Theme> responseHandler(dynamic json) {
       return json.map<Theme>((i) => Theme.fromJson(i)).toList();
     }
@@ -8053,10 +8053,10 @@ class Looker40SDKStream extends APIMethods {
   ///
   /// GET /themes/default -> ByteArray
   Future<SDKResponse<Theme>> default_theme(
-      [
+      {
 
       /// @param {DateTime} ts Timestamp representing the target datetime for the active period. Defaults to 'now'
-      DateTime ts]) async {
+      DateTime ts}) async {
     Theme responseHandler(dynamic json) {
       return Theme.fromJson(json);
     }
@@ -8100,7 +8100,7 @@ class Looker40SDKStream extends APIMethods {
   ///
   /// GET /themes/active -> ByteArray
   Future<SDKResponse<List<Theme>>> active_themes(
-      [
+      {
 
       /// @param {String} name Name of theme
       String name,
@@ -8109,7 +8109,7 @@ class Looker40SDKStream extends APIMethods {
       DateTime ts,
 
       /// @param {String} fields Requested fields.
-      String fields]) async {
+      String fields}) async {
     List<Theme> responseHandler(dynamic json) {
       return json.map<Theme>((i) => Theme.fromJson(i)).toList();
     }
@@ -8130,10 +8130,10 @@ class Looker40SDKStream extends APIMethods {
 
       /// @param {String} name Name of theme
       String name,
-      [
+      {
 
       /// @param {DateTime} ts Timestamp representing the target datetime for the active period. Defaults to 'now'
-      DateTime ts]) async {
+      DateTime ts}) async {
     Theme responseHandler(dynamic json) {
       return Theme.fromJson(json);
     }
@@ -8174,10 +8174,10 @@ class Looker40SDKStream extends APIMethods {
 
       /// @param {int} theme_id Id of theme
       int theme_id,
-      [
+      {
 
       /// @param {String} fields Requested fields.
-      String fields]) async {
+      String fields}) async {
     var path_theme_id = encodeParam(theme_id);
 
     Theme responseHandler(dynamic json) {
@@ -8241,10 +8241,10 @@ class Looker40SDKStream extends APIMethods {
   ///
   /// GET /user -> ByteArray
   Future<SDKResponse<User>> me(
-      [
+      {
 
       /// @param {String} fields Requested fields.
-      String fields]) async {
+      String fields}) async {
     User responseHandler(dynamic json) {
       return User.fromJson(json);
     }
@@ -8256,7 +8256,7 @@ class Looker40SDKStream extends APIMethods {
   ///
   /// GET /users -> ByteArray
   Future<SDKResponse<List<User>>> all_users(
-      [
+      {
 
       /// @param {String} fields Requested fields.
       String fields,
@@ -8271,7 +8271,7 @@ class Looker40SDKStream extends APIMethods {
       String sorts,
 
       /// @param {DelimList<int>} ids Optional list of ids to get specific users.
-      DelimList<int> ids]) async {
+      DelimList<int> ids}) async {
     List<User> responseHandler(dynamic json) {
       return json.map<User>((i) => User.fromJson(i)).toList();
     }
@@ -8289,13 +8289,13 @@ class Looker40SDKStream extends APIMethods {
   ///
   /// POST /users -> ByteArray
   Future<SDKResponse<User>> create_user(
-      [
+      {
 
       /// @param {WriteUser} body
       WriteUser body,
 
       /// @param {String} fields Requested fields.
-      String fields]) async {
+      String fields}) async {
     User responseHandler(dynamic json) {
       return User.fromJson(json);
     }
@@ -8337,7 +8337,7 @@ class Looker40SDKStream extends APIMethods {
   ///
   /// GET /users/search -> ByteArray
   Future<SDKResponse<List<User>>> search_users(
-      [
+      {
 
       /// @param {String} fields Include only these fields in the response
       String fields,
@@ -8376,7 +8376,7 @@ class Looker40SDKStream extends APIMethods {
       String content_metadata_id,
 
       /// @param {String} group_id Search for users who are direct members of this group
-      String group_id]) async {
+      String group_id}) async {
     List<User> responseHandler(dynamic json) {
       return json.map<User>((i) => User.fromJson(i)).toList();
     }
@@ -8410,7 +8410,7 @@ class Looker40SDKStream extends APIMethods {
 
       /// @param {String} pattern Pattern to match
       String pattern,
-      [
+      {
 
       /// @param {String} fields Include only these fields in the response
       String fields,
@@ -8440,7 +8440,7 @@ class Looker40SDKStream extends APIMethods {
       String email,
 
       /// @param {bool} is_disabled Include or exclude disabled accounts in the results
-      bool is_disabled]) async {
+      bool is_disabled}) async {
     var path_pattern = encodeParam(pattern);
 
     List<User> responseHandler(dynamic json) {
@@ -8472,10 +8472,10 @@ class Looker40SDKStream extends APIMethods {
 
       /// @param {int} user_id Id of user
       int user_id,
-      [
+      {
 
       /// @param {String} fields Requested fields.
-      String fields]) async {
+      String fields}) async {
     var path_user_id = encodeParam(user_id);
 
     User responseHandler(dynamic json) {
@@ -8495,10 +8495,10 @@ class Looker40SDKStream extends APIMethods {
 
       /// @param {WriteUser} body
       WriteUser body,
-      [
+      {
 
       /// @param {String} fields Requested fields.
-      String fields]) async {
+      String fields}) async {
     var path_user_id = encodeParam(user_id);
 
     User responseHandler(dynamic json) {
@@ -8564,10 +8564,10 @@ class Looker40SDKStream extends APIMethods {
 
       /// @param {String} credential_id Id of credential
       String credential_id,
-      [
+      {
 
       /// @param {String} fields Requested fields.
-      String fields]) async {
+      String fields}) async {
     var path_credential_type = encodeParam(credential_type);
     var path_credential_id = encodeParam(credential_id);
 
@@ -8588,10 +8588,10 @@ class Looker40SDKStream extends APIMethods {
 
       /// @param {int} user_id id of user
       int user_id,
-      [
+      {
 
       /// @param {String} fields Requested fields.
-      String fields]) async {
+      String fields}) async {
     var path_user_id = encodeParam(user_id);
 
     CredentialsEmail responseHandler(dynamic json) {
@@ -8612,10 +8612,10 @@ class Looker40SDKStream extends APIMethods {
 
       /// @param {WriteCredentialsEmail} body
       WriteCredentialsEmail body,
-      [
+      {
 
       /// @param {String} fields Requested fields.
-      String fields]) async {
+      String fields}) async {
     var path_user_id = encodeParam(user_id);
 
     CredentialsEmail responseHandler(dynamic json) {
@@ -8636,10 +8636,10 @@ class Looker40SDKStream extends APIMethods {
 
       /// @param {WriteCredentialsEmail} body
       WriteCredentialsEmail body,
-      [
+      {
 
       /// @param {String} fields Requested fields.
-      String fields]) async {
+      String fields}) async {
     var path_user_id = encodeParam(user_id);
 
     CredentialsEmail responseHandler(dynamic json) {
@@ -8673,10 +8673,10 @@ class Looker40SDKStream extends APIMethods {
 
       /// @param {int} user_id id of user
       int user_id,
-      [
+      {
 
       /// @param {String} fields Requested fields.
-      String fields]) async {
+      String fields}) async {
     var path_user_id = encodeParam(user_id);
 
     CredentialsTotp responseHandler(dynamic json) {
@@ -8694,13 +8694,13 @@ class Looker40SDKStream extends APIMethods {
 
       /// @param {int} user_id id of user
       int user_id,
-      [
+      {
 
       /// @param {CredentialsTotp} body
       CredentialsTotp body,
 
       /// @param {String} fields Requested fields.
-      String fields]) async {
+      String fields}) async {
     var path_user_id = encodeParam(user_id);
 
     CredentialsTotp responseHandler(dynamic json) {
@@ -8734,10 +8734,10 @@ class Looker40SDKStream extends APIMethods {
 
       /// @param {int} user_id id of user
       int user_id,
-      [
+      {
 
       /// @param {String} fields Requested fields.
-      String fields]) async {
+      String fields}) async {
     var path_user_id = encodeParam(user_id);
 
     CredentialsLDAP responseHandler(dynamic json) {
@@ -8771,10 +8771,10 @@ class Looker40SDKStream extends APIMethods {
 
       /// @param {int} user_id id of user
       int user_id,
-      [
+      {
 
       /// @param {String} fields Requested fields.
-      String fields]) async {
+      String fields}) async {
     var path_user_id = encodeParam(user_id);
 
     CredentialsGoogle responseHandler(dynamic json) {
@@ -8808,10 +8808,10 @@ class Looker40SDKStream extends APIMethods {
 
       /// @param {int} user_id id of user
       int user_id,
-      [
+      {
 
       /// @param {String} fields Requested fields.
-      String fields]) async {
+      String fields}) async {
     var path_user_id = encodeParam(user_id);
 
     CredentialsSaml responseHandler(dynamic json) {
@@ -8845,10 +8845,10 @@ class Looker40SDKStream extends APIMethods {
 
       /// @param {int} user_id id of user
       int user_id,
-      [
+      {
 
       /// @param {String} fields Requested fields.
-      String fields]) async {
+      String fields}) async {
     var path_user_id = encodeParam(user_id);
 
     CredentialsOIDC responseHandler(dynamic json) {
@@ -8885,10 +8885,10 @@ class Looker40SDKStream extends APIMethods {
 
       /// @param {int} credentials_api3_id Id of API 3 Credential
       int credentials_api3_id,
-      [
+      {
 
       /// @param {String} fields Requested fields.
-      String fields]) async {
+      String fields}) async {
     var path_user_id = encodeParam(user_id);
     var path_credentials_api3_id = encodeParam(credentials_api3_id);
 
@@ -8930,10 +8930,10 @@ class Looker40SDKStream extends APIMethods {
 
       /// @param {int} user_id id of user
       int user_id,
-      [
+      {
 
       /// @param {String} fields Requested fields.
-      String fields]) async {
+      String fields}) async {
     var path_user_id = encodeParam(user_id);
 
     List<CredentialsApi3> responseHandler(dynamic json) {
@@ -8953,13 +8953,13 @@ class Looker40SDKStream extends APIMethods {
 
       /// @param {int} user_id id of user
       int user_id,
-      [
+      {
 
       /// @param {CredentialsApi3} body
       CredentialsApi3 body,
 
       /// @param {String} fields Requested fields.
-      String fields]) async {
+      String fields}) async {
     var path_user_id = encodeParam(user_id);
 
     CredentialsApi3 responseHandler(dynamic json) {
@@ -8980,10 +8980,10 @@ class Looker40SDKStream extends APIMethods {
 
       /// @param {int} credentials_embed_id Id of Embedding Credential
       int credentials_embed_id,
-      [
+      {
 
       /// @param {String} fields Requested fields.
-      String fields]) async {
+      String fields}) async {
     var path_user_id = encodeParam(user_id);
     var path_credentials_embed_id = encodeParam(credentials_embed_id);
 
@@ -9025,10 +9025,10 @@ class Looker40SDKStream extends APIMethods {
 
       /// @param {int} user_id id of user
       int user_id,
-      [
+      {
 
       /// @param {String} fields Requested fields.
-      String fields]) async {
+      String fields}) async {
     var path_user_id = encodeParam(user_id);
 
     List<CredentialsEmbed> responseHandler(dynamic json) {
@@ -9048,10 +9048,10 @@ class Looker40SDKStream extends APIMethods {
 
       /// @param {int} user_id id of user
       int user_id,
-      [
+      {
 
       /// @param {String} fields Requested fields.
-      String fields]) async {
+      String fields}) async {
     var path_user_id = encodeParam(user_id);
 
     CredentialsLookerOpenid responseHandler(dynamic json) {
@@ -9089,10 +9089,10 @@ class Looker40SDKStream extends APIMethods {
 
       /// @param {int} session_id Id of Web Login Session
       int session_id,
-      [
+      {
 
       /// @param {String} fields Requested fields.
-      String fields]) async {
+      String fields}) async {
     var path_user_id = encodeParam(user_id);
     var path_session_id = encodeParam(session_id);
 
@@ -9134,10 +9134,10 @@ class Looker40SDKStream extends APIMethods {
 
       /// @param {int} user_id id of user
       int user_id,
-      [
+      {
 
       /// @param {String} fields Requested fields.
-      String fields]) async {
+      String fields}) async {
     var path_user_id = encodeParam(user_id);
 
     List<Session> responseHandler(dynamic json) {
@@ -9164,13 +9164,13 @@ class Looker40SDKStream extends APIMethods {
 
           /// @param {int} user_id Id of user
           int user_id,
-          [
+          {
 
           /// @param {bool} expires Expiring token.
           bool expires,
 
           /// @param {String} fields Requested fields.
-          String fields]) async {
+          String fields}) async {
     var path_user_id = encodeParam(user_id);
 
     CredentialsEmail responseHandler(dynamic json) {
@@ -9190,13 +9190,13 @@ class Looker40SDKStream extends APIMethods {
 
       /// @param {int} user_id id of user
       int user_id,
-      [
+      {
 
       /// @param {String} fields Requested fields.
       String fields,
 
       /// @param {bool} direct_association_only Get only roles associated directly with the user: exclude those only associated through groups.
-      bool direct_association_only]) async {
+      bool direct_association_only}) async {
     var path_user_id = encodeParam(user_id);
 
     List<Role> responseHandler(dynamic json) {
@@ -9217,10 +9217,10 @@ class Looker40SDKStream extends APIMethods {
 
       /// @param {List<int>} body
       List<int> body,
-      [
+      {
 
       /// @param {String} fields Requested fields.
-      String fields]) async {
+      String fields}) async {
     var path_user_id = encodeParam(user_id);
 
     List<Role> responseHandler(dynamic json) {
@@ -9253,7 +9253,7 @@ class Looker40SDKStream extends APIMethods {
 
       /// @param {int} user_id Id of user
       int user_id,
-      [
+      {
 
       /// @param {String} fields Requested fields.
       String fields,
@@ -9265,7 +9265,7 @@ class Looker40SDKStream extends APIMethods {
       bool all_values,
 
       /// @param {bool} include_unset If true, returns an empty record for each requested attribute that has no user, group, or default value.
-      bool include_unset]) async {
+      bool include_unset}) async {
     var path_user_id = encodeParam(user_id);
 
     List<UserAttributeWithValue> responseHandler(dynamic json) {
@@ -9349,10 +9349,10 @@ class Looker40SDKStream extends APIMethods {
 
           /// @param {int} user_id Id of user
           int user_id,
-          [
+          {
 
           /// @param {String} fields Requested fields.
-          String fields]) async {
+          String fields}) async {
     var path_user_id = encodeParam(user_id);
 
     CredentialsEmail responseHandler(dynamic json) {
@@ -9373,13 +9373,13 @@ class Looker40SDKStream extends APIMethods {
   ///
   /// GET /user_attributes -> ByteArray
   Future<SDKResponse<List<UserAttribute>>> all_user_attributes(
-      [
+      {
 
       /// @param {String} fields Requested fields.
       String fields,
 
       /// @param {String} sorts Fields to order the results by. Sortable fields include: name, label
-      String sorts]) async {
+      String sorts}) async {
     List<UserAttribute> responseHandler(dynamic json) {
       return json.map<UserAttribute>((i) => UserAttribute.fromJson(i)).toList();
     }
@@ -9404,10 +9404,10 @@ class Looker40SDKStream extends APIMethods {
 
       /// @param {WriteUserAttribute} body
       WriteUserAttribute body,
-      [
+      {
 
       /// @param {String} fields Requested fields.
-      String fields]) async {
+      String fields}) async {
     UserAttribute responseHandler(dynamic json) {
       return UserAttribute.fromJson(json);
     }
@@ -9423,10 +9423,10 @@ class Looker40SDKStream extends APIMethods {
 
       /// @param {int} user_attribute_id Id of user attribute
       int user_attribute_id,
-      [
+      {
 
       /// @param {String} fields Requested fields.
-      String fields]) async {
+      String fields}) async {
     var path_user_attribute_id = encodeParam(user_attribute_id);
 
     UserAttribute responseHandler(dynamic json) {
@@ -9447,10 +9447,10 @@ class Looker40SDKStream extends APIMethods {
 
       /// @param {WriteUserAttribute} body
       WriteUserAttribute body,
-      [
+      {
 
       /// @param {String} fields Requested fields.
-      String fields]) async {
+      String fields}) async {
     var path_user_attribute_id = encodeParam(user_attribute_id);
 
     UserAttribute responseHandler(dynamic json) {
@@ -9492,10 +9492,10 @@ class Looker40SDKStream extends APIMethods {
 
           /// @param {int} user_attribute_id Id of user attribute
           int user_attribute_id,
-          [
+          {
 
           /// @param {String} fields Requested fields.
-          String fields]) async {
+          String fields}) async {
     var path_user_attribute_id = encodeParam(user_attribute_id);
 
     List<UserAttributeGroupValue> responseHandler(dynamic json) {

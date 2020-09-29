@@ -27,8 +27,8 @@ void runConnectionApis(Looker40SDK sdk) async {
   try {
     var connections = await sdk.ok(sdk.all_connections());
     connections.forEach((connection) => print(connection.name));
-    var connection =
-        await sdk.ok(sdk.connection(connections[0].name, 'name,host,port'));
+    var connection = await sdk
+        .ok(sdk.connection(connections[0].name, fields: 'name,host,port'));
     print(
         'name=${connection.name} host=${connection.host} port=${connection.port}');
     var newConnection = WriteDBConnection();
@@ -52,8 +52,8 @@ void runConnectionApis(Looker40SDK sdk) async {
     connection =
         await sdk.ok(sdk.update_connection('TestConnection', updateConnection));
     print('Connection updated: username=${connection.username}');
-    var testResults = await sdk
-        .ok(sdk.test_connection('TestConnection', DelimList(['connect'])));
+    var testResults = await sdk.ok(
+        sdk.test_connection('TestConnection', tests: DelimList(['connect'])));
     if (testResults.isEmpty) {
       print('No connection tests run');
     } else {

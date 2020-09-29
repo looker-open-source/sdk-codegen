@@ -119,6 +119,7 @@ class ${this.sdkClassName()}Stream extends APIMethods {
   modelsPrologue(_indent: string) {
     return `
 // ${this.warnEditing()}
+import 'dart:convert';
 `
   }
 
@@ -222,7 +223,7 @@ class ${this.sdkClassName()}Stream extends APIMethods {
         if (params.length > 0) {
           fragment += ', '
         }
-        fragment += `\n[${optionalParams.join(this.paramDelimiter)}]\n`
+        fragment += `\n{${optionalParams.join(this.paramDelimiter)}}\n`
       }
     }
     if (method.responseIsBoth()) {
@@ -366,13 +367,13 @@ class ${this.sdkClassName()}Stream extends APIMethods {
         const name = prop.name === 'default' ? 'default_value' : prop.name
         if (prop.type.customType) {
           if (prop.type.className === 'ArrayType') {
-            // props.push(
-            //   `${name} = source['${prop.name}'] == null ? null : (source['${prop.name}'] as List).map((i) => ${prop.type.customType}.fromJson(i)).toList()`
-            // )
+            props.push(
+              `${prop.name} : ${prop.name} == null ? null : ${prop.name}.map((i) => i.toJson()).toList()`
+            )
           } else {
-            // props.push(
-            //   `${name} = source['${prop.name}'] == null ? null : ${prop.type.customType}.fromJson(source['${prop.name}'])`
-            // )
+            props.push(
+              `'${prop.name}' :  ${prop.name} == null ? null : ${prop.name}.toJson()`
+            )
           }
         } else {
           if (prop.type.className === 'ArrayType') {
@@ -380,6 +381,9 @@ class ${this.sdkClassName()}Stream extends APIMethods {
             // props.push(
             //   `${name} = source['${prop.name}'] == null ? null : source['${prop.name}'].map<${listType}>((i) => i as ${listType}).toList()`
             // )
+            props.push(
+              `'${prop.name}' : ${name} == null ? null : jsonEncode(${name})`
+            )
           } else {
             const mapped = this.typeMap(prop.type)
             if (mapped.name === 'DateTime') {
