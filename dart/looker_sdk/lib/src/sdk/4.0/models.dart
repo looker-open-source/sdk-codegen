@@ -106,7 +106,7 @@ class ApiVersion {
         'looker_release_version': looker_release_version,
         'current_version':
             current_version == null ? null : current_version.toJson(),
-        supported_versions: supported_versions == null
+        'supported_versions': supported_versions == null
             ? null
             : supported_versions.map((i) => i.toJson()).toList()
       };
@@ -256,7 +256,7 @@ class Board {
         'created_at': created_at == null ? null : created_at.toString(),
         'deleted_at': deleted_at == null ? null : deleted_at.toString(),
         'description': description,
-        board_sections: board_sections == null
+        'board_sections': board_sections == null
             ? null
             : board_sections.map((i) => i.toJson()).toList(),
         'id': id,
@@ -439,7 +439,7 @@ class BoardSection {
         'deleted_at': deleted_at == null ? null : deleted_at.toString(),
         'description': description,
         'board_id': board_id,
-        board_items: board_items == null
+        'board_items': board_items == null
             ? null
             : board_items.map((i) => i.toJson()).toList(),
         'id': id,
@@ -499,13 +499,13 @@ class ColorCollection {
   Map toJson() => {
         'id': id,
         'label': label,
-        categoricalPalettes: categoricalPalettes == null
+        'categoricalPalettes': categoricalPalettes == null
             ? null
             : categoricalPalettes.map((i) => i.toJson()).toList(),
-        sequentialPalettes: sequentialPalettes == null
+        'sequentialPalettes': sequentialPalettes == null
             ? null
             : sequentialPalettes.map((i) => i.toJson()).toList(),
-        divergingPalettes: divergingPalettes == null
+        'divergingPalettes': divergingPalettes == null
             ? null
             : divergingPalettes.map((i) => i.toJson()).toList()
       };
@@ -779,7 +779,7 @@ class ContentValidation {
   ContentValidation();
 
   Map toJson() => {
-        content_with_errors: content_with_errors == null
+        'content_with_errors': content_with_errors == null
             ? null
             : content_with_errors.map((i) => i.toJson()).toList(),
         'computation_time': computation_time,
@@ -1222,7 +1222,8 @@ class ContentValidatorError {
         'lookml_dashboard_element': lookml_dashboard_element == null
             ? null
             : lookml_dashboard_element.toJson(),
-        errors: errors == null ? null : errors.map((i) => i.toJson()).toList(),
+        'errors':
+            errors == null ? null : errors.map((i) => i.toJson()).toList(),
         'id': id
       };
 
@@ -1350,7 +1351,7 @@ class ContinuousPalette {
         'id': id,
         'label': label,
         'type': type,
-        stops: stops == null ? null : stops.map((i) => i.toJson()).toList()
+        'stops': stops == null ? null : stops.map((i) => i.toJson()).toList()
       };
 
   ContinuousPalette.fromJson(Map source)
@@ -2231,13 +2232,13 @@ class Dashboard {
         'background_color': background_color,
         'created_at': created_at == null ? null : created_at.toString(),
         'crossfilter_enabled': crossfilter_enabled,
-        dashboard_elements: dashboard_elements == null
+        'dashboard_elements': dashboard_elements == null
             ? null
             : dashboard_elements.map((i) => i.toJson()).toList(),
-        dashboard_filters: dashboard_filters == null
+        'dashboard_filters': dashboard_filters == null
             ? null
             : dashboard_filters.map((i) => i.toJson()).toList(),
-        dashboard_layouts: dashboard_layouts == null
+        'dashboard_layouts': dashboard_layouts == null
             ? null
             : dashboard_layouts.map((i) => i.toJson()).toList(),
         'deleted': deleted,
@@ -2846,7 +2847,7 @@ class DashboardLayout {
         'width': width,
         'deleted': deleted,
         'dashboard_title': dashboard_title,
-        dashboard_layout_components: dashboard_layout_components == null
+        'dashboard_layout_components': dashboard_layout_components == null
             ? null
             : dashboard_layout_components.map((i) => i.toJson()).toList()
       };
@@ -2978,7 +2979,7 @@ class DataActionForm {
 
   Map toJson() => {
         'state': state == null ? null : state.toJson(),
-        fields: fields == null ? null : fields.map((i) => i.toJson()).toList()
+        'fields': fields == null ? null : fields.map((i) => i.toJson()).toList()
       };
 
   DataActionForm.fromJson(Map source)
@@ -3031,7 +3032,7 @@ class DataActionFormField {
         'oauth_url': oauth_url,
         'interactive': interactive,
         'required': required,
-        options:
+        'options':
             options == null ? null : options.map((i) => i.toJson()).toList()
       };
 
@@ -3329,7 +3330,7 @@ class DBConnection {
         'can': can,
         'name': name,
         'dialect': dialect == null ? null : dialect.toJson(),
-        snippets:
+        'snippets':
             snippets == null ? null : snippets.map((i) => i.toJson()).toList(),
         'host': host,
         'port': port,
@@ -3472,7 +3473,7 @@ class DBConnectionBase {
         'can': can,
         'name': name,
         'dialect': dialect == null ? null : dialect.toJson(),
-        snippets:
+        'snippets':
             snippets == null ? null : snippets.map((i) => i.toJson()).toList()
       };
 
@@ -4124,10 +4125,10 @@ class Folder {
         'is_shared_root': is_shared_root,
         'is_users_root': is_users_root,
         'can': can,
-        dashboards: dashboards == null
+        'dashboards': dashboards == null
             ? null
             : dashboards.map((i) => i.toJson()).toList(),
-        looks: looks == null ? null : looks.map((i) => i.toJson()).toList()
+        'looks': looks == null ? null : looks.map((i) => i.toJson()).toList()
       };
 
   Folder.fromJson(Map source)
@@ -4563,7 +4564,7 @@ class GroupSearch {
         'include_by_default': include_by_default,
         'name': name,
         'user_count': user_count,
-        roles: roles == null ? null : roles.map((i) => i.toJson()).toList()
+        'roles': roles == null ? null : roles.map((i) => i.toJson()).toList()
       };
 
   GroupSearch.fromJson(Map source)
@@ -4797,7 +4798,7 @@ class HomepageSection {
         'deleted_at': deleted_at == null ? null : deleted_at.toString(),
         'detail_url': detail_url,
         'homepage_id': homepage_id,
-        homepage_items: homepage_items == null
+        'homepage_items': homepage_items == null
             ? null
             : homepage_items.map((i) => i.toJson()).toList(),
         'id': id,
@@ -4925,7 +4926,8 @@ class Integration {
         'label': label,
         'description': description,
         'enabled': enabled,
-        params: params == null ? null : params.map((i) => i.toJson()).toList(),
+        'params':
+            params == null ? null : params.map((i) => i.toJson()).toList(),
         'supported_formats': supported_formats,
         'supported_action_types': supported_action_types,
         'supported_formattings': supported_formattings,
@@ -4934,7 +4936,7 @@ class Integration {
         'supported_download_settings': supported_download_settings,
         'icon_url': icon_url,
         'uses_oauth': uses_oauth,
-        required_fields: required_fields == null
+        'required_fields': required_fields == null
             ? null
             : required_fields.map((i) => i.toJson()).toList(),
         'delegate_oauth': delegate_oauth,
@@ -5159,7 +5161,7 @@ class IntegrationTestResult {
   Map toJson() => {
         'success': success,
         'message': message,
-        delegate_oauth_result: delegate_oauth_result == null
+        'delegate_oauth_result': delegate_oauth_result == null
             ? null
             : delegate_oauth_result.map((i) => i.toJson()).toList()
       };
@@ -5364,24 +5366,25 @@ class LDAPConfig {
         'default_new_user_group_ids': default_new_user_group_ids == null
             ? null
             : jsonEncode(default_new_user_group_ids),
-        default_new_user_groups: default_new_user_groups == null
+        'default_new_user_groups': default_new_user_groups == null
             ? null
             : default_new_user_groups.map((i) => i.toJson()).toList(),
         'default_new_user_role_ids': default_new_user_role_ids == null
             ? null
             : jsonEncode(default_new_user_role_ids),
-        default_new_user_roles: default_new_user_roles == null
+        'default_new_user_roles': default_new_user_roles == null
             ? null
             : default_new_user_roles.map((i) => i.toJson()).toList(),
         'enabled': enabled,
         'force_no_page': force_no_page,
-        groups: groups == null ? null : groups.map((i) => i.toJson()).toList(),
+        'groups':
+            groups == null ? null : groups.map((i) => i.toJson()).toList(),
         'groups_base_dn': groups_base_dn,
         'groups_finder_type': groups_finder_type,
         'groups_member_attribute': groups_member_attribute,
         'groups_objectclasses': groups_objectclasses,
         'groups_user_attribute': groups_user_attribute,
-        groups_with_role_ids: groups_with_role_ids == null
+        'groups_with_role_ids': groups_with_role_ids == null
             ? null
             : groups_with_role_ids.map((i) => i.toJson()).toList(),
         'has_auth_password': has_auth_password,
@@ -5395,10 +5398,10 @@ class LDAPConfig {
         'user_attribute_map_first_name': user_attribute_map_first_name,
         'user_attribute_map_last_name': user_attribute_map_last_name,
         'user_attribute_map_ldap_id': user_attribute_map_ldap_id,
-        user_attributes: user_attributes == null
+        'user_attributes': user_attributes == null
             ? null
             : user_attributes.map((i) => i.toJson()).toList(),
-        user_attributes_with_ids: user_attributes_with_ids == null
+        'user_attributes_with_ids': user_attributes_with_ids == null
             ? null
             : user_attributes_with_ids.map((i) => i.toJson()).toList(),
         'user_bind_base_dn': user_bind_base_dn,
@@ -5580,7 +5583,8 @@ class LDAPConfigTestResult {
 
   Map toJson() => {
         'details': details,
-        issues: issues == null ? null : issues.map((i) => i.toJson()).toList(),
+        'issues':
+            issues == null ? null : issues.map((i) => i.toJson()).toList(),
         'message': message,
         'status': status,
         'trace': trace,
@@ -5631,7 +5635,7 @@ class LDAPGroupRead {
         'looker_group_id': looker_group_id,
         'looker_group_name': looker_group_name,
         'name': name,
-        roles: roles == null ? null : roles.map((i) => i.toJson()).toList(),
+        'roles': roles == null ? null : roles.map((i) => i.toJson()).toList(),
         'url': url
       };
 
@@ -5779,7 +5783,7 @@ class LDAPUserAttributeRead {
   Map toJson() => {
         'name': name,
         'required': required,
-        user_attributes: user_attributes == null
+        'user_attributes': user_attributes == null
             ? null
             : user_attributes.map((i) => i.toJson()).toList(),
         'url': url
@@ -6230,7 +6234,7 @@ class LookmlModel {
         'allowed_db_connection_names': allowed_db_connection_names == null
             ? null
             : jsonEncode(allowed_db_connection_names),
-        explores:
+        'explores':
             explores == null ? null : explores.map((i) => i.toJson()).toList(),
         'has_content': has_content,
         'label': label,
@@ -6407,25 +6411,26 @@ class LookmlModelExplore {
         'access_filter_fields': access_filter_fields == null
             ? null
             : jsonEncode(access_filter_fields),
-        access_filters: access_filters == null
+        'access_filters': access_filters == null
             ? null
             : access_filters.map((i) => i.toJson()).toList(),
-        aliases:
+        'aliases':
             aliases == null ? null : aliases.map((i) => i.toJson()).toList(),
-        always_filter: always_filter == null
+        'always_filter': always_filter == null
             ? null
             : always_filter.map((i) => i.toJson()).toList(),
-        conditionally_filter: conditionally_filter == null
+        'conditionally_filter': conditionally_filter == null
             ? null
             : conditionally_filter.map((i) => i.toJson()).toList(),
         'index_fields': index_fields == null ? null : jsonEncode(index_fields),
-        sets: sets == null ? null : sets.map((i) => i.toJson()).toList(),
+        'sets': sets == null ? null : sets.map((i) => i.toJson()).toList(),
         'tags': tags == null ? null : jsonEncode(tags),
-        errors: errors == null ? null : errors.map((i) => i.toJson()).toList(),
+        'errors':
+            errors == null ? null : errors.map((i) => i.toJson()).toList(),
         'fields': fields == null ? null : fields.toJson(),
-        joins: joins == null ? null : joins.map((i) => i.toJson()).toList(),
+        'joins': joins == null ? null : joins.map((i) => i.toJson()).toList(),
         'group_label': group_label,
-        supported_measure_types: supported_measure_types == null
+        'supported_measure_types': supported_measure_types == null
             ? null
             : supported_measure_types.map((i) => i.toJson()).toList()
       };
@@ -6798,7 +6803,7 @@ class LookmlModelExploreField {
         'category': category,
         'default_filter_value': default_filter_value,
         'description': description,
-        enumerations: enumerations == null
+        'enumerations': enumerations == null
             ? null
             : enumerations.map((i) => i.toJson()).toList(),
         'error': error,
@@ -6832,9 +6837,9 @@ class LookmlModelExploreField {
         'source_file': source_file,
         'source_file_path': source_file_path,
         'sql': sql,
-        sql_case:
+        'sql_case':
             sql_case == null ? null : sql_case.map((i) => i.toJson()).toList(),
-        filters:
+        'filters':
             filters == null ? null : filters.map((i) => i.toJson()).toList(),
         'suggest_dimension': suggest_dimension,
         'suggest_explore': suggest_explore,
@@ -7073,14 +7078,14 @@ class LookmlModelExploreFieldset {
   LookmlModelExploreFieldset();
 
   Map toJson() => {
-        dimensions: dimensions == null
+        'dimensions': dimensions == null
             ? null
             : dimensions.map((i) => i.toJson()).toList(),
-        measures:
+        'measures':
             measures == null ? null : measures.map((i) => i.toJson()).toList(),
-        filters:
+        'filters':
             filters == null ? null : filters.map((i) => i.toJson()).toList(),
-        parameters: parameters == null
+        'parameters': parameters == null
             ? null
             : parameters.map((i) => i.toJson()).toList()
       };
@@ -7399,8 +7404,9 @@ class LookmlTestResult {
         'test_name': test_name,
         'assertions_count': assertions_count,
         'assertions_failed': assertions_failed,
-        errors: errors == null ? null : errors.map((i) => i.toJson()).toList(),
-        warnings:
+        'errors':
+            errors == null ? null : errors.map((i) => i.toJson()).toList(),
+        'warnings':
             warnings == null ? null : warnings.map((i) => i.toJson()).toList(),
         'success': success
       };
@@ -7572,7 +7578,7 @@ class LookWithDashboards {
         'folder_id': folder_id,
         'updated_at': updated_at == null ? null : updated_at.toString(),
         'view_count': view_count,
-        dashboards: dashboards == null
+        'dashboards': dashboards == null
             ? null
             : dashboards.map((i) => i.toJson()).toList()
       };
@@ -7865,7 +7871,7 @@ class Manifest {
   Map toJson() => {
         'can': can,
         'name': name,
-        imports:
+        'imports':
             imports == null ? null : imports.map((i) => i.toJson()).toList(),
         'localization_settings': localization_settings == null
             ? null
@@ -7947,7 +7953,7 @@ class MergeQuery {
         'pivots': pivots == null ? null : jsonEncode(pivots),
         'result_maker_id': result_maker_id,
         'sorts': sorts == null ? null : jsonEncode(sorts),
-        source_queries: source_queries == null
+        'source_queries': source_queries == null
             ? null
             : source_queries.map((i) => i.toJson()).toList(),
         'total': total,
@@ -7992,7 +7998,7 @@ class MergeQuerySourceQuery {
   MergeQuerySourceQuery();
 
   Map toJson() => {
-        merge_fields: merge_fields == null
+        'merge_fields': merge_fields == null
             ? null
             : merge_fields.map((i) => i.toJson()).toList(),
         'name': name,
@@ -8127,7 +8133,7 @@ class OauthClientApp {
         'tokens_invalid_before': tokens_invalid_before == null
             ? null
             : tokens_invalid_before.toString(),
-        activated_users: activated_users == null
+        'activated_users': activated_users == null
             ? null
             : activated_users.map((i) => i.toJson()).toList()
       };
@@ -8269,19 +8275,20 @@ class OIDCConfig {
         'default_new_user_group_ids': default_new_user_group_ids == null
             ? null
             : jsonEncode(default_new_user_group_ids),
-        default_new_user_groups: default_new_user_groups == null
+        'default_new_user_groups': default_new_user_groups == null
             ? null
             : default_new_user_groups.map((i) => i.toJson()).toList(),
         'default_new_user_role_ids': default_new_user_role_ids == null
             ? null
             : jsonEncode(default_new_user_role_ids),
-        default_new_user_roles: default_new_user_roles == null
+        'default_new_user_roles': default_new_user_roles == null
             ? null
             : default_new_user_roles.map((i) => i.toJson()).toList(),
         'enabled': enabled,
-        groups: groups == null ? null : groups.map((i) => i.toJson()).toList(),
+        'groups':
+            groups == null ? null : groups.map((i) => i.toJson()).toList(),
         'groups_attribute': groups_attribute,
-        groups_with_role_ids: groups_with_role_ids == null
+        'groups_with_role_ids': groups_with_role_ids == null
             ? null
             : groups_with_role_ids.map((i) => i.toJson()).toList(),
         'identifier': identifier,
@@ -8297,10 +8304,10 @@ class OIDCConfig {
         'user_attribute_map_email': user_attribute_map_email,
         'user_attribute_map_first_name': user_attribute_map_first_name,
         'user_attribute_map_last_name': user_attribute_map_last_name,
-        user_attributes: user_attributes == null
+        'user_attributes': user_attributes == null
             ? null
             : user_attributes.map((i) => i.toJson()).toList(),
-        user_attributes_with_ids: user_attributes_with_ids == null
+        'user_attributes_with_ids': user_attributes_with_ids == null
             ? null
             : user_attributes_with_ids.map((i) => i.toJson()).toList(),
         'userinfo_endpoint': userinfo_endpoint,
@@ -8429,7 +8436,7 @@ class OIDCGroupRead {
         'looker_group_id': looker_group_id,
         'looker_group_name': looker_group_name,
         'name': name,
-        roles: roles == null ? null : roles.map((i) => i.toJson()).toList()
+        'roles': roles == null ? null : roles.map((i) => i.toJson()).toList()
       };
 
   OIDCGroupRead.fromJson(Map source)
@@ -8497,7 +8504,7 @@ class OIDCUserAttributeRead {
   Map toJson() => {
         'name': name,
         'required': required,
-        user_attributes: user_attributes == null
+        'user_attributes': user_attributes == null
             ? null
             : user_attributes.map((i) => i.toJson()).toList()
       };
@@ -8938,9 +8945,10 @@ class ProjectValidation {
   ProjectValidation();
 
   Map toJson() => {
-        errors: errors == null ? null : errors.map((i) => i.toJson()).toList(),
+        'errors':
+            errors == null ? null : errors.map((i) => i.toJson()).toList(),
         'project_digest': project_digest,
-        models_not_validated: models_not_validated == null
+        'models_not_validated': models_not_validated == null
             ? null
             : models_not_validated.map((i) => i.toJson()).toList(),
         'computation_time': computation_time
@@ -8982,9 +8990,10 @@ class ProjectValidationCache {
   ProjectValidationCache();
 
   Map toJson() => {
-        errors: errors == null ? null : errors.map((i) => i.toJson()).toList(),
+        'errors':
+            errors == null ? null : errors.map((i) => i.toJson()).toList(),
         'project_digest': project_digest,
-        models_not_validated: models_not_validated == null
+        'models_not_validated': models_not_validated == null
             ? null
             : models_not_validated.map((i) => i.toJson()).toList(),
         'computation_time': computation_time,
@@ -9560,7 +9569,7 @@ class ResultMakerFilterables {
         'model': model,
         'view': view,
         'name': name,
-        listen: listen == null ? null : listen.map((i) => i.toJson()).toList()
+        'listen': listen == null ? null : listen.map((i) => i.toJson()).toList()
       };
 
   ResultMakerFilterables.fromJson(Map source)
@@ -9629,7 +9638,7 @@ class ResultMakerWithIdVisConfigAndDynamicFields {
   Map toJson() => {
         'id': id,
         'dynamic_fields': dynamic_fields,
-        filterables: filterables == null
+        'filterables': filterables == null
             ? null
             : filterables.map((i) => i.toJson()).toList(),
         'sorts': sorts == null ? null : jsonEncode(sorts),
@@ -9979,10 +9988,10 @@ class SamlConfig {
         'test_slug': test_slug,
         'modified_at': modified_at,
         'modified_by': modified_by,
-        default_new_user_roles: default_new_user_roles == null
+        'default_new_user_roles': default_new_user_roles == null
             ? null
             : default_new_user_roles.map((i) => i.toJson()).toList(),
-        default_new_user_groups: default_new_user_groups == null
+        'default_new_user_groups': default_new_user_groups == null
             ? null
             : default_new_user_groups.map((i) => i.toJson()).toList(),
         'default_new_user_role_ids': default_new_user_role_ids == null
@@ -9993,15 +10002,16 @@ class SamlConfig {
             : jsonEncode(default_new_user_group_ids),
         'set_roles_from_groups': set_roles_from_groups,
         'groups_attribute': groups_attribute,
-        groups: groups == null ? null : groups.map((i) => i.toJson()).toList(),
-        groups_with_role_ids: groups_with_role_ids == null
+        'groups':
+            groups == null ? null : groups.map((i) => i.toJson()).toList(),
+        'groups_with_role_ids': groups_with_role_ids == null
             ? null
             : groups_with_role_ids.map((i) => i.toJson()).toList(),
         'auth_requires_role': auth_requires_role,
-        user_attributes: user_attributes == null
+        'user_attributes': user_attributes == null
             ? null
             : user_attributes.map((i) => i.toJson()).toList(),
-        user_attributes_with_ids: user_attributes_with_ids == null
+        'user_attributes_with_ids': user_attributes_with_ids == null
             ? null
             : user_attributes_with_ids.map((i) => i.toJson()).toList(),
         'groups_finder_type': groups_finder_type,
@@ -10136,7 +10146,7 @@ class SamlGroupRead {
         'looker_group_id': looker_group_id,
         'looker_group_name': looker_group_name,
         'name': name,
-        roles: roles == null ? null : roles.map((i) => i.toJson()).toList(),
+        'roles': roles == null ? null : roles.map((i) => i.toJson()).toList(),
         'url': url
       };
 
@@ -10247,7 +10257,7 @@ class SamlUserAttributeRead {
   Map toJson() => {
         'name': name,
         'required': required,
-        user_attributes: user_attributes == null
+        'user_attributes': user_attributes == null
             ? null
             : user_attributes.map((i) => i.toJson()).toList(),
         'url': url
@@ -10419,7 +10429,7 @@ class ScheduledPlan {
         'datagroup': datagroup,
         'timezone': timezone,
         'query_id': query_id,
-        scheduled_plan_destination: scheduled_plan_destination == null
+        'scheduled_plan_destination': scheduled_plan_destination == null
             ? null
             : scheduled_plan_destination.map((i) => i.toJson()).toList(),
         'run_once': run_once,
@@ -11382,12 +11392,12 @@ class User {
         'can': can,
         'avatar_url': avatar_url,
         'avatar_url_without_sizing': avatar_url_without_sizing,
-        credentials_api3: credentials_api3 == null
+        'credentials_api3': credentials_api3 == null
             ? null
             : credentials_api3.map((i) => i.toJson()).toList(),
         'credentials_email':
             credentials_email == null ? null : credentials_email.toJson(),
-        credentials_embed: credentials_embed == null
+        'credentials_embed': credentials_embed == null
             ? null
             : credentials_embed.map((i) => i.toJson()).toList(),
         'credentials_google':
@@ -11419,7 +11429,7 @@ class User {
         'personal_folder_id': personal_folder_id,
         'presumed_looker_employee': presumed_looker_employee,
         'role_ids': role_ids == null ? null : jsonEncode(role_ids),
-        sessions:
+        'sessions':
             sessions == null ? null : sessions.map((i) => i.toJson()).toList(),
         'ui_state': ui_state,
         'verified_looker_employee': verified_looker_employee,
@@ -11842,7 +11852,8 @@ class ValidationError {
 
   Map toJson() => {
         'message': message,
-        errors: errors == null ? null : errors.map((i) => i.toJson()).toList(),
+        'errors':
+            errors == null ? null : errors.map((i) => i.toJson()).toList(),
         'documentation_url': documentation_url
       };
 
@@ -12041,7 +12052,7 @@ class Workspace {
   Map toJson() => {
         'can': can,
         'id': id,
-        projects:
+        'projects':
             projects == null ? null : projects.map((i) => i.toJson()).toList()
       };
 
@@ -12252,13 +12263,13 @@ class WriteColorCollection {
 
   Map toJson() => {
         'label': label,
-        categoricalPalettes: categoricalPalettes == null
+        'categoricalPalettes': categoricalPalettes == null
             ? null
             : categoricalPalettes.map((i) => i.toJson()).toList(),
-        sequentialPalettes: sequentialPalettes == null
+        'sequentialPalettes': sequentialPalettes == null
             ? null
             : sequentialPalettes.map((i) => i.toJson()).toList(),
-        divergingPalettes: divergingPalettes == null
+        'divergingPalettes': divergingPalettes == null
             ? null
             : divergingPalettes.map((i) => i.toJson()).toList()
       };
@@ -13351,7 +13362,8 @@ class WriteIntegration {
 
   Map toJson() => {
         'enabled': enabled,
-        params: params == null ? null : params.map((i) => i.toJson()).toList(),
+        'params':
+            params == null ? null : params.map((i) => i.toJson()).toList(),
         'installed_delegate_oauth_targets':
             installed_delegate_oauth_targets == null
                 ? null
@@ -13560,7 +13572,7 @@ class WriteLDAPConfig {
         'groups_member_attribute': groups_member_attribute,
         'groups_objectclasses': groups_objectclasses,
         'groups_user_attribute': groups_user_attribute,
-        groups_with_role_ids: groups_with_role_ids == null
+        'groups_with_role_ids': groups_with_role_ids == null
             ? null
             : groups_with_role_ids.map((i) => i.toJson()).toList(),
         'merge_new_users_by_email': merge_new_users_by_email,
@@ -13571,7 +13583,7 @@ class WriteLDAPConfig {
         'user_attribute_map_first_name': user_attribute_map_first_name,
         'user_attribute_map_last_name': user_attribute_map_last_name,
         'user_attribute_map_ldap_id': user_attribute_map_ldap_id,
-        user_attributes_with_ids: user_attributes_with_ids == null
+        'user_attributes_with_ids': user_attributes_with_ids == null
             ? null
             : user_attributes_with_ids.map((i) => i.toJson()).toList(),
         'user_bind_base_dn': user_bind_base_dn,
@@ -13845,7 +13857,7 @@ class WriteMergeQuery {
         'dynamic_fields': dynamic_fields,
         'pivots': pivots == null ? null : jsonEncode(pivots),
         'sorts': sorts == null ? null : jsonEncode(sorts),
-        source_queries: source_queries == null
+        'source_queries': source_queries == null
             ? null
             : source_queries.map((i) => i.toJson()).toList(),
         'total': total,
@@ -14027,7 +14039,7 @@ class WriteOIDCConfig {
             : jsonEncode(default_new_user_role_ids),
         'enabled': enabled,
         'groups_attribute': groups_attribute,
-        groups_with_role_ids: groups_with_role_ids == null
+        'groups_with_role_ids': groups_with_role_ids == null
             ? null
             : groups_with_role_ids.map((i) => i.toJson()).toList(),
         'identifier': identifier,
@@ -14040,7 +14052,7 @@ class WriteOIDCConfig {
         'user_attribute_map_email': user_attribute_map_email,
         'user_attribute_map_first_name': user_attribute_map_first_name,
         'user_attribute_map_last_name': user_attribute_map_last_name,
-        user_attributes_with_ids: user_attributes_with_ids == null
+        'user_attributes_with_ids': user_attributes_with_ids == null
             ? null
             : user_attributes_with_ids.map((i) => i.toJson()).toList(),
         'userinfo_endpoint': userinfo_endpoint,
@@ -14597,11 +14609,11 @@ class WriteSamlConfig {
             : jsonEncode(default_new_user_group_ids),
         'set_roles_from_groups': set_roles_from_groups,
         'groups_attribute': groups_attribute,
-        groups_with_role_ids: groups_with_role_ids == null
+        'groups_with_role_ids': groups_with_role_ids == null
             ? null
             : groups_with_role_ids.map((i) => i.toJson()).toList(),
         'auth_requires_role': auth_requires_role,
-        user_attributes_with_ids: user_attributes_with_ids == null
+        'user_attributes_with_ids': user_attributes_with_ids == null
             ? null
             : user_attributes_with_ids.map((i) => i.toJson()).toList(),
         'groups_finder_type': groups_finder_type,
@@ -14780,7 +14792,7 @@ class WriteScheduledPlan {
         'datagroup': datagroup,
         'timezone': timezone,
         'query_id': query_id,
-        scheduled_plan_destination: scheduled_plan_destination == null
+        'scheduled_plan_destination': scheduled_plan_destination == null
             ? null
             : scheduled_plan_destination.map((i) => i.toJson()).toList(),
         'run_once': run_once,

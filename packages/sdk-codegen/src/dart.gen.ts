@@ -368,7 +368,7 @@ import 'dart:convert';
         if (prop.type.customType) {
           if (prop.type.className === 'ArrayType') {
             props.push(
-              `${prop.name} : ${prop.name} == null ? null : ${prop.name}.map((i) => i.toJson()).toList()`
+              `'${prop.name}' : ${prop.name} == null ? null : ${prop.name}.map((i) => i.toJson()).toList()`
             )
           } else {
             props.push(

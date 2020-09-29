@@ -17,6 +17,8 @@ void runDashboardApis(Looker40SDK sdk) async {
   try {
     var dashboards = await sdk.ok(sdk.all_dashboards());
     dashboards.forEach((dashboard) => print(dashboard.title));
+    var dashboard = await sdk.ok(sdk.dashboard(dashboards[0].id));
+    print(dashboard.toJson());
   } catch (error, stacktrace) {
     print(error);
     print(stacktrace);
