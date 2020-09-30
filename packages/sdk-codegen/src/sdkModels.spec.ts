@@ -431,15 +431,23 @@ describe('sdkModels', () => {
   })
 
   describe('enum types', () => {
-    const checkEnum = (type: IType, propName: string, values: any[]) => {
-      const num = type.properties[propName].type as IEnumType
-      expect(num).toBeDefined()
+    const checkEnum = (num: IEnumType, propName: string, values: any[]) => {
       if (!(num instanceof EnumType))
-        console.error(`${type.name}.${propName} should be EnumType`)
+        console.error(`${propName} should be EnumType`)
       expect(num).toBeInstanceOf(EnumType)
       expect(num.name).toEqual(titleCase(propName))
       expect(num.values).toEqual(values)
       expect(num.parentTypes.size).toBeGreaterThan(0)
+    }
+
+    const checkSingleEnum = (type: IType, propName: string, values: any[]) => {
+      checkEnum(type.properties[propName].type as IEnumType, propName, values)
+    }
+
+    const checkEnumArray = (type: IType, propName: string, values: any[]) => {
+      const arr = type.properties[propName].type
+      expect(arr).toBeInstanceOf(ArrayType)
+      checkEnum(arr.elementType as IEnumType, propName, values)
     }
 
     it('registers enum types', () => {
@@ -450,7 +458,7 @@ describe('sdkModels', () => {
     })
 
     describe('enum naming', () => {
-      const rf1: OAS.SchemaObject = {
+      const rf: OAS.SchemaObject = {
         name: 'result_format',
         type: 'string',
         'x-looker-values': [
@@ -465,11 +473,11 @@ describe('sdkModels', () => {
           'xlsx',
           'gsxml',
         ],
-        description: 'RF1',
+        description: 'RF',
         nullable: true,
       }
 
-      const rf2: OAS.SchemaObject = {
+      const rf1: OAS.SchemaObject = {
         name: 'result_format',
         type: 'string',
         'x-looker-values': ['pdf', 'png', 'jpeg'],
@@ -477,22 +485,22 @@ describe('sdkModels', () => {
         nullable: true,
       }
 
-      const rf3: OAS.SchemaObject = {
+      const rf2: OAS.SchemaObject = {
         type: 'string',
         'x-looker-values': ['csv', 'html', 'txt'],
+        description: 'RF2',
+        nullable: true,
+      }
+
+      const rf3: OAS.SchemaObject = {
+        name: 'result_format',
+        type: 'string',
+        'x-looker-values': ['csv', 'html', 'txt', 'xlsx'],
         description: 'RF3',
         nullable: true,
       }
 
       const rf4: OAS.SchemaObject = {
-        name: 'result_format',
-        type: 'string',
-        'x-looker-values': ['csv', 'html', 'txt', 'xlsx'],
-        description: 'RF4',
-        nullable: true,
-      }
-
-      const rf5: OAS.SchemaObject = {
         name: 'result_format',
         type: 'string',
         enum: [
@@ -507,37 +515,37 @@ describe('sdkModels', () => {
           'xlsx',
           'gsxml',
         ],
-        description: 'RF5',
+        description: 'RF4',
         nullable: true,
       }
 
       it('enum types are renamed and not overwritten', () => {
         const api = new ApiModel({} as OAS.OpenAPIObject)
-        const actual1 = api.resolveType(rf1)
-        expect(actual1.name).toEqual('ResultFormat')
+        const actual = api.resolveType(rf)
+        expect(actual.name).toEqual('ResultFormat')
 
         // Returns first enum for same values
         // the `style` parameter is undefined because it is not part of this tests. Because Typescript arguments are
         // positional only (no named arguments) the parameter must be skipped with an "ignore this" value
-        const actual5 = api.resolveType(rf5, undefined, 'Foo')
-        expect(actual5.name).toEqual('ResultFormat')
-        expect(actual5.description).toEqual(actual1.description)
+        const actual4 = api.resolveType(rf4, undefined, 'Foo')
+        expect(actual4.name).toEqual('ResultFormat')
+        expect(actual4.description).toEqual(actual.description)
 
-        const actual2 = api.resolveType(rf2)
-        expect(actual2.name).toEqual('ResultFormat1')
+        const actual1 = api.resolveType(rf1)
+        expect(actual1.name).toEqual('ResultFormat1')
 
-        const actual3 = api.resolveType(rf3, undefined, 'result_format')
-        expect(actual3.name).toEqual('ResultFormat2')
+        const actual2 = api.resolveType(rf2, undefined, 'result_format')
+        expect(actual2.name).toEqual('ResultFormat2')
 
-        const actual4 = api.resolveType(rf4, undefined, undefined, 'Meth')
-        expect(actual4.name).toEqual('MethResultFormat')
+        const actual3 = api.resolveType(rf3, undefined, undefined, 'Meth')
+        expect(actual3.name).toEqual('MethResultFormat')
       })
     })
 
     it('enum from array type', () => {
       const type = apiTestModel.types.Integration
       expect(type).toBeDefined()
-      checkEnum(type, 'supported_formats', [
+      checkEnumArray(type, 'supported_formats', [
         'txt',
         'csv',
         'inline_json',
@@ -552,16 +560,26 @@ describe('sdkModels', () => {
         'wysiwyg_png',
         'csv_zip',
       ])
-      checkEnum(type, 'supported_action_types', ['cell', 'query', 'dashboard'])
-      checkEnum(type, 'supported_formattings', ['formatted', 'unformatted'])
-      checkEnum(type, 'supported_download_settings', ['push', 'url'])
+      checkEnumArray(type, 'supported_action_types', [
+        'cell',
+        'query',
+        'dashboard',
+      ])
+      checkEnumArray(type, 'supported_formattings', [
+        'formatted',
+        'unformatted',
+      ])
+      checkEnumArray(type, 'supported_download_settings', ['push', 'url'])
     })
 
     it('enum from string type', () => {
       const type = apiTestModel.types.Project
       expect(type).toBeDefined()
-      checkEnum(type, 'git_application_server_http_scheme', ['http', 'https'])
-      checkEnum(type, 'pull_request_mode', [
+      checkSingleEnum(type, 'git_application_server_http_scheme', [
+        'http',
+        'https',
+      ])
+      checkSingleEnum(type, 'pull_request_mode', [
         'off',
         'links',
         'recommended',

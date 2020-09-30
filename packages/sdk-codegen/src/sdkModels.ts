@@ -1445,12 +1445,19 @@ export class Type implements IType {
     Object.entries(this.schema.properties || {}).forEach(
       ([propName, propSchema]) => {
         const propType = api.resolveType(propSchema, undefined, propName)
-        // Using class name instead of instanceof check because Typescript linting complains about declaration order
+        // Using class name instead of instanceof check because Typescript
+        // linting complains about declaration order
         if (propType.instanceOf('EnumType')) {
           api.registerEnum(propType, propName)
         }
         // Track the "parent" reference for this type from the property reference
         propType.parentTypes.add(this.name)
+        if (
+          propType.instanceOf('ArrayType') &&
+          propType.elementType?.instanceOf('EnumType')
+        ) {
+          propType.elementType.parentTypes.add(propType.name)
+        }
         this.types.add(propType.name)
         const customType = propType.customType
         if (customType) this.customTypes.add(customType)
@@ -1560,7 +1567,13 @@ export class ArrayType extends Type {
 export class EnumType extends Type implements IEnumType {
   readonly values: EnumValueType[]
 
-  constructor(public elementType: IType, schema: OAS.SchemaObject) {
+  constructor(
+    public elementType: IType,
+    schema: OAS.SchemaObject,
+    types: TypeList,
+    typeName?: string,
+    methodName?: string
+  ) {
     super(schema, schema.name)
     this.customType = elementType.customType
     if (lookerValuesTag in schema) {
@@ -1572,6 +1585,26 @@ export class EnumType extends Type implements IEnumType {
         `${schema.name} is an enum but has no defined enum values`
       )
     }
+    if (methodName) {
+      this.description = `Type defined in ${methodName}\n${this.description}`
+    }
+
+    this.name = this.findName(types, typeName, methodName)
+  }
+
+  private findName(types: TypeList, typeName?: string, methodName?: string) {
+    let name = titleCase(this.name || typeName || 'Enum')
+    if (name in types) {
+      // Enum values don't match existing enum of this name. Pick a new name
+      const baseName = methodName ? titleCase(`${methodName}_${name}`) : name
+      let newName = baseName
+      let i = 0
+      while (newName in types) {
+        newName = `${baseName}${++i}`
+      }
+      name = newName
+    }
+    return name
   }
 
   searchString(criteria: SearchCriteria): string {
@@ -1928,20 +1961,31 @@ export class ApiModel implements ISymbolTable, IApiModel {
           return new DelimArrayType(this.resolveType(schema.items), schema)
         }
         if (this.schemaHasEnums(schema)) {
-          const result = new EnumType(this.resolveType(schema.items), schema)
-          if (result) {
-            // If defined, it may get reassigned
-            return this.registerEnum(result, typeName, methodName)
-          }
+          const resolved = this.resolveType(schema.items)
+          const num = new EnumType(
+            resolved,
+            schema,
+            this.types,
+            typeName,
+            methodName
+          )
+          this.registerEnum(num, methodName)
+          const result = new ArrayType(num, schema)
           return result
         }
         return new ArrayType(this.resolveType(schema.items), schema)
       }
       if (this.schemaHasEnums(schema)) {
-        const result = new EnumType(this.resolveType(schema.type), schema)
+        const result = new EnumType(
+          this.resolveType(schema.type),
+          schema,
+          this.types,
+          typeName,
+          methodName
+        )
         if (result) {
           // If defined, it may get reassigned
-          return this.registerEnum(result, typeName, methodName)
+          return this.registerEnum(result, methodName)
         }
         return result
       }
@@ -1981,7 +2025,7 @@ export class ApiModel implements ISymbolTable, IApiModel {
     return request
   }
 
-  registerEnum(type: IType, typeName?: string, methodName?: string) {
+  registerEnum(type: IType, methodName?: string) {
     if (!(type instanceof EnumType)) return type
     const hash = md5(type.asHashString())
 
@@ -1992,21 +2036,7 @@ export class ApiModel implements ISymbolTable, IApiModel {
       return this.enumTypes[hash]
     }
 
-    type.name = titleCase(type.name || typeName || 'Enum')
-    if (type.name in this.types) {
-      // Enum values don't match existing enum of this name. Pick a new name
-      const baseName = methodName
-        ? titleCase(`${methodName}_${type.name}`)
-        : type.name
-      let newName = baseName
-      let i = 0
-      while (newName in this.types) {
-        newName = `${baseName}${++i}`
-      }
-      type.name = newName
-    }
     if (methodName) {
-      type.description = `Type defined in ${methodName}\n${type.description}`
       const method = this.methods[methodName]
       if (method) {
         method.types.add(type.name)
