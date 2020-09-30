@@ -24,25 +24,15 @@
 
  */
 
-import { HttpMethod, ITransport } from '@looker/sdk-rtl/lib/browser'
-import { boolDefault, parseResponse } from '@looker/sdk-rtl'
+import {
+  HttpMethod,
+  ITransport,
+  boolDefault,
+  DelimArray,
+} from '@looker/sdk-rtl/lib/browser'
 
-export const defaultScopes = [
-  'https://www.googleapis.com/auth/drive',
-  'https://www.googleapis.com/auth/drive.file',
-  'https://www.googleapis.com/auth/drive.readonly',
-  'https://www.googleapis.com/auth/spreadsheets',
-  'https://www.googleapis.com/auth/spreadsheets.readonly',
-]
-
-// https://developers.google.com/sheets/api/reference/rest
-
-export class SheetError extends Error {
-  constructor(message?: string) {
-    super(message) // 'Error' breaks prototype chain here
-    Object.setPrototypeOf(this, new.target.prototype) // restore prototype chain
-  }
-}
+// TODO export this in @looker/sdk-rtl/lib/browser
+import { parseResponse } from '@looker/sdk-rtl'
 
 export const noDate = new Date(-8640000000000000)
 
@@ -130,6 +120,9 @@ export class RowModel<T extends IRowModel> implements IRowModel {
     if (this[key] instanceof Date) {
       return new Date(value)
     }
+    if (this[key] instanceof DelimArray) {
+      return value.toString().split(',')
+    }
     return this.toString()
   }
 
@@ -168,6 +161,22 @@ export interface ITabTable {
   header: ColumnHeaders
   /** Parsed data for the tab */
   rows: IRowModel[]
+}
+export const defaultScopes = [
+  'https://www.googleapis.com/auth/drive',
+  'https://www.googleapis.com/auth/drive.file',
+  'https://www.googleapis.com/auth/drive.readonly',
+  'https://www.googleapis.com/auth/spreadsheets',
+  'https://www.googleapis.com/auth/spreadsheets.readonly',
+]
+
+// https://developers.google.com/sheets/api/reference/rest
+
+export class SheetError extends Error {
+  constructor(message?: string) {
+    super(message) // 'Error' breaks prototype chain here
+    Object.setPrototypeOf(this, new.target.prototype) // restore prototype chain
+  }
 }
 
 // Manually recreated type/interface declarations that are NOT complete

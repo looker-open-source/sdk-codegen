@@ -30,31 +30,23 @@ import {
   noDate,
   RowModel,
   SheetSDK,
-} from '../../SheetSDK'
-import { WhollySheet } from '../../WhollySheet'
+  WhollySheet,
+} from '@looker/wholly-sheet'
 
-/** NOTE: Very important that the properties are declared in the tab's columnar order */
-interface IHackathon extends IRowModel {
-  name: string
-  description: string
-  location: string
-  date: Date
-  duration_in_days: number
-  max_team_size: number
-  judging_starts: Date
-  judging_stops: Date
+/** IMPORTANT: properties must be declared in the tab sheet's columnar order, not sorted order */
+export interface IProjectTechnology extends IRowModel {
+  user_id: string
+  hackathon_id: string
+  date_registered: Date
+  attended: boolean
 }
 
-/** NOTE: Very important that the properties are declared in the tab's columnar order */
-export class Hackathon extends RowModel<IHackathon> {
-  name = ''
-  description = ''
-  location = ''
-  date: Date = noDate
-  duration_in_days = 0
-  max_team_size = 0
-  judging_starts: Date = noDate
-  judging_stops: Date = noDate
+/** IMPORTANT: properties must be declared in the tab sheet's columnar order, not sorted order */
+export class ProjectTechnology extends RowModel<IProjectTechnology> {
+  user_id = ''
+  hackathon_id = ''
+  date_registered: Date = noDate
+  attended = false
   constructor(values?: any) {
     super()
     // IMPORTANT: this must be done after super() constructor is called so keys are established
@@ -63,22 +55,19 @@ export class Hackathon extends RowModel<IHackathon> {
   }
 }
 
-// export const RowHackathonCreator: RowModelFactory<IHackathon> = (values?: any) =>
-//   new Hackathon(values)
-
-export class Hackathons extends WhollySheet<IHackathon> {
+export class ProjectTechnologies extends WhollySheet<IProjectTechnology> {
   constructor(
     public readonly sheets: SheetSDK,
     public readonly table: ITabTable
   ) {
-    super(sheets, 'hackathons', table, 'id') //, { new Hackathon(values?: any)})
+    super(sheets, 'project_technologies', table, 'id')
   }
 
   typeRows<T extends IRowModel>(rows: any[]): T[] {
     const result: T[] = []
 
     rows.forEach((r) => {
-      const row: T = (new Hackathon(r) as unknown) as T
+      const row: T = (new ProjectTechnology(r) as unknown) as T
       result.push(row)
     })
 
