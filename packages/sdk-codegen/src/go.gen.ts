@@ -25,13 +25,12 @@
  */
 
 import { commentBlock } from '@looker/sdk-codegen-utils'
-import { CodeGen, IVersionInfo } from './codeGen'
+import { CodeGen, IMappedType, IVersionInfo } from './codeGen'
 import {
   ApiModel,
   Arg,
   EnumType,
   EnumValueType,
-  IMappedType,
   IMethod,
   IParameter,
   IProperty,
@@ -564,20 +563,14 @@ import (
   toCamelCaseCap(str: string): string {
     return this.capitalize(
       str.replace(/([-_][a-z])/g, (group) =>
-        group
-          .toUpperCase()
-          .replace('-', '')
-          .replace('_', '')
+        group.toUpperCase().replace('-', '').replace('_', '')
       )
     )
   }
 
   toCamelCase(str: string): string {
     return str.replace(/([-_][a-z])/g, (group) =>
-      group
-        .toUpperCase()
-        .replace('-', '')
-        .replace('_', '')
+      group.toUpperCase().replace('-', '').replace('_', '')
     )
   }
 }

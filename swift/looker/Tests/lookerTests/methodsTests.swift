@@ -95,6 +95,16 @@ class methodsTests: XCTestCase {
     func testMe() {
         let me = try! sdk.ok(sdk.me())
         XCTAssertNotNil(me)
+        if let auth = sdk.authSession as? IAuthSession {
+            if let authToken = try? auth.getToken() {
+            let token = AccessToken(
+                access_token: authToken.access_token,
+                token_type: authToken.token_type,
+                expires_in: authToken.expires_in,
+                refresh_token: authToken.refresh_token)
+                _ = sdk.authSession.setToken(token)
+            }
+        }
         _ = sdk.authSession.logout()
     }
         

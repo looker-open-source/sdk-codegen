@@ -25,7 +25,9 @@ echo "Smoking SDKs: ${tests} ..."
 if [[ $tests == *typescript* ]]
 then
   echo "Smoking Typescript SDK ..."
-  JEST_JUNIT_OUTPUT_DIR=results JEST_JUNIT_OUTPUT_NAME=smoketypescript.xml yarn jest --reporters=default --reporters=jest-junit
+  JEST_JUNIT_OUTPUT_DIR=results JEST_JUNIT_OUTPUT_NAME=smoketypescript.xml yarn jest packages/sdk-codegen-scripts --reporters=default --reporters=jest-junit
+  JEST_JUNIT_OUTPUT_DIR=results JEST_JUNIT_OUTPUT_NAME=smoketypescript.xml yarn jest packages/sdk-codegen --reporters=default --reporters=jest-junit
+  JEST_JUNIT_OUTPUT_DIR=results JEST_JUNIT_OUTPUT_NAME=smoketypescript.xml yarn jest packages/sdk --reporters=default --reporters=jest-junit
 fi
 
 if [[ $tests == *python* ]]
