@@ -1,6 +1,6 @@
 {
   "name": "@looker/run-it",
-  "version": "0.1.0-alpha",
+  "version": "0.1.1-alpha.0",
   "description": "A dynamic REST request input form and response visualizer",
   "main": "lib/index.js",
   "typings": "lib/index.d.ts",
@@ -30,10 +30,10 @@
     "@testing-library/react": "^10.0.4",
     "@testing-library/user-event": "^10.4.0",
     "@types/lodash": "^4.14.157",
+    "@types/papaparse": "^5.2.2",
     "@types/react-test-renderer": "^16.9.2",
     "@types/styled-components": "^4.4.1",
     "@types/styled-system": "^5.1.9",
-    "@types/papaparse": "^5.2.2",
     "ace": "^1.3.0",
     "ace-builds": "^1.4.11",
     "enzyme": "^3.11.0",
@@ -48,20 +48,20 @@
   "dependencies": {
     "@looker/components": "^0.9.11",
     "@looker/design-tokens": "0.9.10",
-    "@looker/sdk": "^0.3.4-beta.1",
-    "@looker/sdk-rtl": "^0.3.4-beta.2",
-    "@looker/sdk-codegen": "^0.1.2-alpha.18+551e4fe",
-    "@looker/sdk-codegen-utils": "^0.1.0-alpha.2",
+    "@looker/sdk": "^0.3.5-beta.0",
+    "@looker/sdk-codegen": "^0.1.3-alpha.0",
+    "@looker/sdk-codegen-utils": "^0.1.1-alpha.0",
+    "@looker/sdk-rtl": "^0.3.5-beta.0",
     "@types/readable-stream": "^2.3.5",
     "lodash": "^4.17.19",
+    "papaparse": "^5.3.0",
     "react": "^16.13.1",
     "react-ace": "^8.1.0",
     "react-dom": "^16.13.1",
     "react-google-charts": "^3.0.15",
     "react-is": "^16.13.1",
     "styled-components": "^4.4.1",
-    "styled-system": "^5.1.5",
-    "papaparse": "^5.3.0"
+    "styled-system": "^5.1.5"
   },
   "resolutions": {
     "typescript": "3.8.2"
