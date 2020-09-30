@@ -376,7 +376,7 @@ export class SheetSDK {
    * Index the raw sheet into tab data
    * @param doc Sheet to index
    */
-  async index(doc?: ISheet) {
+  async index(doc?: ISheet): Promise<ISheet> {
     if (!doc) doc = await this.read()
     if (doc) {
       doc.tabs = {}

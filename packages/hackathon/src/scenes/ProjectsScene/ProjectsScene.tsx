@@ -23,6 +23,7 @@
  SOFTWARE.
 
  */
+
 import React, { FC } from 'react'
 import {
   Button,
@@ -37,13 +38,15 @@ import {
   SelectMulti,
 } from '@looker/components'
 
-import { Projects } from './models'
+import { Projects } from '../../models'
 
-interface ProjectSceneProps {}
+interface ProjectSceneProps {
+  projects: Projects
+}
 
 export const ProjectsScene: FC<ProjectSceneProps> = ({ projects }) => {
   const { value, setOn, setOff } = useToggle()
-
+  console.log({ projects })
   return (
     <>
       <Dialog isOpen={value} onClose={setOff}>
