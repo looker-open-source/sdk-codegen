@@ -37,7 +37,27 @@ export const defaultScopes = [
 
 // https://developers.google.com/sheets/api/reference/rest
 
+export class SheetError extends Error {
+  constructor(message?: string) {
+    super(message) // 'Error' breaks prototype chain here
+    Object.setPrototypeOf(this, new.target.prototype) // restore prototype chain
+  }
+}
+
 export const noDate = new Date(-8640000000000000)
+
+/** Signifies an empty cell */
+export const NIL = '\0'
+
+/** Convert a value to the string representation for a cell value */
+export const stringer = (value: any) => {
+  if (value === undefined || value === null) return NIL
+  if (value instanceof Date) {
+    if (value === noDate) return NIL
+    return value.toISOString()
+  }
+  return value.toString()
+}
 
 /** Key/value pairs for tab data */
 export type RowValues = Record<string, any>
@@ -57,6 +77,8 @@ export interface IRowModel extends RowValues {
   keys(): ColumnHeaders
   /** The sheet Column Headers keys for this model */
   header(): ColumnHeaders
+  /** Column values for the entire row to write to the GSheet */
+  values(): any[]
 }
 
 export class RowModel<T extends IRowModel> implements IRowModel {
@@ -72,12 +94,6 @@ export class RowModel<T extends IRowModel> implements IRowModel {
     }
   }
 
-  /**
-   * Ugly, but creating a reference type to derive keys and type should work correctly.
-   * It must start with row and id values
-   */
-  // abstract ref(): any
-
   keys(): ColumnHeaders {
     return Object.keys(this)
   }
@@ -85,6 +101,15 @@ export class RowModel<T extends IRowModel> implements IRowModel {
   header(): ColumnHeaders {
     // remove `row`
     return this.keys().slice(1)
+  }
+
+  values() {
+    const result: any[] = []
+    const keys = this.header()
+    keys.forEach((key) => {
+      result.push(stringer(this[key]))
+    })
+    return result
   }
 
   typeCast(key: string, value: any) {
@@ -300,7 +325,7 @@ export const loadTabTable = (tab: ISheetTab, keyName = 'id'): ITabTable => {
     }
 
     if (!row[keyName]) {
-      throw new Error(
+      throw new SheetError(
         `Tab ${tabName(tab)} row ${rowIndex + 1} has no key column '${keyName}'`
       )
     }
@@ -326,7 +351,7 @@ export class SheetSDK {
     const path = `https://sheets.googleapis.com/v4/spreadsheets/${this.sheetId}${api}${key}`
     const raw = await this.transport.rawRequest(method, path, undefined, body)
     const response = await parseResponse(raw)
-    if (!raw.ok) throw new Error(response)
+    if (!raw.ok) throw new SheetError(response)
     return response
   }
 
@@ -366,33 +391,59 @@ export class SheetSDK {
   // }
 
   /**
-   * Perform an update or create operation on a row
-   *
-   * TBD: Delete?
-   * @param method HttpMethod to perform
-   * @param tab name or tab object
-   * @param row row to change
-   * @param values values to set in the row
-   * @private
+   * Get the values for a sheet row
+   * @param tab name or tab sheet
+   * @param row to retrieve
    */
-  private async changeRow(
-    method: HttpMethod,
-    tab: string | ISheetTab,
-    row: number,
-    values: any[]
-  ) {
-    const body = { values }
+  async getRow(tab: string | ISheetTab, row: number) {
+    if (!row) throw new SheetError('row cannot be zero')
     const name = tabName(tab)
-    const api = `/values/${name}!A${row}:end?valueInputOption=RAW`
-    await this.request(method, api, body)
+    const api = `/values/${name}!A${row}:end`
+    const sheet = await this.request('GET', api)
+    return sheet.values
   }
 
+  /**
+   * Update a row of a sheet with the provided values
+   *
+   * @param tab name or tab sheet
+   * @param row 1-based position of row
+   * @param values to assign in order for the row
+   */
   async updateRow(tab: string | ISheetTab, row: number, values: any[]) {
-    return await this.changeRow('PUT', tab, row, values)
+    const body = JSON.stringify({ values })
+    const name = tabName(tab)
+    // https://developers.google.com/sheets/api/reference/rest/v4/spreadsheets.values/update
+    const options = 'valueInputOption=RAW'
+    const api = `/values/${name}!A${row}:end?${options}`
+    const response = await this.request('PUT', api, body)
+    return response
   }
 
+  /**
+   * Update a row of a sheet with the provided values
+   *
+   * @param tab name or tab sheet
+   * @param row 1-based position of row
+   * @param values to assign in order for the row
+   */
   async createRow(tab: string | ISheetTab, row: number, values: any[]) {
-    return await this.changeRow('POST', tab, row, values)
+    const body = JSON.stringify({ values })
+    const name = tabName(tab)
+    // https://developers.google.com/sheets/api/reference/rest/v4/spreadsheets.values/append
+    const options = 'valueInputOption=RAW&insertDataOption=INSERT_ROWS'
+    const api = `/values/${name}!A${row}:end:append?${options}`
+    const response = await this.request('POST', api, body)
+    if (!response.updates || !response.updates.updatedRanges) {
+      throw new SheetError(`Couldn't update ${name} row ${row}`)
+    }
+    // const rowId = new RegExp(`${name}!A?`)
+    // updated_range = response["updates"]["updatedRange"]
+    // match = re.match(fr"{self.sheet_name}!A(?P<row_id>\d+)", updated_range)
+    // if not match:
+    //   raise SheetError("Could not determine row_id")
+    // model.id = int(match.group("row_id"))
+    return response
   }
 
   // async tabValues(tab: string | ISheetTab, range = '!A1:end') {

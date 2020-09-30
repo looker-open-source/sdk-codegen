@@ -24,9 +24,9 @@
 
  */
 
-import { IRowModel, ITabTable, noDate, RowModel, SheetSDK } from './SheetSDK'
-import { WhollySheet } from './WhollySheet'
+import { ISheet, NIL, noDate } from './SheetSDK'
 import { sheets } from './testUtils/testUtils'
+import { Hackathon, Hackathons } from './testUtils/models/Hackathons'
 
 const hackJson = `{
   "header": [
@@ -70,67 +70,10 @@ const hackJson = `{
 
 const hackathonTable = JSON.parse(hackJson)
 
-/** NOTE: Very important that the properties are declared in the tab's columnar order */
-interface IHackathon extends IRowModel {
-  name: string
-  description: string
-  location: string
-  date: Date
-  duration_in_days: number
-  max_team_size: number
-  judging_starts: Date
-  judging_stops: Date
-}
-
-/** NOTE: Very important that the properties are declared in the tab's columnar order */
-export class Hackathon extends RowModel<IHackathon> {
-  name = ''
-  description = ''
-  location = ''
-  date: Date = noDate
-  duration_in_days = 0
-  max_team_size = 0
-  judging_starts: Date = noDate
-  judging_stops: Date = noDate
-  constructor(values?: any) {
-    super()
-    this.assign(values)
-  }
-  //
-  // // TODO figure out a better way to do this
-  // ref(): any {
-  //   const mockDate = new Date()
-  //   return {
-  //     row: 0,
-  //     id: '',
-  //     name: '',
-  //     description: '',
-  //     location: '',
-  //     date: mockDate,
-  //     duration_in_days: 0,
-  //     max_team_size: 0,
-  //     judging_starts: mockDate,
-  //     judging_stops: mockDate,
-  //   }
-  // }
-}
-
-// export const RowHackathonCreator: RowModelFactory<IHackathon> = (values?: any) =>
-//   new Hackathon(values)
-
-export class Hackathons extends WhollySheet<IHackathon> {
-  constructor(
-    public readonly sheets: SheetSDK,
-    public readonly table: ITabTable
-  ) {
-    super(sheets, 'hackathons', table, 'id') //, { new Hackathon(values?: any)})
-  }
-}
-
 describe('WhollySheet', () => {
   describe('with hardcoded data', () => {
     const hackathons = new Hackathons(sheets, hackathonTable)
-    it('initializes', () => {
+    test('initializes', () => {
       expect(hackathons.rows).toBeDefined()
       expect(hackathons.rows.length).toEqual(hackathonTable.rows.length)
       expect(hackathons.header).toEqual(hackathonTable.header)
@@ -139,7 +82,7 @@ describe('WhollySheet', () => {
       )
     })
 
-    it('gets values in order', () => {
+    test('gets values in order', () => {
       expect(hackathons.rows).toBeDefined()
       expect(hackathons.rows.length).toEqual(hackathonTable.rows.length)
       const hackathon = hackathons.rows[0]
@@ -159,7 +102,7 @@ describe('WhollySheet', () => {
       expect(actual).toEqual(expected)
     })
 
-    it('converts sheet data to typed properties', () => {
+    test('converts sheet data to typed properties', () => {
       expect(hackathons.rows).toBeDefined()
       expect(hackathons.rows.length).toEqual(hackathonTable.rows.length)
       const row = hackathons.rows[0]
@@ -179,8 +122,41 @@ describe('WhollySheet', () => {
         new Date('2019-11-05T19:00:00.000000+00:00')
       )
     })
+
+    test('undefined values are "empty"', () => {
+      const someUndefined = [
+        'id1',
+        'name1',
+        'desc1',
+        'loc1',
+        '2019-11-05T15:00:00.000Z',
+        5,
+        6,
+      ]
+      const actual = new Hackathon(someUndefined)
+      expect(actual.row).toEqual(0)
+      expect(actual.id).toEqual(someUndefined[0])
+      expect(actual.name).toEqual(someUndefined[1])
+      expect(actual.description).toEqual(someUndefined[2])
+      expect(actual.location).toEqual(someUndefined[3])
+      expect(actual.date).toEqual(new Date(someUndefined[4]))
+      expect(actual.duration_in_days).toEqual(someUndefined[5])
+      expect(actual.max_team_size).toEqual(someUndefined[6])
+      expect(actual.judging_starts).toEqual(noDate)
+      expect(actual.judging_stops).toEqual(noDate)
+      const values = actual.values()
+      expect(values[0]).toEqual(someUndefined[0])
+      expect(values[1]).toEqual(someUndefined[1])
+      expect(values[2]).toEqual(someUndefined[2])
+      expect(values[3]).toEqual(someUndefined[3])
+      expect(values[4]).toEqual(someUndefined[4])
+      expect(values[5]).toEqual('5')
+      expect(values[6]).toEqual('6')
+      expect(values[7]).toEqual(NIL)
+      expect(values[8]).toEqual(NIL)
+    })
     describe('find', () => {
-      it('finds by id', () => {
+      test('finds by id', () => {
         const rows = hackathons.rows
         expect(rows).toBeDefined()
         const target = rows[0]
@@ -188,7 +164,7 @@ describe('WhollySheet', () => {
         expect(found).toBeDefined()
         expect(found).toEqual(target)
       })
-      it('finds by row', () => {
+      test('finds by row', () => {
         const rows = hackathons.rows
         expect(rows).toBeDefined()
         const target = rows[1]
@@ -196,7 +172,7 @@ describe('WhollySheet', () => {
         expect(found).toBeDefined()
         expect(found).toEqual(target)
       })
-      it('finds by search', () => {
+      test('finds by search', () => {
         const rows = hackathons.rows
         expect(rows).toBeDefined()
         const target = rows[1]
@@ -207,9 +183,74 @@ describe('WhollySheet', () => {
     })
   })
 
+  describe('error checking', () => {
+    const hackathons = new Hackathons(sheets, hackathonTable)
+    describe('empty id', () => {
+      // jest error handling discussed at https://jestjs.io/docs/en/asynchronous#resolves-rejects
+      test('save errors', async () => {
+        expect(hackathons.rows).toBeDefined()
+        expect(hackathons.rows.length).toBeGreaterThan(0)
+        const row = hackathons.rows[0]
+        row.id = ''
+        await expect(hackathons.save(row)).rejects.toThrow(
+          `"id" must be assigned for row ${row.row}`
+        )
+      })
+      test('update errors', async () => {
+        expect(hackathons.rows).toBeDefined()
+        expect(hackathons.rows.length).toBeGreaterThan(0)
+        const row = hackathons.rows[0]
+        row.id = ''
+        await expect(hackathons.update(row)).rejects.toThrow(
+          `"id" must be assigned for row ${row.row}`
+        )
+      })
+      test('create errors', async () => {
+        expect(hackathons.rows).toBeDefined()
+        expect(hackathons.rows.length).toBeGreaterThan(0)
+        const row = hackathons.rows[0]
+        row.row = 0
+        row.id = ''
+        await expect(hackathons.create(row)).rejects.toThrow(
+          `"id" must be assigned for row ${row.row}`
+        )
+      })
+    })
+    describe('bad row value', () => {
+      test('update needs a non-zero row', async () => {
+        expect(hackathons.rows).toBeDefined()
+        expect(hackathons.rows.length).toBeGreaterThan(0)
+        const row = hackathons.rows[0]
+        row.id = 'update_test'
+        row.row = 0
+        try {
+          await hackathons.update(row)
+        } catch (e) {
+          expect(e.message).toMatch(`"${row.id}" row must be > 0 to update`)
+        }
+      })
+      test('create needs a zero row', async () => {
+        expect(hackathons.rows).toBeDefined()
+        expect(hackathons.rows.length).toBeGreaterThan(0)
+        const row = hackathons.rows[0]
+        row.id = 'create_test'
+        row.row = 2
+        try {
+          await hackathons.create(row)
+        } catch (e) {
+          expect(e.message).toMatch(
+            `"${row.id}" row must be 0, not ${row.row} to create`
+          )
+        }
+      })
+    })
+  })
   describe('with a live sheet', () => {
-    it('initializes from sheet', async () => {
-      const doc = await sheets.index()
+    let doc: ISheet
+    beforeAll(async () => {
+      doc = await sheets.index()
+    })
+    test('initializes from sheet', async () => {
       const table = doc.tabs.hackathons
       expect(table).toBeDefined()
       expect(table.header).toBeDefined()
@@ -221,6 +262,13 @@ describe('WhollySheet', () => {
       expect(hackathons.header).toEqual(table.header)
       expect(hackathons.rows).toBeDefined()
       expect(hackathons.rows.length).toEqual(table.rows.length)
+    })
+    test('updates a row', async () => {
+      const table = doc.tabs.hackathons
+      const hackathons = new Hackathons(sheets, table)
+      const row = hackathons.rows[0]
+      const actual = await hackathons.update(row)
+      expect(actual).toBeDefined()
     })
   })
 })

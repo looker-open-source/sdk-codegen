@@ -28,8 +28,9 @@ import {
   ColumnHeaders,
   IRowModel,
   ITabTable,
-  noDate,
+  SheetError,
   SheetSDK,
+  stringer,
 } from './SheetSDK'
 
 export interface IWhollySheet<T extends IRowModel> {
@@ -45,33 +46,45 @@ export interface IWhollySheet<T extends IRowModel> {
   rows: T[]
   /** Keyed row retrieval */
   index: Record<string, T>
+  /** What's the next row of the sheet? */
+  nextRow: number
+
   // TODO figure out init generic typing issue
   // init(values?: any): (values?: any) => T
+
+  /** Verify the column order in the sheet matches the key order of the row type */
   checkHeader(header: ColumnHeaders): boolean
-  /** Gets the row's values in column order */
+  /** Gets the row's values in table.header column order */
   values(model: T): any[]
-  save<T extends IRowModel>(model: T): T
-  create<T extends IRowModel>(model: T): T
-  update<T extends IRowModel>(model: T): T
+  /** Converts raw rows into typed rows. TODO replace with constructor argument */
+  typeRows<T extends IRowModel>(rows: any[]): T[]
+  save<T extends IRowModel>(model: T): Promise<T>
+  create<T extends IRowModel>(model: T): Promise<T>
+  update<T extends IRowModel>(model: T): Promise<T>
   find(value: any, columnName?: string): T | undefined
 }
 
 // https://github.com/gsuitedevs/node-samples/blob/master/sheets/snippets/test/helpers.js
 
 /** CRUF (no delete) operations for a GSheet */
-export class WhollySheet<T extends IRowModel> implements IWhollySheet<T> {
+export abstract class WhollySheet<T extends IRowModel>
+  implements IWhollySheet<T> {
   index: Record<string, T> = {}
   rows: T[]
-  constructor(
+  protected constructor(
     public readonly sheets: SheetSDK,
     public readonly name: string,
     public readonly table: ITabTable,
     public readonly keyColumn: string = 'id' // public readonly NewItem: RowModelFactory<T>
   ) {
-    this.rows = this.table.rows as T[]
+    this.rows = this.typeRows(table.rows)
+    this.checkHeader()
     this.createIndex()
     this.checkHeader()
   }
+
+  // Using this until I can figure out the constructor syntax, maybe https://stackoverflow.com/a/43674389
+  abstract typeRows<T extends IRowModel>(rows: any[]): T[]
 
   // // TODO figure out init generic typing issue
   // init(values?: any): T {
@@ -90,17 +103,24 @@ export class WhollySheet<T extends IRowModel> implements IWhollySheet<T> {
   }
 
   checkHeader() {
-    // TODO figure out generic constructor
+    // Nothing to check
+    if (this.rows.length === 0) return true
+    const row = this.rows[0]
+    const rowHeader = row.header().join()
+    const tableHeader = this.table.header.join()
+    if (tableHeader !== rowHeader)
+      throw new SheetError(
+        `Expected table.header to be ${rowHeader} not ${tableHeader}`
+      )
     return true
-    // // limitations of checking property keys of interface https://stackoverflow.com/a/56121798
-    // const mock = new this.NewItem()
-    // // row should be the first key, so skip it
-    // const keys = Object.keys(mock).slice(1)
-    // return keys === this.header
   }
 
   get header() {
     return this.table.header
+  }
+
+  get nextRow() {
+    return this.rows.length
   }
 
   private createIndex() {
@@ -110,37 +130,54 @@ export class WhollySheet<T extends IRowModel> implements IWhollySheet<T> {
     })
   }
 
-  private notYet(method: string) {
-    throw new Error(`${method} not implemented`)
-  }
-
-  values(model: T) {
+  values<T extends IRowModel>(model: T) {
     const result: any[] = []
     this.header.forEach((h) => {
-      const value = model[h]
-      if (value === noDate) {
-        result.push(undefined)
-      } else {
-        result.push(model[h])
-      }
+      result.push(stringer(model[h]))
     })
     return result
   }
 
-  save<T extends IRowModel>(model: T): T {
+  async save<T extends IRowModel>(model: T): Promise<T> {
     // A model with a non-zero row is an update
-    if (model.row) return this.update<T>(model)
-    return this.create<T>(model)
+    if (model.row) return await this.update<T>(model)
+    return await this.create<T>(model)
   }
 
-  create<T extends IRowModel>(model: T): T {
-    this.notYet('create')
+  checkId<T extends IRowModel>(model: T) {
+    if (!model[this.keyColumn])
+      throw new SheetError(
+        `"${this.keyColumn}" must be assigned for row ${model.row}`
+      )
+  }
+
+  async create<T extends IRowModel>(model: T): Promise<T> {
+    this.checkId(model)
+    if (model.row !== 0)
+      throw new SheetError(
+        `"${model.id}" row must be 0, not ${model.row} to create`
+      )
+    const values = this.values(model)
+    const result = await this.sheets.createRow(this.name, this.nextRow, values)
+    model.assign(result)
+    // this.rows.push(this.toAT(model))
+    // ID may have changed
+    this.createIndex()
     return model
   }
 
-  update<T extends IRowModel>(model: T): T {
-    this.notYet('create')
-    return model
+  async update<T extends IRowModel>(model: T): Promise<T> {
+    this.checkId(model)
+    if (!model.row)
+      throw new SheetError(`"${model.id}" row must be > 0 to update`)
+
+    const values = this.values(model)
+    /** This will throw an error if the request fails */
+    const result = await this.sheets.updateRow(this.name, model.row, values)
+    this.rows[model.row].assign(result)
+    // ID may have changed
+    this.createIndex()
+    return (this.rows[model.row] as unknown) as T
   }
 
   find(value: any, columnName?: string): T | undefined {

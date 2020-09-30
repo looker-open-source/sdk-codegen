@@ -27,10 +27,39 @@
 import * as fs from 'fs'
 import * as path from 'path'
 import { cred, sheets, sheetTimeout } from './testUtils/testUtils'
-import { tabName } from './SheetSDK'
+import { NIL, noDate, stringer, tabName } from './SheetSDK'
 
-describe('SheetConnection', () => {
-  it(
+describe('SheetSDK', () => {
+  describe('stringer', () => {
+    test('formats dates', () => {
+      expect(stringer(new Date('2019-11-05T15:00:00.000000+00:00'))).toEqual(
+        '2019-11-05T15:00:00.000Z'
+      )
+    })
+    test('NILs empty dates', () => {
+      expect(stringer(noDate)).toEqual(NIL)
+    })
+    test('NILS undefined', () => {
+      expect(stringer(undefined)).toEqual(NIL)
+    })
+    test('NILS null', () => {
+      expect(stringer(null)).toEqual(NIL)
+    })
+    test('Returns empty string', () => {
+      expect(stringer('')).toEqual('')
+    })
+    test('Returns bool string', () => {
+      expect(stringer(true)).toEqual('true')
+      expect(stringer(false)).toEqual('false')
+    })
+    test('Returns float string', () => {
+      expect(stringer(1.2)).toEqual('1.2')
+    })
+    test('Returns int string', () => {
+      expect(stringer(12)).toEqual('12')
+    })
+  })
+  test(
     'can get sheet',
     async () => {
       const actual = await sheets.read()
@@ -56,7 +85,7 @@ describe('SheetConnection', () => {
   //     expect(actual.length).toBeGreaterThan(0)
   //   }
   // })
-  it(
+  test(
     'can index tab values',
     async () => {
       const actual = await sheets.index()
