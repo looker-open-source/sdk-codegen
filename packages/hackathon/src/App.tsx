@@ -24,7 +24,7 @@
 
  */
 import React, { FC, useEffect, useState } from 'react'
-import { SheetSDK } from '@looker/wholly-sheet'
+import { ISheet, SheetSDK } from '@looker/wholly-sheet'
 import { ExtensionProvider } from '@looker/extension-sdk-react'
 import { ComponentsProvider } from '@looker/components'
 import { hot } from 'react-hot-loader/root'
@@ -34,7 +34,7 @@ import { ProjectsScene } from './scenes'
 import { SheetData } from './models/SheetData'
 
 export const App: FC = hot(() => {
-  const [sheetData, setSheetData] = useState()
+  const [sheetData, setSheetData] = useState<SheetData>()
   const transport = new BrowserTransport(DefaultSettings())
   const sheetSDK = new SheetSDK(
     transport,
@@ -46,14 +46,16 @@ export const App: FC = hot(() => {
     const loadSheet = async () => {
       return await sheetSDK.index()
     }
-    const sheet = loadSheet()
-    setSheetData(new SheetData(sheetSDK, sheet))
+    loadSheet().then((sheet: ISheet) => {
+      const data = new SheetData(sheetSDK, sheet)
+      setSheetData(data)
+    })
   }, [])
 
   return (
     <ExtensionProvider>
       <ComponentsProvider>
-        <ProjectsScene projects={sheetData.projects} />
+        {sheetData && <ProjectsScene projects={sheetData.projects} />}
       </ComponentsProvider>
     </ExtensionProvider>
   )
