@@ -29,10 +29,8 @@ import {
   ITransport,
   boolDefault,
   DelimArray,
+  parseResponse,
 } from '@looker/sdk-rtl/lib/browser'
-
-// TODO export this in @looker/sdk-rtl/lib/browser
-import { parseResponse } from '@looker/sdk-rtl'
 
 export const noDate = new Date(-8640000000000000)
 

@@ -33,7 +33,7 @@ import {
   WhollySheet,
 } from '@looker/wholly-sheet'
 
-import { DelimArray } from '@looker/sdk-rtl'
+import { DelimArray } from '@looker/sdk-rtl/lib/browser'
 
 /** IMPORTANT: properties must be declared in the tab sheet's columnar order, not sorted order */
 export interface IProject extends IRowModel {
