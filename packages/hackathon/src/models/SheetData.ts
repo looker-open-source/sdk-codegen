@@ -23,41 +23,36 @@
  SOFTWARE.
 
  */
+import { SheetSDK, ISheet } from '@looker/wholly-sheet'
+import {
+  Projects,
+  Registrations,
+  Technologies,
+  ProjectTechnologies,
+  Hackathons,
+  TeamMembers,
+  Judgings,
+} from '.'
 
-import { sheets_v4 } from 'googleapis'
+export class SheetData {
+  projects: Projects
+  technologies: Technologies
+  registrations: Registrations
+  projectTechnologies: ProjectTechnologies
+  hackathons: Hackathons
+  teamMembers: TeamMembers
+  judgings: Judgings
 
-export const toObjectValues = (array: any[][]): any[] => {
-  const header = array.splice(0, 1)[0]
-  const output = [] as any[]
-
-  array.forEach((el) => {
-    const entry = {} as any
-    header.forEach((h, i) => {
-      entry[h] = el[i] ? el[i] : undefined
-    })
-    output.push(entry)
-  })
-
-  return output
-}
-
-export const getValues = async (
-  connection: sheets_v4.Sheets,
-  spreadsheetId: string,
-  range: string
-): Promise<any[][]> => {
-  return (await new Promise((resolve, reject) => {
-    connection.spreadsheets.values.get(
-      { spreadsheetId, range },
-      (err: any, res: any) => (err ? reject(err) : resolve(res.data.values))
+  constructor(public readonly sheets: SheetSDK, sheet: ISheet) {
+    this.projects = new Projects(sheets, sheet.tabs.projects)
+    this.technologies = new Technologies(sheets, sheet.tabs.technologies)
+    this.registrations = new Registrations(sheets, sheet.tabs.registrations)
+    this.projectTechnologies = new ProjectTechnologies(
+      sheets,
+      sheet.tabs.project_technologies
     )
-  })) as any[][]
-}
-
-export const getObjectValues = async (
-  connection: sheets_v4.Sheets,
-  spreadsheetId: string,
-  range: string
-): Promise<any[]> => {
-  return toObjectValues(await getValues(connection, spreadsheetId, range))
+    this.hackathons = new Hackathons(sheets, sheet.tabs.hackathons)
+    this.teamMembers = new TeamMembers(sheets, sheet.tabs.team_members)
+    this.judgings = new Judgings(sheets, sheet.tabs.judgings)
+  }
 }

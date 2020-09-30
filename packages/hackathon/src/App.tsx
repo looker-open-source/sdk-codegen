@@ -23,30 +23,37 @@
  SOFTWARE.
 
  */
-import React, { FC, useEffect } from 'react'
+import React, { FC, useEffect, useState } from 'react'
+import { SheetSDK } from '@looker/wholly-sheet'
 import { ExtensionProvider } from '@looker/extension-sdk-react'
-import { Text, ComponentsProvider } from '@looker/components'
+import { ComponentsProvider } from '@looker/components'
 import { hot } from 'react-hot-loader/root'
+import { BrowserTransport, DefaultSettings } from '@looker/sdk-rtl/lib/browser'
 
-import { IProject } from '@looker/hackathon'
-// Projects
-const projects: IProject = [
-  {
-    registration_id: 1,
-    title: 'Project1',
-    description: 'Some project description',
-    date_created: new Date(),
-    project_type: 'API',
-    contestant: true,
-    locked: true,
-  },
-]
+import { ProjectsScene } from './scenes'
+import { SheetData } from './models/SheetData'
 
 export const App: FC = hot(() => {
+  const [sheetData, setSheetData] = useState()
+  const transport = new BrowserTransport(DefaultSettings())
+  const sheetSDK = new SheetSDK(
+    transport,
+    'a93316beb3a0eac1e26865f85d15f33f069831b0',
+    '1RCliBCBPMjJLi5YCSQwhuNBDdAfEQuUQu2wFrW3avF0'
+  )
+
+  useEffect(() => {
+    const loadSheet = async () => {
+      return await sheetSDK.index()
+    }
+    const sheet = loadSheet()
+    setSheetData(new SheetData(sheetSDK, sheet))
+  }, [])
+
   return (
     <ExtensionProvider>
       <ComponentsProvider>
-        <Text>Just some text</Text>
+        <ProjectsScene projects={sheetData.projects} />
       </ComponentsProvider>
     </ExtensionProvider>
   )
