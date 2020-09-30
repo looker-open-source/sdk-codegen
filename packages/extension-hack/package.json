@@ -1,0 +1,28 @@
+{
+  "name": "@looker/extension-hackathon",
+  "version": "1.0.0",
+  "description": "Hackathon extension  ",
+  "main": "index.js",
+  "license": "MIT",
+  "homepage": "https://github.com/looker-open-source/sdk-codegen/tree/master/packages/extension-hackathon",
+  "scripts": {
+    "bundle": "tsc && webpack --config webpack.prod.config.js",
+    "deploy": "bin/deploy",
+    "develop": "webpack-dev-server --hot --disable-host-check --port 8080 --config webpack.dev.config.js",
+    "watch": "yarn lerna exec --scope @looker/extension-api-explorer --stream 'BABEL_ENV=build babel src --root-mode upward --out-dir lib --source-maps --extensions .ts,.tsx --no-comments --watch'"
+  },
+  "dependencies": {
+    "@looker/components": "^0.9.15",
+    "@looker/extension-sdk": "^0.10.0",
+    "@looker/extension-sdk-react": "^0.6.0",
+    "react": "^16.13.1",
+    "react-dom": "^16.13.1",
+    "react-hot-loader": "^4.13.0",
+    "react-router-dom": "^5.2.0",
+    "webpack-cli": "^3.3.12",
+    "webpack-dev-server": "^3.11.0"
+  },
+  "resolutions": {
+    "typescript": "3.8.2"
+  }
+}
