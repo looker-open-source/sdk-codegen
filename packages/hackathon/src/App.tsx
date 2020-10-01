@@ -24,6 +24,7 @@
 
  */
 import React, { FC, useEffect, useState } from 'react'
+import { Route, Switch } from 'react-router-dom'
 import { ISheet, SheetSDK } from '@looker/wholly-sheet'
 import { ExtensionProvider } from '@looker/extension-sdk-react'
 import { ComponentsProvider } from '@looker/components'
@@ -36,11 +37,7 @@ import { SheetData } from './models/SheetData'
 export const App: FC = hot(() => {
   const [sheetData, setSheetData] = useState<SheetData>()
   const transport = new BrowserTransport(DefaultSettings())
-  const sheetSDK = new SheetSDK(
-    transport,
-    'a93316beb3a0eac1e26865f85d15f33f069831b0',
-    '1RCliBCBPMjJLi5YCSQwhuNBDdAfEQuUQu2wFrW3avF0'
-  )
+  const sheetSDK = new SheetSDK(transport, '', '')
 
   useEffect(() => {
     const loadSheet = async () => {
@@ -50,12 +47,16 @@ export const App: FC = hot(() => {
       const data = new SheetData(sheetSDK, sheet)
       setSheetData(data)
     })
-  }, [])
+  })
 
   return (
     <ExtensionProvider>
       <ComponentsProvider>
-        {sheetData && <ProjectsScene projects={sheetData.projects} />}
+        <Switch>
+          <Route path="/projects" exact>
+            {sheetData && <ProjectsScene projects={sheetData.projects} />}
+          </Route>
+        </Switch>
       </ComponentsProvider>
     </ExtensionProvider>
   )
