@@ -30,8 +30,8 @@ import {
   Project,
   Projects,
 } from '../../hackathon/src/models'
-import { NIL, noDate, ISheet } from './SheetSDK'
-import { sheets } from './testUtils/testUtils'
+import { NIL, noDate, ISheet, SheetSDK } from './SheetSDK'
+import { initSheetSDK } from './testUtils/testUtils'
 
 const rawJson = `
 {
@@ -131,7 +131,18 @@ const data = JSON.parse(rawJson)
 const hackathonTable = data.hackathons
 const projectTable = data.projects
 
+const addDays = (date: Date, days: number): Date => {
+  const result = new Date(date)
+  result.setDate(result.getDate() + days)
+  return result
+}
+
+let sheets: SheetSDK
+
 describe('WhollySheet', () => {
+  beforeAll(async () => {
+    sheets = await initSheetSDK()
+  })
   describe('with hardcoded data', () => {
     const hackathons = new Hackathons(sheets, hackathonTable)
     const projects = new Projects(sheets, projectTable)
@@ -347,14 +358,35 @@ describe('WhollySheet', () => {
       expect(actual.rows).toBeDefined()
       expect(actual.rows.length).toEqual(table.rows.length)
     })
-    test('updates a row fails for now', async () => {
-      const table = doc.tabs.hackathons
-      const hackathons = new Hackathons(sheets, table)
-      const row = hackathons.rows[0]
-      await expect(hackathons.update(row)).rejects.toThrow()
+    describe('modifications', () => {
+      test('updates a row', async () => {
+        const table = doc.tabs.hackathons
+        const hackathons = new Hackathons(sheets, table)
+        const row = hackathons.rows[0]
+        // await expect(hackathons.update(row)).rejects.toThrow()
 
-      // const actual = await hackathons.update(row)
-      // expect(actual).toBeDefined()
+        const actual = await hackathons.update(row)
+        expect(actual).toBeDefined()
+      })
+      test('creates a row', async () => {
+        const table = doc.tabs.hackathons
+        const hackathons = new Hackathons(sheets, table)
+        const nr = hackathons.nextRow
+        const hackathon = new Hackathon()
+        hackathon.id = `HACK${nr}`
+        hackathon.name = `Hackathon${nr}`
+        hackathon.description = `Hackathon description ${nr}`
+        hackathon.location = `Here`
+        hackathon.date = new Date()
+        hackathon.duration_in_days = nr
+        hackathon.max_team_size = nr
+        hackathon.judging_starts = addDays(hackathon.date, nr)
+        hackathon.judging_stops = addDays(hackathon.date, nr + 1)
+
+        const actual = await hackathons.create(hackathon)
+        expect(actual).toBeDefined()
+        expect(actual).toEqual(nr)
+      })
     })
   })
 })

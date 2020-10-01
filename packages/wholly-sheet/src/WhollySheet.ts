@@ -59,7 +59,7 @@ export interface IWhollySheet<T extends IRowModel> {
   /** Converts raw rows into typed rows. TODO replace with constructor argument */
   typeRows<T extends IRowModel>(rows: any[]): T[]
   save<T extends IRowModel>(model: T): Promise<T>
-  create<T extends IRowModel>(model: T): Promise<T>
+  create<T extends IRowModel>(model: T): Promise<number>
   update<T extends IRowModel>(model: T): Promise<T>
   find(value: any, columnName?: string): T | undefined
 }
@@ -120,7 +120,9 @@ export abstract class WhollySheet<T extends IRowModel>
   }
 
   get nextRow() {
-    return this.rows.length
+    // +1 for header row
+    // +1 for 1-based rows
+    return this.rows.length + 2
   }
 
   private createIndex() {
@@ -141,7 +143,9 @@ export abstract class WhollySheet<T extends IRowModel>
   async save<T extends IRowModel>(model: T): Promise<T> {
     // A model with a non-zero row is an update
     if (model.row) return await this.update<T>(model)
-    return await this.create<T>(model)
+    // Create currently returns the row not the model
+    await this.create<T>(model)
+    return model
   }
 
   checkId<T extends IRowModel>(model: T) {
@@ -151,7 +155,7 @@ export abstract class WhollySheet<T extends IRowModel>
       )
   }
 
-  async create<T extends IRowModel>(model: T): Promise<T> {
+  async create<T extends IRowModel>(model: T): Promise<number> {
     this.checkId(model)
     if (model.row !== 0)
       throw new SheetError(
@@ -159,11 +163,18 @@ export abstract class WhollySheet<T extends IRowModel>
       )
     const values = this.values(model)
     const result = await this.sheets.createRow(this.name, this.nextRow, values)
-    model.assign(result)
-    // this.rows.push(this.toAT(model))
-    // ID may have changed
+    if (result.response.updatedData) {
+      // This appears to return only the updated row
+      const createValues = result.response.updatedData.values
+      console.log({ createValues })
+    }
+    const newRow = this.typeRows([model])
+    // TODO figure out this generic typing madness
+    // eslint-disable-next-line @typescript-eslint/ban-ts-ignore
+    // @ts-ignore
+    this.rows.push(newRow[0])
     this.createIndex()
-    return model
+    return result.row
   }
 
   async update<T extends IRowModel>(model: T): Promise<T> {
@@ -174,10 +185,15 @@ export abstract class WhollySheet<T extends IRowModel>
     const values = this.values(model)
     /** This will throw an error if the request fails */
     const result = await this.sheets.updateRow(this.name, model.row, values)
-    this.rows[model.row].assign(result)
+    if (result.updatedData) {
+      // This appears to return all non-header rows of the sheet in the values collection
+      // TODO figure out the always-correct way to reference the target row to update
+      const updateValues = result.updatedData.values
+      console.log({ updateValues })
+    }
     // ID may have changed
     this.createIndex()
-    return (this.rows[model.row] as unknown) as T
+    return model
   }
 
   find(value: any, columnName?: string): T | undefined {

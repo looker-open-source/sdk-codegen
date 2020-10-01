@@ -25,12 +25,35 @@
  */
 import * as fs from 'fs'
 import path from 'path'
+import { JWT } from 'google-auth-library'
 import { NodeTransport, DefaultSettings } from '@looker/sdk-rtl'
-import { SheetSDK } from '../SheetSDK'
+import { defaultScopes, SheetSDK } from '../SheetSDK'
 
 const credFile = path.join(__dirname, '../google-creds.json')
 const creds = fs.readFileSync(credFile, { encoding: 'utf-8' })
-const transport = new NodeTransport(DefaultSettings())
 export const cred = JSON.parse(creds)
-export const sheets = new SheetSDK(transport, cred.api_key, cred.sheet_id)
+export const transport = new NodeTransport(DefaultSettings())
 export const sheetTimeout = 10000
+
+export const getAuthToken = async (cred: any): Promise<string> => {
+  const client = new JWT({
+    email: cred.client_email,
+    key: cred.private_key,
+    scopes: defaultScopes,
+  })
+
+  const result = await client.getAccessToken()
+  console.log({ result })
+  return result.token || ''
+  // const spreadsheetId = keys.sheet_id
+  // const range = 'A2:E'
+  // const url = `https://sheets.googleapis.com/v4/spreadsheets/${spreadsheetId}/values/${range}`
+  // const res = await client.request({ url })
+  // console.log(res.data)
+}
+
+export const initSheetSDK = async (keys = cred): Promise<SheetSDK> => {
+  const token = await getAuthToken(keys)
+  const sheets = new SheetSDK(transport, token, cred.sheet_id)
+  return sheets
+}
