@@ -73,7 +73,7 @@ export const HeaderLayout: FC<HeaderProps> = ({
             color="text5"
             style={{ width: '82px' }}
           />
-          <Text color="key" fontSize="xlarge" fontWeight="light">
+          <Text color="key" fontSize="xlarge" fontWeight="medium">
             API Explorer
           </Text>
         </Space>
