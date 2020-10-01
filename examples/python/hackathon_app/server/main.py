@@ -233,6 +233,17 @@ def register() -> Any:
 
 @app.route("/status")
 def status():
+    """Endpoint that devops automation playbook checks to verify it's up.
+
+    "status.json" is created by the ansible playbook and loaded into the
+    container at build time. The structure is:
+        {
+          "app_version": "{{ hackathon_app_version }}",
+          "build_date": "{{ image_build_date }}",
+          "git_commit": "{{ git_info.after }}",
+          "hackathon_provider_label": "{{ hackathon_provider_label[img_environment] }}"
+        }
+    """
     assert get_hackathons()
     assert looker.me()
     status_path = os.path.join(app.static_folder, "status.json")
