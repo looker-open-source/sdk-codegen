@@ -31,7 +31,7 @@ import { Looker40SDK, Looker31SDK } from '@looker/sdk/lib/browser'
 
 import { SearchContext, LodeContext, defaultLodeContextValue } from './context'
 import { getLoded } from './utils'
-import { GlobalStyles, Header as AppHeader, SideNav } from './components'
+import { Header as AppHeader, SideNav } from './components'
 import { Aside, Header, Layout, Page } from './components/Layout'
 import {
   specReducer,
