@@ -9,6 +9,7 @@
   ],
   "author": "Looker",
   "license": "MIT",
+  "private": false,
   "publishConfig": {
     "access": "public"
   },

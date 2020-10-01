@@ -9,6 +9,7 @@
   ],
   "author": "Looker",
   "license": "MIT",
+  "private": false,
   "publishConfig": {
     "access": "public"
   },
@@ -37,5 +38,5 @@
     "blueimp-md5": "^2.13.0",
     "openapi3-ts": "^1.3.0"
   },
-  "gitHead": "551e4fe9bdbabe91116fbb0094d4f2bfd2dae029"
+  "gitHead": "308cb8c61290837e71345a5ef6fb17be9285990e"
 }

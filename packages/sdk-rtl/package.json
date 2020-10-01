@@ -1,5 +1,4 @@
 {
-  "private": false,
   "name": "@looker/sdk-rtl",
   "version": "0.3.6-beta.0",
   "description": "Looker SDK Runtime Library",
@@ -8,6 +7,10 @@
   "files": [
     "lib"
   ],
+  "private": false,
+  "publishConfig": {
+    "access": "public"
+  },
   "repository": {
     "type": "git",
     "url": "git+https://github.com/looker-open-source/sdk-codegen.git",
@@ -45,5 +48,6 @@
     "Looker",
     "SDK",
     "RTL"
-  ]
+  ],
+  "gitHead": "308cb8c61290837e71345a5ef6fb17be9285990e"
 }

@@ -1,5 +1,4 @@
 {
-  "private": false,
   "name": "@looker/sdk",
   "version": "0.3.6-beta.0",
   "description": "Looker SDK",
@@ -8,6 +7,10 @@
   "files": [
     "lib"
   ],
+  "private": false,
+  "publishConfig": {
+    "access": "public"
+  },
   "directories": {
     "test": "test"
   },
@@ -49,5 +52,5 @@
     "Looker",
     "SDK"
   ],
-  "gitHead": "d03bf81006d0f6fc2e1a54938e30356df9d86ecd"
+  "gitHead": "308cb8c61290837e71345a5ef6fb17be9285990e"
 }
