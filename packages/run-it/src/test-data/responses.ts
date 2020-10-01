@@ -24,7 +24,7 @@
 
  */
 
-import { IRawResponse } from '@looker/sdk/lib/browser'
+import { IRawResponse } from '@looker/sdk-rtl/lib/browser'
 
 export const testJsonResponse: IRawResponse = {
   url: 'https://some/json/data',

@@ -27,11 +27,12 @@
 import {
   DefaultSettings,
   IApiSettings,
-  LookerBrowserSDK,
   lookerVersion,
-} from '@looker/sdk/lib/browser'
-import { RunItSettings } from './RunItSDK'
+} from '@looker/sdk-rtl/lib/browser'
+import { LookerBrowserSDK } from '@looker/sdk/lib/browser'
+
 import { defaultConfigurator } from '..'
+import { RunItSettings } from './RunItSDK'
 
 const settings = {
   ...DefaultSettings(),

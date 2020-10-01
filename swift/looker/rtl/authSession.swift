@@ -63,6 +63,13 @@ open class AuthSession: IAuthSession {
         return self.activeToken
     }
     
+    /// sets the default auth token and resets any value for the sudo token
+    open func setToken(_ token: AccessToken) -> AuthToken {
+        self._sudoToken.reset()
+        let _ = self._authToken.setToken(token)
+        return self.activeToken
+    }
+    
     open func isSudo() -> Bool {
         return ((!self.sudoId.isEmpty) && self._sudoToken.isActive())
     }

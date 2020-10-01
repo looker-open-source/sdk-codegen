@@ -24,7 +24,7 @@
 
  */
 
-import React, { FC, useContext } from 'react'
+import React, { FC, useContext, useState, useEffect } from 'react'
 import {
   Space,
   useToggle,
@@ -33,9 +33,8 @@ import {
   ComponentsProvider,
 } from '@looker/components'
 import { ThemeContext } from 'styled-components'
-
 import { useParams } from 'react-router-dom'
-import { RunIt, RunItHttpMethod, RunItContext } from '@looker/run-it'
+import { RunIt, RunItContext } from '@looker/run-it'
 import { ApiModel, typeRefs } from '@looker/sdk-codegen'
 
 import {
@@ -45,6 +44,7 @@ import {
   DocReferences,
   DocResponses,
   DocSDKs,
+  DocSdkUsage,
   DocStatus,
   DocTitle,
 } from '../../components'
@@ -64,9 +64,13 @@ interface DocMethodParams {
 export const MethodScene: FC<DocMethodProps> = ({ api }) => {
   const { sdk } = useContext(RunItContext)
   const { methodName, specKey } = useParams<DocMethodParams>()
-  const method = api.methods[methodName]
-  const seeTypes = typeRefs(api, method.customTypes)
   const { value, toggle } = useToggle()
+  const [method, setMethod] = useState(api.methods[methodName])
+  const seeTypes = typeRefs(api, method.customTypes)
+
+  useEffect(() => {
+    setMethod(api.methods[methodName])
+  }, [methodName])
 
   const { colors } = useContext(ThemeContext)
 
@@ -96,6 +100,7 @@ export const MethodScene: FC<DocMethodProps> = ({ api }) => {
         <DocOperation method={method} />
         <DocMarkdown source={method.description} specKey={specKey} />
         <DocSDKs api={api} method={method} />
+        <DocSdkUsage method={method} />
         <DocReferences seeTypes={seeTypes} api={api} specKey={specKey} />
         <DocResponses responses={method.responses} />
       </Section>
@@ -106,9 +111,8 @@ export const MethodScene: FC<DocMethodProps> = ({ api }) => {
         >
           <Aside width="24rem" bg="background" py="large">
             <RunIt
-              inputs={createInputs(api, method)}
-              httpMethod={method.httpMethod as RunItHttpMethod}
-              endpoint={method.endpoint}
+             api={api} inputs={createInputs(api, method)}
+              method={method}
             />
           </Aside>
         </ComponentsProvider>

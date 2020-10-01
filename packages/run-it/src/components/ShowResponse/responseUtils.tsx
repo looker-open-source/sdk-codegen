@@ -28,30 +28,49 @@ import {
   IRawResponse,
   ResponseMode,
   responseMode,
-} from '@looker/sdk/lib/browser'
+} from '@looker/sdk-rtl/lib/browser'
 import { Paragraph } from '@looker/components'
 
 import { CodeStructure } from '../CodeStructure'
+import { DataGrid, parseCsv, parseJson } from '../DataGrid'
 
 /**
- * A handler for JSON type responses
+ * Show JSON responses
+ *
+ * Shows the JSON in a syntax-highlighted fashion
+ * If the JSON is parseable as 2D row/column data it will also be shown in grid
+ * @param response
  */
-const ShowJSON = (response: IRawResponse) => (
-  <CodeStructure
-    code={JSON.stringify(JSON.parse(response.body), null, 2)}
-    language={'json'}
-  />
-)
+const ShowJSON = (response: IRawResponse) => {
+  const content = response.body.toString()
+  const data = parseJson(content)
+  const raw = (
+    <CodeStructure
+      code={JSON.stringify(JSON.parse(response.body), null, 2)}
+      language={'json'}
+    />
+  )
+  if (data.data.length === 0) return raw
+  return <DataGrid data={data.data} raw={raw} />
+}
 
-/**
- * A handler for text type responses
- */
+/** A handler for text type responses */
 const ShowText = (response: IRawResponse) => (
   <pre>
     {response.statusMessage !== 'OK' && response.statusMessage}
     {response.body.toString()}
   </pre>
 )
+
+/**
+ * Show CSV grid and raw data
+ * @param response HTTP response to parse and display
+ */
+const ShowCSV = (response: IRawResponse) => {
+  const raw = <pre>{response.body.toString()}</pre>
+  const data = parseCsv(response.body.toString())
+  return <DataGrid data={data.data} raw={raw} />
+}
 
 /** A handler for image type responses */
 const ShowImage = (response: IRawResponse) => {
@@ -88,6 +107,12 @@ const ShowUnknown = (response: IRawResponse) => (
   </Paragraph>
 )
 
+/** Displays a PDF inside the page */
+const ShowPDF = (response: IRawResponse) => {
+  // TODO display a PDF, maybe similar to https://github.com/wojtekmaj/react-pdf/blob/master/sample/webpack/Sample.jsx
+  return ShowUnknown(response)
+}
+
 interface Responder {
   /** A label indicating the supported MIME type(s) */
   label: string
@@ -110,8 +135,13 @@ export const responseHandlers: Responder[] = [
   },
   {
     label: 'html',
-    isRecognized: (contentType) => RegExp(/text\/html/g).test(contentType),
+    isRecognized: (contentType) => /text\/html/g.test(contentType),
     component: (response) => ShowHTML(response),
+  },
+  {
+    label: 'csv',
+    isRecognized: (contentType) => /text\/csv/g.test(contentType),
+    component: (response) => ShowCSV(response),
   },
   // SVG would normally be considered a "string" because of the xml tag, so it must be checked before text
   {
@@ -119,6 +149,13 @@ export const responseHandlers: Responder[] = [
     isRecognized: (contentType) =>
       RegExp(/image\/(png|jpg|jpeg|svg\+xml)/).test(contentType),
     component: (response) => ShowImage(response),
+  },
+  {
+    // render task: 9d52f842b2c3f474970123302b2fa7e0
+    label: 'pdf',
+    isRecognized: (contentType) =>
+      RegExp(/application\/pdf/g).test(contentType),
+    component: (response) => ShowPDF(response),
   },
   {
     label: 'text',

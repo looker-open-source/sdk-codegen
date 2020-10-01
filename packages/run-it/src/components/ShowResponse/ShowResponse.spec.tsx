@@ -37,57 +37,63 @@ import {
 } from '../../test-data'
 import { ShowResponse } from './ShowResponse'
 
-test('it renders json responses', () => {
-  render(<ShowResponse response={testJsonResponse} />)
-  expect(screen.getByText('200: application/json')).toBeInTheDocument()
-  expect(screen.getByRole('textbox', { name: '' })).toBeInTheDocument()
-})
+describe('ShowResponse', () => {
+  test('it renders json responses', () => {
+    render(<ShowResponse response={testJsonResponse} />)
+    expect(screen.getByText('200: application/json')).toBeInTheDocument()
+    expect(screen.getByRole('textbox', { name: '' })).toBeInTheDocument()
+  })
 
-test('it renders text responses', () => {
-  render(<ShowResponse response={testTextResponse} />)
-  expect(screen.getByText('200: text/plain;charset=utf-8')).toBeInTheDocument()
-  expect(screen.getByText(testTextResponse.body.toString())).toBeInTheDocument()
-})
+  test('it renders text responses', () => {
+    render(<ShowResponse response={testTextResponse} />)
+    expect(
+      screen.getByText('200: text/plain;charset=utf-8')
+    ).toBeInTheDocument()
+    expect(
+      screen.getByText(testTextResponse.body.toString())
+    ).toBeInTheDocument()
+  })
 
-test('it renders html responses', () => {
-  render(<ShowResponse response={testHtmlResponse} />)
-  expect(screen.getByText('200: text/html;charset=utf-8')).toBeInTheDocument()
-  expect(screen.getByRole('textbox', { name: '' })).toBeInTheDocument()
-})
+  test('it renders html responses', () => {
+    render(<ShowResponse response={testHtmlResponse} />)
+    expect(screen.getByText('200: text/html;charset=utf-8')).toBeInTheDocument()
+    expect(screen.getByRole('textbox', { name: '' })).toBeInTheDocument()
+  })
 
-test('it renders png responses', () => {
-  render(<ShowResponse response={testImageResponse()} />)
-  expect(screen.getByText('200: image/png')).toBeInTheDocument()
-  expect(screen.getByRole('img')).toBeInTheDocument()
-})
+  test('it renders png responses', () => {
+    render(<ShowResponse response={testImageResponse()} />)
+    expect(screen.getByText('200: image/png')).toBeInTheDocument()
+    expect(screen.getByRole('img')).toBeInTheDocument()
+  })
 
-test('it renders jpg responses', () => {
-  render(<ShowResponse response={testImageResponse('image/jpeg')} />)
-  expect(screen.getByText('200: image/jpeg')).toBeInTheDocument()
-  expect(screen.getByRole('img')).toBeInTheDocument()
-})
+  test('it renders jpg responses', () => {
+    render(<ShowResponse response={testImageResponse('image/jpeg')} />)
+    expect(screen.getByText('200: image/jpeg')).toBeInTheDocument()
+    expect(screen.getByRole('img')).toBeInTheDocument()
+  })
 
-test('it renders svg responses', () => {
-  render(<ShowResponse response={testImageResponse('image/svg+xml')} />)
-  expect(screen.getByText('200: image/svg+xml')).toBeInTheDocument()
-  expect(screen.getByRole('img')).toBeInTheDocument()
-})
+  test('it renders svg responses', () => {
+    render(<ShowResponse response={testImageResponse('image/svg+xml')} />)
+    expect(screen.getByText('200: image/svg+xml')).toBeInTheDocument()
+    expect(screen.getByRole('img')).toBeInTheDocument()
+  })
 
-test('it renders a message for unknown response types', () => {
-  render(<ShowResponse response={testUnknownResponse} />)
-  expect(
-    screen.getByText(
-      `Received ${testUnknownResponse.body.length} bytes of ${testUnknownResponse.contentType} data.`
-    )
-  ).toBeInTheDocument()
-})
+  test('it renders a message for unknown response types', () => {
+    render(<ShowResponse response={testUnknownResponse} />)
+    expect(
+      screen.getByText(
+        `Received ${testUnknownResponse.body.length} bytes of ${testUnknownResponse.contentType} data.`
+      )
+    ).toBeInTheDocument()
+  })
 
-test('it renders an error for error responses', () => {
-  render(<ShowResponse response={testErrorResponse} />)
-  expect(
-    screen.getByText(testErrorResponse.statusMessage, { exact: false })
-  ).toBeInTheDocument()
-  expect(
-    screen.getByText(testErrorResponse.body.toString(), { exact: false })
-  ).toBeInTheDocument()
+  test('it renders an error for error responses', () => {
+    render(<ShowResponse response={testErrorResponse} />)
+    expect(
+      screen.getByText(testErrorResponse.statusMessage, { exact: false })
+    ).toBeInTheDocument()
+    expect(
+      screen.getByText(testErrorResponse.body.toString(), { exact: false })
+    ).toBeInTheDocument()
+  })
 })

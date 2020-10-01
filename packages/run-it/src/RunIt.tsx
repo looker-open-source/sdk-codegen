@@ -32,14 +32,16 @@ import React, {
   useEffect,
 } from 'react'
 import { TabList, useTabs, TabPanels, Tab, TabPanel } from '@looker/components'
-import { IRawResponse, Looker40SDK } from '@looker/sdk/lib/browser'
+import { Looker40SDK } from '@looker/sdk/lib/browser'
+import { IRawResponse } from '@looker/sdk-rtl/lib/browser'
+import { ApiModel, IMethod } from '@looker/sdk-codegen'
 import {
   RequestForm,
   ShowResponse,
   ConfigForm,
   LoginForm,
   Loading,
-  RunItConfigurator,
+  SdkCalls,
 } from './components'
 import {
   createRequestParams,
@@ -48,8 +50,8 @@ import {
   sdkNeedsConfig,
   RunItSettings,
 } from './utils'
-import { PerfTracker } from './components/PerfTracker/PerfTracker'
-import { PerfTimings } from './components/PerfTracker/perfUtils'
+import { PerfTracker, PerfTimings } from './components/PerfTracker'
+import { prepareInputs } from './utils/requestUtils'
 import { RunItContext } from '.'
 
 export type RunItHttpMethod = 'GET' | 'PUT' | 'POST' | 'PATCH' | 'DELETE'
@@ -96,53 +98,24 @@ export interface IStorageValue {
   value: string
 }
 
-interface PerfTabPanelProps {
-  perf: PerfTimings
-  /** Is this running in an extension? */
-  isExtension: boolean
-  /** Configuration provider */
-  configurator: RunItConfigurator
-}
-
-export const PerfTabPanel: FC<PerfTabPanelProps> = ({
-  perf,
-  isExtension,
-  configurator,
-}) => {
-  if (isExtension) return <></>
-  return (
-    <TabPanel key="performance">
-      <PerfTracker perf={perf} configurator={configurator} />
-    </TabPanel>
-  )
-}
-
-interface PerfTabProps {
-  /** Is this running in an extension? */
-  isExtension: boolean
-}
-
-export const PerfTab: FC<PerfTabProps> = ({ isExtension }) => {
-  if (isExtension) return <></>
-  return <Tab key="performance">Performance</Tab>
-}
-
 interface RunItProps {
+  /** spec model to use for sdk call generation */
+  api: ApiModel
   /** An array of parameters associated with a given endpoint */
   inputs: RunItInput[]
-  /** HTTP Method */
-  httpMethod: RunItHttpMethod
-  /** Request path with path params in curly braces e.g. /looks/{look_id}/run/{result_format} */
-  endpoint: string
+  /** Method to test */
+  method: IMethod
 }
 
 type ResponseContent = IRawResponse | undefined
 
 /**
- * Given an array of inputs, an HTTP method, an endpoint and an api version (specKey) it renders a REST request form
+ * Given an array of inputs, a method, and an api model it renders a REST request form
  * which on submit performs a REST request and renders the response with the appropriate MIME type handler
  */
-export const RunIt: FC<RunItProps> = ({ inputs, httpMethod, endpoint }) => {
+export const RunIt: FC<RunItProps> = ({ api, inputs, method }) => {
+  const httpMethod = method.httpMethod as RunItHttpMethod
+  const endpoint = method.endpoint
   const { sdk, configurator, basePath } = useContext(RunItContext)
 
   const [requestContent, setRequestContent] = useState({})
@@ -151,20 +124,22 @@ export const RunIt: FC<RunItProps> = ({ inputs, httpMethod, endpoint }) => {
   const [responseContent, setResponseContent] = useState<ResponseContent>(
     undefined
   )
+  const [isExtension, setIsExtension] = useState<boolean>(false)
   const [hasConfig, setHasConfig] = useState<boolean>(true)
   const [needsAuth, setNeedsAuth] = useState<boolean>(true)
   const tabs = useTabs()
-  let configIsNeeded = false
 
   const perf = new PerfTimings()
 
   useEffect(() => {
     if (sdk && sdk instanceof Looker40SDK) {
       const settings = sdk.authSession.settings as RunItSettings
-      configIsNeeded = sdkNeedsConfig(sdk)
+      const configIsNeeded = sdkNeedsConfig(sdk)
+      setIsExtension(!configIsNeeded)
       setHasConfig(!configIsNeeded || settings.authIsConfigured())
       setNeedsAuth(configIsNeeded && !sdk.authSession.isAuthenticated())
     } else {
+      setIsExtension(true)
       setHasConfig(true)
       setNeedsAuth(false)
     }
@@ -207,7 +182,8 @@ export const RunIt: FC<RunItProps> = ({ inputs, httpMethod, endpoint }) => {
       <TabList distribute {...tabs}>
         <Tab key="request">Request</Tab>
         <Tab key="response">Response</Tab>
-        <PerfTab isExtension={!configIsNeeded} />
+        {isExtension ? <></> : <Tab key="performance">Performance</Tab>}
+        <Tab key="makeTheCall">Code</Tab>
       </TabList>
       <TabPanels px="xxlarge" {...tabs}>
         <TabPanel key="request">
@@ -249,11 +225,20 @@ export const RunIt: FC<RunItProps> = ({ inputs, httpMethod, endpoint }) => {
             />
           )}
         </TabPanel>
-        <PerfTabPanel
-          perf={perf}
-          isExtension={!configIsNeeded}
-          configurator={configurator}
-        />
+        {isExtension ? (
+          <></>
+        ) : (
+          <TabPanel key="performance">
+            <PerfTracker perf={perf} configurator={configurator} />
+          </TabPanel>
+        )}
+        <TabPanel key="makeTheCall">
+          <SdkCalls
+            api={api}
+            method={method}
+            inputs={prepareInputs(inputs, requestContent)}
+          />
+        </TabPanel>
       </TabPanels>
     </>
   )

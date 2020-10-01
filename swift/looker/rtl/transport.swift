@@ -208,6 +208,7 @@ public protocol IAuthorizer {
     func authenticate(_ props: URLRequest) throws -> URLRequest
 
     func logout() -> Bool
+    func setToken(_ token: AccessToken) -> AuthToken
 }
 
 /** General purpose authentication callback */

@@ -26,7 +26,8 @@
 
 import { TestConfig } from './testUtils'
 import { PythonGen } from './python.gen'
-import { IEnumType, IMappedType, IType } from './sdkModels'
+import { IEnumType, IType } from './sdkModels'
+import { IMappedType } from './codeGen'
 
 const config = TestConfig()
 const apiTestModel = config.apiTestModel
@@ -645,27 +646,30 @@ PermissionType.__new__ = model.safe_enum__new__`
     })
 
     it('needs __annotations__', () => {
-      const type = apiTestModel.types.RequiredResponseWithSingleEnum
+      const type = apiTestModel.types.RequiredResponseWithEnums
       expect(type).toBeDefined()
       const actual = gen.declareType('', type)
       const expected = `
 @attr.s(auto_attribs=True, init=False)
-class RequiredResponseWithSingleEnum(model.Model):
+class RequiredResponseWithEnums(model.Model):
     """
     Attributes:
         query_id: Id of query to run
         result_format: Desired async query result format. Valid values are: "inline_json", "json", "json_detail", "json_fe", "csv", "html", "md", "txt", "xlsx", "gsxml".
         user:
+        an_array_of_enums: An array of user attribute types that are allowed to be used in filters on this field. Valid values are: "advanced_filter_string", "advanced_filter_number", "advanced_filter_datetime", "string", "number", "datetime", "relative_url", "yesno", "zipcode".
         roles: Roles assigned to group
     """
     query_id: int
     result_format: "ResultFormat"
     user: "UserPublic"
+    an_array_of_enums: Optional[Sequence["AnArrayOfEnums"]] = None
     roles: Optional[Sequence["Role"]] = None
     __annotations__ = {
         "query_id": int,
         "result_format": ForwardRef("ResultFormat"),
         "user": ForwardRef("UserPublic"),
+        "an_array_of_enums": Optional[Sequence["AnArrayOfEnums"]],
         "roles": Optional[Sequence["Role"]]
     }
 
@@ -673,10 +677,12 @@ class RequiredResponseWithSingleEnum(model.Model):
             query_id: int,
             result_format: "ResultFormat",
             user: "UserPublic",
+            an_array_of_enums: Optional[Sequence["AnArrayOfEnums"]] = None,
             roles: Optional[Sequence["Role"]] = None):
         self.query_id = query_id
         self.result_format = result_format
         self.user = user
+        self.an_array_of_enums = an_array_of_enums
         self.roles = roles`
       expect(actual).toEqual(expected)
     })

@@ -24,7 +24,7 @@
 
  */
 
-import React, { FC, useState } from 'react'
+import React, { FC, useState, useEffect } from 'react'
 import {
   Box,
   Tab,
@@ -35,9 +35,10 @@ import {
 } from '@looker/components'
 import { IMethod, IType, ApiModel } from '@looker/sdk-codegen'
 
+import { getGenerators } from '@looker/run-it'
 import { DocCode } from '../DocCode'
 import { CollapserCard } from '../Collapser'
-import { getGenerators, noComment } from './utils'
+import { noComment } from './utils'
 
 interface LanguageSDKProps {
   /** API spec */
@@ -54,11 +55,15 @@ interface LanguageSDKProps {
 export const DocSDKs: FC<LanguageSDKProps> = ({ api, method, type }) => {
   const tabs = useTabs()
   const generators = getGenerators(api)
-  const [item] = useState(method ? noComment(method) : type!)
+  const [item, setItem] = useState(method ? noComment(method) : type!)
+
+  useEffect(() => {
+    setItem(method ? noComment(method) : type!)
+  }, [method, type])
 
   return (
     <Box mb="xlarge">
-      <CollapserCard heading="Language SDK declarations">
+      <CollapserCard heading="SDK declarations">
         <>
           <TabList {...tabs}>
             {Object.keys(generators).map((language) => (

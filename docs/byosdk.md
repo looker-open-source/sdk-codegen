@@ -9,8 +9,8 @@ The high-level steps for building a new Language SDK include:
 1. Create the language/platform [run-time library](#run-time-library) (RTL)
 
 1. Create the Language SDK [code generator](#code-generator) by descending from
-   [codeGen.ts](/packages/sdk-codegen/src/codeGen.ts) or one of the existing
-   generators like [Typescript](/packages/sdk-codegen/src/typescript.gen.ts) or [Python](/packages/sdk-codegen/src/python.gen.ts)
+   [codeGen.ts](/packages/sdk-codegen/src/codeGen.ts) or perhaps the
+   [Typescript generator](/packages/sdk-codegen/src/typescript.gen.ts) or [Python generator](/packages/sdk-codegen/src/python.gen.ts)
 
 1. Create [unit](#unit-tests) and [functional](#functional-or-integration-tests) tests
 
@@ -48,7 +48,7 @@ All SDKs implement something like a `readConfig() -> [String: String]` method th
 to determine configuration values. See [securing your SDK credentials](/README.md#securing-your-sdk-credentials) for more information
 on this topic, including links to `readConfig()` examples.
 
-The Typescript SDK configuration support is in [`apiSettings.ts`](/packages/sdk/src/rtl/apiSettings.ts).
+The Typescript SDK configuration support is in [`apiSettings.ts`](/packages/sdk-rtl/src/apiSettings.ts).
 
 Once the RTL can read the configuration values for `base_url` and API credentials, the HTTP request processor and
 `AuthSession` implementation work can begin.
@@ -178,7 +178,7 @@ export interface ITransport {
 }
 ```
 
-**Note**: The latest version of these interfaces can always be found in [transport.ts](/packages/sdk/src/rtl/transport.ts)
+**Note**: The latest version of these interfaces can always be found in [transport.ts](/packages/sdk-rtl/src/transport.ts)
 
 The `ITransportSettings` interface shows the default properties for all HTTP requests and can also be used to override
 request settings for an individual HTTP request.
@@ -314,7 +314,7 @@ This section discusses how parameters should be processed by the run-time **befo
 When the codegen project began, there was one method of authenticating for Looker API requests, which was providing the
 API credentials `client_id` and `client_secret` to the API. `AuthSession` is commonly the name of this class.
 Due to the complexities of Node vs. Browser implementations and authentication methods, the reference
-implementation for the Typescript SDK is called [`NodeSession`](/packages/sdk/src/rtl/nodeSession.ts) but for this
+implementation for the Typescript SDK is called [`NodeSession`](/packages/sdk-rtl/src/nodeSession.ts) but for this
 document we'll pretend it's called `AuthSession`.
 
 Recent (Looker 7.6 and above) API implementations additionally offer an OAuth authentication flow for API calls. Both 
@@ -355,11 +355,11 @@ extension, the run-time environment can provide API authentication support witho
 When an SDK supports significantly different runtime behavior, use a different `AuthSession` implementation.
 For example, the Typescript SDK has:
 
-- [`CSRFSession`](/packages/sdk/src/rtl/CSRFSession.ts) for browser-based same-origin usage
-- [`BrowserSession`](/packages/sdk/src/rtl/browserSession.ts) for browser-based CORS usage
-- [`NodeSession`](/packages/sdk/src/rtl/nodeSession.ts) for node-based usage
-- [`OAuthSession`](/packages/sdk/src/rtl/oauthSession.ts) for OAuth2-based usage
-- [`ProxySession`](/packages/sdk/src/rtl/proxySession.ts) for proxy-based usage
+- [`CSRFSession`](/packages/sdk-rtl/src/CSRFSession.ts) for browser-based same-origin usage
+- [`BrowserSession`](/packages/sdk-rtl/src/browserSession.ts) for browser-based CORS usage
+- [`NodeSession`](/packages/sdk-rtl/src/nodeSession.ts) for node-based usage
+- [`OAuthSession`](/packages/sdk-rtl/src/oauthSession.ts) for OAuth2-based usage
+- [`ProxySession`](/packages/sdk-rtl/src/proxySession.ts) for proxy-based usage
 
 ## Code generator
 
@@ -490,13 +490,13 @@ See the Typescript SDK [`streams.ts`](/packages/sdk/src/sdk/4.0/streams.ts) for 
 
 ### API version tracking
 
-The `constants` file (e.g. [`constants.ts`](/packages/sdk/src/rtl/constants.ts)) for an SDK has the Looker API version and Looker release version as variables. The update mechanism
-for these variables is in [`reformatter.ts`](/packages/scripts/src/reformatter.ts).
+The `constants` file (e.g. [`constants.ts`](/packages/sdk-rtl/src/constants.ts)) for an SDK has the Looker API version and Looker release version as variables. The update mechanism
+for these variables is in [`reformatter.ts`](/packages/sdk-codegen-scripts/src/reformatter.ts).
 
 #### Code reformatting
 
 Some languages have command-line code reformatters readily available. If your SDK language has a code reformatter,
-define it in [`reformatter.ts`](/packages/scripts/src/reformatter.ts) and the generated source code will automatically
+define it in [`reformatter.ts`](/packages/sdk-codegen-scripts/src/reformatter.ts) and the generated source code will automatically
 be reformatted when the code generation is finishing up.
 
 ## Tests
