@@ -43,6 +43,7 @@
     "@looker/wholly-sheet": "^0.1.0-alpha.1",
     "react": "^16.13.1",
     "react-dom": "^16.13.1",
-    "react-hot-loader": "^4.13.0"
+    "react-hot-loader": "^4.13.0",
+    "react-router-dom": "^5.2.0"
   }
 }

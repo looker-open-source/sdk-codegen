@@ -24,6 +24,7 @@
 
  */
 import React, { FC, useEffect, useState } from 'react'
+import { Route, Switch } from 'react-router-dom'
 import { ISheet, SheetSDK } from '@looker/wholly-sheet'
 import { ExtensionProvider } from '@looker/extension-sdk-react'
 import { ComponentsProvider } from '@looker/components'
@@ -46,12 +47,16 @@ export const App: FC = hot(() => {
       const data = new SheetData(sheetSDK, sheet)
       setSheetData(data)
     })
-  }, [])
+  })
 
   return (
     <ExtensionProvider>
       <ComponentsProvider>
-        {sheetData && <ProjectsScene projects={sheetData.projects} />}
+        <Switch>
+          <Route path="/projects" exact>
+            {sheetData && <ProjectsScene projects={sheetData.projects} />}
+          </Route>
+        </Switch>
       </ComponentsProvider>
     </ExtensionProvider>
   )
