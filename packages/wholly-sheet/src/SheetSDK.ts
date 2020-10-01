@@ -346,16 +346,16 @@ export const loadTabTable = (tab: ISheetTab, keyName = 'id'): ITabTable => {
 export class SheetSDK {
   constructor(
     public readonly transport: ITransport,
-    public readonly apiKey: string,
+    public readonly token: string,
     public sheetId: string
   ) {
-    this.apiKey = encodeURIComponent(apiKey)
+    this.token = encodeURIComponent(token)
     this.sheetId = encodeURIComponent(sheetId)
   }
 
   async request(method: HttpMethod, api = '', body: any = undefined) {
-    const key = (api.includes('?') ? '&' : '?') + `key=${this.apiKey}`
-    const path = `https://sheets.googleapis.com/v4/spreadsheets/${this.sheetId}${api}${key}`
+    const auth = (api.includes('?') ? '&' : '?') + `access_token=${this.token}`
+    const path = `https://sheets.googleapis.com/v4/spreadsheets/${this.sheetId}${api}${auth}`
     const raw = await this.transport.rawRequest(method, path, undefined, body)
     const response = await parseResponse(raw)
     if (!raw.ok) throw new SheetError(response)
@@ -410,21 +410,8 @@ export class SheetSDK {
     return sheet.values
   }
 
-  /**
-   * Update a row of a sheet with the provided values
-   *
-   * @param tab name or tab sheet
-   * @param row 1-based position of row
-   * @param values to assign in order for the row
-   */
-  async updateRow(tab: string | ISheetTab, row: number, values: any[]) {
-    const body = JSON.stringify({ values })
-    const name = tabName(tab)
-    // https://developers.google.com/sheets/api/reference/rest/v4/spreadsheets.values/update
-    const options = 'valueInputOption=RAW'
-    const api = `/values/${name}!A${row}:end?${options}`
-    const response = await this.request('PUT', api, body)
-    return response
+  private static bodyValues(values: any[]) {
+    return JSON.stringify({ values: [values] })
   }
 
   /**
@@ -434,23 +421,51 @@ export class SheetSDK {
    * @param row 1-based position of row
    * @param values to assign in order for the row
    */
-  async createRow(tab: string | ISheetTab, row: number, values: any[]) {
-    const body = JSON.stringify({ values })
+  async updateRow(tab: string | ISheetTab, row: number, values: any[]) {
+    const body = SheetSDK.bodyValues(values)
     const name = tabName(tab)
+    // TODO receive changed values back from request
+    // https://developers.google.com/sheets/api/reference/rest/v4/spreadsheets.values/update
+    const options =
+      'valueInputOption=RAW&includeValuesInResponse=true&responseValueRenderOption=FORMATTED_VALUE'
+    const api = `/values/${name}!A${row}:end?${options}`
+    const response = await this.request('PUT', api, body)
+    const changeCount = values.length
+    const expected = `1 row(s), ${changeCount} column(s), ${changeCount} cells`
+    const actual = `${response.updatedRows} row(s), ${response.updatedColumns} column(s), ${response.updatedCells} cells`
+    if (expected !== actual)
+      throw new SheetError(`Update expected ${expected} but got ${actual}`)
+    return response
+  }
+
+  /**
+   * Create a row of a sheet with the provided values
+   *
+   * @param tab name or tab sheet
+   * @param row 1-based position of row
+   * @param values to assign in order for the row
+   * @return number of the created row
+   */
+  async createRow(
+    tab: string | ISheetTab,
+    row: number,
+    values: any[]
+  ): Promise<{ row: number; response: any }> {
+    const body = SheetSDK.bodyValues(values)
+    const name = tabName(tab)
+    // TODO receive changed values back from request
     // https://developers.google.com/sheets/api/reference/rest/v4/spreadsheets.values/append
-    const options = 'valueInputOption=RAW&insertDataOption=INSERT_ROWS'
+    const options =
+      'valueInputOption=RAW&insertDataOption=INSERT_ROWS&includeValuesInResponse=true&responseValueRenderOption=FORMATTED_VALUE'
     const api = `/values/${name}!A${row}:end:append?${options}`
     const response = await this.request('POST', api, body)
-    if (!response.updates || !response.updates.updatedRanges) {
-      throw new SheetError(`Couldn't update ${name} row ${row}`)
+    const range = response.updates.updatedRange
+    const match = range.match(/!A(\d+):/)
+    if (!match) {
+      throw new SheetError(`Update couldn't extract row from range ${range}`)
     }
-    // const rowId = new RegExp(`${name}!A?`)
-    // updated_range = response["updates"]["updatedRange"]
-    // match = re.match(fr"{self.sheet_name}!A(?P<row_id>\d+)", updated_range)
-    // if not match:
-    //   raise SheetError("Could not determine row_id")
-    // model.id = int(match.group("row_id"))
-    return response
+    const rowId = parseInt(match[1])
+    return { row: rowId, response: response }
   }
 
   // async tabValues(tab: string | ISheetTab, range = '!A1:end') {

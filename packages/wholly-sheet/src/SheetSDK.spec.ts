@@ -26,10 +26,15 @@
 
 import * as fs from 'fs'
 import * as path from 'path'
-import { cred, sheets, sheetTimeout } from './testUtils/testUtils'
-import { NIL, noDate, stringer, tabName } from './SheetSDK'
+import { cred, initSheetSDK, sheetTimeout } from './testUtils/testUtils'
+import { NIL, noDate, SheetSDK, stringer, tabName } from './SheetSDK'
+let sheets: SheetSDK
 
 describe('SheetSDK', () => {
+  beforeAll(async () => {
+    sheets = await initSheetSDK()
+  })
+
   describe('stringer', () => {
     test('formats dates', () => {
       expect(stringer(new Date('2019-11-05T15:00:00.000000+00:00'))).toEqual(
