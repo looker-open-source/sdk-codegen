@@ -80,8 +80,7 @@ const ApiExplorer: FC<ApiExplorerProps> = ({
   }, [lodeUrl])
 
   return (
-    <ComponentsProvider>
-      <GlobalStyles />
+    <ComponentsProvider loadGoogleFonts>
       <LodeContext.Provider value={{ ...lode }}>
         <SearchContext.Provider value={{ searchSettings, setSearchSettings }}>
           <Page>

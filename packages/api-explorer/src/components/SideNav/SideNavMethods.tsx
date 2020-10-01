@@ -28,7 +28,6 @@ import React, { FC, useContext, useState } from 'react'
 import styled from 'styled-components'
 import {
   Accordion,
-  Icon,
   AccordionDisclosure,
   AccordionContent,
   List,
@@ -101,16 +100,10 @@ const SideNavMethodsLayout: FC<MethodsProps> = ({
   )
 }
 
-/* color: ${({ isOpen, theme }) => isOpen && theme.colors.key}; */
-
 export const SideNavMethods = styled(SideNavMethodsLayout)`
   ${AccordionDisclosure} {
     padding-left: ${({ theme }) => theme.space.large};
     padding-right: ${({ theme }) => theme.space.large};
-
-    ${Icon} {
-      color: ${({ isOpen, theme }) => (isOpen ? theme.colors.key : 'inherit')};
-    }
 
     &:hover,
     &:focus {
