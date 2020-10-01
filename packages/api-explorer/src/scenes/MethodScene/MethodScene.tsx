@@ -107,11 +107,12 @@ export const MethodScene: FC<DocMethodProps> = ({ api }) => {
       {sdk && value && (
         <ComponentsProvider
           globalStyle={false}
-          coreColors={{ background: colors.text, text: colors.background }}
+          colors={{ background: colors.text, text: colors.background }}
         >
           <Aside width="24rem" bg="background" py="large">
             <RunIt
-             api={api} inputs={createInputs(api, method)}
+              api={api}
+              inputs={createInputs(api, method)}
               method={method}
             />
           </Aside>
