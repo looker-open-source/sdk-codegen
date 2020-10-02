@@ -1,4 +1,5 @@
 import { Router } from 'express'
+import moment from 'moment'
 import { JWT } from 'google-auth-library'
 import sha1 from 'crypto-js/sha1'
 import { getSetup } from '../setup'
@@ -20,8 +21,9 @@ const createTokenDataKey = (
   ).toString()}`
 }
 
-const isExpiring = (expiryDate: string) => {
-  return false
+const isExpiring = (expiryDate: number) => {
+  const diff = moment(new Date(expiryDate)).diff(moment(), 'seconds')
+  return diff < 300
 }
 
 const isValidClientIdAndSecret = (clientId: string, clientSecret: string) => {
@@ -51,7 +53,7 @@ router.post('/access_token', async (req, res) => {
   }
   const key = createTokenDataKey(client_id, client_secret, scope)
   let accessTokenData = accessTokenDataMap[key]
-  if (accessTokenData && !isExpiring(accessTokenData.access_token)) {
+  if (accessTokenData && !isExpiring(accessTokenData.expiry_date)) {
     res.setHeader('Content-Type', 'application/json')
     res.send(JSON.stringify(accessTokenData))
     return
@@ -62,6 +64,7 @@ router.post('/access_token', async (req, res) => {
     return
   }
   accessTokenData = await getAccessTokenData(scope)
+  accessTokenDataMap[key] = accessTokenData
   res.setHeader('Content-Type', 'application/json')
   res.send(JSON.stringify(accessTokenData))
 })

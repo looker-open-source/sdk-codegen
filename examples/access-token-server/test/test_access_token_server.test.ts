@@ -58,8 +58,18 @@ describe('access_token_server', () => {
     })
     expect(resp.status).toEqual(200)
     const json = await resp.json()
-    console.log(json)
     expect(json.access_token).toBeDefined()
     expect(json.expiry_date).toBeDefined()
+    const resp2 = await fetch('http://localhost:3000/access_token', {
+      method: 'post',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(input),
+    })
+    expect(resp2.status).toEqual(200)
+    const json2 = await resp2.json()
+    expect(json2.access_token).toEqual(json.access_token)
+    expect(json2.expiry_date).toEqual(json.expiry_date)
   })
 })
