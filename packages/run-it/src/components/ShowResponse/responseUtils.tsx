@@ -71,8 +71,8 @@ export const isColumnar = (data: any[]) => {
  */
 const ShowJSON = (response: IRawResponse) => {
   const content = response.body.toString()
-  const parsed = JSON.parse(content)
-  const showGrid = isColumnar(parsed)
+  const data = parseJson(content)
+  const showGrid = isColumnar(data.data)
   const raw = (
     <CodeStructure
       code={JSON.stringify(JSON.parse(response.body), null, 2)}
@@ -80,7 +80,6 @@ const ShowJSON = (response: IRawResponse) => {
     />
   )
   if (!showGrid) return raw
-  const data = parseJson(content)
   return <DataGrid data={data.data} raw={raw} />
 }
 
