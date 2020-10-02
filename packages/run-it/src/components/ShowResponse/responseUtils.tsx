@@ -35,6 +35,34 @@ import { CodeStructure } from '../CodeStructure'
 import { DataGrid, parseCsv, parseJson } from '../DataGrid'
 
 /**
+ * Are all items this array "simple"
+ * @param data to check for simplicity
+ */
+export const allSimple = (data: any[]) => {
+  if (!Array.isArray(data)) return false
+  for (let i = 0; i < data.length; i++) {
+    const col = data[i]
+    if (col) {
+      if (col === '[object Object]') return false
+      if (Array.isArray(col)) return false
+      if (col instanceof Object && !(col instanceof Date)) return false
+    }
+  }
+  return true
+}
+
+/**
+ * Is every array in this array a "simple" data row?
+ * @param data to check for columnarity
+ */
+export const isColumnar = (data: any[]) => {
+  if (data.length === 0) return false
+  if (data.length === 1 && data[0].length === 0) return false
+  const complex = Object.values(data).find((row: any[]) => !allSimple(row))
+  return !complex
+}
+
+/**
  * Show JSON responses
  *
  * Shows the JSON in a syntax-highlighted fashion
@@ -43,14 +71,16 @@ import { DataGrid, parseCsv, parseJson } from '../DataGrid'
  */
 const ShowJSON = (response: IRawResponse) => {
   const content = response.body.toString()
-  const data = parseJson(content)
+  const parsed = JSON.parse(content)
+  const showGrid = isColumnar(parsed)
   const raw = (
     <CodeStructure
       code={JSON.stringify(JSON.parse(response.body), null, 2)}
       language={'json'}
     />
   )
-  if (data.data.length === 0) return raw
+  if (!showGrid) return raw
+  const data = parseJson(content)
   return <DataGrid data={data.data} raw={raw} />
 }
 
@@ -97,15 +127,13 @@ const ShowHTML = (response: IRawResponse) => (
 /**
  * A handler for unknown response types. It renders the size of the unknown response and its type.
  */
-const ShowUnknown = (response: IRawResponse) => (
-  <Paragraph>
-    {`Received ${
-      response.body instanceof Blob
-        ? response.body.size
-        : response.body.toString().length
-    } bytes of ${response.contentType} data.`}
-  </Paragraph>
-)
+const ShowUnknown = (response: IRawResponse) => {
+  const body = response.body || ''
+  const message = `Received ${
+    body instanceof Blob ? body.size : body.toString().length
+  } bytes of ${response.contentType} data.`
+  return <Paragraph>{message}</Paragraph>
+}
 
 /** Displays a PDF inside the page */
 const ShowPDF = (response: IRawResponse) => {

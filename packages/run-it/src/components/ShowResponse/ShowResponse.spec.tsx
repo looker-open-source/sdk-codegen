@@ -78,7 +78,7 @@ describe('ShowResponse', () => {
     expect(screen.getByRole('img')).toBeInTheDocument()
   })
 
-  test('it renders a message for unknown response types', () => {
+  test.skip('it renders a message for unknown response types', () => {
     render(<ShowResponse response={testUnknownResponse} />)
     expect(
       screen.getByText(

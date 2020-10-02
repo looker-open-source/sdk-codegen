@@ -54,6 +54,11 @@ export const ApiSpecSelector: FC<ApiSpecSelectorProps> = ({
   }
 
   return (
-    <Select defaultValue={spec.key} options={options} onChange={handleChange} />
+    <Select
+      name="Version"
+      defaultValue={spec.key}
+      options={options}
+      onChange={handleChange}
+    />
   )
 }
