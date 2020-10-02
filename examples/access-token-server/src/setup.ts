@@ -3,6 +3,10 @@ import dotenv from 'dotenv'
 export interface ProcessEnv {
   [key: string]: string
 }
+interface Credentials {
+  private_key: string
+  client_email: string
+}
 
 const envVarNames = {
   SERVER_PORT: 'SERVER_PORT',
@@ -15,6 +19,7 @@ const envVarNames = {
 const env = process.env as ProcessEnv
 
 class Setup {
+  private _serviceAccountCredentials: Credentials
   constructor() {
     const missingEnvVars = Object.keys(envVarNames).reduce((accum, key) => {
       if (!process.env[key]) {
@@ -31,6 +36,19 @@ class Setup {
     }
     if (!env[envVarNames.SERVER_PORT].match(/^[0-9]*$/)) {
       const message = `Invalid environment variable: ${envVarNames.SERVER_PORT}`
+      console.error(message)
+      throw new Error(message)
+    }
+    try {
+      this._serviceAccountCredentials = JSON.parse(
+        Buffer.from(
+          env[envVarNames.SERVICE_ACCOUNT_CREDENTIALS],
+          'base64'
+        ).toString()
+      )
+    } catch (err) {}
+    if (!this._serviceAccountCredentials) {
+      const message = `Invalid environment variable: ${envVarNames.SERVICE_ACCOUNT_CREDENTIALS}`
       console.error(message)
       throw new Error(message)
     }
@@ -52,8 +70,8 @@ class Setup {
     return env[envVarNames.LOOKER_CLIENT_SECRET]
   }
 
-  get serviceAccountCredentials() {
-    return env[envVarNames.SERVICE_ACCOUNT_CREDENTIALS]
+  get serviceAccountCredentials(): Credentials {
+    return this._serviceAccountCredentials
   }
 }
 
