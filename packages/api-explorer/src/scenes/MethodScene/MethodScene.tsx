@@ -109,7 +109,7 @@ export const MethodScene: FC<DocMethodProps> = ({ api }) => {
           globalStyle={false}
           colors={{ background: colors.text, text: colors.background }}
         >
-          <Aside width="30rem" bg="background" py="large">
+          <Aside width="50rem" bg="background" py="large">
             <RunIt
               api={api}
               inputs={createInputs(api, method)}
