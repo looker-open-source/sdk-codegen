@@ -29,7 +29,7 @@ import {
   ResponseMode,
   responseMode,
 } from '@looker/sdk-rtl/lib/browser'
-import { Paragraph } from '@looker/components'
+import { Paragraph, CodeBlock } from '@looker/components'
 
 import { CodeStructure } from '../CodeStructure'
 import { DataGrid, parseCsv, parseJson } from '../DataGrid'
@@ -85,10 +85,10 @@ const ShowJSON = (response: IRawResponse) => {
 
 /** A handler for text type responses */
 const ShowText = (response: IRawResponse) => (
-  <pre>
+  <>
     {response.statusMessage !== 'OK' && response.statusMessage}
-    {response.body.toString()}
-  </pre>
+    <CodeBlock>{response.body.toString()}</CodeBlock>
+  </>
 )
 
 /**
@@ -96,7 +96,7 @@ const ShowText = (response: IRawResponse) => (
  * @param response HTTP response to parse and display
  */
 const ShowCSV = (response: IRawResponse) => {
-  const raw = <pre>{response.body.toString()}</pre>
+  const raw = <CodeBlock>{response.body.toString()}</CodeBlock>
   const data = parseCsv(response.body.toString())
   return <DataGrid data={data.data} raw={raw} />
 }
