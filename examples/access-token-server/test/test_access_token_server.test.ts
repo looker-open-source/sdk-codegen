@@ -34,6 +34,7 @@ describe('access_token_server', () => {
     const resp = await fetch('http://localhost:3000/status')
     expect(resp.status).toEqual(200)
     const json = await resp.json()
+    console.log(json)
     expect(json.app_version).toBeDefined()
     expect(json.build_date).toBeDefined()
     expect(json.git_commit).toBeDefined()
@@ -94,5 +95,33 @@ describe('access_token_server', () => {
     const json2 = await resp2.json()
     expect(json2.access_token).toEqual(json.access_token)
     expect(json2.expiry_date).toEqual(json.expiry_date)
+  })
+
+  test.each([
+    {
+      scope: 'https://www.googleapis.com/auth/spreadsheets',
+    },
+    {
+      client_id: process.env.LOOKER_CLIENT_ID,
+      scope: 'https://www.googleapis.com/auth/spreadsheets',
+    },
+    {
+      client_secret: process.env.LOOKER_CLIENT_SECRET,
+      scope: 'https://www.googleapis.com/auth/spreadsheets',
+    },
+    {
+      client_id: 'XXX',
+      client_secret: 'XXX',
+      scope: 'https://www.googleapis.com/auth/spreadsheets',
+    },
+  ])('bad looker credentials', async (input) => {
+    const resp = await fetch('http://localhost:3000/access_token', {
+      method: 'post',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(input),
+    })
+    expect(resp.status).toEqual(400)
   })
 })

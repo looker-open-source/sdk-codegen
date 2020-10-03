@@ -34,15 +34,21 @@ const router = Router()
  * status endpoint. Returns a status json file provided by devops. Doesnt do
  * anything else as it does not have enough information.
  */
-router.get('/status', (req, res) => {
+router.get('/status', async (req, res) => {
+  let statusCode = 200
+  let status: any = {
+    errors: [],
+  }
   try {
-    const status = readFileSync(`${cwd()}/status.json`, 'utf8')
-    res.setHeader('Content-Type', 'application/json')
-    res.send(status)
+    const statusString = readFileSync(`${cwd()}/status.json`, 'utf8')
+    status = { ...JSON.parse(statusString), ...status }
   } catch (err) {
     console.error(err)
-    res.status(512).send('status.json read error')
+    statusCode = 542
+    status.errors.push('failed to read or parse status.json file')
   }
+  res.setHeader('Content-Type', 'application/json')
+  res.status(statusCode).send(JSON.stringify(status))
 })
 
 export { router as statusRouter }
