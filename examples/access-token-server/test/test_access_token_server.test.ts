@@ -34,7 +34,6 @@ describe('access_token_server', () => {
     const resp = await fetch('http://localhost:3000/status')
     expect(resp.status).toEqual(200)
     const json = await resp.json()
-    console.log(json)
     expect(json.app_version).toBeDefined()
     expect(json.build_date).toBeDefined()
     expect(json.git_commit).toBeDefined()
