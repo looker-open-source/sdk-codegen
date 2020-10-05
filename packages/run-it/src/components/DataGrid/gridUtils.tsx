@@ -72,15 +72,12 @@ export const gridRowId = (index: number) => `row.${index}`
 export const gridCellId = (rowId: string, index: number) => `${rowId}.${index}`
 
 /**
- * Generates PerfTable rows from an array of resource load times
- * @param data A array of resource load times
- * @param onSelect A handler for performing an action when a row is clicked
+ * Generates ActionList rows from an array of data
+ * @param data A array of data rows
  */
 export const gridRows = (data: any[]) => {
-  //, onSelect: (item: any) => void) => {
   const result: JSX.Element[] = []
-  const rows = data.slice(1) // Skip the header row
-  rows.map((row, index) => {
+  data.map((row, index) => {
     const id = gridRowId(index)
     const cells: any = []
     row.map((item: any, index: number) => {
@@ -89,7 +86,6 @@ export const gridRows = (data: any[]) => {
       cells.push(cell)
     })
     result.push(
-      // <ActionListItem id={id} key={id} onClick={onSelect.bind(null, cells)}>
       <ActionListItem id={id} key={id}>
         {cells}
       </ActionListItem>

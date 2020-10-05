@@ -26,8 +26,9 @@
 
 import { gridHeaders, gridRows, parseCsv, parseJson } from './gridUtils'
 
-const testDataRows = 3
-const testDataCols = 3
+const dataRowsLength = 2
+const allRowsLength = dataRowsLength + 1
+const dataColsLength = 3
 
 const testCsvData = `First,Last,Age
 Aaron,Aardvark,20
@@ -48,28 +49,39 @@ const testJsonData = JSON.stringify([
 ])
 
 describe('gridUtils', () => {
+  // TODO: Test actual data values
   test('parses csv', () => {
     const actual = parseCsv(testCsvData)
     expect(actual).toBeDefined()
     expect(actual.data).toBeDefined()
-    expect(actual.data.length).toEqual(testDataRows)
+    expect(actual.data).toHaveLength(allRowsLength)
+    expect(gridRows(actual.data)).toHaveLength(allRowsLength)
   })
+
   test('parses json data', () => {
     const actual = parseJson(testJsonData)
     expect(actual).toBeDefined()
     expect(actual.data).toBeDefined()
-    expect(actual.data.length).toEqual(testDataRows)
+    expect(actual.data).toHaveLength(allRowsLength)
     const csvData = parseCsv(testCsvData)
     expect(actual.data).toEqual(csvData.data)
   })
+
   test('creates grid columns', () => {
     const data = parseCsv(testCsvData)
     const actual = gridHeaders(data.data)
-    expect(actual.length).toEqual(testDataCols)
+    expect(actual).toHaveLength(dataColsLength)
   })
+
   test('creates grid rows', () => {
     const data = parseCsv(testCsvData)
     const actual = gridRows(data.data)
-    expect(actual.length).toEqual(testDataRows - 1)
+    expect(actual).toHaveLength(allRowsLength)
+  })
+
+  test('creates grid rows from json', () => {
+    const data = parseJson(testJsonData)
+    const actual = gridRows(data.data)
+    expect(actual).toHaveLength(allRowsLength)
   })
 })
