@@ -26,6 +26,7 @@
 
 import React from 'react'
 import { render, screen } from '@testing-library/react'
+import { renderWithTheme } from '@looker/components-test-utils'
 
 import {
   testErrorResponse,
@@ -39,9 +40,9 @@ import { ShowResponse } from './ShowResponse'
 
 describe('ShowResponse', () => {
   test('it renders json responses', () => {
-    render(<ShowResponse response={testJsonResponse} />)
+    renderWithTheme(<ShowResponse response={testJsonResponse} />)
     expect(screen.getByText('200: application/json')).toBeInTheDocument()
-    expect(screen.getByRole('textbox', { name: '' })).toBeInTheDocument()
+    expect(screen.getByText('key1')).toBeInTheDocument()
   })
 
   test('it renders text responses', () => {
