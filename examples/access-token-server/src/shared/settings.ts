@@ -58,9 +58,7 @@ class Settings {
       throw new Error(message)
     }
     if (!env[envVarNames.SERVER_PORT].match(/^[0-9]*$/)) {
-      const message = `Invalid environment variable: ${envVarNames.SERVER_PORT}`
-      console.error(message)
-      throw new Error(message)
+      env[envVarNames.SERVER_PORT] = '8081'
     }
     try {
       this._serviceAccountCredentials = JSON.parse(

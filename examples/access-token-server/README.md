@@ -36,6 +36,18 @@ SERVICE_ACCOUNT_CREDENTIALS=
 2. Use the extension sdk serverProxy api to get the access token. The credentials should be embedded in the request body using secret key tags. See the [kitchen sink readme](https://github.com/looker-open-source/extension-template-kitchensink/blob/master/README.md) for details. Note the access token and an expiry date is returned. The token is cached in the server for up to 55 minutes _(TODO: return the expiry time this server will refresh the token, not Googles expiry time)_. The extension should have some mechanism to refresh the access token.
 3. Ensure this servers endpoint is defined as an entitlement for the extension.
 
+## Docker container instructions
+
+1. Build the image locally: ./docker-run.sh
+2. Start a container from the image in #1 and tail the logs: ./docker-run.sh
+3. Stop the container: ./docker-stop.sh  (not enough to just Ctrl-c from #2)
+
+Assumptions:
+1. locally running docker container will listen on 8081 - make sure youre .env SERVER_PORT, if set, is 8081
+2. prod running docker container will listen on 8081
+3. devops deployment will add the status.json file
+4. devops deployemnt will not have a .env file - env will come from AWS secret manager
+
 ## Endpoint details
 
 ```
