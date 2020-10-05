@@ -26,17 +26,21 @@
 
 import React from 'react'
 import { renderWithTheme } from '@looker/components-test-utils'
-import { fireEvent, screen } from '@testing-library/react'
+import { fireEvent, screen, waitFor } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 
-import { RequestForm } from './RequestForm'
 import { defaultConfigurator } from '../ConfigForm'
+import { RequestForm } from './RequestForm'
 
 describe('RequestForm', () => {
   const run = 'Run'
   const requestContent = {}
   const setRequestContent = jest.fn()
-  const handleSubmit = jest.fn()
+  const handleSubmit = jest.fn((e) => e.preventDefault())
+
+  beforeEach(() => {
+    jest.resetAllMocks()
+  })
 
   test('it creates a form with a simple item and a submit button', () => {
     renderWithTheme(
@@ -91,7 +95,7 @@ describe('RequestForm', () => {
     expect(setRequestContent).toHaveBeenCalledWith({ boolean_item: true })
   })
 
-  test('interactive with a number simple item changes the request content', () => {
+  test('interactive with a number simple item changes the request content', async () => {
     renderWithTheme(
       <RequestForm
         configurator={defaultConfigurator}
@@ -112,11 +116,13 @@ describe('RequestForm', () => {
     )
 
     const item = screen.getByRole('spinbutton', { name: 'number_item' })
-    userEvent.type(item, '123')
-    expect(setRequestContent).toHaveBeenCalledWith({ number_item: 123 })
+    await userEvent.paste(item, '123')
+    await waitFor(() => {
+      expect(setRequestContent).toHaveBeenCalledWith({ number_item: 123 })
+    })
   })
 
-  test('interacting with a text simple item changes the request content', () => {
+  test('interacting with a text simple item changes the request content', async () => {
     renderWithTheme(
       <RequestForm
         configurator={defaultConfigurator}
@@ -137,9 +143,11 @@ describe('RequestForm', () => {
     )
 
     const item = screen.getByRole('textbox', { name: 'text_item' })
-    userEvent.type(item, 'some text')
-    expect(setRequestContent).toHaveBeenCalledWith({
-      text_item: 'some text',
+    await userEvent.paste(item, 'some text')
+    await waitFor(() => {
+      expect(setRequestContent).toHaveBeenCalledWith({
+        text_item: 'some text',
+      })
     })
   })
 
@@ -171,9 +179,42 @@ describe('RequestForm', () => {
     expect(screen.getByRole('checkbox')).toBeInTheDocument()
     const input = screen.getByRole('textbox')
     // TODO: make complex items requirable. i.e. expect(input).toBeRequired() should pass
-    userEvent.type(input, 'content')
+    userEvent.paste(input, 'content')
     expect(setRequestContent).toHaveBeenCalled()
     userEvent.click(screen.getByRole('button', { name: run }))
     expect(handleSubmit).toHaveBeenCalledTimes(1)
+  })
+
+  test('pressing enter submits the request form', async () => {
+    const handleSubmit = jest.fn((e) => e.preventDefault())
+    renderWithTheme(
+      <RequestForm
+        configurator={defaultConfigurator}
+        inputs={[
+          {
+            name: 'id',
+            location: 'path',
+            type: 'string',
+            required: true,
+            description: 'Request body',
+          },
+        ]}
+        handleSubmit={handleSubmit}
+        httpMethod={'POST'}
+        requestContent={requestContent}
+        setRequestContent={setRequestContent}
+      />
+    )
+
+    expect(screen.getByRole('textbox')).toBeInTheDocument()
+    const input = screen.getByRole('textbox')
+    await userEvent.paste(input, 'foo')
+    await userEvent.type(input, '{enter}')
+    await waitFor(() => {
+      expect(setRequestContent).toHaveBeenLastCalledWith({
+        id: 'foo',
+      })
+      expect(handleSubmit).toHaveBeenCalledTimes(1)
+    })
   })
 })

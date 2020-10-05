@@ -111,8 +111,10 @@ export const RequestForm: FC<RequestFormProps> = ({
       )}
       {httpMethod !== 'GET' && showDataChangeWarning()}
       <Space>
-        <ButtonTransparent onClick={handleClear}>Clear</ButtonTransparent>
-        <Button>Run</Button>
+        <ButtonTransparent type="button" onClick={handleClear}>
+          Clear
+        </ButtonTransparent>
+        <Button type="submit">Run</Button>
         {setHasConfig && (
           <ConfigDialog
             setHasConfig={setHasConfig}

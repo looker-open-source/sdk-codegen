@@ -156,6 +156,7 @@ describe('RunIt', () => {
       expect(screen.queryByRole('button', { name: 'Login' })).toBeNull()
     })
   })
+
   describe('configured but not authenticated', () => {
     beforeEach(() => {
       jest.spyOn(sdk.authSession, 'isAuthenticated').mockReturnValue(false)
