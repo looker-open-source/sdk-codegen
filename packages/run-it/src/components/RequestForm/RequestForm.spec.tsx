@@ -42,7 +42,7 @@ describe('RequestForm', () => {
     jest.resetAllMocks()
   })
 
-  test('it creates a form with a simple item and a submit button', () => {
+  test('it creates a form with a simple item, submit button, and config button', () => {
     renderWithTheme(
       <RequestForm
         configurator={defaultConfigurator}
@@ -59,6 +59,7 @@ describe('RequestForm', () => {
         httpMethod={'GET'}
         requestContent={requestContent}
         setRequestContent={setRequestContent}
+        isExtension={false}
       />
     )
 
@@ -68,6 +69,37 @@ describe('RequestForm', () => {
     /** Warning checkbox should only be rendered for operations that modify data */
     expect(screen.queryByRole('checkbox')).not.toBeInTheDocument()
     expect(screen.getByRole('button', { name: run })).toBeInTheDocument()
+    // TODO check the config gear exists
+  })
+
+  test('it creates a form with a simple item, submit button, and config button', () => {
+    renderWithTheme(
+      <RequestForm
+        configurator={defaultConfigurator}
+        inputs={[
+          {
+            name: 'user_id',
+            location: 'path',
+            type: 'string',
+            required: true,
+            description: 'A unique identifier for a user',
+          },
+        ]}
+        handleSubmit={handleSubmit}
+        httpMethod={'GET'}
+        requestContent={requestContent}
+        setRequestContent={setRequestContent}
+        isExtension={true}
+      />
+    )
+
+    expect(
+      screen.getByLabelText('user_id', { exact: false })
+    ).toBeInTheDocument()
+    /** Warning checkbox should only be rendered for operations that modify data */
+    expect(screen.queryByRole('checkbox')).not.toBeInTheDocument()
+    expect(screen.getByRole('button', { name: run })).toBeInTheDocument()
+    // TODO check the config gear does NOT exist
   })
 
   test('interacting with a boolean simple item changes the request content', () => {
