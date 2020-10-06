@@ -1,6 +1,4 @@
-import base64
 import csv
-import os
 import time
 
 import click
@@ -35,6 +33,7 @@ def main(filename: str, hackathon: str, limit: int):
         count += 1
         if limit and count == int(limit):
             break
+        time.sleep(60)
     click.secho(f"Registered {count} users", fg="green")
 
 
