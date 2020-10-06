@@ -30,8 +30,10 @@ import dotenv from 'dotenv'
 dotenv.config()
 
 describe('access_token_server', () => {
+  const accessTokenServerUrl = `http://localhost:${process.env.SERVER_PORT}`
+
   test('status', async () => {
-    const resp = await fetch('http://localhost:3000/status')
+    const resp = await fetch(`${accessTokenServerUrl}/status`)
     expect(resp.status).toEqual(200)
     const json = await resp.json()
     expect(json.app_version).toBeDefined()
@@ -54,7 +56,7 @@ describe('access_token_server', () => {
       client_secret: 'expiry_date',
     },
   ])('access_token missing input', async (input) => {
-    const resp = await fetch('http://localhost:3000/access_token', {
+    const resp = await fetch(`${accessTokenServerUrl}/access_token`, {
       method: 'post',
       headers: {
         'Content-Type': 'application/json',
@@ -72,7 +74,7 @@ describe('access_token_server', () => {
       scope: 'https://www.googleapis.com/auth/spreadsheets',
     },
   ])('access_token good', async (input) => {
-    const resp = await fetch('http://localhost:3000/access_token', {
+    const resp = await fetch(`${accessTokenServerUrl}/access_token`, {
       method: 'post',
       headers: {
         'Content-Type': 'application/json',
@@ -83,7 +85,7 @@ describe('access_token_server', () => {
     const json = await resp.json()
     expect(json.access_token).toBeDefined()
     expect(json.expiry_date).toBeDefined()
-    const resp2 = await fetch('http://localhost:3000/access_token', {
+    const resp2 = await fetch(`${accessTokenServerUrl}/access_token`, {
       method: 'post',
       headers: {
         'Content-Type': 'application/json',
@@ -114,7 +116,7 @@ describe('access_token_server', () => {
       scope: 'https://www.googleapis.com/auth/spreadsheets',
     },
   ])('bad looker credentials', async (input) => {
-    const resp = await fetch('http://localhost:3000/access_token', {
+    const resp = await fetch(`${accessTokenServerUrl}/access_token`, {
       method: 'post',
       headers: {
         'Content-Type': 'application/json',

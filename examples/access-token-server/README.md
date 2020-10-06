@@ -4,11 +4,13 @@ The access token gets google oauth access tokens using a service account. The re
 
 ## Setup for running locally
 
-1. [Create a Google oauth2 service account](https://developers.google.com/identity/protocols/oauth2/service-account)
-2. Grant access to the required api (Google console API & Services Library page for the project created or updated in step 1)
-3. Create a .env file and add contents as shown below.
-4. Encode the json generated when the service account was created by running `yarn encode-credentials`. The script expects the json created in step 1 to be in a file called service_account.json in this directory. It prints a base64 encoded string to the console. Copy this string to the .env file.
-5. Start up the server
+1. Clone this repo.
+2. Run `yarn install`
+3. [Create a Google oauth2 service account](https://developers.google.com/identity/protocols/oauth2/service-account)
+4. Grant access to the required api (Google console API & Services Library page for the project created or updated in step 1)
+5. Create a .env file and add contents as shown below.
+6. Encode the json generated when the service account was created by running `yarn encode-credentials`. The script expects the json created in step 1 to be in a file called service_account.json in this directory. It prints a base64 encoded string to the console. Copy this string to the .env file.
+7. Start up the server
 
 ## Required environment variables
 
@@ -33,8 +35,11 @@ SERVICE_ACCOUNT_CREDENTIALS=
 ## Using in a Looker extension
 
 1. The client id and client secret should be added as user attributes for the extension. See the [kitchen sink readme](https://github.com/looker-open-source/extension-template-kitchensink/blob/master/README.md) for details.
-2. Use the extension sdk serverProxy api to get the access token. The credentials should be embedded in the request body using secret key tags. See the [kitchen sink readme](https://github.com/looker-open-source/extension-template-kitchensink/blob/master/README.md) for details. Note the access token and an expiry date is returned. The token is cached in the server for up to 55 minutes _(TODO: return the expiry time this server will refresh the token, not Googles expiry time)_. The extension should have some mechanism to refresh the access token.
-3. Ensure this servers endpoint is defined as an entitlement for the extension.
+2. Use the extension sdk serverProxy api to get the access token. The credentials should be embedded in the request body using secret key tags. See the [kitchen sink readme](https://github.com/looker-open-source/extension-template-kitchensink/blob/master/README.md) for details. Note the access token and an expiry date is returned. Note that the expiry date is 5 minutes less than the expiry date actually returned by google. Any use of the access token should take this into account. Before using the access token, check if it has and request a new one. If it has expired, a new token is guaranteed to be returned.
+3. The extension SDK fetch api maybe used with the access token. It does not need to use the extension SDK server proxy to all the Google APIs. Note that the token can be used in the following ways:
+   - Query string parameter - `https://www.googleapis.com/drive/v2/files?access_token=access_token`
+   - Request header - `Authorization: Bearer access_token`
+4. Ensure this servers endpoint is defined as an entitlement for the extension.
 
 ## Endpoint details
 
@@ -64,4 +69,4 @@ SERVICE_ACCOUNT_CREDENTIALS=
     }
 ```
 
-The access token can then be used to call the Google API endpoint.
+The access token can then be used to call the Google API endpoint (use of the extension SDK fetch API method is recommended).
