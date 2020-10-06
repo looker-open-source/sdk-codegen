@@ -29,8 +29,8 @@ import { ProcessEnv, Credentials } from '../types'
 
 const envVarNames = {
   SERVER_PORT: 'SERVER_PORT',
-  LOOKER_SERVER_URL: 'LOOKER_SERVER_URL',
-  LOOKER_SERVER_VERIFY_SSL: 'LOOKER_SERVER_VERIFY_SSL',
+  LOOKERSDK_BASE_URL: 'LOOKERSDK_BASE_URL',
+  LOOKERSDK_VERIFY_SSL: 'LOOKERSDK_VERIFY_SSL',
   SERVICE_ACCOUNT_CREDENTIALS: 'SERVICE_ACCOUNT_CREDENTIALS',
 }
 
@@ -44,21 +44,18 @@ const env = process.env as ProcessEnv
 class Settings {
   private _serviceAccountCredentials: Credentials
   constructor() {
-    const missingEnvVars = Object.keys(envVarNames).reduce((accum, key) => {
-      if (!process.env[key]) {
-        accum.push(key)
-      }
-      return accum
-    }, [])
+    const missingEnvVars = Object.keys(envVarNames)
+      .filter((key) => key !== 'SERVER_PORT')
+      .reduce((accum, key) => {
+        if (!process.env[key]) {
+          accum.push(key)
+        }
+        return accum
+      }, [])
     if (missingEnvVars.length > 0) {
       const message = `Missing environment variables: ${missingEnvVars.join(
         ','
       )}`
-      console.error(message)
-      throw new Error(message)
-    }
-    if (!env[envVarNames.SERVER_PORT].match(/^[0-9]*$/)) {
-      const message = `Invalid environment variable: ${envVarNames.SERVER_PORT}`
       console.error(message)
       throw new Error(message)
     }
@@ -81,21 +78,23 @@ class Settings {
    * Port number that this server will run on.
    */
   get port() {
-    return parseInt(env[envVarNames.SERVER_PORT], 10)
+    return env[envVarNames.SERVER_PORT]
+      ? parseInt(env[envVarNames.SERVER_PORT], 10)
+      : 8081
   }
 
   /**
    * Looker server against which to validate looker credentials.
    */
   get lookerServerUrl() {
-    return env[envVarNames.LOOKER_SERVER_URL]
+    return env[envVarNames.LOOKERSDK_BASE_URL]
   }
 
   /**
    * Whether or not to validate the Looker server SSL certificate.
    */
   get lookerServerVerifySsl() {
-    return env[envVarNames.LOOKER_SERVER_VERIFY_SSL] !== 'false'
+    return env[envVarNames.LOOKERSDK_VERIFY_SSL] !== 'false'
   }
 
   /**

@@ -6,8 +6,9 @@
   "scripts": {
     "dev": "nodemon --watch src --ext ts --exec npm run start",
     "start": "ts-node src/index.ts",
-    "test": "jest",
-    "encode-credentials": "ts-node script/encode_credentials.ts"
+    "test": "yarn create-status-json && jest",
+    "encode-credentials": "ts-node script/encode_credentials.ts",
+    "create-status-json": "ts-node script/create_status_json.ts"
   },
   "dependencies": {
     "@looker/sdk": "^0.3.7-beta.0",

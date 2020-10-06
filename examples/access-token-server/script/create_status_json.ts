@@ -24,32 +24,23 @@
 
  */
 
-import { NodeSession, DefaultSettings, IApiSection } from '@looker/sdk-rtl'
-import { getSettings } from '../shared/settings'
+import { existsSync, writeFileSync } from 'fs'
 
 /**
- * Validate looker api key and secret
- * @param client_id
- * @param client_secret
+ * Create status.json file if it does not exist
  */
-export const validateLookerCredentials = async (
-  client_id: string,
-  client_secret: string
-): Promise<boolean> => {
-  const lookerSettings = DefaultSettings()
-  lookerSettings.readConfig = (): IApiSection => {
-    return { client_id, client_secret }
-  }
-  const settings = getSettings()
-  lookerSettings.base_url = settings.lookerServerUrl
-  lookerSettings.verify_ssl = settings.lookerServerVerifySsl
-  const session = new NodeSession(lookerSettings)
-  try {
-    const authToken = await session.login()
-    return authToken.isActive()
-  } catch (err) {
-    console.error('looker credentials incorrect')
-    console.error(err)
-    return false
-  }
+
+if (existsSync('status.json')) {
+  console.log('./status.json exists, leaving be')
+} else {
+  console.log('status.json does not exist, creating')
+  writeFileSync(
+    './status.json',
+    '{\n' +
+      '  "app_version": "TODO",\n' +
+      '  "build_date": "TODO",\n' +
+      '  "git_commit": "TODO",\n' +
+      '  "access_token_server_provider_label": "TODO"\n' +
+      '}\n'
+  )
 }

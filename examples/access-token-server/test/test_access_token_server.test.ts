@@ -30,7 +30,9 @@ import dotenv from 'dotenv'
 dotenv.config()
 
 describe('access_token_server', () => {
-  const accessTokenServerUrl = `http://localhost:${process.env.SERVER_PORT}`
+  const accessTokenServerUrl = `http://localhost:${
+    process.env.SERVER_PORT || 8081
+  }`
 
   test('status', async () => {
     const resp = await fetch(`${accessTokenServerUrl}/status`)
