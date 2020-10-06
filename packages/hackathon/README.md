@@ -13,3 +13,21 @@ Use that token to initialize the SheetSDK for your extension development pleasur
 ## Configuration
 
 To configure your GSheet, see the instructions in the [WhollySheet readme](../wholly-sheet/README.md#getting-your-gsheet-credentials)
+
+### Hackathon extension
+
+The Hackathon manifest should include:
+
+```lookml
+application: ext-hack {
+ label: "Hackathon"
+ url: "https://localhost:8080/dist/bundle.js"
+ entitlements: {
+   local_storage: yes
+   navigation: yes
+   new_window: yes
+   allow_forms: yes
+   allow_same_origin: yes
+ }
+}
+```

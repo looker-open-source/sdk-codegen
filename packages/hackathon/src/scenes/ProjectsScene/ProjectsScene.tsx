@@ -33,7 +33,7 @@ import {
   Checkbox,
 } from '@looker/components'
 
-import { ActionListColumn } from '@looker/components'
+// import { ActionListColumn } from '@looker/components'
 import { Projects } from '../../models'
 
 interface ProjectSceneProps {
@@ -61,31 +61,32 @@ interface ProjectListProps {
   projects: Projects
 }
 
-const sheetHeader = (value: any, key: string) => {
-  if (!value) throw new Error('Each header column needs a value and a key')
-  // Follow packages/run-it/src/components/PerfTracker/perfTableUtils.tsx
-  // if (typeof value === 'string') {
-  //   return value.toString()
-  // }
-  // if (typeof value === 'number') {
-  //   const isInt = /^([+-]?[1-9]\d*|0)$/
-  //   if (value.toString().match(isInt)) {
-  //     return parseInt(value, 10)
-  //   }
-  //   return parseFloat(value)
-  // }
-  // if (typeof value === 'boolean') {
-  //   return boolDefault(value, false)
-  // }
-  // if (value instanceof Date) {
-  //   return new Date(value)
-  // }
-  // if (value instanceof DelimArray) {
-  //   return value.toString().split(',')
-  // }
-  // return this.toString()
-  return {} as ActionListColumn
-}
+// const sheetHeaderColumn = (value: any, key: string) => {
+//   if (!value || !key)
+//     throw new Error('Each header column needs a value and a key')
+//   // Follow packages/run-it/src/components/PerfTracker/perfTableUtils.tsx
+//   // if (typeof value === 'string') {
+//   //   return value.toString()
+//   // }
+//   // if (typeof value === 'number') {
+//   //   const isInt = /^([+-]?[1-9]\d*|0)$/
+//   //   if (value.toString().match(isInt)) {
+//   //     return parseInt(value, 10)
+//   //   }
+//   //   return parseFloat(value)
+//   // }
+//   // if (typeof value === 'boolean') {
+//   //   return boolDefault(value, false)
+//   // }
+//   // if (value instanceof Date) {
+//   //   return new Date(value)
+//   // }
+//   // if (value instanceof DelimArray) {
+//   //   return value.toString().split(',')
+//   // }
+//   // return this.toString()
+//   return {} as ActionListColumn
+// }
 
 const sheetCell = (value: any) => {
   if (!value) return <></>
