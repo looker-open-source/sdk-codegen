@@ -90,7 +90,7 @@ yarn start
 ## Bulk import script
 
 The `bulk_import.py` script reads a CSV file that has "first_name", "last_name", and "email" column headers and adds users to the hack instance.
-It can be re-run safely w/out duplicating users (primary key is "email"). It will send the user an account setup email.
+It can be re-run safely w/out duplicating users (primary key is "email"). It will send newly registered users an account setup email.
 
 ```
 ❯ pipenv run python bulk_import.py --help
