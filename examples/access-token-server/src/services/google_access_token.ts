@@ -24,24 +24,31 @@
 
  */
 
-import express from 'express'
-import { json } from 'body-parser'
-import { accessTokenRouter, statusRouter } from './routes'
-import { getSettings } from './shared/settings'
+import { JWT } from 'google-auth-library'
+import { AccessTokenError } from '../shared/access_token_error'
+import { getSettings } from '../shared/settings'
+import { AccessTokenData } from '../types'
 
 /**
- * Access token server
- * Gets a Google access token for a service account. To access the access token
- * the caller MUST provide a valid looker client_id and client_secret. The caller
- * must also provide a scope for the access token.
+ * Get an access token from google for the given scrope
+ * @param scope
  */
-
-const settings = getSettings()
-const app = express()
-app.use(json())
-app.use(accessTokenRouter)
-app.use(statusRouter)
-
-app.listen(settings.port, () => {
-  console.log(`server listening on port ${settings.port}`)
-})
+export const getGoogleAccessToken = async (
+  scope: string
+): Promise<AccessTokenData> => {
+  const { client_email, private_key } = getSettings().serviceAccountCredentials
+  const client = new JWT({
+    email: client_email,
+    key: private_key,
+    scopes: scope.split(' '),
+  })
+  const accessToken = await client.getAccessToken()
+  if (!accessToken.token) {
+    throw new AccessTokenError('invalid environment')
+  }
+  const tokenInfo = await client.getTokenInfo(accessToken.token)
+  return {
+    access_token: accessToken.token,
+    expiry_date: tokenInfo.expiry_date - 5 * 60 * 1000,
+  }
+}

@@ -28,12 +28,12 @@ SERVICE_ACCOUNT_CREDENTIALS=
 - LOOKER_SERVER_VERIFY_SSL true to validate the SSL certificate. Set to false if using a test certificate.
 - LOOKER_CLIENT_ID Looker server API3 client id (Looker user admin page)
 - LOOKER_CLIENT_SECRET Looker server API3 client secret (Looker user admin page)
-- SERVICE_ACCOUNT_CREDENTIALS base64 encoded string containing service account json file (see above for how to generated).
+- SERVICE_ACCOUNT_CREDENTIALS base64 encoded string containing service account json file (see above for how to generate).
 
 ## Using in a Looker extension
 
 1. The client id and client secret should be added as user attributes for the extension. See the [kitchen sink readme](https://github.com/looker-open-source/extension-template-kitchensink/blob/master/README.md) for details.
-2. Use the extension sdk serverProxy api to get the access token. The credentials should be embeded in the request body using secret key tags. See the [kitchen sink readme](https://github.com/looker-open-source/extension-template-kitchensink/blob/master/README.md) for details. Note the access token and an expiry date is returned. The token is cached in the server for up to 55 minutes _(TODO: return the expiry time this server will refresh the token, not Googles expiry time)_. The extension should have some mechanism to refresh the access token.
+2. Use the extension sdk serverProxy api to get the access token. The credentials should be embedded in the request body using secret key tags. See the [kitchen sink readme](https://github.com/looker-open-source/extension-template-kitchensink/blob/master/README.md) for details. Note the access token and an expiry date is returned. The token is cached in the server for up to 55 minutes _(TODO: return the expiry time this server will refresh the token, not Googles expiry time)_. The extension should have some mechanism to refresh the access token.
 3. Ensure this servers endpoint is defined as an entitlement for the extension.
 
 ## Endpoint details

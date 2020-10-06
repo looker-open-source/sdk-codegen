@@ -25,14 +25,7 @@
  */
 
 import dotenv from 'dotenv'
-
-export interface ProcessEnv {
-  [key: string]: string
-}
-interface Credentials {
-  private_key: string
-  client_email: string
-}
+import { ProcessEnv, Credentials } from '../types'
 
 const envVarNames = {
   SERVER_PORT: 'SERVER_PORT',

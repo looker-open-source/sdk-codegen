@@ -24,24 +24,32 @@
 
  */
 
-import express from 'express'
-import { json } from 'body-parser'
-import { accessTokenRouter, statusRouter } from './routes'
-import { getSettings } from './shared/settings'
+import { NodeSession, DefaultSettings, IApiSection } from '@looker/sdk-rtl'
+import { getSettings } from '../shared/settings'
 
 /**
- * Access token server
- * Gets a Google access token for a service account. To access the access token
- * the caller MUST provide a valid looker client_id and client_secret. The caller
- * must also provide a scope for the access token.
+ * Validate looker api key and secret
+ * @param client_id
+ * @param client_secret
  */
-
-const settings = getSettings()
-const app = express()
-app.use(json())
-app.use(accessTokenRouter)
-app.use(statusRouter)
-
-app.listen(settings.port, () => {
-  console.log(`server listening on port ${settings.port}`)
-})
+export const validateLookerCredentials = async (
+  client_id: string,
+  client_secret: string
+): Promise<boolean> => {
+  const lookerSettings = DefaultSettings()
+  lookerSettings.readConfig = (): IApiSection => {
+    return { client_id, client_secret }
+  }
+  const settings = getSettings()
+  lookerSettings.base_url = settings.lookerServerUrl
+  lookerSettings.verify_ssl = settings.lookerServerVerifySsl
+  const session = new NodeSession(lookerSettings)
+  try {
+    const accessToken = await session.login()
+    return !!accessToken
+  } catch (err) {
+    console.error('looker credentials incorrect')
+    console.error(err)
+    return false
+  }
+}

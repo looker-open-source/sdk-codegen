@@ -24,7 +24,5 @@
 
  */
 
-import { statusRouter } from './status'
-import { accessTokenRouter } from './accessTokenRouter'
-
-export { statusRouter, accessTokenRouter }
+export * from './status'
+export * from './access_token_router'

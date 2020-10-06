@@ -24,24 +24,4 @@
 
  */
 
-import express from 'express'
-import { json } from 'body-parser'
-import { accessTokenRouter, statusRouter } from './routes'
-import { getSettings } from './shared/settings'
-
-/**
- * Access token server
- * Gets a Google access token for a service account. To access the access token
- * the caller MUST provide a valid looker client_id and client_secret. The caller
- * must also provide a scope for the access token.
- */
-
-const settings = getSettings()
-const app = express()
-app.use(json())
-app.use(accessTokenRouter)
-app.use(statusRouter)
-
-app.listen(settings.port, () => {
-  console.log(`server listening on port ${settings.port}`)
-})
+export * from './types'
