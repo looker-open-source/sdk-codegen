@@ -27,7 +27,6 @@
 import {
   IRowModel,
   ITabTable,
-  noDate,
   RowModel,
   SheetSDK,
   WhollySheet,
@@ -35,18 +34,14 @@ import {
 
 /** IMPORTANT: properties must be declared in the tab sheet's columnar order, not sorted order */
 export interface IProjectTechnology extends IRowModel {
-  user_id: string
-  hackathon_id: string
-  date_registered: Date
-  attended: boolean
+  project_id: string
+  technology_id: string
 }
 
 /** IMPORTANT: properties must be declared in the tab sheet's columnar order, not sorted order */
 export class ProjectTechnology extends RowModel<IProjectTechnology> {
-  user_id = ''
-  hackathon_id = ''
-  date_registered: Date = noDate
-  attended = false
+  project_id = ''
+  technology_id = ''
   constructor(values?: any) {
     super()
     // IMPORTANT: this must be done after super() constructor is called so keys are established

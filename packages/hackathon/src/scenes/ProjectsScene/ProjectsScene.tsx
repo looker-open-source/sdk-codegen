@@ -26,18 +26,14 @@
 
 import React, { FC } from 'react'
 import {
-  Button,
-  Dialog,
-  DialogContent,
-  useToggle,
-  Form,
-  Fieldset,
-  FieldText,
-  FieldTextArea,
-  FieldToggleSwitch,
-  SelectMulti,
+  ActionList,
+  ActionListItem,
+  ActionListItemColumn,
+  Text,
+  Checkbox,
 } from '@looker/components'
 
+import { ActionListColumn } from '@looker/components'
 import { Projects } from '../../models'
 
 interface ProjectSceneProps {
@@ -45,54 +41,121 @@ interface ProjectSceneProps {
 }
 
 export const ProjectsScene: FC<ProjectSceneProps> = ({ projects }) => {
-  const { value, setOn, setOff } = useToggle()
-  console.log({ projects })
+  // const { value, setOn, setOff } = useToggle()
   return (
     <>
-      <Dialog isOpen={value} onClose={setOff}>
-        <DialogContent>
-          <ProjectForm />
-        </DialogContent>
-      </Dialog>
-      <Button iconBefore="CircleAdd" onClick={setOn}>
-        Add Project
-      </Button>
+      <ProjectList projects={projects} />
+      {/*<Dialog isOpen={value} onClose={setOff}>*/}
+      {/*  <DialogContent>*/}
+      {/*    <ProjectForm />*/}
+      {/*  </DialogContent>*/}
+      {/*</Dialog>*/}
+      {/*<Button iconBefore="CircleAdd" onClick={setOn}>*/}
+      {/*  Add Project*/}
+      {/*</Button>*/}
     </>
   )
+}
+
+interface ProjectListProps {
+  projects: Projects
+}
+
+const sheetHeader = (value: any, key: string) => {
+  if (!value) throw new Error('Each header column needs a value and a key')
+  // Follow packages/run-it/src/components/PerfTracker/perfTableUtils.tsx
+  // if (typeof value === 'string') {
+  //   return value.toString()
+  // }
+  // if (typeof value === 'number') {
+  //   const isInt = /^([+-]?[1-9]\d*|0)$/
+  //   if (value.toString().match(isInt)) {
+  //     return parseInt(value, 10)
+  //   }
+  //   return parseFloat(value)
+  // }
+  // if (typeof value === 'boolean') {
+  //   return boolDefault(value, false)
+  // }
+  // if (value instanceof Date) {
+  //   return new Date(value)
+  // }
+  // if (value instanceof DelimArray) {
+  //   return value.toString().split(',')
+  // }
+  // return this.toString()
+  return {} as ActionListColumn
+}
+
+const sheetCell = (value: any) => {
+  if (!value) return <></>
+
+  if (typeof value === 'boolean') {
+    return <Checkbox checked={value} />
+  }
+  // if (value instanceof Date) {
+  //   return new Date(value)
+  // }
+  return <Text>{value.toString()}</Text>
+}
+
+const ProjectList: FC<ProjectListProps> = ({ projects }) => {
+  const header = projects.header
+  const columns = header.map((colName) => ({
+    id: colName,
+    primaryKey: colName === projects.keyColumn,
+    title: colName,
+    widthPercent: 20,
+  }))
+
+  const items = projects.rows.map((project, idx) => (
+    <ActionListItem key={idx} id={idx.toString()}>
+      {header.map((columnName, columnId) => (
+        <ActionListItemColumn key={columnId}>
+          {sheetCell(project[columnName])}
+        </ActionListItemColumn>
+      ))}
+    </ActionListItem>
+  ))
+  return <ActionList columns={columns}>{items}</ActionList>
 }
 
 // Use guid function for registration_id. There's a shakespearean guid (word-word-word). Check in Looker package.json
+// interface ProjectFormProps {
+//   project: Project
+//   techonologies: Technologies
+// }
 
-const ProjectForm = () => {
-  return (
-    <>
-      <Form
-        onSubmit={() => {
-          console.log('submitted')
-        }}
-      >
-        <Fieldset legend="Enter your project details">
-          <FieldText required label="Title" />
-          <FieldTextArea required label="Description" />
-          <FieldText required label="Type" />
-          <FieldToggleSwitch name="contestant" label="Contestant" />
-          <FieldToggleSwitch name="locked" label="Lock" />
-          <SelectMulti
-            options={[
-              { value: 'Typescript' },
-              { value: 'React' },
-              { value: 'CSS' },
-              { value: 'C#' },
-              { value: 'Go' },
-              { value: 'Python' },
-            ]}
-            isFilterable
-            placeholder="Type values or select from the list"
-            freeInput
-          />
-        </Fieldset>
-      </Form>
-      <Button>Submit</Button>
-    </>
-  )
-}
+// const ProjectForm: FC = () => {
+//   return (
+//     <>
+//       <Form
+//         onSubmit={() => {
+//           console.log('submitted')
+//         }}
+//       >
+//         <Fieldset legend="Enter your project details">
+//           <FieldText required label="Title" />
+//           <FieldTextArea required label="Description" />
+//           <FieldText required label="Type" />
+//           <FieldToggleSwitch name="contestant" label="Contestant" />
+//           <FieldToggleSwitch name="locked" label="Lock" />
+//           <SelectMulti
+//             options={[
+//               { value: 'Typescript' },
+//               { value: 'React' },
+//               { value: 'CSS' },
+//               { value: 'C#' },
+//               { value: 'Go' },
+//               { value: 'Python' },
+//             ]}
+//             isFilterable
+//             placeholder="Type values or select from the list"
+//             freeInput
+//           />
+//         </Fieldset>
+//       </Form>
+//       <Button>Submit</Button>
+//     </>
+//   )
+// }

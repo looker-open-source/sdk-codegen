@@ -23,41 +23,27 @@
  SOFTWARE.
 
  */
-import React, { FC, useEffect, useState } from 'react'
+import React, { FC } from 'react'
 import { Route, Switch } from 'react-router-dom'
-import { ISheet, SheetSDK } from '@looker/wholly-sheet'
 import { ExtensionProvider } from '@looker/extension-sdk-react'
 import { ComponentsProvider } from '@looker/components'
 import { hot } from 'react-hot-loader/root'
-import { BrowserTransport, DefaultSettings } from '@looker/sdk-rtl/lib/browser'
 
 import { ProjectsScene } from './scenes'
 import { SheetData } from './models/SheetData'
 
-export const App: FC = hot(() => {
-  const [sheetData, setSheetData] = useState<SheetData>()
-  const transport = new BrowserTransport(DefaultSettings())
-  const sheetSDK = new SheetSDK(transport, '', '')
+interface HackAppProps {
+  sheetData: SheetData
+}
 
-  useEffect(() => {
-    const loadSheet = async () => {
-      return await sheetSDK.index()
-    }
-    loadSheet().then((sheet: ISheet) => {
-      const data = new SheetData(sheetSDK, sheet)
-      setSheetData(data)
-    })
-  })
-
-  return (
-    <ExtensionProvider>
-      <ComponentsProvider>
-        <Switch>
-          <Route path="/projects" exact>
-            {sheetData && <ProjectsScene projects={sheetData.projects} />}
-          </Route>
-        </Switch>
-      </ComponentsProvider>
-    </ExtensionProvider>
-  )
-})
+export const HackApp: FC<HackAppProps> = hot(({ sheetData }) => (
+  <ExtensionProvider>
+    <ComponentsProvider>
+      <Switch>
+        <Route path="/projects" exact>
+          {sheetData && <ProjectsScene projects={sheetData.projects} />}
+        </Route>
+      </Switch>
+    </ComponentsProvider>
+  </ExtensionProvider>
+))

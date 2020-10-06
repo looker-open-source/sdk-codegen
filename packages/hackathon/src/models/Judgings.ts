@@ -36,14 +36,22 @@ import {
 export interface IJudging extends IRowModel {
   user_id: string
   project_id: string
-  responsibilities: string
+  execution: number
+  ambition: number
+  coolness: number
+  impact: number
+  notes: string
 }
 
 /** IMPORTANT: properties must be declared in the tab sheet's columnar order, not sorted order */
 export class Judging extends RowModel<IJudging> {
   user_id = ''
   project_id = ''
-  responsibilities = ''
+  execution = 0
+  ambition = 0
+  coolness = 0
+  impact = 0
+  notes = ''
   constructor(values?: any) {
     super()
     // IMPORTANT: this must be done after super() constructor is called so keys are established

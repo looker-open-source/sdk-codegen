@@ -25,10 +25,21 @@
  */
 import * as React from 'react'
 import * as ReactDOM from 'react-dom'
-import { App } from './App'
+import { DefaultSettings, BrowserTransport } from '@looker/sdk-rtl/lib/browser'
+import { ISheet, SheetSDK } from '@looker/wholly-sheet'
+import { HackApp } from './HackApp'
+import { SheetData } from './models/SheetData'
+
+// eslint-disable-next-line @typescript-eslint/no-var-requires
+const tabs = require('../../wholly-sheet/src/tabs.json')
+const sheet = { tabs } as ISheet
+const sheetData = new SheetData(
+  new SheetSDK(new BrowserTransport(DefaultSettings()), 'bogus', 'bogus'),
+  sheet
+)
 
 window.addEventListener('DOMContentLoaded', (_) => {
   const root = document.createElement('div')
   document.body.appendChild(root)
-  ReactDOM.render(<App />, root)
+  ReactDOM.render(<HackApp sheetData={sheetData} />, root)
 })
