@@ -29,12 +29,9 @@ import {
   ActionList,
   ActionListItem,
   ActionListItemColumn,
-  Text,
-  Checkbox,
 } from '@looker/components'
 
-// import { ActionListColumn } from '@looker/components'
-import { Projects } from '../../models'
+import { Projects, Project, sheetHeader, sheetCell } from '../../models'
 
 interface ProjectSceneProps {
   projects: Projects
@@ -45,14 +42,14 @@ export const ProjectsScene: FC<ProjectSceneProps> = ({ projects }) => {
   return (
     <>
       <ProjectList projects={projects} />
-      {/*<Dialog isOpen={value} onClose={setOff}>*/}
-      {/*  <DialogContent>*/}
-      {/*    <ProjectForm />*/}
-      {/*  </DialogContent>*/}
-      {/*</Dialog>*/}
-      {/*<Button iconBefore="CircleAdd" onClick={setOn}>*/}
-      {/*  Add Project*/}
-      {/*</Button>*/}
+      {/* <Dialog isOpen={value} onClose={setOff}> */}
+      {/*  <DialogContent> */}
+      {/*    <ProjectForm /> */}
+      {/*  </DialogContent> */}
+      {/* </Dialog> */}
+      {/* <Button iconBefore="CircleAdd" onClick={setOn}> */}
+      {/*  Add Project */}
+      {/* </Button> */}
     </>
   )
 }
@@ -61,58 +58,15 @@ interface ProjectListProps {
   projects: Projects
 }
 
-// const sheetHeaderColumn = (value: any, key: string) => {
-//   if (!value || !key)
-//     throw new Error('Each header column needs a value and a key')
-//   // Follow packages/run-it/src/components/PerfTracker/perfTableUtils.tsx
-//   // if (typeof value === 'string') {
-//   //   return value.toString()
-//   // }
-//   // if (typeof value === 'number') {
-//   //   const isInt = /^([+-]?[1-9]\d*|0)$/
-//   //   if (value.toString().match(isInt)) {
-//   //     return parseInt(value, 10)
-//   //   }
-//   //   return parseFloat(value)
-//   // }
-//   // if (typeof value === 'boolean') {
-//   //   return boolDefault(value, false)
-//   // }
-//   // if (value instanceof Date) {
-//   //   return new Date(value)
-//   // }
-//   // if (value instanceof DelimArray) {
-//   //   return value.toString().split(',')
-//   // }
-//   // return this.toString()
-//   return {} as ActionListColumn
-// }
-
-const sheetCell = (value: any) => {
-  if (!value) return <></>
-
-  if (typeof value === 'boolean') {
-    return <Checkbox checked={value} />
-  }
-  // if (value instanceof Date) {
-  //   return new Date(value)
-  // }
-  return <Text>{value.toString()}</Text>
-}
-
 const ProjectList: FC<ProjectListProps> = ({ projects }) => {
+  const template = projects.rows.length > 0 ? projects.rows[0] : new Project()
   const header = projects.header
-  const columns = header.map((colName) => ({
-    id: colName,
-    primaryKey: colName === projects.keyColumn,
-    title: colName,
-    widthPercent: 20,
-  }))
+  const columns = sheetHeader(header, template)
 
   const items = projects.rows.map((project, idx) => (
     <ActionListItem key={idx} id={idx.toString()}>
-      {header.map((columnName, columnId) => (
-        <ActionListItemColumn key={columnId}>
+      {header.map((columnName, _) => (
+        <ActionListItemColumn key={`${idx}.${columnName}`}>
           {sheetCell(project[columnName])}
         </ActionListItemColumn>
       ))}

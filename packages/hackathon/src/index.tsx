@@ -33,10 +33,12 @@ import { SheetData } from './models/SheetData'
 // eslint-disable-next-line @typescript-eslint/no-var-requires
 const tabs = require('../../wholly-sheet/src/tabs.json')
 const sheet = { tabs } as ISheet
-const sheetData = new SheetData(
-  new SheetSDK(new BrowserTransport(DefaultSettings()), 'bogus', 'bogus'),
-  sheet
+const sheetSDK = new SheetSDK(
+  new BrowserTransport(DefaultSettings()),
+  'bogus',
+  'bogus'
 )
+const sheetData = new SheetData(sheetSDK, sheet)
 
 window.addEventListener('DOMContentLoaded', (_) => {
   const root = document.createElement('div')

@@ -35,3 +35,9 @@ export {
 export { ITechnology, Technology, Technologies } from './Technologies'
 export { ITeamMember, TeamMember, TeamMembers } from './TeamMembers'
 export { IJudging, Judging, Judgings } from './Judgings'
+export {
+  sheetCell,
+  sheetHeader,
+  sheetHeaderColumn,
+  asTitle,
+} from './sheetUtils'
