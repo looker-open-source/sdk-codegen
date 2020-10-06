@@ -7,8 +7,22 @@ The access token gets google oauth access tokens using a service account. The re
 1. [Create a Google oauth2 service account](https://developers.google.com/identity/protocols/oauth2/service-account)
 2. Grant access to the required api (Google console API & Services Library page for the project created or updated in step 1)
 3. Create a .env file and add contents as shown below.
-4. Encode the json generated when the service account was created by running `yarn encode-credentials`. The script expects the json created in step 1 to be in a file called service_account.json in this directory. It prints a base64 encoded string to the console. Copy this string to the .env file.
-5. Start up the server
+4. `yarn install`
+5. Encode the json generated when the service account was created by running `yarn encode-credentials`. The script expects the json created in step 1 to be in a file called service_account.json in this directory. It prints a base64 encoded string to the console. Copy this string to the .env file.
+6. Start up the server
+
+### Tests
+1. Create a local file in this directory named `status.json` with these contents
+```
+{
+  "app_version": "TODO",
+  "build_date": "TODO",
+  "git_commit": "TODO",
+  "access_token_server_provider_label": "TODO"
+}
+```
+2. Make sure your .env `SERVER_PORT` is set to 3000 (hardcoded in tests)
+3. `yarn test`
 
 ## Required environment variables
 
