@@ -43,7 +43,7 @@ export const allSimple = (data: any[]) => {
   for (let i = 0; i < data.length; i++) {
     const col = data[i]
     if (col) {
-      if (col === '[object Object]') return false
+      if (/\[object Object]/gi.test(col)) return false
       if (Array.isArray(col)) return false
       if (col instanceof Object && !(col instanceof Date)) return false
     }
