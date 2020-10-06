@@ -196,6 +196,7 @@ export const RunIt: FC<RunItProps> = ({ api, inputs, method }) => {
               handleSubmit={handleSubmit}
               setHasConfig={setHasConfig}
               configurator={configurator}
+              isExtension={isExtension}
             />
           )}
           {!hasConfig && (
