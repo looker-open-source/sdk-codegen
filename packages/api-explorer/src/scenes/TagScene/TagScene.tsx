@@ -25,7 +25,7 @@
  */
 import React, { FC, useEffect, useState } from 'react'
 import { ApiModel } from '@looker/sdk-codegen'
-import { useParams, NavLink, useHistory } from 'react-router-dom'
+import { useParams, NavLink } from 'react-router-dom'
 import { Grid, ButtonToggle, ButtonItem } from '@looker/components'
 
 import { DocTitle, DocMethodSummary } from '../../components'
@@ -44,10 +44,6 @@ interface TagSceneParams {
 
 export const TagScene: FC<TagSceneProps> = ({ api }) => {
   const { specKey, methodTag } = useParams<TagSceneParams>()
-  const history = useHistory()
-  if (!(methodTag in api.tags)) {
-    history.push('/methods')
-  }
   const methods = api.tags[methodTag]
   const tag = Object.values(api.spec.tags!).find(
     (tag) => tag.name === methodTag

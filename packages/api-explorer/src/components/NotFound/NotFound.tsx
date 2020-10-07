@@ -23,20 +23,18 @@
  SOFTWARE.
 
  */
-export { ApixHeading } from './common'
-export { DocActivityType } from './DocActivityType'
-export { DocCode } from './DocCode'
-export { DocMethodSummary } from './DocMethodSummary'
-export { DocMarkdown } from './DocMarkdown'
-export { DocPseudo } from './DocPseudo'
-export { DocRateLimited } from './DocRateLimited'
-export { DocReferences } from './DocReferences'
-export { DocResponses } from './DocResponses'
-export { DocSDKs } from './DocSDKs'
-export { DocSdkUsage } from './DocSdkUsage'
-export { DocStatus } from './DocStatus'
-export { DocTitle } from './DocTitle'
-export { GlobalStyles } from './GlobalStyles'
-export { Header } from './Header'
-export { NotFound } from './NotFound'
-export { SideNav } from './SideNav'
+import React, { FC } from 'react'
+import { Space } from '@looker/components'
+import { ApixHeading } from '../common'
+
+interface NotFoundProps {
+  message?: string
+}
+
+export const NotFound: FC<NotFoundProps> = ({ message }) => (
+  <Space p="xxxlarge" width="100%" height="50vh" around>
+    <ApixHeading as="h1">
+      {message || 'The page you requested could not be found.'}
+    </ApixHeading>
+  </Space>
+)
