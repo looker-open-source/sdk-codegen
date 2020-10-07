@@ -1,0 +1,186 @@
+/*
+
+ MIT License
+
+ Copyright (c) 2020 Looker Data Sciences, Inc.
+
+ Permission is hereby granted, free of charge, to any person obtaining a copy
+ of this software and associated documentation files (the "Software"), to deal
+ in the Software without restriction, including without limitation the rights
+ to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+ copies of the Software, and to permit persons to whom the Software is
+ furnished to do so, subject to the following conditions:
+
+ The above copyright notice and this permission notice shall be included in all
+ copies or substantial portions of the Software.
+
+ THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+ FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+ AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+ LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+ SOFTWARE.
+
+ */
+
+import {
+  Authenticator,
+  HttpMethod,
+  IRawResponse,
+  BaseTransport,
+  ITransportSettings,
+  SDKResponse,
+  Values,
+} from '@looker/sdk-rtl/lib/browser'
+import {
+  agentPrefix,
+  IRequestHeaders,
+  IRequestProps,
+  ISDKError,
+  LookerAppId,
+  lookerVersion,
+  parseResponse,
+  ResponseMode,
+  responseMode,
+} from '@looker/sdk-rtl'
+import {
+  ExtensionSDK,
+  FetchCustomParameters,
+  FetchProxyDataResponse,
+} from '@looker/extension-sdk'
+
+export class ExtensionProxyTransport extends BaseTransport {
+  constructor(public extensionSDK: ExtensionSDK, options: ITransportSettings) {
+    super(options)
+  }
+
+  private async initRequest(
+    method: HttpMethod,
+    path: string,
+    body?: any,
+    authenticator?: Authenticator,
+    options?: Partial<ITransportSettings>
+  ) {
+    const agentTag = options?.agentTag || `${agentPrefix} ${lookerVersion}`
+    options = options ? { ...this.options, ...options } : this.options
+    const headers: IRequestHeaders = { [LookerAppId]: agentTag }
+    if (options && options.headers) {
+      Object.entries(options.headers).forEach(([key, val]) => {
+        headers[key] = val
+      })
+    }
+
+    // Make sure an empty body is undefined
+    if (!body) {
+      body = undefined
+    } else {
+      if (typeof body !== 'string') {
+        body = JSON.stringify(body)
+        headers['Content-Type'] = 'application/json'
+      }
+    }
+    let props: IRequestProps = {
+      body,
+      credentials: 'same-origin',
+      headers,
+      method,
+      url: path,
+    }
+
+    if (authenticator) {
+      // Add authentication information to the request
+      props = await authenticator(props)
+    }
+
+    return props
+  }
+
+  async rawRequest(
+    method: HttpMethod,
+    path: string,
+    queryParams?: Values,
+    body?: any,
+    authenticator?: Authenticator,
+    options?: Partial<ITransportSettings>
+  ): Promise<IRawResponse> {
+    options = { ...this.options, ...options }
+    const requestPath = this.makeUrl(path, options, queryParams)
+    const props = await this.initRequest(
+      method,
+      requestPath,
+      body,
+      authenticator,
+      options
+    )
+    const fetchParams: FetchCustomParameters = {
+      body: props.body,
+      credentials: props.credentials,
+      headers: props.headers,
+      method: method as any,
+    }
+    const req = this.extensionSDK.fetchProxy(props.url, fetchParams)
+
+    const res: FetchProxyDataResponse = await req
+
+    const contentType = String(res.headers['content-type'])
+    const mode = responseMode(contentType)
+    const responseBody =
+      mode === ResponseMode.binary ? await res.body : await res.body.toString()
+    return {
+      url: requestPath,
+      body: responseBody,
+      contentType,
+      ok: true,
+      statusCode: res.status,
+      statusMessage: `${res.status} fetched`,
+    }
+  }
+
+  async request<TSuccess, TError>(
+    method: HttpMethod,
+    path: string,
+    queryParams?: Values,
+    body?: any,
+    authenticator?: Authenticator,
+    options?: Partial<ITransportSettings>
+  ): Promise<SDKResponse<TSuccess, TError>> {
+    try {
+      const res = await this.rawRequest(
+        method,
+        path,
+        queryParams,
+        body,
+        authenticator,
+        options
+      )
+      const parsed = await parseResponse(res)
+      if (this.ok(res)) {
+        return { ok: true, value: parsed }
+      } else {
+        return { error: parsed, ok: false }
+      }
+    } catch (e) {
+      const error: ISDKError = {
+        message:
+          typeof e.message === 'string'
+            ? e.message
+            : `The SDK call was not successful. The error was '${e}'.`,
+        type: 'sdk_error',
+      }
+      return { error, ok: false }
+    }
+  }
+
+  async stream<T>(
+    _callback: (readable: _Readable.Readable) => Promise<T>,
+    _method: HttpMethod,
+    _path: string,
+    _queryParams?: Values,
+    _body?: any,
+    _authenticator?: Authenticator,
+    _options?: Partial<ITransportSettings>
+  ): Promise<T> {
+    return Promise.reject('stream is not implemented')
+  }
+}
