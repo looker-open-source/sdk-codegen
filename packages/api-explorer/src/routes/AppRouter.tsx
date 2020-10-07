@@ -27,11 +27,9 @@ import React, { FC, useContext } from 'react'
 import { Redirect, Route, Switch } from 'react-router-dom'
 import { ApiModel } from '@looker/sdk-codegen'
 import { OAuthScene, RunItContext } from '@looker/run-it'
-import { Looker40SDK } from '@looker/sdk/lib/browser'
 
+import { Looker40SDK } from '@looker/sdk/lib/browser'
 import { HomeScene, MethodScene, TagScene, TypeScene } from '../scenes'
-import { NotFound } from '../components'
-import { validateAndRender } from './utils'
 
 interface AppRouterProps {
   api: ApiModel
@@ -49,33 +47,18 @@ export const AppRouter: FC<AppRouterProps> = ({ specKey, api }) => {
           <OAuthScene />
         </Route>
       )}
-      <Route
-        path="/:specKey/(methods|types)?"
-        render={({ match }) =>
-          validateAndRender(match, 'home', api, <HomeScene api={api} />)
-        }
-        exact
-      />
-      <Route
-        path="/:specKey/methods/:methodTag"
-        render={({ match }) =>
-          validateAndRender(match, 'tag', api, <TagScene api={api} />)
-        }
-        exact
-      />
-      <Route
-        path="/:specKey/methods/:methodTag/:methodName"
-        render={({ match }) =>
-          validateAndRender(match, 'method', api, <MethodScene api={api} />)
-        }
-      />
-      <Route
-        path="/:specKey/types/:typeName"
-        render={({ match }) =>
-          validateAndRender(match, 'type', api, <TypeScene api={api} />)
-        }
-      />
-      <Route component={NotFound} />
+      <Route path="/:specKey/(methods|types)?" exact>
+        <HomeScene api={api} />
+      </Route>
+      <Route path="/:specKey/methods/:methodTag" exact>
+        <TagScene api={api} />
+      </Route>
+      <Route path="/:specKey/methods/:methodTag/:methodName">
+        <MethodScene api={api} />
+      </Route>
+      <Route path="/:specKey/types/:typeName">
+        <TypeScene api={api} />
+      </Route>
     </Switch>
   )
 }

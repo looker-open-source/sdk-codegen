@@ -123,14 +123,14 @@ describe('Spec reducer utils', () => {
 
     test('it fetches spec using key defined in url', () => {
       window.history.pushState({}, '', '/4.0/')
-      const fetchedSpec = initDefaultSpecState(specs, window.location)
+      const fetchedSpec = initDefaultSpecState(specs)
       expect(fetchedSpec).toBeDefined()
       expect(fetchedSpec.key).toEqual('4.0')
     })
 
     test('it gets default spec if url does not specify a key', () => {
       window.history.pushState({}, '', '/')
-      const fetchedSpec = initDefaultSpecState(specs, window.location)
+      const fetchedSpec = initDefaultSpecState(specs)
       expect(fetchedSpec).toBeDefined()
       expect(fetchedSpec.key).toEqual('4.0')
     })
