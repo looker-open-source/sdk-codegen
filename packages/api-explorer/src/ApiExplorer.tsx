@@ -28,6 +28,7 @@ import React, { FC, useReducer, useState, useEffect } from 'react'
 import { ComponentsProvider } from '@looker/components'
 import { ApiModel, KeyedCollection } from '@looker/sdk-codegen'
 import { Looker40SDK, Looker31SDK } from '@looker/sdk/lib/browser'
+import { useLocation } from 'react-router'
 
 import { SearchContext, LodeContext, defaultLodeContextValue } from './context'
 import { getLoded } from './utils'
@@ -61,9 +62,10 @@ const ApiExplorer: FC<ApiExplorerProps> = ({
   specs,
   lodeUrl = 'https://raw.githubusercontent.com/looker-open-source/sdk-codegen/master/motherlode.json',
 }) => {
+  const location = useLocation()
   const [spec, specDispatch] = useReducer(
     specReducer,
-    initDefaultSpecState(specs)
+    initDefaultSpecState(specs, location)
   )
   const [searchSettings, setSearchSettings] = useReducer(
     searchReducer,

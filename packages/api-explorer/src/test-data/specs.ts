@@ -42,6 +42,6 @@ export const specs: SpecItems = {
   },
 }
 
-export const specState = initDefaultSpecState(specs)
+export const specState = initDefaultSpecState(specs, window.location)
 
 export const api = ApiModel.fromJson(specs['3.1'].specContent)
