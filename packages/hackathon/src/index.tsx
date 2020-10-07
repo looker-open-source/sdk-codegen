@@ -27,9 +27,10 @@ import * as React from 'react'
 import * as ReactDOM from 'react-dom'
 import { DefaultSettings, BrowserTransport } from '@looker/sdk-rtl/lib/browser'
 import { ISheet, SheetSDK } from '@looker/wholly-sheet'
-import { HackApp } from './HackApp'
+import { App } from './App'
 import { SheetData } from './models/SheetData'
 
+// TODO the setup of the SheetData will change. I will likely retrieved from
 // eslint-disable-next-line @typescript-eslint/no-var-requires
 const tabs = require('../../wholly-sheet/src/tabs.json')
 const sheet = { tabs } as ISheet
@@ -43,5 +44,5 @@ const sheetData = new SheetData(sheetSDK, sheet)
 window.addEventListener('DOMContentLoaded', (_) => {
   const root = document.createElement('div')
   document.body.appendChild(root)
-  ReactDOM.render(<HackApp sheetData={sheetData} />, root)
+  ReactDOM.render(<App sheetData={sheetData} />, root)
 })

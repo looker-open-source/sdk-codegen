@@ -23,29 +23,22 @@
  SOFTWARE.
 
  */
+
 import React, { FC } from 'react'
-// import { Route, Switch } from 'react-router-dom'
 import { ExtensionProvider } from '@looker/extension-sdk-react'
 import { ComponentsProvider } from '@looker/components'
 import { hot } from 'react-hot-loader/root'
-
-// import { ProjectsScene } from './scenes'
 import { SheetData } from './models/SheetData'
-import { HomeScene } from './scenes/HomeScene/HomeScene'
+import { Hackathon } from './Hackathon'
 
-interface HackAppProps {
+interface AppProps {
   sheetData: SheetData
 }
 
-export const HackApp: FC<HackAppProps> = hot(({ sheetData }) => (
+export const App: FC<AppProps> = hot(({ sheetData }) => (
   <ExtensionProvider>
     <ComponentsProvider>
-      {/* <Switch> */}
-      {/*  <Route path="/projects" exact> */}
-      {/*    {sheetData && <ProjectsScene projects={sheetData.projects} />} */}
-      {/*  </Route> */}
-      {/* </Switch> */}
-      <HomeScene sheetData={sheetData} />
+      <Hackathon sheetData={sheetData} />
     </ComponentsProvider>
   </ExtensionProvider>
 ))
