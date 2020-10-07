@@ -19,20 +19,21 @@ To configure your GSheet, see the instructions in the [WhollySheet readme](../wh
 The Hackathon manifest should have:
 
 ```lookml
-project_name: "ext-hack"
-
-application: ext-hack {
+project_name: "hackathon_app"
+application: hackathon_app {
   label: "Hackathon"
   url: "https://localhost:8080/dist/bundle.js"
   entitlements: {
-    local_storage: yes
+    local_storage: no
     navigation: yes
     new_window: yes
     use_form_submit: yes
-    use_embeds: yes
+    use_embeds: no
+    external_api_urls: []
+    core_api_methods: []
+    scoped_user_attributes: []
   }
 }
-
 ```
 
 Remember to add a model to the project that has any valid connection.

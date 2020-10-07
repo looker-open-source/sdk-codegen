@@ -139,7 +139,7 @@ export abstract class AuthSession implements IAuthSession {
   sudoId = ''
   transport: ITransport
 
-  constructor(settings: IApiSettings, transport: ITransport) {
+  protected constructor(settings: IApiSettings, transport: ITransport) {
     this.settings = settings
     this.transport = transport
   }

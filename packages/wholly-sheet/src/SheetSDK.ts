@@ -160,6 +160,7 @@ export interface ITabTable {
   /** Parsed data for the tab */
   rows: IRowModel[]
 }
+
 export const defaultScopes = [
   'https://www.googleapis.com/auth/drive',
   'https://www.googleapis.com/auth/drive.file',
