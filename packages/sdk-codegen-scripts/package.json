@@ -1,6 +1,6 @@
 {
   "name": "@looker/sdk-codegen-scripts",
-  "version": "0.3.1-alpha.18+551e4fe",
+  "version": "0.3.5-alpha.0",
   "description": "Looker SDK Codegen scripts",
   "main": "lib/index.js",
   "typings": "lib/index.d.ts",
@@ -9,6 +9,7 @@
   ],
   "author": "Looker",
   "license": "MIT",
+  "private": false,
   "publishConfig": {
     "access": "public"
   },
@@ -21,19 +22,18 @@
     "url": "https://github.com/looker-open-source/sdk-codegen/issues"
   },
   "homepage": "https://github.com/looker-open-source/sdk-codegen/tree/master/packages/sdk-codegen-scripts",
-  "private": false,
   "scripts": {
     "docs": "typedoc --mode file --out docs",
     "watch": "yarn lerna exec --scope @looker/sdk-codegen-scripts --stream 'BABEL_ENV=build babel src --root-mode upward --out-dir lib --source-maps --extensions .ts,.tsx --no-comments --watch'"
   },
   "dependencies": {
-    "@looker/sdk": "^0.3.4-beta.1",
-    "@looker/sdk-rtl": "^0.3.4-beta.2",
-    "@looker/sdk-codegen": "^0.1.2-alpha.18+551e4fe",
-    "@looker/sdk-codegen-utils": "^0.1.0-alpha.2",
+    "@looker/sdk": "^0.3.7-beta.0",
+    "@looker/sdk-codegen": "^0.1.6-alpha.0",
+    "@looker/sdk-codegen-utils": "^0.1.2-alpha.0",
+    "@looker/sdk-rtl": "^0.3.7-beta.0",
+    "config": "^3.3.1",
     "cross-env": "^7.0.2",
-    "swagger2openapi": "^6.0.3",
-    "config": "^3.3.1"
+    "swagger2openapi": "^6.0.3"
   },
   "devDependencies": {
     "@openapitools/openapi-generator-cli": "^1.0.2-4.2.0",
@@ -48,5 +48,5 @@
     "prettier": "^2.0.5",
     "swagger2openapi": "^6.0.3"
   },
-  "gitHead": "551e4fe9bdbabe91116fbb0094d4f2bfd2dae029"
+  "gitHead": "308cb8c61290837e71345a5ef6fb17be9285990e"
 }

@@ -133,7 +133,7 @@ describe('oauthSession', () => {
     const session = new OAuthSession(services)
     const urlstr = await session.createAuthCodeRequestUrl('api', 'mystate')
     expect(session.code_verifier).toBeDefined()
-    expect((session.code_verifier || '').length).toEqual(64)
+    expect((session.code_verifier || '').length).toEqual(66)
 
     const url = new URL(urlstr)
     expect(url.origin).toEqual(allSettings.looker_url)

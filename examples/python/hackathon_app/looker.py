@@ -3,7 +3,7 @@ import re
 from typing import Dict, Sequence
 
 import looker_sdk
-from looker_sdk import methods, models, error
+from looker_sdk import methods40 as methods, models40 as models, error
 
 
 LOOKER_GROUP_PREFIX = "Looker_Hack: "
@@ -13,8 +13,7 @@ HACKATHON_ROLE = None
 
 
 def try_to(func):
-    """Wrap API calls in try/except
-    """
+    """Wrap API calls in try/except"""
 
     @functools.wraps(func)
     def wrapped_f(**kwargs):
@@ -27,7 +26,7 @@ def try_to(func):
 
 
 @try_to
-def get_hackathon_attr_id(*, sdk: methods.LookerSDK) -> int:
+def get_hackathon_attr_id(*, sdk: methods.Looker40SDK) -> int:
     global HACKATHON_ATTR_ID
     if HACKATHON_ATTR_ID is not None:
         return HACKATHON_ATTR_ID
@@ -42,7 +41,7 @@ def get_hackathon_attr_id(*, sdk: methods.LookerSDK) -> int:
     else:
         attrib = sdk.create_user_attribute(
             body=models.WriteUserAttribute(
-                name=main_hackathon, label="Looker Hackathon", type="string"
+                name=main_hackathon, label="Hackathon", type="string"
             )
         )
         if not attrib:
@@ -55,7 +54,7 @@ def get_hackathon_attr_id(*, sdk: methods.LookerSDK) -> int:
 
 
 @try_to
-def get_hackathon_role(*, sdk: methods.LookerSDK) -> models.Role:
+def get_hackathon_role(*, sdk: methods.Looker40SDK) -> models.Role:
     global HACKATHON_ROLE
     if HACKATHON_ROLE is not None:
         return HACKATHON_ROLE
@@ -74,7 +73,7 @@ def get_hackathon_role(*, sdk: methods.LookerSDK) -> models.Role:
 def register_user(
     *, hackathon: str, first_name: str, last_name: str, email: str
 ) -> str:
-    sdk = looker_sdk.init31()
+    sdk = looker_sdk.init40()
 
     user = find_or_create_user(
         sdk=sdk, first_name=first_name, last_name=last_name, email=email
@@ -88,13 +87,12 @@ def register_user(
         client_id = create_api3_credentials(sdk=sdk, user_id=user.id).client_id
     set_user_group(sdk=sdk, user_id=user.id, hackathon=hackathon)
     set_user_attributes(sdk=sdk, user_id=user.id, hackathon=hackathon)
-    disable_user(sdk=sdk, user_id=user.id)
     assert client_id
     return client_id
 
 
 def find_or_create_user(
-    *, sdk: methods.LookerSDK, first_name: str, last_name: str, email: str
+    *, sdk: methods.Looker40SDK, first_name: str, last_name: str, email: str
 ) -> models.User:
     try:
         users = sdk.search_users(email=email)
@@ -114,7 +112,9 @@ def find_or_create_user(
                 )
         else:
             user = sdk.create_user(
-                models.WriteUser(first_name=first_name, last_name=last_name)
+                models.WriteUser(
+                    first_name=first_name, last_name=last_name, is_disabled=False
+                )
             )
     except error.SDKError as create_ex:
         raise RegisterError(f"Failed to find or create User ({create_ex})")
@@ -123,7 +123,7 @@ def find_or_create_user(
 
 def enable_users_by_hackathons(hackathons: Sequence[str]) -> Dict[str, str]:
     global LOOKER_GROUP_PREFIX
-    sdk = looker_sdk.init31()
+    sdk = looker_sdk.init40()
     groups = {g.name: g.id for g in sdk.all_groups(fields="id,name")}
     ret = {}
     for hackathon in hackathons:
@@ -145,15 +145,16 @@ def enable_users_by_hackathons(hackathons: Sequence[str]) -> Dict[str, str]:
 
 
 @try_to
-def create_email_credentials(*, sdk: methods.LookerSDK, user_id: int, email: str):
+def create_email_credentials(*, sdk: methods.Looker40SDK, user_id: int, email: str):
     sdk.create_user_credentials_email(
         user_id=user_id, body=models.WriteCredentialsEmail(email=email)
     )
+    sdk.send_user_credentials_email_password_reset(user_id)
 
 
 @try_to
 def create_api3_credentials(
-    *, sdk: methods.LookerSDK, user_id: int
+    *, sdk: methods.Looker40SDK, user_id: int
 ) -> models.CredentialsApi3:
     return sdk.create_user_credentials_api3(
         user_id=user_id, body=models.CredentialsApi3()
@@ -161,7 +162,7 @@ def create_api3_credentials(
 
 
 @try_to
-def set_user_group(*, sdk: methods.LookerSDK, user_id: int, hackathon: str):
+def set_user_group(*, sdk: methods.Looker40SDK, user_id: int, hackathon: str):
     global LOOKER_GROUP_PREFIX
     # TODO - switch to sdk.search_groups once that method is live on
     # sandboxcl and hack instances
@@ -169,6 +170,7 @@ def set_user_group(*, sdk: methods.LookerSDK, user_id: int, hackathon: str):
     name = f"{LOOKER_GROUP_PREFIX}{hackathon}"
     for group in groups:
         if group.name == name:
+            assert group.id
             break
     else:
         role = get_hackathon_role(sdk=sdk)
@@ -182,14 +184,26 @@ def set_user_group(*, sdk: methods.LookerSDK, user_id: int, hackathon: str):
         role_groups.append(group.id)
         sdk.set_role_groups(role_id=role.id, body=role_groups)
 
-    assert group.id
+        user_attrs = sdk.all_user_attributes(fields="name,id")
+        for user_attr in user_attrs:
+            if user_attr.name == "landing_page":
+                break
+        assert user_attr.id
+        sdk.set_user_attribute_group_values(
+            user_attribute_id=user_attr.id,
+            body=[
+                models.UserAttributeGroupValue(
+                    group_id=group.id, value="/extensions/hack::hack"
+                )
+            ],
+        )
     sdk.add_group_user(
         group_id=group.id, body=models.GroupIdForGroupUserInclusion(user_id=user_id)
     )
 
 
 @try_to
-def set_user_attributes(*, sdk: methods.LookerSDK, user_id, hackathon):
+def set_user_attributes(*, sdk: methods.Looker40SDK, user_id, hackathon):
     hackathon_attr_id = get_hackathon_attr_id(sdk=sdk)
     assert hackathon_attr_id
     sdk.set_user_attribute_user_value(
@@ -200,15 +214,14 @@ def set_user_attributes(*, sdk: methods.LookerSDK, user_id, hackathon):
 
 
 @try_to
-def disable_user(*, sdk: methods.LookerSDK, user_id: int):
+def disable_user(*, sdk: methods.Looker40SDK, user_id: int):
     sdk.update_user(user_id=user_id, body=models.WriteUser(is_disabled=True))
 
 
 def me():
-    sdk = looker_sdk.init31()
+    sdk = looker_sdk.init40()
     return sdk.me()
 
 
 class RegisterError(Exception):
-    """Failed to register user in looker instance.
-    """
+    """Failed to register user in looker instance."""

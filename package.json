@@ -33,7 +33,7 @@
     "build:es": "yarn lerna exec --stream 'BABEL_ENV=build babel src --root-mode upward --out-dir lib --source-maps --extensions .ts,.tsx --no-comments'",
     "build:ts": "yarn lerna exec --stream --sort 'tsc -b tsconfig.build.json'",
     "clean": "rm -Rf packages/*/lib",
-    "prepublishOnly": "yarn test",
+    "prepublishOnly": "yarn jest packages/sdk/",
     "deploy": "yarn workspace sdk deploy",
     "deploy:codegen": "lerna run deploy --scope sdk-codegen -c",
     "deploy:sdk": "lerna run deploy --scope sdk",
