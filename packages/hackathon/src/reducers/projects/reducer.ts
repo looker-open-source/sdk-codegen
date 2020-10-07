@@ -23,18 +23,38 @@
  SOFTWARE.
 
  */
-import * as React from 'react'
-import * as ReactDOM from 'react-dom'
-import { DefaultSettings, BrowserTransport } from '@looker/sdk-rtl/lib/browser'
-import { ISheet, SheetSDK } from '@looker/wholly-sheet'
-import { App } from './App'
-import { SheetData } from './models/SheetData'
+import { Project } from '../../models'
+import { ProjectAction, Actions } from './projectActions'
 
-// TODO the setup of the SheetData will change. I will likely retrieved from
-// eslint-disable-next-line @typescript-eslint/no-var-requires
+export interface ProjectState {
+  loading: boolean
+  error?: string
+  projects?: Project[]
+}
 
-window.addEventListener('DOMContentLoaded', (_) => {
-  const root = document.createElement('div')
-  document.body.appendChild(root)
-  ReactDOM.render(<App sheetData={sheetData} />, root)
+const defaultState: Readonly<ProjectState> = Object.freeze({
+  loading: false,
 })
+
+export const projectsReducer = (
+  state: ProjectState = defaultState,
+  action: ProjectAction
+): ProjectState => {
+  switch (action.type) {
+    case Actions.ALL_PROJECTS_REQUEST:
+    // case ProjectActions.CREATE_PROJECT_REQUEST:
+    // case ProjectActions.UPDATE_PROJECT_REQUEST:
+    //   return {
+    //     ...state,
+    //     loading: true,
+    //   }
+    // case ProjectActions.ERROR:
+    //   return {
+    //     ...state,
+    //     loading: false,
+    //     error: action.payload as string,
+    //   }
+    default:
+      return state
+  }
+}

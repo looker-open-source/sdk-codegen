@@ -23,18 +23,16 @@
  SOFTWARE.
 
  */
-import * as React from 'react'
-import * as ReactDOM from 'react-dom'
-import { DefaultSettings, BrowserTransport } from '@looker/sdk-rtl/lib/browser'
 import { ISheet, SheetSDK } from '@looker/wholly-sheet'
-import { App } from './App'
-import { SheetData } from './models/SheetData'
+import { BrowserTransport, DefaultSettings } from '@looker/sdk-rtl'
+import { SheetData } from '../models/SheetData'
 
-// TODO the setup of the SheetData will change. I will likely retrieved from
 // eslint-disable-next-line @typescript-eslint/no-var-requires
-
-window.addEventListener('DOMContentLoaded', (_) => {
-  const root = document.createElement('div')
-  document.body.appendChild(root)
-  ReactDOM.render(<App sheetData={sheetData} />, root)
-})
+const tabs = require('../../../wholly-sheet/src/tabs.json')
+const sheet = { tabs } as ISheet
+const sheetSDK = new SheetSDK(
+  new BrowserTransport(DefaultSettings()),
+  'bogus',
+  'bogus'
+)
+export const sheetData = new SheetData(sheetSDK, sheet)
