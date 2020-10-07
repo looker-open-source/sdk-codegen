@@ -24,4 +24,3 @@
 
  */
 export { AppRouter } from './AppRouter'
-export { validTag, validMethod, validSpecKey } from './utils'

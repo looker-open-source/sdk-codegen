@@ -25,18 +25,15 @@
  */
 
 import { ApiModel } from '@looker/sdk-codegen'
-import { Location as HLocation } from 'history'
 
 import { SpecItems } from '../../ApiExplorer'
 import { SpecState } from './reducer'
 
-export type AbstractLocation = HLocation | Location
-
 /**
  * Given a collection of specs, it returns the spec marked as default, the one
  * marked as current or the first one, in that order.
- * @param specs A collection of specs
- * @returns A spec
+ * @param {SpecItems} A collection of specs
+ * @returns {string}  A spec
  */
 export const getDefaultSpecKey = (specs: SpecItems): string => {
   const items = Object.entries(specs)
@@ -123,17 +120,13 @@ export const fetchSpec = (key: string, specs: SpecItems): SpecState => {
 /**
  * Creates a default state object with the spec matching the specKey defined
  * in the url or the default criteria in getDefaultSpecKey
- * @param specs A collection of specs
- * @param location Standalone or extension location
- * @returns An object to be used as default state
+ * @param {SpecItems} A collection of specs
+ * @returns {SpecState} An object to be used as default state
  */
-export const initDefaultSpecState = (
-  specs: SpecItems,
-  location: AbstractLocation
-): SpecState => {
+export const initDefaultSpecState = (specs: SpecItems): SpecState => {
   const pathNodes = location.pathname.split('/')
   let specKey
-  if (pathNodes.length > 1 && pathNodes[1]) {
+  if (pathNodes.length > 2) {
     specKey = pathNodes[1]
   } else {
     specKey = getDefaultSpecKey(specs)
