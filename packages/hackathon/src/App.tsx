@@ -25,20 +25,21 @@
  */
 
 import React, { FC } from 'react'
+import { Provider } from 'react-redux'
 import { ExtensionProvider } from '@looker/extension-sdk-react'
 import { ComponentsProvider } from '@looker/components'
 import { hot } from 'react-hot-loader/root'
-import { SheetData } from './models/SheetData'
 import { Hackathon } from './Hackathon'
+import { configureStore } from './reducers/projects/store'
 
-interface AppProps {
-  sheetData: SheetData
-}
+interface AppProps {}
 
-export const App: FC<AppProps> = hot(({ sheetData }) => (
-  <ExtensionProvider>
-    <ComponentsProvider>
-      <Hackathon sheetData={sheetData} />
-    </ComponentsProvider>
-  </ExtensionProvider>
+export const App: FC<AppProps> = hot(() => (
+  <Provider store={configureStore()}>
+    <ExtensionProvider>
+      <ComponentsProvider>
+        <Hackathon />
+      </ComponentsProvider>
+    </ExtensionProvider>
+  </Provider>
 ))

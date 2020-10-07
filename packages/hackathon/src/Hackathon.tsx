@@ -30,15 +30,12 @@ import {
   ExtensionContextData,
 } from '@looker/extension-sdk-react'
 // import { ProjectsScene } from './scenes'
-import { SheetData } from './models/SheetData'
 import { HomeScene } from './scenes/HomeScene/HomeScene'
 
 // TODO sheetData will NOT be passed down as a property
-interface HackathonProps {
-  sheetData: SheetData
-}
+interface HackathonProps {}
 
-export const Hackathon: FC<HackathonProps> = ({ sheetData }) => {
+export const Hackathon: FC<HackathonProps> = () => {
   // TODO the extensionSDK will be passed to wholly sheets which will do a
   // bunch of setup
   // 1. verify user attributes have been defined
@@ -53,7 +50,7 @@ export const Hackathon: FC<HackathonProps> = ({ sheetData }) => {
       {/*    {sheetData && <ProjectsScene projects={sheetData.projects} />} */}
       {/*  </Route> */}
       <Route exact>
-        <HomeScene sheetData={sheetData} />
+        <HomeScene />
       </Route>
     </Switch>
   )

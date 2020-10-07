@@ -24,24 +24,31 @@
 
  */
 
-import React, { FC } from 'react'
+import React, { FC, useEffect } from 'react'
+import { useSelector, useDispatch } from 'react-redux'
 import {
   ActionList,
   ActionListItem,
   ActionListItemColumn,
 } from '@looker/components'
+import { allProjectsRequest } from '../../reducers/projects/actions'
 
 import { Projects, Project, sheetHeader, sheetCell } from '../../models'
 
-interface ProjectSceneProps {
-  projects: Projects
-}
+interface ProjectSceneProps {}
 
-export const ProjectsScene: FC<ProjectSceneProps> = ({ projects }) => {
+export const ProjectsScene: FC<ProjectSceneProps> = () => {
+  const dispatch = useDispatch()
+  useEffect(() => {
+    dispatch(allProjectsRequest())
+  }, [])
+  const projects = useSelector((state: any) => {
+    return state.projects
+  })
   // const { value, setOn, setOff } = useToggle()
   return (
     <>
-      <ProjectList projects={projects} />
+      {projects && <ProjectList projects={projects} />}
       {/* <Dialog isOpen={value} onClose={setOff}> */}
       {/*  <DialogContent> */}
       {/*    <ProjectForm /> */}

@@ -23,71 +23,121 @@
  SOFTWARE.
 
  */
-import { Project } from '../../models'
+import { Projects, Project } from '../../models'
 
 export enum Actions {
   ALL_PROJECTS_REQUEST = 'ALL_PROJECTS_REQUEST',
   ALL_PROJECTS_SUCCESS = 'ALL_PROJECTS_SUCCESS',
-  CREATE_PROJECT_REQUEST = 'CREATE_PROJECT_REQUEST',
-  CREATE_PROJECT_SUCCESS = 'CREATE_PROJECT_SUCCESS',
-  UPDATE_PROJECT_REQUEST = 'UPDATE_PROJECT_REQUEST',
-  UPDATE_PROJECT_SUCCESS = 'UPDATE_PROJECT_SUCCESS',
+  BEGIN_EDIT_PROJECT_REQUEST = 'BEGIN_EDIT_PROJECT_REQUEST',
+  BEGIN_EDIT_PROJECT_SUCCESS = 'BEGIN_EDIT_PROJECT_SUCCESS',
+  SAVE_PROJECT_REQUEST = 'SAVE_PROJECT_REQUEST',
+  SAVE_PROJECT_SUCCESS = 'SAVE_PROJECT_SUCCESS',
   DELETE_PROJECT_REQUEST = 'DELETE_PROJECT_REQUEST',
   DELETE_PROJECT_SUCCESS = 'DELETE_PROJECT_SUCCESS',
   ERROR = 'ERROR',
 }
 
-export interface ProjectAction {
-  type: string
+export interface AllProjectsRequestAction {
+  type: Actions.ALL_PROJECTS_REQUEST
 }
 
-export interface EditProjectAction extends ProjectAction {
+export interface AllProjectsSuccessAction {
+  type: Actions.ALL_PROJECTS_SUCCESS
+  payload: Projects
+}
+
+export interface BeginEditProjectRequestAction {
+  type: Actions.BEGIN_EDIT_PROJECT_REQUEST
+  payload?: string
+}
+
+export interface BeginEditProjectSuccessAction {
+  type: Actions.BEGIN_EDIT_PROJECT_SUCCESS
   payload: Project
 }
 
-export interface CreateProjectAction extends ProjectAction {
+export interface SaveProjectRequestAction {
+  type: Actions.SAVE_PROJECT_REQUEST
   payload: Project
 }
 
-export const allProjectsRequest = (): ProjectAction => ({
+export interface SaveProjectSuccessAction {
+  type: Actions.SAVE_PROJECT_SUCCESS
+}
+
+export interface DeleteProjectRequestAction {
+  type: Actions.DELETE_PROJECT_REQUEST
+  payload: Project
+}
+
+export interface DeleteProjectSuccessAction {
+  type: Actions.DELETE_PROJECT_SUCCESS
+}
+
+export interface ErrorAction {
+  type: Actions.ERROR
+  payload: Error
+}
+
+export type ProjectAction =
+  | AllProjectsRequestAction
+  | AllProjectsSuccessAction
+  | BeginEditProjectRequestAction
+  | BeginEditProjectSuccessAction
+  | SaveProjectRequestAction
+  | SaveProjectSuccessAction
+  | DeleteProjectRequestAction
+  | DeleteProjectSuccessAction
+  | ErrorAction
+
+export const allProjectsRequest = (): AllProjectsRequestAction => ({
   type: Actions.ALL_PROJECTS_REQUEST,
 })
 
-export const allProjectsSuccess = (projects: Project[]): ProjectAction => ({
+export const allProjectsSuccess = (
+  projects: Projects
+): AllProjectsSuccessAction => ({
   type: Actions.ALL_PROJECTS_SUCCESS,
   payload: projects,
 })
 
-export const updateProjectRequest = (
-  updatedProject: Project
-): ProjectAction => ({
-  type: Actions.UPDATE_PROJECT_REQUEST,
-  payload: updatedProject,
+export const beginEditProjectRequest = (
+  id?: string
+): BeginEditProjectRequestAction => ({
+  type: Actions.BEGIN_EDIT_PROJECT_REQUEST,
+  payload: id,
 })
 
-export const updateProjectSuccess = (
-  updatedProject: Project
-): ProjectAction => ({
-  type: Actions.UPDATE_PROJECT_SUCCESS,
-  payload: updatedProject,
-})
-
-export const createProjectRequest = (project: Project): ProjectAction => ({
-  type: Actions.CREATE_PROJECT_REQUEST,
+export const beginEditProjectSuccess = (
+  project: Project
+): BeginEditProjectSuccessAction => ({
+  type: Actions.BEGIN_EDIT_PROJECT_SUCCESS,
   payload: project,
 })
 
-export const createProjectSuccess = (project: Project): ProjectAction => ({
-  type: Actions.CREATE_PROJECT_SUCCESS,
+export const saveProjectRequest = (
+  project: Project
+): SaveProjectRequestAction => ({
+  type: Actions.SAVE_PROJECT_REQUEST,
   payload: project,
 })
 
-export const deleteProjectRequest = (project: Project): ProjectAction => ({
+export const saveProjectSuccess = (): SaveProjectSuccessAction => ({
+  type: Actions.SAVE_PROJECT_SUCCESS,
+})
+
+export const deleteProjectRequest = (
+  project: Project
+): DeleteProjectRequestAction => ({
   type: Actions.DELETE_PROJECT_REQUEST,
   payload: project,
 })
 
-export const deleteProjectSuccess = (project: Project): ProjectAction => ({
-  type: Actions.DELETE_PROJECT_REQUEST,
-  payload: project,
+export const deleteProjectSuccess = (): DeleteProjectSuccessAction => ({
+  type: Actions.DELETE_PROJECT_SUCCESS,
+})
+
+export const actionError = (error: Error): ErrorAction => ({
+  type: Actions.ERROR,
+  payload: error,
 })

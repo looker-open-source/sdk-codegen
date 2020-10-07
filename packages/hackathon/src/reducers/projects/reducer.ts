@@ -23,37 +23,87 @@
  SOFTWARE.
 
  */
-import { Project } from '../../models'
-import { ProjectAction, Actions } from './projectActions'
+import { Projects, Project } from '../../models'
+import { ProjectAction, Actions } from './actions'
 
-export interface ProjectState {
-  loading: boolean
+// This is the first cut for state and to be honest I dont like it.
+// It will likely change
+export interface ProjectsStore {
+  projects?: Projects
+  currentProject?: Project
   error?: string
-  projects?: Project[]
+  loading: boolean
 }
 
-const defaultState: Readonly<ProjectState> = Object.freeze({
+const defaultState: Readonly<ProjectsStore> = Object.freeze({
   loading: false,
 })
 
 export const projectsReducer = (
-  state: ProjectState = defaultState,
+  state: ProjectsStore = defaultState,
   action: ProjectAction
-): ProjectState => {
+): ProjectsStore => {
   switch (action.type) {
     case Actions.ALL_PROJECTS_REQUEST:
-    // case ProjectActions.CREATE_PROJECT_REQUEST:
-    // case ProjectActions.UPDATE_PROJECT_REQUEST:
-    //   return {
-    //     ...state,
-    //     loading: true,
-    //   }
-    // case ProjectActions.ERROR:
-    //   return {
-    //     ...state,
-    //     loading: false,
-    //     error: action.payload as string,
-    //   }
+      return {
+        ...state,
+        loading: true,
+        error: undefined,
+      }
+    case Actions.ALL_PROJECTS_SUCCESS:
+      return {
+        ...state,
+        projects: action.payload,
+        loading: false,
+      }
+    case Actions.BEGIN_EDIT_PROJECT_REQUEST:
+      return {
+        ...state,
+        loading: true,
+        error: undefined,
+      }
+    case Actions.BEGIN_EDIT_PROJECT_SUCCESS:
+      return {
+        ...state,
+        currentProject: action.payload,
+        loading: false,
+      }
+    case Actions.SAVE_PROJECT_REQUEST:
+      return {
+        ...state,
+        loading: true,
+        error: undefined,
+      }
+    case Actions.SAVE_PROJECT_SUCCESS:
+      // TODO consider updating the just updated project
+      // in the project list. Probably not necessary
+      // as projects is supposed to be refreshed.
+      return {
+        ...state,
+        currentProject: undefined,
+        loading: false,
+      }
+    case Actions.DELETE_PROJECT_REQUEST:
+      return {
+        ...state,
+        loading: true,
+        error: undefined,
+      }
+    case Actions.DELETE_PROJECT_SUCCESS:
+      // TODO consider deleting the just deleted project
+      // from the project list. Probably not necessary
+      // as projects is supposed to be refreshed.
+      return {
+        ...state,
+        currentProject: undefined,
+        loading: false,
+      }
+    case Actions.ERROR:
+      return {
+        ...state,
+        loading: false,
+        error: action.payload.message,
+      }
     default:
       return state
   }
