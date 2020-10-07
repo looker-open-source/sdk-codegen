@@ -31,7 +31,8 @@ const envVarNames = {
   SERVER_PORT: 'SERVER_PORT',
   LOOKERSDK_BASE_URL: 'LOOKERSDK_BASE_URL',
   LOOKERSDK_VERIFY_SSL: 'LOOKERSDK_VERIFY_SSL',
-  SERVICE_ACCOUNT_CREDENTIALS: 'SERVICE_ACCOUNT_CREDENTIALS',
+  GOOGLE_APPLICATION_CREDENTIAL_ENCODED:
+    'GOOGLE_APPLICATION_CREDENTIAL_ENCODED',
 }
 
 const env = process.env as ProcessEnv
@@ -62,13 +63,13 @@ class Settings {
     try {
       this._serviceAccountCredentials = JSON.parse(
         Buffer.from(
-          env[envVarNames.SERVICE_ACCOUNT_CREDENTIALS],
+          env[envVarNames.GOOGLE_APPLICATION_CREDENTIAL_ENCODED],
           'base64'
         ).toString()
       )
     } catch (err) {}
     if (!this._serviceAccountCredentials) {
-      const message = `Invalid environment variable: ${envVarNames.SERVICE_ACCOUNT_CREDENTIALS}`
+      const message = `Invalid environment variable: ${envVarNames.GOOGLE_APPLICATION_CREDENTIAL_ENCODED}`
       console.error(message)
       throw new Error(message)
     }

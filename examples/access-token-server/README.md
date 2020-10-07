@@ -23,7 +23,7 @@ The server will read an update environment variables from a .env file in this di
 SERVER_PORT=
 LOOKERSDK_BASE_URL=
 LOOKERSDK_VERIFY_SSL=
-SERVICE_ACCOUNT_CREDENTIALS=
+GOOGLE_APPLICATION_CREDENTIAL_ENCODED=
 ```
 
 ### Optional - only for running tests
@@ -40,7 +40,7 @@ LOOKER_CLIENT_SECRET=
 - LOOKERSDK_VERIFY_SSL true to validate the SSL certificate. Set to false if using a test certificate.
 - LOOKER_CLIENT_ID Looker server API3 client id (Looker user admin page). Only used for tests.
 - LOOKER_CLIENT_SECRET Looker server API3 client secret (Looker user admin page). Only used for tests.
-- SERVICE_ACCOUNT_CREDENTIALS base64 encoded string containing service account json file (see above for how to generate).
+- GOOGLE_APPLICATION_CREDENTIAL_ENCODED base64 encoded string containing service account json file (see above for how to generate).
 
 ## Using in a Looker extension
 
