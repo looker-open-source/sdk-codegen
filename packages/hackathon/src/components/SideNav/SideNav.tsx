@@ -25,28 +25,28 @@
  */
 import React, { FC } from 'react'
 import styled from 'styled-components'
-import { Box, TreeItem, TreeGroup } from '@looker/components'
+import { Box, MenuList, MenuItem } from '@looker/components'
 import { NavLink } from 'react-router-dom'
 
 export const SideNav: FC = () => (
-  <Box pt="small" fontSize="xxlarge">
-    <TreeGroup label="Menu">
-      <TreeItem icon="Home">
+  <Box fontSize="xxlarge">
+    <MenuList type="none">
+      <MenuItem icon="Home">
         <Link to="/home">Home</Link>
-      </TreeItem>
-      <TreeItem icon="Group">
+      </MenuItem>
+      <MenuItem icon="Group">
         <Link to="/users">Users</Link>
-      </TreeItem>
-      <TreeItem icon="Folder">
+      </MenuItem>
+      <MenuItem icon="Folder">
         <Link to="projects">Projects</Link>
-      </TreeItem>
-      <TreeItem icon="Style">
+      </MenuItem>
+      <MenuItem icon="Style">
         <Link to="/judging">Judging</Link>
-      </TreeItem>
-      <TreeItem icon="Gear">
+      </MenuItem>
+      <MenuItem icon="Gear">
         <Link to="/admin">Admin</Link>
-      </TreeItem>
-    </TreeGroup>
+      </MenuItem>
+    </MenuList>
   </Box>
 )
 
@@ -60,6 +60,7 @@ const Link = styled(NavLink)`
     },
   }) => `${xsmall} ${large}`};
   &:hover,
+  &:visited,
   &:focus,
   &.active {
     color: ${({ theme }) => theme.colors.key};
