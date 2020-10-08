@@ -24,7 +24,7 @@
 
  */
 import React, { FC } from 'react'
-import { Page, Layout, Aside } from '@looker/components'
+import { Page, Layout, Aside, Section } from '@looker/components'
 
 import { SideNav, Header } from './components'
 import { AppRouter } from './routes'
@@ -39,7 +39,9 @@ export const Hackathon: FC<HackathonProps> = () => {
         <Aside width="10rem">
           <SideNav />
         </Aside>
-        <AppRouter />
+        <Section>
+          <AppRouter />
+        </Section>
       </Layout>
     </Page>
   )
