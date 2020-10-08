@@ -30,20 +30,15 @@ import { ComponentsProvider } from '@looker/components'
 import { hot } from 'react-hot-loader/root'
 import { Hackathon } from './Hackathon'
 
-interface AppProps {
-  sheetId: string
-  accessTokenServerUrl?: string
-}
+// eslint-disable-next-line @typescript-eslint/no-var-requires
+const temporaryCreds = require('../../../examples/access-token-server/service_account.json')
 
-export const App: FC<AppProps> = hot(({ sheetId, accessTokenServerUrl }) => {
-  if (!accessTokenServerUrl) accessTokenServerUrl = 'http://localhost:8081'
+export const App: FC = hot(() => {
+  const sheetId = temporaryCreds.sheet_id
   return (
     <ExtensionProvider>
       <ComponentsProvider>
-        <Hackathon
-          sheetId={sheetId}
-          accessTokenServerUrl={accessTokenServerUrl}
-        />
+        <Hackathon sheetId={sheetId} />
       </ComponentsProvider>
     </ExtensionProvider>
   )

@@ -32,7 +32,7 @@ import {
 } from '@looker/extension-sdk-react'
 import { DefaultSettings } from '@looker/sdk-rtl/lib/browser'
 import { SheetData } from './models/SheetData'
-import { HomeScene } from './scenes/HomeScene/HomeScene'
+import { HomeScene } from './scenes/HomeScene'
 import { ExtensionProxyTransport } from './authToken/extensionProxyTransport'
 import { GAuthSession } from './authToken/gAuthSession'
 
