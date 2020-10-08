@@ -23,4 +23,6 @@
  SOFTWARE.
 
  */
+export { Loading } from './Loading'
 export { SideNav } from './SideNav'
+export { Header } from './Header'

@@ -24,23 +24,9 @@
 
  */
 import React, { FC } from 'react'
-import { Page, Layout, Aside } from '@looker/components'
+import { Heading } from '@looker/components'
 
-import { SideNav, Header } from './components'
-import { AppRouter } from './routes'
-
-interface HackathonProps {}
-
-export const Hackathon: FC<HackathonProps> = () => {
-  return (
-    <Page>
-      <Header />
-      <Layout hasAside>
-        <Aside width="10rem">
-          <SideNav />
-        </Aside>
-        <AppRouter />
-      </Layout>
-    </Page>
-  )
+// TODO: Pull hackathon name from store and greet user by name
+export const Header: FC = () => {
+  return <Heading>Welcome to ABC123</Heading>
 }

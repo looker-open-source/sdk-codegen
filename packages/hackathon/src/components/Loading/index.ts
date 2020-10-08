@@ -23,24 +23,4 @@
  SOFTWARE.
 
  */
-import React, { FC } from 'react'
-import { Page, Layout, Aside } from '@looker/components'
-
-import { SideNav, Header } from './components'
-import { AppRouter } from './routes'
-
-interface HackathonProps {}
-
-export const Hackathon: FC<HackathonProps> = () => {
-  return (
-    <Page>
-      <Header />
-      <Layout hasAside>
-        <Aside width="10rem">
-          <SideNav />
-        </Aside>
-        <AppRouter />
-      </Layout>
-    </Page>
-  )
-}
+export { Loading } from './Loading'

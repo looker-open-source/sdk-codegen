@@ -34,6 +34,8 @@ import {
 import { allProjectsRequest } from '../../reducers/projects/actions'
 
 import { Projects, Project, sheetHeader, sheetCell } from '../../models'
+import { ProjectsStore } from '../../reducers/projects/reducer'
+import { Loading } from '../../components'
 
 interface ProjectSceneProps {}
 
@@ -41,13 +43,20 @@ export const ProjectsScene: FC<ProjectSceneProps> = () => {
   const dispatch = useDispatch()
   useEffect(() => {
     dispatch(allProjectsRequest())
-  }, [])
-  const projects = useSelector((state: any) => {
-    return state.projects
-  })
-  // const { value, setOn, setOff } = useToggle()
+  }, [dispatch])
+  const projects = useSelector<ProjectsStore, Projects>(
+    (state) => state.projects!
+  )
+  const isLoading = useSelector<ProjectsStore, boolean>(
+    (state) => state.loading
+  )
+
   return (
     <>
+      <Loading
+        loading={!projects && isLoading}
+        message={'Fetching projects...'}
+      />
       {projects && <ProjectList projects={projects} />}
       {/* <Dialog isOpen={value} onClose={setOff}> */}
       {/*  <DialogContent> */}
