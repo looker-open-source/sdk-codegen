@@ -26,10 +26,20 @@
 import * as fs from 'fs'
 import path from 'path'
 import { JWT } from 'google-auth-library'
-import { NodeTransport, DefaultSettings } from '@looker/sdk-rtl'
+import {
+  NodeTransport,
+  DefaultSettings,
+  AuthSession,
+  IRequestProps,
+  IApiSettings,
+  ITransport,
+} from '@looker/sdk-rtl'
 import { defaultScopes, SheetSDK } from '../SheetSDK'
 
-const credFile = path.join(__dirname, '../google-creds.json')
+const credFile = path.join(
+  __dirname,
+  '../../../../examples/access-token-server/service_account.json'
+)
 const creds = fs.readFileSync(credFile, { encoding: 'utf-8' })
 export const cred = JSON.parse(creds)
 export const transport = new NodeTransport(DefaultSettings())
@@ -52,8 +62,34 @@ export const getAuthToken = async (cred: any): Promise<string> => {
   // console.log(res.data)
 }
 
+class TestAuthSession extends AuthSession {
+  constructor(
+    public readonly activeToken: string,
+    settings: IApiSettings,
+    transport: ITransport
+  ) {
+    super(settings, transport)
+  }
+
+  async authenticate(props: IRequestProps) {
+    props.headers.Authorization = `Bearer ${this.activeToken}`
+    return props
+  }
+
+  getToken() {
+    return Promise.resolve(this.activeToken)
+  }
+
+  isAuthenticated(): boolean {
+    return !!this.activeToken
+  }
+}
+
 export const initSheetSDK = async (keys = cred): Promise<SheetSDK> => {
   const token = await getAuthToken(keys)
-  const sheets = new SheetSDK(transport, token, cred.sheet_id)
+  const settings = DefaultSettings()
+  const transport = new NodeTransport(settings)
+  const session = new TestAuthSession(token, settings, transport)
+  const sheets = new SheetSDK(session, cred.sheet_id)
   return sheets
 }
