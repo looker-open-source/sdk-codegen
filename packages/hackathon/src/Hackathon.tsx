@@ -33,7 +33,7 @@ interface HackathonProps {}
 
 export const Hackathon: FC<HackathonProps> = () => {
   return (
-    <Page>
+    <Page mx="large">
       <Header />
       <Layout hasAside>
         <Aside width="10rem">
