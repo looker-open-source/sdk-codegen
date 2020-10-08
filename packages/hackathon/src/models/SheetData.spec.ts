@@ -24,18 +24,19 @@
 
  */
 
-import { SheetSDK } from '@looker/wholly-sheet'
+import { ISheet, SheetSDK } from '@looker/wholly-sheet'
 import { initSheetSDK } from '../../../wholly-sheet/src/testUtils/testUtils'
 import { SheetData } from './SheetData'
 
 let sheetSDK: SheetSDK
+let data: ISheet
 
 describe('SheetData', () => {
   beforeAll(async () => {
     sheetSDK = await initSheetSDK()
+    data = await sheetSDK.index()
   })
   test('loads', async () => {
-    const data = await sheetSDK.index()
     const actual = new SheetData(sheetSDK, data)
     expect(actual.hackathons.rows.length).toBeGreaterThan(0)
     expect(actual.judgings.rows.length).toBeGreaterThan(0)
@@ -44,5 +45,13 @@ describe('SheetData', () => {
     expect(actual.registrations.rows.length).toBeGreaterThan(0)
     expect(actual.teamMembers.rows.length).toBeGreaterThan(0)
     expect(actual.technologies.rows.length).toBeGreaterThan(0)
+  })
+  test('gets current hackathon', () => {
+    const sheet = new SheetData(sheetSDK, data)
+    const actual = sheet.currentHackathon
+    expect(actual).toBeDefined()
+    expect(actual?.judging_stops.getTime()).toBeGreaterThan(
+      new Date().getTime()
+    )
   })
 })

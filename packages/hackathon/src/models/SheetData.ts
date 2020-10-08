@@ -32,9 +32,11 @@ import {
   Hackathons,
   TeamMembers,
   Judgings,
+  Hackathon,
 } from '.'
 
 export class SheetData {
+  private _hackathon: Hackathon | undefined
   protected _sheet!: ISheet
   projects!: Projects
   technologies!: Technologies
@@ -50,6 +52,19 @@ export class SheetData {
 
   get sheet() {
     return this._sheet
+  }
+
+  /** finds the "next up" or "current" hackathon and caches it for the instance lifetime */
+  get currentHackathon(): Hackathon | undefined {
+    if (this._hackathon) return this._hackathon
+    // Sort hackathons in chronological order by start time ... maybe we sort by the stop of judging instead?
+    const sorted = this.hackathons.rows.sort(
+      (a, b) => a.date.getTime() - b.date.getTime()
+    )
+    const now = new Date().getTime()
+    const current = sorted.find((hack) => hack.judging_stops.getTime() >= now)
+    this._hackathon = current as Hackathon
+    return this._hackathon
   }
 
   /**
