@@ -68,7 +68,6 @@ function* allProjectsSaga() {
   try {
     const result = yield call([projects, projects.getProjects])
     yield put(allProjectsSuccess(result))
-    yield put(allProjectsSuccess({} as Projects))
   } catch (err) {
     yield put(actionError(err.message))
   }
