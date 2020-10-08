@@ -43,7 +43,7 @@ import {
   parseResponse,
   ResponseMode,
   responseMode,
-} from '@looker/sdk-rtl'
+} from '@looker/sdk-rtl/lib/browser'
 import {
   ExtensionSDK,
   FetchCustomParameters,

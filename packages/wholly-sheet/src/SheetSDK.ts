@@ -26,10 +26,10 @@
 
 import {
   HttpMethod,
-  ITransport,
   boolDefault,
   DelimArray,
-  parseResponse,
+  APIMethods,
+  IAuthSession,
 } from '@looker/sdk-rtl/lib/browser'
 
 export const noDate = new Date(-8640000000000000)
@@ -344,22 +344,22 @@ export const loadTabTable = (tab: ISheetTab, keyName = 'id'): ITabTable => {
 
 // https://developers.google.com/sheets/api/reference/rest/v4/spreadsheets.values
 
-export class SheetSDK {
-  constructor(
-    public readonly transport: ITransport,
-    public readonly token: string,
-    public sheetId: string
-  ) {
-    this.token = encodeURIComponent(token)
+const sheetSDKVersion = '0.1.0-alpha'
+
+export class SheetSDK extends APIMethods {
+  constructor(authSession: IAuthSession, public sheetId: string) {
+    super(authSession, sheetSDKVersion)
+    authSession.settings.agentTag = `SheetSDK ${this.apiVersion}`
     this.sheetId = encodeURIComponent(sheetId)
   }
 
-  async request(method: HttpMethod, api = '', body: any = undefined) {
-    const auth = (api.includes('?') ? '&' : '?') + `access_token=${this.token}`
-    const path = `https://sheets.googleapis.com/v4/spreadsheets/${this.sheetId}${api}${auth}`
-    const raw = await this.transport.rawRequest(method, path, undefined, body)
-    const response = await parseResponse(raw)
-    if (!raw.ok) throw new SheetError(response)
+  async request<TSuccess>(method: HttpMethod, api = '', body: any = undefined) {
+    const path = `https://sheets.googleapis.com/v4/spreadsheets/${this.sheetId}${api}`
+    const response = await this.ok<TSuccess, SheetError>(
+      this.authRequest<TSuccess, SheetError>(method, path, undefined, body)
+    )
+    // const response = await parseResponse(raw)
+    // if (!raw.ok) throw new SheetError(response)
     return response
   }
 
@@ -407,7 +407,7 @@ export class SheetSDK {
     if (!row) throw new SheetError('row cannot be zero')
     const name = tabName(tab)
     const api = `/values/${name}!A${row}:end`
-    const sheet = await this.request('GET', api)
+    const sheet = await this.request<any>('GET', api)
     return sheet.values
   }
 
@@ -430,7 +430,7 @@ export class SheetSDK {
     const options =
       'valueInputOption=RAW&includeValuesInResponse=true&responseValueRenderOption=FORMATTED_VALUE'
     const api = `/values/${name}!A${row}:end?${options}`
-    const response = await this.request('PUT', api, body)
+    const response = await this.request<any>('PUT', api, body)
     const changeCount = values.length
     const expected = `1 row(s), ${changeCount} column(s), ${changeCount} cells`
     const actual = `${response.updatedRows} row(s), ${response.updatedColumns} column(s), ${response.updatedCells} cells`
@@ -459,7 +459,7 @@ export class SheetSDK {
     const options =
       'valueInputOption=RAW&insertDataOption=INSERT_ROWS&includeValuesInResponse=true&responseValueRenderOption=FORMATTED_VALUE'
     const api = `/values/${name}!A${row}:end:append?${options}`
-    const response = await this.request('POST', api, body)
+    const response = await this.request<any>('POST', api, body)
     const range = response.updates.updatedRange
     const match = range.match(/!A(\d+):/)
     if (!match) {

@@ -23,30 +23,49 @@
  SOFTWARE.
 
  */
-import React, { FC, useContext } from 'react'
+import React, { FC, useContext, useEffect, useState } from 'react'
 import { Route, Switch } from 'react-router-dom'
+import { ISheet, SheetSDK } from '@looker/wholly-sheet'
 import {
   ExtensionContext,
   ExtensionContextData,
 } from '@looker/extension-sdk-react'
-// import { ProjectsScene } from './scenes'
+import { DefaultSettings } from '@looker/sdk-rtl/lib/browser'
 import { SheetData } from './models/SheetData'
 import { HomeScene } from './scenes/HomeScene/HomeScene'
+import { ExtensionProxyTransport } from './authToken/extensionProxyTransport'
+import { GAuthSession } from './authToken/gAuthSession'
 
 // TODO sheetData will NOT be passed down as a property
 interface HackathonProps {
-  sheetData: SheetData
+  sheetId: string
+  accessTokenServerUrl?: string
 }
 
-export const Hackathon: FC<HackathonProps> = ({ sheetData }) => {
-  // TODO the extensionSDK will be passed to wholly sheets which will do a
-  // bunch of setup
-  // 1. verify user attributes have been defined
-  // 2. Get an access token from the access token server
-  // 3. Get the sheets data.
+export const Hackathon: FC<HackathonProps> = ({
+  sheetId,
+  accessTokenServerUrl = 'http://localhost:8081',
+}) => {
   const { extensionSDK } = useContext<ExtensionContextData>(ExtensionContext)
-  // TODO remove this. My OCD put it in because I did not want to see a warning
-  console.log(extensionSDK.lookerHostData)
+  const options = {
+    ...DefaultSettings(),
+    ...{ base_url: accessTokenServerUrl },
+  }
+  const emptySheet = {} as ISheet
+  const transport = new ExtensionProxyTransport(extensionSDK, options)
+  const sheetSession = new GAuthSession(extensionSDK, options, transport)
+  const sheetSDK = new SheetSDK(sheetSession, sheetId)
+  const [sheetData, setSheetData] = useState<SheetData>(
+    new SheetData(sheetSDK, emptySheet)
+  )
+
+  useEffect(() => {
+    const loadSheet = async () => await sheetSDK.index()
+    loadSheet().then((data) => {
+      setSheetData(new SheetData(sheetSDK, data))
+    })
+  })
+
   return (
     <Switch>
       {/*  <Route path="/projects" exact> */}

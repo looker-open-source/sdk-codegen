@@ -35,24 +35,56 @@ import {
 } from '.'
 
 export class SheetData {
-  projects: Projects
-  technologies: Technologies
-  registrations: Registrations
-  projectTechnologies: ProjectTechnologies
-  hackathons: Hackathons
-  teamMembers: TeamMembers
-  judgings: Judgings
+  protected _sheet!: ISheet
+  projects!: Projects
+  technologies!: Technologies
+  registrations!: Registrations
+  projectTechnologies!: ProjectTechnologies
+  hackathons!: Hackathons
+  teamMembers!: TeamMembers
+  judgings!: Judgings
 
-  constructor(public readonly sheets: SheetSDK, sheet: ISheet) {
-    this.projects = new Projects(sheets, sheet.tabs.projects)
-    this.technologies = new Technologies(sheets, sheet.tabs.technologies)
-    this.registrations = new Registrations(sheets, sheet.tabs.registrations)
-    this.projectTechnologies = new ProjectTechnologies(
-      sheets,
-      sheet.tabs.project_technologies
+  constructor(public readonly sheetSDK: SheetSDK, data: ISheet) {
+    this.sheet = data
+  }
+
+  get sheet() {
+    return this._sheet
+  }
+
+  /**
+   * Assigning the sheet assigns the typed collections
+   * @param value
+   */
+  set sheet(value: ISheet) {
+    this.load(value)
+  }
+
+  /**
+   * Loads the sheet into typed collections
+   * @param data entire sheet to load
+   */
+  load(data: ISheet) {
+    this._sheet = data
+    if (Object.keys(data).length === 0) return this
+    this.projects = new Projects(this.sheetSDK, data.tabs.projects)
+    this.technologies = new Technologies(this.sheetSDK, data.tabs.technologies)
+    this.registrations = new Registrations(
+      this.sheetSDK,
+      data.tabs.registrations
     )
-    this.hackathons = new Hackathons(sheets, sheet.tabs.hackathons)
-    this.teamMembers = new TeamMembers(sheets, sheet.tabs.team_members)
-    this.judgings = new Judgings(sheets, sheet.tabs.judgings)
+    this.projectTechnologies = new ProjectTechnologies(
+      this.sheetSDK,
+      data.tabs.project_technologies
+    )
+    this.hackathons = new Hackathons(this.sheetSDK, data.tabs.hackathons)
+    this.teamMembers = new TeamMembers(this.sheetSDK, data.tabs.team_members)
+    this.judgings = new Judgings(this.sheetSDK, data.tabs.judgings)
+    return this
+  }
+
+  async refresh() {
+    this.load(await this.sheetSDK.index())
+    return this
   }
 }

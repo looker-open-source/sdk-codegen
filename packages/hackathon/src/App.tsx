@@ -28,17 +28,23 @@ import React, { FC } from 'react'
 import { ExtensionProvider } from '@looker/extension-sdk-react'
 import { ComponentsProvider } from '@looker/components'
 import { hot } from 'react-hot-loader/root'
-import { SheetData } from './models/SheetData'
 import { Hackathon } from './Hackathon'
 
 interface AppProps {
-  sheetData: SheetData
+  sheetId: string
+  accessTokenServerUrl?: string
 }
 
-export const App: FC<AppProps> = hot(({ sheetData }) => (
-  <ExtensionProvider>
-    <ComponentsProvider>
-      <Hackathon sheetData={sheetData} />
-    </ComponentsProvider>
-  </ExtensionProvider>
-))
+export const App: FC<AppProps> = hot(({ sheetId, accessTokenServerUrl }) => {
+  if (!accessTokenServerUrl) accessTokenServerUrl = 'http://localhost:8081'
+  return (
+    <ExtensionProvider>
+      <ComponentsProvider>
+        <Hackathon
+          sheetId={sheetId}
+          accessTokenServerUrl={accessTokenServerUrl}
+        />
+      </ComponentsProvider>
+    </ExtensionProvider>
+  )
+})

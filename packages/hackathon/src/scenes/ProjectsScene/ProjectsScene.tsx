@@ -78,7 +78,7 @@ const ProjectList: FC<ProjectListProps> = ({ projects }) => {
 // Use guid function for registration_id. There's a shakespearean guid (word-word-word). Check in Looker package.json
 // interface ProjectFormProps {
 //   project: Project
-//   techonologies: Technologies
+//   technologies: Technologies
 // }
 
 // const ProjectForm: FC = () => {

@@ -51,14 +51,11 @@ export class GAuthToken extends AuthToken {
   }
 }
 
-// TODO make this an extension parameter
-const ACCESS_SERVER_URL = 'http://localhost:8081'
-
 export class GAuthSession extends AuthSession {
   activeToken = new GAuthToken()
   sudoId = ''
 
-  protected constructor(
+  constructor(
     protected readonly extensionSDK: ExtensionSDK,
     public settings: IApiSettings,
     public transport: ITransport
@@ -95,7 +92,7 @@ export class GAuthSession extends AuthSession {
     }
     try {
       const response = await this.extensionSDK.serverProxy(
-        `${ACCESS_SERVER_URL}/access_token`,
+        `${this.settings.base_url}/access_token`,
         {
           method: 'POST',
           headers: {
