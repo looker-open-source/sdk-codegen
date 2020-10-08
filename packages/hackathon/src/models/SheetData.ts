@@ -84,7 +84,8 @@ export class SheetData {
   }
 
   async refresh() {
-    this.load(await this.sheetSDK.index())
+    const data = await this.sheetSDK.index()
+    this.load(data)
     return this
   }
 }

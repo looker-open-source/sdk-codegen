@@ -32,17 +32,12 @@ import {
   ITransportSettings,
   SDKResponse,
   Values,
-} from '@looker/sdk-rtl/lib/browser'
-import {
   agentPrefix,
   IRequestHeaders,
   IRequestProps,
   ISDKError,
   LookerAppId,
   lookerVersion,
-  parseResponse,
-  ResponseMode,
-  responseMode,
 } from '@looker/sdk-rtl/lib/browser'
 import {
   ExtensionSDK,
@@ -113,6 +108,9 @@ export class ExtensionProxyTransport extends BaseTransport {
       authenticator,
       options
     )
+    // const req = this.extensionSDK.fetchProxy(props.url)
+    // Google services don't like LookerAppId header
+    delete props.headers[LookerAppId]
     const fetchParams: FetchCustomParameters = {
       body: props.body,
       credentials: props.credentials,
@@ -124,12 +122,12 @@ export class ExtensionProxyTransport extends BaseTransport {
     const res: FetchProxyDataResponse = await req
 
     const contentType = String(res.headers['content-type'])
-    const mode = responseMode(contentType)
-    const responseBody =
-      mode === ResponseMode.binary ? await res.body : await res.body.toString()
+    // const mode = responseMode(contentType)
+    // const responseBody =
+    //   mode === ResponseMode.binary ? await res.body : await res.body.toString()
     return {
       url: requestPath,
-      body: responseBody,
+      body: res.body,
       contentType,
       ok: true,
       statusCode: res.status,
@@ -154,11 +152,11 @@ export class ExtensionProxyTransport extends BaseTransport {
         authenticator,
         options
       )
-      const parsed = await parseResponse(res)
+      // The response body is already parsed to an object if it's JSON
       if (this.ok(res)) {
-        return { ok: true, value: parsed }
+        return { ok: true, value: res.body }
       } else {
-        return { error: parsed, ok: false }
+        return { error: res.body, ok: false }
       }
     } catch (e) {
       const error: ISDKError = {

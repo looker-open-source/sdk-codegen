@@ -66,6 +66,9 @@ export class GAuthSession extends AuthSession {
   async authenticate(props: IRequestProps) {
     const token = await this.getToken()
     if (token && token.access_token) {
+      // props.mode = 'cors'
+      // delete props.credentials
+
       const suffix =
         (props.url.includes('?') ? '&' : '?') +
         `access_token=${token.access_token}`

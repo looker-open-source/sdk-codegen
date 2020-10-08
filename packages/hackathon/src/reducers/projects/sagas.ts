@@ -59,8 +59,8 @@ const initSheetData = async () => {
 const projects = {
   getProjects: async (): Promise<Projects> => {
     const data = await initSheetData()
-    await data.refresh()
-    return data.projects
+    const result = await data.refresh()
+    return result.projects
   },
 }
 
