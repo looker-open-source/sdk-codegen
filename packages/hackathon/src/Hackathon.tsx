@@ -24,17 +24,22 @@
 
  */
 import React, { FC } from 'react'
-import { Route, Switch } from 'react-router-dom'
-import { HomeScene } from './scenes/HomeScene'
+import { Page, Layout, Aside } from '@looker/components'
+
+import { SideNav } from './components'
+import { AppRouter } from './routes'
 
 interface HackathonProps {}
 
 export const Hackathon: FC<HackathonProps> = () => {
   return (
-    <Switch>
-      <Route exact>
-        <HomeScene />
-      </Route>
-    </Switch>
+    <Page>
+      <Layout hasAside>
+        <Aside width="10rem">
+          <SideNav />
+        </Aside>
+        <AppRouter />
+      </Layout>
+    </Page>
   )
 }

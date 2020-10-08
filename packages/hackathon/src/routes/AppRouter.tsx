@@ -23,9 +23,37 @@
  SOFTWARE.
 
  */
-export { HomeScene } from './HomeScene'
-export { ProjectsScene } from './ProjectsScene'
-export { UsersScene } from './UsersScene'
-export { JudgingScene } from './JudgingScene'
-export { AdminScene } from './AdminScene'
-export { NotFoundScene } from './NotFoundScene'
+import React, { FC } from 'react'
+import { Redirect, Route, Switch } from 'react-router-dom'
+import {
+  HomeScene,
+  UsersScene,
+  JudgingScene,
+  AdminScene,
+  NotFoundScene,
+  ProjectsScene,
+} from '../scenes'
+
+export const AppRouter: FC = () => (
+  <Switch>
+    <Redirect from="/" to="/home" exact />
+    <Route path="/home" exact>
+      <HomeScene />
+    </Route>
+    <Route path="/admin">
+      <AdminScene />
+    </Route>
+    <Route path="/judging">
+      <JudgingScene />
+    </Route>
+    <Route path="/projects">
+      <ProjectsScene />
+    </Route>
+    <Route path="/users">
+      <UsersScene />
+    </Route>
+    <Route>
+      <NotFoundScene />
+    </Route>
+  </Switch>
+)

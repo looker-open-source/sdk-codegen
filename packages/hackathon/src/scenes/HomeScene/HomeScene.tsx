@@ -25,43 +25,5 @@
  */
 
 import React, { FC } from 'react'
-import {
-  Box,
-  Header,
-  useTabs,
-  TabList,
-  TabPanels,
-  Tab,
-  TabPanel,
-} from '@looker/components'
-import { ProjectsScene } from '../ProjectsScene'
 
-interface HomeSceneProps {}
-
-export const HomeScene: FC<HomeSceneProps> = () => {
-  // const { value, setOn, setOff } = useToggle()
-  const tabs = useTabs()
-  return (
-    <>
-      <Box>
-        <Header>Looker Hack@Home</Header>
-      </Box>
-      <TabList {...tabs}>
-        <Tab key="home">Home</Tab>
-        <Tab key="admin">Admin</Tab>
-        <Tab key="users">Users</Tab>
-        <Tab key="projects">Projects</Tab>
-        <Tab key="judging">Judging</Tab>
-      </TabList>
-      <TabPanels {...tabs}>
-        <TabPanel key="home">Home page content goes here!</TabPanel>
-        <TabPanel key="admin">Admin page goes here!</TabPanel>
-        <TabPanel key="users">Users page goes here!</TabPanel>
-        <TabPanel key="projects">
-          <ProjectsScene />
-        </TabPanel>
-        <TabPanel key="judging">Judging page goes here!</TabPanel>
-      </TabPanels>
-    </>
-  )
-}
+export const HomeScene: FC = () => <> Text to display for home scene</>
