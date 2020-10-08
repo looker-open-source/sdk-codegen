@@ -63,6 +63,8 @@ export interface IRowModel extends RowValues {
   header(): ColumnHeaders
   /** Column values for the entire row to write to the GSheet */
   values(): any[]
+  /** Prepare the row for saving */
+  prepare(): IRowModel
 }
 
 export class RowModel<T extends IRowModel> implements IRowModel {
@@ -89,11 +91,12 @@ export class RowModel<T extends IRowModel> implements IRowModel {
     return this.keys().slice(1)
   }
 
-  prepare() {
+  prepare(): T {
     if (!this.id) {
       // Generate GUID
       this.id = uuidv4()
     }
+    return (this as unknown) as T
   }
 
   values() {

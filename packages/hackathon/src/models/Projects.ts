@@ -28,15 +28,15 @@ import {
   IRowModel,
   ITabTable,
   noDate,
-  RowModel,
   SheetSDK,
   WhollySheet,
 } from '@looker/wholly-sheet'
 
 import { DelimArray } from '@looker/sdk-rtl/lib/browser'
+import { ISheetRow, SheetRow } from './SheetRow'
 
 /** IMPORTANT: properties must be declared in the tab sheet's columnar order, not sorted order */
-export interface IProject extends IRowModel {
+export interface IProject extends ISheetRow {
   registration_id: string
   title: string
   description: string
@@ -48,7 +48,7 @@ export interface IProject extends IRowModel {
 }
 
 /** IMPORTANT: properties must be declared in the tab sheet's columnar order, not sorted order */
-export class Project extends RowModel<IProject> {
+export class Project extends SheetRow<IProject> {
   registration_id = ''
   title = ''
   description = ''
