@@ -29,11 +29,12 @@ application: hackathon_app {
     new_window: yes
     use_form_submit: yes
     use_embeds: no
-    external_api_urls: []
+    external_api_urls: ["http://localhost:8081/*", "https://sheets.googleapis.com/*"]
     core_api_methods: []
-    scoped_user_attributes: []
+    scoped_user_attributes: ["sheet_id", "token_server_url"]
   }
 }
+
 ```
 
 Remember to add a model to the project that has any valid connection.
