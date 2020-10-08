@@ -26,3 +26,4 @@
 
 export * from './SheetSDK'
 export * from './WhollySheet'
+export * from './RowModel'

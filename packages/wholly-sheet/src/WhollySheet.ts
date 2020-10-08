@@ -24,14 +24,9 @@
 
  */
 
-import {
-  ColumnHeaders,
-  IRowModel,
-  ITabTable,
-  SheetError,
-  SheetSDK,
-  stringer,
-} from './SheetSDK'
+import { ITabTable, SheetError, SheetSDK } from './SheetSDK'
+
+import { ColumnHeaders, IRowModel, stringer } from './RowModel'
 
 export interface IWhollySheet<T extends IRowModel> {
   /** Initialized REST-based GSheets SDK */
