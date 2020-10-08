@@ -25,21 +25,21 @@
  */
 
 import React, { FC } from 'react'
+import { Provider } from 'react-redux'
 import { ExtensionProvider } from '@looker/extension-sdk-react'
 import { ComponentsProvider } from '@looker/components'
 import { hot } from 'react-hot-loader/root'
 import { Hackathon } from './Hackathon'
-
-// eslint-disable-next-line @typescript-eslint/no-var-requires
-const temporaryCreds = require('../../../examples/access-token-server/service_account.json')
+import { configureStore } from './reducers/projects/store'
 
 export const App: FC = hot(() => {
-  const sheetId = temporaryCreds.sheet_id
   return (
-    <ExtensionProvider>
-      <ComponentsProvider>
-        <Hackathon sheetId={sheetId} />
-      </ComponentsProvider>
-    </ExtensionProvider>
+    <Provider store={configureStore()}>
+      <ExtensionProvider>
+        <ComponentsProvider>
+          <Hackathon />
+        </ComponentsProvider>
+      </ExtensionProvider>
+    </Provider>
   )
 })

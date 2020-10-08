@@ -23,18 +23,4 @@
  SOFTWARE.
 
  */
-import React, { FC } from 'react'
-import { Route, Switch } from 'react-router-dom'
-import { HomeScene } from './scenes/HomeScene'
-
-interface HackathonProps {}
-
-export const Hackathon: FC<HackathonProps> = () => {
-  return (
-    <Switch>
-      <Route exact>
-        <HomeScene />
-      </Route>
-    </Switch>
-  )
-}
+export { sheetData } from './data'

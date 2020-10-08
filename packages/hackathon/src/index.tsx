@@ -30,5 +30,5 @@ import { App } from './App'
 window.addEventListener('DOMContentLoaded', (_) => {
   const root = document.createElement('div')
   document.body.appendChild(root)
-  ReactDOM.render(<App sheetId={'hardcoded sheet id for now'} />, root)
+  ReactDOM.render(<App />, root)
 })

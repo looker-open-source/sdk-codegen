@@ -23,18 +23,25 @@
  SOFTWARE.
 
  */
-import React, { FC } from 'react'
-import { Route, Switch } from 'react-router-dom'
-import { HomeScene } from './scenes/HomeScene'
+import { ISheet, SheetSDK } from '@looker/wholly-sheet'
+import { BrowserTransport, DefaultSettings } from '@looker/sdk-rtl'
+import { ExtensionSDK } from '@looker/extension-sdk'
+import { SheetData } from '../models/SheetData'
+import { GAuthSession } from '../authToken/gAuthSession'
 
-interface HackathonProps {}
+// eslint-disable-next-line @typescript-eslint/no-var-requires
+const tabs = require('../../../wholly-sheet/src/tabs.json')
+// eslint-disable-next-line @typescript-eslint/no-var-requires
+const creds = require('../../../examples/access-token-server/service_account.json')
 
-export const Hackathon: FC<HackathonProps> = () => {
-  return (
-    <Switch>
-      <Route exact>
-        <HomeScene />
-      </Route>
-    </Switch>
-  )
-}
+const sheet = { tabs } as ISheet
+const settings = DefaultSettings()
+const sheetSDK = new SheetSDK(
+  new GAuthSession(
+    {} as ExtensionSDK,
+    settings,
+    new BrowserTransport(settings)
+  ),
+  creds.sheet_id
+)
+export const sheetData = new SheetData(sheetSDK, sheet)
