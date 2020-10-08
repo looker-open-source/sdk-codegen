@@ -31,19 +31,19 @@ import { NavLink } from 'react-router-dom'
 export const SideNav: FC = () => (
   <Box pt="small" fontSize="xxlarge">
     <TreeGroup label="Menu">
-      <TreeItem>
+      <TreeItem icon="Home">
         <Link to="/home">Home</Link>
       </TreeItem>
-      <TreeItem>
+      <TreeItem icon="Group">
         <Link to="/users">Users</Link>
       </TreeItem>
-      <TreeItem>
+      <TreeItem icon="Folder">
         <Link to="projects">Projects</Link>
       </TreeItem>
-      <TreeItem>
+      <TreeItem icon="Style">
         <Link to="/judging">Judging</Link>
       </TreeItem>
-      <TreeItem>
+      <TreeItem icon="Gear">
         <Link to="/admin">Admin</Link>
       </TreeItem>
     </TreeGroup>

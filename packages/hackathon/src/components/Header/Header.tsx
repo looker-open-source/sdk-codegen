@@ -28,5 +28,9 @@ import { Heading } from '@looker/components'
 
 // TODO: Pull hackathon name from store and greet user by name
 export const Header: FC = () => {
-  return <Heading>Welcome to ABC123</Heading>
+  return (
+    <Heading pt="large" pb="large">
+      Welcome to ABC123
+    </Heading>
+  )
 }
