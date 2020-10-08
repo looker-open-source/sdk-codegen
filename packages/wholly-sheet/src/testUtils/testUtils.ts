@@ -90,6 +90,6 @@ export const initSheetSDK = async (keys = cred): Promise<SheetSDK> => {
   const settings = DefaultSettings()
   const transport = new NodeTransport(settings)
   const session = new TestAuthSession(token, settings, transport)
-  const sheets = new SheetSDK(session, cred.sheet_id)
-  return sheets
+  const sheetSDK = new SheetSDK(session, cred.sheet_id)
+  return sheetSDK
 }

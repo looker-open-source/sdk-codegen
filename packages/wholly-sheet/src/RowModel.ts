@@ -68,17 +68,16 @@ export interface IRowModel extends RowValues {
 }
 
 export class RowModel<T extends IRowModel> implements IRowModel {
-  row: number
-  id: string
+  row = 0
+  id = ''
   updated: Date = noDate
 
-  protected constructor(values?: any) {
-    this.row = 0
-    this.id = ''
+  constructor(values?: any) {
     if (values && Object.keys(values).length > 0) {
       if (values.row) this.row = values.row
       if (values.id) this.id = values.id
-      if (values.updated) this.updated = values.updated
+      if (values.updated)
+        this.updated = this.typeCast('updated', values.updated)
     }
   }
 

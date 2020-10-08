@@ -31,9 +31,10 @@ import {
   SheetSDK,
   WhollySheet,
 } from '@looker/wholly-sheet'
+import { ISheetRow } from './SheetRow'
 
 /** IMPORTANT: properties must be declared in the tab sheet's columnar order, not sorted order */
-export interface ITechnology extends IRowModel {
+export interface ITechnology extends ISheetRow {
   title: string
   description: string
 }

@@ -27,7 +27,7 @@
 import * as fs from 'fs'
 import * as path from 'path'
 import { cred, initSheetSDK, sheetTimeout } from './testUtils/testUtils'
-import { NIL, noDate, SheetSDK, stringer, tabName } from './SheetSDK'
+import { SheetSDK, tabName } from './SheetSDK'
 let sheets: SheetSDK
 
 describe('SheetSDK', () => {
@@ -35,35 +35,6 @@ describe('SheetSDK', () => {
     sheets = await initSheetSDK()
   })
 
-  describe('stringer', () => {
-    test('formats dates', () => {
-      expect(stringer(new Date('2019-11-05T15:00:00.000000+00:00'))).toEqual(
-        '2019-11-05T15:00:00.000Z'
-      )
-    })
-    test('NILs empty dates', () => {
-      expect(stringer(noDate)).toEqual(NIL)
-    })
-    test('NILS undefined', () => {
-      expect(stringer(undefined)).toEqual(NIL)
-    })
-    test('NILS null', () => {
-      expect(stringer(null)).toEqual(NIL)
-    })
-    test('Returns empty string', () => {
-      expect(stringer('')).toEqual('')
-    })
-    test('Returns bool string', () => {
-      expect(stringer(true)).toEqual('true')
-      expect(stringer(false)).toEqual('false')
-    })
-    test('Returns float string', () => {
-      expect(stringer(1.2)).toEqual('1.2')
-    })
-    test('Returns int string', () => {
-      expect(stringer(12)).toEqual('12')
-    })
-  })
   test(
     'can get sheet',
     async () => {

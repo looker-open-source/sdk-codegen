@@ -30,14 +30,16 @@ import {
   Project,
   Projects,
 } from '../../hackathon/src/models'
-import { NIL, noDate, ISheet, SheetSDK } from './SheetSDK'
+import { ISheet, SheetSDK } from './SheetSDK'
 import { initSheetSDK } from './testUtils/testUtils'
+import { NIL, noDate } from './RowModel'
 
 const rawJson = `
 {
   "projects": {
     "header": [
       "id",
+      "updated",
       "registration_id",
       "title",
       "description",
@@ -89,6 +91,7 @@ const rawJson = `
   "hackathons":{
     "header": [
       "id",
+      "updated",
       "name",
       "description",
       "location",

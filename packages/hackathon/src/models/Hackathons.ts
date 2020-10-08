@@ -28,13 +28,13 @@ import {
   IRowModel,
   ITabTable,
   noDate,
-  RowModel,
   SheetSDK,
   WhollySheet,
 } from '@looker/wholly-sheet'
+import { ISheetRow, SheetRow } from './SheetRow'
 
 /** IMPORTANT: properties must be declared in the tab sheet's columnar order, not sorted order */
-export interface IHackathon extends IRowModel {
+export interface IHackathon extends ISheetRow {
   name: string
   description: string
   location: string
@@ -46,7 +46,7 @@ export interface IHackathon extends IRowModel {
 }
 
 /** IMPORTANT: properties must be declared in the tab sheet's columnar order, not sorted order */
-export class Hackathon extends RowModel<IHackathon> {
+export class Hackathon extends SheetRow<IHackathon> {
   name = ''
   description = ''
   location = ''
