@@ -34,14 +34,11 @@ import {
   Tab,
   TabPanel,
 } from '@looker/components'
-import { SheetData } from '../../models/SheetData'
 import { ProjectsScene } from '../ProjectsScene'
 
-interface HomeSceneProps {
-  sheetData: SheetData
-}
+interface HomeSceneProps {}
 
-export const HomeScene: FC<HomeSceneProps> = ({ sheetData }) => {
+export const HomeScene: FC<HomeSceneProps> = () => {
   // const { value, setOn, setOff } = useToggle()
   const tabs = useTabs()
   return (
@@ -61,7 +58,7 @@ export const HomeScene: FC<HomeSceneProps> = ({ sheetData }) => {
         <TabPanel key="admin">Admin page goes here!</TabPanel>
         <TabPanel key="users">Users page goes here!</TabPanel>
         <TabPanel key="projects">
-          {sheetData && <ProjectsScene projects={sheetData.projects} />}
+          <ProjectsScene />
         </TabPanel>
         <TabPanel key="judging">Judging page goes here!</TabPanel>
       </TabPanels>

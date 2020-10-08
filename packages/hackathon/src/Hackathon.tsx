@@ -36,7 +36,6 @@ import { HomeScene } from './scenes/HomeScene/HomeScene'
 import { ExtensionProxyTransport } from './authToken/extensionProxyTransport'
 import { GAuthSession } from './authToken/gAuthSession'
 
-// TODO sheetData will NOT be passed down as a property
 interface HackathonProps {
   sheetId: string
   accessTokenServerUrl?: string
@@ -46,6 +45,11 @@ export const Hackathon: FC<HackathonProps> = ({
   sheetId,
   accessTokenServerUrl = 'http://localhost:8081',
 }) => {
+  // TODO the extensionSDK will be passed to wholly sheets which will do a
+  // bunch of setup
+  // 1. verify user attributes have been defined
+  // 2. Get an access token from the access token server
+  // 3. Get the sheets data.
   const { extensionSDK } = useContext<ExtensionContextData>(ExtensionContext)
   const options = {
     ...DefaultSettings(),
@@ -72,7 +76,7 @@ export const Hackathon: FC<HackathonProps> = ({
       {/*    {sheetData && <ProjectsScene projects={sheetData.projects} />} */}
       {/*  </Route> */}
       <Route exact>
-        <HomeScene sheetData={sheetData} />
+        <HomeScene />
       </Route>
     </Switch>
   )

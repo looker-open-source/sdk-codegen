@@ -23,32 +23,16 @@
  SOFTWARE.
 
  */
+import { ISheet, SheetSDK } from '@looker/wholly-sheet'
+import { BrowserTransport, DefaultSettings } from '@looker/sdk-rtl'
+import { SheetData } from '../models/SheetData'
 
-import React, { FC } from 'react'
-import { Provider } from 'react-redux'
-import { ExtensionProvider } from '@looker/extension-sdk-react'
-import { ComponentsProvider } from '@looker/components'
-import { hot } from 'react-hot-loader/root'
-import { Hackathon } from './Hackathon'
-import { configureStore } from './reducers/projects/store'
-
-interface AppProps {
-  sheetId: string
-  accessTokenServerUrl?: string
-}
-
-export const App: FC<AppProps> = hot(({ sheetId, accessTokenServerUrl }) => {
-  if (!accessTokenServerUrl) accessTokenServerUrl = 'http://localhost:8081'
-  return (
-    <Provider store={configureStore()}>
-      <ExtensionProvider>
-        <ComponentsProvider>
-          <Hackathon
-            sheetId={sheetId}
-            accessTokenServerUrl={accessTokenServerUrl}
-          />
-        </ComponentsProvider>
-      </ExtensionProvider>
-    </Provider>
-  )
-})
+// eslint-disable-next-line @typescript-eslint/no-var-requires
+const tabs = require('../../../wholly-sheet/src/tabs.json')
+const sheet = { tabs } as ISheet
+const sheetSDK = new SheetSDK(
+  new BrowserTransport(DefaultSettings()),
+  'bogus',
+  'bogus'
+)
+export const sheetData = new SheetData(sheetSDK, sheet)

@@ -23,32 +23,4 @@
  SOFTWARE.
 
  */
-
-import React, { FC } from 'react'
-import { Provider } from 'react-redux'
-import { ExtensionProvider } from '@looker/extension-sdk-react'
-import { ComponentsProvider } from '@looker/components'
-import { hot } from 'react-hot-loader/root'
-import { Hackathon } from './Hackathon'
-import { configureStore } from './reducers/projects/store'
-
-interface AppProps {
-  sheetId: string
-  accessTokenServerUrl?: string
-}
-
-export const App: FC<AppProps> = hot(({ sheetId, accessTokenServerUrl }) => {
-  if (!accessTokenServerUrl) accessTokenServerUrl = 'http://localhost:8081'
-  return (
-    <Provider store={configureStore()}>
-      <ExtensionProvider>
-        <ComponentsProvider>
-          <Hackathon
-            sheetId={sheetId}
-            accessTokenServerUrl={accessTokenServerUrl}
-          />
-        </ComponentsProvider>
-      </ExtensionProvider>
-    </Provider>
-  )
-})
+export { sheetData } from './data'
