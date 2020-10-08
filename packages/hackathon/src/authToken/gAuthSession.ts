@@ -37,10 +37,10 @@ import { ExtensionSDK } from '@looker/extension-sdk'
 import { defaultScopes } from '@looker/wholly-sheet'
 
 export class GAuthToken extends AuthToken {
-  constructor(access_token?: string, expiry_date?: Date) {
+  constructor(access_token?: string, expiry_date?: number) {
     let token = {} as IAccessToken
     if (access_token && expiry_date) {
-      const expSeconds = expiry_date.getSeconds() - new Date().getSeconds()
+      const expSeconds = Math.floor((expiry_date - Date.now()) / 1000)
       token = {
         access_token,
         token_type: 'Bearer',
@@ -66,7 +66,11 @@ export class GAuthSession extends AuthSession {
   async authenticate(props: IRequestProps) {
     const token = await this.getToken()
     if (token && token.access_token) {
-      props.headers.Authorization = `Bearer ${token.access_token}`
+      const suffix =
+        (props.url.includes('?') ? '&' : '?') +
+        `access_token=${token.access_token}`
+      props.url += suffix
+      // props.headers.Authorization = `Bearer ${token.access_token}`
     }
     return props
   }

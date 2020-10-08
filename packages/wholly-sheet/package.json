@@ -34,7 +34,7 @@
     "typescript": "3.8.2"
   },
   "dependencies": {
-    "@looker/sdk": "^0.3.4-beta.1",
+    "@looker/sdk": "^0.3.7-beta.0",
     "@looker/sdk-rtl": "^0.3.7-beta.0"
   },
   "devDependencies": {

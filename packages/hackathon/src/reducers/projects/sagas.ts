@@ -26,7 +26,7 @@
 import { all, call, put, takeEvery } from 'redux-saga/effects'
 import { DefaultSettings } from '@looker/sdk-rtl/lib/browser'
 import { ISheet, SheetSDK } from '@looker/wholly-sheet'
-import { ExtensionSDK } from '@looker/extension-sdk'
+import { getExtensionSDK } from '@looker/extension-sdk'
 import { SheetData } from '../../models/SheetData'
 import { GAuthSession } from '../../authToken/gAuthSession'
 import { Projects } from '../../models'
@@ -38,13 +38,14 @@ let sheetData: SheetData
 const initSheetData = async () => {
   if (sheetData) return sheetData
   // Values required
-  const extSDK: ExtensionSDK = {} as ExtensionSDK
-  const authTokenServerUrl = 'http://localhost:8081' // TODO provide this
-  const sheetId = '' // TODO provide this
+  const extSDK = getExtensionSDK()
+  const tokenServerUrl =
+    (await extSDK.userAttributeGetItem('token_server_url')) || ''
+  const sheetId = (await extSDK.userAttributeGetItem('sheet_id')) || ''
 
   const options = {
     ...DefaultSettings(),
-    ...{ base_url: authTokenServerUrl },
+    ...{ base_url: tokenServerUrl },
   }
 
   const transport = new ExtensionProxyTransport(extSDK, options)

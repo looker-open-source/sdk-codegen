@@ -162,11 +162,11 @@ export interface ITabTable {
 }
 
 export const defaultScopes = [
-  'https://www.googleapis.com/auth/drive',
-  'https://www.googleapis.com/auth/drive.file',
-  'https://www.googleapis.com/auth/drive.readonly',
+  // 'https://www.googleapis.com/auth/drive',
+  // 'https://www.googleapis.com/auth/drive.file',
+  // 'https://www.googleapis.com/auth/drive.readonly',
   'https://www.googleapis.com/auth/spreadsheets',
-  'https://www.googleapis.com/auth/spreadsheets.readonly',
+  // 'https://www.googleapis.com/auth/spreadsheets.readonly',
 ]
 
 // https://developers.google.com/sheets/api/reference/rest
