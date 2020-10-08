@@ -23,9 +23,4 @@
  SOFTWARE.
 
  */
-export { HomeScene } from './HomeScene'
-export { ProjectsScene } from './ProjectsScene'
-export { UsersScene } from './UsersScene'
-export { JudgingScene } from './JudgingScene'
-export { AdminScene } from './AdminScene'
-export { NotFoundScene } from './NotFoundScene'
+export { Loading } from './Loading'

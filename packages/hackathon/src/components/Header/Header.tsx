@@ -23,9 +23,10 @@
  SOFTWARE.
 
  */
-export { HomeScene } from './HomeScene'
-export { ProjectsScene } from './ProjectsScene'
-export { UsersScene } from './UsersScene'
-export { JudgingScene } from './JudgingScene'
-export { AdminScene } from './AdminScene'
-export { NotFoundScene } from './NotFoundScene'
+import React, { FC } from 'react'
+import { Heading } from '@looker/components'
+
+// TODO: Pull hackathon name from store and greet user by name
+export const Header: FC = () => {
+  return <Heading>Welcome to ABC123</Heading>
+}

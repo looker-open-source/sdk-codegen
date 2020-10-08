@@ -23,9 +23,45 @@
  SOFTWARE.
 
  */
-export { HomeScene } from './HomeScene'
-export { ProjectsScene } from './ProjectsScene'
-export { UsersScene } from './UsersScene'
-export { JudgingScene } from './JudgingScene'
-export { AdminScene } from './AdminScene'
-export { NotFoundScene } from './NotFoundScene'
+import React, { FC } from 'react'
+import styled from 'styled-components'
+import { Box, TreeItem, TreeGroup } from '@looker/components'
+import { NavLink } from 'react-router-dom'
+
+export const SideNav: FC = () => (
+  <Box pt="small" fontSize="xxlarge">
+    <TreeGroup label="Menu">
+      <TreeItem>
+        <Link to="/home">Home</Link>
+      </TreeItem>
+      <TreeItem>
+        <Link to="/users">Users</Link>
+      </TreeItem>
+      <TreeItem>
+        <Link to="projects">Projects</Link>
+      </TreeItem>
+      <TreeItem>
+        <Link to="/judging">Judging</Link>
+      </TreeItem>
+      <TreeItem>
+        <Link to="/admin">Admin</Link>
+      </TreeItem>
+    </TreeGroup>
+  </Box>
+)
+
+const Link = styled(NavLink)`
+  color:${({ theme }) => theme.colors.ui5}
+  cursor: pointer;
+  display: block;
+  padding: ${({
+    theme: {
+      space: { xsmall, large },
+    },
+  }) => `${xsmall} ${large}`};
+  &:hover,
+  &:focus,
+  &.active {
+    color: ${({ theme }) => theme.colors.key};
+  }
+`

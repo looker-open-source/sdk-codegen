@@ -23,9 +23,13 @@
  SOFTWARE.
 
  */
-export { HomeScene } from './HomeScene'
-export { ProjectsScene } from './ProjectsScene'
-export { UsersScene } from './UsersScene'
-export { JudgingScene } from './JudgingScene'
-export { AdminScene } from './AdminScene'
-export { NotFoundScene } from './NotFoundScene'
+import React, { FC } from 'react'
+import { Link } from 'react-router-dom'
+import { Heading } from '@looker/components'
+
+export const NotFoundScene: FC = () => (
+  <Heading as="h2">
+    The page you requested could not be found. Click{' '}
+    <Link to="/home">here</Link> to go back to the homepage
+  </Heading>
+)
