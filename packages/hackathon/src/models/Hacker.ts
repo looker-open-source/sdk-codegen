@@ -51,19 +51,21 @@ export interface IHacker {
   canJudge(): boolean
   /** is this user an admin? */
   canAdmin(): boolean
-  /** assign this user their roles and permissions from Looker user lookup */
-  assignRoles(sdk: Looker40SDK): Promise<IHacker>
+  /** assign the current user their roles and permissions from Looker user lookup */
+  getMe(sdk: Looker40SDK): Promise<IHacker>
 }
 
 export class Hacker implements IHacker {
+  user!: IUser
   roles = new Set<UserRole>(['user'])
   permissions = new Set<UserPermission>()
 
-  constructor(public readonly user: IUser) {
+  constructor() {
     /** Initialize static cached values */
   }
 
-  async assignRoles(sdk: Looker40SDK) {
+  async getMe(sdk: Looker40SDK) {
+    this.user = await sdk.ok(sdk.me())
     const roles = await sdk.ok(sdk.all_roles({}))
     const staffRole = roles.find((r) => r.name?.match(/staff/i))
     const judgeRole = roles.find((r) => r.name?.match(/judge/i))
@@ -90,14 +92,14 @@ export class Hacker implements IHacker {
   }
 
   canAdmin(): boolean {
-    return false
+    return this.roles.has('admin')
   }
 
   canJudge(): boolean {
-    return false
+    return this.roles.has('judge') || this.canAdmin()
   }
 
   canStaff(): boolean {
-    return false
+    return this.roles.has('staff') || this.canAdmin()
   }
 }
