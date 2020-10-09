@@ -23,4 +23,4 @@
  SOFTWARE.
 
  */
-export { AppRouter } from './AppRouter'
+export { AppRouter, getAuthorizedRoutes } from './AppRouter'

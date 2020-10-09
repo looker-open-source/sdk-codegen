@@ -29,24 +29,34 @@ import { Box, MenuList, MenuItem } from '@looker/components'
 import { NavLink } from 'react-router-dom'
 import { Routes } from '../../routes/AppRouter'
 
-export const SideNav: FC = () => (
+export interface SideNavProps {
+  authorizedRoutes: Routes[]
+}
+
+export const SideNav: FC<SideNavProps> = ({ authorizedRoutes }) => (
   <Box fontSize="xxlarge">
     <MenuList type="none">
       <MenuItem icon="Home">
         <Link to={Routes.HOME}>Home</Link>
       </MenuItem>
-      <MenuItem icon="Group">
-        <Link to={Routes.USERS}>Users</Link>
-      </MenuItem>
+      {authorizedRoutes.includes(Routes.USERS) && (
+        <MenuItem icon="Group">
+          <Link to={Routes.USERS}>Users</Link>
+        </MenuItem>
+      )}
       <MenuItem icon="Folder">
         <Link to={Routes.PROJECTS}>Projects</Link>
       </MenuItem>
-      <MenuItem icon="Style">
-        <Link to={Routes.JUDGING}>Judging</Link>
-      </MenuItem>
-      <MenuItem icon="Gear">
-        <Link to={Routes.ADMIN}>Admin</Link>
-      </MenuItem>
+      {authorizedRoutes.includes(Routes.JUDGING) && (
+        <MenuItem icon="Style">
+          <Link to={Routes.JUDGING}>Judging</Link>
+        </MenuItem>
+      )}
+      {authorizedRoutes.includes(Routes.ADMIN) && (
+        <MenuItem icon="Gear">
+          <Link to={Routes.ADMIN}>Admin</Link>
+        </MenuItem>
+      )}
     </MenuList>
   </Box>
 )

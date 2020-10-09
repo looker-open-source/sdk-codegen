@@ -5,7 +5,7 @@ This extension uses the `@looker/wholly-sheet` package (currently only available
 The only complication is that modifications of a GSheet cannot be done with only an API key, so you must use a service account or OAuth.
 
 But fear not! During development, you can use the `WhollySheet` unit tests to log an auth token to the console, then use that token to initialize the SheetSDK for this extension.
- 
+
 Run either [SheetSDK.spec.ts](../wholly-sheet/src/SheetSDK.spec.ts) or [WhollySheet.spec.ts](../wholly-sheet/src/WhollySheet.spec.ts) to have a valid auth token logged to the console.
 
 Use that token to initialize the SheetSDK for your extension development pleasure as shown at the bottom of [testUtils.ts](../wholly-sheet/src/testUtils/testUtils.ts)
@@ -30,7 +30,7 @@ application: hackathon_app {
     use_form_submit: yes
     use_embeds: no
     external_api_urls: ["http://localhost:8081/*", "https://sheets.googleapis.com/*"]
-    core_api_methods: []
+    core_api_methods: ["me", "all_roles"]
     scoped_user_attributes: ["sheet_id", "token_server_url"]
   }
 }

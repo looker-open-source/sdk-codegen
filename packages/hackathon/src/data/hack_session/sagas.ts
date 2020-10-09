@@ -30,6 +30,7 @@ import { Actions, initHackSessionSuccess } from './actions'
 
 function* initializeHackSessionSaga() {
   try {
+    // TODO investigate use of saga effects to invoke in parallel
     yield put(beginLoading())
     const hackathon = yield call([
       sheetsSdkHelper,
@@ -39,8 +40,9 @@ function* initializeHackSessionSaga() {
       sheetsSdkHelper,
       sheetsSdkHelper.getTechnologies,
     ])
+    const hacker = yield call([sheetsSdkHelper, sheetsSdkHelper.getHacker])
     yield put(endLoading())
-    yield put(initHackSessionSuccess(hackathon, technologies))
+    yield put(initHackSessionSuccess(hackathon, technologies, hacker))
   } catch (err) {
     console.error(err)
     yield put(actionMessage('A problem occurred loading the data', 'critical'))

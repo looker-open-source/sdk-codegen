@@ -29,7 +29,7 @@ import { getExtensionSDK } from '@looker/extension-sdk'
 import { getCore40SDK } from '@looker/extension-sdk-react'
 import { SheetData } from '../models/SheetData'
 import { GAuthSession } from '../authToken/gAuthSession'
-import { Hackathon, Project, Projects, Technologies } from '../models'
+import { Hacker, Hackathon, Project, Projects, Technologies } from '../models'
 import { ExtensionProxyTransport } from '../authToken/extensionProxyTransport'
 
 let sheetData: SheetData
@@ -38,7 +38,6 @@ const initSheetData = async () => {
   if (sheetData) return sheetData
   // Values required
   const extSDK = getExtensionSDK()
-  const lookerSdk = getCore40SDK()
   const tokenServerUrl =
     (await extSDK.userAttributeGetItem('token_server_url')) || ''
   const sheetId = (await extSDK.userAttributeGetItem('sheet_id')) || ''
@@ -87,6 +86,11 @@ export const sheetsSdkHelper = {
     }
     const result = await data.refresh()
     return result.currentHackathon!
+  },
+  getHacker: async (): Promise<Hacker> => {
+    const lookerSdk = getCore40SDK()
+    const foo = new Hacker(lookerSdk)
+    return await foo.getMe()
   },
   getTechnologies: async (): Promise<Technologies> => {
     const data = await initSheetData()

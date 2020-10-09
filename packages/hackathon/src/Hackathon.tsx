@@ -28,11 +28,14 @@ import { Page, Layout, Aside, Section, MessageBar } from '@looker/components'
 import { useSelector, useDispatch } from 'react-redux'
 
 import { SideNav, Header } from './components'
-import { AppRouter } from './routes'
+import { AppRouter, getAuthorizedRoutes } from './routes'
 import { getMessageState } from './data/common/selectors'
 import { actionClearMessage } from './data/common/actions'
 import { initHackSessionRequest } from './data/hack_session/actions'
-import { getCurrentHackathonState } from './data/hack_session/selectors'
+import {
+  getCurrentHackathonState,
+  getHackerState,
+} from './data/hack_session/selectors'
 
 interface HackathonProps {}
 
@@ -42,6 +45,8 @@ export const Hackathon: FC<HackathonProps> = () => {
     dispatch(initHackSessionRequest())
   }, [dispatch])
   const currentHackathon = useSelector(getCurrentHackathonState)
+  const hacker = useSelector(getHackerState)
+  const authorizedRoutes = getAuthorizedRoutes(hacker)
   const message = useSelector(getMessageState)
   const headerText = currentHackathon ? currentHackathon.name : 'Welcome'
   const clearMessage = () => {
@@ -58,10 +63,10 @@ export const Hackathon: FC<HackathonProps> = () => {
       )}
       <Layout hasAside>
         <Aside>
-          <SideNav />
+          <SideNav authorizedRoutes={authorizedRoutes} />
         </Aside>
         <Section>
-          <AppRouter />
+          <AppRouter authorizedRoutes={authorizedRoutes} />
         </Section>
       </Layout>
     </Page>
