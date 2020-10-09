@@ -126,7 +126,7 @@ export const ProjectDialog: FC<ProjectDialogProps> = ({ project }) => {
                 isFilterable
                 placeholder="Type values or select from the list"
                 freeInput
-                onChange={(values: string[]) => {
+                onChange={(values?: string[]) => {
                   setState((prevState) => {
                     prevState.technologies = new DelimArray(values)
                     return prevState
