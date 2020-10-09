@@ -76,8 +76,8 @@ export class Hacker implements IHacker {
     this.user = await this.sdk.ok(this.sdk.me())
     try {
       const roles = await this.sdk.ok(this.sdk.all_roles({}))
-      const staffRole = roles.find((r) => r.name?.match(/staff/i))
-      const judgeRole = roles.find((r) => r.name?.match(/judge/i))
+      const staffRole = roles.find((r) => r.name?.match(/hackathon staff/i))
+      const judgeRole = roles.find((r) => r.name?.match(/hackathon judge/i))
       const adminRole = roles.find((r) => r.name?.match(/admin/i))
       if (staffRole && this.user.role_ids?.includes(staffRole.id as number))
         this.roles.add('staff')
