@@ -23,14 +23,89 @@
  SOFTWARE.
 
  */
-import React, { FC } from 'react'
+
+import React, { FC, useEffect } from 'react'
+import { useSelector, useDispatch } from 'react-redux'
+import { Form, Fieldset, FieldText, Button } from '@looker/components'
+import {
+  loadUserAttributesRequest,
+  AdminUserAttributes,
+} from '../../../data/admin/actions'
+import { getUserAttributesState } from '../../../data/admin/selectors'
+import { isLoadingState } from '../../../data/common/selectors'
 
 export interface UserAttributesProps {}
 
+const isDirty = (userAttributes: AdminUserAttributes): boolean => {
+  if (userAttributes) {
+    return (
+      userAttributes.lookerClientId.dirty ||
+      userAttributes.lookerClientSecret.dirty ||
+      userAttributes.sheetId.dirty ||
+      userAttributes.tokenServerUrl.dirty
+    )
+  }
+  return false
+}
+
 export const UserAttributes: FC<UserAttributesProps> = () => {
+  const dispatch = useDispatch()
+  useEffect(() => {
+    dispatch(loadUserAttributesRequest())
+  }, [dispatch])
+  const userAttributes = useSelector(getUserAttributesState)
+  const isLoading = useSelector(isLoadingState)
+
+  const onSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+    // Need to prevent the default processing for the form submission
+    e.preventDefault()
+  }
+
+  const onChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    // TODO
+  }
+
   return (
     <>
-      <div>UserAttributes</div>
+      {userAttributes && (
+        <Form onSubmit={onSubmit} width="40vw" mt="large">
+          <Fieldset legend="Configure extension user attributes">
+            <FieldText
+              label="Looker client id"
+              name="lookerClientId"
+              value={userAttributes.lookerClientId.value}
+              onChange={onChange}
+              type="password"
+              disabled={isLoading}
+            />
+            <FieldText
+              label="Looker client secret"
+              name="lookerClientSecret"
+              value={userAttributes.lookerClientSecret.value}
+              onChange={onChange}
+              type="password"
+              disabled={isLoading}
+            />
+            <FieldText
+              label="Google sheet id"
+              name="sheetId"
+              value={userAttributes.sheetId.value}
+              onChange={onChange}
+              disabled={isLoading}
+            />
+            <FieldText
+              label="Google access token server URL"
+              name="sheetId"
+              value={userAttributes.tokenServerUrl.value}
+              onChange={onChange}
+              disabled={isLoading}
+            />
+          </Fieldset>
+          <Button disabled={!isDirty(userAttributes)}>
+            Save Extension User Attributes
+          </Button>
+        </Form>
+      )}
     </>
   )
 }

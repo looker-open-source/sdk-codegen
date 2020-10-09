@@ -31,10 +31,10 @@ export interface AdminState {
 
 const defaultState: Readonly<AdminState> = Object.freeze({
   adminUserAttributes: {
-    lookerClientId: '',
-    lookerClientSecret: '',
-    sheetId: '',
-    apiTokenServerUrl: '',
+    lookerClientId: { value: '', dirty: false },
+    lookerClientSecret: { value: '', dirty: false },
+    sheetId: { value: '', dirty: false },
+    tokenServerUrl: { value: '', dirty: false },
   },
 })
 

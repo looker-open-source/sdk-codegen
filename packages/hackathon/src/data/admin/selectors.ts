@@ -24,9 +24,9 @@
 
  */
 
-import { Hackathon } from '../../models'
 import { RootState } from '../root_reducer'
+import { AdminUserAttributes } from './actions'
 
-export const getCurrentHackathonState = (
+export const getUserAttributesState = (
   state: RootState
-): Hackathon | undefined => state.hackSessionState.currentHackathon
+): AdminUserAttributes | undefined => state.adminState.adminUserAttributes
