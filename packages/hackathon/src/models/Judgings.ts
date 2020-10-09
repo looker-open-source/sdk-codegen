@@ -42,6 +42,7 @@ export interface IJudging extends ISheetRow {
   ambition: number
   coolness: number
   impact: number
+  score: number
   notes: string
 }
 
@@ -53,6 +54,7 @@ export class Judging extends RowModel<IJudging> {
   ambition = 0
   coolness = 0
   impact = 0
+  score = 0
   notes = ''
   constructor(values?: any) {
     super()
