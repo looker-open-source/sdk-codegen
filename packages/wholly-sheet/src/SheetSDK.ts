@@ -221,6 +221,7 @@ export const loadTabTable = (tab: ISheetTab, keyName = 'id'): ITabTable => {
 }
 
 // https://developers.google.com/sheets/api/reference/rest/v4/spreadsheets.values
+export type SheetValues = any[]
 
 const sheetSDKVersion = '0.1.0-alpha'
 
@@ -266,30 +267,51 @@ export class SheetSDK extends APIMethods {
     return doc
   }
 
-  // /**
-  //  * Get the values collection from the sheet. Defaults to all values in the sheet
-  //  * @param range
-  //  */
-  // async values(range = '!A1:end') {
-  //   const api = range ? `/values/${range}` : ''
-  //   const sheet = await this.request('GET', api)
-  //   return sheet.values
-  // }
+  /**
+   * Get a values collection for the specified range
+   * @param range Defaults to all values in the default (first?) tab
+   */
+  async getValues(range = '!A1:end') {
+    const api = range ? `/values/${range}` : ''
+    const sheet = await this.request<any>('GET', api)
+    return sheet.values as SheetValues
+  }
 
   /**
    * Get the values for a sheet row
    * @param tab name or tab sheet
    * @param row to retrieve
    */
-  async getRow(tab: string | ISheetTab, row: number) {
+  async rowGet(tab: string | ISheetTab, row: number) {
     if (!row) throw new SheetError('row cannot be zero')
     const name = tabName(tab)
     const api = `/values/${name}!A${row}:end`
     const sheet = await this.request<any>('GET', api)
-    return sheet.values
+    return sheet.values as SheetValues
   }
 
-  private static bodyValues(values: any[]) {
+  /**
+   * Delete the specified row on the tab by compacting the tab
+   * @param tab name or ISheetTab
+   * @param row to remove
+   */
+  async rowDelete(tab: string | ISheetTab, row: number) {
+    /**
+     * Multiple expensive steps required for this functionality:
+     * - read all values from the sheet
+     * - delete the array entry for the requested row
+     * - batch update the sheet with the new collection
+     */
+
+    if (!row) throw new SheetError('row cannot be zero')
+
+    const name = tabName(tab)
+    const api = `/values/${name}!A${row}:end`
+    const sheet = await this.request<any>('DELETE', api)
+    return sheet.values as SheetValues
+  }
+
+  private static bodyValues(values: SheetValues) {
     return JSON.stringify({ values: [values] })
   }
 
@@ -300,7 +322,7 @@ export class SheetSDK extends APIMethods {
    * @param row 1-based position of row
    * @param values to assign in order for the row
    */
-  async updateRow(tab: string | ISheetTab, row: number, values: any[]) {
+  async rowUpdate(tab: string | ISheetTab, row: number, values: SheetValues) {
     const body = SheetSDK.bodyValues(values)
     const name = tabName(tab)
     // TODO receive changed values back from request
@@ -325,10 +347,10 @@ export class SheetSDK extends APIMethods {
    * @param values to assign in order for the row
    * @return number of the created row
    */
-  async createRow(
+  async rowCreate(
     tab: string | ISheetTab,
     row: number,
-    values: any[]
+    values: SheetValues
   ): Promise<{ row: number; response: any }> {
     const body = SheetSDK.bodyValues(values)
     const name = tabName(tab)
@@ -347,7 +369,12 @@ export class SheetSDK extends APIMethods {
     return { row: rowId, response: response }
   }
 
-  // async tabValues(tab: string | ISheetTab, range = '!A1:end') {
-  //   return await this.values(`${tabName(tab)}${range}`)
-  // }
+  /**
+   * Get values (rows of columns) from the tab
+   * @param tab name or ISheetTab
+   * @param range defaults to the entire sheet
+   */
+  async tabValues(tab: string | ISheetTab, range = '!A1:end') {
+    return await this.getValues(`${tabName(tab)}${range}`)
+  }
 }

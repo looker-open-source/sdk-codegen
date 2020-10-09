@@ -30,6 +30,7 @@ import {
   noDate,
   RowModel,
   SheetSDK,
+  SheetValues,
   WhollySheet,
 } from '@looker/wholly-sheet'
 import { ISheetRow } from './SheetRow'
@@ -64,7 +65,7 @@ export class Registrations extends WhollySheet<IRegistration> {
     super(sheets, 'registrations', table, 'id')
   }
 
-  typeRows<T extends IRowModel>(rows: any[]): T[] {
+  typeRows<T extends IRowModel>(rows: SheetValues): T[] {
     const result: T[] = []
 
     rows.forEach((r) => {

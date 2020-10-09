@@ -66,7 +66,7 @@ export const sheetsSdkHelper = {
     const data = await initSheetData()
     const sheet = await data.projects
     const nextRow = sheet.nextRow
-    await data.sheetSDK.createRow('projects', nextRow, [
+    await data.sheetSDK.rowCreate('projects', nextRow, [
       project.id,
       project.updated,
       project.user_id,

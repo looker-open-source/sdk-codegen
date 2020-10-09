@@ -23,7 +23,7 @@
  SOFTWARE.
 
  */
-import { IRowModel } from '@looker/wholly-sheet'
+import { IRowModel, SheetValues } from '@looker/wholly-sheet'
 import { ActionListColumns, Checkbox, Text } from '@looker/components'
 import React from 'react'
 
@@ -65,7 +65,7 @@ export const sheetHeaderColumn = (
  * @param row data template to use for column typing
  */
 export const sheetHeader = (header: string[], row: IRowModel) => {
-  const result: any[] = []
+  const result: SheetValues = []
   const colCount = header.length
   header.forEach((key) => {
     result.push(sheetHeaderColumn(row, key, row[key], colCount))

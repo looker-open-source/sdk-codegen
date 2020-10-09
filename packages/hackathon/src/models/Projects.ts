@@ -29,6 +29,7 @@ import {
   ITabTable,
   noDate,
   SheetSDK,
+  SheetValues,
   WhollySheet,
 } from '@looker/wholly-sheet'
 
@@ -88,7 +89,7 @@ export class Projects extends WhollySheet<IProject> {
     super(sheets, 'projects', table, 'id') //, { new Hackathon(values?: any)})
   }
 
-  typeRows<T extends IRowModel>(rows: any[]): T[] {
+  typeRows<T extends IRowModel>(rows: SheetValues): T[] {
     const result: T[] = []
 
     rows.forEach((r) => {

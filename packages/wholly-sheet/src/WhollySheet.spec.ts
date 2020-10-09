@@ -145,14 +145,18 @@ const addDays = (date: Date, days: number): Date => {
 }
 
 let sheets: SheetSDK
+let hackathons: Hackathons
+let projects: Projects
 
 describe('WhollySheet', () => {
   beforeAll(async () => {
     sheets = await initSheetSDK()
   })
   describe('with hardcoded data', () => {
-    const hackathons = new Hackathons(sheets, hackathonTable)
-    const projects = new Projects(sheets, projectTable)
+    beforeAll(() => {
+      hackathons = new Hackathons(sheets, hackathonTable)
+      projects = new Projects(sheets, projectTable)
+    })
     test('initializes', () => {
       expect(hackathons.rows).toBeDefined()
       expect(hackathons.rows.length).toEqual(hackathonTable.rows.length)
@@ -283,7 +287,9 @@ describe('WhollySheet', () => {
   })
 
   describe('error checking', () => {
-    const hackathons = new Hackathons(sheets, hackathonTable)
+    beforeAll(() => {
+      hackathons = new Hackathons(sheets, hackathonTable)
+    })
     describe('empty id', () => {
       // jest error handling discussed at https://jestjs.io/docs/en/asynchronous#resolves-rejects
       test('save errors', async () => {
@@ -295,24 +301,18 @@ describe('WhollySheet', () => {
           `"id" must be assigned for row ${row.row}`
         )
       })
-      test('update errors', async () => {
+      test('update errors on mismatched update', async () => {
         expect(hackathons.rows).toBeDefined()
         expect(hackathons.rows.length).toBeGreaterThan(0)
         const row = hackathons.rows[0]
-        row.id = ''
-        await expect(hackathons.update(row)).rejects.toThrow(
-          `"id" must be assigned for row ${row.row}`
-        )
-      })
-      test('create errors', async () => {
-        expect(hackathons.rows).toBeDefined()
-        expect(hackathons.rows.length).toBeGreaterThan(0)
-        const row = hackathons.rows[0]
-        row.row = 0
-        row.id = ''
-        await expect(hackathons.create(row)).rejects.toThrow(
-          `"id" must be assigned for row ${row.row}`
-        )
+        // prepare will update updated
+        row.prepare()
+        try {
+          await hackathons.update(row)
+          expect('whoops').toEqual('We should never get here')
+        } catch (e) {
+          expect(e.message).toMatch(/Row 2 is outdated:/i)
+        }
       })
     })
     describe('bad row value', () => {
@@ -327,13 +327,14 @@ describe('WhollySheet', () => {
         )
       })
       test('create needs a zero row', async () => {
+        expect(hackathons.sheets).toBeDefined()
         expect(hackathons.rows).toBeDefined()
         expect(hackathons.rows.length).toBeGreaterThan(0)
         const row = hackathons.rows[0]
         row.id = 'create_test'
         row.row = 2
         await expect(hackathons.create(row)).rejects.toThrow(
-          `"${row.id}" row must be 0, not ${row.row} to create`
+          `create needs "${row.id}" row to be < 1, not ${row.row}`
         )
       })
     })

@@ -26,6 +26,7 @@
 
 import { v4 as uuidv4 } from 'uuid'
 import { boolDefault, DelimArray } from '@looker/sdk-rtl/lib/browser'
+import { SheetValues } from './SheetSDK'
 
 export const noDate = new Date(-8640000000000000)
 
@@ -62,7 +63,7 @@ export interface IRowModel extends RowValues {
   /** The sheet Column Headers keys for this model */
   header(): ColumnHeaders
   /** Column values for the entire row to write to the GSheet */
-  values(): any[]
+  values(): SheetValues
   /** Prepare the row for saving */
   prepare(): IRowModel
 }
@@ -101,7 +102,7 @@ export class RowModel<T extends IRowModel> implements IRowModel {
   }
 
   values() {
-    const result: any[] = []
+    const result: SheetValues = []
     const keys = this.header()
     keys.forEach((key) => {
       result.push(stringer(this[key]))

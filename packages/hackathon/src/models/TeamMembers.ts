@@ -29,6 +29,7 @@ import {
   ITabTable,
   RowModel,
   SheetSDK,
+  SheetValues,
   WhollySheet,
 } from '@looker/wholly-sheet'
 import { ISheetRow } from './SheetRow'
@@ -61,7 +62,7 @@ export class TeamMembers extends WhollySheet<ITeamMember> {
     super(sheets, 'team_members', table, 'id')
   }
 
-  typeRows<T extends IRowModel>(rows: any[]): T[] {
+  typeRows<T extends IRowModel>(rows: SheetValues): T[] {
     const result: T[] = []
 
     rows.forEach((r) => {
