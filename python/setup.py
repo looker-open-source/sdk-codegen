@@ -5,7 +5,7 @@
 from setuptools import setup, find_packages  # noqa: H301
 
 NAME = "looker_sdk"
-VERSION = "0.1.3b18"
+VERSION = "0.1.3b19"
 REQUIRES = [
     "requests >= 2.22",
     "attrs >= 18.2.0",
