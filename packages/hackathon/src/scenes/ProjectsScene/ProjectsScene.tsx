@@ -31,10 +31,10 @@ import {
   ActionListItem,
   ActionListItemColumn,
 } from '@looker/components'
-import { allProjectsRequest } from '../../reducers/projects/actions'
-
+import { allProjectsRequest } from '../../data/projects/actions'
+import { getProjectsState } from '../../data/projects/selectors'
+import { isLoadingState } from '../../data/common/selectors'
 import { Projects, Project, sheetHeader, sheetCell } from '../../models'
-import { ProjectsStore } from '../../reducers/projects/reducer'
 import { Loading } from '../../components'
 
 interface ProjectSceneProps {}
@@ -44,12 +44,8 @@ export const ProjectsScene: FC<ProjectSceneProps> = () => {
   useEffect(() => {
     dispatch(allProjectsRequest())
   }, [dispatch])
-  const projects = useSelector<ProjectsStore, Projects>(
-    (state) => state.projects!
-  )
-  const isLoading = useSelector<ProjectsStore, boolean>(
-    (state) => state.loading
-  )
+  const projects = useSelector(getProjectsState)
+  const isLoading = useSelector(isLoadingState)
 
   return (
     <>

@@ -30,7 +30,7 @@ import { ExtensionProvider } from '@looker/extension-sdk-react'
 import { ComponentsProvider } from '@looker/components'
 import { hot } from 'react-hot-loader/root'
 import { Hackathon } from './Hackathon'
-import { configureStore } from './reducers/projects/store'
+import { configureStore } from './data/store'
 
 export const App: FC = hot(() => {
   return (

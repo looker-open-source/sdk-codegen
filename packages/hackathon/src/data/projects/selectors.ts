@@ -23,23 +23,9 @@
  SOFTWARE.
 
  */
-import createSagaMiddleware, { SagaMiddleware } from 'redux-saga'
 
-import { applyMiddleware, createStore } from 'redux'
-import { registerProjectsSagas as projectsSagaCallbacks } from './sagas'
-import { projectsReducer } from './reducer'
+import { Projects } from '../../models'
+import { RootState } from '../root_reducer'
 
-const sagaMiddleware: SagaMiddleware = createSagaMiddleware()
-
-const registerSagas = (callbacks: any[]) => {
-  callbacks.forEach((callback) => sagaMiddleware.run(callback))
-}
-
-export const configureStore = () => {
-  const store: any = createStore(
-    projectsReducer,
-    applyMiddleware(sagaMiddleware)
-  )
-  registerSagas([projectsSagaCallbacks])
-  return store
-}
+export const getProjectsState = (state: RootState): Projects | undefined =>
+  state.projectsState.projects

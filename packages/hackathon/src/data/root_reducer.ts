@@ -23,10 +23,19 @@
  SOFTWARE.
 
  */
-import React, { FC } from 'react'
-import { Heading } from '@looker/components'
 
-// TODO: Pull hackathon name from store and greet user by name
-export const Header: FC = () => {
-  return <Heading py="large">Welcome to ABC123</Heading>
+import { combineReducers } from 'redux'
+import { commonReducer, CommonState } from './common/reducer'
+import { projectsReducer, ProjectsState } from './projects/reducer'
+
+export interface RootStore {
+  commonState: CommonState
+  projectsState: ProjectsState
 }
+
+export const rootReducer = combineReducers({
+  commonState: commonReducer,
+  projectsState: projectsReducer,
+})
+
+export type RootState = ReturnType<typeof rootReducer>

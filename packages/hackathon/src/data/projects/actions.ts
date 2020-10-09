@@ -74,11 +74,6 @@ export interface DeleteProjectSuccessAction {
   type: Actions.DELETE_PROJECT_SUCCESS
 }
 
-export interface ErrorAction {
-  type: Actions.ERROR
-  payload: Error
-}
-
 export type ProjectAction =
   | AllProjectsRequestAction
   | AllProjectsSuccessAction
@@ -88,7 +83,6 @@ export type ProjectAction =
   | SaveProjectSuccessAction
   | DeleteProjectRequestAction
   | DeleteProjectSuccessAction
-  | ErrorAction
 
 export const allProjectsRequest = (): AllProjectsRequestAction => ({
   type: Actions.ALL_PROJECTS_REQUEST,
@@ -135,9 +129,4 @@ export const deleteProjectRequest = (
 
 export const deleteProjectSuccess = (): DeleteProjectSuccessAction => ({
   type: Actions.DELETE_PROJECT_SUCCESS,
-})
-
-export const actionError = (error: Error): ErrorAction => ({
-  type: Actions.ERROR,
-  payload: error,
 })

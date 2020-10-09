@@ -23,10 +23,11 @@
  SOFTWARE.
 
  */
-import React, { FC } from 'react'
-import { Heading } from '@looker/components'
+import { RootState } from '../root_reducer'
+import { MessageDetail } from './reducer'
 
-// TODO: Pull hackathon name from store and greet user by name
-export const Header: FC = () => {
-  return <Heading py="large">Welcome to ABC123</Heading>
-}
+export const isLoadingState = (state: RootState): boolean =>
+  state.commonState.loading
+
+export const getMessageState = (state: RootState): MessageDetail | undefined =>
+  state.commonState.message

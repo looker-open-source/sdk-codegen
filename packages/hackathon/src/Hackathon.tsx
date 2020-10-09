@@ -24,17 +24,32 @@
 
  */
 import React, { FC } from 'react'
-import { Page, Layout, Aside, Section } from '@looker/components'
+import { Page, Layout, Aside, Section, MessageBar } from '@looker/components'
+import { useSelector, useDispatch } from 'react-redux'
 
 import { SideNav, Header } from './components'
 import { AppRouter } from './routes'
+import { getMessageState } from './data/common/selectors'
+import { actionClearMessage } from './data/common/actions'
 
 interface HackathonProps {}
 
 export const Hackathon: FC<HackathonProps> = () => {
+  const dispatch = useDispatch()
+  const message = useSelector(getMessageState)
+
+  const clearMessage = () => {
+    dispatch(actionClearMessage())
+  }
+
   return (
-    <Page mx="large">
+    <Page px="large">
       <Header />
+      {message && (
+        <MessageBar intent={message.intent} onPrimaryClick={clearMessage}>
+          {message.messageText}
+        </MessageBar>
+      )}
       <Layout hasAside>
         <Aside width="10rem">
           <SideNav />
