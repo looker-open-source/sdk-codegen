@@ -24,24 +24,9 @@
 
  */
 
-import { combineReducers } from 'redux'
-import { commonReducer, CommonState } from './common/reducer'
-import { adminReducer, AdminState } from './admin/reducer'
-import { projectsReducer, ProjectsState } from './projects/reducer'
-import { hackSessionReducer, HackSessionState } from './hack_session/reducer'
+import { Hackathon } from '../../models'
+import { RootState } from '../root_reducer'
 
-export interface RootStore {
-  commonState: CommonState
-  adminState: AdminState
-  hackSessionState: HackSessionState
-  projectsState: ProjectsState
-}
-
-export const rootReducer = combineReducers({
-  commonState: commonReducer,
-  adminState: adminReducer,
-  hackSessionState: hackSessionReducer,
-  projectsState: projectsReducer,
-})
-
-export type RootState = ReturnType<typeof rootReducer>
+export const getCurrentHackathonState = (
+  state: RootState
+): Hackathon | undefined => state.hackSessionState.currentHackathon

@@ -23,25 +23,36 @@
  SOFTWARE.
 
  */
+import { AdminAction, Actions, AdminUserAttributes } from './actions'
 
-import { combineReducers } from 'redux'
-import { commonReducer, CommonState } from './common/reducer'
-import { adminReducer, AdminState } from './admin/reducer'
-import { projectsReducer, ProjectsState } from './projects/reducer'
-import { hackSessionReducer, HackSessionState } from './hack_session/reducer'
-
-export interface RootStore {
-  commonState: CommonState
-  adminState: AdminState
-  hackSessionState: HackSessionState
-  projectsState: ProjectsState
+export interface AdminState {
+  adminUserAttributes: AdminUserAttributes
 }
 
-export const rootReducer = combineReducers({
-  commonState: commonReducer,
-  adminState: adminReducer,
-  hackSessionState: hackSessionReducer,
-  projectsState: projectsReducer,
+const defaultState: Readonly<AdminState> = Object.freeze({
+  adminUserAttributes: {
+    lookerClientId: '',
+    lookerClientSecret: '',
+    sheetId: '',
+    apiTokenServerUrl: '',
+  },
 })
 
-export type RootState = ReturnType<typeof rootReducer>
+export const adminReducer = (
+  state: AdminState = defaultState,
+  action: AdminAction
+): AdminState => {
+  switch (action.type) {
+    case Actions.LOAD_USER_ATTRIBUTES_REQUEST:
+      return {
+        ...state,
+      }
+    case Actions.LOAD_USER_ATTRIBUTES_SUCCESS:
+      return {
+        ...state,
+        adminUserAttributes: action.payload,
+      }
+    default:
+      return state
+  }
+}

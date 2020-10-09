@@ -23,6 +23,28 @@
  SOFTWARE.
 
  */
-import React, { FC } from 'react'
+import React, { FC, useState } from 'react'
+import { TabList, Tab, TabPanels, TabPanel } from '@looker/components'
 
-export const AdminScene: FC = () => <>Admin page content goes here</>
+export const AdminScene: FC = () => {
+  // TODO hook selected index up to route
+  const [selectedIndex, setSelectedIndex] = useState(0)
+  const onSelectTab = (index: number) => setSelectedIndex(index)
+
+  return (
+    <>
+      <TabList selectedIndex={selectedIndex} onSelectTab={onSelectTab}>
+        <Tab>General</Tab>
+        <Tab>User Attributes</Tab>
+      </TabList>
+      <TabPanels selectedIndex={selectedIndex}>
+        <TabPanel>
+          <div>General admin stuff TBD</div>
+        </TabPanel>
+        <TabPanel>
+          <div>User attribute stuff</div>
+        </TabPanel>
+      </TabPanels>
+    </>
+  )
+}
