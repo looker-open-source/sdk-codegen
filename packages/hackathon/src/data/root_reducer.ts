@@ -27,14 +27,17 @@
 import { combineReducers } from 'redux'
 import { commonReducer, CommonState } from './common/reducer'
 import { projectsReducer, ProjectsState } from './projects/reducer'
+import { hackSessionReducer, HackSessionState } from './hack_session/reducer'
 
 export interface RootStore {
   commonState: CommonState
+  hackSessionState: HackSessionState
   projectsState: ProjectsState
 }
 
 export const rootReducer = combineReducers({
   commonState: commonReducer,
+  hackSessionState: hackSessionReducer,
   projectsState: projectsReducer,
 })
 

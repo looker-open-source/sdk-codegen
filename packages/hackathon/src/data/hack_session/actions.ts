@@ -23,21 +23,37 @@
  SOFTWARE.
 
  */
-import createSagaMiddleware, { SagaMiddleware } from 'redux-saga'
+import { Hackathon } from '../../models'
 
-import { applyMiddleware, createStore } from 'redux'
-import { registerProjectsSagas } from './projects/sagas'
-import { registerHackSessionSagas } from './hack_session/sagas'
-import { rootReducer } from './root_reducer'
-
-const sagaMiddleware: SagaMiddleware = createSagaMiddleware()
-
-const registerSagas = (callbacks: any[]) => {
-  callbacks.forEach((callback) => sagaMiddleware.run(callback))
+export enum Actions {
+  INIT_HACK_SESSION_REQUEST = 'INIT_HACK_SESSION_REQUEST',
+  INIT_HACK_SESSION_SUCCESS = 'INIT_HACK_SESSION_SUCCESS',
 }
 
-export const configureStore = () => {
-  const store: any = createStore(rootReducer, applyMiddleware(sagaMiddleware))
-  registerSagas([registerProjectsSagas, registerHackSessionSagas])
-  return store
+export interface InitHackSessionRequestAction {
+  type: Actions.INIT_HACK_SESSION_REQUEST
 }
+
+export interface InitHackSessionPayload {
+  currentHackathon: Hackathon
+}
+
+export interface InitHackSessionSuccessAction {
+  type: Actions.INIT_HACK_SESSION_SUCCESS
+  payload: InitHackSessionPayload
+}
+
+export type HackSessionAction =
+  | InitHackSessionRequestAction
+  | InitHackSessionSuccessAction
+
+export const initHackSessionRequest = (): InitHackSessionRequestAction => ({
+  type: Actions.INIT_HACK_SESSION_REQUEST,
+})
+
+export const initHackSessionSuccess = (
+  currentHackathon: Hackathon
+): InitHackSessionSuccessAction => ({
+  type: Actions.INIT_HACK_SESSION_SUCCESS,
+  payload: { currentHackathon },
+})

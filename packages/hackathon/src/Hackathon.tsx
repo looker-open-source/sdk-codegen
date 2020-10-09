@@ -23,7 +23,7 @@
  SOFTWARE.
 
  */
-import React, { FC } from 'react'
+import React, { FC, useEffect } from 'react'
 import { Page, Layout, Aside, Section, MessageBar } from '@looker/components'
 import { useSelector, useDispatch } from 'react-redux'
 
@@ -31,20 +31,26 @@ import { SideNav, Header } from './components'
 import { AppRouter } from './routes'
 import { getMessageState } from './data/common/selectors'
 import { actionClearMessage } from './data/common/actions'
+import { initHackSessionRequest } from './data/hack_session/actions'
+import { getCurrentHackathonState } from './data/hack_session/selectors'
 
 interface HackathonProps {}
 
 export const Hackathon: FC<HackathonProps> = () => {
   const dispatch = useDispatch()
+  useEffect(() => {
+    dispatch(initHackSessionRequest())
+  }, [])
+  const currentHackathon = useSelector(getCurrentHackathonState)
   const message = useSelector(getMessageState)
-
+  const headerText = currentHackathon ? currentHackathon.name : 'Welcome'
   const clearMessage = () => {
     dispatch(actionClearMessage())
   }
 
   return (
     <Page px="large">
-      <Header />
+      <Header text={headerText} />
       {message && (
         <MessageBar intent={message.intent} onPrimaryClick={clearMessage}>
           {message.messageText}

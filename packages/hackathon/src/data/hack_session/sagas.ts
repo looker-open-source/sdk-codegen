@@ -23,21 +23,28 @@
  SOFTWARE.
 
  */
-import createSagaMiddleware, { SagaMiddleware } from 'redux-saga'
+import { all, call, put, takeEvery } from 'redux-saga/effects'
+import { actionMessage, beginLoading, endLoading } from '../common/actions'
+import { sheetsSdkHelper } from '../sheets_sdk_helper'
+import { Actions, initHackSessionSuccess } from './actions'
 
-import { applyMiddleware, createStore } from 'redux'
-import { registerProjectsSagas } from './projects/sagas'
-import { registerHackSessionSagas } from './hack_session/sagas'
-import { rootReducer } from './root_reducer'
-
-const sagaMiddleware: SagaMiddleware = createSagaMiddleware()
-
-const registerSagas = (callbacks: any[]) => {
-  callbacks.forEach((callback) => sagaMiddleware.run(callback))
+function* initializeHackSessionSaga() {
+  try {
+    yield put(beginLoading())
+    const result = yield call([
+      sheetsSdkHelper,
+      sheetsSdkHelper.getCurrentHackathon,
+    ])
+    yield put(endLoading())
+    yield put(initHackSessionSuccess(result))
+  } catch (err) {
+    console.error(err)
+    yield put(actionMessage('A problem occurred loading the data', 'critical'))
+  }
 }
 
-export const configureStore = () => {
-  const store: any = createStore(rootReducer, applyMiddleware(sagaMiddleware))
-  registerSagas([registerProjectsSagas, registerHackSessionSagas])
-  return store
+export function* registerHackSessionSagas() {
+  yield all([
+    takeEvery(Actions.INIT_HACK_SESSION_REQUEST, initializeHackSessionSaga),
+  ])
 }

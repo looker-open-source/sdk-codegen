@@ -29,7 +29,7 @@ import { getExtensionSDK } from '@looker/extension-sdk'
 import { getCore40SDK } from '@looker/extension-sdk-react'
 import { SheetData } from '../models/SheetData'
 import { GAuthSession } from '../authToken/gAuthSession'
-import { Projects } from '../models'
+import { Hackathon, Projects } from '../models'
 import { ExtensionProxyTransport } from '../authToken/extensionProxyTransport'
 
 let sheetData: SheetData
@@ -61,5 +61,13 @@ export const sheetsSdkHelper = {
     const data = await initSheetData()
     const result = await data.refresh()
     return result.projects
+  },
+  getCurrentHackathon: async (): Promise<Hackathon> => {
+    const data = await initSheetData()
+    if (data.currentHackathon) {
+      return data.currentHackathon!
+    }
+    const result = await data.refresh()
+    return result.currentHackathon!
   },
 }

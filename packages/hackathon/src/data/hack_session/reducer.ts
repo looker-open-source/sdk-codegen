@@ -23,21 +23,30 @@
  SOFTWARE.
 
  */
-import createSagaMiddleware, { SagaMiddleware } from 'redux-saga'
+import { Hackathon } from '../../models'
+import { HackSessionAction, Actions } from './actions'
 
-import { applyMiddleware, createStore } from 'redux'
-import { registerProjectsSagas } from './projects/sagas'
-import { registerHackSessionSagas } from './hack_session/sagas'
-import { rootReducer } from './root_reducer'
-
-const sagaMiddleware: SagaMiddleware = createSagaMiddleware()
-
-const registerSagas = (callbacks: any[]) => {
-  callbacks.forEach((callback) => sagaMiddleware.run(callback))
+export interface HackSessionState {
+  currentHackathon?: Hackathon
 }
 
-export const configureStore = () => {
-  const store: any = createStore(rootReducer, applyMiddleware(sagaMiddleware))
-  registerSagas([registerProjectsSagas, registerHackSessionSagas])
-  return store
+const defaultState: Readonly<HackSessionState> = Object.freeze({})
+
+export const hackSessionReducer = (
+  state: HackSessionState = defaultState,
+  action: HackSessionAction
+): HackSessionState => {
+  switch (action.type) {
+    case Actions.INIT_HACK_SESSION_REQUEST:
+      return {
+        ...state,
+      }
+    case Actions.INIT_HACK_SESSION_SUCCESS:
+      return {
+        ...state,
+        currentHackathon: action.payload.currentHackathon,
+      }
+    default:
+      return state
+  }
 }

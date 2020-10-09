@@ -24,15 +24,8 @@
 
  */
 import { all, call, put, takeEvery } from 'redux-saga/effects'
-import { DefaultSettings } from '@looker/sdk-rtl/lib/browser'
-import { ISheet, SheetSDK } from '@looker/wholly-sheet'
-import { getExtensionSDK } from '@looker/extension-sdk'
 import { actionMessage, beginLoading, endLoading } from '../common/actions'
 import { sheetsSdkHelper } from '../sheets_sdk_helper'
-import { SheetData } from '../../models/SheetData'
-import { GAuthSession } from '../../authToken/gAuthSession'
-import { Projects } from '../../models'
-import { ExtensionProxyTransport } from '../../authToken/extensionProxyTransport'
 import { Actions, allProjectsSuccess } from './actions'
 
 function* allProjectsSaga() {

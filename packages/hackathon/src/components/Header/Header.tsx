@@ -26,7 +26,10 @@
 import React, { FC } from 'react'
 import { Heading } from '@looker/components'
 
-// TODO: Pull hackathon name from store and greet user by name
-export const Header: FC = () => {
-  return <Heading py="large">Welcome to ABC123</Heading>
+export interface HeaderProps {
+  text: string
 }
+
+export const Header: FC<HeaderProps> = ({ text }) => (
+  <Heading py="large">{text}</Heading>
+)
