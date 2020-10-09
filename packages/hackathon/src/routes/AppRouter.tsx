@@ -60,7 +60,6 @@ export const getAuthorizedRoutes = (hacker?: Hacker): Routes[] => {
       authorizedRoutes.push(Routes.ADMIN)
     }
   }
-  console.log({ authorizedRoutes })
   return authorizedRoutes
 }
 
