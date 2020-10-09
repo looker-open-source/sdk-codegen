@@ -24,24 +24,38 @@
 
  */
 
-import { combineReducers } from 'redux'
-import { commonReducer, CommonState } from './common/reducer'
-import { adminReducer, AdminState } from './admin/reducer'
-import { projectsReducer, ProjectsState } from './projects/reducer'
-import { hackSessionReducer, HackSessionState } from './hack_session/reducer'
-
-export interface RootStore {
-  commonState: CommonState
-  adminState: AdminState
-  hackSessionState: HackSessionState
-  projectsState: ProjectsState
+export enum Actions {
+  LOAD_USER_ATTRIBUTES_REQUEST = 'LOAD_USER_ATTRIBUTES_REQUEST',
+  LOAD_USER_ATTRIBUTES_SUCCESS = 'LOAD_USER_ATTRIBUTES_SUCCESS',
 }
 
-export const rootReducer = combineReducers({
-  commonState: commonReducer,
-  adminState: adminReducer,
-  hackSessionState: hackSessionReducer,
-  projectsState: projectsReducer,
+export interface LoadUserAttributesRequestAction {
+  type: Actions.LOAD_USER_ATTRIBUTES_REQUEST
+}
+
+export interface AdminUserAttributes {
+  lookerClientId: string
+  lookerClientSecret: string
+  sheetId: string
+  apiTokenServerUrl: string
+}
+
+export interface LoadUserAttributesSuccessAction {
+  type: Actions.LOAD_USER_ATTRIBUTES_SUCCESS
+  payload: AdminUserAttributes
+}
+
+export type AdminAction =
+  | LoadUserAttributesRequestAction
+  | LoadUserAttributesSuccessAction
+
+export const loadUserAttributesRequest = (): LoadUserAttributesRequestAction => ({
+  type: Actions.LOAD_USER_ATTRIBUTES_REQUEST,
 })
 
-export type RootState = ReturnType<typeof rootReducer>
+export const loadUserAttributesSuccess = (
+  adminUserAttributes: AdminUserAttributes
+): LoadUserAttributesSuccessAction => ({
+  type: Actions.LOAD_USER_ATTRIBUTES_SUCCESS,
+  payload: adminUserAttributes,
+})
