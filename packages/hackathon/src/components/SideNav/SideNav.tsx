@@ -27,24 +27,25 @@ import React, { FC } from 'react'
 import styled from 'styled-components'
 import { Box, MenuList, MenuItem } from '@looker/components'
 import { NavLink } from 'react-router-dom'
+import { Routes } from '../../routes/AppRouter'
 
 export const SideNav: FC = () => (
   <Box fontSize="xxlarge">
     <MenuList type="none">
       <MenuItem icon="Home">
-        <Link to="/home">Home</Link>
+        <Link to={Routes.HOME}>Home</Link>
       </MenuItem>
       <MenuItem icon="Group">
-        <Link to="/users">Users</Link>
+        <Link to={Routes.USERS}>Users</Link>
       </MenuItem>
       <MenuItem icon="Folder">
-        <Link to="projects">Projects</Link>
+        <Link to={Routes.PROJECTS}>Projects</Link>
       </MenuItem>
       <MenuItem icon="Style">
-        <Link to="/judging">Judging</Link>
+        <Link to={Routes.JUDGING}>Judging</Link>
       </MenuItem>
       <MenuItem icon="Gear">
-        <Link to="/admin">Admin</Link>
+        <Link to={Routes.ADMIN}>Admin</Link>
       </MenuItem>
     </MenuList>
   </Box>

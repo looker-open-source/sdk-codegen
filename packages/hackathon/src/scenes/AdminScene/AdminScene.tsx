@@ -23,26 +23,61 @@
  SOFTWARE.
 
  */
-import React, { FC, useState } from 'react'
+import React, { FC, useEffect } from 'react'
 import { TabList, Tab, TabPanels, TabPanel } from '@looker/components'
+import { useHistory, useRouteMatch } from 'react-router-dom'
+import { Routes } from '../../routes/AppRouter'
+import { UserAttributes } from './components/UserAttributes'
+
+const tabnames = ['general', 'userattributes']
+
+const getTabNameIndex = (tabname?: string) => {
+  let tabIndex = tabnames.indexOf(tabname || 'general')
+  if (tabIndex < 0) {
+    tabIndex = 0
+  }
+  return {
+    tabname: tabnames[tabIndex],
+    tabIndex,
+  }
+}
 
 export const AdminScene: FC = () => {
-  // TODO hook selected index up to route
-  const [selectedIndex, setSelectedIndex] = useState(0)
-  const onSelectTab = (index: number) => setSelectedIndex(index)
+  const history = useHistory()
+  const match = useRouteMatch<{ func: string; tabname: string }>(
+    '/:func/:tabname'
+  )
+
+  useEffect(() => {
+    const currentTabname = match?.params?.tabname
+    const { tabname } = getTabNameIndex(currentTabname)
+    if (tabname !== currentTabname) {
+      history.push(`/admin/${tabname}`)
+    }
+  }, [history, match])
+
+  const onSelectTab = (index: number) => {
+    const currentTabname = match?.params?.tabname
+    const tabname = tabnames[index]
+    if (tabname !== currentTabname) {
+      history.push(`${Routes.ADMIN}/${tabname}`)
+    }
+  }
+
+  const { tabIndex } = getTabNameIndex(match?.params?.tabname)
 
   return (
     <>
-      <TabList selectedIndex={selectedIndex} onSelectTab={onSelectTab}>
+      <TabList selectedIndex={tabIndex} onSelectTab={onSelectTab}>
         <Tab>General</Tab>
         <Tab>User Attributes</Tab>
       </TabList>
-      <TabPanels selectedIndex={selectedIndex}>
+      <TabPanels selectedIndex={tabIndex}>
         <TabPanel>
           <div>General admin stuff TBD</div>
         </TabPanel>
         <TabPanel>
-          <div>User attribute stuff</div>
+          <UserAttributes />
         </TabPanel>
       </TabPanels>
     </>

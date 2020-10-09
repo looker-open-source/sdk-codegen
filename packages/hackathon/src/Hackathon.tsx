@@ -40,7 +40,7 @@ export const Hackathon: FC<HackathonProps> = () => {
   const dispatch = useDispatch()
   useEffect(() => {
     dispatch(initHackSessionRequest())
-  }, [])
+  }, [dispatch])
   const currentHackathon = useSelector(getCurrentHackathonState)
   const message = useSelector(getMessageState)
   const headerText = currentHackathon ? currentHackathon.name : 'Welcome'
@@ -57,7 +57,7 @@ export const Hackathon: FC<HackathonProps> = () => {
         </MessageBar>
       )}
       <Layout hasAside>
-        <Aside width="10rem">
+        <Aside>
           <SideNav />
         </Aside>
         <Section>

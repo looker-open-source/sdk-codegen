@@ -24,44 +24,13 @@
 
  */
 import React, { FC } from 'react'
-import { Redirect, Route, Switch } from 'react-router-dom'
-import {
-  HomeScene,
-  UsersScene,
-  JudgingScene,
-  AdminScene,
-  NotFoundScene,
-  ProjectsScene,
-} from '../scenes'
 
-export enum Routes {
-  HOME = '/home',
-  ADMIN = '/admin',
-  JUDGING = '/judging',
-  PROJECTS = '/projects',
-  USERS = '/users',
+export interface UserAttributesProps {}
+
+export const UserAttributes: FC<UserAttributesProps> = () => {
+  return (
+    <>
+      <div>UserAttributes</div>
+    </>
+  )
 }
-
-export const AppRouter: FC = () => (
-  <Switch>
-    <Redirect from="/" to="/home" exact />
-    <Route path={Routes.HOME} exact>
-      <HomeScene />
-    </Route>
-    <Route path={Routes.ADMIN}>
-      <AdminScene />
-    </Route>
-    <Route path={Routes.JUDGING}>
-      <JudgingScene />
-    </Route>
-    <Route path={Routes.PROJECTS}>
-      <ProjectsScene />
-    </Route>
-    <Route path={Routes.USERS}>
-      <UsersScene />
-    </Route>
-    <Route>
-      <NotFoundScene />
-    </Route>
-  </Switch>
-)
