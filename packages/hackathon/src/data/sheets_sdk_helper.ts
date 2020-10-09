@@ -23,30 +23,43 @@
  SOFTWARE.
 
  */
-import { all, call, put, takeEvery } from 'redux-saga/effects'
 import { DefaultSettings } from '@looker/sdk-rtl/lib/browser'
 import { ISheet, SheetSDK } from '@looker/wholly-sheet'
 import { getExtensionSDK } from '@looker/extension-sdk'
-import { actionMessage, beginLoading, endLoading } from '../common/actions'
-import { sheetsSdkHelper } from '../sheets_sdk_helper'
-import { SheetData } from '../../models/SheetData'
-import { GAuthSession } from '../../authToken/gAuthSession'
-import { Projects } from '../../models'
-import { ExtensionProxyTransport } from '../../authToken/extensionProxyTransport'
-import { Actions, allProjectsSuccess } from './actions'
+import { getCore40SDK } from '@looker/extension-sdk-react'
+import { SheetData } from '../models/SheetData'
+import { GAuthSession } from '../authToken/gAuthSession'
+import { Projects } from '../models'
+import { ExtensionProxyTransport } from '../authToken/extensionProxyTransport'
 
-function* allProjectsSaga() {
-  try {
-    yield put(beginLoading())
-    const result = yield call([sheetsSdkHelper, sheetsSdkHelper.getProjects])
-    yield put(endLoading())
-    yield put(allProjectsSuccess(result))
-  } catch (err) {
-    console.error(err)
-    yield put(actionMessage('A problem occured loading the data', 'critical'))
+let sheetData: SheetData
+
+const initSheetData = async () => {
+  if (sheetData) return sheetData
+  // Values required
+  const extSDK = getExtensionSDK()
+  const lookerSdk = getCore40SDK()
+  const tokenServerUrl =
+    (await extSDK.userAttributeGetItem('token_server_url')) || ''
+  const sheetId = (await extSDK.userAttributeGetItem('sheet_id')) || ''
+
+  const options = {
+    ...DefaultSettings(),
+    ...{ base_url: tokenServerUrl },
   }
+
+  const transport = new ExtensionProxyTransport(extSDK, options)
+  const gSession = new GAuthSession(extSDK, options, transport)
+  const sheetSDK = new SheetSDK(gSession, sheetId)
+  const emptySheet = {} as ISheet
+  sheetData = new SheetData(sheetSDK, emptySheet)
+  return sheetData
 }
 
-export function* registerProjectsSagas() {
-  yield all([takeEvery(Actions.ALL_PROJECTS_REQUEST, allProjectsSaga)])
+export const sheetsSdkHelper = {
+  getProjects: async (): Promise<Projects> => {
+    const data = await initSheetData()
+    const result = await data.refresh()
+    return result.projects
+  },
 }
