@@ -44,11 +44,11 @@ export const SideNav: FC<SideNavProps> = ({ authorizedRoutes }) => (
           <Link to={Routes.USERS}>Users</Link>
         </MenuItem>
       )}
-      <MenuItem icon="Folder">
+      <MenuItem icon="Beaker">
         <Link to={Routes.PROJECTS}>Projects</Link>
       </MenuItem>
       {authorizedRoutes.includes(Routes.JUDGING) && (
-        <MenuItem icon="Style">
+        <MenuItem icon="FactCheck">
           <Link to={Routes.JUDGING}>Judging</Link>
         </MenuItem>
       )}
