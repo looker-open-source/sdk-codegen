@@ -33,11 +33,16 @@ export interface LoadUserAttributesRequestAction {
   type: Actions.LOAD_USER_ATTRIBUTES_REQUEST
 }
 
+export interface AttributeValue {
+  value: string
+  dirty: boolean
+}
+
 export interface AdminUserAttributes {
-  lookerClientId: string
-  lookerClientSecret: string
-  sheetId: string
-  apiTokenServerUrl: string
+  lookerClientId: AttributeValue
+  lookerClientSecret: AttributeValue
+  sheetId: AttributeValue
+  tokenServerUrl: AttributeValue
 }
 
 export interface LoadUserAttributesSuccessAction {

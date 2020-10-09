@@ -23,7 +23,7 @@
  SOFTWARE.
 
  */
-import { Hackathon, Technologies } from '../../models'
+import { Hacker, Hackathon, Technologies } from '../../models'
 
 export enum Actions {
   INIT_HACK_SESSION_REQUEST = 'INIT_HACK_SESSION_REQUEST',
@@ -37,6 +37,7 @@ export interface InitHackSessionRequestAction {
 export interface InitHackSessionPayload {
   currentHackathon: Hackathon
   technologies: Technologies
+  hacker: Hacker
 }
 
 export interface InitHackSessionSuccessAction {
@@ -54,8 +55,9 @@ export const initHackSessionRequest = (): InitHackSessionRequestAction => ({
 
 export const initHackSessionSuccess = (
   currentHackathon: Hackathon,
-  technologies: Technologies
+  technologies: Technologies,
+  hacker: Hacker
 ): InitHackSessionSuccessAction => ({
   type: Actions.INIT_HACK_SESSION_SUCCESS,
-  payload: { currentHackathon, technologies },
+  payload: { currentHackathon, technologies, hacker },
 })

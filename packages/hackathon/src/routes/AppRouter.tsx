@@ -25,6 +25,7 @@
  */
 import React, { FC } from 'react'
 import { Redirect, Route, Switch } from 'react-router-dom'
+import { Hacker } from '../models'
 import {
   HomeScene,
   UsersScene,
@@ -42,24 +43,50 @@ export enum Routes {
   USERS = '/users',
 }
 
-export const AppRouter: FC = () => (
+export interface AppRouterProps {
+  authorizedRoutes: Routes[]
+}
+
+export const getAuthorizedRoutes = (hacker?: Hacker): Routes[] => {
+  const authorizedRoutes: Routes[] = []
+  if (hacker) {
+    if (hacker.canAdmin() || hacker.canJudge() || hacker.canStaff()) {
+      authorizedRoutes.push(Routes.JUDGING)
+    }
+    if (hacker.canAdmin() || hacker.canStaff()) {
+      authorizedRoutes.push(Routes.USERS)
+    }
+    if (hacker.canAdmin()) {
+      authorizedRoutes.push(Routes.ADMIN)
+    }
+  }
+  return authorizedRoutes
+}
+
+export const AppRouter: FC<AppRouterProps> = ({ authorizedRoutes }) => (
   <Switch>
     <Redirect from="/" to="/home" exact />
     <Route path={Routes.HOME} exact>
       <HomeScene />
     </Route>
-    <Route path={Routes.ADMIN}>
-      <AdminScene />
-    </Route>
-    <Route path={Routes.JUDGING}>
-      <JudgingScene />
-    </Route>
+    {authorizedRoutes.includes(Routes.ADMIN) && (
+      <Route path={Routes.ADMIN}>
+        <AdminScene />
+      </Route>
+    )}
+    {authorizedRoutes.includes(Routes.JUDGING) && (
+      <Route path={Routes.JUDGING}>
+        <JudgingScene />
+      </Route>
+    )}
     <Route path={Routes.PROJECTS}>
       <ProjectsScene />
     </Route>
-    <Route path={Routes.USERS}>
-      <UsersScene />
-    </Route>
+    {authorizedRoutes.includes(Routes.USERS) && (
+      <Route path={Routes.USERS}>
+        <UsersScene />
+      </Route>
+    )}
     <Route>
       <NotFoundScene />
     </Route>

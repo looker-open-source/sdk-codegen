@@ -74,16 +74,22 @@ export class Hacker implements IHacker {
    */
   async getMe() {
     this.user = await this.sdk.ok(this.sdk.me())
-    const roles = await this.sdk.ok(this.sdk.all_roles({}))
-    const staffRole = roles.find((r) => r.name?.match(/staff/i))
-    const judgeRole = roles.find((r) => r.name?.match(/judge/i))
-    const adminRole = roles.find((r) => r.name?.match(/admin/i))
-    if (staffRole && this.user.role_ids?.includes(staffRole.id as number))
-      this.roles.add('staff')
-    if (judgeRole && this.user.role_ids?.includes(judgeRole.id as number))
-      this.roles.add('judge')
-    if (adminRole && this.user.role_ids?.includes(adminRole.id as number))
-      this.roles.add('admin')
+    try {
+      const roles = await this.sdk.ok(this.sdk.all_roles({}))
+      const staffRole = roles.find((r) => r.name?.match(/staff/i))
+      const judgeRole = roles.find((r) => r.name?.match(/judge/i))
+      const adminRole = roles.find((r) => r.name?.match(/admin/i))
+      if (staffRole && this.user.role_ids?.includes(staffRole.id as number))
+        this.roles.add('staff')
+      if (judgeRole && this.user.role_ids?.includes(judgeRole.id as number))
+        this.roles.add('judge')
+      if (adminRole && this.user.role_ids?.includes(adminRole.id as number))
+        this.roles.add('admin')
+    } catch (err) {
+      if (err.message !== 'Not found') {
+        throw err
+      }
+    }
     return this
   }
 

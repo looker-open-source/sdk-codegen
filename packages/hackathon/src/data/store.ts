@@ -28,6 +28,7 @@ import createSagaMiddleware, { SagaMiddleware } from 'redux-saga'
 import { applyMiddleware, createStore } from 'redux'
 import { registerProjectsSagas } from './projects/sagas'
 import { registerHackSessionSagas } from './hack_session/sagas'
+import { registeAdminSagas } from './admin/sagas'
 import { rootReducer } from './root_reducer'
 
 const sagaMiddleware: SagaMiddleware = createSagaMiddleware()
@@ -38,6 +39,10 @@ const registerSagas = (callbacks: any[]) => {
 
 export const configureStore = () => {
   const store: any = createStore(rootReducer, applyMiddleware(sagaMiddleware))
-  registerSagas([registerProjectsSagas, registerHackSessionSagas])
+  registerSagas([
+    registerProjectsSagas,
+    registerHackSessionSagas,
+    registeAdminSagas,
+  ])
   return store
 }

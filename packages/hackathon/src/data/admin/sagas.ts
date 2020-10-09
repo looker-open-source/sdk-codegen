@@ -25,19 +25,48 @@
  */
 import { all, call, put, takeEvery } from 'redux-saga/effects'
 import { getCore40SDK } from '@looker/extension-sdk-react'
+import { getExtensionSDK } from '@looker/extension-sdk'
+import { IUserAttribute } from '@looker/sdk'
 import { actionMessage, beginLoading, endLoading } from '../common/actions'
 import {
   Actions,
   loadUserAttributesSuccess,
   AdminUserAttributes,
+  AttributeValue,
 } from './actions'
 
-const extractUserAttributes = (): AdminUserAttributes => {
+const findUserAttributeValue = (
+  name: string,
+  userAttributes: IUserAttribute[]
+): AttributeValue => {
+  const userAttribute = userAttributes.find(
+    (userAttribute) => userAttribute.name === name
+  )
   return {
-    lookerClientId: '',
-    lookerClientSecret: '',
-    sheetId: '',
-    apiTokenServerUrl: '',
+    value: userAttribute ? userAttribute.default_value || '' : '',
+    dirty: false,
+  }
+}
+
+const extractUserAttributes = (
+  userAttributes: IUserAttribute[]
+): AdminUserAttributes => {
+  const prefix =
+    getExtensionSDK().lookerHostData?.extensionId.replace(/::|-/g, '_') + '_'
+  return {
+    lookerClientId: findUserAttributeValue(
+      prefix + 'looker_client_id',
+      userAttributes
+    ),
+    lookerClientSecret: findUserAttributeValue(
+      prefix + 'looker_client_secret',
+      userAttributes
+    ),
+    sheetId: findUserAttributeValue(prefix + 'sheet_id', userAttributes),
+    tokenServerUrl: findUserAttributeValue(
+      prefix + 'token_server_url',
+      userAttributes
+    ),
   }
 }
 
@@ -47,9 +76,8 @@ function* loadUserAttributesSaga() {
     const lookerSdk = getCore40SDK()
     const result = yield call([lookerSdk, lookerSdk.all_user_attributes], {})
     const userAttributes = yield call([lookerSdk, lookerSdk.ok], result)
-    console.log({ userAttributes })
     yield put(endLoading())
-    yield put(loadUserAttributesSuccess(extractUserAttributes()))
+    yield put(loadUserAttributesSuccess(extractUserAttributes(userAttributes)))
   } catch (err) {
     console.error(err)
     yield put(actionMessage('A problem occurred loading the data', 'critical'))
