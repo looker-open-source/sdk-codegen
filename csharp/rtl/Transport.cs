@@ -4,6 +4,7 @@ using System.Linq;
 using System.Net;
 using System.Net.Http;
 using System.Text;
+using System.Text.Json;
 using System.Threading.Tasks;
 using Newtonsoft.Json;
 using JsonSerializer = System.Text.Json.JsonSerializer;
@@ -236,7 +237,7 @@ namespace Looker.RTL
                 {
                     request.Content =
                         new StringContent(
-                            JsonSerializer.Serialize(body),
+                            JsonSerializer.Serialize(body, new JsonSerializerOptions { IgnoreNullValues = true }),
                             Encoding.UTF8,
                             "application/json");
                 }
