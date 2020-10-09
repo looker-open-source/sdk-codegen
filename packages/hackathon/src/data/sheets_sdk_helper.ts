@@ -29,7 +29,7 @@ import { getExtensionSDK } from '@looker/extension-sdk'
 import { getCore40SDK } from '@looker/extension-sdk-react'
 import { SheetData } from '../models/SheetData'
 import { GAuthSession } from '../authToken/gAuthSession'
-import { Hackathon, Projects } from '../models'
+import { Hackathon, Project, Projects, Technologies } from '../models'
 import { ExtensionProxyTransport } from '../authToken/extensionProxyTransport'
 
 let sheetData: SheetData
@@ -62,6 +62,24 @@ export const sheetsSdkHelper = {
     const result = await data.refresh()
     return result.projects
   },
+  saveProject: async (project: Project) => {
+    const data = await initSheetData()
+    const sheet = await data.projects
+    const nextRow = sheet.nextRow
+    await data.sheetSDK.createRow('projects', nextRow, [
+      project.id,
+      project.updated,
+      project.user_id,
+      project.registration_id,
+      project.title,
+      project.description,
+      project.date_created,
+      project.project_type,
+      project.contestant,
+      project.locked,
+      project.technologies,
+    ])
+  },
   getCurrentHackathon: async (): Promise<Hackathon> => {
     const data = await initSheetData()
     if (data.currentHackathon) {
@@ -69,5 +87,13 @@ export const sheetsSdkHelper = {
     }
     const result = await data.refresh()
     return result.currentHackathon!
+  },
+  getTechnologies: async (): Promise<Technologies> => {
+    const data = await initSheetData()
+    if (data.technologies) {
+      return data.technologies
+    }
+    const result = await data.refresh()
+    return result.technologies
   },
 }

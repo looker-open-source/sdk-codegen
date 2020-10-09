@@ -23,11 +23,12 @@
  SOFTWARE.
 
  */
-import { Hackathon } from '../../models'
+import { Hackathon, Technologies } from '../../models'
 import { HackSessionAction, Actions } from './actions'
 
 export interface HackSessionState {
   currentHackathon?: Hackathon
+  technologies?: Technologies
 }
 
 const defaultState: Readonly<HackSessionState> = Object.freeze({})
@@ -45,6 +46,7 @@ export const hackSessionReducer = (
       return {
         ...state,
         currentHackathon: action.payload.currentHackathon,
+        technologies: action.payload.technologies,
       }
     default:
       return state

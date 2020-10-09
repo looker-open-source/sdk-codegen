@@ -31,12 +31,16 @@ import { Actions, initHackSessionSuccess } from './actions'
 function* initializeHackSessionSaga() {
   try {
     yield put(beginLoading())
-    const result = yield call([
+    const hackathon = yield call([
       sheetsSdkHelper,
       sheetsSdkHelper.getCurrentHackathon,
     ])
+    const technologies = yield call([
+      sheetsSdkHelper,
+      sheetsSdkHelper.getTechnologies,
+    ])
     yield put(endLoading())
-    yield put(initHackSessionSuccess(result))
+    yield put(initHackSessionSuccess(hackathon, technologies))
   } catch (err) {
     console.error(err)
     yield put(actionMessage('A problem occurred loading the data', 'critical'))

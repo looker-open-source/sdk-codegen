@@ -23,33 +23,4 @@
  SOFTWARE.
 
  */
-
-import React, { FC, useEffect } from 'react'
-import { useSelector, useDispatch } from 'react-redux'
-
-import { allProjectsRequest } from '../../data/projects/actions'
-import { getProjectsState } from '../../data/projects/selectors'
-import { isLoadingState } from '../../data/common/selectors'
-import { Loading, ProjectList, ProjectDialog } from '../../components'
-
-interface ProjectSceneProps {}
-
-export const ProjectsScene: FC<ProjectSceneProps> = () => {
-  const dispatch = useDispatch()
-  useEffect(() => {
-    dispatch(allProjectsRequest())
-  }, [dispatch])
-  const projects = useSelector(getProjectsState)
-  const isLoading = useSelector(isLoadingState)
-
-  return (
-    <>
-      <Loading
-        loading={!projects && isLoading}
-        message={'Fetching projects...'}
-      />
-      {projects && <ProjectList projects={projects} />}
-      <ProjectDialog />
-    </>
-  )
-}
+export { ProjectList } from './ProjectList'

@@ -26,3 +26,5 @@
 export { Loading } from './Loading'
 export { SideNav } from './SideNav'
 export { Header } from './Header'
+export { ProjectList } from './ProjectList'
+export { ProjectDialog } from './ProjectDialog'

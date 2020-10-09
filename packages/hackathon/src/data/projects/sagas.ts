@@ -26,7 +26,12 @@
 import { all, call, put, takeEvery } from 'redux-saga/effects'
 import { actionMessage, beginLoading, endLoading } from '../common/actions'
 import { sheetsSdkHelper } from '../sheets_sdk_helper'
-import { Actions, allProjectsSuccess } from './actions'
+import {
+  Actions,
+  allProjectsSuccess,
+  SaveProjectRequestAction,
+  saveProjectSuccess,
+} from './actions'
 
 function* allProjectsSaga() {
   try {
@@ -36,10 +41,27 @@ function* allProjectsSaga() {
     yield put(allProjectsSuccess(result))
   } catch (err) {
     console.error(err)
-    yield put(actionMessage('A problem occured loading the data', 'critical'))
+    yield put(actionMessage('A problem occurred loading the data', 'critical'))
+  }
+}
+
+function* saveProjectSaga(action: SaveProjectRequestAction) {
+  try {
+    yield put(beginLoading())
+    yield call([sheetsSdkHelper, sheetsSdkHelper.saveProject], action.payload)
+    yield put(endLoading())
+    yield put(saveProjectSuccess())
+  } catch (err) {
+    console.error(err)
+    yield put(
+      actionMessage('A problem occurred while saving the project', 'critical')
+    )
   }
 }
 
 export function* registerProjectsSagas() {
-  yield all([takeEvery(Actions.ALL_PROJECTS_REQUEST, allProjectsSaga)])
+  yield all([
+    takeEvery(Actions.ALL_PROJECTS_REQUEST, allProjectsSaga),
+    takeEvery(Actions.SAVE_PROJECT_REQUEST, saveProjectSaga),
+  ])
 }

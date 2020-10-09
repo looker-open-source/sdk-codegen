@@ -24,9 +24,12 @@
 
  */
 
-import { Hackathon } from '../../models'
+import { Hackathon, Technologies } from '../../models'
 import { RootState } from '../root_reducer'
 
 export const getCurrentHackathonState = (
   state: RootState
 ): Hackathon | undefined => state.hackSessionState.currentHackathon
+
+export const getTechnologies = (state: RootState): Technologies | undefined =>
+  state.hackSessionState.technologies
