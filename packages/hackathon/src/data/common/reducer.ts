@@ -23,10 +23,55 @@
  SOFTWARE.
 
  */
-import React, { FC } from 'react'
-import { Heading } from '@looker/components'
 
-// TODO: Pull hackathon name from store and greet user by name
-export const Header: FC = () => {
-  return <Heading py="large">Welcome to ABC123</Heading>
+import { Actions, CommonAction } from './actions'
+
+export interface MessageDetail {
+  messageText: string
+  intent: 'critical' | 'inform' | 'positive' | 'warn'
+}
+
+export interface CommonState {
+  message?: MessageDetail
+  loading: boolean
+}
+
+const defaultState: Readonly<CommonState> = Object.freeze({ loading: false })
+
+export const commonReducer = (
+  state: CommonState = defaultState,
+  action: CommonAction
+): CommonState => {
+  switch (action.type) {
+    case Actions.ERROR:
+      return {
+        ...state,
+        message: { messageText: action.payload.message, intent: 'critical' },
+        loading: false,
+      }
+    case Actions.MESSAGE:
+      return {
+        ...state,
+        message: action.payload,
+        loading: false,
+      }
+    case Actions.MESSAGE_CLEAR:
+      return {
+        ...state,
+        message: undefined,
+      }
+    case Actions.BEGIN_LOADING:
+      return {
+        ...state,
+        message: undefined,
+        loading: true,
+      }
+    case Actions.END_LOADING:
+      return {
+        ...state,
+        loading: false,
+      }
+    default:
+      return state
+  }
 }

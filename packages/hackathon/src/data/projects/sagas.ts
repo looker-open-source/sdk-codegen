@@ -27,11 +27,12 @@ import { all, call, put, takeEvery } from 'redux-saga/effects'
 import { DefaultSettings } from '@looker/sdk-rtl/lib/browser'
 import { ISheet, SheetSDK } from '@looker/wholly-sheet'
 import { getExtensionSDK } from '@looker/extension-sdk'
+import { actionMessage, beginLoading, endLoading } from '../common/actions'
 import { SheetData } from '../../models/SheetData'
 import { GAuthSession } from '../../authToken/gAuthSession'
 import { Projects } from '../../models'
 import { ExtensionProxyTransport } from '../../authToken/extensionProxyTransport'
-import { Actions, allProjectsSuccess, actionError } from './actions'
+import { Actions, allProjectsSuccess } from './actions'
 
 let sheetData: SheetData
 
@@ -60,16 +61,20 @@ const projects = {
   getProjects: async (): Promise<Projects> => {
     const data = await initSheetData()
     const result = await data.refresh()
+    console.log(result.hackathons.rows[0])
     return result.projects
   },
 }
 
 function* allProjectsSaga() {
   try {
+    yield put(beginLoading())
     const result = yield call([projects, projects.getProjects])
+    yield put(endLoading())
     yield put(allProjectsSuccess(result))
   } catch (err) {
-    yield put(actionError(err.message))
+    console.error(err)
+    yield put(actionMessage('A problem occured loading the data', 'critical'))
   }
 }
 

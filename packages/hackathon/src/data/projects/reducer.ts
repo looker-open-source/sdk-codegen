@@ -28,51 +28,39 @@ import { ProjectAction, Actions } from './actions'
 
 // This is the first cut for state and to be honest I dont like it.
 // It will likely change
-export interface ProjectsStore {
+export interface ProjectsState {
   projects?: Projects
   currentProject?: Project
-  error?: string
-  loading: boolean
 }
 
-const defaultState: Readonly<ProjectsStore> = Object.freeze({
-  loading: false,
-})
+const defaultState: Readonly<ProjectsState> = Object.freeze({})
 
 export const projectsReducer = (
-  state: ProjectsStore = defaultState,
+  state: ProjectsState = defaultState,
   action: ProjectAction
-): ProjectsStore => {
+): ProjectsState => {
   switch (action.type) {
     case Actions.ALL_PROJECTS_REQUEST:
       return {
         ...state,
-        loading: true,
-        error: undefined,
       }
     case Actions.ALL_PROJECTS_SUCCESS:
       return {
         ...state,
         projects: action.payload,
-        loading: false,
       }
     case Actions.BEGIN_EDIT_PROJECT_REQUEST:
       return {
         ...state,
-        loading: true,
-        error: undefined,
       }
     case Actions.BEGIN_EDIT_PROJECT_SUCCESS:
       return {
         ...state,
         currentProject: action.payload,
-        loading: false,
       }
     case Actions.SAVE_PROJECT_REQUEST:
       return {
         ...state,
-        loading: true,
-        error: undefined,
       }
     case Actions.SAVE_PROJECT_SUCCESS:
       // TODO consider updating the just updated project
@@ -81,13 +69,10 @@ export const projectsReducer = (
       return {
         ...state,
         currentProject: undefined,
-        loading: false,
       }
     case Actions.DELETE_PROJECT_REQUEST:
       return {
         ...state,
-        loading: true,
-        error: undefined,
       }
     case Actions.DELETE_PROJECT_SUCCESS:
       // TODO consider deleting the just deleted project
@@ -96,13 +81,6 @@ export const projectsReducer = (
       return {
         ...state,
         currentProject: undefined,
-        loading: false,
-      }
-    case Actions.ERROR:
-      return {
-        ...state,
-        loading: false,
-        error: action.payload.message,
       }
     default:
       return state

@@ -23,10 +23,20 @@
  SOFTWARE.
 
  */
-import React, { FC } from 'react'
-import { Heading } from '@looker/components'
+import createSagaMiddleware, { SagaMiddleware } from 'redux-saga'
 
-// TODO: Pull hackathon name from store and greet user by name
-export const Header: FC = () => {
-  return <Heading py="large">Welcome to ABC123</Heading>
+import { applyMiddleware, createStore } from 'redux'
+import { registerProjectsSagas as projectsSagaCallbacks } from './projects/sagas'
+import { rootReducer } from './root_reducer'
+
+const sagaMiddleware: SagaMiddleware = createSagaMiddleware()
+
+const registerSagas = (callbacks: any[]) => {
+  callbacks.forEach((callback) => sagaMiddleware.run(callback))
+}
+
+export const configureStore = () => {
+  const store: any = createStore(rootReducer, applyMiddleware(sagaMiddleware))
+  registerSagas([projectsSagaCallbacks])
+  return store
 }
