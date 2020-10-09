@@ -186,7 +186,7 @@ namespace Looker.RTL
         {
             if (path.StartsWith("http:", StringComparison.InvariantCultureIgnoreCase)
                 || path.StartsWith("https:", StringComparison.InvariantCultureIgnoreCase))
-                return path;
+                return SdkUtils.AddQueryParams(path, queryParams);
             // TODO I don't think authenticator is needed here any more?
             return SdkUtils.AddQueryParams($"{BaseUrl}{path}", queryParams);
         }
