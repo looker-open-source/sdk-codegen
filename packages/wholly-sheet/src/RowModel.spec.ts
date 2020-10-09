@@ -132,4 +132,29 @@ describe('RowModel', () => {
       expect(actual.toggle).toEqual(true)
     })
   })
+  describe('prepare', () => {
+    test('assigns empty id and updated', () => {
+      const actual = new TestRow()
+      expect(actual.row).toEqual(0)
+      expect(actual.id).toEqual('')
+      expect(actual.updated).toEqual(noDate)
+      actual.prepare()
+      expect(actual.row).toEqual(0)
+      expect(actual.id).not.toEqual('')
+      expect(actual.updated).not.toEqual(noDate)
+    })
+    test('updates updated without updating id', () => {
+      const id = 'baad-f00d'
+      const actual = new TestRow({ row: 1, id })
+      actual.prepare()
+      expect(actual.row).toEqual(1)
+      expect(actual.id).toEqual(id)
+      expect(actual.updated).not.toEqual(noDate)
+      const updated = actual.updated
+      actual.prepare()
+      expect(actual.row).toEqual(1)
+      expect(actual.id).toEqual(id)
+      expect(actual.updated).not.toEqual(updated)
+    })
+  })
 })

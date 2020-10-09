@@ -92,9 +92,11 @@ export class RowModel<T extends IRowModel> implements IRowModel {
 
   prepare(): T {
     if (!this.id) {
-      // Generate GUID
+      // Generate id if not assigned
       this.id = uuidv4()
     }
+    /** Always update the "updated" value before saving */
+    this.updated = new Date()
     return (this as unknown) as T
   }
 
