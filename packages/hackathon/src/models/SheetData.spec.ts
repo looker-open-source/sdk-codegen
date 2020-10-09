@@ -27,9 +27,22 @@
 import { ISheet, SheetSDK } from '@looker/wholly-sheet'
 import { initSheetSDK } from '../../../wholly-sheet/src/testUtils/testUtils'
 import { SheetData } from './SheetData'
+import { IHacker } from './SheetRow'
 
 let sheetSDK: SheetSDK
 let data: ISheet
+
+const mockUser: ISheetUser = {
+  id: 'regularJoe',
+  roles: new Set<string>(['hacker']),
+  permissions: new Set<string>(),
+}
+
+const mockStaff: ISheetUser = {
+  id: 'regularJoe',
+  roles: new Set<string>(['hacker', 'staff']),
+  permissions: new Set<string>(),
+}
 
 describe('SheetData', () => {
   beforeAll(async () => {

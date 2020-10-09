@@ -50,10 +50,6 @@ export class SheetData {
     this.sheet = data
   }
 
-  get sheet() {
-    return this._sheet
-  }
-
   /** finds the "next up" or "current" hackathon and caches it for the instance lifetime */
   get currentHackathon(): Hackathon | undefined {
     if (this._hackathon) return this._hackathon
@@ -65,6 +61,10 @@ export class SheetData {
     const current = sorted.find((hack) => hack.judging_stops.getTime() >= now)
     this._hackathon = current as Hackathon
     return this._hackathon
+  }
+
+  get sheet() {
+    return this._sheet
   }
 
   /**

@@ -24,26 +24,15 @@
 
  */
 import { IRowModel, RowModel } from '@looker/wholly-sheet'
-
-/** This will probably need to change but it's a start at establishing user permissions for data operations */
-export type RowUserPermission = 'delete' | 'create' | 'update'
-
-export interface ISheetUser {
-  /** ID of the user */
-  id: string
-  /** Roles this user has */
-  roles: Set<string>
-  /** Permissions this user has */
-  permissions: Set<string>
-}
+import { IHacker } from './Hacker'
 
 export interface ISheetRow extends IRowModel {
   /** can the user create this row? */
-  canCreate(user: ISheetUser): boolean
+  canCreate(user: IHacker): boolean
   /** can the user update this row? */
-  canUpdate(user: ISheetUser): boolean
+  canUpdate(user: IHacker): boolean
   /** can the user delete this row? */
-  canDelete(user: ISheetUser): boolean
+  canDelete(user: IHacker): boolean
 }
 
 export class SheetRow<T extends ISheetRow> extends RowModel<T> {
@@ -51,15 +40,15 @@ export class SheetRow<T extends ISheetRow> extends RowModel<T> {
     super(values)
   }
 
-  canCreate(user: ISheetUser): boolean {
+  canCreate(user: IHacker): boolean {
     return user.roles.has('admin') || user.permissions.has('create')
   }
 
-  canDelete(user: ISheetUser): boolean {
+  canDelete(user: IHacker): boolean {
     return user.roles.has('admin') || user.permissions.has('delete')
   }
 
-  canUpdate(user: ISheetUser): boolean {
+  canUpdate(user: IHacker): boolean {
     return user.roles.has('admin') || user.permissions.has('update')
   }
 }
