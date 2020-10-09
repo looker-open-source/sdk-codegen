@@ -60,13 +60,13 @@ export class Hacker implements IHacker {
   roles = new Set<UserRole>(['user'])
   permissions = new Set<UserPermission>()
 
-  constructor() {
+  constructor(public readonly sdk: Looker40SDK) {
     /** Initialize static cached values */
   }
 
-  async getMe(sdk: Looker40SDK) {
-    this.user = await sdk.ok(sdk.me())
-    const roles = await sdk.ok(sdk.all_roles({}))
+  async getMe() {
+    this.user = await this.sdk.ok(this.sdk.me())
+    const roles = await this.sdk.ok(this.sdk.all_roles({}))
     const staffRole = roles.find((r) => r.name?.match(/staff/i))
     const judgeRole = roles.find((r) => r.name?.match(/judge/i))
     const adminRole = roles.find((r) => r.name?.match(/admin/i))
