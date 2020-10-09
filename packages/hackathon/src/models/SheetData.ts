@@ -53,6 +53,12 @@ export class SheetData {
   /** finds the "next up" or "current" hackathon and caches it for the instance lifetime */
   get currentHackathon(): Hackathon | undefined {
     if (this._hackathon) return this._hackathon
+    if (
+      !this.hackathons ||
+      !this.hackathons.rows ||
+      this.hackathons.rows.length === 0
+    )
+      return undefined
     // Sort hackathons in chronological order by start time ... maybe we sort by the stop of judging instead?
     const sorted = this.hackathons.rows.sort(
       (a, b) => a.date.getTime() - b.date.getTime()
