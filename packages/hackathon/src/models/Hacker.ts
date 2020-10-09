@@ -25,7 +25,7 @@
  */
 
 import { IUser } from '@looker/sdk/lib/sdk/4.0/models'
-import { ExtensionSDK } from '@looker/extension-sdk'
+import { Looker40SDK } from '@looker/sdk'
 
 export type UserPermission = 'delete' | 'create' | 'update'
 /** This will probably need to change but it's a start at establishing user permissions for data operations */
@@ -37,38 +37,56 @@ export interface IHacker {
   user: IUser
   /** ID of the user */
   id: string
-  /** Roles this user has */
-  roles: Set<string>
-  /** Permissions this user has */
-  permissions: Set<string>
+  /** First name of user */
+  firstName: string
+  /** Last name of user */
+  lastName: string
+  /** Roles for this user */
+  roles: Set<UserRole>
+  /** Permissions for this user */
+  permissions: Set<UserPermission>
   /** is this user a staff member? */
   canStaff(): boolean
   /** is this user a judge? */
   canJudge(): boolean
-  /** is this user an admin */
+  /** is this user an admin? */
   canAdmin(): boolean
+  /** assign this user their roles and permissions from Looker user lookup */
+  assignRoles(sdk: Looker40SDK): Promise<IHacker>
 }
 
 export class Hacker implements IHacker {
-  roles = new Set<string>(['user'])
-  permissions = new Set<string>()
-  private static _configured = false
-  private static _init(_extSDK: ExtensionSDK) {
-    if (Hacker._configured) return Hacker._configured
-    Hacker._configured = true
-    return Hacker._configured
+  roles = new Set<UserRole>(['user'])
+  permissions = new Set<UserPermission>()
+
+  constructor(public readonly user: IUser) {
+    /** Initialize static cached values */
   }
 
-  constructor(
-    public readonly extSDK: ExtensionSDK,
-    public readonly user: IUser
-  ) {
-    /** Initialize static cached values */
-    Hacker._init(extSDK)
+  async assignRoles(sdk: Looker40SDK) {
+    const roles = await sdk.ok(sdk.all_roles({}))
+    const staffRole = roles.find((r) => r.name?.match(/staff/i))
+    const judgeRole = roles.find((r) => r.name?.match(/judge/i))
+    const adminRole = roles.find((r) => r.name?.match(/admin/i))
+    if (staffRole && this.user.role_ids?.includes(staffRole.id as number))
+      this.roles.add('staff')
+    if (judgeRole && this.user.role_ids?.includes(judgeRole.id as number))
+      this.roles.add('judge')
+    if (adminRole && this.user.role_ids?.includes(adminRole.id as number))
+      this.roles.add('admin')
+    return this
   }
 
   get id(): string {
     return this.user.id?.toString() || 'no id'
+  }
+
+  get firstName(): string {
+    return this.user.first_name || 'no first name!'
+  }
+
+  get lastName(): string {
+    return this.user.last_name || 'no first name!'
   }
 
   canAdmin(): boolean {
