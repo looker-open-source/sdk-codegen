@@ -34,9 +34,11 @@ import {
 
 import { DelimArray } from '@looker/sdk-rtl/lib/browser'
 import { ISheetRow, SheetRow } from './SheetRow'
+import { IHacker } from './Hacker'
 
 /** IMPORTANT: properties must be declared in the tab sheet's columnar order, not sorted order */
 export interface IProject extends ISheetRow {
+  user_id: string
   registration_id: string
   title: string
   description: string
@@ -49,6 +51,7 @@ export interface IProject extends ISheetRow {
 
 /** IMPORTANT: properties must be declared in the tab sheet's columnar order, not sorted order */
 export class Project extends SheetRow<IProject> {
+  user_id = ''
   registration_id = ''
   title = ''
   description = ''
@@ -62,6 +65,18 @@ export class Project extends SheetRow<IProject> {
     // IMPORTANT: this must be done after super() constructor is called so keys are established
     // there may be a way to overload the constructor so this isn't necessary but pattern hasn't been found
     this.assign(values)
+  }
+
+  canCreate(user: IHacker): boolean {
+    return super.canCreate(user) || this.user_id === user.id
+  }
+
+  canDelete(user: IHacker): boolean {
+    return super.canDelete(user) || this.user_id === user.id
+  }
+
+  canUpdate(user: IHacker): boolean {
+    return super.canUpdate(user) || this.user_id === user.id
   }
 }
 

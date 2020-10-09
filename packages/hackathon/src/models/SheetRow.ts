@@ -41,14 +41,19 @@ export class SheetRow<T extends ISheetRow> extends RowModel<T> {
   }
 
   canCreate(user: IHacker): boolean {
-    return user.roles.has('admin') || user.permissions.has('create')
+    return user.canAdmin() || user.permissions.has('create')
   }
 
   canDelete(user: IHacker): boolean {
-    return user.roles.has('admin') || user.permissions.has('delete')
+    return user.canAdmin() || user.permissions.has('delete')
   }
 
   canUpdate(user: IHacker): boolean {
-    return user.roles.has('admin') || user.permissions.has('update')
+    return (
+      user.canAdmin() ||
+      user.canStaff() ||
+      user.canJudge() ||
+      user.permissions.has('update')
+    )
   }
 }

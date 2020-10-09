@@ -40,6 +40,7 @@ const rawJson = `
     "header": [
       "id",
       "updated",
+      "user_id",
       "registration_id",
       "title",
       "description",
@@ -53,6 +54,7 @@ const rawJson = `
       {
         "row": 2,
         "id": "a",
+        "user_id": "1",
         "registration_id": "a",
         "title": "cool project",
         "description": "a description of some project",
@@ -65,6 +67,7 @@ const rawJson = `
       {
         "row": 3,
         "id": "b",
+        "user_id": "2",
         "registration_id": "b",
         "title": "another project",
         "description": "the second project",
@@ -77,6 +80,7 @@ const rawJson = `
       {
         "row": 4,
         "id": "c",
+        "user_id": "3",
         "registration_id": "c",
         "title": "HackWeek 2020",
         "description": "Just a third project",
@@ -164,6 +168,7 @@ describe('WhollySheet', () => {
       const hackathon = hackathons.rows[0]
       const expected = [
         'JOIN_2019',
+        '\u0000',
         'JOIN in SFO',
         'First hackathon!',
         'sfo',
@@ -217,6 +222,7 @@ describe('WhollySheet', () => {
     test('undefined values are "empty"', () => {
       const someUndefined = [
         'id1',
+        '2019-11-05T15:00:00.000Z',
         'name1',
         'desc1',
         'loc1',
@@ -227,12 +233,13 @@ describe('WhollySheet', () => {
       const actual = new Hackathon(someUndefined)
       expect(actual.row).toEqual(0)
       expect(actual.id).toEqual(someUndefined[0])
-      expect(actual.name).toEqual(someUndefined[1])
-      expect(actual.description).toEqual(someUndefined[2])
-      expect(actual.location).toEqual(someUndefined[3])
-      expect(actual.date).toEqual(new Date(someUndefined[4]))
-      expect(actual.duration_in_days).toEqual(someUndefined[5])
-      expect(actual.max_team_size).toEqual(someUndefined[6])
+      expect(actual.updated).toEqual(new Date(someUndefined[1]))
+      expect(actual.name).toEqual(someUndefined[2])
+      expect(actual.description).toEqual(someUndefined[3])
+      expect(actual.location).toEqual(someUndefined[4])
+      expect(actual.date).toEqual(new Date(someUndefined[5]))
+      expect(actual.duration_in_days).toEqual(someUndefined[6])
+      expect(actual.max_team_size).toEqual(someUndefined[7])
       expect(actual.judging_starts).toEqual(noDate)
       expect(actual.judging_stops).toEqual(noDate)
       const values = actual.values()
@@ -241,10 +248,11 @@ describe('WhollySheet', () => {
       expect(values[2]).toEqual(someUndefined[2])
       expect(values[3]).toEqual(someUndefined[3])
       expect(values[4]).toEqual(someUndefined[4])
-      expect(values[5]).toEqual('5')
-      expect(values[6]).toEqual('6')
-      expect(values[7]).toEqual(NIL)
+      expect(values[5]).toEqual(someUndefined[5])
+      expect(values[6]).toEqual(someUndefined[6].toString())
+      expect(values[7]).toEqual(someUndefined[7].toString())
       expect(values[8]).toEqual(NIL)
+      expect(values[9]).toEqual(NIL)
     })
     describe('find', () => {
       test('finds by id', () => {

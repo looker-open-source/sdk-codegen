@@ -156,6 +156,7 @@ export abstract class WhollySheet<T extends IRowModel>
       throw new SheetError(
         `"${model.id}" row must be 0, not ${model.row} to create`
       )
+    model.prepare()
     const values = this.values(model)
     const result = await this.sheets.createRow(this.name, this.nextRow, values)
     if (result.response.updatedData) {
@@ -177,6 +178,7 @@ export abstract class WhollySheet<T extends IRowModel>
     if (!model.row)
       throw new SheetError(`"${model.id}" row must be > 0 to update`)
 
+    model.prepare()
     const values = this.values(model)
     /** This will throw an error if the request fails */
     const result = await this.sheets.updateRow(this.name, model.row, values)
