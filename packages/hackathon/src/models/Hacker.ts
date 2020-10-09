@@ -64,6 +64,14 @@ export class Hacker implements IHacker {
     /** Initialize static cached values */
   }
 
+  /**
+   * Assigns the current looker user as the Hacker
+   *
+   * Because constructors cannot be async, the pattern to use is:
+   *
+   * const hacker = new Hacker(<Looker40SDK>)
+   * await hacker.getMe()
+   */
   async getMe() {
     this.user = await this.sdk.ok(this.sdk.me())
     const roles = await this.sdk.ok(this.sdk.all_roles({}))

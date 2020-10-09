@@ -31,6 +31,7 @@ import { Hacker } from './Hacker'
 const iniFile = path.join(__dirname, '../../../../looker.ini')
 const settings = new NodeSettingsIniFile(iniFile)
 const sdk = LookerNodeSDK.init40(settings)
+
 describe('Hacker', () => {
   test('gets me', async () => {
     const hacker = new Hacker(sdk)
@@ -41,5 +42,33 @@ describe('Hacker', () => {
     expect(me.id).toBeDefined()
     expect(me.firstName).toBeDefined()
     expect(me.roles.has('user')).toBeTruthy()
+  })
+  test('regular user cannot judge, staff, or admin', () => {
+    const actual = new Hacker(sdk)
+    expect(actual.canAdmin()).toEqual(false)
+    expect(actual.canJudge()).toEqual(false)
+    expect(actual.canStaff()).toEqual(false)
+  })
+
+  test('staff role can staff but not judge or admin', () => {
+    const actual = new Hacker(sdk)
+    actual.roles.add('staff')
+    expect(actual.canAdmin()).toEqual(false)
+    expect(actual.canJudge()).toEqual(false)
+    expect(actual.canStaff()).toEqual(true)
+  })
+  test('judge role can judge but not staff or admin', () => {
+    const actual = new Hacker(sdk)
+    actual.roles.add('judge')
+    expect(actual.canAdmin()).toEqual(false)
+    expect(actual.canJudge()).toEqual(true)
+    expect(actual.canStaff()).toEqual(false)
+  })
+  test('admin role is god', () => {
+    const actual = new Hacker(sdk)
+    actual.roles.add('admin')
+    expect(actual.canAdmin()).toEqual(true)
+    expect(actual.canJudge()).toEqual(true)
+    expect(actual.canStaff()).toEqual(true)
   })
 })
