@@ -36,8 +36,16 @@ import {
   getCurrentHackathonState,
   getHackerState,
 } from './data/hack_session/selectors'
+import { Hacker } from './models'
 
 interface HackathonProps {}
+
+const banner = (currentHackathon: any, hacker?: Hacker) => {
+  let result = 'Welcome'
+  if (currentHackathon) result += ` to ${currentHackathon.name}`
+  if (hacker) result += ` ${hacker.firstName} ${hacker.lastName}`
+  return result
+}
 
 export const Hackathon: FC<HackathonProps> = () => {
   const dispatch = useDispatch()
@@ -48,7 +56,7 @@ export const Hackathon: FC<HackathonProps> = () => {
   const hacker = useSelector(getHackerState)
   const authorizedRoutes = getAuthorizedRoutes(hacker, currentHackathon)
   const message = useSelector(getMessageState)
-  const headerText = currentHackathon ? currentHackathon.name : 'Welcome'
+  const headerText = banner(currentHackathon, hacker)
   const clearMessage = () => {
     dispatch(actionClearMessage())
   }
