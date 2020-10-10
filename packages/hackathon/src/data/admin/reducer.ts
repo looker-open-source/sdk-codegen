@@ -31,10 +31,10 @@ export interface AdminState {
 
 const defaultState: Readonly<AdminState> = Object.freeze({
   adminUserAttributes: {
-    lookerClientId: { value: '', dirty: false },
-    lookerClientSecret: { value: '', dirty: false },
-    sheetId: { value: '', dirty: false },
-    tokenServerUrl: { value: '', dirty: false },
+    lookerClientId: { value: '', originalValue: '' },
+    lookerClientSecret: { value: '', originalValue: '' },
+    sheetId: { value: '', originalValue: '' },
+    tokenServerUrl: { value: '', originalValue: '' },
   },
 })
 
@@ -48,6 +48,11 @@ export const adminReducer = (
         ...state,
       }
     case Actions.LOAD_USER_ATTRIBUTES_SUCCESS:
+      return {
+        ...state,
+        adminUserAttributes: action.payload,
+      }
+    case Actions.UPDATE_USER_ATTRIBUTE_VALUES:
       return {
         ...state,
         adminUserAttributes: action.payload,

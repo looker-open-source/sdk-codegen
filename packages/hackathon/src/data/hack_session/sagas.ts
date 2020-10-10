@@ -26,12 +26,18 @@
 import { all, call, put, takeEvery } from 'redux-saga/effects'
 import { actionMessage, beginLoading, endLoading } from '../common/actions'
 import { sheetsSdkHelper } from '../sheets_sdk_helper'
-import { Actions, initHackSessionSuccess } from './actions'
+import {
+  Actions,
+  initHackSessionSuccess,
+  initHackSessionFailure,
+} from './actions'
 
 function* initializeHackSessionSaga() {
+  let hacker
   try {
     // TODO investigate use of saga effects to invoke in parallel
     yield put(beginLoading())
+    hacker = yield call([sheetsSdkHelper, sheetsSdkHelper.getHacker])
     const hackathon = yield call([
       sheetsSdkHelper,
       sheetsSdkHelper.getCurrentHackathon,
@@ -40,12 +46,23 @@ function* initializeHackSessionSaga() {
       sheetsSdkHelper,
       sheetsSdkHelper.getTechnologies,
     ])
-    const hacker = yield call([sheetsSdkHelper, sheetsSdkHelper.getHacker])
     yield put(endLoading())
     yield put(initHackSessionSuccess(hackathon, technologies, hacker))
   } catch (err) {
     console.error(err)
-    yield put(actionMessage('A problem occurred loading the data', 'critical'))
+    if (hacker) {
+      yield put(initHackSessionFailure(hacker))
+      yield put(
+        actionMessage(
+          'A problem occurred loading the data. Has the extension been configured?',
+          'critical'
+        )
+      )
+    } else {
+      yield put(
+        actionMessage('A problem occurred loading the data', 'critical')
+      )
+    }
   }
 }
 

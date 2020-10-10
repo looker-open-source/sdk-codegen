@@ -50,6 +50,11 @@ export const hackSessionReducer = (
         technologies: action.payload.technologies,
         hacker: action.payload.hacker,
       }
+    case Actions.INIT_HACK_SESSION_FAILURE:
+      return {
+        ...state,
+        hacker: action.payload.hacker,
+      }
     default:
       return state
   }

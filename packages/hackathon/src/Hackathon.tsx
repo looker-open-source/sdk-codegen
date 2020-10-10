@@ -46,7 +46,7 @@ export const Hackathon: FC<HackathonProps> = () => {
   }, [dispatch])
   const currentHackathon = useSelector(getCurrentHackathonState)
   const hacker = useSelector(getHackerState)
-  const authorizedRoutes = getAuthorizedRoutes(hacker)
+  const authorizedRoutes = getAuthorizedRoutes(hacker, currentHackathon)
   const message = useSelector(getMessageState)
   const headerText = currentHackathon ? currentHackathon.name : 'Welcome'
   const clearMessage = () => {

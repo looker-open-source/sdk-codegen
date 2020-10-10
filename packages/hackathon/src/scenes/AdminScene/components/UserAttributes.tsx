@@ -30,22 +30,39 @@ import { Form, Fieldset, FieldText, Button } from '@looker/components'
 import {
   loadUserAttributesRequest,
   AdminUserAttributes,
+  updateAttributeValues,
+  saveUserAttributes,
 } from '../../../data/admin/actions'
 import { getUserAttributesState } from '../../../data/admin/selectors'
 import { isLoadingState } from '../../../data/common/selectors'
 
 export interface UserAttributesProps {}
 
-const isDirty = (userAttributes: AdminUserAttributes): boolean => {
+const isFormClean = (userAttributes: AdminUserAttributes): boolean => {
   if (userAttributes) {
     return (
-      userAttributes.lookerClientId.dirty ||
-      userAttributes.lookerClientSecret.dirty ||
-      userAttributes.sheetId.dirty ||
-      userAttributes.tokenServerUrl.dirty
+      userAttributes.lookerClientId.value ===
+        userAttributes.lookerClientId.originalValue &&
+      userAttributes.lookerClientSecret.value ===
+        userAttributes.lookerClientSecret.originalValue &&
+      userAttributes.sheetId.value === userAttributes.sheetId.originalValue &&
+      userAttributes.tokenServerUrl.value ===
+        userAttributes.tokenServerUrl.originalValue
     )
   }
-  return false
+  return true
+}
+
+const isFormInvalid = (userAttributes: AdminUserAttributes): boolean => {
+  if (userAttributes) {
+    return (
+      userAttributes.lookerClientId.value.trim() === '' ||
+      userAttributes.lookerClientSecret.value.trim() === '' ||
+      userAttributes.sheetId.value.trim() === '' ||
+      userAttributes.tokenServerUrl.value.trim() === ''
+    )
+  }
+  return true
 }
 
 export const UserAttributes: FC<UserAttributesProps> = () => {
@@ -57,12 +74,34 @@ export const UserAttributes: FC<UserAttributesProps> = () => {
   const isLoading = useSelector(isLoadingState)
 
   const onSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
-    // Need to prevent the default processing for the form submission
     e.preventDefault()
+    dispatch(saveUserAttributes(userAttributes!))
   }
 
   const onChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    // TODO
+    const updatedUserAttributes = { ...userAttributes! }
+    if (e.target.name === 'lookerClientId') {
+      updatedUserAttributes.lookerClientId = {
+        ...updatedUserAttributes.lookerClientId,
+        value: e.target.value,
+      }
+    } else if (e.target.name === 'lookerClientSecret') {
+      updatedUserAttributes.lookerClientSecret = {
+        ...updatedUserAttributes.lookerClientSecret,
+        value: e.target.value,
+      }
+    } else if (e.target.name === 'sheetId') {
+      updatedUserAttributes.sheetId = {
+        ...updatedUserAttributes.sheetId,
+        value: e.target.value,
+      }
+    } else if (e.target.name === 'tokenServerUrl') {
+      updatedUserAttributes.tokenServerUrl = {
+        ...updatedUserAttributes.tokenServerUrl,
+        value: e.target.value,
+      }
+    }
+    dispatch(updateAttributeValues(updatedUserAttributes))
   }
 
   return (
@@ -71,6 +110,7 @@ export const UserAttributes: FC<UserAttributesProps> = () => {
         <Form onSubmit={onSubmit} width="40vw" mt="large">
           <Fieldset legend="Configure extension user attributes">
             <FieldText
+              required
               label="Looker client id"
               name="lookerClientId"
               value={userAttributes.lookerClientId.value}
@@ -79,6 +119,7 @@ export const UserAttributes: FC<UserAttributesProps> = () => {
               disabled={isLoading}
             />
             <FieldText
+              required
               label="Looker client secret"
               name="lookerClientSecret"
               value={userAttributes.lookerClientSecret.value}
@@ -87,6 +128,7 @@ export const UserAttributes: FC<UserAttributesProps> = () => {
               disabled={isLoading}
             />
             <FieldText
+              required
               label="Google sheet id"
               name="sheetId"
               value={userAttributes.sheetId.value}
@@ -94,15 +136,22 @@ export const UserAttributes: FC<UserAttributesProps> = () => {
               disabled={isLoading}
             />
             <FieldText
+              required
               label="Google access token server URL"
-              name="sheetId"
+              name="tokenServerUrl"
               value={userAttributes.tokenServerUrl.value}
               onChange={onChange}
               disabled={isLoading}
             />
           </Fieldset>
-          <Button disabled={!isDirty(userAttributes)}>
-            Save Extension User Attributes
+          <Button
+            disabled={
+              isLoading ||
+              isFormClean(userAttributes) ||
+              isFormInvalid(userAttributes)
+            }
+          >
+            {isLoading ? 'Loading...' : 'Save Extension User Attributes'}
           </Button>
         </Form>
       )}
