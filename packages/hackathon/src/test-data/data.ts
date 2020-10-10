@@ -26,13 +26,15 @@
 import { ISheet, SheetSDK } from '@looker/wholly-sheet'
 import { BrowserTransport, DefaultSettings } from '@looker/sdk-rtl'
 import { ExtensionSDK } from '@looker/extension-sdk'
+import { Looker40SDK } from '@looker/sdk'
 import { SheetData } from '../models/SheetData'
 import { GAuthSession } from '../authToken/gAuthSession'
+import { Hacker } from '../models'
 
 // eslint-disable-next-line @typescript-eslint/no-var-requires
 const tabs = require('../../../wholly-sheet/src/tabs.json')
 // eslint-disable-next-line @typescript-eslint/no-var-requires
-const creds = require('../../../examples/access-token-server/service_account.json')
+const creds = require('../../../../examples/access-token-server/service_account.json')
 
 const sheet = { tabs } as ISheet
 const settings = DefaultSettings()
@@ -44,4 +46,21 @@ const sheetSDK = new SheetSDK(
   ),
   creds.sheet_id
 )
+
 export const sheetData = new SheetData(sheetSDK, sheet)
+const mockSDK = {} as Looker40SDK
+
+export const mockUser = new Hacker(mockSDK)
+mockUser.user = { id: 1, first_name: 'Ordinary', last_name: 'Joe' }
+
+export const mockStaff = new Hacker(mockSDK)
+mockStaff.user = { id: 2, first_name: 'Looker', last_name: 'Staff' }
+mockStaff.roles.add('staff')
+
+export const mockJudge = new Hacker(mockSDK)
+mockJudge.user = { id: 3, first_name: 'Looker', last_name: 'Judge' }
+mockJudge.roles.add('judge')
+
+export const mockAdmin = new Hacker(mockSDK)
+mockJudge.user = { id: 4, first_name: 'Looker', last_name: 'Admin' }
+mockAdmin.roles.add('admin')

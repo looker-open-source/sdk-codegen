@@ -53,13 +53,8 @@ export const getAuthToken = async (cred: any): Promise<string> => {
   })
 
   const result = await client.getAccessToken()
-  console.log({ result })
+  // console.log({ result })
   return result.token || ''
-  // const spreadsheetId = keys.sheet_id
-  // const range = 'A2:E'
-  // const url = `https://sheets.googleapis.com/v4/spreadsheets/${spreadsheetId}/values/${range}`
-  // const res = await client.request({ url })
-  // console.log(res.data)
 }
 
 class TestAuthSession extends AuthSession {

@@ -25,30 +25,13 @@
  */
 
 import { ISheet, SheetSDK } from '@looker/wholly-sheet'
-import { Looker40SDK } from '@looker/sdk'
 import { initSheetSDK } from '../../../wholly-sheet/src/testUtils/testUtils'
+import { mockAdmin, mockJudge, mockStaff, mockUser } from '../test-data/data'
 import { SheetData } from './SheetData'
-import { Hacker } from './Hacker'
 import { Project } from './Projects'
 
 let sheetSDK: SheetSDK
 let data: ISheet
-
-const mockSDK = {} as Looker40SDK
-const mockUser = new Hacker(mockSDK)
-mockUser.user = { id: 1, first_name: 'Ordinary', last_name: 'Joe' }
-
-const mockStaff = new Hacker(mockSDK)
-mockStaff.user = { id: 2, first_name: 'Looker', last_name: 'Staff' }
-mockStaff.roles.add('staff')
-
-const mockJudge = new Hacker(mockSDK)
-mockJudge.user = { id: 3, first_name: 'Looker', last_name: 'Judge' }
-mockJudge.roles.add('judge')
-
-const mockAdmin = new Hacker(mockSDK)
-mockJudge.user = { id: 4, first_name: 'Looker', last_name: 'Admin' }
-mockAdmin.roles.add('admin')
 
 describe('SheetData', () => {
   beforeAll(async () => {

@@ -225,6 +225,11 @@ export type SheetValues = any[]
 
 const sheetSDKVersion = '0.1.0-alpha'
 
+export interface ISheetRowResponse {
+  row: number
+  values: SheetValues
+}
+
 export class SheetSDK extends APIMethods {
   constructor(authSession: IAuthSession, public sheetId: string) {
     super(authSession, sheetSDKVersion)
@@ -291,6 +296,51 @@ export class SheetSDK extends APIMethods {
   }
 
   /**
+   * Replaces all values in a sheet from row to the length of the values array
+   * @param tab to update
+   * @param values row array of values
+   * @param row starting position to replace. Defaults to the first row of the sheet
+   */
+  async batchUpdate(tab: string | ISheetTab, values: SheetValues, row = 1) {
+    if (!values || values.length === 0 || !Array.isArray(values[0]))
+      throw new SheetError(
+        `Nothing to batch update. Expected an array of row values`
+      )
+    const name = tabName(tab)
+    const data = {
+      range: `${name}!A${row}:end`,
+      majorDimension: 'ROWS',
+      values: values,
+    }
+    const api = `/values:batchUpdate`
+    const body = {
+      valueInputOption: 'RAW',
+      data: [data],
+      includeValuesInResponse: true,
+      responseValueRenderOption: 'UNFORMATTED_VALUE',
+      responseDateTimeRenderOption: 'FORMATTED_STRING',
+    }
+    const response = await this.request<any>('POST', api, JSON.stringify(body))
+    // remove header row
+    const update = response.responses[0].updatedData.values.slice(1)
+    return update
+  }
+
+  /**
+   * Clear all values from a tab
+   * @param tab to clear
+   */
+  async tabClear(tab: string | ISheetTab) {
+    const name = tabName(tab)
+    // https://developers.google.com/sheets/api/reference/rest/v4/spreadsheets.values/batchClear
+    // TODO is there a way to KNOW what the last column is?
+    const body = { ranges: [name] }
+    const api = `/values:batchClear`
+    const response = await this.request<any>('POST', api, JSON.stringify(body))
+    return response
+  }
+
+  /**
    * Delete the specified row on the tab by compacting the tab
    * @param tab name or ISheetTab
    * @param row to remove
@@ -304,11 +354,18 @@ export class SheetSDK extends APIMethods {
      */
 
     if (!row) throw new SheetError('row cannot be zero')
+    const batch = await this.tabValues(tab)
+    const rowPos = row - 1
+    if (rowPos > batch.length)
+      throw new SheetError(
+        `Row ${row} doesn't exist. ${batch.length} rows found.`
+      )
+    await this.tabClear(tab)
+    // Remove the target row
+    batch.splice(rowPos, 1)
 
-    const name = tabName(tab)
-    const api = `/values/${name}!A${row}:end`
-    const sheet = await this.request<any>('DELETE', api)
-    return sheet.values as SheetValues
+    const values = await this.batchUpdate(tab, batch)
+    return values
   }
 
   private static bodyValues(values: SheetValues) {
@@ -321,8 +378,17 @@ export class SheetSDK extends APIMethods {
    * @param tab name or tab sheet
    * @param row 1-based position of row
    * @param values to assign in order for the row
+   *
+   * The values collection returned has all rows starting from the updated row
+   * to the end of the sheet. If only one row of values is passed in, only
+   * one row is actually updated, but all remaining rows to the end of the sheet
+   * are also returned
    */
-  async rowUpdate(tab: string | ISheetTab, row: number, values: SheetValues) {
+  async rowUpdate(
+    tab: string | ISheetTab,
+    row: number,
+    values: SheetValues
+  ): Promise<ISheetRowResponse> {
     const body = SheetSDK.bodyValues(values)
     const name = tabName(tab)
     // TODO receive changed values back from request
@@ -336,7 +402,7 @@ export class SheetSDK extends APIMethods {
     const actual = `${response.updatedRows} row(s), ${response.updatedColumns} column(s), ${response.updatedCells} cells`
     if (expected !== actual)
       throw new SheetError(`Update expected ${expected} but got ${actual}`)
-    return response
+    return { row: row, values: response.updatedData.values }
   }
 
   /**
@@ -346,12 +412,14 @@ export class SheetSDK extends APIMethods {
    * @param row 1-based position of row
    * @param values to assign in order for the row
    * @return number of the created row
+   *
+   * The values collection returned includes only the rows of data that were created
    */
   async rowCreate(
     tab: string | ISheetTab,
     row: number,
     values: SheetValues
-  ): Promise<{ row: number; response: any }> {
+  ): Promise<ISheetRowResponse> {
     const body = SheetSDK.bodyValues(values)
     const name = tabName(tab)
     // TODO receive changed values back from request
@@ -366,7 +434,7 @@ export class SheetSDK extends APIMethods {
       throw new SheetError(`Update couldn't extract row from range ${range}`)
     }
     const rowId = parseInt(match[1])
-    return { row: rowId, response: response }
+    return { row: rowId, values: response.updates.updatedData.values }
   }
 
   /**

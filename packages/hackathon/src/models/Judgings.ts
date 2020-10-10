@@ -27,12 +27,12 @@
 import {
   IRowModel,
   ITabTable,
-  RowModel,
   SheetSDK,
   SheetValues,
   WhollySheet,
 } from '@looker/wholly-sheet'
-import { ISheetRow } from './SheetRow'
+import { ISheetRow, SheetRow } from './SheetRow'
+import { IHacker } from './Hacker'
 
 /** IMPORTANT: properties must be declared in the tab sheet's columnar order, not sorted order */
 export interface IJudging extends ISheetRow {
@@ -47,7 +47,7 @@ export interface IJudging extends ISheetRow {
 }
 
 /** IMPORTANT: properties must be declared in the tab sheet's columnar order, not sorted order */
-export class Judging extends RowModel<IJudging> {
+export class Judging extends SheetRow<IJudging> {
   user_id = ''
   project_id = ''
   execution = 0
@@ -58,9 +58,28 @@ export class Judging extends RowModel<IJudging> {
   notes = ''
   constructor(values?: any) {
     super()
-    // IMPORTANT: this must be done after super() constructor is called so keys are established
+    // IMPORTANT: assign must be called AFTER super() constructor is called so keys are established
     // there may be a way to overload the constructor so this isn't necessary but pattern hasn't been found
     this.assign(values)
+  }
+
+  canDelete(user: IHacker): boolean {
+    return user.canAdmin() || (user.canJudge() && this.user_id === user.id)
+  }
+
+  canUpdate(user: IHacker): boolean {
+    return user.canAdmin() || (user.canJudge() && this.user_id === user.id)
+  }
+
+  canCreate(user: IHacker): boolean {
+    return user.canAdmin() || (user.canJudge() && this.user_id === user.id)
+  }
+
+  prepare(): IJudging {
+    super.prepare()
+    this.score =
+      this.execution * 2 + this.ambition + this.coolness + this.impact
+    return this
   }
 }
 

@@ -28,6 +28,14 @@ import { ITabTable, SheetError, SheetSDK, SheetValues } from './SheetSDK'
 
 import { ColumnHeaders, IRowModel, stringer } from './RowModel'
 
+/**
+ * Compare dates without running into numeric comparison problems
+ * @param a first date to compare
+ * @param b second date to compare
+ * @returns 0 if dates are equal, positive if a > b, negative if a < b
+ */
+export const compareDates = (a: Date, b: Date) => a.getTime() - b.getTime()
+
 export interface IWhollySheet<T extends IRowModel> {
   /** Initialized REST-based GSheets SDK */
   sheets: SheetSDK
@@ -96,7 +104,7 @@ export interface IWhollySheet<T extends IRowModel> {
    *
    * @param model row to create in sheet
    */
-  create<T extends IRowModel>(model: T): Promise<number>
+  create<T extends IRowModel>(model: T): Promise<T>
 
   /**
    * Update a row in the sheet
@@ -113,7 +121,7 @@ export interface IWhollySheet<T extends IRowModel> {
    * Reads the specified row directly from the sheet
    * @param row
    */
-  getRow<T extends IRowModel>(row: number): Promise<T | undefined>
+  rowGet<T extends IRowModel>(row: number): Promise<T | undefined>
 
   /**
    * Delete a row if it still exists
@@ -154,11 +162,15 @@ export abstract class WhollySheet<T extends IRowModel>
     this.rows = this.typeRows(table.rows)
     this.checkHeader()
     this.createIndex()
-    this.checkHeader()
   }
 
   // Using this until I can figure out the constructor syntax, maybe https://stackoverflow.com/a/43674389
   abstract typeRows<T extends IRowModel>(rows: SheetValues): T[]
+
+  typeRow<T extends IRowModel>(row: SheetValues): T {
+    const rows = this.typeRows([row])
+    return (rows[0] as unknown) as T
+  }
 
   // // TODO figure out init generic typing issue
   // init(values?: any): T {
@@ -218,8 +230,7 @@ export abstract class WhollySheet<T extends IRowModel>
     // A model with a non-zero row is an update
     if (model.row) return await this.update<T>(model)
     // Create currently returns the row not the model
-    await this.create<T>(model)
-    return model
+    return ((await this.create<T>(model)) as unknown) as T
   }
 
   checkId<T extends IRowModel>(model: T) {
@@ -229,8 +240,8 @@ export abstract class WhollySheet<T extends IRowModel>
       )
   }
 
-  async create<T extends IRowModel>(model: T): Promise<number> {
-    if (model.row !== 0)
+  async create<T extends IRowModel>(model: T): Promise<T> {
+    if (model.row > 0)
       throw new SheetError(
         `create needs "${model.id}" row to be < 1, not ${model.row}`
       )
@@ -238,18 +249,21 @@ export abstract class WhollySheet<T extends IRowModel>
     this.checkId(model)
     const values = this.values(model)
     const result = await this.sheets.rowCreate(this.name, this.nextRow, values)
-    if (result.response.updatedData) {
-      // This appears to return only the updated row
-      const createValues = result.response.updatedData.values
-      console.log({ createValues })
+    if (result.row < 1 || !result.values || result.values.length === 0)
+      throw new SheetError(`Could not create row for ${model[this.keyColumn]}`)
+    // This returns an array of values with 1 entry per row value array
+    const newRow = this.typeRow(result.values[0])
+    newRow.row = result.row
+    if (result.row === this.nextRow) {
+      // No other rows have been added
+      // eslint-disable-next-line @typescript-eslint/ban-ts-ignore
+      // @ts-ignore
+      this.rows.push((newRow as unknown) as T)
+      this.createIndex()
+    } else {
+      await this.refresh()
     }
-    const newRow = this.typeRows([model])
-    // TODO figure out this generic typing madness
-    // eslint-disable-next-line @typescript-eslint/ban-ts-ignore
-    // @ts-ignore
-    this.rows.push(newRow[0])
-    this.createIndex()
-    return result.row
+    return (this.index[newRow[this.keyColumn]] as unknown) as T
   }
 
   async update<T extends IRowModel>(model: T): Promise<T> {
@@ -258,19 +272,19 @@ export abstract class WhollySheet<T extends IRowModel>
       throw new SheetError(`"${model.id}" row must be > 0 to update`)
 
     await this.checkOutdated(model)
+    const rowPos = model.row - 2
     model.prepare()
     const values = this.values(model)
     /** This will throw an error if the request fails */
     const result = await this.sheets.rowUpdate(this.name, model.row, values)
-    if (result.updatedData) {
-      // This appears to return all non-header rows of the sheet in the values collection
-      // TODO figure out the always-correct way to reference the target row to update
-      const updateValues = result.updatedData.values
-      console.log({ updateValues })
+    if (result.values) {
+      // This returns an array of values with 1 entry per row value array
+      const updateValues = result.values[0]
+      this.rows[rowPos].assign(updateValues)
     }
-    // ID may have changed
+    // ID may have changed?
     this.createIndex()
-    return model
+    return (this.rows[rowPos] as unknown) as T
   }
 
   find(value: any, columnName?: string): T | undefined {
@@ -299,8 +313,9 @@ export abstract class WhollySheet<T extends IRowModel>
 
   async delete<T extends IRowModel>(model: T) {
     await this.checkOutdated(model)
-    await this.sheets.rowDelete(this.name, model.row)
-    await this.refresh()
+    const values = await this.sheets.rowDelete(this.name, model.row)
+    this.rows = this.typeRows(values)
+    this.createIndex()
     return true
   }
 
@@ -308,22 +323,26 @@ export abstract class WhollySheet<T extends IRowModel>
     return !(columnName.startsWith('_') || columnName.startsWith('$'))
   }
 
-  async getRow<T extends IRowModel>(row: number): Promise<T | undefined> {
+  async rowGet<T extends IRowModel>(row: number): Promise<T | undefined> {
     const values = await this.sheets.rowGet(this.name, row)
     if (!values || values.length === 0) return undefined
+    // Returns a nested array of values, 1 top element per row
+    const typed = this.typeRow(values[0])
     // ugly hack cheat for type conversion
-    const typed = this.typeRows([values])
-    return (typed[0] as unknown) as T
+    return (typed as unknown) as T
   }
 
   async checkOutdated<T extends IRowModel>(model: T) {
     if (model.row < 1) return false
     const errors: string[] = []
-    const fetched = await this.getRow(model.row)
+    const fetched = await this.rowGet(model.row)
     if (!fetched) {
       errors.push('Row not found')
     } else {
-      if (fetched.updated !== model.updated)
+      if (
+        fetched.updated !== undefined &&
+        compareDates(fetched.updated, model.updated) !== 0
+      )
         errors.push(`update is ${fetched.updated} not ${model.updated}`)
       if (fetched[this.keyColumn] !== model[this.keyColumn])
         errors.push(
@@ -338,11 +357,15 @@ export abstract class WhollySheet<T extends IRowModel>
   }
 
   async refresh<T extends IRowModel>(): Promise<T[]> {
-    const values = await this.sheets.tabValues(this.name)
+    let values = await this.sheets.tabValues(this.name)
+    // trim header row
+    values = values.slice(1)
     const rows = (this.typeRows(values) as unknown) as T[]
     // eslint-disable-next-line @typescript-eslint/ban-ts-ignore
     // @ts-ignore
     this.rows = rows
+    this.rows.forEach((r, index) => (r.row = index + 2))
+    this.createIndex()
     return rows
   }
 }

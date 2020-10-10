@@ -23,7 +23,7 @@
  SOFTWARE.
 
  */
-import { SheetSDK, ISheet } from '@looker/wholly-sheet'
+import { SheetSDK, ISheet, compareDates } from '@looker/wholly-sheet'
 import {
   Projects,
   Registrations,
@@ -60,8 +60,8 @@ export class SheetData {
     )
       return undefined
     // Sort hackathons in chronological order by start time ... maybe we sort by the stop of judging instead?
-    const sorted = this.hackathons.rows.sort(
-      (a, b) => a.date.getTime() - b.date.getTime()
+    const sorted = this.hackathons.rows.sort((a, b) =>
+      compareDates(a.date, b.date)
     )
     const now = new Date().getTime()
     const current = sorted.find((hack) => hack.judging_stops.getTime() >= now)
