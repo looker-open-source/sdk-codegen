@@ -59,7 +59,7 @@ export class TeamMembers extends WhollySheet<ITeamMember> {
     public readonly sheets: SheetSDK,
     public readonly table: ITabTable
   ) {
-    super(sheets, 'team_members', table, 'id')
+    super(sheets, 'team_members', table)
   }
 
   typeRows<T extends IRowModel>(rows: SheetValues): T[] {

@@ -157,7 +157,7 @@ export abstract class WhollySheet<T extends IRowModel>
     /** name of the tab in the GSheet document */
     public readonly name: string,
     public readonly table: ITabTable,
-    public readonly keyColumn: string = 'id' // public readonly NewItem: RowModelFactory<T>
+    public readonly keyColumn: string = '_id' // public readonly NewItem: RowModelFactory<T>
   ) {
     this.rows = this.typeRows(table.rows)
     this.checkHeader()
@@ -196,7 +196,7 @@ export abstract class WhollySheet<T extends IRowModel>
     const tableHeader = this.table.header.join()
     if (tableHeader !== rowHeader)
       throw new SheetError(
-        `Expected table.header to be ${rowHeader} not ${tableHeader}`
+        `Expected ${this.name} header to be ${rowHeader} not ${tableHeader}`
       )
     return true
   }
@@ -228,7 +228,7 @@ export abstract class WhollySheet<T extends IRowModel>
 
   async save<T extends IRowModel>(model: T): Promise<T> {
     // A model with a non-zero row is an update
-    if (model.row) return await this.update<T>(model)
+    if (model._row) return await this.update<T>(model)
     // Create currently returns the row not the model
     return ((await this.create<T>(model)) as unknown) as T
   }
@@ -236,14 +236,16 @@ export abstract class WhollySheet<T extends IRowModel>
   checkId<T extends IRowModel>(model: T) {
     if (!model[this.keyColumn])
       throw new SheetError(
-        `"${this.keyColumn}" must be assigned for row ${model.row}`
+        `"${this.keyColumn}" must be assigned for row ${model._row}`
       )
   }
 
   async create<T extends IRowModel>(model: T): Promise<T> {
-    if (model.row > 0)
+    if (model._row > 0)
       throw new SheetError(
-        `create needs "${model.id}" row to be < 1, not ${model.row}`
+        `create needs "${model[this.keyColumn]}" row to be < 1, not ${
+          model._row
+        }`
       )
     model.prepare()
     this.checkId(model)
@@ -253,7 +255,7 @@ export abstract class WhollySheet<T extends IRowModel>
       throw new SheetError(`Could not create row for ${model[this.keyColumn]}`)
     // This returns an array of values with 1 entry per row value array
     const newRow = this.typeRow(result.values[0])
-    newRow.row = result.row
+    newRow._row = result.row
     if (result.row === this.nextRow) {
       // No other rows have been added
       // eslint-disable-next-line @typescript-eslint/ban-ts-ignore
@@ -268,15 +270,17 @@ export abstract class WhollySheet<T extends IRowModel>
 
   async update<T extends IRowModel>(model: T): Promise<T> {
     this.checkId(model)
-    if (!model.row)
-      throw new SheetError(`"${model.id}" row must be > 0 to update`)
+    if (!model._row)
+      throw new SheetError(
+        `"${model[this.keyColumn]}" row must be > 0 to update`
+      )
 
     await this.checkOutdated(model)
-    const rowPos = model.row - 2
+    const rowPos = model._row - 2
     model.prepare()
     const values = this.values(model)
     /** This will throw an error if the request fails */
-    const result = await this.sheets.rowUpdate(this.name, model.row, values)
+    const result = await this.sheets.rowUpdate(this.name, model._row, values)
     if (result.values) {
       // This returns an array of values with 1 entry per row value array
       const updateValues = result.values[0]
@@ -292,7 +296,7 @@ export abstract class WhollySheet<T extends IRowModel>
     let key = columnName || this.keyColumn
     if (typeof value === 'number') {
       // Default key to row
-      if (!columnName) key = 'row'
+      if (!columnName) key = '_row'
     }
     if (columnName === this.keyColumn) {
       // Find by index
@@ -313,7 +317,7 @@ export abstract class WhollySheet<T extends IRowModel>
 
   async delete<T extends IRowModel>(model: T) {
     await this.checkOutdated(model)
-    const values = await this.sheets.rowDelete(this.name, model.row)
+    const values = await this.sheets.rowDelete(this.name, model._row)
     this.rows = this.typeRows(values)
     this.createIndex()
     return true
@@ -333,17 +337,17 @@ export abstract class WhollySheet<T extends IRowModel>
   }
 
   async checkOutdated<T extends IRowModel>(model: T) {
-    if (model.row < 1) return false
+    if (model._row < 1) return false
     const errors: string[] = []
-    const fetched = await this.rowGet(model.row)
+    const fetched = await this.rowGet(model._row)
     if (!fetched) {
       errors.push('Row not found')
     } else {
       if (
-        fetched.updated !== undefined &&
-        compareDates(fetched.updated, model.updated) !== 0
+        fetched._updated !== undefined &&
+        compareDates(fetched._updated, model._updated) !== 0
       )
-        errors.push(`update is ${fetched.updated} not ${model.updated}`)
+        errors.push(`update is ${fetched._updated} not ${model._updated}`)
       if (fetched[this.keyColumn] !== model[this.keyColumn])
         errors.push(
           `${this.keyColumn} is "${fetched[this.keyColumn]}" not "${
@@ -352,7 +356,7 @@ export abstract class WhollySheet<T extends IRowModel>
         )
     }
     if (errors.length > 0)
-      throw new SheetError(`Row ${model.row} is outdated: ${errors.join()}`)
+      throw new SheetError(`Row ${model._row} is outdated: ${errors.join()}`)
     return false
   }
 
@@ -364,7 +368,7 @@ export abstract class WhollySheet<T extends IRowModel>
     // eslint-disable-next-line @typescript-eslint/ban-ts-ignore
     // @ts-ignore
     this.rows = rows
-    this.rows.forEach((r, index) => (r.row = index + 2))
+    this.rows.forEach((r, index) => (r._row = index + 2))
     this.createIndex()
     return rows
   }

@@ -98,6 +98,7 @@ describe('Judgings', () => {
   })
   describe('CRUD', () => {
     test('can refresh the tab', async () => {
+      expect(data.judgings.keyColumn).toEqual('_id')
       const expected = data.judgings.rows
       await data.judgings.refresh()
       expect(data.judgings.rows).toEqual(expected)
@@ -129,9 +130,9 @@ describe('Judgings', () => {
       expect(actual.user_id).toEqual(j.user_id)
       expect(actual.project_id).toEqual(j.project_id)
       expect(judgings.rows.length).toEqual(rowCount + 1)
-      const found = judgings.find(actual.id)
+      const found = judgings.find(actual._id)
       expect(found).toBeDefined()
-      expect(found?.id).toEqual(actual.id)
+      expect(found?._id).toEqual(actual._id)
     })
     test('can delete a row', async () => {
       const judgings = data.judgings
@@ -141,7 +142,7 @@ describe('Judgings', () => {
       const actual = await judgings.delete(created)
       expect(actual).toEqual(true)
       expect(judgings.rows.length).toEqual(rowCount)
-      expect(judgings.find(created.id)).not.toBeDefined()
+      expect(judgings.find(created._id)).not.toBeDefined()
     })
   })
 })

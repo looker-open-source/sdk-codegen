@@ -172,9 +172,9 @@ export const tabName = (tab: string | ISheetTab) => {
  * NOTE: data collection stops when a blank row is encountered, or or at the end of all rows.
  *
  * @param tab GSheet sheet to process
- * @param keyName Optional key column name. Defaults to id
+ * @param keyName Optional key column name. Defaults to _id
  */
-export const loadTabTable = (tab: ISheetTab, keyName = 'id'): ITabTable => {
+export const loadTabTable = (tab: ISheetTab, keyName = '_id'): ITabTable => {
   const result: ITabTable = {
     header: [],
     rows: [],

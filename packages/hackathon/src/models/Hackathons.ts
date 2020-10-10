@@ -72,7 +72,7 @@ export class Hackathons extends WhollySheet<IHackathon> {
     public readonly sheets: SheetSDK,
     public readonly table: ITabTable
   ) {
-    super(sheets, 'hackathons', table, 'id') //, { new Hackathon(values?: any)})
+    super(sheets, 'hackathons', table) //, { new Hackathon(values?: any)})
   }
 
   typeRows<T extends IRowModel>(rows: SheetValues): T[] {

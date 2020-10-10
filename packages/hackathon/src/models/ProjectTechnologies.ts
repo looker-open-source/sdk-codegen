@@ -57,7 +57,7 @@ export class ProjectTechnologies extends WhollySheet<IProjectTechnology> {
     public readonly sheets: SheetSDK,
     public readonly table: ITabTable
   ) {
-    super(sheets, 'project_technologies', table, 'id')
+    super(sheets, 'project_technologies', table)
   }
 
   typeRows<T extends IRowModel>(rows: SheetValues): T[] {

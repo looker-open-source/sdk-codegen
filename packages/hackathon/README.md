@@ -30,7 +30,7 @@ application: hackathon_app {
     use_form_submit: yes
     use_embeds: no
     external_api_urls: ["http://localhost:8081/*", "https://sheets.googleapis.com/*"]
-    core_api_methods: ["me", "all_roles"]
+    core_api_methods: ["me", "all_roles", "all_user_attributes"]
     scoped_user_attributes: ["sheet_id", "token_server_url"]
   }
 }

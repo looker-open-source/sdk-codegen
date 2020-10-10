@@ -74,9 +74,10 @@ describe('SheetSDK', () => {
         expect(tab.header).toBeDefined()
         expect(tab.header.length).toBeGreaterThan(0)
         // No empty data rows
-        tab.rows.forEach((row) =>
+        tab.rows.forEach((row) => {
           expect(Object.keys(row).length).toBeGreaterThan(0)
-        )
+          expect(row._row).toBeGreaterThan(0)
+        })
       })
       const sheetFile = path.join(__dirname, '/', 'tabs.json')
       const json = JSON.stringify(actual.tabs, null, 2)

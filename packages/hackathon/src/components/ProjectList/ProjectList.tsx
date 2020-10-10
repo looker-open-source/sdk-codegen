@@ -39,9 +39,8 @@ interface ProjectListProps {
 
 export const ProjectList: FC<ProjectListProps> = ({ projects }) => {
   const template = projects.rows.length > 0 ? projects.rows[0] : new Project()
-  // Remove the ID columns
-  // TODO after we have registration id associated with the project we can drop user_id again
-  const header = projects.header.slice(4)
+  // Select only the displayable columns
+  const header = projects.displayHeader
   const columns = sheetHeader(header, template)
   // TODO available actions should be determined based on user's role
   const actions = (

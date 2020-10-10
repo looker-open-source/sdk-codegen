@@ -88,7 +88,7 @@ export class Judgings extends WhollySheet<IJudging> {
     public readonly sheets: SheetSDK,
     public readonly table: ITabTable
   ) {
-    super(sheets, 'judgings', table, 'id')
+    super(sheets, 'judgings', table)
   }
 
   typeRows<T extends IRowModel>(rows: SheetValues): T[] {

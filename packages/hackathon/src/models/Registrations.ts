@@ -37,7 +37,7 @@ import { ISheetRow } from './SheetRow'
 
 /** IMPORTANT: properties must be declared in the tab sheet's columnar order, not sorted order */
 export interface IRegistration extends ISheetRow {
-  user_id: string
+  _user_id: string
   hackathon_id: string
   date_registered: Date
   attended: boolean
@@ -45,7 +45,7 @@ export interface IRegistration extends ISheetRow {
 
 /** IMPORTANT: properties must be declared in the tab sheet's columnar order, not sorted order */
 export class Registration extends RowModel<IRegistration> {
-  user_id = ''
+  _user_id = ''
   hackathon_id = ''
   date_registered: Date = noDate
   attended = false
@@ -62,7 +62,7 @@ export class Registrations extends WhollySheet<IRegistration> {
     public readonly sheets: SheetSDK,
     public readonly table: ITabTable
   ) {
-    super(sheets, 'registrations', table, 'id')
+    super(sheets, 'registrations', table)
   }
 
   typeRows<T extends IRowModel>(rows: SheetValues): T[] {

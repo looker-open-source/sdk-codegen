@@ -39,8 +39,8 @@ import { IHacker } from './Hacker'
 
 /** IMPORTANT: properties must be declared in the tab sheet's columnar order, not sorted order */
 export interface IProject extends ISheetRow {
-  user_id: string
-  registration_id: string
+  _user_id: string
+  _registration_id: string
   title: string
   description: string
   date_created: Date
@@ -52,8 +52,8 @@ export interface IProject extends ISheetRow {
 
 /** IMPORTANT: properties must be declared in the tab sheet's columnar order, not sorted order */
 export class Project extends SheetRow<IProject> {
-  user_id = ''
-  registration_id = ''
+  _user_id = ''
+  _registration_id = ''
   title = ''
   description = ''
   date_created: Date = noDate
@@ -69,15 +69,15 @@ export class Project extends SheetRow<IProject> {
   }
 
   canCreate(user: IHacker): boolean {
-    return super.canCreate(user) || this.user_id === user.id
+    return super.canCreate(user) || this._user_id === user.id
   }
 
   canDelete(user: IHacker): boolean {
-    return super.canDelete(user) || this.user_id === user.id
+    return super.canDelete(user) || this._user_id === user.id
   }
 
   canUpdate(user: IHacker): boolean {
-    return super.canUpdate(user) || this.user_id === user.id
+    return super.canUpdate(user) || this._user_id === user.id
   }
 }
 
@@ -86,7 +86,7 @@ export class Projects extends WhollySheet<IProject> {
     public readonly sheets: SheetSDK,
     public readonly table: ITabTable
   ) {
-    super(sheets, 'projects', table, 'id') //, { new Hackathon(values?: any)})
+    super(sheets, 'projects', table) //, { new Hackathon(values?: any)})
   }
 
   typeRows<T extends IRowModel>(rows: SheetValues): T[] {

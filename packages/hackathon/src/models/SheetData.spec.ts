@@ -58,13 +58,13 @@ describe('SheetData', () => {
   })
   describe('Projects', () => {
     const proj1 = new Project({
-      id: 'p1',
-      user_id: mockUser.id,
+      _id: 'p1',
+      _user_id: mockUser.id,
       title: 'test project',
     })
     const proj2 = new Project({
-      id: 'p1',
-      user_id: 'different id',
+      _id: 'p1',
+      _user_id: 'different id',
       title: 'test project',
     })
     test('User can manage his own project', () => {

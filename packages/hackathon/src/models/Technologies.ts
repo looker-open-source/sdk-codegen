@@ -36,13 +36,11 @@ import { ISheetRow } from './SheetRow'
 
 /** IMPORTANT: properties must be declared in the tab sheet's columnar order, not sorted order */
 export interface ITechnology extends ISheetRow {
-  title: string
   description: string
 }
 
 /** IMPORTANT: properties must be declared in the tab sheet's columnar order, not sorted order */
 export class Technology extends RowModel<ITechnology> {
-  title = ''
   description = ''
   constructor(values?: any) {
     super()
@@ -57,7 +55,7 @@ export class Technologies extends WhollySheet<ITechnology> {
     public readonly sheets: SheetSDK,
     public readonly table: ITabTable
   ) {
-    super(sheets, 'technologies', table, 'id')
+    super(sheets, 'technologies', table)
   }
 
   typeRows<T extends IRowModel>(rows: SheetValues): T[] {

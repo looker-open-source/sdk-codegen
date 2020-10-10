@@ -31,13 +31,13 @@ import { SheetValues } from './SheetSDK'
 export const noDate = new Date(-8640000000000000)
 
 /** Signifies an empty cell */
-export const NIL = '\0'
+export const nilCell = '\0'
 
 /** Convert a value to the string representation for a cell value */
 export const stringer = (value: any) => {
-  if (value === undefined || value === null) return NIL
+  if (value === undefined || value === null) return nilCell
   if (value instanceof Date) {
-    if (value === noDate) return NIL
+    if (value === noDate) return nilCell
     return value.toISOString()
   }
   return value.toString()
@@ -50,13 +50,13 @@ export type RowValues = Record<string, any>
 export type ColumnHeaders = string[]
 
 /** name of the property that tracks the row's position in the tab sheet */
-export const rowPosition = 'row'
+export const rowPosition = '_row'
 
 /** Keyed data for a sheet row */
 export interface IRowModel extends RowValues {
-  row: number
-  id: string
-  updated: Date
+  _row: number
+  _id: string
+  _updated: Date
   assign(values: any): IRowModel
   /** All keys for this object */
   keys(): ColumnHeaders
@@ -69,16 +69,16 @@ export interface IRowModel extends RowValues {
 }
 
 export class RowModel<T extends IRowModel> implements IRowModel {
-  row = 0
-  id = ''
-  updated: Date = noDate
+  _row = 0
+  _id = ''
+  _updated: Date = noDate
 
   constructor(values?: any) {
     if (values && Object.keys(values).length > 0) {
-      if (values.row) this.row = values.row
-      if (values.id) this.id = values.id
+      if (values.row) this._row = values.row
+      if (values.id) this._id = values.id
       if (values.updated)
-        this.updated = this.typeCast('updated', values.updated)
+        this._updated = this.typeCast('updated', values.updated)
     }
   }
 
@@ -92,12 +92,12 @@ export class RowModel<T extends IRowModel> implements IRowModel {
   }
 
   prepare(): T {
-    if (!this.id) {
+    if (!this._id) {
       // Generate id if not assigned
-      this.id = uuidv4()
+      this._id = uuidv4()
     }
     /** Always update the "updated" value before saving */
-    this.updated = new Date()
+    this._updated = new Date()
     return (this as unknown) as T
   }
 

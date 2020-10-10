@@ -23,7 +23,7 @@
  SOFTWARE.
 
  */
-import { IRowModel, NIL, noDate, RowModel, stringer } from './RowModel'
+import { IRowModel, nilCell, noDate, RowModel, stringer } from './RowModel'
 
 interface ITestRow extends IRowModel {
   toggle: boolean
@@ -47,13 +47,13 @@ describe('RowModel', () => {
       )
     })
     test('NILs empty dates', () => {
-      expect(stringer(noDate)).toEqual(NIL)
+      expect(stringer(noDate)).toEqual(nilCell)
     })
     test('NILs undefined', () => {
-      expect(stringer(undefined)).toEqual(NIL)
+      expect(stringer(undefined)).toEqual(nilCell)
     })
     test('NILs null', () => {
-      expect(stringer(null)).toEqual(NIL)
+      expect(stringer(null)).toEqual(nilCell)
     })
     test('Returns empty string', () => {
       expect(stringer('')).toEqual('')
@@ -72,7 +72,7 @@ describe('RowModel', () => {
 
   test('header omits row key', () => {
     const row = new TestRow()
-    const expected = ['id', 'updated', 'toggle', 'score']
+    const expected = ['_id', '_updated', 'toggle', 'score']
     const actual = row.header()
     expect(actual).toEqual(expected)
   })
@@ -80,33 +80,33 @@ describe('RowModel', () => {
   describe('initialization', () => {
     test('inits with default values', () => {
       const actual = new TestRow()
-      expect(actual.row).toEqual(0)
-      expect(actual.id).toEqual('')
-      expect(actual.updated).toEqual(noDate)
+      expect(actual._row).toEqual(0)
+      expect(actual._id).toEqual('')
+      expect(actual._updated).toEqual(noDate)
       expect(actual.toggle).toEqual(false)
       expect(actual.score).toEqual(0)
     })
     test('inits with object values', () => {
       const now = new Date()
       const actual = new TestRow({
-        row: 2,
-        id: '3',
-        updated: now,
+        _row: 2,
+        _id: '3',
+        _updated: now,
         toggle: true,
         score: 5,
       })
-      expect(actual.row).toEqual(2)
-      expect(actual.id).toEqual('3')
-      expect(actual.updated).toEqual(now)
+      expect(actual._row).toEqual(2)
+      expect(actual._id).toEqual('3')
+      expect(actual._updated).toEqual(now)
       expect(actual.toggle).toEqual(true)
       expect(actual.score).toEqual(5)
     })
     test('inits with value array', () => {
       const now = new Date()
       const actual = new TestRow(['3', now, true, 5])
-      expect(actual.row).toEqual(0)
-      expect(actual.id).toEqual('3')
-      expect(actual.updated).toEqual(now)
+      expect(actual._row).toEqual(0)
+      expect(actual._id).toEqual('3')
+      expect(actual._updated).toEqual(now)
       expect(actual.toggle).toEqual(true)
       expect(actual.score).toEqual(5)
     })
@@ -116,45 +116,51 @@ describe('RowModel', () => {
       const now = new Date()
       const actual = new TestRow()
       actual.assign(['3', now, true, 5])
-      expect(actual.row).toEqual(0)
-      expect(actual.id).toEqual('3')
-      expect(actual.updated).toEqual(now)
+      expect(actual._row).toEqual(0)
+      expect(actual._id).toEqual('3')
+      expect(actual._updated).toEqual(now)
       expect(actual.toggle).toEqual(true)
       expect(actual.score).toEqual(5)
     })
     test('with object', () => {
       const now = new Date()
       const actual = new TestRow()
-      actual.assign({ row: 2, id: '3', updated: now, toggle: true, score: 5 })
-      expect(actual.row).toEqual(2)
-      expect(actual.id).toEqual('3')
-      expect(actual.updated).toEqual(now)
+      actual.assign({
+        _row: 2,
+        _id: '3',
+        _updated: now,
+        toggle: true,
+        score: 5,
+      })
+      expect(actual._row).toEqual(2)
+      expect(actual._id).toEqual('3')
+      expect(actual._updated).toEqual(now)
       expect(actual.toggle).toEqual(true)
     })
   })
   describe('prepare', () => {
     test('assigns empty id and updated', () => {
       const actual = new TestRow()
-      expect(actual.row).toEqual(0)
-      expect(actual.id).toEqual('')
-      expect(actual.updated).toEqual(noDate)
+      expect(actual._row).toEqual(0)
+      expect(actual._id).toEqual('')
+      expect(actual._updated).toEqual(noDate)
       actual.prepare()
-      expect(actual.row).toEqual(0)
-      expect(actual.id).not.toEqual('')
-      expect(actual.updated).not.toEqual(noDate)
+      expect(actual._row).toEqual(0)
+      expect(actual._id).not.toEqual('')
+      expect(actual._updated).not.toEqual(noDate)
     })
     test('updates updated without updating id', () => {
       const id = 'baad-f00d'
       const actual = new TestRow({ row: 1, id })
       actual.prepare()
-      expect(actual.row).toEqual(1)
-      expect(actual.id).toEqual(id)
-      expect(actual.updated).not.toEqual(noDate)
-      const updated = actual.updated
+      expect(actual._row).toEqual(1)
+      expect(actual._id).toEqual(id)
+      expect(actual._updated).not.toEqual(noDate)
+      const updated = actual._updated
       actual.prepare()
-      expect(actual.row).toEqual(1)
-      expect(actual.id).toEqual(id)
-      expect(actual.updated).not.toEqual(updated)
+      expect(actual._row).toEqual(1)
+      expect(actual._id).toEqual(id)
+      expect(actual._updated).not.toEqual(updated)
     })
   })
 })
