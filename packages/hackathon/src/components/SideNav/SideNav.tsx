@@ -36,17 +36,21 @@ export interface SideNavProps {
 export const SideNav: FC<SideNavProps> = ({ authorizedRoutes }) => (
   <Box fontSize="xxlarge">
     <MenuList type="none">
-      <MenuItem icon="Home">
-        <Link to={Routes.HOME}>Home</Link>
-      </MenuItem>
+      {authorizedRoutes.includes(Routes.HOME) && (
+        <MenuItem icon="Home">
+          <Link to={Routes.HOME}>Home</Link>
+        </MenuItem>
+      )}
       {authorizedRoutes.includes(Routes.USERS) && (
         <MenuItem icon="Group">
           <Link to={Routes.USERS}>Users</Link>
         </MenuItem>
       )}
-      <MenuItem icon="Beaker">
-        <Link to={Routes.PROJECTS}>Projects</Link>
-      </MenuItem>
+      {authorizedRoutes.includes(Routes.PROJECTS) && (
+        <MenuItem icon="Beaker">
+          <Link to={Routes.PROJECTS}>Projects</Link>
+        </MenuItem>
+      )}
       {authorizedRoutes.includes(Routes.JUDGING) && (
         <MenuItem icon="FactCheck">
           <Link to={Routes.JUDGING}>Judging</Link>

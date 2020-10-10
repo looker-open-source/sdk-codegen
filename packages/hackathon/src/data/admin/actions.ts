@@ -27,15 +27,13 @@
 export enum Actions {
   LOAD_USER_ATTRIBUTES_REQUEST = 'LOAD_USER_ATTRIBUTES_REQUEST',
   LOAD_USER_ATTRIBUTES_SUCCESS = 'LOAD_USER_ATTRIBUTES_SUCCESS',
-}
-
-export interface LoadUserAttributesRequestAction {
-  type: Actions.LOAD_USER_ATTRIBUTES_REQUEST
+  UPDATE_USER_ATTRIBUTE_VALUES = 'UPDATE_USER_ATTRIBUTE_VALUES',
+  SAVE_USER_ATTRIBUTES = 'SAVE_USER_ATTRIBUTES',
 }
 
 export interface AttributeValue {
   value: string
-  dirty: boolean
+  originalValue: string
 }
 
 export interface AdminUserAttributes {
@@ -45,14 +43,30 @@ export interface AdminUserAttributes {
   tokenServerUrl: AttributeValue
 }
 
+export interface LoadUserAttributesRequestAction {
+  type: Actions.LOAD_USER_ATTRIBUTES_REQUEST
+}
+
 export interface LoadUserAttributesSuccessAction {
   type: Actions.LOAD_USER_ATTRIBUTES_SUCCESS
+  payload: AdminUserAttributes
+}
+
+export interface UpdateAttributeValuesAction {
+  type: Actions.UPDATE_USER_ATTRIBUTE_VALUES
+  payload: AdminUserAttributes
+}
+
+export interface SaveUserAttributesAction {
+  type: Actions.SAVE_USER_ATTRIBUTES
   payload: AdminUserAttributes
 }
 
 export type AdminAction =
   | LoadUserAttributesRequestAction
   | LoadUserAttributesSuccessAction
+  | UpdateAttributeValuesAction
+  | SaveUserAttributesAction
 
 export const loadUserAttributesRequest = (): LoadUserAttributesRequestAction => ({
   type: Actions.LOAD_USER_ATTRIBUTES_REQUEST,
@@ -62,5 +76,19 @@ export const loadUserAttributesSuccess = (
   adminUserAttributes: AdminUserAttributes
 ): LoadUserAttributesSuccessAction => ({
   type: Actions.LOAD_USER_ATTRIBUTES_SUCCESS,
+  payload: adminUserAttributes,
+})
+
+export const updateAttributeValues = (
+  adminUserAttributes: AdminUserAttributes
+): UpdateAttributeValuesAction => ({
+  type: Actions.UPDATE_USER_ATTRIBUTE_VALUES,
+  payload: adminUserAttributes,
+})
+
+export const saveUserAttributes = (
+  adminUserAttributes: AdminUserAttributes
+): SaveUserAttributesAction => ({
+  type: Actions.SAVE_USER_ATTRIBUTES,
   payload: adminUserAttributes,
 })

@@ -28,6 +28,7 @@ import { Hacker, Hackathon, Technologies } from '../../models'
 export enum Actions {
   INIT_HACK_SESSION_REQUEST = 'INIT_HACK_SESSION_REQUEST',
   INIT_HACK_SESSION_SUCCESS = 'INIT_HACK_SESSION_SUCCESS',
+  INIT_HACK_SESSION_FAILURE = 'INIT_HACK_SESSION_FAILURE',
 }
 
 export interface InitHackSessionRequestAction {
@@ -40,14 +41,24 @@ export interface InitHackSessionPayload {
   hacker: Hacker
 }
 
+export interface InitHackFailurePayload {
+  hacker: Hacker
+}
+
 export interface InitHackSessionSuccessAction {
   type: Actions.INIT_HACK_SESSION_SUCCESS
   payload: InitHackSessionPayload
 }
 
+export interface InitHackSessionFailureAction {
+  type: Actions.INIT_HACK_SESSION_FAILURE
+  payload: InitHackFailurePayload
+}
+
 export type HackSessionAction =
   | InitHackSessionRequestAction
   | InitHackSessionSuccessAction
+  | InitHackSessionFailureAction
 
 export const initHackSessionRequest = (): InitHackSessionRequestAction => ({
   type: Actions.INIT_HACK_SESSION_REQUEST,
@@ -60,4 +71,11 @@ export const initHackSessionSuccess = (
 ): InitHackSessionSuccessAction => ({
   type: Actions.INIT_HACK_SESSION_SUCCESS,
   payload: { currentHackathon, technologies, hacker },
+})
+
+export const initHackSessionFailure = (
+  hacker: Hacker
+): InitHackSessionFailureAction => ({
+  type: Actions.INIT_HACK_SESSION_FAILURE,
+  payload: { hacker },
 })

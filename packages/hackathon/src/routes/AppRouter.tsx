@@ -25,7 +25,7 @@
  */
 import React, { FC } from 'react'
 import { Redirect, Route, Switch } from 'react-router-dom'
-import { Hacker } from '../models'
+import { Hacker, Hackathon } from '../models'
 import {
   HomeScene,
   UsersScene,
@@ -47,14 +47,21 @@ export interface AppRouterProps {
   authorizedRoutes: Routes[]
 }
 
-export const getAuthorizedRoutes = (hacker?: Hacker): Routes[] => {
+export const getAuthorizedRoutes = (
+  hacker?: Hacker,
+  currentHackathon?: Hackathon
+): Routes[] => {
   const authorizedRoutes: Routes[] = []
   if (hacker) {
-    if (hacker.canAdmin() || hacker.canJudge() || hacker.canStaff()) {
-      authorizedRoutes.push(Routes.JUDGING)
-    }
-    if (hacker.canAdmin() || hacker.canStaff()) {
-      authorizedRoutes.push(Routes.USERS)
+    if (currentHackathon) {
+      authorizedRoutes.push(Routes.HOME)
+      authorizedRoutes.push(Routes.PROJECTS)
+      if (hacker.canAdmin() || hacker.canJudge() || hacker.canStaff()) {
+        authorizedRoutes.push(Routes.JUDGING)
+      }
+      if (hacker.canAdmin() || hacker.canStaff()) {
+        authorizedRoutes.push(Routes.USERS)
+      }
     }
     if (hacker.canAdmin()) {
       authorizedRoutes.push(Routes.ADMIN)
@@ -65,10 +72,14 @@ export const getAuthorizedRoutes = (hacker?: Hacker): Routes[] => {
 
 export const AppRouter: FC<AppRouterProps> = ({ authorizedRoutes }) => (
   <Switch>
-    <Redirect from="/" to="/home" exact />
-    <Route path={Routes.HOME} exact>
-      <HomeScene />
-    </Route>
+    {authorizedRoutes.includes(Routes.HOME) && (
+      <Redirect from="/" to="/home" exact />
+    )}
+    {authorizedRoutes.includes(Routes.HOME) && (
+      <Route path={Routes.HOME} exact>
+        <HomeScene />
+      </Route>
+    )}
     {authorizedRoutes.includes(Routes.ADMIN) && (
       <Route path={Routes.ADMIN}>
         <AdminScene />
@@ -79,9 +90,11 @@ export const AppRouter: FC<AppRouterProps> = ({ authorizedRoutes }) => (
         <JudgingScene />
       </Route>
     )}
-    <Route path={Routes.PROJECTS}>
-      <ProjectsScene />
-    </Route>
+    {authorizedRoutes.includes(Routes.PROJECTS) && (
+      <Route path={Routes.PROJECTS}>
+        <ProjectsScene />
+      </Route>
+    )}
     {authorizedRoutes.includes(Routes.USERS) && (
       <Route path={Routes.USERS}>
         <UsersScene />
