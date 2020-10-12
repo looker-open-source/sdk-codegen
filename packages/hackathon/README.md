@@ -14,6 +14,8 @@ Use that token to initialize the SheetSDK for your extension development pleasur
 
 To configure your GSheet, see the instructions in the [WhollySheet readme](../wholly-sheet/README.md#getting-your-gsheet-credentials)
 
+To configure your access token server, see the instructions in the [access token server example readme](../../examples/access-token-server/README.md)
+
 ### Hackathon extension
 
 The Hackathon manifest should have:
@@ -23,6 +25,7 @@ project_name: "hackathon_app"
 application: hackathon_app {
   label: "Hackathon"
   url: "https://localhost:8080/dist/bundle.js"
+   # file: "bundle.js"
   entitlements: {
     local_storage: no
     navigation: yes
@@ -30,11 +33,13 @@ application: hackathon_app {
     use_form_submit: yes
     use_embeds: no
     external_api_urls: ["http://localhost:8081/*", "https://sheets.googleapis.com/*"]
-    core_api_methods: ["me", "all_roles", "all_user_attributes"]
+    core_api_methods: ["me", "all_roles", "all_user_attributes", "delete_user_attribute", "create_user_attribute"]
     scoped_user_attributes: ["sheet_id", "token_server_url"]
   }
 }
 
 ```
+
+Note that http://localhost:8081/* points to the access token server. Change to the access token server URL you are using.
 
 Remember to add a model to the project that has any valid connection.

@@ -63,7 +63,7 @@ export const sheetsSdkHelper = {
   },
   saveProject: async (project: Project) => {
     const data = await initSheetData()
-    const sheet = await data.projects
+    const sheet = data.projects
     const nextRow = sheet.nextRow
     await data.sheetSDK.rowCreate('projects', nextRow, [
       project._id,
