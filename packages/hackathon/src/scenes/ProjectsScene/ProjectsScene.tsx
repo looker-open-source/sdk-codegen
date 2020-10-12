@@ -27,10 +27,14 @@
 import React, { FC, useEffect } from 'react'
 import { useSelector, useDispatch } from 'react-redux'
 
+import { useHistory } from 'react-router-dom'
+import { Button } from '@looker/components'
+
 import { allProjectsRequest } from '../../data/projects/actions'
 import { getProjectsState } from '../../data/projects/selectors'
 import { isLoadingState } from '../../data/common/selectors'
-import { Loading, ProjectList, ProjectDialog } from '../../components'
+import { Loading, ProjectList } from '../../components'
+import { Routes } from '../../routes/AppRouter'
 
 interface ProjectSceneProps {}
 
@@ -41,6 +45,11 @@ export const ProjectsScene: FC<ProjectSceneProps> = () => {
   }, [dispatch])
   const projects = useSelector(getProjectsState)
   const isLoading = useSelector(isLoadingState)
+  const history = useHistory()
+
+  const handleClick = () => {
+    history.push(Routes.CREATE_PROJECT)
+  }
 
   return (
     <>
@@ -48,8 +57,14 @@ export const ProjectsScene: FC<ProjectSceneProps> = () => {
         loading={!projects && isLoading}
         message={'Fetching projects...'}
       />
-      {projects && <ProjectList projects={projects} />}
-      <ProjectDialog />
+      {projects && (
+        <>
+          <ProjectList projects={projects} />
+          <Button iconBefore="CircleAdd" onClick={handleClick}>
+            Add Project
+          </Button>
+        </>
+      )}
     </>
   )
 }

@@ -48,17 +48,23 @@ export interface AllProjectsSuccessAction {
 
 export interface BeginEditProjectRequestAction {
   type: Actions.BEGIN_EDIT_PROJECT_REQUEST
-  payload?: string
+  payload: {
+    projects: Projects
+    project: Project
+  }
 }
 
 export interface BeginEditProjectSuccessAction {
   type: Actions.BEGIN_EDIT_PROJECT_SUCCESS
-  payload: Project
 }
 
 export interface SaveProjectRequestAction {
   type: Actions.SAVE_PROJECT_REQUEST
-  payload: Project
+  payload: {
+    hacker_id: string
+    projects: Projects
+    project: Project
+  }
 }
 
 export interface SaveProjectSuccessAction {
@@ -67,7 +73,10 @@ export interface SaveProjectSuccessAction {
 
 export interface DeleteProjectRequestAction {
   type: Actions.DELETE_PROJECT_REQUEST
-  payload: Project
+  payload: {
+    projects: Projects
+    project: Project
+  }
 }
 
 export interface DeleteProjectSuccessAction {
@@ -96,24 +105,31 @@ export const allProjectsSuccess = (
 })
 
 export const beginEditProjectRequest = (
-  id?: string
+  projects: Projects,
+  project: Project
 ): BeginEditProjectRequestAction => ({
   type: Actions.BEGIN_EDIT_PROJECT_REQUEST,
-  payload: id,
+  payload: {
+    projects,
+    project,
+  },
 })
 
-export const beginEditProjectSuccess = (
-  project: Project
-): BeginEditProjectSuccessAction => ({
+export const beginEditProjectSuccess = (): BeginEditProjectSuccessAction => ({
   type: Actions.BEGIN_EDIT_PROJECT_SUCCESS,
-  payload: project,
 })
 
 export const saveProjectRequest = (
+  hacker_id: string,
+  projects: Projects,
   project: Project
 ): SaveProjectRequestAction => ({
   type: Actions.SAVE_PROJECT_REQUEST,
-  payload: project,
+  payload: {
+    hacker_id: hacker_id,
+    projects: projects,
+    project: project,
+  },
 })
 
 export const saveProjectSuccess = (): SaveProjectSuccessAction => ({
@@ -121,10 +137,14 @@ export const saveProjectSuccess = (): SaveProjectSuccessAction => ({
 })
 
 export const deleteProjectRequest = (
+  projects: Projects,
   project: Project
 ): DeleteProjectRequestAction => ({
   type: Actions.DELETE_PROJECT_REQUEST,
-  payload: project,
+  payload: {
+    project: project,
+    projects: projects,
+  },
 })
 
 export const deleteProjectSuccess = (): DeleteProjectSuccessAction => ({

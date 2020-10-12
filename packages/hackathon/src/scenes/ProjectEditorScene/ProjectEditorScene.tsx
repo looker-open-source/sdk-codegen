@@ -23,10 +23,35 @@
  SOFTWARE.
 
  */
-export { HomeScene } from './HomeScene'
-export { ProjectsScene } from './ProjectsScene'
-export { UsersScene } from './UsersScene'
-export { JudgingScene } from './JudgingScene'
-export { AdminScene } from './AdminScene'
-export { NotFoundScene } from './NotFoundScene'
-export { ProjectEditorScene } from './ProjectEditorScene'
+import React, { FC } from 'react'
+import { useSelector } from 'react-redux'
+
+import { useParams } from 'react-router-dom'
+import { ProjectForm } from '../../components'
+import { getProjectsState } from '../../data/projects/selectors'
+import { Project } from '../../models'
+
+interface ProjectEditorParams {
+  id?: string
+}
+
+export const ProjectEditorScene: FC = () => {
+  const projects = useSelector(getProjectsState)
+  const { id } = useParams<ProjectEditorParams>()
+
+  let project: Project
+  if (id) {
+    project = projects.rows?.find((proj) => proj.id === id) as Project
+  } else {
+    project = new Project()
+  }
+
+  // TODO: add a not found error in case project is not found
+  return (
+    <>
+      {projects && (
+        <ProjectForm isUpdate={!!id} projects={projects} project={project} />
+      )}
+    </>
+  )
+}

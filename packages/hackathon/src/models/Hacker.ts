@@ -98,11 +98,11 @@ export class Hacker implements IHacker {
   }
 
   get firstName(): string {
-    return this.user.first_name || 'no first name!'
+    return this.user.first_name || 'Unknown'
   }
 
   get lastName(): string {
-    return this.user.last_name || 'no first name!'
+    return this.user.last_name || 'user!'
   }
 
   canAdmin(): boolean {

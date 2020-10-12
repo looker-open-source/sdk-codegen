@@ -23,16 +23,25 @@
  SOFTWARE.
 
  */
+import { Looker40SDK } from '@looker/sdk/lib/browser'
 import { Hackathon, Hacker, Technologies } from '../../models'
 import { HackSessionAction, Actions } from './actions'
 
 export interface HackSessionState {
   currentHackathon?: Hackathon
   technologies?: Technologies
-  hacker?: Hacker
+  hacker: Hacker
 }
 
-const defaultState: Readonly<HackSessionState> = Object.freeze({})
+const EmptyHacker = new Hacker({} as Looker40SDK)
+EmptyHacker.user = {
+  id: -1,
+  first_name: '',
+  last_name: '',
+}
+const defaultState: Readonly<HackSessionState> = Object.freeze({
+  hacker: EmptyHacker,
+})
 
 export const hackSessionReducer = (
   state: HackSessionState = defaultState,
