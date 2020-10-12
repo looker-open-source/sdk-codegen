@@ -71,7 +71,7 @@ export const sheetsSdkHelper = {
     await projects.save(project)
   },
   editProject: async (projects: Projects, project: Project) => {
-    project.updated = new Date()
+    project._updated = new Date()
     await projects.update(project)
   },
   deleteProject: async (projects: Projects, project: Project) => {

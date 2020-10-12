@@ -58,7 +58,7 @@ import { isLoadingState } from '../../data/common/selectors'
 interface ProjectDialogProps {
   isUpdate: boolean
   projects: Projects
-  project?: Project
+  project: Project
 }
 
 export const ProjectForm: FC<ProjectDialogProps> = ({
@@ -66,7 +66,7 @@ export const ProjectForm: FC<ProjectDialogProps> = ({
   projects,
   project,
 }) => {
-  const [state, setState] = useState<Project>(project || new Project())
+  const [state, setState] = useState<Project>(project)
   const [isUpdating, setIsUpdating] = useState(false)
   const dispatch = useDispatch()
   const technologies = useSelector(getTechnologies)
@@ -79,7 +79,7 @@ export const ProjectForm: FC<ProjectDialogProps> = ({
     if (isUpdate) {
       dispatch(beginEditProjectRequest(projects, state))
     } else {
-      dispatch(saveProjectRequest(hacker!.id, projects, state))
+      dispatch(saveProjectRequest(hacker.id, projects, state))
     }
     setIsUpdating(true)
   }
@@ -88,7 +88,7 @@ export const ProjectForm: FC<ProjectDialogProps> = ({
     if (isUpdating && !isLoading) {
       history.push(Routes.PROJECTS)
     }
-  }, [isLoading, isUpdating])
+  }, [isLoading, isUpdating, history])
 
   const handleBoolChange = (e: BaseSyntheticEvent) => {
     setState((prevState) => {

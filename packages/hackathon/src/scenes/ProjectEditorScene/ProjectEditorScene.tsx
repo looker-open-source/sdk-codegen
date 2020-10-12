@@ -41,7 +41,7 @@ export const ProjectEditorScene: FC = () => {
 
   let project: Project
   if (id) {
-    project = projects?.find(id, '_id')
+    project = projects.rows?.find((proj) => proj.id === id) as Project
   } else {
     project = new Project()
   }

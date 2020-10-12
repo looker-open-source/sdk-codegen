@@ -28,11 +28,11 @@ import { actionMessage, beginLoading, endLoading } from '../common/actions'
 import { sheetsSdkHelper } from '../sheets_sdk_helper'
 import {
   Actions,
+  allProjectsRequest,
   allProjectsSuccess,
   BeginEditProjectRequestAction,
   beginEditProjectSuccess,
   DeleteProjectRequestAction,
-  deleteProjectSuccess,
   SaveProjectRequestAction,
   saveProjectSuccess,
 } from './actions'
@@ -94,8 +94,7 @@ function* deleteProjectSaga(action: DeleteProjectRequestAction) {
       action.payload.projects,
       action.payload.project
     )
-    yield put(endLoading())
-    yield put(deleteProjectSuccess())
+    yield put(allProjectsRequest())
   } catch (err) {
     console.error(err)
     yield put(
