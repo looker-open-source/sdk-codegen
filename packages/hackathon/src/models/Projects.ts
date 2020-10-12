@@ -24,14 +24,7 @@
 
  */
 
-import {
-  IRowModel,
-  ITabTable,
-  noDate,
-  SheetSDK,
-  SheetValues,
-  WhollySheet,
-} from '@looker/wholly-sheet'
+import { ITabTable, noDate, SheetSDK, WhollySheet } from '@looker/wholly-sheet'
 
 import { DelimArray } from '@looker/sdk-rtl/lib/browser'
 import { ISheetRow, SheetRow } from './SheetRow'
@@ -81,7 +74,7 @@ export class Project extends SheetRow<IProject> {
   }
 }
 
-export class Projects extends WhollySheet<IProject> {
+export class Projects extends WhollySheet<Project> {
   constructor(
     public readonly sheets: SheetSDK,
     public readonly table: ITabTable
@@ -89,14 +82,7 @@ export class Projects extends WhollySheet<IProject> {
     super(sheets, 'projects', table) //, { new Hackathon(values?: any)})
   }
 
-  typeRows<T extends IRowModel>(rows: SheetValues): T[] {
-    const result: T[] = []
-
-    rows.forEach((r) => {
-      const row: T = (new Project(r) as unknown) as T
-      result.push(row)
-    })
-
-    return result
+  typeRow<Project>(values?: any) {
+    return (new Project(values) as unknown) as Project
   }
 }

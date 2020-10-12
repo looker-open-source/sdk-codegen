@@ -24,14 +24,7 @@
 
  */
 
-import {
-  IRowModel,
-  ITabTable,
-  noDate,
-  SheetSDK,
-  SheetValues,
-  WhollySheet,
-} from '@looker/wholly-sheet'
+import { ITabTable, noDate, SheetSDK, WhollySheet } from '@looker/wholly-sheet'
 import { ISheetRow, SheetRow } from './SheetRow'
 
 /** IMPORTANT: properties must be declared in the tab sheet's columnar order, not sorted order */
@@ -64,25 +57,15 @@ export class Hackathon extends SheetRow<IHackathon> {
   }
 }
 
-// export const RowHackathonCreator: RowModelFactory<IHackathon> = (values?: any) =>
-//   new Hackathon(values)
-
-export class Hackathons extends WhollySheet<IHackathon> {
+export class Hackathons extends WhollySheet<Hackathon> {
   constructor(
     public readonly sheets: SheetSDK,
     public readonly table: ITabTable
   ) {
-    super(sheets, 'hackathons', table) //, { new Hackathon(values?: any)})
+    super(sheets, 'hackathons', table)
   }
 
-  typeRows<T extends IRowModel>(rows: SheetValues): T[] {
-    const result: T[] = []
-
-    rows.forEach((r) => {
-      const row: T = (new Hackathon(r) as any) as T
-      result.push(row)
-    })
-
-    return (result as SheetValues) as T[]
+  typeRow<Hackathon>(values?: any) {
+    return (new Hackathon(values) as unknown) as Hackathon
   }
 }

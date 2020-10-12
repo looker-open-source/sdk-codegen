@@ -24,15 +24,8 @@
 
  */
 
-import {
-  IRowModel,
-  ITabTable,
-  RowModel,
-  SheetSDK,
-  SheetValues,
-  WhollySheet,
-} from '@looker/wholly-sheet'
-import { ISheetRow } from './SheetRow'
+import { ITabTable, SheetSDK, WhollySheet } from '@looker/wholly-sheet'
+import { ISheetRow, SheetRow } from './SheetRow'
 
 /** IMPORTANT: properties must be declared in the tab sheet's columnar order, not sorted order */
 export interface IProjectTechnology extends ISheetRow {
@@ -41,7 +34,7 @@ export interface IProjectTechnology extends ISheetRow {
 }
 
 /** IMPORTANT: properties must be declared in the tab sheet's columnar order, not sorted order */
-export class ProjectTechnology extends RowModel<IProjectTechnology> {
+export class ProjectTechnology extends SheetRow<IProjectTechnology> {
   project_id = ''
   technology_id = ''
   constructor(values?: any) {
@@ -60,14 +53,7 @@ export class ProjectTechnologies extends WhollySheet<IProjectTechnology> {
     super(sheets, 'project_technologies', table)
   }
 
-  typeRows<T extends IRowModel>(rows: SheetValues): T[] {
-    const result: T[] = []
-
-    rows.forEach((r) => {
-      const row: T = (new ProjectTechnology(r) as unknown) as T
-      result.push(row)
-    })
-
-    return result
+  typeRow<ProjectTechnology>(values?: any) {
+    return (new ProjectTechnology(values) as unknown) as ProjectTechnology
   }
 }

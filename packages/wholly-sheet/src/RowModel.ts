@@ -66,6 +66,8 @@ export interface IRowModel extends RowValues {
   values(): SheetValues
   /** Prepare the row for saving */
   prepare(): IRowModel
+  /** Convert a cell to the right type */
+  typeCast(key: string, value: any): any
 }
 
 export class RowModel<T extends IRowModel> implements IRowModel {

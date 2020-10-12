@@ -24,13 +24,7 @@
 
  */
 
-import {
-  IRowModel,
-  ITabTable,
-  SheetSDK,
-  SheetValues,
-  WhollySheet,
-} from '@looker/wholly-sheet'
+import { ITabTable, SheetSDK, WhollySheet } from '@looker/wholly-sheet'
 import { ISheetRow, SheetRow } from './SheetRow'
 import { IHacker } from './Hacker'
 
@@ -83,7 +77,7 @@ export class Judging extends SheetRow<IJudging> {
   }
 }
 
-export class Judgings extends WhollySheet<IJudging> {
+export class Judgings extends WhollySheet<Judging> {
   constructor(
     public readonly sheets: SheetSDK,
     public readonly table: ITabTable
@@ -91,14 +85,7 @@ export class Judgings extends WhollySheet<IJudging> {
     super(sheets, 'judgings', table)
   }
 
-  typeRows<T extends IRowModel>(rows: SheetValues): T[] {
-    const result: T[] = []
-
-    rows.forEach((r) => {
-      const row: T = (new Judging(r) as unknown) as T
-      result.push(row)
-    })
-
-    return result
+  typeRow<Judging>(values?: any) {
+    return (new Judging(values) as unknown) as Judging
   }
 }

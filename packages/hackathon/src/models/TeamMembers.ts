@@ -24,15 +24,8 @@
 
  */
 
-import {
-  IRowModel,
-  ITabTable,
-  RowModel,
-  SheetSDK,
-  SheetValues,
-  WhollySheet,
-} from '@looker/wholly-sheet'
-import { ISheetRow } from './SheetRow'
+import { ITabTable, SheetSDK, WhollySheet } from '@looker/wholly-sheet'
+import { ISheetRow, SheetRow } from './SheetRow'
 
 /** IMPORTANT: properties must be declared in the tab sheet's columnar order, not sorted order */
 export interface ITeamMember extends ISheetRow {
@@ -42,7 +35,7 @@ export interface ITeamMember extends ISheetRow {
 }
 
 /** IMPORTANT: properties must be declared in the tab sheet's columnar order, not sorted order */
-export class TeamMember extends RowModel<ITeamMember> {
+export class TeamMember extends SheetRow<ITeamMember> {
   user_id = ''
   project_id = ''
   responsibilities = ''
@@ -62,14 +55,7 @@ export class TeamMembers extends WhollySheet<ITeamMember> {
     super(sheets, 'team_members', table)
   }
 
-  typeRows<T extends IRowModel>(rows: SheetValues): T[] {
-    const result: T[] = []
-
-    rows.forEach((r) => {
-      const row: T = (new TeamMember(r) as unknown) as T
-      result.push(row)
-    })
-
-    return result
+  typeRow<TeamMember>(values?: any) {
+    return (new TeamMember(values) as unknown) as TeamMember
   }
 }

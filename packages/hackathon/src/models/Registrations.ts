@@ -24,16 +24,8 @@
 
  */
 
-import {
-  IRowModel,
-  ITabTable,
-  noDate,
-  RowModel,
-  SheetSDK,
-  SheetValues,
-  WhollySheet,
-} from '@looker/wholly-sheet'
-import { ISheetRow } from './SheetRow'
+import { ITabTable, noDate, SheetSDK, WhollySheet } from '@looker/wholly-sheet'
+import { ISheetRow, SheetRow } from './SheetRow'
 
 /** IMPORTANT: properties must be declared in the tab sheet's columnar order, not sorted order */
 export interface IRegistration extends ISheetRow {
@@ -44,7 +36,7 @@ export interface IRegistration extends ISheetRow {
 }
 
 /** IMPORTANT: properties must be declared in the tab sheet's columnar order, not sorted order */
-export class Registration extends RowModel<IRegistration> {
+export class Registration extends SheetRow<IRegistration> {
   _user_id = ''
   hackathon_id = ''
   date_registered: Date = noDate
@@ -65,14 +57,7 @@ export class Registrations extends WhollySheet<IRegistration> {
     super(sheets, 'registrations', table)
   }
 
-  typeRows<T extends IRowModel>(rows: SheetValues): T[] {
-    const result: T[] = []
-
-    rows.forEach((r) => {
-      const row: T = (new Registration(r) as unknown) as T
-      result.push(row)
-    })
-
-    return result
+  typeRow<Registration>(values?: any) {
+    return (new Registration(values) as unknown) as Registration
   }
 }

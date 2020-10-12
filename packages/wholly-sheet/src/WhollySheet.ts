@@ -36,6 +36,57 @@ import { ColumnHeaders, IRowModel, stringer } from './RowModel'
  */
 export const compareDates = (a: Date, b: Date) => a.getTime() - b.getTime()
 
+export interface IMaker<T> {
+  new (values?: any): T
+}
+
+// TODO maybe get a technique from https://stackoverflow.com/a/34698946 or
+//  https://www.logicbig.com/tutorials/misc/typescript/generic-constraints.html
+
+// TODO refactor WhollySheet<T> into something a bit cleaner
+//   ref https://www.smashingmagazine.com/2020/10/understanding-typescript-generics/
+// class TypedRows<T> {
+//   rows: T[] = []
+//
+//   constructor(rows: T[], Maker?: IMaker<T>) {
+//     if (Maker) {
+//       this.rows = rows.map((v) => new Maker(v))
+//     } else {
+//       this.rows = rows
+//     }
+//   }
+//
+//   public add(value: T): void {
+//     this.rows.push(value)
+//   }
+//
+//   public where(predicate: (value: T) => boolean): TypedRows<T> {
+//     return TypedRows.from<T>(this.rows.filter(predicate))
+//   }
+//
+//   public select<U>(selector: (value: T) => U): TypedRows<U> {
+//     return TypedRows.from<U>(this.rows.map(selector))
+//   }
+//
+//   public toArray(): T[] {
+//     return this.rows
+//   }
+//
+//   public static from<U>(values: U[]): TypedRows<U> {
+//     // Perhaps we perform some logic here.
+//     // ...
+//
+//     return new TypedRows<U>(values)
+//   }
+//
+//   public static create<U>(values?: U[]): TypedRows<U> {
+//     return new TypedRows<U>(values ?? [])
+//   }
+//
+//   // Other collection functions.
+//   // ..
+// }
+
 export interface IWhollySheet<T extends IRowModel> {
   /** Initialized REST-based GSheets SDK */
   sheets: SheetSDK
@@ -75,8 +126,12 @@ export interface IWhollySheet<T extends IRowModel> {
   /**
    * Gets the row's values in table.header column order
    * @param model row to introspect
+   * @param model row to introspect
    */
   values(model: T): SheetValues
+
+  /** Create a new row of this type */
+  typeRow<T extends IRowModel>(values?: any): T
 
   /**
    * Converts raw rows into typed rows.
@@ -144,10 +199,9 @@ export interface IWhollySheet<T extends IRowModel> {
   find(value: any, columnName?: string): T | undefined
 }
 
-// https://github.com/gsuitedevs/node-samples/blob/master/sheets/snippets/test/helpers.js
-
 /** CRUDF operations for a GSheet tab */
 export abstract class WhollySheet<T extends IRowModel>
+  // extends TypedRows<T>
   implements IWhollySheet<T> {
   index: Record<string, T> = {}
   rows: T[]
@@ -157,19 +211,25 @@ export abstract class WhollySheet<T extends IRowModel>
     /** name of the tab in the GSheet document */
     public readonly name: string,
     public readonly table: ITabTable,
-    public readonly keyColumn: string = '_id' // public readonly NewItem: RowModelFactory<T>
+    public readonly keyColumn: string = '_id'
   ) {
+    // super([])
     this.rows = this.typeRows(table.rows)
     this.checkHeader()
     this.createIndex()
   }
 
-  // Using this until I can figure out the constructor syntax, maybe https://stackoverflow.com/a/43674389
-  abstract typeRows<T extends IRowModel>(rows: SheetValues): T[]
+  abstract typeRow<T extends IRowModel>(values?: any): T
 
-  typeRow<T extends IRowModel>(row: SheetValues): T {
-    const rows = this.typeRows([row])
-    return (rows[0] as unknown) as T
+  typeRows<T extends IRowModel>(rows: SheetValues): T[] {
+    const result: T[] = []
+
+    rows.forEach((r) => {
+      const row: T = this.typeRow(r)
+      result.push(row)
+    })
+
+    return result
   }
 
   // // TODO figure out init generic typing issue
@@ -183,7 +243,7 @@ export abstract class WhollySheet<T extends IRowModel>
    * @param value to strongly type
    * @private
    */
-  private toAT<T extends IRowModel>(value: unknown): T | undefined {
+  private static toAT<T extends IRowModel>(value: unknown): T | undefined {
     if (value) return value as T
     return undefined
   }
@@ -300,9 +360,9 @@ export abstract class WhollySheet<T extends IRowModel>
     }
     if (columnName === this.keyColumn) {
       // Find by index
-      return this.toAT(this.index[value.toString()])
+      return WhollySheet.toAT(this.index[value.toString()])
     }
-    return this.toAT(this.rows.find((r) => r[key] === value))
+    return WhollySheet.toAT(this.rows.find((r) => r[key] === value))
   }
 
   private _displayHeader: ColumnHeaders = []
