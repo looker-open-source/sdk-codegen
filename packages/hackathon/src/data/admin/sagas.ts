@@ -101,7 +101,7 @@ function* persistUserAttribute(
       (ua: IUserAttribute) => ua.name === attributeName
     )
     const lookerSdk = getCore40SDK()
-    if (userAttribute) {
+    if (userAttribute && userAttribute.id) {
       yield call([lookerSdk, lookerSdk.delete_user_attribute], userAttribute.id)
     }
     const ua: IUserAttribute = {
