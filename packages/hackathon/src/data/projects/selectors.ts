@@ -27,5 +27,5 @@
 import { Projects } from '../../models'
 import { RootState } from '../root_reducer'
 
-export const getProjectsState = (state: RootState): Projects | undefined =>
+export const getProjectsState = (state: RootState): Projects =>
   state.projectsState.projects

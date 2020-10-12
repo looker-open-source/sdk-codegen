@@ -24,7 +24,7 @@
 
  */
 import { IRowModel, SheetValues } from '@looker/wholly-sheet'
-import { ActionListColumns, Checkbox, Text } from '@looker/components'
+import { ActionListColumns, Icon, Text } from '@looker/components'
 import React from 'react'
 
 /**
@@ -78,11 +78,12 @@ export const sheetHeader = (header: string[], row: IRowModel) => {
  * @param value to convert to displayable actionitem
  */
 export const sheetCell = (value: any) => {
-  if (!value) return <></>
+  if (typeof value === 'undefined') return <></>
 
   if (typeof value === 'boolean') {
-    return <Checkbox checked={value} />
+    return <Icon size="small" name={value ? 'Check' : 'Close'} />
   }
+
   if (value instanceof Date) {
     return <Text>{value.toDateString()}</Text>
   }

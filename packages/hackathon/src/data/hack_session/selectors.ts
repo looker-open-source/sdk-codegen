@@ -31,7 +31,7 @@ export const getCurrentHackathonState = (
   state: RootState
 ): Hackathon | undefined => state.hackSessionState.currentHackathon
 
-export const getHackerState = (state: RootState): Hacker | undefined =>
+export const getHackerState = (state: RootState): Hacker =>
   state.hackSessionState.hacker
 
 export const getTechnologies = (state: RootState): Technologies | undefined =>

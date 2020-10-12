@@ -31,7 +31,17 @@ import {
   ActionListItemColumn,
 } from '@looker/components'
 
-import { Project, Projects, sheetCell, sheetHeader } from '../../models'
+import { useSelector, useDispatch } from 'react-redux'
+import { useHistory, NavLink } from 'react-router-dom'
+import {
+  Project,
+  Projects,
+  sheetCell,
+  sheetHeader,
+  IProject,
+} from '../../models'
+import { getHackerState } from '../../data/hack_session/selectors'
+import { deleteProjectRequest } from '../../data/projects/actions'
 
 interface ProjectListProps {
   projects: Projects
@@ -42,15 +52,46 @@ export const ProjectList: FC<ProjectListProps> = ({ projects }) => {
   // Select only the displayable columns
   const header = projects.displayHeader
   const columns = sheetHeader(header, template)
-  // TODO available actions should be determined based on user's role
-  const actions = (
-    <>
-      <ActionListItemAction>Edit</ActionListItemAction>
-      <ActionListItemAction>Delete</ActionListItemAction>
-    </>
-  )
+  const hacker = useSelector(getHackerState)
+  const dispatch = useDispatch()
+  const handleDelete = (project: IProject) => {
+    dispatch(deleteProjectRequest(projects, project))
+  }
+  const history = useHistory()
+  const handleEdit = (project: IProject) => {
+    history.push(`/projects/${project._id}/edit`)
+  }
+
+  const actions = (project: IProject) => {
+    const canModify = project.canUpdate(hacker) || project.canDelete(hacker)
+
+    if (!canModify) return undefined
+
+    return (
+      <>
+        {project.canUpdate(hacker) && (
+          <ActionListItemAction
+            onClick={handleEdit.bind(null, project)}
+            icon="Edit"
+            itemRole="link"
+            detail={
+              <NavLink to={`/projects/${project._id}/edit`}>Edit</NavLink>
+            }
+          />
+        )}
+        {project.canDelete(hacker) && (
+          <ActionListItemAction
+            onClick={handleDelete.bind(null, project)}
+            icon="Trash"
+          >
+            Delete
+          </ActionListItemAction>
+        )}
+      </>
+    )
+  }
   const rows = projects.rows.map((project, idx) => (
-    <ActionListItem key={idx} id={idx.toString()} actions={actions}>
+    <ActionListItem key={idx} id={idx.toString()} actions={actions(project)}>
       {header.map((columnName, _) => (
         <ActionListItemColumn key={`${idx}.${columnName}`}>
           {sheetCell(project[columnName])}

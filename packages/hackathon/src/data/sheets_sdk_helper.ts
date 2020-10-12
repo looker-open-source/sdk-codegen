@@ -61,23 +61,21 @@ export const sheetsSdkHelper = {
     const result = await data.refresh()
     return result.projects
   },
-  saveProject: async (project: Project) => {
-    const data = await initSheetData()
-    const sheet = await data.projects
-    const nextRow = sheet.nextRow
-    await data.sheetSDK.rowCreate('projects', nextRow, [
-      project.id,
-      project.updated,
-      project.user_id,
-      project.registration_id,
-      project.title,
-      project.description,
-      project.date_created,
-      project.project_type,
-      project.contestant,
-      project.locked,
-      project.technologies,
-    ])
+  saveProject: async (
+    hacker_id: string,
+    projects: Projects,
+    project: Project
+  ) => {
+    project._user_id = hacker_id
+    project.date_created = new Date()
+    await projects.save(project)
+  },
+  editProject: async (projects: Projects, project: Project) => {
+    project.updated = new Date()
+    await projects.update(project)
+  },
+  deleteProject: async (projects: Projects, project: Project) => {
+    await projects.delete(project)
   },
   getCurrentHackathon: async (): Promise<Hackathon> => {
     const data = await initSheetData()

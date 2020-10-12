@@ -29,6 +29,10 @@ import { sheetsSdkHelper } from '../sheets_sdk_helper'
 import {
   Actions,
   allProjectsSuccess,
+  BeginEditProjectRequestAction,
+  beginEditProjectSuccess,
+  DeleteProjectRequestAction,
+  deleteProjectSuccess,
   SaveProjectRequestAction,
   saveProjectSuccess,
 } from './actions'
@@ -48,7 +52,12 @@ function* allProjectsSaga() {
 function* saveProjectSaga(action: SaveProjectRequestAction) {
   try {
     yield put(beginLoading())
-    yield call([sheetsSdkHelper, sheetsSdkHelper.saveProject], action.payload)
+    yield call(
+      [sheetsSdkHelper, sheetsSdkHelper.saveProject],
+      action.payload.hacker_id,
+      action.payload.projects,
+      action.payload.project
+    )
     yield put(endLoading())
     yield put(saveProjectSuccess())
   } catch (err) {
@@ -59,9 +68,47 @@ function* saveProjectSaga(action: SaveProjectRequestAction) {
   }
 }
 
+function* editProjectSaga(action: BeginEditProjectRequestAction) {
+  try {
+    yield put(beginLoading())
+    yield call(
+      [sheetsSdkHelper, sheetsSdkHelper.editProject],
+      action.payload.projects,
+      action.payload.project
+    )
+    yield put(endLoading())
+    yield put(beginEditProjectSuccess())
+  } catch (err) {
+    console.error(err)
+    yield put(
+      actionMessage('A problem occurred while editing the project', 'critical')
+    )
+  }
+}
+
+function* deleteProjectSaga(action: DeleteProjectRequestAction) {
+  try {
+    yield put(beginLoading())
+    yield call(
+      [sheetsSdkHelper, sheetsSdkHelper.deleteProject],
+      action.payload.projects,
+      action.payload.project
+    )
+    yield put(endLoading())
+    yield put(deleteProjectSuccess())
+  } catch (err) {
+    console.error(err)
+    yield put(
+      actionMessage('A problem occurred while deleting the project', 'critical')
+    )
+  }
+}
+
 export function* registerProjectsSagas() {
   yield all([
     takeEvery(Actions.ALL_PROJECTS_REQUEST, allProjectsSaga),
     takeEvery(Actions.SAVE_PROJECT_REQUEST, saveProjectSaga),
+    takeEvery(Actions.BEGIN_EDIT_PROJECT_REQUEST, editProjectSaga),
+    takeEvery(Actions.DELETE_PROJECT_REQUEST, deleteProjectSaga),
   ])
 }
