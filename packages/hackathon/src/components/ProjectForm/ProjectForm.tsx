@@ -39,6 +39,8 @@ import {
   FieldSelect,
   FieldSelectMulti,
   Button,
+  ButtonOutline,
+  Space,
 } from '@looker/components'
 import { useDispatch, useSelector } from 'react-redux'
 import { useHistory, useRouteMatch } from 'react-router-dom'
@@ -117,6 +119,10 @@ export const ProjectForm: FC<ProjectDialogProps> = () => {
     }
   }
 
+  const handleCancel = () => {
+    history.push(Routes.PROJECTS)
+  }
+
   useEffect(() => {
     if (isUpdating && !isLoading) {
       history.push(Routes.PROJECTS)
@@ -188,7 +194,16 @@ export const ProjectForm: FC<ProjectDialogProps> = () => {
               }}
             />
           </Fieldset>
-          <Button type="submit">Save</Button>
+          <Space>
+            <ButtonOutline
+              type="button"
+              onClick={handleCancel}
+              color="critical"
+            >
+              Cancel
+            </ButtonOutline>
+            <Button type="submit">Save</Button>
+          </Space>
         </Form>
       )}
     </>
