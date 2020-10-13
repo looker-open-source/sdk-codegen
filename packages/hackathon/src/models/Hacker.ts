@@ -132,11 +132,12 @@ export class Hacker implements IHacker {
     return this
   }
 
-  findRegistration(hackathon: Hackathon, registrations: Registrations) {
-    this.registration = registrations.find(
+  findRegistration(hackathon: Hackathon, registrations: Registration[]) {
+    const reg = registrations.find(
       (r: Registration) =>
         r._user_id === this.id && r.hackathon_id === hackathon._id
     )
+    this.registration = reg
   }
 
   get id(): string {
@@ -186,7 +187,7 @@ export class Hackers extends TypedRows<Hacker> {
       'firstName',
       'lastName',
       'roles',
-      'permissions',
+      // 'permissions',
       'registered',
       'attended',
     ]
@@ -231,7 +232,9 @@ export class Hackers extends TypedRows<Hacker> {
     } else if (users) {
       this.assign(users)
     }
-    const regs = data.registrations
+    const regs = data.registrations.rows.filter(
+      (r) => r.hackathon_id === hackathon._id
+    )
     for (const user of this.rows) {
       await user.assignRoles()
       user.findRegistration(hackathon, regs)

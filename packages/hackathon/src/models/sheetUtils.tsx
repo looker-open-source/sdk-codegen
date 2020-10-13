@@ -84,9 +84,17 @@ export const sheetCell = (value: any) => {
   if (typeof value === 'undefined') return <></>
 
   if (typeof value === 'boolean') {
-    return <Icon size="small" name={value ? 'Check' : 'Close'} />
+    return value ? <Icon size="small" name="Check" /> : ''
   }
 
+  if (value instanceof Set) {
+    const values: string[] = []
+    // Value iteration is a bit clumsy. Probably could create a helper method
+    for (const v of value.values()) {
+      values.push(v.toString())
+    }
+    return <Text>{values.join(', ')}</Text>
+  }
   if (value instanceof Date) {
     return <Text>{value.toDateString()}</Text>
   }
