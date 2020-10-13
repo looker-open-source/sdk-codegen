@@ -24,7 +24,13 @@
 
  */
 
-import { ITabTable, noDate, SheetSDK, WhollySheet } from '@looker/wholly-sheet'
+import {
+  ITabTable,
+  noDate,
+  SheetError,
+  SheetSDK,
+  WhollySheet,
+} from '@looker/wholly-sheet'
 
 import { ISheetRow, SheetRow } from './SheetRow'
 import { IHacker } from './Hacker'
@@ -43,7 +49,7 @@ export interface IProject extends ISheetRow {
 }
 
 /** IMPORTANT: properties must be declared in the tab sheet's columnar order, not sorted order */
-export class Project extends SheetRow<IProject> {
+export class Project extends SheetRow<Project> {
   _user_id = ''
   _registration_id = ''
   title = ''
@@ -70,6 +76,16 @@ export class Project extends SheetRow<IProject> {
 
   canUpdate(user: IHacker): boolean {
     return super.canUpdate(user) || this._user_id === user.id
+  }
+
+  prepare(): Project {
+    super.prepare()
+    if (!this._user_id || !this._registration_id)
+      throw new SheetError(
+        'User Id (for now) and Registration Id must be assigned'
+      )
+    if (this.date_created === noDate) this.date_created = new Date()
+    return this
   }
 }
 
