@@ -25,6 +25,7 @@
  */
 
 import { RootState } from '../root_reducer'
+import { Hackers } from '../../models'
 
 export const getHackersState = (state: RootState): Hackers =>
   state.hackersState.hackers
