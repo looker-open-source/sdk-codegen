@@ -43,7 +43,7 @@ export class Technology extends SheetRow<ITechnology> {
   }
 }
 
-export class Technologies extends WhollySheet<ITechnology> {
+export class Technologies extends WhollySheet<Technology> {
   constructor(
     public readonly sheets: SheetSDK,
     public readonly table: ITabTable

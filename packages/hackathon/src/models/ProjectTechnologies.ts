@@ -45,7 +45,7 @@ export class ProjectTechnology extends SheetRow<IProjectTechnology> {
   }
 }
 
-export class ProjectTechnologies extends WhollySheet<IProjectTechnology> {
+export class ProjectTechnologies extends WhollySheet<ProjectTechnology> {
   constructor(
     public readonly sheets: SheetSDK,
     public readonly table: ITabTable

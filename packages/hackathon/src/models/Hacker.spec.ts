@@ -32,10 +32,14 @@ const iniFile = path.join(__dirname, '../../../../looker.ini')
 const settings = new NodeSettingsIniFile(iniFile)
 const sdk = LookerNodeSDK.init40(settings)
 
+export const getHacker = async () => {
+  const hacker = new Hacker(sdk)
+  return await hacker.getMe()
+}
+
 describe('Hacker', () => {
   test('gets me', async () => {
-    const hacker = new Hacker(sdk)
-    const me = await hacker.getMe()
+    const me = await getHacker()
     expect(me.user).toBeDefined()
     expect(me.firstName).toBeDefined()
     expect(me.lastName).toBeDefined()
@@ -43,6 +47,7 @@ describe('Hacker', () => {
     expect(me.firstName).toBeDefined()
     expect(me.roles.has('user')).toBeTruthy()
   })
+
   test('regular user cannot judge, staff, or admin', () => {
     const actual = new Hacker(sdk)
     expect(actual.canAdmin()).toEqual(false)

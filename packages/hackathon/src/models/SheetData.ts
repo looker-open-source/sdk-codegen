@@ -33,6 +33,8 @@ import {
   TeamMembers,
   Judgings,
   Hackathon,
+  Hacker,
+  Registration,
 } from '.'
 
 export class SheetData {
@@ -67,6 +69,24 @@ export class SheetData {
     const current = sorted.find((hack) => hack.judging_stops.getTime() >= now)
     this._hackathon = current as Hackathon
     return this._hackathon
+  }
+
+  /**
+   * Optionally create and get registration record for user in Hackathon
+   * @param hackathon to register
+   * @param user to register
+   */
+  async registerUser(
+    hackathon: Hackathon,
+    user: Hacker
+  ): Promise<Registration> {
+    let reg = this.registrations.rows.find(
+      (r) => r._user_id === user.id && r.hackathon_id === hackathon._id
+    )
+    if (reg) return reg
+    reg = new Registration({ _user_id: user.id, hackathon_id: hackathon._id })
+    reg = await this.registrations.save(reg)
+    return reg
   }
 
   get sheet() {

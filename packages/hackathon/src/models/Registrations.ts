@@ -47,9 +47,17 @@ export class Registration extends SheetRow<IRegistration> {
     // there may be a way to overload the constructor so this isn't necessary but pattern hasn't been found
     this.assign(values)
   }
+
+  prepare(): IRegistration {
+    super.prepare()
+    if (this.date_registered === noDate) this.date_registered = new Date()
+    // Current behavior is, if this registration record exists, the user attended because they're using the extension
+    this.attended = true
+    return this
+  }
 }
 
-export class Registrations extends WhollySheet<IRegistration> {
+export class Registrations extends WhollySheet<Registration> {
   constructor(
     public readonly sheets: SheetSDK,
     public readonly table: ITabTable

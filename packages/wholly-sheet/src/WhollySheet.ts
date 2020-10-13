@@ -45,47 +45,47 @@ export interface IMaker<T> {
 
 // TODO refactor WhollySheet<T> into something a bit cleaner
 //   ref https://www.smashingmagazine.com/2020/10/understanding-typescript-generics/
-// class TypedRows<T> {
-//   rows: T[] = []
-//
-//   constructor(rows: T[], Maker?: IMaker<T>) {
-//     if (Maker) {
-//       this.rows = rows.map((v) => new Maker(v))
-//     } else {
-//       this.rows = rows
-//     }
-//   }
-//
-//   public add(value: T): void {
-//     this.rows.push(value)
-//   }
-//
-//   public where(predicate: (value: T) => boolean): TypedRows<T> {
-//     return TypedRows.from<T>(this.rows.filter(predicate))
-//   }
-//
-//   public select<U>(selector: (value: T) => U): TypedRows<U> {
-//     return TypedRows.from<U>(this.rows.map(selector))
-//   }
-//
-//   public toArray(): T[] {
-//     return this.rows
-//   }
-//
-//   public static from<U>(values: U[]): TypedRows<U> {
-//     // Perhaps we perform some logic here.
-//     // ...
-//
-//     return new TypedRows<U>(values)
-//   }
-//
-//   public static create<U>(values?: U[]): TypedRows<U> {
-//     return new TypedRows<U>(values ?? [])
-//   }
-//
-//   // Other collection functions.
-//   // ..
-// }
+class TypedRows<T> {
+  rows: T[] = []
+
+  constructor(rows: T[], Maker?: IMaker<T>) {
+    if (Maker) {
+      this.rows = rows.map((v) => new Maker(v))
+    } else {
+      this.rows = rows
+    }
+  }
+
+  public add(value: T): void {
+    this.rows.push(value)
+  }
+
+  public where(predicate: (value: T) => boolean): TypedRows<T> {
+    return TypedRows.from<T>(this.rows.filter(predicate))
+  }
+
+  public select<U>(selector: (value: T) => U): TypedRows<U> {
+    return TypedRows.from<U>(this.rows.map(selector))
+  }
+
+  public toArray(): T[] {
+    return this.rows
+  }
+
+  public static from<U>(values: U[]): TypedRows<U> {
+    // Perhaps we perform some logic here.
+    // ...
+
+    return new TypedRows<U>(values)
+  }
+
+  public static create<U>(values?: U[]): TypedRows<U> {
+    return new TypedRows<U>(values ?? [])
+  }
+
+  // Other collection functions.
+  // ..
+}
 
 export interface IWhollySheet<T extends IRowModel> {
   /** Initialized REST-based GSheets SDK */
@@ -201,10 +201,10 @@ export interface IWhollySheet<T extends IRowModel> {
 
 /** CRUDF operations for a GSheet tab */
 export abstract class WhollySheet<T extends IRowModel>
-  // extends TypedRows<T>
+  extends TypedRows<T>
   implements IWhollySheet<T> {
   index: Record<string, T> = {}
-  rows: T[]
+  // rows: T[]
 
   protected constructor(
     public readonly sheets: SheetSDK,
@@ -213,7 +213,7 @@ export abstract class WhollySheet<T extends IRowModel>
     public readonly table: ITabTable,
     public readonly keyColumn: string = '_id'
   ) {
-    // super([])
+    super([])
     this.rows = this.typeRows(table.rows)
     this.checkHeader()
     this.createIndex()

@@ -47,7 +47,7 @@ export class TeamMember extends SheetRow<ITeamMember> {
   }
 }
 
-export class TeamMembers extends WhollySheet<ITeamMember> {
+export class TeamMembers extends WhollySheet<TeamMember> {
   constructor(
     public readonly sheets: SheetSDK,
     public readonly table: ITabTable
