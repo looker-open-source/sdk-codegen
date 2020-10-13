@@ -41,8 +41,9 @@ import {
   Button,
 } from '@looker/components'
 import { useDispatch, useSelector } from 'react-redux'
-import { useHistory } from 'react-router-dom'
-import { Project, Projects } from '../../models'
+import { DelimArray } from '@looker/sdk-rtl/src/browser'
+import { useHistory, useRouteMatch } from 'react-router-dom'
+import { Project } from '../../models'
 import {
   beginEditProjectRequest,
   saveProjectRequest,
@@ -51,36 +52,72 @@ import {
   getHackerState,
   getTechnologies,
 } from '../../data/hack_session/selectors'
+import { getProjectsState } from '../../data/projects/selectors'
 import { Routes } from '../../routes/AppRouter'
 import { isLoadingState } from '../../data/common/selectors'
 
-interface ProjectDialogProps {
-  isUpdate: boolean
-  projects: Projects
-  project: Project
-}
+interface ProjectDialogProps {}
 
-export const ProjectForm: FC<ProjectDialogProps> = ({
-  isUpdate,
-  projects,
-  project,
-}) => {
-  const [state, setState] = useState<Project>(project)
+export const ProjectForm: FC<ProjectDialogProps> = () => {
+  const match = useRouteMatch<{ func: string }>('/projects/:func')
+  const projects = useSelector(getProjectsState)
+  const func = match?.params?.func
+  const [project, setProject] = useState<Project>()
+
+  const [title, setTitle] = useState<string>('')
+  const [description, setDescription] = useState<string>('')
+  const [projectType, setProjectType] = useState<string>('')
+  const [contestant, setContestant] = useState<boolean>(false)
+  const [locked, setLocked] = useState<boolean>(false)
+  const [technologies, setTechnologies] = useState<string[]>([])
+
   const [isUpdating, setIsUpdating] = useState(false)
   const dispatch = useDispatch()
-  const technologies = useSelector(getTechnologies)
+  const availableTechnologies = useSelector(getTechnologies)
   const hacker = useSelector(getHackerState)
   const isLoading = useSelector(isLoadingState)
   const history = useHistory()
 
+  useEffect(() => {
+    if (func) {
+      let project
+      if (func === 'new') {
+        project = new Project()
+      } else {
+        if (projects) {
+          project = projects.rows.find((project) => project._id === func)
+        }
+      }
+      if (project) {
+        setProject(project)
+        setTitle(project.title)
+        setDescription(project.description)
+        setProjectType(project.project_type)
+        setContestant(project.contestant)
+        setLocked(project.locked)
+        setTechnologies(project.technologies as string[])
+      } else {
+        history.push(Routes.PROJECTS)
+      }
+    }
+  }, [projects, func])
+
   const handleSubmit = (e: FormEvent) => {
     e.preventDefault()
-    if (isUpdate) {
-      dispatch(beginEditProjectRequest(projects, state))
-    } else {
-      dispatch(saveProjectRequest(hacker.id, projects, state))
+    if (project) {
+      project.title = title
+      project.description = description
+      project.project_type = projectType
+      project.contestant = contestant
+      project.locked = locked
+      project.technologies = new DelimArray<string>(technologies)
+      if (func === 'new') {
+        dispatch(saveProjectRequest(hacker.id, projects, project))
+      } else {
+        dispatch(beginEditProjectRequest(projects, project))
+      }
+      setIsUpdating(true)
     }
-    setIsUpdating(true)
   }
 
   useEffect(() => {
@@ -89,82 +126,72 @@ export const ProjectForm: FC<ProjectDialogProps> = ({
     }
   }, [isLoading, isUpdating, history])
 
-  const handleBoolChange = (e: BaseSyntheticEvent) => {
-    setState((prevState) => {
-      prevState[e.target.name] = e.target.checked
-      return prevState
-    })
-  }
-
-  const handleChange = (e: BaseSyntheticEvent) => {
-    setState((prevState) => {
-      prevState[e.target.name] = e.target.value
-      return prevState
-    })
-  }
-
   return (
-    <Form onSubmit={handleSubmit} width="80%">
-      <Fieldset legend="Enter your project details">
-        <FieldText
-          required
-          name="title"
-          label="Title"
-          defaultValue={state.title}
-          onChange={handleChange}
-        />
-        <FieldTextArea
-          required
-          label="Description"
-          name="description"
-          defaultValue={state.description}
-          onChange={handleChange}
-        />
-        <Select
-          required
-          label="Type"
-          options={[
-            { value: 'Open' },
-            { value: 'Closed' },
-            { value: 'Invite Only' },
-          ]}
-          defaultValue={state.project_type}
-          onChange={(value: string) => {
-            setState((prevState) => {
-              prevState.project_type = value
-              return prevState
-            })
-          }}
-        />
-        <FieldToggleSwitch
-          name="contestant"
-          label="Contestant"
-          onChange={handleBoolChange}
-          on={state.contestant}
-        />
-        <FieldToggleSwitch
-          name="locked"
-          label="Lock"
-          onChange={handleBoolChange}
-          on={state.locked}
-        />
-        <SelectMulti
-          options={technologies?.rows.map((row) => ({
-            value: row._id,
-          }))}
-          isFilterable
-          placeholder="Type values or select from the list"
-          freeInput
-          defaultValues={state.technologies as string[]}
-          onChange={(values?: string[]) => {
-            setState((prevState) => {
-              prevState.technologies = values || []
-              return prevState
-            })
-          }}
-        />
-      </Fieldset>
-      <Button type="submit">Save</Button>
-    </Form>
+    <>
+      {project && (
+        <Form onSubmit={handleSubmit} width="40vw" mt="large">
+          <Fieldset legend="Enter your project details">
+            <FieldText
+              required
+              name="title"
+              label="Title"
+              defaultValue={title}
+              onChange={(e: BaseSyntheticEvent) => setTitle(e.target.value)}
+            />
+            <FieldTextArea
+              required
+              label="Description"
+              name="description"
+              defaultValue={description}
+              onChange={(e: BaseSyntheticEvent) =>
+                setDescription(e.target.value)
+              }
+            />
+            <Select
+              required
+              label="Type"
+              options={[
+                { value: 'Open' },
+                { value: 'Closed' },
+                { value: 'Invite Only' },
+              ]}
+              defaultValue={projectType}
+              onChange={(value: string) => {
+                setProjectType(value)
+              }}
+            />
+            <FieldToggleSwitch
+              name="contestant"
+              label="Contestant"
+              onChange={(e: BaseSyntheticEvent) => {
+                setContestant(e.target.checked)
+              }}
+              on={contestant}
+            />
+            <FieldToggleSwitch
+              name="locked"
+              label="Lock"
+              onChange={(e: BaseSyntheticEvent) => {
+                setLocked(e.target.checked)
+              }}
+              on={locked}
+            />
+            <SelectMulti
+              options={availableTechnologies?.rows.map((row) => ({
+                value: row._id,
+              }))}
+              isFilterable
+              placeholder="Type values or select from the list"
+              freeInput
+              defaultValues={technologies}
+              onChange={(values: string[] = []) => {
+                setTechnologies(values)
+              }}
+            />
+          </Fieldset>
+          <Button type="submit">Save</Button>
+        </Form>
+      )}
+    </>
   )
 }

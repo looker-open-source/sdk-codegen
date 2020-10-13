@@ -52,7 +52,9 @@ export const ProjectList: FC<ProjectListProps> = ({ projects }) => {
   }
   const history = useHistory()
   const handleEdit = (projectId: string) => {
-    history.push(`/projects/${projectId}/edit`)
+    setTimeout(() => {
+      history.push(`/projects/${projectId}/edit`)
+    })
   }
 
   const actions = (project: Project) => {

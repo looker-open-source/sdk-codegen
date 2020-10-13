@@ -53,7 +53,7 @@ function* saveProjectSaga(action: SaveProjectRequestAction) {
   try {
     yield put(beginLoading())
     yield call(
-      [sheetsSdkHelper, sheetsSdkHelper.saveProject],
+      [sheetsSdkHelper, sheetsSdkHelper.createProject],
       action.payload.hacker_id,
       action.payload.projects,
       action.payload.project
@@ -72,7 +72,7 @@ function* editProjectSaga(action: BeginEditProjectRequestAction) {
   try {
     yield put(beginLoading())
     yield call(
-      [sheetsSdkHelper, sheetsSdkHelper.editProject],
+      [sheetsSdkHelper, sheetsSdkHelper.updateProject],
       action.payload.projects,
       action.payload.project
     )

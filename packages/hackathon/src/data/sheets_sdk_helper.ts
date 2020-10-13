@@ -69,7 +69,7 @@ export const sheetsSdkHelper = {
     const result = await data.refresh()
     return result.projects
   },
-  saveProject: async (
+  createProject: async (
     hacker_id: string,
     projects: Projects,
     project: Project
@@ -78,8 +78,7 @@ export const sheetsSdkHelper = {
     project.date_created = new Date()
     await projects.save(project)
   },
-  editProject: async (projects: Projects, project: Project) => {
-    project._updated = new Date()
+  updateProject: async (projects: Projects, project: Project) => {
     await projects.update(project)
   },
   deleteProject: async (projects: Projects, project: Project) => {
