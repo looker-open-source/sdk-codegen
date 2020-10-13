@@ -41,7 +41,6 @@ import {
   Button,
 } from '@looker/components'
 import { useDispatch, useSelector } from 'react-redux'
-import { DelimArray } from '@looker/sdk-rtl/src/browser'
 import { useHistory, useRouteMatch } from 'react-router-dom'
 import { Project } from '../../models'
 import {
@@ -93,7 +92,7 @@ export const ProjectForm: FC<ProjectDialogProps> = () => {
         setProjectType(project.project_type)
         setContestant(project.contestant)
         setLocked(project.locked)
-        setTechnologies(project.technologies as string[])
+        setTechnologies(project.technologies)
       } else {
         history.push(Routes.PROJECTS)
       }
@@ -108,7 +107,7 @@ export const ProjectForm: FC<ProjectDialogProps> = () => {
       project.project_type = projectType
       project.contestant = contestant
       project.locked = locked
-      project.technologies = new DelimArray<string>(technologies)
+      project.technologies = technologies
       if (func === 'new') {
         dispatch(saveProjectRequest(hacker.id, projects, project))
       } else {
