@@ -92,7 +92,7 @@ export const ProjectList: FC<ProjectListProps> = ({ projects }) => {
   }
 
   const pageSize = 25
-  const totalPages = Math.round(projects.rows.length / pageSize)
+  const totalPages = Math.ceil(projects.rows.length / pageSize)
 
   const projectCell = (project: Project, columnName: string) => {
     if (columnName !== 'locked') return sheetCell(project[columnName])
@@ -108,10 +108,9 @@ export const ProjectList: FC<ProjectListProps> = ({ projects }) => {
     return ''
   }
   const rows = projects.rows.map((project, idx) => (
-    <>
+    <span key={idx}>
       {Math.ceil((idx + 1) / pageSize) === currentPage && (
         <ActionListItem
-          key={idx}
           id={idx.toString()}
           actions={actions(project as Project)}
         >
@@ -122,7 +121,7 @@ export const ProjectList: FC<ProjectListProps> = ({ projects }) => {
           ))}
         </ActionListItem>
       )}
-    </>
+    </span>
   ))
 
   return (

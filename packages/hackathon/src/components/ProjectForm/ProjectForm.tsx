@@ -55,13 +55,14 @@ import {
 } from '../../data/hack_session/selectors'
 import { getProjectsState } from '../../data/projects/selectors'
 import { Routes } from '../../routes/AppRouter'
-import { isLoadingState } from '../../data/common/selectors'
+import { isLoadingState, getMessageState } from '../../data/common/selectors'
 
 interface ProjectDialogProps {}
 
 export const ProjectForm: FC<ProjectDialogProps> = () => {
   const match = useRouteMatch<{ func: string }>('/projects/:func')
   const projects = useSelector(getProjectsState)
+  const messageDetail = useSelector(getMessageState)
   const func = match?.params?.func
   const [project, setProject] = useState<Project>()
 
@@ -124,7 +125,7 @@ export const ProjectForm: FC<ProjectDialogProps> = () => {
   }
 
   useEffect(() => {
-    if (isUpdating && !isLoading) {
+    if (isUpdating && !isLoading && !messageDetail) {
       history.push(Routes.PROJECTS)
     }
   }, [isLoading, isUpdating, history])
