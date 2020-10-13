@@ -43,7 +43,7 @@ export const HackerList: FC<HackerListProps> = ({ hackers }) => {
   const columns = sheetHeader(header, template)
 
   const pageSize = 25
-  const totalPages = Math.round(hackers.rows.length / pageSize)
+  const totalPages = Math.ceil(hackers.rows.length / pageSize)
 
   const rows = hackers.rows.map((hacker, idx) => (
     <>
