@@ -39,7 +39,7 @@ interface HackerListProps {
 export const HackerList: FC<HackerListProps> = ({ hackers }) => {
   const [currentPage, setCurrentPage] = useState(1)
   const template = hackers.rows.length === 0 ? new Hacker() : hackers.rows[0]
-  const header = Object.keys(template)
+  const header = hackers.displayHeaders
   const columns = sheetHeader(header, template)
 
   const pageSize = 25

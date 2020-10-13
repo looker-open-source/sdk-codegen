@@ -66,7 +66,6 @@ export class Hacker implements IHacker {
   user: IUser = { id: 0, first_name: 'Unknown', last_name: 'user!' }
   roles = new Set<UserRole>(['user'])
   permissions = new Set<UserPermission>()
-
   registration?: Registration
 
   constructor(public readonly sdk?: Looker40SDK, user?: IUser) {
@@ -179,6 +178,18 @@ export class Hackers extends TypedRows<Hacker> {
   constructor(public sdk: Looker40SDK, users?: IUser[]) {
     super([])
     if (users) this.assign(users)
+  }
+
+  get displayHeaders() {
+    return [
+      'id',
+      'firstName',
+      'lastName',
+      'roles',
+      'permissions',
+      'registered',
+      'attended',
+    ]
   }
 
   assign(users: IUser[]) {
