@@ -23,35 +23,35 @@
  SOFTWARE.
 
  */
-import React, { FC } from 'react'
-import { useSelector } from 'react-redux'
+import { Looker40SDK } from '@looker/sdk/lib/browser'
+import { Hackers } from '../../models'
+import { Actions, HackerAction } from './actions'
 
-import { useParams } from 'react-router-dom'
-import { ProjectForm } from '../../components'
-import { getProjectsState } from '../../data/projects/selectors'
-import { Project } from '../../models'
-
-interface ProjectEditorParams {
-  id?: string
+export interface HackersState {
+  hackers: Hackers
 }
 
-export const ProjectEditorScene: FC = () => {
-  const projects = useSelector(getProjectsState)
-  const { id } = useParams<ProjectEditorParams>()
+const EmptyHackers = new Hackers({} as Looker40SDK)
 
-  let project: Project
-  if (id) {
-    project = projects.find(id) as Project
-  } else {
-    project = new Project()
+const defaultState: Readonly<HackersState> = Object.freeze({
+  hackers: EmptyHackers,
+})
+
+export const hackersReducer = (
+  state: HackersState = defaultState,
+  action: HackerAction
+): HackersState => {
+  switch (action.type) {
+    case Actions.ALL_HACKERS_REQUEST:
+      return {
+        ...state,
+      }
+    case Actions.ALL_HACKERS_SUCCESS:
+      return {
+        ...state,
+        hackers: action.payload,
+      }
+    default:
+      return state
   }
-
-  // TODO: add a not found error in case project is not found
-  return (
-    <>
-      {projects && (
-        <ProjectForm isUpdate={!!id} projects={projects} project={project} />
-      )}
-    </>
-  )
 }

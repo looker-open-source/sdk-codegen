@@ -23,35 +23,23 @@
  SOFTWARE.
 
  */
-import React, { FC } from 'react'
-import { useSelector } from 'react-redux'
+import { all, call, put, takeEvery } from 'redux-saga/effects'
+import { actionMessage, beginLoading, endLoading } from '../common/actions'
+import { sheetsSdkHelper } from '../sheets_sdk_helper'
+import { Actions, allHackersSuccess } from './actions'
 
-import { useParams } from 'react-router-dom'
-import { ProjectForm } from '../../components'
-import { getProjectsState } from '../../data/projects/selectors'
-import { Project } from '../../models'
-
-interface ProjectEditorParams {
-  id?: string
+function* allHackersSaga() {
+  try {
+    yield put(beginLoading())
+    const result = yield call([sheetsSdkHelper, sheetsSdkHelper.getHackers])
+    yield put(endLoading())
+    yield put(allHackersSuccess(result))
+  } catch (err) {
+    console.error(err)
+    yield put(actionMessage('A problem occurred loading the data', 'critical'))
+  }
 }
 
-export const ProjectEditorScene: FC = () => {
-  const projects = useSelector(getProjectsState)
-  const { id } = useParams<ProjectEditorParams>()
-
-  let project: Project
-  if (id) {
-    project = projects.find(id) as Project
-  } else {
-    project = new Project()
-  }
-
-  // TODO: add a not found error in case project is not found
-  return (
-    <>
-      {projects && (
-        <ProjectForm isUpdate={!!id} projects={projects} project={project} />
-      )}
-    </>
-  )
+export function* registerHackersSagas() {
+  yield all([takeEvery(Actions.ALL_HACKERS_REQUEST, allHackersSaga)])
 }

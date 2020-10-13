@@ -23,35 +23,33 @@
  SOFTWARE.
 
  */
-import React, { FC } from 'react'
-import { useSelector } from 'react-redux'
 
-import { useParams } from 'react-router-dom'
-import { ProjectForm } from '../../components'
-import { getProjectsState } from '../../data/projects/selectors'
-import { Project } from '../../models'
+import { Hackers } from '../../models'
 
-interface ProjectEditorParams {
-  id?: string
+export enum Actions {
+  ALL_HACKERS_REQUEST = 'ALL_HACKERS_REQUEST',
+  ALL_HACKERS_SUCCESS = 'ALL_HACKERS_SUCCESS',
+  ERROR = 'ERROR',
 }
 
-export const ProjectEditorScene: FC = () => {
-  const projects = useSelector(getProjectsState)
-  const { id } = useParams<ProjectEditorParams>()
-
-  let project: Project
-  if (id) {
-    project = projects.find(id) as Project
-  } else {
-    project = new Project()
-  }
-
-  // TODO: add a not found error in case project is not found
-  return (
-    <>
-      {projects && (
-        <ProjectForm isUpdate={!!id} projects={projects} project={project} />
-      )}
-    </>
-  )
+export interface AllHackersRequestAction {
+  type: Actions.ALL_HACKERS_REQUEST
 }
+
+export interface AllHackersSuccessAction {
+  type: Actions.ALL_HACKERS_SUCCESS
+  payload: Hackers
+}
+
+export type HackerAction = AllHackersRequestAction | AllHackersSuccessAction
+
+export const allHackersRequest = (): AllHackersRequestAction => ({
+  type: Actions.ALL_HACKERS_REQUEST,
+})
+
+export const allHackersSuccess = (
+  hackers: Hackers
+): AllHackersSuccessAction => ({
+  type: Actions.ALL_HACKERS_SUCCESS,
+  payload: hackers,
+})

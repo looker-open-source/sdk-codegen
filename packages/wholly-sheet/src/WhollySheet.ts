@@ -45,7 +45,7 @@ export interface IMaker<T> {
 
 // TODO refactor WhollySheet<T> into something a bit cleaner
 //   ref https://www.smashingmagazine.com/2020/10/understanding-typescript-generics/
-class TypedRows<T> {
+export class TypedRows<T> {
   rows: T[] = []
 
   constructor(rows: T[], Maker?: IMaker<T>) {

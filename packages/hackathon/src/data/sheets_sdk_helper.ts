@@ -36,6 +36,7 @@ import {
   Projects,
   Technologies,
   Registration,
+  Hackers,
 } from '../models'
 import { ExtensionProxyTransport } from '../authToken/extensionProxyTransport'
 
@@ -96,6 +97,12 @@ export const sheetsSdkHelper = {
     const lookerSdk = getCore40SDK()
     const foo = new Hacker(lookerSdk)
     return await foo.getMe()
+  },
+  getHackers: async (): Promise<Hackers> => {
+    const lookerSdk = getCore40SDK()
+    const foo = new Hackers(lookerSdk)
+    const data = await initSheetData()
+    return await foo.load(data)
   },
   registerUser: async (
     hackathon: Hackathon,
