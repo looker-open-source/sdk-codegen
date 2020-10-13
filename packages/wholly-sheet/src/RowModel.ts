@@ -52,6 +52,13 @@ export type ColumnHeaders = string[]
 /** name of the property that tracks the row's position in the tab sheet */
 export const rowPosition = '_row'
 
+export interface IRowValidationError {
+  message: string
+  type: 'error'
+}
+
+export type RowValidationErrors = Record<string, IRowValidationError>
+
 /** Keyed data for a sheet row */
 export interface IRowModel extends RowValues {
   _row: number
@@ -66,6 +73,8 @@ export interface IRowModel extends RowValues {
   values(): SheetValues
   /** Prepare the row for saving */
   prepare(): IRowModel
+  /** Returns undefined if no errors, or the error messages */
+  validate(): RowValidationErrors | undefined
   /** Convert a cell to the right type */
   typeCast(key: string, value: any): any
 }
@@ -157,6 +166,11 @@ export class RowModel<T extends IRowModel> implements IRowModel {
       }
     }
     return (this as unknown) as T
+  }
+
+  /** default to no errors */
+  validate(): RowValidationErrors | undefined {
+    return undefined
   }
 }
 

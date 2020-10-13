@@ -27,6 +27,7 @@
 import {
   ITabTable,
   noDate,
+  RowValidationErrors,
   SheetError,
   SheetSDK,
   WhollySheet,
@@ -90,6 +91,30 @@ export class Project extends SheetRow<Project> {
       )
     if (this.date_created === noDate) this.date_created = new Date()
     return this
+  }
+
+  validate() {
+    const result: RowValidationErrors = {}
+    if (!this._user_id) {
+      result._user_id = {
+        message: 'User ID (for now) must be assigned',
+        type: 'error',
+      }
+    }
+    if (!this._registration_id) {
+      result._registration_id = {
+        message: 'Registration ID must be assigned',
+        type: 'error',
+      }
+    }
+    if (this.technologies.length === 0) {
+      result.technologies = {
+        message: 'Technologies must be chosen',
+        type: 'error',
+      }
+    }
+    if (Object.keys(result).length === 0) return undefined
+    return result
   }
 }
 
