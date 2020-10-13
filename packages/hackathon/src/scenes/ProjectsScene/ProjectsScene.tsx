@@ -53,11 +53,8 @@ export const ProjectsScene: FC<ProjectSceneProps> = () => {
 
   return (
     <>
-      <Loading
-        loading={!projects && isLoading}
-        message={'Fetching projects...'}
-      />
-      {projects && (
+      <Loading loading={isLoading} message={'Fetching projects...'} />
+      {!isLoading && projects && (
         <>
           <ProjectList projects={projects} />
           <Button iconBefore="CircleAdd" onClick={handleClick}>

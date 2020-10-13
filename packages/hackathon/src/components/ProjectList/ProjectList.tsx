@@ -23,12 +23,13 @@
  SOFTWARE.
 
  */
-import React, { FC } from 'react'
+import React, { FC, useState } from 'react'
 import {
   ActionList,
   ActionListItem,
   ActionListItemAction,
   ActionListItemColumn,
+  Pagination,
 } from '@looker/components'
 import { useSelector, useDispatch } from 'react-redux'
 import { useHistory } from 'react-router-dom'
@@ -42,6 +43,7 @@ interface ProjectListProps {
 
 export const ProjectList: FC<ProjectListProps> = ({ projects }) => {
   const template = projects.rows.length > 0 ? projects.rows[0] : new Project()
+  const [currentPage, setCurrentPage] = useState(1)
   // Select only the displayable columns
   const header = projects.displayHeader
   const columns = sheetHeader(header, template)
@@ -84,19 +86,36 @@ export const ProjectList: FC<ProjectListProps> = ({ projects }) => {
       </>
     )
   }
+
+  const pageSize = 25
+  const totalPages = Math.round(projects.rows.length / pageSize)
+
   const rows = projects.rows.map((project, idx) => (
-    <ActionListItem
-      key={idx}
-      id={idx.toString()}
-      actions={actions(project as Project)}
-    >
-      {header.map((columnName, _) => (
-        <ActionListItemColumn key={`${idx}.${columnName}`}>
-          {sheetCell(project[columnName])}
-        </ActionListItemColumn>
-      ))}
-    </ActionListItem>
+    <>
+      {Math.ceil((idx + 1) / pageSize) === currentPage && (
+        <ActionListItem
+          key={idx}
+          id={idx.toString()}
+          actions={actions(project as Project)}
+        >
+          {header.map((columnName, _) => (
+            <ActionListItemColumn key={`${idx}.${columnName}`}>
+              {sheetCell(project[columnName])}
+            </ActionListItemColumn>
+          ))}
+        </ActionListItem>
+      )}
+    </>
   ))
 
-  return <ActionList columns={columns}>{rows}</ActionList>
+  return (
+    <>
+      <ActionList columns={columns}>{rows}</ActionList>
+      <Pagination
+        current={currentPage}
+        pages={totalPages}
+        onChange={setCurrentPage}
+      />
+    </>
+  )
 }
