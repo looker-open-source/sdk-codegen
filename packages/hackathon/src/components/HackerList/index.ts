@@ -23,32 +23,4 @@
  SOFTWARE.
 
  */
-import React, { FC, useEffect } from 'react'
-import { useDispatch, useSelector } from 'react-redux'
-import { isLoadingState } from '../../data/common/selectors'
-import { Loading } from '../../components/Loading'
-import { allHackersRequest } from '../../data/hackers/actions'
-import { getHackersState } from '../../data/hackers/selectors'
-import { HackerList } from '../../components/HackerList'
-
-interface UsersSceneProps {}
-
-export const UsersScene: FC<UsersSceneProps> = () => {
-  const dispatch = useDispatch()
-  useEffect(() => {
-    dispatch(allHackersRequest())
-  }, [dispatch])
-  const hackers = useSelector(getHackersState)
-  const isLoading = useSelector(isLoadingState)
-
-  return (
-    <>
-      <Loading loading={isLoading} message={'Fetching hackers...'} />
-      {!isLoading && hackers && (
-        <>
-          <HackerList hackers={hackers} />
-        </>
-      )}
-    </>
-  )
-}
+export { HackerList } from './HackerList'

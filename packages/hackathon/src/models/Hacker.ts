@@ -69,7 +69,7 @@ export class Hacker implements IHacker {
 
   registration?: Registration
 
-  constructor(public readonly sdk: Looker40SDK, user?: IUser) {
+  constructor(public readonly sdk?: Looker40SDK, user?: IUser) {
     if (user) {
       this.user = user
     }
@@ -98,31 +98,36 @@ export class Hacker implements IHacker {
    * await hacker.getMe()
    */
   async getMe() {
-    this.user = await this.sdk.ok(this.sdk.me())
-    return await this.assignRoles()
+    if (this.sdk) {
+      this.user = await this.sdk.ok(this.sdk.me())
+      return await this.assignRoles()
+    }
+    return this
   }
 
   async assignRoles() {
-    try {
-      await Hacker.getRoles(this.sdk)
-      if (
-        Hacker.staffRole &&
-        this.user.role_ids?.includes(Hacker.staffRole.id as number)
-      )
-        this.roles.add('staff')
-      if (
-        Hacker.judgeRole &&
-        this.user.role_ids?.includes(Hacker.judgeRole.id as number)
-      )
-        this.roles.add('judge')
-      if (
-        Hacker.adminRole &&
-        this.user.role_ids?.includes(Hacker.adminRole.id as number)
-      )
-        this.roles.add('admin')
-    } catch (err) {
-      if (err.message !== 'Not found') {
-        throw err
+    if (this.sdk) {
+      try {
+        await Hacker.getRoles(this.sdk)
+        if (
+          Hacker.staffRole &&
+          this.user.role_ids?.includes(Hacker.staffRole.id as number)
+        )
+          this.roles.add('staff')
+        if (
+          Hacker.judgeRole &&
+          this.user.role_ids?.includes(Hacker.judgeRole.id as number)
+        )
+          this.roles.add('judge')
+        if (
+          Hacker.adminRole &&
+          this.user.role_ids?.includes(Hacker.adminRole.id as number)
+        )
+          this.roles.add('admin')
+      } catch (err) {
+        if (err.message !== 'Not found') {
+          throw err
+        }
       }
     }
     return this

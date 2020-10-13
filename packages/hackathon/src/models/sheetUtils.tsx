@@ -23,7 +23,7 @@
  SOFTWARE.
 
  */
-import { IRowModel, SheetValues } from '@looker/wholly-sheet'
+import { SheetValues } from '@looker/wholly-sheet'
 import { ActionListColumns, Icon, Text } from '@looker/components'
 import React from 'react'
 
@@ -41,7 +41,6 @@ export const asTitle = (value: string) => {
 }
 
 export const sheetHeaderColumn = (
-  row: IRowModel,
   key: string,
   value: any,
   colCount: number,
@@ -55,7 +54,7 @@ export const sheetHeaderColumn = (
   return {
     canSort: true,
     id: key,
-    primaryKey: key === row.keyColumn,
+    primaryKey: key === '_id' || 'id',
     title: asTitle(key),
     type: colType,
     widthPercent: width,
@@ -67,12 +66,12 @@ export const sheetHeaderColumn = (
  * @param header names of column headers
  * @param row data template to use for column typing
  */
-export const sheetHeader = (header: string[], row: IRowModel) => {
+export const sheetHeader = (header: string[], row: any) => {
   const result: SheetValues = []
   const colCount = header.length
   const boolCount = header.filter((h) => typeof row[h] === 'boolean').length
   header.forEach((key) => {
-    result.push(sheetHeaderColumn(row, key, row[key], colCount, boolCount))
+    result.push(sheetHeaderColumn(key, row[key], colCount, boolCount))
   })
   return result as ActionListColumns
 }
