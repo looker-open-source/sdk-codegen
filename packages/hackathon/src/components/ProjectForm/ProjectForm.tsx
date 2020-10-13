@@ -36,8 +36,8 @@ import {
   FieldText,
   FieldTextArea,
   FieldToggleSwitch,
-  Select,
-  SelectMulti,
+  FieldSelect,
+  FieldSelectMulti,
   Button,
 } from '@looker/components'
 import { useDispatch, useSelector } from 'react-redux'
@@ -66,7 +66,7 @@ export const ProjectForm: FC<ProjectDialogProps> = () => {
 
   const [title, setTitle] = useState<string>('')
   const [description, setDescription] = useState<string>('')
-  const [projectType, setProjectType] = useState<string>('')
+  const [projectType, setProjectType] = useState<string>('Open')
   const [contestant, setContestant] = useState<boolean>(false)
   const [locked, setLocked] = useState<boolean>(false)
   const [technologies, setTechnologies] = useState<string[]>([])
@@ -83,10 +83,8 @@ export const ProjectForm: FC<ProjectDialogProps> = () => {
       let project
       if (func === 'new') {
         project = new Project()
-      } else {
-        if (projects) {
-          project = projects.rows.find((project) => project._id === func)
-        }
+      } else if (projects) {
+        project = projects.rows.find((project) => project._id === func)
       }
       if (project) {
         setProject(project)
@@ -147,15 +145,15 @@ export const ProjectForm: FC<ProjectDialogProps> = () => {
                 setDescription(e.target.value)
               }
             />
-            <Select
-              required
+            <FieldSelect
+              id="projectType"
               label="Type"
+              required
               options={[
                 { value: 'Open' },
                 { value: 'Closed' },
                 { value: 'Invite Only' },
               ]}
-              defaultValue={projectType}
               onChange={(value: string) => {
                 setProjectType(value)
               }}
@@ -176,13 +174,15 @@ export const ProjectForm: FC<ProjectDialogProps> = () => {
               }}
               on={locked}
             />
-            <SelectMulti
+            <FieldSelectMulti
+              id="technologies"
+              label="Technologies"
+              required
               options={availableTechnologies?.rows.map((row) => ({
                 value: row._id,
               }))}
               isFilterable
               placeholder="Type values or select from the list"
-              freeInput
               defaultValues={technologies}
               onChange={(values: string[] = []) => {
                 setTechnologies(values)
