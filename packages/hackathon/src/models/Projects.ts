@@ -80,9 +80,13 @@ export class Project extends SheetRow<Project> {
 
   prepare(): Project {
     super.prepare()
-    if (!this._user_id || !this._registration_id)
+    if (
+      !this._user_id ||
+      !this._registration_id ||
+      this.technologies.length === 0
+    )
       throw new SheetError(
-        'User Id (for now) and Registration Id must be assigned'
+        'User Id (for now), Registration Id, and Technologies must be assigned'
       )
     if (this.date_created === noDate) this.date_created = new Date()
     return this
