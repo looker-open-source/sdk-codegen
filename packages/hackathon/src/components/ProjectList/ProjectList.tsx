@@ -30,9 +30,11 @@ import {
   ActionListItemAction,
   ActionListItemColumn,
   Pagination,
+  Tooltip,
 } from '@looker/components'
 import { useSelector, useDispatch } from 'react-redux'
 import { useHistory } from 'react-router-dom'
+import { Icon } from '@looker/components'
 import { Project, Projects, sheetCell, sheetHeader } from '../../models'
 import { getHackerState } from '../../data/hack_session/selectors'
 import { deleteProjectRequest } from '../../data/projects/actions'
@@ -61,6 +63,7 @@ export const ProjectList: FC<ProjectListProps> = ({ projects }) => {
 
   const actions = (project: Project) => {
     const canModify = project.canUpdate(hacker) || project.canDelete(hacker)
+    const isLocked = project.locked
 
     if (!canModify) return undefined
 
@@ -69,8 +72,9 @@ export const ProjectList: FC<ProjectListProps> = ({ projects }) => {
         {project.canUpdate(hacker) && (
           <ActionListItemAction
             onClick={handleEdit.bind(null, project._id)}
-            icon="Edit"
+            icon={isLocked ? 'LockClosed' : 'Edit'}
             itemRole="link"
+            disabled={isLocked}
           >
             Edit
           </ActionListItemAction>
@@ -90,6 +94,19 @@ export const ProjectList: FC<ProjectListProps> = ({ projects }) => {
   const pageSize = 25
   const totalPages = Math.round(projects.rows.length / pageSize)
 
+  const projectCell = (project: Project, columnName: string) => {
+    if (columnName !== 'locked') return sheetCell(project[columnName])
+
+    if (project.locked) {
+      return (
+        <Tooltip content={<>This project is locked.</>}>
+          <Icon size="small" name="LockClosed" />
+        </Tooltip>
+      )
+    }
+
+    return ''
+  }
   const rows = projects.rows.map((project, idx) => (
     <>
       {Math.ceil((idx + 1) / pageSize) === currentPage && (
@@ -100,7 +117,7 @@ export const ProjectList: FC<ProjectListProps> = ({ projects }) => {
         >
           {header.map((columnName, _) => (
             <ActionListItemColumn key={`${idx}.${columnName}`}>
-              {sheetCell(project[columnName])}
+              {projectCell(project, columnName)}
             </ActionListItemColumn>
           ))}
         </ActionListItem>
