@@ -29,7 +29,14 @@ import { getExtensionSDK } from '@looker/extension-sdk'
 import { getCore40SDK } from '@looker/extension-sdk-react'
 import { SheetData } from '../models/SheetData'
 import { GAuthSession } from '../authToken/gAuthSession'
-import { Hacker, Hackathon, Project, Projects, Technologies } from '../models'
+import {
+  Hacker,
+  Hackathon,
+  Project,
+  Projects,
+  Technologies,
+  Registration,
+} from '../models'
 import { ExtensionProxyTransport } from '../authToken/extensionProxyTransport'
 
 let sheetData: SheetData
@@ -89,6 +96,13 @@ export const sheetsSdkHelper = {
     const lookerSdk = getCore40SDK()
     const foo = new Hacker(lookerSdk)
     return await foo.getMe()
+  },
+  registerUser: async (
+    hackathon: Hackathon,
+    user: Hacker
+  ): Promise<Registration> => {
+    const data = await initSheetData()
+    return await data.registerUser(hackathon, user)
   },
   getTechnologies: async (): Promise<Technologies> => {
     const data = await initSheetData()

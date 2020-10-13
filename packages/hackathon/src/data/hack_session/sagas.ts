@@ -42,6 +42,13 @@ function* initializeHackSessionSaga() {
       sheetsSdkHelper,
       sheetsSdkHelper.getCurrentHackathon,
     ])
+    if (hackathon) {
+      yield call(
+        [sheetsSdkHelper, sheetsSdkHelper.registerUser],
+        hackathon,
+        hacker
+      )
+    }
     const technologies = yield call([
       sheetsSdkHelper,
       sheetsSdkHelper.getTechnologies,
