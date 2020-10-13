@@ -27,7 +27,7 @@
 import { IRole, IUser } from '@looker/sdk/lib/sdk/4.0/models'
 import { Looker40SDK } from '@looker/sdk/lib/browser'
 import { SheetError, TypedRows } from '@looker/wholly-sheet'
-import { SheetData, Registrations, Registration, Hackathon } from '.'
+import { SheetData, Registration, Hackathon } from '.'
 
 export type UserPermission = 'delete' | 'create' | 'update'
 /** This will probably need to change but it's a start at establishing user permissions for data operations */
