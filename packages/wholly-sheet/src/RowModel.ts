@@ -25,7 +25,7 @@
  */
 
 import { v4 as uuidv4 } from 'uuid'
-import { boolDefault, DelimArray } from '@looker/sdk-rtl/lib/browser'
+import { boolDefault } from '@looker/sdk-rtl/lib/browser'
 import { SheetValues } from './SheetSDK'
 
 export const noDate = new Date(-8640000000000000)
@@ -130,7 +130,8 @@ export class RowModel<T extends IRowModel> implements IRowModel {
     if (this[key] instanceof Date) {
       return new Date(value)
     }
-    if (this[key] instanceof DelimArray) {
+    // if (this[key] instanceof DelimArray) {
+    if (Array.isArray(this[key])) {
       return value.toString().split(',')
     }
     return this.toString()

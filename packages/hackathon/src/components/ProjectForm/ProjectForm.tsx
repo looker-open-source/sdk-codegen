@@ -41,7 +41,6 @@ import {
   Button,
 } from '@looker/components'
 import { useDispatch, useSelector } from 'react-redux'
-import { DelimArray } from '@looker/sdk-rtl/src/browser'
 import { useHistory } from 'react-router-dom'
 import { Project, Projects } from '../../models'
 import {
@@ -159,7 +158,7 @@ export const ProjectForm: FC<ProjectDialogProps> = ({
           defaultValues={state.technologies as string[]}
           onChange={(values?: string[]) => {
             setState((prevState) => {
-              prevState.technologies = new DelimArray<string>(values)
+              prevState.technologies = values || []
               return prevState
             })
           }}

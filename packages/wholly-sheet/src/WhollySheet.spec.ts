@@ -224,6 +224,7 @@ describe('WhollySheet', () => {
       expect(actual.locked).toEqual(false)
       expect(actual.technologies.toString()).toEqual('t1,t2,t3')
     })
+
     test('undefined values are "empty"', () => {
       const someUndefined = [
         'id1',
@@ -263,10 +264,18 @@ describe('WhollySheet', () => {
       test('finds by id', () => {
         const rows = hackathons.rows
         expect(rows).toBeDefined()
-        const target = rows[0]
-        const found = hackathons.find(target._id)
-        expect(found).toBeDefined()
-        expect(found).toEqual(target)
+        rows.forEach((target) => {
+          const found = hackathons.find(target._id)
+          expect(found).toBeDefined()
+          expect(found).toEqual(target)
+        })
+        const prows = projects.rows
+        expect(prows).toBeDefined()
+        prows.forEach((target) => {
+          const found = projects.find(target._id)
+          expect(found).toBeDefined()
+          expect(found).toEqual(target)
+        })
       })
       test('finds by row', () => {
         const rows = hackathons.rows

@@ -26,7 +26,6 @@
 
 import { ITabTable, noDate, SheetSDK, WhollySheet } from '@looker/wholly-sheet'
 
-import { DelimArray } from '@looker/sdk-rtl/lib/browser'
 import { ISheetRow, SheetRow } from './SheetRow'
 import { IHacker } from './Hacker'
 
@@ -40,7 +39,7 @@ export interface IProject extends ISheetRow {
   project_type: string
   contestant: boolean
   locked: boolean
-  technologies: DelimArray<string>
+  technologies: string[]
 }
 
 /** IMPORTANT: properties must be declared in the tab sheet's columnar order, not sorted order */
@@ -53,7 +52,7 @@ export class Project extends SheetRow<IProject> {
   project_type = ''
   contestant = true
   locked = false
-  technologies: DelimArray<string> = new DelimArray<string>([])
+  technologies: string[] = []
   constructor(values?: any) {
     super()
     // IMPORTANT: this must be done after super() constructor is called so keys are established
