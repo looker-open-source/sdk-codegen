@@ -44,10 +44,13 @@ export const sheetHeaderColumn = (
   row: IRowModel,
   key: string,
   value: any,
-  colCount: number
+  colCount: number,
+  boolCount: number
 ) => {
   if (!key) throw new Error('Each header column needs a key')
   let colType = typeof value
+  const all = 100 + 100 * (boolCount / colCount / 2)
+  const width = colType === 'boolean' ? 50 / colCount : all / colCount
   if (['string', 'number', 'boolean'].includes(colType)) colType = 'string'
   return {
     canSort: true,
@@ -55,7 +58,7 @@ export const sheetHeaderColumn = (
     primaryKey: key === row.keyColumn,
     title: asTitle(key),
     type: colType,
-    widthPercent: 100 / colCount,
+    widthPercent: width,
   }
 }
 
@@ -67,8 +70,9 @@ export const sheetHeaderColumn = (
 export const sheetHeader = (header: string[], row: IRowModel) => {
   const result: SheetValues = []
   const colCount = header.length
+  const boolCount = header.filter((h) => typeof row[h] === 'boolean').length
   header.forEach((key) => {
-    result.push(sheetHeaderColumn(row, key, row[key], colCount))
+    result.push(sheetHeaderColumn(row, key, row[key], colCount, boolCount))
   })
   return result as ActionListColumns
 }
