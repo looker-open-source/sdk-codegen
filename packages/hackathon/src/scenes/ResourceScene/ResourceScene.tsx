@@ -25,7 +25,6 @@
  */
 
 import React, { FC, useState } from 'react'
-import { useSelector } from 'react-redux'
 import {
   Card,
   Grid,
@@ -36,8 +35,6 @@ import {
   CardContent,
   ButtonItem,
 } from '@looker/components'
-import { isLoadingState } from '../../data/common/selectors'
-import { Loading } from '../../components'
 
 interface ResourceSceneProps {}
 
@@ -465,12 +462,9 @@ export const ResourceScene: FC<ResourceSceneProps> = () => {
           return filterValue.includes(resource.tag)
         })
 
-  const isLoading = useSelector(isLoadingState)
-
   return (
     <>
-      <Loading loading={isLoading} message={'Fetching projects...'} />
-      {!isLoading && resources && (
+      {resources && (
         <>
           <Heading as="h4" fontWeight="bold" px="medium">
             Select a technology:
