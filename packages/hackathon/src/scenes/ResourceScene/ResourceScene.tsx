@@ -26,8 +26,6 @@
 
 import React, { FC, useState } from 'react'
 import { useSelector } from 'react-redux'
-
-// import { useHistory } from 'react-router-dom'
 import {
   Card,
   Grid,
@@ -38,14 +36,8 @@ import {
   CardContent,
   ButtonItem,
 } from '@looker/components'
-
 import { isLoadingState } from '../../data/common/selectors'
 import { Loading } from '../../components'
-// import { Routes } from '../../routes/AppRouter'
-// import {
-//   getCurrentHackathonState,
-//   getHackerState,
-// } from '../../data/hack_session/selectors'
 
 interface ResourceSceneProps {}
 
@@ -473,41 +465,19 @@ export const ResourceScene: FC<ResourceSceneProps> = () => {
           return filterValue.includes(resource.tag)
         })
 
-  // const dispatch = useDispatch()
-  // useEffect(() => {
-  //   dispatch(currentProjectsRequest())
-  // }, [dispatch])
-  // const hacker = useSelector(getHackerState)
-  // const hackathon = useSelector(getCurrentHackathonState)
-  // const projects = useSelector(getCurrentProjectsState)
   const isLoading = useSelector(isLoadingState)
-  // const history = useHistory()
-
-  // const handleAdd = () => {
-  //   history.push(Routes.CREATE_PROJECT)
-  // }
-
-  // const handleLock = () => {
-  //   if (hackathon) dispatch(lockProjectsRequest(projects, hackathon, true))
-  // }
-
-  // const handleUnlock = () => {
-  //   if (hackathon) dispatch(lockProjectsRequest(projects, hackathon, false))
-  // }
 
   return (
     <>
       <Loading loading={isLoading} message={'Fetching projects...'} />
       {!isLoading && resources && (
         <>
-          {/* <Card raised height="70vh" width="80vw"> */}
-          <Heading as="h4" fontWeight="bold" px="25">
+          <Heading as="h4" fontWeight="bold" px="medium">
             Select a technology:
           </Heading>
           <ButtonGroup
-            px="25"
-            paddingBottom="25"
-            paddingTop="5"
+            px="medium"
+            pt="small"
             value={filterValue}
             onChange={setFilterValue}
           >
@@ -520,10 +490,13 @@ export const ResourceScene: FC<ResourceSceneProps> = () => {
             <ButtonItem value="devtool">Dev Tools</ButtonItem>
             <ButtonItem value="other">Other</ButtonItem>
           </ButtonGroup>
-          {/* <Text pl="small">Current selection: {value.join(', ')}</Text> */}
-          <Grid padding="15px" columns={3}>
-            {selectedResources.map((resource, index) => (
-              <Link key={resource.link} href={resource.link} target="_blank">
+          <Grid padding="medium" columns={3}>
+            {selectedResources.map((_k, index) => (
+              <Link
+                href={selectedResources[index].link}
+                target="_blank"
+                key={index}
+              >
                 <Card raised key={index} height="25vh">
                   <CardContent>
                     <Text
@@ -532,11 +505,14 @@ export const ResourceScene: FC<ResourceSceneProps> = () => {
                       fontWeight="semiBold"
                       variant="subdued"
                     >
-                      {resource.type} — {resource.tag}
+                      {selectedResources[index].type} —{' '}
+                      {selectedResources[index].tag}
                     </Text>
-                    <Heading fontSize="xxxlarge">{resource.title}</Heading>
+                    <Heading fontSize="xxxlarge">
+                      {selectedResources[index].title}
+                    </Heading>
                     <Heading as="h4" fontSize="small">
-                      {resource.content as string}
+                      {selectedResources[index].content}
                     </Heading>
                   </CardContent>
                 </Card>
@@ -544,7 +520,6 @@ export const ResourceScene: FC<ResourceSceneProps> = () => {
             ))}
           </Grid>
         </>
-        // </Card>
       )}
     </>
   )
