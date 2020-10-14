@@ -62,21 +62,25 @@ export const ProjectList: FC<ProjectListProps> = ({ projects }) => {
   }
 
   const actions = (project: Project) => {
-    const canModify = project.canUpdate(hacker) || project.canDelete(hacker)
     const isLocked = project.locked
-
-    if (!canModify) return undefined
 
     return (
       <>
-        {project.canUpdate(hacker) && (
+        {project.canUpdate(hacker) ? (
           <ActionListItemAction
             onClick={handleEdit.bind(null, project._id)}
             icon={isLocked ? 'LockClosed' : 'Edit'}
             itemRole="link"
-            disabled={isLocked}
           >
             Edit
+          </ActionListItemAction>
+        ) : (
+          <ActionListItemAction
+            onClick={handleEdit.bind(null, project._id)}
+            icon={isLocked ? 'LockClosed' : 'ModelFile'}
+            itemRole="link"
+          >
+            View
           </ActionListItemAction>
         )}
         {project.canDelete(hacker) && (

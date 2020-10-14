@@ -44,7 +44,7 @@ import {
 } from '@looker/components'
 import { useDispatch, useSelector } from 'react-redux'
 import { useHistory, useRouteMatch } from 'react-router-dom'
-import { Project } from '../../models'
+import { Hacker, Project } from '../../models'
 import { actionMessage } from '../../data/common/actions'
 import {
   currentProjectsRequest,
@@ -64,6 +64,26 @@ import { Routes } from '../../routes/AppRouter'
 import { isLoadingState, getMessageState } from '../../data/common/selectors'
 
 interface ProjectDialogProps {}
+
+const canUpdateProject = (
+  hacker: Hacker,
+  project?: Project,
+  func?: string
+): boolean => {
+  if (hacker.canAdmin() || hacker.canJudge() || hacker.canStaff()) {
+    return true
+  }
+  if (
+    func === 'new' ||
+    (project && project?._user_id === hacker.id && !project.locked)
+  ) {
+    return true
+  }
+  return false
+}
+
+const canLockProject = (hacker: Hacker) =>
+  hacker.canAdmin() || hacker.canJudge() || hacker.canStaff()
 
 export const ProjectForm: FC<ProjectDialogProps> = () => {
   const dispatch = useDispatch()
@@ -85,8 +105,9 @@ export const ProjectForm: FC<ProjectDialogProps> = () => {
   const [locked, setLocked] = useState<boolean>(false)
   const [technologies, setTechnologies] = useState<string[]>([])
   const [isUpdating, setIsUpdating] = useState(false)
-
   const func = match?.params?.func
+  const canUpdate = canUpdateProject(hacker, project, func)
+  const canLock = canUpdateProject(hacker)
 
   useEffect(() => {
     dispatch(currentProjectsRequest())
@@ -156,31 +177,39 @@ export const ProjectForm: FC<ProjectDialogProps> = () => {
     }
   }, [isLoading, isUpdating, history])
 
+  console.log({ canLock: canLockProject, canUpdate })
+
   return (
     <>
       {project && (
         <Form onSubmit={handleSubmit} width="40vw" mt="large">
           <Fieldset legend="Enter your project details">
             <FieldText
+              disabled={!canUpdate}
               required
               name="title"
               label="Title"
               defaultValue={title}
-              onChange={(e: BaseSyntheticEvent) => setTitle(e.target.value)}
+              onChange={(e: BaseSyntheticEvent) => {
+                setTitle(e.target.value)
+              }}
             />
             <FieldTextArea
+              disabled={!canUpdate}
               required
               label="Description"
               name="description"
               defaultValue={description}
-              onChange={(e: BaseSyntheticEvent) =>
+              onChange={(e: BaseSyntheticEvent) => {
                 setDescription(e.target.value)
-              }
+              }}
             />
             <FieldSelect
+              disabled={!canUpdate}
               id="projectType"
               label="Type"
               required
+              defaultValue={projectType}
               options={[
                 { value: 'Open' },
                 { value: 'Closed' },
@@ -191,6 +220,7 @@ export const ProjectForm: FC<ProjectDialogProps> = () => {
               }}
             />
             <FieldToggleSwitch
+              disabled={!canUpdate}
               name="contestant"
               label="Contestant"
               onChange={(e: BaseSyntheticEvent) => {
@@ -199,14 +229,16 @@ export const ProjectForm: FC<ProjectDialogProps> = () => {
               on={contestant}
             />
             <FieldToggleSwitch
+              disabled={!canLock}
               name="locked"
               label="Lock"
               onChange={(e: BaseSyntheticEvent) => {
                 setLocked(e.target.checked)
               }}
-              on={locked}
+              on={locked || false}
             />
             <FieldSelectMulti
+              disabled={!canUpdate}
               id="technologies"
               label="Technologies"
               required
@@ -222,14 +254,12 @@ export const ProjectForm: FC<ProjectDialogProps> = () => {
             />
           </Fieldset>
           <Space>
-            <ButtonOutline
-              type="button"
-              onClick={handleCancel}
-              color="critical"
-            >
-              Cancel
+            <ButtonOutline type="button" onClick={handleCancel}>
+              Return
             </ButtonOutline>
-            <Button type="submit">Save</Button>
+            <Button type="submit" disabled={!canUpdate}>
+              Save
+            </Button>
           </Space>
         </Form>
       )}
