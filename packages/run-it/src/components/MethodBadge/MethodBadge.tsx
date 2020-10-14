@@ -30,7 +30,6 @@ import {
   CompatibleHTMLProps,
   typography,
   TypographyProps,
-  IntentColors,
 } from '@looker/design-tokens'
 import { HttpMethod } from '@looker/sdk-rtl/lib/browser'
 import styled, { css } from 'styled-components'
@@ -54,7 +53,13 @@ interface MethodBadgeProps
 /**
  * Intent names to display the correct color for the badge based on the HTTP method or method status.
  */
-type ApixIntentNames = IntentColors | 'key'
+type ApixIntentNames =
+  | 'critical'
+  | 'inform'
+  | 'key'
+  | 'neutral'
+  | 'positive'
+  | 'warn'
 
 export const pickBadgeIntent = (type: HttpMethod | MethodStatus | string) => {
   switch (type) {

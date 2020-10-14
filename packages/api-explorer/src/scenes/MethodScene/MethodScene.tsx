@@ -107,7 +107,9 @@ export const MethodScene: FC<DocMethodProps> = ({ api }) => {
       {sdk && value && (
         <ComponentsProvider
           globalStyle={false}
-          colors={{ background: colors.text, text: colors.background }}
+          themeCustomizations={{
+            colors: { background: colors.text, text: colors.background },
+          }}
         >
           <Aside width="50rem" bg="background" py="large">
             <RunIt
