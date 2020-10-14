@@ -51,6 +51,11 @@ export const SideNav: FC<SideNavProps> = ({ authorizedRoutes }) => (
           <Link to={Routes.PROJECTS}>Projects</Link>
         </MenuItem>
       )}
+      {authorizedRoutes.includes(Routes.RESOURCES) && (
+        <MenuItem icon="ChartMap">
+          <Link to={Routes.RESOURCES}>Resources</Link>
+        </MenuItem>
+      )}
       {authorizedRoutes.includes(Routes.JUDGING) && (
         <MenuItem icon="FactCheck">
           <Link to={Routes.JUDGING}>Judging</Link>

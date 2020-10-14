@@ -34,6 +34,7 @@ import {
   NotFoundScene,
   ProjectsScene,
   ProjectEditorScene,
+  ResourceScene
 } from '../scenes'
 export enum Routes {
   HOME = '/home',
@@ -43,6 +44,7 @@ export enum Routes {
   CREATE_PROJECT = '/projects/new',
   EDIT_PROJECT = '/projects/:id',
   USERS = '/users',
+  RESOURCES = '/resources'
 }
 
 export interface AppRouterProps {
@@ -60,6 +62,7 @@ export const getAuthorizedRoutes = (
       authorizedRoutes.push(Routes.PROJECTS)
       authorizedRoutes.push(Routes.CREATE_PROJECT)
       authorizedRoutes.push(Routes.EDIT_PROJECT)
+      authorizedRoutes.push(Routes.RESOURCES)
       if (hacker.canAdmin() || hacker.canJudge() || hacker.canStaff()) {
         authorizedRoutes.push(Routes.JUDGING)
       }
@@ -94,11 +97,17 @@ export const AppRouter: FC<AppRouterProps> = ({ authorizedRoutes }) => (
         <JudgingScene />
       </Route>
     )}
+    {authorizedRoutes.includes(Routes.RESOURCES) && (
+      <Route path={Routes.RESOURCES} exact>
+        <ResourceScene />
+      </Route>
+    )}
     {authorizedRoutes.includes(Routes.PROJECTS) && (
       <Route path={Routes.PROJECTS} exact>
         <ProjectsScene />
       </Route>
     )}
+    
     {authorizedRoutes.includes(Routes.CREATE_PROJECT) && (
       <Route path={Routes.CREATE_PROJECT} exact>
         <ProjectEditorScene />

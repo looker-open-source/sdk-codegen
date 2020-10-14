@@ -31,5 +31,5 @@ export interface HeaderProps {
 }
 
 export const Header: FC<HeaderProps> = ({ text }) => (
-  <Heading py="large">{text}</Heading>
+  <Heading fontSize="xxxxlarge" textAlign="center" py="large">{text}</Heading>
 )
