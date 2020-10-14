@@ -472,13 +472,12 @@ export const ResourceScene: FC<ResourceSceneProps> = () => {
       <Loading loading={isLoading} message={'Fetching projects...'} />
       {!isLoading && resources && (
         <>
-          <Heading as="h4" fontWeight="bold" px="25">
+          <Heading as="h4" fontWeight="bold" px="medium">
             Select a technology:
           </Heading>
           <ButtonGroup
-            px="25"
-            paddingBottom="25"
-            paddingTop="5"
+            px="medium"
+            pt="small"
             value={filterValue}
             onChange={setFilterValue}
           >
@@ -491,7 +490,7 @@ export const ResourceScene: FC<ResourceSceneProps> = () => {
             <ButtonItem value="devtool">Dev Tools</ButtonItem>
             <ButtonItem value="other">Other</ButtonItem>
           </ButtonGroup>
-          <Grid padding="15px" columns={3}>
+          <Grid padding="medium" columns={3}>
             {selectedResources.map((_k, index) => (
               <Link
                 href={selectedResources[index].link}

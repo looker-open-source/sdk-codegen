@@ -33,96 +33,83 @@ import {
   Link,
   Badge,
   Box,
-  Flex,
-  FlexItem,
   SpaceVertical,
   ButtonTransparent,
 } from '@looker/components'
+import { Scroller } from '../../components/Scroller'
 
 export const HomeScene: FC = () => (
-  <Card
-    width="50vw"
-    height="70vh"
-    raised
-    overflow="scroll"
-    className="homesection"
-  >
-    <Flex flexDirection="column">
-      <Flex px="15" paddingTop="20px" flexDirection="column">
-        <FlexItem>
+  <>
+    <Box height="40px" />
+    <Card width="50vw" height="75vh" raised>
+      <Scroller>
+        <SpaceVertical p="medium">
           <Heading variant="secondary">Agenda — Oct 15</Heading>
-          <SpaceVertical>
-            <Box width="300px">
-              <ButtonTransparent>9:00am</ButtonTransparent>
-              <Text> Welcome and Kickoff</Text>
-            </Box>
-            <Box width="300px">
-              <ButtonTransparent>9:30am</ButtonTransparent>
-              <Text> Supported Hacking Hours Begin</Text>
-            </Box>
-            <Box width="500px">
-              <ButtonTransparent>10:30am</ButtonTransparent>
-              <Text> Jumpstart sessions broadcast</Text>
-              <Link
-                href="https://looker.com/events/join-2020#agenda"
-                target="_blank"
-              >
-                <Badge mx="10px" intent="inform">
-                  Re-watch
-                </Badge>
-              </Link>
-            </Box>
-            <Box width="500px">
-              <ButtonTransparent>1:00pm</ButtonTransparent>
-              <Text> HandStandup & Stretch</Text>
-              {/* <Badge mx="10px" intent="critical">Now</Badge> */}
-            </Box>
-            <Box width="300px">
-              <ButtonTransparent>2:00pm</ButtonTransparent>
-              <Text> Live feedback lounge</Text>
-            </Box>
-            <Box width="300px">
-              <ButtonTransparent>3:00pm</ButtonTransparent>
-              <Text> Supported Hacking Hours Close</Text>
-            </Box>
-            <Box width="300px">
-              <ButtonTransparent>12:00am</ButtonTransparent>
-              <Text> Midnight Hack Party (optional)</Text>
-            </Box>
-          </SpaceVertical>
-        </FlexItem>
-        <Divider my="20px" mt="medium" appearance="dark" />
-        <FlexItem>
+          <Box width="300px">
+            <ButtonTransparent>9:00am</ButtonTransparent>
+            <Text> Welcome and Kickoff</Text>
+          </Box>
+          <Box width="300px">
+            <ButtonTransparent>9:30am</ButtonTransparent>
+            <Text> Supported Hacking Hours Begin</Text>
+          </Box>
+          <Box width="500px">
+            <ButtonTransparent>10:30am</ButtonTransparent>
+            <Text> Jumpstart sessions broadcast</Text>
+            <Link
+              href="https://looker.com/events/join-2020#agenda"
+              target="_blank"
+            >
+              <Badge mx="10px" intent="inform">
+                Re-watch
+              </Badge>
+            </Link>
+          </Box>
+          <Box width="500px">
+            <ButtonTransparent>1:00pm</ButtonTransparent>
+            <Text> HandStandup & Stretch</Text>
+            {/* <Badge mx="10px" intent="critical">Now</Badge> */}
+          </Box>
+          <Box width="300px">
+            <ButtonTransparent>2:00pm</ButtonTransparent>
+            <Text> Live feedback lounge</Text>
+          </Box>
+          <Box width="300px">
+            <ButtonTransparent>3:00pm</ButtonTransparent>
+            <Text> Supported Hacking Hours Close</Text>
+          </Box>
+          <Box width="300px">
+            <ButtonTransparent>12:00am</ButtonTransparent>
+            <Text> Midnight Hack Party (optional)</Text>
+          </Box>
+          <Divider my="20px" mt="medium" appearance="dark" />
           <Heading variant="secondary">Agenda — Oct 16</Heading>
-          <SpaceVertical>
-            <Box width="300px">
-              <ButtonTransparent>9:00am</ButtonTransparent>
-              <Text> Day 2 Kickoff</Text>
-            </Box>
-            <Box width="300px">
-              <ButtonTransparent>10:30am</ButtonTransparent>
-              <Text> Live feedback lounge</Text>
-            </Box>
-            <Box width="500px">
-              <ButtonTransparent>12:00pm PT</ButtonTransparent>
-              <Text> Final submissions due</Text>
-              {/* <ButtonOutline mx="15" color="key">Submit Here</ButtonOutline> */}
-            </Box>
-            <Box width="400px">
-              <ButtonTransparent>12:05pm PT</ButtonTransparent>
-              <Text> Final HandStandup & Stretch</Text>
-            </Box>
-            <Box width="400px">
-              <ButtonTransparent>2:00pm PT</ButtonTransparent>
-              <Text> Winner Announcements & Demos</Text>
-            </Box>
-            <Box width="300px">
-              <ButtonTransparent>2:30pm PT</ButtonTransparent>
-              <Text> Hacky Hour</Text>
-            </Box>
-          </SpaceVertical>
-        </FlexItem>
-      </Flex>
-    </Flex>
-  </Card>
+          <Box width="300px">
+            <ButtonTransparent>9:00am</ButtonTransparent>
+            <Text> Day 2 Kickoff</Text>
+          </Box>
+          <Box width="300px">
+            <ButtonTransparent>10:30am</ButtonTransparent>
+            <Text> Live feedback lounge</Text>
+          </Box>
+          <Box width="500px">
+            <ButtonTransparent>12:00pm PT</ButtonTransparent>
+            <Text> Final submissions due</Text>
+          </Box>
+          <Box width="400px">
+            <ButtonTransparent>12:05pm PT</ButtonTransparent>
+            <Text> Final HandStandup & Stretch</Text>
+          </Box>
+          <Box width="400px">
+            <ButtonTransparent>2:00pm PT</ButtonTransparent>
+            <Text> Winner Announcements & Demos</Text>
+          </Box>
+          <Box width="300px">
+            <ButtonTransparent>2:30pm PT</ButtonTransparent>
+            <Text> Hacky Hour</Text>
+          </Box>
+        </SpaceVertical>
+      </Scroller>
+    </Card>
+  </>
 )

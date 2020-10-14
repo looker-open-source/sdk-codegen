@@ -24,22 +24,13 @@
 
  */
 
-import React, { FC } from 'react'
-import { Provider } from 'react-redux'
-import { ExtensionProvider } from '@looker/extension-sdk-react'
-import { ComponentsProvider } from '@looker/components'
-import { hot } from 'react-hot-loader/root'
-import { Hackathon } from './Hackathon'
-import { configureStore } from './data/store'
+import styled from 'styled-components'
 
-export const App: FC = hot(() => {
-  return (
-    <Provider store={configureStore()}>
-      <ExtensionProvider>
-        <ComponentsProvider>
-          <Hackathon />
-        </ComponentsProvider>
-      </ExtensionProvider>
-    </Provider>
-  )
-})
+export const Scroller = styled.div`
+  overflow: auto;
+  -ms-overflow-style: none; /* Internet Explorer 10+ */
+  scrollbar-width: none; /* Firefox */
+  -webkit-scrollbar {
+    display: none; /* Safari and Chrome */
+  }
+`
