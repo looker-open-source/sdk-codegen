@@ -89,7 +89,7 @@ export const ProjectForm: FC<ProjectDialogProps> = () => {
   const func = match?.params?.func
 
   useEffect(() => {
-    dispatch(currentProjectsRequest)
+    dispatch(currentProjectsRequest())
   }, [dispatch])
 
   useEffect(() => {

@@ -128,14 +128,14 @@ function* deleteProjectSaga(action: DeleteProjectRequestAction) {
 function* lockProjectsSaga(action: LockProjectsRequestAction) {
   try {
     yield put(beginLoading())
-    yield call(
+    const result = yield call(
       [sheetsSdkHelper, sheetsSdkHelper.lockProjects],
       action.payload.projects,
       action.payload.hackathon,
       action.payload.lock
     )
     yield put(endLoading())
-    yield put(lockProjectsSuccess())
+    yield put(lockProjectsSuccess(result))
   } catch (err) {
     console.error(err)
     yield put(
