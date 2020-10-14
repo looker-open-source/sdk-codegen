@@ -69,6 +69,26 @@ describe('SheetData', () => {
         expect(actual.attended).toEqual(true)
       }
     })
+    test('locks hackathon projects', async () => {
+      const hackathon = data.currentHackathon
+      const projects = data.projects
+      expect(hackathon).toBeDefined()
+      if (hackathon) {
+        const locked = await projects.lock(hackathon, true)
+        expect(locked).toBeDefined()
+        expect(locked.length).toBeGreaterThan(0)
+        locked.forEach((p) => {
+          expect(p.locked).toEqual(true)
+          expect(p._hackathon_id).toEqual(hackathon._id)
+        })
+        const unlocked = await projects.lock(hackathon, false)
+        expect(unlocked).toBeDefined()
+        expect(unlocked.length).toBeGreaterThan(0)
+        unlocked.forEach((p) => {
+          expect(p.locked).toEqual(true)
+          expect(p._hackathon_id).toEqual(hackathon._id)
+        })
+      }
+    })
   })
-  describe('Mock tests', () => {})
 })

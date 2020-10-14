@@ -153,8 +153,7 @@ export class RowModel<T extends IRowModel> implements IRowModel {
         // Assign by position
         values.forEach((val, index) => {
           const key = keys[index]
-          const value = this.typeCast(key, val)
-          this[key] = value
+          this[key] = this.typeCast(key, val)
         })
       } else {
         // Assign by name

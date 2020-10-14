@@ -23,7 +23,7 @@
  SOFTWARE.
 
  */
-import { Projects, Project } from '../../models'
+import { Projects, Project, Hackathon } from '../../models'
 
 export enum Actions {
   ALL_PROJECTS_REQUEST = 'ALL_PROJECTS_REQUEST',
@@ -34,6 +34,8 @@ export enum Actions {
   SAVE_PROJECT_SUCCESS = 'SAVE_PROJECT_SUCCESS',
   DELETE_PROJECT_REQUEST = 'DELETE_PROJECT_REQUEST',
   DELETE_PROJECT_SUCCESS = 'DELETE_PROJECT_SUCCESS',
+  LOCK_PROJECTS_REQUEST = 'LOCK_PROJECTS_REQUEST',
+  LOCK_PROJECTS_SUCCESS = 'LOCK_PROJECTS_SUCCESS',
   ERROR = 'ERROR',
 }
 
@@ -83,6 +85,19 @@ export interface DeleteProjectSuccessAction {
   type: Actions.DELETE_PROJECT_SUCCESS
 }
 
+export interface LockProjectsRequestAction {
+  type: Actions.LOCK_PROJECTS_REQUEST
+  payload: {
+    projects: Projects
+    hackathon: Hackathon
+    lock: boolean
+  }
+}
+
+export interface LockProjectsSuccessAction {
+  type: Actions.LOCK_PROJECTS_SUCCESS
+}
+
 export type ProjectAction =
   | AllProjectsRequestAction
   | AllProjectsSuccessAction
@@ -92,6 +107,8 @@ export type ProjectAction =
   | SaveProjectSuccessAction
   | DeleteProjectRequestAction
   | DeleteProjectSuccessAction
+  | LockProjectsRequestAction
+  | LockProjectsSuccessAction
 
 export const allProjectsRequest = (): AllProjectsRequestAction => ({
   type: Actions.ALL_PROJECTS_REQUEST,
@@ -149,4 +166,21 @@ export const deleteProjectRequest = (
 
 export const deleteProjectSuccess = (): DeleteProjectSuccessAction => ({
   type: Actions.DELETE_PROJECT_SUCCESS,
+})
+
+export const lockProjectsRequest = (
+  projects: Projects,
+  hackathon: Hackathon,
+  lock: boolean
+): LockProjectsRequestAction => ({
+  type: Actions.LOCK_PROJECTS_REQUEST,
+  payload: {
+    projects: projects,
+    hackathon: hackathon,
+    lock: lock,
+  },
+})
+
+export const lockProjectsSuccess = (): LockProjectsSuccessAction => ({
+  type: Actions.LOCK_PROJECTS_SUCCESS,
 })

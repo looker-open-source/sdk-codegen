@@ -86,6 +86,13 @@ export const sheetsSdkHelper = {
   deleteProject: async (projects: Projects, project: Project) => {
     await projects.delete(project)
   },
+  lockProjects: async (
+    projects: Projects,
+    hackathon: Hackathon,
+    lock: boolean
+  ) => {
+    await projects.lock(hackathon, lock)
+  },
   getCurrentHackathon: async (): Promise<Hackathon> => {
     const data = await initSheetData()
     if (data.currentHackathon) {

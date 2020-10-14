@@ -33,6 +33,8 @@ import {
   BeginEditProjectRequestAction,
   beginEditProjectSuccess,
   DeleteProjectRequestAction,
+  LockProjectsRequestAction,
+  lockProjectsSuccess,
   SaveProjectRequestAction,
   saveProjectSuccess,
 } from './actions'
@@ -103,11 +105,34 @@ function* deleteProjectSaga(action: DeleteProjectRequestAction) {
   }
 }
 
+function* lockProjectsSaga(action: LockProjectsRequestAction) {
+  try {
+    yield put(beginLoading())
+    yield call(
+      [sheetsSdkHelper, sheetsSdkHelper.lockProjects],
+      action.payload.projects,
+      action.payload.hackathon,
+      action.payload.lock
+    )
+    yield put(endLoading())
+    yield put(lockProjectsSuccess())
+  } catch (err) {
+    console.error(err)
+    yield put(
+      actionMessage(
+        'A problem occurred while locking the hackathon projects',
+        'critical'
+      )
+    )
+  }
+}
+
 export function* registerProjectsSagas() {
   yield all([
     takeEvery(Actions.ALL_PROJECTS_REQUEST, allProjectsSaga),
     takeEvery(Actions.SAVE_PROJECT_REQUEST, saveProjectSaga),
     takeEvery(Actions.BEGIN_EDIT_PROJECT_REQUEST, editProjectSaga),
     takeEvery(Actions.DELETE_PROJECT_REQUEST, deleteProjectSaga),
+    takeEvery(Actions.LOCK_PROJECTS_REQUEST, lockProjectsSaga),
   ])
 }
