@@ -149,8 +149,9 @@ export interface IWhollySheet<T extends IRowModel> {
    * This routine determines whether to call update or create based on whether the row position is < 1
    *
    * @param model row to save
+   * @param force true to skip checking for outdated values. Defaults to false.
    */
-  save<T extends IRowModel>(model: T): Promise<T>
+  save<T extends IRowModel>(model: T, force?: boolean): Promise<T>
 
   /**
    * Create a row in the sheet
@@ -169,8 +170,9 @@ export interface IWhollySheet<T extends IRowModel> {
    * If the row is checkOutdated an error is thrown
    *
    * @param model row to create in sheet
+   * @param force true to skip checking for outdated values. Defaults to false.
    */
-  update<T extends IRowModel>(model: T): Promise<T>
+  update<T extends IRowModel>(model: T, force?: boolean): Promise<T>
 
   /**
    * Reads the specified row directly from the sheet
@@ -286,9 +288,9 @@ export abstract class WhollySheet<T extends IRowModel>
     return result
   }
 
-  async save<T extends IRowModel>(model: T): Promise<T> {
+  async save<T extends IRowModel>(model: T, force = false): Promise<T> {
     // A model with a non-zero row is an update
-    if (model._row) return await this.update<T>(model)
+    if (model._row) return await this.update<T>(model, force)
     // Create currently returns the row not the model
     return ((await this.create<T>(model)) as unknown) as T
   }
@@ -328,14 +330,14 @@ export abstract class WhollySheet<T extends IRowModel>
     return (this.index[newRow[this.keyColumn]] as unknown) as T
   }
 
-  async update<T extends IRowModel>(model: T): Promise<T> {
+  async update<T extends IRowModel>(model: T, force = false): Promise<T> {
     this.checkId(model)
     if (!model._row)
       throw new SheetError(
         `"${model[this.keyColumn]}" row must be > 0 to update`
       )
 
-    await this.checkOutdated(model)
+    if (!force) await this.checkOutdated(model)
     const rowPos = model._row - 2
     model.prepare()
     const values = this.values(model)

@@ -34,12 +34,13 @@ import {
 } from '@looker/wholly-sheet'
 
 import { ISheetRow, SheetRow } from './SheetRow'
-import { IHacker } from './Hacker'
+import { Hacker, IHacker } from './Hacker'
+import { Hackathon } from './Hackathons'
 
 /** IMPORTANT: properties must be declared in the tab sheet's columnar order, not sorted order */
 export interface IProject extends ISheetRow {
   _user_id: string
-  _registration_id: string
+  _hackathon_id: string
   title: string
   description: string
   date_created: Date
@@ -52,7 +53,7 @@ export interface IProject extends ISheetRow {
 /** IMPORTANT: properties must be declared in the tab sheet's columnar order, not sorted order */
 export class Project extends SheetRow<Project> {
   _user_id = ''
-  _registration_id = ''
+  _hackathon_id = ''
   title = ''
   description = ''
   date_created: Date = noDate
@@ -81,13 +82,12 @@ export class Project extends SheetRow<Project> {
 
   prepare(): Project {
     super.prepare()
-    if (
-      !this._user_id ||
-      !this._registration_id ||
-      this.technologies.length === 0
-    )
+    const errors = this.validate()
+    if (errors)
       throw new SheetError(
-        'User Id (for now), Registration Id, and Technologies must be assigned'
+        Object.values(errors)
+          .map((v) => v.message)
+          .join()
       )
     if (this.date_created === noDate) this.date_created = new Date()
     return this
@@ -97,13 +97,13 @@ export class Project extends SheetRow<Project> {
     const result: RowValidationErrors = {}
     if (!this._user_id) {
       result._user_id = {
-        message: 'User ID (for now) must be assigned',
+        message: 'User ID must be assigned',
         type: 'error',
       }
     }
-    if (!this._registration_id) {
-      result._registration_id = {
-        message: 'Registration ID must be assigned',
+    if (!this._hackathon_id) {
+      result._hackathon_id = {
+        message: 'Hackathon ID must be assigned',
         type: 'error',
       }
     }
@@ -123,10 +123,41 @@ export class Projects extends WhollySheet<Project> {
     public readonly sheets: SheetSDK,
     public readonly table: ITabTable
   ) {
-    super(sheets, 'projects', table) //, { new Hackathon(values?: any)})
+    super(sheets, 'projects', table)
   }
 
   typeRow<Project>(values?: any) {
     return (new Project(values) as unknown) as Project
+  }
+
+  /**
+   * Filter projects by hackathon and/or user
+   * @param hackathon to filter by
+   * @param user to filter by
+   */
+  filterBy(hackathon?: Hackathon, user?: Hacker) {
+    if (hackathon && user)
+      return this.rows.filter(
+        (p) => p._user_id === user.id && p._hackathon_id === hackathon._id
+      )
+    if (hackathon)
+      return this.rows.filter((p) => p._hackathon_id === hackathon._id)
+    if (user) return this.rows.filter((p) => p._user_id === user.id)
+    return this.rows
+  }
+
+  /**
+   * Locks or unlocks all projects for a hackathon
+   * @param hackathon
+   * @param locked true to lock, false to unlock
+   */
+  async lock(hackathon: Hackathon, locked: boolean) {
+    await this.refresh()
+    const projects = this.filterBy(hackathon)
+    for (const project of projects) {
+      project.locked = locked
+      await this.update(project, true)
+    }
+    return projects
   }
 }

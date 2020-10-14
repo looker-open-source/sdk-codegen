@@ -41,7 +41,7 @@ const rawJson = `
       "_id",
       "_updated",
       "_user_id",
-      "_registration_id",
+      "_hackathon_id",
       "title",
       "description",
       "date_created",
@@ -55,7 +55,7 @@ const rawJson = `
         "_row": 2,
         "_id": "a",
         "_user_id": "1",
-        "_registration_id": "a",
+        "_hackathon_id": "a",
         "title": "cool project",
         "description": "a description of some project",
         "date_created": "2020-03-05T15:00:00+00:00",
@@ -68,7 +68,7 @@ const rawJson = `
         "_row": 3,
         "_id": "b",
         "_user_id": "2",
-        "_registration_id": "b",
+        "_hackathon_id": "b",
         "title": "another project",
         "description": "the second project",
         "date_created": "2020-03-05T15:00:00.000000+00:00",
@@ -81,7 +81,7 @@ const rawJson = `
         "_row": 4,
         "_id": "c",
         "_user_id": "3",
-        "_registration_id": "c",
+        "_hackathon_id": "c",
         "title": "HackWeek 2020",
         "description": "Just a third project",
         "date_created": "2020-03-05T15:00:00.000000+00:00",
@@ -216,7 +216,7 @@ describe('WhollySheet', () => {
       const values = projects.values(row)
       const actual = new Project(values)
       expect(actual._id).toEqual('a')
-      expect(actual._registration_id).toEqual('a')
+      expect(actual._hackathon_id).toEqual('a')
       expect(actual.title).toEqual('cool project')
       expect(actual.description).toEqual('a description of some project')
       expect(actual.project_type).toEqual('Invite Only')

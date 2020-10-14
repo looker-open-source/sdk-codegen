@@ -29,7 +29,7 @@ import { ExtensionSDK } from '@looker/extension-sdk'
 import { Looker40SDK } from '@looker/sdk'
 import { SheetData } from '../models/SheetData'
 import { GAuthSession } from '../authToken/gAuthSession'
-import { Hacker } from '../models'
+import { Hackathon, Hacker, Projects } from '../models'
 
 // eslint-disable-next-line @typescript-eslint/no-var-requires
 const tabs = require('../../../wholly-sheet/src/tabs.json')
@@ -64,3 +64,110 @@ mockJudge.roles.add('judge')
 export const mockAdmin = new Hacker(mockSDK)
 mockJudge.user = { id: 4, first_name: 'Looker', last_name: 'Admin' }
 mockAdmin.roles.add('admin')
+
+const rawJson = `
+{
+  "projects": {
+    "header": [
+      "_id",
+      "_updated",
+      "_user_id",
+      "_hackathon_id",
+      "title",
+      "description",
+      "date_created",
+      "project_type",
+      "contestant",
+      "locked",
+      "technologies"
+    ],
+    "rows": [
+      {
+        "_row": 2,
+        "_id": "a",
+        "_user_id": "1",
+        "_hackathon_id": "hack_at_home",
+        "title": "cool project",
+        "description": "a description of some project",
+        "date_created": "2020-03-05T15:00:00+00:00",
+        "project_type": "Invite Only",
+        "contestant": "FALSE",
+        "locked": "FALSE",
+        "technologies": "t1,t2,t3"
+      },
+      {
+        "_row": 3,
+        "_id": "b",
+        "_user_id": "2",
+        "_hackathon_id": "hack_at_home",
+        "title": "another project",
+        "description": "the second project",
+        "date_created": "2020-03-05T15:00:00.000000+00:00",
+        "project_type": "Open",
+        "contestant": "TRUE",
+        "locked": "FALSE",
+        "technologies": "t1,t2,t3"
+      },
+      {
+        "_row": 4,
+        "_id": "c",
+        "_user_id": "3",
+        "_hackathon_id": "JOIN_2019",
+        "title": "HackWeek 2020",
+        "description": "Just a third project",
+        "date_created": "2020-03-05T15:00:00.000000+00:00",
+        "project_type": "Closed",
+        "contestant": "TRUE",
+        "locked": "FALSE",
+        "technologies": "t4,t5"
+      }
+    ]
+  },
+  "hackathons":{
+    "header": [
+      "_id",
+      "_updated",
+      "name",
+      "description",
+      "location",
+      "date",
+      "duration_in_days",
+      "max_team_size",
+      "judging_starts",
+      "judging_stops"
+    ],
+    "rows": [
+      {
+        "_row": 2,
+        "_id": "JOIN_2019",
+        "name": "JOIN in SFO",
+        "description": "First hackathon!",
+        "location": "sfo",
+        "date": "2019-11-05T15:00:00.000000+00:00",
+        "duration_in_days": "1",
+        "max_team_size": "5",
+        "judging_starts": "2019-11-05T18:00:00.000000+00:00",
+        "judging_stops": "2019-11-05T19:00:00.000000+00:00"
+      },
+      {
+        "_row": 3,
+        "_id": "hack_at_home",
+        "name": "Hack@Home",
+        "description": "First global hackathon",
+        "location": "worldwide",
+        "date": "2020-11-09T15:00:00.000000+00:00",
+        "duration_in_days": "1",
+        "max_team_size": "5",
+        "judging_starts": "2020-11-09T18:00:00.000000+00:00",
+        "judging_stops": "2020-11-09T19:00:00.000000+00:00"
+      }
+    ]
+  }
+}`
+
+// TODO remove the duplicate of this from WhollySheet.spec.ts
+const data = JSON.parse(rawJson)
+const hackathonTable = data.hackathons
+const projectTable = data.projects
+export const mockProjects = new Projects(sheetSDK, projectTable)
+export const mockHackathon = new Hackathon(hackathonTable.rows[1])

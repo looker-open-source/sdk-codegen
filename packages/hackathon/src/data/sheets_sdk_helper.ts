@@ -67,6 +67,8 @@ export const sheetsSdkHelper = {
   getProjects: async (): Promise<Projects> => {
     const data = await initSheetData()
     const result = await data.refresh()
+    // TODO filter by hackathon
+    // return result.projects.filterBy(hackathon)
     return result.projects
   },
   createProject: async (

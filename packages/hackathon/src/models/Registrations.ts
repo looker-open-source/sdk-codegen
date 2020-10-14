@@ -26,6 +26,7 @@
 
 import { ITabTable, noDate, SheetSDK, WhollySheet } from '@looker/wholly-sheet'
 import { ISheetRow, SheetRow } from './SheetRow'
+import { Hackathon } from './Hackathons'
 
 /** IMPORTANT: properties must be declared in the tab sheet's columnar order, not sorted order */
 export interface IRegistration extends ISheetRow {
@@ -67,5 +68,9 @@ export class Registrations extends WhollySheet<Registration> {
 
   typeRow<Registration>(values?: any) {
     return (new Registration(values) as unknown) as Registration
+  }
+
+  hackRegs(hackathon: Hackathon) {
+    return this.rows.filter((r) => r.hackathon_id === hackathon._id)
   }
 }
