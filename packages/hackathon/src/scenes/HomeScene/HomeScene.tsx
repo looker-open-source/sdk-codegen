@@ -29,7 +29,7 @@ import { Card, Text, Heading, Divider, Link, Badge, Box, Flex, FlexItem, SpaceVe
 
 
 export const HomeScene: FC = () => 
-    <Card width="50vw" height="70vh" raised overflow="auto">
+    <Card width="50vw" height="70vh" raised overflow="scroll" className="homesection">
       <Flex flexDirection="column">
         {/* <FlexItem alignSelf="center" >
           <Heading textAlign="center" variant="subdued" fontSize="xxlarge">

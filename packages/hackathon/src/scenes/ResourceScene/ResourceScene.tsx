@@ -470,7 +470,7 @@ export const ResourceScene: FC<ResourceSceneProps> = () => {
 
 
               {selectedResources.map((_k, index,value) => (
-                <Link href={selectedResources[index]['link']}>
+                <Link href={selectedResources[index]['link']} target="_blank">
                   <Card raised key={index} height="25vh">
                     <CardContent>
                     <Text

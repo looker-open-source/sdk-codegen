@@ -31,6 +31,8 @@ import { ComponentsProvider } from '@looker/components'
 import { hot } from 'react-hot-loader/root'
 import { Hackathon } from './Hackathon'
 import { configureStore } from './data/store'
+import './App.css';
+
 
 export const App: FC = hot(() => {
   return (
