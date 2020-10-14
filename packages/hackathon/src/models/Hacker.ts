@@ -204,6 +204,7 @@ export class Hackers extends TypedRows<Hacker> {
       'roles',
       // 'permissions',
       'registered',
+      'api3',
       'attended',
     ]
   }
