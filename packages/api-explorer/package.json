@@ -25,7 +25,7 @@
     "watch": "yarn lerna exec --scope @looker/api-explorer --stream 'BABEL_ENV=build babel src --root-mode upward --out-dir lib --source-maps --extensions .ts,.tsx --no-comments --watch'"
   },
   "devDependencies": {
-    "@looker/components-test-utils": "^0.7.36",
+    "@looker/components-test-utils": "^0.9.17",
     "@looker/sdk-codegen-scripts": "^0.3.5-alpha.0",
     "@testing-library/jest-dom": "^5.11.4",
     "@testing-library/react": "^11.0.4",
@@ -45,7 +45,7 @@
     "webpack-dev-server": "^3.10.3"
   },
   "dependencies": {
-    "@looker/components": "^0.9.15",
+    "@looker/components": "^0.9.18",
     "@looker/run-it": "^0.1.4-alpha.0",
     "@looker/sdk": "^0.3.7-beta.0",
     "@looker/sdk-codegen": "^0.1.6-alpha.0",
