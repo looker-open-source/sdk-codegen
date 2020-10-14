@@ -24,14 +24,25 @@
 
  */
 
-import { ITabTable, SheetSDK, WhollySheet } from '@looker/wholly-sheet'
+import {
+  ITabTable,
+  SheetError,
+  SheetSDK,
+  WhollySheet,
+} from '@looker/wholly-sheet'
 import { ISheetRow, SheetRow } from './SheetRow'
+import { SheetData } from './SheetData'
+import { User } from './Users'
 
 /** IMPORTANT: properties must be declared in the tab sheet's columnar order, not sorted order */
 export interface ITeamMember extends ISheetRow {
   user_id: string
   project_id: string
   responsibilities: string
+  /** Associated user record */
+  $user: User
+  /** Calculated property for user */
+  $name: string
 }
 
 /** IMPORTANT: properties must be declared in the tab sheet's columnar order, not sorted order */
@@ -39,23 +50,39 @@ export class TeamMember extends SheetRow<ITeamMember> {
   user_id = ''
   project_id = ''
   responsibilities = ''
+  $user!: User
+
   constructor(values?: any) {
     super()
     // IMPORTANT: this must be done after super() constructor is called so keys are established
     // there may be a way to overload the constructor so this isn't necessary but pattern hasn't been found
     this.assign(values)
   }
+
+  get $name() {
+    if (!this.$user) {
+      throw new SheetError(`$user is not assigned for user_id ${this.user_id}`)
+    }
+    return `${this.$user.first_name} ${this.$user.last_name}`
+  }
 }
 
 export class TeamMembers extends WhollySheet<TeamMember> {
   constructor(
-    public readonly sheets: SheetSDK,
+    public readonly data: SheetData,
     public readonly table: ITabTable
   ) {
-    super(sheets, 'team_members', table)
+    super(
+      data.sheetSDK ? data.sheetSDK : ({} as SheetSDK),
+      'team_members',
+      table
+    )
   }
 
   typeRow<TeamMember>(values?: any) {
-    return (new TeamMember(values) as unknown) as TeamMember
+    const member = new TeamMember(values)
+    const user = this.data?.users.find(member.user_id)
+    if (user) member.$user = user
+    return (member as unknown) as TeamMember
   }
 }

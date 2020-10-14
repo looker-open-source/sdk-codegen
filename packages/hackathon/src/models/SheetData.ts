@@ -35,11 +35,14 @@ import {
   Hackathon,
   Hacker,
   Registration,
+  Users,
+  User,
 } from '.'
 
 export class SheetData {
   private _hackathon: Hackathon | undefined
   protected _sheet!: ISheet
+  users!: Users
   projects!: Projects
   technologies!: Technologies
   registrations!: Registrations
@@ -72,22 +75,32 @@ export class SheetData {
   }
 
   /**
-   * Optionally create and get registration record for user in Hackathon
+   * Optionally create and get registration and user record for user in Hackathon
    * @param hackathon to register
-   * @param user to register
+   * @param hacker to register
    */
   async registerUser(
     hackathon: Hackathon,
-    user: Hacker
+    hacker: Hacker
   ): Promise<Registration> {
     let reg = this.registrations.rows.find(
-      (r) => r._user_id === user.id && r.hackathon_id === hackathon._id
+      (r) => r._user_id === hacker.id && r.hackathon_id === hackathon._id
     )
+    let user = this.users.find(hacker.id)
+    if (!user) {
+      /** create the user tab row for this hacker */
+      user = new User({
+        _id: hacker.id,
+        first_name: hacker.firstName,
+        last_name: hacker.lastName,
+      })
+      await this.users.save(user)
+    }
     if (reg) {
-      user.registration = reg
+      hacker.registration = reg
       return reg
     }
-    reg = new Registration({ _user_id: user.id, hackathon_id: hackathon._id })
+    reg = new Registration({ _user_id: hacker.id, hackathon_id: hackathon._id })
     reg = await this.registrations.save(reg)
     return reg
   }
@@ -111,19 +124,17 @@ export class SheetData {
   load(data: ISheet) {
     this._sheet = data
     if (Object.keys(data).length === 0) return this
-    this.projects = new Projects(this.sheetSDK, data.tabs.projects)
-    this.technologies = new Technologies(this.sheetSDK, data.tabs.technologies)
-    this.registrations = new Registrations(
-      this.sheetSDK,
-      data.tabs.registrations
-    )
+    this.users = new Users(this, data.tabs.users)
+    this.registrations = new Registrations(this, data.tabs.registrations)
+    this.technologies = new Technologies(this, data.tabs.technologies)
+    this.projects = new Projects(this, data.tabs.projects)
     this.projectTechnologies = new ProjectTechnologies(
-      this.sheetSDK,
+      this,
       data.tabs.project_technologies
     )
-    this.hackathons = new Hackathons(this.sheetSDK, data.tabs.hackathons)
-    this.teamMembers = new TeamMembers(this.sheetSDK, data.tabs.team_members)
-    this.judgings = new Judgings(this.sheetSDK, data.tabs.judgings)
+    this.hackathons = new Hackathons(this, data.tabs.hackathons)
+    this.teamMembers = new TeamMembers(this, data.tabs.team_members)
+    this.judgings = new Judgings(this, data.tabs.judgings)
     return this
   }
 

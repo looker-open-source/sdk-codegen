@@ -74,7 +74,7 @@ export const sheetsSdkHelper = {
     await data.projects.refresh()
     const rows = data.projects.filterBy(hackathon)
     // Create a projects object from the filtered rows
-    const result = new Projects(data.sheetSDK, {
+    const result = new Projects(data, {
       header: data.projects.header,
       rows: rows,
     } as ITabTable)

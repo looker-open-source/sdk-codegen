@@ -37,6 +37,7 @@ export {
 export { ITechnology, Technology, Technologies } from './Technologies'
 export { ITeamMember, TeamMember, TeamMembers } from './TeamMembers'
 export { IJudging, Judging, Judgings } from './Judgings'
+export { IUser, User, Users } from './Users'
 export {
   sheetCell,
   sheetHeader,

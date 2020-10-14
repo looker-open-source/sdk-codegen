@@ -26,6 +26,7 @@
 
 import { ITabTable, SheetSDK, WhollySheet } from '@looker/wholly-sheet'
 import { ISheetRow, SheetRow } from './SheetRow'
+import { SheetData } from './SheetData'
 
 /** IMPORTANT: properties must be declared in the tab sheet's columnar order, not sorted order */
 export interface IProjectTechnology extends ISheetRow {
@@ -47,10 +48,14 @@ export class ProjectTechnology extends SheetRow<IProjectTechnology> {
 
 export class ProjectTechnologies extends WhollySheet<ProjectTechnology> {
   constructor(
-    public readonly sheets: SheetSDK,
+    public readonly data: SheetData,
     public readonly table: ITabTable
   ) {
-    super(sheets, 'project_technologies', table)
+    super(
+      data.sheetSDK ? data.sheetSDK : ({} as SheetSDK),
+      'project_technologies',
+      table
+    )
   }
 
   typeRow<ProjectTechnology>(values?: any) {

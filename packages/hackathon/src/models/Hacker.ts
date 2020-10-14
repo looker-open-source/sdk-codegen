@@ -24,7 +24,7 @@
 
  */
 
-import { IRole, IUser } from '@looker/sdk/lib/sdk/4.0/models'
+import { IRole, IUser as ILookerUser } from '@looker/sdk/lib/sdk/4.0/models'
 import { Looker40SDK } from '@looker/sdk/lib/browser'
 import { SheetError, TypedRows } from '@looker/wholly-sheet'
 import { SheetData, Registration, Hackathon } from '.'
@@ -36,7 +36,7 @@ export type UserRole = 'user' | 'staff' | 'judge' | 'admin'
 
 export interface IHacker {
   /** Looker user object */
-  user: IUser
+  user: ILookerUser
   /** ID of the user */
   id: string
   /** First name of user */
@@ -51,6 +51,8 @@ export interface IHacker {
   registered: Date | undefined
   /** virtual property for attended */
   attended: boolean
+  /** Does the hacker have API3 credentials */
+  api3: boolean
 
   /** is this user a staff member? */
   canStaff(): boolean
@@ -62,15 +64,28 @@ export interface IHacker {
   getMe(): Promise<IHacker>
 }
 
+/**
+ * Hacker represents the active Hackathon user.
+ *
+ * It is a merge of their Looker user information with their hackathon registration
+ *
+ * The User object from the sheet is used to avoid rights issues getting all users as a normal Hacker
+ */
 export class Hacker implements IHacker {
-  user: IUser = { id: 0, first_name: 'Unknown', last_name: 'user!' }
+  user: ILookerUser = { id: 0, first_name: 'Unknown', last_name: 'user!' }
   roles = new Set<UserRole>(['user'])
   permissions = new Set<UserPermission>()
+  api3 = false
   registration?: Registration
 
-  constructor(public readonly sdk?: Looker40SDK, user?: IUser) {
+  constructor(public readonly sdk?: Looker40SDK, user?: ILookerUser) {
     if (user) {
       this.user = user
+      if (
+        user.credentials_api3 &&
+        user.credentials_api3.find((c) => !c.is_disabled)
+      )
+        this.api3 = true
     }
   }
 
@@ -176,7 +191,7 @@ export class Hacker implements IHacker {
 }
 
 export class Hackers extends TypedRows<Hacker> {
-  constructor(public sdk: Looker40SDK, users?: IUser[]) {
+  constructor(public sdk: Looker40SDK, users?: ILookerUser[]) {
     super([])
     if (users) this.assign(users)
   }
@@ -193,7 +208,7 @@ export class Hackers extends TypedRows<Hacker> {
     ]
   }
 
-  assign(users: IUser[]) {
+  assign(users: ILookerUser[]) {
     this.rows = users.map((u) => new Hacker(this.sdk, u))
     return this
   }
@@ -214,7 +229,7 @@ export class Hackers extends TypedRows<Hacker> {
     return await this.sdk.ok(
       this.sdk.search_users({
         group_id: group.id?.toString(),
-        fields: 'id,first_name,last_name',
+        fields: 'id,first_name,last_name,credentials_api3,avatar_url',
       })
     )
   }
@@ -222,22 +237,22 @@ export class Hackers extends TypedRows<Hacker> {
   /**
    * Load all hackers, assign their roles and registration record
    * @param data all loaded tabs
-   * @param users to load. If not specified, the users for the currentHackathon will be loaded
+   * @param hackers to load. If not specified, the hackers for the currentHackathon will be loaded
    */
-  async load(data: SheetData, users?: IUser[]) {
+  async load(data: SheetData, hackers?: ILookerUser[]) {
     const hackathon = data.currentHackathon
     if (!hackathon) throw new Error(`No current hackathon was found`)
-    if (!users && this.rows.length === 0) {
+    if (!hackers && this.rows.length === 0) {
       this.assign(await this.findHackUsers(hackathon))
-    } else if (users) {
-      this.assign(users)
+    } else if (hackers) {
+      this.assign(hackers)
     }
     const regs = data.registrations.rows.filter(
       (r) => r.hackathon_id === hackathon._id
     )
-    for (const user of this.rows) {
-      await user.assignRoles()
-      user.findRegistration(hackathon, regs)
+    for (const hacker of this.rows) {
+      await hacker.assignRoles()
+      hacker.findRegistration(hackathon, regs)
     }
     return this
   }

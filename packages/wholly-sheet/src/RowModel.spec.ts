@@ -28,11 +28,13 @@ import { IRowModel, nilCell, noDate, RowModel, stringer } from './RowModel'
 interface ITestRow extends IRowModel {
   toggle: boolean
   score: number
+  $notheader: string
 }
 
 class TestRow extends RowModel<ITestRow> {
   toggle = false
   score = 0
+  $notheader = ''
   constructor(values?: any) {
     super(values)
     if (values) this.assign(values)
@@ -70,10 +72,17 @@ describe('RowModel', () => {
     })
   })
 
-  test('header omits row key', () => {
+  test('header omits row key and $ vars', () => {
     const row = new TestRow()
     const expected = ['_id', '_updated', 'toggle', 'score']
     const actual = row.header()
+    expect(actual).toEqual(expected)
+  })
+
+  test('displayHeaders omits _ and $ vars', () => {
+    const row = new TestRow()
+    const expected = ['toggle', 'score']
+    const actual = row.displayHeader()
     expect(actual).toEqual(expected)
   })
 
@@ -149,7 +158,7 @@ describe('RowModel', () => {
       expect(actual._id).not.toEqual('')
       expect(actual._updated).not.toEqual(noDate)
     })
-    test('updates updated without updating id', () => {
+    test('updates updated without updating id', async () => {
       const id = 'baad-f00d'
       const actual = new TestRow({ row: 1, id })
       actual.prepare()
@@ -157,10 +166,13 @@ describe('RowModel', () => {
       expect(actual._id).toEqual(id)
       expect(actual._updated).not.toEqual(noDate)
       const updated = actual._updated
+      jest.useFakeTimers()
+      await null // match delay from await func1()
+      jest.advanceTimersByTime(1000)
       actual.prepare()
       expect(actual._row).toEqual(1)
       expect(actual._id).toEqual(id)
-      expect(actual._updated).not.toEqual(updated)
+      expect(actual._updated.getTime()).not.toEqual(updated.getTime())
     })
   })
 })

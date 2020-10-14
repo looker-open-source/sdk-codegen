@@ -36,6 +36,7 @@ import {
 import { ISheetRow, SheetRow } from './SheetRow'
 import { Hacker, IHacker } from './Hacker'
 import { Hackathon } from './Hackathons'
+import { SheetData } from './SheetData'
 
 /** IMPORTANT: properties must be declared in the tab sheet's columnar order, not sorted order */
 export interface IProject extends ISheetRow {
@@ -47,6 +48,7 @@ export interface IProject extends ISheetRow {
   project_type: string
   contestant: boolean
   locked: boolean
+  more_info: string
   technologies: string[]
 }
 
@@ -60,6 +62,7 @@ export class Project extends SheetRow<Project> {
   project_type = ''
   contestant = true
   locked = false
+  more_info = ''
   technologies: string[] = []
   constructor(values?: any) {
     super()
@@ -120,10 +123,10 @@ export class Project extends SheetRow<Project> {
 
 export class Projects extends WhollySheet<Project> {
   constructor(
-    public readonly sheets: SheetSDK,
+    public readonly data: SheetData,
     public readonly table: ITabTable
   ) {
-    super(sheets, 'projects', table)
+    super(data.sheetSDK ? data.sheetSDK : ({} as SheetSDK), 'projects', table)
   }
 
   typeRow<Project>(values?: any) {

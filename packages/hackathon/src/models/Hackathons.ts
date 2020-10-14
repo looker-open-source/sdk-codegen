@@ -26,6 +26,7 @@
 
 import { ITabTable, noDate, SheetSDK, WhollySheet } from '@looker/wholly-sheet'
 import { ISheetRow, SheetRow } from './SheetRow'
+import { SheetData } from './SheetData'
 
 /** IMPORTANT: properties must be declared in the tab sheet's columnar order, not sorted order */
 export interface IHackathon extends ISheetRow {
@@ -59,10 +60,10 @@ export class Hackathon extends SheetRow<IHackathon> {
 
 export class Hackathons extends WhollySheet<Hackathon> {
   constructor(
-    public readonly sheets: SheetSDK,
+    public readonly data: SheetData,
     public readonly table: ITabTable
   ) {
-    super(sheets, 'hackathons', table)
+    super(data.sheetSDK ? data.sheetSDK : ({} as SheetSDK), 'hackathons', table)
   }
 
   typeRow<Hackathon>(values?: any) {

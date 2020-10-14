@@ -43,12 +43,21 @@ describe('SheetData', () => {
     test('loads', async () => {
       const actual = data
       expect(actual.hackathons.rows.length).toBeGreaterThan(0)
+      expect(actual.users.rows.length).toBeGreaterThan(0)
       expect(actual.judgings.rows.length).toBeGreaterThan(0)
       expect(actual.projects.rows.length).toBeGreaterThan(0)
       expect(actual.projectTechnologies.rows.length).toBeGreaterThan(0)
       expect(actual.registrations.rows.length).toBeGreaterThan(0)
       expect(actual.teamMembers.rows.length).toBeGreaterThan(0)
       expect(actual.technologies.rows.length).toBeGreaterThan(0)
+      expect(actual.hackathons.checkHeader()).toEqual(true)
+      expect(actual.users.checkHeader()).toEqual(true)
+      expect(actual.judgings.checkHeader()).toEqual(true)
+      expect(actual.projects.checkHeader()).toEqual(true)
+      expect(actual.projectTechnologies.checkHeader()).toEqual(true)
+      expect(actual.registrations.checkHeader()).toEqual(true)
+      expect(actual.teamMembers.checkHeader()).toEqual(true)
+      expect(actual.technologies.checkHeader()).toEqual(true)
     })
     test('gets current hackathon', () => {
       const actual = data.currentHackathon
@@ -85,7 +94,7 @@ describe('SheetData', () => {
         expect(unlocked).toBeDefined()
         expect(unlocked.length).toBeGreaterThan(0)
         unlocked.forEach((p) => {
-          expect(p.locked).toEqual(true)
+          expect(p.locked).toEqual(false)
           expect(p._hackathon_id).toEqual(hackathon._id)
         })
       }

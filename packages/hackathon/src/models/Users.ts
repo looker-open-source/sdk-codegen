@@ -24,58 +24,45 @@
 
  */
 
-import { ITabTable, noDate, SheetSDK, WhollySheet } from '@looker/wholly-sheet'
+import { ITabTable, SheetSDK, WhollySheet } from '@looker/wholly-sheet'
 import { ISheetRow, SheetRow } from './SheetRow'
-import { Hackathon } from './Hackathons'
 import { SheetData } from './SheetData'
 
 /** IMPORTANT: properties must be declared in the tab sheet's columnar order, not sorted order */
-export interface IRegistration extends ISheetRow {
-  _user_id: string
-  hackathon_id: string
-  date_registered: Date
-  attended: boolean
+export interface IUser extends ISheetRow {
+  first_name: string
+  last_name: string
 }
 
-/** IMPORTANT: properties must be declared in the tab sheet's columnar order, not sorted order */
-export class Registration extends SheetRow<IRegistration> {
-  _user_id = ''
-  hackathon_id = ''
-  date_registered: Date = noDate
-  attended = false
+/**
+ * This is a row from the sheet's users table
+ *
+ * Because a "Hacker" cannot load the list of users, this is used to resolve user names needed by
+ * other parts of the UI.
+ *
+ * This user record is created on demand when registering "attendance" when opening the Hackathon app
+ *
+ */
+export class User extends SheetRow<IUser> {
+  first_name = ''
+  last_name = ''
   constructor(values?: any) {
     super()
     // IMPORTANT: this must be done after super() constructor is called so keys are established
     // there may be a way to overload the constructor so this isn't necessary but pattern hasn't been found
     this.assign(values)
   }
-
-  prepare(): IRegistration {
-    super.prepare()
-    if (this.date_registered === noDate) this.date_registered = new Date()
-    // Current behavior is, if this registration record exists, the user attended because they're using the extension
-    this.attended = true
-    return this
-  }
 }
 
-export class Registrations extends WhollySheet<Registration> {
+export class Users extends WhollySheet<User> {
   constructor(
     public readonly data: SheetData,
     public readonly table: ITabTable
   ) {
-    super(
-      data.sheetSDK ? data.sheetSDK : ({} as SheetSDK),
-      'registrations',
-      table
-    )
+    super(data.sheetSDK ? data.sheetSDK : ({} as SheetSDK), 'users', table)
   }
 
-  typeRow<Registration>(values?: any) {
-    return (new Registration(values) as unknown) as Registration
-  }
-
-  hackRegs(hackathon: Hackathon) {
-    return this.rows.filter((r) => r.hackathon_id === hackathon._id)
+  typeRow<User>(values?: any) {
+    return (new User(values) as unknown) as User
   }
 }

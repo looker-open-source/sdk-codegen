@@ -27,6 +27,7 @@
 import { ITabTable, SheetSDK, WhollySheet } from '@looker/wholly-sheet'
 import { ISheetRow, SheetRow } from './SheetRow'
 import { IHacker } from './Hacker'
+import { SheetData } from './SheetData'
 
 /** IMPORTANT: properties must be declared in the tab sheet's columnar order, not sorted order */
 export interface IJudging extends ISheetRow {
@@ -79,10 +80,10 @@ export class Judging extends SheetRow<IJudging> {
 
 export class Judgings extends WhollySheet<Judging> {
   constructor(
-    public readonly sheets: SheetSDK,
+    public readonly data: SheetData,
     public readonly table: ITabTable
   ) {
-    super(sheets, 'judgings', table)
+    super(data.sheetSDK ? data.sheetSDK : ({} as SheetSDK), 'judgings', table)
   }
 
   typeRow<Judging>(values?: any) {

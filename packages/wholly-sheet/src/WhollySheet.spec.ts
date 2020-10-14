@@ -24,152 +24,43 @@
 
  */
 
+import { Hackathon, Project } from '../../hackathon/src/models'
 import {
-  Hackathon,
-  Hackathons,
-  Project,
-  Projects,
-} from '../../hackathon/src/models'
-import { ISheet, SheetSDK } from './SheetSDK'
-import { initSheetSDK } from './testUtils/testUtils'
+  hackathonTab,
+  projectTab,
+  mockHackathons,
+  mockProjects,
+} from '../../hackathon/src/test-data'
 import { nilCell, noDate } from './RowModel'
 
-const rawJson = `
-{
-  "projects": {
-    "header": [
-      "_id",
-      "_updated",
-      "_user_id",
-      "_hackathon_id",
-      "title",
-      "description",
-      "date_created",
-      "project_type",
-      "contestant",
-      "locked",
-      "technologies"
-    ],
-    "rows": [
-      {
-        "_row": 2,
-        "_id": "a",
-        "_user_id": "1",
-        "_hackathon_id": "a",
-        "title": "cool project",
-        "description": "a description of some project",
-        "date_created": "2020-03-05T15:00:00+00:00",
-        "project_type": "Invite Only",
-        "contestant": "FALSE",
-        "locked": "FALSE",
-        "technologies": "t1,t2,t3"
-      },
-      {
-        "_row": 3,
-        "_id": "b",
-        "_user_id": "2",
-        "_hackathon_id": "b",
-        "title": "another project",
-        "description": "the second project",
-        "date_created": "2020-03-05T15:00:00.000000+00:00",
-        "project_type": "Open",
-        "contestant": "TRUE",
-        "locked": "FALSE",
-        "technologies": "t1,t2,t3"
-      },
-      {
-        "_row": 4,
-        "_id": "c",
-        "_user_id": "3",
-        "_hackathon_id": "c",
-        "title": "HackWeek 2020",
-        "description": "Just a third project",
-        "date_created": "2020-03-05T15:00:00.000000+00:00",
-        "project_type": "Closed",
-        "contestant": "TRUE",
-        "locked": "FALSE",
-        "technologies": "t4,t5"
-      }
-    ]
-  },
-  "hackathons":{
-    "header": [
-      "_id",
-      "_updated",
-      "name",
-      "description",
-      "location",
-      "date",
-      "duration_in_days",
-      "max_team_size",
-      "judging_starts",
-      "judging_stops"
-    ],
-    "rows": [
-      {
-        "_row": 2,
-        "_id": "JOIN_2019",
-        "name": "JOIN in SFO",
-        "description": "First hackathon!",
-        "location": "sfo",
-        "date": "2019-11-05T15:00:00.000000+00:00",
-        "duration_in_days": "1",
-        "max_team_size": "5",
-        "judging_starts": "2019-11-05T18:00:00.000000+00:00",
-        "judging_stops": "2019-11-05T19:00:00.000000+00:00"
-      },
-      {
-        "_row": 3,
-        "_id": "NYC_2020",
-        "name": "NY HACK 2020",
-        "description": "First Beast Coast",
-        "location": "nyc",
-        "date": "2020-11-09T15:00:00.000000+00:00",
-        "duration_in_days": "1",
-        "max_team_size": "5",
-        "judging_starts": "2020-11-09T18:00:00.000000+00:00",
-        "judging_stops": "2020-11-09T19:00:00.000000+00:00"
-      }
-    ]
-  }
-}`
+// const addDays = (date: Date, days: number): Date => {
+//   const result = new Date(date)
+//   result.setDate(result.getDate() + days)
+//   return result
+// }
 
-const data = JSON.parse(rawJson)
-const hackathonTable = data.hackathons
-const projectTable = data.projects
-
-const addDays = (date: Date, days: number): Date => {
-  const result = new Date(date)
-  result.setDate(result.getDate() + days)
-  return result
-}
-
-let sheets: SheetSDK
-let hackathons: Hackathons
-let projects: Projects
+// let sheets: SheetSDK
 
 describe('WhollySheet', () => {
-  beforeAll(async () => {
-    sheets = await initSheetSDK()
-  })
+  // beforeAll(async () => {
+  //   sheets = await initSheetSDK()
+  // })
   describe('with hardcoded data', () => {
-    beforeAll(() => {
-      hackathons = new Hackathons(sheets, hackathonTable)
-      projects = new Projects(sheets, projectTable)
-    })
     test('initializes', () => {
+      const hackathons = mockHackathons
       expect(hackathons.rows).toBeDefined()
-      expect(hackathons.rows.length).toEqual(hackathonTable.rows.length)
+      expect(hackathons.rows.length).toEqual(hackathonTab.rows.length)
       hackathons.rows.forEach((row) => expect(row._row).toBeGreaterThan(0))
-      expect(hackathons.header).toEqual(hackathonTable.header)
+      expect(hackathons.header).toEqual(hackathonTab.header)
       expect(Object.entries(hackathons.index).length).toEqual(
-        hackathonTable.rows.length
+        hackathonTab.rows.length
       )
     })
 
     test('gets values in order', () => {
+      const hackathons = mockHackathons
       expect(hackathons.rows).toBeDefined()
-      expect(hackathons.rows.length).toEqual(hackathonTable.rows.length)
+      expect(hackathons.rows.length).toEqual(hackathonTab.rows.length)
       const hackathon = hackathons.rows[0]
       const expected = [
         'JOIN_2019',
@@ -189,8 +80,9 @@ describe('WhollySheet', () => {
     })
 
     test('converts sheet data to typed properties', () => {
+      const hackathons = mockHackathons
       expect(hackathons.rows).toBeDefined()
-      expect(hackathons.rows.length).toEqual(hackathonTable.rows.length)
+      expect(hackathons.rows.length).toEqual(hackathonTab.rows.length)
       const row = hackathons.rows[0]
       const values = hackathons.values(row)
       const actual = new Hackathon(values)
@@ -210,13 +102,14 @@ describe('WhollySheet', () => {
     })
 
     test('converts project sheet to typed project', () => {
+      const projects = mockProjects
       expect(projects.rows).toBeDefined()
-      expect(projects.rows.length).toEqual(projectTable.rows.length)
+      expect(projects.rows.length).toEqual(projectTab.rows.length)
       const row = projects.rows[0]
       const values = projects.values(row)
       const actual = new Project(values)
       expect(actual._id).toEqual('a')
-      expect(actual._hackathon_id).toEqual('a')
+      expect(actual._hackathon_id).toEqual('hack_at_home')
       expect(actual.title).toEqual('cool project')
       expect(actual.description).toEqual('a description of some project')
       expect(actual.project_type).toEqual('Invite Only')
@@ -262,6 +155,7 @@ describe('WhollySheet', () => {
     })
     describe('find', () => {
       test('finds by id', () => {
+        const hackathons = mockHackathons
         const rows = hackathons.rows
         expect(rows).toBeDefined()
         rows.forEach((target) => {
@@ -269,6 +163,7 @@ describe('WhollySheet', () => {
           expect(found).toBeDefined()
           expect(found).toEqual(target)
         })
+        const projects = mockProjects
         const prows = projects.rows
         expect(prows).toBeDefined()
         prows.forEach((target) => {
@@ -278,6 +173,7 @@ describe('WhollySheet', () => {
         })
       })
       test('finds by row', () => {
+        const hackathons = mockHackathons
         const rows = hackathons.rows
         expect(rows).toBeDefined()
         const target = rows[1]
@@ -286,6 +182,7 @@ describe('WhollySheet', () => {
         expect(found).toEqual(target)
       })
       test('finds by search', () => {
+        const hackathons = mockHackathons
         const rows = hackathons.rows
         expect(rows).toBeDefined()
         const target = rows[1]
@@ -297,11 +194,9 @@ describe('WhollySheet', () => {
   })
 
   // jest error handling discussed at https://jestjs.io/docs/en/asynchronous#resolves-rejects
-  describe('error checking', () => {
-    beforeAll(() => {
-      hackathons = new Hackathons(sheets, hackathonTable)
-    })
+  describe.skip('error checking', () => {
     test('update errors on mismatched update', async () => {
+      const hackathons = mockHackathons
       expect(hackathons.rows).toBeDefined()
       expect(hackathons.rows.length).toBeGreaterThan(0)
       const row = hackathons.rows[0]
@@ -316,6 +211,7 @@ describe('WhollySheet', () => {
     })
     describe('bad row value', () => {
       test('update needs a non-zero row', async () => {
+        const hackathons = mockHackathons
         expect(hackathons.rows).toBeDefined()
         expect(hackathons.rows.length).toBeGreaterThan(0)
         const row = hackathons.rows[0]
@@ -329,6 +225,7 @@ describe('WhollySheet', () => {
         }
       })
       test('create needs a zero row', async () => {
+        const hackathons = mockHackathons
         expect(hackathons.sheets).toBeDefined()
         expect(hackathons.rows).toBeDefined()
         expect(hackathons.rows.length).toBeGreaterThan(0)
@@ -341,66 +238,66 @@ describe('WhollySheet', () => {
       })
     })
   })
-  describe('with a live sheet', () => {
-    let doc: ISheet
-    beforeAll(async () => {
-      doc = await sheets.index()
-    })
-    test('initializes DelimArray', () => {
-      const table = doc.tabs.projects
-      expect(table).toBeDefined()
-      expect(table.header).toBeDefined()
-      expect(table.header.length).toBeGreaterThan(0)
-      expect(table.rows).toBeDefined()
-      expect(table.rows.length).toBeGreaterThan(0)
-      const actual = new Projects(sheets, table)
-      expect(actual.header).toBeDefined()
-      expect(actual.header).toEqual(table.header)
-      expect(actual.rows).toBeDefined()
-      expect(actual.rows.length).toEqual(table.rows.length)
-    })
-    test('initializes from sheet', () => {
-      const table = doc.tabs.hackathons
-      expect(table).toBeDefined()
-      expect(table.header).toBeDefined()
-      expect(table.header.length).toBeGreaterThan(0)
-      expect(table.rows).toBeDefined()
-      expect(table.rows.length).toBeGreaterThan(0)
-      const actual = new Hackathons(sheets, table)
-      expect(actual.header).toBeDefined()
-      expect(actual.header).toEqual(table.header)
-      expect(actual.rows).toBeDefined()
-      expect(actual.rows.length).toEqual(table.rows.length)
-    })
-    describe('modifications', () => {
-      test('updates a row', async () => {
-        const table = doc.tabs.hackathons
-        const hackathons = new Hackathons(sheets, table)
-        const row = hackathons.rows[0]
-        // await expect(hackathons.update(row)).rejects.toThrow()
-
-        const actual = await hackathons.update(row)
-        expect(actual).toBeDefined()
-      })
-      test('creates a row', async () => {
-        const table = doc.tabs.hackathons
-        const hackathons = new Hackathons(sheets, table)
-        const nr = hackathons.nextRow
-        const hackathon = new Hackathon()
-        hackathon._id = `HACK${nr}`
-        hackathon.name = `Hackathon${nr}`
-        hackathon.description = `Hackathon description ${nr}`
-        hackathon.location = `Here`
-        hackathon.date = new Date()
-        hackathon.duration_in_days = nr
-        hackathon.max_team_size = nr
-        hackathon.judging_starts = addDays(hackathon.date, nr)
-        hackathon.judging_stops = addDays(hackathon.date, nr + 1)
-
-        const actual = await hackathons.create(hackathon)
-        expect(actual).toBeDefined()
-        expect(actual._id).toEqual(hackathon._id)
-      })
-    })
-  })
+  // describe.skip('with a live sheet', () => {
+  //   let doc: ISheet
+  //   beforeAll(async () => {
+  //     doc = await sheets.index()
+  //   })
+  //   test('initializes array', () => {
+  //     const table = doc.tabs.projects
+  //     expect(table).toBeDefined()
+  //     expect(table.header).toBeDefined()
+  //     expect(table.header.length).toBeGreaterThan(0)
+  //     expect(table.rows).toBeDefined()
+  //     expect(table.rows.length).toBeGreaterThan(0)
+  //     const actual = new Projects(sheetData, sheets, table)
+  //     expect(actual.header).toBeDefined()
+  //     expect(actual.header).toEqual(table.header)
+  //     expect(actual.rows).toBeDefined()
+  //     expect(actual.rows.length).toEqual(table.rows.length)
+  //   })
+  //   test('initializes from sheet', () => {
+  //     const table = doc.tabs.hackathons
+  //     expect(table).toBeDefined()
+  //     expect(table.header).toBeDefined()
+  //     expect(table.header.length).toBeGreaterThan(0)
+  //     expect(table.rows).toBeDefined()
+  //     expect(table.rows.length).toBeGreaterThan(0)
+  //     const actual = new Hackathons(sheets, table)
+  //     expect(actual.header).toBeDefined()
+  //     expect(actual.header).toEqual(table.header)
+  //     expect(actual.rows).toBeDefined()
+  //     expect(actual.rows.length).toEqual(table.rows.length)
+  //   })
+  //   describe('modifications', () => {
+  //     test('updates a row', async () => {
+  //       const table = doc.tabs.hackathons
+  //       const hackathons = new Hackathons(sheets, table)
+  //       const row = hackathons.rows[0]
+  //       // await expect(hackathons.update(row)).rejects.toThrow()
+  //
+  //       const actual = await hackathons.update(row)
+  //       expect(actual).toBeDefined()
+  //     })
+  //     test('creates a row', async () => {
+  //       const table = doc.tabs.hackathons
+  //       const hackathons = new Hackathons(sheets, table)
+  //       const nr = hackathons.nextRow
+  //       const hackathon = new Hackathon()
+  //       hackathon._id = `HACK${nr}`
+  //       hackathon.name = `Hackathon${nr}`
+  //       hackathon.description = `Hackathon description ${nr}`
+  //       hackathon.location = `Here`
+  //       hackathon.date = new Date()
+  //       hackathon.duration_in_days = nr
+  //       hackathon.max_team_size = nr
+  //       hackathon.judging_starts = addDays(hackathon.date, nr)
+  //       hackathon.judging_stops = addDays(hackathon.date, nr + 1)
+  //
+  //       const actual = await hackathons.create(hackathon)
+  //       expect(actual).toBeDefined()
+  //       expect(actual._id).toEqual(hackathon._id)
+  //     })
+  //   })
+  // })
 })

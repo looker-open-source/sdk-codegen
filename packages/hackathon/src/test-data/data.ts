@@ -29,7 +29,7 @@ import { ExtensionSDK } from '@looker/extension-sdk'
 import { Looker40SDK } from '@looker/sdk'
 import { SheetData } from '../models/SheetData'
 import { GAuthSession } from '../authToken/gAuthSession'
-import { Hackathon, Hacker, Projects } from '../models'
+import { Hackathon, Hackathons, Hacker, Projects } from '../models'
 
 // eslint-disable-next-line @typescript-eslint/no-var-requires
 const tabs = require('../../../wholly-sheet/src/tabs.json')
@@ -65,7 +65,8 @@ export const mockAdmin = new Hacker(mockSDK)
 mockJudge.user = { id: 4, first_name: 'Looker', last_name: 'Admin' }
 mockAdmin.roles.add('admin')
 
-const rawJson = `
+// TODO make this a separate file and read it in
+export const rawJson = `
 {
   "projects": {
     "header": [
@@ -79,12 +80,14 @@ const rawJson = `
       "project_type",
       "contestant",
       "locked",
+      "more_info",
       "technologies"
     ],
     "rows": [
       {
         "_row": 2,
         "_id": "a",
+        "_updated": "2020-10-13T18:02:24.511Z",
         "_user_id": "1",
         "_hackathon_id": "hack_at_home",
         "title": "cool project",
@@ -93,11 +96,13 @@ const rawJson = `
         "project_type": "Invite Only",
         "contestant": "FALSE",
         "locked": "FALSE",
+        "more_info": "",
         "technologies": "t1,t2,t3"
       },
       {
         "_row": 3,
         "_id": "b",
+        "_updated": "2020-10-13T18:02:24.511Z",
         "_user_id": "2",
         "_hackathon_id": "hack_at_home",
         "title": "another project",
@@ -106,11 +111,13 @@ const rawJson = `
         "project_type": "Open",
         "contestant": "TRUE",
         "locked": "FALSE",
+        "more_info": "",
         "technologies": "t1,t2,t3"
       },
       {
         "_row": 4,
         "_id": "c",
+        "_updated": "2020-10-13T18:02:24.511Z",
         "_user_id": "3",
         "_hackathon_id": "JOIN_2019",
         "title": "HackWeek 2020",
@@ -119,6 +126,7 @@ const rawJson = `
         "project_type": "Closed",
         "contestant": "TRUE",
         "locked": "FALSE",
+        "more_info": "",
         "technologies": "t4,t5"
       }
     ]
@@ -165,9 +173,9 @@ const rawJson = `
   }
 }`
 
-// TODO remove the duplicate of this from WhollySheet.spec.ts
-const data = JSON.parse(rawJson)
-const hackathonTable = data.hackathons
-const projectTable = data.projects
-export const mockProjects = new Projects(sheetSDK, projectTable)
-export const mockHackathon = new Hackathon(hackathonTable.rows[1])
+export const data = JSON.parse(rawJson)
+export const hackathonTab = data.hackathons
+export const projectTab = data.projects
+export const mockProjects = new Projects(sheetData, projectTab)
+export const mockHackathons = new Hackathons(sheetData, hackathonTab)
+export const mockHackathon = new Hackathon(hackathonTab.rows[1])

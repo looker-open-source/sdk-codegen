@@ -69,6 +69,8 @@ export interface IRowModel extends RowValues {
   keys(): ColumnHeaders
   /** The sheet Column Headers keys for this model */
   header(): ColumnHeaders
+  /** The display columh headers for this model */
+  displayHeader(): ColumnHeaders
   /** Column values for the entire row to write to the GSheet */
   values(): SheetValues
   /** Prepare the row for saving */
@@ -99,7 +101,14 @@ export class RowModel<T extends IRowModel> implements IRowModel {
 
   header(): ColumnHeaders {
     // remove `row`
-    return this.keys().slice(1)
+    return this.keys()
+      .slice(1)
+      .filter((v) => !v.startsWith('$'))
+  }
+
+  displayHeader(): ColumnHeaders {
+    // remove `row`
+    return this.header().filter((v) => !v.startsWith('_'))
   }
 
   prepare(): T {

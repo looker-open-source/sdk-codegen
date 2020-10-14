@@ -23,8 +23,8 @@
  SOFTWARE.
 
  */
-import { ITabTable, SheetSDK } from '@looker/wholly-sheet'
-import { Projects, Project } from '../../models'
+import { ITabTable } from '@looker/wholly-sheet'
+import { Projects, Project, SheetData } from '../../models'
 import { ProjectAction, Actions } from './actions'
 
 // This is the first cut for state and to be honest I dont like it.
@@ -37,7 +37,7 @@ export interface ProjectsState {
 }
 
 const EmptyProjects = new Projects(
-  {} as SheetSDK,
+  {} as SheetData,
   { rows: [], header: [] } as ITabTable
 )
 
