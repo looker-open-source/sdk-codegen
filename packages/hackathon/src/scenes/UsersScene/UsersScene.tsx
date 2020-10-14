@@ -43,8 +43,8 @@ export const UsersScene: FC<UsersSceneProps> = () => {
 
   return (
     <>
-      <Loading loading={isLoading} message={'Fetching hackers...'} />
-      {!isLoading && hackers && (
+      <Loading loading={isLoading} message={'Processing hackers...'} />
+      {hackers && (
         <>
           <HackerList hackers={hackers} />
         </>

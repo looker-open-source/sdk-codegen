@@ -107,6 +107,7 @@ export interface LockProjectsRequestAction {
 
 export interface LockProjectsSuccessAction {
   type: Actions.LOCK_PROJECTS_SUCCESS
+  payload: Projects
 }
 
 export type ProjectAction =
@@ -205,6 +206,9 @@ export const lockProjectsRequest = (
   },
 })
 
-export const lockProjectsSuccess = (): LockProjectsSuccessAction => ({
+export const lockProjectsSuccess = (
+  projects: Projects
+): LockProjectsSuccessAction => ({
   type: Actions.LOCK_PROJECTS_SUCCESS,
+  payload: projects,
 })
