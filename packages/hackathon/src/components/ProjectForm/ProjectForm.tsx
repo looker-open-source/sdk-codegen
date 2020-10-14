@@ -52,6 +52,7 @@ import {
   saveProjectRequest,
 } from '../../data/projects/actions'
 import {
+  getCurrentHackathonState,
   getHackerState,
   getTechnologies,
 } from '../../data/hack_session/selectors'
@@ -68,6 +69,7 @@ export const ProjectForm: FC<ProjectDialogProps> = () => {
   const dispatch = useDispatch()
   const history = useHistory()
   const match = useRouteMatch<{ func: string }>('/projects/:func')
+  const hackathon = useSelector(getCurrentHackathonState)
   const hacker = useSelector(getHackerState)
   const projects = useSelector(getProjectsState)
   const projectsLoaded = useSelector(getProjectsLoadedState)
@@ -95,15 +97,18 @@ export const ProjectForm: FC<ProjectDialogProps> = () => {
       let project
       if (hacker && hacker.registration && hacker.registration._id) {
         if (func === 'new') {
-          project = new Project()
-          project._registration_id = hacker.registration?._id
+          project = new Project({
+            _user_id: hacker.id,
+            _hackathon_id: hackathon ? hackathon._id : '',
+          })
+          project._user_id = hacker.registration?._id
         } else if (projects.rows) {
           project = projects.rows.find((project) => project._id === func)
         }
         if (project) {
-          if (!project._registration_id) {
+          if (!project._hackathon_id) {
             // Self correct missing registration for now
-            project._registration_id = hacker.registration?._id
+            project._hackathon_id = hackathon ? hackathon._id : ''
           }
           setTitle(project.title)
           setDescription(project.description)
