@@ -453,7 +453,9 @@ export const ResourceScene: FC<ResourceSceneProps> = () => {
       {!isLoading && resources && (
         <>
              {/* <Card raised height="70vh" width="80vw"> */}
-              <ButtonGroup padding="25" value={filterValue} onChange={setFilterValue}>
+             <Heading as="h4" fontWeight="bold" px="25">Select a technology:</Heading>
+              <ButtonGroup px="25" paddingBottom="25" paddingTop="5" value={filterValue} onChange={setFilterValue}>
+              
                 <ButtonItem value="embed">Embed</ButtonItem>
                 <ButtonItem value="extension">Extensions</ButtonItem>
                 <ButtonItem value="lookml">LookML</ButtonItem>

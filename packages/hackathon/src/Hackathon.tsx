@@ -77,7 +77,7 @@ export const Hackathon: FC<HackathonProps> = () => {
         <Aside>
           <SideNav authorizedRoutes={authorizedRoutes} />
         </Aside>
-        <Section>
+        <Section style={{overflow: "scroll"}}>
           {hacker && <AppRouter authorizedRoutes={authorizedRoutes} />}
         </Section>
       </Layout>

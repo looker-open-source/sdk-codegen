@@ -38,7 +38,7 @@ export const HomeScene: FC = () =>
         </FlexItem> */}
         <Flex px="15" paddingTop="20px" flexDirection="column" >
           <FlexItem>
-          <Heading variant="secondary">Oct 15</Heading>
+          <Heading variant="secondary">Agenda — Oct 15</Heading>
               <SpaceVertical>
                 <Box width="300px">
                     <ButtonTransparent>9:00am</ButtonTransparent>
@@ -77,7 +77,7 @@ export const HomeScene: FC = () =>
           </FlexItem>
           <Divider my="20px" mt="medium" appearance="dark" />
           <FlexItem>
-          <Heading variant="secondary">Oct 16</Heading>
+          <Heading variant="secondary">Agenda — Oct 16</Heading>
               <SpaceVertical>
                 <Box width="300px">
                     <ButtonTransparent>9:00am</ButtonTransparent>
