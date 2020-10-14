@@ -57,7 +57,7 @@ export const ProjectList: FC<ProjectListProps> = ({ projects }) => {
   const history = useHistory()
   const handleEdit = (projectId: string) => {
     setTimeout(() => {
-      history.push(`/projects/${projectId}/edit`)
+      history.push(`/projects/${projectId}`)
     })
   }
 
@@ -107,22 +107,22 @@ export const ProjectList: FC<ProjectListProps> = ({ projects }) => {
 
     return ''
   }
-  const rows = projects.rows.map((project, idx) => (
-    <span key={idx}>
-      {Math.ceil((idx + 1) / pageSize) === currentPage && (
-        <ActionListItem
-          id={idx.toString()}
-          actions={actions(project as Project)}
-        >
-          {header.map((columnName, _) => (
-            <ActionListItemColumn key={`${idx}.${columnName}`}>
-              {projectCell(project, columnName)}
-            </ActionListItemColumn>
-          ))}
-        </ActionListItem>
-      )}
-    </span>
-  ))
+  const startIdx = (currentPage - 1) * pageSize
+  const rows = projects.rows
+    .slice(startIdx, startIdx + pageSize)
+    .map((project, idx) => (
+      <ActionListItem
+        key={idx}
+        id={idx.toString()}
+        actions={actions(project as Project)}
+      >
+        {header.map((columnName, _) => (
+          <ActionListItemColumn key={`${idx}.${columnName}`}>
+            {projectCell(project, columnName)}
+          </ActionListItemColumn>
+        ))}
+      </ActionListItem>
+    ))
 
   return (
     <>

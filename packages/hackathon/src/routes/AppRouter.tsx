@@ -41,7 +41,7 @@ export enum Routes {
   JUDGING = '/judging',
   PROJECTS = '/projects',
   CREATE_PROJECT = '/projects/new',
-  EDIT_PROJECT = '/projects/:id/edit',
+  EDIT_PROJECT = '/projects/:id',
   USERS = '/users',
 }
 

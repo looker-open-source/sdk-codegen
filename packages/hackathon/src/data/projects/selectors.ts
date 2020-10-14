@@ -29,3 +29,6 @@ import { RootState } from '../root_reducer'
 
 export const getProjectsState = (state: RootState): Projects =>
   state.projectsState.projects
+
+export const getProjectsLoadedState = (state: RootState): boolean =>
+  state.projectsState.projectsLoaded

@@ -45,19 +45,18 @@ export const HackerList: FC<HackerListProps> = ({ hackers }) => {
   const pageSize = 25
   const totalPages = Math.ceil(hackers.rows.length / pageSize)
 
-  const rows = hackers.rows.map((hacker, idx) => (
-    <>
-      {Math.ceil((idx + 1) / pageSize) === currentPage && (
-        <ActionListItem key={idx} id={idx.toString()}>
-          {header.map((columnName, _) => (
-            <ActionListItemColumn key={`${idx}.${columnName}`}>
-              {sheetCell(hacker[columnName])}
-            </ActionListItemColumn>
-          ))}
-        </ActionListItem>
-      )}
-    </>
-  ))
+  const startIdx = (currentPage - 1) * pageSize
+  const rows = hackers.rows
+    .slice(startIdx, startIdx + pageSize)
+    .map((hacker, idx) => (
+      <ActionListItem key={idx} id={idx.toString()}>
+        {header.map((columnName, _) => (
+          <ActionListItemColumn key={`${idx}.${columnName}`}>
+            {sheetCell(hacker[columnName])}
+          </ActionListItemColumn>
+        ))}
+      </ActionListItem>
+    ))
 
   return (
     <>

@@ -83,7 +83,10 @@ export class SheetData {
     let reg = this.registrations.rows.find(
       (r) => r._user_id === user.id && r.hackathon_id === hackathon._id
     )
-    if (reg) return reg
+    if (reg) {
+      user.registration = reg
+      return reg
+    }
     reg = new Registration({ _user_id: user.id, hackathon_id: hackathon._id })
     reg = await this.registrations.save(reg)
     return reg
