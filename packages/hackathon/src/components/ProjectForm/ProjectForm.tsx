@@ -47,7 +47,6 @@ import { useHistory, useRouteMatch } from 'react-router-dom'
 import { Project } from '../../models'
 import { actionMessage } from '../../data/common/actions'
 import {
-  allProjectsRequest,
   currentProjectsRequest,
   beginEditProjectRequest,
   saveProjectRequest,
