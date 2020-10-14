@@ -47,6 +47,7 @@ import { useHistory, useRouteMatch } from 'react-router-dom'
 import { Project } from '../../models'
 import { actionMessage } from '../../data/common/actions'
 import {
+  allProjectsRequest,
   currentProjectsRequest,
   beginEditProjectRequest,
   saveProjectRequest,
@@ -89,7 +90,7 @@ export const ProjectForm: FC<ProjectDialogProps> = () => {
   const func = match?.params?.func
 
   useEffect(() => {
-    dispatch(currentProjectsRequest)
+    dispatch(currentProjectsRequest())
   }, [dispatch])
 
   useEffect(() => {
