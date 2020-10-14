@@ -25,6 +25,7 @@
  */
 
 import React, { FC } from 'react'
+import styled from 'styled-components'
 import {
   Card,
   Text,
@@ -45,16 +46,16 @@ export const HomeScene: FC = () => (
       <Scroller>
         <SpaceVertical p="medium">
           <Heading variant="secondary">Agenda — Oct 15</Heading>
-          <Box width="300px">
-            <ButtonTransparent>9:00am</ButtonTransparent>
+          <Box>
+            <Time width="100px">9:00am</Time>
             <Text> Welcome and Kickoff</Text>
           </Box>
-          <Box width="300px">
-            <ButtonTransparent>9:30am</ButtonTransparent>
+          <Box>
+            <Time>9:30am</Time>
             <Text> Supported Hacking Hours Begin</Text>
           </Box>
-          <Box width="500px">
-            <ButtonTransparent>10:30am</ButtonTransparent>
+          <Box>
+            <Time>10:30am</Time>
             <Text> Jumpstart sessions broadcast</Text>
             <Link
               href="https://looker.com/events/join-2020#agenda"
@@ -65,47 +66,47 @@ export const HomeScene: FC = () => (
               </Badge>
             </Link>
           </Box>
-          <Box width="500px">
-            <ButtonTransparent>1:00pm</ButtonTransparent>
+          <Box>
+            <Time>1:00pm</Time>
             <Text> HandStandup & Stretch</Text>
             {/* <Badge mx="10px" intent="critical">Now</Badge> */}
           </Box>
-          <Box width="300px">
-            <ButtonTransparent>2:00pm</ButtonTransparent>
+          <Box>
+            <Time>2:00pm</Time>
             <Text> Live feedback lounge</Text>
           </Box>
-          <Box width="300px">
-            <ButtonTransparent>3:00pm</ButtonTransparent>
+          <Box>
+            <Time>3:00pm</Time>
             <Text> Supported Hacking Hours Close</Text>
           </Box>
-          <Box width="300px">
-            <ButtonTransparent>12:00am</ButtonTransparent>
+          <Box>
+            <Time>12:00am</Time>
             <Text> Midnight Hack Party (optional)</Text>
           </Box>
-          <Divider my="20px" mt="medium" appearance="dark" />
+          <Divider appearance="dark" />
           <Heading variant="secondary">Agenda — Oct 16</Heading>
-          <Box width="300px">
-            <ButtonTransparent>9:00am</ButtonTransparent>
+          <Box>
+            <Time>9:00am</Time>
             <Text> Day 2 Kickoff</Text>
           </Box>
-          <Box width="300px">
-            <ButtonTransparent>10:30am</ButtonTransparent>
+          <Box>
+            <Time>10:30am</Time>
             <Text> Live feedback lounge</Text>
           </Box>
-          <Box width="500px">
-            <ButtonTransparent>12:00pm PT</ButtonTransparent>
+          <Box>
+            <Time>12:00pm PT</Time>
             <Text> Final submissions due</Text>
           </Box>
-          <Box width="400px">
-            <ButtonTransparent>12:05pm PT</ButtonTransparent>
+          <Box>
+            <Time>12:05pm PT</Time>
             <Text> Final HandStandup & Stretch</Text>
           </Box>
-          <Box width="400px">
-            <ButtonTransparent>2:00pm PT</ButtonTransparent>
+          <Box>
+            <Time>2:00pm PT</Time>
             <Text> Winner Announcements & Demos</Text>
           </Box>
-          <Box width="300px">
-            <ButtonTransparent>2:30pm PT</ButtonTransparent>
+          <Box>
+            <Time>2:30pm PT</Time>
             <Text> Hacky Hour</Text>
           </Box>
         </SpaceVertical>
@@ -113,3 +114,8 @@ export const HomeScene: FC = () => (
     </Card>
   </>
 )
+
+const Time = styled(ButtonTransparent)`
+  width: 100px;
+  margin-right: 20px;
+`
