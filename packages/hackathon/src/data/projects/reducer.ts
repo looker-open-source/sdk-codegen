@@ -52,10 +52,6 @@ export const projectsReducer = (
   action: ProjectAction
 ): ProjectsState => {
   switch (action.type) {
-    case Actions.ALL_PROJECTS_REQUEST:
-      return {
-        ...state,
-      }
     case Actions.ALL_PROJECTS_SUCCESS:
       return {
         ...state,
@@ -99,6 +95,12 @@ export const projectsReducer = (
       return {
         ...state,
         currentProject: undefined,
+      }
+    case Actions.LOCK_PROJECTS_SUCCESS:
+      return {
+        ...state,
+        currentProjects: action.payload,
+        projectsLoaded: true,
       }
     default:
       return state

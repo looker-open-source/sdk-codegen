@@ -25,7 +25,7 @@
  */
 
 import React, { FC } from 'react'
-import { Flex, Spinner } from '@looker/components'
+import { Flex, Spinner, Text } from '@looker/components'
 
 interface LoadingProps {
   loading: boolean
@@ -36,12 +36,12 @@ export const Loading: FC<LoadingProps> = ({
   loading,
   message = 'Loading ...',
 }) => (
-  <>
+  <Flex height="40px" alignItems="center">
     {loading && (
-      <Flex>
+      <>
         <Spinner />
-        {message}
-      </Flex>
+        <Text ml="large">{message}</Text>
+      </>
     )}
-  </>
+  </Flex>
 )

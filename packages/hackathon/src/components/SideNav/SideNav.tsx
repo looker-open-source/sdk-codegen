@@ -34,7 +34,7 @@ export interface SideNavProps {
 }
 
 export const SideNav: FC<SideNavProps> = ({ authorizedRoutes }) => (
-  <Box fontSize="xxlarge">
+  <Box fontSize="xxlarge" mt="40px">
     <MenuList type="none">
       {authorizedRoutes.includes(Routes.HOME) && (
         <MenuItem icon="Home">

@@ -99,8 +99,9 @@ export const sheetsSdkHelper = {
     projects: Projects,
     hackathon: Hackathon,
     lock: boolean
-  ) => {
+  ): Promise<Projects> => {
     await projects.lock(hackathon, lock)
+    return await sheetsSdkHelper.getCurrentProjects(hackathon)
   },
   getCurrentHackathon: async (): Promise<Hackathon> => {
     const data = await initSheetData()

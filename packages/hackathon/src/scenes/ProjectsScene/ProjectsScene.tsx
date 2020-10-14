@@ -70,21 +70,33 @@ export const ProjectsScene: FC<ProjectSceneProps> = () => {
 
   return (
     <>
-      <Loading loading={isLoading} message={'Fetching projects...'} />
-      {!isLoading && projects && (
+      <Loading loading={isLoading} message={'Processing projects...'} />
+      {projects && (
         <>
           <ProjectList projects={projects} />
-          <Space>
-            <Button iconBefore="CircleAdd" onClick={handleAdd}>
+          <Space pt="xlarge">
+            <Button
+              iconBefore="CircleAdd"
+              onClick={handleAdd}
+              disabled={isLoading}
+            >
               Add Project
             </Button>
             <>
               {hackathon && hacker && hacker.canAdmin() && (
                 <>
-                  <Button iconBefore="LockClosed" onClick={handleLock}>
+                  <Button
+                    iconBefore="LockClosed"
+                    onClick={handleLock}
+                    disabled={isLoading}
+                  >
                     Lock Projects
                   </Button>
-                  <Button iconBefore="Edit" onClick={handleUnlock}>
+                  <Button
+                    iconBefore="Edit"
+                    onClick={handleUnlock}
+                    disabled={isLoading}
+                  >
                     Unlock Projects
                   </Button>
                 </>
