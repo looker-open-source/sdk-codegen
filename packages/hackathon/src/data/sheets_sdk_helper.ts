@@ -24,7 +24,7 @@
 
  */
 import { DefaultSettings } from '@looker/sdk-rtl/lib/browser'
-import { ISheet, SheetSDK } from '@looker/wholly-sheet'
+import { ITabTable, SheetSDK } from '@looker/wholly-sheet'
 import { getExtensionSDK } from '@looker/extension-sdk'
 import { getCore40SDK } from '@looker/extension-sdk-react'
 import { SheetData } from '../models/SheetData'
@@ -58,18 +58,27 @@ const initSheetData = async () => {
   const transport = new ExtensionProxyTransport(extSDK, options)
   const gSession = new GAuthSession(extSDK, options, transport)
   const sheetSDK = new SheetSDK(gSession, sheetId)
-  const emptySheet = {} as ISheet
-  sheetData = new SheetData(sheetSDK, emptySheet)
+  const doc = await sheetSDK.index()
+  sheetData = new SheetData(sheetSDK, doc)
   return sheetData
 }
 
 export const sheetsSdkHelper = {
   getProjects: async (): Promise<Projects> => {
     const data = await initSheetData()
-    const result = await data.refresh()
-    // TODO filter by hackathon
-    // return result.projects.filterBy(hackathon)
-    return result.projects
+    await data.projects.refresh()
+    return data.projects
+  },
+  getCurrentProjects: async (hackathon: Hackathon): Promise<Projects> => {
+    const data = await initSheetData()
+    await data.projects.refresh()
+    const rows = data.projects.filterBy(hackathon)
+    // Create a projects object from the filtered rows
+    const result = new Projects(data.sheetSDK, {
+      header: data.projects.header,
+      rows: rows,
+    } as ITabTable)
+    return result
   },
   createProject: async (
     hacker_id: string,
@@ -98,8 +107,8 @@ export const sheetsSdkHelper = {
     if (data.currentHackathon) {
       return data.currentHackathon!
     }
-    const result = await data.refresh()
-    return result.currentHackathon!
+    await data.hackathons.refresh()
+    return data.currentHackathon!
   },
   getHacker: async (): Promise<Hacker> => {
     const lookerSdk = getCore40SDK()
@@ -121,10 +130,9 @@ export const sheetsSdkHelper = {
   },
   getTechnologies: async (): Promise<Technologies> => {
     const data = await initSheetData()
-    if (data.technologies) {
+    if (data.technologies && data.technologies.rows.length > 0)
       return data.technologies
-    }
-    const result = await data.refresh()
-    return result.technologies
+    await data.technologies.refresh()
+    return data.technologies
   },
 }

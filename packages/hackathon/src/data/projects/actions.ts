@@ -28,6 +28,8 @@ import { Projects, Project, Hackathon } from '../../models'
 export enum Actions {
   ALL_PROJECTS_REQUEST = 'ALL_PROJECTS_REQUEST',
   ALL_PROJECTS_SUCCESS = 'ALL_PROJECTS_SUCCESS',
+  CURRENT_PROJECTS_REQUEST = 'CURRENT_PROJECTS_REQUEST',
+  CURRENT_PROJECTS_SUCCESS = 'CURRENT_PROJECTS_SUCCESS',
   BEGIN_EDIT_PROJECT_REQUEST = 'BEGIN_EDIT_PROJECT_REQUEST',
   BEGIN_EDIT_PROJECT_SUCCESS = 'BEGIN_EDIT_PROJECT_SUCCESS',
   SAVE_PROJECT_REQUEST = 'SAVE_PROJECT_REQUEST',
@@ -45,6 +47,15 @@ export interface AllProjectsRequestAction {
 
 export interface AllProjectsSuccessAction {
   type: Actions.ALL_PROJECTS_SUCCESS
+  payload: Projects
+}
+
+export interface CurrentProjectsRequestAction {
+  type: Actions.CURRENT_PROJECTS_REQUEST
+}
+
+export interface CurrentProjectsSuccessAction {
+  type: Actions.CURRENT_PROJECTS_SUCCESS
   payload: Projects
 }
 
@@ -101,6 +112,8 @@ export interface LockProjectsSuccessAction {
 export type ProjectAction =
   | AllProjectsRequestAction
   | AllProjectsSuccessAction
+  | CurrentProjectsRequestAction
+  | CurrentProjectsSuccessAction
   | BeginEditProjectRequestAction
   | BeginEditProjectSuccessAction
   | SaveProjectRequestAction
@@ -118,6 +131,17 @@ export const allProjectsSuccess = (
   projects: Projects
 ): AllProjectsSuccessAction => ({
   type: Actions.ALL_PROJECTS_SUCCESS,
+  payload: projects,
+})
+
+export const currentProjectsRequest = (): CurrentProjectsRequestAction => ({
+  type: Actions.CURRENT_PROJECTS_REQUEST,
+})
+
+export const currentProjectsSuccess = (
+  projects: Projects
+): CurrentProjectsSuccessAction => ({
+  type: Actions.CURRENT_PROJECTS_SUCCESS,
   payload: projects,
 })
 

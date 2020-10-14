@@ -31,10 +31,10 @@ import { useHistory } from 'react-router-dom'
 import { Button, Space } from '@looker/components'
 
 import {
-  allProjectsRequest,
+  currentProjectsRequest,
   lockProjectsRequest,
 } from '../../data/projects/actions'
-import { getProjectsState } from '../../data/projects/selectors'
+import { getCurrentProjectsState } from '../../data/projects/selectors'
 import { isLoadingState } from '../../data/common/selectors'
 import { Loading, ProjectList } from '../../components'
 import { Routes } from '../../routes/AppRouter'
@@ -48,11 +48,11 @@ interface ProjectSceneProps {}
 export const ProjectsScene: FC<ProjectSceneProps> = () => {
   const dispatch = useDispatch()
   useEffect(() => {
-    dispatch(allProjectsRequest())
+    dispatch(currentProjectsRequest())
   }, [dispatch])
   const hacker = useSelector(getHackerState)
   const hackathon = useSelector(getCurrentHackathonState)
-  const projects = useSelector(getProjectsState)
+  const projects = useSelector(getCurrentProjectsState)
   const isLoading = useSelector(isLoadingState)
   const history = useHistory()
 

@@ -31,6 +31,7 @@ import { ProjectAction, Actions } from './actions'
 // It will likely change
 export interface ProjectsState {
   projects: Projects
+  currentProjects: Projects
   projectsLoaded: boolean
   currentProject?: Project
 }
@@ -39,8 +40,10 @@ const EmptyProjects = new Projects(
   {} as SheetSDK,
   { rows: [], header: [] } as ITabTable
 )
+
 const defaultState: Readonly<ProjectsState> = Object.freeze({
   projects: EmptyProjects,
+  currentProjects: EmptyProjects,
   projectsLoaded: false,
 })
 
@@ -57,6 +60,12 @@ export const projectsReducer = (
       return {
         ...state,
         projects: action.payload,
+        projectsLoaded: true,
+      }
+    case Actions.CURRENT_PROJECTS_SUCCESS:
+      return {
+        ...state,
+        currentProjects: action.payload,
         projectsLoaded: true,
       }
     case Actions.BEGIN_EDIT_PROJECT_REQUEST:

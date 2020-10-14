@@ -28,8 +28,9 @@ import { actionMessage, beginLoading, endLoading } from '../common/actions'
 import { sheetsSdkHelper } from '../sheets_sdk_helper'
 import {
   Actions,
-  allProjectsRequest,
+  currentProjectsRequest,
   allProjectsSuccess,
+  currentProjectsSuccess,
   BeginEditProjectRequestAction,
   beginEditProjectSuccess,
   DeleteProjectRequestAction,
@@ -45,6 +46,25 @@ function* allProjectsSaga() {
     const result = yield call([sheetsSdkHelper, sheetsSdkHelper.getProjects])
     yield put(endLoading())
     yield put(allProjectsSuccess(result))
+  } catch (err) {
+    console.error(err)
+    yield put(actionMessage('A problem occurred loading the data', 'critical'))
+  }
+}
+
+function* currentProjectsSaga() {
+  try {
+    yield put(beginLoading())
+    const hackathon = yield call([
+      sheetsSdkHelper,
+      sheetsSdkHelper.getCurrentHackathon,
+    ])
+    const result = yield call(
+      [sheetsSdkHelper, sheetsSdkHelper.getCurrentProjects],
+      hackathon
+    )
+    yield put(endLoading())
+    yield put(currentProjectsSuccess(result))
   } catch (err) {
     console.error(err)
     yield put(actionMessage('A problem occurred loading the data', 'critical'))
@@ -96,7 +116,7 @@ function* deleteProjectSaga(action: DeleteProjectRequestAction) {
       action.payload.projects,
       action.payload.project
     )
-    yield put(allProjectsRequest())
+    yield put(currentProjectsRequest())
   } catch (err) {
     console.error(err)
     yield put(
@@ -130,6 +150,7 @@ function* lockProjectsSaga(action: LockProjectsRequestAction) {
 export function* registerProjectsSagas() {
   yield all([
     takeEvery(Actions.ALL_PROJECTS_REQUEST, allProjectsSaga),
+    takeEvery(Actions.CURRENT_PROJECTS_REQUEST, currentProjectsSaga),
     takeEvery(Actions.SAVE_PROJECT_REQUEST, saveProjectSaga),
     takeEvery(Actions.BEGIN_EDIT_PROJECT_REQUEST, editProjectSaga),
     takeEvery(Actions.DELETE_PROJECT_REQUEST, deleteProjectSaga),

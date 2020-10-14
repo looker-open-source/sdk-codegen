@@ -47,7 +47,7 @@ import { useHistory, useRouteMatch } from 'react-router-dom'
 import { Project } from '../../models'
 import { actionMessage } from '../../data/common/actions'
 import {
-  allProjectsRequest,
+  currentProjectsRequest,
   beginEditProjectRequest,
   saveProjectRequest,
 } from '../../data/projects/actions'
@@ -57,7 +57,7 @@ import {
   getTechnologies,
 } from '../../data/hack_session/selectors'
 import {
-  getProjectsState,
+  getCurrentProjectsState,
   getProjectsLoadedState,
 } from '../../data/projects/selectors'
 import { Routes } from '../../routes/AppRouter'
@@ -71,7 +71,7 @@ export const ProjectForm: FC<ProjectDialogProps> = () => {
   const match = useRouteMatch<{ func: string }>('/projects/:func')
   const hackathon = useSelector(getCurrentHackathonState)
   const hacker = useSelector(getHackerState)
-  const projects = useSelector(getProjectsState)
+  const projects = useSelector(getCurrentProjectsState)
   const projectsLoaded = useSelector(getProjectsLoadedState)
   const isLoading = useSelector(isLoadingState)
   const messageDetail = useSelector(getMessageState)
@@ -89,7 +89,7 @@ export const ProjectForm: FC<ProjectDialogProps> = () => {
   const func = match?.params?.func
 
   useEffect(() => {
-    dispatch(allProjectsRequest())
+    dispatch(currentProjectsRequest)
   }, [dispatch])
 
   useEffect(() => {
