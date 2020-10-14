@@ -45,7 +45,9 @@ import {
 import { useDispatch, useSelector } from 'react-redux'
 import { useHistory, useRouteMatch } from 'react-router-dom'
 import { Project } from '../../models'
+import { actionMessage } from '../../data/common/actions'
 import {
+  allProjectsRequest,
   beginEditProjectRequest,
   saveProjectRequest,
 } from '../../data/projects/actions'
@@ -53,54 +55,73 @@ import {
   getHackerState,
   getTechnologies,
 } from '../../data/hack_session/selectors'
-import { getProjectsState } from '../../data/projects/selectors'
+import {
+  getProjectsState,
+  getProjectsLoadedState,
+} from '../../data/projects/selectors'
 import { Routes } from '../../routes/AppRouter'
 import { isLoadingState, getMessageState } from '../../data/common/selectors'
 
 interface ProjectDialogProps {}
 
 export const ProjectForm: FC<ProjectDialogProps> = () => {
+  const dispatch = useDispatch()
+  const history = useHistory()
   const match = useRouteMatch<{ func: string }>('/projects/:func')
+  const hacker = useSelector(getHackerState)
   const projects = useSelector(getProjectsState)
+  const projectsLoaded = useSelector(getProjectsLoadedState)
+  const isLoading = useSelector(isLoadingState)
   const messageDetail = useSelector(getMessageState)
-  const func = match?.params?.func
-  const [project, setProject] = useState<Project>()
+  const availableTechnologies = useSelector(getTechnologies)
 
+  const [project, setProject] = useState<Project>()
   const [title, setTitle] = useState<string>('')
   const [description, setDescription] = useState<string>('')
   const [projectType, setProjectType] = useState<string>('Open')
   const [contestant, setContestant] = useState<boolean>(false)
   const [locked, setLocked] = useState<boolean>(false)
   const [technologies, setTechnologies] = useState<string[]>([])
-
   const [isUpdating, setIsUpdating] = useState(false)
-  const dispatch = useDispatch()
-  const availableTechnologies = useSelector(getTechnologies)
-  const hacker = useSelector(getHackerState)
-  const isLoading = useSelector(isLoadingState)
-  const history = useHistory()
+
+  const func = match?.params?.func
+
+  useEffect(() => {
+    dispatch(allProjectsRequest())
+  }, [dispatch])
 
   useEffect(() => {
     if (func) {
       let project
-      if (func === 'new') {
-        project = new Project()
-      } else if (projects) {
-        project = projects.rows.find((project) => project._id === func)
-      }
-      if (project) {
-        setProject(project)
-        setTitle(project.title)
-        setDescription(project.description)
-        setProjectType(project.project_type)
-        setContestant(project.contestant)
-        setLocked(project.locked)
-        setTechnologies(project.technologies)
+      if (hacker && hacker.registration && hacker.registration._id) {
+        if (func === 'new') {
+          project = new Project()
+          project._registration_id = hacker.registration?._id
+        } else if (projects.rows) {
+          project = projects.rows.find((project) => project._id === func)
+        }
+        if (project) {
+          if (!project._registration_id) {
+            // Self correct missing registration for now
+            project._registration_id = hacker.registration?._id
+          }
+          setTitle(project.title)
+          setDescription(project.description)
+          setProjectType(project.project_type)
+          setContestant(project.contestant)
+          setLocked(project.locked)
+          setTechnologies(project.technologies)
+          setProject(project)
+        } else {
+          if (projectsLoaded) {
+            dispatch(actionMessage('Invalid project', 'critical'))
+          }
+        }
       } else {
-        history.push(Routes.PROJECTS)
+        dispatch(actionMessage('Hacker has not been registered', 'critical'))
       }
     }
-  }, [projects, func])
+  }, [func, hacker, dispatch, projects, projectsLoaded])
 
   const handleSubmit = (e: FormEvent) => {
     e.preventDefault()

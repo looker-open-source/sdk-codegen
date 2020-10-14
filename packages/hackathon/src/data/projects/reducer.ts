@@ -31,6 +31,7 @@ import { ProjectAction, Actions } from './actions'
 // It will likely change
 export interface ProjectsState {
   projects: Projects
+  projectsLoaded: boolean
   currentProject?: Project
 }
 
@@ -40,6 +41,7 @@ const EmptyProjects = new Projects(
 )
 const defaultState: Readonly<ProjectsState> = Object.freeze({
   projects: EmptyProjects,
+  projectsLoaded: false,
 })
 
 export const projectsReducer = (
@@ -55,6 +57,7 @@ export const projectsReducer = (
       return {
         ...state,
         projects: action.payload,
+        projectsLoaded: true,
       }
     case Actions.BEGIN_EDIT_PROJECT_REQUEST:
       return {
