@@ -338,7 +338,7 @@ export abstract class WhollySheet<T extends IRowModel>
       )
 
     if (!force) await this.checkOutdated(model)
-    const rowPos = model._row - 2
+    let rowPos = -1
     model.prepare()
     const values = this.values(model)
     /** This will throw an error if the request fails */
@@ -346,6 +346,7 @@ export abstract class WhollySheet<T extends IRowModel>
     if (result.values) {
       // This returns an array of values with 1 entry per row value array
       const updateValues = result.values[0]
+      rowPos = this.rows.findIndex((row) => (row._row = model._row))
       this.rows[rowPos].assign(updateValues)
     }
     // ID may have changed?
