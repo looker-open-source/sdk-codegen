@@ -34,7 +34,7 @@ import {
   NotFoundScene,
   ProjectsScene,
   ProjectEditorScene,
-  ResourceScene
+  ResourceScene,
 } from '../scenes'
 export enum Routes {
   HOME = '/home',
@@ -44,7 +44,7 @@ export enum Routes {
   CREATE_PROJECT = '/projects/new',
   EDIT_PROJECT = '/projects/:id',
   USERS = '/users',
-  RESOURCES = '/resources'
+  RESOURCES = '/resources',
 }
 
 export interface AppRouterProps {
@@ -79,8 +79,12 @@ export const getAuthorizedRoutes = (
 
 export const AppRouter: FC<AppRouterProps> = ({ authorizedRoutes }) => (
   <Switch>
-    {authorizedRoutes.includes(Routes.HOME) && (
-      <Redirect from="/" to="/home" exact />
+    {authorizedRoutes.length > 0 && (
+      <Redirect
+        from="/"
+        to={authorizedRoutes.includes(Routes.HOME) ? Routes.HOME : Routes.ADMIN}
+        exact
+      />
     )}
     {authorizedRoutes.includes(Routes.HOME) && (
       <Route path={Routes.HOME} exact>
@@ -107,7 +111,7 @@ export const AppRouter: FC<AppRouterProps> = ({ authorizedRoutes }) => (
         <ProjectsScene />
       </Route>
     )}
-    
+
     {authorizedRoutes.includes(Routes.CREATE_PROJECT) && (
       <Route path={Routes.CREATE_PROJECT} exact>
         <ProjectEditorScene />
@@ -123,8 +127,10 @@ export const AppRouter: FC<AppRouterProps> = ({ authorizedRoutes }) => (
         <UsersScene />
       </Route>
     )}
-    <Route>
-      <NotFoundScene />
-    </Route>
+    {authorizedRoutes.length > 0 && (
+      <Route>
+        <NotFoundScene />
+      </Route>
+    )}
   </Switch>
 )

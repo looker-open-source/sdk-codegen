@@ -42,9 +42,12 @@ import { Hacker } from './models'
 interface HackathonProps {}
 
 const banner = (currentHackathon: any, hacker?: Hacker) => {
-  let result = 'Welcome'
-  if (currentHackathon) result += ` to ${currentHackathon.name},`
-  if (hacker) result += ` ${hacker.firstName}`
+  let result = 'Loading...'
+  if (currentHackathon && hacker) {
+    result = `Welcome to ${currentHackathon.name}, ${hacker.firstName}`
+  } else if (hacker && hacker.firstName !== 'Unknown') {
+    result = `Welcome  ${hacker.firstName}`
+  }
   return result
 }
 
