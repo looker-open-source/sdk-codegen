@@ -46,7 +46,7 @@ describe('ShowResponse', () => {
   })
 
   test('it renders text responses', () => {
-    render(<ShowResponse response={testTextResponse} />)
+    renderWithTheme(<ShowResponse response={testTextResponse} />)
     expect(
       screen.getByText('200: text/plain;charset=utf-8')
     ).toBeInTheDocument()
@@ -89,7 +89,7 @@ describe('ShowResponse', () => {
   })
 
   test('it renders an error for error responses', () => {
-    render(<ShowResponse response={testErrorResponse} />)
+    renderWithTheme(<ShowResponse response={testErrorResponse} />)
     expect(
       screen.getByText(testErrorResponse.statusMessage, { exact: false })
     ).toBeInTheDocument()
