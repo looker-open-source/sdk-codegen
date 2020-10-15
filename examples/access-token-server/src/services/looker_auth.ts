@@ -53,3 +53,23 @@ export const validateLookerCredentials = async (
     return false
   }
 }
+
+export const verifyLookerServer = async () => {
+  const lookerSettings = DefaultSettings()
+  const settings = getSettings()
+  lookerSettings.base_url = settings.lookerServerUrl
+  lookerSettings.verify_ssl = settings.lookerServerVerifySsl
+  const session = new NodeSession(lookerSettings)
+  try {
+    const result = await session.transport.rawRequest('GET', '/versions')
+    return {
+      looker_server_url: settings.lookerServerUrl,
+      looker_server_reachable: true,
+    }
+  } catch (error) {
+    return {
+      looker_server_url: settings.lookerServerUrl,
+      looker_server_reachable: false,
+    }
+  }
+}
