@@ -30,6 +30,12 @@ import {
   ActionListItemAction,
   ActionListItemColumn,
   Pagination,
+  Dialog,
+  DialogHeader,
+  DialogContent,
+  Paragraph,
+  SpaceVertical,
+  TextArea,
   Tooltip,
   Icon,
 } from '@looker/components'
@@ -57,13 +63,24 @@ interface ProjectListProps {
 export const ProjectList: FC<ProjectListProps> = ({ projects }) => {
   const template = projects.rows.length > 0 ? projects.rows[0] : new Project()
   const [currentPage, setCurrentPage] = useState(1)
+  const [moreInfoProject, setMoreInfoProject] = useState<Project>()
   // Select only the displayable columns
   const header = projectListHeaders // projects.displayHeader
   const columns = sheetHeader(header, template)
   const hacker = useSelector(getHackerState)
   const dispatch = useDispatch()
+
   const handleDelete = (project: Project) => {
     dispatch(deleteProjectRequest(projects, project))
+  }
+
+  const openMoreInfo = (project: Project) => {
+    console.log({ project })
+    setMoreInfoProject(project)
+  }
+
+  const closeMoreInfo = () => {
+    setMoreInfoProject(undefined)
   }
   columns[0].widthPercent = 3
   columns[0].title = (
@@ -96,6 +113,14 @@ export const ProjectList: FC<ProjectListProps> = ({ projects }) => {
 
     return (
       <>
+        {project.more_info && project.more_info !== '\0' && (
+          <ActionListItemAction
+            onClick={openMoreInfo.bind(null, project)}
+            icon="CircleInfo"
+          >
+            More Information
+          </ActionListItemAction>
+        )}
         {project.canUpdate(hacker) ? (
           <ActionListItemAction
             onClick={handleEdit.bind(null, project._id)}
@@ -166,6 +191,21 @@ export const ProjectList: FC<ProjectListProps> = ({ projects }) => {
         pages={totalPages}
         onChange={setCurrentPage}
       />
+      <Dialog isOpen={!!moreInfoProject} onClose={closeMoreInfo}>
+        <DialogHeader>{moreInfoProject?.title}</DialogHeader>
+        <DialogContent>
+          <SpaceVertical>
+            <Paragraph>
+              Copy the link below and paste into a new browser window to see
+              additional information about the project
+            </Paragraph>
+            <TextArea
+              readOnly={true}
+              value={moreInfoProject?.more_info}
+            ></TextArea>
+          </SpaceVertical>
+        </DialogContent>
+      </Dialog>
     </>
   )
 }

@@ -41,6 +41,7 @@ import {
   Button,
   ButtonOutline,
   Space,
+  ValidationMessages,
 } from '@looker/components'
 import { useDispatch, useSelector } from 'react-redux'
 import { useHistory, useRouteMatch } from 'react-router-dom'
@@ -85,6 +86,24 @@ const canUpdateProject = (
 const canLockProject = (hacker: Hacker) =>
   hacker.canAdmin() || hacker.canJudge() || hacker.canStaff()
 
+const validate = (moreInfo: string): ValidationMessages | undefined => {
+  // TODO improve validation
+  if (
+    // Go figure with this but its happening!
+    !moreInfo ||
+    moreInfo === '\0' ||
+    moreInfo.trim() === '' ||
+    moreInfo.startsWith('http://') ||
+    moreInfo.startsWith('https://')
+  ) {
+    return undefined
+  } else {
+    return {
+      moreInfo: { type: 'error', message: 'More info must be a URL' },
+    }
+  }
+}
+
 export const ProjectForm: FC<ProjectDialogProps> = () => {
   const dispatch = useDispatch()
   const history = useHistory()
@@ -104,10 +123,12 @@ export const ProjectForm: FC<ProjectDialogProps> = () => {
   const [contestant, setContestant] = useState<boolean>(false)
   const [locked, setLocked] = useState<boolean>(false)
   const [technologies, setTechnologies] = useState<string[]>([])
+  const [moreInfo, setMoreInfo] = useState<string>('')
   const [isUpdating, setIsUpdating] = useState(false)
   const func = match?.params?.func
   const canUpdate = canUpdateProject(hacker, project, func)
   const canLock = canUpdateProject(hacker)
+  const validationMessages = validate(moreInfo)
 
   useEffect(() => {
     dispatch(currentProjectsRequest())
@@ -137,6 +158,7 @@ export const ProjectForm: FC<ProjectDialogProps> = () => {
           setContestant(project.contestant)
           setLocked(project.locked)
           setTechnologies(project.technologies)
+          setMoreInfo(project.more_info)
           setProject(project)
         } else {
           if (projectsLoaded) {
@@ -151,6 +173,9 @@ export const ProjectForm: FC<ProjectDialogProps> = () => {
 
   const handleSubmit = (e: FormEvent) => {
     e.preventDefault()
+    if (validate(moreInfo)) {
+      return
+    }
     if (project) {
       project.title = title
       project.description = description
@@ -158,6 +183,7 @@ export const ProjectForm: FC<ProjectDialogProps> = () => {
       project.contestant = contestant
       project.locked = locked
       project.technologies = technologies
+      project.more_info = moreInfo
       if (func === 'new') {
         dispatch(saveProjectRequest(hacker.id, projects, project))
       } else {
@@ -177,12 +203,15 @@ export const ProjectForm: FC<ProjectDialogProps> = () => {
     }
   }, [isLoading, isUpdating, history])
 
-  console.log({ canLock: canLockProject, canUpdate })
-
   return (
     <>
       {project && (
-        <Form onSubmit={handleSubmit} width="40vw" mt="large">
+        <Form
+          onSubmit={handleSubmit}
+          width="40vw"
+          mt="large"
+          validationMessages={validationMessages}
+        >
           <Fieldset legend="Enter your project details">
             <FieldText
               disabled={!canUpdate}
@@ -250,6 +279,15 @@ export const ProjectForm: FC<ProjectDialogProps> = () => {
               defaultValues={technologies}
               onChange={(values: string[] = []) => {
                 setTechnologies(values)
+              }}
+            />
+            <FieldText
+              disabled={!canUpdate}
+              name="moreInfo"
+              label="More information"
+              defaultValue={moreInfo}
+              onChange={(e: BaseSyntheticEvent) => {
+                setMoreInfo(e.target.value)
               }}
             />
           </Fieldset>
