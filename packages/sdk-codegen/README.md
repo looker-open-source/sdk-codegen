@@ -6,9 +6,9 @@ This package contains the OpenAPI analysis files, and all source code necessary 
 
 This package includes the following language generators:
 
-- Typescript
-- Python
-- Kotlin
-- Swift
-
-See the [SDK Codegen project](https://github.com/looker-open-source/sdk-codegen) repository for more information.
+- [Typescript](src/typescript.gen.ts)
+- [Python](src/python.gen.ts)
+- [Kotlin](src/kotlin.gen.ts)
+- [Swift](src/swift.gen.ts)
+- [C#](src/csharp.gen.ts)
+- [Go](src/go.gen.ts)
