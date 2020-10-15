@@ -31,13 +31,22 @@ import {
   ActionListItemColumn,
   Pagination,
   Tooltip,
+  Icon,
 } from '@looker/components'
 import { useSelector, useDispatch } from 'react-redux'
 import { useHistory } from 'react-router-dom'
-import { Icon } from '@looker/components'
 import { Project, Projects, sheetCell, sheetHeader } from '../../models'
 import { getHackerState } from '../../data/hack_session/selectors'
 import { deleteProjectRequest } from '../../data/projects/actions'
+
+const projectListHeaders = [
+  'locked',
+  'contestant',
+  'title',
+  'description',
+  'project_type',
+  'technologies',
+]
 
 interface ProjectListProps {
   projects: Projects
@@ -47,13 +56,25 @@ export const ProjectList: FC<ProjectListProps> = ({ projects }) => {
   const template = projects.rows.length > 0 ? projects.rows[0] : new Project()
   const [currentPage, setCurrentPage] = useState(1)
   // Select only the displayable columns
-  const header = projects.displayHeader
+  const header = projectListHeaders // projects.displayHeader
   const columns = sheetHeader(header, template)
   const hacker = useSelector(getHackerState)
   const dispatch = useDispatch()
   const handleDelete = (project: Project) => {
     dispatch(deleteProjectRequest(projects, project))
   }
+  columns[0].widthPercent = 3
+  columns[0].title = (
+    <Tooltip content={'Is this project locked?'}>
+      <Icon name="LockClosed" />
+    </Tooltip>
+  )
+  columns[1].widthPercent = 3
+  columns[1].title = (
+    <Tooltip content={'Eligible for prizing?'}>
+      <Icon name="FactCheck" />
+    </Tooltip>
+  )
   const history = useHistory()
   const handleEdit = (projectId: string) => {
     setTimeout(() => {
