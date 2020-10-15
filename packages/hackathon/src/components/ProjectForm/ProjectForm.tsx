@@ -177,7 +177,7 @@ export const ProjectForm: FC<ProjectDialogProps> = () => {
     }
   }, [isLoading, isUpdating, history])
 
-  console.log({ canLock: canLockProject, canUpdate })
+  // console.log({ canLock: canLockProject, canUpdate })
 
   return (
     <>

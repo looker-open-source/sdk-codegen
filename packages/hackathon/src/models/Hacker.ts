@@ -53,6 +53,8 @@ export interface IHacker {
   attended: boolean
   /** Does the hacker have API3 credentials */
   api3: boolean
+  /** user registration record */
+  registration: Registration
 
   /** is this user a staff member? */
   canStaff(): boolean
@@ -76,7 +78,7 @@ export class Hacker implements IHacker {
   roles = new Set<UserRole>(['user'])
   permissions = new Set<UserPermission>()
   api3 = false
-  registration?: Registration
+  registration: Registration
 
   constructor(public readonly sdk?: Looker40SDK, user?: ILookerUser) {
     if (user) {
@@ -97,10 +99,14 @@ export class Hacker implements IHacker {
   protected static async getRoles(sdk: Looker40SDK): Promise<void> {
     if (this.staffRole && this.judgeRole && this.adminRole) return
 
-    const roles = await sdk.ok(sdk.all_roles({}))
-    this.staffRole = roles.find((r) => r.name?.match(/hackathon staff/i))
-    this.judgeRole = roles.find((r) => r.name?.match(/hackathon judge/i))
-    this.adminRole = roles.find((r) => r.name?.match(/admin/i))
+    try {
+      const roles = await sdk.ok(sdk.all_roles({}))
+      this.staffRole = roles.find((r) => r.name?.match(/hackathon staff/i))
+      this.judgeRole = roles.find((r) => r.name?.match(/hackathon judge/i))
+      this.adminRole = roles.find((r) => r.name?.match(/admin/i))
+    } catch {
+      // user doesn't have rights, so the user role will default to 'user' only
+    }
   }
 
   /**
@@ -152,7 +158,7 @@ export class Hacker implements IHacker {
       (r: Registration) =>
         r._user_id === this.id && r.hackathon_id === hackathon._id
     )
-    this.registration = reg
+    if (reg) this.registration = reg
   }
 
   get id(): string {
