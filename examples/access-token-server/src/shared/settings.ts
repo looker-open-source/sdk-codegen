@@ -45,6 +45,14 @@ const env = process.env as ProcessEnv
 class Settings {
   private _serviceAccountCredentials: Credentials
   constructor() {
+    if (process.env.LOOKERSDK_CLIENT_ID) {
+      console.warn('LOOKERSDK_CLIENT_ID env set. Please remove!')
+      delete process.env.LOOKERSDK_CLIENT_ID
+    }
+    if (process.env.LOOKERSDK_CLIENT_SECRET) {
+      console.warn('LOOKERSDK_CLIENT_SECRET env set. Please remove!')
+      delete process.env.LOOKERSDK_CLIENT_SECRET
+    }
     const missingEnvVars = Object.keys(envVarNames)
       .filter((key) => key !== 'SERVER_PORT')
       .reduce((accum, key) => {

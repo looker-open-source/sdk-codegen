@@ -45,7 +45,7 @@ const router = Router()
 router.post('/access_token', async (req, res) => {
   const { client_id, client_secret, scope } = req.body
   try {
-    console.log('enter POST /access_token')
+    console.log('POST /access_token')
     const accessTokenData = await handleTokenRequest(
       client_id,
       client_secret,
@@ -53,11 +53,8 @@ router.post('/access_token', async (req, res) => {
     )
     res.setHeader('Content-Type', 'application/json')
     res.send(JSON.stringify(accessTokenData))
-    console.log(
-      `leave POST /access_token - have access token ${!!accessTokenData.access_token}`
-    )
   } catch (err) {
-    console.log(`fail POST /access_token ${err.message}`)
+    console.log(`POST /access_token ${err.message}`)
     if (err instanceof AccessTokenError) {
       res.statusMessage = err.message
       res.sendStatus(400)
