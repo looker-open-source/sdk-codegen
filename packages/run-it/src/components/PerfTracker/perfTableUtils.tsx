@@ -179,7 +179,7 @@ const urlColumn = (value: string) => {
   const path = `${url.pathname}${url.search}`
   return (
     <>
-      <Tooltip content={value} c>
+      <Tooltip content={value}>
         <UrlText mb="0" pt="0" fontSize="xsmall">
           {path}
         </UrlText>
