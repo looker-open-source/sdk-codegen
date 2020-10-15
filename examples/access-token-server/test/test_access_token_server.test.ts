@@ -42,8 +42,8 @@ describe('access_token_server', () => {
     expect(json.build_date).toBeDefined()
     expect(json.git_commit).toBeDefined()
     expect(json.access_token_server_provider_label).toBeDefined()
-    expect(json.looker_server_url).toBeDefined()
-    expect(json.looker_server_reachable).toBeTruthy()
+    expect(json.looker_server_status.url).toBeDefined()
+    expect(json.looker_server_status.reachable).toBeTruthy()
   })
 
   test.each([

@@ -49,7 +49,7 @@ router.get('/status', async (req, res) => {
     status.errors.push('failed to read or parse status.json file')
   }
   const serverStatus = await verifyLookerServer()
-  status = { ...status, ...serverStatus }
+  status.looker_server_status = serverStatus
   res.setHeader('Content-Type', 'application/json')
   res.status(statusCode).send(JSON.stringify(status))
 })
