@@ -30,11 +30,33 @@ import {
   ActionListItemColumn,
   Pagination,
 } from '@looker/components'
+// import { getExtensionSDK } from '@looker/extension-sdk'
 import { Hacker, Hackers, sheetCell, sheetHeader } from '../../models'
 
 interface HackerListProps {
   hackers: Hackers
 }
+
+// TODO click on user id should go to the user editing admin page
+
+// getExtensionSDK().openBrowserWindow(project.more_info, '_blank')
+// const handleMoreInfo = (project: Project) => {
+//   getExtensionSDK().openBrowserWindow(project.more_info, '_blank')
+//   dispatch(deleteProjectRequest(projects, project))
+// }
+// const handleMoreInfo = (project: Project) => {
+//   getExtensionSDK().openBrowserWindow(project.more_info, '_blank')
+// }
+//
+// const hackerCell = (key: string, value: any) => {
+//   if (key !== 'id') return sheetCell(value)
+//   const userLink = `/admin/users/${value}/edit`
+//   return (
+//     <Link key={key} href={userLink} target="_blank">
+//       {value}
+//     </Link>
+//   )
+// }
 
 export const HackerList: FC<HackerListProps> = ({ hackers }) => {
   const [currentPage, setCurrentPage] = useState(1)

@@ -26,7 +26,7 @@
 
 import { ITabTable, SheetError, SheetSDK, SheetValues } from './SheetSDK'
 
-import { ColumnHeaders, IRowModel, stringer } from './RowModel'
+import { ColumnHeaders, IRowModel, rowPosition, stringer } from './RowModel'
 
 /**
  * Compare dates without running into numeric comparison problems
@@ -183,8 +183,9 @@ export interface IWhollySheet<T extends IRowModel> {
   /**
    * Delete a row if it still exists
    * @param model to delete
+   * @param force true to skip checking for outdated values. Defaults to false.
    */
-  delete<T extends IRowModel>(model: T): Promise<boolean>
+  delete<T extends IRowModel>(model: T, force?: boolean): Promise<boolean>
 
   /**
    * If the row is out of date, it throws a SheetError
@@ -225,9 +226,13 @@ export abstract class WhollySheet<T extends IRowModel>
 
   typeRows<T extends IRowModel>(rows: SheetValues): T[] {
     const result: T[] = []
+    let pos = 1
 
     rows.forEach((r) => {
       const row: T = this.typeRow(r)
+      pos++
+      // fixup row position?
+      if (!row[rowPosition]) row[rowPosition] = pos
       result.push(row)
     })
 
@@ -378,8 +383,8 @@ export abstract class WhollySheet<T extends IRowModel>
     return this._displayHeader
   }
 
-  async delete<T extends IRowModel>(model: T) {
-    await this.checkOutdated(model)
+  async delete<T extends IRowModel>(model: T, force = false) {
+    if (!force) await this.checkOutdated(model)
     const values = await this.sheets.rowDelete(this.name, model._row)
     this.rows = this.typeRows(values)
     this.createIndex()
@@ -431,7 +436,6 @@ export abstract class WhollySheet<T extends IRowModel>
     // eslint-disable-next-line @typescript-eslint/ban-ts-ignore
     // @ts-ignore
     this.rows = rows
-    this.rows.forEach((r, index) => (r._row = index + 2))
     this.createIndex()
     return rows
   }

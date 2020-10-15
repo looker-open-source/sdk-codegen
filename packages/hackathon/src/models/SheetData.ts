@@ -124,16 +124,18 @@ export class SheetData {
   load(data: ISheet) {
     this._sheet = data
     if (Object.keys(data).length === 0) return this
+    // The initialization order is significant here, and should remain this way
+    // unless there's a specific reason to change it
     this.users = new Users(this, data.tabs.users)
     this.registrations = new Registrations(this, data.tabs.registrations)
     this.technologies = new Technologies(this, data.tabs.technologies)
+    this.hackathons = new Hackathons(this, data.tabs.hackathons)
+    this.teamMembers = new TeamMembers(this, data.tabs.team_members)
     this.projects = new Projects(this, data.tabs.projects)
     this.projectTechnologies = new ProjectTechnologies(
       this,
       data.tabs.project_technologies
     )
-    this.hackathons = new Hackathons(this, data.tabs.hackathons)
-    this.teamMembers = new TeamMembers(this, data.tabs.team_members)
     this.judgings = new Judgings(this, data.tabs.judgings)
     return this
   }

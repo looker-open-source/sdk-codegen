@@ -25,6 +25,7 @@
  */
 
 import {
+  IRowModel,
   ITabTable,
   noDate,
   RowValidationErrors,
@@ -37,6 +38,7 @@ import { ISheetRow, SheetRow } from './SheetRow'
 import { Hacker, IHacker } from './Hacker'
 import { Hackathon } from './Hackathons'
 import { SheetData } from './SheetData'
+import { TeamMember } from './TeamMembers'
 
 /** IMPORTANT: properties must be declared in the tab sheet's columnar order, not sorted order */
 export interface IProject extends ISheetRow {
@@ -50,6 +52,8 @@ export interface IProject extends ISheetRow {
   locked: boolean
   more_info: string
   technologies: string[]
+  $team: TeamMember[]
+  findMember(hacker: Hacker): TeamMember | undefined
 }
 
 /** IMPORTANT: properties must be declared in the tab sheet's columnar order, not sorted order */
@@ -64,10 +68,12 @@ export class Project extends SheetRow<Project> {
   locked = false
   more_info = ''
   technologies: string[] = []
+  $team: TeamMember[] = []
+
   constructor(values?: any) {
     super()
-    // IMPORTANT: this must be done after super() constructor is called so keys are established
-    // there may be a way to overload the constructor so this isn't necessary but pattern hasn't been found
+    // IMPORTANT: assign must be called after the super() constructor is called so keys are established
+    // there may be a way to overload the constructor so this isn't necessary but that pattern hasn't been found
     this.assign(values)
   }
 
@@ -76,7 +82,10 @@ export class Project extends SheetRow<Project> {
   }
 
   canDelete(user: IHacker): boolean {
-    return super.canDelete(user) || this._user_id === user.id
+    return (
+      super.canDelete(user) ||
+      (this._user_id === user.id && this.$team.length === 0)
+    )
   }
 
   canUpdate(user: IHacker): boolean {
@@ -119,6 +128,10 @@ export class Project extends SheetRow<Project> {
     if (Object.keys(result).length === 0) return undefined
     return result
   }
+
+  findMember(hacker: Hacker) {
+    return this.$team.find((m) => m.user_id === hacker.id)
+  }
 }
 
 export class Projects extends WhollySheet<Project> {
@@ -127,10 +140,13 @@ export class Projects extends WhollySheet<Project> {
     public readonly table: ITabTable
   ) {
     super(data.sheetSDK ? data.sheetSDK : ({} as SheetSDK), 'projects', table)
+    this.rows.forEach((project) => this.getMembers(project))
   }
 
   typeRow<Project>(values?: any) {
-    return (new Project(values) as unknown) as Project
+    const project = new Project(values)
+    // this.getMembers(project)
+    return (project as unknown) as Project
   }
 
   /**
@@ -149,6 +165,13 @@ export class Projects extends WhollySheet<Project> {
     return this.rows
   }
 
+  getMembers(project: Project): Project {
+    project.$team = this.data.teamMembers.rows.filter(
+      (m) => m.project_id === project._id
+    )
+    return project
+  }
+
   /**
    * Locks or unlocks all projects for a hackathon
    * @param hackathon
@@ -162,5 +185,46 @@ export class Projects extends WhollySheet<Project> {
       await this.update(project, true)
     }
     return projects
+  }
+
+  /** Join a project team if slots are available */
+  async join(project: Project, hacker: Hacker) {
+    const hackathon = this.data.hackathons.find(project._hackathon_id)
+    if (!hackathon)
+      throw new SheetError(`Hackathon ${project._hackathon_id} was not found`)
+    if (project.$team.length >= hackathon.max_team_size)
+      throw new SheetError(
+        `Hackathon ${hackathon.name} only allows ${hackathon.max_team_size} team members per project`
+      )
+    let member = project.findMember(hacker)
+    /** already in the project, nothing to do */
+    if (member) return project
+    member = new TeamMember({ user_id: hacker.id, project_id: project._id })
+    await this.data.teamMembers.save(member)
+    // Reload because maybe there's another different member now
+    this.getMembers(project)
+    return project
+  }
+
+  /** Leave a project if on the team */
+  async leave(project: Project, hacker: Hacker) {
+    const member = project.findMember(hacker)
+    if (!member) return project // nothing to do
+    await this.data.teamMembers.delete(member)
+    // Reload because maybe there's another different member now
+    this.getMembers(project)
+
+    return project
+  }
+
+  async delete<T extends IRowModel>(model: T) {
+    if (await super.delete(model)) {
+      const team = Array.from(model.$team).reverse() as TeamMember[]
+      for (const member of team) {
+        // Delete last row first
+        await this.data.teamMembers.delete(member)
+      }
+    }
+    return true
   }
 }
