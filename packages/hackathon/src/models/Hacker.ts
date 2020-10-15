@@ -78,7 +78,7 @@ export class Hacker implements IHacker {
   roles = new Set<UserRole>(['user'])
   permissions = new Set<UserPermission>()
   api3 = false
-  registration: Registration
+  registration!: Registration
 
   constructor(public readonly sdk?: Looker40SDK, user?: ILookerUser) {
     if (user) {
