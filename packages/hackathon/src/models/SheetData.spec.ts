@@ -25,23 +25,15 @@
  */
 
 import { ISheet, noDate, SheetSDK } from '@looker/wholly-sheet'
-import { Looker40SDK } from '@looker/sdk'
 import { initSheetSDK } from '../../../wholly-sheet/src/testUtils/testUtils'
-import { SheetData, Project, Hacker, Hackathon } from '.'
+import { SheetData, Project, Hackathon } from '.'
+import { mockAHacker, mockAJudge } from '../test-data/mocks'
 
 let sheetSDK: SheetSDK
 let doc: ISheet
 let data: SheetData
 
 const waitABit = 300000
-
-const hackUser = (id: number): Hacker => {
-  const mockSDK = {} as Looker40SDK
-
-  const result = new Hacker(mockSDK)
-  result.user = { id: id, first_name: 'Ordinary', last_name: 'Joe' }
-  return result
-}
 
 const testProject = (hackathon: Hackathon) => {
   return new Project({
@@ -90,7 +82,7 @@ describe('SheetData', () => {
       const hackathon = data.currentHackathon
       expect(hackathon).toBeDefined()
       if (hackathon) {
-        const mockUser = hackUser(1)
+        const mockUser = mockAHacker(1)
         const actual = await data.registerUser(hackathon, mockUser)
         expect(actual._user_id).toEqual(mockUser.id)
         expect(actual.hackathon_id).toEqual(hackathon._id)
@@ -133,14 +125,10 @@ describe('SheetData', () => {
             const projects = data.projects
             expect(projects).toBeDefined()
             expect(projects.rows).toBeDefined()
-            expect(projects.rows.length).toBeDefined()
             let project = await data.projects.save(testProject(hackathon))
             expect(project.$team.length).toEqual(0)
-            const users = data.users.rows
-            expect(users).toBeDefined()
-            expect(users.length).toBeGreaterThan(hackathon.max_team_size)
             for (let i = 0; i <= hackathon.max_team_size; i++) {
-              const hacker = hackUser(i)
+              const hacker = mockAHacker(i)
               if (i < hackathon.max_team_size) {
                 project = await projects.join(project, hacker)
                 expect(project.$team.length).toEqual(i + 1)
@@ -170,20 +158,16 @@ describe('SheetData', () => {
             const projects = data.projects
             expect(projects).toBeDefined()
             expect(projects.rows).toBeDefined()
-            expect(projects.rows.length).toBeDefined()
             let project = await data.projects.save(testProject(hackathon))
             expect(project.$team.length).toEqual(0)
-            const users = data.users.rows
-            expect(users).toBeDefined()
-            expect(users.length).toBeGreaterThan(hackathon.max_team_size)
             for (let i = 0; i < hackathon.max_team_size; i++) {
-              const hacker = hackUser(i)
+              const hacker = mockAHacker(i)
               project = await projects.join(project, hacker)
             }
             expect(project.$team.length).toEqual(hackathon.max_team_size)
 
             for (let i = hackathon.max_team_size - 1; i >= 0; i--) {
-              const hacker = hackUser(i)
+              const hacker = mockAHacker(i)
               const member = project.findMember(hacker)
               expect(member).toBeDefined()
               expect(member?.user_id).toEqual(hacker.id)
@@ -202,6 +186,72 @@ describe('SheetData', () => {
         },
         waitABit
       )
+    })
+    describe('Judgings', () => {
+      test(
+        'add a judge only once',
+        async () => {
+          const hackathon = data.currentHackathon
+          if (hackathon) {
+            const projects = data.projects
+            expect(projects).toBeDefined()
+            expect(projects.rows).toBeDefined()
+            let project = await data.projects.save(testProject(hackathon))
+            expect(project.$judgings.length).toEqual(0)
+            const judge = mockAJudge(1)
+            project = await projects.addJudge(project, judge)
+            expect(project.$judgings.length).toEqual(1)
+            project = await projects.addJudge(project, judge)
+            expect(project.$judgings.length).toEqual(1)
+            const cleanup = await projects.delete(project)
+            expect(cleanup).toEqual(true)
+            expect(
+              data.judgings.find(project._id, 'project_id')
+            ).toBeUndefined()
+          }
+        },
+        waitABit
+      )
+      test(
+        'delete a judge only once',
+        async () => {
+          const hackathon = data.currentHackathon
+          if (hackathon) {
+            const projects = data.projects
+            expect(projects).toBeDefined()
+            expect(projects.rows).toBeDefined()
+            let project = await data.projects.save(testProject(hackathon))
+            expect(project.$judgings.length).toEqual(0)
+            const judge = mockAJudge(1)
+            project = await projects.addJudge(project, judge)
+            expect(project.$judgings.length).toEqual(1)
+            project = await projects.deleteJudge(project, mockAJudge(2))
+            expect(project.$judgings.length).toEqual(1)
+            project = await projects.deleteJudge(project, judge)
+            expect(project.$judgings.length).toEqual(0)
+            const cleanup = await projects.delete(project)
+            expect(cleanup).toEqual(true)
+            expect(
+              data.judgings.find(project._id, 'project_id')
+            ).toBeUndefined()
+          }
+        },
+        waitABit
+      )
+      test('invalid judge rejected', async () => {
+        const projects = data.projects
+        expect(projects).toBeDefined()
+        expect(projects.rows).toBeDefined()
+        expect(projects.rows.length).toBeGreaterThan(0)
+        const hacker = mockAHacker(1)
+        const project = projects.rows[0]
+        try {
+          await projects.addJudge(project, hacker)
+          expect('we').toEqual('should not be here')
+        } catch (e) {
+          expect(e.message).toMatch(/is not a judge/)
+        }
+      })
     })
   })
 })

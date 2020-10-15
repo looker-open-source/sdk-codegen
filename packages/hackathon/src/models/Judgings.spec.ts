@@ -25,7 +25,7 @@
  */
 import { ISheet, SheetSDK } from '@looker/wholly-sheet'
 import { initSheetSDK } from '../../../wholly-sheet/src/testUtils/testUtils'
-import { mockAdmin, mockJudge, mockStaff, mockUser } from '../test-data/data'
+import { mockAdmin, mockJudge, mockStaff, mockUser } from '../test-data'
 import { Judging } from './Judgings'
 import { SheetData } from './SheetData'
 

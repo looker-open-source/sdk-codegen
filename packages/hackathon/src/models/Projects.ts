@@ -39,6 +39,7 @@ import { Hacker, IHacker } from './Hacker'
 import { Hackathon } from './Hackathons'
 import { SheetData } from './SheetData'
 import { TeamMember } from './TeamMembers'
+import { Judging } from './Judgings'
 
 /** IMPORTANT: properties must be declared in the tab sheet's columnar order, not sorted order */
 export interface IProject extends ISheetRow {
@@ -54,6 +55,7 @@ export interface IProject extends ISheetRow {
   technologies: string[]
   $team: TeamMember[]
   findMember(hacker: Hacker): TeamMember | undefined
+  findJudging(hacker: Hacker): Judging | undefined
 }
 
 /** IMPORTANT: properties must be declared in the tab sheet's columnar order, not sorted order */
@@ -69,6 +71,7 @@ export class Project extends SheetRow<Project> {
   more_info = ''
   technologies: string[] = []
   $team: TeamMember[] = []
+  $judgings: Judging[] = []
 
   constructor(values?: any) {
     super()
@@ -132,6 +135,10 @@ export class Project extends SheetRow<Project> {
   findMember(hacker: Hacker) {
     return this.$team.find((m) => m.user_id === hacker.id)
   }
+
+  findJudging(hacker: Hacker) {
+    return this.$judgings.find((j) => j.user_id === hacker.id)
+  }
 }
 
 export class Projects extends WhollySheet<Project> {
@@ -167,6 +174,13 @@ export class Projects extends WhollySheet<Project> {
 
   getMembers(project: Project): Project {
     project.$team = this.data.teamMembers.rows.filter(
+      (m) => m.project_id === project._id
+    )
+    return project
+  }
+
+  getJudgings(project: Project): Project {
+    project.$judgings = this.data.judgings.rows.filter(
       (m) => m.project_id === project._id
     )
     return project
@@ -217,12 +231,35 @@ export class Projects extends WhollySheet<Project> {
     return project
   }
 
+  async addJudge(project: Project, hacker: Hacker) {
+    if (!hacker.canJudge())
+      throw new SheetError(`${hacker.name} is not a judge`)
+    if (project.$judgings.find((j) => j.user_id === hacker.id)) return project
+    const judging = new Judging({ user_id: hacker.id, project_id: project._id })
+    await this.data.judgings.save(judging)
+    this.getJudgings(project)
+    return project
+  }
+
+  async deleteJudge(project: Project, hacker: Hacker) {
+    const judging = project.findJudging(hacker)
+    if (!judging) return project
+    await this.data.judgings.delete(judging)
+    this.getJudgings(project)
+    return project
+  }
+
   async delete<T extends IRowModel>(model: T) {
     if (await super.delete(model)) {
       const team = Array.from(model.$team).reverse() as TeamMember[]
       for (const member of team) {
         // Delete last row first
         await this.data.teamMembers.delete(member)
+      }
+      const judging = Array.from(model.$judgings).reverse() as Judging[]
+      for (const j of judging) {
+        // Delete last row first
+        await this.data.judgings.delete(j)
       }
     }
     return true

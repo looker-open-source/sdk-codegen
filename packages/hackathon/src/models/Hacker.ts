@@ -43,6 +43,8 @@ export interface IHacker {
   firstName: string
   /** Last name of user */
   lastName: string
+  /** Full name of user */
+  name: string
   /** Roles for this user */
   roles: Set<UserRole>
   /** Permissions for this user */
@@ -89,6 +91,10 @@ export class Hacker implements IHacker {
       )
         this.api3 = true
     }
+  }
+
+  get name() {
+    return `${this.firstName} ${this.lastName}`
   }
 
   /** Initialize static cached values */
@@ -205,8 +211,7 @@ export class Hackers extends TypedRows<Hacker> {
   get displayHeaders() {
     return [
       'id',
-      'firstName',
-      'lastName',
+      'name',
       'roles',
       // 'permissions',
       'registered',

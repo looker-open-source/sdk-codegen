@@ -30,7 +30,7 @@ import {
   mockProjects,
   mockStaff,
   mockUser,
-} from '../test-data/data'
+} from '../test-data'
 import { Project } from './Projects'
 
 describe('Projects', () => {

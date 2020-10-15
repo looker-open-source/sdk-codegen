@@ -26,8 +26,8 @@
 
 import { Hackathon, Project } from '../../hackathon/src/models'
 import {
-  hackathonTab,
-  projectTab,
+  mockHackathonTab,
+  mockProjectTab,
   mockHackathons,
   mockProjects,
 } from '../../hackathon/src/test-data'
@@ -49,18 +49,18 @@ describe('WhollySheet', () => {
     test('initializes', () => {
       const hackathons = mockHackathons
       expect(hackathons.rows).toBeDefined()
-      expect(hackathons.rows.length).toEqual(hackathonTab.rows.length)
+      expect(hackathons.rows.length).toEqual(mockHackathonTab.rows.length)
       hackathons.rows.forEach((row) => expect(row._row).toBeGreaterThan(0))
-      expect(hackathons.header).toEqual(hackathonTab.header)
+      expect(hackathons.header).toEqual(mockHackathonTab.header)
       expect(Object.entries(hackathons.index).length).toEqual(
-        hackathonTab.rows.length
+        mockHackathonTab.rows.length
       )
     })
 
     test('gets values in order', () => {
       const hackathons = mockHackathons
       expect(hackathons.rows).toBeDefined()
-      expect(hackathons.rows.length).toEqual(hackathonTab.rows.length)
+      expect(hackathons.rows.length).toEqual(mockHackathonTab.rows.length)
       const hackathon = hackathons.rows[0]
       const expected = [
         'JOIN_2019',
@@ -82,7 +82,7 @@ describe('WhollySheet', () => {
     test('converts sheet data to typed properties', () => {
       const hackathons = mockHackathons
       expect(hackathons.rows).toBeDefined()
-      expect(hackathons.rows.length).toEqual(hackathonTab.rows.length)
+      expect(hackathons.rows.length).toEqual(mockHackathonTab.rows.length)
       const row = hackathons.rows[0]
       const values = hackathons.values(row)
       const actual = new Hackathon(values)
@@ -104,7 +104,7 @@ describe('WhollySheet', () => {
     test('converts project sheet to typed project', () => {
       const projects = mockProjects
       expect(projects.rows).toBeDefined()
-      expect(projects.rows.length).toEqual(projectTab.rows.length)
+      expect(projects.rows.length).toEqual(mockProjectTab.rows.length)
       const row = projects.rows[0]
       const values = projects.values(row)
       const actual = new Project(values)

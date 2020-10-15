@@ -23,16 +23,14 @@
  SOFTWARE.
 
  */
+export { sheetData, mockProjects, mockHackathon, mockHackathons } from './data'
+
 export {
-  sheetData,
-  data,
-  hackathonTab,
-  projectTab,
-  mockProjects,
   mockUser,
   mockJudge,
   mockAdmin,
   mockStaff,
-  mockHackathon,
-  mockHackathons,
-} from './data'
+  mockTabs,
+  mockHackathonTab,
+  mockProjectTab,
+} from './mocks'
