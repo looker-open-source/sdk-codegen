@@ -44,6 +44,7 @@ export const getGoogleAccessToken = async (
   })
   const accessToken = await client.getAccessToken()
   if (!accessToken.token) {
+    console.error('google access token request failed', accessToken)
     throw new AccessTokenError('invalid environment')
   }
   const tokenInfo = await client.getTokenInfo(accessToken.token)
