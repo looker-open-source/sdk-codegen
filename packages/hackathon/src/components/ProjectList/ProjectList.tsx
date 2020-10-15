@@ -38,6 +38,7 @@ import {
   TextArea,
   Tooltip,
   Icon,
+  Span,
 } from '@looker/components'
 import { useSelector, useDispatch } from 'react-redux'
 import { useHistory } from 'react-router-dom'
@@ -97,9 +98,27 @@ export const ProjectList: FC<ProjectListProps> = ({ projects }) => {
   columns[2].widthPercent = 25 // title
   columns[3].widthPercent = 40 // description
   columns[4].widthPercent = 5 // project type
+  columns[4].title = (
+    <SpaceVertical gap="xxsmall">
+      <Span>Project</Span>
+      <Span>Type</Span>
+    </SpaceVertical>
+  )
   columns[5].widthPercent = 15 // technologies
   columns[6].widthPercent = 5 // team count
+  columns[6].title = (
+    <SpaceVertical gap="xxsmall">
+      <Span>Team</Span>
+      <Span>Count</Span>
+    </SpaceVertical>
+  )
   columns[7].widthPercent = 5 // judge count
+  columns[7].title = (
+    <SpaceVertical gap="xxsmall">
+      <Span>Judge</Span>
+      <Span>Count</Span>
+    </SpaceVertical>
+  )
 
   const history = useHistory()
   const handleEdit = (projectId: string) => {

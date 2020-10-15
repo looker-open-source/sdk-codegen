@@ -23,6 +23,7 @@
  SOFTWARE.
 
  */
+
 import React, {
   BaseSyntheticEvent,
   FC,
@@ -83,7 +84,7 @@ const canUpdateProject = (
   return false
 }
 
-const canLockProject = (hacker: Hacker) =>
+export const canLockProject = (hacker: Hacker) =>
   hacker.canAdmin() || hacker.canJudge() || hacker.canStaff()
 
 const validate = (moreInfo: string): ValidationMessages | undefined => {
