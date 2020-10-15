@@ -33,6 +33,7 @@ import React from 'react'
  */
 export const asTitle = (value: string) => {
   if (!value) return ''
+  value = value.replace('$', '')
   value = value.replace(/(([-_ ]+)[a-z])|([-_ ]+)/gi, ($1) => {
     return $1.toLocaleUpperCase().replace(/([-_ ]+)/gi, ' ')
   })

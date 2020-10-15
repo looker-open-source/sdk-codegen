@@ -27,7 +27,7 @@
 import * as fs from 'fs'
 import path from 'path'
 import { Looker40SDK } from '@looker/sdk'
-import { Hacker } from '../models'
+import { Hackathon, Hacker, Project, SheetData } from '../models'
 
 const mockSDK = {} as Looker40SDK
 
@@ -64,4 +64,21 @@ export const mockAJudge = (id: number): Hacker => {
   const result = mockAHacker(id)
   result.roles.add('judge')
   return result
+}
+
+export const mockAProject = (
+  userId: number,
+  hackathon: Hackathon,
+  data?: SheetData
+) => {
+  return new Project(
+    {
+      _user_id: userId,
+      _hackathon_id: hackathon._id,
+      title: 'teamwork',
+      description: 'join and leave',
+      technologies: ['other'],
+    },
+    data
+  )
 }

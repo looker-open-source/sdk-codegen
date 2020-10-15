@@ -33,4 +33,7 @@ export {
   mockTabs,
   mockHackathonTab,
   mockProjectTab,
+  mockAProject,
+  mockAJudge,
+  mockAHacker,
 } from './mocks'

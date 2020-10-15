@@ -25,6 +25,7 @@
  */
 import React, { FC, useEffect } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
+import { Tab, TabList, useTabs, TabPanels, TabPanel } from '@looker/components'
 import { isLoadingState } from '../../data/common/selectors'
 import { Loading } from '../../components/Loading'
 import { allHackersRequest } from '../../data/hackers/actions'
@@ -40,13 +41,33 @@ export const UsersScene: FC<UsersSceneProps> = () => {
   }, [dispatch])
   const hackers = useSelector(getHackersState)
   const isLoading = useSelector(isLoadingState)
+  const tabs = useTabs()
 
   return (
     <>
       <Loading loading={isLoading} message={'Processing hackers...'} />
       {hackers && (
         <>
-          <HackerList hackers={hackers} />
+          <TabList {...tabs}>
+            <Tab key="hackers">Hackers</Tab>
+            <Tab key="staff">Staff</Tab>
+            <Tab key="judges">Judges</Tab>
+            <Tab key="admins">Admins</Tab>
+          </TabList>
+          <TabPanels px="xxlarge" {...tabs}>
+            <TabPanel key="hackers">
+              <HackerList hackers={hackers} list={hackers.users} />
+            </TabPanel>
+            <TabPanel key="staff">
+              <HackerList hackers={hackers} list={hackers.staff} />
+            </TabPanel>
+            <TabPanel key="judges">
+              <HackerList hackers={hackers} list={hackers.judges} />
+            </TabPanel>
+            <TabPanel key="admins">
+              <HackerList hackers={hackers} list={hackers.admins} />
+            </TabPanel>
+          </TabPanels>
         </>
       )}
     </>

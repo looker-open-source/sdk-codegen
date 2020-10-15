@@ -194,7 +194,7 @@ export class Hacker implements IHacker {
   }
 
   canJudge(): boolean {
-    return this.roles.has('judge') || this.canAdmin()
+    return this.roles.has('judge')
   }
 
   canStaff(): boolean {
@@ -203,6 +203,11 @@ export class Hacker implements IHacker {
 }
 
 export class Hackers extends TypedRows<Hacker> {
+  judges!: Hacker[]
+  users!: Hacker[]
+  staff!: Hacker[]
+  admins!: Hacker[]
+
   constructor(public sdk: Looker40SDK, users?: ILookerUser[]) {
     super([])
     if (users) this.assign(users)
@@ -241,9 +246,17 @@ export class Hackers extends TypedRows<Hacker> {
     return await this.sdk.ok(
       this.sdk.search_users({
         group_id: group.id?.toString(),
-        fields: 'id,first_name,last_name,credentials_api3,avatar_url',
       })
     )
+  }
+
+  private loadGroups() {
+    this.users = this.rows.filter(
+      (h) => !(h.canJudge() || h.canStaff() || h.canAdmin())
+    )
+    this.staff = this.rows.filter((h) => h.canStaff())
+    this.judges = this.rows.filter((h) => h.canJudge())
+    this.admins = this.rows.filter((h) => h.canAdmin())
   }
 
   /**
@@ -266,6 +279,7 @@ export class Hackers extends TypedRows<Hacker> {
       await hacker.assignRoles()
       hacker.findRegistration(hackathon, regs)
     }
+    this.loadGroups()
     return this
   }
 }

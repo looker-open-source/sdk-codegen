@@ -34,7 +34,10 @@ import {
 import { Hacker, Hackers, sheetCell, sheetHeader } from '../../models'
 
 interface HackerListProps {
+  /** All hackers object */
   hackers: Hackers
+  /** hacker group. Defaults to all */
+  list?: Hacker[]
 }
 
 // TODO click on user id should go to the user editing admin page
@@ -58,27 +61,26 @@ interface HackerListProps {
 //   )
 // }
 
-export const HackerList: FC<HackerListProps> = ({ hackers }) => {
+export const HackerList: FC<HackerListProps> = ({ hackers, list }) => {
   const [currentPage, setCurrentPage] = useState(1)
+  if (!list) list = hackers.rows
   const template = hackers.rows.length === 0 ? new Hacker() : hackers.rows[0]
   const header = hackers.displayHeaders
   const columns = sheetHeader(header, template)
 
   const pageSize = 25
-  const totalPages = Math.ceil(hackers.rows.length / pageSize)
+  const totalPages = Math.ceil(list.length / pageSize)
 
   const startIdx = (currentPage - 1) * pageSize
-  const rows = hackers.rows
-    .slice(startIdx, startIdx + pageSize)
-    .map((hacker, idx) => (
-      <ActionListItem key={idx} id={idx.toString()}>
-        {header.map((columnName, _) => (
-          <ActionListItemColumn key={`${idx}.${columnName}`}>
-            {sheetCell(hacker[columnName])}
-          </ActionListItemColumn>
-        ))}
-      </ActionListItem>
-    ))
+  const rows = list.slice(startIdx, startIdx + pageSize).map((hacker, idx) => (
+    <ActionListItem key={idx} id={idx.toString()}>
+      {header.map((columnName, _) => (
+        <ActionListItemColumn key={`${idx}.${columnName}`}>
+          {sheetCell(hacker[columnName])}
+        </ActionListItemColumn>
+      ))}
+    </ActionListItem>
+  ))
 
   return (
     <>

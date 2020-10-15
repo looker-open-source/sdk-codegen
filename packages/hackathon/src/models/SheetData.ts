@@ -131,12 +131,12 @@ export class SheetData {
     this.technologies = new Technologies(this, data.tabs.technologies)
     this.hackathons = new Hackathons(this, data.tabs.hackathons)
     this.teamMembers = new TeamMembers(this, data.tabs.team_members)
+    this.judgings = new Judgings(this, data.tabs.judgings)
     this.projects = new Projects(this, data.tabs.projects)
     this.projectTechnologies = new ProjectTechnologies(
       this,
       data.tabs.project_technologies
     )
-    this.judgings = new Judgings(this, data.tabs.judgings)
     return this
   }
 

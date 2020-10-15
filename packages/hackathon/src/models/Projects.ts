@@ -54,6 +54,14 @@ export interface IProject extends ISheetRow {
   more_info: string
   technologies: string[]
   $team: TeamMember[]
+  $judgings: Judging[]
+  $hackathon: Hackathon
+  $data: SheetData
+  $members: string[]
+  $judges: string[]
+  $team_count: number
+  $judge_count: number
+
   findMember(hacker: Hacker): TeamMember | undefined
   findJudging(hacker: Hacker): Judging | undefined
 }
@@ -72,12 +80,49 @@ export class Project extends SheetRow<Project> {
   technologies: string[] = []
   $team: TeamMember[] = []
   $judgings: Judging[] = []
+  $hackathon!: Hackathon
+  $_data!: SheetData
 
-  constructor(values?: any) {
+  constructor(values?: any, data?: SheetData) {
     super()
     // IMPORTANT: assign must be called after the super() constructor is called so keys are established
     // there may be a way to overload the constructor so this isn't necessary but that pattern hasn't been found
     this.assign(values)
+    if (data) this.$data = data
+  }
+
+  get $team_count() {
+    return `${this.$team.length}/${this.$hackathon?.max_team_size || 5}`
+  }
+
+  get $judge_count() {
+    return this.$judgings.length
+  }
+
+  get $members(): string[] {
+    const names: string[] = []
+    this.$team.forEach((m) => {
+      const user = this.$data.users.find(m.user_id)
+      if (user) names.push(`${user.first_name} ${user.last_name}`)
+    })
+    return names
+  }
+
+  get $judges(): string[] {
+    const names: string[] = []
+    this.$judgings.forEach((j) => {
+      const user = this.$data.users.find(j.user_id)
+      if (user) names.push(`${user.first_name} ${user.last_name}`)
+    })
+    return names
+  }
+
+  get $data() {
+    return this.$_data
+  }
+
+  set $data(value: SheetData) {
+    this.load(value)
   }
 
   canCreate(user: IHacker): boolean {
@@ -139,6 +184,77 @@ export class Project extends SheetRow<Project> {
   findJudging(hacker: Hacker) {
     return this.$judgings.find((j) => j.user_id === hacker.id)
   }
+
+  load(data?: SheetData) {
+    if (data) this.$_data = data
+    this.getJudgings()
+    this.getMembers()
+    const found = this.$data.hackathons.find(this._hackathon_id)
+    if (found) this.$hackathon = found
+    return this
+  }
+
+  getMembers(): Project {
+    this.$team = this.$data.teamMembers.rows.filter(
+      (m) => m.project_id === this._id
+    )
+    return this
+  }
+
+  getJudgings(): Project {
+    this.$judgings = this.$data.judgings.rows.filter(
+      (m) => m.project_id === this._id
+    )
+    return this
+  }
+
+  /** Join a project team if slots are available */
+  async join(hacker: Hacker) {
+    const hackathon = this.$data.hackathons.find(this._hackathon_id)
+    if (!hackathon)
+      throw new SheetError(`Hackathon ${this._hackathon_id} was not found`)
+    if (this.$team.length >= hackathon.max_team_size)
+      throw new SheetError(
+        `Hackathon ${hackathon.name} only allows ${hackathon.max_team_size} team members per project`
+      )
+    let member = this.findMember(hacker)
+    /** already in the project, nothing to do */
+    if (member) return this
+    member = new TeamMember({ user_id: hacker.id, project_id: this._id })
+    await this.$data.teamMembers.save(member)
+    // Reload because maybe there's another different member now
+    this.getMembers()
+    return this
+  }
+
+  /** Leave a project if on the team */
+  async leave(hacker: Hacker) {
+    const member = this.findMember(hacker)
+    if (!member) return this // nothing to do
+    await this.$data.teamMembers.delete(member)
+    // Reload because maybe there's another different member now
+    this.getMembers()
+
+    return this
+  }
+
+  async addJudge(hacker: Hacker) {
+    if (!hacker.canJudge())
+      throw new SheetError(`${hacker.name} is not a judge`)
+    if (this.findJudging(hacker)) return this
+    const judging = new Judging({ user_id: hacker.id, project_id: this._id })
+    await this.$data.judgings.save(judging)
+    this.getJudgings()
+    return this
+  }
+
+  async deleteJudge(hacker: Hacker) {
+    const judging = this.findJudging(hacker)
+    if (!judging) return this
+    await this.$data.judgings.delete(judging)
+    this.getJudgings()
+    return this
+  }
 }
 
 export class Projects extends WhollySheet<Project> {
@@ -147,7 +263,7 @@ export class Projects extends WhollySheet<Project> {
     public readonly table: ITabTable
   ) {
     super(data.sheetSDK ? data.sheetSDK : ({} as SheetSDK), 'projects', table)
-    this.rows.forEach((project) => this.getMembers(project))
+    this.rows.forEach((project) => (project.$data = this.data))
   }
 
   typeRow<Project>(values?: any) {
@@ -172,17 +288,25 @@ export class Projects extends WhollySheet<Project> {
     return this.rows
   }
 
-  getMembers(project: Project): Project {
-    project.$team = this.data.teamMembers.rows.filter(
-      (m) => m.project_id === project._id
-    )
-    return project
+  async delete<T extends IRowModel>(model: T, force = false) {
+    if (await super.delete(model, force)) {
+      const team = Array.from(model.$team).reverse() as TeamMember[]
+      for (const member of team) {
+        // Delete last row first
+        await this.data.teamMembers.delete(member)
+      }
+      const judging = Array.from(model.$judgings).reverse() as Judging[]
+      for (const j of judging) {
+        // Delete last row first
+        await this.data.judgings.delete(j)
+      }
+    }
+    return true
   }
 
-  getJudgings(project: Project): Project {
-    project.$judgings = this.data.judgings.rows.filter(
-      (m) => m.project_id === project._id
-    )
+  async save<T extends IRowModel>(model: T, force = false): Promise<T> {
+    const project = await super.save(model, force)
+    project.load(this.data)
     return project
   }
 
@@ -199,69 +323,5 @@ export class Projects extends WhollySheet<Project> {
       await this.update(project, true)
     }
     return projects
-  }
-
-  /** Join a project team if slots are available */
-  async join(project: Project, hacker: Hacker) {
-    const hackathon = this.data.hackathons.find(project._hackathon_id)
-    if (!hackathon)
-      throw new SheetError(`Hackathon ${project._hackathon_id} was not found`)
-    if (project.$team.length >= hackathon.max_team_size)
-      throw new SheetError(
-        `Hackathon ${hackathon.name} only allows ${hackathon.max_team_size} team members per project`
-      )
-    let member = project.findMember(hacker)
-    /** already in the project, nothing to do */
-    if (member) return project
-    member = new TeamMember({ user_id: hacker.id, project_id: project._id })
-    await this.data.teamMembers.save(member)
-    // Reload because maybe there's another different member now
-    this.getMembers(project)
-    return project
-  }
-
-  /** Leave a project if on the team */
-  async leave(project: Project, hacker: Hacker) {
-    const member = project.findMember(hacker)
-    if (!member) return project // nothing to do
-    await this.data.teamMembers.delete(member)
-    // Reload because maybe there's another different member now
-    this.getMembers(project)
-
-    return project
-  }
-
-  async addJudge(project: Project, hacker: Hacker) {
-    if (!hacker.canJudge())
-      throw new SheetError(`${hacker.name} is not a judge`)
-    if (project.$judgings.find((j) => j.user_id === hacker.id)) return project
-    const judging = new Judging({ user_id: hacker.id, project_id: project._id })
-    await this.data.judgings.save(judging)
-    this.getJudgings(project)
-    return project
-  }
-
-  async deleteJudge(project: Project, hacker: Hacker) {
-    const judging = project.findJudging(hacker)
-    if (!judging) return project
-    await this.data.judgings.delete(judging)
-    this.getJudgings(project)
-    return project
-  }
-
-  async delete<T extends IRowModel>(model: T) {
-    if (await super.delete(model)) {
-      const team = Array.from(model.$team).reverse() as TeamMember[]
-      for (const member of team) {
-        // Delete last row first
-        await this.data.teamMembers.delete(member)
-      }
-      const judging = Array.from(model.$judgings).reverse() as Judging[]
-      for (const j of judging) {
-        // Delete last row first
-        await this.data.judgings.delete(j)
-      }
-    }
-    return true
   }
 }

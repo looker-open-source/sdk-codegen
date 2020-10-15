@@ -46,6 +46,8 @@ const projectListHeaders = [
   'description',
   'project_type',
   'technologies',
+  '$team_count',
+  '$judge_count',
 ]
 
 interface ProjectListProps {
@@ -75,6 +77,13 @@ export const ProjectList: FC<ProjectListProps> = ({ projects }) => {
       <Icon name="FactCheck" />
     </Tooltip>
   )
+  columns[2].widthPercent = 25 // title
+  columns[3].widthPercent = 40 // description
+  columns[4].widthPercent = 5 // project type
+  columns[5].widthPercent = 15 // technologies
+  columns[6].widthPercent = 5 // team count
+  columns[7].widthPercent = 5 // judge count
+
   const history = useHistory()
   const handleEdit = (projectId: string) => {
     setTimeout(() => {
