@@ -87,6 +87,27 @@ yarn start
 
 - this launches the frontend static server at http://127.0.0.1:3000 which proxies fetch requests to the backend server
 
+## Bulk import script
+
+The `bulk_import.py` script reads a CSV file that has "first_name", "last_name", and "email" column headers and adds users to the hack instance.
+It can be re-run safely w/out duplicating users (primary key is "email"). It will send newly registered users an account setup email.
+
+```
+❯ pipenv run python bulk_import.py --help
+Usage: bulk_import.py [OPTIONS] FILENAME HACKATHON LIMIT
+
+Options:
+  --help  Show this message and exit.
+
+
+❯ pipenv run python bulk_import.py names.csv hack_at_home 5
+Registering beans@baked.com
+Registering spam@lovely.com
+Registering spam@wonderful.com
+Registering joeldodge+hackuser@google.com
+Registered 4 users
+```
+
 ## Production deployment
 
 Deployment is partially automated. devops has an ansible runbook that they execute manually when we want a new version deployed.

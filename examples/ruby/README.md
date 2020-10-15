@@ -34,7 +34,7 @@ ___________
 ___________
 ### CONTENT 📊
 - Template to update Look [[link]](update_look.rb)
-- Automated testing for Look output between Development mode and Production mode [[link]](master/dev_vs_prod.rb)
+- Automated testing for Look output between Development mode and Production mode [[link]](dev_vs_prod.rb)
 - Validates the Looker **Content** [[link]](validate_content.rb)
 - Delete old Looks [[link]](delete_unused_content.rb)
 
@@ -43,4 +43,4 @@ ___________
 
 - Kill all running queries in the instance [[link]](kill_all_running_queries.rb)
 - Test database connections [[link]](test_all_connections.rb)
-
+- Create Looker Themes for your dashboards [[link]](create_themes.rb)
