@@ -968,7 +968,7 @@
   dependencies:
     regenerator-runtime "^0.13.4"
 
-"@babel/runtime@^7.11.2", "@babel/runtime@^7.6.3":
+"@babel/runtime@^7.6.3":
   version "7.12.0"
   resolved "https://registry.yarnpkg.com/@babel/runtime/-/runtime-7.12.0.tgz#98bd7666186969c04be893d747cf4a6c6c8fa6b0"
   integrity sha512-lS4QLXQ2Vbw2ubfQjeQcn+BZgZ5+ROHW9f+DWjEp5Y+NHYmkRGKqHSJ1tuhbUauKu2nhZNTBIvsIQ8dXfY5Gjw==
@@ -2314,6 +2314,31 @@
   dependencies:
     prettier ">=2.0.2"
 
+"@looker/sdk-rtl@^0.3.7-beta.4":
+  version "0.3.7-beta.4"
+  resolved "https://registry.yarnpkg.com/@looker/sdk-rtl/-/sdk-rtl-0.3.7-beta.4.tgz#4e2d95b2f9db8a4a756984bcb5d724409b7e5612"
+  integrity sha512-viweUtO70XjQal/vTkJTnMfG3STYrEssYT+mWKKPnSofeLwrrcGT5zyJb1lyXf2DelMd4q2Andm4hv5X3L9sbA==
+  dependencies:
+    ini "^1.3.5"
+    readable-stream "^3.4.0"
+    request "^2.88.0"
+    request-promise-native "^1.0.8"
+    ts-node "^8.4.1"
+    typescript "^3.8.2"
+
+"@looker/sdk@^0.3.7-beta.4":
+  version "0.3.7-beta.4"
+  resolved "https://registry.yarnpkg.com/@looker/sdk/-/sdk-0.3.7-beta.4.tgz#80c9ac715d23f9ace3ee100eb5be0a0a2de3aab1"
+  integrity sha512-vcYVTJVF1MPU17TbQmW8t6qvC793WVRpYdt4MKYZ3p2/a9m1Pq2uzfu4GeX6281/yv3aPiVnvTQXlfcCDNXY+w==
+  dependencies:
+    "@looker/sdk-rtl" "^0.3.7-beta.4"
+    ini "^1.3.5"
+    readable-stream "^3.4.0"
+    request "^2.88.0"
+    request-promise-native "^1.0.8"
+    ts-node "^8.4.1"
+    typescript "^3.8.2"
+
 "@mdx-js/util@1.6.16":
   version "1.6.16"
   resolved "https://registry.yarnpkg.com/@mdx-js/util/-/util-1.6.16.tgz#07a7342f6b61ea1ecbfb31e6e23bf7a8c79b9b57"
@@ -2770,7 +2795,7 @@
     remark "^12.0.0"
     unist-util-find-all-after "^3.0.1"
 
-"@testing-library/dom@^7.26.0":
+"@testing-library/dom@^7.22.3":
   version "7.26.0"
   resolved "https://registry.yarnpkg.com/@testing-library/dom/-/dom-7.26.0.tgz#da4d052dc426a4ccc916303369c6e7552126f680"
   integrity sha512-fyKFrBbS1IigaE3FV21LyeC7kSGF84lqTlSYdKmGaHuK2eYQ/bXVPM5vAa2wx/AU1iPD6oQHsxy2QQ17q9AMCg==
@@ -2783,20 +2808,6 @@
     dom-accessibility-api "^0.5.1"
     lz-string "^1.4.4"
     pretty-format "^26.4.2"
-
-"@testing-library/jest-dom@^5.11.4":
-  version "5.11.4"
-  resolved "https://registry.yarnpkg.com/@testing-library/jest-dom/-/jest-dom-5.11.4.tgz#f325c600db352afb92995c2576022b35621ddc99"
-  integrity sha512-6RRn3epuweBODDIv3dAlWjOEHQLpGJHB2i912VS3JQtsD22+ENInhdDNl4ZZQiViLlIfFinkSET/J736ytV9sw==
-  dependencies:
-    "@babel/runtime" "^7.9.2"
-    "@types/testing-library__jest-dom" "^5.9.1"
-    aria-query "^4.2.2"
-    chalk "^3.0.0"
-    css "^3.0.0"
-    css.escape "^1.5.1"
-    lodash "^4.17.15"
-    redent "^3.0.0"
 
 "@testing-library/jest-dom@^5.8.0":
   version "5.11.3"
@@ -2814,18 +2825,18 @@
     lodash "^4.17.15"
     redent "^3.0.0"
 
-"@testing-library/react@^11.1.0":
-  version "11.1.0"
-  resolved "https://registry.yarnpkg.com/@testing-library/react/-/react-11.1.0.tgz#dfb4b3177d05a8ccf156b5fd14a5550e91d7ebe4"
-  integrity sha512-Nfz58jGzW0tgg3irmTB7sa02JLkLnCk+QN3XG6WiaGQYb0Qc4Ok00aujgjdxlIQWZHbb4Zj5ZOIeE9yKFSs4sA==
+"@testing-library/react@^10.0.4":
+  version "10.4.9"
+  resolved "https://registry.yarnpkg.com/@testing-library/react/-/react-10.4.9.tgz#9faa29c6a1a217bf8bbb96a28bd29d7a847ca150"
+  integrity sha512-pHZKkqUy0tmiD81afs8xfiuseXfU/N7rAX3iKjeZYje86t9VaB0LrxYVa+OOsvkrveX5jCK3IjajVn2MbePvqA==
   dependencies:
-    "@babel/runtime" "^7.11.2"
-    "@testing-library/dom" "^7.26.0"
+    "@babel/runtime" "^7.10.3"
+    "@testing-library/dom" "^7.22.3"
 
-"@testing-library/user-event@^12.1.8":
-  version "12.1.8"
-  resolved "https://registry.yarnpkg.com/@testing-library/user-event/-/user-event-12.1.8.tgz#52b419455a3da2ac7ac17b77f8fd621c3700ec12"
-  integrity sha512-UUcTuT8HyDwGaRXgNgvMS1uOlreLv9+WsXi1FNj3mmumnB2d3hv2cov0RAd99lx8QI2CtAAOELxoihGj8x/nWg==
+"@testing-library/user-event@^10.4.0":
+  version "10.4.1"
+  resolved "https://registry.yarnpkg.com/@testing-library/user-event/-/user-event-10.4.1.tgz#f62adeae45681484dc24e6ca4f0b8f8a09321429"
+  integrity sha512-3sdJAfjT0i4aNvo0Gqod5MvZXutMXarVsLtb+r1t65AaRJY7BgMIzWgOtfM5dxRvZsc7IdXnCt9+gcWhiXk1xg==
   dependencies:
     "@babel/runtime" "^7.10.2"
 

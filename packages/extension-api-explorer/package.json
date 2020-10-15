@@ -16,7 +16,7 @@
     "@looker/api-explorer": "^0.1.4-alpha.4",
     "@looker/extension-sdk": "^0.12.4",
     "@looker/extension-sdk-react": "^0.6.5",
-    "@looker/run-it": "^0.1.4-alpha.4",
+    "@looker/run-it": "^0.1.4-alpha.0",
     "@looker/sdk": "^0.3.7-beta.4",
     "react": "^16.13.1",
     "react-dom": "^16.13.1",
