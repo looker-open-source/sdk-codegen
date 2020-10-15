@@ -90,6 +90,7 @@ const validate = (moreInfo: string): ValidationMessages | undefined => {
   // TODO improve validation
   if (
     // Go figure with this but its happening!
+    !moreInfo ||
     moreInfo === '\0' ||
     moreInfo.trim() === '' ||
     moreInfo.startsWith('http://') ||
