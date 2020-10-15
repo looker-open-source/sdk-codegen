@@ -2208,12 +2208,12 @@
     "@looker/design-tokens" "^0.9.17"
     lodash "^4.17.20"
 
-"@looker/components-test-utils@^0.7.36":
-  version "0.7.36"
-  resolved "https://registry.yarnpkg.com/@looker/components-test-utils/-/components-test-utils-0.7.36.tgz#2de68473d728b61f11fd744cfe8dbe2dae190e2f"
-  integrity sha512-eT6EGgNnCwlBeZ3QYuKq/Mq+n1JataHVD9by3ONv7LrS1bpPg3Rhmdzg8MWoSPrXNj96fMsmvCjkKk6+mfT3yA==
+"@looker/components-test-utils@^0.9.17":
+  version "0.9.17"
+  resolved "https://registry.yarnpkg.com/@looker/components-test-utils/-/components-test-utils-0.9.17.tgz#04298e49cd03fa6e4319d325002766aaa22e3cc9"
+  integrity sha512-fSKdrljEf1mTRRKEU7V7X9eb5SRk3MRUhHV/mZab31zJ+gjWbudkNOVe3KoR2DCq4ixsdlDWxrZFfzIwWxEtEg==
 
-"@looker/components@^0.9.11", "@looker/components@^0.9.15":
+"@looker/components@^0.9.18":
   version "0.9.18"
   resolved "https://registry.yarnpkg.com/@looker/components/-/components-0.9.18.tgz#2b5f875733293d6c82631df5757c1ebb44d53b8e"
   integrity sha512-iR6Zr/zkzN2+7ArlaUbEOFLGYBYLMR4ezlW6bRw/q95BCYOHKHcVJSiqNk8vbU8ozTDqMWAi8v/WsjmNQnjdoQ==
