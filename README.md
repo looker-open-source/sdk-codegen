@@ -20,7 +20,7 @@ This repository contains:
 
 We hope to help people who want use Looker as a platform get up and running quickly, largely by providing pre-built client SDKs in the most popular languages, and implementing consistency across all languages and platforms.
 
-An [OpenAPI specification](https://github.com/OAI/OpenAPI-Specification) described the Looker API. This specification is used to produce both Looker's interactive API Explorer, and the Looker API language bindings for the Looker REST API.
+An [OpenAPI specification](https://github.com/OAI/OpenAPI-Specification) describes the Looker API. This specification is used to produce both Looker's interactive API Explorer, and the Looker API language bindings for the Looker REST API.
 
 A Looker SDK has several parts:
 
