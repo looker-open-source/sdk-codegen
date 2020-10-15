@@ -25,7 +25,14 @@
  */
 
 import React, { FC, useState, useEffect } from 'react'
-import { Tab, TabList, TabPanel, TabPanels, useTabs } from '@looker/components'
+import {
+  Box,
+  Tab,
+  TabList,
+  TabPanel,
+  TabPanels,
+  useTabs,
+} from '@looker/components'
 import { IMethod, IType, ApiModel } from '@looker/sdk-codegen'
 
 import { getGenerators } from '@looker/run-it'
@@ -55,26 +62,28 @@ export const DocSDKs: FC<LanguageSDKProps> = ({ api, method, type }) => {
   }, [method, type])
 
   return (
-    <CollapserCard heading="SDK declarations">
-      <>
-        <TabList {...tabs}>
-          {Object.keys(generators).map((language) => (
-            <Tab key={language}>{language}</Tab>
-          ))}
-        </TabList>
-        <TabPanels {...tabs} pt="0">
-          {Object.entries(generators).map(([language, gen]) => {
-            const code = method
-              ? gen.declareMethod('', item as IMethod)
-              : gen.declareType('', item as IType)
-            return (
-              <TabPanel key={language}>
-                <DocCode language={language} code={code} />
-              </TabPanel>
-            )
-          })}
-        </TabPanels>
-      </>
-    </CollapserCard>
+    <Box mb="xlarge">
+      <CollapserCard heading="SDK declarations">
+        <>
+          <TabList {...tabs}>
+            {Object.keys(generators).map((language) => (
+              <Tab key={language}>{language}</Tab>
+            ))}
+          </TabList>
+          <TabPanels {...tabs} pt="0">
+            {Object.entries(generators).map(([language, gen]) => {
+              const code = method
+                ? gen.declareMethod('', item as IMethod)
+                : gen.declareType('', item as IType)
+              return (
+                <TabPanel key={language}>
+                  <DocCode language={language} code={code} />
+                </TabPanel>
+              )
+            })}
+          </TabPanels>
+        </>
+      </CollapserCard>
+    </Box>
   )
 }

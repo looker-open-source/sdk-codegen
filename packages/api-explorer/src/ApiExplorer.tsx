@@ -28,17 +28,12 @@ import React, { FC, useReducer, useState, useEffect } from 'react'
 import { ComponentsProvider } from '@looker/components'
 import { ApiModel, KeyedCollection } from '@looker/sdk-codegen'
 import { Looker40SDK, Looker31SDK } from '@looker/sdk/lib/browser'
+import { useLocation } from 'react-router'
 
 import { SearchContext, LodeContext, defaultLodeContextValue } from './context'
 import { getLoded } from './utils'
-import {
-  Header,
-  Main,
-  PageLayout,
-  SideNav,
-  SideNavToggle,
-  SideNavDivider,
-} from './components'
+import { Header as AppHeader, SideNav } from './components'
+import { Aside, Header, Layout, Page } from './components/Layout'
 import {
   specReducer,
   initDefaultSpecState,
@@ -65,11 +60,12 @@ export interface ApiExplorerProps {
 
 const ApiExplorer: FC<ApiExplorerProps> = ({
   specs,
-  lodeUrl = 'https://raw.githubusercontent.com/looker-open-source/sdk-codegen/tree/master/motherlode.json',
+  lodeUrl = 'https://raw.githubusercontent.com/looker-open-source/sdk-codegen/master/motherlode.json',
 }) => {
+  const location = useLocation()
   const [spec, specDispatch] = useReducer(
     specReducer,
-    initDefaultSpecState(specs)
+    initDefaultSpecState(specs, location)
   )
   const [searchSettings, setSearchSettings] = useReducer(
     searchReducer,
@@ -78,32 +74,35 @@ const ApiExplorer: FC<ApiExplorerProps> = ({
 
   const [lode, setLode] = useState(defaultLodeContextValue)
 
-  const [isSideNavOpen, setSideNavOpen] = useState(true)
-  const handleSideNavToggle = () => {
-    setSideNavOpen(!isSideNavOpen)
-  }
+  const [hasNavigation, setHasNavigation] = useState(true)
+  const toggleNavigation = () => setHasNavigation(!hasNavigation)
 
   useEffect(() => {
     getLoded(lodeUrl).then((resp) => setLode(resp))
   }, [lodeUrl])
 
   return (
-    <ComponentsProvider>
+    <ComponentsProvider loadGoogleFonts>
       <LodeContext.Provider value={{ ...lode }}>
         <SearchContext.Provider value={{ searchSettings, setSearchSettings }}>
-          <Header specs={specs} spec={spec} specDispatch={specDispatch} />
-          <PageLayout open={isSideNavOpen}>
-            {isSideNavOpen && <SideNav api={spec.api} specKey={spec.key} />}
-            <SideNavDivider open={isSideNavOpen}>
-              <SideNavToggle
-                onClick={handleSideNavToggle}
-                isOpen={isSideNavOpen}
+          <Page>
+            <Header height="4rem">
+              <AppHeader
+                specs={specs}
+                spec={spec}
+                specDispatch={specDispatch}
+                toggleNavigation={toggleNavigation}
               />
-            </SideNavDivider>
-            <Main>
+            </Header>
+            <Layout hasAside>
+              {hasNavigation && (
+                <Aside width="20rem">
+                  <SideNav api={spec.api} specKey={spec.key} />
+                </Aside>
+              )}
               <AppRouter api={spec.api} specKey={spec.key} />
-            </Main>
-          </PageLayout>
+            </Layout>
+          </Page>
         </SearchContext.Provider>
       </LodeContext.Provider>
     </ComponentsProvider>

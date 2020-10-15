@@ -24,11 +24,9 @@
 
  */
 import React, { FC } from 'react'
-import { CardContent, Flex, Space, Text } from '@looker/components'
+import { Card, CardContent, Flex, Space, Text } from '@looker/components'
 import { IMethod } from '@looker/sdk-codegen'
 import { MethodBadge } from '@looker/run-it'
-
-import { SummaryCard } from '../ExplorerStyle'
 import { ApixHeading } from '../common'
 import { DocActivityType, DocRateLimited } from '../../components'
 import { DocSummaryStatus } from './DocSummaryStatus'
@@ -37,31 +35,29 @@ interface DocMethodSummaryProps {
   method: IMethod
 }
 
-export const DocMethodSummary: FC<DocMethodSummaryProps> = ({ method }) => {
-  return (
-    <SummaryCard>
-      <CardContent>
-        <Space align="start" between>
-          <MethodBadge
-            type={method.httpMethod}
-            textAlign="center"
-            minWidth="3.7625rem"
-          >
-            {method.httpMethod.toUpperCase()}
-          </MethodBadge>
-          <Flex alignItems="start" flexDirection="column" flex="1" mx="small">
-            <ApixHeading as="h3" mb="0" pt="0">
-              {method.summary}
-            </ApixHeading>
-            <Space>
-              <DocRateLimited method={method} />
-              <DocActivityType method={method} />
-            </Space>
-            <Text variant="subdued">{method.endpoint}</Text>
-          </Flex>
-          <DocSummaryStatus method={method} />
-        </Space>
-      </CardContent>
-    </SummaryCard>
-  )
-}
+export const DocMethodSummary: FC<DocMethodSummaryProps> = ({ method }) => (
+  <Card maxWidth="50rem" border="1px solid" borderColor="ui2">
+    <CardContent>
+      <Space align="start" between>
+        <MethodBadge
+          type={method.httpMethod}
+          textAlign="center"
+          minWidth="3.7625rem"
+        >
+          {method.httpMethod.toUpperCase()}
+        </MethodBadge>
+        <Flex alignItems="start" flexDirection="column" flex="1" mx="small">
+          <ApixHeading as="h3" mb="0" pt="0">
+            {method.summary}
+          </ApixHeading>
+          <Space>
+            <DocRateLimited method={method} />
+            <DocActivityType method={method} />
+          </Space>
+          <Text variant="subdued">{method.endpoint}</Text>
+        </Flex>
+        <DocSummaryStatus method={method} />
+      </Space>
+    </CardContent>
+  </Card>
+)

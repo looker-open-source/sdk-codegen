@@ -30,6 +30,7 @@ import { Grid, ButtonToggle, ButtonItem } from '@looker/components'
 
 import { DocTitle, DocMethodSummary } from '../../components'
 import { buildMethodPath } from '../../utils'
+import { Section } from '../../components/Layout'
 import { getOperations } from './utils'
 
 interface TagSceneProps {
@@ -60,7 +61,7 @@ export const TagScene: FC<TagSceneProps> = ({ api }) => {
   }, [methodTag])
 
   return (
-    <>
+    <Section>
       <DocTitle>{`${tag.name}: ${tag.description}`}</DocTitle>
       <ButtonToggle mb="small" mt="xlarge" value={value} onChange={setValue}>
         <ButtonItem key="ALL" px="large" py="xsmall">
@@ -85,6 +86,6 @@ export const TagScene: FC<TagSceneProps> = ({ api }) => {
             </NavLink>
           )
       )}
-    </>
+    </Section>
   )
 }

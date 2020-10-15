@@ -30,9 +30,8 @@ import { Heading } from '@looker/components'
  * Common styled components to be used across the whole library
  */
 
-export const ApixHeading = styled(Heading)`
-  color: ${({ theme }) => theme.colors.text2};
-`
+export const ApixHeading = styled(Heading)``
+
 ApixHeading.defaultProps = {
   fontWeight: 'semiBold',
   mb: 'xsmall',

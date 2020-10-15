@@ -56,7 +56,7 @@ export const DocMarkdown: FC<DocMarkdownProps> = ({ source, specKey }) => {
   const handleClick = (e: BaseSyntheticEvent) => {
     if (
       e.target.tagName === 'A' &&
-      e.target.origin === window.location.origin
+      e.target.pathname.startsWith(`/${specKey}`)
     ) {
       e.preventDefault()
       history.push(e.target.pathname)

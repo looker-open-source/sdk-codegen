@@ -24,26 +24,15 @@
 
  */
 
-import React, { FC } from 'react'
+import { createGlobalStyle } from 'styled-components'
 
-import { SideNavToggleWrapper } from '../ExplorerStyle'
-import { Collapser } from '../Collapser'
+export const GlobalStyles = createGlobalStyle`
+  .codeMarker {
+    background: yellow;
+    position: absolute;
+  }
 
-interface SideNavToggleProps {
-  isOpen: boolean
-  onClick: () => void
-}
-
-export const SideNavToggle: FC<SideNavToggleProps> = ({ isOpen, onClick }) => {
-  return (
-    <SideNavToggleWrapper>
-      <Collapser
-        isOpen={isOpen}
-        onClick={onClick}
-        openIcon="CaretLeft"
-        closeIcon="CaretRight"
-        label="Toggle Sidebar"
-      />
-    </SideNavToggleWrapper>
-  )
-}
+  .hi {
+    background: yellow;
+  }
+`
