@@ -62,8 +62,9 @@ export class TypescriptGen extends CodeGen {
 
   indentStr = '  '
   endTypeStr = '\n}'
-  useNamedParameters = false
   willItStream = true
+  useNamedParameters = false
+  useNamedArguments = false
 
   methodsPrologue(_indent: string) {
     // TODO get the rtl path alias to work correctly in all scenarios! !!
@@ -488,13 +489,11 @@ export interface IDictionary<T> {
           return {
             default: '[]',
             name: `${map.name}[]`,
-            asVal: (indent, v) => this.arrayValue(indent, type, v),
           }
         case 'HashType':
           return {
             default: '{}',
             name: `IDictionary<${map.name}>`,
-            asVal: (indent, value) => this.hashValue(indent, value),
           }
         case 'DelimArrayType':
           return {

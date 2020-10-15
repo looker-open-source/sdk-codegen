@@ -24,6 +24,18 @@
 
  */
 
+import {
+  IAccessToken,
+  IDictionary,
+  IMergeQuerySourceQuery,
+  IRequestAllUsers,
+  IRequestCreateQueryTask,
+  IWriteLookWithQuery,
+  IWriteMergeQuery,
+  ISqlQueryCreate,
+  ResultFormat,
+} from '@looker/sdk/lib/browser'
+import { DelimArray } from '@looker/sdk-rtl'
 import { TestConfig } from './testUtils'
 import { PythonGen } from './python.gen'
 import { IEnumType, IType } from './sdkModels'
@@ -696,13 +708,16 @@ class RequiredResponseWithEnums(model.Model):
       gen.declareParameter(indent, method, param)
 
       const inputType = apiTestModel.types.WriteMergeQuery
+      const asVal = expect.any(Function)
       checkMappedType(inputType.properties.column_limit.type, 'string', {
         default: gen.nullStr,
         name: 'str',
+        asVal: asVal,
       })
       checkMappedType(inputType.properties.dynamic_fields.type, 'string', {
         default: gen.nullStr,
         name: 'str',
+        asVal: asVal,
       })
       checkMappedType(inputType.properties.pivots.type, 'string[]', {
         default: gen.nullStr,
@@ -790,6 +805,249 @@ class MergeFields(model.Model):
             source_field_name: Optional[str] = None):
         self.field_name = field_name
         self.source_field_name = source_field_name`)
+    })
+  })
+
+  describe('makeTheCall', () => {
+    const fields = 'id,user_id,title,description'
+    it('handles no params', () => {
+      const inputs = {}
+      const method = apiTestModel.methods.run_look
+      const actual = gen.makeTheCall(method, inputs)
+      const expected = 'response = sdk.run_look()'
+      expect(actual).toEqual(expected)
+    })
+
+    it('assigns single param', () => {
+      const inputs = { look_id: 17 }
+      const method = apiTestModel.methods.look
+      const actual = gen.makeTheCall(method, inputs)
+      const expected = `response = sdk.look(look_id=17)`
+      expect(actual).toEqual(expected)
+    })
+
+    it('assigns simple params', () => {
+      const inputs = { look_id: 17, fields }
+      const method = apiTestModel.methods.look
+      const actual = gen.makeTheCall(method, inputs)
+      const expected = `response = sdk.look(
+    look_id=17,
+    fields="${fields}")`
+      expect(actual).toEqual(expected)
+    })
+
+    it('assigns a body param', () => {
+      const body: IWriteLookWithQuery = {
+        title: 'test title',
+        description: 'gen test',
+        query: {
+          model: 'the_look',
+          view: 'users',
+          total: true,
+        },
+      }
+      const inputs = { look_id: 17, body, fields }
+      const method = apiTestModel.methods.update_look
+      const actual = gen.makeTheCall(method, inputs)
+      const expected = `response = sdk.update_look(
+    look_id=17,
+    body=models.WriteLookWithQuery(
+        title="test title",
+        description="gen test",
+        query=models.WriteQuery(
+            model="the_look",
+            view="users",
+            total=true
+        )
+    ),
+    fields="id,user_id,title,description")`
+      expect(actual).toEqual(expected)
+    })
+
+    it('assigns an enum', () => {
+      const inputs: IRequestCreateQueryTask = {
+        body: {
+          query_id: 1,
+          result_format: ResultFormat.csv,
+        },
+      }
+      const method = apiTestModel.methods.create_query_task
+      const actual = gen.makeTheCall(method, inputs)
+      const expected = `response = sdk.create_query_task(
+    body=models.WriteCreateQueryTask(
+        query_id=1,
+        result_format=models.ResultFormat.csv
+    ))`
+      expect(actual).toEqual(expected)
+    })
+
+    it('assigns a DelimArray', () => {
+      const inputs: IRequestAllUsers = {
+        ids: new DelimArray<number>([1, 2, 3]),
+      }
+      const method = apiTestModel.methods.all_users
+      const actual = gen.makeTheCall(method, inputs)
+      const expected = `response = sdk.all_users(
+    ids=models.DelimSequence([1,2,3]))`
+      expect(actual).toEqual(expected)
+    })
+
+    it('assigns simple and complex arrays', () => {
+      const body: IWriteMergeQuery = {
+        column_limit: '5',
+        pivots: ['one', 'two', 'three'],
+        sorts: ['a'],
+        source_queries: [
+          {
+            name: 'first query',
+            query_id: 1,
+            merge_fields: [
+              {
+                field_name: 'merge_1',
+                source_field_name: 'source_1',
+              },
+            ],
+          },
+          {
+            name: 'second query',
+            query_id: 2,
+            merge_fields: [
+              {
+                field_name: 'merge_2',
+                source_field_name: 'source_2',
+              },
+            ],
+          },
+        ],
+      }
+      const inputs = { body, fields }
+      const method = apiTestModel.methods.create_merge_query
+      const actual = gen.makeTheCall(method, inputs)
+      const expected = `response = sdk.create_merge_query(
+    body=models.WriteMergeQuery(
+        column_limit="5",
+        pivots=[
+            "one",
+            "two",
+            "three"
+        ],
+        sorts=["a"],
+        source_queries=[
+            models.MergeQuerySourceQuery(
+                merge_fields=[
+                    models.MergeFields(
+                        field_name="merge_1",
+                        source_field_name="source_1"
+                    )
+                ],
+                name="first query",
+                query_id=1
+            ),
+            models.MergeQuerySourceQuery(
+                merge_fields=[
+                    models.MergeFields(
+                        field_name="merge_2",
+                        source_field_name="source_2"
+                    )
+                ],
+                name="second query",
+                query_id=2
+            )
+        ]
+    ),
+    fields="id,user_id,title,description")`
+      expect(actual).toEqual(expected)
+    })
+
+    it('assigns dictionaries', () => {
+      const query: ISqlQueryCreate = {
+        connection_name: 'looker',
+        model_name: 'the_look',
+        vis_config: { first: 1, second: 'two' },
+      }
+      const inputs = { body: query }
+      const method = apiTestModel.methods.create_sql_query
+      const expected = `response = sdk.create_sql_query(
+    body=models.SqlQueryCreate(
+        connection_name="looker",
+        model_name="the_look",
+        vis_config=dict(
+            first=1,
+            second="two"
+        )
+    ))`
+      const actual = gen.makeTheCall(method, inputs)
+      expect(actual).toEqual(expected)
+    })
+
+    describe('hashValue', () => {
+      it('assigns a hash with heterogeneous values', () => {
+        const token: IAccessToken = {
+          access_token: 'backstage',
+          token_type: 'test',
+          expires_in: 10,
+        }
+        const oneItem = [1]
+        const threeItems = ['Abe', 'Zeb', token]
+        const inputs: IDictionary<any> = {
+          item: oneItem,
+          items: threeItems,
+          first: 1,
+          second: 'two',
+          third: false,
+          token,
+        }
+        const expected = `dict(
+    item=[1],
+    items=[
+        "Abe",
+        "Zeb",
+        dict(
+            access_token="backstage",
+            token_type="test",
+            expires_in=10
+        )
+    ],
+    first=1,
+    second="two",
+    third=false,
+    token=dict(
+        access_token="backstage",
+        token_type="test",
+        expires_in=10
+    )
+)`
+        const actual = gen.hashValue('', inputs)
+        expect(actual).toEqual(expected)
+      })
+    })
+    describe('assignType', () => {
+      it('assigns a complex type', () => {
+        const inputs: IMergeQuerySourceQuery = {
+          name: 'first query',
+          query_id: 1,
+          merge_fields: [
+            {
+              field_name: 'merge_1',
+              source_field_name: 'source_1',
+            },
+          ],
+        }
+        const type = apiTestModel.types.MergeQuerySourceQuery
+        expect(type).toBeDefined()
+        const expected = `models.MergeQuerySourceQuery(
+        merge_fields=[
+            models.MergeFields(
+                field_name="merge_1",
+                source_field_name="source_1"
+            )
+        ],
+        name="first query",
+        query_id=1
+    )`
+        const actual = gen.assignType(gen.indentStr, type, inputs)
+        expect(actual).toEqual(expected)
+      })
     })
   })
 })
