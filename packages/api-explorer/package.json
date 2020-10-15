@@ -45,7 +45,7 @@
     "webpack-dev-server": "^3.10.3"
   },
   "dependencies": {
-    "@looker/components": "^0.9.18",
+    "@looker/components": "^0.9.19",
     "@looker/run-it": "^0.1.4-alpha.0",
     "@looker/sdk": "^0.3.7-beta.0",
     "@looker/sdk-codegen": "^0.1.6-alpha.0",
