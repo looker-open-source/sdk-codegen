@@ -49,7 +49,7 @@ export const Header: FC<HeaderProps> = ({ specs, spec, specDispatch }) => (
         <NavLink to={`/${spec.key}`}>
           <Space gap="small">
             <Logo />
-            <Text color="key" fontSize="xlarge" fontWeight="light">
+            <Text color="key" fontSize="xlarge" fontWeight="medium">
               API Explorer
             </Text>
           </Space>
