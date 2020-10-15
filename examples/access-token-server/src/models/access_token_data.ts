@@ -52,7 +52,7 @@ export const handleTokenRequest = async (
 ): Promise<AccessTokenData> => {
   let accessTokenData: AccessTokenData
   if (client_id && client_secret && scope) {
-    console.log('got client id, secret and scope')
+    console.log(`got client id, secret and scope ${client_id}/${client_secret}`)
     const key = createTokenDataKey(client_id, client_secret, scope)
     accessTokenData = accessTokenDataMap[key]
     console.log(`cached token? ${!!accessTokenData}`)
