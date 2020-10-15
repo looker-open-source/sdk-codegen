@@ -4,43 +4,57 @@ This Looker Open Source repository is released under the MIT license. By using t
 
 While Looker has developed and tested this code internally, we cannot guarantee that the open-source tools used by the scripts in this repository have not been modified with malicious code.
 
-Our goal is to help people who want use Looker as a platform to get up and running quickly, largely by providing pre-built client SDKs in the most popular languages, and implementing consistency across all languages and platforms.
+## Overview
 
-The Looker API is defined with the [OpenAPI specification](https://github.com/OAI/OpenAPI-Specification), formerly known as "swagger." This specification is used to produce both Looker's interactive API Explorer,and the Looker API language bindings that describes the Looker REST API.
+This repository contains:
+
+- The [SDK code generator](packages/sdk-codegen) that generates the source code for Looker SDKs
+- Source code for the [Looker SDKs](#looker-sdks) produced by the code generator
+- Looker SDK source code [examples](examples)
+- the [API Explorer extension](packages/extension-api-explorer) that can be installed into a Looker instance
+- the stand-alone [API Explorer](packages/api-explorer)
+- the [RunIt](packages/run-it) REST client tester (embedded within API Explorer, typically)
+- [code generator scripts](packages/sdk-codegen-scripts) that require Node (file i/o) to read and write SDK files
 
 ## The parts of the Looker SDK
+
+We hope to help people who want use Looker as a platform get up and running quickly, largely by providing pre-built client SDKs in the most popular languages, and implementing consistency across all languages and platforms.
+
+An [OpenAPI specification](https://github.com/OAI/OpenAPI-Specification) described the Looker API. This specification is used to produce both Looker's interactive API Explorer, and the Looker API language bindings for the Looker REST API.
 
 A Looker SDK has several parts:
 
 - **Looker API** OpenAPI specification (e.g., found at
   `https://<your-looker-endpoint>:19999/api/3.1/swagger.json`, although this is still the Swagger 2.x representation)
 
-- The **Looker API Explorer**, provided in the Looker web app directly from our version-specific OpenAPI specification, available in each Looker server instance.
+- The **Looker API Docs viewer**, provided in the Looker web app directly from our version-specific OpenAPI specification, available on each Looker server instance.
 
-- **Language SDKs**, "smarter" client language classes and methods to improve the experience of calling the Looker API in various popular coding languages. Looker has created a code generator for specific languages in this repository, which is invoked by the command available in this repository, `yarn sdk [language]`.
-
-- **API bindings** using the legacy [OpenAPI Generator](https://github.com/OpenAPITools/openapi-generator) can also be produced. This process converts the API specification to language-specific code. Most of these template-based generators are written by different language enthusiasts, so the pattern and quality of the generated code varies widely, even though most generated code tends to work acceptably.
+- **Language SDKs**, "smarter" client language classes and methods to improve the experience of calling the Looker API in various popular coding languages.
 
 ## Multi-API support with Looker 7.2 and later
 
-Looker 7.2 introduced an **Experimental** version of API 4.0. Therefore, the SDKs now support multiple API versions in the same SDK package.
+Looker 7.2 introduced an **Experimental** version of API 4.0. Since that release, the SDKs now support multiple API versions in the same SDK package.
 
-The main change to the SDKs is that `api_version` is no longer used from any configuration value. Instead, for all SDKs but Swift, API-specific SDKs are now created and put in the same SDK package, and share the same run-time code.
+For all SDKs but Swift, API-specific SDKs are now created and put in the same SDK package, and share the same run-time code.
 
-API 3.0 is not included. At the time of this writing, API 3.1 and API 4.0 are included in most SDK packages. For an SDK that supports multiple API versions, there will be a `methods.*` and `models.*` generated for each API version.
+At the time of this writing, API 3.1 and API 4.0 are included in most SDK packages. For an SDK that supports multiple API versions, there will be a `methods.*` and `models.*` generated for each API version.
 
 The class names representing these API versions are distinct, with version-named factories for creating initialized SDK objects.
 
 These API-specific files still use all the same Run-Time Library (RTL) code in the SDK package to minimize code duplication.
 
+### Looker SDKs
+
 Please review the following table for a breakdown of the options to initialize the desired SDK object.
 
-| SDK        | API 3.1                                                                   | API 4.0                                                                  | Notes                                                                                                                                                                                                 |
-| ---------- | ------------------------------------------------------------------------- | ------------------------------------------------------------------------ | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| Python     | `looker_sdk.init31()`                                                     | `looker_sdk.init40()`                                                    | Both API 3.1 and 4.0 are supported, and can be initialized with the functions shown                                                                                                                   |
-| Typescript | `Looker31SDK()`, `LookerNodeSDK.init31()`, or `LookerBrowserSDK.init31()` | `Looker40SDK()`, `LookerNodeSDK.init40()` or `LookerBrowserSDK.init40()` | Both API 3.1 and 4.0 are supported and can be initialized with the functions shown                                                                                                                    |
-| Kotlin     | Do not use                                                                | `LookerSDK()`                                                            | API 4.0 was specifically created to correct the endpoint payloads for strongly-typed languages like Kotlin and Swift. Because Kotlin really requires API 4.0, API 4.0 is the default namespace for it |
-| Swift      | Not applicable                                                            | `Looker40SDK()`                                                          | Swift only has SDK definitions for API 4.0                                                                                                                                                            |  |
+| SDK                        | API 3.1                                                                   | API 4.0                                                                  | Notes                                                                                                                                                                                                 |
+| -------------------------- | ------------------------------------------------------------------------- | ------------------------------------------------------------------------ | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| [Python](python)           | `looker_sdk.init31()`                                                     | `looker_sdk.init40()`                                                    | Both API 3.1 and 4.0 are supported, and can be initialized with the functions shown                                                                                                                   |
+| [Typescript](packages/sdk) | `Looker31SDK()`, `LookerNodeSDK.init31()`, or `LookerBrowserSDK.init31()` | `Looker40SDK()`, `LookerNodeSDK.init40()` or `LookerBrowserSDK.init40()` | Both API 3.1 and 4.0 are supported and can be initialized with the functions shown                                                                                                                    |
+| [Kotlin](kotlin)           | Do not use                                                                | `LookerSDK()`                                                            | API 4.0 was specifically created to correct the endpoint payloads for strongly-typed languages like Kotlin and Swift. Because Kotlin really requires API 4.0, API 4.0 is the default namespace for it |
+| [Swift](swift/looker)      | Not applicable                                                            | `Looker40SDK()`                                                          | Swift only has SDK definitions for API 4.0                                                                                                                                                            |  |
+| [Look#](csharp)            | `Looker31SDK()`                                                           | `Looker40SDK()`                                                          | Community-supported C# SDK for Looker                                                                                                                                                                 |  |
+| [GoLook](go)               | `v3.NewLookerSDK()`                                                       | `v4.NewLookerSDK()`                                                      | Community-supported GO SDK for Looker                                                                                                                                                                 |  |
 
 By supporting both API versions in the same SDK package, we hope the migration path to the latest API is simplified. Both SDK versions can be used at the same time, in the same source file, which should allow for iterative work to move to the new API version.
 
@@ -51,7 +65,7 @@ import {
   Looker40SDK,
   Looker31SDK,
   NodeSession,
-  NodeSettingsIniFile
+  NodeSettingsIniFile,
 } from '@looker/sdk'
 
 const settings = new NodeSettingsIniFile()
@@ -71,17 +85,11 @@ All SDKs URL encode (also known as [percent encoding](https://en.wikipedia.org/w
 
 ## Using existing, pre-generated SDKs
 
-When a specific language SDK has been developed, Looker makes that SDK available using the standard package manager for by that platform. Currently, there are two client language SDKs Looker has deployed to package managers. If you want to use our Python or Node/Typescript/Javascript SDKs, you don't need to run the generator in this repository at all. You can add it using `pip` or `node/yarn` and start writing your Looker SDK application.
+When a specific language SDK has been developed, Looker makes that SDK available using the standard package manager for by that platform. Currently, the [Python SDK](python) and the [Typescript SDK](packages/sdk) can be installed from their respective package managers by following the instructions in their readmes.
 
-### Installing the Python SDK
+For the other SDKs in this repository, you can copy and paste the source code into a module for your own project. Every SDK will eventually have a deployed package version.
 
-Instructions for using the Looker SDK for Python are at <https://pypi.org/project/looker-sdk>. The source for this package's documentation is at [python/README.rst](python/README.rst).
-
-### Installing the Typescript/Javascript SDK
-
-Instructions for the Looker SDK for Typescript/Javascript are at <https://www.npmjs.com/package/@looker/sdk>. The source for this package's documentation is at [packages/sdk/README.md](packages/sdk/README.md).
-
-If you do want to use the generation options for another language, read on.
+If you want to use the generation options for an SDK, read on.
 
 ## Generating an API language binding
 
@@ -92,12 +100,17 @@ There are three steps for generating an SDK with this project:
   - **Note**: previous versions of the `looker.ini` file had an `api_version` entry. This is no longer required. The code generator project will read an `api_versions` value if that is found, but the SDKs ignore this value. If `api_versions` is not found in the `ini` file, it defaults to "3.1,4.0" for the generator to produce the definitions for the supported API versions.
 
 - install the code generator project dependencies by running:
- 
+
 ```sh
 yarn install
+yarn build
 ```
 
-- run the SDK generator with `yarn sdk`
+The resources required to run the code generator are in [package.json](package.json).
+
+**Note**: If `yarn` is not installed, use [these instructions to install](https://yarnpkg.com/lang/en/docs/install/) it.
+
+- run the SDK generator with `yarn sdk [language]`
 
 - **Note**: [Generating Client SDKs for the Looker API](https://discourse.looker.com/t/generating-client-sdks-for-the-looker-api/3185) describes the legacy, manual steps for generating an API language binding. This project replaces these manual steps, and uses an improved code generator.
 
@@ -111,12 +124,6 @@ For your own source code repositories, be sure to configure your version control
 
 Unlike some other OpenAPI code generators, the Looker SDK code generator **never** writes access information into SDK source code. All SDKs provided by Looker are designed to receive the credentials required to call API methods via a `readConfig()` method that returns a key/value collection, where `client_id` and `client_secret` are retrieved, and used only for the time it takes to complete a login for authentication token retrieval, then they are immediately discarded from memory.
 
-### Using the code generator
-
-If `yarn` is not installed, use [these instructions to install](https://yarnpkg.com/lang/en/docs/install/) it.
-
-After installing yarn, just run `yarn` from your terminal window/command line, and it will download or update all the packages required to run the code generator. The resources required to run the code generator are in [package.json](package.json).
-
 Invoke the SDK code generator with the command:
 
 ```sh
@@ -128,7 +135,6 @@ To always use the latest Looker API specification for SDK generation, use:
 ```sh
 yarn wipe && yarn sdk
 ```
-
 
 The code generator will:
 
@@ -156,28 +162,9 @@ python
     sdk
       methods.py (automatically generated)
       models.py (automatically generated)
-typescript
-  looker
-    rtl
-      (run-time library hand-written files here)
-    sdk
-      methods.ts (automatically generated)
-      models.ts (automatically generated)
 ```
 
-**Note:** If you're unable to download the API specification file because you're using an instance of Looker that is self-signed and errors are being thrown, you can explicitly turn off SSL verification by putting `verify_ssl=false` in the `looker.ini` file configuration section.
-
-#### View the specification interactively
-
-When the specification conversion completes successfully, the OpenAPI 3.x specification file is available locally, so you can search and explore the api using a command similar to the following:
-
-```sh
-yarn view Looker.4.0.oas.json
-```
-
-This command will start a local web server that allows you to browse and search the indicated specification file.
-
-**Tip**: search for `query` or `dashboard` in the UI and see what you get!
+**Note:** If you're unable to download the API specification file because you're using an instance of Looker that is self-signed and errors are thrown, you can explicitly turn off SSL verification by putting `verify_ssl=false` in the `looker.ini` file configuration section.
 
 ### Using the Legacy generator
 
@@ -202,38 +189,6 @@ to see the list of all scripts that can be run by the code generator.
 ## SDK Examples
 
 The open source repository <https://github.com/looker-open-source/sdk-examples> contains code snippets and projects written using the Looker language SDKs. You may find useful code in that repository. and are also welcome to contribute additional examples.
-
-## Running Integration Tests
-
-These are notes for the integration tests Looker is developing and are left here for reference in case you want to establish your own integration testing process.
-
-In order to run the integration tests you will need:
-
-- [docker](https://docs.docker.com/install/#support)
-- [docker-compose](https://docs.docker.com/compose/install/)
-
-Which we use to isolate the various supporting libraries required to test the SDK in a given language.
-
-You will also need to copy the `looker-sample.ini` to `looker.ini` and fill out
-the necessary details so it can reach your running _Looker_ instance.
-
-First, you will need to build the base:
-
-```sh
-docker-compose build base
-```
-
-Then to build a specific language integration testing image you simply execute:
-
-```sh
-docker-compose build [language]
-```
-
-Where language comes from the directories `sdk-codegen/docker/*` and we'd build the docker image to support running those tests. At this point you can run the existing tests from inside that container pointed at the instance you identified in `looker.ini` like so:
-
-```sh
-docker-compose run [language]
-```
 
 ## API Troubleshooting
 
@@ -309,4 +264,4 @@ Configuration variables should be processed as follows:
 - if the default configuration `.ini` file exists, apply the values
 - if an environment variable exists, apply the value
 - if a configuration value is explicitly in code, apply that value
-- if a command-line switch is supported, apply that value 
+- if a command-line switch is supported, apply that value
