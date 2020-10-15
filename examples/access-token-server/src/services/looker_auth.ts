@@ -50,7 +50,31 @@ export const validateLookerCredentials = async (
     return authToken.isActive()
   } catch (err) {
     console.error('looker credentials incorrect')
+    console.error(`server url ${session.settings.base_url}`)
     console.error(err)
     return false
+  }
+}
+
+export const verifyLookerServer = async () => {
+  const lookerSettings = DefaultSettings()
+  const settings = getSettings()
+  lookerSettings.base_url = settings.lookerServerUrl
+  lookerSettings.verify_ssl = settings.lookerServerVerifySsl
+  const session = new NodeSession(lookerSettings)
+  try {
+    const result = await session.transport.rawRequest('GET', '/versions')
+    return {
+      url: settings.lookerServerUrl,
+      reachable: result.statusCode === 200,
+      status: result.statusCode,
+      status_message: result.statusMessage,
+      body: result.body.toString(),
+    }
+  } catch (error) {
+    return {
+      looker_server_url: settings.lookerServerUrl,
+      looker_server_reachable: false,
+    }
   }
 }

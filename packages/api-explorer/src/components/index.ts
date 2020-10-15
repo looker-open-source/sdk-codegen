@@ -24,7 +24,6 @@
 
  */
 export { ApixHeading } from './common'
-export { Collapser } from './Collapser'
 export { DocActivityType } from './DocActivityType'
 export { DocCode } from './DocCode'
 export { DocMethodSummary } from './DocMethodSummary'
@@ -37,14 +36,6 @@ export { DocSDKs } from './DocSDKs'
 export { DocSdkUsage } from './DocSdkUsage'
 export { DocStatus } from './DocStatus'
 export { DocTitle } from './DocTitle'
-export {
-  HeaderWrapper,
-  Main,
-  PageLayout,
-  SideNavDivider,
-  StatusBeta,
-  SummaryCard,
-} from './ExplorerStyle'
+export { GlobalStyles } from './GlobalStyles'
 export { Header } from './Header'
 export { SideNav } from './SideNav'
-export { SideNavToggle } from './SideNavToggle'

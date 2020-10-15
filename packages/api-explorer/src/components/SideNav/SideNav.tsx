@@ -25,30 +25,24 @@
  */
 
 import React, { FC } from 'react'
-import {
-  TabList,
-  Tab,
-  TabPanel,
-  TabPanels,
-  Box,
-  useTabs,
-} from '@looker/components'
+import { TabList, Tab, TabPanel, TabPanels, useTabs } from '@looker/components'
+import styled from 'styled-components'
 import { useRouteMatch } from 'react-router-dom'
 import { ApiModel } from '@looker/sdk-codegen'
-
 import { SideNavTags } from './SideNavTags'
 import { SideNavTypes } from './SideNavTypes'
 
 interface SideNavProps {
   api: ApiModel
   specKey: string
+  className?: string
 }
 
 interface SideNavParams {
   sideNavTab: string
 }
 
-export const SideNav: FC<SideNavProps> = ({ api, specKey }) => {
+const SideNavLayout: FC<SideNavProps> = ({ api, specKey, className }) => {
   const tabNames = ['methods', 'types']
   const match = useRouteMatch<SideNavParams>(`/:specKey/:sideNavTab?`)
   let defaultIndex = tabNames.indexOf('methods')
@@ -60,12 +54,12 @@ export const SideNav: FC<SideNavProps> = ({ api, specKey }) => {
   const tags = api.tags || {}
 
   return (
-    <Box paddingTop="small">
-      <TabList {...tabs}>
+    <nav className={className}>
+      <TabList {...tabs} distribute>
         <Tab>Methods</Tab>
         <Tab>Types</Tab>
       </TabList>
-      <TabPanels {...tabs}>
+      <TabPanels {...tabs} pt="xsmall">
         <TabPanel>
           <SideNavTags tags={tags} specKey={specKey} />
         </TabPanel>
@@ -73,6 +67,12 @@ export const SideNav: FC<SideNavProps> = ({ api, specKey }) => {
           <SideNavTypes types={types} specKey={specKey} />
         </TabPanel>
       </TabPanels>
-    </Box>
+    </nav>
   )
 }
+
+export const SideNav = styled(SideNavLayout)`
+  padding: ${({ theme }) => theme.space.large} 0;
+  border-right: 1px solid ${({ theme }) => theme.colors.ui2};
+  height: 100%;
+`

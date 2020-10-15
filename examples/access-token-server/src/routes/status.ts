@@ -27,6 +27,7 @@
 import { readFileSync } from 'fs'
 import { cwd } from 'process'
 import { Router } from 'express'
+import { verifyLookerServer } from '../services/looker_auth'
 
 const router = Router()
 
@@ -47,6 +48,8 @@ router.get('/status', async (req, res) => {
     statusCode = 542
     status.errors.push('failed to read or parse status.json file')
   }
+  const serverStatus = await verifyLookerServer()
+  status.looker_server_status = serverStatus
   res.setHeader('Content-Type', 'application/json')
   res.status(statusCode).send(JSON.stringify(status))
 })

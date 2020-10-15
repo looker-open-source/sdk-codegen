@@ -31,7 +31,6 @@ import { SearchCriterion } from '@looker/sdk-codegen'
 
 import { renderWithSearch, renderWithSearchAndRouter } from '../../test-utils'
 import { api } from '../../test-data'
-import { defaultSearchState } from '../../reducers'
 import { Search } from './Search'
 
 describe('Search', () => {
@@ -40,7 +39,7 @@ describe('Search', () => {
     expect(screen.getByRole('combobox')).toBeInTheDocument()
     expect(screen.getByRole('textbox')).toHaveProperty(
       'placeholder',
-      `Searching in ${defaultSearchState.criteria.join(', ')}.`
+      `Press '/' to start searching.`
     )
   })
 
@@ -102,7 +101,10 @@ describe('Search', () => {
     )
     const search = screen.getByRole('textbox')
     expect(search).toBeDisabled()
-    expect(search).toHaveProperty('placeholder', 'No search criteria selected.')
+    expect(search).toHaveProperty(
+      'placeholder',
+      `Press '/' to start searching.`
+    )
   })
 
   test.skip('search settings show all criteria', async () => {

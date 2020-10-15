@@ -24,8 +24,8 @@
 
  */
 import React from 'react'
+import styled from 'styled-components'
 import { Icon, Status } from '@looker/components'
-import { StatusBeta } from '../ExplorerStyle'
 
 /**
  * Return a Status react element based on an endpoint's status
@@ -64,3 +64,13 @@ export const pickTooltipContent = (status: string) => {
       return 'This endpoint has no status associated with it.'
   }
 }
+
+const StatusBeta = styled.div`
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: ${({ theme }) => theme.fontSizes.xxsmall};
+  color: ${({ theme }) => theme.colors.neutral};
+  width: 1.125rem;
+  height: 1.125rem;
+`

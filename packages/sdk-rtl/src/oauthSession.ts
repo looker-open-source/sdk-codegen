@@ -166,8 +166,9 @@ export class OAuthSession extends AuthSession {
         if (!code) {
           return Promise.reject(
             new Error(
-              `OAuth failed: no OAuth code parameter found in ${window.location
-                .pathname + window.location.search}`
+              `OAuth failed: no OAuth code parameter found in ${
+                window.location.pathname + window.location.search
+              }`
             )
           )
         }

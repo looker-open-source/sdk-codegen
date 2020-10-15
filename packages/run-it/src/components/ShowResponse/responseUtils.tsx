@@ -29,10 +29,38 @@ import {
   ResponseMode,
   responseMode,
 } from '@looker/sdk-rtl/lib/browser'
-import { Paragraph } from '@looker/components'
+import { Paragraph, CodeBlock } from '@looker/components'
 
 import { CodeStructure } from '../CodeStructure'
 import { DataGrid, parseCsv, parseJson } from '../DataGrid'
+
+/**
+ * Are all items this array "simple"
+ * @param data to check for simplicity
+ */
+export const allSimple = (data: any[]) => {
+  if (!Array.isArray(data)) return false
+  for (let i = 0; i < data.length; i++) {
+    const col = data[i]
+    if (col) {
+      if (/\[object Object]/gi.test(col)) return false
+      if (Array.isArray(col)) return false
+      if (col instanceof Object && !(col instanceof Date)) return false
+    }
+  }
+  return true
+}
+
+/**
+ * Is every array in this array a "simple" data row?
+ * @param data to check for columnarity
+ */
+export const isColumnar = (data: any[]) => {
+  if (data.length === 0) return false
+  if (data.length === 1 && data[0].length === 0) return false
+  const complex = Object.values(data).find((row: any[]) => !allSimple(row))
+  return !complex
+}
 
 /**
  * Show JSON responses
@@ -44,22 +72,23 @@ import { DataGrid, parseCsv, parseJson } from '../DataGrid'
 const ShowJSON = (response: IRawResponse) => {
   const content = response.body.toString()
   const data = parseJson(content)
+  const showGrid = isColumnar(data.data)
   const raw = (
     <CodeStructure
       code={JSON.stringify(JSON.parse(response.body), null, 2)}
       language={'json'}
     />
   )
-  if (data.data.length === 0) return raw
+  if (!showGrid) return raw
   return <DataGrid data={data.data} raw={raw} />
 }
 
 /** A handler for text type responses */
 const ShowText = (response: IRawResponse) => (
-  <pre>
+  <>
     {response.statusMessage !== 'OK' && response.statusMessage}
-    {response.body.toString()}
-  </pre>
+    <CodeBlock>{response.body.toString()}</CodeBlock>
+  </>
 )
 
 /**
@@ -67,7 +96,7 @@ const ShowText = (response: IRawResponse) => (
  * @param response HTTP response to parse and display
  */
 const ShowCSV = (response: IRawResponse) => {
-  const raw = <pre>{response.body.toString()}</pre>
+  const raw = <CodeBlock>{response.body.toString()}</CodeBlock>
   const data = parseCsv(response.body.toString())
   return <DataGrid data={data.data} raw={raw} />
 }
@@ -97,15 +126,13 @@ const ShowHTML = (response: IRawResponse) => (
 /**
  * A handler for unknown response types. It renders the size of the unknown response and its type.
  */
-const ShowUnknown = (response: IRawResponse) => (
-  <Paragraph>
-    {`Received ${
-      response.body instanceof Blob
-        ? response.body.size
-        : response.body.toString().length
-    } bytes of ${response.contentType} data.`}
-  </Paragraph>
-)
+const ShowUnknown = (response: IRawResponse) => {
+  const body = response.body || ''
+  const message = `Received ${
+    body instanceof Blob ? body.size : body.toString().length
+  } bytes of ${response.contentType} data.`
+  return <Paragraph>{message}</Paragraph>
+}
 
 /** Displays a PDF inside the page */
 const ShowPDF = (response: IRawResponse) => {

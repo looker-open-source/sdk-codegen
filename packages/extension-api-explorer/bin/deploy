@@ -31,3 +31,5 @@ git checkout master || { echo "Error checking out branch"; exit 1; }
 cp ${path_to_bundle} .
 echo "Pushing changes to remote"
 git add bundle.js && git commit -m "${commit_msg}" && git push || { exit 1; }
+echo "The extension's bundle commit hash is:"
+git rev-parse HEAD

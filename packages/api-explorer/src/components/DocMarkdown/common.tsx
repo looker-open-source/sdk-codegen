@@ -42,20 +42,25 @@ MDCode.defaultProps = {
   pr: 'xxsmall',
 }
 
-export const MDCodeBlock = styled(CodeBlock)``
+export const MDCodeBlock = styled(CodeBlock)`
+  max-width: 800px;
+`
 MDCodeBlock.defaultProps = {
   fontSize: 'small',
   mb: 'large',
 }
 
 export const MDParagraph = styled(Paragraph)`
-  color: ${({ theme }) => theme.colors.text2};
+  color: ${({ theme }) => theme.colors.text5};
+  max-width: 600px;
 `
 MDParagraph.defaultProps = {
   mb: 'large',
 }
 
-export const MDList = styled(List)``
+export const MDList = styled(List)`
+  max-width: 600px;
+`
 MDList.defaultProps = {
   mb: 'large',
 }

@@ -37,7 +37,6 @@ import {
   FieldText,
   Form,
   Heading,
-  Text,
   ValidationMessages,
 } from '@looker/components'
 import { RunItConfigKey, validateUrl, RunItConfigurator } from './configUtils'
@@ -129,9 +128,7 @@ export const ConfigForm: FC<ConfigFormProps> = ({
 
   return (
     <>
-      <Heading>
-        <Text>{title}</Text>
-      </Heading>
+      <Heading>{title}</Heading>
       <Form onSubmit={handleSubmit} validationMessages={validationMessages}>
         <Fieldset legend="Server locations">
           <FieldText
@@ -154,14 +151,15 @@ export const ConfigForm: FC<ConfigFormProps> = ({
       </Form>
       <>
         <Button
-          iconAfter="Check"
+          iconBefore="Check"
           disabled={Object.keys(validationMessages).length > 0}
           // TODO maybe validationMessages is breaking the submit?
           onClick={handleSubmit}
+          mr="small"
         >
           Save
         </Button>
-        <Button onClick={handleRemove} iconAfter="Trash" color="critical">
+        <Button onClick={handleRemove} iconBefore="Trash" color="critical">
           Remove
         </Button>
       </>

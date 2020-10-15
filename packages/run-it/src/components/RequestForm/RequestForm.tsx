@@ -50,7 +50,10 @@ interface RequestFormProps {
   setRequestContent: Dispatch<{ [key: string]: any }>
   /** A set state callback which if present allows for editing, setting or clearing OAuth configuration parameters */
   setHasConfig?: Dispatch<boolean>
+  /** Configuration plug-in for stand-alone or extension */
   configurator: RunItConfigurator
+  /** Is RunIt being used in a Looker extension? */
+  isExtension?: boolean
 }
 
 /**
@@ -65,6 +68,7 @@ export const RequestForm: FC<RequestFormProps> = ({
   setRequestContent,
   setHasConfig,
   configurator,
+  isExtension = false,
 }) => {
   const handleBoolChange = (e: BaseSyntheticEvent) => {
     setRequestContent({ ...requestContent, [e.target.name]: e.target.checked })
@@ -111,9 +115,11 @@ export const RequestForm: FC<RequestFormProps> = ({
       )}
       {httpMethod !== 'GET' && showDataChangeWarning()}
       <Space>
-        <ButtonTransparent onClick={handleClear}>Clear</ButtonTransparent>
-        <Button>Run</Button>
-        {setHasConfig && (
+        <ButtonTransparent type="button" onClick={handleClear}>
+          Clear
+        </ButtonTransparent>
+        <Button type="submit">Run</Button>
+        {!isExtension && setHasConfig && (
           <ConfigDialog
             setHasConfig={setHasConfig}
             configurator={configurator}

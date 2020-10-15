@@ -31,17 +31,7 @@ import React, {
   useState,
   useEffect,
 } from 'react'
-import {
-  TabList,
-  useTabs,
-  TabPanels,
-  Tab,
-  TabPanel,
-  Badge,
-  Text,
-  Heading,
-  Box,
-} from '@looker/components'
+import { TabList, useTabs, TabPanels, Tab, TabPanel } from '@looker/components'
 import { Looker40SDK } from '@looker/sdk/lib/browser'
 import { IRawResponse } from '@looker/sdk-rtl/lib/browser'
 import { ApiModel, IMethod } from '@looker/sdk-codegen'
@@ -188,17 +178,14 @@ export const RunIt: FC<RunItProps> = ({ api, inputs, method }) => {
   if (!sdk) return <></>
 
   return (
-    <Box>
-      <Heading>
-        <Badge>{httpMethod}</Badge> <Text>{endpoint}</Text>
-      </Heading>
-      <TabList {...tabs}>
+    <>
+      <TabList distribute {...tabs}>
         <Tab key="request">Request</Tab>
         <Tab key="response">Response</Tab>
         {isExtension ? <></> : <Tab key="performance">Performance</Tab>}
         <Tab key="makeTheCall">Code</Tab>
       </TabList>
-      <TabPanels {...tabs}>
+      <TabPanels px="xxlarge" {...tabs}>
         <TabPanel key="request">
           {!needsAuth && hasConfig && (
             <RequestForm
@@ -209,6 +196,7 @@ export const RunIt: FC<RunItProps> = ({ api, inputs, method }) => {
               handleSubmit={handleSubmit}
               setHasConfig={setHasConfig}
               configurator={configurator}
+              isExtension={isExtension}
             />
           )}
           {!hasConfig && (
@@ -253,6 +241,6 @@ export const RunIt: FC<RunItProps> = ({ api, inputs, method }) => {
           />
         </TabPanel>
       </TabPanels>
-    </Box>
+    </>
   )
 }
