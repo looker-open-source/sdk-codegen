@@ -182,7 +182,8 @@ query_task_ids: DelimArray<string>`)
       const inputs = { look_id: 17, fields }
       const method = apiTestModel.methods.look
       const actual = gen.makeTheCall(method, inputs)
-      const expected = `let response = await sdk.ok(sdk.look(17, '${fields}'))`
+      const expected = `let response = await sdk.ok(sdk.look(
+  17, '${fields}'))`
       expect(actual).toEqual(expected)
     })
 
@@ -199,16 +200,15 @@ query_task_ids: DelimArray<string>`)
       const inputs = { look_id: 17, body, fields }
       const method = apiTestModel.methods.update_look
       const actual = gen.makeTheCall(method, inputs)
-      const expected = `let response = await sdk.ok(sdk.update_look(17, 
-  {
+      const expected = `let response = await sdk.ok(sdk.update_look(
+  17, {
     title: 'test title',
     description: 'gen test',
-    query:
-      {
-        model: 'the_look',
-        view: 'users',
-        total: true
-      }
+    query: {
+      model: 'the_look',
+      view: 'users',
+      total: true
+    }
   }, 'id,user_id,title,description'))`
       expect(actual).toEqual(expected)
     })
@@ -236,11 +236,10 @@ query_task_ids: DelimArray<string>`)
       const actual = gen.makeTheCall(method, inputs)
       const expected = `let response = await sdk.ok(sdk.create_query_task(
   {
-    body:
-      {
-        query_id: 1,
-        result_format: ResultFormat.csv
-      }
+    body: {
+      query_id: 1,
+      result_format: ResultFormat.csv
+    }
   }))`
       expect(actual).toEqual(expected)
     })
@@ -261,7 +260,7 @@ query_task_ids: DelimArray<string>`)
     it('assigns simple and complex arrays', () => {
       const body: IWriteMergeQuery = {
         pivots: ['one', 'two', 'three'],
-        sorts: ['a', 'b', 'c'],
+        sorts: ['a'],
         source_queries: [
           {
             name: 'first query',
@@ -290,36 +289,36 @@ query_task_ids: DelimArray<string>`)
       const actual = gen.makeTheCall(method, inputs)
       const expected = `let response = await sdk.ok(sdk.create_merge_query(
   {
-    body:
-      {
-        pivots: ['one', 'two', 'three'],
-        sorts: ['a', 'b', 'c'],
-        source_queries:
-        [
-          {
-            merge_fields:
-            [
-              {
-                field_name: 'merge_1',
-                source_field_name: 'source_1'
-              }
-            ],
-            name: 'first query',
-            query_id: 1
-          }, 
-          {
-            merge_fields:
-            [
-              {
-                field_name: 'merge_2',
-                source_field_name: 'source_2'
-              }
-            ],
-            name: 'second query',
-            query_id: 2
-          }
-        ]
-      },
+    body: {
+      pivots: [
+        'one',
+        'two',
+        'three'
+      ],
+      sorts: ['a'],
+      source_queries: [
+        {
+          merge_fields: [
+            {
+              field_name: 'merge_1',
+              source_field_name: 'source_1'
+            }
+          ],
+          name: 'first query',
+          query_id: 1
+        },
+        {
+          merge_fields: [
+            {
+              field_name: 'merge_2',
+              source_field_name: 'source_2'
+            }
+          ],
+          name: 'second query',
+          query_id: 2
+        }
+      ]
+    },
     fields: 'id,user_id,title,description'
   }))`
       expect(actual).toEqual(expected)
@@ -337,8 +336,7 @@ query_task_ids: DelimArray<string>`)
   {
     connection_name: 'looker',
     model_name: 'the_look',
-    vis_config:
-    {
+    vis_config: {
       first: 1,
       second: 'two'
     }
@@ -354,30 +352,31 @@ query_task_ids: DelimArray<string>`)
           token_type: 'test',
           expires_in: 10,
         }
-        const items = ['Abe', 'Zeb', token]
+        const oneItem = [1]
+        const threeItems = ['Abe', 'Zeb', token]
         const inputs: IDictionary<any> = {
-          items,
+          item: oneItem,
+          items: threeItems,
           first: 1,
           second: 'two',
           third: false,
           token,
         }
         const expected = `{
-  items:
-  [
+  item: [1],
+  items: [
     'Abe',
     'Zeb',
-      {
-    access_token: 'backstage',
-    token_type: 'test',
-    expires_in: 10
-  }
+    {
+      access_token: 'backstage',
+      token_type: 'test',
+      expires_in: 10
+    }
   ],
   first: 1,
   second: 'two',
   third: false,
-  token:
-  {
+  token: {
     access_token: 'backstage',
     token_type: 'test',
     expires_in: 10
@@ -401,10 +400,8 @@ query_task_ids: DelimArray<string>`)
         }
         const type = apiTestModel.types.MergeQuerySourceQuery
         expect(type).toBeDefined()
-        const expected = `
-  {
-    merge_fields:
-    [
+        const expected = `{
+    merge_fields: [
       {
         field_name: 'merge_1',
         source_field_name: 'source_1'
@@ -430,26 +427,24 @@ query_task_ids: DelimArray<string>`)
               },
             ],
           },
-          // {
-          //   name: 'second query',
-          //   query_id: 2,
-          //   merge_fields: [
-          //     {
-          //       field_name: 'merge_2',
-          //       source_field_name: 'source_2',
-          //     },
-          //   ],
-          // },
+          {
+            name: 'second query',
+            query_id: 2,
+            merge_fields: [
+              {
+                field_name: 'merge_2',
+                source_field_name: 'source_2',
+              },
+            ],
+          },
         ]
         const type =
           apiTestModel.types.WriteMergeQuery.properties.source_queries.type
         expect(type).toBeDefined()
         const actual = gen.arrayValue('', type, sourceQueries)
-        const expected = `
-[
+        const expected = `[
   {
-    merge_fields:
-    [
+    merge_fields: [
       {
         field_name: 'merge_1',
         source_field_name: 'source_1'
@@ -457,6 +452,16 @@ query_task_ids: DelimArray<string>`)
     ],
     name: 'first query',
     query_id: 1
+  },
+  {
+    merge_fields: [
+      {
+        field_name: 'merge_2',
+        source_field_name: 'source_2'
+      }
+    ],
+    name: 'second query',
+    query_id: 2
   }
 ]`
         expect(actual).toEqual(expected)

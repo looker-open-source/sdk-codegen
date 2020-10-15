@@ -26,6 +26,7 @@
 
 import {
   Arg,
+  ArgValues,
   EnumType,
   IMethod,
   IParameter,
@@ -33,7 +34,7 @@ import {
   IType,
   strBody,
 } from './sdkModels'
-import { CodeGen, IMappedType } from './codeGen'
+import { CodeGen, IMappedType, CodeAssignment, trimInputs } from './codeGen'
 
 export class PythonGen extends CodeGen {
   codePath = './python/'
@@ -45,12 +46,19 @@ export class PythonGen extends CodeGen {
 
   indentStr = '    '
   argDelimiter = `,\n${this.indentStr.repeat(3)}`
+  argSetSep = '='
   paramDelimiter = ',\n'
   propDelimiter = '\n'
   dataStructureDelimiter = ', '
   enumDelimiter = '\n'
   codeQuote = '"'
   useNamedParameters = true
+  useNamedArguments = true
+  typeOpen = '('
+  typeClose = ')'
+  hashOpen = 'dict('
+  hashClose = ')'
+  useModelClassForTypes = true
 
   endTypeStr = ''
 
@@ -92,23 +100,6 @@ export class PythonGen extends CodeGen {
     'with',
     'yield',
   ])
-
-  readonly pythonTypes: Record<string, IMappedType> = {
-    any: { default: this.nullStr, name: 'Any' },
-    boolean: { default: this.nullStr, name: 'bool' },
-    byte: { default: this.nullStr, name: 'bytes' },
-    datetime: { default: this.nullStr, name: 'datetime.datetime' },
-    double: { default: this.nullStr, name: 'float' },
-    float: { default: this.nullStr, name: 'float' },
-    int32: { default: this.nullStr, name: 'int' },
-    int64: { default: this.nullStr, name: 'int' },
-    integer: { default: this.nullStr, name: 'int' },
-    number: { default: this.nullStr, name: 'float' },
-    password: { default: this.nullStr, name: 'str' },
-    string: { default: this.nullStr, name: 'str' },
-    uri: { default: this.nullStr, name: 'str' },
-    void: { default: this.nullStr, name: 'None' },
-  }
 
   // cattrs [un]structure hooks for model [de]serialization
   hooks: string[] = []
@@ -281,6 +272,16 @@ ${this.hooks.join('\n')}
       `${indent}${param.name}: ${paramType}` +
       (param.required ? '' : ` = ${mapped.default}`)
     )
+  }
+
+  makeTheCall(method: IMethod, inputs: ArgValues): string {
+    const origDelim = this.argDelimiter
+    this.argDelimiter = `,\n${this.indentStr}`
+    inputs = trimInputs(inputs)
+    const resp = `response = sdk.${method.name}(`
+    const args = this.assignParams(method, inputs)
+    this.argDelimiter = origDelim
+    return `${resp}${args})`
   }
 
   initArg(indent: string, property: IProperty) {
@@ -525,51 +526,90 @@ ${this.hooks.join('\n')}
     return text ? `${indent}"""${text}"""\n` : ''
   }
 
-  _typeMap(type: IType, format: 'models' | 'methods'): IMappedType {
-    this.typeMap(type)
+  // hack default format to 'methods' so that argValue() calls the right thing
+  typeMap(type: IType, format: 'models' | 'methods' = 'methods'): IMappedType {
+    const asString: CodeAssignment = (_, v) => `"${v}"`
+    const pythonTypes: Record<string, IMappedType> = {
+      any: { default: this.nullStr, name: 'Any' },
+      boolean: { default: this.nullStr, name: 'bool' },
+      byte: { default: this.nullStr, name: 'bytes' },
+      datetime: { default: this.nullStr, name: 'datetime.datetime' },
+      double: { default: this.nullStr, name: 'float' },
+      float: { default: this.nullStr, name: 'float' },
+      int32: { default: this.nullStr, name: 'int' },
+      int64: { default: this.nullStr, name: 'int' },
+      integer: { default: this.nullStr, name: 'int' },
+      number: { default: this.nullStr, name: 'float' },
+      password: { default: this.nullStr, name: 'str', asVal: asString },
+      string: { default: this.nullStr, name: 'str', asVal: asString },
+      uri: { default: this.nullStr, name: 'str', asVal: asString },
+      void: { default: this.nullStr, name: 'None' },
+    }
+
+    super.typeMap(type)
     if (type.elementType) {
-      const map = this._typeMap(type.elementType, format)
+      const map = this.typeMap(type.elementType, format)
+      let typeName: string
+      let name: string
+      const defaultValue = this.nullStr
+      let asVal: CodeAssignment | undefined
       switch (type.className) {
         case 'ArrayType':
-          return { default: this.nullStr, name: `Sequence[${map.name}]` }
-        case 'HashType': {
-          const mapName = type.elementType.name === 'string' ? 'Any' : map.name // TODO fix bad API spec, like MergeQuery vis_config
-          return {
-            default: this.nullStr,
-            name: `MutableMapping[str, ${mapName}]`,
-          }
-        }
+          typeName = 'Sequence'
+          name = `${typeName}[${map.name}]`
+          break
+        case 'HashType':
+          typeName = 'MutableMapping'
+          // TODO fix bad API spec, like MergeQuery vis_config
+          name =
+            typeName +
+            '[str, ' +
+            (type.elementType.name === 'string' ? 'Any' : map.name) +
+            ']'
+          break
         case 'DelimArrayType':
-          return {
-            default: this.nullStr,
-            name: `models.DelimSequence[${map.name}]`,
-          }
+          typeName = 'DelimSequence'
+          name = `${typeName}[${map.name}]`
+          asVal = (_, v) => `models.${typeName}([${v}])`
+          break
         case 'EnumType':
-          return { default: '', name: `"${type.name}"` }
+          typeName = type.name
+          name = `"${type.name}"`
+          asVal = (_, v) => `models.${typeName}.${v}`
+          break
+        default:
+          throw new Error(`Don't know how to handle: ${JSON.stringify(type)}`)
       }
-      throw new Error(`Don't know how to handle: ${JSON.stringify(type)}`)
+      const mt: IMappedType = { default: defaultValue, name: name }
+      if (asVal) {
+        mt.asVal = asVal
+      }
+      return mt
     }
-    if (type.name) {
-      let name: string
-      if (format === 'models') {
-        name = type.customType ? `"${type.name}"` : type.name
-      } else if (format === 'methods') {
-        name = `models.${type.name}`
-      } else {
-        throw new Error('format must be "models" or "methods"')
-      }
-      const result = this.pythonTypes[type.name]
-      return result || { default: this.nullStr, name: name }
-    } else {
+    if (!type.name) {
       throw new Error('Cannot output a nameless type.')
     }
+    let name: string
+    if (format === 'models') {
+      name = type.customType ? `"${type.name}"` : type.name
+    } else if (format === 'methods') {
+      name = `models.${type.name}`
+    } else {
+      throw new Error('format must be "models" or "methods"')
+    }
+    const result = pythonTypes[type.name]
+    return result || { default: this.nullStr, name: name }
   }
 
   typeMapMethods(type: IType) {
-    return this._typeMap(type, 'methods')
+    return this.typeMap(type, 'methods')
   }
 
   typeMapModels(type: IType) {
-    return this._typeMap(type, 'models')
+    return this.typeMap(type, 'models')
+  }
+
+  argSet(name: string, _sep: string, exp: string) {
+    return `${name}=${exp}`
   }
 }

@@ -487,13 +487,11 @@ export interface IDictionary<T> {
           return {
             default: '[]',
             name: `${map.name}[]`,
-            asVal: (indent, v) => this.arrayValue(indent, type, v),
           }
         case 'HashType':
           return {
             default: '{}',
             name: `IDictionary<${map.name}>`,
-            asVal: (indent, value) => this.hashValue(indent, value),
           }
         case 'DelimArrayType':
           return {
