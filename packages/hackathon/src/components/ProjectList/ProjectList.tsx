@@ -99,25 +99,31 @@ export const ProjectList: FC<ProjectListProps> = ({ projects }) => {
   columns[3].widthPercent = 40 // description
   columns[4].widthPercent = 5 // project type
   columns[4].title = (
-    <SpaceVertical gap="xxsmall">
-      <Span>Project</Span>
-      <Span>Type</Span>
-    </SpaceVertical>
+    <Tooltip content="Open: anyone can join. Closed: no more members. Invite only: ask to join">
+      <SpaceVertical gap="xxsmall">
+        <Span>Project</Span>
+        <Span>Type</Span>
+      </SpaceVertical>
+    </Tooltip>
   )
   columns[5].widthPercent = 15 // technologies
   columns[6].widthPercent = 5 // team count
   columns[6].title = (
-    <SpaceVertical gap="xxsmall">
-      <Span>Team</Span>
-      <Span>Count</Span>
-    </SpaceVertical>
+    <Tooltip content="member count/maximum allowed">
+      <SpaceVertical gap="xxsmall">
+        <Span>Team</Span>
+        <Span>Count</Span>
+      </SpaceVertical>
+    </Tooltip>
   )
   columns[7].widthPercent = 5 // judge count
   columns[7].title = (
-    <SpaceVertical gap="xxsmall">
-      <Span>Judge</Span>
-      <Span>Count</Span>
-    </SpaceVertical>
+    <Tooltip content="Number of judges assigned">
+      <SpaceVertical gap="xxsmall">
+        <Span>Judge</Span>
+        <Span>Count</Span>
+      </SpaceVertical>
+    </Tooltip>
   )
 
   const history = useHistory()
