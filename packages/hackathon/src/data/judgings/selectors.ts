@@ -25,7 +25,7 @@
  */
 
 import { RootState } from '../root_reducer'
-import { Judgings } from '../../models'
+import { Judging } from '../../models'
 
-export const getJudgingsState = (state: RootState): Judgings =>
+export const getJudgingsState = (state: RootState): Judging[] =>
   state.judgingsState.judgings

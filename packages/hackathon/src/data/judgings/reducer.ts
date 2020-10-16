@@ -23,15 +23,14 @@
  SOFTWARE.
 
  */
-import { ITabTable } from '@looker/wholly-sheet'
-import { Judgings, SheetData } from '../../models'
+import { Judging } from '../../models'
 import { Actions, JudgingAction } from './actions'
 
 export interface JudgingsState {
-  judgings: Judgings
+  judgings: Judging[]
 }
 
-const EmptyJudgings = new Judgings({} as SheetData, {} as ITabTable)
+const EmptyJudgings: Judging[] = []
 
 const defaultState: Readonly<JudgingsState> = Object.freeze({
   judgings: EmptyJudgings,

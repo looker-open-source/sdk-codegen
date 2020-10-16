@@ -24,7 +24,7 @@
 
  */
 
-import { Judgings } from '../../models'
+import { Judging } from '../../models'
 
 export enum Actions {
   ALL_JUDGINGS_REQUEST = 'ALL_JUDGINGS_REQUEST',
@@ -38,7 +38,7 @@ export interface AllJudgingsRequestAction {
 
 export interface AllJudgingsSuccessAction {
   type: Actions.ALL_JUDGINGS_SUCCESS
-  payload: Judgings
+  payload: Judging[]
 }
 
 export type JudgingAction = AllJudgingsRequestAction | AllJudgingsSuccessAction
@@ -48,7 +48,7 @@ export const allJudgingsRequest = (): AllJudgingsRequestAction => ({
 })
 
 export const allJudgingsSuccess = (
-  judgings: Judgings
+  judgings: Judging[]
 ): AllJudgingsSuccessAction => ({
   type: Actions.ALL_JUDGINGS_SUCCESS,
   payload: judgings,

@@ -50,9 +50,9 @@ export const JudgingScene: FC<JudgingSceneProps> = () => {
   let list: Judging[] = []
   if (judgings && hackathon) {
     if (hacker.canAdmin()) {
-      list = judgings.filterBy(hackathon)
+      list = judgings
     } else if (hacker.canJudge()) {
-      list = judgings.filterBy(hackathon, hacker)
+      list = judgings.filter((j) => j.user_id === hacker.id)
     }
   }
 

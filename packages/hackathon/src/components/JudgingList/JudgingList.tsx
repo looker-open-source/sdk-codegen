@@ -44,7 +44,7 @@ import { Judging, sheetCell, sheetHeader, Project } from '../../models'
 import { getHackerState } from '../../data/hack_session/selectors'
 
 const judgingListheaders = [
-  '$judge',
+  '$judge_name',
   '$title',
   'execution',
   'ambition',
