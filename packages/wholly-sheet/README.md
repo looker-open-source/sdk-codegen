@@ -1,8 +1,17 @@
-# Looker GSheets API extentions
+# Looker GSheets as data tables API
 
-This package contains routines for treating a GSheet as a database where each sheet (tab) is a data table.
+This package contains routines for treating a GSheet (Google Sheet) as a database where each sheet (tab) is a data table. 
 
-This is based on the Python [sheets.py](/examples/python/hackathon_app/sheets.py) created for the initial Looker Hackathon registration application.
+## WhollySheet
+We call the base component that supports data-table like operations on GSheet tabs [**WhollySheet**](src/WhollySheet.ts).
+
+The original version of this implementation is the Python [sheets.py](/examples/python/hackathon_app/sheets.py) created for the initial Looker Hackathon registration application.
+
+Porting WhollySheet to Typescript was required for the new Looker [Hackathon application](/packages/hackathon) extension.
+
+## Sheet SDK
+
+The [Sheet SDK](src/SheetSDK.ts) implements the REST requests for managing a GSheet. We couldn't use the Google-provided API because it would not be available inside a Looker extension.
 
 ## Typescript Google Sheets API
 
