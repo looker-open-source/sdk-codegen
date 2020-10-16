@@ -76,7 +76,6 @@ export const ProjectList: FC<ProjectListProps> = ({ projects }) => {
   }
 
   const openMoreInfo = (project: Project) => {
-    console.log({ project })
     setMoreInfoProject(project)
   }
 

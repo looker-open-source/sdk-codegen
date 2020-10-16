@@ -71,7 +71,6 @@ export const JudgingList: FC<JudgingListProps> = ({ judgings }) => {
   // const dispatch = useDispatch()
 
   const openMoreInfo = (judging: Judging) => {
-    console.log({ judging })
     setMoreInfoProject(judging.$project)
   }
 

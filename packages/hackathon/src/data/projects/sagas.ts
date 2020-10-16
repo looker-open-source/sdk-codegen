@@ -31,13 +31,13 @@ import {
   currentProjectsRequest,
   allProjectsSuccess,
   currentProjectsSuccess,
-  BeginEditProjectRequestAction,
-  beginEditProjectSuccess,
+  UpdateProjectRequestAction,
+  updateProjectSuccess,
   DeleteProjectRequestAction,
   LockProjectsRequestAction,
   lockProjectsSuccess,
-  SaveProjectRequestAction,
-  saveProjectSuccess,
+  CreateProjectRequestAction,
+  createProjectSuccess,
   ChangeMembershipAction,
 } from './actions'
 
@@ -72,7 +72,7 @@ function* currentProjectsSaga() {
   }
 }
 
-function* saveProjectSaga(action: SaveProjectRequestAction) {
+function* createProjectSaga(action: CreateProjectRequestAction) {
   try {
     yield put(beginLoading())
     yield call(
@@ -82,7 +82,7 @@ function* saveProjectSaga(action: SaveProjectRequestAction) {
       action.payload.project
     )
     yield put(endLoading())
-    yield put(saveProjectSuccess())
+    yield put(createProjectSuccess())
   } catch (err) {
     console.error(err)
     yield put(
@@ -91,7 +91,7 @@ function* saveProjectSaga(action: SaveProjectRequestAction) {
   }
 }
 
-function* editProjectSaga(action: BeginEditProjectRequestAction) {
+function* updateProjectSaga(action: UpdateProjectRequestAction) {
   try {
     yield put(beginLoading())
     yield call(
@@ -100,7 +100,7 @@ function* editProjectSaga(action: BeginEditProjectRequestAction) {
       action.payload.project
     )
     yield put(endLoading())
-    yield put(beginEditProjectSuccess())
+    yield put(updateProjectSuccess())
   } catch (err) {
     console.error(err)
     yield put(
@@ -173,8 +173,8 @@ export function* registerProjectsSagas() {
   yield all([
     takeEvery(Actions.ALL_PROJECTS_REQUEST, allProjectsSaga),
     takeEvery(Actions.CURRENT_PROJECTS_REQUEST, currentProjectsSaga),
-    takeEvery(Actions.SAVE_PROJECT_REQUEST, saveProjectSaga),
-    takeEvery(Actions.BEGIN_EDIT_PROJECT_REQUEST, editProjectSaga),
+    takeEvery(Actions.CREATE_PROJECT_REQUEST, createProjectSaga),
+    takeEvery(Actions.UPDATE_PROJECT_REQUEST, updateProjectSaga),
     takeEvery(Actions.DELETE_PROJECT_REQUEST, deleteProjectSaga),
     takeEvery(Actions.LOCK_PROJECTS_REQUEST, lockProjectsSaga),
     takeEvery(Actions.CHANGE_MEMBERSHIP, changeMembershipSaga),

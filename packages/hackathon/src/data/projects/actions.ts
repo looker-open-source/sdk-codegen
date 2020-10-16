@@ -30,10 +30,10 @@ export enum Actions {
   ALL_PROJECTS_SUCCESS = 'ALL_PROJECTS_SUCCESS',
   CURRENT_PROJECTS_REQUEST = 'CURRENT_PROJECTS_REQUEST',
   CURRENT_PROJECTS_SUCCESS = 'CURRENT_PROJECTS_SUCCESS',
-  BEGIN_EDIT_PROJECT_REQUEST = 'BEGIN_EDIT_PROJECT_REQUEST',
-  BEGIN_EDIT_PROJECT_SUCCESS = 'BEGIN_EDIT_PROJECT_SUCCESS',
-  SAVE_PROJECT_REQUEST = 'SAVE_PROJECT_REQUEST',
-  SAVE_PROJECT_SUCCESS = 'SAVE_PROJECT_SUCCESS',
+  UPDATE_PROJECT_REQUEST = 'UPDATE_PROJECT_REQUEST',
+  UPDATE_PROJECT_SUCCESS = 'UPDATE_PROJECT_SUCCESS',
+  CREATE_PROJECT_REQUEST = 'CREATE_PROJECT_REQUEST',
+  CREATE_PROJECT_SUCCESS = 'CREATE_PROJECT_SUCCESS',
   DELETE_PROJECT_REQUEST = 'DELETE_PROJECT_REQUEST',
   DELETE_PROJECT_SUCCESS = 'DELETE_PROJECT_SUCCESS',
   LOCK_PROJECTS_REQUEST = 'LOCK_PROJECTS_REQUEST',
@@ -59,20 +59,20 @@ export interface CurrentProjectsSuccessAction {
   payload: Projects
 }
 
-export interface BeginEditProjectRequestAction {
-  type: Actions.BEGIN_EDIT_PROJECT_REQUEST
+export interface UpdateProjectRequestAction {
+  type: Actions.UPDATE_PROJECT_REQUEST
   payload: {
     projects: Projects
     project: Project
   }
 }
 
-export interface BeginEditProjectSuccessAction {
-  type: Actions.BEGIN_EDIT_PROJECT_SUCCESS
+export interface UpdateProjectSuccessAction {
+  type: Actions.UPDATE_PROJECT_SUCCESS
 }
 
-export interface SaveProjectRequestAction {
-  type: Actions.SAVE_PROJECT_REQUEST
+export interface CreateProjectRequestAction {
+  type: Actions.CREATE_PROJECT_REQUEST
   payload: {
     hacker_id: string
     projects: Projects
@@ -80,8 +80,8 @@ export interface SaveProjectRequestAction {
   }
 }
 
-export interface SaveProjectSuccessAction {
-  type: Actions.SAVE_PROJECT_SUCCESS
+export interface CreateProjectSuccessAction {
+  type: Actions.CREATE_PROJECT_SUCCESS
 }
 
 export interface DeleteProjectRequestAction {
@@ -124,10 +124,10 @@ export type ProjectAction =
   | AllProjectsSuccessAction
   | CurrentProjectsRequestAction
   | CurrentProjectsSuccessAction
-  | BeginEditProjectRequestAction
-  | BeginEditProjectSuccessAction
-  | SaveProjectRequestAction
-  | SaveProjectSuccessAction
+  | UpdateProjectRequestAction
+  | UpdateProjectSuccessAction
+  | CreateProjectRequestAction
+  | CreateProjectSuccessAction
   | DeleteProjectRequestAction
   | DeleteProjectSuccessAction
   | LockProjectsRequestAction
@@ -156,27 +156,27 @@ export const currentProjectsSuccess = (
   payload: projects,
 })
 
-export const beginEditProjectRequest = (
+export const updateProjectRequest = (
   projects: Projects,
   project: Project
-): BeginEditProjectRequestAction => ({
-  type: Actions.BEGIN_EDIT_PROJECT_REQUEST,
+): UpdateProjectRequestAction => ({
+  type: Actions.UPDATE_PROJECT_REQUEST,
   payload: {
     projects,
     project,
   },
 })
 
-export const beginEditProjectSuccess = (): BeginEditProjectSuccessAction => ({
-  type: Actions.BEGIN_EDIT_PROJECT_SUCCESS,
+export const updateProjectSuccess = (): UpdateProjectSuccessAction => ({
+  type: Actions.UPDATE_PROJECT_SUCCESS,
 })
 
-export const saveProjectRequest = (
+export const createProjectRequest = (
   hacker_id: string,
   projects: Projects,
   project: Project
-): SaveProjectRequestAction => ({
-  type: Actions.SAVE_PROJECT_REQUEST,
+): CreateProjectRequestAction => ({
+  type: Actions.CREATE_PROJECT_REQUEST,
   payload: {
     hacker_id: hacker_id,
     projects: projects,
@@ -184,8 +184,8 @@ export const saveProjectRequest = (
   },
 })
 
-export const saveProjectSuccess = (): SaveProjectSuccessAction => ({
-  type: Actions.SAVE_PROJECT_SUCCESS,
+export const createProjectSuccess = (): CreateProjectSuccessAction => ({
+  type: Actions.CREATE_PROJECT_SUCCESS,
 })
 
 export const deleteProjectRequest = (
