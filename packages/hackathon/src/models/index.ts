@@ -44,3 +44,4 @@ export {
   sheetHeaderColumn,
   asTitle,
 } from './sheetUtils'
+export { ISheetRow, SheetRow } from './SheetRow'

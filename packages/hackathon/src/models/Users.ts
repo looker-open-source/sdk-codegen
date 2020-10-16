@@ -32,6 +32,7 @@ import { SheetData } from './SheetData'
 export interface IUser extends ISheetRow {
   first_name: string
   last_name: string
+  $name: string
 }
 
 /**
@@ -51,6 +52,10 @@ export class User extends SheetRow<IUser> {
     // IMPORTANT: this must be done after super() constructor is called so keys are established
     // there may be a way to overload the constructor so this isn't necessary but pattern hasn't been found
     this.assign(values)
+  }
+
+  get $name(): string {
+    return `${this.first_name} ${this.last_name}`
   }
 }
 

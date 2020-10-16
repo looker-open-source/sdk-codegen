@@ -202,6 +202,10 @@ describe('SheetData', () => {
             const judge = mockAJudge(1)
             project = await project.addJudge(judge)
             expect(project.$judgings.length).toEqual(1)
+            const judging = project.$judgings[0]
+            expect(judging.$project._id).toEqual(project._id)
+            expect(judging.project_id).toEqual(project._id)
+            expect(judging.$judge._id).toEqual(judge.id)
             project = await project.addJudge(judge)
             expect(project.$judgings.length).toEqual(1)
             expect(project.$judge_count).toEqual(1)

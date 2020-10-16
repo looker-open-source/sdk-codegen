@@ -205,6 +205,10 @@ export class Project extends SheetRow<Project> {
     this.$judgings = this.$data.judgings.rows.filter(
       (m) => m.project_id === this._id
     )
+    this.$judgings.forEach((j) => {
+      // Assign relations back for judging row in case it's not established
+      j.load(this.$data)
+    })
     return this
   }
 

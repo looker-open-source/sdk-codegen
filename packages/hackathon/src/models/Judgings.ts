@@ -26,8 +26,11 @@
 
 import { ITabTable, SheetSDK, WhollySheet } from '@looker/wholly-sheet'
 import { ISheetRow, SheetRow } from './SheetRow'
-import { IHacker } from './Hacker'
+import { Project } from './Projects'
+import { User } from './Users'
+import { TeamMembers } from './TeamMembers'
 import { SheetData } from './SheetData'
+import { IHacker } from './Hacker'
 
 /** IMPORTANT: properties must be declared in the tab sheet's columnar order, not sorted order */
 export interface IJudging extends ISheetRow {
@@ -39,6 +42,13 @@ export interface IJudging extends ISheetRow {
   impact: number
   score: number
   notes: string
+  $project: Project
+  $title: string
+  $judge: User
+  $judge_name: string
+  $team: TeamMembers[]
+  $members: string[]
+  $more_info: string
 }
 
 /** IMPORTANT: properties must be declared in the tab sheet's columnar order, not sorted order */
@@ -51,11 +61,43 @@ export class Judging extends SheetRow<IJudging> {
   impact = 0
   score = 0
   notes = ''
+  $project: Project = {} as Project
+  $judge: User = {} as User
+  $data: SheetData = {} as SheetData
+
   constructor(values?: any) {
     super()
     // IMPORTANT: assign must be called AFTER super() constructor is called so keys are established
     // there may be a way to overload the constructor so this isn't necessary but pattern hasn't been found
     this.assign(values)
+  }
+
+  load(data?: SheetData) {
+    if (data) this.$data = data
+    const j = this.$data.users?.find(this.user_id)
+    if (j) this.$judge = j
+    const p = this.$data.projects?.find(this.project_id)
+    if (p) this.$project = p
+  }
+
+  get $title() {
+    return this.$project?.title || ''
+  }
+
+  get $team() {
+    return this.$project.$team
+  }
+
+  get $members() {
+    return this.$project.$members
+  }
+
+  get $judge_name() {
+    return this.$judge.$name || ''
+  }
+
+  get $more_info() {
+    return this.$project.more_info
   }
 
   canDelete(user: IHacker): boolean {
@@ -74,7 +116,7 @@ export class Judging extends SheetRow<IJudging> {
     super.prepare()
     this.score =
       this.execution * 2 + this.ambition + this.coolness + this.impact
-    return this
+    return (this as unknown) as IJudging
   }
 }
 
@@ -87,6 +129,8 @@ export class Judgings extends WhollySheet<Judging> {
   }
 
   typeRow<Judging>(values?: any) {
-    return (new Judging(values) as unknown) as Judging
+    const j = new Judging(values)
+    j.load(this.data)
+    return (j as unknown) as Judging
   }
 }

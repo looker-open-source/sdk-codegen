@@ -23,36 +23,4 @@
  SOFTWARE.
 
  */
-import React, { FC } from 'react'
-import { useSelector } from 'react-redux'
-import { isLoadingState } from '../../data/common/selectors'
-// import {
-//   getCurrentHackathonState,
-//   getHackerState,
-// } from '../../data/hack_session/selectors'
-// import { Routes } from '../../routes/AppRouter'
-import { Loading } from '../../components/Loading'
-import { JudgingList } from '../../components/JudgingList'
-import { Judging } from '../../models'
-
-interface JudgingSceneProps {}
-
-export const JudgingScene: FC<JudgingSceneProps> = () => {
-  // const dispatch = useDispatch()
-  // useEffect(() => {
-  //   dispatch(currentJudgingsRequest())
-  // }, [dispatch])
-  // const hacker = useSelector(getHackerState)
-  // const hackathon = useSelector(getCurrentHackathonState)
-  // const judgings = useSelector(getCurrentJudgingsState)
-  const isLoading = useSelector(isLoadingState)
-  const judgings: Judging[] = []
-  // const history = useHistory()
-
-  return (
-    <>
-      <Loading loading={isLoading} message={'Processing judgings...'} />
-      {judgings && <JudgingList judgings={judgings} />}
-    </>
-  )
-}
+export { JudgingList } from './JudgingList'
