@@ -82,6 +82,7 @@ export const ProjectList: FC<ProjectListProps> = ({ projects }) => {
   const closeMoreInfo = () => {
     setMoreInfoProject(undefined)
   }
+  columns[0].canSort = false
   columns[0].widthPercent = 3
   columns[0].title = (
     <Tooltip content={'Is this project locked?'}>
@@ -178,12 +179,25 @@ export const ProjectList: FC<ProjectListProps> = ({ projects }) => {
   const totalPages = Math.ceil(projects.rows.length / pageSize)
 
   const projectCell = (project: Project, columnName: string) => {
-    if (columnName !== 'locked' && columnName !== '$team_count')
+    if (
+      columnName !== 'locked' &&
+      columnName !== '$team_count' &&
+      columnName !== '$judge_count'
+    )
       return sheetCell(project[columnName])
 
     if (columnName === '$team_count') {
       return (
         <Tooltip content={project.$members.join(',')}>
+          {sheetCell(project[columnName])}
+        </Tooltip>
+      )
+    }
+    if (columnName === '$judge_count') {
+      if (!hacker.canAdmin() && !hacker.canStaff())
+        return sheetCell(project[columnName])
+      return (
+        <Tooltip content={project.$judges.join(',')}>
           {sheetCell(project[columnName])}
         </Tooltip>
       )
