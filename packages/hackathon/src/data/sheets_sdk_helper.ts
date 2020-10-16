@@ -116,6 +116,7 @@ export const sheetsSdkHelper = {
   },
   getJudgings: async (hackathon: Hackathon): Promise<JudgingsData> => {
     const data = await initSheetData()
+    await data.judgings.refresh()
     return {
       judgingsList: data.judgings.filterBy(hackathon),
       judgings: data.judgings,

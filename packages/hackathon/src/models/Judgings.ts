@@ -50,6 +50,12 @@ export interface IJudging extends ISheetRow {
   $team: TeamMembers[]
   $members: string[]
   $more_info: string
+  calculateScore(
+    execution: number,
+    ambition: number,
+    coolness: number,
+    impact: number
+  ): number
 }
 
 /** IMPORTANT: properties must be declared in the tab sheet's columnar order, not sorted order */
@@ -79,6 +85,15 @@ export class Judging extends SheetRow<IJudging> {
     if (j) this.$judge = j
     const p = this.$data.projects?.find(this.project_id)
     if (p) this.$project = p
+  }
+
+  calculateScore(
+    execution: number,
+    ambition: number,
+    coolness: number,
+    impact: number
+  ) {
+    return 2 * execution + ambition + coolness + impact
   }
 
   get $title() {
@@ -115,8 +130,12 @@ export class Judging extends SheetRow<IJudging> {
 
   prepare(): IJudging {
     super.prepare()
-    this.score =
-      this.execution * 2 + this.ambition + this.coolness + this.impact
+    this.score = this.calculateScore(
+      this.execution,
+      this.ambition,
+      this.coolness,
+      this.impact
+    )
     return (this as unknown) as IJudging
   }
 }

@@ -73,11 +73,11 @@ export const JudgingForm: FC<JudgingFormProps> = ({ judgings, judging }) => {
     if (!isLoading && !messageDetail && isUpdating) {
       history.push(Routes.JUDGING)
     }
-  }, [isLoading, messageDetail, isUpdating])
+  }, [history, isLoading, messageDetail, isUpdating])
 
   useEffect(() => {
-    setScore(2 * execution + ambition + coolness + impact)
-  }, [execution, ambition, coolness, impact])
+    setScore(judging.calculateScore(execution, ambition, coolness, impact))
+  }, [judging, execution, ambition, coolness, impact])
 
   const onExecutionChange = (event: BaseSyntheticEvent) => {
     setExecution(event.target.valueAsNumber)
