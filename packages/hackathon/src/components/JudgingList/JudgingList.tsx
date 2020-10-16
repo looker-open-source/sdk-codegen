@@ -144,6 +144,7 @@ export const JudgingList: FC<JudgingListProps> = ({ judgings }) => {
     )
   }
 
+  judgings.forEach((j) => j.load())
   const pageSize = 25
   const totalPages = Math.ceil(judgings.length / pageSize)
 

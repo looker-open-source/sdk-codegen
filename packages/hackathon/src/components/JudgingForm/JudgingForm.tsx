@@ -60,6 +60,7 @@ export const JudgingForm: FC<JudgingFormProps> = ({ judgings, judging }) => {
   const [impact, setImpact] = useState<number>(1)
 
   useEffect(() => {
+    judging.load()
     setExecution(judging.execution || 1)
     setAmbition(judging.ambition || 1)
     setCoolness(judging.coolness || 1)
