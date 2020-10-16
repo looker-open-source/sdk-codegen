@@ -38,6 +38,7 @@ import {
   lockProjectsSuccess,
   SaveProjectRequestAction,
   saveProjectSuccess,
+  ChangeMembershipAction,
 } from './actions'
 
 function* allProjectsSaga() {
@@ -147,6 +148,27 @@ function* lockProjectsSaga(action: LockProjectsRequestAction) {
   }
 }
 
+function* changeMembershipSaga(action: ChangeMembershipAction) {
+  try {
+    yield put(beginLoading())
+    yield call(
+      [sheetsSdkHelper, sheetsSdkHelper.changeMembership],
+      action.payload.project,
+      action.payload.hacker,
+      action.payload.leave
+    )
+    yield put(currentProjectsRequest())
+  } catch (err) {
+    console.error(err)
+    yield put(
+      actionMessage(
+        'A problem occurred while locking the hackathon projects',
+        'critical'
+      )
+    )
+  }
+}
+
 export function* registerProjectsSagas() {
   yield all([
     takeEvery(Actions.ALL_PROJECTS_REQUEST, allProjectsSaga),
@@ -155,5 +177,6 @@ export function* registerProjectsSagas() {
     takeEvery(Actions.BEGIN_EDIT_PROJECT_REQUEST, editProjectSaga),
     takeEvery(Actions.DELETE_PROJECT_REQUEST, deleteProjectSaga),
     takeEvery(Actions.LOCK_PROJECTS_REQUEST, lockProjectsSaga),
+    takeEvery(Actions.CHANGE_MEMBERSHIP, changeMembershipSaga),
   ])
 }
