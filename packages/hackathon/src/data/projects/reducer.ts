@@ -64,19 +64,19 @@ export const projectsReducer = (
         currentProjects: action.payload,
         projectsLoaded: true,
       }
-    case Actions.BEGIN_EDIT_PROJECT_REQUEST:
+    case Actions.UPDATE_PROJECT_REQUEST:
       return {
         ...state,
       }
-    case Actions.BEGIN_EDIT_PROJECT_SUCCESS:
+    case Actions.UPDATE_PROJECT_SUCCESS:
       return {
         ...state,
       }
-    case Actions.SAVE_PROJECT_REQUEST:
+    case Actions.CREATE_PROJECT_REQUEST:
       return {
         ...state,
       }
-    case Actions.SAVE_PROJECT_SUCCESS:
+    case Actions.CREATE_PROJECT_SUCCESS:
       // TODO consider updating the just updated project
       // in the project list. Probably not necessary
       // as projects is supposed to be refreshed.

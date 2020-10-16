@@ -50,8 +50,8 @@ import { Hacker, Project, Hackathon } from '../../models'
 import { actionMessage } from '../../data/common/actions'
 import {
   currentProjectsRequest,
-  beginEditProjectRequest,
-  saveProjectRequest,
+  updateProjectRequest,
+  createProjectRequest,
   changeMembership,
 } from '../../data/projects/actions'
 import {
@@ -63,10 +63,23 @@ import {
   getCurrentProjectsState,
   getProjectsLoadedState,
 } from '../../data/projects/selectors'
+import { allHackersRequest } from '../../data/hackers/actions'
+import { getJudgesState } from '../../data/hackers/selectors'
 import { Routes } from '../../routes/AppRouter'
 import { isLoadingState, getMessageState } from '../../data/common/selectors'
 
 interface ProjectDialogProps {}
+
+interface ModifiedJudges {
+  addedJudges: Hacker[]
+  deletedJudges: Hacker[]
+}
+
+enum ChangeMemberShipType {
+  leave = 'leave',
+  join = 'join',
+  nochange = 'nochange',
+}
 
 const canUpdateProject = (
   hacker: Hacker,
@@ -106,12 +119,6 @@ const validate = (moreInfo: string): ValidationMessages | undefined => {
   }
 }
 
-enum ChangeMemberShipType {
-  leave = 'leave',
-  join = 'join',
-  nochange = 'nochange',
-}
-
 const changeMemberShip = (
   hacker: Hacker,
   hackathon?: Hackathon,
@@ -127,6 +134,43 @@ const changeMemberShip = (
   return ChangeMemberShipType.nochange
 }
 
+const getModifiedJudges = (
+  availableJudges: Hacker[],
+  oldJudgeNames: string[],
+  newJudgeNames: string[]
+): ModifiedJudges => {
+  const deletedJudgeNames = oldJudgeNames
+    .filter((oldJudgeName) => !newJudgeNames.includes(oldJudgeName))
+    .filter(
+      (judgeName) =>
+        !!availableJudges.find(
+          (availableJudge) => availableJudge.name === judgeName
+        )
+    )
+  const addedJudgeNames = newJudgeNames
+    .filter((newJudgeName) => !oldJudgeNames.includes(newJudgeName))
+    .filter(
+      (judgeName) =>
+        !!availableJudges.find(
+          (availableJudge) => availableJudge.name === judgeName
+        )
+    )
+  return {
+    addedJudges: addedJudgeNames.map(
+      (judgeName) =>
+        availableJudges.find(
+          (availableJudge) => availableJudge.name === judgeName
+        )!
+    ),
+    deletedJudges: deletedJudgeNames.map(
+      (judgeName) =>
+        availableJudges.find(
+          (availableJudge) => availableJudge.name === judgeName
+        )!
+    ),
+  }
+}
+
 export const ProjectForm: FC<ProjectDialogProps> = () => {
   const dispatch = useDispatch()
   const history = useHistory()
@@ -138,6 +182,7 @@ export const ProjectForm: FC<ProjectDialogProps> = () => {
   const isLoading = useSelector(isLoadingState)
   const messageDetail = useSelector(getMessageState)
   const availableTechnologies = useSelector(getTechnologies)
+  const availableJudges = useSelector(getJudgesState)
 
   const [project, setProject] = useState<Project>()
   const [title, setTitle] = useState<string>('')
@@ -148,6 +193,7 @@ export const ProjectForm: FC<ProjectDialogProps> = () => {
   const [technologies, setTechnologies] = useState<string[]>([])
   const [moreInfo, setMoreInfo] = useState<string>('')
   const [members, setMembers] = useState<string[]>([])
+  const [judges, setJudges] = useState<string[]>([])
   const [isUpdating, setIsUpdating] = useState(false)
   const func = match?.params?.func
   const canUpdate = canUpdateProject(hacker, project, func)
@@ -157,6 +203,7 @@ export const ProjectForm: FC<ProjectDialogProps> = () => {
 
   useEffect(() => {
     dispatch(currentProjectsRequest())
+    dispatch(allHackersRequest())
   }, [dispatch])
 
   useEffect(() => {
@@ -185,6 +232,7 @@ export const ProjectForm: FC<ProjectDialogProps> = () => {
           setTechnologies(project.technologies)
           setMoreInfo(project.more_info)
           setMembers(project.$members)
+          setJudges(project.$judges)
           setProject(project)
         } else {
           if (projectsLoaded) {
@@ -216,10 +264,19 @@ export const ProjectForm: FC<ProjectDialogProps> = () => {
       project.locked = locked
       project.technologies = technologies
       project.more_info = moreInfo
+      const modifiedJudges = getModifiedJudges(
+        availableJudges,
+        project.$judges,
+        judges
+      )
+      modifiedJudges.addedJudges.forEach((judge) => project.addJudge(judge))
+      modifiedJudges.deletedJudges.forEach((judge) =>
+        project.deleteJudge(judge)
+      )
       if (func === 'new') {
-        dispatch(saveProjectRequest(hacker.id, projects, project))
+        dispatch(createProjectRequest(hacker.id, projects, project))
       } else {
-        dispatch(beginEditProjectRequest(projects, project))
+        dispatch(updateProjectRequest(projects, project))
       }
       setIsUpdating(true)
     }
@@ -337,23 +394,42 @@ export const ProjectForm: FC<ProjectDialogProps> = () => {
               defaultValues={members}
             />
           </Fieldset>
-          <Space>
-            <ButtonOutline
-              type="button"
-              onClick={handleCancel}
-              disabled={isUpdating}
-            >
-              Return
-            </ButtonOutline>
-            <Button type="submit" disabled={!canUpdate || isUpdating}>
-              Save
-            </Button>
-            {changeMemberShipType !== ChangeMemberShipType.nochange && (
-              <Button onClick={updateMembershipClick} disabled={isUpdating}>
-                {changeMemberShipType === ChangeMemberShipType.leave
-                  ? 'Leave'
-                  : 'Join'}
+          <FieldSelectMulti
+            disabled={!hacker.canAdmin()}
+            id="judges"
+            label="Judges"
+            options={availableJudges.map((judge) => ({
+              value: `${judge.name}`,
+            }))}
+            isFilterable
+            placeholder="Type values or select from the list"
+            defaultValues={judges}
+            onChange={(values: string[] = []) => {
+              setJudges(values)
+            }}
+          />
+          <Space between width="100%">
+            <Space>
+              <ButtonOutline
+                type="button"
+                onClick={handleCancel}
+                disabled={isUpdating}
+              >
+                Return
+              </ButtonOutline>
+              <Button type="submit" disabled={!canUpdate || isUpdating}>
+                Save
               </Button>
+            </Space>
+            {changeMemberShipType !== ChangeMemberShipType.nochange && (
+              <ButtonOutline
+                onClick={updateMembershipClick}
+                disabled={isUpdating}
+              >
+                {changeMemberShipType === ChangeMemberShipType.leave
+                  ? 'Leave project'
+                  : 'Join project'}
+              </ButtonOutline>
             )}
           </Space>
         </Form>
