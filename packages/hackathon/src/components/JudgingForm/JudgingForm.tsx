@@ -32,6 +32,7 @@ import {
   Heading,
   ButtonOutline,
   Space,
+  Span,
   Text,
   SpaceVertical,
   FieldTextArea,
@@ -120,6 +121,7 @@ export const JudgingForm: FC<JudgingFormProps> = ({ judgings, judging }) => {
       )}
       <SpaceVertical gap="xlarge" width="40vh">
         <Heading as="h1">{judging.$project.title}</Heading>
+        <Span>{judging.$project.description}</Span>
         <SpaceVertical gap="medium">
           <Slider
             onChange={onExecutionChange}
