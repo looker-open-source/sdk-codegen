@@ -27,7 +27,6 @@ import React, { BaseSyntheticEvent, FC, useEffect, useState } from 'react'
 import { useSelector, useDispatch } from 'react-redux'
 import { useHistory } from 'react-router-dom'
 import {
-  Header,
   Slider,
   Button,
   Heading,
@@ -35,6 +34,7 @@ import {
   Space,
   Text,
   SpaceVertical,
+  FieldTextArea,
 } from '@looker/components'
 import { saveJudgement } from '../../data/judgings/actions'
 import { isLoadingState, getMessageState } from '../../data/common/selectors'
@@ -58,6 +58,7 @@ export const JudgingForm: FC<JudgingFormProps> = ({ judgings, judging }) => {
   const [ambition, setAmbition] = useState<number>(1)
   const [coolness, setCoolness] = useState<number>(1)
   const [impact, setImpact] = useState<number>(1)
+  const [notes, setNotes] = useState<string>('')
 
   useEffect(() => {
     judging.load()
@@ -65,6 +66,7 @@ export const JudgingForm: FC<JudgingFormProps> = ({ judgings, judging }) => {
     setAmbition(judging.ambition || 1)
     setCoolness(judging.coolness || 1)
     setImpact(judging.impact || 1)
+    setNotes(judging.notes || '')
   }, [judging])
 
   useEffect(() => {
@@ -89,6 +91,10 @@ export const JudgingForm: FC<JudgingFormProps> = ({ judgings, judging }) => {
     setImpact(event.target.value)
   }
 
+  const onNotesChange = (event: BaseSyntheticEvent) => {
+    setNotes(event.target.value)
+  }
+
   const handleCancel = () => {
     history.push(Routes.JUDGING)
   }
@@ -98,6 +104,7 @@ export const JudgingForm: FC<JudgingFormProps> = ({ judgings, judging }) => {
     judging.ambition = ambition
     judging.coolness = coolness
     judging.impact = impact
+    judging.notes = notes
     dispatch(saveJudgement(judgings, judging))
     setIsUpdating(true)
   }
@@ -108,7 +115,7 @@ export const JudgingForm: FC<JudgingFormProps> = ({ judgings, judging }) => {
         <Text>You can't judge this</Text>
       )}
       <SpaceVertical gap="xlarge" width="40vh">
-        <Header>{judging.$project.title}</Header>
+        <Heading as="h1">{judging.$project.title}</Heading>
         <SpaceVertical gap="medium">
           <Slider
             onChange={onExecutionChange}
@@ -156,6 +163,15 @@ export const JudgingForm: FC<JudgingFormProps> = ({ judgings, judging }) => {
           <Heading>
             <strong>Impact:</strong> {impact}
           </Heading>
+        </SpaceVertical>
+        <SpaceVertical gap="medium">
+          <FieldTextArea
+            resize="vertical"
+            label="Notes"
+            placeholder="Additional comments about this project"
+            defaultValue={notes}
+            onChange={onNotesChange}
+          />
         </SpaceVertical>
         <Space between>
           <Space>
