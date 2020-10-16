@@ -30,7 +30,8 @@ import { Project } from './Projects'
 import { User } from './Users'
 import { TeamMembers } from './TeamMembers'
 import { SheetData } from './SheetData'
-import { IHacker } from './Hacker'
+import { Hacker, IHacker } from './Hacker'
+import { Hackathon } from './Hackathons'
 
 /** IMPORTANT: properties must be declared in the tab sheet's columnar order, not sorted order */
 export interface IJudging extends ISheetRow {
@@ -132,5 +133,17 @@ export class Judgings extends WhollySheet<Judging> {
     const j = new Judging(values)
     j.load(this.data)
     return (j as unknown) as Judging
+  }
+
+  filterBy(hackathon: Hackathon, hacker?: Hacker): Judging[] {
+    const projects = this.data.projects.filterBy(hackathon)
+    if (hacker) {
+      return this.rows.filter(
+        (j) =>
+          j.user_id === hacker.id &&
+          projects.find((p) => p._id === j.project_id)
+      )
+    }
+    return this.rows.filter((j) => projects.find((p) => p._id === j.project_id))
   }
 }

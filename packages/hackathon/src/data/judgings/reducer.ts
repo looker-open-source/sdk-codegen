@@ -23,31 +23,35 @@
  SOFTWARE.
 
  */
+import { ITabTable } from '@looker/wholly-sheet'
+import { Judgings, SheetData } from '../../models'
+import { Actions, JudgingAction } from './actions'
 
-import { combineReducers } from 'redux'
-import { commonReducer, CommonState } from './common/reducer'
-import { adminReducer, AdminState } from './admin/reducer'
-import { projectsReducer, ProjectsState } from './projects/reducer'
-import { hackSessionReducer, HackSessionState } from './hack_session/reducer'
-import { hackersReducer, HackersState } from './hackers/reducer'
-import { judgingsReducer, JudgingsState } from './judgings/reducer'
-
-export interface RootStore {
-  commonState: CommonState
-  adminState: AdminState
-  hackSessionState: HackSessionState
-  projectsState: ProjectsState
-  hackersState: HackersState
-  judgingsState: JudgingsState
+export interface JudgingsState {
+  judgings: Judgings
 }
 
-export const rootReducer = combineReducers({
-  commonState: commonReducer,
-  adminState: adminReducer,
-  hackSessionState: hackSessionReducer,
-  projectsState: projectsReducer,
-  hackersState: hackersReducer,
-  judgingsState: judgingsReducer,
+const EmptyJudgings = new Judgings({} as SheetData, {} as ITabTable)
+
+const defaultState: Readonly<JudgingsState> = Object.freeze({
+  judgings: EmptyJudgings,
 })
 
-export type RootState = ReturnType<typeof rootReducer>
+export const judgingsReducer = (
+  state: JudgingsState = defaultState,
+  action: JudgingAction
+): JudgingsState => {
+  switch (action.type) {
+    case Actions.ALL_JUDGINGS_REQUEST:
+      return {
+        ...state,
+      }
+    case Actions.ALL_JUDGINGS_SUCCESS:
+      return {
+        ...state,
+        judgings: action.payload,
+      }
+    default:
+      return state
+  }
+}

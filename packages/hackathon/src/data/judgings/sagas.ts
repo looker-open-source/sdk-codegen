@@ -23,31 +23,30 @@
  SOFTWARE.
 
  */
+import { all, call, put, takeEvery } from 'redux-saga/effects'
+import { actionMessage, beginLoading, endLoading } from '../common/actions'
+import { sheetsSdkHelper } from '../sheets_sdk_helper'
+import { Actions, allJudgingsSuccess } from './actions'
 
-import { combineReducers } from 'redux'
-import { commonReducer, CommonState } from './common/reducer'
-import { adminReducer, AdminState } from './admin/reducer'
-import { projectsReducer, ProjectsState } from './projects/reducer'
-import { hackSessionReducer, HackSessionState } from './hack_session/reducer'
-import { hackersReducer, HackersState } from './hackers/reducer'
-import { judgingsReducer, JudgingsState } from './judgings/reducer'
-
-export interface RootStore {
-  commonState: CommonState
-  adminState: AdminState
-  hackSessionState: HackSessionState
-  projectsState: ProjectsState
-  hackersState: HackersState
-  judgingsState: JudgingsState
+function* allJudgingsSaga() {
+  try {
+    yield put(beginLoading())
+    const hackathon = yield call([
+      sheetsSdkHelper,
+      sheetsSdkHelper.getCurrentHackathon,
+    ])
+    const result = yield call(
+      [sheetsSdkHelper, sheetsSdkHelper.getJudgings],
+      hackathon
+    )
+    yield put(endLoading())
+    yield put(allJudgingsSuccess(result))
+  } catch (err) {
+    console.error(err)
+    yield put(actionMessage('A problem occurred loading the data', 'critical'))
+  }
 }
 
-export const rootReducer = combineReducers({
-  commonState: commonReducer,
-  adminState: adminReducer,
-  hackSessionState: hackSessionReducer,
-  projectsState: projectsReducer,
-  hackersState: hackersReducer,
-  judgingsState: judgingsReducer,
-})
-
-export type RootState = ReturnType<typeof rootReducer>
+export function* registerJudgingsSagas() {
+  yield all([takeEvery(Actions.ALL_JUDGINGS_REQUEST, allJudgingsSaga)])
+}

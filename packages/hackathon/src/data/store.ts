@@ -31,6 +31,7 @@ import { registerHackSessionSagas } from './hack_session/sagas'
 import { registerAdminSagas } from './admin/sagas'
 import { rootReducer } from './root_reducer'
 import { registerHackersSagas } from './hackers/sagas'
+import { registerJudgingsSagas } from './judgings/sagas'
 
 const sagaMiddleware: SagaMiddleware = createSagaMiddleware()
 
@@ -45,6 +46,7 @@ export const configureStore = () => {
     registerHackSessionSagas,
     registerAdminSagas,
     registerHackersSagas,
+    registerJudgingsSagas,
   ])
   return store
 }

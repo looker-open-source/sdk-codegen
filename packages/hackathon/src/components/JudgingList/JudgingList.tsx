@@ -37,8 +37,6 @@ import {
   SpaceVertical,
   TextArea,
   Tooltip,
-  Icon,
-  Span,
 } from '@looker/components'
 import { useSelector } from 'react-redux'
 import { useHistory } from 'react-router-dom'
@@ -71,55 +69,52 @@ export const JudgingList: FC<JudgingListProps> = ({ judgings }) => {
   // const dispatch = useDispatch()
 
   const openMoreInfo = (judging: Judging) => {
-    console.log({ judging })
+    // console.log({ judging })
     setMoreInfoProject(judging.$project)
   }
 
   const closeMoreInfo = () => {
     setMoreInfoProject(undefined)
   }
-  columns[0].widthPercent = 3
   columns[0].title = (
-    <Tooltip content={'Is this judging locked?'}>
-      <Icon name="LockClosed" />
-    </Tooltip>
+    <Tooltip content={'The judge assigned to this project'}>Judge</Tooltip>
   )
-  columns[1].widthPercent = 3
-  columns[1].title = (
-    <Tooltip content={'Eligible for prizing?'}>
-      <Icon name="FactCheck" />
-    </Tooltip>
-  )
-  columns[2].widthPercent = 25 // title
-  columns[3].widthPercent = 40 // description
-  columns[4].widthPercent = 5 // judging type
-  columns[4].title = (
-    <Tooltip content="Open: anyone can join. Closed: no more members. Invite only: ask to join">
-      <SpaceVertical gap="xxsmall">
-        <Span>Judging</Span>
-        <Span>Type</Span>
-      </SpaceVertical>
-    </Tooltip>
-  )
-  columns[5].widthPercent = 15 // technologies
-  columns[6].widthPercent = 5 // team count
-  columns[6].title = (
-    <Tooltip content="member count/maximum allowed">
-      <SpaceVertical gap="xxsmall">
-        <Span>Team</Span>
-        <Span>Count</Span>
-      </SpaceVertical>
-    </Tooltip>
-  )
-  columns[7].widthPercent = 5 // judge count
-  columns[7].title = (
-    <Tooltip content="Number of judges assigned">
-      <SpaceVertical gap="xxsmall">
-        <Span>Judge</Span>
-        <Span>Count</Span>
-      </SpaceVertical>
-    </Tooltip>
-  )
+  // columns[1].widthPercent = 3
+  // columns[1].title = (
+  //   <Tooltip content={'Eligible for prizing?'}>
+  //     <Icon name="FactCheck" />
+  //   </Tooltip>
+  // )
+  // columns[2].widthPercent = 25 // title
+  // columns[3].widthPercent = 40 // description
+  // columns[4].widthPercent = 5 // judging type
+  // columns[4].title = (
+  //   <Tooltip content="Open: anyone can join. Closed: no more members. Invite only: ask to join">
+  //     <SpaceVertical gap="xxsmall">
+  //       <Span>Judging</Span>
+  //       <Span>Type</Span>
+  //     </SpaceVertical>
+  //   </Tooltip>
+  // )
+  // columns[5].widthPercent = 15 // technologies
+  // columns[6].widthPercent = 5 // team count
+  // columns[6].title = (
+  //   <Tooltip content="member count/maximum allowed">
+  //     <SpaceVertical gap="xxsmall">
+  //       <Span>Team</Span>
+  //       <Span>Count</Span>
+  //     </SpaceVertical>
+  //   </Tooltip>
+  // )
+  // columns[7].widthPercent = 5 // judge count
+  // columns[7].title = (
+  //   <Tooltip content="Number of judges assigned">
+  //     <SpaceVertical gap="xxsmall">
+  //       <Span>Judge</Span>
+  //       <Span>Count</Span>
+  //     </SpaceVertical>
+  //   </Tooltip>
+  // )
 
   const history = useHistory()
   const handleEdit = (judgingId: string) => {

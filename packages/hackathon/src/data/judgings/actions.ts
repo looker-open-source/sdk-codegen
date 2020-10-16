@@ -24,30 +24,32 @@
 
  */
 
-import { combineReducers } from 'redux'
-import { commonReducer, CommonState } from './common/reducer'
-import { adminReducer, AdminState } from './admin/reducer'
-import { projectsReducer, ProjectsState } from './projects/reducer'
-import { hackSessionReducer, HackSessionState } from './hack_session/reducer'
-import { hackersReducer, HackersState } from './hackers/reducer'
-import { judgingsReducer, JudgingsState } from './judgings/reducer'
+import { Judgings } from '../../models'
 
-export interface RootStore {
-  commonState: CommonState
-  adminState: AdminState
-  hackSessionState: HackSessionState
-  projectsState: ProjectsState
-  hackersState: HackersState
-  judgingsState: JudgingsState
+export enum Actions {
+  ALL_JUDGINGS_REQUEST = 'ALL_JUDGINGS_REQUEST',
+  ALL_JUDGINGS_SUCCESS = 'ALL_JUDGINGS_SUCCESS',
+  ERROR = 'ERROR',
 }
 
-export const rootReducer = combineReducers({
-  commonState: commonReducer,
-  adminState: adminReducer,
-  hackSessionState: hackSessionReducer,
-  projectsState: projectsReducer,
-  hackersState: hackersReducer,
-  judgingsState: judgingsReducer,
+export interface AllJudgingsRequestAction {
+  type: Actions.ALL_JUDGINGS_REQUEST
+}
+
+export interface AllJudgingsSuccessAction {
+  type: Actions.ALL_JUDGINGS_SUCCESS
+  payload: Judgings
+}
+
+export type JudgingAction = AllJudgingsRequestAction | AllJudgingsSuccessAction
+
+export const allJudgingsRequest = (): AllJudgingsRequestAction => ({
+  type: Actions.ALL_JUDGINGS_REQUEST,
 })
 
-export type RootState = ReturnType<typeof rootReducer>
+export const allJudgingsSuccess = (
+  judgings: Judgings
+): AllJudgingsSuccessAction => ({
+  type: Actions.ALL_JUDGINGS_SUCCESS,
+  payload: judgings,
+})

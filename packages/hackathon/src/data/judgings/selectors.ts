@@ -24,30 +24,8 @@
 
  */
 
-import { combineReducers } from 'redux'
-import { commonReducer, CommonState } from './common/reducer'
-import { adminReducer, AdminState } from './admin/reducer'
-import { projectsReducer, ProjectsState } from './projects/reducer'
-import { hackSessionReducer, HackSessionState } from './hack_session/reducer'
-import { hackersReducer, HackersState } from './hackers/reducer'
-import { judgingsReducer, JudgingsState } from './judgings/reducer'
+import { RootState } from '../root_reducer'
+import { Judgings } from '../../models'
 
-export interface RootStore {
-  commonState: CommonState
-  adminState: AdminState
-  hackSessionState: HackSessionState
-  projectsState: ProjectsState
-  hackersState: HackersState
-  judgingsState: JudgingsState
-}
-
-export const rootReducer = combineReducers({
-  commonState: commonReducer,
-  adminState: adminReducer,
-  hackSessionState: hackSessionReducer,
-  projectsState: projectsReducer,
-  hackersState: hackersReducer,
-  judgingsState: judgingsReducer,
-})
-
-export type RootState = ReturnType<typeof rootReducer>
+export const getJudgingsState = (state: RootState): Judgings =>
+  state.judgingsState.judgings

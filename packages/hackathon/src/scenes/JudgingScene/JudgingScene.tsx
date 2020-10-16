@@ -23,36 +23,43 @@
  SOFTWARE.
 
  */
-import React, { FC } from 'react'
-import { useSelector } from 'react-redux'
+import React, { FC, useEffect } from 'react'
+import { useDispatch, useSelector } from 'react-redux'
 import { isLoadingState } from '../../data/common/selectors'
-// import {
-//   getCurrentHackathonState,
-//   getHackerState,
-// } from '../../data/hack_session/selectors'
-// import { Routes } from '../../routes/AppRouter'
+import {
+  getCurrentHackathonState,
+  getHackerState,
+} from '../../data/hack_session/selectors'
 import { Loading } from '../../components/Loading'
 import { JudgingList } from '../../components/JudgingList'
+import { allJudgingsRequest } from '../../data/judgings/actions'
+import { getJudgingsState } from '../../data/judgings/selectors'
 import { Judging } from '../../models'
 
 interface JudgingSceneProps {}
 
 export const JudgingScene: FC<JudgingSceneProps> = () => {
-  // const dispatch = useDispatch()
-  // useEffect(() => {
-  //   dispatch(currentJudgingsRequest())
-  // }, [dispatch])
-  // const hacker = useSelector(getHackerState)
-  // const hackathon = useSelector(getCurrentHackathonState)
-  // const judgings = useSelector(getCurrentJudgingsState)
+  const dispatch = useDispatch()
+  useEffect(() => {
+    dispatch(allJudgingsRequest())
+  }, [dispatch])
+  const hackathon = useSelector(getCurrentHackathonState)
+  const hacker = useSelector(getHackerState)
+  const judgings = useSelector(getJudgingsState)
   const isLoading = useSelector(isLoadingState)
-  const judgings: Judging[] = []
-  // const history = useHistory()
+  let list: Judging[] = []
+  if (judgings && hackathon) {
+    if (hacker.canAdmin()) {
+      list = judgings.filterBy(hackathon)
+    } else if (hacker.canJudge()) {
+      list = judgings.filterBy(hackathon, hacker)
+    }
+  }
 
   return (
     <>
       <Loading loading={isLoading} message={'Processing judgings...'} />
-      {judgings && <JudgingList judgings={judgings} />}
+      {list && <JudgingList judgings={list} />}
     </>
   )
 }
