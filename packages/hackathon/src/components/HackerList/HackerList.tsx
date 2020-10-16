@@ -23,14 +23,16 @@
  SOFTWARE.
 
  */
+
 import React, { FC, useState } from 'react'
 import {
   ActionList,
   ActionListItem,
+  ActionListItemAction,
   ActionListItemColumn,
   Pagination,
 } from '@looker/components'
-// import { getExtensionSDK } from '@looker/extension-sdk'
+import { getExtensionSDK } from '@looker/extension-sdk'
 import { Hacker, Hackers, sheetCell, sheetHeader } from '../../models'
 
 interface HackerListProps {
@@ -39,27 +41,6 @@ interface HackerListProps {
   /** hacker group. Defaults to all */
   list?: Hacker[]
 }
-
-// TODO click on user id should go to the user editing admin page
-
-// getExtensionSDK().openBrowserWindow(project.more_info, '_blank')
-// const handleMoreInfo = (project: Project) => {
-//   getExtensionSDK().openBrowserWindow(project.more_info, '_blank')
-//   dispatch(deleteProjectRequest(projects, project))
-// }
-// const handleMoreInfo = (project: Project) => {
-//   getExtensionSDK().openBrowserWindow(project.more_info, '_blank')
-// }
-//
-// const hackerCell = (key: string, value: any) => {
-//   if (key !== 'id') return sheetCell(value)
-//   const userLink = `/admin/users/${value}/edit`
-//   return (
-//     <Link key={key} href={userLink} target="_blank">
-//       {value}
-//     </Link>
-//   )
-// }
 
 export const HackerList: FC<HackerListProps> = ({ hackers, list }) => {
   const [currentPage, setCurrentPage] = useState(1)
@@ -71,14 +52,28 @@ export const HackerList: FC<HackerListProps> = ({ hackers, list }) => {
   const pageSize = 25
   const totalPages = Math.ceil(list.length / pageSize)
 
-  const startIdx = (currentPage - 1) * pageSize
-  const rows = list.slice(startIdx, startIdx + pageSize).map((hacker, idx) => (
-    <ActionListItem key={idx} id={idx.toString()}>
-      {header.map((columnName, _) => (
+  const hackHacker = (hacker: Hacker) => {
+    getExtensionSDK().openBrowserWindow(`/admin/users/${hacker.id}/edit`)
+  }
+
+  const takeAction = (idx: number, columnName: string, hacker: Hacker) => {
+    if (columnName !== 'id')
+      return (
         <ActionListItemColumn key={`${idx}.${columnName}`}>
           {sheetCell(hacker[columnName])}
         </ActionListItemColumn>
-      ))}
+      )
+    return (
+      <ActionListItemAction onClick={hackHacker.bind(null, hacker)} icon="Edit">
+        {hacker.id}
+      </ActionListItemAction>
+    )
+  }
+
+  const startIdx = (currentPage - 1) * pageSize
+  const rows = list.slice(startIdx, startIdx + pageSize).map((hacker, idx) => (
+    <ActionListItem key={idx} id={idx.toString()}>
+      {header.map((columnName, _) => takeAction(idx, columnName, hacker))}
     </ActionListItem>
   ))
 
