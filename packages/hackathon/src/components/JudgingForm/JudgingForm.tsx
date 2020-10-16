@@ -60,6 +60,7 @@ export const JudgingForm: FC<JudgingFormProps> = ({ judgings, judging }) => {
   const [coolness, setCoolness] = useState<number>(1)
   const [impact, setImpact] = useState<number>(1)
   const [notes, setNotes] = useState<string>('')
+  const [moreInfo, setMoreInfo] = useState<string>('')
   const [score, setScore] = useState<number>(0)
   useEffect(() => {
     judging.load()
@@ -68,6 +69,7 @@ export const JudgingForm: FC<JudgingFormProps> = ({ judgings, judging }) => {
     setCoolness(judging.coolness || 1)
     setImpact(judging.impact || 1)
     setNotes(judging.notes || '')
+    setMoreInfo(judging.$project.more_info || '')
   }, [judging])
 
   useEffect(() => {
@@ -180,6 +182,15 @@ export const JudgingForm: FC<JudgingFormProps> = ({ judgings, judging }) => {
             placeholder="Additional comments about this project"
             defaultValue={notes}
             onChange={onNotesChange}
+          />
+        </SpaceVertical>
+        <SpaceVertical gap="medium">
+          <FieldTextArea
+            readOnly
+            resize="vertical"
+            label="More information (copy and paste the URL into another browser window to see the information)"
+            placeholder="A link to more information"
+            defaultValue={moreInfo}
           />
         </SpaceVertical>
         <Space between>
