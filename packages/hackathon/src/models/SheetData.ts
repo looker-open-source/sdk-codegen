@@ -95,6 +95,16 @@ export class SheetData {
         last_name: hacker.lastName,
       })
       await this.users.save(user)
+    } else {
+      if (
+        user.first_name !== hacker.firstName ||
+        user.last_name !== hacker.lastName
+      ) {
+        // Refresh the user's name
+        user.first_name = hacker.firstName
+        user.last_name = hacker.lastName
+        await this.users.save(user)
+      }
     }
     if (reg) {
       hacker.registration = reg
