@@ -76,19 +76,19 @@ export const JudgingForm: FC<JudgingFormProps> = ({ judgings, judging }) => {
   }, [isLoading, messageDetail, isUpdating])
 
   const onExecutionChange = (event: BaseSyntheticEvent) => {
-    setExecution(event.target.value)
+    setExecution(event.target.valueAsNumber)
   }
 
   const onAmbitionChange = (event: BaseSyntheticEvent) => {
-    setAmbition(event.target.value)
+    setAmbition(event.target.valueAsNumber)
   }
 
   const onCoolnessChange = (event: BaseSyntheticEvent) => {
-    setCoolness(event.target.value)
+    setCoolness(event.target.valueAsNumber)
   }
 
   const onImpactChange = (event: BaseSyntheticEvent) => {
-    setImpact(event.target.value)
+    setImpact(event.target.valueAsNumber)
   }
 
   const onNotesChange = (event: BaseSyntheticEvent) => {
