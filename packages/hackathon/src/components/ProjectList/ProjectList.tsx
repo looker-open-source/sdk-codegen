@@ -179,8 +179,17 @@ export const ProjectList: FC<ProjectListProps> = ({ projects }) => {
   const totalPages = Math.ceil(projects.rows.length / pageSize)
 
   const projectCell = (project: Project, columnName: string) => {
-    if (columnName !== 'locked') return sheetCell(project[columnName])
+    console.log({ columnName })
+    if (columnName !== 'locked' && columnName !== '$team_count')
+      return sheetCell(project[columnName])
 
+    if (columnName === '$team_count') {
+      return (
+        <Tooltip content={project.$members.join(',')}>
+          {sheetCell(project[columnName])}
+        </Tooltip>
+      )
+    }
     if (project.locked) {
       return (
         <Tooltip content={<>This project is locked.</>}>
