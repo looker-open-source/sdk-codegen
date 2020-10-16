@@ -59,7 +59,7 @@ export const JudgingForm: FC<JudgingFormProps> = ({ judgings, judging }) => {
   const [coolness, setCoolness] = useState<number>(1)
   const [impact, setImpact] = useState<number>(1)
   const [notes, setNotes] = useState<string>('')
-
+  const [score, setScore] = useState<number>(0)
   useEffect(() => {
     judging.load()
     setExecution(judging.execution || 1)
@@ -74,6 +74,10 @@ export const JudgingForm: FC<JudgingFormProps> = ({ judgings, judging }) => {
       history.push(Routes.JUDGING)
     }
   }, [isLoading, messageDetail, isUpdating])
+
+  useEffect(() => {
+    setScore(2 * execution + ambition + coolness + impact)
+  }, [execution, ambition, coolness, impact])
 
   const onExecutionChange = (event: BaseSyntheticEvent) => {
     setExecution(event.target.valueAsNumber)
@@ -164,6 +168,9 @@ export const JudgingForm: FC<JudgingFormProps> = ({ judgings, judging }) => {
             <strong>Impact:</strong> {impact}
           </Heading>
         </SpaceVertical>
+        <Heading>
+          <strong>Total Score: {score}</strong>
+        </Heading>
         <SpaceVertical gap="medium">
           <FieldTextArea
             resize="vertical"
