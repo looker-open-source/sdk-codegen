@@ -156,8 +156,8 @@ export const JudgingForm: FC<JudgingFormProps> = ({ judgings, judging }) => {
 }
 
 interface JudgingEditorSceneProps {
-  judgings: Judgings
-  judging: Judging
+  judgings?: Judgings
+  judging?: Judging
 }
 
 export const JudgingEditorScene: FC<JudgingEditorSceneProps> = ({
@@ -165,5 +165,12 @@ export const JudgingEditorScene: FC<JudgingEditorSceneProps> = ({
   judging,
 }) => {
   // TODO: add a not found error in case judging is not found
-  return <JudgingForm judgings={judgings} judging={judging} />
+  return (
+    <>
+      {(!judgings || !judging) && <>No judging information</>}
+      {judgings && judging && (
+        <JudgingForm judgings={judgings} judging={judging} />
+      )}
+    </>
+  )
 }
