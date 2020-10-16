@@ -31,13 +31,10 @@ import {
   currentProjectsRequest,
   allProjectsSuccess,
   currentProjectsSuccess,
-  UpdateProjectRequestAction,
-  updateProjectSuccess,
-  DeleteProjectRequestAction,
-  LockProjectsRequestAction,
-  lockProjectsSuccess,
-  CreateProjectRequestAction,
-  createProjectSuccess,
+  UpdateProjectAction,
+  DeleteProjectAction,
+  LockProjectsAction,
+  CreateProjectAction,
   ChangeMembershipAction,
 } from './actions'
 
@@ -72,7 +69,7 @@ function* currentProjectsSaga() {
   }
 }
 
-function* createProjectSaga(action: CreateProjectRequestAction) {
+function* createProjectSaga(action: CreateProjectAction) {
   try {
     yield put(beginLoading())
     yield call(
@@ -81,8 +78,7 @@ function* createProjectSaga(action: CreateProjectRequestAction) {
       action.payload.projects,
       action.payload.project
     )
-    yield put(endLoading())
-    yield put(createProjectSuccess())
+    yield put(currentProjectsRequest())
   } catch (err) {
     console.error(err)
     yield put(
@@ -91,7 +87,7 @@ function* createProjectSaga(action: CreateProjectRequestAction) {
   }
 }
 
-function* updateProjectSaga(action: UpdateProjectRequestAction) {
+function* updateProjectSaga(action: UpdateProjectAction) {
   try {
     yield put(beginLoading())
     yield call(
@@ -99,8 +95,7 @@ function* updateProjectSaga(action: UpdateProjectRequestAction) {
       action.payload.projects,
       action.payload.project
     )
-    yield put(endLoading())
-    yield put(updateProjectSuccess())
+    yield put(currentProjectsRequest())
   } catch (err) {
     console.error(err)
     yield put(
@@ -109,7 +104,7 @@ function* updateProjectSaga(action: UpdateProjectRequestAction) {
   }
 }
 
-function* deleteProjectSaga(action: DeleteProjectRequestAction) {
+function* deleteProjectSaga(action: DeleteProjectAction) {
   try {
     yield put(beginLoading())
     yield call(
@@ -126,17 +121,16 @@ function* deleteProjectSaga(action: DeleteProjectRequestAction) {
   }
 }
 
-function* lockProjectsSaga(action: LockProjectsRequestAction) {
+function* lockProjectsSaga(action: LockProjectsAction) {
   try {
     yield put(beginLoading())
-    const result = yield call(
+    yield call(
       [sheetsSdkHelper, sheetsSdkHelper.lockProjects],
       action.payload.projects,
       action.payload.hackathon,
       action.payload.lock
     )
-    yield put(endLoading())
-    yield put(lockProjectsSuccess(result))
+    yield put(currentProjectsRequest())
   } catch (err) {
     console.error(err)
     yield put(
@@ -173,10 +167,10 @@ export function* registerProjectsSagas() {
   yield all([
     takeEvery(Actions.ALL_PROJECTS_REQUEST, allProjectsSaga),
     takeEvery(Actions.CURRENT_PROJECTS_REQUEST, currentProjectsSaga),
-    takeEvery(Actions.CREATE_PROJECT_REQUEST, createProjectSaga),
-    takeEvery(Actions.UPDATE_PROJECT_REQUEST, updateProjectSaga),
-    takeEvery(Actions.DELETE_PROJECT_REQUEST, deleteProjectSaga),
-    takeEvery(Actions.LOCK_PROJECTS_REQUEST, lockProjectsSaga),
+    takeEvery(Actions.CREATE_PROJECT, createProjectSaga),
+    takeEvery(Actions.UPDATE_PROJECT, updateProjectSaga),
+    takeEvery(Actions.DELETE_PROJECT, deleteProjectSaga),
+    takeEvery(Actions.LOCK_PROJECTS, lockProjectsSaga),
     takeEvery(Actions.CHANGE_MEMBERSHIP, changeMembershipSaga),
   ])
 }

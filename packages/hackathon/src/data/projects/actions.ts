@@ -30,14 +30,10 @@ export enum Actions {
   ALL_PROJECTS_SUCCESS = 'ALL_PROJECTS_SUCCESS',
   CURRENT_PROJECTS_REQUEST = 'CURRENT_PROJECTS_REQUEST',
   CURRENT_PROJECTS_SUCCESS = 'CURRENT_PROJECTS_SUCCESS',
-  UPDATE_PROJECT_REQUEST = 'UPDATE_PROJECT_REQUEST',
-  UPDATE_PROJECT_SUCCESS = 'UPDATE_PROJECT_SUCCESS',
-  CREATE_PROJECT_REQUEST = 'CREATE_PROJECT_REQUEST',
-  CREATE_PROJECT_SUCCESS = 'CREATE_PROJECT_SUCCESS',
-  DELETE_PROJECT_REQUEST = 'DELETE_PROJECT_REQUEST',
-  DELETE_PROJECT_SUCCESS = 'DELETE_PROJECT_SUCCESS',
-  LOCK_PROJECTS_REQUEST = 'LOCK_PROJECTS_REQUEST',
-  LOCK_PROJECTS_SUCCESS = 'LOCK_PROJECTS_SUCCESS',
+  UPDATE_PROJECT = 'UPDATE_PROJECT',
+  CREATE_PROJECT = 'CREATE_PROJECT',
+  DELETE_PROJECT = 'DELETE_PROJECT',
+  LOCK_PROJECTS = 'LOCK_PROJECTS',
   CHANGE_MEMBERSHIP = 'CHANGE_MEMBERSHIP',
 }
 
@@ -59,20 +55,16 @@ export interface CurrentProjectsSuccessAction {
   payload: Projects
 }
 
-export interface UpdateProjectRequestAction {
-  type: Actions.UPDATE_PROJECT_REQUEST
+export interface UpdateProjectAction {
+  type: Actions.UPDATE_PROJECT
   payload: {
     projects: Projects
     project: Project
   }
 }
 
-export interface UpdateProjectSuccessAction {
-  type: Actions.UPDATE_PROJECT_SUCCESS
-}
-
-export interface CreateProjectRequestAction {
-  type: Actions.CREATE_PROJECT_REQUEST
+export interface CreateProjectAction {
+  type: Actions.CREATE_PROJECT
   payload: {
     hacker_id: string
     projects: Projects
@@ -80,20 +72,12 @@ export interface CreateProjectRequestAction {
   }
 }
 
-export interface CreateProjectSuccessAction {
-  type: Actions.CREATE_PROJECT_SUCCESS
-}
-
-export interface DeleteProjectRequestAction {
-  type: Actions.DELETE_PROJECT_REQUEST
+export interface DeleteProjectAction {
+  type: Actions.DELETE_PROJECT
   payload: {
     projects: Projects
     project: Project
   }
-}
-
-export interface DeleteProjectSuccessAction {
-  type: Actions.DELETE_PROJECT_SUCCESS
 }
 
 export interface ChangeMembershipAction {
@@ -105,8 +89,8 @@ export interface ChangeMembershipAction {
   }
 }
 
-export interface LockProjectsRequestAction {
-  type: Actions.LOCK_PROJECTS_REQUEST
+export interface LockProjectsAction {
+  type: Actions.LOCK_PROJECTS
   payload: {
     projects: Projects
     hackathon: Hackathon
@@ -114,24 +98,15 @@ export interface LockProjectsRequestAction {
   }
 }
 
-export interface LockProjectsSuccessAction {
-  type: Actions.LOCK_PROJECTS_SUCCESS
-  payload: Projects
-}
-
 export type ProjectAction =
   | AllProjectsRequestAction
   | AllProjectsSuccessAction
   | CurrentProjectsRequestAction
   | CurrentProjectsSuccessAction
-  | UpdateProjectRequestAction
-  | UpdateProjectSuccessAction
-  | CreateProjectRequestAction
-  | CreateProjectSuccessAction
-  | DeleteProjectRequestAction
-  | DeleteProjectSuccessAction
-  | LockProjectsRequestAction
-  | LockProjectsSuccessAction
+  | UpdateProjectAction
+  | CreateProjectAction
+  | DeleteProjectAction
+  | LockProjectsAction
   | ChangeMembershipAction
 
 export const allProjectsRequest = (): AllProjectsRequestAction => ({
@@ -156,27 +131,23 @@ export const currentProjectsSuccess = (
   payload: projects,
 })
 
-export const updateProjectRequest = (
+export const updateProject = (
   projects: Projects,
   project: Project
-): UpdateProjectRequestAction => ({
-  type: Actions.UPDATE_PROJECT_REQUEST,
+): UpdateProjectAction => ({
+  type: Actions.UPDATE_PROJECT,
   payload: {
     projects,
     project,
   },
 })
 
-export const updateProjectSuccess = (): UpdateProjectSuccessAction => ({
-  type: Actions.UPDATE_PROJECT_SUCCESS,
-})
-
-export const createProjectRequest = (
+export const createProject = (
   hacker_id: string,
   projects: Projects,
   project: Project
-): CreateProjectRequestAction => ({
-  type: Actions.CREATE_PROJECT_REQUEST,
+): CreateProjectAction => ({
+  type: Actions.CREATE_PROJECT,
   payload: {
     hacker_id: hacker_id,
     projects: projects,
@@ -184,43 +155,28 @@ export const createProjectRequest = (
   },
 })
 
-export const createProjectSuccess = (): CreateProjectSuccessAction => ({
-  type: Actions.CREATE_PROJECT_SUCCESS,
-})
-
-export const deleteProjectRequest = (
+export const deleteProject = (
   projects: Projects,
   project: Project
-): DeleteProjectRequestAction => ({
-  type: Actions.DELETE_PROJECT_REQUEST,
+): DeleteProjectAction => ({
+  type: Actions.DELETE_PROJECT,
   payload: {
     project: project,
     projects: projects,
   },
 })
 
-export const deleteProjectSuccess = (): DeleteProjectSuccessAction => ({
-  type: Actions.DELETE_PROJECT_SUCCESS,
-})
-
-export const lockProjectsRequest = (
+export const lockProjects = (
   projects: Projects,
   hackathon: Hackathon,
   lock: boolean
-): LockProjectsRequestAction => ({
-  type: Actions.LOCK_PROJECTS_REQUEST,
+): LockProjectsAction => ({
+  type: Actions.LOCK_PROJECTS,
   payload: {
     projects: projects,
     hackathon: hackathon,
     lock: lock,
   },
-})
-
-export const lockProjectsSuccess = (
-  projects: Projects
-): LockProjectsSuccessAction => ({
-  type: Actions.LOCK_PROJECTS_SUCCESS,
-  payload: projects,
 })
 
 export const changeMembership = (

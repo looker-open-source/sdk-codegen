@@ -32,7 +32,7 @@ import { Button, Space } from '@looker/components'
 
 import {
   currentProjectsRequest,
-  lockProjectsRequest,
+  lockProjects,
 } from '../../data/projects/actions'
 import { getCurrentProjectsState } from '../../data/projects/selectors'
 import { isLoadingState } from '../../data/common/selectors'
@@ -61,11 +61,11 @@ export const ProjectsScene: FC<ProjectSceneProps> = () => {
   }
 
   const handleLock = () => {
-    if (hackathon) dispatch(lockProjectsRequest(projects, hackathon, true))
+    if (hackathon) dispatch(lockProjects(projects, hackathon, true))
   }
 
   const handleUnlock = () => {
-    if (hackathon) dispatch(lockProjectsRequest(projects, hackathon, false))
+    if (hackathon) dispatch(lockProjects(projects, hackathon, false))
   }
 
   return (

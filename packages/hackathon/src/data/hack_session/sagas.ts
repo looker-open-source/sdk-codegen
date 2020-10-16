@@ -48,13 +48,16 @@ function* initializeHackSessionSaga() {
         hackathon,
         hacker
       )
+      const technologies = yield call([
+        sheetsSdkHelper,
+        sheetsSdkHelper.getTechnologies,
+      ])
+      yield put(endLoading())
+      yield put(initHackSessionSuccess(hackathon, technologies, hacker))
+    } else {
+      yield put(initHackSessionFailure(hacker))
+      yield put(actionMessage('No active hackathon found', 'warn'))
     }
-    const technologies = yield call([
-      sheetsSdkHelper,
-      sheetsSdkHelper.getTechnologies,
-    ])
-    yield put(endLoading())
-    yield put(initHackSessionSuccess(hackathon, technologies, hacker))
   } catch (err) {
     console.error(err)
     if (hacker) {
