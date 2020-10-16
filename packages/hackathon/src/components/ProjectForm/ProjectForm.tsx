@@ -50,8 +50,8 @@ import { Hacker, Project, Hackathon } from '../../models'
 import { actionMessage } from '../../data/common/actions'
 import {
   currentProjectsRequest,
-  updateProjectRequest,
-  createProjectRequest,
+  updateProject,
+  createProject,
   changeMembership,
 } from '../../data/projects/actions'
 import {
@@ -274,9 +274,9 @@ export const ProjectForm: FC<ProjectDialogProps> = () => {
         project.deleteJudge(judge)
       )
       if (func === 'new') {
-        dispatch(createProjectRequest(hacker.id, projects, project))
+        dispatch(createProject(hacker.id, projects, project))
       } else {
-        dispatch(updateProjectRequest(projects, project))
+        dispatch(updateProject(projects, project))
       }
       setIsUpdating(true)
     }
@@ -387,27 +387,31 @@ export const ProjectForm: FC<ProjectDialogProps> = () => {
                 setMoreInfo(e.target.value)
               }}
             />
-            <FieldSelectMulti
-              disabled={true}
-              id="members"
-              label="Members"
-              defaultValues={members}
-            />
+            {func !== 'new' && (
+              <FieldSelectMulti
+                disabled={true}
+                id="members"
+                label="Members"
+                defaultValues={members}
+              />
+            )}
           </Fieldset>
-          <FieldSelectMulti
-            disabled={!hacker.canAdmin()}
-            id="judges"
-            label="Judges"
-            options={availableJudges.map((judge) => ({
-              value: `${judge.name}`,
-            }))}
-            isFilterable
-            placeholder="Type values or select from the list"
-            defaultValues={judges}
-            onChange={(values: string[] = []) => {
-              setJudges(values)
-            }}
-          />
+          {func !== 'new' && (
+            <FieldSelectMulti
+              disabled={!hacker.canAdmin()}
+              id="judges"
+              label="Judges"
+              options={availableJudges.map((judge) => ({
+                value: `${judge.name}`,
+              }))}
+              isFilterable
+              placeholder="Type values or select from the list"
+              defaultValues={judges}
+              onChange={(values: string[] = []) => {
+                setJudges(values)
+              }}
+            />
+          )}
           <Space between width="100%">
             <Space>
               <ButtonOutline
@@ -421,16 +425,17 @@ export const ProjectForm: FC<ProjectDialogProps> = () => {
                 Save
               </Button>
             </Space>
-            {changeMemberShipType !== ChangeMemberShipType.nochange && (
-              <ButtonOutline
-                onClick={updateMembershipClick}
-                disabled={isUpdating}
-              >
-                {changeMemberShipType === ChangeMemberShipType.leave
-                  ? 'Leave project'
-                  : 'Join project'}
-              </ButtonOutline>
-            )}
+            {changeMemberShipType !== ChangeMemberShipType.nochange &&
+              func !== 'new' && (
+                <ButtonOutline
+                  onClick={updateMembershipClick}
+                  disabled={isUpdating}
+                >
+                  {changeMemberShipType === ChangeMemberShipType.leave
+                    ? 'Leave project'
+                    : 'Join project'}
+                </ButtonOutline>
+              )}
           </Space>
         </Form>
       )}

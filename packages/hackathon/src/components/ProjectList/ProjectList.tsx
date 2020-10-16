@@ -44,7 +44,7 @@ import { useSelector, useDispatch } from 'react-redux'
 import { useHistory } from 'react-router-dom'
 import { Project, Projects, sheetCell, sheetHeader } from '../../models'
 import { getHackerState } from '../../data/hack_session/selectors'
-import { deleteProjectRequest } from '../../data/projects/actions'
+import { deleteProject } from '../../data/projects/actions'
 
 const projectListHeaders = [
   'locked',
@@ -72,7 +72,7 @@ export const ProjectList: FC<ProjectListProps> = ({ projects }) => {
   const dispatch = useDispatch()
 
   const handleDelete = (project: Project) => {
-    dispatch(deleteProjectRequest(projects, project))
+    dispatch(deleteProject(projects, project))
   }
 
   const openMoreInfo = (project: Project) => {

@@ -24,7 +24,7 @@
 
  */
 import { ITabTable } from '@looker/wholly-sheet'
-import { Projects, Project, SheetData } from '../../models'
+import { Projects, SheetData } from '../../models'
 import { ProjectAction, Actions } from './actions'
 
 // This is the first cut for state and to be honest I dont like it.
@@ -33,7 +33,6 @@ export interface ProjectsState {
   projects: Projects
   currentProjects: Projects
   projectsLoaded: boolean
-  currentProject?: Project
 }
 
 const EmptyProjects = new Projects(
@@ -64,43 +63,9 @@ export const projectsReducer = (
         currentProjects: action.payload,
         projectsLoaded: true,
       }
-    case Actions.UPDATE_PROJECT_REQUEST:
+    case Actions.DELETE_PROJECT:
       return {
         ...state,
-      }
-    case Actions.UPDATE_PROJECT_SUCCESS:
-      return {
-        ...state,
-      }
-    case Actions.CREATE_PROJECT_REQUEST:
-      return {
-        ...state,
-      }
-    case Actions.CREATE_PROJECT_SUCCESS:
-      // TODO consider updating the just updated project
-      // in the project list. Probably not necessary
-      // as projects is supposed to be refreshed.
-      return {
-        ...state,
-        currentProject: undefined,
-      }
-    case Actions.DELETE_PROJECT_REQUEST:
-      return {
-        ...state,
-      }
-    case Actions.DELETE_PROJECT_SUCCESS:
-      // TODO consider deleting the just deleted project
-      // from the project list. Probably not necessary
-      // as projects is supposed to be refreshed.
-      return {
-        ...state,
-        currentProject: undefined,
-      }
-    case Actions.LOCK_PROJECTS_SUCCESS:
-      return {
-        ...state,
-        currentProjects: action.payload,
-        projectsLoaded: true,
       }
     default:
       return state
