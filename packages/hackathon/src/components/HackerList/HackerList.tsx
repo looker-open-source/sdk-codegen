@@ -66,14 +66,19 @@ export const HackerList: FC<HackerListProps> = ({ hackers, list }) => {
   }, [hackers.rows, list])
 
   const takeAction = (idx: number, columnName: string, hacker: Hacker) => {
+    const key = `${idx}.${columnName}`
     if (columnName !== 'id')
       return (
-        <ActionListItemColumn key={`${idx}.${columnName}`}>
+        <ActionListItemColumn key={key}>
           {sheetCell(hacker[columnName])}
         </ActionListItemColumn>
       )
     return (
-      <ActionListItemAction onClick={hackHacker.bind(null, hacker)} icon="Edit">
+      <ActionListItemAction
+        key={key}
+        onClick={hackHacker.bind(null, hacker)}
+        icon="Edit"
+      >
         {hacker.id}
       </ActionListItemAction>
     )
