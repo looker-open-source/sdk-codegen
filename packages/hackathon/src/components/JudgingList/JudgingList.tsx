@@ -179,7 +179,7 @@ export const JudgingList: FC<JudgingListProps> = ({ judgings }) => {
           <SpaceVertical>
             <Paragraph>
               Copy the link below and paste into a new browser window to see
-              additional information about the judging
+              additional information about the project
             </Paragraph>
             <TextArea
               readOnly={true}

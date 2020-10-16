@@ -188,7 +188,7 @@ export const JudgingForm: FC<JudgingFormProps> = ({ judgings, judging }) => {
           <FieldTextArea
             readOnly
             resize="vertical"
-            label="More information (copy and paste the URL into another browser window to see the information)"
+            label="Copy the link below and paste into a new browser window to see additional information about the project"
             placeholder="A link to more information"
             defaultValue={moreInfo}
           />
