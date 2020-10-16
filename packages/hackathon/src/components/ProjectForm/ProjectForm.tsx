@@ -46,12 +46,13 @@ import {
 } from '@looker/components'
 import { useDispatch, useSelector } from 'react-redux'
 import { useHistory, useRouteMatch } from 'react-router-dom'
-import { Hacker, Project } from '../../models'
+import { Hacker, Project, Hackathon } from '../../models'
 import { actionMessage } from '../../data/common/actions'
 import {
   currentProjectsRequest,
   beginEditProjectRequest,
   saveProjectRequest,
+  changeMembership,
 } from '../../data/projects/actions'
 import {
   getCurrentHackathonState,
@@ -105,6 +106,27 @@ const validate = (moreInfo: string): ValidationMessages | undefined => {
   }
 }
 
+enum ChangeMemberShipType {
+  leave = 'leave',
+  join = 'join',
+  nochange = 'nochange',
+}
+
+const changeMemberShip = (
+  hacker: Hacker,
+  hackathon?: Hackathon,
+  project?: Project
+): ChangeMemberShipType => {
+  if (project && !project.locked && hackathon) {
+    if (project.findMember(hacker)) {
+      return ChangeMemberShipType.leave
+    } else if (project.$team.length < hackathon.max_team_size) {
+      return ChangeMemberShipType.join
+    }
+  }
+  return ChangeMemberShipType.nochange
+}
+
 export const ProjectForm: FC<ProjectDialogProps> = () => {
   const dispatch = useDispatch()
   const history = useHistory()
@@ -125,11 +147,13 @@ export const ProjectForm: FC<ProjectDialogProps> = () => {
   const [locked, setLocked] = useState<boolean>(false)
   const [technologies, setTechnologies] = useState<string[]>([])
   const [moreInfo, setMoreInfo] = useState<string>('')
+  const [members, setMembers] = useState<string[]>([])
   const [isUpdating, setIsUpdating] = useState(false)
   const func = match?.params?.func
   const canUpdate = canUpdateProject(hacker, project, func)
-  const canLock = canUpdateProject(hacker)
+  const canLock = canLockProject(hacker)
   const validationMessages = validate(moreInfo)
+  const changeMemberShipType = changeMemberShip(hacker, hackathon, project)
 
   useEffect(() => {
     dispatch(currentProjectsRequest())
@@ -160,6 +184,7 @@ export const ProjectForm: FC<ProjectDialogProps> = () => {
           setLocked(project.locked)
           setTechnologies(project.technologies)
           setMoreInfo(project.more_info)
+          setMembers(project.$members)
           setProject(project)
         } else {
           if (projectsLoaded) {
@@ -171,6 +196,12 @@ export const ProjectForm: FC<ProjectDialogProps> = () => {
       }
     }
   }, [func, hacker, dispatch, projects, projectsLoaded])
+
+  useEffect(() => {
+    if (isUpdating && !isLoading && !messageDetail) {
+      history.push(Routes.PROJECTS)
+    }
+  }, [isLoading, isUpdating, history])
 
   const handleSubmit = (e: FormEvent) => {
     e.preventDefault()
@@ -198,11 +229,19 @@ export const ProjectForm: FC<ProjectDialogProps> = () => {
     history.push(Routes.PROJECTS)
   }
 
-  useEffect(() => {
-    if (isUpdating && !isLoading && !messageDetail) {
-      history.push(Routes.PROJECTS)
+  const updateMembershipClick = (e: FormEvent) => {
+    e.preventDefault()
+    if (project) {
+      dispatch(
+        changeMembership(
+          project,
+          hacker,
+          changeMemberShipType === ChangeMemberShipType.leave
+        )
+      )
+      setIsUpdating(true)
     }
-  }, [isLoading, isUpdating, history])
+  }
 
   return (
     <>
@@ -291,14 +330,31 @@ export const ProjectForm: FC<ProjectDialogProps> = () => {
                 setMoreInfo(e.target.value)
               }}
             />
+            <FieldSelectMulti
+              disabled={true}
+              id="members"
+              label="Members"
+              defaultValues={members}
+            />
           </Fieldset>
           <Space>
-            <ButtonOutline type="button" onClick={handleCancel}>
+            <ButtonOutline
+              type="button"
+              onClick={handleCancel}
+              disabled={isUpdating}
+            >
               Return
             </ButtonOutline>
-            <Button type="submit" disabled={!canUpdate}>
+            <Button type="submit" disabled={!canUpdate || isUpdating}>
               Save
             </Button>
+            {changeMemberShipType !== ChangeMemberShipType.nochange && (
+              <Button onClick={updateMembershipClick} disabled={isUpdating}>
+                {changeMemberShipType === ChangeMemberShipType.leave
+                  ? 'Leave'
+                  : 'Join'}
+              </Button>
+            )}
           </Space>
         </Form>
       )}

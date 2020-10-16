@@ -23,7 +23,7 @@
  SOFTWARE.
 
  */
-import { Projects, Project, Hackathon } from '../../models'
+import { Projects, Project, Hackathon, Hacker } from '../../models'
 
 export enum Actions {
   ALL_PROJECTS_REQUEST = 'ALL_PROJECTS_REQUEST',
@@ -38,7 +38,7 @@ export enum Actions {
   DELETE_PROJECT_SUCCESS = 'DELETE_PROJECT_SUCCESS',
   LOCK_PROJECTS_REQUEST = 'LOCK_PROJECTS_REQUEST',
   LOCK_PROJECTS_SUCCESS = 'LOCK_PROJECTS_SUCCESS',
-  ERROR = 'ERROR',
+  CHANGE_MEMBERSHIP = 'CHANGE_MEMBERSHIP',
 }
 
 export interface AllProjectsRequestAction {
@@ -96,6 +96,15 @@ export interface DeleteProjectSuccessAction {
   type: Actions.DELETE_PROJECT_SUCCESS
 }
 
+export interface ChangeMembershipAction {
+  type: Actions.CHANGE_MEMBERSHIP
+  payload: {
+    leave: boolean
+    project: Project
+    hacker: Hacker
+  }
+}
+
 export interface LockProjectsRequestAction {
   type: Actions.LOCK_PROJECTS_REQUEST
   payload: {
@@ -123,6 +132,8 @@ export type ProjectAction =
   | DeleteProjectSuccessAction
   | LockProjectsRequestAction
   | LockProjectsSuccessAction
+  | ChangeMembershipAction
+  | ChangeMembershipSuccessAction
 
 export const allProjectsRequest = (): AllProjectsRequestAction => ({
   type: Actions.ALL_PROJECTS_REQUEST,
@@ -211,4 +222,17 @@ export const lockProjectsSuccess = (
 ): LockProjectsSuccessAction => ({
   type: Actions.LOCK_PROJECTS_SUCCESS,
   payload: projects,
+})
+
+export const changeMembership = (
+  project: Project,
+  hacker: Hacker,
+  leave: boolean
+): ChangeMembershipAction => ({
+  type: Actions.CHANGE_MEMBERSHIP,
+  payload: {
+    project,
+    hacker,
+    leave,
+  },
 })

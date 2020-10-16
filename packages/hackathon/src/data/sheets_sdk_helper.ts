@@ -136,4 +136,15 @@ export const sheetsSdkHelper = {
     await data.technologies.refresh()
     return data.technologies
   },
+  changeMembership: async (
+    project: Project,
+    hacker: Hacker,
+    leave: boolean
+  ) => {
+    if (leave) {
+      await project.leave(hacker)
+    } else {
+      await project.join(hacker)
+    }
+  },
 }
