@@ -30,6 +30,7 @@ import {
   HomeScene,
   UsersScene,
   JudgingScene,
+  JudgingEditorScene,
   AdminScene,
   NotFoundScene,
   ProjectsScene,
@@ -40,6 +41,7 @@ export enum Routes {
   HOME = '/home',
   ADMIN = '/admin',
   JUDGING = '/judging',
+  EDIT_JUDGING = '/judging/:id',
   PROJECTS = '/projects',
   CREATE_PROJECT = '/projects/new',
   EDIT_PROJECT = '/projects/:id',
@@ -65,6 +67,7 @@ export const getAuthorizedRoutes = (
       authorizedRoutes.push(Routes.RESOURCES)
       if (hacker.canAdmin() || hacker.canJudge() || hacker.canStaff()) {
         authorizedRoutes.push(Routes.JUDGING)
+        authorizedRoutes.push(Routes.EDIT_JUDGING)
       }
       if (hacker.canAdmin() || hacker.canStaff()) {
         authorizedRoutes.push(Routes.USERS)
@@ -97,8 +100,13 @@ export const AppRouter: FC<AppRouterProps> = ({ authorizedRoutes }) => (
       </Route>
     )}
     {authorizedRoutes.includes(Routes.JUDGING) && (
-      <Route path={Routes.JUDGING}>
+      <Route path={Routes.JUDGING} exact>
         <JudgingScene />
+      </Route>
+    )}
+    {authorizedRoutes.includes(Routes.EDIT_JUDGING) && (
+      <Route path={Routes.EDIT_JUDGING}>
+        <JudgingEditorScene />
       </Route>
     )}
     {authorizedRoutes.includes(Routes.RESOURCES) && (
