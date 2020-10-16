@@ -133,7 +133,6 @@ export type ProjectAction =
   | LockProjectsRequestAction
   | LockProjectsSuccessAction
   | ChangeMembershipAction
-  | ChangeMembershipSuccessAction
 
 export const allProjectsRequest = (): AllProjectsRequestAction => ({
   type: Actions.ALL_PROJECTS_REQUEST,
