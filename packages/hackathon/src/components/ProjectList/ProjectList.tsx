@@ -179,7 +179,6 @@ export const ProjectList: FC<ProjectListProps> = ({ projects }) => {
   const totalPages = Math.ceil(projects.rows.length / pageSize)
 
   const projectCell = (project: Project, columnName: string) => {
-    console.log({ columnName })
     if (columnName !== 'locked' && columnName !== '$team_count')
       return sheetCell(project[columnName])
 
