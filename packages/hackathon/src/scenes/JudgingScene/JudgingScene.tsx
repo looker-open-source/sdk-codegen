@@ -26,14 +26,11 @@
 import React, { FC, useEffect } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { isLoadingState } from '../../data/common/selectors'
-import {
-  getCurrentHackathonState,
-  getHackerState,
-} from '../../data/hack_session/selectors'
+import { getHackerState } from '../../data/hack_session/selectors'
 import { Loading } from '../../components/Loading'
 import { JudgingList } from '../../components/JudgingList'
 import { allJudgingsRequest } from '../../data/judgings/actions'
-import { getJudgingsState } from '../../data/judgings/selectors'
+import { getJudgingsListState } from '../../data/judgings/selectors'
 import { Judging } from '../../models'
 
 interface JudgingSceneProps {}
@@ -43,12 +40,11 @@ export const JudgingScene: FC<JudgingSceneProps> = () => {
   useEffect(() => {
     dispatch(allJudgingsRequest())
   }, [dispatch])
-  const hackathon = useSelector(getCurrentHackathonState)
   const hacker = useSelector(getHackerState)
-  const judgings = useSelector(getJudgingsState)
+  const judgings = useSelector(getJudgingsListState)
   const isLoading = useSelector(isLoadingState)
   let list: Judging[] = []
-  if (judgings && hackathon) {
+  if (judgings) {
     if (hacker.canAdmin()) {
       list = judgings
     } else if (hacker.canJudge()) {

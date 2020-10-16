@@ -26,7 +26,12 @@
 import { all, call, put, takeEvery } from 'redux-saga/effects'
 import { actionMessage, beginLoading, endLoading } from '../common/actions'
 import { sheetsSdkHelper } from '../sheets_sdk_helper'
-import { Actions, allJudgingsSuccess } from './actions'
+import {
+  Actions,
+  allJudgingsSuccess,
+  SaveJudgementAction,
+  allJudgingsRequest,
+} from './actions'
 
 function* allJudgingsSaga() {
   try {
@@ -40,7 +45,22 @@ function* allJudgingsSaga() {
       hackathon
     )
     yield put(endLoading())
-    yield put(allJudgingsSuccess(result))
+    yield put(allJudgingsSuccess(result.judgings, result.judgingsList))
+  } catch (err) {
+    console.error(err)
+    yield put(actionMessage('A problem occurred loading the data', 'critical'))
+  }
+}
+
+function* saveJudgingsSaga(action: SaveJudgementAction) {
+  try {
+    yield put(beginLoading())
+    yield call(
+      [sheetsSdkHelper, sheetsSdkHelper.saveJudgings],
+      action.payload.judgings,
+      action.payload.judging
+    )
+    yield put(allJudgingsRequest())
   } catch (err) {
     console.error(err)
     yield put(actionMessage('A problem occurred loading the data', 'critical'))
@@ -49,4 +69,5 @@ function* allJudgingsSaga() {
 
 export function* registerJudgingsSagas() {
   yield all([takeEvery(Actions.ALL_JUDGINGS_REQUEST, allJudgingsSaga)])
+  yield all([takeEvery(Actions.SAVE_JUDGEMENT, saveJudgingsSaga)])
 }

@@ -23,153 +23,60 @@
  SOFTWARE.
 
  */
-import React, { BaseSyntheticEvent, FC, useEffect, useState } from 'react'
+import React, { FC, useEffect, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
-import { useHistory } from 'react-router-dom'
-import {
-  Header,
-  Slider,
-  Button,
-  Heading,
-  ButtonOutline,
-  Space,
-  Text,
-} from '@looker/components'
-import { allJudgingsRequest } from '../../data/judgings/actions'
+import { useRouteMatch } from 'react-router-dom'
 import { getHackerState } from '../../data/hack_session/selectors'
-import { Judging, Judgings } from '../../models'
-import { Routes } from '../../routes/AppRouter'
+import { allJudgingsRequest } from '../../data/judgings/actions'
+import {
+  getJudgingsState,
+  getJudgingsListState,
+  getJudgingsLoadedState,
+} from '../../data/judgings/selectors'
+import { Judging } from '../../models'
+import { actionMessage } from '../../data/common/actions'
+import { JudgingForm } from '../../components/JudgingForm'
 
-interface JudgingFormProps {
-  judgings: Judgings
-  judging: Judging
-}
-
-export const JudgingForm: FC<JudgingFormProps> = ({ judgings, judging }) => {
+export const JudgingEditorScene: FC = () => {
   const dispatch = useDispatch()
+  const match = useRouteMatch<{ id: string }>('/judging/:id')
+  const hacker = useSelector(getHackerState)
+  const judgings = useSelector(getJudgingsState)
+  const judgingsList = useSelector(getJudgingsListState)
+  const judgingsLoaded = useSelector(getJudgingsLoadedState)
+  const [judging, setJudging] = useState<Judging>()
+
   useEffect(() => {
     dispatch(allJudgingsRequest())
   }, [dispatch])
-  const history = useHistory()
-  const hacker = useSelector(getHackerState)
-  // const isLoading = useSelector(isLoadingState)
-  const [execution, setExecution] = useState<number>(0)
-  const [ambition, setAmbition] = useState<number>(0)
-  const [coolness, setCoolness] = useState<number>(0)
-  const [impact, setImpact] = useState<number>(0)
 
-  const onExecutionChange = (event: BaseSyntheticEvent) => {
-    setExecution(event.target.value)
-  }
-  const onAmbitionChange = (event: BaseSyntheticEvent) => {
-    setAmbition(event.target.value)
-  }
-
-  const onCoolnessChange = (event: BaseSyntheticEvent) => {
-    setCoolness(event.target.value)
-  }
-  const onImpactChange = (event: BaseSyntheticEvent) => {
-    setImpact(event.target.value)
-  }
-
-  const handleCancel = () => {
-    history.push(Routes.JUDGING)
-  }
-
-  setExecution(judging.execution)
-  setAmbition(judging.ambition)
-  setCoolness(judging.coolness)
-  setImpact(judging.impact)
-
-  const handleSave = () => {
-    judging.execution = execution
-    judging.ambition = ambition
-    judging.coolness = coolness
-    judging.impact = impact
-    if (judgings) {
-      console.log({ judging })
-      // await judgings.save(judging)
+  useEffect(() => {
+    if (match?.params?.id && judgingsList) {
+      const judgement = judgingsList.find(
+        (judging: Judging) => judging._id === match?.params?.id
+      )
+      if (judgement) {
+        if (
+          hacker.canAdmin() ||
+          (hacker.canJudge() && judgement.user_id === hacker.id)
+        ) {
+          setJudging(judgement)
+        } else {
+          dispatch(actionMessage('Could not find judging details', 'critical'))
+        }
+      } else {
+        if (judgingsLoaded) {
+          dispatch(actionMessage('Could not find judging details', 'critical'))
+        }
+      }
     }
-  }
+  }, [match, judgingsList, judgingsLoaded])
 
-  return (
-    <>
-      {judging && judging.user_id !== hacker.id && (
-        <Text>You can't judge this</Text>
-      )}
-      {judging && (
-        <>
-          <Header>{judging.$project.title}</Header>
-          <div>
-            <Slider
-              onChange={onExecutionChange}
-              value={execution}
-              min={1}
-              max={10}
-            />
-            <Heading>
-              <strong>Execution:</strong> {execution}
-            </Heading>
-          </div>
-          <div>
-            <Slider
-              onChange={onAmbitionChange}
-              value={ambition}
-              min={1}
-              max={10}
-            />
-            <Heading>
-              <strong>Ambition:</strong> {ambition}
-            </Heading>
-          </div>
-          <div>
-            <Slider
-              onChange={onCoolnessChange}
-              value={coolness}
-              min={1}
-              max={10}
-            />
-            <Heading>
-              <strong>Coolness:</strong> {coolness}
-            </Heading>
-          </div>
-          <div>
-            <Slider onChange={onImpactChange} value={impact} min={1} max={10} />
-            <Heading>
-              <strong>Impact:</strong> {impact}
-            </Heading>
-          </div>
-          <Space between width="100%">
-            <Space>
-              <ButtonOutline type="button" onClick={handleCancel}>
-                Cancel
-              </ButtonOutline>
-              <Button type="submit" onClick={handleSave}>
-                Save
-              </Button>
-            </Space>
-          </Space>
-        </>
-      )}
-    </>
-  )
-}
-
-interface JudgingEditorSceneProps {
-  judgings?: Judgings
-  judging?: Judging
-}
-
-export const JudgingEditorScene: FC<JudgingEditorSceneProps> = ({
-  judgings,
-  judging,
-}) => {
-  // TODO: add a not found error in case judging is not found
   return (
     <>
       {(!judgings || !judging) && <>No judging information</>}
       {judgings && judging && (
-        <JudgingForm judgings={judgings} judging={judging} />
+        <JudgingForm judging={judging} judgings={judgings} />
       )}
     </>
   )

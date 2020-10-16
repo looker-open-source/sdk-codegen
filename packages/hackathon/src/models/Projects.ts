@@ -246,8 +246,6 @@ export class Project extends SheetRow<Project> {
     if (!hacker.canJudge())
       throw new SheetError(`${hacker.name} is not a judge`)
     if (this.findJudging(hacker)) return this
-    // Make sure the user exists in the User tab
-    await this.$data.getUser(hacker)
     const judging = new Judging({ user_id: hacker.id, project_id: this._id })
     await this.$data.judgings.save(judging)
     this.getJudgings()

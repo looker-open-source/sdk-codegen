@@ -75,10 +75,17 @@ export class SheetData {
   }
 
   /**
-   * Ensure the user record exists and the user name is current
-   * @param hacker user to log
+   * Optionally create and get registration and user record for user in Hackathon
+   * @param hackathon to register
+   * @param hacker to register
    */
-  async getUser(hacker: Hacker) {
+  async registerUser(
+    hackathon: Hackathon,
+    hacker: Hacker
+  ): Promise<Registration> {
+    let reg = this.registrations.rows.find(
+      (r) => r._user_id === hacker.id && r.hackathon_id === hackathon._id
+    )
     let user = this.users.find(hacker.id)
     if (!user) {
       /** create the user tab row for this hacker */
@@ -99,22 +106,6 @@ export class SheetData {
         await this.users.save(user)
       }
     }
-    return user
-  }
-
-  /**
-   * Optionally create and get registration and user record for user in Hackathon
-   * @param hackathon to register
-   * @param hacker to register
-   */
-  async registerUser(
-    hackathon: Hackathon,
-    hacker: Hacker
-  ): Promise<Registration> {
-    let reg = this.registrations.rows.find(
-      (r) => r._user_id === hacker.id && r.hackathon_id === hackathon._id
-    )
-    await this.getUser(hacker)
     if (reg) {
       hacker.registration = reg
       return reg

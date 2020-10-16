@@ -23,15 +23,4 @@
  SOFTWARE.
 
  */
-
-import { RootState } from '../root_reducer'
-import { Judgings, Judging } from '../../models'
-
-export const getJudgingsState = (state: RootState): Judgings | undefined =>
-  state.judgingsState.judgings
-
-export const getJudgingsListState = (state: RootState): Judging[] =>
-  state.judgingsState.judgingsList
-
-export const getJudgingsLoadedState = (state: RootState): boolean =>
-  state.judgingsState.judgingsLoaded
+export { JudgingForm } from './JudgingForm'

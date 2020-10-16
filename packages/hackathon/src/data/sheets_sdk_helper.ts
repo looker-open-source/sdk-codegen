@@ -38,8 +38,10 @@ import {
   Registration,
   Hackers,
   Judging,
+  Judgings,
 } from '../models'
 import { ExtensionProxyTransport } from '../authToken/extensionProxyTransport'
+import { JudgingsData } from './judgings/actions'
 
 let sheetData: SheetData
 
@@ -112,9 +114,15 @@ export const sheetsSdkHelper = {
     await data.hackathons.refresh()
     return data.currentHackathon!
   },
-  getJudgings: async (hackathon: Hackathon): Promise<Judging[]> => {
+  getJudgings: async (hackathon: Hackathon): Promise<JudgingsData> => {
     const data = await initSheetData()
-    return data.judgings.filterBy(hackathon)
+    return {
+      judgingsList: data.judgings.filterBy(hackathon),
+      judgings: data.judgings,
+    }
+  },
+  saveJudgings: async (judgings: Judgings, judging: Judging) => {
+    await judgings.save(judging)
   },
   getHacker: async (): Promise<Hacker> => {
     const lookerSdk = getCore40SDK()

@@ -59,6 +59,7 @@ interface JudgingListProps {
 }
 
 export const JudgingList: FC<JudgingListProps> = ({ judgings }) => {
+  const history = useHistory()
   const template = judgings.length > 0 ? judgings[0] : new Judging()
   const [currentPage, setCurrentPage] = useState(1)
   const [moreInfoProject, setMoreInfoProject] = useState<Project>()
@@ -115,10 +116,9 @@ export const JudgingList: FC<JudgingListProps> = ({ judgings }) => {
   //   </Tooltip>
   // )
 
-  const history = useHistory()
-  const handleEdit = (judgingId: string) => {
+  const showJudging = (judgingId: string) => {
     setTimeout(() => {
-      history.push(`/judgings/${judgingId}`)
+      history.push(`/judging/${judgingId}`)
     })
   }
 
@@ -133,23 +133,13 @@ export const JudgingList: FC<JudgingListProps> = ({ judgings }) => {
             More Information
           </ActionListItemAction>
         )}
-        {judging.canUpdate(hacker) ? (
-          <ActionListItemAction
-            onClick={handleEdit.bind(null, judging._id)}
-            icon="Edit"
-            itemRole="link"
-          >
-            Edit
-          </ActionListItemAction>
-        ) : (
-          <ActionListItemAction
-            onClick={handleEdit.bind(null, judging._id)}
-            icon="ModelFile"
-            itemRole="link"
-          >
-            View
-          </ActionListItemAction>
-        )}
+        <ActionListItemAction
+          onClick={showJudging.bind(null, judging._id)}
+          icon="Edit"
+          itemRole="link"
+        >
+          {judging.canUpdate(hacker) ? 'Edit' : 'View'}
+        </ActionListItemAction>
       </>
     )
   }
