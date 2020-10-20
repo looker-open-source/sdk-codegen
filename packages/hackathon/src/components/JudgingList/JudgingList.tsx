@@ -40,7 +40,7 @@ import {
 } from '@looker/components'
 import { useSelector } from 'react-redux'
 import { useHistory } from 'react-router-dom'
-import { Judging, sheetCell, sheetHeader, Project } from '../../models'
+import { Judging, sheetCell, sheetHeader } from '../../models'
 import { getHackerState } from '../../data/hack_session/selectors'
 
 const judgingListheaders = [
@@ -62,7 +62,8 @@ export const JudgingList: FC<JudgingListProps> = ({ judgings }) => {
   const history = useHistory()
   const template = judgings.length > 0 ? judgings[0] : new Judging()
   const [currentPage, setCurrentPage] = useState(1)
-  const [moreInfoProject, setMoreInfoProject] = useState<Project>()
+  const [moreInfo, setMoreInfo] = useState<string>()
+  const [title, setTitle] = useState<string>()
   // Select only the displayable columns
   const header = judgingListheaders
   const columns = sheetHeader(header, template)
@@ -70,12 +71,15 @@ export const JudgingList: FC<JudgingListProps> = ({ judgings }) => {
   // const dispatch = useDispatch()
 
   const openMoreInfo = (judging: Judging) => {
-    setMoreInfoProject(judging.$project)
+    setMoreInfo(judging.$more_info)
+    setTitle(judging.$title)
   }
 
   const closeMoreInfo = () => {
-    setMoreInfoProject(undefined)
+    setMoreInfo(undefined)
+    setTitle(undefined)
   }
+
   columns[0].title = (
     <Tooltip content={'The judge assigned to this project'}>Judge</Tooltip>
   )
@@ -173,18 +177,15 @@ export const JudgingList: FC<JudgingListProps> = ({ judgings }) => {
         pages={totalPages}
         onChange={setCurrentPage}
       />
-      <Dialog isOpen={!!moreInfoProject} onClose={closeMoreInfo}>
-        <DialogHeader>{moreInfoProject?.title}</DialogHeader>
+      <Dialog isOpen={!!moreInfo} onClose={closeMoreInfo}>
+        <DialogHeader>{title}</DialogHeader>
         <DialogContent>
           <SpaceVertical>
             <Paragraph>
               Copy the link below and paste into a new browser window to see
               additional information about the project
             </Paragraph>
-            <TextArea
-              readOnly={true}
-              value={moreInfoProject?.more_info}
-            ></TextArea>
+            <TextArea readOnly={true} value={moreInfo}></TextArea>
           </SpaceVertical>
         </DialogContent>
       </Dialog>

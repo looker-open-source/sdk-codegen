@@ -69,7 +69,7 @@ export const JudgingForm: FC<JudgingFormProps> = ({ judgings, judging }) => {
     setCoolness(judging.coolness || 1)
     setImpact(judging.impact || 1)
     setNotes(judging.notes || '')
-    setMoreInfo(judging.$project.more_info || '')
+    setMoreInfo(judging.$more_info || '')
   }, [judging])
 
   useEffect(() => {
@@ -122,8 +122,8 @@ export const JudgingForm: FC<JudgingFormProps> = ({ judgings, judging }) => {
         <Text>You can't judge this</Text>
       )}
       <SpaceVertical gap="xlarge" width="40vh">
-        <Heading as="h1">{judging.$project.title}</Heading>
-        <Span>{judging.$project.description}</Span>
+        <Heading as="h1">{judging.$title}</Heading>
+        <Span>{judging.$description}</Span>
         <SpaceVertical gap="medium">
           <Slider
             onChange={onExecutionChange}
