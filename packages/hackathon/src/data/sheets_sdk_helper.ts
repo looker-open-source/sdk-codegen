@@ -27,7 +27,7 @@ import { DefaultSettings } from '@looker/sdk-rtl/lib/browser'
 import { ITabTable, SheetSDK } from '@looker/wholly-sheet'
 import { getExtensionSDK } from '@looker/extension-sdk'
 import { getCore40SDK } from '@looker/extension-sdk-react'
-import { SheetData } from '../models/SheetData'
+import { initActiveSheet, SheetData } from '../models/SheetData'
 import { GAuthSession } from '../authToken/gAuthSession'
 import {
   Hacker,
@@ -62,7 +62,7 @@ const initSheetData = async () => {
   const gSession = new GAuthSession(extSDK, options, transport)
   const sheetSDK = new SheetSDK(gSession, sheetId)
   const doc = await sheetSDK.index()
-  sheetData = new SheetData(sheetSDK, doc)
+  sheetData = initActiveSheet(sheetSDK, doc)
   return sheetData
 }
 

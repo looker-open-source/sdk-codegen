@@ -25,20 +25,47 @@
  */
 import { IRowModel, nilCell, noDate, RowModel, stringer } from './RowModel'
 
-interface ITestRow extends IRowModel {
+export interface ITestRow extends IRowModel {
+  name: string
   toggle: boolean
   score: number
+  average: number
+  strArray: string[]
   $notheader: string
 }
 
-class TestRow extends RowModel<ITestRow> {
+export class TestRow extends RowModel<ITestRow> {
+  name = ''
   toggle = false
   score = 0
+  average = 0.0
+  strArray = []
   $notheader = ''
   constructor(values?: any) {
     super(values)
     if (values) this.assign(values)
   }
+}
+export const testRowNow = new Date()
+export const testRowValues = [
+  '3',
+  testRowNow,
+  'Looker',
+  true,
+  5,
+  3.2,
+  ['a', 'b'],
+]
+
+export const testRowObject = {
+  _row: 2,
+  _id: testRowValues[0],
+  _updated: testRowValues[1],
+  name: testRowValues[2],
+  toggle: testRowValues[3],
+  score: testRowValues[4],
+  average: testRowValues[5],
+  strArray: testRowValues[6],
 }
 
 describe('RowModel', () => {
@@ -70,18 +97,29 @@ describe('RowModel', () => {
     test('Returns int string', () => {
       expect(stringer(12)).toEqual('12')
     })
+    test('Returns comma-delimited array', () => {
+      expect(stringer(['a', 'b'])).toEqual('a,b')
+    })
   })
 
   test('header omits row key and $ vars', () => {
     const row = new TestRow()
-    const expected = ['_id', '_updated', 'toggle', 'score']
+    const expected = [
+      '_id',
+      '_updated',
+      'name',
+      'toggle',
+      'score',
+      'average',
+      'strArray',
+    ]
     const actual = row.header()
     expect(actual).toEqual(expected)
   })
 
   test('displayHeaders omits _ and $ vars', () => {
     const row = new TestRow()
-    const expected = ['toggle', 'score']
+    const expected = ['name', 'toggle', 'score', 'average', 'strArray']
     const actual = row.displayHeader()
     expect(actual).toEqual(expected)
   })
@@ -92,59 +130,81 @@ describe('RowModel', () => {
       expect(actual._row).toEqual(0)
       expect(actual._id).toEqual('')
       expect(actual._updated).toEqual(noDate)
+      expect(actual.name).toEqual('')
       expect(actual.toggle).toEqual(false)
       expect(actual.score).toEqual(0)
+      expect(actual.average).toEqual(0.0)
+      expect(actual.strArray).toEqual([])
     })
     test('inits with object values', () => {
-      const now = new Date()
-      const actual = new TestRow({
-        _row: 2,
-        _id: '3',
-        _updated: now,
-        toggle: true,
-        score: 5,
-      })
+      const actual = new TestRow(testRowObject)
       expect(actual._row).toEqual(2)
       expect(actual._id).toEqual('3')
-      expect(actual._updated).toEqual(now)
+      expect(actual._updated).toEqual(testRowNow)
+      expect(actual.name).toEqual(testRowObject.name)
       expect(actual.toggle).toEqual(true)
       expect(actual.score).toEqual(5)
+      expect(actual.average).toEqual(3.2)
+      expect(actual.strArray).toEqual(['a', 'b'])
     })
     test('inits with value array', () => {
-      const now = new Date()
-      const actual = new TestRow(['3', now, true, 5])
+      const actual = new TestRow(testRowValues)
       expect(actual._row).toEqual(0)
       expect(actual._id).toEqual('3')
-      expect(actual._updated).toEqual(now)
+      expect(actual._updated).toEqual(testRowNow)
+      expect(actual.name).toEqual(testRowObject.name)
       expect(actual.toggle).toEqual(true)
       expect(actual.score).toEqual(5)
+      expect(actual.average).toEqual(3.2)
+      expect(actual.strArray).toEqual(['a', 'b'])
     })
   })
   describe('assign', () => {
     test('with value array', () => {
-      const now = new Date()
       const actual = new TestRow()
-      actual.assign(['3', now, true, 5])
+      actual.assign(testRowValues)
       expect(actual._row).toEqual(0)
       expect(actual._id).toEqual('3')
-      expect(actual._updated).toEqual(now)
+      expect(actual._updated).toEqual(testRowNow)
+      expect(actual.name).toEqual(testRowObject.name)
       expect(actual.toggle).toEqual(true)
       expect(actual.score).toEqual(5)
+      expect(actual.average).toEqual(3.2)
+      expect(actual.strArray).toEqual(['a', 'b'])
     })
     test('with object', () => {
-      const now = new Date()
       const actual = new TestRow()
-      actual.assign({
-        _row: 2,
-        _id: '3',
-        _updated: now,
-        toggle: true,
-        score: 5,
-      })
+      actual.assign(testRowObject)
       expect(actual._row).toEqual(2)
       expect(actual._id).toEqual('3')
-      expect(actual._updated).toEqual(now)
+      expect(actual._updated).toEqual(testRowNow)
+      expect(actual.name).toEqual(testRowObject.name)
       expect(actual.toggle).toEqual(true)
+      expect(actual.score).toEqual(5)
+      expect(actual.average).toEqual(3.2)
+      expect(actual.strArray).toEqual(['a', 'b'])
+    })
+    test('with toObject and fromObject', () => {
+      const actual = new TestRow()
+      actual.fromObject(testRowObject)
+      expect(actual._row).toEqual(2)
+      expect(actual._id).toEqual('3')
+      expect(actual._updated).toEqual(testRowNow)
+      expect(actual.name).toEqual(testRowObject.name)
+      expect(actual.toggle).toEqual(true)
+      expect(actual.score).toEqual(5)
+      expect(actual.average).toEqual(3.2)
+      expect(actual.strArray).toEqual(['a', 'b'])
+      const obj = actual.toObject()
+      actual.fromObject(obj)
+      expect(actual._row).toEqual(2)
+      expect(actual._id).toEqual('3')
+      expect(actual._updated).toEqual(testRowNow)
+      expect(actual.name).toEqual(testRowObject.name)
+      expect(actual.toggle).toEqual(true)
+      expect(actual.score).toEqual(5)
+      expect(actual.average).toEqual(3.2)
+      expect(actual.strArray).toEqual(['a', 'b'])
     })
   })
   describe('prepare', () => {

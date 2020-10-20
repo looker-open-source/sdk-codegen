@@ -28,8 +28,7 @@ import { ITabTable, SheetSDK, WhollySheet } from '@looker/wholly-sheet'
 import { ISheetRow, SheetRow } from './SheetRow'
 import { Project } from './Projects'
 import { User } from './Users'
-import { TeamMembers } from './TeamMembers'
-import { SheetData } from './SheetData'
+import { getActiveSheet, SheetData } from './SheetData'
 import { Hacker, IHacker } from './Hacker'
 import { Hackathon } from './Hackathons'
 
@@ -43,13 +42,11 @@ export interface IJudging extends ISheetRow {
   impact: number
   score: number
   notes: string
-  $project: Project
   $title: string
-  $judge: User
-  $judge_name: string
-  $team: TeamMembers[]
-  $members: string[]
+  $description: string
   $more_info: string
+  $judge_name: string
+  $members: string[]
   calculateScore(
     execution: number,
     ambition: number,
@@ -68,9 +65,11 @@ export class Judging extends SheetRow<IJudging> {
   impact = 0
   score = 0
   notes = ''
-  $project: Project = {} as Project
-  $judge: User = {} as User
-  $data: SheetData = {} as SheetData
+  $title = ''
+  $description = ''
+  $more_info = ''
+  $judge_name = ''
+  $members: string[] = []
 
   constructor(values?: any) {
     super()
@@ -79,12 +78,23 @@ export class Judging extends SheetRow<IJudging> {
     this.assign(values)
   }
 
+  private data() {
+    return getActiveSheet()
+  }
+
   load(data?: SheetData) {
-    if (data) this.$data = data
-    const j = this.$data.users?.find(this.user_id)
-    if (j) this.$judge = j
-    const p = this.$data.projects?.find(this.project_id)
-    if (p) this.$project = p
+    if (!data) data = this.data()
+    const u = data.users?.find(this.user_id) as User
+    if (u) {
+      this.$judge_name = u.$name
+    }
+    const p = data.projects?.find(this.project_id) as Project
+    if (p) {
+      this.$title = p.title
+      this.$description = p.description
+      this.$members = p.$members
+      this.$more_info = p.more_info
+    }
   }
 
   calculateScore(
@@ -94,26 +104,6 @@ export class Judging extends SheetRow<IJudging> {
     impact: number
   ) {
     return 2 * execution + ambition + coolness + impact
-  }
-
-  get $title() {
-    return this.$project?.title || ''
-  }
-
-  get $team() {
-    return this.$project.$team
-  }
-
-  get $members() {
-    return this.$project.$members
-  }
-
-  get $judge_name() {
-    return this.$judge.$name || ''
-  }
-
-  get $more_info() {
-    return this.$project.more_info
   }
 
   canDelete(user: IHacker): boolean {

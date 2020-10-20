@@ -37,7 +37,7 @@ import {
 import { ISheetRow, SheetRow } from './SheetRow'
 import { Hacker, IHacker } from './Hacker'
 import { Hackathon } from './Hackathons'
-import { SheetData } from './SheetData'
+import { getActiveSheet, SheetData } from './SheetData'
 import { TeamMember } from './TeamMembers'
 import { Judging } from './Judgings'
 
@@ -56,7 +56,6 @@ export interface IProject extends ISheetRow {
   $team: TeamMember[]
   $judgings: Judging[]
   $hackathon: Hackathon
-  $data: SheetData
   $members: string[]
   $judges: string[]
   $team_count: number
@@ -83,12 +82,11 @@ export class Project extends SheetRow<Project> {
   $hackathon!: Hackathon
   $_data!: SheetData
 
-  constructor(values?: any, data?: SheetData) {
+  constructor(values?: any) {
     super()
     // IMPORTANT: assign must be called after the super() constructor is called so keys are established
     // there may be a way to overload the constructor so this isn't necessary but that pattern hasn't been found
     this.assign(values)
-    if (data) this.$data = data
   }
 
   get $team_count() {
@@ -99,10 +97,14 @@ export class Project extends SheetRow<Project> {
     return this.$judgings.length
   }
 
+  data(): SheetData {
+    return getActiveSheet()
+  }
+
   get $members(): string[] {
     const names: string[] = []
     this.$team.forEach((m) => {
-      const user = this.$data.users.find(m.user_id)
+      const user = this.data().users.find(m.user_id)
       if (user) names.push(`${user.first_name} ${user.last_name}`)
     })
     return names
@@ -111,33 +113,33 @@ export class Project extends SheetRow<Project> {
   get $judges(): string[] {
     const names: string[] = []
     this.$judgings.forEach((j) => {
-      const user = this.$data.users.find(j.user_id)
+      const user = this.data().users.find(j.user_id)
       if (user) names.push(`${user.first_name} ${user.last_name}`)
     })
     return names
   }
 
-  get $data() {
-    return this.$_data
-  }
-
-  set $data(value: SheetData) {
-    this.load(value)
-  }
-
   canCreate(user: IHacker): boolean {
-    return super.canCreate(user) || this._user_id === user.id
+    return (
+      super.canCreate(user) ||
+      (this._user_id === user.id && this.$hackathon?.isActive())
+    )
   }
 
   canDelete(user: IHacker): boolean {
     return (
       super.canDelete(user) ||
-      (this._user_id === user.id && this.$team.length === 0)
+      (this._user_id === user.id &&
+        this.$team.length === 0 &&
+        this.$hackathon?.isActive())
     )
   }
 
   canUpdate(user: IHacker): boolean {
-    return super.canUpdate(user) || this._user_id === user.id
+    return (
+      super.canUpdate(user) ||
+      (this._user_id === user.id && this.$hackathon?.isActive())
+    )
   }
 
   prepare(): Project {
@@ -186,35 +188,37 @@ export class Project extends SheetRow<Project> {
   }
 
   load(data?: SheetData) {
-    if (data) this.$_data = data
+    if (!data) data = this.data()
     this.getJudgings()
     this.getMembers()
-    const found = this.$data.hackathons.find(this._hackathon_id)
+    const found = data.hackathons?.find(this._hackathon_id)
     if (found) this.$hackathon = found
     return this
   }
 
   getMembers(): Project {
-    this.$team = this.$data.teamMembers.rows.filter(
+    this.$team = this.data().teamMembers?.rows.filter(
       (m) => m.project_id === this._id
     )
     return this
   }
 
   getJudgings(): Project {
-    this.$judgings = this.$data.judgings.rows.filter(
+    const data = this.data()
+    this.$judgings = data.judgings?.rows.filter(
       (m) => m.project_id === this._id
     )
     this.$judgings.forEach((j) => {
       // Assign relations back for judging row in case it's not established
-      j.load(this.$data)
+      j.load(data)
     })
     return this
   }
 
   /** Join a project team if slots are available */
   async join(hacker: Hacker) {
-    const hackathon = this.$data.hackathons.find(this._hackathon_id)
+    const data = this.data()
+    const hackathon = data.hackathons?.find(this._hackathon_id)
     if (!hackathon)
       throw new SheetError(`Hackathon ${this._hackathon_id} was not found`)
     if (this.$team.length >= hackathon.max_team_size)
@@ -225,7 +229,7 @@ export class Project extends SheetRow<Project> {
     /** already in the project, nothing to do */
     if (member) return this
     member = new TeamMember({ user_id: hacker.id, project_id: this._id })
-    await this.$data.teamMembers.save(member)
+    await data.teamMembers.save(member)
     // Reload because maybe there's another different member now
     this.getMembers()
     return this
@@ -235,7 +239,7 @@ export class Project extends SheetRow<Project> {
   async leave(hacker: Hacker) {
     const member = this.findMember(hacker)
     if (!member) return this // nothing to do
-    await this.$data.teamMembers.delete(member)
+    await this.data().teamMembers.delete(member)
     // Reload because maybe there's another different member now
     this.getMembers()
 
@@ -247,7 +251,7 @@ export class Project extends SheetRow<Project> {
       throw new SheetError(`${hacker.name} is not a judge`)
     if (this.findJudging(hacker)) return this
     const judging = new Judging({ user_id: hacker.id, project_id: this._id })
-    await this.$data.judgings.save(judging)
+    await this.data().judgings.save(judging)
     this.getJudgings()
     return this
   }
@@ -255,7 +259,7 @@ export class Project extends SheetRow<Project> {
   async deleteJudge(hacker: Hacker) {
     const judging = this.findJudging(hacker)
     if (!judging) return this
-    await this.$data.judgings.delete(judging)
+    await this.data().judgings.delete(judging)
     this.getJudgings()
     return this
   }
@@ -267,7 +271,6 @@ export class Projects extends WhollySheet<Project> {
     public readonly table: ITabTable
   ) {
     super(data.sheetSDK ? data.sheetSDK : ({} as SheetSDK), 'projects', table)
-    this.rows.forEach((project) => (project.$data = this.data))
   }
 
   typeRow<Project>(values?: any) {

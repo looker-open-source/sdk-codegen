@@ -200,6 +200,18 @@ export interface IWhollySheet<T extends IRowModel> {
    * @param columnName in which to find the value. Defaults to primary key. If primary key, indexed retrieval is use.
    */
   find(value: any, columnName?: string): T | undefined
+
+  /**
+   * Reassigns collection rows, checks header, and reindexes
+   * @param rows to overwrite current list
+   */
+  loadRows<T extends IRowModel>(rows: SheetValues): T[]
+
+  /** Converts the row collection to a plain javascript object array */
+  toObject(): object[]
+
+  /** Assigns the passed object[] to the rows collection */
+  fromObject<T extends IRowModel>(obj: object[]): T[]
 }
 
 /** CRUDF operations for a GSheet tab */
@@ -209,7 +221,7 @@ export abstract class WhollySheet<T extends IRowModel>
   index: Record<string, T> = {}
   // rows: T[]
 
-  protected constructor(
+  constructor(
     public readonly sheets: SheetSDK,
     /** name of the tab in the GSheet document */
     public readonly name: string,
@@ -217,9 +229,14 @@ export abstract class WhollySheet<T extends IRowModel>
     public readonly keyColumn: string = '_id'
   ) {
     super([])
-    this.rows = this.typeRows(table.rows)
+    this.loadRows(table.rows)
+  }
+
+  loadRows<T extends IRowModel>(rows: SheetValues): T[] {
+    this.rows = this.typeRows(rows)
     this.checkHeader()
     this.createIndex()
+    return (this.rows as unknown) as T[]
   }
 
   abstract typeRow<T extends IRowModel>(values?: any): T
@@ -438,5 +455,16 @@ export abstract class WhollySheet<T extends IRowModel>
     this.rows = rows
     this.createIndex()
     return rows
+  }
+
+  fromObject<T extends IRowModel>(obj: object[]): T[] {
+    this.loadRows(obj)
+    return (this.rows as unknown) as T[]
+  }
+
+  toObject(): object[] {
+    const result: object[] = []
+    this.rows.forEach((r) => result.push(r.toObject()))
+    return result
   }
 }

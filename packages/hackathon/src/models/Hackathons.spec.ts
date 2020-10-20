@@ -23,26 +23,27 @@
  SOFTWARE.
 
  */
+import { mockHackathons } from '../test-data'
 
-export {
-  wait2Mins,
-  mockUser,
-  mockJudge,
-  mockAdmin,
-  mockStaff,
-  mockAProject,
-  mockFullProject,
-  mockProjects,
-  mockAJudge,
-  mockAHacker,
-  mockHackathons,
-  mockAHackathon,
-  mockLookerSDK,
-  noSheetData,
-  mockTabTable,
-  mockUsers,
-  mockSheetData,
-  mockSheetSDK,
-  mockSheet,
-  mockJudging,
-} from './mocks'
+const hackathons = mockHackathons()
+
+describe('Hackathons', () => {
+  test('gets current hackathon', () => {
+    const actual = hackathons.currentHackathon
+    expect(actual).toBeDefined()
+    expect(actual?._id).toEqual('current')
+    expect(actual?.isActive()).toEqual(true)
+  })
+  test('past hackathon is not active', () => {
+    const actual = hackathons.find('past')
+    expect(actual).toBeDefined()
+    expect(actual?._id).toEqual('past')
+    expect(actual?.isActive()).toEqual(false)
+  })
+  test('future hackathon is not active', () => {
+    const actual = hackathons.find('future')
+    expect(actual).toBeDefined()
+    expect(actual?._id).toEqual('future')
+    expect(actual?.isActive()).toEqual(false)
+  })
+})

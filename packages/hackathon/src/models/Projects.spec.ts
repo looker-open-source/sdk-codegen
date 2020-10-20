@@ -25,13 +25,20 @@
  */
 import {
   mockAdmin,
-  mockHackathon,
   mockJudge,
   mockProjects,
   mockStaff,
   mockUser,
+  mockHackathons,
+  mockUsers,
 } from '../test-data'
 import { Project } from './Projects'
+import { Hackathon } from './Hackathons'
+
+const hackathons = mockHackathons()
+const users = mockUsers()
+const hackathon = hackathons.find('current') as Hackathon
+const projects = mockProjects(hackathons.rows, users.rows)
 
 describe('Projects', () => {
   const proj1 = new Project({
@@ -44,6 +51,8 @@ describe('Projects', () => {
     _user_id: 'different id',
     title: 'test project',
   })
+  proj1.$hackathon = hackathon
+  proj2.$hackathon = hackathon
   test('User can manage his own project', () => {
     expect(proj1.canUpdate(mockUser)).toEqual(true)
     expect(proj1.canDelete(mockUser)).toEqual(true)
@@ -71,15 +80,14 @@ describe('Projects', () => {
   })
   describe('filterBy', () => {
     test('user projects', () => {
-      const actual = mockProjects.filterBy(undefined, mockUser)
+      const actual = projects.filterBy(undefined, mockUser)
       expect(actual.length).toBeGreaterThan(0)
       actual.forEach((p: Project) => expect(p._user_id).toEqual(mockUser.id))
     })
     test('hackathon projects', () => {
-      const hackathon = mockHackathon
       expect(hackathon).toBeDefined()
       if (hackathon) {
-        const actual = mockProjects.filterBy(hackathon)
+        const actual = projects.filterBy(hackathon)
         expect(actual.length).toBeGreaterThan(0)
         actual.forEach((p: Project) => {
           expect(p._hackathon_id).toEqual(hackathon._id)
@@ -87,10 +95,9 @@ describe('Projects', () => {
       }
     })
     test('hackathon + user projects', () => {
-      const hackathon = mockHackathon
       expect(hackathon).toBeDefined()
       if (hackathon) {
-        const actual = mockProjects.filterBy(hackathon, mockUser)
+        const actual = projects.filterBy(hackathon, mockUser)
         expect(actual.length).toBeGreaterThan(0)
         actual.forEach((p: Project) => {
           expect(p._user_id).toEqual(mockUser.id)

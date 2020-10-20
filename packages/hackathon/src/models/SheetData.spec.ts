@@ -26,22 +26,25 @@
 
 import { ISheet, noDate, SheetSDK } from '@looker/wholly-sheet'
 import { initSheetSDK } from '../../../wholly-sheet/src/testUtils/testUtils'
-// Don't want data mocking bits loaded here
-import { mockAHacker, mockAJudge, mockAProject } from '../test-data/mocks'
-import { SheetData } from '.'
+import {
+  mockAHacker,
+  mockAJudge,
+  mockAProject,
+  wait2Mins,
+} from '../test-data/mocks'
+import { initActiveSheet } from './SheetData'
+import { SheetData, TeamMember } from '.'
 
 let sheetSDK: SheetSDK
 let doc: ISheet
 let data: SheetData
-
-const waitABit = 300000
 
 describe('SheetData', () => {
   describe('end to end tests', () => {
     beforeAll(async () => {
       sheetSDK = await initSheetSDK()
       doc = await sheetSDK.index()
-      data = new SheetData(sheetSDK, doc)
+      data = initActiveSheet(sheetSDK, doc)
     })
     test('loads', async () => {
       const actual = data
@@ -49,7 +52,6 @@ describe('SheetData', () => {
       expect(actual.users.rows.length).toBeGreaterThan(0)
       expect(actual.judgings.rows.length).toBeGreaterThan(0)
       expect(actual.projects.rows.length).toBeGreaterThan(0)
-      expect(actual.projectTechnologies.rows.length).toBeGreaterThan(0)
       expect(actual.registrations.rows.length).toBeGreaterThan(0)
       expect(actual.teamMembers.rows.length).toBeGreaterThan(0)
       expect(actual.technologies.rows.length).toBeGreaterThan(0)
@@ -57,7 +59,6 @@ describe('SheetData', () => {
       expect(actual.users.checkHeader()).toEqual(true)
       expect(actual.judgings.checkHeader()).toEqual(true)
       expect(actual.projects.checkHeader()).toEqual(true)
-      expect(actual.projectTechnologies.checkHeader()).toEqual(true)
       expect(actual.registrations.checkHeader()).toEqual(true)
       expect(actual.teamMembers.checkHeader()).toEqual(true)
       expect(actual.technologies.checkHeader()).toEqual(true)
@@ -105,7 +106,7 @@ describe('SheetData', () => {
           })
         }
       },
-      waitABit
+      wait2Mins
     )
     describe('TeamMembers', () => {
       test(
@@ -117,7 +118,7 @@ describe('SheetData', () => {
             expect(projects).toBeDefined()
             expect(projects.rows).toBeDefined()
             let project = await data.projects.save(
-              mockAProject(1, hackathon, data)
+              mockAProject('1', hackathon._id)
             )
             expect(project.$team.length).toEqual(0)
             for (let i = 0; i <= hackathon.max_team_size; i++) {
@@ -144,7 +145,7 @@ describe('SheetData', () => {
             ).toBeUndefined()
           }
         },
-        waitABit
+        wait2Mins
       )
       test(
         'can leave',
@@ -154,9 +155,7 @@ describe('SheetData', () => {
             const projects = data.projects
             expect(projects).toBeDefined()
             expect(projects.rows).toBeDefined()
-            let project = await data.projects.save(
-              mockAProject(1, hackathon, data)
-            )
+            let project = await data.projects.save(mockAProject(1, hackathon))
             expect(project.$team.length).toEqual(0)
             for (let i = 0; i < hackathon.max_team_size; i++) {
               const hacker = mockAHacker(i)
@@ -171,7 +170,7 @@ describe('SheetData', () => {
               expect(member?.user_id).toEqual(hacker.id)
               project = await project.leave(hacker)
               expect(
-                project.$team.find((t) => t.user_id === hacker.id)
+                project.$team.find((t: TeamMember) => t.user_id === hacker.id)
               ).toBeUndefined()
               expect(project.$team.length).toEqual(i)
             }
@@ -182,7 +181,7 @@ describe('SheetData', () => {
             ).toBeUndefined()
           }
         },
-        waitABit
+        wait2Mins
       )
     })
     describe('Judgings', () => {
@@ -194,18 +193,15 @@ describe('SheetData', () => {
             const projects = data.projects
             expect(projects).toBeDefined()
             expect(projects.rows).toBeDefined()
-            let project = await data.projects.save(
-              mockAProject(1, hackathon, data)
-            )
+            let project = await data.projects.save(mockAProject(1, hackathon))
             expect(project.$judgings.length).toEqual(0)
             expect(project.$judge_count).toEqual(0)
             const judge = mockAJudge(1)
             project = await project.addJudge(judge)
             expect(project.$judgings.length).toEqual(1)
             const judging = project.$judgings[0]
-            expect(judging.$project._id).toEqual(project._id)
             expect(judging.project_id).toEqual(project._id)
-            expect(judging.$judge._id).toEqual(judge.id)
+            expect(judging.$judge_name).toEqual(judge.name)
             project = await project.addJudge(judge)
             expect(project.$judgings.length).toEqual(1)
             expect(project.$judge_count).toEqual(1)
@@ -216,7 +212,7 @@ describe('SheetData', () => {
             ).toBeUndefined()
           }
         },
-        waitABit
+        wait2Mins
       )
       test(
         'delete a judge only once',
@@ -226,9 +222,7 @@ describe('SheetData', () => {
             const projects = data.projects
             expect(projects).toBeDefined()
             expect(projects.rows).toBeDefined()
-            let project = await data.projects.save(
-              mockAProject(1, hackathon, data)
-            )
+            let project = await data.projects.save(mockAProject(1, hackathon))
             expect(project.$judgings.length).toEqual(0)
             const judge = mockAJudge(1)
             project = await project.addJudge(judge)
@@ -244,7 +238,7 @@ describe('SheetData', () => {
             ).toBeUndefined()
           }
         },
-        waitABit
+        wait2Mins
       )
       test('invalid judge rejected', async () => {
         const projects = data.projects

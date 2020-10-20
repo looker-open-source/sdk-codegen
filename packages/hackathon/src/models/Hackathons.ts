@@ -24,7 +24,13 @@
 
  */
 
-import { ITabTable, noDate, SheetSDK, WhollySheet } from '@looker/wholly-sheet'
+import {
+  compareDates,
+  ITabTable,
+  noDate,
+  SheetSDK,
+  WhollySheet,
+} from '@looker/wholly-sheet'
 import { ISheetRow, SheetRow } from './SheetRow'
 import { SheetData } from './SheetData'
 
@@ -38,6 +44,7 @@ export interface IHackathon extends ISheetRow {
   max_team_size: number
   judging_starts: Date
   judging_stops: Date
+  isActive(): boolean
 }
 
 /** IMPORTANT: properties must be declared in the tab sheet's columnar order, not sorted order */
@@ -56,9 +63,16 @@ export class Hackathon extends SheetRow<IHackathon> {
     // there may be a way to overload the constructor so this isn't necessary but pattern hasn't been found
     this.assign(values)
   }
+
+  isActive() {
+    const now = new Date().getTime()
+    return this.date.getTime() <= now && this.judging_stops.getTime() >= now
+  }
 }
 
 export class Hackathons extends WhollySheet<Hackathon> {
+  private _hackathon: Hackathon | undefined
+
   constructor(
     public readonly data: SheetData,
     public readonly table: ITabTable
@@ -68,5 +82,17 @@ export class Hackathons extends WhollySheet<Hackathon> {
 
   typeRow<Hackathon>(values?: any) {
     return (new Hackathon(values) as unknown) as Hackathon
+  }
+
+  /** finds the "next up" or active hackathon and caches it for the instance lifetime */
+  get currentHackathon(): Hackathon | undefined {
+    if (this._hackathon) return this._hackathon
+    if (!this.rows || this.rows.length === 0) return undefined
+    // Sort hackathons in chronological order by start time ... maybe we sort by the stop of judging instead?
+    const sorted = this.rows.sort((a, b) => compareDates(a.date, b.date))
+    const now = new Date().getTime()
+    const current = sorted.find((hack) => hack.judging_stops.getTime() >= now)
+    this._hackathon = current as Hackathon
+    return this._hackathon
   }
 }

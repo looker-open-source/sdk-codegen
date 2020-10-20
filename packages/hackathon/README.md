@@ -4,11 +4,7 @@ This extension uses the `@looker/wholly-sheet` package (currently only available
 
 The only complication is that modifications of a GSheet cannot be done with only an API key, so you must use a service account or OAuth.
 
-But fear not! During development, you can use the `WhollySheet` unit tests to log an auth token to the console, then use that token to initialize the SheetSDK for this extension.
-
-Run either [SheetSDK.spec.ts](../wholly-sheet/src/SheetSDK.spec.ts) or [WhollySheet.spec.ts](../wholly-sheet/src/WhollySheet.spec.ts) to have a valid auth token logged to the console.
-
-Use that token to initialize the SheetSDK for your extension development pleasure as shown at the bottom of [testUtils.ts](../wholly-sheet/src/testUtils/testUtils.ts)
+But fear not! You can configure and use the [access token server](/examples/access-token-server) to get your service account token to use with this extension. 
 
 ## Configuration
 
@@ -72,4 +68,4 @@ Hackathon judges have a role called `Hackathon Judge`.
 
 ### Admin
 
-Hackathon administrators are assigned the existing `Admin` role. Because they're already able to do everything, anyway.
+Anyone who has the Looker `Admin` role is also a Hackathon administrator because they're already able to do everything, anyway.

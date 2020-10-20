@@ -33,6 +33,10 @@ export const noDate = new Date(-8640000000000000)
 /** Signifies an empty cell */
 export const nilCell = '\0'
 
+export const addMinutes = (date: Date, minutes: number) => {
+  return new Date(date.getTime() + minutes * 60000)
+}
+
 /** Convert a value to the string representation for a cell value */
 export const stringer = (value: any) => {
   if (value === undefined || value === null) return nilCell
@@ -79,6 +83,10 @@ export interface IRowModel extends RowValues {
   validate(): RowValidationErrors | undefined
   /** Convert a cell to the right type */
   typeCast(key: string, value: any): any
+  /** Converts instance to plain javascript object */
+  toObject(): object
+  /** Converts from plain javascript object to class instance */
+  fromObject(obj: object): IRowModel
 }
 
 export class RowModel<T extends IRowModel> implements IRowModel {
@@ -179,6 +187,16 @@ export class RowModel<T extends IRowModel> implements IRowModel {
   /** default to no errors */
   validate(): RowValidationErrors | undefined {
     return undefined
+  }
+
+  toObject(): object {
+    const result = {}
+    Object.entries(this).forEach(([key, value]) => (result[key] = value))
+    return result
+  }
+
+  fromObject(obj: object): IRowModel {
+    return this.assign(obj)
   }
 }
 

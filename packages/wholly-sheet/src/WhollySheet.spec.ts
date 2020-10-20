@@ -24,186 +24,149 @@
 
  */
 
-import { Hackathon, Project } from '../../hackathon/src/models'
-import {
-  mockHackathonTab,
-  mockProjectTab,
-  mockHackathons,
-  mockProjects,
-} from '../../hackathon/src/test-data'
-import { nilCell, noDate } from './RowModel'
+import { IAuthSession } from '@looker/sdk-rtl'
+import { addMinutes, IRowModel, noDate, stringer } from './RowModel'
+import { WhollySheet } from './WhollySheet'
+import { TestRow, testRowObject } from './RowModel.spec'
+import { ITabTable, SheetSDK } from './SheetSDK'
 
-// const addDays = (date: Date, days: number): Date => {
-//   const result = new Date(date)
-//   result.setDate(result.getDate() + days)
-//   return result
-// }
+export class TestSheet extends WhollySheet<TestRow> {
+  typeRow<T extends IRowModel>(values?: any): T {
+    return (new TestRow(values) as unknown) as T
+  }
+}
 
-// let sheets: SheetSDK
+const testRow = new TestRow(testRowObject)
+const testRow2Object = {
+  _row: 3,
+  _id: '4',
+  _updated: new Date(),
+  name: 'row 2',
+  toggle: false,
+  score: 10,
+  average: 5.1,
+  strArray: ['c', 'd'],
+}
+
+const testRow2 = new TestRow(testRow2Object)
+
+const testTable: ITabTable = {
+  header: testRow.header(),
+  rows: [testRow, testRow2],
+}
+
+const emptyTable: ITabTable = {
+  header: testRow.header(),
+  rows: [],
+}
+
+const testSDK = new SheetSDK({ settings: {} } as IAuthSession, 'test sheet id')
+const sheet = new TestSheet(testSDK, 'test', testTable)
 
 describe('WhollySheet', () => {
-  // beforeAll(async () => {
-  //   sheets = await initSheetSDK()
-  // })
-  describe('with hardcoded data', () => {
-    test('initializes', () => {
-      const hackathons = mockHackathons
-      expect(hackathons.rows).toBeDefined()
-      expect(hackathons.rows.length).toEqual(mockHackathonTab.rows.length)
-      hackathons.rows.forEach((row) => expect(row._row).toBeGreaterThan(0))
-      expect(hackathons.header).toEqual(mockHackathonTab.header)
-      expect(Object.entries(hackathons.index).length).toEqual(
-        mockHackathonTab.rows.length
-      )
-    })
+  test('gets values in order', () => {
+    const row = sheet.rows[0]
+    const expected = [
+      stringer(testRow._id),
+      stringer(testRow._updated),
+      stringer(testRow.name),
+      stringer(testRow.toggle),
+      stringer(testRow.score),
+      stringer(testRow.average),
+      stringer(testRow.strArray),
+    ]
 
-    test('gets values in order', () => {
-      const hackathons = mockHackathons
-      expect(hackathons.rows).toBeDefined()
-      expect(hackathons.rows.length).toEqual(mockHackathonTab.rows.length)
-      const hackathon = hackathons.rows[0]
-      const expected = [
-        'JOIN_2019',
-        '\u0000',
-        'JOIN in SFO',
-        'First hackathon!',
-        'sfo',
-        '2019-11-05T15:00:00.000Z',
-        '1',
-        '5',
-        '2019-11-05T18:00:00.000Z',
-        '2019-11-05T19:00:00.000Z',
-      ]
+    const actual = sheet.values(row)
+    expect(actual).toEqual(expected)
+  })
 
-      const actual = hackathons.values(hackathon)
-      expect(actual).toEqual(expected)
-    })
+  test('converts sheet data to typed properties', () => {
+    const row = sheet.rows[0]
+    row.$notheader = 'not a header column'
+    const values = sheet.values(row)
+    const actual = new TestRow(values)
+    expect(actual._id).toEqual(row._id)
+    expect(actual._updated).toEqual(row._updated)
+    expect(actual.toggle).toEqual(row.toggle)
+    expect(actual.score).toEqual(row.score)
+    expect(actual.average).toEqual(row.average)
+    expect(actual.strArray).toEqual(row.strArray)
+    expect(actual.$notheader).toEqual('')
+  })
 
-    test('converts sheet data to typed properties', () => {
-      const hackathons = mockHackathons
-      expect(hackathons.rows).toBeDefined()
-      expect(hackathons.rows.length).toEqual(mockHackathonTab.rows.length)
-      const row = hackathons.rows[0]
-      const values = hackathons.values(row)
-      const actual = new Hackathon(values)
-      expect(actual._id).toEqual('JOIN_2019')
-      expect(actual.name).toEqual('JOIN in SFO')
-      expect(actual.description).toEqual('First hackathon!')
-      expect(actual.location).toEqual('sfo')
-      expect(actual.date).toEqual(new Date('2019-11-05T15:00:00.000000+00:00'))
-      expect(actual.duration_in_days).toEqual(1)
-      expect(actual.max_team_size).toEqual(5)
-      expect(actual.judging_starts).toEqual(
-        new Date('2019-11-05T18:00:00.000000+00:00')
-      )
-      expect(actual.judging_stops).toEqual(
-        new Date('2019-11-05T19:00:00.000000+00:00')
-      )
-    })
-
-    test('converts project sheet to typed project', () => {
-      const projects = mockProjects
-      expect(projects.rows).toBeDefined()
-      expect(projects.rows.length).toEqual(mockProjectTab.rows.length)
-      const row = projects.rows[0]
-      const values = projects.values(row)
-      const actual = new Project(values)
-      expect(actual._id).toEqual('a')
-      expect(actual._hackathon_id).toEqual('hack_at_home')
-      expect(actual.title).toEqual('cool project')
-      expect(actual.description).toEqual('a description of some project')
-      expect(actual.project_type).toEqual('Invite Only')
-      expect(actual.contestant).toEqual(false)
-      expect(actual.locked).toEqual(false)
-      expect(actual.technologies.toString()).toEqual('t1,t2,t3')
-    })
-
-    test('undefined values are "empty"', () => {
-      const someUndefined = [
-        'id1',
-        '2019-11-05T15:00:00.000Z',
-        'name1',
-        'desc1',
-        'loc1',
-        '2019-11-05T15:00:00.000Z',
-        5,
-        6,
-      ]
-      const actual = new Hackathon(someUndefined)
-      expect(actual._row).toEqual(0)
-      expect(actual._id).toEqual(someUndefined[0])
-      expect(actual._updated).toEqual(new Date(someUndefined[1]))
-      expect(actual.name).toEqual(someUndefined[2])
-      expect(actual.description).toEqual(someUndefined[3])
-      expect(actual.location).toEqual(someUndefined[4])
-      expect(actual.date).toEqual(new Date(someUndefined[5]))
-      expect(actual.duration_in_days).toEqual(someUndefined[6])
-      expect(actual.max_team_size).toEqual(someUndefined[7])
-      expect(actual.judging_starts).toEqual(noDate)
-      expect(actual.judging_stops).toEqual(noDate)
-      const values = actual.values()
-      expect(values[0]).toEqual(someUndefined[0])
-      expect(values[1]).toEqual(someUndefined[1])
-      expect(values[2]).toEqual(someUndefined[2])
-      expect(values[3]).toEqual(someUndefined[3])
-      expect(values[4]).toEqual(someUndefined[4])
-      expect(values[5]).toEqual(someUndefined[5])
-      expect(values[6]).toEqual(someUndefined[6].toString())
-      expect(values[7]).toEqual(someUndefined[7].toString())
-      expect(values[8]).toEqual(nilCell)
-      expect(values[9]).toEqual(nilCell)
-    })
-    describe('find', () => {
-      test('finds by id', () => {
-        const hackathons = mockHackathons
-        const rows = hackathons.rows
-        expect(rows).toBeDefined()
-        rows.forEach((target) => {
-          const found = hackathons.find(target._id)
-          expect(found).toBeDefined()
-          expect(found).toEqual(target)
-        })
-        const projects = mockProjects
-        const prows = projects.rows
-        expect(prows).toBeDefined()
-        prows.forEach((target) => {
-          const found = projects.find(target._id)
-          expect(found).toBeDefined()
-          expect(found).toEqual(target)
-        })
-      })
-      test('finds by row', () => {
-        const hackathons = mockHackathons
-        const rows = hackathons.rows
-        expect(rows).toBeDefined()
-        const target = rows[1]
-        const found = hackathons.find(target._row)
+  test('undefined values are "empty"', () => {
+    const undefValues: any[] = []
+    const actual = new TestRow(undefValues)
+    expect(actual._row).toEqual(0)
+    expect(actual._id).toEqual('')
+    expect(actual._updated).toEqual(noDate)
+    expect(actual.toggle).toEqual(false)
+    expect(actual.score).toEqual(0)
+    expect(actual.average).toEqual(0.0)
+    expect(actual.strArray).toEqual([])
+    // const values = actual.values()
+    // expect(values[0]).toEqual(someUndefined[0])
+    // expect(values[1]).toEqual(someUndefined[1])
+    // expect(values[2]).toEqual(someUndefined[2])
+    // expect(values[3]).toEqual(someUndefined[3])
+    // expect(values[4]).toEqual(someUndefined[4])
+    // expect(values[5]).toEqual(someUndefined[5])
+    // expect(values[6]).toEqual(someUndefined[6].toString())
+    // expect(values[7]).toEqual(someUndefined[7].toString())
+    // expect(values[8]).toEqual(nilCell)
+    // expect(values[9]).toEqual(nilCell)
+  })
+  describe('find', () => {
+    test('finds by id', () => {
+      const rows = sheet.rows
+      expect(rows).toBeDefined()
+      rows.forEach((target) => {
+        const found = sheet.find(target._id)
         expect(found).toBeDefined()
         expect(found).toEqual(target)
       })
-      test('finds by search', () => {
-        const hackathons = mockHackathons
-        const rows = hackathons.rows
-        expect(rows).toBeDefined()
-        const target = rows[1]
-        const found = hackathons.find(target.name, 'name')
-        expect(found).toBeDefined()
-        expect(found).toEqual(target)
-      })
+    })
+    test('finds by row', () => {
+      const rows = sheet.rows
+      expect(rows).toBeDefined()
+      const target = rows[1]
+      const found = sheet.find(target._row)
+      expect(found).toBeDefined()
+      expect(found).toEqual(target)
+    })
+    test('finds by search', () => {
+      const rows = sheet.rows
+      expect(rows).toBeDefined()
+      const target = rows[1]
+      const found = sheet.find(target.name, 'name')
+      expect(found).toBeDefined()
+      expect(found).toEqual(target)
+    })
+  })
+
+  describe('object conversion', () => {
+    test('fromObject and toObject', () => {
+      const obj = sheet.toObject()
+      const sheet2 = new TestSheet(testSDK, 'test2', emptyTable)
+      const rows2 = sheet2.fromObject(obj)
+      expect(rows2).toEqual(sheet.rows)
     })
   })
 
   // jest error handling discussed at https://jestjs.io/docs/en/asynchronous#resolves-rejects
-  describe.skip('error checking', () => {
+  describe('error checking', () => {
     test('update errors on mismatched update', async () => {
-      const hackathons = mockHackathons
-      expect(hackathons.rows).toBeDefined()
-      expect(hackathons.rows.length).toBeGreaterThan(0)
-      const row = hackathons.rows[0]
+      expect(sheet.rows).toBeDefined()
+      expect(sheet.rows.length).toBeGreaterThan(0)
+      const row = sheet.rows[0]
+      const mockVals = sheet.values(row)
+      // _id = 0, _updated = 1
+      mockVals[1] = stringer(addMinutes(row._updated, 1))
+      jest.spyOn(testSDK, 'rowGet').mockReturnValue(Promise.resolve(mockVals))
       // prepare will update updated
       row.prepare()
       try {
-        await hackathons.update(row)
+        await sheet.update(row)
         expect('whoops').toEqual('We should never get here')
       } catch (e) {
         expect(e.message).toMatch(/Row 2 is outdated:/i)
@@ -211,93 +174,29 @@ describe('WhollySheet', () => {
     })
     describe('bad row value', () => {
       test('update needs a non-zero row', async () => {
-        const hackathons = mockHackathons
-        expect(hackathons.rows).toBeDefined()
-        expect(hackathons.rows.length).toBeGreaterThan(0)
-        const row = hackathons.rows[0]
+        expect(sheet.rows).toBeDefined()
+        expect(sheet.rows.length).toBeGreaterThan(0)
+        const row = sheet.rows[0]
         row._id = 'update_test'
         row._row = 0
         try {
-          await hackathons.update(row)
+          await sheet.update(row)
           expect('whoops').toEqual('We should never get here')
         } catch (e) {
           expect(e.message).toMatch(/row must be > 0 to update/i)
         }
       })
       test('create needs a zero row', async () => {
-        const hackathons = mockHackathons
-        expect(hackathons.sheets).toBeDefined()
-        expect(hackathons.rows).toBeDefined()
-        expect(hackathons.rows.length).toBeGreaterThan(0)
-        const row = hackathons.rows[0]
+        expect(sheet.sheets).toBeDefined()
+        expect(sheet.rows).toBeDefined()
+        expect(sheet.rows.length).toBeGreaterThan(0)
+        const row = sheet.rows[0]
         row._id = 'create_test'
         row._row = 2
-        await expect(hackathons.create(row)).rejects.toThrow(
+        await expect(sheet.create(row)).rejects.toThrow(
           `create needs "${row._id}" row to be < 1, not ${row._row}`
         )
       })
     })
   })
-  // describe.skip('with a live sheet', () => {
-  //   let doc: ISheet
-  //   beforeAll(async () => {
-  //     doc = await sheets.index()
-  //   })
-  //   test('initializes array', () => {
-  //     const table = doc.tabs.projects
-  //     expect(table).toBeDefined()
-  //     expect(table.header).toBeDefined()
-  //     expect(table.header.length).toBeGreaterThan(0)
-  //     expect(table.rows).toBeDefined()
-  //     expect(table.rows.length).toBeGreaterThan(0)
-  //     const actual = new Projects(sheetData, sheets, table)
-  //     expect(actual.header).toBeDefined()
-  //     expect(actual.header).toEqual(table.header)
-  //     expect(actual.rows).toBeDefined()
-  //     expect(actual.rows.length).toEqual(table.rows.length)
-  //   })
-  //   test('initializes from sheet', () => {
-  //     const table = doc.tabs.hackathons
-  //     expect(table).toBeDefined()
-  //     expect(table.header).toBeDefined()
-  //     expect(table.header.length).toBeGreaterThan(0)
-  //     expect(table.rows).toBeDefined()
-  //     expect(table.rows.length).toBeGreaterThan(0)
-  //     const actual = new Hackathons(sheets, table)
-  //     expect(actual.header).toBeDefined()
-  //     expect(actual.header).toEqual(table.header)
-  //     expect(actual.rows).toBeDefined()
-  //     expect(actual.rows.length).toEqual(table.rows.length)
-  //   })
-  //   describe('modifications', () => {
-  //     test('updates a row', async () => {
-  //       const table = doc.tabs.hackathons
-  //       const hackathons = new Hackathons(sheets, table)
-  //       const row = hackathons.rows[0]
-  //       // await expect(hackathons.update(row)).rejects.toThrow()
-  //
-  //       const actual = await hackathons.update(row)
-  //       expect(actual).toBeDefined()
-  //     })
-  //     test('creates a row', async () => {
-  //       const table = doc.tabs.hackathons
-  //       const hackathons = new Hackathons(sheets, table)
-  //       const nr = hackathons.nextRow
-  //       const hackathon = new Hackathon()
-  //       hackathon._id = `HACK${nr}`
-  //       hackathon.name = `Hackathon${nr}`
-  //       hackathon.description = `Hackathon description ${nr}`
-  //       hackathon.location = `Here`
-  //       hackathon.date = new Date()
-  //       hackathon.duration_in_days = nr
-  //       hackathon.max_team_size = nr
-  //       hackathon.judging_starts = addDays(hackathon.date, nr)
-  //       hackathon.judging_stops = addDays(hackathon.date, nr + 1)
-  //
-  //       const actual = await hackathons.create(hackathon)
-  //       expect(actual).toBeDefined()
-  //       expect(actual._id).toEqual(hackathon._id)
-  //     })
-  //   })
-  // })
 })

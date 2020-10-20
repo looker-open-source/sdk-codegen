@@ -29,11 +29,6 @@ export { IHacker, Hacker, Hackers } from './Hacker'
 export { IRegistration, Registration, Registrations } from './Registrations'
 export { IProject, Project, Projects } from './Projects'
 export { SheetData } from './SheetData'
-export {
-  IProjectTechnology,
-  ProjectTechnology,
-  ProjectTechnologies,
-} from './ProjectTechnologies'
 export { ITechnology, Technology, Technologies } from './Technologies'
 export { ITeamMember, TeamMember, TeamMembers } from './TeamMembers'
 export { IJudging, Judging, Judgings } from './Judgings'

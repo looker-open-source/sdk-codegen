@@ -69,11 +69,11 @@ describe('Hacker', () => {
     expect(actual.canJudge()).toEqual(true)
     expect(actual.canStaff()).toEqual(false)
   })
-  test('admin role is god', () => {
+  test('admin role can admin or staff', () => {
     const actual = new Hacker(sdk)
     actual.roles.add('admin')
     expect(actual.canAdmin()).toEqual(true)
-    expect(actual.canJudge()).toEqual(true)
+    expect(actual.canJudge()).toEqual(false)
     expect(actual.canStaff()).toEqual(true)
   })
 })

@@ -23,12 +23,11 @@
  SOFTWARE.
 
  */
-import { SheetSDK, ISheet, compareDates } from '@looker/wholly-sheet'
+import { SheetSDK, ISheet } from '@looker/wholly-sheet'
 import {
   Projects,
   Registrations,
   Technologies,
-  ProjectTechnologies,
   Hackathons,
   TeamMembers,
   Judgings,
@@ -40,13 +39,11 @@ import {
 } from '.'
 
 export class SheetData {
-  private _hackathon: Hackathon | undefined
   protected _sheet!: ISheet
   users!: Users
   projects!: Projects
   technologies!: Technologies
   registrations!: Registrations
-  projectTechnologies!: ProjectTechnologies
   hackathons!: Hackathons
   teamMembers!: TeamMembers
   judgings!: Judgings
@@ -55,23 +52,8 @@ export class SheetData {
     this.sheet = data
   }
 
-  /** finds the "next up" or "current" hackathon and caches it for the instance lifetime */
-  get currentHackathon(): Hackathon | undefined {
-    if (this._hackathon) return this._hackathon
-    if (
-      !this.hackathons ||
-      !this.hackathons.rows ||
-      this.hackathons.rows.length === 0
-    )
-      return undefined
-    // Sort hackathons in chronological order by start time ... maybe we sort by the stop of judging instead?
-    const sorted = this.hackathons.rows.sort((a, b) =>
-      compareDates(a.date, b.date)
-    )
-    const now = new Date().getTime()
-    const current = sorted.find((hack) => hack.judging_stops.getTime() >= now)
-    this._hackathon = current as Hackathon
-    return this._hackathon
+  get currentHackathon() {
+    return this.hackathons.currentHackathon
   }
 
   /**
@@ -133,6 +115,8 @@ export class SheetData {
    */
   load(data: ISheet) {
     this._sheet = data
+    // eslint-disable-next-line @typescript-eslint/no-use-before-define
+    _activeSheet = this
     if (Object.keys(data).length === 0) return this
     // The initialization order is significant here, and should remain this way
     // unless there's a specific reason to change it
@@ -143,10 +127,8 @@ export class SheetData {
     this.teamMembers = new TeamMembers(this, data.tabs.team_members)
     this.judgings = new Judgings(this, data.tabs.judgings)
     this.projects = new Projects(this, data.tabs.projects)
-    this.projectTechnologies = new ProjectTechnologies(
-      this,
-      data.tabs.project_technologies
-    )
+    this.projects.rows.forEach((p) => p.load(this))
+    this.judgings.rows.forEach((j) => j.load(this))
     return this
   }
 
@@ -156,3 +138,17 @@ export class SheetData {
     return this
   }
 }
+
+let _activeSheet: SheetData
+
+/** Initialize the globally available sheet */
+export const initActiveSheet = (
+  sheetSDK: SheetSDK,
+  data: ISheet
+): SheetData => {
+  _activeSheet = new SheetData(sheetSDK, data)
+  return _activeSheet
+}
+
+/** Get the globally available sheet */
+export const getActiveSheet = (): SheetData => _activeSheet
