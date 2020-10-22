@@ -24,26 +24,35 @@
 
  */
 import { mockHackathons } from '../test-data'
+import { Hackathon } from './Hackathons'
 
 const hackathons = mockHackathons()
 
 describe('Hackathons', () => {
-  test('gets current hackathon', () => {
+  test('gets current hackathon by default', () => {
     const actual = hackathons.currentHackathon
     expect(actual).toBeDefined()
     expect(actual?._id).toEqual('current')
     expect(actual?.isActive()).toEqual(true)
   })
   test('past hackathon is not active', () => {
-    const actual = hackathons.find('past')
+    const actual = hackathons.find('past') as Hackathon
     expect(actual).toBeDefined()
-    expect(actual?._id).toEqual('past')
-    expect(actual?.isActive()).toEqual(false)
+    expect(actual._id).toEqual('past')
+    expect(actual.isActive()).toEqual(false)
   })
   test('future hackathon is not active', () => {
-    const actual = hackathons.find('future')
+    const actual = hackathons.find('future') as Hackathon
     expect(actual).toBeDefined()
-    expect(actual?._id).toEqual('future')
-    expect(actual?.isActive()).toEqual(false)
+    expect(actual._id).toEqual('future')
+    expect(actual.isActive()).toEqual(false)
+  })
+  test('setting default to true finds the earliest "current" hackathon', () => {
+    const past = hackathons.find('past') as Hackathon
+    past.default = true
+    const actual = hackathons.getCurrentHackathon() as Hackathon
+    past.default = false
+    expect(actual).toBeDefined()
+    expect(actual._id).toEqual('past')
   })
 })

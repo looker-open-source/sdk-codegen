@@ -44,6 +44,7 @@ export interface IHackathon extends ISheetRow {
   max_team_size: number
   judging_starts: Date
   judging_stops: Date
+  default: boolean
   isActive(): boolean
 }
 
@@ -57,6 +58,7 @@ export class Hackathon extends SheetRow<IHackathon> {
   max_team_size = 0
   judging_starts: Date = noDate
   judging_stops: Date = noDate
+  default = false
   constructor(values?: any) {
     super()
     // IMPORTANT: this must be done after super() constructor is called so keys are established
@@ -84,15 +86,24 @@ export class Hackathons extends WhollySheet<Hackathon> {
     return (new Hackathon(values) as unknown) as Hackathon
   }
 
-  /** finds the "next up" or active hackathon and caches it for the instance lifetime */
-  get currentHackathon(): Hackathon | undefined {
-    if (this._hackathon) return this._hackathon
+  getCurrentHackathon(): Hackathon | undefined {
     if (!this.rows || this.rows.length === 0) return undefined
     // Sort hackathons in chronological order by start time ... maybe we sort by the stop of judging instead?
     const sorted = this.rows.sort((a, b) => compareDates(a.date, b.date))
+    let current = sorted.find((h) => h.default)
+    if (current) {
+      this._hackathon = current as Hackathon
+      return this._hackathon
+    }
     const now = new Date().getTime()
-    const current = sorted.find((hack) => hack.judging_stops.getTime() >= now)
+    current = sorted.find((hack) => hack.judging_stops.getTime() >= now)
     this._hackathon = current as Hackathon
     return this._hackathon
+  }
+
+  /** finds the "next up" or active hackathon and caches it for the instance lifetime */
+  get currentHackathon(): Hackathon | undefined {
+    if (this._hackathon) return this._hackathon
+    return this.getCurrentHackathon()
   }
 }
