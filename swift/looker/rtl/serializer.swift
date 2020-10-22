@@ -28,7 +28,7 @@ let encoder = JSONEncoder()
 
 /// Converts an object to a JSON string
 /// @throws errors if deserialization fails
-func serialize<T>(_ value: T) throws -> Data where T : Encodable {
+public func serialize<T>(_ value: T) throws -> Data where T : Encodable {
     return try! encoder.encode(value)
 }
 
@@ -36,7 +36,7 @@ func serialize<T>(_ value: T) throws -> Data where T : Encodable {
 /// @throws errors if deserialization failsœ
 /// some interesting date decoding options here: https://stackoverflow.com/questions/44682626/swifts-jsondecoder-with-multiple-date-formats-in-a-json-string
 /// https://benscheirman.com/2017/06/swift-json/ excplores lots of options, none that help with strings misrepresented as int
-func deserialize<T>(_ data: Data) throws -> T where T : Codable {
+public func deserialize<T>(_ data: Data) throws -> T where T : Codable {
     let decoder = JSONDecoder()
     decoder.dateDecodingStrategy = .formatted(DateFormatter.iso8601Full)
 //    decoder.dateDecodingStrategyFormatters = [
@@ -57,17 +57,17 @@ func deserialize<T>(_ data: Data) throws -> T where T : Codable {
 /// Convert a JSON string into the type `T`
 /// @throws errors if deserialization fails
 @available(OSX 10.12, *)
-func deserialize<T>(_ json: String) throws -> T where T : Codable {
+public func deserialize<T>(_ json: String) throws -> T where T : Codable {
     return try deserialize(Data(json.utf8))
 }
 
 /// Support for converting a struct or class to a Dictionary of values
 /// Code from https://stackoverflow.com/a/46597941/74137
-struct JSON {
+public struct JSON {
     static let encoder = JSONEncoder()
 }
 
-extension Encodable {
+public extension Encodable {
     subscript(key: String) -> Any? {
         return dictionary[key] as Any?
     }
@@ -78,7 +78,7 @@ extension Encodable {
 
 /// handling date strings in JSON
 /// https://stackoverflow.com/questions/44682626/swifts-jsondecoder-with-multiple-date-formats-in-a-json-string
-extension JSONDecoder {
+public extension JSONDecoder {
     
     /// Assign multiple DateFormatter to dateDecodingStrategy
     ///
@@ -111,7 +111,7 @@ extension JSONDecoder {
     }
 }
 
-extension DateFormatter {
+public extension DateFormatter {
     static let iso8601Full: DateFormatter = {
         let formatter = DateFormatter()
         formatter.dateFormat = "yyyy-MM-dd'T'HH:mm:ss.SSSZZZZZ"
