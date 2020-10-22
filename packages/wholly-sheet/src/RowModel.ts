@@ -190,9 +190,7 @@ export class RowModel<T extends IRowModel> implements IRowModel {
   }
 
   toObject(): object {
-    const result = {}
-    Object.entries(this).forEach(([key, value]) => (result[key] = value))
-    return result
+    return { ...this }
   }
 
   fromObject(obj: object): IRowModel {
