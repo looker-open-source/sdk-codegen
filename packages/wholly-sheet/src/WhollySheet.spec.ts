@@ -326,6 +326,37 @@ describe('WhollySheet', () => {
         expect(actual[actual.length - 2][0]).toEqual(a._id)
         expect(actual[actual.length - 1][0]).toEqual(b._id)
       })
+      test('mixed mode blends', () => {
+        const rows = sheet.rows
+        const rowCount = rows.length
+        const tab = sheet.allValues()
+        expect(tab).toHaveLength(rowCount + 1)
+        const a = new TestRow({ _id: 'c1' })
+        const b = new TestRow({ _id: 'c2' })
+        const c = rows[0]
+        const d = rows[1]
+        a.setCreate()
+        b.setCreate()
+        sheet.rows.push(a, b)
+        c.setDelete()
+        d._id = 'updatedid'
+        d.setUpdate()
+        expect(sheet.rows).toHaveLength(rowCount + 2)
+        const delta = sheet.getDelta()
+        expect(delta.creates).toHaveLength(2)
+        expect(delta.deletes).toHaveLength(1)
+        expect(delta.updates).toHaveLength(1)
+        const tabLength = tab.length
+        // Update 1 row, delete 1 row, create 2 rows
+        const actual = sheet.mergePurge(tab, delta)
+        expect(actual).toHaveLength(tabLength + 1)
+        actual.splice(0, 1) // remove header row
+        sheet.loadRows(actual)
+        expect(sheet.find(a._id)).toBeDefined()
+        expect(sheet.find(b._id)).toBeDefined()
+        expect(sheet.find(c._id)).not.toBeDefined()
+        expect(sheet.find(d._id)).toBeDefined()
+      })
     })
   })
 
