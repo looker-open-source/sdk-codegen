@@ -26,7 +26,13 @@
 
 import { ITabTable, SheetError, SheetSDK, SheetValues } from './SheetSDK'
 
-import { ColumnHeaders, IRowModel, rowPosition, stringer } from './RowModel'
+import {
+  ColumnHeaders,
+  IRowModel,
+  RowAction,
+  rowPosition,
+  stringer,
+} from './RowModel'
 
 /**
  * Compare dates without running into numeric comparison problems
@@ -38,6 +44,12 @@ export const compareDates = (a: Date, b: Date) => a.getTime() - b.getTime()
 
 export interface IMaker<T> {
   new (values?: any): T
+}
+
+export interface IRowDelta<T extends IRowModel> {
+  updates: T[]
+  deletes: T[]
+  creates: T[]
 }
 
 // TODO maybe get a technique from https://stackoverflow.com/a/34698946 or
@@ -130,6 +142,9 @@ export interface IWhollySheet<T extends IRowModel> {
    */
   values(model: T): SheetValues
 
+  /** Returns a 2D array of all row values including the header row */
+  allValues(): SheetValues
+
   /** Create a new row of this type */
   typeRow<T extends IRowModel>(values?: any): T
 
@@ -190,8 +205,9 @@ export interface IWhollySheet<T extends IRowModel> {
   /**
    * If the row is out of date, it throws a SheetError
    * @param model row for status check
+   * @param source row to compare against
    */
-  checkOutdated<T extends IRowModel>(model: T): Promise<boolean>
+  checkOutdated<T extends IRowModel>(model: T, source?: T): Promise<boolean>
 
   /**
    * Find the matching row. If columnName is the primary key field, indexed retrieval is used
@@ -212,6 +228,40 @@ export interface IWhollySheet<T extends IRowModel> {
 
   /** Assigns the passed object[] to the rows collection */
   fromObject<T extends IRowModel>(obj: object[]): T[]
+
+  /** Gets the delta rows for a batch update */
+  getDelta<T extends IRowModel>(): IRowDelta<T>
+
+  /**
+   * Processes a delta change against the tab values snapshot
+   * @param tab SheetValues to update (includes header row)
+   * @param delta row changes to apply
+   */
+  mergePurge<T extends IRowModel>(
+    tab: SheetValues,
+    delta: IRowDelta<T>
+  ): SheetValues
+
+  /**
+   * Prepare a batch for processing
+   *
+   * If `force` is false and update rows are outdated, a SheetError with outdated list is thrown
+   * @param tab of sheet values to use for update checks (includes header row)
+   * @param delta change to merge and purge
+   * @param force prepare each row but don't worry about outdated rows
+   */
+  prepareBatch<T extends IRowModel>(
+    tab: SheetValues,
+    delta: IRowDelta<T>,
+    force?: boolean
+  ): boolean
+
+  /**
+   * Perform a batch update by retrieving the delta for the sheet, check for outdated update rows,
+   * and update the entire tab sheet with the changes
+   * @param force true to skip checking for outdated update rows
+   */
+  batchUpdate<T extends IRowModel>(force?: boolean): Promise<T[]>
 }
 
 /** CRUDF operations for a GSheet tab */
@@ -219,7 +269,6 @@ export abstract class WhollySheet<T extends IRowModel>
   extends TypedRows<T>
   implements IWhollySheet<T> {
   index: Record<string, T> = {}
-  // rows: T[]
 
   constructor(
     public readonly sheets: SheetSDK,
@@ -310,6 +359,12 @@ export abstract class WhollySheet<T extends IRowModel>
     return result
   }
 
+  allValues(): SheetValues {
+    const values: SheetValues = [this.header]
+    values.push(...this.rows.map((r) => this.values(r)))
+    return values
+  }
+
   async save<T extends IRowModel>(model: T, force = false): Promise<T> {
     // A model with a non-zero row is an update
     if (model._row) return await this.update<T>(model, force)
@@ -320,16 +375,16 @@ export abstract class WhollySheet<T extends IRowModel>
   checkId<T extends IRowModel>(model: T) {
     if (!model[this.keyColumn])
       throw new SheetError(
-        `"${this.keyColumn}" must be assigned for row ${model._row}`
+        `"${this.keyColumn}" must be assigned for ${this.name} row ${model._row}`
       )
   }
 
   async create<T extends IRowModel>(model: T): Promise<T> {
     if (model._row > 0)
       throw new SheetError(
-        `create needs "${model[this.keyColumn]}" row to be < 1, not ${
-          model._row
-        }`
+        `create needs ${this.name} "${
+          model[this.keyColumn]
+        }" row to be < 1, not ${model._row}`
       )
     model.prepare()
     this.checkId(model)
@@ -353,15 +408,15 @@ export abstract class WhollySheet<T extends IRowModel>
   }
 
   async update<T extends IRowModel>(model: T, force = false): Promise<T> {
-    this.checkId(model)
     if (!model._row)
       throw new SheetError(
-        `"${model[this.keyColumn]}" row must be > 0 to update`
+        `${this.name} "${model[this.keyColumn]}" row must be > 0 to update`
       )
 
     if (!force) await this.checkOutdated(model)
     let rowPos = -1
     model.prepare()
+    this.checkId(model)
     const values = this.values(model)
     /** This will throw an error if the request fails */
     const result = await this.sheets.rowUpdate(this.name, model._row, values)
@@ -421,27 +476,30 @@ export abstract class WhollySheet<T extends IRowModel>
     return (typed as unknown) as T
   }
 
-  async checkOutdated<T extends IRowModel>(model: T) {
+  async checkOutdated<T extends IRowModel>(model: T, source?: T) {
     if (model._row < 1) return false
     const errors: string[] = []
-    const fetched = await this.rowGet(model._row)
-    if (!fetched) {
-      errors.push('Row not found')
+    if (!source) source = await this.rowGet<T>(model._row)
+    if (!source) {
+      errors.push(`Row not found`)
     } else {
       if (
-        fetched._updated !== undefined &&
-        compareDates(fetched._updated, model._updated) !== 0
-      )
-        errors.push(`update is ${fetched._updated} not ${model._updated}`)
-      if (fetched[this.keyColumn] !== model[this.keyColumn])
+        source._updated !== undefined &&
+        compareDates(source._updated, model._updated) !== 0
+      ) {
+        errors.push(`update is ${source._updated} not ${model._updated}`)
+      }
+      if (source[this.keyColumn] !== model[this.keyColumn])
         errors.push(
-          `${this.keyColumn} is "${fetched[this.keyColumn]}" not "${
+          `${this.keyColumn} is "${source[this.keyColumn]}" not "${
             model[this.keyColumn]
           }"`
         )
     }
     if (errors.length > 0)
-      throw new SheetError(`Row ${model._row} is outdated: ${errors.join()}`)
+      throw new SheetError(
+        `${this.name} row ${model._row} is outdated: ${errors.join()}`
+      )
     return false
   }
 
@@ -466,5 +524,64 @@ export abstract class WhollySheet<T extends IRowModel>
     const result: object[] = []
     this.rows.forEach((r) => result.push(r.toObject()))
     return result
+  }
+
+  async batchUpdate<T extends IRowModel>(force = false): Promise<T[]> {
+    const delta = this.getDelta()
+    let values = await this.sheets.tabValues(this.name)
+    this.prepareBatch(values, delta, force)
+    values = this.mergePurge(values, delta)
+    if (delta.deletes.length > 0) await this.sheets.tabClear(this.name)
+    const response = await this.sheets.batchUpdate(this.name, values)
+    return this.loadRows(response)
+  }
+
+  getDelta<T extends IRowModel>(): IRowDelta<T> {
+    const updates = this.rows.filter((r) => r.$action === RowAction.Update)
+    // Sort deletions in descending row order
+    const deletes = this.rows
+      .filter((r) => r.$action === RowAction.Delete)
+      .sort((a, b) => b._row - a._row)
+    const creates = this.rows.filter((r) => r.$action === RowAction.Create)
+
+    return {
+      updates: (updates as unknown) as T[],
+      deletes: (deletes as unknown) as T[],
+      creates: (creates as unknown) as T[],
+    }
+  }
+
+  mergePurge<T extends IRowModel>(
+    values: SheetValues,
+    delta: IRowDelta<T>
+  ): SheetValues {
+    delta.updates.forEach((u) => (values[u._row - 1] = this.values(u)))
+    delta.deletes.forEach((d) => values.splice(d._row - 1, 1))
+    delta.creates.forEach((c) => values.push(this.values(c)))
+    return values
+  }
+
+  prepareBatch<T extends IRowModel>(
+    values: SheetValues,
+    delta: IRowDelta<T>,
+    force?: boolean
+  ): boolean {
+    if (!force) {
+      const errors = []
+      try {
+        delta.updates.forEach((u) =>
+          this.checkOutdated(u, this.typeRow(values[u._row - 1]))
+        )
+        delta.deletes.forEach((d) =>
+          this.checkOutdated(d, this.typeRow(values[d._row - 1]))
+        )
+      } catch (e) {
+        errors.push(e.message)
+      }
+      if (errors.length > 0) throw new SheetError(errors.join('\n'))
+    }
+    delta.updates.forEach((u) => u.prepare())
+    delta.creates.forEach((c) => c.prepare())
+    return true
   }
 }

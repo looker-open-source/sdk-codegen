@@ -23,7 +23,14 @@
  SOFTWARE.
 
  */
-import { IRowModel, nilCell, noDate, RowModel, stringer } from './RowModel'
+import {
+  IRowModel,
+  nilCell,
+  noDate,
+  RowAction,
+  RowModel,
+  stringer,
+} from './RowModel'
 
 export interface ITestRow extends IRowModel {
   name: string
@@ -46,6 +53,7 @@ export class TestRow extends RowModel<ITestRow> {
     if (values) this.assign(values)
   }
 }
+
 export const testRowNow = new Date()
 export const testRowValues = [
   '3',
@@ -135,6 +143,7 @@ describe('RowModel', () => {
       expect(actual.score).toEqual(0)
       expect(actual.average).toEqual(0.0)
       expect(actual.strArray).toEqual([])
+      expect(actual.$action).toEqual(RowAction.Create)
     })
     test('inits with object values', () => {
       const actual = new TestRow(testRowObject)
@@ -146,6 +155,7 @@ describe('RowModel', () => {
       expect(actual.score).toEqual(5)
       expect(actual.average).toEqual(3.2)
       expect(actual.strArray).toEqual(['a', 'b'])
+      expect(actual.$action).toEqual(RowAction.None)
     })
     test('inits with value array', () => {
       const actual = new TestRow(testRowValues)
@@ -157,6 +167,18 @@ describe('RowModel', () => {
       expect(actual.score).toEqual(5)
       expect(actual.average).toEqual(3.2)
       expect(actual.strArray).toEqual(['a', 'b'])
+      expect(actual.$action).toEqual(RowAction.Create)
+    })
+    test('inits with array of empty strings', () => {
+      const actual = new TestRow(['', '', '', '', '', '', ''])
+      expect(actual._row).toEqual(0)
+      expect(actual._id).toEqual('')
+      expect(actual._updated).toEqual(noDate)
+      expect(actual.name).toEqual('')
+      expect(actual.toggle).toEqual(false)
+      expect(actual.score).toEqual(0)
+      expect(actual.average).toEqual(0.0)
+      expect(actual.strArray).toEqual([])
     })
   })
   describe('assign', () => {
@@ -220,7 +242,7 @@ describe('RowModel', () => {
     })
     test('updates updated without updating id', async () => {
       const id = 'baad-f00d'
-      const actual = new TestRow({ row: 1, id })
+      const actual = new TestRow({ _row: 1, _id: id })
       actual.prepare()
       expect(actual._row).toEqual(1)
       expect(actual._id).toEqual(id)
@@ -233,6 +255,47 @@ describe('RowModel', () => {
       expect(actual._row).toEqual(1)
       expect(actual._id).toEqual(id)
       expect(actual._updated.getTime()).not.toEqual(updated.getTime())
+    })
+  })
+  describe('actions', () => {
+    test('setCreate marks create action', () => {
+      const actual = new TestRow()
+      actual.setCreate()
+      expect(actual.$action).toEqual(RowAction.Create)
+    })
+    test('setDelete marks delete action', () => {
+      const actual = new TestRow({ _row: 2 })
+      actual.setDelete()
+      expect(actual.$action).toEqual(RowAction.Delete)
+    })
+    test('setUpdate marks update action', () => {
+      const actual = new TestRow({ _row: 2 })
+      actual.setUpdate()
+      expect(actual.$action).toEqual(RowAction.Update)
+    })
+    test('Create action is rejected for existing row', () => {
+      const actual = new TestRow({ _row: 2 })
+      const expected = actual.$action
+      expect(actual.setCreate()).toEqual(false)
+      expect(actual.$action).toEqual(expected)
+      actual.$action = RowAction.Create
+      expect(actual.$action).toEqual(expected)
+    })
+    test('Delete action is rejected for new row', () => {
+      const actual = new TestRow({ _row: 0 })
+      const expected = actual.$action
+      expect(actual.setDelete()).toEqual(false)
+      expect(actual.$action).toEqual(expected)
+      actual.$action = RowAction.Delete
+      expect(actual.$action).toEqual(expected)
+    })
+    test('Update action is rejected for new row', () => {
+      const actual = new TestRow({ _row: 0 })
+      const expected = actual.$action
+      expect(actual.setUpdate()).toEqual(false)
+      expect(actual.$action).toEqual(expected)
+      actual.$action = RowAction.Update
+      expect(actual.$action).toEqual(expected)
     })
   })
 })

@@ -64,7 +64,8 @@ describe('SheetData', () => {
       expect(actual.technologies.checkHeader()).toEqual(true)
     })
     test('gets current hackathon', () => {
-      const actual = data.currentHackathon
+      data.hackathons.rows.forEach((h) => (h.default = false))
+      const actual = data.hackathons.getCurrentHackathon()
       expect(actual).toBeDefined()
       expect(actual?.judging_stops.getTime()).toBeGreaterThan(
         new Date().getTime()

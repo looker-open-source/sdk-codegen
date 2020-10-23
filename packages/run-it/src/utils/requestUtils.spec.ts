@@ -31,129 +31,135 @@ import { initRunItSdk } from './RunItSDK'
 
 const sdk = initRunItSdk(new StandaloneConfigurator())
 
-describe('pathify', () => {
-  test('it returns unchanged path if no path params are specified', () => {
-    const actual = pathify('/logout')
-    expect(actual).toEqual('/logout')
+describe('requestUtils', () => {
+  afterEach(() => {
+    jest.clearAllMocks()
   })
 
-  test('it works path params', () => {
-    const pathParams = {
-      query_id: 1,
-      result_format: 'json',
-    }
-    const actual = pathify(
-      '/queries/{query_id}/run/{result_format}',
-      pathParams
-    )
-    expect(actual).toEqual('/queries/1/run/json')
-  })
-})
-
-describe('createRequestParams', () => {
-  const inputs: RunItInput[] = [
-    {
-      name: 'result_format',
-      location: 'path',
-      type: 'string',
-      required: true,
-      description: 'Format of result',
-    },
-    {
-      name: 'cache',
-      location: 'query',
-      type: 'boolean',
-      required: false,
-      description: 'Get results from cache if available',
-    },
-    {
-      name: 'body',
-      location: 'body',
-      type: {
-        model: 'string',
-        view: 'string',
-        fields: ['string'],
-        limit: 'string',
-      },
-      description: 'body',
-      required: true,
-    },
-  ]
-  const requestContent = {
-    result_format: 'json',
-    cache: true,
-    body: JSON.stringify({
-      model: 'thelook',
-      view: 'orders',
-      fields: ['orders.created_date', 'orders.count'],
-      limit: '500',
-    }),
-  }
-
-  test('it correctly identifies requestContent params location', () => {
-    const [pathParams, queryParams, body] = createRequestParams(
-      inputs,
-      requestContent
-    )
-    expect(pathParams).toEqual({
-      result_format: requestContent.result_format,
+  describe('pathify', () => {
+    test('it returns unchanged path if no path params are specified', () => {
+      const actual = pathify('/logout')
+      expect(actual).toEqual('/logout')
     })
-    expect(queryParams).toEqual({
-      cache: requestContent.cache,
-    })
-    expect(body).toEqual(JSON.parse(requestContent.body))
-  })
 
-  test('non JSON parsable strings are treated as x-www-form-urlencoded strings', () => {
-    const urlParams = 'key1=value1&key2=value2'
-    const [, , body] = createRequestParams(
-      [
-        {
-          name: 'body',
-          type: 'string',
-          required: true,
-          description: 'x-www-form-urlencoded data',
-          location: 'body',
-        },
-      ],
-      {
-        body: urlParams,
+    test('it works path params', () => {
+      const pathParams = {
+        query_id: 1,
+        result_format: 'json',
       }
-    )
-    expect(body).toEqual(urlParams)
+      const actual = pathify(
+        '/queries/{query_id}/run/{result_format}',
+        pathParams
+      )
+      expect(actual).toEqual('/queries/1/run/json')
+    })
   })
-})
 
-describe('defaultRunItCallback', () => {
-  test('it makes a request', async () => {
-    const spy = jest
-      .spyOn(sdk.authSession.transport, 'rawRequest')
-      .mockResolvedValueOnce(testJsonResponse)
-    jest.spyOn(sdk.authSession, 'isAuthenticated').mockReturnValue(true)
-
-    const resp = await runRequest(
-      sdk,
-      '/api/3.1',
-      'POST',
-      '/queries/run/{result_format}',
-      { result_format: 'json' },
-      { fields: 'first_name, last_name' },
-      { model: 'thelook', view: 'orders', fields: ['orders.count'] }
-    )
-
-    expect(spy).toHaveBeenCalledWith(
-      'POST',
-      '/api/3.1/queries/run/json',
+  describe('createRequestParams', () => {
+    const inputs: RunItInput[] = [
       {
-        fields: 'first_name, last_name',
+        name: 'result_format',
+        location: 'path',
+        type: 'string',
+        required: true,
+        description: 'Format of result',
       },
       {
-        fields: ['orders.count'],
+        name: 'cache',
+        location: 'query',
+        type: 'boolean',
+        required: false,
+        description: 'Get results from cache if available',
+      },
+      {
+        name: 'body',
+        location: 'body',
+        type: {
+          model: 'string',
+          view: 'string',
+          fields: ['string'],
+          limit: 'string',
+        },
+        description: 'body',
+        required: true,
+      },
+    ]
+    const requestContent = {
+      result_format: 'json',
+      cache: true,
+      body: JSON.stringify({
         model: 'thelook',
         view: 'orders',
-      },
-      expect.any(Function)
-    )
-    expect(resp).toEqual(testJsonResponse)
+        fields: ['orders.created_date', 'orders.count'],
+        limit: '500',
+      }),
+    }
+
+    test('it correctly identifies requestContent params location', () => {
+      const [pathParams, queryParams, body] = createRequestParams(
+        inputs,
+        requestContent
+      )
+      expect(pathParams).toEqual({
+        result_format: requestContent.result_format,
+      })
+      expect(queryParams).toEqual({
+        cache: requestContent.cache,
+      })
+      expect(body).toEqual(JSON.parse(requestContent.body))
+    })
+
+    test('non JSON parsable strings are treated as x-www-form-urlencoded strings', () => {
+      const urlParams = 'key1=value1&key2=value2'
+      const [, , body] = createRequestParams(
+        [
+          {
+            name: 'body',
+            type: 'string',
+            required: true,
+            description: 'x-www-form-urlencoded data',
+            location: 'body',
+          },
+        ],
+        {
+          body: urlParams,
+        }
+      )
+      expect(body).toEqual(urlParams)
+    })
+  })
+
+  describe('defaultRunItCallback', () => {
+    test('it makes a request', async () => {
+      const spy = jest
+        .spyOn(sdk.authSession.transport, 'rawRequest')
+        .mockResolvedValueOnce(testJsonResponse)
+      jest.spyOn(sdk.authSession, 'isAuthenticated').mockReturnValue(true)
+
+      const resp = await runRequest(
+        sdk,
+        '/api/3.1',
+        'POST',
+        '/queries/run/{result_format}',
+        { result_format: 'json' },
+        { fields: 'first_name, last_name' },
+        { model: 'thelook', view: 'orders', fields: ['orders.count'] }
+      )
+
+      expect(spy).toHaveBeenCalledWith(
+        'POST',
+        '/api/3.1/queries/run/json',
+        {
+          fields: 'first_name, last_name',
+        },
+        {
+          fields: ['orders.count'],
+          model: 'thelook',
+          view: 'orders',
+        },
+        expect.any(Function)
+      )
+      expect(resp).toEqual(testJsonResponse)
+    })
   })
 })

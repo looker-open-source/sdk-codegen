@@ -29,6 +29,7 @@ import { addMinutes, IRowModel, noDate, stringer } from './RowModel'
 import { WhollySheet } from './WhollySheet'
 import { TestRow, testRowObject } from './RowModel.spec'
 import { ITabTable, SheetSDK } from './SheetSDK'
+import { initSheetSDK } from './testUtils/testUtils'
 
 export class TestSheet extends WhollySheet<TestRow> {
   typeRow<T extends IRowModel>(values?: any): T {
@@ -36,6 +37,7 @@ export class TestSheet extends WhollySheet<TestRow> {
   }
 }
 
+const wait2Mins = 2 * 60 * 1000
 const testRow = new TestRow(testRowObject)
 const testRow2Object = {
   _row: 3,
@@ -52,7 +54,13 @@ const testRow2 = new TestRow(testRow2Object)
 
 const testTable: ITabTable = {
   header: testRow.header(),
-  rows: [testRow, testRow2],
+  rows: [
+    testRow,
+    testRow2,
+    new TestRow({ _row: 4, _id: '5', _updated: new Date(), name: 'row 4' }),
+    new TestRow({ _row: 5, _id: '6', _updated: new Date(), name: 'row 5' }),
+    new TestRow({ _row: 6, _id: '7', _updated: new Date(), name: 'row 6' }),
+  ],
 }
 
 const emptyTable: ITabTable = {
@@ -61,9 +69,18 @@ const emptyTable: ITabTable = {
 }
 
 const testSDK = new SheetSDK({ settings: {} } as IAuthSession, 'test sheet id')
-const sheet = new TestSheet(testSDK, 'test', testTable)
+const mockSheet = () => new TestSheet(testSDK, 'test', testTable)
+let sheet = mockSheet()
+let sheets: SheetSDK
 
 describe('WhollySheet', () => {
+  beforeEach(() => {
+    sheet = mockSheet()
+  })
+  afterEach(() => {
+    jest.clearAllMocks()
+  })
+
   test('gets values in order', () => {
     const row = sheet.rows[0]
     const expected = [
@@ -163,7 +180,7 @@ describe('WhollySheet', () => {
       // _id = 0, _updated = 1
       mockVals[1] = stringer(addMinutes(row._updated, 1))
       jest.spyOn(testSDK, 'rowGet').mockReturnValue(Promise.resolve(mockVals))
-      // prepare will update updated
+      // prepare will update _updated
       row.prepare()
       try {
         await sheet.update(row)
@@ -194,9 +211,192 @@ describe('WhollySheet', () => {
         row._id = 'create_test'
         row._row = 2
         await expect(sheet.create(row)).rejects.toThrow(
-          `create needs "${row._id}" row to be < 1, not ${row._row}`
+          `create needs ${sheet.name} "${row._id}" row to be < 1, not ${row._row}`
         )
       })
     })
+  })
+
+  describe('batch updates', () => {
+    describe('getDelta', () => {
+      test('No delta for no changes', () => {
+        const delta = sheet.getDelta()
+        expect(delta.updates).toHaveLength(0)
+        expect(delta.deletes).toHaveLength(0)
+        expect(delta.creates).toHaveLength(0)
+      })
+      test('Deletions are in descending row order', () => {
+        const a = sheet.rows[0]
+        const b = sheet.rows[3]
+        a.setDelete()
+        b.setDelete()
+        const delta = sheet.getDelta()
+        expect(delta.updates).toHaveLength(0)
+        expect(delta.deletes).toHaveLength(2)
+        expect(delta.creates).toHaveLength(0)
+        expect(delta.deletes[0]).toEqual(b)
+        expect(delta.deletes[1]).toEqual(a)
+      })
+      test('Updates are in original order', () => {
+        const a = sheet.rows[0]
+        const b = sheet.rows[3]
+        a.setUpdate()
+        b.setUpdate()
+        const delta = sheet.getDelta()
+        expect(delta.updates).toHaveLength(2)
+        expect(delta.deletes).toHaveLength(0)
+        expect(delta.creates).toHaveLength(0)
+        expect(delta.updates[0]).toEqual(a)
+        expect(delta.updates[1]).toEqual(b)
+      })
+      test('Creates are in original order', () => {
+        const a = new TestRow({ _id: 'create1' })
+        const b = new TestRow({ _id: 'create2' })
+        a.setCreate()
+        b.setCreate()
+        sheet.rows.push(a, b)
+        const delta = sheet.getDelta()
+        expect(delta.updates).toHaveLength(0)
+        expect(delta.deletes).toHaveLength(0)
+        expect(delta.creates).toHaveLength(2)
+        expect(delta.creates[0]).toEqual(a)
+        expect(delta.creates[1]).toEqual(b)
+      })
+    })
+
+    test('allValues', () => {
+      const values = sheet.allValues()
+      expect(values).toHaveLength(sheet.rows.length + 1)
+      expect(values[0]).toEqual(sheet.header)
+      values.splice(0, 1) // remove header row
+      values.forEach((r, index) => expect(r[0]).toEqual(sheet.rows[index]._id))
+    })
+
+    describe('mergePurge', () => {
+      test('updates updates', () => {
+        const rows = sheet.rows
+        const tab = sheet.allValues()
+        expect(tab).toHaveLength(rows.length + 1)
+        const a = rows[0]
+        const b = rows[3]
+        a._id = 'a'
+        b._id = 'b'
+        a.setUpdate()
+        b.setUpdate()
+        const delta = sheet.getDelta()
+        expect(delta.updates).toHaveLength(2)
+        const actual = sheet.mergePurge(tab, delta)
+        actual.splice(0, 1) // remove header row
+        expect(actual).toHaveLength(rows.length)
+        expect(actual[a._row - 2][0]).toEqual(a._id)
+        expect(actual[b._row - 2][0]).toEqual(b._id)
+      })
+      test('deletes deletes', () => {
+        const rows = sheet.rows
+        const tab = sheet.allValues()
+        expect(tab).toHaveLength(rows.length + 1)
+        const a = rows[0]
+        const b = rows[3]
+        a.setDelete()
+        b.setDelete()
+        const delta = sheet.getDelta()
+        expect(delta.deletes).toHaveLength(2)
+        const actual = sheet.mergePurge(tab, delta)
+        actual.splice(0, 1) // remove header row
+        expect(actual).toHaveLength(rows.length - 2)
+        expect(actual[0][0]).toEqual(rows[1]._id)
+        expect(actual[2][0]).toEqual(rows[4]._id)
+      })
+      test('creates creates', () => {
+        const rows = sheet.rows
+        const rowCount = rows.length
+        const tab = sheet.allValues()
+        expect(tab).toHaveLength(rowCount + 1)
+        const a = new TestRow({ _id: 'c1' })
+        const b = new TestRow({ _id: 'c2' })
+        a.setCreate()
+        b.setCreate()
+        sheet.rows.push(a, b)
+        expect(sheet.rows).toHaveLength(rowCount + 2)
+        const delta = sheet.getDelta()
+        expect(delta.creates).toHaveLength(2)
+        const actual = sheet.mergePurge(tab, delta)
+        actual.splice(0, 1) // remove header row
+        expect(actual).toHaveLength(rowCount + 2)
+        expect(actual[actual.length - 2][0]).toEqual(a._id)
+        expect(actual[actual.length - 1][0]).toEqual(b._id)
+      })
+    })
+  })
+
+  describe('live sheet', () => {
+    beforeAll(async () => {
+      sheets = await initSheetSDK()
+    })
+
+    const createSheet = async (data: TestSheet) => {
+      const doc = await sheets.index()
+      sheet = new TestSheet(sheets, 'test', doc.tabs.test)
+      sheet.rows = data.rows
+      sheet.rows.forEach((r) => {
+        r._row = 0
+        r.setCreate()
+      })
+      return await sheet.batchUpdate()
+    }
+
+    test(
+      'creates all rows',
+      async () => {
+        const data = mockSheet()
+        await createSheet(data)
+        expect(sheet.rows).toHaveLength(data.rows.length)
+        sheet.rows.forEach((r, index) => {
+          expect(r._id).toEqual(data.rows[index]._id)
+          expect(r._updated).not.toEqual(noDate)
+          expect(r.score).toBeDefined()
+        })
+      },
+      wait2Mins
+    )
+
+    test(
+      'updates all rows',
+      async () => {
+        const doc = await sheets.index()
+        sheet = new TestSheet(sheets, 'test', doc.tabs.test)
+        const data = mockSheet()
+        if (sheet.rows.length === 0) await createSheet(data)
+        sheet.rows.forEach((r, index) => {
+          r.name = `u ${index}`
+          r.setUpdate()
+        })
+        const response = await sheet.batchUpdate(true)
+        expect(response).toHaveLength(sheet.rows.length)
+        sheet.rows.forEach((r, index) => {
+          expect(r.name).toEqual(`u ${index}`)
+          expect(response[index].name).toEqual(`u ${index}`)
+        })
+      },
+      wait2Mins
+    )
+
+    test(
+      'deletes all rows',
+      async () => {
+        const doc = await sheets.index()
+        sheet = new TestSheet(sheets, 'test', doc.tabs.test)
+        const data = mockSheet()
+        if (sheet.rows.length === 0) await createSheet(data)
+        expect(sheet.rows.length).toBeGreaterThan(0)
+        sheet.rows.forEach((r) => r.setDelete())
+        const delta = sheet.getDelta()
+        expect(delta.deletes).toHaveLength(sheet.rows.length)
+        const response = await sheet.batchUpdate(true)
+        expect(response).toHaveLength(0)
+        expect(sheet.rows).toHaveLength(0)
+      },
+      wait2Mins
+    )
   })
 })

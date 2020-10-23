@@ -63,11 +63,23 @@ export interface IRowValidationError {
 
 export type RowValidationErrors = Record<string, IRowValidationError>
 
+export enum RowAction {
+  None,
+  Create,
+  Update,
+  Delete,
+}
+
 /** Keyed data for a sheet row */
 export interface IRowModel extends RowValues {
+  /** Row position in sheet for this item. Usually assigned in WhollySheet processing */
   _row: number
+  /** Unique ID for this row. Assigned to a UUID in prepare() */
   _id: string
+  /** Updated date/time stamp for this row. Always set in prepare() */
   _updated: Date
+  /** Batch update action. Defaults to RowAction.None, so the row is not part of the delta */
+  $action: RowAction
   assign(values: any): IRowModel
   /** All keys for this object */
   keys(): ColumnHeaders
@@ -87,20 +99,59 @@ export interface IRowModel extends RowValues {
   toObject(): object
   /** Converts from plain javascript object to class instance */
   fromObject(obj: object): IRowModel
+  /** Mark a row for update. Returns true if the row can be marked for updating */
+  setUpdate(): boolean
+  /** Mark a row for deletion. Returns true if the row can be marked for deleting */
+  setDelete(): boolean
+  /** Mark a row for creation. Returns true if the row can be marked for creating */
+  setCreate(): boolean
 }
 
 export class RowModel<T extends IRowModel> implements IRowModel {
   _row = 0
   _id = ''
   _updated: Date = noDate
+  private $_action: RowAction = RowAction.None
 
   constructor(values?: any) {
-    if (values && Object.keys(values).length > 0) {
-      if (values.row) this._row = values.row
-      if (values.id) this._id = values.id
-      if (values.updated)
-        this._updated = this.typeCast('updated', values.updated)
+    if (values && !Array.isArray(values) && Object.keys(values).length > 0) {
+      if (values._row) this._row = values._row
+      if (values._id) this._id = values._id
+      if (values._updated)
+        this._updated = this.typeCast('_updated', values._updated)
     }
+  }
+
+  get $action(): RowAction {
+    if (this.$_action === RowAction.None && this._row === 0)
+      return RowAction.Create
+    return this.$_action
+  }
+
+  set $action(value: RowAction) {
+    // Can't create an existing row
+    if (value === RowAction.Create && this._row) return
+    // Can't update or delete a new row
+    if (value !== RowAction.None && !this._row) return
+    this.$_action = value
+  }
+
+  setCreate(): boolean {
+    if (this._row) return false
+    this.$_action = RowAction.Create
+    return true
+  }
+
+  setUpdate(): boolean {
+    if (!this._row) return false
+    this.$_action = RowAction.Update
+    return true
+  }
+
+  setDelete(): boolean {
+    if (!this._row) return false
+    this.$_action = RowAction.Delete
+    return true
   }
 
   keys(): ColumnHeaders {
@@ -139,11 +190,12 @@ export class RowModel<T extends IRowModel> implements IRowModel {
   }
 
   typeCast(key: string, value: any) {
-    if (!value) return undefined
+    if (value === undefined || value === null) value = ''
     if (typeof this[key] === 'string') {
       return value.toString()
     }
     if (typeof this[key] === 'number') {
+      if (value === '') return 0
       const isInt = /^([+-]?[1-9]\d*|0)$/
       if (value.toString().match(isInt)) {
         return parseInt(value, 10)
@@ -154,10 +206,11 @@ export class RowModel<T extends IRowModel> implements IRowModel {
       return boolDefault(value, false)
     }
     if (this[key] instanceof Date) {
-      return new Date(value)
+      if (value) return new Date(value)
+      return noDate
     }
-    // if (this[key] instanceof DelimArray) {
     if (Array.isArray(this[key])) {
+      if (!value) return []
       return value.toString().split(',')
     }
     return this.toString()
@@ -169,8 +222,10 @@ export class RowModel<T extends IRowModel> implements IRowModel {
       if (Array.isArray(values)) {
         // Assign by position
         values.forEach((val, index) => {
-          const key = keys[index]
-          this[key] = this.typeCast(key, val)
+          if (val !== undefined && val !== null) {
+            const key = keys[index]
+            this[key] = this.typeCast(key, val)
+          }
         })
       } else {
         // Assign by name

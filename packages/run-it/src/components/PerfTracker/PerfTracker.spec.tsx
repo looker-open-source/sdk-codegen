@@ -67,6 +67,10 @@ export const mockPerfEntries: LoadTimes[] = [
 ]
 
 describe('PerfTracker', () => {
+  afterEach(() => {
+    jest.clearAllMocks()
+  })
+
   test('it initializes to no data', () => {
     jest.spyOn(PerfTimings.prototype, 'entries').mockReturnValue([])
     renderWithTheme(<PerfTracker configurator={defaultConfigurator} />)
