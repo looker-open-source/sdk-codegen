@@ -161,6 +161,10 @@ export interface ISheet {
   spreadsheetUrl: string
 }
 
+/**
+ * Returns the name of the tab
+ * @param tab string or ISheetTab interface
+ */
 export const tabName = (tab: string | ISheetTab) => {
   if (typeof tab === 'string') return tab
   return tab.properties.title

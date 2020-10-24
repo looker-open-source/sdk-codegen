@@ -80,30 +80,59 @@ export interface IRowModel extends RowValues {
   _updated: Date
   /** Batch update action. Defaults to RowAction.None, so the row is not part of the delta */
   $action: RowAction
+
+  /**
+   * Assign a value array or object to the typed row
+   *
+   * @param values an array of values, or an object with matching keys
+   */
   assign(values: any): IRowModel
-  /** All keys for this object */
+
+  /** All keys for this object, but overrideable */
   keys(): ColumnHeaders
+
   /** The sheet Column Headers keys for this model */
   header(): ColumnHeaders
-  /** The display columh headers for this model */
+
+  /** The display column headers for this model */
   displayHeader(): ColumnHeaders
-  /** Column values for the entire row to write to the GSheet */
+
+  /** Column values in the correct order to write the entire row to the GSheet */
   values(): SheetValues
-  /** Prepare the row for saving */
+
+  /**
+   * Prepare the row for saving. This includes auto-generation of _id and updating _update
+   * Override this for error handling, calculations, and other default initializations
+   * to avoid persisting bad data values to the sheet
+   */
   prepare(): IRowModel
-  /** Returns undefined if no errors, or the error messages */
+
+  /** Returns undefined if no errors, or the error messages with keys corresponding to property names */
   validate(): RowValidationErrors | undefined
-  /** Convert a cell to the right type */
+
+  /**
+   * Convert a cell to the declared type of the keyed property
+   * @param key name of property to receive the value
+   * @param value any value representation
+   */
   typeCast(key: string, value: any): any
+
   /** Converts instance to plain javascript object */
   toObject(): object
-  /** Converts from plain javascript object to class instance */
+
+  /**
+   * Converts from plain javascript object to class instance
+   * @param obj to assign to row. Uses properties of the same name
+   */
   fromObject(obj: object): IRowModel
-  /** Mark a row for update. Returns true if the row can be marked for updating */
+
+  /** Mark a row for update. Sets the $action and returns true if the row can be marked for updating */
   setUpdate(): boolean
-  /** Mark a row for deletion. Returns true if the row can be marked for deleting */
+
+  /** Mark a row for deletion. Sets the $action and returns true if the row can be marked for deleting */
   setDelete(): boolean
-  /** Mark a row for creation. Returns true if the row can be marked for creating */
+
+  /** Mark a row for creation. Sets the $action and returns true if the row can be marked for creating */
   setCreate(): boolean
 }
 
@@ -166,7 +195,6 @@ export class RowModel<T extends IRowModel> implements IRowModel {
   }
 
   displayHeader(): ColumnHeaders {
-    // remove `row`
     return this.header().filter((v) => !v.startsWith('_'))
   }
 

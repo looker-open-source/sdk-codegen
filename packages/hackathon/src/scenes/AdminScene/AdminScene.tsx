@@ -29,7 +29,7 @@ import { useHistory, useRouteMatch } from 'react-router-dom'
 import { Routes } from '../../routes/AppRouter'
 import { UserAttributes } from './components/UserAttributes'
 
-const tabnames = ['general', 'userattributes']
+const tabnames = ['general', 'config']
 
 const getTabNameIndex = (tabname?: string) => {
   let tabIndex = tabnames.indexOf(tabname || 'general')
@@ -70,7 +70,7 @@ export const AdminScene: FC = () => {
     <>
       <TabList selectedIndex={tabIndex} onSelectTab={onSelectTab}>
         <Tab>General</Tab>
-        <Tab>User Attributes</Tab>
+        <Tab>Configuration</Tab>
       </TabList>
       <TabPanels selectedIndex={tabIndex}>
         <TabPanel>

@@ -102,9 +102,13 @@ export class TypedRows<T> {
 export interface IWhollySheet<T extends IRowModel> {
   /** Initialized REST-based GSheets SDK */
   sheets: SheetSDK
-  /** Name of the tab */
+  /** Name of the tab in the sheet */
   name: string
-  /** Header column names for reading/writing to the sheet */
+  /**
+   * Header column names for reading from/writing to the sheet.
+   * The order of the column names **must** match the order of the columns in the sheet.
+   * The values used to read and write the sheet are always in column order position.
+   */
   header: ColumnHeaders
   /** Column names to display */
   displayHeader: ColumnHeaders
@@ -138,24 +142,29 @@ export interface IWhollySheet<T extends IRowModel> {
   /**
    * Gets the row's values in table.header column order
    * @param model row to introspect
-   * @param model row to introspect
    */
   values(model: T): SheetValues
 
-  /** Returns a 2D array of all row values including the header row */
+  /**
+   * Returns a 2D array of all row values based on the current rows collection.
+   * The result include the header row
+   */
   allValues(): SheetValues
 
-  /** Create a new row of this type */
+  /**
+   * Create a new row of this type
+   * @param values either a value array or an object
+   */
   typeRow<T extends IRowModel>(values?: any): T
 
   /**
    * Converts raw rows into typed rows.
-   * TODO replace with constructor argument
-   * @param rows array of data to convert. Either value arrays or keyed collections
+   *
+   * @param rows array of data to convert. Either value arrays or a collection of objects
    */
   typeRows<T extends IRowModel>(rows: SheetValues): T[]
 
-  /** Reload the entire tab */
+  /** Reload the entire tab by fetching all its values from the GSheet */
   refresh<T extends IRowModel>(): Promise<T[]>
 
   /**

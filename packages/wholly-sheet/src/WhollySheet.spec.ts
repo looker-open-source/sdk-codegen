@@ -402,7 +402,7 @@ describe('WhollySheet', () => {
           r.name = `u ${index}`
           r.setUpdate()
         })
-        const response = await sheet.batchUpdate(true)
+        const response = await sheet.batchUpdate()
         expect(response).toHaveLength(sheet.rows.length)
         sheet.rows.forEach((r, index) => {
           expect(r.name).toEqual(`u ${index}`)
@@ -423,7 +423,7 @@ describe('WhollySheet', () => {
         sheet.rows.forEach((r) => r.setDelete())
         const delta = sheet.getDelta()
         expect(delta.deletes).toHaveLength(sheet.rows.length)
-        const response = await sheet.batchUpdate(true)
+        const response = await sheet.batchUpdate()
         expect(response).toHaveLength(0)
         expect(sheet.rows).toHaveLength(0)
       },
