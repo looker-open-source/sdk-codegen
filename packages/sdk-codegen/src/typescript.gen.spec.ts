@@ -562,8 +562,7 @@ async create_user_credentials_email(
   /**
    * @param {string} fields Requested fields.
    */
-  fields?: string,
-  options?: Partial<ITransportSettings>) {
+  fields?: string, options?: Partial<ITransportSettings>) {
 `
       const actual = gen.methodSignature('', method)
       expect(actual).toEqual(expected)
@@ -576,8 +575,7 @@ async create_user_credentials_email(
  *
  * GET /datagroups -> IDatagroup[]
  */
-async all_datagroups(
-  options?: Partial<ITransportSettings>) {
+async all_datagroups(options?: Partial<ITransportSettings>) {
 `
       const actual = gen.methodSignature('', method)
       expect(actual).toEqual(expected)
@@ -621,8 +619,7 @@ async all_datagroups(
     })
     it('assert response is list active_themes', () => {
       const method = apiTestModel.methods.active_themes
-      const expected = `return this.get<ITheme[], IError>('/themes/active', 
-  {name: request.name, ts: request.ts, fields: request.fields}, null, options)`
+      const expected = `return this.get<ITheme[], IError>('/themes/active', {name: request.name, ts: request.ts, fields: request.fields}, null, options)`
       const actual = gen.httpCall(indent, method)
       expect(actual).toEqual(expected)
     })
@@ -649,12 +646,10 @@ async all_datagroups(
  *
  * POST /render_tasks/dashboards/{dashboard_id}/{result_format} -> IRenderTask
  */
-async create_dashboard_render_task(request: IRequestCreateDashboardRenderTask,
-  options?: Partial<ITransportSettings>) {
-    request.dashboard_id = encodeParam(request.dashboard_id)
-    request.result_format = encodeParam(request.result_format)
-  return this.post<IRenderTask, IError | IValidationError>(\`/render_tasks/dashboards/\${request.dashboard_id}/\${request.result_format}\`, 
-    {width: request.width, height: request.height, fields: request.fields, pdf_paper_size: request.pdf_paper_size, pdf_landscape: request.pdf_landscape, long_tables: request.long_tables}, request.body, options)
+async create_dashboard_render_task(request: IRequestCreateDashboardRenderTask, options?: Partial<ITransportSettings>) {
+  request.dashboard_id = encodeParam(request.dashboard_id)
+  request.result_format = encodeParam(request.result_format)
+  return this.post<IRenderTask, IError | IValidationError>(\`/render_tasks/dashboards/\${request.dashboard_id}/\${request.result_format}\`, {width: request.width, height: request.height, fields: request.fields, pdf_paper_size: request.pdf_paper_size, pdf_landscape: request.pdf_landscape, long_tables: request.long_tables}, request.body, options)
 }`
       const actual = gen.declareMethod(indent, method)
       expect(actual).toEqual(expected)
@@ -780,10 +775,8 @@ async me(
   /**
    * @param {string} hi-test Requested fields.
    */
-  'hi-test'?: string,
-  options?: Partial<ITransportSettings>) {
-  return this.get<IUser, IError>('/user', 
-    {'hi-test'}, null, options)
+  'hi-test'?: string, options?: Partial<ITransportSettings>) {
+  return this.get<IUser, IError>('/user', {'hi-test'}, null, options)
 }`
         expect(actual).toEqual(expected)
       })
@@ -800,10 +793,8 @@ async me(
  *
  * GET /roles/{role_id}/users -> IUser[]
  */
-async role_users(request: IRequestRoleUsers,
-  options?: Partial<ITransportSettings>) {
-  return this.get<IUser[], IError>(\`/roles/\${request.role_id}/users\`, 
-    {fields: request.fields, 'direct-association-only': request['direct-association-only']}, null, options)
+async role_users(request: IRequestRoleUsers, options?: Partial<ITransportSettings>) {
+  return this.get<IUser[], IError>(\`/roles/\${request.role_id}/users\`, {fields: request.fields, 'direct-association-only': request['direct-association-only']}, null, options)
 }`
         expect(actual).toEqual(expected)
       })
