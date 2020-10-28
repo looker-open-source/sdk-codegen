@@ -893,7 +893,7 @@ describe('sdkModels', () => {
         const actual = apiTestModel.search('dashboard', modelAndTypeNames)
         const methods = allMethods(actual.tags)
         expect(Object.entries(methods).length).toEqual(33)
-        expect(Object.entries(actual.types).length).toEqual(27)
+        expect(Object.entries(actual.types).length).toEqual(29)
       })
 
       it('search special names', () => {
@@ -933,7 +933,7 @@ describe('sdkModels', () => {
       it('find rate_limited endpoints', () => {
         const actual = apiTestModel.search('rate_limited', SearchAll)
         const methods = allMethods(actual.tags)
-        expect(Object.entries(methods).length).toEqual(8)
+        expect(Object.entries(methods).length).toEqual(11)
         expect(Object.entries(actual.types).length).toEqual(0)
       })
 
@@ -958,25 +958,25 @@ describe('sdkModels', () => {
 
       it('deprecated items', () => {
         const actual = apiTestModel.search('deprecated', statusCriteria)
-        expect(Object.entries(allMethods(actual.tags)).length).toEqual(6)
+        expect(Object.entries(allMethods(actual.tags)).length).toEqual(7)
         expect(Object.entries(actual.types).length).toEqual(3)
       })
 
       it('beta items', () => {
         const actual = apiTestModel.search('beta', statusCriteria)
-        expect(Object.entries(allMethods(actual.tags)).length).toEqual(201)
-        expect(Object.entries(actual.types).length).toEqual(104)
+        expect(Object.entries(allMethods(actual.tags)).length).toEqual(238)
+        expect(Object.entries(actual.types).length).toEqual(126)
       })
 
       it('stable items', () => {
         const actual = apiTestModel.search('stable', statusCriteria)
-        expect(Object.entries(allMethods(actual.tags)).length).toEqual(153)
+        expect(Object.entries(allMethods(actual.tags)).length).toEqual(154)
         expect(Object.entries(actual.types).length).toEqual(90)
       })
 
       it('db queries', () => {
         const actual = apiTestModel.search('db_query', activityCriteria)
-        expect(Object.entries(allMethods(actual.tags)).length).toEqual(35)
+        expect(Object.entries(allMethods(actual.tags)).length).toEqual(37)
         expect(Object.entries(actual.types).length).toEqual(0)
       })
     })
@@ -984,7 +984,7 @@ describe('sdkModels', () => {
     describe('response search', () => {
       it('find binary responses', () => {
         const actual = apiTestModel.search('binary', responseCriteria)
-        expect(Object.entries(allMethods(actual.tags)).length).toEqual(6)
+        expect(Object.entries(allMethods(actual.tags)).length).toEqual(7)
         expect(Object.entries(actual.types).length).toEqual(0)
       })
     })
@@ -1049,7 +1049,7 @@ describe('sdkModels', () => {
   describe('tagging', () => {
     it('methods are tagged', () => {
       const actual = apiTestModel.tags
-      expect(Object.entries(actual).length).toEqual(26)
+      expect(Object.entries(actual).length).toEqual(28)
     })
 
     it('methods are in the right tag', () => {
