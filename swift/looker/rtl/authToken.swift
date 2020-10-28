@@ -45,7 +45,7 @@ public struct AuthToken: AccessTokenProtocol, Codable {
     public var expires_in: Int64 = 0
     public var refresh_token: String = ""
     
-    private var expiresAt: Date?
+    public var expiresAt: Date?
     
     public init() { }
     
