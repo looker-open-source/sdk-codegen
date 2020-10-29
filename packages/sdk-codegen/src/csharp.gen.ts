@@ -137,7 +137,7 @@ export class CSharpGen extends CodeGen {
 
   indentStr = '  '
   endTypeStr = '\n}'
-  needsRequestTypes = false
+  useNamedParameters = true
   willItStream = false
   codeQuote = '"'
 

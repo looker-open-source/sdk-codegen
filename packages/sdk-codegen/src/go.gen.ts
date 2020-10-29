@@ -86,7 +86,7 @@ export class GoGen extends CodeGen {
   endTypeStr = '}'
   codeQuote = `"`
 
-  needsRequestTypes = true
+  useNamedParameters = false
 
   keywords = new Set<string>([
     'break',

@@ -55,7 +55,7 @@ export class SwiftGen extends CodeGen {
 
   indentStr = '    '
   endTypeStr = `\n}`
-  needsRequestTypes = false
+  useNamedParameters = true
   willItStream = true
   keywords = new Set<string>([
     'associatedtype',
