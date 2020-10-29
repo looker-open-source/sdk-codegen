@@ -50,7 +50,6 @@ export class PythonGen extends CodeGen {
   dataStructureDelimiter = ', '
   enumDelimiter = '\n'
   codeQuote = '"'
-  useNamedParameters = true
 
   endTypeStr = ''
 

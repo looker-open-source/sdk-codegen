@@ -55,7 +55,7 @@ export class KotlinGen extends CodeGen {
 
   indentStr = '  '
   endTypeStr = '\n) : Serializable'
-  useNamedParameters = true
+  needsRequestTypes = false
   willItStream = true
 
   private readonly defaultApi = '4.0'

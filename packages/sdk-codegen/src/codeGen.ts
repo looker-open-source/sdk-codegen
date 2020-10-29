@@ -623,7 +623,7 @@ export interface ICodeGen {
 }
 
 export abstract class CodeGen implements ICodeGen {
-  useNamedParameters = false
+  useNamedParameters = true
   willItStream = false
   codePath = './'
   packagePath = 'looker'
