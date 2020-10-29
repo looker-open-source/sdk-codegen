@@ -272,8 +272,8 @@ def render_task_results(
 # 'explore' URLs etc.
 #
 # The parameters here are very similar to the json body formatting except that the filter syntax is
-# tricky. Unfortunately, this format makes this method not currently callible via the 'Try it out!' button
-# in this documentation page. But, this is callable  when creating URLs manually or when using the Looker SDK.
+# tricky. Unfortunately, this format makes this method not currently callable via the 'Try it out!' button
+# in this documentation page. But, this is callable when creating URLs manually or when using the Looker SDK.
 #
 # Here is an example inline query URL:
 #
