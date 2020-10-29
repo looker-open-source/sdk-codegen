@@ -24,14 +24,21 @@
 
  */
 
-import { ITabTable, SheetSDK, WhollySheet } from '@looker/wholly-sheet'
+import {
+  IRowModelProps,
+  ITabTable,
+  SheetSDK,
+  WhollySheet,
+} from '@looker/wholly-sheet'
 import { ISheetRow, SheetRow } from './SheetRow'
 import { SheetData } from './SheetData'
 
 /** IMPORTANT: properties must be declared in the tab sheet's columnar order, not sorted order */
-export interface ITechnology extends ISheetRow {
+export interface ITechnologyProps extends IRowModelProps {
   description: string
 }
+
+export interface ITechnology extends ITechnologyProps, ISheetRow {}
 
 /** IMPORTANT: properties must be declared in the tab sheet's columnar order, not sorted order */
 export class Technology extends SheetRow<ITechnology> {
@@ -41,6 +48,10 @@ export class Technology extends SheetRow<ITechnology> {
     // IMPORTANT: this must be done after super() constructor is called so keys are established
     // there may be a way to overload the constructor so this isn't necessary but pattern hasn't been found
     this.assign(values)
+  }
+
+  toObject(): ITechnologyProps {
+    return super.toObject() as ITechnologyProps
   }
 }
 
@@ -58,5 +69,9 @@ export class Technologies extends WhollySheet<Technology> {
 
   typeRow<Technology>(values?: any) {
     return (new Technology(values) as unknown) as Technology
+  }
+
+  toObject(): ITechnologyProps[] {
+    return super.toObject() as ITechnologyProps[]
   }
 }

@@ -70,8 +70,7 @@ export enum RowAction {
   Delete,
 }
 
-/** Keyed data for a sheet row */
-export interface IRowModel extends RowValues {
+export interface IRowModelProps extends RowValues {
   /** Row position in sheet for this item. Usually assigned in WhollySheet processing */
   _row: number
   /** Unique ID for this row. Assigned to a UUID in prepare() */
@@ -80,7 +79,10 @@ export interface IRowModel extends RowValues {
   _updated: Date
   /** Batch update action. Defaults to RowAction.None, so the row is not part of the delta */
   $action: RowAction
+}
 
+/** Keyed data for a sheet row */
+export interface IRowModel extends IRowModelProps {
   /**
    * Assign a value array or object to the typed row
    *

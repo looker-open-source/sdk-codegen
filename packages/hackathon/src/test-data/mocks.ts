@@ -49,18 +49,22 @@ export const mockTabTable = {} as ITabTable
 
 export const mockUser = new Hacker(mockLookerSDK)
 mockUser.user = { id: 1, first_name: 'Ordinary', last_name: 'Joe' }
+mockUser.assignRights()
 
 export const mockStaff = new Hacker(mockLookerSDK)
 mockStaff.user = { id: 2, first_name: 'Looker', last_name: 'Staff' }
 mockStaff.roles.add('staff')
+mockStaff.assignRights()
 
 export const mockJudge = new Hacker(mockLookerSDK)
 mockJudge.user = { id: 3, first_name: 'Looker', last_name: 'Judge' }
 mockJudge.roles.add('judge')
+mockJudge.assignRights()
 
 export const mockAdmin = new Hacker(mockLookerSDK)
 mockJudge.user = { id: 4, first_name: 'Looker', last_name: 'Admin' }
 mockAdmin.roles.add('admin')
+mockAdmin.assignRights()
 
 // const filePath = path.join(__dirname, './')
 // const localFile = (name: string) => path.join(filePath, name)
@@ -74,12 +78,14 @@ mockAdmin.roles.add('admin')
 export const mockAHacker = (id: number): Hacker => {
   const result = new Hacker(mockLookerSDK)
   result.user = { id: id, first_name: 'Ordinary', last_name: 'Joe' }
+  result.assignRights()
   return result
 }
 
 export const mockAJudge = (id: number): Hacker => {
   const result = mockAHacker(id)
   result.roles.add('judge')
+  result.assignRights()
   return result
 }
 

@@ -83,7 +83,7 @@ export const ProjectsScene: FC<ProjectSceneProps> = () => {
               Add Project
             </Button>
             <>
-              {hackathon && hacker && hacker.canAdmin() && (
+              {hackathon && hacker && hacker.canAdmin && (
                 <>
                   <Button
                     iconBefore="LockClosed"

@@ -34,7 +34,7 @@ export type UserPermission = 'delete' | 'create' | 'update'
 
 export type UserRole = 'user' | 'staff' | 'judge' | 'admin'
 
-export interface IHacker {
+export interface IHackerProps {
   /** Looker user object */
   user: ILookerUser
   /** ID of the user */
@@ -57,14 +57,16 @@ export interface IHacker {
   api3: boolean
   /** user registration record */
   registration: Registration
-
   /** is this user a staff member? */
-  canStaff(): boolean
+  canStaff: boolean
   /** is this user a judge? */
-  canJudge(): boolean
+  canJudge: boolean
   /** is this user an admin? */
-  canAdmin(): boolean
+  canAdmin: boolean
   /** assign the current user their roles and permissions from Looker user lookup */
+}
+
+export interface IHacker extends IHackerProps {
   getMe(): Promise<IHacker>
 }
 
@@ -81,6 +83,9 @@ export class Hacker implements IHacker {
   permissions = new Set<UserPermission>()
   api3 = false
   registration!: Registration
+  canAdmin = false
+  canJudge = false
+  canStaff = false
 
   constructor(public readonly sdk?: Looker40SDK, user?: ILookerUser) {
     if (user) {
@@ -156,7 +161,14 @@ export class Hacker implements IHacker {
         }
       }
     }
+    this.assignRights()
     return this
+  }
+
+  assignRights() {
+    this.canAdmin = this.roles.has('admin')
+    this.canJudge = this.roles.has('judge')
+    this.canStaff = this.roles.has('staff') || this.canAdmin
   }
 
   findRegistration(hackathon: Hackathon, registrations: Registration[]) {
@@ -189,16 +201,8 @@ export class Hacker implements IHacker {
     return false
   }
 
-  canAdmin(): boolean {
-    return this.roles.has('admin')
-  }
-
-  canJudge(): boolean {
-    return this.roles.has('judge')
-  }
-
-  canStaff(): boolean {
-    return this.roles.has('staff') || this.canAdmin()
+  toObject(): IHackerProps {
+    return { ...this } as IHackerProps
   }
 }
 
@@ -252,11 +256,11 @@ export class Hackers extends TypedRows<Hacker> {
 
   private loadGroups() {
     this.users = this.rows.filter(
-      (h) => !(h.canJudge() || h.canStaff() || h.canAdmin())
+      (h) => !(h.canJudge || h.canStaff || h.canAdmin)
     )
-    this.staff = this.rows.filter((h) => h.canStaff())
-    this.judges = this.rows.filter((h) => h.canJudge())
-    this.admins = this.rows.filter((h) => h.canAdmin())
+    this.staff = this.rows.filter((h) => h.canStaff)
+    this.judges = this.rows.filter((h) => h.canJudge)
+    this.admins = this.rows.filter((h) => h.canAdmin)
   }
 
   /**

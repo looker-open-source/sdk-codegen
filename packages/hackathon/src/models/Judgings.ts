@@ -24,7 +24,12 @@
 
  */
 
-import { ITabTable, SheetSDK, WhollySheet } from '@looker/wholly-sheet'
+import {
+  IRowModelProps,
+  ITabTable,
+  SheetSDK,
+  WhollySheet,
+} from '@looker/wholly-sheet'
 import { ISheetRow, SheetRow } from './SheetRow'
 import { Project } from './Projects'
 import { User } from './Users'
@@ -33,7 +38,7 @@ import { Hacker, IHacker } from './Hacker'
 import { Hackathon } from './Hackathons'
 
 /** IMPORTANT: properties must be declared in the tab sheet's columnar order, not sorted order */
-export interface IJudging extends ISheetRow {
+export interface IJudgingProps extends IRowModelProps {
   user_id: string
   project_id: string
   execution: number
@@ -47,6 +52,8 @@ export interface IJudging extends ISheetRow {
   $more_info: string
   $judge_name: string
   $members: string[]
+}
+export interface IJudging extends IJudgingProps, ISheetRow {
   calculateScore(
     execution: number,
     ambition: number,
@@ -107,15 +114,15 @@ export class Judging extends SheetRow<IJudging> {
   }
 
   canDelete(user: IHacker): boolean {
-    return user.canAdmin() || (user.canJudge() && this.user_id === user.id)
+    return user.canAdmin || (user.canJudge && this.user_id === user.id)
   }
 
   canUpdate(user: IHacker): boolean {
-    return user.canAdmin() || (user.canJudge() && this.user_id === user.id)
+    return user.canAdmin || (user.canJudge && this.user_id === user.id)
   }
 
   canCreate(user: IHacker): boolean {
-    return user.canAdmin() || (user.canJudge() && this.user_id === user.id)
+    return user.canAdmin || (user.canJudge && this.user_id === user.id)
   }
 
   prepare(): IJudging {
@@ -127,6 +134,10 @@ export class Judging extends SheetRow<IJudging> {
       this.impact
     )
     return (this as unknown) as IJudging
+  }
+
+  toObject(): IJudgingProps {
+    return super.toObject() as IJudgingProps
   }
 }
 
@@ -154,5 +165,9 @@ export class Judgings extends WhollySheet<Judging> {
       )
     }
     return this.rows.filter((j) => projects.find((p) => p._id === j.project_id))
+  }
+
+  toObject(): IJudgingProps[] {
+    return super.toObject() as IJudgingProps[]
   }
 }

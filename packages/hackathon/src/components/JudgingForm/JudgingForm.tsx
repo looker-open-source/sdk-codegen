@@ -118,7 +118,7 @@ export const JudgingForm: FC<JudgingFormProps> = ({ judgings, judging }) => {
 
   return (
     <>
-      {!hacker.canAdmin() && judging.user_id !== hacker.id && (
+      {!hacker.canAdmin && judging.user_id !== hacker.id && (
         <Text>You can't judge this</Text>
       )}
       <SpaceVertical gap="xlarge" width="40vh">

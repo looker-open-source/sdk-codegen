@@ -25,6 +25,7 @@
  */
 
 import {
+  IRowModelProps,
   ITabTable,
   SheetError,
   SheetSDK,
@@ -35,7 +36,7 @@ import { SheetData } from './SheetData'
 import { User } from './Users'
 
 /** IMPORTANT: properties must be declared in the tab sheet's columnar order, not sorted order */
-export interface ITeamMember extends ISheetRow {
+export interface ITeamMemberProps extends IRowModelProps {
   user_id: string
   project_id: string
   responsibilities: string
@@ -44,6 +45,8 @@ export interface ITeamMember extends ISheetRow {
   /** Calculated property for user */
   $name: string
 }
+
+export interface ITeamMember extends ITeamMemberProps, ISheetRow {}
 
 /** IMPORTANT: properties must be declared in the tab sheet's columnar order, not sorted order */
 export class TeamMember extends SheetRow<ITeamMember> {
@@ -65,6 +68,10 @@ export class TeamMember extends SheetRow<ITeamMember> {
     }
     return `${this.$user.first_name} ${this.$user.last_name}`
   }
+
+  toObject(): ITeamMemberProps {
+    return super.toObject() as ITeamMemberProps
+  }
 }
 
 export class TeamMembers extends WhollySheet<TeamMember> {
@@ -84,5 +91,9 @@ export class TeamMembers extends WhollySheet<TeamMember> {
     const user = this.data?.users.find(member.user_id)
     if (user) member.$user = user
     return (member as unknown) as TeamMember
+  }
+
+  toObject(): ITeamMemberProps[] {
+    return super.toObject() as ITeamMemberProps[]
   }
 }

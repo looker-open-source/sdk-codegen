@@ -45,9 +45,9 @@ export const JudgingScene: FC<JudgingSceneProps> = () => {
   const isLoading = useSelector(isLoadingState)
   let list: Judging[] = []
   if (judgings) {
-    if (hacker.canAdmin()) {
+    if (hacker.canAdmin) {
       list = judgings
-    } else if (hacker.canJudge()) {
+    } else if (hacker.canJudge) {
       list = judgings.filter((j) => j.user_id === hacker.id)
     }
   }

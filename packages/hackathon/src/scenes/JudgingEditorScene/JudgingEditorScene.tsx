@@ -57,8 +57,8 @@ export const JudgingEditorScene: FC = () => {
       )
       if (judgement) {
         if (
-          hacker.canAdmin() ||
-          (hacker.canJudge() && judgement.user_id === hacker.id)
+          hacker.canAdmin ||
+          (hacker.canJudge && judgement.user_id === hacker.id)
         ) {
           setJudging(judgement)
         } else {

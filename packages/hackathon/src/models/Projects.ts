@@ -26,6 +26,7 @@
 
 import {
   IRowModel,
+  IRowModelProps,
   ITabTable,
   noDate,
   RowValidationErrors,
@@ -42,7 +43,7 @@ import { TeamMember } from './TeamMembers'
 import { Judging } from './Judgings'
 
 /** IMPORTANT: properties must be declared in the tab sheet's columnar order, not sorted order */
-export interface IProject extends ISheetRow {
+export interface IProjectProps extends IRowModelProps {
   _user_id: string
   _hackathon_id: string
   title: string
@@ -60,7 +61,9 @@ export interface IProject extends ISheetRow {
   $judges: string[]
   $team_count: number
   $judge_count: number
+}
 
+export interface IProject extends IProjectProps, ISheetRow {
   findMember(hacker: Hacker): TeamMember | undefined
   findJudging(hacker: Hacker): Judging | undefined
 }
@@ -99,6 +102,10 @@ export class Project extends SheetRow<Project> {
 
   data(): SheetData {
     return getActiveSheet()
+  }
+
+  toObject(): IProjectProps {
+    return super.toObject() as IProjectProps
   }
 
   get $members(): string[] {
@@ -247,8 +254,7 @@ export class Project extends SheetRow<Project> {
   }
 
   async addJudge(hacker: Hacker) {
-    if (!hacker.canJudge())
-      throw new SheetError(`${hacker.name} is not a judge`)
+    if (!hacker.canJudge) throw new SheetError(`${hacker.name} is not a judge`)
     if (this.findJudging(hacker)) return this
     const judging = new Judging({ user_id: hacker.id, project_id: this._id })
     await this.data().judgings.save(judging)
@@ -330,5 +336,9 @@ export class Projects extends WhollySheet<Project> {
       await this.update(project, true)
     }
     return projects
+  }
+
+  toObject(): IProjectProps[] {
+    return super.toObject() as IProjectProps[]
   }
 }

@@ -24,16 +24,23 @@
 
  */
 
-import { ITabTable, SheetSDK, WhollySheet } from '@looker/wholly-sheet'
+import {
+  IRowModelProps,
+  ITabTable,
+  SheetSDK,
+  WhollySheet,
+} from '@looker/wholly-sheet'
 import { ISheetRow, SheetRow } from './SheetRow'
 import { SheetData } from './SheetData'
 
 /** IMPORTANT: properties must be declared in the tab sheet's columnar order, not sorted order */
-export interface IUser extends ISheetRow {
+export interface IUserProps extends IRowModelProps {
   first_name: string
   last_name: string
   $name: string
 }
+
+export interface IUser extends ISheetRow, IUserProps {}
 
 /**
  * This is a row from the sheet's users table
@@ -57,6 +64,10 @@ export class User extends SheetRow<IUser> {
   get $name(): string {
     return `${this.first_name} ${this.last_name}`
   }
+
+  toObject(): IUserProps {
+    return super.toObject() as IUserProps
+  }
 }
 
 export class Users extends WhollySheet<User> {
@@ -69,5 +80,9 @@ export class Users extends WhollySheet<User> {
 
   typeRow<User>(values?: any) {
     return (new User(values) as unknown) as User
+  }
+
+  toObject(): IUserProps[] {
+    return super.toObject() as IUserProps[]
   }
 }

@@ -194,7 +194,7 @@ export const ProjectList: FC<ProjectListProps> = ({ projects }) => {
       )
     }
     if (columnName === '$judge_count') {
-      if (!hacker.canAdmin() && !hacker.canStaff())
+      if (!hacker.canAdmin && !hacker.canStaff)
         return sheetCell(project[columnName])
       return (
         <Tooltip content={project.$judges.join(',')}>

@@ -86,7 +86,7 @@ const canUpdateProject = (
   project?: Project,
   func?: string
 ): boolean => {
-  if (hacker.canAdmin() || hacker.canJudge() || hacker.canStaff()) {
+  if (hacker.canAdmin || hacker.canJudge || hacker.canStaff) {
     return true
   }
   if (
@@ -99,7 +99,7 @@ const canUpdateProject = (
 }
 
 export const canLockProject = (hacker: Hacker) =>
-  hacker.canAdmin() || hacker.canJudge() || hacker.canStaff()
+  hacker.canAdmin || hacker.canJudge || hacker.canStaff
 
 const validate = (moreInfo: string): ValidationMessages | undefined => {
   // TODO improve validation
@@ -398,7 +398,7 @@ export const ProjectForm: FC<ProjectDialogProps> = () => {
           </Fieldset>
           {func !== 'new' && (
             <FieldSelectMulti
-              disabled={!hacker.canAdmin()}
+              disabled={!hacker.canAdmin}
               id="judges"
               label="Judges"
               options={availableJudges.map((judge) => ({

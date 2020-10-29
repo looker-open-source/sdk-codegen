@@ -65,15 +65,15 @@ export const getAuthorizedRoutes = (
       authorizedRoutes.push(Routes.CREATE_PROJECT)
       authorizedRoutes.push(Routes.EDIT_PROJECT)
       authorizedRoutes.push(Routes.RESOURCES)
-      if (hacker.canAdmin() || hacker.canJudge() || hacker.canStaff()) {
+      if (hacker.canAdmin || hacker.canJudge || hacker.canStaff) {
         authorizedRoutes.push(Routes.JUDGING)
         authorizedRoutes.push(Routes.EDIT_JUDGING)
       }
-      if (hacker.canAdmin() || hacker.canStaff()) {
+      if (hacker.canAdmin || hacker.canStaff) {
         authorizedRoutes.push(Routes.USERS)
       }
     }
-    if (hacker.canAdmin()) {
+    if (hacker.canAdmin) {
       authorizedRoutes.push(Routes.ADMIN)
     }
   }

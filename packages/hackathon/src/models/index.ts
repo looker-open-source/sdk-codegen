@@ -24,15 +24,35 @@
 
  */
 
-export { IHackathon, Hackathon, Hackathons } from './Hackathons'
-export { IHacker, Hacker, Hackers } from './Hacker'
-export { IRegistration, Registration, Registrations } from './Registrations'
-export { IProject, Project, Projects } from './Projects'
+export {
+  IHackathon,
+  IHackathonProps,
+  Hackathon,
+  Hackathons,
+} from './Hackathons'
+export { IHacker, IHackerProps, Hacker, Hackers } from './Hacker'
+export {
+  IRegistration,
+  IRegistrationProps,
+  Registration,
+  Registrations,
+} from './Registrations'
+export { IProject, IProjectProps, Project, Projects } from './Projects'
 export { SheetData } from './SheetData'
-export { ITechnology, Technology, Technologies } from './Technologies'
-export { ITeamMember, TeamMember, TeamMembers } from './TeamMembers'
-export { IJudging, Judging, Judgings } from './Judgings'
-export { IUser, User, Users } from './Users'
+export {
+  ITechnology,
+  ITechnologyProps,
+  Technology,
+  Technologies,
+} from './Technologies'
+export {
+  ITeamMember,
+  ITeamMemberProps,
+  TeamMember,
+  TeamMembers,
+} from './TeamMembers'
+export { IJudging, IJudgingProps, Judging, Judgings } from './Judgings'
+export { IUser, IUserProps, User, Users } from './Users'
 export {
   sheetCell,
   sheetHeader,

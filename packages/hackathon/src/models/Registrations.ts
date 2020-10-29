@@ -24,18 +24,26 @@
 
  */
 
-import { ITabTable, noDate, SheetSDK, WhollySheet } from '@looker/wholly-sheet'
+import {
+  IRowModelProps,
+  ITabTable,
+  noDate,
+  SheetSDK,
+  WhollySheet,
+} from '@looker/wholly-sheet'
 import { ISheetRow, SheetRow } from './SheetRow'
 import { Hackathon } from './Hackathons'
 import { SheetData } from './SheetData'
 
 /** IMPORTANT: properties must be declared in the tab sheet's columnar order, not sorted order */
-export interface IRegistration extends ISheetRow {
+export interface IRegistrationProps extends IRowModelProps {
   _user_id: string
   hackathon_id: string
   date_registered: Date
   attended: boolean
 }
+
+export interface IRegistration extends IRowModelProps, ISheetRow {}
 
 /** IMPORTANT: properties must be declared in the tab sheet's columnar order, not sorted order */
 export class Registration extends SheetRow<IRegistration> {
@@ -57,6 +65,10 @@ export class Registration extends SheetRow<IRegistration> {
     this.attended = true
     return this
   }
+
+  toObject(): IRegistrationProps {
+    return super.toObject() as IRegistrationProps
+  }
 }
 
 export class Registrations extends WhollySheet<Registration> {
@@ -77,5 +89,9 @@ export class Registrations extends WhollySheet<Registration> {
 
   hackRegs(hackathon: Hackathon) {
     return this.rows.filter((r) => r.hackathon_id === hackathon._id)
+  }
+
+  toObject(): IRegistrationProps[] {
+    return super.toObject() as IRegistrationProps[]
   }
 }

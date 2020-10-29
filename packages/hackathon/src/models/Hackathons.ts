@@ -26,6 +26,7 @@
 
 import {
   compareDates,
+  IRowModelProps,
   ITabTable,
   noDate,
   SheetSDK,
@@ -35,7 +36,7 @@ import { ISheetRow, SheetRow } from './SheetRow'
 import { SheetData } from './SheetData'
 
 /** IMPORTANT: properties must be declared in the tab sheet's columnar order, not sorted order */
-export interface IHackathon extends ISheetRow {
+export interface IHackathonProps extends IRowModelProps {
   name: string
   description: string
   location: string
@@ -45,6 +46,9 @@ export interface IHackathon extends ISheetRow {
   judging_starts: Date
   judging_stops: Date
   default: boolean
+}
+
+export interface IHackathon extends IHackathonProps, ISheetRow {
   isActive(): boolean
 }
 
@@ -69,6 +73,10 @@ export class Hackathon extends SheetRow<IHackathon> {
   isActive() {
     const now = new Date().getTime()
     return this.date.getTime() <= now && this.judging_stops.getTime() >= now
+  }
+
+  toObject(): IHackathonProps {
+    return super.toObject() as IHackathonProps
   }
 }
 
@@ -105,5 +113,9 @@ export class Hackathons extends WhollySheet<Hackathon> {
   get currentHackathon(): Hackathon | undefined {
     if (this._hackathon) return this._hackathon
     return this.getCurrentHackathon()
+  }
+
+  toObject(): IHackathonProps[] {
+    return super.toObject() as IHackathonProps[]
   }
 }
