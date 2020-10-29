@@ -137,6 +137,7 @@ export class Judging extends SheetRow<IJudging> {
   }
 
   toObject(): IJudgingProps {
+    this.load()
     return super.toObject() as IJudgingProps
   }
 }

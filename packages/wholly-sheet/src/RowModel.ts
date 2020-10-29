@@ -26,6 +26,7 @@
 
 import { v4 as uuidv4 } from 'uuid'
 import { boolDefault } from '@looker/sdk-rtl/lib/browser'
+import { omit } from 'lodash'
 import { SheetValues } from './SheetSDK'
 
 export const noDate = new Date(-8640000000000000)
@@ -275,7 +276,9 @@ export class RowModel<T extends IRowModel> implements IRowModel {
   }
 
   toObject(): object {
-    return { ...this }
+    const result = { ...this }
+    omit(result, ['$_action'])
+    return result
   }
 
   fromObject(obj: object): IRowModel {

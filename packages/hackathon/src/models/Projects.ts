@@ -35,6 +35,7 @@ import {
   WhollySheet,
 } from '@looker/wholly-sheet'
 
+import { omit } from 'lodash'
 import { ISheetRow, SheetRow } from './SheetRow'
 import { Hacker, IHacker } from './Hacker'
 import { Hackathon } from './Hackathons'
@@ -100,14 +101,6 @@ export class Project extends SheetRow<Project> {
     return this.$judgings.length
   }
 
-  data(): SheetData {
-    return getActiveSheet()
-  }
-
-  toObject(): IProjectProps {
-    return super.toObject() as IProjectProps
-  }
-
   get $members(): string[] {
     const names: string[] = []
     this.$team.forEach((m) => {
@@ -124,6 +117,17 @@ export class Project extends SheetRow<Project> {
       if (user) names.push(`${user.first_name} ${user.last_name}`)
     })
     return names
+  }
+
+  data(): SheetData {
+    return getActiveSheet()
+  }
+
+  toObject(): IProjectProps {
+    this.load()
+    const result = super.toObject() as IProjectProps
+    omit(result, ['$_data'])
+    return result as IProjectProps
   }
 
   canCreate(user: IHacker): boolean {
