@@ -141,7 +141,7 @@ export class Judging extends SheetRow<IJudging> {
   }
 }
 
-export class Judgings extends WhollySheet<Judging> {
+export class Judgings extends WhollySheet<Judging, IJudgingProps> {
   constructor(
     public readonly data: SheetData,
     public readonly table: ITabTable
@@ -165,9 +165,5 @@ export class Judgings extends WhollySheet<Judging> {
       )
     }
     return this.rows.filter((j) => projects.find((p) => p._id === j.project_id))
-  }
-
-  toObject(): IJudgingProps[] {
-    return super.toObject() as IJudgingProps[]
   }
 }

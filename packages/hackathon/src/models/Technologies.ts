@@ -55,7 +55,7 @@ export class Technology extends SheetRow<ITechnology> {
   }
 }
 
-export class Technologies extends WhollySheet<Technology> {
+export class Technologies extends WhollySheet<Technology, ITechnologyProps> {
   constructor(
     public readonly data: SheetData,
     public readonly table: ITabTable
@@ -69,9 +69,5 @@ export class Technologies extends WhollySheet<Technology> {
 
   typeRow<Technology>(values?: any) {
     return (new Technology(values) as unknown) as Technology
-  }
-
-  toObject(): ITechnologyProps[] {
-    return super.toObject() as ITechnologyProps[]
   }
 }

@@ -271,7 +271,7 @@ export class Project extends SheetRow<Project> {
   }
 }
 
-export class Projects extends WhollySheet<Project> {
+export class Projects extends WhollySheet<Project, IProjectProps> {
   constructor(
     public readonly data: SheetData,
     public readonly table: ITabTable
@@ -336,9 +336,5 @@ export class Projects extends WhollySheet<Project> {
       await this.update(project, true)
     }
     return projects
-  }
-
-  toObject(): IProjectProps[] {
-    return super.toObject() as IProjectProps[]
   }
 }

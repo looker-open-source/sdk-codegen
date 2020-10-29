@@ -32,7 +32,7 @@ import {
   stringer,
 } from './RowModel'
 
-export interface ITestRow extends IRowModel {
+export interface ITestRowProps {
   name: string
   toggle: boolean
   score: number
@@ -40,6 +40,8 @@ export interface ITestRow extends IRowModel {
   strArray: string[]
   $notheader: string
 }
+
+export interface ITestRow extends IRowModel, ITestRowProps {}
 
 export class TestRow extends RowModel<ITestRow> {
   name = ''

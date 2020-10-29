@@ -80,7 +80,7 @@ export class Hackathon extends SheetRow<IHackathon> {
   }
 }
 
-export class Hackathons extends WhollySheet<Hackathon> {
+export class Hackathons extends WhollySheet<Hackathon, IHackathonProps> {
   private _hackathon: Hackathon | undefined
 
   constructor(
@@ -113,9 +113,5 @@ export class Hackathons extends WhollySheet<Hackathon> {
   get currentHackathon(): Hackathon | undefined {
     if (this._hackathon) return this._hackathon
     return this.getCurrentHackathon()
-  }
-
-  toObject(): IHackathonProps[] {
-    return super.toObject() as IHackathonProps[]
   }
 }

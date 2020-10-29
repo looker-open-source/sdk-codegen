@@ -74,7 +74,7 @@ export class TeamMember extends SheetRow<ITeamMember> {
   }
 }
 
-export class TeamMembers extends WhollySheet<TeamMember> {
+export class TeamMembers extends WhollySheet<TeamMember, ITeamMemberProps> {
   constructor(
     public readonly data: SheetData,
     public readonly table: ITabTable
@@ -91,9 +91,5 @@ export class TeamMembers extends WhollySheet<TeamMember> {
     const user = this.data?.users.find(member.user_id)
     if (user) member.$user = user
     return (member as unknown) as TeamMember
-  }
-
-  toObject(): ITeamMemberProps[] {
-    return super.toObject() as ITeamMemberProps[]
   }
 }

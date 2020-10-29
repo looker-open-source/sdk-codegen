@@ -71,7 +71,10 @@ export class Registration extends SheetRow<IRegistration> {
   }
 }
 
-export class Registrations extends WhollySheet<Registration> {
+export class Registrations extends WhollySheet<
+  Registration,
+  IRegistrationProps
+> {
   constructor(
     public readonly data: SheetData,
     public readonly table: ITabTable
@@ -89,9 +92,5 @@ export class Registrations extends WhollySheet<Registration> {
 
   hackRegs(hackathon: Hackathon) {
     return this.rows.filter((r) => r.hackathon_id === hackathon._id)
-  }
-
-  toObject(): IRegistrationProps[] {
-    return super.toObject() as IRegistrationProps[]
   }
 }

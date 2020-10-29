@@ -27,11 +27,11 @@
 import { IAuthSession } from '@looker/sdk-rtl'
 import { addMinutes, IRowModel, noDate, stringer } from './RowModel'
 import { WhollySheet } from './WhollySheet'
-import { TestRow, testRowObject } from './RowModel.spec'
+import { ITestRowProps, TestRow, testRowObject } from './RowModel.spec'
 import { ITabTable, SheetSDK } from './SheetSDK'
 import { initSheetSDK } from './testUtils/testUtils'
 
-export class TestSheet extends WhollySheet<TestRow> {
+export class TestSheet extends WhollySheet<TestRow, ITestRowProps> {
   typeRow<T extends IRowModel>(values?: any): T {
     return (new TestRow(values) as unknown) as T
   }

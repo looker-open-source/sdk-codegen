@@ -70,7 +70,7 @@ export class User extends SheetRow<IUser> {
   }
 }
 
-export class Users extends WhollySheet<User> {
+export class Users extends WhollySheet<User, IUserProps> {
   constructor(
     public readonly data: SheetData,
     public readonly table: ITabTable
@@ -80,9 +80,5 @@ export class Users extends WhollySheet<User> {
 
   typeRow<User>(values?: any) {
     return (new User(values) as unknown) as User
-  }
-
-  toObject(): IUserProps[] {
-    return super.toObject() as IUserProps[]
   }
 }

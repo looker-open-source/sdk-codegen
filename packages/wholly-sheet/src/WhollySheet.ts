@@ -99,7 +99,7 @@ export class TypedRows<T> {
   // ..
 }
 
-export interface IWhollySheet<T extends IRowModel> {
+export interface IWhollySheet<T extends IRowModel, P> {
   /** Initialized REST-based GSheets SDK */
   sheets: SheetSDK
   /** Name of the tab in the sheet */
@@ -233,10 +233,10 @@ export interface IWhollySheet<T extends IRowModel> {
   loadRows<T extends IRowModel>(rows: SheetValues): T[]
 
   /** Converts the row collection to a plain javascript object array */
-  toObject(): object[]
+  toObject(): P[]
 
   /** Assigns the passed object[] to the rows collection */
-  fromObject<T extends IRowModel>(obj: object[]): T[]
+  fromObject<T extends IRowModel>(obj: P[]): T[]
 
   /** Gets the delta rows for a batch update */
   getDelta<T extends IRowModel>(): IRowDelta<T>
@@ -274,9 +274,9 @@ export interface IWhollySheet<T extends IRowModel> {
 }
 
 /** CRUDF operations for a GSheet tab */
-export abstract class WhollySheet<T extends IRowModel>
+export abstract class WhollySheet<T extends IRowModel, P>
   extends TypedRows<T>
-  implements IWhollySheet<T> {
+  implements IWhollySheet<T, P> {
   index: Record<string, T> = {}
 
   constructor(
@@ -524,15 +524,13 @@ export abstract class WhollySheet<T extends IRowModel>
     return rows
   }
 
-  fromObject<T extends IRowModel>(obj: object[]): T[] {
+  fromObject<T extends IRowModel>(obj: P[]): T[] {
     this.loadRows(obj)
     return (this.rows as unknown) as T[]
   }
 
-  toObject(): object[] {
-    const result: object[] = []
-    this.rows.forEach((r) => result.push(r.toObject()))
-    return result
+  toObject(): P[] {
+    return this.rows.map((r) => (r.toObject() as unknown) as P)
   }
 
   async batchUpdate<T extends IRowModel>(force = false): Promise<T[]> {
