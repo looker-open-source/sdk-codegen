@@ -180,10 +180,11 @@ export interface ICodeGen {
   codeQuote: string
 
   /**
-   * Does this language require request types to be generated because it doesn't
-   * conveniently support named default parameters?
+   * Does this language support named parameters with default values? Otherwise
+   * request types for sdk method signatures may be generated:
+   * see IMethod.eligibleForRequestType
    */
-  needsRequestTypes: boolean
+  useNamedParameters: boolean
 
   /** Does this language have streaming methods? */
   willItStream: boolean
@@ -622,7 +623,7 @@ export interface ICodeGen {
 }
 
 export abstract class CodeGen implements ICodeGen {
-  needsRequestTypes = false
+  useNamedParameters = true
   willItStream = false
   codePath = './'
   packagePath = 'looker'
@@ -1065,8 +1066,8 @@ export abstract class CodeGen implements ICodeGen {
   }
 
   useRequest(method: IMethod) {
-    if (!this.needsRequestTypes) return false
-    return method.mayUseRequestType()
+    if (this.useNamedParameters) return false
+    return method.eligibleForRequestType()
   }
 
   // Looks up or dynamically creates the request type for this method based

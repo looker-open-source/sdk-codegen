@@ -62,7 +62,7 @@ export class TypescriptGen extends CodeGen {
 
   indentStr = '  '
   endTypeStr = '\n}'
-  needsRequestTypes = true
+  useNamedParameters = false
   willItStream = true
 
   methodsPrologue(_indent: string) {
