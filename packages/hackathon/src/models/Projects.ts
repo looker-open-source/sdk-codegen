@@ -35,13 +35,12 @@ import {
   WhollySheet,
 } from '@looker/wholly-sheet'
 
-import { omit } from 'lodash'
 import { ISheetRow, SheetRow } from './SheetRow'
 import { Hacker, IHacker } from './Hacker'
-import { Hackathon } from './Hackathons'
+import { Hackathon, IHackathonProps } from './Hackathons'
 import { getActiveSheet, SheetData } from './SheetData'
-import { TeamMember } from './TeamMembers'
-import { Judging } from './Judgings'
+import { ITeamMemberProps, TeamMember } from './TeamMembers'
+import { IJudgingProps, Judging } from './Judgings'
 
 /** IMPORTANT: properties must be declared in the tab sheet's columnar order, not sorted order */
 export interface IProjectProps extends IRowModelProps {
@@ -55,9 +54,9 @@ export interface IProjectProps extends IRowModelProps {
   locked: boolean
   more_info: string
   technologies: string[]
-  $team: TeamMember[]
-  $judgings: Judging[]
-  $hackathon: Hackathon
+  $team: ITeamMemberProps[]
+  $judgings: IJudgingProps[]
+  $hackathon: IHackathonProps
   $members: string[]
   $judges: string[]
   $team_count: number
@@ -81,10 +80,9 @@ export class Project extends SheetRow<Project> {
   locked = false
   more_info = ''
   technologies: string[] = []
-  $team: TeamMember[] = []
-  $judgings: Judging[] = []
-  $hackathon!: Hackathon
-  $_data!: SheetData
+  $team: ITeamMemberProps[] = []
+  $judgings: IJudgingProps[] = []
+  $hackathon!: IHackathonProps
 
   constructor(values?: any) {
     super()
@@ -125,9 +123,7 @@ export class Project extends SheetRow<Project> {
 
   toObject(): IProjectProps {
     this.load()
-    const result = super.toObject() as IProjectProps
-    omit(result, ['$_data'])
-    return result as IProjectProps
+    return super.toObject() as IProjectProps
   }
 
   canCreate(user: IHacker): boolean {
@@ -191,11 +187,13 @@ export class Project extends SheetRow<Project> {
   }
 
   findMember(hacker: Hacker) {
-    return this.$team.find((m) => m.user_id === hacker.id)
+    const found = this.$team.find((m) => m.user_id === hacker.id)
+    return found ? new TeamMember(found) : found
   }
 
   findJudging(hacker: Hacker) {
-    return this.$judgings.find((j) => j.user_id === hacker.id)
+    const found = this.$judgings.find((j) => j.user_id === hacker.id)
+    return found ? new Judging(found) : undefined
   }
 
   load(data?: SheetData) {

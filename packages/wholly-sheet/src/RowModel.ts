@@ -276,9 +276,7 @@ export class RowModel<T extends IRowModel> implements IRowModel {
   }
 
   toObject(): object {
-    const result = { ...this }
-    omit(result, ['$_action'])
-    return result
+    return omit({ ...this }, ['$_action'])
   }
 
   fromObject(obj: object): IRowModel {
