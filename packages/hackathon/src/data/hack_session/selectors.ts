@@ -24,15 +24,26 @@
 
  */
 
-import { Hacker, Hackathon, Technologies } from '../../models'
+import { IHackathonProps, ITechnologyProps, IHackerProps } from '../../models'
 import { RootState } from '../root_reducer'
+import { ProjectsHeadings, HackersHeadings, JudgingsHeadings } from '../types'
 
 export const getCurrentHackathonState = (
   state: RootState
-): Hackathon | undefined => state.hackSessionState.currentHackathon
+): IHackathonProps | undefined => state.hackSessionState.currentHackathon
 
-export const getHackerState = (state: RootState): Hacker =>
+export const getHackerState = (state: RootState): IHackerProps =>
   state.hackSessionState.hacker
 
-export const getTechnologies = (state: RootState): Technologies | undefined =>
-  state.hackSessionState.technologies
+export const getTechnologies = (
+  state: RootState
+): ITechnologyProps[] | undefined => state.hackSessionState.technologies
+
+export const getProjectsHeadings = (state: RootState): ProjectsHeadings =>
+  state.hackSessionState.metadata.projectsHeadings
+
+export const getHackersHeadings = (state: RootState): HackersHeadings =>
+  state.hackSessionState.metadata.hackersHeadings
+
+export const getJudgingsHeadings = (state: RootState): JudgingsHeadings =>
+  state.hackSessionState.metadata.judgingsHeadings

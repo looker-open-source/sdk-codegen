@@ -30,7 +30,13 @@ export {
   Hackathon,
   Hackathons,
 } from './Hackathons'
-export { IHacker, IHackerProps, Hacker, Hackers } from './Hacker'
+export {
+  IHacker,
+  IHackerProps,
+  Hacker,
+  Hackers,
+  UserPermission,
+} from './Hacker'
 export {
   IRegistration,
   IRegistrationProps,

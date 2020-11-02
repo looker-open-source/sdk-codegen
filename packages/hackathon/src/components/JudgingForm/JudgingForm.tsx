@@ -37,18 +37,17 @@ import {
   SpaceVertical,
   FieldTextArea,
 } from '@looker/components'
-import { saveJudgement } from '../../data/judgings/actions'
+import { saveJudging } from '../../data/judgings/actions'
 import { isLoadingState, getMessageState } from '../../data/common/selectors'
 import { getHackerState } from '../../data/hack_session/selectors'
-import { Judging, Judgings } from '../../models'
+import { IJudgingProps } from '../../models'
 import { Routes } from '../../routes/AppRouter'
 
 interface JudgingFormProps {
-  judgings: Judgings
-  judging: Judging
+  judging: IJudgingProps
 }
 
-export const JudgingForm: FC<JudgingFormProps> = ({ judgings, judging }) => {
+export const JudgingForm: FC<JudgingFormProps> = ({ judging }) => {
   const dispatch = useDispatch()
   const history = useHistory()
   const hacker = useSelector(getHackerState)
@@ -63,7 +62,6 @@ export const JudgingForm: FC<JudgingFormProps> = ({ judgings, judging }) => {
   const [moreInfo, setMoreInfo] = useState<string>('')
   const [score, setScore] = useState<number>(0)
   useEffect(() => {
-    judging.load()
     setExecution(judging.execution || 1)
     setAmbition(judging.ambition || 1)
     setCoolness(judging.coolness || 1)
@@ -79,7 +77,7 @@ export const JudgingForm: FC<JudgingFormProps> = ({ judgings, judging }) => {
   }, [history, isLoading, messageDetail, isUpdating])
 
   useEffect(() => {
-    setScore(judging.calculateScore(execution, ambition, coolness, impact))
+    setScore(2 * execution + ambition + coolness + impact)
   }, [judging, execution, ambition, coolness, impact])
 
   const onExecutionChange = (event: BaseSyntheticEvent) => {
@@ -112,7 +110,7 @@ export const JudgingForm: FC<JudgingFormProps> = ({ judgings, judging }) => {
     judging.coolness = coolness
     judging.impact = impact
     judging.notes = notes
-    dispatch(saveJudgement(judgings, judging))
+    dispatch(saveJudging(judging))
     setIsUpdating(true)
   }
 

@@ -37,14 +37,14 @@ import {
   getCurrentHackathonState,
   getHackerState,
 } from './data/hack_session/selectors'
-import { Hacker } from './models'
+import { IHackerProps } from './models'
 
 interface HackathonProps {}
 
-const banner = (currentHackathon: any, hacker?: Hacker) => {
+const banner = (currentHackathon: any, hacker?: IHackerProps) => {
   let result = 'Loading...'
   if (currentHackathon && hacker) {
-    result = `Welcome to ${currentHackathon.name}, ${hacker.firstName}`
+    result = `Welcome to ${currentHackathon.name}, ${hacker.user.first_name}`
   } else if (hacker && hacker.firstName !== 'Unknown') {
     result = `Welcome  ${hacker.firstName}`
   }
@@ -58,6 +58,7 @@ export const Hackathon: FC<HackathonProps> = () => {
   }, [dispatch])
   const currentHackathon = useSelector(getCurrentHackathonState)
   const hacker = useSelector(getHackerState)
+
   const authorizedRoutes = getAuthorizedRoutes(hacker, currentHackathon)
   const message = useSelector(getMessageState)
   const headerText = banner(currentHackathon, hacker)

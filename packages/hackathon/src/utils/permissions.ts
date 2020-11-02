@@ -24,14 +24,53 @@
 
  */
 
-import { RootState } from '../root_reducer'
-import { IProjectProps } from '../../models'
+import {
+  IHackerProps,
+  IJudgingProps,
+  IProjectProps,
+  UserPermission,
+} from '../models'
 
-export const getProjectsState = (state: RootState): IProjectProps[] =>
-  state.projectsState.projects
+export const canDoProjectAction = (
+  hacker: IHackerProps,
+  project: IProjectProps,
+  action: UserPermission
+) => {
+  return (
+    hacker.canAdmin ||
+    hacker.canJudge ||
+    hacker.canStaff ||
+    hacker.permissions.has(action) ||
+    String(hacker.id) === project._user_id
+  )
+}
 
-export const getCurrentProjectsState = (state: RootState): IProjectProps[] =>
-  state.projectsState.currentProjects
+export const canUpdateProject = (
+  hacker: IHackerProps,
+  project?: IProjectProps,
+  newProject?: boolean
+): boolean => {
+  if (hacker.canAdmin || hacker.canJudge || hacker.canStaff) {
+    return true
+  }
+  if (
+    newProject ||
+    (project && project?._user_id === hacker.id && !project.locked)
+  ) {
+    return true
+  }
+  return false
+}
 
-export const getProjectsLoadedState = (state: RootState): boolean =>
-  state.projectsState.projectsLoaded
+export const canLockProject = (hacker: IHackerProps) =>
+  hacker.canAdmin || hacker.canJudge || hacker.canStaff
+
+export const canDoJudgingAction = (
+  hacker: IHackerProps,
+  judging: IJudgingProps
+) => {
+  return (
+    hacker.canAdmin ||
+    (hacker.canJudge && String(hacker.id) === judging.user_id)
+  )
+}

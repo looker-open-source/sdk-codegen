@@ -25,7 +25,7 @@
  */
 import { all, call, put, takeEvery } from 'redux-saga/effects'
 import { actionMessage, beginLoading, endLoading } from '../common/actions'
-import { sheetsSdkHelper } from '../sheets_sdk_helper'
+import { sheetsClient } from '../sheets_client'
 import {
   Actions,
   currentProjectsRequest,
@@ -41,7 +41,7 @@ import {
 function* allProjectsSaga() {
   try {
     yield put(beginLoading())
-    const result = yield call([sheetsSdkHelper, sheetsSdkHelper.getProjects])
+    const result = yield call([sheetsClient, sheetsClient.getProjects])
     yield put(endLoading())
     yield put(allProjectsSuccess(result))
   } catch (err) {
@@ -53,14 +53,7 @@ function* allProjectsSaga() {
 function* currentProjectsSaga() {
   try {
     yield put(beginLoading())
-    const hackathon = yield call([
-      sheetsSdkHelper,
-      sheetsSdkHelper.getCurrentHackathon,
-    ])
-    const result = yield call(
-      [sheetsSdkHelper, sheetsSdkHelper.getCurrentProjects],
-      hackathon
-    )
+    const result = yield call([sheetsClient, sheetsClient.getCurrentProjects])
     yield put(endLoading())
     yield put(currentProjectsSuccess(result))
   } catch (err) {
@@ -73,9 +66,8 @@ function* createProjectSaga(action: CreateProjectAction) {
   try {
     yield put(beginLoading())
     yield call(
-      [sheetsSdkHelper, sheetsSdkHelper.createProject],
-      action.payload.hacker_id,
-      action.payload.projects,
+      [sheetsClient, sheetsClient.createProject],
+      action.payload.hackerId,
       action.payload.project
     )
     yield put(currentProjectsRequest())
@@ -90,10 +82,12 @@ function* createProjectSaga(action: CreateProjectAction) {
 function* updateProjectSaga(action: UpdateProjectAction) {
   try {
     yield put(beginLoading())
+    const { project, addedJudges, deletedJudges } = action.payload
     yield call(
-      [sheetsSdkHelper, sheetsSdkHelper.updateProject],
-      action.payload.projects,
-      action.payload.project
+      [sheetsClient, sheetsClient.updateProject],
+      project,
+      addedJudges,
+      deletedJudges
     )
     yield put(currentProjectsRequest())
   } catch (err) {
@@ -108,9 +102,8 @@ function* deleteProjectSaga(action: DeleteProjectAction) {
   try {
     yield put(beginLoading())
     yield call(
-      [sheetsSdkHelper, sheetsSdkHelper.deleteProject],
-      action.payload.projects,
-      action.payload.project
+      [sheetsClient, sheetsClient.deleteProject],
+      action.payload.projectId
     )
     yield put(currentProjectsRequest())
   } catch (err) {
@@ -125,10 +118,9 @@ function* lockProjectsSaga(action: LockProjectsAction) {
   try {
     yield put(beginLoading())
     yield call(
-      [sheetsSdkHelper, sheetsSdkHelper.lockProjects],
-      action.payload.projects,
-      action.payload.hackathon,
-      action.payload.lock
+      [sheetsClient, sheetsClient.lockProjects],
+      action.payload.lock,
+      action.payload.hackathonId
     )
     yield put(currentProjectsRequest())
   } catch (err) {
@@ -146,9 +138,9 @@ function* changeMembershipSaga(action: ChangeMembershipAction) {
   try {
     yield put(beginLoading())
     yield call(
-      [sheetsSdkHelper, sheetsSdkHelper.changeMembership],
-      action.payload.project,
-      action.payload.hacker,
+      [sheetsClient, sheetsClient.changeMembership],
+      action.payload.projectId,
+      action.payload.hackerId,
       action.payload.leave
     )
     yield put(currentProjectsRequest())

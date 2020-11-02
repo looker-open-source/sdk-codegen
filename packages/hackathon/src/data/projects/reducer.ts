@@ -23,26 +23,20 @@
  SOFTWARE.
 
  */
-import { ITabTable } from '@looker/wholly-sheet'
-import { Projects, SheetData } from '../../models'
+import { IProjectProps } from '../../models'
 import { ProjectAction, Actions } from './actions'
 
 // This is the first cut for state and to be honest I dont like it.
 // It will likely change
 export interface ProjectsState {
-  projects: Projects
-  currentProjects: Projects
+  projects: IProjectProps[]
+  currentProjects: IProjectProps[]
   projectsLoaded: boolean
 }
 
-const EmptyProjects = new Projects(
-  {} as SheetData,
-  { rows: [], header: [] } as ITabTable
-)
-
 const defaultState: Readonly<ProjectsState> = Object.freeze({
-  projects: EmptyProjects,
-  currentProjects: EmptyProjects,
+  projects: [],
+  currentProjects: [],
   projectsLoaded: false,
 })
 
@@ -62,10 +56,6 @@ export const projectsReducer = (
         ...state,
         currentProjects: action.payload,
         projectsLoaded: true,
-      }
-    case Actions.DELETE_PROJECT:
-      return {
-        ...state,
       }
     default:
       return state

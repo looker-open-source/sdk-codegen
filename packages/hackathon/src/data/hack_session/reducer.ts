@@ -23,24 +23,38 @@
  SOFTWARE.
 
  */
-import { Looker40SDK } from '@looker/sdk/lib/browser'
-import { Hackathon, Hacker, Technologies } from '../../models'
+import { IUser as ILookerUser } from '@looker/sdk/lib/browser'
+import { IHackathonProps, ITechnologyProps, IHackerProps } from '../../models'
 import { HackSessionAction, Actions } from './actions'
+import { ProjectsHeadings, HackersHeadings, JudgingsHeadings } from '../types'
+
+export interface Metadata {
+  projectsHeadings: ProjectsHeadings
+  hackersHeadings: HackersHeadings
+  judgingsHeadings: JudgingsHeadings
+}
 
 export interface HackSessionState {
-  currentHackathon?: Hackathon
-  technologies?: Technologies
-  hacker: Hacker
+  currentHackathon?: IHackathonProps
+  technologies?: ITechnologyProps[]
+  hacker: IHackerProps
+  metadata: Metadata
 }
 
-const EmptyHacker = new Hacker({} as Looker40SDK)
-EmptyHacker.user = {
-  id: -1,
-  first_name: '',
-  last_name: '',
-}
+const EmptyHacker: IHackerProps = {
+  id: '',
+  user: {} as ILookerUser,
+  firstName: '',
+  name: '',
+  lastName: '',
+} as IHackerProps
 const defaultState: Readonly<HackSessionState> = Object.freeze({
   hacker: EmptyHacker,
+  metadata: {
+    projectsHeadings: [],
+    hackersHeadings: [],
+    judgingsHeadings: [],
+  },
 })
 
 export const hackSessionReducer = (
@@ -53,11 +67,24 @@ export const hackSessionReducer = (
         ...state,
       }
     case Actions.INIT_HACK_SESSION_SUCCESS:
+      const {
+        currentHackathon,
+        technologies,
+        hacker,
+        projectsHeadings,
+        hackersHeadings,
+        judgingsHeadings,
+      } = action.payload
       return {
         ...state,
-        currentHackathon: action.payload.currentHackathon,
-        technologies: action.payload.technologies,
-        hacker: action.payload.hacker,
+        currentHackathon: currentHackathon,
+        technologies: technologies,
+        hacker: hacker,
+        metadata: {
+          projectsHeadings,
+          hackersHeadings,
+          judgingsHeadings,
+        },
       }
     case Actions.INIT_HACK_SESSION_FAILURE:
       return {

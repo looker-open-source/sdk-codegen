@@ -23,18 +23,17 @@
  SOFTWARE.
 
  */
-import { Judgings, Judging } from '../../models'
+import { IJudgingProps } from '../../models'
 import { Actions, JudgingAction } from './actions'
 
 export interface JudgingsState {
-  judgings?: Judgings
-  judgingsList: Judging[]
+  judgings: IJudgingProps[]
   judgingsLoaded: boolean
 }
 
 const defaultState: Readonly<JudgingsState> = Object.freeze({
   judgingsLoaded: false,
-  judgingsList: [],
+  judgings: [],
 })
 
 export const judgingsReducer = (
@@ -50,8 +49,7 @@ export const judgingsReducer = (
     case Actions.ALL_JUDGINGS_SUCCESS:
       return {
         ...state,
-        judgings: action.payload.judgings,
-        judgingsList: action.payload.judgingsList,
+        judgings: action.payload,
         judgingsLoaded: true,
       }
     default:

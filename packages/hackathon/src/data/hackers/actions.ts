@@ -24,7 +24,7 @@
 
  */
 
-import { Hackers } from '../../models'
+import { IHackerProps } from '../../models'
 
 export enum Actions {
   ALL_HACKERS_REQUEST = 'ALL_HACKERS_REQUEST',
@@ -38,7 +38,12 @@ export interface AllHackersRequestAction {
 
 export interface AllHackersSuccessAction {
   type: Actions.ALL_HACKERS_SUCCESS
-  payload: Hackers
+  payload: {
+    hackers: IHackerProps[]
+    judges: IHackerProps[]
+    staff: IHackerProps[]
+    admins: IHackerProps[]
+  }
 }
 
 export type HackerAction = AllHackersRequestAction | AllHackersSuccessAction
@@ -48,8 +53,11 @@ export const allHackersRequest = (): AllHackersRequestAction => ({
 })
 
 export const allHackersSuccess = (
-  hackers: Hackers
+  hackers: IHackerProps[],
+  judges: IHackerProps[],
+  staff: IHackerProps[],
+  admins: IHackerProps[]
 ): AllHackersSuccessAction => ({
   type: Actions.ALL_HACKERS_SUCCESS,
-  payload: hackers,
+  payload: { hackers, judges, staff, admins },
 })

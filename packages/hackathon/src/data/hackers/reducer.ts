@@ -23,18 +23,21 @@
  SOFTWARE.
 
  */
-import { Looker40SDK } from '@looker/sdk/lib/browser'
-import { Hackers } from '../../models'
+import { IHackerProps } from '../../models'
 import { Actions, HackerAction } from './actions'
 
 export interface HackersState {
-  hackers: Hackers
+  hackers: IHackerProps[]
+  judges: IHackerProps[]
+  staff: IHackerProps[]
+  admins: IHackerProps[]
 }
 
-const EmptyHackers = new Hackers({} as Looker40SDK)
-
 const defaultState: Readonly<HackersState> = Object.freeze({
-  hackers: EmptyHackers,
+  hackers: [],
+  judges: [],
+  staff: [],
+  admins: [],
 })
 
 export const hackersReducer = (
@@ -42,14 +45,13 @@ export const hackersReducer = (
   action: HackerAction
 ): HackersState => {
   switch (action.type) {
-    case Actions.ALL_HACKERS_REQUEST:
-      return {
-        ...state,
-      }
     case Actions.ALL_HACKERS_SUCCESS:
+      const { hackers, staff, admins, judges } = action.payload
       return {
-        ...state,
-        hackers: action.payload,
+        hackers,
+        judges,
+        staff,
+        admins,
       }
     default:
       return state

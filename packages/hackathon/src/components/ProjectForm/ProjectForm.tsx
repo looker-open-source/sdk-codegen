@@ -46,7 +46,7 @@ import {
 } from '@looker/components'
 import { useDispatch, useSelector } from 'react-redux'
 import { useHistory, useRouteMatch } from 'react-router-dom'
-import { Hacker, Project, Hackathon } from '../../models'
+import { IHackerProps, IProjectProps, IHackathonProps } from '../../models'
 import { actionMessage } from '../../data/common/actions'
 import {
   currentProjectsRequest,
@@ -67,12 +67,13 @@ import { allHackersRequest } from '../../data/hackers/actions'
 import { getJudgesState } from '../../data/hackers/selectors'
 import { Routes } from '../../routes/AppRouter'
 import { isLoadingState, getMessageState } from '../../data/common/selectors'
+import { canUpdateProject, canLockProject } from '../../utils'
 
-interface ProjectDialogProps {}
+interface ProjectFormProps {}
 
 interface ModifiedJudges {
-  addedJudges: Hacker[]
-  deletedJudges: Hacker[]
+  addedJudges: IHackerProps[]
+  deletedJudges: IHackerProps[]
 }
 
 enum ChangeMemberShipType {
@@ -80,26 +81,6 @@ enum ChangeMemberShipType {
   join = 'join',
   nochange = 'nochange',
 }
-
-const canUpdateProject = (
-  hacker: Hacker,
-  project?: Project,
-  func?: string
-): boolean => {
-  if (hacker.canAdmin || hacker.canJudge || hacker.canStaff) {
-    return true
-  }
-  if (
-    func === 'new' ||
-    (project && project?._user_id === hacker.id && !project.locked)
-  ) {
-    return true
-  }
-  return false
-}
-
-export const canLockProject = (hacker: Hacker) =>
-  hacker.canAdmin || hacker.canJudge || hacker.canStaff
 
 const validate = (moreInfo: string): ValidationMessages | undefined => {
   // TODO improve validation
@@ -120,12 +101,16 @@ const validate = (moreInfo: string): ValidationMessages | undefined => {
 }
 
 const changeMemberShip = (
-  hacker: Hacker,
-  hackathon?: Hackathon,
-  project?: Project
+  hacker: IHackerProps,
+  hackathon?: IHackathonProps,
+  project?: IProjectProps
 ): ChangeMemberShipType => {
   if (project && !project.locked && hackathon) {
-    if (project.findMember(hacker)) {
+    if (
+      !!project.$team.find(
+        (teamMember) => teamMember.user_id === String(hacker.id)
+      )
+    ) {
       return ChangeMemberShipType.leave
     } else if (project.$team.length < hackathon.max_team_size) {
       return ChangeMemberShipType.join
@@ -135,7 +120,7 @@ const changeMemberShip = (
 }
 
 const getModifiedJudges = (
-  availableJudges: Hacker[],
+  availableJudges: IHackerProps[],
   oldJudgeNames: string[],
   newJudgeNames: string[]
 ): ModifiedJudges => {
@@ -144,7 +129,7 @@ const getModifiedJudges = (
     .filter(
       (judgeName) =>
         !!availableJudges.find(
-          (availableJudge) => availableJudge.name === judgeName
+          (availableJudge) => availableJudge.user.display_name === judgeName
         )
     )
   const addedJudgeNames = newJudgeNames
@@ -152,29 +137,31 @@ const getModifiedJudges = (
     .filter(
       (judgeName) =>
         !!availableJudges.find(
-          (availableJudge) => availableJudge.name === judgeName
+          (availableJudge) => availableJudge.user.display_name === judgeName
         )
     )
   return {
     addedJudges: addedJudgeNames.map(
       (judgeName) =>
         availableJudges.find(
-          (availableJudge) => availableJudge.name === judgeName
+          (availableJudge) => availableJudge.user.display_name === judgeName
         )!
     ),
     deletedJudges: deletedJudgeNames.map(
       (judgeName) =>
         availableJudges.find(
-          (availableJudge) => availableJudge.name === judgeName
+          (availableJudge) => availableJudge.user.display_name === judgeName
         )!
     ),
   }
 }
 
-export const ProjectForm: FC<ProjectDialogProps> = () => {
+export const ProjectForm: FC<ProjectFormProps> = () => {
   const dispatch = useDispatch()
   const history = useHistory()
-  const match = useRouteMatch<{ func: string }>('/projects/:func')
+  const match = useRouteMatch<{ projectIdOrNew: string }>(
+    '/projects/:projectIdOrNew'
+  )
   const hackathon = useSelector(getCurrentHackathonState)
   const hacker = useSelector(getHackerState)
   const projects = useSelector(getCurrentProjectsState)
@@ -184,7 +171,7 @@ export const ProjectForm: FC<ProjectDialogProps> = () => {
   const availableTechnologies = useSelector(getTechnologies)
   const availableJudges = useSelector(getJudgesState)
 
-  const [project, setProject] = useState<Project>()
+  const [project, setProject] = useState<IProjectProps>()
   const [title, setTitle] = useState<string>('')
   const [description, setDescription] = useState<string>('')
   const [projectType, setProjectType] = useState<string>('Open')
@@ -195,8 +182,8 @@ export const ProjectForm: FC<ProjectDialogProps> = () => {
   const [members, setMembers] = useState<string[]>([])
   const [judges, setJudges] = useState<string[]>([])
   const [isUpdating, setIsUpdating] = useState(false)
-  const func = match?.params?.func
-  const canUpdate = canUpdateProject(hacker, project, func)
+  const projectIdOrNew = match?.params?.projectIdOrNew
+  const canUpdate = canUpdateProject(hacker, project, projectIdOrNew === 'new')
   const canLock = canLockProject(hacker)
   const validationMessages = validate(moreInfo)
   const changeMemberShipType = changeMemberShip(hacker, hackathon, project)
@@ -207,43 +194,35 @@ export const ProjectForm: FC<ProjectDialogProps> = () => {
   }, [dispatch])
 
   useEffect(() => {
-    if (func) {
-      let project
+    if (projectIdOrNew) {
+      let project: IProjectProps | undefined
       if (hacker && hacker.registration && hacker.registration._id) {
-        if (func === 'new') {
-          project = new Project({
-            _user_id: hacker.id,
-            _hackathon_id: hackathon ? hackathon._id : '',
-          })
-          project._user_id = hacker.registration?._id
-        } else if (projects.rows) {
-          project = projects.rows.find((project) => project._id === func)
-        }
-        if (project) {
-          if (!project._hackathon_id) {
-            // Self correct missing registration for now
-            project._hackathon_id = hackathon ? hackathon._id : ''
-          }
-          setTitle(project.title)
-          setDescription(project.description)
-          setProjectType(project.project_type)
-          setContestant(project.contestant)
-          setLocked(project.locked)
-          setTechnologies(project.technologies)
-          setMoreInfo(project.more_info)
-          setMembers(project.$members)
-          setJudges(project.$judges)
-          setProject(project)
-        } else {
-          if (projectsLoaded) {
-            dispatch(actionMessage('Invalid project', 'critical'))
+        if (projectIdOrNew !== 'new') {
+          if (projects) {
+            project = projects.find((project) => project._id === projectIdOrNew)
+            if (project) {
+              setTitle(project.title)
+              setDescription(project.description)
+              setProjectType(project.project_type)
+              setContestant(project.contestant)
+              setLocked(project.locked)
+              setTechnologies(project.technologies)
+              setMoreInfo(project.more_info)
+              setMembers(project.$members)
+              setJudges(project.$judges)
+              setProject(project)
+            } else {
+              if (projectsLoaded) {
+                dispatch(actionMessage('Invalid project', 'critical'))
+              }
+            }
           }
         }
       } else {
         dispatch(actionMessage('Hacker has not been registered', 'critical'))
       }
     }
-  }, [func, hacker, dispatch, projects, projectsLoaded])
+  }, [projectIdOrNew, hacker, dispatch, projects, projectsLoaded])
 
   useEffect(() => {
     if (isUpdating && !isLoading && !messageDetail) {
@@ -256,30 +235,35 @@ export const ProjectForm: FC<ProjectDialogProps> = () => {
     if (validate(moreInfo)) {
       return
     }
+    let projectProps: IProjectProps
     if (project) {
-      project.title = title
-      project.description = description
-      project.project_type = projectType
-      project.contestant = contestant
-      project.locked = locked
-      project.technologies = technologies
-      project.more_info = moreInfo
-      const modifiedJudges = getModifiedJudges(
+      projectProps = project
+      project._user_id = hacker.registration?._id
+    } else {
+      projectProps = {} as IProjectProps
+    }
+    if (!projectProps._hackathon_id) {
+      // Self correct missing registration for now
+      projectProps._hackathon_id = hackathon ? hackathon._id : ''
+    }
+    projectProps.title = title
+    projectProps.description = description
+    projectProps.project_type = projectType
+    projectProps.contestant = contestant
+    projectProps.locked = locked
+    projectProps.technologies = technologies
+    projectProps.more_info = moreInfo
+    if (projectIdOrNew === 'new') {
+      dispatch(createProject(hacker.registration?._id, projectProps))
+    } else {
+      const { addedJudges, deletedJudges } = getModifiedJudges(
         availableJudges,
-        project.$judges,
+        projectProps.$judges,
         judges
       )
-      modifiedJudges.addedJudges.forEach((judge) => project.addJudge(judge))
-      modifiedJudges.deletedJudges.forEach((judge) =>
-        project.deleteJudge(judge)
-      )
-      if (func === 'new') {
-        dispatch(createProject(hacker.id, projects, project))
-      } else {
-        dispatch(updateProject(projects, project))
-      }
-      setIsUpdating(true)
+      dispatch(updateProject(projectProps, addedJudges, deletedJudges))
     }
+    setIsUpdating(true)
   }
 
   const handleCancel = () => {
@@ -291,8 +275,8 @@ export const ProjectForm: FC<ProjectDialogProps> = () => {
     if (project) {
       dispatch(
         changeMembership(
-          project,
-          hacker,
+          project._id,
+          String(hacker.id),
           changeMemberShipType === ChangeMemberShipType.leave
         )
       )
@@ -302,7 +286,7 @@ export const ProjectForm: FC<ProjectDialogProps> = () => {
 
   return (
     <>
-      {project && (
+      {(project || projectIdOrNew === 'new') && (
         <Form
           onSubmit={handleSubmit}
           width="40vw"
@@ -368,8 +352,8 @@ export const ProjectForm: FC<ProjectDialogProps> = () => {
               id="technologies"
               label="Technologies"
               required
-              options={availableTechnologies?.rows.map((row) => ({
-                value: row._id,
+              options={availableTechnologies?.map((technology) => ({
+                value: technology._id,
               }))}
               isFilterable
               placeholder="Type values or select from the list"
@@ -387,7 +371,7 @@ export const ProjectForm: FC<ProjectDialogProps> = () => {
                 setMoreInfo(e.target.value)
               }}
             />
-            {func !== 'new' && (
+            {projectIdOrNew !== 'new' && (
               <FieldSelectMulti
                 disabled={true}
                 id="members"
@@ -396,13 +380,13 @@ export const ProjectForm: FC<ProjectDialogProps> = () => {
               />
             )}
           </Fieldset>
-          {func !== 'new' && (
+          {projectIdOrNew !== 'new' && (
             <FieldSelectMulti
               disabled={!hacker.canAdmin}
               id="judges"
               label="Judges"
               options={availableJudges.map((judge) => ({
-                value: `${judge.name}`,
+                value: judge.name,
               }))}
               isFilterable
               placeholder="Type values or select from the list"
@@ -426,7 +410,7 @@ export const ProjectForm: FC<ProjectDialogProps> = () => {
               </Button>
             </Space>
             {changeMemberShipType !== ChangeMemberShipType.nochange &&
-              func !== 'new' && (
+              projectIdOrNew !== 'new' && (
                 <ButtonOutline
                   onClick={updateMembershipClick}
                   disabled={isUpdating}

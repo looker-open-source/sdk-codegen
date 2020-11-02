@@ -25,7 +25,7 @@
  */
 import React, { FC } from 'react'
 import { Redirect, Route, Switch } from 'react-router-dom'
-import { Hacker, Hackathon } from '../models'
+import { IHackerProps, IHackathonProps } from '../models'
 import {
   HomeScene,
   UsersScene,
@@ -54,8 +54,8 @@ export interface AppRouterProps {
 }
 
 export const getAuthorizedRoutes = (
-  hacker?: Hacker,
-  currentHackathon?: Hackathon
+  hacker?: IHackerProps,
+  currentHackathon?: IHackathonProps
 ): Routes[] => {
   const authorizedRoutes: Routes[] = []
   if (hacker) {

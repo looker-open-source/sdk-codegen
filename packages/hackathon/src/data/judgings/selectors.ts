@@ -25,13 +25,10 @@
  */
 
 import { RootState } from '../root_reducer'
-import { Judgings, Judging } from '../../models'
+import { IJudgingProps } from '../../models'
 
-export const getJudgingsState = (state: RootState): Judgings | undefined =>
+export const getJudgingsState = (state: RootState): IJudgingProps[] =>
   state.judgingsState.judgings
-
-export const getJudgingsListState = (state: RootState): Judging[] =>
-  state.judgingsState.judgingsList
 
 export const getJudgingsLoadedState = (state: RootState): boolean =>
   state.judgingsState.judgingsLoaded

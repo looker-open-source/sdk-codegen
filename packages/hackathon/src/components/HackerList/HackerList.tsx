@@ -24,7 +24,7 @@
 
  */
 
-import React, { FC, useState, useEffect } from 'react'
+import React, { FC, useState } from 'react'
 import {
   ActionList,
   ActionListItem,
@@ -32,40 +32,31 @@ import {
   ActionListItemColumn,
   Pagination,
 } from '@looker/components'
+import { useSelector } from 'react-redux'
 import { getExtensionSDK } from '@looker/extension-sdk'
-import { Hacker, Hackers, sheetCell, sheetHeader } from '../../models'
+import { IHackerProps, sheetCell } from '../../models'
+import { getHackersHeadings } from '../../data/hack_session/selectors'
 
 interface HackerListProps {
-  /** All hackers object */
-  hackers: Hackers
-  /** hacker group. Defaults to all */
-  list?: Hacker[]
+  hackers: IHackerProps[]
 }
 
-export const HackerList: FC<HackerListProps> = ({ hackers, list }) => {
+export const HackerList: FC<HackerListProps> = ({ hackers }) => {
   const [currentPage, setCurrentPage] = useState(1)
-  const [hackerList, setHackerList] = useState(list || hackers.rows)
-  // if (!list) list = hackers.rows
-  const template = hackers.rows.length === 0 ? new Hacker() : hackers.rows[0]
-  const header = hackers.displayHeaders
-  const columns = sheetHeader(header, template)
+  const columns = useSelector(getHackersHeadings)
 
   const pageSize = 25
-  const totalPages = Math.ceil(hackerList.length / pageSize)
+  const totalPages = Math.ceil(hackers.length / pageSize)
 
-  const hackHacker = (hacker: Hacker) => {
+  const hackHacker = (hacker: IHackerProps) => {
     getExtensionSDK().openBrowserWindow(`/admin/users/${hacker.id}/edit`)
   }
 
-  useEffect(() => {
-    if (!list) {
-      setHackerList(hackers.rows)
-    } else {
-      setHackerList(list)
-    }
-  }, [hackers.rows, list])
-
-  const takeAction = (idx: number, columnName: string, hacker: Hacker) => {
+  const takeAction = (
+    idx: number,
+    columnName: string,
+    hacker: IHackerProps
+  ) => {
     const key = `${idx}.${columnName}`
     if (columnName !== 'id')
       return (
@@ -85,11 +76,11 @@ export const HackerList: FC<HackerListProps> = ({ hackers, list }) => {
   }
 
   const startIdx = (currentPage - 1) * pageSize
-  const rows = hackerList
+  const rows = hackers
     .slice(startIdx, startIdx + pageSize)
     .map((hacker, idx) => (
       <ActionListItem key={idx} id={idx.toString()}>
-        {header.map((columnName, _) => takeAction(idx, columnName, hacker))}
+        {columns.map((column) => takeAction(idx, column.id, hacker))}
       </ActionListItem>
     ))
 

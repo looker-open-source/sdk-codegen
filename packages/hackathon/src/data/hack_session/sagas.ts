@@ -25,7 +25,7 @@
  */
 import { all, call, put, takeEvery } from 'redux-saga/effects'
 import { actionMessage, beginLoading, endLoading } from '../common/actions'
-import { sheetsSdkHelper } from '../sheets_sdk_helper'
+import { sheetsClient } from '../sheets_client'
 import {
   Actions,
   initHackSessionSuccess,
@@ -35,25 +35,47 @@ import {
 function* initializeHackSessionSaga() {
   let hacker
   try {
-    // TODO investigate use of saga effects to invoke in parallel
     yield put(beginLoading())
-    hacker = yield call([sheetsSdkHelper, sheetsSdkHelper.getHacker])
+    hacker = yield call([sheetsClient, sheetsClient.getHacker])
     const hackathon = yield call([
-      sheetsSdkHelper,
-      sheetsSdkHelper.getCurrentHackathon,
+      sheetsClient,
+      sheetsClient.getCurrentHackathon,
     ])
     if (hackathon) {
-      yield call(
-        [sheetsSdkHelper, sheetsSdkHelper.registerUser],
-        hackathon,
-        hacker
-      )
+      if (!hacker.registration) {
+        const registration = yield call(
+          [sheetsClient, sheetsClient.registerUser],
+          hacker
+        )
+        hacker.registration = registration
+      }
       const technologies = yield call([
-        sheetsSdkHelper,
-        sheetsSdkHelper.getTechnologies,
+        sheetsClient,
+        sheetsClient.getTechnologies,
       ])
+      const projectsHeadings = yield call([
+        sheetsClient,
+        sheetsClient.getProjectsHeadings,
+      ])
+      const hackersHeadings = yield call([
+        sheetsClient,
+        sheetsClient.getHackersHeadings,
+      ])
+      const judgingsHeadings = yield call([
+        sheetsClient,
+        sheetsClient.getJudgingsHeadings,
+      ])
+      yield put(
+        initHackSessionSuccess(
+          hackathon,
+          technologies,
+          hacker,
+          projectsHeadings,
+          hackersHeadings,
+          judgingsHeadings
+        )
+      )
       yield put(endLoading())
-      yield put(initHackSessionSuccess(hackathon, technologies, hacker))
     } else {
       yield put(initHackSessionFailure(hacker))
       yield put(actionMessage('No active hackathon found', 'warn'))

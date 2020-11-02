@@ -42,40 +42,31 @@ import {
 } from '@looker/components'
 import { useSelector, useDispatch } from 'react-redux'
 import { useHistory } from 'react-router-dom'
-import { Project, Projects, sheetCell, sheetHeader } from '../../models'
-import { getHackerState } from '../../data/hack_session/selectors'
+import { sheetCell, IProjectProps } from '../../models'
+import {
+  getHackerState,
+  getProjectsHeadings,
+} from '../../data/hack_session/selectors'
 import { deleteProject } from '../../data/projects/actions'
-
-const projectListHeaders = [
-  'locked',
-  'contestant',
-  'title',
-  'description',
-  'project_type',
-  'technologies',
-  '$team_count',
-  '$judge_count',
-]
+import { canDoProjectAction } from '../../utils'
 
 interface ProjectListProps {
-  projects: Projects
+  projects: IProjectProps[]
 }
 
 export const ProjectList: FC<ProjectListProps> = ({ projects }) => {
-  const template = projects.rows.length > 0 ? projects.rows[0] : new Project()
   const [currentPage, setCurrentPage] = useState(1)
-  const [moreInfoProject, setMoreInfoProject] = useState<Project>()
+  const [moreInfoProject, setMoreInfoProject] = useState<IProjectProps>()
   // Select only the displayable columns
-  const header = projectListHeaders // projects.displayHeader
-  const columns = sheetHeader(header, template)
   const hacker = useSelector(getHackerState)
   const dispatch = useDispatch()
+  const columns = useSelector(getProjectsHeadings)
 
-  const handleDelete = (project: Project) => {
-    dispatch(deleteProject(projects, project))
+  const handleDelete = (project: IProjectProps) => {
+    dispatch(deleteProject(project._id))
   }
 
-  const openMoreInfo = (project: Project) => {
+  const openMoreInfo = (project: IProjectProps) => {
     setMoreInfoProject(project)
   }
 
@@ -133,7 +124,7 @@ export const ProjectList: FC<ProjectListProps> = ({ projects }) => {
     })
   }
 
-  const actions = (project: Project) => {
+  const actions = (project: IProjectProps) => {
     const isLocked = project.locked
 
     return (
@@ -146,7 +137,7 @@ export const ProjectList: FC<ProjectListProps> = ({ projects }) => {
             More Information
           </ActionListItemAction>
         )}
-        {project.canUpdate(hacker) ? (
+        {canDoProjectAction(hacker, project, 'update') ? (
           <ActionListItemAction
             onClick={handleEdit.bind(null, project._id)}
             icon={isLocked ? 'LockClosed' : 'Edit'}
@@ -163,7 +154,7 @@ export const ProjectList: FC<ProjectListProps> = ({ projects }) => {
             View
           </ActionListItemAction>
         )}
-        {project.canDelete(hacker) && (
+        {canDoProjectAction(hacker, project, 'delete') && (
           <ActionListItemAction
             onClick={handleDelete.bind(null, project)}
             icon="Trash"
@@ -176,9 +167,9 @@ export const ProjectList: FC<ProjectListProps> = ({ projects }) => {
   }
 
   const pageSize = 25
-  const totalPages = Math.ceil(projects.rows.length / pageSize)
+  const totalPages = Math.ceil(projects.length / pageSize)
 
-  const projectCell = (project: Project, columnName: string) => {
+  const projectCell = (project: IProjectProps, columnName: string) => {
     if (
       columnName !== 'locked' &&
       columnName !== '$team_count' &&
@@ -213,17 +204,13 @@ export const ProjectList: FC<ProjectListProps> = ({ projects }) => {
     return ''
   }
   const startIdx = (currentPage - 1) * pageSize
-  const rows = projects.rows
+  const rows = projects
     .slice(startIdx, startIdx + pageSize)
     .map((project, idx) => (
-      <ActionListItem
-        key={idx}
-        id={idx.toString()}
-        actions={actions(project as Project)}
-      >
-        {header.map((columnName, _) => (
-          <ActionListItemColumn key={`${idx}.${columnName}`}>
-            {projectCell(project, columnName)}
+      <ActionListItem key={idx} id={idx.toString()} actions={actions(project)}>
+        {columns.map((column) => (
+          <ActionListItemColumn key={`${idx}.${column.id}`}>
+            {projectCell(project, column.id)}
           </ActionListItemColumn>
         ))}
       </ActionListItem>

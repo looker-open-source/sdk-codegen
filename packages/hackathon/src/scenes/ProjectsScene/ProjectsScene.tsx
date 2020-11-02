@@ -61,11 +61,11 @@ export const ProjectsScene: FC<ProjectSceneProps> = () => {
   }
 
   const handleLock = () => {
-    if (hackathon) dispatch(lockProjects(projects, hackathon, true))
+    if (hackathon) dispatch(lockProjects(true, hackathon._id))
   }
 
   const handleUnlock = () => {
-    if (hackathon) dispatch(lockProjects(projects, hackathon, false))
+    if (hackathon) dispatch(lockProjects(false, hackathon._id))
   }
 
   return (
@@ -73,7 +73,7 @@ export const ProjectsScene: FC<ProjectSceneProps> = () => {
       <Loading loading={isLoading} message={'Processing projects...'} />
       {projects && (
         <>
-          <ProjectList projects={projects} />
+          {projects.length > 0 && <ProjectList projects={projects} />}
           <Space pt="xlarge">
             <Button
               iconBefore="CircleAdd"

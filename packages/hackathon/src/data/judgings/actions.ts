@@ -24,22 +24,12 @@
 
  */
 
-import { Judgings, Judging } from '../../models'
+import { IJudgingProps } from '../../models'
 
 export enum Actions {
   ALL_JUDGINGS_REQUEST = 'ALL_JUDGINGS_REQUEST',
   ALL_JUDGINGS_SUCCESS = 'ALL_JUDGINGS_SUCCESS',
-  SAVE_JUDGEMENT = 'SAVE_JUDGEMENT',
-}
-
-export interface JudgingsData {
-  judgings: Judgings
-  judgingsList: Judging[]
-}
-
-export interface JudgementData {
-  judgings: Judgings
-  judging: Judging
+  SAVE_JUDGING = 'SAVE_JUDGEMENT',
 }
 
 export interface AllJudgingsRequestAction {
@@ -48,35 +38,31 @@ export interface AllJudgingsRequestAction {
 
 export interface AllJudgingsSuccessAction {
   type: Actions.ALL_JUDGINGS_SUCCESS
-  payload: JudgingsData
+  payload: IJudgingProps[]
 }
 
-export interface SaveJudgementAction {
-  type: Actions.SAVE_JUDGEMENT
-  payload: JudgementData
+export interface SaveJudgingAction {
+  type: Actions.SAVE_JUDGING
+  payload: IJudgingProps
 }
 
 export type JudgingAction =
   | AllJudgingsRequestAction
   | AllJudgingsSuccessAction
-  | SaveJudgementAction
+  | SaveJudgingAction
 
 export const allJudgingsRequest = (): AllJudgingsRequestAction => ({
   type: Actions.ALL_JUDGINGS_REQUEST,
 })
 
 export const allJudgingsSuccess = (
-  judgings: Judgings,
-  judgingsList: Judging[]
+  judgings: IJudgingProps[]
 ): AllJudgingsSuccessAction => ({
   type: Actions.ALL_JUDGINGS_SUCCESS,
-  payload: { judgings, judgingsList },
+  payload: judgings,
 })
 
-export const saveJudgement = (
-  judgings: Judgings,
-  judging: Judging
-): SaveJudgementAction => ({
-  type: Actions.SAVE_JUDGEMENT,
-  payload: { judgings, judging },
+export const saveJudging = (judging: IJudgingProps): SaveJudgingAction => ({
+  type: Actions.SAVE_JUDGING,
+  payload: judging,
 })

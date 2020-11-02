@@ -25,41 +25,30 @@
  */
 import { all, call, put, takeEvery } from 'redux-saga/effects'
 import { actionMessage, beginLoading, endLoading } from '../common/actions'
-import { sheetsSdkHelper } from '../sheets_sdk_helper'
+import { sheetsClient } from '../sheets_client'
 import {
   Actions,
   allJudgingsSuccess,
-  SaveJudgementAction,
+  SaveJudgingAction,
   allJudgingsRequest,
 } from './actions'
 
 function* allJudgingsSaga() {
   try {
     yield put(beginLoading())
-    const hackathon = yield call([
-      sheetsSdkHelper,
-      sheetsSdkHelper.getCurrentHackathon,
-    ])
-    const result = yield call(
-      [sheetsSdkHelper, sheetsSdkHelper.getJudgings],
-      hackathon
-    )
+    const judgings = yield call([sheetsClient, sheetsClient.getJudgings])
+    yield put(allJudgingsSuccess(judgings))
     yield put(endLoading())
-    yield put(allJudgingsSuccess(result.judgings, result.judgingsList))
   } catch (err) {
     console.error(err)
     yield put(actionMessage('A problem occurred loading the data', 'critical'))
   }
 }
 
-function* saveJudgingsSaga(action: SaveJudgementAction) {
+function* saveJudgingSaga(action: SaveJudgingAction) {
   try {
     yield put(beginLoading())
-    yield call(
-      [sheetsSdkHelper, sheetsSdkHelper.saveJudgings],
-      action.payload.judgings,
-      action.payload.judging
-    )
+    yield call([sheetsClient, sheetsClient.saveJudging], action.payload)
     yield put(allJudgingsRequest())
   } catch (err) {
     console.error(err)
@@ -69,5 +58,5 @@ function* saveJudgingsSaga(action: SaveJudgementAction) {
 
 export function* registerJudgingsSagas() {
   yield all([takeEvery(Actions.ALL_JUDGINGS_REQUEST, allJudgingsSaga)])
-  yield all([takeEvery(Actions.SAVE_JUDGEMENT, saveJudgingsSaga)])
+  yield all([takeEvery(Actions.SAVE_JUDGING, saveJudgingSaga)])
 }

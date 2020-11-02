@@ -24,14 +24,4 @@
 
  */
 
-import { RootState } from '../root_reducer'
-import { IProjectProps } from '../../models'
-
-export const getProjectsState = (state: RootState): IProjectProps[] =>
-  state.projectsState.projects
-
-export const getCurrentProjectsState = (state: RootState): IProjectProps[] =>
-  state.projectsState.currentProjects
-
-export const getProjectsLoadedState = (state: RootState): boolean =>
-  state.projectsState.projectsLoaded
+export * from './permissions'

@@ -30,10 +30,9 @@ import { getHackerState } from '../../data/hack_session/selectors'
 import { allJudgingsRequest } from '../../data/judgings/actions'
 import {
   getJudgingsState,
-  getJudgingsListState,
   getJudgingsLoadedState,
 } from '../../data/judgings/selectors'
-import { Judging } from '../../models'
+import { IJudgingProps } from '../../models'
 import { actionMessage } from '../../data/common/actions'
 import { JudgingForm } from '../../components/JudgingForm'
 
@@ -42,25 +41,24 @@ export const JudgingEditorScene: FC = () => {
   const match = useRouteMatch<{ id: string }>('/judging/:id')
   const hacker = useSelector(getHackerState)
   const judgings = useSelector(getJudgingsState)
-  const judgingsList = useSelector(getJudgingsListState)
   const judgingsLoaded = useSelector(getJudgingsLoadedState)
-  const [judging, setJudging] = useState<Judging>()
+  const [judging, setJudging] = useState<IJudgingProps>()
 
   useEffect(() => {
     dispatch(allJudgingsRequest())
   }, [dispatch])
 
   useEffect(() => {
-    if (match?.params?.id && judgingsList) {
-      const judgement = judgingsList.find(
-        (judging: Judging) => judging._id === match?.params?.id
+    if (match?.params?.id && judgings) {
+      const judging = judgings.find(
+        (judging: IJudgingProps) => judging._id === match?.params?.id
       )
-      if (judgement) {
+      if (judging) {
         if (
           hacker.canAdmin ||
-          (hacker.canJudge && judgement.user_id === hacker.id)
+          (hacker.canJudge && judging.user_id === hacker.id)
         ) {
-          setJudging(judgement)
+          setJudging(judging)
         } else {
           dispatch(actionMessage('Could not find judging details', 'critical'))
         }
@@ -70,14 +68,12 @@ export const JudgingEditorScene: FC = () => {
         }
       }
     }
-  }, [match, judgingsList, judgingsLoaded])
+  }, [match, judging, judgingsLoaded])
 
   return (
     <>
       {(!judgings || !judging) && <>No judging information</>}
-      {judgings && judging && (
-        <JudgingForm judging={judging} judgings={judgings} />
-      )}
+      {judgings && judging && <JudgingForm judging={judging} />}
     </>
   )
 }

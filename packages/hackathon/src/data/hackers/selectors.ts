@@ -25,10 +25,16 @@
  */
 
 import { RootState } from '../root_reducer'
-import { Hackers, Hacker } from '../../models'
+import { IHackerProps } from '../../models'
 
-export const getHackersState = (state: RootState): Hackers =>
+export const getHackersState = (state: RootState): IHackerProps[] =>
   state.hackersState.hackers
 
-export const getJudgesState = (state: RootState): Hacker[] =>
-  state.hackersState.hackers?.judges || []
+export const getJudgesState = (state: RootState): IHackerProps[] =>
+  state.hackersState.judges
+
+export const getAdminsState = (state: RootState): IHackerProps[] =>
+  state.hackersState.admins
+
+export const getStaffState = (state: RootState): IHackerProps[] =>
+  state.hackersState.staff

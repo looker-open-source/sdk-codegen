@@ -25,15 +25,18 @@
  */
 import { all, call, put, takeEvery } from 'redux-saga/effects'
 import { actionMessage, beginLoading, endLoading } from '../common/actions'
-import { sheetsSdkHelper } from '../sheets_sdk_helper'
+import { sheetsClient } from '../sheets_client'
 import { Actions, allHackersSuccess } from './actions'
 
 function* allHackersSaga() {
   try {
     yield put(beginLoading())
-    const result = yield call([sheetsSdkHelper, sheetsSdkHelper.getHackers])
+    const { hackers, judges, admins, staff } = yield call([
+      sheetsClient,
+      sheetsClient.getHackers,
+    ])
     yield put(endLoading())
-    yield put(allHackersSuccess(result))
+    yield put(allHackersSuccess(hackers, judges, staff, admins))
   } catch (err) {
     console.error(err)
     yield put(actionMessage('A problem occurred loading the data', 'critical'))

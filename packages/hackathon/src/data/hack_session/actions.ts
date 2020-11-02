@@ -23,7 +23,8 @@
  SOFTWARE.
 
  */
-import { Hacker, Hackathon, Technologies } from '../../models'
+import { IHackathonProps, ITechnologyProps, IHackerProps } from '../../models'
+import { ProjectsHeadings, HackersHeadings, JudgingsHeadings } from '../types'
 
 export enum Actions {
   INIT_HACK_SESSION_REQUEST = 'INIT_HACK_SESSION_REQUEST',
@@ -36,13 +37,16 @@ export interface InitHackSessionRequestAction {
 }
 
 export interface InitHackSessionPayload {
-  currentHackathon: Hackathon
-  technologies: Technologies
-  hacker: Hacker
+  currentHackathon: IHackathonProps
+  technologies: ITechnologyProps[]
+  hacker: IHackerProps
+  projectsHeadings: ProjectsHeadings
+  hackersHeadings: HackersHeadings
+  judgingsHeadings: JudgingsHeadings
 }
 
 export interface InitHackFailurePayload {
-  hacker: Hacker
+  hacker: IHackerProps
 }
 
 export interface InitHackSessionSuccessAction {
@@ -65,16 +69,26 @@ export const initHackSessionRequest = (): InitHackSessionRequestAction => ({
 })
 
 export const initHackSessionSuccess = (
-  currentHackathon: Hackathon,
-  technologies: Technologies,
-  hacker: Hacker
+  currentHackathon: IHackathonProps,
+  technologies: ITechnologyProps[],
+  hacker: IHackerProps,
+  projectsHeadings: ProjectsHeadings,
+  hackersHeadings: HackersHeadings,
+  judgingsHeadings: JudgingsHeadings
 ): InitHackSessionSuccessAction => ({
   type: Actions.INIT_HACK_SESSION_SUCCESS,
-  payload: { currentHackathon, technologies, hacker },
+  payload: {
+    currentHackathon,
+    technologies,
+    hacker,
+    projectsHeadings,
+    hackersHeadings,
+    judgingsHeadings,
+  },
 })
 
 export const initHackSessionFailure = (
-  hacker: Hacker
+  hacker: IHackerProps
 ): InitHackSessionFailureAction => ({
   type: Actions.INIT_HACK_SESSION_FAILURE,
   payload: { hacker },

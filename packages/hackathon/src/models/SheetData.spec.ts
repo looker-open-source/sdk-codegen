@@ -33,7 +33,7 @@ import {
   wait2Mins,
 } from '../test-data/mocks'
 import { initActiveSheet } from './SheetData'
-import { SheetData, TeamMember } from '.'
+import { SheetData, ITeamMemberProps } from '.'
 
 let sheetSDK: SheetSDK
 let doc: ISheet
@@ -171,7 +171,9 @@ describe('SheetData', () => {
               expect(member?.user_id).toEqual(hacker.id)
               project = await project.leave(hacker)
               expect(
-                project.$team.find((t: TeamMember) => t.user_id === hacker.id)
+                project.$team.find(
+                  (t: ITeamMemberProps) => t.user_id === hacker.id
+                )
               ).toBeUndefined()
               expect(project.$team.length).toEqual(i)
             }

@@ -30,8 +30,8 @@ import { getHackerState } from '../../data/hack_session/selectors'
 import { Loading } from '../../components/Loading'
 import { JudgingList } from '../../components/JudgingList'
 import { allJudgingsRequest } from '../../data/judgings/actions'
-import { getJudgingsListState } from '../../data/judgings/selectors'
-import { Judging } from '../../models'
+import { getJudgingsState } from '../../data/judgings/selectors'
+import { IJudgingProps } from '../../models'
 
 interface JudgingSceneProps {}
 
@@ -41,9 +41,9 @@ export const JudgingScene: FC<JudgingSceneProps> = () => {
     dispatch(allJudgingsRequest())
   }, [dispatch])
   const hacker = useSelector(getHackerState)
-  const judgings = useSelector(getJudgingsListState)
+  const judgings = useSelector(getJudgingsState)
   const isLoading = useSelector(isLoadingState)
-  let list: Judging[] = []
+  let list: IJudgingProps[] = []
   if (judgings) {
     if (hacker.canAdmin) {
       list = judgings
@@ -51,6 +51,8 @@ export const JudgingScene: FC<JudgingSceneProps> = () => {
       list = judgings.filter((j) => j.user_id === hacker.id)
     }
   }
+
+  console.log({ hacker, judgings })
 
   return (
     <>

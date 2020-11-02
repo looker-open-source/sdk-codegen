@@ -29,7 +29,12 @@ import { Tab, TabList, useTabs, TabPanels, TabPanel } from '@looker/components'
 import { isLoadingState } from '../../data/common/selectors'
 import { Loading } from '../../components/Loading'
 import { allHackersRequest } from '../../data/hackers/actions'
-import { getHackersState } from '../../data/hackers/selectors'
+import {
+  getHackersState,
+  getAdminsState,
+  getJudgesState,
+  getStaffState,
+} from '../../data/hackers/selectors'
 import { HackerList } from '../../components/HackerList'
 
 interface UsersSceneProps {}
@@ -40,6 +45,9 @@ export const UsersScene: FC<UsersSceneProps> = () => {
     dispatch(allHackersRequest())
   }, [dispatch])
   const hackers = useSelector(getHackersState)
+  const staff = useSelector(getStaffState)
+  const admins = useSelector(getAdminsState)
+  const judges = useSelector(getJudgesState)
   const isLoading = useSelector(isLoadingState)
   const tabs = useTabs()
 
@@ -56,16 +64,16 @@ export const UsersScene: FC<UsersSceneProps> = () => {
           </TabList>
           <TabPanels px="xxlarge" {...tabs}>
             <TabPanel key="hackers">
-              <HackerList hackers={hackers} list={hackers.users} />
+              <HackerList hackers={hackers} />
             </TabPanel>
             <TabPanel key="staff">
-              <HackerList hackers={hackers} list={hackers.staff} />
+              <HackerList hackers={staff} />
             </TabPanel>
             <TabPanel key="judges">
-              <HackerList hackers={hackers} list={hackers.judges} />
+              <HackerList hackers={judges} />
             </TabPanel>
             <TabPanel key="admins">
-              <HackerList hackers={hackers} list={hackers.admins} />
+              <HackerList hackers={admins} />
             </TabPanel>
           </TabPanels>
         </>

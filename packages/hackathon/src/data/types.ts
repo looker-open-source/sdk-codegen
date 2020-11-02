@@ -24,14 +24,10 @@
 
  */
 
-import { RootState } from '../root_reducer'
-import { IProjectProps } from '../../models'
+import { ActionListColumns } from '@looker/components'
 
-export const getProjectsState = (state: RootState): IProjectProps[] =>
-  state.projectsState.projects
+export interface ProjectsHeadings extends ActionListColumns {}
 
-export const getCurrentProjectsState = (state: RootState): IProjectProps[] =>
-  state.projectsState.currentProjects
+export interface HackersHeadings extends ActionListColumns {}
 
-export const getProjectsLoadedState = (state: RootState): boolean =>
-  state.projectsState.projectsLoaded
+export interface JudgingsHeadings extends ActionListColumns {}
