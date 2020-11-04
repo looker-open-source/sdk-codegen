@@ -36,6 +36,7 @@ import { useSelector } from 'react-redux'
 import { getExtensionSDK } from '@looker/extension-sdk'
 import { IHackerProps, sheetCell } from '../../models'
 import { getHackersHeadings } from '../../data/hack_session/selectors'
+import { PAGE_SIZE } from '../../constants'
 
 interface HackerListProps {
   hackers: IHackerProps[]
@@ -44,9 +45,6 @@ interface HackerListProps {
 export const HackerList: FC<HackerListProps> = ({ hackers }) => {
   const [currentPage, setCurrentPage] = useState(1)
   const columns = useSelector(getHackersHeadings)
-
-  const pageSize = 25
-  const totalPages = Math.ceil(hackers.length / pageSize)
 
   const hackHacker = (hacker: IHackerProps) => {
     getExtensionSDK().openBrowserWindow(`/admin/users/${hacker.id}/edit`)
@@ -75,9 +73,10 @@ export const HackerList: FC<HackerListProps> = ({ hackers }) => {
     )
   }
 
-  const startIdx = (currentPage - 1) * pageSize
+  const totalPages = Math.ceil(hackers.length / PAGE_SIZE)
+  const startIdx = (currentPage - 1) * PAGE_SIZE
   const rows = hackers
-    .slice(startIdx, startIdx + pageSize)
+    .slice(startIdx, startIdx + PAGE_SIZE)
     .map((hacker, idx) => (
       <ActionListItem key={idx} id={idx.toString()}>
         {columns.map((column) => takeAction(idx, column.id, hacker))}

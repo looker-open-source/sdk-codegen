@@ -24,8 +24,10 @@
 
  */
 import React, { FC, useEffect } from 'react'
+import { useHistory, useRouteMatch } from 'react-router-dom'
 import { useDispatch, useSelector } from 'react-redux'
-import { Tab, TabList, useTabs, TabPanels, TabPanel } from '@looker/components'
+import { Tab, TabList, TabPanels, TabPanel } from '@looker/components'
+import { Routes } from '../../routes/AppRouter'
 import { isLoadingState } from '../../data/common/selectors'
 import { Loading } from '../../components/Loading'
 import { allHackersRequest } from '../../data/hackers/actions'
@@ -36,10 +38,18 @@ import {
   getStaffState,
 } from '../../data/hackers/selectors'
 import { HackerList } from '../../components/HackerList'
+import { getTabInfo } from '../../utils'
 
 interface UsersSceneProps {}
 
+const tabnames = ['hackers', 'staff', 'judges', 'admins']
+
 export const UsersScene: FC<UsersSceneProps> = () => {
+  const history = useHistory()
+  const match = useRouteMatch<{ func: string; tabname: string }>(
+    '/:func/:tabname'
+  )
+
   const dispatch = useDispatch()
   useEffect(() => {
     dispatch(allHackersRequest())
@@ -49,20 +59,36 @@ export const UsersScene: FC<UsersSceneProps> = () => {
   const admins = useSelector(getAdminsState)
   const judges = useSelector(getJudgesState)
   const isLoading = useSelector(isLoadingState)
-  const tabs = useTabs()
+  const { tabIndex } = getTabInfo(tabnames, match?.params?.tabname)
+
+  useEffect(() => {
+    const currentTabname = match?.params?.tabname
+    const { tabname } = getTabInfo(tabnames, currentTabname)
+    if (tabname !== currentTabname) {
+      history.push(`${Routes.USERS}/${tabname}`)
+    }
+  }, [history, match])
+
+  const onSelectTab = (index: number) => {
+    const currentTabname = match?.params?.tabname
+    const tabname = tabnames[index]
+    if (tabname !== currentTabname) {
+      history.push(`${Routes.USERS}/${tabname}`)
+    }
+  }
 
   return (
     <>
       <Loading loading={isLoading} message={'Processing hackers...'} />
       {hackers && (
         <>
-          <TabList {...tabs}>
+          <TabList selectedIndex={tabIndex} onSelectTab={onSelectTab}>
             <Tab key="hackers">Hackers</Tab>
             <Tab key="staff">Staff</Tab>
             <Tab key="judges">Judges</Tab>
             <Tab key="admins">Admins</Tab>
           </TabList>
-          <TabPanels px="xxlarge" {...tabs}>
+          <TabPanels px="xxlarge" selectedIndex={tabIndex}>
             <TabPanel key="hackers">
               <HackerList hackers={hackers} />
             </TabPanel>

@@ -26,15 +26,19 @@
 import { IProjectProps } from '../../models'
 import { ProjectAction, Actions } from './actions'
 
-// This is the first cut for state and to be honest I dont like it.
-// It will likely change
 export interface ProjectsState {
+  currentPageNum: number
   projects: IProjectProps[]
   currentProjects: IProjectProps[]
   projectsLoaded: boolean
+  moreInfo?: {
+    title: string
+    moreInfo: string
+  }
 }
 
 const defaultState: Readonly<ProjectsState> = Object.freeze({
+  currentPageNum: 1,
   projects: [],
   currentProjects: [],
   projectsLoaded: false,
@@ -56,6 +60,16 @@ export const projectsReducer = (
         ...state,
         currentProjects: action.payload,
         projectsLoaded: true,
+      }
+    case Actions.UPDATE_PROJECTS_PAGE_NUM:
+      return {
+        ...state,
+        currentPageNum: action.payload,
+      }
+    case Actions.SET_MORE_INFO:
+      return {
+        ...state,
+        moreInfo: action.payload,
       }
     default:
       return state

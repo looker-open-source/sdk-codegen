@@ -23,40 +23,65 @@
  SOFTWARE.
 
  */
-import { all, call, put, takeEvery } from 'redux-saga/effects'
+import { all, call, put, takeEvery, select } from 'redux-saga/effects'
 import { actionMessage, beginLoading, endLoading } from '../common/actions'
+import { IJudgingProps } from '../../models'
 import { sheetsClient } from '../sheets_client'
 import {
   Actions,
-  allJudgingsSuccess,
-  SaveJudgingAction,
-  allJudgingsRequest,
+  GetJudgingRequestAction,
+  getJudgingsResponse,
+  getJudgingResponse,
+  SaveJudgingRequestAction,
+  saveJudgingResponse,
 } from './actions'
+import { getJudgingsState } from './selectors'
 
-function* allJudgingsSaga() {
+function* getJudgingsSaga() {
+  let judgings: IJudgingProps[] = []
   try {
     yield put(beginLoading())
-    const judgings = yield call([sheetsClient, sheetsClient.getJudgings])
-    yield put(allJudgingsSuccess(judgings))
+    judgings = yield call([sheetsClient, sheetsClient.getJudgings])
+    yield put(getJudgingsResponse(judgings))
     yield put(endLoading())
   } catch (err) {
     console.error(err)
     yield put(actionMessage('A problem occurred loading the data', 'critical'))
   }
+  return judgings
 }
 
-function* saveJudgingSaga(action: SaveJudgingAction) {
+function* getJudgingSaga({ payload: judgingId }: GetJudgingRequestAction) {
   try {
-    yield put(beginLoading())
-    yield call([sheetsClient, sheetsClient.saveJudging], action.payload)
-    yield put(allJudgingsRequest())
+    // Pull judging out of state.
+    let state = yield select()
+    let judgings = getJudgingsState(state)
+    if (judgings.length === 0) {
+      // judgings are lost on page reload so load them
+      judgings = yield getJudgingsSaga()
+    }
+    const judging = judgings.find((j) => j._id === judgingId)
+    yield put(getJudgingResponse(judging))
   } catch (err) {
     console.error(err)
     yield put(actionMessage('A problem occurred loading the data', 'critical'))
   }
 }
 
+function* saveJudgingSaga(action: SaveJudgingRequestAction) {
+  try {
+    yield put(beginLoading())
+    yield call([sheetsClient, sheetsClient.saveJudging], action.payload)
+    yield put(saveJudgingResponse(action.payload, true))
+  } catch (err) {
+    console.error(err)
+    yield put(saveJudgingResponse(action.payload, false))
+    yield put(actionMessage('A problem occurred loading the data', 'critical'))
+  }
+}
+
 export function* registerJudgingsSagas() {
-  yield all([takeEvery(Actions.ALL_JUDGINGS_REQUEST, allJudgingsSaga)])
-  yield all([takeEvery(Actions.SAVE_JUDGING, saveJudgingSaga)])
+  yield all([takeEvery(Actions.GET_JUDGINGS_REQUEST, getJudgingsSaga)])
+  yield all([takeEvery(Actions.GET_JUDGING_REQUEST, getJudgingSaga)])
+  yield all([takeEvery(Actions.SAVE_JUDGING_REQUEST, saveJudgingSaga)])
 }

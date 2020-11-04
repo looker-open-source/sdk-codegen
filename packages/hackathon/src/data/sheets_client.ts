@@ -62,6 +62,7 @@ import { ProjectsHeadings, HackersHeadings, JudgingsHeadings } from './types'
 class SheetsClient {
   private sheetData?: SheetData
   private hackers?: Hackers
+  private hacker?: IHackerProps
 
   async getProjects(): Promise<IProjectProps[]> {
     const projects = await this.getSheetProjects(true)
@@ -165,11 +166,20 @@ class SheetsClient {
   }
 
   async getJudgings(hackathonId?: string): Promise<IJudgingProps[]> {
-    const hackathon = await this.getSheetHackathon()
+    const hackathon = await this.getSheetHackathon(hackathonId)
     if (hackathon) {
       const data = await this.getSheetData()
       await data.judgings.refresh()
-      return data.judgings.filterBy(hackathon).map((j) => j.toObject())
+      let judgings = data.judgings.filterBy(hackathon).map((j) => j.toObject())
+      const hacker = await this.getHacker()
+      if (!hacker.canAdmin) {
+        if (hacker.canJudge) {
+          judgings = judgings.filter((j) => j.user_id === hacker.id)
+        } else {
+          judgings = []
+        }
+      }
+      return judgings
     } else {
       throw new Error(this.getHackathodErrorMessage(hackathonId))
     }
@@ -187,18 +197,21 @@ class SheetsClient {
   }
 
   async getHacker(): Promise<IHackerProps> {
-    const data = await this.getSheetData()
-    await this.loadHackers(data)
-    const lookerSdk = getCore40SDK()
-    const hacker = new Hacker(lookerSdk)
-    await hacker.getMe()
-    // TODO revisit this with JK
-    const me = this.hackers?.rows.find(
-      (maybeMe) => maybeMe.user.id === hacker.user.id
-    )
-    return me
-      ? this.decorateHacker(me.toObject())
-      : this.decorateHacker(hacker.toObject())
+    if (!this.hacker) {
+      const data = await this.getSheetData()
+      await this.loadHackers(data)
+      const lookerSdk = getCore40SDK()
+      const hacker = new Hacker(lookerSdk)
+      await hacker.getMe()
+      // TODO revisit this with JK
+      const me = this.hackers?.rows.find(
+        (maybeMe) => maybeMe.user.id === hacker.user.id
+      )
+      this.hacker = me
+        ? this.decorateHacker(me.toObject())
+        : this.decorateHacker(hacker.toObject())
+    }
+    return this.hacker
   }
 
   async getHackers(): Promise<{

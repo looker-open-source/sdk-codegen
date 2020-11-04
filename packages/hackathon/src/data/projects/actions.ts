@@ -35,6 +35,8 @@ export enum Actions {
   DELETE_PROJECT = 'DELETE_PROJECT',
   LOCK_PROJECTS = 'LOCK_PROJECTS',
   CHANGE_MEMBERSHIP = 'CHANGE_MEMBERSHIP',
+  UPDATE_PROJECTS_PAGE_NUM = 'UPDATE_PROJECTS_PAGE_NUM',
+  SET_MORE_INFO = 'SET_MORE_INFO',
 }
 
 export interface AllProjectsRequestAction {
@@ -62,6 +64,11 @@ export interface UpdateProjectAction {
     addedJudges: IHackerProps[]
     deletedJudges: IHackerProps[]
   }
+}
+
+export interface UpdateProjectsPageNumAction {
+  type: Actions.UPDATE_PROJECTS_PAGE_NUM
+  payload: number
 }
 
 export interface CreateProjectAction {
@@ -96,6 +103,14 @@ export interface LockProjectsAction {
   }
 }
 
+export interface SetMoreInfoAction {
+  type: Actions.SET_MORE_INFO
+  payload?: {
+    title: string
+    moreInfo: string
+  }
+}
+
 export type ProjectAction =
   | AllProjectsRequestAction
   | AllProjectsSuccessAction
@@ -106,6 +121,8 @@ export type ProjectAction =
   | DeleteProjectAction
   | LockProjectsAction
   | ChangeMembershipAction
+  | UpdateProjectsPageNumAction
+  | SetMoreInfoAction
 
 export const allProjectsRequest = (): AllProjectsRequestAction => ({
   type: Actions.ALL_PROJECTS_REQUEST,
@@ -127,6 +144,13 @@ export const currentProjectsSuccess = (
 ): CurrentProjectsSuccessAction => ({
   type: Actions.CURRENT_PROJECTS_SUCCESS,
   payload: projects,
+})
+
+export const updateProjectsPageNum = (
+  pageNum: number
+): UpdateProjectsPageNumAction => ({
+  type: Actions.UPDATE_PROJECTS_PAGE_NUM,
+  payload: pageNum,
 })
 
 export const updateProject = (
@@ -180,4 +204,12 @@ export const changeMembership = (
     hackerId,
     leave,
   },
+})
+
+export const setMoreInfo = (
+  title?: string,
+  moreInfo?: string
+): SetMoreInfoAction => ({
+  type: Actions.SET_MORE_INFO,
+  payload: moreInfo && title ? { title, moreInfo } : undefined,
 })

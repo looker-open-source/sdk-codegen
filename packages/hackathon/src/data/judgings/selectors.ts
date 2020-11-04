@@ -32,3 +32,15 @@ export const getJudgingsState = (state: RootState): IJudgingProps[] =>
 
 export const getJudgingsLoadedState = (state: RootState): boolean =>
   state.judgingsState.judgingsLoaded
+
+export const getJudgingState = (state: RootState): IJudgingProps | undefined =>
+  state.judgingsState.currentJudging
+
+export const getJudgingUpdatedState = (state: RootState): boolean | undefined =>
+  state.judgingsState.judgingUpdated
+
+export const getJudgingLoadedState = (state: RootState): boolean =>
+  state.judgingsState.judgingLoaded
+
+export const getJudgingsPageNumState = (state: RootState): number =>
+  state.judgingsState.currentPageNum

@@ -23,8 +23,4 @@
  SOFTWARE.
 
  */
-export { Loading } from './Loading'
-export { SideNav } from './SideNav'
-export { Header } from './Header'
-export { ProjectList } from './ProjectList'
-export { ProjectForm } from './ProjectForm'
+export { MoreInfoDialog } from './MoreInfoDialog'

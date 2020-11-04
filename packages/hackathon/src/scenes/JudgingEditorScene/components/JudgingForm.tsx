@@ -23,7 +23,7 @@
  SOFTWARE.
 
  */
-import React, { BaseSyntheticEvent, FC, useEffect, useState } from 'react'
+import React, { BaseSyntheticEvent, FC, useEffect } from 'react'
 import { useSelector, useDispatch } from 'react-redux'
 import { useHistory } from 'react-router-dom'
 import {
@@ -37,67 +37,34 @@ import {
   SpaceVertical,
   FieldTextArea,
 } from '@looker/components'
-import { saveJudging } from '../../data/judgings/actions'
-import { isLoadingState, getMessageState } from '../../data/common/selectors'
-import { getHackerState } from '../../data/hack_session/selectors'
-import { IJudgingProps } from '../../models'
-import { Routes } from '../../routes/AppRouter'
+import {
+  saveJudgingRequest,
+  updateJudgingData,
+} from '../../../data/judgings/actions'
+import { getJudgingUpdatedState } from '../../../data/judgings/selectors'
+import { getHackerState } from '../../../data/hack_session/selectors'
+import { IJudgingProps } from '../../../models'
+import { Routes } from '../../../routes/AppRouter'
 
 interface JudgingFormProps {
   judging: IJudgingProps
+  readonly: boolean
 }
 
-export const JudgingForm: FC<JudgingFormProps> = ({ judging }) => {
+export const JudgingForm: FC<JudgingFormProps> = ({ judging, readonly }) => {
   const dispatch = useDispatch()
   const history = useHistory()
   const hacker = useSelector(getHackerState)
-  const isLoading = useSelector(isLoadingState)
-  const messageDetail = useSelector(getMessageState)
-  const [isUpdating, setIsUpdating] = useState(false)
-  const [execution, setExecution] = useState<number>(1)
-  const [ambition, setAmbition] = useState<number>(1)
-  const [coolness, setCoolness] = useState<number>(1)
-  const [impact, setImpact] = useState<number>(1)
-  const [notes, setNotes] = useState<string>('')
-  const [moreInfo, setMoreInfo] = useState<string>('')
-  const [score, setScore] = useState<number>(0)
-  useEffect(() => {
-    setExecution(judging.execution || 1)
-    setAmbition(judging.ambition || 1)
-    setCoolness(judging.coolness || 1)
-    setImpact(judging.impact || 1)
-    setNotes(judging.notes || '')
-    setMoreInfo(judging.$more_info || '')
-  }, [judging])
+  const judgingUpdated = useSelector(getJudgingUpdatedState)
 
   useEffect(() => {
-    if (!isLoading && !messageDetail && isUpdating) {
+    if (judgingUpdated) {
       history.push(Routes.JUDGING)
     }
-  }, [history, isLoading, messageDetail, isUpdating])
+  }, [history, judgingUpdated])
 
-  useEffect(() => {
-    setScore(2 * execution + ambition + coolness + impact)
-  }, [judging, execution, ambition, coolness, impact])
-
-  const onExecutionChange = (event: BaseSyntheticEvent) => {
-    setExecution(event.target.valueAsNumber)
-  }
-
-  const onAmbitionChange = (event: BaseSyntheticEvent) => {
-    setAmbition(event.target.valueAsNumber)
-  }
-
-  const onCoolnessChange = (event: BaseSyntheticEvent) => {
-    setCoolness(event.target.valueAsNumber)
-  }
-
-  const onImpactChange = (event: BaseSyntheticEvent) => {
-    setImpact(event.target.valueAsNumber)
-  }
-
-  const onNotesChange = (event: BaseSyntheticEvent) => {
-    setNotes(event.target.value)
+  const onValueChange = (event: BaseSyntheticEvent) => {
+    dispatch(updateJudgingData(event.target.name, event.target.value))
   }
 
   const handleCancel = () => {
@@ -105,14 +72,13 @@ export const JudgingForm: FC<JudgingFormProps> = ({ judging }) => {
   }
 
   const handleSave = () => {
-    judging.execution = execution
-    judging.ambition = ambition
-    judging.coolness = coolness
-    judging.impact = impact
-    judging.notes = notes
-    dispatch(saveJudging(judging))
-    setIsUpdating(true)
+    dispatch(saveJudgingRequest(judging))
   }
+
+  const execution = judging.execution
+  const ambition = judging.ambition
+  const coolness = judging.coolness
+  const impact = judging.impact
 
   return (
     <>
@@ -124,11 +90,13 @@ export const JudgingForm: FC<JudgingFormProps> = ({ judging }) => {
         <Span>{judging.$description}</Span>
         <SpaceVertical gap="medium">
           <Slider
-            onChange={onExecutionChange}
+            name="execution"
+            onChange={onValueChange}
             value={execution}
             min={1}
             max={10}
             step={1}
+            disabled={readonly}
           />
           <Heading>
             <strong>Execution:</strong> {execution}
@@ -136,11 +104,13 @@ export const JudgingForm: FC<JudgingFormProps> = ({ judging }) => {
         </SpaceVertical>
         <SpaceVertical gap="medium">
           <Slider
-            onChange={onAmbitionChange}
+            name="ambition"
+            onChange={onValueChange}
             value={ambition}
             min={1}
             max={10}
             step={1}
+            disabled={readonly}
           />
           <Heading>
             <strong>Ambition:</strong> {ambition}
@@ -148,11 +118,13 @@ export const JudgingForm: FC<JudgingFormProps> = ({ judging }) => {
         </SpaceVertical>
         <SpaceVertical gap="medium">
           <Slider
-            onChange={onCoolnessChange}
+            name="coolness"
+            onChange={onValueChange}
             value={coolness}
             min={1}
             max={10}
             step={1}
+            disabled={readonly}
           />
           <Heading>
             <strong>Coolness:</strong> {coolness}
@@ -160,26 +132,30 @@ export const JudgingForm: FC<JudgingFormProps> = ({ judging }) => {
         </SpaceVertical>
         <SpaceVertical gap="medium">
           <Slider
-            onChange={onImpactChange}
+            name="impact"
+            onChange={onValueChange}
             value={impact}
             min={1}
             max={10}
             step={1}
+            disabled={readonly}
           />
           <Heading>
             <strong>Impact:</strong> {impact}
           </Heading>
         </SpaceVertical>
         <Heading>
-          <strong>Total Score: {score}</strong>
+          <strong>Total Score: {judging.score}</strong>
         </Heading>
         <SpaceVertical gap="medium">
           <FieldTextArea
+            name="notes"
             resize="vertical"
             label="Notes"
             placeholder="Additional comments about this project"
-            defaultValue={notes}
-            onChange={onNotesChange}
+            defaultValue={judging.notes}
+            onChange={onValueChange}
+            disabled={readonly}
           />
         </SpaceVertical>
         <SpaceVertical gap="medium">
@@ -188,7 +164,7 @@ export const JudgingForm: FC<JudgingFormProps> = ({ judging }) => {
             resize="vertical"
             label="Copy the link below and paste into a new browser window to see additional information about the project"
             placeholder="A link to more information"
-            defaultValue={moreInfo}
+            defaultValue={judging.$more_info || ''}
           />
         </SpaceVertical>
         <Space between>
@@ -196,7 +172,7 @@ export const JudgingForm: FC<JudgingFormProps> = ({ judging }) => {
             <ButtonOutline type="button" onClick={handleCancel}>
               Return
             </ButtonOutline>
-            <Button type="submit" onClick={handleSave}>
+            <Button type="submit" onClick={handleSave} disabled={readonly}>
               Save
             </Button>
           </Space>

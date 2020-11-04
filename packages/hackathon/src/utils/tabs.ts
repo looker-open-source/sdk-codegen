@@ -23,8 +23,14 @@
  SOFTWARE.
 
  */
-export { Loading } from './Loading'
-export { SideNav } from './SideNav'
-export { Header } from './Header'
-export { ProjectList } from './ProjectList'
-export { ProjectForm } from './ProjectForm'
+
+export const getTabInfo = (tabnames: string[], tabname?: string) => {
+  let tabIndex = tabnames.indexOf(tabname || tabnames[0])
+  if (tabIndex < 0) {
+    tabIndex = 0
+  }
+  return {
+    tabname: tabnames[tabIndex],
+    tabIndex,
+  }
+}

@@ -27,42 +27,130 @@
 import { IJudgingProps } from '../../models'
 
 export enum Actions {
-  ALL_JUDGINGS_REQUEST = 'ALL_JUDGINGS_REQUEST',
-  ALL_JUDGINGS_SUCCESS = 'ALL_JUDGINGS_SUCCESS',
-  SAVE_JUDGING = 'SAVE_JUDGEMENT',
+  GET_JUDGINGS_REQUEST = 'GET_JUDGINGS_REQUEST',
+  GET_JUDGINGS_RESPONSE = 'GET_JUDGINGS_RESPONSE',
+  GET_JUDGING_REQUEST = 'GET_JUDGING_REQUEST',
+  GET_JUDGING_RESPONSE = 'GET_JUDGING_SUCCESS',
+  UPDATE_JUDGING_DATA = 'UPDATE_JUDGING_DATA',
+  SAVE_JUDGING_REQUEST = 'SAVE_JUDGING_REQUEST',
+  SAVE_JUDGING_RESPONSE = 'SAVE_JUDGING_RESPONSE',
+  UPDATE_JUDGINGS_PAGE_NUM = 'UPDATE_JUDGINGS_PAGE_NUM',
 }
 
-export interface AllJudgingsRequestAction {
-  type: Actions.ALL_JUDGINGS_REQUEST
+export interface GetJudgingsRequestAction {
+  type: Actions.GET_JUDGINGS_REQUEST
 }
 
-export interface AllJudgingsSuccessAction {
-  type: Actions.ALL_JUDGINGS_SUCCESS
+export interface GetJudgingsResponseAction {
+  type: Actions.GET_JUDGINGS_RESPONSE
   payload: IJudgingProps[]
 }
 
-export interface SaveJudgingAction {
-  type: Actions.SAVE_JUDGING
+export interface GetJudgingRequestAction {
+  type: Actions.GET_JUDGING_REQUEST
+  payload: string
+}
+
+export interface GetJudgingResponseAction {
+  type: Actions.GET_JUDGING_RESPONSE
+  payload?: IJudgingProps
+}
+
+export interface SaveJudgingRequestAction {
+  type: Actions.SAVE_JUDGING_REQUEST
   payload: IJudgingProps
 }
 
-export type JudgingAction =
-  | AllJudgingsRequestAction
-  | AllJudgingsSuccessAction
-  | SaveJudgingAction
+export interface SaveJudgingResponseAction {
+  type: Actions.SAVE_JUDGING_RESPONSE
+  payload: {
+    judging: IJudgingProps
+    judgingUpdated: boolean
+  }
+}
 
-export const allJudgingsRequest = (): AllJudgingsRequestAction => ({
-  type: Actions.ALL_JUDGINGS_REQUEST,
+export interface UpdateJudgingsPageNumAction {
+  type: Actions.UPDATE_JUDGINGS_PAGE_NUM
+  payload: number
+}
+
+export enum JudgingFieldName {
+  execution = 'execution',
+  ambition = 'ambition',
+  coolness = 'coolness',
+  impact = 'impact',
+  notes = 'notes',
+}
+
+export interface UpdateJudgingData {
+  type: Actions.UPDATE_JUDGING_DATA
+  payload: {
+    fieldName: JudgingFieldName
+    fieldValue: string
+  }
+}
+
+export type JudgingAction =
+  | GetJudgingsRequestAction
+  | GetJudgingsResponseAction
+  | GetJudgingRequestAction
+  | GetJudgingResponseAction
+  | SaveJudgingRequestAction
+  | SaveJudgingResponseAction
+  | UpdateJudgingsPageNumAction
+  | UpdateJudgingData
+
+export const getJudgingsRequest = (): GetJudgingsRequestAction => ({
+  type: Actions.GET_JUDGINGS_REQUEST,
 })
 
-export const allJudgingsSuccess = (
+export const getJudgingsResponse = (
   judgings: IJudgingProps[]
-): AllJudgingsSuccessAction => ({
-  type: Actions.ALL_JUDGINGS_SUCCESS,
+): GetJudgingsResponseAction => ({
+  type: Actions.GET_JUDGINGS_RESPONSE,
   payload: judgings,
 })
 
-export const saveJudging = (judging: IJudgingProps): SaveJudgingAction => ({
-  type: Actions.SAVE_JUDGING,
+export const getJudgingRequest = (
+  judgingId: string
+): GetJudgingRequestAction => ({
+  type: Actions.GET_JUDGING_REQUEST,
+  payload: judgingId,
+})
+
+export const getJudgingResponse = (
+  judging?: IJudgingProps
+): GetJudgingResponseAction => ({
+  type: Actions.GET_JUDGING_RESPONSE,
   payload: judging,
+})
+
+export const updateJudgingData = (
+  fieldName: JudgingFieldName,
+  fieldValue: string
+): UpdateJudgingData => ({
+  type: Actions.UPDATE_JUDGING_DATA,
+  payload: { fieldName, fieldValue },
+})
+
+export const saveJudgingRequest = (
+  judging: IJudgingProps
+): SaveJudgingRequestAction => ({
+  type: Actions.SAVE_JUDGING_REQUEST,
+  payload: judging,
+})
+
+export const saveJudgingResponse = (
+  judging: IJudgingProps,
+  success: boolean
+): SaveJudgingResponseAction => ({
+  type: Actions.SAVE_JUDGING_RESPONSE,
+  payload: { judging, judgingUpdated: success },
+})
+
+export const updateJudgingsPageNum = (
+  pageNum: number
+): UpdateJudgingsPageNumAction => ({
+  type: Actions.UPDATE_JUDGINGS_PAGE_NUM,
+  payload: pageNum,
 })

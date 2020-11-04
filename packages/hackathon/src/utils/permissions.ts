@@ -62,8 +62,21 @@ export const canUpdateProject = (
   return false
 }
 
-export const canLockProject = (hacker: IHackerProps) =>
+export const canLockProject = (hacker: IHackerProps): boolean =>
   hacker.canAdmin || hacker.canJudge || hacker.canStaff
+
+export const canJudge = (
+  hacker: IHackerProps,
+  judging?: IJudgingProps
+): boolean => {
+  let canJudge = false
+  if (judging) {
+    if (hacker.canAdmin || (hacker.canJudge && judging.user_id === hacker.id)) {
+      canJudge = true
+    }
+  }
+  return canJudge
+}
 
 export const canDoJudgingAction = (
   hacker: IHackerProps,

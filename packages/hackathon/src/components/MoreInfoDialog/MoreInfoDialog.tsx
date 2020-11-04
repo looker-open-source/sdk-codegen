@@ -24,19 +24,43 @@
 
  */
 import React, { FC } from 'react'
-import { useSelector } from 'react-redux'
-import { isLoadingState } from '../../data/common/selectors'
-import { Loading } from '../../components/Loading'
-import { JudgingList } from './components'
-interface JudgingSceneProps {}
+import {
+  Dialog,
+  DialogHeader,
+  DialogContent,
+  Paragraph,
+  SpaceVertical,
+  TextArea,
+} from '@looker/components'
+import { useSelector, useDispatch } from 'react-redux'
+import { setMoreInfo } from '../../data/projects/actions'
+import { getMoreInfoState } from '../../data/projects/selectors'
 
-export const JudgingScene: FC<JudgingSceneProps> = () => {
-  const isLoading = useSelector(isLoadingState)
+interface MoreInfoDialogProps {}
+
+export const MoreInfoDialog: FC<MoreInfoDialogProps> = () => {
+  const dispatch = useDispatch()
+  const moreInfoProject = useSelector(getMoreInfoState)
+
+  const closeMoreInfo = () => {
+    dispatch(setMoreInfo())
+  }
 
   return (
-    <>
-      <Loading loading={isLoading} message={'Processing judgings...'} />
-      <JudgingList />
-    </>
+    <Dialog isOpen={!!moreInfoProject} onClose={closeMoreInfo}>
+      <DialogHeader>{moreInfoProject?.title}</DialogHeader>
+      <DialogContent>
+        <SpaceVertical>
+          <Paragraph>
+            Copy the link below and paste into a new browser window to see
+            additional information about the project
+          </Paragraph>
+          <TextArea
+            readOnly={true}
+            value={moreInfoProject?.moreInfo}
+          ></TextArea>
+        </SpaceVertical>
+      </DialogContent>
+    </Dialog>
   )
 }

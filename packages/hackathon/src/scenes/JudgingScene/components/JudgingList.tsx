@@ -23,50 +23,55 @@
  SOFTWARE.
 
  */
-import React, { FC, useState } from 'react'
+import React, { FC, useEffect } from 'react'
 import {
   ActionList,
   ActionListItem,
   ActionListItemAction,
   ActionListItemColumn,
   Pagination,
-  Dialog,
-  DialogHeader,
-  DialogContent,
-  Paragraph,
-  SpaceVertical,
-  TextArea,
   Tooltip,
 } from '@looker/components'
-import { useSelector } from 'react-redux'
+import { useSelector, useDispatch } from 'react-redux'
 import { useHistory } from 'react-router-dom'
-import { IJudgingProps, sheetCell } from '../../models'
+import { MoreInfoDialog } from '../../../components/MoreInfoDialog'
+import { IJudgingProps, sheetCell } from '../../../models'
 import {
   getHackerState,
   getJudgingsHeadings,
-} from '../../data/hack_session/selectors'
-import { canDoJudgingAction } from '../../utils'
+} from '../../../data/hack_session/selectors'
+import {
+  getJudgingsRequest,
+  updateJudgingsPageNum,
+} from '../../../data/judgings/actions'
+import {
+  getJudgingsState,
+  getJudgingsPageNumState,
+} from '../../../data/judgings/selectors'
+import { setMoreInfo } from '../../../data/projects/actions'
+import { canDoJudgingAction } from '../../../utils'
+import { PAGE_SIZE } from '../../../constants'
 
-interface JudgingListProps {
-  judgings: IJudgingProps[]
-}
+interface JudgingListProps {}
 
-export const JudgingList: FC<JudgingListProps> = ({ judgings }) => {
+export const JudgingList: FC<JudgingListProps> = () => {
+  const dispatch = useDispatch()
   const history = useHistory()
-  const [currentPage, setCurrentPage] = useState(1)
-  const [moreInfo, setMoreInfo] = useState<string>()
-  const [title, setTitle] = useState<string>()
   const columns = useSelector(getJudgingsHeadings)
   const hacker = useSelector(getHackerState)
+  const judgings = useSelector(getJudgingsState)
+  const currentPage = useSelector(getJudgingsPageNumState)
 
-  const openMoreInfo = (judging: IJudgingProps) => {
-    setMoreInfo(judging.$more_info)
-    setTitle(judging.$title)
+  useEffect(() => {
+    dispatch(getJudgingsRequest())
+  }, [dispatch])
+
+  const updatePage = (pageNum: number) => {
+    dispatch(updateJudgingsPageNum(pageNum))
   }
 
-  const closeMoreInfo = () => {
-    setMoreInfo(undefined)
-    setTitle(undefined)
+  const openMoreInfo = ({ $title, $more_info }: IJudgingProps) => {
+    dispatch(setMoreInfo($title, $more_info))
   }
 
   columns[0].title = (
@@ -95,18 +100,19 @@ export const JudgingList: FC<JudgingListProps> = ({ judgings }) => {
           icon="Edit"
           itemRole="link"
         >
-          {canDoJudgingAction(hacker, judging) ? 'Edit' : 'View'}
+          {canDoJudgingAction(hacker, judging)
+            ? 'Update Judging'
+            : 'View Juding'}
         </ActionListItemAction>
       </>
     )
   }
 
-  const pageSize = 25
-  const totalPages = Math.ceil(judgings.length / pageSize)
+  const totalPages = Math.ceil(judgings.length / PAGE_SIZE)
 
-  const startIdx = (currentPage - 1) * pageSize
+  const startIdx = (currentPage - 1) * PAGE_SIZE
   const rows = judgings
-    .slice(startIdx, startIdx + pageSize)
+    .slice(startIdx, startIdx + PAGE_SIZE)
     .map((judging, idx) => (
       <ActionListItem key={idx} id={idx.toString()} actions={actions(judging)}>
         {columns.map((column) => (
@@ -123,20 +129,9 @@ export const JudgingList: FC<JudgingListProps> = ({ judgings }) => {
       <Pagination
         current={currentPage}
         pages={totalPages}
-        onChange={setCurrentPage}
+        onChange={updatePage}
       />
-      <Dialog isOpen={!!moreInfo} onClose={closeMoreInfo}>
-        <DialogHeader>{title}</DialogHeader>
-        <DialogContent>
-          <SpaceVertical>
-            <Paragraph>
-              Copy the link below and paste into a new browser window to see
-              additional information about the project
-            </Paragraph>
-            <TextArea readOnly={true} value={moreInfo}></TextArea>
-          </SpaceVertical>
-        </DialogContent>
-      </Dialog>
+      <MoreInfoDialog />
     </>
   )
 }

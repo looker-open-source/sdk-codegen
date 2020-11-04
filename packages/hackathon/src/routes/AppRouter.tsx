@@ -131,7 +131,7 @@ export const AppRouter: FC<AppRouterProps> = ({ authorizedRoutes }) => (
       </Route>
     )}
     {authorizedRoutes.includes(Routes.USERS) && (
-      <Route path={Routes.USERS} exact>
+      <Route path={Routes.USERS}>
         <UsersScene />
       </Route>
     )}

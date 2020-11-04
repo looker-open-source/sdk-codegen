@@ -23,25 +23,21 @@
  SOFTWARE.
 
  */
-import React, { FC, useState } from 'react'
+import React, { FC, useEffect } from 'react'
 import {
   ActionList,
   ActionListItem,
   ActionListItemAction,
   ActionListItemColumn,
   Pagination,
-  Dialog,
-  DialogHeader,
-  DialogContent,
-  Paragraph,
   SpaceVertical,
-  TextArea,
   Tooltip,
   Icon,
   Span,
 } from '@looker/components'
 import { useSelector, useDispatch } from 'react-redux'
 import { useHistory } from 'react-router-dom'
+import { MoreInfoDialog } from '../MoreInfoDialog'
 import { sheetCell, IProjectProps } from '../../models'
 import {
   getHackerState,
@@ -49,30 +45,37 @@ import {
 } from '../../data/hack_session/selectors'
 import { deleteProject } from '../../data/projects/actions'
 import { canDoProjectAction } from '../../utils'
+import { PAGE_SIZE } from '../../constants'
+import {
+  currentProjectsRequest,
+  updateProjectsPageNum,
+  setMoreInfo,
+} from '../../data/projects/actions'
+import {
+  getCurrentProjectsState,
+  getProjectsPageNumState,
+} from '../../data/projects/selectors'
 
-interface ProjectListProps {
-  projects: IProjectProps[]
-}
+interface ProjectListProps {}
 
-export const ProjectList: FC<ProjectListProps> = ({ projects }) => {
-  const [currentPage, setCurrentPage] = useState(1)
-  const [moreInfoProject, setMoreInfoProject] = useState<IProjectProps>()
-  // Select only the displayable columns
-  const hacker = useSelector(getHackerState)
+export const ProjectList: FC<ProjectListProps> = () => {
   const dispatch = useDispatch()
+  const currentPage = useSelector(getProjectsPageNumState)
+  const hacker = useSelector(getHackerState)
   const columns = useSelector(getProjectsHeadings)
+  useEffect(() => {
+    dispatch(currentProjectsRequest())
+  }, [dispatch])
+  const projects = useSelector(getCurrentProjectsState)
 
   const handleDelete = (project: IProjectProps) => {
     dispatch(deleteProject(project._id))
   }
 
-  const openMoreInfo = (project: IProjectProps) => {
-    setMoreInfoProject(project)
+  const openMoreInfo = ({ title, more_info }: IProjectProps) => {
+    dispatch(setMoreInfo(title, more_info))
   }
 
-  const closeMoreInfo = () => {
-    setMoreInfoProject(undefined)
-  }
   columns[0].canSort = false
   columns[0].widthPercent = 3
   columns[0].title = (
@@ -166,9 +169,6 @@ export const ProjectList: FC<ProjectListProps> = ({ projects }) => {
     )
   }
 
-  const pageSize = 25
-  const totalPages = Math.ceil(projects.length / pageSize)
-
   const projectCell = (project: IProjectProps, columnName: string) => {
     if (
       columnName !== 'locked' &&
@@ -203,9 +203,11 @@ export const ProjectList: FC<ProjectListProps> = ({ projects }) => {
 
     return ''
   }
-  const startIdx = (currentPage - 1) * pageSize
+
+  const totalPages = Math.ceil(projects.length / PAGE_SIZE)
+  const startIdx = (currentPage - 1) * PAGE_SIZE
   const rows = projects
-    .slice(startIdx, startIdx + pageSize)
+    .slice(startIdx, startIdx + PAGE_SIZE)
     .map((project, idx) => (
       <ActionListItem key={idx} id={idx.toString()} actions={actions(project)}>
         {columns.map((column) => (
@@ -222,23 +224,9 @@ export const ProjectList: FC<ProjectListProps> = ({ projects }) => {
       <Pagination
         current={currentPage}
         pages={totalPages}
-        onChange={setCurrentPage}
+        onChange={(pageNumber) => dispatch(updateProjectsPageNum(pageNumber))}
       />
-      <Dialog isOpen={!!moreInfoProject} onClose={closeMoreInfo}>
-        <DialogHeader>{moreInfoProject?.title}</DialogHeader>
-        <DialogContent>
-          <SpaceVertical>
-            <Paragraph>
-              Copy the link below and paste into a new browser window to see
-              additional information about the project
-            </Paragraph>
-            <TextArea
-              readOnly={true}
-              value={moreInfoProject?.more_info}
-            ></TextArea>
-          </SpaceVertical>
-        </DialogContent>
-      </Dialog>
+      <MoreInfoDialog />
     </>
   )
 }

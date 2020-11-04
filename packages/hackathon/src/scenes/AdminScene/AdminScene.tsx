@@ -28,19 +28,9 @@ import { TabList, Tab, TabPanels, TabPanel } from '@looker/components'
 import { useHistory, useRouteMatch } from 'react-router-dom'
 import { Routes } from '../../routes/AppRouter'
 import { UserAttributes } from './components/UserAttributes'
+import { getTabInfo } from '../../utils'
 
 const tabnames = ['general', 'config']
-
-const getTabNameIndex = (tabname?: string) => {
-  let tabIndex = tabnames.indexOf(tabname || 'general')
-  if (tabIndex < 0) {
-    tabIndex = 0
-  }
-  return {
-    tabname: tabnames[tabIndex],
-    tabIndex,
-  }
-}
 
 export const AdminScene: FC = () => {
   const history = useHistory()
@@ -50,9 +40,9 @@ export const AdminScene: FC = () => {
 
   useEffect(() => {
     const currentTabname = match?.params?.tabname
-    const { tabname } = getTabNameIndex(currentTabname)
+    const { tabname } = getTabInfo(tabnames, currentTabname)
     if (tabname !== currentTabname) {
-      history.push(`/admin/${tabname}`)
+      history.push(`${Routes.ADMIN}/${tabname}`)
     }
   }, [history, match])
 
@@ -64,7 +54,7 @@ export const AdminScene: FC = () => {
     }
   }
 
-  const { tabIndex } = getTabNameIndex(match?.params?.tabname)
+  const { tabIndex } = getTabInfo(tabnames, match?.params?.tabname)
 
   return (
     <>

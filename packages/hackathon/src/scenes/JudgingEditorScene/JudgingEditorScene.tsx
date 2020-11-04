@@ -23,57 +23,45 @@
  SOFTWARE.
 
  */
-import React, { FC, useEffect, useState } from 'react'
+import React, { FC, useEffect } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { useRouteMatch } from 'react-router-dom'
-import { getHackerState } from '../../data/hack_session/selectors'
-import { allJudgingsRequest } from '../../data/judgings/actions'
-import {
-  getJudgingsState,
-  getJudgingsLoadedState,
-} from '../../data/judgings/selectors'
-import { IJudgingProps } from '../../models'
 import { actionMessage } from '../../data/common/actions'
-import { JudgingForm } from '../../components/JudgingForm'
+import { getHackerState } from '../../data/hack_session/selectors'
+import { getJudgingRequest } from '../../data/judgings/actions'
+import {
+  getJudgingState,
+  getJudgingLoadedState,
+} from '../../data/judgings/selectors'
+import { JudgingForm } from './components'
+import { canJudge } from '../../utils'
 
 export const JudgingEditorScene: FC = () => {
   const dispatch = useDispatch()
   const match = useRouteMatch<{ id: string }>('/judging/:id')
+  const id = match?.params?.id
   const hacker = useSelector(getHackerState)
-  const judgings = useSelector(getJudgingsState)
-  const judgingsLoaded = useSelector(getJudgingsLoadedState)
-  const [judging, setJudging] = useState<IJudgingProps>()
+  const judging = useSelector(getJudgingState)
+  const judgingLoaded = useSelector(getJudgingLoadedState)
 
   useEffect(() => {
-    dispatch(allJudgingsRequest())
-  }, [dispatch])
-
-  useEffect(() => {
-    if (match?.params?.id && judgings) {
-      const judging = judgings.find(
-        (judging: IJudgingProps) => judging._id === match?.params?.id
-      )
-      if (judging) {
-        if (
-          hacker.canAdmin ||
-          (hacker.canJudge && judging.user_id === hacker.id)
-        ) {
-          setJudging(judging)
-        } else {
-          dispatch(actionMessage('Could not find judging details', 'critical'))
-        }
-      } else {
-        if (judgingsLoaded) {
-          dispatch(actionMessage('Could not find judging details', 'critical'))
-        }
-      }
+    if (id) {
+      dispatch(getJudgingRequest(id))
     }
-  }, [match, judging, judgingsLoaded])
+  }, [dispatch, id])
+
+  const readonly = !canJudge(hacker, judging)
+
+  useEffect(() => {
+    if (judgingLoaded && readonly) {
+      dispatch(actionMessage('Viewing judgment', 'inform'))
+    }
+  }, [judgingLoaded, readonly])
 
   return (
     <>
-      {(!judgings || !judging) && <>No judging information</>}
-      {judgings && judging && <JudgingForm judging={judging} />}
+      {!judging && judgingLoaded && <>No judging information</>}
+      {judging && <JudgingForm judging={judging} readonly={readonly} />}
     </>
   )
 }

@@ -25,3 +25,4 @@
  */
 
 export * from './permissions'
+export * from './tabs'

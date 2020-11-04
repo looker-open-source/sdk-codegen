@@ -24,17 +24,11 @@
 
  */
 
-import React, { FC, useEffect } from 'react'
+import React, { FC } from 'react'
 import { useSelector, useDispatch } from 'react-redux'
-
 import { useHistory } from 'react-router-dom'
 import { Button, Space } from '@looker/components'
-
-import {
-  currentProjectsRequest,
-  lockProjects,
-} from '../../data/projects/actions'
-import { getCurrentProjectsState } from '../../data/projects/selectors'
+import { lockProjects } from '../../data/projects/actions'
 import { isLoadingState } from '../../data/common/selectors'
 import { Loading, ProjectList } from '../../components'
 import { Routes } from '../../routes/AppRouter'
@@ -47,12 +41,8 @@ interface ProjectSceneProps {}
 
 export const ProjectsScene: FC<ProjectSceneProps> = () => {
   const dispatch = useDispatch()
-  useEffect(() => {
-    dispatch(currentProjectsRequest())
-  }, [dispatch])
   const hacker = useSelector(getHackerState)
   const hackathon = useSelector(getCurrentHackathonState)
-  const projects = useSelector(getCurrentProjectsState)
   const isLoading = useSelector(isLoadingState)
   const history = useHistory()
 
@@ -71,40 +61,32 @@ export const ProjectsScene: FC<ProjectSceneProps> = () => {
   return (
     <>
       <Loading loading={isLoading} message={'Processing projects...'} />
-      {projects && (
+      <ProjectList />
+      <Space pt="xlarge">
+        <Button iconBefore="CircleAdd" onClick={handleAdd} disabled={isLoading}>
+          Add Project
+        </Button>
         <>
-          {projects.length > 0 && <ProjectList projects={projects} />}
-          <Space pt="xlarge">
-            <Button
-              iconBefore="CircleAdd"
-              onClick={handleAdd}
-              disabled={isLoading}
-            >
-              Add Project
-            </Button>
+          {hackathon && hacker && hacker.canAdmin && (
             <>
-              {hackathon && hacker && hacker.canAdmin && (
-                <>
-                  <Button
-                    iconBefore="LockClosed"
-                    onClick={handleLock}
-                    disabled={isLoading}
-                  >
-                    Lock Projects
-                  </Button>
-                  <Button
-                    iconBefore="Edit"
-                    onClick={handleUnlock}
-                    disabled={isLoading}
-                  >
-                    Unlock Projects
-                  </Button>
-                </>
-              )}
+              <Button
+                iconBefore="LockClosed"
+                onClick={handleLock}
+                disabled={isLoading}
+              >
+                Lock Projects
+              </Button>
+              <Button
+                iconBefore="Edit"
+                onClick={handleUnlock}
+                disabled={isLoading}
+              >
+                Unlock Projects
+              </Button>
             </>
-          </Space>
+          )}
         </>
-      )}
+      </Space>
     </>
   )
 }
