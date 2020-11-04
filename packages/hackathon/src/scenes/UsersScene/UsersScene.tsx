@@ -49,7 +49,6 @@ export const UsersScene: FC<UsersSceneProps> = () => {
   const match = useRouteMatch<{ func: string; tabname: string }>(
     '/:func/:tabname'
   )
-
   const dispatch = useDispatch()
   useEffect(() => {
     dispatch(allHackersRequest())
