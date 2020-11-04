@@ -30,8 +30,9 @@ import { useHistory } from 'react-router-dom'
 import { Button, Space } from '@looker/components'
 import { lockProjects } from '../../data/projects/actions'
 import { isLoadingState } from '../../data/common/selectors'
-import { Loading, ProjectList } from '../../components'
+import { Loading } from '../../components/Loading'
 import { Routes } from '../../routes/AppRouter'
+import { ProjectList } from './components'
 import {
   getCurrentHackathonState,
   getHackerState,

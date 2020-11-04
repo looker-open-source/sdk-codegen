@@ -37,24 +37,24 @@ import {
 } from '@looker/components'
 import { useSelector, useDispatch } from 'react-redux'
 import { useHistory } from 'react-router-dom'
-import { MoreInfoDialog } from '../MoreInfoDialog'
-import { sheetCell, IProjectProps } from '../../models'
+import { MoreInfoDialog } from '../../../components/MoreInfoDialog'
+import { sheetCell, IProjectProps } from '../../../models'
 import {
   getHackerState,
   getProjectsHeadings,
-} from '../../data/hack_session/selectors'
-import { deleteProject } from '../../data/projects/actions'
-import { canDoProjectAction } from '../../utils'
-import { PAGE_SIZE } from '../../constants'
+} from '../../../data/hack_session/selectors'
+import { deleteProject } from '../../../data/projects/actions'
+import { canDoProjectAction } from '../../../utils'
+import { PAGE_SIZE } from '../../../constants'
 import {
   currentProjectsRequest,
   updateProjectsPageNum,
   setMoreInfo,
-} from '../../data/projects/actions'
+} from '../../../data/projects/actions'
 import {
   getCurrentProjectsState,
   getProjectsPageNumState,
-} from '../../data/projects/selectors'
+} from '../../../data/projects/selectors'
 
 interface ProjectListProps {}
 

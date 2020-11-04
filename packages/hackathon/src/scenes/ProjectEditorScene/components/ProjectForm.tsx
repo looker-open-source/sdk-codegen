@@ -46,28 +46,28 @@ import {
 } from '@looker/components'
 import { useDispatch, useSelector } from 'react-redux'
 import { useHistory, useRouteMatch } from 'react-router-dom'
-import { IHackerProps, IProjectProps, IHackathonProps } from '../../models'
-import { actionMessage } from '../../data/common/actions'
+import { IHackerProps, IProjectProps, IHackathonProps } from '../../../models'
+import { actionMessage } from '../../../data/common/actions'
 import {
   currentProjectsRequest,
   updateProject,
   createProject,
   changeMembership,
-} from '../../data/projects/actions'
+} from '../../../data/projects/actions'
 import {
   getCurrentHackathonState,
   getHackerState,
   getTechnologies,
-} from '../../data/hack_session/selectors'
+} from '../../../data/hack_session/selectors'
 import {
   getCurrentProjectsState,
   getProjectsLoadedState,
-} from '../../data/projects/selectors'
-import { allHackersRequest } from '../../data/hackers/actions'
-import { getJudgesState } from '../../data/hackers/selectors'
-import { Routes } from '../../routes/AppRouter'
-import { isLoadingState, getMessageState } from '../../data/common/selectors'
-import { canUpdateProject, canLockProject } from '../../utils'
+} from '../../../data/projects/selectors'
+import { allHackersRequest } from '../../../data/hackers/actions'
+import { getJudgesState } from '../../../data/hackers/selectors'
+import { Routes } from '../../../routes/AppRouter'
+import { isLoadingState, getMessageState } from '../../../data/common/selectors'
+import { canUpdateProject, canLockProject } from '../../../utils'
 
 interface ProjectFormProps {}
 

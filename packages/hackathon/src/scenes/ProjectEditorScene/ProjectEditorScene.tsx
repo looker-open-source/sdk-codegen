@@ -24,7 +24,7 @@
 
  */
 import React, { FC } from 'react'
-import { ProjectForm } from '../../components'
+import { ProjectForm } from './components'
 
 export const ProjectEditorScene: FC = () => {
   // TODO: add a not found error in case project is not found
