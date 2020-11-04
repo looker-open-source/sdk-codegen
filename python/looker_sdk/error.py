@@ -23,7 +23,13 @@
 """API error class
 """
 
+from typing import Optional
+
 
 class SDKError(Exception):
     """API error class
     """
+
+    def __init__(self, message: str, http_status: Optional[int] = None):
+        super().__init__(message)
+        self.http_status = http_status

@@ -96,6 +96,7 @@ class Response:
     ok: bool
     value: bytes
     response_mode: ResponseMode
+    http_status: int
     encoding: str = "utf-8"
 
 

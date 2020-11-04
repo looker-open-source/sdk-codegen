@@ -84,7 +84,10 @@ class APIMethods:
     def _return(self, response: transport.Response, structure: TStructure) -> TReturn:
         encoding = response.encoding
         if not response.ok:
-            raise error.SDKError(response.value.decode(encoding=encoding))
+            raise error.SDKError(
+                response.value.decode(encoding=encoding),
+                http_status=response.http_status,
+            )
         ret: TReturn
         if structure is None:
             ret = None

@@ -80,17 +80,22 @@ class RequestsTransport(transport.Transport):
                 headers=headers,
                 timeout=timeout,
             )
-        except IOError as exc:
+        # https://requests.readthedocs.io/en/latest/user/quickstart/#errors-and-exceptions
+        # OSError is base for ConnectionError and Timeout
+        except OSError as exc:
             ret = transport.Response(
-                False,
-                bytes(str(exc), encoding="utf-8"),
-                transport.ResponseMode.STRING,
+                ok=False,
+                value=bytes(str(exc), encoding="utf-8"),
+                # sentinel value rather than making it optional
+                http_status=0,
+                response_mode=transport.ResponseMode.STRING,
             )
         else:
             ret = transport.Response(
-                resp.ok,
-                resp.content,
-                transport.response_mode(resp.headers.get("content-type")),
+                ok=resp.ok,
+                value=resp.content,
+                response_mode=transport.response_mode(resp.headers.get("content-type")),
+                http_status=resp.status_code,
             )
             encoding = cast(
                 Optional[str], requests.utils.get_encoding_from_headers(resp.headers)
