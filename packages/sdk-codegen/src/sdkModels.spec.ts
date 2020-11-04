@@ -269,6 +269,7 @@ describe('sdkModels', () => {
       expect(type.hasSpecialNeeds).toEqual(false)
     })
   })
+
   describe('request type determination', () => {
     it('search_looks', () => {
       const method = apiTestModel.methods.search_looks
@@ -1082,6 +1083,22 @@ describe('sdkModels', () => {
       const actual = JSON.stringify(item, null, 2)
       expect(actual).toBeDefined()
       expect(actual).toContain('"name": "dashboard_dashboard_elements"')
+    })
+  })
+
+  describe('summary', () => {
+    it('should summarize a property', () => {
+      const prop = apiTestModel.types.Dashboard.properties.id
+      const actual = prop.summary()
+      expect(actual).toEqual('Dashboard.id:string readOnly')
+    })
+  })
+
+  describe('asHashString', () => {
+    it('should hash a property', () => {
+      const prop = apiTestModel.types.Dashboard.properties.id
+      const actual = prop.asHashString()
+      expect(actual).toEqual('id:string readOnly')
     })
   })
 })

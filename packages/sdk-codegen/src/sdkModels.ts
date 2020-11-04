@@ -512,6 +512,8 @@ export interface IProperty extends ITypedSymbol {
    * @returns {boolean} true if the pattern is found in the specified criteria
    */
   search(rx: RegExp, include: SearchCriteria): boolean
+
+  summary(): string
 }
 
 class Symbol implements ISymbol {
@@ -640,16 +642,24 @@ class Property extends SchemadSymbol implements IProperty {
     return this.schema.writeOnly || false
   }
 
+  private tag(key: string) {
+    return this[key] ? ` ${key}` : ''
+  }
+
+  summary() {
+    return `${this.fullName}:${this.type.name}${this.tag('readOnly')}${this.tag(
+      'required'
+    )}${this.tag('nullable')}${this.tag('deprecated')}`
+  }
+
   asHashString() {
-    return super.asHashString() + this.nullable
-      ? '?'
-      : '' + this.readOnly
-      ? ' ro'
-      : '' + this.required
-      ? ' req'
-      : '' + this.writeOnly
-      ? ' wo'
-      : ''
+    return (
+      super.asHashString() +
+      this.tag('readOnly') +
+      this.tag('required') +
+      this.tag('nullable') +
+      this.tag('deprecated')
+    )
   }
 
   searchString(criteria: SearchCriteria): string {
