@@ -27,6 +27,7 @@ import { IHackerProps } from '../../models'
 import { Actions, HackerAction } from './actions'
 
 export interface HackersState {
+  currentPageNum: number
   hackers: IHackerProps[]
   judges: IHackerProps[]
   staff: IHackerProps[]
@@ -34,6 +35,7 @@ export interface HackersState {
 }
 
 const defaultState: Readonly<HackersState> = Object.freeze({
+  currentPageNum: 1,
   hackers: [],
   judges: [],
   staff: [],
@@ -45,13 +47,19 @@ export const hackersReducer = (
   action: HackerAction
 ): HackersState => {
   switch (action.type) {
-    case Actions.ALL_HACKERS_SUCCESS:
+    case Actions.ALL_HACKERS_RESPONSE:
       const { hackers, staff, admins, judges } = action.payload
       return {
+        ...state,
         hackers,
         judges,
         staff,
         admins,
+      }
+    case Actions.UPDATE_HACKERS_PAGE_NUM:
+      return {
+        ...state,
+        currentPageNum: action.payload,
       }
     default:
       return state

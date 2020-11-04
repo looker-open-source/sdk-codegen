@@ -30,12 +30,16 @@ import { Tab, TabList, TabPanels, TabPanel } from '@looker/components'
 import { Routes } from '../../routes/AppRouter'
 import { isLoadingState } from '../../data/common/selectors'
 import { Loading } from '../../components/Loading'
-import { allHackersRequest } from '../../data/hackers/actions'
+import {
+  allHackersRequest,
+  updateHackersPageNum,
+} from '../../data/hackers/actions'
 import {
   getHackersState,
   getAdminsState,
   getJudgesState,
   getStaffState,
+  getHackersPageNumState,
 } from '../../data/hackers/selectors'
 import { HackerList } from './components/HackerList'
 import { getTabInfo } from '../../utils'
@@ -53,6 +57,7 @@ export const UsersScene: FC<UsersSceneProps> = () => {
   useEffect(() => {
     dispatch(allHackersRequest())
   }, [dispatch])
+  const pageNum = useSelector(getHackersPageNumState)
   const hackers = useSelector(getHackersState)
   const staff = useSelector(getStaffState)
   const admins = useSelector(getAdminsState)
@@ -68,10 +73,15 @@ export const UsersScene: FC<UsersSceneProps> = () => {
     }
   }, [history, match])
 
+  const updatePageNum = (pageNum: number) => {
+    dispatch(updateHackersPageNum(pageNum))
+  }
+
   const onSelectTab = (index: number) => {
     const currentTabname = match?.params?.tabname
     const tabname = tabnames[index]
     if (tabname !== currentTabname) {
+      updateHackersPageNum(1)
       history.push(`${Routes.USERS}/${tabname}`)
     }
   }
@@ -89,16 +99,32 @@ export const UsersScene: FC<UsersSceneProps> = () => {
           </TabList>
           <TabPanels px="xxlarge" selectedIndex={tabIndex}>
             <TabPanel key="hackers">
-              <HackerList hackers={hackers} />
+              <HackerList
+                hackers={hackers}
+                pageNum={pageNum}
+                updatePageNum={updatePageNum}
+              />
             </TabPanel>
             <TabPanel key="staff">
-              <HackerList hackers={staff} />
+              <HackerList
+                hackers={staff}
+                pageNum={pageNum}
+                updatePageNum={updatePageNum}
+              />
             </TabPanel>
             <TabPanel key="judges">
-              <HackerList hackers={judges} />
+              <HackerList
+                hackers={judges}
+                pageNum={pageNum}
+                updatePageNum={updatePageNum}
+              />
             </TabPanel>
             <TabPanel key="admins">
-              <HackerList hackers={admins} />
+              <HackerList
+                hackers={admins}
+                pageNum={pageNum}
+                updatePageNum={updatePageNum}
+              />
             </TabPanel>
           </TabPanels>
         </>

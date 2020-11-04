@@ -66,7 +66,7 @@ export const hackSessionReducer = (
       return {
         ...state,
       }
-    case Actions.INIT_HACK_SESSION_SUCCESS:
+    case Actions.INIT_HACK_SESSION_RESPONSE:
       const {
         currentHackathon,
         technologies,

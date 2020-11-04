@@ -26,7 +26,7 @@
 
 export enum Actions {
   LOAD_USER_ATTRIBUTES_REQUEST = 'LOAD_USER_ATTRIBUTES_REQUEST',
-  LOAD_USER_ATTRIBUTES_SUCCESS = 'LOAD_USER_ATTRIBUTES_SUCCESS',
+  LOAD_USER_ATTRIBUTES_RESPONSE = 'LOAD_USER_ATTRIBUTES_RESPONSE',
   UPDATE_USER_ATTRIBUTE_VALUES = 'UPDATE_USER_ATTRIBUTE_VALUES',
   SAVE_USER_ATTRIBUTES = 'SAVE_USER_ATTRIBUTES',
 }
@@ -47,8 +47,8 @@ export interface LoadUserAttributesRequestAction {
   type: Actions.LOAD_USER_ATTRIBUTES_REQUEST
 }
 
-export interface LoadUserAttributesSuccessAction {
-  type: Actions.LOAD_USER_ATTRIBUTES_SUCCESS
+export interface LoadUserAttributesResponseAction {
+  type: Actions.LOAD_USER_ATTRIBUTES_RESPONSE
   payload: AdminUserAttributes
 }
 
@@ -64,7 +64,7 @@ export interface SaveUserAttributesAction {
 
 export type AdminAction =
   | LoadUserAttributesRequestAction
-  | LoadUserAttributesSuccessAction
+  | LoadUserAttributesResponseAction
   | UpdateAttributeValuesAction
   | SaveUserAttributesAction
 
@@ -72,10 +72,10 @@ export const loadUserAttributesRequest = (): LoadUserAttributesRequestAction => 
   type: Actions.LOAD_USER_ATTRIBUTES_REQUEST,
 })
 
-export const loadUserAttributesSuccess = (
+export const loadUserAttributesResponse = (
   adminUserAttributes: AdminUserAttributes
-): LoadUserAttributesSuccessAction => ({
-  type: Actions.LOAD_USER_ATTRIBUTES_SUCCESS,
+): LoadUserAttributesResponseAction => ({
+  type: Actions.LOAD_USER_ATTRIBUTES_RESPONSE,
   payload: adminUserAttributes,
 })
 

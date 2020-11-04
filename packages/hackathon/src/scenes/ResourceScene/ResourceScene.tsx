@@ -51,7 +51,6 @@ export const ResourceScene: FC<ResourceSceneProps> = () => {
   )
     .split(',')
     .filter((fv) => fv !== '')
-  console.log({ location, filterValues })
 
   const selectedResources =
     filterValues.length === 0

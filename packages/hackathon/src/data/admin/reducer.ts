@@ -47,7 +47,7 @@ export const adminReducer = (
       return {
         ...state,
       }
-    case Actions.LOAD_USER_ATTRIBUTES_SUCCESS:
+    case Actions.LOAD_USER_ATTRIBUTES_RESPONSE:
       return {
         ...state,
         adminUserAttributes: action.payload,

@@ -29,8 +29,8 @@ import { sheetsClient } from '../sheets_client'
 import {
   Actions,
   currentProjectsRequest,
-  allProjectsSuccess,
-  currentProjectsSuccess,
+  allProjectsResponse,
+  currentProjectsResponse,
   UpdateProjectAction,
   DeleteProjectAction,
   LockProjectsAction,
@@ -43,7 +43,7 @@ function* allProjectsSaga() {
     yield put(beginLoading())
     const result = yield call([sheetsClient, sheetsClient.getProjects])
     yield put(endLoading())
-    yield put(allProjectsSuccess(result))
+    yield put(allProjectsResponse(result))
   } catch (err) {
     console.error(err)
     yield put(actionMessage('A problem occurred loading the data', 'critical'))
@@ -55,7 +55,7 @@ function* currentProjectsSaga() {
     yield put(beginLoading())
     const result = yield call([sheetsClient, sheetsClient.getCurrentProjects])
     yield put(endLoading())
-    yield put(currentProjectsSuccess(result))
+    yield put(currentProjectsResponse(result))
   } catch (err) {
     console.error(err)
     yield put(actionMessage('A problem occurred loading the data', 'critical'))

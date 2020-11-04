@@ -28,16 +28,16 @@ import { IHackerProps } from '../../models'
 
 export enum Actions {
   ALL_HACKERS_REQUEST = 'ALL_HACKERS_REQUEST',
-  ALL_HACKERS_SUCCESS = 'ALL_HACKERS_SUCCESS',
-  ERROR = 'ERROR',
+  ALL_HACKERS_RESPONSE = 'ALL_HACKERS_RESPONSE',
+  UPDATE_HACKERS_PAGE_NUM = 'UPDATE_HACKERS_PAGE_NUM',
 }
 
 export interface AllHackersRequestAction {
   type: Actions.ALL_HACKERS_REQUEST
 }
 
-export interface AllHackersSuccessAction {
-  type: Actions.ALL_HACKERS_SUCCESS
+export interface AllHackersResponseAction {
+  type: Actions.ALL_HACKERS_RESPONSE
   payload: {
     hackers: IHackerProps[]
     judges: IHackerProps[]
@@ -46,18 +46,33 @@ export interface AllHackersSuccessAction {
   }
 }
 
-export type HackerAction = AllHackersRequestAction | AllHackersSuccessAction
+export interface UpdateHackersPageNumAction {
+  type: Actions.UPDATE_HACKERS_PAGE_NUM
+  payload: number
+}
+
+export type HackerAction =
+  | AllHackersRequestAction
+  | AllHackersResponseAction
+  | UpdateHackersPageNumAction
 
 export const allHackersRequest = (): AllHackersRequestAction => ({
   type: Actions.ALL_HACKERS_REQUEST,
 })
 
-export const allHackersSuccess = (
+export const allHackersResponse = (
   hackers: IHackerProps[],
   judges: IHackerProps[],
   staff: IHackerProps[],
   admins: IHackerProps[]
-): AllHackersSuccessAction => ({
-  type: Actions.ALL_HACKERS_SUCCESS,
+): AllHackersResponseAction => ({
+  type: Actions.ALL_HACKERS_RESPONSE,
   payload: { hackers, judges, staff, admins },
+})
+
+export const updateHackersPageNum = (
+  pageNum: number
+): UpdateHackersPageNumAction => ({
+  type: Actions.UPDATE_HACKERS_PAGE_NUM,
+  payload: pageNum,
 })

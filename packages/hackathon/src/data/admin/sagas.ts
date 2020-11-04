@@ -31,7 +31,7 @@ import { actionMessage, beginLoading, endLoading } from '../common/actions'
 import {
   Actions,
   loadUserAttributesRequest,
-  loadUserAttributesSuccess,
+  loadUserAttributesResponse,
   AdminUserAttributes,
   AttributeValue,
   saveUserAttributes,
@@ -82,7 +82,7 @@ function* loadUserAttributesSaga() {
     const result = yield call([lookerSdk, lookerSdk.all_user_attributes], {})
     const userAttributes = yield call([lookerSdk, lookerSdk.ok], result)
     yield put(endLoading())
-    yield put(loadUserAttributesSuccess(extractUserAttributes(userAttributes)))
+    yield put(loadUserAttributesResponse(extractUserAttributes(userAttributes)))
   } catch (err) {
     console.error(err)
     yield put(actionMessage('A problem occurred loading the data', 'critical'))
@@ -158,7 +158,7 @@ function* saveUserAttributesSaga(
       'Hackathon Token Server URL'
     )
     // Load the user requests again. Not very efficient but for this
-    // exercise okay. endLoading will be fired when loadUserAttributesSuccess
+    // exercise okay. endLoading will be fired when loadUserAttributesResponse
     // fires.
     yield put(loadUserAttributesRequest())
   } catch (err) {

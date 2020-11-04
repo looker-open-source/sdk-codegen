@@ -38,3 +38,6 @@ export const getAdminsState = (state: RootState): IHackerProps[] =>
 
 export const getStaffState = (state: RootState): IHackerProps[] =>
   state.hackersState.staff
+
+export const getHackersPageNumState = (state: RootState): number =>
+  state.hackersState.currentPageNum

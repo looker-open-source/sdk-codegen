@@ -28,7 +28,7 @@ import { actionMessage, beginLoading, endLoading } from '../common/actions'
 import { sheetsClient } from '../sheets_client'
 import {
   Actions,
-  initHackSessionSuccess,
+  initHackSessionResponse,
   initHackSessionFailure,
 } from './actions'
 
@@ -66,7 +66,7 @@ function* initializeHackSessionSaga() {
         sheetsClient.getJudgingsHeadings,
       ])
       yield put(
-        initHackSessionSuccess(
+        initHackSessionResponse(
           hackathon,
           technologies,
           hacker,

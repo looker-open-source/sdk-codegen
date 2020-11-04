@@ -28,7 +28,7 @@ import { ProjectsHeadings, HackersHeadings, JudgingsHeadings } from '../types'
 
 export enum Actions {
   INIT_HACK_SESSION_REQUEST = 'INIT_HACK_SESSION_REQUEST',
-  INIT_HACK_SESSION_SUCCESS = 'INIT_HACK_SESSION_SUCCESS',
+  INIT_HACK_SESSION_RESPONSE = 'INIT_HACK_SESSION_RESPONSE',
   INIT_HACK_SESSION_FAILURE = 'INIT_HACK_SESSION_FAILURE',
 }
 
@@ -49,8 +49,8 @@ export interface InitHackFailurePayload {
   hacker: IHackerProps
 }
 
-export interface InitHackSessionSuccessAction {
-  type: Actions.INIT_HACK_SESSION_SUCCESS
+export interface InitHackSessionResponseAction {
+  type: Actions.INIT_HACK_SESSION_RESPONSE
   payload: InitHackSessionPayload
 }
 
@@ -61,22 +61,22 @@ export interface InitHackSessionFailureAction {
 
 export type HackSessionAction =
   | InitHackSessionRequestAction
-  | InitHackSessionSuccessAction
+  | InitHackSessionResponseAction
   | InitHackSessionFailureAction
 
 export const initHackSessionRequest = (): InitHackSessionRequestAction => ({
   type: Actions.INIT_HACK_SESSION_REQUEST,
 })
 
-export const initHackSessionSuccess = (
+export const initHackSessionResponse = (
   currentHackathon: IHackathonProps,
   technologies: ITechnologyProps[],
   hacker: IHackerProps,
   projectsHeadings: ProjectsHeadings,
   hackersHeadings: HackersHeadings,
   judgingsHeadings: JudgingsHeadings
-): InitHackSessionSuccessAction => ({
-  type: Actions.INIT_HACK_SESSION_SUCCESS,
+): InitHackSessionResponseAction => ({
+  type: Actions.INIT_HACK_SESSION_RESPONSE,
   payload: {
     currentHackathon,
     technologies,

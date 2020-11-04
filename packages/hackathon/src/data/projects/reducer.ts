@@ -49,13 +49,13 @@ export const projectsReducer = (
   action: ProjectAction
 ): ProjectsState => {
   switch (action.type) {
-    case Actions.ALL_PROJECTS_SUCCESS:
+    case Actions.ALL_PROJECTS_RESPONSE:
       return {
         ...state,
         projects: action.payload,
         projectsLoaded: true,
       }
-    case Actions.CURRENT_PROJECTS_SUCCESS:
+    case Actions.CURRENT_PROJECTS_RESPONSE:
       return {
         ...state,
         currentProjects: action.payload,

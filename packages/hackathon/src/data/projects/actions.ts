@@ -27,9 +27,9 @@ import { IProjectProps, IHackerProps } from '../../models'
 
 export enum Actions {
   ALL_PROJECTS_REQUEST = 'ALL_PROJECTS_REQUEST',
-  ALL_PROJECTS_SUCCESS = 'ALL_PROJECTS_SUCCESS',
+  ALL_PROJECTS_RESPONSE = 'ALL_PROJECTS_RESPONSE',
   CURRENT_PROJECTS_REQUEST = 'CURRENT_PROJECTS_REQUEST',
-  CURRENT_PROJECTS_SUCCESS = 'CURRENT_PROJECTS_SUCCESS',
+  CURRENT_PROJECTS_RESPONSE = 'CURRENT_PROJECTS_RESPONSE',
   UPDATE_PROJECT = 'UPDATE_PROJECT',
   CREATE_PROJECT = 'CREATE_PROJECT',
   DELETE_PROJECT = 'DELETE_PROJECT',
@@ -43,8 +43,8 @@ export interface AllProjectsRequestAction {
   type: Actions.ALL_PROJECTS_REQUEST
 }
 
-export interface AllProjectsSuccessAction {
-  type: Actions.ALL_PROJECTS_SUCCESS
+export interface AllProjectsResponseAction {
+  type: Actions.ALL_PROJECTS_RESPONSE
   payload: IProjectProps[]
 }
 
@@ -52,8 +52,8 @@ export interface CurrentProjectsRequestAction {
   type: Actions.CURRENT_PROJECTS_REQUEST
 }
 
-export interface CurrentProjectsSuccessAction {
-  type: Actions.CURRENT_PROJECTS_SUCCESS
+export interface CurrentProjectsResponseAction {
+  type: Actions.CURRENT_PROJECTS_RESPONSE
   payload: IProjectProps[]
 }
 
@@ -113,9 +113,9 @@ export interface SetMoreInfoAction {
 
 export type ProjectAction =
   | AllProjectsRequestAction
-  | AllProjectsSuccessAction
+  | AllProjectsResponseAction
   | CurrentProjectsRequestAction
-  | CurrentProjectsSuccessAction
+  | CurrentProjectsResponseAction
   | UpdateProjectAction
   | CreateProjectAction
   | DeleteProjectAction
@@ -128,10 +128,10 @@ export const allProjectsRequest = (): AllProjectsRequestAction => ({
   type: Actions.ALL_PROJECTS_REQUEST,
 })
 
-export const allProjectsSuccess = (
+export const allProjectsResponse = (
   projects: IProjectProps[]
-): AllProjectsSuccessAction => ({
-  type: Actions.ALL_PROJECTS_SUCCESS,
+): AllProjectsResponseAction => ({
+  type: Actions.ALL_PROJECTS_RESPONSE,
   payload: projects,
 })
 
@@ -139,10 +139,10 @@ export const currentProjectsRequest = (): CurrentProjectsRequestAction => ({
   type: Actions.CURRENT_PROJECTS_REQUEST,
 })
 
-export const currentProjectsSuccess = (
+export const currentProjectsResponse = (
   projects: IProjectProps[]
-): CurrentProjectsSuccessAction => ({
-  type: Actions.CURRENT_PROJECTS_SUCCESS,
+): CurrentProjectsResponseAction => ({
+  type: Actions.CURRENT_PROJECTS_RESPONSE,
   payload: projects,
 })
 

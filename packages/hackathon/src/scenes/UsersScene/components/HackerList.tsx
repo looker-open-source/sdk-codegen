@@ -24,7 +24,7 @@
 
  */
 
-import React, { FC, useState } from 'react'
+import React, { FC } from 'react'
 import {
   ActionList,
   ActionListItem,
@@ -40,10 +40,15 @@ import { PAGE_SIZE } from '../../../constants'
 
 interface HackerListProps {
   hackers: IHackerProps[]
+  pageNum: number
+  updatePageNum: (pageNum: number) => void
 }
 
-export const HackerList: FC<HackerListProps> = ({ hackers }) => {
-  const [currentPage, setCurrentPage] = useState(1)
+export const HackerList: FC<HackerListProps> = ({
+  hackers,
+  pageNum,
+  updatePageNum,
+}) => {
   const columns = useSelector(getHackersHeadings)
 
   const hackHacker = (hacker: IHackerProps) => {
@@ -74,7 +79,7 @@ export const HackerList: FC<HackerListProps> = ({ hackers }) => {
   }
 
   const totalPages = Math.ceil(hackers.length / PAGE_SIZE)
-  const startIdx = (currentPage - 1) * PAGE_SIZE
+  const startIdx = (pageNum - 1) * PAGE_SIZE
   const rows = hackers
     .slice(startIdx, startIdx + PAGE_SIZE)
     .map((hacker, idx) => (
@@ -87,9 +92,9 @@ export const HackerList: FC<HackerListProps> = ({ hackers }) => {
     <>
       <ActionList columns={columns}>{rows}</ActionList>
       <Pagination
-        current={currentPage}
+        current={pageNum}
         pages={totalPages}
-        onChange={setCurrentPage}
+        onChange={updatePageNum}
       />
     </>
   )
