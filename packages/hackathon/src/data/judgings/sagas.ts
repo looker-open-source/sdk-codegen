@@ -71,8 +71,12 @@ function* getJudgingSaga({ payload: judgingId }: GetJudgingRequestAction) {
 function* saveJudgingSaga(action: SaveJudgingRequestAction) {
   try {
     yield put(beginLoading())
-    yield call([sheetsClient, sheetsClient.saveJudging], action.payload)
-    yield put(saveJudgingResponse(action.payload, true))
+    const judging = yield call(
+      [sheetsClient, sheetsClient.saveJudging],
+      action.payload
+    )
+    yield put(saveJudgingResponse(judging, true))
+    yield put(actionMessage('Judging has been saved', 'positive'))
   } catch (err) {
     console.error(err)
     yield put(saveJudgingResponse(action.payload, false))

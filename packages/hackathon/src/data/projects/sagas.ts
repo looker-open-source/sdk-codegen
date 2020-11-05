@@ -121,6 +121,7 @@ function* createProjectSaga(action: CreateProjectAction) {
       projectId
     )
     yield put(saveProjectResponse(updatedProject))
+    yield put(actionMessage('Project has been saved', 'positive'))
     yield put(endLoading())
   } catch (err) {
     console.error(err)
@@ -140,6 +141,7 @@ function* updateProjectSaga(action: UpdateProjectAction) {
       project._id
     )
     yield put(saveProjectResponse(updatedProject))
+    yield put(actionMessage('Project has been saved', 'positive'))
     yield put(endLoading())
   } catch (err) {
     console.error(err)
@@ -156,6 +158,7 @@ function* deleteProjectSaga(action: DeleteProjectAction) {
       [sheetsClient, sheetsClient.deleteProject],
       action.payload.projectId
     )
+    yield put(actionMessage('Project has been deleted', 'positive'))
     yield put(currentProjectsRequest())
   } catch (err) {
     console.error(err)
@@ -167,11 +170,14 @@ function* deleteProjectSaga(action: DeleteProjectAction) {
 
 function* lockProjectsSaga(action: LockProjectsAction) {
   try {
+    const { lock, hackathonId } = action.payload
     yield put(beginLoading())
-    yield call(
-      [sheetsClient, sheetsClient.lockProjects],
-      action.payload.lock,
-      action.payload.hackathonId
+    yield call([sheetsClient, sheetsClient.lockProjects], lock, hackathonId)
+    yield put(
+      actionMessage(
+        `Projects have been ${lock ? 'locked' : 'unlocked'}`,
+        'positive'
+      )
     )
     yield put(currentProjectsRequest())
   } catch (err) {
@@ -195,6 +201,12 @@ function* lockProjectSaga(action: LockProjectAction) {
       projectId
     )
     yield put(saveProjectResponse(updatedProject))
+    yield put(
+      actionMessage(
+        `Project has been ${lock ? 'locked' : 'unlocked'}`,
+        'positive'
+      )
+    )
     yield put(endLoading())
   } catch (err) {
     console.error(err)
@@ -207,13 +219,20 @@ function* lockProjectSaga(action: LockProjectAction) {
 function* changeMembershipSaga(action: ChangeMembershipAction) {
   try {
     yield put(beginLoading())
+    const { projectId, hackerId, leave } = action.payload
     const project = yield call(
       [sheetsClient, sheetsClient.changeMembership],
-      action.payload.projectId,
-      action.payload.hackerId,
-      action.payload.leave
+      projectId,
+      hackerId,
+      leave
     )
     yield put(saveProjectResponse(project))
+    yield put(
+      actionMessage(
+        `You have ${leave ? 'left' : 'joined'} the project`,
+        'positive'
+      )
+    )
     yield put(endLoading())
   } catch (err) {
     console.error(err)

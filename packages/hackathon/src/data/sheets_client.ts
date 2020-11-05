@@ -184,12 +184,13 @@ class SheetsClient {
     }
   }
 
-  async saveJudging(judgingProps: IJudgingProps) {
+  async saveJudging(judgingProps: IJudgingProps): Promise<IJudgingProps> {
     const data = await this.getSheetData()
     const judging = data.judgings.find(judgingProps._id, '_id')
     if (judging) {
       judging.fromObject(judgingProps)
-      await data.judgings.save(judging)
+      const updatedJudging = await data.judgings.save(judging)
+      return updatedJudging.toObject()
     } else {
       throw new Error(`judging not found for ${judgingProps._id}`)
     }

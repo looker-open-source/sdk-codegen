@@ -23,7 +23,7 @@
  SOFTWARE.
 
  */
-import React, { BaseSyntheticEvent, FC, useEffect } from 'react'
+import React, { BaseSyntheticEvent, FC } from 'react'
 import { useSelector, useDispatch } from 'react-redux'
 import { useHistory } from 'react-router-dom'
 import {
@@ -41,7 +41,6 @@ import {
   saveJudgingRequest,
   updateJudgingData,
 } from '../../../data/judgings/actions'
-import { getJudgingUpdatedState } from '../../../data/judgings/selectors'
 import { getHackerState } from '../../../data/hack_session/selectors'
 import { IJudgingProps } from '../../../models'
 import { Routes } from '../../../routes/AppRouter'
@@ -55,13 +54,6 @@ export const JudgingForm: FC<JudgingFormProps> = ({ judging, readonly }) => {
   const dispatch = useDispatch()
   const history = useHistory()
   const hacker = useSelector(getHackerState)
-  const judgingUpdated = useSelector(getJudgingUpdatedState)
-
-  useEffect(() => {
-    if (judgingUpdated) {
-      history.push(Routes.JUDGING)
-    }
-  }, [history, judgingUpdated])
 
   const onValueChange = (event: BaseSyntheticEvent) => {
     dispatch(updateJudgingData(event.target.name, event.target.value))
@@ -170,10 +162,10 @@ export const JudgingForm: FC<JudgingFormProps> = ({ judging, readonly }) => {
         <Space between>
           <Space>
             <ButtonOutline type="button" onClick={handleCancel}>
-              Return
+              Return to judging
             </ButtonOutline>
             <Button type="submit" onClick={handleSave} disabled={readonly}>
-              Save
+              Save judging
             </Button>
           </Space>
         </Space>

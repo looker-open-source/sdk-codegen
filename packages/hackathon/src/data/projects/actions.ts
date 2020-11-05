@@ -127,7 +127,7 @@ export interface LockProjectsAction {
 export interface LockProjectAction {
   type: Actions.LOCK_PROJECT
   payload: {
-    projectId?: string
+    projectId: string
     lock: boolean
   }
 }
@@ -249,7 +249,7 @@ export const lockProjects = (
 
 export const lockProject = (
   lock: boolean,
-  projectId?: string
+  projectId: string
 ): LockProjectAction => ({
   type: Actions.LOCK_PROJECT,
   payload: {
