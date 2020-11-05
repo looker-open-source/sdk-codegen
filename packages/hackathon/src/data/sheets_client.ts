@@ -102,37 +102,18 @@ class SheetsClient {
     return project._id
   }
 
-  async updateProject(
-    projectProps: IProjectProps,
-    addedJudges: IHackerProps[],
-    deletedJudges: IHackerProps[]
-  ) {
+  async updateProject(projectProps: IProjectProps) {
     const data = await this.getSheetData()
     const projects = data.projects
     const project = projects.find(projectProps._id, '_id')
     if (project) {
-      // TODO fromObject does not like this
+      this.updateJudges(project, projectProps.$judges)
       const projProps = this.prepareProjectProperties(projectProps)
-      deletedJudges.forEach((judge) => {
-        const hackerJudge = this.hackers?.judges.find(
-          (availableJudge) => availableJudge.user.id === judge.user.id
-        )
-        if (hackerJudge) {
-          project.deleteJudge(hackerJudge)
-        }
-      })
-      addedJudges.forEach((judge) => {
-        const hackerJudge = this.hackers?.judges.find(
-          (availableJudge) => availableJudge.user.id === judge.user.id
-        )
-        if (hackerJudge) {
-          project.addJudge(hackerJudge)
-        }
-      })
       // TODO fromObject messes up $judging which is why judge updates are done first.
-      // For the moment self correcting as the prohects are refreshed
       project.fromObject(projProps)
       await projects.update(project)
+      // TODO remove this when fromObject is fixed
+      await this.getCurrentProjects()
     } else {
       throw new Error(`project not found for ${projectProps._id}`)
     }
@@ -159,6 +140,18 @@ class SheetsClient {
       return await this.getCurrentProjects(hackathonId)
     } else {
       throw new Error(this.getHackathonErrorMessage(hackathonId))
+    }
+  }
+
+  async lockProject(lock: boolean, projectId: string) {
+    const data = await this.getSheetData()
+    const projects = data.projects
+    const project = projects.find(projectId, '_id')
+    if (project) {
+      project.locked = lock
+      await projects.update(project)
+    } else {
+      throw new Error(`project not found for ${projectId}`)
     }
   }
 
@@ -331,6 +324,29 @@ class SheetsClient {
     ]
     const template = new Judging()
     return sheetHeader(headers, template)
+  }
+
+  private async updateJudges(project: Project, judges: string[]) {
+    const addedJudges = judges.filter(
+      (judge) => !project.$judges.includes(judge)
+    )
+    const deletedJudges = project.$judges.filter(
+      (judge) => !judges.includes(judge)
+    )
+    const hackerJudges = this.hackers?.judges
+
+    for (const judge of deletedJudges) {
+      const hackerJudge = hackerJudges?.find((hj) => hj.name === judge)
+      if (hackerJudge) {
+        await project.deleteJudge(hackerJudge)
+      }
+    }
+    for (const judge of addedJudges) {
+      const hackerJudge = hackerJudges?.find((hj) => hj.name === judge)
+      if (hackerJudge) {
+        await project.addJudge(hackerJudge)
+      }
+    }
   }
 
   private prepareProjectProperties(projectProps: IProjectProps): IProjectProps {

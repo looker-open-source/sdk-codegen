@@ -47,9 +47,6 @@ export const getMoreInfoState = (
 export const getProjectState = (state: RootState): IProjectProps | undefined =>
   state.projectsState.currentProject
 
-export const getProjectJudgesState = (state: RootState): string[] | undefined =>
-  state.projectsState.currentProjectJudges
-
 export const getProjectUpdatedState = (state: RootState): boolean | undefined =>
   state.projectsState.projectUpdated
 

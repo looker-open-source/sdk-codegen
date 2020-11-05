@@ -48,6 +48,7 @@ import {
   changeMembership,
   getProjectRequest,
   updateProjectData,
+  lockProject,
 } from '../../../data/projects/actions'
 import {
   getCurrentHackathonState,
@@ -57,8 +58,6 @@ import {
 import {
   getProjectLoadedState,
   getProjectState,
-  getProjectUpdatedState,
-  getProjectJudgesState,
 } from '../../../data/projects/selectors'
 import { allHackersRequest } from '../../../data/hackers/actions'
 import { getJudgesState } from '../../../data/hackers/selectors'
@@ -67,11 +66,6 @@ import { isLoadingState } from '../../../data/common/selectors'
 import { canUpdateProject, canLockProject } from '../../../utils'
 
 interface ProjectFormProps {}
-
-interface ModifiedJudges {
-  addedJudges: IHackerProps[]
-  deletedJudges: IHackerProps[]
-}
 
 enum ChangeMemberShipType {
   leave = 'leave',
@@ -113,7 +107,7 @@ const canSubmit = ({ title, description, technologies }: IProjectProps) => {
   return title.length > 0 && description.length > 0 && technologies.length > 0
 }
 
-const changeMemberShip = (
+const getChangeMemberShipType = (
   hacker: IHackerProps,
   hackathon?: IHackathonProps,
   project?: IProjectProps
@@ -132,43 +126,6 @@ const changeMemberShip = (
   return ChangeMemberShipType.nochange
 }
 
-const getModifiedJudges = (
-  availableJudges: IHackerProps[],
-  oldJudgeNames: string[],
-  newJudgeNames: string[]
-): ModifiedJudges => {
-  const deletedJudgeNames = oldJudgeNames
-    .filter((oldJudgeName) => !newJudgeNames.includes(oldJudgeName))
-    .filter(
-      (judgeName) =>
-        !!availableJudges.find(
-          (availableJudge) => availableJudge.user.display_name === judgeName
-        )
-    )
-  const addedJudgeNames = newJudgeNames
-    .filter((newJudgeName) => !oldJudgeNames.includes(newJudgeName))
-    .filter(
-      (judgeName) =>
-        !!availableJudges.find(
-          (availableJudge) => availableJudge.user.display_name === judgeName
-        )
-    )
-  return {
-    addedJudges: addedJudgeNames.map(
-      (judgeName) =>
-        availableJudges.find(
-          (availableJudge) => availableJudge.user.display_name === judgeName
-        )!
-    ),
-    deletedJudges: deletedJudgeNames.map(
-      (judgeName) =>
-        availableJudges.find(
-          (availableJudge) => availableJudge.user.display_name === judgeName
-        )!
-    ),
-  }
-}
-
 export const ProjectForm: FC<ProjectFormProps> = () => {
   const dispatch = useDispatch()
   const history = useHistory()
@@ -183,24 +140,26 @@ export const ProjectForm: FC<ProjectFormProps> = () => {
   const projectIdOrNew = match?.params?.projectIdOrNew
   const isProjectLoaded = useSelector(getProjectLoadedState)
   const project = useSelector(getProjectState)
-  const currentJudges = useSelector(getProjectJudgesState)
-  const isProjectUpdated = useSelector(getProjectUpdatedState)
   const isHackerRegistered =
     hacker && hacker.registration && hacker.registration._id
 
   useEffect(() => {
-    if (projectIdOrNew) {
+    if (projectIdOrNew && !project) {
       dispatch(
         getProjectRequest(projectIdOrNew === 'new' ? undefined : projectIdOrNew)
       )
       dispatch(allHackersRequest())
     }
-  }, [dispatch, projectIdOrNew])
+  }, [dispatch, projectIdOrNew, project])
 
   useEffect(() => {
     if (project) {
       if (!isHackerRegistered) {
         dispatch(actionMessage('Hacker has not been registered', 'critical'))
+      } else if (projectIdOrNew === 'new' && project._id) {
+        history.push(`${Routes.PROJECTS}/${project._id}`)
+      } else if (project.locked) {
+        dispatch(actionMessage('This project is locked', 'warn'))
       }
     } else {
       if (isProjectLoaded) {
@@ -208,12 +167,6 @@ export const ProjectForm: FC<ProjectFormProps> = () => {
       }
     }
   }, [project, isProjectLoaded, isHackerRegistered])
-
-  useEffect(() => {
-    if (history && project && isProjectUpdated) {
-      history.push(Routes.PROJECTS)
-    }
-  }, [isProjectUpdated, project, history])
 
   const handleSubmit = (e: FormEvent) => {
     e.preventDefault()
@@ -223,12 +176,7 @@ export const ProjectForm: FC<ProjectFormProps> = () => {
     if (projectIdOrNew === 'new') {
       dispatch(createProject(hacker.registration?._id, project!))
     } else {
-      const { addedJudges, deletedJudges } = getModifiedJudges(
-        availableJudges,
-        currentJudges!,
-        project!.$judges
-      )
-      dispatch(updateProject(project!, addedJudges, deletedJudges))
+      dispatch(updateProject(project!))
     }
   }
 
@@ -236,8 +184,7 @@ export const ProjectForm: FC<ProjectFormProps> = () => {
     history.push(Routes.PROJECTS)
   }
 
-  const updateMembershipClick = (e: FormEvent) => {
-    e.preventDefault()
+  const updateMembershipClick = () => {
     if (project) {
       dispatch(
         changeMembership(
@@ -248,17 +195,26 @@ export const ProjectForm: FC<ProjectFormProps> = () => {
       )
     }
   }
+
+  const lockProjectClick = () => {
+    dispatch(lockProject(!project!.locked, project!._id))
+  }
+
   if (!project) return <></>
 
   const canUpdate = canUpdateProject(hacker, project, projectIdOrNew === 'new')
-  const canLock = canLockProject(hacker)
+  const canLock = canLockProject(hacker) && projectIdOrNew !== 'new'
   const validationMessages = validate(project)
-  const changeMemberShipType = changeMemberShip(hacker, hackathon, project)
+  const changeMemberShipType = getChangeMemberShipType(
+    hacker,
+    hackathon,
+    project
+  )
 
   return (
     <Form
       onSubmit={handleSubmit}
-      width="40vw"
+      width="50vw"
       mt="large"
       validationMessages={validationMessages}
     >
@@ -268,7 +224,7 @@ export const ProjectForm: FC<ProjectFormProps> = () => {
           required
           name="title"
           label="Title"
-          defaultValue={project.title}
+          value={project.title}
           onChange={(e: BaseSyntheticEvent) => {
             dispatch(updateProjectData({ ...project, title: e.target.value }))
           }}
@@ -278,7 +234,7 @@ export const ProjectForm: FC<ProjectFormProps> = () => {
           required
           label="Description"
           name="description"
-          defaultValue={project.description}
+          value={project.description}
           onChange={(e: BaseSyntheticEvent) => {
             dispatch(
               updateProjectData({ ...project, description: e.target.value })
@@ -290,7 +246,7 @@ export const ProjectForm: FC<ProjectFormProps> = () => {
           id="projectType"
           label="Type"
           required
-          defaultValue={project.project_type}
+          value={project.project_type}
           options={[
             { value: 'Open' },
             { value: 'Closed' },
@@ -311,17 +267,6 @@ export const ProjectForm: FC<ProjectFormProps> = () => {
           }}
           on={project.contestant}
         />
-        <FieldToggleSwitch
-          disabled={!canLock}
-          name="locked"
-          label="Lock"
-          onChange={(e: BaseSyntheticEvent) => {
-            dispatch(
-              updateProjectData({ ...project, locked: e.target.checked })
-            )
-          }}
-          on={project.locked}
-        />
         <FieldSelectMulti
           disabled={!canUpdate}
           id="technologies"
@@ -332,7 +277,7 @@ export const ProjectForm: FC<ProjectFormProps> = () => {
           }))}
           isFilterable
           placeholder="Type values or select from the list"
-          defaultValues={project.technologies}
+          values={project.technologies}
           onChange={(values: string[] = []) => {
             dispatch(updateProjectData({ ...project, technologies: values }))
           }}
@@ -341,7 +286,7 @@ export const ProjectForm: FC<ProjectFormProps> = () => {
           disabled={!canUpdate}
           name="moreInfo"
           label="More information"
-          defaultValue={project.more_info}
+          value={project.more_info}
           onChange={(e: BaseSyntheticEvent) => {
             dispatch(
               updateProjectData({ ...project, more_info: e.target.value })
@@ -353,7 +298,7 @@ export const ProjectForm: FC<ProjectFormProps> = () => {
             disabled={true}
             id="members"
             label="Members"
-            defaultValues={project.$members}
+            values={[...project.$members]}
           />
         )}
       </Fieldset>
@@ -367,7 +312,7 @@ export const ProjectForm: FC<ProjectFormProps> = () => {
           }))}
           isFilterable
           placeholder="Type values or select from the list"
-          defaultValues={project.$judges}
+          values={[...project.$judges]}
           onChange={(values: string[] = []) => {
             dispatch(updateProjectData({ ...project, $judges: values }))
           }}
@@ -380,7 +325,7 @@ export const ProjectForm: FC<ProjectFormProps> = () => {
             onClick={handleCancel}
             disabled={isLoading}
           >
-            Return
+            Return to projects
           </ButtonOutline>
           <Button
             type="submit"
@@ -391,7 +336,7 @@ export const ProjectForm: FC<ProjectFormProps> = () => {
               !!validationMessages
             }
           >
-            Save
+            Save project
           </Button>
         </Space>
         {changeMemberShipType !== ChangeMemberShipType.nochange &&
@@ -402,6 +347,15 @@ export const ProjectForm: FC<ProjectFormProps> = () => {
                 : 'Join project'}
             </ButtonOutline>
           )}
+        {canLock && (
+          <ButtonOutline
+            onClick={lockProjectClick}
+            disabled={isLoading}
+            ml="small"
+          >
+            {project.locked ? 'Unlock project' : 'Lock project'}
+          </ButtonOutline>
+        )}
       </Space>
     </Form>
   )

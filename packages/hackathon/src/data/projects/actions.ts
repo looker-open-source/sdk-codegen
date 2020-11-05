@@ -23,7 +23,7 @@
  SOFTWARE.
 
  */
-import { IProjectProps, IHackerProps } from '../../models'
+import { IProjectProps } from '../../models'
 
 export enum Actions {
   ALL_PROJECTS_REQUEST = 'ALL_PROJECTS_REQUEST',
@@ -38,6 +38,7 @@ export enum Actions {
   SAVE_PROJECT_RESPONSE = 'SAVE_PROJECT_RESPONSE',
   DELETE_PROJECT = 'DELETE_PROJECT',
   LOCK_PROJECTS = 'LOCK_PROJECTS',
+  LOCK_PROJECT = 'LOCK_PROJECT',
   CHANGE_MEMBERSHIP = 'CHANGE_MEMBERSHIP',
   UPDATE_PROJECTS_PAGE_NUM = 'UPDATE_PROJECTS_PAGE_NUM',
   SET_MORE_INFO = 'SET_MORE_INFO',
@@ -78,11 +79,7 @@ export interface UpdateProjectDataAction {
 
 export interface UpdateProjectAction {
   type: Actions.UPDATE_PROJECT
-  payload: {
-    project: IProjectProps
-    addedJudges: IHackerProps[]
-    deletedJudges: IHackerProps[]
-  }
+  payload: IProjectProps
 }
 
 export interface UpdateProjectsPageNumAction {
@@ -127,6 +124,14 @@ export interface LockProjectsAction {
   }
 }
 
+export interface LockProjectAction {
+  type: Actions.LOCK_PROJECT
+  payload: {
+    projectId?: string
+    lock: boolean
+  }
+}
+
 export interface SetMoreInfoAction {
   type: Actions.SET_MORE_INFO
   payload?: {
@@ -148,6 +153,7 @@ export type ProjectAction =
   | DeleteProjectAction
   | SaveProjectResponseAction
   | LockProjectsAction
+  | LockProjectAction
   | ChangeMembershipAction
   | UpdateProjectsPageNumAction
   | SetMoreInfoAction
@@ -202,17 +208,9 @@ export const updateProjectsPageNum = (
   payload: pageNum,
 })
 
-export const updateProject = (
-  project: IProjectProps,
-  addedJudges: IHackerProps[],
-  deletedJudges: IHackerProps[]
-): UpdateProjectAction => ({
+export const updateProject = (project: IProjectProps): UpdateProjectAction => ({
   type: Actions.UPDATE_PROJECT,
-  payload: {
-    project,
-    addedJudges,
-    deletedJudges,
-  },
+  payload: project,
 })
 
 export const saveProjectResponse = (
@@ -245,6 +243,17 @@ export const lockProjects = (
   type: Actions.LOCK_PROJECTS,
   payload: {
     hackathonId,
+    lock,
+  },
+})
+
+export const lockProject = (
+  lock: boolean,
+  projectId?: string
+): LockProjectAction => ({
+  type: Actions.LOCK_PROJECT,
+  payload: {
+    projectId,
     lock,
   },
 })

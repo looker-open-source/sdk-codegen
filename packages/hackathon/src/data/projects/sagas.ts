@@ -35,6 +35,7 @@ import {
   UpdateProjectAction,
   DeleteProjectAction,
   LockProjectsAction,
+  LockProjectAction,
   CreateProjectAction,
   ChangeMembershipAction,
   saveProjectResponse,
@@ -120,7 +121,7 @@ function* createProjectSaga(action: CreateProjectAction) {
       projectId
     )
     yield put(saveProjectResponse(updatedProject))
-    yield put(currentProjectsRequest())
+    yield put(endLoading())
   } catch (err) {
     console.error(err)
     yield put(
@@ -132,19 +133,14 @@ function* createProjectSaga(action: CreateProjectAction) {
 function* updateProjectSaga(action: UpdateProjectAction) {
   try {
     yield put(beginLoading())
-    const { project, addedJudges, deletedJudges } = action.payload
-    yield call(
-      [sheetsClient, sheetsClient.updateProject],
-      project,
-      addedJudges,
-      deletedJudges
-    )
+    const project = action.payload
+    yield call([sheetsClient, sheetsClient.updateProject], project)
     const updatedProject = yield call(
       [sheetsClient, sheetsClient.getProject],
       project._id
     )
     yield put(saveProjectResponse(updatedProject))
-    yield put(currentProjectsRequest())
+    yield put(endLoading())
   } catch (err) {
     console.error(err)
     yield put(
@@ -189,6 +185,25 @@ function* lockProjectsSaga(action: LockProjectsAction) {
   }
 }
 
+function* lockProjectSaga(action: LockProjectAction) {
+  try {
+    const { lock, projectId } = action.payload
+    yield put(beginLoading())
+    yield call([sheetsClient, sheetsClient.lockProject], lock, projectId)
+    const updatedProject = yield call(
+      [sheetsClient, sheetsClient.getProject],
+      projectId
+    )
+    yield put(saveProjectResponse(updatedProject))
+    yield put(endLoading())
+  } catch (err) {
+    console.error(err)
+    yield put(
+      actionMessage('A problem occurred while locking the project', 'critical')
+    )
+  }
+}
+
 function* changeMembershipSaga(action: ChangeMembershipAction) {
   try {
     yield put(beginLoading())
@@ -199,7 +214,7 @@ function* changeMembershipSaga(action: ChangeMembershipAction) {
       action.payload.leave
     )
     yield put(saveProjectResponse(project))
-    yield put(currentProjectsRequest())
+    yield put(endLoading())
   } catch (err) {
     console.error(err)
     yield put(
@@ -220,6 +235,7 @@ export function* registerProjectsSagas() {
     takeEvery(Actions.UPDATE_PROJECT, updateProjectSaga),
     takeEvery(Actions.DELETE_PROJECT, deleteProjectSaga),
     takeEvery(Actions.LOCK_PROJECTS, lockProjectsSaga),
+    takeEvery(Actions.LOCK_PROJECT, lockProjectSaga),
     takeEvery(Actions.CHANGE_MEMBERSHIP, changeMembershipSaga),
   ])
 }

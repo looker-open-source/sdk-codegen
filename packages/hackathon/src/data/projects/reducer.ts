@@ -32,7 +32,6 @@ export interface ProjectsState {
   currentProjects: IProjectProps[]
   projectsLoaded: boolean
   currentProject?: IProjectProps
-  currentProjectJudges?: string[]
   projectUpdated?: boolean
   projectLoaded: boolean
   moreInfo?: {
@@ -84,7 +83,6 @@ export const projectsReducer = (
       return {
         ...state,
         currentProject: undefined,
-        currentProjectJudges: undefined,
         projectUpdated: undefined,
         projectLoaded: false,
       }
@@ -92,9 +90,6 @@ export const projectsReducer = (
       return {
         ...state,
         currentProject: action.payload,
-        currentProjectJudges: action.payload
-          ? action.payload.$judges
-          : undefined,
         projectLoaded: true,
       }
     case Actions.UPDATE_PROJECT_DATA:
