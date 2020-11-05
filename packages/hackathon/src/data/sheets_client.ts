@@ -64,9 +64,14 @@ class SheetsClient {
   private hackers?: Hackers
   private hacker?: IHackerProps
 
-  async getProjects(): Promise<IProjectProps[]> {
-    const projects = await this.getSheetProjects(true)
+  async getProjects(refresh = true): Promise<IProjectProps[]> {
+    const projects = await this.getSheetProjects(refresh)
     return this.decorateProjectObjects(projects.toObject(), projects.rows)
+  }
+
+  async getProject(projectId: string): Promise<IProjectProps | undefined> {
+    const projects = await this.getProjects(false)
+    return projects.find((project) => project._id === projectId)
   }
 
   async getCurrentProjects(hackathonId?: string): Promise<IProjectProps[]> {
@@ -82,13 +87,19 @@ class SheetsClient {
     return this.decorateProjectObjects(result.toObject(), rows)
   }
 
-  async createProject(hacker_id: string, projectProps: IProjectProps) {
+  async createProject(
+    hacker_id: string,
+    projectProps: IProjectProps
+  ): Promise<string> {
+    const hackathon = await this.getSheetHackathon()
+    projectProps._hackathon_id = hackathon!._id
     projectProps.date_created = new Date()
     projectProps._user_id = hacker_id
     const projects = await this.getSheetProjects()
-    const project = new Project()
-    project.fromObject(projectProps)
-    await projects.save(project)
+    let project = new Project()
+    project.fromObject(this.prepareProjectProperties(projectProps))
+    project = await projects.save(project)
+    return project._id
   }
 
   async updateProject(
@@ -101,12 +112,7 @@ class SheetsClient {
     const project = projects.find(projectProps._id, '_id')
     if (project) {
       // TODO fromObject does not like this
-      const projProps = omit(projectProps, [
-        '$judges',
-        '$judge_count',
-        '$members',
-        '$team_count',
-      ])
+      const projProps = this.prepareProjectProperties(projectProps)
       deletedJudges.forEach((judge) => {
         const hackerJudge = this.hackers?.judges.find(
           (availableJudge) => availableJudge.user.id === judge.user.id
@@ -261,7 +267,11 @@ class SheetsClient {
     return data.technologies.toObject()
   }
 
-  async changeMembership(projectId: string, hackerId: string, leave: boolean) {
+  async changeMembership(
+    projectId: string,
+    hackerId: string,
+    leave: boolean
+  ): Promise<IProjectProps> {
     const projects = await this.getSheetProjects()
     const project = projects.find(projectId, '_id')
     if (project) {
@@ -276,6 +286,7 @@ class SheetsClient {
         } else {
           await project.join(hacker)
         }
+        return (await this.getProject(projectId)) as IProjectProps
       } else {
         throw new Error(`hacker not found for ${hackerId}`)
       }
@@ -320,6 +331,16 @@ class SheetsClient {
     ]
     const template = new Judging()
     return sheetHeader(headers, template)
+  }
+
+  private prepareProjectProperties(projectProps: IProjectProps): IProjectProps {
+    const props = omit(projectProps, [
+      '$judges',
+      '$judge_count',
+      '$members',
+      '$team_count',
+    ])
+    return props as IProjectProps
   }
 
   private async getSheetProjects(refresh = false) {

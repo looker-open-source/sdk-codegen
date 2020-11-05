@@ -24,13 +24,7 @@
 
  */
 
-import React, {
-  BaseSyntheticEvent,
-  FC,
-  FormEvent,
-  useEffect,
-  useState,
-} from 'react'
+import React, { BaseSyntheticEvent, FC, FormEvent, useEffect } from 'react'
 import {
   Form,
   Fieldset,
@@ -49,10 +43,11 @@ import { useHistory, useRouteMatch } from 'react-router-dom'
 import { IHackerProps, IProjectProps, IHackathonProps } from '../../../models'
 import { actionMessage } from '../../../data/common/actions'
 import {
-  currentProjectsRequest,
   updateProject,
   createProject,
   changeMembership,
+  getProjectRequest,
+  updateProjectData,
 } from '../../../data/projects/actions'
 import {
   getCurrentHackathonState,
@@ -60,13 +55,15 @@ import {
   getTechnologies,
 } from '../../../data/hack_session/selectors'
 import {
-  getCurrentProjectsState,
-  getProjectsLoadedState,
+  getProjectLoadedState,
+  getProjectState,
+  getProjectUpdatedState,
+  getProjectJudgesState,
 } from '../../../data/projects/selectors'
 import { allHackersRequest } from '../../../data/hackers/actions'
 import { getJudgesState } from '../../../data/hackers/selectors'
 import { Routes } from '../../../routes/AppRouter'
-import { isLoadingState, getMessageState } from '../../../data/common/selectors'
+import { isLoadingState } from '../../../data/common/selectors'
 import { canUpdateProject, canLockProject } from '../../../utils'
 
 interface ProjectFormProps {}
@@ -82,15 +79,16 @@ enum ChangeMemberShipType {
   nochange = 'nochange',
 }
 
-const validate = (moreInfo: string): ValidationMessages | undefined => {
-  // TODO improve validation
+const validateMoreInfo = (
+  more_info?: string
+): ValidationMessages | undefined => {
   if (
     // Go figure with this but its happening!
-    !moreInfo ||
-    moreInfo === '\0' ||
-    moreInfo.trim() === '' ||
-    moreInfo.startsWith('http://') ||
-    moreInfo.startsWith('https://')
+    !more_info ||
+    more_info === '\0' ||
+    more_info.trim() === '' ||
+    more_info.startsWith('http://') ||
+    more_info.startsWith('https://')
   ) {
     return undefined
   } else {
@@ -98,6 +96,21 @@ const validate = (moreInfo: string): ValidationMessages | undefined => {
       moreInfo: { type: 'error', message: 'More info must be a URL' },
     }
   }
+}
+
+const validate = ({
+  more_info,
+}: IProjectProps): ValidationMessages | undefined => {
+  const moreInfoResult = validateMoreInfo(more_info)
+  if (moreInfoResult) {
+    return { ...(moreInfoResult || {}) }
+  } else {
+    return undefined
+  }
+}
+
+const canSubmit = ({ title, description, technologies }: IProjectProps) => {
+  return title.length > 0 && description.length > 0 && technologies.length > 0
 }
 
 const changeMemberShip = (
@@ -164,106 +177,59 @@ export const ProjectForm: FC<ProjectFormProps> = () => {
   )
   const hackathon = useSelector(getCurrentHackathonState)
   const hacker = useSelector(getHackerState)
-  const projects = useSelector(getCurrentProjectsState)
-  const projectsLoaded = useSelector(getProjectsLoadedState)
   const isLoading = useSelector(isLoadingState)
-  const messageDetail = useSelector(getMessageState)
   const availableTechnologies = useSelector(getTechnologies)
   const availableJudges = useSelector(getJudgesState)
-
-  const [project, setProject] = useState<IProjectProps>()
-  const [title, setTitle] = useState<string>('')
-  const [description, setDescription] = useState<string>('')
-  const [projectType, setProjectType] = useState<string>('Open')
-  const [contestant, setContestant] = useState<boolean>(false)
-  const [locked, setLocked] = useState<boolean>(false)
-  const [technologies, setTechnologies] = useState<string[]>([])
-  const [moreInfo, setMoreInfo] = useState<string>('')
-  const [members, setMembers] = useState<string[]>([])
-  const [judges, setJudges] = useState<string[]>([])
-  const [isUpdating, setIsUpdating] = useState(false)
   const projectIdOrNew = match?.params?.projectIdOrNew
-  const canUpdate = canUpdateProject(hacker, project, projectIdOrNew === 'new')
-  const canLock = canLockProject(hacker)
-  const validationMessages = validate(moreInfo)
-  const changeMemberShipType = changeMemberShip(hacker, hackathon, project)
-
-  useEffect(() => {
-    dispatch(currentProjectsRequest())
-    dispatch(allHackersRequest())
-  }, [dispatch])
+  const isProjectLoaded = useSelector(getProjectLoadedState)
+  const project = useSelector(getProjectState)
+  const currentJudges = useSelector(getProjectJudgesState)
+  const isProjectUpdated = useSelector(getProjectUpdatedState)
+  const isHackerRegistered =
+    hacker && hacker.registration && hacker.registration._id
 
   useEffect(() => {
     if (projectIdOrNew) {
-      let project: IProjectProps | undefined
-      if (hacker && hacker.registration && hacker.registration._id) {
-        if (projectIdOrNew !== 'new') {
-          if (projects) {
-            project = projects.find((project) => project._id === projectIdOrNew)
-            if (project) {
-              setTitle(project.title)
-              setDescription(project.description)
-              setProjectType(project.project_type)
-              setContestant(project.contestant)
-              setLocked(project.locked)
-              setTechnologies(project.technologies)
-              setMoreInfo(project.more_info)
-              setMembers(project.$members)
-              setJudges(project.$judges)
-              setProject(project)
-            } else {
-              if (projectsLoaded) {
-                dispatch(actionMessage('Invalid project', 'critical'))
-              }
-            }
-          }
-        }
-      } else {
-        dispatch(actionMessage('Hacker has not been registered', 'critical'))
-      }
+      dispatch(
+        getProjectRequest(projectIdOrNew === 'new' ? undefined : projectIdOrNew)
+      )
+      dispatch(allHackersRequest())
     }
-  }, [projectIdOrNew, hacker, dispatch, projects, projectsLoaded])
+  }, [dispatch, projectIdOrNew])
 
   useEffect(() => {
-    if (isUpdating && !isLoading && !messageDetail) {
+    if (project) {
+      if (!isHackerRegistered) {
+        dispatch(actionMessage('Hacker has not been registered', 'critical'))
+      }
+    } else {
+      if (isProjectLoaded) {
+        dispatch(actionMessage('Invalid project', 'critical'))
+      }
+    }
+  }, [project, isProjectLoaded, isHackerRegistered])
+
+  useEffect(() => {
+    if (history && project && isProjectUpdated) {
       history.push(Routes.PROJECTS)
     }
-  }, [isLoading, isUpdating, history])
+  }, [isProjectUpdated, project, history])
 
   const handleSubmit = (e: FormEvent) => {
     e.preventDefault()
-    if (validate(moreInfo)) {
+    if (validate(project!)) {
       return
     }
-    let projectProps: IProjectProps
-    if (project) {
-      projectProps = project
-      project._user_id = hacker.registration?._id
-    } else {
-      projectProps = {} as IProjectProps
-    }
-    if (!projectProps._hackathon_id) {
-      // Self correct missing registration for now
-      projectProps._hackathon_id = hackathon ? hackathon._id : ''
-    }
-    projectProps.title = title
-    projectProps.description = description
-    projectProps.project_type = projectType
-    projectProps.contestant = contestant
-    projectProps.locked = locked
-    projectProps.technologies = technologies
-    projectProps.more_info = moreInfo
     if (projectIdOrNew === 'new') {
-      dispatch(createProject(hacker.registration?._id, projectProps))
+      dispatch(createProject(hacker.registration?._id, project!))
     } else {
       const { addedJudges, deletedJudges } = getModifiedJudges(
         availableJudges,
-        projectProps.$judges,
-        judges
+        currentJudges!,
+        project!.$judges
       )
-      dispatch(updateProject(projectProps, addedJudges, deletedJudges))
+      dispatch(updateProject(project!, addedJudges, deletedJudges))
     }
-    setIsUpdating(true)
   }
 
   const handleCancel = () => {
@@ -280,149 +246,163 @@ export const ProjectForm: FC<ProjectFormProps> = () => {
           changeMemberShipType === ChangeMemberShipType.leave
         )
       )
-      setIsUpdating(true)
     }
   }
+  if (!project) return <></>
+
+  const canUpdate = canUpdateProject(hacker, project, projectIdOrNew === 'new')
+  const canLock = canLockProject(hacker)
+  const validationMessages = validate(project)
+  const changeMemberShipType = changeMemberShip(hacker, hackathon, project)
 
   return (
-    <>
-      {(project || projectIdOrNew === 'new') && (
-        <Form
-          onSubmit={handleSubmit}
-          width="40vw"
-          mt="large"
-          validationMessages={validationMessages}
-        >
-          <Fieldset legend="Enter your project details">
-            <FieldText
-              disabled={!canUpdate}
-              required
-              name="title"
-              label="Title"
-              defaultValue={title}
-              onChange={(e: BaseSyntheticEvent) => {
-                setTitle(e.target.value)
-              }}
-            />
-            <FieldTextArea
-              disabled={!canUpdate}
-              required
-              label="Description"
-              name="description"
-              defaultValue={description}
-              onChange={(e: BaseSyntheticEvent) => {
-                setDescription(e.target.value)
-              }}
-            />
-            <FieldSelect
-              disabled={!canUpdate}
-              id="projectType"
-              label="Type"
-              required
-              defaultValue={projectType}
-              options={[
-                { value: 'Open' },
-                { value: 'Closed' },
-                { value: 'Invite Only' },
-              ]}
-              onChange={(value: string) => {
-                setProjectType(value)
-              }}
-            />
-            <FieldToggleSwitch
-              disabled={!canUpdate}
-              name="contestant"
-              label="Contestant"
-              onChange={(e: BaseSyntheticEvent) => {
-                setContestant(e.target.checked)
-              }}
-              on={contestant}
-            />
-            <FieldToggleSwitch
-              disabled={!canLock}
-              name="locked"
-              label="Lock"
-              onChange={(e: BaseSyntheticEvent) => {
-                setLocked(e.target.checked)
-              }}
-              on={locked || false}
-            />
-            <FieldSelectMulti
-              disabled={!canUpdate}
-              id="technologies"
-              label="Technologies"
-              required
-              options={availableTechnologies?.map((technology) => ({
-                value: technology._id,
-              }))}
-              isFilterable
-              placeholder="Type values or select from the list"
-              defaultValues={technologies}
-              onChange={(values: string[] = []) => {
-                setTechnologies(values)
-              }}
-            />
-            <FieldText
-              disabled={!canUpdate}
-              name="moreInfo"
-              label="More information"
-              defaultValue={moreInfo}
-              onChange={(e: BaseSyntheticEvent) => {
-                setMoreInfo(e.target.value)
-              }}
-            />
-            {projectIdOrNew !== 'new' && (
-              <FieldSelectMulti
-                disabled={true}
-                id="members"
-                label="Members"
-                defaultValues={members}
-              />
-            )}
-          </Fieldset>
-          {projectIdOrNew !== 'new' && (
-            <FieldSelectMulti
-              disabled={!hacker.canAdmin}
-              id="judges"
-              label="Judges"
-              options={availableJudges.map((judge) => ({
-                value: judge.name,
-              }))}
-              isFilterable
-              placeholder="Type values or select from the list"
-              defaultValues={judges}
-              onChange={(values: string[] = []) => {
-                setJudges(values)
-              }}
-            />
-          )}
-          <Space between width="100%">
-            <Space>
-              <ButtonOutline
-                type="button"
-                onClick={handleCancel}
-                disabled={isUpdating}
-              >
-                Return
-              </ButtonOutline>
-              <Button type="submit" disabled={!canUpdate || isUpdating}>
-                Save
-              </Button>
-            </Space>
-            {changeMemberShipType !== ChangeMemberShipType.nochange &&
-              projectIdOrNew !== 'new' && (
-                <ButtonOutline
-                  onClick={updateMembershipClick}
-                  disabled={isUpdating}
-                >
-                  {changeMemberShipType === ChangeMemberShipType.leave
-                    ? 'Leave project'
-                    : 'Join project'}
-                </ButtonOutline>
-              )}
-          </Space>
-        </Form>
+    <Form
+      onSubmit={handleSubmit}
+      width="40vw"
+      mt="large"
+      validationMessages={validationMessages}
+    >
+      <Fieldset legend="Enter your project details">
+        <FieldText
+          disabled={!canUpdate}
+          required
+          name="title"
+          label="Title"
+          defaultValue={project.title}
+          onChange={(e: BaseSyntheticEvent) => {
+            dispatch(updateProjectData({ ...project, title: e.target.value }))
+          }}
+        />
+        <FieldTextArea
+          disabled={!canUpdate}
+          required
+          label="Description"
+          name="description"
+          defaultValue={project.description}
+          onChange={(e: BaseSyntheticEvent) => {
+            dispatch(
+              updateProjectData({ ...project, description: e.target.value })
+            )
+          }}
+        />
+        <FieldSelect
+          disabled={!canUpdate}
+          id="projectType"
+          label="Type"
+          required
+          defaultValue={project.project_type}
+          options={[
+            { value: 'Open' },
+            { value: 'Closed' },
+            { value: 'Invite Only' },
+          ]}
+          onChange={(value: string) => {
+            dispatch(updateProjectData({ ...project, project_type: value }))
+          }}
+        />
+        <FieldToggleSwitch
+          disabled={!canUpdate}
+          name="contestant"
+          label="Contestant"
+          onChange={(e: BaseSyntheticEvent) => {
+            dispatch(
+              updateProjectData({ ...project, contestant: e.target.checked })
+            )
+          }}
+          on={project.contestant}
+        />
+        <FieldToggleSwitch
+          disabled={!canLock}
+          name="locked"
+          label="Lock"
+          onChange={(e: BaseSyntheticEvent) => {
+            dispatch(
+              updateProjectData({ ...project, locked: e.target.checked })
+            )
+          }}
+          on={project.locked}
+        />
+        <FieldSelectMulti
+          disabled={!canUpdate}
+          id="technologies"
+          label="Technologies"
+          required
+          options={availableTechnologies?.map((technology) => ({
+            value: technology._id,
+          }))}
+          isFilterable
+          placeholder="Type values or select from the list"
+          defaultValues={project.technologies}
+          onChange={(values: string[] = []) => {
+            dispatch(updateProjectData({ ...project, technologies: values }))
+          }}
+        />
+        <FieldText
+          disabled={!canUpdate}
+          name="moreInfo"
+          label="More information"
+          defaultValue={project.more_info}
+          onChange={(e: BaseSyntheticEvent) => {
+            dispatch(
+              updateProjectData({ ...project, more_info: e.target.value })
+            )
+          }}
+        />
+        {projectIdOrNew !== 'new' && (
+          <FieldSelectMulti
+            disabled={true}
+            id="members"
+            label="Members"
+            defaultValues={project.$members}
+          />
+        )}
+      </Fieldset>
+      {projectIdOrNew !== 'new' && (
+        <FieldSelectMulti
+          disabled={!hacker.canAdmin}
+          id="judges"
+          label="Judges"
+          options={availableJudges.map((judge) => ({
+            value: judge.name,
+          }))}
+          isFilterable
+          placeholder="Type values or select from the list"
+          defaultValues={project.$judges}
+          onChange={(values: string[] = []) => {
+            dispatch(updateProjectData({ ...project, $judges: values }))
+          }}
+        />
       )}
-    </>
+      <Space between width="100%">
+        <Space>
+          <ButtonOutline
+            type="button"
+            onClick={handleCancel}
+            disabled={isLoading}
+          >
+            Return
+          </ButtonOutline>
+          <Button
+            type="submit"
+            disabled={
+              !canUpdate ||
+              isLoading ||
+              !canSubmit(project) ||
+              !!validationMessages
+            }
+          >
+            Save
+          </Button>
+        </Space>
+        {changeMemberShipType !== ChangeMemberShipType.nochange &&
+          projectIdOrNew !== 'new' && (
+            <ButtonOutline onClick={updateMembershipClick} disabled={isLoading}>
+              {changeMemberShipType === ChangeMemberShipType.leave
+                ? 'Leave project'
+                : 'Join project'}
+            </ButtonOutline>
+          )}
+      </Space>
+    </Form>
   )
 }

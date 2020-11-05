@@ -23,7 +23,8 @@
  SOFTWARE.
 
  */
-import { all, call, put, takeEvery } from 'redux-saga/effects'
+import { all, call, put, takeEvery, select } from 'redux-saga/effects'
+import { IProjectProps } from '../../models'
 import { actionMessage, beginLoading, endLoading } from '../common/actions'
 import { sheetsClient } from '../sheets_client'
 import {
@@ -36,7 +37,27 @@ import {
   LockProjectsAction,
   CreateProjectAction,
   ChangeMembershipAction,
+  saveProjectResponse,
+  GetProjectRequestAction,
+  getProjectResponse,
 } from './actions'
+import { getCurrentProjectsState } from './selectors'
+
+const createNewProject = (): IProjectProps => {
+  const newProject: unknown = {
+    title: '',
+    description: '',
+    project_type: 'Open',
+    contestant: false,
+    locked: false,
+    technologies: [],
+    more_info: '',
+    $team: [],
+    $members: [],
+    $judges: [],
+  }
+  return newProject as IProjectProps
+}
 
 function* allProjectsSaga() {
   try {
@@ -51,11 +72,35 @@ function* allProjectsSaga() {
 }
 
 function* currentProjectsSaga() {
+  let projects: IProjectProps[] = []
   try {
     yield put(beginLoading())
-    const result = yield call([sheetsClient, sheetsClient.getCurrentProjects])
+    projects = yield call([sheetsClient, sheetsClient.getCurrentProjects])
     yield put(endLoading())
-    yield put(currentProjectsResponse(result))
+    yield put(currentProjectsResponse(projects))
+  } catch (err) {
+    console.error(err)
+    yield put(actionMessage('A problem occurred loading the data', 'critical'))
+  }
+  return projects
+}
+
+function* getProjectSaga({ payload: projectId }: GetProjectRequestAction) {
+  try {
+    if (!projectId) {
+      // For new projects initialize empty project props
+      yield put(getProjectResponse(createNewProject()))
+    } else {
+      // Pull prpjects out of state.
+      let state = yield select()
+      let projects = getCurrentProjectsState(state)
+      if (projects.length === 0) {
+        // projects are lost on page reload so load them
+        projects = yield currentProjectsSaga()
+      }
+      const project = projects.find((p) => p._id === projectId)
+      yield put(getProjectResponse(project))
+    }
   } catch (err) {
     console.error(err)
     yield put(actionMessage('A problem occurred loading the data', 'critical'))
@@ -65,11 +110,16 @@ function* currentProjectsSaga() {
 function* createProjectSaga(action: CreateProjectAction) {
   try {
     yield put(beginLoading())
-    yield call(
+    const projectId = yield call(
       [sheetsClient, sheetsClient.createProject],
       action.payload.hackerId,
       action.payload.project
     )
+    const updatedProject = yield call(
+      [sheetsClient, sheetsClient.getProject],
+      projectId
+    )
+    yield put(saveProjectResponse(updatedProject))
     yield put(currentProjectsRequest())
   } catch (err) {
     console.error(err)
@@ -89,6 +139,11 @@ function* updateProjectSaga(action: UpdateProjectAction) {
       addedJudges,
       deletedJudges
     )
+    const updatedProject = yield call(
+      [sheetsClient, sheetsClient.getProject],
+      project._id
+    )
+    yield put(saveProjectResponse(updatedProject))
     yield put(currentProjectsRequest())
   } catch (err) {
     console.error(err)
@@ -137,12 +192,13 @@ function* lockProjectsSaga(action: LockProjectsAction) {
 function* changeMembershipSaga(action: ChangeMembershipAction) {
   try {
     yield put(beginLoading())
-    yield call(
+    const project = yield call(
       [sheetsClient, sheetsClient.changeMembership],
       action.payload.projectId,
       action.payload.hackerId,
       action.payload.leave
     )
+    yield put(saveProjectResponse(project))
     yield put(currentProjectsRequest())
   } catch (err) {
     console.error(err)
@@ -159,6 +215,7 @@ export function* registerProjectsSagas() {
   yield all([
     takeEvery(Actions.ALL_PROJECTS_REQUEST, allProjectsSaga),
     takeEvery(Actions.CURRENT_PROJECTS_REQUEST, currentProjectsSaga),
+    takeEvery(Actions.GET_PROJECT_REQUEST, getProjectSaga),
     takeEvery(Actions.CREATE_PROJECT, createProjectSaga),
     takeEvery(Actions.UPDATE_PROJECT, updateProjectSaga),
     takeEvery(Actions.DELETE_PROJECT, deleteProjectSaga),

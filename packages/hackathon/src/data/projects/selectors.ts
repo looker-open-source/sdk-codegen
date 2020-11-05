@@ -43,3 +43,15 @@ export const getMoreInfoState = (
   state: RootState
 ): { title: string; moreInfo: string } | undefined =>
   state.projectsState.moreInfo
+
+export const getProjectState = (state: RootState): IProjectProps | undefined =>
+  state.projectsState.currentProject
+
+export const getProjectJudgesState = (state: RootState): string[] | undefined =>
+  state.projectsState.currentProjectJudges
+
+export const getProjectUpdatedState = (state: RootState): boolean | undefined =>
+  state.projectsState.projectUpdated
+
+export const getProjectLoadedState = (state: RootState): boolean =>
+  state.projectsState.projectLoaded

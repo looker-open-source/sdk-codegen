@@ -53,11 +53,13 @@ export const canUpdateProject = (
   if (hacker.canAdmin || hacker.canJudge || hacker.canStaff) {
     return true
   }
-  if (
-    newProject ||
-    (project && project?._user_id === hacker.id && !project.locked)
-  ) {
-    return true
+  if (hacker.registration && hacker.registration._id) {
+    if (
+      newProject ||
+      (project && project?._user_id === hacker.id && !project.locked)
+    ) {
+      return true
+    }
   }
   return false
 }

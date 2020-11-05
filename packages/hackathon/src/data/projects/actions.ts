@@ -30,8 +30,12 @@ export enum Actions {
   ALL_PROJECTS_RESPONSE = 'ALL_PROJECTS_RESPONSE',
   CURRENT_PROJECTS_REQUEST = 'CURRENT_PROJECTS_REQUEST',
   CURRENT_PROJECTS_RESPONSE = 'CURRENT_PROJECTS_RESPONSE',
+  GET_PROJECT_REQUEST = 'GET_PROJECT_REQUEST',
+  GET_PROJECT_RESPONSE = 'GET_PROJECT_RESPONSE',
+  UPDATE_PROJECT_DATA = 'UPDATE_PROJECT_DATA',
   UPDATE_PROJECT = 'UPDATE_PROJECT',
   CREATE_PROJECT = 'CREATE_PROJECT',
+  SAVE_PROJECT_RESPONSE = 'SAVE_PROJECT_RESPONSE',
   DELETE_PROJECT = 'DELETE_PROJECT',
   LOCK_PROJECTS = 'LOCK_PROJECTS',
   CHANGE_MEMBERSHIP = 'CHANGE_MEMBERSHIP',
@@ -57,6 +61,21 @@ export interface CurrentProjectsResponseAction {
   payload: IProjectProps[]
 }
 
+export interface GetProjectRequestAction {
+  type: Actions.GET_PROJECT_REQUEST
+  payload?: string
+}
+
+export interface GetProjectResponseAction {
+  type: Actions.GET_PROJECT_RESPONSE
+  payload?: IProjectProps
+}
+
+export interface UpdateProjectDataAction {
+  type: Actions.UPDATE_PROJECT_DATA
+  payload: IProjectProps
+}
+
 export interface UpdateProjectAction {
   type: Actions.UPDATE_PROJECT
   payload: {
@@ -77,6 +96,11 @@ export interface CreateProjectAction {
     hackerId: string
     project: IProjectProps
   }
+}
+
+export interface SaveProjectResponseAction {
+  type: Actions.SAVE_PROJECT_RESPONSE
+  payload: IProjectProps
 }
 
 export interface DeleteProjectAction {
@@ -116,9 +140,13 @@ export type ProjectAction =
   | AllProjectsResponseAction
   | CurrentProjectsRequestAction
   | CurrentProjectsResponseAction
+  | GetProjectRequestAction
+  | GetProjectResponseAction
+  | UpdateProjectDataAction
   | UpdateProjectAction
   | CreateProjectAction
   | DeleteProjectAction
+  | SaveProjectResponseAction
   | LockProjectsAction
   | ChangeMembershipAction
   | UpdateProjectsPageNumAction
@@ -146,6 +174,27 @@ export const currentProjectsResponse = (
   payload: projects,
 })
 
+export const getProjectRequest = (
+  projectId?: string
+): GetProjectRequestAction => ({
+  type: Actions.GET_PROJECT_REQUEST,
+  payload: projectId,
+})
+
+export const getProjectResponse = (
+  project?: IProjectProps
+): GetProjectResponseAction => ({
+  type: Actions.GET_PROJECT_RESPONSE,
+  payload: project,
+})
+
+export const updateProjectData = (
+  project: IProjectProps
+): UpdateProjectDataAction => ({
+  type: Actions.UPDATE_PROJECT_DATA,
+  payload: project,
+})
+
 export const updateProjectsPageNum = (
   pageNum: number
 ): UpdateProjectsPageNumAction => ({
@@ -164,6 +213,13 @@ export const updateProject = (
     addedJudges,
     deletedJudges,
   },
+})
+
+export const saveProjectResponse = (
+  project: IProjectProps
+): SaveProjectResponseAction => ({
+  type: Actions.SAVE_PROJECT_RESPONSE,
+  payload: project,
 })
 
 export const createProject = (

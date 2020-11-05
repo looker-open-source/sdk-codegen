@@ -31,6 +31,10 @@ export interface ProjectsState {
   projects: IProjectProps[]
   currentProjects: IProjectProps[]
   projectsLoaded: boolean
+  currentProject?: IProjectProps
+  currentProjectJudges?: string[]
+  projectUpdated?: boolean
+  projectLoaded: boolean
   moreInfo?: {
     title: string
     moreInfo: string
@@ -42,6 +46,7 @@ const defaultState: Readonly<ProjectsState> = Object.freeze({
   projects: [],
   currentProjects: [],
   projectsLoaded: false,
+  projectLoaded: false,
 })
 
 export const projectsReducer = (
@@ -49,11 +54,25 @@ export const projectsReducer = (
   action: ProjectAction
 ): ProjectsState => {
   switch (action.type) {
+    case Actions.ALL_PROJECTS_REQUEST:
+      return {
+        ...state,
+        currentProject: undefined,
+        projectUpdated: undefined,
+        projectLoaded: false,
+      }
     case Actions.ALL_PROJECTS_RESPONSE:
       return {
         ...state,
         projects: action.payload,
         projectsLoaded: true,
+      }
+    case Actions.CURRENT_PROJECTS_REQUEST:
+      return {
+        ...state,
+        currentProject: undefined,
+        projectUpdated: undefined,
+        projectLoaded: false,
       }
     case Actions.CURRENT_PROJECTS_RESPONSE:
       return {
@@ -61,10 +80,38 @@ export const projectsReducer = (
         currentProjects: action.payload,
         projectsLoaded: true,
       }
+    case Actions.GET_PROJECT_REQUEST:
+      return {
+        ...state,
+        currentProject: undefined,
+        currentProjectJudges: undefined,
+        projectUpdated: undefined,
+        projectLoaded: false,
+      }
+    case Actions.GET_PROJECT_RESPONSE:
+      return {
+        ...state,
+        currentProject: action.payload,
+        currentProjectJudges: action.payload
+          ? action.payload.$judges
+          : undefined,
+        projectLoaded: true,
+      }
+    case Actions.UPDATE_PROJECT_DATA:
+      return {
+        ...state,
+        currentProject: { ...action.payload },
+      }
     case Actions.UPDATE_PROJECTS_PAGE_NUM:
       return {
         ...state,
         currentPageNum: action.payload,
+      }
+    case Actions.SAVE_PROJECT_RESPONSE:
+      return {
+        ...state,
+        currentProject: action.payload,
+        projectUpdated: true,
       }
     case Actions.SET_MORE_INFO:
       return {
