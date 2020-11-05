@@ -335,8 +335,9 @@ export class Projects extends WhollySheet<Project, IProjectProps> {
     const projects = this.filterBy(hackathon)
     for (const project of projects) {
       project.locked = locked
-      await this.update(project, true)
+      project.setUpdate()
     }
+    await this.batchUpdate(true)
     return projects
   }
 }

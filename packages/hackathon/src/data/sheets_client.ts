@@ -132,7 +132,7 @@ class SheetsClient {
     }
   }
 
-  async deleteProject(projectId: String) {
+  async deleteProject(projectId: string) {
     const projects = await this.getSheetProjects()
     const project = projects.find(projectId, '_id')
     if (project) {
@@ -152,7 +152,7 @@ class SheetsClient {
       await projects.lock(hackathon, lock)
       return await this.getCurrentProjects(hackathonId)
     } else {
-      throw new Error(this.getHackathodErrorMessage(hackathonId))
+      throw new Error(this.getHackathonErrorMessage(hackathonId))
     }
   }
 
@@ -161,7 +161,7 @@ class SheetsClient {
     if (hackathon) {
       return hackathon.toObject()
     } else {
-      throw new Error(this.getHackathodErrorMessage())
+      throw new Error(this.getHackathonErrorMessage())
     }
   }
 
@@ -181,7 +181,7 @@ class SheetsClient {
       }
       return judgings
     } else {
-      throw new Error(this.getHackathodErrorMessage(hackathonId))
+      throw new Error(this.getHackathonErrorMessage(hackathonId))
     }
   }
 
@@ -249,7 +249,7 @@ class SheetsClient {
       const registration = await data.registerUser(hackathon, user)
       return registration.toObject()
     } else {
-      throw new Error(this.getHackathodErrorMessage(hackathonId))
+      throw new Error(this.getHackathonErrorMessage(hackathonId))
     }
   }
 
@@ -345,7 +345,7 @@ class SheetsClient {
     return data.hackathons
   }
 
-  private getHackathodErrorMessage(hackathonId?: string) {
+  private getHackathonErrorMessage(hackathonId?: string) {
     return hackathonId
       ? `hackathon not found for ${hackathonId}`
       : 'current hackathon not found'
