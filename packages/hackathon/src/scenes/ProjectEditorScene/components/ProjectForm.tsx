@@ -36,12 +36,11 @@ import {
   Button,
   ButtonOutline,
   Space,
-  ValidationMessages,
 } from '@looker/components'
 import { useDispatch, useSelector } from 'react-redux'
 import { useHistory, useRouteMatch } from 'react-router-dom'
-import { IHackerProps, IProjectProps, IHackathonProps } from '../../../models'
 import { actionMessage } from '../../../data/common/actions'
+import { isLoadingState } from '../../../data/common/selectors'
 import {
   updateProject,
   createProject,
@@ -51,19 +50,20 @@ import {
   lockProject,
 } from '../../../data/projects/actions'
 import {
+  getProjectLoadedState,
+  getProjectState,
+  getValidationMessagesState,
+} from '../../../data/projects/selectors'
+import {
   getCurrentHackathonState,
   getHackerState,
   getTechnologies,
 } from '../../../data/hack_session/selectors'
-import {
-  getProjectLoadedState,
-  getProjectState,
-} from '../../../data/projects/selectors'
 import { allHackersRequest } from '../../../data/hackers/actions'
 import { getJudgesState } from '../../../data/hackers/selectors'
-import { Routes } from '../../../routes/AppRouter'
-import { isLoadingState } from '../../../data/common/selectors'
 import { canUpdateProject, canLockProject } from '../../../utils'
+import { Routes } from '../../../routes/AppRouter'
+import { IHackerProps, IProjectProps, IHackathonProps } from '../../../models'
 
 interface ProjectFormProps {}
 
@@ -71,40 +71,6 @@ enum ChangeMemberShipType {
   leave = 'leave',
   join = 'join',
   nochange = 'nochange',
-}
-
-const validateMoreInfo = (
-  more_info?: string
-): ValidationMessages | undefined => {
-  if (
-    // Go figure with this but its happening!
-    !more_info ||
-    more_info === '\0' ||
-    more_info.trim() === '' ||
-    more_info.startsWith('http://') ||
-    more_info.startsWith('https://')
-  ) {
-    return undefined
-  } else {
-    return {
-      moreInfo: { type: 'error', message: 'More info must be a URL' },
-    }
-  }
-}
-
-const validate = ({
-  more_info,
-}: IProjectProps): ValidationMessages | undefined => {
-  const moreInfoResult = validateMoreInfo(more_info)
-  if (moreInfoResult) {
-    return { ...(moreInfoResult || {}) }
-  } else {
-    return undefined
-  }
-}
-
-const canSubmit = ({ title, description, technologies }: IProjectProps) => {
-  return title.length > 0 && description.length > 0 && technologies.length > 0
 }
 
 const getChangeMemberShipType = (
@@ -140,6 +106,7 @@ export const ProjectForm: FC<ProjectFormProps> = () => {
   const projectIdOrNew = match?.params?.projectIdOrNew
   const isProjectLoaded = useSelector(getProjectLoadedState)
   const project = useSelector(getProjectState)
+  const validationMessages = useSelector(getValidationMessagesState)
   const isHackerRegistered =
     hacker && hacker.registration && hacker.registration._id
 
@@ -170,9 +137,6 @@ export const ProjectForm: FC<ProjectFormProps> = () => {
 
   const handleSubmit = (e: FormEvent) => {
     e.preventDefault()
-    if (validate(project!)) {
-      return
-    }
     if (projectIdOrNew === 'new') {
       dispatch(createProject(hacker.registration?._id, project!))
     } else {
@@ -204,7 +168,6 @@ export const ProjectForm: FC<ProjectFormProps> = () => {
 
   const canUpdate = canUpdateProject(hacker, project, projectIdOrNew === 'new')
   const canLock = canLockProject(hacker) && projectIdOrNew !== 'new'
-  const validationMessages = validate(project)
   const changeMemberShipType = getChangeMemberShipType(
     hacker,
     hackathon,
@@ -243,7 +206,7 @@ export const ProjectForm: FC<ProjectFormProps> = () => {
         />
         <FieldSelect
           disabled={!canUpdate}
-          id="projectType"
+          id="project_type"
           label="Type"
           required
           value={project.project_type}
@@ -269,7 +232,7 @@ export const ProjectForm: FC<ProjectFormProps> = () => {
         />
         <FieldSelectMulti
           disabled={!canUpdate}
-          id="technologies"
+          name="technologies"
           label="Technologies"
           required
           options={availableTechnologies?.map((technology) => ({
@@ -284,7 +247,7 @@ export const ProjectForm: FC<ProjectFormProps> = () => {
         />
         <FieldText
           disabled={!canUpdate}
-          name="moreInfo"
+          name="more_info"
           label="More information"
           value={project.more_info}
           onChange={(e: BaseSyntheticEvent) => {
@@ -314,7 +277,12 @@ export const ProjectForm: FC<ProjectFormProps> = () => {
           placeholder="Type values or select from the list"
           values={[...project.$judges]}
           onChange={(values: string[] = []) => {
-            dispatch(updateProjectData({ ...project, $judges: values }))
+            dispatch(
+              updateProjectData({
+                ...project,
+                $judges: values,
+              })
+            )
           }}
         />
       )}
@@ -327,21 +295,16 @@ export const ProjectForm: FC<ProjectFormProps> = () => {
           >
             Return to projects
           </ButtonOutline>
-          <Button
-            type="submit"
-            disabled={
-              !canUpdate ||
-              isLoading ||
-              !canSubmit(project) ||
-              !!validationMessages
-            }
-          >
+          <Button type="submit" disabled={!canUpdate || isLoading}>
             Save project
           </Button>
         </Space>
         {changeMemberShipType !== ChangeMemberShipType.nochange &&
           projectIdOrNew !== 'new' && (
-            <ButtonOutline onClick={updateMembershipClick} disabled={isLoading}>
+            <ButtonOutline
+              onClick={updateMembershipClick}
+              disabled={isLoading || !!validationMessages}
+            >
               {changeMemberShipType === ChangeMemberShipType.leave
                 ? 'Leave project'
                 : 'Join project'}
@@ -350,7 +313,7 @@ export const ProjectForm: FC<ProjectFormProps> = () => {
         {canLock && (
           <ButtonOutline
             onClick={lockProjectClick}
-            disabled={isLoading}
+            disabled={isLoading || !!validationMessages}
             ml="small"
           >
             {project.locked ? 'Unlock project' : 'Lock project'}

@@ -24,7 +24,7 @@
 
  */
 import { IJudgingProps } from '../../models'
-import { Actions, JudgingAction, JudgingFieldName } from './actions'
+import { Actions, JudgingAction } from './actions'
 
 export interface JudgingsState {
   currentPageNum: number
@@ -44,34 +44,6 @@ const defaultState: Readonly<JudgingsState> = Object.freeze({
 
 const calculateScore = (judging: IJudgingProps): number =>
   2 * judging.execution + judging.ambition + judging.coolness + judging.impact
-
-const updateJudingData = (
-  fieldName: JudgingFieldName,
-  fieldValue: string,
-  currentJudging: IJudgingProps
-): IJudgingProps => {
-  const newJudging = { ...currentJudging }
-
-  switch (fieldName) {
-    case JudgingFieldName.ambition:
-      newJudging.ambition = parseInt(fieldValue, 10)
-      break
-    case JudgingFieldName.coolness:
-      newJudging.coolness = parseInt(fieldValue, 10)
-      break
-    case JudgingFieldName.execution:
-      newJudging.execution = parseInt(fieldValue, 10)
-      break
-    case JudgingFieldName.impact:
-      newJudging.impact = parseInt(fieldValue, 10)
-      break
-    case JudgingFieldName.notes:
-      newJudging.notes = fieldValue as string
-      break
-  }
-  newJudging.score = calculateScore(newJudging)
-  return newJudging
-}
 
 const normalizeValue = (value: number) => {
   return value > 0 ? value : 1
@@ -124,15 +96,9 @@ export const judgingsReducer = (
         judgingLoaded: true,
       }
     case Actions.UPDATE_JUDGING_DATA:
-      const { fieldName, fieldValue } = action.payload
-      const newJudging = updateJudingData(
-        fieldName,
-        fieldValue,
-        state.currentJudging as IJudgingProps
-      )
       return {
         ...state,
-        currentJudging: newJudging,
+        currentJudging: normalizeJudgingData(action.payload),
       }
     case Actions.UPDATE_JUDGINGS_PAGE_NUM:
       return {

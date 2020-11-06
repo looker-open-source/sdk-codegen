@@ -23,6 +23,7 @@
  SOFTWARE.
 
  */
+import { ValidationMessages } from '@looker/components'
 import { IProjectProps } from '../../models'
 
 export enum Actions {
@@ -97,7 +98,10 @@ export interface CreateProjectAction {
 
 export interface SaveProjectResponseAction {
   type: Actions.SAVE_PROJECT_RESPONSE
-  payload: IProjectProps
+  payload: {
+    project: IProjectProps
+    validationMessages?: ValidationMessages
+  }
 }
 
 export interface DeleteProjectAction {
@@ -214,10 +218,11 @@ export const updateProject = (project: IProjectProps): UpdateProjectAction => ({
 })
 
 export const saveProjectResponse = (
-  project: IProjectProps
+  project: IProjectProps,
+  validationMessages?: ValidationMessages
 ): SaveProjectResponseAction => ({
   type: Actions.SAVE_PROJECT_RESPONSE,
-  payload: project,
+  payload: { project, validationMessages },
 })
 
 export const createProject = (

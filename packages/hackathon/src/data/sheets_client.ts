@@ -24,6 +24,7 @@
 
  */
 import { omit } from 'lodash'
+import { ValidationMessages } from '@looker/components'
 import { DefaultSettings } from '@looker/sdk-rtl/lib/browser'
 import { ITabTable, SheetSDK } from '@looker/wholly-sheet'
 import { getExtensionSDK } from '@looker/extension-sdk'
@@ -85,6 +86,58 @@ class SheetsClient {
       rows: rows,
     } as ITabTable)
     return this.decorateProjectObjects(result.toObject(), rows)
+  }
+
+  validateProject({
+    title,
+    description,
+    project_type,
+    technologies,
+    more_info,
+  }: IProjectProps): ValidationMessages | undefined {
+    const validationMessage: ValidationMessages = {}
+    if (!title || title.trim() === '') {
+      validationMessage.title = {
+        type: 'error',
+        message: 'Title required',
+      }
+    }
+    if (!description || description.trim() === '') {
+      validationMessage.description = {
+        type: 'error',
+        message: 'Description required',
+      }
+    }
+    if (!project_type || project_type.trim() === '') {
+      validationMessage.project_type = {
+        type: 'error',
+        message: 'Project type required',
+      }
+    }
+    if (!technologies || technologies.length === 0) {
+      validationMessage.technologies = {
+        type: 'error',
+        message: 'At least one technology required',
+      }
+    }
+    if (
+      !(
+        !more_info ||
+        // Go figure this but its happening!
+        more_info === '\0' ||
+        more_info.trim() === '' ||
+        more_info.startsWith('http://') ||
+        more_info.startsWith('https://')
+      )
+    ) {
+      validationMessage.more_info = {
+        type: 'error',
+        message: 'More info must be a URL',
+      }
+    }
+    return Object.keys(validationMessage).length === 0
+      ? undefined
+      : validationMessage
   }
 
   async createProject(
@@ -440,6 +493,9 @@ class SheetsClient {
       if (!projectProps.$team_count) {
         projectProps.$team_count = projectProps.$members.length
       }
+      projectProps.technologies = projectProps.technologies.filter(
+        (v) => v !== ''
+      )
       return projectProps
     })
   }

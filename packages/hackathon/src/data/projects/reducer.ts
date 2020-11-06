@@ -23,6 +23,7 @@
  SOFTWARE.
 
  */
+import { ValidationMessages } from '@looker/components'
 import { IProjectProps } from '../../models'
 import { ProjectAction, Actions } from './actions'
 
@@ -32,6 +33,7 @@ export interface ProjectsState {
   currentProjects: IProjectProps[]
   projectsLoaded: boolean
   currentProject?: IProjectProps
+  validationMessages?: ValidationMessages
   projectUpdated?: boolean
   projectLoaded: boolean
   moreInfo?: {
@@ -83,6 +85,7 @@ export const projectsReducer = (
       return {
         ...state,
         currentProject: undefined,
+        validationMessages: undefined,
         projectUpdated: undefined,
         projectLoaded: false,
       }
@@ -102,10 +105,21 @@ export const projectsReducer = (
         ...state,
         currentPageNum: action.payload,
       }
+    case Actions.CREATE_PROJECT:
+      return {
+        ...state,
+        validationMessages: undefined,
+      }
+    case Actions.UPDATE_PROJECT_DATA:
+      return {
+        ...state,
+        validationMessages: undefined,
+      }
     case Actions.SAVE_PROJECT_RESPONSE:
       return {
         ...state,
-        currentProject: action.payload,
+        currentProject: action.payload.project,
+        validationMessages: action.payload.validationMessages,
         projectUpdated: true,
       }
     case Actions.SET_MORE_INFO:

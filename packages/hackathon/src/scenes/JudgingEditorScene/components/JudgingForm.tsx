@@ -56,7 +56,12 @@ export const JudgingForm: FC<JudgingFormProps> = ({ judging, readonly }) => {
   const hacker = useSelector(getHackerState)
 
   const onValueChange = (event: BaseSyntheticEvent) => {
-    dispatch(updateJudgingData(event.target.name, event.target.value))
+    const newJudging = { ...judging }
+    newJudging[event.target.name] =
+      event.target.type === 'range'
+        ? parseInt(event.target.value, 10)
+        : event.target.value
+    dispatch(updateJudgingData(newJudging))
   }
 
   const handleCancel = () => {

@@ -74,20 +74,9 @@ export interface UpdateJudgingsPageNumAction {
   payload: number
 }
 
-export enum JudgingFieldName {
-  execution = 'execution',
-  ambition = 'ambition',
-  coolness = 'coolness',
-  impact = 'impact',
-  notes = 'notes',
-}
-
 export interface UpdateJudgingData {
   type: Actions.UPDATE_JUDGING_DATA
-  payload: {
-    fieldName: JudgingFieldName
-    fieldValue: string
-  }
+  payload: IJudgingProps
 }
 
 export type JudgingAction =
@@ -126,11 +115,10 @@ export const getJudgingResponse = (
 })
 
 export const updateJudgingData = (
-  fieldName: JudgingFieldName,
-  fieldValue: string
+  judging: IJudgingProps
 ): UpdateJudgingData => ({
   type: Actions.UPDATE_JUDGING_DATA,
-  payload: { fieldName, fieldValue },
+  payload: judging,
 })
 
 export const saveJudgingRequest = (

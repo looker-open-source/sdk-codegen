@@ -24,6 +24,7 @@
 
  */
 
+import { ValidationMessages } from '@looker/components'
 import { RootState } from '../root_reducer'
 import { IProjectProps } from '../../models'
 
@@ -46,6 +47,10 @@ export const getMoreInfoState = (
 
 export const getProjectState = (state: RootState): IProjectProps | undefined =>
   state.projectsState.currentProject
+
+export const getValidationMessagesState = (
+  state: RootState
+): ValidationMessages | undefined => state.projectsState.validationMessages
 
 export const getProjectUpdatedState = (state: RootState): boolean | undefined =>
   state.projectsState.projectUpdated

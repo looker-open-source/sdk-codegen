@@ -146,7 +146,7 @@ export const ProjectList: FC<ProjectListProps> = () => {
             icon={isLocked ? 'LockClosed' : 'Edit'}
             itemRole="link"
           >
-            Edit
+            Update project
           </ActionListItemAction>
         ) : (
           <ActionListItemAction
@@ -154,7 +154,7 @@ export const ProjectList: FC<ProjectListProps> = () => {
             icon={isLocked ? 'LockClosed' : 'ModelFile'}
             itemRole="link"
           >
-            View
+            View project
           </ActionListItemAction>
         )}
         {canDoProjectAction(hacker, project, 'delete') && (
@@ -162,7 +162,7 @@ export const ProjectList: FC<ProjectListProps> = () => {
             onClick={handleDelete.bind(null, project)}
             icon="Trash"
           >
-            Delete
+            Delete project
           </ActionListItemAction>
         )}
       </>

@@ -110,18 +110,28 @@ function* getProjectSaga({ payload: projectId }: GetProjectRequestAction) {
 
 function* createProjectSaga(action: CreateProjectAction) {
   try {
+    const { project, hackerId } = action.payload
     yield put(beginLoading())
-    const projectId = yield call(
-      [sheetsClient, sheetsClient.createProject],
-      action.payload.hackerId,
-      action.payload.project
+    const validationMessages = yield call(
+      [sheetsClient, sheetsClient.validateProject],
+      project
     )
-    const updatedProject = yield call(
-      [sheetsClient, sheetsClient.getProject],
-      projectId
-    )
-    yield put(saveProjectResponse(updatedProject))
-    yield put(actionMessage('Project has been saved', 'positive'))
+    if (validationMessages) {
+      yield put(saveProjectResponse(project, validationMessages))
+      yield put(actionMessage('Please fix errors', 'critical'))
+    } else {
+      const projectId = yield call(
+        [sheetsClient, sheetsClient.createProject],
+        hackerId,
+        project
+      )
+      const updatedProject = yield call(
+        [sheetsClient, sheetsClient.getProject],
+        projectId
+      )
+      yield put(saveProjectResponse(updatedProject))
+      yield put(actionMessage('Project has been saved', 'positive'))
+    }
     yield put(endLoading())
   } catch (err) {
     console.error(err)
@@ -135,13 +145,22 @@ function* updateProjectSaga(action: UpdateProjectAction) {
   try {
     yield put(beginLoading())
     const project = action.payload
-    yield call([sheetsClient, sheetsClient.updateProject], project)
-    const updatedProject = yield call(
-      [sheetsClient, sheetsClient.getProject],
-      project._id
+    const validationMessages = yield call(
+      [sheetsClient, sheetsClient.validateProject],
+      project
     )
-    yield put(saveProjectResponse(updatedProject))
-    yield put(actionMessage('Project has been saved', 'positive'))
+    if (validationMessages) {
+      yield put(saveProjectResponse(project, validationMessages))
+      yield put(actionMessage('Please fix errors', 'critical'))
+    } else {
+      yield call([sheetsClient, sheetsClient.updateProject], project)
+      const updatedProject = yield call(
+        [sheetsClient, sheetsClient.getProject],
+        project._id
+      )
+      yield put(saveProjectResponse(updatedProject))
+      yield put(actionMessage('Project has been saved', 'positive'))
+    }
     yield put(endLoading())
   } catch (err) {
     console.error(err)
