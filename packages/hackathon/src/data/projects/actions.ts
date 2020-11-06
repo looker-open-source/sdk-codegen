@@ -70,7 +70,7 @@ export interface GetProjectRequestAction {
 
 export interface GetProjectResponseAction {
   type: Actions.GET_PROJECT_RESPONSE
-  payload?: IProjectProps
+  payload: { project?: IProjectProps; isProjectMember?: boolean }
 }
 
 export interface UpdateProjectDataAction {
@@ -101,6 +101,7 @@ export interface SaveProjectResponseAction {
   payload: {
     project: IProjectProps
     validationMessages?: ValidationMessages
+    isProjectMember?: boolean
   }
 }
 
@@ -192,10 +193,11 @@ export const getProjectRequest = (
 })
 
 export const getProjectResponse = (
-  project?: IProjectProps
+  project?: IProjectProps,
+  isProjectMember?: boolean
 ): GetProjectResponseAction => ({
   type: Actions.GET_PROJECT_RESPONSE,
-  payload: project,
+  payload: { project, isProjectMember },
 })
 
 export const updateProjectData = (
@@ -219,10 +221,11 @@ export const updateProject = (project: IProjectProps): UpdateProjectAction => ({
 
 export const saveProjectResponse = (
   project: IProjectProps,
+  isProjectMember?: boolean,
   validationMessages?: ValidationMessages
 ): SaveProjectResponseAction => ({
   type: Actions.SAVE_PROJECT_RESPONSE,
-  payload: { project, validationMessages },
+  payload: { project, validationMessages, isProjectMember },
 })
 
 export const createProject = (

@@ -24,6 +24,17 @@
 
  */
 
+/*
+ * TODO - remove as much logic as possible that relies on 'new'.
+ * At a minimum this means the save logic. Difference between new
+ * and update should be in the saga.
+ */
+
+/*
+ * TODO - remove need for hacker data - logic that needs it should be in
+ * the saga.
+ */
+
 import React, { BaseSyntheticEvent, FC, FormEvent, useEffect } from 'react'
 import {
   Form,
@@ -53,44 +64,20 @@ import {
   getProjectLoadedState,
   getProjectState,
   getValidationMessagesState,
+  getIsProjectMemberState,
 } from '../../../data/projects/selectors'
 import {
-  getCurrentHackathonState,
   getHackerState,
+  getHackerIdState,
+  getHackerRegistrationIdState,
   getTechnologies,
 } from '../../../data/hack_session/selectors'
 import { allHackersRequest } from '../../../data/hackers/actions'
 import { getJudgesState } from '../../../data/hackers/selectors'
 import { canUpdateProject, canLockProject } from '../../../utils'
 import { Routes } from '../../../routes/AppRouter'
-import { IHackerProps, IProjectProps, IHackathonProps } from '../../../models'
 
 interface ProjectFormProps {}
-
-enum ChangeMemberShipType {
-  leave = 'leave',
-  join = 'join',
-  nochange = 'nochange',
-}
-
-const getChangeMemberShipType = (
-  hacker: IHackerProps,
-  hackathon?: IHackathonProps,
-  project?: IProjectProps
-): ChangeMemberShipType => {
-  if (project && !project.locked && hackathon) {
-    if (
-      !!project.$team.find(
-        (teamMember) => teamMember.user_id === String(hacker.id)
-      )
-    ) {
-      return ChangeMemberShipType.leave
-    } else if (project.$team.length < hackathon.max_team_size) {
-      return ChangeMemberShipType.join
-    }
-  }
-  return ChangeMemberShipType.nochange
-}
 
 export const ProjectForm: FC<ProjectFormProps> = () => {
   const dispatch = useDispatch()
@@ -98,7 +85,6 @@ export const ProjectForm: FC<ProjectFormProps> = () => {
   const match = useRouteMatch<{ projectIdOrNew: string }>(
     '/projects/:projectIdOrNew'
   )
-  const hackathon = useSelector(getCurrentHackathonState)
   const hacker = useSelector(getHackerState)
   const isLoading = useSelector(isLoadingState)
   const availableTechnologies = useSelector(getTechnologies)
@@ -106,9 +92,10 @@ export const ProjectForm: FC<ProjectFormProps> = () => {
   const projectIdOrNew = match?.params?.projectIdOrNew
   const isProjectLoaded = useSelector(getProjectLoadedState)
   const project = useSelector(getProjectState)
+  const isProjectMember = useSelector(getIsProjectMemberState)
   const validationMessages = useSelector(getValidationMessagesState)
-  const isHackerRegistered =
-    hacker && hacker.registration && hacker.registration._id
+  const hackerId = useSelector(getHackerIdState)
+  const hackerRegistrationId = useSelector(getHackerRegistrationIdState)
 
   useEffect(() => {
     if (projectIdOrNew && !project) {
@@ -120,8 +107,9 @@ export const ProjectForm: FC<ProjectFormProps> = () => {
   }, [dispatch, projectIdOrNew, project])
 
   useEffect(() => {
+    // TODO all of this logic should be in the saga!
     if (project) {
-      if (!isHackerRegistered) {
+      if (!hackerRegistrationId) {
         dispatch(actionMessage('Hacker has not been registered', 'critical'))
       } else if (projectIdOrNew === 'new' && project._id) {
         history.push(`${Routes.PROJECTS}/${project._id}`)
@@ -133,12 +121,13 @@ export const ProjectForm: FC<ProjectFormProps> = () => {
         dispatch(actionMessage('Invalid project', 'critical'))
       }
     }
-  }, [project, isProjectLoaded, isHackerRegistered])
+  }, [project, isProjectLoaded, hackerRegistrationId])
 
   const handleSubmit = (e: FormEvent) => {
     e.preventDefault()
+    // TODO this should be a single action - saveProject
     if (projectIdOrNew === 'new') {
-      dispatch(createProject(hacker.registration?._id, project!))
+      dispatch(createProject(hackerRegistrationId!, project!))
     } else {
       dispatch(updateProject(project!))
     }
@@ -149,15 +138,7 @@ export const ProjectForm: FC<ProjectFormProps> = () => {
   }
 
   const updateMembershipClick = () => {
-    if (project) {
-      dispatch(
-        changeMembership(
-          project._id,
-          String(hacker.id),
-          changeMemberShipType === ChangeMemberShipType.leave
-        )
-      )
-    }
+    dispatch(changeMembership(project!._id, hackerId!, isProjectMember!))
   }
 
   const lockProjectClick = () => {
@@ -166,13 +147,9 @@ export const ProjectForm: FC<ProjectFormProps> = () => {
 
   if (!project) return <></>
 
+  // TODO move this to the sage and pull data out of rudux
   const canUpdate = canUpdateProject(hacker, project, projectIdOrNew === 'new')
   const canLock = canLockProject(hacker) && projectIdOrNew !== 'new'
-  const changeMemberShipType = getChangeMemberShipType(
-    hacker,
-    hackathon,
-    project
-  )
 
   return (
     <Form
@@ -299,17 +276,14 @@ export const ProjectForm: FC<ProjectFormProps> = () => {
             Save project
           </Button>
         </Space>
-        {changeMemberShipType !== ChangeMemberShipType.nochange &&
-          projectIdOrNew !== 'new' && (
-            <ButtonOutline
-              onClick={updateMembershipClick}
-              disabled={isLoading || !!validationMessages}
-            >
-              {changeMemberShipType === ChangeMemberShipType.leave
-                ? 'Leave project'
-                : 'Join project'}
-            </ButtonOutline>
-          )}
+        {canLock && (
+          <ButtonOutline
+            onClick={updateMembershipClick}
+            disabled={isLoading || !!validationMessages}
+          >
+            {isProjectMember ? 'Leave project' : 'Join project'}
+          </ButtonOutline>
+        )}
         {canLock && (
           <ButtonOutline
             onClick={lockProjectClick}

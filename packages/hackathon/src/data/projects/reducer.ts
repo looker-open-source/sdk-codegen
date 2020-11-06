@@ -33,6 +33,7 @@ export interface ProjectsState {
   currentProjects: IProjectProps[]
   projectsLoaded: boolean
   currentProject?: IProjectProps
+  isProjectMember?: boolean
   validationMessages?: ValidationMessages
   projectUpdated?: boolean
   projectLoaded: boolean
@@ -90,9 +91,11 @@ export const projectsReducer = (
         projectLoaded: false,
       }
     case Actions.GET_PROJECT_RESPONSE:
+      const { project, isProjectMember } = action.payload
       return {
         ...state,
-        currentProject: action.payload,
+        currentProject: project,
+        isProjectMember,
         projectLoaded: true,
       }
     case Actions.UPDATE_PROJECT_DATA:
@@ -120,6 +123,7 @@ export const projectsReducer = (
         ...state,
         currentProject: action.payload.project,
         validationMessages: action.payload.validationMessages,
+        isProjectMember: action.payload.isProjectMember,
         projectUpdated: true,
       }
     case Actions.SET_MORE_INFO:

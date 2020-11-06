@@ -35,6 +35,13 @@ export const getCurrentHackathonState = (
 export const getHackerState = (state: RootState): IHackerProps =>
   state.hackSessionState.hacker
 
+export const getHackerIdState = (state: RootState): string | undefined =>
+  state.hackSessionState.hacker?.id
+
+export const getHackerRegistrationIdState = (
+  state: RootState
+): string | undefined => state.hackSessionState.hacker?.registration?._id
+
 export const getTechnologies = (
   state: RootState
 ): ITechnologyProps[] | undefined => state.hackSessionState.technologies

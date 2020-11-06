@@ -57,3 +57,7 @@ export const getProjectUpdatedState = (state: RootState): boolean | undefined =>
 
 export const getProjectLoadedState = (state: RootState): boolean =>
   state.projectsState.projectLoaded
+
+export const getIsProjectMemberState = (
+  state: RootState
+): boolean | undefined => state.projectsState.isProjectMember

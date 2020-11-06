@@ -42,7 +42,7 @@ import {
   GetProjectRequestAction,
   getProjectResponse,
 } from './actions'
-import { getCurrentProjectsState } from './selectors'
+import { getCurrentProjectsState, getIsProjectMemberState } from './selectors'
 
 const createNewProject = (): IProjectProps => {
   const newProject: unknown = {
@@ -90,7 +90,7 @@ function* getProjectSaga({ payload: projectId }: GetProjectRequestAction) {
   try {
     if (!projectId) {
       // For new projects initialize empty project props
-      yield put(getProjectResponse(createNewProject()))
+      yield put(getProjectResponse(createNewProject(), false))
     } else {
       // Pull prpjects out of state.
       let state = yield select()
@@ -100,7 +100,14 @@ function* getProjectSaga({ payload: projectId }: GetProjectRequestAction) {
         projects = yield currentProjectsSaga()
       }
       const project = projects.find((p) => p._id === projectId)
-      yield put(getProjectResponse(project))
+      let isProjectMember
+      if (project) {
+        const hacker = yield call([sheetsClient, sheetsClient.getHacker])
+        isProjectMember = !!project.$team.find(
+          (teamMember) => teamMember.user_id === String(hacker.id)
+        )
+      }
+      yield put(getProjectResponse(project, isProjectMember))
     }
   } catch (err) {
     console.error(err)
@@ -116,8 +123,12 @@ function* createProjectSaga(action: CreateProjectAction) {
       [sheetsClient, sheetsClient.validateProject],
       project
     )
+    let state = yield select()
+    let isProjectMember = getIsProjectMemberState(state)
     if (validationMessages) {
-      yield put(saveProjectResponse(project, validationMessages))
+      yield put(
+        saveProjectResponse(project, isProjectMember, validationMessages)
+      )
       yield put(actionMessage('Please fix errors', 'critical'))
     } else {
       const projectId = yield call(
@@ -129,7 +140,7 @@ function* createProjectSaga(action: CreateProjectAction) {
         [sheetsClient, sheetsClient.getProject],
         projectId
       )
-      yield put(saveProjectResponse(updatedProject))
+      yield put(saveProjectResponse(updatedProject, isProjectMember))
       yield put(actionMessage('Project has been saved', 'positive'))
     }
     yield put(endLoading())
@@ -144,13 +155,18 @@ function* createProjectSaga(action: CreateProjectAction) {
 function* updateProjectSaga(action: UpdateProjectAction) {
   try {
     yield put(beginLoading())
+
     const project = action.payload
     const validationMessages = yield call(
       [sheetsClient, sheetsClient.validateProject],
       project
     )
+    let state = yield select()
+    let isProjectMember = getIsProjectMemberState(state)
     if (validationMessages) {
-      yield put(saveProjectResponse(project, validationMessages))
+      yield put(
+        saveProjectResponse(project, isProjectMember, validationMessages)
+      )
       yield put(actionMessage('Please fix errors', 'critical'))
     } else {
       yield call([sheetsClient, sheetsClient.updateProject], project)
@@ -158,7 +174,7 @@ function* updateProjectSaga(action: UpdateProjectAction) {
         [sheetsClient, sheetsClient.getProject],
         project._id
       )
-      yield put(saveProjectResponse(updatedProject))
+      yield put(saveProjectResponse(updatedProject, isProjectMember))
       yield put(actionMessage('Project has been saved', 'positive'))
     }
     yield put(endLoading())
@@ -214,12 +230,14 @@ function* lockProjectSaga(action: LockProjectAction) {
   try {
     const { lock, projectId } = action.payload
     yield put(beginLoading())
+    let state = yield select()
+    let isProjectMember = getIsProjectMemberState(state)
     yield call([sheetsClient, sheetsClient.lockProject], lock, projectId)
     const updatedProject = yield call(
       [sheetsClient, sheetsClient.getProject],
       projectId
     )
-    yield put(saveProjectResponse(updatedProject))
+    yield put(saveProjectResponse(updatedProject, isProjectMember))
     yield put(
       actionMessage(
         `Project has been ${lock ? 'locked' : 'unlocked'}`,
@@ -245,7 +263,7 @@ function* changeMembershipSaga(action: ChangeMembershipAction) {
       hackerId,
       leave
     )
-    yield put(saveProjectResponse(project))
+    yield put(saveProjectResponse(project, !leave))
     yield put(
       actionMessage(
         `You have ${leave ? 'left' : 'joined'} the project`,
