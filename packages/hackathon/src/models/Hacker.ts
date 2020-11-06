@@ -102,21 +102,24 @@ export class Hacker implements IHacker {
     return `${this.firstName} ${this.lastName}`
   }
 
-  /** Initialize static cached values */
-  protected static staffRole?: IRole
-  protected static judgeRole?: IRole
-  protected static adminRole?: IRole
+  protected staffRole?: IRole
+  protected judgeRole?: IRole
+  protected adminRole?: IRole
 
-  protected static async getRoles(sdk: Looker40SDK): Promise<void> {
-    if (this.staffRole && this.judgeRole && this.adminRole) return
-
+  protected async getRoles(sdk: Looker40SDK, userId: string): Promise<void> {
     try {
-      const roles = await sdk.ok(sdk.all_roles({}))
-      this.staffRole = roles.find((r) => r.name?.match(/hackathon staff/i))
-      this.judgeRole = roles.find((r) => r.name?.match(/hackathon judge/i))
-      this.adminRole = roles.find((r) => r.name?.match(/admin/i))
-    } catch {
-      // user doesn't have rights, so the user role will default to 'user' only
+      const roles = await sdk.ok(
+        sdk.user_roles({ user_id: parseInt(userId, 10) })
+      )
+      this.staffRole = roles.find((r: IRole) =>
+        r.name?.match(/hackathon staff/i)
+      )
+      this.judgeRole = roles.find((r: IRole) =>
+        r.name?.match(/hackathon judge/i)
+      )
+      this.adminRole = roles.find((r: IRole) => r.name?.match(/admin/i))
+    } catch (error) {
+      // user doesn't have roles, so the user role will default to 'user' only
     }
   }
 
@@ -139,22 +142,10 @@ export class Hacker implements IHacker {
   async assignRoles() {
     if (this.sdk) {
       try {
-        await Hacker.getRoles(this.sdk)
-        if (
-          Hacker.staffRole &&
-          this.user.role_ids?.includes(Hacker.staffRole.id as number)
-        )
-          this.roles.add('staff')
-        if (
-          Hacker.judgeRole &&
-          this.user.role_ids?.includes(Hacker.judgeRole.id as number)
-        )
-          this.roles.add('judge')
-        if (
-          Hacker.adminRole &&
-          this.user.role_ids?.includes(Hacker.adminRole.id as number)
-        )
-          this.roles.add('admin')
+        await this.getRoles(this.sdk, this.id)
+        if (this.staffRole) this.roles.add('staff')
+        if (this.judgeRole) this.roles.add('judge')
+        if (this.adminRole) this.roles.add('admin')
       } catch (err) {
         if (err.message !== 'Not found') {
           throw err

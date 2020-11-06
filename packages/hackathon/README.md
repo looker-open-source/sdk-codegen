@@ -4,7 +4,7 @@ This extension uses the `@looker/wholly-sheet` package (currently only available
 
 Modifications of a GSheet cannot be done with an API key, so you must use a service account or OAuth.
 
-Fear not! You can configure and use the [access token server](/examples/access-token-server) to get your service account token to use with this extension. 
+Fear not! You can configure and use the [access token server](/examples/access-token-server) to get your service account token to use with this extension.
 
 ## Configuration
 
@@ -33,14 +33,14 @@ application: hackathon_app {
     use_form_submit: yes
     use_embeds: no
     external_api_urls: ["http://localhost:8081/*", "https://sheets.googleapis.com/*"]
-    core_api_methods: ["me", "all_roles", "all_user_attributes", "delete_user_attribute", "create_user_attribute", "search_groups", "search_users"]
+    core_api_methods: ["me", "user_roles", "all_user_attributes", "delete_user_attribute", "create_user_attribute", "search_groups", "search_users"]
     scoped_user_attributes: ["sheet_id", "token_server_url"]
   }
 }
 
 ```
 
-**Note** that http://localhost:8081/* points to the access token server. Change to the access token server URL you are using.
+**Note** that http://localhost:8081/\* points to the access token server. Change to the access token server URL you are using.
 
 Remember to add a model to the project that has a valid connection.
 
@@ -59,7 +59,7 @@ When using the Hackathon registration [Python registration script](/examples/pyt
 e.g., for Looker's first **Hack@Home**, if the `hackathon_id` is `hack_at_home`, the group name the Hackathon app will use to find signed up users is `Looker_Hackathon: hack_at_home`.
 
 If registering users via the Looker admin interface instead, be sure to:
- 
+
 - create the correctly named hackathon group first
 - add all registered users to that group
 - add all other roles and group those users should have for the Hackathon

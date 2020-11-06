@@ -507,10 +507,7 @@ class SheetsClient {
     })
   }
 
-  private decorateHacker(
-    hackerProps: IHackerProps,
-    hacker: Hacker
-  ): IHackerProps {
+  private decorateHacker(hackerProps: IHackerProps, _: Hacker): IHackerProps {
     if (hackerProps.id === undefined) {
       hackerProps.id = String(hackerProps.user.id)
     }
