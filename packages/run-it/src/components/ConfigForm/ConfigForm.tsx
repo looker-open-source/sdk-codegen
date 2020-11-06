@@ -30,13 +30,17 @@ import React, {
   FC,
   FormEvent,
   useState,
+  useContext,
 } from 'react'
 import {
   Button,
+  DialogHeader,
+  DialogContent,
+  DialogContext,
+  DialogFooter,
   Fieldset,
   FieldText,
   Form,
-  Heading,
   ValidationMessages,
 } from '@looker/components'
 import { RunItConfigKey, validateUrl, RunItConfigurator } from './configUtils'
@@ -55,9 +59,9 @@ interface ConfigFormProps {
 export const ConfigForm: FC<ConfigFormProps> = ({
   title,
   setHasConfig,
-  handleClose,
   configurator,
 }) => {
+  const { closeModal } = useContext(DialogContext)
   // See https://codesandbox.io/s/youthful-surf-0g27j?file=/src/index.tsx for a prototype from Luke
   // TODO see about useReducer to clean this up a bit more
   title = title || 'RunIt Configuration'
@@ -90,7 +94,7 @@ export const ConfigForm: FC<ConfigFormProps> = ({
       'local'
     )
     if (setHasConfig) setHasConfig(true)
-    if (handleClose) handleClose()
+    closeModal()
   }
 
   const handleRemove = (e: BaseSyntheticEvent) => {
@@ -128,28 +132,30 @@ export const ConfigForm: FC<ConfigFormProps> = ({
 
   return (
     <>
-      <Heading>{title}</Heading>
-      <Form onSubmit={handleSubmit} validationMessages={validationMessages}>
-        <Fieldset legend="Server locations">
-          <FieldText
-            required
-            label="API server url"
-            placeholder="typically https://myserver.looker.com:19999"
-            name="baseUrl"
-            defaultValue={fields.baseUrl}
-            onChange={handleUrlChange}
-          />
-          <FieldText
-            required
-            label="Auth server url"
-            placeholder="typically https://myserver.looker.com:9999"
-            name="lookerUrl"
-            defaultValue={fields.lookerUrl}
-            onChange={handleUrlChange}
-          />
-        </Fieldset>
-      </Form>
-      <>
+      <DialogHeader hideClose>{title}</DialogHeader>
+      <DialogContent>
+        <Form onSubmit={handleSubmit} validationMessages={validationMessages}>
+          <Fieldset legend="Server locations">
+            <FieldText
+              required
+              label="API server url"
+              placeholder="typically https://myserver.looker.com:19999"
+              name="baseUrl"
+              defaultValue={fields.baseUrl}
+              onChange={handleUrlChange}
+            />
+            <FieldText
+              required
+              label="Auth server url"
+              placeholder="typically https://myserver.looker.com:9999"
+              name="lookerUrl"
+              defaultValue={fields.lookerUrl}
+              onChange={handleUrlChange}
+            />
+          </Fieldset>
+        </Form>
+      </DialogContent>
+      <DialogFooter>
         <Button
           iconBefore="Check"
           disabled={Object.keys(validationMessages).length > 0}
@@ -162,7 +168,7 @@ export const ConfigForm: FC<ConfigFormProps> = ({
         <Button onClick={handleRemove} iconBefore="Trash" color="critical">
           Remove
         </Button>
-      </>
+      </DialogFooter>
     </>
   )
 }

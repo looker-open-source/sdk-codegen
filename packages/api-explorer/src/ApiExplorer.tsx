@@ -25,7 +25,13 @@
  */
 
 import React, { FC, useReducer, useState, useEffect } from 'react'
-import { ComponentsProvider } from '@looker/components'
+import {
+  Aside,
+  ComponentsProvider,
+  Header,
+  Layout,
+  Page,
+} from '@looker/components'
 import { ApiModel, KeyedCollection } from '@looker/sdk-codegen'
 import { Looker40SDK, Looker31SDK } from '@looker/sdk/lib/browser'
 import { useLocation } from 'react-router'
@@ -33,7 +39,6 @@ import { useLocation } from 'react-router'
 import { SearchContext, LodeContext, defaultLodeContextValue } from './context'
 import { getLoded } from './utils'
 import { Header as AppHeader, SideNav } from './components'
-import { Aside, Header, Layout, Page } from './components/Layout'
 import {
   specReducer,
   initDefaultSpecState,
@@ -85,7 +90,8 @@ const ApiExplorer: FC<ApiExplorerProps> = ({
     <ComponentsProvider loadGoogleFonts>
       <LodeContext.Provider value={{ ...lode }}>
         <SearchContext.Provider value={{ searchSettings, setSearchSettings }}>
-          <Page>
+          {/* custom `style` will be removable after @looker/components > 0.9.22 */}
+          <Page style={{ width: '100%' }}>
             <Header height="4rem">
               <AppHeader
                 specs={specs}

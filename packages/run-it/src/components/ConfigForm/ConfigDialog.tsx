@@ -25,45 +25,27 @@
  */
 
 import React, { Dispatch, FC } from 'react'
-import {
-  Dialog,
-  DialogContent,
-  IconNames,
-  useToggle,
-  IconButton,
-} from '@looker/components'
+import { Dialog, IconButton } from '@looker/components'
 import { ConfigForm, RunItConfigurator } from '.'
 
 interface ConfigDialogProps {
-  /** Icon to use for config dialog */
-  icon?: IconNames
-  /** A set state callback fn used to set a hasConfig flag indicating whether OAuth config details are present */
+  /**
+   * A set state callback fn used to set a hasConfig flag indicating whether OAuth config details are present
+   * */
   setHasConfig?: Dispatch<boolean>
   configurator: RunItConfigurator
 }
 
 export const ConfigDialog: FC<ConfigDialogProps> = ({
-  icon = 'GearOutline',
   setHasConfig,
   configurator,
-}) => {
-  const { value, setOff, setOn } = useToggle()
-  return (
-    <>
-      <Dialog
-        isOpen={value}
-        onClose={setOff}
-        maxWidth={['90vw', '60vw', '500px', '800px']}
-      >
-        <DialogContent>
-          <ConfigForm
-            setHasConfig={setHasConfig}
-            handleClose={setOff}
-            configurator={configurator}
-          />
-        </DialogContent>
-      </Dialog>
-      <IconButton label="Settings" color="key" icon={icon} onClick={setOn} />
-    </>
-  )
-}
+}) => (
+  <Dialog
+    maxWidth={['90vw', '60vw', '500px', '800px']}
+    content={
+      <ConfigForm setHasConfig={setHasConfig} configurator={configurator} />
+    }
+  >
+    <IconButton label="Settings" icon="GearOutline" />
+  </Dialog>
+)

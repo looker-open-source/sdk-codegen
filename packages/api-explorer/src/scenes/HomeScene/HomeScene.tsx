@@ -26,8 +26,7 @@
 import { ApiModel } from '@looker/sdk-codegen'
 import React, { FC } from 'react'
 import { useParams } from 'react-router-dom'
-
-import { Section } from '../../components/Layout'
+import { Section } from '@looker/components'
 import { DocMarkdown, DocTitle } from '../../components'
 
 interface DocHomeProps {
@@ -42,7 +41,7 @@ export const HomeScene: FC<DocHomeProps> = ({ api }) => {
   const { specKey } = useParams<DocHomeParams>()
 
   return (
-    <Section>
+    <Section p="xxlarge">
       <DocTitle>{`Looker API ${specKey} Reference`}</DocTitle>
       {api.spec.info.description && (
         <DocMarkdown source={api.spec.info.description} specKey={specKey} />

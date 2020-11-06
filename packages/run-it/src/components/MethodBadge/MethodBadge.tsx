@@ -33,7 +33,6 @@ import {
 } from '@looker/design-tokens'
 import { HttpMethod } from '@looker/sdk-rtl/lib/browser'
 import styled, { css } from 'styled-components'
-import { MinWidthProps, minWidth } from 'styled-system'
 
 /**
  * Status of endpoint method.
@@ -42,11 +41,11 @@ type MethodStatus = 'beta' | 'stable' | 'experimental' | 'deprecated' | 'inform'
 
 interface MethodBadgeProps
   extends CompatibleHTMLProps<HTMLDivElement>,
-    MinWidthProps,
     TypographyProps {
   /** Determines background color */
   type: HttpMethod | MethodStatus | string
   compact?: boolean
+  minWidth?: string
   titleStatus?: boolean
 }
 
@@ -92,7 +91,6 @@ export const cssForIntent = (intent: ApixIntentNames) =>
 
 export const MethodBadge = styled.div<MethodBadgeProps>`
   ${typography}
-  ${minWidth}
 
   ${({ type }) => cssForIntent(pickBadgeIntent(type))};
 
@@ -104,6 +102,7 @@ export const MethodBadge = styled.div<MethodBadgeProps>`
   /** NOTE: This is below minimum accessibility threshold font-size */
   ${({ compact }) => compact && `font-size: 9px;`}
 
+  min-width: ${({ minWidth }) => minWidth};
   padding: ${({ compact, theme: { space } }) =>
     `${space.xxsmall} ${compact ? space.none : space.xsmall}`};
 `
