@@ -5,12 +5,16 @@
 from setuptools import setup, find_packages  # noqa: H301
 
 NAME = "looker_sdk"
-VERSION = "0.1.3b19"
+VERSION = "0.1.3b20"
 REQUIRES = [
     "requests >= 2.22",
-    "attrs >= 18.2.0",
-    "cattrs >= 1.0.0",
+    # Python 3.6
+    "attrs >= 18.2.0;python_version<'3.7'",
+    "cattrs < 1.1.0;python_version<'3.7'",
     "python-dateutil;python_version<'3.7'",
+    # Python 3.7+
+    "attrs >= 20.1.0;python_version>='3.7'",
+    "cattrs >= 1.1.0;python_version>='3.7'",
     "typing-extensions;python_version<'3.8'",
 ]
 
