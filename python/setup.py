@@ -31,7 +31,7 @@ setup(
     name=NAME,
     package_data={"looker_sdk": ["py.typed", "looker_sdk/looker-sample.ini"]},
     packages=find_packages(),
-    python_requires=">=3.6, <3.9",
+    python_requires="~=3.6",
     url="https://pypi.python.org/pypi/looker_sdk",
     version=VERSION,
 )
