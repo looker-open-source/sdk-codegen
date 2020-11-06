@@ -34,8 +34,8 @@ fun base64UrlEncode(bytes: ByteArray): String {
 }
 
 @ExperimentalUnsignedTypes
-class OAuthSession(override val apiSettings: ConfigurationProvider, override val transport: Transport = Transport(apiSettings))
-    : AuthSession(apiSettings, transport) {
+class OAuthSession(override val apiSettings: ConfigurationProvider, override val transport: Transport = Transport(apiSettings)) :
+    AuthSession(apiSettings, transport) {
     private var random = SecureRandom()
     private var codeVerifier: String = ""
     private val messageDigest = MessageDigest.getInstance("SHA-256") // "HmacSHA256")
@@ -46,10 +46,11 @@ class OAuthSession(override val apiSettings: ConfigurationProvider, override val
 
     fun requestToken(body: Values): AuthToken {
         val response = this.transport.request<AccessToken>(
-                HttpMethod.POST,
-                "/api/token",
-                mapOf(),
-                body)
+            HttpMethod.POST,
+            "/api/token",
+            mapOf(),
+            body
+        )
         val token = this.ok<AccessToken>(response)
         this.authToken.setToken(token)
         return this.authToken
@@ -60,12 +61,14 @@ class OAuthSession(override val apiSettings: ConfigurationProvider, override val
             if (this.activeToken().refreshToken?.isNotEmpty() == true) {
                 val config = this.apiSettings.readConfig()
                 // fetch the token
-                this.requestToken(mapOf(
+                this.requestToken(
+                    mapOf(
                         "grant_type" to "refresh_token",
                         "refresh_token" to this.activeToken().refreshToken,
                         "client_id" to config["client_id"],
                         "redirect_uri" to config["redirect_uri"]
-                ))
+                    )
+                )
             }
         }
         return this.activeToken()
@@ -79,7 +82,9 @@ class OAuthSession(override val apiSettings: ConfigurationProvider, override val
         val codeChallenge = this.sha256hash(this.codeVerifier)
         val config = this.apiSettings.readConfig()
         val lookerUrl = config["looker_url"]
-        return addQueryParams("$lookerUrl/auth", mapOf(
+        return addQueryParams(
+            "$lookerUrl/auth",
+            mapOf(
                 "response_type" to "code",
                 "client_id" to config["client_id"],
                 "redirect_uri" to config["redirect_uri"],
@@ -87,18 +92,19 @@ class OAuthSession(override val apiSettings: ConfigurationProvider, override val
                 "state" to state,
                 "code_challenge_method" to "S256",
                 "code_challenge" to codeChallenge
-        ))
+            )
+        )
     }
 
     fun redeemAuthCodeBody(authCode: String, codeVerifier: String? = null): Map<String, String> {
-        val verifier = codeVerifier?: this.codeVerifier
+        val verifier = codeVerifier ?: this.codeVerifier
         val config = this.apiSettings.readConfig()
         return mapOf(
-                "grant_type" to "authorization_code",
-                "code" to authCode,
-                "code_verifier" to verifier,
-                "client_id" to (config["client_id"] ?: error("")),
-                "redirect_uri" to (config["redirect_uri"] ?: error(""))
+            "grant_type" to "authorization_code",
+            "code" to authCode,
+            "code_verifier" to verifier,
+            "client_id" to (config["client_id"] ?: error("")),
+            "redirect_uri" to (config["redirect_uri"] ?: error(""))
         )
     }
 

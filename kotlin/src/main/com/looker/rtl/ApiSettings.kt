@@ -48,7 +48,7 @@ fun apiConfig(contents: String): ApiSections {
 open class ApiSettings(val rawReadConfig: () -> Map<String, String>) : ConfigurationProvider {
 
     companion object {
-        fun fromIniFile(filename: String = "./looker.ini", section: String = "") : ConfigurationProvider {
+        fun fromIniFile(filename: String = "./looker.ini", section: String = ""): ConfigurationProvider {
             return ApiSettings({
                 val file = File(filename)
                 if (!file.exists()) {
@@ -62,7 +62,7 @@ open class ApiSettings(val rawReadConfig: () -> Map<String, String>) : Configura
             })
         }
 
-        fun fromIniText(contents: String, section: String = "") : ConfigurationProvider {
+        fun fromIniText(contents: String, section: String = ""): ConfigurationProvider {
             val config = apiConfig(contents)
             val first_section = if (!section.isBlank()) section else config.keys.first()
 
@@ -74,7 +74,7 @@ open class ApiSettings(val rawReadConfig: () -> Map<String, String>) : Configura
             return ApiSettings({ settings })
         }
 
-        fun fromMap(config: Map<String, String>) : ConfigurationProvider {
+        fun fromMap(config: Map<String, String>): ConfigurationProvider {
             return ApiSettings({ config })
         }
     }
@@ -86,7 +86,7 @@ open class ApiSettings(val rawReadConfig: () -> Map<String, String>) : Configura
     override var headers: Map<String, String> = mapOf()
 
     init {
-        val settings = rawReadConfig();
+        val settings = rawReadConfig()
 
         // Only replace the current values if new values are provided
         settings["base_url"].let { value ->
@@ -111,14 +111,14 @@ open class ApiSettings(val rawReadConfig: () -> Map<String, String>) : Configura
 
     override fun readConfig(): Map<String, String> {
         // Merge any provided settings with the calculated values for the TransportOptions
-        return rawReadConfig().plus(mapOf(
+        return rawReadConfig().plus(
+            mapOf(
                 "base_url" to baseUrl,
                 "api_version" to apiVersion,
                 "verify_ssl" to verifySSL.toString(),
                 "timeout" to timeout.toString(),
                 "headers" to headers.toString()
-        ))
+            )
+        )
     }
-
-
 }

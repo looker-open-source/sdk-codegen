@@ -28,7 +28,6 @@ import io.ktor.client.HttpClient
 import io.ktor.client.call.call
 import io.ktor.client.call.receive
 import io.ktor.client.engine.okhttp.OkHttp
-import io.ktor.client.features.ClientRequestException
 import io.ktor.client.features.json.JacksonSerializer
 import io.ktor.client.features.json.JsonFeature
 import io.ktor.client.features.json.defaultSerializer
@@ -52,12 +51,11 @@ import javax.net.ssl.SSLContext
 import javax.net.ssl.SSLSocketFactory
 import javax.net.ssl.X509TrustManager
 
-
 sealed class SDKResponse {
     /** A successful SDK call. */
     data class SDKSuccessResponse<T>(
-            /** The object returned by the SDK call. */
-            val value: T
+        /** The object returned by the SDK call. */
+        val value: T
     ) : SDKResponse() {
         /** Whether the SDK call was successful. */
         val ok: Boolean = true
@@ -65,8 +63,8 @@ sealed class SDKResponse {
 
     /** An erroring SDK call. */
     data class SDKErrorResponse<T>(
-            /** The error object returned by the SDK call. */
-            val value: T
+        /** The error object returned by the SDK call. */
+        val value: T
     ) : SDKResponse() {
         /** Whether the SDK call was successful. */
         val ok: Boolean = false
@@ -101,9 +99,9 @@ enum class HttpMethod(val value: io.ktor.http.HttpMethod) {
 }
 
 data class RequestSettings(
-        val method: HttpMethod,
-        val url: String,
-        val headers: Map<String, String> = mapOf()
+    val method: HttpMethod,
+    val url: String,
+    val headers: Map<String, String> = mapOf()
 )
 
 typealias Authenticator = (init: RequestSettings) -> RequestSettings
@@ -124,16 +122,16 @@ interface ConfigurationProvider : TransportOptions {
 }
 
 data class TransportSettings(
-        override var baseUrl: String = "",
-        override var apiVersion: String = DEFAULT_API_VERSION,
-        override var verifySSL: Boolean = true,
-        override var timeout: Int = DEFAULT_TIMEOUT,
-        override var headers: Map<String, String> = mapOf()
+    override var baseUrl: String = "",
+    override var apiVersion: String = DEFAULT_API_VERSION,
+    override var verifySSL: Boolean = true,
+    override var timeout: Int = DEFAULT_TIMEOUT,
+    override var headers: Map<String, String> = mapOf()
 ) : TransportOptions
 
 private val utcFormat by lazy { DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'") }
 
-fun encodeParam(value: Any?) : String {
+fun encodeParam(value: Any?): String {
     val utf8 = "utf-8"
     var encoded = if (value is ZonedDateTime) {
         value.toOffsetDateTime().format(utcFormat)
@@ -158,9 +156,9 @@ fun encodeParam(value: Any?) : String {
 fun encodeValues(params: Values = mapOf()): String {
     @Suppress("UNCHECKED_CAST")
     return params
-            .filter { (_, v) -> v !== null }
-            .map { (k, v) -> "$k=${encodeParam(v)}" }
-            .joinToString("&")
+        .filter { (_, v) -> v !== null }
+        .map { (k, v) -> "$k=${encodeParam(v)}" }
+        .joinToString("&")
 }
 
 fun addQueryParams(path: String, params: Values = mapOf()): String {
@@ -204,12 +202,16 @@ fun customClient(options: TransportOptions): HttpClient {
 
                         @Throws(CertificateException::class)
                         override fun checkClientTrusted(
-                                certs: Array<X509Certificate?>?, authType: String?) {
+                            certs: Array<X509Certificate?>?,
+                            authType: String?
+                        ) {
                         }
 
                         @Throws(CertificateException::class)
                         override fun checkServerTrusted(
-                                certs: Array<X509Certificate?>?, authType: String?) {
+                            certs: Array<X509Certificate?>?,
+                            authType: String?
+                        ) {
                         }
                     }
                     val trustAllCerts = arrayOf(tm)
@@ -217,7 +219,7 @@ fun customClient(options: TransportOptions): HttpClient {
                     sslContext.init(null, trustAllCerts, SecureRandom())
                     val sslSocketFactory: SSLSocketFactory = sslContext.socketFactory
                     sslSocketFactory(
-                            sslSocketFactory, tm
+                        sslSocketFactory, tm
                     )
 
                     val hostnameVerifier = HostnameVerifier { _, _ ->
@@ -247,12 +249,13 @@ class Transport(val options: TransportOptions) {
      * @return a fully qualified path that is the base url, the api path, or a pass through request url
      */
     fun makeUrl(
-            path: String,
-            queryParams: Values = mapOf(),
-            authenticator: Authenticator? = null // TODO figure out why ::defaultAuthenticator is matching when it shouldn't
+        path: String,
+        queryParams: Values = mapOf(),
+        authenticator: Authenticator? = null // TODO figure out why ::defaultAuthenticator is matching when it shouldn't
     ): String {
-        return if (path.startsWith("http://", true)
-                || path.startsWith("https://", true)) {
+        return if (path.startsWith("http://", true) ||
+            path.startsWith("https://", true)
+        ) {
             "" // full path was passed in
         } else {
             if (authenticator === null) {
@@ -264,11 +267,12 @@ class Transport(val options: TransportOptions) {
     }
 
     inline fun <reified T> request(
-            method: HttpMethod,
-            path: String,
-            queryParams: Values = mapOf(),
-            body: Any? = null,
-            noinline authenticator: Authenticator? = null): SDKResponse {
+        method: HttpMethod,
+        path: String,
+        queryParams: Values = mapOf(),
+        body: Any? = null,
+        noinline authenticator: Authenticator? = null
+    ): SDKResponse {
         // TODO get overrides parameter to work without causing compilation errors in UserSession
 //            overrides: TransportOptions? = null): SDKResponse {
 
@@ -334,12 +338,11 @@ class Transport(val options: TransportOptions) {
                     val json = defaultSerializer()
 
                     val jsonBody = json.write(body)
-                    builder.body = jsonBody  // TODO: I think having to do this is a bug? https://github.com/ktorio/ktor/issues/1265
+                    builder.body = jsonBody // TODO: I think having to do this is a bug? https://github.com/ktorio/ktor/issues/1265
                     headers["Content-Length"] = jsonBody.contentLength.toString()
                 }
             }
         }
         return builder
     }
-
 }

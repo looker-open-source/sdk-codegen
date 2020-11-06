@@ -90,7 +90,7 @@ class TestConstants {
 
     @test
     fun testDelimArray() {
-        val ids: Array<Long> = arrayOf(1,2,3,4)
+        val ids: Array<Long> = arrayOf(1, 2, 3, 4)
         var actual = DelimArray(ids)
         assertEquals(actual.toString(), "1,2,3,4")
         actual = DelimArray(ids, ", ")

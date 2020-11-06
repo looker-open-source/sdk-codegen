@@ -6,15 +6,14 @@ buildscript {
     }
     dependencies {
         classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
-//        classpath "org.jmailen.gradle:kotlinter-gradle:2.4.1"
     }
 }
 
-group = "com.looker.sdk"
+plugins {
+    id 'com.diffplug.spotless' version '5.7.0'
+}
 
-//plugins {
-//    id "org.jmailen.kotlinter" version "2.4.1"
-//}
+group = "com.looker.sdk"
 
 defaultTasks 'jar'
 
@@ -65,44 +64,11 @@ compileJava {
     targetCompatibility = JavaVersion.VERSION_1_8
 }
 
-// from https://github.com/jeremymailen/kotlinter-gradle#configuration
-//kotlinter {
-//    ignoreFailures = false
-//    indentSize = 4
-//    reporters = ['checkstyle', 'plain']
-//    experimentalRules = false
-//    disabledRules = ["import-ordering", "no-wildcard-imports"]
-//    fileBatchSize = 30
-//}
-//
-//lintKotlinMain {
-//    exclude '**/sdk/**/*.kt'
-//}
-//
-//import org.jmailen.gradle.kotlinter.tasks.LintTask
-//import org.jmailen.gradle.kotlinter.tasks.FormatTask
-//
-//task rtlLint(type: LintTask, group: 'verification') {
-//    source files('src/main/com/looker/rtl')
-//    reports = [
-//            'plain': file('build/lint-report.txt'),
-//            'json': file('build/lint-report.json')
-//    ]
-//}
-//
-//task sdkLint(type: LintTask, group: 'verification') {
-//    source files('src/main/com/looker/sdk')
-//    reports = [
-//            'plain': file('build/lint-report.txt'),
-//            'json': file('build/lint-report.json')
-//    ]
-//}
-//
-//task sdkFormat(type: FormatTask, group: 'formatting') {
-//    source files('src/main/com/looker/sdk')
-//    report = file('build/format-report.txt')
-//}
-
+spotless {
+    kotlin {
+        ktlint("0.39.0").userData(["disabled_rules": "no-wildcard-imports"])
+    }
+}
 
 //android {
 //    compileOptions {
