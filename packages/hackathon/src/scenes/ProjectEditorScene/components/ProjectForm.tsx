@@ -276,7 +276,7 @@ export const ProjectForm: FC<ProjectFormProps> = () => {
             Save project
           </Button>
         </Space>
-        {canLock && (
+        {(canLock || canUpdate) && (
           <ButtonOutline
             onClick={updateMembershipClick}
             disabled={isLoading || !!validationMessages}

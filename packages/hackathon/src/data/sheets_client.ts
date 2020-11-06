@@ -268,8 +268,8 @@ class SheetsClient {
         )
       }
       this.hacker = me
-        ? this.decorateHacker(me.toObject())
-        : this.decorateHacker(hacker.toObject())
+        ? this.decorateHacker(me.toObject(), me)
+        : this.decorateHacker(hacker.toObject(), hacker)
     }
     return this.hacker
   }
@@ -282,19 +282,19 @@ class SheetsClient {
   }> {
     const hackers =
       this.hackers?.users?.map((hacker) =>
-        this.decorateHacker(hacker.toObject())
+        this.decorateHacker(hacker.toObject(), hacker)
       ) || []
     const judges =
       this.hackers?.judges?.map((hacker) =>
-        this.decorateHacker(hacker.toObject())
+        this.decorateHacker(hacker.toObject(), hacker)
       ) || []
     const admins =
       this.hackers?.admins?.map((hacker) =>
-        this.decorateHacker(hacker.toObject())
+        this.decorateHacker(hacker.toObject(), hacker)
       ) || []
     const staff =
       this.hackers?.staff?.map((hacker) =>
-        this.decorateHacker(hacker.toObject())
+        this.decorateHacker(hacker.toObject(), hacker)
       ) || []
     return { hackers, judges, admins, staff }
   }
@@ -507,7 +507,10 @@ class SheetsClient {
     })
   }
 
-  private decorateHacker(hackerProps: IHackerProps): IHackerProps {
+  private decorateHacker(
+    hackerProps: IHackerProps,
+    hacker: Hacker
+  ): IHackerProps {
     if (hackerProps.id === undefined) {
       hackerProps.id = String(hackerProps.user.id)
     }

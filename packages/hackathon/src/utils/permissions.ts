@@ -41,7 +41,7 @@ export const canDoProjectAction = (
     hacker.canJudge ||
     hacker.canStaff ||
     hacker.permissions.has(action) ||
-    String(hacker.id) === project._user_id
+    hacker.registration._id === project._user_id
   )
 }
 
@@ -56,7 +56,9 @@ export const canUpdateProject = (
   if (hacker.registration && hacker.registration._id) {
     if (
       newProject ||
-      (project && project?._user_id === hacker.id && !project.locked)
+      (project &&
+        project?._user_id === hacker.registration._id &&
+        !project.locked)
     ) {
       return true
     }
