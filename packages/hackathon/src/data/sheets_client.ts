@@ -95,27 +95,27 @@ class SheetsClient {
     technologies,
     more_info,
   }: IProjectProps): ValidationMessages | undefined {
-    const validationMessage: ValidationMessages = {}
+    const validationMessages: ValidationMessages = {}
     if (!title || title.trim() === '') {
-      validationMessage.title = {
+      validationMessages.title = {
         type: 'error',
         message: 'Title required',
       }
     }
     if (!description || description.trim() === '') {
-      validationMessage.description = {
+      validationMessages.description = {
         type: 'error',
         message: 'Description required',
       }
     }
     if (!project_type || project_type.trim() === '') {
-      validationMessage.project_type = {
+      validationMessages.project_type = {
         type: 'error',
         message: 'Project type required',
       }
     }
     if (!technologies || technologies.length === 0) {
-      validationMessage.technologies = {
+      validationMessages.technologies = {
         type: 'error',
         message: 'At least one technology required',
       }
@@ -130,14 +130,14 @@ class SheetsClient {
         more_info.startsWith('https://')
       )
     ) {
-      validationMessage.more_info = {
+      validationMessages.more_info = {
         type: 'error',
         message: 'More info must be a URL',
       }
     }
-    return Object.keys(validationMessage).length === 0
+    return Object.keys(validationMessages).length === 0
       ? undefined
-      : validationMessage
+      : validationMessages
   }
 
   async createProject(
@@ -251,15 +251,22 @@ class SheetsClient {
 
   async getHacker(): Promise<IHackerProps> {
     if (!this.hacker) {
-      const data = await this.getSheetData()
-      await this.loadHackers(data)
       const lookerSdk = getCore40SDK()
       const hacker = new Hacker(lookerSdk)
       await hacker.getMe()
-      // TODO revisit this with JK
-      const me = this.hackers?.rows.find(
-        (maybeMe) => maybeMe.user.id === hacker.user.id
-      )
+      let me
+      try {
+        const data = await this.getSheetData()
+        await this.loadHackers(data)
+        // TODO revisit this with JK
+        me = this.hackers?.rows.find(
+          (maybeMe) => maybeMe.user.id === hacker.user.id
+        )
+      } catch (error) {
+        console.warn(
+          'Error loading sheets data. Has hackathon application been configured?'
+        )
+      }
       this.hacker = me
         ? this.decorateHacker(me.toObject())
         : this.decorateHacker(hacker.toObject())
@@ -513,10 +520,10 @@ class SheetsClient {
     if (hackerProps.name === undefined) {
       hackerProps.name = hackerProps.user.display_name!
     }
-    if (hackerProps.registered === undefined) {
+    if (hackerProps.registered === undefined && hackerProps.registration) {
       hackerProps.registered = hackerProps.registration.date_registered
     }
-    if (hackerProps.attended === undefined) {
+    if (hackerProps.attended === undefined && hackerProps.registration) {
       hackerProps.attended = hackerProps.registration.attended
     }
     return hackerProps

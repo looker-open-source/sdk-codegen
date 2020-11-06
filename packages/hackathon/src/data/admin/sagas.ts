@@ -30,29 +30,25 @@ import { IUserAttribute } from '@looker/sdk'
 import { actionMessage, beginLoading, endLoading } from '../common/actions'
 import {
   Actions,
-  loadUserAttributesRequest,
   loadUserAttributesResponse,
   AdminUserAttributes,
-  AttributeValue,
-  saveUserAttributes,
+  saveUserAttributesRequest,
+  saveUserAttributesResponse,
 } from './actions'
+import { ValidationMessages } from '@looker/components'
 
 const findUserAttributeValue = (
   name: string,
   userAttributes: IUserAttribute[]
-): AttributeValue => {
+): string => {
   const userAttribute = userAttributes.find(
     (userAttribute) => userAttribute.name === name
   )
-  const value = userAttribute ? userAttribute.default_value || '' : ''
-  return {
-    value,
-    originalValue: value,
-  }
+  return userAttribute ? userAttribute.default_value || '' : ''
 }
 
 const getAttributeNamePrefix = () =>
-  getExtensionSDK().lookerHostData?.extensionId.replace(/::|-/g, '_') + '_'
+  getExtensionSDK().lookerHostData?.extensionId.replace(/::|-/g, '_')
 
 const extractUserAttributes = (
   userAttributes: IUserAttribute[]
@@ -60,19 +56,52 @@ const extractUserAttributes = (
   const prefix = getAttributeNamePrefix()
   return {
     lookerClientId: findUserAttributeValue(
-      prefix + 'looker_client_id',
+      prefix + '_looker_client_id',
       userAttributes
     ),
     lookerClientSecret: findUserAttributeValue(
-      prefix + 'looker_client_secret',
+      prefix + '_looker_client_secret',
       userAttributes
     ),
-    sheetId: findUserAttributeValue(prefix + 'sheet_id', userAttributes),
+    sheetId: findUserAttributeValue(prefix + '_sheet_id', userAttributes),
     tokenServerUrl: findUserAttributeValue(
-      prefix + 'token_server_url',
+      prefix + '_token_server_url',
       userAttributes
     ),
   }
+}
+
+const validateUserAttributes = (
+  userAttributes: AdminUserAttributes
+): ValidationMessages | undefined => {
+  const validationMessages: ValidationMessages = {}
+  if (userAttributes.lookerClientId.trim() === '') {
+    validationMessages.lookerClientId = {
+      type: 'error',
+      message: 'Looker client id required',
+    }
+  }
+  if (userAttributes.lookerClientId.trim() === '') {
+    validationMessages.lookerClientSecret = {
+      type: 'error',
+      message: 'Looker client secret required',
+    }
+  }
+  if (userAttributes.sheetId.trim() === '') {
+    validationMessages.sheetId = {
+      type: 'error',
+      message: 'Google sheet id required',
+    }
+  }
+  if (userAttributes.tokenServerUrl.trim() === '') {
+    validationMessages.tokenServerUrl = {
+      type: 'error',
+      message: 'Access toker server URL required',
+    }
+  }
+  return Object.keys(validationMessages).length === 0
+    ? undefined
+    : validationMessages
 }
 
 function* loadUserAttributesSaga() {
@@ -81,8 +110,8 @@ function* loadUserAttributesSaga() {
     const lookerSdk = getCore40SDK()
     const result = yield call([lookerSdk, lookerSdk.all_user_attributes], {})
     const userAttributes = yield call([lookerSdk, lookerSdk.ok], result)
-    yield put(endLoading())
     yield put(loadUserAttributesResponse(extractUserAttributes(userAttributes)))
+    yield put(endLoading())
   } catch (err) {
     console.error(err)
     yield put(actionMessage('A problem occurred loading the data', 'critical'))
@@ -90,16 +119,16 @@ function* loadUserAttributesSaga() {
 }
 
 function* persistUserAttribute(
-  newAttributeValue: AttributeValue,
+  newAttributeValue: string,
   attributeName: string,
   userAttributes: IUserAttribute[],
   label: string,
   url?: string
 ) {
-  if (newAttributeValue.originalValue !== newAttributeValue.value) {
-    const userAttribute = userAttributes.find(
-      (ua: IUserAttribute) => ua.name === attributeName
-    )
+  const userAttribute = userAttributes.find(
+    (ua: IUserAttribute) => ua.name === attributeName
+  )
+  if (!userAttribute || newAttributeValue !== userAttribute.default_value) {
     const lookerSdk = getCore40SDK()
     if (userAttribute && userAttribute.id) {
       yield call([lookerSdk, lookerSdk.delete_user_attribute], userAttribute.id)
@@ -107,7 +136,7 @@ function* persistUserAttribute(
     const ua: IUserAttribute = {
       name: attributeName,
       label,
-      default_value: newAttributeValue.value,
+      default_value: newAttributeValue,
       type: 'string',
       user_can_edit: false,
       user_can_view: true,
@@ -122,54 +151,57 @@ function* persistUserAttribute(
 }
 
 function* saveUserAttributesSaga(
-  action: ReturnType<typeof saveUserAttributes>
+  action: ReturnType<typeof saveUserAttributesRequest>
 ) {
   const prefix = getAttributeNamePrefix()
   try {
     const updatedUserAttributes: AdminUserAttributes = action.payload
     yield put(beginLoading())
-    const lookerSdk = getCore40SDK()
-    const result = yield call([lookerSdk, lookerSdk.all_user_attributes], {})
-    const userAttributes = yield call([lookerSdk, lookerSdk.ok], result)
-    yield persistUserAttribute(
-      updatedUserAttributes.lookerClientId,
-      `${prefix}looker_client_id`,
-      userAttributes,
-      'Hackathon Looker Client ID',
-      updatedUserAttributes.tokenServerUrl.value
+    const validationMessages = validateUserAttributes(updatedUserAttributes)
+    if (!validationMessages) {
+      const lookerSdk = getCore40SDK()
+      const result = yield call([lookerSdk, lookerSdk.all_user_attributes], {})
+      const userAttributes = yield call([lookerSdk, lookerSdk.ok], result)
+      yield persistUserAttribute(
+        updatedUserAttributes.lookerClientId,
+        `${prefix}_looker_client_id`,
+        userAttributes,
+        `${prefix} Hackathon Looker Client ID`,
+        updatedUserAttributes.tokenServerUrl
+      )
+      yield persistUserAttribute(
+        updatedUserAttributes.lookerClientSecret,
+        `${prefix}_looker_client_secret`,
+        userAttributes,
+        `${prefix} Hackathon Looker Client Secret`,
+        updatedUserAttributes.tokenServerUrl
+      )
+      yield persistUserAttribute(
+        updatedUserAttributes.sheetId,
+        `${prefix}_sheet_id`,
+        userAttributes,
+        `${prefix} Hackathon Sheet ID`
+      )
+      yield persistUserAttribute(
+        updatedUserAttributes.tokenServerUrl,
+        `${prefix}_token_server_url`,
+        userAttributes,
+        `${prefix} Hackathon Token Server URL`
+      )
+    }
+    yield put(
+      saveUserAttributesResponse(updatedUserAttributes, validationMessages)
     )
-    yield persistUserAttribute(
-      updatedUserAttributes.lookerClientSecret,
-      `${prefix}looker_client_secret`,
-      userAttributes,
-      'Hackathon Looker Client Secret',
-      updatedUserAttributes.tokenServerUrl.value
-    )
-    yield persistUserAttribute(
-      updatedUserAttributes.sheetId,
-      `${prefix}sheet_id`,
-      userAttributes,
-      'Hackathon Sheet ID'
-    )
-    yield persistUserAttribute(
-      updatedUserAttributes.tokenServerUrl,
-      `${prefix}token_server_url`,
-      userAttributes,
-      'Hackathon Token Server URL'
-    )
-    // Load the user requests again. Not very efficient but for this
-    // exercise okay. endLoading will be fired when loadUserAttributesResponse
-    // fires.
-    yield put(loadUserAttributesRequest())
+    yield put(endLoading())
   } catch (err) {
     console.error(err)
-    yield put(actionMessage('A problem occurred loading the data', 'critical'))
+    yield put(actionMessage('A problem occurred saving the data', 'critical'))
   }
 }
 
 export function* registerAdminSagas() {
   yield all([
     takeEvery(Actions.LOAD_USER_ATTRIBUTES_REQUEST, loadUserAttributesSaga),
-    takeEvery(Actions.SAVE_USER_ATTRIBUTES, saveUserAttributesSaga),
+    takeEvery(Actions.SAVE_USER_ATTRIBUTES_REQUEST, saveUserAttributesSaga),
   ])
 }

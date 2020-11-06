@@ -24,23 +24,21 @@
 
  */
 
+import { ValidationMessages } from '@looker/components'
+
 export enum Actions {
   LOAD_USER_ATTRIBUTES_REQUEST = 'LOAD_USER_ATTRIBUTES_REQUEST',
   LOAD_USER_ATTRIBUTES_RESPONSE = 'LOAD_USER_ATTRIBUTES_RESPONSE',
   UPDATE_USER_ATTRIBUTE_VALUES = 'UPDATE_USER_ATTRIBUTE_VALUES',
-  SAVE_USER_ATTRIBUTES = 'SAVE_USER_ATTRIBUTES',
-}
-
-export interface AttributeValue {
-  value: string
-  originalValue: string
+  SAVE_USER_ATTRIBUTES_REQUEST = 'SAVE_USER_ATTRIBUTES_REQUEST',
+  SAVE_USER_ATTRIBUTES_RESPONSE = 'SAVE_USER_ATTRIBUTES_RESPONSE',
 }
 
 export interface AdminUserAttributes {
-  lookerClientId: AttributeValue
-  lookerClientSecret: AttributeValue
-  sheetId: AttributeValue
-  tokenServerUrl: AttributeValue
+  lookerClientId: string
+  lookerClientSecret: string
+  sheetId: string
+  tokenServerUrl: string
 }
 
 export interface LoadUserAttributesRequestAction {
@@ -57,16 +55,25 @@ export interface UpdateAttributeValuesAction {
   payload: AdminUserAttributes
 }
 
-export interface SaveUserAttributesAction {
-  type: Actions.SAVE_USER_ATTRIBUTES
+export interface SaveUserAttributesRequestAction {
+  type: Actions.SAVE_USER_ATTRIBUTES_REQUEST
   payload: AdminUserAttributes
+}
+
+export interface SaveUserAttributesResponseAction {
+  type: Actions.SAVE_USER_ATTRIBUTES_RESPONSE
+  payload: {
+    adminUserAttributes: AdminUserAttributes
+    validationMessages?: ValidationMessages
+  }
 }
 
 export type AdminAction =
   | LoadUserAttributesRequestAction
   | LoadUserAttributesResponseAction
   | UpdateAttributeValuesAction
-  | SaveUserAttributesAction
+  | SaveUserAttributesRequestAction
+  | SaveUserAttributesResponseAction
 
 export const loadUserAttributesRequest = (): LoadUserAttributesRequestAction => ({
   type: Actions.LOAD_USER_ATTRIBUTES_REQUEST,
@@ -86,9 +93,17 @@ export const updateAttributeValues = (
   payload: adminUserAttributes,
 })
 
-export const saveUserAttributes = (
+export const saveUserAttributesRequest = (
   adminUserAttributes: AdminUserAttributes
-): SaveUserAttributesAction => ({
-  type: Actions.SAVE_USER_ATTRIBUTES,
+): SaveUserAttributesRequestAction => ({
+  type: Actions.SAVE_USER_ATTRIBUTES_REQUEST,
   payload: adminUserAttributes,
+})
+
+export const saveUserAttributesResponse = (
+  adminUserAttributes: AdminUserAttributes,
+  validationMessages?: ValidationMessages
+): SaveUserAttributesResponseAction => ({
+  type: Actions.SAVE_USER_ATTRIBUTES_RESPONSE,
+  payload: { adminUserAttributes, validationMessages },
 })

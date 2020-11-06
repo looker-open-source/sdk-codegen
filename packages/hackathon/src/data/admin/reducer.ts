@@ -23,18 +23,21 @@
  SOFTWARE.
 
  */
+
+import { ValidationMessages } from '@looker/components'
 import { AdminAction, Actions, AdminUserAttributes } from './actions'
 
 export interface AdminState {
   adminUserAttributes: AdminUserAttributes
+  validationMessages?: ValidationMessages
 }
 
 const defaultState: Readonly<AdminState> = Object.freeze({
   adminUserAttributes: {
-    lookerClientId: { value: '', originalValue: '' },
-    lookerClientSecret: { value: '', originalValue: '' },
-    sheetId: { value: '', originalValue: '' },
-    tokenServerUrl: { value: '', originalValue: '' },
+    lookerClientId: '',
+    lookerClientSecret: '',
+    sheetId: '',
+    tokenServerUrl: '',
   },
 })
 
@@ -56,6 +59,18 @@ export const adminReducer = (
       return {
         ...state,
         adminUserAttributes: action.payload,
+      }
+    case Actions.SAVE_USER_ATTRIBUTES_REQUEST:
+      return {
+        ...state,
+        validationMessages: undefined,
+      }
+    case Actions.SAVE_USER_ATTRIBUTES_RESPONSE:
+      const { adminUserAttributes, validationMessages } = action.payload
+      return {
+        ...state,
+        adminUserAttributes,
+        validationMessages,
       }
     default:
       return state
