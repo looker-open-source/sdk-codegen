@@ -175,6 +175,8 @@ export interface IParameter extends ITypedSymbol {
 
   asProperty(): IProperty
 
+  summary(): string
+
   asHashString(): string
 
   doEncode(): boolean
@@ -718,6 +720,16 @@ export class Parameter extends SchemadSymbol implements IParameter {
     return new Property(this.name, this.type, this.asSchemaObject())
   }
 
+  private tag(key: string) {
+    return this[key] ? ` ${key}` : ''
+  }
+
+  summary() {
+    return `${this.fullName}:${this.type.name}${this.tag('readOnly')}${this.tag(
+      'required'
+    )}${this.tag('nullable')}${this.tag('deprecated')}`
+  }
+
   asHashString() {
     return `${this.name}:${this.type.name}${this.required ? '' : '?'}${
       this.location
@@ -933,6 +945,8 @@ export interface IMethod extends ISchemadSymbol {
    * @returns {KeyList} the list of all types used by the method
    */
   makeTypes(api: IApiModel): KeyList
+
+  signature(): string
 }
 
 /**
@@ -1132,6 +1146,21 @@ export class Method extends SchemadSymbol implements IMethod {
 
   get summary(): string {
     return this.schema.summary || ''
+  }
+
+  signature() {
+    let result = this.operationId + '('
+    const allParams = this.allParams
+    if (allParams) {
+      allParams.forEach((param, index) => {
+        if (index > 0) result += ', '
+        result += `${param.required ? '' : '['}${param.name}:${
+          param.type.name
+        }${param.required ? '' : ']'}`
+      })
+    }
+    result += ')'
+    return result
   }
 
   // all required parameters ordered by location declaration order
