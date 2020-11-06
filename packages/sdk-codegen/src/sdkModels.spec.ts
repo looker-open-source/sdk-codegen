@@ -1088,9 +1088,24 @@ describe('sdkModels', () => {
 
   describe('summary', () => {
     it('should summarize a property', () => {
-      const prop = apiTestModel.types.Dashboard.properties.id
-      const actual = prop.summary()
+      const actual = apiTestModel.types.Dashboard.properties.id.summary()
       expect(actual).toEqual('Dashboard.id:string readOnly')
+    })
+
+    it('should summarize a parameter', () => {
+      const method = apiTestModel.methods.create_dashboard
+      const actual = method.allParams[0].summary()
+      expect(actual).toEqual('create_dashboard.body:Dashboard required')
+    })
+
+    it('should summarize a method with params', () => {
+      const actual = apiTestModel.methods.create_look.signature()
+      expect(actual).toEqual('create_look(body:LookWithQuery, [fields:string])')
+    })
+
+    it('should summarize a method without params', () => {
+      const actual = apiTestModel.methods.logout.signature()
+      expect(actual).toEqual('logout()')
     })
   })
 
