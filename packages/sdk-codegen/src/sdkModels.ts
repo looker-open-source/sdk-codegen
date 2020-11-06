@@ -613,8 +613,11 @@ class SchemadSymbol extends Symbol implements ISchemadSymbol {
   }
 }
 
-class Property extends SchemadSymbol implements IProperty {
+export class Property extends SchemadSymbol implements IProperty {
   required = false
+  nullable = false
+  readOnly = false
+  writeOnly = false
 
   constructor(
     name: string,
@@ -627,19 +630,10 @@ class Property extends SchemadSymbol implements IProperty {
     this.required = !!(
       required.includes(name) || schema.required?.includes(name)
     )
-  }
-
-  get nullable(): boolean {
-    // TODO determine cascading nullable options
-    return this.schema.nullable || this.schema['x-looker-nullable'] || false
-  }
-
-  get readOnly(): boolean {
-    return this.schema.readOnly || false
-  }
-
-  get writeOnly(): boolean {
-    return this.schema.writeOnly || false
+    this.nullable =
+      this.schema.nullable || this.schema['x-looker-nullable'] || false
+    this.readOnly = this.schema.readOnly || false
+    this.writeOnly = this.schema.writeOnly || false
   }
 
   private tag(key: string) {
