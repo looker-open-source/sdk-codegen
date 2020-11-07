@@ -151,6 +151,14 @@ import java.util.*
     return `${indent}//endregion ${description}`
   }
 
+  paramMappedType(param: IParameter, method: IMethod) {
+    const type =
+      param.location === strBody
+        ? this.writeableType(param.type, method) || param.type
+        : param.type
+    return this.typeMap(type)
+  }
+
   declareProperty(indent: string, property: IProperty) {
     const optional = !property.required ? '? = null' : ''
     const type = this.typeMap(property.type)
@@ -169,58 +177,59 @@ import java.util.*
   }
 
   declareParameter(indent: string, method: IMethod, param: IParameter) {
-    const type =
-      param.location === strBody
-        ? this.writeableType(param.type, method) || param.type
-        : param.type
-    const mapped = this.typeMap(type)
+    const mapped = this.paramMappedType(param, method)
     let pOpt = ''
     if (!param.required) {
       pOpt = '?'
     }
     return (
-      this.commentHeader(indent, this.paramComment(param, mapped)) +
       `${indent}${param.name}: ${mapped.name}${pOpt}` +
       (param.required ? '' : mapped.default ? ` = ${mapped.default}` : '')
     )
   }
 
   methodHeaderDeclaration(indent: string, method: IMethod, streamer = false) {
-    const type = this.typeMap(method.type)
-    const resultType = streamer ? 'ByteArray' : type.name
-    const head = method.description?.trim()
-    let headComment =
-      (head ? `${head}\n\n` : '') +
-      `${method.httpMethod} ${method.endpoint} -> ${resultType}`
-    let fragment = ''
-    const requestType = this.requestTypeName(method)
     const bump = indent + this.indentStr
 
-    if (requestType) {
-      // TODO remove this Typescript cruft
-      fragment = `request: Partial<${requestType}>`
-    } else {
-      const params: string[] = []
-      const args = method.allParams // get the params in signature order
-      if (args && args.length > 0)
-        args.forEach((p) => params.push(this.declareParameter(bump, method, p)))
-      fragment =
-        params.length > 0 ? `\n${params.join(this.paramDelimiter)}` : ''
-    }
-    if (method.responseIsBoth()) {
-      headComment += `\n\n**Note**: Binary content may be returned by this method.`
-    } else if (method.responseIsBinary()) {
-      headComment += `\n\n**Note**: Binary content is returned by this method.\n`
-    }
-    const jvmOverloads =
-      method.optionalParams.length > 0 ? '@JvmOverloads ' : ''
-    // const callback = `callback: (readable: Readable) => Promise<${type.name}>,`
-    const header =
-      this.commentHeader(indent, headComment) +
-      `${indent}${jvmOverloads}fun ${method.name}(`
-    // + (streamer ? `\n${bump}${callback}` : '')
+    const params: string[] = []
+    const args = method.allParams // get the params in signature order
+    if (args && args.length > 0)
+      args.forEach((p) => params.push(this.declareParameter(bump, method, p)))
 
-    return header + fragment + `) : SDKResponse {\n`
+    return `
+${this.commentHeader(indent, this.headerComment(method, streamer))}
+${indent}${this.jvmOverloads(method)}fun ${method.name}(
+${params.join(this.paramDelimiter)}
+${indent}) : SDKResponse {
+`
+  }
+
+  headerComment(method: IMethod, streamer = false) {
+    const type = this.typeMap(method.type)
+    const resultType = streamer ? 'ByteArray' : type.name
+    const paramComments = method.allParams.map((p) =>
+      this.paramComment(p, this.paramMappedType(p, method))
+    )
+
+    let note = ''
+    if (method.responseIsBoth()) {
+      note = '\n**Note**: Binary content may be returned by this method.'
+    } else if (method.responseIsBinary()) {
+      note = '\n**Note**: Binary content is returned by this method.'
+    }
+
+    return `
+${method.description?.trim()}
+
+${paramComments.join('\n')}
+
+${method.httpMethod} ${method.endpoint} -> ${resultType}
+${note}
+`
+  }
+
+  jvmOverloads(method: IMethod) {
+    return method.optionalParams.length > 0 ? '@JvmOverloads ' : ''
   }
 
   methodSignature(indent: string, method: IMethod) {
