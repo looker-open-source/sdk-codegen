@@ -1097,7 +1097,9 @@ describe('sdkModels', () => {
       const actual = method.allParams[0].summary()
       expect(actual).toEqual('create_dashboard.body:Dashboard required')
     })
+  })
 
+  describe('signature', () => {
     it('should summarize a method with params', () => {
       const actual = apiTestModel.methods.create_look.signature()
       expect(actual).toEqual('create_look(body:LookWithQuery, [fields:string])')
@@ -1114,6 +1116,14 @@ describe('sdkModels', () => {
       const prop = apiTestModel.types.Dashboard.properties.id
       const actual = prop.asHashString()
       expect(actual).toEqual('id:string readOnly')
+    })
+  })
+
+  describe('id', () => {
+    it('method.id should be httpMethod + endpoint', () => {
+      const method = apiTestModel.methods.create_look
+      const actual = method.id
+      expect(actual).toEqual(`${method.httpMethod} ${method.endpoint}`)
     })
   })
 })

@@ -773,6 +773,9 @@ export class Parameter extends SchemadSymbol implements IParameter {
  *
  */
 export interface IMethod extends ISchemadSymbol {
+  /** Lookup id */
+  id: string
+
   /** alias of ISymbol.name */
   operationId: string
 
@@ -953,6 +956,7 @@ export interface IMethod extends ISchemadSymbol {
  * Concrete implementation of IMethod interface
  */
 export class Method extends SchemadSymbol implements IMethod {
+  readonly id: string
   readonly httpMethod: HttpMethod
   readonly endpoint: string
   readonly primaryResponse: IMethodResponse
@@ -1019,6 +1023,7 @@ export class Method extends SchemadSymbol implements IMethod {
     this.types = new Set<string>()
     this.httpMethod = httpMethod
     this.endpoint = endpoint
+    this.id = `${httpMethod} ${endpoint}`
     this.responses = responses
     this.primaryResponse = primaryResponse
     this.responseModes = this.getResponseModes()
