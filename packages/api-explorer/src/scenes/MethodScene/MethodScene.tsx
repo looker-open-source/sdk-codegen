@@ -26,17 +26,18 @@
 
 import React, { FC, useContext, useState, useEffect } from 'react'
 import {
-  Space,
-  useToggle,
-  ButtonOutline,
+  Aside,
   Button,
+  ButtonOutline,
   ComponentsProvider,
+  Space,
+  Section,
+  useToggle,
 } from '@looker/components'
 import { ThemeContext } from 'styled-components'
 import { useParams } from 'react-router-dom'
 import { RunIt, RunItContext } from '@looker/run-it'
 import { ApiModel, typeRefs } from '@looker/sdk-codegen'
-
 import {
   DocActivityType,
   DocMarkdown,
@@ -48,7 +49,6 @@ import {
   DocStatus,
   DocTitle,
 } from '../../components'
-import { Layout, Section, Aside } from '../../components/Layout'
 import { DocOperation } from './components'
 import { createInputs } from './utils'
 
@@ -86,8 +86,8 @@ export const MethodScene: FC<DocMethodProps> = ({ api }) => {
   )
 
   return (
-    <Layout hasAside>
-      <Section>
+    <>
+      <Section p="xxlarge">
         <Space between>
           <DocTitle>{method.summary}</DocTitle>
           {runItToggle}
@@ -105,21 +105,21 @@ export const MethodScene: FC<DocMethodProps> = ({ api }) => {
         <DocResponses responses={method.responses} />
       </Section>
       {sdk && value && (
-        <ComponentsProvider
-          globalStyle={false}
-          themeCustomizations={{
-            colors: { background: colors.text, text: colors.background },
-          }}
-        >
-          <Aside width="50rem" bg="background" py="large">
+        <Aside width="50rem">
+          <ComponentsProvider
+            globalStyle={false}
+            themeCustomizations={{
+              colors: { background: colors.text, text: colors.background },
+            }}
+          >
             <RunIt
               api={api}
               inputs={createInputs(api, method)}
               method={method}
             />
-          </Aside>
-        </ComponentsProvider>
+          </ComponentsProvider>
+        </Aside>
       )}
-    </Layout>
+    </>
   )
 }
