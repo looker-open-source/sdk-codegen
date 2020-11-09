@@ -38,18 +38,14 @@ import com.looker.rtl.*
 import java.io.Serializable
 import java.util.*
 
+/**
+ * @property access_token Access Token used for API calls (read-only)
+ * @property token_type Type of Token (read-only)
+ * @property expires_in Number of seconds before the token expires (read-only)
+ */
 data class AccessToken (
-  /**
-   * Access Token used for API calls (read-only)
-   */
   var access_token: String? = null,
-  /**
-   * Type of Token (read-only)
-   */
   var token_type: String? = null,
-  /**
-   * Number of seconds before the token expires (read-only)
-   */
   var expires_in: Long? = null
 ) : Serializable
 
@@ -61,80 +57,57 @@ enum class Align : Serializable {
   right
 }
 
+/**
+ * @property can Operations the current user is able to perform on this object (read-only)
+ * @property workspace_id The id of active workspace for this session
+ * @property sudo_user_id The id of the actual user in the case when this session represents one user sudo'ing as another (read-only)
+ */
 data class ApiSession (
-  /**
-   * Operations the current user is able to perform on this object (read-only)
-   */
   var can: Map<String,Boolean>? = null,
-  /**
-   * The id of active workspace for this session
-   */
   var workspace_id: String? = null,
-  /**
-   * The id of the actual user in the case when this session represents one user sudo'ing as another (read-only)
-   */
   var sudo_user_id: Long? = null
 ) : Serializable
 
+/**
+ * @property looker_release_version Current Looker release version number (read-only)
+ * @property current_version
+ * @property supported_versions Array of versions supported by this Looker instance (read-only)
+ */
 data class ApiVersion (
-  /**
-   * Current Looker release version number (read-only)
-   */
   var looker_release_version: String? = null,
   var current_version: ApiVersionElement? = null,
-  /**
-   * Array of versions supported by this Looker instance (read-only)
-   */
   var supported_versions: Array<ApiVersionElement>? = null
 ) : Serializable
 
+/**
+ * @property version Version number as it appears in '/api/xxx/' urls (read-only)
+ * @property full_version Full version number including minor version (read-only)
+ * @property status Status of this version (read-only)
+ * @property swagger_url Url for swagger.json for this version (read-only)
+ */
 data class ApiVersionElement (
-  /**
-   * Version number as it appears in '/api/xxx/' urls (read-only)
-   */
   var version: String? = null,
-  /**
-   * Full version number including minor version (read-only)
-   */
   var full_version: String? = null,
-  /**
-   * Status of this version (read-only)
-   */
   var status: String? = null,
-  /**
-   * Url for swagger.json for this version (read-only)
-   */
   var swagger_url: UriString? = null
 ) : Serializable
 
+/**
+ * @property can Operations the current user is able to perform on this object (read-only)
+ * @property type Type of backup: looker-s3 or custom-s3
+ * @property custom_s3_bucket Name of bucket for custom-s3 backups
+ * @property custom_s3_bucket_region Name of region where the bucket is located
+ * @property custom_s3_key (Write-Only) AWS S3 key used for custom-s3 backups
+ * @property custom_s3_secret (Write-Only) AWS S3 secret used for custom-s3 backups
+ * @property url Link to get this item (read-only)
+ */
 data class BackupConfiguration (
-  /**
-   * Operations the current user is able to perform on this object (read-only)
-   */
   var can: Map<String,Boolean>? = null,
-  /**
-   * Type of backup: looker-s3 or custom-s3
-   */
   var type: String? = null,
-  /**
-   * Name of bucket for custom-s3 backups
-   */
   var custom_s3_bucket: String? = null,
-  /**
-   * Name of region where the bucket is located
-   */
   var custom_s3_bucket_region: String? = null,
-  /**
-   * (Write-Only) AWS S3 key used for custom-s3 backups
-   */
   var custom_s3_key: String? = null,
-  /**
-   * (Write-Only) AWS S3 secret used for custom-s3 backups
-   */
   var custom_s3_secret: String? = null,
-  /**
-   * Link to get this item (read-only)
-   */
   var url: UriString? = null
 ) : Serializable
 
@@ -148,412 +121,291 @@ enum class Category : Serializable {
   dimension
 }
 
+/**
+ * @property id Unique Id (read-only)
+ * @property label Label of color collection
+ * @property categoricalPalettes Array of categorical palette definitions
+ * @property sequentialPalettes Array of discrete palette definitions
+ * @property divergingPalettes Array of diverging palette definitions
+ */
 data class ColorCollection (
-  /**
-   * Unique Id (read-only)
-   */
   var id: String? = null,
-  /**
-   * Label of color collection
-   */
   var label: String? = null,
-  /**
-   * Array of categorical palette definitions
-   */
   var categoricalPalettes: Array<DiscretePalette>? = null,
-  /**
-   * Array of discrete palette definitions
-   */
   var sequentialPalettes: Array<ContinuousPalette>? = null,
-  /**
-   * Array of diverging palette definitions
-   */
   var divergingPalettes: Array<ContinuousPalette>? = null
 ) : Serializable
 
+/**
+ * @property color CSS color string
+ * @property offset Offset in continuous palette (0 to 100)
+ */
 data class ColorStop (
-  /**
-   * CSS color string
-   */
   var color: String? = null,
-  /**
-   * Offset in continuous palette (0 to 100)
-   */
   var offset: Long? = null
 ) : Serializable
 
+/**
+ * @property id Unique Id (read-only)
+ * @property user_id User Id which owns this ContentFavorite
+ * @property content_metadata_id Content Metadata Id associated with this ContentFavorite
+ * @property look_id Id of a look (read-only)
+ * @property dashboard_id Id of a dashboard (read-only)
+ * @property look
+ * @property dashboard
+ */
 data class ContentFavorite (
-  /**
-   * Unique Id (read-only)
-   */
   var id: Long? = null,
-  /**
-   * User Id which owns this ContentFavorite
-   */
   var user_id: Long? = null,
-  /**
-   * Content Metadata Id associated with this ContentFavorite
-   */
   var content_metadata_id: Long? = null,
-  /**
-   * Id of a look (read-only)
-   */
   var look_id: Long? = null,
-  /**
-   * Id of a dashboard (read-only)
-   */
   var dashboard_id: Long? = null,
   var look: LookBasic? = null,
   var dashboard: DashboardBase? = null
 ) : Serializable
 
+/**
+ * @property can Operations the current user is able to perform on this object (read-only)
+ * @property id Unique Id (read-only)
+ * @property name Name or title of underlying content (read-only)
+ * @property parent_id Id of Parent Content (read-only)
+ * @property dashboard_id Id of associated dashboard when content_type is "dashboard" (read-only)
+ * @property look_id Id of associated look when content_type is "look" (read-only)
+ * @property folder_id Id of associated folder when content_type is "space" (read-only)
+ * @property content_type Content Type ("dashboard", "look", or "space") (read-only)
+ * @property inherits Whether content inherits its access levels from parent
+ * @property inheriting_id Id of Inherited Content (read-only)
+ * @property slug Content Slug (read-only)
+ * @property space_id Id of associated space when content_type is "space" (read-only)
+ */
 data class ContentMeta (
-  /**
-   * Operations the current user is able to perform on this object (read-only)
-   */
   var can: Map<String,Boolean>? = null,
-  /**
-   * Unique Id (read-only)
-   */
   var id: Long? = null,
-  /**
-   * Name or title of underlying content (read-only)
-   */
   var name: String? = null,
-  /**
-   * Id of Parent Content (read-only)
-   */
   var parent_id: Long? = null,
-  /**
-   * Id of associated dashboard when content_type is "dashboard" (read-only)
-   */
   var dashboard_id: String? = null,
-  /**
-   * Id of associated look when content_type is "look" (read-only)
-   */
   var look_id: Long? = null,
-  /**
-   * Id of associated folder when content_type is "space" (read-only)
-   */
   var folder_id: String? = null,
-  /**
-   * Content Type ("dashboard", "look", or "space") (read-only)
-   */
   var content_type: String? = null,
-  /**
-   * Whether content inherits its access levels from parent
-   */
   var inherits: Boolean? = null,
-  /**
-   * Id of Inherited Content (read-only)
-   */
   var inheriting_id: Long? = null,
-  /**
-   * Content Slug (read-only)
-   */
   var slug: String? = null,
-  /**
-   * Id of associated space when content_type is "space" (read-only)
-   */
   var space_id: String? = null
 ) : Serializable
 
+/**
+ * @property can Operations the current user is able to perform on this object (read-only)
+ * @property id Unique Id (read-only)
+ * @property content_metadata_id Id of associated Content Metadata (read-only)
+ * @property permission_type Type of permission: "view" or "edit" Valid values are: "view", "edit". (read-only)
+ * @property group_id ID of associated group (read-only)
+ * @property user_id ID of associated user (read-only)
+ */
 data class ContentMetaGroupUser (
-  /**
-   * Operations the current user is able to perform on this object (read-only)
-   */
   var can: Map<String,Boolean>? = null,
-  /**
-   * Unique Id (read-only)
-   */
   var id: String? = null,
-  /**
-   * Id of associated Content Metadata (read-only)
-   */
   var content_metadata_id: String? = null,
-  /**
-   * Type of permission: "view" or "edit" Valid values are: "view", "edit". (read-only)
-   */
   var permission_type: PermissionType? = null,
-  /**
-   * ID of associated group (read-only)
-   */
   var group_id: Long? = null,
-  /**
-   * ID of associated user (read-only)
-   */
   var user_id: Long? = null
 ) : Serializable
 
+/**
+ * @property content_with_errors A list of content errors (read-only)
+ * @property computation_time Duration of content validation in seconds (read-only)
+ * @property total_looks_validated The number of looks validated (read-only)
+ * @property total_dashboard_elements_validated The number of dashboard elements validated (read-only)
+ * @property total_dashboard_filters_validated The number of dashboard filters validated (read-only)
+ * @property total_scheduled_plans_validated The number of scheduled plans validated (read-only)
+ * @property total_alerts_validated The number of alerts validated (read-only)
+ * @property total_explores_validated The number of explores used across all content validated (read-only)
+ */
 data class ContentValidation (
-  /**
-   * A list of content errors (read-only)
-   */
   var content_with_errors: Array<ContentValidatorError>? = null,
-  /**
-   * Duration of content validation in seconds (read-only)
-   */
   var computation_time: Float? = null,
-  /**
-   * The number of looks validated (read-only)
-   */
   var total_looks_validated: Long? = null,
-  /**
-   * The number of dashboard elements validated (read-only)
-   */
   var total_dashboard_elements_validated: Long? = null,
-  /**
-   * The number of dashboard filters validated (read-only)
-   */
   var total_dashboard_filters_validated: Long? = null,
-  /**
-   * The number of scheduled plans validated (read-only)
-   */
   var total_scheduled_plans_validated: Long? = null,
-  /**
-   * The number of alerts validated (read-only)
-   */
   var total_alerts_validated: Long? = null,
-  /**
-   * The number of explores used across all content validated (read-only)
-   */
   var total_explores_validated: Long? = null
 ) : Serializable
 
+/**
+ * @property id ID of the alert
+ * @property lookml_dashboard_id ID of the LookML dashboard associated with the alert
+ * @property lookml_link_id ID of the LookML dashboard element associated with the alert
+ * @property custom_title An optional, user-defined title for the alert
+ */
 data class ContentValidationAlert (
-  /**
-   * ID of the alert
-   */
   var id: Long? = null,
-  /**
-   * ID of the LookML dashboard associated with the alert
-   */
   var lookml_dashboard_id: String? = null,
-  /**
-   * ID of the LookML dashboard element associated with the alert
-   */
   var lookml_link_id: String? = null,
-  /**
-   * An optional, user-defined title for the alert
-   */
   var custom_title: String? = null
 ) : Serializable
 
+/**
+ * @property description Description
+ * @property id Unique Id (read-only)
+ * @property folder
+ * @property title Dashboard Title
+ * @property space
+ */
 data class ContentValidationDashboard (
-  /**
-   * Description
-   */
   var description: String? = null,
-  /**
-   * Unique Id (read-only)
-   */
   var id: String? = null,
   var folder: ContentValidationFolder? = null,
-  /**
-   * Dashboard Title
-   */
   var title: String? = null,
   var space: ContentValidationSpace? = null
 ) : Serializable
 
+/**
+ * @property body_text Text tile body text
+ * @property dashboard_id Id of Dashboard
+ * @property id Unique Id (read-only)
+ * @property look_id Id Of Look
+ * @property note_display Note Display
+ * @property note_state Note State
+ * @property note_text Note Text
+ * @property note_text_as_html Note Text as Html (read-only)
+ * @property query_id Id Of Query
+ * @property subtitle_text Text tile subtitle text
+ * @property title Title of dashboard element
+ * @property title_hidden Whether title is hidden
+ * @property title_text Text tile title
+ * @property type Type
+ */
 data class ContentValidationDashboardElement (
-  /**
-   * Text tile body text
-   */
   var body_text: String? = null,
-  /**
-   * Id of Dashboard
-   */
   var dashboard_id: String? = null,
-  /**
-   * Unique Id (read-only)
-   */
   var id: String? = null,
-  /**
-   * Id Of Look
-   */
   var look_id: String? = null,
-  /**
-   * Note Display
-   */
   var note_display: String? = null,
-  /**
-   * Note State
-   */
   var note_state: String? = null,
-  /**
-   * Note Text
-   */
   var note_text: String? = null,
-  /**
-   * Note Text as Html (read-only)
-   */
   var note_text_as_html: String? = null,
-  /**
-   * Id Of Query
-   */
   var query_id: Long? = null,
-  /**
-   * Text tile subtitle text
-   */
   var subtitle_text: String? = null,
-  /**
-   * Title of dashboard element
-   */
   var title: String? = null,
-  /**
-   * Whether title is hidden
-   */
   var title_hidden: Boolean? = null,
-  /**
-   * Text tile title
-   */
   var title_text: String? = null,
-  /**
-   * Type
-   */
   var type: String? = null
 ) : Serializable
 
+/**
+ * @property id Unique Id (read-only)
+ * @property dashboard_id Id of Dashboard (read-only)
+ * @property name Name of filter
+ * @property title Title of filter
+ * @property type Type of filter: one of date, number, string, or field
+ * @property default_value Default value of filter
+ * @property model Model of filter (required if type = field)
+ * @property explore Explore of filter (required if type = field)
+ * @property dimension Dimension of filter (required if type = field)
+ */
 data class ContentValidationDashboardFilter (
-  /**
-   * Unique Id (read-only)
-   */
   var id: String? = null,
-  /**
-   * Id of Dashboard (read-only)
-   */
   var dashboard_id: String? = null,
-  /**
-   * Name of filter
-   */
   var name: String? = null,
-  /**
-   * Title of filter
-   */
   var title: String? = null,
-  /**
-   * Type of filter: one of date, number, string, or field
-   */
   var type: String? = null,
-  /**
-   * Default value of filter
-   */
   var default_value: String? = null,
-  /**
-   * Model of filter (required if type = field)
-   */
   var model: String? = null,
-  /**
-   * Explore of filter (required if type = field)
-   */
   var explore: String? = null,
-  /**
-   * Dimension of filter (required if type = field)
-   */
   var dimension: String? = null
 ) : Serializable
 
+/**
+ * @property message Error message (read-only)
+ * @property field_name Name of the field involved in the error (read-only)
+ * @property model_name Name of the model involved in the error (read-only)
+ * @property explore_name Name of the explore involved in the error (read-only)
+ * @property removable Whether this validation error is removable (read-only)
+ */
 data class ContentValidationError (
-  /**
-   * Error message (read-only)
-   */
   var message: String? = null,
-  /**
-   * Name of the field involved in the error (read-only)
-   */
   var field_name: String? = null,
-  /**
-   * Name of the model involved in the error (read-only)
-   */
   var model_name: String? = null,
-  /**
-   * Name of the explore involved in the error (read-only)
-   */
   var explore_name: String? = null,
-  /**
-   * Whether this validation error is removable (read-only)
-   */
   var removable: Boolean? = null
 ) : Serializable
 
+/**
+ * @property name Unique Name
+ * @property id Unique Id (read-only)
+ */
 data class ContentValidationFolder (
-  /**
-   * Unique Name
-   */
   var name: String,
-  /**
-   * Unique Id (read-only)
-   */
   var id: String? = null
 ) : Serializable
 
+/**
+ * @property id Unique Id (read-only)
+ * @property title Look Title
+ * @property folder
+ * @property space
+ */
 data class ContentValidationLook (
-  /**
-   * Unique Id (read-only)
-   */
   var id: Long? = null,
-  /**
-   * Look Title
-   */
   var title: String? = null,
   var folder: ContentValidationFolder? = null,
   var space: ContentValidationSpace? = null
 ) : Serializable
 
+/**
+ * @property id ID of the LookML Dashboard (read-only)
+ * @property title Title of the LookML Dashboard (read-only)
+ * @property space_id ID of Space (read-only)
+ * @property space
+ */
 data class ContentValidationLookMLDashboard (
-  /**
-   * ID of the LookML Dashboard (read-only)
-   */
   var id: String? = null,
-  /**
-   * Title of the LookML Dashboard (read-only)
-   */
   var title: String? = null,
-  /**
-   * ID of Space (read-only)
-   */
   var space_id: String? = null,
   var space: SpaceBase? = null
 ) : Serializable
 
+/**
+ * @property lookml_link_id Link ID of the LookML Dashboard Element (read-only)
+ * @property title Title of the LookML Dashboard Element (read-only)
+ */
 data class ContentValidationLookMLDashboardElement (
-  /**
-   * Link ID of the LookML Dashboard Element (read-only)
-   */
   var lookml_link_id: String? = null,
-  /**
-   * Title of the LookML Dashboard Element (read-only)
-   */
   var title: String? = null
 ) : Serializable
 
+/**
+ * @property name Name of this scheduled plan
+ * @property look_id Id of a look
+ * @property id Unique Id (read-only)
+ */
 data class ContentValidationScheduledPlan (
-  /**
-   * Name of this scheduled plan
-   */
   var name: String? = null,
-  /**
-   * Id of a look
-   */
   var look_id: Long? = null,
-  /**
-   * Unique Id (read-only)
-   */
   var id: Long? = null
 ) : Serializable
 
+/**
+ * @property name Unique Name
+ * @property id Unique Id (read-only)
+ */
 data class ContentValidationSpace (
-  /**
-   * Unique Name
-   */
   var name: String,
-  /**
-   * Unique Id (read-only)
-   */
   var id: String? = null
 ) : Serializable
 
+/**
+ * @property look
+ * @property dashboard
+ * @property dashboard_element
+ * @property dashboard_filter
+ * @property scheduled_plan
+ * @property alert
+ * @property lookml_dashboard
+ * @property lookml_dashboard_element
+ * @property errors A list of errors found for this piece of content (read-only)
+ * @property id An id unique to this piece of content for this validation run (read-only)
+ */
 data class ContentValidatorError (
   var look: ContentValidationLook? = null,
   var dashboard: ContentValidationDashboard? = null,
@@ -563,1486 +415,899 @@ data class ContentValidatorError (
   var alert: ContentValidationAlert? = null,
   var lookml_dashboard: ContentValidationLookMLDashboard? = null,
   var lookml_dashboard_element: ContentValidationLookMLDashboardElement? = null,
-  /**
-   * A list of errors found for this piece of content (read-only)
-   */
   var errors: Array<ContentValidationError>? = null,
-  /**
-   * An id unique to this piece of content for this validation run (read-only)
-   */
   var id: String? = null
 ) : Serializable
 
+/**
+ * @property can Operations the current user is able to perform on this object (read-only)
+ * @property id Unique Id (read-only)
+ * @property look_id Id of viewed Look (read-only)
+ * @property dashboard_id Id of the viewed Dashboard (read-only)
+ * @property content_metadata_id Content metadata id of the Look or Dashboard (read-only)
+ * @property user_id Id of user content was viewed by (read-only)
+ * @property group_id Id of group content was viewed by (read-only)
+ * @property view_count Number of times piece of content was viewed (read-only)
+ * @property favorite_count Number of times piece of content was favorited (read-only)
+ * @property last_viewed_at Date the piece of content was last viewed (read-only)
+ * @property start_of_week_date Week start date for the view and favorite count during that given week (read-only)
+ */
 data class ContentView (
-  /**
-   * Operations the current user is able to perform on this object (read-only)
-   */
   var can: Map<String,Boolean>? = null,
-  /**
-   * Unique Id (read-only)
-   */
   var id: Long? = null,
-  /**
-   * Id of viewed Look (read-only)
-   */
   var look_id: Long? = null,
-  /**
-   * Id of the viewed Dashboard (read-only)
-   */
   var dashboard_id: Long? = null,
-  /**
-   * Content metadata id of the Look or Dashboard (read-only)
-   */
   var content_metadata_id: Long? = null,
-  /**
-   * Id of user content was viewed by (read-only)
-   */
   var user_id: Long? = null,
-  /**
-   * Id of group content was viewed by (read-only)
-   */
   var group_id: Long? = null,
-  /**
-   * Number of times piece of content was viewed (read-only)
-   */
   var view_count: Long? = null,
-  /**
-   * Number of times piece of content was favorited (read-only)
-   */
   var favorite_count: Long? = null,
-  /**
-   * Date the piece of content was last viewed (read-only)
-   */
   var last_viewed_at: String? = null,
-  /**
-   * Week start date for the view and favorite count during that given week (read-only)
-   */
   var start_of_week_date: String? = null
 ) : Serializable
 
+/**
+ * @property id Unique identity string (read-only)
+ * @property label Label for palette
+ * @property type Type of palette
+ * @property stops Array of ColorStops in the palette
+ */
 data class ContinuousPalette (
-  /**
-   * Unique identity string (read-only)
-   */
   var id: String? = null,
-  /**
-   * Label for palette
-   */
   var label: String? = null,
-  /**
-   * Type of palette
-   */
   var type: String? = null,
-  /**
-   * Array of ColorStops in the palette
-   */
   var stops: Array<ColorStop>? = null
 ) : Serializable
 
+/**
+ * @property id Unique Id (read-only)
+ * @property dashboard_id Id of Dashboard
+ * @property name Name of filter
+ * @property title Title of filter
+ * @property type Type of filter: one of date, number, string, or field
+ * @property default_value Default value of filter
+ * @property model Model of filter (required if type = field)
+ * @property explore Explore of filter (required if type = field)
+ * @property dimension Dimension of filter (required if type = field)
+ * @property field Field information (read-only)
+ * @property row Display order of this filter relative to other filters
+ * @property listens_to_filters Array of listeners for faceted filters
+ * @property allow_multiple_values Whether the filter allows multiple filter values (deprecated in the latest version of dashboards)
+ * @property required Whether the filter requires a value to run the dashboard
+ * @property ui_config The visual configuration for this filter. Used to set up how the UI for this filter should appear.
+ */
 data class CreateDashboardFilter (
-  /**
-   * Unique Id (read-only)
-   */
   var id: String? = null,
-  /**
-   * Id of Dashboard
-   */
   var dashboard_id: String,
-  /**
-   * Name of filter
-   */
   var name: String,
-  /**
-   * Title of filter
-   */
   var title: String,
-  /**
-   * Type of filter: one of date, number, string, or field
-   */
   var type: String,
-  /**
-   * Default value of filter
-   */
   var default_value: String? = null,
-  /**
-   * Model of filter (required if type = field)
-   */
   var model: String? = null,
-  /**
-   * Explore of filter (required if type = field)
-   */
   var explore: String? = null,
-  /**
-   * Dimension of filter (required if type = field)
-   */
   var dimension: String? = null,
-  /**
-   * Field information (read-only)
-   */
   var field: Map<String,Any>? = null,
-  /**
-   * Display order of this filter relative to other filters
-   */
   var row: Long? = null,
-  /**
-   * Array of listeners for faceted filters
-   */
   var listens_to_filters: Array<String>? = null,
-  /**
-   * Whether the filter allows multiple filter values (deprecated in the latest version of dashboards)
-   */
   var allow_multiple_values: Boolean? = null,
-  /**
-   * Whether the filter requires a value to run the dashboard
-   */
   var required: Boolean? = null,
-  /**
-   * The visual configuration for this filter. Used to set up how the UI for this filter should appear.
-   */
   var ui_config: Map<String,Any>? = null
 ) : Serializable
 
+/**
+ * @property dashboard_filters Filter values to apply to the dashboard queries, in URL query format
+ * @property dashboard_style Dashboard layout style: single_column or tiled
+ */
 data class CreateDashboardRenderTask (
-  /**
-   * Filter values to apply to the dashboard queries, in URL query format
-   */
   var dashboard_filters: String? = null,
-  /**
-   * Dashboard layout style: single_column or tiled
-   */
   var dashboard_style: String? = null
 ) : Serializable
 
+/**
+ * @property name Unique Name
+ * @property parent_id Id of Parent. If the parent id is null, this is a root-level entry
+ */
 data class CreateFolder (
-  /**
-   * Unique Name
-   */
   var name: String,
-  /**
-   * Id of Parent. If the parent id is null, this is a root-level entry
-   */
   var parent_id: String
 ) : Serializable
 
+/**
+ * @property can Operations the current user is able to perform on this object (read-only)
+ * @property query_id Id of query to run
+ * @property result_format Desired async query result format. Valid values are: "inline_json", "json", "json_detail", "json_fe", "csv", "html", "md", "txt", "xlsx", "gsxml".
+ * @property source Source of query task
+ * @property deferred Create the task but defer execution
+ * @property look_id Id of look associated with query.
+ * @property dashboard_id Id of dashboard associated with query.
+ */
 data class CreateQueryTask (
-  /**
-   * Operations the current user is able to perform on this object (read-only)
-   */
   var can: Map<String,Boolean>? = null,
-  /**
-   * Id of query to run
-   */
   var query_id: Long,
-  /**
-   * Desired async query result format. Valid values are: "inline_json", "json", "json_detail", "json_fe", "csv", "html", "md", "txt", "xlsx", "gsxml".
-   */
   var result_format: ResultFormat,
-  /**
-   * Source of query task
-   */
   var source: String? = null,
-  /**
-   * Create the task but defer execution
-   */
   var deferred: Boolean? = null,
-  /**
-   * Id of look associated with query.
-   */
   var look_id: Long? = null,
-  /**
-   * Id of dashboard associated with query.
-   */
   var dashboard_id: String? = null
 ) : Serializable
 
+/**
+ * @property name Unique Name
+ * @property parent_id Id of Parent. If the parent id is null, this is a root-level entry
+ */
 data class CreateSpace (
-  /**
-   * Unique Name
-   */
   var name: String,
-  /**
-   * Id of Parent. If the parent id is null, this is a root-level entry
-   */
   var parent_id: String
 ) : Serializable
 
+/**
+ * @property can Operations the current user is able to perform on this object (read-only)
+ * @property id Unique Id (read-only)
+ * @property client_id API key client_id (read-only)
+ * @property created_at Timestamp for the creation of this credential (read-only)
+ * @property is_disabled Has this credential been disabled? (read-only)
+ * @property type Short name for the type of this kind of credential (read-only)
+ * @property url Link to get this item (read-only)
+ */
 data class CredentialsApi3 (
-  /**
-   * Operations the current user is able to perform on this object (read-only)
-   */
   var can: Map<String,Boolean>? = null,
-  /**
-   * Unique Id (read-only)
-   */
   var id: Long? = null,
-  /**
-   * API key client_id (read-only)
-   */
   var client_id: String? = null,
-  /**
-   * Timestamp for the creation of this credential (read-only)
-   */
   var created_at: String? = null,
-  /**
-   * Has this credential been disabled? (read-only)
-   */
   var is_disabled: Boolean? = null,
-  /**
-   * Short name for the type of this kind of credential (read-only)
-   */
   var type: String? = null,
-  /**
-   * Link to get this item (read-only)
-   */
   var url: UriString? = null
 ) : Serializable
 
+/**
+ * @property can Operations the current user is able to perform on this object (read-only)
+ * @property created_at Timestamp for the creation of this credential (read-only)
+ * @property email EMail address used for user login
+ * @property forced_password_reset_at_next_login Force the user to change their password upon their next login
+ * @property is_disabled Has this credential been disabled? (read-only)
+ * @property logged_in_at Timestamp for most recent login using credential (read-only)
+ * @property password_reset_url Url with one-time use secret token that the user can use to reset password (read-only)
+ * @property type Short name for the type of this kind of credential (read-only)
+ * @property url Link to get this item (read-only)
+ * @property user_url Link to get this user (read-only)
+ */
 data class CredentialsEmail (
-  /**
-   * Operations the current user is able to perform on this object (read-only)
-   */
   var can: Map<String,Boolean>? = null,
-  /**
-   * Timestamp for the creation of this credential (read-only)
-   */
   var created_at: String? = null,
-  /**
-   * EMail address used for user login
-   */
   var email: String? = null,
-  /**
-   * Force the user to change their password upon their next login
-   */
   var forced_password_reset_at_next_login: Boolean? = null,
-  /**
-   * Has this credential been disabled? (read-only)
-   */
   var is_disabled: Boolean? = null,
-  /**
-   * Timestamp for most recent login using credential (read-only)
-   */
   var logged_in_at: String? = null,
-  /**
-   * Url with one-time use secret token that the user can use to reset password (read-only)
-   */
   var password_reset_url: String? = null,
-  /**
-   * Short name for the type of this kind of credential (read-only)
-   */
   var type: String? = null,
-  /**
-   * Link to get this item (read-only)
-   */
   var url: UriString? = null,
-  /**
-   * Link to get this user (read-only)
-   */
   var user_url: UriString? = null
 ) : Serializable
 
+/**
+ * @property can Operations the current user is able to perform on this object (read-only)
+ * @property created_at Timestamp for the creation of this credential (read-only)
+ * @property external_group_id Embedder's id for a group to which this user was added during the most recent login (read-only)
+ * @property external_user_id Embedder's unique id for the user (read-only)
+ * @property id Unique Id (read-only)
+ * @property is_disabled Has this credential been disabled? (read-only)
+ * @property logged_in_at Timestamp for most recent login using credential (read-only)
+ * @property type Short name for the type of this kind of credential (read-only)
+ * @property url Link to get this item (read-only)
+ */
 data class CredentialsEmbed (
-  /**
-   * Operations the current user is able to perform on this object (read-only)
-   */
   var can: Map<String,Boolean>? = null,
-  /**
-   * Timestamp for the creation of this credential (read-only)
-   */
   var created_at: String? = null,
-  /**
-   * Embedder's id for a group to which this user was added during the most recent login (read-only)
-   */
   var external_group_id: String? = null,
-  /**
-   * Embedder's unique id for the user (read-only)
-   */
   var external_user_id: String? = null,
-  /**
-   * Unique Id (read-only)
-   */
   var id: Long? = null,
-  /**
-   * Has this credential been disabled? (read-only)
-   */
   var is_disabled: Boolean? = null,
-  /**
-   * Timestamp for most recent login using credential (read-only)
-   */
   var logged_in_at: String? = null,
-  /**
-   * Short name for the type of this kind of credential (read-only)
-   */
   var type: String? = null,
-  /**
-   * Link to get this item (read-only)
-   */
   var url: UriString? = null
 ) : Serializable
 
+/**
+ * @property can Operations the current user is able to perform on this object (read-only)
+ * @property created_at Timestamp for the creation of this credential (read-only)
+ * @property domain Google domain (read-only)
+ * @property email EMail address (read-only)
+ * @property google_user_id Google's Unique ID for this user (read-only)
+ * @property is_disabled Has this credential been disabled? (read-only)
+ * @property logged_in_at Timestamp for most recent login using credential (read-only)
+ * @property type Short name for the type of this kind of credential (read-only)
+ * @property url Link to get this item (read-only)
+ */
 data class CredentialsGoogle (
-  /**
-   * Operations the current user is able to perform on this object (read-only)
-   */
   var can: Map<String,Boolean>? = null,
-  /**
-   * Timestamp for the creation of this credential (read-only)
-   */
   var created_at: String? = null,
-  /**
-   * Google domain (read-only)
-   */
   var domain: String? = null,
-  /**
-   * EMail address (read-only)
-   */
   var email: String? = null,
-  /**
-   * Google's Unique ID for this user (read-only)
-   */
   var google_user_id: String? = null,
-  /**
-   * Has this credential been disabled? (read-only)
-   */
   var is_disabled: Boolean? = null,
-  /**
-   * Timestamp for most recent login using credential (read-only)
-   */
   var logged_in_at: String? = null,
-  /**
-   * Short name for the type of this kind of credential (read-only)
-   */
   var type: String? = null,
-  /**
-   * Link to get this item (read-only)
-   */
   var url: UriString? = null
 ) : Serializable
 
+/**
+ * @property can Operations the current user is able to perform on this object (read-only)
+ * @property created_at Timestamp for the creation of this credential (read-only)
+ * @property email EMail address (read-only)
+ * @property is_disabled Has this credential been disabled? (read-only)
+ * @property ldap_dn LDAP Distinguished name for this user (as-of the last login) (read-only)
+ * @property ldap_id LDAP Unique ID for this user (read-only)
+ * @property logged_in_at Timestamp for most recent login using credential (read-only)
+ * @property type Short name for the type of this kind of credential (read-only)
+ * @property url Link to get this item (read-only)
+ */
 data class CredentialsLDAP (
-  /**
-   * Operations the current user is able to perform on this object (read-only)
-   */
   var can: Map<String,Boolean>? = null,
-  /**
-   * Timestamp for the creation of this credential (read-only)
-   */
   var created_at: String? = null,
-  /**
-   * EMail address (read-only)
-   */
   var email: String? = null,
-  /**
-   * Has this credential been disabled? (read-only)
-   */
   var is_disabled: Boolean? = null,
-  /**
-   * LDAP Distinguished name for this user (as-of the last login) (read-only)
-   */
   var ldap_dn: String? = null,
-  /**
-   * LDAP Unique ID for this user (read-only)
-   */
   var ldap_id: String? = null,
-  /**
-   * Timestamp for most recent login using credential (read-only)
-   */
   var logged_in_at: String? = null,
-  /**
-   * Short name for the type of this kind of credential (read-only)
-   */
   var type: String? = null,
-  /**
-   * Link to get this item (read-only)
-   */
   var url: UriString? = null
 ) : Serializable
 
+/**
+ * @property can Operations the current user is able to perform on this object (read-only)
+ * @property created_at Timestamp for the creation of this credential (read-only)
+ * @property email EMail address used for user login (read-only)
+ * @property is_disabled Has this credential been disabled? (read-only)
+ * @property logged_in_at Timestamp for most recent login using credential (read-only)
+ * @property logged_in_ip IP address of client for most recent login using credential (read-only)
+ * @property type Short name for the type of this kind of credential (read-only)
+ * @property url Link to get this item (read-only)
+ * @property user_url Link to get this user (read-only)
+ */
 data class CredentialsLookerOpenid (
-  /**
-   * Operations the current user is able to perform on this object (read-only)
-   */
   var can: Map<String,Boolean>? = null,
-  /**
-   * Timestamp for the creation of this credential (read-only)
-   */
   var created_at: String? = null,
-  /**
-   * EMail address used for user login (read-only)
-   */
   var email: String? = null,
-  /**
-   * Has this credential been disabled? (read-only)
-   */
   var is_disabled: Boolean? = null,
-  /**
-   * Timestamp for most recent login using credential (read-only)
-   */
   var logged_in_at: String? = null,
-  /**
-   * IP address of client for most recent login using credential (read-only)
-   */
   var logged_in_ip: String? = null,
-  /**
-   * Short name for the type of this kind of credential (read-only)
-   */
   var type: String? = null,
-  /**
-   * Link to get this item (read-only)
-   */
   var url: UriString? = null,
-  /**
-   * Link to get this user (read-only)
-   */
   var user_url: UriString? = null
 ) : Serializable
 
+/**
+ * @property can Operations the current user is able to perform on this object (read-only)
+ * @property created_at Timestamp for the creation of this credential (read-only)
+ * @property email EMail address (read-only)
+ * @property is_disabled Has this credential been disabled? (read-only)
+ * @property logged_in_at Timestamp for most recent login using credential (read-only)
+ * @property oidc_user_id OIDC OP's Unique ID for this user (read-only)
+ * @property type Short name for the type of this kind of credential (read-only)
+ * @property url Link to get this item (read-only)
+ */
 data class CredentialsOIDC (
-  /**
-   * Operations the current user is able to perform on this object (read-only)
-   */
   var can: Map<String,Boolean>? = null,
-  /**
-   * Timestamp for the creation of this credential (read-only)
-   */
   var created_at: String? = null,
-  /**
-   * EMail address (read-only)
-   */
   var email: String? = null,
-  /**
-   * Has this credential been disabled? (read-only)
-   */
   var is_disabled: Boolean? = null,
-  /**
-   * Timestamp for most recent login using credential (read-only)
-   */
   var logged_in_at: String? = null,
-  /**
-   * OIDC OP's Unique ID for this user (read-only)
-   */
   var oidc_user_id: String? = null,
-  /**
-   * Short name for the type of this kind of credential (read-only)
-   */
   var type: String? = null,
-  /**
-   * Link to get this item (read-only)
-   */
   var url: UriString? = null
 ) : Serializable
 
+/**
+ * @property can Operations the current user is able to perform on this object (read-only)
+ * @property created_at Timestamp for the creation of this credential (read-only)
+ * @property email EMail address (read-only)
+ * @property is_disabled Has this credential been disabled? (read-only)
+ * @property logged_in_at Timestamp for most recent login using credential (read-only)
+ * @property saml_user_id Saml IdP's Unique ID for this user (read-only)
+ * @property type Short name for the type of this kind of credential (read-only)
+ * @property url Link to get this item (read-only)
+ */
 data class CredentialsSaml (
-  /**
-   * Operations the current user is able to perform on this object (read-only)
-   */
   var can: Map<String,Boolean>? = null,
-  /**
-   * Timestamp for the creation of this credential (read-only)
-   */
   var created_at: String? = null,
-  /**
-   * EMail address (read-only)
-   */
   var email: String? = null,
-  /**
-   * Has this credential been disabled? (read-only)
-   */
   var is_disabled: Boolean? = null,
-  /**
-   * Timestamp for most recent login using credential (read-only)
-   */
   var logged_in_at: String? = null,
-  /**
-   * Saml IdP's Unique ID for this user (read-only)
-   */
   var saml_user_id: String? = null,
-  /**
-   * Short name for the type of this kind of credential (read-only)
-   */
   var type: String? = null,
-  /**
-   * Link to get this item (read-only)
-   */
   var url: UriString? = null
 ) : Serializable
 
+/**
+ * @property can Operations the current user is able to perform on this object (read-only)
+ * @property created_at Timestamp for the creation of this credential (read-only)
+ * @property is_disabled Has this credential been disabled? (read-only)
+ * @property type Short name for the type of this kind of credential (read-only)
+ * @property verified User has verified (read-only)
+ * @property url Link to get this item (read-only)
+ */
 data class CredentialsTotp (
-  /**
-   * Operations the current user is able to perform on this object (read-only)
-   */
   var can: Map<String,Boolean>? = null,
-  /**
-   * Timestamp for the creation of this credential (read-only)
-   */
   var created_at: String? = null,
-  /**
-   * Has this credential been disabled? (read-only)
-   */
   var is_disabled: Boolean? = null,
-  /**
-   * Short name for the type of this kind of credential (read-only)
-   */
   var type: String? = null,
-  /**
-   * User has verified (read-only)
-   */
   var verified: Boolean? = null,
-  /**
-   * Link to get this item (read-only)
-   */
   var url: UriString? = null
 ) : Serializable
 
+/**
+ * @property can Operations the current user is able to perform on this object (read-only)
+ * @property enabled If true, custom email content will replace the default body of welcome emails
+ * @property content The HTML to use as custom content for welcome emails. Script elements and other potentially dangerous markup will be removed.
+ * @property subject The text to appear in the email subject line.
+ * @property header The text to appear in the header line of the email body.
+ */
 data class CustomWelcomeEmail (
-  /**
-   * Operations the current user is able to perform on this object (read-only)
-   */
   var can: Map<String,Boolean>? = null,
-  /**
-   * If true, custom email content will replace the default body of welcome emails
-   */
   var enabled: Boolean? = null,
-  /**
-   * The HTML to use as custom content for welcome emails. Script elements and other potentially dangerous markup will be removed.
-   */
   var content: String? = null,
-  /**
-   * The text to appear in the email subject line.
-   */
   var subject: String? = null,
-  /**
-   * The text to appear in the header line of the email body.
-   */
   var header: String? = null
 ) : Serializable
 
+/**
+ * @property can Operations the current user is able to perform on this object (read-only)
+ * @property content_favorite_id Content Favorite Id (read-only)
+ * @property content_metadata_id Id of content metadata (read-only)
+ * @property description Description
+ * @property hidden Is Hidden
+ * @property id Unique Id (read-only)
+ * @property model
+ * @property query_timezone Timezone in which the Dashboard will run by default.
+ * @property readonly Is Read-only (read-only)
+ * @property refresh_interval Refresh Interval, as a time duration phrase like "2 hours 30 minutes". A number with no time units will be interpreted as whole seconds.
+ * @property refresh_interval_to_i Refresh Interval in milliseconds (read-only)
+ * @property folder
+ * @property title Dashboard Title
+ * @property user_id Id of User (read-only)
+ * @property space
+ * @property background_color Background color
+ * @property created_at Time that the Dashboard was created. (read-only)
+ * @property crossfilter_enabled Enables crossfiltering in dashboards - only available in dashboards-next (beta)
+ * @property dashboard_elements Elements (read-only)
+ * @property dashboard_filters Filters (read-only)
+ * @property dashboard_layouts Layouts (read-only)
+ * @property deleted Whether or not a dashboard is 'soft' deleted.
+ * @property deleted_at Time that the Dashboard was 'soft' deleted. (read-only)
+ * @property deleter_id Id of User that 'soft' deleted the dashboard. (read-only)
+ * @property edit_uri Relative path of URI of LookML file to edit the dashboard (LookML dashboard only). (read-only)
+ * @property favorite_count Number of times favorited (read-only)
+ * @property last_accessed_at Time the dashboard was last accessed (read-only)
+ * @property last_viewed_at Time last viewed in the Looker web UI (read-only)
+ * @property load_configuration configuration option that governs how dashboard loading will happen.
+ * @property lookml_link_id Links this dashboard to a particular LookML dashboard such that calling a **sync** operation on that LookML dashboard will update this dashboard to match.
+ * @property show_filters_bar Show filters bar.  **Security Note:** This property only affects the *cosmetic* appearance of the dashboard, not a user's ability to access data. Hiding the filters bar does **NOT** prevent users from changing filters by other means. For information on how to set up secure data access control policies, see [Control User Access to Data](https://looker.com/docs/r/api/control-access)
+ * @property show_title Show title
+ * @property slug Content Metadata Slug
+ * @property space_id Id of Space
+ * @property folder_id Id of folder
+ * @property text_tile_text_color Color of text on text tiles
+ * @property tile_background_color Tile background color
+ * @property tile_text_color Tile text color
+ * @property title_color Title color
+ * @property view_count Number of times viewed in the Looker web UI (read-only)
+ * @property appearance
+ * @property preferred_viewer The preferred route for viewing this dashboard (ie: dashboards or dashboards-next)
+ */
 data class Dashboard (
-  /**
-   * Operations the current user is able to perform on this object (read-only)
-   */
   var can: Map<String,Boolean>? = null,
-  /**
-   * Content Favorite Id (read-only)
-   */
   var content_favorite_id: Long? = null,
-  /**
-   * Id of content metadata (read-only)
-   */
   var content_metadata_id: Long? = null,
-  /**
-   * Description
-   */
   var description: String? = null,
-  /**
-   * Is Hidden
-   */
   var hidden: Boolean? = null,
-  /**
-   * Unique Id (read-only)
-   */
   var id: String? = null,
   var model: LookModel? = null,
-  /**
-   * Timezone in which the Dashboard will run by default.
-   */
   var query_timezone: String? = null,
-  /**
-   * Is Read-only (read-only)
-   */
   var readonly: Boolean? = null,
-  /**
-   * Refresh Interval, as a time duration phrase like "2 hours 30 minutes". A number with no time units will be interpreted as whole seconds.
-   */
   var refresh_interval: String? = null,
-  /**
-   * Refresh Interval in milliseconds (read-only)
-   */
   var refresh_interval_to_i: Long? = null,
   var folder: FolderBase? = null,
-  /**
-   * Dashboard Title
-   */
   var title: String? = null,
-  /**
-   * Id of User (read-only)
-   */
   var user_id: Long? = null,
   var space: SpaceBase? = null,
-  /**
-   * Background color
-   */
   var background_color: String? = null,
-  /**
-   * Time that the Dashboard was created. (read-only)
-   */
   var created_at: Date? = null,
-  /**
-   * Enables crossfiltering in dashboards - only available in dashboards-next (beta)
-   */
   var crossfilter_enabled: Boolean? = null,
-  /**
-   * Elements (read-only)
-   */
   var dashboard_elements: Array<DashboardElement>? = null,
-  /**
-   * Filters (read-only)
-   */
   var dashboard_filters: Array<DashboardFilter>? = null,
-  /**
-   * Layouts (read-only)
-   */
   var dashboard_layouts: Array<DashboardLayout>? = null,
-  /**
-   * Whether or not a dashboard is 'soft' deleted.
-   */
   var deleted: Boolean? = null,
-  /**
-   * Time that the Dashboard was 'soft' deleted. (read-only)
-   */
   var deleted_at: Date? = null,
-  /**
-   * Id of User that 'soft' deleted the dashboard. (read-only)
-   */
   var deleter_id: Long? = null,
-  /**
-   * Relative path of URI of LookML file to edit the dashboard (LookML dashboard only). (read-only)
-   */
   var edit_uri: UriString? = null,
-  /**
-   * Number of times favorited (read-only)
-   */
   var favorite_count: Long? = null,
-  /**
-   * Time the dashboard was last accessed (read-only)
-   */
   var last_accessed_at: Date? = null,
-  /**
-   * Time last viewed in the Looker web UI (read-only)
-   */
   var last_viewed_at: Date? = null,
-  /**
-   * configuration option that governs how dashboard loading will happen.
-   */
   var load_configuration: String? = null,
-  /**
-   * Links this dashboard to a particular LookML dashboard such that calling a **sync** operation on that LookML dashboard will update this dashboard to match.
-   */
   var lookml_link_id: String? = null,
-  /**
-   * Show filters bar.  **Security Note:** This property only affects the *cosmetic* appearance of the dashboard, not a user's ability to access data. Hiding the filters bar does **NOT** prevent users from changing filters by other means. For information on how to set up secure data access control policies, see [Control User Access to Data](https://looker.com/docs/r/api/control-access)
-   */
   var show_filters_bar: Boolean? = null,
-  /**
-   * Show title
-   */
   var show_title: Boolean? = null,
-  /**
-   * Content Metadata Slug
-   */
   var slug: String? = null,
-  /**
-   * Id of Space
-   */
   var space_id: String? = null,
-  /**
-   * Id of folder
-   */
   var folder_id: String? = null,
-  /**
-   * Color of text on text tiles
-   */
   var text_tile_text_color: String? = null,
-  /**
-   * Tile background color
-   */
   var tile_background_color: String? = null,
-  /**
-   * Tile text color
-   */
   var tile_text_color: String? = null,
-  /**
-   * Title color
-   */
   var title_color: String? = null,
-  /**
-   * Number of times viewed in the Looker web UI (read-only)
-   */
   var view_count: Long? = null,
   var appearance: DashboardAppearance? = null,
-  /**
-   * The preferred route for viewing this dashboard (ie: dashboards or dashboards-next)
-   */
   var preferred_viewer: String? = null
 ) : Serializable
 
+/**
+ * @property dashboard_id Dashboard Id (read-only)
+ * @property aggregate_table_lookml Aggregate Table LookML (read-only)
+ */
 data class DashboardAggregateTableLookml (
-  /**
-   * Dashboard Id (read-only)
-   */
   var dashboard_id: String? = null,
-  /**
-   * Aggregate Table LookML (read-only)
-   */
   var aggregate_table_lookml: String? = null
 ) : Serializable
 
+/**
+ * @property page_side_margins Page margin (side) width
+ * @property page_background_color Background color for the dashboard
+ * @property tile_title_alignment Title alignment on dashboard tiles
+ * @property tile_space_between Space between tiles
+ * @property tile_background_color Background color for tiles
+ * @property tile_shadow Tile shadow on/off
+ * @property key_color Key color
+ */
 data class DashboardAppearance (
-  /**
-   * Page margin (side) width
-   */
   var page_side_margins: Long? = null,
-  /**
-   * Background color for the dashboard
-   */
   var page_background_color: String? = null,
-  /**
-   * Title alignment on dashboard tiles
-   */
   var tile_title_alignment: String? = null,
-  /**
-   * Space between tiles
-   */
   var tile_space_between: Long? = null,
-  /**
-   * Background color for tiles
-   */
   var tile_background_color: String? = null,
-  /**
-   * Tile shadow on/off
-   */
   var tile_shadow: Boolean? = null,
-  /**
-   * Key color
-   */
   var key_color: String? = null
 ) : Serializable
 
+/**
+ * @property can Operations the current user is able to perform on this object (read-only)
+ * @property content_favorite_id Content Favorite Id (read-only)
+ * @property content_metadata_id Id of content metadata (read-only)
+ * @property description Description (read-only)
+ * @property hidden Is Hidden (read-only)
+ * @property id Unique Id (read-only)
+ * @property model
+ * @property query_timezone Timezone in which the Dashboard will run by default. (read-only)
+ * @property readonly Is Read-only (read-only)
+ * @property refresh_interval Refresh Interval, as a time duration phrase like "2 hours 30 minutes". A number with no time units will be interpreted as whole seconds. (read-only)
+ * @property refresh_interval_to_i Refresh Interval in milliseconds (read-only)
+ * @property folder
+ * @property title Dashboard Title (read-only)
+ * @property user_id Id of User (read-only)
+ * @property space
+ */
 data class DashboardBase (
-  /**
-   * Operations the current user is able to perform on this object (read-only)
-   */
   var can: Map<String,Boolean>? = null,
-  /**
-   * Content Favorite Id (read-only)
-   */
   var content_favorite_id: Long? = null,
-  /**
-   * Id of content metadata (read-only)
-   */
   var content_metadata_id: Long? = null,
-  /**
-   * Description (read-only)
-   */
   var description: String? = null,
-  /**
-   * Is Hidden (read-only)
-   */
   var hidden: Boolean? = null,
-  /**
-   * Unique Id (read-only)
-   */
   var id: String? = null,
   var model: LookModel? = null,
-  /**
-   * Timezone in which the Dashboard will run by default. (read-only)
-   */
   var query_timezone: String? = null,
-  /**
-   * Is Read-only (read-only)
-   */
   var readonly: Boolean? = null,
-  /**
-   * Refresh Interval, as a time duration phrase like "2 hours 30 minutes". A number with no time units will be interpreted as whole seconds. (read-only)
-   */
   var refresh_interval: String? = null,
-  /**
-   * Refresh Interval in milliseconds (read-only)
-   */
   var refresh_interval_to_i: Long? = null,
   var folder: FolderBase? = null,
-  /**
-   * Dashboard Title (read-only)
-   */
   var title: String? = null,
-  /**
-   * Id of User (read-only)
-   */
   var user_id: Long? = null,
   var space: SpaceBase? = null
 ) : Serializable
 
+/**
+ * @property can Operations the current user is able to perform on this object (read-only)
+ * @property body_text Text tile body text
+ * @property body_text_as_html Text tile body text as Html (read-only)
+ * @property dashboard_id Id of Dashboard
+ * @property edit_uri Relative path of URI of LookML file to edit the dashboard element (LookML dashboard only). (read-only)
+ * @property id Unique Id (read-only)
+ * @property look
+ * @property look_id Id Of Look
+ * @property lookml_link_id LookML link ID (read-only)
+ * @property merge_result_id ID of merge result
+ * @property note_display Note Display
+ * @property note_state Note State
+ * @property note_text Note Text
+ * @property note_text_as_html Note Text as Html (read-only)
+ * @property query
+ * @property query_id Id Of Query
+ * @property refresh_interval Refresh Interval
+ * @property refresh_interval_to_i Refresh Interval as integer (read-only)
+ * @property result_maker
+ * @property result_maker_id ID of the ResultMakerLookup entry.
+ * @property subtitle_text Text tile subtitle text
+ * @property title Title of dashboard element
+ * @property title_hidden Whether title is hidden
+ * @property title_text Text tile title
+ * @property type Type
+ * @property alert_count Count of Alerts associated to a dashboard element (read-only)
+ * @property title_text_as_html Text tile title text as Html (read-only)
+ * @property subtitle_text_as_html Text tile subtitle text as Html (read-only)
+ */
 data class DashboardElement (
-  /**
-   * Operations the current user is able to perform on this object (read-only)
-   */
   var can: Map<String,Boolean>? = null,
-  /**
-   * Text tile body text
-   */
   var body_text: String? = null,
-  /**
-   * Text tile body text as Html (read-only)
-   */
   var body_text_as_html: String? = null,
-  /**
-   * Id of Dashboard
-   */
   var dashboard_id: String? = null,
-  /**
-   * Relative path of URI of LookML file to edit the dashboard element (LookML dashboard only). (read-only)
-   */
   var edit_uri: UriString? = null,
-  /**
-   * Unique Id (read-only)
-   */
   var id: String? = null,
   var look: LookWithQuery? = null,
-  /**
-   * Id Of Look
-   */
   var look_id: String? = null,
-  /**
-   * LookML link ID (read-only)
-   */
   var lookml_link_id: String? = null,
-  /**
-   * ID of merge result
-   */
   var merge_result_id: String? = null,
-  /**
-   * Note Display
-   */
   var note_display: String? = null,
-  /**
-   * Note State
-   */
   var note_state: String? = null,
-  /**
-   * Note Text
-   */
   var note_text: String? = null,
-  /**
-   * Note Text as Html (read-only)
-   */
   var note_text_as_html: String? = null,
   var query: Query? = null,
-  /**
-   * Id Of Query
-   */
   var query_id: Long? = null,
-  /**
-   * Refresh Interval
-   */
   var refresh_interval: String? = null,
-  /**
-   * Refresh Interval as integer (read-only)
-   */
   var refresh_interval_to_i: Long? = null,
   var result_maker: ResultMakerWithIdVisConfigAndDynamicFields? = null,
-  /**
-   * ID of the ResultMakerLookup entry.
-   */
   var result_maker_id: Long? = null,
-  /**
-   * Text tile subtitle text
-   */
   var subtitle_text: String? = null,
-  /**
-   * Title of dashboard element
-   */
   var title: String? = null,
-  /**
-   * Whether title is hidden
-   */
   var title_hidden: Boolean? = null,
-  /**
-   * Text tile title
-   */
   var title_text: String? = null,
-  /**
-   * Type
-   */
   var type: String? = null,
-  /**
-   * Count of Alerts associated to a dashboard element (read-only)
-   */
   var alert_count: Long? = null,
-  /**
-   * Text tile title text as Html (read-only)
-   */
   var title_text_as_html: String? = null,
-  /**
-   * Text tile subtitle text as Html (read-only)
-   */
   var subtitle_text_as_html: String? = null
 ) : Serializable
 
+/**
+ * @property can Operations the current user is able to perform on this object (read-only)
+ * @property id Unique Id (read-only)
+ * @property dashboard_id Id of Dashboard (read-only)
+ * @property name Name of filter
+ * @property title Title of filter
+ * @property type Type of filter: one of date, number, string, or field
+ * @property default_value Default value of filter
+ * @property model Model of filter (required if type = field)
+ * @property explore Explore of filter (required if type = field)
+ * @property dimension Dimension of filter (required if type = field)
+ * @property field Field information (read-only)
+ * @property row Display order of this filter relative to other filters
+ * @property listens_to_filters Array of listeners for faceted filters
+ * @property allow_multiple_values Whether the filter allows multiple filter values (deprecated in the latest version of dashboards)
+ * @property required Whether the filter requires a value to run the dashboard
+ * @property ui_config The visual configuration for this filter. Used to set up how the UI for this filter should appear.
+ */
 data class DashboardFilter (
-  /**
-   * Operations the current user is able to perform on this object (read-only)
-   */
   var can: Map<String,Boolean>? = null,
-  /**
-   * Unique Id (read-only)
-   */
   var id: String? = null,
-  /**
-   * Id of Dashboard (read-only)
-   */
   var dashboard_id: String? = null,
-  /**
-   * Name of filter
-   */
   var name: String? = null,
-  /**
-   * Title of filter
-   */
   var title: String? = null,
-  /**
-   * Type of filter: one of date, number, string, or field
-   */
   var type: String? = null,
-  /**
-   * Default value of filter
-   */
   var default_value: String? = null,
-  /**
-   * Model of filter (required if type = field)
-   */
   var model: String? = null,
-  /**
-   * Explore of filter (required if type = field)
-   */
   var explore: String? = null,
-  /**
-   * Dimension of filter (required if type = field)
-   */
   var dimension: String? = null,
-  /**
-   * Field information (read-only)
-   */
   var field: Map<String,Any>? = null,
-  /**
-   * Display order of this filter relative to other filters
-   */
   var row: Long? = null,
-  /**
-   * Array of listeners for faceted filters
-   */
   var listens_to_filters: Array<String>? = null,
-  /**
-   * Whether the filter allows multiple filter values (deprecated in the latest version of dashboards)
-   */
   var allow_multiple_values: Boolean? = null,
-  /**
-   * Whether the filter requires a value to run the dashboard
-   */
   var required: Boolean? = null,
-  /**
-   * The visual configuration for this filter. Used to set up how the UI for this filter should appear.
-   */
   var ui_config: Map<String,Any>? = null
 ) : Serializable
 
+/**
+ * @property can Operations the current user is able to perform on this object (read-only)
+ * @property id Unique Id (read-only)
+ * @property dashboard_id Id of Dashboard
+ * @property type Type
+ * @property active Is Active
+ * @property column_width Column Width
+ * @property width Width
+ * @property deleted Whether or not the dashboard layout is deleted. (read-only)
+ * @property dashboard_title Title extracted from the dashboard this layout represents. (read-only)
+ * @property dashboard_layout_components Components (read-only)
+ */
 data class DashboardLayout (
-  /**
-   * Operations the current user is able to perform on this object (read-only)
-   */
   var can: Map<String,Boolean>? = null,
-  /**
-   * Unique Id (read-only)
-   */
   var id: String? = null,
-  /**
-   * Id of Dashboard
-   */
   var dashboard_id: String? = null,
-  /**
-   * Type
-   */
   var type: String? = null,
-  /**
-   * Is Active
-   */
   var active: Boolean? = null,
-  /**
-   * Column Width
-   */
   var column_width: Long? = null,
-  /**
-   * Width
-   */
   var width: Long? = null,
-  /**
-   * Whether or not the dashboard layout is deleted. (read-only)
-   */
   var deleted: Boolean? = null,
-  /**
-   * Title extracted from the dashboard this layout represents. (read-only)
-   */
   var dashboard_title: String? = null,
-  /**
-   * Components (read-only)
-   */
   var dashboard_layout_components: Array<DashboardLayoutComponent>? = null
 ) : Serializable
 
+/**
+ * @property can Operations the current user is able to perform on this object (read-only)
+ * @property id Unique Id (read-only)
+ * @property dashboard_layout_id Id of Dashboard Layout
+ * @property dashboard_element_id Id Of Dashboard Element
+ * @property row Row
+ * @property column Column
+ * @property width Width
+ * @property height Height
+ * @property deleted Whether or not the dashboard layout component is deleted (read-only)
+ * @property element_title Dashboard element title, extracted from the Dashboard Element. (read-only)
+ * @property element_title_hidden Whether or not the dashboard element title is displayed. (read-only)
+ * @property vis_type Visualization type, extracted from a query's vis_config (read-only)
+ */
 data class DashboardLayoutComponent (
-  /**
-   * Operations the current user is able to perform on this object (read-only)
-   */
   var can: Map<String,Boolean>? = null,
-  /**
-   * Unique Id (read-only)
-   */
   var id: String? = null,
-  /**
-   * Id of Dashboard Layout
-   */
   var dashboard_layout_id: String? = null,
-  /**
-   * Id Of Dashboard Element
-   */
   var dashboard_element_id: String? = null,
-  /**
-   * Row
-   */
   var row: Long? = null,
-  /**
-   * Column
-   */
   var column: Long? = null,
-  /**
-   * Width
-   */
   var width: Long? = null,
-  /**
-   * Height
-   */
   var height: Long? = null,
-  /**
-   * Whether or not the dashboard layout component is deleted (read-only)
-   */
   var deleted: Boolean? = null,
-  /**
-   * Dashboard element title, extracted from the Dashboard Element. (read-only)
-   */
   var element_title: String? = null,
-  /**
-   * Whether or not the dashboard element title is displayed. (read-only)
-   */
   var element_title_hidden: Boolean? = null,
-  /**
-   * Visualization type, extracted from a query's vis_config (read-only)
-   */
   var vis_type: String? = null
 ) : Serializable
 
+/**
+ * @property dashboard_id Id of Dashboard (read-only)
+ * @property lookml lookml of UDD (read-only)
+ */
 data class DashboardLookml (
-  /**
-   * Id of Dashboard (read-only)
-   */
   var dashboard_id: String? = null,
-  /**
-   * lookml of UDD (read-only)
-   */
   var lookml: String? = null
 ) : Serializable
 
+/**
+ * @property state
+ * @property fields Array of form fields. (read-only)
+ */
 data class DataActionForm (
   var state: DataActionUserState? = null,
-  /**
-   * Array of form fields. (read-only)
-   */
   var fields: Array<DataActionFormField>? = null
 ) : Serializable
 
+/**
+ * @property name Name (read-only)
+ * @property label Human-readable label (read-only)
+ * @property description Description of field (read-only)
+ * @property type Type of field. (read-only)
+ * @property default Default value of the field. (read-only)
+ * @property oauth_url The URL for an oauth link, if type is 'oauth_link'. (read-only)
+ * @property interactive Whether or not a field supports interactive forms. (read-only)
+ * @property required Whether or not the field is required. This is a user-interface hint. A user interface displaying this form should not submit it without a value for this field. The action server must also perform this validation. (read-only)
+ * @property options If the form type is 'select', a list of options to be selected from. (read-only)
+ */
 data class DataActionFormField (
-  /**
-   * Name (read-only)
-   */
   var name: String? = null,
-  /**
-   * Human-readable label (read-only)
-   */
   var label: String? = null,
-  /**
-   * Description of field (read-only)
-   */
   var description: String? = null,
-  /**
-   * Type of field. (read-only)
-   */
   var type: String? = null,
-  /**
-   * Default value of the field. (read-only)
-   */
   var default: String? = null,
-  /**
-   * The URL for an oauth link, if type is 'oauth_link'. (read-only)
-   */
   var oauth_url: String? = null,
-  /**
-   * Whether or not a field supports interactive forms. (read-only)
-   */
   var interactive: Boolean? = null,
-  /**
-   * Whether or not the field is required. This is a user-interface hint. A user interface displaying this form should not submit it without a value for this field. The action server must also perform this validation. (read-only)
-   */
   var required: Boolean? = null,
-  /**
-   * If the form type is 'select', a list of options to be selected from. (read-only)
-   */
   var options: Array<DataActionFormSelectOption>? = null
 ) : Serializable
 
+/**
+ * @property name Name (read-only)
+ * @property label Human-readable label (read-only)
+ */
 data class DataActionFormSelectOption (
-  /**
-   * Name (read-only)
-   */
   var name: String? = null,
-  /**
-   * Human-readable label (read-only)
-   */
   var label: String? = null
 ) : Serializable
 
+/**
+ * @property action The JSON describing the data action. This JSON should be considered opaque and should be passed through unmodified from the query result it came from.
+ * @property form_values User input for any form values the data action might use.
+ */
 data class DataActionRequest (
-  /**
-   * The JSON describing the data action. This JSON should be considered opaque and should be passed through unmodified from the query result it came from.
-   */
   var action: Map<String,Any>? = null,
-  /**
-   * User input for any form values the data action might use.
-   */
   var form_values: Map<String,Any>? = null
 ) : Serializable
 
+/**
+ * @property webhook_id ID of the webhook event that sent this data action. In some error conditions, this may be null. (read-only)
+ * @property success Whether the data action was successful. (read-only)
+ * @property refresh_query When true, indicates that the client should refresh (rerun) the source query because the data may have been changed by the action. (read-only)
+ * @property validation_errors
+ * @property message Optional message returned by the data action server describing the state of the action that took place. This can be used to implement custom failure messages. If a failure is related to a particular form field, the server should send back a validation error instead. The Looker web UI does not currently display any message if the action indicates 'success', but may do so in the future. (read-only)
+ */
 data class DataActionResponse (
-  /**
-   * ID of the webhook event that sent this data action. In some error conditions, this may be null. (read-only)
-   */
   var webhook_id: String? = null,
-  /**
-   * Whether the data action was successful. (read-only)
-   */
   var success: Boolean? = null,
-  /**
-   * When true, indicates that the client should refresh (rerun) the source query because the data may have been changed by the action. (read-only)
-   */
   var refresh_query: Boolean? = null,
   var validation_errors: ValidationError? = null,
-  /**
-   * Optional message returned by the data action server describing the state of the action that took place. This can be used to implement custom failure messages. If a failure is related to a particular form field, the server should send back a validation error instead. The Looker web UI does not currently display any message if the action indicates 'success', but may do so in the future. (read-only)
-   */
   var message: String? = null
 ) : Serializable
 
+/**
+ * @property data User state data (read-only)
+ * @property refresh_time Time in seconds until the state needs to be refreshed (read-only)
+ */
 data class DataActionUserState (
-  /**
-   * User state data (read-only)
-   */
   var data: String? = null,
-  /**
-   * Time in seconds until the state needs to be refreshed (read-only)
-   */
   var refresh_time: Long? = null
 ) : Serializable
 
+/**
+ * @property can Operations the current user is able to perform on this object (read-only)
+ * @property created_at UNIX timestamp at which this entry was created. (read-only)
+ * @property id Unique ID of the datagroup (read-only)
+ * @property model_name Name of the model containing the datagroup. Unique when combined with name. (read-only)
+ * @property name Name of the datagroup. Unique when combined with model_name. (read-only)
+ * @property stale_before UNIX timestamp before which cache entries are considered stale. Cannot be in the future.
+ * @property trigger_check_at UNIX timestamp at which this entry trigger was last checked. (read-only)
+ * @property trigger_error The message returned with the error of the last trigger check. (read-only)
+ * @property trigger_value The value of the trigger when last checked. (read-only)
+ * @property triggered_at UNIX timestamp at which this entry became triggered. Cannot be in the future.
+ */
 data class Datagroup (
-  /**
-   * Operations the current user is able to perform on this object (read-only)
-   */
   var can: Map<String,Boolean>? = null,
-  /**
-   * UNIX timestamp at which this entry was created. (read-only)
-   */
   var created_at: Long? = null,
-  /**
-   * Unique ID of the datagroup (read-only)
-   */
   var id: String? = null,
-  /**
-   * Name of the model containing the datagroup. Unique when combined with name. (read-only)
-   */
   var model_name: String? = null,
-  /**
-   * Name of the datagroup. Unique when combined with model_name. (read-only)
-   */
   var name: String? = null,
-  /**
-   * UNIX timestamp before which cache entries are considered stale. Cannot be in the future.
-   */
   var stale_before: Long? = null,
-  /**
-   * UNIX timestamp at which this entry trigger was last checked. (read-only)
-   */
   var trigger_check_at: Long? = null,
-  /**
-   * The message returned with the error of the last trigger check. (read-only)
-   */
   var trigger_error: String? = null,
-  /**
-   * The value of the trigger when last checked. (read-only)
-   */
   var trigger_value: String? = null,
-  /**
-   * UNIX timestamp at which this entry became triggered. Cannot be in the future.
-   */
   var triggered_at: Long? = null
 ) : Serializable
 
+/**
+ * @property can Operations the current user is able to perform on this object (read-only)
+ * @property name Name of the connection. Also used as the unique identifier
+ * @property dialect
+ * @property snippets SQL Runner snippets for this connection (read-only)
+ * @property pdts_enabled True if PDTs are enabled on this connection (read-only)
+ * @property host Host name/address of server
+ * @property port Port number on server
+ * @property username Username for server authentication
+ * @property password (Write-Only) Password for server authentication
+ * @property uses_oauth Whether the connection uses OAuth for authentication. (read-only)
+ * @property certificate (Write-Only) Base64 encoded Certificate body for server authentication (when appropriate for dialect).
+ * @property file_type (Write-Only) Certificate keyfile type - .json or .p12
+ * @property database Database name
+ * @property db_timezone Time zone of database
+ * @property query_timezone Timezone to use in queries
+ * @property schema Scheme name
+ * @property max_connections Maximum number of concurrent connection to use
+ * @property max_billing_gigabytes Maximum size of query in GBs (BigQuery only, can be a user_attribute name)
+ * @property ssl Use SSL/TLS when connecting to server
+ * @property verify_ssl Verify the SSL
+ * @property tmp_db_name Name of temporary database (if used)
+ * @property jdbc_additional_params Additional params to add to JDBC connection string
+ * @property pool_timeout Connection Pool Timeout, in seconds
+ * @property dialect_name (Read/Write) SQL Dialect name
+ * @property created_at Creation date for this connection (read-only)
+ * @property user_id Id of user who last modified this connection configuration (read-only)
+ * @property example Is this an example connection? (read-only)
+ * @property user_db_credentials (Limited access feature) Are per user db credentials enabled. Enabling will remove previously set username and password
+ * @property user_attribute_fields Fields whose values map to user attribute names
+ * @property maintenance_cron Cron string specifying when maintenance such as PDT trigger checks and drops should be performed
+ * @property last_regen_at Unix timestamp at start of last completed PDT trigger check process (read-only)
+ * @property last_reap_at Unix timestamp at start of last completed PDT reap process (read-only)
+ * @property sql_runner_precache_tables Precache tables in the SQL Runner
+ * @property after_connect_statements SQL statements (semicolon separated) to issue after connecting to the database. Requires `custom_after_connect_statements` license feature
+ * @property pdt_context_override
+ * @property managed Is this connection created and managed by Looker (read-only)
+ */
 data class DBConnection (
-  /**
-   * Operations the current user is able to perform on this object (read-only)
-   */
   var can: Map<String,Boolean>? = null,
-  /**
-   * Name of the connection. Also used as the unique identifier
-   */
   var name: String? = null,
   var dialect: Dialect? = null,
-  /**
-   * SQL Runner snippets for this connection (read-only)
-   */
   var snippets: Array<Snippet>? = null,
-  /**
-   * True if PDTs are enabled on this connection (read-only)
-   */
   var pdts_enabled: Boolean? = null,
-  /**
-   * Host name/address of server
-   */
   var host: String? = null,
-  /**
-   * Port number on server
-   */
   var port: String? = null,
-  /**
-   * Username for server authentication
-   */
   var username: String? = null,
-  /**
-   * (Write-Only) Password for server authentication
-   */
   var password: String? = null,
-  /**
-   * Whether the connection uses OAuth for authentication. (read-only)
-   */
   var uses_oauth: Boolean? = null,
-  /**
-   * (Write-Only) Base64 encoded Certificate body for server authentication (when appropriate for dialect).
-   */
   var certificate: String? = null,
-  /**
-   * (Write-Only) Certificate keyfile type - .json or .p12
-   */
   var file_type: String? = null,
-  /**
-   * Database name
-   */
   var database: String? = null,
-  /**
-   * Time zone of database
-   */
   var db_timezone: String? = null,
-  /**
-   * Timezone to use in queries
-   */
   var query_timezone: String? = null,
-  /**
-   * Scheme name
-   */
   var schema: String? = null,
-  /**
-   * Maximum number of concurrent connection to use
-   */
   var max_connections: Long? = null,
-  /**
-   * Maximum size of query in GBs (BigQuery only, can be a user_attribute name)
-   */
   var max_billing_gigabytes: String? = null,
-  /**
-   * Use SSL/TLS when connecting to server
-   */
   var ssl: Boolean? = null,
-  /**
-   * Verify the SSL
-   */
   var verify_ssl: Boolean? = null,
-  /**
-   * Name of temporary database (if used)
-   */
   var tmp_db_name: String? = null,
-  /**
-   * Additional params to add to JDBC connection string
-   */
   var jdbc_additional_params: String? = null,
-  /**
-   * Connection Pool Timeout, in seconds
-   */
   var pool_timeout: Long? = null,
-  /**
-   * (Read/Write) SQL Dialect name
-   */
   var dialect_name: String? = null,
-  /**
-   * Creation date for this connection (read-only)
-   */
   var created_at: String? = null,
-  /**
-   * Id of user who last modified this connection configuration (read-only)
-   */
   var user_id: String? = null,
-  /**
-   * Is this an example connection? (read-only)
-   */
   var example: Boolean? = null,
-  /**
-   * (Limited access feature) Are per user db credentials enabled. Enabling will remove previously set username and password
-   */
   var user_db_credentials: Boolean? = null,
-  /**
-   * Fields whose values map to user attribute names
-   */
   var user_attribute_fields: Array<String>? = null,
-  /**
-   * Cron string specifying when maintenance such as PDT trigger checks and drops should be performed
-   */
   var maintenance_cron: String? = null,
-  /**
-   * Unix timestamp at start of last completed PDT trigger check process (read-only)
-   */
   var last_regen_at: String? = null,
-  /**
-   * Unix timestamp at start of last completed PDT reap process (read-only)
-   */
   var last_reap_at: String? = null,
-  /**
-   * Precache tables in the SQL Runner
-   */
   var sql_runner_precache_tables: Boolean? = null,
-  /**
-   * SQL statements (semicolon separated) to issue after connecting to the database. Requires `custom_after_connect_statements` license feature
-   */
   var after_connect_statements: String? = null,
   var pdt_context_override: DBConnectionOverride? = null,
-  /**
-   * Is this connection created and managed by Looker (read-only)
-   */
   var managed: Boolean? = null
 ) : Serializable
 
+/**
+ * @property can Operations the current user is able to perform on this object (read-only)
+ * @property name Name of the connection. Also used as the unique identifier (read-only)
+ * @property dialect
+ * @property snippets SQL Runner snippets for this connection (read-only)
+ * @property pdts_enabled True if PDTs are enabled on this connection (read-only)
+ */
 data class DBConnectionBase (
-  /**
-   * Operations the current user is able to perform on this object (read-only)
-   */
   var can: Map<String,Boolean>? = null,
-  /**
-   * Name of the connection. Also used as the unique identifier (read-only)
-   */
   var name: String? = null,
   var dialect: Dialect? = null,
-  /**
-   * SQL Runner snippets for this connection (read-only)
-   */
   var snippets: Array<Snippet>? = null,
-  /**
-   * True if PDTs are enabled on this connection (read-only)
-   */
   var pdts_enabled: Boolean? = null
 ) : Serializable
 
+/**
+ * @property context Context in which to override (`pdt` is the only allowed value)
+ * @property host Host name/address of server
+ * @property port Port number on server
+ * @property username Username for server authentication
+ * @property password (Write-Only) Password for server authentication
+ * @property has_password Whether or not the password is overridden in this context (read-only)
+ * @property certificate (Write-Only) Base64 encoded Certificate body for server authentication (when appropriate for dialect).
+ * @property file_type (Write-Only) Certificate keyfile type - .json or .p12
+ * @property database Database name
+ * @property schema Scheme name
+ * @property jdbc_additional_params Additional params to add to JDBC connection string
+ * @property after_connect_statements SQL statements (semicolon separated) to issue after connecting to the database. Requires `custom_after_connect_statements` license feature
+ */
 data class DBConnectionOverride (
-  /**
-   * Context in which to override (`pdt` is the only allowed value)
-   */
   var context: String? = null,
-  /**
-   * Host name/address of server
-   */
   var host: String? = null,
-  /**
-   * Port number on server
-   */
   var port: String? = null,
-  /**
-   * Username for server authentication
-   */
   var username: String? = null,
-  /**
-   * (Write-Only) Password for server authentication
-   */
   var password: String? = null,
-  /**
-   * Whether or not the password is overridden in this context (read-only)
-   */
   var has_password: Boolean? = null,
-  /**
-   * (Write-Only) Base64 encoded Certificate body for server authentication (when appropriate for dialect).
-   */
   var certificate: String? = null,
-  /**
-   * (Write-Only) Certificate keyfile type - .json or .p12
-   */
   var file_type: String? = null,
-  /**
-   * Database name
-   */
   var database: String? = null,
-  /**
-   * Scheme name
-   */
   var schema: String? = null,
-  /**
-   * Additional params to add to JDBC connection string
-   */
   var jdbc_additional_params: String? = null,
-  /**
-   * SQL statements (semicolon separated) to issue after connecting to the database. Requires `custom_after_connect_statements` license feature
-   */
   var after_connect_statements: String? = null
 ) : Serializable
 
+/**
+ * @property can Operations the current user is able to perform on this object (read-only)
+ * @property connection_string JDBC connection string. (only populated in the 'connect' test) (read-only)
+ * @property message Result message of test (read-only)
+ * @property name Name of test (read-only)
+ * @property status Result code of test (read-only)
+ */
 data class DBConnectionTestResult (
-  /**
-   * Operations the current user is able to perform on this object (read-only)
-   */
   var can: Map<String,Boolean>? = null,
-  /**
-   * JDBC connection string. (only populated in the 'connect' test) (read-only)
-   */
   var connection_string: String? = null,
-  /**
-   * Result message of test (read-only)
-   */
   var message: String? = null,
-  /**
-   * Name of test (read-only)
-   */
   var name: String? = null,
-  /**
-   * Result code of test (read-only)
-   */
   var status: String? = null
 ) : Serializable
 
+/**
+ * @property name Delegate Oauth Connection Name (read-only)
+ * @property installation_target_id The ID of the installation target. For Slack, this would be workspace id. (read-only)
+ * @property installation_id Installation ID (read-only)
+ * @property success Whether or not the test was successful (read-only)
+ */
 data class DelegateOauthTest (
-  /**
-   * Delegate Oauth Connection Name (read-only)
-   */
   var name: String? = null,
-  /**
-   * The ID of the installation target. For Slack, this would be workspace id. (read-only)
-   */
   var installation_target_id: String? = null,
-  /**
-   * Installation ID (read-only)
-   */
   var installation_id: Long? = null,
-  /**
-   * Whether or not the test was successful (read-only)
-   */
   var success: Boolean? = null
 ) : Serializable
 
@@ -2056,243 +1321,156 @@ enum class DependencyStatus : Serializable {
   install_none
 }
 
+/**
+ * @property name The name of the dialect (read-only)
+ * @property label The human-readable label of the connection (read-only)
+ * @property supports_cost_estimate Whether the dialect supports query cost estimates (read-only)
+ * @property persistent_table_indexes PDT index columns (read-only)
+ * @property persistent_table_sortkeys PDT sortkey columns (read-only)
+ * @property persistent_table_distkey PDT distkey column (read-only)
+ * @property supports_streaming Suports streaming results (read-only)
+ * @property automatically_run_sql_runner_snippets Should SQL Runner snippets automatically be run (read-only)
+ * @property connection_tests Array of names of the tests that can be run on a connection using this dialect (read-only)
+ * @property supports_inducer Is supported with the inducer (i.e. generate from sql) (read-only)
+ * @property supports_multiple_databases Can multiple databases be accessed from a connection using this dialect (read-only)
+ * @property supports_persistent_derived_tables Whether the dialect supports allowing Looker to build persistent derived tables (read-only)
+ * @property has_ssl_support Does the database have client SSL support settable through the JDBC string explicitly? (read-only)
+ */
 data class Dialect (
-  /**
-   * The name of the dialect (read-only)
-   */
   var name: String? = null,
-  /**
-   * The human-readable label of the connection (read-only)
-   */
   var label: String? = null,
-  /**
-   * Whether the dialect supports query cost estimates (read-only)
-   */
   var supports_cost_estimate: Boolean? = null,
-  /**
-   * PDT index columns (read-only)
-   */
   var persistent_table_indexes: String? = null,
-  /**
-   * PDT sortkey columns (read-only)
-   */
   var persistent_table_sortkeys: String? = null,
-  /**
-   * PDT distkey column (read-only)
-   */
   var persistent_table_distkey: String? = null,
-  /**
-   * Suports streaming results (read-only)
-   */
   var supports_streaming: Boolean? = null,
-  /**
-   * Should SQL Runner snippets automatically be run (read-only)
-   */
   var automatically_run_sql_runner_snippets: Boolean? = null,
-  /**
-   * Array of names of the tests that can be run on a connection using this dialect (read-only)
-   */
   var connection_tests: Array<String>? = null,
-  /**
-   * Is supported with the inducer (i.e. generate from sql) (read-only)
-   */
   var supports_inducer: Boolean? = null,
-  /**
-   * Can multiple databases be accessed from a connection using this dialect (read-only)
-   */
   var supports_multiple_databases: Boolean? = null,
-  /**
-   * Whether the dialect supports allowing Looker to build persistent derived tables (read-only)
-   */
   var supports_persistent_derived_tables: Boolean? = null,
-  /**
-   * Does the database have client SSL support settable through the JDBC string explicitly? (read-only)
-   */
   var has_ssl_support: Boolean? = null
 ) : Serializable
 
+/**
+ * @property can Operations the current user is able to perform on this object (read-only)
+ * @property default_max_connections Default number max connections (read-only)
+ * @property default_port Default port number (read-only)
+ * @property installed Is the supporting driver installed (read-only)
+ * @property label The human-readable label of the connection (read-only)
+ * @property label_for_database_equivalent What the dialect calls the equivalent of a normal SQL table (read-only)
+ * @property name The name of the dialect (read-only)
+ * @property supported_options
+ */
 data class DialectInfo (
-  /**
-   * Operations the current user is able to perform on this object (read-only)
-   */
   var can: Map<String,Boolean>? = null,
-  /**
-   * Default number max connections (read-only)
-   */
   var default_max_connections: String? = null,
-  /**
-   * Default port number (read-only)
-   */
   var default_port: String? = null,
-  /**
-   * Is the supporting driver installed (read-only)
-   */
   var installed: Boolean? = null,
-  /**
-   * The human-readable label of the connection (read-only)
-   */
   var label: String? = null,
-  /**
-   * What the dialect calls the equivalent of a normal SQL table (read-only)
-   */
   var label_for_database_equivalent: String? = null,
-  /**
-   * The name of the dialect (read-only)
-   */
   var name: String? = null,
   var supported_options: DialectInfoOptions? = null
 ) : Serializable
 
+/**
+ * @property additional_params Has additional params support (read-only)
+ * @property auth Has auth support (read-only)
+ * @property host Has host support (read-only)
+ * @property oauth_credentials Has support for a service account (read-only)
+ * @property project_name Has project name support (read-only)
+ * @property schema Has schema support (read-only)
+ * @property ssl Has SSL support (read-only)
+ * @property timezone Has timezone support (read-only)
+ * @property tmp_table Has tmp table support (read-only)
+ * @property username_required Username is required (read-only)
+ * @property can Operations the current user is able to perform on this object (read-only)
+ */
 data class DialectInfoOptions (
-  /**
-   * Has additional params support (read-only)
-   */
   var additional_params: Boolean? = null,
-  /**
-   * Has auth support (read-only)
-   */
   var auth: Boolean? = null,
-  /**
-   * Has host support (read-only)
-   */
   var host: Boolean? = null,
-  /**
-   * Has support for a service account (read-only)
-   */
   var oauth_credentials: Boolean? = null,
-  /**
-   * Has project name support (read-only)
-   */
   var project_name: Boolean? = null,
-  /**
-   * Has schema support (read-only)
-   */
   var schema: Boolean? = null,
-  /**
-   * Has SSL support (read-only)
-   */
   var ssl: Boolean? = null,
-  /**
-   * Has timezone support (read-only)
-   */
   var timezone: Boolean? = null,
-  /**
-   * Has tmp table support (read-only)
-   */
   var tmp_table: Boolean? = null,
-  /**
-   * Username is required (read-only)
-   */
   var username_required: Boolean? = null,
-  /**
-   * Operations the current user is able to perform on this object (read-only)
-   */
   var can: Map<String,Boolean>? = null
 ) : Serializable
 
+/**
+ * @property is_enabled Whether or not digest emails are enabled
+ */
 data class DigestEmails (
-  /**
-   * Whether or not digest emails are enabled
-   */
   var is_enabled: Boolean? = null
 ) : Serializable
 
+/**
+ * @property configuration_delivered True if content was successfully generated and delivered
+ */
 data class DigestEmailSend (
-  /**
-   * True if content was successfully generated and delivered
-   */
   var configuration_delivered: Boolean? = null
 ) : Serializable
 
+/**
+ * @property id Unique identity string (read-only)
+ * @property label Label for palette
+ * @property type Type of palette
+ * @property colors Array of colors in the palette
+ */
 data class DiscretePalette (
-  /**
-   * Unique identity string (read-only)
-   */
   var id: String? = null,
-  /**
-   * Label for palette
-   */
   var label: String? = null,
-  /**
-   * Type of palette
-   */
   var type: String? = null,
-  /**
-   * Array of colors in the palette
-   */
   var colors: Array<String>? = null
 ) : Serializable
 
+/**
+ * @property target_url The complete URL of the Looker UI page to display in the embed context. For example, to display the dashboard with id 34, `target_url` would look like: `https://mycompany.looker.com:9999/dashboards/34`. `target_uri` MUST contain a scheme (HTTPS), domain name, and URL path. Port must be included if it is required to reach the Looker server from browser clients. If the Looker instance is behind a load balancer or other proxy, `target_uri` must be the public-facing domain name and port required to reach the Looker instance, not the actual internal network machine name of the Looker instance.
+ * @property session_length Number of seconds the SSO embed session will be valid after the embed session is started. Defaults to 300 seconds. Maximum session length accepted is 2592000 seconds (30 days).
+ * @property force_logout_login When true, the embed session will purge any residual Looker login state (such as in browser cookies) before creating a new login state with the given embed user info. Defaults to true.
+ * @property external_user_id A value from an external system that uniquely identifies the embed user. Since the user_ids of Looker embed users may change with every embed session, external_user_id provides a way to assign a known, stable user identifier across multiple embed sessions.
+ * @property first_name First name of the embed user. Defaults to 'Embed' if not specified
+ * @property last_name Last name of the embed user. Defaults to 'User' if not specified
+ * @property user_timezone Sets the user timezone for the embed user session, if the User Specific Timezones setting is enabled in the Looker admin settings. A value of `null` forces the embed user to use the Looker Application Default Timezone. You MUST omit this property from the request if the User Specific Timezones setting is disabled. Timezone values are validated against the IANA Timezone standard and can be seen in the Application Time Zone dropdown list on the Looker General Settings admin page.
+ * @property permissions List of Looker permission names to grant to the embed user. Requested permissions will be filtered to permissions allowed for embed sessions.
+ * @property models List of model names that the embed user may access
+ * @property group_ids List of Looker group ids in which to enroll the embed user
+ * @property external_group_id A unique value identifying an embed-exclusive group. Multiple embed users using the same `external_group_id` value will be able to share Looker content with each other. Content and embed users associated with the `external_group_id` will not be accessible to normal Looker users or embed users not associated with this `external_group_id`.
+ * @property user_attributes A dictionary of name-value pairs associating a Looker user attribute name with a value.
+ * @property secret_id Id of the embed secret to use to sign this SSO url. If specified, the value must be an id of a valid (active) secret defined in the Looker instance. If not specified, the URL will be signed with the newest active embed secret defined in the Looker instance.
+ */
 data class EmbedSsoParams (
-  /**
-   * The complete URL of the Looker UI page to display in the embed context. For example, to display the dashboard with id 34, `target_url` would look like: `https://mycompany.looker.com:9999/dashboards/34`. `target_uri` MUST contain a scheme (HTTPS), domain name, and URL path. Port must be included if it is required to reach the Looker server from browser clients. If the Looker instance is behind a load balancer or other proxy, `target_uri` must be the public-facing domain name and port required to reach the Looker instance, not the actual internal network machine name of the Looker instance.
-   */
   var target_url: UriString,
-  /**
-   * Number of seconds the SSO embed session will be valid after the embed session is started. Defaults to 300 seconds. Maximum session length accepted is 2592000 seconds (30 days).
-   */
   var session_length: Long? = null,
-  /**
-   * When true, the embed session will purge any residual Looker login state (such as in browser cookies) before creating a new login state with the given embed user info. Defaults to true.
-   */
   var force_logout_login: Boolean? = null,
-  /**
-   * A value from an external system that uniquely identifies the embed user. Since the user_ids of Looker embed users may change with every embed session, external_user_id provides a way to assign a known, stable user identifier across multiple embed sessions.
-   */
   var external_user_id: String? = null,
-  /**
-   * First name of the embed user. Defaults to 'Embed' if not specified
-   */
   var first_name: String? = null,
-  /**
-   * Last name of the embed user. Defaults to 'User' if not specified
-   */
   var last_name: String? = null,
-  /**
-   * Sets the user timezone for the embed user session, if the User Specific Timezones setting is enabled in the Looker admin settings. A value of `null` forces the embed user to use the Looker Application Default Timezone. You MUST omit this property from the request if the User Specific Timezones setting is disabled. Timezone values are validated against the IANA Timezone standard and can be seen in the Application Time Zone dropdown list on the Looker General Settings admin page.
-   */
   var user_timezone: String? = null,
-  /**
-   * List of Looker permission names to grant to the embed user. Requested permissions will be filtered to permissions allowed for embed sessions.
-   */
   var permissions: Array<String>? = null,
-  /**
-   * List of model names that the embed user may access
-   */
   var models: Array<String>? = null,
-  /**
-   * List of Looker group ids in which to enroll the embed user
-   */
   var group_ids: Array<Long>? = null,
-  /**
-   * A unique value identifying an embed-exclusive group. Multiple embed users using the same `external_group_id` value will be able to share Looker content with each other. Content and embed users associated with the `external_group_id` will not be accessible to normal Looker users or embed users not associated with this `external_group_id`.
-   */
   var external_group_id: Long? = null,
-  /**
-   * A dictionary of name-value pairs associating a Looker user attribute name with a value.
-   */
   var user_attributes: Map<String,Any>? = null,
-  /**
-   * Id of the embed secret to use to sign this SSO url. If specified, the value must be an id of a valid (active) secret defined in the Looker instance. If not specified, the URL will be signed with the newest active embed secret defined in the Looker instance.
-   */
   var secret_id: Long? = null
 ) : Serializable
 
+/**
+ * @property url The embed URL. Any modification to this string will make the URL unusable. (read-only)
+ */
 data class EmbedUrlResponse (
-  /**
-   * The embed URL. Any modification to this string will make the URL unusable. (read-only)
-   */
   var url: String? = null
 ) : Serializable
 
+/**
+ * @property message Error details (read-only)
+ * @property documentation_url Documentation link (read-only)
+ */
 data class Error (
-  /**
-   * Error details (read-only)
-   */
   var message: String,
-  /**
-   * Documentation link (read-only)
-   */
   var documentation_url: UriString
 ) : Serializable
 
@@ -2304,145 +1482,81 @@ enum class FillStyle : Serializable {
   range
 }
 
+/**
+ * @property name Unique Name
+ * @property parent_id Id of Parent. If the parent id is null, this is a root-level entry
+ * @property id Unique Id (read-only)
+ * @property content_metadata_id Id of content metadata (read-only)
+ * @property created_at Time the space was created (read-only)
+ * @property creator_id User Id of Creator (read-only)
+ * @property child_count Children Count (read-only)
+ * @property external_id Embedder's Id if this folder was autogenerated as an embedding shared folder via 'external_group_id' in an SSO embed login (read-only)
+ * @property is_embed Folder is an embed folder (read-only)
+ * @property is_embed_shared_root Folder is the root embed shared folder (read-only)
+ * @property is_embed_users_root Folder is the root embed users folder (read-only)
+ * @property is_personal Folder is a user's personal folder (read-only)
+ * @property is_personal_descendant Folder is descendant of a user's personal folder (read-only)
+ * @property is_shared_root Folder is the root shared folder (read-only)
+ * @property is_users_root Folder is the root user folder (read-only)
+ * @property can Operations the current user is able to perform on this object (read-only)
+ * @property dashboards Dashboards (read-only)
+ * @property looks Looks (read-only)
+ */
 data class Folder (
-  /**
-   * Unique Name
-   */
   var name: String,
-  /**
-   * Id of Parent. If the parent id is null, this is a root-level entry
-   */
   var parent_id: String? = null,
-  /**
-   * Unique Id (read-only)
-   */
   var id: String? = null,
-  /**
-   * Id of content metadata (read-only)
-   */
   var content_metadata_id: Long? = null,
-  /**
-   * Time the space was created (read-only)
-   */
   var created_at: Date? = null,
-  /**
-   * User Id of Creator (read-only)
-   */
   var creator_id: Long? = null,
-  /**
-   * Children Count (read-only)
-   */
   var child_count: Long? = null,
-  /**
-   * Embedder's Id if this folder was autogenerated as an embedding shared folder via 'external_group_id' in an SSO embed login (read-only)
-   */
   var external_id: String? = null,
-  /**
-   * Folder is an embed folder (read-only)
-   */
   var is_embed: Boolean? = null,
-  /**
-   * Folder is the root embed shared folder (read-only)
-   */
   var is_embed_shared_root: Boolean? = null,
-  /**
-   * Folder is the root embed users folder (read-only)
-   */
   var is_embed_users_root: Boolean? = null,
-  /**
-   * Folder is a user's personal folder (read-only)
-   */
   var is_personal: Boolean? = null,
-  /**
-   * Folder is descendant of a user's personal folder (read-only)
-   */
   var is_personal_descendant: Boolean? = null,
-  /**
-   * Folder is the root shared folder (read-only)
-   */
   var is_shared_root: Boolean? = null,
-  /**
-   * Folder is the root user folder (read-only)
-   */
   var is_users_root: Boolean? = null,
-  /**
-   * Operations the current user is able to perform on this object (read-only)
-   */
   var can: Map<String,Boolean>? = null,
-  /**
-   * Dashboards (read-only)
-   */
   var dashboards: Array<DashboardBase>? = null,
-  /**
-   * Looks (read-only)
-   */
   var looks: Array<LookWithDashboards>? = null
 ) : Serializable
 
+/**
+ * @property name Unique Name
+ * @property parent_id Id of Parent. If the parent id is null, this is a root-level entry
+ * @property id Unique Id (read-only)
+ * @property content_metadata_id Id of content metadata (read-only)
+ * @property created_at Time the folder was created (read-only)
+ * @property creator_id User Id of Creator (read-only)
+ * @property child_count Children Count (read-only)
+ * @property external_id Embedder's Id if this folder was autogenerated as an embedding shared folder via 'external_group_id' in an SSO embed login (read-only)
+ * @property is_embed Folder is an embed folder (read-only)
+ * @property is_embed_shared_root Folder is the root embed shared folder (read-only)
+ * @property is_embed_users_root Folder is the root embed users folder (read-only)
+ * @property is_personal Folder is a user's personal folder (read-only)
+ * @property is_personal_descendant Folder is descendant of a user's personal folder (read-only)
+ * @property is_shared_root Folder is the root shared folder (read-only)
+ * @property is_users_root Folder is the root user folder (read-only)
+ * @property can Operations the current user is able to perform on this object (read-only)
+ */
 data class FolderBase (
-  /**
-   * Unique Name
-   */
   var name: String,
-  /**
-   * Id of Parent. If the parent id is null, this is a root-level entry
-   */
   var parent_id: String? = null,
-  /**
-   * Unique Id (read-only)
-   */
   var id: String? = null,
-  /**
-   * Id of content metadata (read-only)
-   */
   var content_metadata_id: Long? = null,
-  /**
-   * Time the folder was created (read-only)
-   */
   var created_at: Date? = null,
-  /**
-   * User Id of Creator (read-only)
-   */
   var creator_id: Long? = null,
-  /**
-   * Children Count (read-only)
-   */
   var child_count: Long? = null,
-  /**
-   * Embedder's Id if this folder was autogenerated as an embedding shared folder via 'external_group_id' in an SSO embed login (read-only)
-   */
   var external_id: String? = null,
-  /**
-   * Folder is an embed folder (read-only)
-   */
   var is_embed: Boolean? = null,
-  /**
-   * Folder is the root embed shared folder (read-only)
-   */
   var is_embed_shared_root: Boolean? = null,
-  /**
-   * Folder is the root embed users folder (read-only)
-   */
   var is_embed_users_root: Boolean? = null,
-  /**
-   * Folder is a user's personal folder (read-only)
-   */
   var is_personal: Boolean? = null,
-  /**
-   * Folder is descendant of a user's personal folder (read-only)
-   */
   var is_personal_descendant: Boolean? = null,
-  /**
-   * Folder is the root shared folder (read-only)
-   */
   var is_shared_root: Boolean? = null,
-  /**
-   * Folder is the root user folder (read-only)
-   */
   var is_users_root: Boolean? = null,
-  /**
-   * Operations the current user is able to perform on this object (read-only)
-   */
   var can: Map<String,Boolean>? = null
 ) : Serializable
 
@@ -2462,2326 +1576,1403 @@ enum class GitApplicationServerHttpScheme : Serializable {
   https
 }
 
+/**
+ * @property can Operations the current user is able to perform on this object (read-only)
+ * @property name The short name on the local. Updating `name` results in `git checkout <new_name>`
+ * @property remote The name of the remote (read-only)
+ * @property remote_name The short name on the remote (read-only)
+ * @property error Name of error (read-only)
+ * @property message Message describing an error if present (read-only)
+ * @property owner_name Name of the owner of a personal branch (read-only)
+ * @property readonly Whether or not this branch is readonly (read-only)
+ * @property personal Whether or not this branch is a personal branch - readonly for all developers except the owner (read-only)
+ * @property is_local Whether or not a local ref exists for the branch (read-only)
+ * @property is_remote Whether or not a remote ref exists for the branch (read-only)
+ * @property is_production Whether or not this is the production branch (read-only)
+ * @property ahead_count Number of commits the local branch is ahead of the remote (read-only)
+ * @property behind_count Number of commits the local branch is behind the remote (read-only)
+ * @property commit_at UNIX timestamp at which this branch was last committed. (read-only)
+ * @property ref The resolved ref of this branch. Updating `ref` results in `git reset --hard <new_ref>``.
+ * @property remote_ref The resolved ref of this branch remote. (read-only)
+ */
 data class GitBranch (
-  /**
-   * Operations the current user is able to perform on this object (read-only)
-   */
   var can: Map<String,Boolean>? = null,
-  /**
-   * The short name on the local. Updating `name` results in `git checkout <new_name>`
-   */
   var name: String? = null,
-  /**
-   * The name of the remote (read-only)
-   */
   var remote: String? = null,
-  /**
-   * The short name on the remote (read-only)
-   */
   var remote_name: String? = null,
-  /**
-   * Name of error (read-only)
-   */
   var error: String? = null,
-  /**
-   * Message describing an error if present (read-only)
-   */
   var message: String? = null,
-  /**
-   * Name of the owner of a personal branch (read-only)
-   */
   var owner_name: String? = null,
-  /**
-   * Whether or not this branch is readonly (read-only)
-   */
   var readonly: Boolean? = null,
-  /**
-   * Whether or not this branch is a personal branch - readonly for all developers except the owner (read-only)
-   */
   var personal: Boolean? = null,
-  /**
-   * Whether or not a local ref exists for the branch (read-only)
-   */
   var is_local: Boolean? = null,
-  /**
-   * Whether or not a remote ref exists for the branch (read-only)
-   */
   var is_remote: Boolean? = null,
-  /**
-   * Whether or not this is the production branch (read-only)
-   */
   var is_production: Boolean? = null,
-  /**
-   * Number of commits the local branch is ahead of the remote (read-only)
-   */
   var ahead_count: Long? = null,
-  /**
-   * Number of commits the local branch is behind the remote (read-only)
-   */
   var behind_count: Long? = null,
-  /**
-   * UNIX timestamp at which this branch was last committed. (read-only)
-   */
   var commit_at: Long? = null,
-  /**
-   * The resolved ref of this branch. Updating `ref` results in `git reset --hard <new_ref>``.
-   */
   var ref: String? = null,
-  /**
-   * The resolved ref of this branch remote. (read-only)
-   */
   var remote_ref: String? = null
 ) : Serializable
 
+/**
+ * @property can Operations the current user is able to perform on this object (read-only)
+ * @property description Human readable string describing the test (read-only)
+ * @property id A short string, uniquely naming this test (read-only)
+ */
 data class GitConnectionTest (
-  /**
-   * Operations the current user is able to perform on this object (read-only)
-   */
   var can: Map<String,Boolean>? = null,
-  /**
-   * Human readable string describing the test (read-only)
-   */
   var description: String? = null,
-  /**
-   * A short string, uniquely naming this test (read-only)
-   */
   var id: String? = null
 ) : Serializable
 
+/**
+ * @property can Operations the current user is able to perform on this object (read-only)
+ * @property id A short string, uniquely naming this test (read-only)
+ * @property message Additional data from the test (read-only)
+ * @property status Either 'pass' or 'fail' (read-only)
+ */
 data class GitConnectionTestResult (
-  /**
-   * Operations the current user is able to perform on this object (read-only)
-   */
   var can: Map<String,Boolean>? = null,
-  /**
-   * A short string, uniquely naming this test (read-only)
-   */
   var id: String? = null,
-  /**
-   * Additional data from the test (read-only)
-   */
   var message: String? = null,
-  /**
-   * Either 'pass' or 'fail' (read-only)
-   */
   var status: String? = null
 ) : Serializable
 
+/**
+ * @property action Git action: add, delete, etc (read-only)
+ * @property conflict When true, changes to the local file conflict with the remote repository (read-only)
+ * @property revertable When true, the file can be reverted to an earlier state (read-only)
+ * @property text Git description of the action (read-only)
+ * @property can Operations the current user is able to perform on this object (read-only)
+ */
 data class GitStatus (
-  /**
-   * Git action: add, delete, etc (read-only)
-   */
   var action: String? = null,
-  /**
-   * When true, changes to the local file conflict with the remote repository (read-only)
-   */
   var conflict: Boolean? = null,
-  /**
-   * When true, the file can be reverted to an earlier state (read-only)
-   */
   var revertable: Boolean? = null,
-  /**
-   * Git description of the action (read-only)
-   */
   var text: String? = null,
-  /**
-   * Operations the current user is able to perform on this object (read-only)
-   */
   var can: Map<String,Boolean>? = null
 ) : Serializable
 
+/**
+ * @property can Operations the current user is able to perform on this object (read-only)
+ * @property can_add_to_content_metadata Group can be used in content access controls
+ * @property contains_current_user Currently logged in user is group member (read-only)
+ * @property external_group_id External Id group if embed group (read-only)
+ * @property externally_managed Group membership controlled outside of Looker (read-only)
+ * @property id Unique Id (read-only)
+ * @property include_by_default New users are added to this group by default (read-only)
+ * @property name Name of group
+ * @property user_count Number of users included in this group (read-only)
+ */
 data class Group (
-  /**
-   * Operations the current user is able to perform on this object (read-only)
-   */
   var can: Map<String,Boolean>? = null,
-  /**
-   * Group can be used in content access controls
-   */
   var can_add_to_content_metadata: Boolean? = null,
-  /**
-   * Currently logged in user is group member (read-only)
-   */
   var contains_current_user: Boolean? = null,
-  /**
-   * External Id group if embed group (read-only)
-   */
   var external_group_id: String? = null,
-  /**
-   * Group membership controlled outside of Looker (read-only)
-   */
   var externally_managed: Boolean? = null,
-  /**
-   * Unique Id (read-only)
-   */
   var id: Long? = null,
-  /**
-   * New users are added to this group by default (read-only)
-   */
   var include_by_default: Boolean? = null,
-  /**
-   * Name of group
-   */
   var name: String? = null,
-  /**
-   * Number of users included in this group (read-only)
-   */
   var user_count: Long? = null
 ) : Serializable
 
+/**
+ * @property group_id Id of group (read-only)
+ */
 data class GroupIdForGroupInclusion (
-  /**
-   * Id of group (read-only)
-   */
   var group_id: Long? = null
 ) : Serializable
 
+/**
+ * @property user_id Id of user (read-only)
+ */
 data class GroupIdForGroupUserInclusion (
-  /**
-   * Id of user (read-only)
-   */
   var user_id: Long? = null
 ) : Serializable
 
+/**
+ * @property can Operations the current user is able to perform on this object (read-only)
+ * @property content_metadata_id Id of associated content_metadata record (read-only)
+ * @property created_at Date of homepage creation (read-only)
+ * @property deleted_at Date of homepage deletion
+ * @property description Description of the homepage
+ * @property homepage_sections Sections of the homepage (read-only)
+ * @property id Unique Id (read-only)
+ * @property section_order ids of the homepage sections in the order they should be displayed
+ * @property title Title of the homepage
+ * @property updated_at Date of last homepage update (read-only)
+ * @property user_id User id of homepage creator (read-only)
+ * @property primary_homepage Whether the homepage is the primary homepage or not (read-only)
+ */
 data class Homepage (
-  /**
-   * Operations the current user is able to perform on this object (read-only)
-   */
   var can: Map<String,Boolean>? = null,
-  /**
-   * Id of associated content_metadata record (read-only)
-   */
   var content_metadata_id: Long? = null,
-  /**
-   * Date of homepage creation (read-only)
-   */
   var created_at: Date? = null,
-  /**
-   * Date of homepage deletion
-   */
   var deleted_at: Date? = null,
-  /**
-   * Description of the homepage
-   */
   var description: String? = null,
-  /**
-   * Sections of the homepage (read-only)
-   */
   var homepage_sections: Array<HomepageSection>? = null,
-  /**
-   * Unique Id (read-only)
-   */
   var id: String? = null,
-  /**
-   * ids of the homepage sections in the order they should be displayed
-   */
   var section_order: Array<Long>? = null,
-  /**
-   * Title of the homepage
-   */
   var title: String? = null,
-  /**
-   * Date of last homepage update (read-only)
-   */
   var updated_at: Date? = null,
-  /**
-   * User id of homepage creator (read-only)
-   */
   var user_id: Long? = null,
-  /**
-   * Whether the homepage is the primary homepage or not (read-only)
-   */
   var primary_homepage: Boolean? = null
 ) : Serializable
 
+/**
+ * @property can Operations the current user is able to perform on this object (read-only)
+ * @property content_created_by Name of user who created the content this item is based on (read-only)
+ * @property content_favorite_id Content favorite id associated with the item this content is based on (read-only)
+ * @property content_metadata_id Content metadata id associated with the item this content is based on (read-only)
+ * @property content_updated_at Last time the content that this item is based on was updated (read-only)
+ * @property custom_description Custom description entered by the user, if present
+ * @property custom_image_data_base64 (Write-Only) base64 encoded image data
+ * @property custom_image_url Custom image_url entered by the user, if present (read-only)
+ * @property custom_title Custom title entered by the user, if present
+ * @property custom_url Custom url entered by the user, if present
+ * @property dashboard_id Dashboard to base this item on
+ * @property description The actual description for display (read-only)
+ * @property favorite_count Number of times content has been favorited, if present (read-only)
+ * @property homepage_section_id Associated Homepage Section
+ * @property id Unique Id (read-only)
+ * @property image_url The actual image_url for display (read-only)
+ * @property location The container folder name of the content (read-only)
+ * @property look_id Look to base this item on
+ * @property lookml_dashboard_id LookML Dashboard to base this item on
+ * @property order An arbitrary integer representing the sort order within the section
+ * @property section_fetch_time Number of seconds it took to fetch the section this item is in (read-only)
+ * @property title The actual title for display (read-only)
+ * @property url The actual url for display (read-only)
+ * @property use_custom_description Whether the custom description should be used instead of the content description, if the item is associated with content
+ * @property use_custom_image Whether the custom image should be used instead of the content image, if the item is associated with content
+ * @property use_custom_title Whether the custom title should be used instead of the content title, if the item is associated with content
+ * @property use_custom_url Whether the custom url should be used instead of the content url, if the item is associated with content
+ * @property view_count Number of times content has been viewed, if present (read-only)
+ */
 data class HomepageItem (
-  /**
-   * Operations the current user is able to perform on this object (read-only)
-   */
   var can: Map<String,Boolean>? = null,
-  /**
-   * Name of user who created the content this item is based on (read-only)
-   */
   var content_created_by: String? = null,
-  /**
-   * Content favorite id associated with the item this content is based on (read-only)
-   */
   var content_favorite_id: Long? = null,
-  /**
-   * Content metadata id associated with the item this content is based on (read-only)
-   */
   var content_metadata_id: Long? = null,
-  /**
-   * Last time the content that this item is based on was updated (read-only)
-   */
   var content_updated_at: String? = null,
-  /**
-   * Custom description entered by the user, if present
-   */
   var custom_description: String? = null,
-  /**
-   * (Write-Only) base64 encoded image data
-   */
   var custom_image_data_base64: String? = null,
-  /**
-   * Custom image_url entered by the user, if present (read-only)
-   */
   var custom_image_url: String? = null,
-  /**
-   * Custom title entered by the user, if present
-   */
   var custom_title: String? = null,
-  /**
-   * Custom url entered by the user, if present
-   */
   var custom_url: String? = null,
-  /**
-   * Dashboard to base this item on
-   */
   var dashboard_id: Long? = null,
-  /**
-   * The actual description for display (read-only)
-   */
   var description: String? = null,
-  /**
-   * Number of times content has been favorited, if present (read-only)
-   */
   var favorite_count: Long? = null,
-  /**
-   * Associated Homepage Section
-   */
   var homepage_section_id: String? = null,
-  /**
-   * Unique Id (read-only)
-   */
   var id: String? = null,
-  /**
-   * The actual image_url for display (read-only)
-   */
   var image_url: String? = null,
-  /**
-   * The container folder name of the content (read-only)
-   */
   var location: String? = null,
-  /**
-   * Look to base this item on
-   */
   var look_id: Long? = null,
-  /**
-   * LookML Dashboard to base this item on
-   */
   var lookml_dashboard_id: String? = null,
-  /**
-   * An arbitrary integer representing the sort order within the section
-   */
   var order: Long? = null,
-  /**
-   * Number of seconds it took to fetch the section this item is in (read-only)
-   */
   var section_fetch_time: Float? = null,
-  /**
-   * The actual title for display (read-only)
-   */
   var title: String? = null,
-  /**
-   * The actual url for display (read-only)
-   */
   var url: String? = null,
-  /**
-   * Whether the custom description should be used instead of the content description, if the item is associated with content
-   */
   var use_custom_description: Boolean? = null,
-  /**
-   * Whether the custom image should be used instead of the content image, if the item is associated with content
-   */
   var use_custom_image: Boolean? = null,
-  /**
-   * Whether the custom title should be used instead of the content title, if the item is associated with content
-   */
   var use_custom_title: Boolean? = null,
-  /**
-   * Whether the custom url should be used instead of the content url, if the item is associated with content
-   */
   var use_custom_url: Boolean? = null,
-  /**
-   * Number of times content has been viewed, if present (read-only)
-   */
   var view_count: Long? = null
 ) : Serializable
 
+/**
+ * @property can Operations the current user is able to perform on this object (read-only)
+ * @property created_at Time at which this section was created. (read-only)
+ * @property deleted_at Time at which this section was deleted.
+ * @property detail_url A URL pointing to a page showing further information about the content in the section. (read-only)
+ * @property homepage_id Id reference to parent homepage
+ * @property homepage_items Items in the homepage section (read-only)
+ * @property id Unique Id (read-only)
+ * @property is_header Is this a header section (has no items) (read-only)
+ * @property item_order ids of the homepage items in the order they should be displayed
+ * @property title Name of row
+ * @property updated_at Time at which this section was last updated. (read-only)
+ * @property description Description of the content found in this section.
+ */
 data class HomepageSection (
-  /**
-   * Operations the current user is able to perform on this object (read-only)
-   */
   var can: Map<String,Boolean>? = null,
-  /**
-   * Time at which this section was created. (read-only)
-   */
   var created_at: Date? = null,
-  /**
-   * Time at which this section was deleted.
-   */
   var deleted_at: Date? = null,
-  /**
-   * A URL pointing to a page showing further information about the content in the section. (read-only)
-   */
   var detail_url: String? = null,
-  /**
-   * Id reference to parent homepage
-   */
   var homepage_id: Long? = null,
-  /**
-   * Items in the homepage section (read-only)
-   */
   var homepage_items: Array<HomepageItem>? = null,
-  /**
-   * Unique Id (read-only)
-   */
   var id: String? = null,
-  /**
-   * Is this a header section (has no items) (read-only)
-   */
   var is_header: Boolean? = null,
-  /**
-   * ids of the homepage items in the order they should be displayed
-   */
   var item_order: Array<Long>? = null,
-  /**
-   * Name of row
-   */
   var title: String? = null,
-  /**
-   * Time at which this section was last updated. (read-only)
-   */
   var updated_at: Date? = null,
-  /**
-   * Description of the content found in this section.
-   */
   var description: String? = null
 ) : Serializable
 
+/**
+ * @property name Dependency name (read-only)
+ * @property url Url for a remote dependency (read-only)
+ * @property ref Ref for a remote dependency (read-only)
+ * @property is_remote Flag signifying if a dependency is remote or local (read-only)
+ * @property can Operations the current user is able to perform on this object (read-only)
+ */
 data class ImportedProject (
-  /**
-   * Dependency name (read-only)
-   */
   var name: String? = null,
-  /**
-   * Url for a remote dependency (read-only)
-   */
   var url: String? = null,
-  /**
-   * Ref for a remote dependency (read-only)
-   */
   var ref: String? = null,
-  /**
-   * Flag signifying if a dependency is remote or local (read-only)
-   */
   var is_remote: Boolean? = null,
-  /**
-   * Operations the current user is able to perform on this object (read-only)
-   */
   var can: Map<String,Boolean>? = null
 ) : Serializable
 
+/**
+ * @property can Operations the current user is able to perform on this object (read-only)
+ * @property id ID of the integration. (read-only)
+ * @property integration_hub_id ID of the integration hub. (read-only)
+ * @property label Label for the integration. (read-only)
+ * @property description Description of the integration. (read-only)
+ * @property enabled Whether the integration is available to users.
+ * @property params Array of params for the integration.
+ * @property supported_formats A list of data formats the integration supports. If unspecified, the default is all data formats. Valid values are: "txt", "csv", "inline_json", "json", "json_label", "json_detail", "json_detail_lite_stream", "xlsx", "html", "wysiwyg_pdf", "assembled_pdf", "wysiwyg_png", "csv_zip". (read-only)
+ * @property supported_action_types A list of action types the integration supports. Valid values are: "cell", "query", "dashboard". (read-only)
+ * @property supported_formattings A list of formatting options the integration supports. If unspecified, defaults to all formats. Valid values are: "formatted", "unformatted". (read-only)
+ * @property supported_visualization_formattings A list of visualization formatting options the integration supports. If unspecified, defaults to all formats. Valid values are: "apply", "noapply". (read-only)
+ * @property supported_download_settings A list of all the download mechanisms the integration supports. The order of values is not significant: Looker will select the most appropriate supported download mechanism for a given query. The integration must ensure it can handle any of the mechanisms it claims to support. If unspecified, this defaults to all download setting values. Valid values are: "push", "url". (read-only)
+ * @property icon_url URL to an icon for the integration. (read-only)
+ * @property uses_oauth Whether the integration uses oauth. (read-only)
+ * @property required_fields A list of descriptions of required fields that this integration is compatible with. If there are multiple entries in this list, the integration requires more than one field. If unspecified, no fields will be required. (read-only)
+ * @property delegate_oauth Whether the integration uses delegate oauth, which allows federation between an integration installation scope specific entity (like org, group, and team, etc.) and Looker. (read-only)
+ * @property installed_delegate_oauth_targets Whether the integration is available to users.
+ */
 data class Integration (
-  /**
-   * Operations the current user is able to perform on this object (read-only)
-   */
   var can: Map<String,Boolean>? = null,
-  /**
-   * ID of the integration. (read-only)
-   */
   var id: String? = null,
-  /**
-   * ID of the integration hub. (read-only)
-   */
   var integration_hub_id: Long? = null,
-  /**
-   * Label for the integration. (read-only)
-   */
   var label: String? = null,
-  /**
-   * Description of the integration. (read-only)
-   */
   var description: String? = null,
-  /**
-   * Whether the integration is available to users.
-   */
   var enabled: Boolean? = null,
-  /**
-   * Array of params for the integration.
-   */
   var params: Array<IntegrationParam>? = null,
-  /**
-   * A list of data formats the integration supports. If unspecified, the default is all data formats. Valid values are: "txt", "csv", "inline_json", "json", "json_label", "json_detail", "json_detail_lite_stream", "xlsx", "html", "wysiwyg_pdf", "assembled_pdf", "wysiwyg_png", "csv_zip". (read-only)
-   */
   var supported_formats: Array<SupportedFormats>? = null,
-  /**
-   * A list of action types the integration supports. Valid values are: "cell", "query", "dashboard". (read-only)
-   */
   var supported_action_types: Array<SupportedActionTypes>? = null,
-  /**
-   * A list of formatting options the integration supports. If unspecified, defaults to all formats. Valid values are: "formatted", "unformatted". (read-only)
-   */
   var supported_formattings: Array<SupportedFormattings>? = null,
-  /**
-   * A list of visualization formatting options the integration supports. If unspecified, defaults to all formats. Valid values are: "apply", "noapply". (read-only)
-   */
   var supported_visualization_formattings: Array<SupportedVisualizationFormattings>? = null,
-  /**
-   * A list of all the download mechanisms the integration supports. The order of values is not significant: Looker will select the most appropriate supported download mechanism for a given query. The integration must ensure it can handle any of the mechanisms it claims to support. If unspecified, this defaults to all download setting values. Valid values are: "push", "url". (read-only)
-   */
   var supported_download_settings: Array<SupportedDownloadSettings>? = null,
-  /**
-   * URL to an icon for the integration. (read-only)
-   */
   var icon_url: String? = null,
-  /**
-   * Whether the integration uses oauth. (read-only)
-   */
   var uses_oauth: Boolean? = null,
-  /**
-   * A list of descriptions of required fields that this integration is compatible with. If there are multiple entries in this list, the integration requires more than one field. If unspecified, no fields will be required. (read-only)
-   */
   var required_fields: Array<IntegrationRequiredField>? = null,
-  /**
-   * Whether the integration uses delegate oauth, which allows federation between an integration installation scope specific entity (like org, group, and team, etc.) and Looker. (read-only)
-   */
   var delegate_oauth: Boolean? = null,
-  /**
-   * Whether the integration is available to users.
-   */
   var installed_delegate_oauth_targets: Array<Long>? = null
 ) : Serializable
 
+/**
+ * @property can Operations the current user is able to perform on this object (read-only)
+ * @property id ID of the hub. (read-only)
+ * @property url URL of the hub.
+ * @property label Label of the hub. (read-only)
+ * @property official Whether this hub is a first-party integration hub operated by Looker. (read-only)
+ * @property fetch_error_message An error message, present if the integration hub metadata could not be fetched. If this is present, the integration hub is unusable. (read-only)
+ * @property authorization_token (Write-Only) An authorization key that will be sent to the integration hub on every request.
+ * @property has_authorization_token Whether the authorization_token is set for the hub. (read-only)
+ * @property legal_agreement_signed Whether the legal agreement message has been signed by the user. This only matters if legal_agreement_required is true. (read-only)
+ * @property legal_agreement_required Whether the legal terms for the integration hub are required before use. (read-only)
+ * @property legal_agreement_text The legal agreement text for this integration hub. (read-only)
+ */
 data class IntegrationHub (
-  /**
-   * Operations the current user is able to perform on this object (read-only)
-   */
   var can: Map<String,Boolean>? = null,
-  /**
-   * ID of the hub. (read-only)
-   */
   var id: Long? = null,
-  /**
-   * URL of the hub.
-   */
   var url: String? = null,
-  /**
-   * Label of the hub. (read-only)
-   */
   var label: String? = null,
-  /**
-   * Whether this hub is a first-party integration hub operated by Looker. (read-only)
-   */
   var official: Boolean? = null,
-  /**
-   * An error message, present if the integration hub metadata could not be fetched. If this is present, the integration hub is unusable. (read-only)
-   */
   var fetch_error_message: String? = null,
-  /**
-   * (Write-Only) An authorization key that will be sent to the integration hub on every request.
-   */
   var authorization_token: String? = null,
-  /**
-   * Whether the authorization_token is set for the hub. (read-only)
-   */
   var has_authorization_token: Boolean? = null,
-  /**
-   * Whether the legal agreement message has been signed by the user. This only matters if legal_agreement_required is true. (read-only)
-   */
   var legal_agreement_signed: Boolean? = null,
-  /**
-   * Whether the legal terms for the integration hub are required before use. (read-only)
-   */
   var legal_agreement_required: Boolean? = null,
-  /**
-   * The legal agreement text for this integration hub. (read-only)
-   */
   var legal_agreement_text: String? = null
 ) : Serializable
 
+/**
+ * @property name Name of the parameter.
+ * @property label Label of the parameter. (read-only)
+ * @property description Short description of the parameter. (read-only)
+ * @property required Whether the parameter is required to be set to use the destination. If unspecified, this defaults to false. (read-only)
+ * @property has_value Whether the parameter has a value set. (read-only)
+ * @property value The current value of the parameter. Always null if the value is sensitive. When writing, null values will be ignored. Set the value to an empty string to clear it.
+ * @property user_attribute_name When present, the param's value comes from this user attribute instead of the 'value' parameter. Set to null to use the 'value'.
+ * @property sensitive Whether the parameter contains sensitive data like API credentials. If unspecified, this defaults to true. (read-only)
+ * @property per_user When true, this parameter must be assigned to a user attribute in the admin panel (instead of a constant value), and that value may be updated by the user as part of the integration flow. (read-only)
+ * @property delegate_oauth_url When present, the param represents the oauth url the user will be taken to. (read-only)
+ */
 data class IntegrationParam (
-  /**
-   * Name of the parameter.
-   */
   var name: String? = null,
-  /**
-   * Label of the parameter. (read-only)
-   */
   var label: String? = null,
-  /**
-   * Short description of the parameter. (read-only)
-   */
   var description: String? = null,
-  /**
-   * Whether the parameter is required to be set to use the destination. If unspecified, this defaults to false. (read-only)
-   */
   var required: Boolean? = null,
-  /**
-   * Whether the parameter has a value set. (read-only)
-   */
   var has_value: Boolean? = null,
-  /**
-   * The current value of the parameter. Always null if the value is sensitive. When writing, null values will be ignored. Set the value to an empty string to clear it.
-   */
   var value: String? = null,
-  /**
-   * When present, the param's value comes from this user attribute instead of the 'value' parameter. Set to null to use the 'value'.
-   */
   var user_attribute_name: String? = null,
-  /**
-   * Whether the parameter contains sensitive data like API credentials. If unspecified, this defaults to true. (read-only)
-   */
   var sensitive: Boolean? = null,
-  /**
-   * When true, this parameter must be assigned to a user attribute in the admin panel (instead of a constant value), and that value may be updated by the user as part of the integration flow. (read-only)
-   */
   var per_user: Boolean? = null,
-  /**
-   * When present, the param represents the oauth url the user will be taken to. (read-only)
-   */
   var delegate_oauth_url: String? = null
 ) : Serializable
 
+/**
+ * @property tag Matches a field that has this tag. (read-only)
+ * @property any_tag If present, supercedes 'tag' and matches a field that has any of the provided tags. (read-only)
+ * @property all_tags If present, supercedes 'tag' and matches a field that has all of the provided tags. (read-only)
+ */
 data class IntegrationRequiredField (
-  /**
-   * Matches a field that has this tag. (read-only)
-   */
   var tag: String? = null,
-  /**
-   * If present, supercedes 'tag' and matches a field that has any of the provided tags. (read-only)
-   */
   var any_tag: Array<String>? = null,
-  /**
-   * If present, supercedes 'tag' and matches a field that has all of the provided tags. (read-only)
-   */
   var all_tags: Array<String>? = null
 ) : Serializable
 
+/**
+ * @property success Whether or not the test was successful (read-only)
+ * @property message A message representing the results of the test. (read-only)
+ * @property delegate_oauth_result An array of connection test result for delegate oauth actions. (read-only)
+ */
 data class IntegrationTestResult (
-  /**
-   * Whether or not the test was successful (read-only)
-   */
   var success: Boolean? = null,
-  /**
-   * A message representing the results of the test. (read-only)
-   */
   var message: String? = null,
-  /**
-   * An array of connection test result for delegate oauth actions. (read-only)
-   */
   var delegate_oauth_result: Array<DelegateOauthTest>? = null
 ) : Serializable
 
+/**
+ * @property can Operations the current user is able to perform on this object (read-only)
+ * @property enabled If true and internal help resources content is not blank then the link for internal help resources will be shown in the help menu and the content displayed within Looker
+ */
 data class InternalHelpResources (
-  /**
-   * Operations the current user is able to perform on this object (read-only)
-   */
   var can: Map<String,Boolean>? = null,
-  /**
-   * If true and internal help resources content is not blank then the link for internal help resources will be shown in the help menu and the content displayed within Looker
-   */
   var enabled: Boolean? = null
 ) : Serializable
 
+/**
+ * @property can Operations the current user is able to perform on this object (read-only)
+ * @property organization_name Text to display in the help menu item which will display the internal help resources
+ * @property markdown_content Content to be displayed in the internal help resources page/modal
+ */
 data class InternalHelpResourcesContent (
-  /**
-   * Operations the current user is able to perform on this object (read-only)
-   */
   var can: Map<String,Boolean>? = null,
-  /**
-   * Text to display in the help menu item which will display the internal help resources
-   */
   var organization_name: String? = null,
-  /**
-   * Content to be displayed in the internal help resources page/modal
-   */
   var markdown_content: String? = null
 ) : Serializable
 
+/**
+ * @property can Operations the current user is able to perform on this object (read-only)
+ * @property alternate_email_login_allowed Allow alternate email-based login via '/login/email' for admins and for specified users with the 'login_special_email' permission. This option is useful as a fallback during ldap setup, if ldap config problems occur later, or if you need to support some users who are not in your ldap directory. Looker email/password logins are always disabled for regular users when ldap is enabled.
+ * @property auth_password (Write-Only)  Password for the LDAP account used to access the LDAP server
+ * @property auth_requires_role Users will not be allowed to login at all unless a role for them is found in LDAP if set to true
+ * @property auth_username Distinguished name of LDAP account used to access the LDAP server
+ * @property connection_host LDAP server hostname
+ * @property connection_port LDAP host port
+ * @property connection_tls Use Transport Layer Security
+ * @property connection_tls_no_verify Do not verify peer when using TLS
+ * @property default_new_user_group_ids (Write-Only)  Array of ids of groups that will be applied to new users the first time they login via LDAP
+ * @property default_new_user_groups (Read-only) Groups that will be applied to new users the first time they login via LDAP (read-only)
+ * @property default_new_user_role_ids (Write-Only)  Array of ids of roles that will be applied to new users the first time they login via LDAP
+ * @property default_new_user_roles (Read-only) Roles that will be applied to new users the first time they login via LDAP (read-only)
+ * @property enabled Enable/Disable LDAP authentication for the server
+ * @property force_no_page Don't attempt to do LDAP search result paging (RFC 2696) even if the LDAP server claims to support it.
+ * @property groups (Read-only) Array of mappings between LDAP Groups and Looker Roles (read-only)
+ * @property groups_base_dn Base dn for finding groups in LDAP searches
+ * @property groups_finder_type Identifier for a strategy for how Looker will search for groups in the LDAP server
+ * @property groups_member_attribute LDAP Group attribute that signifies the members of the groups. Most commonly 'member'
+ * @property groups_objectclasses Optional comma-separated list of supported LDAP objectclass for groups when doing groups searches
+ * @property groups_user_attribute LDAP Group attribute that signifies the user in a group. Most commonly 'dn'
+ * @property groups_with_role_ids (Read/Write) Array of mappings between LDAP Groups and arrays of Looker Role ids
+ * @property has_auth_password (Read-only) Has the password been set for the LDAP account used to access the LDAP server (read-only)
+ * @property merge_new_users_by_email Merge first-time ldap login to existing user account by email addresses. When a user logs in for the first time via ldap this option will connect this user into their existing account by finding the account with a matching email address. Otherwise a new user account will be created for the user.
+ * @property modified_at When this config was last modified (read-only)
+ * @property modified_by User id of user who last modified this config (read-only)
+ * @property set_roles_from_groups Set user roles in Looker based on groups from LDAP
+ * @property test_ldap_password (Write-Only)  Test LDAP user password. For ldap tests only.
+ * @property test_ldap_user (Write-Only)  Test LDAP user login id. For ldap tests only.
+ * @property user_attribute_map_email Name of user record attributes used to indicate email address field
+ * @property user_attribute_map_first_name Name of user record attributes used to indicate first name
+ * @property user_attribute_map_last_name Name of user record attributes used to indicate last name
+ * @property user_attribute_map_ldap_id Name of user record attributes used to indicate unique record id
+ * @property user_attributes (Read-only) Array of mappings between LDAP User Attributes and Looker User Attributes (read-only)
+ * @property user_attributes_with_ids (Read/Write) Array of mappings between LDAP User Attributes and arrays of Looker User Attribute ids
+ * @property user_bind_base_dn Distinguished name of LDAP node used as the base for user searches
+ * @property user_custom_filter (Optional) Custom RFC-2254 filter clause for use in finding user during login. Combined via 'and' with the other generated filter clauses.
+ * @property user_id_attribute_names Name(s) of user record attributes used for matching user login id (comma separated list)
+ * @property user_objectclass (Optional) Name of user record objectclass used for finding user during login id
+ * @property allow_normal_group_membership Allow LDAP auth'd users to be members of non-reflected Looker groups. If 'false', user will be removed from non-reflected groups on login.
+ * @property allow_roles_from_normal_groups LDAP auth'd users will be able to inherit roles from non-reflected Looker groups.
+ * @property allow_direct_roles Allows roles to be directly assigned to LDAP auth'd users.
+ * @property url Link to get this item (read-only)
+ */
 data class LDAPConfig (
-  /**
-   * Operations the current user is able to perform on this object (read-only)
-   */
   var can: Map<String,Boolean>? = null,
-  /**
-   * Allow alternate email-based login via '/login/email' for admins and for specified users with the 'login_special_email' permission. This option is useful as a fallback during ldap setup, if ldap config problems occur later, or if you need to support some users who are not in your ldap directory. Looker email/password logins are always disabled for regular users when ldap is enabled.
-   */
   var alternate_email_login_allowed: Boolean? = null,
-  /**
-   * (Write-Only)  Password for the LDAP account used to access the LDAP server
-   */
   var auth_password: String? = null,
-  /**
-   * Users will not be allowed to login at all unless a role for them is found in LDAP if set to true
-   */
   var auth_requires_role: Boolean? = null,
-  /**
-   * Distinguished name of LDAP account used to access the LDAP server
-   */
   var auth_username: String? = null,
-  /**
-   * LDAP server hostname
-   */
   var connection_host: String? = null,
-  /**
-   * LDAP host port
-   */
   var connection_port: String? = null,
-  /**
-   * Use Transport Layer Security
-   */
   var connection_tls: Boolean? = null,
-  /**
-   * Do not verify peer when using TLS
-   */
   var connection_tls_no_verify: Boolean? = null,
-  /**
-   * (Write-Only)  Array of ids of groups that will be applied to new users the first time they login via LDAP
-   */
   var default_new_user_group_ids: Array<Long>? = null,
-  /**
-   * (Read-only) Groups that will be applied to new users the first time they login via LDAP (read-only)
-   */
   var default_new_user_groups: Array<Group>? = null,
-  /**
-   * (Write-Only)  Array of ids of roles that will be applied to new users the first time they login via LDAP
-   */
   var default_new_user_role_ids: Array<Long>? = null,
-  /**
-   * (Read-only) Roles that will be applied to new users the first time they login via LDAP (read-only)
-   */
   var default_new_user_roles: Array<Role>? = null,
-  /**
-   * Enable/Disable LDAP authentication for the server
-   */
   var enabled: Boolean? = null,
-  /**
-   * Don't attempt to do LDAP search result paging (RFC 2696) even if the LDAP server claims to support it.
-   */
   var force_no_page: Boolean? = null,
-  /**
-   * (Read-only) Array of mappings between LDAP Groups and Looker Roles (read-only)
-   */
   var groups: Array<LDAPGroupRead>? = null,
-  /**
-   * Base dn for finding groups in LDAP searches
-   */
   var groups_base_dn: String? = null,
-  /**
-   * Identifier for a strategy for how Looker will search for groups in the LDAP server
-   */
   var groups_finder_type: String? = null,
-  /**
-   * LDAP Group attribute that signifies the members of the groups. Most commonly 'member'
-   */
   var groups_member_attribute: String? = null,
-  /**
-   * Optional comma-separated list of supported LDAP objectclass for groups when doing groups searches
-   */
   var groups_objectclasses: String? = null,
-  /**
-   * LDAP Group attribute that signifies the user in a group. Most commonly 'dn'
-   */
   var groups_user_attribute: String? = null,
-  /**
-   * (Read/Write) Array of mappings between LDAP Groups and arrays of Looker Role ids
-   */
   var groups_with_role_ids: Array<LDAPGroupWrite>? = null,
-  /**
-   * (Read-only) Has the password been set for the LDAP account used to access the LDAP server (read-only)
-   */
   var has_auth_password: Boolean? = null,
-  /**
-   * Merge first-time ldap login to existing user account by email addresses. When a user logs in for the first time via ldap this option will connect this user into their existing account by finding the account with a matching email address. Otherwise a new user account will be created for the user.
-   */
   var merge_new_users_by_email: Boolean? = null,
-  /**
-   * When this config was last modified (read-only)
-   */
   var modified_at: String? = null,
-  /**
-   * User id of user who last modified this config (read-only)
-   */
   var modified_by: String? = null,
-  /**
-   * Set user roles in Looker based on groups from LDAP
-   */
   var set_roles_from_groups: Boolean? = null,
-  /**
-   * (Write-Only)  Test LDAP user password. For ldap tests only.
-   */
   var test_ldap_password: String? = null,
-  /**
-   * (Write-Only)  Test LDAP user login id. For ldap tests only.
-   */
   var test_ldap_user: String? = null,
-  /**
-   * Name of user record attributes used to indicate email address field
-   */
   var user_attribute_map_email: String? = null,
-  /**
-   * Name of user record attributes used to indicate first name
-   */
   var user_attribute_map_first_name: String? = null,
-  /**
-   * Name of user record attributes used to indicate last name
-   */
   var user_attribute_map_last_name: String? = null,
-  /**
-   * Name of user record attributes used to indicate unique record id
-   */
   var user_attribute_map_ldap_id: String? = null,
-  /**
-   * (Read-only) Array of mappings between LDAP User Attributes and Looker User Attributes (read-only)
-   */
   var user_attributes: Array<LDAPUserAttributeRead>? = null,
-  /**
-   * (Read/Write) Array of mappings between LDAP User Attributes and arrays of Looker User Attribute ids
-   */
   var user_attributes_with_ids: Array<LDAPUserAttributeWrite>? = null,
-  /**
-   * Distinguished name of LDAP node used as the base for user searches
-   */
   var user_bind_base_dn: String? = null,
-  /**
-   * (Optional) Custom RFC-2254 filter clause for use in finding user during login. Combined via 'and' with the other generated filter clauses.
-   */
   var user_custom_filter: String? = null,
-  /**
-   * Name(s) of user record attributes used for matching user login id (comma separated list)
-   */
   var user_id_attribute_names: String? = null,
-  /**
-   * (Optional) Name of user record objectclass used for finding user during login id
-   */
   var user_objectclass: String? = null,
-  /**
-   * Allow LDAP auth'd users to be members of non-reflected Looker groups. If 'false', user will be removed from non-reflected groups on login.
-   */
   var allow_normal_group_membership: Boolean? = null,
-  /**
-   * LDAP auth'd users will be able to inherit roles from non-reflected Looker groups.
-   */
   var allow_roles_from_normal_groups: Boolean? = null,
-  /**
-   * Allows roles to be directly assigned to LDAP auth'd users.
-   */
   var allow_direct_roles: Boolean? = null,
-  /**
-   * Link to get this item (read-only)
-   */
   var url: UriString? = null
 ) : Serializable
 
+/**
+ * @property severity Severity of the issue. Error or Warning (read-only)
+ * @property message Message describing the issue (read-only)
+ * @property can Operations the current user is able to perform on this object (read-only)
+ */
 data class LDAPConfigTestIssue (
-  /**
-   * Severity of the issue. Error or Warning (read-only)
-   */
   var severity: String? = null,
-  /**
-   * Message describing the issue (read-only)
-   */
   var message: String? = null,
-  /**
-   * Operations the current user is able to perform on this object (read-only)
-   */
   var can: Map<String,Boolean>? = null
 ) : Serializable
 
+/**
+ * @property details Additional details for error cases (read-only)
+ * @property issues Array of issues/considerations about the result (read-only)
+ * @property message Short human readable test about the result (read-only)
+ * @property status Test status code: always 'success' or 'error' (read-only)
+ * @property trace A more detailed trace of incremental results during auth tests (read-only)
+ * @property user
+ * @property url Link to ldap config (read-only)
+ */
 data class LDAPConfigTestResult (
-  /**
-   * Additional details for error cases (read-only)
-   */
   var details: String? = null,
-  /**
-   * Array of issues/considerations about the result (read-only)
-   */
   var issues: Array<LDAPConfigTestIssue>? = null,
-  /**
-   * Short human readable test about the result (read-only)
-   */
   var message: String? = null,
-  /**
-   * Test status code: always 'success' or 'error' (read-only)
-   */
   var status: String? = null,
-  /**
-   * A more detailed trace of incremental results during auth tests (read-only)
-   */
   var trace: String? = null,
   var user: LDAPUser? = null,
-  /**
-   * Link to ldap config (read-only)
-   */
   var url: UriString? = null
 ) : Serializable
 
+/**
+ * @property id Unique Id (read-only)
+ * @property looker_group_id Unique Id of group in Looker (read-only)
+ * @property looker_group_name Name of group in Looker (read-only)
+ * @property name Name of group in LDAP (read-only)
+ * @property roles Looker Roles (read-only)
+ * @property url Link to ldap config (read-only)
+ */
 data class LDAPGroupRead (
-  /**
-   * Unique Id (read-only)
-   */
   var id: Long? = null,
-  /**
-   * Unique Id of group in Looker (read-only)
-   */
   var looker_group_id: Long? = null,
-  /**
-   * Name of group in Looker (read-only)
-   */
   var looker_group_name: String? = null,
-  /**
-   * Name of group in LDAP (read-only)
-   */
   var name: String? = null,
-  /**
-   * Looker Roles (read-only)
-   */
   var roles: Array<Role>? = null,
-  /**
-   * Link to ldap config (read-only)
-   */
   var url: UriString? = null
 ) : Serializable
 
+/**
+ * @property id Unique Id
+ * @property looker_group_id Unique Id of group in Looker (read-only)
+ * @property looker_group_name Name of group in Looker
+ * @property name Name of group in LDAP
+ * @property role_ids Looker Role Ids
+ * @property url Link to ldap config (read-only)
+ */
 data class LDAPGroupWrite (
-  /**
-   * Unique Id
-   */
   var id: Long? = null,
-  /**
-   * Unique Id of group in Looker (read-only)
-   */
   var looker_group_id: Long? = null,
-  /**
-   * Name of group in Looker
-   */
   var looker_group_name: String? = null,
-  /**
-   * Name of group in LDAP
-   */
   var name: String? = null,
-  /**
-   * Looker Role Ids
-   */
   var role_ids: Array<Long>? = null,
-  /**
-   * Link to ldap config (read-only)
-   */
   var url: UriString? = null
 ) : Serializable
 
+/**
+ * @property all_emails Array of user's email addresses and aliases for use in migration (read-only)
+ * @property attributes Dictionary of user's attributes (name/value) (read-only)
+ * @property email Primary email address (read-only)
+ * @property first_name First name (read-only)
+ * @property groups Array of user's groups (group names only) (read-only)
+ * @property last_name Last Name (read-only)
+ * @property ldap_dn LDAP's distinguished name for the user record (read-only)
+ * @property ldap_id LDAP's Unique ID for the user (read-only)
+ * @property roles Array of user's roles (role names only) (read-only)
+ * @property can Operations the current user is able to perform on this object (read-only)
+ * @property url Link to ldap config (read-only)
+ */
 data class LDAPUser (
-  /**
-   * Array of user's email addresses and aliases for use in migration (read-only)
-   */
   var all_emails: Array<String>? = null,
-  /**
-   * Dictionary of user's attributes (name/value) (read-only)
-   */
   var attributes: Map<String,Any>? = null,
-  /**
-   * Primary email address (read-only)
-   */
   var email: String? = null,
-  /**
-   * First name (read-only)
-   */
   var first_name: String? = null,
-  /**
-   * Array of user's groups (group names only) (read-only)
-   */
   var groups: Array<String>? = null,
-  /**
-   * Last Name (read-only)
-   */
   var last_name: String? = null,
-  /**
-   * LDAP's distinguished name for the user record (read-only)
-   */
   var ldap_dn: String? = null,
-  /**
-   * LDAP's Unique ID for the user (read-only)
-   */
   var ldap_id: String? = null,
-  /**
-   * Array of user's roles (role names only) (read-only)
-   */
   var roles: Array<String>? = null,
-  /**
-   * Operations the current user is able to perform on this object (read-only)
-   */
   var can: Map<String,Boolean>? = null,
-  /**
-   * Link to ldap config (read-only)
-   */
   var url: UriString? = null
 ) : Serializable
 
+/**
+ * @property name Name of User Attribute in LDAP (read-only)
+ * @property required Required to be in LDAP assertion for login to be allowed to succeed (read-only)
+ * @property user_attributes Looker User Attributes (read-only)
+ * @property url Link to ldap config (read-only)
+ */
 data class LDAPUserAttributeRead (
-  /**
-   * Name of User Attribute in LDAP (read-only)
-   */
   var name: String? = null,
-  /**
-   * Required to be in LDAP assertion for login to be allowed to succeed (read-only)
-   */
   var required: Boolean? = null,
-  /**
-   * Looker User Attributes (read-only)
-   */
   var user_attributes: Array<UserAttribute>? = null,
-  /**
-   * Link to ldap config (read-only)
-   */
   var url: UriString? = null
 ) : Serializable
 
+/**
+ * @property name Name of User Attribute in LDAP
+ * @property required Required to be in LDAP assertion for login to be allowed to succeed
+ * @property user_attribute_ids Looker User Attribute Ids
+ * @property url Link to ldap config (read-only)
+ */
 data class LDAPUserAttributeWrite (
-  /**
-   * Name of User Attribute in LDAP
-   */
   var name: String? = null,
-  /**
-   * Required to be in LDAP assertion for login to be allowed to succeed
-   */
   var required: Boolean? = null,
-  /**
-   * Looker User Attribute Ids
-   */
   var user_attribute_ids: Array<Long>? = null,
-  /**
-   * Link to ldap config (read-only)
-   */
   var url: UriString? = null
 ) : Serializable
 
+/**
+ * @property can Operations the current user is able to perform on this object (read-only)
+ * @property id Unique Id (read-only)
+ * @property name Name (read-only)
+ * @property description Description (read-only)
+ * @property enabled_locally Whether this feature has been enabled by a user
+ * @property enabled Whether this feature is currently enabled (read-only)
+ * @property disallowed_as_of_version Looker version where this feature became a legacy feature (read-only)
+ * @property disable_on_upgrade_to_version Looker version where this feature will be automatically disabled (read-only)
+ * @property end_of_life_version Future Looker version where this feature will be removed (read-only)
+ * @property documentation_url URL for documentation about this feature (read-only)
+ * @property approximate_disable_date Approximate date that this feature will be automatically disabled. (read-only)
+ * @property approximate_end_of_life_date Approximate date that this feature will be removed. (read-only)
+ * @property has_disabled_on_upgrade Whether this legacy feature may have been automatically disabled when upgrading to the current version. (read-only)
+ */
 data class LegacyFeature (
-  /**
-   * Operations the current user is able to perform on this object (read-only)
-   */
   var can: Map<String,Boolean>? = null,
-  /**
-   * Unique Id (read-only)
-   */
   var id: String? = null,
-  /**
-   * Name (read-only)
-   */
   var name: String? = null,
-  /**
-   * Description (read-only)
-   */
   var description: String? = null,
-  /**
-   * Whether this feature has been enabled by a user
-   */
   var enabled_locally: Boolean? = null,
-  /**
-   * Whether this feature is currently enabled (read-only)
-   */
   var enabled: Boolean? = null,
-  /**
-   * Looker version where this feature became a legacy feature (read-only)
-   */
   var disallowed_as_of_version: String? = null,
-  /**
-   * Looker version where this feature will be automatically disabled (read-only)
-   */
   var disable_on_upgrade_to_version: String? = null,
-  /**
-   * Future Looker version where this feature will be removed (read-only)
-   */
   var end_of_life_version: String? = null,
-  /**
-   * URL for documentation about this feature (read-only)
-   */
   var documentation_url: String? = null,
-  /**
-   * Approximate date that this feature will be automatically disabled. (read-only)
-   */
   var approximate_disable_date: Date? = null,
-  /**
-   * Approximate date that this feature will be removed. (read-only)
-   */
   var approximate_end_of_life_date: Date? = null,
-  /**
-   * Whether this legacy feature may have been automatically disabled when upgrading to the current version. (read-only)
-   */
   var has_disabled_on_upgrade: Boolean? = null
 ) : Serializable
 
+/**
+ * @property code Code for Locale (read-only)
+ * @property native_name Name of Locale in its own language (read-only)
+ * @property english_name Name of Locale in English (read-only)
+ */
 data class Locale (
-  /**
-   * Code for Locale (read-only)
-   */
   var code: String? = null,
-  /**
-   * Name of Locale in its own language (read-only)
-   */
   var native_name: String? = null,
-  /**
-   * Name of Locale in English (read-only)
-   */
   var english_name: String? = null
 ) : Serializable
 
+/**
+ * @property default_locale Default locale for localization (read-only)
+ * @property localization_level Localization level - strict or permissive (read-only)
+ * @property can Operations the current user is able to perform on this object (read-only)
+ */
 data class LocalizationSettings (
-  /**
-   * Default locale for localization (read-only)
-   */
   var default_locale: String? = null,
-  /**
-   * Localization level - strict or permissive (read-only)
-   */
   var localization_level: String? = null,
-  /**
-   * Operations the current user is able to perform on this object (read-only)
-   */
   var can: Map<String,Boolean>? = null
 ) : Serializable
 
+/**
+ * @property can Operations the current user is able to perform on this object (read-only)
+ * @property content_metadata_id Id of content metadata (read-only)
+ * @property id Unique Id (read-only)
+ * @property title Look Title
+ * @property content_favorite_id Content Favorite Id (read-only)
+ * @property created_at Time that the Look was created. (read-only)
+ * @property deleted Whether or not a look is 'soft' deleted.
+ * @property deleted_at Time that the Look was deleted. (read-only)
+ * @property deleter_id Id of User that deleted the look. (read-only)
+ * @property description Description
+ * @property embed_url Embed Url (read-only)
+ * @property excel_file_url Excel File Url (read-only)
+ * @property favorite_count Number of times favorited (read-only)
+ * @property google_spreadsheet_formula Google Spreadsheet Formula (read-only)
+ * @property image_embed_url Image Embed Url (read-only)
+ * @property is_run_on_load auto-run query when Look viewed
+ * @property last_accessed_at Time that the Look was last accessed by any user (read-only)
+ * @property last_updater_id Id of User that last updated the look. (read-only)
+ * @property last_viewed_at Time last viewed in the Looker web UI (read-only)
+ * @property model
+ * @property public Is Public
+ * @property public_slug Public Slug (read-only)
+ * @property public_url Public Url (read-only)
+ * @property query_id Query Id
+ * @property short_url Short Url (read-only)
+ * @property folder
+ * @property folder_id Folder Id
+ * @property updated_at Time that the Look was updated. (read-only)
+ * @property user_id User Id
+ * @property view_count Number of times viewed in the Looker web UI (read-only)
+ * @property user
+ * @property space_id Space Id
+ * @property space
+ */
 data class Look (
-  /**
-   * Operations the current user is able to perform on this object (read-only)
-   */
   var can: Map<String,Boolean>? = null,
-  /**
-   * Id of content metadata (read-only)
-   */
   var content_metadata_id: Long? = null,
-  /**
-   * Unique Id (read-only)
-   */
   var id: Long? = null,
-  /**
-   * Look Title
-   */
   var title: String? = null,
-  /**
-   * Content Favorite Id (read-only)
-   */
   var content_favorite_id: Long? = null,
-  /**
-   * Time that the Look was created. (read-only)
-   */
   var created_at: Date? = null,
-  /**
-   * Whether or not a look is 'soft' deleted.
-   */
   var deleted: Boolean? = null,
-  /**
-   * Time that the Look was deleted. (read-only)
-   */
   var deleted_at: Date? = null,
-  /**
-   * Id of User that deleted the look. (read-only)
-   */
   var deleter_id: Long? = null,
-  /**
-   * Description
-   */
   var description: String? = null,
-  /**
-   * Embed Url (read-only)
-   */
   var embed_url: String? = null,
-  /**
-   * Excel File Url (read-only)
-   */
   var excel_file_url: String? = null,
-  /**
-   * Number of times favorited (read-only)
-   */
   var favorite_count: Long? = null,
-  /**
-   * Google Spreadsheet Formula (read-only)
-   */
   var google_spreadsheet_formula: String? = null,
-  /**
-   * Image Embed Url (read-only)
-   */
   var image_embed_url: String? = null,
-  /**
-   * auto-run query when Look viewed
-   */
   var is_run_on_load: Boolean? = null,
-  /**
-   * Time that the Look was last accessed by any user (read-only)
-   */
   var last_accessed_at: Date? = null,
-  /**
-   * Id of User that last updated the look. (read-only)
-   */
   var last_updater_id: Long? = null,
-  /**
-   * Time last viewed in the Looker web UI (read-only)
-   */
   var last_viewed_at: Date? = null,
   var model: LookModel? = null,
-  /**
-   * Is Public
-   */
   var public: Boolean? = null,
-  /**
-   * Public Slug (read-only)
-   */
   var public_slug: String? = null,
-  /**
-   * Public Url (read-only)
-   */
   var public_url: String? = null,
-  /**
-   * Query Id
-   */
   var query_id: Long? = null,
-  /**
-   * Short Url (read-only)
-   */
   var short_url: String? = null,
   var folder: FolderBase? = null,
-  /**
-   * Folder Id
-   */
   var folder_id: String? = null,
-  /**
-   * Time that the Look was updated. (read-only)
-   */
   var updated_at: Date? = null,
-  /**
-   * User Id
-   */
   var user_id: Long? = null,
-  /**
-   * Number of times viewed in the Looker web UI (read-only)
-   */
   var view_count: Long? = null,
   var user: UserIdOnly? = null,
-  /**
-   * Space Id
-   */
   var space_id: String? = null,
   var space: SpaceBase? = null
 ) : Serializable
 
+/**
+ * @property can Operations the current user is able to perform on this object (read-only)
+ * @property content_metadata_id Id of content metadata (read-only)
+ * @property id Unique Id (read-only)
+ * @property title Look Title (read-only)
+ */
 data class LookBasic (
-  /**
-   * Operations the current user is able to perform on this object (read-only)
-   */
   var can: Map<String,Boolean>? = null,
-  /**
-   * Id of content metadata (read-only)
-   */
   var content_metadata_id: Long? = null,
-  /**
-   * Unique Id (read-only)
-   */
   var id: Long? = null,
-  /**
-   * Look Title (read-only)
-   */
   var title: String? = null
 ) : Serializable
 
+/**
+ * @property can Operations the current user is able to perform on this object (read-only)
+ * @property allowed_db_connection_names Array of names of connections this model is allowed to use
+ * @property explores Array of explores (if has_content) (read-only)
+ * @property has_content Does this model declaration have have lookml content? (read-only)
+ * @property label UI-friendly name for this model (read-only)
+ * @property name Name of the model. Also used as the unique identifier
+ * @property project_name Name of project containing the model
+ * @property unlimited_db_connections Is this model allowed to use all current and future connections
+ */
 data class LookmlModel (
-  /**
-   * Operations the current user is able to perform on this object (read-only)
-   */
   var can: Map<String,Boolean>? = null,
-  /**
-   * Array of names of connections this model is allowed to use
-   */
   var allowed_db_connection_names: Array<String>? = null,
-  /**
-   * Array of explores (if has_content) (read-only)
-   */
   var explores: Array<LookmlModelNavExplore>? = null,
-  /**
-   * Does this model declaration have have lookml content? (read-only)
-   */
   var has_content: Boolean? = null,
-  /**
-   * UI-friendly name for this model (read-only)
-   */
   var label: String? = null,
-  /**
-   * Name of the model. Also used as the unique identifier
-   */
   var name: String? = null,
-  /**
-   * Name of project containing the model
-   */
   var project_name: String? = null,
-  /**
-   * Is this model allowed to use all current and future connections
-   */
   var unlimited_db_connections: Boolean? = null
 ) : Serializable
 
+/**
+ * @property id Fully qualified explore name (model name plus explore name) (read-only)
+ * @property name Explore name (read-only)
+ * @property description Description (read-only)
+ * @property label Label (read-only)
+ * @property scopes Scopes (read-only)
+ * @property can_total Can Total (read-only)
+ * @property can_save Can Save (read-only)
+ * @property can_explain Can Explain (read-only)
+ * @property can_pivot_in_db Can pivot in the DB (read-only)
+ * @property can_subtotal Can use subtotals (read-only)
+ * @property has_timezone_support Has timezone support (read-only)
+ * @property supports_cost_estimate Cost estimates supported (read-only)
+ * @property connection_name Connection name (read-only)
+ * @property null_sort_treatment How nulls are sorted, possible values are "low", "high", "first" and "last" (read-only)
+ * @property files List of model source files (read-only)
+ * @property source_file Primary source_file file (read-only)
+ * @property project_name Name of project (read-only)
+ * @property model_name Name of model (read-only)
+ * @property view_name Name of view (read-only)
+ * @property hidden Is hidden (read-only)
+ * @property sql_table_name A sql_table_name expression that defines what sql table the view/explore maps onto. Example: "prod_orders2 AS orders" in a view named orders. (read-only)
+ * @property access_filter_fields (DEPRECATED) Array of access filter field names (read-only)
+ * @property access_filters Access filters (read-only)
+ * @property aliases Aliases (read-only)
+ * @property always_filter Always filter (read-only)
+ * @property conditionally_filter Conditionally filter (read-only)
+ * @property index_fields Array of index fields (read-only)
+ * @property sets Sets (read-only)
+ * @property tags An array of arbitrary string tags provided in the model for this explore. (read-only)
+ * @property errors Errors (read-only)
+ * @property fields
+ * @property joins Views joined into this explore (read-only)
+ * @property group_label Label used to group explores in the navigation menus (read-only)
+ * @property supported_measure_types An array of items describing which custom measure types are supported for creating a custom measure 'based_on' each possible dimension type. (read-only)
+ */
 data class LookmlModelExplore (
-  /**
-   * Fully qualified explore name (model name plus explore name) (read-only)
-   */
   var id: String? = null,
-  /**
-   * Explore name (read-only)
-   */
   var name: String? = null,
-  /**
-   * Description (read-only)
-   */
   var description: String? = null,
-  /**
-   * Label (read-only)
-   */
   var label: String? = null,
-  /**
-   * Scopes (read-only)
-   */
   var scopes: Array<String>? = null,
-  /**
-   * Can Total (read-only)
-   */
   var can_total: Boolean? = null,
-  /**
-   * Can Save (read-only)
-   */
   var can_save: Boolean? = null,
-  /**
-   * Can Explain (read-only)
-   */
   var can_explain: Boolean? = null,
-  /**
-   * Can pivot in the DB (read-only)
-   */
   var can_pivot_in_db: Boolean? = null,
-  /**
-   * Can use subtotals (read-only)
-   */
   var can_subtotal: Boolean? = null,
-  /**
-   * Has timezone support (read-only)
-   */
   var has_timezone_support: Boolean? = null,
-  /**
-   * Cost estimates supported (read-only)
-   */
   var supports_cost_estimate: Boolean? = null,
-  /**
-   * Connection name (read-only)
-   */
   var connection_name: String? = null,
-  /**
-   * How nulls are sorted, possible values are "low", "high", "first" and "last" (read-only)
-   */
   var null_sort_treatment: String? = null,
-  /**
-   * List of model source files (read-only)
-   */
   var files: Array<String>? = null,
-  /**
-   * Primary source_file file (read-only)
-   */
   var source_file: String? = null,
-  /**
-   * Name of project (read-only)
-   */
   var project_name: String? = null,
-  /**
-   * Name of model (read-only)
-   */
   var model_name: String? = null,
-  /**
-   * Name of view (read-only)
-   */
   var view_name: String? = null,
-  /**
-   * Is hidden (read-only)
-   */
   var hidden: Boolean? = null,
-  /**
-   * A sql_table_name expression that defines what sql table the view/explore maps onto. Example: "prod_orders2 AS orders" in a view named orders. (read-only)
-   */
   var sql_table_name: String? = null,
-  /**
-   * (DEPRECATED) Array of access filter field names (read-only)
-   */
   var access_filter_fields: Array<String>? = null,
-  /**
-   * Access filters (read-only)
-   */
   var access_filters: Array<LookmlModelExploreAccessFilter>? = null,
-  /**
-   * Aliases (read-only)
-   */
   var aliases: Array<LookmlModelExploreAlias>? = null,
-  /**
-   * Always filter (read-only)
-   */
   var always_filter: Array<LookmlModelExploreAlwaysFilter>? = null,
-  /**
-   * Conditionally filter (read-only)
-   */
   var conditionally_filter: Array<LookmlModelExploreConditionallyFilter>? = null,
-  /**
-   * Array of index fields (read-only)
-   */
   var index_fields: Array<String>? = null,
-  /**
-   * Sets (read-only)
-   */
   var sets: Array<LookmlModelExploreSet>? = null,
-  /**
-   * An array of arbitrary string tags provided in the model for this explore. (read-only)
-   */
   var tags: Array<String>? = null,
-  /**
-   * Errors (read-only)
-   */
   var errors: Array<LookmlModelExploreError>? = null,
   var fields: LookmlModelExploreFieldset? = null,
-  /**
-   * Views joined into this explore (read-only)
-   */
   var joins: Array<LookmlModelExploreJoins>? = null,
-  /**
-   * Label used to group explores in the navigation menus (read-only)
-   */
   var group_label: String? = null,
-  /**
-   * An array of items describing which custom measure types are supported for creating a custom measure 'based_on' each possible dimension type. (read-only)
-   */
   var supported_measure_types: Array<LookmlModelExploreSupportedMeasureType>? = null
 ) : Serializable
 
+/**
+ * @property field Field to be filtered (read-only)
+ * @property user_attribute User attribute name (read-only)
+ */
 data class LookmlModelExploreAccessFilter (
-  /**
-   * Field to be filtered (read-only)
-   */
   var field: String? = null,
-  /**
-   * User attribute name (read-only)
-   */
   var user_attribute: String? = null
 ) : Serializable
 
+/**
+ * @property name Name (read-only)
+ * @property value Value (read-only)
+ */
 data class LookmlModelExploreAlias (
-  /**
-   * Name (read-only)
-   */
   var name: String? = null,
-  /**
-   * Value (read-only)
-   */
   var value: String? = null
 ) : Serializable
 
+/**
+ * @property name Name (read-only)
+ * @property value Value (read-only)
+ */
 data class LookmlModelExploreAlwaysFilter (
-  /**
-   * Name (read-only)
-   */
   var name: String? = null,
-  /**
-   * Value (read-only)
-   */
   var value: String? = null
 ) : Serializable
 
+/**
+ * @property name Name (read-only)
+ * @property value Value (read-only)
+ */
 data class LookmlModelExploreConditionallyFilter (
-  /**
-   * Name (read-only)
-   */
   var name: String? = null,
-  /**
-   * Value (read-only)
-   */
   var value: String? = null
 ) : Serializable
 
+/**
+ * @property message Error Message (read-only)
+ * @property details Details (read-only)
+ * @property error_pos Error source location (read-only)
+ * @property field_error Is this a field error (read-only)
+ */
 data class LookmlModelExploreError (
-  /**
-   * Error Message (read-only)
-   */
   var message: String? = null,
-  /**
-   * Details (read-only)
-   */
   var details: Any? = null,
-  /**
-   * Error source location (read-only)
-   */
   var error_pos: String? = null,
-  /**
-   * Is this a field error (read-only)
-   */
   var field_error: Boolean? = null
 ) : Serializable
 
+/**
+ * @property align The appropriate horizontal text alignment the values of this field should be displayed in. Valid values are: "left", "right". (read-only)
+ * @property can_filter Whether it's possible to filter on this field. (read-only)
+ * @property category Field category Valid values are: "parameter", "filter", "measure", "dimension". (read-only)
+ * @property default_filter_value The default value that this field uses when filtering. Null if there is no default value. (read-only)
+ * @property description Description (read-only)
+ * @property enumerations An array enumerating all the possible values that this field can contain. When null, there is no limit to the set of possible values this field can contain. (read-only)
+ * @property error An error message indicating a problem with the definition of this field. If there are no errors, this will be null. (read-only)
+ * @property field_group_label A label creating a grouping of fields. All fields with this label should be presented together when displayed in a UI. (read-only)
+ * @property field_group_variant When presented in a field group via field_group_label, a shorter name of the field to be displayed in that context. (read-only)
+ * @property fill_style The style of dimension fill that is possible for this field. Null if no dimension fill is possible. Valid values are: "enumeration", "range". (read-only)
+ * @property fiscal_month_offset An offset (in months) from the calendar start month to the fiscal start month defined in the LookML model this field belongs to. (read-only)
+ * @property has_allowed_values Whether this field has a set of allowed_values specified in LookML. (read-only)
+ * @property hidden Whether this field should be hidden from the user interface. (read-only)
+ * @property is_filter Whether this field is a filter. (read-only)
+ * @property is_fiscal Whether this field represents a fiscal time value. (read-only)
+ * @property is_numeric Whether this field is of a type that represents a numeric value. (read-only)
+ * @property is_timeframe Whether this field is of a type that represents a time value. (read-only)
+ * @property can_time_filter Whether this field can be time filtered. (read-only)
+ * @property time_interval
+ * @property label Fully-qualified human-readable label of the field. (read-only)
+ * @property label_from_parameter The name of the parameter that will provide a parameterized label for this field, if available in the current context. (read-only)
+ * @property label_short The human-readable label of the field, without the view label. (read-only)
+ * @property lookml_link A URL linking to the definition of this field in the LookML IDE. (read-only)
+ * @property map_layer
+ * @property measure Whether this field is a measure. (read-only)
+ * @property name Fully-qualified name of the field. (read-only)
+ * @property strict_value_format If yes, the field will not be localized with the user attribute number_format. Defaults to no (read-only)
+ * @property parameter Whether this field is a parameter. (read-only)
+ * @property permanent Whether this field can be removed from a query. (read-only)
+ * @property primary_key Whether or not the field represents a primary key. (read-only)
+ * @property project_name The name of the project this field is defined in. (read-only)
+ * @property requires_refresh_on_sort When true, it's not possible to re-sort this field's values without re-running the SQL query, due to database logic that affects the sort. (read-only)
+ * @property scope The LookML scope this field belongs to. The scope is typically the field's view. (read-only)
+ * @property sortable Whether this field can be sorted. (read-only)
+ * @property source_file The path portion of source_file_path. (read-only)
+ * @property source_file_path The fully-qualified path of the project file this field is defined in. (read-only)
+ * @property sql SQL expression as defined in the LookML model. The SQL syntax shown here is a representation intended for auditability, and is not neccessarily an exact match for what will ultimately be run in the database. It may contain special LookML syntax or annotations that are not valid SQL. This will be null if the current user does not have the see_lookml permission for the field's model. (read-only)
+ * @property sql_case An array of conditions and values that make up a SQL Case expression, as defined in the LookML model. The SQL syntax shown here is a representation intended for auditability, and is not neccessarily an exact match for what will ultimately be run in the database. It may contain special LookML syntax or annotations that are not valid SQL. This will be null if the current user does not have the see_lookml permission for the field's model. (read-only)
+ * @property filters Array of filter conditions defined for the measure in LookML. (read-only)
+ * @property suggest_dimension The name of the dimension to base suggest queries from. (read-only)
+ * @property suggest_explore The name of the explore to base suggest queries from. (read-only)
+ * @property suggestable Whether or not suggestions are possible for this field. (read-only)
+ * @property suggestions If available, a list of suggestions for this field. For most fields, a suggest query is a more appropriate way to get an up-to-date list of suggestions. Or use enumerations to list all the possible values. (read-only)
+ * @property tags An array of arbitrary string tags provided in the model for this field. (read-only)
+ * @property type The LookML type of the field. (read-only)
+ * @property user_attribute_filter_types An array of user attribute types that are allowed to be used in filters on this field. Valid values are: "advanced_filter_string", "advanced_filter_number", "advanced_filter_datetime", "string", "number", "datetime", "relative_url", "yesno", "zipcode". (read-only)
+ * @property value_format If specified, the LookML value format string for formatting values of this field. (read-only)
+ * @property view The name of the view this field belongs to. (read-only)
+ * @property view_label The human-readable label of the view the field belongs to. (read-only)
+ * @property dynamic Whether this field was specified in "dynamic_fields" and is not part of the model. (read-only)
+ * @property week_start_day The name of the starting day of the week. Valid values are: "monday", "tuesday", "wednesday", "thursday", "friday", "saturday", "sunday". (read-only)
+ */
 data class LookmlModelExploreField (
-  /**
-   * The appropriate horizontal text alignment the values of this field should be displayed in. Valid values are: "left", "right". (read-only)
-   */
   var align: Align? = null,
-  /**
-   * Whether it's possible to filter on this field. (read-only)
-   */
   var can_filter: Boolean? = null,
-  /**
-   * Field category Valid values are: "parameter", "filter", "measure", "dimension". (read-only)
-   */
   var category: Category? = null,
-  /**
-   * The default value that this field uses when filtering. Null if there is no default value. (read-only)
-   */
   var default_filter_value: String? = null,
-  /**
-   * Description (read-only)
-   */
   var description: String? = null,
-  /**
-   * An array enumerating all the possible values that this field can contain. When null, there is no limit to the set of possible values this field can contain. (read-only)
-   */
   var enumerations: Array<LookmlModelExploreFieldEnumeration>? = null,
-  /**
-   * An error message indicating a problem with the definition of this field. If there are no errors, this will be null. (read-only)
-   */
   var error: String? = null,
-  /**
-   * A label creating a grouping of fields. All fields with this label should be presented together when displayed in a UI. (read-only)
-   */
   var field_group_label: String? = null,
-  /**
-   * When presented in a field group via field_group_label, a shorter name of the field to be displayed in that context. (read-only)
-   */
   var field_group_variant: String? = null,
-  /**
-   * The style of dimension fill that is possible for this field. Null if no dimension fill is possible. Valid values are: "enumeration", "range". (read-only)
-   */
   var fill_style: FillStyle? = null,
-  /**
-   * An offset (in months) from the calendar start month to the fiscal start month defined in the LookML model this field belongs to. (read-only)
-   */
   var fiscal_month_offset: Long? = null,
-  /**
-   * Whether this field has a set of allowed_values specified in LookML. (read-only)
-   */
   var has_allowed_values: Boolean? = null,
-  /**
-   * Whether this field should be hidden from the user interface. (read-only)
-   */
   var hidden: Boolean? = null,
-  /**
-   * Whether this field is a filter. (read-only)
-   */
   var is_filter: Boolean? = null,
-  /**
-   * Whether this field represents a fiscal time value. (read-only)
-   */
   var is_fiscal: Boolean? = null,
-  /**
-   * Whether this field is of a type that represents a numeric value. (read-only)
-   */
   var is_numeric: Boolean? = null,
-  /**
-   * Whether this field is of a type that represents a time value. (read-only)
-   */
   var is_timeframe: Boolean? = null,
-  /**
-   * Whether this field can be time filtered. (read-only)
-   */
   var can_time_filter: Boolean? = null,
   var time_interval: LookmlModelExploreFieldTimeInterval? = null,
-  /**
-   * Fully-qualified human-readable label of the field. (read-only)
-   */
   var label: String? = null,
-  /**
-   * The name of the parameter that will provide a parameterized label for this field, if available in the current context. (read-only)
-   */
   var label_from_parameter: String? = null,
-  /**
-   * The human-readable label of the field, without the view label. (read-only)
-   */
   var label_short: String? = null,
-  /**
-   * A URL linking to the definition of this field in the LookML IDE. (read-only)
-   */
   var lookml_link: String? = null,
   var map_layer: LookmlModelExploreFieldMapLayer? = null,
-  /**
-   * Whether this field is a measure. (read-only)
-   */
   var measure: Boolean? = null,
-  /**
-   * Fully-qualified name of the field. (read-only)
-   */
   var name: String? = null,
-  /**
-   * If yes, the field will not be localized with the user attribute number_format. Defaults to no (read-only)
-   */
   var strict_value_format: Boolean? = null,
-  /**
-   * Whether this field is a parameter. (read-only)
-   */
   var parameter: Boolean? = null,
-  /**
-   * Whether this field can be removed from a query. (read-only)
-   */
   var permanent: Boolean? = null,
-  /**
-   * Whether or not the field represents a primary key. (read-only)
-   */
   var primary_key: Boolean? = null,
-  /**
-   * The name of the project this field is defined in. (read-only)
-   */
   var project_name: String? = null,
-  /**
-   * When true, it's not possible to re-sort this field's values without re-running the SQL query, due to database logic that affects the sort. (read-only)
-   */
   var requires_refresh_on_sort: Boolean? = null,
-  /**
-   * The LookML scope this field belongs to. The scope is typically the field's view. (read-only)
-   */
   var scope: String? = null,
-  /**
-   * Whether this field can be sorted. (read-only)
-   */
   var sortable: Boolean? = null,
-  /**
-   * The path portion of source_file_path. (read-only)
-   */
   var source_file: String? = null,
-  /**
-   * The fully-qualified path of the project file this field is defined in. (read-only)
-   */
   var source_file_path: String? = null,
-  /**
-   * SQL expression as defined in the LookML model. The SQL syntax shown here is a representation intended for auditability, and is not neccessarily an exact match for what will ultimately be run in the database. It may contain special LookML syntax or annotations that are not valid SQL. This will be null if the current user does not have the see_lookml permission for the field's model. (read-only)
-   */
   var sql: String? = null,
-  /**
-   * An array of conditions and values that make up a SQL Case expression, as defined in the LookML model. The SQL syntax shown here is a representation intended for auditability, and is not neccessarily an exact match for what will ultimately be run in the database. It may contain special LookML syntax or annotations that are not valid SQL. This will be null if the current user does not have the see_lookml permission for the field's model. (read-only)
-   */
   var sql_case: Array<LookmlModelExploreFieldSqlCase>? = null,
-  /**
-   * Array of filter conditions defined for the measure in LookML. (read-only)
-   */
   var filters: Array<LookmlModelExploreFieldMeasureFilters>? = null,
-  /**
-   * The name of the dimension to base suggest queries from. (read-only)
-   */
   var suggest_dimension: String? = null,
-  /**
-   * The name of the explore to base suggest queries from. (read-only)
-   */
   var suggest_explore: String? = null,
-  /**
-   * Whether or not suggestions are possible for this field. (read-only)
-   */
   var suggestable: Boolean? = null,
-  /**
-   * If available, a list of suggestions for this field. For most fields, a suggest query is a more appropriate way to get an up-to-date list of suggestions. Or use enumerations to list all the possible values. (read-only)
-   */
   var suggestions: Array<String>? = null,
-  /**
-   * An array of arbitrary string tags provided in the model for this field. (read-only)
-   */
   var tags: Array<String>? = null,
-  /**
-   * The LookML type of the field. (read-only)
-   */
   var type: String? = null,
-  /**
-   * An array of user attribute types that are allowed to be used in filters on this field. Valid values are: "advanced_filter_string", "advanced_filter_number", "advanced_filter_datetime", "string", "number", "datetime", "relative_url", "yesno", "zipcode". (read-only)
-   */
   var user_attribute_filter_types: Array<UserAttributeFilterTypes>? = null,
-  /**
-   * If specified, the LookML value format string for formatting values of this field. (read-only)
-   */
   var value_format: String? = null,
-  /**
-   * The name of the view this field belongs to. (read-only)
-   */
   var view: String? = null,
-  /**
-   * The human-readable label of the view the field belongs to. (read-only)
-   */
   var view_label: String? = null,
-  /**
-   * Whether this field was specified in "dynamic_fields" and is not part of the model. (read-only)
-   */
   var dynamic: Boolean? = null,
-  /**
-   * The name of the starting day of the week. Valid values are: "monday", "tuesday", "wednesday", "thursday", "friday", "saturday", "sunday". (read-only)
-   */
   var week_start_day: WeekStartDay? = null
 ) : Serializable
 
+/**
+ * @property label Label (read-only)
+ * @property value Value (read-only)
+ */
 data class LookmlModelExploreFieldEnumeration (
-  /**
-   * Label (read-only)
-   */
   var label: String? = null,
-  /**
-   * Value (read-only)
-   */
   var value: Any? = null
 ) : Serializable
 
+/**
+ * @property url URL to the map layer resource. (read-only)
+ * @property name Name of the map layer, as defined in LookML. (read-only)
+ * @property feature_key Specifies the name of the TopoJSON object that the map layer references. If not specified, use the first object.. (read-only)
+ * @property property_key Selects which property from the TopoJSON data to plot against. TopoJSON supports arbitrary metadata for each region. When null, the first matching property should be used. (read-only)
+ * @property property_label_key Which property from the TopoJSON data to use to label the region. When null, property_key should be used. (read-only)
+ * @property projection The preferred geographic projection of the map layer when displayed in a visualization that supports multiple geographic projections. (read-only)
+ * @property format Specifies the data format of the region information. Valid values are: "topojson", "vector_tile_region". (read-only)
+ * @property extents_json_url Specifies the URL to a JSON file that defines the geographic extents of each region available in the map layer. This data is used to automatically center the map on the available data for visualization purposes. The JSON file must be a JSON object where the keys are the mapping value of the feature (as specified by property_key) and the values are arrays of four numbers representing the west longitude, south latitude, east longitude, and north latitude extents of the region. The object must include a key for every possible value of property_key. (read-only)
+ * @property max_zoom_level The minimum zoom level that the map layer may be displayed at, for visualizations that support zooming. (read-only)
+ * @property min_zoom_level The maximum zoom level that the map layer may be displayed at, for visualizations that support zooming. (read-only)
+ */
 data class LookmlModelExploreFieldMapLayer (
-  /**
-   * URL to the map layer resource. (read-only)
-   */
   var url: String? = null,
-  /**
-   * Name of the map layer, as defined in LookML. (read-only)
-   */
   var name: String? = null,
-  /**
-   * Specifies the name of the TopoJSON object that the map layer references. If not specified, use the first object.. (read-only)
-   */
   var feature_key: String? = null,
-  /**
-   * Selects which property from the TopoJSON data to plot against. TopoJSON supports arbitrary metadata for each region. When null, the first matching property should be used. (read-only)
-   */
   var property_key: String? = null,
-  /**
-   * Which property from the TopoJSON data to use to label the region. When null, property_key should be used. (read-only)
-   */
   var property_label_key: String? = null,
-  /**
-   * The preferred geographic projection of the map layer when displayed in a visualization that supports multiple geographic projections. (read-only)
-   */
   var projection: String? = null,
-  /**
-   * Specifies the data format of the region information. Valid values are: "topojson", "vector_tile_region". (read-only)
-   */
   var format: Format? = null,
-  /**
-   * Specifies the URL to a JSON file that defines the geographic extents of each region available in the map layer. This data is used to automatically center the map on the available data for visualization purposes. The JSON file must be a JSON object where the keys are the mapping value of the feature (as specified by property_key) and the values are arrays of four numbers representing the west longitude, south latitude, east longitude, and north latitude extents of the region. The object must include a key for every possible value of property_key. (read-only)
-   */
   var extents_json_url: String? = null,
-  /**
-   * The minimum zoom level that the map layer may be displayed at, for visualizations that support zooming. (read-only)
-   */
   var max_zoom_level: Long? = null,
-  /**
-   * The maximum zoom level that the map layer may be displayed at, for visualizations that support zooming. (read-only)
-   */
   var min_zoom_level: Long? = null
 ) : Serializable
 
+/**
+ * @property field Filter field name (read-only)
+ * @property condition Filter condition value (read-only)
+ */
 data class LookmlModelExploreFieldMeasureFilters (
-  /**
-   * Filter field name (read-only)
-   */
   var field: String? = null,
-  /**
-   * Filter condition value (read-only)
-   */
   var condition: String? = null
 ) : Serializable
 
+/**
+ * @property dimensions Array of dimensions (read-only)
+ * @property measures Array of measures (read-only)
+ * @property filters Array of filters (read-only)
+ * @property parameters Array of parameters (read-only)
+ */
 data class LookmlModelExploreFieldset (
-  /**
-   * Array of dimensions (read-only)
-   */
   var dimensions: Array<LookmlModelExploreField>? = null,
-  /**
-   * Array of measures (read-only)
-   */
   var measures: Array<LookmlModelExploreField>? = null,
-  /**
-   * Array of filters (read-only)
-   */
   var filters: Array<LookmlModelExploreField>? = null,
-  /**
-   * Array of parameters (read-only)
-   */
   var parameters: Array<LookmlModelExploreField>? = null
 ) : Serializable
 
+/**
+ * @property value SQL Case label value (read-only)
+ * @property condition SQL Case condition expression (read-only)
+ */
 data class LookmlModelExploreFieldSqlCase (
-  /**
-   * SQL Case label value (read-only)
-   */
   var value: String? = null,
-  /**
-   * SQL Case condition expression (read-only)
-   */
   var condition: String? = null
 ) : Serializable
 
+/**
+ * @property name The type of time interval this field represents a grouping of. Valid values are: "day", "hour", "minute", "second", "millisecond", "microsecond", "week", "month", "quarter", "year". (read-only)
+ * @property count The number of intervals this field represents a grouping of. (read-only)
+ */
 data class LookmlModelExploreFieldTimeInterval (
-  /**
-   * The type of time interval this field represents a grouping of. Valid values are: "day", "hour", "minute", "second", "millisecond", "microsecond", "week", "month", "quarter", "year". (read-only)
-   */
   var name: Name? = null,
-  /**
-   * The number of intervals this field represents a grouping of. (read-only)
-   */
   var count: Long? = null
 ) : Serializable
 
+/**
+ * @property name Name of this join (and name of the view to join) (read-only)
+ * @property dependent_fields Fields referenced by the join (read-only)
+ * @property fields Fields of the joined view to pull into this explore (read-only)
+ * @property foreign_key Name of the dimension in this explore whose value is in the primary key of the joined view (read-only)
+ * @property from Name of view to join (read-only)
+ * @property outer_only Specifies whether all queries must use an outer join (read-only)
+ * @property relationship many_to_one, one_to_one, one_to_many, many_to_many (read-only)
+ * @property required_joins Names of joins that must always be included in SQL queries (read-only)
+ * @property sql_foreign_key SQL expression that produces a foreign key (read-only)
+ * @property sql_on SQL ON expression describing the join condition (read-only)
+ * @property sql_table_name SQL table name to join (read-only)
+ * @property type The join type: left_outer, full_outer, inner, or cross (read-only)
+ * @property view_label Label to display in UI selectors (read-only)
+ */
 data class LookmlModelExploreJoins (
-  /**
-   * Name of this join (and name of the view to join) (read-only)
-   */
   var name: String? = null,
-  /**
-   * Fields referenced by the join (read-only)
-   */
   var dependent_fields: Array<String>? = null,
-  /**
-   * Fields of the joined view to pull into this explore (read-only)
-   */
   var fields: Array<String>? = null,
-  /**
-   * Name of the dimension in this explore whose value is in the primary key of the joined view (read-only)
-   */
   var foreign_key: String? = null,
-  /**
-   * Name of view to join (read-only)
-   */
   var from: String? = null,
-  /**
-   * Specifies whether all queries must use an outer join (read-only)
-   */
   var outer_only: Boolean? = null,
-  /**
-   * many_to_one, one_to_one, one_to_many, many_to_many (read-only)
-   */
   var relationship: String? = null,
-  /**
-   * Names of joins that must always be included in SQL queries (read-only)
-   */
   var required_joins: Array<String>? = null,
-  /**
-   * SQL expression that produces a foreign key (read-only)
-   */
   var sql_foreign_key: String? = null,
-  /**
-   * SQL ON expression describing the join condition (read-only)
-   */
   var sql_on: String? = null,
-  /**
-   * SQL table name to join (read-only)
-   */
   var sql_table_name: String? = null,
-  /**
-   * The join type: left_outer, full_outer, inner, or cross (read-only)
-   */
   var type: String? = null,
-  /**
-   * Label to display in UI selectors (read-only)
-   */
   var view_label: String? = null
 ) : Serializable
 
+/**
+ * @property name Name (read-only)
+ * @property value Value set (read-only)
+ */
 data class LookmlModelExploreSet (
-  /**
-   * Name (read-only)
-   */
   var name: String? = null,
-  /**
-   * Value set (read-only)
-   */
   var value: Array<String>? = null
 ) : Serializable
 
+/**
+ * @property dimension_type  (read-only)
+ * @property measure_types  (read-only)
+ */
 data class LookmlModelExploreSupportedMeasureType (
-  /**
-   * (read-only)
-   */
   var dimension_type: String? = null,
-  /**
-   * (read-only)
-   */
   var measure_types: Array<String>? = null
 ) : Serializable
 
+/**
+ * @property name Name of the explore (read-only)
+ * @property description Description for the explore (read-only)
+ * @property label Label for the explore (read-only)
+ * @property hidden Is this explore marked as hidden (read-only)
+ * @property group_label Label used to group explores in the navigation menus (read-only)
+ * @property can Operations the current user is able to perform on this object (read-only)
+ */
 data class LookmlModelNavExplore (
-  /**
-   * Name of the explore (read-only)
-   */
   var name: String? = null,
-  /**
-   * Description for the explore (read-only)
-   */
   var description: String? = null,
-  /**
-   * Label for the explore (read-only)
-   */
   var label: String? = null,
-  /**
-   * Is this explore marked as hidden (read-only)
-   */
   var hidden: Boolean? = null,
-  /**
-   * Label used to group explores in the navigation menus (read-only)
-   */
   var group_label: String? = null,
-  /**
-   * Operations the current user is able to perform on this object (read-only)
-   */
   var can: Map<String,Boolean>? = null
 ) : Serializable
 
+/**
+ * @property can Operations the current user is able to perform on this object (read-only)
+ * @property model_name Name of model containing this test. (read-only)
+ * @property name Name of this test. (read-only)
+ * @property explore_name Name of the explore this test runs a query against (read-only)
+ * @property query_url_params The url parameters that can be used to reproduce this test's query on an explore. (read-only)
+ * @property file Name of the LookML file containing this test. (read-only)
+ * @property line Line number of this test in LookML. (read-only)
+ */
 data class LookmlTest (
-  /**
-   * Operations the current user is able to perform on this object (read-only)
-   */
   var can: Map<String,Boolean>? = null,
-  /**
-   * Name of model containing this test. (read-only)
-   */
   var model_name: String? = null,
-  /**
-   * Name of this test. (read-only)
-   */
   var name: String? = null,
-  /**
-   * Name of the explore this test runs a query against (read-only)
-   */
   var explore_name: String? = null,
-  /**
-   * The url parameters that can be used to reproduce this test's query on an explore. (read-only)
-   */
   var query_url_params: String? = null,
-  /**
-   * Name of the LookML file containing this test. (read-only)
-   */
   var file: String? = null,
-  /**
-   * Line number of this test in LookML. (read-only)
-   */
   var line: Long? = null
 ) : Serializable
 
+/**
+ * @property can Operations the current user is able to perform on this object (read-only)
+ * @property model_name Name of model containing this test. (read-only)
+ * @property test_name Name of this test. (read-only)
+ * @property assertions_count Number of assertions in this test (read-only)
+ * @property assertions_failed Number of assertions passed in this test (read-only)
+ * @property errors A list of any errors encountered by the test. (read-only)
+ * @property warnings A list of any warnings encountered by the test. (read-only)
+ * @property success True if this test passsed without errors. (read-only)
+ */
 data class LookmlTestResult (
-  /**
-   * Operations the current user is able to perform on this object (read-only)
-   */
   var can: Map<String,Boolean>? = null,
-  /**
-   * Name of model containing this test. (read-only)
-   */
   var model_name: String? = null,
-  /**
-   * Name of this test. (read-only)
-   */
   var test_name: String? = null,
-  /**
-   * Number of assertions in this test (read-only)
-   */
   var assertions_count: Long? = null,
-  /**
-   * Number of assertions passed in this test (read-only)
-   */
   var assertions_failed: Long? = null,
-  /**
-   * A list of any errors encountered by the test. (read-only)
-   */
   var errors: Array<ProjectError>? = null,
-  /**
-   * A list of any warnings encountered by the test. (read-only)
-   */
   var warnings: Array<ProjectError>? = null,
-  /**
-   * True if this test passsed without errors. (read-only)
-   */
   var success: Boolean? = null
 ) : Serializable
 
+/**
+ * @property id Model Id (read-only)
+ * @property label Model Label (read-only)
+ */
 data class LookModel (
-  /**
-   * Model Id (read-only)
-   */
   var id: String? = null,
-  /**
-   * Model Label (read-only)
-   */
   var label: String? = null
 ) : Serializable
 
+/**
+ * @property can Operations the current user is able to perform on this object (read-only)
+ * @property content_metadata_id Id of content metadata (read-only)
+ * @property id Unique Id (read-only)
+ * @property title Look Title
+ * @property content_favorite_id Content Favorite Id (read-only)
+ * @property created_at Time that the Look was created. (read-only)
+ * @property deleted Whether or not a look is 'soft' deleted.
+ * @property deleted_at Time that the Look was deleted. (read-only)
+ * @property deleter_id Id of User that deleted the look. (read-only)
+ * @property description Description
+ * @property embed_url Embed Url (read-only)
+ * @property excel_file_url Excel File Url (read-only)
+ * @property favorite_count Number of times favorited (read-only)
+ * @property google_spreadsheet_formula Google Spreadsheet Formula (read-only)
+ * @property image_embed_url Image Embed Url (read-only)
+ * @property is_run_on_load auto-run query when Look viewed
+ * @property last_accessed_at Time that the Look was last accessed by any user (read-only)
+ * @property last_updater_id Id of User that last updated the look. (read-only)
+ * @property last_viewed_at Time last viewed in the Looker web UI (read-only)
+ * @property model
+ * @property public Is Public
+ * @property public_slug Public Slug (read-only)
+ * @property public_url Public Url (read-only)
+ * @property query_id Query Id
+ * @property short_url Short Url (read-only)
+ * @property folder
+ * @property folder_id Folder Id
+ * @property updated_at Time that the Look was updated. (read-only)
+ * @property user_id User Id
+ * @property view_count Number of times viewed in the Looker web UI (read-only)
+ * @property user
+ * @property space_id Space Id
+ * @property space
+ * @property dashboards Dashboards (read-only)
+ */
 data class LookWithDashboards (
-  /**
-   * Operations the current user is able to perform on this object (read-only)
-   */
   var can: Map<String,Boolean>? = null,
-  /**
-   * Id of content metadata (read-only)
-   */
   var content_metadata_id: Long? = null,
-  /**
-   * Unique Id (read-only)
-   */
   var id: Long? = null,
-  /**
-   * Look Title
-   */
   var title: String? = null,
-  /**
-   * Content Favorite Id (read-only)
-   */
   var content_favorite_id: Long? = null,
-  /**
-   * Time that the Look was created. (read-only)
-   */
   var created_at: Date? = null,
-  /**
-   * Whether or not a look is 'soft' deleted.
-   */
   var deleted: Boolean? = null,
-  /**
-   * Time that the Look was deleted. (read-only)
-   */
   var deleted_at: Date? = null,
-  /**
-   * Id of User that deleted the look. (read-only)
-   */
   var deleter_id: Long? = null,
-  /**
-   * Description
-   */
   var description: String? = null,
-  /**
-   * Embed Url (read-only)
-   */
   var embed_url: String? = null,
-  /**
-   * Excel File Url (read-only)
-   */
   var excel_file_url: String? = null,
-  /**
-   * Number of times favorited (read-only)
-   */
   var favorite_count: Long? = null,
-  /**
-   * Google Spreadsheet Formula (read-only)
-   */
   var google_spreadsheet_formula: String? = null,
-  /**
-   * Image Embed Url (read-only)
-   */
   var image_embed_url: String? = null,
-  /**
-   * auto-run query when Look viewed
-   */
   var is_run_on_load: Boolean? = null,
-  /**
-   * Time that the Look was last accessed by any user (read-only)
-   */
   var last_accessed_at: Date? = null,
-  /**
-   * Id of User that last updated the look. (read-only)
-   */
   var last_updater_id: Long? = null,
-  /**
-   * Time last viewed in the Looker web UI (read-only)
-   */
   var last_viewed_at: Date? = null,
   var model: LookModel? = null,
-  /**
-   * Is Public
-   */
   var public: Boolean? = null,
-  /**
-   * Public Slug (read-only)
-   */
   var public_slug: String? = null,
-  /**
-   * Public Url (read-only)
-   */
   var public_url: String? = null,
-  /**
-   * Query Id
-   */
   var query_id: Long? = null,
-  /**
-   * Short Url (read-only)
-   */
   var short_url: String? = null,
   var folder: FolderBase? = null,
-  /**
-   * Folder Id
-   */
   var folder_id: String? = null,
-  /**
-   * Time that the Look was updated. (read-only)
-   */
   var updated_at: Date? = null,
-  /**
-   * User Id
-   */
   var user_id: Long? = null,
-  /**
-   * Number of times viewed in the Looker web UI (read-only)
-   */
   var view_count: Long? = null,
   var user: UserIdOnly? = null,
-  /**
-   * Space Id
-   */
   var space_id: String? = null,
   var space: SpaceBase? = null,
-  /**
-   * Dashboards (read-only)
-   */
   var dashboards: Array<DashboardBase>? = null
 ) : Serializable
 
+/**
+ * @property can Operations the current user is able to perform on this object (read-only)
+ * @property content_metadata_id Id of content metadata (read-only)
+ * @property id Unique Id (read-only)
+ * @property title Look Title
+ * @property content_favorite_id Content Favorite Id (read-only)
+ * @property created_at Time that the Look was created. (read-only)
+ * @property deleted Whether or not a look is 'soft' deleted.
+ * @property deleted_at Time that the Look was deleted. (read-only)
+ * @property deleter_id Id of User that deleted the look. (read-only)
+ * @property description Description
+ * @property embed_url Embed Url (read-only)
+ * @property excel_file_url Excel File Url (read-only)
+ * @property favorite_count Number of times favorited (read-only)
+ * @property google_spreadsheet_formula Google Spreadsheet Formula (read-only)
+ * @property image_embed_url Image Embed Url (read-only)
+ * @property is_run_on_load auto-run query when Look viewed
+ * @property last_accessed_at Time that the Look was last accessed by any user (read-only)
+ * @property last_updater_id Id of User that last updated the look. (read-only)
+ * @property last_viewed_at Time last viewed in the Looker web UI (read-only)
+ * @property model
+ * @property public Is Public
+ * @property public_slug Public Slug (read-only)
+ * @property public_url Public Url (read-only)
+ * @property query_id Query Id
+ * @property short_url Short Url (read-only)
+ * @property folder
+ * @property folder_id Folder Id
+ * @property updated_at Time that the Look was updated. (read-only)
+ * @property user_id User Id
+ * @property view_count Number of times viewed in the Looker web UI (read-only)
+ * @property user
+ * @property space_id Space Id
+ * @property space
+ * @property query
+ * @property url Url (read-only)
+ */
 data class LookWithQuery (
-  /**
-   * Operations the current user is able to perform on this object (read-only)
-   */
   var can: Map<String,Boolean>? = null,
-  /**
-   * Id of content metadata (read-only)
-   */
   var content_metadata_id: Long? = null,
-  /**
-   * Unique Id (read-only)
-   */
   var id: Long? = null,
-  /**
-   * Look Title
-   */
   var title: String? = null,
-  /**
-   * Content Favorite Id (read-only)
-   */
   var content_favorite_id: Long? = null,
-  /**
-   * Time that the Look was created. (read-only)
-   */
   var created_at: Date? = null,
-  /**
-   * Whether or not a look is 'soft' deleted.
-   */
   var deleted: Boolean? = null,
-  /**
-   * Time that the Look was deleted. (read-only)
-   */
   var deleted_at: Date? = null,
-  /**
-   * Id of User that deleted the look. (read-only)
-   */
   var deleter_id: Long? = null,
-  /**
-   * Description
-   */
   var description: String? = null,
-  /**
-   * Embed Url (read-only)
-   */
   var embed_url: String? = null,
-  /**
-   * Excel File Url (read-only)
-   */
   var excel_file_url: String? = null,
-  /**
-   * Number of times favorited (read-only)
-   */
   var favorite_count: Long? = null,
-  /**
-   * Google Spreadsheet Formula (read-only)
-   */
   var google_spreadsheet_formula: String? = null,
-  /**
-   * Image Embed Url (read-only)
-   */
   var image_embed_url: String? = null,
-  /**
-   * auto-run query when Look viewed
-   */
   var is_run_on_load: Boolean? = null,
-  /**
-   * Time that the Look was last accessed by any user (read-only)
-   */
   var last_accessed_at: Date? = null,
-  /**
-   * Id of User that last updated the look. (read-only)
-   */
   var last_updater_id: Long? = null,
-  /**
-   * Time last viewed in the Looker web UI (read-only)
-   */
   var last_viewed_at: Date? = null,
   var model: LookModel? = null,
-  /**
-   * Is Public
-   */
   var public: Boolean? = null,
-  /**
-   * Public Slug (read-only)
-   */
   var public_slug: String? = null,
-  /**
-   * Public Url (read-only)
-   */
   var public_url: String? = null,
-  /**
-   * Query Id
-   */
   var query_id: Long? = null,
-  /**
-   * Short Url (read-only)
-   */
   var short_url: String? = null,
   var folder: FolderBase? = null,
-  /**
-   * Folder Id
-   */
   var folder_id: String? = null,
-  /**
-   * Time that the Look was updated. (read-only)
-   */
   var updated_at: Date? = null,
-  /**
-   * User Id
-   */
   var user_id: Long? = null,
-  /**
-   * Number of times viewed in the Looker web UI (read-only)
-   */
   var view_count: Long? = null,
   var user: UserIdOnly? = null,
-  /**
-   * Space Id
-   */
   var space_id: String? = null,
   var space: SpaceBase? = null,
   var query: Query? = null,
-  /**
-   * Url (read-only)
-   */
   var url: String? = null
 ) : Serializable
 
+/**
+ * @property can Operations the current user is able to perform on this object (read-only)
+ * @property name Manifest project name (read-only)
+ * @property imports Imports for a project (read-only)
+ * @property localization_settings
+ */
 data class Manifest (
-  /**
-   * Operations the current user is able to perform on this object (read-only)
-   */
   var can: Map<String,Boolean>? = null,
-  /**
-   * Manifest project name (read-only)
-   */
   var name: String? = null,
-  /**
-   * Imports for a project (read-only)
-   */
   var imports: Array<ImportedProject>? = null,
   var localization_settings: LocalizationSettings? = null
 ) : Serializable
 
+/**
+ * @property field_name Field name to map onto in the merged results
+ * @property source_field_name Field name from the source query
+ */
 data class MergeFields (
-  /**
-   * Field name to map onto in the merged results
-   */
   var field_name: String? = null,
-  /**
-   * Field name from the source query
-   */
   var source_field_name: String? = null
 ) : Serializable
 
+/**
+ * @property can Operations the current user is able to perform on this object (read-only)
+ * @property column_limit Column Limit
+ * @property dynamic_fields Dynamic Fields
+ * @property id Unique Id (read-only)
+ * @property pivots Pivots
+ * @property result_maker_id Unique to get results (read-only)
+ * @property sorts Sorts
+ * @property source_queries Source Queries defining the results to be merged.
+ * @property total Total
+ * @property vis_config Visualization Config
+ */
 data class MergeQuery (
-  /**
-   * Operations the current user is able to perform on this object (read-only)
-   */
   var can: Map<String,Boolean>? = null,
-  /**
-   * Column Limit
-   */
   var column_limit: String? = null,
-  /**
-   * Dynamic Fields
-   */
   var dynamic_fields: String? = null,
-  /**
-   * Unique Id (read-only)
-   */
   var id: String? = null,
-  /**
-   * Pivots
-   */
   var pivots: Array<String>? = null,
-  /**
-   * Unique to get results (read-only)
-   */
   var result_maker_id: Long? = null,
-  /**
-   * Sorts
-   */
   var sorts: Array<String>? = null,
-  /**
-   * Source Queries defining the results to be merged.
-   */
   var source_queries: Array<MergeQuerySourceQuery>? = null,
-  /**
-   * Total
-   */
   var total: Boolean? = null,
-  /**
-   * Visualization Config
-   */
   var vis_config: Map<String,Any>? = null
 ) : Serializable
 
+/**
+ * @property merge_fields An array defining which fields of the source query are mapped onto fields of the merge query
+ * @property name Display name
+ * @property query_id Id of the query to merge
+ */
 data class MergeQuerySourceQuery (
-  /**
-   * An array defining which fields of the source query are mapped onto fields of the merge query
-   */
   var merge_fields: Array<MergeFields>? = null,
-  /**
-   * Display name
-   */
   var name: String? = null,
-  /**
-   * Id of the query to merge
-   */
   var query_id: Long? = null
 ) : Serializable
 
+/**
+ * @property can Operations the current user is able to perform on this object (read-only)
+ * @property all_access  (read-only)
+ * @property built_in  (read-only)
+ * @property id Unique Id (read-only)
+ * @property models
+ * @property name Name of ModelSet
+ * @property url Link to get this item (read-only)
+ */
 data class ModelSet (
-  /**
-   * Operations the current user is able to perform on this object (read-only)
-   */
   var can: Map<String,Boolean>? = null,
-  /**
-   * (read-only)
-   */
   var all_access: Boolean? = null,
-  /**
-   * (read-only)
-   */
   var built_in: Boolean? = null,
-  /**
-   * Unique Id (read-only)
-   */
   var id: Long? = null,
   var models: Array<String>? = null,
-  /**
-   * Name of ModelSet
-   */
   var name: String? = null,
-  /**
-   * Link to get this item (read-only)
-   */
   var url: UriString? = null
 ) : Serializable
 
+/**
+ * @property name Model name (read-only)
+ * @property project_file_id Project file (read-only)
+ */
 data class ModelsNotValidated (
-  /**
-   * Model name (read-only)
-   */
   var name: String? = null,
-  /**
-   * Project file (read-only)
-   */
   var project_file_id: String? = null
 ) : Serializable
 
@@ -4801,292 +2992,177 @@ enum class Name : Serializable {
   year
 }
 
+/**
+ * @property can Operations the current user is able to perform on this object (read-only)
+ * @property alternate_email_login_allowed Allow alternate email-based login via '/login/email' for admins and for specified users with the 'login_special_email' permission. This option is useful as a fallback during ldap setup, if ldap config problems occur later, or if you need to support some users who are not in your ldap directory. Looker email/password logins are always disabled for regular users when ldap is enabled.
+ * @property audience OpenID Provider Audience
+ * @property auth_requires_role Users will not be allowed to login at all unless a role for them is found in OIDC if set to true
+ * @property authorization_endpoint OpenID Provider Authorization Url
+ * @property default_new_user_group_ids (Write-Only) Array of ids of groups that will be applied to new users the first time they login via OIDC
+ * @property default_new_user_groups (Read-only) Groups that will be applied to new users the first time they login via OIDC (read-only)
+ * @property default_new_user_role_ids (Write-Only) Array of ids of roles that will be applied to new users the first time they login via OIDC
+ * @property default_new_user_roles (Read-only) Roles that will be applied to new users the first time they login via OIDC (read-only)
+ * @property enabled Enable/Disable OIDC authentication for the server
+ * @property groups (Read-only) Array of mappings between OIDC Groups and Looker Roles (read-only)
+ * @property groups_attribute Name of user record attributes used to indicate groups. Used when 'groups_finder_type' is set to 'grouped_attribute_values'
+ * @property groups_with_role_ids (Read/Write) Array of mappings between OIDC Groups and arrays of Looker Role ids
+ * @property identifier Relying Party Identifier (provided by OpenID Provider)
+ * @property issuer OpenID Provider Issuer
+ * @property modified_at When this config was last modified (read-only)
+ * @property modified_by User id of user who last modified this config (read-only)
+ * @property new_user_migration_types Merge first-time oidc login to existing user account by email addresses. When a user logs in for the first time via oidc this option will connect this user into their existing account by finding the account with a matching email address by testing the given types of credentials for existing users. Otherwise a new user account will be created for the user. This list (if provided) must be a comma separated list of string like 'email,ldap,google'
+ * @property scopes Array of scopes to request.
+ * @property secret (Write-Only) Relying Party Secret (provided by OpenID Provider)
+ * @property set_roles_from_groups Set user roles in Looker based on groups from OIDC
+ * @property test_slug Slug to identify configurations that are created in order to run a OIDC config test (read-only)
+ * @property token_endpoint OpenID Provider Token Url
+ * @property user_attribute_map_email Name of user record attributes used to indicate email address field
+ * @property user_attribute_map_first_name Name of user record attributes used to indicate first name
+ * @property user_attribute_map_last_name Name of user record attributes used to indicate last name
+ * @property user_attributes (Read-only) Array of mappings between OIDC User Attributes and Looker User Attributes (read-only)
+ * @property user_attributes_with_ids (Read/Write) Array of mappings between OIDC User Attributes and arrays of Looker User Attribute ids
+ * @property userinfo_endpoint OpenID Provider User Information Url
+ * @property allow_normal_group_membership Allow OIDC auth'd users to be members of non-reflected Looker groups. If 'false', user will be removed from non-reflected groups on login.
+ * @property allow_roles_from_normal_groups OIDC auth'd users will inherit roles from non-reflected Looker groups.
+ * @property allow_direct_roles Allows roles to be directly assigned to OIDC auth'd users.
+ * @property url Link to get this item (read-only)
+ */
 data class OIDCConfig (
-  /**
-   * Operations the current user is able to perform on this object (read-only)
-   */
   var can: Map<String,Boolean>? = null,
-  /**
-   * Allow alternate email-based login via '/login/email' for admins and for specified users with the 'login_special_email' permission. This option is useful as a fallback during ldap setup, if ldap config problems occur later, or if you need to support some users who are not in your ldap directory. Looker email/password logins are always disabled for regular users when ldap is enabled.
-   */
   var alternate_email_login_allowed: Boolean? = null,
-  /**
-   * OpenID Provider Audience
-   */
   var audience: String? = null,
-  /**
-   * Users will not be allowed to login at all unless a role for them is found in OIDC if set to true
-   */
   var auth_requires_role: Boolean? = null,
-  /**
-   * OpenID Provider Authorization Url
-   */
   var authorization_endpoint: UriString? = null,
-  /**
-   * (Write-Only) Array of ids of groups that will be applied to new users the first time they login via OIDC
-   */
   var default_new_user_group_ids: Array<Long>? = null,
-  /**
-   * (Read-only) Groups that will be applied to new users the first time they login via OIDC (read-only)
-   */
   var default_new_user_groups: Array<Group>? = null,
-  /**
-   * (Write-Only) Array of ids of roles that will be applied to new users the first time they login via OIDC
-   */
   var default_new_user_role_ids: Array<Long>? = null,
-  /**
-   * (Read-only) Roles that will be applied to new users the first time they login via OIDC (read-only)
-   */
   var default_new_user_roles: Array<Role>? = null,
-  /**
-   * Enable/Disable OIDC authentication for the server
-   */
   var enabled: Boolean? = null,
-  /**
-   * (Read-only) Array of mappings between OIDC Groups and Looker Roles (read-only)
-   */
   var groups: Array<OIDCGroupRead>? = null,
-  /**
-   * Name of user record attributes used to indicate groups. Used when 'groups_finder_type' is set to 'grouped_attribute_values'
-   */
   var groups_attribute: String? = null,
-  /**
-   * (Read/Write) Array of mappings between OIDC Groups and arrays of Looker Role ids
-   */
   var groups_with_role_ids: Array<OIDCGroupWrite>? = null,
-  /**
-   * Relying Party Identifier (provided by OpenID Provider)
-   */
   var identifier: String? = null,
-  /**
-   * OpenID Provider Issuer
-   */
   var issuer: String? = null,
-  /**
-   * When this config was last modified (read-only)
-   */
   var modified_at: Date? = null,
-  /**
-   * User id of user who last modified this config (read-only)
-   */
   var modified_by: Long? = null,
-  /**
-   * Merge first-time oidc login to existing user account by email addresses. When a user logs in for the first time via oidc this option will connect this user into their existing account by finding the account with a matching email address by testing the given types of credentials for existing users. Otherwise a new user account will be created for the user. This list (if provided) must be a comma separated list of string like 'email,ldap,google'
-   */
   var new_user_migration_types: String? = null,
-  /**
-   * Array of scopes to request.
-   */
   var scopes: Array<String>? = null,
-  /**
-   * (Write-Only) Relying Party Secret (provided by OpenID Provider)
-   */
   var secret: String? = null,
-  /**
-   * Set user roles in Looker based on groups from OIDC
-   */
   var set_roles_from_groups: Boolean? = null,
-  /**
-   * Slug to identify configurations that are created in order to run a OIDC config test (read-only)
-   */
   var test_slug: String? = null,
-  /**
-   * OpenID Provider Token Url
-   */
   var token_endpoint: String? = null,
-  /**
-   * Name of user record attributes used to indicate email address field
-   */
   var user_attribute_map_email: String? = null,
-  /**
-   * Name of user record attributes used to indicate first name
-   */
   var user_attribute_map_first_name: String? = null,
-  /**
-   * Name of user record attributes used to indicate last name
-   */
   var user_attribute_map_last_name: String? = null,
-  /**
-   * (Read-only) Array of mappings between OIDC User Attributes and Looker User Attributes (read-only)
-   */
   var user_attributes: Array<OIDCUserAttributeRead>? = null,
-  /**
-   * (Read/Write) Array of mappings between OIDC User Attributes and arrays of Looker User Attribute ids
-   */
   var user_attributes_with_ids: Array<OIDCUserAttributeWrite>? = null,
-  /**
-   * OpenID Provider User Information Url
-   */
   var userinfo_endpoint: UriString? = null,
-  /**
-   * Allow OIDC auth'd users to be members of non-reflected Looker groups. If 'false', user will be removed from non-reflected groups on login.
-   */
   var allow_normal_group_membership: Boolean? = null,
-  /**
-   * OIDC auth'd users will inherit roles from non-reflected Looker groups.
-   */
   var allow_roles_from_normal_groups: Boolean? = null,
-  /**
-   * Allows roles to be directly assigned to OIDC auth'd users.
-   */
   var allow_direct_roles: Boolean? = null,
-  /**
-   * Link to get this item (read-only)
-   */
   var url: UriString? = null
 ) : Serializable
 
+/**
+ * @property id Unique Id (read-only)
+ * @property looker_group_id Unique Id of group in Looker (read-only)
+ * @property looker_group_name Name of group in Looker (read-only)
+ * @property name Name of group in OIDC (read-only)
+ * @property roles Looker Roles (read-only)
+ */
 data class OIDCGroupRead (
-  /**
-   * Unique Id (read-only)
-   */
   var id: Long? = null,
-  /**
-   * Unique Id of group in Looker (read-only)
-   */
   var looker_group_id: Long? = null,
-  /**
-   * Name of group in Looker (read-only)
-   */
   var looker_group_name: String? = null,
-  /**
-   * Name of group in OIDC (read-only)
-   */
   var name: String? = null,
-  /**
-   * Looker Roles (read-only)
-   */
   var roles: Array<Role>? = null
 ) : Serializable
 
+/**
+ * @property id Unique Id
+ * @property looker_group_id Unique Id of group in Looker (read-only)
+ * @property looker_group_name Name of group in Looker
+ * @property name Name of group in OIDC
+ * @property role_ids Looker Role Ids
+ * @property can Operations the current user is able to perform on this object (read-only)
+ */
 data class OIDCGroupWrite (
-  /**
-   * Unique Id
-   */
   var id: Long? = null,
-  /**
-   * Unique Id of group in Looker (read-only)
-   */
   var looker_group_id: Long? = null,
-  /**
-   * Name of group in Looker
-   */
   var looker_group_name: String? = null,
-  /**
-   * Name of group in OIDC
-   */
   var name: String? = null,
-  /**
-   * Looker Role Ids
-   */
   var role_ids: Array<Long>? = null,
-  /**
-   * Operations the current user is able to perform on this object (read-only)
-   */
   var can: Map<String,Boolean>? = null
 ) : Serializable
 
+/**
+ * @property name Name of User Attribute in OIDC (read-only)
+ * @property required Required to be in OIDC assertion for login to be allowed to succeed (read-only)
+ * @property user_attributes Looker User Attributes (read-only)
+ */
 data class OIDCUserAttributeRead (
-  /**
-   * Name of User Attribute in OIDC (read-only)
-   */
   var name: String? = null,
-  /**
-   * Required to be in OIDC assertion for login to be allowed to succeed (read-only)
-   */
   var required: Boolean? = null,
-  /**
-   * Looker User Attributes (read-only)
-   */
   var user_attributes: Array<UserAttribute>? = null
 ) : Serializable
 
+/**
+ * @property name Name of User Attribute in OIDC
+ * @property required Required to be in OIDC assertion for login to be allowed to succeed
+ * @property user_attribute_ids Looker User Attribute Ids
+ * @property can Operations the current user is able to perform on this object (read-only)
+ */
 data class OIDCUserAttributeWrite (
-  /**
-   * Name of User Attribute in OIDC
-   */
   var name: String? = null,
-  /**
-   * Required to be in OIDC assertion for login to be allowed to succeed
-   */
   var required: Boolean? = null,
-  /**
-   * Looker User Attribute Ids
-   */
   var user_attribute_ids: Array<Long>? = null,
-  /**
-   * Operations the current user is able to perform on this object (read-only)
-   */
   var can: Map<String,Boolean>? = null
 ) : Serializable
 
+/**
+ * @property can Operations the current user is able to perform on this object (read-only)
+ * @property min_length Minimum number of characters required for a new password.  Must be between 7 and 100
+ * @property require_numeric Require at least one numeric character
+ * @property require_upperlower Require at least one uppercase and one lowercase letter
+ * @property require_special Require at least one special character
+ */
 data class PasswordConfig (
-  /**
-   * Operations the current user is able to perform on this object (read-only)
-   */
   var can: Map<String,Boolean>? = null,
-  /**
-   * Minimum number of characters required for a new password.  Must be between 7 and 100
-   */
   var min_length: Long? = null,
-  /**
-   * Require at least one numeric character
-   */
   var require_numeric: Boolean? = null,
-  /**
-   * Require at least one uppercase and one lowercase letter
-   */
   var require_upperlower: Boolean? = null,
-  /**
-   * Require at least one special character
-   */
   var require_special: Boolean? = null
 ) : Serializable
 
+/**
+ * @property can Operations the current user is able to perform on this object (read-only)
+ * @property permission Permission symbol (read-only)
+ * @property parent Dependency parent symbol (read-only)
+ * @property description Description (read-only)
+ */
 data class Permission (
-  /**
-   * Operations the current user is able to perform on this object (read-only)
-   */
   var can: Map<String,Boolean>? = null,
-  /**
-   * Permission symbol (read-only)
-   */
   var permission: String? = null,
-  /**
-   * Dependency parent symbol (read-only)
-   */
   var parent: String? = null,
-  /**
-   * Description (read-only)
-   */
   var description: String? = null
 ) : Serializable
 
+/**
+ * @property can Operations the current user is able to perform on this object (read-only)
+ * @property all_access  (read-only)
+ * @property built_in  (read-only)
+ * @property id Unique Id (read-only)
+ * @property name Name of PermissionSet
+ * @property permissions
+ * @property url Link to get this item (read-only)
+ */
 data class PermissionSet (
-  /**
-   * Operations the current user is able to perform on this object (read-only)
-   */
   var can: Map<String,Boolean>? = null,
-  /**
-   * (read-only)
-   */
   var all_access: Boolean? = null,
-  /**
-   * (read-only)
-   */
   var built_in: Boolean? = null,
-  /**
-   * Unique Id (read-only)
-   */
   var id: Long? = null,
-  /**
-   * Name of PermissionSet
-   */
   var name: String? = null,
   var permissions: Array<String>? = null,
-  /**
-   * Link to get this item (read-only)
-   */
   var url: UriString? = null
 ) : Serializable
 
@@ -5098,243 +3174,147 @@ enum class PermissionType : Serializable {
   edit
 }
 
+/**
+ * @property can Operations the current user is able to perform on this object (read-only)
+ * @property id Project Id (read-only)
+ * @property name Project display name
+ * @property uses_git If true the project is configured with a git repository (read-only)
+ * @property git_remote_url Git remote repository url
+ * @property git_username Git username for HTTPS authentication. (For production only, if using user attributes.)
+ * @property git_password (Write-Only) Git password for HTTPS authentication. (For production only, if using user attributes.)
+ * @property git_username_user_attribute User attribute name for username in per-user HTTPS authentication.
+ * @property git_password_user_attribute User attribute name for password in per-user HTTPS authentication.
+ * @property git_service_name Name of the git service provider
+ * @property git_application_server_http_port Port that HTTP(S) application server is running on (for PRs, file browsing, etc.)
+ * @property git_application_server_http_scheme Scheme that is running on application server (for PRs, file browsing, etc.) Valid values are: "http", "https".
+ * @property deploy_secret (Write-Only) Optional secret token with which to authenticate requests to the webhook deploy endpoint. If not set, endpoint is unauthenticated.
+ * @property unset_deploy_secret (Write-Only) When true, unsets the deploy secret to allow unauthenticated access to the webhook deploy endpoint.
+ * @property pull_request_mode The git pull request policy for this project. Valid values are: "off", "links", "recommended", "required".
+ * @property validation_required Validation policy: If true, the project must pass validation checks before project changes can be committed to the git repository
+ * @property git_release_mgmt_enabled If true, advanced git release management is enabled for this project
+ * @property allow_warnings Validation policy: If true, the project can be committed with warnings when `validation_required` is true. (`allow_warnings` does nothing if `validation_required` is false).
+ * @property is_example If true the project is an example project and cannot be modified (read-only)
+ */
 data class Project (
-  /**
-   * Operations the current user is able to perform on this object (read-only)
-   */
   var can: Map<String,Boolean>? = null,
-  /**
-   * Project Id (read-only)
-   */
   var id: String? = null,
-  /**
-   * Project display name
-   */
   var name: String? = null,
-  /**
-   * If true the project is configured with a git repository (read-only)
-   */
   var uses_git: Boolean? = null,
-  /**
-   * Git remote repository url
-   */
   var git_remote_url: String? = null,
-  /**
-   * Git username for HTTPS authentication. (For production only, if using user attributes.)
-   */
   var git_username: String? = null,
-  /**
-   * (Write-Only) Git password for HTTPS authentication. (For production only, if using user attributes.)
-   */
   var git_password: String? = null,
-  /**
-   * User attribute name for username in per-user HTTPS authentication.
-   */
   var git_username_user_attribute: String? = null,
-  /**
-   * User attribute name for password in per-user HTTPS authentication.
-   */
   var git_password_user_attribute: String? = null,
-  /**
-   * Name of the git service provider
-   */
   var git_service_name: String? = null,
-  /**
-   * Port that HTTP(S) application server is running on (for PRs, file browsing, etc.)
-   */
   var git_application_server_http_port: Long? = null,
-  /**
-   * Scheme that is running on application server (for PRs, file browsing, etc.) Valid values are: "http", "https".
-   */
   var git_application_server_http_scheme: GitApplicationServerHttpScheme? = null,
-  /**
-   * (Write-Only) Optional secret token with which to authenticate requests to the webhook deploy endpoint. If not set, endpoint is unauthenticated.
-   */
   var deploy_secret: String? = null,
-  /**
-   * (Write-Only) When true, unsets the deploy secret to allow unauthenticated access to the webhook deploy endpoint.
-   */
   var unset_deploy_secret: Boolean? = null,
-  /**
-   * The git pull request policy for this project. Valid values are: "off", "links", "recommended", "required".
-   */
   var pull_request_mode: PullRequestMode? = null,
-  /**
-   * Validation policy: If true, the project must pass validation checks before project changes can be committed to the git repository
-   */
   var validation_required: Boolean? = null,
-  /**
-   * If true, advanced git release management is enabled for this project
-   */
   var git_release_mgmt_enabled: Boolean? = null,
-  /**
-   * Validation policy: If true, the project can be committed with warnings when `validation_required` is true. (`allow_warnings` does nothing if `validation_required` is false).
-   */
   var allow_warnings: Boolean? = null,
-  /**
-   * If true the project is an example project and cannot be modified (read-only)
-   */
   var is_example: Boolean? = null
 ) : Serializable
 
+/**
+ * @property code A stable token that uniquely identifies this class of error, ignoring parameter values. Error message text may vary due to parameters or localization, but error codes do not. For example, a "File not found" error will have the same error code regardless of the filename in question or the user's display language (read-only)
+ * @property severity Severity: fatal, error, warning, info, success (read-only)
+ * @property kind Error classification: syntax, deprecation, model_configuration, etc (read-only)
+ * @property message Error message which may contain information such as dashboard or model names that may be considered sensitive in some use cases. Avoid storing or sending this message outside of Looker (read-only)
+ * @property field_name The field associated with this error (read-only)
+ * @property file_path Name of the file containing this error (read-only)
+ * @property line_number Line number in the file of this error (read-only)
+ * @property model_id The model associated with this error (read-only)
+ * @property explore The explore associated with this error (read-only)
+ * @property help_url A link to Looker documentation about this error (read-only)
+ * @property params Error parameters (read-only)
+ * @property sanitized_message A version of the error message that does not contain potentially sensitive information. Suitable for situations in which messages are stored or sent to consumers outside of Looker, such as external logs. Sanitized messages will display "(?)" where sensitive information would appear in the corresponding non-sanitized message (read-only)
+ */
 data class ProjectError (
-  /**
-   * A stable token that uniquely identifies this class of error, ignoring parameter values. Error message text may vary due to parameters or localization, but error codes do not. For example, a "File not found" error will have the same error code regardless of the filename in question or the user's display language (read-only)
-   */
   var code: String? = null,
-  /**
-   * Severity: fatal, error, warning, info, success (read-only)
-   */
   var severity: String? = null,
-  /**
-   * Error classification: syntax, deprecation, model_configuration, etc (read-only)
-   */
   var kind: String? = null,
-  /**
-   * Error message which may contain information such as dashboard or model names that may be considered sensitive in some use cases. Avoid storing or sending this message outside of Looker (read-only)
-   */
   var message: String? = null,
-  /**
-   * The field associated with this error (read-only)
-   */
   var field_name: String? = null,
-  /**
-   * Name of the file containing this error (read-only)
-   */
   var file_path: String? = null,
-  /**
-   * Line number in the file of this error (read-only)
-   */
   var line_number: Long? = null,
-  /**
-   * The model associated with this error (read-only)
-   */
   var model_id: String? = null,
-  /**
-   * The explore associated with this error (read-only)
-   */
   var explore: String? = null,
-  /**
-   * A link to Looker documentation about this error (read-only)
-   */
   var help_url: String? = null,
-  /**
-   * Error parameters (read-only)
-   */
   var params: Map<String,Any>? = null,
-  /**
-   * A version of the error message that does not contain potentially sensitive information. Suitable for situations in which messages are stored or sent to consumers outside of Looker, such as external logs. Sanitized messages will display "(?)" where sensitive information would appear in the corresponding non-sanitized message (read-only)
-   */
   var sanitized_message: String? = null
 ) : Serializable
 
+/**
+ * @property can Operations the current user is able to perform on this object (read-only)
+ * @property id An opaque token uniquely identifying a file within a project. Avoid parsing or decomposing the text of this token. This token is stable within a Looker release but may change between Looker releases (read-only)
+ * @property path Path, file name, and extension of the file relative to the project root directory (read-only)
+ * @property title Display name (read-only)
+ * @property type File type: model, view, etc (read-only)
+ * @property extension The extension of the file: .view.lkml, .model.lkml, etc (read-only)
+ * @property mime_type File mime type (read-only)
+ * @property editable State of editability for the file. (read-only)
+ * @property git_status
+ */
 data class ProjectFile (
-  /**
-   * Operations the current user is able to perform on this object (read-only)
-   */
   var can: Map<String,Boolean>? = null,
-  /**
-   * An opaque token uniquely identifying a file within a project. Avoid parsing or decomposing the text of this token. This token is stable within a Looker release but may change between Looker releases (read-only)
-   */
   var id: String? = null,
-  /**
-   * Path, file name, and extension of the file relative to the project root directory (read-only)
-   */
   var path: String? = null,
-  /**
-   * Display name (read-only)
-   */
   var title: String? = null,
-  /**
-   * File type: model, view, etc (read-only)
-   */
   var type: String? = null,
-  /**
-   * The extension of the file: .view.lkml, .model.lkml, etc (read-only)
-   */
   var extension: String? = null,
-  /**
-   * File mime type (read-only)
-   */
   var mime_type: String? = null,
-  /**
-   * State of editability for the file. (read-only)
-   */
   var editable: Boolean? = null,
   var git_status: GitStatus? = null
 ) : Serializable
 
+/**
+ * @property errors A list of project errors (read-only)
+ * @property project_digest A hash value computed from the project's current state (read-only)
+ * @property models_not_validated A list of models which were not fully validated (read-only)
+ * @property computation_time Duration of project validation in seconds (read-only)
+ */
 data class ProjectValidation (
-  /**
-   * A list of project errors (read-only)
-   */
   var errors: Array<ProjectError>? = null,
-  /**
-   * A hash value computed from the project's current state (read-only)
-   */
   var project_digest: String? = null,
-  /**
-   * A list of models which were not fully validated (read-only)
-   */
   var models_not_validated: Array<ModelsNotValidated>? = null,
-  /**
-   * Duration of project validation in seconds (read-only)
-   */
   var computation_time: Float? = null
 ) : Serializable
 
+/**
+ * @property errors A list of project errors (read-only)
+ * @property project_digest A hash value computed from the project's current state (read-only)
+ * @property models_not_validated A list of models which were not fully validated (read-only)
+ * @property computation_time Duration of project validation in seconds (read-only)
+ * @property stale If true, the cached project validation results are no longer accurate because the project has changed since the cached results were calculated (read-only)
+ */
 data class ProjectValidationCache (
-  /**
-   * A list of project errors (read-only)
-   */
   var errors: Array<ProjectError>? = null,
-  /**
-   * A hash value computed from the project's current state (read-only)
-   */
   var project_digest: String? = null,
-  /**
-   * A list of models which were not fully validated (read-only)
-   */
   var models_not_validated: Array<ModelsNotValidated>? = null,
-  /**
-   * Duration of project validation in seconds (read-only)
-   */
   var computation_time: Float? = null,
-  /**
-   * If true, the cached project validation results are no longer accurate because the project has changed since the cached results were calculated (read-only)
-   */
   var stale: Boolean? = null
 ) : Serializable
 
+/**
+ * @property can Operations the current user is able to perform on this object (read-only)
+ * @property project_id The id of the project (read-only)
+ * @property workspace_id The id of the local workspace containing the project files (read-only)
+ * @property git_status The status of the local git directory (read-only)
+ * @property git_head Git head revision name (read-only)
+ * @property dependency_status Status of the dependencies in your project. Valid values are: "lock_optional", "lock_required", "lock_error", "install_none". (read-only)
+ * @property git_branch
+ * @property lookml_type The lookml syntax used by all files in this project (read-only)
+ */
 data class ProjectWorkspace (
-  /**
-   * Operations the current user is able to perform on this object (read-only)
-   */
   var can: Map<String,Boolean>? = null,
-  /**
-   * The id of the project (read-only)
-   */
   var project_id: String? = null,
-  /**
-   * The id of the local workspace containing the project files (read-only)
-   */
   var workspace_id: String? = null,
-  /**
-   * The status of the local git directory (read-only)
-   */
   var git_status: String? = null,
-  /**
-   * Git head revision name (read-only)
-   */
   var git_head: String? = null,
-  /**
-   * Status of the dependencies in your project. Valid values are: "lock_optional", "lock_required", "lock_error", "install_none". (read-only)
-   */
   var dependency_status: DependencyStatus? = null,
   var git_branch: GitBranch? = null,
-  /**
-   * The lookml syntax used by all files in this project (read-only)
-   */
   var lookml_type: String? = null
 ) : Serializable
 
@@ -5348,304 +3328,169 @@ enum class PullRequestMode : Serializable {
   required
 }
 
+/**
+ * @property can Operations the current user is able to perform on this object (read-only)
+ * @property id Unique Id (read-only)
+ * @property model Model
+ * @property view Explore Name
+ * @property fields Fields
+ * @property pivots Pivots
+ * @property fill_fields Fill Fields
+ * @property filters Filters
+ * @property filter_expression Filter Expression
+ * @property sorts Sorting for the query results. Use the format `["view.field", ...]` to sort on fields in ascending order. Use the format `["view.field desc", ...]` to sort on fields in descending order. Use `["__UNSORTED__"]` (2 underscores before and after) to disable sorting entirely. Empty sorts `[]` will trigger a default sort.
+ * @property limit Limit
+ * @property column_limit Column Limit
+ * @property total Total
+ * @property row_total Raw Total
+ * @property subtotals Fields on which to run subtotals
+ * @property vis_config Visualization configuration properties. These properties are typically opaque and differ based on the type of visualization used. There is no specified set of allowed keys. The values can be any type supported by JSON. A "type" key with a string value is often present, and is used by Looker to determine which visualization to present. Visualizations ignore unknown vis_config properties.
+ * @property filter_config The filter_config represents the state of the filter UI on the explore page for a given query. When running a query via the Looker UI, this parameter takes precedence over "filters". When creating a query or modifying an existing query, "filter_config" should be set to null. Setting it to any other value could cause unexpected filtering behavior. The format should be considered opaque.
+ * @property visible_ui_sections Visible UI Sections
+ * @property slug Slug (read-only)
+ * @property dynamic_fields Dynamic Fields
+ * @property client_id Client Id: used to generate shortened explore URLs. If set by client, must be a unique 22 character alphanumeric string. Otherwise one will be generated.
+ * @property share_url Share Url (read-only)
+ * @property expanded_share_url Expanded Share Url (read-only)
+ * @property url Expanded Url (read-only)
+ * @property query_timezone Query Timezone
+ * @property has_table_calculations Has Table Calculations (read-only)
+ * @property runtime (DEPRECATED) Runtime (Deprecated)
+ */
 data class Query (
-  /**
-   * Operations the current user is able to perform on this object (read-only)
-   */
   var can: Map<String,Boolean>? = null,
-  /**
-   * Unique Id (read-only)
-   */
   var id: Long? = null,
-  /**
-   * Model
-   */
   var model: String,
-  /**
-   * Explore Name
-   */
   var view: String,
-  /**
-   * Fields
-   */
   var fields: Array<String>? = null,
-  /**
-   * Pivots
-   */
   var pivots: Array<String>? = null,
-  /**
-   * Fill Fields
-   */
   var fill_fields: Array<String>? = null,
-  /**
-   * Filters
-   */
   var filters: Map<String,Any>? = null,
-  /**
-   * Filter Expression
-   */
   var filter_expression: String? = null,
-  /**
-   * Sorting for the query results. Use the format `["view.field", ...]` to sort on fields in ascending order. Use the format `["view.field desc", ...]` to sort on fields in descending order. Use `["__UNSORTED__"]` (2 underscores before and after) to disable sorting entirely. Empty sorts `[]` will trigger a default sort.
-   */
   var sorts: Array<String>? = null,
-  /**
-   * Limit
-   */
   var limit: String? = null,
-  /**
-   * Column Limit
-   */
   var column_limit: String? = null,
-  /**
-   * Total
-   */
   var total: Boolean? = null,
-  /**
-   * Raw Total
-   */
   var row_total: String? = null,
-  /**
-   * Fields on which to run subtotals
-   */
   var subtotals: Array<String>? = null,
-  /**
-   * Visualization configuration properties. These properties are typically opaque and differ based on the type of visualization used. There is no specified set of allowed keys. The values can be any type supported by JSON. A "type" key with a string value is often present, and is used by Looker to determine which visualization to present. Visualizations ignore unknown vis_config properties.
-   */
   var vis_config: Map<String,Any>? = null,
-  /**
-   * The filter_config represents the state of the filter UI on the explore page for a given query. When running a query via the Looker UI, this parameter takes precedence over "filters". When creating a query or modifying an existing query, "filter_config" should be set to null. Setting it to any other value could cause unexpected filtering behavior. The format should be considered opaque.
-   */
   var filter_config: Map<String,Any>? = null,
-  /**
-   * Visible UI Sections
-   */
   var visible_ui_sections: String? = null,
-  /**
-   * Slug (read-only)
-   */
   var slug: String? = null,
-  /**
-   * Dynamic Fields
-   */
   var dynamic_fields: String? = null,
-  /**
-   * Client Id: used to generate shortened explore URLs. If set by client, must be a unique 22 character alphanumeric string. Otherwise one will be generated.
-   */
   var client_id: String? = null,
-  /**
-   * Share Url (read-only)
-   */
   var share_url: String? = null,
-  /**
-   * Expanded Share Url (read-only)
-   */
   var expanded_share_url: String? = null,
-  /**
-   * Expanded Url (read-only)
-   */
   var url: String? = null,
-  /**
-   * Query Timezone
-   */
   var query_timezone: String? = null,
-  /**
-   * Has Table Calculations (read-only)
-   */
   var has_table_calculations: Boolean? = null,
-  /**
-   * (DEPRECATED) Runtime (Deprecated)
-   */
   var runtime: Double? = null
 ) : Serializable
 
+/**
+ * @property can Operations the current user is able to perform on this object (read-only)
+ * @property id Unique Id (read-only)
+ * @property query_id Id of query
+ * @property query
+ * @property generate_links whether or not to generate links in the query response.
+ * @property force_production Use production models to run query (even is user is in dev mode).
+ * @property path_prefix Prefix to use for drill links.
+ * @property cache Whether or not to use the cache
+ * @property server_table_calcs Whether or not to run table calculations on the server
+ * @property cache_only Retrieve any results from cache even if the results have expired.
+ * @property cache_key cache key used to cache query. (read-only)
+ * @property status Status of query task.
+ * @property source Source of query task.
+ * @property runtime Runtime of prior queries. (read-only)
+ * @property rebuild_pdts Rebuild PDTS used in query.
+ * @property result_source Source of the results of the query. (read-only)
+ * @property look_id Id of look associated with query.
+ * @property dashboard_id Id of dashboard associated with query.
+ * @property result_format The data format of the query results. (read-only)
+ */
 data class QueryTask (
-  /**
-   * Operations the current user is able to perform on this object (read-only)
-   */
   var can: Map<String,Boolean>? = null,
-  /**
-   * Unique Id (read-only)
-   */
   var id: String? = null,
-  /**
-   * Id of query
-   */
   var query_id: Long? = null,
   var query: Query? = null,
-  /**
-   * whether or not to generate links in the query response.
-   */
   var generate_links: Boolean? = null,
-  /**
-   * Use production models to run query (even is user is in dev mode).
-   */
   var force_production: Boolean? = null,
-  /**
-   * Prefix to use for drill links.
-   */
   var path_prefix: String? = null,
-  /**
-   * Whether or not to use the cache
-   */
   var cache: Boolean? = null,
-  /**
-   * Whether or not to run table calculations on the server
-   */
   var server_table_calcs: Boolean? = null,
-  /**
-   * Retrieve any results from cache even if the results have expired.
-   */
   var cache_only: Boolean? = null,
-  /**
-   * cache key used to cache query. (read-only)
-   */
   var cache_key: String? = null,
-  /**
-   * Status of query task.
-   */
   var status: String? = null,
-  /**
-   * Source of query task.
-   */
   var source: String? = null,
-  /**
-   * Runtime of prior queries. (read-only)
-   */
   var runtime: Float? = null,
-  /**
-   * Rebuild PDTS used in query.
-   */
   var rebuild_pdts: Boolean? = null,
-  /**
-   * Source of the results of the query. (read-only)
-   */
   var result_source: String? = null,
-  /**
-   * Id of look associated with query.
-   */
   var look_id: Long? = null,
-  /**
-   * Id of dashboard associated with query.
-   */
   var dashboard_id: String? = null,
-  /**
-   * The data format of the query results. (read-only)
-   */
   var result_format: String? = null
 ) : Serializable
 
+/**
+ * @property can Operations the current user is able to perform on this object (read-only)
+ * @property created_at Date/Time render task was created (read-only)
+ * @property dashboard_filters Filter values to apply to the dashboard queries, in URL query format (read-only)
+ * @property dashboard_id Id of dashboard to render (read-only)
+ * @property dashboard_style Dashboard layout style: single_column or tiled (read-only)
+ * @property finalized_at Date/Time render task was completed (read-only)
+ * @property height Output height in pixels. Flowed layouts may ignore this value. (read-only)
+ * @property id Id of this render task (read-only)
+ * @property look_id Id of look to render (read-only)
+ * @property lookml_dashboard_id Id of lookml dashboard to render (read-only)
+ * @property query_id Id of query to render (read-only)
+ * @property query_runtime Number of seconds elapsed running queries (read-only)
+ * @property render_runtime Number of seconds elapsed rendering data (read-only)
+ * @property result_format Output format: pdf, png, or jpg (read-only)
+ * @property runtime Total seconds elapsed for render task (read-only)
+ * @property status Render task status: enqueued_for_query, querying, enqueued_for_render, rendering, success, failure (read-only)
+ * @property status_detail Additional information about the current status (read-only)
+ * @property user_id The user account permissions in which the render task will execute (read-only)
+ * @property width Output width in pixels (read-only)
+ */
 data class RenderTask (
-  /**
-   * Operations the current user is able to perform on this object (read-only)
-   */
   var can: Map<String,Boolean>? = null,
-  /**
-   * Date/Time render task was created (read-only)
-   */
   var created_at: String? = null,
-  /**
-   * Filter values to apply to the dashboard queries, in URL query format (read-only)
-   */
   var dashboard_filters: String? = null,
-  /**
-   * Id of dashboard to render (read-only)
-   */
   var dashboard_id: Long? = null,
-  /**
-   * Dashboard layout style: single_column or tiled (read-only)
-   */
   var dashboard_style: String? = null,
-  /**
-   * Date/Time render task was completed (read-only)
-   */
   var finalized_at: String? = null,
-  /**
-   * Output height in pixels. Flowed layouts may ignore this value. (read-only)
-   */
   var height: Long? = null,
-  /**
-   * Id of this render task (read-only)
-   */
   var id: String? = null,
-  /**
-   * Id of look to render (read-only)
-   */
   var look_id: Long? = null,
-  /**
-   * Id of lookml dashboard to render (read-only)
-   */
   var lookml_dashboard_id: String? = null,
-  /**
-   * Id of query to render (read-only)
-   */
   var query_id: Long? = null,
-  /**
-   * Number of seconds elapsed running queries (read-only)
-   */
   var query_runtime: Double? = null,
-  /**
-   * Number of seconds elapsed rendering data (read-only)
-   */
   var render_runtime: Double? = null,
-  /**
-   * Output format: pdf, png, or jpg (read-only)
-   */
   var result_format: String? = null,
-  /**
-   * Total seconds elapsed for render task (read-only)
-   */
   var runtime: Double? = null,
-  /**
-   * Render task status: enqueued_for_query, querying, enqueued_for_render, rendering, success, failure (read-only)
-   */
   var status: String? = null,
-  /**
-   * Additional information about the current status (read-only)
-   */
   var status_detail: String? = null,
-  /**
-   * The user account permissions in which the render task will execute (read-only)
-   */
   var user_id: Long? = null,
-  /**
-   * Output width in pixels (read-only)
-   */
   var width: Long? = null
 ) : Serializable
 
+/**
+ * @property can Operations the current user is able to perform on this object (read-only)
+ * @property id Unique Id (read-only)
+ * @property root_project_id Root project Id (read-only)
+ * @property remote_url Git remote repository url (read-only)
+ * @property git_username Git username for HTTPS authentication.
+ * @property git_password (Write-Only) Git password for HTTPS authentication.
+ * @property ssh_public_key Public deploy key for SSH authentication.
+ * @property is_configured Whether the credentials have been configured for the Git Repository. (read-only)
+ */
 data class RepositoryCredential (
-  /**
-   * Operations the current user is able to perform on this object (read-only)
-   */
   var can: Map<String,Boolean>? = null,
-  /**
-   * Unique Id (read-only)
-   */
   var id: String? = null,
-  /**
-   * Root project Id (read-only)
-   */
   var root_project_id: String? = null,
-  /**
-   * Git remote repository url (read-only)
-   */
   var remote_url: String? = null,
-  /**
-   * Git username for HTTPS authentication.
-   */
   var git_username: String? = null,
-  /**
-   * (Write-Only) Git password for HTTPS authentication.
-   */
   var git_password: String? = null,
-  /**
-   * Public deploy key for SSH authentication.
-   */
   var ssh_public_key: String? = null,
-  /**
-   * Whether the credentials have been configured for the Git Repository. (read-only)
-   */
   var is_configured: Boolean? = null
 ) : Serializable
 
@@ -5665,937 +3510,555 @@ enum class ResultFormat : Serializable {
   gsxml
 }
 
+/**
+ * @property model The model this filterable comes from (used for field suggestions). (read-only)
+ * @property view The view this filterable comes from (used for field suggestions). (read-only)
+ * @property name The name of the filterable thing (Query or Merged Results). (read-only)
+ * @property listen array of dashboard_filter_name: and field: objects. (read-only)
+ */
 data class ResultMakerFilterables (
-  /**
-   * The model this filterable comes from (used for field suggestions). (read-only)
-   */
   var model: String? = null,
-  /**
-   * The view this filterable comes from (used for field suggestions). (read-only)
-   */
   var view: String? = null,
-  /**
-   * The name of the filterable thing (Query or Merged Results). (read-only)
-   */
   var name: String? = null,
-  /**
-   * array of dashboard_filter_name: and field: objects. (read-only)
-   */
   var listen: Array<ResultMakerFilterablesListen>? = null
 ) : Serializable
 
+/**
+ * @property dashboard_filter_name The name of a dashboard filter to listen to.
+ * @property field The name of the field in the filterable to filter with the value of the dashboard filter.
+ */
 data class ResultMakerFilterablesListen (
-  /**
-   * The name of a dashboard filter to listen to.
-   */
   var dashboard_filter_name: String? = null,
-  /**
-   * The name of the field in the filterable to filter with the value of the dashboard filter.
-   */
   var field: String? = null
 ) : Serializable
 
+/**
+ * @property id Unique Id. (read-only)
+ * @property dynamic_fields JSON string of dynamic field information. (read-only)
+ * @property filterables array of items that can be filtered and information about them. (read-only)
+ * @property sorts Sorts of the constituent Look, Query, or Merge Query (read-only)
+ * @property merge_result_id ID of merge result if this is a merge_result. (read-only)
+ * @property total Total of the constituent Look, Query, or Merge Query (read-only)
+ * @property query_id ID of query if this is a query. (read-only)
+ * @property sql_query_id ID of SQL Query if this is a SQL Runner Query (read-only)
+ * @property query
+ * @property vis_config Vis config of the constituent Query, or Merge Query. (read-only)
+ */
 data class ResultMakerWithIdVisConfigAndDynamicFields (
-  /**
-   * Unique Id. (read-only)
-   */
   var id: Long? = null,
-  /**
-   * JSON string of dynamic field information. (read-only)
-   */
   var dynamic_fields: String? = null,
-  /**
-   * array of items that can be filtered and information about them. (read-only)
-   */
   var filterables: Array<ResultMakerFilterables>? = null,
-  /**
-   * Sorts of the constituent Look, Query, or Merge Query (read-only)
-   */
   var sorts: Array<String>? = null,
-  /**
-   * ID of merge result if this is a merge_result. (read-only)
-   */
   var merge_result_id: String? = null,
-  /**
-   * Total of the constituent Look, Query, or Merge Query (read-only)
-   */
   var total: Boolean? = null,
-  /**
-   * ID of query if this is a query. (read-only)
-   */
   var query_id: Long? = null,
-  /**
-   * ID of SQL Query if this is a SQL Runner Query (read-only)
-   */
   var sql_query_id: String? = null,
   var query: Query? = null,
-  /**
-   * Vis config of the constituent Query, or Merge Query. (read-only)
-   */
   var vis_config: Map<String,Any>? = null
 ) : Serializable
 
+/**
+ * @property can Operations the current user is able to perform on this object (read-only)
+ * @property id Unique Id (read-only)
+ * @property name Name of Role
+ * @property permission_set
+ * @property permission_set_id (Write-Only) Id of permission set
+ * @property model_set
+ * @property model_set_id (Write-Only) Id of model set
+ * @property url Link to get this item (read-only)
+ * @property users_url Link to get list of users with this role (read-only)
+ */
 data class Role (
-  /**
-   * Operations the current user is able to perform on this object (read-only)
-   */
   var can: Map<String,Boolean>? = null,
-  /**
-   * Unique Id (read-only)
-   */
   var id: Long? = null,
-  /**
-   * Name of Role
-   */
   var name: String? = null,
   var permission_set: PermissionSet? = null,
-  /**
-   * (Write-Only) Id of permission set
-   */
   var permission_set_id: Long? = null,
   var model_set: ModelSet? = null,
-  /**
-   * (Write-Only) Id of model set
-   */
   var model_set_id: Long? = null,
-  /**
-   * Link to get this item (read-only)
-   */
   var url: UriString? = null,
-  /**
-   * Link to get list of users with this role (read-only)
-   */
   var users_url: UriString? = null
 ) : Serializable
 
+/**
+ * @property can Operations the current user is able to perform on this object (read-only)
+ * @property id Unique Id (read-only)
+ * @property user
+ * @property query
+ * @property sql_query
+ * @property look
+ * @property created_at Date/Time Query was initiated (read-only)
+ * @property completed_at Date/Time Query was completed (read-only)
+ * @property query_id Query Id (read-only)
+ * @property source Source (look, dashboard, queryrunner, explore, etc.) (read-only)
+ * @property node_id Node Id (read-only)
+ * @property slug Slug (read-only)
+ * @property query_task_id ID of a Query Task (read-only)
+ * @property cache_key Cache Key (read-only)
+ * @property connection_name Connection (read-only)
+ * @property dialect Dialect (read-only)
+ * @property connection_id Connection ID (read-only)
+ * @property message Additional Information(Error message or verbose status) (read-only)
+ * @property status Status description (read-only)
+ * @property runtime Number of seconds elapsed running the Query (read-only)
+ * @property sql SQL text of the query as run (read-only)
+ */
 data class RunningQueries (
-  /**
-   * Operations the current user is able to perform on this object (read-only)
-   */
   var can: Map<String,Boolean>? = null,
-  /**
-   * Unique Id (read-only)
-   */
   var id: Long? = null,
   var user: UserPublic? = null,
   var query: Query? = null,
   var sql_query: SqlQuery? = null,
   var look: LookBasic? = null,
-  /**
-   * Date/Time Query was initiated (read-only)
-   */
   var created_at: String? = null,
-  /**
-   * Date/Time Query was completed (read-only)
-   */
   var completed_at: String? = null,
-  /**
-   * Query Id (read-only)
-   */
   var query_id: String? = null,
-  /**
-   * Source (look, dashboard, queryrunner, explore, etc.) (read-only)
-   */
   var source: String? = null,
-  /**
-   * Node Id (read-only)
-   */
   var node_id: String? = null,
-  /**
-   * Slug (read-only)
-   */
   var slug: String? = null,
-  /**
-   * ID of a Query Task (read-only)
-   */
   var query_task_id: String? = null,
-  /**
-   * Cache Key (read-only)
-   */
   var cache_key: String? = null,
-  /**
-   * Connection (read-only)
-   */
   var connection_name: String? = null,
-  /**
-   * Dialect (read-only)
-   */
   var dialect: String? = null,
-  /**
-   * Connection ID (read-only)
-   */
   var connection_id: String? = null,
-  /**
-   * Additional Information(Error message or verbose status) (read-only)
-   */
   var message: String? = null,
-  /**
-   * Status description (read-only)
-   */
   var status: String? = null,
-  /**
-   * Number of seconds elapsed running the Query (read-only)
-   */
   var runtime: Double? = null,
-  /**
-   * SQL text of the query as run (read-only)
-   */
   var sql: String? = null
 ) : Serializable
 
+/**
+ * @property can Operations the current user is able to perform on this object (read-only)
+ * @property enabled Enable/Disable Saml authentication for the server
+ * @property idp_cert Identity Provider Certificate (provided by IdP)
+ * @property idp_url Identity Provider Url (provided by IdP)
+ * @property idp_issuer Identity Provider Issuer (provided by IdP)
+ * @property idp_audience Identity Provider Audience (set in IdP config). Optional in Looker. Set this only if you want Looker to validate the audience value returned by the IdP.
+ * @property allowed_clock_drift Count of seconds of clock drift to allow when validating timestamps of assertions.
+ * @property user_attribute_map_email Name of user record attributes used to indicate email address field
+ * @property user_attribute_map_first_name Name of user record attributes used to indicate first name
+ * @property user_attribute_map_last_name Name of user record attributes used to indicate last name
+ * @property new_user_migration_types Merge first-time saml login to existing user account by email addresses. When a user logs in for the first time via saml this option will connect this user into their existing account by finding the account with a matching email address by testing the given types of credentials for existing users. Otherwise a new user account will be created for the user. This list (if provided) must be a comma separated list of string like 'email,ldap,google'
+ * @property alternate_email_login_allowed Allow alternate email-based login via '/login/email' for admins and for specified users with the 'login_special_email' permission. This option is useful as a fallback during ldap setup, if ldap config problems occur later, or if you need to support some users who are not in your ldap directory. Looker email/password logins are always disabled for regular users when ldap is enabled.
+ * @property test_slug Slug to identify configurations that are created in order to run a Saml config test (read-only)
+ * @property modified_at When this config was last modified (read-only)
+ * @property modified_by User id of user who last modified this config (read-only)
+ * @property default_new_user_roles (Read-only) Roles that will be applied to new users the first time they login via Saml (read-only)
+ * @property default_new_user_groups (Read-only) Groups that will be applied to new users the first time they login via Saml (read-only)
+ * @property default_new_user_role_ids (Write-Only) Array of ids of roles that will be applied to new users the first time they login via Saml
+ * @property default_new_user_group_ids (Write-Only) Array of ids of groups that will be applied to new users the first time they login via Saml
+ * @property set_roles_from_groups Set user roles in Looker based on groups from Saml
+ * @property groups_attribute Name of user record attributes used to indicate groups. Used when 'groups_finder_type' is set to 'grouped_attribute_values'
+ * @property groups (Read-only) Array of mappings between Saml Groups and Looker Roles (read-only)
+ * @property groups_with_role_ids (Read/Write) Array of mappings between Saml Groups and arrays of Looker Role ids
+ * @property auth_requires_role Users will not be allowed to login at all unless a role for them is found in Saml if set to true
+ * @property user_attributes (Read-only) Array of mappings between Saml User Attributes and Looker User Attributes (read-only)
+ * @property user_attributes_with_ids (Read/Write) Array of mappings between Saml User Attributes and arrays of Looker User Attribute ids
+ * @property groups_finder_type Identifier for a strategy for how Looker will find groups in the SAML response. One of ['grouped_attribute_values', 'individual_attributes']
+ * @property groups_member_value Value for group attribute used to indicate membership. Used when 'groups_finder_type' is set to 'individual_attributes'
+ * @property bypass_login_page Bypass the login page when user authentication is required. Redirect to IdP immediately instead.
+ * @property allow_normal_group_membership Allow SAML auth'd users to be members of non-reflected Looker groups. If 'false', user will be removed from non-reflected groups on login.
+ * @property allow_roles_from_normal_groups SAML auth'd users will inherit roles from non-reflected Looker groups.
+ * @property allow_direct_roles Allows roles to be directly assigned to SAML auth'd users.
+ * @property url Link to get this item (read-only)
+ */
 data class SamlConfig (
-  /**
-   * Operations the current user is able to perform on this object (read-only)
-   */
   var can: Map<String,Boolean>? = null,
-  /**
-   * Enable/Disable Saml authentication for the server
-   */
   var enabled: Boolean? = null,
-  /**
-   * Identity Provider Certificate (provided by IdP)
-   */
   var idp_cert: String? = null,
-  /**
-   * Identity Provider Url (provided by IdP)
-   */
   var idp_url: String? = null,
-  /**
-   * Identity Provider Issuer (provided by IdP)
-   */
   var idp_issuer: String? = null,
-  /**
-   * Identity Provider Audience (set in IdP config). Optional in Looker. Set this only if you want Looker to validate the audience value returned by the IdP.
-   */
   var idp_audience: String? = null,
-  /**
-   * Count of seconds of clock drift to allow when validating timestamps of assertions.
-   */
   var allowed_clock_drift: Long? = null,
-  /**
-   * Name of user record attributes used to indicate email address field
-   */
   var user_attribute_map_email: String? = null,
-  /**
-   * Name of user record attributes used to indicate first name
-   */
   var user_attribute_map_first_name: String? = null,
-  /**
-   * Name of user record attributes used to indicate last name
-   */
   var user_attribute_map_last_name: String? = null,
-  /**
-   * Merge first-time saml login to existing user account by email addresses. When a user logs in for the first time via saml this option will connect this user into their existing account by finding the account with a matching email address by testing the given types of credentials for existing users. Otherwise a new user account will be created for the user. This list (if provided) must be a comma separated list of string like 'email,ldap,google'
-   */
   var new_user_migration_types: String? = null,
-  /**
-   * Allow alternate email-based login via '/login/email' for admins and for specified users with the 'login_special_email' permission. This option is useful as a fallback during ldap setup, if ldap config problems occur later, or if you need to support some users who are not in your ldap directory. Looker email/password logins are always disabled for regular users when ldap is enabled.
-   */
   var alternate_email_login_allowed: Boolean? = null,
-  /**
-   * Slug to identify configurations that are created in order to run a Saml config test (read-only)
-   */
   var test_slug: String? = null,
-  /**
-   * When this config was last modified (read-only)
-   */
   var modified_at: String? = null,
-  /**
-   * User id of user who last modified this config (read-only)
-   */
   var modified_by: String? = null,
-  /**
-   * (Read-only) Roles that will be applied to new users the first time they login via Saml (read-only)
-   */
   var default_new_user_roles: Array<Role>? = null,
-  /**
-   * (Read-only) Groups that will be applied to new users the first time they login via Saml (read-only)
-   */
   var default_new_user_groups: Array<Group>? = null,
-  /**
-   * (Write-Only) Array of ids of roles that will be applied to new users the first time they login via Saml
-   */
   var default_new_user_role_ids: Array<Long>? = null,
-  /**
-   * (Write-Only) Array of ids of groups that will be applied to new users the first time they login via Saml
-   */
   var default_new_user_group_ids: Array<Long>? = null,
-  /**
-   * Set user roles in Looker based on groups from Saml
-   */
   var set_roles_from_groups: Boolean? = null,
-  /**
-   * Name of user record attributes used to indicate groups. Used when 'groups_finder_type' is set to 'grouped_attribute_values'
-   */
   var groups_attribute: String? = null,
-  /**
-   * (Read-only) Array of mappings between Saml Groups and Looker Roles (read-only)
-   */
   var groups: Array<SamlGroupRead>? = null,
-  /**
-   * (Read/Write) Array of mappings between Saml Groups and arrays of Looker Role ids
-   */
   var groups_with_role_ids: Array<SamlGroupWrite>? = null,
-  /**
-   * Users will not be allowed to login at all unless a role for them is found in Saml if set to true
-   */
   var auth_requires_role: Boolean? = null,
-  /**
-   * (Read-only) Array of mappings between Saml User Attributes and Looker User Attributes (read-only)
-   */
   var user_attributes: Array<SamlUserAttributeRead>? = null,
-  /**
-   * (Read/Write) Array of mappings between Saml User Attributes and arrays of Looker User Attribute ids
-   */
   var user_attributes_with_ids: Array<SamlUserAttributeWrite>? = null,
-  /**
-   * Identifier for a strategy for how Looker will find groups in the SAML response. One of ['grouped_attribute_values', 'individual_attributes']
-   */
   var groups_finder_type: String? = null,
-  /**
-   * Value for group attribute used to indicate membership. Used when 'groups_finder_type' is set to 'individual_attributes'
-   */
   var groups_member_value: String? = null,
-  /**
-   * Bypass the login page when user authentication is required. Redirect to IdP immediately instead.
-   */
   var bypass_login_page: Boolean? = null,
-  /**
-   * Allow SAML auth'd users to be members of non-reflected Looker groups. If 'false', user will be removed from non-reflected groups on login.
-   */
   var allow_normal_group_membership: Boolean? = null,
-  /**
-   * SAML auth'd users will inherit roles from non-reflected Looker groups.
-   */
   var allow_roles_from_normal_groups: Boolean? = null,
-  /**
-   * Allows roles to be directly assigned to SAML auth'd users.
-   */
   var allow_direct_roles: Boolean? = null,
-  /**
-   * Link to get this item (read-only)
-   */
   var url: UriString? = null
 ) : Serializable
 
+/**
+ * @property id Unique Id (read-only)
+ * @property looker_group_id Unique Id of group in Looker (read-only)
+ * @property looker_group_name Name of group in Looker (read-only)
+ * @property name Name of group in Saml (read-only)
+ * @property roles Looker Roles (read-only)
+ * @property url Link to saml config (read-only)
+ */
 data class SamlGroupRead (
-  /**
-   * Unique Id (read-only)
-   */
   var id: Long? = null,
-  /**
-   * Unique Id of group in Looker (read-only)
-   */
   var looker_group_id: Long? = null,
-  /**
-   * Name of group in Looker (read-only)
-   */
   var looker_group_name: String? = null,
-  /**
-   * Name of group in Saml (read-only)
-   */
   var name: String? = null,
-  /**
-   * Looker Roles (read-only)
-   */
   var roles: Array<Role>? = null,
-  /**
-   * Link to saml config (read-only)
-   */
   var url: UriString? = null
 ) : Serializable
 
+/**
+ * @property id Unique Id
+ * @property looker_group_id Unique Id of group in Looker (read-only)
+ * @property looker_group_name Name of group in Looker
+ * @property name Name of group in Saml
+ * @property role_ids Looker Role Ids
+ * @property url Link to saml config (read-only)
+ */
 data class SamlGroupWrite (
-  /**
-   * Unique Id
-   */
   var id: Long? = null,
-  /**
-   * Unique Id of group in Looker (read-only)
-   */
   var looker_group_id: Long? = null,
-  /**
-   * Name of group in Looker
-   */
   var looker_group_name: String? = null,
-  /**
-   * Name of group in Saml
-   */
   var name: String? = null,
-  /**
-   * Looker Role Ids
-   */
   var role_ids: Array<Long>? = null,
-  /**
-   * Link to saml config (read-only)
-   */
   var url: UriString? = null
 ) : Serializable
 
+/**
+ * @property can Operations the current user is able to perform on this object (read-only)
+ * @property idp_issuer Identify Provider Issuer (read-only)
+ * @property idp_url Identify Provider Url (read-only)
+ * @property idp_cert Identify Provider Certificate (read-only)
+ */
 data class SamlMetadataParseResult (
-  /**
-   * Operations the current user is able to perform on this object (read-only)
-   */
   var can: Map<String,Boolean>? = null,
-  /**
-   * Identify Provider Issuer (read-only)
-   */
   var idp_issuer: String? = null,
-  /**
-   * Identify Provider Url (read-only)
-   */
   var idp_url: String? = null,
-  /**
-   * Identify Provider Certificate (read-only)
-   */
   var idp_cert: String? = null
 ) : Serializable
 
+/**
+ * @property name Name of User Attribute in Saml (read-only)
+ * @property required Required to be in Saml assertion for login to be allowed to succeed (read-only)
+ * @property user_attributes Looker User Attributes (read-only)
+ * @property url Link to saml config (read-only)
+ */
 data class SamlUserAttributeRead (
-  /**
-   * Name of User Attribute in Saml (read-only)
-   */
   var name: String? = null,
-  /**
-   * Required to be in Saml assertion for login to be allowed to succeed (read-only)
-   */
   var required: Boolean? = null,
-  /**
-   * Looker User Attributes (read-only)
-   */
   var user_attributes: Array<UserAttribute>? = null,
-  /**
-   * Link to saml config (read-only)
-   */
   var url: UriString? = null
 ) : Serializable
 
+/**
+ * @property name Name of User Attribute in Saml
+ * @property required Required to be in Saml assertion for login to be allowed to succeed
+ * @property user_attribute_ids Looker User Attribute Ids
+ * @property url Link to saml config (read-only)
+ */
 data class SamlUserAttributeWrite (
-  /**
-   * Name of User Attribute in Saml
-   */
   var name: String? = null,
-  /**
-   * Required to be in Saml assertion for login to be allowed to succeed
-   */
   var required: Boolean? = null,
-  /**
-   * Looker User Attribute Ids
-   */
   var user_attribute_ids: Array<Long>? = null,
-  /**
-   * Link to saml config (read-only)
-   */
   var url: UriString? = null
 ) : Serializable
 
+/**
+ * @property name Name of this scheduled plan
+ * @property user_id User Id which owns this scheduled plan
+ * @property run_as_recipient Whether schedule is run as recipient (only applicable for email recipients)
+ * @property enabled Whether the ScheduledPlan is enabled
+ * @property look_id Id of a look
+ * @property dashboard_id Id of a dashboard
+ * @property lookml_dashboard_id Id of a LookML dashboard
+ * @property filters_string Query string to run look or dashboard with
+ * @property dashboard_filters (DEPRECATED) Alias for filters_string field
+ * @property require_results Delivery should occur if running the dashboard or look returns results
+ * @property require_no_results Delivery should occur if the dashboard look does not return results
+ * @property require_change Delivery should occur if data have changed since the last run
+ * @property send_all_results Will run an unlimited query and send all results.
+ * @property crontab Vixie-Style crontab specification when to run
+ * @property datagroup Name of a datagroup; if specified will run when datagroup triggered (can't be used with cron string)
+ * @property timezone Timezone for interpreting the specified crontab (default is Looker instance timezone)
+ * @property query_id Query id
+ * @property scheduled_plan_destination Scheduled plan destinations
+ * @property run_once Whether the plan in question should only be run once (usually for testing)
+ * @property include_links Whether links back to Looker should be included in this ScheduledPlan
+ * @property pdf_paper_size The size of paper the PDF should be formatted to fit. Valid values are: "letter", "legal", "tabloid", "a0", "a1", "a2", "a3", "a4", "a5".
+ * @property pdf_landscape Whether the PDF should be formatted for landscape orientation
+ * @property embed Whether this schedule is in an embed context or not
+ * @property color_theme Color scheme of the dashboard if applicable
+ * @property long_tables Whether or not to expand table vis to full length
+ * @property inline_table_width The pixel width at which we render the inline table visualizations
+ * @property id Unique Id (read-only)
+ * @property created_at Date and time when ScheduledPlan was created (read-only)
+ * @property updated_at Date and time when ScheduledPlan was last updated (read-only)
+ * @property title Title (read-only)
+ * @property user
+ * @property next_run_at When the ScheduledPlan will next run (null if running once) (read-only)
+ * @property last_run_at When the ScheduledPlan was last run (read-only)
+ * @property can Operations the current user is able to perform on this object (read-only)
+ */
 data class ScheduledPlan (
-  /**
-   * Name of this scheduled plan
-   */
   var name: String? = null,
-  /**
-   * User Id which owns this scheduled plan
-   */
   var user_id: Long? = null,
-  /**
-   * Whether schedule is run as recipient (only applicable for email recipients)
-   */
   var run_as_recipient: Boolean? = null,
-  /**
-   * Whether the ScheduledPlan is enabled
-   */
   var enabled: Boolean? = null,
-  /**
-   * Id of a look
-   */
   var look_id: Long? = null,
-  /**
-   * Id of a dashboard
-   */
   var dashboard_id: Long? = null,
-  /**
-   * Id of a LookML dashboard
-   */
   var lookml_dashboard_id: String? = null,
-  /**
-   * Query string to run look or dashboard with
-   */
   var filters_string: String? = null,
-  /**
-   * (DEPRECATED) Alias for filters_string field
-   */
   var dashboard_filters: String? = null,
-  /**
-   * Delivery should occur if running the dashboard or look returns results
-   */
   var require_results: Boolean? = null,
-  /**
-   * Delivery should occur if the dashboard look does not return results
-   */
   var require_no_results: Boolean? = null,
-  /**
-   * Delivery should occur if data have changed since the last run
-   */
   var require_change: Boolean? = null,
-  /**
-   * Will run an unlimited query and send all results.
-   */
   var send_all_results: Boolean? = null,
-  /**
-   * Vixie-Style crontab specification when to run
-   */
   var crontab: String? = null,
-  /**
-   * Name of a datagroup; if specified will run when datagroup triggered (can't be used with cron string)
-   */
   var datagroup: String? = null,
-  /**
-   * Timezone for interpreting the specified crontab (default is Looker instance timezone)
-   */
   var timezone: String? = null,
-  /**
-   * Query id
-   */
   var query_id: String? = null,
-  /**
-   * Scheduled plan destinations
-   */
   var scheduled_plan_destination: Array<ScheduledPlanDestination>? = null,
-  /**
-   * Whether the plan in question should only be run once (usually for testing)
-   */
   var run_once: Boolean? = null,
-  /**
-   * Whether links back to Looker should be included in this ScheduledPlan
-   */
   var include_links: Boolean? = null,
-  /**
-   * The size of paper the PDF should be formatted to fit. Valid values are: "letter", "legal", "tabloid", "a0", "a1", "a2", "a3", "a4", "a5".
-   */
   var pdf_paper_size: String? = null,
-  /**
-   * Whether the PDF should be formatted for landscape orientation
-   */
   var pdf_landscape: Boolean? = null,
-  /**
-   * Whether this schedule is in an embed context or not
-   */
   var embed: Boolean? = null,
-  /**
-   * Color scheme of the dashboard if applicable
-   */
   var color_theme: String? = null,
-  /**
-   * Whether or not to expand table vis to full length
-   */
   var long_tables: Boolean? = null,
-  /**
-   * The pixel width at which we render the inline table visualizations
-   */
   var inline_table_width: Long? = null,
-  /**
-   * Unique Id (read-only)
-   */
   var id: Long? = null,
-  /**
-   * Date and time when ScheduledPlan was created (read-only)
-   */
   var created_at: Date? = null,
-  /**
-   * Date and time when ScheduledPlan was last updated (read-only)
-   */
   var updated_at: Date? = null,
-  /**
-   * Title (read-only)
-   */
   var title: String? = null,
   var user: UserPublic? = null,
-  /**
-   * When the ScheduledPlan will next run (null if running once) (read-only)
-   */
   var next_run_at: Date? = null,
-  /**
-   * When the ScheduledPlan was last run (read-only)
-   */
   var last_run_at: Date? = null,
-  /**
-   * Operations the current user is able to perform on this object (read-only)
-   */
   var can: Map<String,Boolean>? = null
 ) : Serializable
 
+/**
+ * @property id Unique Id (read-only)
+ * @property scheduled_plan_id Id of a scheduled plan you own
+ * @property format The data format to send to the given destination. Supported formats vary by destination, but include: "txt", "csv", "inline_json", "json", "json_detail", "xlsx", "html", "wysiwyg_pdf", "assembled_pdf", "wysiwyg_png"
+ * @property apply_formatting Are values formatted? (containing currency symbols, digit separators, etc.
+ * @property apply_vis Whether visualization options are applied to the results.
+ * @property address Address for recipient. For email e.g. 'user@example.com'. For webhooks e.g. 'https://domain/path'. For Amazon S3 e.g. 's3://bucket-name/path/'. For SFTP e.g. 'sftp://host-name/path/'.
+ * @property looker_recipient Whether the recipient is a Looker user on the current instance (only applicable for email recipients) (read-only)
+ * @property type Type of the address ('email', 'webhook', 's3', or 'sftp')
+ * @property parameters JSON object containing parameters for external scheduling. For Amazon S3, this requires keys and values for access_key_id and region. For SFTP, this requires a key and value for username.
+ * @property secret_parameters (Write-Only) JSON object containing secret parameters for external scheduling. For Amazon S3, this requires a key and value for secret_access_key. For SFTP, this requires a key and value for password.
+ * @property message Optional message to be included in scheduled emails
+ */
 data class ScheduledPlanDestination (
-  /**
-   * Unique Id (read-only)
-   */
   var id: Long? = null,
-  /**
-   * Id of a scheduled plan you own
-   */
   var scheduled_plan_id: Long? = null,
-  /**
-   * The data format to send to the given destination. Supported formats vary by destination, but include: "txt", "csv", "inline_json", "json", "json_detail", "xlsx", "html", "wysiwyg_pdf", "assembled_pdf", "wysiwyg_png"
-   */
   var format: String? = null,
-  /**
-   * Are values formatted? (containing currency symbols, digit separators, etc.
-   */
   var apply_formatting: Boolean? = null,
-  /**
-   * Whether visualization options are applied to the results.
-   */
   var apply_vis: Boolean? = null,
-  /**
-   * Address for recipient. For email e.g. 'user@example.com'. For webhooks e.g. 'https://domain/path'. For Amazon S3 e.g. 's3://bucket-name/path/'. For SFTP e.g. 'sftp://host-name/path/'.
-   */
   var address: String? = null,
-  /**
-   * Whether the recipient is a Looker user on the current instance (only applicable for email recipients) (read-only)
-   */
   var looker_recipient: Boolean? = null,
-  /**
-   * Type of the address ('email', 'webhook', 's3', or 'sftp')
-   */
   var type: String? = null,
-  /**
-   * JSON object containing parameters for external scheduling. For Amazon S3, this requires keys and values for access_key_id and region. For SFTP, this requires a key and value for username.
-   */
   var parameters: String? = null,
-  /**
-   * (Write-Only) JSON object containing secret parameters for external scheduling. For Amazon S3, this requires a key and value for secret_access_key. For SFTP, this requires a key and value for password.
-   */
   var secret_parameters: String? = null,
-  /**
-   * Optional message to be included in scheduled emails
-   */
   var message: String? = null
 ) : Serializable
 
+/**
+ * @property can Operations the current user is able to perform on this object (read-only)
+ * @property id Unique Id (read-only)
+ * @property ip_address IP address of user when this session was initiated (read-only)
+ * @property browser User's browser type (read-only)
+ * @property operating_system User's Operating System (read-only)
+ * @property city City component of user location (derived from IP address) (read-only)
+ * @property state State component of user location (derived from IP address) (read-only)
+ * @property country Country component of user location (derived from IP address) (read-only)
+ * @property credentials_type Type of credentials used for logging in this session (read-only)
+ * @property extended_at Time when this session was last extended by the user (read-only)
+ * @property extended_count Number of times this session was extended (read-only)
+ * @property sudo_user_id Actual user in the case when this session represents one user sudo'ing as another (read-only)
+ * @property created_at Time when this session was initiated (read-only)
+ * @property expires_at Time when this session will expire (read-only)
+ * @property url Link to get this item (read-only)
+ */
 data class Session (
-  /**
-   * Operations the current user is able to perform on this object (read-only)
-   */
   var can: Map<String,Boolean>? = null,
-  /**
-   * Unique Id (read-only)
-   */
   var id: Long? = null,
-  /**
-   * IP address of user when this session was initiated (read-only)
-   */
   var ip_address: String? = null,
-  /**
-   * User's browser type (read-only)
-   */
   var browser: String? = null,
-  /**
-   * User's Operating System (read-only)
-   */
   var operating_system: String? = null,
-  /**
-   * City component of user location (derived from IP address) (read-only)
-   */
   var city: String? = null,
-  /**
-   * State component of user location (derived from IP address) (read-only)
-   */
   var state: String? = null,
-  /**
-   * Country component of user location (derived from IP address) (read-only)
-   */
   var country: String? = null,
-  /**
-   * Type of credentials used for logging in this session (read-only)
-   */
   var credentials_type: String? = null,
-  /**
-   * Time when this session was last extended by the user (read-only)
-   */
   var extended_at: String? = null,
-  /**
-   * Number of times this session was extended (read-only)
-   */
   var extended_count: Long? = null,
-  /**
-   * Actual user in the case when this session represents one user sudo'ing as another (read-only)
-   */
   var sudo_user_id: Long? = null,
-  /**
-   * Time when this session was initiated (read-only)
-   */
   var created_at: String? = null,
-  /**
-   * Time when this session will expire (read-only)
-   */
   var expires_at: String? = null,
-  /**
-   * Link to get this item (read-only)
-   */
   var url: UriString? = null
 ) : Serializable
 
+/**
+ * @property can Operations the current user is able to perform on this object (read-only)
+ * @property allow_persistent_sessions Allow users to have persistent sessions when they login
+ * @property session_minutes Number of minutes for user sessions.  Must be between 5 and 43200
+ * @property unlimited_sessions_per_user Allow users to have an unbounded number of concurrent sessions (otherwise, users will be limited to only one session at a time).
+ * @property use_inactivity_based_logout Enforce session logout for sessions that are inactive for 15 minutes.
+ * @property track_session_location Track location of session when user logs in.
+ */
 data class SessionConfig (
-  /**
-   * Operations the current user is able to perform on this object (read-only)
-   */
   var can: Map<String,Boolean>? = null,
-  /**
-   * Allow users to have persistent sessions when they login
-   */
   var allow_persistent_sessions: Boolean? = null,
-  /**
-   * Number of minutes for user sessions.  Must be between 5 and 43200
-   */
   var session_minutes: Long? = null,
-  /**
-   * Allow users to have an unbounded number of concurrent sessions (otherwise, users will be limited to only one session at a time).
-   */
   var unlimited_sessions_per_user: Boolean? = null,
-  /**
-   * Enforce session logout for sessions that are inactive for 15 minutes.
-   */
   var use_inactivity_based_logout: Boolean? = null,
-  /**
-   * Track location of session when user logs in.
-   */
   var track_session_location: Boolean? = null
 ) : Serializable
 
+/**
+ * @property name Name of the snippet (read-only)
+ * @property label Label of the snippet (read-only)
+ * @property sql SQL text of the snippet (read-only)
+ * @property can Operations the current user is able to perform on this object (read-only)
+ */
 data class Snippet (
-  /**
-   * Name of the snippet (read-only)
-   */
   var name: String? = null,
-  /**
-   * Label of the snippet (read-only)
-   */
   var label: String? = null,
-  /**
-   * SQL text of the snippet (read-only)
-   */
   var sql: String? = null,
-  /**
-   * Operations the current user is able to perform on this object (read-only)
-   */
   var can: Map<String,Boolean>? = null
 ) : Serializable
 
+/**
+ * @property name Unique Name
+ * @property parent_id Id of Parent. If the parent id is null, this is a root-level entry
+ * @property id Unique Id (read-only)
+ * @property content_metadata_id Id of content metadata (read-only)
+ * @property created_at Time the space was created (read-only)
+ * @property creator_id User Id of Creator (read-only)
+ * @property child_count Children Count (read-only)
+ * @property external_id Embedder's Id if this space was autogenerated as an embedding shared space via 'external_group_id' in an SSO embed login (read-only)
+ * @property is_embed Space is an embed space (read-only)
+ * @property is_embed_shared_root Space is the root embed shared space (read-only)
+ * @property is_embed_users_root Space is the root embed users space (read-only)
+ * @property is_personal Space is a user's personal space (read-only)
+ * @property is_personal_descendant Space is descendant of a user's personal space (read-only)
+ * @property is_shared_root Space is the root shared space (read-only)
+ * @property is_users_root Space is the root user space (read-only)
+ * @property can Operations the current user is able to perform on this object (read-only)
+ * @property dashboards Dashboards (read-only)
+ * @property looks Looks (read-only)
+ */
 data class Space (
-  /**
-   * Unique Name
-   */
   var name: String,
-  /**
-   * Id of Parent. If the parent id is null, this is a root-level entry
-   */
   var parent_id: String? = null,
-  /**
-   * Unique Id (read-only)
-   */
   var id: String? = null,
-  /**
-   * Id of content metadata (read-only)
-   */
   var content_metadata_id: Long? = null,
-  /**
-   * Time the space was created (read-only)
-   */
   var created_at: Date? = null,
-  /**
-   * User Id of Creator (read-only)
-   */
   var creator_id: Long? = null,
-  /**
-   * Children Count (read-only)
-   */
   var child_count: Long? = null,
-  /**
-   * Embedder's Id if this space was autogenerated as an embedding shared space via 'external_group_id' in an SSO embed login (read-only)
-   */
   var external_id: String? = null,
-  /**
-   * Space is an embed space (read-only)
-   */
   var is_embed: Boolean? = null,
-  /**
-   * Space is the root embed shared space (read-only)
-   */
   var is_embed_shared_root: Boolean? = null,
-  /**
-   * Space is the root embed users space (read-only)
-   */
   var is_embed_users_root: Boolean? = null,
-  /**
-   * Space is a user's personal space (read-only)
-   */
   var is_personal: Boolean? = null,
-  /**
-   * Space is descendant of a user's personal space (read-only)
-   */
   var is_personal_descendant: Boolean? = null,
-  /**
-   * Space is the root shared space (read-only)
-   */
   var is_shared_root: Boolean? = null,
-  /**
-   * Space is the root user space (read-only)
-   */
   var is_users_root: Boolean? = null,
-  /**
-   * Operations the current user is able to perform on this object (read-only)
-   */
   var can: Map<String,Boolean>? = null,
-  /**
-   * Dashboards (read-only)
-   */
   var dashboards: Array<DashboardBase>? = null,
-  /**
-   * Looks (read-only)
-   */
   var looks: Array<LookWithDashboards>? = null
 ) : Serializable
 
+/**
+ * @property name Unique Name
+ * @property parent_id Id of Parent. If the parent id is null, this is a root-level entry
+ * @property id Unique Id (read-only)
+ * @property content_metadata_id Id of content metadata (read-only)
+ * @property created_at Time the space was created (read-only)
+ * @property creator_id User Id of Creator (read-only)
+ * @property child_count Children Count (read-only)
+ * @property external_id Embedder's Id if this space was autogenerated as an embedding shared space via 'external_group_id' in an SSO embed login (read-only)
+ * @property is_embed Space is an embed space (read-only)
+ * @property is_embed_shared_root Space is the root embed shared space (read-only)
+ * @property is_embed_users_root Space is the root embed users space (read-only)
+ * @property is_personal Space is a user's personal space (read-only)
+ * @property is_personal_descendant Space is descendant of a user's personal space (read-only)
+ * @property is_shared_root Space is the root shared space (read-only)
+ * @property is_users_root Space is the root user space (read-only)
+ * @property can Operations the current user is able to perform on this object (read-only)
+ */
 data class SpaceBase (
-  /**
-   * Unique Name
-   */
   var name: String,
-  /**
-   * Id of Parent. If the parent id is null, this is a root-level entry
-   */
   var parent_id: String? = null,
-  /**
-   * Unique Id (read-only)
-   */
   var id: String? = null,
-  /**
-   * Id of content metadata (read-only)
-   */
   var content_metadata_id: Long? = null,
-  /**
-   * Time the space was created (read-only)
-   */
   var created_at: Date? = null,
-  /**
-   * User Id of Creator (read-only)
-   */
   var creator_id: Long? = null,
-  /**
-   * Children Count (read-only)
-   */
   var child_count: Long? = null,
-  /**
-   * Embedder's Id if this space was autogenerated as an embedding shared space via 'external_group_id' in an SSO embed login (read-only)
-   */
   var external_id: String? = null,
-  /**
-   * Space is an embed space (read-only)
-   */
   var is_embed: Boolean? = null,
-  /**
-   * Space is the root embed shared space (read-only)
-   */
   var is_embed_shared_root: Boolean? = null,
-  /**
-   * Space is the root embed users space (read-only)
-   */
   var is_embed_users_root: Boolean? = null,
-  /**
-   * Space is a user's personal space (read-only)
-   */
   var is_personal: Boolean? = null,
-  /**
-   * Space is descendant of a user's personal space (read-only)
-   */
   var is_personal_descendant: Boolean? = null,
-  /**
-   * Space is the root shared space (read-only)
-   */
   var is_shared_root: Boolean? = null,
-  /**
-   * Space is the root user space (read-only)
-   */
   var is_users_root: Boolean? = null,
-  /**
-   * Operations the current user is able to perform on this object (read-only)
-   */
   var can: Map<String,Boolean>? = null
 ) : Serializable
 
+/**
+ * @property can Operations the current user is able to perform on this object (read-only)
+ * @property slug The identifier of the SQL query (read-only)
+ * @property last_runtime Number of seconds this query took to run the most recent time it was run (read-only)
+ * @property run_count Number of times this query has been run (read-only)
+ * @property browser_limit Maximum number of rows this query will display on the SQL Runner page (read-only)
+ * @property sql SQL query text (read-only)
+ * @property last_run_at The most recent time this query was run (read-only)
+ * @property connection
+ * @property model_name Model name this query uses (read-only)
+ * @property creator
+ * @property explore_url Explore page URL for this SQL query (read-only)
+ * @property plaintext Should this query be rendered as plain text (read-only)
+ * @property vis_config Visualization configuration properties. These properties are typically opaque and differ based on the type of visualization used. There is no specified set of allowed keys. The values can be any type supported by JSON. A "type" key with a string value is often present, and is used by Looker to determine which visualization to present. Visualizations ignore unknown vis_config properties.
+ * @property result_maker_id ID of the ResultMakerLookup entry.
+ */
 data class SqlQuery (
-  /**
-   * Operations the current user is able to perform on this object (read-only)
-   */
   var can: Map<String,Boolean>? = null,
-  /**
-   * The identifier of the SQL query (read-only)
-   */
   var slug: String? = null,
-  /**
-   * Number of seconds this query took to run the most recent time it was run (read-only)
-   */
   var last_runtime: Float? = null,
-  /**
-   * Number of times this query has been run (read-only)
-   */
   var run_count: Long? = null,
-  /**
-   * Maximum number of rows this query will display on the SQL Runner page (read-only)
-   */
   var browser_limit: Long? = null,
-  /**
-   * SQL query text (read-only)
-   */
   var sql: String? = null,
-  /**
-   * The most recent time this query was run (read-only)
-   */
   var last_run_at: String? = null,
   var connection: DBConnectionBase? = null,
-  /**
-   * Model name this query uses (read-only)
-   */
   var model_name: String? = null,
   var creator: UserPublic? = null,
-  /**
-   * Explore page URL for this SQL query (read-only)
-   */
   var explore_url: String? = null,
-  /**
-   * Should this query be rendered as plain text (read-only)
-   */
   var plaintext: Boolean? = null,
-  /**
-   * Visualization configuration properties. These properties are typically opaque and differ based on the type of visualization used. There is no specified set of allowed keys. The values can be any type supported by JSON. A "type" key with a string value is often present, and is used by Looker to determine which visualization to present. Visualizations ignore unknown vis_config properties.
-   */
   var vis_config: Map<String,Any>? = null,
-  /**
-   * ID of the ResultMakerLookup entry.
-   */
   var result_maker_id: Long? = null
 ) : Serializable
 
+/**
+ * @property connection_name Name of the db connection on which to run this query
+ * @property connection_id (DEPRECATED) Use `connection_name` instead
+ * @property model_name Name of LookML Model (this or `connection_id` required)
+ * @property sql SQL query
+ * @property vis_config Visualization configuration properties. These properties are typically opaque and differ based on the type of visualization used. There is no specified set of allowed keys. The values can be any type supported by JSON. A "type" key with a string value is often present, and is used by Looker to determine which visualization to present. Visualizations ignore unknown vis_config properties.
+ */
 data class SqlQueryCreate (
-  /**
-   * Name of the db connection on which to run this query
-   */
   var connection_name: String? = null,
-  /**
-   * (DEPRECATED) Use `connection_name` instead
-   */
   var connection_id: String? = null,
-  /**
-   * Name of LookML Model (this or `connection_id` required)
-   */
   var model_name: String? = null,
-  /**
-   * SQL query
-   */
   var sql: String? = null,
-  /**
-   * Visualization configuration properties. These properties are typically opaque and differ based on the type of visualization used. There is no specified set of allowed keys. The values can be any type supported by JSON. A "type" key with a string value is often present, and is used by Looker to determine which visualization to present. Visualizations ignore unknown vis_config properties.
-   */
   var vis_config: Map<String,Any>? = null
 ) : Serializable
 
@@ -6651,159 +4114,136 @@ enum class SupportedVisualizationFormattings : Serializable {
   noapply
 }
 
+/**
+ * @property can Operations the current user is able to perform on this object (read-only)
+ * @property begin_at Timestamp for when this theme becomes active. Null=always
+ * @property end_at Timestamp for when this theme expires. Null=never
+ * @property id Unique Id (read-only)
+ * @property name Name of theme. Can only be alphanumeric and underscores.
+ * @property settings
+ */
 data class Theme (
-  /**
-   * Operations the current user is able to perform on this object (read-only)
-   */
   var can: Map<String,Boolean>? = null,
-  /**
-   * Timestamp for when this theme becomes active. Null=always
-   */
   var begin_at: Date? = null,
-  /**
-   * Timestamp for when this theme expires. Null=never
-   */
   var end_at: Date? = null,
-  /**
-   * Unique Id (read-only)
-   */
   var id: Long? = null,
-  /**
-   * Name of theme. Can only be alphanumeric and underscores.
-   */
   var name: String? = null,
   var settings: ThemeSettings? = null
 ) : Serializable
 
+/**
+ * @property background_color Default background color
+ * @property base_font_size Base font size for scaling fonts
+ * @property color_collection_id Optional. ID of color collection to use with the theme. Use an empty string for none.
+ * @property font_color Default font color
+ * @property font_family Primary font family
+ * @property font_source Source specification for font
+ * @property info_button_color Info button color
+ * @property primary_button_color Primary button color
+ * @property show_filters_bar Toggle to show filters. Defaults to true.
+ * @property show_title Toggle to show the title. Defaults to true.
+ * @property text_tile_text_color Text color for text tiles
+ * @property tile_background_color Background color for tiles
+ * @property tile_text_color Text color for tiles
+ * @property title_color Color for titles
+ * @property warn_button_color Warning button color
+ * @property tile_title_alignment The text alignment of tile titles (New Dashboards)
+ * @property tile_shadow Toggles the tile shadow (New Dashboards)
+ */
 data class ThemeSettings (
-  /**
-   * Default background color
-   */
   var background_color: String? = null,
-  /**
-   * Base font size for scaling fonts
-   */
   var base_font_size: String? = null,
-  /**
-   * Optional. ID of color collection to use with the theme. Use an empty string for none.
-   */
   var color_collection_id: String? = null,
-  /**
-   * Default font color
-   */
   var font_color: String? = null,
-  /**
-   * Primary font family
-   */
   var font_family: String? = null,
-  /**
-   * Source specification for font
-   */
   var font_source: String? = null,
-  /**
-   * Info button color
-   */
   var info_button_color: String? = null,
-  /**
-   * Primary button color
-   */
   var primary_button_color: String? = null,
-  /**
-   * Toggle to show filters. Defaults to true.
-   */
   var show_filters_bar: Boolean? = null,
-  /**
-   * Toggle to show the title. Defaults to true.
-   */
   var show_title: Boolean? = null,
-  /**
-   * Text color for text tiles
-   */
   var text_tile_text_color: String? = null,
-  /**
-   * Background color for tiles
-   */
   var tile_background_color: String? = null,
-  /**
-   * Text color for tiles
-   */
   var tile_text_color: String? = null,
-  /**
-   * Color for titles
-   */
   var title_color: String? = null,
-  /**
-   * Warning button color
-   */
   var warn_button_color: String? = null,
-  /**
-   * The text alignment of tile titles (New Dashboards)
-   */
   var tile_title_alignment: String? = null,
-  /**
-   * Toggles the tile shadow (New Dashboards)
-   */
   var tile_shadow: Boolean? = null
 ) : Serializable
 
+/**
+ * @property value Timezone (read-only)
+ * @property label Description of timezone (read-only)
+ * @property group Timezone group (e.g Common, Other, etc.) (read-only)
+ */
 data class Timezone (
-  /**
-   * Timezone (read-only)
-   */
   var value: String? = null,
-  /**
-   * Description of timezone (read-only)
-   */
   var label: String? = null,
-  /**
-   * Timezone group (e.g Common, Other, etc.) (read-only)
-   */
   var group: String? = null
 ) : Serializable
 
+/**
+ * @property name Unique Name
+ * @property parent_id Id of Parent. If the parent id is null, this is a root-level entry
+ */
 data class UpdateFolder (
-  /**
-   * Unique Name
-   */
   var name: String? = null,
-  /**
-   * Id of Parent. If the parent id is null, this is a root-level entry
-   */
   var parent_id: String? = null
 ) : Serializable
 
+/**
+ * @property name Unique Name
+ * @property parent_id Id of Parent. If the parent id is null, this is a root-level entry
+ */
 data class UpdateSpace (
-  /**
-   * Unique Name
-   */
   var name: String? = null,
-  /**
-   * Id of Parent. If the parent id is null, this is a root-level entry
-   */
   var parent_id: String? = null
 ) : Serializable
 
+/**
+ * @property can Operations the current user is able to perform on this object (read-only)
+ * @property avatar_url URL for the avatar image (may be generic) (read-only)
+ * @property avatar_url_without_sizing URL for the avatar image (may be generic), does not specify size (read-only)
+ * @property credentials_api3 API 3 credentials (read-only)
+ * @property credentials_email
+ * @property credentials_embed Embed credentials (read-only)
+ * @property credentials_google
+ * @property credentials_ldap
+ * @property credentials_looker_openid
+ * @property credentials_oidc
+ * @property credentials_saml
+ * @property credentials_totp
+ * @property display_name Full name for display (available only if both first_name and last_name are set) (read-only)
+ * @property email EMail address (read-only)
+ * @property embed_group_space_id (Embed only) ID of user's group space based on the external_group_id optionally specified during embed user login (read-only)
+ * @property first_name First name
+ * @property group_ids Array of ids of the groups for this user (read-only)
+ * @property home_space_id ID string for user's home space
+ * @property home_folder_id ID string for user's home folder
+ * @property id Unique Id (read-only)
+ * @property is_disabled Account has been disabled
+ * @property last_name Last name
+ * @property locale User's preferred locale. User locale takes precedence over Looker's system-wide default locale. Locale determines language of display strings and date and numeric formatting in API responses. Locale string must be a 2 letter language code or a combination of language code and region code: 'en' or 'en-US', for example.
+ * @property looker_versions Array of strings representing the Looker versions that this user has used (this only goes back as far as '3.54.0') (read-only)
+ * @property models_dir_validated User's dev workspace has been checked for presence of applicable production projects
+ * @property personal_space_id ID of user's personal space (read-only)
+ * @property personal_folder_id ID of user's personal folder (read-only)
+ * @property presumed_looker_employee User is identified as an employee of Looker (read-only)
+ * @property role_ids Array of ids of the roles for this user (read-only)
+ * @property sessions Active sessions (read-only)
+ * @property ui_state Per user dictionary of undocumented state information owned by the Looker UI.
+ * @property verified_looker_employee User is identified as an employee of Looker who has been verified via Looker corporate authentication (read-only)
+ * @property roles_externally_managed User's roles are managed by an external directory like SAML or LDAP and can not be changed directly. (read-only)
+ * @property allow_direct_roles User can be directly assigned a role. (read-only)
+ * @property allow_normal_group_membership User can be a direct member of a normal Looker group. (read-only)
+ * @property allow_roles_from_normal_groups User can inherit roles from a normal Looker group. (read-only)
+ * @property url Link to get this item (read-only)
+ */
 data class User (
-  /**
-   * Operations the current user is able to perform on this object (read-only)
-   */
   var can: Map<String,Boolean>? = null,
-  /**
-   * URL for the avatar image (may be generic) (read-only)
-   */
   var avatar_url: UriString? = null,
-  /**
-   * URL for the avatar image (may be generic), does not specify size (read-only)
-   */
   var avatar_url_without_sizing: UriString? = null,
-  /**
-   * API 3 credentials (read-only)
-   */
   var credentials_api3: Array<CredentialsApi3>? = null,
   var credentials_email: CredentialsEmail? = null,
-  /**
-   * Embed credentials (read-only)
-   */
   var credentials_embed: Array<CredentialsEmbed>? = null,
   var credentials_google: CredentialsGoogle? = null,
   var credentials_ldap: CredentialsLDAP? = null,
@@ -6811,156 +4251,59 @@ data class User (
   var credentials_oidc: CredentialsOIDC? = null,
   var credentials_saml: CredentialsSaml? = null,
   var credentials_totp: CredentialsTotp? = null,
-  /**
-   * Full name for display (available only if both first_name and last_name are set) (read-only)
-   */
   var display_name: String? = null,
-  /**
-   * EMail address (read-only)
-   */
   var email: String? = null,
-  /**
-   * (Embed only) ID of user's group space based on the external_group_id optionally specified during embed user login (read-only)
-   */
   var embed_group_space_id: Long? = null,
-  /**
-   * First name
-   */
   var first_name: String? = null,
-  /**
-   * Array of ids of the groups for this user (read-only)
-   */
   var group_ids: Array<Long>? = null,
-  /**
-   * ID string for user's home space
-   */
   var home_space_id: String? = null,
-  /**
-   * ID string for user's home folder
-   */
   var home_folder_id: String? = null,
-  /**
-   * Unique Id (read-only)
-   */
   var id: Long? = null,
-  /**
-   * Account has been disabled
-   */
   var is_disabled: Boolean? = null,
-  /**
-   * Last name
-   */
   var last_name: String? = null,
-  /**
-   * User's preferred locale. User locale takes precedence over Looker's system-wide default locale. Locale determines language of display strings and date and numeric formatting in API responses. Locale string must be a 2 letter language code or a combination of language code and region code: 'en' or 'en-US', for example.
-   */
   var locale: String? = null,
-  /**
-   * Array of strings representing the Looker versions that this user has used (this only goes back as far as '3.54.0') (read-only)
-   */
   var looker_versions: Array<String>? = null,
-  /**
-   * User's dev workspace has been checked for presence of applicable production projects
-   */
   var models_dir_validated: Boolean? = null,
-  /**
-   * ID of user's personal space (read-only)
-   */
   var personal_space_id: Long? = null,
-  /**
-   * ID of user's personal folder (read-only)
-   */
   var personal_folder_id: Long? = null,
-  /**
-   * User is identified as an employee of Looker (read-only)
-   */
   var presumed_looker_employee: Boolean? = null,
-  /**
-   * Array of ids of the roles for this user (read-only)
-   */
   var role_ids: Array<Long>? = null,
-  /**
-   * Active sessions (read-only)
-   */
   var sessions: Array<Session>? = null,
-  /**
-   * Per user dictionary of undocumented state information owned by the Looker UI.
-   */
   var ui_state: Map<String,Any>? = null,
-  /**
-   * User is identified as an employee of Looker who has been verified via Looker corporate authentication (read-only)
-   */
   var verified_looker_employee: Boolean? = null,
-  /**
-   * User's roles are managed by an external directory like SAML or LDAP and can not be changed directly. (read-only)
-   */
   var roles_externally_managed: Boolean? = null,
-  /**
-   * User can be directly assigned a role. (read-only)
-   */
   var allow_direct_roles: Boolean? = null,
-  /**
-   * User can be a direct member of a normal Looker group. (read-only)
-   */
   var allow_normal_group_membership: Boolean? = null,
-  /**
-   * User can inherit roles from a normal Looker group. (read-only)
-   */
   var allow_roles_from_normal_groups: Boolean? = null,
-  /**
-   * Link to get this item (read-only)
-   */
   var url: UriString? = null
 ) : Serializable
 
+/**
+ * @property can Operations the current user is able to perform on this object (read-only)
+ * @property id Unique Id (read-only)
+ * @property name Name of user attribute
+ * @property label Human-friendly label for user attribute
+ * @property type Type of user attribute ("string", "number", "datetime", "yesno", "zipcode")
+ * @property default_value Default value for when no value is set on the user
+ * @property is_system Attribute is a system default (read-only)
+ * @property is_permanent Attribute is permanent and cannot be deleted (read-only)
+ * @property value_is_hidden If true, users will not be able to view values of this attribute
+ * @property user_can_view Non-admin users can see the values of their attributes and use them in filters
+ * @property user_can_edit Users can change the value of this attribute for themselves
+ * @property hidden_value_domain_whitelist Destinations to which a hidden attribute may be sent. Once set, cannot be edited.
+ */
 data class UserAttribute (
-  /**
-   * Operations the current user is able to perform on this object (read-only)
-   */
   var can: Map<String,Boolean>? = null,
-  /**
-   * Unique Id (read-only)
-   */
   var id: Long? = null,
-  /**
-   * Name of user attribute
-   */
   var name: String? = null,
-  /**
-   * Human-friendly label for user attribute
-   */
   var label: String? = null,
-  /**
-   * Type of user attribute ("string", "number", "datetime", "yesno", "zipcode")
-   */
   var type: String? = null,
-  /**
-   * Default value for when no value is set on the user
-   */
   var default_value: String? = null,
-  /**
-   * Attribute is a system default (read-only)
-   */
   var is_system: Boolean? = null,
-  /**
-   * Attribute is permanent and cannot be deleted (read-only)
-   */
   var is_permanent: Boolean? = null,
-  /**
-   * If true, users will not be able to view values of this attribute
-   */
   var value_is_hidden: Boolean? = null,
-  /**
-   * Non-admin users can see the values of their attributes and use them in filters
-   */
   var user_can_view: Boolean? = null,
-  /**
-   * Users can change the value of this attribute for themselves
-   */
   var user_can_edit: Boolean? = null,
-  /**
-   * Destinations to which a hidden attribute may be sent. Once set, cannot be edited.
-   */
   var hidden_value_domain_whitelist: String? = null
 ) : Serializable
 
@@ -6979,196 +4322,124 @@ enum class UserAttributeFilterTypes : Serializable {
   zipcode
 }
 
+/**
+ * @property can Operations the current user is able to perform on this object (read-only)
+ * @property id Unique Id of this group-attribute relation (read-only)
+ * @property group_id Id of group (read-only)
+ * @property user_attribute_id Id of user attribute (read-only)
+ * @property value_is_hidden If true, the "value" field will be null, because the attribute settings block access to this value (read-only)
+ * @property rank Precedence for resolving value for user (read-only)
+ * @property value Value of user attribute for group (read-only)
+ */
 data class UserAttributeGroupValue (
-  /**
-   * Operations the current user is able to perform on this object (read-only)
-   */
   var can: Map<String,Boolean>? = null,
-  /**
-   * Unique Id of this group-attribute relation (read-only)
-   */
   var id: Long? = null,
-  /**
-   * Id of group (read-only)
-   */
   var group_id: Long? = null,
-  /**
-   * Id of user attribute (read-only)
-   */
   var user_attribute_id: Long? = null,
-  /**
-   * If true, the "value" field will be null, because the attribute settings block access to this value (read-only)
-   */
   var value_is_hidden: Boolean? = null,
-  /**
-   * Precedence for resolving value for user (read-only)
-   */
   var rank: Long? = null,
-  /**
-   * Value of user attribute for group (read-only)
-   */
   var value: String? = null
 ) : Serializable
 
+/**
+ * @property can Operations the current user is able to perform on this object (read-only)
+ * @property name Name of user attribute (read-only)
+ * @property label Human-friendly label for user attribute (read-only)
+ * @property rank Precedence for setting value on user (lowest wins) (read-only)
+ * @property value Value of attribute for user
+ * @property user_id Id of User (read-only)
+ * @property user_can_edit Can the user set this value (read-only)
+ * @property value_is_hidden If true, the "value" field will be null, because the attribute settings block access to this value (read-only)
+ * @property user_attribute_id Id of User Attribute (read-only)
+ * @property source How user got this value for this attribute (read-only)
+ * @property hidden_value_domain_whitelist If this user attribute is hidden, whitelist of destinations to which it may be sent. (read-only)
+ */
 data class UserAttributeWithValue (
-  /**
-   * Operations the current user is able to perform on this object (read-only)
-   */
   var can: Map<String,Boolean>? = null,
-  /**
-   * Name of user attribute (read-only)
-   */
   var name: String? = null,
-  /**
-   * Human-friendly label for user attribute (read-only)
-   */
   var label: String? = null,
-  /**
-   * Precedence for setting value on user (lowest wins) (read-only)
-   */
   var rank: Long? = null,
-  /**
-   * Value of attribute for user
-   */
   var value: String? = null,
-  /**
-   * Id of User (read-only)
-   */
   var user_id: Long? = null,
-  /**
-   * Can the user set this value (read-only)
-   */
   var user_can_edit: Boolean? = null,
-  /**
-   * If true, the "value" field will be null, because the attribute settings block access to this value (read-only)
-   */
   var value_is_hidden: Boolean? = null,
-  /**
-   * Id of User Attribute (read-only)
-   */
   var user_attribute_id: Long? = null,
-  /**
-   * How user got this value for this attribute (read-only)
-   */
   var source: String? = null,
-  /**
-   * If this user attribute is hidden, whitelist of destinations to which it may be sent. (read-only)
-   */
   var hidden_value_domain_whitelist: String? = null
 ) : Serializable
 
+/**
+ * @property id Unique Id (read-only)
+ */
 data class UserIdOnly (
-  /**
-   * Unique Id (read-only)
-   */
   var id: Long? = null
 ) : Serializable
 
+/**
+ * @property can Operations the current user is able to perform on this object (read-only)
+ * @property key Hash of user's client id (read-only)
+ * @property auth_type Authentication method for login failures (read-only)
+ * @property ip IP address of most recent failed attempt (read-only)
+ * @property user_id User ID (read-only)
+ * @property remote_id Remote ID of user if using LDAP (read-only)
+ * @property full_name User's name (read-only)
+ * @property email Email address associated with the user's account (read-only)
+ * @property fail_count Number of failures that triggered the lockout (read-only)
+ * @property lockout_at Time when lockout was triggered (read-only)
+ */
 data class UserLoginLockout (
-  /**
-   * Operations the current user is able to perform on this object (read-only)
-   */
   var can: Map<String,Boolean>? = null,
-  /**
-   * Hash of user's client id (read-only)
-   */
   var key: String? = null,
-  /**
-   * Authentication method for login failures (read-only)
-   */
   var auth_type: String? = null,
-  /**
-   * IP address of most recent failed attempt (read-only)
-   */
   var ip: String? = null,
-  /**
-   * User ID (read-only)
-   */
   var user_id: Long? = null,
-  /**
-   * Remote ID of user if using LDAP (read-only)
-   */
   var remote_id: String? = null,
-  /**
-   * User's name (read-only)
-   */
   var full_name: String? = null,
-  /**
-   * Email address associated with the user's account (read-only)
-   */
   var email: String? = null,
-  /**
-   * Number of failures that triggered the lockout (read-only)
-   */
   var fail_count: Long? = null,
-  /**
-   * Time when lockout was triggered (read-only)
-   */
   var lockout_at: Date? = null
 ) : Serializable
 
+/**
+ * @property can Operations the current user is able to perform on this object (read-only)
+ * @property id Unique Id (read-only)
+ * @property first_name First Name (read-only)
+ * @property last_name Last Name (read-only)
+ * @property display_name Full name for display (available only if both first_name and last_name are set) (read-only)
+ * @property avatar_url URL for the avatar image (may be generic) (read-only)
+ * @property url Link to get this item (read-only)
+ */
 data class UserPublic (
-  /**
-   * Operations the current user is able to perform on this object (read-only)
-   */
   var can: Map<String,Boolean>? = null,
-  /**
-   * Unique Id (read-only)
-   */
   var id: Long? = null,
-  /**
-   * First Name (read-only)
-   */
   var first_name: String? = null,
-  /**
-   * Last Name (read-only)
-   */
   var last_name: String? = null,
-  /**
-   * Full name for display (available only if both first_name and last_name are set) (read-only)
-   */
   var display_name: String? = null,
-  /**
-   * URL for the avatar image (may be generic) (read-only)
-   */
   var avatar_url: UriString? = null,
-  /**
-   * Link to get this item (read-only)
-   */
   var url: UriString? = null
 ) : Serializable
 
+/**
+ * @property message Error details (read-only)
+ * @property errors Error detail array (read-only)
+ * @property documentation_url Documentation link (read-only)
+ */
 data class ValidationError (
-  /**
-   * Error details (read-only)
-   */
   var message: String,
-  /**
-   * Error detail array (read-only)
-   */
   var errors: Array<ValidationErrorDetail>? = null,
-  /**
-   * Documentation link (read-only)
-   */
   var documentation_url: UriString
 ) : Serializable
 
+/**
+ * @property field Field with error (read-only)
+ * @property code Error code (read-only)
+ * @property message Error info message (read-only)
+ * @property documentation_url Documentation link (read-only)
+ */
 data class ValidationErrorDetail (
-  /**
-   * Field with error (read-only)
-   */
   var field: String? = null,
-  /**
-   * Error code (read-only)
-   */
   var code: String? = null,
-  /**
-   * Error info message (read-only)
-   */
   var message: String? = null,
-  /**
-   * Documentation link (read-only)
-   */
   var documentation_url: UriString
 ) : Serializable
 
@@ -7185,180 +4456,121 @@ enum class WeekStartDay : Serializable {
   sunday
 }
 
+/**
+ * @property content The content that would be sent in the body of a custom welcome email
+ * @property subject The subject that would be sent for the custom welcome email
+ * @property header The header that would be sent in the body of a custom welcome email
+ */
 data class WelcomeEmailTest (
-  /**
-   * The content that would be sent in the body of a custom welcome email
-   */
   var content: String? = null,
-  /**
-   * The subject that would be sent for the custom welcome email
-   */
   var subject: String? = null,
-  /**
-   * The header that would be sent in the body of a custom welcome email
-   */
   var header: String? = null
 ) : Serializable
 
+/**
+ * @property can Operations the current user is able to perform on this object (read-only)
+ * @property id Unique Id (read-only)
+ * @property logo_file Customer logo image. Expected base64 encoded data (write-only)
+ * @property logo_url Logo image url (read-only) (read-only)
+ * @property favicon_file Custom favicon image. Expected base64 encoded data (write-only)
+ * @property favicon_url Favicon image url (read-only) (read-only)
+ * @property default_title Default page title
+ * @property show_help_menu Boolean to toggle showing help menus
+ * @property show_docs Boolean to toggle showing docs
+ * @property show_email_sub_options Boolean to toggle showing email subscription options.
+ * @property allow_looker_mentions Boolean to toggle mentions of Looker in emails
+ * @property allow_looker_links Boolean to toggle links to Looker in emails
+ * @property custom_welcome_email_advanced Allow subject line and email heading customization in customized emails”
+ * @property setup_mentions Remove the word Looker from appearing in the account setup page
+ * @property alerts_logo Remove Looker logo from Alerts
+ * @property alerts_links Remove Looker links from Alerts
+ * @property folders_mentions Remove Looker mentions in home folder page when you don’t have any items saved
+ */
 data class WhitelabelConfiguration (
-  /**
-   * Operations the current user is able to perform on this object (read-only)
-   */
   var can: Map<String,Boolean>? = null,
-  /**
-   * Unique Id (read-only)
-   */
   var id: Long? = null,
-  /**
-   * Customer logo image. Expected base64 encoded data (write-only)
-   */
   var logo_file: String? = null,
-  /**
-   * Logo image url (read-only) (read-only)
-   */
   var logo_url: String? = null,
-  /**
-   * Custom favicon image. Expected base64 encoded data (write-only)
-   */
   var favicon_file: String? = null,
-  /**
-   * Favicon image url (read-only) (read-only)
-   */
   var favicon_url: String? = null,
-  /**
-   * Default page title
-   */
   var default_title: String? = null,
-  /**
-   * Boolean to toggle showing help menus
-   */
   var show_help_menu: Boolean? = null,
-  /**
-   * Boolean to toggle showing docs
-   */
   var show_docs: Boolean? = null,
-  /**
-   * Boolean to toggle showing email subscription options.
-   */
   var show_email_sub_options: Boolean? = null,
-  /**
-   * Boolean to toggle mentions of Looker in emails
-   */
   var allow_looker_mentions: Boolean? = null,
-  /**
-   * Boolean to toggle links to Looker in emails
-   */
   var allow_looker_links: Boolean? = null,
-  /**
-   * Allow subject line and email heading customization in customized emails”
-   */
   var custom_welcome_email_advanced: Boolean? = null,
-  /**
-   * Remove the word Looker from appearing in the account setup page
-   */
   var setup_mentions: Boolean? = null,
-  /**
-   * Remove Looker logo from Alerts
-   */
   var alerts_logo: Boolean? = null,
-  /**
-   * Remove Looker links from Alerts
-   */
   var alerts_links: Boolean? = null,
-  /**
-   * Remove Looker mentions in home folder page when you don’t have any items saved
-   */
   var folders_mentions: Boolean? = null
 ) : Serializable
 
+/**
+ * @property can Operations the current user is able to perform on this object (read-only)
+ * @property id The unique id of this user workspace. Predefined workspace ids include "production" and "dev" (read-only)
+ * @property projects The local state of each project in the workspace (read-only)
+ */
 data class Workspace (
-  /**
-   * Operations the current user is able to perform on this object (read-only)
-   */
   var can: Map<String,Boolean>? = null,
-  /**
-   * The unique id of this user workspace. Predefined workspace ids include "production" and "dev" (read-only)
-   */
   var id: String? = null,
-  /**
-   * The local state of each project in the workspace (read-only)
-   */
   var projects: Array<Project>? = null
 ) : Serializable
 
 /**
  * Dynamically generated writeable type for ApiSession removes properties:
  * can, sudo_user_id
+ *
+ * @property workspace_id The id of active workspace for this session
  */
 data class WriteApiSession (
-  /**
-   * The id of active workspace for this session
-   */
   var workspace_id: String? = null
 ) : Serializable
 
 /**
  * Dynamically generated writeable type for BackupConfiguration removes properties:
  * can, url
+ *
+ * @property type Type of backup: looker-s3 or custom-s3
+ * @property custom_s3_bucket Name of bucket for custom-s3 backups
+ * @property custom_s3_bucket_region Name of region where the bucket is located
+ * @property custom_s3_key (Write-Only) AWS S3 key used for custom-s3 backups
+ * @property custom_s3_secret (Write-Only) AWS S3 secret used for custom-s3 backups
  */
 data class WriteBackupConfiguration (
-  /**
-   * Type of backup: looker-s3 or custom-s3
-   */
   var type: String? = null,
-  /**
-   * Name of bucket for custom-s3 backups
-   */
   var custom_s3_bucket: String? = null,
-  /**
-   * Name of region where the bucket is located
-   */
   var custom_s3_bucket_region: String? = null,
-  /**
-   * (Write-Only) AWS S3 key used for custom-s3 backups
-   */
   var custom_s3_key: String? = null,
-  /**
-   * (Write-Only) AWS S3 secret used for custom-s3 backups
-   */
   var custom_s3_secret: String? = null
 ) : Serializable
 
 /**
  * Dynamically generated writeable type for ColorCollection removes properties:
  * id
+ *
+ * @property label Label of color collection
+ * @property categoricalPalettes Array of categorical palette definitions
+ * @property sequentialPalettes Array of discrete palette definitions
+ * @property divergingPalettes Array of diverging palette definitions
  */
 data class WriteColorCollection (
-  /**
-   * Label of color collection
-   */
   var label: String? = null,
-  /**
-   * Array of categorical palette definitions
-   */
   var categoricalPalettes: Array<DiscretePalette>? = null,
-  /**
-   * Array of discrete palette definitions
-   */
   var sequentialPalettes: Array<ContinuousPalette>? = null,
-  /**
-   * Array of diverging palette definitions
-   */
   var divergingPalettes: Array<ContinuousPalette>? = null
 ) : Serializable
 
 /**
  * Dynamically generated writeable type for ContentFavorite removes properties:
  * id, look_id, dashboard_id, look
+ *
+ * @property user_id User Id which owns this ContentFavorite
+ * @property content_metadata_id Content Metadata Id associated with this ContentFavorite
+ * @property dashboard
  */
 data class WriteContentFavorite (
-  /**
-   * User Id which owns this ContentFavorite
-   */
   var user_id: Long? = null,
-  /**
-   * Content Metadata Id associated with this ContentFavorite
-   */
   var content_metadata_id: Long? = null,
   var dashboard: WriteDashboardBase? = null
 ) : Serializable
@@ -7366,235 +4578,155 @@ data class WriteContentFavorite (
 /**
  * Dynamically generated writeable type for ContentMeta removes properties:
  * can, id, name, parent_id, dashboard_id, look_id, folder_id, content_type, inheriting_id, slug, space_id
+ *
+ * @property inherits Whether content inherits its access levels from parent
  */
 data class WriteContentMeta (
-  /**
-   * Whether content inherits its access levels from parent
-   */
   var inherits: Boolean? = null
 ) : Serializable
 
 /**
  * Dynamically generated writeable type for CreateDashboardFilter removes properties:
  * id, field
+ *
+ * @property dashboard_id Id of Dashboard
+ * @property name Name of filter
+ * @property title Title of filter
+ * @property type Type of filter: one of date, number, string, or field
+ * @property default_value Default value of filter
+ * @property model Model of filter (required if type = field)
+ * @property explore Explore of filter (required if type = field)
+ * @property dimension Dimension of filter (required if type = field)
+ * @property row Display order of this filter relative to other filters
+ * @property listens_to_filters Array of listeners for faceted filters
+ * @property allow_multiple_values Whether the filter allows multiple filter values (deprecated in the latest version of dashboards)
+ * @property required Whether the filter requires a value to run the dashboard
+ * @property ui_config The visual configuration for this filter. Used to set up how the UI for this filter should appear.
  */
 data class WriteCreateDashboardFilter (
-  /**
-   * Id of Dashboard
-   */
   var dashboard_id: String,
-  /**
-   * Name of filter
-   */
   var name: String,
-  /**
-   * Title of filter
-   */
   var title: String,
-  /**
-   * Type of filter: one of date, number, string, or field
-   */
   var type: String,
-  /**
-   * Default value of filter
-   */
   var default_value: String? = null,
-  /**
-   * Model of filter (required if type = field)
-   */
   var model: String? = null,
-  /**
-   * Explore of filter (required if type = field)
-   */
   var explore: String? = null,
-  /**
-   * Dimension of filter (required if type = field)
-   */
   var dimension: String? = null,
-  /**
-   * Display order of this filter relative to other filters
-   */
   var row: Long? = null,
-  /**
-   * Array of listeners for faceted filters
-   */
   var listens_to_filters: Array<String>? = null,
-  /**
-   * Whether the filter allows multiple filter values (deprecated in the latest version of dashboards)
-   */
   var allow_multiple_values: Boolean? = null,
-  /**
-   * Whether the filter requires a value to run the dashboard
-   */
   var required: Boolean? = null,
-  /**
-   * The visual configuration for this filter. Used to set up how the UI for this filter should appear.
-   */
   var ui_config: Map<String,Any>? = null
 ) : Serializable
 
 /**
  * Dynamically generated writeable type for CreateQueryTask removes properties:
  * can
+ *
+ * @property query_id Id of query to run
+ * @property result_format Desired async query result format. Valid values are: "inline_json", "json", "json_detail", "json_fe", "csv", "html", "md", "txt", "xlsx", "gsxml".
+ * @property source Source of query task
+ * @property deferred Create the task but defer execution
+ * @property look_id Id of look associated with query.
+ * @property dashboard_id Id of dashboard associated with query.
  */
 data class WriteCreateQueryTask (
-  /**
-   * Id of query to run
-   */
   var query_id: Long,
-  /**
-   * Desired async query result format. Valid values are: "inline_json", "json", "json_detail", "json_fe", "csv", "html", "md", "txt", "xlsx", "gsxml".
-   */
   var result_format: ResultFormat,
-  /**
-   * Source of query task
-   */
   var source: String? = null,
-  /**
-   * Create the task but defer execution
-   */
   var deferred: Boolean? = null,
-  /**
-   * Id of look associated with query.
-   */
   var look_id: Long? = null,
-  /**
-   * Id of dashboard associated with query.
-   */
   var dashboard_id: String? = null
 ) : Serializable
 
 /**
  * Dynamically generated writeable type for CredentialsEmail removes properties:
  * can, created_at, is_disabled, logged_in_at, password_reset_url, type, url, user_url
+ *
+ * @property email EMail address used for user login
+ * @property forced_password_reset_at_next_login Force the user to change their password upon their next login
  */
 data class WriteCredentialsEmail (
-  /**
-   * EMail address used for user login
-   */
   var email: String? = null,
-  /**
-   * Force the user to change their password upon their next login
-   */
   var forced_password_reset_at_next_login: Boolean? = null
 ) : Serializable
 
 /**
  * Dynamically generated writeable type for CustomWelcomeEmail removes properties:
  * can
+ *
+ * @property enabled If true, custom email content will replace the default body of welcome emails
+ * @property content The HTML to use as custom content for welcome emails. Script elements and other potentially dangerous markup will be removed.
+ * @property subject The text to appear in the email subject line.
+ * @property header The text to appear in the header line of the email body.
  */
 data class WriteCustomWelcomeEmail (
-  /**
-   * If true, custom email content will replace the default body of welcome emails
-   */
   var enabled: Boolean? = null,
-  /**
-   * The HTML to use as custom content for welcome emails. Script elements and other potentially dangerous markup will be removed.
-   */
   var content: String? = null,
-  /**
-   * The text to appear in the email subject line.
-   */
   var subject: String? = null,
-  /**
-   * The text to appear in the header line of the email body.
-   */
   var header: String? = null
 ) : Serializable
 
 /**
  * Dynamically generated writeable type for Dashboard removes properties:
  * can, content_favorite_id, content_metadata_id, id, model, readonly, refresh_interval_to_i, user_id, created_at, dashboard_elements, dashboard_filters, dashboard_layouts, deleted_at, deleter_id, edit_uri, favorite_count, last_accessed_at, last_viewed_at, view_count
+ *
+ * @property description Description
+ * @property hidden Is Hidden
+ * @property query_timezone Timezone in which the Dashboard will run by default.
+ * @property refresh_interval Refresh Interval, as a time duration phrase like "2 hours 30 minutes". A number with no time units will be interpreted as whole seconds.
+ * @property folder
+ * @property title Dashboard Title
+ * @property space
+ * @property background_color Background color
+ * @property crossfilter_enabled Enables crossfiltering in dashboards - only available in dashboards-next (beta)
+ * @property deleted Whether or not a dashboard is 'soft' deleted.
+ * @property load_configuration configuration option that governs how dashboard loading will happen.
+ * @property lookml_link_id Links this dashboard to a particular LookML dashboard such that calling a **sync** operation on that LookML dashboard will update this dashboard to match.
+ * @property show_filters_bar Show filters bar.  **Security Note:** This property only affects the *cosmetic* appearance of the dashboard, not a user's ability to access data. Hiding the filters bar does **NOT** prevent users from changing filters by other means. For information on how to set up secure data access control policies, see [Control User Access to Data](https://looker.com/docs/r/api/control-access)
+ * @property show_title Show title
+ * @property slug Content Metadata Slug
+ * @property space_id Id of Space
+ * @property folder_id Id of folder
+ * @property text_tile_text_color Color of text on text tiles
+ * @property tile_background_color Tile background color
+ * @property tile_text_color Tile text color
+ * @property title_color Title color
+ * @property appearance
+ * @property preferred_viewer The preferred route for viewing this dashboard (ie: dashboards or dashboards-next)
  */
 data class WriteDashboard (
-  /**
-   * Description
-   */
   var description: String? = null,
-  /**
-   * Is Hidden
-   */
   var hidden: Boolean? = null,
-  /**
-   * Timezone in which the Dashboard will run by default.
-   */
   var query_timezone: String? = null,
-  /**
-   * Refresh Interval, as a time duration phrase like "2 hours 30 minutes". A number with no time units will be interpreted as whole seconds.
-   */
   var refresh_interval: String? = null,
   var folder: WriteFolderBase? = null,
-  /**
-   * Dashboard Title
-   */
   var title: String? = null,
   var space: WriteSpaceBase? = null,
-  /**
-   * Background color
-   */
   var background_color: String? = null,
-  /**
-   * Enables crossfiltering in dashboards - only available in dashboards-next (beta)
-   */
   var crossfilter_enabled: Boolean? = null,
-  /**
-   * Whether or not a dashboard is 'soft' deleted.
-   */
   var deleted: Boolean? = null,
-  /**
-   * configuration option that governs how dashboard loading will happen.
-   */
   var load_configuration: String? = null,
-  /**
-   * Links this dashboard to a particular LookML dashboard such that calling a **sync** operation on that LookML dashboard will update this dashboard to match.
-   */
   var lookml_link_id: String? = null,
-  /**
-   * Show filters bar.  **Security Note:** This property only affects the *cosmetic* appearance of the dashboard, not a user's ability to access data. Hiding the filters bar does **NOT** prevent users from changing filters by other means. For information on how to set up secure data access control policies, see [Control User Access to Data](https://looker.com/docs/r/api/control-access)
-   */
   var show_filters_bar: Boolean? = null,
-  /**
-   * Show title
-   */
   var show_title: Boolean? = null,
-  /**
-   * Content Metadata Slug
-   */
   var slug: String? = null,
-  /**
-   * Id of Space
-   */
   var space_id: String? = null,
-  /**
-   * Id of folder
-   */
   var folder_id: String? = null,
-  /**
-   * Color of text on text tiles
-   */
   var text_tile_text_color: String? = null,
-  /**
-   * Tile background color
-   */
   var tile_background_color: String? = null,
-  /**
-   * Tile text color
-   */
   var tile_text_color: String? = null,
-  /**
-   * Title color
-   */
   var title_color: String? = null,
   var appearance: DashboardAppearance? = null,
-  /**
-   * The preferred route for viewing this dashboard (ie: dashboards or dashboards-next)
-   */
   var preferred_viewer: String? = null
 ) : Serializable
 
 /**
  * Dynamically generated writeable type for DashboardBase removes properties:
  * can, content_favorite_id, content_metadata_id, description, hidden, id, model, query_timezone, readonly, refresh_interval, refresh_interval_to_i, title, user_id
+ *
+ * @property folder
+ * @property space
  */
 data class WriteDashboardBase (
   var folder: WriteFolderBase? = null,
@@ -7604,301 +4736,183 @@ data class WriteDashboardBase (
 /**
  * Dynamically generated writeable type for DashboardElement removes properties:
  * can, body_text_as_html, edit_uri, id, lookml_link_id, note_text_as_html, refresh_interval_to_i, alert_count, title_text_as_html, subtitle_text_as_html
+ *
+ * @property body_text Text tile body text
+ * @property dashboard_id Id of Dashboard
+ * @property look
+ * @property look_id Id Of Look
+ * @property merge_result_id ID of merge result
+ * @property note_display Note Display
+ * @property note_state Note State
+ * @property note_text Note Text
+ * @property query
+ * @property query_id Id Of Query
+ * @property refresh_interval Refresh Interval
+ * @property result_maker
+ * @property result_maker_id ID of the ResultMakerLookup entry.
+ * @property subtitle_text Text tile subtitle text
+ * @property title Title of dashboard element
+ * @property title_hidden Whether title is hidden
+ * @property title_text Text tile title
+ * @property type Type
  */
 data class WriteDashboardElement (
-  /**
-   * Text tile body text
-   */
   var body_text: String? = null,
-  /**
-   * Id of Dashboard
-   */
   var dashboard_id: String? = null,
   var look: WriteLookWithQuery? = null,
-  /**
-   * Id Of Look
-   */
   var look_id: String? = null,
-  /**
-   * ID of merge result
-   */
   var merge_result_id: String? = null,
-  /**
-   * Note Display
-   */
   var note_display: String? = null,
-  /**
-   * Note State
-   */
   var note_state: String? = null,
-  /**
-   * Note Text
-   */
   var note_text: String? = null,
   var query: WriteQuery? = null,
-  /**
-   * Id Of Query
-   */
   var query_id: Long? = null,
-  /**
-   * Refresh Interval
-   */
   var refresh_interval: String? = null,
   var result_maker: WriteResultMakerWithIdVisConfigAndDynamicFields? = null,
-  /**
-   * ID of the ResultMakerLookup entry.
-   */
   var result_maker_id: Long? = null,
-  /**
-   * Text tile subtitle text
-   */
   var subtitle_text: String? = null,
-  /**
-   * Title of dashboard element
-   */
   var title: String? = null,
-  /**
-   * Whether title is hidden
-   */
   var title_hidden: Boolean? = null,
-  /**
-   * Text tile title
-   */
   var title_text: String? = null,
-  /**
-   * Type
-   */
   var type: String? = null
 ) : Serializable
 
 /**
  * Dynamically generated writeable type for DashboardFilter removes properties:
  * can, id, dashboard_id, field
+ *
+ * @property name Name of filter
+ * @property title Title of filter
+ * @property type Type of filter: one of date, number, string, or field
+ * @property default_value Default value of filter
+ * @property model Model of filter (required if type = field)
+ * @property explore Explore of filter (required if type = field)
+ * @property dimension Dimension of filter (required if type = field)
+ * @property row Display order of this filter relative to other filters
+ * @property listens_to_filters Array of listeners for faceted filters
+ * @property allow_multiple_values Whether the filter allows multiple filter values (deprecated in the latest version of dashboards)
+ * @property required Whether the filter requires a value to run the dashboard
+ * @property ui_config The visual configuration for this filter. Used to set up how the UI for this filter should appear.
  */
 data class WriteDashboardFilter (
-  /**
-   * Name of filter
-   */
   var name: String? = null,
-  /**
-   * Title of filter
-   */
   var title: String? = null,
-  /**
-   * Type of filter: one of date, number, string, or field
-   */
   var type: String? = null,
-  /**
-   * Default value of filter
-   */
   var default_value: String? = null,
-  /**
-   * Model of filter (required if type = field)
-   */
   var model: String? = null,
-  /**
-   * Explore of filter (required if type = field)
-   */
   var explore: String? = null,
-  /**
-   * Dimension of filter (required if type = field)
-   */
   var dimension: String? = null,
-  /**
-   * Display order of this filter relative to other filters
-   */
   var row: Long? = null,
-  /**
-   * Array of listeners for faceted filters
-   */
   var listens_to_filters: Array<String>? = null,
-  /**
-   * Whether the filter allows multiple filter values (deprecated in the latest version of dashboards)
-   */
   var allow_multiple_values: Boolean? = null,
-  /**
-   * Whether the filter requires a value to run the dashboard
-   */
   var required: Boolean? = null,
-  /**
-   * The visual configuration for this filter. Used to set up how the UI for this filter should appear.
-   */
   var ui_config: Map<String,Any>? = null
 ) : Serializable
 
 /**
  * Dynamically generated writeable type for DashboardLayout removes properties:
  * can, id, deleted, dashboard_title, dashboard_layout_components
+ *
+ * @property dashboard_id Id of Dashboard
+ * @property type Type
+ * @property active Is Active
+ * @property column_width Column Width
+ * @property width Width
  */
 data class WriteDashboardLayout (
-  /**
-   * Id of Dashboard
-   */
   var dashboard_id: String? = null,
-  /**
-   * Type
-   */
   var type: String? = null,
-  /**
-   * Is Active
-   */
   var active: Boolean? = null,
-  /**
-   * Column Width
-   */
   var column_width: Long? = null,
-  /**
-   * Width
-   */
   var width: Long? = null
 ) : Serializable
 
 /**
  * Dynamically generated writeable type for DashboardLayoutComponent removes properties:
  * can, id, deleted, element_title, element_title_hidden, vis_type
+ *
+ * @property dashboard_layout_id Id of Dashboard Layout
+ * @property dashboard_element_id Id Of Dashboard Element
+ * @property row Row
+ * @property column Column
+ * @property width Width
+ * @property height Height
  */
 data class WriteDashboardLayoutComponent (
-  /**
-   * Id of Dashboard Layout
-   */
   var dashboard_layout_id: String? = null,
-  /**
-   * Id Of Dashboard Element
-   */
   var dashboard_element_id: String? = null,
-  /**
-   * Row
-   */
   var row: Long? = null,
-  /**
-   * Column
-   */
   var column: Long? = null,
-  /**
-   * Width
-   */
   var width: Long? = null,
-  /**
-   * Height
-   */
   var height: Long? = null
 ) : Serializable
 
 /**
  * Dynamically generated writeable type for Datagroup removes properties:
  * can, created_at, id, model_name, name, trigger_check_at, trigger_error, trigger_value
+ *
+ * @property stale_before UNIX timestamp before which cache entries are considered stale. Cannot be in the future.
+ * @property triggered_at UNIX timestamp at which this entry became triggered. Cannot be in the future.
  */
 data class WriteDatagroup (
-  /**
-   * UNIX timestamp before which cache entries are considered stale. Cannot be in the future.
-   */
   var stale_before: Long? = null,
-  /**
-   * UNIX timestamp at which this entry became triggered. Cannot be in the future.
-   */
   var triggered_at: Long? = null
 ) : Serializable
 
 /**
  * Dynamically generated writeable type for DBConnection removes properties:
  * can, dialect, snippets, pdts_enabled, uses_oauth, created_at, user_id, example, last_regen_at, last_reap_at, managed
+ *
+ * @property name Name of the connection. Also used as the unique identifier
+ * @property host Host name/address of server
+ * @property port Port number on server
+ * @property username Username for server authentication
+ * @property password (Write-Only) Password for server authentication
+ * @property certificate (Write-Only) Base64 encoded Certificate body for server authentication (when appropriate for dialect).
+ * @property file_type (Write-Only) Certificate keyfile type - .json or .p12
+ * @property database Database name
+ * @property db_timezone Time zone of database
+ * @property query_timezone Timezone to use in queries
+ * @property schema Scheme name
+ * @property max_connections Maximum number of concurrent connection to use
+ * @property max_billing_gigabytes Maximum size of query in GBs (BigQuery only, can be a user_attribute name)
+ * @property ssl Use SSL/TLS when connecting to server
+ * @property verify_ssl Verify the SSL
+ * @property tmp_db_name Name of temporary database (if used)
+ * @property jdbc_additional_params Additional params to add to JDBC connection string
+ * @property pool_timeout Connection Pool Timeout, in seconds
+ * @property dialect_name (Read/Write) SQL Dialect name
+ * @property user_db_credentials (Limited access feature) Are per user db credentials enabled. Enabling will remove previously set username and password
+ * @property user_attribute_fields Fields whose values map to user attribute names
+ * @property maintenance_cron Cron string specifying when maintenance such as PDT trigger checks and drops should be performed
+ * @property sql_runner_precache_tables Precache tables in the SQL Runner
+ * @property after_connect_statements SQL statements (semicolon separated) to issue after connecting to the database. Requires `custom_after_connect_statements` license feature
+ * @property pdt_context_override
  */
 data class WriteDBConnection (
-  /**
-   * Name of the connection. Also used as the unique identifier
-   */
   var name: String? = null,
-  /**
-   * Host name/address of server
-   */
   var host: String? = null,
-  /**
-   * Port number on server
-   */
   var port: String? = null,
-  /**
-   * Username for server authentication
-   */
   var username: String? = null,
-  /**
-   * (Write-Only) Password for server authentication
-   */
   var password: String? = null,
-  /**
-   * (Write-Only) Base64 encoded Certificate body for server authentication (when appropriate for dialect).
-   */
   var certificate: String? = null,
-  /**
-   * (Write-Only) Certificate keyfile type - .json or .p12
-   */
   var file_type: String? = null,
-  /**
-   * Database name
-   */
   var database: String? = null,
-  /**
-   * Time zone of database
-   */
   var db_timezone: String? = null,
-  /**
-   * Timezone to use in queries
-   */
   var query_timezone: String? = null,
-  /**
-   * Scheme name
-   */
   var schema: String? = null,
-  /**
-   * Maximum number of concurrent connection to use
-   */
   var max_connections: Long? = null,
-  /**
-   * Maximum size of query in GBs (BigQuery only, can be a user_attribute name)
-   */
   var max_billing_gigabytes: String? = null,
-  /**
-   * Use SSL/TLS when connecting to server
-   */
   var ssl: Boolean? = null,
-  /**
-   * Verify the SSL
-   */
   var verify_ssl: Boolean? = null,
-  /**
-   * Name of temporary database (if used)
-   */
   var tmp_db_name: String? = null,
-  /**
-   * Additional params to add to JDBC connection string
-   */
   var jdbc_additional_params: String? = null,
-  /**
-   * Connection Pool Timeout, in seconds
-   */
   var pool_timeout: Long? = null,
-  /**
-   * (Read/Write) SQL Dialect name
-   */
   var dialect_name: String? = null,
-  /**
-   * (Limited access feature) Are per user db credentials enabled. Enabling will remove previously set username and password
-   */
   var user_db_credentials: Boolean? = null,
-  /**
-   * Fields whose values map to user attribute names
-   */
   var user_attribute_fields: Array<String>? = null,
-  /**
-   * Cron string specifying when maintenance such as PDT trigger checks and drops should be performed
-   */
   var maintenance_cron: String? = null,
-  /**
-   * Precache tables in the SQL Runner
-   */
   var sql_runner_precache_tables: Boolean? = null,
-  /**
-   * SQL statements (semicolon separated) to issue after connecting to the database. Requires `custom_after_connect_statements` license feature
-   */
   var after_connect_statements: String? = null,
   var pdt_context_override: WriteDBConnectionOverride? = null
 ) : Serializable
@@ -7906,486 +4920,314 @@ data class WriteDBConnection (
 /**
  * Dynamically generated writeable type for DBConnectionOverride removes properties:
  * has_password
+ *
+ * @property context Context in which to override (`pdt` is the only allowed value)
+ * @property host Host name/address of server
+ * @property port Port number on server
+ * @property username Username for server authentication
+ * @property password (Write-Only) Password for server authentication
+ * @property certificate (Write-Only) Base64 encoded Certificate body for server authentication (when appropriate for dialect).
+ * @property file_type (Write-Only) Certificate keyfile type - .json or .p12
+ * @property database Database name
+ * @property schema Scheme name
+ * @property jdbc_additional_params Additional params to add to JDBC connection string
+ * @property after_connect_statements SQL statements (semicolon separated) to issue after connecting to the database. Requires `custom_after_connect_statements` license feature
  */
 data class WriteDBConnectionOverride (
-  /**
-   * Context in which to override (`pdt` is the only allowed value)
-   */
   var context: String? = null,
-  /**
-   * Host name/address of server
-   */
   var host: String? = null,
-  /**
-   * Port number on server
-   */
   var port: String? = null,
-  /**
-   * Username for server authentication
-   */
   var username: String? = null,
-  /**
-   * (Write-Only) Password for server authentication
-   */
   var password: String? = null,
-  /**
-   * (Write-Only) Base64 encoded Certificate body for server authentication (when appropriate for dialect).
-   */
   var certificate: String? = null,
-  /**
-   * (Write-Only) Certificate keyfile type - .json or .p12
-   */
   var file_type: String? = null,
-  /**
-   * Database name
-   */
   var database: String? = null,
-  /**
-   * Scheme name
-   */
   var schema: String? = null,
-  /**
-   * Additional params to add to JDBC connection string
-   */
   var jdbc_additional_params: String? = null,
-  /**
-   * SQL statements (semicolon separated) to issue after connecting to the database. Requires `custom_after_connect_statements` license feature
-   */
   var after_connect_statements: String? = null
 ) : Serializable
 
 /**
  * Dynamically generated writeable type for FolderBase removes properties:
  * id, content_metadata_id, created_at, creator_id, child_count, external_id, is_embed, is_embed_shared_root, is_embed_users_root, is_personal, is_personal_descendant, is_shared_root, is_users_root, can
+ *
+ * @property name Unique Name
+ * @property parent_id Id of Parent. If the parent id is null, this is a root-level entry
  */
 data class WriteFolderBase (
-  /**
-   * Unique Name
-   */
   var name: String,
-  /**
-   * Id of Parent. If the parent id is null, this is a root-level entry
-   */
   var parent_id: String? = null
 ) : Serializable
 
 /**
  * Dynamically generated writeable type for GitBranch removes properties:
  * can, remote, remote_name, error, message, owner_name, readonly, personal, is_local, is_remote, is_production, ahead_count, behind_count, commit_at, remote_ref
+ *
+ * @property name The short name on the local. Updating `name` results in `git checkout <new_name>`
+ * @property ref The resolved ref of this branch. Updating `ref` results in `git reset --hard <new_ref>``.
  */
 data class WriteGitBranch (
-  /**
-   * The short name on the local. Updating `name` results in `git checkout <new_name>`
-   */
   var name: String? = null,
-  /**
-   * The resolved ref of this branch. Updating `ref` results in `git reset --hard <new_ref>``.
-   */
   var ref: String? = null
 ) : Serializable
 
 /**
  * Dynamically generated writeable type for Group removes properties:
  * can, contains_current_user, external_group_id, externally_managed, id, include_by_default, user_count
+ *
+ * @property can_add_to_content_metadata Group can be used in content access controls
+ * @property name Name of group
  */
 data class WriteGroup (
-  /**
-   * Group can be used in content access controls
-   */
   var can_add_to_content_metadata: Boolean? = null,
-  /**
-   * Name of group
-   */
   var name: String? = null
 ) : Serializable
 
 /**
  * Dynamically generated writeable type for Homepage removes properties:
  * can, content_metadata_id, created_at, homepage_sections, id, updated_at, user_id, primary_homepage
+ *
+ * @property deleted_at Date of homepage deletion
+ * @property description Description of the homepage
+ * @property section_order ids of the homepage sections in the order they should be displayed
+ * @property title Title of the homepage
  */
 data class WriteHomepage (
-  /**
-   * Date of homepage deletion
-   */
   var deleted_at: Date? = null,
-  /**
-   * Description of the homepage
-   */
   var description: String? = null,
-  /**
-   * ids of the homepage sections in the order they should be displayed
-   */
   var section_order: Array<Long>? = null,
-  /**
-   * Title of the homepage
-   */
   var title: String? = null
 ) : Serializable
 
 /**
  * Dynamically generated writeable type for HomepageItem removes properties:
  * can, content_created_by, content_favorite_id, content_metadata_id, content_updated_at, custom_image_url, description, favorite_count, id, image_url, location, section_fetch_time, title, url, view_count
+ *
+ * @property custom_description Custom description entered by the user, if present
+ * @property custom_image_data_base64 (Write-Only) base64 encoded image data
+ * @property custom_title Custom title entered by the user, if present
+ * @property custom_url Custom url entered by the user, if present
+ * @property dashboard_id Dashboard to base this item on
+ * @property homepage_section_id Associated Homepage Section
+ * @property look_id Look to base this item on
+ * @property lookml_dashboard_id LookML Dashboard to base this item on
+ * @property order An arbitrary integer representing the sort order within the section
+ * @property use_custom_description Whether the custom description should be used instead of the content description, if the item is associated with content
+ * @property use_custom_image Whether the custom image should be used instead of the content image, if the item is associated with content
+ * @property use_custom_title Whether the custom title should be used instead of the content title, if the item is associated with content
+ * @property use_custom_url Whether the custom url should be used instead of the content url, if the item is associated with content
  */
 data class WriteHomepageItem (
-  /**
-   * Custom description entered by the user, if present
-   */
   var custom_description: String? = null,
-  /**
-   * (Write-Only) base64 encoded image data
-   */
   var custom_image_data_base64: String? = null,
-  /**
-   * Custom title entered by the user, if present
-   */
   var custom_title: String? = null,
-  /**
-   * Custom url entered by the user, if present
-   */
   var custom_url: String? = null,
-  /**
-   * Dashboard to base this item on
-   */
   var dashboard_id: Long? = null,
-  /**
-   * Associated Homepage Section
-   */
   var homepage_section_id: String? = null,
-  /**
-   * Look to base this item on
-   */
   var look_id: Long? = null,
-  /**
-   * LookML Dashboard to base this item on
-   */
   var lookml_dashboard_id: String? = null,
-  /**
-   * An arbitrary integer representing the sort order within the section
-   */
   var order: Long? = null,
-  /**
-   * Whether the custom description should be used instead of the content description, if the item is associated with content
-   */
   var use_custom_description: Boolean? = null,
-  /**
-   * Whether the custom image should be used instead of the content image, if the item is associated with content
-   */
   var use_custom_image: Boolean? = null,
-  /**
-   * Whether the custom title should be used instead of the content title, if the item is associated with content
-   */
   var use_custom_title: Boolean? = null,
-  /**
-   * Whether the custom url should be used instead of the content url, if the item is associated with content
-   */
   var use_custom_url: Boolean? = null
 ) : Serializable
 
 /**
  * Dynamically generated writeable type for HomepageSection removes properties:
  * can, created_at, detail_url, homepage_items, id, is_header, updated_at
+ *
+ * @property deleted_at Time at which this section was deleted.
+ * @property homepage_id Id reference to parent homepage
+ * @property item_order ids of the homepage items in the order they should be displayed
+ * @property title Name of row
+ * @property description Description of the content found in this section.
  */
 data class WriteHomepageSection (
-  /**
-   * Time at which this section was deleted.
-   */
   var deleted_at: Date? = null,
-  /**
-   * Id reference to parent homepage
-   */
   var homepage_id: Long? = null,
-  /**
-   * ids of the homepage items in the order they should be displayed
-   */
   var item_order: Array<Long>? = null,
-  /**
-   * Name of row
-   */
   var title: String? = null,
-  /**
-   * Description of the content found in this section.
-   */
   var description: String? = null
 ) : Serializable
 
 /**
  * Dynamically generated writeable type for Integration removes properties:
  * can, id, integration_hub_id, label, description, supported_formats, supported_action_types, supported_formattings, supported_visualization_formattings, supported_download_settings, icon_url, uses_oauth, required_fields, delegate_oauth
+ *
+ * @property enabled Whether the integration is available to users.
+ * @property params Array of params for the integration.
+ * @property installed_delegate_oauth_targets Whether the integration is available to users.
  */
 data class WriteIntegration (
-  /**
-   * Whether the integration is available to users.
-   */
   var enabled: Boolean? = null,
-  /**
-   * Array of params for the integration.
-   */
   var params: Array<IntegrationParam>? = null,
-  /**
-   * Whether the integration is available to users.
-   */
   var installed_delegate_oauth_targets: Array<Long>? = null
 ) : Serializable
 
 /**
  * Dynamically generated writeable type for IntegrationHub removes properties:
  * can, id, label, official, fetch_error_message, has_authorization_token, legal_agreement_signed, legal_agreement_required, legal_agreement_text
+ *
+ * @property url URL of the hub.
+ * @property authorization_token (Write-Only) An authorization key that will be sent to the integration hub on every request.
  */
 data class WriteIntegrationHub (
-  /**
-   * URL of the hub.
-   */
   var url: String? = null,
-  /**
-   * (Write-Only) An authorization key that will be sent to the integration hub on every request.
-   */
   var authorization_token: String? = null
 ) : Serializable
 
 /**
  * Dynamically generated writeable type for InternalHelpResources removes properties:
  * can
+ *
+ * @property enabled If true and internal help resources content is not blank then the link for internal help resources will be shown in the help menu and the content displayed within Looker
  */
 data class WriteInternalHelpResources (
-  /**
-   * If true and internal help resources content is not blank then the link for internal help resources will be shown in the help menu and the content displayed within Looker
-   */
   var enabled: Boolean? = null
 ) : Serializable
 
 /**
  * Dynamically generated writeable type for InternalHelpResourcesContent removes properties:
  * can
+ *
+ * @property organization_name Text to display in the help menu item which will display the internal help resources
+ * @property markdown_content Content to be displayed in the internal help resources page/modal
  */
 data class WriteInternalHelpResourcesContent (
-  /**
-   * Text to display in the help menu item which will display the internal help resources
-   */
   var organization_name: String? = null,
-  /**
-   * Content to be displayed in the internal help resources page/modal
-   */
   var markdown_content: String? = null
 ) : Serializable
 
 /**
  * Dynamically generated writeable type for LDAPConfig removes properties:
  * can, default_new_user_groups, default_new_user_roles, groups, has_auth_password, modified_at, modified_by, user_attributes, url
+ *
+ * @property alternate_email_login_allowed Allow alternate email-based login via '/login/email' for admins and for specified users with the 'login_special_email' permission. This option is useful as a fallback during ldap setup, if ldap config problems occur later, or if you need to support some users who are not in your ldap directory. Looker email/password logins are always disabled for regular users when ldap is enabled.
+ * @property auth_password (Write-Only)  Password for the LDAP account used to access the LDAP server
+ * @property auth_requires_role Users will not be allowed to login at all unless a role for them is found in LDAP if set to true
+ * @property auth_username Distinguished name of LDAP account used to access the LDAP server
+ * @property connection_host LDAP server hostname
+ * @property connection_port LDAP host port
+ * @property connection_tls Use Transport Layer Security
+ * @property connection_tls_no_verify Do not verify peer when using TLS
+ * @property default_new_user_group_ids (Write-Only)  Array of ids of groups that will be applied to new users the first time they login via LDAP
+ * @property default_new_user_role_ids (Write-Only)  Array of ids of roles that will be applied to new users the first time they login via LDAP
+ * @property enabled Enable/Disable LDAP authentication for the server
+ * @property force_no_page Don't attempt to do LDAP search result paging (RFC 2696) even if the LDAP server claims to support it.
+ * @property groups_base_dn Base dn for finding groups in LDAP searches
+ * @property groups_finder_type Identifier for a strategy for how Looker will search for groups in the LDAP server
+ * @property groups_member_attribute LDAP Group attribute that signifies the members of the groups. Most commonly 'member'
+ * @property groups_objectclasses Optional comma-separated list of supported LDAP objectclass for groups when doing groups searches
+ * @property groups_user_attribute LDAP Group attribute that signifies the user in a group. Most commonly 'dn'
+ * @property groups_with_role_ids (Read/Write) Array of mappings between LDAP Groups and arrays of Looker Role ids
+ * @property merge_new_users_by_email Merge first-time ldap login to existing user account by email addresses. When a user logs in for the first time via ldap this option will connect this user into their existing account by finding the account with a matching email address. Otherwise a new user account will be created for the user.
+ * @property set_roles_from_groups Set user roles in Looker based on groups from LDAP
+ * @property test_ldap_password (Write-Only)  Test LDAP user password. For ldap tests only.
+ * @property test_ldap_user (Write-Only)  Test LDAP user login id. For ldap tests only.
+ * @property user_attribute_map_email Name of user record attributes used to indicate email address field
+ * @property user_attribute_map_first_name Name of user record attributes used to indicate first name
+ * @property user_attribute_map_last_name Name of user record attributes used to indicate last name
+ * @property user_attribute_map_ldap_id Name of user record attributes used to indicate unique record id
+ * @property user_attributes_with_ids (Read/Write) Array of mappings between LDAP User Attributes and arrays of Looker User Attribute ids
+ * @property user_bind_base_dn Distinguished name of LDAP node used as the base for user searches
+ * @property user_custom_filter (Optional) Custom RFC-2254 filter clause for use in finding user during login. Combined via 'and' with the other generated filter clauses.
+ * @property user_id_attribute_names Name(s) of user record attributes used for matching user login id (comma separated list)
+ * @property user_objectclass (Optional) Name of user record objectclass used for finding user during login id
+ * @property allow_normal_group_membership Allow LDAP auth'd users to be members of non-reflected Looker groups. If 'false', user will be removed from non-reflected groups on login.
+ * @property allow_roles_from_normal_groups LDAP auth'd users will be able to inherit roles from non-reflected Looker groups.
+ * @property allow_direct_roles Allows roles to be directly assigned to LDAP auth'd users.
  */
 data class WriteLDAPConfig (
-  /**
-   * Allow alternate email-based login via '/login/email' for admins and for specified users with the 'login_special_email' permission. This option is useful as a fallback during ldap setup, if ldap config problems occur later, or if you need to support some users who are not in your ldap directory. Looker email/password logins are always disabled for regular users when ldap is enabled.
-   */
   var alternate_email_login_allowed: Boolean? = null,
-  /**
-   * (Write-Only)  Password for the LDAP account used to access the LDAP server
-   */
   var auth_password: String? = null,
-  /**
-   * Users will not be allowed to login at all unless a role for them is found in LDAP if set to true
-   */
   var auth_requires_role: Boolean? = null,
-  /**
-   * Distinguished name of LDAP account used to access the LDAP server
-   */
   var auth_username: String? = null,
-  /**
-   * LDAP server hostname
-   */
   var connection_host: String? = null,
-  /**
-   * LDAP host port
-   */
   var connection_port: String? = null,
-  /**
-   * Use Transport Layer Security
-   */
   var connection_tls: Boolean? = null,
-  /**
-   * Do not verify peer when using TLS
-   */
   var connection_tls_no_verify: Boolean? = null,
-  /**
-   * (Write-Only)  Array of ids of groups that will be applied to new users the first time they login via LDAP
-   */
   var default_new_user_group_ids: Array<Long>? = null,
-  /**
-   * (Write-Only)  Array of ids of roles that will be applied to new users the first time they login via LDAP
-   */
   var default_new_user_role_ids: Array<Long>? = null,
-  /**
-   * Enable/Disable LDAP authentication for the server
-   */
   var enabled: Boolean? = null,
-  /**
-   * Don't attempt to do LDAP search result paging (RFC 2696) even if the LDAP server claims to support it.
-   */
   var force_no_page: Boolean? = null,
-  /**
-   * Base dn for finding groups in LDAP searches
-   */
   var groups_base_dn: String? = null,
-  /**
-   * Identifier for a strategy for how Looker will search for groups in the LDAP server
-   */
   var groups_finder_type: String? = null,
-  /**
-   * LDAP Group attribute that signifies the members of the groups. Most commonly 'member'
-   */
   var groups_member_attribute: String? = null,
-  /**
-   * Optional comma-separated list of supported LDAP objectclass for groups when doing groups searches
-   */
   var groups_objectclasses: String? = null,
-  /**
-   * LDAP Group attribute that signifies the user in a group. Most commonly 'dn'
-   */
   var groups_user_attribute: String? = null,
-  /**
-   * (Read/Write) Array of mappings between LDAP Groups and arrays of Looker Role ids
-   */
   var groups_with_role_ids: Array<LDAPGroupWrite>? = null,
-  /**
-   * Merge first-time ldap login to existing user account by email addresses. When a user logs in for the first time via ldap this option will connect this user into their existing account by finding the account with a matching email address. Otherwise a new user account will be created for the user.
-   */
   var merge_new_users_by_email: Boolean? = null,
-  /**
-   * Set user roles in Looker based on groups from LDAP
-   */
   var set_roles_from_groups: Boolean? = null,
-  /**
-   * (Write-Only)  Test LDAP user password. For ldap tests only.
-   */
   var test_ldap_password: String? = null,
-  /**
-   * (Write-Only)  Test LDAP user login id. For ldap tests only.
-   */
   var test_ldap_user: String? = null,
-  /**
-   * Name of user record attributes used to indicate email address field
-   */
   var user_attribute_map_email: String? = null,
-  /**
-   * Name of user record attributes used to indicate first name
-   */
   var user_attribute_map_first_name: String? = null,
-  /**
-   * Name of user record attributes used to indicate last name
-   */
   var user_attribute_map_last_name: String? = null,
-  /**
-   * Name of user record attributes used to indicate unique record id
-   */
   var user_attribute_map_ldap_id: String? = null,
-  /**
-   * (Read/Write) Array of mappings between LDAP User Attributes and arrays of Looker User Attribute ids
-   */
   var user_attributes_with_ids: Array<LDAPUserAttributeWrite>? = null,
-  /**
-   * Distinguished name of LDAP node used as the base for user searches
-   */
   var user_bind_base_dn: String? = null,
-  /**
-   * (Optional) Custom RFC-2254 filter clause for use in finding user during login. Combined via 'and' with the other generated filter clauses.
-   */
   var user_custom_filter: String? = null,
-  /**
-   * Name(s) of user record attributes used for matching user login id (comma separated list)
-   */
   var user_id_attribute_names: String? = null,
-  /**
-   * (Optional) Name of user record objectclass used for finding user during login id
-   */
   var user_objectclass: String? = null,
-  /**
-   * Allow LDAP auth'd users to be members of non-reflected Looker groups. If 'false', user will be removed from non-reflected groups on login.
-   */
   var allow_normal_group_membership: Boolean? = null,
-  /**
-   * LDAP auth'd users will be able to inherit roles from non-reflected Looker groups.
-   */
   var allow_roles_from_normal_groups: Boolean? = null,
-  /**
-   * Allows roles to be directly assigned to LDAP auth'd users.
-   */
   var allow_direct_roles: Boolean? = null
 ) : Serializable
 
 /**
  * Dynamically generated writeable type for LegacyFeature removes properties:
  * can, id, name, description, enabled, disallowed_as_of_version, disable_on_upgrade_to_version, end_of_life_version, documentation_url, approximate_disable_date, approximate_end_of_life_date, has_disabled_on_upgrade
+ *
+ * @property enabled_locally Whether this feature has been enabled by a user
  */
 data class WriteLegacyFeature (
-  /**
-   * Whether this feature has been enabled by a user
-   */
   var enabled_locally: Boolean? = null
 ) : Serializable
 
 /**
  * Dynamically generated writeable type for LookmlModel removes properties:
  * can, explores, has_content, label
+ *
+ * @property allowed_db_connection_names Array of names of connections this model is allowed to use
+ * @property name Name of the model. Also used as the unique identifier
+ * @property project_name Name of project containing the model
+ * @property unlimited_db_connections Is this model allowed to use all current and future connections
  */
 data class WriteLookmlModel (
-  /**
-   * Array of names of connections this model is allowed to use
-   */
   var allowed_db_connection_names: Array<String>? = null,
-  /**
-   * Name of the model. Also used as the unique identifier
-   */
   var name: String? = null,
-  /**
-   * Name of project containing the model
-   */
   var project_name: String? = null,
-  /**
-   * Is this model allowed to use all current and future connections
-   */
   var unlimited_db_connections: Boolean? = null
 ) : Serializable
 
 /**
  * Dynamically generated writeable type for LookWithQuery removes properties:
  * can, content_metadata_id, id, content_favorite_id, created_at, deleted_at, deleter_id, embed_url, excel_file_url, favorite_count, google_spreadsheet_formula, image_embed_url, last_accessed_at, last_updater_id, last_viewed_at, model, public_slug, public_url, short_url, updated_at, view_count, user, url
+ *
+ * @property title Look Title
+ * @property deleted Whether or not a look is 'soft' deleted.
+ * @property description Description
+ * @property is_run_on_load auto-run query when Look viewed
+ * @property public Is Public
+ * @property query_id Query Id
+ * @property folder
+ * @property folder_id Folder Id
+ * @property user_id User Id
+ * @property space_id Space Id
+ * @property space
+ * @property query
  */
 data class WriteLookWithQuery (
-  /**
-   * Look Title
-   */
   var title: String? = null,
-  /**
-   * Whether or not a look is 'soft' deleted.
-   */
   var deleted: Boolean? = null,
-  /**
-   * Description
-   */
   var description: String? = null,
-  /**
-   * auto-run query when Look viewed
-   */
   var is_run_on_load: Boolean? = null,
-  /**
-   * Is Public
-   */
   var public: Boolean? = null,
-  /**
-   * Query Id
-   */
   var query_id: Long? = null,
   var folder: WriteFolderBase? = null,
-  /**
-   * Folder Id
-   */
   var folder_id: String? = null,
-  /**
-   * User Id
-   */
   var user_id: Long? = null,
-  /**
-   * Space Id
-   */
   var space_id: String? = null,
   var space: WriteSpaceBase? = null,
   var query: WriteQuery? = null
@@ -8394,184 +5236,117 @@ data class WriteLookWithQuery (
 /**
  * Dynamically generated writeable type for MergeQuery removes properties:
  * can, id, result_maker_id
+ *
+ * @property column_limit Column Limit
+ * @property dynamic_fields Dynamic Fields
+ * @property pivots Pivots
+ * @property sorts Sorts
+ * @property source_queries Source Queries defining the results to be merged.
+ * @property total Total
+ * @property vis_config Visualization Config
  */
 data class WriteMergeQuery (
-  /**
-   * Column Limit
-   */
   var column_limit: String? = null,
-  /**
-   * Dynamic Fields
-   */
   var dynamic_fields: String? = null,
-  /**
-   * Pivots
-   */
   var pivots: Array<String>? = null,
-  /**
-   * Sorts
-   */
   var sorts: Array<String>? = null,
-  /**
-   * Source Queries defining the results to be merged.
-   */
   var source_queries: Array<MergeQuerySourceQuery>? = null,
-  /**
-   * Total
-   */
   var total: Boolean? = null,
-  /**
-   * Visualization Config
-   */
   var vis_config: Map<String,Any>? = null
 ) : Serializable
 
 /**
  * Dynamically generated writeable type for ModelSet removes properties:
  * can, all_access, built_in, id, url
+ *
+ * @property models
+ * @property name Name of ModelSet
  */
 data class WriteModelSet (
   var models: Array<String>? = null,
-  /**
-   * Name of ModelSet
-   */
   var name: String? = null
 ) : Serializable
 
 /**
  * Dynamically generated writeable type for OIDCConfig removes properties:
  * can, default_new_user_groups, default_new_user_roles, groups, modified_at, modified_by, test_slug, user_attributes, url
+ *
+ * @property alternate_email_login_allowed Allow alternate email-based login via '/login/email' for admins and for specified users with the 'login_special_email' permission. This option is useful as a fallback during ldap setup, if ldap config problems occur later, or if you need to support some users who are not in your ldap directory. Looker email/password logins are always disabled for regular users when ldap is enabled.
+ * @property audience OpenID Provider Audience
+ * @property auth_requires_role Users will not be allowed to login at all unless a role for them is found in OIDC if set to true
+ * @property authorization_endpoint OpenID Provider Authorization Url
+ * @property default_new_user_group_ids (Write-Only) Array of ids of groups that will be applied to new users the first time they login via OIDC
+ * @property default_new_user_role_ids (Write-Only) Array of ids of roles that will be applied to new users the first time they login via OIDC
+ * @property enabled Enable/Disable OIDC authentication for the server
+ * @property groups_attribute Name of user record attributes used to indicate groups. Used when 'groups_finder_type' is set to 'grouped_attribute_values'
+ * @property groups_with_role_ids (Read/Write) Array of mappings between OIDC Groups and arrays of Looker Role ids
+ * @property identifier Relying Party Identifier (provided by OpenID Provider)
+ * @property issuer OpenID Provider Issuer
+ * @property new_user_migration_types Merge first-time oidc login to existing user account by email addresses. When a user logs in for the first time via oidc this option will connect this user into their existing account by finding the account with a matching email address by testing the given types of credentials for existing users. Otherwise a new user account will be created for the user. This list (if provided) must be a comma separated list of string like 'email,ldap,google'
+ * @property scopes Array of scopes to request.
+ * @property secret (Write-Only) Relying Party Secret (provided by OpenID Provider)
+ * @property set_roles_from_groups Set user roles in Looker based on groups from OIDC
+ * @property token_endpoint OpenID Provider Token Url
+ * @property user_attribute_map_email Name of user record attributes used to indicate email address field
+ * @property user_attribute_map_first_name Name of user record attributes used to indicate first name
+ * @property user_attribute_map_last_name Name of user record attributes used to indicate last name
+ * @property user_attributes_with_ids (Read/Write) Array of mappings between OIDC User Attributes and arrays of Looker User Attribute ids
+ * @property userinfo_endpoint OpenID Provider User Information Url
+ * @property allow_normal_group_membership Allow OIDC auth'd users to be members of non-reflected Looker groups. If 'false', user will be removed from non-reflected groups on login.
+ * @property allow_roles_from_normal_groups OIDC auth'd users will inherit roles from non-reflected Looker groups.
+ * @property allow_direct_roles Allows roles to be directly assigned to OIDC auth'd users.
  */
 data class WriteOIDCConfig (
-  /**
-   * Allow alternate email-based login via '/login/email' for admins and for specified users with the 'login_special_email' permission. This option is useful as a fallback during ldap setup, if ldap config problems occur later, or if you need to support some users who are not in your ldap directory. Looker email/password logins are always disabled for regular users when ldap is enabled.
-   */
   var alternate_email_login_allowed: Boolean? = null,
-  /**
-   * OpenID Provider Audience
-   */
   var audience: String? = null,
-  /**
-   * Users will not be allowed to login at all unless a role for them is found in OIDC if set to true
-   */
   var auth_requires_role: Boolean? = null,
-  /**
-   * OpenID Provider Authorization Url
-   */
   var authorization_endpoint: UriString? = null,
-  /**
-   * (Write-Only) Array of ids of groups that will be applied to new users the first time they login via OIDC
-   */
   var default_new_user_group_ids: Array<Long>? = null,
-  /**
-   * (Write-Only) Array of ids of roles that will be applied to new users the first time they login via OIDC
-   */
   var default_new_user_role_ids: Array<Long>? = null,
-  /**
-   * Enable/Disable OIDC authentication for the server
-   */
   var enabled: Boolean? = null,
-  /**
-   * Name of user record attributes used to indicate groups. Used when 'groups_finder_type' is set to 'grouped_attribute_values'
-   */
   var groups_attribute: String? = null,
-  /**
-   * (Read/Write) Array of mappings between OIDC Groups and arrays of Looker Role ids
-   */
   var groups_with_role_ids: Array<OIDCGroupWrite>? = null,
-  /**
-   * Relying Party Identifier (provided by OpenID Provider)
-   */
   var identifier: String? = null,
-  /**
-   * OpenID Provider Issuer
-   */
   var issuer: String? = null,
-  /**
-   * Merge first-time oidc login to existing user account by email addresses. When a user logs in for the first time via oidc this option will connect this user into their existing account by finding the account with a matching email address by testing the given types of credentials for existing users. Otherwise a new user account will be created for the user. This list (if provided) must be a comma separated list of string like 'email,ldap,google'
-   */
   var new_user_migration_types: String? = null,
-  /**
-   * Array of scopes to request.
-   */
   var scopes: Array<String>? = null,
-  /**
-   * (Write-Only) Relying Party Secret (provided by OpenID Provider)
-   */
   var secret: String? = null,
-  /**
-   * Set user roles in Looker based on groups from OIDC
-   */
   var set_roles_from_groups: Boolean? = null,
-  /**
-   * OpenID Provider Token Url
-   */
   var token_endpoint: String? = null,
-  /**
-   * Name of user record attributes used to indicate email address field
-   */
   var user_attribute_map_email: String? = null,
-  /**
-   * Name of user record attributes used to indicate first name
-   */
   var user_attribute_map_first_name: String? = null,
-  /**
-   * Name of user record attributes used to indicate last name
-   */
   var user_attribute_map_last_name: String? = null,
-  /**
-   * (Read/Write) Array of mappings between OIDC User Attributes and arrays of Looker User Attribute ids
-   */
   var user_attributes_with_ids: Array<OIDCUserAttributeWrite>? = null,
-  /**
-   * OpenID Provider User Information Url
-   */
   var userinfo_endpoint: UriString? = null,
-  /**
-   * Allow OIDC auth'd users to be members of non-reflected Looker groups. If 'false', user will be removed from non-reflected groups on login.
-   */
   var allow_normal_group_membership: Boolean? = null,
-  /**
-   * OIDC auth'd users will inherit roles from non-reflected Looker groups.
-   */
   var allow_roles_from_normal_groups: Boolean? = null,
-  /**
-   * Allows roles to be directly assigned to OIDC auth'd users.
-   */
   var allow_direct_roles: Boolean? = null
 ) : Serializable
 
 /**
  * Dynamically generated writeable type for PasswordConfig removes properties:
  * can
+ *
+ * @property min_length Minimum number of characters required for a new password.  Must be between 7 and 100
+ * @property require_numeric Require at least one numeric character
+ * @property require_upperlower Require at least one uppercase and one lowercase letter
+ * @property require_special Require at least one special character
  */
 data class WritePasswordConfig (
-  /**
-   * Minimum number of characters required for a new password.  Must be between 7 and 100
-   */
   var min_length: Long? = null,
-  /**
-   * Require at least one numeric character
-   */
   var require_numeric: Boolean? = null,
-  /**
-   * Require at least one uppercase and one lowercase letter
-   */
   var require_upperlower: Boolean? = null,
-  /**
-   * Require at least one special character
-   */
   var require_special: Boolean? = null
 ) : Serializable
 
 /**
  * Dynamically generated writeable type for PermissionSet removes properties:
  * can, all_access, built_in, id, url
+ *
+ * @property name Name of PermissionSet
+ * @property permissions
  */
 data class WritePermissionSet (
-  /**
-   * Name of PermissionSet
-   */
   var name: String? = null,
   var permissions: Array<String>? = null
 ) : Serializable
@@ -8579,179 +5354,108 @@ data class WritePermissionSet (
 /**
  * Dynamically generated writeable type for Project removes properties:
  * can, id, uses_git, is_example
+ *
+ * @property name Project display name
+ * @property git_remote_url Git remote repository url
+ * @property git_username Git username for HTTPS authentication. (For production only, if using user attributes.)
+ * @property git_password (Write-Only) Git password for HTTPS authentication. (For production only, if using user attributes.)
+ * @property git_username_user_attribute User attribute name for username in per-user HTTPS authentication.
+ * @property git_password_user_attribute User attribute name for password in per-user HTTPS authentication.
+ * @property git_service_name Name of the git service provider
+ * @property git_application_server_http_port Port that HTTP(S) application server is running on (for PRs, file browsing, etc.)
+ * @property git_application_server_http_scheme Scheme that is running on application server (for PRs, file browsing, etc.) Valid values are: "http", "https".
+ * @property deploy_secret (Write-Only) Optional secret token with which to authenticate requests to the webhook deploy endpoint. If not set, endpoint is unauthenticated.
+ * @property unset_deploy_secret (Write-Only) When true, unsets the deploy secret to allow unauthenticated access to the webhook deploy endpoint.
+ * @property pull_request_mode The git pull request policy for this project. Valid values are: "off", "links", "recommended", "required".
+ * @property validation_required Validation policy: If true, the project must pass validation checks before project changes can be committed to the git repository
+ * @property git_release_mgmt_enabled If true, advanced git release management is enabled for this project
+ * @property allow_warnings Validation policy: If true, the project can be committed with warnings when `validation_required` is true. (`allow_warnings` does nothing if `validation_required` is false).
  */
 data class WriteProject (
-  /**
-   * Project display name
-   */
   var name: String? = null,
-  /**
-   * Git remote repository url
-   */
   var git_remote_url: String? = null,
-  /**
-   * Git username for HTTPS authentication. (For production only, if using user attributes.)
-   */
   var git_username: String? = null,
-  /**
-   * (Write-Only) Git password for HTTPS authentication. (For production only, if using user attributes.)
-   */
   var git_password: String? = null,
-  /**
-   * User attribute name for username in per-user HTTPS authentication.
-   */
   var git_username_user_attribute: String? = null,
-  /**
-   * User attribute name for password in per-user HTTPS authentication.
-   */
   var git_password_user_attribute: String? = null,
-  /**
-   * Name of the git service provider
-   */
   var git_service_name: String? = null,
-  /**
-   * Port that HTTP(S) application server is running on (for PRs, file browsing, etc.)
-   */
   var git_application_server_http_port: Long? = null,
-  /**
-   * Scheme that is running on application server (for PRs, file browsing, etc.) Valid values are: "http", "https".
-   */
   var git_application_server_http_scheme: GitApplicationServerHttpScheme? = null,
-  /**
-   * (Write-Only) Optional secret token with which to authenticate requests to the webhook deploy endpoint. If not set, endpoint is unauthenticated.
-   */
   var deploy_secret: String? = null,
-  /**
-   * (Write-Only) When true, unsets the deploy secret to allow unauthenticated access to the webhook deploy endpoint.
-   */
   var unset_deploy_secret: Boolean? = null,
-  /**
-   * The git pull request policy for this project. Valid values are: "off", "links", "recommended", "required".
-   */
   var pull_request_mode: PullRequestMode? = null,
-  /**
-   * Validation policy: If true, the project must pass validation checks before project changes can be committed to the git repository
-   */
   var validation_required: Boolean? = null,
-  /**
-   * If true, advanced git release management is enabled for this project
-   */
   var git_release_mgmt_enabled: Boolean? = null,
-  /**
-   * Validation policy: If true, the project can be committed with warnings when `validation_required` is true. (`allow_warnings` does nothing if `validation_required` is false).
-   */
   var allow_warnings: Boolean? = null
 ) : Serializable
 
 /**
  * Dynamically generated writeable type for Query removes properties:
  * can, id, slug, share_url, expanded_share_url, url, has_table_calculations
+ *
+ * @property model Model
+ * @property view Explore Name
+ * @property fields Fields
+ * @property pivots Pivots
+ * @property fill_fields Fill Fields
+ * @property filters Filters
+ * @property filter_expression Filter Expression
+ * @property sorts Sorting for the query results. Use the format `["view.field", ...]` to sort on fields in ascending order. Use the format `["view.field desc", ...]` to sort on fields in descending order. Use `["__UNSORTED__"]` (2 underscores before and after) to disable sorting entirely. Empty sorts `[]` will trigger a default sort.
+ * @property limit Limit
+ * @property column_limit Column Limit
+ * @property total Total
+ * @property row_total Raw Total
+ * @property subtotals Fields on which to run subtotals
+ * @property vis_config Visualization configuration properties. These properties are typically opaque and differ based on the type of visualization used. There is no specified set of allowed keys. The values can be any type supported by JSON. A "type" key with a string value is often present, and is used by Looker to determine which visualization to present. Visualizations ignore unknown vis_config properties.
+ * @property filter_config The filter_config represents the state of the filter UI on the explore page for a given query. When running a query via the Looker UI, this parameter takes precedence over "filters". When creating a query or modifying an existing query, "filter_config" should be set to null. Setting it to any other value could cause unexpected filtering behavior. The format should be considered opaque.
+ * @property visible_ui_sections Visible UI Sections
+ * @property dynamic_fields Dynamic Fields
+ * @property client_id Client Id: used to generate shortened explore URLs. If set by client, must be a unique 22 character alphanumeric string. Otherwise one will be generated.
+ * @property query_timezone Query Timezone
+ * @property runtime (DEPRECATED) Runtime (Deprecated)
  */
 data class WriteQuery (
-  /**
-   * Model
-   */
   var model: String,
-  /**
-   * Explore Name
-   */
   var view: String,
-  /**
-   * Fields
-   */
   var fields: Array<String>? = null,
-  /**
-   * Pivots
-   */
   var pivots: Array<String>? = null,
-  /**
-   * Fill Fields
-   */
   var fill_fields: Array<String>? = null,
-  /**
-   * Filters
-   */
   var filters: Map<String,Any>? = null,
-  /**
-   * Filter Expression
-   */
   var filter_expression: String? = null,
-  /**
-   * Sorting for the query results. Use the format `["view.field", ...]` to sort on fields in ascending order. Use the format `["view.field desc", ...]` to sort on fields in descending order. Use `["__UNSORTED__"]` (2 underscores before and after) to disable sorting entirely. Empty sorts `[]` will trigger a default sort.
-   */
   var sorts: Array<String>? = null,
-  /**
-   * Limit
-   */
   var limit: String? = null,
-  /**
-   * Column Limit
-   */
   var column_limit: String? = null,
-  /**
-   * Total
-   */
   var total: Boolean? = null,
-  /**
-   * Raw Total
-   */
   var row_total: String? = null,
-  /**
-   * Fields on which to run subtotals
-   */
   var subtotals: Array<String>? = null,
-  /**
-   * Visualization configuration properties. These properties are typically opaque and differ based on the type of visualization used. There is no specified set of allowed keys. The values can be any type supported by JSON. A "type" key with a string value is often present, and is used by Looker to determine which visualization to present. Visualizations ignore unknown vis_config properties.
-   */
   var vis_config: Map<String,Any>? = null,
-  /**
-   * The filter_config represents the state of the filter UI on the explore page for a given query. When running a query via the Looker UI, this parameter takes precedence over "filters". When creating a query or modifying an existing query, "filter_config" should be set to null. Setting it to any other value could cause unexpected filtering behavior. The format should be considered opaque.
-   */
   var filter_config: Map<String,Any>? = null,
-  /**
-   * Visible UI Sections
-   */
   var visible_ui_sections: String? = null,
-  /**
-   * Dynamic Fields
-   */
   var dynamic_fields: String? = null,
-  /**
-   * Client Id: used to generate shortened explore URLs. If set by client, must be a unique 22 character alphanumeric string. Otherwise one will be generated.
-   */
   var client_id: String? = null,
-  /**
-   * Query Timezone
-   */
   var query_timezone: String? = null,
-  /**
-   * (DEPRECATED) Runtime (Deprecated)
-   */
   var runtime: Double? = null
 ) : Serializable
 
 /**
  * Dynamically generated writeable type for RepositoryCredential removes properties:
  * can, id, root_project_id, remote_url, is_configured
+ *
+ * @property git_username Git username for HTTPS authentication.
+ * @property git_password (Write-Only) Git password for HTTPS authentication.
+ * @property ssh_public_key Public deploy key for SSH authentication.
  */
 data class WriteRepositoryCredential (
-  /**
-   * Git username for HTTPS authentication.
-   */
   var git_username: String? = null,
-  /**
-   * (Write-Only) Git password for HTTPS authentication.
-   */
   var git_password: String? = null,
-  /**
-   * Public deploy key for SSH authentication.
-   */
   var ssh_public_key: String? = null
 ) : Serializable
 
 /**
  * Dynamically generated writeable type for ResultMakerWithIdVisConfigAndDynamicFields removes properties:
  * id, dynamic_fields, filterables, sorts, merge_result_id, total, query_id, sql_query_id, vis_config
+ *
+ * @property query
  */
 data class WriteResultMakerWithIdVisConfigAndDynamicFields (
   var query: WriteQuery? = null
@@ -8760,296 +5464,179 @@ data class WriteResultMakerWithIdVisConfigAndDynamicFields (
 /**
  * Dynamically generated writeable type for Role removes properties:
  * can, id, url, users_url
+ *
+ * @property name Name of Role
+ * @property permission_set
+ * @property permission_set_id (Write-Only) Id of permission set
+ * @property model_set
+ * @property model_set_id (Write-Only) Id of model set
  */
 data class WriteRole (
-  /**
-   * Name of Role
-   */
   var name: String? = null,
   var permission_set: WritePermissionSet? = null,
-  /**
-   * (Write-Only) Id of permission set
-   */
   var permission_set_id: Long? = null,
   var model_set: WriteModelSet? = null,
-  /**
-   * (Write-Only) Id of model set
-   */
   var model_set_id: Long? = null
 ) : Serializable
 
 /**
  * Dynamically generated writeable type for SamlConfig removes properties:
  * can, test_slug, modified_at, modified_by, default_new_user_roles, default_new_user_groups, groups, user_attributes, url
+ *
+ * @property enabled Enable/Disable Saml authentication for the server
+ * @property idp_cert Identity Provider Certificate (provided by IdP)
+ * @property idp_url Identity Provider Url (provided by IdP)
+ * @property idp_issuer Identity Provider Issuer (provided by IdP)
+ * @property idp_audience Identity Provider Audience (set in IdP config). Optional in Looker. Set this only if you want Looker to validate the audience value returned by the IdP.
+ * @property allowed_clock_drift Count of seconds of clock drift to allow when validating timestamps of assertions.
+ * @property user_attribute_map_email Name of user record attributes used to indicate email address field
+ * @property user_attribute_map_first_name Name of user record attributes used to indicate first name
+ * @property user_attribute_map_last_name Name of user record attributes used to indicate last name
+ * @property new_user_migration_types Merge first-time saml login to existing user account by email addresses. When a user logs in for the first time via saml this option will connect this user into their existing account by finding the account with a matching email address by testing the given types of credentials for existing users. Otherwise a new user account will be created for the user. This list (if provided) must be a comma separated list of string like 'email,ldap,google'
+ * @property alternate_email_login_allowed Allow alternate email-based login via '/login/email' for admins and for specified users with the 'login_special_email' permission. This option is useful as a fallback during ldap setup, if ldap config problems occur later, or if you need to support some users who are not in your ldap directory. Looker email/password logins are always disabled for regular users when ldap is enabled.
+ * @property default_new_user_role_ids (Write-Only) Array of ids of roles that will be applied to new users the first time they login via Saml
+ * @property default_new_user_group_ids (Write-Only) Array of ids of groups that will be applied to new users the first time they login via Saml
+ * @property set_roles_from_groups Set user roles in Looker based on groups from Saml
+ * @property groups_attribute Name of user record attributes used to indicate groups. Used when 'groups_finder_type' is set to 'grouped_attribute_values'
+ * @property groups_with_role_ids (Read/Write) Array of mappings between Saml Groups and arrays of Looker Role ids
+ * @property auth_requires_role Users will not be allowed to login at all unless a role for them is found in Saml if set to true
+ * @property user_attributes_with_ids (Read/Write) Array of mappings between Saml User Attributes and arrays of Looker User Attribute ids
+ * @property groups_finder_type Identifier for a strategy for how Looker will find groups in the SAML response. One of ['grouped_attribute_values', 'individual_attributes']
+ * @property groups_member_value Value for group attribute used to indicate membership. Used when 'groups_finder_type' is set to 'individual_attributes'
+ * @property bypass_login_page Bypass the login page when user authentication is required. Redirect to IdP immediately instead.
+ * @property allow_normal_group_membership Allow SAML auth'd users to be members of non-reflected Looker groups. If 'false', user will be removed from non-reflected groups on login.
+ * @property allow_roles_from_normal_groups SAML auth'd users will inherit roles from non-reflected Looker groups.
+ * @property allow_direct_roles Allows roles to be directly assigned to SAML auth'd users.
  */
 data class WriteSamlConfig (
-  /**
-   * Enable/Disable Saml authentication for the server
-   */
   var enabled: Boolean? = null,
-  /**
-   * Identity Provider Certificate (provided by IdP)
-   */
   var idp_cert: String? = null,
-  /**
-   * Identity Provider Url (provided by IdP)
-   */
   var idp_url: String? = null,
-  /**
-   * Identity Provider Issuer (provided by IdP)
-   */
   var idp_issuer: String? = null,
-  /**
-   * Identity Provider Audience (set in IdP config). Optional in Looker. Set this only if you want Looker to validate the audience value returned by the IdP.
-   */
   var idp_audience: String? = null,
-  /**
-   * Count of seconds of clock drift to allow when validating timestamps of assertions.
-   */
   var allowed_clock_drift: Long? = null,
-  /**
-   * Name of user record attributes used to indicate email address field
-   */
   var user_attribute_map_email: String? = null,
-  /**
-   * Name of user record attributes used to indicate first name
-   */
   var user_attribute_map_first_name: String? = null,
-  /**
-   * Name of user record attributes used to indicate last name
-   */
   var user_attribute_map_last_name: String? = null,
-  /**
-   * Merge first-time saml login to existing user account by email addresses. When a user logs in for the first time via saml this option will connect this user into their existing account by finding the account with a matching email address by testing the given types of credentials for existing users. Otherwise a new user account will be created for the user. This list (if provided) must be a comma separated list of string like 'email,ldap,google'
-   */
   var new_user_migration_types: String? = null,
-  /**
-   * Allow alternate email-based login via '/login/email' for admins and for specified users with the 'login_special_email' permission. This option is useful as a fallback during ldap setup, if ldap config problems occur later, or if you need to support some users who are not in your ldap directory. Looker email/password logins are always disabled for regular users when ldap is enabled.
-   */
   var alternate_email_login_allowed: Boolean? = null,
-  /**
-   * (Write-Only) Array of ids of roles that will be applied to new users the first time they login via Saml
-   */
   var default_new_user_role_ids: Array<Long>? = null,
-  /**
-   * (Write-Only) Array of ids of groups that will be applied to new users the first time they login via Saml
-   */
   var default_new_user_group_ids: Array<Long>? = null,
-  /**
-   * Set user roles in Looker based on groups from Saml
-   */
   var set_roles_from_groups: Boolean? = null,
-  /**
-   * Name of user record attributes used to indicate groups. Used when 'groups_finder_type' is set to 'grouped_attribute_values'
-   */
   var groups_attribute: String? = null,
-  /**
-   * (Read/Write) Array of mappings between Saml Groups and arrays of Looker Role ids
-   */
   var groups_with_role_ids: Array<SamlGroupWrite>? = null,
-  /**
-   * Users will not be allowed to login at all unless a role for them is found in Saml if set to true
-   */
   var auth_requires_role: Boolean? = null,
-  /**
-   * (Read/Write) Array of mappings between Saml User Attributes and arrays of Looker User Attribute ids
-   */
   var user_attributes_with_ids: Array<SamlUserAttributeWrite>? = null,
-  /**
-   * Identifier for a strategy for how Looker will find groups in the SAML response. One of ['grouped_attribute_values', 'individual_attributes']
-   */
   var groups_finder_type: String? = null,
-  /**
-   * Value for group attribute used to indicate membership. Used when 'groups_finder_type' is set to 'individual_attributes'
-   */
   var groups_member_value: String? = null,
-  /**
-   * Bypass the login page when user authentication is required. Redirect to IdP immediately instead.
-   */
   var bypass_login_page: Boolean? = null,
-  /**
-   * Allow SAML auth'd users to be members of non-reflected Looker groups. If 'false', user will be removed from non-reflected groups on login.
-   */
   var allow_normal_group_membership: Boolean? = null,
-  /**
-   * SAML auth'd users will inherit roles from non-reflected Looker groups.
-   */
   var allow_roles_from_normal_groups: Boolean? = null,
-  /**
-   * Allows roles to be directly assigned to SAML auth'd users.
-   */
   var allow_direct_roles: Boolean? = null
 ) : Serializable
 
 /**
  * Dynamically generated writeable type for ScheduledPlan removes properties:
  * id, created_at, updated_at, title, user, next_run_at, last_run_at, can
+ *
+ * @property name Name of this scheduled plan
+ * @property user_id User Id which owns this scheduled plan
+ * @property run_as_recipient Whether schedule is run as recipient (only applicable for email recipients)
+ * @property enabled Whether the ScheduledPlan is enabled
+ * @property look_id Id of a look
+ * @property dashboard_id Id of a dashboard
+ * @property lookml_dashboard_id Id of a LookML dashboard
+ * @property filters_string Query string to run look or dashboard with
+ * @property dashboard_filters (DEPRECATED) Alias for filters_string field
+ * @property require_results Delivery should occur if running the dashboard or look returns results
+ * @property require_no_results Delivery should occur if the dashboard look does not return results
+ * @property require_change Delivery should occur if data have changed since the last run
+ * @property send_all_results Will run an unlimited query and send all results.
+ * @property crontab Vixie-Style crontab specification when to run
+ * @property datagroup Name of a datagroup; if specified will run when datagroup triggered (can't be used with cron string)
+ * @property timezone Timezone for interpreting the specified crontab (default is Looker instance timezone)
+ * @property query_id Query id
+ * @property scheduled_plan_destination Scheduled plan destinations
+ * @property run_once Whether the plan in question should only be run once (usually for testing)
+ * @property include_links Whether links back to Looker should be included in this ScheduledPlan
+ * @property pdf_paper_size The size of paper the PDF should be formatted to fit. Valid values are: "letter", "legal", "tabloid", "a0", "a1", "a2", "a3", "a4", "a5".
+ * @property pdf_landscape Whether the PDF should be formatted for landscape orientation
+ * @property embed Whether this schedule is in an embed context or not
+ * @property color_theme Color scheme of the dashboard if applicable
+ * @property long_tables Whether or not to expand table vis to full length
+ * @property inline_table_width The pixel width at which we render the inline table visualizations
  */
 data class WriteScheduledPlan (
-  /**
-   * Name of this scheduled plan
-   */
   var name: String? = null,
-  /**
-   * User Id which owns this scheduled plan
-   */
   var user_id: Long? = null,
-  /**
-   * Whether schedule is run as recipient (only applicable for email recipients)
-   */
   var run_as_recipient: Boolean? = null,
-  /**
-   * Whether the ScheduledPlan is enabled
-   */
   var enabled: Boolean? = null,
-  /**
-   * Id of a look
-   */
   var look_id: Long? = null,
-  /**
-   * Id of a dashboard
-   */
   var dashboard_id: Long? = null,
-  /**
-   * Id of a LookML dashboard
-   */
   var lookml_dashboard_id: String? = null,
-  /**
-   * Query string to run look or dashboard with
-   */
   var filters_string: String? = null,
-  /**
-   * (DEPRECATED) Alias for filters_string field
-   */
   var dashboard_filters: String? = null,
-  /**
-   * Delivery should occur if running the dashboard or look returns results
-   */
   var require_results: Boolean? = null,
-  /**
-   * Delivery should occur if the dashboard look does not return results
-   */
   var require_no_results: Boolean? = null,
-  /**
-   * Delivery should occur if data have changed since the last run
-   */
   var require_change: Boolean? = null,
-  /**
-   * Will run an unlimited query and send all results.
-   */
   var send_all_results: Boolean? = null,
-  /**
-   * Vixie-Style crontab specification when to run
-   */
   var crontab: String? = null,
-  /**
-   * Name of a datagroup; if specified will run when datagroup triggered (can't be used with cron string)
-   */
   var datagroup: String? = null,
-  /**
-   * Timezone for interpreting the specified crontab (default is Looker instance timezone)
-   */
   var timezone: String? = null,
-  /**
-   * Query id
-   */
   var query_id: String? = null,
-  /**
-   * Scheduled plan destinations
-   */
   var scheduled_plan_destination: Array<ScheduledPlanDestination>? = null,
-  /**
-   * Whether the plan in question should only be run once (usually for testing)
-   */
   var run_once: Boolean? = null,
-  /**
-   * Whether links back to Looker should be included in this ScheduledPlan
-   */
   var include_links: Boolean? = null,
-  /**
-   * The size of paper the PDF should be formatted to fit. Valid values are: "letter", "legal", "tabloid", "a0", "a1", "a2", "a3", "a4", "a5".
-   */
   var pdf_paper_size: String? = null,
-  /**
-   * Whether the PDF should be formatted for landscape orientation
-   */
   var pdf_landscape: Boolean? = null,
-  /**
-   * Whether this schedule is in an embed context or not
-   */
   var embed: Boolean? = null,
-  /**
-   * Color scheme of the dashboard if applicable
-   */
   var color_theme: String? = null,
-  /**
-   * Whether or not to expand table vis to full length
-   */
   var long_tables: Boolean? = null,
-  /**
-   * The pixel width at which we render the inline table visualizations
-   */
   var inline_table_width: Long? = null
 ) : Serializable
 
 /**
  * Dynamically generated writeable type for SessionConfig removes properties:
  * can
+ *
+ * @property allow_persistent_sessions Allow users to have persistent sessions when they login
+ * @property session_minutes Number of minutes for user sessions.  Must be between 5 and 43200
+ * @property unlimited_sessions_per_user Allow users to have an unbounded number of concurrent sessions (otherwise, users will be limited to only one session at a time).
+ * @property use_inactivity_based_logout Enforce session logout for sessions that are inactive for 15 minutes.
+ * @property track_session_location Track location of session when user logs in.
  */
 data class WriteSessionConfig (
-  /**
-   * Allow users to have persistent sessions when they login
-   */
   var allow_persistent_sessions: Boolean? = null,
-  /**
-   * Number of minutes for user sessions.  Must be between 5 and 43200
-   */
   var session_minutes: Long? = null,
-  /**
-   * Allow users to have an unbounded number of concurrent sessions (otherwise, users will be limited to only one session at a time).
-   */
   var unlimited_sessions_per_user: Boolean? = null,
-  /**
-   * Enforce session logout for sessions that are inactive for 15 minutes.
-   */
   var use_inactivity_based_logout: Boolean? = null,
-  /**
-   * Track location of session when user logs in.
-   */
   var track_session_location: Boolean? = null
 ) : Serializable
 
 /**
  * Dynamically generated writeable type for SpaceBase removes properties:
  * id, content_metadata_id, created_at, creator_id, child_count, external_id, is_embed, is_embed_shared_root, is_embed_users_root, is_personal, is_personal_descendant, is_shared_root, is_users_root, can
+ *
+ * @property name Unique Name
+ * @property parent_id Id of Parent. If the parent id is null, this is a root-level entry
  */
 data class WriteSpaceBase (
-  /**
-   * Unique Name
-   */
   var name: String,
-  /**
-   * Id of Parent. If the parent id is null, this is a root-level entry
-   */
   var parent_id: String? = null
 ) : Serializable
 
 /**
  * Dynamically generated writeable type for Theme removes properties:
  * can, id
+ *
+ * @property begin_at Timestamp for when this theme becomes active. Null=always
+ * @property end_at Timestamp for when this theme expires. Null=never
+ * @property name Name of theme. Can only be alphanumeric and underscores.
+ * @property settings
  */
 data class WriteTheme (
-  /**
-   * Timestamp for when this theme becomes active. Null=always
-   */
   var begin_at: Date? = null,
-  /**
-   * Timestamp for when this theme expires. Null=never
-   */
   var end_at: Date? = null,
-  /**
-   * Name of theme. Can only be alphanumeric and underscores.
-   */
   var name: String? = null,
   var settings: ThemeSettings? = null
 ) : Serializable
@@ -9057,148 +5644,93 @@ data class WriteTheme (
 /**
  * Dynamically generated writeable type for User removes properties:
  * can, avatar_url, avatar_url_without_sizing, credentials_api3, credentials_embed, credentials_google, credentials_ldap, credentials_looker_openid, credentials_oidc, credentials_saml, credentials_totp, display_name, email, embed_group_space_id, group_ids, id, looker_versions, personal_space_id, personal_folder_id, presumed_looker_employee, role_ids, sessions, verified_looker_employee, roles_externally_managed, allow_direct_roles, allow_normal_group_membership, allow_roles_from_normal_groups, url
+ *
+ * @property credentials_email
+ * @property first_name First name
+ * @property home_space_id ID string for user's home space
+ * @property home_folder_id ID string for user's home folder
+ * @property is_disabled Account has been disabled
+ * @property last_name Last name
+ * @property locale User's preferred locale. User locale takes precedence over Looker's system-wide default locale. Locale determines language of display strings and date and numeric formatting in API responses. Locale string must be a 2 letter language code or a combination of language code and region code: 'en' or 'en-US', for example.
+ * @property models_dir_validated User's dev workspace has been checked for presence of applicable production projects
+ * @property ui_state Per user dictionary of undocumented state information owned by the Looker UI.
  */
 data class WriteUser (
   var credentials_email: WriteCredentialsEmail? = null,
-  /**
-   * First name
-   */
   var first_name: String? = null,
-  /**
-   * ID string for user's home space
-   */
   var home_space_id: String? = null,
-  /**
-   * ID string for user's home folder
-   */
   var home_folder_id: String? = null,
-  /**
-   * Account has been disabled
-   */
   var is_disabled: Boolean? = null,
-  /**
-   * Last name
-   */
   var last_name: String? = null,
-  /**
-   * User's preferred locale. User locale takes precedence over Looker's system-wide default locale. Locale determines language of display strings and date and numeric formatting in API responses. Locale string must be a 2 letter language code or a combination of language code and region code: 'en' or 'en-US', for example.
-   */
   var locale: String? = null,
-  /**
-   * User's dev workspace has been checked for presence of applicable production projects
-   */
   var models_dir_validated: Boolean? = null,
-  /**
-   * Per user dictionary of undocumented state information owned by the Looker UI.
-   */
   var ui_state: Map<String,Any>? = null
 ) : Serializable
 
 /**
  * Dynamically generated writeable type for UserAttribute removes properties:
  * can, id, is_system, is_permanent
+ *
+ * @property name Name of user attribute
+ * @property label Human-friendly label for user attribute
+ * @property type Type of user attribute ("string", "number", "datetime", "yesno", "zipcode")
+ * @property default_value Default value for when no value is set on the user
+ * @property value_is_hidden If true, users will not be able to view values of this attribute
+ * @property user_can_view Non-admin users can see the values of their attributes and use them in filters
+ * @property user_can_edit Users can change the value of this attribute for themselves
+ * @property hidden_value_domain_whitelist Destinations to which a hidden attribute may be sent. Once set, cannot be edited.
  */
 data class WriteUserAttribute (
-  /**
-   * Name of user attribute
-   */
   var name: String? = null,
-  /**
-   * Human-friendly label for user attribute
-   */
   var label: String? = null,
-  /**
-   * Type of user attribute ("string", "number", "datetime", "yesno", "zipcode")
-   */
   var type: String? = null,
-  /**
-   * Default value for when no value is set on the user
-   */
   var default_value: String? = null,
-  /**
-   * If true, users will not be able to view values of this attribute
-   */
   var value_is_hidden: Boolean? = null,
-  /**
-   * Non-admin users can see the values of their attributes and use them in filters
-   */
   var user_can_view: Boolean? = null,
-  /**
-   * Users can change the value of this attribute for themselves
-   */
   var user_can_edit: Boolean? = null,
-  /**
-   * Destinations to which a hidden attribute may be sent. Once set, cannot be edited.
-   */
   var hidden_value_domain_whitelist: String? = null
 ) : Serializable
 
 /**
  * Dynamically generated writeable type for UserAttributeWithValue removes properties:
  * can, name, label, rank, user_id, user_can_edit, value_is_hidden, user_attribute_id, source, hidden_value_domain_whitelist
+ *
+ * @property value Value of attribute for user
  */
 data class WriteUserAttributeWithValue (
-  /**
-   * Value of attribute for user
-   */
   var value: String? = null
 ) : Serializable
 
 /**
  * Dynamically generated writeable type for WhitelabelConfiguration removes properties:
  * can, id, logo_url, favicon_url
+ *
+ * @property logo_file Customer logo image. Expected base64 encoded data (write-only)
+ * @property favicon_file Custom favicon image. Expected base64 encoded data (write-only)
+ * @property default_title Default page title
+ * @property show_help_menu Boolean to toggle showing help menus
+ * @property show_docs Boolean to toggle showing docs
+ * @property show_email_sub_options Boolean to toggle showing email subscription options.
+ * @property allow_looker_mentions Boolean to toggle mentions of Looker in emails
+ * @property allow_looker_links Boolean to toggle links to Looker in emails
+ * @property custom_welcome_email_advanced Allow subject line and email heading customization in customized emails”
+ * @property setup_mentions Remove the word Looker from appearing in the account setup page
+ * @property alerts_logo Remove Looker logo from Alerts
+ * @property alerts_links Remove Looker links from Alerts
+ * @property folders_mentions Remove Looker mentions in home folder page when you don’t have any items saved
  */
 data class WriteWhitelabelConfiguration (
-  /**
-   * Customer logo image. Expected base64 encoded data (write-only)
-   */
   var logo_file: String? = null,
-  /**
-   * Custom favicon image. Expected base64 encoded data (write-only)
-   */
   var favicon_file: String? = null,
-  /**
-   * Default page title
-   */
   var default_title: String? = null,
-  /**
-   * Boolean to toggle showing help menus
-   */
   var show_help_menu: Boolean? = null,
-  /**
-   * Boolean to toggle showing docs
-   */
   var show_docs: Boolean? = null,
-  /**
-   * Boolean to toggle showing email subscription options.
-   */
   var show_email_sub_options: Boolean? = null,
-  /**
-   * Boolean to toggle mentions of Looker in emails
-   */
   var allow_looker_mentions: Boolean? = null,
-  /**
-   * Boolean to toggle links to Looker in emails
-   */
   var allow_looker_links: Boolean? = null,
-  /**
-   * Allow subject line and email heading customization in customized emails”
-   */
   var custom_welcome_email_advanced: Boolean? = null,
-  /**
-   * Remove the word Looker from appearing in the account setup page
-   */
   var setup_mentions: Boolean? = null,
-  /**
-   * Remove Looker logo from Alerts
-   */
   var alerts_logo: Boolean? = null,
-  /**
-   * Remove Looker links from Alerts
-   */
   var alerts_links: Boolean? = null,
-  /**
-   * Remove Looker mentions in home folder page when you don’t have any items saved
-   */
   var folders_mentions: Boolean? = null
 ) : Serializable

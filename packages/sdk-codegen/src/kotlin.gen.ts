@@ -165,11 +165,10 @@ import java.util.*
     const attr = property.hasSpecialNeeds
       ? `${indent}@JsonProperty("${property.jsonName}")\n`
       : ''
-    return (
-      this.commentHeader(indent, this.describeProperty(property)) +
-      attr +
-      `${indent}var ${property.name}: ${type.name}${optional}`
-    )
+    return `
+${attr}
+${indent}var ${property.name}: ${type.name}${optional}
+`.trim()
   }
 
   paramComment(param: IParameter, mapped: IMappedType) {
@@ -275,40 +274,58 @@ ${note}
     return `${indent}${mayQuote(value)}`
   }
 
+  describeProperty(property: IProperty) {
+    return `@property ${property.name} ${super.describeProperty(property)}`
+  }
+
   typeSignature(indent: string, type: IType) {
-    const isEnum = type instanceof EnumType
-    const kind = isEnum ? 'enum' : 'data'
-    const opener = isEnum ? ': Serializable {' : '('
-    return (
-      this.commentHeader(indent, type.description) +
-      `${indent}${kind} class ${type.name} ${opener}\n`
-    )
+    if (type instanceof EnumType) {
+      return `
+${this.commentHeader(indent, type.description).trim()}
+${indent}enum class ${type.name} : Serializable {
+`.trim()
+    } else {
+      const props = Object.values(type.properties).map((prop) =>
+        this.describeProperty(prop)
+      )
+
+      const header = `
+${type.description}
+
+${props.join('\n')}
+`.trim()
+
+      return `
+${this.commentHeader(indent, header).trim()}
+${indent}data class ${type.name} (
+`.trim()
+    }
   }
 
   declareType(indent: string, type: IType) {
     const bump = this.bumper(indent)
-    const props: string[] = []
-    let ender = this.endTypeStr
-    let propertyValues = ''
     if (type instanceof EnumType) {
-      ender = `\n}`
       const num = type as EnumType
-      num.values.forEach((value) =>
-        props.push(this.declareEnumValue(bump, value))
+      const props = num.values.map((value) =>
+        this.declareEnumValue(bump, value)
       )
-      propertyValues = props.join(this.enumDelimiter)
+
+      return `
+${this.typeSignature(indent, type)}
+${props.join(this.enumDelimiter)}
+}
+`.trim()
     } else {
-      Object.values(type.properties).forEach((prop) =>
-        props.push(this.declareProperty(bump, prop))
+      const props = Object.values(type.properties).map((prop) =>
+        this.declareProperty(bump, prop)
       )
-      propertyValues = props.join(this.propDelimiter)
+
+      return `
+${this.typeSignature(indent, type)}
+${props.join(this.propDelimiter)}
+) : Serializable
+`.trim()
     }
-    return (
-      this.typeSignature(indent, type) +
-      propertyValues +
-      this.construct(indent, type) +
-      `${this.endTypeStr ? indent : ''}${ender}`
-    )
   }
 
   errorResponses(_indent: string, _method: IMethod) {
