@@ -71,8 +71,5 @@ open class APIMethods(val authSession: AuthSession) {
         } catch (ex: UnsupportedEncodingException) {
             throw RuntimeException(ex.cause)
         }
-
     }
-
-
 }

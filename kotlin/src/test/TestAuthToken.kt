@@ -41,10 +41,10 @@ class TestAuthToken {
     @test
     fun isActiveWithFullToken() {
         val testToken = AuthToken(
-                accessToken = "all-access",
-                tokenType = "backstage",
-                expiresIn = 3600,
-                refreshToken = "refresh"
+            accessToken = "all-access",
+            tokenType = "backstage",
+            expiresIn = 3600,
+            refreshToken = "refresh"
         )
 
         assertEquals(testToken.accessToken, "all-access")
@@ -57,9 +57,9 @@ class TestAuthToken {
     @test
     fun has10SecondLag() {
         var actual = AuthToken(
-                accessToken = "all-access",
-                tokenType = "backstage",
-                expiresIn = 9
+            accessToken = "all-access",
+            tokenType = "backstage",
+            expiresIn = 9
         )
 
         assertEquals(actual.accessToken, "all-access")
@@ -67,9 +67,9 @@ class TestAuthToken {
         assertEquals(actual.expiresIn, 9)
         assertEquals(actual.isActive(), false)
         actual = AuthToken(
-                accessToken = "all-access",
-                tokenType = "backstage",
-                expiresIn = 11
+            accessToken = "all-access",
+            tokenType = "backstage",
+            expiresIn = 11
         )
 
         assertEquals(actual.expiresIn, 11)

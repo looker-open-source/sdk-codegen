@@ -11,11 +11,11 @@ class TestMethods {
     val sdk by lazy { TestConfig().sdk }
 
     private inline fun <TAll, TId, reified TEntity : Any> listGetter(
-            lister: () -> SDKResponse,
-            getId: (item: TAll) -> TId,
-            getEntity: (id: TId, fields: String?) -> SDKResponse,
-            fields: String? = null,
-            maxErrors: Int = 3
+        lister: () -> SDKResponse,
+        getId: (item: TAll) -> TId,
+        getEntity: (id: TId, fields: String?) -> SDKResponse,
+        fields: String? = null,
+        maxErrors: Int = 3
     ): String {
         val entityName = TEntity::class.simpleName!!
         val list = sdk.ok<Array<TAll>>(lister())
@@ -45,11 +45,11 @@ class TestMethods {
     }
 
     private inline fun <TAll, TId, reified TEntity : Any> testAll(
-            lister: () -> SDKResponse,
-            getId: (item: TAll) -> TId,
-            getEntity: (id: TId, fields: String?) -> SDKResponse,
-            fields: String? = null,
-            maxErrors: Int = 3
+        lister: () -> SDKResponse,
+        getId: (item: TAll) -> TId,
+        getEntity: (id: TId, fields: String?) -> SDKResponse,
+        fields: String? = null,
+        maxErrors: Int = 3
     ) {
         val entityName = TEntity::class.simpleName!!
         var result = listGetter<TAll, TId, TEntity>(lister, getId, getEntity, null, maxErrors)
@@ -64,18 +64,20 @@ class TestMethods {
 
     private fun simpleQuery(): WriteQuery {
         return WriteQuery(
-                "system__activity",
-                "dashboard",
-                arrayOf("dashboard.id", "dashboard.title", "dashboard.count"),
-                limit = "100")
+            "system__activity",
+            "dashboard",
+            arrayOf("dashboard.id", "dashboard.title", "dashboard.count"),
+            limit = "100"
+        )
     }
 
     private fun slowQuery(): WriteQuery {
         return WriteQuery(
-                "system__activity",
-                "dashboard",
-                arrayOf("dashboard.id", "dashboard.title", "dashboard.count"),
-                limit = "5000")
+            "system__activity",
+            "dashboard",
+            arrayOf("dashboard.id", "dashboard.title", "dashboard.count"),
+            limit = "5000"
+        )
     }
 
     /*
@@ -86,10 +88,14 @@ class TestMethods {
         if (items.count() > 0) {
             return items.first()
         }
-        val look = sdk.ok<Look>(sdk.create_look(WriteLookWithQuery(
-                description = "SDK Look",
-                query = simpleQuery()
-        )))
+        val look = sdk.ok<Look>(
+            sdk.create_look(
+                WriteLookWithQuery(
+                    description = "SDK Look",
+                    query = simpleQuery()
+                )
+            )
+        )
         print("Prepared Look ${look.id}")
         return look
     }
@@ -100,11 +106,15 @@ class TestMethods {
             val base = items.first()
             return sdk.ok(sdk.dashboard(base.id!!))
         }
-        val dashboard = sdk.ok<Dashboard>(sdk.create_dashboard(WriteDashboard(
-                description = "SDK Dashboard",
-                title = "SDK Dashboard Title",
-                show_title = true
-        )))
+        val dashboard = sdk.ok<Dashboard>(
+            sdk.create_dashboard(
+                WriteDashboard(
+                    description = "SDK Dashboard",
+                    title = "SDK Dashboard Title",
+                    show_title = true
+                )
+            )
+        )
         print("Prepared Dashboard ${dashboard.id}")
         return dashboard
     }
@@ -115,19 +125,31 @@ class TestMethods {
             return items.first()
         }
         val look = prepLook()
-        val board = sdk.ok<Board>(sdk.create_board(WriteBoard(
-                description = "SDK board description",
-                title = "SDK Board"
-        )))
+        val board = sdk.ok<Board>(
+            sdk.create_board(
+                WriteBoard(
+                    description = "SDK board description",
+                    title = "SDK Board"
+                )
+            )
+        )
 
-        val section = sdk.ok<BoardSection>(sdk.create_board_section(WriteBoardSection(
-                board_id = board.id!!.toLong(),
-                description = "SDK section"
-        )))
-        val item = sdk.ok<BoardItem>(sdk.create_board_item(WriteBoardItem(
-                board_section_id = section.id,
-                look_id = look.id
-        )))
+        val section = sdk.ok<BoardSection>(
+            sdk.create_board_section(
+                WriteBoardSection(
+                    board_id = board.id!!.toLong(),
+                    description = "SDK section"
+                )
+            )
+        )
+        val item = sdk.ok<BoardItem>(
+            sdk.create_board_item(
+                WriteBoardItem(
+                    board_section_id = section.id,
+                    look_id = look.id
+                )
+            )
+        )
         print("Prepared Board ${board.id} Section ${section.id} Item ${item.id} with Look ${look.id}")
         return board
     }
@@ -140,25 +162,31 @@ class TestMethods {
             return items.first()
         }
         val look = prepLook()
-        val destinations = arrayOf(ScheduledPlanDestination(
+        val destinations = arrayOf(
+            ScheduledPlanDestination(
                 type = "sftp",
                 format = "csv",
                 address = "sftp://example",
                 secret_parameters = "{\"password\":\"secret\"}",
                 parameters = "{\"username\":\"name\"}"
-        ))
+            )
+        )
 
-        val plan = sdk.ok<ScheduledPlan>(sdk.create_scheduled_plan(WriteScheduledPlan(
-                name = scheduleName,
-                look_id = look.id!!.toLong(),
-                require_change = false,
-                require_no_results = false,
-                require_results = true,
-                timezone = "America/Los_Angeles",
-                crontab = "*/1440 * * * *",
-                enabled = true, // Plan must be enabled to be retrieved by `all_scheduled_plans`
-                scheduled_plan_destination = destinations)
-        ))
+        val plan = sdk.ok<ScheduledPlan>(
+            sdk.create_scheduled_plan(
+                WriteScheduledPlan(
+                    name = scheduleName,
+                    look_id = look.id!!.toLong(),
+                    require_change = false,
+                    require_no_results = false,
+                    require_results = true,
+                    timezone = "America/Los_Angeles",
+                    crontab = "*/1440 * * * *",
+                    enabled = true, // Plan must be enabled to be retrieved by `all_scheduled_plans`
+                    scheduled_plan_destination = destinations
+                )
+            )
+        )
         print("Prepared scheduled plan ${plan.id}")
         return plan
     }
@@ -234,9 +262,10 @@ class TestMethods {
         val query = sdk.ok<Query>(sdk.create_query(simpleQuery()))
         query.id?.let { id ->
             var task = WriteCreateQueryTask(
-                    query_id = id,
-                    source = "test",
-                    result_format = ResultFormat.csv)
+                query_id = id,
+                source = "test",
+                result_format = ResultFormat.csv
+            )
             val created = sdk.ok<QueryTask>(sdk.create_query_task(task))
             assertEquals(id, created.query_id, "Query id matches")
             assertEquals(ResultFormat.csv.toString(), created.result_format)
@@ -272,7 +301,7 @@ class TestMethods {
     @test
     fun testRunInlineQuery() {
         val result = sdk.ok<String>(
-                sdk.run_inline_query("csv", simpleQuery())
+            sdk.run_inline_query("csv", simpleQuery())
         )
         assertTrue(result.contains("Dashboard ID"))
     }
@@ -280,34 +309,38 @@ class TestMethods {
     @test
     fun testAllColorCollections() {
         listGetter<ColorCollection, String, ColorCollection>(
-                { sdk.all_color_collections() },
-                { item -> item.id!! },
-                { id, fields -> sdk.color_collection(id, fields) })
+            { sdk.all_color_collections() },
+            { item -> item.id!! },
+            { id, fields -> sdk.color_collection(id, fields) }
+        )
     }
 
     @test
     fun testAllConnections() {
         listGetter<DBConnection, String, DBConnection>(
-                { sdk.all_connections() },
-                { item -> item.name!! },
-                { id, fields -> sdk.connection(id, fields) })
+            { sdk.all_connections() },
+            { item -> item.name!! },
+            { id, fields -> sdk.connection(id, fields) }
+        )
     }
 
     @test
     fun testAllDataGroups() {
         listGetter<Datagroup, Long, Datagroup>(
-                { sdk.all_datagroups() },
-                { item -> item.id!! },
-                { id, _ -> sdk.datagroup(id) })
+            { sdk.all_datagroups() },
+            { item -> item.id!! },
+            { id, _ -> sdk.datagroup(id) }
+        )
     }
 
     @test
     fun testAllDashboards() {
         prepDashboard()
         testAll<DashboardBase, String, Dashboard>(
-                { sdk.all_dashboards() },
-                { item -> item.id!! },
-                { id, fields -> sdk.dashboard(id, fields) })
+            { sdk.all_dashboards() },
+            { item -> item.id!! },
+            { id, fields -> sdk.dashboard(id, fields) }
+        )
     }
 
     @test
@@ -319,31 +352,34 @@ class TestMethods {
     @test
     fun testAllFolders() {
         testAll<Folder, String, Folder>(
-                { sdk.all_folders() },
-                { item -> item.id!! },
-                { id, fields -> sdk.folder(id, fields) })
+            { sdk.all_folders() },
+            { item -> item.id!! },
+            { id, fields -> sdk.folder(id, fields) }
+        )
     }
 
     @test
     fun testAllGroups() {
         listGetter<Group, Long, Group>(
-                { sdk.all_groups() },
-                { item -> item.id!! },
-                { id, fields -> sdk.group(id, fields) })
+            { sdk.all_groups() },
+            { item -> item.id!! },
+            { id, fields -> sdk.group(id, fields) }
+        )
     }
 
     @test
     fun testAllBoardItems() {
         prepBoard()
         listGetter<BoardItem, Long, BoardItem>(
-                { sdk.all_board_items() },
-                { item -> item.id!!.toLong() },
-                { id, fields -> sdk.board_item(id, fields) })
+            { sdk.all_board_items() },
+            { item -> item.id!!.toLong() },
+            { id, fields -> sdk.board_item(id, fields) }
+        )
     }
 
     @test
     fun testSearchBoards() {
-        val searched = sdk.ok<Array<Board>>(sdk.search_boards(title="%"))
+        val searched = sdk.ok<Array<Board>>(sdk.search_boards(title = "%"))
         assertNotNull(searched)
         assertNotEquals(0, searched.count(), "There should be boards")
     }
@@ -352,42 +388,47 @@ class TestMethods {
     fun testAllBoards() {
         prepBoard()
         listGetter<Board, Long, Board>(
-                { sdk.all_boards() },
-                { item -> item.id!!.toLong() },
-                { id, fields -> sdk.board(id, fields) })
+            { sdk.all_boards() },
+            { item -> item.id!!.toLong() },
+            { id, fields -> sdk.board(id, fields) }
+        )
     }
 
     @test
     fun testAllBoardSections() {
         prepBoard()
         listGetter<BoardSection, Long, BoardSection>(
-                { sdk.all_board_sections() },
-                { item -> item.id!!.toLong() },
-                { id, fields -> sdk.board_section(id, fields) })
+            { sdk.all_board_sections() },
+            { item -> item.id!!.toLong() },
+            { id, fields -> sdk.board_section(id, fields) }
+        )
     }
 
     @test
     fun testAllIntegrationHubs() {
         listGetter<IntegrationHub, Long, IntegrationHub>(
-                { sdk.all_integration_hubs() },
-                { item -> item.id!!.toLong() },
-                { id, fields -> sdk.integration_hub(id, fields) })
+            { sdk.all_integration_hubs() },
+            { item -> item.id!!.toLong() },
+            { id, fields -> sdk.integration_hub(id, fields) }
+        )
     }
 
     @test
     fun testAllIntegrations() {
         listGetter<Integration, String, Integration>(
-                { sdk.all_integrations() },
-                { item -> item.id!! },
-                { id, fields -> sdk.integration(id, fields) })
+            { sdk.all_integrations() },
+            { item -> item.id!! },
+            { id, fields -> sdk.integration(id, fields) }
+        )
     }
 
     @test
     fun testAllLegacyFeatures() {
         listGetter<LegacyFeature, String, LegacyFeature>(
-                { sdk.all_legacy_features() },
-                { item -> item.id!! },
-                { id, _ -> sdk.legacy_feature(id) })
+            { sdk.all_legacy_features() },
+            { item -> item.id!! },
+            { id, _ -> sdk.legacy_feature(id) }
+        )
     }
 
     @test
@@ -399,34 +440,38 @@ class TestMethods {
     @test
     fun testAllLookMLModels() {
         testAll<LookmlModel, String, LookmlModel>(
-                { sdk.all_lookml_models() },
-                { item -> item.name!! },
-                { id, fields -> sdk.lookml_model(id, fields) })
+            { sdk.all_lookml_models() },
+            { item -> item.name!! },
+            { id, fields -> sdk.lookml_model(id, fields) }
+        )
     }
 
     @test
     fun testAllLooks() {
         prepLook()
         testAll<Look, Long, LookWithQuery>(
-                { sdk.all_looks() },
-                { item -> item.id!! },
-                { id, fields -> sdk.look(id, fields) })
+            { sdk.all_looks() },
+            { item -> item.id!! },
+            { id, fields -> sdk.look(id, fields) }
+        )
     }
 
     @test
     fun testAllModelSets() {
         testAll<ModelSet, Long, ModelSet>(
-                { sdk.all_model_sets() },
-                { item -> item.id!! },
-                { id, fields -> sdk.model_set(id, fields) })
+            { sdk.all_model_sets() },
+            { item -> item.id!! },
+            { id, fields -> sdk.model_set(id, fields) }
+        )
     }
 
     @test
     fun testAllPermissionSets() {
         testAll<PermissionSet, Long, PermissionSet>(
-                { sdk.all_permission_sets() },
-                { item -> item.id!! },
-                { id, fields -> sdk.permission_set(id, fields) })
+            { sdk.all_permission_sets() },
+            { item -> item.id!! },
+            { id, fields -> sdk.permission_set(id, fields) }
+        )
     }
 
     @test
@@ -438,17 +483,19 @@ class TestMethods {
     @test
     fun testAllProjects() {
         testAll<Project, String, Project>(
-                { sdk.all_projects() },
-                { item -> item.id!! },
-                { id, fields -> sdk.project(id, fields) })
+            { sdk.all_projects() },
+            { item -> item.id!! },
+            { id, fields -> sdk.project(id, fields) }
+        )
     }
 
     @test
     fun testAllRoles() {
         testAll<Role, Long, Role>(
-                { sdk.all_roles() },
-                { item -> item.id!! },
-                { id, _ -> sdk.role(id) })
+            { sdk.all_roles() },
+            { item -> item.id!! },
+            { id, _ -> sdk.role(id) }
+        )
     }
 
 // TODO figure out a reliable way to queue up some running queries
@@ -467,7 +514,7 @@ class TestMethods {
 //            list = sdk.ok(sdk.all_running_queries())
 //            Thread.sleep(100L) // block main thread to ensure query is running
 //        } while (running && list.count() == 0 && tries++ < 99)
-////        assertEquals(running, false, "Running should have completed")
+// //        assertEquals(running, false, "Running should have completed")
 //        assertNotEquals(list.count(), 0, "List should have at least one query")
 //    }
 
@@ -475,18 +522,20 @@ class TestMethods {
     fun testAllSchedulePlans() {
         prepScheduledPlan()
         testAll<ScheduledPlan, Long, ScheduledPlan>(
-                { sdk.all_scheduled_plans() },
-                { item -> item.id!! },
-                { id, fields -> sdk.scheduled_plan(id, fields) })
+            { sdk.all_scheduled_plans() },
+            { item -> item.id!! },
+            { id, fields -> sdk.scheduled_plan(id, fields) }
+        )
         clearScheduledPlan()
     }
 
     @test
     fun testAllThemes() {
         testAll<Theme, Long, Theme>(
-                { sdk.all_themes() },
-                { item -> item.id!! },
-                { id, fields -> sdk.theme(id, fields) })
+            { sdk.all_themes() },
+            { item -> item.id!! },
+            { id, fields -> sdk.theme(id, fields) }
+        )
     }
 
     @test
@@ -498,9 +547,10 @@ class TestMethods {
     @test
     fun testAllUserAttributes() {
         testAll<UserAttribute, Long, UserAttribute>(
-                { sdk.all_user_attributes() },
-                { item -> item.id!! },
-                { id, fields -> sdk.user_attribute(id, fields) })
+            { sdk.all_user_attributes() },
+            { item -> item.id!! },
+            { id, fields -> sdk.user_attribute(id, fields) }
+        )
     }
 
     @test
@@ -514,18 +564,19 @@ class TestMethods {
     @test
     fun testAllUsers() {
         testAll<User, Long, User>(
-                { sdk.all_users() },
-                { item -> item.id!! },
-                { id, fields -> sdk.user(id, fields) })
+            { sdk.all_users() },
+            { item -> item.id!! },
+            { id, fields -> sdk.user(id, fields) }
+        )
     }
 
     @test
     fun testAllUsersWithIds() {
         val allUsers = sdk.ok<Array<User>>(sdk.all_users())
         val userIds: Array<Long> = allUsers
-                .map { u -> u.id!! }
-                .take(2)
-                .toTypedArray()
+            .map { u -> u.id!! }
+            .take(2)
+            .toTypedArray()
         val ids: DelimArray<Long> = DelimArray<Long>(userIds)
         val users = sdk.ok<Array<User>>(sdk.all_users(ids = ids))
         assertEquals(2, users.size, "Should retrieve 2 users.")
@@ -546,10 +597,9 @@ class TestMethods {
     @test
     fun testAllWorkspaces() {
         testAll<Workspace, String, Workspace>(
-                { sdk.all_workspaces() },
-                { item -> item.id!! },
-                { id, _ -> sdk.workspace(id) })
+            { sdk.all_workspaces() },
+            { item -> item.id!! },
+            { id, _ -> sdk.workspace(id) }
+        )
     }
-
-
 }

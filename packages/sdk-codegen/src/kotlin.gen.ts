@@ -53,7 +53,7 @@ export class KotlinGen extends CodeGen {
   codeQuote = '"'
   enumDelimiter = ',\n'
 
-  indentStr = '  '
+  indentStr = '    '
   endTypeStr = '\n) : Serializable'
   needsRequestTypes = false
   willItStream = true
@@ -151,17 +151,24 @@ import java.util.*
     return `${indent}//endregion ${description}`
   }
 
+  paramMappedType(param: IParameter, method: IMethod) {
+    const type =
+      param.location === strBody
+        ? this.writeableType(param.type, method) || param.type
+        : param.type
+    return this.typeMap(type)
+  }
+
   declareProperty(indent: string, property: IProperty) {
     const optional = !property.required ? '? = null' : ''
     const type = this.typeMap(property.type)
     const attr = property.hasSpecialNeeds
       ? `${indent}@JsonProperty("${property.jsonName}")\n`
       : ''
-    return (
-      this.commentHeader(indent, this.describeProperty(property)) +
-      attr +
-      `${indent}var ${property.name}: ${type.name}${optional}`
-    )
+    return `
+${attr}
+${indent}var ${property.name}: ${type.name}${optional}
+`.trim()
   }
 
   paramComment(param: IParameter, mapped: IMappedType) {
@@ -169,58 +176,62 @@ import java.util.*
   }
 
   declareParameter(indent: string, method: IMethod, param: IParameter) {
-    const type =
-      param.location === strBody
-        ? this.writeableType(param.type, method) || param.type
-        : param.type
-    const mapped = this.typeMap(type)
+    const mapped = this.paramMappedType(param, method)
     let pOpt = ''
     if (!param.required) {
       pOpt = '?'
     }
     return (
-      this.commentHeader(indent, this.paramComment(param, mapped)) +
       `${indent}${param.name}: ${mapped.name}${pOpt}` +
       (param.required ? '' : mapped.default ? ` = ${mapped.default}` : '')
     )
   }
 
   methodHeaderDeclaration(indent: string, method: IMethod, streamer = false) {
-    const type = this.typeMap(method.type)
-    const resultType = streamer ? 'ByteArray' : type.name
-    const head = method.description?.trim()
-    let headComment =
-      (head ? `${head}\n\n` : '') +
-      `${method.httpMethod} ${method.endpoint} -> ${resultType}`
-    let fragment = ''
-    const requestType = this.requestTypeName(method)
     const bump = indent + this.indentStr
 
-    if (requestType) {
-      // TODO remove this Typescript cruft
-      fragment = `request: Partial<${requestType}>`
-    } else {
-      const params: string[] = []
-      const args = method.allParams // get the params in signature order
-      if (args && args.length > 0)
-        args.forEach((p) => params.push(this.declareParameter(bump, method, p)))
-      fragment =
-        params.length > 0 ? `\n${params.join(this.paramDelimiter)}` : ''
-    }
-    if (method.responseIsBoth()) {
-      headComment += `\n\n**Note**: Binary content may be returned by this method.`
-    } else if (method.responseIsBinary()) {
-      headComment += `\n\n**Note**: Binary content is returned by this method.\n`
-    }
-    const jvmOverloads =
-      method.optionalParams.length > 0 ? '@JvmOverloads ' : ''
-    // const callback = `callback: (readable: Readable) => Promise<${type.name}>,`
-    const header =
-      this.commentHeader(indent, headComment) +
-      `${indent}${jvmOverloads}fun ${method.name}(`
-    // + (streamer ? `\n${bump}${callback}` : '')
+    const params: string[] = []
+    const args = method.allParams // get the params in signature order
+    if (args && args.length > 0)
+      args.forEach((p) => params.push(this.declareParameter(bump, method, p)))
 
-    return header + fragment + `) : SDKResponse {\n`
+    return `
+${this.commentHeader(indent, this.headerComment(method, streamer)).trimEnd()}
+${indent}${this.jvmOverloads(method)}fun ${method.name}(
+${params.join(this.paramDelimiter)}
+${indent}) : SDKResponse {
+`
+  }
+
+  headerComment(method: IMethod, streamer = false) {
+    const lines: string[] = []
+
+    lines.push(method.description?.trim())
+
+    if (method.allParams.length) {
+      lines.push('')
+      method.allParams.forEach((p) =>
+        lines.push(this.paramComment(p, this.paramMappedType(p, method)))
+      )
+    }
+
+    const resultType = streamer ? 'ByteArray' : this.typeMap(method.type).name
+    lines.push('')
+    lines.push(`${method.httpMethod} ${method.endpoint} -> ${resultType}`)
+
+    if (method.responseIsBoth()) {
+      lines.push('')
+      lines.push('**Note**: Binary content may be returned by this method.')
+    } else if (method.responseIsBinary()) {
+      lines.push('')
+      lines.push('**Note**: Binary content is returned by this method.')
+    }
+
+    return lines.join('\n')
+  }
+
+  jvmOverloads(method: IMethod) {
+    return method.optionalParams.length > 0 ? '@JvmOverloads ' : ''
   }
 
   methodSignature(indent: string, method: IMethod) {
@@ -228,11 +239,10 @@ import java.util.*
   }
 
   encodePathParams(indent: string, method: IMethod) {
-    const bump = indent + this.indentStr
     let encodings = ''
     if (method.pathParams.length > 0) {
       for (const param of method.pathParams) {
-        encodings += `${bump}val path_${param.name} = encodeParam(${param.name})\n`
+        encodings += `${indent}val path_${param.name} = encodeParam(${param.name})\n`
       }
     }
     return encodings
@@ -266,40 +276,58 @@ import java.util.*
     return `${indent}${mayQuote(value)}`
   }
 
+  describeProperty(property: IProperty) {
+    return `@property ${property.name} ${super.describeProperty(property)}`
+  }
+
   typeSignature(indent: string, type: IType) {
-    const isEnum = type instanceof EnumType
-    const kind = isEnum ? 'enum' : 'data'
-    const opener = isEnum ? ': Serializable {' : '('
-    return (
-      this.commentHeader(indent, type.description) +
-      `${indent}${kind} class ${type.name} ${opener}\n`
-    )
+    if (type instanceof EnumType) {
+      return `
+${this.commentHeader(indent, type.description).trim()}
+${indent}enum class ${type.name} : Serializable {
+`.trim()
+    } else {
+      const props = Object.values(type.properties).map((prop) =>
+        this.describeProperty(prop)
+      )
+
+      const header = `
+${type.description}
+
+${props.join('\n')}
+`.trim()
+
+      return `
+${this.commentHeader(indent, header).trim()}
+${indent}data class ${type.name} (
+`.trim()
+    }
   }
 
   declareType(indent: string, type: IType) {
     const bump = this.bumper(indent)
-    const props: string[] = []
-    let ender = this.endTypeStr
-    let propertyValues = ''
     if (type instanceof EnumType) {
-      ender = `\n}`
       const num = type as EnumType
-      num.values.forEach((value) =>
-        props.push(this.declareEnumValue(bump, value))
+      const props = num.values.map((value) =>
+        this.declareEnumValue(bump, value)
       )
-      propertyValues = props.join(this.enumDelimiter)
+
+      return `
+${this.typeSignature(indent, type)}
+${props.join(this.enumDelimiter)}
+}
+`.trim()
     } else {
-      Object.values(type.properties).forEach((prop) =>
-        props.push(this.declareProperty(bump, prop))
+      const props = Object.values(type.properties).map((prop) =>
+        this.declareProperty(bump, prop)
       )
-      propertyValues = props.join(this.propDelimiter)
+
+      return `
+${this.typeSignature(indent, type)}
+${props.join(this.propDelimiter)}
+) : Serializable
+`.trim()
     }
-    return (
-      this.typeSignature(indent, type) +
-      propertyValues +
-      this.construct(indent, type) +
-      `${this.endTypeStr ? indent : ''}${ender}`
-    )
   }
 
   errorResponses(_indent: string, _method: IMethod) {
@@ -378,11 +406,10 @@ import java.util.*
   httpCall(indent: string, method: IMethod) {
     const request = this.useRequest(method) ? 'request.' : ''
     const type = this.typeMap(method.type)
-    const bump = indent + this.indentStr
-    const args = this.httpArgs(bump, method)
+    const args = this.httpArgs(indent, method)
     // TODO don't currently need these for Kotlin
     // const errors = this.errorResponses(indent, method)
-    return `${bump}return ${this.it(method.httpMethod.toLowerCase())}<${
+    return `${indent}return ${this.it(method.httpMethod.toLowerCase())}<${
       type.name
     }>(${this.httpPath(method.endpoint, request)}${args ? ', ' + args : ''})`
   }

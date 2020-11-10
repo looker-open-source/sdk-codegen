@@ -22,9 +22,9 @@
  * THE SOFTWARE.
  */
 
-import com.looker.rtl.Transport
 import com.looker.rtl.AuthSession
 import com.looker.rtl.OAuthSession
+import com.looker.rtl.Transport
 import java.io.File
 import kotlin.test.assertEquals
 import kotlin.test.assertFalse
@@ -88,8 +88,7 @@ class TestAuthSession {
         val request = session.redeemAuthCodeBody("authCode", hashCode)
         assertEquals("authCode", request["code"])
         assertEquals(hashCode, request["code_verifier"])
-        assertEquals( "test_client_id", request["client_id"])
-        assertEquals( "looker://", request["redirect_uri"])
+        assertEquals("test_client_id", request["client_id"])
+        assertEquals("looker://", request["redirect_uri"])
     }
-
 }
