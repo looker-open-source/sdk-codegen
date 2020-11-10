@@ -26,7 +26,7 @@
 import { cloneDeep } from 'lodash'
 import { OperationObject } from 'openapi3-ts'
 
-import { compareMethods, compareTypes } from './specLinter'
+import { compareParams, compareTypes } from './specLinter'
 import { TestConfig } from './testUtils'
 import { PropertyList, Type, Method, Parameter } from './sdkModels'
 
@@ -112,17 +112,17 @@ describe('spec linter', () => {
     })
   })
 
-  describe('compareMethods', () => {
+  describe('compareParams', () => {
     const lMethod = apiTestModel.methods.create_look
 
     it('should return undefined if methods are identical', () => {
-      const actual = compareMethods(lMethod, lMethod)
+      const actual = compareParams(lMethod, lMethod)
       expect(actual).toBeUndefined()
     })
 
     it('should return an object containing all non matching entries', () => {
       const rMethod = changeMethod(lMethod as Method)
-      const actual = compareMethods(lMethod, rMethod)
+      const actual = compareParams(lMethod, rMethod)
       expect(actual).toBeDefined()
       if (actual) {
         const key = Object.keys(actual)[0]

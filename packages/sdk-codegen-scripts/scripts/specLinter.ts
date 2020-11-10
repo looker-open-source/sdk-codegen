@@ -24,34 +24,20 @@
 
  */
 import * as path from 'path'
+import { writeFileSync } from 'fs'
 import {
   ApiModel,
-  IMethod,
-  SearchCriterion,
-  TagList,
+  csvHeaderRow,
+  csvDiffRow,
+  ComputeDiffInputs,
 } from '@looker/sdk-codegen'
-import { readFileSync } from '..'
-import { writeFileSync } from 'fs'
+import { compareSpecs } from '@looker/sdk-codegen/src/specLinter'
+import { readFileSync } from '../src'
 
-const allMethods = (tags: TagList): Array<IMethod> => {
-  const result: Array<IMethod> = []
-  Object.entries(tags).forEach(([, methods]) => {
-    Object.entries(methods).forEach(([, method]) => {
-      result.push(method)
-    })
-  })
-  return result
-}
-
-const headerRow = `
-| method name  | path | 3.1 | 4.0 | 
-| ------------ | ---- | --- | --- |`
-
-const lintRow = (method31: IMethod, method40?: IMethod) => `
-  | ${method31.name} | ${method31.endpoint} | ${method31.status} | ${
-  method40?.status || ' '
-} |`
-
+/**
+ * Compares Looker API 3.1 beta endpoints with their 4.0 version and writes the
+ * result to csv.
+ */
 ;(async () => {
   const rootPath = path.join(__dirname, '../../../spec')
   const spec31Path = path.join(rootPath, 'Looker.3.1.oas.json')
@@ -60,25 +46,18 @@ const lintRow = (method31: IMethod, method40?: IMethod) => `
   const spec31 = ApiModel.fromString(readFileSync(spec31Path))
   const spec40 = ApiModel.fromString(readFileSync(spec40Path))
 
-  const criteria = new Set<SearchCriterion>([SearchCriterion.status])
-  const beta31 = spec31.search('beta', criteria)
-  const methods40 = Object.values(spec40.methods)
+  const diff = compareSpecs(
+    spec31,
+    spec40,
+    ({ lMethod }: ComputeDiffInputs) => lMethod?.status === 'beta'
+  )
 
-  const methods31 = allMethods(beta31.tags)
-
-  let result = headerRow
-
-  methods31.forEach((method) => {
-    const found = methods40.find((m40) => m40.endpoint === method.endpoint)
-    result += lintRow(method, found)
+  let result = csvHeaderRow
+  diff.forEach((diffRow, index) => {
+    if (index > 0) result += csvDiffRow(diffRow)
   })
 
-  writeFileSync(path.join(rootPath, '../results.md'), result, {
+  writeFileSync(path.join(rootPath, '../results.csv'), result, {
     encoding: 'utf-8',
   })
-
-  // create regex that looks for controller path pattern httpMethod
-  // create index with all paths in all ruby controllers. key (as in method.httpMethod method.endpoint ), value = source file name and Line number
-  // transform {user_id} => :user_id:
-  // getCommitHash
 })()

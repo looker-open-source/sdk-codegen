@@ -23,14 +23,7 @@
  SOFTWARE.
 
  */
-import {
-  IMethod,
-  IType,
-  KeyedCollection,
-  SearchCriterion,
-  TagList,
-  IApiModel,
-} from './sdkModels'
+import { IMethod, IType, KeyedCollection, IApiModel } from './sdkModels'
 
 interface ITypeDelta {
   lhs: string
@@ -66,11 +59,12 @@ export const compareTypes = (lType: IType, rType: IType) => {
 }
 
 /**
- * Compares two types and returns an object of non-matching entries
+ * Compares the params of two methods and returns the signature of both methods
+ * if non matching.
  * @param lMethod
  * @param rMethod
  */
-export const compareMethods = (lMethod: IMethod, rMethod: IMethod) => {
+export const compareParams = (lMethod: IMethod, rMethod: IMethod) => {
   const lSignature = lMethod.signature()
   const rSignature = rMethod.signature()
 
@@ -82,44 +76,74 @@ export const compareMethods = (lMethod: IMethod, rMethod: IMethod) => {
   }
 }
 
-const allMethods = (tags: TagList): Array<IMethod> => {
-  const result: Array<IMethod> = []
-  Object.entries(tags).forEach(([, methods]) => {
-    Object.entries(methods).forEach(([, method]) => {
-      result.push(method)
-    })
-  })
-  return result
-}
+export const csvHeaderRow =
+  'method name,Op + URI,left status,right status,typeDiff,paramDiff'
 
-const csvHeaderRow =
-  'method name,path,left status,right status,typeDiff,paramDiff'
+export const csvDiffRow = (diff: DiffRow) => `
+${diff.name},${diff.id},${diff.lStatus},${diff.rStatus},${diff.typeDiff},${diff.paramsDiff}`
 
-const csvLintRow = (
-  lMethod: IMethod,
-  rMethod?: IMethod,
-  typeChanges?: string,
-  paramChanges?: string
-) => `
-${lMethod.name},${lMethod.endpoint},${lMethod.status},${
-  rMethod?.status || ''
-},${typeChanges},${paramChanges}`
+export const mdHeaderRow = `
+| method name  | Op + URI | 3.1 | 4.0 | typeDiff
+| ------------ | -------- | --- | --- | ------------`
 
-// const mdHeaderRow = `
-// | method name  | path | 3.1 | 4.0 | typeDiff
-// | ------------ | ---- | --- | --- | ------------`
-
-// const mdLintRow = (
-//   method31: IMethod,
-//   method40?: IMethod,
-//   typeChanges?: string
-// ) => `
-//   | ${method31.name} | ${method31.endpoint} | ${method31.status} | ${
-//   method40?.status || ''
-// } | ${typeChanges} || '' |`
+export const mdDiffRow = (diff: DiffRow) => `
+  | ${diff.name} | ${diff.id} | ${diff.lStatus} | ${diff.rStatus} | ${diff.typeDiff} | ${diff.paramsDiff} |`
 
 const diffToString = (diff: any) =>
-  `"${JSON.stringify(diff, null, 2).replace(/"/g, "'")}."`
+  diff ? `"${JSON.stringify(diff, null, 2).replace(/"/g, "'")}."` : ''
+
+export interface ComputeDiffInputs {
+  lMethod?: IMethod
+  rMethod?: IMethod
+}
+
+interface DiffRow {
+  /** Method name */
+  name: string
+  /** Method operation and path */
+  id: string
+  /** Method status in both specs */
+  lStatus: string
+  rStatus: string
+  /** Method type diff if any */
+  typeDiff: string
+  /** Method params diff if any */
+  paramsDiff: string
+}
+
+/**
+ * Computes the diff of two methods
+ * @param lMethod
+ * @param rMethod
+ */
+const computeDiff = ({ lMethod, rMethod }: ComputeDiffInputs) => {
+  if (!lMethod && !rMethod) throw new Error('At least one method is required.')
+
+  let result: DiffRow
+  if (lMethod) {
+    result = {
+      name: lMethod.name,
+      id: lMethod.id,
+      lStatus: lMethod.status,
+      rStatus: rMethod ? rMethod.status : '',
+      typeDiff: rMethod
+        ? diffToString(compareTypes(lMethod.type, rMethod.type))
+        : '',
+      paramsDiff: rMethod ? diffToString(compareParams(lMethod, rMethod)) : '',
+    }
+  } else if (!lMethod && rMethod) {
+    result = {
+      name: rMethod.name,
+      id: rMethod.id,
+      lStatus: '',
+      rStatus: rMethod.status,
+      typeDiff: '',
+      paramsDiff: '',
+    }
+  }
+
+  return result!
+}
 
 /**
  * Given two specs, compares each method's params and response type, and returns
@@ -127,25 +151,53 @@ const diffToString = (diff: any) =>
  * @param lSpec
  * @param rSpec
  */
-export const compareSpecs = (lSpec: IApiModel, rSpec: IApiModel) => {
-  const criteria = new Set<SearchCriterion>([SearchCriterion.status])
-  const lBeta = lSpec.search('beta', criteria)
-  const lMethods = allMethods(lBeta.tags)
-  const rMethods = Object.values(rSpec.methods)
 
-  let result = csvHeaderRow
+export type preDiffCb = ({ lMethod, rMethod }: ComputeDiffInputs) => boolean
+
+/**
+ * Compares two specs and returns a diff object
+ * @param lSpec
+ * @param rSpec
+ * @param preDiffCb A callback for filtering methods prior to computing the diff
+ */
+export const compareSpecs = (
+  lSpec: IApiModel,
+  rSpec: IApiModel,
+  preDiffCb?: preDiffCb
+) => {
+  const lMethods = Object.values(lSpec.methods)
+  const rMethods = Object.values(rSpec.methods)
+  const rLength = rMethods.length
+  let rIndex = 0
+  const diff: DiffRow[] = []
+
   lMethods.forEach((lMethod) => {
-    const found = rMethods.find((rMethod) => lMethod.id === rMethod.id)
-    let typeChanges = ''
-    let paramChanges = ''
-    if (found) {
-      const typeDelta = compareTypes(lMethod.type, found.type)
-      typeChanges = typeDelta ? diffToString(typeDelta) : ''
-      const paramDelta = compareMethods(lMethod, found)
-      paramChanges = paramDelta ? diffToString(paramDelta) : ''
+    let rMethod = rMethods[rIndex]
+
+    if (preDiffCb && !preDiffCb({ lMethod, rMethod })) return
+
+    while (
+      lMethod.name !== rMethod.name &&
+      rMethod.name < lMethod.name &&
+      rIndex < rLength
+    ) {
+      /** Case when right method does not exist on the left */
+      if (preDiffCb && preDiffCb({ rMethod })) {
+        diff.push(computeDiff({ rMethod }))
+      }
+      rIndex += 1
+      rMethod = rMethods[rIndex]
     }
-    result += csvLintRow(lMethod, found, typeChanges, paramChanges)
+
+    if (lMethod.name === rMethod.name) {
+      /** Case when method exists on both sides */
+      diff.push(computeDiff({ lMethod, rMethod }))
+      rIndex = rIndex + 1 < rLength ? rIndex + 1 : rIndex
+    } else {
+      /** Case when left method does not exist on the right */
+      diff.push(computeDiff({ lMethod }))
+    }
   })
 
-  return result
+  return diff
 }
