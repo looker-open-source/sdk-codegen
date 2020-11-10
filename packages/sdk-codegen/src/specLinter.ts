@@ -77,7 +77,7 @@ export const compareParams = (lMethod: IMethod, rMethod: IMethod) => {
 }
 
 export const csvHeaderRow =
-  'method name,Op + URI,left status,right status,typeDiff,paramDiff'
+  'method name,"Op + URI",left status,right status,typeDiff,paramDiff'
 
 export const csvDiffRow = (diff: DiffRow) => `
 ${diff.name},${diff.id},${diff.lStatus},${diff.rStatus},${diff.typeDiff},${diff.paramsDiff}`
