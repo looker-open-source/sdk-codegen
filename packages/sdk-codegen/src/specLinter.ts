@@ -145,13 +145,6 @@ const computeDiff = ({ lMethod, rMethod }: ComputeDiffInputs) => {
   return result!
 }
 
-/**
- * Given two specs, compares each method's params and response type, and returns
- * a string representing representing a csv containing the difference if any
- * @param lSpec
- * @param rSpec
- */
-
 export type preDiffCb = ({ lMethod, rMethod }: ComputeDiffInputs) => boolean
 
 /**
