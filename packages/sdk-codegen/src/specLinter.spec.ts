@@ -34,7 +34,7 @@ const config = TestConfig()
 const apiTestModel = config.apiTestModel
 
 /**
- * Returns an array contain the key and the value of the first enumerable object property
+ * Returns an array containing the key and the value of the first enumerable object property
  * @param props A key/value collection of type properties
  */
 const firstProperty = (props: PropertyList) =>
