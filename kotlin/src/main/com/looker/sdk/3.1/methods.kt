@@ -75,7 +75,6 @@ class Looker31SDK(authSession: AuthSession) : APIMethods(authSession) {
      *
      * POST /login -> AccessToken
      */
-
     @JvmOverloads fun login(
         client_id: String? = null,
         client_secret: String? = null
@@ -112,7 +111,6 @@ class Looker31SDK(authSession: AuthSession) : APIMethods(authSession) {
      *
      * POST /login/{user_id} -> AccessToken
      */
-
     @JvmOverloads fun login_user(
         user_id: Long,
         associative: Boolean? = null
@@ -127,11 +125,8 @@ class Looker31SDK(authSession: AuthSession) : APIMethods(authSession) {
     /**
      * ### Logout of the API and invalidate the current access token.
      *
-     *
-     *
      * DELETE /logout -> String
      */
-
     fun logout(): SDKResponse {
         return this.delete<String>("/logout", mapOf())
     }
@@ -180,7 +175,6 @@ class Looker31SDK(authSession: AuthSession) : APIMethods(authSession) {
      *
      * POST /embed/sso_url -> EmbedUrlResponse
      */
-
     fun create_sso_embed_url(
         body: EmbedSsoParams
     ): SDKResponse {
@@ -205,11 +199,8 @@ class Looker31SDK(authSession: AuthSession) : APIMethods(authSession) {
      *
      * See the [Looker LDAP docs](https://www.looker.com/docs/r/api/ldap_setup) for additional information.
      *
-     *
-     *
      * GET /ldap_config -> LDAPConfig
      */
-
     fun ldap_config(): SDKResponse {
         return this.get<LDAPConfig>("/ldap_config", mapOf())
     }
@@ -231,7 +222,6 @@ class Looker31SDK(authSession: AuthSession) : APIMethods(authSession) {
      *
      * PATCH /ldap_config -> LDAPConfig
      */
-
     fun update_ldap_config(
         body: WriteLDAPConfig
     ): SDKResponse {
@@ -262,7 +252,6 @@ class Looker31SDK(authSession: AuthSession) : APIMethods(authSession) {
      *
      * PUT /ldap_config/test_connection -> LDAPConfigTestResult
      */
-
     fun test_ldap_config_connection(
         body: WriteLDAPConfig
     ): SDKResponse {
@@ -295,7 +284,6 @@ class Looker31SDK(authSession: AuthSession) : APIMethods(authSession) {
      *
      * PUT /ldap_config/test_auth -> LDAPConfigTestResult
      */
-
     fun test_ldap_config_auth(
         body: WriteLDAPConfig
     ): SDKResponse {
@@ -317,7 +305,6 @@ class Looker31SDK(authSession: AuthSession) : APIMethods(authSession) {
      *
      * PUT /ldap_config/test_user_info -> LDAPConfigTestResult
      */
-
     fun test_ldap_config_user_info(
         body: WriteLDAPConfig
     ): SDKResponse {
@@ -339,7 +326,6 @@ class Looker31SDK(authSession: AuthSession) : APIMethods(authSession) {
      *
      * PUT /ldap_config/test_user_auth -> LDAPConfigTestResult
      */
-
     fun test_ldap_config_user_auth(
         body: WriteLDAPConfig
     ): SDKResponse {
@@ -360,11 +346,8 @@ class Looker31SDK(authSession: AuthSession) : APIMethods(authSession) {
      *
      * OIDC is enabled or disabled for Looker using the **enabled** field.
      *
-     *
-     *
      * GET /oidc_config -> OIDCConfig
      */
-
     fun oidc_config(): SDKResponse {
         return this.get<OIDCConfig>("/oidc_config", mapOf())
     }
@@ -384,7 +367,6 @@ class Looker31SDK(authSession: AuthSession) : APIMethods(authSession) {
      *
      * PATCH /oidc_config -> OIDCConfig
      */
-
     fun update_oidc_config(
         body: WriteOIDCConfig
     ): SDKResponse {
@@ -398,7 +380,6 @@ class Looker31SDK(authSession: AuthSession) : APIMethods(authSession) {
      *
      * GET /oidc_test_configs/{test_slug} -> OIDCConfig
      */
-
     fun oidc_test_config(
         test_slug: String
     ): SDKResponse {
@@ -413,7 +394,6 @@ class Looker31SDK(authSession: AuthSession) : APIMethods(authSession) {
      *
      * DELETE /oidc_test_configs/{test_slug} -> String
      */
-
     fun delete_oidc_test_config(
         test_slug: String
     ): SDKResponse {
@@ -428,7 +408,6 @@ class Looker31SDK(authSession: AuthSession) : APIMethods(authSession) {
      *
      * POST /oidc_test_configs -> OIDCConfig
      */
-
     fun create_oidc_test_config(
         body: WriteOIDCConfig
     ): SDKResponse {
@@ -438,11 +417,8 @@ class Looker31SDK(authSession: AuthSession) : APIMethods(authSession) {
     /**
      * ### Get password config.
      *
-     *
-     *
      * GET /password_config -> PasswordConfig
      */
-
     fun password_config(): SDKResponse {
         return this.get<PasswordConfig>("/password_config", mapOf())
     }
@@ -454,7 +430,6 @@ class Looker31SDK(authSession: AuthSession) : APIMethods(authSession) {
      *
      * PATCH /password_config -> PasswordConfig
      */
-
     fun update_password_config(
         body: WritePasswordConfig
     ): SDKResponse {
@@ -464,11 +439,8 @@ class Looker31SDK(authSession: AuthSession) : APIMethods(authSession) {
     /**
      * ### Force all credentials_email users to reset their login passwords upon their next login.
      *
-     *
-     *
      * PUT /password_config/force_password_reset_at_next_login_for_all_users -> String
      */
-
     fun force_password_reset_at_next_login_for_all_users(): SDKResponse {
         return this.put<String>("/password_config/force_password_reset_at_next_login_for_all_users", mapOf())
     }
@@ -487,11 +459,8 @@ class Looker31SDK(authSession: AuthSession) : APIMethods(authSession) {
      *
      * SAML is enabled or disabled for Looker using the **enabled** field.
      *
-     *
-     *
      * GET /saml_config -> SamlConfig
      */
-
     fun saml_config(): SDKResponse {
         return this.get<SamlConfig>("/saml_config", mapOf())
     }
@@ -511,7 +480,6 @@ class Looker31SDK(authSession: AuthSession) : APIMethods(authSession) {
      *
      * PATCH /saml_config -> SamlConfig
      */
-
     fun update_saml_config(
         body: WriteSamlConfig
     ): SDKResponse {
@@ -525,7 +493,6 @@ class Looker31SDK(authSession: AuthSession) : APIMethods(authSession) {
      *
      * GET /saml_test_configs/{test_slug} -> SamlConfig
      */
-
     fun saml_test_config(
         test_slug: String
     ): SDKResponse {
@@ -540,7 +507,6 @@ class Looker31SDK(authSession: AuthSession) : APIMethods(authSession) {
      *
      * DELETE /saml_test_configs/{test_slug} -> String
      */
-
     fun delete_saml_test_config(
         test_slug: String
     ): SDKResponse {
@@ -555,7 +521,6 @@ class Looker31SDK(authSession: AuthSession) : APIMethods(authSession) {
      *
      * POST /saml_test_configs -> SamlConfig
      */
-
     fun create_saml_test_config(
         body: WriteSamlConfig
     ): SDKResponse {
@@ -569,7 +534,6 @@ class Looker31SDK(authSession: AuthSession) : APIMethods(authSession) {
      *
      * POST /parse_saml_idp_metadata -> SamlMetadataParseResult
      */
-
     fun parse_saml_idp_metadata(
         body: String
     ): SDKResponse {
@@ -585,7 +549,6 @@ class Looker31SDK(authSession: AuthSession) : APIMethods(authSession) {
      *
      * POST /fetch_and_parse_saml_idp_metadata -> SamlMetadataParseResult
      */
-
     fun fetch_and_parse_saml_idp_metadata(
         body: String
     ): SDKResponse {
@@ -595,11 +558,8 @@ class Looker31SDK(authSession: AuthSession) : APIMethods(authSession) {
     /**
      * ### Get session config.
      *
-     *
-     *
      * GET /session_config -> SessionConfig
      */
-
     fun session_config(): SDKResponse {
         return this.get<SessionConfig>("/session_config", mapOf())
     }
@@ -611,7 +571,6 @@ class Looker31SDK(authSession: AuthSession) : APIMethods(authSession) {
      *
      * PATCH /session_config -> SessionConfig
      */
-
     fun update_session_config(
         body: WriteSessionConfig
     ): SDKResponse {
@@ -625,7 +584,6 @@ class Looker31SDK(authSession: AuthSession) : APIMethods(authSession) {
      *
      * GET /user_login_lockouts -> Array<UserLoginLockout>
      */
-
     @JvmOverloads fun all_user_login_lockouts(
         fields: String? = null
     ): SDKResponse {
@@ -650,7 +608,6 @@ class Looker31SDK(authSession: AuthSession) : APIMethods(authSession) {
      *
      * GET /user_login_lockouts/search -> Array<UserLoginLockout>
      */
-
     @JvmOverloads fun search_user_login_lockouts(
         fields: String? = null,
         page: Long? = null,
@@ -685,7 +642,6 @@ class Looker31SDK(authSession: AuthSession) : APIMethods(authSession) {
      *
      * DELETE /user_login_lockout/{key} -> String
      */
-
     fun delete_user_login_lockout(
         key: String
     ): SDKResponse {
@@ -711,7 +667,6 @@ class Looker31SDK(authSession: AuthSession) : APIMethods(authSession) {
      *
      * GET /color_collections -> Array<ColorCollection>
      */
-
     @JvmOverloads fun all_color_collections(
         fields: String? = null
     ): SDKResponse {
@@ -736,7 +691,6 @@ class Looker31SDK(authSession: AuthSession) : APIMethods(authSession) {
      *
      * POST /color_collections -> ColorCollection
      */
-
     fun create_color_collection(
         body: WriteColorCollection
     ): SDKResponse {
@@ -755,7 +709,6 @@ class Looker31SDK(authSession: AuthSession) : APIMethods(authSession) {
      *
      * GET /color_collections/custom -> Array<ColorCollection>
      */
-
     @JvmOverloads fun color_collections_custom(
         fields: String? = null
     ): SDKResponse {
@@ -777,7 +730,6 @@ class Looker31SDK(authSession: AuthSession) : APIMethods(authSession) {
      *
      * GET /color_collections/standard -> Array<ColorCollection>
      */
-
     @JvmOverloads fun color_collections_standard(
         fields: String? = null
     ): SDKResponse {
@@ -794,11 +746,8 @@ class Looker31SDK(authSession: AuthSession) : APIMethods(authSession) {
      *
      * Set the default color collection with [ColorCollection](#!/ColorCollection/set_default_color_collection)
      *
-     *
-     *
      * GET /color_collections/default -> ColorCollection
      */
-
     fun default_color_collection(): SDKResponse {
         return this.get<ColorCollection>("/color_collections/default", mapOf())
     }
@@ -813,7 +762,6 @@ class Looker31SDK(authSession: AuthSession) : APIMethods(authSession) {
      *
      * PUT /color_collections/default -> ColorCollection
      */
-
     fun set_default_color_collection(
         collection_id: String
     ): SDKResponse {
@@ -840,7 +788,6 @@ class Looker31SDK(authSession: AuthSession) : APIMethods(authSession) {
      *
      * GET /color_collections/{collection_id} -> ColorCollection
      */
-
     @JvmOverloads fun color_collection(
         collection_id: String,
         fields: String? = null
@@ -861,7 +808,6 @@ class Looker31SDK(authSession: AuthSession) : APIMethods(authSession) {
      *
      * PATCH /color_collections/{collection_id} -> ColorCollection
      */
-
     fun update_color_collection(
         collection_id: String,
         body: WriteColorCollection
@@ -884,7 +830,6 @@ class Looker31SDK(authSession: AuthSession) : APIMethods(authSession) {
      *
      * DELETE /color_collections/{collection_id} -> String
      */
-
     fun delete_color_collection(
         collection_id: String
     ): SDKResponse {
@@ -899,11 +844,8 @@ class Looker31SDK(authSession: AuthSession) : APIMethods(authSession) {
     /**
      * ### WARNING: The Looker internal database backup function has been deprecated.
      *
-     *
-     *
      * GET /backup_configuration -> BackupConfiguration
      */
-
     fun backup_configuration(): SDKResponse {
         return this.get<BackupConfiguration>("/backup_configuration", mapOf())
     }
@@ -915,7 +857,6 @@ class Looker31SDK(authSession: AuthSession) : APIMethods(authSession) {
      *
      * PATCH /backup_configuration -> BackupConfiguration
      */
-
     fun update_backup_configuration(
         body: WriteBackupConfiguration
     ): SDKResponse {
@@ -925,11 +866,8 @@ class Looker31SDK(authSession: AuthSession) : APIMethods(authSession) {
     /**
      * Get the current Cloud Storage Configuration.
      *
-     *
-     *
      * GET /cloud_storage -> BackupConfiguration
      */
-
     fun cloud_storage_configuration(): SDKResponse {
         return this.get<BackupConfiguration>("/cloud_storage", mapOf())
     }
@@ -941,7 +879,6 @@ class Looker31SDK(authSession: AuthSession) : APIMethods(authSession) {
      *
      * PATCH /cloud_storage -> BackupConfiguration
      */
-
     fun update_cloud_storage_configuration(
         body: WriteBackupConfiguration
     ): SDKResponse {
@@ -951,11 +888,8 @@ class Looker31SDK(authSession: AuthSession) : APIMethods(authSession) {
     /**
      * ### Get the current status and content of custom welcome emails
      *
-     *
-     *
      * GET /custom_welcome_email -> CustomWelcomeEmail
      */
-
     fun custom_welcome_email(): SDKResponse {
         return this.get<CustomWelcomeEmail>("/custom_welcome_email", mapOf())
     }
@@ -968,7 +902,6 @@ class Looker31SDK(authSession: AuthSession) : APIMethods(authSession) {
      *
      * PATCH /custom_welcome_email -> CustomWelcomeEmail
      */
-
     @JvmOverloads fun update_custom_welcome_email(
         body: WriteCustomWelcomeEmail,
         send_test_welcome_email: Boolean? = null
@@ -986,7 +919,6 @@ class Looker31SDK(authSession: AuthSession) : APIMethods(authSession) {
      *
      * PUT /custom_welcome_email_test -> WelcomeEmailTest
      */
-
     fun update_custom_welcome_email_test(
         body: WelcomeEmailTest
     ): SDKResponse {
@@ -996,11 +928,8 @@ class Looker31SDK(authSession: AuthSession) : APIMethods(authSession) {
     /**
      * ### Retrieve the value for whether or not digest emails is enabled
      *
-     *
-     *
      * GET /digest_emails_enabled -> DigestEmails
      */
-
     fun digest_emails_enabled(): SDKResponse {
         return this.get<DigestEmails>("/digest_emails_enabled", mapOf())
     }
@@ -1012,7 +941,6 @@ class Looker31SDK(authSession: AuthSession) : APIMethods(authSession) {
      *
      * PATCH /digest_emails_enabled -> DigestEmails
      */
-
     fun update_digest_emails_enabled(
         body: DigestEmails
     ): SDKResponse {
@@ -1024,11 +952,8 @@ class Looker31SDK(authSession: AuthSession) : APIMethods(authSession) {
      * any actual emails, it generates records containing content which may be of interest for users who have become inactive.
      * Emails will be sent at a later time from Looker's internal system if the Digest Emails feature is enabled in settings.
      *
-     *
-     *
      * POST /digest_email_send -> DigestEmailSend
      */
-
     fun create_digest_email_send(): SDKResponse {
         return this.post<DigestEmailSend>("/digest_email_send", mapOf())
     }
@@ -1036,11 +961,8 @@ class Looker31SDK(authSession: AuthSession) : APIMethods(authSession) {
     /**
      * ### Set the menu item name and content for internal help resources
      *
-     *
-     *
      * GET /internal_help_resources_content -> InternalHelpResourcesContent
      */
-
     fun internal_help_resources_content(): SDKResponse {
         return this.get<InternalHelpResourcesContent>("/internal_help_resources_content", mapOf())
     }
@@ -1052,7 +974,6 @@ class Looker31SDK(authSession: AuthSession) : APIMethods(authSession) {
      *
      * PATCH /internal_help_resources_content -> InternalHelpResourcesContent
      */
-
     fun update_internal_help_resources_content(
         body: WriteInternalHelpResourcesContent
     ): SDKResponse {
@@ -1062,11 +983,8 @@ class Looker31SDK(authSession: AuthSession) : APIMethods(authSession) {
     /**
      * ### Get and set the options for internal help resources
      *
-     *
-     *
      * GET /internal_help_resources_enabled -> InternalHelpResources
      */
-
     fun internal_help_resources(): SDKResponse {
         return this.get<InternalHelpResources>("/internal_help_resources_enabled", mapOf())
     }
@@ -1078,7 +996,6 @@ class Looker31SDK(authSession: AuthSession) : APIMethods(authSession) {
      *
      * PATCH /internal_help_resources -> InternalHelpResources
      */
-
     fun update_internal_help_resources(
         body: WriteInternalHelpResources
     ): SDKResponse {
@@ -1088,11 +1005,8 @@ class Looker31SDK(authSession: AuthSession) : APIMethods(authSession) {
     /**
      * ### Get all legacy features.
      *
-     *
-     *
      * GET /legacy_features -> Array<LegacyFeature>
      */
-
     fun all_legacy_features(): SDKResponse {
         return this.get<Array<LegacyFeature>>("/legacy_features", mapOf())
     }
@@ -1104,7 +1018,6 @@ class Looker31SDK(authSession: AuthSession) : APIMethods(authSession) {
      *
      * GET /legacy_features/{legacy_feature_id} -> LegacyFeature
      */
-
     fun legacy_feature(
         legacy_feature_id: Long
     ): SDKResponse {
@@ -1120,7 +1033,6 @@ class Looker31SDK(authSession: AuthSession) : APIMethods(authSession) {
      *
      * PATCH /legacy_features/{legacy_feature_id} -> LegacyFeature
      */
-
     fun update_legacy_feature(
         legacy_feature_id: Long,
         body: WriteLegacyFeature
@@ -1132,11 +1044,8 @@ class Looker31SDK(authSession: AuthSession) : APIMethods(authSession) {
     /**
      * ### Get a list of locales that Looker supports.
      *
-     *
-     *
      * GET /locales -> Array<Locale>
      */
-
     fun all_locales(): SDKResponse {
         return this.get<Array<Locale>>("/locales", mapOf())
     }
@@ -1144,11 +1053,8 @@ class Looker31SDK(authSession: AuthSession) : APIMethods(authSession) {
     /**
      * ### Get a list of timezones that Looker supports (e.g. useful for scheduling tasks).
      *
-     *
-     *
      * GET /timezones -> Array<Timezone>
      */
-
     fun all_timezones(): SDKResponse {
         return this.get<Array<Timezone>>("/timezones", mapOf())
     }
@@ -1160,7 +1066,6 @@ class Looker31SDK(authSession: AuthSession) : APIMethods(authSession) {
      *
      * GET /versions -> ApiVersion
      */
-
     @JvmOverloads fun versions(
         fields: String? = null
     ): SDKResponse {
@@ -1178,7 +1083,6 @@ class Looker31SDK(authSession: AuthSession) : APIMethods(authSession) {
      *
      * GET /whitelabel_configuration -> WhitelabelConfiguration
      */
-
     @JvmOverloads fun whitelabel_configuration(
         fields: String? = null
     ): SDKResponse {
@@ -1195,7 +1099,6 @@ class Looker31SDK(authSession: AuthSession) : APIMethods(authSession) {
      *
      * PUT /whitelabel_configuration -> WhitelabelConfiguration
      */
-
     fun update_whitelabel_configuration(
         body: WriteWhitelabelConfiguration
     ): SDKResponse {
@@ -1213,7 +1116,6 @@ class Looker31SDK(authSession: AuthSession) : APIMethods(authSession) {
      *
      * GET /connections -> Array<DBConnection>
      */
-
     @JvmOverloads fun all_connections(
         fields: String? = null
     ): SDKResponse {
@@ -1230,7 +1132,6 @@ class Looker31SDK(authSession: AuthSession) : APIMethods(authSession) {
      *
      * POST /connections -> DBConnection
      */
-
     fun create_connection(
         body: WriteDBConnection
     ): SDKResponse {
@@ -1245,7 +1146,6 @@ class Looker31SDK(authSession: AuthSession) : APIMethods(authSession) {
      *
      * GET /connections/{connection_name} -> DBConnection
      */
-
     @JvmOverloads fun connection(
         connection_name: String,
         fields: String? = null
@@ -1265,7 +1165,6 @@ class Looker31SDK(authSession: AuthSession) : APIMethods(authSession) {
      *
      * PATCH /connections/{connection_name} -> DBConnection
      */
-
     fun update_connection(
         connection_name: String,
         body: WriteDBConnection
@@ -1281,7 +1180,6 @@ class Looker31SDK(authSession: AuthSession) : APIMethods(authSession) {
      *
      * DELETE /connections/{connection_name} -> String
      */
-
     fun delete_connection(
         connection_name: String
     ): SDKResponse {
@@ -1297,7 +1195,6 @@ class Looker31SDK(authSession: AuthSession) : APIMethods(authSession) {
      *
      * DELETE /connections/{connection_name}/connection_override/{override_context} -> String
      */
-
     fun delete_connection_override(
         connection_name: String,
         override_context: String
@@ -1322,7 +1219,6 @@ class Looker31SDK(authSession: AuthSession) : APIMethods(authSession) {
      *
      * PUT /connections/{connection_name}/test -> Array<DBConnectionTestResult>
      */
-
     @JvmOverloads fun test_connection(
         connection_name: String,
         tests: DelimArray<String>? = null
@@ -1349,7 +1245,6 @@ class Looker31SDK(authSession: AuthSession) : APIMethods(authSession) {
      *
      * PUT /connections/test -> Array<DBConnectionTestResult>
      */
-
     @JvmOverloads fun test_connection_config(
         body: WriteDBConnection,
         tests: DelimArray<String>? = null
@@ -1367,7 +1262,6 @@ class Looker31SDK(authSession: AuthSession) : APIMethods(authSession) {
      *
      * GET /dialect_info -> Array<DialectInfo>
      */
-
     @JvmOverloads fun all_dialect_infos(
         fields: String? = null
     ): SDKResponse {
@@ -1418,7 +1312,6 @@ class Looker31SDK(authSession: AuthSession) : APIMethods(authSession) {
      *
      * GET /content_favorite/search -> Array<ContentFavorite>
      */
-
     @JvmOverloads fun search_content_favorites(
         id: Long? = null,
         user_id: Long? = null,
@@ -1456,7 +1349,6 @@ class Looker31SDK(authSession: AuthSession) : APIMethods(authSession) {
      *
      * GET /content_favorite/{content_favorite_id} -> ContentFavorite
      */
-
     @JvmOverloads fun content_favorite(
         content_favorite_id: Long,
         fields: String? = null
@@ -1475,7 +1367,6 @@ class Looker31SDK(authSession: AuthSession) : APIMethods(authSession) {
      *
      * DELETE /content_favorite/{content_favorite_id} -> String
      */
-
     fun delete_content_favorite(
         content_favorite_id: Long
     ): SDKResponse {
@@ -1490,7 +1381,6 @@ class Looker31SDK(authSession: AuthSession) : APIMethods(authSession) {
      *
      * POST /content_favorite -> ContentFavorite
      */
-
     fun create_content_favorite(
         body: WriteContentFavorite
     ): SDKResponse {
@@ -1505,7 +1395,6 @@ class Looker31SDK(authSession: AuthSession) : APIMethods(authSession) {
      *
      * GET /content_metadata -> Array<ContentMeta>
      */
-
     @JvmOverloads fun all_content_metadatas(
         parent_id: Long,
         fields: String? = null
@@ -1527,7 +1416,6 @@ class Looker31SDK(authSession: AuthSession) : APIMethods(authSession) {
      *
      * GET /content_metadata/{content_metadata_id} -> ContentMeta
      */
-
     @JvmOverloads fun content_metadata(
         content_metadata_id: Long,
         fields: String? = null
@@ -1547,7 +1435,6 @@ class Looker31SDK(authSession: AuthSession) : APIMethods(authSession) {
      *
      * PATCH /content_metadata/{content_metadata_id} -> ContentMeta
      */
-
     fun update_content_metadata(
         content_metadata_id: Long,
         body: WriteContentMeta
@@ -1564,7 +1451,6 @@ class Looker31SDK(authSession: AuthSession) : APIMethods(authSession) {
      *
      * GET /content_metadata_access -> Array<ContentMetaGroupUser>
      */
-
     @JvmOverloads fun all_content_metadata_accesses(
         content_metadata_id: Long,
         fields: String? = null
@@ -1586,7 +1472,6 @@ class Looker31SDK(authSession: AuthSession) : APIMethods(authSession) {
      *
      * POST /content_metadata_access -> ContentMetaGroupUser
      */
-
     @JvmOverloads fun create_content_metadata_access(
         body: ContentMetaGroupUser,
         send_boards_notification_email: Boolean? = null
@@ -1605,7 +1490,6 @@ class Looker31SDK(authSession: AuthSession) : APIMethods(authSession) {
      *
      * PUT /content_metadata_access/{content_metadata_access_id} -> ContentMetaGroupUser
      */
-
     fun update_content_metadata_access(
         content_metadata_access_id: Long,
         body: ContentMetaGroupUser
@@ -1621,7 +1505,6 @@ class Looker31SDK(authSession: AuthSession) : APIMethods(authSession) {
      *
      * DELETE /content_metadata_access/{content_metadata_access_id} -> String
      */
-
     fun delete_content_metadata_access(
         content_metadata_access_id: Long
     ): SDKResponse {
@@ -1646,7 +1529,6 @@ class Looker31SDK(authSession: AuthSession) : APIMethods(authSession) {
      *
      * **Note**: Binary content may be returned by this method.
      */
-
     @JvmOverloads fun content_thumbnail(
         type: String,
         resource_id: String,
@@ -1678,7 +1560,6 @@ class Looker31SDK(authSession: AuthSession) : APIMethods(authSession) {
      *
      * GET /content_validation -> ContentValidation
      */
-
     @JvmOverloads fun content_validation(
         fields: String? = null
     ): SDKResponse {
@@ -1717,7 +1598,7 @@ class Looker31SDK(authSession: AuthSession) : APIMethods(authSession) {
      * @param {String} look_id Match look_id
      * @param {String} dashboard_id Match dashboard_id
      * @param {Long} content_metadata_id Match content metadata id
-     * @param {String} start_of_week_date Match start of week date (format is "YYYY-MM-DD")
+     * @param {String} start_of_week_date Match start of week date
      * @param {Boolean} all_time True if only all time view records should be returned
      * @param {Long} user_id Match user id
      * @param {String} fields Requested fields
@@ -1728,7 +1609,6 @@ class Looker31SDK(authSession: AuthSession) : APIMethods(authSession) {
      *
      * GET /content_view/search -> Array<ContentView>
      */
-
     @JvmOverloads fun search_content_views(
         view_count: Long? = null,
         group_id: Long? = null,
@@ -1778,7 +1658,6 @@ class Looker31SDK(authSession: AuthSession) : APIMethods(authSession) {
      *
      * GET /vector_thumbnail/{type}/{resource_id} -> String
      */
-
     @JvmOverloads fun vector_thumbnail(
         type: String,
         resource_id: String,
@@ -1809,7 +1688,6 @@ class Looker31SDK(authSession: AuthSession) : APIMethods(authSession) {
      *
      * GET /dashboards -> Array<DashboardBase>
      */
-
     @JvmOverloads fun all_dashboards(
         fields: String? = null
     ): SDKResponse {
@@ -1839,7 +1717,6 @@ class Looker31SDK(authSession: AuthSession) : APIMethods(authSession) {
      *
      * POST /dashboards -> Dashboard
      */
-
     fun create_dashboard(
         body: WriteDashboard
     ): SDKResponse {
@@ -1899,7 +1776,6 @@ class Looker31SDK(authSession: AuthSession) : APIMethods(authSession) {
      *
      * GET /dashboards/search -> Array<Dashboard>
      */
-
     @JvmOverloads fun search_dashboards(
         id: Long? = null,
         slug: String? = null,
@@ -1968,7 +1844,6 @@ class Looker31SDK(authSession: AuthSession) : APIMethods(authSession) {
      *
      * POST /dashboards/{lookml_dashboard_id}/import/{space_id} -> Dashboard
      */
-
     @JvmOverloads fun import_lookml_dashboard(
         lookml_dashboard_id: String,
         space_id: String,
@@ -2000,7 +1875,6 @@ class Looker31SDK(authSession: AuthSession) : APIMethods(authSession) {
      *
      * PATCH /dashboards/{lookml_dashboard_id}/sync -> Array<Long>
      */
-
     @JvmOverloads fun sync_lookml_dashboard(
         lookml_dashboard_id: String,
         body: WriteDashboard,
@@ -2027,7 +1901,6 @@ class Looker31SDK(authSession: AuthSession) : APIMethods(authSession) {
      *
      * GET /dashboards/{dashboard_id} -> Dashboard
      */
-
     @JvmOverloads fun dashboard(
         dashboard_id: String,
         fields: String? = null
@@ -2056,7 +1929,6 @@ class Looker31SDK(authSession: AuthSession) : APIMethods(authSession) {
      *
      * PATCH /dashboards/{dashboard_id} -> Dashboard
      */
-
     fun update_dashboard(
         dashboard_id: String,
         body: WriteDashboard
@@ -2078,7 +1950,6 @@ class Looker31SDK(authSession: AuthSession) : APIMethods(authSession) {
      *
      * DELETE /dashboards/{dashboard_id} -> String
      */
-
     fun delete_dashboard(
         dashboard_id: String
     ): SDKResponse {
@@ -2095,7 +1966,6 @@ class Looker31SDK(authSession: AuthSession) : APIMethods(authSession) {
      *
      * GET /dashboards/aggregate_table_lookml/{dashboard_id} -> DashboardAggregateTableLookml
      */
-
     fun dashboard_aggregate_table_lookml(
         dashboard_id: String
     ): SDKResponse {
@@ -2112,7 +1982,6 @@ class Looker31SDK(authSession: AuthSession) : APIMethods(authSession) {
      *
      * GET /dashboards/lookml/{dashboard_id} -> DashboardLookml
      */
-
     fun dashboard_lookml(
         dashboard_id: String
     ): SDKResponse {
@@ -2156,7 +2025,6 @@ class Looker31SDK(authSession: AuthSession) : APIMethods(authSession) {
      *
      * GET /dashboard_elements/search -> Array<DashboardElement>
      */
-
     @JvmOverloads fun search_dashboard_elements(
         dashboard_id: Long? = null,
         look_id: Long? = null,
@@ -2188,7 +2056,6 @@ class Looker31SDK(authSession: AuthSession) : APIMethods(authSession) {
      *
      * GET /dashboard_elements/{dashboard_element_id} -> DashboardElement
      */
-
     @JvmOverloads fun dashboard_element(
         dashboard_element_id: String,
         fields: String? = null
@@ -2209,7 +2076,6 @@ class Looker31SDK(authSession: AuthSession) : APIMethods(authSession) {
      *
      * PATCH /dashboard_elements/{dashboard_element_id} -> DashboardElement
      */
-
     @JvmOverloads fun update_dashboard_element(
         dashboard_element_id: String,
         body: WriteDashboardElement,
@@ -2229,7 +2095,6 @@ class Looker31SDK(authSession: AuthSession) : APIMethods(authSession) {
      *
      * DELETE /dashboard_elements/{dashboard_element_id} -> String
      */
-
     fun delete_dashboard_element(
         dashboard_element_id: String
     ): SDKResponse {
@@ -2245,7 +2110,6 @@ class Looker31SDK(authSession: AuthSession) : APIMethods(authSession) {
      *
      * GET /dashboards/{dashboard_id}/dashboard_elements -> Array<DashboardElement>
      */
-
     @JvmOverloads fun dashboard_dashboard_elements(
         dashboard_id: String,
         fields: String? = null
@@ -2265,7 +2129,6 @@ class Looker31SDK(authSession: AuthSession) : APIMethods(authSession) {
      *
      * POST /dashboard_elements -> DashboardElement
      */
-
     @JvmOverloads fun create_dashboard_element(
         body: WriteDashboardElement,
         fields: String? = null
@@ -2284,7 +2147,6 @@ class Looker31SDK(authSession: AuthSession) : APIMethods(authSession) {
      *
      * GET /dashboard_filters/{dashboard_filter_id} -> DashboardFilter
      */
-
     @JvmOverloads fun dashboard_filter(
         dashboard_filter_id: String,
         fields: String? = null
@@ -2305,7 +2167,6 @@ class Looker31SDK(authSession: AuthSession) : APIMethods(authSession) {
      *
      * PATCH /dashboard_filters/{dashboard_filter_id} -> DashboardFilter
      */
-
     @JvmOverloads fun update_dashboard_filter(
         dashboard_filter_id: String,
         body: WriteDashboardFilter,
@@ -2325,7 +2186,6 @@ class Looker31SDK(authSession: AuthSession) : APIMethods(authSession) {
      *
      * DELETE /dashboard_filters/{dashboard_filter_id} -> String
      */
-
     fun delete_dashboard_filter(
         dashboard_filter_id: String
     ): SDKResponse {
@@ -2341,7 +2201,6 @@ class Looker31SDK(authSession: AuthSession) : APIMethods(authSession) {
      *
      * GET /dashboards/{dashboard_id}/dashboard_filters -> Array<DashboardFilter>
      */
-
     @JvmOverloads fun dashboard_dashboard_filters(
         dashboard_id: String,
         fields: String? = null
@@ -2361,7 +2220,6 @@ class Looker31SDK(authSession: AuthSession) : APIMethods(authSession) {
      *
      * POST /dashboard_filters -> DashboardFilter
      */
-
     @JvmOverloads fun create_dashboard_filter(
         body: WriteCreateDashboardFilter,
         fields: String? = null
@@ -2380,7 +2238,6 @@ class Looker31SDK(authSession: AuthSession) : APIMethods(authSession) {
      *
      * GET /dashboard_layout_components/{dashboard_layout_component_id} -> DashboardLayoutComponent
      */
-
     @JvmOverloads fun dashboard_layout_component(
         dashboard_layout_component_id: String,
         fields: String? = null
@@ -2401,7 +2258,6 @@ class Looker31SDK(authSession: AuthSession) : APIMethods(authSession) {
      *
      * PATCH /dashboard_layout_components/{dashboard_layout_component_id} -> DashboardLayoutComponent
      */
-
     @JvmOverloads fun update_dashboard_layout_component(
         dashboard_layout_component_id: String,
         body: WriteDashboardLayoutComponent,
@@ -2422,7 +2278,6 @@ class Looker31SDK(authSession: AuthSession) : APIMethods(authSession) {
      *
      * GET /dashboard_layouts/{dashboard_layout_id}/dashboard_layout_components -> Array<DashboardLayoutComponent>
      */
-
     @JvmOverloads fun dashboard_layout_dashboard_layout_components(
         dashboard_layout_id: String,
         fields: String? = null
@@ -2442,7 +2297,6 @@ class Looker31SDK(authSession: AuthSession) : APIMethods(authSession) {
      *
      * GET /dashboard_layouts/{dashboard_layout_id} -> DashboardLayout
      */
-
     @JvmOverloads fun dashboard_layout(
         dashboard_layout_id: String,
         fields: String? = null
@@ -2463,7 +2317,6 @@ class Looker31SDK(authSession: AuthSession) : APIMethods(authSession) {
      *
      * PATCH /dashboard_layouts/{dashboard_layout_id} -> DashboardLayout
      */
-
     @JvmOverloads fun update_dashboard_layout(
         dashboard_layout_id: String,
         body: WriteDashboardLayout,
@@ -2483,7 +2336,6 @@ class Looker31SDK(authSession: AuthSession) : APIMethods(authSession) {
      *
      * DELETE /dashboard_layouts/{dashboard_layout_id} -> String
      */
-
     fun delete_dashboard_layout(
         dashboard_layout_id: String
     ): SDKResponse {
@@ -2499,7 +2351,6 @@ class Looker31SDK(authSession: AuthSession) : APIMethods(authSession) {
      *
      * GET /dashboards/{dashboard_id}/dashboard_layouts -> Array<DashboardLayout>
      */
-
     @JvmOverloads fun dashboard_dashboard_layouts(
         dashboard_id: String,
         fields: String? = null
@@ -2519,7 +2370,6 @@ class Looker31SDK(authSession: AuthSession) : APIMethods(authSession) {
      *
      * POST /dashboard_layouts -> DashboardLayout
      */
-
     @JvmOverloads fun create_dashboard_layout(
         body: WriteDashboardLayout,
         fields: String? = null
@@ -2541,7 +2391,6 @@ class Looker31SDK(authSession: AuthSession) : APIMethods(authSession) {
      *
      * POST /data_actions -> DataActionResponse
      */
-
     fun perform_data_action(
         body: DataActionRequest
     ): SDKResponse {
@@ -2555,7 +2404,6 @@ class Looker31SDK(authSession: AuthSession) : APIMethods(authSession) {
      *
      * POST /data_actions/form -> DataActionForm
      */
-
     fun fetch_remote_data_action_form(
         body: Map<String, Any>
     ): SDKResponse {
@@ -2569,11 +2417,8 @@ class Looker31SDK(authSession: AuthSession) : APIMethods(authSession) {
     /**
      * ### Get information about all datagroups.
      *
-     *
-     *
      * GET /datagroups -> Array<Datagroup>
      */
-
     fun all_datagroups(): SDKResponse {
         return this.get<Array<Datagroup>>("/datagroups", mapOf())
     }
@@ -2585,7 +2430,6 @@ class Looker31SDK(authSession: AuthSession) : APIMethods(authSession) {
      *
      * GET /datagroups/{datagroup_id} -> Datagroup
      */
-
     fun datagroup(
         datagroup_id: String
     ): SDKResponse {
@@ -2601,7 +2445,6 @@ class Looker31SDK(authSession: AuthSession) : APIMethods(authSession) {
      *
      * PATCH /datagroups/{datagroup_id} -> Datagroup
      */
-
     fun update_datagroup(
         datagroup_id: String,
         body: WriteDatagroup
@@ -2631,7 +2474,6 @@ class Looker31SDK(authSession: AuthSession) : APIMethods(authSession) {
      *
      * GET /folders/search -> Array<Folder>
      */
-
     @JvmOverloads fun search_folders(
         fields: String? = null,
         page: Long? = null,
@@ -2671,7 +2513,6 @@ class Looker31SDK(authSession: AuthSession) : APIMethods(authSession) {
      *
      * GET /folders/{folder_id} -> Folder
      */
-
     @JvmOverloads fun folder(
         folder_id: String,
         fields: String? = null
@@ -2691,7 +2532,6 @@ class Looker31SDK(authSession: AuthSession) : APIMethods(authSession) {
      *
      * PATCH /folders/{folder_id} -> Folder
      */
-
     fun update_folder(
         folder_id: String,
         body: UpdateFolder
@@ -2708,7 +2548,6 @@ class Looker31SDK(authSession: AuthSession) : APIMethods(authSession) {
      *
      * DELETE /folders/{folder_id} -> String
      */
-
     fun delete_folder(
         folder_id: String
     ): SDKResponse {
@@ -2719,14 +2558,10 @@ class Looker31SDK(authSession: AuthSession) : APIMethods(authSession) {
     /**
      * ### Get information about all folders.
      *
-     * In API 3.x, this will not return empty personal folders, unless they belong to the calling user.
-     * In API 4.0+, all personal folders will be returned.
-     *
      * @param {String} fields Requested fields.
      *
      * GET /folders -> Array<Folder>
      */
-
     @JvmOverloads fun all_folders(
         fields: String? = null
     ): SDKResponse {
@@ -2746,7 +2581,6 @@ class Looker31SDK(authSession: AuthSession) : APIMethods(authSession) {
      *
      * POST /folders -> Folder
      */
-
     fun create_folder(
         body: CreateFolder
     ): SDKResponse {
@@ -2764,7 +2598,6 @@ class Looker31SDK(authSession: AuthSession) : APIMethods(authSession) {
      *
      * GET /folders/{folder_id}/children -> Array<Folder>
      */
-
     @JvmOverloads fun folder_children(
         folder_id: String,
         fields: String? = null,
@@ -2794,7 +2627,6 @@ class Looker31SDK(authSession: AuthSession) : APIMethods(authSession) {
      *
      * GET /folders/{folder_id}/children/search -> Array<Folder>
      */
-
     @JvmOverloads fun folder_children_search(
         folder_id: String,
         fields: String? = null,
@@ -2820,7 +2652,6 @@ class Looker31SDK(authSession: AuthSession) : APIMethods(authSession) {
      *
      * GET /folders/{folder_id}/parent -> Folder
      */
-
     @JvmOverloads fun folder_parent(
         folder_id: String,
         fields: String? = null
@@ -2840,7 +2671,6 @@ class Looker31SDK(authSession: AuthSession) : APIMethods(authSession) {
      *
      * GET /folders/{folder_id}/ancestors -> Array<Folder>
      */
-
     @JvmOverloads fun folder_ancestors(
         folder_id: String,
         fields: String? = null
@@ -2853,16 +2683,13 @@ class Looker31SDK(authSession: AuthSession) : APIMethods(authSession) {
     }
 
     /**
-     * ### Get all looks in a folder.
-     * In API 3.x, this will return all looks in a folder, including looks in the trash.
-     * In API 4.0+, all looks in a folder will be returned, excluding looks in the trash.
+     * ### Get the looks in a folder
      *
      * @param {String} folder_id Id of folder
      * @param {String} fields Requested fields.
      *
      * GET /folders/{folder_id}/looks -> Array<LookWithQuery>
      */
-
     @JvmOverloads fun folder_looks(
         folder_id: String,
         fields: String? = null
@@ -2882,7 +2709,6 @@ class Looker31SDK(authSession: AuthSession) : APIMethods(authSession) {
      *
      * GET /folders/{folder_id}/dashboards -> Array<Dashboard>
      */
-
     @JvmOverloads fun folder_dashboards(
         folder_id: String,
         fields: String? = null
@@ -2911,7 +2737,6 @@ class Looker31SDK(authSession: AuthSession) : APIMethods(authSession) {
      *
      * GET /groups -> Array<Group>
      */
-
     @JvmOverloads fun all_groups(
         fields: String? = null,
         page: Long? = null,
@@ -2943,7 +2768,6 @@ class Looker31SDK(authSession: AuthSession) : APIMethods(authSession) {
      *
      * POST /groups -> Group
      */
-
     @JvmOverloads fun create_group(
         body: WriteGroup,
         fields: String? = null
@@ -2993,7 +2817,6 @@ class Looker31SDK(authSession: AuthSession) : APIMethods(authSession) {
      *
      * GET /groups/search -> Array<Group>
      */
-
     @JvmOverloads fun search_groups(
         fields: String? = null,
         limit: Long? = null,
@@ -3031,7 +2854,6 @@ class Looker31SDK(authSession: AuthSession) : APIMethods(authSession) {
      *
      * GET /groups/{group_id} -> Group
      */
-
     @JvmOverloads fun group(
         group_id: Long,
         fields: String? = null
@@ -3052,7 +2874,6 @@ class Looker31SDK(authSession: AuthSession) : APIMethods(authSession) {
      *
      * PATCH /groups/{group_id} -> Group
      */
-
     @JvmOverloads fun update_group(
         group_id: Long,
         body: WriteGroup,
@@ -3072,7 +2893,6 @@ class Looker31SDK(authSession: AuthSession) : APIMethods(authSession) {
      *
      * DELETE /groups/{group_id} -> String
      */
-
     fun delete_group(
         group_id: Long
     ): SDKResponse {
@@ -3088,7 +2908,6 @@ class Looker31SDK(authSession: AuthSession) : APIMethods(authSession) {
      *
      * GET /groups/{group_id}/groups -> Array<Group>
      */
-
     @JvmOverloads fun all_group_groups(
         group_id: Long,
         fields: String? = null
@@ -3108,7 +2927,6 @@ class Looker31SDK(authSession: AuthSession) : APIMethods(authSession) {
      *
      * POST /groups/{group_id}/groups -> Group
      */
-
     fun add_group_group(
         group_id: Long,
         body: GroupIdForGroupInclusion
@@ -3128,7 +2946,6 @@ class Looker31SDK(authSession: AuthSession) : APIMethods(authSession) {
      *
      * GET /groups/{group_id}/users -> Array<User>
      */
-
     @JvmOverloads fun all_group_users(
         group_id: Long,
         fields: String? = null,
@@ -3156,7 +2973,6 @@ class Looker31SDK(authSession: AuthSession) : APIMethods(authSession) {
      *
      * POST /groups/{group_id}/users -> User
      */
-
     fun add_group_user(
         group_id: Long,
         body: GroupIdForGroupUserInclusion
@@ -3173,7 +2989,6 @@ class Looker31SDK(authSession: AuthSession) : APIMethods(authSession) {
      *
      * DELETE /groups/{group_id}/users/{user_id} -> Void
      */
-
     fun delete_group_user(
         group_id: Long,
         user_id: Long
@@ -3191,7 +3006,6 @@ class Looker31SDK(authSession: AuthSession) : APIMethods(authSession) {
      *
      * DELETE /groups/{group_id}/groups/{deleting_group_id} -> Void
      */
-
     fun delete_group_from_group(
         group_id: Long,
         deleting_group_id: Long
@@ -3212,7 +3026,6 @@ class Looker31SDK(authSession: AuthSession) : APIMethods(authSession) {
      *
      * PATCH /groups/{group_id}/attribute_values/{user_attribute_id} -> UserAttributeGroupValue
      */
-
     fun update_user_attribute_group_value(
         group_id: Long,
         user_attribute_id: Long,
@@ -3231,7 +3044,6 @@ class Looker31SDK(authSession: AuthSession) : APIMethods(authSession) {
      *
      * DELETE /groups/{group_id}/attribute_values/{user_attribute_id} -> Void
      */
-
     fun delete_user_attribute_group_value(
         group_id: Long,
         user_attribute_id: Long
@@ -3252,7 +3064,6 @@ class Looker31SDK(authSession: AuthSession) : APIMethods(authSession) {
      *
      * GET /homepages -> Array<Homepage>
      */
-
     @JvmOverloads fun all_homepages(
         fields: String? = null
     ): SDKResponse {
@@ -3270,7 +3081,6 @@ class Looker31SDK(authSession: AuthSession) : APIMethods(authSession) {
      *
      * POST /homepages -> Homepage
      */
-
     @JvmOverloads fun create_homepage(
         body: WriteHomepage,
         fields: String? = null
@@ -3321,7 +3131,6 @@ class Looker31SDK(authSession: AuthSession) : APIMethods(authSession) {
      *
      * GET /homepages/search -> Array<Homepage>
      */
-
     @JvmOverloads fun search_homepages(
         title: String? = null,
         created_at: String? = null,
@@ -3365,7 +3174,6 @@ class Looker31SDK(authSession: AuthSession) : APIMethods(authSession) {
      *
      * GET /homepages/{homepage_id} -> Homepage
      */
-
     @JvmOverloads fun homepage(
         homepage_id: Long,
         fields: String? = null
@@ -3386,7 +3194,6 @@ class Looker31SDK(authSession: AuthSession) : APIMethods(authSession) {
      *
      * PATCH /homepages/{homepage_id} -> Homepage
      */
-
     @JvmOverloads fun update_homepage(
         homepage_id: Long,
         body: WriteHomepage,
@@ -3406,7 +3213,6 @@ class Looker31SDK(authSession: AuthSession) : APIMethods(authSession) {
      *
      * DELETE /homepages/{homepage_id} -> String
      */
-
     fun delete_homepage(
         homepage_id: Long
     ): SDKResponse {
@@ -3423,7 +3229,6 @@ class Looker31SDK(authSession: AuthSession) : APIMethods(authSession) {
      *
      * GET /homepage_items -> Array<HomepageItem>
      */
-
     @JvmOverloads fun all_homepage_items(
         fields: String? = null,
         sorts: String? = null,
@@ -3447,7 +3252,6 @@ class Looker31SDK(authSession: AuthSession) : APIMethods(authSession) {
      *
      * POST /homepage_items -> HomepageItem
      */
-
     @JvmOverloads fun create_homepage_item(
         body: WriteHomepageItem,
         fields: String? = null
@@ -3466,7 +3270,6 @@ class Looker31SDK(authSession: AuthSession) : APIMethods(authSession) {
      *
      * GET /homepage_items/{homepage_item_id} -> HomepageItem
      */
-
     @JvmOverloads fun homepage_item(
         homepage_item_id: Long,
         fields: String? = null
@@ -3487,7 +3290,6 @@ class Looker31SDK(authSession: AuthSession) : APIMethods(authSession) {
      *
      * PATCH /homepage_items/{homepage_item_id} -> HomepageItem
      */
-
     @JvmOverloads fun update_homepage_item(
         homepage_item_id: Long,
         body: WriteHomepageItem,
@@ -3507,7 +3309,6 @@ class Looker31SDK(authSession: AuthSession) : APIMethods(authSession) {
      *
      * DELETE /homepage_items/{homepage_item_id} -> String
      */
-
     fun delete_homepage_item(
         homepage_item_id: Long
     ): SDKResponse {
@@ -3523,7 +3324,6 @@ class Looker31SDK(authSession: AuthSession) : APIMethods(authSession) {
      *
      * GET /homepage_sections -> Array<HomepageSection>
      */
-
     @JvmOverloads fun all_homepage_sections(
         fields: String? = null,
         sorts: String? = null
@@ -3545,7 +3345,6 @@ class Looker31SDK(authSession: AuthSession) : APIMethods(authSession) {
      *
      * POST /homepage_sections -> HomepageSection
      */
-
     @JvmOverloads fun create_homepage_section(
         body: WriteHomepageSection,
         fields: String? = null
@@ -3564,7 +3363,6 @@ class Looker31SDK(authSession: AuthSession) : APIMethods(authSession) {
      *
      * GET /homepage_sections/{homepage_section_id} -> HomepageSection
      */
-
     @JvmOverloads fun homepage_section(
         homepage_section_id: Long,
         fields: String? = null
@@ -3585,7 +3383,6 @@ class Looker31SDK(authSession: AuthSession) : APIMethods(authSession) {
      *
      * PATCH /homepage_sections/{homepage_section_id} -> HomepageSection
      */
-
     @JvmOverloads fun update_homepage_section(
         homepage_section_id: Long,
         body: WriteHomepageSection,
@@ -3605,7 +3402,6 @@ class Looker31SDK(authSession: AuthSession) : APIMethods(authSession) {
      *
      * DELETE /homepage_sections/{homepage_section_id} -> String
      */
-
     fun delete_homepage_section(
         homepage_section_id: Long
     ): SDKResponse {
@@ -3620,7 +3416,6 @@ class Looker31SDK(authSession: AuthSession) : APIMethods(authSession) {
      *
      * GET /primary_homepage_sections -> Array<HomepageSection>
      */
-
     @JvmOverloads fun all_primary_homepage_sections(
         fields: String? = null
     ): SDKResponse {
@@ -3641,7 +3436,6 @@ class Looker31SDK(authSession: AuthSession) : APIMethods(authSession) {
      *
      * GET /integration_hubs -> Array<IntegrationHub>
      */
-
     @JvmOverloads fun all_integration_hubs(
         fields: String? = null
     ): SDKResponse {
@@ -3661,7 +3455,6 @@ class Looker31SDK(authSession: AuthSession) : APIMethods(authSession) {
      *
      * POST /integration_hubs -> IntegrationHub
      */
-
     @JvmOverloads fun create_integration_hub(
         body: WriteIntegrationHub,
         fields: String? = null
@@ -3680,7 +3473,6 @@ class Looker31SDK(authSession: AuthSession) : APIMethods(authSession) {
      *
      * GET /integration_hubs/{integration_hub_id} -> IntegrationHub
      */
-
     @JvmOverloads fun integration_hub(
         integration_hub_id: Long,
         fields: String? = null
@@ -3703,7 +3495,6 @@ class Looker31SDK(authSession: AuthSession) : APIMethods(authSession) {
      *
      * PATCH /integration_hubs/{integration_hub_id} -> IntegrationHub
      */
-
     @JvmOverloads fun update_integration_hub(
         integration_hub_id: Long,
         body: WriteIntegrationHub,
@@ -3723,7 +3514,6 @@ class Looker31SDK(authSession: AuthSession) : APIMethods(authSession) {
      *
      * DELETE /integration_hubs/{integration_hub_id} -> String
      */
-
     fun delete_integration_hub(
         integration_hub_id: Long
     ): SDKResponse {
@@ -3738,7 +3528,6 @@ class Looker31SDK(authSession: AuthSession) : APIMethods(authSession) {
      *
      * POST /integration_hubs/{integration_hub_id}/accept_legal_agreement -> IntegrationHub
      */
-
     fun accept_integration_hub_legal_agreement(
         integration_hub_id: Long
     ): SDKResponse {
@@ -3754,7 +3543,6 @@ class Looker31SDK(authSession: AuthSession) : APIMethods(authSession) {
      *
      * GET /integrations -> Array<Integration>
      */
-
     @JvmOverloads fun all_integrations(
         fields: String? = null,
         integration_hub_id: String? = null
@@ -3776,7 +3564,6 @@ class Looker31SDK(authSession: AuthSession) : APIMethods(authSession) {
      *
      * GET /integrations/{integration_id} -> Integration
      */
-
     @JvmOverloads fun integration(
         integration_id: String,
         fields: String? = null
@@ -3797,7 +3584,6 @@ class Looker31SDK(authSession: AuthSession) : APIMethods(authSession) {
      *
      * PATCH /integrations/{integration_id} -> Integration
      */
-
     @JvmOverloads fun update_integration(
         integration_id: String,
         body: WriteIntegration,
@@ -3818,7 +3604,6 @@ class Looker31SDK(authSession: AuthSession) : APIMethods(authSession) {
      *
      * POST /integrations/{integration_id}/form -> DataActionForm
      */
-
     @JvmOverloads fun fetch_integration_form(
         integration_id: String,
         body: Map<String, Any>? = null
@@ -3834,7 +3619,6 @@ class Looker31SDK(authSession: AuthSession) : APIMethods(authSession) {
      *
      * POST /integrations/{integration_id}/test -> IntegrationTestResult
      */
-
     fun test_integration(
         integration_id: String
     ): SDKResponse {
@@ -3859,7 +3643,6 @@ class Looker31SDK(authSession: AuthSession) : APIMethods(authSession) {
      *
      * GET /looks -> Array<Look>
      */
-
     @JvmOverloads fun all_looks(
         fields: String? = null
     ): SDKResponse {
@@ -3883,7 +3666,6 @@ class Looker31SDK(authSession: AuthSession) : APIMethods(authSession) {
      *
      * POST /looks -> LookWithQuery
      */
-
     @JvmOverloads fun create_look(
         body: WriteLookWithQuery,
         fields: String? = null
@@ -3943,7 +3725,6 @@ class Looker31SDK(authSession: AuthSession) : APIMethods(authSession) {
      *
      * GET /looks/search -> Array<Look>
      */
-
     @JvmOverloads fun search_looks(
         id: String? = null,
         title: String? = null,
@@ -3997,7 +3778,6 @@ class Looker31SDK(authSession: AuthSession) : APIMethods(authSession) {
      *
      * GET /looks/{look_id} -> LookWithQuery
      */
-
     @JvmOverloads fun look(
         look_id: Long,
         fields: String? = null
@@ -4037,7 +3817,6 @@ class Looker31SDK(authSession: AuthSession) : APIMethods(authSession) {
      *
      * PATCH /looks/{look_id} -> LookWithQuery
      */
-
     @JvmOverloads fun update_look(
         look_id: Long,
         body: WriteLookWithQuery,
@@ -4063,7 +3842,6 @@ class Looker31SDK(authSession: AuthSession) : APIMethods(authSession) {
      *
      * DELETE /looks/{look_id} -> String
      */
-
     fun delete_look(
         look_id: Long
     ): SDKResponse {
@@ -4110,7 +3888,6 @@ class Looker31SDK(authSession: AuthSession) : APIMethods(authSession) {
      *
      * **Note**: Binary content may be returned by this method.
      */
-
     @JvmOverloads fun run_look(
         look_id: Long,
         result_format: String,
@@ -4159,7 +3936,6 @@ class Looker31SDK(authSession: AuthSession) : APIMethods(authSession) {
      *
      * GET /lookml_models -> Array<LookmlModel>
      */
-
     @JvmOverloads fun all_lookml_models(
         fields: String? = null
     ): SDKResponse {
@@ -4176,7 +3952,6 @@ class Looker31SDK(authSession: AuthSession) : APIMethods(authSession) {
      *
      * POST /lookml_models -> LookmlModel
      */
-
     fun create_lookml_model(
         body: WriteLookmlModel
     ): SDKResponse {
@@ -4191,7 +3966,6 @@ class Looker31SDK(authSession: AuthSession) : APIMethods(authSession) {
      *
      * GET /lookml_models/{lookml_model_name} -> LookmlModel
      */
-
     @JvmOverloads fun lookml_model(
         lookml_model_name: String,
         fields: String? = null
@@ -4211,7 +3985,6 @@ class Looker31SDK(authSession: AuthSession) : APIMethods(authSession) {
      *
      * PATCH /lookml_models/{lookml_model_name} -> LookmlModel
      */
-
     fun update_lookml_model(
         lookml_model_name: String,
         body: WriteLookmlModel
@@ -4227,7 +4000,6 @@ class Looker31SDK(authSession: AuthSession) : APIMethods(authSession) {
      *
      * DELETE /lookml_models/{lookml_model_name} -> String
      */
-
     fun delete_lookml_model(
         lookml_model_name: String
     ): SDKResponse {
@@ -4244,7 +4016,6 @@ class Looker31SDK(authSession: AuthSession) : APIMethods(authSession) {
      *
      * GET /lookml_models/{lookml_model_name}/explores/{explore_name} -> LookmlModelExplore
      */
-
     @JvmOverloads fun lookml_model_explore(
         lookml_model_name: String,
         explore_name: String,
@@ -4271,7 +4042,6 @@ class Looker31SDK(authSession: AuthSession) : APIMethods(authSession) {
      *
      * GET /projects/{project_id}/git_branches -> Array<GitBranch>
      */
-
     fun all_git_branches(
         project_id: String
     ): SDKResponse {
@@ -4288,7 +4058,6 @@ class Looker31SDK(authSession: AuthSession) : APIMethods(authSession) {
      *
      * GET /projects/{project_id}/git_branch -> GitBranch
      */
-
     fun git_branch(
         project_id: String
     ): SDKResponse {
@@ -4312,7 +4081,6 @@ class Looker31SDK(authSession: AuthSession) : APIMethods(authSession) {
      *
      * PUT /projects/{project_id}/git_branch -> GitBranch
      */
-
     fun update_git_branch(
         project_id: String,
         body: WriteGitBranch
@@ -4336,7 +4104,6 @@ class Looker31SDK(authSession: AuthSession) : APIMethods(authSession) {
      *
      * POST /projects/{project_id}/git_branch -> GitBranch
      */
-
     fun create_git_branch(
         project_id: String,
         body: WriteGitBranch
@@ -4355,7 +4122,6 @@ class Looker31SDK(authSession: AuthSession) : APIMethods(authSession) {
      *
      * GET /projects/{project_id}/git_branch/{branch_name} -> GitBranch
      */
-
     fun find_git_branch(
         project_id: String,
         branch_name: String
@@ -4375,7 +4141,6 @@ class Looker31SDK(authSession: AuthSession) : APIMethods(authSession) {
      *
      * DELETE /projects/{project_id}/git_branch/{branch_name} -> String
      */
-
     fun delete_git_branch(
         project_id: String,
         branch_name: String
@@ -4402,7 +4167,6 @@ class Looker31SDK(authSession: AuthSession) : APIMethods(authSession) {
      *
      * POST /projects/{project_id}/deploy_ref_to_production -> String
      */
-
     @JvmOverloads fun deploy_ref_to_production(
         project_id: String,
         branch: String? = null,
@@ -4436,7 +4200,6 @@ class Looker31SDK(authSession: AuthSession) : APIMethods(authSession) {
      *
      * POST /projects/{project_id}/deploy_to_production -> String
      */
-
     fun deploy_to_production(
         project_id: String
     ): SDKResponse {
@@ -4453,7 +4216,6 @@ class Looker31SDK(authSession: AuthSession) : APIMethods(authSession) {
      *
      * POST /projects/{project_id}/reset_to_production -> String
      */
-
     fun reset_project_to_production(
         project_id: String
     ): SDKResponse {
@@ -4470,7 +4232,6 @@ class Looker31SDK(authSession: AuthSession) : APIMethods(authSession) {
      *
      * POST /projects/{project_id}/reset_to_remote -> String
      */
-
     fun reset_project_to_remote(
         project_id: String
     ): SDKResponse {
@@ -4487,7 +4248,6 @@ class Looker31SDK(authSession: AuthSession) : APIMethods(authSession) {
      *
      * GET /projects -> Array<Project>
      */
-
     @JvmOverloads fun all_projects(
         fields: String? = null
     ): SDKResponse {
@@ -4510,7 +4270,6 @@ class Looker31SDK(authSession: AuthSession) : APIMethods(authSession) {
      *
      * POST /projects -> Project
      */
-
     fun create_project(
         body: WriteProject
     ): SDKResponse {
@@ -4527,7 +4286,6 @@ class Looker31SDK(authSession: AuthSession) : APIMethods(authSession) {
      *
      * GET /projects/{project_id} -> Project
      */
-
     @JvmOverloads fun project(
         project_id: String,
         fields: String? = null
@@ -4569,7 +4327,6 @@ class Looker31SDK(authSession: AuthSession) : APIMethods(authSession) {
      *
      * PATCH /projects/{project_id} -> Project
      */
-
     @JvmOverloads fun update_project(
         project_id: String,
         body: WriteProject,
@@ -4591,7 +4348,6 @@ class Looker31SDK(authSession: AuthSession) : APIMethods(authSession) {
      *
      * GET /projects/{project_id}/manifest -> Manifest
      */
-
     fun manifest(
         project_id: String
     ): SDKResponse {
@@ -4608,7 +4364,6 @@ class Looker31SDK(authSession: AuthSession) : APIMethods(authSession) {
      *
      * GET /projects/{project_id}/git/deploy_key -> String
      */
-
     fun git_deploy_key(
         project_id: String
     ): SDKResponse {
@@ -4631,7 +4386,6 @@ class Looker31SDK(authSession: AuthSession) : APIMethods(authSession) {
      *
      * POST /projects/{project_id}/git/deploy_key -> String
      */
-
     fun create_git_deploy_key(
         project_id: String
     ): SDKResponse {
@@ -4658,7 +4412,6 @@ class Looker31SDK(authSession: AuthSession) : APIMethods(authSession) {
      *
      * GET /projects/{project_id}/validate -> ProjectValidationCache
      */
-
     @JvmOverloads fun project_validation_results(
         project_id: String,
         fields: String? = null
@@ -4686,7 +4439,6 @@ class Looker31SDK(authSession: AuthSession) : APIMethods(authSession) {
      *
      * POST /projects/{project_id}/validate -> ProjectValidation
      */
-
     @JvmOverloads fun validate_project(
         project_id: String,
         fields: String? = null
@@ -4708,7 +4460,6 @@ class Looker31SDK(authSession: AuthSession) : APIMethods(authSession) {
      *
      * GET /projects/{project_id}/current_workspace -> ProjectWorkspace
      */
-
     @JvmOverloads fun project_workspace(
         project_id: String,
         fields: String? = null
@@ -4730,7 +4481,6 @@ class Looker31SDK(authSession: AuthSession) : APIMethods(authSession) {
      *
      * GET /projects/{project_id}/files -> Array<ProjectFile>
      */
-
     @JvmOverloads fun all_project_files(
         project_id: String,
         fields: String? = null
@@ -4753,7 +4503,6 @@ class Looker31SDK(authSession: AuthSession) : APIMethods(authSession) {
      *
      * GET /projects/{project_id}/files/file -> ProjectFile
      */
-
     @JvmOverloads fun project_file(
         project_id: String,
         file_id: String,
@@ -4786,7 +4535,6 @@ class Looker31SDK(authSession: AuthSession) : APIMethods(authSession) {
      *
      * GET /projects/{project_id}/git_connection_tests -> Array<GitConnectionTest>
      */
-
     @JvmOverloads fun all_git_connection_tests(
         project_id: String,
         remote_url: String? = null
@@ -4813,7 +4561,6 @@ class Looker31SDK(authSession: AuthSession) : APIMethods(authSession) {
      *
      * GET /projects/{project_id}/git_connection_tests/{test_id} -> GitConnectionTestResult
      */
-
     @JvmOverloads fun run_git_connection_test(
         project_id: String,
         test_id: String,
@@ -4839,7 +4586,6 @@ class Looker31SDK(authSession: AuthSession) : APIMethods(authSession) {
      *
      * GET /projects/{project_id}/lookml_tests -> Array<LookmlTest>
      */
-
     @JvmOverloads fun all_lookml_tests(
         project_id: String,
         file_id: String? = null
@@ -4863,7 +4609,6 @@ class Looker31SDK(authSession: AuthSession) : APIMethods(authSession) {
      *
      * GET /projects/{project_id}/lookml_tests/run -> Array<LookmlTestResult>
      */
-
     @JvmOverloads fun run_lookml_test(
         project_id: String,
         file_id: String? = null,
@@ -4895,7 +4640,6 @@ class Looker31SDK(authSession: AuthSession) : APIMethods(authSession) {
      *
      * PUT /projects/{root_project_id}/credential/{credential_id} -> RepositoryCredential
      */
-
     fun update_repository_credential(
         root_project_id: String,
         credential_id: String,
@@ -4919,7 +4663,6 @@ class Looker31SDK(authSession: AuthSession) : APIMethods(authSession) {
      *
      * DELETE /projects/{root_project_id}/credential/{credential_id} -> String
      */
-
     fun delete_repository_credential(
         root_project_id: String,
         credential_id: String
@@ -4938,7 +4681,6 @@ class Looker31SDK(authSession: AuthSession) : APIMethods(authSession) {
      *
      * GET /projects/{root_project_id}/credentials -> Array<RepositoryCredential>
      */
-
     fun get_all_repository_credentials(
         root_project_id: String
     ): SDKResponse {
@@ -4975,7 +4717,6 @@ class Looker31SDK(authSession: AuthSession) : APIMethods(authSession) {
      *
      * POST /query_tasks -> QueryTask
      */
-
     @JvmOverloads fun create_query_task(
         body: WriteCreateQueryTask,
         limit: Long? = null,
@@ -5026,7 +4767,6 @@ class Looker31SDK(authSession: AuthSession) : APIMethods(authSession) {
      *
      * GET /query_tasks/multi_results -> Map<String,Any>
      */
-
     fun query_task_multi_results(
         query_task_ids: DelimArray<String>
     ): SDKResponse {
@@ -5050,7 +4790,6 @@ class Looker31SDK(authSession: AuthSession) : APIMethods(authSession) {
      *
      * GET /query_tasks/{query_task_id} -> QueryTask
      */
-
     @JvmOverloads fun query_task(
         query_task_id: String,
         fields: String? = null
@@ -5091,7 +4830,6 @@ class Looker31SDK(authSession: AuthSession) : APIMethods(authSession) {
      *
      * GET /query_tasks/{query_task_id}/results -> String
      */
-
     fun query_task_results(
         query_task_id: String
     ): SDKResponse {
@@ -5123,7 +4861,6 @@ class Looker31SDK(authSession: AuthSession) : APIMethods(authSession) {
      *
      * GET /queries/{query_id} -> Query
      */
-
     @JvmOverloads fun query(
         query_id: Long,
         fields: String? = null
@@ -5159,7 +4896,6 @@ class Looker31SDK(authSession: AuthSession) : APIMethods(authSession) {
      *
      * GET /queries/slug/{slug} -> Query
      */
-
     @JvmOverloads fun query_for_slug(
         slug: String,
         fields: String? = null
@@ -5186,7 +4922,6 @@ class Looker31SDK(authSession: AuthSession) : APIMethods(authSession) {
      *
      * POST /queries -> Query
      */
-
     @JvmOverloads fun create_query(
         body: WriteQuery,
         fields: String? = null
@@ -5239,7 +4974,6 @@ class Looker31SDK(authSession: AuthSession) : APIMethods(authSession) {
      *
      * **Note**: Binary content may be returned by this method.
      */
-
     @JvmOverloads fun run_query(
         query_id: Long,
         result_format: String,
@@ -5348,7 +5082,6 @@ class Looker31SDK(authSession: AuthSession) : APIMethods(authSession) {
      *
      * **Note**: Binary content may be returned by this method.
      */
-
     @JvmOverloads fun run_inline_query(
         result_format: String,
         body: WriteQuery,
@@ -5448,7 +5181,6 @@ class Looker31SDK(authSession: AuthSession) : APIMethods(authSession) {
      *
      * **Note**: Binary content may be returned by this method.
      */
-
     fun run_url_encoded_query(
         model_name: String,
         view_name: String,
@@ -5470,7 +5202,6 @@ class Looker31SDK(authSession: AuthSession) : APIMethods(authSession) {
      *
      * GET /merge_queries/{merge_query_id} -> MergeQuery
      */
-
     @JvmOverloads fun merge_query(
         merge_query_id: String,
         fields: String? = null
@@ -5506,7 +5237,6 @@ class Looker31SDK(authSession: AuthSession) : APIMethods(authSession) {
      *
      * POST /merge_queries -> MergeQuery
      */
-
     @JvmOverloads fun create_merge_query(
         body: WriteMergeQuery? = null,
         fields: String? = null
@@ -5520,11 +5250,8 @@ class Looker31SDK(authSession: AuthSession) : APIMethods(authSession) {
     /**
      * Get information about all running queries.
      *
-     *
-     *
      * GET /running_queries -> Array<RunningQueries>
      */
-
     fun all_running_queries(): SDKResponse {
         return this.get<Array<RunningQueries>>("/running_queries", mapOf())
     }
@@ -5536,7 +5263,6 @@ class Looker31SDK(authSession: AuthSession) : APIMethods(authSession) {
      *
      * DELETE /running_queries/{query_task_id} -> String
      */
-
     fun kill_query(
         query_task_id: String
     ): SDKResponse {
@@ -5551,7 +5277,6 @@ class Looker31SDK(authSession: AuthSession) : APIMethods(authSession) {
      *
      * GET /sql_queries/{slug} -> SqlQuery
      */
-
     fun sql_query(
         slug: String
     ): SDKResponse {
@@ -5568,7 +5293,6 @@ class Looker31SDK(authSession: AuthSession) : APIMethods(authSession) {
      *
      * POST /sql_queries -> SqlQuery
      */
-
     fun create_sql_query(
         body: SqlQueryCreate
     ): SDKResponse {
@@ -5586,7 +5310,6 @@ class Looker31SDK(authSession: AuthSession) : APIMethods(authSession) {
      *
      * **Note**: Binary content may be returned by this method.
      */
-
     @JvmOverloads fun run_sql_query(
         slug: String,
         result_format: String,
@@ -5624,7 +5347,6 @@ class Looker31SDK(authSession: AuthSession) : APIMethods(authSession) {
      *
      * POST /render_tasks/lookml_dashboards/{dashboard_id}/{result_format} -> RenderTask
      */
-
     @JvmOverloads fun create_lookml_dashboard_render_task(
         dashboard_id: String,
         result_format: String,
@@ -5665,7 +5387,6 @@ class Looker31SDK(authSession: AuthSession) : APIMethods(authSession) {
      *
      * POST /render_tasks/looks/{look_id}/{result_format} -> RenderTask
      */
-
     @JvmOverloads fun create_look_render_task(
         look_id: Long,
         result_format: String,
@@ -5700,7 +5421,6 @@ class Looker31SDK(authSession: AuthSession) : APIMethods(authSession) {
      *
      * POST /render_tasks/queries/{query_id}/{result_format} -> RenderTask
      */
-
     @JvmOverloads fun create_query_render_task(
         query_id: Long,
         result_format: String,
@@ -5738,7 +5458,6 @@ class Looker31SDK(authSession: AuthSession) : APIMethods(authSession) {
      *
      * POST /render_tasks/dashboards/{dashboard_id}/{result_format} -> RenderTask
      */
-
     @JvmOverloads fun create_dashboard_render_task(
         dashboard_id: Long,
         result_format: String,
@@ -5776,7 +5495,6 @@ class Looker31SDK(authSession: AuthSession) : APIMethods(authSession) {
      *
      * GET /render_tasks/{render_task_id} -> RenderTask
      */
-
     @JvmOverloads fun render_task(
         render_task_id: String,
         fields: String? = null
@@ -5813,7 +5531,6 @@ class Looker31SDK(authSession: AuthSession) : APIMethods(authSession) {
      *
      * **Note**: Binary content is returned by this method.
      */
-
     fun render_task_results(
         render_task_id: String
     ): SDKResponse {
@@ -5861,7 +5578,6 @@ class Looker31SDK(authSession: AuthSession) : APIMethods(authSession) {
      *
      * GET /model_sets/search -> Array<ModelSet>
      */
-
     @JvmOverloads fun search_model_sets(
         fields: String? = null,
         limit: Long? = null,
@@ -5897,7 +5613,6 @@ class Looker31SDK(authSession: AuthSession) : APIMethods(authSession) {
      *
      * GET /model_sets/{model_set_id} -> ModelSet
      */
-
     @JvmOverloads fun model_set(
         model_set_id: Long,
         fields: String? = null
@@ -5917,7 +5632,6 @@ class Looker31SDK(authSession: AuthSession) : APIMethods(authSession) {
      *
      * PATCH /model_sets/{model_set_id} -> ModelSet
      */
-
     fun update_model_set(
         model_set_id: Long,
         body: WriteModelSet
@@ -5933,7 +5647,6 @@ class Looker31SDK(authSession: AuthSession) : APIMethods(authSession) {
      *
      * DELETE /model_sets/{model_set_id} -> String
      */
-
     fun delete_model_set(
         model_set_id: Long
     ): SDKResponse {
@@ -5948,7 +5661,6 @@ class Looker31SDK(authSession: AuthSession) : APIMethods(authSession) {
      *
      * GET /model_sets -> Array<ModelSet>
      */
-
     @JvmOverloads fun all_model_sets(
         fields: String? = null
     ): SDKResponse {
@@ -5965,7 +5677,6 @@ class Looker31SDK(authSession: AuthSession) : APIMethods(authSession) {
      *
      * POST /model_sets -> ModelSet
      */
-
     fun create_model_set(
         body: WriteModelSet
     ): SDKResponse {
@@ -5975,11 +5686,8 @@ class Looker31SDK(authSession: AuthSession) : APIMethods(authSession) {
     /**
      * ### Get all supported permissions.
      *
-     *
-     *
      * GET /permissions -> Array<Permission>
      */
-
     fun all_permissions(): SDKResponse {
         return this.get<Array<Permission>>("/permissions", mapOf())
     }
@@ -6020,7 +5728,6 @@ class Looker31SDK(authSession: AuthSession) : APIMethods(authSession) {
      *
      * GET /permission_sets/search -> Array<PermissionSet>
      */
-
     @JvmOverloads fun search_permission_sets(
         fields: String? = null,
         limit: Long? = null,
@@ -6056,7 +5763,6 @@ class Looker31SDK(authSession: AuthSession) : APIMethods(authSession) {
      *
      * GET /permission_sets/{permission_set_id} -> PermissionSet
      */
-
     @JvmOverloads fun permission_set(
         permission_set_id: Long,
         fields: String? = null
@@ -6076,7 +5782,6 @@ class Looker31SDK(authSession: AuthSession) : APIMethods(authSession) {
      *
      * PATCH /permission_sets/{permission_set_id} -> PermissionSet
      */
-
     fun update_permission_set(
         permission_set_id: Long,
         body: WritePermissionSet
@@ -6092,7 +5797,6 @@ class Looker31SDK(authSession: AuthSession) : APIMethods(authSession) {
      *
      * DELETE /permission_sets/{permission_set_id} -> String
      */
-
     fun delete_permission_set(
         permission_set_id: Long
     ): SDKResponse {
@@ -6107,7 +5811,6 @@ class Looker31SDK(authSession: AuthSession) : APIMethods(authSession) {
      *
      * GET /permission_sets -> Array<PermissionSet>
      */
-
     @JvmOverloads fun all_permission_sets(
         fields: String? = null
     ): SDKResponse {
@@ -6124,7 +5827,6 @@ class Looker31SDK(authSession: AuthSession) : APIMethods(authSession) {
      *
      * POST /permission_sets -> PermissionSet
      */
-
     fun create_permission_set(
         body: WritePermissionSet
     ): SDKResponse {
@@ -6139,7 +5841,6 @@ class Looker31SDK(authSession: AuthSession) : APIMethods(authSession) {
      *
      * GET /roles -> Array<Role>
      */
-
     @JvmOverloads fun all_roles(
         fields: String? = null,
         ids: DelimArray<Long>? = null
@@ -6160,7 +5861,6 @@ class Looker31SDK(authSession: AuthSession) : APIMethods(authSession) {
      *
      * POST /roles -> Role
      */
-
     fun create_role(
         body: WriteRole
     ): SDKResponse {
@@ -6204,7 +5904,6 @@ class Looker31SDK(authSession: AuthSession) : APIMethods(authSession) {
      *
      * GET /roles/search -> Array<Role>
      */
-
     @JvmOverloads fun search_roles(
         fields: String? = null,
         limit: Long? = null,
@@ -6237,7 +5936,6 @@ class Looker31SDK(authSession: AuthSession) : APIMethods(authSession) {
      *
      * GET /roles/{role_id} -> Role
      */
-
     fun role(
         role_id: Long
     ): SDKResponse {
@@ -6253,7 +5951,6 @@ class Looker31SDK(authSession: AuthSession) : APIMethods(authSession) {
      *
      * PATCH /roles/{role_id} -> Role
      */
-
     fun update_role(
         role_id: Long,
         body: WriteRole
@@ -6269,7 +5966,6 @@ class Looker31SDK(authSession: AuthSession) : APIMethods(authSession) {
      *
      * DELETE /roles/{role_id} -> String
      */
-
     fun delete_role(
         role_id: Long
     ): SDKResponse {
@@ -6285,7 +5981,6 @@ class Looker31SDK(authSession: AuthSession) : APIMethods(authSession) {
      *
      * GET /roles/{role_id}/groups -> Array<Group>
      */
-
     @JvmOverloads fun role_groups(
         role_id: Long,
         fields: String? = null
@@ -6305,7 +6000,6 @@ class Looker31SDK(authSession: AuthSession) : APIMethods(authSession) {
      *
      * PUT /roles/{role_id}/groups -> Array<Group>
      */
-
     fun set_role_groups(
         role_id: Long,
         body: Array<Long>
@@ -6323,7 +6017,6 @@ class Looker31SDK(authSession: AuthSession) : APIMethods(authSession) {
      *
      * GET /roles/{role_id}/users -> Array<User>
      */
-
     @JvmOverloads fun role_users(
         role_id: Long,
         fields: String? = null,
@@ -6347,7 +6040,6 @@ class Looker31SDK(authSession: AuthSession) : APIMethods(authSession) {
      *
      * PUT /roles/{role_id}/users -> Array<User>
      */
-
     fun set_role_users(
         role_id: Long,
         body: Array<Long>
@@ -6370,7 +6062,6 @@ class Looker31SDK(authSession: AuthSession) : APIMethods(authSession) {
      *
      * GET /scheduled_plans/space/{space_id} -> Array<ScheduledPlan>
      */
-
     @JvmOverloads fun scheduled_plans_for_space(
         space_id: Long,
         fields: String? = null
@@ -6392,7 +6083,6 @@ class Looker31SDK(authSession: AuthSession) : APIMethods(authSession) {
      *
      * GET /scheduled_plans/{scheduled_plan_id} -> ScheduledPlan
      */
-
     @JvmOverloads fun scheduled_plan(
         scheduled_plan_id: Long,
         fields: String? = null
@@ -6453,7 +6143,6 @@ class Looker31SDK(authSession: AuthSession) : APIMethods(authSession) {
      *
      * PATCH /scheduled_plans/{scheduled_plan_id} -> ScheduledPlan
      */
-
     fun update_scheduled_plan(
         scheduled_plan_id: Long,
         body: WriteScheduledPlan
@@ -6473,7 +6162,6 @@ class Looker31SDK(authSession: AuthSession) : APIMethods(authSession) {
      *
      * DELETE /scheduled_plans/{scheduled_plan_id} -> String
      */
-
     fun delete_scheduled_plan(
         scheduled_plan_id: Long
     ): SDKResponse {
@@ -6500,7 +6188,6 @@ class Looker31SDK(authSession: AuthSession) : APIMethods(authSession) {
      *
      * GET /scheduled_plans -> Array<ScheduledPlan>
      */
-
     @JvmOverloads fun all_scheduled_plans(
         user_id: Long? = null,
         fields: String? = null,
@@ -6580,7 +6267,6 @@ class Looker31SDK(authSession: AuthSession) : APIMethods(authSession) {
      *
      * POST /scheduled_plans -> ScheduledPlan
      */
-
     fun create_scheduled_plan(
         body: WriteScheduledPlan
     ): SDKResponse {
@@ -6630,7 +6316,6 @@ class Looker31SDK(authSession: AuthSession) : APIMethods(authSession) {
      *
      * POST /scheduled_plans/run_once -> ScheduledPlan
      */
-
     fun scheduled_plan_run_once(
         body: WriteScheduledPlan
     ): SDKResponse {
@@ -6657,7 +6342,6 @@ class Looker31SDK(authSession: AuthSession) : APIMethods(authSession) {
      *
      * GET /scheduled_plans/look/{look_id} -> Array<ScheduledPlan>
      */
-
     @JvmOverloads fun scheduled_plans_for_look(
         look_id: Long,
         user_id: Long? = null,
@@ -6695,7 +6379,6 @@ class Looker31SDK(authSession: AuthSession) : APIMethods(authSession) {
      *
      * GET /scheduled_plans/dashboard/{dashboard_id} -> Array<ScheduledPlan>
      */
-
     @JvmOverloads fun scheduled_plans_for_dashboard(
         dashboard_id: Long,
         user_id: Long? = null,
@@ -6726,16 +6409,15 @@ class Looker31SDK(authSession: AuthSession) : APIMethods(authSession) {
      *
      * The caller must have `see_schedules` permission to see other users' scheduled plans.
      *
-     * @param {String} lookml_dashboard_id LookML Dashboard Id
+     * @param {Long} lookml_dashboard_id LookML Dashboard Id
      * @param {Long} user_id User Id (default is requesting user if not specified)
      * @param {String} fields Requested fields.
      * @param {Boolean} all_users Return scheduled plans belonging to all users for the dashboard
      *
      * GET /scheduled_plans/lookml_dashboard/{lookml_dashboard_id} -> Array<ScheduledPlan>
      */
-
     @JvmOverloads fun scheduled_plans_for_lookml_dashboard(
-        lookml_dashboard_id: String,
+        lookml_dashboard_id: Long,
         user_id: Long? = null,
         fields: String? = null,
         all_users: Boolean? = null
@@ -6805,7 +6487,6 @@ class Looker31SDK(authSession: AuthSession) : APIMethods(authSession) {
      *
      * POST /scheduled_plans/{scheduled_plan_id}/run_once -> ScheduledPlan
      */
-
     @JvmOverloads fun scheduled_plan_run_once_by_id(
         scheduled_plan_id: Long,
         body: WriteScheduledPlan? = null
@@ -6823,11 +6504,8 @@ class Looker31SDK(authSession: AuthSession) : APIMethods(authSession) {
      *
      * Returns information about the current API session, such as which workspace is selected for the session.
      *
-     *
-     *
      * GET /session -> ApiSession
      */
-
     fun session(): SDKResponse {
         return this.get<ApiSession>("/session", mapOf())
     }
@@ -6858,7 +6536,6 @@ class Looker31SDK(authSession: AuthSession) : APIMethods(authSession) {
      *
      * PATCH /session -> ApiSession
      */
-
     fun update_session(
         body: WriteApiSession
     ): SDKResponse {
@@ -6914,7 +6591,6 @@ class Looker31SDK(authSession: AuthSession) : APIMethods(authSession) {
      *
      * GET /spaces/search -> Array<Space>
      */
-
     @JvmOverloads fun search_spaces(
         fields: String? = null,
         page: Long? = null,
@@ -6954,7 +6630,6 @@ class Looker31SDK(authSession: AuthSession) : APIMethods(authSession) {
      *
      * GET /spaces/{space_id} -> Space
      */
-
     @JvmOverloads fun space(
         space_id: String,
         fields: String? = null
@@ -6974,7 +6649,6 @@ class Looker31SDK(authSession: AuthSession) : APIMethods(authSession) {
      *
      * PATCH /spaces/{space_id} -> Space
      */
-
     fun update_space(
         space_id: String,
         body: UpdateSpace
@@ -6991,7 +6665,6 @@ class Looker31SDK(authSession: AuthSession) : APIMethods(authSession) {
      *
      * DELETE /spaces/{space_id} -> String
      */
-
     fun delete_space(
         space_id: String
     ): SDKResponse {
@@ -7002,14 +6675,10 @@ class Looker31SDK(authSession: AuthSession) : APIMethods(authSession) {
     /**
      * ### Get information about all spaces.
      *
-     * In API 3.x, this will not return empty personal spaces, unless they belong to the calling user.
-     * In API 4.0+, all personal spaces will be returned.
-     *
      * @param {String} fields Requested fields.
      *
      * GET /spaces -> Array<SpaceBase>
      */
-
     @JvmOverloads fun all_spaces(
         fields: String? = null
     ): SDKResponse {
@@ -7029,7 +6698,6 @@ class Looker31SDK(authSession: AuthSession) : APIMethods(authSession) {
      *
      * POST /spaces -> Space
      */
-
     fun create_space(
         body: CreateSpace
     ): SDKResponse {
@@ -7047,7 +6715,6 @@ class Looker31SDK(authSession: AuthSession) : APIMethods(authSession) {
      *
      * GET /spaces/{space_id}/children -> Array<Space>
      */
-
     @JvmOverloads fun space_children(
         space_id: String,
         fields: String? = null,
@@ -7077,7 +6744,6 @@ class Looker31SDK(authSession: AuthSession) : APIMethods(authSession) {
      *
      * GET /spaces/{space_id}/children/search -> Array<Space>
      */
-
     @JvmOverloads fun space_children_search(
         space_id: String,
         fields: String? = null,
@@ -7103,7 +6769,6 @@ class Looker31SDK(authSession: AuthSession) : APIMethods(authSession) {
      *
      * GET /spaces/{space_id}/parent -> Space
      */
-
     @JvmOverloads fun space_parent(
         space_id: String,
         fields: String? = null
@@ -7123,7 +6788,6 @@ class Looker31SDK(authSession: AuthSession) : APIMethods(authSession) {
      *
      * GET /spaces/{space_id}/ancestors -> Array<Space>
      */
-
     @JvmOverloads fun space_ancestors(
         space_id: String,
         fields: String? = null
@@ -7136,16 +6800,13 @@ class Looker31SDK(authSession: AuthSession) : APIMethods(authSession) {
     }
 
     /**
-     * ### Get all looks in a space.
-     * In API 3.x, this will return all looks in a space, including looks in the trash.
-     * In API 4.0+, all looks in a space will be returned, excluding looks in the trash.
+     * ### Get the looks in a space
      *
      * @param {String} space_id Id of space
      * @param {String} fields Requested fields.
      *
      * GET /spaces/{space_id}/looks -> Array<LookWithQuery>
      */
-
     @JvmOverloads fun space_looks(
         space_id: String,
         fields: String? = null
@@ -7165,7 +6826,6 @@ class Looker31SDK(authSession: AuthSession) : APIMethods(authSession) {
      *
      * GET /spaces/{space_id}/dashboards -> Array<Dashboard>
      */
-
     @JvmOverloads fun space_dashboards(
         space_id: String,
         fields: String? = null
@@ -7194,7 +6854,6 @@ class Looker31SDK(authSession: AuthSession) : APIMethods(authSession) {
      *
      * GET /themes -> Array<Theme>
      */
-
     @JvmOverloads fun all_themes(
         fields: String? = null
     ): SDKResponse {
@@ -7225,7 +6884,6 @@ class Looker31SDK(authSession: AuthSession) : APIMethods(authSession) {
      *
      * POST /themes -> Theme
      */
-
     fun create_theme(
         body: WriteTheme
     ): SDKResponse {
@@ -7284,7 +6942,6 @@ class Looker31SDK(authSession: AuthSession) : APIMethods(authSession) {
      *
      * GET /themes/search -> Array<Theme>
      */
-
     @JvmOverloads fun search_themes(
         id: Long? = null,
         name: String? = null,
@@ -7325,7 +6982,6 @@ class Looker31SDK(authSession: AuthSession) : APIMethods(authSession) {
      *
      * GET /themes/default -> Theme
      */
-
     @JvmOverloads fun default_theme(
         ts: Date? = null
     ): SDKResponse {
@@ -7352,7 +7008,6 @@ class Looker31SDK(authSession: AuthSession) : APIMethods(authSession) {
      *
      * PUT /themes/default -> Theme
      */
-
     fun set_default_theme(
         name: String
     ): SDKResponse {
@@ -7379,7 +7034,6 @@ class Looker31SDK(authSession: AuthSession) : APIMethods(authSession) {
      *
      * GET /themes/active -> Array<Theme>
      */
-
     @JvmOverloads fun active_themes(
         name: String? = null,
         ts: Date? = null,
@@ -7408,7 +7062,6 @@ class Looker31SDK(authSession: AuthSession) : APIMethods(authSession) {
      *
      * GET /themes/theme_or_default -> Theme
      */
-
     @JvmOverloads fun theme_or_default(
         name: String,
         ts: Date? = null
@@ -7435,7 +7088,6 @@ class Looker31SDK(authSession: AuthSession) : APIMethods(authSession) {
      *
      * POST /themes/validate -> ValidationError
      */
-
     fun validate_theme(
         body: WriteTheme
     ): SDKResponse {
@@ -7454,7 +7106,6 @@ class Looker31SDK(authSession: AuthSession) : APIMethods(authSession) {
      *
      * GET /themes/{theme_id} -> Theme
      */
-
     @JvmOverloads fun theme(
         theme_id: String,
         fields: String? = null
@@ -7476,7 +7127,6 @@ class Looker31SDK(authSession: AuthSession) : APIMethods(authSession) {
      *
      * PATCH /themes/{theme_id} -> Theme
      */
-
     fun update_theme(
         theme_id: String,
         body: WriteTheme
@@ -7500,7 +7150,6 @@ class Looker31SDK(authSession: AuthSession) : APIMethods(authSession) {
      *
      * DELETE /themes/{theme_id} -> String
      */
-
     fun delete_theme(
         theme_id: String
     ): SDKResponse {
@@ -7519,7 +7168,6 @@ class Looker31SDK(authSession: AuthSession) : APIMethods(authSession) {
      *
      * GET /user -> User
      */
-
     @JvmOverloads fun me(
         fields: String? = null
     ): SDKResponse {
@@ -7540,7 +7188,6 @@ class Looker31SDK(authSession: AuthSession) : APIMethods(authSession) {
      *
      * GET /users -> Array<User>
      */
-
     @JvmOverloads fun all_users(
         fields: String? = null,
         page: Long? = null,
@@ -7568,7 +7215,6 @@ class Looker31SDK(authSession: AuthSession) : APIMethods(authSession) {
      *
      * POST /users -> User
      */
-
     @JvmOverloads fun create_user(
         body: WriteUser? = null,
         fields: String? = null
@@ -7627,7 +7273,6 @@ class Looker31SDK(authSession: AuthSession) : APIMethods(authSession) {
      *
      * GET /users/search -> Array<User>
      */
-
     @JvmOverloads fun search_users(
         fields: String? = null,
         page: Long? = null,
@@ -7685,7 +7330,6 @@ class Looker31SDK(authSession: AuthSession) : APIMethods(authSession) {
      *
      * GET /users/search/names/{pattern} -> Array<User>
      */
-
     @JvmOverloads fun search_users_names(
         pattern: String,
         fields: String? = null,
@@ -7729,7 +7373,6 @@ class Looker31SDK(authSession: AuthSession) : APIMethods(authSession) {
      *
      * GET /users/{user_id} -> User
      */
-
     @JvmOverloads fun user(
         user_id: Long,
         fields: String? = null
@@ -7750,7 +7393,6 @@ class Looker31SDK(authSession: AuthSession) : APIMethods(authSession) {
      *
      * PATCH /users/{user_id} -> User
      */
-
     @JvmOverloads fun update_user(
         user_id: Long,
         body: WriteUser,
@@ -7772,7 +7414,6 @@ class Looker31SDK(authSession: AuthSession) : APIMethods(authSession) {
      *
      * DELETE /users/{user_id} -> String
      */
-
     fun delete_user(
         user_id: Long
     ): SDKResponse {
@@ -7816,7 +7457,6 @@ class Looker31SDK(authSession: AuthSession) : APIMethods(authSession) {
      *
      * GET /users/credential/{credential_type}/{credential_id} -> User
      */
-
     @JvmOverloads fun user_for_credential(
         credential_type: String,
         credential_id: String,
@@ -7838,7 +7478,6 @@ class Looker31SDK(authSession: AuthSession) : APIMethods(authSession) {
      *
      * GET /users/{user_id}/credentials_email -> CredentialsEmail
      */
-
     @JvmOverloads fun user_credentials_email(
         user_id: Long,
         fields: String? = null
@@ -7859,7 +7498,6 @@ class Looker31SDK(authSession: AuthSession) : APIMethods(authSession) {
      *
      * POST /users/{user_id}/credentials_email -> CredentialsEmail
      */
-
     @JvmOverloads fun create_user_credentials_email(
         user_id: Long,
         body: WriteCredentialsEmail,
@@ -7881,7 +7519,6 @@ class Looker31SDK(authSession: AuthSession) : APIMethods(authSession) {
      *
      * PATCH /users/{user_id}/credentials_email -> CredentialsEmail
      */
-
     @JvmOverloads fun update_user_credentials_email(
         user_id: Long,
         body: WriteCredentialsEmail,
@@ -7901,7 +7538,6 @@ class Looker31SDK(authSession: AuthSession) : APIMethods(authSession) {
      *
      * DELETE /users/{user_id}/credentials_email -> String
      */
-
     fun delete_user_credentials_email(
         user_id: Long
     ): SDKResponse {
@@ -7917,7 +7553,6 @@ class Looker31SDK(authSession: AuthSession) : APIMethods(authSession) {
      *
      * GET /users/{user_id}/credentials_totp -> CredentialsTotp
      */
-
     @JvmOverloads fun user_credentials_totp(
         user_id: Long,
         fields: String? = null
@@ -7938,7 +7573,6 @@ class Looker31SDK(authSession: AuthSession) : APIMethods(authSession) {
      *
      * POST /users/{user_id}/credentials_totp -> CredentialsTotp
      */
-
     @JvmOverloads fun create_user_credentials_totp(
         user_id: Long,
         body: CredentialsTotp? = null,
@@ -7958,7 +7592,6 @@ class Looker31SDK(authSession: AuthSession) : APIMethods(authSession) {
      *
      * DELETE /users/{user_id}/credentials_totp -> String
      */
-
     fun delete_user_credentials_totp(
         user_id: Long
     ): SDKResponse {
@@ -7974,7 +7607,6 @@ class Looker31SDK(authSession: AuthSession) : APIMethods(authSession) {
      *
      * GET /users/{user_id}/credentials_ldap -> CredentialsLDAP
      */
-
     @JvmOverloads fun user_credentials_ldap(
         user_id: Long,
         fields: String? = null
@@ -7993,7 +7625,6 @@ class Looker31SDK(authSession: AuthSession) : APIMethods(authSession) {
      *
      * DELETE /users/{user_id}/credentials_ldap -> String
      */
-
     fun delete_user_credentials_ldap(
         user_id: Long
     ): SDKResponse {
@@ -8009,7 +7640,6 @@ class Looker31SDK(authSession: AuthSession) : APIMethods(authSession) {
      *
      * GET /users/{user_id}/credentials_google -> CredentialsGoogle
      */
-
     @JvmOverloads fun user_credentials_google(
         user_id: Long,
         fields: String? = null
@@ -8028,7 +7658,6 @@ class Looker31SDK(authSession: AuthSession) : APIMethods(authSession) {
      *
      * DELETE /users/{user_id}/credentials_google -> String
      */
-
     fun delete_user_credentials_google(
         user_id: Long
     ): SDKResponse {
@@ -8044,7 +7673,6 @@ class Looker31SDK(authSession: AuthSession) : APIMethods(authSession) {
      *
      * GET /users/{user_id}/credentials_saml -> CredentialsSaml
      */
-
     @JvmOverloads fun user_credentials_saml(
         user_id: Long,
         fields: String? = null
@@ -8063,7 +7691,6 @@ class Looker31SDK(authSession: AuthSession) : APIMethods(authSession) {
      *
      * DELETE /users/{user_id}/credentials_saml -> String
      */
-
     fun delete_user_credentials_saml(
         user_id: Long
     ): SDKResponse {
@@ -8079,7 +7706,6 @@ class Looker31SDK(authSession: AuthSession) : APIMethods(authSession) {
      *
      * GET /users/{user_id}/credentials_oidc -> CredentialsOIDC
      */
-
     @JvmOverloads fun user_credentials_oidc(
         user_id: Long,
         fields: String? = null
@@ -8098,7 +7724,6 @@ class Looker31SDK(authSession: AuthSession) : APIMethods(authSession) {
      *
      * DELETE /users/{user_id}/credentials_oidc -> String
      */
-
     fun delete_user_credentials_oidc(
         user_id: Long
     ): SDKResponse {
@@ -8115,7 +7740,6 @@ class Looker31SDK(authSession: AuthSession) : APIMethods(authSession) {
      *
      * GET /users/{user_id}/credentials_api3/{credentials_api3_id} -> CredentialsApi3
      */
-
     @JvmOverloads fun user_credentials_api3(
         user_id: Long,
         credentials_api3_id: Long,
@@ -8137,7 +7761,6 @@ class Looker31SDK(authSession: AuthSession) : APIMethods(authSession) {
      *
      * DELETE /users/{user_id}/credentials_api3/{credentials_api3_id} -> String
      */
-
     fun delete_user_credentials_api3(
         user_id: Long,
         credentials_api3_id: Long
@@ -8155,7 +7778,6 @@ class Looker31SDK(authSession: AuthSession) : APIMethods(authSession) {
      *
      * GET /users/{user_id}/credentials_api3 -> Array<CredentialsApi3>
      */
-
     @JvmOverloads fun all_user_credentials_api3s(
         user_id: Long,
         fields: String? = null
@@ -8176,7 +7798,6 @@ class Looker31SDK(authSession: AuthSession) : APIMethods(authSession) {
      *
      * POST /users/{user_id}/credentials_api3 -> CredentialsApi3
      */
-
     @JvmOverloads fun create_user_credentials_api3(
         user_id: Long,
         body: CredentialsApi3? = null,
@@ -8198,7 +7819,6 @@ class Looker31SDK(authSession: AuthSession) : APIMethods(authSession) {
      *
      * GET /users/{user_id}/credentials_embed/{credentials_embed_id} -> CredentialsEmbed
      */
-
     @JvmOverloads fun user_credentials_embed(
         user_id: Long,
         credentials_embed_id: Long,
@@ -8220,7 +7840,6 @@ class Looker31SDK(authSession: AuthSession) : APIMethods(authSession) {
      *
      * DELETE /users/{user_id}/credentials_embed/{credentials_embed_id} -> String
      */
-
     fun delete_user_credentials_embed(
         user_id: Long,
         credentials_embed_id: Long
@@ -8238,7 +7857,6 @@ class Looker31SDK(authSession: AuthSession) : APIMethods(authSession) {
      *
      * GET /users/{user_id}/credentials_embed -> Array<CredentialsEmbed>
      */
-
     @JvmOverloads fun all_user_credentials_embeds(
         user_id: Long,
         fields: String? = null
@@ -8258,7 +7876,6 @@ class Looker31SDK(authSession: AuthSession) : APIMethods(authSession) {
      *
      * GET /users/{user_id}/credentials_looker_openid -> CredentialsLookerOpenid
      */
-
     @JvmOverloads fun user_credentials_looker_openid(
         user_id: Long,
         fields: String? = null
@@ -8277,7 +7894,6 @@ class Looker31SDK(authSession: AuthSession) : APIMethods(authSession) {
      *
      * DELETE /users/{user_id}/credentials_looker_openid -> String
      */
-
     fun delete_user_credentials_looker_openid(
         user_id: Long
     ): SDKResponse {
@@ -8294,7 +7910,6 @@ class Looker31SDK(authSession: AuthSession) : APIMethods(authSession) {
      *
      * GET /users/{user_id}/sessions/{session_id} -> Session
      */
-
     @JvmOverloads fun user_session(
         user_id: Long,
         session_id: Long,
@@ -8316,7 +7931,6 @@ class Looker31SDK(authSession: AuthSession) : APIMethods(authSession) {
      *
      * DELETE /users/{user_id}/sessions/{session_id} -> String
      */
-
     fun delete_user_session(
         user_id: Long,
         session_id: Long
@@ -8334,7 +7948,6 @@ class Looker31SDK(authSession: AuthSession) : APIMethods(authSession) {
      *
      * GET /users/{user_id}/sessions -> Array<Session>
      */
-
     @JvmOverloads fun all_user_sessions(
         user_id: Long,
         fields: String? = null
@@ -8363,7 +7976,6 @@ class Looker31SDK(authSession: AuthSession) : APIMethods(authSession) {
      *
      * POST /users/{user_id}/credentials_email/password_reset -> CredentialsEmail
      */
-
     @JvmOverloads fun create_user_credentials_email_password_reset(
         user_id: Long,
         expires: Boolean? = null,
@@ -8388,7 +8000,6 @@ class Looker31SDK(authSession: AuthSession) : APIMethods(authSession) {
      *
      * GET /users/{user_id}/roles -> Array<Role>
      */
-
     @JvmOverloads fun user_roles(
         user_id: Long,
         fields: String? = null,
@@ -8413,7 +8024,6 @@ class Looker31SDK(authSession: AuthSession) : APIMethods(authSession) {
      *
      * PUT /users/{user_id}/roles -> Array<Role>
      */
-
     @JvmOverloads fun set_user_roles(
         user_id: Long,
         body: Array<Long>,
@@ -8452,7 +8062,6 @@ class Looker31SDK(authSession: AuthSession) : APIMethods(authSession) {
      *
      * GET /users/{user_id}/attribute_values -> Array<UserAttributeWithValue>
      */
-
     @JvmOverloads fun user_attribute_user_values(
         user_id: Long,
         fields: String? = null,
@@ -8483,7 +8092,6 @@ class Looker31SDK(authSession: AuthSession) : APIMethods(authSession) {
      *
      * PATCH /users/{user_id}/attribute_values/{user_attribute_id} -> UserAttributeWithValue
      */
-
     fun set_user_attribute_user_value(
         user_id: Long,
         user_attribute_id: Long,
@@ -8507,7 +8115,6 @@ class Looker31SDK(authSession: AuthSession) : APIMethods(authSession) {
      *
      * DELETE /users/{user_id}/attribute_values/{user_attribute_id} -> Void
      */
-
     fun delete_user_attribute_user_value(
         user_id: Long,
         user_attribute_id: Long
@@ -8529,7 +8136,6 @@ class Looker31SDK(authSession: AuthSession) : APIMethods(authSession) {
      *
      * GET /user_attributes -> Array<UserAttribute>
      */
-
     @JvmOverloads fun all_user_attributes(
         fields: String? = null,
         sorts: String? = null
@@ -8560,7 +8166,6 @@ class Looker31SDK(authSession: AuthSession) : APIMethods(authSession) {
      *
      * POST /user_attributes -> UserAttribute
      */
-
     @JvmOverloads fun create_user_attribute(
         body: WriteUserAttribute,
         fields: String? = null
@@ -8579,7 +8184,6 @@ class Looker31SDK(authSession: AuthSession) : APIMethods(authSession) {
      *
      * GET /user_attributes/{user_attribute_id} -> UserAttribute
      */
-
     @JvmOverloads fun user_attribute(
         user_attribute_id: Long,
         fields: String? = null
@@ -8600,7 +8204,6 @@ class Looker31SDK(authSession: AuthSession) : APIMethods(authSession) {
      *
      * PATCH /user_attributes/{user_attribute_id} -> UserAttribute
      */
-
     @JvmOverloads fun update_user_attribute(
         user_attribute_id: Long,
         body: WriteUserAttribute,
@@ -8620,7 +8223,6 @@ class Looker31SDK(authSession: AuthSession) : APIMethods(authSession) {
      *
      * DELETE /user_attributes/{user_attribute_id} -> String
      */
-
     fun delete_user_attribute(
         user_attribute_id: Long
     ): SDKResponse {
@@ -8642,7 +8244,6 @@ class Looker31SDK(authSession: AuthSession) : APIMethods(authSession) {
      *
      * GET /user_attributes/{user_attribute_id}/group_values -> Array<UserAttributeGroupValue>
      */
-
     @JvmOverloads fun all_user_attribute_group_values(
         user_attribute_id: Long,
         fields: String? = null
@@ -8681,7 +8282,6 @@ class Looker31SDK(authSession: AuthSession) : APIMethods(authSession) {
      *
      * POST /user_attributes/{user_attribute_id}/group_values -> Array<UserAttributeGroupValue>
      */
-
     fun set_user_attribute_group_values(
         user_attribute_id: Long,
         body: Array<UserAttributeGroupValue>
@@ -8699,11 +8299,8 @@ class Looker31SDK(authSession: AuthSession) : APIMethods(authSession) {
      *
      * Returns all workspaces available to the calling user.
      *
-     *
-     *
      * GET /workspaces -> Array<Workspace>
      */
-
     fun all_workspaces(): SDKResponse {
         return this.get<Array<Workspace>>("/workspaces", mapOf())
     }
@@ -8743,7 +8340,6 @@ class Looker31SDK(authSession: AuthSession) : APIMethods(authSession) {
      *
      * GET /workspaces/{workspace_id} -> Workspace
      */
-
     fun workspace(
         workspace_id: String
     ): SDKResponse {

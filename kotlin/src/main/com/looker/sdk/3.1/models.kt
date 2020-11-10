@@ -470,7 +470,7 @@ data class ContinuousPalette(
  * @property field Field information (read-only)
  * @property row Display order of this filter relative to other filters
  * @property listens_to_filters Array of listeners for faceted filters
- * @property allow_multiple_values Whether the filter allows multiple filter values (deprecated in the latest version of dashboards)
+ * @property allow_multiple_values Whether the filter allows multiple filter values
  * @property required Whether the filter requires a value to run the dashboard
  * @property ui_config The visual configuration for this filter. Used to set up how the UI for this filter should appear.
  */
@@ -975,7 +975,7 @@ data class DashboardElement(
  * @property field Field information (read-only)
  * @property row Display order of this filter relative to other filters
  * @property listens_to_filters Array of listeners for faceted filters
- * @property allow_multiple_values Whether the filter allows multiple filter values (deprecated in the latest version of dashboards)
+ * @property allow_multiple_values Whether the filter allows multiple filter values
  * @property required Whether the filter requires a value to run the dashboard
  * @property ui_config The visual configuration for this filter. Used to set up how the UI for this filter should appear.
  */
@@ -4597,7 +4597,7 @@ data class WriteContentMeta(
  * @property dimension Dimension of filter (required if type = field)
  * @property row Display order of this filter relative to other filters
  * @property listens_to_filters Array of listeners for faceted filters
- * @property allow_multiple_values Whether the filter allows multiple filter values (deprecated in the latest version of dashboards)
+ * @property allow_multiple_values Whether the filter allows multiple filter values
  * @property required Whether the filter requires a value to run the dashboard
  * @property ui_config The visual configuration for this filter. Used to set up how the UI for this filter should appear.
  */
@@ -4788,7 +4788,7 @@ data class WriteDashboardElement(
  * @property dimension Dimension of filter (required if type = field)
  * @property row Display order of this filter relative to other filters
  * @property listens_to_filters Array of listeners for faceted filters
- * @property allow_multiple_values Whether the filter allows multiple filter values (deprecated in the latest version of dashboards)
+ * @property allow_multiple_values Whether the filter allows multiple filter values
  * @property required Whether the filter requires a value to run the dashboard
  * @property ui_config The visual configuration for this filter. Used to set up how the UI for this filter should appear.
  */

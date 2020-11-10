@@ -196,7 +196,7 @@ ${indent}var ${property.name}: ${type.name}${optional}
       args.forEach((p) => params.push(this.declareParameter(bump, method, p)))
 
     return `
-${this.commentHeader(indent, this.headerComment(method, streamer))}
+${this.commentHeader(indent, this.headerComment(method, streamer)).trimEnd()}
 ${indent}${this.jvmOverloads(method)}fun ${method.name}(
 ${params.join(this.paramDelimiter)}
 ${indent}) : SDKResponse {
@@ -204,27 +204,30 @@ ${indent}) : SDKResponse {
   }
 
   headerComment(method: IMethod, streamer = false) {
-    const type = this.typeMap(method.type)
-    const resultType = streamer ? 'ByteArray' : type.name
-    const paramComments = method.allParams.map((p) =>
-      this.paramComment(p, this.paramMappedType(p, method))
-    )
+    const lines: string[] = []
 
-    let note = ''
-    if (method.responseIsBoth()) {
-      note = '\n**Note**: Binary content may be returned by this method.'
-    } else if (method.responseIsBinary()) {
-      note = '\n**Note**: Binary content is returned by this method.'
+    lines.push(method.description?.trim())
+
+    if (method.allParams.length) {
+      lines.push('')
+      method.allParams.forEach((p) =>
+        lines.push(this.paramComment(p, this.paramMappedType(p, method)))
+      )
     }
 
-    return `
-${method.description?.trim()}
+    const resultType = streamer ? 'ByteArray' : this.typeMap(method.type).name
+    lines.push('')
+    lines.push(`${method.httpMethod} ${method.endpoint} -> ${resultType}`)
 
-${paramComments.join('\n')}
+    if (method.responseIsBoth()) {
+      lines.push('')
+      lines.push('**Note**: Binary content may be returned by this method.')
+    } else if (method.responseIsBinary()) {
+      lines.push('')
+      lines.push('**Note**: Binary content is returned by this method.')
+    }
 
-${method.httpMethod} ${method.endpoint} -> ${resultType}
-${note}
-`
+    return lines.join('\n')
   }
 
   jvmOverloads(method: IMethod) {
