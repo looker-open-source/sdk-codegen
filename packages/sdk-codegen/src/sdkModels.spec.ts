@@ -1109,6 +1109,14 @@ describe('sdkModels', () => {
       const actual = apiTestModel.methods.logout.signature()
       expect(actual).toEqual('logout()')
     })
+
+    it('should summarize a parameter', () => {
+      const allParams = apiTestModel.methods.create_look.allParams
+      const actual = allParams
+        .find((param) => param.name === 'fields')
+        ?.signature()
+      expect(actual).toEqual('[fields:string]')
+    })
   })
 
   describe('asHashString', () => {

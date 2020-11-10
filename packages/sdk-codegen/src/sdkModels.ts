@@ -175,6 +175,8 @@ export interface IParameter extends ITypedSymbol {
 
   asProperty(): IProperty
 
+  signature(): string
+
   summary(): string
 
   asHashString(): string
@@ -724,6 +726,16 @@ export class Parameter extends SchemadSymbol implements IParameter {
     return this[key] ? ` ${key}` : ''
   }
 
+  signature() {
+    return (
+      (this.required ? '' : '[') +
+      this.name +
+      ':' +
+      this.type.name +
+      (this.required ? '' : ']')
+    )
+  }
+
   summary() {
     return `${this.fullName}:${this.type.name}${this.tag('readOnly')}${this.tag(
       'required'
@@ -1159,9 +1171,7 @@ export class Method extends SchemadSymbol implements IMethod {
     if (allParams) {
       allParams.forEach((param, index) => {
         if (index > 0) result += ', '
-        result += `${param.required ? '' : '['}${param.name}:${
-          param.type.name
-        }${param.required ? '' : ']'}`
+        result += param.signature()
       })
     }
     result += ')'
