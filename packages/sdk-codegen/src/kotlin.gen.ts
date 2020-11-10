@@ -53,7 +53,7 @@ export class KotlinGen extends CodeGen {
   codeQuote = '"'
   enumDelimiter = ',\n'
 
-  indentStr = '  '
+  indentStr = '    '
   endTypeStr = '\n) : Serializable'
   needsRequestTypes = false
   willItStream = true
@@ -236,11 +236,10 @@ ${note}
   }
 
   encodePathParams(indent: string, method: IMethod) {
-    const bump = indent + this.indentStr
     let encodings = ''
     if (method.pathParams.length > 0) {
       for (const param of method.pathParams) {
-        encodings += `${bump}val path_${param.name} = encodeParam(${param.name})\n`
+        encodings += `${indent}val path_${param.name} = encodeParam(${param.name})\n`
       }
     }
     return encodings
@@ -404,11 +403,10 @@ ${props.join(this.propDelimiter)}
   httpCall(indent: string, method: IMethod) {
     const request = this.useRequest(method) ? 'request.' : ''
     const type = this.typeMap(method.type)
-    const bump = indent + this.indentStr
-    const args = this.httpArgs(bump, method)
+    const args = this.httpArgs(indent, method)
     // TODO don't currently need these for Kotlin
     // const errors = this.errorResponses(indent, method)
-    return `${bump}return ${this.it(method.httpMethod.toLowerCase())}<${
+    return `${indent}return ${this.it(method.httpMethod.toLowerCase())}<${
       type.name
     }>(${this.httpPath(method.endpoint, request)}${args ? ', ' + args : ''})`
   }
