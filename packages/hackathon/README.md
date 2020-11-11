@@ -1,4 +1,4 @@
-# WIP Hackathon extension
+# Hackathon extension
 
 This extension uses the `@looker/wholly-sheet` package (currently only available in this repository) for CRUDF operations on a GSheet.
 
