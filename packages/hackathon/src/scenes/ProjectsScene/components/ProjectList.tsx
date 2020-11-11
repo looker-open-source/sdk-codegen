@@ -30,11 +30,10 @@ import {
   ActionListItemAction,
   ActionListItemColumn,
   Pagination,
-  SpaceVertical,
   Tooltip,
   Icon,
-  Span,
 } from '@looker/components'
+
 import { useSelector, useDispatch } from 'react-redux'
 import { useHistory } from 'react-router-dom'
 import { MoreInfoDialog } from '../../../components/MoreInfoDialog'
@@ -76,49 +75,21 @@ export const ProjectList: FC<ProjectListProps> = () => {
     dispatch(setMoreInfo(title, more_info))
   }
 
-  columns[0].canSort = false
-  columns[0].widthPercent = 3
-  columns[0].title = (
-    <Tooltip content={'Is this project locked?'}>
-      <Icon name="LockClosed" />
-    </Tooltip>
-  )
-  columns[1].widthPercent = 3
-  columns[1].title = (
-    <Tooltip content={'Eligible for prizing?'}>
-      <Icon name="FactCheck" />
-    </Tooltip>
-  )
-  columns[2].widthPercent = 25 // title
-  columns[3].widthPercent = 40 // description
-  columns[4].widthPercent = 5 // project type
-  columns[4].title = (
-    <Tooltip content="Open: anyone can join. Closed: no more members. Invite only: ask to join">
-      <SpaceVertical gap="xxsmall">
-        <Span>Project</Span>
-        <Span>Type</Span>
-      </SpaceVertical>
-    </Tooltip>
-  )
-  columns[5].widthPercent = 15 // technologies
-  columns[6].widthPercent = 5 // team count
-  columns[6].title = (
-    <Tooltip content="member count/maximum allowed">
-      <SpaceVertical gap="xxsmall">
-        <Span>Team</Span>
-        <Span>Count</Span>
-      </SpaceVertical>
-    </Tooltip>
-  )
-  columns[7].widthPercent = 5 // judge count
-  columns[7].title = (
-    <Tooltip content="Number of judges assigned">
-      <SpaceVertical gap="xxsmall">
-        <Span>Judge</Span>
-        <Span>Count</Span>
-      </SpaceVertical>
-    </Tooltip>
-  )
+  const lockCol = columns[0]
+  lockCol.canSort = false
+  lockCol.size = 'auto'
+  lockCol.titleIcon = 'LockClosed'
+  columns[1].size = 'auto'
+  columns[1].titleIcon = 'FactCheck'
+  columns[2].size = 'auto' // title
+  columns[3].size = 'auto' // description
+  columns[4].size = 'auto' // project type
+  // columns[4].title = 'Project Type'
+  columns[5].size = 'medium' // technologies
+  columns[6].size = 'auto' // team count
+  // columns[6].title = 'Team Count'
+  columns[7].size = 'auto' // judge count
+  // columns[7].title = 'Judge Count'
 
   const history = useHistory()
   const handleEdit = (projectId: string) => {

@@ -26,11 +26,10 @@
 
 import React, { FC } from 'react'
 import {
-  ActionList,
-  ActionListItem,
-  ActionListItemAction,
-  ActionListItemColumn,
+  DataTableCell,
+  DataTableAction,
   Pagination,
+  DataTable,
 } from '@looker/components'
 import { useSelector } from 'react-redux'
 import { getExtensionSDK } from '@looker/extension-sdk'
@@ -63,18 +62,16 @@ export const HackerList: FC<HackerListProps> = ({
     const key = `${idx}.${columnName}`
     if (columnName !== 'id')
       return (
-        <ActionListItemColumn key={key}>
-          {sheetCell(hacker[columnName])}
-        </ActionListItemColumn>
+        <DataTableCell key={key}>{sheetCell(hacker[columnName])}</DataTableCell>
       )
     return (
-      <ActionListItemAction
+      <DataTableAction
         key={key}
         onClick={hackHacker.bind(null, hacker)}
         icon="Edit"
       >
         {hacker.id}
-      </ActionListItemAction>
+      </DataTableAction>
     )
   }
 
@@ -83,14 +80,14 @@ export const HackerList: FC<HackerListProps> = ({
   const rows = hackers
     .slice(startIdx, startIdx + PAGE_SIZE)
     .map((hacker, idx) => (
-      <ActionListItem key={idx} id={idx.toString()}>
+      <DataTableCell key={idx}>
         {columns.map((column) => takeAction(idx, column.id, hacker))}
-      </ActionListItem>
+      </DataTableCell>
     ))
 
   return (
     <>
-      <ActionList columns={columns}>{rows}</ActionList>
+      <DataTable columns={columns}>{rows}</DataTable>
       <Pagination
         current={pageNum}
         pages={totalPages}

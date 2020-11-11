@@ -24,10 +24,10 @@
 
  */
 
-import { ActionListColumns } from '@looker/components'
+import { DataTableColumns } from '@looker/components'
 
-export interface ProjectsHeadings extends ActionListColumns {}
+export interface ProjectsHeadings extends DataTableColumns {}
 
-export interface HackersHeadings extends ActionListColumns {}
+export interface HackersHeadings extends DataTableColumns {}
 
-export interface JudgingsHeadings extends ActionListColumns {}
+export interface JudgingsHeadings extends DataTableColumns {}

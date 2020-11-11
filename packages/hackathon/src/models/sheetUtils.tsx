@@ -24,7 +24,7 @@
 
  */
 import { SheetValues } from '@looker/wholly-sheet'
-import { ActionListColumns, Icon, Text } from '@looker/components'
+import { DataTableColumn, DataTableColumns, Icon } from '@looker/components'
 import React from 'react'
 
 /**
@@ -43,22 +43,24 @@ export const asTitle = (value: string) => {
 
 export const sheetHeaderColumn = (
   key: string,
-  value: any,
-  colCount: number,
-  boolCount: number
-) => {
+  value: any
+  // colCount: number,
+  // boolCount: number
+): DataTableColumn => {
   if (!key) throw new Error('Each header column needs a key')
   let colType = typeof value
-  const all = 100 + 100 * (boolCount / colCount / 2)
-  const width = colType === 'boolean' ? 50 / colCount : all / colCount
-  if (['string', 'number', 'boolean'].includes(colType)) colType = 'string'
+  // const all = 100 + 100 * (boolCount / colCount / 2)
+  // const width = colType === 'boolean' ? 50 / colCount : all / colCount
+  // const size = colType === 'boolean' ? 'small' : 'auto'
+  if (['string', 'boolean'].includes(colType)) colType = 'string'
+  else if (['bigint'].includes(colType)) colType = 'number'
+  else colType = 'string'
   return {
     canSort: true,
     id: key,
-    primaryKey: key === '_id' || 'id',
     title: asTitle(key),
     type: colType,
-    widthPercent: width,
+    size: 'auto',
   }
 }
 
@@ -69,12 +71,12 @@ export const sheetHeaderColumn = (
  */
 export const sheetHeader = (header: string[], row: any) => {
   const result: SheetValues = []
-  const colCount = header.length
-  const boolCount = header.filter((h) => typeof row[h] === 'boolean').length
+  // const colCount = header.length
+  // const boolCount = header.filter((h) => typeof row[h] === 'boolean').length
   header.forEach((key) => {
-    result.push(sheetHeaderColumn(key, row[key], colCount, boolCount))
+    result.push(sheetHeaderColumn(key, row[key])) //, colCount, boolCount))
   })
-  return result as ActionListColumns
+  return result as DataTableColumns
 }
 
 /**
@@ -82,7 +84,7 @@ export const sheetHeader = (header: string[], row: any) => {
  * @param value to convert to displayable actionitem
  */
 export const sheetCell = (value: any) => {
-  if (typeof value === 'undefined') return <></>
+  if (typeof value === 'undefined') return ''
 
   if (typeof value === 'boolean') {
     return value ? <Icon size="small" name="Check" /> : ''
@@ -94,10 +96,10 @@ export const sheetCell = (value: any) => {
     for (const v of value.values()) {
       values.push(v.toString())
     }
-    return <Text>{values.join(', ')}</Text>
+    return values.join(', ')
   }
   if (value instanceof Date) {
-    return <Text>{value.toDateString()}</Text>
+    return value.toDateString()
   }
-  return <Text>{value.toString()}</Text>
+  return value.toString()
 }

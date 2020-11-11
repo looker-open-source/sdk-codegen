@@ -29,14 +29,15 @@ import com.looker.sdk.AccessToken
 import java.time.LocalDateTime
 
 data class AuthToken(
-        @JsonProperty("access_token")
-        var accessToken: String = "",  // TODO: Consider making this/these vals and using new objects instead of mutating
-        @JsonProperty("token_type")
-        var tokenType: String = "",
-        @JsonProperty("expires_in")
-        var expiresIn: Long = 0L,
-        @JsonProperty("refresh_token")
-        var refreshToken: String? = null) {
+    @JsonProperty("access_token")
+    var accessToken: String = "", // TODO: Consider making this/these vals and using new objects instead of mutating
+    @JsonProperty("token_type")
+    var tokenType: String = "",
+    @JsonProperty("expires_in")
+    var expiresIn: Long = 0L,
+    @JsonProperty("refresh_token")
+    var refreshToken: String? = null
+) {
 
     var expiresAt: LocalDateTime = LocalDateTime.now()
     /** Lag time of 10 seconds */
@@ -74,7 +75,7 @@ data class AuthToken(
         return this
     }
 
-    fun reset() {  // TODO: Should this just return a blank AuthToken object instead?
+    fun reset() { // TODO: Should this just return a blank AuthToken object instead?
         accessToken = ""
         expiresIn = 0
     }

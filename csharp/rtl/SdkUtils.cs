@@ -134,7 +134,7 @@ namespace Looker.RTL
             var args = values
                 .Where(pair =>
                     pair.Value != null || (pair.Value is string && pair.Value.ToString().IsFull()))
-                .Select(x => $"{x.Key}=encodeParam(x.Value)");
+                .Select(x => $"{x.Key}={EncodeParam(x.Value)}");
 
             return string.Join("&", args);
         }

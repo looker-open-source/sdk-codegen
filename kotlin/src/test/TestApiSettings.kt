@@ -1,7 +1,7 @@
 import com.looker.rtl.ApiSettings
+import com.looker.rtl.AuthSession
 import com.looker.rtl.ConfigurationProvider
 import com.looker.rtl.DEFAULT_TIMEOUT
-import com.looker.rtl.AuthSession
 import org.junit.Test
 import kotlin.test.assertEquals
 
@@ -21,12 +21,12 @@ val mockSecret = "SecretOverride"
 class MockSettings(contents: String) : ConfigurationProvider by ApiSettings.fromIniText(contents) {
     override fun readConfig(): Map<String, String> {
         return mapOf(
-                "base_url" to baseUrl,
-                "verify_ssl" to verifySSL.toString(),
-                "timeout" to timeout.toString(),
-                "headers" to headers.toString(),
-                "client_id" to mockId,
-                "client_secret" to mockSecret
+            "base_url" to baseUrl,
+            "verify_ssl" to verifySSL.toString(),
+            "timeout" to timeout.toString(),
+            "headers" to headers.toString(),
+            "client_id" to mockId,
+            "client_secret" to mockSecret
         )
     }
 }

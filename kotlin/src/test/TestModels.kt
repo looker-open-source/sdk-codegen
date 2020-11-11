@@ -9,5 +9,4 @@ class TestModels {
         val url = URI(value)
         assertEquals(url.toString(), value)
     }
-
 }

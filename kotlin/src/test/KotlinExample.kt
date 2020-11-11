@@ -28,7 +28,7 @@ class KotlinExample {
     }
 
     fun downloadTile(tile: DashboardElement, format: String): String {
-        val fileName = "$tile.${format}"
+        val fileName = "$tile.$format"
         if (tile.query_id == null) {
             throw Error("No query found on ${tile.title}.")
         }
@@ -66,11 +66,11 @@ class KotlinExample {
 }
 
 // TODO convert this to a functional test
-//fun main(args: List<String>) {
+// fun main(args: List<String>) {
 //    val x = KotlinExample()
 //    val dash = x.findDashboardsByTitle("Test")
 //    val tile = x.getDashboardTile(dash[0], "Test")
 //    if (tile != null) {
 //        val down = x.downloadTile(tile, "txt")
 //    }
-//}
+// }

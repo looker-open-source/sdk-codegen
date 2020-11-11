@@ -25,8 +25,8 @@
  */
 import { IUser as ILookerUser } from '@looker/sdk/lib/browser'
 import { IHackathonProps, ITechnologyProps, IHackerProps } from '../../models'
-import { HackSessionAction, Actions } from './actions'
 import { ProjectsHeadings, HackersHeadings, JudgingsHeadings } from '../types'
+import { HackSessionAction, Actions } from './actions'
 
 export interface Metadata {
   projectsHeadings: ProjectsHeadings

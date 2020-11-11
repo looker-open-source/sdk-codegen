@@ -33,8 +33,8 @@ import {
   ArrayType,
   EnumType,
   EnumValueType,
+  HashType,
   IMethod,
-  IntrinsicType,
   IParameter,
   IProperty,
   IType,
@@ -167,6 +167,9 @@ export interface ICodeGen {
   /** argument separator string. Typically ', ' */
   argDelimiter: string
 
+  /** type properties/args expression separater. E.g ': ' for Typescript */
+  argSetSep: string
+
   /** parameter delimiter. Typically ",\n" */
   paramDelimiter: string
 
@@ -180,10 +183,14 @@ export interface ICodeGen {
   codeQuote: string
 
   /**
-   * Does this language require request types to be generated because it doesn't
-   * conveniently support named default parameters?
+   * Does this language support named parameters with default values? Otherwise
+   * request types for sdk method signatures may be generated:
+   * see IMethod.eligibleForRequestType
    */
-  needsRequestTypes: boolean
+  useNamedParameters: boolean
+
+  /** Use named/keyword arguments in calling syntax */
+  useNamedArguments: boolean
 
   /** Does this language have streaming methods? */
   willItStream: boolean
@@ -208,6 +215,9 @@ export interface ICodeGen {
 
   /** type close string */
   typeClose: string
+
+  /** Do type declarations use a class definition */
+  useModelClassForTypes: boolean
 
   /**
    * Quote a string value for the language
@@ -276,7 +286,7 @@ export interface ICodeGen {
    * @param sep spacing to separate value. Could be newline or single space or something else
    * @param exp expression (as valid code fragment) to assign
    *
-   * @example `${name}:${sep}${exp}` for Typescript
+   * @example `foo: bar` for Typescript where `name` is "foo", `sep` is ": " and `exp` is "bar"
    */
   argSet(name: string, sep: string, exp: string): string
 
@@ -317,7 +327,7 @@ export interface ICodeGen {
    * @param method to track writeable type conversion
    * @returns {IType | undefined}
    */
-  writeableType(type: IType, method: IMethod): IType | undefined
+  writeableType(type: IType, method?: IMethod): IType | undefined
 
   /**
    * standard code to insert at the top of the generated "methods" file(s)
@@ -622,7 +632,6 @@ export interface ICodeGen {
 }
 
 export abstract class CodeGen implements ICodeGen {
-  needsRequestTypes = false
   willItStream = false
   codePath = './'
   packagePath = 'looker'
@@ -632,16 +641,20 @@ export abstract class CodeGen implements ICodeGen {
   itself = ''
   fileExtension = '.code'
   argDelimiter = ', '
+  argSetSep = ': '
   paramDelimiter = ',\n'
   propDelimiter = '\n'
   enumDelimiter = ',\n'
   codeQuote = `'`
-  arrayOpen = '[ '
-  arrayClose = ' ]'
-  hashOpen = '{ '
-  hashClose = ' }'
+  useNamedParameters = true
+  useNamedArguments = true
+  arrayOpen = '['
+  arrayClose = ']'
+  hashOpen = '{'
+  hashClose = '}'
   typeOpen = '{'
   typeClose = '}'
+  useModelClassForTypes = false
 
   indentStr = '  '
   commentStr = '// '
@@ -743,12 +756,14 @@ export abstract class CodeGen implements ICodeGen {
     let close = closer
     let delim = this.argDelimiter
     if (args.length > 1) {
-      open = `${indent}${opener.trim()}\n${bump}`
-      close = `\n${indent}${closer.trim()}`
+      open = `${opener}\n${bump}`
+      close = `\n${indent}${closer}`
       delim = `${this.argDelimiter.trim()}\n${bump}`
     }
     return `${open}${args.join(delim)}${close}`
   }
+
+  defaultAsVal: CodeAssignment = (_, v) => v.toString()
 
   argValue(
     indent: string,
@@ -758,31 +773,56 @@ export abstract class CodeGen implements ICodeGen {
     // TODO handle required positional arguments that are not provided?
     if (!(arg.name in inputs)) return ''
     const val = inputs[arg.name]
-    const type = this.typeMap(arg.type)
-    if (type.asVal) return type.asVal(indent, val)
-    if (!arg.type.intrinsic) {
-      return this.assignType(this.bumper(indent), arg.type, val)
+    const argType = this.writeableType(arg.type) || arg.type
+    const mt = this.typeMap(argType)
+    let argVal: string
+    if (mt.asVal) {
+      argVal = mt.asVal(indent, val)
+    } else if (argType instanceof ArrayType) {
+      argVal = this.arrayValue(indent, argType, val)
+    } else if (argType instanceof HashType) {
+      argVal = this.hashValue(indent, val)
+    } else if (!argType.intrinsic) {
+      argVal = this.assignType(indent, argType, val)
+    } else {
+      argVal = this.defaultAsVal(indent, val)
     }
-    return val.toString()
+    return argVal
   }
 
   assignParams(method: IMethod, inputs: ArgValues): string {
     const args: string[] = []
+    let hasComplexArg = false
     if (Object.keys(inputs).length > 0) {
-      const requestType = this.api.getRequestType(method)
-      if (requestType) {
-        return this.assignType(this.indentStr, requestType, inputs)
+      let requestType: IType | undefined
+      if (
+        !this.useNamedArguments &&
+        (requestType = this.api.getRequestType(method))
+      ) {
+        args.push(this.assignType(this.indentStr, requestType, inputs))
+        hasComplexArg = true
+      } else {
+        method.allParams.forEach((p) => {
+          const v = this.argValue(this.indentStr, p, inputs)
+          if (v !== '') {
+            const arg = this.useNamedArguments ? `${p.name}=${v}` : v
+            args.push(arg)
+            if (!p.type.intrinsic) {
+              hasComplexArg = true
+            }
+          }
+        })
       }
-      method.allParams.forEach((p) => {
-        const v = this.argValue('', p, inputs)
-        if (v !== '') args.push(v)
-      })
     }
-    return args.join(this.argDelimiter)
+    let open = ''
+    if (args.length > 1 || hasComplexArg) {
+      open = `\n${this.indentStr}`
+    }
+    return args.length > 0 ? `${open}${args.join(this.argDelimiter)}` : ''
   }
 
   argSet(name: string, sep: string, exp: string) {
-    return `${name}:${sep}${exp}`
+    return `${name}${sep}${exp}`
   }
 
   /**
@@ -792,46 +832,68 @@ export abstract class CodeGen implements ICodeGen {
    * @param inputs to assign to type
    */
   assignType(indent: string, type: IType, inputs: ArgValues): string {
+    const mt = this.typeMap(type)
     const args: string[] = []
+    // child properties are indented one level
     const bump = this.bumper(indent)
     Object.values(type.properties).forEach((p) => {
-      let v = this.argValue(bump, p, inputs)
-      let sep = ' '
-      if (v.includes('\n')) {
-        sep = v.startsWith('\n') ? '' : '\n'
-      } else {
-        v = v.trimStart()
-      }
-      if (v) args.push(this.argSet(p.name, sep, v))
+      const v = this.argValue(bump, p, inputs)
+      if (v) args.push(this.argSet(p.name, this.argSetSep, v))
     })
     // Nothing to assign?
     if (args.length === 0) return ''
     // Otherwise, indent and join arguments
+    const open = this.useModelClassForTypes
+      ? `${mt.name}${this.typeOpen}`
+      : this.typeOpen
     const nl = `,\n${bump}`
-    return `\n${indent}${this.typeOpen}\n${bump}${args.join(nl)}\n${indent}${
-      this.typeClose
-    }`
+    // need a bump after `open` to account for the first argument
+    // not getting the proper bump from args.join()
+    return `${open}\n${bump}${args.join(nl)}\n${indent}${this.typeClose}`
   }
 
+  /**
+   * Constructs array of ArrayType elements
+   *
+   * It is rendered on a single line if the array has only one element
+   * and it is an IntrinsicType. Otherwise the array is rendered on
+   * multiple lines with elements appropriately further indented
+   *
+   * @param indent starting indent level
+   * @param type that receives assignments
+   * @param val elements for this array
+   */
   arrayValue(indent: string, type: IType, val: any) {
-    const args: string[] = []
     const ra = type as ArrayType
-    let asVal = (_: string, v: any) => v.toString()
+    const et = ra.elementType
     const bump = this.bumper(indent)
-    const intrinsic = ra.elementType.intrinsic
-    const open = intrinsic ? '' : '\n'
-    const close = ra.elementType.intrinsic ? '' : `\n${indent}`
-    if (ra.elementType.intrinsic) {
-      const it = ra.elementType as IntrinsicType
-      if (it.isString) asVal = (_, v) => this.quote(v)
-    } else {
-      asVal = (b: string, v: any) => this.assignType(b, ra.elementType, v)
+    // single intrinsic element array renders single line
+    let open = this.arrayOpen
+    let close = this.arrayClose
+    let arrayValDelimiter = this.argDelimiter
+    // multiple intrisinc element or 1 or more non-intrinsic element array
+    // renders multiple lines
+    if (Object.values(val).length > 1 || !et.intrinsic) {
+      // the opener uses bump to account for the first argument
+      // not getting the proper bump from args.join()
+      open = `${open}\n${bump}`
+      close = `\n${indent}${close}`
+      // bump elements one level in from array declaration
+      arrayValDelimiter = `${arrayValDelimiter.trim()}\n${bump}`
     }
-    // Bump is only used for nested complex typed items
+    const args: string[] = []
+    let asVal = this.defaultAsVal
+    const mt = this.typeMap(et)
+    if (et.intrinsic) {
+      asVal = mt.asVal || asVal
+    } else {
+      asVal = (i: string, v: any) => this.assignType(i, et, v)
+    }
+    // passing `bump` to `asVal` - typically intrinsic asVal ignores
+    // indentation but certainly for the assignType case we want the
+    // nested object to be indented a level further
     Object.values(val).forEach((v) => args.push(asVal(bump, v)))
-    return `${open}${indent}${this.arrayOpen.trim()}${args.join(
-      this.argDelimiter
-    )}${close}${this.arrayClose.trim()}`
+    return open + args.join(arrayValDelimiter) + close
   }
 
   anyValue(indent: string, val: any): string {
@@ -849,15 +911,14 @@ export abstract class CodeGen implements ICodeGen {
       case 'function':
         return ''
       case 'object': {
-        const bump = this.bumper(indent)
         if (Array.isArray(val)) {
           const vals: string[] = []
           Object.values(val).forEach((v) => {
-            vals.push(this.anyValue(indent, v))
+            vals.push(this.anyValue(this.bumper(indent), v))
           })
-          return this.argIndent(bump, vals, this.arrayOpen, this.arrayClose)
+          return this.argIndent(indent, vals, this.arrayOpen, this.arrayClose)
         } else {
-          return this.hashValue(bump, val)
+          return this.hashValue(indent, val)
         }
       }
       case 'symbol':
@@ -866,12 +927,14 @@ export abstract class CodeGen implements ICodeGen {
     return val.toString()
   }
 
+  // indent represents the starting level of indentation for this hash
+  // the key/value pairs are further indented one bump
   hashValue(indent: string, val: any) {
     const args: string[] = []
+    const bump = this.bumper(indent)
     Object.entries(val).forEach(([name, v]) => {
-      const exp = this.anyValue(indent, v)
-      const sep = exp.includes('\n') ? '\n' : ' '
-      args.push(this.argSet(name, sep, exp))
+      const exp = this.anyValue(bump, v)
+      args.push(this.argSet(name, this.argSetSep, exp))
     })
     return this.argIndent(indent, args, this.hashOpen, this.hashClose)
   }
@@ -1065,8 +1128,8 @@ export abstract class CodeGen implements ICodeGen {
   }
 
   useRequest(method: IMethod) {
-    if (!this.needsRequestTypes) return false
-    return method.mayUseRequestType()
+    if (this.useNamedParameters) return false
+    return method.eligibleForRequestType()
   }
 
   // Looks up or dynamically creates the request type for this method based
@@ -1084,12 +1147,12 @@ export abstract class CodeGen implements ICodeGen {
   // Looks up or dynamically creates the writeable type for this method based
   // on rules for creating writable types at the IApiModel implementation level
   // If no writeable type is required, no writeable type is created or referenced
-  writeableType(type: IType, method: IMethod): IType | undefined {
+  writeableType(type: IType, method?: IMethod): IType | undefined {
     if (!type) return undefined
     const writer = this.api.mayGetWriteableType(type)
     if (!writer) return undefined
     writer.refCount++
-    method.addType(this.api, writer)
+    if (method) method.addType(this.api, writer)
     return writer
   }
 

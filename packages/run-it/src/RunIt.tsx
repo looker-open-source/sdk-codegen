@@ -31,7 +31,14 @@ import React, {
   useState,
   useEffect,
 } from 'react'
-import { TabList, useTabs, TabPanels, Tab, TabPanel } from '@looker/components'
+import {
+  Box,
+  Tab,
+  TabList,
+  TabPanels,
+  TabPanel,
+  useTabs,
+} from '@looker/components'
 import { Looker40SDK } from '@looker/sdk/lib/browser'
 import { IRawResponse } from '@looker/sdk-rtl/lib/browser'
 import { ApiModel, IMethod } from '@looker/sdk-codegen'
@@ -178,7 +185,7 @@ export const RunIt: FC<RunItProps> = ({ api, inputs, method }) => {
   if (!sdk) return <></>
 
   return (
-    <>
+    <Box bg="background" py="large" height="100%">
       <TabList distribute {...tabs}>
         <Tab key="request">Request</Tab>
         <Tab key="response">Response</Tab>
@@ -241,6 +248,6 @@ export const RunIt: FC<RunItProps> = ({ api, inputs, method }) => {
           />
         </TabPanel>
       </TabPanels>
-    </>
+    </Box>
   )
 }

@@ -29,7 +29,6 @@ import com.looker.sdk.LookerSDK
 import io.ktor.client.HttpClient
 import java.io.File
 
-
 typealias jsonDict = Map<String, Any>
 
 val jsonDictType = object : TypeToken<jsonDict>() {}.type
@@ -50,7 +49,7 @@ class TestSettingsIniFile(
 
 open class TestConfig() {
     val rootPath: String = File("./").absoluteFile.parentFile.parentFile.absolutePath
-    val testPath = "${rootPath}/test"
+    val testPath = "$rootPath/test"
     val dataFile = testFile("data.yml.json")
     val envIni = System.getenv("LOOKERSDK_INI")
     val localIni = if (envIni === null) rootFile("looker.ini") else envIni
@@ -72,11 +71,11 @@ open class TestConfig() {
     val sdk = LookerSDK(session)
 
     fun rootFile(fileName: String): String {
-        return "${rootPath}/${fileName}"
+        return "$rootPath/$fileName"
     }
 
     fun testFile(fileName: String): String {
-        return "${testPath}/${fileName}"
+        return "$testPath/$fileName"
     }
 
     fun testSettings(options: TransportOptions): TransportOptions {
@@ -95,4 +94,3 @@ open class TestConfig() {
         return customClient(testSettings(settings))
     }
 }
-

@@ -27,7 +27,6 @@ import kotlin.test.assertEquals
 import kotlin.test.assertTrue
 import org.junit.Test as test
 
-
 class TestTransport {
     val fullPath = "https://github.com/looker-open-source/sdk-codegen/"
     val base = "https://my.looker.com:19999"

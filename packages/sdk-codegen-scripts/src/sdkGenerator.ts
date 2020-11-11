@@ -173,7 +173,7 @@ export class TypeGenerator extends Generator<Models.IApiModel> {
     Object.values(this.model.types).forEach((type) => {
       if (!(type instanceof Models.IntrinsicType)) {
         if (
-          this.codeFormatter.needsRequestTypes ||
+          !this.codeFormatter.useNamedParameters ||
           !(type instanceof Models.RequestType)
         ) {
           items.push(this.codeFormatter.declareType(indent, type))

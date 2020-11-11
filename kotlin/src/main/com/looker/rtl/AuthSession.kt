@@ -27,8 +27,10 @@ package com.looker.rtl
 import io.ktor.client.request.forms.FormDataContent
 import io.ktor.http.Parameters
 
-open class AuthSession(open val apiSettings: ConfigurationProvider,
-                       open val transport: Transport = Transport(apiSettings)) {
+open class AuthSession(
+    open val apiSettings: ConfigurationProvider,
+    open val transport: Transport = Transport(apiSettings)
+) {
 
     var authToken: AuthToken = AuthToken()
     private var sudoToken: AuthToken = AuthToken()
@@ -140,24 +142,28 @@ open class AuthSession(open val apiSettings: ConfigurationProvider,
             val config = apiSettings.readConfig()
             val clientId = unQuote(System.getenv("${ENVIRONMENT_PREFIX}_CLIENT_ID") ?: config[client_id])
             val clientSecret = unQuote(System.getenv("${ENVIRONMENT_PREFIX}_CLIENT_SECRET") ?: config[client_secret])
-            val body = FormDataContent(Parameters.build {
-                append(client_id, clientId)
-                append(client_secret, clientSecret)
-            })
+            val body = FormDataContent(
+                Parameters.build {
+                    append(client_id, clientId)
+                    append(client_secret, clientSecret)
+                }
+            )
             val token = ok<AuthToken>(
-                    transport.request<AuthToken>(HttpMethod.POST,
-                            "${apiPath}/login",
-                            mapOf(),
-                            body
-                    )
+                transport.request<AuthToken>(
+                    HttpMethod.POST,
+                    "$apiPath/login",
+                    mapOf(),
+                    body
+                )
             )
             authToken = token
         }
 
         if (sudoId.isNotBlank()) {
             val token = activeToken()
-            val sudoToken = transport.request<AuthToken>(HttpMethod.POST,
-                    "/login/$newId"
+            val sudoToken = transport.request<AuthToken>(
+                HttpMethod.POST,
+                "/login/$newId"
             ) { requestSettings ->
                 val headers = requestSettings.headers.toMutableMap()
                 if (token.accessToken.isNotBlank()) {

@@ -1,11 +1,5 @@
-import com.looker.sdk.Dashboard
-import com.looker.sdk.Look
-import com.looker.sdk.DashboardBase
+
 import kotlinx.coroutines.*
-import kotlin.test.assertEquals
-import kotlin.test.assertNotEquals
-import kotlin.test.assertNotNull
-import org.junit.Test as test
 
 class TestAsync {
     // for >7.2
@@ -68,5 +62,4 @@ class TestAsync {
 //            assertEquals(limits.second!!.toInt(), looks.count(), "${limits.second} viewed Looks")
 //        }
 //    }
-
 }

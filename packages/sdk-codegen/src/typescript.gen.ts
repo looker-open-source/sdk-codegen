@@ -62,8 +62,9 @@ export class TypescriptGen extends CodeGen {
 
   indentStr = '  '
   endTypeStr = '\n}'
-  needsRequestTypes = true
   willItStream = true
+  useNamedParameters = false
+  useNamedArguments = false
 
   methodsPrologue(_indent: string) {
     // TODO get the rtl path alias to work correctly in all scenarios! !!
@@ -213,7 +214,7 @@ export interface IDictionary<T> {
       `${method.httpMethod} ${method.endpoint} -> ${mapped.name}`
     let fragment: string
     const requestType = this.requestTypeName(method)
-    const bump = indent + this.indentStr
+    const bump = this.bumper(indent)
 
     if (requestType) {
       // use the request type that will be generated in models.ts
@@ -245,9 +246,8 @@ export interface IDictionary<T> {
     return (
       header +
       fragment +
-      `${
-        fragment ? ',' : ''
-      }\n${bump}options?: Partial<ITransportSettings>) {\n`
+      (fragment ? ', ' : '') +
+      'options?: Partial<ITransportSettings>) {\n'
     )
   }
 
@@ -274,7 +274,7 @@ export interface IDictionary<T> {
     const bump = this.bumper(indent)
     return (
       this.methodSignature(indent, method) +
-      this.encodePathParams(bump, method) +
+      this.encodePathParams(indent, method) +
       this.httpCall(bump, method) +
       `\n${indent}}`
     )
@@ -328,7 +328,7 @@ export interface IDictionary<T> {
     return `'${path}'`
   }
 
-  argGroup(indent: string, args: Arg[], prefix?: string) {
+  argGroup(_indent: string, args: Arg[], prefix?: string) {
     if (!args || args.length === 0) return this.nullStr
     const hash: string[] = []
     for (const arg of args) {
@@ -339,7 +339,7 @@ export interface IDictionary<T> {
         hash.push(reserved)
       }
     }
-    return `\n${indent}{${hash.join(this.argDelimiter)}}`
+    return `{${hash.join(this.argDelimiter)}}`
   }
 
   /**
@@ -410,14 +410,15 @@ export interface IDictionary<T> {
   httpCall(indent: string, method: IMethod) {
     const request = this.useRequest(method) ? 'request.' : ''
     const mapped = this.typeMap(method.type)
-    const bump = indent + this.indentStr
+    const bump = this.bumper(indent)
     const args = this.httpArgs(bump, method)
     const errors = this.errorResponses(indent, method)
-    return `${indent}return ${this.it(method.httpMethod.toLowerCase())}<${
-      mapped.name
-    }, ${errors}>(${this.httpPath(method.endpoint, request)}${
-      args ? ', ' + args : ''
-    })`
+    return (
+      `${indent}return ${this.it(method.httpMethod.toLowerCase())}` +
+      `<${mapped.name}, ${errors}>(` +
+      this.httpPath(method.endpoint, request) +
+      `${args ? ', ' + args : ''})`
+    )
   }
 
   streamCall(indent: string, method: IMethod) {
@@ -488,13 +489,11 @@ export interface IDictionary<T> {
           return {
             default: '[]',
             name: `${map.name}[]`,
-            asVal: (indent, v) => this.arrayValue(indent, type, v),
           }
         case 'HashType':
           return {
             default: '{}',
             name: `IDictionary<${map.name}>`,
-            asVal: (indent, value) => this.hashValue(indent, value),
           }
         case 'DelimArrayType':
           return {

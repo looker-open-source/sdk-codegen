@@ -30,7 +30,6 @@ import {
   ActionListItemAction,
   ActionListItemColumn,
   Pagination,
-  Tooltip,
 } from '@looker/components'
 import { useSelector, useDispatch } from 'react-redux'
 import { useHistory } from 'react-router-dom'
@@ -73,10 +72,6 @@ export const JudgingList: FC<JudgingListProps> = () => {
   const openMoreInfo = ({ $title, $more_info }: IJudgingProps) => {
     dispatch(setMoreInfo($title, $more_info))
   }
-
-  columns[0].title = (
-    <Tooltip content={'The judge assigned to this project'}>Judge</Tooltip>
-  )
 
   const showJudging = (judgingId: string) => {
     setTimeout(() => {

@@ -918,7 +918,7 @@ export interface IMethod extends ISchemadSymbol {
   /**
    * If a method may need a request type for a given language, this function returns true
    */
-  mayUseRequestType(): boolean
+  eligibleForRequestType(): boolean
 
   /**
    * If any dynamic types will be required for this method, this function will make them
@@ -1042,7 +1042,7 @@ export class Method extends SchemadSymbol implements IMethod {
     return false
   }
 
-  mayUseRequestType(): boolean {
+  eligibleForRequestType(): boolean {
     const [body] = this.bodyParams
     /**
      * if the body parameter is specified and is optional, at least 2 optional parameters are required
@@ -1052,7 +1052,7 @@ export class Method extends SchemadSymbol implements IMethod {
   }
 
   makeTypes(api: IApiModel): KeyList {
-    if (this.mayUseRequestType()) {
+    if (this.eligibleForRequestType()) {
       api.getRequestType(this)
     }
 
