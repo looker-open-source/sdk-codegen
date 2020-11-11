@@ -26,6 +26,7 @@
 
 import React, { FC } from 'react'
 import {
+  DataTableItem,
   DataTableCell,
   DataTableAction,
   Pagination,
@@ -80,9 +81,9 @@ export const HackerList: FC<HackerListProps> = ({
   const rows = hackers
     .slice(startIdx, startIdx + PAGE_SIZE)
     .map((hacker, idx) => (
-      <DataTableCell key={idx}>
+      <DataTableItem key={idx} id={idx.toString()}>
         {columns.map((column) => takeAction(idx, column.id, hacker))}
-      </DataTableCell>
+      </DataTableItem>
     ))
 
   return (
