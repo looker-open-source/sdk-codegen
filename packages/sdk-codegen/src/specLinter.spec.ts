@@ -23,12 +23,12 @@
  SOFTWARE.
 
  */
-import { cloneDeep } from 'lodash'
+import { cloneDeep, pick } from 'lodash'
 import { OperationObject } from 'openapi3-ts'
 
-import { compareParams, compareTypes } from './specLinter'
+import { compareParams, compareSpecs, compareTypes } from './specLinter'
 import { TestConfig } from './testUtils'
-import { PropertyList, Type, Method, Parameter } from './sdkModels'
+import { PropertyList, Type, Method, Parameter, IApiModel } from './sdkModels'
 
 const config = TestConfig()
 const apiTestModel = config.apiTestModel
@@ -70,8 +70,8 @@ const changeParams = (method: Method) => {
 }
 
 /**
- * Returns a copy of the given method with changes to the name, first method
- * param and first type property
+ * Returns a copy of the given method with changes to the first param and first
+ * type property
  * @param method
  */
 export const changeMethod = (method: Method) => {
@@ -125,11 +125,135 @@ describe('spec linter', () => {
       const actual = compareParams(lMethod, rMethod)
       expect(actual).toBeDefined()
       if (actual) {
-        const key = Object.keys(actual)[0]
-        expect(actual[key].lhs).toBeDefined()
-        expect(actual[key].rhs).toBeDefined()
-        expect(actual[key].rhs).toContain(`${lMethod.name}.${key}`)
+        expect(actual.lhs).toEqual(lMethod.signature())
+        expect(actual.rhs).toEqual(rMethod.signature())
       }
+    })
+  })
+
+  describe('compareSpecs', () => {
+    let lSpec: IApiModel
+    let rSpec: IApiModel
+    beforeEach(() => {
+      lSpec = cloneDeep(apiTestModel)
+      rSpec = cloneDeep(apiTestModel)
+    })
+
+    it('should compare two identical specs', () => {
+      let actual = compareSpecs(lSpec, lSpec)
+      expect(actual).toBeDefined()
+      expect(actual).toHaveLength(Object.keys(lSpec.methods).length)
+      actual = actual.filter((el) => el.paramsDiff !== '' || el.typeDiff !== '')
+      expect(actual).toHaveLength(0)
+    })
+
+    it('should compare two specs with no overlap', () => {
+      const lMethod = lSpec.methods.create_look
+      const rMethod = rSpec.methods.create_query
+      lSpec.methods = { create_look: lMethod }
+      rSpec.methods = { create_query: rMethod }
+      const actual = compareSpecs(lSpec, rSpec)
+      expect(actual).toBeDefined()
+      expect(actual).toHaveLength(2)
+      expect(actual).toEqual(
+        expect.arrayContaining([
+          {
+            name: lMethod.name,
+            id: lMethod.id,
+            lStatus: lMethod.status,
+            rStatus: '',
+            typeDiff: '',
+            paramsDiff: '',
+          },
+          {
+            name: rMethod.name,
+            id: rMethod.id,
+            lStatus: '',
+            rStatus: rMethod.status,
+            typeDiff: '',
+            paramsDiff: '',
+          },
+        ])
+      )
+    })
+
+    it('should work with internal matches', () => {
+      const match1 = lSpec.methods.create_look
+      const match2 = lSpec.methods.create_query
+      lSpec.methods = pick(lSpec.methods, [
+        'create_dashboard',
+        'create_look',
+        'create_query',
+        'user',
+      ])
+      rSpec.methods = pick(rSpec.methods, ['create_look', 'create_query'])
+      rSpec.methods.create_query = changeMethod(match2 as Method)
+
+      const expected = [
+        {
+          name: match1.name,
+          id: match1.id,
+          lStatus: match1.status,
+          rStatus: match1.status,
+          typeDiff: '',
+          paramsDiff: '',
+        },
+        {
+          name: match2.name,
+          id: match2.id,
+          lStatus: match2.status,
+          rStatus: match2.status,
+          typeDiff: expect.stringContaining('lhs'),
+          paramsDiff: expect.stringContaining('lhs'),
+        },
+      ]
+      let actual = compareSpecs(lSpec, rSpec)
+      expect(actual).toHaveLength(4)
+      expect(actual).toEqual(expect.arrayContaining(expected))
+
+      /** The left spec is now the shorter one */
+      actual = compareSpecs(rSpec, lSpec)
+      expect(actual).toHaveLength(4)
+      expect(actual).toEqual(expect.arrayContaining(expected))
+    })
+
+    it('should work with boundary matches', () => {
+      const match1 = lSpec.methods.create_dashboard
+      const match2 = lSpec.methods.user
+      lSpec.methods = pick(lSpec.methods, [
+        'create_dashboard',
+        'create_look',
+        'create_query',
+        'user',
+      ])
+      rSpec.methods = pick(rSpec.methods, ['create_dashboard', 'group', 'user'])
+      rSpec.methods.user = changeMethod(match2 as Method)
+
+      const expected = [
+        {
+          name: match1.name,
+          id: match1.id,
+          lStatus: match1.status,
+          rStatus: match1.status,
+          typeDiff: '',
+          paramsDiff: '',
+        },
+        {
+          name: match2.name,
+          id: match2.id,
+          lStatus: match2.status,
+          rStatus: match2.status,
+          typeDiff: expect.stringContaining('lhs'),
+          paramsDiff: expect.stringContaining('lhs'),
+        },
+      ]
+      let actual = compareSpecs(lSpec, rSpec)
+      expect(actual).toHaveLength(5)
+      expect(actual).toEqual(expect.arrayContaining(expected))
+
+      actual = compareSpecs(rSpec, lSpec)
+      expect(actual).toHaveLength(5)
+      expect(actual).toEqual(expect.arrayContaining(expected))
     })
   })
 })

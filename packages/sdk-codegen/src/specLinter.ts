@@ -159,37 +159,59 @@ export const compareSpecs = (
   preDiffCb?: preDiffCb
 ) => {
   const lMethods = Object.values(lSpec.methods)
+  const lLength = lMethods.length
   const rMethods = Object.values(rSpec.methods)
   const rLength = rMethods.length
   let rIndex = 0
+  let lastRIndex = -1
+  let lastLIndex = -1
   const diff: DiffRow[] = []
 
-  lMethods.forEach((lMethod) => {
+  lMethods.forEach((lMethod, lIndex) => {
+    const lEnd = lIndex + 1 === lLength
     let rMethod = rMethods[rIndex]
-
     if (preDiffCb && !preDiffCb({ lMethod, rMethod })) return
 
     while (
-      lMethod.name !== rMethod.name &&
-      rMethod.name < lMethod.name &&
-      rIndex < rLength
+      rIndex < rLength &&
+      rIndex !== lastRIndex &&
+      // eslint-disable-next-line no-unmodified-loop-condition
+      (rMethod.name < lMethod.name || lEnd)
     ) {
-      /** Case when right method does not exist on the left */
-      if (preDiffCb && preDiffCb({ rMethod })) {
-        diff.push(computeDiff({ rMethod }))
+      /**
+       * This point is reached if rMethod is alphabetically smaller than the
+       * left one OR the left array has been fully traversed but not the right
+       */
+      if (!preDiffCb || preDiffCb?.({ rMethod })) {
+        lastRIndex = rIndex
+        if (lMethod.name === rMethod.name) {
+          /**
+           * Case when lMethods has been fully traversed and a match is found
+           * for the last lMethod in rMethods
+           */
+          lastLIndex = lIndex
+          diff.push(computeDiff({ lMethod, rMethod }))
+        } else {
+          /** Case when rMethod does not exist on the left */
+          diff.push(computeDiff({ rMethod }))
+        }
       }
       rIndex += 1
-      rMethod = rMethods[rIndex]
+      rMethod = rMethods?.[rIndex] || rMethod
     }
 
-    if (lMethod.name === rMethod.name) {
-      /** Case when method exists on both sides */
-      diff.push(computeDiff({ lMethod, rMethod }))
-      rIndex = rIndex + 1 < rLength ? rIndex + 1 : rIndex
-    } else {
-      /** Case when left method does not exist on the right */
-      diff.push(computeDiff({ lMethod }))
-    }
+    if (lIndex !== lastLIndex)
+      if (lMethod.name === rMethod.name) {
+        /** Case when a method exists on both sides */
+        lastRIndex = rIndex
+        lastLIndex = lIndex
+        diff.push(computeDiff({ lMethod, rMethod }))
+        rIndex = rIndex + 1 < rLength ? rIndex + 1 : rIndex
+      } else {
+        /** Case when left method does not exist on the right */
+        lastLIndex = lIndex
+        diff.push(computeDiff({ lMethod }))
+      }
   })
 
   return diff
