@@ -58,13 +58,13 @@ export const getAuthorizedRoutes = (
   currentHackathon?: IHackathonProps
 ): Routes[] => {
   const authorizedRoutes: Routes[] = []
+  authorizedRoutes.push(Routes.HOME)
+  authorizedRoutes.push(Routes.RESOURCES)
   if (hacker) {
     if (currentHackathon) {
-      authorizedRoutes.push(Routes.HOME)
       authorizedRoutes.push(Routes.PROJECTS)
       authorizedRoutes.push(Routes.CREATE_PROJECT)
       authorizedRoutes.push(Routes.EDIT_PROJECT)
-      authorizedRoutes.push(Routes.RESOURCES)
       if (hacker.canAdmin || hacker.canJudge || hacker.canStaff) {
         authorizedRoutes.push(Routes.JUDGING)
         authorizedRoutes.push(Routes.EDIT_JUDGING)
