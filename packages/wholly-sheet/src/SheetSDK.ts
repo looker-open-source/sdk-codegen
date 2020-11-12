@@ -447,7 +447,6 @@ export class SheetSDK extends APIMethods {
    * @param range defaults to the entire sheet
    */
   async tabValues(tab: string | ISheetTab, range = '!A1:end') {
-    console.log(`tabValues(${tabName(tab)})`)
     return await this.getValues(`${tabName(tab)}${range}`)
   }
 }

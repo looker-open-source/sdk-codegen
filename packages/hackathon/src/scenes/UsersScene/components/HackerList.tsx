@@ -61,18 +61,8 @@ export const HackerList: FC<HackerListProps> = ({
     hacker: IHackerProps
   ) => {
     const key = `${idx}.${columnName}`
-    if (columnName !== 'id')
-      return (
-        <DataTableCell key={key}>{sheetCell(hacker[columnName])}</DataTableCell>
-      )
     return (
-      <DataTableAction
-        key={key}
-        onClick={hackHacker.bind(null, hacker)}
-        icon="Edit"
-      >
-        {hacker.id}
-      </DataTableAction>
+      <DataTableCell key={key}>{sheetCell(hacker[columnName])}</DataTableCell>
     )
   }
 
@@ -81,7 +71,19 @@ export const HackerList: FC<HackerListProps> = ({
   const rows = hackers
     .slice(startIdx, startIdx + PAGE_SIZE)
     .map((hacker, idx) => (
-      <DataTableItem key={idx} id={idx.toString()}>
+      <DataTableItem
+        key={idx}
+        id={idx.toString()}
+        actions={
+          <DataTableAction
+            key={`${idx.toString() + '.click'}`}
+            onClick={hackHacker.bind(null, hacker)}
+            icon="Edit"
+          >
+            Manage {hacker.name}
+          </DataTableAction>
+        }
+      >
         {columns.map((column) => takeAction(idx, column.id, hacker))}
       </DataTableItem>
     ))
