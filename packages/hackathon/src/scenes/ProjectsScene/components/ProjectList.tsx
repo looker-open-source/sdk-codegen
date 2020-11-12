@@ -81,8 +81,8 @@ export const ProjectList: FC<ProjectListProps> = () => {
   lockCol.titleIcon = 'LockClosed'
   columns[1].size = 'auto'
   columns[1].titleIcon = 'FactCheck'
-  columns[2].size = 'auto' // title
-  columns[3].size = 'auto' // description
+  columns[2].size = 'medium' // title
+  columns[3].size = 'large' // description
   columns[4].size = 'auto' // project type
   // columns[4].title = 'Project Type'
   columns[5].size = 'medium' // technologies
