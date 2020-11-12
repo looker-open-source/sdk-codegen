@@ -28,7 +28,17 @@ import { OperationObject } from 'openapi3-ts'
 
 import { compareParams, compareSpecs, compareTypes } from './specLinter'
 import { TestConfig } from './testUtils'
-import { PropertyList, Type, Method, Parameter, IApiModel } from './sdkModels'
+import {
+  PropertyList,
+  Type,
+  Method,
+  Parameter,
+  IApiModel,
+  ApiModel,
+  IMethod,
+} from './sdkModels'
+import { readFileSync } from 'fs'
+import path from 'path'
 
 const config = TestConfig()
 const apiTestModel = config.apiTestModel
@@ -99,15 +109,16 @@ describe('spec linter', () => {
     })
 
     it('should return an object containing all non matching entries', () => {
-      const [key] = firstProperty(lType.properties)
+      const [key, lProp] = firstProperty(lType.properties)
       const rType = changeType(lType as Type)
       const actual = compareTypes(lType, rType)
       expect(actual).toBeDefined()
       if (actual) {
         expect(actual[key]).toBeDefined()
-        expect(actual[key].lhs).toBeDefined()
-        expect(actual[key].rhs).toBeDefined()
-        expect(actual[key].rhs).toContain(`${lType.owner}.${key}`)
+        expect(actual[key].lhs).toEqual(lProp.summary())
+        expect(actual[key].rhs).toEqual(
+          firstProperty(rType.properties)[1].summary()
+        )
       }
     })
   })
@@ -254,6 +265,33 @@ describe('spec linter', () => {
       actual = compareSpecs(rSpec, lSpec)
       expect(actual).toHaveLength(5)
       expect(actual).toEqual(expect.arrayContaining(expected))
+    })
+
+    it('should compare with filter', () => {
+      const lSpec = ApiModel.fromString(
+        readFileSync(
+          path.join(__dirname, '../../../spec/Looker.3.1.oas.json'),
+          'utf-8'
+        )
+      )
+
+      const rSpec = ApiModel.fromString(
+        readFileSync(
+          path.join(__dirname, '../../../spec/Looker.4.0.oas.json'),
+          'utf-8'
+        )
+      )
+
+      const betaCompare = (lMethod?: IMethod, _?: IMethod) =>
+        lMethod?.status === 'beta'
+
+      const actual = compareSpecs(lSpec, rSpec, betaCompare)
+      expect(actual).toBeDefined()
+      expect(actual).toHaveLength(
+        Object.values(lSpec.methods).filter(
+          (method) => method.status === 'beta'
+        ).length
+      )
     })
   })
 })

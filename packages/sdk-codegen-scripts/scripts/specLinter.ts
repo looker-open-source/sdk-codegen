@@ -29,7 +29,7 @@ import {
   ApiModel,
   csvHeaderRow,
   csvDiffRow,
-  ComputeDiffInputs,
+  IMethod,
 } from '@looker/sdk-codegen'
 import { compareSpecs } from '@looker/sdk-codegen/src/specLinter'
 import { readFileSync } from '../src'
@@ -46,11 +46,9 @@ import { readFileSync } from '../src'
   const spec31 = ApiModel.fromString(readFileSync(spec31Path))
   const spec40 = ApiModel.fromString(readFileSync(spec40Path))
 
-  const diff = compareSpecs(
-    spec31,
-    spec40,
-    ({ lMethod }: ComputeDiffInputs) => lMethod?.status === 'beta'
-  )
+  const filter = (lMethod?: IMethod, _?: IMethod) => lMethod?.status === 'beta'
+
+  const diff = compareSpecs(spec31, spec40, filter)
 
   let result = csvHeaderRow
   diff.forEach((diffRow, index) => {

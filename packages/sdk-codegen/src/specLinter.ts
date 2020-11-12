@@ -116,7 +116,7 @@ interface DiffRow {
  * @param lMethod
  * @param rMethod
  */
-const computeDiff = ({ lMethod, rMethod }: ComputeDiffInputs) => {
+const computeDiff = (lMethod?: IMethod, rMethod?: IMethod) => {
   if (!lMethod && !rMethod) throw new Error('At least one method is required.')
 
   let result: DiffRow
@@ -145,74 +145,54 @@ const computeDiff = ({ lMethod, rMethod }: ComputeDiffInputs) => {
   return result!
 }
 
-export type preDiffCb = ({ lMethod, rMethod }: ComputeDiffInputs) => boolean
+export type DiffFilter = (lMethod?: IMethod, rMethod?: IMethod) => boolean
 
+const diffAll: DiffFilter = () => true
 /**
  * Compares two specs and returns a diff object
  * @param lSpec
  * @param rSpec
- * @param preDiffCb A callback for filtering methods prior to computing the diff
+ * @param filter
  */
 export const compareSpecs = (
   lSpec: IApiModel,
   rSpec: IApiModel,
-  preDiffCb?: preDiffCb
+  filter: DiffFilter = diffAll
 ) => {
-  const lMethods = Object.values(lSpec.methods)
+  const specSort = (a: IMethod, b: IMethod) => a.id.localeCompare(b.id)
+
+  const lMethods = Object.values(lSpec.methods).sort(specSort)
+  const rMethods = Object.values(rSpec.methods).sort(specSort)
+
   const lLength = lMethods.length
-  const rMethods = Object.values(rSpec.methods)
   const rLength = rMethods.length
+  let lIndex = 0
   let rIndex = 0
-  let lastRIndex = -1
-  let lastLIndex = -1
   const diff: DiffRow[] = []
 
-  lMethods.forEach((lMethod, lIndex) => {
-    const lEnd = lIndex + 1 === lLength
-    let rMethod = rMethods[rIndex]
-    if (preDiffCb && !preDiffCb({ lMethod, rMethod })) return
+  while (lIndex < lLength || rIndex < rLength) {
+    let lMethod: IMethod | undefined = lMethods[lIndex]
+    let rMethod: IMethod | undefined = rMethods[rIndex]
 
-    while (
-      rIndex < rLength &&
-      rIndex !== lastRIndex &&
-      // eslint-disable-next-line no-unmodified-loop-condition
-      (rMethod.name < lMethod.name || lEnd)
-    ) {
-      /**
-       * This point is reached if rMethod is alphabetically smaller than the
-       * left one OR the left array has been fully traversed but not the right
-       */
-      if (!preDiffCb || preDiffCb?.({ rMethod })) {
-        lastRIndex = rIndex
-        if (lMethod.name === rMethod.name) {
-          /**
-           * Case when lMethods has been fully traversed and a match is found
-           * for the last lMethod in rMethods
-           */
-          lastLIndex = lIndex
-          diff.push(computeDiff({ lMethod, rMethod }))
-        } else {
-          /** Case when rMethod does not exist on the left */
-          diff.push(computeDiff({ rMethod }))
-        }
-      }
-      rIndex += 1
-      rMethod = rMethods?.[rIndex] || rMethod
+    if (!lMethod) {
+      rIndex++
+    } else if (!rMethod) {
+      lIndex++
+    } else if (lMethod.id < rMethod.id) {
+      rMethod = undefined
+      lIndex++
+    } else if (rMethod.id < lMethod.id) {
+      lMethod = undefined
+      rIndex++
+    } else {
+      lIndex++
+      rIndex++
     }
 
-    if (lIndex !== lastLIndex)
-      if (lMethod.name === rMethod.name) {
-        /** Case when a method exists on both sides */
-        lastRIndex = rIndex
-        lastLIndex = lIndex
-        diff.push(computeDiff({ lMethod, rMethod }))
-        rIndex = rIndex + 1 < rLength ? rIndex + 1 : rIndex
-      } else {
-        /** Case when left method does not exist on the right */
-        lastLIndex = lIndex
-        diff.push(computeDiff({ lMethod }))
-      }
-  })
-
+    if (filter(lMethod, rMethod)) {
+      const delta = computeDiff(lMethod, rMethod)
+      diff.push(delta)
+    }
+  }
   return diff
 }
