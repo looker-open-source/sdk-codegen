@@ -302,6 +302,8 @@ export interface IRequestProps {
   method: HttpMethod
   /** Redirect processing for request. optional */
   redirect?: any
+  /** Credentials to use */
+  credentials?: 'include' | 'omit' | 'same-origin' | undefined
 
   /** http.Agent instance, allows custom proxy, certificate etc. */
   agent?: Agent

@@ -38,7 +38,7 @@ import {
 } from './transport'
 
 export abstract class BaseTransport implements ITransport {
-  constructor(protected readonly options: ITransportSettings) {
+  protected constructor(protected readonly options: ITransportSettings) {
     this.options = options
   }
 

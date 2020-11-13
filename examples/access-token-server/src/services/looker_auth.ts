@@ -37,6 +37,7 @@ export const validateLookerCredentials = async (
   client_secret: string
 ): Promise<boolean> => {
   const lookerSettings = DefaultSettings()
+  console.log({ client_id, client_secret })
   lookerSettings.readConfig = (): IApiSection => {
     return { client_id, client_secret }
   }

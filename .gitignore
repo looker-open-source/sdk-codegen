@@ -66,6 +66,9 @@ results/*
 
 # csharp
 csharp/*.cache
-obj/
+**/obj/
 **/bin/Debug
 *.user
+
+# hackathon
+**/google-creds.json

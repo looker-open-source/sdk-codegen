@@ -133,7 +133,7 @@ export const initDefaultSpecState = (
 ): SpecState => {
   const pathNodes = location.pathname.split('/')
   let specKey
-  if (pathNodes.length > 1 && pathNodes[1]) {
+  if (pathNodes.length > 1 && pathNodes[1] && pathNodes[1] !== 'oauth') {
     specKey = pathNodes[1]
   } else {
     specKey = getDefaultSpecKey(specs)

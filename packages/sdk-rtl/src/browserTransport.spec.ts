@@ -27,6 +27,9 @@
 import { BrowserTransport } from './browserTransport'
 
 describe('BrowserTransport', () => {
+  afterEach(() => {
+    jest.clearAllMocks()
+  })
   it('cannot track performance if performance is not supported', () => {
     jest.spyOn(BrowserTransport, 'supportsPerformance').mockReturnValue(false)
     BrowserTransport.trackPerformance = true

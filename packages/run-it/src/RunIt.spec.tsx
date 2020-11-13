@@ -103,6 +103,9 @@ describe('RunIt', () => {
         looker_url: 'https://foo:9999',
       })
     })
+    afterEach(() => {
+      jest.clearAllMocks()
+    })
 
     test('it renders endpoint, request and response tabs, and form inputs', () => {
       renderRunIt()

@@ -100,7 +100,7 @@ export const registerOAuthApp = async (
 const brokenPromise = (message: string) => Promise.reject(new Error(message))
 
 export const registerApp = async () => {
-  const args = process.argv.splice(2)
+  const args = process.argv.slice(2)
   const total = args.length
   const iniFile = total < 1 ? `${__dirname}/../../../looker.ini` : args[0]
   const configFile = total < 2 ? `${__dirname}/appconfig.json` : args[1]

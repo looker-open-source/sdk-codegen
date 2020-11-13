@@ -28,7 +28,7 @@ import * as path from 'path'
 import * as fs from 'fs'
 import { Miner } from '../src/miner'
 ;(() => {
-  const args = process.argv.splice(2)
+  const args = process.argv.slice(2)
   const total = args.length
   const root = path.join(__dirname, '/../../../')
   const sourcePath = total < 1 ? root : path.join(root, args[0])
