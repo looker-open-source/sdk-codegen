@@ -23,15 +23,39 @@
  SOFTWARE.
 
  */
+import * as path from 'path'
+import { writeFileSync } from 'fs'
+import {
+  ApiModel,
+  csvHeaderRow,
+  csvDiffRow,
+  IMethod,
+} from '@looker/sdk-codegen'
+import { compareSpecs } from '@looker/sdk-codegen/src/specLinter'
+import { readFileSync } from '../src'
 
-export * from './codeGen'
-export * from './sdkModels'
-export * from './kotlin.gen'
-export * from './pseudo.gen'
-export * from './python.gen'
-export * from './swift.gen'
-export * from './typescript.gen'
-export * from './csharp.gen'
-export * from './codeGenerators'
-export * from './exampleInfo'
-export * from './specLinter'
+/**
+ * Compares Looker API 3.1 beta endpoints with their 4.0 version and writes the
+ * result to csv.
+ */
+;(async () => {
+  const rootPath = path.join(__dirname, '../../../spec')
+  const spec31Path = path.join(rootPath, 'Looker.3.1.oas.json')
+  const spec40Path = path.join(rootPath, 'Looker.4.0.oas.json')
+
+  const spec31 = ApiModel.fromString(readFileSync(spec31Path))
+  const spec40 = ApiModel.fromString(readFileSync(spec40Path))
+
+  const filter = (lMethod?: IMethod, _?: IMethod) => lMethod?.status === 'beta'
+
+  const diff = compareSpecs(spec31, spec40, filter)
+
+  let result = csvHeaderRow
+  diff.forEach((diffRow, index) => {
+    if (index > 0) result += csvDiffRow(diffRow)
+  })
+
+  writeFileSync(path.join(rootPath, '../results.csv'), result, {
+    encoding: 'utf-8',
+  })
+})()

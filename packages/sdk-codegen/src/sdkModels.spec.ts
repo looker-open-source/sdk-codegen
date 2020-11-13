@@ -269,6 +269,7 @@ describe('sdkModels', () => {
       expect(type.hasSpecialNeeds).toEqual(false)
     })
   })
+
   describe('request type determination', () => {
     it('search_looks', () => {
       const method = apiTestModel.methods.search_looks
@@ -1082,6 +1083,55 @@ describe('sdkModels', () => {
       const actual = JSON.stringify(item, null, 2)
       expect(actual).toBeDefined()
       expect(actual).toContain('"name": "dashboard_dashboard_elements"')
+    })
+  })
+
+  describe('summary', () => {
+    it('should summarize a property', () => {
+      const actual = apiTestModel.types.Dashboard.properties.id.summary()
+      expect(actual).toEqual('Dashboard.id:string readOnly')
+    })
+
+    it('should summarize a parameter', () => {
+      const method = apiTestModel.methods.create_dashboard
+      const actual = method.allParams[0].summary()
+      expect(actual).toEqual('create_dashboard.body:Dashboard required')
+    })
+  })
+
+  describe('signature', () => {
+    it('should summarize a method with params', () => {
+      const actual = apiTestModel.methods.create_look.signature()
+      expect(actual).toEqual('create_look(body:LookWithQuery, [fields:string])')
+    })
+
+    it('should summarize a method without params', () => {
+      const actual = apiTestModel.methods.logout.signature()
+      expect(actual).toEqual('logout()')
+    })
+
+    it('should summarize a parameter', () => {
+      const allParams = apiTestModel.methods.create_look.allParams
+      const actual = allParams
+        .find((param) => param.name === 'fields')
+        ?.signature()
+      expect(actual).toEqual('[fields:string]')
+    })
+  })
+
+  describe('asHashString', () => {
+    it('should hash a property', () => {
+      const prop = apiTestModel.types.Dashboard.properties.id
+      const actual = prop.asHashString()
+      expect(actual).toEqual('id:string readOnly')
+    })
+  })
+
+  describe('id', () => {
+    it('method.id should be httpMethod + endpoint', () => {
+      const method = apiTestModel.methods.create_look
+      const actual = method.id
+      expect(actual).toEqual(`${method.httpMethod} ${method.endpoint}`)
     })
   })
 })

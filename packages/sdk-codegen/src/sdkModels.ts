@@ -175,6 +175,10 @@ export interface IParameter extends ITypedSymbol {
 
   asProperty(): IProperty
 
+  signature(): string
+
+  summary(): string
+
   asHashString(): string
 
   doEncode(): boolean
@@ -512,6 +516,8 @@ export interface IProperty extends ITypedSymbol {
    * @returns {boolean} true if the pattern is found in the specified criteria
    */
   search(rx: RegExp, include: SearchCriteria): boolean
+
+  summary(): string
 }
 
 class Symbol implements ISymbol {
@@ -611,8 +617,11 @@ class SchemadSymbol extends Symbol implements ISchemadSymbol {
   }
 }
 
-class Property extends SchemadSymbol implements IProperty {
+export class Property extends SchemadSymbol implements IProperty {
   required = false
+  nullable = false
+  readOnly = false
+  writeOnly = false
 
   constructor(
     name: string,
@@ -625,31 +634,30 @@ class Property extends SchemadSymbol implements IProperty {
     this.required = !!(
       required.includes(name) || schema.required?.includes(name)
     )
+    this.nullable =
+      this.schema.nullable || this.schema['x-looker-nullable'] || false
+    this.readOnly = this.schema.readOnly || false
+    this.writeOnly = this.schema.writeOnly || false
   }
 
-  get nullable(): boolean {
-    // TODO determine cascading nullable options
-    return this.schema.nullable || this.schema['x-looker-nullable'] || false
+  private tag(key: string) {
+    return this[key] ? ` ${key}` : ''
   }
 
-  get readOnly(): boolean {
-    return this.schema.readOnly || false
-  }
-
-  get writeOnly(): boolean {
-    return this.schema.writeOnly || false
+  summary() {
+    return `${this.fullName}:${this.type.name}${this.tag('readOnly')}${this.tag(
+      'required'
+    )}${this.tag('nullable')}${this.tag('deprecated')}`
   }
 
   asHashString() {
-    return super.asHashString() + this.nullable
-      ? '?'
-      : '' + this.readOnly
-      ? ' ro'
-      : '' + this.required
-      ? ' req'
-      : '' + this.writeOnly
-      ? ' wo'
-      : ''
+    return (
+      super.asHashString() +
+      this.tag('readOnly') +
+      this.tag('required') +
+      this.tag('nullable') +
+      this.tag('deprecated')
+    )
   }
 
   searchString(criteria: SearchCriteria): string {
@@ -714,6 +722,26 @@ export class Parameter extends SchemadSymbol implements IParameter {
     return new Property(this.name, this.type, this.asSchemaObject())
   }
 
+  private tag(key: string) {
+    return this[key] ? ` ${key}` : ''
+  }
+
+  signature() {
+    return (
+      (this.required ? '' : '[') +
+      this.name +
+      ':' +
+      this.type.name +
+      (this.required ? '' : ']')
+    )
+  }
+
+  summary() {
+    return `${this.fullName}:${this.type.name}${this.tag('readOnly')}${this.tag(
+      'required'
+    )}${this.tag('nullable')}${this.tag('deprecated')}`
+  }
+
   asHashString() {
     return `${this.name}:${this.type.name}${this.required ? '' : '?'}${
       this.location
@@ -757,6 +785,9 @@ export class Parameter extends SchemadSymbol implements IParameter {
  *
  */
 export interface IMethod extends ISchemadSymbol {
+  /** Lookup id */
+  id: string
+
   /** alias of ISymbol.name */
   operationId: string
 
@@ -929,12 +960,15 @@ export interface IMethod extends ISchemadSymbol {
    * @returns {KeyList} the list of all types used by the method
    */
   makeTypes(api: IApiModel): KeyList
+
+  signature(): string
 }
 
 /**
  * Concrete implementation of IMethod interface
  */
 export class Method extends SchemadSymbol implements IMethod {
+  readonly id: string
   readonly httpMethod: HttpMethod
   readonly endpoint: string
   readonly primaryResponse: IMethodResponse
@@ -1001,6 +1035,7 @@ export class Method extends SchemadSymbol implements IMethod {
     this.types = new Set<string>()
     this.httpMethod = httpMethod
     this.endpoint = endpoint
+    this.id = `${httpMethod} ${endpoint}`
     this.responses = responses
     this.primaryResponse = primaryResponse
     this.responseModes = this.getResponseModes()
@@ -1128,6 +1163,19 @@ export class Method extends SchemadSymbol implements IMethod {
 
   get summary(): string {
     return this.schema.summary || ''
+  }
+
+  signature() {
+    let result = this.operationId + '('
+    const allParams = this.allParams
+    if (allParams) {
+      allParams.forEach((param, index) => {
+        if (index > 0) result += ', '
+        result += param.signature()
+      })
+    }
+    result += ')'
+    return result
   }
 
   // all required parameters ordered by location declaration order

@@ -42,6 +42,7 @@
     "lint:es": "eslint 'packages/**/*.ts{,x}' --cache",
     "lint:ts": "tsc",
     "lint-staged": "yarn exec lint-staged",
+    "lint:spec": "SUPPRESS_NO_CONFIG_WARNING=1 ts-node -O '{ \"module\": \"commonjs\", \"target\": \"es2019\" }' packages/sdk-codegen-scripts/scripts/specLinter.ts",
     "refresh": "SUPPRESS_NO_CONFIG_WARNING=1 ts-node -O '{ \"module\": \"commonjs\", \"target\": \"es2019\" }' packages/api-explorer/scripts/refresh_specs.ts",
     "test": "yarn jest",
     "test:ts": "yarn jest --reporters=default --reporters=jest-junit",
