@@ -51,8 +51,8 @@ import { readFileSync } from '../src'
   const diff = compareSpecs(spec31, spec40, filter)
 
   let result = csvHeaderRow
-  diff.forEach((diffRow, index) => {
-    if (index > 0) result += csvDiffRow(diffRow)
+  diff.forEach((diffRow) => {
+    result += csvDiffRow(diffRow)
   })
 
   writeFileSync(path.join(rootPath, '../results.csv'), result, {
