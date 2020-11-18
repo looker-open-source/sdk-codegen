@@ -41,7 +41,7 @@ const runItSettings = new RunItSettings(settings, defaultConfigurator)
 describe('RunItSDK', () => {
   describe('RunItSettings', () => {
     test('settings keep agentTag', () => {
-      expect(runItSettings.agentTag).toContain(`RunIt`)
+      expect(runItSettings.agentTag).toContain('RunIt')
     })
   })
   test('sdk keeps agentTag', () => {
