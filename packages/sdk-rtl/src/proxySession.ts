@@ -74,7 +74,7 @@ export abstract class ProxySession extends AuthSession {
       props.headers = {}
     }
     props.headers['X-Forwarded-For'] = props.url
-    props.headers[LookerAppId] = `${agentPrefix}`
+    props.headers[LookerAppId] = agentPrefix
     props.url = this.proxyUrl
     return props
   }
