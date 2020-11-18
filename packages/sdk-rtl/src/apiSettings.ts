@@ -33,7 +33,7 @@ export interface IValueSettings {
 
 /**
  * Gets list of environment variable names for config values
- * @param envPrefix Environment naming prefix to use. Leave blank to return no variable keys
+ * @param envPrefix Environment naming prefix to use. Pass an empty string to return no variable keys
  * @constructor
  */
 export const ApiConfigMap = (envPrefix: string): IValueSettings => {
