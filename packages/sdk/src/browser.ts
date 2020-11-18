@@ -24,9 +24,8 @@
 
  */
 
-import * as models31 from './3.1/models'
+export * as models31 from './3.1/models'
 export * from './3.1/methods'
-export { models31 }
 export * from './3.1/streams'
 export * from './4.0/methods'
 export * from './4.0/models'
