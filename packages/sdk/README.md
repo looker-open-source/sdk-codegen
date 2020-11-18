@@ -81,6 +81,15 @@ import { LookerNodeSDK } from '@looker/sdk/lib/node'
 })()
 ```
 
+**NOTE**: By default, `LookerNodeSDK.init31()` and `LookerNodeSDK.init40()` will check for environment variables. Environment variables can be ignored by passing an empty string to the NodeSettings constructor.
+
+```typescript
+// Ignore any SDK environment variables for the node runtime
+const settings = new NodeSettingsIniFile('')
+const sdk = LookerNodeSDK.init40(settings)
+const sdk31 = LookerNodeSDK.init31(settings)
+```
+
 ### Using the Browser SDK
 
 The default auth/auth mode for the Browser SDK uses CORS, so your Looker instance will need to be configured for CORS support, which is available in Looker 7.10 and above.
