@@ -46,6 +46,6 @@ describe('RunItSDK', () => {
   })
   test('sdk keeps agentTag', () => {
     const actual = LookerBrowserSDK.init40(runItSettings)
-    expect(actual.authSession.settings.agentTag).toContain(`RunIt`)
+    expect(actual.authSession.settings.agentTag).toContain('RunIt')
   })
 })
