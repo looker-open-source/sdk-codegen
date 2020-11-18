@@ -56,6 +56,8 @@ Verify authentication works and that API calls will succeed with code similar to
 ```kotlin
 import com.looker.rtl.ApiSettings;
 import com.looker.rtl.AuthSession;
+import com.looker.rtl.SdkResult;
+import com.looker.rtl.ok;
 import com.looker.sdk.LookerSDK;
 
 val localIni = "./looker.ini"
@@ -63,10 +65,21 @@ val settings = ApiSettings.fromIniFile(localIni, "Looker")
 val session = AuthSession(settings)
 val sdk = LookerSDK(session)
 // Verify minimal SDK call works
-val me = sdk.ok<User>(sdk.me())
+val me = sdk.me().ok()
 
 /// continue making SDK calls
-val users = sdk.ok<Array<User>>(sdk.all_users())
+val result = sdk.all_users()
+when (result) {
+  is SdkResult.SuccessResponse<List<User>> -> {
+    result.body.forEach { user -> print(user.name) }
+  }
+  is SdkResult.FailureResponse<com.looker.sdk.Error> -> {
+    log(result.body.message)
+  }
+  is SdkResult.Error -> {
+    log(result.error.message)
+  }
+}
 ```
 
 ### More examples

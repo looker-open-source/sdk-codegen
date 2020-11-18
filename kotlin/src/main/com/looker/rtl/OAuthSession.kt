@@ -45,13 +45,13 @@ class OAuthSession(override val apiSettings: ConfigurationProvider, override val
     }
 
     fun requestToken(body: Values): AuthToken {
-        val response = this.transport.request<AccessToken>(
+        val response = this.transport.request<AccessToken, Any?>(
             HttpMethod.POST,
             "/api/token",
             mapOf(),
             body
         )
-        val token = this.ok<AccessToken>(response)
+        val token = response.ok()
         this.authToken.setToken(token)
         return this.authToken
     }

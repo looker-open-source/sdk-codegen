@@ -111,15 +111,6 @@ open class AuthSession(
         return false
     }
 
-    fun <T> ok(response: SDKResponse): T {
-        @Suppress("UNCHECKED_CAST")
-        when (response) {
-            is SDKResponse.SDKErrorResponse<*> -> throw Error(response.value.toString())
-            is SDKResponse.SDKSuccessResponse<*> -> return response.value as T
-            else -> throw Error("Fail!!")
-        }
-    }
-
     private fun sudoLogout(): Boolean {
         var result = false
         if (isSudo()) {
@@ -148,20 +139,17 @@ open class AuthSession(
                     append(client_secret, clientSecret)
                 }
             )
-            val token = ok<AuthToken>(
-                transport.request<AuthToken>(
-                    HttpMethod.POST,
-                    "$apiPath/login",
-                    mapOf(),
-                    body
-                )
-            )
-            authToken = token
+            authToken = transport.request<AuthToken, Any?>(
+                HttpMethod.POST,
+                "$apiPath/login",
+                mapOf(),
+                body
+            ).ok()
         }
 
         if (sudoId.isNotBlank()) {
             val token = activeToken()
-            val sudoToken = transport.request<AuthToken>(
+            val sudoToken = transport.request<AuthToken, Any?>(
                 HttpMethod.POST,
                 "/login/$newId"
             ) { requestSettings ->
@@ -171,14 +159,14 @@ open class AuthSession(
                 }
                 requestSettings.copy(headers = headers)
             }
-            this.sudoToken = ok(sudoToken)
+            this.sudoToken = sudoToken.ok()
         }
         return activeToken()
     }
 
     private fun doLogout(): Boolean {
         val token = activeToken()
-        val resp = transport.request<String>(HttpMethod.DELETE, "/logout") {
+        val resp = transport.request<String, Any?>(HttpMethod.DELETE, "/logout") {
             val headers = it.headers.toMutableMap()
             if (token.accessToken.isNotBlank()) {
                 headers["Authorization"] = "Bearer ${token.accessToken}"
@@ -186,11 +174,8 @@ open class AuthSession(
             it.copy(headers = headers)
         }
 
-        val success = when (resp) {
-            is SDKResponse.SDKSuccessResponse<*> -> true
-            is SDKResponse.SDKErrorResponse<*> -> false
-            else -> false
-        }
+        val success = resp.success
+
         if (sudoId.isNotBlank()) {
             sudoId = ""
             sudoToken.reset()

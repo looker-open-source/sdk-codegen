@@ -58,6 +58,8 @@ export class KotlinGen extends CodeGen {
   needsRequestTypes = false
   willItStream = true
 
+  tFailure = 'com.looker.sdk.Error'
+
   private readonly defaultApi = '4.0'
 
   isDefaultApi() {
@@ -162,13 +164,16 @@ import java.util.*
   declareProperty(indent: string, property: IProperty) {
     const optional = !property.required ? '? = null' : ''
     const type = this.typeMap(property.type)
-    const attr = property.hasSpecialNeeds
-      ? `${indent}@JsonProperty("${property.jsonName}")\n`
-      : ''
-    return `
-${attr}
-${indent}var ${property.name}: ${type.name}${optional}
-`.trim()
+
+    const lines: string[] = []
+
+    if (property.hasSpecialNeeds) {
+      lines.push(`${indent}@JsonProperty("${property.jsonName}")`)
+    }
+
+    lines.push(`${indent}var ${property.name}: ${type.name}${optional}`)
+
+    return lines.join('\n')
   }
 
   paramComment(param: IParameter, mapped: IMappedType) {
@@ -194,12 +199,13 @@ ${indent}var ${property.name}: ${type.name}${optional}
     const args = method.allParams // get the params in signature order
     if (args && args.length > 0)
       args.forEach((p) => params.push(this.declareParameter(bump, method, p)))
+    const tSuccess = streamer ? 'ByteArray' : this.typeMap(method.type).name
 
     return `
 ${this.commentHeader(indent, this.headerComment(method, streamer)).trimEnd()}
 ${indent}${this.jvmOverloads(method)}fun ${method.name}(
 ${params.join(this.paramDelimiter)}
-${indent}) : SDKResponse {
+${indent}) : SdkResult<${tSuccess}, ${this.tFailure}> {
 `
   }
 
@@ -404,27 +410,31 @@ ${props.join(this.propDelimiter)}
   }
 
   httpCall(indent: string, method: IMethod) {
+    const bump = indent + this.indentStr
+    const methodName = this.it(method.httpMethod.toLowerCase())
     const request = this.useRequest(method) ? 'request.' : ''
-    const type = this.typeMap(method.type)
+    const tSuccess = this.typeMap(method.type).name
     const args = this.httpArgs(indent, method)
+    const path = this.httpPath(method.endpoint, request)
+    const functionArgs = [path].concat(args)
     // TODO don't currently need these for Kotlin
     // const errors = this.errorResponses(indent, method)
-    return `${indent}return ${this.it(method.httpMethod.toLowerCase())}<${
-      type.name
-    }>(${this.httpPath(method.endpoint, request)}${args ? ', ' + args : ''})`
+    return `${indent}return ${methodName}<${tSuccess}, ${this.tFailure}>(
+${bump}${functionArgs.join(', ')}
+${indent})`
   }
 
   streamCall(indent: string, method: IMethod) {
     const request = this.useRequest(method) ? 'request.' : ''
+    const methodName = this.it(method.httpMethod.toLowerCase())
+    const tSuccess = 'ByteArray'
     // const type = this.typeMap(method.type)
     const bump = indent + this.indentStr
     const args = this.httpArgs(bump, method)
     // const errors = this.errorResponses(indent, method)
-    return `${bump}return ${this.it(
-      method.httpMethod.toLowerCase()
-    )}<ByteArray>(${this.httpPath(method.endpoint, request)}${
-      args ? ', ' + args : ''
-    })`
+    return `${indent}return ${methodName}<${tSuccess}, ${this.tFailure}>(
+${bump}${this.httpPath(method.endpoint, request)}${args ? ', ' + args : ''}
+${indent})`
   }
 
   summary(indent: string, text: string | undefined) {

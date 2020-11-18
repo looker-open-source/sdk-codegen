@@ -33,36 +33,64 @@ open class APIMethods(val authSession: AuthSession) {
 
     val authRequest = authSession::authenticate
 
-    fun <T> ok(response: SDKResponse): T {
-        when (response) {
-            is SDKResponse.SDKErrorResponse<*> -> throw Error(response.value.toString())
-            is SDKResponse.SDKSuccessResponse<*> -> return response.value as T
-            else -> throw Error("Fail!!")
-        }
+    inline fun <reified TSuccess, reified TFailure> get(
+        path: String,
+        queryParams: Values = mapOf(),
+        body: Any? = null
+    ): SdkResult<TSuccess, TFailure> {
+        return authSession.transport.request<TSuccess, TFailure>(
+            HttpMethod.GET, path, queryParams, body, authRequest
+        )
     }
 
-    inline fun <reified T> get(path: String, queryParams: Values = mapOf(), body: Any? = null): SDKResponse {
-        return authSession.transport.request<T>(HttpMethod.GET, path, queryParams, body, authRequest)
+    inline fun <reified TSuccess, reified TFailure> head(
+        path: String,
+        queryParams: Values = mapOf(),
+        body: Any? = null
+    ): SdkResult<TSuccess, TFailure> {
+        return authSession.transport.request<TSuccess, TFailure>(
+            HttpMethod.HEAD, path, queryParams, body, authRequest
+        )
     }
 
-    inline fun <reified T> head(path: String, queryParams: Values = mapOf(), body: Any? = null): SDKResponse {
-        return authSession.transport.request<T>(HttpMethod.HEAD, path, queryParams, body, authRequest)
+    inline fun <reified TSuccess, reified TFailure> delete(
+        path: String,
+        queryParams: Values = mapOf(),
+        body: Any? = null
+    ): SdkResult<TSuccess, TFailure> {
+        return authSession.transport.request<TSuccess, TFailure>(
+            HttpMethod.DELETE, path, queryParams, body, authRequest
+        )
     }
 
-    inline fun <reified T> delete(path: String, queryParams: Values = mapOf(), body: Any? = null): SDKResponse {
-        return authSession.transport.request<T>(HttpMethod.DELETE, path, queryParams, body, authRequest)
+    inline fun <reified TSuccess, reified TFailure> post(
+        path: String,
+        queryParams: Values = mapOf(),
+        body: Any? = null
+    ): SdkResult<TSuccess, TFailure> {
+        return authSession.transport.request<TSuccess, TFailure>(
+            HttpMethod.POST, path, queryParams, body, authRequest
+        )
     }
 
-    inline fun <reified T> post(path: String, queryParams: Values = mapOf(), body: Any? = null): SDKResponse {
-        return authSession.transport.request<T>(HttpMethod.POST, path, queryParams, body, authRequest)
+    inline fun <reified TSuccess, reified TFailure> put(
+        path: String,
+        queryParams: Values = mapOf(),
+        body: Any? = null
+    ): SdkResult<TSuccess, TFailure> {
+        return authSession.transport.request<TSuccess, TFailure>(
+            HttpMethod.PUT, path, queryParams, body, authRequest
+        )
     }
 
-    inline fun <reified T> put(path: String, queryParams: Values = mapOf(), body: Any? = null): SDKResponse {
-        return authSession.transport.request<T>(HttpMethod.PUT, path, queryParams, body, authRequest)
-    }
-
-    inline fun <reified T> patch(path: String, queryParams: Values = mapOf(), body: Any? = null): SDKResponse {
-        return authSession.transport.request<T>(HttpMethod.PATCH, path, queryParams, body, authRequest)
+    inline fun <reified TSuccess, reified TFailure> patch(
+        path: String,
+        queryParams: Values = mapOf(),
+        body: Any? = null
+    ): SdkResult<TSuccess, TFailure> {
+        return authSession.transport.request<TSuccess, TFailure>(
+            HttpMethod.PATCH, path, queryParams, body, authRequest
+        )
     }
 
     fun encodeURI(value: String): String {
