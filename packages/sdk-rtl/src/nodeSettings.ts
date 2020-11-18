@@ -115,7 +115,7 @@ const readEnvConfig = (envPrefix: string) => {
  * with environment variable values, if the environment variables exist
  *
  * @param {string} fileName Name of configuration file to read
- * @param envPrefix environment variable prefix. Leave undefined or empty to skip environment reading.
+ * @param envPrefix environment variable prefix. Pass an empty string to skip environment reading.
  * @param {string} section Optional. Name of section of configuration file to read
  * @returns {IApiSection} containing the configuration values
  */
