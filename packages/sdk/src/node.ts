@@ -24,11 +24,11 @@
 
  */
 
-import * as models31 from './sdk/3.1/models'
-export * from './sdk/3.1/methods'
+import * as models31 from './3.1/models'
+export * from './3.1/methods'
 export { models31 }
-export * from './sdk/3.1/streams'
-export * from './sdk/4.0/methods'
-export * from './sdk/4.0/models'
-export * from './sdk/4.0/streams'
+export * from './3.1/streams'
+export * from './4.0/methods'
+export * from './4.0/models'
+export * from './4.0/streams'
 export * from './nodeSdk'

@@ -32,17 +32,13 @@ import {
   NodeSettingsIniFile,
   DelimArray,
   boolDefault,
-  strLookerBaseUrl,
-  strLookerClientId,
-  strLookerClientSecret,
-  strLookerTimeout,
-  strLookerVerifySsl,
   defaultTimeout,
   NodeSession,
+  ApiConfigMap,
 } from '@looker/sdk-rtl'
 import { TestConfig } from '../../../sdk-rtl/src/testUtils'
 import { LookerNodeSDK } from '../nodeSdk'
-import { Looker40SDK as LookerSDK } from '../sdk/4.0/methods'
+import { Looker40SDK as LookerSDK } from '../4.0/methods'
 import {
   ICreateQueryTask,
   IQuery,
@@ -50,8 +46,15 @@ import {
   IUser,
   IWriteQuery,
   ResultFormat,
-} from '../sdk/4.0/models'
+} from '../4.0/models'
+import { environmentPrefix } from '../constants'
 
+const envKey = ApiConfigMap(environmentPrefix)
+const strLookerBaseUrl = envKey.base_url
+const strLookerClientId = envKey.client_id
+const strLookerClientSecret = envKey.client_secret
+const strLookerTimeout = envKey.timeout
+const strLookerVerifySsl = envKey.verify_ssl
 const config = TestConfig()
 const users: Partial<IUser>[] = config.testData.users
 const queries: Partial<IQuery>[] = config.testData.queries_system_activity
@@ -59,71 +62,14 @@ const dashboards: any[] = config.testData.dashboards
 const emailDomain = '@foo.com'
 const testTimeout = 36000000 // 1 hour
 
-// /**
-//  * Converts a String to an ArrayBuffer.
-//  *
-//  * @param str - String to convert.
-//  * @returns ArrayBuffer.
-//  */
-// const stringToArrayBuffer = (str: string): ArrayBuffer => {
-//   const stringLength = str.length;
-//   const buffer = new ArrayBuffer(stringLength)
-//   const bufferView = new Uint8Array(buffer)
-//   for (let i = 0; i < stringLength; i++) {
-//     bufferView[i] = str.charCodeAt(i)
-//   }
-//   return buffer
-// }
-
-// const sleep = async (ms: number) => {
-//   return new Promise(resolve  =>{
-//     setTimeout(resolve, ms)
-//   })
-// }
-//
-// const downloadTile = async (sdk: LookerSDK, tile: IDashboardElement, format: string) => {
-//   if (!tile.query_id) {
-//     console.error(`Tile ${tile.title} does not have a query`)
-//     return
-//   }
-//   const task = await sdk.ok(sdk.create_query_render_task(tile.query_id, format, 640, 480))
-//
-//   if (!task || !task.id) {
-//     console.error(`Could not create a render task for ${tile.title}`)
-//     return
-//   }
-//
-//   // poll the render task until it completes
-//   let elapsed = 0.0
-//   const delay = 500 // wait .5 seconds
-//   while (true) {
-//     const poll = await sdk.ok(sdk.render_task(task.id!))
-//     if (poll.status === 'failure') {
-//       console.log({poll})
-//       console.error(`Render failed for ${tile.title}`)
-//       return
-//     }
-//     if (poll.status === 'success') {
-//       break
-//     }
-//     await sleep(delay)
-//     console.log(`${elapsed += (delay/1000)} seconds elapsed`)
-//   }
-//   // IMPORTANT: must set encoding to `null` for binary downloads
-//   const result = await sdk.ok(sdk.render_task_results(task.id!, {encoding: null}))
-//   const fileName = `${tile.title}.${format}`
-//   let failed = false
-//   fs.writeFile(fileName, result, 'binary',(err) => {
-//       if (err) {
-//         failed = true
-//         console.error(err)}
-//     }
-//   )
-//   return failed ? undefined : fileName
-// }
+// TODO test binary download with content_thumbnail
 
 describe('LookerNodeSDK', () => {
-  const settings = new NodeSettingsIniFile(config.localIni, 'Looker')
+  const settings = new NodeSettingsIniFile(
+    environmentPrefix,
+    config.localIni,
+    'Looker'
+  )
   const session = new NodeSession(settings)
 
   const createQueryRequest = (q: any, limit: number) => {
@@ -672,10 +618,7 @@ describe('LookerNodeSDK', () => {
             const writer = fs.createWriteStream(csvFile)
             await sdk.stream.run_inline_query(async (readable: Readable) => {
               return new Promise<any>((resolve, reject) => {
-                readable
-                  .pipe(writer)
-                  .on('error', reject)
-                  .on('finish', resolve)
+                readable.pipe(writer).on('error', reject).on('finish', resolve)
               })
             }, request)
             expect(fs.existsSync(csvFile)).toEqual(true)
@@ -683,16 +626,6 @@ describe('LookerNodeSDK', () => {
             fs.unlinkSync(csvFile)
             expect(fs.existsSync(csvFile)).toEqual(false)
             expect(contents).toEqual(csv)
-            // TODO test binary download
-            // request.result_format = 'png'
-            // const png = await sdk.ok(sdk.run_inline_query(request))
-            // // expect(png instanceof).toEqual(Buffer)
-            // const type = FileType(stringToArrayBuffer(png))
-            // expect(type).toBeDefined()
-            // if (type) {
-            //   expect(type.ext).toEqual('png')
-            //   expect(type.mime).toEqual('image/png')
-            // }
           }
         }
         await sdk.authSession.logout()
@@ -911,7 +844,7 @@ describe('LookerNodeSDK', () => {
     })
 
     it('no INI', async () => {
-      const sdk = LookerNodeSDK.init31(new NodeSettings())
+      const sdk = LookerNodeSDK.init31(new NodeSettings(environmentPrefix))
       const me = await sdk.ok(sdk.me())
       expect(me).not.toBeUndefined()
       expect(me.id).not.toBeUndefined()

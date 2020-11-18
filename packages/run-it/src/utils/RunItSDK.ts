@@ -31,7 +31,6 @@ import {
   DefaultSettings,
   IApiSection,
   IApiSettings,
-  lookerVersion,
 } from '@looker/sdk-rtl/lib/browser'
 import { RunItConfigKey, RunItConfigurator } from '../components'
 
@@ -39,7 +38,7 @@ import { RunItConfigKey, RunItConfigurator } from '../components'
 const settings = {
   ...DefaultSettings(),
   base_url: 'https://self-signed.looker.com:19999',
-  agentTag: `RunIt ${lookerVersion}.4.0`,
+  agentTag: `RunIt 0.5`,
 } as IApiSettings
 
 /***

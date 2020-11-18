@@ -49,7 +49,6 @@ import {
 } from './transport'
 import { BaseTransport } from './baseTransport'
 import { ICryptoHash } from './cryptoHash'
-import { lookerVersion } from './constants'
 
 export class NodeCryptoHash implements ICryptoHash {
   secureRandom(byteCount: number): string {
@@ -327,7 +326,7 @@ export class NodeTransport extends BaseTransport {
   ) {
     options = options ? { ...this.options, ...options } : this.options
     if (!options.agentTag) {
-      options.agentTag = `${agentPrefix} ${lookerVersion}`
+      options.agentTag = agentPrefix
     }
     const headers: IRequestHeaders = {
       [LookerAppId]: options.agentTag,

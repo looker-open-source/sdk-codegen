@@ -170,30 +170,23 @@ class TypescriptFormatter extends BaseFormatter {
 
   versionStamp(gen: ICodeGen) {
     if (gen.versions && gen.versions.lookerVersion) {
-      const stampFile = gen.fileName('../../sdk-rtl/src/constants')
+      const stampFile = gen.fileName('../../sdk/src/constants')
       if (!isFileSync(stampFile)) {
         warn(`${stampFile} was not found. Skipping version update.`)
       }
       let content = readFileSync(stampFile)
-      const lookerPattern = /lookerVersion = ['"].*['"]/i
-      const apiPattern = /\bapiVersion = ['"].*['"]/i
+      const sdkVersionPattern = /sdkVersion = ['"].*['"]/i
       const envPattern = /environmentPrefix = ['"].*['"]/i
       content = content.replace(
-        lookerPattern,
-        `lookerVersion = '${gen.versions.lookerVersion}'`
-      )
-      content = content.replace(
-        apiPattern,
-        `apiVersion = '${gen.versions.apiVersion}'`
+        sdkVersionPattern,
+        `sdkVersion = '${gen.versions.lookerVersion}'`
       )
       content = content.replace(
         envPattern,
         `environmentPrefix = '${gen.environmentPrefix}'`
       )
       writeFile(stampFile, content)
-      return success(
-        `updated ${stampFile} to ${gen.versions.apiVersion}.${gen.versions.lookerVersion}`
-      )
+      return success(`updated ${stampFile} to ${gen.versions.lookerVersion}`)
     }
 
     return warn(
@@ -325,9 +318,7 @@ class GoFormatter extends BaseFormatter {
   }
 
   versionStamp() {
-    return warn(
-        'Skipping SDK version updating - not implemented for Go.'
-    )
+    return warn('Skipping SDK version updating - not implemented for Go.')
   }
 }
 

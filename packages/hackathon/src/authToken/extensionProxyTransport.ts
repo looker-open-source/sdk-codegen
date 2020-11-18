@@ -37,7 +37,6 @@ import {
   IRequestProps,
   ISDKError,
   LookerAppId,
-  lookerVersion,
 } from '@looker/sdk-rtl/lib/browser'
 import {
   ExtensionSDK,
@@ -57,7 +56,7 @@ export class ExtensionProxyTransport extends BaseTransport {
     authenticator?: Authenticator,
     options?: Partial<ITransportSettings>
   ) {
-    const agentTag = options?.agentTag || `${agentPrefix} ${lookerVersion}`
+    const agentTag = options?.agentTag || agentPrefix
     options = options ? { ...this.options, ...options } : this.options
     const headers: IRequestHeaders = { [LookerAppId]: agentTag }
     if (options && options.headers) {

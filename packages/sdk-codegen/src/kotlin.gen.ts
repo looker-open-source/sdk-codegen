@@ -165,10 +165,8 @@ import java.util.*
     const attr = property.hasSpecialNeeds
       ? `${indent}@JsonProperty("${property.jsonName}")\n`
       : ''
-    return `
-${attr}
-${indent}var ${property.name}: ${type.name}${optional}
-`.trim()
+    const result = `${attr}${indent}var ${property.name}: ${type.name}${optional}`
+    return result
   }
 
   paramComment(param: IParameter, mapped: IMappedType) {

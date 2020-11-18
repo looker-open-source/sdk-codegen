@@ -24,26 +24,5 @@
 
  */
 
-import React from 'react'
-import { screen } from '@testing-library/react'
-import { renderWithTheme } from '@looker/components-test-utils'
-import { defaultConfigurator } from '..'
-import { LoginForm } from './LoginForm'
-
-describe('LoginForm', () => {
-  // https://testing-library.com/docs/guide-which-query
-
-  test('it creates a login form', async () => {
-    renderWithTheme(<LoginForm configurator={defaultConfigurator} />)
-    const title = screen.getByRole('heading') as HTMLHeadingElement
-    expect(title).toHaveTextContent('OAuth Login')
-    expect(
-      await screen.findByText(/OAuth authentication is already configured/)
-    ).toBeInTheDocument()
-    expect(
-      screen.getByRole('button', {
-        name: 'Login',
-      })
-    ).toBeInTheDocument()
-  })
-})
+export const sdkVersion = '7.18'
+export const environmentPrefix = 'LOOKERSDK'

@@ -24,11 +24,7 @@
 
  */
 
-import {
-  DefaultSettings,
-  IApiSettings,
-  lookerVersion,
-} from '@looker/sdk-rtl/lib/browser'
+import { DefaultSettings, IApiSettings } from '@looker/sdk-rtl/lib/browser'
 import { LookerBrowserSDK } from '@looker/sdk/lib/browser'
 
 import { defaultConfigurator } from '..'
@@ -37,7 +33,7 @@ import { RunItSettings } from './RunItSDK'
 const settings = {
   ...DefaultSettings(),
   base_url: 'https://self-signed.looker.com:19999',
-  agentTag: `RunIt ${lookerVersion}.4.0`,
+  agentTag: `RunIt `,
 } as IApiSettings
 
 const runItSettings = new RunItSettings(settings, defaultConfigurator)
@@ -45,13 +41,11 @@ const runItSettings = new RunItSettings(settings, defaultConfigurator)
 describe('RunItSDK', () => {
   describe('RunItSettings', () => {
     test('settings keep agentTag', () => {
-      expect(runItSettings.agentTag).toEqual(`RunIt ${lookerVersion}.4.0`)
+      expect(runItSettings.agentTag).toContain(`RunIt`)
     })
   })
   test('sdk keeps agentTag', () => {
     const actual = LookerBrowserSDK.init40(runItSettings)
-    expect(actual.authSession.settings.agentTag).toEqual(
-      `RunIt ${lookerVersion}.4.0`
-    )
+    expect(actual.authSession.settings.agentTag).toContain(`RunIt`)
   })
 })

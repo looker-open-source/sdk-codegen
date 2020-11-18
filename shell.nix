@@ -5,5 +5,5 @@ with stdenv;
 with stdenv.lib;
 mkShell {
   name = "sdk-codegen";
-  buildInputs =[nodejs-14_x];
+  buildInputs =[nodejs-14_x yarn];
 }

@@ -1,6 +1,6 @@
 import {Card, ComponentsProvider, Flex} from '@looker/components'
 import React from 'react'
-import {Router} from '@reach/router'
+import {Router} from '@react/router'
 import {Logo} from './Logo'
 import {RegisterScene} from './RegisterScene'
 import {ResourcesScene} from './ResourcesScene'

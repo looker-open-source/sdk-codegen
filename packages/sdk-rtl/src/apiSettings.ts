@@ -25,30 +25,26 @@
  */
 
 import { agentPrefix, defaultTimeout, ITransportSettings } from './transport'
-import {
-  lookerVersion,
-  boolDefault,
-  environmentPrefix,
-  isTrue,
-  unquote,
-} from './constants'
+import { boolDefault, isTrue, unquote } from './constants'
 
 export interface IValueSettings {
   [name: string]: string
 }
 
-export const strLookerBaseUrl = `${environmentPrefix}_BASE_URL`
-export const strLookerVerifySsl = `${environmentPrefix}_VERIFY_SSL`
-export const strLookerTimeout = `${environmentPrefix}_TIMEOUT`
-export const strLookerClientId = `${environmentPrefix}_CLIENT_ID`
-export const strLookerClientSecret = `${environmentPrefix}_CLIENT_SECRET`
-
-export const ApiConfigMap: IValueSettings = {
-  base_url: strLookerBaseUrl,
-  client_id: strLookerClientId,
-  client_secret: strLookerClientSecret,
-  timeout: strLookerTimeout,
-  verify_ssl: strLookerVerifySsl,
+/**
+ * Gets list of environment variable names for config values
+ * @param envPrefix Environment naming prefix to use. Leave blank to return no variable keys
+ * @constructor
+ */
+export const ApiConfigMap = (envPrefix: string): IValueSettings => {
+  if (!envPrefix) return {} as IValueSettings
+  return {
+    base_url: `${envPrefix}_BASE_URL`,
+    client_id: `${envPrefix}_VERIFY_SSL`,
+    client_secret: `${envPrefix}_TIMEOUT`,
+    timeout: `${envPrefix}_CLIENT_ID`,
+    verify_ssl: `${envPrefix}_CLIENT_SECRET`,
+  }
 }
 
 export const strBadConfiguration = `${agentPrefix} configuration error:
@@ -83,7 +79,7 @@ export interface IApiSettings extends ITransportSettings {
  */
 export const DefaultSettings = () =>
   ({
-    agentTag: `${agentPrefix} ${lookerVersion}`,
+    agentTag: agentPrefix,
     base_url: '',
     timeout: defaultTimeout,
     verify_ssl: true,
@@ -92,11 +88,16 @@ export const DefaultSettings = () =>
 /**
  * Return environment variable name value first, otherwise config name value
  * @param {IValueSettings} values
- * @param {string} name
- * @returns {string}
+ * @param {string} name of config variable
+ * @param envKey key collection of environment variables
+ * @returns {string} environment value
  */
-export const configValue = (values: IValueSettings, name: string) => {
-  const val = values[ApiConfigMap[name]] || values[name]
+export const configValue = (
+  values: IValueSettings,
+  name: string,
+  envKey: IValueSettings
+) => {
+  const val = values[envKey[name]] || values[name]
   return typeof val === 'string' ? unquote(val) : val
 }
 
@@ -111,12 +112,20 @@ export const configValue = (values: IValueSettings, name: string) => {
  *  - <environmentPrefix>_VERIFY_SSL or `verify_ssl`
  *  - <environmentPrefix>_TIMEOUT or `timeout`
  */
-export const ValueSettings = (values: IValueSettings): IApiSettings => {
+export const ValueSettings = (
+  values: IValueSettings,
+  envPrefix: string
+): IApiSettings => {
   const settings = DefaultSettings()
-  settings.base_url = configValue(values, 'base_url') || settings.base_url
-  settings.verify_ssl = boolDefault(configValue(values, 'verify_ssl'), true)
-  settings.agentTag = `${agentPrefix} ${lookerVersion}`
-  const timeout = configValue(values, 'timeout')
+  const envKey = ApiConfigMap(envPrefix)
+  settings.base_url =
+    configValue(values, 'base_url', envKey) || settings.base_url
+  settings.verify_ssl = boolDefault(
+    configValue(values, 'verify_ssl', envKey),
+    true
+  )
+  settings.agentTag = `TS-SDK`
+  const timeout = configValue(values, 'timeout', envKey)
   settings.timeout = timeout ? parseInt(timeout, 10) : defaultTimeout
   return settings
 }
@@ -130,7 +139,7 @@ export class ApiSettings implements IApiSettings {
   base_url = ''
   verify_ssl = true
   timeout: number = defaultTimeout
-  agentTag = `${agentPrefix} ${lookerVersion}`
+  agentTag = agentPrefix
 
   constructor(settings: Partial<IApiSettings>) {
     // coerce types to declared types since some paths could have non-conforming settings values

@@ -33,26 +33,19 @@ import {
 } from './transport'
 import { AuthToken } from './authToken'
 import { NodeTransport } from './nodeTransport'
-import {
-  IApiSettings,
-  strLookerClientId,
-  strLookerClientSecret,
-} from './apiSettings'
+import { IApiSettings } from './apiSettings'
 import { AuthSession, IAccessToken, IError } from './authSession'
-import { defaultApiVersion } from './constants'
-import { getenv } from './nodeSettings'
 
 const strPost: HttpMethod = 'POST'
 const strDelete: HttpMethod = 'DELETE'
 
 export class NodeSession extends AuthSession {
-  private readonly apiPath: string = ''
+  private readonly apiPath: string = '/api/3.1'
   _authToken: AuthToken = new AuthToken()
   _sudoToken: AuthToken = new AuthToken()
 
   constructor(public settings: IApiSettings, transport?: ITransport) {
     super(settings, transport || new NodeTransport(settings))
-    this.apiPath = `/api/${defaultApiVersion}`
   }
 
   /**
@@ -163,8 +156,8 @@ export class NodeSession extends AuthSession {
       this.reset()
       // only retain client API3 credentials for the lifetime of the login request
       const section = this.settings.readConfig()
-      const clientId = getenv(strLookerClientId, section.client_id)
-      const clientSecret = getenv(strLookerClientSecret, section.client_secret)
+      const clientId = section.client_id
+      const clientSecret = section.client_secret
       if (!clientId || !clientSecret) {
         throw sdkError({
           message: 'API credentials client_id and/or client_secret are not set',

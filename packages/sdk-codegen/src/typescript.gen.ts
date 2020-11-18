@@ -66,14 +66,18 @@ export class TypescriptGen extends CodeGen {
   useNamedParameters = false
   useNamedArguments = false
 
+  sdkFileName(baseFileName: string) {
+    return this.fileName(`${this.apiVersion}/${baseFileName}`)
+  }
+
   methodsPrologue(_indent: string) {
-    // TODO get the rtl path alias to work correctly in all scenarios! !!
     return `
 import { APIMethods, DelimArray, IAuthSession, ITransportSettings, encodeParam } from '@looker/sdk-rtl/lib/browser'
 /**
  * ${this.warnEditing()}
  *
  */
+import { sdkVersion } from '../constants'
 import { ${this.packageName}Stream } from './streams'
 import { IDictionary, ${this.typeNames().join(', ')} } from './models'
 
@@ -82,7 +86,7 @@ export class ${this.packageName} extends APIMethods {
   public stream: ${this.packageName}Stream
 
   constructor(authSession: IAuthSession) {
-    super(authSession, '${this.apiVersion}')
+    super(authSession, sdkVersion, '${this.apiVersion}')
     this.stream = new ${this.packageName}Stream(authSession)
   }
 
@@ -97,11 +101,12 @@ import { APIMethods, IAuthSession, DelimArray, ITransportSettings, encodeParam }
  * ${this.warnEditing()}
  *
  */
+import { sdkVersion } from '../constants'
 import { IDictionary, ${this.typeNames(false).join(', ')} } from './models'
 
 export class ${this.packageName}Stream extends APIMethods {
   constructor(authSession: IAuthSession) {
-    super(authSession, '${this.apiVersion}')
+    super(authSession, sdkVersion, '${this.apiVersion}')
   }
 `
   }

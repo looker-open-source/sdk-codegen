@@ -33,7 +33,6 @@ import {
   agentPrefix,
 } from './transport'
 import { IApiSettings } from './apiSettings'
-import { lookerVersion } from './constants'
 
 /**
  * An AuthSession class intended for use with proxied requests
@@ -75,7 +74,7 @@ export abstract class ProxySession extends AuthSession {
       props.headers = {}
     }
     props.headers['X-Forwarded-For'] = props.url
-    props.headers[LookerAppId] = `${agentPrefix} ${lookerVersion}`
+    props.headers[LookerAppId] = `${agentPrefix}`
     props.url = this.proxyUrl
     return props
   }

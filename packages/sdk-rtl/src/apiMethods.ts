@@ -35,22 +35,26 @@ import {
   Authenticator,
 } from './transport'
 import { IAuthSession } from './authSession'
-import { defaultApiVersion, lookerVersion } from './constants'
 
 export class APIMethods {
   private readonly apiPath: string = ''
-  apiVersion: string = defaultApiVersion
+
+  /**
+   * Initialize the APIMethods wrapper
+   * @param authSession authentication management session
+   * @param sdkVersion version of the SDK for agent tagging
+   * @param apiVersion version of the API for api path assignment
+   */
   constructor(
     public authSession: IAuthSession,
-    apiVersion: string = defaultApiVersion
+    public sdkVersion: string,
+    public apiVersion: string
   ) {
-    this.authSession = authSession
-    this.apiVersion = apiVersion
     if (
       !('agentTag' in authSession.settings && authSession.settings.agentTag)
     ) {
       // Initialize agentTag if it's not already explicitly set
-      authSession.settings.agentTag = `${agentPrefix} ${lookerVersion}.${this.apiVersion}`
+      authSession.settings.agentTag = `${agentPrefix} ${sdkVersion}`
     }
     this.apiPath =
       authSession.settings.base_url === ''

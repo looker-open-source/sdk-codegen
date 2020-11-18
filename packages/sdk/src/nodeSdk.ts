@@ -32,8 +32,8 @@ import {
   IApiSettings,
   IAuthSession,
 } from '@looker/sdk-rtl'
-import { Looker31SDK } from './sdk/3.1/methods'
-import { Looker40SDK } from './sdk/4.0/methods'
+import { Looker31SDK } from './3.1/methods'
+import { Looker40SDK } from './4.0/methods'
 
 /**
  * @class LookerNodeSDK

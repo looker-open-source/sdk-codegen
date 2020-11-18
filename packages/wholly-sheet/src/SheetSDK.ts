@@ -227,7 +227,7 @@ export const loadTabTable = (tab: ISheetTab, keyName = '_id'): ITabTable => {
 // https://developers.google.com/sheets/api/reference/rest/v4/spreadsheets.values
 export type SheetValues = any[]
 
-const sheetSDKVersion = '0.1.0-alpha'
+const sheetSDKVersion = '0.5.0-beta'
 
 export interface ISheetRowResponse {
   row: number
@@ -236,7 +236,7 @@ export interface ISheetRowResponse {
 
 export class SheetSDK extends APIMethods {
   constructor(authSession: IAuthSession, public sheetId: string) {
-    super(authSession, sheetSDKVersion)
+    super(authSession, sheetSDKVersion, '')
     authSession.settings.agentTag = `SheetSDK ${this.apiVersion}`
     this.sheetId = encodeURIComponent(sheetId)
   }
