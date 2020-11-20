@@ -73,7 +73,7 @@ export const registerOAuthApp = async (
   if (!guid) {
     return Promise.reject(new Error(`client_guid must be defined`))
   }
-  const settings = new NodeSettingsIniFile(iniFile)
+  const settings = new NodeSettingsIniFile('', iniFile)
   let result = `${guid} is registered for OAuth on ${settings.base_url}`
   const sdk = LookerNodeSDK.init40(settings)
   try {
