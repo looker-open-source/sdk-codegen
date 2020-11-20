@@ -76,8 +76,8 @@ class LookerSDKStream(authSession: AuthSession) : APIMethods(authSession) {
     @JvmOverloads fun login(
         client_id: String? = null,
         client_secret: String? = null
-    ): SDKResponse {
-        return this.post<ByteArray>(
+    ): SdkResult<ByteArray, com.looker.sdk.Error> {
+        return this.post<ByteArray, com.looker.sdk.Error>(
             "/login",
             mapOf(
                 "client_id" to client_id,
@@ -112,9 +112,9 @@ class LookerSDKStream(authSession: AuthSession) : APIMethods(authSession) {
     @JvmOverloads fun login_user(
         user_id: Long,
         associative: Boolean? = null
-    ): SDKResponse {
+    ): SdkResult<ByteArray, com.looker.sdk.Error> {
         val path_user_id = encodeParam(user_id)
-        return this.post<ByteArray>(
+        return this.post<ByteArray, com.looker.sdk.Error>(
             "/login/$path_user_id",
             mapOf("associative" to associative)
         )
@@ -125,8 +125,10 @@ class LookerSDKStream(authSession: AuthSession) : APIMethods(authSession) {
      *
      * DELETE /logout -> ByteArray
      */
-    fun logout(): SDKResponse {
-        return this.delete<ByteArray>("/logout", mapOf())
+    fun logout(): SdkResult<ByteArray, com.looker.sdk.Error> {
+        return this.delete<ByteArray, com.looker.sdk.Error>(
+            "/logout", mapOf()
+        )
     }
 
     //endregion ApiAuth: API Authentication
@@ -175,8 +177,10 @@ class LookerSDKStream(authSession: AuthSession) : APIMethods(authSession) {
      */
     fun create_sso_embed_url(
         body: EmbedSsoParams
-    ): SDKResponse {
-        return this.post<ByteArray>("/embed/sso_url", mapOf(), body)
+    ): SdkResult<ByteArray, com.looker.sdk.Error> {
+        return this.post<ByteArray, com.looker.sdk.Error>(
+            "/embed/sso_url", mapOf(), body
+        )
     }
 
     /**
@@ -206,8 +210,10 @@ class LookerSDKStream(authSession: AuthSession) : APIMethods(authSession) {
      */
     fun create_embed_url_as_me(
         body: EmbedParams
-    ): SDKResponse {
-        return this.post<ByteArray>("/embed/token_url/me", mapOf(), body)
+    ): SdkResult<ByteArray, com.looker.sdk.Error> {
+        return this.post<ByteArray, com.looker.sdk.Error>(
+            "/embed/token_url/me", mapOf(), body
+        )
     }
 
     /**
@@ -230,8 +236,10 @@ class LookerSDKStream(authSession: AuthSession) : APIMethods(authSession) {
      *
      * GET /ldap_config -> ByteArray
      */
-    fun ldap_config(): SDKResponse {
-        return this.get<ByteArray>("/ldap_config", mapOf())
+    fun ldap_config(): SdkResult<ByteArray, com.looker.sdk.Error> {
+        return this.get<ByteArray, com.looker.sdk.Error>(
+            "/ldap_config", mapOf()
+        )
     }
 
     /**
@@ -253,8 +261,10 @@ class LookerSDKStream(authSession: AuthSession) : APIMethods(authSession) {
      */
     fun update_ldap_config(
         body: WriteLDAPConfig
-    ): SDKResponse {
-        return this.patch<ByteArray>("/ldap_config", mapOf(), body)
+    ): SdkResult<ByteArray, com.looker.sdk.Error> {
+        return this.patch<ByteArray, com.looker.sdk.Error>(
+            "/ldap_config", mapOf(), body
+        )
     }
 
     /**
@@ -283,8 +293,10 @@ class LookerSDKStream(authSession: AuthSession) : APIMethods(authSession) {
      */
     fun test_ldap_config_connection(
         body: WriteLDAPConfig
-    ): SDKResponse {
-        return this.put<ByteArray>("/ldap_config/test_connection", mapOf(), body)
+    ): SdkResult<ByteArray, com.looker.sdk.Error> {
+        return this.put<ByteArray, com.looker.sdk.Error>(
+            "/ldap_config/test_connection", mapOf(), body
+        )
     }
 
     /**
@@ -315,8 +327,10 @@ class LookerSDKStream(authSession: AuthSession) : APIMethods(authSession) {
      */
     fun test_ldap_config_auth(
         body: WriteLDAPConfig
-    ): SDKResponse {
-        return this.put<ByteArray>("/ldap_config/test_auth", mapOf(), body)
+    ): SdkResult<ByteArray, com.looker.sdk.Error> {
+        return this.put<ByteArray, com.looker.sdk.Error>(
+            "/ldap_config/test_auth", mapOf(), body
+        )
     }
 
     /**
@@ -336,8 +350,10 @@ class LookerSDKStream(authSession: AuthSession) : APIMethods(authSession) {
      */
     fun test_ldap_config_user_info(
         body: WriteLDAPConfig
-    ): SDKResponse {
-        return this.put<ByteArray>("/ldap_config/test_user_info", mapOf(), body)
+    ): SdkResult<ByteArray, com.looker.sdk.Error> {
+        return this.put<ByteArray, com.looker.sdk.Error>(
+            "/ldap_config/test_user_info", mapOf(), body
+        )
     }
 
     /**
@@ -357,8 +373,10 @@ class LookerSDKStream(authSession: AuthSession) : APIMethods(authSession) {
      */
     fun test_ldap_config_user_auth(
         body: WriteLDAPConfig
-    ): SDKResponse {
-        return this.put<ByteArray>("/ldap_config/test_user_auth", mapOf(), body)
+    ): SdkResult<ByteArray, com.looker.sdk.Error> {
+        return this.put<ByteArray, com.looker.sdk.Error>(
+            "/ldap_config/test_user_auth", mapOf(), body
+        )
     }
 
     /**
@@ -376,8 +394,8 @@ class LookerSDKStream(authSession: AuthSession) : APIMethods(authSession) {
      */
     @JvmOverloads fun all_oauth_client_apps(
         fields: String? = null
-    ): SDKResponse {
-        return this.get<ByteArray>(
+    ): SdkResult<ByteArray, com.looker.sdk.Error> {
+        return this.get<ByteArray, com.looker.sdk.Error>(
             "/oauth_client_apps",
             mapOf("fields" to fields)
         )
@@ -396,9 +414,9 @@ class LookerSDKStream(authSession: AuthSession) : APIMethods(authSession) {
     @JvmOverloads fun oauth_client_app(
         client_guid: String,
         fields: String? = null
-    ): SDKResponse {
+    ): SdkResult<ByteArray, com.looker.sdk.Error> {
         val path_client_guid = encodeParam(client_guid)
-        return this.get<ByteArray>(
+        return this.get<ByteArray, com.looker.sdk.Error>(
             "/oauth_client_apps/$path_client_guid",
             mapOf("fields" to fields)
         )
@@ -422,9 +440,9 @@ class LookerSDKStream(authSession: AuthSession) : APIMethods(authSession) {
         client_guid: String,
         body: WriteOauthClientApp,
         fields: String? = null
-    ): SDKResponse {
+    ): SdkResult<ByteArray, com.looker.sdk.Error> {
         val path_client_guid = encodeParam(client_guid)
-        return this.post<ByteArray>(
+        return this.post<ByteArray, com.looker.sdk.Error>(
             "/oauth_client_apps/$path_client_guid",
             mapOf("fields" to fields), body
         )
@@ -445,9 +463,9 @@ class LookerSDKStream(authSession: AuthSession) : APIMethods(authSession) {
         client_guid: String,
         body: WriteOauthClientApp,
         fields: String? = null
-    ): SDKResponse {
+    ): SdkResult<ByteArray, com.looker.sdk.Error> {
         val path_client_guid = encodeParam(client_guid)
-        return this.patch<ByteArray>(
+        return this.patch<ByteArray, com.looker.sdk.Error>(
             "/oauth_client_apps/$path_client_guid",
             mapOf("fields" to fields), body
         )
@@ -467,9 +485,11 @@ class LookerSDKStream(authSession: AuthSession) : APIMethods(authSession) {
      */
     fun delete_oauth_client_app(
         client_guid: String
-    ): SDKResponse {
+    ): SdkResult<ByteArray, com.looker.sdk.Error> {
         val path_client_guid = encodeParam(client_guid)
-        return this.delete<ByteArray>("/oauth_client_apps/$path_client_guid", mapOf())
+        return this.delete<ByteArray, com.looker.sdk.Error>(
+            "/oauth_client_apps/$path_client_guid", mapOf()
+        )
     }
 
     /**
@@ -484,9 +504,11 @@ class LookerSDKStream(authSession: AuthSession) : APIMethods(authSession) {
      */
     fun invalidate_tokens(
         client_guid: String
-    ): SDKResponse {
+    ): SdkResult<ByteArray, com.looker.sdk.Error> {
         val path_client_guid = encodeParam(client_guid)
-        return this.delete<ByteArray>("/oauth_client_apps/$path_client_guid/tokens", mapOf())
+        return this.delete<ByteArray, com.looker.sdk.Error>(
+            "/oauth_client_apps/$path_client_guid/tokens", mapOf()
+        )
     }
 
     /**
@@ -508,10 +530,10 @@ class LookerSDKStream(authSession: AuthSession) : APIMethods(authSession) {
         client_guid: String,
         user_id: Long,
         fields: String? = null
-    ): SDKResponse {
+    ): SdkResult<ByteArray, com.looker.sdk.Error> {
         val path_client_guid = encodeParam(client_guid)
         val path_user_id = encodeParam(user_id)
-        return this.post<ByteArray>(
+        return this.post<ByteArray, com.looker.sdk.Error>(
             "/oauth_client_apps/$path_client_guid/users/$path_user_id",
             mapOf("fields" to fields)
         )
@@ -539,10 +561,10 @@ class LookerSDKStream(authSession: AuthSession) : APIMethods(authSession) {
         client_guid: String,
         user_id: Long,
         fields: String? = null
-    ): SDKResponse {
+    ): SdkResult<ByteArray, com.looker.sdk.Error> {
         val path_client_guid = encodeParam(client_guid)
         val path_user_id = encodeParam(user_id)
-        return this.delete<ByteArray>(
+        return this.delete<ByteArray, com.looker.sdk.Error>(
             "/oauth_client_apps/$path_client_guid/users/$path_user_id",
             mapOf("fields" to fields)
         )
@@ -564,8 +586,10 @@ class LookerSDKStream(authSession: AuthSession) : APIMethods(authSession) {
      *
      * GET /oidc_config -> ByteArray
      */
-    fun oidc_config(): SDKResponse {
-        return this.get<ByteArray>("/oidc_config", mapOf())
+    fun oidc_config(): SdkResult<ByteArray, com.looker.sdk.Error> {
+        return this.get<ByteArray, com.looker.sdk.Error>(
+            "/oidc_config", mapOf()
+        )
     }
 
     /**
@@ -585,8 +609,10 @@ class LookerSDKStream(authSession: AuthSession) : APIMethods(authSession) {
      */
     fun update_oidc_config(
         body: WriteOIDCConfig
-    ): SDKResponse {
-        return this.patch<ByteArray>("/oidc_config", mapOf(), body)
+    ): SdkResult<ByteArray, com.looker.sdk.Error> {
+        return this.patch<ByteArray, com.looker.sdk.Error>(
+            "/oidc_config", mapOf(), body
+        )
     }
 
     /**
@@ -598,9 +624,11 @@ class LookerSDKStream(authSession: AuthSession) : APIMethods(authSession) {
      */
     fun oidc_test_config(
         test_slug: String
-    ): SDKResponse {
+    ): SdkResult<ByteArray, com.looker.sdk.Error> {
         val path_test_slug = encodeParam(test_slug)
-        return this.get<ByteArray>("/oidc_test_configs/$path_test_slug", mapOf())
+        return this.get<ByteArray, com.looker.sdk.Error>(
+            "/oidc_test_configs/$path_test_slug", mapOf()
+        )
     }
 
     /**
@@ -612,9 +640,11 @@ class LookerSDKStream(authSession: AuthSession) : APIMethods(authSession) {
      */
     fun delete_oidc_test_config(
         test_slug: String
-    ): SDKResponse {
+    ): SdkResult<ByteArray, com.looker.sdk.Error> {
         val path_test_slug = encodeParam(test_slug)
-        return this.delete<ByteArray>("/oidc_test_configs/$path_test_slug", mapOf())
+        return this.delete<ByteArray, com.looker.sdk.Error>(
+            "/oidc_test_configs/$path_test_slug", mapOf()
+        )
     }
 
     /**
@@ -626,8 +656,10 @@ class LookerSDKStream(authSession: AuthSession) : APIMethods(authSession) {
      */
     fun create_oidc_test_config(
         body: WriteOIDCConfig
-    ): SDKResponse {
-        return this.post<ByteArray>("/oidc_test_configs", mapOf(), body)
+    ): SdkResult<ByteArray, com.looker.sdk.Error> {
+        return this.post<ByteArray, com.looker.sdk.Error>(
+            "/oidc_test_configs", mapOf(), body
+        )
     }
 
     /**
@@ -635,8 +667,10 @@ class LookerSDKStream(authSession: AuthSession) : APIMethods(authSession) {
      *
      * GET /password_config -> ByteArray
      */
-    fun password_config(): SDKResponse {
-        return this.get<ByteArray>("/password_config", mapOf())
+    fun password_config(): SdkResult<ByteArray, com.looker.sdk.Error> {
+        return this.get<ByteArray, com.looker.sdk.Error>(
+            "/password_config", mapOf()
+        )
     }
 
     /**
@@ -648,8 +682,10 @@ class LookerSDKStream(authSession: AuthSession) : APIMethods(authSession) {
      */
     fun update_password_config(
         body: WritePasswordConfig
-    ): SDKResponse {
-        return this.patch<ByteArray>("/password_config", mapOf(), body)
+    ): SdkResult<ByteArray, com.looker.sdk.Error> {
+        return this.patch<ByteArray, com.looker.sdk.Error>(
+            "/password_config", mapOf(), body
+        )
     }
 
     /**
@@ -657,8 +693,10 @@ class LookerSDKStream(authSession: AuthSession) : APIMethods(authSession) {
      *
      * PUT /password_config/force_password_reset_at_next_login_for_all_users -> ByteArray
      */
-    fun force_password_reset_at_next_login_for_all_users(): SDKResponse {
-        return this.put<ByteArray>("/password_config/force_password_reset_at_next_login_for_all_users", mapOf())
+    fun force_password_reset_at_next_login_for_all_users(): SdkResult<ByteArray, com.looker.sdk.Error> {
+        return this.put<ByteArray, com.looker.sdk.Error>(
+            "/password_config/force_password_reset_at_next_login_for_all_users", mapOf()
+        )
     }
 
     /**
@@ -677,8 +715,10 @@ class LookerSDKStream(authSession: AuthSession) : APIMethods(authSession) {
      *
      * GET /saml_config -> ByteArray
      */
-    fun saml_config(): SDKResponse {
-        return this.get<ByteArray>("/saml_config", mapOf())
+    fun saml_config(): SdkResult<ByteArray, com.looker.sdk.Error> {
+        return this.get<ByteArray, com.looker.sdk.Error>(
+            "/saml_config", mapOf()
+        )
     }
 
     /**
@@ -698,8 +738,10 @@ class LookerSDKStream(authSession: AuthSession) : APIMethods(authSession) {
      */
     fun update_saml_config(
         body: WriteSamlConfig
-    ): SDKResponse {
-        return this.patch<ByteArray>("/saml_config", mapOf(), body)
+    ): SdkResult<ByteArray, com.looker.sdk.Error> {
+        return this.patch<ByteArray, com.looker.sdk.Error>(
+            "/saml_config", mapOf(), body
+        )
     }
 
     /**
@@ -711,9 +753,11 @@ class LookerSDKStream(authSession: AuthSession) : APIMethods(authSession) {
      */
     fun saml_test_config(
         test_slug: String
-    ): SDKResponse {
+    ): SdkResult<ByteArray, com.looker.sdk.Error> {
         val path_test_slug = encodeParam(test_slug)
-        return this.get<ByteArray>("/saml_test_configs/$path_test_slug", mapOf())
+        return this.get<ByteArray, com.looker.sdk.Error>(
+            "/saml_test_configs/$path_test_slug", mapOf()
+        )
     }
 
     /**
@@ -725,9 +769,11 @@ class LookerSDKStream(authSession: AuthSession) : APIMethods(authSession) {
      */
     fun delete_saml_test_config(
         test_slug: String
-    ): SDKResponse {
+    ): SdkResult<ByteArray, com.looker.sdk.Error> {
         val path_test_slug = encodeParam(test_slug)
-        return this.delete<ByteArray>("/saml_test_configs/$path_test_slug", mapOf())
+        return this.delete<ByteArray, com.looker.sdk.Error>(
+            "/saml_test_configs/$path_test_slug", mapOf()
+        )
     }
 
     /**
@@ -739,8 +785,10 @@ class LookerSDKStream(authSession: AuthSession) : APIMethods(authSession) {
      */
     fun create_saml_test_config(
         body: WriteSamlConfig
-    ): SDKResponse {
-        return this.post<ByteArray>("/saml_test_configs", mapOf(), body)
+    ): SdkResult<ByteArray, com.looker.sdk.Error> {
+        return this.post<ByteArray, com.looker.sdk.Error>(
+            "/saml_test_configs", mapOf(), body
+        )
     }
 
     /**
@@ -752,8 +800,10 @@ class LookerSDKStream(authSession: AuthSession) : APIMethods(authSession) {
      */
     fun parse_saml_idp_metadata(
         body: String
-    ): SDKResponse {
-        return this.post<ByteArray>("/parse_saml_idp_metadata", mapOf(), body)
+    ): SdkResult<ByteArray, com.looker.sdk.Error> {
+        return this.post<ByteArray, com.looker.sdk.Error>(
+            "/parse_saml_idp_metadata", mapOf(), body
+        )
     }
 
     /**
@@ -767,8 +817,10 @@ class LookerSDKStream(authSession: AuthSession) : APIMethods(authSession) {
      */
     fun fetch_and_parse_saml_idp_metadata(
         body: String
-    ): SDKResponse {
-        return this.post<ByteArray>("/fetch_and_parse_saml_idp_metadata", mapOf(), body)
+    ): SdkResult<ByteArray, com.looker.sdk.Error> {
+        return this.post<ByteArray, com.looker.sdk.Error>(
+            "/fetch_and_parse_saml_idp_metadata", mapOf(), body
+        )
     }
 
     /**
@@ -776,8 +828,10 @@ class LookerSDKStream(authSession: AuthSession) : APIMethods(authSession) {
      *
      * GET /session_config -> ByteArray
      */
-    fun session_config(): SDKResponse {
-        return this.get<ByteArray>("/session_config", mapOf())
+    fun session_config(): SdkResult<ByteArray, com.looker.sdk.Error> {
+        return this.get<ByteArray, com.looker.sdk.Error>(
+            "/session_config", mapOf()
+        )
     }
 
     /**
@@ -789,8 +843,10 @@ class LookerSDKStream(authSession: AuthSession) : APIMethods(authSession) {
      */
     fun update_session_config(
         body: WriteSessionConfig
-    ): SDKResponse {
-        return this.patch<ByteArray>("/session_config", mapOf(), body)
+    ): SdkResult<ByteArray, com.looker.sdk.Error> {
+        return this.patch<ByteArray, com.looker.sdk.Error>(
+            "/session_config", mapOf(), body
+        )
     }
 
     /**
@@ -802,8 +858,8 @@ class LookerSDKStream(authSession: AuthSession) : APIMethods(authSession) {
      */
     @JvmOverloads fun all_user_login_lockouts(
         fields: String? = null
-    ): SDKResponse {
-        return this.get<ByteArray>(
+    ): SdkResult<ByteArray, com.looker.sdk.Error> {
+        return this.get<ByteArray, com.looker.sdk.Error>(
             "/user_login_lockouts",
             mapOf("fields" to fields)
         )
@@ -834,8 +890,8 @@ class LookerSDKStream(authSession: AuthSession) : APIMethods(authSession) {
         email: String? = null,
         remote_id: String? = null,
         filter_or: Boolean? = null
-    ): SDKResponse {
-        return this.get<ByteArray>(
+    ): SdkResult<ByteArray, com.looker.sdk.Error> {
+        return this.get<ByteArray, com.looker.sdk.Error>(
             "/user_login_lockouts/search",
             mapOf(
                 "fields" to fields,
@@ -860,9 +916,11 @@ class LookerSDKStream(authSession: AuthSession) : APIMethods(authSession) {
      */
     fun delete_user_login_lockout(
         key: String
-    ): SDKResponse {
+    ): SdkResult<ByteArray, com.looker.sdk.Error> {
         val path_key = encodeParam(key)
-        return this.delete<ByteArray>("/user_login_lockout/$path_key", mapOf())
+        return this.delete<ByteArray, com.looker.sdk.Error>(
+            "/user_login_lockout/$path_key", mapOf()
+        )
     }
 
     //endregion Auth: Manage User Authentication Configuration
@@ -878,8 +936,8 @@ class LookerSDKStream(authSession: AuthSession) : APIMethods(authSession) {
      */
     @JvmOverloads fun all_boards(
         fields: String? = null
-    ): SDKResponse {
-        return this.get<ByteArray>(
+    ): SdkResult<ByteArray, com.looker.sdk.Error> {
+        return this.get<ByteArray, com.looker.sdk.Error>(
             "/boards",
             mapOf("fields" to fields)
         )
@@ -896,8 +954,8 @@ class LookerSDKStream(authSession: AuthSession) : APIMethods(authSession) {
     @JvmOverloads fun create_board(
         body: WriteBoard,
         fields: String? = null
-    ): SDKResponse {
-        return this.post<ByteArray>(
+    ): SdkResult<ByteArray, com.looker.sdk.Error> {
+        return this.post<ByteArray, com.looker.sdk.Error>(
             "/boards",
             mapOf("fields" to fields), body
         )
@@ -957,8 +1015,8 @@ class LookerSDKStream(authSession: AuthSession) : APIMethods(authSession) {
         offset: Long? = null,
         limit: Long? = null,
         filter_or: Boolean? = null
-    ): SDKResponse {
-        return this.get<ByteArray>(
+    ): SdkResult<ByteArray, com.looker.sdk.Error> {
+        return this.get<ByteArray, com.looker.sdk.Error>(
             "/boards/search",
             mapOf(
                 "title" to title,
@@ -989,9 +1047,9 @@ class LookerSDKStream(authSession: AuthSession) : APIMethods(authSession) {
     @JvmOverloads fun board(
         board_id: Long,
         fields: String? = null
-    ): SDKResponse {
+    ): SdkResult<ByteArray, com.looker.sdk.Error> {
         val path_board_id = encodeParam(board_id)
-        return this.get<ByteArray>(
+        return this.get<ByteArray, com.looker.sdk.Error>(
             "/boards/$path_board_id",
             mapOf("fields" to fields)
         )
@@ -1010,9 +1068,9 @@ class LookerSDKStream(authSession: AuthSession) : APIMethods(authSession) {
         board_id: Long,
         body: WriteBoard,
         fields: String? = null
-    ): SDKResponse {
+    ): SdkResult<ByteArray, com.looker.sdk.Error> {
         val path_board_id = encodeParam(board_id)
-        return this.patch<ByteArray>(
+        return this.patch<ByteArray, com.looker.sdk.Error>(
             "/boards/$path_board_id",
             mapOf("fields" to fields), body
         )
@@ -1027,9 +1085,11 @@ class LookerSDKStream(authSession: AuthSession) : APIMethods(authSession) {
      */
     fun delete_board(
         board_id: Long
-    ): SDKResponse {
+    ): SdkResult<ByteArray, com.looker.sdk.Error> {
         val path_board_id = encodeParam(board_id)
-        return this.delete<ByteArray>("/boards/$path_board_id", mapOf())
+        return this.delete<ByteArray, com.looker.sdk.Error>(
+            "/boards/$path_board_id", mapOf()
+        )
     }
 
     /**
@@ -1045,8 +1105,8 @@ class LookerSDKStream(authSession: AuthSession) : APIMethods(authSession) {
         fields: String? = null,
         sorts: String? = null,
         board_section_id: String? = null
-    ): SDKResponse {
-        return this.get<ByteArray>(
+    ): SdkResult<ByteArray, com.looker.sdk.Error> {
+        return this.get<ByteArray, com.looker.sdk.Error>(
             "/board_items",
             mapOf(
                 "fields" to fields,
@@ -1067,8 +1127,8 @@ class LookerSDKStream(authSession: AuthSession) : APIMethods(authSession) {
     @JvmOverloads fun create_board_item(
         body: WriteBoardItem,
         fields: String? = null
-    ): SDKResponse {
-        return this.post<ByteArray>(
+    ): SdkResult<ByteArray, com.looker.sdk.Error> {
+        return this.post<ByteArray, com.looker.sdk.Error>(
             "/board_items",
             mapOf("fields" to fields), body
         )
@@ -1085,9 +1145,9 @@ class LookerSDKStream(authSession: AuthSession) : APIMethods(authSession) {
     @JvmOverloads fun board_item(
         board_item_id: Long,
         fields: String? = null
-    ): SDKResponse {
+    ): SdkResult<ByteArray, com.looker.sdk.Error> {
         val path_board_item_id = encodeParam(board_item_id)
-        return this.get<ByteArray>(
+        return this.get<ByteArray, com.looker.sdk.Error>(
             "/board_items/$path_board_item_id",
             mapOf("fields" to fields)
         )
@@ -1106,9 +1166,9 @@ class LookerSDKStream(authSession: AuthSession) : APIMethods(authSession) {
         board_item_id: Long,
         body: WriteBoardItem,
         fields: String? = null
-    ): SDKResponse {
+    ): SdkResult<ByteArray, com.looker.sdk.Error> {
         val path_board_item_id = encodeParam(board_item_id)
-        return this.patch<ByteArray>(
+        return this.patch<ByteArray, com.looker.sdk.Error>(
             "/board_items/$path_board_item_id",
             mapOf("fields" to fields), body
         )
@@ -1123,9 +1183,11 @@ class LookerSDKStream(authSession: AuthSession) : APIMethods(authSession) {
      */
     fun delete_board_item(
         board_item_id: Long
-    ): SDKResponse {
+    ): SdkResult<ByteArray, com.looker.sdk.Error> {
         val path_board_item_id = encodeParam(board_item_id)
-        return this.delete<ByteArray>("/board_items/$path_board_item_id", mapOf())
+        return this.delete<ByteArray, com.looker.sdk.Error>(
+            "/board_items/$path_board_item_id", mapOf()
+        )
     }
 
     /**
@@ -1139,8 +1201,8 @@ class LookerSDKStream(authSession: AuthSession) : APIMethods(authSession) {
     @JvmOverloads fun all_board_sections(
         fields: String? = null,
         sorts: String? = null
-    ): SDKResponse {
-        return this.get<ByteArray>(
+    ): SdkResult<ByteArray, com.looker.sdk.Error> {
+        return this.get<ByteArray, com.looker.sdk.Error>(
             "/board_sections",
             mapOf(
                 "fields" to fields,
@@ -1160,8 +1222,8 @@ class LookerSDKStream(authSession: AuthSession) : APIMethods(authSession) {
     @JvmOverloads fun create_board_section(
         body: WriteBoardSection,
         fields: String? = null
-    ): SDKResponse {
-        return this.post<ByteArray>(
+    ): SdkResult<ByteArray, com.looker.sdk.Error> {
+        return this.post<ByteArray, com.looker.sdk.Error>(
             "/board_sections",
             mapOf("fields" to fields), body
         )
@@ -1178,9 +1240,9 @@ class LookerSDKStream(authSession: AuthSession) : APIMethods(authSession) {
     @JvmOverloads fun board_section(
         board_section_id: Long,
         fields: String? = null
-    ): SDKResponse {
+    ): SdkResult<ByteArray, com.looker.sdk.Error> {
         val path_board_section_id = encodeParam(board_section_id)
-        return this.get<ByteArray>(
+        return this.get<ByteArray, com.looker.sdk.Error>(
             "/board_sections/$path_board_section_id",
             mapOf("fields" to fields)
         )
@@ -1199,9 +1261,9 @@ class LookerSDKStream(authSession: AuthSession) : APIMethods(authSession) {
         board_section_id: Long,
         body: WriteBoardSection,
         fields: String? = null
-    ): SDKResponse {
+    ): SdkResult<ByteArray, com.looker.sdk.Error> {
         val path_board_section_id = encodeParam(board_section_id)
-        return this.patch<ByteArray>(
+        return this.patch<ByteArray, com.looker.sdk.Error>(
             "/board_sections/$path_board_section_id",
             mapOf("fields" to fields), body
         )
@@ -1216,9 +1278,11 @@ class LookerSDKStream(authSession: AuthSession) : APIMethods(authSession) {
      */
     fun delete_board_section(
         board_section_id: Long
-    ): SDKResponse {
+    ): SdkResult<ByteArray, com.looker.sdk.Error> {
         val path_board_section_id = encodeParam(board_section_id)
-        return this.delete<ByteArray>("/board_sections/$path_board_section_id", mapOf())
+        return this.delete<ByteArray, com.looker.sdk.Error>(
+            "/board_sections/$path_board_section_id", mapOf()
+        )
     }
 
     //endregion Board: Manage Boards
@@ -1241,8 +1305,8 @@ class LookerSDKStream(authSession: AuthSession) : APIMethods(authSession) {
      */
     @JvmOverloads fun all_color_collections(
         fields: String? = null
-    ): SDKResponse {
-        return this.get<ByteArray>(
+    ): SdkResult<ByteArray, com.looker.sdk.Error> {
+        return this.get<ByteArray, com.looker.sdk.Error>(
             "/color_collections",
             mapOf("fields" to fields)
         )
@@ -1265,8 +1329,10 @@ class LookerSDKStream(authSession: AuthSession) : APIMethods(authSession) {
      */
     fun create_color_collection(
         body: WriteColorCollection
-    ): SDKResponse {
-        return this.post<ByteArray>("/color_collections", mapOf(), body)
+    ): SdkResult<ByteArray, com.looker.sdk.Error> {
+        return this.post<ByteArray, com.looker.sdk.Error>(
+            "/color_collections", mapOf(), body
+        )
     }
 
     /**
@@ -1283,8 +1349,8 @@ class LookerSDKStream(authSession: AuthSession) : APIMethods(authSession) {
      */
     @JvmOverloads fun color_collections_custom(
         fields: String? = null
-    ): SDKResponse {
-        return this.get<ByteArray>(
+    ): SdkResult<ByteArray, com.looker.sdk.Error> {
+        return this.get<ByteArray, com.looker.sdk.Error>(
             "/color_collections/custom",
             mapOf("fields" to fields)
         )
@@ -1304,8 +1370,8 @@ class LookerSDKStream(authSession: AuthSession) : APIMethods(authSession) {
      */
     @JvmOverloads fun color_collections_standard(
         fields: String? = null
-    ): SDKResponse {
-        return this.get<ByteArray>(
+    ): SdkResult<ByteArray, com.looker.sdk.Error> {
+        return this.get<ByteArray, com.looker.sdk.Error>(
             "/color_collections/standard",
             mapOf("fields" to fields)
         )
@@ -1320,8 +1386,10 @@ class LookerSDKStream(authSession: AuthSession) : APIMethods(authSession) {
      *
      * GET /color_collections/default -> ByteArray
      */
-    fun default_color_collection(): SDKResponse {
-        return this.get<ByteArray>("/color_collections/default", mapOf())
+    fun default_color_collection(): SdkResult<ByteArray, com.looker.sdk.Error> {
+        return this.get<ByteArray, com.looker.sdk.Error>(
+            "/color_collections/default", mapOf()
+        )
     }
 
     /**
@@ -1336,8 +1404,8 @@ class LookerSDKStream(authSession: AuthSession) : APIMethods(authSession) {
      */
     fun set_default_color_collection(
         collection_id: String
-    ): SDKResponse {
-        return this.put<ByteArray>(
+    ): SdkResult<ByteArray, com.looker.sdk.Error> {
+        return this.put<ByteArray, com.looker.sdk.Error>(
             "/color_collections/default",
             mapOf("collection_id" to collection_id)
         )
@@ -1363,9 +1431,9 @@ class LookerSDKStream(authSession: AuthSession) : APIMethods(authSession) {
     @JvmOverloads fun color_collection(
         collection_id: String,
         fields: String? = null
-    ): SDKResponse {
+    ): SdkResult<ByteArray, com.looker.sdk.Error> {
         val path_collection_id = encodeParam(collection_id)
-        return this.get<ByteArray>(
+        return this.get<ByteArray, com.looker.sdk.Error>(
             "/color_collections/$path_collection_id",
             mapOf("fields" to fields)
         )
@@ -1383,9 +1451,11 @@ class LookerSDKStream(authSession: AuthSession) : APIMethods(authSession) {
     fun update_color_collection(
         collection_id: String,
         body: WriteColorCollection
-    ): SDKResponse {
+    ): SdkResult<ByteArray, com.looker.sdk.Error> {
         val path_collection_id = encodeParam(collection_id)
-        return this.patch<ByteArray>("/color_collections/$path_collection_id", mapOf(), body)
+        return this.patch<ByteArray, com.looker.sdk.Error>(
+            "/color_collections/$path_collection_id", mapOf(), body
+        )
     }
 
     /**
@@ -1404,9 +1474,11 @@ class LookerSDKStream(authSession: AuthSession) : APIMethods(authSession) {
      */
     fun delete_color_collection(
         collection_id: String
-    ): SDKResponse {
+    ): SdkResult<ByteArray, com.looker.sdk.Error> {
         val path_collection_id = encodeParam(collection_id)
-        return this.delete<ByteArray>("/color_collections/$path_collection_id", mapOf())
+        return this.delete<ByteArray, com.looker.sdk.Error>(
+            "/color_collections/$path_collection_id", mapOf()
+        )
     }
 
     //endregion ColorCollection: Manage Color Collections
@@ -1426,8 +1498,8 @@ class LookerSDKStream(authSession: AuthSession) : APIMethods(authSession) {
         content_id: String? = null,
         content_type: String? = null,
         limit: Long? = null
-    ): SDKResponse {
-        return this.get<ByteArray>(
+    ): SdkResult<ByteArray, com.looker.sdk.Error> {
+        return this.get<ByteArray, com.looker.sdk.Error>(
             "/commands",
             mapOf(
                 "content_id" to content_id,
@@ -1449,8 +1521,10 @@ class LookerSDKStream(authSession: AuthSession) : APIMethods(authSession) {
      */
     fun create_command(
         body: WriteCommand
-    ): SDKResponse {
-        return this.post<ByteArray>("/commands", mapOf(), body)
+    ): SdkResult<ByteArray, com.looker.sdk.Error> {
+        return this.post<ByteArray, com.looker.sdk.Error>(
+            "/commands", mapOf(), body
+        )
     }
 
     /**
@@ -1466,9 +1540,11 @@ class LookerSDKStream(authSession: AuthSession) : APIMethods(authSession) {
     fun update_command(
         command_id: Long,
         body: UpdateCommand
-    ): SDKResponse {
+    ): SdkResult<ByteArray, com.looker.sdk.Error> {
         val path_command_id = encodeParam(command_id)
-        return this.patch<ByteArray>("/commands/$path_command_id", mapOf(), body)
+        return this.patch<ByteArray, com.looker.sdk.Error>(
+            "/commands/$path_command_id", mapOf(), body
+        )
     }
 
     /**
@@ -1480,9 +1556,11 @@ class LookerSDKStream(authSession: AuthSession) : APIMethods(authSession) {
      */
     fun delete_command(
         command_id: Long
-    ): SDKResponse {
+    ): SdkResult<ByteArray, com.looker.sdk.Error> {
         val path_command_id = encodeParam(command_id)
-        return this.delete<ByteArray>("/commands/$path_command_id", mapOf())
+        return this.delete<ByteArray, com.looker.sdk.Error>(
+            "/commands/$path_command_id", mapOf()
+        )
     }
 
     //endregion Command: Manage Commands
@@ -1494,8 +1572,10 @@ class LookerSDKStream(authSession: AuthSession) : APIMethods(authSession) {
      *
      * GET /cloud_storage -> ByteArray
      */
-    fun cloud_storage_configuration(): SDKResponse {
-        return this.get<ByteArray>("/cloud_storage", mapOf())
+    fun cloud_storage_configuration(): SdkResult<ByteArray, com.looker.sdk.Error> {
+        return this.get<ByteArray, com.looker.sdk.Error>(
+            "/cloud_storage", mapOf()
+        )
     }
 
     /**
@@ -1507,8 +1587,10 @@ class LookerSDKStream(authSession: AuthSession) : APIMethods(authSession) {
      */
     fun update_cloud_storage_configuration(
         body: WriteBackupConfiguration
-    ): SDKResponse {
-        return this.patch<ByteArray>("/cloud_storage", mapOf(), body)
+    ): SdkResult<ByteArray, com.looker.sdk.Error> {
+        return this.patch<ByteArray, com.looker.sdk.Error>(
+            "/cloud_storage", mapOf(), body
+        )
     }
 
     /**
@@ -1516,8 +1598,10 @@ class LookerSDKStream(authSession: AuthSession) : APIMethods(authSession) {
      *
      * GET /custom_welcome_email -> ByteArray
      */
-    fun custom_welcome_email(): SDKResponse {
-        return this.get<ByteArray>("/custom_welcome_email", mapOf())
+    fun custom_welcome_email(): SdkResult<ByteArray, com.looker.sdk.Error> {
+        return this.get<ByteArray, com.looker.sdk.Error>(
+            "/custom_welcome_email", mapOf()
+        )
     }
 
     /**
@@ -1531,8 +1615,8 @@ class LookerSDKStream(authSession: AuthSession) : APIMethods(authSession) {
     @JvmOverloads fun update_custom_welcome_email(
         body: WriteCustomWelcomeEmail,
         send_test_welcome_email: Boolean? = null
-    ): SDKResponse {
-        return this.patch<ByteArray>(
+    ): SdkResult<ByteArray, com.looker.sdk.Error> {
+        return this.patch<ByteArray, com.looker.sdk.Error>(
             "/custom_welcome_email",
             mapOf("send_test_welcome_email" to send_test_welcome_email), body
         )
@@ -1547,8 +1631,10 @@ class LookerSDKStream(authSession: AuthSession) : APIMethods(authSession) {
      */
     fun update_custom_welcome_email_test(
         body: WelcomeEmailTest
-    ): SDKResponse {
-        return this.put<ByteArray>("/custom_welcome_email_test", mapOf(), body)
+    ): SdkResult<ByteArray, com.looker.sdk.Error> {
+        return this.put<ByteArray, com.looker.sdk.Error>(
+            "/custom_welcome_email_test", mapOf(), body
+        )
     }
 
     /**
@@ -1556,8 +1642,10 @@ class LookerSDKStream(authSession: AuthSession) : APIMethods(authSession) {
      *
      * GET /digest_emails_enabled -> ByteArray
      */
-    fun digest_emails_enabled(): SDKResponse {
-        return this.get<ByteArray>("/digest_emails_enabled", mapOf())
+    fun digest_emails_enabled(): SdkResult<ByteArray, com.looker.sdk.Error> {
+        return this.get<ByteArray, com.looker.sdk.Error>(
+            "/digest_emails_enabled", mapOf()
+        )
     }
 
     /**
@@ -1569,8 +1657,10 @@ class LookerSDKStream(authSession: AuthSession) : APIMethods(authSession) {
      */
     fun update_digest_emails_enabled(
         body: DigestEmails
-    ): SDKResponse {
-        return this.patch<ByteArray>("/digest_emails_enabled", mapOf(), body)
+    ): SdkResult<ByteArray, com.looker.sdk.Error> {
+        return this.patch<ByteArray, com.looker.sdk.Error>(
+            "/digest_emails_enabled", mapOf(), body
+        )
     }
 
     /**
@@ -1580,8 +1670,10 @@ class LookerSDKStream(authSession: AuthSession) : APIMethods(authSession) {
      *
      * POST /digest_email_send -> ByteArray
      */
-    fun create_digest_email_send(): SDKResponse {
-        return this.post<ByteArray>("/digest_email_send", mapOf())
+    fun create_digest_email_send(): SdkResult<ByteArray, com.looker.sdk.Error> {
+        return this.post<ByteArray, com.looker.sdk.Error>(
+            "/digest_email_send", mapOf()
+        )
     }
 
     /**
@@ -1589,8 +1681,10 @@ class LookerSDKStream(authSession: AuthSession) : APIMethods(authSession) {
      *
      * GET /internal_help_resources_content -> ByteArray
      */
-    fun internal_help_resources_content(): SDKResponse {
-        return this.get<ByteArray>("/internal_help_resources_content", mapOf())
+    fun internal_help_resources_content(): SdkResult<ByteArray, com.looker.sdk.Error> {
+        return this.get<ByteArray, com.looker.sdk.Error>(
+            "/internal_help_resources_content", mapOf()
+        )
     }
 
     /**
@@ -1602,8 +1696,10 @@ class LookerSDKStream(authSession: AuthSession) : APIMethods(authSession) {
      */
     fun update_internal_help_resources_content(
         body: WriteInternalHelpResourcesContent
-    ): SDKResponse {
-        return this.patch<ByteArray>("/internal_help_resources_content", mapOf(), body)
+    ): SdkResult<ByteArray, com.looker.sdk.Error> {
+        return this.patch<ByteArray, com.looker.sdk.Error>(
+            "/internal_help_resources_content", mapOf(), body
+        )
     }
 
     /**
@@ -1611,8 +1707,10 @@ class LookerSDKStream(authSession: AuthSession) : APIMethods(authSession) {
      *
      * GET /internal_help_resources_enabled -> ByteArray
      */
-    fun internal_help_resources(): SDKResponse {
-        return this.get<ByteArray>("/internal_help_resources_enabled", mapOf())
+    fun internal_help_resources(): SdkResult<ByteArray, com.looker.sdk.Error> {
+        return this.get<ByteArray, com.looker.sdk.Error>(
+            "/internal_help_resources_enabled", mapOf()
+        )
     }
 
     /**
@@ -1624,8 +1722,10 @@ class LookerSDKStream(authSession: AuthSession) : APIMethods(authSession) {
      */
     fun update_internal_help_resources(
         body: WriteInternalHelpResources
-    ): SDKResponse {
-        return this.patch<ByteArray>("/internal_help_resources", mapOf(), body)
+    ): SdkResult<ByteArray, com.looker.sdk.Error> {
+        return this.patch<ByteArray, com.looker.sdk.Error>(
+            "/internal_help_resources", mapOf(), body
+        )
     }
 
     /**
@@ -1633,8 +1733,10 @@ class LookerSDKStream(authSession: AuthSession) : APIMethods(authSession) {
      *
      * GET /legacy_features -> ByteArray
      */
-    fun all_legacy_features(): SDKResponse {
-        return this.get<ByteArray>("/legacy_features", mapOf())
+    fun all_legacy_features(): SdkResult<ByteArray, com.looker.sdk.Error> {
+        return this.get<ByteArray, com.looker.sdk.Error>(
+            "/legacy_features", mapOf()
+        )
     }
 
     /**
@@ -1646,9 +1748,11 @@ class LookerSDKStream(authSession: AuthSession) : APIMethods(authSession) {
      */
     fun legacy_feature(
         legacy_feature_id: String
-    ): SDKResponse {
+    ): SdkResult<ByteArray, com.looker.sdk.Error> {
         val path_legacy_feature_id = encodeParam(legacy_feature_id)
-        return this.get<ByteArray>("/legacy_features/$path_legacy_feature_id", mapOf())
+        return this.get<ByteArray, com.looker.sdk.Error>(
+            "/legacy_features/$path_legacy_feature_id", mapOf()
+        )
     }
 
     /**
@@ -1662,9 +1766,11 @@ class LookerSDKStream(authSession: AuthSession) : APIMethods(authSession) {
     fun update_legacy_feature(
         legacy_feature_id: String,
         body: WriteLegacyFeature
-    ): SDKResponse {
+    ): SdkResult<ByteArray, com.looker.sdk.Error> {
         val path_legacy_feature_id = encodeParam(legacy_feature_id)
-        return this.patch<ByteArray>("/legacy_features/$path_legacy_feature_id", mapOf(), body)
+        return this.patch<ByteArray, com.looker.sdk.Error>(
+            "/legacy_features/$path_legacy_feature_id", mapOf(), body
+        )
     }
 
     /**
@@ -1672,8 +1778,10 @@ class LookerSDKStream(authSession: AuthSession) : APIMethods(authSession) {
      *
      * GET /locales -> ByteArray
      */
-    fun all_locales(): SDKResponse {
-        return this.get<ByteArray>("/locales", mapOf())
+    fun all_locales(): SdkResult<ByteArray, com.looker.sdk.Error> {
+        return this.get<ByteArray, com.looker.sdk.Error>(
+            "/locales", mapOf()
+        )
     }
 
     /**
@@ -1681,8 +1789,10 @@ class LookerSDKStream(authSession: AuthSession) : APIMethods(authSession) {
      *
      * GET /timezones -> ByteArray
      */
-    fun all_timezones(): SDKResponse {
-        return this.get<ByteArray>("/timezones", mapOf())
+    fun all_timezones(): SdkResult<ByteArray, com.looker.sdk.Error> {
+        return this.get<ByteArray, com.looker.sdk.Error>(
+            "/timezones", mapOf()
+        )
     }
 
     /**
@@ -1694,8 +1804,8 @@ class LookerSDKStream(authSession: AuthSession) : APIMethods(authSession) {
      */
     @JvmOverloads fun versions(
         fields: String? = null
-    ): SDKResponse {
-        return this.get<ByteArray>(
+    ): SdkResult<ByteArray, com.looker.sdk.Error> {
+        return this.get<ByteArray, com.looker.sdk.Error>(
             "/versions",
             mapOf("fields" to fields)
         )
@@ -1711,8 +1821,8 @@ class LookerSDKStream(authSession: AuthSession) : APIMethods(authSession) {
      */
     @JvmOverloads fun whitelabel_configuration(
         fields: String? = null
-    ): SDKResponse {
-        return this.get<ByteArray>(
+    ): SdkResult<ByteArray, com.looker.sdk.Error> {
+        return this.get<ByteArray, com.looker.sdk.Error>(
             "/whitelabel_configuration",
             mapOf("fields" to fields)
         )
@@ -1727,8 +1837,10 @@ class LookerSDKStream(authSession: AuthSession) : APIMethods(authSession) {
      */
     fun update_whitelabel_configuration(
         body: WriteWhitelabelConfiguration
-    ): SDKResponse {
-        return this.put<ByteArray>("/whitelabel_configuration", mapOf(), body)
+    ): SdkResult<ByteArray, com.looker.sdk.Error> {
+        return this.put<ByteArray, com.looker.sdk.Error>(
+            "/whitelabel_configuration", mapOf(), body
+        )
     }
 
     //endregion Config: Manage General Configuration
@@ -1744,8 +1856,8 @@ class LookerSDKStream(authSession: AuthSession) : APIMethods(authSession) {
      */
     @JvmOverloads fun all_connections(
         fields: String? = null
-    ): SDKResponse {
-        return this.get<ByteArray>(
+    ): SdkResult<ByteArray, com.looker.sdk.Error> {
+        return this.get<ByteArray, com.looker.sdk.Error>(
             "/connections",
             mapOf("fields" to fields)
         )
@@ -1760,8 +1872,10 @@ class LookerSDKStream(authSession: AuthSession) : APIMethods(authSession) {
      */
     fun create_connection(
         body: WriteDBConnection
-    ): SDKResponse {
-        return this.post<ByteArray>("/connections", mapOf(), body)
+    ): SdkResult<ByteArray, com.looker.sdk.Error> {
+        return this.post<ByteArray, com.looker.sdk.Error>(
+            "/connections", mapOf(), body
+        )
     }
 
     /**
@@ -1775,9 +1889,9 @@ class LookerSDKStream(authSession: AuthSession) : APIMethods(authSession) {
     @JvmOverloads fun connection(
         connection_name: String,
         fields: String? = null
-    ): SDKResponse {
+    ): SdkResult<ByteArray, com.looker.sdk.Error> {
         val path_connection_name = encodeParam(connection_name)
-        return this.get<ByteArray>(
+        return this.get<ByteArray, com.looker.sdk.Error>(
             "/connections/$path_connection_name",
             mapOf("fields" to fields)
         )
@@ -1794,9 +1908,11 @@ class LookerSDKStream(authSession: AuthSession) : APIMethods(authSession) {
     fun update_connection(
         connection_name: String,
         body: WriteDBConnection
-    ): SDKResponse {
+    ): SdkResult<ByteArray, com.looker.sdk.Error> {
         val path_connection_name = encodeParam(connection_name)
-        return this.patch<ByteArray>("/connections/$path_connection_name", mapOf(), body)
+        return this.patch<ByteArray, com.looker.sdk.Error>(
+            "/connections/$path_connection_name", mapOf(), body
+        )
     }
 
     /**
@@ -1808,9 +1924,11 @@ class LookerSDKStream(authSession: AuthSession) : APIMethods(authSession) {
      */
     fun delete_connection(
         connection_name: String
-    ): SDKResponse {
+    ): SdkResult<ByteArray, com.looker.sdk.Error> {
         val path_connection_name = encodeParam(connection_name)
-        return this.delete<ByteArray>("/connections/$path_connection_name", mapOf())
+        return this.delete<ByteArray, com.looker.sdk.Error>(
+            "/connections/$path_connection_name", mapOf()
+        )
     }
 
     /**
@@ -1824,10 +1942,12 @@ class LookerSDKStream(authSession: AuthSession) : APIMethods(authSession) {
     fun delete_connection_override(
         connection_name: String,
         override_context: String
-    ): SDKResponse {
+    ): SdkResult<ByteArray, com.looker.sdk.Error> {
         val path_connection_name = encodeParam(connection_name)
         val path_override_context = encodeParam(override_context)
-        return this.delete<ByteArray>("/connections/$path_connection_name/connection_override/$path_override_context", mapOf())
+        return this.delete<ByteArray, com.looker.sdk.Error>(
+            "/connections/$path_connection_name/connection_override/$path_override_context", mapOf()
+        )
     }
 
     /**
@@ -1848,9 +1968,9 @@ class LookerSDKStream(authSession: AuthSession) : APIMethods(authSession) {
     @JvmOverloads fun test_connection(
         connection_name: String,
         tests: DelimArray<String>? = null
-    ): SDKResponse {
+    ): SdkResult<ByteArray, com.looker.sdk.Error> {
         val path_connection_name = encodeParam(connection_name)
-        return this.put<ByteArray>(
+        return this.put<ByteArray, com.looker.sdk.Error>(
             "/connections/$path_connection_name/test",
             mapOf("tests" to tests)
         )
@@ -1874,8 +1994,8 @@ class LookerSDKStream(authSession: AuthSession) : APIMethods(authSession) {
     @JvmOverloads fun test_connection_config(
         body: WriteDBConnection,
         tests: DelimArray<String>? = null
-    ): SDKResponse {
-        return this.put<ByteArray>(
+    ): SdkResult<ByteArray, com.looker.sdk.Error> {
+        return this.put<ByteArray, com.looker.sdk.Error>(
             "/connections/test",
             mapOf("tests" to tests), body
         )
@@ -1890,8 +2010,8 @@ class LookerSDKStream(authSession: AuthSession) : APIMethods(authSession) {
      */
     @JvmOverloads fun all_dialect_infos(
         fields: String? = null
-    ): SDKResponse {
-        return this.get<ByteArray>(
+    ): SdkResult<ByteArray, com.looker.sdk.Error> {
+        return this.get<ByteArray, com.looker.sdk.Error>(
             "/dialect_info",
             mapOf("fields" to fields)
         )
@@ -1906,8 +2026,8 @@ class LookerSDKStream(authSession: AuthSession) : APIMethods(authSession) {
      */
     @JvmOverloads fun all_ssh_servers(
         fields: String? = null
-    ): SDKResponse {
-        return this.get<ByteArray>(
+    ): SdkResult<ByteArray, com.looker.sdk.Error> {
+        return this.get<ByteArray, com.looker.sdk.Error>(
             "/ssh_servers",
             mapOf("fields" to fields)
         )
@@ -1922,8 +2042,10 @@ class LookerSDKStream(authSession: AuthSession) : APIMethods(authSession) {
      */
     fun create_ssh_server(
         body: WriteSshServer
-    ): SDKResponse {
-        return this.post<ByteArray>("/ssh_servers", mapOf(), body)
+    ): SdkResult<ByteArray, com.looker.sdk.Error> {
+        return this.post<ByteArray, com.looker.sdk.Error>(
+            "/ssh_servers", mapOf(), body
+        )
     }
 
     /**
@@ -1935,9 +2057,11 @@ class LookerSDKStream(authSession: AuthSession) : APIMethods(authSession) {
      */
     fun ssh_server(
         ssh_server_id: String
-    ): SDKResponse {
+    ): SdkResult<ByteArray, com.looker.sdk.Error> {
         val path_ssh_server_id = encodeParam(ssh_server_id)
-        return this.get<ByteArray>("/ssh_server/$path_ssh_server_id", mapOf())
+        return this.get<ByteArray, com.looker.sdk.Error>(
+            "/ssh_server/$path_ssh_server_id", mapOf()
+        )
     }
 
     /**
@@ -1951,9 +2075,11 @@ class LookerSDKStream(authSession: AuthSession) : APIMethods(authSession) {
     fun update_ssh_server(
         ssh_server_id: String,
         body: WriteSshServer
-    ): SDKResponse {
+    ): SdkResult<ByteArray, com.looker.sdk.Error> {
         val path_ssh_server_id = encodeParam(ssh_server_id)
-        return this.patch<ByteArray>("/ssh_server/$path_ssh_server_id", mapOf(), body)
+        return this.patch<ByteArray, com.looker.sdk.Error>(
+            "/ssh_server/$path_ssh_server_id", mapOf(), body
+        )
     }
 
     /**
@@ -1965,9 +2091,11 @@ class LookerSDKStream(authSession: AuthSession) : APIMethods(authSession) {
      */
     fun delete_ssh_server(
         ssh_server_id: String
-    ): SDKResponse {
+    ): SdkResult<ByteArray, com.looker.sdk.Error> {
         val path_ssh_server_id = encodeParam(ssh_server_id)
-        return this.delete<ByteArray>("/ssh_server/$path_ssh_server_id", mapOf())
+        return this.delete<ByteArray, com.looker.sdk.Error>(
+            "/ssh_server/$path_ssh_server_id", mapOf()
+        )
     }
 
     /**
@@ -1979,9 +2107,11 @@ class LookerSDKStream(authSession: AuthSession) : APIMethods(authSession) {
      */
     fun test_ssh_server(
         ssh_server_id: String
-    ): SDKResponse {
+    ): SdkResult<ByteArray, com.looker.sdk.Error> {
         val path_ssh_server_id = encodeParam(ssh_server_id)
-        return this.get<ByteArray>("/ssh_server/$path_ssh_server_id/test", mapOf())
+        return this.get<ByteArray, com.looker.sdk.Error>(
+            "/ssh_server/$path_ssh_server_id/test", mapOf()
+        )
     }
 
     /**
@@ -1993,8 +2123,8 @@ class LookerSDKStream(authSession: AuthSession) : APIMethods(authSession) {
      */
     @JvmOverloads fun all_ssh_tunnels(
         fields: String? = null
-    ): SDKResponse {
-        return this.get<ByteArray>(
+    ): SdkResult<ByteArray, com.looker.sdk.Error> {
+        return this.get<ByteArray, com.looker.sdk.Error>(
             "/ssh_tunnels",
             mapOf("fields" to fields)
         )
@@ -2009,8 +2139,10 @@ class LookerSDKStream(authSession: AuthSession) : APIMethods(authSession) {
      */
     fun create_ssh_tunnel(
         body: WriteSshTunnel
-    ): SDKResponse {
-        return this.post<ByteArray>("/ssh_tunnels", mapOf(), body)
+    ): SdkResult<ByteArray, com.looker.sdk.Error> {
+        return this.post<ByteArray, com.looker.sdk.Error>(
+            "/ssh_tunnels", mapOf(), body
+        )
     }
 
     /**
@@ -2022,9 +2154,11 @@ class LookerSDKStream(authSession: AuthSession) : APIMethods(authSession) {
      */
     fun ssh_tunnel(
         ssh_tunnel_id: String
-    ): SDKResponse {
+    ): SdkResult<ByteArray, com.looker.sdk.Error> {
         val path_ssh_tunnel_id = encodeParam(ssh_tunnel_id)
-        return this.get<ByteArray>("/ssh_tunnel/$path_ssh_tunnel_id", mapOf())
+        return this.get<ByteArray, com.looker.sdk.Error>(
+            "/ssh_tunnel/$path_ssh_tunnel_id", mapOf()
+        )
     }
 
     /**
@@ -2038,9 +2172,11 @@ class LookerSDKStream(authSession: AuthSession) : APIMethods(authSession) {
     fun update_ssh_tunnel(
         ssh_tunnel_id: String,
         body: WriteSshTunnel
-    ): SDKResponse {
+    ): SdkResult<ByteArray, com.looker.sdk.Error> {
         val path_ssh_tunnel_id = encodeParam(ssh_tunnel_id)
-        return this.patch<ByteArray>("/ssh_tunnel/$path_ssh_tunnel_id", mapOf(), body)
+        return this.patch<ByteArray, com.looker.sdk.Error>(
+            "/ssh_tunnel/$path_ssh_tunnel_id", mapOf(), body
+        )
     }
 
     /**
@@ -2052,9 +2188,11 @@ class LookerSDKStream(authSession: AuthSession) : APIMethods(authSession) {
      */
     fun delete_ssh_tunnel(
         ssh_tunnel_id: String
-    ): SDKResponse {
+    ): SdkResult<ByteArray, com.looker.sdk.Error> {
         val path_ssh_tunnel_id = encodeParam(ssh_tunnel_id)
-        return this.delete<ByteArray>("/ssh_tunnel/$path_ssh_tunnel_id", mapOf())
+        return this.delete<ByteArray, com.looker.sdk.Error>(
+            "/ssh_tunnel/$path_ssh_tunnel_id", mapOf()
+        )
     }
 
     /**
@@ -2066,9 +2204,11 @@ class LookerSDKStream(authSession: AuthSession) : APIMethods(authSession) {
      */
     fun test_ssh_tunnel(
         ssh_tunnel_id: String
-    ): SDKResponse {
+    ): SdkResult<ByteArray, com.looker.sdk.Error> {
         val path_ssh_tunnel_id = encodeParam(ssh_tunnel_id)
-        return this.get<ByteArray>("/ssh_tunnel/$path_ssh_tunnel_id/test", mapOf())
+        return this.get<ByteArray, com.looker.sdk.Error>(
+            "/ssh_tunnel/$path_ssh_tunnel_id/test", mapOf()
+        )
     }
 
     /**
@@ -2078,8 +2218,10 @@ class LookerSDKStream(authSession: AuthSession) : APIMethods(authSession) {
      *
      * GET /ssh_public_key -> ByteArray
      */
-    fun ssh_public_key(): SDKResponse {
-        return this.get<ByteArray>("/ssh_public_key", mapOf())
+    fun ssh_public_key(): SdkResult<ByteArray, com.looker.sdk.Error> {
+        return this.get<ByteArray, com.looker.sdk.Error>(
+            "/ssh_public_key", mapOf()
+        )
     }
 
     //endregion Connection: Manage Database Connections
@@ -2136,8 +2278,8 @@ class LookerSDKStream(authSession: AuthSession) : APIMethods(authSession) {
         sorts: String? = null,
         fields: String? = null,
         filter_or: Boolean? = null
-    ): SDKResponse {
-        return this.get<ByteArray>(
+    ): SdkResult<ByteArray, com.looker.sdk.Error> {
+        return this.get<ByteArray, com.looker.sdk.Error>(
             "/content_favorite/search",
             mapOf(
                 "id" to id,
@@ -2166,9 +2308,9 @@ class LookerSDKStream(authSession: AuthSession) : APIMethods(authSession) {
     @JvmOverloads fun content_favorite(
         content_favorite_id: Long,
         fields: String? = null
-    ): SDKResponse {
+    ): SdkResult<ByteArray, com.looker.sdk.Error> {
         val path_content_favorite_id = encodeParam(content_favorite_id)
-        return this.get<ByteArray>(
+        return this.get<ByteArray, com.looker.sdk.Error>(
             "/content_favorite/$path_content_favorite_id",
             mapOf("fields" to fields)
         )
@@ -2183,9 +2325,11 @@ class LookerSDKStream(authSession: AuthSession) : APIMethods(authSession) {
      */
     fun delete_content_favorite(
         content_favorite_id: Long
-    ): SDKResponse {
+    ): SdkResult<ByteArray, com.looker.sdk.Error> {
         val path_content_favorite_id = encodeParam(content_favorite_id)
-        return this.delete<ByteArray>("/content_favorite/$path_content_favorite_id", mapOf())
+        return this.delete<ByteArray, com.looker.sdk.Error>(
+            "/content_favorite/$path_content_favorite_id", mapOf()
+        )
     }
 
     /**
@@ -2197,8 +2341,10 @@ class LookerSDKStream(authSession: AuthSession) : APIMethods(authSession) {
      */
     fun create_content_favorite(
         body: WriteContentFavorite
-    ): SDKResponse {
-        return this.post<ByteArray>("/content_favorite", mapOf(), body)
+    ): SdkResult<ByteArray, com.looker.sdk.Error> {
+        return this.post<ByteArray, com.looker.sdk.Error>(
+            "/content_favorite", mapOf(), body
+        )
     }
 
     /**
@@ -2212,8 +2358,8 @@ class LookerSDKStream(authSession: AuthSession) : APIMethods(authSession) {
     @JvmOverloads fun all_content_metadatas(
         parent_id: Long,
         fields: String? = null
-    ): SDKResponse {
-        return this.get<ByteArray>(
+    ): SdkResult<ByteArray, com.looker.sdk.Error> {
+        return this.get<ByteArray, com.looker.sdk.Error>(
             "/content_metadata",
             mapOf(
                 "parent_id" to parent_id,
@@ -2233,9 +2379,9 @@ class LookerSDKStream(authSession: AuthSession) : APIMethods(authSession) {
     @JvmOverloads fun content_metadata(
         content_metadata_id: Long,
         fields: String? = null
-    ): SDKResponse {
+    ): SdkResult<ByteArray, com.looker.sdk.Error> {
         val path_content_metadata_id = encodeParam(content_metadata_id)
-        return this.get<ByteArray>(
+        return this.get<ByteArray, com.looker.sdk.Error>(
             "/content_metadata/$path_content_metadata_id",
             mapOf("fields" to fields)
         )
@@ -2252,9 +2398,11 @@ class LookerSDKStream(authSession: AuthSession) : APIMethods(authSession) {
     fun update_content_metadata(
         content_metadata_id: Long,
         body: WriteContentMeta
-    ): SDKResponse {
+    ): SdkResult<ByteArray, com.looker.sdk.Error> {
         val path_content_metadata_id = encodeParam(content_metadata_id)
-        return this.patch<ByteArray>("/content_metadata/$path_content_metadata_id", mapOf(), body)
+        return this.patch<ByteArray, com.looker.sdk.Error>(
+            "/content_metadata/$path_content_metadata_id", mapOf(), body
+        )
     }
 
     /**
@@ -2268,8 +2416,8 @@ class LookerSDKStream(authSession: AuthSession) : APIMethods(authSession) {
     @JvmOverloads fun all_content_metadata_accesses(
         content_metadata_id: Long,
         fields: String? = null
-    ): SDKResponse {
-        return this.get<ByteArray>(
+    ): SdkResult<ByteArray, com.looker.sdk.Error> {
+        return this.get<ByteArray, com.looker.sdk.Error>(
             "/content_metadata_access",
             mapOf(
                 "content_metadata_id" to content_metadata_id,
@@ -2289,8 +2437,8 @@ class LookerSDKStream(authSession: AuthSession) : APIMethods(authSession) {
     @JvmOverloads fun create_content_metadata_access(
         body: ContentMetaGroupUser,
         send_boards_notification_email: Boolean? = null
-    ): SDKResponse {
-        return this.post<ByteArray>(
+    ): SdkResult<ByteArray, com.looker.sdk.Error> {
+        return this.post<ByteArray, com.looker.sdk.Error>(
             "/content_metadata_access",
             mapOf("send_boards_notification_email" to send_boards_notification_email), body
         )
@@ -2307,9 +2455,11 @@ class LookerSDKStream(authSession: AuthSession) : APIMethods(authSession) {
     fun update_content_metadata_access(
         content_metadata_access_id: String,
         body: ContentMetaGroupUser
-    ): SDKResponse {
+    ): SdkResult<ByteArray, com.looker.sdk.Error> {
         val path_content_metadata_access_id = encodeParam(content_metadata_access_id)
-        return this.put<ByteArray>("/content_metadata_access/$path_content_metadata_access_id", mapOf(), body)
+        return this.put<ByteArray, com.looker.sdk.Error>(
+            "/content_metadata_access/$path_content_metadata_access_id", mapOf(), body
+        )
     }
 
     /**
@@ -2321,9 +2471,11 @@ class LookerSDKStream(authSession: AuthSession) : APIMethods(authSession) {
      */
     fun delete_content_metadata_access(
         content_metadata_access_id: Long
-    ): SDKResponse {
+    ): SdkResult<ByteArray, com.looker.sdk.Error> {
         val path_content_metadata_access_id = encodeParam(content_metadata_access_id)
-        return this.delete<ByteArray>("/content_metadata_access/$path_content_metadata_access_id", mapOf())
+        return this.delete<ByteArray, com.looker.sdk.Error>(
+            "/content_metadata_access/$path_content_metadata_access_id", mapOf()
+        )
     }
 
     /**
@@ -2350,10 +2502,10 @@ class LookerSDKStream(authSession: AuthSession) : APIMethods(authSession) {
         format: String? = null,
         width: Long? = null,
         height: Long? = null
-    ): SDKResponse {
+    ): SdkResult<ByteArray, com.looker.sdk.Error> {
         val path_type = encodeParam(type)
         val path_resource_id = encodeParam(resource_id)
-        return this.get<ByteArray>(
+        return this.get<ByteArray, com.looker.sdk.Error>(
             "/content_thumbnail/$path_type/$path_resource_id",
             mapOf(
                 "reload" to reload,
@@ -2376,8 +2528,8 @@ class LookerSDKStream(authSession: AuthSession) : APIMethods(authSession) {
      */
     @JvmOverloads fun content_validation(
         fields: String? = null
-    ): SDKResponse {
-        return this.get<ByteArray>(
+    ): SdkResult<ByteArray, com.looker.sdk.Error> {
+        return this.get<ByteArray, com.looker.sdk.Error>(
             "/content_validation",
             mapOf("fields" to fields)
         )
@@ -2437,8 +2589,8 @@ class LookerSDKStream(authSession: AuthSession) : APIMethods(authSession) {
         offset: Long? = null,
         sorts: String? = null,
         filter_or: Boolean? = null
-    ): SDKResponse {
-        return this.get<ByteArray>(
+    ): SdkResult<ByteArray, com.looker.sdk.Error> {
+        return this.get<ByteArray, com.looker.sdk.Error>(
             "/content_view/search",
             mapOf(
                 "view_count" to view_count,
@@ -2476,10 +2628,10 @@ class LookerSDKStream(authSession: AuthSession) : APIMethods(authSession) {
         type: String,
         resource_id: String,
         reload: String? = null
-    ): SDKResponse {
+    ): SdkResult<ByteArray, com.looker.sdk.Error> {
         val path_type = encodeParam(type)
         val path_resource_id = encodeParam(resource_id)
-        return this.get<ByteArray>(
+        return this.get<ByteArray, com.looker.sdk.Error>(
             "/vector_thumbnail/$path_type/$path_resource_id",
             mapOf("reload" to reload)
         )
@@ -2504,8 +2656,8 @@ class LookerSDKStream(authSession: AuthSession) : APIMethods(authSession) {
      */
     @JvmOverloads fun all_dashboards(
         fields: String? = null
-    ): SDKResponse {
-        return this.get<ByteArray>(
+    ): SdkResult<ByteArray, com.looker.sdk.Error> {
+        return this.get<ByteArray, com.looker.sdk.Error>(
             "/dashboards",
             mapOf("fields" to fields)
         )
@@ -2533,8 +2685,10 @@ class LookerSDKStream(authSession: AuthSession) : APIMethods(authSession) {
      */
     fun create_dashboard(
         body: WriteDashboard
-    ): SDKResponse {
-        return this.post<ByteArray>("/dashboards", mapOf(), body)
+    ): SdkResult<ByteArray, com.looker.sdk.Error> {
+        return this.post<ByteArray, com.looker.sdk.Error>(
+            "/dashboards", mapOf(), body
+        )
     }
 
     /**
@@ -2610,8 +2764,8 @@ class LookerSDKStream(authSession: AuthSession) : APIMethods(authSession) {
         offset: Long? = null,
         sorts: String? = null,
         filter_or: Boolean? = null
-    ): SDKResponse {
-        return this.get<ByteArray>(
+    ): SdkResult<ByteArray, com.looker.sdk.Error> {
+        return this.get<ByteArray, com.looker.sdk.Error>(
             "/dashboards/search",
             mapOf(
                 "id" to id,
@@ -2663,10 +2817,10 @@ class LookerSDKStream(authSession: AuthSession) : APIMethods(authSession) {
         space_id: String,
         body: WriteDashboard? = null,
         raw_locale: Boolean? = null
-    ): SDKResponse {
+    ): SdkResult<ByteArray, com.looker.sdk.Error> {
         val path_lookml_dashboard_id = encodeParam(lookml_dashboard_id)
         val path_space_id = encodeParam(space_id)
-        return this.post<ByteArray>(
+        return this.post<ByteArray, com.looker.sdk.Error>(
             "/dashboards/$path_lookml_dashboard_id/import/$path_space_id",
             mapOf("raw_locale" to raw_locale), body
         )
@@ -2693,9 +2847,9 @@ class LookerSDKStream(authSession: AuthSession) : APIMethods(authSession) {
         lookml_dashboard_id: String,
         body: WriteDashboard,
         raw_locale: Boolean? = null
-    ): SDKResponse {
+    ): SdkResult<ByteArray, com.looker.sdk.Error> {
         val path_lookml_dashboard_id = encodeParam(lookml_dashboard_id)
-        return this.patch<ByteArray>(
+        return this.patch<ByteArray, com.looker.sdk.Error>(
             "/dashboards/$path_lookml_dashboard_id/sync",
             mapOf("raw_locale" to raw_locale), body
         )
@@ -2718,9 +2872,9 @@ class LookerSDKStream(authSession: AuthSession) : APIMethods(authSession) {
     @JvmOverloads fun dashboard(
         dashboard_id: String,
         fields: String? = null
-    ): SDKResponse {
+    ): SdkResult<ByteArray, com.looker.sdk.Error> {
         val path_dashboard_id = encodeParam(dashboard_id)
-        return this.get<ByteArray>(
+        return this.get<ByteArray, com.looker.sdk.Error>(
             "/dashboards/$path_dashboard_id",
             mapOf("fields" to fields)
         )
@@ -2746,9 +2900,11 @@ class LookerSDKStream(authSession: AuthSession) : APIMethods(authSession) {
     fun update_dashboard(
         dashboard_id: String,
         body: WriteDashboard
-    ): SDKResponse {
+    ): SdkResult<ByteArray, com.looker.sdk.Error> {
         val path_dashboard_id = encodeParam(dashboard_id)
-        return this.patch<ByteArray>("/dashboards/$path_dashboard_id", mapOf(), body)
+        return this.patch<ByteArray, com.looker.sdk.Error>(
+            "/dashboards/$path_dashboard_id", mapOf(), body
+        )
     }
 
     /**
@@ -2766,9 +2922,11 @@ class LookerSDKStream(authSession: AuthSession) : APIMethods(authSession) {
      */
     fun delete_dashboard(
         dashboard_id: String
-    ): SDKResponse {
+    ): SdkResult<ByteArray, com.looker.sdk.Error> {
         val path_dashboard_id = encodeParam(dashboard_id)
-        return this.delete<ByteArray>("/dashboards/$path_dashboard_id", mapOf())
+        return this.delete<ByteArray, com.looker.sdk.Error>(
+            "/dashboards/$path_dashboard_id", mapOf()
+        )
     }
 
     /**
@@ -2782,9 +2940,11 @@ class LookerSDKStream(authSession: AuthSession) : APIMethods(authSession) {
      */
     fun dashboard_aggregate_table_lookml(
         dashboard_id: String
-    ): SDKResponse {
+    ): SdkResult<ByteArray, com.looker.sdk.Error> {
         val path_dashboard_id = encodeParam(dashboard_id)
-        return this.get<ByteArray>("/dashboards/aggregate_table_lookml/$path_dashboard_id", mapOf())
+        return this.get<ByteArray, com.looker.sdk.Error>(
+            "/dashboards/aggregate_table_lookml/$path_dashboard_id", mapOf()
+        )
     }
 
     /**
@@ -2798,9 +2958,11 @@ class LookerSDKStream(authSession: AuthSession) : APIMethods(authSession) {
      */
     fun dashboard_lookml(
         dashboard_id: String
-    ): SDKResponse {
+    ): SdkResult<ByteArray, com.looker.sdk.Error> {
         val path_dashboard_id = encodeParam(dashboard_id)
-        return this.get<ByteArray>("/dashboards/lookml/$path_dashboard_id", mapOf())
+        return this.get<ByteArray, com.looker.sdk.Error>(
+            "/dashboards/lookml/$path_dashboard_id", mapOf()
+        )
     }
 
     /**
@@ -2847,8 +3009,8 @@ class LookerSDKStream(authSession: AuthSession) : APIMethods(authSession) {
         fields: String? = null,
         filter_or: Boolean? = null,
         sorts: String? = null
-    ): SDKResponse {
-        return this.get<ByteArray>(
+    ): SdkResult<ByteArray, com.looker.sdk.Error> {
+        return this.get<ByteArray, com.looker.sdk.Error>(
             "/dashboard_elements/search",
             mapOf(
                 "dashboard_id" to dashboard_id,
@@ -2873,9 +3035,9 @@ class LookerSDKStream(authSession: AuthSession) : APIMethods(authSession) {
     @JvmOverloads fun dashboard_element(
         dashboard_element_id: String,
         fields: String? = null
-    ): SDKResponse {
+    ): SdkResult<ByteArray, com.looker.sdk.Error> {
         val path_dashboard_element_id = encodeParam(dashboard_element_id)
-        return this.get<ByteArray>(
+        return this.get<ByteArray, com.looker.sdk.Error>(
             "/dashboard_elements/$path_dashboard_element_id",
             mapOf("fields" to fields)
         )
@@ -2894,9 +3056,9 @@ class LookerSDKStream(authSession: AuthSession) : APIMethods(authSession) {
         dashboard_element_id: String,
         body: WriteDashboardElement,
         fields: String? = null
-    ): SDKResponse {
+    ): SdkResult<ByteArray, com.looker.sdk.Error> {
         val path_dashboard_element_id = encodeParam(dashboard_element_id)
-        return this.patch<ByteArray>(
+        return this.patch<ByteArray, com.looker.sdk.Error>(
             "/dashboard_elements/$path_dashboard_element_id",
             mapOf("fields" to fields), body
         )
@@ -2911,9 +3073,11 @@ class LookerSDKStream(authSession: AuthSession) : APIMethods(authSession) {
      */
     fun delete_dashboard_element(
         dashboard_element_id: String
-    ): SDKResponse {
+    ): SdkResult<ByteArray, com.looker.sdk.Error> {
         val path_dashboard_element_id = encodeParam(dashboard_element_id)
-        return this.delete<ByteArray>("/dashboard_elements/$path_dashboard_element_id", mapOf())
+        return this.delete<ByteArray, com.looker.sdk.Error>(
+            "/dashboard_elements/$path_dashboard_element_id", mapOf()
+        )
     }
 
     /**
@@ -2927,9 +3091,9 @@ class LookerSDKStream(authSession: AuthSession) : APIMethods(authSession) {
     @JvmOverloads fun dashboard_dashboard_elements(
         dashboard_id: String,
         fields: String? = null
-    ): SDKResponse {
+    ): SdkResult<ByteArray, com.looker.sdk.Error> {
         val path_dashboard_id = encodeParam(dashboard_id)
-        return this.get<ByteArray>(
+        return this.get<ByteArray, com.looker.sdk.Error>(
             "/dashboards/$path_dashboard_id/dashboard_elements",
             mapOf("fields" to fields)
         )
@@ -2946,8 +3110,8 @@ class LookerSDKStream(authSession: AuthSession) : APIMethods(authSession) {
     @JvmOverloads fun create_dashboard_element(
         body: WriteDashboardElement,
         fields: String? = null
-    ): SDKResponse {
-        return this.post<ByteArray>(
+    ): SdkResult<ByteArray, com.looker.sdk.Error> {
+        return this.post<ByteArray, com.looker.sdk.Error>(
             "/dashboard_elements",
             mapOf("fields" to fields), body
         )
@@ -2964,9 +3128,9 @@ class LookerSDKStream(authSession: AuthSession) : APIMethods(authSession) {
     @JvmOverloads fun dashboard_filter(
         dashboard_filter_id: String,
         fields: String? = null
-    ): SDKResponse {
+    ): SdkResult<ByteArray, com.looker.sdk.Error> {
         val path_dashboard_filter_id = encodeParam(dashboard_filter_id)
-        return this.get<ByteArray>(
+        return this.get<ByteArray, com.looker.sdk.Error>(
             "/dashboard_filters/$path_dashboard_filter_id",
             mapOf("fields" to fields)
         )
@@ -2985,9 +3149,9 @@ class LookerSDKStream(authSession: AuthSession) : APIMethods(authSession) {
         dashboard_filter_id: String,
         body: WriteDashboardFilter,
         fields: String? = null
-    ): SDKResponse {
+    ): SdkResult<ByteArray, com.looker.sdk.Error> {
         val path_dashboard_filter_id = encodeParam(dashboard_filter_id)
-        return this.patch<ByteArray>(
+        return this.patch<ByteArray, com.looker.sdk.Error>(
             "/dashboard_filters/$path_dashboard_filter_id",
             mapOf("fields" to fields), body
         )
@@ -3002,9 +3166,11 @@ class LookerSDKStream(authSession: AuthSession) : APIMethods(authSession) {
      */
     fun delete_dashboard_filter(
         dashboard_filter_id: String
-    ): SDKResponse {
+    ): SdkResult<ByteArray, com.looker.sdk.Error> {
         val path_dashboard_filter_id = encodeParam(dashboard_filter_id)
-        return this.delete<ByteArray>("/dashboard_filters/$path_dashboard_filter_id", mapOf())
+        return this.delete<ByteArray, com.looker.sdk.Error>(
+            "/dashboard_filters/$path_dashboard_filter_id", mapOf()
+        )
     }
 
     /**
@@ -3018,9 +3184,9 @@ class LookerSDKStream(authSession: AuthSession) : APIMethods(authSession) {
     @JvmOverloads fun dashboard_dashboard_filters(
         dashboard_id: String,
         fields: String? = null
-    ): SDKResponse {
+    ): SdkResult<ByteArray, com.looker.sdk.Error> {
         val path_dashboard_id = encodeParam(dashboard_id)
-        return this.get<ByteArray>(
+        return this.get<ByteArray, com.looker.sdk.Error>(
             "/dashboards/$path_dashboard_id/dashboard_filters",
             mapOf("fields" to fields)
         )
@@ -3037,8 +3203,8 @@ class LookerSDKStream(authSession: AuthSession) : APIMethods(authSession) {
     @JvmOverloads fun create_dashboard_filter(
         body: WriteCreateDashboardFilter,
         fields: String? = null
-    ): SDKResponse {
-        return this.post<ByteArray>(
+    ): SdkResult<ByteArray, com.looker.sdk.Error> {
+        return this.post<ByteArray, com.looker.sdk.Error>(
             "/dashboard_filters",
             mapOf("fields" to fields), body
         )
@@ -3055,9 +3221,9 @@ class LookerSDKStream(authSession: AuthSession) : APIMethods(authSession) {
     @JvmOverloads fun dashboard_layout_component(
         dashboard_layout_component_id: String,
         fields: String? = null
-    ): SDKResponse {
+    ): SdkResult<ByteArray, com.looker.sdk.Error> {
         val path_dashboard_layout_component_id = encodeParam(dashboard_layout_component_id)
-        return this.get<ByteArray>(
+        return this.get<ByteArray, com.looker.sdk.Error>(
             "/dashboard_layout_components/$path_dashboard_layout_component_id",
             mapOf("fields" to fields)
         )
@@ -3076,9 +3242,9 @@ class LookerSDKStream(authSession: AuthSession) : APIMethods(authSession) {
         dashboard_layout_component_id: String,
         body: WriteDashboardLayoutComponent,
         fields: String? = null
-    ): SDKResponse {
+    ): SdkResult<ByteArray, com.looker.sdk.Error> {
         val path_dashboard_layout_component_id = encodeParam(dashboard_layout_component_id)
-        return this.patch<ByteArray>(
+        return this.patch<ByteArray, com.looker.sdk.Error>(
             "/dashboard_layout_components/$path_dashboard_layout_component_id",
             mapOf("fields" to fields), body
         )
@@ -3095,9 +3261,9 @@ class LookerSDKStream(authSession: AuthSession) : APIMethods(authSession) {
     @JvmOverloads fun dashboard_layout_dashboard_layout_components(
         dashboard_layout_id: String,
         fields: String? = null
-    ): SDKResponse {
+    ): SdkResult<ByteArray, com.looker.sdk.Error> {
         val path_dashboard_layout_id = encodeParam(dashboard_layout_id)
-        return this.get<ByteArray>(
+        return this.get<ByteArray, com.looker.sdk.Error>(
             "/dashboard_layouts/$path_dashboard_layout_id/dashboard_layout_components",
             mapOf("fields" to fields)
         )
@@ -3114,9 +3280,9 @@ class LookerSDKStream(authSession: AuthSession) : APIMethods(authSession) {
     @JvmOverloads fun dashboard_layout(
         dashboard_layout_id: String,
         fields: String? = null
-    ): SDKResponse {
+    ): SdkResult<ByteArray, com.looker.sdk.Error> {
         val path_dashboard_layout_id = encodeParam(dashboard_layout_id)
-        return this.get<ByteArray>(
+        return this.get<ByteArray, com.looker.sdk.Error>(
             "/dashboard_layouts/$path_dashboard_layout_id",
             mapOf("fields" to fields)
         )
@@ -3135,9 +3301,9 @@ class LookerSDKStream(authSession: AuthSession) : APIMethods(authSession) {
         dashboard_layout_id: String,
         body: WriteDashboardLayout,
         fields: String? = null
-    ): SDKResponse {
+    ): SdkResult<ByteArray, com.looker.sdk.Error> {
         val path_dashboard_layout_id = encodeParam(dashboard_layout_id)
-        return this.patch<ByteArray>(
+        return this.patch<ByteArray, com.looker.sdk.Error>(
             "/dashboard_layouts/$path_dashboard_layout_id",
             mapOf("fields" to fields), body
         )
@@ -3152,9 +3318,11 @@ class LookerSDKStream(authSession: AuthSession) : APIMethods(authSession) {
      */
     fun delete_dashboard_layout(
         dashboard_layout_id: String
-    ): SDKResponse {
+    ): SdkResult<ByteArray, com.looker.sdk.Error> {
         val path_dashboard_layout_id = encodeParam(dashboard_layout_id)
-        return this.delete<ByteArray>("/dashboard_layouts/$path_dashboard_layout_id", mapOf())
+        return this.delete<ByteArray, com.looker.sdk.Error>(
+            "/dashboard_layouts/$path_dashboard_layout_id", mapOf()
+        )
     }
 
     /**
@@ -3168,9 +3336,9 @@ class LookerSDKStream(authSession: AuthSession) : APIMethods(authSession) {
     @JvmOverloads fun dashboard_dashboard_layouts(
         dashboard_id: String,
         fields: String? = null
-    ): SDKResponse {
+    ): SdkResult<ByteArray, com.looker.sdk.Error> {
         val path_dashboard_id = encodeParam(dashboard_id)
-        return this.get<ByteArray>(
+        return this.get<ByteArray, com.looker.sdk.Error>(
             "/dashboards/$path_dashboard_id/dashboard_layouts",
             mapOf("fields" to fields)
         )
@@ -3187,8 +3355,8 @@ class LookerSDKStream(authSession: AuthSession) : APIMethods(authSession) {
     @JvmOverloads fun create_dashboard_layout(
         body: WriteDashboardLayout,
         fields: String? = null
-    ): SDKResponse {
-        return this.post<ByteArray>(
+    ): SdkResult<ByteArray, com.looker.sdk.Error> {
+        return this.post<ByteArray, com.looker.sdk.Error>(
             "/dashboard_layouts",
             mapOf("fields" to fields), body
         )
@@ -3207,8 +3375,10 @@ class LookerSDKStream(authSession: AuthSession) : APIMethods(authSession) {
      */
     fun perform_data_action(
         body: DataActionRequest
-    ): SDKResponse {
-        return this.post<ByteArray>("/data_actions", mapOf(), body)
+    ): SdkResult<ByteArray, com.looker.sdk.Error> {
+        return this.post<ByteArray, com.looker.sdk.Error>(
+            "/data_actions", mapOf(), body
+        )
     }
 
     /**
@@ -3220,8 +3390,10 @@ class LookerSDKStream(authSession: AuthSession) : APIMethods(authSession) {
      */
     fun fetch_remote_data_action_form(
         body: Map<String, Any>
-    ): SDKResponse {
-        return this.post<ByteArray>("/data_actions/form", mapOf(), body)
+    ): SdkResult<ByteArray, com.looker.sdk.Error> {
+        return this.post<ByteArray, com.looker.sdk.Error>(
+            "/data_actions/form", mapOf(), body
+        )
     }
 
     //endregion DataAction: Run Data Actions
@@ -3233,8 +3405,10 @@ class LookerSDKStream(authSession: AuthSession) : APIMethods(authSession) {
      *
      * GET /datagroups -> ByteArray
      */
-    fun all_datagroups(): SDKResponse {
-        return this.get<ByteArray>("/datagroups", mapOf())
+    fun all_datagroups(): SdkResult<ByteArray, com.looker.sdk.Error> {
+        return this.get<ByteArray, com.looker.sdk.Error>(
+            "/datagroups", mapOf()
+        )
     }
 
     /**
@@ -3246,9 +3420,11 @@ class LookerSDKStream(authSession: AuthSession) : APIMethods(authSession) {
      */
     fun datagroup(
         datagroup_id: Long
-    ): SDKResponse {
+    ): SdkResult<ByteArray, com.looker.sdk.Error> {
         val path_datagroup_id = encodeParam(datagroup_id)
-        return this.get<ByteArray>("/datagroups/$path_datagroup_id", mapOf())
+        return this.get<ByteArray, com.looker.sdk.Error>(
+            "/datagroups/$path_datagroup_id", mapOf()
+        )
     }
 
     /**
@@ -3262,9 +3438,11 @@ class LookerSDKStream(authSession: AuthSession) : APIMethods(authSession) {
     fun update_datagroup(
         datagroup_id: Long,
         body: WriteDatagroup
-    ): SDKResponse {
+    ): SdkResult<ByteArray, com.looker.sdk.Error> {
         val path_datagroup_id = encodeParam(datagroup_id)
-        return this.patch<ByteArray>("/datagroups/$path_datagroup_id", mapOf(), body)
+        return this.patch<ByteArray, com.looker.sdk.Error>(
+            "/datagroups/$path_datagroup_id", mapOf(), body
+        )
     }
 
     //endregion Datagroup: Manage Datagroups
@@ -3300,8 +3478,8 @@ class LookerSDKStream(authSession: AuthSession) : APIMethods(authSession) {
         parent_id: String? = null,
         creator_id: String? = null,
         filter_or: Boolean? = null
-    ): SDKResponse {
-        return this.get<ByteArray>(
+    ): SdkResult<ByteArray, com.looker.sdk.Error> {
+        return this.get<ByteArray, com.looker.sdk.Error>(
             "/folders/search",
             mapOf(
                 "fields" to fields,
@@ -3330,9 +3508,9 @@ class LookerSDKStream(authSession: AuthSession) : APIMethods(authSession) {
     @JvmOverloads fun folder(
         folder_id: String,
         fields: String? = null
-    ): SDKResponse {
+    ): SdkResult<ByteArray, com.looker.sdk.Error> {
         val path_folder_id = encodeParam(folder_id)
-        return this.get<ByteArray>(
+        return this.get<ByteArray, com.looker.sdk.Error>(
             "/folders/$path_folder_id",
             mapOf("fields" to fields)
         )
@@ -3349,9 +3527,11 @@ class LookerSDKStream(authSession: AuthSession) : APIMethods(authSession) {
     fun update_folder(
         folder_id: String,
         body: UpdateFolder
-    ): SDKResponse {
+    ): SdkResult<ByteArray, com.looker.sdk.Error> {
         val path_folder_id = encodeParam(folder_id)
-        return this.patch<ByteArray>("/folders/$path_folder_id", mapOf(), body)
+        return this.patch<ByteArray, com.looker.sdk.Error>(
+            "/folders/$path_folder_id", mapOf(), body
+        )
     }
 
     /**
@@ -3364,9 +3544,11 @@ class LookerSDKStream(authSession: AuthSession) : APIMethods(authSession) {
      */
     fun delete_folder(
         folder_id: String
-    ): SDKResponse {
+    ): SdkResult<ByteArray, com.looker.sdk.Error> {
         val path_folder_id = encodeParam(folder_id)
-        return this.delete<ByteArray>("/folders/$path_folder_id", mapOf())
+        return this.delete<ByteArray, com.looker.sdk.Error>(
+            "/folders/$path_folder_id", mapOf()
+        )
     }
 
     /**
@@ -3378,8 +3560,8 @@ class LookerSDKStream(authSession: AuthSession) : APIMethods(authSession) {
      */
     @JvmOverloads fun all_folders(
         fields: String? = null
-    ): SDKResponse {
-        return this.get<ByteArray>(
+    ): SdkResult<ByteArray, com.looker.sdk.Error> {
+        return this.get<ByteArray, com.looker.sdk.Error>(
             "/folders",
             mapOf("fields" to fields)
         )
@@ -3397,8 +3579,10 @@ class LookerSDKStream(authSession: AuthSession) : APIMethods(authSession) {
      */
     fun create_folder(
         body: CreateFolder
-    ): SDKResponse {
-        return this.post<ByteArray>("/folders", mapOf(), body)
+    ): SdkResult<ByteArray, com.looker.sdk.Error> {
+        return this.post<ByteArray, com.looker.sdk.Error>(
+            "/folders", mapOf(), body
+        )
     }
 
     /**
@@ -3418,9 +3602,9 @@ class LookerSDKStream(authSession: AuthSession) : APIMethods(authSession) {
         page: Long? = null,
         per_page: Long? = null,
         sorts: String? = null
-    ): SDKResponse {
+    ): SdkResult<ByteArray, com.looker.sdk.Error> {
         val path_folder_id = encodeParam(folder_id)
-        return this.get<ByteArray>(
+        return this.get<ByteArray, com.looker.sdk.Error>(
             "/folders/$path_folder_id/children",
             mapOf(
                 "fields" to fields,
@@ -3446,9 +3630,9 @@ class LookerSDKStream(authSession: AuthSession) : APIMethods(authSession) {
         fields: String? = null,
         sorts: String? = null,
         name: String? = null
-    ): SDKResponse {
+    ): SdkResult<ByteArray, com.looker.sdk.Error> {
         val path_folder_id = encodeParam(folder_id)
-        return this.get<ByteArray>(
+        return this.get<ByteArray, com.looker.sdk.Error>(
             "/folders/$path_folder_id/children/search",
             mapOf(
                 "fields" to fields,
@@ -3469,9 +3653,9 @@ class LookerSDKStream(authSession: AuthSession) : APIMethods(authSession) {
     @JvmOverloads fun folder_parent(
         folder_id: String,
         fields: String? = null
-    ): SDKResponse {
+    ): SdkResult<ByteArray, com.looker.sdk.Error> {
         val path_folder_id = encodeParam(folder_id)
-        return this.get<ByteArray>(
+        return this.get<ByteArray, com.looker.sdk.Error>(
             "/folders/$path_folder_id/parent",
             mapOf("fields" to fields)
         )
@@ -3488,9 +3672,9 @@ class LookerSDKStream(authSession: AuthSession) : APIMethods(authSession) {
     @JvmOverloads fun folder_ancestors(
         folder_id: String,
         fields: String? = null
-    ): SDKResponse {
+    ): SdkResult<ByteArray, com.looker.sdk.Error> {
         val path_folder_id = encodeParam(folder_id)
-        return this.get<ByteArray>(
+        return this.get<ByteArray, com.looker.sdk.Error>(
             "/folders/$path_folder_id/ancestors",
             mapOf("fields" to fields)
         )
@@ -3507,9 +3691,9 @@ class LookerSDKStream(authSession: AuthSession) : APIMethods(authSession) {
     @JvmOverloads fun folder_looks(
         folder_id: String,
         fields: String? = null
-    ): SDKResponse {
+    ): SdkResult<ByteArray, com.looker.sdk.Error> {
         val path_folder_id = encodeParam(folder_id)
-        return this.get<ByteArray>(
+        return this.get<ByteArray, com.looker.sdk.Error>(
             "/folders/$path_folder_id/looks",
             mapOf("fields" to fields)
         )
@@ -3526,9 +3710,9 @@ class LookerSDKStream(authSession: AuthSession) : APIMethods(authSession) {
     @JvmOverloads fun folder_dashboards(
         folder_id: String,
         fields: String? = null
-    ): SDKResponse {
+    ): SdkResult<ByteArray, com.looker.sdk.Error> {
         val path_folder_id = encodeParam(folder_id)
-        return this.get<ByteArray>(
+        return this.get<ByteArray, com.looker.sdk.Error>(
             "/folders/$path_folder_id/dashboards",
             mapOf("fields" to fields)
         )
@@ -3559,8 +3743,8 @@ class LookerSDKStream(authSession: AuthSession) : APIMethods(authSession) {
         ids: DelimArray<Long>? = null,
         content_metadata_id: Long? = null,
         can_add_to_content_metadata: Boolean? = null
-    ): SDKResponse {
-        return this.get<ByteArray>(
+    ): SdkResult<ByteArray, com.looker.sdk.Error> {
+        return this.get<ByteArray, com.looker.sdk.Error>(
             "/groups",
             mapOf(
                 "fields" to fields,
@@ -3585,8 +3769,8 @@ class LookerSDKStream(authSession: AuthSession) : APIMethods(authSession) {
     @JvmOverloads fun create_group(
         body: WriteGroup,
         fields: String? = null
-    ): SDKResponse {
-        return this.post<ByteArray>(
+    ): SdkResult<ByteArray, com.looker.sdk.Error> {
+        return this.post<ByteArray, com.looker.sdk.Error>(
             "/groups",
             mapOf("fields" to fields), body
         )
@@ -3642,8 +3826,8 @@ class LookerSDKStream(authSession: AuthSession) : APIMethods(authSession) {
         external_group_id: String? = null,
         externally_managed: Boolean? = null,
         externally_orphaned: Boolean? = null
-    ): SDKResponse {
-        return this.get<ByteArray>(
+    ): SdkResult<ByteArray, com.looker.sdk.Error> {
+        return this.get<ByteArray, com.looker.sdk.Error>(
             "/groups/search",
             mapOf(
                 "fields" to fields,
@@ -3710,8 +3894,8 @@ class LookerSDKStream(authSession: AuthSession) : APIMethods(authSession) {
         external_group_id: String? = null,
         externally_managed: Boolean? = null,
         externally_orphaned: Boolean? = null
-    ): SDKResponse {
-        return this.get<ByteArray>(
+    ): SdkResult<ByteArray, com.looker.sdk.Error> {
+        return this.get<ByteArray, com.looker.sdk.Error>(
             "/groups/search/with_roles",
             mapOf(
                 "fields" to fields,
@@ -3779,8 +3963,8 @@ class LookerSDKStream(authSession: AuthSession) : APIMethods(authSession) {
         external_group_id: String? = null,
         externally_managed: Boolean? = null,
         externally_orphaned: Boolean? = null
-    ): SDKResponse {
-        return this.get<ByteArray>(
+    ): SdkResult<ByteArray, com.looker.sdk.Error> {
+        return this.get<ByteArray, com.looker.sdk.Error>(
             "/groups/search/with_hierarchy",
             mapOf(
                 "fields" to fields,
@@ -3808,9 +3992,9 @@ class LookerSDKStream(authSession: AuthSession) : APIMethods(authSession) {
     @JvmOverloads fun group(
         group_id: Long,
         fields: String? = null
-    ): SDKResponse {
+    ): SdkResult<ByteArray, com.looker.sdk.Error> {
         val path_group_id = encodeParam(group_id)
-        return this.get<ByteArray>(
+        return this.get<ByteArray, com.looker.sdk.Error>(
             "/groups/$path_group_id",
             mapOf("fields" to fields)
         )
@@ -3829,9 +4013,9 @@ class LookerSDKStream(authSession: AuthSession) : APIMethods(authSession) {
         group_id: Long,
         body: WriteGroup,
         fields: String? = null
-    ): SDKResponse {
+    ): SdkResult<ByteArray, com.looker.sdk.Error> {
         val path_group_id = encodeParam(group_id)
-        return this.patch<ByteArray>(
+        return this.patch<ByteArray, com.looker.sdk.Error>(
             "/groups/$path_group_id",
             mapOf("fields" to fields), body
         )
@@ -3846,9 +4030,11 @@ class LookerSDKStream(authSession: AuthSession) : APIMethods(authSession) {
      */
     fun delete_group(
         group_id: Long
-    ): SDKResponse {
+    ): SdkResult<ByteArray, com.looker.sdk.Error> {
         val path_group_id = encodeParam(group_id)
-        return this.delete<ByteArray>("/groups/$path_group_id", mapOf())
+        return this.delete<ByteArray, com.looker.sdk.Error>(
+            "/groups/$path_group_id", mapOf()
+        )
     }
 
     /**
@@ -3862,9 +4048,9 @@ class LookerSDKStream(authSession: AuthSession) : APIMethods(authSession) {
     @JvmOverloads fun all_group_groups(
         group_id: Long,
         fields: String? = null
-    ): SDKResponse {
+    ): SdkResult<ByteArray, com.looker.sdk.Error> {
         val path_group_id = encodeParam(group_id)
-        return this.get<ByteArray>(
+        return this.get<ByteArray, com.looker.sdk.Error>(
             "/groups/$path_group_id/groups",
             mapOf("fields" to fields)
         )
@@ -3881,9 +4067,11 @@ class LookerSDKStream(authSession: AuthSession) : APIMethods(authSession) {
     fun add_group_group(
         group_id: Long,
         body: GroupIdForGroupInclusion
-    ): SDKResponse {
+    ): SdkResult<ByteArray, com.looker.sdk.Error> {
         val path_group_id = encodeParam(group_id)
-        return this.post<ByteArray>("/groups/$path_group_id/groups", mapOf(), body)
+        return this.post<ByteArray, com.looker.sdk.Error>(
+            "/groups/$path_group_id/groups", mapOf(), body
+        )
     }
 
     /**
@@ -3903,9 +4091,9 @@ class LookerSDKStream(authSession: AuthSession) : APIMethods(authSession) {
         page: Long? = null,
         per_page: Long? = null,
         sorts: String? = null
-    ): SDKResponse {
+    ): SdkResult<ByteArray, com.looker.sdk.Error> {
         val path_group_id = encodeParam(group_id)
-        return this.get<ByteArray>(
+        return this.get<ByteArray, com.looker.sdk.Error>(
             "/groups/$path_group_id/users",
             mapOf(
                 "fields" to fields,
@@ -3927,9 +4115,11 @@ class LookerSDKStream(authSession: AuthSession) : APIMethods(authSession) {
     fun add_group_user(
         group_id: Long,
         body: GroupIdForGroupUserInclusion
-    ): SDKResponse {
+    ): SdkResult<ByteArray, com.looker.sdk.Error> {
         val path_group_id = encodeParam(group_id)
-        return this.post<ByteArray>("/groups/$path_group_id/users", mapOf(), body)
+        return this.post<ByteArray, com.looker.sdk.Error>(
+            "/groups/$path_group_id/users", mapOf(), body
+        )
     }
 
     /**
@@ -3943,10 +4133,12 @@ class LookerSDKStream(authSession: AuthSession) : APIMethods(authSession) {
     fun delete_group_user(
         group_id: Long,
         user_id: Long
-    ): SDKResponse {
+    ): SdkResult<ByteArray, com.looker.sdk.Error> {
         val path_group_id = encodeParam(group_id)
         val path_user_id = encodeParam(user_id)
-        return this.delete<ByteArray>("/groups/$path_group_id/users/$path_user_id", mapOf())
+        return this.delete<ByteArray, com.looker.sdk.Error>(
+            "/groups/$path_group_id/users/$path_user_id", mapOf()
+        )
     }
 
     /**
@@ -3960,10 +4152,12 @@ class LookerSDKStream(authSession: AuthSession) : APIMethods(authSession) {
     fun delete_group_from_group(
         group_id: Long,
         deleting_group_id: Long
-    ): SDKResponse {
+    ): SdkResult<ByteArray, com.looker.sdk.Error> {
         val path_group_id = encodeParam(group_id)
         val path_deleting_group_id = encodeParam(deleting_group_id)
-        return this.delete<ByteArray>("/groups/$path_group_id/groups/$path_deleting_group_id", mapOf())
+        return this.delete<ByteArray, com.looker.sdk.Error>(
+            "/groups/$path_group_id/groups/$path_deleting_group_id", mapOf()
+        )
     }
 
     /**
@@ -3981,10 +4175,12 @@ class LookerSDKStream(authSession: AuthSession) : APIMethods(authSession) {
         group_id: Long,
         user_attribute_id: Long,
         body: UserAttributeGroupValue
-    ): SDKResponse {
+    ): SdkResult<ByteArray, com.looker.sdk.Error> {
         val path_group_id = encodeParam(group_id)
         val path_user_attribute_id = encodeParam(user_attribute_id)
-        return this.patch<ByteArray>("/groups/$path_group_id/attribute_values/$path_user_attribute_id", mapOf(), body)
+        return this.patch<ByteArray, com.looker.sdk.Error>(
+            "/groups/$path_group_id/attribute_values/$path_user_attribute_id", mapOf(), body
+        )
     }
 
     /**
@@ -3998,10 +4194,12 @@ class LookerSDKStream(authSession: AuthSession) : APIMethods(authSession) {
     fun delete_user_attribute_group_value(
         group_id: Long,
         user_attribute_id: Long
-    ): SDKResponse {
+    ): SdkResult<ByteArray, com.looker.sdk.Error> {
         val path_group_id = encodeParam(group_id)
         val path_user_attribute_id = encodeParam(user_attribute_id)
-        return this.delete<ByteArray>("/groups/$path_group_id/attribute_values/$path_user_attribute_id", mapOf())
+        return this.delete<ByteArray, com.looker.sdk.Error>(
+            "/groups/$path_group_id/attribute_values/$path_user_attribute_id", mapOf()
+        )
     }
 
     //endregion Group: Manage Groups
@@ -4017,8 +4215,8 @@ class LookerSDKStream(authSession: AuthSession) : APIMethods(authSession) {
      */
     @JvmOverloads fun all_primary_homepage_sections(
         fields: String? = null
-    ): SDKResponse {
-        return this.get<ByteArray>(
+    ): SdkResult<ByteArray, com.looker.sdk.Error> {
+        return this.get<ByteArray, com.looker.sdk.Error>(
             "/primary_homepage_sections",
             mapOf("fields" to fields)
         )
@@ -4037,8 +4235,8 @@ class LookerSDKStream(authSession: AuthSession) : APIMethods(authSession) {
      */
     @JvmOverloads fun all_integration_hubs(
         fields: String? = null
-    ): SDKResponse {
-        return this.get<ByteArray>(
+    ): SdkResult<ByteArray, com.looker.sdk.Error> {
+        return this.get<ByteArray, com.looker.sdk.Error>(
             "/integration_hubs",
             mapOf("fields" to fields)
         )
@@ -4057,8 +4255,8 @@ class LookerSDKStream(authSession: AuthSession) : APIMethods(authSession) {
     @JvmOverloads fun create_integration_hub(
         body: WriteIntegrationHub,
         fields: String? = null
-    ): SDKResponse {
-        return this.post<ByteArray>(
+    ): SdkResult<ByteArray, com.looker.sdk.Error> {
+        return this.post<ByteArray, com.looker.sdk.Error>(
             "/integration_hubs",
             mapOf("fields" to fields), body
         )
@@ -4075,9 +4273,9 @@ class LookerSDKStream(authSession: AuthSession) : APIMethods(authSession) {
     @JvmOverloads fun integration_hub(
         integration_hub_id: Long,
         fields: String? = null
-    ): SDKResponse {
+    ): SdkResult<ByteArray, com.looker.sdk.Error> {
         val path_integration_hub_id = encodeParam(integration_hub_id)
-        return this.get<ByteArray>(
+        return this.get<ByteArray, com.looker.sdk.Error>(
             "/integration_hubs/$path_integration_hub_id",
             mapOf("fields" to fields)
         )
@@ -4098,9 +4296,9 @@ class LookerSDKStream(authSession: AuthSession) : APIMethods(authSession) {
         integration_hub_id: Long,
         body: WriteIntegrationHub,
         fields: String? = null
-    ): SDKResponse {
+    ): SdkResult<ByteArray, com.looker.sdk.Error> {
         val path_integration_hub_id = encodeParam(integration_hub_id)
-        return this.patch<ByteArray>(
+        return this.patch<ByteArray, com.looker.sdk.Error>(
             "/integration_hubs/$path_integration_hub_id",
             mapOf("fields" to fields), body
         )
@@ -4115,9 +4313,11 @@ class LookerSDKStream(authSession: AuthSession) : APIMethods(authSession) {
      */
     fun delete_integration_hub(
         integration_hub_id: Long
-    ): SDKResponse {
+    ): SdkResult<ByteArray, com.looker.sdk.Error> {
         val path_integration_hub_id = encodeParam(integration_hub_id)
-        return this.delete<ByteArray>("/integration_hubs/$path_integration_hub_id", mapOf())
+        return this.delete<ByteArray, com.looker.sdk.Error>(
+            "/integration_hubs/$path_integration_hub_id", mapOf()
+        )
     }
 
     /**
@@ -4129,9 +4329,11 @@ class LookerSDKStream(authSession: AuthSession) : APIMethods(authSession) {
      */
     fun accept_integration_hub_legal_agreement(
         integration_hub_id: Long
-    ): SDKResponse {
+    ): SdkResult<ByteArray, com.looker.sdk.Error> {
         val path_integration_hub_id = encodeParam(integration_hub_id)
-        return this.post<ByteArray>("/integration_hubs/$path_integration_hub_id/accept_legal_agreement", mapOf())
+        return this.post<ByteArray, com.looker.sdk.Error>(
+            "/integration_hubs/$path_integration_hub_id/accept_legal_agreement", mapOf()
+        )
     }
 
     /**
@@ -4145,8 +4347,8 @@ class LookerSDKStream(authSession: AuthSession) : APIMethods(authSession) {
     @JvmOverloads fun all_integrations(
         fields: String? = null,
         integration_hub_id: String? = null
-    ): SDKResponse {
-        return this.get<ByteArray>(
+    ): SdkResult<ByteArray, com.looker.sdk.Error> {
+        return this.get<ByteArray, com.looker.sdk.Error>(
             "/integrations",
             mapOf(
                 "fields" to fields,
@@ -4166,9 +4368,9 @@ class LookerSDKStream(authSession: AuthSession) : APIMethods(authSession) {
     @JvmOverloads fun integration(
         integration_id: String,
         fields: String? = null
-    ): SDKResponse {
+    ): SdkResult<ByteArray, com.looker.sdk.Error> {
         val path_integration_id = encodeParam(integration_id)
-        return this.get<ByteArray>(
+        return this.get<ByteArray, com.looker.sdk.Error>(
             "/integrations/$path_integration_id",
             mapOf("fields" to fields)
         )
@@ -4187,9 +4389,9 @@ class LookerSDKStream(authSession: AuthSession) : APIMethods(authSession) {
         integration_id: String,
         body: WriteIntegration,
         fields: String? = null
-    ): SDKResponse {
+    ): SdkResult<ByteArray, com.looker.sdk.Error> {
         val path_integration_id = encodeParam(integration_id)
-        return this.patch<ByteArray>(
+        return this.patch<ByteArray, com.looker.sdk.Error>(
             "/integrations/$path_integration_id",
             mapOf("fields" to fields), body
         )
@@ -4206,9 +4408,11 @@ class LookerSDKStream(authSession: AuthSession) : APIMethods(authSession) {
     @JvmOverloads fun fetch_integration_form(
         integration_id: String,
         body: Map<String, Any>? = null
-    ): SDKResponse {
+    ): SdkResult<ByteArray, com.looker.sdk.Error> {
         val path_integration_id = encodeParam(integration_id)
-        return this.post<ByteArray>("/integrations/$path_integration_id/form", mapOf(), body)
+        return this.post<ByteArray, com.looker.sdk.Error>(
+            "/integrations/$path_integration_id/form", mapOf(), body
+        )
     }
 
     /**
@@ -4220,9 +4424,11 @@ class LookerSDKStream(authSession: AuthSession) : APIMethods(authSession) {
      */
     fun test_integration(
         integration_id: String
-    ): SDKResponse {
+    ): SdkResult<ByteArray, com.looker.sdk.Error> {
         val path_integration_id = encodeParam(integration_id)
-        return this.post<ByteArray>("/integrations/$path_integration_id/test", mapOf())
+        return this.post<ByteArray, com.looker.sdk.Error>(
+            "/integrations/$path_integration_id/test", mapOf()
+        )
     }
 
     //endregion Integration: Manage Integrations
@@ -4244,8 +4450,8 @@ class LookerSDKStream(authSession: AuthSession) : APIMethods(authSession) {
      */
     @JvmOverloads fun all_looks(
         fields: String? = null
-    ): SDKResponse {
-        return this.get<ByteArray>(
+    ): SdkResult<ByteArray, com.looker.sdk.Error> {
+        return this.get<ByteArray, com.looker.sdk.Error>(
             "/looks",
             mapOf("fields" to fields)
         )
@@ -4268,8 +4474,8 @@ class LookerSDKStream(authSession: AuthSession) : APIMethods(authSession) {
     @JvmOverloads fun create_look(
         body: WriteLookWithQuery,
         fields: String? = null
-    ): SDKResponse {
-        return this.post<ByteArray>(
+    ): SdkResult<ByteArray, com.looker.sdk.Error> {
+        return this.post<ByteArray, com.looker.sdk.Error>(
             "/looks",
             mapOf("fields" to fields), body
         )
@@ -4344,8 +4550,8 @@ class LookerSDKStream(authSession: AuthSession) : APIMethods(authSession) {
         offset: Long? = null,
         sorts: String? = null,
         filter_or: Boolean? = null
-    ): SDKResponse {
-        return this.get<ByteArray>(
+    ): SdkResult<ByteArray, com.looker.sdk.Error> {
+        return this.get<ByteArray, com.looker.sdk.Error>(
             "/looks/search",
             mapOf(
                 "id" to id,
@@ -4383,9 +4589,9 @@ class LookerSDKStream(authSession: AuthSession) : APIMethods(authSession) {
     @JvmOverloads fun look(
         look_id: Long,
         fields: String? = null
-    ): SDKResponse {
+    ): SdkResult<ByteArray, com.looker.sdk.Error> {
         val path_look_id = encodeParam(look_id)
-        return this.get<ByteArray>(
+        return this.get<ByteArray, com.looker.sdk.Error>(
             "/looks/$path_look_id",
             mapOf("fields" to fields)
         )
@@ -4423,9 +4629,9 @@ class LookerSDKStream(authSession: AuthSession) : APIMethods(authSession) {
         look_id: Long,
         body: WriteLookWithQuery,
         fields: String? = null
-    ): SDKResponse {
+    ): SdkResult<ByteArray, com.looker.sdk.Error> {
         val path_look_id = encodeParam(look_id)
-        return this.patch<ByteArray>(
+        return this.patch<ByteArray, com.looker.sdk.Error>(
             "/looks/$path_look_id",
             mapOf("fields" to fields), body
         )
@@ -4446,9 +4652,11 @@ class LookerSDKStream(authSession: AuthSession) : APIMethods(authSession) {
      */
     fun delete_look(
         look_id: Long
-    ): SDKResponse {
+    ): SdkResult<ByteArray, com.looker.sdk.Error> {
         val path_look_id = encodeParam(look_id)
-        return this.delete<ByteArray>("/looks/$path_look_id", mapOf())
+        return this.delete<ByteArray, com.looker.sdk.Error>(
+            "/looks/$path_look_id", mapOf()
+        )
     }
 
     /**
@@ -4505,10 +4713,10 @@ class LookerSDKStream(authSession: AuthSession) : APIMethods(authSession) {
         path_prefix: String? = null,
         rebuild_pdts: Boolean? = null,
         server_table_calcs: Boolean? = null
-    ): SDKResponse {
+    ): SdkResult<ByteArray, com.looker.sdk.Error> {
         val path_look_id = encodeParam(look_id)
         val path_result_format = encodeParam(result_format)
-        return this.get<ByteArray>(
+        return this.get<ByteArray, com.looker.sdk.Error>(
             "/looks/$path_look_id/run/$path_result_format",
             mapOf(
                 "limit" to limit,
@@ -4540,8 +4748,8 @@ class LookerSDKStream(authSession: AuthSession) : APIMethods(authSession) {
      */
     @JvmOverloads fun all_lookml_models(
         fields: String? = null
-    ): SDKResponse {
-        return this.get<ByteArray>(
+    ): SdkResult<ByteArray, com.looker.sdk.Error> {
+        return this.get<ByteArray, com.looker.sdk.Error>(
             "/lookml_models",
             mapOf("fields" to fields)
         )
@@ -4556,8 +4764,10 @@ class LookerSDKStream(authSession: AuthSession) : APIMethods(authSession) {
      */
     fun create_lookml_model(
         body: WriteLookmlModel
-    ): SDKResponse {
-        return this.post<ByteArray>("/lookml_models", mapOf(), body)
+    ): SdkResult<ByteArray, com.looker.sdk.Error> {
+        return this.post<ByteArray, com.looker.sdk.Error>(
+            "/lookml_models", mapOf(), body
+        )
     }
 
     /**
@@ -4571,9 +4781,9 @@ class LookerSDKStream(authSession: AuthSession) : APIMethods(authSession) {
     @JvmOverloads fun lookml_model(
         lookml_model_name: String,
         fields: String? = null
-    ): SDKResponse {
+    ): SdkResult<ByteArray, com.looker.sdk.Error> {
         val path_lookml_model_name = encodeParam(lookml_model_name)
-        return this.get<ByteArray>(
+        return this.get<ByteArray, com.looker.sdk.Error>(
             "/lookml_models/$path_lookml_model_name",
             mapOf("fields" to fields)
         )
@@ -4590,9 +4800,11 @@ class LookerSDKStream(authSession: AuthSession) : APIMethods(authSession) {
     fun update_lookml_model(
         lookml_model_name: String,
         body: WriteLookmlModel
-    ): SDKResponse {
+    ): SdkResult<ByteArray, com.looker.sdk.Error> {
         val path_lookml_model_name = encodeParam(lookml_model_name)
-        return this.patch<ByteArray>("/lookml_models/$path_lookml_model_name", mapOf(), body)
+        return this.patch<ByteArray, com.looker.sdk.Error>(
+            "/lookml_models/$path_lookml_model_name", mapOf(), body
+        )
     }
 
     /**
@@ -4604,9 +4816,11 @@ class LookerSDKStream(authSession: AuthSession) : APIMethods(authSession) {
      */
     fun delete_lookml_model(
         lookml_model_name: String
-    ): SDKResponse {
+    ): SdkResult<ByteArray, com.looker.sdk.Error> {
         val path_lookml_model_name = encodeParam(lookml_model_name)
-        return this.delete<ByteArray>("/lookml_models/$path_lookml_model_name", mapOf())
+        return this.delete<ByteArray, com.looker.sdk.Error>(
+            "/lookml_models/$path_lookml_model_name", mapOf()
+        )
     }
 
     /**
@@ -4622,10 +4836,10 @@ class LookerSDKStream(authSession: AuthSession) : APIMethods(authSession) {
         lookml_model_name: String,
         explore_name: String,
         fields: String? = null
-    ): SDKResponse {
+    ): SdkResult<ByteArray, com.looker.sdk.Error> {
         val path_lookml_model_name = encodeParam(lookml_model_name)
         val path_explore_name = encodeParam(explore_name)
-        return this.get<ByteArray>(
+        return this.get<ByteArray, com.looker.sdk.Error>(
             "/lookml_models/$path_lookml_model_name/explores/$path_explore_name",
             mapOf("fields" to fields)
         )
@@ -4652,11 +4866,11 @@ class LookerSDKStream(authSession: AuthSession) : APIMethods(authSession) {
         field_name: String,
         term: String? = null,
         filters: String? = null
-    ): SDKResponse {
+    ): SdkResult<ByteArray, com.looker.sdk.Error> {
         val path_model_name = encodeParam(model_name)
         val path_view_name = encodeParam(view_name)
         val path_field_name = encodeParam(field_name)
-        return this.get<ByteArray>(
+        return this.get<ByteArray, com.looker.sdk.Error>(
             "/models/$path_model_name/views/$path_view_name/fields/$path_field_name/suggestions",
             mapOf(
                 "term" to term,
@@ -4682,9 +4896,11 @@ class LookerSDKStream(authSession: AuthSession) : APIMethods(authSession) {
      */
     fun connection_databases(
         connection_name: String
-    ): SDKResponse {
+    ): SdkResult<ByteArray, com.looker.sdk.Error> {
         val path_connection_name = encodeParam(connection_name)
-        return this.get<ByteArray>("/connections/$path_connection_name/databases", mapOf())
+        return this.get<ByteArray, com.looker.sdk.Error>(
+            "/connections/$path_connection_name/databases", mapOf()
+        )
     }
 
     /**
@@ -4700,9 +4916,9 @@ class LookerSDKStream(authSession: AuthSession) : APIMethods(authSession) {
     @JvmOverloads fun connection_features(
         connection_name: String,
         fields: String? = null
-    ): SDKResponse {
+    ): SdkResult<ByteArray, com.looker.sdk.Error> {
         val path_connection_name = encodeParam(connection_name)
-        return this.get<ByteArray>(
+        return this.get<ByteArray, com.looker.sdk.Error>(
             "/connections/$path_connection_name/features",
             mapOf("fields" to fields)
         )
@@ -4723,9 +4939,9 @@ class LookerSDKStream(authSession: AuthSession) : APIMethods(authSession) {
         database: String? = null,
         cache: Boolean? = null,
         fields: String? = null
-    ): SDKResponse {
+    ): SdkResult<ByteArray, com.looker.sdk.Error> {
         val path_connection_name = encodeParam(connection_name)
-        return this.get<ByteArray>(
+        return this.get<ByteArray, com.looker.sdk.Error>(
             "/connections/$path_connection_name/schemas",
             mapOf(
                 "database" to database,
@@ -4757,9 +4973,9 @@ class LookerSDKStream(authSession: AuthSession) : APIMethods(authSession) {
         schema_name: String? = null,
         cache: Boolean? = null,
         fields: String? = null
-    ): SDKResponse {
+    ): SdkResult<ByteArray, com.looker.sdk.Error> {
         val path_connection_name = encodeParam(connection_name)
-        return this.get<ByteArray>(
+        return this.get<ByteArray, com.looker.sdk.Error>(
             "/connections/$path_connection_name/tables",
             mapOf(
                 "database" to database,
@@ -4791,9 +5007,9 @@ class LookerSDKStream(authSession: AuthSession) : APIMethods(authSession) {
         table_limit: Long? = null,
         table_names: String? = null,
         fields: String? = null
-    ): SDKResponse {
+    ): SdkResult<ByteArray, com.looker.sdk.Error> {
         val path_connection_name = encodeParam(connection_name)
-        return this.get<ByteArray>(
+        return this.get<ByteArray, com.looker.sdk.Error>(
             "/connections/$path_connection_name/columns",
             mapOf(
                 "database" to database,
@@ -4821,9 +5037,9 @@ class LookerSDKStream(authSession: AuthSession) : APIMethods(authSession) {
         connection_name: String,
         column_name: String? = null,
         fields: String? = null
-    ): SDKResponse {
+    ): SdkResult<ByteArray, com.looker.sdk.Error> {
         val path_connection_name = encodeParam(connection_name)
-        return this.get<ByteArray>(
+        return this.get<ByteArray, com.looker.sdk.Error>(
             "/connections/$path_connection_name/search_columns",
             mapOf(
                 "column_name" to column_name,
@@ -4849,9 +5065,9 @@ class LookerSDKStream(authSession: AuthSession) : APIMethods(authSession) {
         connection_name: String,
         body: CreateCostEstimate,
         fields: String? = null
-    ): SDKResponse {
+    ): SdkResult<ByteArray, com.looker.sdk.Error> {
         val path_connection_name = encodeParam(connection_name)
-        return this.post<ByteArray>(
+        return this.post<ByteArray, com.looker.sdk.Error>(
             "/connections/$path_connection_name/cost_estimate",
             mapOf("fields" to fields), body
         )
@@ -4878,9 +5094,9 @@ class LookerSDKStream(authSession: AuthSession) : APIMethods(authSession) {
     @JvmOverloads fun lock_all(
         project_id: String,
         fields: String? = null
-    ): SDKResponse {
+    ): SdkResult<ByteArray, com.looker.sdk.Error> {
         val path_project_id = encodeParam(project_id)
-        return this.post<ByteArray>(
+        return this.post<ByteArray, com.looker.sdk.Error>(
             "/projects/$path_project_id/manifest/lock_all",
             mapOf("fields" to fields)
         )
@@ -4897,9 +5113,11 @@ class LookerSDKStream(authSession: AuthSession) : APIMethods(authSession) {
      */
     fun all_git_branches(
         project_id: String
-    ): SDKResponse {
+    ): SdkResult<ByteArray, com.looker.sdk.Error> {
         val path_project_id = encodeParam(project_id)
-        return this.get<ByteArray>("/projects/$path_project_id/git_branches", mapOf())
+        return this.get<ByteArray, com.looker.sdk.Error>(
+            "/projects/$path_project_id/git_branches", mapOf()
+        )
     }
 
     /**
@@ -4913,9 +5131,11 @@ class LookerSDKStream(authSession: AuthSession) : APIMethods(authSession) {
      */
     fun git_branch(
         project_id: String
-    ): SDKResponse {
+    ): SdkResult<ByteArray, com.looker.sdk.Error> {
         val path_project_id = encodeParam(project_id)
-        return this.get<ByteArray>("/projects/$path_project_id/git_branch", mapOf())
+        return this.get<ByteArray, com.looker.sdk.Error>(
+            "/projects/$path_project_id/git_branch", mapOf()
+        )
     }
 
     /**
@@ -4937,9 +5157,11 @@ class LookerSDKStream(authSession: AuthSession) : APIMethods(authSession) {
     fun update_git_branch(
         project_id: String,
         body: WriteGitBranch
-    ): SDKResponse {
+    ): SdkResult<ByteArray, com.looker.sdk.Error> {
         val path_project_id = encodeParam(project_id)
-        return this.put<ByteArray>("/projects/$path_project_id/git_branch", mapOf(), body)
+        return this.put<ByteArray, com.looker.sdk.Error>(
+            "/projects/$path_project_id/git_branch", mapOf(), body
+        )
     }
 
     /**
@@ -4960,9 +5182,11 @@ class LookerSDKStream(authSession: AuthSession) : APIMethods(authSession) {
     fun create_git_branch(
         project_id: String,
         body: WriteGitBranch
-    ): SDKResponse {
+    ): SdkResult<ByteArray, com.looker.sdk.Error> {
         val path_project_id = encodeParam(project_id)
-        return this.post<ByteArray>("/projects/$path_project_id/git_branch", mapOf(), body)
+        return this.post<ByteArray, com.looker.sdk.Error>(
+            "/projects/$path_project_id/git_branch", mapOf(), body
+        )
     }
 
     /**
@@ -4978,10 +5202,12 @@ class LookerSDKStream(authSession: AuthSession) : APIMethods(authSession) {
     fun find_git_branch(
         project_id: String,
         branch_name: String
-    ): SDKResponse {
+    ): SdkResult<ByteArray, com.looker.sdk.Error> {
         val path_project_id = encodeParam(project_id)
         val path_branch_name = encodeParam(branch_name)
-        return this.get<ByteArray>("/projects/$path_project_id/git_branch/$path_branch_name", mapOf())
+        return this.get<ByteArray, com.looker.sdk.Error>(
+            "/projects/$path_project_id/git_branch/$path_branch_name", mapOf()
+        )
     }
 
     /**
@@ -4997,10 +5223,12 @@ class LookerSDKStream(authSession: AuthSession) : APIMethods(authSession) {
     fun delete_git_branch(
         project_id: String,
         branch_name: String
-    ): SDKResponse {
+    ): SdkResult<ByteArray, com.looker.sdk.Error> {
         val path_project_id = encodeParam(project_id)
         val path_branch_name = encodeParam(branch_name)
-        return this.delete<ByteArray>("/projects/$path_project_id/git_branch/$path_branch_name", mapOf())
+        return this.delete<ByteArray, com.looker.sdk.Error>(
+            "/projects/$path_project_id/git_branch/$path_branch_name", mapOf()
+        )
     }
 
     /**
@@ -5024,9 +5252,9 @@ class LookerSDKStream(authSession: AuthSession) : APIMethods(authSession) {
         project_id: String,
         branch: String? = null,
         ref: String? = null
-    ): SDKResponse {
+    ): SdkResult<ByteArray, com.looker.sdk.Error> {
         val path_project_id = encodeParam(project_id)
-        return this.post<ByteArray>(
+        return this.post<ByteArray, com.looker.sdk.Error>(
             "/projects/$path_project_id/deploy_ref_to_production",
             mapOf(
                 "branch" to branch,
@@ -5055,9 +5283,11 @@ class LookerSDKStream(authSession: AuthSession) : APIMethods(authSession) {
      */
     fun deploy_to_production(
         project_id: String
-    ): SDKResponse {
+    ): SdkResult<ByteArray, com.looker.sdk.Error> {
         val path_project_id = encodeParam(project_id)
-        return this.post<ByteArray>("/projects/$path_project_id/deploy_to_production", mapOf())
+        return this.post<ByteArray, com.looker.sdk.Error>(
+            "/projects/$path_project_id/deploy_to_production", mapOf()
+        )
     }
 
     /**
@@ -5071,9 +5301,11 @@ class LookerSDKStream(authSession: AuthSession) : APIMethods(authSession) {
      */
     fun reset_project_to_production(
         project_id: String
-    ): SDKResponse {
+    ): SdkResult<ByteArray, com.looker.sdk.Error> {
         val path_project_id = encodeParam(project_id)
-        return this.post<ByteArray>("/projects/$path_project_id/reset_to_production", mapOf())
+        return this.post<ByteArray, com.looker.sdk.Error>(
+            "/projects/$path_project_id/reset_to_production", mapOf()
+        )
     }
 
     /**
@@ -5087,9 +5319,11 @@ class LookerSDKStream(authSession: AuthSession) : APIMethods(authSession) {
      */
     fun reset_project_to_remote(
         project_id: String
-    ): SDKResponse {
+    ): SdkResult<ByteArray, com.looker.sdk.Error> {
         val path_project_id = encodeParam(project_id)
-        return this.post<ByteArray>("/projects/$path_project_id/reset_to_remote", mapOf())
+        return this.post<ByteArray, com.looker.sdk.Error>(
+            "/projects/$path_project_id/reset_to_remote", mapOf()
+        )
     }
 
     /**
@@ -5103,8 +5337,8 @@ class LookerSDKStream(authSession: AuthSession) : APIMethods(authSession) {
      */
     @JvmOverloads fun all_projects(
         fields: String? = null
-    ): SDKResponse {
-        return this.get<ByteArray>(
+    ): SdkResult<ByteArray, com.looker.sdk.Error> {
+        return this.get<ByteArray, com.looker.sdk.Error>(
             "/projects",
             mapOf("fields" to fields)
         )
@@ -5125,8 +5359,10 @@ class LookerSDKStream(authSession: AuthSession) : APIMethods(authSession) {
      */
     fun create_project(
         body: WriteProject
-    ): SDKResponse {
-        return this.post<ByteArray>("/projects", mapOf(), body)
+    ): SdkResult<ByteArray, com.looker.sdk.Error> {
+        return this.post<ByteArray, com.looker.sdk.Error>(
+            "/projects", mapOf(), body
+        )
     }
 
     /**
@@ -5142,9 +5378,9 @@ class LookerSDKStream(authSession: AuthSession) : APIMethods(authSession) {
     @JvmOverloads fun project(
         project_id: String,
         fields: String? = null
-    ): SDKResponse {
+    ): SdkResult<ByteArray, com.looker.sdk.Error> {
         val path_project_id = encodeParam(project_id)
-        return this.get<ByteArray>(
+        return this.get<ByteArray, com.looker.sdk.Error>(
             "/projects/$path_project_id",
             mapOf("fields" to fields)
         )
@@ -5184,9 +5420,9 @@ class LookerSDKStream(authSession: AuthSession) : APIMethods(authSession) {
         project_id: String,
         body: WriteProject,
         fields: String? = null
-    ): SDKResponse {
+    ): SdkResult<ByteArray, com.looker.sdk.Error> {
         val path_project_id = encodeParam(project_id)
-        return this.patch<ByteArray>(
+        return this.patch<ByteArray, com.looker.sdk.Error>(
             "/projects/$path_project_id",
             mapOf("fields" to fields), body
         )
@@ -5203,9 +5439,11 @@ class LookerSDKStream(authSession: AuthSession) : APIMethods(authSession) {
      */
     fun manifest(
         project_id: String
-    ): SDKResponse {
+    ): SdkResult<ByteArray, com.looker.sdk.Error> {
         val path_project_id = encodeParam(project_id)
-        return this.get<ByteArray>("/projects/$path_project_id/manifest", mapOf())
+        return this.get<ByteArray, com.looker.sdk.Error>(
+            "/projects/$path_project_id/manifest", mapOf()
+        )
     }
 
     /**
@@ -5219,9 +5457,11 @@ class LookerSDKStream(authSession: AuthSession) : APIMethods(authSession) {
      */
     fun git_deploy_key(
         project_id: String
-    ): SDKResponse {
+    ): SdkResult<ByteArray, com.looker.sdk.Error> {
         val path_project_id = encodeParam(project_id)
-        return this.get<ByteArray>("/projects/$path_project_id/git/deploy_key", mapOf())
+        return this.get<ByteArray, com.looker.sdk.Error>(
+            "/projects/$path_project_id/git/deploy_key", mapOf()
+        )
     }
 
     /**
@@ -5241,9 +5481,11 @@ class LookerSDKStream(authSession: AuthSession) : APIMethods(authSession) {
      */
     fun create_git_deploy_key(
         project_id: String
-    ): SDKResponse {
+    ): SdkResult<ByteArray, com.looker.sdk.Error> {
         val path_project_id = encodeParam(project_id)
-        return this.post<ByteArray>("/projects/$path_project_id/git/deploy_key", mapOf())
+        return this.post<ByteArray, com.looker.sdk.Error>(
+            "/projects/$path_project_id/git/deploy_key", mapOf()
+        )
     }
 
     /**
@@ -5268,9 +5510,9 @@ class LookerSDKStream(authSession: AuthSession) : APIMethods(authSession) {
     @JvmOverloads fun project_validation_results(
         project_id: String,
         fields: String? = null
-    ): SDKResponse {
+    ): SdkResult<ByteArray, com.looker.sdk.Error> {
         val path_project_id = encodeParam(project_id)
-        return this.get<ByteArray>(
+        return this.get<ByteArray, com.looker.sdk.Error>(
             "/projects/$path_project_id/validate",
             mapOf("fields" to fields)
         )
@@ -5295,9 +5537,9 @@ class LookerSDKStream(authSession: AuthSession) : APIMethods(authSession) {
     @JvmOverloads fun validate_project(
         project_id: String,
         fields: String? = null
-    ): SDKResponse {
+    ): SdkResult<ByteArray, com.looker.sdk.Error> {
         val path_project_id = encodeParam(project_id)
-        return this.post<ByteArray>(
+        return this.post<ByteArray, com.looker.sdk.Error>(
             "/projects/$path_project_id/validate",
             mapOf("fields" to fields)
         )
@@ -5316,9 +5558,9 @@ class LookerSDKStream(authSession: AuthSession) : APIMethods(authSession) {
     @JvmOverloads fun project_workspace(
         project_id: String,
         fields: String? = null
-    ): SDKResponse {
+    ): SdkResult<ByteArray, com.looker.sdk.Error> {
         val path_project_id = encodeParam(project_id)
-        return this.get<ByteArray>(
+        return this.get<ByteArray, com.looker.sdk.Error>(
             "/projects/$path_project_id/current_workspace",
             mapOf("fields" to fields)
         )
@@ -5337,9 +5579,9 @@ class LookerSDKStream(authSession: AuthSession) : APIMethods(authSession) {
     @JvmOverloads fun all_project_files(
         project_id: String,
         fields: String? = null
-    ): SDKResponse {
+    ): SdkResult<ByteArray, com.looker.sdk.Error> {
         val path_project_id = encodeParam(project_id)
-        return this.get<ByteArray>(
+        return this.get<ByteArray, com.looker.sdk.Error>(
             "/projects/$path_project_id/files",
             mapOf("fields" to fields)
         )
@@ -5360,9 +5602,9 @@ class LookerSDKStream(authSession: AuthSession) : APIMethods(authSession) {
         project_id: String,
         file_id: String,
         fields: String? = null
-    ): SDKResponse {
+    ): SdkResult<ByteArray, com.looker.sdk.Error> {
         val path_project_id = encodeParam(project_id)
-        return this.get<ByteArray>(
+        return this.get<ByteArray, com.looker.sdk.Error>(
             "/projects/$path_project_id/files/file",
             mapOf(
                 "file_id" to file_id,
@@ -5391,9 +5633,9 @@ class LookerSDKStream(authSession: AuthSession) : APIMethods(authSession) {
     @JvmOverloads fun all_git_connection_tests(
         project_id: String,
         remote_url: String? = null
-    ): SDKResponse {
+    ): SdkResult<ByteArray, com.looker.sdk.Error> {
         val path_project_id = encodeParam(project_id)
-        return this.get<ByteArray>(
+        return this.get<ByteArray, com.looker.sdk.Error>(
             "/projects/$path_project_id/git_connection_tests",
             mapOf("remote_url" to remote_url)
         )
@@ -5418,10 +5660,10 @@ class LookerSDKStream(authSession: AuthSession) : APIMethods(authSession) {
         project_id: String,
         test_id: String,
         remote_url: String? = null
-    ): SDKResponse {
+    ): SdkResult<ByteArray, com.looker.sdk.Error> {
         val path_project_id = encodeParam(project_id)
         val path_test_id = encodeParam(test_id)
-        return this.get<ByteArray>(
+        return this.get<ByteArray, com.looker.sdk.Error>(
             "/projects/$path_project_id/git_connection_tests/$path_test_id",
             mapOf("remote_url" to remote_url)
         )
@@ -5442,9 +5684,9 @@ class LookerSDKStream(authSession: AuthSession) : APIMethods(authSession) {
     @JvmOverloads fun all_lookml_tests(
         project_id: String,
         file_id: String? = null
-    ): SDKResponse {
+    ): SdkResult<ByteArray, com.looker.sdk.Error> {
         val path_project_id = encodeParam(project_id)
-        return this.get<ByteArray>(
+        return this.get<ByteArray, com.looker.sdk.Error>(
             "/projects/$path_project_id/lookml_tests",
             mapOf("file_id" to file_id)
         )
@@ -5467,9 +5709,9 @@ class LookerSDKStream(authSession: AuthSession) : APIMethods(authSession) {
         file_id: String? = null,
         test: String? = null,
         model: String? = null
-    ): SDKResponse {
+    ): SdkResult<ByteArray, com.looker.sdk.Error> {
         val path_project_id = encodeParam(project_id)
-        return this.get<ByteArray>(
+        return this.get<ByteArray, com.looker.sdk.Error>(
             "/projects/$path_project_id/lookml_tests/run",
             mapOf(
                 "file_id" to file_id,
@@ -5497,10 +5739,12 @@ class LookerSDKStream(authSession: AuthSession) : APIMethods(authSession) {
         root_project_id: String,
         credential_id: String,
         body: WriteRepositoryCredential
-    ): SDKResponse {
+    ): SdkResult<ByteArray, com.looker.sdk.Error> {
         val path_root_project_id = encodeParam(root_project_id)
         val path_credential_id = encodeParam(credential_id)
-        return this.put<ByteArray>("/projects/$path_root_project_id/credential/$path_credential_id", mapOf(), body)
+        return this.put<ByteArray, com.looker.sdk.Error>(
+            "/projects/$path_root_project_id/credential/$path_credential_id", mapOf(), body
+        )
     }
 
     /**
@@ -5519,10 +5763,12 @@ class LookerSDKStream(authSession: AuthSession) : APIMethods(authSession) {
     fun delete_repository_credential(
         root_project_id: String,
         credential_id: String
-    ): SDKResponse {
+    ): SdkResult<ByteArray, com.looker.sdk.Error> {
         val path_root_project_id = encodeParam(root_project_id)
         val path_credential_id = encodeParam(credential_id)
-        return this.delete<ByteArray>("/projects/$path_root_project_id/credential/$path_credential_id", mapOf())
+        return this.delete<ByteArray, com.looker.sdk.Error>(
+            "/projects/$path_root_project_id/credential/$path_credential_id", mapOf()
+        )
     }
 
     /**
@@ -5536,9 +5782,11 @@ class LookerSDKStream(authSession: AuthSession) : APIMethods(authSession) {
      */
     fun get_all_repository_credentials(
         root_project_id: String
-    ): SDKResponse {
+    ): SdkResult<ByteArray, com.looker.sdk.Error> {
         val path_root_project_id = encodeParam(root_project_id)
-        return this.get<ByteArray>("/projects/$path_root_project_id/credentials", mapOf())
+        return this.get<ByteArray, com.looker.sdk.Error>(
+            "/projects/$path_root_project_id/credentials", mapOf()
+        )
     }
 
     //endregion Project: Manage Projects
@@ -5585,8 +5833,8 @@ class LookerSDKStream(authSession: AuthSession) : APIMethods(authSession) {
         rebuild_pdts: Boolean? = null,
         server_table_calcs: Boolean? = null,
         fields: String? = null
-    ): SDKResponse {
-        return this.post<ByteArray>(
+    ): SdkResult<ByteArray, com.looker.sdk.Error> {
+        return this.post<ByteArray, com.looker.sdk.Error>(
             "/query_tasks",
             mapOf(
                 "limit" to limit,
@@ -5622,8 +5870,8 @@ class LookerSDKStream(authSession: AuthSession) : APIMethods(authSession) {
      */
     fun query_task_multi_results(
         query_task_ids: DelimArray<String>
-    ): SDKResponse {
-        return this.get<ByteArray>(
+    ): SdkResult<ByteArray, com.looker.sdk.Error> {
+        return this.get<ByteArray, com.looker.sdk.Error>(
             "/query_tasks/multi_results",
             mapOf("query_task_ids" to query_task_ids)
         )
@@ -5646,9 +5894,9 @@ class LookerSDKStream(authSession: AuthSession) : APIMethods(authSession) {
     @JvmOverloads fun query_task(
         query_task_id: String,
         fields: String? = null
-    ): SDKResponse {
+    ): SdkResult<ByteArray, com.looker.sdk.Error> {
         val path_query_task_id = encodeParam(query_task_id)
-        return this.get<ByteArray>(
+        return this.get<ByteArray, com.looker.sdk.Error>(
             "/query_tasks/$path_query_task_id",
             mapOf("fields" to fields)
         )
@@ -5685,9 +5933,11 @@ class LookerSDKStream(authSession: AuthSession) : APIMethods(authSession) {
      */
     fun query_task_results(
         query_task_id: String
-    ): SDKResponse {
+    ): SdkResult<ByteArray, com.looker.sdk.Error> {
         val path_query_task_id = encodeParam(query_task_id)
-        return this.get<ByteArray>("/query_tasks/$path_query_task_id/results", mapOf())
+        return this.get<ByteArray, com.looker.sdk.Error>(
+            "/query_tasks/$path_query_task_id/results", mapOf()
+        )
     }
 
     /**
@@ -5717,9 +5967,9 @@ class LookerSDKStream(authSession: AuthSession) : APIMethods(authSession) {
     @JvmOverloads fun query(
         query_id: Long,
         fields: String? = null
-    ): SDKResponse {
+    ): SdkResult<ByteArray, com.looker.sdk.Error> {
         val path_query_id = encodeParam(query_id)
-        return this.get<ByteArray>(
+        return this.get<ByteArray, com.looker.sdk.Error>(
             "/queries/$path_query_id",
             mapOf("fields" to fields)
         )
@@ -5752,9 +6002,9 @@ class LookerSDKStream(authSession: AuthSession) : APIMethods(authSession) {
     @JvmOverloads fun query_for_slug(
         slug: String,
         fields: String? = null
-    ): SDKResponse {
+    ): SdkResult<ByteArray, com.looker.sdk.Error> {
         val path_slug = encodeParam(slug)
-        return this.get<ByteArray>(
+        return this.get<ByteArray, com.looker.sdk.Error>(
             "/queries/slug/$path_slug",
             mapOf("fields" to fields)
         )
@@ -5778,8 +6028,8 @@ class LookerSDKStream(authSession: AuthSession) : APIMethods(authSession) {
     @JvmOverloads fun create_query(
         body: WriteQuery,
         fields: String? = null
-    ): SDKResponse {
-        return this.post<ByteArray>(
+    ): SdkResult<ByteArray, com.looker.sdk.Error> {
+        return this.post<ByteArray, com.looker.sdk.Error>(
             "/queries",
             mapOf("fields" to fields), body
         )
@@ -5842,10 +6092,10 @@ class LookerSDKStream(authSession: AuthSession) : APIMethods(authSession) {
         path_prefix: String? = null,
         rebuild_pdts: Boolean? = null,
         server_table_calcs: Boolean? = null
-    ): SDKResponse {
+    ): SdkResult<ByteArray, com.looker.sdk.Error> {
         val path_query_id = encodeParam(query_id)
         val path_result_format = encodeParam(result_format)
-        return this.get<ByteArray>(
+        return this.get<ByteArray, com.looker.sdk.Error>(
             "/queries/$path_query_id/run/$path_result_format",
             mapOf(
                 "limit" to limit,
@@ -5950,9 +6200,9 @@ class LookerSDKStream(authSession: AuthSession) : APIMethods(authSession) {
         path_prefix: String? = null,
         rebuild_pdts: Boolean? = null,
         server_table_calcs: Boolean? = null
-    ): SDKResponse {
+    ): SdkResult<ByteArray, com.looker.sdk.Error> {
         val path_result_format = encodeParam(result_format)
-        return this.post<ByteArray>(
+        return this.post<ByteArray, com.looker.sdk.Error>(
             "/queries/run/$path_result_format",
             mapOf(
                 "limit" to limit,
@@ -6038,11 +6288,13 @@ class LookerSDKStream(authSession: AuthSession) : APIMethods(authSession) {
         model_name: String,
         view_name: String,
         result_format: String
-    ): SDKResponse {
+    ): SdkResult<ByteArray, com.looker.sdk.Error> {
         val path_model_name = encodeParam(model_name)
         val path_view_name = encodeParam(view_name)
         val path_result_format = encodeParam(result_format)
-        return this.get<ByteArray>("/queries/models/$path_model_name/views/$path_view_name/run/$path_result_format", mapOf())
+        return this.get<ByteArray, com.looker.sdk.Error>(
+            "/queries/models/$path_model_name/views/$path_view_name/run/$path_result_format", mapOf()
+        )
     }
 
     /**
@@ -6058,9 +6310,9 @@ class LookerSDKStream(authSession: AuthSession) : APIMethods(authSession) {
     @JvmOverloads fun merge_query(
         merge_query_id: String,
         fields: String? = null
-    ): SDKResponse {
+    ): SdkResult<ByteArray, com.looker.sdk.Error> {
         val path_merge_query_id = encodeParam(merge_query_id)
-        return this.get<ByteArray>(
+        return this.get<ByteArray, com.looker.sdk.Error>(
             "/merge_queries/$path_merge_query_id",
             mapOf("fields" to fields)
         )
@@ -6093,8 +6345,8 @@ class LookerSDKStream(authSession: AuthSession) : APIMethods(authSession) {
     @JvmOverloads fun create_merge_query(
         body: WriteMergeQuery? = null,
         fields: String? = null
-    ): SDKResponse {
-        return this.post<ByteArray>(
+    ): SdkResult<ByteArray, com.looker.sdk.Error> {
+        return this.post<ByteArray, com.looker.sdk.Error>(
             "/merge_queries",
             mapOf("fields" to fields), body
         )
@@ -6105,8 +6357,10 @@ class LookerSDKStream(authSession: AuthSession) : APIMethods(authSession) {
      *
      * GET /running_queries -> ByteArray
      */
-    fun all_running_queries(): SDKResponse {
-        return this.get<ByteArray>("/running_queries", mapOf())
+    fun all_running_queries(): SdkResult<ByteArray, com.looker.sdk.Error> {
+        return this.get<ByteArray, com.looker.sdk.Error>(
+            "/running_queries", mapOf()
+        )
     }
 
     /**
@@ -6118,9 +6372,11 @@ class LookerSDKStream(authSession: AuthSession) : APIMethods(authSession) {
      */
     fun kill_query(
         query_task_id: String
-    ): SDKResponse {
+    ): SdkResult<ByteArray, com.looker.sdk.Error> {
         val path_query_task_id = encodeParam(query_task_id)
-        return this.delete<ByteArray>("/running_queries/$path_query_task_id", mapOf())
+        return this.delete<ByteArray, com.looker.sdk.Error>(
+            "/running_queries/$path_query_task_id", mapOf()
+        )
     }
 
     /**
@@ -6132,9 +6388,11 @@ class LookerSDKStream(authSession: AuthSession) : APIMethods(authSession) {
      */
     fun sql_query(
         slug: String
-    ): SDKResponse {
+    ): SdkResult<ByteArray, com.looker.sdk.Error> {
         val path_slug = encodeParam(slug)
-        return this.get<ByteArray>("/sql_queries/$path_slug", mapOf())
+        return this.get<ByteArray, com.looker.sdk.Error>(
+            "/sql_queries/$path_slug", mapOf()
+        )
     }
 
     /**
@@ -6148,8 +6406,10 @@ class LookerSDKStream(authSession: AuthSession) : APIMethods(authSession) {
      */
     fun create_sql_query(
         body: SqlQueryCreate
-    ): SDKResponse {
-        return this.post<ByteArray>("/sql_queries", mapOf(), body)
+    ): SdkResult<ByteArray, com.looker.sdk.Error> {
+        return this.post<ByteArray, com.looker.sdk.Error>(
+            "/sql_queries", mapOf(), body
+        )
     }
 
     /**
@@ -6167,10 +6427,10 @@ class LookerSDKStream(authSession: AuthSession) : APIMethods(authSession) {
         slug: String,
         result_format: String,
         download: String? = null
-    ): SDKResponse {
+    ): SdkResult<ByteArray, com.looker.sdk.Error> {
         val path_slug = encodeParam(slug)
         val path_result_format = encodeParam(result_format)
-        return this.post<ByteArray>(
+        return this.post<ByteArray, com.looker.sdk.Error>(
             "/sql_queries/$path_slug/run/$path_result_format",
             mapOf("download" to download)
         )
@@ -6201,10 +6461,10 @@ class LookerSDKStream(authSession: AuthSession) : APIMethods(authSession) {
         width: Long,
         height: Long,
         fields: String? = null
-    ): SDKResponse {
+    ): SdkResult<ByteArray, com.looker.sdk.Error> {
         val path_look_id = encodeParam(look_id)
         val path_result_format = encodeParam(result_format)
-        return this.post<ByteArray>(
+        return this.post<ByteArray, com.looker.sdk.Error>(
             "/render_tasks/looks/$path_look_id/$path_result_format",
             mapOf(
                 "width" to width,
@@ -6235,10 +6495,10 @@ class LookerSDKStream(authSession: AuthSession) : APIMethods(authSession) {
         width: Long,
         height: Long,
         fields: String? = null
-    ): SDKResponse {
+    ): SdkResult<ByteArray, com.looker.sdk.Error> {
         val path_query_id = encodeParam(query_id)
         val path_result_format = encodeParam(result_format)
-        return this.post<ByteArray>(
+        return this.post<ByteArray, com.looker.sdk.Error>(
             "/render_tasks/queries/$path_query_id/$path_result_format",
             mapOf(
                 "width" to width,
@@ -6277,10 +6537,10 @@ class LookerSDKStream(authSession: AuthSession) : APIMethods(authSession) {
         pdf_paper_size: String? = null,
         pdf_landscape: Boolean? = null,
         long_tables: Boolean? = null
-    ): SDKResponse {
+    ): SdkResult<ByteArray, com.looker.sdk.Error> {
         val path_dashboard_id = encodeParam(dashboard_id)
         val path_result_format = encodeParam(result_format)
-        return this.post<ByteArray>(
+        return this.post<ByteArray, com.looker.sdk.Error>(
             "/render_tasks/dashboards/$path_dashboard_id/$path_result_format",
             mapOf(
                 "width" to width,
@@ -6309,9 +6569,9 @@ class LookerSDKStream(authSession: AuthSession) : APIMethods(authSession) {
     @JvmOverloads fun render_task(
         render_task_id: String,
         fields: String? = null
-    ): SDKResponse {
+    ): SdkResult<ByteArray, com.looker.sdk.Error> {
         val path_render_task_id = encodeParam(render_task_id)
-        return this.get<ByteArray>(
+        return this.get<ByteArray, com.looker.sdk.Error>(
             "/render_tasks/$path_render_task_id",
             mapOf("fields" to fields)
         )
@@ -6344,9 +6604,11 @@ class LookerSDKStream(authSession: AuthSession) : APIMethods(authSession) {
      */
     fun render_task_results(
         render_task_id: String
-    ): SDKResponse {
+    ): SdkResult<ByteArray, com.looker.sdk.Error> {
         val path_render_task_id = encodeParam(render_task_id)
-        return this.get<ByteArray>("/render_tasks/$path_render_task_id/results", mapOf())
+        return this.get<ByteArray, com.looker.sdk.Error>(
+            "/render_tasks/$path_render_task_id/results", mapOf()
+        )
     }
 
     //endregion RenderTask: Manage Render Tasks
@@ -6399,8 +6661,8 @@ class LookerSDKStream(authSession: AuthSession) : APIMethods(authSession) {
         all_access: Boolean? = null,
         built_in: Boolean? = null,
         filter_or: Boolean? = null
-    ): SDKResponse {
-        return this.get<ByteArray>(
+    ): SdkResult<ByteArray, com.looker.sdk.Error> {
+        return this.get<ByteArray, com.looker.sdk.Error>(
             "/model_sets/search",
             mapOf(
                 "fields" to fields,
@@ -6427,9 +6689,9 @@ class LookerSDKStream(authSession: AuthSession) : APIMethods(authSession) {
     @JvmOverloads fun model_set(
         model_set_id: Long,
         fields: String? = null
-    ): SDKResponse {
+    ): SdkResult<ByteArray, com.looker.sdk.Error> {
         val path_model_set_id = encodeParam(model_set_id)
-        return this.get<ByteArray>(
+        return this.get<ByteArray, com.looker.sdk.Error>(
             "/model_sets/$path_model_set_id",
             mapOf("fields" to fields)
         )
@@ -6446,9 +6708,11 @@ class LookerSDKStream(authSession: AuthSession) : APIMethods(authSession) {
     fun update_model_set(
         model_set_id: Long,
         body: WriteModelSet
-    ): SDKResponse {
+    ): SdkResult<ByteArray, com.looker.sdk.Error> {
         val path_model_set_id = encodeParam(model_set_id)
-        return this.patch<ByteArray>("/model_sets/$path_model_set_id", mapOf(), body)
+        return this.patch<ByteArray, com.looker.sdk.Error>(
+            "/model_sets/$path_model_set_id", mapOf(), body
+        )
     }
 
     /**
@@ -6460,9 +6724,11 @@ class LookerSDKStream(authSession: AuthSession) : APIMethods(authSession) {
      */
     fun delete_model_set(
         model_set_id: Long
-    ): SDKResponse {
+    ): SdkResult<ByteArray, com.looker.sdk.Error> {
         val path_model_set_id = encodeParam(model_set_id)
-        return this.delete<ByteArray>("/model_sets/$path_model_set_id", mapOf())
+        return this.delete<ByteArray, com.looker.sdk.Error>(
+            "/model_sets/$path_model_set_id", mapOf()
+        )
     }
 
     /**
@@ -6474,8 +6740,8 @@ class LookerSDKStream(authSession: AuthSession) : APIMethods(authSession) {
      */
     @JvmOverloads fun all_model_sets(
         fields: String? = null
-    ): SDKResponse {
-        return this.get<ByteArray>(
+    ): SdkResult<ByteArray, com.looker.sdk.Error> {
+        return this.get<ByteArray, com.looker.sdk.Error>(
             "/model_sets",
             mapOf("fields" to fields)
         )
@@ -6490,8 +6756,10 @@ class LookerSDKStream(authSession: AuthSession) : APIMethods(authSession) {
      */
     fun create_model_set(
         body: WriteModelSet
-    ): SDKResponse {
-        return this.post<ByteArray>("/model_sets", mapOf(), body)
+    ): SdkResult<ByteArray, com.looker.sdk.Error> {
+        return this.post<ByteArray, com.looker.sdk.Error>(
+            "/model_sets", mapOf(), body
+        )
     }
 
     /**
@@ -6499,8 +6767,10 @@ class LookerSDKStream(authSession: AuthSession) : APIMethods(authSession) {
      *
      * GET /permissions -> ByteArray
      */
-    fun all_permissions(): SDKResponse {
-        return this.get<ByteArray>("/permissions", mapOf())
+    fun all_permissions(): SdkResult<ByteArray, com.looker.sdk.Error> {
+        return this.get<ByteArray, com.looker.sdk.Error>(
+            "/permissions", mapOf()
+        )
     }
 
     /**
@@ -6549,8 +6819,8 @@ class LookerSDKStream(authSession: AuthSession) : APIMethods(authSession) {
         all_access: Boolean? = null,
         built_in: Boolean? = null,
         filter_or: Boolean? = null
-    ): SDKResponse {
-        return this.get<ByteArray>(
+    ): SdkResult<ByteArray, com.looker.sdk.Error> {
+        return this.get<ByteArray, com.looker.sdk.Error>(
             "/permission_sets/search",
             mapOf(
                 "fields" to fields,
@@ -6577,9 +6847,9 @@ class LookerSDKStream(authSession: AuthSession) : APIMethods(authSession) {
     @JvmOverloads fun permission_set(
         permission_set_id: Long,
         fields: String? = null
-    ): SDKResponse {
+    ): SdkResult<ByteArray, com.looker.sdk.Error> {
         val path_permission_set_id = encodeParam(permission_set_id)
-        return this.get<ByteArray>(
+        return this.get<ByteArray, com.looker.sdk.Error>(
             "/permission_sets/$path_permission_set_id",
             mapOf("fields" to fields)
         )
@@ -6596,9 +6866,11 @@ class LookerSDKStream(authSession: AuthSession) : APIMethods(authSession) {
     fun update_permission_set(
         permission_set_id: Long,
         body: WritePermissionSet
-    ): SDKResponse {
+    ): SdkResult<ByteArray, com.looker.sdk.Error> {
         val path_permission_set_id = encodeParam(permission_set_id)
-        return this.patch<ByteArray>("/permission_sets/$path_permission_set_id", mapOf(), body)
+        return this.patch<ByteArray, com.looker.sdk.Error>(
+            "/permission_sets/$path_permission_set_id", mapOf(), body
+        )
     }
 
     /**
@@ -6610,9 +6882,11 @@ class LookerSDKStream(authSession: AuthSession) : APIMethods(authSession) {
      */
     fun delete_permission_set(
         permission_set_id: Long
-    ): SDKResponse {
+    ): SdkResult<ByteArray, com.looker.sdk.Error> {
         val path_permission_set_id = encodeParam(permission_set_id)
-        return this.delete<ByteArray>("/permission_sets/$path_permission_set_id", mapOf())
+        return this.delete<ByteArray, com.looker.sdk.Error>(
+            "/permission_sets/$path_permission_set_id", mapOf()
+        )
     }
 
     /**
@@ -6624,8 +6898,8 @@ class LookerSDKStream(authSession: AuthSession) : APIMethods(authSession) {
      */
     @JvmOverloads fun all_permission_sets(
         fields: String? = null
-    ): SDKResponse {
-        return this.get<ByteArray>(
+    ): SdkResult<ByteArray, com.looker.sdk.Error> {
+        return this.get<ByteArray, com.looker.sdk.Error>(
             "/permission_sets",
             mapOf("fields" to fields)
         )
@@ -6640,8 +6914,10 @@ class LookerSDKStream(authSession: AuthSession) : APIMethods(authSession) {
      */
     fun create_permission_set(
         body: WritePermissionSet
-    ): SDKResponse {
-        return this.post<ByteArray>("/permission_sets", mapOf(), body)
+    ): SdkResult<ByteArray, com.looker.sdk.Error> {
+        return this.post<ByteArray, com.looker.sdk.Error>(
+            "/permission_sets", mapOf(), body
+        )
     }
 
     /**
@@ -6655,8 +6931,8 @@ class LookerSDKStream(authSession: AuthSession) : APIMethods(authSession) {
     @JvmOverloads fun all_roles(
         fields: String? = null,
         ids: DelimArray<Long>? = null
-    ): SDKResponse {
-        return this.get<ByteArray>(
+    ): SdkResult<ByteArray, com.looker.sdk.Error> {
+        return this.get<ByteArray, com.looker.sdk.Error>(
             "/roles",
             mapOf(
                 "fields" to fields,
@@ -6674,8 +6950,10 @@ class LookerSDKStream(authSession: AuthSession) : APIMethods(authSession) {
      */
     fun create_role(
         body: WriteRole
-    ): SDKResponse {
-        return this.post<ByteArray>("/roles", mapOf(), body)
+    ): SdkResult<ByteArray, com.looker.sdk.Error> {
+        return this.post<ByteArray, com.looker.sdk.Error>(
+            "/roles", mapOf(), body
+        )
     }
 
     /**
@@ -6724,8 +7002,8 @@ class LookerSDKStream(authSession: AuthSession) : APIMethods(authSession) {
         name: String? = null,
         built_in: Boolean? = null,
         filter_or: Boolean? = null
-    ): SDKResponse {
-        return this.get<ByteArray>(
+    ): SdkResult<ByteArray, com.looker.sdk.Error> {
+        return this.get<ByteArray, com.looker.sdk.Error>(
             "/roles/search",
             mapOf(
                 "fields" to fields,
@@ -6749,9 +7027,11 @@ class LookerSDKStream(authSession: AuthSession) : APIMethods(authSession) {
      */
     fun role(
         role_id: Long
-    ): SDKResponse {
+    ): SdkResult<ByteArray, com.looker.sdk.Error> {
         val path_role_id = encodeParam(role_id)
-        return this.get<ByteArray>("/roles/$path_role_id", mapOf())
+        return this.get<ByteArray, com.looker.sdk.Error>(
+            "/roles/$path_role_id", mapOf()
+        )
     }
 
     /**
@@ -6765,9 +7045,11 @@ class LookerSDKStream(authSession: AuthSession) : APIMethods(authSession) {
     fun update_role(
         role_id: Long,
         body: WriteRole
-    ): SDKResponse {
+    ): SdkResult<ByteArray, com.looker.sdk.Error> {
         val path_role_id = encodeParam(role_id)
-        return this.patch<ByteArray>("/roles/$path_role_id", mapOf(), body)
+        return this.patch<ByteArray, com.looker.sdk.Error>(
+            "/roles/$path_role_id", mapOf(), body
+        )
     }
 
     /**
@@ -6779,9 +7061,11 @@ class LookerSDKStream(authSession: AuthSession) : APIMethods(authSession) {
      */
     fun delete_role(
         role_id: Long
-    ): SDKResponse {
+    ): SdkResult<ByteArray, com.looker.sdk.Error> {
         val path_role_id = encodeParam(role_id)
-        return this.delete<ByteArray>("/roles/$path_role_id", mapOf())
+        return this.delete<ByteArray, com.looker.sdk.Error>(
+            "/roles/$path_role_id", mapOf()
+        )
     }
 
     /**
@@ -6795,9 +7079,9 @@ class LookerSDKStream(authSession: AuthSession) : APIMethods(authSession) {
     @JvmOverloads fun role_groups(
         role_id: Long,
         fields: String? = null
-    ): SDKResponse {
+    ): SdkResult<ByteArray, com.looker.sdk.Error> {
         val path_role_id = encodeParam(role_id)
-        return this.get<ByteArray>(
+        return this.get<ByteArray, com.looker.sdk.Error>(
             "/roles/$path_role_id/groups",
             mapOf("fields" to fields)
         )
@@ -6814,9 +7098,11 @@ class LookerSDKStream(authSession: AuthSession) : APIMethods(authSession) {
     fun set_role_groups(
         role_id: Long,
         body: Array<Long>
-    ): SDKResponse {
+    ): SdkResult<ByteArray, com.looker.sdk.Error> {
         val path_role_id = encodeParam(role_id)
-        return this.put<ByteArray>("/roles/$path_role_id/groups", mapOf(), body)
+        return this.put<ByteArray, com.looker.sdk.Error>(
+            "/roles/$path_role_id/groups", mapOf(), body
+        )
     }
 
     /**
@@ -6832,9 +7118,9 @@ class LookerSDKStream(authSession: AuthSession) : APIMethods(authSession) {
         role_id: Long,
         fields: String? = null,
         direct_association_only: Boolean? = null
-    ): SDKResponse {
+    ): SdkResult<ByteArray, com.looker.sdk.Error> {
         val path_role_id = encodeParam(role_id)
-        return this.get<ByteArray>(
+        return this.get<ByteArray, com.looker.sdk.Error>(
             "/roles/$path_role_id/users",
             mapOf(
                 "fields" to fields,
@@ -6854,9 +7140,11 @@ class LookerSDKStream(authSession: AuthSession) : APIMethods(authSession) {
     fun set_role_users(
         role_id: Long,
         body: Array<Long>
-    ): SDKResponse {
+    ): SdkResult<ByteArray, com.looker.sdk.Error> {
         val path_role_id = encodeParam(role_id)
-        return this.put<ByteArray>("/roles/$path_role_id/users", mapOf(), body)
+        return this.put<ByteArray, com.looker.sdk.Error>(
+            "/roles/$path_role_id/users", mapOf(), body
+        )
     }
 
     //endregion Role: Manage Roles
@@ -6876,9 +7164,9 @@ class LookerSDKStream(authSession: AuthSession) : APIMethods(authSession) {
     @JvmOverloads fun scheduled_plans_for_space(
         space_id: Long,
         fields: String? = null
-    ): SDKResponse {
+    ): SdkResult<ByteArray, com.looker.sdk.Error> {
         val path_space_id = encodeParam(space_id)
-        return this.get<ByteArray>(
+        return this.get<ByteArray, com.looker.sdk.Error>(
             "/scheduled_plans/space/$path_space_id",
             mapOf("fields" to fields)
         )
@@ -6897,9 +7185,9 @@ class LookerSDKStream(authSession: AuthSession) : APIMethods(authSession) {
     @JvmOverloads fun scheduled_plan(
         scheduled_plan_id: Long,
         fields: String? = null
-    ): SDKResponse {
+    ): SdkResult<ByteArray, com.looker.sdk.Error> {
         val path_scheduled_plan_id = encodeParam(scheduled_plan_id)
-        return this.get<ByteArray>(
+        return this.get<ByteArray, com.looker.sdk.Error>(
             "/scheduled_plans/$path_scheduled_plan_id",
             mapOf("fields" to fields)
         )
@@ -6957,9 +7245,11 @@ class LookerSDKStream(authSession: AuthSession) : APIMethods(authSession) {
     fun update_scheduled_plan(
         scheduled_plan_id: Long,
         body: WriteScheduledPlan
-    ): SDKResponse {
+    ): SdkResult<ByteArray, com.looker.sdk.Error> {
         val path_scheduled_plan_id = encodeParam(scheduled_plan_id)
-        return this.patch<ByteArray>("/scheduled_plans/$path_scheduled_plan_id", mapOf(), body)
+        return this.patch<ByteArray, com.looker.sdk.Error>(
+            "/scheduled_plans/$path_scheduled_plan_id", mapOf(), body
+        )
     }
 
     /**
@@ -6975,9 +7265,11 @@ class LookerSDKStream(authSession: AuthSession) : APIMethods(authSession) {
      */
     fun delete_scheduled_plan(
         scheduled_plan_id: Long
-    ): SDKResponse {
+    ): SdkResult<ByteArray, com.looker.sdk.Error> {
         val path_scheduled_plan_id = encodeParam(scheduled_plan_id)
-        return this.delete<ByteArray>("/scheduled_plans/$path_scheduled_plan_id", mapOf())
+        return this.delete<ByteArray, com.looker.sdk.Error>(
+            "/scheduled_plans/$path_scheduled_plan_id", mapOf()
+        )
     }
 
     /**
@@ -7003,8 +7295,8 @@ class LookerSDKStream(authSession: AuthSession) : APIMethods(authSession) {
         user_id: Long? = null,
         fields: String? = null,
         all_users: Boolean? = null
-    ): SDKResponse {
-        return this.get<ByteArray>(
+    ): SdkResult<ByteArray, com.looker.sdk.Error> {
+        return this.get<ByteArray, com.looker.sdk.Error>(
             "/scheduled_plans",
             mapOf(
                 "user_id" to user_id,
@@ -7080,8 +7372,10 @@ class LookerSDKStream(authSession: AuthSession) : APIMethods(authSession) {
      */
     fun create_scheduled_plan(
         body: WriteScheduledPlan
-    ): SDKResponse {
-        return this.post<ByteArray>("/scheduled_plans", mapOf(), body)
+    ): SdkResult<ByteArray, com.looker.sdk.Error> {
+        return this.post<ByteArray, com.looker.sdk.Error>(
+            "/scheduled_plans", mapOf(), body
+        )
     }
 
     /**
@@ -7129,8 +7423,10 @@ class LookerSDKStream(authSession: AuthSession) : APIMethods(authSession) {
      */
     fun scheduled_plan_run_once(
         body: WriteScheduledPlan
-    ): SDKResponse {
-        return this.post<ByteArray>("/scheduled_plans/run_once", mapOf(), body)
+    ): SdkResult<ByteArray, com.looker.sdk.Error> {
+        return this.post<ByteArray, com.looker.sdk.Error>(
+            "/scheduled_plans/run_once", mapOf(), body
+        )
     }
 
     /**
@@ -7158,9 +7454,9 @@ class LookerSDKStream(authSession: AuthSession) : APIMethods(authSession) {
         user_id: Long? = null,
         fields: String? = null,
         all_users: Boolean? = null
-    ): SDKResponse {
+    ): SdkResult<ByteArray, com.looker.sdk.Error> {
         val path_look_id = encodeParam(look_id)
-        return this.get<ByteArray>(
+        return this.get<ByteArray, com.looker.sdk.Error>(
             "/scheduled_plans/look/$path_look_id",
             mapOf(
                 "user_id" to user_id,
@@ -7195,9 +7491,9 @@ class LookerSDKStream(authSession: AuthSession) : APIMethods(authSession) {
         user_id: Long? = null,
         all_users: Boolean? = null,
         fields: String? = null
-    ): SDKResponse {
+    ): SdkResult<ByteArray, com.looker.sdk.Error> {
         val path_dashboard_id = encodeParam(dashboard_id)
-        return this.get<ByteArray>(
+        return this.get<ByteArray, com.looker.sdk.Error>(
             "/scheduled_plans/dashboard/$path_dashboard_id",
             mapOf(
                 "user_id" to user_id,
@@ -7232,9 +7528,9 @@ class LookerSDKStream(authSession: AuthSession) : APIMethods(authSession) {
         user_id: Long? = null,
         fields: String? = null,
         all_users: Boolean? = null
-    ): SDKResponse {
+    ): SdkResult<ByteArray, com.looker.sdk.Error> {
         val path_lookml_dashboard_id = encodeParam(lookml_dashboard_id)
-        return this.get<ByteArray>(
+        return this.get<ByteArray, com.looker.sdk.Error>(
             "/scheduled_plans/lookml_dashboard/$path_lookml_dashboard_id",
             mapOf(
                 "user_id" to user_id,
@@ -7301,9 +7597,11 @@ class LookerSDKStream(authSession: AuthSession) : APIMethods(authSession) {
     @JvmOverloads fun scheduled_plan_run_once_by_id(
         scheduled_plan_id: Long,
         body: WriteScheduledPlan? = null
-    ): SDKResponse {
+    ): SdkResult<ByteArray, com.looker.sdk.Error> {
         val path_scheduled_plan_id = encodeParam(scheduled_plan_id)
-        return this.post<ByteArray>("/scheduled_plans/$path_scheduled_plan_id/run_once", mapOf(), body)
+        return this.post<ByteArray, com.looker.sdk.Error>(
+            "/scheduled_plans/$path_scheduled_plan_id/run_once", mapOf(), body
+        )
     }
 
     //endregion ScheduledPlan: Manage Scheduled Plans
@@ -7317,8 +7615,10 @@ class LookerSDKStream(authSession: AuthSession) : APIMethods(authSession) {
      *
      * GET /session -> ByteArray
      */
-    fun session(): SDKResponse {
-        return this.get<ByteArray>("/session", mapOf())
+    fun session(): SdkResult<ByteArray, com.looker.sdk.Error> {
+        return this.get<ByteArray, com.looker.sdk.Error>(
+            "/session", mapOf()
+        )
     }
 
     /**
@@ -7349,8 +7649,10 @@ class LookerSDKStream(authSession: AuthSession) : APIMethods(authSession) {
      */
     fun update_session(
         body: WriteApiSession
-    ): SDKResponse {
-        return this.patch<ByteArray>("/session", mapOf(), body)
+    ): SdkResult<ByteArray, com.looker.sdk.Error> {
+        return this.patch<ByteArray, com.looker.sdk.Error>(
+            "/session", mapOf(), body
+        )
     }
 
     //endregion Session: Session Information
@@ -7372,8 +7674,8 @@ class LookerSDKStream(authSession: AuthSession) : APIMethods(authSession) {
      */
     @JvmOverloads fun all_themes(
         fields: String? = null
-    ): SDKResponse {
-        return this.get<ByteArray>(
+    ): SdkResult<ByteArray, com.looker.sdk.Error> {
+        return this.get<ByteArray, com.looker.sdk.Error>(
             "/themes",
             mapOf("fields" to fields)
         )
@@ -7402,8 +7704,10 @@ class LookerSDKStream(authSession: AuthSession) : APIMethods(authSession) {
      */
     fun create_theme(
         body: WriteTheme
-    ): SDKResponse {
-        return this.post<ByteArray>("/themes", mapOf(), body)
+    ): SdkResult<ByteArray, com.looker.sdk.Error> {
+        return this.post<ByteArray, com.looker.sdk.Error>(
+            "/themes", mapOf(), body
+        )
     }
 
     /**
@@ -7468,8 +7772,8 @@ class LookerSDKStream(authSession: AuthSession) : APIMethods(authSession) {
         sorts: String? = null,
         fields: String? = null,
         filter_or: Boolean? = null
-    ): SDKResponse {
-        return this.get<ByteArray>(
+    ): SdkResult<ByteArray, com.looker.sdk.Error> {
+        return this.get<ByteArray, com.looker.sdk.Error>(
             "/themes/search",
             mapOf(
                 "id" to id,
@@ -7500,8 +7804,8 @@ class LookerSDKStream(authSession: AuthSession) : APIMethods(authSession) {
      */
     @JvmOverloads fun default_theme(
         ts: Date? = null
-    ): SDKResponse {
-        return this.get<ByteArray>(
+    ): SdkResult<ByteArray, com.looker.sdk.Error> {
+        return this.get<ByteArray, com.looker.sdk.Error>(
             "/themes/default",
             mapOf("ts" to ts)
         )
@@ -7526,8 +7830,8 @@ class LookerSDKStream(authSession: AuthSession) : APIMethods(authSession) {
      */
     fun set_default_theme(
         name: String
-    ): SDKResponse {
-        return this.put<ByteArray>(
+    ): SdkResult<ByteArray, com.looker.sdk.Error> {
+        return this.put<ByteArray, com.looker.sdk.Error>(
             "/themes/default",
             mapOf("name" to name)
         )
@@ -7554,8 +7858,8 @@ class LookerSDKStream(authSession: AuthSession) : APIMethods(authSession) {
         name: String? = null,
         ts: Date? = null,
         fields: String? = null
-    ): SDKResponse {
-        return this.get<ByteArray>(
+    ): SdkResult<ByteArray, com.looker.sdk.Error> {
+        return this.get<ByteArray, com.looker.sdk.Error>(
             "/themes/active",
             mapOf(
                 "name" to name,
@@ -7581,8 +7885,8 @@ class LookerSDKStream(authSession: AuthSession) : APIMethods(authSession) {
     @JvmOverloads fun theme_or_default(
         name: String,
         ts: Date? = null
-    ): SDKResponse {
-        return this.get<ByteArray>(
+    ): SdkResult<ByteArray, com.looker.sdk.Error> {
+        return this.get<ByteArray, com.looker.sdk.Error>(
             "/themes/theme_or_default",
             mapOf(
                 "name" to name,
@@ -7606,8 +7910,10 @@ class LookerSDKStream(authSession: AuthSession) : APIMethods(authSession) {
      */
     fun validate_theme(
         body: WriteTheme
-    ): SDKResponse {
-        return this.post<ByteArray>("/themes/validate", mapOf(), body)
+    ): SdkResult<ByteArray, com.looker.sdk.Error> {
+        return this.post<ByteArray, com.looker.sdk.Error>(
+            "/themes/validate", mapOf(), body
+        )
     }
 
     /**
@@ -7625,9 +7931,9 @@ class LookerSDKStream(authSession: AuthSession) : APIMethods(authSession) {
     @JvmOverloads fun theme(
         theme_id: Long,
         fields: String? = null
-    ): SDKResponse {
+    ): SdkResult<ByteArray, com.looker.sdk.Error> {
         val path_theme_id = encodeParam(theme_id)
-        return this.get<ByteArray>(
+        return this.get<ByteArray, com.looker.sdk.Error>(
             "/themes/$path_theme_id",
             mapOf("fields" to fields)
         )
@@ -7646,9 +7952,11 @@ class LookerSDKStream(authSession: AuthSession) : APIMethods(authSession) {
     fun update_theme(
         theme_id: Long,
         body: WriteTheme
-    ): SDKResponse {
+    ): SdkResult<ByteArray, com.looker.sdk.Error> {
         val path_theme_id = encodeParam(theme_id)
-        return this.patch<ByteArray>("/themes/$path_theme_id", mapOf(), body)
+        return this.patch<ByteArray, com.looker.sdk.Error>(
+            "/themes/$path_theme_id", mapOf(), body
+        )
     }
 
     /**
@@ -7668,9 +7976,11 @@ class LookerSDKStream(authSession: AuthSession) : APIMethods(authSession) {
      */
     fun delete_theme(
         theme_id: String
-    ): SDKResponse {
+    ): SdkResult<ByteArray, com.looker.sdk.Error> {
         val path_theme_id = encodeParam(theme_id)
-        return this.delete<ByteArray>("/themes/$path_theme_id", mapOf())
+        return this.delete<ByteArray, com.looker.sdk.Error>(
+            "/themes/$path_theme_id", mapOf()
+        )
     }
 
     //endregion Theme: Manage Themes
@@ -7686,8 +7996,8 @@ class LookerSDKStream(authSession: AuthSession) : APIMethods(authSession) {
      */
     @JvmOverloads fun me(
         fields: String? = null
-    ): SDKResponse {
-        return this.get<ByteArray>(
+    ): SdkResult<ByteArray, com.looker.sdk.Error> {
+        return this.get<ByteArray, com.looker.sdk.Error>(
             "/user",
             mapOf("fields" to fields)
         )
@@ -7710,8 +8020,8 @@ class LookerSDKStream(authSession: AuthSession) : APIMethods(authSession) {
         per_page: Long? = null,
         sorts: String? = null,
         ids: DelimArray<Long>? = null
-    ): SDKResponse {
-        return this.get<ByteArray>(
+    ): SdkResult<ByteArray, com.looker.sdk.Error> {
+        return this.get<ByteArray, com.looker.sdk.Error>(
             "/users",
             mapOf(
                 "fields" to fields,
@@ -7734,8 +8044,8 @@ class LookerSDKStream(authSession: AuthSession) : APIMethods(authSession) {
     @JvmOverloads fun create_user(
         body: WriteUser? = null,
         fields: String? = null
-    ): SDKResponse {
-        return this.post<ByteArray>(
+    ): SdkResult<ByteArray, com.looker.sdk.Error> {
+        return this.post<ByteArray, com.looker.sdk.Error>(
             "/users",
             mapOf("fields" to fields), body
         )
@@ -7803,8 +8113,8 @@ class LookerSDKStream(authSession: AuthSession) : APIMethods(authSession) {
         filter_or: Boolean? = null,
         content_metadata_id: String? = null,
         group_id: String? = null
-    ): SDKResponse {
-        return this.get<ByteArray>(
+    ): SdkResult<ByteArray, com.looker.sdk.Error> {
+        return this.get<ByteArray, com.looker.sdk.Error>(
             "/users/search",
             mapOf(
                 "fields" to fields,
@@ -7858,9 +8168,9 @@ class LookerSDKStream(authSession: AuthSession) : APIMethods(authSession) {
         verified_looker_employee: Boolean? = null,
         email: String? = null,
         is_disabled: Boolean? = null
-    ): SDKResponse {
+    ): SdkResult<ByteArray, com.looker.sdk.Error> {
         val path_pattern = encodeParam(pattern)
-        return this.get<ByteArray>(
+        return this.get<ByteArray, com.looker.sdk.Error>(
             "/users/search/names/$path_pattern",
             mapOf(
                 "fields" to fields,
@@ -7892,9 +8202,9 @@ class LookerSDKStream(authSession: AuthSession) : APIMethods(authSession) {
     @JvmOverloads fun user(
         user_id: Long,
         fields: String? = null
-    ): SDKResponse {
+    ): SdkResult<ByteArray, com.looker.sdk.Error> {
         val path_user_id = encodeParam(user_id)
-        return this.get<ByteArray>(
+        return this.get<ByteArray, com.looker.sdk.Error>(
             "/users/$path_user_id",
             mapOf("fields" to fields)
         )
@@ -7913,9 +8223,9 @@ class LookerSDKStream(authSession: AuthSession) : APIMethods(authSession) {
         user_id: Long,
         body: WriteUser,
         fields: String? = null
-    ): SDKResponse {
+    ): SdkResult<ByteArray, com.looker.sdk.Error> {
         val path_user_id = encodeParam(user_id)
-        return this.patch<ByteArray>(
+        return this.patch<ByteArray, com.looker.sdk.Error>(
             "/users/$path_user_id",
             mapOf("fields" to fields), body
         )
@@ -7932,9 +8242,11 @@ class LookerSDKStream(authSession: AuthSession) : APIMethods(authSession) {
      */
     fun delete_user(
         user_id: Long
-    ): SDKResponse {
+    ): SdkResult<ByteArray, com.looker.sdk.Error> {
         val path_user_id = encodeParam(user_id)
-        return this.delete<ByteArray>("/users/$path_user_id", mapOf())
+        return this.delete<ByteArray, com.looker.sdk.Error>(
+            "/users/$path_user_id", mapOf()
+        )
     }
 
     /**
@@ -7977,10 +8289,10 @@ class LookerSDKStream(authSession: AuthSession) : APIMethods(authSession) {
         credential_type: String,
         credential_id: String,
         fields: String? = null
-    ): SDKResponse {
+    ): SdkResult<ByteArray, com.looker.sdk.Error> {
         val path_credential_type = encodeParam(credential_type)
         val path_credential_id = encodeParam(credential_id)
-        return this.get<ByteArray>(
+        return this.get<ByteArray, com.looker.sdk.Error>(
             "/users/credential/$path_credential_type/$path_credential_id",
             mapOf("fields" to fields)
         )
@@ -7997,9 +8309,9 @@ class LookerSDKStream(authSession: AuthSession) : APIMethods(authSession) {
     @JvmOverloads fun user_credentials_email(
         user_id: Long,
         fields: String? = null
-    ): SDKResponse {
+    ): SdkResult<ByteArray, com.looker.sdk.Error> {
         val path_user_id = encodeParam(user_id)
-        return this.get<ByteArray>(
+        return this.get<ByteArray, com.looker.sdk.Error>(
             "/users/$path_user_id/credentials_email",
             mapOf("fields" to fields)
         )
@@ -8018,9 +8330,9 @@ class LookerSDKStream(authSession: AuthSession) : APIMethods(authSession) {
         user_id: Long,
         body: WriteCredentialsEmail,
         fields: String? = null
-    ): SDKResponse {
+    ): SdkResult<ByteArray, com.looker.sdk.Error> {
         val path_user_id = encodeParam(user_id)
-        return this.post<ByteArray>(
+        return this.post<ByteArray, com.looker.sdk.Error>(
             "/users/$path_user_id/credentials_email",
             mapOf("fields" to fields), body
         )
@@ -8039,9 +8351,9 @@ class LookerSDKStream(authSession: AuthSession) : APIMethods(authSession) {
         user_id: Long,
         body: WriteCredentialsEmail,
         fields: String? = null
-    ): SDKResponse {
+    ): SdkResult<ByteArray, com.looker.sdk.Error> {
         val path_user_id = encodeParam(user_id)
-        return this.patch<ByteArray>(
+        return this.patch<ByteArray, com.looker.sdk.Error>(
             "/users/$path_user_id/credentials_email",
             mapOf("fields" to fields), body
         )
@@ -8056,9 +8368,11 @@ class LookerSDKStream(authSession: AuthSession) : APIMethods(authSession) {
      */
     fun delete_user_credentials_email(
         user_id: Long
-    ): SDKResponse {
+    ): SdkResult<ByteArray, com.looker.sdk.Error> {
         val path_user_id = encodeParam(user_id)
-        return this.delete<ByteArray>("/users/$path_user_id/credentials_email", mapOf())
+        return this.delete<ByteArray, com.looker.sdk.Error>(
+            "/users/$path_user_id/credentials_email", mapOf()
+        )
     }
 
     /**
@@ -8072,9 +8386,9 @@ class LookerSDKStream(authSession: AuthSession) : APIMethods(authSession) {
     @JvmOverloads fun user_credentials_totp(
         user_id: Long,
         fields: String? = null
-    ): SDKResponse {
+    ): SdkResult<ByteArray, com.looker.sdk.Error> {
         val path_user_id = encodeParam(user_id)
-        return this.get<ByteArray>(
+        return this.get<ByteArray, com.looker.sdk.Error>(
             "/users/$path_user_id/credentials_totp",
             mapOf("fields" to fields)
         )
@@ -8093,9 +8407,9 @@ class LookerSDKStream(authSession: AuthSession) : APIMethods(authSession) {
         user_id: Long,
         body: CredentialsTotp? = null,
         fields: String? = null
-    ): SDKResponse {
+    ): SdkResult<ByteArray, com.looker.sdk.Error> {
         val path_user_id = encodeParam(user_id)
-        return this.post<ByteArray>(
+        return this.post<ByteArray, com.looker.sdk.Error>(
             "/users/$path_user_id/credentials_totp",
             mapOf("fields" to fields), body
         )
@@ -8110,9 +8424,11 @@ class LookerSDKStream(authSession: AuthSession) : APIMethods(authSession) {
      */
     fun delete_user_credentials_totp(
         user_id: Long
-    ): SDKResponse {
+    ): SdkResult<ByteArray, com.looker.sdk.Error> {
         val path_user_id = encodeParam(user_id)
-        return this.delete<ByteArray>("/users/$path_user_id/credentials_totp", mapOf())
+        return this.delete<ByteArray, com.looker.sdk.Error>(
+            "/users/$path_user_id/credentials_totp", mapOf()
+        )
     }
 
     /**
@@ -8126,9 +8442,9 @@ class LookerSDKStream(authSession: AuthSession) : APIMethods(authSession) {
     @JvmOverloads fun user_credentials_ldap(
         user_id: Long,
         fields: String? = null
-    ): SDKResponse {
+    ): SdkResult<ByteArray, com.looker.sdk.Error> {
         val path_user_id = encodeParam(user_id)
-        return this.get<ByteArray>(
+        return this.get<ByteArray, com.looker.sdk.Error>(
             "/users/$path_user_id/credentials_ldap",
             mapOf("fields" to fields)
         )
@@ -8143,9 +8459,11 @@ class LookerSDKStream(authSession: AuthSession) : APIMethods(authSession) {
      */
     fun delete_user_credentials_ldap(
         user_id: Long
-    ): SDKResponse {
+    ): SdkResult<ByteArray, com.looker.sdk.Error> {
         val path_user_id = encodeParam(user_id)
-        return this.delete<ByteArray>("/users/$path_user_id/credentials_ldap", mapOf())
+        return this.delete<ByteArray, com.looker.sdk.Error>(
+            "/users/$path_user_id/credentials_ldap", mapOf()
+        )
     }
 
     /**
@@ -8159,9 +8477,9 @@ class LookerSDKStream(authSession: AuthSession) : APIMethods(authSession) {
     @JvmOverloads fun user_credentials_google(
         user_id: Long,
         fields: String? = null
-    ): SDKResponse {
+    ): SdkResult<ByteArray, com.looker.sdk.Error> {
         val path_user_id = encodeParam(user_id)
-        return this.get<ByteArray>(
+        return this.get<ByteArray, com.looker.sdk.Error>(
             "/users/$path_user_id/credentials_google",
             mapOf("fields" to fields)
         )
@@ -8176,9 +8494,11 @@ class LookerSDKStream(authSession: AuthSession) : APIMethods(authSession) {
      */
     fun delete_user_credentials_google(
         user_id: Long
-    ): SDKResponse {
+    ): SdkResult<ByteArray, com.looker.sdk.Error> {
         val path_user_id = encodeParam(user_id)
-        return this.delete<ByteArray>("/users/$path_user_id/credentials_google", mapOf())
+        return this.delete<ByteArray, com.looker.sdk.Error>(
+            "/users/$path_user_id/credentials_google", mapOf()
+        )
     }
 
     /**
@@ -8192,9 +8512,9 @@ class LookerSDKStream(authSession: AuthSession) : APIMethods(authSession) {
     @JvmOverloads fun user_credentials_saml(
         user_id: Long,
         fields: String? = null
-    ): SDKResponse {
+    ): SdkResult<ByteArray, com.looker.sdk.Error> {
         val path_user_id = encodeParam(user_id)
-        return this.get<ByteArray>(
+        return this.get<ByteArray, com.looker.sdk.Error>(
             "/users/$path_user_id/credentials_saml",
             mapOf("fields" to fields)
         )
@@ -8209,9 +8529,11 @@ class LookerSDKStream(authSession: AuthSession) : APIMethods(authSession) {
      */
     fun delete_user_credentials_saml(
         user_id: Long
-    ): SDKResponse {
+    ): SdkResult<ByteArray, com.looker.sdk.Error> {
         val path_user_id = encodeParam(user_id)
-        return this.delete<ByteArray>("/users/$path_user_id/credentials_saml", mapOf())
+        return this.delete<ByteArray, com.looker.sdk.Error>(
+            "/users/$path_user_id/credentials_saml", mapOf()
+        )
     }
 
     /**
@@ -8225,9 +8547,9 @@ class LookerSDKStream(authSession: AuthSession) : APIMethods(authSession) {
     @JvmOverloads fun user_credentials_oidc(
         user_id: Long,
         fields: String? = null
-    ): SDKResponse {
+    ): SdkResult<ByteArray, com.looker.sdk.Error> {
         val path_user_id = encodeParam(user_id)
-        return this.get<ByteArray>(
+        return this.get<ByteArray, com.looker.sdk.Error>(
             "/users/$path_user_id/credentials_oidc",
             mapOf("fields" to fields)
         )
@@ -8242,9 +8564,11 @@ class LookerSDKStream(authSession: AuthSession) : APIMethods(authSession) {
      */
     fun delete_user_credentials_oidc(
         user_id: Long
-    ): SDKResponse {
+    ): SdkResult<ByteArray, com.looker.sdk.Error> {
         val path_user_id = encodeParam(user_id)
-        return this.delete<ByteArray>("/users/$path_user_id/credentials_oidc", mapOf())
+        return this.delete<ByteArray, com.looker.sdk.Error>(
+            "/users/$path_user_id/credentials_oidc", mapOf()
+        )
     }
 
     /**
@@ -8260,10 +8584,10 @@ class LookerSDKStream(authSession: AuthSession) : APIMethods(authSession) {
         user_id: Long,
         credentials_api3_id: Long,
         fields: String? = null
-    ): SDKResponse {
+    ): SdkResult<ByteArray, com.looker.sdk.Error> {
         val path_user_id = encodeParam(user_id)
         val path_credentials_api3_id = encodeParam(credentials_api3_id)
-        return this.get<ByteArray>(
+        return this.get<ByteArray, com.looker.sdk.Error>(
             "/users/$path_user_id/credentials_api3/$path_credentials_api3_id",
             mapOf("fields" to fields)
         )
@@ -8280,10 +8604,12 @@ class LookerSDKStream(authSession: AuthSession) : APIMethods(authSession) {
     fun delete_user_credentials_api3(
         user_id: Long,
         credentials_api3_id: Long
-    ): SDKResponse {
+    ): SdkResult<ByteArray, com.looker.sdk.Error> {
         val path_user_id = encodeParam(user_id)
         val path_credentials_api3_id = encodeParam(credentials_api3_id)
-        return this.delete<ByteArray>("/users/$path_user_id/credentials_api3/$path_credentials_api3_id", mapOf())
+        return this.delete<ByteArray, com.looker.sdk.Error>(
+            "/users/$path_user_id/credentials_api3/$path_credentials_api3_id", mapOf()
+        )
     }
 
     /**
@@ -8297,9 +8623,9 @@ class LookerSDKStream(authSession: AuthSession) : APIMethods(authSession) {
     @JvmOverloads fun all_user_credentials_api3s(
         user_id: Long,
         fields: String? = null
-    ): SDKResponse {
+    ): SdkResult<ByteArray, com.looker.sdk.Error> {
         val path_user_id = encodeParam(user_id)
-        return this.get<ByteArray>(
+        return this.get<ByteArray, com.looker.sdk.Error>(
             "/users/$path_user_id/credentials_api3",
             mapOf("fields" to fields)
         )
@@ -8318,9 +8644,9 @@ class LookerSDKStream(authSession: AuthSession) : APIMethods(authSession) {
         user_id: Long,
         body: CredentialsApi3? = null,
         fields: String? = null
-    ): SDKResponse {
+    ): SdkResult<ByteArray, com.looker.sdk.Error> {
         val path_user_id = encodeParam(user_id)
-        return this.post<ByteArray>(
+        return this.post<ByteArray, com.looker.sdk.Error>(
             "/users/$path_user_id/credentials_api3",
             mapOf("fields" to fields), body
         )
@@ -8339,10 +8665,10 @@ class LookerSDKStream(authSession: AuthSession) : APIMethods(authSession) {
         user_id: Long,
         credentials_embed_id: Long,
         fields: String? = null
-    ): SDKResponse {
+    ): SdkResult<ByteArray, com.looker.sdk.Error> {
         val path_user_id = encodeParam(user_id)
         val path_credentials_embed_id = encodeParam(credentials_embed_id)
-        return this.get<ByteArray>(
+        return this.get<ByteArray, com.looker.sdk.Error>(
             "/users/$path_user_id/credentials_embed/$path_credentials_embed_id",
             mapOf("fields" to fields)
         )
@@ -8359,10 +8685,12 @@ class LookerSDKStream(authSession: AuthSession) : APIMethods(authSession) {
     fun delete_user_credentials_embed(
         user_id: Long,
         credentials_embed_id: Long
-    ): SDKResponse {
+    ): SdkResult<ByteArray, com.looker.sdk.Error> {
         val path_user_id = encodeParam(user_id)
         val path_credentials_embed_id = encodeParam(credentials_embed_id)
-        return this.delete<ByteArray>("/users/$path_user_id/credentials_embed/$path_credentials_embed_id", mapOf())
+        return this.delete<ByteArray, com.looker.sdk.Error>(
+            "/users/$path_user_id/credentials_embed/$path_credentials_embed_id", mapOf()
+        )
     }
 
     /**
@@ -8376,9 +8704,9 @@ class LookerSDKStream(authSession: AuthSession) : APIMethods(authSession) {
     @JvmOverloads fun all_user_credentials_embeds(
         user_id: Long,
         fields: String? = null
-    ): SDKResponse {
+    ): SdkResult<ByteArray, com.looker.sdk.Error> {
         val path_user_id = encodeParam(user_id)
-        return this.get<ByteArray>(
+        return this.get<ByteArray, com.looker.sdk.Error>(
             "/users/$path_user_id/credentials_embed",
             mapOf("fields" to fields)
         )
@@ -8395,9 +8723,9 @@ class LookerSDKStream(authSession: AuthSession) : APIMethods(authSession) {
     @JvmOverloads fun user_credentials_looker_openid(
         user_id: Long,
         fields: String? = null
-    ): SDKResponse {
+    ): SdkResult<ByteArray, com.looker.sdk.Error> {
         val path_user_id = encodeParam(user_id)
-        return this.get<ByteArray>(
+        return this.get<ByteArray, com.looker.sdk.Error>(
             "/users/$path_user_id/credentials_looker_openid",
             mapOf("fields" to fields)
         )
@@ -8412,9 +8740,11 @@ class LookerSDKStream(authSession: AuthSession) : APIMethods(authSession) {
      */
     fun delete_user_credentials_looker_openid(
         user_id: Long
-    ): SDKResponse {
+    ): SdkResult<ByteArray, com.looker.sdk.Error> {
         val path_user_id = encodeParam(user_id)
-        return this.delete<ByteArray>("/users/$path_user_id/credentials_looker_openid", mapOf())
+        return this.delete<ByteArray, com.looker.sdk.Error>(
+            "/users/$path_user_id/credentials_looker_openid", mapOf()
+        )
     }
 
     /**
@@ -8430,10 +8760,10 @@ class LookerSDKStream(authSession: AuthSession) : APIMethods(authSession) {
         user_id: Long,
         session_id: Long,
         fields: String? = null
-    ): SDKResponse {
+    ): SdkResult<ByteArray, com.looker.sdk.Error> {
         val path_user_id = encodeParam(user_id)
         val path_session_id = encodeParam(session_id)
-        return this.get<ByteArray>(
+        return this.get<ByteArray, com.looker.sdk.Error>(
             "/users/$path_user_id/sessions/$path_session_id",
             mapOf("fields" to fields)
         )
@@ -8450,10 +8780,12 @@ class LookerSDKStream(authSession: AuthSession) : APIMethods(authSession) {
     fun delete_user_session(
         user_id: Long,
         session_id: Long
-    ): SDKResponse {
+    ): SdkResult<ByteArray, com.looker.sdk.Error> {
         val path_user_id = encodeParam(user_id)
         val path_session_id = encodeParam(session_id)
-        return this.delete<ByteArray>("/users/$path_user_id/sessions/$path_session_id", mapOf())
+        return this.delete<ByteArray, com.looker.sdk.Error>(
+            "/users/$path_user_id/sessions/$path_session_id", mapOf()
+        )
     }
 
     /**
@@ -8467,9 +8799,9 @@ class LookerSDKStream(authSession: AuthSession) : APIMethods(authSession) {
     @JvmOverloads fun all_user_sessions(
         user_id: Long,
         fields: String? = null
-    ): SDKResponse {
+    ): SdkResult<ByteArray, com.looker.sdk.Error> {
         val path_user_id = encodeParam(user_id)
-        return this.get<ByteArray>(
+        return this.get<ByteArray, com.looker.sdk.Error>(
             "/users/$path_user_id/sessions",
             mapOf("fields" to fields)
         )
@@ -8496,9 +8828,9 @@ class LookerSDKStream(authSession: AuthSession) : APIMethods(authSession) {
         user_id: Long,
         expires: Boolean? = null,
         fields: String? = null
-    ): SDKResponse {
+    ): SdkResult<ByteArray, com.looker.sdk.Error> {
         val path_user_id = encodeParam(user_id)
-        return this.post<ByteArray>(
+        return this.post<ByteArray, com.looker.sdk.Error>(
             "/users/$path_user_id/credentials_email/password_reset",
             mapOf(
                 "expires" to expires,
@@ -8520,9 +8852,9 @@ class LookerSDKStream(authSession: AuthSession) : APIMethods(authSession) {
         user_id: Long,
         fields: String? = null,
         direct_association_only: Boolean? = null
-    ): SDKResponse {
+    ): SdkResult<ByteArray, com.looker.sdk.Error> {
         val path_user_id = encodeParam(user_id)
-        return this.get<ByteArray>(
+        return this.get<ByteArray, com.looker.sdk.Error>(
             "/users/$path_user_id/roles",
             mapOf(
                 "fields" to fields,
@@ -8544,9 +8876,9 @@ class LookerSDKStream(authSession: AuthSession) : APIMethods(authSession) {
         user_id: Long,
         body: Array<Long>,
         fields: String? = null
-    ): SDKResponse {
+    ): SdkResult<ByteArray, com.looker.sdk.Error> {
         val path_user_id = encodeParam(user_id)
-        return this.put<ByteArray>(
+        return this.put<ByteArray, com.looker.sdk.Error>(
             "/users/$path_user_id/roles",
             mapOf("fields" to fields), body
         )
@@ -8584,9 +8916,9 @@ class LookerSDKStream(authSession: AuthSession) : APIMethods(authSession) {
         user_attribute_ids: DelimArray<Long>? = null,
         all_values: Boolean? = null,
         include_unset: Boolean? = null
-    ): SDKResponse {
+    ): SdkResult<ByteArray, com.looker.sdk.Error> {
         val path_user_id = encodeParam(user_id)
-        return this.get<ByteArray>(
+        return this.get<ByteArray, com.looker.sdk.Error>(
             "/users/$path_user_id/attribute_values",
             mapOf(
                 "fields" to fields,
@@ -8612,10 +8944,12 @@ class LookerSDKStream(authSession: AuthSession) : APIMethods(authSession) {
         user_id: Long,
         user_attribute_id: Long,
         body: WriteUserAttributeWithValue
-    ): SDKResponse {
+    ): SdkResult<ByteArray, com.looker.sdk.Error> {
         val path_user_id = encodeParam(user_id)
         val path_user_attribute_id = encodeParam(user_attribute_id)
-        return this.patch<ByteArray>("/users/$path_user_id/attribute_values/$path_user_attribute_id", mapOf(), body)
+        return this.patch<ByteArray, com.looker.sdk.Error>(
+            "/users/$path_user_id/attribute_values/$path_user_attribute_id", mapOf(), body
+        )
     }
 
     /**
@@ -8634,10 +8968,12 @@ class LookerSDKStream(authSession: AuthSession) : APIMethods(authSession) {
     fun delete_user_attribute_user_value(
         user_id: Long,
         user_attribute_id: Long
-    ): SDKResponse {
+    ): SdkResult<ByteArray, com.looker.sdk.Error> {
         val path_user_id = encodeParam(user_id)
         val path_user_attribute_id = encodeParam(user_attribute_id)
-        return this.delete<ByteArray>("/users/$path_user_id/attribute_values/$path_user_attribute_id", mapOf())
+        return this.delete<ByteArray, com.looker.sdk.Error>(
+            "/users/$path_user_id/attribute_values/$path_user_attribute_id", mapOf()
+        )
     }
 
     /**
@@ -8657,9 +8993,9 @@ class LookerSDKStream(authSession: AuthSession) : APIMethods(authSession) {
     @JvmOverloads fun send_user_credentials_email_password_reset(
         user_id: Long,
         fields: String? = null
-    ): SDKResponse {
+    ): SdkResult<ByteArray, com.looker.sdk.Error> {
         val path_user_id = encodeParam(user_id)
-        return this.post<ByteArray>(
+        return this.post<ByteArray, com.looker.sdk.Error>(
             "/users/$path_user_id/credentials_email/send_password_reset",
             mapOf("fields" to fields)
         )
@@ -8680,8 +9016,8 @@ class LookerSDKStream(authSession: AuthSession) : APIMethods(authSession) {
     @JvmOverloads fun all_user_attributes(
         fields: String? = null,
         sorts: String? = null
-    ): SDKResponse {
-        return this.get<ByteArray>(
+    ): SdkResult<ByteArray, com.looker.sdk.Error> {
+        return this.get<ByteArray, com.looker.sdk.Error>(
             "/user_attributes",
             mapOf(
                 "fields" to fields,
@@ -8710,8 +9046,8 @@ class LookerSDKStream(authSession: AuthSession) : APIMethods(authSession) {
     @JvmOverloads fun create_user_attribute(
         body: WriteUserAttribute,
         fields: String? = null
-    ): SDKResponse {
-        return this.post<ByteArray>(
+    ): SdkResult<ByteArray, com.looker.sdk.Error> {
+        return this.post<ByteArray, com.looker.sdk.Error>(
             "/user_attributes",
             mapOf("fields" to fields), body
         )
@@ -8728,9 +9064,9 @@ class LookerSDKStream(authSession: AuthSession) : APIMethods(authSession) {
     @JvmOverloads fun user_attribute(
         user_attribute_id: Long,
         fields: String? = null
-    ): SDKResponse {
+    ): SdkResult<ByteArray, com.looker.sdk.Error> {
         val path_user_attribute_id = encodeParam(user_attribute_id)
-        return this.get<ByteArray>(
+        return this.get<ByteArray, com.looker.sdk.Error>(
             "/user_attributes/$path_user_attribute_id",
             mapOf("fields" to fields)
         )
@@ -8749,9 +9085,9 @@ class LookerSDKStream(authSession: AuthSession) : APIMethods(authSession) {
         user_attribute_id: Long,
         body: WriteUserAttribute,
         fields: String? = null
-    ): SDKResponse {
+    ): SdkResult<ByteArray, com.looker.sdk.Error> {
         val path_user_attribute_id = encodeParam(user_attribute_id)
-        return this.patch<ByteArray>(
+        return this.patch<ByteArray, com.looker.sdk.Error>(
             "/user_attributes/$path_user_attribute_id",
             mapOf("fields" to fields), body
         )
@@ -8766,9 +9102,11 @@ class LookerSDKStream(authSession: AuthSession) : APIMethods(authSession) {
      */
     fun delete_user_attribute(
         user_attribute_id: Long
-    ): SDKResponse {
+    ): SdkResult<ByteArray, com.looker.sdk.Error> {
         val path_user_attribute_id = encodeParam(user_attribute_id)
-        return this.delete<ByteArray>("/user_attributes/$path_user_attribute_id", mapOf())
+        return this.delete<ByteArray, com.looker.sdk.Error>(
+            "/user_attributes/$path_user_attribute_id", mapOf()
+        )
     }
 
     /**
@@ -8788,9 +9126,9 @@ class LookerSDKStream(authSession: AuthSession) : APIMethods(authSession) {
     @JvmOverloads fun all_user_attribute_group_values(
         user_attribute_id: Long,
         fields: String? = null
-    ): SDKResponse {
+    ): SdkResult<ByteArray, com.looker.sdk.Error> {
         val path_user_attribute_id = encodeParam(user_attribute_id)
-        return this.get<ByteArray>(
+        return this.get<ByteArray, com.looker.sdk.Error>(
             "/user_attributes/$path_user_attribute_id/group_values",
             mapOf("fields" to fields)
         )
@@ -8826,9 +9164,11 @@ class LookerSDKStream(authSession: AuthSession) : APIMethods(authSession) {
     fun set_user_attribute_group_values(
         user_attribute_id: Long,
         body: Array<UserAttributeGroupValue>
-    ): SDKResponse {
+    ): SdkResult<ByteArray, com.looker.sdk.Error> {
         val path_user_attribute_id = encodeParam(user_attribute_id)
-        return this.post<ByteArray>("/user_attributes/$path_user_attribute_id/group_values", mapOf(), body)
+        return this.post<ByteArray, com.looker.sdk.Error>(
+            "/user_attributes/$path_user_attribute_id/group_values", mapOf(), body
+        )
     }
 
     //endregion UserAttribute: Manage User Attributes
@@ -8842,8 +9182,10 @@ class LookerSDKStream(authSession: AuthSession) : APIMethods(authSession) {
      *
      * GET /workspaces -> ByteArray
      */
-    fun all_workspaces(): SDKResponse {
-        return this.get<ByteArray>("/workspaces", mapOf())
+    fun all_workspaces(): SdkResult<ByteArray, com.looker.sdk.Error> {
+        return this.get<ByteArray, com.looker.sdk.Error>(
+            "/workspaces", mapOf()
+        )
     }
 
     /**
@@ -8883,9 +9225,11 @@ class LookerSDKStream(authSession: AuthSession) : APIMethods(authSession) {
      */
     fun workspace(
         workspace_id: String
-    ): SDKResponse {
+    ): SdkResult<ByteArray, com.looker.sdk.Error> {
         val path_workspace_id = encodeParam(workspace_id)
-        return this.get<ByteArray>("/workspaces/$path_workspace_id", mapOf())
+        return this.get<ByteArray, com.looker.sdk.Error>(
+            "/workspaces/$path_workspace_id", mapOf()
+        )
     }
 
     //endregion Workspace: Manage Workspaces

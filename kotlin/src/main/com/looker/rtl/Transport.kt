@@ -26,7 +26,6 @@ package com.looker.rtl
 
 import io.ktor.client.HttpClient
 import io.ktor.client.call.call
-import io.ktor.client.call.receive
 import io.ktor.client.engine.okhttp.OkHttp
 import io.ktor.client.features.json.JacksonSerializer
 import io.ktor.client.features.json.JsonFeature
@@ -50,43 +49,6 @@ import javax.net.ssl.HostnameVerifier
 import javax.net.ssl.SSLContext
 import javax.net.ssl.SSLSocketFactory
 import javax.net.ssl.X509TrustManager
-
-sealed class SDKResponse {
-    /** A successful SDK call. */
-    data class SDKSuccessResponse<T>(
-        /** The object returned by the SDK call. */
-        val value: T
-    ) : SDKResponse() {
-        /** Whether the SDK call was successful. */
-        val ok: Boolean = true
-    }
-
-    /** An erroring SDK call. */
-    data class SDKErrorResponse<T>(
-        /** The error object returned by the SDK call. */
-        val value: T
-    ) : SDKResponse() {
-        /** Whether the SDK call was successful. */
-        val ok: Boolean = false
-    }
-
-    /** An error representing an issue in the SDK, like a network or parsing error. */
-    data class SDKError(val message: String) : SDKResponse() {
-        val type: String = "sdk_error"
-    }
-}
-
-/**
- * Response handler that throws an error on error response, returns success result on success
- */
-fun <T> ok(response: SDKResponse): T {
-    @Suppress("UNCHECKED_CAST")
-    when (response) {
-        is SDKResponse.SDKErrorResponse<*> -> throw Error(response.value.toString())
-        is SDKResponse.SDKSuccessResponse<*> -> return response.value as T
-        else -> throw Error("Fail!!")
-    }
-}
 
 enum class HttpMethod(val value: io.ktor.http.HttpMethod) {
     GET(io.ktor.http.HttpMethod.Get),
@@ -266,38 +228,29 @@ class Transport(val options: TransportOptions) {
         } + addQueryParams(path, queryParams)
     }
 
-    inline fun <reified T> request(
+    inline fun <reified TSuccess, reified TFailure> request(
         method: HttpMethod,
         path: String,
         queryParams: Values = mapOf(),
         body: Any? = null,
         noinline authenticator: Authenticator? = null
-    ): SDKResponse {
-        // TODO get overrides parameter to work without causing compilation errors in UserSession
-//            overrides: TransportOptions? = null): SDKResponse {
-
+    ): SdkResult<TSuccess, TFailure> {
         val builder = httpRequestBuilder(method, path, queryParams, authenticator, body)
 
-        val client = customClient(options)
-        // TODO get overrides parameter working
-//        overrides?.let { o ->
-//            if (options.verifySSL != o.verifySSL || options.timeout != o.timeout) {
-//                // need an HTTP client with custom options
-//                client = customClient(o)
-//            }
-//        }
-
-        val result = try {
+        return customClient(options).use {
+            client ->
             runBlocking {
-                SDKResponse.SDKSuccessResponse(client.call(builder).response.receive<T>())
+                try {
+                    SdkResult.response<TSuccess, TFailure>(
+                        client.call(builder).response,
+                        method,
+                        path
+                    )
+                } catch (ex: Exception) {
+                    SdkResult.error<TSuccess, TFailure>(ex, method, path)
+                }
             }
-        } catch (e: Exception) {
-            SDKResponse.SDKErrorResponse("$method $path $e")
-        } finally {
-            client.close()
         }
-
-        return result
     }
 
     fun httpRequestBuilder(method: HttpMethod, path: String, queryParams: Values, authenticator: Authenticator?, body: Any?): HttpRequestBuilder {
