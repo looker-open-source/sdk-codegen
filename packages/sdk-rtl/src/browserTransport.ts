@@ -43,7 +43,6 @@ import {
   safeBase64,
 } from './transport'
 import { BaseTransport } from './baseTransport'
-import { lookerVersion } from './constants'
 import { ICryptoHash } from './cryptoHash'
 
 export class BrowserCryptoHash implements ICryptoHash {
@@ -255,7 +254,7 @@ export class BrowserTransport extends BaseTransport {
     authenticator?: Authenticator,
     options?: Partial<ITransportSettings>
   ) {
-    const agentTag = options?.agentTag || `${agentPrefix} ${lookerVersion}`
+    const agentTag = options?.agentTag || agentPrefix
     options = options ? { ...this.options, ...options } : this.options
     const headers: IRequestHeaders = { [LookerAppId]: agentTag }
     if (options && options.headers) {

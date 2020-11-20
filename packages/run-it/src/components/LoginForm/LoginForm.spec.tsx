@@ -27,8 +27,8 @@
 import React from 'react'
 import { screen } from '@testing-library/react'
 import { renderWithTheme } from '@looker/components-test-utils'
-import { LoginForm } from './LoginForm'
 import { defaultConfigurator } from '..'
+import { LoginForm } from './LoginForm'
 
 describe('LoginForm', () => {
   // https://testing-library.com/docs/guide-which-query

@@ -33,7 +33,7 @@ import {
   ExtensionSession,
   ExtensionTransport,
 } from '@looker/sdk-rtl/lib/browser'
-import { Looker31SDK } from './sdk/3.1/methods'
+import { Looker31SDK } from './3.1/methods'
 
 export class LookerExtensionSDK {
   /**

@@ -29,21 +29,16 @@ import { TestConfig } from './testUtils'
 import { NodeTransport } from './nodeTransport'
 import { NodeSession } from './nodeSession'
 import { ApiConfig, NodeSettings, NodeSettingsIniFile } from './nodeSettings'
-import {
-  strLookerBaseUrl,
-  strLookerClientId,
-  strLookerClientSecret,
-  strLookerTimeout,
-  strLookerVerifySsl,
-} from './apiSettings'
 import { defaultTimeout } from './transport'
 import { boolDefault } from './constants'
+import { ApiConfigMap } from './apiSettings'
 
 const config = TestConfig()
+const envPrefix = 'LOOKERSDK'
 const localIni = config.localIni
 
 describe('NodeSession', () => {
-  const settings = new NodeSettingsIniFile(localIni, 'Looker')
+  const settings = new NodeSettingsIniFile(envPrefix, localIni, 'Looker')
   const transport = new NodeTransport(settings)
 
   describe('isAuthenticated', () => {
@@ -80,15 +75,16 @@ describe('NodeSession', () => {
     it('no INI file', async () => {
       const section = ApiConfig(fs.readFileSync(localIni, 'utf8')).Looker
       const verify_ssl = boolDefault(section.verify_ssl, false).toString()
+      const envPrefix = 'LOOKERSDK'
+      const envKey = ApiConfigMap(envPrefix)
       // populate environment variables
-      process.env[strLookerTimeout] =
-        section.timeout || defaultTimeout.toString()
-      process.env[strLookerClientId] = section.client_id
-      process.env[strLookerClientSecret] = section.client_secret
-      process.env[strLookerBaseUrl] = section.base_url
-      process.env[strLookerVerifySsl] = verify_ssl.toString()
+      process.env[envKey.timeout] = section.timeout || defaultTimeout.toString()
+      process.env[envKey.client_id] = section.client_id
+      process.env[envKey.client_secret] = section.client_secret
+      process.env[envKey.base_url] = section.base_url
+      process.env[envKey.verify_ssl] = verify_ssl.toString()
 
-      const settings = new NodeSettings()
+      const settings = new NodeSettings(envPrefix)
       expect(settings.base_url).toEqual(section.base_url)
       expect(settings.timeout.toString()).toEqual(
         section.timeout || defaultTimeout.toString()
@@ -106,11 +102,11 @@ describe('NodeSession', () => {
       expect(session.isAuthenticated()).toEqual(false)
 
       // reset environment variables
-      delete process.env[strLookerTimeout]
-      delete process.env[strLookerClientId]
-      delete process.env[strLookerClientSecret]
-      delete process.env[strLookerBaseUrl]
-      delete process.env[strLookerVerifySsl]
+      delete process.env[envKey.timeout]
+      delete process.env[envKey.client_id]
+      delete process.env[envKey.client_secret]
+      delete process.env[envKey.base_url]
+      delete process.env[envKey.verify_ssl]
     })
   })
 })

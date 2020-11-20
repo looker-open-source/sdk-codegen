@@ -156,7 +156,13 @@
         "config/license-header.js"
       ],
       "import/default": "off",
-      "sort-keys": "off"
+      "sort-keys": "off",
+      "spaced-comment": [
+        "error",
+        "always", {
+          "markers": ["#"]
+        }
+      ]
     },
     "settings": {
       "import/resolver": {

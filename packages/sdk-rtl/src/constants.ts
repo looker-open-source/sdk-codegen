@@ -24,11 +24,6 @@
 
  */
 
-export const defaultApiVersion = '3.1'
-export const lookerVersion = '7.18'
-export const apiVersion = '4.0'
-export const sdkVersion = `${apiVersion}.${lookerVersion}`
-export const environmentPrefix = 'LOOKERSDK'
 export const matchCharset = ';.*charset='
 
 /**

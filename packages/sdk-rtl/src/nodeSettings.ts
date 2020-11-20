@@ -97,10 +97,11 @@ export const ApiConfigSection = (
  *
  * @returns the populated `IApiSection`, which may be empty
  */
-const readEnvConfig = () => {
+const readEnvConfig = (envPrefix: string) => {
   const values: IApiSection = {}
-  Object.keys(ApiConfigMap).forEach((key) => {
-    const envKey = ApiConfigMap[key]
+  const configMap = ApiConfigMap(envPrefix)
+  Object.keys(configMap).forEach((key) => {
+    const envKey = configMap[key]
     if (process.env[envKey] !== undefined) {
       // Value exists. Map environment variable keys to config variable keys
       values[key] = unquote(process.env[envKey])
@@ -114,12 +115,17 @@ const readEnvConfig = () => {
  * with environment variable values, if the environment variables exist
  *
  * @param {string} fileName Name of configuration file to read
+ * @param envPrefix environment variable prefix. Pass an empty string to skip environment reading.
  * @param {string} section Optional. Name of section of configuration file to read
  * @returns {IApiSection} containing the configuration values
  */
-const readIniConfig = (fileName: string, section?: string) => {
+const readIniConfig = (
+  fileName: string,
+  envPrefix: string,
+  section?: string
+) => {
   // get environment variables
-  let config = readEnvConfig()
+  let config = readEnvConfig(envPrefix)
   if (fileName && fs.existsSync(fileName)) {
     // override any config file settings with environment values if the environment value is set
     config = {
@@ -148,7 +154,19 @@ const readIniConfig = (fileName: string, section?: string) => {
  *
  */
 export class NodeSettings extends ApiSettings {
-  constructor(contents?: string | IApiSettings, section?: string) {
+  protected readonly envPrefix!: string
+
+  /**
+   * Initialize config settings for the node SDK runtime
+   * @param envPrefix Environment variable name prefix. Use empty string to not read the environment
+   * @param contents contents of the read config
+   * @param section name of ini section to process
+   */
+  constructor(
+    envPrefix: string,
+    contents?: string | IApiSettings,
+    section?: string
+  ) {
     let settings: IApiSettings
     if (contents) {
       if (typeof contents === 'string') {
@@ -156,15 +174,21 @@ export class NodeSettings extends ApiSettings {
       } else {
         settings = contents
       }
-      settings = { ...readEnvConfig(), ...settings }
+      settings = { ...readEnvConfig(envPrefix), ...settings }
     } else {
-      settings = readEnvConfig() as IApiSettings
+      settings = readEnvConfig(envPrefix) as IApiSettings
     }
     super({ ...DefaultSettings(), ...settings })
+    this.envPrefix = envPrefix
   }
 
+  /**
+   * **NOTE**: If `envPrefix` is defined in the constructor, environment variables will be read in this call.
+   *
+   * @param _section section name is ignored here.
+   */
   readConfig(_section?: string): IApiSection {
-    return readEnvConfig()
+    return readEnvConfig(this.envPrefix)
   }
 }
 
@@ -186,14 +210,17 @@ export class NodeSettings extends ApiSettings {
 export class NodeSettingsIniFile extends NodeSettings {
   private readonly fileName!: string
 
-  constructor(fileName = '', section?: string) {
+  constructor(envPrefix: string, fileName = '', section?: string) {
     if (fileName && !fs.existsSync(fileName)) {
       throw sdkError({ message: `File ${fileName} was not found` })
     }
     // default fileName to looker.ini
     fileName = fileName || './looker.ini'
-    const settings = ValueSettings(readIniConfig(fileName, section))
-    super(settings, section)
+    const settings = ValueSettings(
+      readIniConfig(fileName, envPrefix, section),
+      envPrefix
+    )
+    super(envPrefix, settings, section)
     this.fileName = fileName
   }
 
@@ -201,10 +228,13 @@ export class NodeSettingsIniFile extends NodeSettings {
    * Read a configuration section and return it as a generic keyed collection
    * If the configuration file doesn't exist, environment variables will be used for the values
    * Environment variables, if set, also override the configuration file values
+   *
+   * **NOTE**: If `envPrefix` is defined in the constructor, environment variables will be read in this call.
+   *
    * @param section {string} Name of Ini section to read. Optional. Defaults to first section.
    *
    */
   readConfig(section?: string): IApiSection {
-    return readIniConfig(this.fileName, section)
+    return readIniConfig(this.fileName, this.envPrefix, section)
   }
 }

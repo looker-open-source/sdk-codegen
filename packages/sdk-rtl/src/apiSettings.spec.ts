@@ -25,41 +25,51 @@
  */
 
 import {
+  ApiConfigMap,
   ApiSettings,
   strBadConfiguration,
   ValueSettings,
-  strLookerBaseUrl,
-  strLookerVerifySsl,
-  strLookerTimeout,
 } from './apiSettings'
 import { defaultTimeout } from './transport'
+
+const envPrefix = 'LOOKERSDK'
+const envKey = ApiConfigMap(envPrefix)
+const strLookerBaseUrl = envKey.base_url
+const strLookerTimeout = envKey.timeout
+const strLookerVerifySsl = envKey.verify_ssl
 
 describe('SDK configuration', () => {
   describe('ValueSettings', () => {
     it('initializes to defaults', () => {
-      const settings = ValueSettings({})
+      const settings = ValueSettings({}, envPrefix)
       expect(settings.base_url).toEqual('')
       expect(settings.verify_ssl).toEqual(true)
       expect(settings.timeout).toEqual(defaultTimeout)
     })
 
     it('retrieves the first section by name', () => {
-      const settings = ValueSettings({
-        [strLookerBaseUrl]: 'base',
-        [strLookerTimeout]: '30',
-        [strLookerVerifySsl]: 'false',
-      })
+      const settings = ValueSettings(
+        {
+          [strLookerBaseUrl]: 'base',
+          [strLookerTimeout]: '30',
+          [strLookerVerifySsl]: 'false',
+        },
+        envPrefix
+      )
       expect(settings.base_url).toEqual('base')
       expect(settings.verify_ssl).toEqual(false)
       expect(settings.timeout).toEqual(30)
     })
 
     it('unquotes ValueSettings', () => {
-      const settings = ValueSettings({
-        [strLookerBaseUrl]: '"base"',
-        [strLookerTimeout]: "'30'",
-        [strLookerVerifySsl]: "'false'",
-      })
+      const settings = ValueSettings(
+        {
+          [strLookerBaseUrl]: '"base"',
+          [strLookerTimeout]: "'30'",
+          [strLookerVerifySsl]: "'false'",
+        },
+        envPrefix
+      )
       expect(settings.base_url).toEqual('base')
       expect(settings.verify_ssl).toEqual(false)
       expect(settings.timeout).toEqual(30)

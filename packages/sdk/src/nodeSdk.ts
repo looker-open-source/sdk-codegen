@@ -32,8 +32,9 @@ import {
   IApiSettings,
   IAuthSession,
 } from '@looker/sdk-rtl'
-import { Looker31SDK } from './sdk/3.1/methods'
-import { Looker40SDK } from './sdk/4.0/methods'
+import { Looker31SDK } from './3.1/methods'
+import { Looker40SDK } from './4.0/methods'
+import { environmentPrefix } from './constants'
 
 /**
  * @class LookerNodeSDK
@@ -56,7 +57,7 @@ export class LookerNodeSDK {
     transport?: ITransport,
     session?: IAuthSession
   ) {
-    settings = settings || new NodeSettingsIniFile('looker.ini')
+    settings = settings || new NodeSettingsIniFile(environmentPrefix)
     transport = transport || new NodeTransport(settings)
     session = session || new NodeSession(settings, transport)
     return new Looker31SDK(session)
@@ -76,7 +77,7 @@ export class LookerNodeSDK {
     transport?: ITransport,
     session?: IAuthSession
   ) {
-    settings = settings || new NodeSettingsIniFile('looker.ini')
+    settings = settings || new NodeSettingsIniFile(environmentPrefix)
     transport = transport || new NodeTransport(settings)
     session = session ?? new NodeSession(settings, transport)
     return new Looker40SDK(session)
