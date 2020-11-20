@@ -58,17 +58,18 @@ class RequestsTransport(transport.Transport):
         query_params: Optional[MutableMapping[str, str]] = None,
         body: Optional[bytes] = None,
         authenticator: Optional[Callable[[], Dict[str, str]]] = None,
-        headers: Optional[MutableMapping[str, str]] = None,
-        transport_options: Optional[transport.PTransportSettings] = None,
+        transport_options: Optional[transport.TransportOptions] = None,
     ) -> transport.Response:
 
-        if headers is None:
-            headers = {}
+        headers: Dict[str, str] = {}
+        timeout = self.settings.timeout
         if authenticator:
             headers.update(authenticator())
-        timeout = self.settings.timeout
         if transport_options:
-            timeout = transport_options.timeout
+            if transport_options.get("headers"):
+                headers.update(transport_options["headers"])
+            if transport_options.get("timeout"):
+                timeout = transport_options["timeout"]
         self.logger.info("%s(%s)", method.name, path)
         try:
             resp = self.session.request(

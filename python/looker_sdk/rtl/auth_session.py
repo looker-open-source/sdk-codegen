@@ -150,7 +150,9 @@ class AuthSession:
                 transport.HttpMethod.POST,
                 f"{self.settings.base_url}/api/{self.version}/login",
                 body=serialized,
-                headers={"Content-Type": "application/x-www-form-urlencoded"},
+                transport_options={
+                    "headers": {"Content-Type": "application/x-www-form-urlencoded"}
+                },
             )
         )
 

@@ -33,9 +33,9 @@ import attr
 from looker_sdk.rtl import constants
 
 if sys.version_info >= (3, 8):
-    from typing import Protocol
+    from typing import Protocol, TypedDict
 else:
-    from typing_extensions import Protocol
+    from typing_extensions import Protocol, TypedDict
 
 
 AGENT_PREFIX = "PY SDK"
@@ -64,6 +64,17 @@ class PTransportSettings(Protocol):
 
     def is_configured(self) -> bool:
         return bool(self.base_url)
+
+
+class TransportOptions(TypedDict, total=False):
+    """Dictionary of available per-request transport options
+
+    # make me() call with 5 minute timeout and send a special header
+    e.g. sdk.me(transport_options={"timeout": 60 * 5, headers: {"foo": "bar"}})
+    """
+
+    timeout: int
+    headers: Optional[MutableMapping[str, str]]
 
 
 TAuthenticator = Optional[Callable[[], Dict[str, str]]]
@@ -125,8 +136,7 @@ class Transport(abc.ABC):
         query_params: Optional[MutableMapping[str, str]] = None,
         body: Optional[bytes] = None,
         authenticator: TAuthenticator = None,
-        headers: Optional[MutableMapping[str, str]] = None,
-        transport_options: Optional[PTransportSettings] = None,
+        transport_options: Optional[TransportOptions] = None,
     ) -> Response:
         """Send API request.
         """
