@@ -1,12 +1,11 @@
 import looker_sdk
 from looker_sdk import models
-from looker_sdk.rtl import transport
 import configparser
 import hashlib
 import csv
 
 config_file = "../../looker.ini"
-sdk = looker_sdk.init31()
+sdk = looker_sdk.init31(config_file)
 
 
 def main():
@@ -53,7 +52,7 @@ def get_space_data():
 def get_broken_content():
     """Collect broken content"""
     broken_content = sdk.content_validation(
-        transport_options=transport.TransportSettings(timeout=600)
+        transport_options={"timeout": 600}
     ).content_with_errors
     return broken_content
 

@@ -86,7 +86,7 @@ class MockTransport(transport.Transport):
         query_params=None,
         body=None,
         authenticator=None,
-        headers=None,
+        transport_options=None,
     ):
         if authenticator:
             authenticator()
@@ -97,7 +97,7 @@ class MockTransport(transport.Transport):
                     expected_header = {
                         "Content-Type": "application/x-www-form-urlencoded"
                     }
-                    if headers != expected_header:
+                    if transport_options["headers"] != expected_header:
                         raise TypeError(f"Must send {expected_header}")
                 else:
                     token = "UserAccessToken"
