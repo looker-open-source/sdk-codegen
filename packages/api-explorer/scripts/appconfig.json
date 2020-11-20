@@ -1,6 +1,6 @@
 {
   "client_guid": "looker.api-explorer",
-  "redirect_uri": "https://localhost:8080/oauth",
+  "redirect_uri": "http://localhost:8080/oauth",
   "display_name": "CORS API Explorer",
   "description": "Looker API Explorer using CORS",
   "enabled": true
