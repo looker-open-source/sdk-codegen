@@ -17,20 +17,21 @@ else
   tests="$*"
 fi
 
-./bin/unit_test "${tests}"
+yarn jsonify test/data.yml
+rm -rf results/
 
-echo "Smoking SDKs: ${tests} ..."
+echo "Unit testing SDKs: ${tests} ..."
 
 if [[ $tests == *typescript* ]]
 then
-  echo "Smoking Typescript SDK ..."
-  JEST_JUNIT_OUTPUT_DIR=results JEST_JUNIT_OUTPUT_NAME=ts_sdk_smoke.xml yarn jest packages/sdk/test --reporters=default --reporters=jest-junit
+  echo "Unit testing Typescript SDK ..."
+  JEST_JUNIT_OUTPUT_DIR=results JEST_JUNIT_OUTPUT_NAME=ts_sdk_unit.xml yarn jest packages/sdk-rtl --reporters=default --reporters=jest-junit
 fi
 
 if [[ $tests == *python* ]]
 then
   cd python || exit
-  echo "Smoking Python SDK ..."
+  echo "Unit testing Python SDK ..."
   pipenv run tox
   cd ..
 fi
@@ -38,7 +39,7 @@ fi
 if [[ $tests == *kotlin* ]]
 then
   cd kotlin || exit
-  echo "Smoking Kotlin SDK ..."
+  echo "Unit testing Kotlin SDK ..."
   ./gradlew test
   cd ..
 fi
@@ -46,9 +47,9 @@ fi
 if [[ $tests == *swift* ]]
 then
   cd swift/looker || exit
-  echo "Smoking Swift SDK ..."
+  echo "Unit testing Swift SDK ..."
   swift test
   cd ../..
 fi
 
-echo "Smoke tests completed"
+echo "Unit tests completed"
