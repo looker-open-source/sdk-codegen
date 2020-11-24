@@ -31,24 +31,24 @@ fi
 if [[ $tests == *python* ]]
 then
   cd python || exit
-  echo "Unit testing Python SDK ..."
-  pipenv run tox
+  echo "TODO: Unit testing Python SDK ..."
+  #pipenv run tox
   cd ..
 fi
 
 if [[ $tests == *kotlin* ]]
 then
   cd kotlin || exit
-  echo "Unit testing Kotlin SDK ..."
-  ./gradlew test
+  echo "TODO: Unit testing Kotlin SDK ..."
+  # ./gradlew test
   cd ..
 fi
 
 if [[ $tests == *swift* ]]
 then
   cd swift/looker || exit
-  echo "Unit testing Swift SDK ..."
-  swift test
+  echo "TODO: Unit testing Swift SDK ..."
+  # swift test
   cd ../..
 fi
 
