@@ -36,9 +36,9 @@ import {
   NodeSession,
   ApiConfigMap,
 } from '@looker/sdk-rtl'
-import { TestConfig } from '../../../sdk-rtl/src/testUtils'
-import { LookerNodeSDK } from '../nodeSdk'
-import { Looker40SDK as LookerSDK } from '../4.0/methods'
+import { TestConfig } from '../../sdk-rtl/src/testUtils'
+import { LookerNodeSDK } from '../src/nodeSdk'
+import { Looker40SDK as LookerSDK } from '../src/4.0/methods'
 import {
   ICreateQueryTask,
   IQuery,
@@ -46,8 +46,8 @@ import {
   IUser,
   IWriteQuery,
   ResultFormat,
-} from '../4.0/models'
-import { environmentPrefix } from '../constants'
+} from '../src/4.0/models'
+import { environmentPrefix } from '../src/constants'
 
 const envKey = ApiConfigMap(environmentPrefix)
 const strLookerBaseUrl = envKey.base_url
@@ -62,7 +62,31 @@ const dashboards: any[] = config.testData.dashboards
 const emailDomain = '@foo.com'
 const testTimeout = 36000000 // 1 hour
 
-// TODO test binary download with content_thumbnail
+const mimeType = (data: string) => {
+  //        var sig = [UInt8](repeating: 0, count: 20)
+  //        data.copyBytes(to: &sig, count: 20)
+  //        print(sig)
+  const b = data.charCodeAt(0)
+  switch (b) {
+    case 0xff:
+      return 'image/jpg'
+    case 0x89:
+      return 'image/png'
+    case 0x47:
+      return 'image/gif'
+    case 0x4d:
+    case 0x49:
+      return 'image/tiff'
+    case 0x25:
+      return 'application/pdf'
+    case 0xd0:
+      return 'application/vnd'
+    case 0x46:
+      return 'text/plain'
+    default:
+      return 'application/octet-stream'
+  }
+}
 
 describe('LookerNodeSDK', () => {
   const settings = new NodeSettingsIniFile(
@@ -182,6 +206,59 @@ describe('LookerNodeSDK', () => {
     await sdk.authSession.logout()
   }
 
+  describe('downloads', () => {
+    it('png and svg', async () => {
+      const sdk = new LookerSDK(session)
+      const looks = await sdk.ok(sdk.search_looks({ limit: 1 }))
+      let type = ''
+      let id = ''
+      expect(looks).toBeDefined()
+      if (looks.length > 0) {
+        type = 'look'
+        id = looks[0].id!.toString(10)
+      } else {
+        const dashboards = await sdk.ok(sdk.search_dashboards({ limit: 1 }))
+        expect(dashboards).toBeDefined()
+        if (dashboards.length > 0) {
+          type = 'dashboards'
+          id = dashboards[0].id!
+        }
+      }
+      expect(type).toBeDefined()
+      expect(id).toBeDefined()
+      const image = await sdk.ok(
+        sdk.content_thumbnail({ type: type, resource_id: id, format: 'png' })
+      )
+      expect(image).toBeDefined()
+      expect(mimeType(image)).toEqual('image/png')
+      const svg = await sdk.ok(
+        sdk.content_thumbnail({ type: type, resource_id: id, format: 'svg' })
+      )
+      expect(svg).toBeDefined()
+      expect(svg).toMatch(/^<\?xml/)
+    })
+  })
+
+  describe('PUT smoke test', () => {
+    it('set default color collection', async () => {
+      const sdk = new LookerSDK(session)
+      const current = await sdk.ok(sdk.default_color_collection())
+      expect(current).toBeDefined()
+      const cols = await sdk.ok(sdk.all_color_collections())
+      const other = cols.find((c) => c.id !== current.id)
+      expect(other).toBeDefined()
+      // tests to stop lint from complaining
+      if (other && other.id && current.id) {
+        const actual = await sdk.ok(sdk.set_default_color_collection(other.id))
+        expect(actual).toBeDefined()
+        expect(actual.id).toEqual(other.id)
+        const updated = await sdk.ok(sdk.default_color_collection())
+        expect(updated.id).toEqual(actual.id)
+        await sdk.ok(sdk.set_default_color_collection(current.id))
+      }
+    })
+  })
+
   describe('automatic authentication for API calls', () => {
     it('me returns the correct result', async () => {
       const sdk = new LookerSDK(session)
@@ -264,15 +341,6 @@ describe('LookerNodeSDK', () => {
       testTimeout
     )
   })
-
-  // const simpleQuery = (): IWriteQuery => {
-  //   return {
-  //     model: 'system__activity',
-  //     view: 'dashboard',
-  //     fields: ['dashboard.id', 'dashboard.title', 'dashboard.count'],
-  //     limit: '100',
-  //   }
-  // }
 
   describe('retrieves collections', () => {
     it('search_looks returns looks', async () => {
@@ -655,6 +723,14 @@ describe('LookerNodeSDK', () => {
       await removeTestDashboards()
     }, testTimeout)
 
+    it('search_dashboards', async () => {
+      const sdk = new LookerSDK(session)
+      const list = await sdk.ok(sdk.search_dashboards({ limit: 1 }))
+      expect(list).toBeDefined()
+      expect(list).toHaveLength(1)
+      expect(list[0].created_at).toBeDefined()
+    })
+
     it(
       'create and update dashboard',
       async () => {
@@ -804,15 +880,6 @@ describe('LookerNodeSDK', () => {
             expect(tile.title).toEqual(t.title)
             expect(tile.type).toEqual(t.type)
           }
-          // TODO figure out configuration problems causing dashboard to fail render
-          // refresh dashboard
-          // dashboard = await sdk.ok(sdk.dashboard(dashboard.id!))
-          // if (dashboard.dashboard_elements) {
-          //   const [tile] = dashboard.dashboard_elements.filter( t => t.query_id && t.query_id > 0)
-          //   expect(tile).toBeDefined()
-          //   const file = await downloadTile(sdk, tile, 'png')
-          //   expect(file).toBeDefined()
-          // }
         }
         await sdk.authSession.logout()
         expect(sdk.authSession.isAuthenticated()).toBeFalsy()
@@ -853,77 +920,4 @@ describe('LookerNodeSDK', () => {
       expect(sdk.authSession.isAuthenticated()).toBeFalsy()
     })
   })
-
-  /*
-  This test should only be run if specifically needed. It's costly and really only checks the API, not the SDK
-
-  function mimeType(data: string) {
-    //        var sig = [UInt8](repeating: 0, count: 20)
-    //        data.copyBytes(to: &sig, count: 20)
-    //        print(sig)
-    const b = data.charCodeAt(0)
-    switch (b) {
-      case 0xff:
-        return 'image/jpg'
-      case 0x89:
-        return 'image/png'
-      case 0x47:
-        return 'image/gif'
-      case 0x4d:
-      case 0x49:
-        return 'image/tiff'
-      case 0x25:
-        return 'application/pdf'
-      case 0xd0:
-        return 'application/vnd'
-      case 0x46:
-        return 'text/plain'
-      default:
-        return 'application/octet-stream'
-    }
-  }
-
-  const simpleQuery = (): Partial<IWriteQuery> => {
-    return {
-      fields: ['dashboard.id', 'dashboard.title', 'dashboard.count'],
-      limit: '100',
-      model: 'system__activity',
-      view: 'dashboard',
-    }
-  }
-
-  describe('Binary download', () => {
-    it(
-      'PNG and JPG download',
-      async () => {
-        const sdk = new LookerSDK(session)
-        const query = await sdk.ok(sdk.create_query(simpleQuery()))
-        const png = await sdk.ok(
-          sdk.run_query({ query_id: query.id!, result_format: 'png' })
-        )
-        expect(mimeType(png)).toEqual('image/png')
-        // TODO resurrect this when the API bug is fixed
-        // const jpg = await sdk.ok(
-        //   sdk.run_query({ query_id: query.id!, result_format: 'jpg' })
-        // )
-        // expect(mimeType(jpg)).toEqual('image/jpeg') // Houston, we have a problem with jpg being a png
-      },
-      testTimeout
-    )
-    it(
-      'run look PNG download',
-      async () => {
-        const sdk = new LookerSDK(session)
-        const looks = await sdk.ok(sdk.all_looks('id'))
-        expect(looks.length).toBeGreaterThan(0)
-        const look = looks[0]
-        const png = await sdk.ok(
-          sdk.run_look({ look_id: look.id!, result_format: 'png' })
-        )
-        expect(mimeType(png)).toEqual('image/png')
-      },
-      testTimeout
-    )
-  })
-   */
 })
