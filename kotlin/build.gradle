@@ -65,6 +65,13 @@ spotless {
     }
 }
 
+test {
+    testLogging {
+        exceptionFormat "full"
+    }
+}
+
+
 //android {
 //    compileOptions {
 //        sourceCompatibility JavaVersion.VERSION_1_8
