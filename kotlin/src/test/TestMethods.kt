@@ -219,21 +219,79 @@ class TestMethods {
         }
     }
 
-    // For >7.2
-//    @test
-//    fun testThumbnailDownload() {
-//        val dashboards = sdk.ok<Array<DashboardBase>>(sdk.all_dashboards("id"))
-//        dashboards.forEach { d ->
-//            d.id?.let { id ->
-//                val svg = sdk.ok<String>(sdk.vector_thumbnail("dashboard", id))
-//                assertTrue(svg.contains("<svg"), "Dashboard ${id} should have '<svg'")
-//            }
-//        }
-//    }
+    @ExperimentalUnsignedTypes
+    @test
+    fun testContentThumbnail() {
+        var type = ""
+        var id = ""
+        val looks = sdk.ok<Array<Look>>(sdk.search_looks(limit = 1))
+        assertNotNull(looks)
+        if (looks.isNotEmpty()) {
+            type = "look"
+            looks[0].id?.let { lookId ->
+                id = lookId.toString()
+            }
+        }
+        if (id === "") {
+            val dashboards = sdk.ok<Array<Dashboard>>(sdk.search_dashboards(limit = 1))
+            assertNotNull(dashboards)
+            if (dashboards.isNotEmpty()) {
+                type = "dashboard"
+                dashboards[0].id?.let {
+                    dashId ->
+                    id = dashId
+                }
+            }
+        }
+        assertNotEquals("", type, "Type should be 'look' or 'dashboard'")
+        assertNotEquals("", id, "Look or dashboard ID should be assigned")
+        val svg = sdk.ok<String>(sdk.content_thumbnail(type, id))
+        assertTrue(svg.contains("<?xml"), "$type $id SVG should have '<?xml'")
+        val response = sdk.ok<ByteArray>(sdk.stream.content_thumbnail(type, id, format = "png"))
+        val png = response.toUByteArray()
+        val mime = mimeType(png)
+        assertNotNull(png)
+        assertEquals("image/png", mime, "png is png?")
+    }
+
+    private fun prepUsers(): User {
+        val first = "SDK"
+        val last = "User"
+        val users = sdk.ok<Array<User>>(sdk.search_users(first_name = first, last_name = last))
+        assertNotNull(users)
+        val user = if (users.isNotEmpty()) {
+            users.first()
+        } else {
+            sdk.ok(sdk.create_user(WriteUser(first_name = first, last_name = last)))
+        }
+        assertNotNull(user)
+        return user
+    }
+
+    @test
+    fun testUserDisabling() {
+        val user = prepUsers()
+        val id = user.id!!
+        val toggle = user.is_disabled!!
+        var body = WriteUser(is_disabled = !toggle)
+        val disabled = sdk.ok<User>(sdk.update_user(id, body))
+        assertEquals(!toggle, disabled.is_disabled)
+        body = WriteUser(is_disabled = toggle)
+        val enabled = sdk.ok<User>(sdk.update_user(id, body))
+        assertEquals(toggle, enabled.is_disabled)
+    }
+
+    @test
+    fun testSearchUserIds() {
+        prepUsers()
+        val users = sdk.ok<Array<User>>(sdk.search_users(page = 1, per_page = 2))
+        assertNotNull(users)
+        assertEquals(2, users.size)
+
+    }
 
     // TODO resurrect this when the bug is fixed
 /*
-    @ExperimentalUnsignedTypes
     @test
     fun testImageDownload() {
         val body = simpleQuery()
@@ -253,6 +311,7 @@ class TestMethods {
         }
     }
 */
+
     /*
     functional tests
      */
@@ -261,7 +320,7 @@ class TestMethods {
     fun testEnumProcessing() {
         val query = sdk.ok<Query>(sdk.create_query(simpleQuery()))
         query.id?.let { id ->
-            var task = WriteCreateQueryTask(
+            val task = WriteCreateQueryTask(
                 query_id = id,
                 source = "test",
                 result_format = ResultFormat.csv
@@ -304,6 +363,24 @@ class TestMethods {
             sdk.run_inline_query("csv", simpleQuery())
         )
         assertTrue(result.contains("Dashboard ID"))
+    }
+
+    @test
+    fun testDefaultColorCollection() {
+        val current = sdk.ok<ColorCollection>(sdk.default_color_collection())
+        assertNotNull(current)
+        val cols = sdk.ok<Array<ColorCollection>>(sdk.all_color_collections())
+        assertNotNull(cols)
+        val other = cols.find { c -> c.id !== current.id }
+        assertNotNull(other)
+
+        val actual = sdk.ok<ColorCollection>(sdk.set_default_color_collection(other.id!!))
+        assertNotNull(actual)
+        assertEquals(other.id, actual.id)
+        val updated = sdk.ok<ColorCollection>(sdk.default_color_collection())
+        assertNotNull(updated)
+        assertEquals(other.id, actual.id)
+        sdk.ok<ColorCollection>(sdk.set_default_color_collection(current.id!!))
     }
 
     @test

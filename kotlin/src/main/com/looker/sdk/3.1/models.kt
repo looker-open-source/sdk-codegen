@@ -32,6 +32,7 @@
 
 package com.looker.sdk.api31
 
+import com.fasterxml.jackson.annotation.JsonProperty
 import com.looker.rtl.*
 import java.io.Serializable
 import java.util.*
@@ -552,6 +553,8 @@ data class CredentialsApi3(
     var id: Long? = null,
     var client_id: String? = null,
     var created_at: String? = null,
+    @get:JsonProperty("is_disabled")
+    @param:JsonProperty("is_disabled")
     var is_disabled: Boolean? = null,
     var type: String? = null,
     var url: UriString? = null
@@ -574,6 +577,8 @@ data class CredentialsEmail(
     var created_at: String? = null,
     var email: String? = null,
     var forced_password_reset_at_next_login: Boolean? = null,
+    @get:JsonProperty("is_disabled")
+    @param:JsonProperty("is_disabled")
     var is_disabled: Boolean? = null,
     var logged_in_at: String? = null,
     var password_reset_url: String? = null,
@@ -599,6 +604,8 @@ data class CredentialsEmbed(
     var external_group_id: String? = null,
     var external_user_id: String? = null,
     var id: Long? = null,
+    @get:JsonProperty("is_disabled")
+    @param:JsonProperty("is_disabled")
     var is_disabled: Boolean? = null,
     var logged_in_at: String? = null,
     var type: String? = null,
@@ -622,6 +629,8 @@ data class CredentialsGoogle(
     var domain: String? = null,
     var email: String? = null,
     var google_user_id: String? = null,
+    @get:JsonProperty("is_disabled")
+    @param:JsonProperty("is_disabled")
     var is_disabled: Boolean? = null,
     var logged_in_at: String? = null,
     var type: String? = null,
@@ -643,6 +652,8 @@ data class CredentialsLDAP(
     var can: Map<String, Boolean>? = null,
     var created_at: String? = null,
     var email: String? = null,
+    @get:JsonProperty("is_disabled")
+    @param:JsonProperty("is_disabled")
     var is_disabled: Boolean? = null,
     var ldap_dn: String? = null,
     var ldap_id: String? = null,
@@ -666,6 +677,8 @@ data class CredentialsLookerOpenid(
     var can: Map<String, Boolean>? = null,
     var created_at: String? = null,
     var email: String? = null,
+    @get:JsonProperty("is_disabled")
+    @param:JsonProperty("is_disabled")
     var is_disabled: Boolean? = null,
     var logged_in_at: String? = null,
     var logged_in_ip: String? = null,
@@ -688,6 +701,8 @@ data class CredentialsOIDC(
     var can: Map<String, Boolean>? = null,
     var created_at: String? = null,
     var email: String? = null,
+    @get:JsonProperty("is_disabled")
+    @param:JsonProperty("is_disabled")
     var is_disabled: Boolean? = null,
     var logged_in_at: String? = null,
     var oidc_user_id: String? = null,
@@ -709,6 +724,8 @@ data class CredentialsSaml(
     var can: Map<String, Boolean>? = null,
     var created_at: String? = null,
     var email: String? = null,
+    @get:JsonProperty("is_disabled")
+    @param:JsonProperty("is_disabled")
     var is_disabled: Boolean? = null,
     var logged_in_at: String? = null,
     var saml_user_id: String? = null,
@@ -727,6 +744,8 @@ data class CredentialsSaml(
 data class CredentialsTotp(
     var can: Map<String, Boolean>? = null,
     var created_at: String? = null,
+    @get:JsonProperty("is_disabled")
+    @param:JsonProperty("is_disabled")
     var is_disabled: Boolean? = null,
     var type: String? = null,
     var verified: Boolean? = null,
@@ -1402,6 +1421,8 @@ data class DialectInfoOptions(
  * @property is_enabled Whether or not digest emails are enabled
  */
 data class DigestEmails(
+    @get:JsonProperty("is_enabled")
+    @param:JsonProperty("is_enabled")
     var is_enabled: Boolean? = null
 ) : Serializable
 
@@ -1509,12 +1530,26 @@ data class Folder(
     var creator_id: Long? = null,
     var child_count: Long? = null,
     var external_id: String? = null,
+    @get:JsonProperty("is_embed")
+    @param:JsonProperty("is_embed")
     var is_embed: Boolean? = null,
+    @get:JsonProperty("is_embed_shared_root")
+    @param:JsonProperty("is_embed_shared_root")
     var is_embed_shared_root: Boolean? = null,
+    @get:JsonProperty("is_embed_users_root")
+    @param:JsonProperty("is_embed_users_root")
     var is_embed_users_root: Boolean? = null,
+    @get:JsonProperty("is_personal")
+    @param:JsonProperty("is_personal")
     var is_personal: Boolean? = null,
+    @get:JsonProperty("is_personal_descendant")
+    @param:JsonProperty("is_personal_descendant")
     var is_personal_descendant: Boolean? = null,
+    @get:JsonProperty("is_shared_root")
+    @param:JsonProperty("is_shared_root")
     var is_shared_root: Boolean? = null,
+    @get:JsonProperty("is_users_root")
+    @param:JsonProperty("is_users_root")
     var is_users_root: Boolean? = null,
     var can: Map<String, Boolean>? = null,
     var dashboards: Array<DashboardBase>? = null,
@@ -1548,12 +1583,26 @@ data class FolderBase(
     var creator_id: Long? = null,
     var child_count: Long? = null,
     var external_id: String? = null,
+    @get:JsonProperty("is_embed")
+    @param:JsonProperty("is_embed")
     var is_embed: Boolean? = null,
+    @get:JsonProperty("is_embed_shared_root")
+    @param:JsonProperty("is_embed_shared_root")
     var is_embed_shared_root: Boolean? = null,
+    @get:JsonProperty("is_embed_users_root")
+    @param:JsonProperty("is_embed_users_root")
     var is_embed_users_root: Boolean? = null,
+    @get:JsonProperty("is_personal")
+    @param:JsonProperty("is_personal")
     var is_personal: Boolean? = null,
+    @get:JsonProperty("is_personal_descendant")
+    @param:JsonProperty("is_personal_descendant")
     var is_personal_descendant: Boolean? = null,
+    @get:JsonProperty("is_shared_root")
+    @param:JsonProperty("is_shared_root")
     var is_shared_root: Boolean? = null,
+    @get:JsonProperty("is_users_root")
+    @param:JsonProperty("is_users_root")
     var is_users_root: Boolean? = null,
     var can: Map<String, Boolean>? = null
 ) : Serializable
@@ -1603,8 +1652,14 @@ data class GitBranch(
     var owner_name: String? = null,
     var readonly: Boolean? = null,
     var personal: Boolean? = null,
+    @get:JsonProperty("is_local")
+    @param:JsonProperty("is_local")
     var is_local: Boolean? = null,
+    @get:JsonProperty("is_remote")
+    @param:JsonProperty("is_remote")
     var is_remote: Boolean? = null,
+    @get:JsonProperty("is_production")
+    @param:JsonProperty("is_production")
     var is_production: Boolean? = null,
     var ahead_count: Long? = null,
     var behind_count: Long? = null,
@@ -1801,6 +1856,8 @@ data class HomepageSection(
     var homepage_id: Long? = null,
     var homepage_items: Array<HomepageItem>? = null,
     var id: String? = null,
+    @get:JsonProperty("is_header")
+    @param:JsonProperty("is_header")
     var is_header: Boolean? = null,
     var item_order: Array<Long>? = null,
     var title: String? = null,
@@ -1819,6 +1876,8 @@ data class ImportedProject(
     var name: String? = null,
     var url: String? = null,
     var ref: String? = null,
+    @get:JsonProperty("is_remote")
+    @param:JsonProperty("is_remote")
     var is_remote: Boolean? = null,
     var can: Map<String, Boolean>? = null
 ) : Serializable
@@ -2069,6 +2128,8 @@ data class LDAPConfigTestIssue(
  */
 data class LDAPConfigTestResult(
     var details: String? = null,
+    @get:JsonProperty("issues")
+    @param:JsonProperty("issues")
     var issues: Array<LDAPConfigTestIssue>? = null,
     var message: String? = null,
     var status: String? = null,
@@ -2268,6 +2329,8 @@ data class Look(
     var favorite_count: Long? = null,
     var google_spreadsheet_formula: String? = null,
     var image_embed_url: String? = null,
+    @get:JsonProperty("is_run_on_load")
+    @param:JsonProperty("is_run_on_load")
     var is_run_on_load: Boolean? = null,
     var last_accessed_at: Date? = null,
     var last_updater_id: Long? = null,
@@ -2511,9 +2574,17 @@ data class LookmlModelExploreField(
     var fiscal_month_offset: Long? = null,
     var has_allowed_values: Boolean? = null,
     var hidden: Boolean? = null,
+    @get:JsonProperty("is_filter")
+    @param:JsonProperty("is_filter")
     var is_filter: Boolean? = null,
+    @get:JsonProperty("is_fiscal")
+    @param:JsonProperty("is_fiscal")
     var is_fiscal: Boolean? = null,
+    @get:JsonProperty("is_numeric")
+    @param:JsonProperty("is_numeric")
     var is_numeric: Boolean? = null,
+    @get:JsonProperty("is_timeframe")
+    @param:JsonProperty("is_timeframe")
     var is_timeframe: Boolean? = null,
     var can_time_filter: Boolean? = null,
     var time_interval: LookmlModelExploreFieldTimeInterval? = null,
@@ -2792,6 +2863,8 @@ data class LookWithDashboards(
     var favorite_count: Long? = null,
     var google_spreadsheet_formula: String? = null,
     var image_embed_url: String? = null,
+    @get:JsonProperty("is_run_on_load")
+    @param:JsonProperty("is_run_on_load")
     var is_run_on_load: Boolean? = null,
     var last_accessed_at: Date? = null,
     var last_updater_id: Long? = null,
@@ -2866,6 +2939,8 @@ data class LookWithQuery(
     var favorite_count: Long? = null,
     var google_spreadsheet_formula: String? = null,
     var image_embed_url: String? = null,
+    @get:JsonProperty("is_run_on_load")
+    @param:JsonProperty("is_run_on_load")
     var is_run_on_load: Boolean? = null,
     var last_accessed_at: Date? = null,
     var last_updater_id: Long? = null,
@@ -3040,6 +3115,8 @@ data class OIDCConfig(
     var groups_attribute: String? = null,
     var groups_with_role_ids: Array<OIDCGroupWrite>? = null,
     var identifier: String? = null,
+    @get:JsonProperty("issuer")
+    @param:JsonProperty("issuer")
     var issuer: String? = null,
     var modified_at: Date? = null,
     var modified_by: Long? = null,
@@ -3212,6 +3289,8 @@ data class Project(
     var validation_required: Boolean? = null,
     var git_release_mgmt_enabled: Boolean? = null,
     var allow_warnings: Boolean? = null,
+    @get:JsonProperty("is_example")
+    @param:JsonProperty("is_example")
     var is_example: Boolean? = null
 ) : Serializable
 
@@ -3489,6 +3568,8 @@ data class RepositoryCredential(
     var git_username: String? = null,
     var git_password: String? = null,
     var ssh_public_key: String? = null,
+    @get:JsonProperty("is_configured")
+    @param:JsonProperty("is_configured")
     var is_configured: Boolean? = null
 ) : Serializable
 
@@ -3963,12 +4044,26 @@ data class Space(
     var creator_id: Long? = null,
     var child_count: Long? = null,
     var external_id: String? = null,
+    @get:JsonProperty("is_embed")
+    @param:JsonProperty("is_embed")
     var is_embed: Boolean? = null,
+    @get:JsonProperty("is_embed_shared_root")
+    @param:JsonProperty("is_embed_shared_root")
     var is_embed_shared_root: Boolean? = null,
+    @get:JsonProperty("is_embed_users_root")
+    @param:JsonProperty("is_embed_users_root")
     var is_embed_users_root: Boolean? = null,
+    @get:JsonProperty("is_personal")
+    @param:JsonProperty("is_personal")
     var is_personal: Boolean? = null,
+    @get:JsonProperty("is_personal_descendant")
+    @param:JsonProperty("is_personal_descendant")
     var is_personal_descendant: Boolean? = null,
+    @get:JsonProperty("is_shared_root")
+    @param:JsonProperty("is_shared_root")
     var is_shared_root: Boolean? = null,
+    @get:JsonProperty("is_users_root")
+    @param:JsonProperty("is_users_root")
     var is_users_root: Boolean? = null,
     var can: Map<String, Boolean>? = null,
     var dashboards: Array<DashboardBase>? = null,
@@ -4002,12 +4097,26 @@ data class SpaceBase(
     var creator_id: Long? = null,
     var child_count: Long? = null,
     var external_id: String? = null,
+    @get:JsonProperty("is_embed")
+    @param:JsonProperty("is_embed")
     var is_embed: Boolean? = null,
+    @get:JsonProperty("is_embed_shared_root")
+    @param:JsonProperty("is_embed_shared_root")
     var is_embed_shared_root: Boolean? = null,
+    @get:JsonProperty("is_embed_users_root")
+    @param:JsonProperty("is_embed_users_root")
     var is_embed_users_root: Boolean? = null,
+    @get:JsonProperty("is_personal")
+    @param:JsonProperty("is_personal")
     var is_personal: Boolean? = null,
+    @get:JsonProperty("is_personal_descendant")
+    @param:JsonProperty("is_personal_descendant")
     var is_personal_descendant: Boolean? = null,
+    @get:JsonProperty("is_shared_root")
+    @param:JsonProperty("is_shared_root")
     var is_shared_root: Boolean? = null,
+    @get:JsonProperty("is_users_root")
+    @param:JsonProperty("is_users_root")
     var is_users_root: Boolean? = null,
     var can: Map<String, Boolean>? = null
 ) : Serializable
@@ -4257,6 +4366,8 @@ data class User(
     var home_space_id: String? = null,
     var home_folder_id: String? = null,
     var id: Long? = null,
+    @get:JsonProperty("is_disabled")
+    @param:JsonProperty("is_disabled")
     var is_disabled: Boolean? = null,
     var last_name: String? = null,
     var locale: String? = null,
@@ -4297,7 +4408,11 @@ data class UserAttribute(
     var label: String? = null,
     var type: String? = null,
     var default_value: String? = null,
+    @get:JsonProperty("is_system")
+    @param:JsonProperty("is_system")
     var is_system: Boolean? = null,
+    @get:JsonProperty("is_permanent")
+    @param:JsonProperty("is_permanent")
     var is_permanent: Boolean? = null,
     var value_is_hidden: Boolean? = null,
     var user_can_view: Boolean? = null,
@@ -5220,6 +5335,8 @@ data class WriteLookWithQuery(
     var title: String? = null,
     var deleted: Boolean? = null,
     var description: String? = null,
+    @get:JsonProperty("is_run_on_load")
+    @param:JsonProperty("is_run_on_load")
     var is_run_on_load: Boolean? = null,
     var public: Boolean? = null,
     var query_id: Long? = null,
@@ -5305,6 +5422,8 @@ data class WriteOIDCConfig(
     var groups_attribute: String? = null,
     var groups_with_role_ids: Array<OIDCGroupWrite>? = null,
     var identifier: String? = null,
+    @get:JsonProperty("issuer")
+    @param:JsonProperty("issuer")
     var issuer: String? = null,
     var new_user_migration_types: String? = null,
     var scopes: Array<String>? = null,
@@ -5658,6 +5777,8 @@ data class WriteUser(
     var first_name: String? = null,
     var home_space_id: String? = null,
     var home_folder_id: String? = null,
+    @get:JsonProperty("is_disabled")
+    @param:JsonProperty("is_disabled")
     var is_disabled: Boolean? = null,
     var last_name: String? = null,
     var locale: String? = null,

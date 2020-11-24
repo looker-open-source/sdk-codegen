@@ -528,9 +528,9 @@ class Symbol implements ISymbol {
     public type: IType,
     public owner: string = ''
   ) {
+    this.jsonName = name
     const snake = safeName(name)
     if (snake !== name) {
-      this.jsonName = name
       this.name = snake
       this.hasSpecialNeeds = true
     }
@@ -1411,9 +1411,9 @@ export class Type implements IType {
   refCount = 0
 
   constructor(public schema: OAS.SchemaObject, public name: string) {
+    this.jsonName = name
     const snake = safeName(name)
     if (snake !== name) {
-      this.jsonName = name
       this.name = snake
     }
     this.customType = name

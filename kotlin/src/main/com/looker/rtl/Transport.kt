@@ -338,7 +338,7 @@ class Transport(val options: TransportOptions) {
                     val json = defaultSerializer()
 
                     val jsonBody = json.write(body)
-                    builder.body = jsonBody // TODO: I think having to do this is a bug? https://github.com/ktorio/ktor/issues/1265
+                    builder.body = jsonBody // TODO: I think having to do this is a bug? https://github.com/ktorio/ktor/issues/1265 aka https://youtrack.jetbrains.com/issue/KTOR-576
                     headers["Content-Length"] = jsonBody.contentLength.toString()
                 }
             }
