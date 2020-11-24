@@ -31,8 +31,8 @@ fi
 if [[ $tests == *python* ]]
 then
   cd python || exit
-  echo "TODO: Unit testing Python SDK ..."
-  #pipenv run tox
+  echo "Unit testing Python SDK ..."
+  PIPENV_DOTENV_LOCATION=tests/rtl/.env pipenv run tox
   cd ..
 fi
 
