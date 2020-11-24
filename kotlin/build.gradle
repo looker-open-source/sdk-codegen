@@ -27,7 +27,8 @@ sourceSets {
 }
 
 dependencies {
-    api "org.jetbrains.kotlin:kotlin-stdlib:$kotlinVersion"
+    implementation "org.jetbrains.kotlin:kotlin-reflect:$kotlinVersion"
+
     implementation "org.ini4j:ini4j:0.5.4"
 
     implementation "io.ktor:ktor-client:$ktorVersion"
