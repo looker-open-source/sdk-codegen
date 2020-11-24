@@ -1,8 +1,9 @@
+import datetime
 import io
 import json
 import re
 from operator import itemgetter
-from typing import Any, Dict, List, Optional, Union, cast
+from typing import Any, cast, Dict, List, Optional, Union, Sequence
 
 import pytest  # type: ignore
 from PIL import Image  # type: ignore
@@ -202,6 +203,35 @@ def test_search_users_matches_pattern(
         assert resp == ""
 
 
+def test_csv_user_id_list(sdk: mtds.Looker40SDK):
+    """all_users() should accept a delimited array of ids."""
+    users = sdk.all_users()
+    assert len(users) > 1
+    ids = [user.id for user in users]
+    all_users = sdk.all_users(ids=ml.DelimSequence(cast(Sequence[int], ids)))
+    assert len(all_users) == len(users)
+
+
+def test_enum(sdk: mtds.Looker40SDK):
+    # TODO: there is currently no example in the Looker API of a "bare"
+    # ForwardRef property on a model that is returned by the API. We
+    # have unittests deserializing into "bare" ForwardRef properties,
+    # that will have to do for now.
+    query = ml.WriteQuery(
+        model="system__activity",
+        view="dashboard",
+        fields=["dashboard.id", "dashboard.title", "dashboard.count"],
+    )
+    query_id = sdk.create_query(query).id
+    assert query_id
+    task = ml.WriteCreateQueryTask(
+        query_id=query_id, source="test", result_format=ml.ResultFormat.csv
+    )
+    created = sdk.create_query_task(task)
+    # created.result_format is type str, not ResultFormat.csv
+    assert ml.ResultFormat.csv.value == created.result_format
+
+
 @pytest.mark.usefixtures("test_users")
 def test_it_matches_email_domain_and_returns_sorted(
     sdk: mtds.Looker40SDK, email_domain: str, users: List[Dict[str, str]]
@@ -308,14 +338,6 @@ def test_it_runs_inline_query(sdk: mtds.Looker40SDK, queries_system_activity: TQ
         assert isinstance(csv, str)
         assert len(re.findall(r"\n", csv)) == int(limit) + 1
 
-    # only do 1 image download since it takes a while
-    png = sdk.run_inline_query("png", request)
-    assert isinstance(png, bytes)
-    try:
-        Image.open(io.BytesIO(png))
-    except IOError:
-        raise AssertionError("png format failed to return an image")
-
 
 @pytest.mark.usefixtures("remove_test_looks")
 def test_crud_look(sdk: mtds.Looker40SDK, looks):
@@ -355,6 +377,47 @@ def test_crud_look(sdk: mtds.Looker40SDK, looks):
 
         look = sdk.update_look(look.id, ml.WriteLookWithQuery(deleted=False))
         assert not look.deleted
+
+
+def test_png_svg_downloads(sdk: mtds.Looker40SDK):
+    """content_thumbnail() should return a binary or string response based on the specified format."""
+    looks = sdk.search_looks(limit=1)
+    _id: str
+    if looks:
+        _type = "look"
+        _id = str(looks[0].id)
+    else:
+        dashboards = sdk.search_dashboards(limit=1)
+        if dashboards:
+            _type = "dashboard"
+            _id = cast(str, dashboards[0].id)
+
+    png = sdk.content_thumbnail(type=_type, resource_id=_id, format="png")
+    assert isinstance(png, bytes)
+    try:
+        Image.open(io.BytesIO(png))
+    except IOError:
+        raise AssertionError("png format failed to return an image")
+
+    svg = sdk.content_thumbnail(type=_type, resource_id=_id, format="svg")
+    assert isinstance(svg, str)
+    assert "<?xml" in svg
+
+
+def test_setting_default_color_collection(sdk: mtds.Looker40SDK):
+    """Given a color collection id, set_default_color_collection() should change the default collection."""
+    original = sdk.default_color_collection()
+    assert isinstance(original, ml.ColorCollection)
+    assert isinstance(original.id, str)
+    color_collections = sdk.all_color_collections()
+    other: ml.ColorCollection = next(
+        filter(lambda c: c.id != original.id, color_collections)
+    )
+    assert isinstance(other.id, str)
+    actual = sdk.set_default_color_collection(other.id)
+    assert actual.id == other.id
+    updated = sdk.set_default_color_collection(original.id)
+    assert updated.id == original.id
 
 
 def test_search_looks_returns_looks(sdk: mtds.Looker40SDK):
@@ -476,6 +539,7 @@ def test_crud_dashboard(sdk: mtds.Looker40SDK, queries_system_activity, dashboar
         )
 
         assert isinstance(dashboard, ml.Dashboard)
+        assert isinstance(dashboard.created_at, datetime.datetime)
 
         if d.get("background_color"):
             assert d["background_color"] == dashboard.background_color

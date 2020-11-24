@@ -232,33 +232,64 @@ def test_it_creates_and_runs_query(
         assert len(re.findall(r"\n", csv)) == int(limit) + 1
 
 
-def test_it_runs_inline_query(sdk: mtds.Looker31SDK, queries_system_activity: TQueries):
-    """run_inline_query() should run a query and return its results."""
-    for q in queries_system_activity:
-        limit = cast(str, q["limit"]) or "10"
-        request = create_query_request(q, limit)
+def test_png_svg_downloads(sdk: mtds.Looker40SDK):
+    """content_thumbnail() should return a binary or string response based on the specified format."""
+    looks = sdk.search_looks(limit=1)
+    _id: str
+    if looks:
+        _type = "look"
+        _id = str(looks[0].id)
+    else:
+        dashboards = sdk.search_dashboards(limit=1)
+        if dashboards:
+            _type = "dashboard"
+            _id = cast(str, dashboards[0].id)
 
-        json_resp = sdk.run_inline_query("json", request)
-        assert isinstance(json_resp, str)
-        json_: List[Dict[str, Any]] = json.loads(json_resp)
-        assert len(json_) == int(limit)
-
-        row = json_[0]
-        if q.get("fields"):
-            for field in q["fields"]:
-                assert field in row.keys()
-
-        csv = sdk.run_inline_query("csv", request)
-        assert isinstance(csv, str)
-        assert len(re.findall(r"\n", csv)) == int(limit) + 1
-
-    # only do 1 image download since it takes a while
-    png = sdk.run_inline_query("png", request)
+    png = sdk.content_thumbnail(type=_type, resource_id=_id, format="png")
     assert isinstance(png, bytes)
     try:
         Image.open(io.BytesIO(png))
     except IOError:
         raise AssertionError("png format failed to return an image")
+
+    svg = sdk.content_thumbnail(type=_type, resource_id=_id, format="svg")
+    assert isinstance(svg, str)
+    assert "<?xml version" in svg
+
+
+def test_setting_default_color_collection(sdk: mtds.Looker40SDK):
+    """Given a color collection id, set_default_color_collection() should change the default collection."""
+    original = sdk.default_color_collection()
+    assert isinstance(original, ml.ColorCollection)
+    assert isinstance(original.id, str)
+    color_collections = sdk.all_color_collections()
+    other: ml.ColorCollection = next(
+        filter(lambda c: c.id != original.id, color_collections)
+    )
+    assert isinstance(other.id, str)
+    actual = sdk.set_default_color_collection(other.id)
+    assert actual.id == other.id
+    updated = sdk.set_default_color_collection(original.id)
+    assert updated.id == original.id
+
+
+@pytest.mark.usefixtures("test_users")
+def test_post_with_empty_body(sdk: mtds.Looker40SDK, users: List[Dict[str, str]]):
+    """A POST method with an optional body should not error if the body is not defined."""
+    test_user = users[0]
+    result = sdk.search_users(
+        first_name=test_user["first_name"], last_name=test_user["last_name"]
+    )
+    assert len(result) > 0
+    user = result[0]
+    assert isinstance(user.id, int)
+    actual = sdk.create_user_credentials_api3(user.id)
+    assert isinstance(actual, ml.CredentialsApi3)
+    assert isinstance(actual.id, int)
+    updated = sdk.delete_user_credentials_api3(
+        user_id=user.id, credentials_api3_id=actual.id
+    )
+    assert updated == ""
 
 
 @pytest.mark.usefixtures("remove_test_looks")
