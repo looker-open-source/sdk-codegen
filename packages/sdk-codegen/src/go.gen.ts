@@ -86,6 +86,7 @@ export class GoGen extends CodeGen {
   endTypeStr = '}'
   codeQuote = `"`
 
+  useNamedParameters = false
   needsRequestTypes = true
 
   keywords = new Set<string>([
@@ -455,7 +456,7 @@ import (
             name: `rtl.Delim${this.capitalize(map.name)}`,
           }
         case 'EnumType':
-          return { default: '', name: type.name }
+          return { default: '', name: this.capitalize(type.name) }
       }
       throw new Error(`Don't know how to handle: ${JSON.stringify(type)}`)
     }
@@ -480,7 +481,7 @@ import (
         const props: string[] = []
         let propertyValues = ''
         const num = type as EnumType
-        const typeName = `${this.capitalize(type.name)}Type`
+        const typeName = this.capitalize(type.name)
         props.push(`type ${typeName} string`) // todo: handle other types then string
         num.values.forEach((value) => {
           // props.push(this.declareEnumValue(bump, value, typeName))
@@ -535,8 +536,7 @@ import (
   ): string {
     const type = this.typeMap(property.type)
     const name = this.toCamelCaseCap(property.name)
-    const typeName =
-      property.type instanceof EnumType ? `${type.name}Type` : type.name
+    const typeName = type.name
 
     const doc = property.description
       ? `${this.comment(' ', property.description)}`
