@@ -1,4 +1,4 @@
-import com.looker.rtl.DelimArray
+
 import com.looker.rtl.SDKResponse
 import com.looker.sdk.*
 import kotlin.test.assertEquals
@@ -202,38 +202,8 @@ class TestMethods {
         }
     }
 
-    @ExperimentalUnsignedTypes
-    fun mimeType(data: UByteArray): String {
-
-        val b = data[0]
-        val n = b.toUInt().toInt()
-        return when (n) {
-            0xFF -> "image/jpeg"
-            0x89 -> "image/png"
-            0x47 -> "image/gif"
-            0x4D, 0x49 -> "image/tiff"
-            0x25 -> "application/pdf"
-            0xD0 -> "application/vnd"
-            0x46 -> "text/plain"
-            else -> "application/octet-stream"
-        }
-    }
-
-    // For >7.2
-//    @test
-//    fun testThumbnailDownload() {
-//        val dashboards = sdk.ok<Array<DashboardBase>>(sdk.all_dashboards("id"))
-//        dashboards.forEach { d ->
-//            d.id?.let { id ->
-//                val svg = sdk.ok<String>(sdk.vector_thumbnail("dashboard", id))
-//                assertTrue(svg.contains("<svg"), "Dashboard ${id} should have '<svg'")
-//            }
-//        }
-//    }
-
     // TODO resurrect this when the bug is fixed
 /*
-    @ExperimentalUnsignedTypes
     @test
     fun testImageDownload() {
         val body = simpleQuery()
@@ -253,24 +223,10 @@ class TestMethods {
         }
     }
 */
+
     /*
     functional tests
      */
-
-    @test
-    fun testEnumProcessing() {
-        val query = sdk.ok<Query>(sdk.create_query(simpleQuery()))
-        query.id?.let { id ->
-            var task = WriteCreateQueryTask(
-                query_id = id,
-                source = "test",
-                result_format = ResultFormat.csv
-            )
-            val created = sdk.ok<QueryTask>(sdk.create_query_task(task))
-            assertEquals(id, created.query_id, "Query id matches")
-            assertEquals(ResultFormat.csv.toString(), created.result_format)
-        }
-    }
 
     @test
     fun testMe() {
@@ -568,20 +524,6 @@ class TestMethods {
             { item -> item.id!! },
             { id, fields -> sdk.user(id, fields) }
         )
-    }
-
-    @test
-    fun testAllUsersWithIds() {
-        val allUsers = sdk.ok<Array<User>>(sdk.all_users())
-        val userIds: Array<Long> = allUsers
-            .map { u -> u.id!! }
-            .take(2)
-            .toTypedArray()
-        val ids: DelimArray<Long> = DelimArray<Long>(userIds)
-        val users = sdk.ok<Array<User>>(sdk.all_users(ids = ids))
-        assertEquals(2, users.size, "Should retrieve 2 users.")
-        assertEquals(userIds[0], users[0].id)
-        assertEquals(userIds[1], users[1].id)
     }
 
     @test

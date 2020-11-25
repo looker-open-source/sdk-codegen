@@ -39,7 +39,7 @@ if [[ $tests == *kotlin* ]]
 then
   cd kotlin || exit
   echo "Smoking Kotlin SDK ..."
-  ./gradlew test
+  ./gradlew test --tests TestSmoke
   cd ..
 fi
 
