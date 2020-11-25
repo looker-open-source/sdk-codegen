@@ -37,8 +37,13 @@ from looker_sdk.sdk.api40 import models as models40  # noqa: F401
 API_SETTINGS_API_VERSION_DEPRECATED = "API_VERSION config value is no longer needed."
 
 
-class InitError(Exception):
-    pass
+def _settings(config_file: str, section: Optional[str] = None):
+    return api_settings.ApiSettings(
+        filename=config_file,
+        section=section,
+        sdk_version=constants.sdk_version,
+        env_prefix=constants.environment_prefix,
+    )
 
 
 def init31(
@@ -46,11 +51,8 @@ def init31(
 ) -> methods31.Looker31SDK:
     """Default dependency configuration
     """
-    settings = api_settings.ApiSettings(
-        config_file, section, constants.sdk_version, constants.environment_prefix
-    )
-    if not settings.is_configured():
-        raise InitError("Missing required configuration values.")
+    settings = _settings(config_file, section)
+    settings.is_configured()
     transport = requests_transport.RequestsTransport.configure(settings)
     return methods31.Looker31SDK(
         auth_session.AuthSession(settings, transport, serialize.deserialize31, "3.1"),
@@ -66,11 +68,8 @@ def init40(
 ) -> methods40.Looker40SDK:
     """Default dependency configuration
     """
-    settings = api_settings.ApiSettings(
-        config_file, section, constants.sdk_version, constants.environment_prefix
-    )
-    if not settings.is_configured():
-        raise InitError("Missing required configuration values.")
+    settings = _settings(config_file, section)
+    settings.is_configured()
     transport = requests_transport.RequestsTransport.configure(settings)
     return methods40.Looker40SDK(
         auth_session.AuthSession(settings, transport, serialize.deserialize40, "4.0"),

@@ -24,7 +24,7 @@
 """
 import hashlib
 import secrets
-from typing import cast, Dict, Optional, Type, Union
+from typing import cast, Dict, Optional, Union
 import urllib.parse
 
 import attr
@@ -48,10 +48,7 @@ class AuthSession:
         deserialize: serialize.TDeserialize,
         api_version: str,
     ):
-        if not settings.is_configured():
-            raise error.SDKError(
-                "Missing required configuration values like base_url and api_version."
-            )
+        settings.is_configured()
         self.settings = settings
         self.api_version = api_version
         self.sudo_token: auth_token.AuthToken = auth_token.AuthToken()
