@@ -1,26 +1,27 @@
+import datetime
 import io
 import json
-from operator import itemgetter
 import re
-from typing import Any, Dict, List, Optional, Union, cast
+from operator import itemgetter
+from typing import Any, cast, Dict, List, Optional, Union, Sequence
 
 import pytest  # type: ignore
 from PIL import Image  # type: ignore
 
-from looker_sdk.sdk.api31 import methods as mtds
-from looker_sdk.sdk.api31 import models as ml
+from looker_sdk.sdk.api40 import methods as mtds
+from looker_sdk.sdk.api40 import models as ml
 
 
 @pytest.fixture(scope="module")
-def sdk(sdk31) -> mtds.Looker31SDK:
-    return sdk31
+def sdk(sdk40) -> mtds.Looker40SDK:
+    return sdk40
 
 
 TEST_FIRST_NAME = "Rudolphontronix"
 TEST_LAST_NAME = "Doe"
 
 
-def test_crud_user(sdk: mtds.Looker31SDK):
+def test_crud_user(sdk: mtds.Looker40SDK):
     """Test creating, retrieving, updating and deleting a user."""
 
     # Create user
@@ -66,8 +67,8 @@ def test_crud_user(sdk: mtds.Looker31SDK):
     update_user.last_name = ml.EXPLICIT_NULL
     sdk.update_user(user_id, update_user)
     user = sdk.user(user_id)
-    assert user.first_name is None
-    assert user.last_name is None
+    assert user.first_name == ""
+    assert user.last_name == ""
 
     # Try adding email creds
     sdk.create_user_credentials_email(
@@ -82,7 +83,63 @@ def test_crud_user(sdk: mtds.Looker31SDK):
     assert resp == ""
 
 
-def test_me_returns_correct_result(sdk: mtds.Looker31SDK):
+def test_crud_user_dict(sdk):  # no typing
+    """Test creating, retrieving, updating and deleting a user."""
+
+    # Create user
+    new_user = sdk.create_user(
+        dict(
+            first_name=TEST_FIRST_NAME,
+            last_name=TEST_LAST_NAME,
+            is_disabled=False,
+            locale="fr",
+        )
+    )
+    assert new_user["first_name"] == TEST_FIRST_NAME
+    assert new_user["last_name"] == TEST_LAST_NAME
+    assert not new_user["is_disabled"]
+    assert new_user["locale"] == "fr"
+
+    # sudo checks
+    user_id = new_user["id"]
+    sdk.login_user(user_id)
+    sudo_user = sdk.me()
+    assert sudo_user["first_name"] == TEST_FIRST_NAME
+    assert sudo_user["last_name"] == TEST_LAST_NAME
+    sdk.logout()
+    me_user = sdk.me()
+    assert me_user["first_name"] != TEST_FIRST_NAME
+    assert me_user["last_name"] != TEST_LAST_NAME
+
+    # Update user and check fields we didn't intend to change didn't change
+    new_user["is_disabled"] = True
+    new_user["locale"] = "uk"
+    # sdk.update_user(user_id, update_user)
+    sdk.update_user(user_id, new_user)
+    updated_user = sdk.user(user_id)
+    assert updated_user["first_name"] == TEST_FIRST_NAME
+    assert updated_user["last_name"] == TEST_LAST_NAME
+    assert updated_user["locale"] == "uk"
+    assert updated_user["is_disabled"]
+
+    update_user = dict(first_name=None)
+    update_user["last_name"] = None
+    sdk.update_user(user_id, update_user)
+    user = sdk.user(user_id)
+    assert user["first_name"] == ""
+    assert user["last_name"] == ""
+
+    # Try adding email creds
+    sdk.create_user_credentials_email(user_id, dict(email="john.doe@looker.com"))
+    user = sdk.user(user_id)
+    assert user["credentials_email"]["email"] == "john.doe@looker.com"
+
+    # Delete user
+    resp = sdk.delete_user(user_id)
+    assert resp == ""
+
+
+def test_me_returns_correct_result(sdk: mtds.Looker40SDK):
     """me() should return the current authenticated user"""
     me = sdk.me()
     assert isinstance(me, ml.User)
@@ -91,7 +148,7 @@ def test_me_returns_correct_result(sdk: mtds.Looker31SDK):
     assert isinstance(me.credentials_api3[0], ml.CredentialsApi3)
 
 
-def test_me_field_filters(sdk: mtds.Looker31SDK):
+def test_me_field_filters(sdk: mtds.Looker40SDK):
     """me() should return only the requested fields."""
     me = sdk.me("id, first_name, last_name")
     assert isinstance(me, ml.User)
@@ -102,11 +159,11 @@ def test_me_field_filters(sdk: mtds.Looker31SDK):
     assert me.last_name != ""
     assert not me.display_name
     assert not me.email
-    assert not me.personal_space_id
+    assert not me.personal_folder_id
 
 
 @pytest.mark.usefixtures("test_users")
-def test_bad_user_search_returns_no_results(sdk: mtds.Looker31SDK):
+def test_bad_user_search_returns_no_results(sdk: mtds.Looker40SDK):
     """search_users() should return an empty list when no match is found."""
     resp = sdk.search_users(first_name="Bad", last_name="News")
     assert isinstance(resp, list)
@@ -115,7 +172,7 @@ def test_bad_user_search_returns_no_results(sdk: mtds.Looker31SDK):
 
 @pytest.mark.usefixtures("test_users")
 def test_search_users_matches_pattern(
-    sdk: mtds.Looker31SDK, users: List[Dict[str, str]], email_domain: str
+    sdk: mtds.Looker40SDK, users: List[Dict[str, str]], email_domain: str
 ):
     """search_users should return a list of all matches."""
     user = users[0]
@@ -146,9 +203,38 @@ def test_search_users_matches_pattern(
         assert resp == ""
 
 
+def test_csv_user_id_list(sdk: mtds.Looker40SDK):
+    """all_users() should accept a delimited array of ids."""
+    users = sdk.all_users()
+    assert len(users) > 1
+    ids = [user.id for user in users]
+    all_users = sdk.all_users(ids=ml.DelimSequence(cast(Sequence[int], ids)))
+    assert len(all_users) == len(users)
+
+
+def test_enum(sdk: mtds.Looker40SDK):
+    # TODO: there is currently no example in the Looker API of a "bare"
+    # ForwardRef property on a model that is returned by the API. We
+    # have unittests deserializing into "bare" ForwardRef properties,
+    # that will have to do for now.
+    query = ml.WriteQuery(
+        model="system__activity",
+        view="dashboard",
+        fields=["dashboard.id", "dashboard.title", "dashboard.count"],
+    )
+    query_id = sdk.create_query(query).id
+    assert query_id
+    task = ml.WriteCreateQueryTask(
+        query_id=query_id, source="test", result_format=ml.ResultFormat.csv
+    )
+    created = sdk.create_query_task(task)
+    # created.result_format is type str, not ResultFormat.csv
+    assert ml.ResultFormat.csv.value == created.result_format
+
+
 @pytest.mark.usefixtures("test_users")
 def test_it_matches_email_domain_and_returns_sorted(
-    sdk: mtds.Looker31SDK, email_domain: str, users: List[Dict[str, str]]
+    sdk: mtds.Looker40SDK, email_domain: str, users: List[Dict[str, str]]
 ):
     """search_users_names() should search users matching a given pattern and return
     sorted results if sort fields are specified.
@@ -167,7 +253,7 @@ def test_it_matches_email_domain_and_returns_sorted(
 
 @pytest.mark.usefixtures("test_users")
 def test_delim_sequence(
-    sdk: mtds.Looker31SDK, email_domain: str, users: List[Dict[str, str]]
+    sdk: mtds.Looker40SDK, email_domain: str, users: List[Dict[str, str]]
 ):
     search_results = sdk.search_users_names(pattern=f"%{email_domain}")
     assert len(search_results) == len(users)
@@ -176,13 +262,13 @@ def test_delim_sequence(
     assert len(all_users) == len(users)
 
 
-def test_it_retrieves_session(sdk: mtds.Looker31SDK):
+def test_it_retrieves_session(sdk: mtds.Looker40SDK):
     """session() should return the current session."""
     current_session = sdk.session()
     assert current_session.workspace_id == "production"
 
 
-def test_it_updates_session(sdk: mtds.Looker31SDK):
+def test_it_updates_session(sdk: mtds.Looker40SDK):
     """update_session() should allow us to change the current workspace."""
     # Switch workspace to dev mode
     sdk.update_session(ml.WriteApiSession(workspace_id="dev"))
@@ -202,7 +288,7 @@ TQueries = List[Dict[str, Union[str, List[str], Dict[str, str]]]]
 
 
 def test_it_creates_and_runs_query(
-    sdk: mtds.Looker31SDK, queries_system_activity: TQueries
+    sdk: mtds.Looker40SDK, queries_system_activity: TQueries
 ):
     """create_query() creates a query and run_query() returns its result."""
     for q in queries_system_activity:
@@ -232,7 +318,7 @@ def test_it_creates_and_runs_query(
         assert len(re.findall(r"\n", csv)) == int(limit) + 1
 
 
-def test_it_runs_inline_query(sdk: mtds.Looker31SDK, queries_system_activity: TQueries):
+def test_it_runs_inline_query(sdk: mtds.Looker40SDK, queries_system_activity: TQueries):
     """run_inline_query() should run a query and return its results."""
     for q in queries_system_activity:
         limit = cast(str, q["limit"]) or "10"
@@ -252,44 +338,36 @@ def test_it_runs_inline_query(sdk: mtds.Looker31SDK, queries_system_activity: TQ
         assert isinstance(csv, str)
         assert len(re.findall(r"\n", csv)) == int(limit) + 1
 
-    # only do 1 image download since it takes a while
-    png = sdk.run_inline_query("png", request)
-    assert isinstance(png, bytes)
-    try:
-        Image.open(io.BytesIO(png))
-    except IOError:
-        raise AssertionError("png format failed to return an image")
-
 
 @pytest.mark.usefixtures("remove_test_looks")
-def test_crud_look(sdk: mtds.Looker31SDK, looks):
+def test_crud_look(sdk: mtds.Looker40SDK, looks):
     """Test creating, retrieving, updating and deleting a look."""
-    for look_data in looks:
-        request = create_query_request(look_data["query"][0], "10")
+    for l in looks:
+        request = create_query_request(l["query"][0], "10")
         query = sdk.create_query(request)
 
         look = sdk.create_look(
             ml.WriteLookWithQuery(
-                title=look_data.get("title"),
-                description=look_data.get("description"),
-                deleted=look_data.get("deleted"),
-                is_run_on_load=look_data.get("is_run_on_load"),
-                public=look_data.get("public"),
+                title=l.get("title"),
+                description=l.get("description"),
+                deleted=l.get("deleted"),
+                is_run_on_load=l.get("is_run_on_load"),
+                public=l.get("public"),
                 query_id=query.id,
-                space_id=look_data.get("space_id") or str(sdk.me().personal_space_id),
+                folder_id=l.get("folder_id") or str(sdk.me().personal_folder_id),
             )
         )
 
         assert isinstance(look, ml.LookWithQuery)
-        assert look.title == look_data.get("title")
-        assert look.description == look_data.get("description")
-        assert look.deleted == look_data.get("deleted")
-        assert look.is_run_on_load == look_data.get("is_run_on_load")
+        assert look.title == l.get("title")
+        assert look.description == l.get("description")
+        assert look.deleted == l.get("deleted")
+        assert look.is_run_on_load == l.get("is_run_on_load")
         # TODO this is broken for local dev but works for CI...
-        # assert look.public == look_data.get("public")
+        # assert look.public == l.get("public")
         assert look.query_id == query.id
-        assert look.space_id == look_data.get("space_id") or sdk.me().home_space_id
-        assert look.user_id == look_data.get("user_id") or sdk.me().id
+        assert look.folder_id == l.get("folder_id") or sdk.me().home_folder_id
+        assert look.user_id == l.get("user_id") or sdk.me().id
 
         # Update
         assert isinstance(look.id, int)
@@ -301,7 +379,52 @@ def test_crud_look(sdk: mtds.Looker31SDK, looks):
         assert not look.deleted
 
 
-def test_search_looks_returns_looks(sdk: mtds.Looker31SDK):
+def test_png_svg_downloads(sdk: mtds.Looker40SDK):
+    """content_thumbnail() should return a binary or string response based on the specified format."""
+    looks = sdk.search_looks(limit=1)
+    resource_id: str
+    if looks:
+        resource_type = "look"
+        resource_id = str(looks[0].id)
+    else:
+        dashboards = sdk.search_dashboards(limit=1)
+        if dashboards:
+            resource_type = "dashboard"
+            resource_id = cast(str, dashboards[0].id)
+
+    png = sdk.content_thumbnail(
+        type=resource_type, resource_id=resource_id, format="png"
+    )
+    assert isinstance(png, bytes)
+    try:
+        Image.open(io.BytesIO(png))
+    except IOError:
+        raise AssertionError("png format failed to return an image")
+
+    svg = sdk.content_thumbnail(
+        type=resource_type, resource_id=resource_id, format="svg"
+    )
+    assert isinstance(svg, str)
+    assert "<?xml" in svg
+
+
+def test_setting_default_color_collection(sdk: mtds.Looker40SDK):
+    """Given a color collection id, set_default_color_collection() should change the default collection."""
+    original = sdk.default_color_collection()
+    assert isinstance(original, ml.ColorCollection)
+    assert isinstance(original.id, str)
+    color_collections = sdk.all_color_collections()
+    other: ml.ColorCollection = next(
+        filter(lambda c: c.id != original.id, color_collections)
+    )
+    assert isinstance(other.id, str)
+    actual = sdk.set_default_color_collection(other.id)
+    assert actual.id == other.id
+    updated = sdk.set_default_color_collection(original.id)
+    assert updated.id == original.id
+
+
+def test_search_looks_returns_looks(sdk: mtds.Looker40SDK):
     """search_looks() should return a list of looks."""
     search_results = sdk.search_looks()
     assert isinstance(search_results, list)
@@ -312,7 +435,7 @@ def test_search_looks_returns_looks(sdk: mtds.Looker31SDK):
     assert look.created_at is not None
 
 
-def test_search_looks_fields_filter(sdk: mtds.Looker31SDK):
+def test_search_looks_fields_filter(sdk: mtds.Looker40SDK):
     """search_looks() should only return the requested fields passed in the fields
     argument of the request.
     """
@@ -325,7 +448,7 @@ def test_search_looks_fields_filter(sdk: mtds.Looker31SDK):
     assert look.created_at is None
 
 
-def test_search_looks_title_fields_filter(sdk: mtds.Looker31SDK):
+def test_search_looks_title_fields_filter(sdk: mtds.Looker40SDK):
     """search_looks() should be able to filter on title."""
     search_results = sdk.search_looks(title="An SDK%", fields="id, title")
     assert isinstance(search_results, list)
@@ -337,7 +460,7 @@ def test_search_looks_title_fields_filter(sdk: mtds.Looker31SDK):
     assert look.description is None
 
 
-def test_search_look_and_run(sdk: mtds.Looker31SDK):
+def test_search_look_and_run(sdk: mtds.Looker40SDK):
     """run_look() should return CSV and JSON
     CSV will use column descriptions
     JSON will use column names
@@ -362,26 +485,6 @@ def test_search_look_and_run(sdk: mtds.Looker31SDK):
     assert "Dashboard ID" in actual
 
 
-def test_enum(sdk: mtds.Looker31SDK):
-    # TODO: there is currently no example in the Looker API of a "bare"
-    # ForwardRef property on a model that is returned by the API. We
-    # have unittests deserializing into "bare" ForwardRef properties,
-    # that will have to do for now.
-    query = ml.WriteQuery(
-        model="system__activity",
-        view="dashboard",
-        fields=["dashboard.id", "dashboard.title", "dashboard.count"],
-    )
-    query_id = sdk.create_query(query).id
-    assert query_id
-    task = ml.WriteCreateQueryTask(
-        query_id=query_id, source="test", result_format=ml.ResultFormat.csv
-    )
-    created = sdk.create_query_task(task)
-    # created.result_format is type str, not ResultFormat.csv
-    assert ml.ResultFormat.csv.value == created.result_format
-
-
 def create_query_request(q, limit: Optional[str] = None) -> ml.WriteQuery:
     return ml.WriteQuery(
         model=q.get("model"),
@@ -397,7 +500,6 @@ def create_query_request(q, limit: Optional[str] = None) -> ml.WriteQuery:
         total=q.get("total"),
         row_total=q.get("row_total"),
         subtotals=q.get("subtotal"),
-        runtime=q.get("runtime"),
         vis_config=q.get("vis_config"),
         filter_config=q.get("filter_config"),
         visible_ui_sections=q.get("visible_ui_sections"),
@@ -408,7 +510,7 @@ def create_query_request(q, limit: Optional[str] = None) -> ml.WriteQuery:
 
 
 @pytest.mark.usefixtures("remove_test_dashboards")
-def test_crud_dashboard(sdk: mtds.Looker31SDK, queries_system_activity, dashboards):
+def test_crud_dashboard(sdk: mtds.Looker40SDK, queries_system_activity, dashboards):
     """Test creating, retrieving, updating and deleting a dashboard.
     """
     qhash: Dict[Union[str, int], ml.Query] = {}
@@ -432,7 +534,7 @@ def test_crud_dashboard(sdk: mtds.Looker31SDK, queries_system_activity, dashboar
                 show_filters_bar=d.get("show_filters_bar"),
                 show_title=d.get("show_title"),
                 slug=d.get("slug"),
-                space_id=d.get("space_id") or sdk.me().home_space_id,
+                folder_id=d.get("folder_id") or sdk.me().home_folder_id,
                 text_tile_text_color=d.get("text_tile_text_color"),
                 tile_background_color=d.get("tile_background_color"),
                 tile_text_color=d.get("tile_text_color"),
@@ -441,6 +543,7 @@ def test_crud_dashboard(sdk: mtds.Looker31SDK, queries_system_activity, dashboar
         )
 
         assert isinstance(dashboard, ml.Dashboard)
+        assert isinstance(dashboard.created_at, datetime.datetime)
 
         if d.get("background_color"):
             assert d["background_color"] == dashboard.background_color
