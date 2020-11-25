@@ -382,24 +382,28 @@ def test_crud_look(sdk: mtds.Looker40SDK, looks):
 def test_png_svg_downloads(sdk: mtds.Looker40SDK):
     """content_thumbnail() should return a binary or string response based on the specified format."""
     looks = sdk.search_looks(limit=1)
-    _id: str
+    resource_id: str
     if looks:
-        _type = "look"
-        _id = str(looks[0].id)
+        resource_type = "look"
+        resource_id = str(looks[0].id)
     else:
         dashboards = sdk.search_dashboards(limit=1)
         if dashboards:
-            _type = "dashboard"
-            _id = cast(str, dashboards[0].id)
+            resource_type = "dashboard"
+            resource_id = cast(str, dashboards[0].id)
 
-    png = sdk.content_thumbnail(type=_type, resource_id=_id, format="png")
+    png = sdk.content_thumbnail(
+        type=resource_type, resource_id=resource_id, format="png"
+    )
     assert isinstance(png, bytes)
     try:
         Image.open(io.BytesIO(png))
     except IOError:
         raise AssertionError("png format failed to return an image")
 
-    svg = sdk.content_thumbnail(type=_type, resource_id=_id, format="svg")
+    svg = sdk.content_thumbnail(
+        type=resource_type, resource_id=resource_id, format="svg"
+    )
     assert isinstance(svg, str)
     assert "<?xml" in svg
 
