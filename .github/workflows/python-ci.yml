@@ -1,0 +1,82 @@
+name: Python CI
+on:
+  pull_request_target:
+    paths:
+      - python/**
+      - packages/sdk-codegen*/**
+
+  push:
+    branches:
+      - $default-branch
+    paths:
+      # TODO use an anchor when it's supported
+      - python/**
+      - packages/sdk-codegen*/**
+
+defaults:
+  run:
+    shell: bash
+    working-directory: python/
+
+jobs:
+  build:
+    name: Build
+    env:
+      LOOKERSDK_CLIENT_ID: ${{ secrets.LOOKERSDK_CLIENT_ID }}
+      LOOKERSDK_CLIENT_SECRET: ${{ secrets.LOOKERSDK_CLIENT_SECRET }}
+      LOOKERSDK_BASE_URL: https://localhost:20000
+      LOOKERSDK_VERIFY_SSL: false
+      TOX_JUNIT_OUTPUT_DIR: results/
+      TOX_JUNIT_OUTPUT_NAME: ${{ matrix.os }}.${{ matrix.python-version }}
+    runs-on: ${{ matrix.os }}
+    strategy:
+      matrix:
+        os:
+          - ubuntu-latest
+            #- macos-latest
+        python-version:
+          - 3.6
+            #- 3.7
+            #- 3.8
+            #- 3.9
+
+    steps:
+      - name: Repo Checkout
+        uses: actions/checkout@v2
+      - name: Set up Python ${{ matrix.python-version }}
+        uses: actions/setup-python@v2
+        with:
+          python-version: ${{ matrix.python-version }}
+      - name: Install Tox and any other packages
+        run: |
+          python -m pip install --upgrade pip
+          pip install tox
+      - name: Run Unit Tests
+        id: unittest
+        run: tox -e unit
+      - name: Set up Cloud SDK
+        # if: ${{ steps.unittest.outcome == success}} WTF - not "success", not success, what then?
+        uses: google-github-actions/setup-gcloud@v0.2.0
+        with:
+          project_id: ${{ secrets.GCP_PROJECT_ID }}
+          service_account_key: ${{ secrets.GCP_AR_READER_SA_KEY }}
+          export_default_credentials: true
+      - name: Authenticate Artifact Repository
+        run: gcloud auth configure-docker us-west1-docker.pkg.dev
+      - name: Pull Looker docker image
+        run: docker pull us-west1-docker.pkg.dev/cloud-looker-sdk-codgen-cicd/looker/7.20
+      - name: Run docker container
+        # set $LOOKER_OPTS to --no-ssl if we want to turn off ssl
+        run: docker run --name looker-sdk-codegen-ci -d -p 10000:9999 -p 20000:19999 us-west1-docker.pkg.dev/cloud-looker-sdk-codgen-cicd/looker/7.20
+      - name: Wait for Looker
+        shell: python
+        working-directory: ./github/scripts
+        run: wait_for_looker.py
+      - name: Run Integration Tests
+        run: tox -e integration
+      - name: Upload pytest test results
+        if: ${{ always() }}
+        uses: actions/upload-artifact@v2
+        with:
+          name: python-test-results
+          path: python/results/
