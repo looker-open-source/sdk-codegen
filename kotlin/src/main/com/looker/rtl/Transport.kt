@@ -25,7 +25,6 @@
 package com.looker.rtl
 
 import io.ktor.client.HttpClient
-import io.ktor.client.call.call
 import io.ktor.client.call.receive
 import io.ktor.client.engine.okhttp.OkHttp
 import io.ktor.client.features.json.JacksonSerializer
@@ -33,7 +32,9 @@ import io.ktor.client.features.json.JsonFeature
 import io.ktor.client.features.json.defaultSerializer
 import io.ktor.client.request.HttpRequestBuilder
 import io.ktor.client.request.forms.FormDataContent
-import io.ktor.client.response.HttpResponse
+import io.ktor.client.request.request
+import io.ktor.client.statement.HttpResponse
+import io.ktor.client.statement.HttpStatement
 import io.ktor.http.takeFrom
 import kotlinx.coroutines.runBlocking
 import java.net.URLDecoder
@@ -236,11 +237,6 @@ class Transport(val options: TransportOptions) {
 
     private val apiPath = "${options.baseUrl}/api/${options.apiVersion}"
 
-    private fun ok(res: HttpResponse): Boolean {
-        // Thought: We should use whatever is idiomatic for Kotlin
-        return (res.status.value >= 200) && (res.status.value <= 226)
-    }
-
     /**
      * Create the correct http request path
      * @param path Relative or absolute path
@@ -289,7 +285,12 @@ class Transport(val options: TransportOptions) {
 
         val result = try {
             runBlocking {
-                SDKResponse.SDKSuccessResponse(client.call(builder).response.receive<T>())
+                SDKResponse.SDKSuccessResponse(
+                    client.request<HttpStatement>(builder).execute {
+                        response: HttpResponse ->
+                        response.receive<T>()
+                    }
+                )
             }
         } catch (e: Exception) {
             SDKResponse.SDKErrorResponse("$method $path $e")
