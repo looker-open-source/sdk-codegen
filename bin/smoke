@@ -47,7 +47,7 @@ if [[ $tests == *swift* ]]
 then
   cd swift/looker || exit
   echo "Smoking Swift SDK ..."
-  swift test
+  swift test -only-testing Tests/lookerTests/smokeTests
   cd ../..
 fi
 

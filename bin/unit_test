@@ -48,7 +48,7 @@ if [[ $tests == *swift* ]]
 then
   cd swift/looker || exit
   echo "TODO: Unit testing Swift SDK ..."
-  # swift test
+  swift test -only-testing Tests/lookerTests/apiConfigTests -only-testing Tests/lookerTests/apiSettingsTests -only-testing Tests/lookerTests/constantsTests
   cd ../..
 fi
 
