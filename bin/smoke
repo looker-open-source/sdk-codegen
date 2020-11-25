@@ -31,7 +31,7 @@ if [[ $tests == *python* ]]
 then
   cd python || exit
   echo "Smoking Python SDK ..."
-  pipenv run tox
+  PIPENV_DOTENV_LOCATION=tests/integration/.env pipenv run tox
   cd ..
 fi
 
