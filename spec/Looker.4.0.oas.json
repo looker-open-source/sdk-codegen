@@ -1,8 +1,8 @@
 {
   "openapi": "3.0.0",
   "info": {
-    "version": "4.0.7.21",
-    "x-looker-release-version": "7.21.0",
+    "version": "4.0.7.20",
+    "x-looker-release-version": "7.20.0",
     "title": "Looker API 4.0 (Experimental) Reference",
     "description": "\nWelcome to the future! This is an early preview of our next-generation Looker API 4.0.\nAPI 4.0 runs alongside APIs 3.1 and 3.0. We've tagged 4.0 as \"experimental\" to reflect\nthat we have more work planned for API 4.0 which may include breaking changes.\nPlease pardon our dust while we remodel a few rooms!\n\n### In This Release\n\nWe're spinning up this new API 4.0 version so that we can make adjustments to our API\nfunctions, parameters, and response types to fix bugs and inconsistencies. These changes\nfall outside the bounds of non-breaking additive changes we can make to our stable API 3.1.\n\nOne benefit of these type adjustments in API 4.0 is dramatically better support for strongly\ntyped languages like TypeScript, Kotlin, Java, and more. Looker is also creating client SDKs\nto call the Looker API from these and other languages. These client SDKs will be available\nas pre-built packages for download from public repositories such as npmjs.org, RubyGems.org,\nPyPi.org. If you use an IDE for software development, you will soon be able to install a\nLooker SDK for your programming language with the click of a button!\n\nWhile API 3.1 is still the defacto Looker API (\"current\", \"stable\", \"default\", etc), the bulk\nof our development activity will gradually shift to API 4.0.\n\n",
     "contact": { "name": "Looker Team", "url": "https://help.looker.com" },
@@ -5868,65 +5868,6 @@
           },
           "429": {
             "description": "Too Many Requests",
-            "content": {
-              "application/json": {
-                "schema": { "$ref": "#/components/schemas/Error" }
-              }
-            }
-          }
-        },
-        "x-looker-status": "beta",
-        "x-looker-activity-type": "non_query"
-      }
-    },
-    "/derived_table/graph/model/{model}": {
-      "get": {
-        "tags": ["LookmlModel"],
-        "operationId": "graph_derived_tables_for_model",
-        "summary": "Get Derived Table",
-        "description": "### Discover information about derived tables\n",
-        "parameters": [
-          {
-            "name": "model",
-            "in": "path",
-            "description": "The name of the Lookml model.",
-            "required": true,
-            "schema": { "type": "string" }
-          },
-          {
-            "name": "format",
-            "in": "query",
-            "description": "The format of the graph. Valid values are [dot]. Default is `dot`",
-            "required": false,
-            "schema": { "type": "string" }
-          },
-          {
-            "name": "color",
-            "in": "query",
-            "description": "Color denoting the build status of the graph. Grey = not built, green = built, yellow = building, red = error.",
-            "required": false,
-            "schema": { "type": "string" }
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "Derived Table",
-            "content": {
-              "application/json": {
-                "schema": { "$ref": "#/components/schemas/DependencyGraph" }
-              }
-            }
-          },
-          "400": {
-            "description": "Bad Request",
-            "content": {
-              "application/json": {
-                "schema": { "$ref": "#/components/schemas/Error" }
-              }
-            }
-          },
-          "404": {
-            "description": "Not Found",
             "content": {
               "application/json": {
                 "schema": { "$ref": "#/components/schemas/Error" }
@@ -14670,13 +14611,6 @@
             "description": "(Optional: leave blank for root project) The remote url for remote dependency to test.",
             "required": false,
             "schema": { "type": "string" }
-          },
-          {
-            "name": "use_production",
-            "in": "query",
-            "description": "(Optional: leave blank for dev credentials) Whether to use git production credentials.",
-            "required": false,
-            "schema": { "type": "string" }
           }
         ],
         "responses": {
@@ -23349,7 +23283,7 @@
       }
     }
   },
-  "servers": [{ "url": "http://kaster.c.googlers.com:19999/api/4.0" }],
+  "servers": [{ "url": "https://localhost:20000/api/4.0" }],
   "components": {
     "requestBodies": {
       "ColorCollection": {
@@ -23689,7 +23623,7 @@
             "nullable": true
           }
         },
-        "x-looker-status": "stable"
+        "x-looker-status": "beta"
       },
       "HomepageSection": {
         "properties": {
@@ -23769,7 +23703,7 @@
             "nullable": true
           }
         },
-        "x-looker-status": "stable"
+        "x-looker-status": "beta"
       },
       "HomepageItem": {
         "properties": {
@@ -23941,7 +23875,7 @@
             "nullable": true
           }
         },
-        "x-looker-status": "stable"
+        "x-looker-status": "beta"
       },
       "ValidationError": {
         "properties": {
@@ -24052,7 +23986,7 @@
             "nullable": true
           }
         },
-        "x-looker-status": "stable"
+        "x-looker-status": "beta"
       },
       "BackupConfiguration": {
         "properties": {
@@ -24376,7 +24310,7 @@
             "nullable": false
           }
         },
-        "x-looker-status": "stable"
+        "x-looker-status": "beta"
       },
       "ContinuousPalette": {
         "properties": {
@@ -24403,7 +24337,7 @@
             "nullable": false
           }
         },
-        "x-looker-status": "stable"
+        "x-looker-status": "beta"
       },
       "DiscretePalette": {
         "properties": {
@@ -24430,7 +24364,7 @@
             "nullable": false
           }
         },
-        "x-looker-status": "stable"
+        "x-looker-status": "beta"
       },
       "ColorCollection": {
         "properties": {
@@ -24464,7 +24398,7 @@
             "nullable": false
           }
         },
-        "x-looker-status": "stable"
+        "x-looker-status": "beta"
       },
       "Command": {
         "properties": {
@@ -24566,7 +24500,7 @@
             "nullable": true
           }
         },
-        "x-looker-status": "stable"
+        "x-looker-status": "beta"
       },
       "ContentMetaGroupUser": {
         "properties": {
@@ -24611,7 +24545,7 @@
             "nullable": true
           }
         },
-        "x-looker-status": "stable"
+        "x-looker-status": "beta"
       },
       "ContentMeta": {
         "properties": {
@@ -24686,7 +24620,7 @@
             "nullable": true
           }
         },
-        "x-looker-status": "stable"
+        "x-looker-status": "beta"
       },
       "ContentValidation": {
         "properties": {
@@ -24747,7 +24681,7 @@
             "nullable": true
           }
         },
-        "x-looker-status": "stable"
+        "x-looker-status": "beta"
       },
       "ContentValidatorError": {
         "properties": {
@@ -24785,7 +24719,7 @@
             "nullable": false
           }
         },
-        "x-looker-status": "stable"
+        "x-looker-status": "beta"
       },
       "ContentValidationFolder": {
         "properties": {
@@ -24801,7 +24735,7 @@
             "nullable": false
           }
         },
-        "x-looker-status": "stable",
+        "x-looker-status": "beta",
         "required": ["name"]
       },
       "ContentValidationLook": {
@@ -24820,7 +24754,7 @@
           },
           "folder": { "$ref": "#/components/schemas/ContentValidationFolder" }
         },
-        "x-looker-status": "stable"
+        "x-looker-status": "beta"
       },
       "ContentValidationDashboard": {
         "properties": {
@@ -24842,7 +24776,7 @@
             "nullable": true
           }
         },
-        "x-looker-status": "stable"
+        "x-looker-status": "beta"
       },
       "ContentValidationDashboardElement": {
         "properties": {
@@ -24916,7 +24850,7 @@
           },
           "type": { "type": "string", "description": "Type", "nullable": true }
         },
-        "x-looker-status": "stable"
+        "x-looker-status": "beta"
       },
       "ContentValidationError": {
         "properties": {
@@ -24951,7 +24885,7 @@
             "nullable": false
           }
         },
-        "x-looker-status": "stable"
+        "x-looker-status": "beta"
       },
       "ContentValidationDashboardFilter": {
         "properties": {
@@ -25003,7 +24937,7 @@
             "nullable": true
           }
         },
-        "x-looker-status": "stable"
+        "x-looker-status": "beta"
       },
       "ContentValidationScheduledPlan": {
         "properties": {
@@ -25026,7 +24960,7 @@
             "nullable": false
           }
         },
-        "x-looker-status": "stable"
+        "x-looker-status": "beta"
       },
       "ContentValidationAlert": {
         "properties": {
@@ -25052,7 +24986,7 @@
             "nullable": true
           }
         },
-        "x-looker-status": "stable"
+        "x-looker-status": "beta"
       },
       "ContentValidationLookMLDashboard": {
         "properties": {
@@ -25075,7 +25009,7 @@
             "nullable": true
           }
         },
-        "x-looker-status": "stable"
+        "x-looker-status": "beta"
       },
       "ContentValidationLookMLDashboardElement": {
         "properties": {
@@ -25092,7 +25026,7 @@
             "nullable": true
           }
         },
-        "x-looker-status": "stable"
+        "x-looker-status": "beta"
       },
       "ContentView": {
         "properties": {
@@ -25172,7 +25106,7 @@
             "nullable": true
           }
         },
-        "x-looker-status": "stable"
+        "x-looker-status": "beta"
       },
       "CredentialsApi3": {
         "properties": {
@@ -25719,7 +25653,7 @@
             "nullable": true
           }
         },
-        "x-looker-status": "stable"
+        "x-looker-status": "beta"
       },
       "DashboardAggregateTableLookml": {
         "properties": {
@@ -25736,7 +25670,7 @@
             "nullable": true
           }
         },
-        "x-looker-status": "stable"
+        "x-looker-status": "beta"
       },
       "DashboardAppearance": {
         "properties": {
@@ -25778,7 +25712,7 @@
             "nullable": true
           }
         },
-        "x-looker-status": "stable"
+        "x-looker-status": "beta"
       },
       "DashboardElement": {
         "properties": {
@@ -25925,7 +25859,7 @@
             "nullable": true
           }
         },
-        "x-looker-status": "stable"
+        "x-looker-status": "beta"
       },
       "DashboardFilter": {
         "properties": {
@@ -26004,7 +25938,7 @@
           },
           "allow_multiple_values": {
             "type": "boolean",
-            "description": "Whether the filter allows multiple filter values (deprecated in the latest version of dashboards)",
+            "description": "Whether the filter allows multiple filter values",
             "nullable": false
           },
           "required": {
@@ -26019,7 +25953,7 @@
             "nullable": true
           }
         },
-        "x-looker-status": "stable"
+        "x-looker-status": "beta"
       },
       "CreateDashboardFilter": {
         "properties": {
@@ -26090,7 +26024,7 @@
           },
           "allow_multiple_values": {
             "type": "boolean",
-            "description": "Whether the filter allows multiple filter values (deprecated in the latest version of dashboards)",
+            "description": "Whether the filter allows multiple filter values",
             "nullable": false
           },
           "required": {
@@ -26105,7 +26039,7 @@
             "nullable": true
           }
         },
-        "x-looker-status": "stable",
+        "x-looker-status": "beta",
         "required": ["dashboard_id", "name", "title", "type"]
       },
       "DashboardLayoutComponent": {
@@ -26182,7 +26116,7 @@
             "nullable": true
           }
         },
-        "x-looker-status": "stable"
+        "x-looker-status": "beta"
       },
       "DashboardLayout": {
         "properties": {
@@ -26244,7 +26178,7 @@
             "nullable": true
           }
         },
-        "x-looker-status": "stable"
+        "x-looker-status": "beta"
       },
       "DashboardLookml": {
         "properties": {
@@ -26261,7 +26195,7 @@
             "nullable": true
           }
         },
-        "x-looker-status": "stable"
+        "x-looker-status": "beta"
       },
       "Dashboard": {
         "properties": {
@@ -26488,7 +26422,7 @@
             "nullable": true
           }
         },
-        "x-looker-status": "stable"
+        "x-looker-status": "beta"
       },
       "DataActionFormField": {
         "properties": {
@@ -26550,7 +26484,7 @@
             "nullable": true
           }
         },
-        "x-looker-status": "stable"
+        "x-looker-status": "beta"
       },
       "DataActionForm": {
         "properties": {
@@ -26563,7 +26497,7 @@
             "nullable": true
           }
         },
-        "x-looker-status": "stable"
+        "x-looker-status": "beta"
       },
       "DataActionFormSelectOption": {
         "properties": {
@@ -26580,7 +26514,7 @@
             "nullable": true
           }
         },
-        "x-looker-status": "stable"
+        "x-looker-status": "beta"
       },
       "DataActionRequest": {
         "properties": {
@@ -26597,7 +26531,7 @@
             "nullable": true
           }
         },
-        "x-looker-status": "stable"
+        "x-looker-status": "beta"
       },
       "DataActionResponse": {
         "properties": {
@@ -26629,7 +26563,7 @@
             "nullable": true
           }
         },
-        "x-looker-status": "stable"
+        "x-looker-status": "beta"
       },
       "DataActionUserState": {
         "properties": {
@@ -26647,7 +26581,7 @@
             "nullable": true
           }
         },
-        "x-looker-status": "stable"
+        "x-looker-status": "beta"
       },
       "Datagroup": {
         "properties": {
@@ -26716,7 +26650,7 @@
             "nullable": true
           }
         },
-        "x-looker-status": "stable"
+        "x-looker-status": "beta"
       },
       "DBConnectionBase": {
         "properties": {
@@ -27104,18 +27038,7 @@
             "nullable": false
           }
         },
-        "x-looker-status": "stable"
-      },
-      "DependencyGraph": {
-        "properties": {
-          "graph_text": {
-            "type": "string",
-            "readOnly": true,
-            "description": "The graph structure in the dot language that can be rendered into an image.",
-            "nullable": false
-          }
-        },
-        "x-looker-status": "stable"
+        "x-looker-status": "beta"
       },
       "DialectInfo": {
         "properties": {
@@ -27325,7 +27248,7 @@
             "nullable": false
           }
         },
-        "x-looker-status": "stable"
+        "x-looker-status": "beta"
       },
       "DigestEmails": {
         "properties": {
@@ -27335,7 +27258,7 @@
             "nullable": false
           }
         },
-        "x-looker-status": "stable"
+        "x-looker-status": "beta"
       },
       "EmbedParams": {
         "properties": {
@@ -27418,7 +27341,8 @@
             "nullable": true
           },
           "external_group_id": {
-            "type": "string",
+            "type": "integer",
+            "format": "int64",
             "description": "A unique value identifying an embed-exclusive group. Multiple embed users using the same `external_group_id` value will be able to share Looker content with each other. Content and embed users associated with the `external_group_id` will not be accessible to normal Looker users or embed users not associated with this `external_group_id`.",
             "nullable": true
           },
@@ -27435,7 +27359,7 @@
             "nullable": true
           }
         },
-        "x-looker-status": "stable",
+        "x-looker-status": "beta",
         "required": ["target_url"]
       },
       "EmbedUrlResponse": {
@@ -27447,7 +27371,7 @@
             "nullable": false
           }
         },
-        "x-looker-status": "stable"
+        "x-looker-status": "beta"
       },
       "ExternalOauthApplication": {
         "properties": {
@@ -27598,7 +27522,7 @@
             "nullable": false
           }
         },
-        "x-looker-status": "stable",
+        "x-looker-status": "beta",
         "required": ["name"]
       },
       "CreateFolder": {
@@ -27614,7 +27538,7 @@
             "nullable": false
           }
         },
-        "x-looker-status": "stable",
+        "x-looker-status": "beta",
         "required": ["name", "parent_id"]
       },
       "UpdateFolder": {
@@ -27630,7 +27554,7 @@
             "nullable": false
           }
         },
-        "x-looker-status": "stable"
+        "x-looker-status": "beta"
       },
       "Folder": {
         "properties": {
@@ -27748,7 +27672,7 @@
             "nullable": true
           }
         },
-        "x-looker-status": "stable",
+        "x-looker-status": "beta",
         "required": ["name"]
       },
       "GitBranch": {
@@ -27858,7 +27782,7 @@
             "nullable": true
           }
         },
-        "x-looker-status": "stable"
+        "x-looker-status": "beta"
       },
       "GitConnectionTest": {
         "properties": {
@@ -27882,7 +27806,7 @@
             "nullable": false
           }
         },
-        "x-looker-status": "stable"
+        "x-looker-status": "beta"
       },
       "GitConnectionTestResult": {
         "properties": {
@@ -27912,7 +27836,7 @@
             "nullable": true
           }
         },
-        "x-looker-status": "stable"
+        "x-looker-status": "beta"
       },
       "GitStatus": {
         "properties": {
@@ -27941,7 +27865,7 @@
             "nullable": true
           }
         },
-        "x-looker-status": "stable"
+        "x-looker-status": "beta"
       },
       "GroupIdForGroupInclusion": {
         "properties": {
@@ -28195,7 +28119,7 @@
             "nullable": false
           }
         },
-        "x-looker-status": "stable"
+        "x-looker-status": "beta"
       },
       "IntegrationHub": {
         "properties": {
@@ -28267,7 +28191,7 @@
             "nullable": true
           }
         },
-        "x-looker-status": "stable"
+        "x-looker-status": "beta"
       },
       "Integration": {
         "properties": {
@@ -28402,7 +28326,7 @@
             "nullable": false
           }
         },
-        "x-looker-status": "stable"
+        "x-looker-status": "beta"
       },
       "IntegrationParam": {
         "properties": {
@@ -28464,7 +28388,7 @@
             "nullable": true
           }
         },
-        "x-looker-status": "stable"
+        "x-looker-status": "beta"
       },
       "IntegrationRequiredField": {
         "properties": {
@@ -28489,7 +28413,7 @@
             "nullable": true
           }
         },
-        "x-looker-status": "stable"
+        "x-looker-status": "beta"
       },
       "IntegrationTestResult": {
         "properties": {
@@ -28513,7 +28437,7 @@
             "nullable": true
           }
         },
-        "x-looker-status": "stable"
+        "x-looker-status": "beta"
       },
       "InternalHelpResourcesContent": {
         "properties": {
@@ -28535,7 +28459,7 @@
             "nullable": true
           }
         },
-        "x-looker-status": "stable"
+        "x-looker-status": "beta"
       },
       "InternalHelpResources": {
         "properties": {
@@ -28552,7 +28476,7 @@
             "nullable": false
           }
         },
-        "x-looker-status": "stable"
+        "x-looker-status": "beta"
       },
       "LDAPConfig": {
         "properties": {
@@ -29197,7 +29121,7 @@
             "nullable": true
           }
         },
-        "x-looker-status": "stable"
+        "x-looker-status": "beta"
       },
       "LookBasic": {
         "properties": {
@@ -29812,7 +29736,7 @@
             "nullable": true
           }
         },
-        "x-looker-status": "stable"
+        "x-looker-status": "beta"
       },
       "LookmlModelNavExplore": {
         "properties": {
@@ -30302,12 +30226,6 @@
             "type": "string",
             "readOnly": true,
             "description": "Description",
-            "nullable": true
-          },
-          "dimension_group": {
-            "type": "string",
-            "readOnly": true,
-            "description": "Dimension group if this field is part of a dimension group. If not, this will be null.",
             "nullable": true
           },
           "enumerations": {
@@ -30963,7 +30881,7 @@
             "nullable": true
           }
         },
-        "x-looker-status": "stable"
+        "x-looker-status": "beta"
       },
       "LookmlTestResult": {
         "properties": {
@@ -31021,7 +30939,7 @@
             "nullable": false
           }
         },
-        "x-looker-status": "stable"
+        "x-looker-status": "beta"
       },
       "Manifest": {
         "properties": {
@@ -31049,7 +30967,7 @@
             "$ref": "#/components/schemas/LocalizationSettings"
           }
         },
-        "x-looker-status": "stable"
+        "x-looker-status": "beta"
       },
       "MergeQuery": {
         "properties": {
@@ -31113,7 +31031,7 @@
             "nullable": true
           }
         },
-        "x-looker-status": "stable"
+        "x-looker-status": "beta"
       },
       "MergeQuerySourceQuery": {
         "properties": {
@@ -31135,7 +31053,7 @@
             "nullable": true
           }
         },
-        "x-looker-status": "stable"
+        "x-looker-status": "beta"
       },
       "MergeFields": {
         "properties": {
@@ -31150,7 +31068,7 @@
             "nullable": true
           }
         },
-        "x-looker-status": "stable"
+        "x-looker-status": "beta"
       },
       "ModelSet": {
         "properties": {
@@ -31451,7 +31369,7 @@
             "nullable": true
           }
         },
-        "x-looker-status": "stable"
+        "x-looker-status": "beta"
       },
       "OIDCGroupRead": {
         "properties": {
@@ -31601,7 +31519,7 @@
             "nullable": false
           }
         },
-        "x-looker-status": "stable"
+        "x-looker-status": "beta"
       },
       "Permission": {
         "properties": {
@@ -31732,7 +31650,7 @@
           },
           "git_status": { "$ref": "#/components/schemas/GitStatus" }
         },
-        "x-looker-status": "stable"
+        "x-looker-status": "beta"
       },
       "Project": {
         "properties": {
@@ -31775,11 +31693,6 @@
             "x-looker-write-only": true,
             "description": "(Write-Only) Git password for HTTPS authentication. (For production only, if using user attributes.)",
             "nullable": true
-          },
-          "git_production_branch_name": {
-            "type": "string",
-            "description": "Git production branch name. Defaults to master.",
-            "nullable": false
           },
           "git_username_user_attribute": {
             "type": "string",
@@ -31853,7 +31766,7 @@
             "nullable": true
           }
         },
-        "x-looker-status": "stable"
+        "x-looker-status": "beta"
       },
       "ProjectError": {
         "properties": {
@@ -31932,7 +31845,7 @@
             "nullable": true
           }
         },
-        "x-looker-status": "stable"
+        "x-looker-status": "beta"
       },
       "ModelsNotValidated": {
         "properties": {
@@ -31949,7 +31862,7 @@
             "nullable": true
           }
         },
-        "x-looker-status": "stable"
+        "x-looker-status": "beta"
       },
       "ProjectValidation": {
         "properties": {
@@ -31981,7 +31894,7 @@
             "nullable": true
           }
         },
-        "x-looker-status": "stable"
+        "x-looker-status": "beta"
       },
       "ProjectValidationCache": {
         "properties": {
@@ -32019,7 +31932,7 @@
             "nullable": false
           }
         },
-        "x-looker-status": "stable"
+        "x-looker-status": "beta"
       },
       "ProjectWorkspace": {
         "properties": {
@@ -32074,7 +31987,7 @@
             "nullable": true
           }
         },
-        "x-looker-status": "stable"
+        "x-looker-status": "beta"
       },
       "Query": {
         "properties": {
@@ -32283,7 +32196,7 @@
             "nullable": true
           }
         },
-        "x-looker-status": "stable",
+        "x-looker-status": "beta",
         "required": ["query_id", "result_format"]
       },
       "QueryTask": {
@@ -32390,7 +32303,7 @@
             "nullable": true
           }
         },
-        "x-looker-status": "stable"
+        "x-looker-status": "beta"
       },
       "RenderTask": {
         "properties": {
@@ -32519,7 +32432,7 @@
             "nullable": true
           }
         },
-        "x-looker-status": "stable"
+        "x-looker-status": "beta"
       },
       "CreateDashboardRenderTask": {
         "properties": {
@@ -32534,7 +32447,7 @@
             "nullable": true
           }
         },
-        "x-looker-status": "stable"
+        "x-looker-status": "beta"
       },
       "RepositoryCredential": {
         "properties": {
@@ -32586,7 +32499,7 @@
             "nullable": false
           }
         },
-        "x-looker-status": "stable"
+        "x-looker-status": "beta"
       },
       "ResultMakerFilterablesListen": {
         "properties": {
@@ -32601,7 +32514,7 @@
             "nullable": true
           }
         },
-        "x-looker-status": "stable"
+        "x-looker-status": "beta"
       },
       "ResultMakerFilterables": {
         "properties": {
@@ -32633,7 +32546,7 @@
             "nullable": true
           }
         },
-        "x-looker-status": "stable"
+        "x-looker-status": "beta"
       },
       "ResultMakerWithIdVisConfigAndDynamicFields": {
         "properties": {
@@ -32698,7 +32611,7 @@
             "nullable": true
           }
         },
-        "x-looker-status": "stable"
+        "x-looker-status": "beta"
       },
       "Role": {
         "properties": {
@@ -33298,7 +33211,7 @@
             "nullable": true
           }
         },
-        "x-looker-status": "stable"
+        "x-looker-status": "beta"
       },
       "WriteScheduledPlan": {
         "properties": {
@@ -33441,7 +33354,7 @@
             "nullable": true
           }
         },
-        "x-looker-status": "stable"
+        "x-looker-status": "beta"
       },
       "ScheduledPlan": {
         "properties": {
@@ -33633,7 +33546,7 @@
             "nullable": false
           }
         },
-        "x-looker-status": "stable"
+        "x-looker-status": "beta"
       },
       "SchemaColumn": {
         "properties": {
@@ -34053,7 +33966,7 @@
             "nullable": false
           }
         },
-        "x-looker-status": "stable"
+        "x-looker-status": "beta"
       },
       "Session": {
         "properties": {
@@ -34208,7 +34121,7 @@
             "nullable": true
           }
         },
-        "x-looker-status": "stable"
+        "x-looker-status": "beta"
       },
       "SqlQuery": {
         "properties": {
@@ -34519,7 +34432,7 @@
             "nullable": false
           }
         },
-        "x-looker-status": "stable"
+        "x-looker-status": "beta"
       },
       "Theme": {
         "properties": {
@@ -34556,7 +34469,7 @@
           },
           "settings": { "$ref": "#/components/schemas/ThemeSettings" }
         },
-        "x-looker-status": "stable"
+        "x-looker-status": "beta"
       },
       "Timezone": {
         "properties": {
@@ -34845,7 +34758,7 @@
             "nullable": true
           }
         },
-        "x-looker-status": "stable"
+        "x-looker-status": "beta"
       },
       "User": {
         "properties": {
@@ -35168,7 +35081,7 @@
             "nullable": true
           }
         },
-        "x-looker-status": "stable"
+        "x-looker-status": "beta"
       },
       "WhitelabelConfiguration": {
         "properties": {
@@ -35264,7 +35177,7 @@
             "nullable": false
           }
         },
-        "x-looker-status": "stable"
+        "x-looker-status": "beta"
       },
       "Workspace": {
         "properties": {
@@ -35289,7 +35202,7 @@
             "nullable": true
           }
         },
-        "x-looker-status": "stable"
+        "x-looker-status": "beta"
       }
     }
   }
