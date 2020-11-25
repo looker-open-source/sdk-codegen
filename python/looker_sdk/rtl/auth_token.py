@@ -22,7 +22,7 @@
 
 """AuthToken
 """
-from typing import Optional, Type, Union, cast
+from typing import Optional, Type, Union
 import datetime
 
 import attr
@@ -78,7 +78,7 @@ class AuthToken:
         )
         if token is None:
             token = AccessToken()
-        self.set_token(cast(AccessToken, token))
+        self.set_token(token)
 
     def set_token(self, token: AccessToken):
         """Assign the token and set its expiration."""
