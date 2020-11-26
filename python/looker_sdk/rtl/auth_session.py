@@ -46,14 +46,14 @@ class AuthSession:
         settings: api_settings.PApiSettings,
         transport: transport.Transport,
         deserialize: serialize.TDeserialize,
-        version: str,
+        api_version: str,
     ):
         if not settings.is_configured():
             raise error.SDKError(
                 "Missing required configuration values like base_url and api_version."
             )
         self.settings = settings
-        self.version = version
+        self.api_version = api_version
         self.sudo_token: auth_token.AuthToken = auth_token.AuthToken()
         self.token: auth_token.AuthToken = auth_token.AuthToken()
         self._sudo_id: Optional[int] = None
