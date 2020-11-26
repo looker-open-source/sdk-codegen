@@ -30,7 +30,6 @@ from typing import Dict, Optional, Set
 import warnings
 
 from looker_sdk.rtl import transport
-from looker_sdk.rtl import constants
 
 if sys.version_info >= (3, 8):
     from typing import Protocol
@@ -49,7 +48,13 @@ _DEFAULT_INI = "looker.ini"
 class ApiSettings(PApiSettings):
     deprecated_settings: Set[str] = {"api_version", "embed_secret", "user_id"}
 
-    def __init__(self, filename: str = _DEFAULT_INI, section: Optional[str] = None):
+    def __init__(
+        self,
+        sdk_version: str,
+        filename: str = _DEFAULT_INI,
+        section: Optional[str] = None,
+        env_prefix: Optional[str] = None,
+    ):
         """Configure using a config file and/or environment variables.
 
         Environment variables will override config file settings. Neither
@@ -69,6 +74,7 @@ class ApiSettings(PApiSettings):
         """
         self.filename = filename
         self.section = section
+        self.env_prefix = env_prefix
         data = self.read_config()
         verify_ssl = data.get("verify_ssl")
         if verify_ssl is None:
@@ -78,7 +84,7 @@ class ApiSettings(PApiSettings):
         self.base_url = data.get("base_url", "")
         self.timeout = int(data.get("timeout", 120))
         self.headers = {"Content-Type": "application/json"}
-        self.agent_tag = f"{transport.AGENT_PREFIX} {constants.sdk_version}"
+        self.agent_tag = f"{transport.AGENT_PREFIX} {sdk_version}"
 
     def read_config(self) -> Dict[str, str]:
         cfg_parser = cp.ConfigParser()
@@ -101,7 +107,8 @@ class ApiSettings(PApiSettings):
                 raise cp.NoSectionError(section)
             data = dict(cfg_parser[section])
 
-        data.update(self._override_from_env())
+        if self.env_prefix:
+            data.update(self._override_from_env(self.env_prefix))
         return self._clean_input(data)
 
     @staticmethod
@@ -115,9 +122,8 @@ class ApiSettings(PApiSettings):
         return converted
 
     @staticmethod
-    def _override_from_env() -> Dict[str, str]:
+    def _override_from_env(env_prefix: str) -> Dict[str, str]:
         overrides = {}
-        env_prefix = constants.environment_prefix
         base_url = os.getenv(f"{env_prefix}_BASE_URL")
         if base_url:
             overrides["base_url"] = base_url
