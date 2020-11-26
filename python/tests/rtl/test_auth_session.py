@@ -66,7 +66,7 @@ client_secret=
 
 @pytest.fixture(scope="function")
 def auth_session(config_file):
-    settings = api_settings.ApiSettings(config_file)
+    settings = api_settings.ApiSettings("7.20", config_file, env_prefix="LOOKERSDK")
     return auth.AuthSession(
         settings, MockTransport.configure(settings), serialize.deserialize31, "3.1"
     )
@@ -185,7 +185,7 @@ def test_it_fails_with_missing_credentials(
     monkeypatch.setenv("LOOKERSDK_CLIENT_ID", test_env_client_id)
     monkeypatch.setenv("LOOKERSDK_CLIENT_SECRET", test_env_client_secret)
 
-    settings = api_settings.ApiSettings(config_file, test_section)
+    settings = api_settings.ApiSettings("7.20", config_file, test_section)
     settings.api_version = "3.1"
 
     auth_session = auth.AuthSession(
@@ -240,7 +240,7 @@ def test_env_variables_override_config_file_credentials(
 
 @pytest.fixture(scope="function")
 def oauth_session(config_file):
-    settings = api_settings.ApiSettings(config_file)
+    settings = api_settings.ApiSettings("7.20", config_file)
     return auth.OAuthSession(
         settings=settings,
         transport=MockTransport.configure(settings),
