@@ -26,13 +26,13 @@ from looker_sdk.rtl import api_settings
 from looker_sdk.rtl import requests_transport
 from looker_sdk.rtl import serialize
 from looker_sdk.rtl import auth_session
+from looker_sdk.sdk import constants
 
 # F401 - providing convenience shortcut for methods/models at top level
 from looker_sdk.sdk.api31 import methods, methods as methods31  # noqa:F401
 from looker_sdk.sdk.api40 import methods as methods40
 from looker_sdk.sdk.api31 import models, models as models31  # noqa:F401
 from looker_sdk.sdk.api40 import models as models40  # noqa: F401
-
 
 API_SETTINGS_API_VERSION_DEPRECATED = "API_VERSION config value is no longer needed."
 
@@ -46,7 +46,9 @@ def init31(
 ) -> methods31.Looker31SDK:
     """Default dependency configuration
     """
-    settings = api_settings.ApiSettings(config_file, section)
+    settings = api_settings.ApiSettings(
+        constants.sdk_version, config_file, section, constants.environment_prefix
+    )
     if not settings.is_configured():
         raise InitError("Missing required configuration values.")
     transport = requests_transport.RequestsTransport.configure(settings)
@@ -64,7 +66,7 @@ def init40(
 ) -> methods40.Looker40SDK:
     """Default dependency configuration
     """
-    settings = api_settings.ApiSettings(config_file, section)
+    settings = api_settings.ApiSettings(constants.sdk_version, config_file, section)
     if not settings.is_configured():
         raise InitError("Missing required configuration values.")
     transport = requests_transport.RequestsTransport.configure(settings)
