@@ -139,7 +139,7 @@ class AuthSession:
         response = self._ok(
             self.transport.request(
                 transport.HttpMethod.POST,
-                f"{self.settings.base_url}/api/{self.version}/login",
+                f"{self.settings.base_url}/api/{self.api_version}/login",
                 body=serialized,
                 transport_options={
                     "headers": {"Content-Type": "application/x-www-form-urlencoded"}
@@ -158,7 +158,7 @@ class AuthSession:
         response = self._ok(
             self.transport.request(
                 transport.HttpMethod.POST,
-                f"{self.settings.base_url}/api/{self.version}/login/{self._sudo_id}",
+                f"{self.settings.base_url}/api/{self.api_version}/login/{self._sudo_id}",
                 authenticator=lambda: {
                     "Authorization": f"Bearer {self._get_token().access_token}"
                 },

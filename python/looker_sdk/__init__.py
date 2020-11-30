@@ -47,7 +47,7 @@ def init31(
     """Default dependency configuration
     """
     settings = api_settings.ApiSettings(
-        constants.sdk_version, config_file, section, constants.environment_prefix
+        config_file, section, constants.sdk_version, constants.environment_prefix
     )
     if not settings.is_configured():
         raise InitError("Missing required configuration values.")
@@ -66,7 +66,9 @@ def init40(
 ) -> methods40.Looker40SDK:
     """Default dependency configuration
     """
-    settings = api_settings.ApiSettings(constants.sdk_version, config_file, section)
+    settings = api_settings.ApiSettings(
+        config_file, section, constants.sdk_version, constants.environment_prefix
+    )
     if not settings.is_configured():
         raise InitError("Missing required configuration values.")
     transport = requests_transport.RequestsTransport.configure(settings)
