@@ -50,9 +50,9 @@ class ApiSettings(PApiSettings):
 
     def __init__(
         self,
-        sdk_version: str,
         filename: str = _DEFAULT_INI,
         section: Optional[str] = None,
+        sdk_version: Optional[str] = "",
         env_prefix: Optional[str] = None,
     ):
         """Configure using a config file and/or environment variables.
@@ -84,7 +84,9 @@ class ApiSettings(PApiSettings):
         self.base_url = data.get("base_url", "")
         self.timeout = int(data.get("timeout", 120))
         self.headers = {"Content-Type": "application/json"}
-        self.agent_tag = f"{transport.AGENT_PREFIX} {sdk_version}"
+        self.agent_tag = f"{transport.AGENT_PREFIX}"
+        if sdk_version:
+            self.agent_tag += f" {sdk_version}"
 
     def read_config(self) -> Dict[str, str]:
         cfg_parser = cp.ConfigParser()
