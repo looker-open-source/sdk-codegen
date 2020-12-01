@@ -23,11 +23,12 @@
  SOFTWARE.
 
  */
+import { readFileSync } from 'fs'
 import { cloneDeep, pick } from 'lodash'
 import { OperationObject } from 'openapi3-ts'
 
 import { compareParams, compareSpecs, compareTypes } from './specLinter'
-import { TestConfig } from './testUtils'
+import { rootFile, TestConfig } from './testUtils'
 import {
   PropertyList,
   Type,
@@ -37,8 +38,6 @@ import {
   ApiModel,
   IMethod,
 } from './sdkModels'
-import { readFileSync } from 'fs'
-import path from 'path'
 
 const config = TestConfig()
 const apiTestModel = config.apiTestModel
@@ -268,19 +267,10 @@ describe('spec linter', () => {
     })
 
     it('should compare with filter', () => {
-      const lSpec = ApiModel.fromString(
-        readFileSync(
-          path.join(__dirname, '../../../spec/Looker.3.1.oas.json'),
-          'utf-8'
-        )
-      )
-
-      const rSpec = ApiModel.fromString(
-        readFileSync(
-          path.join(__dirname, '../../../spec/Looker.4.0.oas.json'),
-          'utf-8'
-        )
-      )
+      const leftFile = rootFile('/spec/Looker.3.1.oas.json')
+      const lSpec = ApiModel.fromString(readFileSync(leftFile, 'utf-8'))
+      const rightFile = rootFile('/spec/Looker.4.0.oas.json')
+      const rSpec = ApiModel.fromString(readFileSync(rightFile, 'utf-8'))
 
       const betaCompare = (lMethod?: IMethod, _?: IMethod) =>
         lMethod?.status === 'beta'

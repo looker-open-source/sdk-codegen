@@ -75,9 +75,11 @@ enum class PermissionType : Serializable {
  */
 data class HyphenType (
     var project_name: String? = null,
-    @JsonProperty("project-digest")
+    @get:JsonProperty("project-digest")
+    @param:JsonProperty("project-digest")
     var project_digest: String? = null,
-    @JsonProperty("computation time")
+    @get:JsonProperty("computation time")
+    @param:JsonProperty("computation time")
     var computation_time: Float? = null
 ) : Serializable`
       expect(actual).toEqual(expected)
