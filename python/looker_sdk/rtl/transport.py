@@ -30,6 +30,7 @@ from typing import Callable, Dict, MutableMapping, Optional
 
 import attr
 
+from looker_sdk import error
 from looker_sdk.rtl import constants
 
 if sys.version_info >= (3, 8):
@@ -63,7 +64,8 @@ class PTransportSettings(Protocol):
     headers: Optional[MutableMapping[str, str]]
 
     def is_configured(self) -> bool:
-        return bool(self.base_url)
+        if not self.base_url:
+            raise error.SDKError("Missing required configuration value: base_url")
 
 
 class TransportOptions(TypedDict, total=False):
