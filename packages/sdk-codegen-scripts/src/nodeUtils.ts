@@ -42,6 +42,12 @@ export const readFileSync = (
   encoding: BufferEncoding = utf8
 ) => fs.readFileSync(filePath, { encoding: encoding })
 
+export const writeFileSync = (
+  filePath: string,
+  data: any,
+  encoding: BufferEncoding = utf8
+) => fs.writeFileSync(filePath, data, { encoding: encoding })
+
 export const isDirSync = (filePath: string) => {
   try {
     return fs.statSync(filePath).isDirectory()
