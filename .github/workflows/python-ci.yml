@@ -62,16 +62,14 @@ jobs:
           service_account_key: ${{ secrets.GCP_AR_READER_SA_KEY }}
           export_default_credentials: true
       - name: Authenticate Artifact Repository
-        run: gcloud auth configure-docker us-west1-docker.pkg.dev
+        run: gcloud auth configure-docker us-west1-docker.pkg.dev --quiet
       - name: Pull Looker docker image
-        run: docker pull us-west1-docker.pkg.dev/cloud-looker-sdk-codgen-cicd/looker/7.20
+        run: docker pull --quiet us-west1-docker.pkg.dev/cloud-looker-sdk-codgen-cicd/looker/7.20
       - name: Run docker container
         # set $LOOKER_OPTS to --no-ssl if we want to turn off ssl
         run: docker run --name looker-sdk-codegen-ci -d -p 10000:9999 -p 20000:19999 us-west1-docker.pkg.dev/cloud-looker-sdk-codgen-cicd/looker/7.20
       - name: Wait for Looker
-        shell: python
-        working-directory: ./github/scripts
-        run: wait_for_looker.py
+        run: python ${{ github.workspace }}/.github/scripts/wait_for_looker.py
       - name: Run Integration Tests
         run: tox -e integration
       - name: Upload pytest test results
