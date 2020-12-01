@@ -104,30 +104,23 @@ class PythonFormatter extends BaseFormatter {
 
   versionStamp(gen: ICodeGen) {
     if (gen.versions && gen.versions.lookerVersion) {
-      const stampFile = gen.fileName('rtl/constants')
+      const stampFile = gen.fileName('sdk/constants')
       if (!isFileSync(stampFile)) {
         warn(`${stampFile} was not found. Skipping version update.`)
       }
       let content = readFileSync(stampFile)
-      const lookerPattern = /looker_version = ['"].*['"]/i
-      const apiPattern = /api_version = ['"].*['"]/i
+      const sdkVersionPattern = /sdk_version = ['"].*['"]/i
       const envPattern = /environment_prefix = ['"].*['"]/i
       content = content.replace(
-        lookerPattern,
-        `looker_version = "${gen.versions.lookerVersion}"`
-      )
-      content = content.replace(
-        apiPattern,
-        `api_version = "${gen.versions.apiVersion}"`
+        sdkVersionPattern,
+        `sdk_version = "${gen.versions.lookerVersion}"`
       )
       content = content.replace(
         envPattern,
         `environment_prefix = "${gen.environmentPrefix}"`
       )
       writeFile(stampFile, content)
-      return success(
-        `updated ${stampFile} to ${gen.versions.apiVersion}.${gen.versions.lookerVersion}`
-      )
+      return success(`updated ${stampFile} to ${gen.versions.lookerVersion}`)
     }
 
     return warn(

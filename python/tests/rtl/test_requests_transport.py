@@ -28,7 +28,6 @@ import requests
 
 from looker_sdk.rtl import requests_transport
 from looker_sdk.rtl import transport
-from looker_sdk.rtl import constants
 
 
 @attr.s(auto_attribs=True)

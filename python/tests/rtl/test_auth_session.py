@@ -66,7 +66,7 @@ client_secret=
 
 @pytest.fixture(scope="function")
 def auth_session(config_file):
-    settings = api_settings.ApiSettings(config_file)
+    settings = api_settings.ApiSettings(config_file, env_prefix="LOOKERSDK")
     return auth.AuthSession(
         settings, MockTransport.configure(settings), serialize.deserialize31, "3.1"
     )

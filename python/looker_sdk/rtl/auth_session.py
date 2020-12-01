@@ -46,14 +46,14 @@ class AuthSession:
         settings: api_settings.PApiSettings,
         transport: transport.Transport,
         deserialize: serialize.TDeserialize,
-        version: str,
+        api_version: str,
     ):
         if not settings.is_configured():
             raise error.SDKError(
                 "Missing required configuration values like base_url and api_version."
             )
         self.settings = settings
-        self.version = version
+        self.api_version = api_version
         self.sudo_token: auth_token.AuthToken = auth_token.AuthToken()
         self.token: auth_token.AuthToken = auth_token.AuthToken()
         self._sudo_id: Optional[int] = None
@@ -139,7 +139,7 @@ class AuthSession:
         response = self._ok(
             self.transport.request(
                 transport.HttpMethod.POST,
-                f"{self.settings.base_url}/api/{self.version}/login",
+                f"{self.settings.base_url}/api/{self.api_version}/login",
                 body=serialized,
                 transport_options={
                     "headers": {"Content-Type": "application/x-www-form-urlencoded"}
@@ -158,7 +158,7 @@ class AuthSession:
         response = self._ok(
             self.transport.request(
                 transport.HttpMethod.POST,
-                f"{self.settings.base_url}/api/{self.version}/login/{self._sudo_id}",
+                f"{self.settings.base_url}/api/{self.api_version}/login/{self._sudo_id}",
                 authenticator=lambda: {
                     "Authorization": f"Bearer {self._get_token().access_token}"
                 },

@@ -140,7 +140,9 @@ def test_settings_from_env_variables_override_config_file(
     monkeypatch.setenv("LOOKERSDK_CLIENT_ID", "id123")
     monkeypatch.setenv("LOOKERSDK_CLIENT_SECRET", "secret123")
 
-    settings = api_settings.ApiSettings(config_file, section=test_section)
+    settings = api_settings.ApiSettings(
+        config_file, test_section, env_prefix="LOOKERSDK"
+    )
     assert settings.base_url == "https://host1.looker.com:19999"
     assert not settings.verify_ssl
     # API credentials are still not set as attributes when read from env variables
@@ -169,7 +171,9 @@ def test_env_verify_ssl_maps_properly(monkeypatch, config_file, test_value, expe
     accordingly.
     """
     monkeypatch.setenv("LOOKERSDK_VERIFY_SSL", test_value)
-    settings = api_settings.ApiSettings(config_file, section="BARE_MINIMUM")
+    settings = api_settings.ApiSettings(
+        config_file, section="BARE_MINIMUM", env_prefix="LOOKERSDK"
+    )
     assert settings.verify_ssl == expected
 
 
@@ -181,7 +185,9 @@ def test_configure_with_no_file(monkeypatch):
     monkeypatch.setenv("LOOKERSDK_CLIENT_ID", "id123")
     monkeypatch.setenv("LOOKERSDK_CLIENT_SECRET", "secret123")
 
-    settings = api_settings.ApiSettings("")  # explicitly setting config_file to falsey
+    settings = api_settings.ApiSettings(
+        "", env_prefix="LOOKERSDK",
+    )  # explicitly setting config_file to falsey
     assert settings.base_url == "https://host1.looker.com:19999"
     data = vars(settings)
     assert "client_id" not in data
@@ -206,7 +212,10 @@ def test_it_fails_when_env_variables_are_defined_but_empty(config_file, monkeypa
     """
     monkeypatch.setenv("LOOKERSDK_BASE_URL", "")
 
-    assert api_settings.ApiSettings(config_file, "BARE").is_configured() is False
+    assert (
+        api_settings.ApiSettings(config_file, "BARE", "LOOKERSDK").is_configured()
+        is False
+    )
 
 
 def test_it_unquotes_quoted_config_file_vars(config_file):
@@ -222,7 +231,9 @@ def test_it_unquotes_quoted_env_var_values(monkeypatch):
     monkeypatch.setenv("LOOKERSDK_TIMEOUT", "100")
     monkeypatch.setenv("LOOKERSDK_VERIFY_SSL", '"false"')
 
-    settings = api_settings.ApiSettings()  # _DEFAULT_INI absence doesn't raise
+    settings = api_settings.ApiSettings(
+        env_prefix="LOOKERSDK"
+    )  # _DEFAULT_INI absence doesn't raise
 
     assert settings.base_url == "https://host1.looker.com:19999"
     assert settings.verify_ssl is False
