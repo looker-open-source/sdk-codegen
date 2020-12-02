@@ -31,6 +31,9 @@ jobs:
     runs-on: ${{ matrix.os }}
     strategy:
       matrix:
+        looker:
+          - 7.18
+          - 7.20
         os:
           - ubuntu-latest
             #- macos-latest
@@ -52,10 +55,8 @@ jobs:
           python -m pip install --upgrade pip
           pip install tox
       - name: Run Unit Tests
-        id: unittest
         run: tox -e unit
       - name: Set up Cloud SDK
-        # if: ${{ steps.unittest.outcome == success}} WTF - not "success", not success, what then?
         uses: google-github-actions/setup-gcloud@v0.2.0
         with:
           project_id: ${{ secrets.GCP_PROJECT_ID }}
@@ -63,13 +64,12 @@ jobs:
           export_default_credentials: true
       - name: Authenticate Artifact Repository
         run: gcloud auth configure-docker us-west1-docker.pkg.dev --quiet
-      - name: Pull Looker docker image
-        run: docker pull --quiet us-west1-docker.pkg.dev/cloud-looker-sdk-codgen-cicd/looker/7.20
-      - name: Run docker container
-        # set $LOOKER_OPTS to --no-ssl if we want to turn off ssl
-        run: docker run --name looker-sdk-codegen-ci -d -p 10000:9999 -p 20000:19999 us-west1-docker.pkg.dev/cloud-looker-sdk-codgen-cicd/looker/7.20
-      - name: Wait for Looker
-        run: python ${{ github.workspace }}/.github/scripts/wait_for_looker.py
+      - name: Pull and run Looker docker image
+        run: |
+          docker pull --quiet us-west1-docker.pkg.dev/cloud-looker-sdk-codgen-cicd/looker/{{ matrix.looker }}
+          # set $LOOKER_OPTS to --no-ssl if we want to turn off ssl
+          docker run --name looker-sdk-codegen-ci -d -p 10000:9999 -p 20000:19999 us-west1-docker.pkg.dev/cloud-looker-sdk-codgen-cicd/looker/{{ matrix.looker }}
+          python ${{ github.workspace }}/.github/scripts/wait_for_looker.py
       - name: Run Integration Tests
         run: tox -e integration
       - name: Upload pytest test results
