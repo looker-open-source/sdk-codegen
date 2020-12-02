@@ -24,9 +24,13 @@
 
  */
 
+import { ArgValues } from './sdkModels'
+
 const warn = (warning: string) => {
   throw new Error(warning)
 }
+
+const appJson = 'application/json'
 
 /**
  * https://github.com/OAI/OpenAPI-Specification/blob/master/versions/3.0.0.md#style-values
@@ -85,21 +89,21 @@ export const openApiStyle = (
  * Utility function to find the named parameter for an OpenAPI endpoint
  * @param api JSON structure of OpenAPI spec
  * @param endpoint url pattern for endpoint
- * @param httpMethod HTTP method to locate
+ * @param verb HTTP method to locate
  * @param name name of parameter to find
  * @returns the matched parameter, or undefined
  */
 const findOpenApiParam = (
   api: any,
   endpoint: string,
-  httpMethod: string,
+  verb: string,
   name: string
 ) => {
-  const result = api.paths[endpoint][httpMethod].parameters.find(
+  const result = api.paths[endpoint][verb].parameters.find(
     (p: { name: string }) => p.name === name
   )
   if (!result) {
-    warn(`Missing parameter: ${endpoint} ${httpMethod} parameter ${name}`)
+    warn(`Missing parameter: ${endpoint} ${verb} parameter ${name}`)
   }
   return result
 }
@@ -118,22 +122,7 @@ export interface IConversionResults {
   fixes: string[]
 }
 
-/**
- * This is a post-fix operation for the OpenAPI converter which currently misses this type of conversion
- *
- * - Converts missing swagger collectionFormat values to OpenAPI styles
- * - Flags OAS.requestBody as required or optional
- *
- * @param openApiSpec converted OpenAPI spec
- * @param swaggerSpec containing missed conversions
- * @returns modified openApiSpec and fix log in IConversionResults
- */
-export const fixConversion = (
-  openApiSpec: string,
-  swaggerSpec: string
-): IConversionResults => {
-  const swagger = JSON.parse(swaggerSpec)
-  const api = JSON.parse(openApiSpec)
+export const fixConversionObjects = (api: any, swagger: any) => {
   const paths = swagger.paths
   const fixes: string[] = []
   Object.entries(paths).forEach(([endpoint, op]) => {
@@ -156,9 +145,9 @@ export const fixConversion = (
                 )
               } else {
                 if (requestBody.required !== required) {
-                  requestBody.required = required
                   fixes.push(fix)
                 }
+                requestBody.required = required
               }
             }
           }
@@ -190,5 +179,201 @@ export const fixConversion = (
     })
   })
 
-  return { fixes, spec: fixes.length > 0 ? JSON.stringify(api) : openApiSpec }
+  return { fixes, spec: JSON.stringify(api) }
 }
+
+/**
+ * Returns true if this spec is a swagger specification
+ * @param spec to check
+ */
+export const isSwagger = (spec: any) => spec.swagger !== undefined
+
+/**
+ * Returns true spec is an OpenAPI specification
+ * @param spec to check
+ */
+export const isOpenApi = (spec: any) => spec.openapi !== undefined
+
+/**
+ * This is a post-fix operation for the OpenAPI converter which currently misses this type of conversion
+ *
+ * - Converts missing swagger collectionFormat values to OpenAPI styles
+ * - Flags OAS.requestBody as required or optional
+ *
+ * @param openApiSpec converted OpenAPI spec
+ * @param swaggerSpec original swagger spec that may contain missed conversions
+ * @returns modified openApiSpec and fix log in IConversionResults
+ */
+export const fixConversion = (
+  openApiSpec: string,
+  swaggerSpec: string
+): IConversionResults => {
+  return fixConversionObjects(JSON.parse(openApiSpec), JSON.parse(swaggerSpec))
+}
+
+/**
+ * Simple "deep copy" operation. If it turns out to be slow, we'll add a lodash dependency
+ * @param obj to clone
+ */
+const clone = (obj: any) => JSON.parse(JSON.stringify(obj))
+
+/**
+ * Convert a swagger structure ref to an OpenAPI structure ref
+ * @param ref string reference to convert
+ */
+export const swapRef = (ref: string) =>
+  ref.replace('#/definitions/', '#/components/schemas/')
+
+/**
+ * Get the name of the structure from the reference string
+ * @param ref to partse
+ */
+export const structName = (ref: string) => {
+  if (!ref) return undefined
+  const parts = ref.split('/')
+  return parts[parts.length - 1]
+}
+
+/**
+ * Moves type, format, items to schema
+ * Converts collectionFormat to style
+ * @param param to convert
+ */
+export const convertParam = (param: any) => {
+  const schema: any = { type: param.type }
+  const result = clone(param)
+  delete result.type
+  if (param.format) {
+    schema.format = param.format
+    delete result.format
+  }
+  if (param.collectionFormat) {
+    result.style = openApiStyle(param.collectionFormat)
+    delete result.collectionFormat
+  }
+  if (param.items) {
+    schema.items = param.items
+    result.explode = false
+    delete result.items
+  }
+  result.schema = schema
+  return result
+}
+
+export const convertResponses = (responses: ArgValues) => {
+  Object.entries(responses).forEach(([code, response]) => {
+    if (response.schema?.$ref)
+      response.schema.$ref = swapRef(response.schema.$ref)
+    responses[code] = {
+      description: response.description,
+      content: { [appJson]: { schema: response.schema } },
+    }
+  })
+  return responses
+}
+
+/**
+ * Convert an operation
+ * Assign schemas in params, create request bodies, update $refs
+ * @param op operation to convert
+ */
+export const convertOp = (op: ArgValues) => {
+  const ep = clone(op)
+  let body = {}
+  if (op.parameters) {
+    ep.parameters = []
+    Object.values(op.parameters).forEach((p: any) => {
+      if (p.in === 'body') {
+        const schema = clone(p.schema)
+        if (schema.$ref) schema.$ref = swapRef(schema.$ref)
+        ep.requestBody = {
+          content: {
+            [appJson]: {
+              schema: schema,
+            },
+          },
+          description: p.description,
+        }
+        if ('required' in p) ep.requestBody.required = p.required
+        const struct = structName(schema.$ref)
+        if (struct) {
+          body = { [struct]: ep.requestBody }
+        }
+      } else {
+        ep.parameters.push(convertParam(p))
+      }
+    })
+    if (ep.parameters.length === 0) delete ep.parameters
+  }
+  ep.responses = convertResponses(ep.responses)
+  return { op: ep, body }
+}
+
+/**
+ * Assign schemas, request bodies, and update $ref pointers
+ * @param paths to process
+ */
+export const convertPathsAndBodies = (paths: ArgValues) => {
+  const result = { paths: {}, requestBodies: {} }
+  Object.entries(paths).forEach(([path, entry]) => {
+    // Hack to accommodate linting limitations
+    const endpoint: ArgValues = entry
+    Object.entries(endpoint).forEach(([verb, op]) => {
+      const ep = convertOp(op)
+      result.paths[path] = { [verb]: ep.op }
+      Object.entries(ep.body as ArgValues).forEach(([name, body]) => {
+        result.requestBodies[name] = body
+      })
+    })
+  })
+  return result
+}
+
+/**
+ * Convert structure definitions
+ * @param defs to convert
+ */
+export const convertDefs = (defs: ArgValues) => {
+  const result = clone(defs)
+  Object.entries(defs).forEach(([_, struct]) => {
+    Object.entries(struct.properties as ArgValues).forEach(([__, prop]) => {
+      if (prop.$ref) prop.$ref = swapRef(prop.$ref)
+      if (prop.items?.$ref) prop.items.$ref = swapRef(prop.items.$ref)
+    })
+  })
+  return result
+}
+
+/**
+ * On-demand conversion of swagger to openAPI specification
+ * @param spec to possibly convert
+ * @returns OpenAPI version of the specification or throws error if not Swagger or OpenAPI
+ */
+export const upgradeSpecObject = (spec: any) => {
+  if (isOpenApi(spec)) {
+    return JSON.parse(swapXLookerTags(JSON.stringify(spec)))
+  }
+  if (!isSwagger(spec)) {
+    throw new Error('Input is not a Swagger or OpenAPI specification')
+  }
+  const info = clone(spec.info)
+  const tags = clone(spec.tags)
+  const pathsAndBodies = convertPathsAndBodies(spec.paths)
+  const schemas = convertDefs(spec.definitions)
+  const api = {
+    openapi: '3.0.0',
+    info,
+    tags,
+    paths: pathsAndBodies.paths,
+    servers: [{ url: `${spec.schemes[0]}://${spec.host}/${spec.basePath}` }],
+    components: {
+      requestBodies: pathsAndBodies.requestBodies,
+      schemas: schemas,
+    },
+  }
+  // const result = fixConversionObjects(api, spec)
+  return api
+}
+
+export const upgradeSpec = (spec: string) =>
+  JSON.stringify(upgradeSpecObject(JSON.parse(spec)))

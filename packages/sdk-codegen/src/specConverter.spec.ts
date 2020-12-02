@@ -24,7 +24,18 @@
 
  */
 
-import { fixConversion, openApiStyle, swapXLookerTags } from './specConverter'
+import { readFileSync, writeFileSync } from 'fs'
+import {
+  fixConversion,
+  openApiStyle,
+  swapXLookerTags,
+  convertParam,
+  convertOp,
+  upgradeSpec,
+  convertPathsAndBodies,
+  convertDefs,
+} from './specConverter'
+import { TestConfig } from './testUtils'
 
 const swaggerFrag = `
 {
@@ -168,7 +179,7 @@ const openApiFrag = `
             "in": "query",
             "description": "List of Query Task IDs",
             "required": true,
-            "style": "form",
+            "style": "simple",
             "explode": false,
             "schema": {
               "type": "array",
@@ -322,8 +333,37 @@ const openApiFrag = `
   }
 }
 `
+const swagger = JSON.parse(swaggerFrag)
+const api = JSON.parse(openApiFrag)
+
+const config = TestConfig()
+const swaggerFile = `${config.rootPath}/spec/Looker.4.0.json`
+const apiFile = `${config.rootPath}/spec/Looker.4.0.oas.json`
+const swaggerSource = readFileSync(swaggerFile, 'utf-8')
+const fullSwagger = JSON.parse(swaggerSource)
+const apiSource = readFileSync(apiFile, 'utf-8')
+const fullApi = JSON.parse(apiSource)
 
 describe('spec conversion', () => {
+  it('converts a swagger array param', () => {
+    const op = swagger.paths['/query_tasks/multi_results'].get
+    const param = op.parameters[0]
+    const actual = convertParam(param)
+    expect(actual).toBeDefined()
+    const expected = api.paths['/query_tasks/multi_results'].get.parameters[0]
+    expect(actual).toEqual(expected)
+  })
+
+  it('converts a swagger body param', () => {
+    const actual = convertOp(
+      swagger.paths['/dashboards/{lookml_dashboard_id}/import/{space_id}'].post
+    )
+    expect(actual).toBeDefined()
+    const expected =
+      api.paths['/dashboards/{lookml_dashboard_id}/import/{space_id}'].post
+    expect(actual).toEqual(expected)
+  })
+
   it('swaps out x-looker-tags', () => {
     const input = `
 "can": {
@@ -402,5 +442,41 @@ describe('spec conversion', () => {
     const actual = fixConversion(openApiFrag, swaggerFrag)
     expect(actual.spec).toContain(`"style":"simple"`)
     expect(actual.fixes).not.toHaveLength(0)
+  })
+
+  const jf = (spec: string) => JSON.stringify(JSON.parse(spec), null, 2)
+
+  it('converts data_actions/form.post', () => {
+    const op = fullSwagger.paths['/data_actions/form'].post
+    const actual = convertOp(op)
+    const expected = fullApi.paths['/data_actions/form'].post
+    expect(actual).toEqual(expected)
+  })
+
+  it('converts all paths', () => {
+    const sourcePaths = Object.keys(fullSwagger.paths)
+    const actual = convertPathsAndBodies(fullSwagger.paths)
+    expect(actual).toBeDefined()
+    const paths = Object.keys(actual.paths)
+    expect(paths).toHaveLength(sourcePaths.length)
+    const bodies = Object.keys(actual.requestBodies)
+    expect(bodies.length).toBeGreaterThan(0)
+  })
+
+  it('converts all definitions', () => {
+    const defs = fullSwagger.definitions
+    const actual = convertDefs(defs)
+    expect(actual).toBeDefined()
+    const keys = Object.keys(actual)
+    expect(keys).toHaveLength(Object.keys(defs).length)
+  })
+
+  it('converts all items', () => {
+    const spec = upgradeSpec(swaggerSource)
+    expect(spec).toBeDefined()
+    const actual = jf(spec)
+    const expected = jf(apiSource)
+    writeFileSync(apiFile, expected, 'utf-8')
+    writeFileSync(`${config.rootPath}/spec/new.spec.json`, actual, 'utf-8')
   })
 })
