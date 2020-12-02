@@ -254,22 +254,15 @@ class SheetsClient {
       const lookerSdk = getCore40SDK()
       const hacker = new Hacker(lookerSdk)
       await hacker.getMe()
-      let me
       try {
         const data = await this.getSheetData()
         await this.loadHackers(data)
-        // TODO revisit this with JK
-        me = this.hackers?.rows.find(
-          (maybeMe) => maybeMe.user.id === hacker.user.id
-        )
       } catch (error) {
         console.warn(
           'Error loading sheets data. Has hackathon application been configured?'
         )
       }
-      this.hacker = me
-        ? this.decorateHacker(me.toObject(), me)
-        : this.decorateHacker(hacker.toObject(), hacker)
+      this.hacker = this.decorateHacker(hacker.toObject(), hacker)
     }
     return this.hacker
   }
