@@ -274,12 +274,15 @@ export class Hackers extends TypedRows<Hacker> {
     for (const hacker of this.rows) {
       if (admins.includes(hacker.id)) {
         hacker.roles.add('admin')
+        hacker.canAdmin = true
       }
       if (staff.includes(hacker.id)) {
         hacker.roles.add('staff')
+        hacker.canStaff = true
       }
       if (judges.includes(hacker.id)) {
         hacker.roles.add('judge')
+        hacker.canJudge = true
       }
       hacker.findRegistration(hackathon, regs)
     }
