@@ -1805,9 +1805,9 @@ export class WriteType extends Type {
 }
 
 export interface IApiModel extends IModel {
-  spec: OAS.OpenAPIObject
   version: string
   description: string
+  spec: OAS.OpenAPIObject
   methods: MethodList
   types: TypeList
   tags: TagList
@@ -1857,12 +1857,12 @@ export class ApiModel implements ISymbolTable, IApiModel {
     this.load()
   }
 
-  get version(): string {
+  public get version(): string {
     return this.spec?.info.version || ''
   }
 
-  get description(): string {
-    return this.spec?.decription?.trim() || ''
+  public get description(): string {
+    return this.spec?.info?.description?.trim() || ''
   }
 
   static fromString(specContent: string): ApiModel {

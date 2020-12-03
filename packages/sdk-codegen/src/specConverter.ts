@@ -24,7 +24,9 @@
 
  */
 
-import { ArgValues } from './sdkModels'
+import { isEmpty } from 'lodash'
+import { APIMethods } from '@looker/sdk-rtl/lib/browser'
+import { ApiModel, ArgValues, IApiModel } from './sdkModels'
 
 const warn = (warning: string) => {
   throw new Error(warning)
@@ -45,6 +47,50 @@ export interface MimeFormats {
    */
   consumes: string[]
 }
+
+/**
+ * Looker spec version item
+ */
+export interface ISpecItem {
+  /** Abbreviated version of the API */
+  version: string
+  /** Semantic version of the API */
+  full_version: string
+  /** Usually legacy, stable, experimental, current */
+  status: string
+  /** Link to the swagger specification */
+  swagger_url: string
+}
+
+/**
+ * Payload returned by the Looker /versions endpoint
+ */
+export interface ILookerVersions {
+  /** This Looker version */
+  looker_release_version: string
+  /** The current/default API version */
+  current_version: ISpecItem
+  /** All API versions */
+  supported_versions: ISpecItem[]
+}
+
+/**
+ * Api Specification with on-demand determination of values
+ */
+export interface IApiSpecLink {
+  /** Name of the specification */
+  name: string
+  /** API version */
+  version: string
+  /** API version status */
+  status: string
+  /** Location of the specification */
+  url: string
+  /** Parsed content. Will be loaded on demand but is assigned to an empty object by default. */
+  api: IApiModel
+}
+
+export type SpecLinks = IApiSpecLink[]
 
 /**
  * Defaults the mime formats for producing and consuming
@@ -308,14 +354,16 @@ export const convertResponses = (
  * @param formats mime format consumer and producer
  */
 export const convertOp = (op: ArgValues, formats = defaultMimeFormats) => {
-  const moveKey = (key: string, value?: any) => {
-    if (!(key in op)) return
-    if (!value) value = op[key]
-    if (value) {
-      delete op[key]
-      op[key] = value
-    }
+  // If keys need to be shuffled for file comparison reasons, uncomment this function
+  const moveKey = (_key: string, value?: any) => {
     return value
+    // if (!(key in op)) return
+    // if (!value) value = op[key]
+    // if (value) {
+    //   delete op[key]
+    //   op[key] = value
+    // }
+    // return value
   }
 
   let { produces, consumes } = formats
@@ -354,7 +402,6 @@ export const convertOp = (op: ArgValues, formats = defaultMimeFormats) => {
     })
     if (op.parameters.length === 0) delete op.parameters
   }
-  // TODO remove key order shuffle when this spec is completely compatible
   moveKey('responses', convertResponses(op.responses, { produces, consumes }))
   moveKey('deprecated')
   const xdep = 'x-looker-deprecated'
@@ -445,5 +492,67 @@ export const upgradeSpecObject = (spec: any) => {
   return api
 }
 
-export const upgradeSpec = (spec: string) =>
-  JSON.stringify(upgradeSpecObject(JSON.parse(spec)))
+/**
+ * Upgrade a spec to OpenAPI if it's not already an OpenAPI spec
+ * @param spec to upgrade
+ */
+export const upgradeSpec = (spec: string | object) => {
+  if (typeof spec === 'string') spec = JSON.parse(spec)
+  return JSON.stringify(upgradeSpecObject(spec))
+}
+
+/**
+ * Fetches Looker specs from the API server url
+ * @param sdk APIMethods implementation that supports authenticating a request
+ * @param apiServerUrl base url of the API server. Typically something like https://my.looker.com:19999
+ */
+export const getLookerSpecs = async (sdk: APIMethods, apiServerUrl: string) => {
+  const versionUrl = `${apiServerUrl}/versions`
+  const versions = await sdk.ok(sdk.get<ILookerVersions, Error>(versionUrl))
+  return versions
+}
+
+/**
+ * Convert a Looker versions payload into API specification links
+ * @param versions
+ * @param include lambda that returns true to include a spec item in the list
+ */
+export const getSpecLinks = (
+  versions: ILookerVersions,
+  include = (spec: ISpecItem) => spec.version > '2.99'
+) => {
+  const prefix = `Release ${versions.looker_release_version} API `
+  const deriveSpec = (spec: ISpecItem): IApiSpecLink => {
+    const status =
+      spec.swagger_url === versions.current_version.swagger_url
+        ? 'current'
+        : spec.status
+    return {
+      name: `${prefix}${spec.version}`,
+      version: spec.version,
+      status,
+      url: spec.swagger_url,
+      api: {} as IApiModel,
+    }
+  }
+  const specs = versions.supported_versions
+    .filter((v) => include(v))
+    .map((v) => deriveSpec(v))
+  return specs
+}
+
+/**
+ * Fetch and parse API specifications from the established links
+ * @param sdk APIMethods implementation that supports authenticating a request
+ * @param links list of specifications to load
+ */
+export const loadSpecs = async (sdk: APIMethods, links: SpecLinks) => {
+  for (const spec of links) {
+    if (isEmpty(spec.api)) {
+      // Not parsed yet
+      const content = upgradeSpec(await sdk.ok(sdk.get(spec.url)))
+      spec.api = ApiModel.fromString(content)
+    }
+  }
+  return links
+}
