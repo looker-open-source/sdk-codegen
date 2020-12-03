@@ -33,6 +33,27 @@ const warn = (warning: string) => {
 const appJson = 'application/json'
 
 /**
+ * Describes the mime types supported by an operation
+ */
+export interface MimeFormats {
+  /**
+   * Output types produced by an operation
+   */
+  produces: string[]
+  /**
+   * Input types accepted by an operation
+   */
+  consumes: string[]
+}
+
+/**
+ * Defaults the mime formats for producing and consuming
+ */
+export const defaultMimeFormats: MimeFormats = {
+  produces: [appJson],
+  consumes: [appJson],
+}
+/**
  * https://github.com/OAI/OpenAPI-Specification/blob/master/versions/3.0.0.md#style-values
  */
 type OpenApiParameterStyle =
@@ -68,7 +89,7 @@ export const swapXLookerTags = (spec: string) => {
  * conversion guidelines
  *
  * @param collectionFormat string
- * @returns {OpenApiStyle}
+ * @returns the converted style, or undefined
  */
 export const openApiStyle = (
   collectionFormat: string
@@ -212,17 +233,13 @@ export const fixConversion = (
 }
 
 /**
- * Simple "deep copy" operation. If it turns out to be slow, we'll add a lodash dependency
- * @param obj to clone
- */
-const clone = (obj: any) => JSON.parse(JSON.stringify(obj))
-
-/**
  * Convert a swagger structure ref to an OpenAPI structure ref
+ *
+ * TODO update this to the typescript that understands replaceAll
  * @param ref string reference to convert
  */
 export const swapRef = (ref: string) =>
-  ref.replace('#/definitions/', '#/components/schemas/')
+  ref.replace(/#\/definitions\//g, '#/components/schemas/')
 
 /**
  * Get the name of the structure from the reference string
@@ -241,7 +258,7 @@ export const structName = (ref: string) => {
  */
 export const convertParam = (param: any) => {
   const schema: any = { type: param.type }
-  const result = clone(param)
+  const result = { ...param }
   delete result.type
   if (param.format) {
     schema.format = param.format
@@ -260,13 +277,25 @@ export const convertParam = (param: any) => {
   return result
 }
 
-export const convertResponses = (responses: ArgValues) => {
+/**
+ * Convert responses for the right response formats
+ * @param responses response to convert
+ * @param formats mime formats
+ */
+export const convertResponses = (
+  responses: ArgValues,
+  formats = defaultMimeFormats
+) => {
   Object.entries(responses).forEach(([code, response]) => {
-    if (response.schema?.$ref)
-      response.schema.$ref = swapRef(response.schema.$ref)
     responses[code] = {
       description: response.description,
-      content: { [appJson]: { schema: response.schema } },
+    }
+    if (response.schema) {
+      const content = {}
+      formats.produces.forEach(
+        (format) => (content[format] = { schema: response.schema })
+      )
+      responses[code].content = content
     }
   })
   return responses
@@ -276,51 +305,86 @@ export const convertResponses = (responses: ArgValues) => {
  * Convert an operation
  * Assign schemas in params, create request bodies, update $refs
  * @param op operation to convert
+ * @param formats mime format consumer and producer
  */
-export const convertOp = (op: ArgValues) => {
-  const ep = clone(op)
-  let body = {}
+export const convertOp = (op: ArgValues, formats = defaultMimeFormats) => {
+  const moveKey = (key: string, value?: any) => {
+    if (!(key in op)) return
+    if (!value) value = op[key]
+    if (value) {
+      delete op[key]
+      op[key] = value
+    }
+    return value
+  }
+
+  let { produces, consumes } = formats
+  const body = {}
+  if (op.produces) {
+    produces = op.produces
+    delete op.produces
+  }
+  if (op.consumes) {
+    consumes = op.consumes
+    delete op.consumes
+  }
   if (op.parameters) {
-    ep.parameters = []
-    Object.values(op.parameters).forEach((p: any) => {
+    // Copy parameters before rebuilding
+    const params = { ...op.parameters }
+    op.parameters = []
+    Object.values(params).forEach((p: any) => {
       if (p.in === 'body') {
-        const schema = clone(p.schema)
-        if (schema.$ref) schema.$ref = swapRef(schema.$ref)
-        ep.requestBody = {
-          content: {
-            [appJson]: {
-              schema: schema,
-            },
-          },
-          description: p.description,
+        // const struct = structName(p.schema?.$ref)
+        op.requestBody = {}
+        // if (struct) {
+        //   op.requestBody.$ref = `#/components/requestBodies/${struct}`
+        // }
+        if (p.schema) {
+          op.requestBody.content = { [consumes[0]]: { schema: p.schema } }
         }
-        if ('required' in p) ep.requestBody.required = p.required
-        const struct = structName(schema.$ref)
-        if (struct) {
-          body = { [struct]: ep.requestBody }
-        }
+        op.requestBody.description = p.description
+        if ('required' in p) op.requestBody.required = p.required
+        // if (struct) {
+        //   body[struct] = { ...op.requestBody }
+        //   body[struct].$ref = `#/components/schema/${struct}`
+        // }
       } else {
-        ep.parameters.push(convertParam(p))
+        op.parameters.push(convertParam(p))
       }
     })
-    if (ep.parameters.length === 0) delete ep.parameters
+    if (op.parameters.length === 0) delete op.parameters
   }
-  ep.responses = convertResponses(ep.responses)
-  return { op: ep, body }
+  // TODO remove key order shuffle when this spec is completely compatible
+  moveKey('responses', convertResponses(op.responses, { produces, consumes }))
+  moveKey('deprecated')
+  const xdep = 'x-looker-deprecated'
+  if (xdep in op) {
+    op.deprecated = op[xdep]
+    delete op[xdep]
+  }
+  moveKey('x-looker-status')
+  moveKey('x-looker-activity-type')
+  moveKey('x-looker-rate-limited')
+  return { op, body }
 }
 
 /**
- * Assign schemas, request bodies, and update $ref pointers
+ * Assign schemas and request bodies
  * @param paths to process
+ * @param formats mime response types
  */
-export const convertPathsAndBodies = (paths: ArgValues) => {
+export const convertPathsAndBodies = (
+  paths: ArgValues,
+  formats = defaultMimeFormats
+) => {
   const result = { paths: {}, requestBodies: {} }
   Object.entries(paths).forEach(([path, entry]) => {
+    result.paths[path] = {}
     // Hack to accommodate linting limitations
     const endpoint: ArgValues = entry
     Object.entries(endpoint).forEach(([verb, op]) => {
-      const ep = convertOp(op)
-      result.paths[path] = { [verb]: ep.op }
+      const ep = convertOp(op, formats)
+      result.paths[path][verb] = ep.op
       Object.entries(ep.body as ArgValues).forEach(([name, body]) => {
         result.requestBodies[name] = body
       })
@@ -334,14 +398,15 @@ export const convertPathsAndBodies = (paths: ArgValues) => {
  * @param defs to convert
  */
 export const convertDefs = (defs: ArgValues) => {
-  const result = clone(defs)
   Object.entries(defs).forEach(([_, struct]) => {
-    Object.entries(struct.properties as ArgValues).forEach(([__, prop]) => {
-      if (prop.$ref) prop.$ref = swapRef(prop.$ref)
-      if (prop.items?.$ref) prop.items.$ref = swapRef(prop.items.$ref)
+    Object.entries(struct.properties as ArgValues).forEach(([name, prop]) => {
+      if (prop.$ref) {
+        // Evidently OAS only wants the ref for the property type
+        struct.properties[name] = { $ref: prop.$ref }
+      }
     })
   })
-  return result
+  return defs
 }
 
 /**
@@ -356,18 +421,23 @@ export const upgradeSpecObject = (spec: any) => {
   if (!isSwagger(spec)) {
     throw new Error('Input is not a Swagger or OpenAPI specification')
   }
-  const info = clone(spec.info)
-  const tags = clone(spec.tags)
-  const pathsAndBodies = convertPathsAndBodies(spec.paths)
+  const cleanup = swapRef(swapXLookerTags(JSON.stringify(spec)))
+  spec = JSON.parse(cleanup)
+  const consumes = spec.consumes || [appJson]
+  const produces = spec.produces || [appJson]
+  const formats = { produces, consumes }
+  const { paths, requestBodies } = convertPathsAndBodies(spec.paths, formats)
+  // TODO create a requestBodies entry for every struct used > 1x
+  // TODO reassign op.requestBody for all requestBodies entries
   const schemas = convertDefs(spec.definitions)
   const api = {
     openapi: '3.0.0',
-    info,
-    tags,
-    paths: pathsAndBodies.paths,
-    servers: [{ url: `${spec.schemes[0]}://${spec.host}/${spec.basePath}` }],
+    info: spec.info,
+    tags: spec.tags,
+    paths,
+    servers: [{ url: `${spec.schemes[0]}://${spec.host}${spec.basePath}` }],
     components: {
-      requestBodies: pathsAndBodies.requestBodies,
+      requestBodies,
       schemas: schemas,
     },
   }

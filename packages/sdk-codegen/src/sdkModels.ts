@@ -1867,7 +1867,7 @@ export class ApiModel implements ISymbolTable, IApiModel {
 
   static fromString(specContent: string): ApiModel {
     const json = JSON.parse(specContent)
-    return this.fromJson(json)
+    return ApiModel.fromJson(json)
   }
 
   static fromJson(json: any): ApiModel {
@@ -2004,12 +2004,15 @@ export class ApiModel implements ISymbolTable, IApiModel {
         return this.types[schema.format]
       }
       if (schema.type === 'array' && schema.items) {
+        const resolved = this.resolveType(schema.items)
+        if (!resolved) {
+          throw new Error(`Could not resolve ${JSON.stringify(schema)}`)
+        }
         if (style === 'simple') {
           // FKA 'csv'
-          return new DelimArrayType(this.resolveType(schema.items), schema)
+          return new DelimArrayType(resolved, schema)
         }
         if (this.schemaHasEnums(schema)) {
-          const resolved = this.resolveType(schema.items)
           const num = new EnumType(
             resolved,
             schema,
@@ -2021,7 +2024,7 @@ export class ApiModel implements ISymbolTable, IApiModel {
           const result = new ArrayType(num, schema)
           return result
         }
-        return new ArrayType(this.resolveType(schema.items), schema)
+        return new ArrayType(resolved, schema)
       }
       if (this.schemaHasEnums(schema)) {
         const result = new EnumType(
@@ -2055,7 +2058,11 @@ export class ApiModel implements ISymbolTable, IApiModel {
         return this.types[schema.type]
       }
     }
-    throw new Error('Schema must have a ref or a type')
+    throw new Error(
+      `Schema ${
+        typeof schema === 'string' ? schema : JSON.stringify(schema)
+      } must have a ref or a type`
+    )
   }
 
   // add to this.requestTypes collection with hash as key
