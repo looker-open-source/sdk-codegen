@@ -30,13 +30,13 @@ import { execSync } from 'child_process'
 import { warn } from '@looker/sdk-codegen-utils'
 import {
   IFileCall,
-  IMine,
   INugget,
   ISDKCall,
   ISummary,
   Nuggets,
   SDKCalls,
   Summaries,
+  IExampleMine,
 } from '@looker/sdk-codegen'
 
 export interface IFileMine {
@@ -287,7 +287,7 @@ const fileMiners: IMiners = {
   // '.rst': new MarkdownMiner(), // TODO .rst miner? Probably not needed
 }
 
-export class Miner {
+export class ExampleMiner {
   summaries: Summaries = {}
   nuggets: Nuggets = {}
   commitHash: string = getCommitHash()
@@ -297,7 +297,7 @@ export class Miner {
     this.execute(sourcePath)
   }
 
-  get motherLode(): IMine {
+  get motherLode(): IExampleMine {
     return {
       commitHash: this.commitHash,
       remoteOrigin: this.remoteOrigin,
@@ -333,7 +333,7 @@ export class Miner {
 
     if ('summary' in call) {
       const s = call as ISummary
-      s.sourceFile = Miner.relate(this.sourcePath, s.sourceFile)
+      s.sourceFile = ExampleMiner.relate(this.sourcePath, s.sourceFile)
       this.summaries[s.sourceFile] = s
     } else {
       let nugget: INugget = this.nuggets[call.operationId]
@@ -362,7 +362,7 @@ export class Miner {
       const coder = fileMiners[ext]
       const calls = coder.mineFile(fileName)
       calls.forEach((call: ISDKCall | ISummary) => {
-        const relFile = Miner.relate(this.sourcePath, fileName)
+        const relFile = ExampleMiner.relate(this.sourcePath, fileName)
         this.addCall(ext, relFile, call)
       })
     } else {
