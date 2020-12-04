@@ -26,7 +26,7 @@
 
 import * as path from 'path'
 import * as fs from 'fs'
-import { Miner } from '../src/miner'
+import { ExampleMiner } from '../src/exampleMiner'
 ;(() => {
   const args = process.argv.slice(2)
   const total = args.length
@@ -34,7 +34,7 @@ import { Miner } from '../src/miner'
   const sourcePath = total < 1 ? root : path.join(root, args[0])
   const indexFile = path.join(sourcePath, '/motherlode.json')
   console.log(`Mining ${sourcePath} ...`)
-  const miner = new Miner(sourcePath)
+  const miner = new ExampleMiner(sourcePath)
   const result = miner.execute()
   fs.writeFileSync(indexFile, JSON.stringify(result, null, 2), {
     encoding: 'utf-8',
