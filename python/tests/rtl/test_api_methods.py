@@ -33,12 +33,15 @@ from looker_sdk.rtl import api_methods
 from looker_sdk.rtl import requests_transport
 from looker_sdk.rtl import serialize
 from looker_sdk.rtl import transport
+from looker_sdk.sdk import constants
 from looker_sdk.sdk.api31 import models
 
 
 @pytest.fixture(scope="module")
 def api() -> api_methods.APIMethods:
-    settings = api_settings.ApiSettings("../looker.ini")
+    settings = api_settings.ApiSettings(
+        filename="../looker.ini", env_prefix=constants.environment_prefix
+    )
     transport = requests_transport.RequestsTransport.configure(settings)
     auth = auth_session.AuthSession(settings, transport, serialize.deserialize31, "3.1")
     return api_methods.APIMethods(

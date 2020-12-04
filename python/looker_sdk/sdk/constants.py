@@ -20,12 +20,5 @@
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 # THE SOFTWARE.
 
-
-RESPONSE_STRING_MODE = (
-    r"(^application/.*"
-    r"(\bjson\b|\bxml\b|\bsql\b|\bgraphql\b|\bjavascript\b|\bx-www-form-urlencoded\b)"
-    r"|^text/|.*\+xml\b|;.*charset=)"
-)
-
-# note: string mode must be checked first
-RESPONSE_BINARY_MODE = r"^image/|^audio/|^video/|^font/|^application/|^multipart/"
+sdk_version = "7.18"
+environment_prefix = "LOOKERSDK"

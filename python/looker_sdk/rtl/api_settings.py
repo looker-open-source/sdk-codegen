@@ -30,7 +30,6 @@ from typing import Dict, Optional, Set
 import warnings
 
 from looker_sdk.rtl import transport
-from looker_sdk.rtl import constants
 
 if sys.version_info >= (3, 8):
     from typing import Protocol
@@ -43,13 +42,20 @@ class PApiSettings(transport.PTransportSettings, Protocol):
         ...
 
 
-_DEFAULT_INI = "looker.ini"
+_DEFAULT_INIS = ["looker.ini", "../looker.ini"]
 
 
 class ApiSettings(PApiSettings):
     deprecated_settings: Set[str] = {"api_version", "embed_secret", "user_id"}
 
-    def __init__(self, filename: str = _DEFAULT_INI, section: Optional[str] = None):
+    def __init__(
+        self,
+        *,
+        filename: str = _DEFAULT_INIS[0],
+        section: Optional[str] = None,
+        sdk_version: Optional[str] = "",
+        env_prefix: Optional[str] = None,
+    ):
         """Configure using a config file and/or environment variables.
 
         Environment variables will override config file settings. Neither
@@ -67,8 +73,13 @@ class ApiSettings(PApiSettings):
             section (str): section in config file. If not supplied default to
                 reading first section.
         """
+        if not os.path.isfile(filename):
+            if filename and filename not in _DEFAULT_INIS:
+                raise FileNotFoundError(f"No config file found: '{filename}'")
+
         self.filename = filename
         self.section = section
+        self.env_prefix = env_prefix
         data = self.read_config()
         verify_ssl = data.get("verify_ssl")
         if verify_ssl is None:
@@ -78,20 +89,16 @@ class ApiSettings(PApiSettings):
         self.base_url = data.get("base_url", "")
         self.timeout = int(data.get("timeout", 120))
         self.headers = {"Content-Type": "application/json"}
-        self.agent_tag = f"{transport.AGENT_PREFIX} {constants.sdk_version}"
+        self.agent_tag = f"{transport.AGENT_PREFIX}"
+        if sdk_version:
+            self.agent_tag += f" {sdk_version}"
 
     def read_config(self) -> Dict[str, str]:
         cfg_parser = cp.ConfigParser()
         try:
             config_file = open(self.filename)
-        except FileNotFoundError as ex:
-            # handle undocumented case of caller specifying empty string
-            # to "explicitly" negate config file. best practice is to
-            # simply not specify a filename argument to the constructor
-            if self.filename == _DEFAULT_INI or not self.filename:
-                data: Dict[str, str] = {}
-            else:
-                raise ex
+        except FileNotFoundError:
+            data: Dict[str, str] = {}
         else:
             cfg_parser.read_file(config_file)
             config_file.close()
@@ -101,7 +108,8 @@ class ApiSettings(PApiSettings):
                 raise cp.NoSectionError(section)
             data = dict(cfg_parser[section])
 
-        data.update(self._override_from_env())
+        if self.env_prefix:
+            data.update(self._override_from_env())
         return self._clean_input(data)
 
     @staticmethod
@@ -114,27 +122,25 @@ class ApiSettings(PApiSettings):
             raise TypeError
         return converted
 
-    @staticmethod
-    def _override_from_env() -> Dict[str, str]:
+    def _override_from_env(self) -> Dict[str, str]:
         overrides = {}
-        env_prefix = constants.environment_prefix
-        base_url = os.getenv(f"{env_prefix}_BASE_URL")
+        base_url = os.getenv(f"{self.env_prefix}_BASE_URL")
         if base_url:
             overrides["base_url"] = base_url
 
-        verify_ssl = os.getenv(f"{env_prefix}_VERIFY_SSL")
+        verify_ssl = os.getenv(f"{self.env_prefix}_VERIFY_SSL")
         if verify_ssl:
             overrides["verify_ssl"] = verify_ssl
 
-        timeout = os.getenv(f"{env_prefix}_TIMEOUT")
+        timeout = os.getenv(f"{self.env_prefix}_TIMEOUT")
         if timeout:
             overrides["timeout"] = timeout
 
-        client_id = os.getenv(f"{env_prefix}_CLIENT_ID")
+        client_id = os.getenv(f"{self.env_prefix}_CLIENT_ID")
         if client_id:
             overrides["client_id"] = client_id
 
-        client_secret = os.getenv(f"{env_prefix}_CLIENT_SECRET")
+        client_secret = os.getenv(f"{self.env_prefix}_CLIENT_SECRET")
         if client_secret:
             overrides["client_secret"] = client_secret
 

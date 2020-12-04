@@ -25,6 +25,7 @@
  */
 
 import * as fs from 'fs'
+import path from 'path'
 import { IApiConfig, ApiConfig, IApiSection } from '@looker/sdk-rtl'
 import { ApiModel } from '@looker/sdk-codegen'
 import * as Models from '@looker/sdk-codegen'
@@ -56,17 +57,20 @@ export interface ITestConfig {
   testSection: IApiSection
 }
 
+const homeToRoost = '../../../../'
+
+export const getRootPath = () => path.join(__dirname, homeToRoost)
+export const rootFile = (fileName = '') => path.join(getRootPath(), fileName)
+
 /**
  * Reads configuration information, returning various test values
  * @param {string} rootPath
  * @returns {{testConfig: {[p: string]: any}; localIni: string; baseUrl: any; testData: any; apiVersion: any; testIni: string; configContents: string; rootPath: string; testSection: any; timeout: number}}
  * @constructor
  */
-export function TestConfig(rootPath = ''): ITestConfig {
+export const TestConfig = (rootPath = ''): ITestConfig => {
   const testFile = 'data.yml.json'
-  if (!rootPath) {
-    rootPath = fs.existsSync(`test/${testFile}`) ? '' : '../../'
-  }
+  rootPath = rootPath || getRootPath()
   const localIni = process.env.LOOKERSDK_INI || `${rootPath}looker.ini`
   const testPath = `${rootPath}test/`
   const dataFile = `${testPath}${testFile}`

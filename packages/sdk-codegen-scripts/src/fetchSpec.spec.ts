@@ -24,7 +24,6 @@
 
  */
 
-import * as fs from 'fs'
 import { TestConfig } from './testUtils'
 import {
   authGetUrl,
@@ -34,11 +33,9 @@ import {
   swaggerFileUrl,
   supportedVersion,
   logConvertSpec,
-  openApiFileName,
   fetchLookerVersion,
 } from './fetchSpec'
 import { ISDKConfigProps } from './sdkConfig'
-import { isFileSync } from './nodeUtils'
 
 const config = TestConfig()
 const props = (config.section as unknown) as ISDKConfigProps
@@ -111,13 +108,8 @@ describe('fetch operations', () => {
   it('logConvertSpec', async () => {
     expect(props).toBeDefined()
     const name = 'Looker'
-    const fileName = openApiFileName(name, props)
     const lookerVersions = await fetchLookerVersions(props)
-    // Make sure the file doesn't exist
-    if (isFileSync(fileName)) {
-      fs.unlinkSync(fileName)
-    }
-    const actual = await logConvertSpec(name, props, lookerVersions)
+    const actual = await logConvertSpec(name, props, lookerVersions, true)
     expect(actual).toBeDefined()
     expect(actual.length).toBeGreaterThan(0)
   })

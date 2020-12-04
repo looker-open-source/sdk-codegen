@@ -257,7 +257,7 @@ describe('sdkModels', () => {
       expect(type.properties.project_name.hasSpecialNeeds).toEqual(false)
       expect(type.properties.project_digest.hasSpecialNeeds).toEqual(true)
       expect(type.properties.computation_time.hasSpecialNeeds).toEqual(true)
-      expect(type.properties.project_name.jsonName).toEqual('')
+      expect(type.properties.project_name.jsonName).toEqual('project_name')
       expect(type.properties.project_digest.jsonName).toEqual('project-digest')
       expect(type.properties.computation_time.jsonName).toEqual(
         'computation time'
