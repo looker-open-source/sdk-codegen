@@ -155,6 +155,7 @@ const readIniConfig = (
  */
 export class NodeSettings extends ApiSettings {
   protected readonly envPrefix!: string
+  public section: string
 
   /**
    * Initialize config settings for the node SDK runtime
@@ -179,6 +180,7 @@ export class NodeSettings extends ApiSettings {
       settings = readEnvConfig(envPrefix) as IApiSettings
     }
     super({ ...DefaultSettings(), ...settings })
+    this.section = section ?? ''
     this.envPrefix = envPrefix
   }
 
@@ -235,6 +237,7 @@ export class NodeSettingsIniFile extends NodeSettings {
    *
    */
   readConfig(section?: string): IApiSection {
+    section = section || this.section
     return readIniConfig(this.fileName, this.envPrefix, section)
   }
 }
