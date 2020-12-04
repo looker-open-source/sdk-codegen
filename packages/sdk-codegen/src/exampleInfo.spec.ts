@@ -25,11 +25,11 @@
  */
 import * as fs from 'fs'
 import path from 'path'
-import { IMine, findExamples, findExampleLanguages } from './exampleInfo'
+import { IExampleMine, findExamples, findExampleLanguages } from './exampleInfo'
 
 const fileName = path.join(__dirname, '../../../motherlode.json')
 const file = fs.readFileSync(fileName, { encoding: 'utf-8' })
-const lode: IMine = JSON.parse(file)
+const lode: IExampleMine = JSON.parse(file)
 const op = 'render_task'
 
 describe('exampleInfo', () => {

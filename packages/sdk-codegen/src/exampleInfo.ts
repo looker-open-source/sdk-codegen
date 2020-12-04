@@ -96,10 +96,13 @@ export interface INugget {
 
 export type Nuggets = KeyedCollection<INugget>
 
-/** All mined example data */
 export interface IMine {
   commitHash: string
   remoteOrigin: string
+}
+
+/** All mined example data */
+export interface IExampleMine extends IMine {
   summaries: Summaries
   nuggets: Nuggets
 }
@@ -124,7 +127,7 @@ export const permaLink = (
  * @param lode all mined example data
  * @param call specific call to summarize
  */
-export const summarize = (lode: IMine, call: IFileCall): string => {
+export const summarize = (lode: IExampleMine, call: IFileCall): string => {
   if (call.sourceFile in lode.summaries) {
     return lode.summaries[call.sourceFile].summary
   }
@@ -137,7 +140,10 @@ export const summarize = (lode: IMine, call: IFileCall): string => {
  * @param lode all mined example data
  * @param call specific all to link
  */
-export const exampleLink = (lode: IMine, call: IFileCall): IExampleLink => {
+export const exampleLink = (
+  lode: IExampleMine,
+  call: IFileCall
+): IExampleLink => {
   return {
     permalink: permaLink(
       lode.remoteOrigin,
@@ -193,7 +199,10 @@ export const getLanguageExtensions = (language: string): string[] => {
   }
 }
 
-export const findExampleLanguages = (lode: IMine, methodName: string) => {
+export const findExampleLanguages = (
+  lode: IExampleMine,
+  methodName: string
+) => {
   const all = lode.nuggets[methodName]
   if (!all) return []
   const result = new Set<string>()
@@ -211,7 +220,7 @@ export const findExampleLanguages = (lode: IMine, methodName: string) => {
  * @param operationId Method's operationId to search for
  */
 export const findExamples = (
-  lode: IMine,
+  lode: IExampleMine,
   language: string,
   operationId: string
 ): IExampleLink[] => {
