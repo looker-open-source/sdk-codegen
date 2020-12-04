@@ -23,23 +23,18 @@
  SOFTWARE.
 
  */
-import { permaLink } from './exampleInfo'
+import { IMine, permaLink, IFileCall } from './exampleInfo'
 import { KeyedCollection } from './sdkModels'
 
 /** All mined declaration data */
-export interface IDeclarationMine {
-  commitHash: string
-  remoteOrigin: string
-  types: Declarations
-  methods: Declarations
+export interface IDeclarationMine extends IMine {
+  types: DeclarationNuggets
+  methods: DeclarationNuggets
 }
 
-export interface IDeclaration {
-  sourceFile: string
-  line: number
-}
+export interface IDeclarationNugget extends IFileCall {}
 
-export type Declarations = KeyedCollection<IDeclaration>
+export type DeclarationNuggets = KeyedCollection<IDeclarationNugget>
 
 /**
  * Searches for declaration of a given method or type and returns a GitHub
