@@ -24,7 +24,24 @@
 
  */
 
-import { fixConversion, openApiStyle, swapXLookerTags } from './specConverter'
+import { readFileSync } from 'fs'
+import { isEmpty } from 'lodash'
+import { NodeSettingsIniFile } from '@looker/sdk-rtl'
+import { LookerNodeSDK, environmentPrefix } from '@looker/sdk'
+import {
+  fixConversion,
+  openApiStyle,
+  swapXLookerTags,
+  convertParam,
+  upgradeSpec,
+  convertDefs,
+  getLookerSpecs,
+  getSpecLinks,
+  loadSpecs,
+} from './specConverter'
+import { TestConfig } from './testUtils'
+import { compareSpecs } from './specDiff'
+import { ApiModel } from './sdkModels'
 
 const swaggerFrag = `
 {
@@ -152,7 +169,6 @@ const swaggerFrag = `
   }
 }
 `
-
 const openApiFrag = `
 {
   "paths": {
@@ -168,7 +184,7 @@ const openApiFrag = `
             "in": "query",
             "description": "List of Query Task IDs",
             "required": true,
-            "style": "form",
+            "style": "simple",
             "explode": false,
             "schema": {
               "type": "array",
@@ -322,10 +338,7 @@ const openApiFrag = `
   }
 }
 `
-
-describe('spec conversion', () => {
-  it('swaps out x-looker-tags', () => {
-    const input = `
+const specFrag = `
 "can": {
   "type": "object",
   "additionalProperties": {
@@ -384,7 +397,26 @@ describe('spec conversion', () => {
   "nullable": false
 },
 `
-    const actual = swapXLookerTags(input)
+
+const swagger = JSON.parse(swaggerFrag)
+const api = JSON.parse(openApiFrag)
+
+const config = TestConfig()
+const swaggerFile = `${config.rootPath}/spec/Looker.4.0.json`
+const apiFile = `${config.rootPath}/spec/Looker.4.0.oas.json`
+const swaggerSource = readFileSync(swaggerFile, 'utf-8')
+const fullSwagger = JSON.parse(swaggerSource)
+const apiSource = readFileSync(apiFile, 'utf-8')
+const settings = new NodeSettingsIniFile(
+  environmentPrefix,
+  config.localIni,
+  'Looker'
+)
+const sdk = LookerNodeSDK.init40(settings)
+
+describe('spec conversion', () => {
+  it('swaps out x-looker-tags', () => {
+    const actual = swapXLookerTags(specFrag)
     expect(actual).toContain('"nullable": true')
     expect(actual).not.toContain('"x-looker-nullable": true')
     expect(actual).toContain('"enum": [')
@@ -402,5 +434,85 @@ describe('spec conversion', () => {
     const actual = fixConversion(openApiFrag, swaggerFrag)
     expect(actual.spec).toContain(`"style":"simple"`)
     expect(actual.fixes).not.toHaveLength(0)
+  })
+
+  describe('spec retrieval', () => {
+    it('gets looker specs', async () => {
+      const actual = await getLookerSpecs(sdk, config.baseUrl)
+      expect(actual).toBeDefined()
+      expect(actual.looker_release_version).not.toEqual('')
+      expect(actual.current_version.version).not.toEqual('')
+      expect(actual.supported_versions).toHaveLength(4)
+    })
+
+    it('gets spec links', async () => {
+      const versions = await getLookerSpecs(sdk, config.baseUrl)
+      expect(versions).toBeDefined()
+      const actual = getSpecLinks(versions)
+      expect(actual).toBeDefined()
+      expect(actual).toHaveLength(3)
+      actual.forEach((spec) => {
+        expect(spec.name).not.toEqual('')
+        expect(spec.version).not.toEqual('')
+        expect(spec.status).not.toEqual('')
+        expect(spec.url).not.toEqual('')
+        expect(isEmpty(spec.api)).toEqual(true)
+      })
+      const current = actual.find((s) => s.status === 'current')
+      expect(current).toBeDefined()
+      actual.forEach((spec) => expect(isEmpty(spec.api)).toEqual(true))
+    })
+
+    it('fetches and parses all specs', async () => {
+      const versions = await getLookerSpecs(sdk, config.baseUrl)
+      expect(versions).toBeDefined()
+      const links = getSpecLinks(versions)
+      const actual = await loadSpecs(sdk, links)
+      expect(actual).toBeDefined()
+      expect(actual).toHaveLength(3)
+      actual.forEach((spec) => {
+        expect(isEmpty(spec.api)).toEqual(false)
+        expect(spec.api.version).not.toEqual('')
+        expect(spec.api.description).not.toEqual('')
+      })
+    })
+  })
+
+  describe('spec upgrade', () => {
+    it('converts a swagger array param', () => {
+      const op = swagger.paths['/query_tasks/multi_results'].get
+      const param = op.parameters[0]
+      const actual = convertParam(param)
+      expect(actual).toBeDefined()
+      const expected = api.paths['/query_tasks/multi_results'].get.parameters[0]
+      expect(actual).toEqual(expected)
+    })
+
+    it('converts all definitions', () => {
+      const defs = fullSwagger.definitions
+      const actual = convertDefs(defs)
+      expect(actual).toBeDefined()
+      const keys = Object.keys(actual)
+      expect(keys).toHaveLength(Object.keys(defs).length)
+    })
+
+    it('matches a reference OpenAPI conversion', () => {
+      const spec = upgradeSpec(swaggerSource)
+      expect(spec).toBeDefined()
+      // writeFileSync(`${config.rootPath}/spec/spec.upgrade.json`, spec, 'utf-8')
+      const left = ApiModel.fromString(apiSource)
+      const right = ApiModel.fromString(spec)
+      const diff = compareSpecs(left, right)
+      expect(diff).toHaveLength(0)
+    })
+
+    it('passes through an existing OpenAPI spec', () => {
+      const spec = upgradeSpec(apiSource)
+      expect(spec).toBeDefined()
+      const left = ApiModel.fromString(apiSource)
+      const right = ApiModel.fromString(spec)
+      const diff = compareSpecs(left, right)
+      expect(diff).toHaveLength(0)
+    })
   })
 })
