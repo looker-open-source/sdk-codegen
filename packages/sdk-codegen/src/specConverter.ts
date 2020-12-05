@@ -352,18 +352,22 @@ export const convertResponses = (
  * Assign schemas in params, create request bodies, update $refs
  * @param op operation to convert
  * @param formats mime format consumer and producer
+ * @param moveKeys true to move keys for reference OAS comparison
  */
-export const convertOp = (op: ArgValues, formats = defaultMimeFormats) => {
+export const convertOp = (
+  op: ArgValues,
+  formats = defaultMimeFormats,
+  moveKeys = false
+) => {
   // If keys need to be shuffled for file comparison reasons, uncomment this function
-  const moveKey = (_key: string, value?: any) => {
+  const moveKey = (key: string, value?: any) => {
+    if (!moveKeys || !(key in op)) return value
+    if (!value) value = op[key]
+    if (value) {
+      delete op[key]
+      op[key] = value
+    }
     return value
-    // if (!(key in op)) return
-    // if (!value) value = op[key]
-    // if (value) {
-    //   delete op[key]
-    //   op[key] = value
-    // }
-    // return value
   }
 
   let { produces, consumes } = formats
