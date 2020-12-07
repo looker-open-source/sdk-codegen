@@ -23,6 +23,7 @@
  SOFTWARE.
 
  */
+
 import { IMethod, IType, KeyedCollection, IApiModel } from './sdkModels'
 
 interface ITypeDelta {
@@ -76,28 +77,78 @@ export const compareParams = (lMethod: IMethod, rMethod: IMethod) => {
   }
 }
 
+export const compareBodies = (lMethod: IMethod, rMethod: IMethod) => {
+  const lSide = lMethod.bodyParams.map((p) => {
+    return {
+      name: p.name,
+      type: p.type.fullName,
+      required: p.required,
+    }
+  })
+  const rSide = rMethod.bodyParams.map((p) => {
+    return {
+      name: p.name,
+      type: p.type.fullName,
+      required: p.required,
+    }
+  })
+  if (JSON.stringify(lSide) !== JSON.stringify(rSide))
+    return {
+      lhs: lSide,
+      rhs: rSide,
+    }
+  return undefined
+}
+
+export const compareResponses = (lMethod: IMethod, rMethod: IMethod) => {
+  const lSide = lMethod.responses.map((r) => {
+    return {
+      statusCode: r.statusCode,
+      mediaType: r.mediaType,
+      type: r.type.fullName,
+    }
+  })
+  const rSide = rMethod.responses.map((r) => {
+    return {
+      statusCode: r.statusCode,
+      mediaType: r.mediaType,
+      type: r.type.fullName,
+    }
+  })
+  if (JSON.stringify(lSide) !== JSON.stringify(rSide))
+    return {
+      lhs: lSide,
+      rhs: rSide,
+    }
+  return undefined
+}
+
 export const csvHeaderRow =
-  'method name,"Op + URI",left status,right status,typeDiff,paramDiff'
+  'method name,"Op + URI",left status,right status,typeDiff,paramDiff,bodyDiff,responseDiff'
 
 export const csvDiffRow = (diff: DiffRow) => `
-${diff.name},${diff.id},${diff.lStatus},${diff.rStatus},${diff.typeDiff},${diff.paramsDiff}`
+${diff.name},${diff.id},${diff.lStatus},${diff.rStatus},${diff.typeDiff},${diff.paramsDiff},${diff.bodyDiff},${diff.responseDiff}`
 
 export const mdHeaderRow = `
-| method name  | Op + URI | 3.1 | 4.0 | typeDiff
-| ------------ | -------- | --- | --- | ------------`
+| method name  | Op + URI | 3.1 | 4.0 | typeDiff     | paramDiff | bodyDiff | responseDiff |
+| ------------ | -------- | --- | --- | ------------ | --------- | -------- | ------------ |`
 
 export const mdDiffRow = (diff: DiffRow) => `
-  | ${diff.name} | ${diff.id} | ${diff.lStatus} | ${diff.rStatus} | ${diff.typeDiff} | ${diff.paramsDiff} |`
+  | ${diff.name} | ${diff.id} | ${diff.lStatus} | ${diff.rStatus} | ${diff.typeDiff} | ${diff.paramsDiff} | ${diff.bodyDiff} | ${diff.responseDiff}`
 
-const diffToString = (diff: any) =>
-  diff ? `"${JSON.stringify(diff, null, 2).replace(/"/g, "'")}."` : ''
+const diffToString = (diff: any) => {
+  if (!diff) return ''
+  const result = JSON.stringify(diff, null, 2)
+  if (result === '{}') return ''
+  return `"${result.replace(/"/g, "'")}"`
+}
 
 export interface ComputeDiffInputs {
   lMethod?: IMethod
   rMethod?: IMethod
 }
 
-interface DiffRow {
+export interface DiffRow {
   /** Method name */
   name: string
   /** Method operation and path */
@@ -109,6 +160,10 @@ interface DiffRow {
   typeDiff: string
   /** Method params diff if any */
   paramsDiff: string
+  /** Body diff if any */
+  bodyDiff: string
+  /** Response diff if any */
+  responseDiff: string
 }
 
 /**
@@ -130,6 +185,10 @@ const computeDiff = (lMethod?: IMethod, rMethod?: IMethod) => {
         ? diffToString(compareTypes(lMethod.type, rMethod.type))
         : '',
       paramsDiff: rMethod ? diffToString(compareParams(lMethod, rMethod)) : '',
+      bodyDiff: rMethod ? diffToString(compareBodies(lMethod, rMethod)) : '',
+      responseDiff: rMethod
+        ? diffToString(compareResponses(lMethod, rMethod))
+        : '',
     }
   } else if (!lMethod && rMethod) {
     result = {
@@ -139,25 +198,49 @@ const computeDiff = (lMethod?: IMethod, rMethod?: IMethod) => {
       rStatus: rMethod.status,
       typeDiff: '',
       paramsDiff: '',
+      bodyDiff: '',
+      responseDiff: '',
     }
   }
 
   return result!
 }
 
-export type DiffFilter = (lMethod?: IMethod, rMethod?: IMethod) => boolean
+export type DiffFilter = (
+  delta: DiffRow,
+  lMethod?: IMethod,
+  rMethod?: IMethod
+) => boolean
 
-const diffAll: DiffFilter = () => true
+/**
+ * Include when:
+ * - lMethod is missing
+ * - rMethod is missing
+ * - params differ
+ * - types differ
+ * @param delta
+ * @param lMethod
+ * @param rMethod
+ */
+export const includeDiffs: DiffFilter = (delta, lMethod, rMethod) =>
+  !lMethod ||
+  !rMethod! ||
+  delta.lStatus !== delta.rStatus ||
+  !!delta.paramsDiff ||
+  !!delta.typeDiff ||
+  !!delta.bodyDiff ||
+  !!delta.responseDiff
+
 /**
  * Compares two specs and returns a diff object
- * @param lSpec
- * @param rSpec
- * @param filter
+ * @param lSpec left-side spec
+ * @param rSpec right-side spec
+ * @param include evaluates to true if the comparison should be included
  */
 export const compareSpecs = (
   lSpec: IApiModel,
   rSpec: IApiModel,
-  filter: DiffFilter = diffAll
+  include: DiffFilter = includeDiffs
 ) => {
   const specSort = (a: IMethod, b: IMethod) => a.id.localeCompare(b.id)
 
@@ -189,8 +272,8 @@ export const compareSpecs = (
       rIndex++
     }
 
-    if (filter(lMethod, rMethod)) {
-      const delta = computeDiff(lMethod, rMethod)
+    const delta = computeDiff(lMethod, rMethod)
+    if (include(delta, lMethod, rMethod)) {
       diff.push(delta)
     }
   }
