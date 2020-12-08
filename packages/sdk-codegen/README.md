@@ -1,4 +1,4 @@
-# Looker SDK code generator core files
+# TESTTEST SDK code generator core files
 
 This package contains the OpenAPI analysis files, and all source code necessary to generate method and type declarations for supported languages.
 
