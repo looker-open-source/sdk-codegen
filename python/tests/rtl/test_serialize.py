@@ -623,7 +623,7 @@ def test_serialize_single():
         class_="model-name",
         finally_=[1, 2, 3],
     )
-    expected = json.dumps(MODEL_DATA).encode("utf-8")
+    expected = json.dumps(MODEL_DATA).encode("utf-8") + "asdf"
     assert sr.serialize(model) == expected
 
 
