@@ -31,7 +31,7 @@ import {
   csvDiffRow,
   IMethod,
 } from '@looker/sdk-codegen'
-import { compareSpecs } from '@looker/sdk-codegen/src/specLinter'
+import { compareSpecs } from '@looker/sdk-codegen/src/specDiff'
 import { readFileSync } from '../src'
 
 /**

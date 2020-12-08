@@ -186,27 +186,16 @@ export const login = async (props: ISDKConfigProps) => {
   }
   const url = loginUrl(props)
 
-  try {
-    const response = await sdkOk<any, Error>(
-      xp.request<any, Error>(
-        'POST',
-        url,
-        creds,
-        undefined,
-        undefined,
-        undefined
-      )
-    )
-    const accessToken = await response.access_token
+  const response = await sdkOk<any, Error>(
+    xp.request<any, Error>('POST', url, creds, undefined, undefined, undefined)
+  )
+  const accessToken = await response.access_token
 
-    if (accessToken) {
-      return accessToken
-    } else {
-      log(`Server Response: ${JSON.stringify(response)}`)
-      throw new Error('Access token could not be retrieved.')
-    }
-  } catch (err) {
-    throw err
+  if (accessToken) {
+    return accessToken
+  } else {
+    log(`Server Response: ${JSON.stringify(response)}`)
+    throw new Error('Access token could not be retrieved.')
   }
 }
 
@@ -297,7 +286,9 @@ export const fetchLookerVersion = async (
     try {
       versions = await fetchLookerVersions(props, options)
     } catch (e) {
-      warn(`Could not retrieve looker release version: ${e.message}`)
+      warn(
+        `Could not retrieve looker release version from "${props.base_url}/versions": ${e.message}`
+      )
       return ''
     }
   }
@@ -371,20 +362,22 @@ export const getVersionInfo = async (
 
 /**
  * Fetch (if needed) and convert a Swagger API specification to OpenAPI
- * @param {string} name base name of the target file
- * @param {ISDKConfigProps} props SDK configuration properties to use
+ * @param name base name of the target file
+ * @param props SDK configuration properties to use
  * @param versions version information structure from Looker
+ * @param force true to force re-conversion of the spec
  * @returns {Promise<string>} name of converted OpenAPI file
  */
 export const logConvertSpec = async (
   name: string,
   props: ISDKConfigProps,
-  versions: any
+  versions: any,
+  force = false
 ) => {
   // if openApiFile is resolved correctly, this value will be the file name
   let result = ''
   const oaFile = openApiFileName(name, props)
-  if (isFileSync(oaFile)) return oaFile
+  if (isFileSync(oaFile) && !force) return oaFile
 
   const apiUrl = await openApiFileUrl(props, versions)
   if (apiUrl) {
@@ -394,7 +387,7 @@ export const logConvertSpec = async (
     }
   } else {
     const specFile = await logFetchSwagger(name, props)
-    result = convertSpec(specFile, oaFile)
+    result = convertSpec(specFile, oaFile, force)
     if (!result) {
       return fail('logConvert', 'No file name returned for openAPI upgrade')
     }

@@ -80,7 +80,8 @@ export const filterCodeFiles = (fileName: string) => {
   return ext in fileMiners
 }
 
-const skipFolder = (name: string) => /node_modules/gi.test(name)
+const skipFolder = (name: string, excludeList: string[] = ['node_modules']) =>
+  new RegExp(excludeList.join('|'), 'gi').test(name)
 
 /**
  * Finds all file recursively
@@ -97,7 +98,7 @@ export const getAllFiles = (
 
   files.forEach((file) => {
     if (fs.statSync(searchPath + '/' + file).isDirectory()) {
-      if (!skipFolder(file))
+      if (!skipFolder(file, ['node_modules', 'lib']))
         listOfFiles = getAllFiles(searchPath + '/' + file, listOfFiles, filter)
     } else {
       if (filter(file)) {

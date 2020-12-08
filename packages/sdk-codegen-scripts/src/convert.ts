@@ -26,160 +26,17 @@
 
  */
 
-import { log, success, warn } from '@looker/sdk-codegen-utils'
-import { ParameterStyle } from 'openapi3-ts'
-import { fail, isFileSync, quit, readFileSync, run } from './nodeUtils'
+import { log, success } from '@looker/sdk-codegen-utils'
+import { fixConversion, swapXLookerTags } from '@looker/sdk-codegen'
+import {
+  fail,
+  isFileSync,
+  quit,
+  readFileSync,
+  run,
+  writeFileSync,
+} from './nodeUtils'
 import { writeSpecFile } from './fetchSpec'
-
-/**
- * Replaces x-looker-nullable with nullable for parameters and properties in a string
- * @param {string} spec
- * @returns {Promise<string>} name of the file written
- */
-export const swapXLookerTags = (spec: string) => {
-  const swaps = [
-    { pattern: /x-looker-nullable/gi, replacement: 'nullable' },
-    { pattern: /x-looker-values/gi, replacement: 'enum' },
-  ]
-  swaps.forEach((swap) => {
-    spec = spec.replace(swap.pattern, swap.replacement)
-  })
-  return spec
-}
-
-type OpenApiStyle = ParameterStyle | undefined
-
-/**
- * Convert OpenAPI 2 collectionFormat to OpenApi 3 style
- *
- * See https://github.com/OAI/OpenAPI-Specification/blob/master/versions/3.0.3.md#style-values for
- * conversion guidelines
- *
- * @param {string} collectionFormat
- * @returns {OpenApiStyle}
- */
-export const openApiStyle = (collectionFormat: string): OpenApiStyle => {
-  if (!collectionFormat) return undefined
-  const styles: { [key: string]: OpenApiStyle } = {
-    csv: 'simple',
-    pipes: 'pipeDelimited',
-    ssv: 'spaceDelimited',
-  }
-  if (collectionFormat in styles) {
-    return styles[collectionFormat]
-  }
-  return undefined
-}
-
-/**
- * Utility function to find the named parameter for an OpenAPI endpoint
- * @param api JSON structure of OpenAPI spec
- * @param {string} endpoint url pattern for endpoint
- * @param {string} httpMethod HTTP method to locate
- * @param {string} name name of parameter to find
- * @returns {any} the matched parameter, or undefined
- */
-const findOpenApiParam = (
-  api: any,
-  endpoint: string,
-  httpMethod: string,
-  name: string
-) => {
-  const result = api.paths[endpoint][httpMethod].parameters.find(
-    (p: { name: string }) => p.name === name
-  )
-  if (!result) {
-    warn(`Missing parameter: ${endpoint} ${httpMethod} parameter ${name}`)
-  }
-  return result
-}
-
-/**
- * This is a post-fix operation for the OpenAPI converter which currently misses this type of conversion
- *
- * - Converts missing swagger collectionFormat values to OpenAPI styles
- * - Flags OAS.requestBody as required or optional
- *
- * @param {string} openApiSpec
- * @param {string} swaggerSpec
- * @param logIt true to output fixes to console.log, false to skip them. Defaults to false.
- * @returns {string} modified openApiSpec
- */
-export const fixConversion = (
-  openApiSpec: string,
-  swaggerSpec: string,
-  logIt = false
-) => {
-  const swagger = JSON.parse(swaggerSpec)
-  const api = JSON.parse(openApiSpec)
-  const paths = swagger.paths
-  const fixes: string[] = []
-  Object.entries(paths).forEach(([endpoint, op]) => {
-    Object.entries(op as any).forEach(([httpMethod, method]) => {
-      const operation = method as any
-      const params = operation.parameters
-      if (params) {
-        Object.entries(params).forEach(([, p]) => {
-          const param = p as any
-          if (param.name === 'body' && param.in === 'body') {
-            // Set `required` in requestBody
-            if ('required' in param) {
-              //  explicitly setting required value
-              const required = param.required
-              const fix = `${endpoint}::${operation.operationId} setting requestBody.required to ${required}`
-              const requestBody = api.paths[endpoint][httpMethod].requestBody
-              if (!requestBody) {
-                warn(
-                  `Failed to find "requestBody" in OAS for swagger "body param" fix: ${fix}`
-                )
-              } else {
-                if (requestBody.required !== required) {
-                  requestBody.required = required
-                  fixes.push(fix)
-                }
-              }
-            }
-          }
-
-          if (param.collectionFormat) {
-            // Set style from collectionFormat if it's not set
-            const format = param.collectionFormat
-            const style = openApiStyle(format)
-            if (style === undefined) {
-              warn(
-                `OAS style conversion failed: collectionFormat '${param.collectionFormat}' is unknown`
-              )
-            } else {
-              const fix = `${endpoint}::${operation.operationId} ${param.name} '${format}' -> '${style}'`
-              const newParam = findOpenApiParam(
-                api,
-                endpoint,
-                httpMethod,
-                param.name
-              )
-              if (newParam && newParam.style !== style) {
-                newParam.style = style
-                fixes.push(fix)
-              }
-            }
-          }
-        })
-      }
-    })
-  })
-
-  if (fixes.length > 0) {
-    if (logIt) {
-      // create the variable to avoid Typescript string template limitation
-      const fixed = fixes.join('\n')
-      log(`Fixed ${fixes.length} OpenAPI conversion issues:\n${fixed}`)
-    }
-
-    // Return the modified API as an unformatted string
-    return JSON.stringify(api)
-  }
-  return openApiSpec
-}
 
 /**
  * Replaces Looker-specific tags with OpenAPI equivalents
@@ -196,40 +53,51 @@ export const swapXLookerTagsInFile = (openApiFile: string) => {
 
 /**
  * Convert a Swagger specification to OpenAPI
- * @param {string} swaggerFilename
- * @param {string} openApiFilename
+ *
+ * If the source spec is already an OpenAPI spec, fixes are still processed
+ *
+ * @param specFileName source Swagger spec file
+ * @param openApiFilename destination OpenAPI spec file
+ * @param force use `true` to force a conversion even if the file exists
  * @returns {Promise<string>} name of OpenAPI file
  */
 export const convertSpec = (
-  swaggerFilename: string,
-  openApiFilename: string
+  specFileName: string,
+  openApiFilename: string,
+  force = false
 ) => {
-  if (isFileSync(openApiFilename)) {
-    log(`${openApiFilename} already exists.`)
+  if (isFileSync(openApiFilename) && !force) {
+    log(`${openApiFilename} already exists. Skipping conversion.`)
     return openApiFilename
   }
-  try {
+  const spec = readFileSync(specFileName)
+  const swagger = JSON.parse(spec)
+  if (swagger.swagger) {
+    // Still a swagger spec. Convert it.
     // https://github.com/Mermade/oas-kit/tree/master/packages/swagger2openapi config options:
     // patch to fix up small errors in source definition (not required, just to ensure smooth process)
     // indent no spaces
     // output to openApiFilename
     run('yarn swagger2openapi', [
-      swaggerFilename,
+      specFileName,
       '-p',
       '-i',
       '""',
       '-o',
       openApiFilename,
     ])
-    if (!isFileSync(openApiFilename)) {
-      return fail('convertSpec', `creating ${openApiFilename} failed`)
-    }
-    let spec = swapXLookerTagsInFile(openApiFilename)
-    spec = fixConversion(spec, readFileSync(swaggerFilename))
-    writeSpecFile(openApiFilename, spec)
-    success(`Fixed up ${openApiFilename}`)
-    return openApiFilename
-  } catch (e) {
-    return quit(e)
+  } else if (swagger.openapi) {
+    // We've already got an OpenAPI file
+    writeFileSync(openApiFilename, JSON.stringify(swagger))
+  } else {
+    throw new Error(`Bad specification file ${specFileName}`)
   }
+  if (!isFileSync(openApiFilename)) {
+    return fail('convertSpec', `creating ${openApiFilename} failed`)
+  }
+  const source = swapXLookerTagsInFile(openApiFilename)
+  const result = fixConversion(source, readFileSync(specFileName))
+  writeSpecFile(openApiFilename, result.spec)
+  success(`${openApiFilename} has ${result.fixes.length} fixes`)
+  return openApiFilename
 }

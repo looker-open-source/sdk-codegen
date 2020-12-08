@@ -270,11 +270,63 @@ export class Hackers extends TypedRows<Hacker> {
     const regs = data.registrations.rows.filter(
       (r) => r.hackathon_id === hackathon._id
     )
+    const { admins, staff, judges } = await this.getSpecialUsers()
     for (const hacker of this.rows) {
-      await hacker.assignRoles()
+      if (admins.includes(hacker.id)) {
+        hacker.roles.add('admin')
+        hacker.canAdmin = true
+      }
+      if (staff.includes(hacker.id)) {
+        hacker.roles.add('staff')
+        hacker.canStaff = true
+      }
+      if (judges.includes(hacker.id)) {
+        hacker.roles.add('judge')
+        hacker.canJudge = true
+      }
       hacker.findRegistration(hackathon, regs)
     }
     this.loadGroups()
     return this
+  }
+
+  private async getSpecialUsers() {
+    let judges: string[] = []
+    let staff: string[] = []
+    let admins: string[] = []
+    try {
+      const roles = await this.sdk.ok(this.sdk.all_roles({ fields: 'name,id' }))
+      const adminRole = roles.find((r: IRole) => r.name?.match(/admin/i))
+      if (adminRole) {
+        const users = await this.sdk.ok(
+          this.sdk.role_users({ fields: 'id', role_id: adminRole.id! })
+        )
+        admins = users.map((user) => user.id?.toString() || 'no id')
+      }
+      const judgeRole = roles.find((r: IRole) =>
+        r.name?.match(/hackathon judge/i)
+      )
+      if (judgeRole) {
+        const users = await this.sdk.ok(
+          this.sdk.role_users({ fields: 'id', role_id: judgeRole.id! })
+        )
+        judges = users.map((user) => user.id?.toString() || 'no id')
+      }
+      const staffRole = roles.find((r: IRole) =>
+        r.name?.match(/hackathon staff/i)
+      )
+      if (staffRole) {
+        const users = await this.sdk.ok(
+          this.sdk.role_users({ fields: 'id', role_id: staffRole.id! })
+        )
+        staff = users.map((user) => user.id?.toString() || 'no id')
+      }
+    } catch (err) {
+      // Likely caused by permission access failure for regular user who
+      // does not have access to all roles or role users apis.
+      // It's okay to eat as regular user does not need information about
+      // other users.
+    }
+    return { admins, judges, staff }
   }
 }

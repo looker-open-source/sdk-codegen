@@ -24,7 +24,7 @@
 """
 import hashlib
 import secrets
-from typing import cast, Dict, Optional, Type, Union
+from typing import cast, Dict, Optional, Union
 import urllib.parse
 
 import attr
@@ -35,11 +35,6 @@ from looker_sdk.rtl import auth_token
 from looker_sdk.rtl import model
 from looker_sdk.rtl import serialize
 from looker_sdk.rtl import transport
-from looker_sdk.sdk.api31 import models as models31
-from looker_sdk.sdk.api40 import models as models40
-
-
-token_model_isinstances = models31.AccessToken, models40.AccessToken
 
 
 class AuthSession:
@@ -51,24 +46,17 @@ class AuthSession:
         settings: api_settings.PApiSettings,
         transport: transport.Transport,
         deserialize: serialize.TDeserialize,
-        version: str,
+        api_version: str,
     ):
-        if not settings.is_configured():
-            raise error.SDKError(
-                "Missing required configuration values like base_url and api_version."
-            )
+        settings.is_configured()
         self.settings = settings
+        self.api_version = api_version
         self.sudo_token: auth_token.AuthToken = auth_token.AuthToken()
         self.token: auth_token.AuthToken = auth_token.AuthToken()
         self._sudo_id: Optional[int] = None
         self.transport = transport
         self.deserialize = deserialize
-        self.version = version
-        self.token_model: Union[Type[models31.AccessToken], Type[models40.AccessToken]]
-        if self.version == "3.1":
-            self.token_model = models31.AccessToken
-        elif self.version == "4.0":
-            self.token_model = models40.AccessToken
+        self.token_model = auth_token.AccessToken
 
     def _is_authenticated(self, token: auth_token.AuthToken) -> bool:
         """Determines if current token is active."""
@@ -148,7 +136,7 @@ class AuthSession:
         response = self._ok(
             self.transport.request(
                 transport.HttpMethod.POST,
-                f"{self.settings.base_url}/api/{self.version}/login",
+                f"{self.settings.base_url}/api/{self.api_version}/login",
                 body=serialized,
                 transport_options={
                     "headers": {"Content-Type": "application/x-www-form-urlencoded"}
@@ -160,14 +148,14 @@ class AuthSession:
         access_token = self.deserialize(
             data=response, structure=self.token_model
         )  # type: ignore
-        assert isinstance(access_token, token_model_isinstances)
+        assert isinstance(access_token, auth_token.AccessToken)
         self.token = auth_token.AuthToken(access_token)
 
     def _login_sudo(self) -> None:
         response = self._ok(
             self.transport.request(
                 transport.HttpMethod.POST,
-                f"{self.settings.base_url}/api/{self.version}/login/{self._sudo_id}",
+                f"{self.settings.base_url}/api/{self.api_version}/login/{self._sudo_id}",
                 authenticator=lambda: {
                     "Authorization": f"Bearer {self._get_token().access_token}"
                 },
@@ -177,7 +165,7 @@ class AuthSession:
         access_token = self.deserialize(
             data=response, structure=self.token_model
         )  # type: ignore
-        assert isinstance(access_token, token_model_isinstances)
+        assert isinstance(access_token, auth_token.AccessToken)
         self.sudo_token = auth_token.AuthToken(access_token)
 
     def logout(self, full: bool = False) -> None:
@@ -293,7 +281,7 @@ class OAuthSession(AuthSession):
 
     def _request_token(
         self, grant_type: Union[AuthCodeGrantTypeParams, RefreshTokenGrantTypeParams]
-    ) -> Union[models31.AccessToken, models40.AccessToken]:
+    ) -> auth_token.AccessToken:
         response = self.transport.request(
             transport.HttpMethod.POST,
             urllib.parse.urljoin(self.settings.base_url, "/api/token"),
