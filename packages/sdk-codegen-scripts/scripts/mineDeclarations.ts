@@ -48,7 +48,7 @@ import {
       sourcePath = settings.base_url
     } catch (e) {
       console.error(
-        'A source path is required. Specify it in the Miner section in looker.ini or pass it as an argument'
+        'A source path is required. Specify it with "base_url" in the Miner section in looker.ini or pass it as an argument'
       )
       process.exit(1)
     }
