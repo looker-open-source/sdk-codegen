@@ -1,4 +1,4 @@
-# Looker SDK
+# test, no Python CI
 
 The Looker SDK for Typescript/Javascript works with Node and browser run-times. The SDK provides a convenient way to communicate with a Looker server's APIs.
 
