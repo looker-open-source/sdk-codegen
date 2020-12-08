@@ -51,7 +51,7 @@ export interface IDocMine {
   ignoreLink(fileName: string): boolean
 }
 
-const readFile = (fileName: string) =>
+export const readFile = (fileName: string) =>
   fs.readFileSync(fileName, { encoding: 'utf-8' })
 
 const sdkPattern = /(\b[a-z0-9_]*sdk)\.\s*([a-z0-9_]*)\s*[(<]/gi
@@ -61,7 +61,7 @@ const linkPattern = /(.*)\[\[link\]\]\((.+?)\)/gim
 export type IMiners = { [key: string]: IFileMine | IDocMine }
 
 /** file-filtering lambda for `getAllFiles()` and `getCodeFiles()` */
-export type FileFilter = (fileName: string) => boolean
+export type FileFilter = (fileName: string, pattern?: RegExp) => boolean
 
 /**
  * Filter to include every file that has a non-empty file name
@@ -74,13 +74,14 @@ export const filterAllFiles = (fileName: string) => fileName.trim().length > 0
  * @param fileName name of file from which to extract its extension
  */
 export const filterCodeFiles = (fileName: string) => {
-  if (/(^|\/)node_modules|lib\//gi.test(fileName)) return false
+  if (/(^|\/)node_modules\//gi.test(fileName)) return false
   const ext = path.extname(fileName).toLocaleLowerCase()
   // eslint-disable-next-line @typescript-eslint/no-use-before-define
   return ext in fileMiners
 }
 
-const skipFolder = (name: string) => /node_modules|lib/gi.test(name)
+const skipFolder = (name: string, excludeList: string[] = ['node_modules']) =>
+  new RegExp(excludeList.join('|'), 'gi').test(name)
 
 /**
  * Finds all file recursively
@@ -97,7 +98,7 @@ export const getAllFiles = (
 
   files.forEach((file) => {
     if (fs.statSync(searchPath + '/' + file).isDirectory()) {
-      if (!skipFolder(file))
+      if (!skipFolder(file, ['node_modules', 'lib']))
         listOfFiles = getAllFiles(searchPath + '/' + file, listOfFiles, filter)
     } else {
       if (filter(file)) {
@@ -117,9 +118,10 @@ export const getAllFiles = (
  */
 export const getCodeFiles = (
   searchPath: string,
-  listOfFiles: string[] = []
+  listOfFiles: string[] = [],
+  filter: FileFilter = filterCodeFiles
 ) => {
-  return getAllFiles(searchPath, listOfFiles, filterCodeFiles)
+  return getAllFiles(searchPath, listOfFiles, filter)
 }
 
 /** get the trimmed output of the command as a UTF-8 string */

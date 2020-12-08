@@ -28,6 +28,7 @@ import path from 'path'
 import { SDKCalls } from '@looker/sdk-codegen'
 import {
   CodeMiner,
+  filterCodeFiles,
   getAllFiles,
   getCodeFiles,
   getCommitHash,
@@ -49,6 +50,19 @@ describe('example mining', () => {
     it('code files', () => {
       const actual = getCodeFiles(sourcePath)
       expect(actual.length).toBeGreaterThan(0)
+    })
+
+    it('should get code files matching pattern', () => {
+      const filter = (pattern: RegExp, fileName: string) => {
+        const fileMatch = pattern.test(fileName)
+        return filterCodeFiles(fileName) && fileMatch
+      }
+      const actual = getCodeFiles(
+        sourcePath,
+        undefined,
+        filter.bind(null, /^download_.*\.py/)
+      )
+      expect(actual).toHaveLength(3)
     })
   })
 

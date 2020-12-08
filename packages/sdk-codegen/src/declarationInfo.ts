@@ -23,17 +23,51 @@
  SOFTWARE.
 
  */
+import { permaLink } from './exampleInfo'
+import { KeyedCollection } from './sdkModels'
 
-export * from './codeGen'
-export * from './sdkModels'
-export * from './kotlin.gen'
-export * from './pseudo.gen'
-export * from './python.gen'
-export * from './swift.gen'
-export * from './typescript.gen'
-export * from './csharp.gen'
-export * from './codeGenerators'
-export * from './exampleInfo'
-export * from './declarationInfo'
-export * from './specDiff'
-export * from './specConverter'
+/** All mined declaration data */
+export interface IDeclarationMine {
+  commitHash: string
+  remoteOrigin: string
+  types: Declarations
+  methods: Declarations
+}
+
+export interface IDeclaration {
+  sourceFile: string
+  line: number
+}
+
+export type Declarations = KeyedCollection<IDeclaration>
+
+/**
+ * Searches for declaration of a given method or type and returns a GitHub
+ * permalink if found
+ * @param lode All declaration data
+ * @param methodId Method id to search for
+ * @param typeId Type id to search for
+ */
+export const findDeclaration = (
+  lode: IDeclarationMine,
+  methodId?: string,
+  typeId?: string
+): string | undefined => {
+  let declaration
+  if (methodId) {
+    declaration = lode.methods[methodId]
+  } else if (typeId) {
+    declaration = lode.methods[typeId]
+  }
+
+  let link
+  if (declaration) {
+    link = permaLink(
+      lode.remoteOrigin,
+      lode.commitHash,
+      declaration.sourceFile,
+      declaration.line
+    )
+  }
+  return link
+}
