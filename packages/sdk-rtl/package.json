@@ -3,6 +3,8 @@
   "version": "0.3.7-beta.5",
   "description": "Looker SDK Runtime Library",
   "main": "lib/index.js",
+  "module": "lib/index.js",
+  "sideEffects": "false",
   "typings": "lib/index.d.ts",
   "files": [
     "lib"
