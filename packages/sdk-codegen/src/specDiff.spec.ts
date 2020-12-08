@@ -170,21 +170,26 @@ describe('spec differ', () => {
       const actual = compareSpecs(lSpec, rSpec)
       expect(actual).toBeDefined()
       expect(actual).toHaveLength(2)
+      // TODO get this working again
       expect(actual).toEqual(
         expect.arrayContaining([
           {
+            bodyDiff: '',
             name: lMethod.name,
             id: lMethod.id,
             lStatus: lMethod.status,
             rStatus: '',
+            responseDiff: '',
             typeDiff: '',
             paramsDiff: '',
           },
           {
+            bodyDiff: '',
             name: rMethod.name,
             id: rMethod.id,
             lStatus: '',
             rStatus: rMethod.status,
+            responseDiff: '',
             typeDiff: '',
             paramsDiff: '',
           },
