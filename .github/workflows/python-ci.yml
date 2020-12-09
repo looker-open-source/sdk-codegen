@@ -1,6 +1,13 @@
 name: Python CI
 on:
   pull_request_target:
+    types:
+      - opened
+      - synchronized
+      - reopened
+      # first three are default, adding labeled for "CI:TEST" support
+      # (see jobs.unit.if below)
+      - labeled
     paths:
       - python/**
       - packages/sdk-codegen*/**
@@ -24,6 +31,21 @@ defaults:
 
 jobs:
   unit:
+    # 1st condition: push event
+    # 2nd condition: PR opened/synchronized/reopened (types filter above)
+    # 3rd condition: PR labeled with "CI:TEST"
+    if: >
+      github.event_name == 'push' ||
+      (
+        github.event_name == 'pull_request_target' &&
+        github.event.action != 'labeled'
+      ) ||
+      (
+        github.event_name == 'pull_request_target' &&
+        github.event.action == 'labeled' &&
+        github.event.label.name == 'CI:TEST'
+      )
+
     name: Unit - ${{ matrix.os }} / py${{ matrix.python-version }}
     env:
       TOX_JUNIT_OUTPUT_NAME: ${{ matrix.os }}.py${{ matrix.python-version }}
@@ -41,8 +63,15 @@ jobs:
           - '3.9'
 
     steps:
+      - name: Cancel Previous Runs
+        uses: styfle/cancel-workflow-action@0.6.0
+        with:
+          access_token: ${{ github.token }}
       - name: Repo Checkout
         uses: actions/checkout@v2
+        with:
+          ref: ${{ github.event.pull_request.head.ref }}
+          repository: ${{ github.event.pull_request.head.repo.full_name }}
       - name: Set up Python ${{ matrix.python-version }}
         uses: actions/setup-python@v2
         with:
@@ -161,7 +190,7 @@ jobs:
           path: python/results/
 
   publish-test-results:
-    name: "Publish Unit Tests Results"
+    name: Publish Unit Tests Results
     needs: [unit, integration]
     if: success() || failure()
     runs-on: ubuntu-latest
@@ -179,3 +208,20 @@ jobs:
           github_token: ${{ secrets.GITHUB_TOKEN }}
           report_individual_runs: true
           files: 'artifacts/python-test-results/*.xml'
+      - name: Remove CI:TEST Label
+        if: >
+          (
+            github.event_name == 'pull_request_target' &&
+            github.event.action == 'labeled' &&
+            github.event.label.name == 'CI:TEST'
+          )
+        uses: actions/github-script@v3
+        with:
+          github-token: ${{secrets.GITHUB_TOKEN}}
+          script: |
+            github.issues.removeLabel({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              issue_number: context.issue.number,
+              name: 'CI:TEST'
+            })
