@@ -26,7 +26,7 @@
     "jsonify": "ts-node -O '{ \"module\": \"commonjs\", \"target\": \"es2019\" }' packages/sdk-codegen-scripts/src/yamlToJson.ts",
     "mine": "run-p -c mine:*",
     "mine:declarations": "ts-node -O '{ \"module\": \"commonjs\", \"target\": \"es2019\" }' packages/sdk-codegen-scripts/scripts/mineDeclarations.ts",
-    "mine:examples": "ts-node -O '{ \"module\": \"commonjs\", \"target\": \"es2019\" }' packages/sdk-codegen-scripts/scripts/mine.ts",
+    "mine:examples": "ts-node -O '{ \"module\": \"commonjs\", \"target\": \"es2019\" }' packages/sdk-codegen-scripts/scripts/mineExamples.ts",
     "example": "ts-node -O '{ \"module\": \"commonjs\", \"target\": \"es2019\" }'",
     "view": "yarn api-explorer",
     "wipe": "rm -rf api spec",

@@ -24,16 +24,16 @@
 
  */
 import path from 'path'
-import { Declarations, IDeclarationMine } from '@looker/sdk-codegen'
+import { DeclarationNuggets, IDeclarationMine } from '@looker/sdk-codegen'
 
 import {
   filterCodeFiles,
   getCodeFiles,
-  Miner,
+  ExampleMiner,
   readFile,
   getCommitHash,
   getRemoteHttpOrigin,
-} from './miner'
+} from './exampleMiner'
 
 /**
  * Filter that checks if given file name matches any of the specified patterns
@@ -87,8 +87,8 @@ export interface IProbe {
 }
 
 export class DeclarationMiner {
-  types: Declarations = {}
-  methods: Declarations = {}
+  types: DeclarationNuggets = {}
+  methods: DeclarationNuggets = {}
 
   constructor(
     public readonly sourcePath: string,
@@ -139,7 +139,7 @@ export class DeclarationMiner {
   }
 
   protected processFile(fileName: string) {
-    const relFile = Miner.relate(this.sourcePath, fileName)
+    const relFile = ExampleMiner.relate(this.sourcePath, fileName)
     return relFile
   }
 
@@ -149,7 +149,7 @@ export class DeclarationMiner {
 
   protected mineCode(relFile: string, content: string, probe: IProbe) {
     const lines = content.split('\n')
-    const declarations: Declarations = {}
+    const declarations: DeclarationNuggets = {}
     lines.forEach((line, index) => {
       const match = probe.declarationPattern.exec(line)
       if (match) {

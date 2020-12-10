@@ -34,8 +34,8 @@ import {
   getCommitHash,
   getRemoteHttpOrigin,
   MarkdownMiner,
-  Miner,
-} from './miner'
+  ExampleMiner,
+} from './exampleMiner'
 
 describe('example mining', () => {
   const sourcePath = path.join(__dirname, '/../../../examples')
@@ -229,12 +229,14 @@ describe('example mining', () => {
 
   describe('Miner', () => {
     it('relate', () => {
-      expect(Miner.relate('/a/b/c/', '/a/b/c/d.txt')).toEqual('d.txt')
-      expect(Miner.relate('/a/b/c/', '/a/b/c/d/e.txt')).toEqual('d/e.txt')
+      expect(ExampleMiner.relate('/a/b/c/', '/a/b/c/d.txt')).toEqual('d.txt')
+      expect(ExampleMiner.relate('/a/b/c/', '/a/b/c/d/e.txt')).toEqual(
+        'd/e.txt'
+      )
     })
 
     it('processes files', () => {
-      const miner = new Miner(sourcePath)
+      const miner = new ExampleMiner(sourcePath)
       const actual = miner.motherLode
       expect(actual).toBeDefined()
       expect(actual.commitHash).toBeDefined()

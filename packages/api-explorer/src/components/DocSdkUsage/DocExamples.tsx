@@ -25,12 +25,12 @@
  */
 import React, { FC } from 'react'
 import { List, Link, Text, Tooltip, ListItem } from '@looker/components'
-import { findExamples, IMine } from '@looker/sdk-codegen'
+import { findExamples, IExampleMine } from '@looker/sdk-codegen'
 import ReactMarkdown from 'react-markdown'
 
 interface DocExamplesProps {
   /** mined examples */
-  lode: IMine
+  lode: IExampleMine
   /** Language example should be in */
   language: string
   /** Method operation id */
