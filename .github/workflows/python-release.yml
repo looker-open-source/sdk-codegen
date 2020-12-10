@@ -1,0 +1,25 @@
+name: Python Publish to PYPI
+on:
+  release:
+    types: [published, edited]
+
+jobs:
+  publish:
+
+    if: >
+      startsWith(github.event.release.tag_name, 'lktstpy') &&
+      !github.event.release.draft &&
+      !github.event.release.prerelease
+
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Package release artifacts
+        run: python setup.py bdist_wheel sdist
+
+      - name: Publish to pypi
+        uses: pypa/gh-action-pypi-publish@v1.4.1
+        with:
+          user: __token__
+          password: ${{ secrets.PYPI_API_TOKEN }}
+          repository_url: https://test.pypi.org/legacy/
