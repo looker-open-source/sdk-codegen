@@ -67,6 +67,7 @@ module.exports = (api) => {
             esmodules: true,
           },
           useBuiltIns: false,
+          modules: false,
         },
       ],
       [
