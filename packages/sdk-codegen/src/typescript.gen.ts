@@ -78,16 +78,12 @@ import { APIMethods, DelimArray, IAuthSession, ITransportSettings, encodeParam }
  *
  */
 import { sdkVersion } from '../constants'
-import { ${this.packageName}Stream } from './streams'
 import { IDictionary, ${this.typeNames().join(', ')} } from './models'
 
 export class ${this.packageName} extends APIMethods {
 
-  public stream: ${this.packageName}Stream
-
   constructor(authSession: IAuthSession) {
     super(authSession, sdkVersion, '${this.apiVersion}')
-    this.stream = new ${this.packageName}Stream(authSession)
   }
 
 `
