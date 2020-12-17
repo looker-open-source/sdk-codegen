@@ -265,9 +265,10 @@ import {
 } from './models'
 
 export class Looker40SDKStream extends APIMethods {
+  static readonly ApiVersion = '4.0'
   constructor(authSession: IAuthSession) {
     super(authSession, sdkVersion)
-    this.apiVersion = '4.0'
+    this.apiVersion = Looker40SDKStream.ApiVersion
     this.apiPath =
       authSession.settings.base_url === ''
         ? ''

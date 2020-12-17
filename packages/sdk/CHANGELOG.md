@@ -19,6 +19,7 @@ See the [README](README.md#streaming-api-responses) for more information.
 
 - ApiMethods no longer has apiVersion as a constructor parameter to clean up use in other factories such as the Extension SDK.
   This shouldn't affect consumers of the SDK-level declarations.
+- SDK objects now have a static `ApiVersion` that reports the version of the API being used by that sdk
 - Modified the packaging method of the TS SDKs to support better tree-shaking
 
 ## [0.3.7-beta.5]
