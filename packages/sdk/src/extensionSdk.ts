@@ -33,7 +33,6 @@ import {
   ExtensionSession,
   ExtensionTransport,
 } from '@looker/sdk-rtl/lib/browser'
-import { Looker31SDK } from './3.1/methods'
 
 export class LookerExtensionSDK {
   /**
@@ -46,18 +45,13 @@ export class LookerExtensionSDK {
    */
   static createClient<T extends APIMethods>(
     hostConnection: IHostConnection,
-    type?: new (authSession: IAuthSession) => T,
+    type: new (authSession: IAuthSession) => T,
     settings?: IApiSettings
   ): T {
     settings = settings || DefaultSettings()
     const transport = new ExtensionTransport(settings, hostConnection)
     const session = new ExtensionSession(settings, transport)
-    if (type) {
-      // eslint-disable-next-line new-cap
-      return new type(session)
-    } else {
-      // work around TS2322
-      return (new Looker31SDK(session) as any) as T
-    }
+    // eslint-disable-next-line new-cap
+    return new type(session)
   }
 }
