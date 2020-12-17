@@ -40,7 +40,6 @@ import {
  *
  */
 import { sdkVersion } from '../constants'
-import { Looker31SDKStream } from './streams'
 import {
   IDictionary,
   IAccessToken,
@@ -242,11 +241,8 @@ import {
 } from './models'
 
 export class Looker31SDK extends APIMethods {
-  public stream: Looker31SDKStream
-
   constructor(authSession: IAuthSession) {
     super(authSession, sdkVersion, '3.1')
-    this.stream = new Looker31SDKStream(authSession)
   }
 
   //#region ApiAuth: API Authentication

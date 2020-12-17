@@ -30,6 +30,7 @@ import {
   Looker40SDK as LookerSDK,
   IDashboardElement,
   IRequestRunQuery,
+  Looker40SDKStream,
 } from '@looker/sdk'
 import { NodeSettingsIniFile, NodeSession } from '@looker/sdk-rtl'
 import { getDashboard, getDashboardTile, rootIni, waitForRender } from './utils'
@@ -142,7 +143,8 @@ const downloadTileAs = async (
     // apply_formatting: true,
     // apply_vis: true
   }
-  await sdk.stream.run_query(async (readable: Readable) => {
+  const sdkStream = new Looker40SDKStream(sdk.authSession)
+  await sdkStream.run_query(async (readable: Readable) => {
     return new Promise<any>((resolve, reject) => {
       readable
         .pipe(writer)
