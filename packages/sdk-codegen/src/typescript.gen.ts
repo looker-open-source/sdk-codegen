@@ -83,7 +83,12 @@ import { IDictionary, ${this.typeNames().join(', ')} } from './models'
 export class ${this.packageName} extends APIMethods {
 
   constructor(authSession: IAuthSession) {
-    super(authSession, sdkVersion, '${this.apiVersion}')
+    super(authSession, sdkVersion)
+    this.apiVersion = '${this.apiVersion}'
+    this.apiPath =
+      authSession.settings.base_url === ''
+        ? ''
+        : authSession.settings.base_url + '/api/' + this.apiVersion
   }
 
 `
@@ -102,7 +107,12 @@ import { IDictionary, ${this.typeNames(false).join(', ')} } from './models'
 
 export class ${this.packageName}Stream extends APIMethods {
   constructor(authSession: IAuthSession) {
-    super(authSession, sdkVersion, '${this.apiVersion}')
+    super(authSession, sdkVersion)
+    this.apiVersion = '${this.apiVersion}'
+    this.apiPath =
+      authSession.settings.base_url === ''
+        ? ''
+        : authSession.settings.base_url + '/api/' + this.apiVersion
   }
 `
   }

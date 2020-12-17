@@ -236,7 +236,7 @@ export interface ISheetRowResponse {
 
 export class SheetSDK extends APIMethods {
   constructor(authSession: IAuthSession, public sheetId: string) {
-    super(authSession, sheetSDKVersion, '')
+    super(authSession, sheetSDKVersion)
     authSession.settings.agentTag = `SheetSDK ${this.apiVersion}`
     this.sheetId = encodeURIComponent(sheetId)
   }
