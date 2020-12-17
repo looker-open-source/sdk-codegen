@@ -146,7 +146,6 @@ The `settings` provided to the `NodeSession` class include the base URL for the 
 
 API users with appropriate permissions can `sudo` as another user by specifying a specific user ID in the `NodeSession.login()` method. Only one user can be impersonated at a time via `NodeSession`. When a `sudo` session is active, all SDK methods will be processed as that user.
 
-
 ### Sudo behavior with NodeSession
 
 The rest of this section shows sample code for typical use cases for authentication and sudo. This code sample is extracted directly from the sdk methods Jest tests, and assumes `apiUser` is the default authenticated user record with `sudo` abilities, and `sudoA` and `sudoB` are other enabled Looker user records.
@@ -267,6 +266,52 @@ export class EmbedSession extends ProxySession {
   }
 
 }
+```
+
+### Streaming API responses
+
+The streaming version of the SDK methods should be initialized using the same `AuthSession` as the main SDK to reduce authentication thrashing.
+
+Construction of the streaming SDK can use code similar to the following, which is taken from the [downloadTile.ts example](/examples/typescript/downloadTile.ts#L124:L160):
+
+```ts
+/**
+ * Use the streaming SDK to download a tile's query
+ * @param {LookerSDK} sdk to use
+ * @param {IDashboardElement} tile to download
+ * @param {string} format to download
+ * @returns {Promise<string>} name of downloaded file (undefined on failure)
+ */
+const downloadTileAs = async (
+                sdk: LookerSDK,
+                tile: IDashboardElement,
+                format: string
+        ) => {
+          let fileName
+          fileName = `${tile.title}.${format}`
+
+          const writer = fs.createWriteStream(fileName)
+          const request: IRequestRunQuery = {
+            result_format: format,
+            query_id: tile.query_id!,
+            // apply_formatting: true,
+            // apply_vis: true
+          }
+          const sdkStream = new Looker40SDKStream(sdk.authSession)
+          await sdkStream.run_query(async (readable: Readable) => {
+            return new Promise<any>((resolve, reject) => {
+              readable
+                      .pipe(writer)
+                      .on('error', () => {
+                        fileName = undefined
+                        throw reject
+                      })
+                      .on('finish', resolve)
+            })
+          }, request)
+
+          return fileName
+        }
 ```
 
 ### More examples

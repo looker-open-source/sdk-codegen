@@ -40,7 +40,6 @@ import {
  *
  */
 import { sdkVersion } from '../constants'
-import { Looker40SDKStream } from './streams'
 import {
   IDictionary,
   IAccessToken,
@@ -266,11 +265,8 @@ import {
 } from './models'
 
 export class Looker40SDK extends APIMethods {
-  public stream: Looker40SDKStream
-
   constructor(authSession: IAuthSession) {
     super(authSession, sdkVersion, '4.0')
-    this.stream = new Looker40SDKStream(authSession)
   }
 
   //#region ApiAuth: API Authentication

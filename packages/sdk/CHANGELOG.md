@@ -7,7 +7,16 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Current]
 
-- Removed the `streams` property from the SDK, keeping it as a separate SDK initialization that provides streaming methods.
+- **BREAKING CHANGE**: The internally constructed `stream` property of the SDK object has been removed. Instead, use:
+
+```ts
+import { Looker40SDKStream } from '@looker/sdk'
+
+const sdkStream = new Looker40SDKStream(sdk.authSession)
+```
+
+See the [README](README.md#streaming-api-responses) for more information.
+
 - Modified the packaging method of the TS SDKs to support better tree-shaking
 
 ## [0.3.7-beta.5]

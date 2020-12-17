@@ -48,6 +48,7 @@ import {
   ResultFormat,
 } from '../src/4.0/models'
 import { environmentPrefix } from '../src/constants'
+import { Looker40SDKStream } from '../src'
 
 const envKey = ApiConfigMap(environmentPrefix)
 const strLookerBaseUrl = envKey.base_url
@@ -687,7 +688,8 @@ describe('LookerNodeSDK', () => {
             streamed = true
             const csvFile = './query.csv'
             const writer = fs.createWriteStream(csvFile)
-            await sdk.stream.run_inline_query(async (readable: Readable) => {
+            const sdkStream = new Looker40SDKStream(sdk.authSession)
+            await sdkStream.run_inline_query(async (readable: Readable) => {
               return new Promise<any>((resolve, reject) => {
                 readable.pipe(writer).on('error', reject).on('finish', resolve)
               })
