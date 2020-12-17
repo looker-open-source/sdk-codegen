@@ -1,6 +1,6 @@
 {
   "name": "@looker/sdk-rtl",
-  "version": "0.3.7-beta.8",
+  "version": "0.3.8-beta.0",
   "description": "Looker SDK Runtime Library",
   "main": "lib/index.js",
   "module": "lib/index.js",
