@@ -63,8 +63,5 @@
     "react-router-dom": "^5.1.2",
     "styled-components": "^5.2.1",
     "ts-jest": "^26.2.0"
-  },
-  "resolutions": {
-    "typescript": "3.8.2"
   }
 }

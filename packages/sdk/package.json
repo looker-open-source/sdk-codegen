@@ -47,8 +47,7 @@
     "readable-stream": "^3.4.0",
     "request": "^2.88.0",
     "request-promise-native": "^1.0.8",
-    "ts-node": "^8.4.1",
-    "typescript": "^3.8.2"
+    "ts-node": "^8.4.1"
   },
   "keywords": [
     "Looker",
