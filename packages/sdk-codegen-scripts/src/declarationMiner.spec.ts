@@ -50,7 +50,7 @@ describe('Declaration miner', () => {
 
   const sourcePath = settings.base_url
   const isConfigured = () => settings.base_url
-  const testIfConfigured = isConfigured ? it : it.skip
+  const testIfConfigured = isConfigured() ? it : it.skip
 
   testIfConfigured('should mine files matching the probe settings', () => {
     const miner = new DeclarationMiner(

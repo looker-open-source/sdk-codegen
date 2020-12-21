@@ -32,9 +32,6 @@
     "develop": "webpack-dev-server --hot --disable-host-check --port 8080 --https --config webpack.dev.config.js",
     "watch": "yarn lerna exec --scope @looker/wholly-sheet --stream 'BABEL_ENV=build babel src --root-mode upward --out-dir lib --source-maps --extensions .ts,.tsx --no-comments --watch'"
   },
-  "resolutions": {
-    "typescript": "3.8.2"
-  },
   "dependencies": {
     "@looker/components": "^0.9.28",
     "@looker/extension-sdk": "^0.13.0-alpha.1",
@@ -51,8 +48,7 @@
     "redux": "^4.0.5",
     "redux-saga": "^1.1.3",
     "styled-components": "^5.2.1",
-    "styled-system": "^5.1.2",
-    "typescript": "3.8.2"
+    "styled-system": "^5.1.2"
   },
   "devDependencies": {
     "@types/react-redux": "^7.1.9",
