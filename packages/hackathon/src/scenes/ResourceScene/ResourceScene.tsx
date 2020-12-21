@@ -61,7 +61,7 @@ export const ResourceScene: FC<ResourceSceneProps> = () => {
 
   const updateFilterValue = (values: string[]) => {
     const search = values.length === 0 ? '' : `?fv=${values.join(',')}`
-    if (history.location.search != search) {
+    if (history.location.search !== search) {
       history.push(`${Routes.RESOURCES}${search}`)
     }
   }
@@ -99,7 +99,7 @@ export const ResourceScene: FC<ResourceSceneProps> = () => {
                   fontSize="xsmall"
                   textTransform="uppercase"
                   fontWeight="semiBold"
-                  variant="subdued"
+                  color="subdued"
                 >
                   {selectedResources[index].type} —{' '}
                   {selectedResources[index].tag}

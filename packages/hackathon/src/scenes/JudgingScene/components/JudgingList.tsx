@@ -25,10 +25,10 @@
  */
 import React, { FC, useEffect } from 'react'
 import {
-  ActionList,
-  ActionListItem,
-  ActionListItemAction,
-  ActionListItemColumn,
+  DataTable,
+  DataTableItem,
+  DataTableAction,
+  DataTableCell,
   Pagination,
 } from '@looker/components'
 import { useSelector, useDispatch } from 'react-redux'
@@ -83,14 +83,14 @@ export const JudgingList: FC<JudgingListProps> = () => {
     return (
       <>
         {judging.$more_info && judging.$more_info !== '\0' && (
-          <ActionListItemAction
+          <DataTableAction
             onClick={openMoreInfo.bind(null, judging)}
             icon="CircleInfo"
           >
             More Information
-          </ActionListItemAction>
+          </DataTableAction>
         )}
-        <ActionListItemAction
+        <DataTableAction
           onClick={showJudging.bind(null, judging._id)}
           icon="Edit"
           itemRole="link"
@@ -98,7 +98,7 @@ export const JudgingList: FC<JudgingListProps> = () => {
           {canDoJudgingAction(hacker, judging)
             ? 'Update Judging'
             : 'View Juding'}
-        </ActionListItemAction>
+        </DataTableAction>
       </>
     )
   }
@@ -109,18 +109,18 @@ export const JudgingList: FC<JudgingListProps> = () => {
   const rows = judgings
     .slice(startIdx, startIdx + PAGE_SIZE)
     .map((judging, idx) => (
-      <ActionListItem key={idx} id={idx.toString()} actions={actions(judging)}>
+      <DataTableItem key={idx} id={idx.toString()} actions={actions(judging)}>
         {columns.map((column) => (
-          <ActionListItemColumn key={`${idx}.${column.id}`}>
+          <DataTableCell key={`${idx}.${column.id}`}>
             {sheetCell(judging[column.id])}
-          </ActionListItemColumn>
+          </DataTableCell>
         ))}
-      </ActionListItem>
+      </DataTableItem>
     ))
 
   return (
     <>
-      <ActionList columns={columns}>{rows}</ActionList>
+      <DataTable columns={columns}>{rows}</DataTable>
       <Pagination
         current={currentPage}
         pages={totalPages}

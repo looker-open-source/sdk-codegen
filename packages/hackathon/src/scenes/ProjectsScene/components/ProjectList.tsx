@@ -25,10 +25,10 @@
  */
 import React, { FC, useEffect } from 'react'
 import {
-  ActionList,
-  ActionListItem,
-  ActionListItemAction,
-  ActionListItemColumn,
+  DataTable,
+  DataTableItem,
+  DataTableAction,
+  DataTableCell,
   Pagination,
   Tooltip,
   Icon,
@@ -104,37 +104,37 @@ export const ProjectList: FC<ProjectListProps> = () => {
     return (
       <>
         {project.more_info && project.more_info !== '\0' && (
-          <ActionListItemAction
+          <DataTableAction
             onClick={openMoreInfo.bind(null, project)}
             icon="CircleInfo"
           >
             More Information
-          </ActionListItemAction>
+          </DataTableAction>
         )}
         {canDoProjectAction(hacker, project, 'update') ? (
-          <ActionListItemAction
+          <DataTableAction
             onClick={handleEdit.bind(null, project._id)}
             icon={isLocked ? 'LockClosed' : 'Edit'}
             itemRole="link"
           >
             Update project
-          </ActionListItemAction>
+          </DataTableAction>
         ) : (
-          <ActionListItemAction
+          <DataTableAction
             onClick={handleEdit.bind(null, project._id)}
             icon={isLocked ? 'LockClosed' : 'ModelFile'}
             itemRole="link"
           >
             View project
-          </ActionListItemAction>
+          </DataTableAction>
         )}
         {canDoProjectAction(hacker, project, 'delete') && (
-          <ActionListItemAction
+          <DataTableAction
             onClick={handleDelete.bind(null, project)}
             icon="Trash"
           >
             Delete project
-          </ActionListItemAction>
+          </DataTableAction>
         )}
       </>
     )
@@ -180,18 +180,18 @@ export const ProjectList: FC<ProjectListProps> = () => {
   const rows = projects
     .slice(startIdx, startIdx + PAGE_SIZE)
     .map((project, idx) => (
-      <ActionListItem key={idx} id={idx.toString()} actions={actions(project)}>
+      <DataTableItem key={idx} id={idx.toString()} actions={actions(project)}>
         {columns.map((column) => (
-          <ActionListItemColumn key={`${idx}.${column.id}`}>
+          <DataTableCell key={`${idx}.${column.id}`}>
             {projectCell(project, column.id)}
-          </ActionListItemColumn>
+          </DataTableCell>
         ))}
-      </ActionListItem>
+      </DataTableItem>
     ))
 
   return (
     <>
-      <ActionList columns={columns}>{rows}</ActionList>
+      <DataTable columns={columns}>{rows}</DataTable>
       <Pagination
         current={currentPage}
         pages={totalPages}
