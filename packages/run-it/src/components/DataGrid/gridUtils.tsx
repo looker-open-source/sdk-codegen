@@ -26,10 +26,10 @@
 
 import Papa from 'papaparse'
 import {
-  ActionListColumn,
-  ActionListColumns,
-  ActionListItem,
-  ActionListItemColumn,
+  DataTableColumn,
+  DataTableColumns,
+  DataTableCell,
+  DataTableItem,
 } from '@looker/components'
 import React from 'react'
 
@@ -46,8 +46,7 @@ export const gridHeaders = (data: any[]) => {
   if (!data || data.length === 0) return []
   const headers = data[0]
   const values = data.length > 1 ? data[1] : undefined
-  const width = 100 / headers.length
-  const result: ActionListColumn[] = []
+  const result: DataTableColumn[] = []
   headers.forEach((h: string, index: number) => {
     let type = 'string'
     if (values && index < values.length) {
@@ -56,16 +55,14 @@ export const gridHeaders = (data: any[]) => {
       }
     }
 
-    const col: ActionListColumn = {
+    const col: DataTableColumn = {
       id: h,
       title: h,
-      primaryKey: false,
       type: type === 'string' ? 'string' : 'number',
-      widthPercent: width,
     }
     result.push(col)
   })
-  return result as ActionListColumns
+  return result as DataTableColumns
 }
 
 export const gridRowId = (index: number) => `row.${index}`
@@ -82,13 +79,13 @@ export const gridRows = (data: any[]) => {
     const cells: any = []
     row.map((item: any, index: number) => {
       const key = gridCellId(id, index)
-      const cell = <ActionListItemColumn key={key}>{item}</ActionListItemColumn>
+      const cell = <DataTableCell key={key}>{item}</DataTableCell>
       cells.push(cell)
     })
     result.push(
-      <ActionListItem id={id} key={id}>
+      <DataTableItem id={id} key={id}>
         {cells}
-      </ActionListItem>
+      </DataTableItem>
     )
   })
 

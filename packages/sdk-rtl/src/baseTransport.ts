@@ -61,7 +61,7 @@ export abstract class BaseTransport implements ITransport {
    * @param options overrides of default transport settings
    * @returns typed response of `TSuccess`, or `TError` result
    */
-  abstract async rawRequest(
+  abstract rawRequest(
     method: HttpMethod,
     path: string,
     queryParams?: Values,
@@ -80,7 +80,7 @@ export abstract class BaseTransport implements ITransport {
    * @param {Partial<ITransportSettings>} options transport option overrides
    * @returns {Promise<TSuccess>} the streaming response
    */
-  abstract async request<TSuccess, TError>(
+  abstract request<TSuccess, TError>(
     method: HttpMethod,
     path: string,
     queryParams?: any,
@@ -101,7 +101,7 @@ export abstract class BaseTransport implements ITransport {
    * @param {Partial<ITransportSettings>} options transport option overrides
    * @returns {Promise<TSuccess>} the streaming response
    */
-  abstract async stream<TSuccess>(
+  abstract stream<TSuccess>(
     callback: (readable: Readable) => Promise<TSuccess>,
     method: HttpMethod,
     path: string,

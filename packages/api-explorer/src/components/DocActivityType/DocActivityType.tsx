@@ -45,9 +45,7 @@ export const DocActivityType: FC<DocActivityTypeProps> = ({ method }) => (
           }
         >
           <span>
-            <Badge intent="neutral" fontWeight="light">
-              $
-            </Badge>
+            <Badge intent="neutral">$</Badge>
           </span>
         </Tooltip>
       </>

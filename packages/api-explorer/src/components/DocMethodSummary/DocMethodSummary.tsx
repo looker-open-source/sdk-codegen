@@ -54,7 +54,7 @@ export const DocMethodSummary: FC<DocMethodSummaryProps> = ({ method }) => (
             <DocRateLimited method={method} />
             <DocActivityType method={method} />
           </Space>
-          <Text variant="subdued">{method.endpoint}</Text>
+          <Text color="subdued">{method.endpoint}</Text>
         </Flex>
         <DocSummaryStatus method={method} />
       </Space>

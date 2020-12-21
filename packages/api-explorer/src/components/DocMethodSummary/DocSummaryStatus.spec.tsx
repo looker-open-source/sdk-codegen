@@ -32,14 +32,15 @@ import { DocSummaryStatus } from './DocSummaryStatus'
 
 describe('DocMethodSummaryStatus', () => {
   test.each`
-    status          | method                              | expectedTitle | expectedContent
-    ${'stable'}     | ${api.methods.login}                | ${'Success'}  | ${'This endpoint is considered stable for this API version.'}
-    ${'deprecated'} | ${api.methods.backup_configuration} | ${'Error'}    | ${'This endpoint has been deprecated and will be removed in the future.'}
+    status          | method                              | expectedLabel            | expectedContent
+    ${'beta'}       | ${api.methods.workspace}            | ${'beta endpoint'}       | ${'This beta endpoint is under development and subject to change.'}
+    ${'stable'}     | ${api.methods.login}                | ${'stable endpoint'}     | ${'This endpoint is considered stable for this API version.'}
+    ${'deprecated'} | ${api.methods.backup_configuration} | ${'deprecated endpoint'} | ${'This endpoint has been deprecated and will be removed in the future.'}
   `(
     'it renders an icon with a tooltip containing the right content for $status endpoints',
-    async ({ method, expectedTitle, expectedContent }) => {
+    async ({ method, expectedLabel, expectedContent }) => {
       renderWithTheme(<DocSummaryStatus method={method} />)
-      const icon = screen.getByTitle(expectedTitle)
+      const icon = screen.getByLabelText(expectedLabel)
       fireEvent.mouseOver(icon)
       await waitFor(() => {
         expect(screen.getByRole('tooltip')).toHaveTextContent(expectedContent)

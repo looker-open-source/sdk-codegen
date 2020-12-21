@@ -25,7 +25,7 @@
  */
 
 import React, { FC, useEffect, useState } from 'react'
-import { ActionList, doDefaultActionListSort } from '@looker/components'
+import { DataTable, doDataTableSort } from '@looker/components'
 
 import { LoadTimes } from './perfUtils'
 import { createTableRows, perfTableColumns } from './perfTableUtils'
@@ -53,10 +53,12 @@ export const PerfTable: FC<PerfTableProps> = ({
     createTableRows(data, onSelect, showAllColumns)
   )
   const handleSort = (id: string, sortDirection: 'asc' | 'desc') => {
-    const {
-      columns: sortedColumns,
-      data: sortedData,
-    } = doDefaultActionListSort(data, columns, id, sortDirection)
+    const { columns: sortedColumns, data: sortedData } = doDataTableSort(
+      data,
+      columns,
+      id,
+      sortDirection
+    )
     setRows(
       createTableRows(sortedData as LoadTimes[], onSelect, showAllColumns)
     )
@@ -70,8 +72,8 @@ export const PerfTable: FC<PerfTableProps> = ({
     setRows(createTableRows(data, onSelect, showAllColumns))
   }, [data, onSelect, showAllColumns])
   return (
-    <ActionList onSort={handleSort} columns={columns}>
+    <DataTable onSort={handleSort} columns={columns}>
       {rows}
-    </ActionList>
+    </DataTable>
   )
 }

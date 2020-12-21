@@ -25,11 +25,11 @@
  */
 import React, { FC } from 'react'
 import {
-  ActionListItem,
-  ActionListItemColumn,
+  DataTableItem,
   Tooltip,
   Text,
-  ActionListColumns,
+  DataTableColumns,
+  DataTableCell,
 } from '@looker/components'
 import styled from 'styled-components'
 import { LoadTimes, perfRound } from './perfUtils'
@@ -130,7 +130,7 @@ export const perfTableColumns = (all = false) => {
       widthPercent: numWidth,
     }
   )
-  return result as ActionListColumns
+  return result as DataTableColumns
 }
 
 interface MetricProps {
@@ -197,25 +197,24 @@ const extraPerfColumns = (item: LoadTimes, showAllColumns = false) => {
   if (!showAllColumns) return <></>
   return (
     <>
-      <ActionListItemColumn>
+      <DataTableCell>
         {metric(
           item.connect,
           'Immediately before the browser starts to establish the connection to the server to retrieve the resource until the connection is established.'
         )}
-      </ActionListItemColumn>
-      <ActionListItemColumn>
+      </DataTableCell>
+      <DataTableCell>
         {metric(
           item.secureConnection,
           'Immediately before the browser starts the handshake process to secure the current connection until the connection ends. 0 if not a secure connection.'
         )}
-      </ActionListItemColumn>
-      <ActionListItemColumn>
+      </DataTableCell>
+      <DataTableCell>
         {metric(
           item.responseTime,
           'Immediately after the browser receives the first byte of the response from the server until the response ends.'
         )}
-      </ActionListItemColumn>
-      }
+      </DataTableCell>
     </>
   )
 }
@@ -234,45 +233,45 @@ export const createTableRows = (
   data.map((item, index) => {
     const id = `${item.name}.${index}`
     return (
-      <ActionListItem id={id} key={id} onClick={onSelect.bind(null, item)}>
-        <ActionListItemColumn>{urlColumn(item.name)}</ActionListItemColumn>
-        <ActionListItemColumn>
+      <DataTableItem id={id} key={id} onClick={onSelect.bind(null, item)}>
+        <DataTableCell>{urlColumn(item.name)}</DataTableCell>
+        <DataTableCell>
           {metric(
             item.domainLookup,
             'Immediately before the browser starts the domain name lookup until it ends'
           )}
-        </ActionListItemColumn>
+        </DataTableCell>
         {extraPerfColumns(item, showAllColumns)}
-        <ActionListItemColumn>
+        <DataTableCell>
           {metric(
             item.fetchUntilResponseEnd,
             'Immediately before the browser starts to fetch the resource until the response ends'
           )}
-        </ActionListItemColumn>
-        <ActionListItemColumn>
+        </DataTableCell>
+        <DataTableCell>
           {metric(
             item.requestUntilResponseEnd,
             'Immediately after the browser receives the first byte of the response from the server until the response ends'
           )}
-        </ActionListItemColumn>
-        <ActionListItemColumn>
+        </DataTableCell>
+        <DataTableCell>
           {metric(
             item.startUntilResponseEnd,
             'Immediately before the browser starts requesting the resource from the server'
           )}
-        </ActionListItemColumn>
-        <ActionListItemColumn>
+        </DataTableCell>
+        <DataTableCell>
           {metric(
             perfRound(item.processDuration),
             'Total time to process the payload'
           )}
-        </ActionListItemColumn>
-        <ActionListItemColumn>
+        </DataTableCell>
+        <DataTableCell>
           {metric(
             perfRound(item.duration),
             'Total time of the request and response'
           )}
-        </ActionListItemColumn>
-      </ActionListItem>
+        </DataTableCell>
+      </DataTableItem>
     )
   })
