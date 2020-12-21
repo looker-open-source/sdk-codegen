@@ -215,7 +215,6 @@ const extraPerfColumns = (item: LoadTimes, showAllColumns = false) => {
           'Immediately after the browser receives the first byte of the response from the server until the response ends.'
         )}
       </DataTableCell>
-      }
     </>
   )
 }
