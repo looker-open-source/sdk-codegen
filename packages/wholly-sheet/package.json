@@ -30,9 +30,6 @@
   "scripts": {
     "watch": "yarn lerna exec --scope @looker/wholly-sheet --stream 'BABEL_ENV=build babel src --root-mode upward --out-dir lib --source-maps --extensions .ts,.tsx --no-comments --watch'"
   },
-  "resolutions": {
-    "typescript": "3.8.2"
-  },
   "dependencies": {
     "@looker/sdk": "^7.20.0-alpha.0",
     "@looker/sdk-rtl": "^7.20.0-alpha.0",

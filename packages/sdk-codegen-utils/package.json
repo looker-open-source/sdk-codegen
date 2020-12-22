@@ -29,8 +29,5 @@
   ],
   "scripts": {
     "watch": "yarn lerna exec --scope @looker/sdk-codegen-utils --stream 'BABEL_ENV=build babel src --root-mode upward --out-dir lib --source-maps --extensions .ts,.tsx --no-comments --watch'"
-  },
-  "resolutions": {
-    "typescript": "3.8.2"
   }
 }

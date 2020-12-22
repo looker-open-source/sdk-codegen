@@ -26,7 +26,7 @@
 
 import React, { FC, ReactElement, useState } from 'react'
 import {
-  ActionList,
+  DataTable,
   Pagination,
   Tab,
   TabList,
@@ -66,9 +66,9 @@ export const DataGrid: FC<DataGridProps> = ({ data, raw, pageSize = 15 }) => {
       </TabList>
       <TabPanels {...tabs} pt="0">
         <TabPanel key="grid">
-          <ActionList key="datagrid" columns={headers}>
+          <DataTable key="datagrid" columns={headers}>
             {pageItems}
-          </ActionList>
+          </DataTable>
           <Pagination
             current={page}
             pages={pageCount}

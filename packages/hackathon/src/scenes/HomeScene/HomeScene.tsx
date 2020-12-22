@@ -45,7 +45,7 @@ export const HomeScene: FC = () => (
     <Card width="50vw" height="75vh" raised>
       <Scroller>
         <SpaceVertical p="medium">
-          <Heading variant="secondary">Agenda — Oct 15</Heading>
+          <Heading color="secondary">Agenda — Oct 15</Heading>
           <Box>
             <Time width="100px">9:00am</Time>
             <Text> Welcome and Kickoff</Text>
@@ -84,7 +84,7 @@ export const HomeScene: FC = () => (
             <Text> Midnight Hack Party (optional)</Text>
           </Box>
           <Divider appearance="dark" />
-          <Heading variant="secondary">Agenda — Oct 16</Heading>
+          <Heading color="secondary">Agenda — Oct 16</Heading>
           <Box>
             <Time>9:00am</Time>
             <Text> Day 2 Kickoff</Text>

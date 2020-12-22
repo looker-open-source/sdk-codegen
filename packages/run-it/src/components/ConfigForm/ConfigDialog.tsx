@@ -41,7 +41,7 @@ export const ConfigDialog: FC<ConfigDialogProps> = ({
   configurator,
 }) => (
   <Dialog
-    maxWidth={['90vw', '60vw', '500px', '800px']}
+    width="small"
     content={
       <ConfigForm setHasConfig={setHasConfig} configurator={configurator} />
     }

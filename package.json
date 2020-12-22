@@ -50,6 +50,7 @@
     "test:ts": "yarn jest --reporters=default --reporters=jest-junit",
     "test:apix": "yarn jest packages/api-explorer packages/run-it packages/extension-api-explorer",
     "test:iphone": "xcodebuild test -project swift/looker/looker.xcodeproj -scheme looker-Package -sdk iphonesimulator -destination 'platform=iOS Simulator,name=iPhone 11,OS=13.4.1' | xcpretty --test --color",
+    "test:sdk": "yarn jest packages/sdk",
     "test:jest": "DOT_ENV_FILE=.env.test jest",
     "bootstrap": "lerna clean -y && lerna bootstrap",
     "watch": "lerna run --parallel watch"
@@ -69,7 +70,7 @@
     "@looker/eslint-config": "^1.0.16",
     "@looker/prettier-config": "^1.0.15",
     "@stoplight/spectral": "^5.6.0",
-    "@testing-library/jest-dom": "^5.11.5",
+    "@testing-library/jest-dom": "^5.11.6",
     "@types/blueimp-md5": "^2.7.0",
     "@types/ini": "^1.3.30",
     "@types/jest": "^25.2.3",
@@ -92,10 +93,10 @@
     "eslint-plugin-import": "^2.20.2",
     "eslint-plugin-mdx": "^1.6.8",
     "eslint-plugin-prettier": "^3.1.3",
-    "jest": "^26.4.0",
-    "jest-canvas-mock": "^2.2.0",
-    "jest-junit": "^10.0.0",
-    "jest-styled-components": "^6.3.4",
+    "jest": "^26.6.3",
+    "jest-canvas-mock": "^2.3.0",
+    "jest-junit": "^12.0.0",
+    "jest-styled-components": "^7.0.3",
     "js-yaml": "^3.13.1",
     "lerna": "^3.20.2",
     "lint-staged": "^10.2.2",
@@ -107,10 +108,10 @@
     "prettier": "^2.1.1",
     "react": "^16.13.1",
     "react-dom": "^16.13.1",
-    "styled-components": "^4.4.1",
-    "ts-jest": "^26.2.0",
-    "ts-node": "^8.1.0",
-    "typescript": "3.8.2",
+    "styled-components": "^5.2.1",
+    "ts-jest": "^26.4.4",
+    "ts-node": "^9.1.1",
+    "typescript": "^4.1.3",
     "webpack": "^4.43.0",
     "node-forge": "^0.10.0",
     "node-uuid": "^1.4.8"
@@ -198,7 +199,6 @@
   },
   "keywords": [],
   "resolutions": {
-    "set-value": "^2.0.1",
-    "typescript": "3.8.2"
+    "set-value": "^2.0.1"
   }
 }

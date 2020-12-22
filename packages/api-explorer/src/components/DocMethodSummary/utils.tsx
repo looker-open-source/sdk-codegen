@@ -34,15 +34,29 @@ import { Icon, Status } from '@looker/components'
 export const pickStatus = (status: string) => {
   switch (status.toLocaleLowerCase()) {
     case 'beta':
-      return <StatusBeta>&beta;</StatusBeta>
+      return <StatusBeta aria-label="beta endpoint">&beta;</StatusBeta>
     case 'experimental':
-      return <Icon name="Beaker" />
+      return <Icon aria-label="experimental endpoint" name="Beaker" />
     case 'deprecated':
-      return <Status intent="critical" size="small" />
+      return (
+        <Status
+          aria-label="deprecated endpoint"
+          intent="critical"
+          size="small"
+        />
+      )
     case 'stable':
-      return <Status intent="positive" size="small" />
+      return (
+        <Status aria-label="stable endpoint" intent="positive" size="small" />
+      )
     default:
-      return <Status intent="neutral" size="small" />
+      return (
+        <Status
+          aria-label="unknown status endpoint"
+          intent="neutral"
+          size="small"
+        />
+      )
   }
 }
 

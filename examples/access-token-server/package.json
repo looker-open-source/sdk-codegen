@@ -36,8 +36,7 @@
     "nodemon": "^2.0.4",
     "test": "^0.6.0",
     "ts-jest": "^26.4.1",
-    "ts-node": "^9.0.0",
-    "typescript": "^4.0.3"
+    "ts-node": "^9.0.0"
   },
   "eslintConfig": {
     "extends": [

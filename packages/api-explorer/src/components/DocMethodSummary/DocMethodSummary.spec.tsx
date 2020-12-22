@@ -40,7 +40,7 @@ describe('DocMethodSummary', () => {
     expect(screen.getByText(method.summary)).toBeInTheDocument()
     expect(screen.getByText(method.endpoint)).toBeInTheDocument()
     await waitFor(() => {
-      const statusIcon = screen.getByTitle('Success')
+      const statusIcon = screen.getByLabelText('stable endpoint')
       fireEvent.mouseOver(statusIcon)
       expect(screen.getByRole('tooltip')).toHaveTextContent(
         'This endpoint is considered stable for this API version.'

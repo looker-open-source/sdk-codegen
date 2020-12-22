@@ -402,8 +402,8 @@ const swagger = JSON.parse(swaggerFrag)
 const api = JSON.parse(openApiFrag)
 
 const config = TestConfig()
-const swaggerFile = `${config.rootPath}/spec/Looker.4.0.json`
-const apiFile = `${config.rootPath}/spec/Looker.4.0.oas.json`
+const swaggerFile = `${config.rootPath}spec/Looker.4.0.json`
+const apiFile = `${config.rootPath}spec/Looker.4.0.oas.json`
 const swaggerSource = readFileSync(swaggerFile, 'utf-8')
 const fullSwagger = JSON.parse(swaggerSource)
 const apiSource = readFileSync(apiFile, 'utf-8')
