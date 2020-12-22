@@ -23,6 +23,7 @@
  SOFTWARE.
 
  */
+
 import { cloneDeep, isEmpty } from 'lodash'
 import {
   IMethodResponse,
@@ -32,36 +33,68 @@ import {
 } from '@looker/sdk-codegen'
 
 /**
- * Omit unwanted properties from a given property object
- * @param val Property object
+ * Every "cleaned" type from the API specification will contain these values
  */
-const cleanProperty = (val: IProperty) => {
-  if (val.type.customType) {
-    // eslint-disable-next-line @typescript-eslint/no-use-before-define
-    return cleanType(val.type).properties
-  }
-  return val.type.name
+interface CleanType {
+  /** Name of the type */
+  name: string
+  /** Description of either the type property or the type */
+  description: string
+  /** List of properties for the type */
+  properties: KeyedCollection<any>
 }
 
-interface CleanType {
-  name: string
-  description: string
-  properties: KeyedCollection<any>
+/**
+ * Omit unwanted properties from a given property object
+ * @param val Property object
+ * @param depth is the current level of the hierarchy
+ * @param expand is the depth to expanded nested types. 0 = all, 1 = no expansion
+ *
+ */
+const cleanProperty = (val: IProperty, depth = 0, expand = 1) => {
+  if (val.type.customType && (expand === 0 || expand > depth)) {
+    const desc = val.description ? val.description : val.type.description
+    // eslint-disable-next-line @typescript-eslint/no-use-before-define
+    return cleanType(val.type, expand, desc, depth)
+  }
+  return val.type.name
 }
 
 /**
  * Omit unwanted metadata from a given type object
  * @param val Type object
+ * @param expand is the depth to expanded nested types. 0 = all, 1 = no expansion
+ * @oaram desc is a default value to use for the description
+ * @param depth is the current level of the hierarchy
  */
-const cleanType = (val: IType): CleanType => {
+const cleanType = (
+  val: IType,
+  expand = 1,
+  desc = '',
+  depth = 0
+): Partial<CleanType> => {
+  let props
+  switch (val.className) {
+    case 'ArrayType':
+    case 'HashType':
+    case 'DelimArrayType':
+    case 'EnumType':
+      props = val.elementType!.properties
+      break
+    default:
+      props = val.properties
+      break
+  }
+
   const result = {
     name: val.name,
-    description: val.description,
+    description: val.description ? val.description : desc,
     properties: {},
   }
-  if (!isEmpty(val.properties)) {
-    Object.entries(val.properties).forEach(
-      ([name, property]) => (result.properties[name] = cleanProperty(property))
+  if (!isEmpty(props)) {
+    Object.entries(props).forEach(
+      ([name, property]) =>
+        (result.properties[name] = cleanProperty(property, depth + 1, expand))
     )
   }
   return result
@@ -70,17 +103,10 @@ const cleanType = (val: IType): CleanType => {
 /**
  * Given a response object, return a copy stripped of unwanted metadata
  * @param val A method response object
+ * @param expand is the depth to expanded nested types. 0 = all, 1 = no expansion
  */
-export const copyAndCleanResponse = (val: IMethodResponse) => {
-  switch (val.type.className) {
-    case 'ArrayType':
-    case 'HashType':
-    case 'DelimArrayType':
-    case 'EnumType':
-      return cleanType(cloneDeep(val.type.elementType!)).properties
-    default:
-      return cleanType(cloneDeep(val.type)).properties
-  }
+export const copyAndCleanResponse = (val: IMethodResponse, expand = 1) => {
+  return cleanType(cloneDeep(val.type), expand, val.description)
 }
 
 /**

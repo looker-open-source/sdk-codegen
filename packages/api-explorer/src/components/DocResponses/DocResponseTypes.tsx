@@ -65,7 +65,7 @@ export const DocResponseTypes: FC<DocResponseTypesProps> = ({ responses }) => {
       </ButtonToggle>
       <DocCode
         code={JSON.stringify(
-          copyAndCleanResponse(resps[selectedMediaType]),
+          copyAndCleanResponse(resps[selectedMediaType], 2),
           null,
           2
         )}
