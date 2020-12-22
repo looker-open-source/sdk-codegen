@@ -24,11 +24,46 @@
 
  */
 import React, { FC, useState, useEffect } from 'react'
-import { ButtonToggle, ButtonItem } from '@looker/components'
+import { ButtonToggle, ButtonItem, Paragraph } from '@looker/components'
 import { KeyedCollection, IMethodResponse } from '@looker/sdk-codegen'
 
-import { DocCode } from '../DocCode'
-import { copyAndCleanResponse } from './utils'
+// import { DocCode } from '../DocCode'
+import { ApixHeading } from '../common'
+import { copyAndCleanResponse, ICleanType } from './utils'
+
+interface DocResponsePropProps {
+  name: string
+  val: any
+}
+
+const DocResponseProp: FC<DocResponsePropProps> = ({ name, val }) => {
+  if (typeof val === 'object')
+    return <DocResponseType response={val}></DocResponseType>
+  return <Paragraph key={name}>{`${name}: ${val}`}</Paragraph>
+}
+
+interface DocResponseTypeProps {
+  response: ICleanType
+}
+
+// TODO make into an expandable/collapsible view
+export const DocResponseType: FC<DocResponseTypeProps> = ({ response }) => {
+  return (
+    <>
+      <ApixHeading as="h3">{response.name}</ApixHeading>
+      {!!response.description && (
+        <>
+          <Paragraph>{response.description}</Paragraph>
+        </>
+      )}
+      {Object.entries(response.properties).map(([name, val]) => (
+        <>
+          <DocResponseProp key={name} name={name} val={val} />
+        </>
+      ))}
+    </>
+  )
+}
 
 interface DocResponseTypesProps {
   responses: KeyedCollection<IMethodResponse>
@@ -63,12 +98,8 @@ export const DocResponseTypes: FC<DocResponseTypesProps> = ({ responses }) => {
           <ButtonItem key={mediaType}>{mediaType}</ButtonItem>
         ))}
       </ButtonToggle>
-      <DocCode
-        code={JSON.stringify(
-          copyAndCleanResponse(resps[selectedMediaType], 2),
-          null,
-          2
-        )}
+      <DocResponseType
+        response={copyAndCleanResponse(resps[selectedMediaType], 2)}
       />
     </>
   )

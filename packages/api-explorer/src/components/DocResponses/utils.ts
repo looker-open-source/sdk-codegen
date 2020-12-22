@@ -35,7 +35,7 @@ import {
 /**
  * Every "cleaned" type from the API specification will contain these values
  */
-interface CleanType {
+export interface ICleanType {
   /** Name of the type */
   name: string
   /** Description of either the type property or the type */
@@ -72,7 +72,7 @@ const cleanType = (
   expand = 1,
   desc = '',
   depth = 0
-): Partial<CleanType> => {
+): ICleanType => {
   let props
   switch (val.className) {
     case 'ArrayType':

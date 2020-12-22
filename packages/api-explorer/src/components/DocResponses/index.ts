@@ -24,3 +24,4 @@
 
  */
 export { DocResponses } from './DocResponses'
+export { ICleanType } from './utils'
