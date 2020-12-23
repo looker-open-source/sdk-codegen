@@ -57,6 +57,45 @@ const enumTag = 'enum'
 const simpleName = /^[a-z_][a-z_\d]*$/im
 
 /**
+ * Convenience enum for exploring types
+ */
+export enum TypeOfType {
+  /** This is an intrinsic type */
+  Intrinsic,
+  /** This is an ArrayType */
+  Array,
+  /** This is a HashType */
+  Hash,
+  /** This is a DelimArrayType */
+  DelimArray,
+  /** This is an EnumType */
+  Enum,
+  /** This is an EnumType */
+  Complex,
+}
+
+/**
+ * Get the enum for the class of the type
+ * @param type
+ */
+export const typeOfType = (type: IType): TypeOfType => {
+  if (type.intrinsic) return TypeOfType.Intrinsic
+  switch (type.className) {
+    case 'ArrayType':
+      return TypeOfType.Array
+    case 'HashType':
+      return TypeOfType.Hash
+    case 'DelimArrayType':
+      return TypeOfType.DelimArray
+    case 'EnumType':
+      return TypeOfType.Enum
+    default: {
+      return TypeOfType.Complex
+    }
+  }
+}
+
+/**
  * Does this name have special characters?
  * @param name to name check
  * @returns true if the name isn't a standard variable name
