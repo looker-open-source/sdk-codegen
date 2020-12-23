@@ -24,133 +24,10 @@
 
  */
 import React, { FC, useState, useEffect } from 'react'
-import { NavLink } from 'react-router-dom'
-import {
-  ButtonToggle,
-  ButtonItem,
-  Tree,
-  TreeItem,
-  Code,
-  Flex,
-  FlexItem,
-  IconNames,
-} from '@looker/components'
+import { ButtonToggle, ButtonItem } from '@looker/components'
 import { KeyedCollection, IMethodResponse } from '@looker/sdk-codegen'
 
-import { buildTypePath } from '../../utils'
-import { copyAndCleanResponse, ICleanType } from './utils'
-
-interface DocTypeLinkProps {
-  name: string
-}
-
-const nodeIcon = (type: string): IconNames => {
-  switch (type) {
-    case 'boolean':
-      return 'FieldYesNo'
-    case 'int64':
-    case 'integer':
-    case 'float':
-    case 'double':
-      return 'FieldNumber'
-    case 'string':
-    case 'hostname':
-    case 'uuid':
-    case 'ipv4':
-    case 'ipv6':
-      return 'FieldString'
-    case 'email':
-      return 'SendEmail'
-    case 'password':
-      return 'Key'
-    case 'uri':
-      return 'Link'
-    case 'datetime':
-      return 'FieldDate'
-    default:
-      return 'Code'
-  }
-}
-
-const DocTypeLink: FC<DocTypeLinkProps> = ({ name }) => {
-  switch (name) {
-    case 'boolean':
-    case 'int64':
-    case 'integer':
-    case 'float':
-    case 'double':
-    case 'string':
-    case 'hostname':
-    case 'uuid':
-    case 'ipv4':
-    case 'ipv6':
-    case 'email':
-    case 'password':
-    case 'uri':
-    case 'datetime':
-      return <Code fontSize="small">{name}</Code>
-    default: {
-      if (name.startsWith('Hash[')) return <Code fontSize="small">{name}</Code>
-      const link = name.endsWith('[]') ? name.substr(0, name.length - 2) : name
-      // TODO get the real spec key to put in here
-      return (
-        <NavLink key={name} to={buildTypePath('4.0', name)}>
-          {link}
-        </NavLink>
-      )
-    }
-  }
-}
-
-interface DocResponsePropProps {
-  name: string
-  val: string | ICleanType
-}
-
-const DocResponseProp: FC<DocResponsePropProps> = ({ name, val }) => {
-  if (typeof val === 'object') {
-    // It must be ICleanType to get here
-    val = { ...val, ...{ name: `${name}: ${val.name}` } }
-    return <DocResponseType response={val} open={false} />
-  }
-  return (
-    <TreeItem icon={nodeIcon(val)}>
-      <Flex flexWrap="nowrap" alignItems="baseline">
-        <FlexItem width="20%" fontSize="small">
-          <strong>{name}</strong>
-        </FlexItem>
-        <FlexItem width="40%">
-          <DocTypeLink name={val} />
-        </FlexItem>
-      </Flex>
-    </TreeItem>
-  )
-}
-
-interface DocResponseTypeProps {
-  response: ICleanType
-  open?: boolean
-}
-
-export const DocResponseType: FC<DocResponseTypeProps> = ({
-  response,
-  open = true,
-}) => {
-  return (
-    <Tree border label={response.name} icon="Code" defaultOpen={open}>
-      {!!response.description && (
-        <>
-          <TreeItem key={response.name}>{response.description}</TreeItem>
-        </>
-      )}
-      {Object.entries(response.properties).map(([name, val]) => (
-        <>
-          <DocResponseProp key={name} name={name} val={val} />
-        </>
-      ))}
-    </Tree>
-  )
-}
+import { ExploreType } from '..'
 
 interface DocResponseTypesProps {
   responses: KeyedCollection<IMethodResponse>
@@ -185,9 +62,9 @@ export const DocResponseTypes: FC<DocResponseTypesProps> = ({ responses }) => {
           <ButtonItem key={mediaType}>{mediaType}</ButtonItem>
         ))}
       </ButtonToggle>
-      <DocResponseType
+      <ExploreType
         key={selectedMediaType}
-        response={copyAndCleanResponse(resps[selectedMediaType], 2)}
+        type={resps[selectedMediaType].type}
       />
     </>
   )

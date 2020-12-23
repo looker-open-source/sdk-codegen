@@ -24,38 +24,30 @@
 
  */
 
-import React, { FC } from 'react'
-import { Section } from '@looker/components'
-import { typeRefs, methodRefs, ApiModel } from '@looker/sdk-codegen'
-import { useParams } from 'react-router-dom'
-import { DocReferences, DocSDKs, DocTitle, ExploreType } from '../../components'
+import { api40 as api } from '../../test-data'
+import { pickType, pickTypeProps, typeIcon } from './exploreUtils'
 
-interface DocTypeProps {
-  api: ApiModel
-}
+describe('exploreUtils', () => {
+  test('pickType', () => {
+    const method = api.methods.connection_tables
+    const responseType = method.primaryResponse.type
+    const type = pickType(responseType)
+    expect(type).toBeDefined()
+    expect(type.fullName).toEqual('SchemaTables')
+    const props = pickTypeProps(responseType)
+    expect(props).toBeDefined()
+    const names = Object.keys(props)
+    expect(names).toEqual(['name', 'is_default', 'tables'])
+  })
 
-interface DocTypeParams {
-  specKey: string
-  typeName: string
-}
-
-export const TypeScene: FC<DocTypeProps> = ({ api }) => {
-  const { specKey, typeName } = useParams<DocTypeParams>()
-  const type = api.types[typeName]
-  const seeTypes = typeRefs(api, type.customTypes)
-  const seeMethods = methodRefs(api, type.methodRefs)
-
-  return (
-    <Section p="xxlarge">
-      <DocTitle>{type.name}</DocTitle>
-      <ExploreType type={type} />
-      <DocReferences
-        seeTypes={seeTypes}
-        seeMethods={seeMethods}
-        api={api}
-        specKey={specKey}
-      />
-      <DocSDKs type={type} api={api} />
-    </Section>
-  )
-}
+  test('iconType', () => {
+    const type = api.types.BoardSection
+    const actual = typeIcon(type)
+    expect(actual).toEqual('Code')
+    const props = type.properties
+    expect(typeIcon(props.can.type)).toEqual('FieldYesNo')
+    expect(typeIcon(props.created_at.type)).toEqual('FieldDate')
+    expect(typeIcon(props.description.type)).toEqual('FieldString')
+    expect(typeIcon(props.id.type)).toEqual('FieldNumber')
+  })
+})
