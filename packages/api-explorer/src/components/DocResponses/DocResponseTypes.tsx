@@ -24,36 +24,123 @@
 
  */
 import React, { FC, useState, useEffect } from 'react'
-import { ButtonToggle, ButtonItem, Paragraph } from '@looker/components'
+import { NavLink } from 'react-router-dom'
+import {
+  ButtonToggle,
+  ButtonItem,
+  Tree,
+  TreeItem,
+  Code,
+  Flex,
+  FlexItem,
+  IconNames,
+} from '@looker/components'
 import { KeyedCollection, IMethodResponse } from '@looker/sdk-codegen'
 
-// import { DocCode } from '../DocCode'
-import { ApixHeading } from '../common'
+import { buildTypePath } from '../../utils'
 import { copyAndCleanResponse, ICleanType } from './utils'
+
+interface DocTypeLinkProps {
+  name: string
+}
+
+const nodeIcon = (type: string): IconNames => {
+  switch (type) {
+    case 'boolean':
+      return 'FieldYesNo'
+    case 'int64':
+    case 'integer':
+    case 'float':
+    case 'double':
+      return 'FieldNumber'
+    case 'string':
+    case 'hostname':
+    case 'uuid':
+    case 'ipv4':
+    case 'ipv6':
+      return 'FieldString'
+    case 'email':
+      return 'SendEmail'
+    case 'password':
+      return 'Key'
+    case 'uri':
+      return 'Link'
+    case 'datetime':
+      return 'FieldDate'
+    default:
+      return 'Code'
+  }
+}
+
+const DocTypeLink: FC<DocTypeLinkProps> = ({ name }) => {
+  switch (name) {
+    case 'boolean':
+    case 'int64':
+    case 'integer':
+    case 'float':
+    case 'double':
+    case 'string':
+    case 'hostname':
+    case 'uuid':
+    case 'ipv4':
+    case 'ipv6':
+    case 'email':
+    case 'password':
+    case 'uri':
+    case 'datetime':
+      return <Code fontSize="small">{name}</Code>
+    default: {
+      if (name.startsWith('Hash[')) return <Code fontSize="small">{name}</Code>
+      const link = name.endsWith('[]') ? name.substr(0, name.length - 2) : name
+      // TODO get the real spec key to put in here
+      return (
+        <NavLink key={name} to={buildTypePath('4.0', name)}>
+          {link}
+        </NavLink>
+      )
+    }
+  }
+}
 
 interface DocResponsePropProps {
   name: string
-  val: any
+  val: string | ICleanType
 }
 
 const DocResponseProp: FC<DocResponsePropProps> = ({ name, val }) => {
-  if (typeof val === 'object')
-    return <DocResponseType response={val}></DocResponseType>
-  return <Paragraph key={name}>{`${name}: ${val}`}</Paragraph>
+  if (typeof val === 'object') {
+    // It must be ICleanType to get here
+    val = { ...val, ...{ name: `${name}: ${val.name}` } }
+    return <DocResponseType response={val} open={false} />
+  }
+  return (
+    <TreeItem icon={nodeIcon(val)}>
+      <Flex flexWrap="nowrap" alignItems="baseline">
+        <FlexItem width="20%" fontSize="small">
+          <strong>{name}</strong>
+        </FlexItem>
+        <FlexItem width="40%">
+          <DocTypeLink name={val} />
+        </FlexItem>
+      </Flex>
+    </TreeItem>
+  )
 }
 
 interface DocResponseTypeProps {
   response: ICleanType
+  open?: boolean
 }
 
-// TODO make into an expandable/collapsible view
-export const DocResponseType: FC<DocResponseTypeProps> = ({ response }) => {
+export const DocResponseType: FC<DocResponseTypeProps> = ({
+  response,
+  open = true,
+}) => {
   return (
-    <>
-      <ApixHeading as="h3">{response.name}</ApixHeading>
+    <Tree border label={response.name} icon="Code" defaultOpen={open}>
       {!!response.description && (
         <>
-          <Paragraph>{response.description}</Paragraph>
+          <TreeItem key={response.name}>{response.description}</TreeItem>
         </>
       )}
       {Object.entries(response.properties).map(([name, val]) => (
@@ -61,7 +148,7 @@ export const DocResponseType: FC<DocResponseTypeProps> = ({ response }) => {
           <DocResponseProp key={name} name={name} val={val} />
         </>
       ))}
-    </>
+    </Tree>
   )
 }
 
@@ -99,6 +186,7 @@ export const DocResponseTypes: FC<DocResponseTypesProps> = ({ responses }) => {
         ))}
       </ButtonToggle>
       <DocResponseType
+        key={selectedMediaType}
         response={copyAndCleanResponse(resps[selectedMediaType], 2)}
       />
     </>
