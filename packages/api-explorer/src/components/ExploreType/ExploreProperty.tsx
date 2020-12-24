@@ -149,7 +149,6 @@ export const ExplorePropertyType: FC<ExplorePropertyTypeProps> = ({
       defaultOpen={open}
       detail={
         <>
-          {' '}
           {!!type.description && (
             <TreeItem key={type.name}>{type.description}</TreeItem>
           )}

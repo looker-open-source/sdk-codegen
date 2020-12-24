@@ -69,15 +69,30 @@ export const ExploreTypeLink: FC<ExploreTypeLinkProps> = ({ type }) => {
 interface ExploreTypeProps {
   type: IType
   open?: boolean
+  link?: boolean
 }
 
-export const ExploreType: FC<ExploreTypeProps> = ({ type, open = true }) => {
+export const ExploreType: FC<ExploreTypeProps> = ({
+  type,
+  open = true,
+  link = false,
+}) => {
   const props = pickTypeProps(type)
   return (
-    <Tree border label={type.name} icon={typeIcon(type)} defaultOpen={open}>
-      {!!type.description && (
-        <TreeItem key={type.name}>{type.description}</TreeItem>
-      )}
+    <Tree
+      border
+      label={type.name}
+      icon={typeIcon(type)}
+      defaultOpen={open}
+      detail={
+        <>
+          {!!type.description && (
+            <TreeItem key={type.name}>{type.description}</TreeItem>
+          )}
+          {link && <ExploreTypeLink type={type} />}
+        </>
+      }
+    >
       {Object.values(props).map((property) => (
         <ExploreProperty key={property.fullName} property={property} />
       ))}
