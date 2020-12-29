@@ -1,0 +1,8 @@
+name: looker_sdk
+version: 0.0.1
+environment:
+  sdk: '>=2.9.0 <3.0.0'
+dependencies:
+  http: ^0.12.0+2
+  pedantic: ^1.9.0
+  dotenv: ^2.0.0

@@ -30,6 +30,7 @@ import { CSharpGen } from './csharp.gen'
 import { KotlinGen } from './kotlin.gen'
 import { SwiftGen } from './swift.gen'
 import { PythonGen } from './python.gen'
+import { DartGen } from './dart.gen'
 import { TypescriptGen } from './typescript.gen'
 import { GoGen } from './go.gen'
 
@@ -92,6 +93,12 @@ export const Generators: Array<IGeneratorSpec> = [
     legacy: 'go',
     options: '-papiPackage=Looker -ppackageName=looker',
     extension: /\.go/gi,
+  },
+  {
+    factory: (api: ApiModel, versions?: IVersionInfo) =>
+      new DartGen(api, versions),
+    language: 'Dart',
+    extension: /\.dart/gi,
   },
   // {
   //   language: 'php',

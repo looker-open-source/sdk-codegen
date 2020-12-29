@@ -683,7 +683,7 @@ export abstract class CodeGen implements ICodeGen {
    * @returns True if multi-API is supported
    */
   supportsMultiApi() {
-    // Currently, all but Swift support multiple APIs
+    // Currently, all but Swift and Dart support multiple APIs
     return true
   }
 
