@@ -48,9 +48,9 @@ describe('ExploreType', () => {
     expect(screen.queryAllByText(offset)).toHaveLength(offsetExpected)
   })
 
-  test('expands nothing if expand is 0', () => {
+  test('expands nothing if maxDepth is 0', () => {
     renderWithSearchAndRouter(
-      <ExploreType type={targetType} openAll={true} expand={0} />
+      <ExploreType type={targetType} openAll={true} maxDepth={0} />
     )
 
     expect(screen.getByText(targetType.jsonName)).toBeInTheDocument()
@@ -61,7 +61,7 @@ describe('ExploreType', () => {
 
   test('expands 2 levels only', () => {
     renderWithSearchAndRouter(
-      <ExploreType type={targetType} expand={2} openAll={true} />
+      <ExploreType type={targetType} maxDepth={2} openAll={true} />
     )
 
     expect(screen.getByText(targetType.jsonName)).toBeInTheDocument()
