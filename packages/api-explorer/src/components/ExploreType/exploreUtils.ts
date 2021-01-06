@@ -44,11 +44,11 @@ export const pickType = (value: IType) => {
 
 /**
  * Is this an expandable node?
- * @param depth is the current level of the hierarchy
- * @param expand is the depth to expanded nested types. -1 = all (default), 0 = no expansion
+ * @param level is the current level of the hierarchy
+ * @param maxDepth is the maximum depth to expanded nested types. -1 = all (default), 0 = no expansion
  */
-export const expandable = (depth: number, expand = -1) =>
-  expand === -1 || depth <= expand
+export const expandable = (level: number, maxDepth = -1) =>
+  maxDepth === -1 || level <= maxDepth
 
 /**
  * Gets the properties for the "exploring" type
@@ -87,45 +87,51 @@ export const typeLinkSuffix = (value: IType) => {
   }
 }
 
+interface TypedIcon {
+  icon: IconNames
+  title: string
+}
+
 /**
  * Determines the icon name for the type
  * @param value to iconize
  */
-export const typeIcon = (value: IType): IconNames => {
+export const typeIcon = (value: IType): TypedIcon => {
   switch (value.className) {
     case 'ArrayType':
+      return { icon: 'ChartSingleRecord', title: value.jsonName }
     case 'DelimArrayType':
-      return 'ChartSingleRecord'
+      return { icon: 'ChartSingleRecord', title: value.jsonName }
     case 'HashType':
-      return 'IdeFileManifest'
+      return { icon: 'IdeFileManifest', title: value.jsonName }
     case 'EnumType':
-      return 'IdeParameter'
+      return { icon: 'IdeParameter', title: value.jsonName }
   }
 
   const type = pickType(value)
   switch (type.jsonName) {
     case 'boolean':
-      return 'FieldYesNo'
+      return { icon: 'FieldYesNo', title: type.jsonName }
     case 'int64':
     case 'integer':
     case 'float':
     case 'double':
-      return 'FieldNumber'
+      return { icon: 'FieldNumber', title: type.jsonName }
     case 'string':
     case 'hostname':
     case 'uuid':
     case 'ipv4':
     case 'ipv6':
-      return 'FieldString'
+      return { icon: 'FieldString', title: type.jsonName }
     case 'email':
-      return 'SendEmail'
+      return { icon: 'SendEmail', title: type.jsonName }
     case 'password':
-      return 'Key'
+      return { icon: 'Key', title: type.jsonName }
     case 'uri':
-      return 'Link'
+      return { icon: 'Link', title: type.jsonName }
     case 'datetime':
-      return 'FieldDate'
+      return { icon: 'FieldDate', title: type.jsonName }
     default:
-      return 'Code'
+      return { icon: 'Code', title: type.jsonName }
   }
 }

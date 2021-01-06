@@ -48,21 +48,22 @@ interface TipIconProps {
   show: boolean
   tip: string
   icon: IconNames
-  label: string
+  title: string
 }
 
 /**
  * Show a tip with icon if show is true
  * @param show true to show tip and icon
- * @param tip to display
- * @param icon to use
+ * @param tip to display on hover
+ * @param icon name to use
+ * @param title for icon
  * @constructor
  */
-export const TipIcon: FC<TipIconProps> = ({ show, tip, icon, label }) => {
+export const TipIcon: FC<TipIconProps> = ({ show, tip, icon, title }) => {
   if (!show) return <></>
   return (
     <Tooltip content={tip}>
-      <Icon label={label} name={icon} size="xsmall" content={tip} />
+      <Icon name={icon} size="xsmall" content={tip} title={title} />
     </Tooltip>
   )
 }
@@ -74,9 +75,9 @@ interface ExplorePropertyProps {
   /** property to explore */
   property: IProperty
   /** the current level of the hierarchy */
-  depth?: number
-  /** the depth to expanded nested types. -1 = all (default), 0 = no expansion */
-  expand?: number
+  level?: number
+  /** the maximum depth to expanded nested types. -1 = all (default), 0 = no expansion */
+  maxDepth?: number
   /** open all nodes immediately? */
   openAll?: boolean
 }
@@ -91,7 +92,12 @@ export const ExplorePropertyRequired: FC<ExplorePropertyProps> = ({
 }) => {
   const tip = `${property.fullName} is required`
   return (
-    <TipIcon show={property.required} icon="Check" tip={tip} label="required" />
+    <TipIcon
+      show={property.required}
+      icon="Check"
+      tip={tip}
+      title="required property"
+    />
   )
 }
 
@@ -109,7 +115,7 @@ export const ExplorePropertyDeprecated: FC<ExplorePropertyProps> = ({
       show={property.deprecated}
       icon="Minus"
       tip={tip}
-      label="deprecated"
+      title="deprecated property"
     />
   )
 }
@@ -128,7 +134,7 @@ export const ExplorePropertyReadOnly: FC<ExplorePropertyProps> = ({
       show={property.readOnly}
       icon="LockClosed"
       tip={tip}
-      label="read-only"
+      title="read-only property"
     />
   )
 }
@@ -176,9 +182,10 @@ export const ExplorePropertyDetail: FC<ExplorePropertyProps> = ({
  * @constructor
  */
 export const ExplorePropertyNode: FC<ExplorePropertyProps> = ({ property }) => {
+  const legend = typeIcon(property.type)
   return (
     <TreeItem
-      icon={typeIcon(property.type)}
+      {...legend}
       detail={<ExplorePropertyDetail property={property} />}
     >
       {property.jsonName}
@@ -189,12 +196,15 @@ export const ExplorePropertyNode: FC<ExplorePropertyProps> = ({ property }) => {
 /**
  * Render the Tree or TreeItem for this property
  * @param property to display
+ * @param level current nesting level
+ * @param maxDepth maximum depth to expand
+ * @param openAll expands entire tree if true
  * @constructor
  */
 export const ExploreProperty: FC<ExplorePropertyProps> = ({
   property,
-  depth = 0,
-  expand = -1,
+  level = 0,
+  maxDepth = -1,
   openAll = false,
 }) => {
   const picked = pickType(property.type)
@@ -203,8 +213,8 @@ export const ExploreProperty: FC<ExplorePropertyProps> = ({
       <ExplorePropertyType
         property={property}
         open={false}
-        depth={depth + 1}
-        expand={expand}
+        level={level + 1}
+        maxDepth={maxDepth}
         openAll={openAll}
       />
     )
@@ -213,20 +223,21 @@ export const ExploreProperty: FC<ExplorePropertyProps> = ({
 }
 
 interface ExplorePropertyTypeProps extends ExplorePropertyProps {
-  /** Open the node display immediately */
+  /** Open the node display immediately? */
   open?: boolean
 }
 
 export const ExplorePropertyType: FC<ExplorePropertyTypeProps> = ({
   property,
   open = true,
-  depth = 0,
-  expand = -1,
+  level = 0,
+  maxDepth = -1,
   openAll = false,
 }) => {
   const type = property.type
   const props = pickTypeProps(type)
-  const nest = expandable(depth, expand)
+  const nest = expandable(level, maxDepth)
+  const legend = typeIcon(type)
   if (!nest) {
     return <ExplorePropertyNode property={property} />
   }
@@ -234,7 +245,7 @@ export const ExplorePropertyType: FC<ExplorePropertyTypeProps> = ({
     <Tree
       border
       label={`${property.jsonName}`}
-      icon={typeIcon(type)}
+      icon={legend.icon}
       defaultOpen={open || openAll}
       detail={<ExplorePropertyDetail property={property} />}
     >
@@ -243,8 +254,8 @@ export const ExplorePropertyType: FC<ExplorePropertyTypeProps> = ({
           <ExploreProperty
             key={property.fullName}
             property={property}
-            depth={depth + 1}
-            expand={expand}
+            level={level + 1}
+            maxDepth={maxDepth}
             openAll={openAll}
           />
         ))}

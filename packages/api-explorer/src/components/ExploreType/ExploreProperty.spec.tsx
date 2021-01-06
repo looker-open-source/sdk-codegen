@@ -28,12 +28,12 @@ import React from 'react'
 import { fireEvent, screen, waitFor } from '@testing-library/react'
 import { api } from '../../test-data'
 import { renderWithSearchAndRouter } from '../../test-utils'
-import { ExplorePropertyDetail } from '.'
+import { ExploreProperty, ExplorePropertyDetail, typeIcon } from '.'
 
 describe('ExploreProperty', () => {
+  const type = api.types.CreateDashboardFilter
   describe('ExplorePropertyDetail', () => {
     describe('CreateDashboardFilter', () => {
-      const type = api.types.CreateDashboardFilter
       test('Shows read-only property and description', async () => {
         const property = type.properties.id
         expect(property).toBeDefined()
@@ -43,14 +43,59 @@ describe('ExploreProperty', () => {
         expect(property.required).toEqual(false)
         expect(screen.getByText(property.description)).toBeInTheDocument()
         await waitFor(() => {
-          // TODO figure out the correct selector for this
-          const statusIcon = screen.getByAltText('read-only')
+          const statusIcon = screen.getByTitle('read-only property')
           fireEvent.mouseOver(statusIcon)
           expect(screen.getByRole('tooltip')).toHaveTextContent(
             'CreateDashboardFilter.id is read-only'
           )
         })
       })
+      test('Shows required property and description', async () => {
+        const property = type.properties.dashboard_id
+        expect(property).toBeDefined()
+        renderWithSearchAndRouter(<ExplorePropertyDetail property={property} />)
+        expect(property.deprecated).toEqual(false)
+        expect(property.readOnly).toEqual(false)
+        expect(property.required).toEqual(true)
+        expect(screen.getByText(property.description)).toBeInTheDocument()
+        await waitFor(() => {
+          const statusIcon = screen.getByTitle('required property')
+          fireEvent.mouseOver(statusIcon)
+          expect(screen.getByRole('tooltip')).toHaveTextContent(
+            'CreateDashboardFilter.dashboard_id is required'
+          )
+        })
+      })
+    })
+  })
+
+  describe('property icons', () => {
+    test('int64 property icon is correct', () => {
+      const property = type.properties.row
+      expect(property.type.jsonName).toEqual('int64')
+      renderWithSearchAndRouter(<ExploreProperty property={property} />)
+      const el = screen.getByTitle('int64')
+      expect(el).toBeInTheDocument()
+      const legend = typeIcon(property.type)
+      expect(legend).toEqual({ icon: 'FieldNumber', title: 'int64' })
+    })
+    test('array property icon is correct', () => {
+      const property = type.properties.listens_to_filters
+      expect(property.type.jsonName).toEqual('string[]')
+      renderWithSearchAndRouter(<ExploreProperty property={property} />)
+      const el = screen.getByTitle(property.type.jsonName)
+      expect(el).toBeInTheDocument()
+      const legend = typeIcon(property.type)
+      expect(legend).toEqual({ icon: 'ChartSingleRecord', title: 'string[]' })
+    })
+    test('hash property icon is correct', () => {
+      const property = type.properties.field
+      expect(property.type.jsonName).toEqual('Hash[any]')
+      renderWithSearchAndRouter(<ExploreProperty property={property} />)
+      const el = screen.getByTitle(property.type.jsonName)
+      expect(el).toBeInTheDocument()
+      const legend = typeIcon(property.type)
+      expect(legend).toEqual({ icon: 'IdeFileManifest', title: 'Hash[any]' })
     })
   })
 })

@@ -25,7 +25,7 @@
  */
 
 import { api40 as api } from '../../test-data'
-import { pickType, pickTypeProps, typeIcon } from './exploreUtils'
+import { expandable, pickType, pickTypeProps, typeIcon } from './exploreUtils'
 
 describe('exploreUtils', () => {
   test('pickType', () => {
@@ -49,5 +49,20 @@ describe('exploreUtils', () => {
     expect(typeIcon(props.created_at.type)).toEqual('FieldDate')
     expect(typeIcon(props.description.type)).toEqual('FieldString')
     expect(typeIcon(props.id.type)).toEqual('FieldNumber')
+  })
+
+  describe('expandable', () => {
+    test('maxDepth -1 is always expandable', () => {
+      expect(expandable(20, -1)).toEqual(true)
+    })
+    test('maxDepth 0 is never expandable', () => {
+      expect(expandable(1, 0)).toEqual(false)
+    })
+    test('maxDepth 2 is expandable 2 levels deep', () => {
+      expect(expandable(0, 2)).toEqual(true)
+      expect(expandable(1, 2)).toEqual(true)
+      expect(expandable(2, 2)).toEqual(true)
+      expect(expandable(3, 2)).toEqual(false)
+    })
   })
 })
