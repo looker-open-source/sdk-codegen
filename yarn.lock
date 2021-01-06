@@ -2418,31 +2418,26 @@
     debug "^2.2.0"
     es6-promise "^4.2.5"
 
-"@looker/components-providers@^0.9.27":
-  version "0.9.27"
-  resolved "https://registry.yarnpkg.com/@looker/components-providers/-/components-providers-0.9.27.tgz#d79f3352d3eb05972e58a474d6395b015ff3e6dc"
-  integrity sha512-sfJMogewAEayELTKhVVsjJagcQrnvxEfXWtvMzKWR7v/TNTNuJTvglXJy0BKhSEY1/Hk/2eM8Kav2aZGJ8xI5g==
+"@looker/components-providers@^0.9.29":
+  version "0.9.29"
+  resolved "https://registry.yarnpkg.com/@looker/components-providers/-/components-providers-0.9.29.tgz#5e07bacb641e2d525ecf87c1a1e6b00d6f0bb4a4"
+  integrity sha512-WRb1E0wAYDP13XV0PliW/TScyxDeFrhW1OgET4b0saqxHVj/AaTyH2/OCg5JWkvcmy/WQ4UHXh4i72kzejmYzA==
   dependencies:
     "@looker/design-tokens" "^0.9.27"
     lodash "^4.17.20"
     tabbable "^5.1.4"
 
-"@looker/components-test-utils@^0.9.17":
-  version "0.9.24"
-  resolved "https://registry.yarnpkg.com/@looker/components-test-utils/-/components-test-utils-0.9.24.tgz#9b9f156a86bad2d01b2049287b9ee4308f38dcd6"
-  integrity sha512-OXwHOCoD2K59lPkROaq5UV65DdEP0oSIgsC0yUgKuXPJlyFppJY9fja0iNGQphW1+gAiDbXmsj/36snWDbnKAg==
+"@looker/components-test-utils@^0.9.29":
+  version "0.9.29"
+  resolved "https://registry.yarnpkg.com/@looker/components-test-utils/-/components-test-utils-0.9.29.tgz#5e61437806c9a26c2d4a4759eb2ca406eee8e73d"
+  integrity sha512-m+JJ9rmvveWJRGF3vZRQo8cI35dTac1gW5pkEbs67pa5uIasyfTfI/kDWDiW7NbBClWX9aVlnpl3elsGnbt2Lw==
 
-"@looker/components-test-utils@^0.9.21":
-  version "0.9.21"
-  resolved "https://registry.yarnpkg.com/@looker/components-test-utils/-/components-test-utils-0.9.21.tgz#16fedc4b473ba16b713cc350e85067c0292404e9"
-  integrity sha512-2UYF+6N49rdOTr/7ZzlO7lVgCg6DTaisiYD2ew3G1om1tO4pKO8srkLm78hDmvWJ4Axquhqv/xQBr/V4gIj+GA==
-
-"@looker/components@^0.9.28":
-  version "0.9.28"
-  resolved "https://registry.yarnpkg.com/@looker/components/-/components-0.9.28.tgz#90ed9e2b836f391953ac43b10a5c826359a3c281"
-  integrity sha512-q/7pTgS/paYuSZ8ILIasf3V0yBHY1ftt/tVm6HLp5AwibCR7qXRPEAxtyyyRoc18J1bh8heR/uZjBn6pWeVO5A==
+"@looker/components@^0.9.30":
+  version "0.9.30"
+  resolved "https://registry.yarnpkg.com/@looker/components/-/components-0.9.30.tgz#7cdc5d188f3f9cc48bcd173273edb6c843e53384"
+  integrity sha512-aMyOeS0E7zYSfRT46IpLewM2jaNmkBzHDZqkpXHwe6Ig+wIZ9HFmbP60lfv83WqnhGM3P/RoU1ANpkYEJLpviA==
   dependencies:
-    "@looker/components-providers" "^0.9.27"
+    "@looker/components-providers" "^0.9.29"
     "@looker/design-tokens" "^0.9.27"
     "@looker/icons" "^0.9.26"
     "@popperjs/core" "^2.5.4"

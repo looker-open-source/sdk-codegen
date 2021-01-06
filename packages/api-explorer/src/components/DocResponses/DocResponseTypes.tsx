@@ -66,6 +66,7 @@ export const DocResponseTypes: FC<DocResponseTypesProps> = ({ responses }) => {
         key={selectedMediaType}
         type={resps[selectedMediaType].type}
         link={true}
+        expand={2}
       />
     </>
   )

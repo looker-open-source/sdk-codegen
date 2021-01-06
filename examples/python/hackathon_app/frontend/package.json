@@ -3,7 +3,7 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
-    "@looker/components": "^0.9.28",
+    "@looker/components": "^0.9.30",
     "@reach/router": "^1.2.1",
     "@types/jest": "24.0.18",
     "@types/node": "12.7.12",

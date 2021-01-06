@@ -43,6 +43,14 @@ export const pickType = (value: IType) => {
 }
 
 /**
+ * Is this an expandable node?
+ * @param depth is the current level of the hierarchy
+ * @param expand is the depth to expanded nested types. -1 = all (default), 0 = no expansion
+ */
+export const expandable = (depth: number, expand = -1) =>
+  expand === -1 || depth <= expand
+
+/**
  * Gets the properties for the "exploring" type
  * @param value type to pick
  */

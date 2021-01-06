@@ -67,23 +67,36 @@ export const ExploreTypeLink: FC<ExploreTypeLinkProps> = ({ type }) => {
 }
 
 interface ExploreTypeProps {
+  /** Type to explore */
   type: IType
+  /** Open the node display immediately */
   open?: boolean
+  /** Create a link to the type? */
   link?: boolean
+  /** the current level of the hierarchy */
+  depth?: number
+  /** the depth to expanded nested types. -1 = all (default), 0 = no expansion */
+  expand?: number
+  /** open all nodes immediately? */
+  openAll?: boolean
 }
 
 export const ExploreType: FC<ExploreTypeProps> = ({
   type,
   open = true,
   link = false,
+  depth = 0,
+  expand = -1,
+  openAll = false,
 }) => {
   const props = pickTypeProps(type)
+  const nest = expand === -1 || depth < expand
   return (
     <Tree
       border
       label={type.name}
       icon={typeIcon(type)}
-      defaultOpen={open}
+      defaultOpen={open || openAll}
       detail={
         <>
           {!!type.description && (
@@ -93,9 +106,16 @@ export const ExploreType: FC<ExploreTypeProps> = ({
         </>
       }
     >
-      {Object.values(props).map((property) => (
-        <ExploreProperty key={property.fullName} property={property} />
-      ))}
+      {nest &&
+        Object.values(props).map((property) => (
+          <ExploreProperty
+            key={property.fullName}
+            property={property}
+            depth={depth + 1}
+            expand={expand}
+            openAll={openAll}
+          />
+        ))}
     </Tree>
   )
 }

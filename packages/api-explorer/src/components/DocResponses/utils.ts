@@ -32,6 +32,8 @@ import {
   KeyedCollection,
 } from '@looker/sdk-codegen'
 
+// TODO remove these utilities entirely?
+
 /**
  * Every "cleaned" type from the API specification will contain these values
  */
