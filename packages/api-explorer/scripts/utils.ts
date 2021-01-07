@@ -36,9 +36,14 @@ import {
 
 const supportedApiVersions = ['3.0', '3.1', '4.0']
 
+const homeToRoost = '../../../'
+
+const getRootPath = () => path.join(__dirname, homeToRoost)
+const rootFile = (fileName = '') => path.join(getRootPath(), fileName)
+
 export const apixSpecFileName = (fileName: string) => {
   const p = path.parse(fileName)
-  return `${__dirname}/../../../spec/${p.base}`
+  return rootFile(`spec/${p.base}`)
 }
 
 // const copySpec = (fileName: string) => {
@@ -48,18 +53,29 @@ export const apixSpecFileName = (fileName: string) => {
 // }
 
 export const updateSpecs = async (apiVersions = supportedApiVersions) => {
-  console.info(`Updating the specs folder with APIs ${apiVersions.join()} ...`)
-  const config = SDKConfig(`${__dirname}/../../../looker.ini`)
+  const iniFile = rootFile('looker.ini')
+  const config = SDKConfig(iniFile)
   const [name, props] = Object.entries(config)[0]
+  console.info(
+    `Updating the specs folder with APIs ${apiVersions.join()} from ${name} ${
+      props.base_url
+    } in ${iniFile} ...`
+  )
   const lookerVersions = await fetchLookerVersions(props)
   for (const v of apiVersions) {
-    const specFile = await logConvertSpec(
-      name,
-      { ...props, ...{ api_version: v } },
-      lookerVersions
-    )
-    if (!specFile) {
-      console.error(`Could not fetch spec for API ${v} from ${props.base_url}`)
+    try {
+      const specFile = await logConvertSpec(
+        name,
+        { ...props, ...{ api_version: v } },
+        lookerVersions
+      )
+      if (!specFile) {
+        console.error(
+          `Could not fetch spec for API ${v} from ${props.base_url}`
+        )
+      }
+    } catch (e) {
+      console.error(`Using ${props.base_url} error ${e}`)
     }
   }
 }
