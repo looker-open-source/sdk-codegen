@@ -91,8 +91,7 @@ describe('ExploreProperty', () => {
       const property = type.properties.field
       expect(property.type.jsonName).toEqual('Hash[any]')
       renderWithSearchAndRouter(<ExploreProperty property={property} />)
-      const el = screen.getByTitle(property.type.jsonName)
-      expect(el).toBeInTheDocument()
+      expect(screen.getByTitle(property.type.jsonName)).toBeInTheDocument()
       const legend = typeIcon(property.type)
       expect(legend).toEqual({ icon: 'IdeFileManifest', title: 'Hash[any]' })
     })
