@@ -43,12 +43,24 @@ describe('exploreUtils', () => {
   test('iconType', () => {
     const type = api.types.BoardSection
     const actual = typeIcon(type)
-    expect(actual).toEqual('Code')
+    expect(actual).toEqual({ icon: 'Code', title: 'BoardSection' })
     const props = type.properties
-    expect(typeIcon(props.can.type)).toEqual('FieldYesNo')
-    expect(typeIcon(props.created_at.type)).toEqual('FieldDate')
-    expect(typeIcon(props.description.type)).toEqual('FieldString')
-    expect(typeIcon(props.id.type)).toEqual('FieldNumber')
+    expect(typeIcon(props.can.type)).toEqual({
+      icon: 'IdeFileManifest',
+      title: 'Hash[boolean]',
+    })
+    expect(typeIcon(props.created_at.type)).toEqual({
+      icon: 'FieldDate',
+      title: 'datetime',
+    })
+    expect(typeIcon(props.description.type)).toEqual({
+      icon: 'FieldString',
+      title: 'string',
+    })
+    expect(typeIcon(props.id.type)).toEqual({
+      icon: 'FieldNumber',
+      title: 'int64',
+    })
   })
 
   describe('expandable', () => {

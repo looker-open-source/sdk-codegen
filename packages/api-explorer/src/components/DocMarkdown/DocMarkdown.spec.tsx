@@ -26,10 +26,7 @@
 
 import React from 'react'
 import { screen } from '@testing-library/react'
-import {
-  renderWithTheme,
-  withThemeProvider,
-} from '@looker/components-test-utils'
+import { renderWithTheme } from '@looker/components-test-utils'
 
 import { renderWithSearch } from '../../test-utils'
 import { DocMarkdown } from './DocMarkdown'
@@ -37,14 +34,12 @@ import { DocMarkdown } from './DocMarkdown'
 describe('DocMarkdown', () => {
   test('it renders markdown', () => {
     renderWithSearch(
-      withThemeProvider(
-        <DocMarkdown
-          source={
-            '# Markdown Component \n Renders markdown using [ReactMarkdown](https://github.com/rexxars/react-markdown)'
-          }
-          specKey={'3.1'}
-        />
-      )
+      <DocMarkdown
+        source={
+          '# Markdown Component \n Renders markdown using [ReactMarkdown](https://github.com/rexxars/react-markdown)'
+        }
+        specKey={'3.1'}
+      />
     )
     const heading = screen.getByRole('heading')
     expect(heading).toHaveTextContent('Markdown Component')
@@ -71,12 +66,10 @@ describe('DocMarkdown', () => {
 
   test('it leaves external urls untouched', () => {
     renderWithSearch(
-      withThemeProvider(
-        <DocMarkdown
-          source={'[external_link](https://www.foo.com)'}
-          specKey={'3.1'}
-        />
-      )
+      <DocMarkdown
+        source={'[external_link](https://www.foo.com)'}
+        specKey={'3.1'}
+      />
     )
     expect(screen.getByText('external_link')).toHaveAttribute(
       'href',
@@ -87,12 +80,10 @@ describe('DocMarkdown', () => {
   test('it highlights text matching search pattern', () => {
     const highlightPattern = 'spec'
     renderWithSearch(
-      withThemeProvider(
-        <DocMarkdown
-          source={'An API Explorer to explore your OpenAPI spec'}
-          specKey={'3.1'}
-        />
-      ),
+      <DocMarkdown
+        source={'An API Explorer to explore your OpenAPI spec'}
+        specKey={'3.1'}
+      />,
       highlightPattern
     )
     const mark = screen.getByText(highlightPattern)
@@ -102,14 +93,12 @@ describe('DocMarkdown', () => {
   test('it only highlights search matches in the display text of link', () => {
     const highlightPattern = 'dashboard'
     renderWithSearch(
-      withThemeProvider(
-        <DocMarkdown
-          source={
-            'An inline styled link with matching text in both the link text and the href: [create_dashboard](/3.1/methods/Dashboard/create_dashboard)'
-          }
-          specKey={'3.1'}
-        />
-      ),
+      <DocMarkdown
+        source={
+          'An inline styled link with matching text in both the link text and the href: [create_dashboard](/3.1/methods/Dashboard/create_dashboard)'
+        }
+        specKey={'3.1'}
+      />,
       highlightPattern
     )
     const link = screen.getByRole('link')

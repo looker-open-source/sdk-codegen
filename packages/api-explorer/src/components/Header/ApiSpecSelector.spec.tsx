@@ -25,10 +25,7 @@
  */
 import React from 'react'
 import { act, screen, waitFor } from '@testing-library/react'
-import {
-  renderWithTheme,
-  withThemeProvider,
-} from '@looker/components-test-utils'
+import { renderWithTheme } from '@looker/components-test-utils'
 import userEvent from '@testing-library/user-event'
 
 import { specs, specState } from '../../test-data'
@@ -70,13 +67,11 @@ describe('ApiSpecSelector', () => {
 
   test('it fires a SELECT_SPEC action when another spec is selected', async () => {
     renderWithRouter(
-      withThemeProvider(
-        <ApiSpecSelector
-          specs={specs}
-          spec={specState}
-          specDispatch={specDispatch}
-        />
-      )
+      <ApiSpecSelector
+        specs={specs}
+        spec={specState}
+        specDispatch={specDispatch}
+      />
     )
 
     await act(async () => {

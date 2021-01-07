@@ -25,7 +25,6 @@
  */
 import React from 'react'
 import { screen } from '@testing-library/react'
-import { withThemeProvider } from '@looker/components-test-utils'
 
 import { specs, specState } from '../../test-data'
 import { renderWithRouter } from '../../test-utils'
@@ -38,14 +37,12 @@ describe('Header', () => {
     const hasNavigation = true
     const toggleNavigation = () => !hasNavigation
     renderWithRouter(
-      withThemeProvider(
-        <Header
-          specs={specs}
-          spec={specState}
-          specDispatch={specDispatch}
-          toggleNavigation={toggleNavigation}
-        />
-      )
+      <Header
+        specs={specs}
+        spec={specState}
+        specDispatch={specDispatch}
+        toggleNavigation={toggleNavigation}
+      />
     )
     expect(screen.getByText('API Explorer').closest('a')).toHaveAttribute(
       'href',
@@ -57,14 +54,12 @@ describe('Header', () => {
     const hasNavigation = true
     const toggleNavigation = () => !hasNavigation
     renderWithRouter(
-      withThemeProvider(
-        <Header
-          specs={specs}
-          spec={specState}
-          specDispatch={specDispatch}
-          toggleNavigation={toggleNavigation}
-        />
-      )
+      <Header
+        specs={specs}
+        spec={specState}
+        specDispatch={specDispatch}
+        toggleNavigation={toggleNavigation}
+      />
     )
     expect(screen).toHaveTextContent('4.0 (experimental)')
     // const selector = screen.getByRole('textbox', { name: 'Version' })
