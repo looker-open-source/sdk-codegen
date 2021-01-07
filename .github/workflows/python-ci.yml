@@ -1,6 +1,6 @@
 name: Python CI
 on:
-  pull_request_target:
+  pull_request:
     types:
       - opened
       - synchronized
@@ -37,11 +37,11 @@ jobs:
     if: >
       github.event_name == 'push' ||
       (
-        github.event_name == 'pull_request_target' &&
+        github.event_name == 'pull_request' &&
         github.event.action != 'labeled'
       ) ||
       (
-        github.event_name == 'pull_request_target' &&
+        github.event_name == 'pull_request' &&
         github.event.action == 'labeled' &&
         github.event.label.name == 'CI:TEST'
       )
@@ -69,9 +69,6 @@ jobs:
           access_token: ${{ github.token }}
       - name: Repo Checkout
         uses: actions/checkout@v2
-        with:
-          ref: ${{ github.event.pull_request.head.ref }}
-          repository: ${{ github.event.pull_request.head.repo.full_name }}
       - name: Set up Python ${{ matrix.python-version }}
         uses: actions/setup-python@v2
         with:
