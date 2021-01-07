@@ -158,23 +158,21 @@ export const ExplorePropertyDescription: FC<ExplorePropertyProps> = ({
  */
 export const ExplorePropertyDetail: FC<ExplorePropertyProps> = ({
   property,
-}) => {
-  return (
-    <Space>
-      <FlexItem width="10rem">
-        <ExploreTypeLink type={property.type} />
-      </FlexItem>
-      <FlexItem width="5rem">
-        <ExplorePropertyRequired property={property} />
-        <ExplorePropertyReadOnly property={property} />
-        <ExplorePropertyDeprecated property={property} />
-      </FlexItem>
-      <FlexItem width="30rem">
-        <ExplorePropertyDescription property={property} />
-      </FlexItem>
-    </Space>
-  )
-}
+}) => (
+  <Space>
+    <FlexItem width="10rem">
+      <ExploreTypeLink type={property.type} />
+    </FlexItem>
+    <FlexItem width="5rem">
+      <ExplorePropertyRequired property={property} />
+      <ExplorePropertyReadOnly property={property} />
+      <ExplorePropertyDeprecated property={property} />
+    </FlexItem>
+    <FlexItem width="30rem">
+      <ExplorePropertyDescription property={property} />
+    </FlexItem>
+  </Space>
+)
 
 /**
  * Render a potentially complex property as a non-expanding node
