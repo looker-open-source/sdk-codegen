@@ -74,8 +74,7 @@ describe('ExploreProperty', () => {
       const property = type.properties.row
       expect(property.type.jsonName).toEqual('int64')
       renderWithSearchAndRouter(<ExploreProperty property={property} />)
-      const el = screen.getByTitle('int64')
-      expect(el).toBeInTheDocument()
+      expect(screen.getByTitle('int64')).toBeInTheDocument()
       const legend = typeIcon(property.type)
       expect(legend).toEqual({ icon: 'FieldNumber', title: 'int64' })
     })
