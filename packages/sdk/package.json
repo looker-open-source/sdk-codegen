@@ -1,6 +1,6 @@
 {
   "name": "@looker/sdk",
-  "version": "7.20.0-alpha.0",
+  "version": "7.20.0",
   "description": "Looker SDK",
   "main": "lib/index.js",
   "module": "lib/index.js",
@@ -42,7 +42,7 @@
     "@types/request-promise-native": "^1.0.17"
   },
   "dependencies": {
-    "@looker/sdk-rtl": "^7.20.0-alpha.0",
+    "@looker/sdk-rtl": "^7.20.0",
     "ini": "^1.3.5",
     "readable-stream": "^3.4.0",
     "request": "^2.88.0",
