@@ -83,8 +83,7 @@ describe('ExploreProperty', () => {
       const property = type.properties.listens_to_filters
       expect(property.type.jsonName).toEqual('string[]')
       renderWithSearchAndRouter(<ExploreProperty property={property} />)
-      const el = screen.getByTitle(property.type.jsonName)
-      expect(el).toBeInTheDocument()
+      expect(screen.getByTitle(property.type.jsonName)).toBeInTheDocument()
       const legend = typeIcon(property.type)
       expect(legend).toEqual({ icon: 'ChartSingleRecord', title: 'string[]' })
     })
