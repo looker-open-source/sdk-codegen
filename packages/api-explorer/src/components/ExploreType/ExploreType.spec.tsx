@@ -27,8 +27,9 @@
 import React from 'react'
 import { screen } from '@testing-library/react'
 import { api } from '../../test-data'
-import { renderWithSearchAndRouter } from '../../test-utils'
-import { ExploreType } from '.'
+import { renderWithRouter, renderWithSearchAndRouter } from '../../test-utils'
+import { ExploreType, ExploreTypeLink } from '.'
+import { MemoryRouter } from 'react-router-dom'
 
 describe('ExploreType', () => {
   const targetType = api.types.ColorCollection
@@ -68,5 +69,68 @@ describe('ExploreType', () => {
     expect(screen.queryAllByText(colors)).toHaveLength(colorsExpected)
     expect(screen.queryAllByText(stops)).toHaveLength(stopsExpected)
     expect(screen.queryAllByText(offset)).toHaveLength(0)
+  })
+
+  describe('ExploreTypeLink', () => {
+    test('recognizes 3.1', () => {
+      const specKey = '3.1'
+      const path = `/${specKey}/methods/foo`
+      renderWithRouter(
+        <MemoryRouter initialEntries={[path]}>
+          <ExploreTypeLink type={targetType} />
+        </MemoryRouter>
+      )
+      const actual = screen.getByText(targetType.jsonName)
+      expect(actual).toBeInTheDocument()
+      expect(actual).toHaveProperty(
+        'href',
+        `http://localhost/${specKey}/types/${targetType.jsonName}`
+      )
+    })
+    test('recognizes 4.0', () => {
+      const specKey = '4.0'
+      const path = `/${specKey}/methods/foo`
+      renderWithRouter(
+        <MemoryRouter initialEntries={[path]}>
+          <ExploreTypeLink type={targetType} />
+        </MemoryRouter>
+      )
+      const actual = screen.getByText(targetType.jsonName)
+      expect(actual).toBeInTheDocument()
+      expect(actual).toHaveProperty(
+        'href',
+        `http://localhost/${specKey}/types/${targetType.jsonName}`
+      )
+    })
+    test('recognizes anything', () => {
+      const specKey = 'anything'
+      const path = `/${specKey}/methods/foo`
+      renderWithRouter(
+        <MemoryRouter initialEntries={[path]}>
+          <ExploreTypeLink type={targetType} />
+        </MemoryRouter>
+      )
+      const actual = screen.getByText(targetType.jsonName)
+      expect(actual).toBeInTheDocument()
+      expect(actual).toHaveProperty(
+        'href',
+        `http://localhost/${specKey}/types/${targetType.jsonName}`
+      )
+    })
+    test('ignores oauth path', () => {
+      const specKey = 'oauth'
+      const path = `/${specKey}/methods/foo`
+      renderWithRouter(
+        <MemoryRouter initialEntries={[path]}>
+          <ExploreTypeLink type={targetType} />
+        </MemoryRouter>
+      )
+      const actual = screen.getByText(targetType.jsonName)
+      expect(actual).toBeInTheDocument()
+      expect(actual).toHaveProperty(
+        'href',
+        `http://types/${targetType.jsonName}`
+      )
+    })
   })
 })

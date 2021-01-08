@@ -28,7 +28,9 @@ import React, { FC } from 'react'
 import { Code, Tree, TreeItem } from '@looker/components'
 import { NavLink } from 'react-router-dom'
 import { IType, TypeOfType, typeOfType } from '@looker/sdk-codegen'
+import { useLocation } from 'react-router'
 import { buildTypePath } from '../../utils'
+import { getSpecKey } from '../../reducers/spec'
 import {
   ExploreProperty,
   pickType,
@@ -43,6 +45,7 @@ interface ExploreTypeLinkProps {
 }
 
 export const ExploreTypeLink: FC<ExploreTypeLinkProps> = ({ type }) => {
+  const location = useLocation()
   const picked = pickType(type)
   const name = picked.name
   const prefix = typeLinkPrefix(type)
@@ -52,11 +55,11 @@ export const ExploreTypeLink: FC<ExploreTypeLinkProps> = ({ type }) => {
     case TypeOfType.Intrinsic:
       return <Code fontSize="small">{type.jsonName}</Code>
     default: {
-      // TODO get the real spec key to put in here
+      const specKey = getSpecKey(location)
       return (
         <>
           {prefix}
-          <NavLink key={type.fullName} to={buildTypePath('4.0', name)}>
+          <NavLink key={type.fullName} to={buildTypePath(specKey, name)}>
             {name}
           </NavLink>
           {suffix}
