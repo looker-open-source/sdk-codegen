@@ -51,22 +51,19 @@ export const ExploreTypeLink: FC<ExploreTypeLinkProps> = ({ type }) => {
   const prefix = typeLinkPrefix(type)
   const suffix = typeLinkSuffix(type)
   const typed = typeOfType(picked)
-  switch (typed) {
-    case TypeOfType.Intrinsic:
-      return <Code fontSize="small">{type.jsonName}</Code>
-    default: {
-      const specKey = getSpecKey(location)
-      return (
-        <>
-          {prefix}
-          <NavLink key={type.fullName} to={buildTypePath(specKey, name)}>
-            {name}
-          </NavLink>
-          {suffix}
-        </>
-      )
-    }
-  }
+  if (typed === TypeOfType.Intrinsic)
+    return <Code fontSize="small">{type.jsonName}</Code>
+
+  const specKey = getSpecKey(location)
+  return (
+    <>
+      {prefix}
+      <NavLink key={type.fullName} to={buildTypePath(specKey, name)}>
+        {name}
+      </NavLink>
+      {suffix}
+    </>
+  )
 }
 
 interface ExploreTypeProps {
