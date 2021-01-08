@@ -10,9 +10,9 @@ The SDK uses a plug-in architecture (also known as dependency injection) for ini
 
 The Looker SDK can be used in a node application in 3 steps:
 
-* install
-* configure
-* use
+- install
+- configure
+- use
 
 ### Install the Looker SDK into your node application
 
@@ -94,7 +94,7 @@ const sdk31 = LookerNodeSDK.init31(settings)
 
 The default auth/auth mode for the Browser SDK uses CORS, so your Looker instance will need to be configured for CORS support, which is available in Looker 7.10 and above.
 
-### Developing with multiple API versions ###
+### Developing with multiple API versions
 
 Starting with Looker release 7.2, the experimental version of API 4.0 is available. To support iterative migration to API 4.0 from API 3.1, the single Looker SDK package now supports multiple API versions for the generated SDK classes. Both API 3.1 and API 4.0 are supported for Node and browser-based use.
 
@@ -126,7 +126,12 @@ for example, which will generate files to
 Code similar to the following can be used to develop with both the 3.1 and 4.0 SDKs in the same source file:
 
 ```typescript
-import { Looker40SDK, Looker31SDK, NodeSession, NodeSettingsIniFile } from '@looker/sdk/lib/node'
+import {
+  Looker40SDK,
+  Looker31SDK,
+  NodeSession,
+  NodeSettingsIniFile,
+} from '@looker/sdk/lib/node'
 
 const settings = new NodeSettingsIniFile()
 const session = new NodeSession(settings)
@@ -152,57 +157,60 @@ The rest of this section shows sample code for typical use cases for authenticat
 
 ```typescript
 describe('sudo', () => {
-  it('login/logout', async () => {
-    const sdk = new LookerSDK(session)
-    const apiUser = await sdk.ok(sdk.me())
-    let all = await sdk.ok(
-      sdk.all_users({
-        fields: 'id,is_disabled'
-      })
-    )
+  it(
+    'login/logout',
+    async () => {
+      const sdk = new LookerSDK(session)
+      const apiUser = await sdk.ok(sdk.me())
+      let all = await sdk.ok(
+        sdk.all_users({
+          fields: 'id,is_disabled',
+        })
+      )
 
-    // find users who are not the API user
-    const others = all
-      .filter(u => u.id !== apiUser.id && (!u.is_disabled))
-      .slice(0, 2)
-    expect(others.length).toEqual(2)
-    if (others.length > 1) {
-      // pick two other active users for `sudo` tests
-      const [sudoA, sudoB] = others
-      // get auth support for login()
-      const auth = sdk.authSession as IAuthSession
+      // find users who are not the API user
+      const others = all
+        .filter((u) => u.id !== apiUser.id && !u.is_disabled)
+        .slice(0, 2)
+      expect(others.length).toEqual(2)
+      if (others.length > 1) {
+        // pick two other active users for `sudo` tests
+        const [sudoA, sudoB] = others
+        // get auth support for login()
+        const auth = sdk.authSession as IAuthSession
 
-      // login as sudoA
-      await auth.login(sudoA.id.toString())
-      let sudo = await sdk.ok(sdk.me()) // `me` returns `sudoA` user
-      expect(sudo.id).toEqual(sudoA.id)
+        // login as sudoA
+        await auth.login(sudoA.id.toString())
+        let sudo = await sdk.ok(sdk.me()) // `me` returns `sudoA` user
+        expect(sudo.id).toEqual(sudoA.id)
 
-      // login as sudoB directly from sudoA
-      await auth.login(sudoB.id)
-      sudo = await sdk.ok(sdk.me()) // `me` returns `sudoB` user
-      expect(sudo.id).toEqual(sudoB.id)
+        // login as sudoB directly from sudoA
+        await auth.login(sudoB.id)
+        sudo = await sdk.ok(sdk.me()) // `me` returns `sudoB` user
+        expect(sudo.id).toEqual(sudoB.id)
 
-      // logging out sudo resets to API user
-      await auth.logout()
-      let user = await sdk.ok(sdk.me()) // `me` returns `apiUser` user
-      expect(sdk.authSession.isAuthenticated()).toEqual(true)
-      expect(user).toEqual(apiUser)
+        // logging out sudo resets to API user
+        await auth.logout()
+        let user = await sdk.ok(sdk.me()) // `me` returns `apiUser` user
+        expect(sdk.authSession.isAuthenticated()).toEqual(true)
+        expect(user).toEqual(apiUser)
 
-      // login as sudoA again to test plain `login()` later
-      await auth.login(sudoA.id)
-      sudo = await sdk.ok(sdk.me())
-      expect(sudo.id).toEqual(sudoA.id)
+        // login as sudoA again to test plain `login()` later
+        await auth.login(sudoA.id)
+        sudo = await sdk.ok(sdk.me())
+        expect(sudo.id).toEqual(sudoA.id)
 
-      // login() without a sudo ID logs in the API user
-      await auth.login()
-      user = await sdk.ok(sdk.me()) // `me` returns `apiUser` user
-      expect(sdk.authSession.isAuthenticated()).toEqual(true)
-      expect(user.id).toEqual(apiUser.id)
-    }
-    await sdk.authSession.logout()
-    expect(sdk.authSession.isAuthenticated()).toEqual(false)
-  }, testTimeout)
-
+        // login() without a sudo ID logs in the API user
+        await auth.login()
+        user = await sdk.ok(sdk.me()) // `me` returns `apiUser` user
+        expect(sdk.authSession.isAuthenticated()).toEqual(true)
+        expect(user.id).toEqual(apiUser.id)
+      }
+      await sdk.authSession.logout()
+      expect(sdk.authSession.isAuthenticated()).toEqual(false)
+    },
+    testTimeout
+  )
 })
 ```
 
@@ -223,17 +231,16 @@ With the introduction of CORS support in the Looker API (coming soon to a releas
 
 `ProxySession` is the SDK class specifically designed to make creating a proxy session simple. The source code example below shows how to override the `authenticate` method for use in a CORS request scenario.
 
-* `getProxyToken()` is the call to the proxy server's API that returns the API auth token to use
-* the code in the `if (this.isAuthenticated()` branch
-  * Sets CORS mode
-  * Sets the auth token header
-  * Identifies the Looker SDK version for the Looker server
+- `getProxyToken()` is the call to the proxy server's API that returns the API auth token to use
+- the code in the `if (this.isAuthenticated()` branch
+  - Sets CORS mode
+  - Sets the auth token header
+  - Identifies the Looker SDK version for the Looker server
 
 By writing your own `getProxyToken()` visible to this class, any proxied authentication workflow is supported.
 
 ```typescript
 export class EmbedSession extends ProxySession {
-
   constructor(public settings: IApiSettings, transport?: ITransport) {
     super(settings, transport)
   }
@@ -258,13 +265,12 @@ export class EmbedSession extends ProxySession {
       // replace the headers argument with required values
       // Note: using new Headers() to construct the headers breaks CORS for the Looker API. Don't know why yet
       props.headers = {
-        'Authorization': `Bearer ${token.access_token}`,
-        'x-looker-appid': agentTag
+        Authorization: `Bearer ${token.access_token}`,
+        'x-looker-appid': agentTag,
       }
     }
     return props
   }
-
 }
 ```
 
@@ -283,35 +289,35 @@ Construction of the streaming SDK can use code similar to the following, which i
  * @returns {Promise<string>} name of downloaded file (undefined on failure)
  */
 const downloadTileAs = async (
-                sdk: LookerSDK,
-                tile: IDashboardElement,
-                format: string
-        ) => {
-          let fileName
-          fileName = `${tile.title}.${format}`
+  sdk: LookerSDK,
+  tile: IDashboardElement,
+  format: string
+) => {
+  let fileName
+  fileName = `${tile.title}.${format}`
 
-          const writer = fs.createWriteStream(fileName)
-          const request: IRequestRunQuery = {
-            result_format: format,
-            query_id: tile.query_id!,
-            // apply_formatting: true,
-            // apply_vis: true
-          }
-          const sdkStream = new Looker40SDKStream(sdk.authSession)
-          await sdkStream.run_query(async (readable: Readable) => {
-            return new Promise<any>((resolve, reject) => {
-              readable
-                      .pipe(writer)
-                      .on('error', () => {
-                        fileName = undefined
-                        throw reject
-                      })
-                      .on('finish', resolve)
-            })
-          }, request)
+  const writer = fs.createWriteStream(fileName)
+  const request: IRequestRunQuery = {
+    result_format: format,
+    query_id: tile.query_id!,
+    // apply_formatting: true,
+    // apply_vis: true
+  }
+  const sdkStream = new Looker40SDKStream(sdk.authSession)
+  await sdkStream.run_query(async (readable: Readable) => {
+    return new Promise<any>((resolve, reject) => {
+      readable
+        .pipe(writer)
+        .on('error', () => {
+          fileName = undefined
+          throw reject
+        })
+        .on('finish', resolve)
+    })
+  }, request)
 
-          return fileName
-        }
+  return fileName
+}
 ```
 
 ### More examples
@@ -322,3 +328,12 @@ Looker's open source repository of [SDK Examples](https://github.com/looker-open
 
 Any script or configuration file used to provide credentials to your Looker SDK instance [needs to be secured](https://github.com/looker-open-source/sdk-codegen#securing-your-sdk-credentials).
 
+## Using jest tests with this SDK as a dependency
+
+This jest config entry may be required to run jest tests on projects which depend on this package.
+
+```js
+ transformIgnorePatterns: [
+    '<rootDir>/node_modules/(?!@looker/(sdk-rtl|sdk)/.*)',
+  ],
+```
