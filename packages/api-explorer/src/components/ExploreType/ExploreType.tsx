@@ -30,7 +30,7 @@ import { NavLink } from 'react-router-dom'
 import { IType, TypeOfType, typeOfType } from '@looker/sdk-codegen'
 import { useLocation } from 'react-router'
 import { buildTypePath } from '../../utils'
-import { getSpecKey } from '../../reducers/spec'
+import { getSpecKey } from '../../reducers'
 import {
   ExploreProperty,
   pickType,
