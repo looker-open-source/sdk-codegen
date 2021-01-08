@@ -171,8 +171,8 @@ func setQuery(u *url.URL, pars map[string]interface{}) {
 
 	q := u.Query()
 	for k, v := range pars {
-		// skip nil
-		if v == nil || reflect.ValueOf(v).IsNil() {
+		// skip nil and ""
+		if v == nil || v == "" || (reflect.ValueOf(v).Kind() == reflect.Ptr && reflect.ValueOf(v).IsNil()) {
 			continue
 		}
 		// marshal the value to json
