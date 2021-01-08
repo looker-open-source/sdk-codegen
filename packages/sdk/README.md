@@ -333,7 +333,10 @@ Any script or configuration file used to provide credentials to your Looker SDK 
 This jest config entry may be required to run jest tests on projects which depend on this package.
 
 ```js
- transformIgnorePatterns: [
+  transform: {
+    '^.+\\.(js|ts|tsx)?$': 'ts-jest',
+  },
+  transformIgnorePatterns: [
     '<rootDir>/node_modules/(?!@looker/(sdk-rtl|sdk)/.*)',
   ],
 ```

@@ -13,7 +13,10 @@ The `@looker/sdk` package is updated with every Looker release. This package has
 This jest config entry may be required to run jest tests on projects which depend on this package.
 
 ```js
- transformIgnorePatterns: [
+  transform: {
+    '^.+\\.(js|ts|tsx)?$': 'ts-jest',
+  },
+  transformIgnorePatterns: [
     '<rootDir>/node_modules/(?!@looker/(sdk-rtl|sdk)/.*)',
   ],
 ```
