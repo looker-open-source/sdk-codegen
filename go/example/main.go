@@ -2,25 +2,22 @@ package main
 
 import (
 	"fmt"
+	"os"
+
 	"github.com/looker-open-source/sdk-codegen/go/rtl"
 	v4 "github.com/looker-open-source/sdk-codegen/go/sdk/v4"
 )
 
-func main() {
-	// Read settings from ini file
-	cfg, err := rtl.NewSettingsFromFile("../../looker.ini", nil)
+func check(err error) {
 	if err != nil {
 		panic(err)
 	}
+}
 
-	// New instance of LookerSDK
-	sdk := v4.NewLookerSDK(rtl.NewAuthSession(cfg))
-
+func printAllUsers(sdk *v4.LookerSDK) {
 	// List all users in Looker
 	users, err := sdk.AllUsers(v4.RequestAllUsers{}, nil)
-	if err != nil {
-		panic(err)
-	}
+	check(err)
 
 	println("-------------------------")
 	// Iterate the users and print basic user info
@@ -28,5 +25,33 @@ func main() {
 		fmt.Printf("user: %s:%s:%s\n", *u.FirstName, *u.LastName, *u.Email)
 	}
 	println("-------------------------")
+}
+
+func printAllProjects(sdk *v4.LookerSDK) {
+	projects, err := sdk.AllProjects("", nil)
+	check(err)
+	for _, proj := range projects {
+		fmt.Printf("Project: %s %s %s\n", *proj.Name, *proj.Id, *proj.GitRemoteUrl)
+	}
+}
+
+func main() {
+	// Default config file location
+	lookerIniPath := "../../looker.ini"
+	if len(os.Args) > 1 {
+		// If first argument exists then it is the config file
+		lookerIniPath = os.Args[1]	
+	}
+
+	// Read settings from ini file
+	cfg, err := rtl.NewSettingsFromFile(lookerIniPath, nil)
+	check(err)
+
+	// New instance of LookerSDK
+	sdk := v4.NewLookerSDK(rtl.NewAuthSession(cfg))
+
+	printAllProjects(sdk)
+
+	printAllUsers(sdk)
 
 }
