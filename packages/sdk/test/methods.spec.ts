@@ -48,7 +48,12 @@ import {
   ResultFormat,
 } from '../src/4.0/models'
 import { environmentPrefix } from '../src/constants'
-import { Looker40SDKStream } from '../src'
+import {
+  Looker31SDK,
+  Looker40SDK,
+  Looker31SDKStream,
+  Looker40SDKStream,
+} from '../src'
 
 const envKey = ApiConfigMap(environmentPrefix)
 const strLookerBaseUrl = envKey.base_url
@@ -206,6 +211,13 @@ describe('LookerNodeSDK', () => {
     }
     await sdk.authSession.logout()
   }
+
+  it('assigns SDK.ApiVersion', () => {
+    expect(Looker31SDK.ApiVersion).toEqual('3.1')
+    expect(Looker31SDKStream.ApiVersion).toEqual('3.1')
+    expect(Looker40SDK.ApiVersion).toEqual('4.0')
+    expect(Looker40SDKStream.ApiVersion).toEqual('4.0')
+  })
 
   describe('downloads', () => {
     it('png and svg', async () => {

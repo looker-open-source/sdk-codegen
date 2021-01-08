@@ -29,14 +29,16 @@ import { APIMethods } from './apiMethods'
 import { IAuthSession } from './authSession'
 import { DefaultSettings, IApiSettings } from './apiSettings'
 
-describe('NodeTransport', () => {
+describe('ApiMethods', () => {
   const hostname = 'https://looker.sdk'
   const apiVersion = '3.1'
   const settings = { base_url: hostname } as IApiSettings
   const session = { settings: settings } as IAuthSession
   const fullPath = 'https://github.com/looker-open-source/sdk-codegen'
   const mockAuth: Authenticator = (props: any) => props
-  const api = new APIMethods(session, 'mock', apiVersion)
+  const api = new APIMethods(session, 'mock')
+  api.apiVersion = apiVersion
+  api.apiPath = `${settings.base_url}/api/${apiVersion}`
 
   it('relative path without auth is just base', () => {
     const actual = api.makePath('/login', settings)
