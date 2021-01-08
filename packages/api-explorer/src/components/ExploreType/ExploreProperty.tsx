@@ -146,10 +146,9 @@ export const ExplorePropertyReadOnly: FC<ExplorePropertyProps> = ({
  */
 export const ExplorePropertyDescription: FC<ExplorePropertyProps> = ({
   property,
-}) => {
-  if (!property.description) return <></>
-  return <ReactMarkdown source={property.description} />
-}
+}) => (
+  <>{property.description && <ReactMarkdown source={property.description} />}</>
+)
 
 /**
  * Show the details of the property
