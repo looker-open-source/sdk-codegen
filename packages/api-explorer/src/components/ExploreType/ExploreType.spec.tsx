@@ -111,6 +111,7 @@ describe('ExploreType', () => {
           <ExploreTypeLink type={targetType} />
         </MemoryRouter>
       )
+
       const actual = screen.getByText(targetType.jsonName)
       expect(actual).toBeInTheDocument()
       expect(actual).toHaveProperty(
