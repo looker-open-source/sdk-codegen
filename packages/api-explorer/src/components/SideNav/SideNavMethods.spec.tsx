@@ -27,7 +27,6 @@ import React from 'react'
 import { pick } from 'lodash'
 import userEvent from '@testing-library/user-event'
 import { screen } from '@testing-library/react'
-import { withThemeProvider } from '@looker/components-test-utils'
 
 import { api } from '../../test-data'
 import { renderWithSearchAndRouter } from '../../test-utils'
@@ -39,9 +38,7 @@ describe('SideNavMethods', () => {
 
   test('it renders provided methods', () => {
     renderWithSearchAndRouter(
-      withThemeProvider(
-        <SideNavMethods methods={methods} tag={tag} specKey={'3.1'} />
-      )
+      <SideNavMethods methods={methods} tag={tag} specKey={'3.1'} />
     )
     userEvent.click(screen.getByText(tag))
     const sideNavItems = screen.getAllByRole('link')
@@ -55,13 +52,11 @@ describe('SideNavMethods', () => {
   test('it highlights text matching search pattern in both tag and methods', () => {
     const highlightPattern = 'dash'
     renderWithSearchAndRouter(
-      withThemeProvider(
-        <SideNavMethods
-          methods={pick(methods, 'create_dashboard')}
-          tag={tag}
-          specKey={'3.1'}
-        />
-      ),
+      <SideNavMethods
+        methods={pick(methods, 'create_dashboard')}
+        tag={tag}
+        specKey={'3.1'}
+      />,
       highlightPattern
     )
     userEvent.click(screen.getByText('Dash'))

@@ -35,8 +35,10 @@ export const pickStatus = (status: string) => {
   switch (status.toLocaleLowerCase()) {
     case 'beta':
       return <StatusBeta aria-label="beta endpoint">&beta;</StatusBeta>
-    case 'experimental':
-      return <Icon aria-label="experimental endpoint" name="Beaker" />
+    case 'experimental': {
+      const title = 'experimental endpoint'
+      return <Icon title={title} aria-label={title} name="Beaker" />
+    }
     case 'deprecated':
       return (
         <Status

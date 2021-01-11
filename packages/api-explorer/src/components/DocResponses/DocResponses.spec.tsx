@@ -25,17 +25,17 @@
  */
 import React from 'react'
 import { screen, waitFor } from '@testing-library/react'
-import { renderWithTheme } from '@looker/components-test-utils'
 import userEvent from '@testing-library/user-event'
 
 import { api } from '../../test-data'
+import { renderWithRouter } from '../../test-utils'
 import { DocResponses } from './DocResponses'
 import { buildResponseTree } from './utils'
 
 describe('DocResponses', () => {
   test('it renders all response statuses and their types', async () => {
     const responses = api.methods.run_look.responses
-    renderWithTheme(<DocResponses responses={responses} />)
+    renderWithRouter(<DocResponses responses={responses} />)
 
     expect(screen.getByText('Response Models')).toBeInTheDocument()
 

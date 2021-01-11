@@ -23,11 +23,8 @@
  SOFTWARE.
 
  */
-import { screen, fireEvent, render, waitFor } from '@testing-library/react'
-import {
-  renderWithTheme,
-  withThemeProvider,
-} from '@looker/components-test-utils'
+import { screen, fireEvent, waitFor } from '@testing-library/react'
+import { renderWithTheme } from '@looker/components-test-utils'
 import userEvent from '@testing-library/user-event'
 import { BaseSyntheticEvent } from 'react'
 
@@ -238,7 +235,7 @@ describe('Complex Item', () => {
       handleComplexChange,
       requestContent
     )
-    render(withThemeProvider(ComplexItem))
+    renderWithTheme(ComplexItem)
     expect(screen.getByText('A complex item')).toBeInTheDocument()
   })
 })

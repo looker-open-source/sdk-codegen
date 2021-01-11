@@ -27,8 +27,7 @@ import React, { FC, useState, useEffect } from 'react'
 import { ButtonToggle, ButtonItem } from '@looker/components'
 import { KeyedCollection, IMethodResponse } from '@looker/sdk-codegen'
 
-import { DocCode } from '../DocCode'
-import { copyAndCleanResponse } from './utils'
+import { ExploreType } from '..'
 
 interface DocResponseTypesProps {
   responses: KeyedCollection<IMethodResponse>
@@ -63,12 +62,11 @@ export const DocResponseTypes: FC<DocResponseTypesProps> = ({ responses }) => {
           <ButtonItem key={mediaType}>{mediaType}</ButtonItem>
         ))}
       </ButtonToggle>
-      <DocCode
-        code={JSON.stringify(
-          copyAndCleanResponse(resps[selectedMediaType]),
-          null,
-          2
-        )}
+      <ExploreType
+        key={selectedMediaType}
+        type={resps[selectedMediaType].type}
+        link={true}
+        maxDepth={2}
       />
     </>
   )

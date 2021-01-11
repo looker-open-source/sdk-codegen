@@ -28,7 +28,6 @@ import { ApiModel } from '@looker/sdk-codegen'
 import { pick } from 'lodash'
 import userEvent from '@testing-library/user-event'
 import { screen } from '@testing-library/react'
-import { withThemeProvider } from '@looker/components-test-utils'
 
 import { api } from '../../test-data'
 import { renderWithRouter } from '../../test-utils'
@@ -43,9 +42,7 @@ describe('SideNav', () => {
   const allTypesPattern = /^(WriteDashboard|WriteQuery)$/
 
   test('it renders all tabs', () => {
-    renderWithRouter(
-      withThemeProvider(<SideNav api={testApi} specKey={'3.1'} />)
-    )
+    renderWithRouter(<SideNav api={testApi} specKey={'3.1'} />)
     const tabs = screen.getAllByRole('tab', {
       name: /^Methods|Types$/,
     })
@@ -53,9 +50,7 @@ describe('SideNav', () => {
   })
 
   test('Methods tab is the default active tab', () => {
-    renderWithRouter(
-      withThemeProvider(<SideNav api={testApi} specKey={'3.1'} />)
-    )
+    renderWithRouter(<SideNav api={testApi} specKey={'3.1'} />)
     expect(screen.getAllByText(allTagsPattern)).toHaveLength(2)
     expect(
       screen.queryAllByRole('link', { name: allTypesPattern })
@@ -70,9 +65,7 @@ describe('SideNav', () => {
   })
 
   test('url determines active tab', () => {
-    renderWithRouter(withThemeProvider(<SideNav api={api} specKey={'3.1'} />), [
-      '/3.1/types',
-    ])
+    renderWithRouter(<SideNav api={api} specKey={'3.1'} />, ['/3.1/types'])
     expect(screen.queryAllByText(allTagsPattern)).toHaveLength(0)
     expect(screen.getAllByRole('link', { name: allTypesPattern })).toHaveLength(
       2

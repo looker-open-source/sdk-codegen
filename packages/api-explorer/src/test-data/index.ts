@@ -23,4 +23,4 @@
  SOFTWARE.
 
  */
-export { api, specs, specState } from './specs'
+export { api, api40, specs, specState } from './specs'

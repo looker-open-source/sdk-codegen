@@ -25,7 +25,6 @@
  */
 import React from 'react'
 import { methodRefs, typeRefs } from '@looker/sdk-codegen'
-import { withThemeProvider } from '@looker/components-test-utils'
 import { screen } from '@testing-library/react'
 
 import { renderWithSearchAndRouter } from '../../test-utils'
@@ -37,14 +36,12 @@ describe('DocReferences', () => {
     const seeTypes = typeRefs(api, api.types.Dashboard.customTypes)
     const seeMethods = methodRefs(api, api.types.Dashboard.methodRefs)
     renderWithSearchAndRouter(
-      withThemeProvider(
-        <DocReferences
-          seeTypes={seeTypes}
-          seeMethods={seeMethods}
-          specKey={'3.1'}
-          api={api}
-        />
-      )
+      <DocReferences
+        seeTypes={seeTypes}
+        seeMethods={seeMethods}
+        specKey={'3.1'}
+        api={api}
+      />
     )
     expect(screen.getAllByRole('link')).toHaveLength(
       seeTypes.length + seeMethods.length
@@ -62,13 +59,11 @@ describe('DocReferences', () => {
   test('it highlights text matching search pattern', () => {
     const highlightPattern = 'dash'
     renderWithSearchAndRouter(
-      withThemeProvider(
-        <DocReferences
-          seeTypes={[api.types.Dashboard]}
-          specKey={'3.1'}
-          api={api}
-        />
-      ),
+      <DocReferences
+        seeTypes={[api.types.Dashboard]}
+        specKey={'3.1'}
+        api={api}
+      />,
       highlightPattern
     )
     const foundRef = screen.getByRole('link')

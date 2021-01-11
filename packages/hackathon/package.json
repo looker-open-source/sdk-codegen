@@ -33,7 +33,7 @@
     "watch": "yarn lerna exec --scope @looker/wholly-sheet --stream 'BABEL_ENV=build babel src --root-mode upward --out-dir lib --source-maps --extensions .ts,.tsx --no-comments --watch'"
   },
   "dependencies": {
-    "@looker/components": "^0.9.28",
+    "@looker/components": "^0.9.30",
     "@looker/extension-sdk": "^0.13.0-alpha.1",
     "@looker/extension-sdk-react": "^0.7.0-alpha.1",
     "@looker/sdk": "^7.20.0",
