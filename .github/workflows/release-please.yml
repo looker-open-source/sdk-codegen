@@ -7,33 +7,20 @@
    release-please-py:
      runs-on: ubuntu-latest
      steps:
-       - uses: google-github-actions/release-please-action@41efee8ee32a4c9f72e461eb37cfba3a0e8e32e6
+       - uses: google-github-actions/release-please-action@master
          with:
            release-type: python
-           package-name: lktstpy
+           package-name: looker_sdk
            monorepo-tags: true
            path: python/
-           # ${{ secrets.GITHUB_TOKEN }} is restricted from any work it performs
-           # having the side effect of triggering other workflows. However, we
-           # need this workflow to trigger the "Python Publish to PYPI" workflow
-           # when it creates a release. Hence we're using a personal token from
-           # the joeldodge79 account with full "repo" permissions.
-           #
-           # TODO: user looker-jenkins or some other service account?
-           # TODO: when a "normal" PR is merged, CI will run on master.
-           # The Release PR will synchronize and, as a result of using this
-           # personal token, CI will now run on it too. Is that desired or do we
-           # want to only run CI manually ("CI:TEST" label) before merging it?
-           token: ${{ secrets.RELEASE_PLEASE_TOKEN }}
+           token: ${{ secrets.GITHUB_TOKEN }}
 
    release-please-ts:
      runs-on: ubuntu-latest
      steps:
-       - uses: google-github-actions/release-please-action@41efee8ee32a4c9f72e461eb37cfba3a0e8e32e6
+       - uses: google-github-actions/release-please-action@master
          with:
            release-type: node
            monorepo-tags: true
            path: packages/sdk/
-
-           # see comment in release-please-py
-           token: ${{ secrets.RELEASE_PLEASE_TOKEN }}
+           token: ${{ secrets.GITHUB_TOKEN }}
