@@ -26,7 +26,6 @@
 import React from 'react'
 import { Route } from 'react-router-dom'
 import { screen, waitFor } from '@testing-library/react'
-import { withThemeProvider } from '@looker/components-test-utils'
 import userEvent from '@testing-library/user-event'
 
 import { api } from '../../test-data'
@@ -38,11 +37,9 @@ const opBtnNames = /ALL|GET|POST|PUT|PATCH|DELETE/
 describe('TagScene', () => {
   test('it renders operation buttons and all methods for a given method tag', () => {
     renderWithRouter(
-      withThemeProvider(
-        <Route path="/:specKey/methods/:methodTag">
-          <TagScene api={api} />
-        </Route>
-      ),
+      <Route path="/:specKey/methods/:methodTag">
+        <TagScene api={api} />
+      </Route>,
       ['/3.1/methods/ColorCollection']
     )
     expect(
@@ -64,11 +61,9 @@ describe('TagScene', () => {
   test('it only renders operation buttons for operations that exist under that tag', () => {
     /** ApiAuth contains two POST methods and a DELETE method */
     renderWithRouter(
-      withThemeProvider(
-        <Route path="/:specKey/methods/:methodTag">
-          <TagScene api={api} />
-        </Route>
-      ),
+      <Route path="/:specKey/methods/:methodTag">
+        <TagScene api={api} />
+      </Route>,
       ['/3.1/methods/ApiAuth']
     )
     expect(
@@ -80,11 +75,9 @@ describe('TagScene', () => {
 
   test('it filters methods by operation type', async () => {
     renderWithRouter(
-      withThemeProvider(
-        <Route path="/:specKey/methods/:methodTag">
-          <TagScene api={api} />
-        </Route>
-      ),
+      <Route path="/:specKey/methods/:methodTag">
+        <TagScene api={api} />
+      </Route>,
       ['/3.1/methods/Look']
     )
     const allLookMethods = /^\/look.*/

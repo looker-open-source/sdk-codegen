@@ -121,6 +121,22 @@ export const fetchSpec = (key: string, specs: SpecItems): SpecState => {
 }
 
 /**
+ * Determine the API specification key from URL pattern or default spec
+ * @param location service to examine
+ * @param specs to use to find the default spec key
+ */
+export const getSpecKey = (location: AbstractLocation, specs?: SpecItems) => {
+  const pathNodes = location.pathname.split('/')
+  let specKey = ''
+  if (pathNodes.length > 1 && pathNodes[1] && pathNodes[1] !== 'oauth') {
+    specKey = pathNodes[1]
+  } else if (specs) {
+    specKey = getDefaultSpecKey(specs)
+  }
+  return specKey
+}
+
+/**
  * Creates a default state object with the spec matching the specKey defined
  * in the url or the default criteria in getDefaultSpecKey
  * @param specs A collection of specs
@@ -131,12 +147,6 @@ export const initDefaultSpecState = (
   specs: SpecItems,
   location: AbstractLocation
 ): SpecState => {
-  const pathNodes = location.pathname.split('/')
-  let specKey
-  if (pathNodes.length > 1 && pathNodes[1] && pathNodes[1] !== 'oauth') {
-    specKey = pathNodes[1]
-  } else {
-    specKey = getDefaultSpecKey(specs)
-  }
+  const specKey = getSpecKey(location, specs)
   return fetchSpec(specKey, specs)
 }

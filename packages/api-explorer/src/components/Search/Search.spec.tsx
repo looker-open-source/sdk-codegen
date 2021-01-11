@@ -25,7 +25,6 @@
  */
 import React from 'react'
 import { screen, waitFor } from '@testing-library/react'
-import { withThemeProvider } from '@looker/components-test-utils'
 import userEvent from '@testing-library/user-event'
 import { SearchCriterion } from '@looker/sdk-codegen'
 
@@ -35,7 +34,7 @@ import { Search } from './Search'
 
 describe('Search', () => {
   test('it renders a search bar with criteria as placeholder text', () => {
-    renderWithSearch(withThemeProvider(<Search api={api} specKey={'3.1'} />))
+    renderWithSearch(<Search api={api} specKey={'3.1'} />)
     expect(screen.getByRole('combobox')).toBeInTheDocument()
     expect(screen.getByRole('textbox')).toHaveProperty(
       'placeholder',
@@ -44,7 +43,7 @@ describe('Search', () => {
   })
 
   test('search can be cleared', () => {
-    renderWithSearch(withThemeProvider(<Search api={api} specKey={'3.1'} />))
+    renderWithSearch(<Search api={api} specKey={'3.1'} />)
     const input = screen.getByRole('textbox')
     userEvent.type(input, 'some search pattern')
     expect(input).toHaveValue('some search pattern')
@@ -53,9 +52,7 @@ describe('Search', () => {
   })
 
   test('it shows results for a valid search pattern', async () => {
-    renderWithSearchAndRouter(
-      withThemeProvider(<Search api={api} specKey={'3.1'} />)
-    )
+    renderWithSearchAndRouter(<Search api={api} specKey={'3.1'} />)
     const input = screen.getByRole('textbox')
     userEvent.type(input, 'Dashboard')
     await waitFor(() => {
@@ -74,9 +71,7 @@ describe('Search', () => {
   })
 
   test('it renders an error for an invalid search pattern', async () => {
-    renderWithSearchAndRouter(
-      withThemeProvider(<Search api={api} specKey={'3.1'} />)
-    )
+    renderWithSearchAndRouter(<Search api={api} specKey={'3.1'} />)
     const input = screen.getByRole('textbox')
     await userEvent.type(input, '[')
     await waitFor(() => {
@@ -94,11 +89,7 @@ describe('Search', () => {
   })
 
   test('search is disabled if no search criteria are selected', () => {
-    renderWithSearchAndRouter(
-      withThemeProvider(<Search api={api} specKey={'3.1'} />),
-      '',
-      []
-    )
+    renderWithSearchAndRouter(<Search api={api} specKey={'3.1'} />, '', [])
     const search = screen.getByRole('textbox')
     expect(search).toBeDisabled()
     expect(search).toHaveProperty(
@@ -108,9 +99,7 @@ describe('Search', () => {
   })
 
   test.skip('search settings show all criteria', async () => {
-    renderWithSearchAndRouter(
-      withThemeProvider(<Search api={api} specKey={'3.1'} />)
-    )
+    renderWithSearchAndRouter(<Search api={api} specKey={'3.1'} />)
     userEvent.click(screen.getByTitle('Filter'))
     await waitFor(() => {
       const criteria = screen.getAllByRole('checkbox')

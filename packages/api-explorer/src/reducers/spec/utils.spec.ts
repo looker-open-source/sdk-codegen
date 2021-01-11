@@ -33,10 +33,17 @@ import {
   parseSpec,
   fetchSpec,
   initDefaultSpecState,
+  getSpecKey,
 } from './utils'
 
 describe('Spec reducer utils', () => {
   const spec = specs['3.1']
+  const specList: SpecItems = {
+    defaultKey: { status: 'experimental', isDefault: true },
+    deprecatedKey: { status: 'deprecated' },
+    currentKey: { status: 'current' },
+    stableKey: { status: 'stable' },
+  }
 
   describe('parseSpec', () => {
     test('given a spec it returns an ApiModel with both readonly and writeable types', () => {
@@ -49,14 +56,42 @@ describe('Spec reducer utils', () => {
     })
   })
 
-  describe('getDefaultSpecKey', () => {
-    const specList: SpecItems = {
-      defaultKey: { status: 'experimental', isDefault: true },
-      deprecatedKey: { status: 'deprecated' },
-      currentKey: { status: 'current' },
-      stableKey: { status: 'stable' },
-    }
+  describe('getSpecKey', () => {
+    const saveLocation = window.location
 
+    afterAll(() => {
+      window.location = saveLocation
+    })
+
+    test('recognizes spec version in url', () => {
+      window.history.pushState({}, '', '/4.0/')
+      const specKey = getSpecKey(window.location)
+      expect(specKey).toBeDefined()
+      expect(specKey).toEqual('4.0')
+    })
+
+    test('ignores oauth as a spec key', () => {
+      window.history.pushState({}, '', '/oauth/')
+      const specKey = getSpecKey(window.location)
+      expect(specKey).toEqual('')
+    })
+
+    test('gets default spec key when specs are provided and url has no path', () => {
+      window.history.pushState({}, '', '')
+      const specKey = getSpecKey(window.location, specList)
+      expect(specKey).toBeDefined()
+      expect(specKey).toEqual('defaultKey')
+    })
+
+    test('gets default spec key when specs are provided and url has oauth path', () => {
+      window.history.pushState({}, '', '/oauth/')
+      const specKey = getSpecKey(window.location, specList)
+      expect(specKey).toBeDefined()
+      expect(specKey).toEqual('defaultKey')
+    })
+  })
+
+  describe('getDefaultSpecKey', () => {
     test('it throws if no specs are provided', () => {
       expect(() => {
         getDefaultSpecKey({} as SpecItems)

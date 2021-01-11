@@ -30,6 +30,7 @@ export {
   initDefaultSpecState,
   SpecState,
   SpecAction,
+  getSpecKey,
 } from './spec'
 export {
   searchReducer,

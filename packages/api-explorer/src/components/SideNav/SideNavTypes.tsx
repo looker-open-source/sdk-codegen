@@ -48,17 +48,17 @@ export const SideNavTypes: FC<TypeProps> = ({ types, specKey }) => {
       {Object.values(types)
         .filter((type) => !(type instanceof IntrinsicType))
         .map((type) => (
-          <Link key={type.name} to={buildTypePath(specKey, type.name)}>
+          <SideNavLink key={type.name} to={buildTypePath(specKey, type.name)}>
             <ApixHeading as="h5" mb="0" pt="0" truncate>
               {highlightHTML(pattern, type.name)}
             </ApixHeading>
-          </Link>
+          </SideNavLink>
         ))}
     </>
   )
 }
 
-const Link = styled(NavLink)`
+const SideNavLink = styled(NavLink)`
   cursor: pointer;
   display: block;
   padding: ${({
