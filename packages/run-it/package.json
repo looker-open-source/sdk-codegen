@@ -1,6 +1,6 @@
 {
   "name": "@looker/run-it",
-  "version": "7.20.1",
+  "version": "7.20.2",
   "description": "A dynamic REST request input form and response visualizer",
   "main": "lib/index.js",
   "typings": "lib/index.d.ts",
@@ -46,8 +46,8 @@
   "dependencies": {
     "@looker/components": "^0.9.30",
     "@looker/design-tokens": "0.9.27",
-    "@looker/sdk": "^7.20.1",
-    "@looker/sdk-codegen": "^7.20.1",
+    "@looker/sdk": "^7.20.2",
+    "@looker/sdk-codegen": "^7.20.2",
     "@looker/sdk-codegen-utils": "^7.20.1",
     "@looker/sdk-rtl": "^7.20.1",
     "@types/readable-stream": "^2.3.5",

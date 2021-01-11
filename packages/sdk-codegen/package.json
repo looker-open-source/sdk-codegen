@@ -1,6 +1,6 @@
 {
   "name": "@looker/sdk-codegen",
-  "version": "7.20.1",
+  "version": "7.20.2",
   "description": "Looker SDK Codegen core",
   "main": "lib/index.js",
   "typings": "lib/index.d.ts",
@@ -32,7 +32,7 @@
     "watch": "yarn lerna exec --scope @looker/sdk-codegen --stream 'BABEL_ENV=build babel src --root-mode upward --out-dir lib --source-maps --extensions .ts,.tsx --no-comments --watch'"
   },
   "dependencies": {
-    "@looker/sdk": "^7.20.1",
+    "@looker/sdk": "^7.20.2",
     "@looker/sdk-codegen-utils": "^7.20.1",
     "@looker/sdk-rtl": "^7.20.1",
     "blueimp-md5": "^2.13.0",
