@@ -34,13 +34,20 @@ func NewAccessToken(js []byte) (AccessToken, error) {
 }
 
 type AuthSession struct {
-	Config ApiSettings
-	token  AccessToken
+	Config    ApiSettings
+	Transport http.RoundTripper
+	token     AccessToken
 }
 
 func NewAuthSession(config ApiSettings) *AuthSession {
+	tr := &http.Transport{
+		TLSClientConfig: &tls.Config{
+			InsecureSkipVerify: config.VerifySsl,
+		},
+	}
 	return &AuthSession{
 		Config: config,
+		Transport: tr,
 	}
 }
 
@@ -50,10 +57,9 @@ func (s *AuthSession) login(id *string) error {
 		"client_id":     {s.Config.ClientId},
 		"client_secret": {s.Config.ClientSecret},
 	}
-	tran := &(*http.DefaultTransport.(*http.Transport))
-	tran.TLSClientConfig = &tls.Config{InsecureSkipVerify: !s.Config.VerifySsl}
+
 	cl := http.Client{
-		Transport: tran,
+		Transport: s.Transport,
 		Timeout:   time.Duration(s.Config.Timeout) * time.Second,
 	}
 	res, err := cl.PostForm(u, data)
@@ -87,7 +93,7 @@ func (s *AuthSession) Authenticate(req *http.Request) error {
 	return nil
 }
 
-func (s *AuthSession) Do(result interface{}, method, ver, path string, reqPars map[string]interface{},  body interface{}, options *ApiSettings) error {
+func (s *AuthSession) Do(result interface{}, method, ver, path string, reqPars map[string]interface{}, body interface{}, options *ApiSettings) error {
 
 	// prepare URL
 	u := fmt.Sprintf("%s/api%s%s", s.Config.BaseUrl, ver, path)
@@ -108,10 +114,9 @@ func (s *AuthSession) Do(result interface{}, method, ver, path string, reqPars m
 		return err
 	}
 
-	tran := &(*http.DefaultTransport.(*http.Transport))
-	tran.TLSClientConfig = &tls.Config{InsecureSkipVerify: !s.Config.VerifySsl}
+
 	cl := http.Client{
-		Transport: tran,
+		Transport: s.Transport,
 		Timeout:   time.Duration(s.Config.Timeout) * time.Second,
 	}
 
