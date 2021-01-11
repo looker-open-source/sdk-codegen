@@ -246,16 +246,15 @@ export const ExplorePropertyType: FC<ExplorePropertyTypeProps> = ({
       defaultOpen={open || openAll}
       detail={<ExplorePropertyDetail property={property} />}
     >
-      {nest &&
-        Object.values(props).map((property) => (
-          <ExploreProperty
-            key={property.fullName}
-            property={property}
-            level={level + 1}
-            maxDepth={maxDepth}
-            openAll={openAll}
-          />
-        ))}
+      {Object.values(props).map((property) => (
+        <ExploreProperty
+          key={property.fullName}
+          property={property}
+          level={level + 1}
+          maxDepth={maxDepth}
+          openAll={openAll}
+        />
+      ))}
     </Tree>
   )
 }
