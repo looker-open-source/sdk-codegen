@@ -51,6 +51,13 @@ func NewAuthSession(config ApiSettings) *AuthSession {
 	}
 }
 
+func NewAuthSessionWithTransport(config ApiSettings, transport http.RoundTripper) *AuthSession {
+	return &AuthSession{
+		Config: config,
+		Transport: transport,
+	}
+}
+
 func (s *AuthSession) login(id *string) error {
 	u := fmt.Sprintf("%s/api/%s/login", s.Config.BaseUrl, s.Config.ApiVersion)
 	data := url.Values{
