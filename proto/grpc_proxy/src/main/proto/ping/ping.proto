@@ -1,0 +1,12 @@
+syntax = "proto3";
+
+package looker;
+
+option java_package = "com.google.looker.grpc.services";
+option java_multiple_files = true;
+
+import 'ping/ping_model.proto';
+
+service PingService {
+  rpc Ping(PingRequest) returns (PingResponse) {};
+}
