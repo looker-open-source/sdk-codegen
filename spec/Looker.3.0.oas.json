@@ -2,11 +2,11 @@
   "openapi": "3.0.0",
   "info": {
     "version": "3.0.0",
-    "x-looker-release-version": "7.17.0",
+    "x-looker-release-version": "7.20.0",
     "title": "Looker API 3.0 (Legacy) Reference",
     "description": "### 3.0 Legacy API\n\nLooker API 3.0 is stable and will continue to be supported for the foreseeable future.\nNo new features will be added to API 3.0; all new development (Looker features and\ndev tools) will appear in API 4.0 only.\n\n",
     "contact": { "name": "Looker Team", "url": "https://help.looker.com" },
-    "license": { "name": "EULA", "url": "http://localhost:9999/eula" }
+    "license": { "name": "EULA", "url": "https://192.168.23.165:10000/eula" }
   },
   "tags": [
     { "name": "ApiAuth", "description": "API Authentication" },
@@ -1943,7 +1943,7 @@
           {
             "name": "start_of_week_date",
             "in": "query",
-            "description": "Match start of week date",
+            "description": "Match start of week date (format is \"YYYY-MM-DD\")",
             "required": false,
             "schema": { "type": "string" }
           },
@@ -11151,7 +11151,7 @@
             "in": "path",
             "description": "LookML Dashboard Id",
             "required": true,
-            "schema": { "type": "integer", "format": "int64" }
+            "schema": { "type": "string" }
           },
           {
             "name": "user_id",
@@ -11581,7 +11581,7 @@
         "tags": ["Space"],
         "operationId": "all_spaces",
         "summary": "Get All Spaces",
-        "description": "### Get information about all spaces.",
+        "description": "### Get information about all spaces.\n\nIn API 3.x, this will not return empty personal spaces, unless they belong to the calling user.\nIn API 4.0+, all personal spaces will be returned.\n\n",
         "parameters": [
           {
             "name": "fields",
@@ -11948,7 +11948,7 @@
         "tags": ["Space"],
         "operationId": "space_looks",
         "summary": "Get Space Looks",
-        "description": "### Get the looks in a space",
+        "description": "### Get all looks in a space.\nIn API 3.x, this will return all looks in a space, including looks in the trash.\nIn API 4.0+, all looks in a space will be returned, excluding looks in the trash.\n",
         "parameters": [
           {
             "name": "space_id",
@@ -15945,7 +15945,7 @@
       }
     }
   },
-  "servers": [{ "url": "http://kaster.c.googlers.com:19999/api/3.0" }],
+  "servers": [{ "url": "https://localhost:20000/api/3.0" }],
   "components": {
     "requestBodies": {
       "LookmlModel": {

@@ -499,7 +499,6 @@ describe('spec conversion', () => {
     it('matches a reference OpenAPI conversion', () => {
       const spec = upgradeSpec(swaggerSource)
       expect(spec).toBeDefined()
-      // writeFileSync(`${config.rootPath}/spec/spec.upgrade.json`, spec, 'utf-8')
       const left = ApiModel.fromString(apiSource)
       const right = ApiModel.fromString(spec)
       const diff = compareSpecs(left, right)
