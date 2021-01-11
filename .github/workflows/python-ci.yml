@@ -1,9 +1,9 @@
 name: Python CI
 on:
-  pull_request_target:
+  pull_request:
     types:
       - opened
-      - synchronized
+      - synchronize
       - reopened
       # first three are default, adding labeled for "CI:TEST" support
       # (see jobs.unit.if below)
@@ -14,7 +14,7 @@ on:
 
   push:
     branches:
-      - $default-branch
+      - master
     paths:
       - python/**
       - packages/sdk-codegen*/**
@@ -31,17 +31,17 @@ defaults:
 
 jobs:
   unit:
-    # 1st condition: push event
+    # 1st condition: push event (restricted to master above)
     # 2nd condition: PR opened/synchronized/reopened (types filter above)
     # 3rd condition: PR labeled with "CI:TEST"
     if: >
       github.event_name == 'push' ||
       (
-        github.event_name == 'pull_request_target' &&
+        github.event_name == 'pull_request' &&
         github.event.action != 'labeled'
       ) ||
       (
-        github.event_name == 'pull_request_target' &&
+        github.event_name == 'pull_request' &&
         github.event.action == 'labeled' &&
         github.event.label.name == 'CI:TEST'
       )
@@ -51,27 +51,30 @@ jobs:
       TOX_JUNIT_OUTPUT_NAME: ${{ matrix.os }}.py${{ matrix.python-version }}
     runs-on: ${{ matrix.os }}-latest
     strategy:
+      # run all supported python versions on ubuntu
+      # run only latest supported python version on windows/mac
       matrix:
         os:
           - ubuntu
           - macos
           - windows
         python-version:
-          - '3.6'
-          - '3.7'
-          - '3.8'
           - '3.9'
+        include:
+          - python-version: '3.6'
+            os: ubuntu
+          - python-version: '3.7'
+            os: ubuntu
+          - python-version: '3.8'
+            os: ubuntu
 
     steps:
       - name: Cancel Previous Runs
         uses: styfle/cancel-workflow-action@0.6.0
         with:
-          access_token: ${{ github.token }}
+          access_token: ${{ secrets.GITHUB_TOKEN }}
       - name: Repo Checkout
         uses: actions/checkout@v2
-        with:
-          ref: ${{ github.event.pull_request.head.ref }}
-          repository: ${{ github.event.pull_request.head.repo.full_name }}
       - name: Set up Python ${{ matrix.python-version }}
         uses: actions/setup-python@v2
         with:
@@ -80,10 +83,6 @@ jobs:
         run: |
           python -m pip install --upgrade pip
           pip install tox
-      - name: Set LOOKERSDK_CLIENT_{ID,SECRET}
-        run: |
-          echo "LOOKERSDK_CLIENT_ID=${{ secrets[format('LOOKERSDK_CLIENT_ID__{0}', matrix.looker)]}}" >> $GITHUB_ENV
-          echo "LOOKERSDK_CLIENT_SECRET=${{ secrets[format('LOOKERSDK_CLIENT_SECRET__{0}', matrix.looker)]}}" >> $GITHUB_ENV
       - name: Run Unit Tests
         run: tox -e unit
       - name: Upload pytest test results
@@ -95,6 +94,7 @@ jobs:
 
   integration:
     needs: unit
+    if: false
     name: Integration - ${{ matrix.os }} / Looker.${{ matrix.looker }}
     env:
       TOX_JUNIT_OUTPUT_NAME: ${{ matrix.os }}.Looker-${{ matrix.looker }}
@@ -138,9 +138,10 @@ jobs:
           python -m pip install --upgrade pip
           pip install tox
       - name: Set LOOKERSDK_CLIENT_{ID,SECRET}
+        # api client/secret stored as github secret per release, e.g. LOOKERSDK_CLIENT_ID__7_20
         run: |
-          echo "LOOKERSDK_CLIENT_ID=${{ secrets[format('LOOKERSDK_CLIENT_ID__{0}', matrix.looker)]}}" >> $GITHUB_ENV
-          echo "LOOKERSDK_CLIENT_SECRET=${{ secrets[format('LOOKERSDK_CLIENT_SECRET__{0}', matrix.looker)]}}" >> $GITHUB_ENV
+          echo "LOOKERSDK_CLIENT_ID=${{ secrets[format('LOOKERSDK_CLIENT_ID__{0}', matrix.looker)] }}" >> $GITHUB_ENV
+          echo "LOOKERSDK_CLIENT_SECRET=${{ secrets[format('LOOKERSDK_CLIENT_SECRET__{0}', matrix.looker)] }}" >> $GITHUB_ENV
       - name: Set up Cloud SDK
         uses: google-github-actions/setup-gcloud@v0.2.0
         with:
@@ -190,7 +191,7 @@ jobs:
           path: python/results/
 
   publish-test-results:
-    name: Publish Unit Tests Results
+    name: Publish Test Results
     needs: [unit, integration]
     if: success() || failure()
     runs-on: ubuntu-latest
@@ -208,10 +209,24 @@ jobs:
           github_token: ${{ secrets.GITHUB_TOKEN }}
           report_individual_runs: true
           files: 'artifacts/python-test-results/*.xml'
+
+  remove-CI-TEST-label:
+    name: Remove CI:TEST Label
+    needs: [unit, integration]
+    # TODO: can we move the step "if" below up to this level and combine with
+    # "always()" somehow? That would skip the job completely rather than firing
+    # up a runner to then skip the only step.
+    #
+    # We want this step to run only after unit and integration (hence "needs")
+    # but we want it to run regardless of whether those jobs
+    # succeeded/failed/skipped (hence "always()")
+    if: always()
+    runs-on: ubuntu-latest
+    steps:
       - name: Remove CI:TEST Label
         if: >
           (
-            github.event_name == 'pull_request_target' &&
+            github.event_name == 'pull_request' &&
             github.event.action == 'labeled' &&
             github.event.label.name == 'CI:TEST'
           )

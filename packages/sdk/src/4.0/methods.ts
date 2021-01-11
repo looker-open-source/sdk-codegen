@@ -265,8 +265,14 @@ import {
 } from './models'
 
 export class Looker40SDK extends APIMethods {
+  static readonly ApiVersion = '4.0'
   constructor(authSession: IAuthSession) {
-    super(authSession, sdkVersion, '4.0')
+    super(authSession, sdkVersion)
+    this.apiVersion = Looker40SDK.ApiVersion
+    this.apiPath =
+      authSession.settings.base_url === ''
+        ? ''
+        : authSession.settings.base_url + '/api/' + this.apiVersion
   }
 
   //#region ApiAuth: API Authentication

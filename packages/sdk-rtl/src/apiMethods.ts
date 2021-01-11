@@ -37,29 +37,48 @@ import {
 import { IAuthSession } from './authSession'
 
 export class APIMethods {
-  private readonly apiPath: string = ''
+  private _apiPath = ''
+  private _apiVersion = ''
 
   /**
    * Initialize the APIMethods wrapper
    * @param authSession authentication management session
    * @param sdkVersion version of the SDK for agent tagging
-   * @param apiVersion version of the API for api path assignment
    */
-  constructor(
-    public authSession: IAuthSession,
-    public sdkVersion: string,
-    public apiVersion: string
-  ) {
+  constructor(public authSession: IAuthSession, public sdkVersion: string) {
     if (
       !('agentTag' in authSession.settings && authSession.settings.agentTag)
     ) {
       // Initialize agentTag if it's not already explicitly set
       authSession.settings.agentTag = `${agentPrefix} ${sdkVersion}`
     }
-    this.apiPath =
-      authSession.settings.base_url === ''
-        ? ''
-        : `${authSession.settings.base_url}/api/${this.apiVersion}`
+  }
+
+  get apiPath() {
+    return this._apiPath
+  }
+
+  set apiPath(value: string) {
+    if (this._apiPath) {
+      throw new Error(
+        `API Path is set to "${this._apiPath}" and cannot be reassigned`
+      )
+    }
+    this._apiPath = value
+  }
+
+  get apiVersion() {
+    return this._apiVersion
+  }
+
+  set apiVersion(value: string) {
+    // API version can only be set once for the instance
+    if (this._apiVersion) {
+      throw new Error(
+        `API Version is set to "${this._apiVersion}" and cannot be reassigned`
+      )
+    }
+    this._apiVersion = value
   }
 
   /** A helper method for constructing with a type as a param

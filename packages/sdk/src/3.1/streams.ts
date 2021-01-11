@@ -241,8 +241,14 @@ import {
 } from './models'
 
 export class Looker31SDKStream extends APIMethods {
+  static readonly ApiVersion = '3.1'
   constructor(authSession: IAuthSession) {
-    super(authSession, sdkVersion, '3.1')
+    super(authSession, sdkVersion)
+    this.apiVersion = Looker31SDKStream.ApiVersion
+    this.apiPath =
+      authSession.settings.base_url === ''
+        ? ''
+        : authSession.settings.base_url + '/api/' + this.apiVersion
   }
 
   //#region ApiAuth: API Authentication
