@@ -7,6 +7,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Current]
 
+- Updating dependencies for security issues
+
+## [7.20.0]
+
 - **BREAKING CHANGE**: The internally constructed `stream` property of the SDK object has been removed. Instead, use:
 
 ```ts
