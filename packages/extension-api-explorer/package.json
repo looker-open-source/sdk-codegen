@@ -2,7 +2,7 @@
   "name": "@looker/extension-api-explorer",
   "version": "7.20.2",
   "description": "Looker API Explorer extension version  ",
-  "main": "index.js",
+  "main": "esm/index.js",
   "license": "MIT",
   "private": true,
   "homepage": "https://github.com/looker-open-source/sdk-codegen/tree/master/packages/extension-api-explorer",

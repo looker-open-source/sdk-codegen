@@ -2,7 +2,7 @@
   "name": "@looker/wholly-sheet",
   "version": "7.20.2",
   "description": "Google sheets API wrapper for data table mimicking",
-  "main": "lib/index.js",
+  "main": "lib/esm/index.js",
   "typings": "lib/index.d.ts",
   "files": [
     "lib"
