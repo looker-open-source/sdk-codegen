@@ -32,7 +32,7 @@ import {
   IHostConnection,
   ExtensionSession,
   ExtensionTransport,
-} from '@looker/sdk-rtl/lib/browser'
+} from '@looker/sdk-rtl/lib/esm/browser'
 
 export class LookerExtensionSDK {
   /**
