@@ -10,14 +10,12 @@ on:
       - labeled
     paths:
       - python/**
-      - packages/sdk-codegen*/**
 
   push:
     branches:
       - master
     paths:
       - python/**
-      - packages/sdk-codegen*/**
 
 env:
   LOOKERSDK_BASE_URL: https://localhost:20000
@@ -33,6 +31,7 @@ jobs:
   unit:
     # 1st condition: push event (restricted to master above)
     # 2nd condition: PR opened/synchronized/reopened (types filter above)
+    #                except Release PRs, those need a manual CI:TEST
     # 3rd condition: PR labeled with "CI:TEST"
     if: >
       github.event_name == 'push' ||
@@ -85,6 +84,11 @@ jobs:
           pip install tox
       - name: Run Unit Tests
         run: tox -e unit
+      - name: Twine upload check
+        run: |
+          pip install wheel twine
+          python setup.py sdist bdist_wheel
+          twine check dist/*
       - name: Upload pytest test results
         if: ${{ always() }}
         uses: actions/upload-artifact@v2
@@ -94,7 +98,6 @@ jobs:
 
   integration:
     needs: unit
-    if: false
     name: Integration - ${{ matrix.os }} / Looker.${{ matrix.looker }}
     env:
       TOX_JUNIT_OUTPUT_NAME: ${{ matrix.os }}.Looker-${{ matrix.looker }}
@@ -212,24 +215,15 @@ jobs:
 
   remove-CI-TEST-label:
     name: Remove CI:TEST Label
-    needs: [unit, integration]
-    # TODO: can we move the step "if" below up to this level and combine with
-    # "always()" somehow? That would skip the job completely rather than firing
-    # up a runner to then skip the only step.
-    #
-    # We want this step to run only after unit and integration (hence "needs")
-    # but we want it to run regardless of whether those jobs
-    # succeeded/failed/skipped (hence "always()")
-    if: always()
+    if: >
+      (
+        github.event_name == 'pull_request' &&
+        github.event.action == 'labeled' &&
+        github.event.label.name == 'CI:TEST'
+      )
     runs-on: ubuntu-latest
     steps:
       - name: Remove CI:TEST Label
-        if: >
-          (
-            github.event_name == 'pull_request' &&
-            github.event.action == 'labeled' &&
-            github.event.label.name == 'CI:TEST'
-          )
         uses: actions/github-script@v3
         with:
           github-token: ${{secrets.GITHUB_TOKEN}}
