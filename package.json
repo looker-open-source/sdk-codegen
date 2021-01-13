@@ -32,7 +32,8 @@
     "wipe": "rm -rf api spec",
     "prebuild": "yarn clean",
     "build": "run-p -c build:*",
-    "build:es": "yarn lerna exec --stream 'BABEL_ENV=build babel src --root-mode upward --out-dir lib --source-maps --extensions .ts,.tsx --no-comments'",
+    "build:cjs": "yarn lerna exec --stream 'BABEL_ENV=build_cjs babel src --root-mode upward --out-dir lib --source-maps --extensions .ts,.tsx --no-comments'",
+    "build:es": "yarn lerna exec --stream 'BABEL_ENV=build babel src --root-mode upward --out-dir lib/esm --source-maps --extensions .ts,.tsx --no-comments'",
     "build:ts": "yarn lerna exec --stream --sort 'tsc -b tsconfig.build.json'",
     "clean": "rm -Rf packages/*/lib",
     "prepublishOnly": "yarn jest packages/sdk/",
@@ -162,8 +163,11 @@
       "sort-keys": "off",
       "spaced-comment": [
         "error",
-        "always", {
-          "markers": ["#"]
+        "always",
+        {
+          "markers": [
+            "#"
+          ]
         }
       ]
     },

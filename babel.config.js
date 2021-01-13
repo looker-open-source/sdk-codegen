@@ -67,13 +67,16 @@ module.exports = (api) => {
             esmodules: true,
           },
           useBuiltIns: false,
-          modules: false,
+          modules: process.env.BABEL_ENV === 'build_cjs' ? 'auto' : false,
         },
       ],
       [
         '@babel/preset-react',
         {
-          development: process.env.BABEL_ENV !== 'build',
+          development: !(
+            process.env.BABEL_ENV === 'build' ||
+            process.env.BABEL_ENV === 'build_cjs'
+          ),
         },
       ],
       '@babel/preset-typescript',

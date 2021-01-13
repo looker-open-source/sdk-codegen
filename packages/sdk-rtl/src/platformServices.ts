@@ -28,6 +28,9 @@ import { IApiSettings } from './apiSettings'
 import { ITransport } from './transport'
 import { ICryptoHash } from './cryptoHash'
 
+/**
+ * Contract for OAuth authentication services
+ */
 export interface IPlatformServices {
   settings: IApiSettings
   transport: ITransport
