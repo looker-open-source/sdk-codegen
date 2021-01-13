@@ -2,7 +2,7 @@
   "name": "@looker/sdk-rtl",
   "version": "7.20.1",
   "description": "Looker SDK Runtime Library",
-  "main": "lib/cjs/index.js",
+  "main": "lib/index.js",
   "module": "lib/esm/index.js",
   "sideEffects": "false",
   "typings": "lib/index.d.ts",
