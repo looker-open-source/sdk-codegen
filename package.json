@@ -35,6 +35,7 @@
     "build:cjs": "yarn lerna exec --stream 'BABEL_ENV=build_cjs babel src --root-mode upward --out-dir lib --source-maps --extensions .ts,.tsx --no-comments'",
     "build:es": "yarn lerna exec --stream 'BABEL_ENV=build babel src --root-mode upward --out-dir lib/esm --source-maps --extensions .ts,.tsx --no-comments'",
     "build:ts": "yarn lerna exec --stream --sort 'tsc -b tsconfig.build.json'",
+    "build:tsesm": "yarn lerna exec --stream --sort 'tsc -b tsconfig.buildesm.json'",
     "clean": "rm -Rf packages/*/lib",
     "prepublishOnly": "yarn jest packages/sdk/",
     "deploy": "yarn workspace sdk deploy",
