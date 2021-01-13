@@ -37,7 +37,7 @@ const FgGreen = '\x1b[32m'
 const FgYellow = '\x1b[33m'
 // const FgBlue = "\x1b[34m"
 // const FgMagenta = "\x1b[35m"
-// const FgCyan = "\x1b[36m"
+const FgCyan = '\x1b[36m'
 // const FgWhite = "\x1b[37m"
 //
 // const BgBlack = "\x1b[40m"
@@ -56,6 +56,8 @@ export const log = (message?: any) => {
 }
 
 const reset = (message: any) => `${message}${Reset}`
+
+export const info = (message: any) => log(reset(`${FgCyan}${message}`))
 
 export const warn = (message: any) => log(reset(`${FgYellow}${message}`))
 
