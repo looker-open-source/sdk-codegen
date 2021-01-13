@@ -2,7 +2,7 @@
   "name": "@looker/sdk-codegen",
   "version": "7.20.2",
   "description": "Looker SDK Codegen core",
-  "main": "lib/index.js",
+  "main": "lib/cjs/index.js",
   "typings": "lib/index.d.ts",
   "files": [
     "lib"

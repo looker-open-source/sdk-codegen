@@ -327,16 +327,3 @@ Looker's open source repository of [SDK Examples](https://github.com/looker-open
 ## A note about security
 
 Any script or configuration file used to provide credentials to your Looker SDK instance [needs to be secured](https://github.com/looker-open-source/sdk-codegen#securing-your-sdk-credentials).
-
-## Using jest tests with this SDK as a dependency
-
-This jest config entry may be required to run jest tests on projects which depend on this package.
-
-```js
-  transform: {
-    '^.+\\.(js|ts|tsx)?$': 'ts-jest',
-  },
-  transformIgnorePatterns: [
-    '<rootDir>/node_modules/(?!@looker/(sdk-rtl|sdk)/.*)',
-  ],
-```
