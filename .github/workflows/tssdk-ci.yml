@@ -1,0 +1,27 @@
+name: Typescript SDK CI
+on:
+  pull_request:
+    types:
+      - opened
+      - synchronize
+      - reopened
+      # first three are default, adding labeled for "CI:TEST" support
+      # (see jobs.unit.if below)
+      - labeled
+    paths:
+      - packages/sdk/**
+      - packages/sdk-rtl/**
+
+  push:
+    branches:
+      - master
+    paths:
+      - packages/sdk/**
+      - packages/sdk-rtl/**
+
+jobs:
+  unit:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Run a one-line script
+        run: echo Hello, world!
