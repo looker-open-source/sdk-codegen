@@ -23,6 +23,9 @@
  */
 
 import com.looker.rtl.*
+import com.looker.sdk.AGENT_TAG
+import com.looker.sdk.ENVIRONMENT_PREFIX
+import com.looker.sdk.LOOKER_APPID
 import kotlin.test.assertEquals
 import kotlin.test.assertTrue
 import org.junit.Test as test
@@ -32,8 +35,9 @@ class TestTransport {
     val base = "https://my.looker.com:19999"
     val apiVersion = "3.1"
     val userPath = "/user"
+    val headers = mapOf(LOOKER_APPID to AGENT_TAG, "User-Agent" to AGENT_TAG)
 
-    val options = TransportSettings(base, apiVersion)
+    val options = TransportSettings(base, apiVersion, headers = headers, environmentPrefix = ENVIRONMENT_PREFIX)
     val xp = Transport(options)
     val qp: Values = mapOf("a" to 1, "b" to false, "c" to "d e", "skip" to null)
     val mockAuth: Authenticator = { RequestSettings(HttpMethod.GET, "bogus") }

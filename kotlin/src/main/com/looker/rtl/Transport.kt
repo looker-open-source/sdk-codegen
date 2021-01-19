@@ -115,6 +115,7 @@ interface TransportOptions {
     var verifySSL: Boolean
     var timeout: Int
     var headers: Map<String, String>
+    var environmentPrefix: String
 }
 
 interface ConfigurationProvider : TransportOptions {
@@ -127,7 +128,8 @@ data class TransportSettings(
     override var apiVersion: String = DEFAULT_API_VERSION,
     override var verifySSL: Boolean = true,
     override var timeout: Int = DEFAULT_TIMEOUT,
-    override var headers: Map<String, String> = mapOf()
+    override var headers: Map<String, String> = mapOf(),
+    override var environmentPrefix: String = "LOOKERSDK",
 ) : TransportOptions
 
 private val utcFormat by lazy { DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'") }
@@ -308,8 +310,6 @@ class Transport(val options: TransportOptions) {
 
         // Handle the headers
         val headers = options.headers.toMutableMap()
-        headers["User-Agent"] = AGENT_TAG
-        headers[LOOKER_APPID] = AGENT_TAG
 
         val requestPath = makeUrl(path, queryParams, authenticator)
 
