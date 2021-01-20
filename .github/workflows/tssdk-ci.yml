@@ -79,10 +79,10 @@ jobs:
 
   integration:
     needs: unit
-    name: Integration - ${{ matrix.os }} / Node.${{node-version}} / Looker.${{ matrix.looker }}
+    name: Integration - ${{ matrix.os }} / Node.${{matrix.node-version}} / Looker.${{ matrix.looker }}
     env:
       JEST_JUNIT_OUTPUT_DIR: results/tssdk
-      JEST_JUNIT_OUTPUT_NAME: ${{ matrix.os }}.Node-${{node-version}}.Looker-${{ matrix.looker }}.xml
+      JEST_JUNIT_OUTPUT_NAME: ${{ matrix.os }}.Node-${{matrix.node-version}}.Looker-${{ matrix.looker }}.xml
     runs-on: ${{ matrix.os }}-latest
     strategy:
       matrix:
