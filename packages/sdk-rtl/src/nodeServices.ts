@@ -31,6 +31,7 @@ import { IPlatformServices } from './platformServices'
 import { NodeCryptoHash, NodeTransport } from './nodeTransport'
 
 export class NodeServices implements IPlatformServices {
+  /** Cryptography service interface */
   crypto: ICryptoHash
   settings: IApiSettings
   transport: ITransport
