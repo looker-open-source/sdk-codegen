@@ -111,36 +111,6 @@ jobs:
           project_id: ${{ secrets.GCP_PROJECT_ID }}
           service_account_key: ${{ secrets.GCP_AR_READER_SA_KEY }}
           export_default_credentials: true
-      - name: Refresh, generate, and build TS SDKs
-        # TODO remove `yarn wipe` when specs are updated by default
-        run: |
-          yarn install
-          yarn build
-          yarn wipe
-          yarn sdk typescript
-      # TODO I don't think we need this for node testing? We can just use ubuntu
-#      - name: Install docker on macos
-#        if: ${{ matrix.os == 'macos' }}
-#        uses: docker-practice/actions-setup-docker@v1
-#        with:
-#          docker_channel: stable
-#          docker_buildx: false
-#          docker_cli_experimental: disabled
-#      - name: Bump docker for mac memory
-#        if: ${{ matrix.os == 'macos' }}
-#        run: |
-#          osascript -e 'quit app "Docker"'
-#          sed -i'.original' -e's/  "memoryMiB" : 2048/  "memoryMiB" : 8192/' ~/Library/Group\ Containers/group.com.docker/settings.json
-#          open -g /Applications/Docker.app
-#          # re-run docker startup logic from docker-practice/actions-setup-docker action
-#          sleep 60
-#          i=0
-#          while ! docker system info &>/dev/null; do
-#          (( i++ == 0 )) && printf %s '-- Waiting for Docker to finish starting up...' || printf '.'
-#          sleep 1
-#          done
-#          (( i )) && printf '\n'
-#          echo "-- Docker is ready."
       - name: Authenticate Artifact Repository
         run: gcloud auth configure-docker us-west1-docker.pkg.dev --quiet
       - name: Pull and run Looker docker image
@@ -152,6 +122,13 @@ jobs:
           docker run --name looker-sdk-codegen-ci -d -p 10000:9999 -p 20000:19999 us-west1-docker.pkg.dev/cloud-looker-sdk-codegen-cicd/looker/${{ matrix.looker }}
           docker logs -f looker-sdk-codegen-ci --until=30s &
           python ${{ github.workspace }}/.github/scripts/wait_for_looker.py
+      - name: Refresh, generate, and build TS SDKs
+        # TODO remove `yarn wipe` when specs are updated by default
+        run: |
+          yarn install
+          yarn build
+          yarn wipe
+          yarn sdk typescript
       - name: Run Integration Tests
         run: yarn jest packages/sdk/test --reporters=default --reporters=jest-junit
       - name: Upload integration test results
