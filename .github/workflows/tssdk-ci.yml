@@ -47,7 +47,7 @@ jobs:
         github.event.label.name == 'CI:TEST'
       )
 
-    name: Unit - ${{ matrix.os }} / py${{ matrix.node-version }}
+    name: Unit - ${{ matrix.os }} / Node{{ matrix.node-version }}
     env:
       JEST_JUNIT_OUTPUT_DIR: results/tssdk
       JEST_JUNIT_OUTPUT_NAME: ${{ matrix.os }}.tsrtl${{ matrix.node-version }}.xml
