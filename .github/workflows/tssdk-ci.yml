@@ -74,11 +74,8 @@ jobs:
         with:
           node-version: ${{ matrix.node-version }}
 
-      - name: Install yarn
-        uses: c-hive/gha-yarn-cache@v1
-
-      - name: Install package dependencies
-        run: yarn --silent
+      - name: Install dependencies
+        run: yarn
 
       - name: Run unit tests
         run: yarn jest packages/sdk-rtl --reporters=default --reporters=jest-junit
