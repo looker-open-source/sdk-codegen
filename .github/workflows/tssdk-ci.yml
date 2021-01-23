@@ -60,9 +60,6 @@ jobs:
         node-version: [10.x, 12.x, 14.x, 15.x]
 
     steps:
-      - name: Setup yarn
-        uses: c-hive/gha-yarn-cache@v1
-        run: yarn --silent
       - name: Cancel Previous Runs
         uses: styfle/cancel-workflow-action@0.6.0
         with:
@@ -73,6 +70,9 @@ jobs:
         uses: actions/setup-node@v1
         with:
           node-version: ${{ matrix.node-version }}
+      - name: Setup yarn
+        uses: c-hive/gha-yarn-cache@v1
+        run: yarn --silent
       - name: Run unit tests
         run: yarn jest packages/sdk-rtl --reporters=default --reporters=jest-junit
       - name: Upload ts unit test results
@@ -101,10 +101,6 @@ jobs:
     steps:
       - name: Repo Checkout
         uses: actions/checkout@v2
-      - name: Set up Node
-        uses: actions/setup-node@v1
-        with:
-          node-version: ${{ matrix.node-version }}
       - name: Set LOOKERSDK_CLIENT_{ID,SECRET}
         # api client/secret stored as github secret per release, e.g. LOOKERSDK_CLIENT_ID__7_20
         run: |
@@ -127,6 +123,10 @@ jobs:
           docker run --name looker-sdk-codegen-ci -d -p 10000:9999 -p 20000:19999 us-west1-docker.pkg.dev/cloud-looker-sdk-codegen-cicd/looker/${{ matrix.looker }}
           docker logs -f looker-sdk-codegen-ci --until=30s &
           python ${{ github.workspace }}/.github/scripts/wait_for_looker.py
+      - name: Set up Node
+        uses: actions/setup-node@v1
+        with:
+          node-version: ${{ matrix.node-version }}
       - name: Setup yarn
         uses: c-hive/gha-yarn-cache@v1
         run: yarn --silent
