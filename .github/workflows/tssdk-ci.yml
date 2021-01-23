@@ -63,20 +63,25 @@ jobs:
     steps:
       - name: Repo Checkout
         uses: actions/checkout@v2
+
       - name: Setup Node ${{ matrix.node-version }}
-      - uses: actions/setup-node@v1
+        uses: actions/setup-node@v1
         with:
           node-version: ${{ matrix.node-version }}
+
       - name: Setup Yarn
-      - uses: c-hive/gha-yarn-cache@v1
+        uses: c-hive/gha-yarn-cache@v1
+
       - run: yarn --silent
 
       - name: Cancel Previous Runs
         uses: styfle/cancel-workflow-action@0.6.0
         with:
           access_token: ${{ secrets.GITHUB_TOKEN }}
+
       - name: Run unit tests
         run: yarn jest packages/sdk-rtl --reporters=default --reporters=jest-junit
+
       - name: Upload ts unit test results
         if: ${{ always() }}
         uses: actions/upload-artifact@v2
@@ -103,12 +108,15 @@ jobs:
     steps:
       - name: Repo Checkout
         uses: actions/checkout@v2
+
       - name: Setup Node ${{ matrix.node-version }}
-      - uses: actions/setup-node@v1
+        uses: actions/setup-node@v1
         with:
           node-version: ${{ matrix.node-version }}
+
       - name: Setup Yarn
-      - uses: c-hive/gha-yarn-cache@v1
+        uses: c-hive/gha-yarn-cache@v1
+
       - run: yarn --silent
 
       - name: Set LOOKERSDK_CLIENT_{ID,SECRET}
@@ -145,6 +153,7 @@ jobs:
           yarn sdk typescript
       - name: Run Integration Tests
         run: yarn jest packages/sdk/test --reporters=default --reporters=jest-junit
+
       - name: Upload integration test results
         if: ${{ always() }}
         uses: actions/upload-artifact@v2
