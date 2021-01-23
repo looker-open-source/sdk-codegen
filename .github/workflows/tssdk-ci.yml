@@ -47,10 +47,10 @@ jobs:
         github.event.label.name == 'CI:TEST'
       )
 
-    name: Unit - ${{ matrix.os }} / Node{{ matrix.node-version }}
+    name: Unit - ${{ matrix.os }} / Node${{ matrix.node-version }}
     env:
       JEST_JUNIT_OUTPUT_DIR: results/tssdk
-      JEST_JUNIT_OUTPUT_NAME: ${{ matrix.os }}.tsrtl${{ matrix.node-version }}.xml
+      JEST_JUNIT_OUTPUT_NAME: ${{ matrix.os }}.tssdkrtl${{ matrix.node-version }}.xml
     runs-on: ${{ matrix.os }}-latest
     strategy:
       # run all supported node versions
