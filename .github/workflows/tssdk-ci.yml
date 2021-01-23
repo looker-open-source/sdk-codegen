@@ -69,8 +69,7 @@ jobs:
         with:
           node-version: ${{ matrix.node-version }}
 
-      - name: Setup Yarn
-        uses: c-hive/gha-yarn-cache@v1
+      - uses: c-hive/gha-yarn-cache@v1
 
       - run: yarn --silent
 
@@ -114,8 +113,7 @@ jobs:
         with:
           node-version: ${{ matrix.node-version }}
 
-      - name: Setup Yarn
-        uses: c-hive/gha-yarn-cache@v1
+      - uses: c-hive/gha-yarn-cache@v1
 
       - run: yarn --silent
 
