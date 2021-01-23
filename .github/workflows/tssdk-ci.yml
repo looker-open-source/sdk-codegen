@@ -60,6 +60,9 @@ jobs:
         node-version: [10.x, 12.x, 14.x, 15.x]
 
     steps:
+      - name: Setup yarn
+        uses: c-hive/gha-yarn-cache@v1
+        run: yarn --silent
       - name: Cancel Previous Runs
         uses: styfle/cancel-workflow-action@0.6.0
         with:
@@ -124,10 +127,12 @@ jobs:
           docker run --name looker-sdk-codegen-ci -d -p 10000:9999 -p 20000:19999 us-west1-docker.pkg.dev/cloud-looker-sdk-codegen-cicd/looker/${{ matrix.looker }}
           docker logs -f looker-sdk-codegen-ci --until=30s &
           python ${{ github.workspace }}/.github/scripts/wait_for_looker.py
+      - name: Setup yarn
+        uses: c-hive/gha-yarn-cache@v1
+        run: yarn --silent
       - name: Refresh, generate, and build TS SDKs
         # TODO remove `yarn wipe` when specs are updated by default
         run: |
-          yarn install
           yarn build
           yarn wipe
           yarn sdk typescript
