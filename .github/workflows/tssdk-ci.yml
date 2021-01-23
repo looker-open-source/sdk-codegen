@@ -55,6 +55,8 @@ jobs:
     strategy:
       # run all supported node versions
       matrix:
+        os:
+          - ubuntu
         node-version: [10.x, 12.x, 14.x, 15.x]
 
     steps:
@@ -79,10 +81,10 @@ jobs:
 
   integration:
     needs: unit
-    name: Integration - ${{ matrix.os }} / Node.${{matrix.node-version}} / Looker.${{ matrix.looker }}
+    name: Integration - ${{ matrix.os }} / Node.${{ matrix.node-version }} / Looker.${{ matrix.looker }}
     env:
       JEST_JUNIT_OUTPUT_DIR: results/tssdk
-      JEST_JUNIT_OUTPUT_NAME: ${{ matrix.os }}.Node-${{matrix.node-version}}.Looker-${{ matrix.looker }}.xml
+      JEST_JUNIT_OUTPUT_NAME: ${{ matrix.os }}.Node-${{ matrix.node-version }}.Looker-${{ matrix.looker }}.xml
     runs-on: ${{ matrix.os }}-latest
     strategy:
       matrix:
