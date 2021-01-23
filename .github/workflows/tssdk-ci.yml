@@ -54,29 +54,31 @@ jobs:
     runs-on: ${{ matrix.os }}-latest
 
     strategy:
-      # run all supported node versions
       matrix:
         os:
           - ubuntu
-        node-version: [10.x, 12.x, 14.x, 15.x]
+        # run all supported node versions with [10.x, 12.x, 14.x, 15.x]
+        node-version: 10
 
     steps:
-      - name: Repo Checkout
-        uses: actions/checkout@v2
-
-      - name: Setup Node ${{ matrix.node-version }}
-        uses: actions/setup-node@v1
-        with:
-          node-version: ${{ matrix.node-version }}
-
-      - uses: c-hive/gha-yarn-cache@v1
-
-      - run: yarn --silent
-
       - name: Cancel Previous Runs
         uses: styfle/cancel-workflow-action@0.6.0
         with:
           access_token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Repo Checkout
+        uses: actions/checkout@v2
+
+      - name: Install Node ${{ matrix.node-version }}
+        uses: actions/setup-node@v1
+        with:
+          node-version: ${{ matrix.node-version }}
+
+      - name: Install yarn
+        uses: c-hive/gha-yarn-cache@v1
+
+      - name: Install package dependencies
+        run: yarn --silent
 
       - name: Run unit tests
         run: yarn jest packages/sdk-rtl --reporters=default --reporters=jest-junit
@@ -88,76 +90,76 @@ jobs:
           name: tssdk-test-results
           path: tssdk/results/
 
-  integration:
-    needs: unit
-    name: Integration - ${{ matrix.os }} / Node.${{ matrix.node-version }} / Looker.${{ matrix.looker }}
-    env:
-      JEST_JUNIT_OUTPUT_DIR: results/tssdk
-      JEST_JUNIT_OUTPUT_NAME: ${{ matrix.os }}.Node-${{ matrix.node-version }}.Looker-${{ matrix.looker }}.xml
-    runs-on: ${{ matrix.os }}-latest
-    strategy:
-      matrix:
-        node-version: [10.x, 12.x, 14.x, 15.x]
-        os:
-          - ubuntu
-        looker:
-          - '7_18'
-          - '7_20'
-
-    steps:
-      - name: Repo Checkout
-        uses: actions/checkout@v2
-
-      - name: Setup Node ${{ matrix.node-version }}
-        uses: actions/setup-node@v1
-        with:
-          node-version: ${{ matrix.node-version }}
-
-      - uses: c-hive/gha-yarn-cache@v1
-
-      - run: yarn --silent
-
-      - name: Set LOOKERSDK_CLIENT_{ID,SECRET}
-        # api client/secret stored as github secret per release, e.g. LOOKERSDK_CLIENT_ID__7_20
-        run: |
-          echo "LOOKERSDK_CLIENT_ID=${{ secrets[format('LOOKERSDK_CLIENT_ID__{0}', matrix.looker)] }}" >> $GITHUB_ENV
-          echo "LOOKERSDK_CLIENT_SECRET=${{ secrets[format('LOOKERSDK_CLIENT_SECRET__{0}', matrix.looker)] }}" >> $GITHUB_ENV
-
-      - name: Set up Cloud SDK
-        uses: google-github-actions/setup-gcloud@v0.2.0
-        with:
-          project_id: ${{ secrets.GCP_PROJECT_ID }}
-          service_account_key: ${{ secrets.GCP_AR_READER_SA_KEY }}
-          export_default_credentials: true
-
-      - name: Authenticate Artifact Repository
-        run: gcloud auth configure-docker us-west1-docker.pkg.dev --quiet
-
-      - name: Pull and run Looker docker image
-        # TODO: can we cache some layers of the image for faster download?
-        # we probably don't want to cache the final image for IP security...
-        run: |
-          docker pull --quiet us-west1-docker.pkg.dev/cloud-looker-sdk-codegen-cicd/looker/${{ matrix.looker }}
-          # set $LOOKER_OPTS to --no-ssl if we want to turn off ssl
-          docker run --name looker-sdk-codegen-ci -d -p 10000:9999 -p 20000:19999 us-west1-docker.pkg.dev/cloud-looker-sdk-codegen-cicd/looker/${{ matrix.looker }}
-          docker logs -f looker-sdk-codegen-ci --until=30s &
-          python ${{ github.workspace }}/.github/scripts/wait_for_looker.py
-
-      - name: Refresh, generate, and build TS SDKs
-        # TODO remove `yarn wipe` when specs are updated by default
-        run: |
-          yarn build
-          yarn wipe
-          yarn sdk typescript
-      - name: Run Integration Tests
-        run: yarn jest packages/sdk/test --reporters=default --reporters=jest-junit
-
-      - name: Upload integration test results
-        if: ${{ always() }}
-        uses: actions/upload-artifact@v2
-        with:
-          name: tssdk-test-results
-          path: tssdk/results/
+#  integration:
+#    needs: unit
+#    name: Integration - ${{ matrix.os }} / Node.${{ matrix.node-version }} / Looker.${{ matrix.looker }}
+#    env:
+#      JEST_JUNIT_OUTPUT_DIR: results/tssdk
+#      JEST_JUNIT_OUTPUT_NAME: ${{ matrix.os }}.Node-${{ matrix.node-version }}.Looker-${{ matrix.looker }}.xml
+#    runs-on: ${{ matrix.os }}-latest
+#    strategy:
+#      matrix:
+#        node-version: [10.x, 12.x, 14.x, 15.x]
+#        os:
+#          - ubuntu
+#        looker:
+#          - '7_18'
+#          - '7_20'
+#
+#    steps:
+#      - name: Repo Checkout
+#        uses: actions/checkout@v2
+#
+#      - name: Setup Node ${{ matrix.node-version }}
+#        uses: actions/setup-node@v1
+#        with:
+#          node-version: ${{ matrix.node-version }}
+#
+#      - uses: c-hive/gha-yarn-cache@v1
+#
+#      - run: yarn --silent
+#
+#      - name: Set LOOKERSDK_CLIENT_{ID,SECRET}
+#        # api client/secret stored as github secret per release, e.g. LOOKERSDK_CLIENT_ID__7_20
+#        run: |
+#          echo "LOOKERSDK_CLIENT_ID=${{ secrets[format('LOOKERSDK_CLIENT_ID__{0}', matrix.looker)] }}" >> $GITHUB_ENV
+#          echo "LOOKERSDK_CLIENT_SECRET=${{ secrets[format('LOOKERSDK_CLIENT_SECRET__{0}', matrix.looker)] }}" >> $GITHUB_ENV
+#
+#      - name: Set up Cloud SDK
+#        uses: google-github-actions/setup-gcloud@v0.2.0
+#        with:
+#          project_id: ${{ secrets.GCP_PROJECT_ID }}
+#          service_account_key: ${{ secrets.GCP_AR_READER_SA_KEY }}
+#          export_default_credentials: true
+#
+#      - name: Authenticate Artifact Repository
+#        run: gcloud auth configure-docker us-west1-docker.pkg.dev --quiet
+#
+#      - name: Pull and run Looker docker image
+#        # TODO: can we cache some layers of the image for faster download?
+#        # we probably don't want to cache the final image for IP security...
+#        run: |
+#          docker pull --quiet us-west1-docker.pkg.dev/cloud-looker-sdk-codegen-cicd/looker/${{ matrix.looker }}
+#          # set $LOOKER_OPTS to --no-ssl if we want to turn off ssl
+#          docker run --name looker-sdk-codegen-ci -d -p 10000:9999 -p 20000:19999 us-west1-docker.pkg.dev/cloud-looker-sdk-codegen-cicd/looker/${{ matrix.looker }}
+#          docker logs -f looker-sdk-codegen-ci --until=30s &
+#          python ${{ github.workspace }}/.github/scripts/wait_for_looker.py
+#
+#      - name: Refresh, generate, and build TS SDKs
+#        # TODO remove `yarn wipe` when specs are updated by default
+#        run: |
+#          yarn build
+#          yarn wipe
+#          yarn sdk typescript
+#      - name: Run Integration Tests
+#        run: yarn jest packages/sdk/test --reporters=default --reporters=jest-junit
+#
+#      - name: Upload integration test results
+#        if: ${{ always() }}
+#        uses: actions/upload-artifact@v2
+#        with:
+#          name: tssdk-test-results
+#          path: tssdk/results/
 
   publish-test-results:
     name: Publish Test Results
