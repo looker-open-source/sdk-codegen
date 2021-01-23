@@ -163,7 +163,8 @@ jobs:
 
   publish-test-results:
     name: Publish Test Results
-    needs: [unit, integration]
+    #    needs: [unit, integration]
+    needs: [unit]
     if: success() || failure()
     runs-on: ubuntu-latest
 
