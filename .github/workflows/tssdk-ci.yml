@@ -80,8 +80,8 @@ jobs:
       - name: Create looker.ini
         run: |
           echo "[Looker]" > looker.ini
-          echo "base_url=https://localhost:20000" >> looker.ini
-          echo "verify_ssl=false" >> looker.ini
+          echo "base_url=${{ secrets[format('LOOKERSDK_BASE_URL', matrix.looker)] }}" >> looker.ini
+          echo "verify_ssl=${{ secrets[format('LOOKERSDK_VERIFY_SSL', matrix.looker)] }}" >> looker.ini
           echo "client_id=${{ secrets[format('LOOKERSDK_CLIENT_ID__{0}', matrix.looker)] }}" >> looker.ini
           echo "client_secret=${{ secrets[format('LOOKERSDK_CLIENT_SECRET__{0}', matrix.looker)] }}" >> looker.ini
           cat looker.ini
