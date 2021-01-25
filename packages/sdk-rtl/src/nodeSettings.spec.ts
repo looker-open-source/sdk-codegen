@@ -24,6 +24,7 @@
 
  */
 
+import fs from 'fs'
 import { TestConfig } from './testUtils'
 import { ApiConfig, NodeSettings, NodeSettingsIniFile } from './nodeSettings'
 import { defaultTimeout } from './transport'
@@ -142,6 +143,12 @@ timeout=30
   })
 
   describe('NodeSettingsIniFile', () => {
+    beforeAll(() => {
+      jest
+        .spyOn(fs, 'readFileSync')
+        .mockImplementation((_path, _options) => Buffer.from(contents))
+    })
+
     it('settings default to the first section', () => {
       const settings = new NodeSettingsIniFile(envPrefix, config.testIni)
       expect(settings.base_url).toEqual(config.testSection.base_url)

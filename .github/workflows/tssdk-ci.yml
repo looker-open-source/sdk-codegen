@@ -80,19 +80,6 @@ jobs:
       - name: Install dependencies
         run: yarn
 
-      - name: Create looker.ini
-        run: |
-          echo "[Looker]" > looker.ini
-          echo "base_url=${{ LOOKERSDK_BASE_URL }}" >> looker.ini
-          echo "verify_ssl=${{ LOOKERSDK_VERIFY_SSL }}" >> looker.ini
-          cat looker.ini
-          echo "client_id=${{ secrets[format('LOOKERSDK_CLIENT_ID__{0}', matrix.looker)] }}" >> looker.ini
-          echo "client_secret=${{ secrets[format('LOOKERSDK_CLIENT_SECRET__{0}', matrix.looker)] }}" >> looker.ini
-          echo "[Looker31]" >> looker.ini
-          echo "base_url=${{ LOOKERSDK_BASE_URL }}" >> looker.ini
-          echo "verify_ssl=${{ LOOKERSDK_VERIFY_SSL }}" >> looker.ini
-          echo "timeout=30" >> looker.ini
-
 #      - name: Set up Cloud SDK
 #        uses: google-github-actions/setup-gcloud@v0.2.0
 #        with:
