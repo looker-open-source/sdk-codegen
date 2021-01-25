@@ -47,7 +47,7 @@ jobs:
         github.event.label.name == 'CI:TEST'
       )
 
-    name: Unit - ${{ matrix.os }} / Node ${{ matrix.node-version }} / Looker ${{ matrix.looker }}
+    name: Unit - ${{ matrix.os }} / Node ${{ matrix.node-version }}
     env:
       JEST_JUNIT_OUTPUT_DIR: results/tssdk
       JEST_JUNIT_OUTPUT_NAME: ${{ matrix.os }}.tssdkrtl${{ matrix.node-version }}.xml
@@ -59,9 +59,6 @@ jobs:
           - ubuntu
         # [12.x, 14.x, 15.x]
         node-version: [12.x]
-        looker:
-          - '7_18'
-#          - '7_20'
 
     steps:
       - name: Cancel Previous Runs

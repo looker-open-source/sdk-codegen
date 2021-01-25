@@ -41,7 +41,7 @@ describe('NodeSession', () => {
   const settings = new NodeSettingsIniFile(envPrefix, localIni, 'Looker')
   const transport = new NodeTransport(settings)
 
-  describe('isAuthenticated', () => {
+  describe.skip('isAuthenticated', () => {
     it('unauthenticated logout returns false', async () => {
       const session = new NodeSession(settings, transport)
       expect(session.isAuthenticated()).toEqual(false)
@@ -50,7 +50,7 @@ describe('NodeSession', () => {
     })
   })
 
-  describe('integration tests', () => {
+  describe.skip('integration tests', () => {
     it('initializes', () => {
       const session = new NodeSession(settings, transport)
       expect(session.settings).toEqual(settings)
