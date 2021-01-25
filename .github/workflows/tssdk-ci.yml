@@ -57,7 +57,8 @@ jobs:
       matrix:
         os:
           - ubuntu
-        node-version: [12.x, 14.x, 15.x]
+        # [12.x, 14.x, 15.x]
+        node-version: [12.x]
 
     steps:
       - name: Cancel Previous Runs
@@ -83,6 +84,7 @@ jobs:
           echo "verify_ssl=false"
           echo "client_id=${{ secrets[format('LOOKERSDK_CLIENT_ID__{0}', matrix.looker)] }}" >> looker.ini
           echo "client_secret=${{ secrets[format('LOOKERSDK_CLIENT_SECRET__{0}', matrix.looker)] }}" >> looker.ini
+          cat looker.ini
       - name: Run unit tests
         run: yarn jest packages/sdk-rtl --reporters=default --reporters=jest-junit
 
