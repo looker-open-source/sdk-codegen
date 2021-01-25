@@ -89,7 +89,9 @@ timeout=30
   const section = config.Looker
   const baseUrl = section.base_url
   const timeout = parseInt(section.timeout, 10)
-  const testContents = fs.readFileSync(testIni, utf8)
+  const testContents = fs.existsSync(testIni)
+    ? fs.readFileSync(testIni, utf8)
+    : mockIni
   const testConfig = ApiConfig(testContents)
   const testSection = testConfig.Looker
 
