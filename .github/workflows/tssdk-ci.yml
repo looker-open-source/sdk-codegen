@@ -47,7 +47,7 @@ jobs:
         github.event.label.name == 'CI:TEST'
       )
 
-    name: Unit - ${{ matrix.os }} / Node ${{ matrix.node-version }} / Looker ${{ matrix-looker }}
+    name: Unit - ${{ matrix.os }} / Node ${{ matrix.node-version }} / Looker ${{ matrix.looker }}
     env:
       JEST_JUNIT_OUTPUT_DIR: results/tssdk
       JEST_JUNIT_OUTPUT_NAME: ${{ matrix.os }}.tssdkrtl${{ matrix.node-version }}.xml
