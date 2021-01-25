@@ -47,7 +47,7 @@ jobs:
         github.event.label.name == 'CI:TEST'
       )
 
-    name: Unit - ${{ matrix.os }} / Node${{ matrix.node-version }}
+    name: Unit - ${{ matrix.os }} / Node ${{ matrix.node-version }} / Looker ${{ matrix-looker }}
     env:
       JEST_JUNIT_OUTPUT_DIR: results/tssdk
       JEST_JUNIT_OUTPUT_NAME: ${{ matrix.os }}.tssdkrtl${{ matrix.node-version }}.xml
@@ -61,7 +61,7 @@ jobs:
         node-version: [12.x]
         looker:
           - '7_18'
-          - '7_20'
+#          - '7_20'
 
     steps:
       - name: Cancel Previous Runs
@@ -87,7 +87,27 @@ jobs:
           echo "verify_ssl=${{ secrets[format('LOOKERSDK_VERIFY_SSL', matrix.looker)] }}" >> looker.ini
           echo "client_id=${{ secrets[format('LOOKERSDK_CLIENT_ID__{0}', matrix.looker)] }}" >> looker.ini
           echo "client_secret=${{ secrets[format('LOOKERSDK_CLIENT_SECRET__{0}', matrix.looker)] }}" >> looker.ini
-          # cat looker.ini
+
+      - name: Set up Cloud SDK
+        uses: google-github-actions/setup-gcloud@v0.2.0
+        with:
+          project_id: ${{ secrets.GCP_PROJECT_ID }}
+          service_account_key: ${{ secrets.GCP_AR_READER_SA_KEY }}
+          export_default_credentials: true
+
+      - name: Authenticate Artifact Repository
+        run: gcloud auth configure-docker us-west1-docker.pkg.dev --quiet
+
+      - name: Pull and run Looker docker image
+        # TODO: can we cache some layers of the image for faster download?
+        # we probably don't want to cache the final image for IP security...
+        run: |
+          docker pull --quiet us-west1-docker.pkg.dev/cloud-looker-sdk-codegen-cicd/looker/${{ matrix.looker }}
+          # set $LOOKER_OPTS to --no-ssl if we want to turn off ssl
+          docker run --name looker-sdk-codegen-ci -d -p 10000:9999 -p 20000:19999 us-west1-docker.pkg.dev/cloud-looker-sdk-codegen-cicd/looker/${{ matrix.looker }}
+          docker logs -f looker-sdk-codegen-ci --until=30s &
+          python ${{ github.workspace }}/.github/scripts/wait_for_looker.py
+
       - name: Run unit tests
         run: yarn jest packages/sdk-rtl --reporters=default --reporters=jest-junit
 
