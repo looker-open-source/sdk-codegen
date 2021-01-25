@@ -34,45 +34,37 @@ import { ApiConfigMap, IApiSettings } from './apiSettings'
 const config = TestConfig()
 const section2 = 'Looker31'
 const envPrefix = 'LOOKERSDK'
+const mockIni = config.mockIni
 
 describe('NodeSettings', () => {
-  const contents = `
-[Looker]
-base_url=${config.baseUrl}
-timeout=${config.timeout}
-[${section2}]
-base_url=https://self-signed.looker.com:19999
-verify_ssl=False
-timeout=30
-`
   describe('ApiConfig', () => {
     it('discovers multiple sections', () => {
-      const config = ApiConfig(contents)
+      const config = ApiConfig(mockIni)
       expect(Object.keys(config)).toEqual(['Looker', section2])
     })
   })
 
   describe('NodeSettingsIni', () => {
     it('settings default to the first section', () => {
-      const settings = new NodeSettings(envPrefix, contents)
+      const settings = new NodeSettings(envPrefix, mockIni)
       expect(settings.timeout).toEqual(config.timeout)
       expect(settings.verify_ssl).toEqual(true)
     })
 
     it('retrieves the first section by name', () => {
-      const settings = new NodeSettings(envPrefix, contents, 'Looker')
+      const settings = new NodeSettings(envPrefix, mockIni, 'Looker')
       expect(settings.timeout).toEqual(config.timeout)
     })
 
     it('retrieves the second section by name', () => {
-      const settings = new NodeSettings(envPrefix, contents, section2)
+      const settings = new NodeSettings(envPrefix, mockIni, section2)
       expect(settings.timeout).toEqual(30)
       expect(settings.verify_ssl).toEqual(false)
     })
 
     it('fails with a bad section name', () => {
       expect(
-        () => new NodeSettings(envPrefix, contents, 'NotAGoodLookForYou')
+        () => new NodeSettings(envPrefix, mockIni, 'NotAGoodLookForYou')
       ).toThrow(/No section named "NotAGoodLookForYou"/)
     })
   })
@@ -146,7 +138,7 @@ timeout=30
     beforeAll(() => {
       jest
         .spyOn(fs, 'readFileSync')
-        .mockImplementation((_path, _options) => Buffer.from(contents))
+        .mockImplementation((_path, _options) => Buffer.from(mockIni))
     })
 
     it('settings default to the first section', () => {

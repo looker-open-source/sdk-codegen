@@ -51,6 +51,7 @@ export interface ITestConfig {
   section: IKeyAny
   testConfig: IKeyAny
   testSection: IKeyAny
+  mockIni: string
 }
 
 const homeToRoost = '../../../../'
@@ -65,6 +66,15 @@ export const rootFile = (fileName = '') => path.join(getRootPath(), fileName)
  * @constructor
  */
 export const TestConfig = (rootPath = ''): ITestConfig => {
+  const mockIni = `
+[Looker]
+base_url=https://self-signed.looker.com:19999
+timeout=31
+[Looker31]
+base_url=https://self-signed.looker.com:19999
+verify_ssl=False
+timeout=30
+`
   const testFile = 'data.yml.json'
   rootPath = rootPath || getRootPath()
   const localIni = process.env.LOOKERSDK_INI || rootFile('looker.ini')
@@ -72,7 +82,9 @@ export const TestConfig = (rootPath = ''): ITestConfig => {
   const dataFile = `${testPath}${testFile}`
   const testData = JSON.parse(fs.readFileSync(dataFile, utf8))
   const testIni = `${rootPath}${testData.iniFile}`
-  const configContents = fs.readFileSync(localIni, utf8)
+  const configContents = fs.existsSync(localIni)
+    ? fs.readFileSync(localIni, utf8)
+    : mockIni
   const config = ApiConfig(configContents)
   const section = config.Looker
   const baseUrl = section.base_url
@@ -80,6 +92,7 @@ export const TestConfig = (rootPath = ''): ITestConfig => {
   const testContents = fs.readFileSync(testIni, utf8)
   const testConfig = ApiConfig(testContents)
   const testSection = testConfig.Looker
+
   return {
     baseUrl,
     config,
@@ -94,5 +107,6 @@ export const TestConfig = (rootPath = ''): ITestConfig => {
     testPath,
     testSection,
     timeout,
+    mockIni,
   }
 }
