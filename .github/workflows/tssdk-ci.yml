@@ -86,6 +86,7 @@ jobs:
           echo "base_url=https://self-signed.looker.com:19999" >> looker.ini
           echo "verify_ssl=False" >> looker.ini
           echo "timeout=30" >> looker.ini
+          cat looker.ini
 
       #      - name: Set up Cloud SDK
 #        uses: google-github-actions/setup-gcloud@v0.2.0

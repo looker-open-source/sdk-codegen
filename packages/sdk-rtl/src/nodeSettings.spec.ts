@@ -34,6 +34,9 @@ import { ApiConfigMap, IApiSettings } from './apiSettings'
 const mockIni = `
 [Looker]
 base_url=https://self-signed.looker.com:19999
+client_id=id
+client_secret=secret
+verify_ssl=false
 timeout=31
 [Looker31]
 base_url=https://self-signed.looker.com:19999
@@ -46,6 +49,12 @@ const section2 = 'Looker31'
 const envPrefix = 'LOOKERSDK'
 
 describe('NodeSettings', () => {
+  beforeAll(() => {
+    jest
+      .spyOn(fs, 'readFileSync')
+      .mockImplementation((_path, _options) => mockIni)
+  })
+
   describe('ApiConfig', () => {
     it('discovers multiple sections', () => {
       const config = ApiConfig(mockIni)
@@ -56,13 +65,13 @@ describe('NodeSettings', () => {
   describe('NodeSettingsIni', () => {
     it('settings default to the first section', () => {
       const settings = new NodeSettings(envPrefix, mockIni)
-      expect(settings.timeout).toEqual(config.timeout)
-      expect(settings.verify_ssl).toEqual(true)
+      expect(settings.timeout).toEqual(31)
+      expect(settings.verify_ssl).toEqual(false)
     })
 
     it('retrieves the first section by name', () => {
       const settings = new NodeSettings(envPrefix, mockIni, 'Looker')
-      expect(settings.timeout).toEqual(config.timeout)
+      expect(settings.timeout).toEqual(31)
     })
 
     it('retrieves the second section by name', () => {
@@ -144,17 +153,11 @@ describe('NodeSettings', () => {
   })
 
   describe('NodeSettingsIniFile', () => {
-    beforeAll(() => {
-      jest
-        .spyOn(fs, 'readFileSync')
-        .mockImplementation((_path, _options) => mockIni)
-    })
-
     it('settings default to the first section', () => {
       const settings = new NodeSettingsIniFile(envPrefix, config.testIni)
       expect(settings.base_url).toEqual(config.testSection.base_url)
-      expect(settings.timeout).toEqual(parseInt(config.testSection.timeout, 10))
-      expect(settings.verify_ssl).toEqual(config.testSection.verify_ssl)
+      expect(settings.timeout).toEqual(31)
+      expect(settings.verify_ssl).toEqual(false)
     })
 
     it('retrieves the first section by name', () => {
@@ -164,8 +167,8 @@ describe('NodeSettings', () => {
         'Looker'
       )
       expect(settings.base_url).toEqual(config.testSection.base_url)
-      expect(settings.timeout).toEqual(parseInt(config.testSection.timeout, 10))
-      expect(settings.verify_ssl).toEqual(config.testSection.verify_ssl)
+      expect(settings.timeout).toEqual(31)
+      expect(settings.verify_ssl).toEqual(false)
     })
 
     it('retrieves the second section by name', () => {
