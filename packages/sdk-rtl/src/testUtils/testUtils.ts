@@ -67,8 +67,8 @@ export const rootFile = (fileName = '') => path.join(getRootPath(), fileName)
 export const TestConfig = (rootPath = ''): ITestConfig => {
   const testFile = 'data.yml.json'
   rootPath = rootPath || getRootPath()
-  const localIni = process.env.LOOKERSDK_INI || `${rootPath}looker.ini`
-  const testPath = `${rootPath}test/`
+  const localIni = process.env.LOOKERSDK_INI || rootFile('looker.ini')
+  const testPath = rootFile('test/')
   const dataFile = `${testPath}${testFile}`
   const testData = JSON.parse(fs.readFileSync(dataFile, utf8))
   const testIni = `${rootPath}${testData.iniFile}`

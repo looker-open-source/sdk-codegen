@@ -31,27 +31,23 @@ import { boolDefault } from './constants'
 import { ApiConfigMap, IApiSettings } from './apiSettings'
 
 const config = TestConfig()
+const section2 = 'Looker31'
 const envPrefix = 'LOOKERSDK'
 
 describe('NodeSettings', () => {
   const contents = `
 [Looker]
 base_url=${config.baseUrl}
-client_id=your_API3_client_id
-client_secret=your_API3_client_secret
 timeout=${config.timeout}
-[Looker30]
-api_version=3.0
+[${section2}]
 base_url=https://self-signed.looker.com:19999
-client_id=your_API3_client_id
-client_secret=your_API3_client_secret
 verify_ssl=False
 timeout=30
 `
   describe('ApiConfig', () => {
     it('discovers multiple sections', () => {
       const config = ApiConfig(contents)
-      expect(Object.keys(config)).toEqual(['Looker', 'Looker30'])
+      expect(Object.keys(config)).toEqual(['Looker', section2])
     })
   })
 
@@ -68,7 +64,7 @@ timeout=30
     })
 
     it('retrieves the second section by name', () => {
-      const settings = new NodeSettings(envPrefix, contents, 'Looker30')
+      const settings = new NodeSettings(envPrefix, contents, section2)
       expect(settings.timeout).toEqual(30)
       expect(settings.verify_ssl).toEqual(false)
     })
@@ -146,14 +142,14 @@ timeout=30
   })
 
   describe('NodeSettingsIniFile', () => {
-    xit('settings default to the first section', () => {
+    it('settings default to the first section', () => {
       const settings = new NodeSettingsIniFile(envPrefix, config.testIni)
       expect(settings.base_url).toEqual(config.testSection.base_url)
       expect(settings.timeout).toEqual(parseInt(config.testSection.timeout, 10))
       expect(settings.verify_ssl).toEqual(config.testSection.verify_ssl)
     })
 
-    xit('retrieves the first section by name', () => {
+    it('retrieves the first section by name', () => {
       const settings = new NodeSettingsIniFile(
         envPrefix,
         config.testIni,
@@ -164,11 +160,11 @@ timeout=30
       expect(settings.verify_ssl).toEqual(config.testSection.verify_ssl)
     })
 
-    xit('retrieves the second section by name', () => {
+    it('retrieves the second section by name', () => {
       const settings = new NodeSettingsIniFile(
         envPrefix,
         config.testIni,
-        'Looker31'
+        section2
       )
       expect(settings.timeout).toEqual(30)
       expect(settings.verify_ssl).toEqual(false)

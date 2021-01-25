@@ -84,6 +84,10 @@ jobs:
           echo "verify_ssl=${{ secrets[format('LOOKERSDK_VERIFY_SSL', matrix.looker)] }}" >> looker.ini
           echo "client_id=${{ secrets[format('LOOKERSDK_CLIENT_ID__{0}', matrix.looker)] }}" >> looker.ini
           echo "client_secret=${{ secrets[format('LOOKERSDK_CLIENT_SECRET__{0}', matrix.looker)] }}" >> looker.ini
+          echo "[Looker31]" >> looker.ini
+          echo "base_url=${{ secrets[format('LOOKERSDK_BASE_URL', matrix.looker)] }}" >> looker.ini
+          echo "verify_ssl=false" >> looker.ini
+          echo "timeout=30" >> looker.ini
 
 #      - name: Set up Cloud SDK
 #        uses: google-github-actions/setup-gcloud@v0.2.0
