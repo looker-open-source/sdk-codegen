@@ -37,11 +37,11 @@ const config = TestConfig()
 const envPrefix = 'LOOKERSDK'
 const localIni = config.localIni
 
-describe('NodeSession', () => {
+describe.skip('NodeSession', () => {
   const settings = new NodeSettingsIniFile(envPrefix, localIni, 'Looker')
   const transport = new NodeTransport(settings)
 
-  describe.skip('isAuthenticated', () => {
+  describe('isAuthenticated', () => {
     it('unauthenticated logout returns false', async () => {
       const session = new NodeSession(settings, transport)
       expect(session.isAuthenticated()).toEqual(false)
@@ -50,7 +50,7 @@ describe('NodeSession', () => {
     })
   })
 
-  describe.skip('integration tests', () => {
+  describe('integration tests', () => {
     it('initializes', () => {
       const session = new NodeSession(settings, transport)
       expect(session.settings).toEqual(settings)

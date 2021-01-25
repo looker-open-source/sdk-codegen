@@ -111,7 +111,7 @@ jobs:
 #          python ${{ github.workspace }}/.github/scripts/wait_for_looker.py
 
       - name: Run unit tests
-        run: yarn jest packages/sdk-rtl --reporters=default --reporters=jest-junit
+        run: yarn jest packages/sdk-rtl/src --reporters=default --reporters=jest-junit
 
       - name: Upload ts unit test results
         if: ${{ always() }}
