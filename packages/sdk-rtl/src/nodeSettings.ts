@@ -218,10 +218,8 @@ export class NodeSettingsIniFile extends NodeSettings {
     }
     // default fileName to looker.ini
     fileName = fileName || './looker.ini'
-    const settings = ValueSettings(
-      readIniConfig(fileName, envPrefix, section),
-      envPrefix
-    )
+    const config = readIniConfig(fileName, envPrefix, section)
+    const settings = ValueSettings(config, envPrefix)
     super(envPrefix, settings, section)
     this.fileName = fileName
   }

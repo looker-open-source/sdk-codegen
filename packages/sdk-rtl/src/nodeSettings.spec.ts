@@ -31,10 +31,19 @@ import { defaultTimeout } from './transport'
 import { boolDefault } from './constants'
 import { ApiConfigMap, IApiSettings } from './apiSettings'
 
+const mockIni = `
+[Looker]
+base_url=https://self-signed.looker.com:19999
+timeout=31
+[Looker31]
+base_url=https://self-signed.looker.com:19999
+verify_ssl=False
+timeout=30
+`
+
 const config = TestConfig()
 const section2 = 'Looker31'
 const envPrefix = 'LOOKERSDK'
-const mockIni = config.mockIni
 
 describe('NodeSettings', () => {
   describe('ApiConfig', () => {
@@ -138,7 +147,7 @@ describe('NodeSettings', () => {
     beforeAll(() => {
       jest
         .spyOn(fs, 'readFileSync')
-        .mockImplementation((_path, _options) => Buffer.from(mockIni))
+        .mockImplementation((_path, _options) => mockIni)
     })
 
     it('settings default to the first section', () => {

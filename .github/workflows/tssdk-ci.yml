@@ -77,7 +77,17 @@ jobs:
       - name: Install dependencies
         run: yarn
 
-#      - name: Set up Cloud SDK
+      - name: Mock looker.ini
+        run: |
+          echo "[Looker]" > looker.ini
+          echo "base_url=https://self-signed.looker.com:19999" >> looker.ini
+          echo "timeout=31" >> looker.ini
+          echo "[Looker31]" >> looker.ini
+          echo "base_url=https://self-signed.looker.com:19999" >> looker.ini
+          echo "verify_ssl=False" >> looker.ini
+          echo "timeout=30" >> looker.ini
+
+      #      - name: Set up Cloud SDK
 #        uses: google-github-actions/setup-gcloud@v0.2.0
 #        with:
 #          project_id: ${{ secrets.GCP_PROJECT_ID }}
