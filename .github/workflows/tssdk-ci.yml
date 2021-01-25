@@ -121,7 +121,7 @@ jobs:
         uses: actions/upload-artifact@v2
         with:
           name: tssdk-test-results
-          path: tssdk/results/
+          path: results/tssdk
 
 #  integration:
 #    needs: unit
