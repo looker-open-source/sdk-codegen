@@ -165,7 +165,6 @@ describe('NodeSettings', () => {
   describe('NodeSettingsIniFile', () => {
     it('settings default to the first section', () => {
       const settings = new NodeSettingsIniFile(envPrefix, config.testIni)
-      expect(settings.base_url).toEqual(config.testSection.base_url)
       expect(settings.timeout).toEqual(31)
       expect(settings.verify_ssl).toEqual(false)
     })
@@ -176,7 +175,6 @@ describe('NodeSettings', () => {
         config.testIni,
         'Looker'
       )
-      expect(settings.base_url).toEqual(config.testSection.base_url)
       expect(settings.timeout).toEqual(31)
       expect(settings.verify_ssl).toEqual(false)
     })
