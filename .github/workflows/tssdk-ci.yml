@@ -165,7 +165,7 @@ jobs:
         run: |
           yarn build
           yarn wipe
-          yarn sdk typescript
+          yarn gen typescript
 
       - name: Run Integration Tests
         run: yarn jest packages/sdk/test --reporters=default --reporters=jest-junit

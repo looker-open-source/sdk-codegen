@@ -24,8 +24,7 @@
 
  */
 
-import * as ini from 'ini'
-import { readFileSync } from './nodeUtils'
+import { boolDefault, readIniConfig } from '@looker/sdk-rtl'
 
 export interface ISDKConfigProps {
   api_version: string
@@ -36,16 +35,23 @@ export interface ISDKConfigProps {
   verify_ssl: boolean
 }
 
-export interface ISDKConfigSection {
-  [key: string]: ISDKConfigProps
-}
+export const SDKConfig = (
+  fileName = './looker.ini',
+  envPrefix = 'LOOKERSDK',
+  sectionName = 'Looker'
+) => {
+  const section = readIniConfig(fileName, envPrefix, sectionName)
+  const config: ISDKConfigProps = {
+    api_version: section.api_version,
+    api_versions: section.api_versions,
+    base_url: section.base_url,
+    client_id: section.client_id,
+    client_secret: section.client_secret,
+    verify_ssl: boolDefault(section.verify_ssl, true),
+  }
 
-export const SDKConfig = (fileName = './looker.ini') => {
-  const settings = ini.parse(readFileSync(fileName))
-  const config = settings as ISDKConfigSection
-  Object.keys(config).forEach((key) => {
-    const props: ISDKConfigProps = config[key]
-    if (props.verify_ssl === undefined) props.verify_ssl = true
-  })
+  if (!config.base_url) {
+    throw Error('Fatal error: base_url is not configured. Exiting.')
+  }
   return config
 }

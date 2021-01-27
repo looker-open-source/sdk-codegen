@@ -104,7 +104,8 @@ export const readEnvConfig = (envPrefix: string) => {
     const envKey = configMap[key]
     if (process.env[envKey] !== undefined) {
       // Value exists. Map environment variable keys to config variable keys
-      values[key] = unquote(process.env[envKey])
+      const val = unquote(process.env[envKey])
+      values[key] = val
     }
   })
   return values
