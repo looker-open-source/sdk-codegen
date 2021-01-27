@@ -24,6 +24,8 @@
 
  */
 
+import * as fs from 'fs'
+import dotenv from 'dotenv'
 import { boolDefault, readIniConfig } from '@looker/sdk-rtl'
 
 export interface ISDKConfigProps {
@@ -35,11 +37,25 @@ export interface ISDKConfigProps {
   verify_ssl: boolean
 }
 
+export interface ISDKConfigSection {
+  [key: string]: ISDKConfigProps
+}
+
 export const SDKConfig = (
   fileName = './looker.ini',
   envPrefix = 'LOOKERSDK',
   sectionName = 'Looker'
-) => {
+): ISDKConfigSection => {
+  dotenv.config()
+  if (process.env.DOT_ENV_FILE) {
+    // Load custom env file
+    const name = process.env.DOT_ENV_FILE
+    const vals = dotenv.parse(fs.readFileSync(name, 'utf-8'))
+    Object.entries(vals).forEach(([key, val]) => {
+      if (val) process.env[key] = val
+    })
+  }
+
   const section = readIniConfig(fileName, envPrefix, sectionName)
   const config: ISDKConfigProps = {
     api_version: section.api_version,
@@ -53,5 +69,5 @@ export const SDKConfig = (
   if (!config.base_url) {
     throw Error('Fatal error: base_url is not configured. Exiting.')
   }
-  return config
+  return { [sectionName]: config }
 }
