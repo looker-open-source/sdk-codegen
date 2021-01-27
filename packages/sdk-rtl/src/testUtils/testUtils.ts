@@ -26,7 +26,7 @@
 
 import * as fs from 'fs'
 import path from 'path'
-import { ApiConfig } from '../nodeSettings'
+import { readIniConfig } from '../nodeSettings'
 
 interface IKeyAny {
   [key: string]: any
@@ -46,10 +46,7 @@ export interface ITestConfig {
   timeout: number
   testData: any
   testIni: string
-  configContents: string
-  config: IKeyAny
   section: IKeyAny
-  testConfig: IKeyAny
   testSection: IKeyAny
 }
 
@@ -66,30 +63,25 @@ export const rootFile = (fileName = '') => path.join(getRootPath(), fileName)
  */
 export const TestConfig = (rootPath = ''): ITestConfig => {
   const testFile = 'data.yml.json'
+  const envPrefix = 'LOOKERSDK'
+  const sectionName = 'Looker'
   rootPath = rootPath || getRootPath()
   const localIni = process.env.LOOKERSDK_INI || rootFile('looker.ini')
   const testPath = rootFile('test/')
   const dataFile = `${testPath}${testFile}`
   const testData = JSON.parse(fs.readFileSync(dataFile, utf8))
   const testIni = `${rootPath}${testData.iniFile}`
-  const configContents = fs.readFileSync(localIni, utf8)
-  const config = ApiConfig(configContents)
-  const section = config.Looker
+  const section = readIniConfig(localIni, envPrefix, sectionName)
   const baseUrl = section.base_url
   const timeout = parseInt(section.timeout, 10)
-  const testContents = fs.readFileSync(testIni, utf8)
-  const testConfig = ApiConfig(testContents)
-  const testSection = testConfig.Looker
+  const testSection = readIniConfig(localIni, envPrefix, sectionName)
 
   return {
     baseUrl,
-    config,
-    configContents,
     dataFile,
     localIni,
     rootPath,
     section,
-    testConfig,
     testData,
     testIni,
     testPath,

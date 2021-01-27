@@ -97,7 +97,7 @@ export const ApiConfigSection = (
  *
  * @returns the populated `IApiSection`, which may be empty
  */
-const readEnvConfig = (envPrefix: string) => {
+export const readEnvConfig = (envPrefix: string) => {
   const values: IApiSection = {}
   const configMap = ApiConfigMap(envPrefix)
   Object.keys(configMap).forEach((key) => {
@@ -119,7 +119,7 @@ const readEnvConfig = (envPrefix: string) => {
  * @param {string} section Optional. Name of section of configuration file to read
  * @returns {IApiSection} containing the configuration values
  */
-const readIniConfig = (
+export const readIniConfig = (
   fileName: string,
   envPrefix: string,
   section?: string
