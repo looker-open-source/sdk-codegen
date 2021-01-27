@@ -63,6 +63,16 @@ describe('NodeSettings', () => {
   })
 
   describe('NodeSettingsIni', () => {
+    beforeAll(() => {
+      // clear any environment variables
+      const envKey = ApiConfigMap(envPrefix)
+      delete process.env[envKey.timeout]
+      delete process.env[envKey.client_id]
+      delete process.env[envKey.client_secret]
+      delete process.env[envKey.base_url]
+      delete process.env[envKey.verify_ssl]
+    })
+
     it('settings default to the first section', () => {
       const settings = new NodeSettings(envPrefix, mockIni)
       expect(settings.timeout).toEqual(31)
