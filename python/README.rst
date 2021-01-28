@@ -19,7 +19,7 @@ Basic Usage
 
     import looker_sdk
 
-
+    # For this to work you must either have set environment variables or created a looker.ini as described below in "Configuring the SDK"
     sdk = looker_sdk.init31()  # or init40() for v4.0 API
     my_user = sdk.me()
 
@@ -113,8 +113,8 @@ example file:
 ::
 
     [Looker]
-    # Base URL for API. Do not include /api/* in the url
-    base_url=https://self-signed.looker.com:19999
+    # Base URL for API. Do not include /api/* in the url. If hosted on GCP, remove the :19999 leaving just https://your.cloud.looker.com
+    base_url=https://your.looker.com:19999
     # API 3 client id
     client_id=YourClientID
     # API 3 client secret
@@ -131,7 +131,7 @@ For any ``.ini`` setting you can use an environment variable instead. It takes t
 
 Code example
 ============
-`See many python sdk examples in our examples repo <https://github.com/looker-open-source/sdk-examples/tree/master/python>`_
+`See many python sdk examples in our examples repo <https://github.com/looker-open-source/sdk-codegen/tree/master/examples/python>`_
 
 Changelog
 ============
