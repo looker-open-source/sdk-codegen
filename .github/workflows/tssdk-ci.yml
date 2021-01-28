@@ -114,8 +114,7 @@ jobs:
     runs-on: ${{ matrix.os }}-latest
     strategy:
       matrix:
-#        node-version: [12.x, 14.x, 15.x]
-        node-version: [12.x]
+        node-version: [12.x, 14.x, 15.x]
         os:
           - ubuntu
         looker:
