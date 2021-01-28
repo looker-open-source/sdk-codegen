@@ -165,7 +165,7 @@ jobs:
         run: |
           yarn build
           yarn wipe
-          yarn gen typescript
+          NODE_TLS_REJECT_UNAUTHORIZED="0" yarn gen typescript
 
       - name: Run Integration Tests
         run: yarn jest packages/sdk/test --reporters=default --reporters=jest-junit
