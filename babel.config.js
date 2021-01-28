@@ -28,25 +28,29 @@ module.exports = (api) => {
   const isTest = api.env('test')
   api.cache(true)
 
-  const ignore = isTest ? [] : ['node_modules']
+  const testIgnore = [
+    '**/*.test.js',
+    '**/*.test.jsx',
+    '**/*.test.ts',
+    '**/*.test.tsx',
+    '**/*.spec.js',
+    '**/*.spec.jsx',
+    '**/*.spec.ts',
+    '**/*.spec.tsx',
+  ]
+
+  const ignore = isTest ? [] : ['node_modules', ...testIgnore]
 
   return {
     env: {
       build: {
         ignore: [
           '**/*.d.ts',
-          '**/*.test.js',
-          '**/*.test.jsx',
-          '**/*.test.ts',
-          '**/*.test.tsx',
-          '**/*.spec.js',
-          '**/*.spec.jsx',
-          '**/*.spec.ts',
-          '**/*.spec.tsx',
           '__snapshots__',
           '__tests__',
           '**/testUtils',
           '**/test-data',
+          ...testIgnore,
         ],
       },
     },
