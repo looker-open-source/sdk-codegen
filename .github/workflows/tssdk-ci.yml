@@ -75,7 +75,9 @@ jobs:
           node-version: ${{ matrix.node-version }}
 
       - name: Install dependencies
-        run: yarn
+        run: |
+          yarn
+          yarn build
 
       - name: Mock looker.ini
         run: |
@@ -91,9 +93,7 @@ jobs:
           echo "timeout=30" >> looker.ini
 
       - name: Run unit tests
-        run: |
-          yarn build
-          yarn jest packages/sdk-rtl/src --reporters=default --reporters=jest-junit
+        run: yarn jest packages/sdk-rtl/src --reporters=default --reporters=jest-junit
 
       - name: Delete looker.ini mock
         run: rm looker.ini
@@ -123,6 +123,19 @@ jobs:
           - '7_20'
 
     steps:
+      - name: Repo Checkout
+        uses: actions/checkout@v2
+
+      - name: Install Node ${{ matrix.node-version }}
+        uses: actions/setup-node@v1
+        with:
+          node-version: ${{ matrix.node-version }}
+
+      - name: Install dependencies
+        run: |
+          yarn
+          yarn build
+
       - name: Set LOOKERSDK_CLIENT_{ID,SECRET}
         # api client/secret stored as github secret per release, e.g. LOOKERSDK_CLIENT_ID__7_20
         run: |
