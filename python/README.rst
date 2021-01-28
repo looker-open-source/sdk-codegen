@@ -45,7 +45,7 @@ Go from installation all the way to creating a functional micro-application in t
    :target: https://colab.research.google.com/github/looker-open-source/sdk-codegen/blob/master/python/python-sdk-tutorial.ipynb
 
 
-sample project setup
+Sample project setup
 ====================
 
 Install python 3.8. We highly recommend using
