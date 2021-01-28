@@ -38,6 +38,7 @@ Basic Usage
 Full tutorial
 =============
 Go from installation all the way to creating a functional micro-application in this 20-30 minute interactive tutorial.
+
 *This tutorial is hosted in Google Colaboratory, an interactive online notebook. You can follow along right in the notebook by clicking the button below.*
 
 .. image:: https://colab.research.google.com/assets/colab-badge.svg
