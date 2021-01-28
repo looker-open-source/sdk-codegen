@@ -40,7 +40,8 @@ Full tutorial
 Go from installation all the way to creating a functional micro-application in this 20-30 minute interactive tutorial.
 *This tutorial is hosted in Google Colaboratory, an interactive online notebook. You can follow along right in the notebook by clicking the button below.*
 
-[![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/looker-open-source/sdk-codegen/blob/master/python/python-sdk-tutorial.ipynb)
+.. image:: https://colab.research.google.com/assets/colab-badge.svg
+   :target: https://colab.research.google.com/github/looker-open-source/sdk-codegen/blob/master/python/python-sdk-tutorial.ipynb
 
 
 sample project setup
