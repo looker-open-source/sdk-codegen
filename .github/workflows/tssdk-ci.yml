@@ -77,21 +77,23 @@ jobs:
       - name: Install dependencies
         run: yarn
 
-      - name: Mock looker.ini
-        run: |
-          echo "[Looker]" > looker.ini
-          echo "base_url=https://self-signed.looker.com:19999" >> looker.ini
-          echo "client_id=id" >> looker.ini
-          echo "client_secret=secret" >> looker.ini
-          echo "verify_ssl=False" >> looker.ini
-          echo "timeout=31" >> looker.ini
-          echo "[Looker31]" >> looker.ini
-          echo "base_url=https://self-signed.looker.com:19999" >> looker.ini
-          echo "verify_ssl=False" >> looker.ini
-          echo "timeout=30" >> looker.ini
+#      - name: Mock looker.ini
+#        run: |
+#          echo "[Looker]" > looker.ini
+#          echo "base_url=https://self-signed.looker.com:19999" >> looker.ini
+#          echo "client_id=id" >> looker.ini
+#          echo "client_secret=secret" >> looker.ini
+#          echo "verify_ssl=False" >> looker.ini
+#          echo "timeout=31" >> looker.ini
+#          echo "[Looker31]" >> looker.ini
+#          echo "base_url=https://self-signed.looker.com:19999" >> looker.ini
+#          echo "verify_ssl=False" >> looker.ini
+#          echo "timeout=30" >> looker.ini
 
       - name: Run unit tests
-        run: yarn jest packages/sdk-rtl/src --reporters=default --reporters=jest-junit
+        run: |
+          yarn build
+          yarn jest packages/sdk-rtl/src --reporters=default --reporters=jest-junit
 
       - name: Upload ts unit test results
         if: ${{ always() }}
@@ -118,17 +120,6 @@ jobs:
           - '7_20'
 
     steps:
-      - name: Repo Checkout
-        uses: actions/checkout@v2
-
-      - name: Install Node ${{ matrix.node-version }}
-        uses: actions/setup-node@v1
-        with:
-          node-version: ${{ matrix.node-version }}
-
-      - name: Install dependencies
-        run: yarn
-
       - name: Set LOOKERSDK_CLIENT_{ID,SECRET}
         # api client/secret stored as github secret per release, e.g. LOOKERSDK_CLIENT_ID__7_20
         run: |
@@ -159,13 +150,6 @@ jobs:
           docker run --name looker-sdk-codegen-ci -d -p 10000:9999 -p 20000:19999 us-west1-docker.pkg.dev/cloud-looker-sdk-codegen-cicd/looker/${{ matrix.looker }}
           docker logs -f looker-sdk-codegen-ci --until=30s &
           python ${{ github.workspace }}/.github/scripts/wait_for_looker.py
-
-      - name: Refresh, generate, and build TS SDKs
-        # TODO remove `yarn wipe` when specs are updated by default
-        run: |
-          yarn build
-          yarn wipe
-          yarn gen typescript
 
       - name: Run Integration Tests
         run: yarn jest packages/sdk/test --reporters=default --reporters=jest-junit
