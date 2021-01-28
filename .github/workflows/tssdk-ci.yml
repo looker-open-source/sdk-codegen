@@ -132,6 +132,7 @@ jobs:
       - name: Set LOOKERSDK_CLIENT_{ID,SECRET}
         # api client/secret stored as github secret per release, e.g. LOOKERSDK_CLIENT_ID__7_20
         run: |
+          echo "LOOKERSDK_VERIFY_SSL=False" >> $GITHUB_ENV
           echo "LOOKERSDK_CLIENT_ID=${{ secrets[format('LOOKERSDK_CLIENT_ID__{0}', matrix.looker)] }}" >> $GITHUB_ENV
           echo "LOOKERSDK_CLIENT_SECRET=${{ secrets[format('LOOKERSDK_CLIENT_SECRET__{0}', matrix.looker)] }}" >> $GITHUB_ENV
 
@@ -165,7 +166,7 @@ jobs:
         run: |
           yarn build
           yarn wipe
-          NODE_TLS_REJECT_UNAUTHORIZED="0" yarn gen typescript
+          yarn gen typescript
 
       - name: Run Integration Tests
         run: yarn jest packages/sdk/test --reporters=default --reporters=jest-junit
