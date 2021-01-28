@@ -67,6 +67,7 @@ const queries: Partial<IQuery>[] = config.testData.queries_system_activity
 const dashboards: any[] = config.testData.dashboards
 const emailDomain = '@foo.com'
 const testTimeout = 36000000 // 1 hour
+const fifteen = 15000 // 15 seconds
 
 const mimeType = (data: string) => {
   //        var sig = [UInt8](repeating: 0, count: 20)
@@ -252,28 +253,34 @@ describe('LookerNodeSDK', () => {
         expect(svg).toBeDefined()
         expect(svg).toMatch(/^<\?xml/)
       },
-      testTimeout
+      fifteen
     )
   })
 
   describe('PUT smoke test', () => {
-    it('set default color collection', async () => {
-      const sdk = new LookerSDK(session)
-      const current = await sdk.ok(sdk.default_color_collection())
-      expect(current).toBeDefined()
-      const cols = await sdk.ok(sdk.all_color_collections())
-      const other = cols.find((c) => c.id !== current.id)
-      expect(other).toBeDefined()
-      // tests to stop lint from complaining
-      if (other && other.id && current.id) {
-        const actual = await sdk.ok(sdk.set_default_color_collection(other.id))
-        expect(actual).toBeDefined()
-        expect(actual.id).toEqual(other.id)
-        const updated = await sdk.ok(sdk.default_color_collection())
-        expect(updated.id).toEqual(actual.id)
-        await sdk.ok(sdk.set_default_color_collection(current.id))
-      }
-    })
+    it(
+      'set default color collection',
+      async () => {
+        const sdk = new LookerSDK(session)
+        const current = await sdk.ok(sdk.default_color_collection())
+        expect(current).toBeDefined()
+        const cols = await sdk.ok(sdk.all_color_collections())
+        const other = cols.find((c) => c.id !== current.id)
+        expect(other).toBeDefined()
+        // tests to stop lint from complaining
+        if (other && other.id && current.id) {
+          const actual = await sdk.ok(
+            sdk.set_default_color_collection(other.id)
+          )
+          expect(actual).toBeDefined()
+          expect(actual.id).toEqual(other.id)
+          const updated = await sdk.ok(sdk.default_color_collection())
+          expect(updated.id).toEqual(actual.id)
+          await sdk.ok(sdk.set_default_color_collection(current.id))
+        }
+      },
+      fifteen
+    )
   })
 
   describe('automatic authentication for API calls', () => {
