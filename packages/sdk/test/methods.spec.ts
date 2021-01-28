@@ -27,7 +27,6 @@
 import * as fs from 'fs'
 import { Readable } from 'readable-stream'
 import {
-  ApiConfig,
   NodeSettings,
   NodeSettingsIniFile,
   DelimArray,
@@ -35,6 +34,7 @@ import {
   defaultTimeout,
   NodeSession,
   ApiConfigMap,
+  readIniConfig,
 } from '@looker/sdk-rtl'
 import { TestConfig } from '../../sdk-rtl/src/testUtils'
 import { LookerNodeSDK } from '../src/nodeSdk'
@@ -220,36 +220,40 @@ describe('LookerNodeSDK', () => {
   })
 
   describe('downloads', () => {
-    it('png and svg', async () => {
-      const sdk = new LookerSDK(session)
-      const looks = await sdk.ok(sdk.search_looks({ limit: 1 }))
-      let type = ''
-      let id = ''
-      expect(looks).toBeDefined()
-      if (looks.length > 0) {
-        type = 'look'
-        id = looks[0].id!.toString(10)
-      } else {
-        const dashboards = await sdk.ok(sdk.search_dashboards({ limit: 1 }))
-        expect(dashboards).toBeDefined()
-        if (dashboards.length > 0) {
-          type = 'dashboards'
-          id = dashboards[0].id!
+    it(
+      'png and svg',
+      async () => {
+        const sdk = new LookerSDK(session)
+        const looks = await sdk.ok(sdk.search_looks({ limit: 1 }))
+        let type = ''
+        let id = ''
+        expect(looks).toBeDefined()
+        if (looks.length > 0) {
+          type = 'look'
+          id = looks[0].id!.toString(10)
+        } else {
+          const dashboards = await sdk.ok(sdk.search_dashboards({ limit: 1 }))
+          expect(dashboards).toBeDefined()
+          if (dashboards.length > 0) {
+            type = 'dashboards'
+            id = dashboards[0].id!
+          }
         }
-      }
-      expect(type).toBeDefined()
-      expect(id).toBeDefined()
-      const image = await sdk.ok(
-        sdk.content_thumbnail({ type: type, resource_id: id, format: 'png' })
-      )
-      expect(image).toBeDefined()
-      expect(mimeType(image)).toEqual('image/png')
-      const svg = await sdk.ok(
-        sdk.content_thumbnail({ type: type, resource_id: id, format: 'svg' })
-      )
-      expect(svg).toBeDefined()
-      expect(svg).toMatch(/^<\?xml/)
-    })
+        expect(type).toBeDefined()
+        expect(id).toBeDefined()
+        const image = await sdk.ok(
+          sdk.content_thumbnail({ type: type, resource_id: id, format: 'png' })
+        )
+        expect(image).toBeDefined()
+        expect(mimeType(image)).toEqual('image/png')
+        const svg = await sdk.ok(
+          sdk.content_thumbnail({ type: type, resource_id: id, format: 'svg' })
+        )
+        expect(svg).toBeDefined()
+        expect(svg).toMatch(/^<\?xml/)
+      },
+      testTimeout
+    )
   })
 
   describe('PUT smoke test', () => {
@@ -907,7 +911,11 @@ describe('LookerNodeSDK', () => {
 
   describe('Node environment', () => {
     beforeAll(() => {
-      const section = ApiConfig(fs.readFileSync(config.localIni, 'utf8')).Looker
+      const section = readIniConfig(
+        config.localIni,
+        environmentPrefix,
+        'Looker'
+      )
       const verify_ssl = boolDefault(section.verify_ssl, false).toString()
       // populate environment variables
       process.env[strLookerTimeout] =
