@@ -24,11 +24,6 @@ env:
   LOOKERSDK_VERIFY_SSL: false
   TS_JUNIT_OUTPUT_DIR: results/tssdk
 
-defaults:
-  run:
-    shell: bash
-#    working-directory: /
-
 jobs:
   unit:
     # 1st condition: push event (restricted to master above)
