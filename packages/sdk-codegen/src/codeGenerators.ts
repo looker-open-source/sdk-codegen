@@ -111,15 +111,6 @@ export const Generators: Array<IGeneratorSpec> = [
   //   language: 'Rust',
   //   options: '-papiPackage=Looker -ppackageName=looker'
   // },
-  // {
-  //   language: 'typescript-node',
-  //   path: 'ts_node',
-  //   options: '-papiPackage=Looker -ppackageName=looker'
-  // },
-  // {
-  //   language: 'typescript-fetch',
-  //   options: '-papiPackage=looker -ppackageName=looker'
-  // },
 ]
 
 export const codeGenerators = Generators.filter((x) => x.factory !== undefined)

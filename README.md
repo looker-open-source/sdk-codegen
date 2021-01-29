@@ -110,7 +110,7 @@ The resources required to run the code generator are in [package.json](package.j
 
 **Note**: If `yarn` is not installed, use [these instructions to install](https://yarnpkg.com/lang/en/docs/install/) it.
 
-- run the SDK generator with `yarn sdk [language]`
+- run the SDK generator with `yarn gen [language]`
 
 - **Note**: [Generating Client SDKs for the Looker API](https://discourse.looker.com/t/generating-client-sdks-for-the-looker-api/3185) describes the legacy, manual steps for generating an API language binding. This project replaces these manual steps, and uses an improved code generator.
 
@@ -127,13 +127,13 @@ Unlike some other OpenAPI code generators, the Looker SDK code generator **never
 Invoke the SDK code generator with the command:
 
 ```sh
-yarn sdk
+yarn gen
 ```
 
 To always use the latest Looker API specification for SDK generation, use:
 
 ```sh
-yarn wipe && yarn sdk
+yarn wipe && yarn gen
 ```
 
 The code generator will:
@@ -150,7 +150,7 @@ The code generator will:
 
 - by default, call the code generator for each active language configured in [`codeGenerators.ts`](packages/sdk-codegen/src/codeGenerators.ts)
 
-  - If you want to generate for one specific language, use `yarn sdk {language}`. Currently, supported `{language}` values are `kotlin`, `python`, `swift` and `typescript`
+  - If you want to generate for one specific language, use `yarn gen {language}`. Currently, supported `{language}` values are `kotlin`, `python`, `swift` and `typescript`
 
 When the generator completes successfully, the output will be similar to:
 
