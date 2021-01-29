@@ -524,6 +524,22 @@ ${this.hooks.join('\n')}
     return text ? `${indent}"""${text}"""\n` : ''
   }
 
+  // when format is "methods" that means we're in the methods.py module
+  // and we need to reference the type by the `models.` package name
+  prefixModelsNamespace(
+    name: string,
+    format: 'models' | 'methods',
+    forwardRef = false
+  ): string {
+    if (format === 'models') {
+      // need to quote this forwardRef
+      name = forwardRef ? `"${name}"` : name
+    } else if (format === 'methods') {
+      name = `models.${name}`
+    }
+    return name
+  }
+
   // hack default format to 'methods' so that argValue() calls the right thing
   typeMap(type: IType, format: 'models' | 'methods' = 'methods'): IMappedType {
     const asString: CodeAssignment = (_, v) => `"${v}"`
@@ -566,14 +582,13 @@ ${this.hooks.join('\n')}
             ']'
           break
         case 'DelimArrayType':
-          typeName = 'DelimSequence'
+          typeName = this.prefixModelsNamespace('DelimSequence', format)
           name = `${typeName}[${map.name}]`
-          asVal = (_, v) => `models.${typeName}([${v}])`
+          asVal = (_, v) => `${typeName}([${v}])`
           break
         case 'EnumType':
-          typeName = type.name
-          name = `"${type.name}"`
-          asVal = (_, v) => `models.${typeName}.${v}`
+          name = typeName = this.prefixModelsNamespace(type.name, format, true)
+          asVal = (_, v) => `${typeName}.${v}`
           break
         default:
           throw new Error(`Don't know how to handle: ${JSON.stringify(type)}`)
@@ -587,14 +602,11 @@ ${this.hooks.join('\n')}
     if (!type.name) {
       throw new Error('Cannot output a nameless type.')
     }
-    let name: string
-    if (format === 'models') {
-      name = type.customType ? `"${type.name}"` : type.name
-    } else if (format === 'methods') {
-      name = `models.${type.name}`
-    } else {
-      throw new Error('format must be "models" or "methods"')
-    }
+    const name = this.prefixModelsNamespace(
+      type.name,
+      format,
+      !!type.customType
+    )
     const result = pythonTypes[type.name]
     return result || { default: this.nullStr, name: name }
   }

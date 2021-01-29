@@ -239,6 +239,30 @@ def all_datagroups(
       const actual = gen.methodSignature('', method)
       expect(actual).toEqual(expected)
     })
+    it('DelimSequence with test_connection', () => {
+      const method = apiTestModel.methods.test_connection
+      const expected = `# ### Test an existing connection.
+#
+# Note that a connection's 'dialect' property has a 'connection_tests' property that lists the
+# specific types of tests that the connection supports.
+#
+# This API is rate limited.
+#
+# Unsupported tests in the request will be ignored.
+#
+# PUT /connections/{connection_name}/test -> Sequence[models.DBConnectionTestResult]
+def test_connection(
+    self,
+    # Name of connection
+    connection_name: str,
+    # Array of names of tests to run
+    tests: Optional[models.DelimSequence[str]] = None,
+    transport_options: Optional[transport.PTransportSettings] = None,
+) -> Sequence[models.DBConnectionTestResult]:
+`
+      const actual = gen.methodSignature('', method)
+      expect(actual).toEqual(expected)
+    })
     it('binary return type render_task_results', () => {
       const method = apiTestModel.methods.render_task_results
       const expected = `# ### Get the document or image produced by a completed render task.
@@ -878,6 +902,17 @@ class MergeFields(model.Model):
         query_id=1,
         result_format=models.ResultFormat.csv
     ))`
+      expect(actual).toEqual(expected)
+    })
+
+    it('assigns a DelimArray', () => {
+      const inputs: IRequestAllUsers = {
+        ids: new DelimArray<number>([1, 2, 3]),
+      }
+      const method = apiTestModel.methods.all_users
+      const actual = gen.makeTheCall(method, inputs)
+      const expected = `response = sdk.all_users(
+    ids=models.DelimSequence([1,2,3]))`
       expect(actual).toEqual(expected)
     })
 
