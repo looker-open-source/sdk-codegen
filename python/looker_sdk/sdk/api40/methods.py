@@ -2132,7 +2132,7 @@ class Looker40SDK(api_methods.APIMethods):
         # Name of connection
         connection_name: str,
         # Array of names of tests to run
-        tests: Optional[DelimSequence[str]] = None,
+        tests: Optional[models.DelimSequence[str]] = None,
         transport_options: Optional[transport.PTransportSettings] = None,
     ) -> Sequence[models.DBConnectionTestResult]:
         """Test Connection"""
@@ -2160,7 +2160,7 @@ class Looker40SDK(api_methods.APIMethods):
         self,
         body: models.WriteDBConnection,
         # Array of names of tests to run
-        tests: Optional[DelimSequence[str]] = None,
+        tests: Optional[models.DelimSequence[str]] = None,
         transport_options: Optional[transport.PTransportSettings] = None,
     ) -> Sequence[models.DBConnectionTestResult]:
         """Test Connection Configuration"""
@@ -4154,7 +4154,7 @@ class Looker40SDK(api_methods.APIMethods):
         # Fields to sort by.
         sorts: Optional[str] = None,
         # Optional of ids to get specific groups.
-        ids: Optional[DelimSequence[int]] = None,
+        ids: Optional[models.DelimSequence[int]] = None,
         # Id of content metadata to which groups must have access.
         content_metadata_id: Optional[int] = None,
         # Select only groups that either can/cannot be given access to content.
@@ -6495,7 +6495,7 @@ class Looker40SDK(api_methods.APIMethods):
     def query_task_multi_results(
         self,
         # List of Query Task IDs
-        query_task_ids: DelimSequence[str],
+        query_task_ids: models.DelimSequence[str],
         transport_options: Optional[transport.PTransportSettings] = None,
     ) -> MutableMapping[str, Any]:
         """Get Multiple Async Query Results"""
@@ -7626,7 +7626,7 @@ class Looker40SDK(api_methods.APIMethods):
         # Requested fields.
         fields: Optional[str] = None,
         # Optional list of ids to get specific roles.
-        ids: Optional[DelimSequence[int]] = None,
+        ids: Optional[models.DelimSequence[int]] = None,
         transport_options: Optional[transport.PTransportSettings] = None,
     ) -> Sequence[models.Role]:
         """Get All Roles"""
@@ -8765,7 +8765,7 @@ class Looker40SDK(api_methods.APIMethods):
         # Fields to sort by.
         sorts: Optional[str] = None,
         # Optional list of ids to get specific users.
-        ids: Optional[DelimSequence[int]] = None,
+        ids: Optional[models.DelimSequence[int]] = None,
         transport_options: Optional[transport.PTransportSettings] = None,
     ) -> Sequence[models.User]:
         """Get All Users"""
@@ -9727,7 +9727,7 @@ class Looker40SDK(api_methods.APIMethods):
         # Requested fields.
         fields: Optional[str] = None,
         # Specific user attributes to request. Omit or leave blank to request all user attributes.
-        user_attribute_ids: Optional[DelimSequence[int]] = None,
+        user_attribute_ids: Optional[models.DelimSequence[int]] = None,
         # If true, returns all values in the search path instead of just the first value found. Useful for debugging group precedence.
         all_values: Optional[bool] = None,
         # If true, returns an empty record for each requested attribute that has no user, group, or default value.
