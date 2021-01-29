@@ -38,7 +38,7 @@ The alpha version of the Looker SDK is not published to the Swift Package Manage
 To ensure you have the version of the SDK that matches your Looker version, you can regenerate `methods.swift` and `models.swift` from the root of the repository with the command:
 
 ```bash
-yarn sdk swift
+yarn gen swift
 ```
 
 If this command fails the first time, read the [instructions for setting up `yarn`](https://github.com/looker-open-source/sdk-codegen/blob/master/README.md#using-the-yarnnode-based-generator)
@@ -76,11 +76,11 @@ let me = try? sdk.ok(sdk.me())
 
 ### SDK model type initialization
 
-All SDK model types can be initialized with named parameters. A `public init(...)` is generated for every SDK model type (either a `struct` or a `class`). 
+All SDK model types can be initialized with named parameters. A `public init(...)` is generated for every SDK model type (either a `struct` or a `class`).
 If an SDK type has all optional properties, this is the only constructor generated.
 
 For types with any required properties, the code generator also produces a positional constructor.
-The `class` type's positional constructor has the syntax `public convenience init(...)`, but `struct` types do not have `convenience` init methods. 
+The `class` type's positional constructor has the syntax `public convenience init(...)`, but `struct` types do not have `convenience` init methods.
 
 This sample code from [modelsTests.swift](Tests/lookerTests/modelsTests.swift) shows both constructor patterns for both a `class` and a `struct`:
 
@@ -133,7 +133,7 @@ func testBothPositionalAndNamed() {
     var testStruct = StructInit(name, id: id) // positional
     XCTAssertEqual(testStruct.name, name)
     XCTAssertEqual(testStruct.id, id)
-    testStruct = StructInit(name: name, id: id) // named 
+    testStruct = StructInit(name: name, id: id) // named
     XCTAssertEqual(testStruct.name, name)
     XCTAssertEqual(testStruct.id, id)
 }

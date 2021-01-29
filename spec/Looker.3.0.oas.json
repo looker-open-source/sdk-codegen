@@ -2,11 +2,11 @@
   "openapi": "3.0.0",
   "info": {
     "version": "3.0.0",
-    "x-looker-release-version": "7.20.0",
+    "x-looker-release-version": "21.0.0",
     "title": "Looker API 3.0 (Legacy) Reference",
     "description": "### 3.0 Legacy API\n\nLooker API 3.0 is stable and will continue to be supported for the foreseeable future.\nNo new features will be added to API 3.0; all new development (Looker features and\ndev tools) will appear in API 4.0 only.\n\n",
     "contact": { "name": "Looker Team", "url": "https://help.looker.com" },
-    "license": { "name": "EULA", "url": "https://192.168.23.165:10000/eula" }
+    "license": { "name": "EULA", "url": "http://localhost:9999/eula" }
   },
   "tags": [
     { "name": "ApiAuth", "description": "API Authentication" },
@@ -197,7 +197,7 @@
             }
           }
         },
-        "x-looker-status": "beta",
+        "x-looker-status": "stable",
         "x-looker-activity-type": "db_query"
       }
     },
@@ -247,7 +247,7 @@
             }
           }
         },
-        "x-looker-status": "beta",
+        "x-looker-status": "stable",
         "x-looker-activity-type": "db_query"
       }
     },
@@ -299,7 +299,7 @@
             }
           }
         },
-        "x-looker-status": "beta",
+        "x-looker-status": "stable",
         "x-looker-activity-type": "db_query"
       }
     },
@@ -352,7 +352,7 @@
             }
           }
         },
-        "x-looker-status": "beta",
+        "x-looker-status": "stable",
         "x-looker-activity-type": "db_query"
       }
     },
@@ -1311,7 +1311,7 @@
             }
           }
         },
-        "x-looker-status": "beta",
+        "x-looker-status": "stable",
         "x-looker-activity-type": "non_query"
       }
     },
@@ -1363,7 +1363,7 @@
             }
           }
         },
-        "x-looker-status": "beta",
+        "x-looker-status": "stable",
         "x-looker-activity-type": "non_query"
       },
       "delete": {
@@ -1412,7 +1412,7 @@
             }
           }
         },
-        "x-looker-status": "beta",
+        "x-looker-status": "stable",
         "x-looker-activity-type": "non_query"
       }
     },
@@ -1481,7 +1481,7 @@
             }
           }
         },
-        "x-looker-status": "beta",
+        "x-looker-status": "stable",
         "x-looker-activity-type": "non_query"
       }
     },
@@ -1536,7 +1536,7 @@
             }
           }
         },
-        "x-looker-status": "beta",
+        "x-looker-status": "stable",
         "x-looker-activity-type": "non_query"
       }
     },
@@ -1606,7 +1606,7 @@
             }
           }
         },
-        "x-looker-status": "beta",
+        "x-looker-status": "stable",
         "x-looker-activity-type": "non_query"
       },
       "get": {
@@ -1656,7 +1656,7 @@
             }
           }
         },
-        "x-looker-status": "beta",
+        "x-looker-status": "stable",
         "x-looker-activity-type": "non_query"
       }
     },
@@ -1722,7 +1722,7 @@
             }
           }
         },
-        "x-looker-status": "beta",
+        "x-looker-status": "stable",
         "x-looker-activity-type": "non_query",
         "x-looker-rate-limited": true
       },
@@ -1778,7 +1778,7 @@
             }
           }
         },
-        "x-looker-status": "beta",
+        "x-looker-status": "stable",
         "x-looker-activity-type": "non_query"
       }
     },
@@ -1845,7 +1845,7 @@
             }
           }
         },
-        "x-looker-status": "beta",
+        "x-looker-status": "stable",
         "x-looker-activity-type": "non_query"
       },
       "delete": {
@@ -1894,7 +1894,7 @@
             }
           }
         },
-        "x-looker-status": "beta",
+        "x-looker-status": "stable",
         "x-looker-activity-type": "non_query"
       }
     },
@@ -2019,7 +2019,7 @@
             }
           }
         },
-        "x-looker-status": "beta",
+        "x-looker-status": "stable",
         "x-looker-activity-type": "non_query"
       }
     },
@@ -2067,7 +2067,7 @@
             }
           }
         },
-        "x-looker-status": "beta",
+        "x-looker-status": "stable",
         "x-looker-activity-type": "non_query"
       },
       "post": {
@@ -2129,7 +2129,7 @@
             }
           }
         },
-        "x-looker-status": "beta",
+        "x-looker-status": "stable",
         "x-looker-activity-type": "non_query"
       }
     },
@@ -2282,7 +2282,7 @@
             }
           }
         },
-        "x-looker-status": "beta",
+        "x-looker-status": "stable",
         "x-looker-activity-type": "non_query"
       }
     },
@@ -2291,7 +2291,7 @@
         "tags": ["Dashboard"],
         "operationId": "import_lookml_dashboard",
         "summary": "Import LookML Dashboard",
-        "description": "### Import a LookML dashboard to a space as a UDD\nCreates a UDD (a dashboard which exists in the Looker database rather than as a LookML file) from the LookML dashboard\nand puts it in the space specified. The created UDD will have a lookml_link_id which links to the original LookML dashboard.\n\nTo give the imported dashboard specify a (e.g. title: \"my title\") in the body of your request, otherwise the imported\ndashboard will have the same title as the original LookML dashboard.\n\nFor this operation to succeed the user must have permission to see the LookML dashboard in question, and have permission to\ncreate content in the space the dashboard is being imported to.\n\n**Sync** a linked UDD with [sync_lookml_dashboard()](#!/Dashboard/sync_lookml_dashboard)\n**Unlink** a linked UDD by setting lookml_link_id to null with [update_dashboard()](#!/Dashboard/update_dashboard)\n",
+        "description": "### Import a LookML dashboard to a space as a UDD\nCreates a UDD (a dashboard which exists in the Looker database rather than as a LookML file) from the LookML dashboard\nand places it in the space specified. The created UDD will have a lookml_link_id which links to the original LookML dashboard.\n\nTo give the imported dashboard specify a (e.g. title: \"my title\") in the body of your request, otherwise the imported\ndashboard will have the same title as the original LookML dashboard.\n\nFor this operation to succeed the user must have permission to see the LookML dashboard in question, and have permission to\ncreate content in the space the dashboard is being imported to.\n\n**Sync** a linked UDD with [sync_lookml_dashboard()](#!/Dashboard/sync_lookml_dashboard)\n**Unlink** a linked UDD by setting lookml_link_id to null with [update_dashboard()](#!/Dashboard/update_dashboard)\n",
         "parameters": [
           {
             "name": "lookml_dashboard_id",
@@ -2382,7 +2382,7 @@
             }
           }
         },
-        "x-looker-status": "beta",
+        "x-looker-status": "stable",
         "x-looker-activity-type": "non_query"
       }
     },
@@ -2457,7 +2457,7 @@
             }
           }
         },
-        "x-looker-status": "beta",
+        "x-looker-status": "stable",
         "x-looker-activity-type": "non_query"
       }
     },
@@ -2516,7 +2516,7 @@
             }
           }
         },
-        "x-looker-status": "beta",
+        "x-looker-status": "stable",
         "x-looker-activity-type": "non_query"
       },
       "patch": {
@@ -2587,7 +2587,7 @@
             }
           }
         },
-        "x-looker-status": "beta",
+        "x-looker-status": "stable",
         "x-looker-activity-type": "non_query"
       },
       "get": {
@@ -2637,7 +2637,7 @@
             }
           }
         },
-        "x-looker-status": "beta",
+        "x-looker-status": "stable",
         "x-looker-activity-type": "non_query"
       }
     },
@@ -2815,7 +2815,7 @@
             }
           }
         },
-        "x-looker-status": "beta",
+        "x-looker-status": "stable",
         "x-looker-activity-type": "non_query"
       }
     },
@@ -2871,7 +2871,7 @@
             }
           }
         },
-        "x-looker-status": "beta",
+        "x-looker-status": "stable",
         "x-looker-activity-type": "non_query"
       }
     },
@@ -2910,7 +2910,7 @@
             }
           }
         },
-        "x-looker-status": "beta",
+        "x-looker-status": "stable",
         "x-looker-activity-type": "non_query"
       }
     },
@@ -2955,7 +2955,7 @@
             }
           }
         },
-        "x-looker-status": "beta",
+        "x-looker-status": "stable",
         "x-looker-activity-type": "non_query"
       },
       "patch": {
@@ -3031,7 +3031,7 @@
             }
           }
         },
-        "x-looker-status": "beta",
+        "x-looker-status": "stable",
         "x-looker-activity-type": "non_query"
       }
     },
@@ -3608,7 +3608,7 @@
             }
           }
         },
-        "x-looker-status": "beta",
+        "x-looker-status": "stable",
         "x-looker-activity-type": "non_query"
       }
     },
@@ -3653,7 +3653,7 @@
             }
           }
         },
-        "x-looker-status": "beta",
+        "x-looker-status": "stable",
         "x-looker-activity-type": "non_query"
       },
       "post": {
@@ -3724,7 +3724,7 @@
             }
           }
         },
-        "x-looker-status": "beta",
+        "x-looker-status": "stable",
         "x-looker-activity-type": "non_query"
       },
       "put": {
@@ -3787,7 +3787,7 @@
             }
           }
         },
-        "x-looker-status": "beta",
+        "x-looker-status": "stable",
         "x-looker-activity-type": "non_query"
       }
     },
@@ -3839,7 +3839,7 @@
             }
           }
         },
-        "x-looker-status": "beta",
+        "x-looker-status": "stable",
         "x-looker-activity-type": "non_query"
       },
       "delete": {
@@ -3895,7 +3895,7 @@
             }
           }
         },
-        "x-looker-status": "beta",
+        "x-looker-status": "stable",
         "x-looker-activity-type": "non_query"
       }
     },
@@ -4779,7 +4779,7 @@
             }
           }
         },
-        "x-looker-status": "beta",
+        "x-looker-status": "stable",
         "x-looker-activity-type": "non_query"
       },
       "post": {
@@ -4850,7 +4850,7 @@
             }
           }
         },
-        "x-looker-status": "beta",
+        "x-looker-status": "stable",
         "x-looker-activity-type": "non_query"
       }
     },
@@ -4902,7 +4902,7 @@
             }
           }
         },
-        "x-looker-status": "beta",
+        "x-looker-status": "stable",
         "x-looker-activity-type": "non_query"
       },
       "patch": {
@@ -4972,7 +4972,7 @@
             }
           }
         },
-        "x-looker-status": "beta",
+        "x-looker-status": "stable",
         "x-looker-activity-type": "non_query"
       },
       "delete": {
@@ -5021,7 +5021,7 @@
             }
           }
         },
-        "x-looker-status": "beta",
+        "x-looker-status": "stable",
         "x-looker-activity-type": "non_query"
       }
     },
@@ -5076,7 +5076,7 @@
             }
           }
         },
-        "x-looker-status": "beta",
+        "x-looker-status": "stable",
         "x-looker-activity-type": "non_query"
       },
       "post": {
@@ -5147,7 +5147,7 @@
             }
           }
         },
-        "x-looker-status": "beta",
+        "x-looker-status": "stable",
         "x-looker-activity-type": "non_query"
       }
     },
@@ -5199,7 +5199,7 @@
             }
           }
         },
-        "x-looker-status": "beta",
+        "x-looker-status": "stable",
         "x-looker-activity-type": "non_query"
       },
       "patch": {
@@ -5269,7 +5269,7 @@
             }
           }
         },
-        "x-looker-status": "beta",
+        "x-looker-status": "stable",
         "x-looker-activity-type": "non_query"
       },
       "delete": {
@@ -5318,7 +5318,7 @@
             }
           }
         },
-        "x-looker-status": "beta",
+        "x-looker-status": "stable",
         "x-looker-activity-type": "non_query"
       }
     },
@@ -5366,7 +5366,7 @@
             }
           }
         },
-        "x-looker-status": "beta",
+        "x-looker-status": "stable",
         "x-looker-activity-type": "non_query"
       },
       "post": {
@@ -5437,7 +5437,7 @@
             }
           }
         },
-        "x-looker-status": "beta",
+        "x-looker-status": "stable",
         "x-looker-activity-type": "non_query",
         "x-looker-rate-limited": true
       }
@@ -5490,7 +5490,7 @@
             }
           }
         },
-        "x-looker-status": "beta",
+        "x-looker-status": "stable",
         "x-looker-activity-type": "non_query"
       },
       "patch": {
@@ -5560,7 +5560,7 @@
             }
           }
         },
-        "x-looker-status": "beta",
+        "x-looker-status": "stable",
         "x-looker-activity-type": "non_query",
         "x-looker-rate-limited": true
       },
@@ -5610,7 +5610,7 @@
             }
           }
         },
-        "x-looker-status": "beta",
+        "x-looker-status": "stable",
         "x-looker-activity-type": "non_query"
       }
     },
@@ -5663,7 +5663,7 @@
             }
           }
         },
-        "x-looker-status": "beta",
+        "x-looker-status": "stable",
         "x-looker-activity-type": "non_query"
       }
     },
@@ -5718,7 +5718,7 @@
             }
           }
         },
-        "x-looker-status": "beta",
+        "x-looker-status": "stable",
         "x-looker-activity-type": "non_query"
       }
     },
@@ -5770,7 +5770,7 @@
             }
           }
         },
-        "x-looker-status": "beta",
+        "x-looker-status": "stable",
         "x-looker-activity-type": "non_query"
       },
       "patch": {
@@ -5845,7 +5845,7 @@
             }
           }
         },
-        "x-looker-status": "beta",
+        "x-looker-status": "stable",
         "x-looker-activity-type": "non_query"
       }
     },
@@ -5910,7 +5910,7 @@
             }
           }
         },
-        "x-looker-status": "beta",
+        "x-looker-status": "stable",
         "x-looker-activity-type": "non_query"
       }
     },
@@ -5965,7 +5965,7 @@
             }
           }
         },
-        "x-looker-status": "beta",
+        "x-looker-status": "stable",
         "x-looker-activity-type": "non_query"
       }
     },
@@ -6439,7 +6439,7 @@
             }
           }
         },
-        "x-looker-status": "beta",
+        "x-looker-status": "stable",
         "x-looker-activity-type": "non_query"
       },
       "post": {
@@ -6510,7 +6510,7 @@
             }
           }
         },
-        "x-looker-status": "beta",
+        "x-looker-status": "stable",
         "x-looker-activity-type": "non_query"
       }
     },
@@ -6635,7 +6635,7 @@
             }
           }
         },
-        "x-looker-status": "beta",
+        "x-looker-status": "stable",
         "x-looker-activity-type": "non_query"
       }
     },
@@ -6687,7 +6687,7 @@
             }
           }
         },
-        "x-looker-status": "beta",
+        "x-looker-status": "stable",
         "x-looker-activity-type": "non_query"
       },
       "patch": {
@@ -6757,7 +6757,7 @@
             }
           }
         },
-        "x-looker-status": "beta",
+        "x-looker-status": "stable",
         "x-looker-activity-type": "non_query"
       },
       "delete": {
@@ -6806,7 +6806,7 @@
             }
           }
         },
-        "x-looker-status": "beta",
+        "x-looker-status": "stable",
         "x-looker-activity-type": "non_query"
       }
     },
@@ -7608,7 +7608,7 @@
             }
           }
         },
-        "x-looker-status": "beta",
+        "x-looker-status": "stable",
         "x-looker-activity-type": "non_query"
       },
       "patch": {
@@ -7659,7 +7659,7 @@
             }
           }
         },
-        "x-looker-status": "beta",
+        "x-looker-status": "stable",
         "x-looker-activity-type": "non_query"
       }
     },
@@ -7696,7 +7696,7 @@
             }
           }
         },
-        "x-looker-status": "beta",
+        "x-looker-status": "stable",
         "x-looker-activity-type": "non_query"
       },
       "delete": {
@@ -7737,7 +7737,7 @@
             }
           }
         },
-        "x-looker-status": "beta",
+        "x-looker-status": "stable",
         "x-looker-activity-type": "non_query"
       }
     },
@@ -7790,7 +7790,7 @@
             }
           }
         },
-        "x-looker-status": "beta",
+        "x-looker-status": "stable",
         "x-looker-activity-type": "non_query"
       }
     },
@@ -8181,7 +8181,7 @@
             }
           }
         },
-        "x-looker-status": "beta",
+        "x-looker-status": "stable",
         "x-looker-activity-type": "non_query"
       }
     },
@@ -8243,7 +8243,7 @@
             }
           }
         },
-        "x-looker-status": "beta",
+        "x-looker-status": "stable",
         "x-looker-activity-type": "non_query"
       }
     },
@@ -8305,7 +8305,7 @@
             }
           }
         },
-        "x-looker-status": "beta",
+        "x-looker-status": "stable",
         "x-looker-activity-type": "non_query"
       }
     },
@@ -8353,7 +8353,7 @@
             }
           }
         },
-        "x-looker-status": "beta",
+        "x-looker-status": "stable",
         "x-looker-activity-type": "non_query"
       },
       "post": {
@@ -8415,7 +8415,7 @@
             }
           }
         },
-        "x-looker-status": "beta",
+        "x-looker-status": "stable",
         "x-looker-activity-type": "non_query"
       }
     },
@@ -8467,7 +8467,7 @@
             }
           }
         },
-        "x-looker-status": "beta",
+        "x-looker-status": "stable",
         "x-looker-activity-type": "non_query"
       },
       "patch": {
@@ -8553,7 +8553,7 @@
             }
           }
         },
-        "x-looker-status": "beta",
+        "x-looker-status": "stable",
         "x-looker-activity-type": "non_query"
       }
     },
@@ -8598,7 +8598,7 @@
             }
           }
         },
-        "x-looker-status": "beta",
+        "x-looker-status": "stable",
         "x-looker-activity-type": "non_query"
       }
     },
@@ -8663,7 +8663,7 @@
             }
           }
         },
-        "x-looker-status": "beta",
+        "x-looker-status": "stable",
         "x-looker-activity-type": "non_query"
       },
       "get": {
@@ -8702,7 +8702,7 @@
             }
           }
         },
-        "x-looker-status": "beta",
+        "x-looker-status": "stable",
         "x-looker-activity-type": "non_query"
       }
     },
@@ -8770,7 +8770,7 @@
             }
           }
         },
-        "x-looker-status": "beta",
+        "x-looker-status": "stable",
         "x-looker-activity-type": "non_query"
       },
       "get": {
@@ -8823,7 +8823,7 @@
             }
           }
         },
-        "x-looker-status": "beta",
+        "x-looker-status": "stable",
         "x-looker-activity-type": "non_query"
       }
     },
@@ -8875,7 +8875,7 @@
             }
           }
         },
-        "x-looker-status": "beta",
+        "x-looker-status": "stable",
         "x-looker-activity-type": "non_query"
       }
     },
@@ -8930,7 +8930,7 @@
             }
           }
         },
-        "x-looker-status": "beta",
+        "x-looker-status": "stable",
         "x-looker-activity-type": "non_query"
       }
     },
@@ -8989,7 +8989,7 @@
             }
           }
         },
-        "x-looker-status": "beta",
+        "x-looker-status": "stable",
         "x-looker-activity-type": "non_query"
       }
     },
@@ -9044,7 +9044,7 @@
             }
           }
         },
-        "x-looker-status": "beta",
+        "x-looker-status": "stable",
         "x-looker-activity-type": "non_query"
       }
     },
@@ -9073,6 +9073,13 @@
             "name": "remote_url",
             "in": "query",
             "description": "(Optional: leave blank for root project) The remote url for remote dependency to test.",
+            "required": false,
+            "schema": { "type": "string" }
+          },
+          {
+            "name": "use_production",
+            "in": "query",
+            "description": "(Optional: leave blank for dev credentials) Whether to use git production credentials.",
             "required": false,
             "schema": { "type": "string" }
           }
@@ -9121,7 +9128,7 @@
             }
           }
         },
-        "x-looker-status": "beta",
+        "x-looker-status": "stable",
         "x-looker-activity-type": "non_query"
       }
     },
@@ -9334,7 +9341,7 @@
             }
           }
         },
-        "x-looker-status": "beta",
+        "x-looker-status": "stable",
         "x-looker-activity-type": "db_query"
       }
     },
@@ -9431,7 +9438,7 @@
             }
           }
         },
-        "x-looker-status": "beta",
+        "x-looker-status": "stable",
         "x-looker-activity-type": "db_query"
       }
     },
@@ -9546,7 +9553,7 @@
             }
           }
         },
-        "x-looker-status": "beta",
+        "x-looker-status": "stable",
         "x-looker-activity-type": "db_query"
       }
     },
@@ -9598,7 +9605,7 @@
             }
           }
         },
-        "x-looker-status": "beta",
+        "x-looker-status": "stable",
         "x-looker-activity-type": "db_query"
       }
     },
@@ -9656,7 +9663,7 @@
             }
           }
         },
-        "x-looker-status": "beta",
+        "x-looker-status": "stable",
         "x-looker-activity-type": "db_query"
       }
     },
@@ -10665,7 +10672,7 @@
             }
           }
         },
-        "x-looker-status": "beta",
+        "x-looker-status": "stable",
         "x-looker-activity-type": "db_query"
       }
     },
@@ -10716,7 +10723,7 @@
             }
           }
         },
-        "x-looker-status": "beta",
+        "x-looker-status": "stable",
         "x-looker-activity-type": "db_query"
       },
       "patch": {
@@ -10779,7 +10786,7 @@
             }
           }
         },
-        "x-looker-status": "beta",
+        "x-looker-status": "stable",
         "x-looker-activity-type": "db_query"
       },
       "get": {
@@ -10829,7 +10836,7 @@
             }
           }
         },
-        "x-looker-status": "beta",
+        "x-looker-status": "stable",
         "x-looker-activity-type": "db_query"
       }
     },
@@ -10893,7 +10900,7 @@
             }
           }
         },
-        "x-looker-status": "beta",
+        "x-looker-status": "stable",
         "x-looker-activity-type": "db_query"
       },
       "get": {
@@ -10946,7 +10953,7 @@
             }
           }
         },
-        "x-looker-status": "beta",
+        "x-looker-status": "stable",
         "x-looker-activity-type": "db_query"
       }
     },
@@ -11010,7 +11017,7 @@
             }
           }
         },
-        "x-looker-status": "beta",
+        "x-looker-status": "stable",
         "x-looker-activity-type": "db_query",
         "x-looker-rate-limited": true
       }
@@ -11073,7 +11080,7 @@
             }
           }
         },
-        "x-looker-status": "beta",
+        "x-looker-status": "stable",
         "x-looker-activity-type": "db_query"
       }
     },
@@ -11135,7 +11142,7 @@
             }
           }
         },
-        "x-looker-status": "beta",
+        "x-looker-status": "stable",
         "x-looker-activity-type": "db_query"
       }
     },
@@ -11197,7 +11204,7 @@
             }
           }
         },
-        "x-looker-status": "beta",
+        "x-looker-status": "stable",
         "x-looker-activity-type": "db_query"
       }
     },
@@ -11233,7 +11240,7 @@
             }
           }
         },
-        "x-looker-status": "beta",
+        "x-looker-status": "stable",
         "x-looker-activity-type": "non_query"
       },
       "patch": {
@@ -11292,7 +11299,7 @@
             }
           }
         },
-        "x-looker-status": "beta",
+        "x-looker-status": "stable",
         "x-looker-activity-type": "non_query"
       }
     },
@@ -11403,7 +11410,7 @@
             }
           }
         },
-        "x-looker-status": "beta",
+        "x-looker-status": "stable",
         "x-looker-activity-type": "non_query"
       }
     },
@@ -11455,7 +11462,7 @@
             }
           }
         },
-        "x-looker-status": "beta",
+        "x-looker-status": "stable",
         "x-looker-activity-type": "non_query"
       },
       "delete": {
@@ -11504,7 +11511,7 @@
             }
           }
         },
-        "x-looker-status": "beta",
+        "x-looker-status": "stable",
         "x-looker-activity-type": "non_query"
       },
       "patch": {
@@ -11572,7 +11579,7 @@
             }
           }
         },
-        "x-looker-status": "beta",
+        "x-looker-status": "stable",
         "x-looker-activity-type": "non_query"
       }
     },
@@ -11620,7 +11627,7 @@
             }
           }
         },
-        "x-looker-status": "beta",
+        "x-looker-status": "stable",
         "x-looker-activity-type": "non_query"
       },
       "post": {
@@ -11687,7 +11694,7 @@
             }
           }
         },
-        "x-looker-status": "beta",
+        "x-looker-status": "stable",
         "x-looker-activity-type": "non_query"
       }
     },
@@ -11763,7 +11770,7 @@
             }
           }
         },
-        "x-looker-status": "beta",
+        "x-looker-status": "stable",
         "x-looker-activity-type": "non_query"
       }
     },
@@ -11832,7 +11839,7 @@
             }
           }
         },
-        "x-looker-status": "beta",
+        "x-looker-status": "stable",
         "x-looker-activity-type": "non_query"
       }
     },
@@ -11884,7 +11891,7 @@
             }
           }
         },
-        "x-looker-status": "beta",
+        "x-looker-status": "stable",
         "x-looker-activity-type": "non_query"
       }
     },
@@ -11939,7 +11946,7 @@
             }
           }
         },
-        "x-looker-status": "beta",
+        "x-looker-status": "stable",
         "x-looker-activity-type": "non_query"
       }
     },
@@ -11994,7 +12001,7 @@
             }
           }
         },
-        "x-looker-status": "beta",
+        "x-looker-status": "stable",
         "x-looker-activity-type": "non_query"
       }
     },
@@ -12049,7 +12056,7 @@
             }
           }
         },
-        "x-looker-status": "beta",
+        "x-looker-status": "stable",
         "x-looker-activity-type": "non_query"
       }
     },
@@ -12094,7 +12101,7 @@
             }
           }
         },
-        "x-looker-status": "beta",
+        "x-looker-status": "stable",
         "x-looker-activity-type": "db_query"
       }
     },
@@ -12163,7 +12170,7 @@
             }
           }
         },
-        "x-looker-status": "beta",
+        "x-looker-status": "stable",
         "x-looker-activity-type": "db_query"
       }
     },
@@ -15793,7 +15800,7 @@
             }
           }
         },
-        "x-looker-status": "beta",
+        "x-looker-status": "stable",
         "x-looker-activity-type": "non_query"
       },
       "put": {
@@ -15856,7 +15863,7 @@
             }
           }
         },
-        "x-looker-status": "beta",
+        "x-looker-status": "stable",
         "x-looker-activity-type": "non_query"
       }
     },
@@ -15895,7 +15902,7 @@
             }
           }
         },
-        "x-looker-status": "beta",
+        "x-looker-status": "stable",
         "x-looker-activity-type": "non_query"
       }
     },
@@ -15940,12 +15947,12 @@
             }
           }
         },
-        "x-looker-status": "beta",
+        "x-looker-status": "stable",
         "x-looker-activity-type": "non_query"
       }
     }
   },
-  "servers": [{ "url": "https://localhost:20000/api/3.0" }],
+  "servers": [{ "url": "http://localhost:19999/api/3.0" }],
   "components": {
     "requestBodies": {
       "LookmlModel": {
@@ -16233,7 +16240,7 @@
           },
           "space": { "$ref": "#/components/schemas/SpaceBase" }
         },
-        "x-looker-status": "beta"
+        "x-looker-status": "stable"
       },
       "SpaceBase": {
         "properties": {
@@ -16351,7 +16358,7 @@
             "nullable": false
           }
         },
-        "x-looker-status": "beta",
+        "x-looker-status": "stable",
         "required": ["name", "parent_id"]
       },
       "CreateSpace": {
@@ -16367,7 +16374,7 @@
             "nullable": false
           }
         },
-        "x-looker-status": "beta",
+        "x-looker-status": "stable",
         "required": ["name", "parent_id"]
       },
       "UpdateSpace": {
@@ -16383,7 +16390,7 @@
             "nullable": false
           }
         },
-        "x-looker-status": "beta"
+        "x-looker-status": "stable"
       },
       "Space": {
         "properties": {
@@ -16515,7 +16522,7 @@
             "nullable": true
           }
         },
-        "x-looker-status": "beta",
+        "x-looker-status": "stable",
         "required": ["name", "parent_id"]
       },
       "HomepageSection": {
@@ -16590,7 +16597,7 @@
             "nullable": true
           }
         },
-        "x-looker-status": "beta"
+        "x-looker-status": "stable"
       },
       "HomepageItem": {
         "properties": {
@@ -16760,7 +16767,7 @@
             "nullable": true
           }
         },
-        "x-looker-status": "beta"
+        "x-looker-status": "stable"
       },
       "ValidationError": {
         "properties": {
@@ -16899,7 +16906,7 @@
             "nullable": true
           }
         },
-        "x-looker-status": "beta"
+        "x-looker-status": "stable"
       },
       "BackupConfiguration": {
         "properties": {
@@ -16985,7 +16992,7 @@
           "look": { "$ref": "#/components/schemas/LookBasic" },
           "dashboard": { "$ref": "#/components/schemas/DashboardBase" }
         },
-        "x-looker-status": "beta"
+        "x-looker-status": "stable"
       },
       "ContentMetaGroupUser": {
         "properties": {
@@ -17030,7 +17037,7 @@
             "nullable": true
           }
         },
-        "x-looker-status": "beta"
+        "x-looker-status": "stable"
       },
       "ContentMeta": {
         "properties": {
@@ -17111,7 +17118,7 @@
             "nullable": true
           }
         },
-        "x-looker-status": "beta"
+        "x-looker-status": "stable"
       },
       "ContentView": {
         "properties": {
@@ -17191,7 +17198,7 @@
             "nullable": true
           }
         },
-        "x-looker-status": "beta"
+        "x-looker-status": "stable"
       },
       "CredentialsApi3": {
         "properties": {
@@ -17884,7 +17891,7 @@
             "nullable": true
           }
         },
-        "x-looker-status": "beta"
+        "x-looker-status": "stable"
       },
       "DashboardFilter": {
         "properties": {
@@ -17963,7 +17970,7 @@
           },
           "allow_multiple_values": {
             "type": "boolean",
-            "description": "Whether the filter allows multiple filter values",
+            "description": "Whether the filter allows multiple filter values (deprecated in the latest version of dashboards)",
             "nullable": false
           },
           "required": {
@@ -17978,7 +17985,7 @@
             "nullable": true
           }
         },
-        "x-looker-status": "beta"
+        "x-looker-status": "stable"
       },
       "DashboardLayoutComponent": {
         "properties": {
@@ -18054,7 +18061,7 @@
             "nullable": true
           }
         },
-        "x-looker-status": "beta"
+        "x-looker-status": "stable"
       },
       "DashboardLayout": {
         "properties": {
@@ -18116,7 +18123,7 @@
             "nullable": true
           }
         },
-        "x-looker-status": "beta"
+        "x-looker-status": "stable"
       },
       "Dashboard": {
         "properties": {
@@ -18343,7 +18350,7 @@
             "nullable": true
           }
         },
-        "x-looker-status": "beta"
+        "x-looker-status": "stable"
       },
       "DataActionFormField": {
         "properties": {
@@ -18405,7 +18412,7 @@
             "nullable": true
           }
         },
-        "x-looker-status": "beta"
+        "x-looker-status": "stable"
       },
       "DataActionForm": {
         "properties": {
@@ -18418,7 +18425,7 @@
             "nullable": true
           }
         },
-        "x-looker-status": "beta"
+        "x-looker-status": "stable"
       },
       "DataActionFormSelectOption": {
         "properties": {
@@ -18435,7 +18442,7 @@
             "nullable": true
           }
         },
-        "x-looker-status": "beta"
+        "x-looker-status": "stable"
       },
       "DataActionRequest": {
         "properties": {
@@ -18452,7 +18459,7 @@
             "nullable": true
           }
         },
-        "x-looker-status": "beta"
+        "x-looker-status": "stable"
       },
       "DataActionResponse": {
         "properties": {
@@ -18484,7 +18491,7 @@
             "nullable": true
           }
         },
-        "x-looker-status": "beta"
+        "x-looker-status": "stable"
       },
       "DataActionUserState": {
         "properties": {
@@ -18502,7 +18509,7 @@
             "nullable": true
           }
         },
-        "x-looker-status": "beta"
+        "x-looker-status": "stable"
       },
       "Datagroup": {
         "properties": {
@@ -18570,7 +18577,7 @@
             "nullable": true
           }
         },
-        "x-looker-status": "beta"
+        "x-looker-status": "stable"
       },
       "DBConnectionBase": {
         "properties": {
@@ -18934,7 +18941,7 @@
             "nullable": false
           }
         },
-        "x-looker-status": "beta"
+        "x-looker-status": "stable"
       },
       "DialectInfo": {
         "properties": {
@@ -19245,7 +19252,7 @@
             "nullable": false
           }
         },
-        "x-looker-status": "beta",
+        "x-looker-status": "stable",
         "required": ["name"]
       },
       "GitBranch": {
@@ -19355,7 +19362,7 @@
             "nullable": true
           }
         },
-        "x-looker-status": "beta"
+        "x-looker-status": "stable"
       },
       "GitConnectionTest": {
         "properties": {
@@ -19379,7 +19386,7 @@
             "nullable": false
           }
         },
-        "x-looker-status": "beta"
+        "x-looker-status": "stable"
       },
       "GitConnectionTestResult": {
         "properties": {
@@ -19409,7 +19416,7 @@
             "nullable": true
           }
         },
-        "x-looker-status": "beta"
+        "x-looker-status": "stable"
       },
       "GitStatus": {
         "properties": {
@@ -19445,7 +19452,7 @@
             "nullable": false
           }
         },
-        "x-looker-status": "beta"
+        "x-looker-status": "stable"
       },
       "GroupIdForGroupInclusion": {
         "properties": {
@@ -19565,7 +19572,7 @@
             "nullable": false
           }
         },
-        "x-looker-status": "beta"
+        "x-looker-status": "stable"
       },
       "IntegrationHub": {
         "properties": {
@@ -19637,7 +19644,7 @@
             "nullable": true
           }
         },
-        "x-looker-status": "beta"
+        "x-looker-status": "stable"
       },
       "Integration": {
         "properties": {
@@ -19760,7 +19767,7 @@
             "nullable": false
           }
         },
-        "x-looker-status": "beta"
+        "x-looker-status": "stable"
       },
       "IntegrationParam": {
         "properties": {
@@ -19816,7 +19823,7 @@
             "nullable": false
           }
         },
-        "x-looker-status": "beta"
+        "x-looker-status": "stable"
       },
       "IntegrationRequiredField": {
         "properties": {
@@ -19841,7 +19848,7 @@
             "nullable": true
           }
         },
-        "x-looker-status": "beta"
+        "x-looker-status": "stable"
       },
       "IntegrationTestResult": {
         "properties": {
@@ -19865,7 +19872,7 @@
             "nullable": true
           }
         },
-        "x-looker-status": "beta"
+        "x-looker-status": "stable"
       },
       "LDAPConfig": {
         "properties": {
@@ -20470,7 +20477,7 @@
             "nullable": false
           }
         },
-        "x-looker-status": "beta"
+        "x-looker-status": "stable"
       },
       "LookBasic": {
         "properties": {
@@ -21100,7 +21107,7 @@
             "nullable": true
           }
         },
-        "x-looker-status": "beta"
+        "x-looker-status": "stable"
       },
       "LookmlModelNavExplore": {
         "properties": {
@@ -21569,6 +21576,12 @@
             "type": "string",
             "readOnly": true,
             "description": "Description",
+            "nullable": true
+          },
+          "dimension_group": {
+            "type": "string",
+            "readOnly": true,
+            "description": "Dimension group if this field is part of a dimension group. If not, this will be null.",
             "nullable": true
           },
           "enumerations": {
@@ -22196,7 +22209,7 @@
             "$ref": "#/components/schemas/LocalizationSettings"
           }
         },
-        "x-looker-status": "beta"
+        "x-looker-status": "stable"
       },
       "ModelSet": {
         "properties": {
@@ -22435,7 +22448,7 @@
             "nullable": true
           }
         },
-        "x-looker-status": "beta"
+        "x-looker-status": "stable"
       },
       "OIDCGroupRead": {
         "properties": {
@@ -22849,7 +22862,7 @@
           },
           "git_status": { "$ref": "#/components/schemas/GitStatus" }
         },
-        "x-looker-status": "beta"
+        "x-looker-status": "stable"
       },
       "Project": {
         "properties": {
@@ -22892,6 +22905,11 @@
             "x-looker-write-only": true,
             "description": "(Write-Only) Git password for HTTPS authentication. (For production only, if using user attributes.)",
             "nullable": true
+          },
+          "git_production_branch_name": {
+            "type": "string",
+            "description": "Git production branch name. Defaults to master.",
+            "nullable": false
           },
           "git_username_user_attribute": {
             "type": "string",
@@ -22960,7 +22978,7 @@
             "nullable": false
           }
         },
-        "x-looker-status": "beta"
+        "x-looker-status": "stable"
       },
       "ProjectError": {
         "properties": {
@@ -23039,7 +23057,7 @@
             "nullable": true
           }
         },
-        "x-looker-status": "beta"
+        "x-looker-status": "stable"
       },
       "ModelsNotValidated": {
         "properties": {
@@ -23056,7 +23074,7 @@
             "nullable": true
           }
         },
-        "x-looker-status": "beta"
+        "x-looker-status": "stable"
       },
       "ProjectValidation": {
         "properties": {
@@ -23088,7 +23106,7 @@
             "nullable": true
           }
         },
-        "x-looker-status": "beta"
+        "x-looker-status": "stable"
       },
       "ProjectValidationCache": {
         "properties": {
@@ -23126,7 +23144,7 @@
             "nullable": false
           }
         },
-        "x-looker-status": "beta"
+        "x-looker-status": "stable"
       },
       "ProjectWorkspace": {
         "properties": {
@@ -23181,7 +23199,7 @@
             "nullable": true
           }
         },
-        "x-looker-status": "beta"
+        "x-looker-status": "stable"
       },
       "Query": {
         "properties": {
@@ -23397,7 +23415,7 @@
             "nullable": true
           }
         },
-        "x-looker-status": "beta",
+        "x-looker-status": "stable",
         "required": ["query_id", "result_format"]
       },
       "QueryTask": {
@@ -23504,7 +23522,7 @@
             "nullable": true
           }
         },
-        "x-looker-status": "beta"
+        "x-looker-status": "stable"
       },
       "RenderTask": {
         "properties": {
@@ -23633,7 +23651,7 @@
             "nullable": true
           }
         },
-        "x-looker-status": "beta"
+        "x-looker-status": "stable"
       },
       "CreateDashboardRenderTask": {
         "properties": {
@@ -23648,7 +23666,7 @@
             "nullable": true
           }
         },
-        "x-looker-status": "beta"
+        "x-looker-status": "stable"
       },
       "ResultMakerFilterablesListen": {
         "properties": {
@@ -23663,7 +23681,7 @@
             "nullable": true
           }
         },
-        "x-looker-status": "beta"
+        "x-looker-status": "stable"
       },
       "ResultMakerFilterables": {
         "properties": {
@@ -23695,7 +23713,7 @@
             "nullable": true
           }
         },
-        "x-looker-status": "beta"
+        "x-looker-status": "stable"
       },
       "ResultMakerWithIdVisConfigAndDynamicFields": {
         "properties": {
@@ -23760,7 +23778,7 @@
             "nullable": true
           }
         },
-        "x-looker-status": "beta"
+        "x-looker-status": "stable"
       },
       "Role": {
         "properties": {
@@ -24322,7 +24340,7 @@
             "nullable": true
           }
         },
-        "x-looker-status": "beta"
+        "x-looker-status": "stable"
       },
       "ScheduledPlan": {
         "properties": {
@@ -24514,7 +24532,7 @@
             "nullable": false
           }
         },
-        "x-looker-status": "beta"
+        "x-looker-status": "stable"
       },
       "Session": {
         "properties": {
@@ -24676,7 +24694,7 @@
             "nullable": true
           }
         },
-        "x-looker-status": "beta"
+        "x-looker-status": "stable"
       },
       "SqlQuery": {
         "properties": {
@@ -24985,7 +25003,7 @@
             "nullable": false
           }
         },
-        "x-looker-status": "beta"
+        "x-looker-status": "stable"
       },
       "User": {
         "properties": {
@@ -25288,6 +25306,12 @@
             "readOnly": true,
             "description": "Array of versions supported by this Looker instance",
             "nullable": true
+          },
+          "api_server_url": {
+            "type": "string",
+            "readOnly": true,
+            "description": "API server base url",
+            "nullable": false
           }
         },
         "x-looker-status": "stable"
@@ -25386,7 +25410,7 @@
             "nullable": false
           }
         },
-        "x-looker-status": "beta"
+        "x-looker-status": "stable"
       },
       "Workspace": {
         "properties": {
@@ -25411,7 +25435,7 @@
             "nullable": true
           }
         },
-        "x-looker-status": "beta"
+        "x-looker-status": "stable"
       }
     }
   }

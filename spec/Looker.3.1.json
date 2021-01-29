@@ -2,17 +2,17 @@
   "swagger": "2.0",
   "info": {
     "version": "3.1.0",
-    "x-looker-release-version": "7.20.0",
+    "x-looker-release-version": "21.0.0",
     "title": "Looker API 3.1 Reference",
     "description": "### Authorization\n\nThe Looker API uses Looker **API3** credentials for authorization and access control. Looker admins can\ncreate API3 credentials on Looker's **Admin/Users** page. Pass API3 credentials to the **/login** endpoint to\nobtain a temporary access_token. Include that access_token in the Authorization header of Looker API requests.\nFor details, see [Looker API Authorization](https://looker.com/docs/r/api/authorization)\n\n### Client SDKs\n\nThe Looker API is a RESTful system that should be usable by any programming language capable of making\nHTTPS requests. Client SDKs for a variety of programming languages can be generated from the Looker API's Swagger\nJSON metadata to streamline use of the Looker API in your applications. A client SDK for Ruby is available\nas an example. For more information, see [Looker API Client SDKs](https://looker.com/docs/r/api/client_sdks)\n\n### Try It Out!\n\nThe 'api-docs' page served by the Looker instance includes 'Try It Out!' buttons for each API method. After logging\nin with API3 credentials, you can use the \"Try It Out!\" buttons to call the API directly from the documentation\npage to interactively explore API features and responses.\n\nNote! With great power comes great responsibility: The \"Try It Out!\" button makes API calls to your live Looker\ninstance. Be especially careful with destructive API operations such as `delete_user` or similar.\nThere is no \"undo\" for API operations.\n\n### Versioning\n\nFuture releases of Looker will expand this API release-by-release to securely expose more and more of the core\npower of Looker to API client applications. API endpoints marked as \"beta\" may receive breaking changes without\nwarning (but we will try to avoid doing that). Stable (non-beta) API endpoints should not receive breaking\nchanges in future releases.\nFor more information, see [Looker API Versioning](https://looker.com/docs/r/api/versioning)\n\n### In This Release\n\nThe following are a few examples of noteworthy items that have changed between API 3.0 and API 3.1.\nFor more comprehensive coverage of API changes, please see the release notes for your Looker release.\n\n### Examples of new things added in API 3.1 (compared to API 3.0):\n\n* [Dashboard construction](#!/3.1/Dashboard/) APIs\n* [Themes](#!/3.1/Theme/) and [custom color collections](#!/3.1/ColorCollection) APIs\n* Create and run [SQL Runner](#!/3.1/Query/run_sql_query) queries\n* Create and run [merged results](#!/3.1/Query/create_merge_query) queries\n* Create and modify [dashboard filters](#!/3.1/Dashboard/create_dashboard_filter)\n* Create and modify [password requirements](#!/3.1/Auth/password_config)\n\n### Deprecated in API 3.0\n\nThe following functions and properties have been deprecated in API 3.0.  They continue to exist and work in API 3.0\nfor the next several Looker releases but they have not been carried forward to API 3.1:\n\n* Dashboard Prefetch functions\n* User access_filter functions\n* User API 1.0 credentials functions\n* Space.is_root and Space.is_user_root properties. Use Space.is_shared_root and Space.is_users_root instead.\n\n### Semantic changes in API 3.1:\n\n* [all_looks()](#!/3.1/Look/all_looks) no longer includes soft-deleted looks, matching [all_dashboards()](#!/3.1/Dashboard/all_dashboards) behavior.\nYou can find soft-deleted looks using [search_looks()](#!/3.1/Look/search_looks) with the `deleted` param set to True.\n* [all_spaces()](#!/3.1/Space/all_spaces) no longer includes duplicate items\n* [search_users()](#!/3.1/User/search_users) no longer accepts Y,y,1,0,N,n for Boolean params, only \"true\" and \"false\".\n* For greater client and network compatibility, [render_task_results](#!/3.1/RenderTask/render_task_results) now returns\nHTTP status **202 Accepted** instead of HTTP status **102 Processing**\n* [all_running_queries()](#!/3.1/Query/all_running_queries) and [kill_query](#!/3.1/Query/kill_query) functions have moved into the [Query](#!/3.1/Query/) function group.\n\n\nIf you have application code which relies on the old behavior of the APIs above, you may\ncontinue using the API 3.0 functions in this Looker release. We strongly suggest you\nupdate your code to use API 3.1 analogs as soon as possible.\n\n",
     "contact": { "name": "Looker Team", "url": "https://help.looker.com" },
-    "license": { "name": "EULA", "url": "https://192.168.23.165:10000/eula" }
+    "license": { "name": "EULA", "url": "http://localhost:9999/eula" }
   },
   "basePath": "/api/3.1",
   "consumes": ["application/json"],
   "produces": ["application/json"],
-  "host": "localhost:20000",
-  "schemes": ["https"],
+  "host": "localhost:19999",
+  "schemes": ["http"],
   "tags": [
     { "name": "ApiAuth", "description": "API Authentication" },
     {
@@ -180,7 +180,7 @@
             "schema": { "$ref": "#/definitions/Error" }
           }
         },
-        "x-looker-status": "beta",
+        "x-looker-status": "stable",
         "x-looker-activity-type": "db_query"
       }
     },
@@ -218,7 +218,7 @@
             "schema": { "$ref": "#/definitions/Error" }
           }
         },
-        "x-looker-status": "beta",
+        "x-looker-status": "stable",
         "x-looker-activity-type": "db_query"
       }
     },
@@ -258,7 +258,7 @@
             "schema": { "$ref": "#/definitions/Error" }
           }
         },
-        "x-looker-status": "beta",
+        "x-looker-status": "stable",
         "x-looker-activity-type": "db_query"
       }
     },
@@ -296,7 +296,7 @@
             "schema": { "$ref": "#/definitions/Error" }
           }
         },
-        "x-looker-status": "beta",
+        "x-looker-status": "stable",
         "x-looker-activity-type": "db_query"
       }
     },
@@ -943,7 +943,7 @@
             "schema": { "$ref": "#/definitions/Error" }
           }
         },
-        "x-looker-status": "beta",
+        "x-looker-status": "stable",
         "x-looker-activity-type": "non_query"
       },
       "patch": {
@@ -978,7 +978,7 @@
             "schema": { "$ref": "#/definitions/ValidationError" }
           }
         },
-        "x-looker-status": "beta",
+        "x-looker-status": "stable",
         "x-looker-activity-type": "non_query"
       }
     },
@@ -1014,7 +1014,7 @@
             "schema": { "$ref": "#/definitions/Error" }
           }
         },
-        "x-looker-status": "beta",
+        "x-looker-status": "stable",
         "x-looker-activity-type": "non_query"
       },
       "post": {
@@ -1061,7 +1061,7 @@
             "schema": { "$ref": "#/definitions/Error" }
           }
         },
-        "x-looker-status": "beta",
+        "x-looker-status": "stable",
         "x-looker-activity-type": "non_query"
       }
     },
@@ -1097,7 +1097,7 @@
             "schema": { "$ref": "#/definitions/Error" }
           }
         },
-        "x-looker-status": "beta",
+        "x-looker-status": "stable",
         "x-looker-activity-type": "non_query"
       }
     },
@@ -1133,7 +1133,7 @@
             "schema": { "$ref": "#/definitions/Error" }
           }
         },
-        "x-looker-status": "beta",
+        "x-looker-status": "stable",
         "x-looker-activity-type": "non_query"
       }
     },
@@ -1174,7 +1174,7 @@
             "schema": { "$ref": "#/definitions/Error" }
           }
         },
-        "x-looker-status": "beta",
+        "x-looker-status": "stable",
         "x-looker-activity-type": "non_query"
       },
       "get": {
@@ -1196,7 +1196,7 @@
             "schema": { "$ref": "#/definitions/Error" }
           }
         },
-        "x-looker-status": "beta",
+        "x-looker-status": "stable",
         "x-looker-activity-type": "non_query"
       }
     },
@@ -1236,7 +1236,7 @@
             "schema": { "$ref": "#/definitions/Error" }
           }
         },
-        "x-looker-status": "beta",
+        "x-looker-status": "stable",
         "x-looker-activity-type": "non_query"
       },
       "patch": {
@@ -1286,7 +1286,7 @@
             "schema": { "$ref": "#/definitions/Error" }
           }
         },
-        "x-looker-status": "beta",
+        "x-looker-status": "stable",
         "x-looker-activity-type": "non_query"
       },
       "delete": {
@@ -1326,7 +1326,7 @@
             "schema": { "$ref": "#/definitions/Error" }
           }
         },
-        "x-looker-status": "beta",
+        "x-looker-status": "stable",
         "x-looker-activity-type": "non_query"
       }
     },
@@ -1432,7 +1432,7 @@
             "schema": { "$ref": "#/definitions/Error" }
           }
         },
-        "x-looker-status": "beta",
+        "x-looker-status": "stable",
         "x-looker-activity-type": "non_query"
       }
     },
@@ -1473,7 +1473,7 @@
             "schema": { "$ref": "#/definitions/Error" }
           }
         },
-        "x-looker-status": "beta",
+        "x-looker-status": "stable",
         "x-looker-activity-type": "non_query"
       },
       "delete": {
@@ -1509,7 +1509,7 @@
             "schema": { "$ref": "#/definitions/Error" }
           }
         },
-        "x-looker-status": "beta",
+        "x-looker-status": "stable",
         "x-looker-activity-type": "non_query"
       }
     },
@@ -1554,7 +1554,7 @@
             "schema": { "$ref": "#/definitions/Error" }
           }
         },
-        "x-looker-status": "beta",
+        "x-looker-status": "stable",
         "x-looker-activity-type": "non_query"
       }
     },
@@ -1598,7 +1598,7 @@
             "schema": { "$ref": "#/definitions/Error" }
           }
         },
-        "x-looker-status": "beta",
+        "x-looker-status": "stable",
         "x-looker-activity-type": "non_query"
       }
     },
@@ -1647,7 +1647,7 @@
             "schema": { "$ref": "#/definitions/Error" }
           }
         },
-        "x-looker-status": "beta",
+        "x-looker-status": "stable",
         "x-looker-activity-type": "non_query"
       },
       "get": {
@@ -1686,7 +1686,7 @@
             "schema": { "$ref": "#/definitions/Error" }
           }
         },
-        "x-looker-status": "beta",
+        "x-looker-status": "stable",
         "x-looker-activity-type": "non_query"
       }
     },
@@ -1738,7 +1738,7 @@
             "schema": { "$ref": "#/definitions/Error" }
           }
         },
-        "x-looker-status": "beta",
+        "x-looker-status": "stable",
         "x-looker-activity-type": "non_query",
         "x-looker-rate-limited": true
       },
@@ -1781,7 +1781,7 @@
             "schema": { "$ref": "#/definitions/Error" }
           }
         },
-        "x-looker-status": "beta",
+        "x-looker-status": "stable",
         "x-looker-activity-type": "non_query"
       }
     },
@@ -1830,7 +1830,7 @@
             "schema": { "$ref": "#/definitions/Error" }
           }
         },
-        "x-looker-status": "beta",
+        "x-looker-status": "stable",
         "x-looker-activity-type": "non_query"
       },
       "delete": {
@@ -1866,7 +1866,7 @@
             "schema": { "$ref": "#/definitions/Error" }
           }
         },
-        "x-looker-status": "beta",
+        "x-looker-status": "stable",
         "x-looker-activity-type": "non_query"
       }
     },
@@ -1937,7 +1937,7 @@
             "schema": { "$ref": "#/definitions/Error" }
           }
         },
-        "x-looker-status": "beta",
+        "x-looker-status": "stable",
         "x-looker-activity-type": "db_query"
       }
     },
@@ -1978,7 +1978,7 @@
             "schema": { "$ref": "#/definitions/Error" }
           }
         },
-        "x-looker-status": "beta",
+        "x-looker-status": "stable",
         "x-looker-activity-type": "non_query"
       }
     },
@@ -2104,7 +2104,7 @@
             "schema": { "$ref": "#/definitions/Error" }
           }
         },
-        "x-looker-status": "beta",
+        "x-looker-status": "stable",
         "x-looker-activity-type": "non_query"
       }
     },
@@ -2128,7 +2128,7 @@
             "schema": { "$ref": "#/definitions/Error" }
           }
         },
-        "x-looker-status": "beta",
+        "x-looker-status": "stable",
         "x-looker-activity-type": "non_query"
       },
       "patch": {
@@ -2174,7 +2174,7 @@
             "schema": { "$ref": "#/definitions/Error" }
           }
         },
-        "x-looker-status": "beta",
+        "x-looker-status": "stable",
         "x-looker-activity-type": "non_query"
       }
     },
@@ -2215,7 +2215,7 @@
             "schema": { "$ref": "#/definitions/Error" }
           }
         },
-        "x-looker-status": "beta",
+        "x-looker-status": "stable",
         "x-looker-activity-type": "non_query"
       }
     },
@@ -2251,7 +2251,7 @@
             "schema": { "$ref": "#/definitions/Error" }
           }
         },
-        "x-looker-status": "beta",
+        "x-looker-status": "stable",
         "x-looker-activity-type": "non_query"
       },
       "post": {
@@ -2294,7 +2294,7 @@
             "schema": { "$ref": "#/definitions/Error" }
           }
         },
-        "x-looker-status": "beta",
+        "x-looker-status": "stable",
         "x-looker-activity-type": "non_query"
       }
     },
@@ -2463,7 +2463,7 @@
             "schema": { "$ref": "#/definitions/Error" }
           }
         },
-        "x-looker-status": "beta",
+        "x-looker-status": "stable",
         "x-looker-activity-type": "non_query"
       }
     },
@@ -2472,7 +2472,7 @@
         "tags": ["Dashboard"],
         "operationId": "import_lookml_dashboard",
         "summary": "Import LookML Dashboard",
-        "description": "### Import a LookML dashboard to a space as a UDD\nCreates a UDD (a dashboard which exists in the Looker database rather than as a LookML file) from the LookML dashboard\nand puts it in the space specified. The created UDD will have a lookml_link_id which links to the original LookML dashboard.\n\nTo give the imported dashboard specify a (e.g. title: \"my title\") in the body of your request, otherwise the imported\ndashboard will have the same title as the original LookML dashboard.\n\nFor this operation to succeed the user must have permission to see the LookML dashboard in question, and have permission to\ncreate content in the space the dashboard is being imported to.\n\n**Sync** a linked UDD with [sync_lookml_dashboard()](#!/Dashboard/sync_lookml_dashboard)\n**Unlink** a linked UDD by setting lookml_link_id to null with [update_dashboard()](#!/Dashboard/update_dashboard)\n",
+        "description": "### Import a LookML dashboard to a space as a UDD\nCreates a UDD (a dashboard which exists in the Looker database rather than as a LookML file) from the LookML dashboard\nand places it in the space specified. The created UDD will have a lookml_link_id which links to the original LookML dashboard.\n\nTo give the imported dashboard specify a (e.g. title: \"my title\") in the body of your request, otherwise the imported\ndashboard will have the same title as the original LookML dashboard.\n\nFor this operation to succeed the user must have permission to see the LookML dashboard in question, and have permission to\ncreate content in the space the dashboard is being imported to.\n\n**Sync** a linked UDD with [sync_lookml_dashboard()](#!/Dashboard/sync_lookml_dashboard)\n**Unlink** a linked UDD by setting lookml_link_id to null with [update_dashboard()](#!/Dashboard/update_dashboard)\n",
         "parameters": [
           {
             "name": "lookml_dashboard_id",
@@ -2533,7 +2533,7 @@
             "schema": { "$ref": "#/definitions/Error" }
           }
         },
-        "x-looker-status": "beta",
+        "x-looker-status": "stable",
         "x-looker-activity-type": "non_query"
       }
     },
@@ -2591,7 +2591,7 @@
             "schema": { "$ref": "#/definitions/Error" }
           }
         },
-        "x-looker-status": "beta",
+        "x-looker-status": "stable",
         "x-looker-activity-type": "non_query"
       }
     },
@@ -2632,7 +2632,7 @@
             "schema": { "$ref": "#/definitions/Error" }
           }
         },
-        "x-looker-status": "beta",
+        "x-looker-status": "stable",
         "x-looker-activity-type": "non_query"
       },
       "patch": {
@@ -2682,7 +2682,7 @@
             "schema": { "$ref": "#/definitions/Error" }
           }
         },
-        "x-looker-status": "beta",
+        "x-looker-status": "stable",
         "x-looker-activity-type": "non_query"
       },
       "get": {
@@ -2720,7 +2720,7 @@
             "schema": { "$ref": "#/definitions/Error" }
           }
         },
-        "x-looker-status": "beta",
+        "x-looker-status": "stable",
         "x-looker-activity-type": "non_query"
       }
     },
@@ -2753,7 +2753,7 @@
             "schema": { "$ref": "#/definitions/Error" }
           }
         },
-        "x-looker-status": "beta",
+        "x-looker-status": "stable",
         "x-looker-activity-type": "non_query"
       }
     },
@@ -2786,7 +2786,7 @@
             "schema": { "$ref": "#/definitions/Error" }
           }
         },
-        "x-looker-status": "beta",
+        "x-looker-status": "stable",
         "x-looker-activity-type": "non_query"
       }
     },
@@ -2866,7 +2866,7 @@
             "schema": { "$ref": "#/definitions/Error" }
           }
         },
-        "x-looker-status": "beta",
+        "x-looker-status": "stable",
         "x-looker-activity-type": "non_query"
       }
     },
@@ -2906,7 +2906,7 @@
             "schema": { "$ref": "#/definitions/Error" }
           }
         },
-        "x-looker-status": "beta",
+        "x-looker-status": "stable",
         "x-looker-activity-type": "non_query"
       },
       "delete": {
@@ -2941,7 +2941,7 @@
             "schema": { "$ref": "#/definitions/Error" }
           }
         },
-        "x-looker-status": "beta",
+        "x-looker-status": "stable",
         "x-looker-activity-type": "non_query"
       },
       "patch": {
@@ -2994,7 +2994,7 @@
             "schema": { "$ref": "#/definitions/Error" }
           }
         },
-        "x-looker-status": "beta",
+        "x-looker-status": "stable",
         "x-looker-activity-type": "non_query"
       }
     },
@@ -3037,7 +3037,7 @@
             "schema": { "$ref": "#/definitions/Error" }
           }
         },
-        "x-looker-status": "beta",
+        "x-looker-status": "stable",
         "x-looker-activity-type": "non_query"
       }
     },
@@ -3089,7 +3089,7 @@
             "schema": { "$ref": "#/definitions/Error" }
           }
         },
-        "x-looker-status": "beta",
+        "x-looker-status": "stable",
         "x-looker-activity-type": "non_query"
       }
     },
@@ -3129,7 +3129,7 @@
             "schema": { "$ref": "#/definitions/Error" }
           }
         },
-        "x-looker-status": "beta",
+        "x-looker-status": "stable",
         "x-looker-activity-type": "non_query"
       },
       "delete": {
@@ -3164,7 +3164,7 @@
             "schema": { "$ref": "#/definitions/Error" }
           }
         },
-        "x-looker-status": "beta",
+        "x-looker-status": "stable",
         "x-looker-activity-type": "non_query"
       },
       "patch": {
@@ -3217,7 +3217,7 @@
             "schema": { "$ref": "#/definitions/Error" }
           }
         },
-        "x-looker-status": "beta",
+        "x-looker-status": "stable",
         "x-looker-activity-type": "non_query"
       }
     },
@@ -3260,7 +3260,7 @@
             "schema": { "$ref": "#/definitions/Error" }
           }
         },
-        "x-looker-status": "beta",
+        "x-looker-status": "stable",
         "x-looker-activity-type": "non_query"
       }
     },
@@ -3312,7 +3312,7 @@
             "schema": { "$ref": "#/definitions/Error" }
           }
         },
-        "x-looker-status": "beta",
+        "x-looker-status": "stable",
         "x-looker-activity-type": "non_query"
       }
     },
@@ -3352,7 +3352,7 @@
             "schema": { "$ref": "#/definitions/Error" }
           }
         },
-        "x-looker-status": "beta",
+        "x-looker-status": "stable",
         "x-looker-activity-type": "non_query"
       },
       "patch": {
@@ -3405,7 +3405,7 @@
             "schema": { "$ref": "#/definitions/Error" }
           }
         },
-        "x-looker-status": "beta",
+        "x-looker-status": "stable",
         "x-looker-activity-type": "non_query"
       }
     },
@@ -3448,7 +3448,7 @@
             "schema": { "$ref": "#/definitions/Error" }
           }
         },
-        "x-looker-status": "beta",
+        "x-looker-status": "stable",
         "x-looker-activity-type": "non_query"
       }
     },
@@ -3488,7 +3488,7 @@
             "schema": { "$ref": "#/definitions/Error" }
           }
         },
-        "x-looker-status": "beta",
+        "x-looker-status": "stable",
         "x-looker-activity-type": "non_query"
       },
       "delete": {
@@ -3527,7 +3527,7 @@
             "schema": { "$ref": "#/definitions/Error" }
           }
         },
-        "x-looker-status": "beta",
+        "x-looker-status": "stable",
         "x-looker-activity-type": "non_query"
       },
       "patch": {
@@ -3580,7 +3580,7 @@
             "schema": { "$ref": "#/definitions/Error" }
           }
         },
-        "x-looker-status": "beta",
+        "x-looker-status": "stable",
         "x-looker-activity-type": "non_query"
       }
     },
@@ -3623,7 +3623,7 @@
             "schema": { "$ref": "#/definitions/Error" }
           }
         },
-        "x-looker-status": "beta",
+        "x-looker-status": "stable",
         "x-looker-activity-type": "non_query"
       }
     },
@@ -3675,7 +3675,7 @@
             "schema": { "$ref": "#/definitions/Error" }
           }
         },
-        "x-looker-status": "beta",
+        "x-looker-status": "stable",
         "x-looker-activity-type": "non_query"
       }
     },
@@ -3708,7 +3708,7 @@
             "schema": { "$ref": "#/definitions/Error" }
           }
         },
-        "x-looker-status": "beta",
+        "x-looker-status": "stable",
         "x-looker-activity-type": "non_query"
       }
     },
@@ -3748,7 +3748,7 @@
             "schema": { "$ref": "#/definitions/ValidationError" }
           }
         },
-        "x-looker-status": "beta",
+        "x-looker-status": "stable",
         "x-looker-activity-type": "non_query"
       }
     },
@@ -3775,7 +3775,7 @@
             "schema": { "$ref": "#/definitions/Error" }
           }
         },
-        "x-looker-status": "beta",
+        "x-looker-status": "stable",
         "x-looker-activity-type": "non_query"
       }
     },
@@ -3808,7 +3808,7 @@
             "schema": { "$ref": "#/definitions/Error" }
           }
         },
-        "x-looker-status": "beta",
+        "x-looker-status": "stable",
         "x-looker-activity-type": "non_query"
       },
       "patch": {
@@ -3858,7 +3858,7 @@
             "schema": { "$ref": "#/definitions/Error" }
           }
         },
-        "x-looker-status": "beta",
+        "x-looker-status": "stable",
         "x-looker-activity-type": "non_query"
       }
     },
@@ -4214,6 +4214,53 @@
         "x-looker-rate-limited": true
       }
     },
+    "/derived_table/graph/model/{model}": {
+      "get": {
+        "tags": ["LookmlModel"],
+        "operationId": "graph_derived_tables_for_model",
+        "summary": "Get Derived Table",
+        "description": "### Discover information about derived tables\n",
+        "parameters": [
+          {
+            "name": "model",
+            "in": "path",
+            "description": "The name of the Lookml model.",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "format",
+            "in": "query",
+            "description": "The format of the graph. Valid values are [dot]. Default is `dot`",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "name": "color",
+            "in": "query",
+            "description": "Color denoting the build status of the graph. Grey = not built, green = built, yellow = building, red = error.",
+            "required": false,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Derived Table",
+            "schema": { "$ref": "#/definitions/DependencyGraph" }
+          },
+          "400": {
+            "description": "Bad Request",
+            "schema": { "$ref": "#/definitions/Error" }
+          },
+          "404": {
+            "description": "Not Found",
+            "schema": { "$ref": "#/definitions/Error" }
+          }
+        },
+        "x-looker-status": "beta",
+        "x-looker-activity-type": "non_query"
+      }
+    },
     "/dialect_info": {
       "get": {
         "tags": ["Connection"],
@@ -4270,7 +4317,7 @@
             "schema": { "$ref": "#/definitions/Error" }
           }
         },
-        "x-looker-status": "beta",
+        "x-looker-status": "stable",
         "x-looker-activity-type": "non_query"
       },
       "patch": {
@@ -4309,7 +4356,7 @@
             "schema": { "$ref": "#/definitions/Error" }
           }
         },
-        "x-looker-status": "beta",
+        "x-looker-status": "stable",
         "x-looker-activity-type": "non_query"
       }
     },
@@ -4337,7 +4384,7 @@
             "schema": { "$ref": "#/definitions/Error" }
           }
         },
-        "x-looker-status": "beta",
+        "x-looker-status": "stable",
         "x-looker-activity-type": "none",
         "x-looker-rate-limited": true
       }
@@ -4383,7 +4430,7 @@
             "schema": { "$ref": "#/definitions/Error" }
           }
         },
-        "x-looker-status": "beta",
+        "x-looker-status": "stable",
         "x-looker-activity-type": "none"
       }
     },
@@ -4419,7 +4466,7 @@
             "schema": { "$ref": "#/definitions/Error" }
           }
         },
-        "x-looker-status": "beta",
+        "x-looker-status": "stable",
         "x-looker-activity-type": "non_query"
       }
     },
@@ -4452,7 +4499,7 @@
             "schema": { "$ref": "#/definitions/Error" }
           }
         },
-        "x-looker-status": "beta",
+        "x-looker-status": "stable",
         "x-looker-activity-type": "non_query"
       },
       "post": {
@@ -4502,7 +4549,7 @@
             "schema": { "$ref": "#/definitions/Error" }
           }
         },
-        "x-looker-status": "beta",
+        "x-looker-status": "stable",
         "x-looker-activity-type": "non_query"
       },
       "put": {
@@ -4548,7 +4595,7 @@
             "schema": { "$ref": "#/definitions/Error" }
           }
         },
-        "x-looker-status": "beta",
+        "x-looker-status": "stable",
         "x-looker-activity-type": "non_query"
       }
     },
@@ -4588,7 +4635,7 @@
             "schema": { "$ref": "#/definitions/Error" }
           }
         },
-        "x-looker-status": "beta",
+        "x-looker-status": "stable",
         "x-looker-activity-type": "non_query"
       },
       "delete": {
@@ -4630,7 +4677,7 @@
             "schema": { "$ref": "#/definitions/Error" }
           }
         },
-        "x-looker-status": "beta",
+        "x-looker-status": "stable",
         "x-looker-activity-type": "non_query"
       }
     },
@@ -5409,7 +5456,8 @@
             "schema": { "$ref": "#/definitions/Error" }
           }
         },
-        "x-looker-status": "beta",
+        "deprecated": true,
+        "x-looker-status": "deprecated",
         "x-looker-activity-type": "non_query"
       },
       "post": {
@@ -5459,7 +5507,8 @@
             "schema": { "$ref": "#/definitions/Error" }
           }
         },
-        "x-looker-status": "beta",
+        "deprecated": true,
+        "x-looker-status": "deprecated",
         "x-looker-activity-type": "non_query"
       }
     },
@@ -5583,7 +5632,8 @@
             "schema": { "$ref": "#/definitions/Error" }
           }
         },
-        "x-looker-status": "beta",
+        "deprecated": true,
+        "x-looker-status": "deprecated",
         "x-looker-activity-type": "non_query"
       }
     },
@@ -5624,7 +5674,8 @@
             "schema": { "$ref": "#/definitions/Error" }
           }
         },
-        "x-looker-status": "beta",
+        "deprecated": true,
+        "x-looker-status": "deprecated",
         "x-looker-activity-type": "non_query"
       },
       "patch": {
@@ -5678,7 +5729,8 @@
             "schema": { "$ref": "#/definitions/Error" }
           }
         },
-        "x-looker-status": "beta",
+        "deprecated": true,
+        "x-looker-status": "deprecated",
         "x-looker-activity-type": "non_query"
       },
       "delete": {
@@ -5714,7 +5766,8 @@
             "schema": { "$ref": "#/definitions/Error" }
           }
         },
-        "x-looker-status": "beta",
+        "deprecated": true,
+        "x-looker-status": "deprecated",
         "x-looker-activity-type": "non_query"
       }
     },
@@ -5764,7 +5817,8 @@
             "schema": { "$ref": "#/definitions/Error" }
           }
         },
-        "x-looker-status": "beta",
+        "deprecated": true,
+        "x-looker-status": "deprecated",
         "x-looker-activity-type": "non_query"
       },
       "post": {
@@ -5814,7 +5868,8 @@
             "schema": { "$ref": "#/definitions/Error" }
           }
         },
-        "x-looker-status": "beta",
+        "deprecated": true,
+        "x-looker-status": "deprecated",
         "x-looker-activity-type": "non_query"
       }
     },
@@ -5855,7 +5910,8 @@
             "schema": { "$ref": "#/definitions/Error" }
           }
         },
-        "x-looker-status": "beta",
+        "deprecated": true,
+        "x-looker-status": "deprecated",
         "x-looker-activity-type": "non_query"
       },
       "patch": {
@@ -5909,7 +5965,8 @@
             "schema": { "$ref": "#/definitions/Error" }
           }
         },
-        "x-looker-status": "beta",
+        "deprecated": true,
+        "x-looker-status": "deprecated",
         "x-looker-activity-type": "non_query"
       },
       "delete": {
@@ -5945,7 +6002,8 @@
             "schema": { "$ref": "#/definitions/Error" }
           }
         },
-        "x-looker-status": "beta",
+        "deprecated": true,
+        "x-looker-status": "deprecated",
         "x-looker-activity-type": "non_query"
       }
     },
@@ -5988,7 +6046,8 @@
             "schema": { "$ref": "#/definitions/Error" }
           }
         },
-        "x-looker-status": "beta",
+        "deprecated": true,
+        "x-looker-status": "deprecated",
         "x-looker-activity-type": "non_query"
       },
       "post": {
@@ -6038,7 +6097,8 @@
             "schema": { "$ref": "#/definitions/Error" }
           }
         },
-        "x-looker-status": "beta",
+        "deprecated": true,
+        "x-looker-status": "deprecated",
         "x-looker-activity-type": "non_query"
       }
     },
@@ -6079,7 +6139,8 @@
             "schema": { "$ref": "#/definitions/Error" }
           }
         },
-        "x-looker-status": "beta",
+        "deprecated": true,
+        "x-looker-status": "deprecated",
         "x-looker-activity-type": "non_query"
       },
       "patch": {
@@ -6133,7 +6194,8 @@
             "schema": { "$ref": "#/definitions/Error" }
           }
         },
-        "x-looker-status": "beta",
+        "deprecated": true,
+        "x-looker-status": "deprecated",
         "x-looker-activity-type": "non_query"
       },
       "delete": {
@@ -6169,7 +6231,8 @@
             "schema": { "$ref": "#/definitions/Error" }
           }
         },
-        "x-looker-status": "beta",
+        "deprecated": true,
+        "x-looker-status": "deprecated",
         "x-looker-activity-type": "non_query"
       }
     },
@@ -6205,7 +6268,7 @@
             "schema": { "$ref": "#/definitions/Error" }
           }
         },
-        "x-looker-status": "beta",
+        "x-looker-status": "stable",
         "x-looker-activity-type": "non_query"
       }
     },
@@ -6241,7 +6304,7 @@
             "schema": { "$ref": "#/definitions/Error" }
           }
         },
-        "x-looker-status": "beta",
+        "x-looker-status": "stable",
         "x-looker-activity-type": "non_query"
       },
       "post": {
@@ -6291,7 +6354,7 @@
             "schema": { "$ref": "#/definitions/Error" }
           }
         },
-        "x-looker-status": "beta",
+        "x-looker-status": "stable",
         "x-looker-activity-type": "non_query",
         "x-looker-rate-limited": true
       }
@@ -6333,7 +6396,7 @@
             "schema": { "$ref": "#/definitions/Error" }
           }
         },
-        "x-looker-status": "beta",
+        "x-looker-status": "stable",
         "x-looker-activity-type": "non_query"
       },
       "patch": {
@@ -6387,7 +6450,7 @@
             "schema": { "$ref": "#/definitions/Error" }
           }
         },
-        "x-looker-status": "beta",
+        "x-looker-status": "stable",
         "x-looker-activity-type": "non_query",
         "x-looker-rate-limited": true
       },
@@ -6424,7 +6487,7 @@
             "schema": { "$ref": "#/definitions/Error" }
           }
         },
-        "x-looker-status": "beta",
+        "x-looker-status": "stable",
         "x-looker-activity-type": "non_query"
       }
     },
@@ -6462,7 +6525,7 @@
             "schema": { "$ref": "#/definitions/ValidationError" }
           }
         },
-        "x-looker-status": "beta",
+        "x-looker-status": "stable",
         "x-looker-activity-type": "non_query"
       }
     },
@@ -6505,7 +6568,7 @@
             "schema": { "$ref": "#/definitions/Error" }
           }
         },
-        "x-looker-status": "beta",
+        "x-looker-status": "stable",
         "x-looker-activity-type": "non_query"
       }
     },
@@ -6545,7 +6608,7 @@
             "schema": { "$ref": "#/definitions/Error" }
           }
         },
-        "x-looker-status": "beta",
+        "x-looker-status": "stable",
         "x-looker-activity-type": "non_query"
       },
       "patch": {
@@ -6598,7 +6661,7 @@
             "schema": { "$ref": "#/definitions/Error" }
           }
         },
-        "x-looker-status": "beta",
+        "x-looker-status": "stable",
         "x-looker-activity-type": "non_query"
       }
     },
@@ -6645,7 +6708,7 @@
             "schema": { "$ref": "#/definitions/ValidationError" }
           }
         },
-        "x-looker-status": "beta",
+        "x-looker-status": "stable",
         "x-looker-activity-type": "non_query"
       }
     },
@@ -6682,7 +6745,7 @@
             "schema": { "$ref": "#/definitions/ValidationError" }
           }
         },
-        "x-looker-status": "beta",
+        "x-looker-status": "stable",
         "x-looker-activity-type": "non_query"
       }
     },
@@ -6706,7 +6769,7 @@
             "schema": { "$ref": "#/definitions/Error" }
           }
         },
-        "x-looker-status": "beta",
+        "x-looker-status": "stable",
         "x-looker-activity-type": "non_query"
       },
       "patch": {
@@ -6745,7 +6808,7 @@
             "schema": { "$ref": "#/definitions/Error" }
           }
         },
-        "x-looker-status": "beta",
+        "x-looker-status": "stable",
         "x-looker-activity-type": "non_query"
       }
     },
@@ -6769,7 +6832,7 @@
             "schema": { "$ref": "#/definitions/Error" }
           }
         },
-        "x-looker-status": "beta",
+        "x-looker-status": "stable",
         "x-looker-activity-type": "non_query"
       }
     },
@@ -6810,7 +6873,7 @@
             "schema": { "$ref": "#/definitions/Error" }
           }
         },
-        "x-looker-status": "beta",
+        "x-looker-status": "stable",
         "x-looker-activity-type": "non_query"
       }
     },
@@ -7184,7 +7247,7 @@
             "schema": { "$ref": "#/definitions/Error" }
           }
         },
-        "x-looker-status": "beta",
+        "x-looker-status": "stable",
         "x-looker-activity-type": "non_query"
       },
       "post": {
@@ -7234,7 +7297,7 @@
             "schema": { "$ref": "#/definitions/Error" }
           }
         },
-        "x-looker-status": "beta",
+        "x-looker-status": "stable",
         "x-looker-activity-type": "non_query"
       }
     },
@@ -7388,7 +7451,7 @@
             "schema": { "$ref": "#/definitions/Error" }
           }
         },
-        "x-looker-status": "beta",
+        "x-looker-status": "stable",
         "x-looker-activity-type": "non_query"
       }
     },
@@ -7429,7 +7492,7 @@
             "schema": { "$ref": "#/definitions/Error" }
           }
         },
-        "x-looker-status": "beta",
+        "x-looker-status": "stable",
         "x-looker-activity-type": "non_query"
       },
       "patch": {
@@ -7483,7 +7546,7 @@
             "schema": { "$ref": "#/definitions/Error" }
           }
         },
-        "x-looker-status": "beta",
+        "x-looker-status": "stable",
         "x-looker-activity-type": "non_query"
       },
       "delete": {
@@ -7519,7 +7582,7 @@
             "schema": { "$ref": "#/definitions/Error" }
           }
         },
-        "x-looker-status": "beta",
+        "x-looker-status": "stable",
         "x-looker-activity-type": "non_query"
       }
     },
@@ -7940,7 +8003,7 @@
             "schema": { "$ref": "#/definitions/Error" }
           }
         },
-        "x-looker-status": "beta",
+        "x-looker-status": "stable",
         "x-looker-activity-type": "db_query"
       }
     },
@@ -7992,7 +8055,7 @@
             "schema": { "$ref": "#/definitions/Error" }
           }
         },
-        "x-looker-status": "beta",
+        "x-looker-status": "stable",
         "x-looker-activity-type": "db_query"
       }
     },
@@ -8302,7 +8365,7 @@
             "schema": { "$ref": "#/definitions/Error" }
           }
         },
-        "x-looker-status": "beta",
+        "x-looker-status": "stable",
         "x-looker-activity-type": "non_query"
       },
       "patch": {
@@ -8337,7 +8400,7 @@
             "schema": { "$ref": "#/definitions/ValidationError" }
           }
         },
-        "x-looker-status": "beta",
+        "x-looker-status": "stable",
         "x-looker-activity-type": "non_query"
       }
     },
@@ -8366,7 +8429,7 @@
             "schema": { "$ref": "#/definitions/Error" }
           }
         },
-        "x-looker-status": "beta",
+        "x-looker-status": "stable",
         "x-looker-activity-type": "non_query"
       },
       "delete": {
@@ -8397,7 +8460,7 @@
             "schema": { "$ref": "#/definitions/Error" }
           }
         },
-        "x-looker-status": "beta",
+        "x-looker-status": "stable",
         "x-looker-activity-type": "non_query"
       }
     },
@@ -8434,7 +8497,7 @@
             "schema": { "$ref": "#/definitions/ValidationError" }
           }
         },
-        "x-looker-status": "beta",
+        "x-looker-status": "stable",
         "x-looker-activity-type": "non_query"
       }
     },
@@ -8458,7 +8521,7 @@
             "schema": { "$ref": "#/definitions/Error" }
           }
         },
-        "x-looker-status": "beta",
+        "x-looker-status": "stable",
         "x-looker-activity-type": "non_query"
       },
       "patch": {
@@ -8497,7 +8560,7 @@
             "schema": { "$ref": "#/definitions/Error" }
           }
         },
-        "x-looker-status": "beta",
+        "x-looker-status": "stable",
         "x-looker-activity-type": "non_query"
       }
     },
@@ -8529,7 +8592,7 @@
             "schema": { "$ref": "#/definitions/Error" }
           }
         },
-        "x-looker-status": "beta",
+        "x-looker-status": "stable",
         "x-looker-activity-type": "non_query"
       }
     },
@@ -8917,7 +8980,7 @@
             "schema": { "$ref": "#/definitions/Error" }
           }
         },
-        "x-looker-status": "beta",
+        "x-looker-status": "stable",
         "x-looker-activity-type": "non_query"
       }
     },
@@ -8958,7 +9021,7 @@
             "schema": { "$ref": "#/definitions/Error" }
           }
         },
-        "x-looker-status": "beta",
+        "x-looker-status": "stable",
         "x-looker-activity-type": "non_query"
       }
     },
@@ -8999,7 +9062,7 @@
             "schema": { "$ref": "#/definitions/Error" }
           }
         },
-        "x-looker-status": "beta",
+        "x-looker-status": "stable",
         "x-looker-activity-type": "non_query"
       }
     },
@@ -9040,7 +9103,7 @@
             "schema": { "$ref": "#/definitions/Error" }
           }
         },
-        "x-looker-status": "beta",
+        "x-looker-status": "stable",
         "x-looker-activity-type": "non_query"
       }
     },
@@ -9076,7 +9139,7 @@
             "schema": { "$ref": "#/definitions/Error" }
           }
         },
-        "x-looker-status": "beta",
+        "x-looker-status": "stable",
         "x-looker-activity-type": "non_query"
       },
       "post": {
@@ -9119,7 +9182,7 @@
             "schema": { "$ref": "#/definitions/Error" }
           }
         },
-        "x-looker-status": "beta",
+        "x-looker-status": "stable",
         "x-looker-activity-type": "non_query"
       }
     },
@@ -9159,7 +9222,7 @@
             "schema": { "$ref": "#/definitions/Error" }
           }
         },
-        "x-looker-status": "beta",
+        "x-looker-status": "stable",
         "x-looker-activity-type": "non_query"
       },
       "patch": {
@@ -9220,7 +9283,7 @@
             "schema": { "$ref": "#/definitions/Error" }
           }
         },
-        "x-looker-status": "beta",
+        "x-looker-status": "stable",
         "x-looker-activity-type": "non_query"
       }
     },
@@ -9253,7 +9316,7 @@
             "schema": { "$ref": "#/definitions/Error" }
           }
         },
-        "x-looker-status": "beta",
+        "x-looker-status": "stable",
         "x-looker-activity-type": "non_query"
       }
     },
@@ -9296,7 +9359,7 @@
             "schema": { "$ref": "#/definitions/Error" }
           }
         },
-        "x-looker-status": "beta",
+        "x-looker-status": "stable",
         "x-looker-activity-type": "non_query"
       },
       "get": {
@@ -9328,7 +9391,7 @@
             "schema": { "$ref": "#/definitions/Error" }
           }
         },
-        "x-looker-status": "beta",
+        "x-looker-status": "stable",
         "x-looker-activity-type": "non_query"
       }
     },
@@ -9376,7 +9439,7 @@
             "schema": { "$ref": "#/definitions/Error" }
           }
         },
-        "x-looker-status": "beta",
+        "x-looker-status": "stable",
         "x-looker-activity-type": "non_query"
       },
       "get": {
@@ -9415,7 +9478,7 @@
             "schema": { "$ref": "#/definitions/Error" }
           }
         },
-        "x-looker-status": "beta",
+        "x-looker-status": "stable",
         "x-looker-activity-type": "non_query"
       }
     },
@@ -9455,7 +9518,7 @@
             "schema": { "$ref": "#/definitions/Error" }
           }
         },
-        "x-looker-status": "beta",
+        "x-looker-status": "stable",
         "x-looker-activity-type": "non_query"
       }
     },
@@ -9498,7 +9561,7 @@
             "schema": { "$ref": "#/definitions/Error" }
           }
         },
-        "x-looker-status": "beta",
+        "x-looker-status": "stable",
         "x-looker-activity-type": "non_query"
       }
     },
@@ -9545,7 +9608,7 @@
             "schema": { "$ref": "#/definitions/Error" }
           }
         },
-        "x-looker-status": "beta",
+        "x-looker-status": "stable",
         "x-looker-activity-type": "non_query"
       }
     },
@@ -9588,7 +9651,7 @@
             "schema": { "$ref": "#/definitions/Error" }
           }
         },
-        "x-looker-status": "beta",
+        "x-looker-status": "stable",
         "x-looker-activity-type": "non_query"
       }
     },
@@ -9619,6 +9682,13 @@
             "description": "(Optional: leave blank for root project) The remote url for remote dependency to test.",
             "required": false,
             "type": "string"
+          },
+          {
+            "name": "use_production",
+            "in": "query",
+            "description": "(Optional: leave blank for dev credentials) Whether to use git production credentials.",
+            "required": false,
+            "type": "string"
           }
         ],
         "responses": {
@@ -9643,7 +9713,7 @@
             "schema": { "$ref": "#/definitions/Error" }
           }
         },
-        "x-looker-status": "beta",
+        "x-looker-status": "stable",
         "x-looker-activity-type": "non_query"
       }
     },
@@ -9686,7 +9756,7 @@
             "schema": { "$ref": "#/definitions/Error" }
           }
         },
-        "x-looker-status": "beta",
+        "x-looker-status": "stable",
         "x-looker-activity-type": "non_query"
       }
     },
@@ -9751,7 +9821,7 @@
             "schema": { "$ref": "#/definitions/Error" }
           }
         },
-        "x-looker-status": "beta",
+        "x-looker-status": "stable",
         "x-looker-activity-type": "non_query"
       }
     },
@@ -9924,7 +9994,7 @@
             "schema": { "$ref": "#/definitions/Error" }
           }
         },
-        "x-looker-status": "beta",
+        "x-looker-status": "stable",
         "x-looker-activity-type": "db_query"
       }
     },
@@ -10000,7 +10070,7 @@
             "schema": { "$ref": "#/definitions/Error" }
           }
         },
-        "x-looker-status": "beta",
+        "x-looker-status": "stable",
         "x-looker-activity-type": "db_query"
       }
     },
@@ -10097,7 +10167,7 @@
             "schema": { "$ref": "#/definitions/Error" }
           }
         },
-        "x-looker-status": "beta",
+        "x-looker-status": "stable",
         "x-looker-activity-type": "db_query"
       }
     },
@@ -10137,7 +10207,7 @@
             "schema": { "$ref": "#/definitions/Error" }
           }
         },
-        "x-looker-status": "beta",
+        "x-looker-status": "stable",
         "x-looker-activity-type": "db_query"
       }
     },
@@ -10172,7 +10242,7 @@
             "schema": { "$ref": "#/definitions/Error" }
           }
         },
-        "x-looker-status": "beta",
+        "x-looker-status": "stable",
         "x-looker-activity-type": "db_query"
       }
     },
@@ -10231,7 +10301,7 @@
             "schema": { "$ref": "#/definitions/Error" }
           }
         },
-        "x-looker-status": "beta",
+        "x-looker-status": "stable",
         "x-looker-activity-type": "non_query"
       },
       "delete": {
@@ -10273,7 +10343,7 @@
             "schema": { "$ref": "#/definitions/Error" }
           }
         },
-        "x-looker-status": "beta",
+        "x-looker-status": "stable",
         "x-looker-activity-type": "non_query"
       }
     },
@@ -10309,7 +10379,7 @@
             "schema": { "$ref": "#/definitions/Error" }
           }
         },
-        "x-looker-status": "beta",
+        "x-looker-status": "stable",
         "x-looker-activity-type": "non_query"
       }
     },
@@ -11143,7 +11213,7 @@
             "schema": { "$ref": "#/definitions/Error" }
           }
         },
-        "x-looker-status": "beta",
+        "x-looker-status": "stable",
         "x-looker-activity-type": "db_query"
       }
     },
@@ -11181,7 +11251,7 @@
             "schema": { "$ref": "#/definitions/Error" }
           }
         },
-        "x-looker-status": "beta",
+        "x-looker-status": "stable",
         "x-looker-activity-type": "db_query"
       },
       "patch": {
@@ -11228,7 +11298,7 @@
             "schema": { "$ref": "#/definitions/Error" }
           }
         },
-        "x-looker-status": "beta",
+        "x-looker-status": "stable",
         "x-looker-activity-type": "db_query"
       },
       "get": {
@@ -11267,7 +11337,7 @@
             "schema": { "$ref": "#/definitions/Error" }
           }
         },
-        "x-looker-status": "beta",
+        "x-looker-status": "stable",
         "x-looker-activity-type": "db_query"
       }
     },
@@ -11312,7 +11382,7 @@
             "schema": { "$ref": "#/definitions/Error" }
           }
         },
-        "x-looker-status": "beta",
+        "x-looker-status": "stable",
         "x-looker-activity-type": "db_query"
       },
       "get": {
@@ -11365,7 +11435,7 @@
             "schema": { "$ref": "#/definitions/ValidationError" }
           }
         },
-        "x-looker-status": "beta",
+        "x-looker-status": "stable",
         "x-looker-activity-type": "db_query"
       }
     },
@@ -11410,7 +11480,7 @@
             "schema": { "$ref": "#/definitions/Error" }
           }
         },
-        "x-looker-status": "beta",
+        "x-looker-status": "stable",
         "x-looker-activity-type": "db_query",
         "x-looker-rate-limited": true
       }
@@ -11470,7 +11540,7 @@
             "schema": { "$ref": "#/definitions/Error" }
           }
         },
-        "x-looker-status": "beta",
+        "x-looker-status": "stable",
         "x-looker-activity-type": "db_query"
       }
     },
@@ -11529,7 +11599,7 @@
             "schema": { "$ref": "#/definitions/Error" }
           }
         },
-        "x-looker-status": "beta",
+        "x-looker-status": "stable",
         "x-looker-activity-type": "db_query"
       }
     },
@@ -11587,7 +11657,7 @@
             "schema": { "$ref": "#/definitions/Error" }
           }
         },
-        "x-looker-status": "beta",
+        "x-looker-status": "stable",
         "x-looker-activity-type": "db_query"
       }
     },
@@ -11640,7 +11710,7 @@
             "schema": { "$ref": "#/definitions/Error" }
           }
         },
-        "x-looker-status": "beta",
+        "x-looker-status": "stable",
         "x-looker-activity-type": "db_query",
         "x-looker-rate-limited": true
       }
@@ -11665,7 +11735,7 @@
             "schema": { "$ref": "#/definitions/Error" }
           }
         },
-        "x-looker-status": "beta",
+        "x-looker-status": "stable",
         "x-looker-activity-type": "non_query"
       },
       "patch": {
@@ -11704,7 +11774,7 @@
             "schema": { "$ref": "#/definitions/Error" }
           }
         },
-        "x-looker-status": "beta",
+        "x-looker-status": "stable",
         "x-looker-activity-type": "non_query"
       }
     },
@@ -11728,7 +11798,7 @@
             "schema": { "$ref": "#/definitions/Error" }
           }
         },
-        "x-looker-status": "beta",
+        "x-looker-status": "stable",
         "x-looker-activity-type": "non_query"
       },
       "patch": {
@@ -11767,7 +11837,7 @@
             "schema": { "$ref": "#/definitions/Error" }
           }
         },
-        "x-looker-status": "beta",
+        "x-looker-status": "stable",
         "x-looker-activity-type": "non_query"
       }
     },
@@ -11878,7 +11948,8 @@
             "schema": { "$ref": "#/definitions/Error" }
           }
         },
-        "x-looker-status": "beta",
+        "deprecated": true,
+        "x-looker-status": "deprecated",
         "x-looker-activity-type": "non_query"
       }
     },
@@ -11918,7 +11989,8 @@
             "schema": { "$ref": "#/definitions/Error" }
           }
         },
-        "x-looker-status": "beta",
+        "deprecated": true,
+        "x-looker-status": "deprecated",
         "x-looker-activity-type": "non_query"
       },
       "delete": {
@@ -11953,7 +12025,8 @@
             "schema": { "$ref": "#/definitions/Error" }
           }
         },
-        "x-looker-status": "beta",
+        "deprecated": true,
+        "x-looker-status": "deprecated",
         "x-looker-activity-type": "non_query"
       },
       "patch": {
@@ -11999,7 +12072,8 @@
             "schema": { "$ref": "#/definitions/Error" }
           }
         },
-        "x-looker-status": "beta",
+        "deprecated": true,
+        "x-looker-status": "deprecated",
         "x-looker-activity-type": "non_query"
       }
     },
@@ -12035,7 +12109,8 @@
             "schema": { "$ref": "#/definitions/Error" }
           }
         },
-        "x-looker-status": "beta",
+        "deprecated": true,
+        "x-looker-status": "deprecated",
         "x-looker-activity-type": "non_query"
       },
       "post": {
@@ -12078,7 +12153,8 @@
             "schema": { "$ref": "#/definitions/Error" }
           }
         },
-        "x-looker-status": "beta",
+        "deprecated": true,
+        "x-looker-status": "deprecated",
         "x-looker-activity-type": "non_query"
       }
     },
@@ -12144,7 +12220,8 @@
             "schema": { "$ref": "#/definitions/Error" }
           }
         },
-        "x-looker-status": "beta",
+        "deprecated": true,
+        "x-looker-status": "deprecated",
         "x-looker-activity-type": "non_query"
       }
     },
@@ -12201,7 +12278,8 @@
             "schema": { "$ref": "#/definitions/Error" }
           }
         },
-        "x-looker-status": "beta",
+        "deprecated": true,
+        "x-looker-status": "deprecated",
         "x-looker-activity-type": "non_query"
       }
     },
@@ -12241,7 +12319,8 @@
             "schema": { "$ref": "#/definitions/Error" }
           }
         },
-        "x-looker-status": "beta",
+        "deprecated": true,
+        "x-looker-status": "deprecated",
         "x-looker-activity-type": "non_query"
       }
     },
@@ -12284,7 +12363,8 @@
             "schema": { "$ref": "#/definitions/Error" }
           }
         },
-        "x-looker-status": "beta",
+        "deprecated": true,
+        "x-looker-status": "deprecated",
         "x-looker-activity-type": "non_query"
       }
     },
@@ -12327,7 +12407,8 @@
             "schema": { "$ref": "#/definitions/Error" }
           }
         },
-        "x-looker-status": "beta",
+        "deprecated": true,
+        "x-looker-status": "deprecated",
         "x-looker-activity-type": "non_query"
       }
     },
@@ -12370,7 +12451,8 @@
             "schema": { "$ref": "#/definitions/Error" }
           }
         },
-        "x-looker-status": "beta",
+        "deprecated": true,
+        "x-looker-status": "deprecated",
         "x-looker-activity-type": "non_query"
       }
     },
@@ -12481,7 +12563,7 @@
             "schema": { "$ref": "#/definitions/Error" }
           }
         },
-        "x-looker-status": "beta",
+        "x-looker-status": "stable",
         "x-looker-activity-type": "non_query"
       }
     },
@@ -12521,7 +12603,7 @@
             "schema": { "$ref": "#/definitions/Error" }
           }
         },
-        "x-looker-status": "beta",
+        "x-looker-status": "stable",
         "x-looker-activity-type": "non_query"
       },
       "delete": {
@@ -12556,7 +12638,7 @@
             "schema": { "$ref": "#/definitions/Error" }
           }
         },
-        "x-looker-status": "beta",
+        "x-looker-status": "stable",
         "x-looker-activity-type": "non_query"
       },
       "patch": {
@@ -12602,7 +12684,7 @@
             "schema": { "$ref": "#/definitions/Error" }
           }
         },
-        "x-looker-status": "beta",
+        "x-looker-status": "stable",
         "x-looker-activity-type": "non_query"
       }
     },
@@ -12638,7 +12720,7 @@
             "schema": { "$ref": "#/definitions/Error" }
           }
         },
-        "x-looker-status": "beta",
+        "x-looker-status": "stable",
         "x-looker-activity-type": "non_query"
       },
       "post": {
@@ -12681,7 +12763,7 @@
             "schema": { "$ref": "#/definitions/Error" }
           }
         },
-        "x-looker-status": "beta",
+        "x-looker-status": "stable",
         "x-looker-activity-type": "non_query"
       }
     },
@@ -12747,7 +12829,7 @@
             "schema": { "$ref": "#/definitions/Error" }
           }
         },
-        "x-looker-status": "beta",
+        "x-looker-status": "stable",
         "x-looker-activity-type": "non_query"
       }
     },
@@ -12804,7 +12886,7 @@
             "schema": { "$ref": "#/definitions/Error" }
           }
         },
-        "x-looker-status": "beta",
+        "x-looker-status": "stable",
         "x-looker-activity-type": "non_query"
       }
     },
@@ -12844,7 +12926,7 @@
             "schema": { "$ref": "#/definitions/Error" }
           }
         },
-        "x-looker-status": "beta",
+        "x-looker-status": "stable",
         "x-looker-activity-type": "non_query"
       }
     },
@@ -12887,7 +12969,7 @@
             "schema": { "$ref": "#/definitions/Error" }
           }
         },
-        "x-looker-status": "beta",
+        "x-looker-status": "stable",
         "x-looker-activity-type": "non_query"
       }
     },
@@ -12930,7 +13012,7 @@
             "schema": { "$ref": "#/definitions/Error" }
           }
         },
-        "x-looker-status": "beta",
+        "x-looker-status": "stable",
         "x-looker-activity-type": "non_query"
       }
     },
@@ -12973,7 +13055,7 @@
             "schema": { "$ref": "#/definitions/Error" }
           }
         },
-        "x-looker-status": "beta",
+        "x-looker-status": "stable",
         "x-looker-activity-type": "non_query"
       }
     },
@@ -13006,7 +13088,7 @@
             "schema": { "$ref": "#/definitions/Error" }
           }
         },
-        "x-looker-status": "beta",
+        "x-looker-status": "stable",
         "x-looker-activity-type": "db_query"
       }
     },
@@ -13051,7 +13133,7 @@
             "schema": { "$ref": "#/definitions/Error" }
           }
         },
-        "x-looker-status": "beta",
+        "x-looker-status": "stable",
         "x-looker-activity-type": "db_query"
       }
     },
@@ -13107,7 +13189,7 @@
             "schema": { "$ref": "#/definitions/Error" }
           }
         },
-        "x-looker-status": "beta",
+        "x-looker-status": "stable",
         "x-looker-activity-type": "db_query"
       }
     },
@@ -13143,7 +13225,7 @@
             "schema": { "$ref": "#/definitions/Error" }
           }
         },
-        "x-looker-status": "beta",
+        "x-looker-status": "stable",
         "x-looker-activity-type": "non_query"
       },
       "post": {
@@ -13186,7 +13268,7 @@
             "schema": { "$ref": "#/definitions/Error" }
           }
         },
-        "x-looker-status": "beta",
+        "x-looker-status": "stable",
         "x-looker-activity-type": "non_query"
       }
     },
@@ -13283,7 +13365,7 @@
             "schema": { "$ref": "#/definitions/Error" }
           }
         },
-        "x-looker-status": "beta",
+        "x-looker-status": "stable",
         "x-looker-activity-type": "non_query"
       }
     },
@@ -13317,7 +13399,7 @@
             "schema": { "$ref": "#/definitions/Error" }
           }
         },
-        "x-looker-status": "beta",
+        "x-looker-status": "stable",
         "x-looker-activity-type": "non_query"
       },
       "put": {
@@ -13356,7 +13438,7 @@
             "schema": { "$ref": "#/definitions/Error" }
           }
         },
-        "x-looker-status": "beta",
+        "x-looker-status": "stable",
         "x-looker-activity-type": "non_query"
       }
     },
@@ -13407,7 +13489,7 @@
             "schema": { "$ref": "#/definitions/Error" }
           }
         },
-        "x-looker-status": "beta",
+        "x-looker-status": "stable",
         "x-looker-activity-type": "non_query"
       }
     },
@@ -13448,7 +13530,7 @@
             "schema": { "$ref": "#/definitions/Error" }
           }
         },
-        "x-looker-status": "beta",
+        "x-looker-status": "stable",
         "x-looker-activity-type": "non_query"
       }
     },
@@ -13497,7 +13579,7 @@
             "schema": { "$ref": "#/definitions/Error" }
           }
         },
-        "x-looker-status": "beta",
+        "x-looker-status": "stable",
         "x-looker-activity-type": "non_query"
       }
     },
@@ -13537,7 +13619,7 @@
             "schema": { "$ref": "#/definitions/Error" }
           }
         },
-        "x-looker-status": "beta",
+        "x-looker-status": "stable",
         "x-looker-activity-type": "non_query"
       },
       "patch": {
@@ -13583,7 +13665,7 @@
             "schema": { "$ref": "#/definitions/Error" }
           }
         },
-        "x-looker-status": "beta",
+        "x-looker-status": "stable",
         "x-looker-activity-type": "non_query"
       },
       "delete": {
@@ -13618,7 +13700,7 @@
             "schema": { "$ref": "#/definitions/Error" }
           }
         },
-        "x-looker-status": "beta",
+        "x-looker-status": "stable",
         "x-looker-activity-type": "non_query"
       }
     },
@@ -14006,7 +14088,7 @@
             "schema": { "$ref": "#/definitions/Error" }
           }
         },
-        "x-looker-status": "beta",
+        "x-looker-status": "stable",
         "x-looker-activity-type": "non_query"
       }
     },
@@ -14100,7 +14182,7 @@
             "schema": { "$ref": "#/definitions/Error" }
           }
         },
-        "x-looker-status": "beta",
+        "x-looker-status": "stable",
         "x-looker-activity-type": "non_query"
       }
     },
@@ -14137,7 +14219,7 @@
             "schema": { "$ref": "#/definitions/Error" }
           }
         },
-        "x-looker-status": "beta",
+        "x-looker-status": "stable",
         "x-looker-activity-type": "non_query"
       }
     },
@@ -16285,7 +16367,7 @@
             "schema": { "$ref": "#/definitions/Error" }
           }
         },
-        "x-looker-status": "beta",
+        "x-looker-status": "stable",
         "x-looker-activity-type": "non_query"
       },
       "put": {
@@ -16324,7 +16406,7 @@
             "schema": { "$ref": "#/definitions/Error" }
           }
         },
-        "x-looker-status": "beta",
+        "x-looker-status": "stable",
         "x-looker-activity-type": "non_query"
       }
     },
@@ -16351,7 +16433,7 @@
             "schema": { "$ref": "#/definitions/Error" }
           }
         },
-        "x-looker-status": "beta",
+        "x-looker-status": "stable",
         "x-looker-activity-type": "non_query"
       }
     },
@@ -16384,7 +16466,7 @@
             "schema": { "$ref": "#/definitions/Error" }
           }
         },
-        "x-looker-status": "beta",
+        "x-looker-status": "stable",
         "x-looker-activity-type": "non_query"
       }
     }
@@ -16507,7 +16589,7 @@
           "x-looker-nullable": true
         }
       },
-      "x-looker-status": "beta"
+      "x-looker-status": "stable"
     },
     "SpaceBase": {
       "properties": {
@@ -16611,7 +16693,7 @@
           "x-looker-nullable": false
         }
       },
-      "x-looker-status": "beta",
+      "x-looker-status": "stable",
       "required": ["name"]
     },
     "CreateSpace": {
@@ -16627,7 +16709,7 @@
           "x-looker-nullable": false
         }
       },
-      "x-looker-status": "beta",
+      "x-looker-status": "stable",
       "required": ["name", "parent_id"]
     },
     "UpdateSpace": {
@@ -16643,7 +16725,7 @@
           "x-looker-nullable": false
         }
       },
-      "x-looker-status": "beta"
+      "x-looker-status": "stable"
     },
     "Space": {
       "properties": {
@@ -16761,7 +16843,7 @@
           "x-looker-nullable": true
         }
       },
-      "x-looker-status": "beta",
+      "x-looker-status": "stable",
       "required": ["name"]
     },
     "Homepage": {
@@ -16922,7 +17004,7 @@
           "x-looker-nullable": true
         }
       },
-      "x-looker-status": "beta"
+      "x-looker-status": "stable"
     },
     "HomepageItem": {
       "properties": {
@@ -17092,7 +17174,7 @@
           "x-looker-nullable": true
         }
       },
-      "x-looker-status": "beta"
+      "x-looker-status": "stable"
     },
     "ValidationError": {
       "properties": {
@@ -17197,7 +17279,7 @@
           "x-looker-nullable": true
         }
       },
-      "x-looker-status": "beta"
+      "x-looker-status": "stable"
     },
     "BackupConfiguration": {
       "properties": {
@@ -17259,7 +17341,7 @@
           "x-looker-nullable": false
         }
       },
-      "x-looker-status": "beta"
+      "x-looker-status": "stable"
     },
     "ContinuousPalette": {
       "properties": {
@@ -17286,7 +17368,7 @@
           "x-looker-nullable": false
         }
       },
-      "x-looker-status": "beta"
+      "x-looker-status": "stable"
     },
     "DiscretePalette": {
       "properties": {
@@ -17313,7 +17395,7 @@
           "x-looker-nullable": false
         }
       },
-      "x-looker-status": "beta"
+      "x-looker-status": "stable"
     },
     "ColorCollection": {
       "properties": {
@@ -17347,7 +17429,7 @@
           "x-looker-nullable": false
         }
       },
-      "x-looker-status": "beta"
+      "x-looker-status": "stable"
     },
     "ContentFavorite": {
       "properties": {
@@ -17397,7 +17479,7 @@
           "x-looker-nullable": true
         }
       },
-      "x-looker-status": "beta"
+      "x-looker-status": "stable"
     },
     "ContentMetaGroupUser": {
       "properties": {
@@ -17442,7 +17524,7 @@
           "x-looker-nullable": true
         }
       },
-      "x-looker-status": "beta"
+      "x-looker-status": "stable"
     },
     "ContentMeta": {
       "properties": {
@@ -17523,7 +17605,7 @@
           "x-looker-nullable": true
         }
       },
-      "x-looker-status": "beta"
+      "x-looker-status": "stable"
     },
     "ContentValidation": {
       "properties": {
@@ -17584,7 +17666,7 @@
           "x-looker-nullable": true
         }
       },
-      "x-looker-status": "beta"
+      "x-looker-status": "stable"
     },
     "ContentValidatorError": {
       "properties": {
@@ -17642,7 +17724,7 @@
           "x-looker-nullable": false
         }
       },
-      "x-looker-status": "beta"
+      "x-looker-status": "stable"
     },
     "ContentValidationSpace": {
       "properties": {
@@ -17658,7 +17740,7 @@
           "x-looker-nullable": false
         }
       },
-      "x-looker-status": "beta",
+      "x-looker-status": "stable",
       "required": ["name"]
     },
     "ContentValidationFolder": {
@@ -17675,7 +17757,7 @@
           "x-looker-nullable": false
         }
       },
-      "x-looker-status": "beta",
+      "x-looker-status": "stable",
       "required": ["name"]
     },
     "ContentValidationLook": {
@@ -17705,7 +17787,7 @@
           "x-looker-nullable": true
         }
       },
-      "x-looker-status": "beta"
+      "x-looker-status": "stable"
     },
     "ContentValidationDashboard": {
       "properties": {
@@ -17738,7 +17820,7 @@
           "x-looker-nullable": true
         }
       },
-      "x-looker-status": "beta"
+      "x-looker-status": "stable"
     },
     "ContentValidationDashboardElement": {
       "properties": {
@@ -17816,7 +17898,7 @@
           "x-looker-nullable": true
         }
       },
-      "x-looker-status": "beta"
+      "x-looker-status": "stable"
     },
     "ContentValidationError": {
       "properties": {
@@ -17851,7 +17933,7 @@
           "x-looker-nullable": false
         }
       },
-      "x-looker-status": "beta"
+      "x-looker-status": "stable"
     },
     "ContentValidationDashboardFilter": {
       "properties": {
@@ -17903,7 +17985,7 @@
           "x-looker-nullable": true
         }
       },
-      "x-looker-status": "beta"
+      "x-looker-status": "stable"
     },
     "ContentValidationScheduledPlan": {
       "properties": {
@@ -17926,7 +18008,7 @@
           "x-looker-nullable": false
         }
       },
-      "x-looker-status": "beta"
+      "x-looker-status": "stable"
     },
     "ContentValidationAlert": {
       "properties": {
@@ -17952,7 +18034,7 @@
           "x-looker-nullable": true
         }
       },
-      "x-looker-status": "beta"
+      "x-looker-status": "stable"
     },
     "ContentValidationLookMLDashboard": {
       "properties": {
@@ -17981,7 +18063,7 @@
           "x-looker-nullable": true
         }
       },
-      "x-looker-status": "beta"
+      "x-looker-status": "stable"
     },
     "ContentValidationLookMLDashboardElement": {
       "properties": {
@@ -17998,7 +18080,7 @@
           "x-looker-nullable": true
         }
       },
-      "x-looker-status": "beta"
+      "x-looker-status": "stable"
     },
     "ContentView": {
       "properties": {
@@ -18078,7 +18160,7 @@
           "x-looker-nullable": true
         }
       },
-      "x-looker-status": "beta"
+      "x-looker-status": "stable"
     },
     "CredentialsApi3": {
       "properties": {
@@ -18625,7 +18707,7 @@
           "x-looker-nullable": true
         }
       },
-      "x-looker-status": "beta"
+      "x-looker-status": "stable"
     },
     "DashboardAggregateTableLookml": {
       "properties": {
@@ -18642,7 +18724,7 @@
           "x-looker-nullable": true
         }
       },
-      "x-looker-status": "beta"
+      "x-looker-status": "stable"
     },
     "DashboardAppearance": {
       "properties": {
@@ -18684,7 +18766,7 @@
           "x-looker-nullable": true
         }
       },
-      "x-looker-status": "beta"
+      "x-looker-status": "stable"
     },
     "DashboardElement": {
       "properties": {
@@ -18847,7 +18929,7 @@
           "x-looker-nullable": true
         }
       },
-      "x-looker-status": "beta"
+      "x-looker-status": "stable"
     },
     "DashboardFilter": {
       "properties": {
@@ -18926,7 +19008,7 @@
         },
         "allow_multiple_values": {
           "type": "boolean",
-          "description": "Whether the filter allows multiple filter values",
+          "description": "Whether the filter allows multiple filter values (deprecated in the latest version of dashboards)",
           "x-looker-nullable": false
         },
         "required": {
@@ -18941,7 +19023,7 @@
           "x-looker-nullable": true
         }
       },
-      "x-looker-status": "beta"
+      "x-looker-status": "stable"
     },
     "CreateDashboardFilter": {
       "properties": {
@@ -19012,7 +19094,7 @@
         },
         "allow_multiple_values": {
           "type": "boolean",
-          "description": "Whether the filter allows multiple filter values",
+          "description": "Whether the filter allows multiple filter values (deprecated in the latest version of dashboards)",
           "x-looker-nullable": false
         },
         "required": {
@@ -19027,7 +19109,7 @@
           "x-looker-nullable": true
         }
       },
-      "x-looker-status": "beta",
+      "x-looker-status": "stable",
       "required": ["dashboard_id", "name", "title", "type"]
     },
     "DashboardLayoutComponent": {
@@ -19104,7 +19186,7 @@
           "x-looker-nullable": true
         }
       },
-      "x-looker-status": "beta"
+      "x-looker-status": "stable"
     },
     "DashboardLayout": {
       "properties": {
@@ -19168,7 +19250,7 @@
           "x-looker-nullable": true
         }
       },
-      "x-looker-status": "beta"
+      "x-looker-status": "stable"
     },
     "DashboardLookml": {
       "properties": {
@@ -19185,7 +19267,7 @@
           "x-looker-nullable": true
         }
       },
-      "x-looker-status": "beta"
+      "x-looker-status": "stable"
     },
     "Dashboard": {
       "properties": {
@@ -19437,7 +19519,7 @@
           "x-looker-nullable": true
         }
       },
-      "x-looker-status": "beta"
+      "x-looker-status": "stable"
     },
     "DataActionFormField": {
       "properties": {
@@ -19497,7 +19579,7 @@
           "x-looker-nullable": true
         }
       },
-      "x-looker-status": "beta"
+      "x-looker-status": "stable"
     },
     "DataActionForm": {
       "properties": {
@@ -19515,7 +19597,7 @@
           "x-looker-nullable": true
         }
       },
-      "x-looker-status": "beta"
+      "x-looker-status": "stable"
     },
     "DataActionFormSelectOption": {
       "properties": {
@@ -19532,7 +19614,7 @@
           "x-looker-nullable": true
         }
       },
-      "x-looker-status": "beta"
+      "x-looker-status": "stable"
     },
     "DataActionRequest": {
       "properties": {
@@ -19549,7 +19631,7 @@
           "x-looker-nullable": true
         }
       },
-      "x-looker-status": "beta"
+      "x-looker-status": "stable"
     },
     "DataActionResponse": {
       "properties": {
@@ -19584,7 +19666,7 @@
           "x-looker-nullable": true
         }
       },
-      "x-looker-status": "beta"
+      "x-looker-status": "stable"
     },
     "DataActionUserState": {
       "properties": {
@@ -19602,7 +19684,7 @@
           "x-looker-nullable": true
         }
       },
-      "x-looker-status": "beta"
+      "x-looker-status": "stable"
     },
     "Datagroup": {
       "properties": {
@@ -19670,7 +19752,7 @@
           "x-looker-nullable": true
         }
       },
-      "x-looker-status": "beta"
+      "x-looker-status": "stable"
     },
     "DBConnectionBase": {
       "properties": {
@@ -20046,7 +20128,18 @@
           "x-looker-nullable": false
         }
       },
-      "x-looker-status": "beta"
+      "x-looker-status": "stable"
+    },
+    "DependencyGraph": {
+      "properties": {
+        "graph_text": {
+          "type": "string",
+          "readOnly": true,
+          "description": "The graph structure in the dot language that can be rendered into an image.",
+          "x-looker-nullable": false
+        }
+      },
+      "x-looker-status": "stable"
     },
     "DialectInfo": {
       "properties": {
@@ -20266,7 +20359,7 @@
           "x-looker-nullable": false
         }
       },
-      "x-looker-status": "beta"
+      "x-looker-status": "stable"
     },
     "DigestEmails": {
       "properties": {
@@ -20276,7 +20369,7 @@
           "x-looker-nullable": false
         }
       },
-      "x-looker-status": "beta"
+      "x-looker-status": "stable"
     },
     "EmbedSsoParams": {
       "properties": {
@@ -20336,8 +20429,7 @@
           "x-looker-nullable": true
         },
         "external_group_id": {
-          "type": "integer",
-          "format": "int64",
+          "type": "string",
           "description": "A unique value identifying an embed-exclusive group. Multiple embed users using the same `external_group_id` value will be able to share Looker content with each other. Content and embed users associated with the `external_group_id` will not be accessible to normal Looker users or embed users not associated with this `external_group_id`.",
           "x-looker-nullable": true
         },
@@ -20354,7 +20446,7 @@
           "x-looker-nullable": true
         }
       },
-      "x-looker-status": "beta",
+      "x-looker-status": "stable",
       "required": ["target_url"]
     },
     "EmbedUrlResponse": {
@@ -20366,7 +20458,7 @@
           "x-looker-nullable": false
         }
       },
-      "x-looker-status": "beta"
+      "x-looker-status": "stable"
     },
     "FolderBase": {
       "properties": {
@@ -20470,7 +20562,7 @@
           "x-looker-nullable": false
         }
       },
-      "x-looker-status": "beta",
+      "x-looker-status": "stable",
       "required": ["name"]
     },
     "CreateFolder": {
@@ -20486,7 +20578,7 @@
           "x-looker-nullable": false
         }
       },
-      "x-looker-status": "beta",
+      "x-looker-status": "stable",
       "required": ["name", "parent_id"]
     },
     "UpdateFolder": {
@@ -20502,7 +20594,7 @@
           "x-looker-nullable": false
         }
       },
-      "x-looker-status": "beta"
+      "x-looker-status": "stable"
     },
     "Folder": {
       "properties": {
@@ -20620,7 +20712,7 @@
           "x-looker-nullable": true
         }
       },
-      "x-looker-status": "beta",
+      "x-looker-status": "stable",
       "required": ["name"]
     },
     "GitBranch": {
@@ -20730,7 +20822,7 @@
           "x-looker-nullable": true
         }
       },
-      "x-looker-status": "beta"
+      "x-looker-status": "stable"
     },
     "GitConnectionTest": {
       "properties": {
@@ -20754,7 +20846,7 @@
           "x-looker-nullable": false
         }
       },
-      "x-looker-status": "beta"
+      "x-looker-status": "stable"
     },
     "GitConnectionTestResult": {
       "properties": {
@@ -20784,7 +20876,7 @@
           "x-looker-nullable": true
         }
       },
-      "x-looker-status": "beta"
+      "x-looker-status": "stable"
     },
     "GitStatus": {
       "properties": {
@@ -20820,7 +20912,7 @@
           "x-looker-nullable": false
         }
       },
-      "x-looker-status": "beta"
+      "x-looker-status": "stable"
     },
     "GroupIdForGroupInclusion": {
       "properties": {
@@ -20940,7 +21032,7 @@
           "x-looker-nullable": false
         }
       },
-      "x-looker-status": "beta"
+      "x-looker-status": "stable"
     },
     "IntegrationHub": {
       "properties": {
@@ -21012,7 +21104,7 @@
           "x-looker-nullable": true
         }
       },
-      "x-looker-status": "beta"
+      "x-looker-status": "stable"
     },
     "Integration": {
       "properties": {
@@ -21145,7 +21237,7 @@
           "x-looker-nullable": false
         }
       },
-      "x-looker-status": "beta"
+      "x-looker-status": "stable"
     },
     "IntegrationParam": {
       "properties": {
@@ -21207,7 +21299,7 @@
           "x-looker-nullable": true
         }
       },
-      "x-looker-status": "beta"
+      "x-looker-status": "stable"
     },
     "IntegrationRequiredField": {
       "properties": {
@@ -21232,7 +21324,7 @@
           "x-looker-nullable": true
         }
       },
-      "x-looker-status": "beta"
+      "x-looker-status": "stable"
     },
     "IntegrationTestResult": {
       "properties": {
@@ -21256,7 +21348,7 @@
           "x-looker-nullable": true
         }
       },
-      "x-looker-status": "beta"
+      "x-looker-status": "stable"
     },
     "InternalHelpResourcesContent": {
       "properties": {
@@ -21278,7 +21370,7 @@
           "x-looker-nullable": true
         }
       },
-      "x-looker-status": "beta"
+      "x-looker-status": "stable"
     },
     "InternalHelpResources": {
       "properties": {
@@ -21295,7 +21387,7 @@
           "x-looker-nullable": false
         }
       },
-      "x-looker-status": "beta"
+      "x-looker-status": "stable"
     },
     "LDAPConfig": {
       "properties": {
@@ -21966,7 +22058,7 @@
           "x-looker-nullable": false
         }
       },
-      "x-looker-status": "beta"
+      "x-looker-status": "stable"
     },
     "LookBasic": {
       "properties": {
@@ -22664,7 +22756,7 @@
           "x-looker-nullable": true
         }
       },
-      "x-looker-status": "beta"
+      "x-looker-status": "stable"
     },
     "LookmlModelNavExplore": {
       "properties": {
@@ -23132,6 +23224,12 @@
           "type": "string",
           "readOnly": true,
           "description": "Description",
+          "x-looker-nullable": true
+        },
+        "dimension_group": {
+          "type": "string",
+          "readOnly": true,
+          "description": "Dimension group if this field is part of a dimension group. If not, this will be null.",
           "x-looker-nullable": true
         },
         "enumerations": {
@@ -23784,7 +23882,7 @@
           "x-looker-nullable": true
         }
       },
-      "x-looker-status": "beta"
+      "x-looker-status": "stable"
     },
     "LookmlTestResult": {
       "properties": {
@@ -23842,7 +23940,7 @@
           "x-looker-nullable": false
         }
       },
-      "x-looker-status": "beta"
+      "x-looker-status": "stable"
     },
     "Manifest": {
       "properties": {
@@ -23873,7 +23971,7 @@
           "x-looker-nullable": true
         }
       },
-      "x-looker-status": "beta"
+      "x-looker-status": "stable"
     },
     "MergeQuery": {
       "properties": {
@@ -23937,7 +24035,7 @@
           "x-looker-nullable": true
         }
       },
-      "x-looker-status": "beta"
+      "x-looker-status": "stable"
     },
     "MergeQuerySourceQuery": {
       "properties": {
@@ -23959,7 +24057,7 @@
           "x-looker-nullable": true
         }
       },
-      "x-looker-status": "beta"
+      "x-looker-status": "stable"
     },
     "MergeFields": {
       "properties": {
@@ -23974,7 +24072,7 @@
           "x-looker-nullable": true
         }
       },
-      "x-looker-status": "beta"
+      "x-looker-status": "stable"
     },
     "ModelSet": {
       "properties": {
@@ -24217,7 +24315,7 @@
           "x-looker-nullable": true
         }
       },
-      "x-looker-status": "beta"
+      "x-looker-status": "stable"
     },
     "OIDCGroupRead": {
       "properties": {
@@ -24381,7 +24479,7 @@
           "x-looker-nullable": false
         }
       },
-      "x-looker-status": "beta"
+      "x-looker-status": "stable"
     },
     "Permission": {
       "properties": {
@@ -24517,7 +24615,7 @@
           "x-looker-nullable": true
         }
       },
-      "x-looker-status": "beta"
+      "x-looker-status": "stable"
     },
     "Project": {
       "properties": {
@@ -24560,6 +24658,11 @@
           "x-looker-write-only": true,
           "description": "(Write-Only) Git password for HTTPS authentication. (For production only, if using user attributes.)",
           "x-looker-nullable": true
+        },
+        "git_production_branch_name": {
+          "type": "string",
+          "description": "Git production branch name. Defaults to master.",
+          "x-looker-nullable": false
         },
         "git_username_user_attribute": {
           "type": "string",
@@ -24628,7 +24731,7 @@
           "x-looker-nullable": false
         }
       },
-      "x-looker-status": "beta"
+      "x-looker-status": "stable"
     },
     "ProjectError": {
       "properties": {
@@ -24707,7 +24810,7 @@
           "x-looker-nullable": true
         }
       },
-      "x-looker-status": "beta"
+      "x-looker-status": "stable"
     },
     "ModelsNotValidated": {
       "properties": {
@@ -24724,7 +24827,7 @@
           "x-looker-nullable": true
         }
       },
-      "x-looker-status": "beta"
+      "x-looker-status": "stable"
     },
     "ProjectValidation": {
       "properties": {
@@ -24756,7 +24859,7 @@
           "x-looker-nullable": true
         }
       },
-      "x-looker-status": "beta"
+      "x-looker-status": "stable"
     },
     "ProjectValidationCache": {
       "properties": {
@@ -24794,7 +24897,7 @@
           "x-looker-nullable": false
         }
       },
-      "x-looker-status": "beta"
+      "x-looker-status": "stable"
     },
     "ProjectWorkspace": {
       "properties": {
@@ -24854,7 +24957,7 @@
           "x-looker-nullable": true
         }
       },
-      "x-looker-status": "beta"
+      "x-looker-status": "stable"
     },
     "Query": {
       "properties": {
@@ -25070,7 +25173,7 @@
           "x-looker-nullable": true
         }
       },
-      "x-looker-status": "beta",
+      "x-looker-status": "stable",
       "required": ["query_id", "result_format"]
     },
     "QueryTask": {
@@ -25182,7 +25285,7 @@
           "x-looker-nullable": true
         }
       },
-      "x-looker-status": "beta"
+      "x-looker-status": "stable"
     },
     "RenderTask": {
       "properties": {
@@ -25311,7 +25414,7 @@
           "x-looker-nullable": true
         }
       },
-      "x-looker-status": "beta"
+      "x-looker-status": "stable"
     },
     "CreateDashboardRenderTask": {
       "properties": {
@@ -25326,7 +25429,7 @@
           "x-looker-nullable": true
         }
       },
-      "x-looker-status": "beta"
+      "x-looker-status": "stable"
     },
     "RepositoryCredential": {
       "properties": {
@@ -25378,7 +25481,7 @@
           "x-looker-nullable": false
         }
       },
-      "x-looker-status": "beta"
+      "x-looker-status": "stable"
     },
     "ResultMakerFilterablesListen": {
       "properties": {
@@ -25393,7 +25496,7 @@
           "x-looker-nullable": true
         }
       },
-      "x-looker-status": "beta"
+      "x-looker-status": "stable"
     },
     "ResultMakerFilterables": {
       "properties": {
@@ -25423,7 +25526,7 @@
           "x-looker-nullable": true
         }
       },
-      "x-looker-status": "beta"
+      "x-looker-status": "stable"
     },
     "ResultMakerWithIdVisConfigAndDynamicFields": {
       "properties": {
@@ -25493,7 +25596,7 @@
           "x-looker-nullable": true
         }
       },
-      "x-looker-status": "beta"
+      "x-looker-status": "stable"
     },
     "Role": {
       "properties": {
@@ -26123,7 +26226,7 @@
           "x-looker-nullable": true
         }
       },
-      "x-looker-status": "beta"
+      "x-looker-status": "stable"
     },
     "WriteScheduledPlan": {
       "properties": {
@@ -26264,7 +26367,7 @@
           "x-looker-nullable": true
         }
       },
-      "x-looker-status": "beta"
+      "x-looker-status": "stable"
     },
     "ScheduledPlan": {
       "properties": {
@@ -26459,7 +26562,7 @@
           "x-looker-nullable": false
         }
       },
-      "x-looker-status": "beta"
+      "x-looker-status": "stable"
     },
     "SessionConfig": {
       "properties": {
@@ -26497,7 +26600,7 @@
           "x-looker-nullable": false
         }
       },
-      "x-looker-status": "beta"
+      "x-looker-status": "stable"
     },
     "Session": {
       "properties": {
@@ -26659,7 +26762,7 @@
           "x-looker-nullable": true
         }
       },
-      "x-looker-status": "beta"
+      "x-looker-status": "stable"
     },
     "SqlQuery": {
       "properties": {
@@ -26842,7 +26945,7 @@
           "x-looker-nullable": false
         }
       },
-      "x-looker-status": "beta"
+      "x-looker-status": "stable"
     },
     "Theme": {
       "properties": {
@@ -26883,7 +26986,7 @@
           "x-looker-nullable": false
         }
       },
-      "x-looker-status": "beta"
+      "x-looker-status": "stable"
     },
     "Timezone": {
       "properties": {
@@ -27115,7 +27218,7 @@
           "x-looker-nullable": false
         }
       },
-      "x-looker-status": "beta"
+      "x-looker-status": "stable"
     },
     "UserLoginLockout": {
       "properties": {
@@ -27184,7 +27287,7 @@
           "x-looker-nullable": true
         }
       },
-      "x-looker-status": "beta"
+      "x-looker-status": "stable"
     },
     "User": {
       "properties": {
@@ -27521,6 +27624,12 @@
           "readOnly": true,
           "description": "Array of versions supported by this Looker instance",
           "x-looker-nullable": true
+        },
+        "api_server_url": {
+          "type": "string",
+          "readOnly": true,
+          "description": "API server base url",
+          "x-looker-nullable": false
         }
       },
       "x-looker-status": "stable"
@@ -27543,7 +27652,7 @@
           "x-looker-nullable": true
         }
       },
-      "x-looker-status": "beta"
+      "x-looker-status": "stable"
     },
     "WhitelabelConfiguration": {
       "properties": {
@@ -27639,7 +27748,7 @@
           "x-looker-nullable": false
         }
       },
-      "x-looker-status": "beta"
+      "x-looker-status": "stable"
     },
     "Workspace": {
       "properties": {
@@ -27664,7 +27773,7 @@
           "x-looker-nullable": true
         }
       },
-      "x-looker-status": "beta"
+      "x-looker-status": "stable"
     }
   }
 }

@@ -38,7 +38,7 @@ This Experimental version of the Looker SDK is not published to a Kotlin Package
 To ensure you have the version of the SDK that matches your Looker version, you can regenerate `methods.kt` and `models.kt` from the root of the repository with the command:
 
 ```bash
-yarn sdk kotlin
+yarn gen kotlin
 ```
 
 If this command fails the first time, read the [instructions for setting up `yarn`](https://github.com/looker-open-source/sdk-codegen/blob/master/README.md#using-the-yarnnode-based-generator)

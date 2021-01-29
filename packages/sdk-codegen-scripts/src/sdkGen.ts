@@ -64,9 +64,9 @@ const formatter = new FilesFormatter()
 
 /**
  * Writes the output file and registers it with the file reformatter for processing
- * @param {string} fileName name of source file
- * @param {string} content contents to (over) write into source file
- * @returns {string} the name of the file written
+ * @param fileName name of source file
+ * @param content contents to (over) write into source file
+ * @returns the name of the file written
  */
 const writeFile = (fileName: string, content: string): string => {
   fs.writeFileSync(fileName, content)
