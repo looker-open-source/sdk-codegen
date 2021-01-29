@@ -34,7 +34,7 @@ API become very concise, which simplifies the code generator.
 
 An important feature of these SDKs is the support for [multiple API versions in the same SDK](/README.md#multi-api-support-with-looker-72-and-later).
 This feature greatly aids iterative client-side code migration from an older SDK version to a new SDK version.
-Only the files generated from a versioned OpenApi specification will indicate which version of the API they consume, and 
+Only the files generated from a versioned OpenApi specification will indicate which version of the API they consume, and
 all generated files must use exactly the same RTL code.
 
 ### Configuration support
@@ -53,8 +53,8 @@ The Typescript SDK configuration support is in [`apiSettings.ts`](/packages/sdk-
 Once the RTL can read the configuration values for `base_url` and API credentials, the HTTP request processor and
 `AuthSession` implementation work can begin.
 
-If the Language SDK supports environment variable, configuration values can also be set via 
-[environment variables](/README.md#environment-variable-configuration). 
+If the Language SDK supports environment variable, configuration values can also be set via
+[environment variables](/README.md#environment-variable-configuration).
 [Precedence rules](/README.md#configuration-variable-precedence) should also be implemented.
 
 **Note**: By design, SDKs never retain API credentials in runtime memory, but only use them when required to authenticate.
@@ -216,11 +216,11 @@ In the `ITransport` function parameters shown above:
   - `base_url` (from `ITransportSettings`) `+`
   - `api_version` (from the SDK method class) `+`
   - `path` from the request parameter
-  
+
 - `options` is a set of override values of `ITransportSettings` (typically, a longer timeout value or setting
   `verify_ssl` to `false`) for a specific request.
   - `agentTag` is a string that identifies the SDK language and SDK version. Pass the tag with the `x-looker-appid` header.
-  
+
 The value for AgentTag is assigned in Typescript with the following:
 
 ```ts
@@ -317,8 +317,8 @@ Due to the complexities of Node vs. Browser implementations and authentication m
 implementation for the Typescript SDK is called [`NodeSession`](/packages/sdk-rtl/src/nodeSession.ts) but for this
 document we'll pretend it's called `AuthSession`.
 
-Recent (Looker 7.6 and above) API implementations additionally offer an OAuth authentication flow for API calls. Both 
-API3 credentials and OAuth2 authentication methods should be supported by `AuthSession` implementations. There will be 
+Recent (Looker 7.6 and above) API implementations additionally offer an OAuth authentication flow for API calls. Both
+API3 credentials and OAuth2 authentication methods should be supported by `AuthSession` implementations. There will be
 additional authentication methods in future Looker releases, but they should follow very similar patterns to these methods.
 
 What all `AuthSession` implementations have in common is:
@@ -328,7 +328,7 @@ What all `AuthSession` implementations have in common is:
 - the session tracks authorization token expiration. If it is expired, the session automatically re-authenticates the
   API user by reading the necessary credential information from `readConfig()` then logs the user back in, discards
   those retrieved credentials, and saves the new authorization token for subsequent API requests.
-  
+
 **NOTE**: The token expiration tracking should be set for 10 - 15 seconds before the indicated token expiration period
 to ensure the token for any API request is always active.
 
@@ -380,7 +380,7 @@ The various **Prologue** properties are for the standard SDK methods, streaming,
 
 We strongly prefer strong typing for language SDKs, as mentioned in [correctness](/docs/rationale.md#correctness).
 
-Some languages may not support strong typing or generics. In that case, we recommend using name/value pairs and 
+Some languages may not support strong typing or generics. In that case, we recommend using name/value pairs and
 verifying the names against the endpoint's specification at run-time before submitting the HTTP request to the endpoint.
 
 ### Methods
@@ -501,7 +501,7 @@ be reformatted when the code generation is finishing up.
 
 ## Tests
 
-A minimum testing threshold must be met before a Language SDK can be accepted. This section describes the tests to 
+A minimum testing threshold must be met before a Language SDK can be accepted. This section describes the tests to
 implement for a Language SDK.
 
 Files that support testing scenarios can be found in the [`test`](/test) folder.
@@ -521,7 +521,7 @@ Unit tests are tests that do not require a running API server.
 
   - reading `.ini` sections by name
   - parsing `true` and `false` values, e.g.
-  
+
 ```kotlin
 /**
  * strip quotes from the value if the same "quote" character is the start and end of the string
@@ -602,7 +602,7 @@ See [`methods.spec.ts`](/packages/sdk/src/test/methods.spec.ts) and
 
 ## CI/CD
 
-Detailed plans for Continuous Integration/Continuous Deployment (CI/CD) are still being established but CI will likely 
+Detailed plans for Continuous Integration/Continuous Deployment (CI/CD) are still being established but CI will likely
 use Travis for this repository.
 
 Both CI and CD have prerequisites that are described below.
@@ -611,7 +611,7 @@ Both CI and CD have prerequisites that are described below.
 
 The following items must succeed for an SDK update to be ready for release:
 
-- `yarn wipe && yarn sdk`
+- `yarn wipe && yarn gen`
 - `bin/smoke`
 
 The monthly release of Looker always has API changes. Updates for the supported SDKs must pass the two steps above before
@@ -642,13 +642,13 @@ A script or command to deploy to the relevant package manager must be provided f
 The package versioning information must contain the Looker Release version.
 
 The package needs a `README` that:
-- introduces the SDK 
+- introduces the SDK
 - describes how to get started
 - links to the SDK-Codegen repository
 - indicate an MIT or Apache license. Package managers often derive licensing information automatically by examining the
   origin of the package. (SDK-Codegen has an MIT license.)
 
-- Earn bonus points by linking to additional SDK examples. 
+- Earn bonus points by linking to additional SDK examples.
 
 Packages must use [semantic versioning](https://docs.npmjs.com/about-semantic-versioning). `Alpha` and `beta` tags can be used in versioning.
 
