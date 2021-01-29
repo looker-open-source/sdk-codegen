@@ -97,14 +97,15 @@ export const ApiConfigSection = (
  *
  * @returns the populated `IApiSection`, which may be empty
  */
-const readEnvConfig = (envPrefix: string) => {
+export const readEnvConfig = (envPrefix: string) => {
   const values: IApiSection = {}
   const configMap = ApiConfigMap(envPrefix)
   Object.keys(configMap).forEach((key) => {
     const envKey = configMap[key]
     if (process.env[envKey] !== undefined) {
       // Value exists. Map environment variable keys to config variable keys
-      values[key] = unquote(process.env[envKey])
+      const val = unquote(process.env[envKey])
+      values[key] = val
     }
   })
   return values
@@ -119,7 +120,7 @@ const readEnvConfig = (envPrefix: string) => {
  * @param {string} section Optional. Name of section of configuration file to read
  * @returns {IApiSection} containing the configuration values
  */
-const readIniConfig = (
+export const readIniConfig = (
   fileName: string,
   envPrefix: string,
   section?: string
@@ -218,10 +219,8 @@ export class NodeSettingsIniFile extends NodeSettings {
     }
     // default fileName to looker.ini
     fileName = fileName || './looker.ini'
-    const settings = ValueSettings(
-      readIniConfig(fileName, envPrefix, section),
-      envPrefix
-    )
+    const config = readIniConfig(fileName, envPrefix, section)
+    const settings = ValueSettings(config, envPrefix)
     super(envPrefix, settings, section)
     this.fileName = fileName
   }

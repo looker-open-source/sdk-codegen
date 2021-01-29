@@ -19,9 +19,195 @@ on:
       - packages/sdk/**
       - packages/sdk-rtl/**
 
+env:
+  LOOKERSDK_BASE_URL: https://localhost:20000
+  LOOKERSDK_VERIFY_SSL: false
+  TS_JUNIT_OUTPUT_DIR: results/tssdk
+
 jobs:
   unit:
+    # 1st condition: push event (restricted to master above)
+    # 2nd condition: PR opened/synchronized/reopened (types filter above)
+    #                except Release PRs, those need a manual CI:TEST
+    # 3rd condition: PR labeled with "CI:TEST"
+    if: >
+      github.event_name == 'push' ||
+      (
+        github.event_name == 'pull_request' &&
+        github.event.action != 'labeled'
+      ) ||
+      (
+        github.event_name == 'pull_request' &&
+        github.event.action == 'labeled' &&
+        github.event.label.name == 'CI:TEST'
+      )
+
+    name: Unit - ${{ matrix.os }} / Node ${{ matrix.node-version }}
+    env:
+      JEST_JUNIT_OUTPUT_DIR: results/tssdk
+      JEST_JUNIT_OUTPUT_NAME: ${{ matrix.os }}.tssdkrtl${{ matrix.node-version }}.xml
+    runs-on: ${{ matrix.os }}-latest
+
+    strategy:
+      matrix:
+        os:
+          - ubuntu
+        node-version: [12.x, 14.x, 15.x]
+
+    steps:
+      - name: Cancel Previous Runs
+        uses: styfle/cancel-workflow-action@0.6.0
+        with:
+          access_token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Repo Checkout
+        uses: actions/checkout@v2
+
+      - name: Install Node ${{ matrix.node-version }}
+        uses: actions/setup-node@v1
+        with:
+          node-version: ${{ matrix.node-version }}
+
+      - name: Install dependencies
+        run: |
+          yarn
+          yarn build
+
+      - name: Mock looker.ini
+        run: |
+          echo "[Looker]" > looker.ini
+          echo "base_url=https://self-signed.looker.com:19999" >> looker.ini
+          echo "client_id=id" >> looker.ini
+          echo "client_secret=secret" >> looker.ini
+          echo "verify_ssl=False" >> looker.ini
+          echo "timeout=31" >> looker.ini
+          echo "[Looker31]" >> looker.ini
+          echo "base_url=https://self-signed.looker.com:19999" >> looker.ini
+          echo "verify_ssl=False" >> looker.ini
+          echo "timeout=30" >> looker.ini
+
+      - name: Run unit tests
+        run: yarn jest packages/sdk-rtl/src --reporters=default --reporters=jest-junit
+
+      - name: Delete looker.ini mock
+        run: rm looker.ini
+
+      - name: Upload ts unit test results
+        if: ${{ always() }}
+        uses: actions/upload-artifact@v2
+        with:
+          name: tssdk-test-results
+          path: results/tssdk
+
+  integration:
+    needs: unit
+    name: Integration - ${{ matrix.os }} / Node.${{ matrix.node-version }} / Looker.${{ matrix.looker }}
+    env:
+      JEST_JUNIT_OUTPUT_DIR: results/tssdk
+      JEST_JUNIT_OUTPUT_NAME: ${{ matrix.os }}.Node-${{ matrix.node-version }}.Looker-${{ matrix.looker }}.xml
+    runs-on: ${{ matrix.os }}-latest
+    strategy:
+      matrix:
+        node-version: [12.x]
+        os:
+          - ubuntu
+        looker:
+          - '7_18'
+          - '7_20'
+
+    steps:
+      - name: Repo Checkout
+        uses: actions/checkout@v2
+
+      - name: Install Node ${{ matrix.node-version }}
+        uses: actions/setup-node@v1
+        with:
+          node-version: ${{ matrix.node-version }}
+
+      - name: Install dependencies
+        run: |
+          yarn
+          yarn build
+
+      - name: Set LOOKERSDK_CLIENT_{ID,SECRET}
+        # api client/secret stored as github secret per release, e.g. LOOKERSDK_CLIENT_ID__7_20
+        run: |
+          echo "LOOKERSDK_CLIENT_ID=${{ secrets[format('LOOKERSDK_CLIENT_ID__{0}', matrix.looker)] }}" >> $GITHUB_ENV
+          echo "LOOKERSDK_CLIENT_SECRET=${{ secrets[format('LOOKERSDK_CLIENT_SECRET__{0}', matrix.looker)] }}" >> $GITHUB_ENV
+
+      - name: Set up Cloud SDK
+        uses: google-github-actions/setup-gcloud@v0.2.0
+        with:
+          project_id: ${{ secrets.GCP_PROJECT_ID }}
+          service_account_key: ${{ secrets.GCP_AR_READER_SA_KEY }}
+          export_default_credentials: true
+
+      - name: Authenticate Artifact Repository
+        run: gcloud auth configure-docker us-west1-docker.pkg.dev --quiet
+
+      - name: Set up Python
+        uses: actions/setup-python@v2
+        with:
+          python-version: 3.x
+
+      - name: Pull and run Looker docker image
+        # TODO: can we cache some layers of the image for faster download?
+        # we probably don't want to cache the final image for IP security...
+        run: |
+          docker pull --quiet us-west1-docker.pkg.dev/cloud-looker-sdk-codegen-cicd/looker/${{ matrix.looker }}
+          # set $LOOKER_OPTS to --no-ssl if we want to turn off ssl
+          docker run --name looker-sdk-codegen-ci -d -p 10000:9999 -p 20000:19999 us-west1-docker.pkg.dev/cloud-looker-sdk-codegen-cicd/looker/${{ matrix.looker }}
+          docker logs -f looker-sdk-codegen-ci --until=30s &
+          python ${{ github.workspace }}/.github/scripts/wait_for_looker.py
+
+      - name: Run Integration Tests
+        run: yarn jest packages/sdk/test --reporters=default --reporters=jest-junit
+
+      - name: Upload integration test results
+        if: ${{ always() }}
+        uses: actions/upload-artifact@v2
+        with:
+          name: tssdk-test-results
+          path: results/tssdk
+
+  publish-test-results:
+    name: Publish Test Results
+    needs: [unit, integration]
+    if: success() || failure()
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Download Artifacts
+        uses: actions/download-artifact@v2
+        with:
+          path: artifacts
+
+      - name: Publish Unit Test Results
+        uses: EnricoMi/publish-unit-test-result-action@v1.6
+        with:
+          check_name: Test Results
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          report_individual_runs: true
+          files: 'artifacts/tssdk-test-results/*.xml'
+
+  remove-CI-TEST-label:
+    name: Remove CI:TEST Label
+    if: >
+      (
+        github.event_name == 'pull_request' &&
+        github.event.action == 'labeled' &&
+        github.event.label.name == 'CI:TEST'
+      )
     runs-on: ubuntu-latest
     steps:
-      - name: Run a one-line script
-        run: echo Hello, world!
+      - name: Remove CI:TEST Label
+        uses: actions/github-script@v3
+        with:
+          github-token: ${{secrets.GITHUB_TOKEN}}
+          script: |
+            github.issues.removeLabel({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              issue_number: context.issue.number,
+              name: 'CI:TEST'
+            })

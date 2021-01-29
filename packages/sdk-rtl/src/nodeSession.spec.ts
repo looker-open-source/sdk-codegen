@@ -37,7 +37,7 @@ const config = TestConfig()
 const envPrefix = 'LOOKERSDK'
 const localIni = config.localIni
 
-describe('NodeSession', () => {
+describe.skip('NodeSession', () => {
   const settings = new NodeSettingsIniFile(envPrefix, localIni, 'Looker')
   const transport = new NodeTransport(settings)
 

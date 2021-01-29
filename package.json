@@ -23,6 +23,7 @@
     "convert": "ts-node -O '{ \"module\": \"commonjs\", \"target\": \"es2019\" }' packages/sdk-codegen-scripts/src/specConvert.ts",
     "legacy": "ts-node -O '{ \"module\": \"commonjs\", \"target\": \"es2019\" }' packages/sdk-codegen-scripts/src/legacy.ts",
     "sdk": "NODE_CONFIG_DIR=./packages/sdk-codegen-scripts/config ts-node -O '{ \"module\": \"commonjs\", \"target\": \"es2019\" }' packages/sdk-codegen-scripts/src/sdkGen.ts",
+    "gen": "NODE_CONFIG_DIR=./packages/sdk-codegen-scripts/config ts-node -O '{ \"module\": \"commonjs\", \"target\": \"es2019\" }' packages/sdk-codegen-scripts/src/sdkGen.ts",
     "jsonify": "ts-node -O '{ \"module\": \"commonjs\", \"target\": \"es2019\" }' packages/sdk-codegen-scripts/src/yamlToJson.ts",
     "mine": "run-p -c mine:*",
     "mine:declarations": "ts-node -O '{ \"module\": \"commonjs\", \"target\": \"es2019\" }' packages/sdk-codegen-scripts/scripts/mineDeclarations.ts",
@@ -103,6 +104,8 @@
     "lint-staged": "^10.2.2",
     "lodash": "^4.17.15",
     "node-fetch": "^2.6.0",
+    "node-forge": "^0.10.0",
+    "node-uuid": "^1.4.8",
     "npm-run-all": "^4.1.5",
     "openapi3-ts": "^1.3.0",
     "pre-commit": "1.2.2",
@@ -113,9 +116,7 @@
     "ts-jest": "^26.4.4",
     "ts-node": "^9.1.1",
     "typescript": "^4.1.3",
-    "webpack": "^4.43.0",
-    "node-forge": "^0.10.0",
-    "node-uuid": "^1.4.8"
+    "webpack": "^4.43.0"
   },
   "dependencies": {},
   "lint-staged": {

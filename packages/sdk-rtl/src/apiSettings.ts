@@ -40,10 +40,10 @@ export const ApiConfigMap = (envPrefix: string): IValueSettings => {
   if (!envPrefix) return {} as IValueSettings
   return {
     base_url: `${envPrefix}_BASE_URL`,
-    client_id: `${envPrefix}_VERIFY_SSL`,
-    client_secret: `${envPrefix}_TIMEOUT`,
-    timeout: `${envPrefix}_CLIENT_ID`,
-    verify_ssl: `${envPrefix}_CLIENT_SECRET`,
+    client_id: `${envPrefix}_CLIENT_ID`,
+    client_secret: `${envPrefix}_CLIENT_SECRET`,
+    timeout: `${envPrefix}_TIMEOUT`,
+    verify_ssl: `${envPrefix}_VERIFY_SSL`,
   }
 }
 
