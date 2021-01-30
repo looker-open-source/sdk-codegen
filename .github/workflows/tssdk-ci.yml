@@ -114,6 +114,7 @@ jobs:
         looker:
           - '7_18'
           - '7_20'
+          - '21_0'
 
     steps:
       - name: Repo Checkout
