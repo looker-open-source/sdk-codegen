@@ -37,7 +37,7 @@ import {
   IRequestProps,
   ISDKError,
   LookerAppId,
-} from '@looker/sdk-rtl/lib/browser'
+} from '@looker/sdk-rtl'
 import {
   ExtensionSDK,
   FetchCustomParameters,
@@ -178,6 +178,6 @@ export class ExtensionProxyTransport extends BaseTransport {
     _authenticator?: Authenticator,
     _options?: Partial<ITransportSettings>
   ): Promise<T> {
-    return Promise.reject('stream is not implemented')
+    return Promise.reject(new Error('stream is not implemented'))
   }
 }

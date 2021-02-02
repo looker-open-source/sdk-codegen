@@ -26,8 +26,8 @@
 
 import React, { FC, useContext, useEffect, useState } from 'react'
 import { useHistory } from 'react-router-dom'
-import { Looker40SDK } from '@looker/sdk/lib/browser'
-import { BrowserSession } from '@looker/sdk-rtl/lib/browser'
+import { Looker40SDK } from '@looker/sdk'
+import { BrowserSession } from '@looker/sdk-rtl'
 import { RunItContext } from '../..'
 import { Loading } from '../../components'
 

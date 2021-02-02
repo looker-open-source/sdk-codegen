@@ -24,11 +24,7 @@
 
  */
 
-import {
-  HttpMethod,
-  APIMethods,
-  IAuthSession,
-} from '@looker/sdk-rtl/lib/browser'
+import { HttpMethod, APIMethods, IAuthSession } from '@looker/sdk-rtl'
 import { ColumnHeaders, IRowModel, rowPosition } from './RowModel'
 
 /** Keyed data for a tab, and the tab's header row */
@@ -269,7 +265,7 @@ export class SheetSDK extends APIMethods {
     if (!doc) doc = await this.read()
     if (doc) {
       doc.tabs = {}
-      // eslint-disable-next-line @typescript-eslint/ban-ts-ignore
+      // eslint-disable-next-line @typescript-eslint/ban-ts-comment
       // @ts-ignore
       doc.sheets.forEach((tab) => (doc.tabs[tabName(tab)] = loadTabTable(tab)))
     }

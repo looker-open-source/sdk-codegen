@@ -24,8 +24,8 @@
 
  */
 
+import { ITransportSettings } from '@looker/sdk-rtl'
 import { NodeCryptoHash, NodeTransport } from './nodeTransport'
-import { ITransportSettings } from './transport'
 
 describe('NodeTransport', () => {
   const hostname = 'https://looker.sdk'

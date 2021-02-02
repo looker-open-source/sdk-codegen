@@ -68,8 +68,8 @@
     "@babel/preset-typescript": "^7.12.1",
     "@babel/runtime": "^7.12.1",
     "@babel/runtime-corejs3": "^7.12.1",
-    "@looker/eslint-config": "^1.0.16",
-    "@looker/prettier-config": "^1.0.15",
+    "@looker/eslint-config": "^0.10.4",
+    "@looker/prettier-config": "^0.10.4",
     "@stoplight/spectral": "^5.6.0",
     "@testing-library/jest-dom": "^5.11.6",
     "@types/blueimp-md5": "^2.7.0",
@@ -87,7 +87,7 @@
     "core-js": "^3.6.5",
     "enzyme": "^3.11.0",
     "enzyme-adapter-react-16": "^1.15.2",
-    "eslint": "^6.8.0",
+    "eslint": "^7.19.0",
     "eslint-import-resolver-typescript": "^2.0.0",
     "eslint-import-resolver-webpack": "^0.12.1",
     "eslint-plugin-header": "^3.0.0",
@@ -134,16 +134,12 @@
   ],
   "eslintConfig": {
     "extends": [
-      "@looker/eslint-config/no-type-checking"
-    ],
-    "plugins": [
-      "header",
-      "prettier"
+      "@looker/eslint-config",
+      "@looker/eslint-config/license-header"
     ],
     "rules": {
-      "prettier/prettier": "error",
       "@typescript-eslint/no-explicit-any": "off",
-      "@typescript-eslint/camelcase": "off",
+      "camelcase": "off",
       "@typescript-eslint/interface-name-prefix": "off",
       "@typescript-eslint/no-unused-vars": [
         "warn",
@@ -166,15 +162,17 @@
         "always",
         {
           "markers": [
-            "#"
+            "#region",
+            "#endregion"
           ]
         }
-      ]
+      ],
+      "no-use-before-define": "off"
     },
     "settings": {
       "import/resolver": {
         "typescript": {
-          "directory": "./tsconfig.json"
+          "project": "./tsconfig.json"
         }
       },
       "import/external-module-folders": [

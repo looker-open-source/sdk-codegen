@@ -25,11 +25,14 @@
  */
 
 import fs from 'fs'
+import {
+  defaultTimeout,
+  boolDefault,
+  ApiConfigMap,
+  IApiSettings,
+} from '@looker/sdk-rtl'
 import { TestConfig } from './testUtils'
 import { ApiConfig, NodeSettings, NodeSettingsIniFile } from './nodeSettings'
-import { defaultTimeout } from './transport'
-import { boolDefault } from './constants'
-import { ApiConfigMap, IApiSettings } from './apiSettings'
 
 const mockIni = `
 [Looker]

@@ -33,10 +33,10 @@ describe('ExtensionTransport', () => {
   let transport: ExtensionTransport
   let connection: IHostConnection
   let mockRequest: any
-  // eslint-disable-next-line @typescript-eslint/ban-ts-ignore
+  // eslint-disable-next-line @typescript-eslint/ban-ts-comment
   // @ts-ignore
   const streamCallback = (readable: any) => {
-    // eslint-disable-next-line @typescript-eslint/ban-ts-ignore
+    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
     // @ts-ignore
     return new Promise((resolve, reject) =>
       reject(Error('Streaming is disabled'))

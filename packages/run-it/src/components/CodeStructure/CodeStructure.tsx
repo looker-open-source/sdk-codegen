@@ -28,7 +28,7 @@ import React, { FC } from 'react'
 import AceEditor from 'react-ace'
 
 // TODO Use webpack resolver instead.
-/* eslint-disable  @typescript-eslint/ban-ts-ignore,@typescript-eslint/no-unused-vars,@typescript-eslint/no-var-requires,import/no-extraneous-dependencies */
+/* eslint-disable  @typescript-eslint/ban-ts-comment,@typescript-eslint/no-unused-vars,@typescript-eslint/no-var-requires,import/no-extraneous-dependencies */
 // @ts-ignore
 const python = require('ace-builds/src-noconflict/mode-python')
 // @ts-ignore
@@ -43,7 +43,7 @@ const json = require('ace-builds/src-noconflict/mode-json')
 const html = require('ace-builds/src-noconflict/mode-html')
 // @ts-ignore
 const theme = require('ace-builds/src-noconflict/theme-dracula')
-/* eslint-enable  @typescript-eslint/ban-ts-ignore,@typescript-eslint/no-unused-vars,@typescript-eslint/no-var-requires,import/no-extraneous-dependencies */
+/* eslint-enable  @typescript-eslint/ban-ts-comment,@typescript-eslint/no-unused-vars,@typescript-eslint/no-var-requires,import/no-extraneous-dependencies */
 
 interface CodeStructureProps {
   code: string

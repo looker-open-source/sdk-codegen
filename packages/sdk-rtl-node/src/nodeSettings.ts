@@ -33,9 +33,9 @@ import {
   IApiSettings,
   IApiSection,
   ValueSettings,
-} from './apiSettings'
-import { unquote } from './constants'
-import { sdkError } from './transport'
+  sdkError,
+  unquote,
+} from '@looker/sdk-rtl'
 
 /**
  * Read an environment key. Use defaultValue if it doesn't exist

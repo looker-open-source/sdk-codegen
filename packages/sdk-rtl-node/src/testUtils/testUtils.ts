@@ -27,6 +27,11 @@
 import * as fs from 'fs'
 import path from 'path'
 import { config } from 'dotenv'
+import { readIniConfig } from '../nodeSettings'
+
+interface IKeyAny {
+  [key: string]: any
+}
 
 const utf8 = 'utf-8'
 
@@ -38,8 +43,12 @@ export interface ITestConfig {
   testPath: string
   dataFile: string
   localIni: string
+  baseUrl: string
+  timeout: number
   testData: any
   testIni: string
+  section: IKeyAny
+  testSection: IKeyAny
 }
 
 const homeToRoost = '../../../../'
@@ -56,23 +65,33 @@ export const rootFile = (fileName = '') => path.join(getRootPath(), fileName)
 export const TestConfig = (rootPath = ''): ITestConfig => {
   config()
   const testFile = 'data.yml.json'
+  const envPrefix = 'LOOKERSDK'
+  const sectionName = 'Looker'
   rootPath = rootPath || getRootPath()
   let localIni = process.env.LOOKERSDK_INI || rootFile('looker.ini')
   const testPath = rootFile('test/')
   const dataFile = `${testPath}${testFile}`
   const testData = JSON.parse(fs.readFileSync(dataFile, utf8))
   let testIni = `${rootPath}${testData.iniFile}`
+  const section = readIniConfig(localIni, envPrefix, sectionName)
+  const baseUrl = section.base_url
+  const timeout = parseInt(section.timeout, 10)
+  const testSection = readIniConfig(localIni, envPrefix, sectionName)
 
   // If .ini files don't exist, don't try to read them downstream and expect environment variables to be set
   if (!fs.existsSync(localIni)) localIni = ''
   if (!fs.existsSync(testIni)) testIni = ''
 
   return {
+    baseUrl,
     dataFile,
     localIni,
     rootPath,
+    section,
     testData,
     testIni,
     testPath,
+    testSection,
+    timeout,
   }
 }

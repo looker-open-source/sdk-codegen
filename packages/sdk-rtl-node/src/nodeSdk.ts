@@ -24,17 +24,9 @@
 
  */
 
-import {
-  ITransport,
-  NodeSettingsIniFile,
-  NodeSession,
-  NodeTransport,
-  IApiSettings,
-  IAuthSession,
-} from '@looker/sdk-rtl'
-import { Looker31SDK } from './3.1/methods'
-import { Looker40SDK } from './4.0/methods'
-import { environmentPrefix } from './constants'
+import { ITransport, IApiSettings, IAuthSession } from '@looker/sdk-rtl'
+import { Looker31SDK, Looker40SDK, environmentPrefix } from '@looker/sdk'
+import { NodeSettingsIniFile, NodeSession, NodeTransport } from '.'
 
 /**
  * @class LookerNodeSDK

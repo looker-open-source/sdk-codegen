@@ -26,8 +26,8 @@
 
 import { readFileSync } from 'fs'
 import { isEmpty } from 'lodash'
-import { NodeSettingsIniFile } from '@looker/sdk-rtl'
-import { LookerNodeSDK, environmentPrefix } from '@looker/sdk'
+import { NodeSettingsIniFile, LookerNodeSDK } from '@looker/sdk-rtl-node'
+import { environmentPrefix } from '@looker/sdk'
 import {
   fixConversion,
   openApiStyle,

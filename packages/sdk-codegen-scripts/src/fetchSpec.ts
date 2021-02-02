@@ -28,12 +28,12 @@ import * as fs from 'fs'
 import { danger, log, warn } from '@looker/sdk-codegen-utils'
 import { IVersionInfo } from '@looker/sdk-codegen'
 import {
-  NodeTransport,
   defaultTimeout,
   ITransportSettings,
   sdkOk,
   sdkError,
 } from '@looker/sdk-rtl'
+import { NodeTransport } from '@looker/sdk-rtl-node'
 import { fail, quit, isFileSync, utf8Encoding, isDirSync } from './nodeUtils'
 import { ISDKConfigProps } from './sdkConfig'
 import { convertSpec } from './convert'

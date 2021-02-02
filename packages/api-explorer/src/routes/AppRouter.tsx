@@ -28,7 +28,7 @@ import { Redirect, Route, Switch } from 'react-router-dom'
 import { ApiModel } from '@looker/sdk-codegen'
 import { OAuthScene, RunItContext } from '@looker/run-it'
 
-import { Looker40SDK } from '@looker/sdk/lib/browser'
+import { Looker40SDK } from '@looker/sdk'
 import { HomeScene, MethodScene, TagScene, TypeScene } from '../scenes'
 
 interface AppRouterProps {

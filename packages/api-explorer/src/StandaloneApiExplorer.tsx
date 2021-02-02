@@ -31,7 +31,7 @@ import {
   defaultConfigurator,
   initRunItSdk,
 } from '@looker/run-it'
-import { Looker40SDK } from '@looker/sdk/lib/node'
+import { Looker40SDK } from '@looker/sdk'
 import ApiExplorer, { SpecItems } from './ApiExplorer'
 
 export interface StandloneApiExplorerProps {

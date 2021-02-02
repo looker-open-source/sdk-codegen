@@ -31,6 +31,7 @@
     "@looker/sdk-codegen": "^21.0.1",
     "@looker/sdk-codegen-utils": "^21.0.1",
     "@looker/sdk-rtl": "^21.0.1",
+    "@looker/sdk-rtl-node": "^21.0.1",
     "config": "^3.3.1",
     "cross-env": "^7.0.2"
   },

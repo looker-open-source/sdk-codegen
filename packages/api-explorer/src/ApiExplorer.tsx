@@ -25,6 +25,7 @@
  */
 
 import React, { FC, useReducer, useState, useEffect } from 'react'
+import { useLocation } from 'react-router'
 import {
   Aside,
   ComponentsProvider,
@@ -33,9 +34,7 @@ import {
   Page,
 } from '@looker/components'
 import { ApiModel, KeyedCollection } from '@looker/sdk-codegen'
-import { Looker40SDK, Looker31SDK } from '@looker/sdk/lib/browser'
-import { useLocation } from 'react-router'
-
+import { Looker40SDK, Looker31SDK } from '@looker/sdk'
 import { SearchContext, LodeContext, defaultLodeContextValue } from './context'
 import { getLoded } from './utils'
 import { Header as AppHeader, SideNav } from './components'
