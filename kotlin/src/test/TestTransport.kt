@@ -28,7 +28,7 @@ import com.looker.sdk.ENVIRONMENT_PREFIX
 import com.looker.sdk.LOOKER_APPID
 import kotlin.test.assertEquals
 import kotlin.test.assertTrue
-import org.junit.Test as test
+import org.junit.Test
 
 class TestTransport {
     val fullPath = "https://github.com/looker-open-source/sdk-codegen/"
@@ -43,7 +43,7 @@ class TestTransport {
     val mockAuth: Authenticator = { RequestSettings(HttpMethod.GET, "bogus") }
     val params = "?a=1&b=false&c=d+e"
 
-    @test
+    @Test
     fun testFullPath() {
         var actual = xp.makeUrl(fullPath)
         assertEquals(fullPath, actual)
@@ -53,7 +53,7 @@ class TestTransport {
         assertEquals(fullPath + params, actual)
     }
 
-    @test
+    @Test
     fun testRelativePath() {
         var actual = xp.makeUrl(userPath)
         assertEquals("$base$userPath", actual)
@@ -63,13 +63,13 @@ class TestTransport {
         assertEquals("$base/api/$apiVersion$userPath$params", actual)
     }
 
-    @test
+    @Test
     fun testFullRequest() {
         val actual = ok<String>(xp.request<String>(HttpMethod.GET, fullPath))
         assertTrue(actual.contains("One SDK to rule them all, and in the codegen bind them"))
     }
 
-    @test
+    @Test
     fun testEncodeParam() {
         val dateStr = "2020-01-01T14:48:00.00Z"
         val oldDate = Date(dateStr)

@@ -29,7 +29,7 @@ import java.io.File
 import kotlin.test.assertEquals
 import kotlin.test.assertFalse
 import kotlin.test.assertTrue
-import org.junit.Test as test
+import org.junit.Test
 
 @ExperimentalUnsignedTypes
 class TestAuthSession {
@@ -37,33 +37,33 @@ class TestAuthSession {
     val settings = config.settings
     val testSettings = config.testSettings(settings)
 
-    @test
+    @Test
     fun testTestFiles() {
         assertTrue(File(config.dataFile).exists(), "${config.dataFile} should exist")
         assertTrue(File(config.localIni).exists(), "${config.localIni} should exist")
     }
 
-    @test
+    @Test
     fun testIsAuthenticated() {
         val session = AuthSession(settings, Transport(testSettings))
         assertFalse(session.isAuthenticated())
     }
 
-    @test
+    @Test
     fun testLoginWithValidCreds() {
         val session = AuthSession(settings, Transport(testSettings))
         session.login()
         assertTrue(session.isAuthenticated())
     }
 
-    @test
+    @Test
     fun testUnauthenticatedLogout() {
         val session = AuthSession(settings, Transport(testSettings))
         assertFalse(session.isAuthenticated())
         assertFalse(session.logout())
     }
 
-    @test
+    @Test
     fun testLogsInAndOutWithGoodCreds() {
         val session = AuthSession(settings, Transport(testSettings))
         assertFalse(session.isAuthenticated())
@@ -73,7 +73,7 @@ class TestAuthSession {
         assertFalse(session.isAuthenticated())
     }
 
-    @test
+    @Test
     fun testSha256() {
         val session = OAuthSession(settings, Transport(testSettings))
         val message = "The quick brown fox jumped over the lazy dog."
@@ -81,7 +81,7 @@ class TestAuthSession {
         assertEquals("aLEoK5HeLAVMNmKcuN1EfxLwltPjxYeXjcIkhERjNIM=", hash, "Quick brown fox should match")
     }
 
-    @test
+    @Test
     fun testRedemptionBody() {
         val session = OAuthSession(config.oAuthTestSettings, Transport(testSettings))
         val hashCode = session.sha256hash("com.looker.android")
