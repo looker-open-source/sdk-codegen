@@ -24,8 +24,7 @@
 
  */
 import path from 'path'
-import { LookerNodeSDK } from '@looker/sdk'
-import { NodeSettingsIniFile } from '@looker/sdk-rtl'
+import { NodeSettingsIniFile, LookerNodeSDK } from '@looker/sdk-rtl-node'
 import { Hacker } from './Hacker'
 
 const iniFile = path.join(__dirname, '../../../../looker.ini')
