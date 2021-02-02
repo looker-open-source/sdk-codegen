@@ -26,9 +26,7 @@ import com.looker.rtl.ApiSettings
 import com.looker.rtl.AuthSession
 import com.looker.rtl.ConfigurationProvider
 import com.looker.rtl.DEFAULT_TIMEOUT
-import com.looker.sdk.API_VERSION
-import com.looker.sdk.ENVIRONMENT_PREFIX
-import com.looker.sdk.SdkSettings
+import com.looker.sdk.*
 import org.junit.Test
 import kotlin.test.assertEquals
 
@@ -129,5 +127,6 @@ class TestApiSettings {
         assertEquals("https://my.looker.com:19999", settings.baseUrl, "Base URL is read")
         assertEquals(ENVIRONMENT_PREFIX, settings.environmentPrefix)
         assertEquals(API_VERSION, settings.apiVersion)
+        assertEquals(mapOf(LOOKER_APPID to AGENT_TAG, "User-Agent" to AGENT_TAG), settings.headers)
     }
 }

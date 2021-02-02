@@ -41,10 +41,11 @@ class TestSettingsIniFile(
 ) : ConfigurationProvider by base {
 
     override fun readConfig(): Map<String, String> {
-        var map = base.readConfig().toMutableMap()
-        map["client_id"] = "test_client_id"
-        map["redirect_uri"] = "looker://"
-        return map
+        return base.readConfig().plus(
+            mapOf(
+                "client_id" to "test_client_id",
+                "redirect_uri" to "looker://"
+            ))
     }
 }
 
@@ -80,11 +81,10 @@ open class TestConfig() {
     }
 
     fun testSettings(options: TransportOptions): TransportOptions {
-        var result = options
         // Set timeout to 120 seconds
-        result.timeout = 120
-        result.verifySSL = false
-        return result
+        options.timeout = 120
+        options.verifySSL = false
+        return options
     }
 
     /**
