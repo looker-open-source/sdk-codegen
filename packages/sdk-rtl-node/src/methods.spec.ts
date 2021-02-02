@@ -26,7 +26,20 @@
 
 import * as fs from 'fs'
 import { Readable } from 'readable-stream'
-import { Looker40SDK as LookerSDK } from '@looker/sdk'
+import { 
+  Looker40SDK as LookerSDK,
+  ICreateQueryTask,
+  IQuery,
+  IRequestRunInlineQuery,
+  IUser,
+  IWriteQuery,
+  ResultFormat,
+  environmentPrefix,
+  Looker31SDK,
+  Looker40SDK,
+  Looker31SDKStream,
+  Looker40SDKStream,
+ } from '@looker/sdk'
 import {
   DelimArray,
   boolDefault,
@@ -40,22 +53,7 @@ import {
   readIniConfig,
 } from '.'
 import { TestConfig } from '../../sdk-rtl/src/testUtils'
-import { LookerNodeSDK } from '../src/nodeSdk'
-import {
-  ICreateQueryTask,
-  IQuery,
-  IRequestRunInlineQuery,
-  IUser,
-  IWriteQuery,
-  ResultFormat,
-} from '../src/4.0/models'
-import { environmentPrefix } from '../src/constants'
-import {
-  Looker31SDK,
-  Looker40SDK,
-  Looker31SDKStream,
-  Looker40SDKStream,
-} from '../src'
+import { LookerNodeSDK } from './nodeSdk'
 
 const envKey = ApiConfigMap(environmentPrefix)
 const strLookerBaseUrl = envKey.base_url
