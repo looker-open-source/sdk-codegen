@@ -77,4 +77,6 @@ open class SdkSettings(rawReadConfig: () -> Map<String, String>) : ApiSettings(r
 
     override var environmentPrefix: String = ENVIRONMENT_PREFIX
     override var apiVersion: String = API_VERSION
+    override var headers: Map<String, String> = mapOf(LOOKER_APPID to AGENT_TAG, "User-Agent" to AGENT_TAG)
+
 }
