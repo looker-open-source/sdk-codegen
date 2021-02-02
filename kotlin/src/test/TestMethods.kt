@@ -5,7 +5,7 @@ import kotlin.test.assertEquals
 import kotlin.test.assertNotEquals
 import kotlin.test.assertNotNull
 import kotlin.test.assertTrue
-import org.junit.Test as test
+import org.junit.Test
 
 class TestMethods {
     val sdk by lazy { TestConfig().sdk }
@@ -204,7 +204,7 @@ class TestMethods {
 
     // TODO resurrect this when the bug is fixed
 /*
-    @test
+    @Test
     fun testImageDownload() {
         val body = simpleQuery()
         val query = sdk.ok<Query>(sdk.create_query(body))
@@ -228,7 +228,7 @@ class TestMethods {
     functional tests
      */
 
-    @test
+    @Test
     fun testMe() {
         val me = sdk.ok<User>(sdk.me())
         val creds = me.credentials_api3
@@ -239,7 +239,7 @@ class TestMethods {
         assertNotNull(creds[0].client_id)
     }
 
-    @test
+    @Test
     fun testCreateQuery() {
         val query = sdk.ok<Query>(sdk.create_query(simpleQuery()))
         query.id?.let { id ->
@@ -248,13 +248,13 @@ class TestMethods {
         }
     }
 
-    @test
+    @Test
     fun testSearchDashboards() {
         val search = sdk.ok<Array<Dashboard>>(sdk.search_dashboards(limit = 3))
         assertNotNull(search)
     }
 
-    @test
+    @Test
     fun testRunInlineQuery() {
         val result = sdk.ok<String>(
             sdk.run_inline_query("csv", simpleQuery())
@@ -262,7 +262,7 @@ class TestMethods {
         assertTrue(result.contains("Dashboard ID"))
     }
 
-    @test
+    @Test
     fun testAllColorCollections() {
         listGetter<ColorCollection, String, ColorCollection>(
             { sdk.all_color_collections() },
@@ -271,7 +271,7 @@ class TestMethods {
         )
     }
 
-    @test
+    @Test
     fun testAllConnections() {
         listGetter<DBConnection, String, DBConnection>(
             { sdk.all_connections() },
@@ -280,7 +280,7 @@ class TestMethods {
         )
     }
 
-    @test
+    @Test
     fun testAllDataGroups() {
         listGetter<Datagroup, Long, Datagroup>(
             { sdk.all_datagroups() },
@@ -289,7 +289,7 @@ class TestMethods {
         )
     }
 
-    @test
+    @Test
     fun testAllDashboards() {
         prepDashboard()
         testAll<DashboardBase, String, Dashboard>(
@@ -299,13 +299,13 @@ class TestMethods {
         )
     }
 
-    @test
+    @Test
     fun testAllDialectInfos() {
         val list = sdk.ok<Array<DialectInfo>>(sdk.all_dialect_infos())
         assertNotEquals(0, list.count(), "Expected dialects")
     }
 
-    @test
+    @Test
     fun testAllFolders() {
         testAll<Folder, String, Folder>(
             { sdk.all_folders() },
@@ -314,7 +314,7 @@ class TestMethods {
         )
     }
 
-    @test
+    @Test
     fun testAllGroups() {
         listGetter<Group, Long, Group>(
             { sdk.all_groups() },
@@ -323,7 +323,7 @@ class TestMethods {
         )
     }
 
-    @test
+    @Test
     fun testAllBoardItems() {
         prepBoard()
         listGetter<BoardItem, Long, BoardItem>(
@@ -333,14 +333,14 @@ class TestMethods {
         )
     }
 
-    @test
+    @Test
     fun testSearchBoards() {
         val searched = sdk.ok<Array<Board>>(sdk.search_boards(title = "%"))
         assertNotNull(searched)
         assertNotEquals(0, searched.count(), "There should be boards")
     }
 
-    @test
+    @Test
     fun testAllBoards() {
         prepBoard()
         listGetter<Board, Long, Board>(
@@ -350,7 +350,7 @@ class TestMethods {
         )
     }
 
-    @test
+    @Test
     fun testAllBoardSections() {
         prepBoard()
         listGetter<BoardSection, Long, BoardSection>(
@@ -360,7 +360,7 @@ class TestMethods {
         )
     }
 
-    @test
+    @Test
     fun testAllIntegrationHubs() {
         listGetter<IntegrationHub, Long, IntegrationHub>(
             { sdk.all_integration_hubs() },
@@ -369,7 +369,7 @@ class TestMethods {
         )
     }
 
-    @test
+    @Test
     fun testAllIntegrations() {
         listGetter<Integration, String, Integration>(
             { sdk.all_integrations() },
@@ -378,7 +378,7 @@ class TestMethods {
         )
     }
 
-    @test
+    @Test
     fun testAllLegacyFeatures() {
         listGetter<LegacyFeature, String, LegacyFeature>(
             { sdk.all_legacy_features() },
@@ -387,13 +387,13 @@ class TestMethods {
         )
     }
 
-    @test
+    @Test
     fun testAllLocales() {
         val list = sdk.ok<Array<Locale>>(sdk.all_locales())
         assertNotEquals(0, list.count(), "Expected locales")
     }
 
-    @test
+    @Test
     fun testAllLookMLModels() {
         testAll<LookmlModel, String, LookmlModel>(
             { sdk.all_lookml_models() },
@@ -402,7 +402,7 @@ class TestMethods {
         )
     }
 
-    @test
+    @Test
     fun testAllLooks() {
         prepLook()
         testAll<Look, Long, LookWithQuery>(
@@ -412,7 +412,7 @@ class TestMethods {
         )
     }
 
-    @test
+    @Test
     fun testAllModelSets() {
         testAll<ModelSet, Long, ModelSet>(
             { sdk.all_model_sets() },
@@ -421,7 +421,7 @@ class TestMethods {
         )
     }
 
-    @test
+    @Test
     fun testAllPermissionSets() {
         testAll<PermissionSet, Long, PermissionSet>(
             { sdk.all_permission_sets() },
@@ -430,13 +430,13 @@ class TestMethods {
         )
     }
 
-    @test
+    @Test
     fun testAllPermissions() {
         val list = sdk.ok<Array<Permission>>(sdk.all_permissions())
         assertNotEquals(0, list.count(), "Expected permissions")
     }
 
-    @test
+    @Test
     fun testAllProjects() {
         testAll<Project, String, Project>(
             { sdk.all_projects() },
@@ -445,7 +445,7 @@ class TestMethods {
         )
     }
 
-    @test
+    @Test
     fun testAllRoles() {
         testAll<Role, Long, Role>(
             { sdk.all_roles() },
@@ -455,7 +455,7 @@ class TestMethods {
     }
 
 // TODO figure out a reliable way to queue up some running queries
-//    @test fun testAllRunningQueries() {
+//    @Test fun testAllRunningQueries() {
 //        var running = false
 //        GlobalScope.launch {
 //            running = true
@@ -474,7 +474,7 @@ class TestMethods {
 //        assertNotEquals(list.count(), 0, "List should have at least one query")
 //    }
 
-    @test
+//    @Test
     fun testAllSchedulePlans() {
         prepScheduledPlan()
         testAll<ScheduledPlan, Long, ScheduledPlan>(
@@ -485,7 +485,7 @@ class TestMethods {
         clearScheduledPlan()
     }
 
-    @test
+    @Test
     fun testAllThemes() {
         testAll<Theme, Long, Theme>(
             { sdk.all_themes() },
@@ -494,13 +494,13 @@ class TestMethods {
         )
     }
 
-    @test
+    @Test
     fun testAllTimezones() {
         val list = sdk.ok<Array<Timezone>>(sdk.all_timezones())
         assertNotEquals(0, list.count(), "Expected timezones")
     }
 
-    @test
+    @Test
     fun testAllUserAttributes() {
         testAll<UserAttribute, Long, UserAttribute>(
             { sdk.all_user_attributes() },
@@ -509,7 +509,7 @@ class TestMethods {
         )
     }
 
-    @test
+    @Test
     fun testAllUserLoginLockouts() {
         val list = sdk.ok<Array<UserLoginLockout>>(sdk.all_user_login_lockouts())
         if (list.count() > 0) {
@@ -517,7 +517,7 @@ class TestMethods {
         }
     }
 
-    @test
+    @Test
     fun testAllUsers() {
         testAll<User, Long, User>(
             { sdk.all_users() },
@@ -526,7 +526,7 @@ class TestMethods {
         )
     }
 
-    @test
+    @Test
     fun testErrorHandling() {
         try {
             sdk.ok<Array<Look>>(sdk.look(-1))
@@ -536,7 +536,7 @@ class TestMethods {
         }
     }
 
-    @test
+    @Test
     fun testAllWorkspaces() {
         testAll<Workspace, String, Workspace>(
             { sdk.all_workspaces() },

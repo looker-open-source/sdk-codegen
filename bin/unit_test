@@ -39,8 +39,8 @@ fi
 if [[ $tests == *kotlin* ]]
 then
   cd kotlin || exit
-  echo "TODO: Unit testing Kotlin SDK ..."
-  # ./gradlew test
+  echo "Unit testing Kotlin SDK ..."
+  ./gradlew test --tests TestApiSettings --tests TestAuth* --tests TestConstants --tests TestModels --tests TestTransport
   cd ..
 fi
 

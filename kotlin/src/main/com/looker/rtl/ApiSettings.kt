@@ -49,26 +49,26 @@ open class ApiSettings(val rawReadConfig: () -> Map<String, String>) : Configura
 
     companion object {
         fun fromIniFile(filename: String = "./looker.ini", section: String = ""): ConfigurationProvider {
-            return ApiSettings({
+            return ApiSettings {
                 val file = File(filename)
                 if (!file.exists()) {
                     mapOf()
                 } else {
                     val contents = file.readText()
                     val config = apiConfig(contents)
-                    val selectedSection = if (!section.isBlank()) section else config.keys.first()
+                    val selectedSection = if (section.isNotBlank()) section else config.keys.first()
                     config[selectedSection] ?: mapOf()
                 }
-            })
+            }
         }
 
         fun fromIniText(contents: String, section: String = ""): ConfigurationProvider {
             val config = apiConfig(contents)
-            val first_section = if (!section.isBlank()) section else config.keys.first()
+            val firstSection = if (section.isNotBlank()) section else config.keys.first()
 
-            val settings = config[first_section]
+            val settings = config[firstSection]
             if (settings.isNullOrEmpty()) {
-                throw Error("No section named '$first_section' was found")
+                throw Error("No section named '$firstSection' was found")
             }
 
             return ApiSettings({ settings })
@@ -84,6 +84,7 @@ open class ApiSettings(val rawReadConfig: () -> Map<String, String>) : Configura
     override var verifySSL: Boolean = true
     override var timeout: Int = DEFAULT_TIMEOUT
     override var headers: Map<String, String> = mapOf()
+    override var environmentPrefix: String = ""
 
     init {
         val settings = rawReadConfig()
@@ -97,12 +98,18 @@ open class ApiSettings(val rawReadConfig: () -> Map<String, String>) : Configura
             apiVersion = unQuote(value ?: apiVersion)
         }
 
+        settings["environmentPrefix"].let { value ->
+            environmentPrefix = unQuote(value ?: environmentPrefix)
+        }
+
         settings["verify_ssl"].let { value ->
             verifySSL = asBoolean(value) ?: verifySSL
         }
+
         settings["timeout"].let { value ->
             timeout = if (value !== null) value.toInt() else timeout
         }
+
     }
 
     override fun isConfigured(): Boolean {
@@ -115,6 +122,7 @@ open class ApiSettings(val rawReadConfig: () -> Map<String, String>) : Configura
             mapOf(
                 "base_url" to baseUrl,
                 "api_version" to apiVersion,
+                "environmentPrefix" to environmentPrefix,
                 "verify_ssl" to verifySSL.toString(),
                 "timeout" to timeout.toString(),
                 "headers" to headers.toString()

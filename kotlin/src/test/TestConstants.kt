@@ -27,12 +27,12 @@ import kotlin.test.assertEquals
 import kotlin.test.assertFalse
 import kotlin.test.assertNull
 import kotlin.test.assertTrue
-import org.junit.Test as test
+import org.junit.Test
 
 val config = TestConfig()
 
 class TestConstants {
-    @test
+    @Test
     fun unquoteMatchingPairs() {
         // matched pairs
         assertEquals(unQuote("'foo'"), "foo")
@@ -48,7 +48,7 @@ class TestConstants {
         assertEquals(unQuote("\"foo"), "\"foo")
     }
 
-    @test
+    @Test
     fun testBoolStrings() {
         asBoolean("1")?.let { assertTrue(it) }
         asBoolean("'1'")?.let { assertTrue(it) }
@@ -68,7 +68,7 @@ class TestConstants {
         asBoolean("boo")?.let { assertNull(it) }
     }
 
-    @test
+    @Test
     fun testStringTypes() {
         val contentTypes = config.testData["content_types"] as jsonDict
         val types = contentTypes["string"] as ArrayList<String>
@@ -78,7 +78,7 @@ class TestConstants {
         }
     }
 
-    @test
+    @Test
     fun testBinaryTypes() {
         val contentTypes = config.testData["content_types"] as jsonDict
         val types = contentTypes["binary"] as ArrayList<String>
@@ -88,7 +88,7 @@ class TestConstants {
         }
     }
 
-    @test
+    @Test
     fun testDelimArray() {
         val ids: Array<Long> = arrayOf(1, 2, 3, 4)
         var actual = DelimArray(ids)

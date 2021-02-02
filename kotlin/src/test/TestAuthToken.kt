@@ -25,10 +25,10 @@
 import com.looker.rtl.AuthToken
 import com.looker.sdk.AccessToken
 import kotlin.test.assertEquals
-import org.junit.Test as test
+import org.junit.Test
 
 class TestAuthToken {
-    @test
+    @Test
     fun defaultsWithEmptyToken() {
         val testToken = AuthToken()
         assertEquals(testToken.accessToken, "")
@@ -38,7 +38,7 @@ class TestAuthToken {
         assertEquals(testToken.isActive(), false)
     }
 
-    @test
+    @Test
     fun isActiveWithFullToken() {
         val testToken = AuthToken(
             accessToken = "all-access",
@@ -54,7 +54,7 @@ class TestAuthToken {
         assertEquals(testToken.isActive(), true)
     }
 
-    @test
+    @Test
     fun has10SecondLag() {
         var actual = AuthToken(
             accessToken = "all-access",
@@ -76,7 +76,7 @@ class TestAuthToken {
         assertEquals(actual.isActive(), true)
     }
 
-    @test
+    @Test
     fun setTokenWithFullAccessToken() {
         val testToken = AuthToken("accessToken", "type", 3600, "refreshToken")
         val updatedAccessToken = AccessToken("newAccess", "newType", 7200, "newRefresh")
@@ -88,7 +88,7 @@ class TestAuthToken {
         assertEquals("newRefresh", testToken.refreshToken, "Refresh token should update")
     }
 
-    @test
+    @Test
     fun setTokenWithNoRefreshToken() {
         val testToken = AuthToken("oldAccessToken", "oldType", 3600, "oldRefreshToken")
         val updatedAccessToken = AccessToken("newAccessToken", "newType", 7200)
