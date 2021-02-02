@@ -26,19 +26,21 @@
 
 import * as fs from 'fs'
 import { Readable } from 'readable-stream'
+import { Looker40SDK as LookerSDK } from '@looker/sdk'
 import {
-  NodeSettings,
-  NodeSettingsIniFile,
   DelimArray,
   boolDefault,
   defaultTimeout,
-  NodeSession,
   ApiConfigMap,
-  readIniConfig,
 } from '@looker/sdk-rtl'
+import {
+  NodeSettings,
+  NodeSettingsIniFile,
+  NodeSession,
+  readIniConfig,
+} from '.'
 import { TestConfig } from '../../sdk-rtl/src/testUtils'
 import { LookerNodeSDK } from '../src/nodeSdk'
-import { Looker40SDK as LookerSDK } from '../src/4.0/methods'
 import {
   ICreateQueryTask,
   IQuery,
