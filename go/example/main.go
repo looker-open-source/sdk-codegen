@@ -35,6 +35,23 @@ func printAllProjects(sdk *v4.LookerSDK) {
 	}
 }
 
+func printAboutMe(sdk *v4.LookerSDK) {
+
+	me,err := sdk.Me("",nil)
+	check(err)
+
+	fmt.Printf("You are %s\n", *(me.Email))
+
+	// Search for this user by their e-mail
+	users,err := sdk.SearchUsers(v4.RequestSearchUsers{Email: me.Email}, nil)
+	if err != nil {
+		fmt.Printf("Error getting myself %v\n", err)
+	}
+	if len(users) != 1 {
+		fmt.Printf("Found %d users with my email expected 1\n")
+	}
+}
+
 func main() {
 	// Default config file location
 	lookerIniPath := "../../looker.ini"
@@ -53,5 +70,7 @@ func main() {
 	printAllProjects(sdk)
 
 	printAllUsers(sdk)
+
+	printAboutMe(sdk)
 
 }

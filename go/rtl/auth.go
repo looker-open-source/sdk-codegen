@@ -174,6 +174,14 @@ func serializeBody(body interface{}) string {
 
 }
 
+func isStringType(v interface{}) bool {
+	return reflect.ValueOf(v).Kind() == reflect.String
+}
+
+func isPtrToStringType(v interface{}) bool {
+	return reflect.ValueOf(v).Type() == reflect.PtrTo(reflect.TypeOf(""))
+}
+
 // setQuery takes the provided parameter map and sets it as query parameters of the provided url
 func setQuery(u *url.URL, pars map[string]interface{}) {
 
@@ -187,12 +195,18 @@ func setQuery(u *url.URL, pars map[string]interface{}) {
 		if v == nil || v == "" || (reflect.ValueOf(v).Kind() == reflect.Ptr && reflect.ValueOf(v).IsNil()) {
 			continue
 		}
-		// marshal the value to json
-		jsn, err := json.Marshal(v)
-		if err != nil {
-			_, _ = fmt.Fprintf(os.Stderr, "error serializing parameter: %s, error: %v", k, err)
+		if isPtrToStringType(v) {
+			q.Add(k, *(v.(*string)))
+		} else if isStringType(v) {
+			q.Add(k, v.(string))
+		} else {
+			// marshal the value to json
+			jsn, err := json.Marshal(v)
+			if err != nil {
+				_, _ = fmt.Fprintf(os.Stderr, "error serializing parameter: %s, error: %v", k, err)
+			}
+			q.Add(k, string(jsn))
 		}
-		q.Add(k, string(jsn))
 	}
 	u.RawQuery = q.Encode()
 }
