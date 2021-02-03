@@ -37,6 +37,8 @@ import io.ktor.client.statement.HttpResponse
 import io.ktor.client.statement.HttpStatement
 import io.ktor.http.takeFrom
 import kotlinx.coroutines.runBlocking
+import org.ini4j.Ini
+import java.io.ByteArrayInputStream
 import java.net.URLDecoder
 import java.net.URLEncoder
 import java.security.SecureRandom
@@ -108,6 +110,19 @@ data class RequestSettings(
 typealias Authenticator = (init: RequestSettings) -> RequestSettings
 
 fun defaultAuthenticator(requestSettings: RequestSettings): RequestSettings = requestSettings
+
+typealias ApiSections = Map<String, Map<String, String>>
+
+fun apiConfig(contents: String): ApiSections {
+    val iniParser = Ini(ByteArrayInputStream(contents.toByteArray()))
+
+    val ret = mutableMapOf<String, Map<String, String>>()
+    iniParser.forEach { (section, values) ->
+        ret[section] = values.map { it.key to unQuote(it.value) }.toMap()
+    }
+
+    return ret
+}
 
 interface TransportOptions {
     var baseUrl: String

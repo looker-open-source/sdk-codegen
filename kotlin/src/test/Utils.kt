@@ -25,8 +25,8 @@
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
 import com.looker.rtl.*
+import com.looker.sdk.ApiSettings
 import com.looker.sdk.LookerSDK
-import com.looker.sdk.SdkSettings
 import io.ktor.client.HttpClient
 import java.io.File
 
@@ -37,7 +37,7 @@ val jsonDictType = object : TypeToken<jsonDict>() {}.type
 class TestSettingsIniFile(
     filename: String = "./looker.ini",
     section: String = "",
-    private val base: ConfigurationProvider = SdkSettings.fromIniFile(filename, section)
+    private val base: ConfigurationProvider = ApiSettings.fromIniFile(filename, section)
 ) : ConfigurationProvider by base {
 
     override fun readConfig(): Map<String, String> {
@@ -62,7 +62,7 @@ open class TestConfig() {
     val configContents = File(localIni).readText()
     val config = apiConfig(configContents)
     val section = config["Looker"]
-    var settings = SdkSettings.fromIniFile(localIni, "Looker")
+    var settings = ApiSettings.fromIniFile(localIni, "Looker")
     var oAuthTestSettings = TestSettingsIniFile(localIni, "Looker")
     val baseUrl = section?.get("base_url")
     val timeout = section?.get("timeout")?.toInt(10)
