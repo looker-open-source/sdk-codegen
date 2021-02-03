@@ -22,24 +22,10 @@
  * THE SOFTWARE.
  */
 
-package com.looker.rtl
+package com.looker.sdk
 
-import org.ini4j.Ini
-import java.io.ByteArrayInputStream
+import com.looker.rtl.*
 import java.io.File
-
-typealias ApiSections = Map<String, Map<String, String>>
-
-fun apiConfig(contents: String): ApiSections {
-    val iniParser = Ini(ByteArrayInputStream(contents.toByteArray()))
-
-    val ret = mutableMapOf<String, Map<String, String>>()
-    iniParser.forEach { (section, values) ->
-        ret[section] = values.map { it.key to unQuote(it.value) }.toMap()
-    }
-
-    return ret
-}
 
 // TODO why no @JvmOverloads here?
 // This takes a function returning a map so that the fromIniFile constructor
@@ -49,16 +35,12 @@ open class ApiSettings(val rawReadConfig: () -> Map<String, String>) : Configura
 
     companion object {
         fun fromIniFile(filename: String = "./looker.ini", section: String = ""): ConfigurationProvider {
-            return ApiSettings {
-                val file = File(filename)
-                if (!file.exists()) {
-                    mapOf()
-                } else {
-                    val contents = file.readText()
-                    val config = apiConfig(contents)
-                    val selectedSection = if (section.isNotBlank()) section else config.keys.first()
-                    config[selectedSection] ?: mapOf()
-                }
+            val file = File(filename)
+            return if (!file.exists()) {
+                fromMap( mapOf() )
+            } else {
+                val contents = file.readText()
+                fromIniText(contents)
             }
         }
 
@@ -71,23 +53,23 @@ open class ApiSettings(val rawReadConfig: () -> Map<String, String>) : Configura
                 throw Error("No section named '$firstSection' was found")
             }
 
-            return ApiSettings({ settings })
+            return ApiSettings { settings }
         }
 
         fun fromMap(config: Map<String, String>): ConfigurationProvider {
-            return ApiSettings({ config })
+            return ApiSettings { config }
         }
     }
 
     override var baseUrl: String = ""
-    override var apiVersion: String = DEFAULT_API_VERSION
+    override var environmentPrefix: String = ENVIRONMENT_PREFIX
+    override var apiVersion: String = API_VERSION
+    override var headers: Map<String, String> = mapOf(LOOKER_APPID to AGENT_TAG, "User-Agent" to AGENT_TAG)
     override var verifySSL: Boolean = true
     override var timeout: Int = DEFAULT_TIMEOUT
-    override var headers: Map<String, String> = mapOf()
-    override var environmentPrefix: String = ""
 
     init {
-        val settings = rawReadConfig()
+        val settings = this.readConfig()
 
         // Only replace the current values if new values are provided
         settings["base_url"].let { value ->
@@ -118,15 +100,14 @@ open class ApiSettings(val rawReadConfig: () -> Map<String, String>) : Configura
 
     override fun readConfig(): Map<String, String> {
         // Merge any provided settings with the calculated values for the TransportOptions
-        return rawReadConfig().plus(
-            mapOf(
+        val rawMap = rawReadConfig()
+        return mapOf(
                 "base_url" to baseUrl,
                 "api_version" to apiVersion,
                 "environmentPrefix" to environmentPrefix,
                 "verify_ssl" to verifySSL.toString(),
                 "timeout" to timeout.toString(),
                 "headers" to headers.toString()
-            )
-        )
+            ).plus(rawMap)
     }
 }
