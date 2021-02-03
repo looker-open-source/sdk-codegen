@@ -51,9 +51,9 @@ import {
   NodeSettingsIniFile,
   NodeSession,
   readIniConfig,
-} from '.'
+} from '../src'
 import { TestConfig } from '../../sdk-rtl/src/testUtils'
-import { LookerNodeSDK } from './nodeSdk'
+import { LookerNodeSDK } from '../src/nodeSdk'
 
 const envKey = ApiConfigMap(environmentPrefix)
 const strLookerBaseUrl = envKey.base_url
