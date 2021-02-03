@@ -52,7 +52,7 @@ const section2 = 'Looker31'
 const envPrefix = 'LOOKERSDK'
 
 describe('NodeSettings', () => {
-  beforeAll(() => {
+  beforeEach(() => {
     jest
       .spyOn(fs, 'readFileSync')
       .mockImplementation((_path, _options) => mockIni)

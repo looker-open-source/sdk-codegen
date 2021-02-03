@@ -38,8 +38,8 @@
     "dotenv": "^8.2.0"
   },
   "dependencies": {
-    "@looker/sdk": "^7.20.3",
-    "@looker/sdk-rtl": "^7.20.3",
+    "@looker/sdk": "^21.0.1",
+    "@looker/sdk-rtl": "^21.0.1",
     "ini": "^1.3.8",
     "readable-stream": "^3.4.0",
     "request": "^2.88.0",

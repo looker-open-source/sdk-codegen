@@ -465,8 +465,13 @@ describe('spec conversion', () => {
 
     it('fetches and parses all specs', async () => {
       const versions = await getLookerSpecs(sdk, config.baseUrl)
-      expect(versions).toBeDefined()
+      expect(versions).toBeDefined()      
       const links = getSpecLinks(versions)
+      links.forEach(link => link.url = 
+        link.url.replace(
+          link.url.substring(0, link.url.indexOf('/api/')), 
+          config.baseUrl)
+      )
       const actual = await loadSpecs(sdk, links)
       expect(actual).toBeDefined()
       expect(actual).toHaveLength(3)
