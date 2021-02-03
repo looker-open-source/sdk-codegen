@@ -60,6 +60,10 @@ export class KotlinGen extends CodeGen {
 
   private readonly defaultApi = '4.0'
 
+  supportsMultiApi(): boolean {
+    return false
+  }
+
   isDefaultApi() {
     return this.apiVersion === this.defaultApi
   }
