@@ -123,9 +123,7 @@ class PythonFormatter extends BaseFormatter {
       return success(`updated ${stampFile} to ${gen.versions.lookerVersion}`)
     }
 
-    return warn(
-      'Version information was not retrieved. Skipping Python SDK version updating.'
-    )
+    return this.skipping()
   }
 }
 
@@ -182,9 +180,7 @@ class TypescriptFormatter extends BaseFormatter {
       return success(`updated ${stampFile} to ${gen.versions.lookerVersion}`)
     }
 
-    return warn(
-      'Version information was not retrieved. Skipping Typescript SDK version updating.'
-    )
+    return this.skipping()
   }
 }
 class KotlinFormatter extends BaseFormatter {
@@ -195,7 +191,7 @@ class KotlinFormatter extends BaseFormatter {
 
   versionStamp(gen: ICodeGen) {
     if (gen.versions && gen.versions.lookerVersion) {
-      const stampFile = gen.fileName('rtl/Constants')
+      const stampFile = gen.fileName('sdk/Constants')
       if (!isFileSync(stampFile)) {
         warn(`${stampFile} was not found. Skipping version update.`)
       }
@@ -220,9 +216,7 @@ class KotlinFormatter extends BaseFormatter {
         `updated ${stampFile} to ${gen.versions.apiVersion}.${gen.versions.lookerVersion}`
       )
     }
-    return warn(
-      'Version information was not retrieved. Skipping Python SDK version updating.'
-    )
+    return this.skipping()
   }
 }
 
@@ -259,9 +253,7 @@ class SwiftFormatter extends BaseFormatter {
         `updated ${stampFile} to ${gen.versions.apiVersion}.${gen.versions.lookerVersion}`
       )
     }
-    return warn(
-      'Version information was not retrieved. Skipping SDK version updating.'
-    )
+    return this.skipping()
   }
 }
 
@@ -298,9 +290,7 @@ class CsharpFormatter extends BaseFormatter {
         `updated ${stampFile} to ${gen.versions.apiVersion}.${gen.versions.lookerVersion}`
       )
     }
-    return warn(
-      'Version information was not retrieved. Skipping SDK version updating.'
-    )
+    return this.skipping()
   }
 }
 
