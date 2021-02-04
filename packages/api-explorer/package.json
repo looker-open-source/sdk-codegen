@@ -37,7 +37,7 @@
     "@types/react-router-dom": "^5.1.5",
     "@types/react-test-renderer": "^16.9.3",
     "@types/styled-components": "^5.1.7",
-    "@looker/sdk-node": "^21.0.1",
+    "@looker/sdk-node": "^21.0.2-alpha",
     "babel-loader": "^8.1.0",
     "css-loader": "^3.4.2",
     "jest-config": "^25.3.0",
