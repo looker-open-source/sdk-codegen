@@ -1,6 +1,6 @@
 {
   "name": "@looker/sdk-node",
-  "version": "21.0.1",
+  "version": "21.0.2-alpha.1007+103df95",
   "description": "Looker SDK Runtime for Node Library",
   "main": "lib/index.js",
   "typings": "lib/index.d.ts",
@@ -38,8 +38,8 @@
     "dotenv": "^8.2.0"
   },
   "dependencies": {
-    "@looker/sdk": "^21.0.1",
-    "@looker/sdk-rtl": "^21.0.1",
+    "@looker/sdk": "^21.0.2-alpha.1007+103df95",
+    "@looker/sdk-rtl": "^21.0.2-alpha.1007+103df95",
     "ini": "^1.3.8",
     "readable-stream": "^3.4.0",
     "request": "^2.88.0",
@@ -49,5 +49,6 @@
     "Looker",
     "SDK",
     "RTL"
-  ]
+  ],
+  "gitHead": "103df9595fff8218c158e1fdd640e33c60827e6a"
 }
