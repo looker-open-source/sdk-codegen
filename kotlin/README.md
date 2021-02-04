@@ -54,12 +54,12 @@ When the SDK is installed and the server location and API credentials are config
 Verify authentication works and that API calls will succeed with code similar to the following:
 
 ```kotlin
-import com.looker.sdk.SdkSettings;
+import com.looker.sdk.ApiSettings;
 import com.looker.rtl.AuthSession;
 import com.looker.sdk.LookerSDK;
 
 val localIni = "./looker.ini"
-val settings = SdkSettings.fromIniFile(localIni, "Looker")
+val settings = ApiSettings.fromIniFile(localIni, "Looker")
 val session = AuthSession(settings)
 val sdk = LookerSDK(session)
 // Verify minimal SDK call works

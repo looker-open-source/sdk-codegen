@@ -37,10 +37,10 @@ open class ApiSettings(val rawReadConfig: () -> Map<String, String>) : Configura
         fun fromIniFile(filename: String = "./looker.ini", section: String = ""): ConfigurationProvider {
             val file = File(filename)
             return if (!file.exists()) {
-                fromMap( mapOf() )
+                fromMap( emptyMap() )
             } else {
                 val contents = file.readText()
-                fromIniText(contents)
+                fromIniText(contents, section)
             }
         }
 

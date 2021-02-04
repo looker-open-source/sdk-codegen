@@ -26,6 +26,8 @@
 
 package com.looker.rtl
 
+import org.ini4j.Ini
+import java.io.ByteArrayInputStream
 import java.text.SimpleDateFormat
 import java.time.ZonedDateTime
 import java.time.format.DateTimeFormatter
@@ -112,3 +114,21 @@ internal fun Date(utcDateTime: String): Date {
     utcFormat.timeZone = TimeZone.getTimeZone("UTC")
     return utcFormat.parse(utcDateTime)
 }
+
+/** Structure read from an .INI file */
+typealias ApiSections = Map<String, Map<String, String>>
+
+/**
+ * Parse and cleanup something that looks like an .INI file, stripping outermost quotes for values
+ */
+fun apiConfig(contents: String): ApiSections {
+    val iniParser = Ini(ByteArrayInputStream(contents.toByteArray()))
+
+    val ret = mutableMapOf<String, Map<String, String>>()
+    iniParser.forEach { (section, values) ->
+        ret[section] = values.map { it.key to unQuote(it.value) }.toMap()
+    }
+
+    return ret
+}
+
