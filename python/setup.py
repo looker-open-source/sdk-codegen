@@ -28,7 +28,7 @@ version = {}
 with open("looker_sdk/version.py") as fp:
     exec(fp.read(), version)
 
-NAME = "lktstpy"
+NAME = "looker_sdk"
 VERSION = version["__version__"]
 REQUIRES = [
     "requests >= 2.22",
@@ -38,7 +38,7 @@ REQUIRES = [
     "python-dateutil;python_version<'3.7'",
     # Python 3.7+
     "attrs >= 20.1.0;python_version>='3.7'",
-    "cattrs >= 1.1.0;python_version>='3.7'",
+    "cattrs == 1.1.2;python_version>='3.7'",
     "typing-extensions;python_version<'3.8'",
 ]
 

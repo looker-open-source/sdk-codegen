@@ -12,6 +12,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - Looker 7.20 bindings - note that this package version will now follow Looker major/minor versioning.
 
+### Fixed
+
+- Pinning cattrs 1.1.2 for pyton >= 3.7 as 1.2.0 [has an unstructure bug](https://github.com/Tinche/cattrs/issues/119)
+
 
 ## [0.1.3b21]
 

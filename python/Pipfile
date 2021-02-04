@@ -26,7 +26,7 @@ tox-pyenv = "*"
 [packages]
 requests = "*"
 attrs = "*"
-cattrs = "*"
+cattrs = "==1.1.2"
 python-dateutil = "*"
 
 [requires]
