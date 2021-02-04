@@ -23,6 +23,8 @@
  SOFTWARE.
 
  */
+
+ // Version 21.0.4
 export * from './apiMethods'
 export * from './apiSettings'
 export * from './authSession'
@@ -37,10 +39,6 @@ export * from './CSRFSession'
 export * from './delimArray'
 export * from './extensionSession'
 export * from './extensionTransport'
-export * from './nodeServices'
-export * from './nodeSession'
-export * from './nodeSettings'
-export * from './nodeTransport'
 export * from './oauthSession'
 export * from './proxySession'
 export * from './platformServices'

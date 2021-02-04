@@ -34,7 +34,7 @@ import {
   ISqlQueryCreate,
   IDictionary,
   IAccessToken,
-} from '@looker/sdk/lib/browser'
+} from '@looker/sdk'
 import { DelimArray } from '@looker/sdk-rtl'
 import { TestConfig } from './testUtils'
 import { TypescriptGen } from './typescript.gen'

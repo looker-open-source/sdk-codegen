@@ -98,7 +98,9 @@ describe('fetch operations', () => {
 
   it('authGetUrl', async () => {
     expect(props).toBeDefined()
-    const fileUrl = swaggerFileUrl(props, await fetchLookerVersions(props))
+    const versions = await fetchLookerVersions(props)
+    const fileUrl = swaggerFileUrl(props, versions)
+      .replace(versions.api_server_url, props.base_url)
     const content = await authGetUrl(props, fileUrl)
     expect(content).toBeDefined()
     expect(content.swagger).toBeDefined()

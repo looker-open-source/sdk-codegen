@@ -46,9 +46,9 @@ import {
   IRawResponse,
   agentPrefix,
   safeBase64,
-} from './transport'
-import { BaseTransport } from './baseTransport'
-import { ICryptoHash } from './cryptoHash'
+  BaseTransport,
+  ICryptoHash,
+} from '@looker/sdk-rtl'
 
 export class NodeCryptoHash implements ICryptoHash {
   secureRandom(byteCount: number): string {

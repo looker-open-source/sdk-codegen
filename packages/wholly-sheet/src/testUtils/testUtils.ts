@@ -27,13 +27,13 @@ import * as fs from 'fs'
 import path from 'path'
 import { JWT } from 'google-auth-library'
 import {
-  NodeTransport,
   DefaultSettings,
   AuthSession,
   IRequestProps,
   IApiSettings,
   ITransport,
 } from '@looker/sdk-rtl'
+import { NodeTransport } from '@looker/sdk-node'
 import { defaultScopes, SheetSDK } from '../SheetSDK'
 
 const credFile = path.join(

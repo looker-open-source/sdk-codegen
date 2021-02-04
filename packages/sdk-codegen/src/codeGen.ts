@@ -25,7 +25,7 @@
  */
 
 import { commentBlock } from '@looker/sdk-codegen-utils'
-import { DelimArray } from '@looker/sdk-rtl/lib/browser'
+import { DelimArray } from '@looker/sdk-rtl'
 import {
   ApiModel,
   Arg,

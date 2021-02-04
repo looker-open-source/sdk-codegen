@@ -24,25 +24,9 @@
 
  */
 
-import { ICryptoHash } from './cryptoHash'
-import { IApiSettings } from './apiSettings'
-import { ITransport, sdkError } from './transport'
-import { IPlatformServices } from './platformServices'
-import { NodeCryptoHash, NodeTransport } from './nodeTransport'
-
-export class NodeServices implements IPlatformServices {
-  /** Cryptography service interface */
-  crypto: ICryptoHash
-  /** SDK configuration interface */
-  settings: IApiSettings
-  transport: ITransport
-
-  constructor(services: Partial<IPlatformServices>) {
-    if (!services.settings) {
-      throw sdkError({ message: 'Missing required IApiSettings' })
-    }
-    this.settings = services.settings
-    this.transport = services.transport || new NodeTransport(this.settings)
-    this.crypto = services.crypto || new NodeCryptoHash()
-  }
-}
+// Version 21.0.4
+ export * from './nodeServices'
+export * from './nodeSession'
+export * from './nodeSettings'
+export * from './nodeTransport'
+export * from './nodeSdk'

@@ -28,7 +28,7 @@ import { MockCrypto } from './oauthSession.spec'
 import { BrowserServices } from './browserServices'
 import { DefaultSettings } from './apiSettings'
 import { BrowserCryptoHash, BrowserTransport } from './browserTransport'
-import { NodeTransport } from './nodeTransport'
+import { ExtensionTransport, IHostConnection } from './extensionTransport'
 
 describe('BrowserServices', () => {
   it('fails if settings are not provided', () => {
@@ -46,10 +46,13 @@ describe('BrowserServices', () => {
   it('accepts transport override', () => {
     const svcs = new BrowserServices({
       settings: DefaultSettings(),
-      transport: new NodeTransport(DefaultSettings()),
+      transport: new ExtensionTransport(
+        DefaultSettings(),
+        {} as IHostConnection
+      ),
     })
     // nonsensical combination, but it doesn't matter for testing BrowserService ctor
-    expect(svcs.transport).toBeInstanceOf(NodeTransport)
+    expect(svcs.transport).toBeInstanceOf(ExtensionTransport)
     expect(svcs.crypto).toBeInstanceOf(BrowserCryptoHash)
   })
 

@@ -83,15 +83,13 @@ const configurator = new ExtensionConfigurator()
 
 export const ExtensionApiExplorer: FC = () => {
   const match = useRouteMatch<{ specKey: string }>(`/:specKey`)
-  const { core40SDK, core31SDK } = useContext<ExtensionContextData>(
-    ExtensionContext
-  )
+  const extensionContext = useContext<ExtensionContextData>(ExtensionContext)
 
-  let chosenSdk
+  let chosenSdk: any
   if (match?.params.specKey === '3.1') {
-    chosenSdk = core31SDK
+    chosenSdk = extensionContext.core31SDK
   } else if (match?.params.specKey === '4.0') {
-    chosenSdk = core40SDK
+    chosenSdk = extensionContext.core40SDK
   }
 
   return (

@@ -23,7 +23,7 @@
  SOFTWARE.
 
  */
-import { IUser as ILookerUser } from '@looker/sdk/lib/browser'
+import { IUser as ILookerUser } from '@looker/sdk'
 import { IHackathonProps, ITechnologyProps, IHackerProps } from '../../models'
 import { ProjectsHeadings, HackersHeadings, JudgingsHeadings } from '../types'
 import { HackSessionAction, Actions } from './actions'
@@ -66,7 +66,7 @@ export const hackSessionReducer = (
       return {
         ...state,
       }
-    case Actions.INIT_HACK_SESSION_RESPONSE:
+    case Actions.INIT_HACK_SESSION_RESPONSE: {
       const {
         currentHackathon,
         technologies,
@@ -86,6 +86,7 @@ export const hackSessionReducer = (
           judgingsHeadings,
         },
       }
+    }
     case Actions.INIT_HACK_SESSION_FAILURE:
       return {
         ...state,

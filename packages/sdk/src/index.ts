@@ -24,6 +24,7 @@
 
  */
 
+// Version 21.0.4
 import * as models31 from './3.1/models'
 export * from './3.1/methods'
 export { models31 }
@@ -34,4 +35,3 @@ export * from './4.0/models'
 export * from './4.0/streams'
 export * from './extensionSdk'
 export * from './browserSdk'
-export * from './nodeSdk'

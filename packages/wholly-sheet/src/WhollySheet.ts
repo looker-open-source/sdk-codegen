@@ -406,7 +406,7 @@ export abstract class WhollySheet<T extends IRowModel, P>
     newRow._row = result.row
     if (result.row === this.nextRow) {
       // No other rows have been added
-      // eslint-disable-next-line @typescript-eslint/ban-ts-ignore
+      // eslint-disable-next-line @typescript-eslint/ban-ts-comment
       // @ts-ignore
       this.rows.push((newRow as unknown) as T)
       this.createIndex()
@@ -517,7 +517,7 @@ export abstract class WhollySheet<T extends IRowModel, P>
     // trim header row
     values = values.slice(1)
     const rows = (this.typeRows(values) as unknown) as T[]
-    // eslint-disable-next-line @typescript-eslint/ban-ts-ignore
+    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
     // @ts-ignore
     this.rows = rows
     this.createIndex()

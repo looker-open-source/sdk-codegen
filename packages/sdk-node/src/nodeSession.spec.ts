@@ -25,13 +25,11 @@
  */
 
 import * as fs from 'fs'
+import { defaultTimeout, boolDefault, ApiConfigMap } from '@looker/sdk-rtl'
 import { TestConfig } from './testUtils'
 import { NodeTransport } from './nodeTransport'
 import { NodeSession } from './nodeSession'
 import { ApiConfig, NodeSettings, NodeSettingsIniFile } from './nodeSettings'
-import { defaultTimeout } from './transport'
-import { boolDefault } from './constants'
-import { ApiConfigMap } from './apiSettings'
 
 const config = TestConfig()
 const envPrefix = 'LOOKERSDK'

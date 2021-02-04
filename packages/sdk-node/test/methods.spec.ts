@@ -27,33 +27,33 @@
 import * as fs from 'fs'
 import { Readable } from 'readable-stream'
 import {
-  NodeSettings,
-  NodeSettingsIniFile,
-  DelimArray,
-  boolDefault,
-  defaultTimeout,
-  NodeSession,
-  ApiConfigMap,
-  readIniConfig,
-} from '@looker/sdk-rtl'
-import { TestConfig } from '../../sdk-rtl/src/testUtils'
-import { LookerNodeSDK } from '../src/nodeSdk'
-import { Looker40SDK as LookerSDK } from '../src/4.0/methods'
-import {
+  Looker40SDK as LookerSDK,
   ICreateQueryTask,
   IQuery,
   IRequestRunInlineQuery,
   IUser,
   IWriteQuery,
   ResultFormat,
-} from '../src/4.0/models'
-import { environmentPrefix } from '../src/constants'
-import {
+  environmentPrefix,
   Looker31SDK,
   Looker40SDK,
   Looker31SDKStream,
   Looker40SDKStream,
+} from '@looker/sdk'
+import {
+  DelimArray,
+  boolDefault,
+  defaultTimeout,
+  ApiConfigMap,
+} from '@looker/sdk-rtl'
+import {
+  NodeSettings,
+  NodeSettingsIniFile,
+  NodeSession,
+  readIniConfig,
 } from '../src'
+import { TestConfig } from '../../sdk-rtl/src/testUtils'
+import { LookerNodeSDK } from '../src/nodeSdk'
 
 const envKey = ApiConfigMap(environmentPrefix)
 const strLookerBaseUrl = envKey.base_url
@@ -414,7 +414,7 @@ describe('LookerNodeSDK', () => {
       expect(look.description).not.toBeDefined()
       await sdk.authSession.logout()
       expect(sdk.authSession.isAuthenticated()).toBeFalsy()
-    })
+    }, fifteen)
   })
 
   describe('User CRUD-it checks', () => {

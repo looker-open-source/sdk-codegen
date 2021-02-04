@@ -74,7 +74,7 @@ export const sheetHeader = (header: string[], row: any) => {
   // const colCount = header.length
   // const boolCount = header.filter((h) => typeof row[h] === 'boolean').length
   header.forEach((key) => {
-    result.push(sheetHeaderColumn(key, row[key])) //, colCount, boolCount))
+    result.push(sheetHeaderColumn(key, row[key])) // , colCount, boolCount))
   })
   return result as DataTableColumns
 }

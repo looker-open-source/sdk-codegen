@@ -24,14 +24,14 @@
 
  */
 
-import { Looker40SDK, LookerBrowserSDK } from '@looker/sdk/lib/browser'
+import { Looker40SDK, LookerBrowserSDK } from '@looker/sdk'
 import {
   ApiSettings,
   BrowserTransport,
   DefaultSettings,
   IApiSection,
   IApiSettings,
-} from '@looker/sdk-rtl/lib/browser'
+} from '@looker/sdk-rtl'
 import { RunItConfigKey, RunItConfigurator } from '../components'
 
 // https://docs.looker.com/reference/api-and-integration/api-cors
@@ -41,7 +41,7 @@ const settings = {
   agentTag: 'RunIt 0.5',
 } as IApiSettings
 
-/***
+/**
  * An OAuth Session configuration provider
  *
  * @class RunItSettings

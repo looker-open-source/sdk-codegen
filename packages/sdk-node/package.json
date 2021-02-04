@@ -1,10 +1,8 @@
 {
-  "name": "@looker/sdk",
+  "name": "@looker/sdk-node",
   "version": "21.0.4",
-  "description": "Looker SDK",
+  "description": "Looker SDK Runtime for Node Library",
   "main": "lib/index.js",
-  "module": "lib/esm/index.js",
-  "sideEffects": "false",
   "typings": "lib/index.d.ts",
   "files": [
     "lib"
@@ -13,19 +11,16 @@
   "publishConfig": {
     "access": "public"
   },
-  "directories": {
-    "test": "test"
-  },
   "repository": {
     "type": "git",
     "url": "git+https://github.com/looker-open-source/sdk-codegen.git",
-    "directory": "packages/sdk"
+    "directory": "packages/sdk-node"
   },
   "author": "Looker",
   "license": "MIT",
   "scripts": {
     "docs": "typedoc --mode file --out docs",
-    "watch": "yarn lerna exec --scope @looker/sdk --stream 'BABEL_ENV=build babel src --root-mode upward --out-dir lib --source-maps --extensions .ts,.tsx --no-comments --watch'"
+    "watch": "yarn lerna exec --scope @looker/sdk-node --stream 'BABEL_ENV=build babel src --root-mode upward --out-dir lib --source-maps --extensions .ts,.tsx --no-comments --watch'"
   },
   "bugs": {
     "url": "https://github.com/looker-open-source/sdk-codegen/issues"
@@ -34,14 +29,16 @@
     "node": ">=12",
     "npm": ">=5.5.1"
   },
-  "homepage": "https://github.com/looker-open-source/sdk-codegen/tree/master/packages/sdk",
+  "homepage": "https://github.com/looker-open-source/sdk-codegen/tree/master/packages/sdk-node",
   "devDependencies": {
     "@types/ini": "^1.3.30",
     "@types/node": "^12.12.6",
     "@types/request": "^2.48.3",
-    "@types/request-promise-native": "^1.0.17"
+    "@types/request-promise-native": "^1.0.17",
+    "dotenv": "^8.2.0"
   },
   "dependencies": {
+    "@looker/sdk": "^21.0.4",
     "@looker/sdk-rtl": "^21.0.4",
     "ini": "^1.3.8",
     "readable-stream": "^3.4.0",
@@ -50,7 +47,8 @@
   },
   "keywords": [
     "Looker",
-    "SDK"
+    "SDK",
+    "RTL"
   ],
   "gitHead": "103df9595fff8218c158e1fdd640e33c60827e6a"
 }

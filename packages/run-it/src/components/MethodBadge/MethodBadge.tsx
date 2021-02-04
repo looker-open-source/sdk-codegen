@@ -31,7 +31,7 @@ import {
   typography,
   TypographyProps,
 } from '@looker/design-tokens'
-import { HttpMethod } from '@looker/sdk-rtl/lib/browser'
+import { HttpMethod } from '@looker/sdk-rtl'
 import styled, { css } from 'styled-components'
 
 /**

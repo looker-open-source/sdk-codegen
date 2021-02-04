@@ -24,10 +24,28 @@
 
  */
 
-export * from './3.1/methods'
-export * as models31 from './3.1/models'
-export * from './3.1/streams'
-export * from './4.0/methods'
-export * from './4.0/models'
-export * from './4.0/streams'
-export * from './nodeSdk'
+import {
+  ICryptoHash,
+  IApiSettings,
+  ITransport,
+  sdkError,
+  IPlatformServices,
+} from '@looker/sdk-rtl'
+import { NodeCryptoHash, NodeTransport } from './nodeTransport'
+
+export class NodeServices implements IPlatformServices {
+  /** Cryptography service interface */
+  crypto: ICryptoHash
+  /** SDK configuration interface */
+  settings: IApiSettings
+  transport: ITransport
+
+  constructor(services: Partial<IPlatformServices>) {
+    if (!services.settings) {
+      throw sdkError({ message: 'Missing required IApiSettings' })
+    }
+    this.settings = services.settings
+    this.transport = services.transport || new NodeTransport(this.settings)
+    this.crypto = services.crypto || new NodeCryptoHash()
+  }
+}

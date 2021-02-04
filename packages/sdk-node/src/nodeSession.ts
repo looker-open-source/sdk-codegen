@@ -30,11 +30,13 @@ import {
   sdkError,
   HttpMethod,
   encodeParams,
-} from './transport'
-import { AuthToken } from './authToken'
+  AuthToken,
+  IApiSettings,
+  AuthSession,
+  IAccessToken,
+  IError,
+} from '@looker/sdk-rtl'
 import { NodeTransport } from './nodeTransport'
-import { IApiSettings } from './apiSettings'
-import { AuthSession, IAccessToken, IError } from './authSession'
 
 const strPost: HttpMethod = 'POST'
 const strDelete: HttpMethod = 'DELETE'

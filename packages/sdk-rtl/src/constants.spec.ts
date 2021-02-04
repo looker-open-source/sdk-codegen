@@ -50,7 +50,7 @@ describe('Constants functions', () => {
     expect(isTrue('T')).toEqual(true)
     expect(isTrue('1')).toEqual(true)
     expect(isTrue('')).toEqual(false)
-    // eslint-disable-next-line @typescript-eslint/ban-ts-ignore
+    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
     // @ts-ignore
     expect(isTrue(undefined)).toEqual(false)
   })
@@ -68,7 +68,7 @@ describe('Constants functions', () => {
     expect(isFalse('F')).toEqual(true)
     expect(isFalse('0')).toEqual(true)
     expect(isFalse('')).toEqual(false)
-    // eslint-disable-next-line @typescript-eslint/ban-ts-ignore
+    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
     // @ts-ignore
     expect(isFalse(undefined)).toEqual(false)
   })
@@ -79,10 +79,10 @@ describe('Constants functions', () => {
     expect(boolDefault('f')).toEqual(false)
     expect(boolDefault('t')).toEqual(true)
     expect(boolDefault('')).toEqual(false)
-    // eslint-disable-next-line @typescript-eslint/ban-ts-ignore
+    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
     // @ts-ignore
     expect(boolDefault(undefined, false)).toEqual(false)
-    // eslint-disable-next-line @typescript-eslint/ban-ts-ignore
+    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
     // @ts-ignore
     expect(boolDefault(undefined, true)).toEqual(true)
   })

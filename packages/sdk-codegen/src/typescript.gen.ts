@@ -72,7 +72,7 @@ export class TypescriptGen extends CodeGen {
 
   methodsPrologue(_indent: string) {
     return `
-import { APIMethods, DelimArray, IAuthSession, ITransportSettings, encodeParam } from '@looker/sdk-rtl/lib/browser'
+import { APIMethods, DelimArray, IAuthSession, ITransportSettings, encodeParam } from '@looker/sdk-rtl'
 /**
  * ${this.warnEditing()}
  *
@@ -97,7 +97,7 @@ export class ${this.packageName} extends APIMethods {
   streamsPrologue(_indent: string): string {
     return `
 import { Readable } from 'readable-stream'
-import { APIMethods, IAuthSession, DelimArray, ITransportSettings, encodeParam } from '@looker/sdk-rtl/lib/browser'
+import { APIMethods, IAuthSession, DelimArray, ITransportSettings, encodeParam } from '@looker/sdk-rtl'
 /**
  * ${this.warnEditing()}
  *
@@ -124,7 +124,7 @@ export class ${this.packageName}Stream extends APIMethods {
 
   modelsPrologue(_indent: string) {
     return `
-import { DelimArray, Url } from '@looker/sdk-rtl/lib/browser'
+import { DelimArray, Url } from '@looker/sdk-rtl'
 
 /*
  * ${this.warnEditing()}

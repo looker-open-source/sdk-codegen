@@ -33,7 +33,8 @@ import {
   IApiSettings,
 } from './apiSettings'
 import { BrowserCryptoHash, BrowserTransport } from './browserTransport'
-import { NodeCryptoHash, NodeTransport } from './nodeTransport'
+// import { NodeCryptoHash, NodeTransport } from './nodeTransport'
+import { ExtensionTransport, IHostConnection } from './extensionTransport'
 import { BrowserServices } from './browserServices'
 
 const allSettings = {
@@ -55,13 +56,13 @@ export class MockOauthSettings extends ApiSettings {
 }
 
 export class MockCrypto implements ICryptoHash {
-  // eslint-disable-next-line @typescript-eslint/ban-ts-ignore
+  // eslint-disable-next-line @typescript-eslint/ban-ts-comment
   // @ts-ignore
   secureRandom(byteCount: number): string {
     return 'feedface'
   }
 
-  // eslint-disable-next-line @typescript-eslint/ban-ts-ignore
+  // eslint-disable-next-line @typescript-eslint/ban-ts-comment
   // @ts-ignore
   sha256Hash(message: string): Promise<string> {
     return Promise.resolve('baadf00d')
@@ -90,7 +91,7 @@ describe('oauthSession', () => {
 
   it('accepts transport and crypto overrides via services', () => {
     const settings = new MockOauthSettings()
-    const transport = new NodeTransport(settings)
+    const transport = new ExtensionTransport(settings, {} as IHostConnection)
     const crypto = new MockCrypto()
     const services = new BrowserServices({
       crypto,
@@ -114,7 +115,7 @@ describe('oauthSession', () => {
   // that does not provide all properties of IPlatformServices
   it('accepts transport and crypto overrides via duck type hash', () => {
     const settings = new MockOauthSettings()
-    const transport = new NodeTransport(settings)
+    const transport = new ExtensionTransport(settings, {} as IHostConnection)
     const crypto = new MockCrypto()
     const session = new OAuthSession({
       crypto,
@@ -123,34 +124,6 @@ describe('oauthSession', () => {
     })
     expect(session.transport).toEqual(transport)
     expect(session.crypto).toEqual(crypto)
-  })
-
-  it('createAuthCodeRequestUrl with live crypto', async () => {
-    const services = new BrowserServices({
-      crypto: new NodeCryptoHash(),
-      settings: new MockOauthSettings(),
-    })
-    const session = new OAuthSession(services)
-    const urlstr = await session.createAuthCodeRequestUrl('api', 'mystate')
-    expect(session.code_verifier).toBeDefined()
-    expect((session.code_verifier || '').length).toEqual(66)
-
-    const url = new URL(urlstr)
-    expect(url.origin).toEqual(allSettings.looker_url)
-    const params = url.searchParams
-    const props: any = {}
-    params.forEach((value, key) => {
-      props[key] = value
-    })
-    delete props.code_challenge
-    expect(props).toEqual({
-      client_id: '123456',
-      code_challenge_method: 'S256',
-      redirect_uri: 'https://myapp.com/redirect',
-      response_type: 'code',
-      scope: 'api',
-      state: 'mystate',
-    })
   })
 
   it('createAuthCodeRequestUrl with mock constant code_verifier', async () => {

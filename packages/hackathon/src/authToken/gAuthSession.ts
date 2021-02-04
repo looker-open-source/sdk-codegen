@@ -32,7 +32,7 @@ import {
   IRequestProps,
   ITransport,
   sdkError,
-} from '@looker/sdk-rtl/lib/browser'
+} from '@looker/sdk-rtl'
 import { ExtensionSDK } from '@looker/extension-sdk'
 import { defaultScopes } from '@looker/wholly-sheet'
 

@@ -31,9 +31,9 @@ module.exports = {
   moduleDirectories: ['./node_modules', './packages'],
   moduleFileExtensions: ['js', 'jsx', 'ts', 'tsx', 'json', 'node'],
   moduleNameMapper: {
-    '@looker/sdk/lib/browser': '<rootDir>/packages/sdk/src',
-    '@looker/sdk/lib/node': '<rootDir>/packages/sdk/src',
-    '@looker/sdk-rtl/lib/browser': '<rootDir>/packages/sdk-rtl/src',
+    // '@looker/sdk/lib/browser': '<rootDir>/packages/sdk/src',
+    // '@looker/sdk/lib/node': '<rootDir>/packages/sdk/src',
+    // '@looker/sdk-rtl/lib/browser': '<rootDir>/packages/sdk-rtl/src',
     '@looker/sdk-codegen-utils/src': '<rootDir>/packages/sdk-codegen-utils/src',
     '@looker/((?!components|design|icons)(.+))$': '<rootDir>/packages/$1/src',
     '\\.(css)$': '<rootDir>/config/jest/styleMock.js',

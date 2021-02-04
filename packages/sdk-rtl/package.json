@@ -1,6 +1,6 @@
 {
   "name": "@looker/sdk-rtl",
-  "version": "21.0.1",
+  "version": "21.0.4",
   "description": "Looker SDK Runtime Library",
   "main": "lib/index.js",
   "module": "lib/esm/index.js",
@@ -50,5 +50,5 @@
     "SDK",
     "RTL"
   ],
-  "gitHead": "308cb8c61290837e71345a5ef6fb17be9285990e"
+  "gitHead": "103df9595fff8218c158e1fdd640e33c60827e6a"
 }

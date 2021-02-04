@@ -26,8 +26,8 @@
 
 import { readFileSync } from 'fs'
 import { isEmpty } from 'lodash'
-import { NodeSettingsIniFile } from '@looker/sdk-rtl'
-import { LookerNodeSDK, environmentPrefix } from '@looker/sdk'
+import { NodeSettingsIniFile, LookerNodeSDK } from '@looker/sdk-node'
+import { environmentPrefix } from '@looker/sdk'
 import {
   fixConversion,
   openApiStyle,
@@ -467,6 +467,13 @@ describe('spec conversion', () => {
       const versions = await getLookerSpecs(sdk, config.baseUrl)
       expect(versions).toBeDefined()
       const links = getSpecLinks(versions)
+      links.forEach(
+        (link) =>
+          (link.url = link.url.replace(
+            link.url.substring(0, link.url.indexOf('/api/')),
+            config.baseUrl
+          ))
+      )
       const actual = await loadSpecs(sdk, links)
       expect(actual).toBeDefined()
       expect(actual).toHaveLength(3)
