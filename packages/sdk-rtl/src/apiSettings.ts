@@ -27,6 +27,7 @@
 import { agentPrefix, defaultTimeout, ITransportSettings } from './transport'
 import { boolDefault, isTrue, unquote } from './constants'
 
+/** Used for reading configuration name/value pairs */
 export interface IValueSettings {
   [name: string]: string
 }
