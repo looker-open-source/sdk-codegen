@@ -37,8 +37,6 @@ import io.ktor.client.statement.HttpResponse
 import io.ktor.client.statement.HttpStatement
 import io.ktor.http.takeFrom
 import kotlinx.coroutines.runBlocking
-import org.ini4j.Ini
-import java.io.ByteArrayInputStream
 import java.net.URLDecoder
 import java.net.URLEncoder
 import java.security.SecureRandom
@@ -104,25 +102,12 @@ enum class HttpMethod(val value: io.ktor.http.HttpMethod) {
 data class RequestSettings(
     val method: HttpMethod,
     val url: String,
-    val headers: Map<String, String> = mapOf()
+    val headers: Map<String, String> = emptyMap()
 )
 
 typealias Authenticator = (init: RequestSettings) -> RequestSettings
 
 fun defaultAuthenticator(requestSettings: RequestSettings): RequestSettings = requestSettings
-
-typealias ApiSections = Map<String, Map<String, String>>
-
-fun apiConfig(contents: String): ApiSections {
-    val iniParser = Ini(ByteArrayInputStream(contents.toByteArray()))
-
-    val ret = mutableMapOf<String, Map<String, String>>()
-    iniParser.forEach { (section, values) ->
-        ret[section] = values.map { it.key to unQuote(it.value) }.toMap()
-    }
-
-    return ret
-}
 
 interface TransportOptions {
     var baseUrl: String
@@ -143,7 +128,7 @@ data class TransportSettings(
     override var apiVersion: String = DEFAULT_API_VERSION,
     override var verifySSL: Boolean = true,
     override var timeout: Int = DEFAULT_TIMEOUT,
-    override var headers: Map<String, String> = mapOf(),
+    override var headers: Map<String, String> = emptyMap(),
     override var environmentPrefix: String = "LOOKERSDK",
 ) : TransportOptions
 
@@ -171,7 +156,7 @@ fun encodeParam(value: Any?): String {
     return encoded
 }
 
-fun encodeValues(params: Values = mapOf()): String {
+fun encodeValues(params: Values = emptyMap()): String {
     @Suppress("UNCHECKED_CAST")
     return params
         .filter { (_, v) -> v !== null }
@@ -179,7 +164,7 @@ fun encodeValues(params: Values = mapOf()): String {
         .joinToString("&")
 }
 
-fun addQueryParams(path: String, params: Values = mapOf()): String {
+fun addQueryParams(path: String, params: Values = emptyMap()): String {
     if (params.isEmpty()) return path
 
     val qp = encodeValues(params)
@@ -214,7 +199,7 @@ fun customClient(options: TransportOptions): HttpClient {
                     // NOTE! This is completely insecure and should ONLY be used with local server instance
                     // testing for development purposes
                     val tm: X509TrustManager = object : X509TrustManager {
-                        override fun getAcceptedIssuers(): Array<X509Certificate?>? {
+                        override fun getAcceptedIssuers(): Array<X509Certificate?> {
                             return arrayOfNulls(0)
                         }
 
@@ -263,7 +248,7 @@ class Transport(val options: TransportOptions) {
      */
     fun makeUrl(
         path: String,
-        queryParams: Values = mapOf(),
+        queryParams: Values = emptyMap(),
         authenticator: Authenticator? = null // TODO figure out why ::defaultAuthenticator is matching when it shouldn't
     ): String {
         return if (path.startsWith("http://", true) ||
@@ -282,7 +267,7 @@ class Transport(val options: TransportOptions) {
     inline fun <reified T> request(
         method: HttpMethod,
         path: String,
-        queryParams: Values = mapOf(),
+        queryParams: Values = emptyMap(),
         body: Any? = null,
         noinline authenticator: Authenticator? = null
     ): SDKResponse {

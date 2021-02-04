@@ -152,7 +152,7 @@ open class AuthSession(
                 transport.request<AuthToken>(
                     HttpMethod.POST,
                     "$apiPath/login",
-                    mapOf(),
+                    emptyMap(),
                     body
                 )
             )
