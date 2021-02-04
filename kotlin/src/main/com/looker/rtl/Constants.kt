@@ -42,7 +42,7 @@ val StringMatch = Regex(MATCH_MODE_STRING, RegexOption.IGNORE_CASE)
 val BinaryMatch = Regex(MATCH_MODE_BINARY, RegexOption.IGNORE_CASE)
 
 const val DEFAULT_TIMEOUT = 120
-const val DEFAULT_API_VERSION = "4.0" // Kotlin requires API 4.0
+const val DEFAULT_API_VERSION = "4.0" // Kotlin requires at least API 4.0
 
 typealias Values = Map<String, Any?>
 

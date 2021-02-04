@@ -68,27 +68,33 @@ open class ApiSettings(val rawReadConfig: () -> Map<String, String>) : Configura
     override var verifySSL: Boolean = true
     override var timeout: Int = DEFAULT_TIMEOUT
 
+    private val keyBaseUrl: String = "base_url"
+    private val keyApiVersion: String = "api_version"
+    private val keyEnvironmentPrefix: String = "environmentPrefix"
+    private val keyVerifySSL: String = "verify_ssl"
+    private val keyTimeout: String = "timeout"
+
     init {
         val settings = this.readConfig()
 
         // Only replace the current values if new values are provided
-        settings["base_url"].let { value ->
+        settings[keyBaseUrl].let { value ->
             baseUrl = unQuote(value ?: baseUrl)
         }
 
-        settings["api_version"].let { value ->
+        settings[keyApiVersion].let { value ->
             apiVersion = unQuote(value ?: apiVersion)
         }
 
-        settings["environmentPrefix"].let { value ->
+        settings[keyEnvironmentPrefix].let { value ->
             environmentPrefix = unQuote(value ?: environmentPrefix)
         }
 
-        settings["verify_ssl"].let { value ->
+        settings[keyVerifySSL].let { value ->
             verifySSL = asBoolean(value) ?: verifySSL
         }
 
-        settings["timeout"].let { value ->
+        settings[keyTimeout].let { value ->
             timeout = if (value !== null) value.toInt() else timeout
         }
 
@@ -99,15 +105,31 @@ open class ApiSettings(val rawReadConfig: () -> Map<String, String>) : Configura
     }
 
     override fun readConfig(): Map<String, String> {
-        // Merge any provided settings with the calculated values for the TransportOptions
-        val rawMap = rawReadConfig()
+        // Load environment variables and possibly overwrite with explicitly declared map values
+        val rawMap = readEnvironment().plus(rawReadConfig())
+        // TODO environment variables must overwrite or append to rawMap values
         return mapOf(
-                "base_url" to baseUrl,
-                "api_version" to apiVersion,
-                "environmentPrefix" to environmentPrefix,
-                "verify_ssl" to verifySSL.toString(),
-                "timeout" to timeout.toString(),
+                keyBaseUrl to baseUrl,
+                keyApiVersion to apiVersion,
+                keyEnvironmentPrefix to environmentPrefix,
+                keyVerifySSL to verifySSL.toString(),
+                keyTimeout to timeout.toString(),
                 "headers" to headers.toString()
             ).plus(rawMap)
+    }
+
+    private fun addEnvVal(map: MutableMap<String,String>, key: String) {
+        System.getenv("${environmentPrefix}_${key.toUpperCase()}").let { value ->
+            if (value !== null && value.isNotEmpty()) map[key] = value
+        }
+    }
+
+    private fun readEnvironment(): Map<String, String> {
+        val map = HashMap<String, String>()
+        addEnvVal(map, keyBaseUrl)
+        addEnvVal(map, keyApiVersion)
+        addEnvVal(map, keyVerifySSL)
+        addEnvVal(map, keyTimeout)
+        return map.toMap()
     }
 }

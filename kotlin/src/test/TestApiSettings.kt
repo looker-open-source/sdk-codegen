@@ -31,7 +31,7 @@ import org.junit.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertNull
 
-val mySDK = "MYSDK"
+val mockSDK = "MOCKSDK"
 
 val bareMinimum = """
 [Looker]
@@ -46,7 +46,7 @@ base_url='https://my.looker.com:19999'
 val withEnvPrefix = """
 [Looker]
 base_url=https://my.looker.com:19999
-environmentPrefix=$mySDK
+environmentPrefix=$mockSDK
 """.trimIndent()
 
 val mockId = "IdOverride"
@@ -56,7 +56,7 @@ class MockSettings(contents: String) : ConfigurationProvider by ApiSettings.from
     override fun readConfig(): Map<String, String> {
         return mapOf(
             "base_url" to baseUrl,
-            "environmentPrefix" to mySDK,
+            "environmentPrefix" to environmentPrefix,
             "verify_ssl" to verifySSL.toString(),
             "timeout" to timeout.toString(),
             "headers" to headers.toString(),
@@ -92,25 +92,38 @@ class TestApiSettings {
     fun testApiSettingsOverrides() {
         val settings = MockSettings(bareMinimum)
         assertEquals("https://my.looker.com:19999", settings.baseUrl, "Base URL is read")
-        // TODO is there a way the following line of code would work without reassigning settings from the map of readConfig()
-        // assertEquals(mySDK, settings.environmentPrefix)
+        assertEquals(ENVIRONMENT_PREFIX, settings.environmentPrefix)
         assertEquals(true, settings.verifySSL)
         assertEquals(DEFAULT_TIMEOUT, settings.timeout)
 
         val config = settings.readConfig()
-        assertEquals(mySDK, config["environmentPrefix"])
+        assertEquals(ENVIRONMENT_PREFIX, config["environmentPrefix"])
         assertEquals(mockId, config["client_id"])
         assertEquals(mockSecret, config["client_secret"])
     }
 
     @Test
-    fun testApiSettingsEnvPrefix() {
+    fun testApiSettingsEnvPrefixOverride() {
+        val settings = ApiSettings.fromIniText(withEnvPrefix)
+        val config = settings.readConfig()
+        assertEquals("https://my.looker.com:19999", settings.baseUrl, "Base URL is read")
+        assertEquals(mockSDK, settings.environmentPrefix)
+        assertEquals(true, settings.verifySSL)
+        assertEquals(DEFAULT_TIMEOUT, settings.timeout)
+        assertEquals(mockSDK, config["environmentPrefix"])
+        assertEquals(null, config["client_id"])
+        assertEquals(null, config["client_secret"])
+    }
+
+    @Test
+    fun testMockSettingsEnvPrefixOverride() {
         val settings = MockSettings(withEnvPrefix)
         val config = settings.readConfig()
         assertEquals("https://my.looker.com:19999", settings.baseUrl, "Base URL is read")
-        assertEquals(mySDK, settings.environmentPrefix)
+        assertEquals(mockSDK, settings.environmentPrefix)
         assertEquals(true, settings.verifySSL)
         assertEquals(DEFAULT_TIMEOUT, settings.timeout)
+        assertEquals(mockSDK, config["environmentPrefix"])
         assertEquals(mockId, config["client_id"])
         assertEquals(mockSecret, config["client_secret"])
     }
@@ -121,7 +134,7 @@ class TestApiSettings {
         val session = AuthSession(settings)
         val config = session.apiSettings.readConfig()
         assertEquals("https://my.looker.com:19999", settings.baseUrl, "Base URL is read")
-        assertEquals(mySDK, settings.environmentPrefix)
+        assertEquals(mockSDK, settings.environmentPrefix)
         assertEquals(true, settings.verifySSL)
         assertEquals(DEFAULT_TIMEOUT, settings.timeout)
         assertEquals(mockId, config["client_id"])
