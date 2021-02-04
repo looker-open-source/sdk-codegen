@@ -1,6 +1,6 @@
 {
   "name": "@looker/extension-api-explorer",
-  "version": "21.0.2",
+  "version": "21.0.3",
   "description": "Looker API Explorer extension version  ",
   "main": "esm/index.js",
   "license": "MIT",
@@ -13,11 +13,11 @@
     "watch": "yarn lerna exec --scope @looker/extension-api-explorer --stream 'BABEL_ENV=build babel src --root-mode upward --out-dir lib --source-maps --extensions .ts,.tsx --no-comments --watch'"
   },
   "dependencies": {
-    "@looker/api-explorer": "^21.0.2",
+    "@looker/api-explorer": "^21.0.3",
     "@looker/extension-sdk": "0.16.3-alpha.1",
     "@looker/extension-sdk-react": "0.10.2-alpha.1",
-    "@looker/run-it": "^21.0.2",
-    "@looker/sdk": "^21.0.1",
+    "@looker/run-it": "^21.0.3",
+    "@looker/sdk": "^21.0.3",
     "react": "^16.13.1",
     "react-dom": "^16.13.1",
     "react-router-dom": "^5.2.0",
