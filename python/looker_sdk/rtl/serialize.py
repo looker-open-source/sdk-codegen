@@ -59,7 +59,7 @@ TSerialize = Callable[[TModelOrSequence], bytes]
 
 
 def deserialize(
-    *, data: str, structure: TStructure, converter: cattr.Converter
+    *, data: str, structure: TStructure, converter: cattr.GenConverter
 ) -> TDeserializeReturn:
     """Translate API data into models."""
     try:
@@ -75,9 +75,9 @@ def deserialize(
     return response
 
 
-converter31 = cattr.Converter()
+converter31 = cattr.GenConverter()
 deserialize31 = functools.partial(deserialize, converter=converter31)
-converter40 = cattr.Converter()
+converter40 = cattr.GenConverter()
 deserialize40 = functools.partial(deserialize, converter=converter40)
 
 
@@ -124,7 +124,7 @@ def forward_ref_structure_hook(context, converter, data, forward_ref):
     return instance
 
 
-def unstructure_hook(api_model):
+def unstructure_hook(converter, api_model):
     """cattr unstructure hook
 
     Map reserved_ words in models to correct json field names.
@@ -132,8 +132,11 @@ def unstructure_hook(api_model):
     EXPLICIT_NULL fields to None so that we only send null
     in the json for fields the caller set EXPLICIT_NULL on.
     """
-    data = cattr.global_converter.unstructure_attrs_asdict(api_model)
+    print("Hello there")  # not getting in here ever
+    data = converter.unstructure_attrs_asdict(api_model)
     for key, value in data.copy().items():
+        print(f"key: {key}")
+        print(f"value: {value}")
         if value is None:
             del data[key]
         elif value == model.EXPLICIT_NULL:
@@ -163,4 +166,5 @@ else:
 
 converter31.register_structure_hook(datetime.datetime, datetime_structure_hook)
 converter40.register_structure_hook(datetime.datetime, datetime_structure_hook)
-cattr.register_unstructure_hook(model.Model, unstructure_hook)  # type: ignore
+# converter31.register_unstructure_hook(model.Model, unstructure_hook)  # type: ignore
+# converter40.register_unstructure_hook(model.Model, unstructure_hook)  # type: ignore

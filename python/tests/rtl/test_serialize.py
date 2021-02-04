@@ -206,7 +206,19 @@ class ModelNoRefs2(ml.Model):
         self.name2 = name2
 
 
-converter = cattr.Converter()
+converter = cattr.GenConverter()
+# the following enables the default unstructuring but how to hook in sr.unstructure_hook ?
+# WTF https://github.com/Tinche/cattrs/issues/119
+attr.resolve_types(ModelNoRefs1)
+attr.resolve_types(Model)
+attr.resolve_types(ModelNoRefs2)
+
+# no dice
+unstructure_hook = functools.partial(sr.unstructure_hook, converter)
+converter.register_unstructure_hook(ModelNoRefs1, unstructure_hook)  # type: ignore
+converter.register_unstructure_hook(Model, unstructure_hook)  # type: ignore
+converter.register_unstructure_hook(ModelNoRefs2, unstructure_hook)  # type: ignore
+
 structure_hook = functools.partial(sr.forward_ref_structure_hook, globals(), converter)
 translate_keys_structure_hook = functools.partial(
     sr.translate_keys_structure_hook, converter
@@ -217,7 +229,9 @@ converter.register_structure_hook(ForwardRef("Enum1"), structure_hook)
 converter.register_structure_hook(ForwardRef("Enum2"), structure_hook)
 converter.register_structure_hook(ForwardRef("ModelNoRefs1"), structure_hook)
 converter.register_structure_hook(ForwardRef("ModelNoRefs2"), structure_hook)
+converter.register_structure_hook(ModelNoRefs1, translate_keys_structure_hook)
 converter.register_structure_hook(Model, translate_keys_structure_hook)
+converter.register_structure_hook(ModelNoRefs2, translate_keys_structure_hook)
 
 
 MODEL_DATA = {
