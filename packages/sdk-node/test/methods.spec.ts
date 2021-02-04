@@ -414,7 +414,7 @@ describe('LookerNodeSDK', () => {
       expect(look.description).not.toBeDefined()
       await sdk.authSession.logout()
       expect(sdk.authSession.isAuthenticated()).toBeFalsy()
-    })
+    }, fifteen)
   })
 
   describe('User CRUD-it checks', () => {
