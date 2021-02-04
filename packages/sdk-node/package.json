@@ -1,5 +1,5 @@
 {
-  "name": "@looker/sdk-rtl-node",
+  "name": "@looker/sdk-node",
   "version": "21.0.1",
   "description": "Looker SDK Runtime for Node Library",
   "main": "lib/index.js",
@@ -14,13 +14,13 @@
   "repository": {
     "type": "git",
     "url": "git+https://github.com/looker-open-source/sdk-codegen.git",
-    "directory": "packages/sdk-rtl-node"
+    "directory": "packages/sdk-node"
   },
   "author": "Looker",
   "license": "MIT",
   "scripts": {
     "docs": "typedoc --mode file --out docs",
-    "watch": "yarn lerna exec --scope @looker/sdk-rtl-node --stream 'BABEL_ENV=build babel src --root-mode upward --out-dir lib --source-maps --extensions .ts,.tsx --no-comments --watch'"
+    "watch": "yarn lerna exec --scope @looker/sdk-node --stream 'BABEL_ENV=build babel src --root-mode upward --out-dir lib --source-maps --extensions .ts,.tsx --no-comments --watch'"
   },
   "bugs": {
     "url": "https://github.com/looker-open-source/sdk-codegen/issues"
@@ -29,7 +29,7 @@
     "node": ">=12",
     "npm": ">=5.5.1"
   },
-  "homepage": "https://github.com/looker-open-source/sdk-codegen/tree/master/packages/sdk-rtl-node",
+  "homepage": "https://github.com/looker-open-source/sdk-codegen/tree/master/packages/sdk-node",
   "devDependencies": {
     "@types/ini": "^1.3.30",
     "@types/node": "^12.12.6",

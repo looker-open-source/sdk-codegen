@@ -26,7 +26,7 @@
 
 import * as fs from 'fs'
 import path from 'path'
-import { IApiConfig, ApiConfig } from '@looker/sdk-rtl-node'
+import { IApiConfig, ApiConfig } from '@looker/sdk-node'
 import { IApiSection } from '@looker/sdk-rtl'
 import { ApiModel } from '@looker/sdk-codegen'
 import * as Models from '@looker/sdk-codegen'

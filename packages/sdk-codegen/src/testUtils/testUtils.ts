@@ -26,7 +26,7 @@
 
 import * as fs from 'fs'
 import path from 'path'
-import { ApiConfig } from '@looker/sdk-rtl-node'
+import { ApiConfig } from '@looker/sdk-node'
 import { ApiModel } from '../sdkModels'
 
 interface IKeyAny {

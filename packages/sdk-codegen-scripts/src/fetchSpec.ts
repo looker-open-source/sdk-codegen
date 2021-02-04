@@ -33,7 +33,7 @@ import {
   sdkOk,
   sdkError,
 } from '@looker/sdk-rtl'
-import { NodeTransport } from '@looker/sdk-rtl-node'
+import { NodeTransport } from '@looker/sdk-node'
 import { fail, quit, isFileSync, utf8Encoding, isDirSync } from './nodeUtils'
 import { ISDKConfigProps } from './sdkConfig'
 import { convertSpec } from './convert'

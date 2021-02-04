@@ -33,7 +33,7 @@ import {
   IApiSettings,
   ITransport,
 } from '@looker/sdk-rtl'
-import { NodeTransport } from '@looker/sdk-rtl-node'
+import { NodeTransport } from '@looker/sdk-node'
 import { defaultScopes, SheetSDK } from '../SheetSDK'
 
 const credFile = path.join(

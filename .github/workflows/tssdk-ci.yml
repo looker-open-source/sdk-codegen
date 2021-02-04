@@ -11,7 +11,7 @@ on:
     paths:
       - packages/sdk/**
       - packages/sdk-rtl/**
-      - packages/sdk-rtl-node/**
+      - packages/sdk-node/**
 
   push:
     branches:
@@ -19,7 +19,7 @@ on:
     paths:
       - packages/sdk/**
       - packages/sdk-rtl/**
-      - packages/sdk-rtl-node/**
+      - packages/sdk-node/**
 
 env:
   LOOKERSDK_BASE_URL: https://localhost:20000
@@ -164,7 +164,7 @@ jobs:
           python ${{ github.workspace }}/.github/scripts/wait_for_looker.py
 
       - name: Run Integration Tests
-        run: yarn jest packages/sdk-rtl-node/test --reporters=default --reporters=jest-junit
+        run: yarn jest packages/sdk-node/test --reporters=default --reporters=jest-junit
 
       - name: Upload integration test results
         if: ${{ always() }}

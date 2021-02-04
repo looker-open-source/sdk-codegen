@@ -27,7 +27,7 @@
 import path from 'path'
 import fs from 'fs'
 import { IOauthClientApp } from '@looker/sdk'
-import { LookerNodeSDK, NodeSettingsIniFile } from '@looker/sdk-rtl-node'
+import { LookerNodeSDK, NodeSettingsIniFile } from '@looker/sdk-node'
 import { SDKConfig } from '../../sdk-codegen-scripts/src/sdkConfig'
 import {
   fetchLookerVersions,

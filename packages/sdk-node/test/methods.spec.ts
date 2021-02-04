@@ -26,7 +26,7 @@
 
 import * as fs from 'fs'
 import { Readable } from 'readable-stream'
-import { 
+import {
   Looker40SDK as LookerSDK,
   ICreateQueryTask,
   IQuery,
@@ -39,7 +39,7 @@ import {
   Looker40SDK,
   Looker31SDKStream,
   Looker40SDKStream,
- } from '@looker/sdk'
+} from '@looker/sdk'
 import {
   DelimArray,
   boolDefault,
@@ -96,15 +96,6 @@ const mimeType = (data: string) => {
 }
 
 describe('LookerNodeSDK', () => {
-  const clearEnvVariables = () => {
-    delete process.env[strLookerTimeout]
-    delete process.env[strLookerClientId]
-    delete process.env[strLookerClientSecret]
-    delete process.env[strLookerBaseUrl]
-    delete process.env[strLookerVerifySsl]
-  }
-  clearEnvVariables()
-
   const settings = new NodeSettingsIniFile(
     environmentPrefix,
     config.localIni,
@@ -428,7 +419,6 @@ describe('LookerNodeSDK', () => {
 
   describe('User CRUD-it checks', () => {
     beforeAll(async () => {
-      clearEnvVariables()
       await removeTestUsers()
     }, testTimeout)
 
@@ -490,7 +480,6 @@ describe('LookerNodeSDK', () => {
 
   describe('User searches', () => {
     beforeAll(async () => {
-      clearEnvVariables()
       await removeTestUsers()
       await createTestUsers()
     }, testTimeout)
@@ -757,7 +746,6 @@ describe('LookerNodeSDK', () => {
     }
 
     beforeAll(async () => {
-      clearEnvVariables()
       // test dashboards are removed here, but not in top-level tear-down because
       // we may want to view them after the test
       await removeTestDashboards()
@@ -930,7 +918,6 @@ describe('LookerNodeSDK', () => {
 
   describe('Node environment', () => {
     beforeAll(() => {
-      clearEnvVariables()
       const section = readIniConfig(
         config.localIni,
         environmentPrefix,
@@ -948,12 +935,15 @@ describe('LookerNodeSDK', () => {
 
     afterAll(() => {
       // reset environment variables
-      clearEnvVariables()
+      delete process.env[strLookerTimeout]
+      delete process.env[strLookerClientId]
+      delete process.env[strLookerClientSecret]
+      delete process.env[strLookerBaseUrl]
+      delete process.env[strLookerVerifySsl]
     })
 
     it('no INI', async () => {
-      const settings = new NodeSettings(environmentPrefix)
-      const sdk = LookerNodeSDK.init31(settings)
+      const sdk = LookerNodeSDK.init31(new NodeSettings(environmentPrefix))
       const me = await sdk.ok(sdk.me())
       expect(me).not.toBeUndefined()
       expect(me.id).not.toBeUndefined()
