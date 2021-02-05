@@ -23,6 +23,14 @@
  SOFTWARE.
 
  */
+
+/**
+ * Builds a path matching the route used by MethodScene
+ * @param methodName A method name
+ * @param specKey A string to identify the spec in the URL
+ * @param tag Corresponding method tag
+ * @returns a Method path
+ */
 export const buildMethodPath = (
   specKey: string,
   tag: string,
