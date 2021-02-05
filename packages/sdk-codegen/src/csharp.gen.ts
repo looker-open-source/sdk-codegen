@@ -157,7 +157,7 @@ using Password = System.String;
 // ReSharper disable InconsistentNaming
 
 ${this.commentHeader('', this.warnEditing())}
-namespace Looker.SDK.API${this.apiRef}
+namespace Looker.SDK.API${this.apiRef} 
 {
 
 `

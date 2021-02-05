@@ -394,31 +394,27 @@ describe('LookerNodeSDK', () => {
       expect(sdk.authSession.isAuthenticated()).toBeFalsy()
     })
 
-    it(
-      'search_looks fields and title',
-      async () => {
-        const sdk = new LookerSDK(session)
-        const looks = await sdk.ok(sdk.all_looks('id,title'))
-        expect(looks).not.toHaveLength(0)
-        const expected = looks[0]
-        const actual = await sdk.ok(
-          sdk.search_looks({
-            fields: 'id,title',
-            title: expected.title,
-          })
-        )
-        expect(actual).toBeDefined()
-        expect(actual.length).toBeGreaterThanOrEqual(1)
-        const look = actual[0]
-        expect(look.id).toBeDefined()
-        expect(look.title).toBeDefined()
-        expect(look.title).toEqual(expected.title)
-        expect(look.description).not.toBeDefined()
-        await sdk.authSession.logout()
-        expect(sdk.authSession.isAuthenticated()).toBeFalsy()
-      },
-      fifteen
-    )
+    it('search_looks fields and title', async () => {
+      const sdk = new LookerSDK(session)
+      const looks = await sdk.ok(sdk.all_looks('id,title'))
+      expect(looks).not.toHaveLength(0)
+      const expected = looks[0]
+      const actual = await sdk.ok(
+        sdk.search_looks({
+          fields: 'id,title',
+          title: expected.title,
+        })
+      )
+      expect(actual).toBeDefined()
+      expect(actual.length).toBeGreaterThanOrEqual(1)
+      const look = actual[0]
+      expect(look.id).toBeDefined()
+      expect(look.title).toBeDefined()
+      expect(look.title).toEqual(expected.title)
+      expect(look.description).not.toBeDefined()
+      await sdk.authSession.logout()
+      expect(sdk.authSession.isAuthenticated()).toBeFalsy()
+    }, fifteen)
   })
 
   describe('User CRUD-it checks', () => {
