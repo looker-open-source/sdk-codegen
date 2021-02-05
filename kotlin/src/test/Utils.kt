@@ -50,10 +50,11 @@ class TestSettingsIniFile(
 }
 
 open class TestConfig() {
+    val env = loadEnvironment()
     val rootPath: String = File("./").absoluteFile.parentFile.parentFile.absolutePath
     val testPath = "$rootPath/test"
     val dataFile = testFile("data.yml.json")
-    val envIni = System.getenv("LOOKERSDK_INI")
+    val envIni = System.getProperty("LOOKERSDK_INI")
     val localIni = if (envIni === null) rootFile("looker.ini") else envIni
     private val gson = Gson()
     private val dataContents = File(dataFile).readText()

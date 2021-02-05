@@ -116,6 +116,17 @@ class TestApiSettings {
     }
 
     @Test
+    fun testApiSettingsEnvironmentOverride() {
+        val testBase = "https://my.looker.com:19999"
+        System.setProperty("${ENVIRONMENT_PREFIX}_BASE_URL", testBase)
+        val settings = ApiSettings.fromIniText(bareMinimum)
+        val config = settings.readConfig()
+        System.clearProperty("${ENVIRONMENT_PREFIX}_BASE_URL")
+        assertEquals(testBase, settings.baseUrl, "Base URL is overridden")
+        assertEquals(testBase, config["base_url"])
+    }
+
+    @Test
     fun testMockSettingsEnvPrefixOverride() {
         val settings = MockSettings(withEnvPrefix)
         val config = settings.readConfig()

@@ -118,18 +118,18 @@ open class ApiSettings(val rawReadConfig: () -> Map<String, String>) : Configura
             ).plus(rawMap)
     }
 
-    private fun addEnvVal(map: MutableMap<String,String>, key: String) {
-        System.getenv("${environmentPrefix}_${key.toUpperCase()}").let { value ->
+    private fun addSystemProperty(map: MutableMap<String,String>, key: String) {
+        System.getProperty("${environmentPrefix}_${key.toUpperCase()}").let { value ->
             if (value !== null && value.isNotEmpty()) map[key] = value
         }
     }
 
     private fun readEnvironment(): Map<String, String> {
         val map = HashMap<String, String>()
-        addEnvVal(map, keyBaseUrl)
-        addEnvVal(map, keyApiVersion)
-        addEnvVal(map, keyVerifySSL)
-        addEnvVal(map, keyTimeout)
+        addSystemProperty(map, keyBaseUrl)
+        addSystemProperty(map, keyApiVersion)
+        addSystemProperty(map, keyVerifySSL)
+        addSystemProperty(map, keyTimeout)
         return map.toMap()
     }
 }

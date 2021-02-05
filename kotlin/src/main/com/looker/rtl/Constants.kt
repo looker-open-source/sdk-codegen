@@ -132,3 +132,11 @@ fun apiConfig(contents: String): ApiSections {
     return ret
 }
 
+/** Loads environment variables into system properties */
+fun loadEnvironment(): Map<String, String> {
+    // TODO get dotenv working for .env file loading https://github.com/cdimascio/dotenv-kotlin
+
+    val envMap = System.getenv()
+    for ((key, value) in envMap) System.setProperty(key, value)
+    return envMap
+}
