@@ -2,7 +2,7 @@
 
  MIT License
 
- Copyright (c) 2019 Looker Data Sciences, Inc.
+ Copyright (c) 2021 Looker Data Sciences, Inc.
 
  Permission is hereby granted, free of charge, to any person obtaining a copy
  of this software and associated documentation files (the "Software"), to deal
@@ -25,7 +25,7 @@
  */
 
 // Version 21.0.4
- export * from './nodeServices'
+export * from './nodeServices'
 export * from './nodeSession'
 export * from './nodeSettings'
 export * from './nodeTransport'

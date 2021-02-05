@@ -2,7 +2,7 @@
 
  MIT License
 
- Copyright (c) 2019 Looker Data Sciences, Inc.
+ Copyright (c) 2021 Looker Data Sciences, Inc.
 
  Permission is hereby granted, free of charge, to any person obtaining a copy
  of this software and associated documentation files (the "Software"), to deal
@@ -157,7 +157,7 @@ using Password = System.String;
 // ReSharper disable InconsistentNaming
 
 ${this.commentHeader('', this.warnEditing())}
-namespace Looker.SDK.API${this.apiRef} 
+namespace Looker.SDK.API${this.apiRef}
 {
 
 `

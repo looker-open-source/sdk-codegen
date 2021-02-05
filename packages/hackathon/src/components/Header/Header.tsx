@@ -2,7 +2,7 @@
 
  MIT License
 
- Copyright (c) 2019 Looker Data Sciences, Inc.
+ Copyright (c) 2021 Looker Data Sciences, Inc.
 
  Permission is hereby granted, free of charge, to any person obtaining a copy
  of this software and associated documentation files (the "Software"), to deal
@@ -31,5 +31,12 @@ export interface HeaderProps {
 }
 
 export const Header: FC<HeaderProps> = ({ text }) => (
-  <Heading style={{position: "relative"}} fontSize="xxxxlarge" textAlign="center" py="large">{text}</Heading>
+  <Heading
+    style={{ position: 'relative' }}
+    fontSize="xxxxlarge"
+    textAlign="center"
+    py="large"
+  >
+    {text}
+  </Heading>
 )
