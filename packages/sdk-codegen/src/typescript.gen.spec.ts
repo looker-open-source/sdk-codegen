@@ -126,6 +126,23 @@ describe('typescript generator', () => {
     expect(actual).toEqual(expected)
   })
 
+  it('license comment header', () => {
+    const text =
+      '\n\nMIT License\n\nCopyright (c) 2021 Looker Data Sciences, Inc.\n\nPermission\n\n\n'
+    let actual = gen.commentHeader('', text, ' ')
+    let expected = `/*
+
+ MIT License
+
+ Copyright (c) 2021 Looker Data Sciences, Inc.
+
+ Permission
+
+ */
+`
+    expect(actual).toEqual(expected)
+  })
+
   describe('parameter declarations', () => {
     it('required parameter', () => {
       const method = apiTestModel.methods.run_query
