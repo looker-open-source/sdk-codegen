@@ -2,7 +2,7 @@
 
  MIT License
 
- Copyright (c) 2020 Looker Data Sciences, Inc.
+ Copyright (c) 2021 Looker Data Sciences, Inc.
 
  Permission is hereby granted, free of charge, to any person obtaining a copy
  of this software and associated documentation files (the "Software"), to deal
@@ -143,14 +143,16 @@ export interface IDictionary<T> {
 
   commentHeader(indent: string, text: string | undefined, commentStr = ' * ') {
     if (!text) return ''
+    const commentPrefix =
+      text.includes(' License') && text.includes('Copyright (c)') ? '/*' : '/**'
     if (commentStr === ' ') {
-      return `${indent}/**\n\n${commentBlock(
+      return `${indent}${commentPrefix}\n\n${commentBlock(
         text,
         indent,
         commentStr
       )}\n\n${indent} */\n`
     }
-    return `${indent}/**\n${commentBlock(
+    return `${indent}${commentPrefix}\n${commentBlock(
       text,
       indent,
       commentStr

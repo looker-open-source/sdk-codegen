@@ -2,7 +2,7 @@
 
  MIT License
 
- Copyright (c) 2020 Looker Data Sciences, Inc.
+ Copyright (c) 2021 Looker Data Sciences, Inc.
 
  Permission is hereby granted, free of charge, to any person obtaining a copy
  of this software and associated documentation files (the "Software"), to deal
@@ -120,6 +120,23 @@ describe('typescript generator', () => {
 
  line 1
  line 2
+
+ */
+`
+    expect(actual).toEqual(expected)
+  })
+
+  it('license comment header', () => {
+    const text =
+      '\n\nMIT License\n\nCopyright (c) 2021 Looker Data Sciences, Inc.\n\nPermission\n\n\n'
+    let actual = gen.commentHeader('', text, ' ')
+    let expected = `/*
+
+ MIT License
+
+ Copyright (c) 2021 Looker Data Sciences, Inc.
+
+ Permission
 
  */
 `
