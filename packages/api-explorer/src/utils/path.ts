@@ -2,7 +2,7 @@
 
  MIT License
 
- Copyright (c) 2020 Looker Data Sciences, Inc.
+ Copyright (c) 2019 Looker Data Sciences, Inc.
 
  Permission is hereby granted, free of charge, to any person obtaining a copy
  of this software and associated documentation files (the "Software"), to deal
@@ -22,14 +22,6 @@
  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  SOFTWARE.
 
- */
-
-/**
- * Builds a path matching the route used by MethodScene
- * @param methodName A method name
- * @param specKey A string to identify the spec in the URL
- * @param tag Corresponding method tag
- * @returns a Method path
  */
 export const buildMethodPath = (
   specKey: string,
