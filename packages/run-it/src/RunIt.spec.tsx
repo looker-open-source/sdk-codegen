@@ -124,8 +124,12 @@ describe('RunIt', () => {
       expect(screen.getByRole('switch', { name: 'cache' })).toBeInTheDocument()
       expect(screen.getByText('body')).toBeInTheDocument()
       expect(screen.getByRole('button', { name: run })).toBeInTheDocument()
-      expect(screen.queryByRole('button', { name: 'Login' })).toBeNull()
-      expect(screen.queryByRole('button', { name: 'Remove' })).toBeNull()
+      expect(
+        screen.queryByRole('button', { name: 'Login' })
+      ).not.toBeInTheDocument()
+      expect(
+        screen.queryByRole('button', { name: 'Remove' })
+      ).not.toBeInTheDocument()
     })
 
     test('the form submit handler invokes the request callback on submit', async () => {
@@ -155,8 +159,12 @@ describe('RunIt', () => {
     test('it renders ConfigForm', () => {
       renderRunIt()
       expect(screen.getByRole('button', { name: 'Remove' })).toBeInTheDocument()
-      expect(screen.queryByRole('button', { name: run })).toBeNull()
-      expect(screen.queryByRole('button', { name: 'Login' })).toBeNull()
+      expect(
+        screen.queryByRole('button', { name: run })
+      ).not.toBeInTheDocument()
+      expect(
+        screen.queryByRole('button', { name: 'Login' })
+      ).not.toBeInTheDocument()
     })
   })
 
@@ -172,8 +180,12 @@ describe('RunIt', () => {
     test('it renders LoginForm', () => {
       renderRunIt()
       expect(screen.getByRole('button', { name: 'Login' })).toBeInTheDocument()
-      expect(screen.queryByRole('button', { name: 'Remove' })).toBeNull()
-      expect(screen.queryByRole('button', { name: run })).toBeNull()
+      expect(
+        screen.queryByRole('button', { name: 'Remove' })
+      ).not.toBeInTheDocument()
+      expect(
+        screen.queryByRole('button', { name: run })
+      ).not.toBeInTheDocument()
     })
   })
 })

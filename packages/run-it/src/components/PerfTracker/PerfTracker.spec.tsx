@@ -27,9 +27,9 @@
 import { screen } from '@testing-library/react'
 import { renderWithTheme } from '@looker/components-test-utils'
 import React from 'react'
+import { defaultConfigurator } from '../ConfigForm'
 import { PerfTracker } from './PerfTracker'
 import { LoadTimes, PerfTimings } from './perfUtils'
-import { defaultConfigurator } from '../ConfigForm'
 
 export const mockPerfEntries: LoadTimes[] = [
   new LoadTimes({
@@ -92,19 +92,23 @@ describe('PerfTracker', () => {
     const url = new URL(mockPerfEntries[1].name)
     const path = `${url.pathname}${url.search}`
     expect(screen.getByText(path)).toBeInTheDocument()
-    expect(screen.queryByText('No performance data is loaded')).toBeNull()
+    expect(
+      screen.queryByText('No performance data is loaded')
+    ).not.toBeInTheDocument()
     expect(
       screen.queryByText('Performance timing is not supported in this browser')
-    ).toBeNull()
+    ).not.toBeInTheDocument()
   })
   test('shows a "no data" message with performance but no entries', () => {
     jest.spyOn(PerfTimings.prototype, 'entries').mockReturnValue([])
     PerfTimings.supported = true
     renderWithTheme(<PerfTracker configurator={defaultConfigurator} />)
-    expect(screen.queryByText('No performance data is loaded')).toBeDefined()
+    expect(
+      screen.queryByText('No performance data is loaded')
+    ).toBeInTheDocument()
     expect(
       screen.queryByText('Performance timing is not supported in this browser')
-    ).toBeNull()
+    ).not.toBeInTheDocument()
   })
   describe('performance support', () => {
     const supported = PerfTimings.supported
@@ -118,8 +122,10 @@ describe('PerfTracker', () => {
         screen.queryByText(
           'Performance timing is not supported in this browser'
         )
-      ).toBeDefined()
-      expect(screen.queryByText('No performance data is loaded')).toBeNull()
+      ).toBeInTheDocument()
+      expect(
+        screen.queryByText('No performance data is loaded')
+      ).not.toBeInTheDocument()
     })
   })
 })

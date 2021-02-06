@@ -40,6 +40,7 @@ describe('ExploreProperty', () => {
         renderWithSearchAndRouter(<ExplorePropertyDetail property={property} />)
         expect(property.deprecated).toEqual(false)
         expect(property.readOnly).toEqual(true)
+        // eslint-disable-next-line jest-dom/prefer-required
         expect(property.required).toEqual(false)
         expect(screen.getByText(property.description)).toBeInTheDocument()
         await waitFor(() => {
@@ -56,6 +57,7 @@ describe('ExploreProperty', () => {
         renderWithSearchAndRouter(<ExplorePropertyDetail property={property} />)
         expect(property.deprecated).toEqual(false)
         expect(property.readOnly).toEqual(false)
+        // eslint-disable-next-line jest-dom/prefer-required
         expect(property.required).toEqual(true)
         expect(screen.getByText(property.description)).toBeInTheDocument()
         await waitFor(() => {

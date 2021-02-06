@@ -32,11 +32,11 @@ import { lockProjects } from '../../data/projects/actions'
 import { isLoadingState } from '../../data/common/selectors'
 import { Loading } from '../../components/Loading'
 import { Routes } from '../../routes/AppRouter'
-import { ProjectList } from './components'
 import {
   getCurrentHackathonState,
   getHackerState,
 } from '../../data/hack_session/selectors'
+import { ProjectList } from './components'
 
 interface ProjectSceneProps {}
 

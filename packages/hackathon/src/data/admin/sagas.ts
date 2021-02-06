@@ -24,6 +24,7 @@
 
  */
 import { all, call, put, takeEvery } from 'redux-saga/effects'
+import { ValidationMessages } from '@looker/components'
 import { getCore40SDK } from '@looker/extension-sdk-react'
 import { getExtensionSDK } from '@looker/extension-sdk'
 import { IUserAttribute } from '@looker/sdk'
@@ -35,7 +36,6 @@ import {
   saveUserAttributesRequest,
   saveUserAttributesResponse,
 } from './actions'
-import { ValidationMessages } from '@looker/components'
 
 const findUserAttributeValue = (
   name: string,

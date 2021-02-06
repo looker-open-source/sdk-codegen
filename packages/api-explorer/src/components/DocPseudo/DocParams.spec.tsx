@@ -32,8 +32,9 @@ import { DocParams } from './DocParams'
 
 describe('DocParams', () => {
   test('it works when method only has required params', () => {
-    const params = api.methods['create_connection'].allParams
+    const params = api.methods.create_connection.allParams
     expect(params).toHaveLength(1)
+    // eslint-disable-next-line jest-dom/prefer-required
     expect(params[0]).toHaveProperty('required', true)
 
     renderWithTheme(<DocParams parameters={params} />)
@@ -41,8 +42,9 @@ describe('DocParams', () => {
   })
 
   test('it works when method only has optional params', () => {
-    const params = api.methods['me'].allParams
+    const params = api.methods.me.allParams
     expect(params).toHaveLength(1)
+    // eslint-disable-next-line jest-dom/prefer-required
     expect(params[0]).toHaveProperty('required', false)
 
     renderWithTheme(<DocParams parameters={params} />)
@@ -50,7 +52,7 @@ describe('DocParams', () => {
   })
 
   test('it works when method has both required and optional params', () => {
-    const params = api.methods['user'].allParams
+    const params = api.methods.user.allParams
     const requiredParams = params.filter((param) => param.required)
     const optionalParams = params.filter((param) => !param.required)
     expect(requiredParams).toHaveLength(1)

@@ -349,9 +349,11 @@ describe('sdkModels', () => {
       expect(type).toBeDefined()
       const actual = apiTestModel.mayGetWriteableType(type)
       expect(actual).toBeDefined()
+      /* eslint-disable jest-dom/prefer-required */
       expect(type.properties.query_id.required).toEqual(true)
       expect(type.properties.result_format.required).toEqual(true)
       expect(type.properties.source.required).toEqual(false)
+      /* eslint-enable jest-dom/prefer-required */
       expect(Object.keys(type.requiredProperties)).toEqual([
         'query_id',
         'result_format',

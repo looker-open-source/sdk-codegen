@@ -26,10 +26,10 @@
 
 import React from 'react'
 import { screen } from '@testing-library/react'
+import { MemoryRouter } from 'react-router-dom'
 import { api } from '../../test-data'
 import { renderWithRouter, renderWithSearchAndRouter } from '../../test-utils'
 import { ExploreType, ExploreTypeLink } from '.'
-import { MemoryRouter } from 'react-router-dom'
 
 describe('ExploreType', () => {
   const targetType = api.types.ColorCollection
@@ -55,8 +55,11 @@ describe('ExploreType', () => {
     )
 
     expect(screen.getByText(targetType.jsonName)).toBeInTheDocument()
+    // eslint-disable-next-line jest-dom/prefer-in-document
     expect(screen.queryAllByText(colors)).toHaveLength(0)
+    // eslint-disable-next-line jest-dom/prefer-in-document
     expect(screen.queryAllByText(stops)).toHaveLength(0)
+    // eslint-disable-next-line jest-dom/prefer-in-document
     expect(screen.queryAllByText(offset)).toHaveLength(0)
   })
 
@@ -68,6 +71,7 @@ describe('ExploreType', () => {
     expect(screen.getByText(targetType.jsonName)).toBeInTheDocument()
     expect(screen.queryAllByText(colors)).toHaveLength(colorsExpected)
     expect(screen.queryAllByText(stops)).toHaveLength(stopsExpected)
+    // eslint-disable-next-line jest-dom/prefer-in-document
     expect(screen.queryAllByText(offset)).toHaveLength(0)
   })
 

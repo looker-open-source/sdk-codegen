@@ -90,7 +90,7 @@ export const projectsReducer = (
         projectUpdated: undefined,
         projectLoaded: false,
       }
-    case Actions.GET_PROJECT_RESPONSE:
+    case Actions.GET_PROJECT_RESPONSE: {
       const { project, isProjectMember } = action.payload
       return {
         ...state,
@@ -98,6 +98,7 @@ export const projectsReducer = (
         isProjectMember,
         projectLoaded: true,
       }
+    }
     case Actions.UPDATE_PROJECT_DATA:
       return {
         ...state,
@@ -109,11 +110,6 @@ export const projectsReducer = (
         currentPageNum: action.payload,
       }
     case Actions.CREATE_PROJECT:
-      return {
-        ...state,
-        validationMessages: undefined,
-      }
-    case Actions.UPDATE_PROJECT_DATA:
       return {
         ...state,
         validationMessages: undefined,

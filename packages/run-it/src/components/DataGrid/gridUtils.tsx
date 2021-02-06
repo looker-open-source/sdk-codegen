@@ -74,10 +74,10 @@ export const gridCellId = (rowId: string, index: number) => `${rowId}.${index}`
  */
 export const gridRows = (data: any[]) => {
   const result: JSX.Element[] = []
-  data.map((row, index) => {
+  data.forEach((row, index) => {
     const id = gridRowId(index)
     const cells: any = []
-    row.map((item: any, index: number) => {
+    row.forEach((item: any, index: number) => {
       const key = gridCellId(id, index)
       const cell = <DataTableCell key={key}>{item}</DataTableCell>
       cells.push(cell)

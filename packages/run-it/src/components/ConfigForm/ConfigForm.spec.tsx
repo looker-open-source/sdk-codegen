@@ -80,7 +80,7 @@ describe('ConfigForm', () => {
         name: 'Save',
       }) as HTMLButtonElement
       expect(button).toBeInTheDocument()
-      expect(button).not.toBeEnabled()
+      expect(button).toBeDisabled()
       expect(screen.getByText(`'bad' is not a valid url`)).toBeInTheDocument()
     })
 
@@ -145,7 +145,7 @@ describe('ConfigForm', () => {
       <ConfigForm title="New title" configurator={defaultConfigurator} />
     )
     const title = screen.getByRole('heading') as HTMLHeadingElement
-    expect(title.textContent).toEqual('New title')
+    expect(title).toHaveTextContent('New title')
   })
 
   test('it gets config from local storage', async () => {

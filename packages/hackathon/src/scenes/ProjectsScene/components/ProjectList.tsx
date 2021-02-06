@@ -42,10 +42,10 @@ import {
   getHackerState,
   getProjectsHeadings,
 } from '../../../data/hack_session/selectors'
-import { deleteProject } from '../../../data/projects/actions'
 import { canDoProjectAction } from '../../../utils'
 import { PAGE_SIZE } from '../../../constants'
 import {
+  deleteProject,
   currentProjectsRequest,
   updateProjectsPageNum,
   setMoreInfo,

@@ -39,6 +39,7 @@ twice! Query, again!
       expect(markers).toBeDefined()
       expect(markers.length).toEqual(2)
       let mark = markers[0]
+      // eslint-disable-next-line jest-dom/prefer-to-have-class
       expect(mark.className).toEqual('codeMarker')
       expect(mark.startCol).toEqual(6)
       expect(mark.endCol).toEqual(6 + 5)

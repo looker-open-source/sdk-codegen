@@ -41,8 +41,8 @@ import {
   getStaffState,
   getHackersPageNumState,
 } from '../../data/hackers/selectors'
-import { HackerList } from './components/HackerList'
 import { getTabInfo } from '../../utils'
+import { HackerList } from './components/HackerList'
 
 interface UsersSceneProps {}
 
