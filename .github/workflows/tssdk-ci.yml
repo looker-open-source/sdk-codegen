@@ -73,6 +73,7 @@ jobs:
       - name: Install dependencies
         run: |
           yarn
+          yarn lint:es
           yarn build
 
       - name: Mock looker.ini
