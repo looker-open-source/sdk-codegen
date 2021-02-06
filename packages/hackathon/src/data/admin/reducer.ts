@@ -65,13 +65,14 @@ export const adminReducer = (
         ...state,
         validationMessages: undefined,
       }
-    case Actions.SAVE_USER_ATTRIBUTES_RESPONSE:
+    case Actions.SAVE_USER_ATTRIBUTES_RESPONSE: {
       const { adminUserAttributes, validationMessages } = action.payload
       return {
         ...state,
         adminUserAttributes,
         validationMessages,
       }
+    }
     default:
       return state
   }

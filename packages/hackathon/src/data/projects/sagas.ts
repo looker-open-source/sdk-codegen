@@ -93,7 +93,7 @@ function* getProjectSaga({ payload: projectId }: GetProjectRequestAction) {
       yield put(getProjectResponse(createNewProject(), false))
     } else {
       // Pull prpjects out of state.
-      let state = yield select()
+      const state = yield select()
       let projects = getCurrentProjectsState(state)
       if (projects.length === 0) {
         // projects are lost on page reload so load them
@@ -123,8 +123,8 @@ function* createProjectSaga(action: CreateProjectAction) {
       [sheetsClient, sheetsClient.validateProject],
       project
     )
-    let state = yield select()
-    let isProjectMember = getIsProjectMemberState(state)
+    const state = yield select()
+    const isProjectMember = getIsProjectMemberState(state)
     if (validationMessages) {
       yield put(
         saveProjectResponse(project, isProjectMember, validationMessages)
@@ -161,8 +161,8 @@ function* updateProjectSaga(action: UpdateProjectAction) {
       [sheetsClient, sheetsClient.validateProject],
       project
     )
-    let state = yield select()
-    let isProjectMember = getIsProjectMemberState(state)
+    const state = yield select()
+    const isProjectMember = getIsProjectMemberState(state)
     if (validationMessages) {
       yield put(
         saveProjectResponse(project, isProjectMember, validationMessages)
@@ -230,8 +230,8 @@ function* lockProjectSaga(action: LockProjectAction) {
   try {
     const { lock, projectId } = action.payload
     yield put(beginLoading())
-    let state = yield select()
-    let isProjectMember = getIsProjectMemberState(state)
+    const state = yield select()
+    const isProjectMember = getIsProjectMemberState(state)
     yield call([sheetsClient, sheetsClient.lockProject], lock, projectId)
     const updatedProject = yield call(
       [sheetsClient, sheetsClient.getProject],

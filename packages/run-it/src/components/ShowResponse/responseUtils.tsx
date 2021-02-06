@@ -152,8 +152,7 @@ export const responseHandlers: Responder[] = [
   // TODO: Add support for content type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet and pdf
   {
     label: 'json',
-    isRecognized: (contentType) =>
-      RegExp(/application\/json/g).test(contentType),
+    isRecognized: (contentType) => /application\/json/g.test(contentType),
     component: (response) => ShowJSON(response),
   },
   {
@@ -170,14 +169,13 @@ export const responseHandlers: Responder[] = [
   {
     label: 'img',
     isRecognized: (contentType) =>
-      RegExp(/image\/(png|jpg|jpeg|svg\+xml)/).test(contentType),
+      /image\/(png|jpg|jpeg|svg\+xml)/.test(contentType),
     component: (response) => ShowImage(response),
   },
   {
     // render task: 9d52f842b2c3f474970123302b2fa7e0
     label: 'pdf',
-    isRecognized: (contentType) =>
-      RegExp(/application\/pdf/g).test(contentType),
+    isRecognized: (contentType) => /application\/pdf/g.test(contentType),
     component: (response) => ShowPDF(response),
   },
   {

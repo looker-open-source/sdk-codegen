@@ -158,7 +158,7 @@ export const openApiFileName = (name: string, props: ISDKConfigProps) =>
  * @param {string | object} content response to check
  * @returns {boolean} True if there's an authentication error
  */
-const badAuth = (content: string | object) => {
+const badAuth = (content: string | Record<string, unknown>) => {
   const text = typeof content === 'object' ? JSON.stringify(content) : content
   return text.indexOf('Requires authentication') > 0
 }
@@ -305,7 +305,10 @@ export const fetchLookerVersion = async (
  * @param {object | string} content to convert to a JSON string
  * @returns {string} name of file written
  */
-export const writeSpecFile = (specFile: string, content: object | string) => {
+export const writeSpecFile = (
+  specFile: string,
+  content: Record<string, unknown> | string
+) => {
   const data = typeof content === 'string' ? content : JSON.stringify(content)
   if (!isDirSync(specPath)) fs.mkdirSync(specPath, { recursive: true })
   fs.writeFileSync(specFile, data, utf8Encoding)

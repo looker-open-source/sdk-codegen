@@ -90,6 +90,7 @@ describe('TagScene', () => {
     /** Filter by DELETE operation */
     userEvent.click(screen.getByRole('button', { name: 'DELETE' }))
     await waitFor(() => {
+      // eslint-disable-next-line jest-dom/prefer-in-document
       expect(screen.getAllByText(allLookMethods)).toHaveLength(1)
     })
     /** Restore original state */

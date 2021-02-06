@@ -27,8 +27,8 @@ import React, { FC, useEffect } from 'react'
 import { TabList, Tab, TabPanels, TabPanel } from '@looker/components'
 import { useHistory, useRouteMatch } from 'react-router-dom'
 import { Routes } from '../../routes/AppRouter'
-import { UserAttributes } from './components/UserAttributes'
 import { getTabInfo } from '../../utils'
+import { UserAttributes } from './components/UserAttributes'
 
 const tabnames = ['general', 'config']
 

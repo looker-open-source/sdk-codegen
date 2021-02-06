@@ -54,10 +54,11 @@ describe('SideNav', () => {
     expect(screen.getAllByText(allTagsPattern)).toHaveLength(2)
     expect(
       screen.queryAllByRole('link', { name: allTypesPattern })
-    ).toHaveLength(0)
+    ).toHaveLength(0) // eslint-disable-line jest-dom/prefer-in-document
 
     userEvent.click(screen.getByRole('tab', { name: /^Types$/ }))
 
+    // eslint-disable-next-line jest-dom/prefer-in-document
     expect(screen.queryAllByText(allTagsPattern)).toHaveLength(0)
     expect(screen.getAllByRole('link', { name: allTypesPattern })).toHaveLength(
       2
@@ -66,6 +67,7 @@ describe('SideNav', () => {
 
   test('url determines active tab', () => {
     renderWithRouter(<SideNav api={api} specKey={'3.1'} />, ['/3.1/types'])
+    // eslint-disable-next-line jest-dom/prefer-in-document
     expect(screen.queryAllByText(allTagsPattern)).toHaveLength(0)
     expect(screen.getAllByRole('link', { name: allTypesPattern })).toHaveLength(
       2

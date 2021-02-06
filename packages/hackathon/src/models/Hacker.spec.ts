@@ -24,6 +24,7 @@
 
  */
 import path from 'path'
+// eslint-disable-next-line import/no-extraneous-dependencies
 import { NodeSettingsIniFile, LookerNodeSDK } from '@looker/sdk-node'
 import { Hacker } from './Hacker'
 

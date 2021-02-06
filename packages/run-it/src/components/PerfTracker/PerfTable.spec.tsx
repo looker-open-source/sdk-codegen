@@ -52,9 +52,9 @@ describe('PerfTable', () => {
   })
   test('it skips some columns by default', () => {
     renderWithTheme(<PerfTable onSelect={mockSelect} data={mockPerfEntries} />)
-    expect(screen.queryByText(/Domain/i)).toBeNull()
-    expect(screen.queryByText(/Connect/i)).toBeNull()
-    expect(screen.queryByText(/Secure/i)).toBeNull()
+    expect(screen.queryByText(/Domain/i)).not.toBeInTheDocument()
+    expect(screen.queryByText(/Connect/i)).not.toBeInTheDocument()
+    expect(screen.queryByText(/Secure/i)).not.toBeInTheDocument()
 
     // Check the partial url is in PerfTable
     const url = new URL(mockPerfEntries[1].name)

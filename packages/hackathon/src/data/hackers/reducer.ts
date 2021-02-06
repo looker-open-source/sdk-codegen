@@ -47,7 +47,7 @@ export const hackersReducer = (
   action: HackerAction
 ): HackersState => {
   switch (action.type) {
-    case Actions.ALL_HACKERS_RESPONSE:
+    case Actions.ALL_HACKERS_RESPONSE: {
       const { hackers, staff, admins, judges } = action.payload
       return {
         ...state,
@@ -56,6 +56,7 @@ export const hackersReducer = (
         staff,
         admins,
       }
+    }
     case Actions.UPDATE_HACKERS_PAGE_NUM:
       return {
         ...state,

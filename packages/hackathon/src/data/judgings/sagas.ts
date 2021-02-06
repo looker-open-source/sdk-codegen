@@ -54,7 +54,7 @@ function* getJudgingsSaga() {
 function* getJudgingSaga({ payload: judgingId }: GetJudgingRequestAction) {
   try {
     // Pull judging out of state.
-    let state = yield select()
+    const state = yield select()
     let judgings = getJudgingsState(state)
     if (judgings.length === 0) {
       // judgings are lost on page reload so load them

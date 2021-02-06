@@ -121,13 +121,13 @@ export interface IRowModel extends IRowModelProps {
   typeCast(key: string, value: any): any
 
   /** Converts instance to plain javascript object */
-  toObject(): object
+  toObject(): Record<string, unknown>
 
   /**
    * Converts from plain javascript object to class instance
    * @param obj to assign to row. Uses properties of the same name
    */
-  fromObject(obj: object): IRowModel
+  fromObject(obj: Record<string, unknown>): IRowModel
 
   /** Mark a row for update. Sets the $action and returns true if the row can be marked for updating */
   setUpdate(): boolean
@@ -275,11 +275,11 @@ export class RowModel<T extends IRowModel> implements IRowModel {
     return undefined
   }
 
-  toObject(): object {
+  toObject(): Record<string, unknown> {
     return omit({ ...this }, ['$_action'])
   }
 
-  fromObject(obj: object): IRowModel {
+  fromObject(obj: Record<string, unknown>): IRowModel {
     return this.assign(obj)
   }
 }

@@ -33,8 +33,8 @@ import {
   getJudgingState,
   getJudgingLoadedState,
 } from '../../data/judgings/selectors'
-import { JudgingForm } from './components'
 import { canJudge } from '../../utils'
+import { JudgingForm } from './components'
 
 export const JudgingEditorScene: FC = () => {
   const dispatch = useDispatch()

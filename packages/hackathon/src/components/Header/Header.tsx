@@ -31,5 +31,12 @@ export interface HeaderProps {
 }
 
 export const Header: FC<HeaderProps> = ({ text }) => (
-  <Heading style={{position: "relative"}} fontSize="xxxxlarge" textAlign="center" py="large">{text}</Heading>
+  <Heading
+    style={{ position: 'relative' }}
+    fontSize="xxxxlarge"
+    textAlign="center"
+    py="large"
+  >
+    {text}
+  </Heading>
 )

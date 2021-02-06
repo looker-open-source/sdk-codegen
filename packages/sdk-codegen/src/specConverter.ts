@@ -500,7 +500,7 @@ export const upgradeSpecObject = (spec: any) => {
  * Upgrade a spec to OpenAPI if it's not already an OpenAPI spec
  * @param spec to upgrade
  */
-export const upgradeSpec = (spec: string | object) => {
+export const upgradeSpec = (spec: string | Record<string, unknown>) => {
   if (typeof spec === 'string') spec = JSON.parse(spec)
   return JSON.stringify(upgradeSpecObject(spec))
 }

@@ -31,7 +31,7 @@ import { api } from '../../test-data'
 import { DocPseudo } from './DocPseudo'
 
 describe('DocPseudo', () => {
-  const method = api.methods['create_dashboard_filter']
+  const method = api.methods.create_dashboard_filter
 
   test('it renders', () => {
     renderWithTheme(<DocPseudo method={method} />)
