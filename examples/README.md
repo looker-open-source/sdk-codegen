@@ -8,7 +8,7 @@ This is a constantly-evolving repository, where examples could change, appear, a
 
 To simplify configuring API credential information for the examples, most of the examples use a `looker.ini` file in the root directory of this repository. It can be exactly the same as the configuration file used for the SDK code generator.
 
-See [Configuring `looker.ini`](../../README.md#configuring-lookerini) for help with configuring your Looker server and API credentials.
+See [Configuring `looker.ini`](/README.md#configuring-lookerini-or-env) for help with configuring your Looker server and API credentials.
 
 ## Please contribute
 
