@@ -27,7 +27,7 @@ class TestAsync {
 //        return Pair(dashLimit.toLong(), lookLimit.toLong())
 //    }
 //
-//    @test
+//    @Test
 //    fun testRecentParallel() {
 //        val limits = listLimits()
 //        runBlocking {
@@ -49,7 +49,7 @@ class TestAsync {
 //        Pair(recentDashboards, recentLooks)
 //    }
 //
-//    @test
+//    @Test
 //    fun testRecentSerial() {
 //        val limits = listLimits()
 //        runBlocking {

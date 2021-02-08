@@ -133,7 +133,7 @@ const writeFile = (fileName: string, content: string): string => {
         }
         if (api !== lastApi && !gen.supportsMultiApi()) {
           danger(
-            `skipping API ${api} for ${language} because it doesn't support multiple APIs`
+            `skipping API ${api} for ${language} because it doesn't support multiple API versions`
           )
           continue
         }

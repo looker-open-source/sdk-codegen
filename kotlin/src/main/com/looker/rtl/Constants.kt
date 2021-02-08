@@ -31,23 +31,16 @@ import java.time.ZonedDateTime
 import java.time.format.DateTimeFormatter
 import java.util.*
 
-const val ENVIRONMENT_PREFIX = "LOOKERSDK"
-const val LOOKER_VERSION = "21.0"
-const val API_VERSION = "4.0"
-const val SDK_VERSION = "$API_VERSION.$LOOKER_VERSION"
-const val AGENT_TAG = "KT-SDK $SDK_VERSION"
-const val LOOKER_APPID = "x-looker-appid"
-
 const val MATCH_CHARSET = ";.*charset="
 const val MATCH_CHARSET_UTF8 = """$MATCH_CHARSET.*\butf-8\b"""
-const val MATCH_MODE_STRING = """(^application\/.*(\bjson\b|\bxml\b|\bsql\b|\bgraphql\b|\bjavascript\b|\bx-www-form-urlencoded\b)|^text\/|.*\+xml\b|$MATCH_CHARSET)"""
-const val MATCH_MODE_BINARY = """^image\/|^audio\/|^video\/|^font\/|^application\/|^multipart\/"""
+const val MATCH_MODE_STRING = """(^application/.*(\bjson\b|\bxml\b|\bsql\b|\bgraphql\b|\bjavascript\b|\bx-www-form-urlencoded\b)|^text/|.*\+xml\b|$MATCH_CHARSET)"""
+const val MATCH_MODE_BINARY = """^image/|^audio/|^video/|^font/|^application/|^multipart/"""
 
 val StringMatch = Regex(MATCH_MODE_STRING, RegexOption.IGNORE_CASE)
 val BinaryMatch = Regex(MATCH_MODE_BINARY, RegexOption.IGNORE_CASE)
 
 const val DEFAULT_TIMEOUT = 120
-const val DEFAULT_API_VERSION = "4.0" // Kotlin requires API 4.0
+const val DEFAULT_API_VERSION = "4.0" // Kotlin requires at least API 4.0
 
 typealias Values = Map<String, Any?>
 
@@ -118,4 +111,13 @@ internal fun Date(utcDateTime: String): Date {
     val utcFormat = SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'")
     utcFormat.timeZone = TimeZone.getTimeZone("UTC")
     return utcFormat.parse(utcDateTime)
+}
+
+/** Loads environment variables into system properties */
+fun loadEnvironment(): Map<String, String> {
+    // TODO get dotenv working for .env file loading https://github.com/cdimascio/dotenv-kotlin
+
+    val envMap = System.getenv()
+    for ((key, value) in envMap) System.setProperty(key, value)
+    return envMap
 }

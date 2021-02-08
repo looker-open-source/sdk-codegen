@@ -48,7 +48,7 @@ class OAuthSession(override val apiSettings: ConfigurationProvider, override val
         val response = this.transport.request<AccessToken>(
             HttpMethod.POST,
             "/api/token",
-            mapOf(),
+            emptyMap(),
             body
         )
         val token = this.ok<AccessToken>(response)

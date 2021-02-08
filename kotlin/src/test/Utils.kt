@@ -25,7 +25,9 @@
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
 import com.looker.rtl.*
+import com.looker.sdk.ApiSettings
 import com.looker.sdk.LookerSDK
+import com.looker.sdk.apiConfig
 import io.ktor.client.HttpClient
 import java.io.File
 
@@ -40,18 +42,20 @@ class TestSettingsIniFile(
 ) : ConfigurationProvider by base {
 
     override fun readConfig(): Map<String, String> {
-        var map = base.readConfig().toMutableMap()
-        map["client_id"] = "test_client_id"
-        map["redirect_uri"] = "looker://"
-        return map
+        return base.readConfig().plus(
+            mapOf(
+                "client_id" to "test_client_id",
+                "redirect_uri" to "looker://"
+            ))
     }
 }
 
 open class TestConfig() {
+    val env = loadEnvironment()
     val rootPath: String = File("./").absoluteFile.parentFile.parentFile.absolutePath
     val testPath = "$rootPath/test"
     val dataFile = testFile("data.yml.json")
-    val envIni = System.getenv("LOOKERSDK_INI")
+    val envIni = System.getProperty("LOOKERSDK_INI")
     val localIni = if (envIni === null) rootFile("looker.ini") else envIni
     private val gson = Gson()
     private val dataContents = File(dataFile).readText()
@@ -79,11 +83,10 @@ open class TestConfig() {
     }
 
     fun testSettings(options: TransportOptions): TransportOptions {
-        var result = options
         // Set timeout to 120 seconds
-        result.timeout = 120
-        result.verifySSL = false
-        return result
+        options.timeout = 120
+        options.verifySSL = false
+        return options
     }
 
     /**

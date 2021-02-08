@@ -22,14 +22,20 @@
  * THE SOFTWARE.
  */
 
-package com.looker.rtl
+package com.looker.sdk
 
+import com.looker.rtl.*
 import org.ini4j.Ini
 import java.io.ByteArrayInputStream
 import java.io.File
 
+
+/** Structure read from an .INI file */
 typealias ApiSections = Map<String, Map<String, String>>
 
+/**
+ * Parse and cleanup something that looks like an .INI file, stripping outermost quotes for values
+ */
 fun apiConfig(contents: String): ApiSections {
     val iniParser = Ini(ByteArrayInputStream(contents.toByteArray()))
 
@@ -49,60 +55,69 @@ open class ApiSettings(val rawReadConfig: () -> Map<String, String>) : Configura
 
     companion object {
         fun fromIniFile(filename: String = "./looker.ini", section: String = ""): ConfigurationProvider {
-            return ApiSettings({
-                val file = File(filename)
-                if (!file.exists()) {
-                    mapOf()
-                } else {
-                    val contents = file.readText()
-                    val config = apiConfig(contents)
-                    val selectedSection = if (!section.isBlank()) section else config.keys.first()
-                    config[selectedSection] ?: mapOf()
-                }
-            })
+            val file = File(filename)
+            return if (!file.exists()) {
+                fromMap( emptyMap() )
+            } else {
+                val contents = file.readText()
+                fromIniText(contents, section)
+            }
         }
 
         fun fromIniText(contents: String, section: String = ""): ConfigurationProvider {
             val config = apiConfig(contents)
-            val first_section = if (!section.isBlank()) section else config.keys.first()
+            val firstSection = if (section.isNotBlank()) section else config.keys.first()
 
-            val settings = config[first_section]
+            val settings = config[firstSection]
             if (settings.isNullOrEmpty()) {
-                throw Error("No section named '$first_section' was found")
+                throw Error("No section named '$firstSection' was found")
             }
 
-            return ApiSettings({ settings })
+            return ApiSettings { settings }
         }
 
         fun fromMap(config: Map<String, String>): ConfigurationProvider {
-            return ApiSettings({ config })
+            return ApiSettings { config }
         }
     }
 
     override var baseUrl: String = ""
-    override var apiVersion: String = DEFAULT_API_VERSION
+    override var environmentPrefix: String = ENVIRONMENT_PREFIX
+    override var apiVersion: String = API_VERSION
+    override var headers: Map<String, String> = mapOf(LOOKER_APPID to AGENT_TAG, "User-Agent" to AGENT_TAG)
     override var verifySSL: Boolean = true
     override var timeout: Int = DEFAULT_TIMEOUT
-    override var headers: Map<String, String> = mapOf()
+
+    private val keyBaseUrl: String = "base_url"
+    private val keyApiVersion: String = "api_version"
+    private val keyEnvironmentPrefix: String = "environmentPrefix"
+    private val keyVerifySSL: String = "verify_ssl"
+    private val keyTimeout: String = "timeout"
 
     init {
-        val settings = rawReadConfig()
+        val settings = this.readConfig()
 
         // Only replace the current values if new values are provided
-        settings["base_url"].let { value ->
+        settings[keyBaseUrl].let { value ->
             baseUrl = unQuote(value ?: baseUrl)
         }
 
-        settings["api_version"].let { value ->
+        settings[keyApiVersion].let { value ->
             apiVersion = unQuote(value ?: apiVersion)
         }
 
-        settings["verify_ssl"].let { value ->
+        settings[keyEnvironmentPrefix].let { value ->
+            environmentPrefix = unQuote(value ?: environmentPrefix)
+        }
+
+        settings[keyVerifySSL].let { value ->
             verifySSL = asBoolean(value) ?: verifySSL
         }
-        settings["timeout"].let { value ->
+
+        settings[keyTimeout].let { value ->
             timeout = if (value !== null) value.toInt() else timeout
         }
+
     }
 
     override fun isConfigured(): Boolean {
@@ -110,15 +125,30 @@ open class ApiSettings(val rawReadConfig: () -> Map<String, String>) : Configura
     }
 
     override fun readConfig(): Map<String, String> {
-        // Merge any provided settings with the calculated values for the TransportOptions
-        return rawReadConfig().plus(
-            mapOf(
-                "base_url" to baseUrl,
-                "api_version" to apiVersion,
-                "verify_ssl" to verifySSL.toString(),
-                "timeout" to timeout.toString(),
+        // Load environment variables and possibly overwrite with explicitly declared map values
+        val rawMap = readEnvironment().plus(rawReadConfig())
+        return mapOf(
+                keyBaseUrl to baseUrl,
+                keyApiVersion to apiVersion,
+                keyEnvironmentPrefix to environmentPrefix,
+                keyVerifySSL to verifySSL.toString(),
+                keyTimeout to timeout.toString(),
                 "headers" to headers.toString()
-            )
-        )
+            ).plus(rawMap)
+    }
+
+    private fun addSystemProperty(map: MutableMap<String,String>, key: String) {
+        System.getProperty("${environmentPrefix}_${key.toUpperCase()}").let { value ->
+            if (value !== null && value.isNotEmpty()) map[key] = value
+        }
+    }
+
+    private fun readEnvironment(): Map<String, String> {
+        val map = HashMap<String, String>()
+        addSystemProperty(map, keyBaseUrl)
+        addSystemProperty(map, keyApiVersion)
+        addSystemProperty(map, keyVerifySSL)
+        addSystemProperty(map, keyTimeout)
+        return map.toMap()
     }
 }
