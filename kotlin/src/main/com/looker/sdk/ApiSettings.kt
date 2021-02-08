@@ -25,7 +25,27 @@
 package com.looker.sdk
 
 import com.looker.rtl.*
+import org.ini4j.Ini
+import java.io.ByteArrayInputStream
 import java.io.File
+
+
+/** Structure read from an .INI file */
+typealias ApiSections = Map<String, Map<String, String>>
+
+/**
+ * Parse and cleanup something that looks like an .INI file, stripping outermost quotes for values
+ */
+fun apiConfig(contents: String): ApiSections {
+    val iniParser = Ini(ByteArrayInputStream(contents.toByteArray()))
+
+    val ret = mutableMapOf<String, Map<String, String>>()
+    iniParser.forEach { (section, values) ->
+        ret[section] = values.map { it.key to unQuote(it.value) }.toMap()
+    }
+
+    return ret
+}
 
 // TODO why no @JvmOverloads here?
 // This takes a function returning a map so that the fromIniFile constructor
@@ -107,7 +127,6 @@ open class ApiSettings(val rawReadConfig: () -> Map<String, String>) : Configura
     override fun readConfig(): Map<String, String> {
         // Load environment variables and possibly overwrite with explicitly declared map values
         val rawMap = readEnvironment().plus(rawReadConfig())
-        // TODO environment variables must overwrite or append to rawMap values
         return mapOf(
                 keyBaseUrl to baseUrl,
                 keyApiVersion to apiVersion,

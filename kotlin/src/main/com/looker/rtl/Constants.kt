@@ -26,8 +26,6 @@
 
 package com.looker.rtl
 
-import org.ini4j.Ini
-import java.io.ByteArrayInputStream
 import java.text.SimpleDateFormat
 import java.time.ZonedDateTime
 import java.time.format.DateTimeFormatter
@@ -35,8 +33,8 @@ import java.util.*
 
 const val MATCH_CHARSET = ";.*charset="
 const val MATCH_CHARSET_UTF8 = """$MATCH_CHARSET.*\butf-8\b"""
-const val MATCH_MODE_STRING = """(^application\/.*(\bjson\b|\bxml\b|\bsql\b|\bgraphql\b|\bjavascript\b|\bx-www-form-urlencoded\b)|^text\/|.*\+xml\b|$MATCH_CHARSET)"""
-const val MATCH_MODE_BINARY = """^image\/|^audio\/|^video\/|^font\/|^application\/|^multipart\/"""
+const val MATCH_MODE_STRING = """(^application/.*(\bjson\b|\bxml\b|\bsql\b|\bgraphql\b|\bjavascript\b|\bx-www-form-urlencoded\b)|^text/|.*\+xml\b|$MATCH_CHARSET)"""
+const val MATCH_MODE_BINARY = """^image/|^audio/|^video/|^font/|^application/|^multipart/"""
 
 val StringMatch = Regex(MATCH_MODE_STRING, RegexOption.IGNORE_CASE)
 val BinaryMatch = Regex(MATCH_MODE_BINARY, RegexOption.IGNORE_CASE)
@@ -113,23 +111,6 @@ internal fun Date(utcDateTime: String): Date {
     val utcFormat = SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'")
     utcFormat.timeZone = TimeZone.getTimeZone("UTC")
     return utcFormat.parse(utcDateTime)
-}
-
-/** Structure read from an .INI file */
-typealias ApiSections = Map<String, Map<String, String>>
-
-/**
- * Parse and cleanup something that looks like an .INI file, stripping outermost quotes for values
- */
-fun apiConfig(contents: String): ApiSections {
-    val iniParser = Ini(ByteArrayInputStream(contents.toByteArray()))
-
-    val ret = mutableMapOf<String, Map<String, String>>()
-    iniParser.forEach { (section, values) ->
-        ret[section] = values.map { it.key to unQuote(it.value) }.toMap()
-    }
-
-    return ret
 }
 
 /** Loads environment variables into system properties */

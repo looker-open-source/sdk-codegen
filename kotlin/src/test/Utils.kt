@@ -27,6 +27,7 @@ import com.google.gson.reflect.TypeToken
 import com.looker.rtl.*
 import com.looker.sdk.ApiSettings
 import com.looker.sdk.LookerSDK
+import com.looker.sdk.apiConfig
 import io.ktor.client.HttpClient
 import java.io.File
 
