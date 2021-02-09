@@ -28,6 +28,6 @@
     "codegen"
   ],
   "scripts": {
-    "watch": "yarn lerna exec --scope @looker/sdk-codegen-utils --stream 'BABEL_ENV=build babel src --root-mode upward --out-dir lib --source-maps --extensions .ts,.tsx --no-comments --watch'"
+    "watch": "yarn lerna exec --scope @looker/sdk-codegen-utils --stream 'BABEL_ENV=build babel src --root-mode upward --out-dir lib/esm --source-maps --extensions .ts,.tsx --no-comments --watch'"
   }
 }

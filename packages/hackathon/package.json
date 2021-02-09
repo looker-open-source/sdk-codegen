@@ -30,7 +30,7 @@
   "scripts": {
     "bundle": "tsc && webpack --config webpack.prod.config.js",
     "develop": "webpack-dev-server --hot --disable-host-check --port 8080 --https --config webpack.dev.config.js",
-    "watch": "yarn lerna exec --scope @looker/wholly-sheet --stream 'BABEL_ENV=build babel src --root-mode upward --out-dir lib --source-maps --extensions .ts,.tsx --no-comments --watch'"
+    "watch": "yarn lerna exec --scope @looker/wholly-sheet --stream 'BABEL_ENV=build babel src --root-mode upward --out-dir lib/esm --source-maps --extensions .ts,.tsx --no-comments --watch'"
   },
   "dependencies": {
     "@looker/components": "^0.9.30",

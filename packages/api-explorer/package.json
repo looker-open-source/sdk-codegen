@@ -22,7 +22,7 @@
     "develop": "webpack-dev-server --host=0.0.0.0 --disable-host-check --config webpack.dev.config.js",
     "docs": "typedoc --mode file --out docs",
     "register": "SUPPRESS_NO_CONFIG_WARNING=1 ts-node -O '{ \"module\": \"commonjs\", \"target\": \"es2019\" }' scripts/register.ts",
-    "watch": "yarn lerna exec --scope @looker/api-explorer --stream 'BABEL_ENV=build babel src --root-mode upward --out-dir lib --source-maps --extensions .ts,.tsx --no-comments --watch'"
+    "watch": "yarn lerna exec --scope @looker/api-explorer --stream 'BABEL_ENV=build babel src --root-mode upward --out-dir lib/esm --source-maps --extensions .ts,.tsx --no-comments --watch'"
   },
   "devDependencies": {
     "@looker/components-test-utils": "^0.9.29",
