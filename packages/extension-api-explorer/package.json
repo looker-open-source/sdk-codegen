@@ -5,7 +5,7 @@
   "main": "esm/index.js",
   "license": "MIT",
   "private": true,
-  "homepage": "https://github.com/looker-open-source/sdk-codegen/tree/master/packages/extension-api-explorer",
+  "homepage": "https://github.com/looker-open-source/sdk-codegen/tree/main/packages/extension-api-explorer",
   "scripts": {
     "bundle": "tsc && webpack --config webpack.prod.config.js",
     "deploy": "bin/deploy",

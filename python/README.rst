@@ -42,7 +42,7 @@ Go from installation all the way to creating a functional micro-application in t
 *This tutorial is hosted in Google Colaboratory, an interactive online notebook. You can follow along right in the notebook by clicking the button below.*
 
 .. image:: https://colab.research.google.com/assets/colab-badge.svg
-   :target: https://colab.research.google.com/github/looker-open-source/sdk-codegen/blob/master/python/python-sdk-tutorial.ipynb
+   :target: https://colab.research.google.com/github/looker-open-source/sdk-codegen/blob/main/python/python-sdk-tutorial.ipynb
 
 
 Sample project setup
@@ -103,7 +103,7 @@ as setting environment variables <https://github.com/looker-open-source/sdk-code
 **Note**: The ``.ini`` configuration for the Looker SDK is a sample
 implementation intended to speed up the initial development of python
 applications using the Looker API. See this note on
-`Securing your SDK Credentials <https://github.com/looker-open-source/sdk-codegen/blob/master/README.md#securing-your-sdk-credentials>`_
+`Securing your SDK Credentials <https://github.com/looker-open-source/sdk-codegen/blob/main/README.md#securing-your-sdk-credentials>`_
 for warnings about using ``.ini`` files that contain your
 API credentials in a source code repository or production environment.
 
@@ -133,8 +133,8 @@ For any ``.ini`` setting you can use an environment variable instead. It takes t
 
 Code example
 ============
-`See many python sdk examples in our examples repo <https://github.com/looker-open-source/sdk-codegen/tree/master/examples/python>`_
+`See many python sdk examples in our examples repo <https://github.com/looker-open-source/sdk-codegen/tree/main/examples/python>`_
 
 Changelog
 ============
-`Located in our github repo <https://github.com/looker-open-source/sdk-codegen/tree/master/python/CHANGELOG.md>`_
+`Located in our github repo <https://github.com/looker-open-source/sdk-codegen/tree/main/python/CHANGELOG.md>`_
