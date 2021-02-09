@@ -15,7 +15,7 @@ on:
 
   push:
     branches:
-      - [ $default-branch ]
+      - main
     paths:
       - packages/sdk/**
       - packages/sdk-rtl/**
@@ -28,7 +28,7 @@ env:
 
 jobs:
   unit:
-    # 1st condition: push event (restricted to $default-branch above)
+    # 1st condition: push event (restricted to main above)
     # 2nd condition: PR opened/synchronized/reopened (types filter above)
     #                except Release PRs, those need a manual CI:TEST
     # 3rd condition: PR labeled with "CI:TEST"
