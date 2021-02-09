@@ -21,7 +21,7 @@
   "bugs": {
     "url": "https://github.com/looker-open-source/sdk-codegen/issues"
   },
-  "homepage": "https://github.com/looker-open-source/sdk-codegen/tree/master/packages/hackathon",
+  "homepage": "https://github.com/looker-open-source/sdk-codegen/tree/main/packages/hackathon",
   "keywords": [
     "Looker",
     "SDK",

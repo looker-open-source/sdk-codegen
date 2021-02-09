@@ -21,7 +21,7 @@
   "bugs": {
     "url": "https://github.com/looker-open-source/sdk-codegen/issues"
   },
-  "homepage": "https://github.com/looker-open-source/sdk-codegen/tree/master/packages/wholly-sheet",
+  "homepage": "https://github.com/looker-open-source/sdk-codegen/tree/main/packages/wholly-sheet",
   "keywords": [
     "Looker",
     "SDK",

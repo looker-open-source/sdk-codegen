@@ -12,7 +12,7 @@
     "url": "git+https://github.com/looker-open-source/sdk-codegen.git",
     "directory": "packages/api-explorer"
   },
-  "homepage": "https://github.com/looker-open-source/sdk-codegen/tree/master/packages/api-explorer",
+  "homepage": "https://github.com/looker-open-source/sdk-codegen/tree/main/packages/api-explorer",
   "bugs": {
     "url": "https://github.com/looker-open-source/sdk-codegen/issues"
   },

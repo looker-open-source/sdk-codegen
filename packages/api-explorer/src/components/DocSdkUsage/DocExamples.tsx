@@ -67,7 +67,7 @@ export const DocExamples: FC<DocExamplesProps> = ({
         <>
           <Text>
             No examples found for {language}. Please{' '}
-            <Link href="https://github.com/looker-open-source/sdk-codegen/tree/master/examples">
+            <Link href="https://github.com/looker-open-source/sdk-codegen/tree/main/examples">
               add some!
             </Link>
           </Text>

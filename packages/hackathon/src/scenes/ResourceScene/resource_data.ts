@@ -65,7 +65,7 @@ export const resources = [
     type: 'Resource',
     tag: 'api',
     link:
-      'https://github.com/looker-open-source/sdk-codegen/tree/master/examples',
+      'https://github.com/looker-open-source/sdk-codegen/tree/main/examples',
     title: 'SDK Examples',
   },
   {

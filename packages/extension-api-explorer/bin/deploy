@@ -19,7 +19,7 @@ path_to_bundle=$(pwd)"/dist/bundle.js"
 cd ../../..
 if [ -d "extension-api-explorer" ]
 then
-  cd extension-api-explorer && git branch --set-upstream-to=origin/master && git pull || exit 1
+  cd extension-api-explorer && git branch --set-upstream-to=origin/main && git pull || exit 1
 else
   echo "extension-api-explorer clone not found, cloning."
   git clone git@github.com:looker-open-source/extension-api-explorer.git || exit 1
@@ -27,7 +27,7 @@ else
 fi
 
 echo "Copying extension bundle into repo"
-git checkout master || { echo "Error checking out branch"; exit 1; }
+git checkout main || { echo "Error checking out branch"; exit 1; }
 cp ${path_to_bundle} .
 echo "Pushing changes to remote"
 git add bundle.js && git commit -m "${commit_msg}" && git push || { exit 1; }
