@@ -26,7 +26,7 @@
 
 import React from 'react'
 import { renderWithTheme } from '@looker/components-test-utils'
-import { fireEvent, screen, waitFor } from '@testing-library/react'
+import { screen, waitFor } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 
 import { defaultConfigurator } from '../ConfigForm'
@@ -34,15 +34,17 @@ import { RequestForm } from './RequestForm'
 
 describe('RequestForm', () => {
   const run = 'Run'
-  const requestContent = {}
-  const setRequestContent = jest.fn()
+  let requestContent = {}
+  const setRequestContent = jest.fn((content) => {
+    requestContent = content
+  })
   const handleSubmit = jest.fn((e) => e.preventDefault())
 
   beforeEach(() => {
     jest.resetAllMocks()
   })
 
-  test('it creates a form with a simple item, submit button, and config button', () => {
+  test('it creates a form with a simple item, submit button, and config button if not an extension', () => {
     renderWithTheme(
       <RequestForm
         configurator={defaultConfigurator}
@@ -59,6 +61,7 @@ describe('RequestForm', () => {
         httpMethod={'GET'}
         requestContent={requestContent}
         setRequestContent={setRequestContent}
+        setHasConfig={() => true}
         isExtension={false}
       />
     )
@@ -69,10 +72,10 @@ describe('RequestForm', () => {
     /** Warning checkbox should only be rendered for operations that modify data */
     expect(screen.queryByRole('checkbox')).not.toBeInTheDocument()
     expect(screen.getByRole('button', { name: run })).toBeInTheDocument()
-    // TODO check the config gear exists
+    expect(screen.getByRole('button', { name: 'Settings' })).toBeInTheDocument()
   })
 
-  test('it creates a form with a simple item, submit button, and config button', () => {
+  test('it creates a form with a simple item, submit button, and config button if running as an extension', () => {
     renderWithTheme(
       <RequestForm
         configurator={defaultConfigurator}
@@ -99,16 +102,19 @@ describe('RequestForm', () => {
     /** Warning checkbox should only be rendered for operations that modify data */
     expect(screen.queryByRole('checkbox')).not.toBeInTheDocument()
     expect(screen.getByRole('button', { name: run })).toBeInTheDocument()
-    // TODO check the config gear does NOT exist
+    expect(
+      screen.queryByRole('button', { name: 'Settings' })
+    ).not.toBeInTheDocument()
   })
 
-  test('interacting with a boolean simple item changes the request content', () => {
+  test('interacting with a boolean simple item changes the request content', async () => {
+    const name = 'boolean_item'
     renderWithTheme(
       <RequestForm
         configurator={defaultConfigurator}
         inputs={[
           {
-            name: 'boolean_item',
+            name,
             location: 'query',
             required: true,
             type: 'boolean',
@@ -122,18 +128,21 @@ describe('RequestForm', () => {
       />
     )
 
-    const item = screen.getByRole('switch', { name: 'boolean_item' })
-    fireEvent.click(item)
-    expect(setRequestContent).toHaveBeenCalledWith({ boolean_item: true })
+    const item = screen.getByRole('switch', { name })
+    userEvent.click(item)
+    await waitFor(() => {
+      expect(setRequestContent).toHaveBeenLastCalledWith({ [name]: true })
+    })
   })
 
   test('interactive with a number simple item changes the request content', async () => {
+    const name = 'number_item'
     renderWithTheme(
       <RequestForm
         configurator={defaultConfigurator}
         inputs={[
           {
-            name: 'number_item',
+            name,
             location: 'query',
             required: false,
             type: 'integer',
@@ -147,10 +156,10 @@ describe('RequestForm', () => {
       />
     )
 
-    const item = screen.getByRole('spinbutton', { name: 'number_item' })
-    await userEvent.paste(item, '123')
+    const item = screen.getByRole('spinbutton', { name })
+    userEvent.type(item, '3')
     await waitFor(() => {
-      expect(setRequestContent).toHaveBeenCalledWith({ number_item: 123 })
+      expect(setRequestContent).toHaveBeenCalledWith({ [name]: 3 })
     })
   })
 
