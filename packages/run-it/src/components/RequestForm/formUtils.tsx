@@ -64,9 +64,7 @@ const createDateItem = (
   <div key={name}>
     <Label>{name}</Label>
     <InputDate
-      defaultValue={
-        name in requestContent ? requestContent[name] : new Date(Date.now())
-      }
+      defaultValue={name in requestContent ? requestContent[name] : undefined}
       onChange={handleChange.bind(null, name)}
     />
   </div>
@@ -247,3 +245,24 @@ export const showDataChangeWarning = () => (
     label="I understand that this API endpoint will change data."
   />
 )
+
+/**
+ * Updates a given state with a key/value pair, taking into consideration
+ * indeterminate values.
+ * @param state A collection to update
+ * @param key Property to update
+ * @param newValue? New value corresponding to given key
+ */
+export const updateNullableProp = (
+  state: RunItValues,
+  key: string,
+  newValue?: any
+) => {
+  const updatedState = { ...state }
+  if (key in state && !newValue) {
+    delete updatedState[key]
+  } else {
+    updatedState[key] = newValue
+  }
+  return updatedState
+}
