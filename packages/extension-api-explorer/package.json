@@ -15,7 +15,7 @@
   "dependencies": {
     "@looker/api-explorer": "^21.0.4",
     "@looker/extension-sdk": "0.16.4",
-    "@looker/extension-sdk-react": "0.10.3",
+    "@looker/extension-sdk-react": "0.10.4",
     "@looker/run-it": "^21.0.4",
     "@looker/sdk": "^21.0.4",
     "react": "^16.13.1",
