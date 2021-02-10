@@ -2604,10 +2604,10 @@
     prettier "^2.2.1"
     typescript "4.1.2"
 
-"@looker/extension-sdk-react@0.10.3":
-  version "0.10.3"
-  resolved "https://registry.yarnpkg.com/@looker/extension-sdk-react/-/extension-sdk-react-0.10.3.tgz#2031ae7651051c20960ac01c0b02eadd30069683"
-  integrity sha512-gco/NnDSWCKWV/bQvkumAgRTtxptTLkWSDUITecUZjpCMw98L1uUQBVoHObV02Gm3RKmGwFKgjK8JLKoObZeNg==
+"@looker/extension-sdk-react@0.10.4":
+  version "0.10.4"
+  resolved "https://registry.yarnpkg.com/@looker/extension-sdk-react/-/extension-sdk-react-0.10.4.tgz#4d8924636a1f3a71465edbda3bda92815abbe3ca"
+  integrity sha512-pFVKdvonWYe5iVU1apKk14Y560kWrQ6rw6ncf1c5cUhvebaEnp8ygzEayGYtlxSvFFsZZ1nYJZeDvf9m/2CYxA==
   dependencies:
     ts-loader "^6.1.2"
 
