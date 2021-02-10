@@ -40,6 +40,12 @@ interface SdkCallsProps {
   inputs: RunItValues
 }
 
+/**
+ * Generates the SDK call syntax for all supported languages
+ * @param api Api spec
+ * @param method Api method
+ * @param inputs Method parameters
+ */
 export const SdkCalls: FC<SdkCallsProps> = ({ api, method, inputs }) => {
   const tabs = useTabs()
   const generators = getGenerators(api)
