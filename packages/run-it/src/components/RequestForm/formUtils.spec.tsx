@@ -33,6 +33,7 @@ import {
   createComplexItem,
   createSimpleItem,
   showDataChangeWarning,
+  updateNullableProp,
 } from './formUtils'
 
 describe('Simple Items', () => {
@@ -140,7 +141,6 @@ describe('Simple Items', () => {
         await expectInput(input, '123.456', handleNumberChange)
         // await userEvent.type(input, '123.456')
         // await waitFor(() => {
-        //   screen.debug(input)
         //   expect(handleNumberChange).toHaveBeenCalled()
         //   expect(input).toHaveValue(123.456)
         // })
@@ -210,6 +210,22 @@ describe('Simple Items', () => {
     test('it creates a datetime item', () => {
       renderWithTheme(DateItem)
       expect(screen.getByTestId('text-input')).toBeInTheDocument()
+    })
+  })
+
+  describe('updateNullableProp', () => {
+    test.each`
+      label             | value
+      ${'empty string'} | ${''}
+      ${'undefined'}    | ${undefined}
+      ${'NaN'}          | ${NaN}
+      ${'null'}         | ${null}
+    `('it pops key from collection if updated with $label', ({ value }) => {
+      const state = { foo: 'bar' }
+      const actual = updateNullableProp(state, 'foo', value)
+      /** State is not modified directly. */
+      expect(state).toHaveProperty('foo')
+      expect(actual).not.toHaveProperty('foo')
     })
   })
 })
