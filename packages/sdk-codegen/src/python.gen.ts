@@ -47,6 +47,7 @@ export class PythonGen extends CodeGen {
   indentStr = '    '
   argDelimiter = `,\n${this.indentStr.repeat(3)}`
   argSetSep = '='
+  hashSetSep = ': '
   paramDelimiter = ',\n'
   propDelimiter = '\n'
   dataStructureDelimiter = ', '
@@ -54,8 +55,9 @@ export class PythonGen extends CodeGen {
   codeQuote = '"'
   typeOpen = '('
   typeClose = ')'
-  hashOpen = 'dict('
-  hashClose = ')'
+  hashOpen = '{'
+  hashClose = '}'
+  hashKeyQuote = '"'
   useModelClassForTypes = true
 
   endTypeStr = ''
@@ -617,9 +619,5 @@ ${this.hooks.join('\n')}
 
   typeMapModels(type: IType) {
     return this.typeMap(type, 'models')
-  }
-
-  argSet(name: string, _sep: string, exp: string) {
-    return `${name}=${exp}`
   }
 }

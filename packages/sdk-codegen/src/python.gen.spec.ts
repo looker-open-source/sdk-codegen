@@ -1006,10 +1006,10 @@ class MergeFields(model.Model):
     body=models.SqlQueryCreate(
         connection_name="looker",
         model_name="the_look",
-        vis_config=dict(
-            first=1,
-            second="two"
-        )
+        vis_config={
+            "first": 1,
+            "second": "two"
+        }
     ))`
       const actual = gen.makeTheCall(method, inputs)
       expect(actual).toEqual(expected)
@@ -1032,26 +1032,26 @@ class MergeFields(model.Model):
           third: false,
           token,
         }
-        const expected = `dict(
-    item=[1],
-    items=[
+        const expected = `{
+    "item": [1],
+    "items": [
         "Abe",
         "Zeb",
-        dict(
-            access_token="backstage",
-            token_type="test",
-            expires_in=10
-        )
+        {
+            "access_token": "backstage",
+            "token_type": "test",
+            "expires_in": 10
+        }
     ],
-    first=1,
-    second="two",
-    third=false,
-    token=dict(
-        access_token="backstage",
-        token_type="test",
-        expires_in=10
-    )
-)`
+    "first": 1,
+    "second": "two",
+    "third": false,
+    "token": {
+        "access_token": "backstage",
+        "token_type": "test",
+        "expires_in": 10
+    }
+}`
         const actual = gen.hashValue('', inputs)
         expect(actual).toEqual(expected)
       })
