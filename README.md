@@ -4,6 +4,8 @@ This Looker Open Source repository is released under the MIT license. By using t
 
 While Looker has developed and tested this code internally, we cannot guarantee that the open-source tools used by the scripts in this repository have not been modified with malicious code.
 
+**Important** - If you are using the typescript Looker SDK, please see the note at the bottom of this file explaining changes to dependencies and packaging.
+
 ## Overview
 
 This repository contains:
@@ -50,7 +52,7 @@ Please review the following table for a breakdown of the options to initialize t
 | SDK                        | API 3.1                                                                   | API 4.0                                                                  | Notes                                                                                                                                                                                                 |
 | -------------------------- | ------------------------------------------------------------------------- | ------------------------------------------------------------------------ | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | [Python](python)           | `looker_sdk.init31()`                                                     | `looker_sdk.init40()`                                                    | Both API 3.1 and 4.0 are supported, and can be initialized with the functions shown                                                                                                                   |
-| [Typescript](packages/sdk) | `Looker31SDK()`, `LookerNodeSDK.init31()`, or `LookerBrowserSDK.init31()` | `Looker40SDK()`, `LookerNodeSDK.init40()` or `LookerBrowserSDK.init40()` | Both API 3.1 and 4.0 are supported and can be initialized with the functions shown                                                                                                                    |
+| [Typescript](packages/sdk) | `Looker31SDK()`, `LookerNodeSDK.init31()`, or `LookerBrowserSDK.init31()` | `Looker40SDK()`, `LookerNodeSDK.init40()` or `LookerBrowserSDK.init40()` | Both API 3.1 and 4.0 are supported and can be initialized with the functions shown. **Important** - See information on the typescript SDK depenendencies at the bottom of this file.                  |
 | [Kotlin](kotlin)           | Do not use                                                                | `LookerSDK()`                                                            | API 4.0 was specifically created to correct the endpoint payloads for strongly-typed languages like Kotlin and Swift. Because Kotlin really requires API 4.0, API 4.0 is the default namespace for it |
 | [Swift](swift/looker)      | Not applicable                                                            | `Looker40SDK()`                                                          | Swift only has SDK definitions for API 4.0                                                                                                                                                            |  |
 | [Look#](csharp)            | `Looker31SDK()`                                                           | `Looker40SDK()`                                                          | Community-supported C# SDK for Looker                                                                                                                                                                 |  |
@@ -190,7 +192,7 @@ to see the list of all scripts that can be run by the code generator.
 
 ## SDK Examples
 
-The open source repository <https://github.com/looker-open-source/sdk-examples> contains code snippets and projects written using the Looker language SDKs. You may find useful code in that repository. and are also welcome to contribute additional examples.
+The [examples directory](/examples) contains code snippets and projects written using the Looker language SDKs. You may find useful code in that repository. and are also welcome to contribute additional examples.
 
 ## API Troubleshooting
 
@@ -267,3 +269,11 @@ Configuration variables should be processed as follows:
 - if an environment variable exists, apply the value
 - if a configuration value is explicitly in code, apply that value
 - if a command-line switch is supported, apply that value
+
+## Very important note regarding the Looker Typescript SDK
+
+The Looker Typescript SDK has been refactored so that node dependencies do not pollute browser usage of the SDK (the node dependencies are not available in the browser and can cause compile errors). There are now three packages available on npm:
+
+1. `@looker/sdk` - contains the Looker API methods.
+2. `@looker/sdk-rtl` - contains a run time library needed to invoke the Looker API methods. Referencing the `@looker/sdk` as a dependency should automatically pull this package in.
+3. `@looker/sdk-node` - contains the dependendencies needed to run the Looker SDK in a node environment. Do NOT include this package if you are using the Looker SDK in a browser. You MUST include this package if you are using `node` or `ts-node`.

@@ -2,7 +2,7 @@
 
  MIT License
 
- Copyright (c) 2020 Looker Data Sciences, Inc.
+ Copyright (c) 2021 Looker Data Sciences, Inc.
 
  Permission is hereby granted, free of charge, to any person obtaining a copy
  of this software and associated documentation files (the "Software"), to deal
@@ -25,11 +25,11 @@
  */
 
 import { Looker40SDK, Looker31SDK } from '@looker/sdk'
-import { NodeSession, NodeSettingsIniFile } from '@looker/sdk-rtl'
+import { NodeSession, NodeSettingsIniFile } from '@looker/sdk-node'
 import { rootIni } from './utils'
 
 const localConfig = rootIni()
-const settings = new NodeSettingsIniFile(localConfig, 'Looker')
+const settings = new NodeSettingsIniFile('', localConfig, 'Looker')
 const session = new NodeSession(settings)
 const sdk = new Looker40SDK(session)
 const sdk31 = new Looker31SDK(session)
