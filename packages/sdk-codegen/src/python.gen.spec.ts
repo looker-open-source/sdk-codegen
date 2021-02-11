@@ -1025,14 +1025,23 @@ class MergeFields(model.Model):
         const oneItem = [1]
         const threeItems = ['Abe', 'Zeb', token]
         const inputs: IDictionary<any> = {
+          /**
+           * The below key is quoted in the generated dictionary. This is a bug
+           * that might need addressing later on.
+           */
+          1: 'one',
+          '2': 'two',
           item: oneItem,
           items: threeItems,
           first: 1,
           second: 'two',
           third: false,
           token,
+          'foo.bar': 'foobar',
         }
         const expected = `{
+    "1": "one",
+    "2": "two",
     "item": [1],
     "items": [
         "Abe",
@@ -1050,7 +1059,8 @@ class MergeFields(model.Model):
         "access_token": "backstage",
         "token_type": "test",
         "expires_in": 10
-    }
+    },
+    "foo.bar": "foobar"
 }`
         const actual = gen.hashValue('', inputs)
         expect(actual).toEqual(expected)
