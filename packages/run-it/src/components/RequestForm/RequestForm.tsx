@@ -33,6 +33,7 @@ import {
   createSimpleItem,
   createComplexItem,
   showDataChangeWarning,
+  updateNullableProp,
 } from './formUtils'
 
 /**
@@ -75,19 +76,23 @@ export const RequestForm: FC<RequestFormProps> = ({
   }
 
   const handleNumberChange = (e: BaseSyntheticEvent) => {
-    // TODO: e.target.valueAsNumber works in the browser but is undefined here
-    setRequestContent({
-      ...requestContent,
-      [e.target.name]: parseFloat(e.target.value),
-    })
+    const value = e.target.value ? parseFloat(e.target.value) : undefined
+    const newState = updateNullableProp(requestContent, e.target.name, value)
+    setRequestContent(newState)
   }
 
   const handleDateChange = (name: string, date?: Date) => {
-    setRequestContent({ ...requestContent, [name]: date })
+    const newState = updateNullableProp(requestContent, name, date)
+    setRequestContent(newState)
   }
 
   const handleChange = (e: BaseSyntheticEvent) => {
-    setRequestContent({ ...requestContent, [e.target.name]: e.target.value })
+    const newState = updateNullableProp(
+      requestContent,
+      e.target.name,
+      e.target.value
+    )
+    setRequestContent(newState)
   }
 
   const handleComplexChange = (name: string, value: string) => {
