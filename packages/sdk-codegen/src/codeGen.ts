@@ -167,8 +167,14 @@ export interface ICodeGen {
   /** argument separator string. Typically ', ' */
   argDelimiter: string
 
-  /** type properties/args expression separater. E.g ': ' for Typescript */
+  /** type properties/args expression separator. E.g ': ' for Typescript */
   argSetSep: string
+
+  /** hash type properties/args expression separator. E.g ': ' for Typescript */
+  hashSetSep: string
+
+  /** hash key quotes E.g '' for Typescript and '"' for Python */
+  hashKeyQuote: string
 
   /** parameter delimiter. Typically ",\n" */
   paramDelimiter: string
@@ -642,6 +648,7 @@ export abstract class CodeGen implements ICodeGen {
   fileExtension = '.code'
   argDelimiter = ', '
   argSetSep = ': '
+  hashSetSep = ': '
   paramDelimiter = ',\n'
   propDelimiter = '\n'
   enumDelimiter = ',\n'
@@ -652,6 +659,7 @@ export abstract class CodeGen implements ICodeGen {
   arrayClose = ']'
   hashOpen = '{'
   hashClose = '}'
+  hashKeyQuote = ''
   typeOpen = '{'
   typeClose = '}'
   useModelClassForTypes = false
@@ -934,7 +942,8 @@ export abstract class CodeGen implements ICodeGen {
     const bump = this.bumper(indent)
     Object.entries(val).forEach(([name, v]) => {
       const exp = this.anyValue(bump, v)
-      args.push(this.argSet(name, this.argSetSep, exp))
+      const key = `${this.hashKeyQuote}${name}${this.hashKeyQuote}`
+      args.push(this.argSet(key, this.hashSetSep, exp))
     })
     return this.argIndent(indent, args, this.hashOpen, this.hashClose)
   }

@@ -54,8 +54,7 @@ export class PythonGen extends CodeGen {
   codeQuote = '"'
   typeOpen = '('
   typeClose = ')'
-  hashOpen = 'dict('
-  hashClose = ')'
+  hashKeyQuote = '"'
   useModelClassForTypes = true
 
   endTypeStr = ''
@@ -617,9 +616,5 @@ ${this.hooks.join('\n')}
 
   typeMapModels(type: IType) {
     return this.typeMap(type, 'models')
-  }
-
-  argSet(name: string, _sep: string, exp: string) {
-    return `${name}=${exp}`
   }
 }
