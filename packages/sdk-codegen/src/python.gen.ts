@@ -47,7 +47,6 @@ export class PythonGen extends CodeGen {
   indentStr = '    '
   argDelimiter = `,\n${this.indentStr.repeat(3)}`
   argSetSep = '='
-  hashSetSep = ': '
   paramDelimiter = ',\n'
   propDelimiter = '\n'
   dataStructureDelimiter = ', '
