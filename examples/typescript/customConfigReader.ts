@@ -2,7 +2,7 @@
 
  MIT License
 
- Copyright (c) 2020 Looker Data Sciences, Inc.
+ Copyright (c) 2021 Looker Data Sciences, Inc.
 
  Permission is hereby granted, free of charge, to any person obtaining a copy
  of this software and associated documentation files (the "Software"), to deal
@@ -23,8 +23,8 @@
  SOFTWARE.
 
  */
-import { LookerNodeSDK } from '@looker/sdk'
-import { NodeSettings, IApiSettings, IApiSection } from '@looker/sdk-rtl'
+import { NodeSettings, LookerNodeSDK } from '@looker/sdk-node'
+import { IApiSettings, IApiSection } from '@looker/sdk-rtl'
 
 /**
  * @class CustomConfigReader
@@ -35,7 +35,7 @@ import { NodeSettings, IApiSettings, IApiSection } from '@looker/sdk-rtl'
  */
 class CustomConfigReader extends NodeSettings {
   constructor(settings: IApiSettings) {
-    super(settings)
+    super('', settings)
   }
 
   /**
