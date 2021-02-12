@@ -54,8 +54,6 @@ export class PythonGen extends CodeGen {
   codeQuote = '"'
   typeOpen = '('
   typeClose = ')'
-  hashOpen = '{'
-  hashClose = '}'
   hashKeyQuote = '"'
   useModelClassForTypes = true
 
