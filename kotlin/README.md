@@ -2,7 +2,7 @@
 
 The Looker SDK for Kotlin provides a convenient way to communicate with the Looker API available on your Looker server.
 
-**DISCLAIMER**: This is an _experimental_ version of the Kotlin SDK for Looker, using a completely new code generator developed by Looker. Implementations are still subject to major change. If you run into problems with the SDK, feel free to [report an issue](https://github.com/looker-open-source/sdk-codegen/issues), and please indicate which language SDK you're using in the report.
+**DISCLAIMER**: This is an _experimental_ version of the Looker SDK. Implementations are still subject to change, but SDK method calls are expected to work correctly. Please [report any issues](https://github.com/looker-open-source/sdk-codegen/issues) encountered, and indicate the SDK language in the report.
 
 ## Getting started
 
