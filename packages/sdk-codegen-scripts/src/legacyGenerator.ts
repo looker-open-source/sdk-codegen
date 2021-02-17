@@ -62,7 +62,7 @@ const generate = async (
   const apiVersion = defaultApiVersion(props)
   const apiPath = `./api/${apiVersion}/${path}`
   const options = spec.options || ''
-  return run('openapi-generator', [
+  return run('openapi-generator-cli', [
     'generate',
     '-i',
     fileName,

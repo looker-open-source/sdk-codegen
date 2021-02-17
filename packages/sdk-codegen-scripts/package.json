@@ -36,7 +36,7 @@
     "cross-env": "^7.0.2"
   },
   "devDependencies": {
-    "@openapitools/openapi-generator-cli": "^2.0.3",
+    "@openapitools/openapi-generator-cli": "^2.1.23",
     "@stoplight/json": "^3.9.0",
     "@stoplight/spectral": "^5.6.0",
     "@types/config": "^0.0.36",
