@@ -2,11 +2,11 @@
 
 The Looker SDK for Typescript/Javascript works with Node and browser run-times. The SDK provides a convenient way to communicate with a Looker server's APIs.
 
-This package is specifically for using the Typescript SDK with Node.
+This package is specifically for using the Looker Typescript SDK with Node.
 
-The SDK uses a plug-in architecture (also known as dependency injection) for initializing that supports run-time specific transports (like `NodeTransport` and `BrowserTransport`) and different approaches for managing API authentication (like `NodeSession`, `BrowserSession`, `ProxySession`, and `CorsSession`).
+The SDK uses a plug-in architecture (also known as dependency injection) for initializing that supports run-time specific transports (like `NodeTransport` and `BrowserTransport`) and different approaches for managing API authentication (like `NodeSession`, `BrowserSession`, `ProxySession`, and `OauthSession`).
 
-**DISCLAIMER**: This is a _beta_ version of the Looker SDK. Implementations are still subject to change, but we expect most SDK method calls to work correctly. If you run into problems with the SDK, please feel free to [report an issue](https://github.com/looker-open-source/sdk-codegen/issues), and please indicate which language SDK you're using in the report.
+**DISCLAIMER**: This is a _beta_ version of the Looker SDK. Implementations are still subject to change, but we expect most SDK method calls to work correctly. If you run into problems with the SDK, [report an issue](https://github.com/looker-open-source/sdk-codegen/issues), and please indicate which language SDK you're using in the report.
 
 ## Getting started
 
@@ -36,7 +36,7 @@ yarn add @looker/sdk @looker/sdk-node
 
 **Note**: The `.ini` configuration for the Looker SDK is a sample implementation intended to speed up the initial development of Node applications using the Looker API. [Environment variables](#environment-variable-configuration) can also be used to configure the SDK.
 
-Create a `looker.ini` file with your server URL and API credentials assigned as shown in this example.
+Create a `looker.ini` file with your server URL and API credentials assigned as shown below:
 
 ```ini
 [Looker]
@@ -123,16 +123,17 @@ const me31 = await sdk.ok(sdk31.me()) // or sdk31.ok(sdk31.me())
 
 ## Using NodeSession for automatic authentication
 
-Almost all requests to Looker's API require an access token. This token is established when the `login` endpoint is called with correct API3 credentials for `client_id` and `client_secret`. When `login` is successful, the user whose API3 credentials are provided is considered the active user. For this discussion of `NodeSession`, we'll
-call this user the **API User**.
+Almost all requests to Looker's API require an access token. Typically, this token is established when the `login` endpoint is called with correct API3 credentials for `client_id` and `client_secret`. When `login` is successful, the provided API3 credentials are used to look up the active **API user**.
 
-The `settings` provided to the `NodeSession` class include the base URL for the Looker instance and the desired API version. When API requests are made, if the auth session is not yet established, `NodeSession` will automatically authenticate the **API User**. The `NodeSession` also directly supports logging in as another user, usually called `sudo as` another user in the Looker browser application.
-
-API users with appropriate permissions can `sudo` as another user by specifying a specific user ID in the `NodeSession.login()` method. Only one user can be impersonated at a time via `NodeSession`. When a `sudo` session is active, all SDK methods will be processed as that user.
+The `settings` provided to the `NodeSession` class include the base URL for the Looker instance, and the desired API version. When API requests are made, if the auth session is not yet established, `NodeSession` will automatically authenticate the **API User**. sed as that user.
 
 ### Sudo behavior with NodeSession
 
-The rest of this section shows sample code for typical use cases for authentication and sudo. This code sample is extracted directly from the sdk methods Jest tests, and assumes `apiUser` is the default authenticated user record with `sudo` abilities, and `sudoA` and `sudoB` are other enabled Looker user records.
+The `NodeSession` also directly supports logging in as another user, which is usually called `sudo as` another user in the Looker browser application.
+
+An API user with appropriate permissions can `sudo` as another user by passing a different user ID to the `NodeSession.login()` method. Only one user can be impersonated at a time via `NodeSession`. When a `sudo` session is active, all SDK requests are processed as that user.
+
+The test below shows use cases for authentication and sudo. This code sample is extracted directly from the sdk methods functionla tests, and assumes `apiUser` is the default authenticated user record with `sudo` abilities, and `sudoA` and `sudoB` are other enabled Looker user accounts.
 
 ```typescript
 describe('sudo', () => {
@@ -208,7 +209,7 @@ const me = await sdk.ok(sdk.me())
 
 With the introduction of CORS support in the Looker API, the Looker SDK can now be used directly in the browser on a different domain than the Looker server. Because all API endpoints require authentication except for Login, a proxy server or OAuth login can be used to retrieve the API auth token and return it to the browser session.
 
-**Note**: For OAuth in a browser application, see the [Oauth and CORS](/docs/cors.md) notes.
+**Note**: For more information on OAuth in a browser application, see the [Oauth and CORS](/docs/cors.md) notes.
 
 [`ProxySession`](/packages/sdk-rtl/src/proxySession.ts) can be extended to streamline creating a proxy session manager. The source code example below shows how to override the `authenticate` method for use in a CORS request scenario.
 
@@ -264,10 +265,10 @@ Construction of the streaming SDK can use code similar to the following, which i
 ```ts
 /**
  * Use the streaming SDK to download a tile's query
- * @param {LookerSDK} sdk to use
- * @param {IDashboardElement} tile to download
- * @param {string} format to download
- * @returns {Promise<string>} name of downloaded file (undefined on failure)
+ * @param sdk to use
+ * @param tile to download
+ * @param format to download
+ * @returns name of downloaded file (undefined on failure)
  */
 const downloadTileAs = async (
   sdk: LookerSDK,
