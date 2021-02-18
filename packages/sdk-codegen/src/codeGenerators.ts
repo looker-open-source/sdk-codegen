@@ -89,10 +89,16 @@ export const Generators: Array<IGeneratorSpec> = [
     factory: (api: ApiModel, versions?: IVersionInfo) =>
       new GoGen(api, versions),
     language: 'Go',
-    legacy: 'go',
     options: '-papiPackage=Looker -ppackageName=looker',
     extension: /\.go/gi,
   },
+  {
+    language: 'java',
+    legacy: 'java',
+    options: '-papiPackage=Looker -ppackageName=looker',
+    extension: /\.java/gi,
+  },
+
   // {
   //   language: 'php',
   //   legacy: 'php',
