@@ -18,16 +18,16 @@ The Looker SDK can be used in a node application in 3 steps:
 
 ### Install the Looker SDK into your node application
 
-Using `npm`:
-
-```bash
-npm install @looker/sdk @looker/sdk-node
-```
-
 Using `yarn`:
 
 ```bash
 yarn add @looker/sdk @looker/sdk-node
+```
+
+Using `npm`:
+
+```bash
+npm install @looker/sdk @looker/sdk-node
 ```
 
 **Note**: If you are only intending to use the SDK in a browser, omit `@looker/sdk-node`.
@@ -121,7 +121,7 @@ const me31 = await sdk.ok(sdk31.me()) // or sdk31.ok(sdk31.me())
 
 Almost all requests to Looker's API require an access token. Typically, this token is established when the `login` endpoint is called with correct API3 credentials for `client_id` and `client_secret`. When `login` is successful, the provided API3 credentials are used to look up the active **API user**.
 
-The `settings` provided to the `NodeSession` class include the base URL for the Looker instance, and the desired API version. When API requests are made, if the auth session is not yet established, `NodeSession` will automatically authenticate the **API User**. sed as that user.
+The `settings` provided to the `NodeSession` class include the base URL for the Looker instance, and the desired API version. When API requests are made, if the auth session is not yet established, `NodeSession` will automatically authenticate the **API User**.
 
 ### Sudo behavior with NodeSession
 
