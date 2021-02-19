@@ -24,25 +24,40 @@
 
  */
 
-process.env.TZ = 'UTC'
+let registered = false
+let _coreSdk: any
 
-module.exports = {
-  automock: false,
-  moduleDirectories: ['./node_modules', './packages'],
-  moduleFileExtensions: ['js', 'jsx', 'ts', 'tsx', 'json', 'node'],
-  moduleNameMapper: {
-    '@looker/sdk-codegen-utils/src': '<rootDir>/packages/sdk-codegen-utils/src',
-    '@looker/((?!components|design|icons|chatty)(.+))$':
-      '<rootDir>/packages/$1/src',
-    '\\.(css)$': '<rootDir>/config/jest/styleMock.js',
-    '\\.(jpg|jpeg|png|gif|eot|otf|webp|svg|ttf|woff|woff2|mp4|webm|wav|mp3|m4a|aac|oga)$':
-      '<rootDir>/config/jest/fileMock.js',
-  },
-  restoreMocks: true,
-  // eslint-disable-next-line node/no-path-concat
-  setupFilesAfterEnv: [`${__dirname}/jest.setup.js`],
-  testMatch: ['**/?(*.)(spec|test).(ts|js)?(x)'],
-  transform: {
-    '^.+\\.(js|jsx|ts|tsx)$': 'ts-jest',
-  },
+/**
+ * Register the SDK. The ExtensionProvider will automatically
+ * call this when connection is first requested.
+ * @param coreSDK core sdk
+ */
+export function registerCoreSDK2(coreSdk: any) {
+  if (_coreSdk) {
+    throw new Error('coreSDK can only be registered once')
+  }
+  _coreSdk = coreSdk
+  registered = true
+}
+
+/**
+ * Unregister theSDK. The ExtensionProvider will automatically
+ * call this when it is unloaded. An extension using
+ * the ExtensionProvider should  never call this.
+ */
+export function unregisterCoreSDK2() {
+  registered = false
+  _coreSdk = undefined
+}
+
+/**
+ * Global access to the coreSDK. An error will be thrown if accessed prematurely.
+ * Note that provider does not have to provide a LookerSdk type. In this case
+ * this method will return undefined.
+ */
+export function getCoreSDK2<T>(): T {
+  if (!registered) {
+    throw new Error('Looker host connection not established')
+  }
+  return _coreSdk
 }

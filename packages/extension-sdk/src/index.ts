@@ -23,26 +23,38 @@
  SOFTWARE.
 
  */
-
-process.env.TZ = 'UTC'
-
-module.exports = {
-  automock: false,
-  moduleDirectories: ['./node_modules', './packages'],
-  moduleFileExtensions: ['js', 'jsx', 'ts', 'tsx', 'json', 'node'],
-  moduleNameMapper: {
-    '@looker/sdk-codegen-utils/src': '<rootDir>/packages/sdk-codegen-utils/src',
-    '@looker/((?!components|design|icons|chatty)(.+))$':
-      '<rootDir>/packages/$1/src',
-    '\\.(css)$': '<rootDir>/config/jest/styleMock.js',
-    '\\.(jpg|jpeg|png|gif|eot|otf|webp|svg|ttf|woff|woff2|mp4|webm|wav|mp3|m4a|aac|oga)$':
-      '<rootDir>/config/jest/fileMock.js',
-  },
-  restoreMocks: true,
-  // eslint-disable-next-line node/no-path-concat
-  setupFilesAfterEnv: [`${__dirname}/jest.setup.js`],
-  testMatch: ['**/?(*.)(spec|test).(ts|js)?(x)'],
-  transform: {
-    '^.+\\.(js|jsx|ts|tsx)$': 'ts-jest',
-  },
-}
+export { connectExtensionHost } from './connect/connect_extension_host'
+export { getExtensionSDK } from './connect/global_listener'
+export {
+  ApiVersion,
+  ContextDataRequest,
+  ErrorEventRequest,
+  ExtensionClientApi,
+  ExtensionEvent,
+  ExtensionInitializationResponse,
+  ExtensionHostApi,
+  ExtensionHostApiConfiguration,
+  ExtensionHostConfiguration,
+  ExtensionNotification,
+  ExtensionNotificationType,
+  ExtensionRequest,
+  ExtensionRequestType,
+  ExtensionSDK,
+  FetchDataRequest,
+  FetchCustomParameters,
+  FetchProxy,
+  FetchProxyDataResponse,
+  FetchResponseBodyType,
+  InvokeCoreSdkRequest,
+  LocalStorageRequest,
+  LookerHostData,
+  RouteChangeData,
+  RouteChangeRequest,
+  TrackActionRequest,
+  UpdateLocationRequest,
+  UpdateTitleRequest,
+} from './connect/types'
+export { LookerExtensionSDK } from './sdk/extension_sdk'
+export { LookerExtensionSDK31 } from './sdk/extension_sdk_31'
+export { LookerExtensionSDK40 } from './sdk/extension_sdk_40'
+export { SdkConnection } from './sdk/sdk_connection'

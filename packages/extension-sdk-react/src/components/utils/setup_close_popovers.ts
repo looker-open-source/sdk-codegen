@@ -24,25 +24,23 @@
 
  */
 
-process.env.TZ = 'UTC'
+import { ExtensionSDK } from '@looker/extension-sdk'
 
-module.exports = {
-  automock: false,
-  moduleDirectories: ['./node_modules', './packages'],
-  moduleFileExtensions: ['js', 'jsx', 'ts', 'tsx', 'json', 'node'],
-  moduleNameMapper: {
-    '@looker/sdk-codegen-utils/src': '<rootDir>/packages/sdk-codegen-utils/src',
-    '@looker/((?!components|design|icons|chatty)(.+))$':
-      '<rootDir>/packages/$1/src',
-    '\\.(css)$': '<rootDir>/config/jest/styleMock.js',
-    '\\.(jpg|jpeg|png|gif|eot|otf|webp|svg|ttf|woff|woff2|mp4|webm|wav|mp3|m4a|aac|oga)$':
-      '<rootDir>/config/jest/fileMock.js',
-  },
-  restoreMocks: true,
-  // eslint-disable-next-line node/no-path-concat
-  setupFilesAfterEnv: [`${__dirname}/jest.setup.js`],
-  testMatch: ['**/?(*.)(spec|test).(ts|js)?(x)'],
-  transform: {
-    '^.+\\.(js|jsx|ts|tsx)$': 'ts-jest',
-  },
+export const setupClosePopoversListener = (extensionSDK?: ExtensionSDK) => {
+  const onBodyMousedown = () => {
+    if (extensionSDK) {
+      extensionSDK.closeHostPopovers()
+    }
+  }
+  const body: HTMLBodyElement | undefined | null = document.querySelector(
+    'body'
+  )
+  if (body) {
+    body.addEventListener('mousedown', onBodyMousedown)
+  }
+  return () => {
+    if (body) {
+      body.removeEventListener('mousedown', onBodyMousedown)
+    }
+  }
 }

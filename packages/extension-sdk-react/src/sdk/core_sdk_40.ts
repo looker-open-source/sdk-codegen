@@ -24,25 +24,36 @@
 
  */
 
-process.env.TZ = 'UTC'
+import { Looker40SDK } from '@looker/sdk/lib/4.0/methods'
 
-module.exports = {
-  automock: false,
-  moduleDirectories: ['./node_modules', './packages'],
-  moduleFileExtensions: ['js', 'jsx', 'ts', 'tsx', 'json', 'node'],
-  moduleNameMapper: {
-    '@looker/sdk-codegen-utils/src': '<rootDir>/packages/sdk-codegen-utils/src',
-    '@looker/((?!components|design|icons|chatty)(.+))$':
-      '<rootDir>/packages/$1/src',
-    '\\.(css)$': '<rootDir>/config/jest/styleMock.js',
-    '\\.(jpg|jpeg|png|gif|eot|otf|webp|svg|ttf|woff|woff2|mp4|webm|wav|mp3|m4a|aac|oga)$':
-      '<rootDir>/config/jest/fileMock.js',
-  },
-  restoreMocks: true,
-  // eslint-disable-next-line node/no-path-concat
-  setupFilesAfterEnv: [`${__dirname}/jest.setup.js`],
-  testMatch: ['**/?(*.)(spec|test).(ts|js)?(x)'],
-  transform: {
-    '^.+\\.(js|jsx|ts|tsx)$': 'ts-jest',
-  },
+let _core40SDK: Looker40SDK | undefined
+
+/**
+ * Register the core 4.0 SDK. The ExtensionProvider will automatically
+ * call this when connection with the host suceeds. An extension using
+ * the ExtensionProvider should  never call this.
+ * @param coreSDK core sdk
+ */
+export const registerCore40SDK = (coreSDK: Looker40SDK) => {
+  if (_core40SDK) {
+    throw new Error('coreSDK can only be registered onces')
+  }
+  _core40SDK = coreSDK
+}
+
+/**
+ * Unregister the core 4.0 SDK. The ExtensionProvider will automatically
+ * call this when it is unloaded. An extension using
+ * the ExtensionProvider should  never call this.
+ */
+export const unregisterCore40SDK = () => (_core40SDK = undefined)
+
+/**
+ * Global access to the core40SDK. An error will be thrown if accessed prematurely.
+ */
+export const getCore40SDK = () => {
+  if (!_core40SDK) {
+    throw new Error('Looker host connection not established')
+  }
+  return _core40SDK
 }

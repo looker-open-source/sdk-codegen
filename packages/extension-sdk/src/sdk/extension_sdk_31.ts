@@ -24,25 +24,23 @@
 
  */
 
-process.env.TZ = 'UTC'
+import {
+  LookerExtensionSDK as _LookerExtensionSDK,
+  Looker31SDK,
+} from '@looker/sdk'
+import { ExtensionHostApi, ApiVersion } from '../connect'
 
-module.exports = {
-  automock: false,
-  moduleDirectories: ['./node_modules', './packages'],
-  moduleFileExtensions: ['js', 'jsx', 'ts', 'tsx', 'json', 'node'],
-  moduleNameMapper: {
-    '@looker/sdk-codegen-utils/src': '<rootDir>/packages/sdk-codegen-utils/src',
-    '@looker/((?!components|design|icons|chatty)(.+))$':
-      '<rootDir>/packages/$1/src',
-    '\\.(css)$': '<rootDir>/config/jest/styleMock.js',
-    '\\.(jpg|jpeg|png|gif|eot|otf|webp|svg|ttf|woff|woff2|mp4|webm|wav|mp3|m4a|aac|oga)$':
-      '<rootDir>/config/jest/fileMock.js',
-  },
-  restoreMocks: true,
-  // eslint-disable-next-line node/no-path-concat
-  setupFilesAfterEnv: [`${__dirname}/jest.setup.js`],
-  testMatch: ['**/?(*.)(spec|test).(ts|js)?(x)'],
-  transform: {
-    '^.+\\.(js|jsx|ts|tsx)$': 'ts-jest',
-  },
+import { SdkConnection } from './sdk_connection'
+
+export class LookerExtensionSDK31 {
+  /**
+   * Create an SDK client that uses SDK 3.1
+   * @param hostConnection extension host API
+   */
+  static createClient(hostConnection: ExtensionHostApi): Looker31SDK {
+    return _LookerExtensionSDK.createClient(
+      new SdkConnection(hostConnection, ApiVersion.sdk31),
+      Looker31SDK
+    )
+  }
 }

@@ -24,25 +24,38 @@
 
  */
 
-process.env.TZ = 'UTC'
+import {
+  ExtensionProvider,
+  ExtensionContext,
+} from './components/ExtensionProvider/ExtensionProvider'
+import { ExtensionContextData } from './components/ExtensionProvider/types'
+import {
+  ExtensionContextData2,
+  ExtensionContext2,
+  ExtensionProvider2,
+} from './components/ExtensionProvider2/ExtensionProvider2'
+import {
+  ExtensionContextBase,
+  ExtensionProviderBase,
+} from './components/ExtensionProviderBase/ExtensionProviderBase'
+import { BaseExtensionContextData } from './components/ExtensionConnector/types'
+import { getCore31SDK } from './sdk/core_sdk_31'
+import { getCore40SDK } from './sdk/core_sdk_40'
+import { getCoreSDK2 } from './sdk/core_sdk2'
+import { getCoreSDK } from './sdk/core_sdk'
 
-module.exports = {
-  automock: false,
-  moduleDirectories: ['./node_modules', './packages'],
-  moduleFileExtensions: ['js', 'jsx', 'ts', 'tsx', 'json', 'node'],
-  moduleNameMapper: {
-    '@looker/sdk-codegen-utils/src': '<rootDir>/packages/sdk-codegen-utils/src',
-    '@looker/((?!components|design|icons|chatty)(.+))$':
-      '<rootDir>/packages/$1/src',
-    '\\.(css)$': '<rootDir>/config/jest/styleMock.js',
-    '\\.(jpg|jpeg|png|gif|eot|otf|webp|svg|ttf|woff|woff2|mp4|webm|wav|mp3|m4a|aac|oga)$':
-      '<rootDir>/config/jest/fileMock.js',
-  },
-  restoreMocks: true,
-  // eslint-disable-next-line node/no-path-concat
-  setupFilesAfterEnv: [`${__dirname}/jest.setup.js`],
-  testMatch: ['**/?(*.)(spec|test).(ts|js)?(x)'],
-  transform: {
-    '^.+\\.(js|jsx|ts|tsx)$': 'ts-jest',
-  },
+export {
+  BaseExtensionContextData,
+  ExtensionContextData,
+  ExtensionProvider,
+  ExtensionContext,
+  ExtensionContextBase,
+  ExtensionProviderBase,
+  ExtensionContextData2,
+  ExtensionContext2,
+  ExtensionProvider2,
+  getCore31SDK,
+  getCore40SDK,
+  getCoreSDK,
+  getCoreSDK2,
 }
