@@ -24,7 +24,8 @@
 
  */
 
-// Version 21.0.4
+/* Version 21.0.5 */
+
 export * from './apiMethods'
 export * from './apiSettings'
 export * from './authSession'
