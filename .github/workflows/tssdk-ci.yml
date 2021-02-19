@@ -93,10 +93,8 @@ jobs:
           echo "verify_ssl=False" >> looker.ini
           echo "timeout=30" >> looker.ini
 
-      - name: Run unit tests
-        run: yarn jest packages/sdk-rtl/src --reporters=default --reporters=jest-junit
-        run: yarn jest packages/extension-sdk/src --reporters=default --reporters=jest-junit
-        run: yarn jest packages/extension-sdk-react/src --reporters=default --reporters=jest-junit
+      - name: Run sdk-rtl unit tests
+        run: yarn jest "packages/(extension-sdk|extension-sdk-react|sdk-rtl)/src" --reporters=default --reporters=jest-junit
 
       - name: Delete looker.ini mock
         run: rm looker.ini
