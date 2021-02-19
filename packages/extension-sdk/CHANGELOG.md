@@ -7,4 +7,4 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [21.0.5]
 
-Moved to the /looker-open-source/sdk-codegen github respository.
+Moved to the /looker-open-source/sdk-codegen github repository.
