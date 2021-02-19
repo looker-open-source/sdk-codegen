@@ -12,6 +12,8 @@ on:
       - packages/sdk/**
       - packages/sdk-rtl/**
       - packages/sdk-node/**
+      - packages/extension-sdk/**
+      - packages/extension-sdk-react/**
 
   push:
     branches:
@@ -20,6 +22,8 @@ on:
       - packages/sdk/**
       - packages/sdk-rtl/**
       - packages/sdk-node/**
+      - packages/extension-sdk/**
+      - packages/extension-sdk-react/**
 
 env:
   LOOKERSDK_BASE_URL: https://localhost:20000
