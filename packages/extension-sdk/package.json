@@ -1,6 +1,6 @@
 {
   "name": "@looker/extension-sdk",
-  "version": "21.0.5",
+  "version": "21.0.6",
   "description": "Looker Extension SDK",
   "main": "lib/index.js",
   "module": "lib/esm/index.js",
@@ -34,18 +34,18 @@
   },
   "homepage": "https://github.com/looker-open-source/sdk-codegen/tree/master/packages/extension-sdk",
   "devDependencies": {
-    "@types/semver": "^7.3.4",
     "@types/request": "^2.48.3",
-    "@types/request-promise-native": "^1.0.17"
+    "@types/request-promise-native": "^1.0.17",
+    "@types/semver": "^7.3.4"
   },
   "dependencies": {
-    "@looker/sdk": "^21.0.5",
-    "@looker/sdk-rtl": "^21.0.5",
     "@looker/chatty": "^2.2.0",
+    "@looker/sdk": "^21.0.6",
+    "@looker/sdk-rtl": "^21.0.6",
+    "deepmerge": "^4.2.2",
     "readable-stream": "^3.4.0",
     "request": "^2.88.0",
     "request-promise-native": "^1.0.8",
-    "deepmerge": "^4.2.2",
     "semver": "^7.3.4"
   },
   "keywords": [
