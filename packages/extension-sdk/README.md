@@ -12,11 +12,15 @@ Extensions are implemented as a sandboxed `<iframe>` and communication with Look
 
 Add dependency to your project using yarn or npm
 
-`yarn add @looker/extension-sdk`
+```sh
+yarn add @looker/extension-sdk
+```
 
 or
 
-`npm install @looker/extension-sdk`
+```sh
+npm install @looker/extension-sdk
+```
 
 ## Usage
 

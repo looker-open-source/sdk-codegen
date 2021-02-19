@@ -4,11 +4,15 @@
 
 Add dependency to your project using yarn or npm
 
-`yarn add @looker/extension-sdk-react`
+```sh
+yarn add @looker/extension-sdk-react
+```
 
 or
 
-`npm install @looker/extension-sdk-react`
+```sh
+npm install @looker/extension-sdk-react
+```
 
 ## Usage
 
@@ -16,18 +20,24 @@ The Extension SDK for react contains a provider that allows child components to 
 Extension SDK.
 
 ### Provider
+
 Add the `ExtensionProvider` near the root of the extension component tree.
-```
-      <ExtensionProvider loadingComponent={<div>Loading ...</div>} requiredLookerVersion='>=7.0.0'>
-        <MyComponent/>
-      </ExtensionProvider>
+
+```tsx
+<ExtensionProvider
+  loadingComponent={<div>Loading ...</div>}
+  requiredLookerVersion=">=7.0.0"
+>
+  <MyComponent />
+</ExtensionProvider>
 ```
 
 - An optional `loadingComponent` can be passed in to display the while the provider is establishing a connection with the looker host
 - `requiredLookerVersion` indicates what version of Looker is required. Check `context.initializeError` to see if a version error was detected.
 
 ### Access the Extension SDK
-```
+
+```tsx
 import React, { useContext } from "react"
 import {
   ExtensionContext,
@@ -55,7 +65,7 @@ The `ExtensionProvider` can also notify the extension of changes to the route us
 
 #### Example
 
-```
+```tsx
 export const MyExtension: React.FC<{}> = () => {
   const [pathname, setPathname] = useState("")
 
@@ -76,42 +86,49 @@ export const MyExtension: React.FC<{}> = () => {
   )
 }
 ```
+
 ### Looker SDK considerations
 
 The Looker SDK can be accessed as follows:
+
 - Through the extension context (see [Access the Extension SDK](#access-the-extension-sdk) above).
 - Globally, through the getCoreXXSDK methods (see [Redux support](#redux-support) below)
 
-
 The extension context exposes the following properties:
+
 - `coreSDK` - SDK version 3.1 (kept for backwards compatability)
 - `core31SDK` - SDK version 3.1
 - `core40SDK` - SDK version 4.0
 
 The following global access methods are available:
+
 - `getCoreSDK()` - SDK version 3.1 (kept for backwards compatability)
 - `getCore31SDK()` - SDK version 3.1
 - `getCore40SDK()` - SDK version 4.0
 
 There is no restriction on which SDK can be used within an extension, none, one or all of the above can be used interchangeably, context or global access. The one caveat is that it is recommended that the Looker version support SDK 4.0 if the 4.0 SDK is used (the results may be unpredictable otherwise).
 
-
 ### Redux support
 
 The Looker SDK is available outside of the Extension provider using the `getCore40SDK` method. This means that `redux sagas` or `redux thunks` can utilize the SDK from within a `saga` or `thunk`. Note that the Looker connection MUST be established before `getCoreSDK` can be called. An error will be thrown if the method is called to soon. Note that children of the `ExtensionProvider` will not be rendered until after the connection has been established. As such it safe for children of the `ExtensionProvider` to utilize `sagas` or `thunks`.
 
 #### Example saga
-```
+
+```tsx
 import { getCore40SDK } from '@looker/extension-sdk-react'
 import { all, call, put, takeEvery, select } from 'redux-saga/effects'
-import { Actions, allLooksSuccess, runLookSuccess, error, Action, State } from '.'
+import {
+  Actions,
+  allLooksSuccess,
+  runLookSuccess,
+  error,
+  Action,
+  State,
+} from '.'
 
 function* allLooksSaga() {
   const coreSDK = getCore40SDK()
-  const result = yield call([
-    coreSDK,
-    coreSDK.all_looks,
-  ])
+  const result = yield call([coreSDK, coreSDK.all_looks])
   if (result.ok) {
     // Take up to the first 10 looks
     const looks = result.value.slice(0, 9)
@@ -122,9 +139,7 @@ function* allLooksSaga() {
 }
 
 export function* sagaCallbacks() {
-  yield all([
-    takeEvery(Actions.ALL_LOOKS_REQUEST, allLooksSaga),
-  ])
+  yield all([takeEvery(Actions.ALL_LOOKS_REQUEST, allLooksSaga)])
 }
 ```
 
