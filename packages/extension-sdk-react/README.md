@@ -12,7 +12,7 @@ or
 
 ## Usage
 
-The Extension SDK for react contains of a provider that allows child components to access the
+The Extension SDK for react contains a provider that allows child components to access the
 Extension SDK.
 
 ### Provider
