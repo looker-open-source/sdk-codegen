@@ -2,7 +2,7 @@
   "swagger": "2.0",
   "info": {
     "version": "3.0.0",
-    "x-looker-release-version": "21.0.0",
+    "x-looker-release-version": "21.3.0",
     "title": "Looker API 3.0 (Legacy) Reference",
     "description": "### 3.0 Legacy API\n\nLooker API 3.0 is stable and will continue to be supported for the foreseeable future.\nNo new features will be added to API 3.0; all new development (Looker features and\ndev tools) will appear in API 4.0 only.\n\n",
     "contact": { "name": "Looker Team", "url": "https://help.looker.com" },
@@ -10025,7 +10025,7 @@
         "tags": ["User"],
         "operationId": "user_for_credential",
         "summary": "Get User by Credential Id",
-        "description": "### Get information about the user with a credential of given type with specific id.\n\nThis is used to do things like find users by their embed external_user_id. Or, find the user with\na given api3 client_id, etc. The 'credential_type' matchs the 'type' name of the various credential\ntypes. It must be one of the values listed in the table below. The 'credential_id' is your unique Id\nfor the user and is specific to each type of credential.\n\nAn example using the Ruby sdk might look like:\n\n`sdk.user_for_credential('embed', 'customer-4959425')`\n\nThis table shows the supported 'Credential Type' strings. The right column is for reference; it shows\nwhich field in the given credential type is actually searched when finding a user with the supplied\n'credential_id'.\n\n| Credential Types | Id Field Matched |\n| ---------------- | ---------------- |\n| email            | email            |\n| google           | google_user_id   |\n| saml             | saml_user_id     |\n| oidc             | oidc_user_id     |\n| ldap             | ldap_id          |\n| api              | token            |\n| api3             | client_id        |\n| embed            | external_user_id |\n| looker_openid    | email            |\n\nNOTE: The 'api' credential type was only used with the legacy Looker query API and is no longer supported. The credential type for API you are currently looking at is 'api3'.\n\n",
+        "description": "### Get information about the user with a credential of given type with specific id.\n\nThis is used to do things like find users by their embed external_user_id. Or, find the user with\na given api3 client_id, etc. The 'credential_type' matches the 'type' name of the various credential\ntypes. It must be one of the values listed in the table below. The 'credential_id' is your unique Id\nfor the user and is specific to each type of credential.\n\nAn example using the Ruby sdk might look like:\n\n`sdk.user_for_credential('embed', 'customer-4959425')`\n\nThis table shows the supported 'Credential Type' strings. The right column is for reference; it shows\nwhich field in the given credential type is actually searched when finding a user with the supplied\n'credential_id'.\n\n| Credential Types | Id Field Matched |\n| ---------------- | ---------------- |\n| email            | email            |\n| google           | google_user_id   |\n| saml             | saml_user_id     |\n| oidc             | oidc_user_id     |\n| ldap             | ldap_id          |\n| api              | token            |\n| api3             | client_id        |\n| embed            | external_user_id |\n| looker_openid    | email            |\n\n**NOTE**: The 'api' credential type was only used with the legacy Looker query API and is no longer supported. The credential type for API you are currently looking at is 'api3'.\n\n",
         "parameters": [
           {
             "name": "credential_type",
@@ -13134,6 +13134,12 @@
           "description": "Id of the viewed Dashboard",
           "x-looker-nullable": true
         },
+        "title": {
+          "type": "string",
+          "readOnly": true,
+          "description": "Name or title of underlying content",
+          "x-looker-nullable": true
+        },
         "content_metadata_id": {
           "type": "integer",
           "format": "int64",
@@ -14822,6 +14828,11 @@
         "sql_runner_precache_tables": {
           "type": "boolean",
           "description": "Precache tables in the SQL Runner",
+          "x-looker-nullable": false
+        },
+        "sql_writing_with_info_schema": {
+          "type": "boolean",
+          "description": "Fetch Information Schema For SQL Writing",
           "x-looker-nullable": false
         },
         "after_connect_statements": {
@@ -19024,8 +19035,13 @@
         },
         "git_production_branch_name": {
           "type": "string",
-          "description": "Git production branch name. Defaults to master.",
+          "description": "Git production branch name. Defaults to master. Supported only in Looker 21.0 and higher.",
           "x-looker-nullable": false
+        },
+        "git_auth_cookie": {
+          "type": "string",
+          "description": "Git http cookie file path.",
+          "x-looker-nullable": true
         },
         "git_username_user_attribute": {
           "type": "string",
