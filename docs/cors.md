@@ -12,8 +12,8 @@ The Node runtime for the Looker SDK doesn't require CORS. Only the Browser runti
 
 Included in this repository are scripts and source code that hopefully reduce the amount of effort and code required to use OAuth and CORS:
 
-- [OAuth application registration](/packages/api-explorer/scripts/register.ts) is a Node script that can create and update an OAuth app configuration
-- a sample OAuth application configuration file [`appconfig.json`](/packages/api-explorer/scripts/appconfig.json) has the configuration for the stand-alone [API Explorer](/packages/api-explorer) in this repository
+- [OAuth application registration](/packages/sdk-codegen-scripts/scripts/register.ts) is a Node script that can create and update an OAuth app configuration
+- a sample OAuth application configuration file [`appconfig.json`](/packages/sdk-codegen-scripts/scripts/appconfig.json) has the configuration for the stand-alone [API Explorer](/packages/api-explorer) in this repository
 - a working [`readConfig` override](/packages/run-it/src/utils/RunItSDK.ts) provides the values required by `OAuthSession`
 - a working React-based [OAuth handler](/packages/run-it/src/scenes/OAuthScene) processes OAuth authentications and "logs in" the SDK
 
