@@ -24,23 +24,38 @@
 
  */
 
-/* Version 21.0.5 */
+import React, { useEffect } from 'react'
+import { useLocation, useHistory } from 'react-router-dom'
+import { ExtensionHostApi } from '@looker/extension-sdk'
+import { RouteChangeListenerProps } from './types'
 
-export * from './apiMethods'
-export * from './apiSettings'
-export * from './authSession'
-export * from './authToken'
-export * from './baseTransport'
-export * from './browserSession'
-export * from './browserServices'
-export * from './browserTransport'
-export * from './constants'
-export * from './cryptoHash'
-export * from './CSRFSession'
-export * from './delimArray'
-export * from './extensionSession'
-export * from './extensionTransport'
-export * from './oauthSession'
-export * from './proxySession'
-export * from './platformServices'
-export * from './transport'
+export const RouteChangeListener: React.FC<RouteChangeListenerProps> = ({
+  onPathnameChange,
+  onRouteChange,
+  extensionHost,
+  hostRoute,
+  hostRouteState,
+}) => {
+  const history = useHistory()
+  const location = useLocation()
+
+  useEffect(() => {
+    if (onPathnameChange) {
+      onPathnameChange(location.pathname)
+    }
+    if (onRouteChange) {
+      onRouteChange(location.pathname + location.search, { ...location.state })
+    }
+    ;(extensionHost as ExtensionHostApi).clientRouteChanged(
+      location.pathname + location.search,
+      location.state
+    )
+  }, [location])
+
+  useEffect(() => {
+    if (hostRoute) {
+      history.push(hostRoute, hostRouteState)
+    }
+  }, [hostRoute])
+  return <></>
+}

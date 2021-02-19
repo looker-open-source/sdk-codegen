@@ -24,23 +24,43 @@
 
  */
 
-/* Version 21.0.5 */
+import { getInitialRouteEntries } from './get_initial_route_entries'
 
-export * from './apiMethods'
-export * from './apiSettings'
-export * from './authSession'
-export * from './authToken'
-export * from './baseTransport'
-export * from './browserSession'
-export * from './browserServices'
-export * from './browserTransport'
-export * from './constants'
-export * from './cryptoHash'
-export * from './CSRFSession'
-export * from './delimArray'
-export * from './extensionSession'
-export * from './extensionTransport'
-export * from './oauthSession'
-export * from './proxySession'
-export * from './platformServices'
-export * from './transport'
+describe('getInitialRouteEntries', () => {
+  it('returns undefined when no initial route', () => {
+    expect(getInitialRouteEntries()).toBeUndefined()
+  })
+
+  it('returns pathname', () => {
+    expect(getInitialRouteEntries({ route: '/abcd/wxyz' })).toEqual([
+      { pathname: '/abcd/wxyz', search: '', hash: '', state: undefined },
+    ])
+  })
+
+  it('returns pathname and query string', () => {
+    expect(getInitialRouteEntries({ route: '/abcd/wxyz?test=1234' })).toEqual([
+      {
+        pathname: '/abcd/wxyz',
+        search: '?test=1234',
+        hash: '',
+        state: undefined,
+      },
+    ])
+  })
+
+  it('returns pathname, query string and state', () => {
+    expect(
+      getInitialRouteEntries({
+        route: '/abcd/wxyz?test=1234',
+        routeState: { hello: 'world' },
+      })
+    ).toEqual([
+      {
+        pathname: '/abcd/wxyz',
+        search: '?test=1234',
+        hash: '',
+        state: { hello: 'world' },
+      },
+    ])
+  })
+})

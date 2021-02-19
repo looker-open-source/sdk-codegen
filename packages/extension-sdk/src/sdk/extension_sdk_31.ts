@@ -24,23 +24,23 @@
 
  */
 
-/* Version 21.0.5 */
+import {
+  LookerExtensionSDK as _LookerExtensionSDK,
+  Looker31SDK,
+} from '@looker/sdk'
+import { ExtensionHostApi, ApiVersion } from '../connect'
 
-export * from './apiMethods'
-export * from './apiSettings'
-export * from './authSession'
-export * from './authToken'
-export * from './baseTransport'
-export * from './browserSession'
-export * from './browserServices'
-export * from './browserTransport'
-export * from './constants'
-export * from './cryptoHash'
-export * from './CSRFSession'
-export * from './delimArray'
-export * from './extensionSession'
-export * from './extensionTransport'
-export * from './oauthSession'
-export * from './proxySession'
-export * from './platformServices'
-export * from './transport'
+import { SdkConnection } from './sdk_connection'
+
+export class LookerExtensionSDK31 {
+  /**
+   * Create an SDK client that uses SDK 3.1
+   * @param hostConnection extension host API
+   */
+  static createClient(hostConnection: ExtensionHostApi): Looker31SDK {
+    return _LookerExtensionSDK.createClient(
+      new SdkConnection(hostConnection, ApiVersion.sdk31),
+      Looker31SDK
+    )
+  }
+}

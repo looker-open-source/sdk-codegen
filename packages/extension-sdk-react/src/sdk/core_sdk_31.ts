@@ -24,23 +24,36 @@
 
  */
 
-/* Version 21.0.5 */
+import { Looker31SDK } from '@looker/sdk/lib/3.1/methods'
 
-export * from './apiMethods'
-export * from './apiSettings'
-export * from './authSession'
-export * from './authToken'
-export * from './baseTransport'
-export * from './browserSession'
-export * from './browserServices'
-export * from './browserTransport'
-export * from './constants'
-export * from './cryptoHash'
-export * from './CSRFSession'
-export * from './delimArray'
-export * from './extensionSession'
-export * from './extensionTransport'
-export * from './oauthSession'
-export * from './proxySession'
-export * from './platformServices'
-export * from './transport'
+let _core31SDK: Looker31SDK | undefined
+
+/**
+ * Register the core 3.1 SDK. The ExtensionProvider will automatically
+ * call this when connection with the host suceeds. An extension using
+ * the ExtensionProvider should  never call this.
+ * @param coreSDK core sdk
+ */
+export const registerCore31SDK = (coreSDK: Looker31SDK) => {
+  if (_core31SDK) {
+    throw new Error('coreSDK can only be registered once')
+  }
+  _core31SDK = coreSDK
+}
+
+/**
+ * Unregister the core 3.1 SDK. The ExtensionProvider will automatically
+ * call this when it is unloaded. An extension using
+ * the ExtensionProvider should  never call this.
+ */
+export const unregisterCore31SDK = () => (_core31SDK = undefined)
+
+/**
+ * Global access to the coreSDK. An error will be thrown if accessed prematurely.
+ */
+export const getCore31SDK = () => {
+  if (!_core31SDK) {
+    throw new Error('Looker host connection not established')
+  }
+  return _core31SDK
+}

@@ -24,23 +24,23 @@
 
  */
 
-/* Version 21.0.5 */
+import React from 'react'
+import { ErrorMessageProps } from './types'
 
-export * from './apiMethods'
-export * from './apiSettings'
-export * from './authSession'
-export * from './authToken'
-export * from './baseTransport'
-export * from './browserSession'
-export * from './browserServices'
-export * from './browserTransport'
-export * from './constants'
-export * from './cryptoHash'
-export * from './CSRFSession'
-export * from './delimArray'
-export * from './extensionSession'
-export * from './extensionTransport'
-export * from './oauthSession'
-export * from './proxySession'
-export * from './platformServices'
-export * from './transport'
+export const ErrorMessage: React.FC<ErrorMessageProps> = ({ errorMessage }) => (
+  <div
+    id="extension-initialization-error"
+    aria-live="polite"
+    role="status"
+    style={{
+      width: '100%',
+      margin: '-8px',
+      padding: '12px 16px',
+      background: '#FFE5E9',
+      borderRadius: '4px',
+      font: '0.875rem "Helvetica", san-serif',
+    }}
+  >
+    {errorMessage}
+  </div>
+)

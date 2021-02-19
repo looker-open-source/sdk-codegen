@@ -24,23 +24,40 @@
 
  */
 
-/* Version 21.0.5 */
+let registered = false
+let _coreSdk: any
 
-export * from './apiMethods'
-export * from './apiSettings'
-export * from './authSession'
-export * from './authToken'
-export * from './baseTransport'
-export * from './browserSession'
-export * from './browserServices'
-export * from './browserTransport'
-export * from './constants'
-export * from './cryptoHash'
-export * from './CSRFSession'
-export * from './delimArray'
-export * from './extensionSession'
-export * from './extensionTransport'
-export * from './oauthSession'
-export * from './proxySession'
-export * from './platformServices'
-export * from './transport'
+/**
+ * Register the SDK. The ExtensionProvider will automatically
+ * call this when connection is first requested.
+ * @param coreSDK core sdk
+ */
+export function registerCoreSDK2(coreSdk: any) {
+  if (_coreSdk) {
+    throw new Error('coreSDK can only be registered once')
+  }
+  _coreSdk = coreSdk
+  registered = true
+}
+
+/**
+ * Unregister theSDK. The ExtensionProvider will automatically
+ * call this when it is unloaded. An extension using
+ * the ExtensionProvider should  never call this.
+ */
+export function unregisterCoreSDK2() {
+  registered = false
+  _coreSdk = undefined
+}
+
+/**
+ * Global access to the coreSDK. An error will be thrown if accessed prematurely.
+ * Note that provider does not have to provide a LookerSdk type. In this case
+ * this method will return undefined.
+ */
+export function getCoreSDK2<T>(): T {
+  if (!registered) {
+    throw new Error('Looker host connection not established')
+  }
+  return _coreSdk
+}

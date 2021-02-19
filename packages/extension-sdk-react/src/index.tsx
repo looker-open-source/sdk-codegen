@@ -24,23 +24,38 @@
 
  */
 
-/* Version 21.0.5 */
+import {
+  ExtensionProvider,
+  ExtensionContext,
+} from './components/ExtensionProvider/ExtensionProvider'
+import { ExtensionContextData } from './components/ExtensionProvider/types'
+import {
+  ExtensionContextData2,
+  ExtensionContext2,
+  ExtensionProvider2,
+} from './components/ExtensionProvider2/ExtensionProvider2'
+import {
+  ExtensionContextBase,
+  ExtensionProviderBase,
+} from './components/ExtensionProviderBase/ExtensionProviderBase'
+import { BaseExtensionContextData } from './components/ExtensionConnector/types'
+import { getCore31SDK } from './sdk/core_sdk_31'
+import { getCore40SDK } from './sdk/core_sdk_40'
+import { getCoreSDK2 } from './sdk/core_sdk2'
+import { getCoreSDK } from './sdk/core_sdk'
 
-export * from './apiMethods'
-export * from './apiSettings'
-export * from './authSession'
-export * from './authToken'
-export * from './baseTransport'
-export * from './browserSession'
-export * from './browserServices'
-export * from './browserTransport'
-export * from './constants'
-export * from './cryptoHash'
-export * from './CSRFSession'
-export * from './delimArray'
-export * from './extensionSession'
-export * from './extensionTransport'
-export * from './oauthSession'
-export * from './proxySession'
-export * from './platformServices'
-export * from './transport'
+export {
+  BaseExtensionContextData,
+  ExtensionContextData,
+  ExtensionProvider,
+  ExtensionContext,
+  ExtensionContextBase,
+  ExtensionProviderBase,
+  ExtensionContextData2,
+  ExtensionContext2,
+  ExtensionProvider2,
+  getCore31SDK,
+  getCore40SDK,
+  getCoreSDK,
+  getCoreSDK2,
+}

@@ -1,0 +1,59 @@
+{
+  "name": "@looker/extension-sdk-react",
+  "version": "21.0.5",
+  "description": "Looker Extension SDK for React",
+  "main": "lib/index.js",
+  "module": "lib/esm/index.js",
+  "sideEffects": "false",
+  "typings": "lib/index.d.ts",
+  "files": [
+    "lib"
+  ],
+  "private": false,
+  "publishConfig": {
+    "access": "public"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/looker-open-source/sdk-codegen.git",
+    "directory": "packages/sdk-rtl"
+  },
+  "author": "Looker",
+  "license": "MIT",
+  "scripts": {
+    "docs": "typedoc --mode file --out docs",
+    "watch": "yarn lerna exec --scope @looker/extension-sdk-react --stream 'BABEL_ENV=build babel src --root-mode upward --out-dir lib/esm --source-maps --extensions .ts,.tsx --no-comments --watch'"
+  },
+  "bugs": {
+    "url": "https://github.com/looker-open-source/sdk-codegen/issues"
+  },
+  "engines": {
+    "node": ">=12",
+    "npm": ">=5.5.1"
+  },
+  "homepage": "https://github.com/looker-open-source/sdk-codegen/tree/master/packages/extension-sdk",
+  "devDependencies": {
+    "@types/react": "^16.14.2",
+    "@types/react-router": "^5.1.11",
+    "@types/react-router-dom": "^5.1.5",
+    "@types/enzyme": "^3.10.8",
+    "@testing-library/react": "^11.2.2",
+    "enzyme": "^3.11.0"
+  },
+  "dependencies": {
+    "@looker/extension-sdk": "^21.0.5",
+    "@looker/sdk": "^21.0.5",
+    "@looker/sdk-rtl": "^21.0.5",
+    "react": "^16.13.1",
+    "react-dom": "^16.13.1",
+    "history": "^4.9.0",
+    "react-router": "^5.1.2",
+    "react-router-dom": "^5.1.2",
+    "lodash": "^4.17.20"
+  },
+  "keywords": [
+    "Looker",
+    "extension-sdk"
+  ],
+  "gitHead": "103df9595fff8218c158e1fdd640e33c60827e6a"
+}

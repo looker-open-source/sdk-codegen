@@ -12,6 +12,8 @@ on:
       - packages/sdk/**
       - packages/sdk-rtl/**
       - packages/sdk-node/**
+      - packages/extension-sdk/**
+      - packages/extension-sdk-react/**
 
   push:
     branches:
@@ -20,6 +22,8 @@ on:
       - packages/sdk/**
       - packages/sdk-rtl/**
       - packages/sdk-node/**
+      - packages/extension-sdk/**
+      - packages/extension-sdk-react/**
 
 env:
   LOOKERSDK_BASE_URL: https://localhost:20000
@@ -90,7 +94,7 @@ jobs:
           echo "timeout=30" >> looker.ini
 
       - name: Run unit tests
-        run: yarn jest packages/sdk-rtl/src --reporters=default --reporters=jest-junit
+        run: yarn jest "packages/(extension-sdk|extension-sdk-react|sdk-rtl)/src" --reporters=default --reporters=jest-junit
 
       - name: Delete looker.ini mock
         run: rm looker.ini

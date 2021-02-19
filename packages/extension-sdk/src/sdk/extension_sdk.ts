@@ -24,23 +24,42 @@
 
  */
 
-/* Version 21.0.5 */
+import {
+  LookerExtensionSDK as _LookerExtensionSDK,
+  Looker31SDK,
+  Looker40SDK,
+} from '@looker/sdk'
+import { ExtensionHostApi, ApiVersion } from '../connect'
 
-export * from './apiMethods'
-export * from './apiSettings'
-export * from './authSession'
-export * from './authToken'
-export * from './baseTransport'
-export * from './browserSession'
-export * from './browserServices'
-export * from './browserTransport'
-export * from './constants'
-export * from './cryptoHash'
-export * from './CSRFSession'
-export * from './delimArray'
-export * from './extensionSession'
-export * from './extensionTransport'
-export * from './oauthSession'
-export * from './proxySession'
-export * from './platformServices'
-export * from './transport'
+import { SdkConnection } from './sdk_connection'
+
+export class LookerExtensionSDK {
+  /**
+   * Create an SDK client that uses SDK 3.1
+   * @param hostConnection extension host API
+   */
+  static create31Client(hostConnection: ExtensionHostApi): Looker31SDK {
+    return _LookerExtensionSDK.createClient(
+      new SdkConnection(hostConnection, ApiVersion.sdk31),
+      Looker31SDK
+    )
+  }
+
+  /**
+   * Create an SDK client that uses SDK 4.0
+   * @param hostConnection extension host API
+   */
+  static create40Client(hostConnection: ExtensionHostApi): Looker40SDK {
+    return _LookerExtensionSDK.createClient(
+      new SdkConnection(hostConnection, ApiVersion.sdk40),
+      Looker40SDK
+    )
+  }
+
+  /**
+   * Creates a [[LookerSDK]] object.
+   */
+  static createClient(hostConnection: ExtensionHostApi) {
+    return LookerExtensionSDK.create31Client(hostConnection)
+  }
+}

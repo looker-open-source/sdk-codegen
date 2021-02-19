@@ -43,6 +43,7 @@
     "fix": "yarn lint:es --fix",
     "lint": "run-p -c lint:*",
     "lint:es": "eslint 'packages/**/*.ts{,x}' --cache",
+    "lint-quiet:es": "eslint 'packages/**/*.ts{,x}' --cache --quiet",
     "lint:ts": "tsc",
     "lint-staged": "yarn exec lint-staged",
     "lint:spec": "SUPPRESS_NO_CONFIG_WARNING=1 ts-node -O '{ \"module\": \"commonjs\", \"target\": \"es2019\" }' packages/sdk-codegen-scripts/scripts/specLinter.ts",

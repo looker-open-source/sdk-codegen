@@ -24,23 +24,25 @@
 
  */
 
-/* Version 21.0.5 */
+import { Looker31SDK } from '@looker/sdk/lib/3.1/methods'
+import { Looker40SDK } from '@looker/sdk/lib/4.0/methods'
+import { BaseExtensionContextData } from '../ExtensionConnector'
 
-export * from './apiMethods'
-export * from './apiSettings'
-export * from './authSession'
-export * from './authToken'
-export * from './baseTransport'
-export * from './browserSession'
-export * from './browserServices'
-export * from './browserTransport'
-export * from './constants'
-export * from './cryptoHash'
-export * from './CSRFSession'
-export * from './delimArray'
-export * from './extensionSession'
-export * from './extensionTransport'
-export * from './oauthSession'
-export * from './proxySession'
-export * from './platformServices'
-export * from './transport'
+/**
+ * Extension context
+ */
+export interface ExtensionContextData extends BaseExtensionContextData {
+  /**
+   * Looker 3.1 SDK. Note that SDK calls are made by the extension host.
+   * @deprecated use core31SDK - coreSDK === core31SDK
+   */
+  coreSDK: Looker31SDK
+  /**
+   * Looker 31. SDK. Note that SDK calls are made by the extension host.
+   */
+  core31SDK: Looker31SDK
+  /**
+   * Looker 4.0 SDK. Note that SDK calls are made by the extension host.
+   */
+  core40SDK: Looker40SDK
+}

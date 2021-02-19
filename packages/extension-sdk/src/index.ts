@@ -23,24 +23,38 @@
  SOFTWARE.
 
  */
-
-/* Version 21.0.5 */
-
-export * from './apiMethods'
-export * from './apiSettings'
-export * from './authSession'
-export * from './authToken'
-export * from './baseTransport'
-export * from './browserSession'
-export * from './browserServices'
-export * from './browserTransport'
-export * from './constants'
-export * from './cryptoHash'
-export * from './CSRFSession'
-export * from './delimArray'
-export * from './extensionSession'
-export * from './extensionTransport'
-export * from './oauthSession'
-export * from './proxySession'
-export * from './platformServices'
-export * from './transport'
+export { connectExtensionHost } from './connect/connect_extension_host'
+export { getExtensionSDK } from './connect/global_listener'
+export {
+  ApiVersion,
+  ContextDataRequest,
+  ErrorEventRequest,
+  ExtensionClientApi,
+  ExtensionEvent,
+  ExtensionInitializationResponse,
+  ExtensionHostApi,
+  ExtensionHostApiConfiguration,
+  ExtensionHostConfiguration,
+  ExtensionNotification,
+  ExtensionNotificationType,
+  ExtensionRequest,
+  ExtensionRequestType,
+  ExtensionSDK,
+  FetchDataRequest,
+  FetchCustomParameters,
+  FetchProxy,
+  FetchProxyDataResponse,
+  FetchResponseBodyType,
+  InvokeCoreSdkRequest,
+  LocalStorageRequest,
+  LookerHostData,
+  RouteChangeData,
+  RouteChangeRequest,
+  TrackActionRequest,
+  UpdateLocationRequest,
+  UpdateTitleRequest,
+} from './connect/types'
+export { LookerExtensionSDK } from './sdk/extension_sdk'
+export { LookerExtensionSDK31 } from './sdk/extension_sdk_31'
+export { LookerExtensionSDK40 } from './sdk/extension_sdk_40'
+export { SdkConnection } from './sdk/sdk_connection'

@@ -24,23 +24,31 @@
 
  */
 
-/* Version 21.0.5 */
+import {
+  registerCore31SDK,
+  unregisterCore31SDK,
+  getCore31SDK,
+} from './core_sdk_31'
 
-export * from './apiMethods'
-export * from './apiSettings'
-export * from './authSession'
-export * from './authToken'
-export * from './baseTransport'
-export * from './browserSession'
-export * from './browserServices'
-export * from './browserTransport'
-export * from './constants'
-export * from './cryptoHash'
-export * from './CSRFSession'
-export * from './delimArray'
-export * from './extensionSession'
-export * from './extensionTransport'
-export * from './oauthSession'
-export * from './proxySession'
-export * from './platformServices'
-export * from './transport'
+/**
+ * Register the core SDK. The ExtensionProvider will automatically
+ * call this when connection with the host suceeds. An extension using
+ * the ExtensionProvider should  never call this.
+ * @param coreSDK core sdk
+ * @deprecated use registerCore31SDK or registerCore40SDK instead
+ */
+export const registerCoreSDK = registerCore31SDK
+
+/**
+ * Unregister the core SDK. The ExtensionProvider will automatically
+ * call this when it is unloaded. An extension using
+ * the ExtensionProvider should  never call this.
+ * @deprecated use unregisterCore31SDK or unregisterCore40SDK instead
+ */
+export const unregisterCoreSDK = unregisterCore31SDK
+
+/**
+ * Global access to the coreSDK. An error will be thrown if accessed prematurely.
+ * @deprecated use getCore31SDK or getCore40SDK instead
+ */
+export const getCoreSDK = getCore31SDK

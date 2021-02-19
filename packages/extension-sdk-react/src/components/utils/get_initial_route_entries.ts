@@ -24,23 +24,14 @@
 
  */
 
-/* Version 21.0.5 */
+import * as H from 'history'
+import { RouteData } from '../ExtensionConnector/types'
 
-export * from './apiMethods'
-export * from './apiSettings'
-export * from './authSession'
-export * from './authToken'
-export * from './baseTransport'
-export * from './browserSession'
-export * from './browserServices'
-export * from './browserTransport'
-export * from './constants'
-export * from './cryptoHash'
-export * from './CSRFSession'
-export * from './delimArray'
-export * from './extensionSession'
-export * from './extensionTransport'
-export * from './oauthSession'
-export * from './proxySession'
-export * from './platformServices'
-export * from './transport'
+export const getInitialRouteEntries = (initialRouteData?: RouteData) => {
+  let initialEntries: H.LocationDescriptor[] | undefined
+  if (initialRouteData) {
+    const { route, routeState } = initialRouteData
+    initialEntries = [{ ...H.parsePath(route), state: routeState }]
+  }
+  return initialEntries
+}

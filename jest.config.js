@@ -2,7 +2,7 @@
 
  MIT License
 
- Copyright (c) 2020 Looker Data Sciences, Inc.
+ Copyright (c) 2021 Looker Data Sciences, Inc.
 
  Permission is hereby granted, free of charge, to any person obtaining a copy
  of this software and associated documentation files (the "Software"), to deal
@@ -31,16 +31,15 @@ module.exports = {
   moduleDirectories: ['./node_modules', './packages'],
   moduleFileExtensions: ['js', 'jsx', 'ts', 'tsx', 'json', 'node'],
   moduleNameMapper: {
-    // '@looker/sdk/lib/browser': '<rootDir>/packages/sdk/src',
-    // '@looker/sdk/lib/node': '<rootDir>/packages/sdk/src',
-    // '@looker/sdk-rtl/lib/browser': '<rootDir>/packages/sdk-rtl/src',
     '@looker/sdk-codegen-utils/src': '<rootDir>/packages/sdk-codegen-utils/src',
-    '@looker/((?!components|design|icons)(.+))$': '<rootDir>/packages/$1/src',
+    '@looker/((?!components|design|icons|chatty)(.+))$':
+      '<rootDir>/packages/$1/src',
     '\\.(css)$': '<rootDir>/config/jest/styleMock.js',
     '\\.(jpg|jpeg|png|gif|eot|otf|webp|svg|ttf|woff|woff2|mp4|webm|wav|mp3|m4a|aac|oga)$':
       '<rootDir>/config/jest/fileMock.js',
   },
   restoreMocks: true,
+  // eslint-disable-next-line node/no-path-concat
   setupFilesAfterEnv: [`${__dirname}/jest.setup.js`],
   testMatch: ['**/?(*.)(spec|test).(ts|js)?(x)'],
   transform: {

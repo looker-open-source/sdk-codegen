@@ -24,23 +24,23 @@
 
  */
 
-/* Version 21.0.5 */
+import { ExtensionSDK } from '@looker/extension-sdk'
 
-export * from './apiMethods'
-export * from './apiSettings'
-export * from './authSession'
-export * from './authToken'
-export * from './baseTransport'
-export * from './browserSession'
-export * from './browserServices'
-export * from './browserTransport'
-export * from './constants'
-export * from './cryptoHash'
-export * from './CSRFSession'
-export * from './delimArray'
-export * from './extensionSession'
-export * from './extensionTransport'
-export * from './oauthSession'
-export * from './proxySession'
-export * from './platformServices'
-export * from './transport'
+export const setupClosePopoversListener = (extensionSDK?: ExtensionSDK) => {
+  const onBodyMousedown = () => {
+    if (extensionSDK) {
+      extensionSDK.closeHostPopovers()
+    }
+  }
+  const body: HTMLBodyElement | undefined | null = document.querySelector(
+    'body'
+  )
+  if (body) {
+    body.addEventListener('mousedown', onBodyMousedown)
+  }
+  return () => {
+    if (body) {
+      body.removeEventListener('mousedown', onBodyMousedown)
+    }
+  }
+}

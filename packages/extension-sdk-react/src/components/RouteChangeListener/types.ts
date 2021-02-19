@@ -24,23 +24,12 @@
 
  */
 
-/* Version 21.0.5 */
+import { ExtensionSDK } from '@looker/extension-sdk'
 
-export * from './apiMethods'
-export * from './apiSettings'
-export * from './authSession'
-export * from './authToken'
-export * from './baseTransport'
-export * from './browserSession'
-export * from './browserServices'
-export * from './browserTransport'
-export * from './constants'
-export * from './cryptoHash'
-export * from './CSRFSession'
-export * from './delimArray'
-export * from './extensionSession'
-export * from './extensionTransport'
-export * from './oauthSession'
-export * from './proxySession'
-export * from './platformServices'
-export * from './transport'
+export interface RouteChangeListenerProps {
+  onPathnameChange?: (pathname: string) => void
+  onRouteChange?: (route: string, routeState?: any) => void
+  extensionHost?: ExtensionSDK
+  hostRoute?: string
+  hostRouteState?: any
+}

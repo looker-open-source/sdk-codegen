@@ -24,23 +24,36 @@
 
  */
 
-/* Version 21.0.5 */
+import { Looker40SDK } from '@looker/sdk/lib/4.0/methods'
 
-export * from './apiMethods'
-export * from './apiSettings'
-export * from './authSession'
-export * from './authToken'
-export * from './baseTransport'
-export * from './browserSession'
-export * from './browserServices'
-export * from './browserTransport'
-export * from './constants'
-export * from './cryptoHash'
-export * from './CSRFSession'
-export * from './delimArray'
-export * from './extensionSession'
-export * from './extensionTransport'
-export * from './oauthSession'
-export * from './proxySession'
-export * from './platformServices'
-export * from './transport'
+let _core40SDK: Looker40SDK | undefined
+
+/**
+ * Register the core 4.0 SDK. The ExtensionProvider will automatically
+ * call this when connection with the host suceeds. An extension using
+ * the ExtensionProvider should  never call this.
+ * @param coreSDK core sdk
+ */
+export const registerCore40SDK = (coreSDK: Looker40SDK) => {
+  if (_core40SDK) {
+    throw new Error('coreSDK can only be registered onces')
+  }
+  _core40SDK = coreSDK
+}
+
+/**
+ * Unregister the core 4.0 SDK. The ExtensionProvider will automatically
+ * call this when it is unloaded. An extension using
+ * the ExtensionProvider should  never call this.
+ */
+export const unregisterCore40SDK = () => (_core40SDK = undefined)
+
+/**
+ * Global access to the core40SDK. An error will be thrown if accessed prematurely.
+ */
+export const getCore40SDK = () => {
+  if (!_core40SDK) {
+    throw new Error('Looker host connection not established')
+  }
+  return _core40SDK
+}

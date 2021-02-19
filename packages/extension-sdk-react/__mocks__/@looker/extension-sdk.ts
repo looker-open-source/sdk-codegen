@@ -24,23 +24,24 @@
 
  */
 
-/* Version 21.0.5 */
+export const connectExtensionHost = (configuration: any) => {
+  const { initializedCallback } = configuration
+  initializedCallback(true)
+  return Promise.resolve({})
+}
 
-export * from './apiMethods'
-export * from './apiSettings'
-export * from './authSession'
-export * from './authToken'
-export * from './baseTransport'
-export * from './browserSession'
-export * from './browserServices'
-export * from './browserTransport'
-export * from './constants'
-export * from './cryptoHash'
-export * from './CSRFSession'
-export * from './delimArray'
-export * from './extensionSession'
-export * from './extensionTransport'
-export * from './oauthSession'
-export * from './proxySession'
-export * from './platformServices'
-export * from './transport'
+export class LookerExtensionSDK {
+  static createClient() {
+    // noop
+  }
+
+  static create31Client() {
+    // noop
+  }
+
+  static create40Client() {
+    // noop
+  }
+}
+
+export class ExtensionHostApi {}

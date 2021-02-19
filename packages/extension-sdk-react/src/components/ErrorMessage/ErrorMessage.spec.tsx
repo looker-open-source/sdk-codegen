@@ -24,23 +24,13 @@
 
  */
 
-/* Version 21.0.5 */
+import React from 'react'
+import { render, screen } from '@testing-library/react'
+import { ErrorMessage } from './ErrorMessage'
 
-export * from './apiMethods'
-export * from './apiSettings'
-export * from './authSession'
-export * from './authToken'
-export * from './baseTransport'
-export * from './browserSession'
-export * from './browserServices'
-export * from './browserTransport'
-export * from './constants'
-export * from './cryptoHash'
-export * from './CSRFSession'
-export * from './delimArray'
-export * from './extensionSession'
-export * from './extensionTransport'
-export * from './oauthSession'
-export * from './proxySession'
-export * from './platformServices'
-export * from './transport'
+describe(ErrorMessage.name, () => {
+  it('should show error message', () => {
+    render(<ErrorMessage errorMessage="I'm a teapot" />)
+    expect(screen.queryByText("I'm a teapot")).toBeInTheDocument()
+  })
+})
