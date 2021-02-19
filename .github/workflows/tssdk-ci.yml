@@ -95,6 +95,8 @@ jobs:
 
       - name: Run unit tests
         run: yarn jest packages/sdk-rtl/src --reporters=default --reporters=jest-junit
+        run: yarn jest packages/extension-sdk/src --reporters=default --reporters=jest-junit
+        run: yarn jest packages/extension-sdk-react/src --reporters=default --reporters=jest-junit
 
       - name: Delete looker.ini mock
         run: rm looker.ini
