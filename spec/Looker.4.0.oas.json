@@ -1,8 +1,8 @@
 {
   "openapi": "3.0.0",
   "info": {
-    "version": "4.0.21.0",
-    "x-looker-release-version": "21.0.0",
+    "version": "4.0.21.3",
+    "x-looker-release-version": "21.3.0",
     "title": "Looker API 4.0 (Experimental) Reference",
     "description": "\nWelcome to the future! This is an early preview of our next-generation Looker API 4.0.\nAPI 4.0 runs alongside APIs 3.1 and 3.0. We've tagged 4.0 as \"experimental\" to reflect\nthat we have more work planned for API 4.0 which may include breaking changes.\nPlease pardon our dust while we remodel a few rooms!\n\n### In This Release\n\nWe're spinning up this new API 4.0 version so that we can make adjustments to our API\nfunctions, parameters, and response types to fix bugs and inconsistencies. These changes\nfall outside the bounds of non-breaking additive changes we can make to our stable API 3.1.\n\nOne benefit of these type adjustments in API 4.0 is dramatically better support for strongly\ntyped languages like TypeScript, Kotlin, Java, and more. Looker is also creating client SDKs\nto call the Looker API from these and other languages. These client SDKs will be available\nas pre-built packages for download from public repositories such as npmjs.org, RubyGems.org,\nPyPi.org. If you use an IDE for software development, you will soon be able to install a\nLooker SDK for your programming language with the click of a button!\n\nWhile API 3.1 is still the defacto Looker API (\"current\", \"stable\", \"default\", etc), the bulk\nof our development activity will gradually shift to API 4.0.\n\n",
     "contact": { "name": "Looker Team", "url": "https://help.looker.com" },
@@ -3862,6 +3862,174 @@
           },
           "404": {
             "description": "Not Found",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/Error" }
+              }
+            }
+          }
+        },
+        "x-looker-status": "beta",
+        "x-looker-activity-type": "non_query"
+      }
+    },
+    "/dashboards/{dashboard_id}/copy": {
+      "post": {
+        "tags": ["Dashboard"],
+        "operationId": "copy_dashboard",
+        "summary": "Copy Dashboard",
+        "description": "### Copy an existing dashboard\n\nCreates a copy of an existing dashboard, in a specified folder, and returns the copied dashboard.\n\n`dashboard_id` and `folder_id` are required.\n`dashboard_id` and `folder_id` must already exist, and `folder_id` must be different from the current `folder_id` of the dashboard.\n",
+        "parameters": [
+          {
+            "name": "dashboard_id",
+            "in": "path",
+            "description": "Dashboard id to copy.",
+            "required": true,
+            "schema": { "type": "string" }
+          },
+          {
+            "name": "folder_id",
+            "in": "query",
+            "description": "Folder id to copy to.",
+            "required": true,
+            "schema": { "type": "string" }
+          }
+        ],
+        "requestBody": {
+          "$ref": "#/components/requestBodies/copy_dashboardBody",
+          "required": false
+        },
+        "responses": {
+          "200": {
+            "description": "Dashboard",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/Dashboard" }
+              }
+            }
+          },
+          "201": {
+            "description": "dashboard",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/Dashboard" }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/Error" }
+              }
+            }
+          },
+          "404": {
+            "description": "Not Found",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/Error" }
+              }
+            }
+          },
+          "409": {
+            "description": "Resource Already Exists",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/Error" }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/ValidationError" }
+              }
+            }
+          },
+          "429": {
+            "description": "Too Many Requests",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/Error" }
+              }
+            }
+          }
+        },
+        "x-looker-status": "beta",
+        "x-looker-activity-type": "non_query"
+      }
+    },
+    "/dashboards/{dashboard_id}/move": {
+      "patch": {
+        "tags": ["Dashboard"],
+        "operationId": "move_dashboard",
+        "summary": "Move Dashboard",
+        "description": "### Move an existing dashboard\n\nMoves a dashboard to a specified folder, and returns the moved dashboard.\n\n`dashboard_id` and `folder_id` are required.\n`dashboard_id` and `folder_id` must already exist, and `folder_id` must be different from the current `folder_id` of the dashboard.\n",
+        "parameters": [
+          {
+            "name": "dashboard_id",
+            "in": "path",
+            "description": "Dashboard id to move.",
+            "required": true,
+            "schema": { "type": "string" }
+          },
+          {
+            "name": "folder_id",
+            "in": "query",
+            "description": "Folder id to move to.",
+            "required": true,
+            "schema": { "type": "string" }
+          }
+        ],
+        "requestBody": {
+          "$ref": "#/components/requestBodies/copy_dashboardBody",
+          "required": false
+        },
+        "responses": {
+          "200": {
+            "description": "Dashboard",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/Dashboard" }
+              }
+            }
+          },
+          "201": {
+            "description": "dashboard",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/Dashboard" }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/Error" }
+              }
+            }
+          },
+          "404": {
+            "description": "Not Found",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/Error" }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/ValidationError" }
+              }
+            }
+          },
+          "429": {
+            "description": "Too Many Requests",
             "content": {
               "application/json": {
                 "schema": { "$ref": "#/components/schemas/Error" }
@@ -10907,6 +11075,174 @@
         "x-looker-activity-type": "db_query"
       }
     },
+    "/looks/{look_id}/copy": {
+      "post": {
+        "tags": ["Look"],
+        "operationId": "copy_look",
+        "summary": "Copy Look",
+        "description": "### Copy an existing look\n\nCreates a copy of an existing look, in a specified folder, and returns the copied look.\n\n`look_id` and `folder_id` are required.\n\n`look_id` and `folder_id` must already exist, and `folder_id` must be different from the current `folder_id` of the dashboard.\n",
+        "parameters": [
+          {
+            "name": "look_id",
+            "in": "path",
+            "description": "Look id to copy.",
+            "required": true,
+            "schema": { "type": "integer", "format": "int64" }
+          },
+          {
+            "name": "folder_id",
+            "in": "query",
+            "description": "Folder id to copy to.",
+            "required": true,
+            "schema": { "type": "integer", "format": "int64" }
+          }
+        ],
+        "requestBody": {
+          "$ref": "#/components/requestBodies/copy_dashboardBody",
+          "required": false
+        },
+        "responses": {
+          "200": {
+            "description": "Look",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/LookWithQuery" }
+              }
+            }
+          },
+          "201": {
+            "description": "look",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/Look" }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/Error" }
+              }
+            }
+          },
+          "404": {
+            "description": "Not Found",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/Error" }
+              }
+            }
+          },
+          "409": {
+            "description": "Resource Already Exists",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/Error" }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/ValidationError" }
+              }
+            }
+          },
+          "429": {
+            "description": "Too Many Requests",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/Error" }
+              }
+            }
+          }
+        },
+        "x-looker-status": "beta",
+        "x-looker-activity-type": "non_query"
+      }
+    },
+    "/looks/{look_id}/move": {
+      "patch": {
+        "tags": ["Look"],
+        "operationId": "move_look",
+        "summary": "Move Look",
+        "description": "### Move an existing look\n\nMoves a look to a specified folder, and returns the moved look.\n\n`look_id` and `folder_id` are required.\n`look_id` and `folder_id` must already exist, and `folder_id` must be different from the current `folder_id` of the dashboard.\n",
+        "parameters": [
+          {
+            "name": "look_id",
+            "in": "path",
+            "description": "Look id to move.",
+            "required": true,
+            "schema": { "type": "integer", "format": "int64" }
+          },
+          {
+            "name": "folder_id",
+            "in": "query",
+            "description": "Folder id to move to.",
+            "required": true,
+            "schema": { "type": "integer", "format": "int64" }
+          }
+        ],
+        "requestBody": {
+          "$ref": "#/components/requestBodies/copy_dashboardBody",
+          "required": false
+        },
+        "responses": {
+          "200": {
+            "description": "Look",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/LookWithQuery" }
+              }
+            }
+          },
+          "201": {
+            "description": "look",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/Look" }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/Error" }
+              }
+            }
+          },
+          "404": {
+            "description": "Not Found",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/Error" }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/ValidationError" }
+              }
+            }
+          },
+          "429": {
+            "description": "Too Many Requests",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/Error" }
+              }
+            }
+          }
+        },
+        "x-looker-status": "beta",
+        "x-looker-activity-type": "non_query"
+      }
+    },
     "/lookml_models": {
       "get": {
         "tags": ["LookmlModel"],
@@ -12005,6 +12341,42 @@
         "x-looker-status": "beta",
         "x-looker-activity-type": "non_query",
         "x-looker-rate-limited": true
+      }
+    },
+    "/mobile/settings": {
+      "get": {
+        "tags": ["Config"],
+        "operationId": "mobile_settings",
+        "summary": "Get Mobile_Settings",
+        "description": "### Get all mobile settings.\n",
+        "responses": {
+          "200": {
+            "description": "Mobile_Settings",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/MobileSettings" }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/Error" }
+              }
+            }
+          },
+          "404": {
+            "description": "Not Found",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/Error" }
+              }
+            }
+          }
+        },
+        "x-looker-status": "beta",
+        "x-looker-activity-type": "non_query"
       }
     },
     "/model_sets/search": {
@@ -21037,7 +21409,7 @@
         "tags": ["User"],
         "operationId": "user_for_credential",
         "summary": "Get User by Credential Id",
-        "description": "### Get information about the user with a credential of given type with specific id.\n\nThis is used to do things like find users by their embed external_user_id. Or, find the user with\na given api3 client_id, etc. The 'credential_type' matchs the 'type' name of the various credential\ntypes. It must be one of the values listed in the table below. The 'credential_id' is your unique Id\nfor the user and is specific to each type of credential.\n\nAn example using the Ruby sdk might look like:\n\n`sdk.user_for_credential('embed', 'customer-4959425')`\n\nThis table shows the supported 'Credential Type' strings. The right column is for reference; it shows\nwhich field in the given credential type is actually searched when finding a user with the supplied\n'credential_id'.\n\n| Credential Types | Id Field Matched |\n| ---------------- | ---------------- |\n| email            | email            |\n| google           | google_user_id   |\n| saml             | saml_user_id     |\n| oidc             | oidc_user_id     |\n| ldap             | ldap_id          |\n| api              | token            |\n| api3             | client_id        |\n| embed            | external_user_id |\n| looker_openid    | email            |\n\nNOTE: The 'api' credential type was only used with the legacy Looker query API and is no longer supported. The credential type for API you are currently looking at is 'api3'.\n\n",
+        "description": "### Get information about the user with a credential of given type with specific id.\n\nThis is used to do things like find users by their embed external_user_id. Or, find the user with\na given api3 client_id, etc. The 'credential_type' matches the 'type' name of the various credential\ntypes. It must be one of the values listed in the table below. The 'credential_id' is your unique Id\nfor the user and is specific to each type of credential.\n\nAn example using the Ruby sdk might look like:\n\n`sdk.user_for_credential('embed', 'customer-4959425')`\n\nThis table shows the supported 'Credential Type' strings. The right column is for reference; it shows\nwhich field in the given credential type is actually searched when finding a user with the supplied\n'credential_id'.\n\n| Credential Types | Id Field Matched |\n| ---------------- | ---------------- |\n| email            | email            |\n| google           | google_user_id   |\n| saml             | saml_user_id     |\n| oidc             | oidc_user_id     |\n| ldap             | ldap_id          |\n| api              | token            |\n| api3             | client_id        |\n| embed            | external_user_id |\n| looker_openid    | email            |\n\n**NOTE**: The 'api' credential type was only used with the legacy Looker query API and is no longer supported. The credential type for API you are currently looking at is 'api3'.\n\n",
         "parameters": [
           {
             "name": "credential_type",
@@ -23478,6 +23850,10 @@
         "description": "Content Metadata Access",
         "required": true
       },
+      "copy_dashboardBody": {
+        "content": { "application/json": { "schema": { "type": "string" } } },
+        "description": "Not required"
+      },
       "DashboardElement": {
         "content": {
           "application/json": {
@@ -25122,6 +25498,12 @@
             "format": "int64",
             "readOnly": true,
             "description": "Id of the viewed Dashboard",
+            "nullable": true
+          },
+          "title": {
+            "type": "string",
+            "readOnly": true,
+            "description": "Name or title of underlying content",
             "nullable": true
           },
           "content_metadata_id": {
@@ -26929,6 +27311,11 @@
           "sql_runner_precache_tables": {
             "type": "boolean",
             "description": "Precache tables in the SQL Runner",
+            "nullable": false
+          },
+          "sql_writing_with_info_schema": {
+            "type": "boolean",
+            "description": "Fetch Information Schema For SQL Writing",
             "nullable": false
           },
           "after_connect_statements": {
@@ -31152,6 +31539,23 @@
         },
         "x-looker-status": "stable"
       },
+      "MobileSettings": {
+        "properties": {
+          "mobile_force_authentication": {
+            "type": "boolean",
+            "readOnly": true,
+            "description": "Specifies whether the force authentication option is enabled for mobile",
+            "nullable": false
+          },
+          "mobile_app_integration": {
+            "type": "boolean",
+            "readOnly": true,
+            "description": "Specifies whether mobile access for this instance is enabled.",
+            "nullable": false
+          }
+        },
+        "x-looker-status": "beta"
+      },
       "ModelSet": {
         "properties": {
           "can": {
@@ -31778,8 +32182,13 @@
           },
           "git_production_branch_name": {
             "type": "string",
-            "description": "Git production branch name. Defaults to master.",
+            "description": "Git production branch name. Defaults to master. Supported only in Looker 21.0 and higher.",
             "nullable": false
+          },
+          "git_auth_cookie": {
+            "type": "string",
+            "description": "Git http cookie file path.",
+            "nullable": true
           },
           "git_username_user_attribute": {
             "type": "string",
