@@ -77,11 +77,16 @@ const generate = async (
 
 /**
  * Generate all languages for the specified configuration
- * @param {string} name configuration name
- * @param {ISDKConfigProps} props SDK configuration properties
- * @returns {Promise<any[]>} generation promises
+ * @param name configuration name
+ * @param props SDK configuration properties
+ * @param targets Optional array of languages to generate
+ * @returns generation promises
  */
-export const runConfig = async (name: string, props: ISDKConfigProps) => {
+export const runConfig = async (
+  name: string,
+  props: ISDKConfigProps,
+  targets: string[] = []
+) => {
   log(`processing ${name} configuration ...`)
   const apiVersion = defaultApiVersion(props)
   props.api_version = apiVersion
@@ -91,9 +96,14 @@ export const runConfig = async (name: string, props: ISDKConfigProps) => {
 
   const results: any[] = []
   for (const language of languages) {
-    const tag = `${name} API ${language.language} version ${apiVersion}`
-    log(`generating ${tag} ...`)
-    results.push(await generate(openApiFile, language, props))
+    if (
+      targets.length === 0 ||
+      targets.find((t) => t.localeCompare(language.language) === 0)
+    ) {
+      const tag = `${name} API ${language.language} version ${apiVersion}`
+      log(`generating ${tag} ...`)
+      results.push(await generate(openApiFile, language, props))
+    }
   }
 
   return results

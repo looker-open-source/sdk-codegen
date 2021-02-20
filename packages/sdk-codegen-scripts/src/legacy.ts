@@ -35,7 +35,9 @@ import { quit } from './nodeUtils'
     // Look for the Looker config section and only run that one
     const name = 'Looker'
     const props = config[name]
-    await runConfig(name, props)
+    const args = process.argv.slice(2)
+
+    await runConfig(name, props, args)
   } catch (e) {
     quit(e)
   }
