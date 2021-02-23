@@ -51,6 +51,8 @@ client_secret=your_API3_client_secret
 **Note**: If the application using the Looker SDK is going to be committed to a version control system, be sure to
 **ignore** the `looker.ini` file to avoid publishing your API credentials.
 
+**Note**: The Browser SDK does _not_ use a `looker.ini` or environment variables.
+
 ### Use the SDK in your code
 
 When the SDK is installed and the server location and API credentials are configured in your `looker.ini` file, it's ready to be used.
