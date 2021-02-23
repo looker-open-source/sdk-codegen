@@ -40,7 +40,7 @@ def delete_dashboards(dashboards: Sequence[models.Dashboard]):
     for dashboard in dashboards:
         try:
             assert dashboard.id
-            sdk.delete_dashboard(dashboard.id)
+            sdk.update_dashboard(dashboard.id, models.WriteDashboard(deleted=True))
         except error.SDKError:
             print(f"Failed to delete dashboard with id {dashboard.id}.")
         else:
