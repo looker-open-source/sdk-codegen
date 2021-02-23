@@ -21,13 +21,13 @@ The Looker Browser SDK can be used in a browser application in 3 steps:
 Using `yarn`:
 
 ```bash
-yarn add @looker/sdk
+yarn add @looker/sdk @looker/sdk-rtl
 ```
 
 Using `npm`:
 
 ```bash
-npm install @looker/sdk
+npm install @looker/sdk @looker/sdk-rtl
 ```
 
 ### Authenticate your API calls
@@ -47,6 +47,8 @@ The stand-alone version of the [Looker API Explorer](/packages/api-explorer) use
 - The [OAuthScene](/packages/run-it/src/scenes/OAuthScene/OAuthScene.tsx) React component receives the OAuth response from the Looker server and logs the user in to retrieve the API authentication token.
 
 Looker's OAuth support makes it possible to build a Looker SDK application that only requires the browser. If a browser application can use a proxy server instead, or already uses an existing backend server, it may be simpler to [use a proxy for authentication](#using-a-proxy-for-authentication)/
+
+The `looker.ini` configuration file and environment variables are _never_ used in the Browser runtime.
 
 ### Developing with multiple API versions
 

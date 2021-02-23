@@ -21,13 +21,13 @@ The Looker SDK can be used in a node application in 3 steps:
 Using `yarn`:
 
 ```bash
-yarn add @looker/sdk @looker/sdk-node
+yarn add @looker/sdk @looker/sdk-rtl @looker/sdk-node
 ```
 
 Using `npm`:
 
 ```bash
-npm install @looker/sdk @looker/sdk-node
+npm install @looker/sdk @looker/sdk-rtl @looker/sdk-node
 ```
 
 **Note**: If you are only intending to use the SDK in a browser, omit `@looker/sdk-node`.
@@ -96,7 +96,7 @@ const sdk31 = LookerNodeSDK.init31(settings)
 
 ### Developing with multiple API versions
 
-Starting with Looker release 7.2, the experimental version of API 4.0 is available. To support iterative migration to API 4.0 from API 3.1, the single Looker SDK package now supports multiple API versions for the generated SDK classes. Both API 3.1 and API 4.0 are supported for Node and browser-based use.
+Starting with Looker release 7.2, the experimental version of API 4.0 is available. To support iterative migration to API 4.0 from API 3.1, the single Looker SDK package now supports multiple API versions for the generated SDK classes. Both API 3.1 and API 4.0 are supported for Node and Browser-based use.
 
 `LookerNodeSDK.init31()` `LookerBrowserSDK.init31()` and `Looker31SDK()` all initialize the API 3.1 implementation of the SDK.
 
