@@ -3,10 +3,19 @@
 Please thoroughly read [Looker's OAuth and CORS documentation](https://docs.looker.com/reference/api-and-integration/api-cors) before reading this document.
 It will answer most questions about using OAuth and CORS with Looker, and describes Looker's OAuth configuration steps.
 
-Looker API 4.0 supports CORS requests and is used in conjunction with Looker's OAuth workflow. [`BrowserSession`](/packages/sdk-rtl/src/browserSession.ts) provides the CORS support in the SDK.
+Looker API 4.0 supports CORS requests and is used in conjunction with Looker's OAuth workflow. [`BrowserSession`](/packages/sdk-rtl/src/browserSession.ts) provides the CORS support in the Browser SDK.
 `BrowserSession` is the default Browser-based session manager for the Looker SDK for Typescript/Javascript.
 
-The Node runtime for the Looker SDK doesn't require CORS. Only the Browser runtime requires CORS.
+OAuth authentication steps for a browser application are:
+
+- register the OAuth browser application with the Looker server
+- start an OAuth request with the Looker server from the browser application
+- receive the response from the Looker server via the configured OAuth application redirect URL and use that code to retrieve an authentication token
+- use that authentication token for all subsequent API/SDK requests via CORS
+
+`BrowserSession` manages the token if used to log in.
+
+**Note**: The Node runtime for the Looker SDK doesn't require CORS. Only the Browser runtime requires CORS.
 
 ## Reference implementation
 
