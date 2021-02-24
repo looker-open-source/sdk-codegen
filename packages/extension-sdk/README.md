@@ -30,7 +30,7 @@ The Extension SDK must establish a connection with its host before further funct
 
 ```ts
 import { LookerExtensionSDK, connectExtensionHost } from '@looker/extension-sdk'
-import { Looker40SDK } from '@looker/sdk/dist/sdk/4.0/methods'
+import { Looker40SDK } from '@looker/sdk'
 
 let extensionSDK
 let coreSDK

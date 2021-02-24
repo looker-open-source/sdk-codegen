@@ -24,7 +24,7 @@
 
  */
 
-import { Looker31SDK } from '@looker/sdk/lib/3.1/methods'
+import { Looker31SDK } from '@looker/sdk'
 
 let _core31SDK: Looker31SDK | undefined
 

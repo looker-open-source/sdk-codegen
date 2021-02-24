@@ -26,9 +26,7 @@
 
 import React, { useState } from 'react'
 import { ExtensionHostApi, LookerExtensionSDK } from '@looker/extension-sdk'
-
-import { Looker31SDK } from '@looker/sdk/lib/3.1/methods'
-import { Looker40SDK } from '@looker/sdk/lib/4.0/methods'
+import { Looker31SDK, Looker40SDK } from '@looker/sdk'
 import {
   BaseExtensionContextData,
   ExtensionProviderProps,
