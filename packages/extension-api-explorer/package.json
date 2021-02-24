@@ -21,6 +21,7 @@
     "@looker/extension-sdk-react": "^21.0.7",
     "@looker/run-it": "^21.0.7",
     "@looker/sdk": "^21.0.7",
+    "@looker/sdk-codegen": "^21.0.7",
     "react": "^16.13.1",
     "react-dom": "^16.13.1",
     "react-router-dom": "^5.2.0",

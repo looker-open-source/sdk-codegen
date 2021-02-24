@@ -28,7 +28,7 @@ import { ApiModel } from '@looker/sdk-codegen'
 import { Location as HLocation } from 'history'
 
 import { IApiVersion } from '@looker/sdk'
-import { SpecItems } from '../../ApiExplorer'
+import { SpecItem, SpecItems } from '../../ApiExplorer'
 import { SpecState } from './reducer'
 
 export type AbstractLocation = HLocation | Location
@@ -153,19 +153,38 @@ export const initDefaultSpecState = (
 }
 
 /**
+ * Callback for fetching and compiling specification to ApiModel
+ */
+export type SpecFetcher = (spec: SpecItem) => Promise<ApiModel | undefined>
+
+/**
  * Return all public API specifications from an ApiVersion payload
  * @param versions payload from a Looker server
+ * @param fetcher fetches and compiles spec to ApiModel
  */
-export const getSpecsFromVersions = (versions: IApiVersion): SpecItems => {
+export const getSpecsFromVersions = async (
+  versions: IApiVersion,
+  fetcher: SpecFetcher | undefined = undefined
+): Promise<SpecItems> => {
   const items = {}
-  versions.supported_versions?.forEach((v) => {
-    if (v.status !== 'internal_test' && v.version && v.status) {
-      items[v.version] = {
-        status: v.status,
-        isDefault: v.status === 'current',
-        specURL: v.swagger_url,
+  if (versions.supported_versions) {
+    for (const v of versions.supported_versions) {
+      // Tell Typescript these are all defined because IApiVersion definition sucks
+      if (v.status && v.version && v.swagger_url) {
+        // TODO skip 'deprecated' and 'legacy' also?
+        if (v.status !== 'internal_test') {
+          const spec: SpecItem = {
+            status: v.status,
+            isDefault: v.status === 'current',
+            specURL: v.swagger_url,
+          }
+          if (fetcher) {
+            spec.api = await fetcher(spec)
+          }
+          items[v.version] = spec
+        }
       }
     }
-  })
+  }
   return items
 }

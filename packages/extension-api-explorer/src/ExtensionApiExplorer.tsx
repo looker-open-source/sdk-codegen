@@ -25,7 +25,10 @@
  */
 
 import React, { FC, useContext, useEffect, useState } from 'react'
-import ApiExplorer, { SpecItems } from '@looker/api-explorer/src/ApiExplorer'
+import ApiExplorer, {
+  SpecItems,
+  SpecItem,
+} from '@looker/api-explorer/src/ApiExplorer'
 import { IStorageValue, RunItProvider, RunItConfigurator } from '@looker/run-it'
 import { useRouteMatch } from 'react-router-dom'
 import {
@@ -33,25 +36,7 @@ import {
   ExtensionContextData,
 } from '@looker/extension-sdk-react'
 import { getSpecsFromVersions } from '@looker/api-explorer/src/reducers/spec/utils'
-
-// const specs: SpecItems = {
-//   '3.0': {
-//     status: 'stable',
-//     specURL: 'https://self-signed.looker.com:19999/api/3.0/swagger.json',
-//     specContent: require('../../../spec/Looker.3.0.oas.json'),
-//   },
-//   '3.1': {
-//     status: 'current',
-//     isDefault: true,
-//     specURL: 'https://self-signed.looker.com:19999/api/3.1/swagger.json',
-//     specContent: require('../../../spec/Looker.3.1.oas.json'),
-//   },
-//   '4.0': {
-//     status: 'experimental',
-//     specURL: 'https://self-signed.looker.com:19999/api/4.0/swagger.json',
-//     specContent: require('../../../spec/Looker.4.0.oas.json'),
-//   },
-// }
+import { ApiModel, upgradeSpecObject } from '@looker/sdk-codegen'
 
 class ExtensionConfigurator implements RunItConfigurator {
   storage: Record<string, string> = {}
@@ -93,27 +78,36 @@ export const ExtensionApiExplorer: FC = () => {
     sdk = extensionContext.core40SDK
   }
 
+  /** fetch and compile an API specification to an ApiModel
+   *
+   * @param spec to fetch and compile
+   */
+  async function extFetch(spec: SpecItem) {
+    if (!spec.specURL) return undefined
+    const sdk = extensionContext.core40SDK
+    const [version, name] = spec.specURL?.split('/').slice(-2)
+    const content = await sdk.ok(sdk.api_spec(version, name))
+    // TODO figure out why this crazy step is required
+    let json = JSON.parse(content)
+    if (typeof json === 'string') {
+      json = JSON.parse(json)
+    }
+    json = upgradeSpecObject(json)
+    const api = ApiModel.fromJson(json)
+    return api
+  }
+
   useEffect(() => {
+    /** Load Looker /versions information and retrieve all supported specs */
     async function getSpecs() {
       const versions = await sdk.ok(sdk.versions())
-      return getSpecsFromVersions(versions)
+      return getSpecsFromVersions(versions, (spec) => extFetch(spec))
     }
 
     getSpecs()
       .then((resp) => setSpecs(resp))
       .catch((err) => console.error(err))
   }, [sdk])
-
-  // if (!specs)
-  //   return (
-  //     <>
-  //       <Loading
-  //         key="specLoader"
-  //         message="Loading specifications"
-  //         loading={true}
-  //       />{' '}
-  //     </>
-  //   )
 
   return (
     <RunItProvider sdk={sdk} configurator={configurator} basePath="">

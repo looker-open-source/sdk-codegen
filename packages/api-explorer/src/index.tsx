@@ -28,6 +28,7 @@ import React from 'react'
 import { BrowserRouter as Router } from 'react-router-dom'
 import ReactDOM from 'react-dom'
 
+import { ApiModel } from '@looker/sdk-codegen'
 import { SpecItems } from './ApiExplorer'
 import { StandaloneApiExplorer } from './StandaloneApiExplorer'
 
@@ -49,6 +50,18 @@ export const specs: SpecItems = {
     specContent: require('../../../spec/Looker.4.0.oas.json'),
   },
 }
+
+// TODO implement fetching and compiling the spec on demand
+Object.values(specs).forEach((spec) => {
+  if (spec.specContent && !spec.api) {
+    const json =
+      typeof spec.specContent === 'string'
+        ? JSON.parse(spec.specContent)
+        : spec.specContent
+    spec.api = ApiModel.fromJson(json)
+    spec.specContent = undefined
+  }
+})
 
 ReactDOM.render(
   <Router>
