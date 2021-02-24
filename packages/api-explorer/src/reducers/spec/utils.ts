@@ -27,6 +27,7 @@
 import { ApiModel } from '@looker/sdk-codegen'
 import { Location as HLocation } from 'history'
 
+import { IApiVersion } from '@looker/sdk'
 import { SpecItems } from '../../ApiExplorer'
 import { SpecState } from './reducer'
 
@@ -149,4 +150,22 @@ export const initDefaultSpecState = (
 ): SpecState => {
   const specKey = getSpecKey(location, specs)
   return fetchSpec(specKey, specs)
+}
+
+/**
+ * Return all public API specifications from an ApiVersion payload
+ * @param versions payload from a Looker server
+ */
+export const getSpecsFromVersions = (versions: IApiVersion): SpecItems => {
+  const items = {}
+  versions.supported_versions?.forEach((v) => {
+    if (v.status !== 'internal_test' && v.version && v.status) {
+      items[v.version] = {
+        status: v.status,
+        isDefault: v.status === 'current',
+        specURL: v.swagger_url,
+      }
+    }
+  })
+  return items
 }

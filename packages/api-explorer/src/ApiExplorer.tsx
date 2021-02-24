@@ -47,7 +47,7 @@ import {
 import { AppRouter } from './routes'
 
 export interface SpecItem {
-  status: 'current' | 'deprecated' | 'experimental' | 'stable'
+  status: string // 'current' | 'deprecated' | 'experimental' | 'stable'
   isDefault?: boolean
   api?: ApiModel
   specURL?: string
