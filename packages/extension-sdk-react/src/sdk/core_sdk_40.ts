@@ -24,7 +24,7 @@
 
  */
 
-import { Looker40SDK } from '@looker/sdk/lib/4.0/methods'
+import { Looker40SDK } from '@looker/sdk'
 
 let _core40SDK: Looker40SDK | undefined
 
