@@ -169,10 +169,13 @@ export const getSpecsFromVersions = async (
   const items = {}
   if (versions.supported_versions) {
     for (const v of versions.supported_versions) {
-      // Tell Typescript these are all defined because IApiVersion definition sucks
+      // Tell Typescript these are all defined because IApiVersion definition is lax
       if (v.status && v.version && v.swagger_url) {
-        // TODO skip 'deprecated' and 'legacy' also?
-        if (v.status !== 'internal_test') {
+        if (
+          v.status !== 'internal_test' &&
+          v.status !== 'deprecated' &&
+          v.status !== 'legacy'
+        ) {
           const spec: SpecItem = {
             status: v.status,
             isDefault: v.status === 'current',

@@ -33,11 +33,6 @@ import { SpecItems } from './ApiExplorer'
 import { StandaloneApiExplorer } from './StandaloneApiExplorer'
 
 export const specs: SpecItems = {
-  '3.0': {
-    status: 'stable',
-    specURL: 'https://self-signed.looker.com:19999/api/3.0/swagger.json',
-    specContent: require('../../../spec/Looker.3.0.oas.json'),
-  },
   '3.1': {
     status: 'current',
     specURL: 'https://self-signed.looker.com:19999/api/3.1/swagger.json',

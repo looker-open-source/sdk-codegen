@@ -213,13 +213,13 @@ describe('Spec reducer utils', () => {
       api_server_url: 'http://localhost:19999',
     }
 
-    test('only gets public specifications', () => {
-      const actual = getSpecsFromVersions(versions)
-      expect(Object.keys(actual)).toEqual(['3.0', '3.1', '4.0'])
+    test('only gets supported specifications', async () => {
+      const actual = await getSpecsFromVersions(versions)
+      expect(Object.keys(actual)).toEqual(['3.1', '4.0'])
     })
 
-    test('current is the default spec', () => {
-      const specs = getSpecsFromVersions(versions)
+    test('current is the default spec', async () => {
+      const specs = await getSpecsFromVersions(versions)
       const actual = Object.entries(specs).find(
         ([_, a]) => a.status === 'current'
       )
