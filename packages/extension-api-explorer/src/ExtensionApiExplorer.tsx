@@ -108,8 +108,8 @@ export const ExtensionApiExplorer: FC = () => {
       setSpecs(result)
     }
 
-    loadSpecs().catch((err) => console.error(err))
-  }, [sdk])
+    if (sdk && !specs) loadSpecs().catch((err) => console.error(err))
+  }, [specs, sdk])
 
   return (
     <RunItProvider sdk={sdk} configurator={configurator} basePath="">
