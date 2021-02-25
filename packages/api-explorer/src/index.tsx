@@ -54,8 +54,9 @@ Object.values(specs).forEach((spec) => {
         ? JSON.parse(spec.specContent)
         : spec.specContent
     spec.api = ApiModel.fromJson(json)
-    spec.specContent = undefined
   }
+  // Memory footprint reduction
+  spec.specContent = undefined
 })
 
 ReactDOM.render(

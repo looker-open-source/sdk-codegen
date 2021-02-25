@@ -35,8 +35,9 @@ import {
   ExtensionContext,
   ExtensionContextData,
 } from '@looker/extension-sdk-react'
-import { getSpecsFromVersions } from '@looker/api-explorer/src/reducers/spec/utils'
 import { ApiModel, upgradeSpecObject } from '@looker/sdk-codegen'
+import { Looker31SDK, Looker40SDK } from '@looker/sdk'
+import { getSpecsFromVersions } from '@looker/api-explorer/src/reducers'
 
 class ExtensionConfigurator implements RunItConfigurator {
   storage: Record<string, string> = {}
@@ -71,7 +72,7 @@ export const ExtensionApiExplorer: FC = () => {
   const extensionContext = useContext<ExtensionContextData>(ExtensionContext)
   const [specs, setSpecs] = useState<SpecItems>()
 
-  let sdk: any
+  let sdk: Looker31SDK | Looker40SDK
   if (match?.params.specKey === '3.1') {
     sdk = extensionContext.core31SDK
   } else {
@@ -99,14 +100,15 @@ export const ExtensionApiExplorer: FC = () => {
 
   useEffect(() => {
     /** Load Looker /versions information and retrieve all supported specs */
-    async function getSpecs() {
+    async function loadSpecs() {
       const versions = await sdk.ok(sdk.versions())
-      return getSpecsFromVersions(versions, (spec) => extFetch(spec))
+      const result = await getSpecsFromVersions(versions, (spec) =>
+        extFetch(spec)
+      )
+      setSpecs(result)
     }
 
-    getSpecs()
-      .then((resp) => setSpecs(resp))
-      .catch((err) => console.error(err))
+    loadSpecs().catch((err) => console.error(err))
   }, [sdk])
 
   return (
