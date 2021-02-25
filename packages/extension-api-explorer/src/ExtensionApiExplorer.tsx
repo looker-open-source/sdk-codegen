@@ -79,14 +79,15 @@ export const ExtensionApiExplorer: FC = () => {
     sdk = extensionContext.core40SDK
   }
 
-  /** fetch and compile an API specification to an ApiModel
+  /**
+   * fetch and compile an API specification to an ApiModel
    *
    * @param spec to fetch and compile
    */
   async function extFetch(spec: SpecItem) {
     if (!spec.specURL) return undefined
     const sdk = extensionContext.core40SDK
-    const [version, name] = spec.specURL?.split('/').slice(-2)
+    const [version, name] = spec.specURL.split('/').slice(-2)
     const content = await sdk.ok(sdk.api_spec(version, name))
     // TODO figure out why this crazy step is required
     let json = JSON.parse(content)
