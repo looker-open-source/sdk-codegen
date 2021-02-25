@@ -3895,10 +3895,6 @@
             "schema": { "type": "string" }
           }
         ],
-        "requestBody": {
-          "$ref": "#/components/requestBodies/copy_dashboardBody",
-          "required": false
-        },
         "responses": {
           "200": {
             "description": "Dashboard",
@@ -3983,10 +3979,6 @@
             "schema": { "type": "string" }
           }
         ],
-        "requestBody": {
-          "$ref": "#/components/requestBodies/copy_dashboardBody",
-          "required": false
-        },
         "responses": {
           "200": {
             "description": "Dashboard",
@@ -11097,10 +11089,6 @@
             "schema": { "type": "integer", "format": "int64" }
           }
         ],
-        "requestBody": {
-          "$ref": "#/components/requestBodies/copy_dashboardBody",
-          "required": false
-        },
         "responses": {
           "200": {
             "description": "Look",
@@ -11185,10 +11173,6 @@
             "schema": { "type": "integer", "format": "int64" }
           }
         ],
-        "requestBody": {
-          "$ref": "#/components/requestBodies/copy_dashboardBody",
-          "required": false
-        },
         "responses": {
           "200": {
             "description": "Look",
@@ -23526,6 +23510,56 @@
         "x-looker-activity-type": "none"
       }
     },
+    "/api_spec/{api_version}/{specification}": {
+      "get": {
+        "tags": ["Config"],
+        "operationId": "api_spec",
+        "summary": "Get an API specification",
+        "description": "### Get an API specification for this Looker instance.\n\n**Note**: Although the API specification is in JSON format, the return type is temporarily `text/plain`, so the response should be treated as standard JSON to consume it.\n",
+        "parameters": [
+          {
+            "name": "api_version",
+            "in": "path",
+            "description": "API version",
+            "required": true,
+            "schema": { "type": "string" }
+          },
+          {
+            "name": "specification",
+            "in": "path",
+            "description": "Specification name. Typically, this is \"swagger.json\"",
+            "required": true,
+            "schema": { "type": "string" }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "API specification",
+            "content": {
+              "application/json": { "schema": { "type": "string" } }
+            }
+          },
+          "400": {
+            "description": "Bad Request",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/Error" }
+              }
+            }
+          },
+          "404": {
+            "description": "Not Found",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/Error" }
+              }
+            }
+          }
+        },
+        "x-looker-status": "beta",
+        "x-looker-activity-type": "none"
+      }
+    },
     "/whitelabel_configuration": {
       "get": {
         "tags": ["Config"],
@@ -23849,10 +23883,6 @@
         },
         "description": "Content Metadata Access",
         "required": true
-      },
-      "copy_dashboardBody": {
-        "content": { "application/json": { "schema": { "type": "string" } } },
-        "description": "Not required"
       },
       "DashboardElement": {
         "content": {

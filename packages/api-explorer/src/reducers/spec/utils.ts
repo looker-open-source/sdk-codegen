@@ -27,7 +27,8 @@
 import { ApiModel } from '@looker/sdk-codegen'
 import { Location as HLocation } from 'history'
 
-import { SpecItems } from '../../ApiExplorer'
+import { IApiVersion } from '@looker/sdk'
+import { SpecItem, SpecItems } from '../../ApiExplorer'
 import { SpecState } from './reducer'
 
 export type AbstractLocation = HLocation | Location
@@ -149,4 +150,44 @@ export const initDefaultSpecState = (
 ): SpecState => {
   const specKey = getSpecKey(location, specs)
   return fetchSpec(specKey, specs)
+}
+
+/**
+ * Callback for fetching and compiling specification to ApiModel
+ */
+export type SpecFetcher = (spec: SpecItem) => Promise<ApiModel | undefined>
+
+/**
+ * Return all public API specifications from an ApiVersion payload
+ * @param versions payload from a Looker server
+ * @param fetcher fetches and compiles spec to ApiModel
+ */
+export const getSpecsFromVersions = async (
+  versions: IApiVersion,
+  fetcher: SpecFetcher | undefined = undefined
+): Promise<SpecItems> => {
+  const items = {}
+  if (versions.supported_versions) {
+    for (const v of versions.supported_versions) {
+      // Tell Typescript these are all defined because IApiVersion definition is lax
+      if (v.status && v.version && v.swagger_url) {
+        if (
+          v.status !== 'internal_test' &&
+          v.status !== 'deprecated' &&
+          v.status !== 'legacy'
+        ) {
+          const spec: SpecItem = {
+            status: v.status,
+            isDefault: v.status === 'current',
+            specURL: v.swagger_url,
+          }
+          if (fetcher) {
+            spec.api = await fetcher(spec)
+          }
+          items[v.version] = spec
+        }
+      }
+    }
+  }
+  return items
 }

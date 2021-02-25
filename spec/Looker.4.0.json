@@ -2925,13 +2925,6 @@
             "type": "string"
           },
           {
-            "name": "body",
-            "in": "body",
-            "description": "Not required",
-            "required": false,
-            "schema": { "type": "string" }
-          },
-          {
             "name": "folder_id",
             "in": "query",
             "description": "Folder id to copy to.",
@@ -2986,13 +2979,6 @@
             "description": "Dashboard id to move.",
             "required": true,
             "type": "string"
-          },
-          {
-            "name": "body",
-            "in": "body",
-            "description": "Not required",
-            "required": false,
-            "schema": { "type": "string" }
           },
           {
             "name": "folder_id",
@@ -8354,13 +8340,6 @@
             "format": "int64"
           },
           {
-            "name": "body",
-            "in": "body",
-            "description": "Not required",
-            "required": false,
-            "schema": { "type": "string" }
-          },
-          {
             "name": "folder_id",
             "in": "query",
             "description": "Folder id to copy to.",
@@ -8417,13 +8396,6 @@
             "required": true,
             "type": "integer",
             "format": "int64"
-          },
-          {
-            "name": "body",
-            "in": "body",
-            "description": "Not required",
-            "required": false,
-            "schema": { "type": "string" }
           },
           {
             "name": "folder_id",
@@ -17764,6 +17736,46 @@
           }
         },
         "x-looker-status": "stable",
+        "x-looker-activity-type": "none"
+      }
+    },
+    "/api_spec/{api_version}/{specification}": {
+      "get": {
+        "tags": ["Config"],
+        "operationId": "api_spec",
+        "summary": "Get an API specification",
+        "description": "### Get an API specification for this Looker instance.\n\n**Note**: Although the API specification is in JSON format, the return type is temporarily `text/plain`, so the response should be treated as standard JSON to consume it.\n",
+        "parameters": [
+          {
+            "name": "api_version",
+            "in": "path",
+            "description": "API version",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "specification",
+            "in": "path",
+            "description": "Specification name. Typically, this is \"swagger.json\"",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "API specification",
+            "schema": { "type": "string" }
+          },
+          "400": {
+            "description": "Bad Request",
+            "schema": { "$ref": "#/definitions/Error" }
+          },
+          "404": {
+            "description": "Not Found",
+            "schema": { "$ref": "#/definitions/Error" }
+          }
+        },
+        "x-looker-status": "beta",
         "x-looker-activity-type": "none"
       }
     },

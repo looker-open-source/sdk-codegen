@@ -34,7 +34,7 @@ import {
   logConvertSpec,
 } from '../../sdk-codegen-scripts/src/fetchSpec'
 
-const supportedApiVersions = ['3.0', '3.1', '4.0']
+const supportedApiVersions = ['3.1', '4.0']
 
 const homeToRoost = '../../../'
 

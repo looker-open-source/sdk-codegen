@@ -34,6 +34,7 @@ import {
   fetchSpec,
   initDefaultSpecState,
   getSpecKey,
+  getSpecsFromVersions,
 } from './utils'
 
 describe('Spec reducer utils', () => {
@@ -47,12 +48,15 @@ describe('Spec reducer utils', () => {
 
   describe('parseSpec', () => {
     test('given a spec it returns an ApiModel with both readonly and writeable types', () => {
-      const api = parseSpec(spec.specContent!)
-      expect(api).toBeDefined()
-      const types = Object.keys(api.types)
-      expect(types).toEqual(
-        expect.arrayContaining(['Dashboard', 'WriteDashboard'])
-      )
+      expect(spec.specContent).toBeDefined()
+      if (spec.specContent) {
+        const api = parseSpec(spec.specContent)
+        expect(api).toBeDefined()
+        const types = Object.keys(api.types)
+        expect(types).toEqual(
+          expect.arrayContaining(['Dashboard', 'WriteDashboard'])
+        )
+      }
     })
   })
 
@@ -168,6 +172,64 @@ describe('Spec reducer utils', () => {
       const fetchedSpec = initDefaultSpecState(specs, window.location)
       expect(fetchedSpec).toBeDefined()
       expect(fetchedSpec.key).toEqual('4.0')
+    })
+  })
+
+  describe('getSpecsFromVersions', () => {
+    const versions = {
+      looker_release_version: '21.3.0',
+      current_version: {
+        version: '3.1',
+        full_version: '3.1.0',
+        status: 'current',
+        swagger_url: 'http://localhost:19999/api/3.1/swagger.json',
+      },
+      supported_versions: [
+        {
+          version: '2.99',
+          full_version: '2.99.0',
+          status: 'internal_test',
+          swagger_url: 'http://localhost:19999/api/2.99/swagger.json',
+        },
+        {
+          version: '3.0',
+          full_version: '3.0.0',
+          status: 'legacy',
+          swagger_url: 'http://localhost:19999/api/3.0/swagger.json',
+        },
+        {
+          version: '3.1',
+          full_version: '3.1.0',
+          status: 'current',
+          swagger_url: 'http://localhost:19999/api/3.1/swagger.json',
+        },
+        {
+          version: '4.0',
+          full_version: '4.0.21.3',
+          status: 'experimental',
+          swagger_url: 'http://localhost:19999/api/4.0/swagger.json',
+        },
+      ],
+      api_server_url: 'http://localhost:19999',
+    }
+
+    test('only gets supported specifications', async () => {
+      const actual = await getSpecsFromVersions(versions)
+      expect(Object.keys(actual)).toEqual(['3.1', '4.0'])
+    })
+
+    test('current is the default spec', async () => {
+      const specs = await getSpecsFromVersions(versions)
+      const actual = Object.entries(specs).find(
+        ([_, a]) => a.status === 'current'
+      )
+      expect(actual).toBeDefined()
+      if (actual) {
+        const [, current] = actual
+        expect(current).toBeDefined()
+        expect(current.status).toEqual('current')
+        expect(current.isDefault).toEqual(true)
+      }
     })
   })
 })
