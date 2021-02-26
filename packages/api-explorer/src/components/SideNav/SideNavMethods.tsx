@@ -72,11 +72,13 @@ const SideNavMethodsLayout: FC<MethodsProps> = ({
 
   return (
     <Accordion isOpen={isOpen} toggleOpen={handleOpen} className={className}>
-      <AccordionDisclosure>{highlightHTML(pattern, tag)}</AccordionDisclosure>
+      <AccordionDisclosure>
+        <Heading as="h5">{highlightHTML(pattern, tag)}</Heading>
+      </AccordionDisclosure>
       <AccordionContent>
         <List>
           {Object.values(methods).map((method) => (
-            <NavLink
+            <SideNavLink
               key={method.name}
               to={buildMethodPath(specKey, tag, method.name)}
             >
@@ -92,13 +94,37 @@ const SideNavMethodsLayout: FC<MethodsProps> = ({
                   {highlightHTML(pattern, method.summary)}
                 </Heading>
               </li>
-            </NavLink>
+            </SideNavLink>
           ))}
         </List>
       </AccordionContent>
     </Accordion>
   )
 }
+
+const SideNavLink = styled(NavLink)`
+  &:hover,
+  &:focus,
+  &.active {
+    li {
+      background-color: ${({ theme }) => theme.colors.ui1};
+
+      ${MethodBadge} {
+        border: solid 1px ${({ theme }) => theme.colors.ui2};
+      }
+    }
+  }
+
+  li {
+    display: flex;
+    border-radius: ${({ theme: { radii } }) => radii.medium};
+    padding: ${({ theme }) => theme.space.xsmall};
+
+    ${MethodBadge} {
+      margin-right: ${({ theme }) => theme.space.small};
+    }
+  }
+`
 
 export const SideNavMethods = styled(SideNavMethodsLayout)`
   ${AccordionDisclosure} {
@@ -111,7 +137,10 @@ export const SideNavMethods = styled(SideNavMethodsLayout)`
     }
 
     &[aria-expanded='true'] {
-      color: ${({ theme }) => theme.colors.key};
+      ${Heading} {
+        color: ${({ theme }) => theme.colors.key};
+        font-weight: ${({ theme }) => theme.fontWeights.semiBold};
+      }
     }
   }
 
@@ -139,8 +168,7 @@ export const SideNavMethods = styled(SideNavMethodsLayout)`
     }
 
     &:hover,
-    &:focus,
-    &.active {
+    &:focus {
       background-color: ${({ theme }) => theme.colors.ui1};
 
       ${MethodBadge} {
@@ -149,7 +177,15 @@ export const SideNavMethods = styled(SideNavMethodsLayout)`
     }
   }
 
-  [aria-current] ${Heading} {
-    font-weight: ${({ theme }) => theme.fontWeights.semiBold};
+  [aria-current] {
+    background-color: ${({ theme }) => theme.colors.ui1};
+
+    ${MethodBadge} {
+      border: solid 1px ${({ theme }) => theme.colors.ui2};
+    }
+
+    ${Heading} {
+      font-weight: ${({ theme }) => theme.fontWeights.semiBold};
+    }
   }
 `
