@@ -33,7 +33,6 @@ import { Heading } from '@looker/components'
 export const ApixHeading = styled(Heading)``
 
 ApixHeading.defaultProps = {
-  fontWeight: 'semiBold',
   mb: 'xsmall',
   pt: 'xsmall',
 }
