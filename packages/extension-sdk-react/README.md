@@ -145,8 +145,6 @@ export function* sagaCallbacks() {
 
 ## Related Projects
 
-- [Looker extension template for react](https://github.com/looker-open-source/extension-template-react).
-- [Looker extension template for redux](https://github.com/looker-open-source/extension-template-redux).
-- [Looker Kitchen sink extension template](https://github.com/looker-open-source/extension-template-kitchensink).
-- [Looker extension SDK](https://www.npmjs.com/package/@looker/extension-sdk).
-- [Looker SDK](https://www.npmjs.com/package/@looker/sdk)
+- [Looker extension examples](https://github.com/looker-open-source/extension-examples).
+- [Looker extension SDK](https://github.com/looker-open-source/sdk-codegen/tree/main/packages/extension-sdk).
+- [Looker SDK](https://github.com/looker-open-source/sdk-codegen/tree/main/packages/sdk).
