@@ -131,12 +131,15 @@ export const SideNavMethods = styled(SideNavMethodsLayout)`
     padding-left: ${({ theme }) => theme.space.large};
     padding-right: ${({ theme }) => theme.space.large};
 
-    &:hover,
-    &:focus {
+    &:hover {
       color: ${({ theme }) => theme.colors.key};
+      ${Heading} {
+        color: ${({ theme }) => theme.colors.key};
+      }
     }
 
     &[aria-expanded='true'] {
+      color: ${({ theme }) => theme.colors.key};
       ${Heading} {
         color: ${({ theme }) => theme.colors.key};
         font-weight: ${({ theme }) => theme.fontWeights.semiBold};
