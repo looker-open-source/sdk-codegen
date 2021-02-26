@@ -32,8 +32,8 @@ import {
   Flex,
   FlexItem,
   Space,
-  Text,
   IconButton,
+  Heading,
 } from '@looker/components'
 import { SpecItems } from '../../ApiExplorer'
 import { SpecState, SpecAction } from '../../reducers'
@@ -73,9 +73,7 @@ export const HeaderLayout: FC<HeaderProps> = ({
             color="text5"
             style={{ width: '82px' }}
           />
-          <Text color="key" fontSize="xlarge" fontWeight="medium">
-            API Explorer
-          </Text>
+          <Heading color="key">API Explorer</Heading>
         </Space>
       </NavLink>
     </Flex>
