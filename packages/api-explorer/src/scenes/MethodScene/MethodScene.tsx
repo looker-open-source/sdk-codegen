@@ -108,8 +108,14 @@ export const MethodScene: FC<DocMethodProps> = ({ api }) => {
         <Aside width="50rem">
           <ComponentsProvider
             globalStyle={false}
+            loadGoogleFonts
             themeCustomizations={{
-              colors: { background: colors.text, text: colors.background },
+              fontFamilies: { brand: 'Google Sans' },
+              colors: {
+                key: colors.key,
+                background: colors.text,
+                text: colors.background,
+              },
             }}
           >
             <RunIt
