@@ -106,7 +106,7 @@ export const MethodScene: FC<DocMethodProps> = ({ api }) => {
       </Section>
       {sdk && value && (
         <Aside width="50rem">
-          <ComponentsProvider
+          <ExtendComponentsThemeProvider
             globalStyle={false}
             loadGoogleFonts
             themeCustomizations={{
