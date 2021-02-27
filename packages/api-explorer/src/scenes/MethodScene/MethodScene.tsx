@@ -110,9 +110,7 @@ export const MethodScene: FC<DocMethodProps> = ({ api }) => {
             globalStyle={false}
             loadGoogleFonts
             themeCustomizations={{
-              fontFamilies: { brand: 'Google Sans' },
               colors: {
-                key: colors.key,
                 background: colors.text,
                 text: colors.background,
               },
