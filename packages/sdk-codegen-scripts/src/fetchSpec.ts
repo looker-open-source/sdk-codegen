@@ -38,40 +38,6 @@ import { fail, quit, isFileSync, utf8Encoding, isDirSync } from './nodeUtils'
 import { ISDKConfigProps } from './sdkConfig'
 import { convertSpec } from './convert'
 
-/*
-const { Spectral } = require('@stoplight/spectral')
-const { getLocationForJsonPath, parseWithPointers } = require('@stoplight/json')
-
-const lintyFresh = true
-
-const lintCheck = async (fileName: string) => {
-  if (!lintyFresh) return ''
-  // return `${fileName} lint checking was skipped`
-  try {
-    // const linter = run('speccy', ['lint', fileName])
-    const linter = new Spectral()
-    if (!linter) return fail('Lint', 'no response')
-    const spec = parseWithPointers(readFileSync(fileName))
-    linter
-      .run({
-        parsed: spec,
-        getLocationForJsonPath,
-      })
-      .then(console.log)
-    return ''
-    // if (
-    //   linter.toString().indexOf('Specification is valid, with 0 lint errors') >=
-    //   0
-    // ) {
-    //   return
-    // }
-  } catch (e) {
-    return quit(e)
-  }
-}
-
-*/
-
 /**
  * Checks OpenAPI file for lint errors
  *
