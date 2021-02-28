@@ -12,6 +12,18 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Looker 21.0 bindings
 
 
+## [21.0.0](https://www.github.com/looker-open-source/sdk-codegen/compare/v7.20.0...v21.0.0) (2021-02-28)
+
+
+### Features
+
+* **python:** Looker 7.20 bindings ([#451](https://www.github.com/looker-open-source/sdk-codegen/issues/451)) ([55a20d5](https://www.github.com/looker-open-source/sdk-codegen/commit/55a20d549cab0fe950f999130706654e8fb1efcb))
+
+
+### Bug Fixes
+
+* **python:** pin cattrs at 1.1.2 ([#460](https://www.github.com/looker-open-source/sdk-codegen/issues/460)) ([bf8f3f6](https://www.github.com/looker-open-source/sdk-codegen/commit/bf8f3f694efd3a2b7af7d5c849694e0c7bd399c5)), closes [#455](https://www.github.com/looker-open-source/sdk-codegen/issues/455)
+
 ## [7.20.0]
 
 ### Added
