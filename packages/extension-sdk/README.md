@@ -385,8 +385,8 @@ Eventually, entitlements will be required for all extensions.
 - `local_storage` - required to access local storage apis.
 - `navigation` - required to access navigation and link apis.
 - `new_window` - required to open a new window.
-- `allow_forms` - required if extension uses html form submission. Note that some `@looker/componenents` use html forms underneath the covers. Note that a message similar to the following will be displayed on the browser console if a form is used without the allow forms entitlement: `Blocked form submission to '' because the form's frame is sandboxed and the 'allow-forms' permission is not set.`
-- `allow_same_origin` - required if the extension uses the `@looker/embed-sdk`. Note that a message similar to the following will be displayed on the browser console if the emded sdk used without the allow same origin entitlement: `Access to script at ... from origin 'null' has been blocked by CORS policy ...`.
+- `use_form_submit` - required if extension uses html form submission. Note that some `@looker/componenents` use html forms underneath the covers. Note that a message similar to the following will be displayed on the browser console if a form is used without the allow forms entitlement: `Blocked form submission to '' because the form's frame is sandboxed and the 'allow-forms' permission is not set.`
+- `use_embeds` - required if the extension uses the `@looker/embed-sdk`. Note that a message similar to the following will be displayed on the browser console if the emded sdk used without the allow same origin entitlement: `Access to script at ... from origin 'null' has been blocked by CORS policy ...`.
 - `core_api_methods` - list of Looker api methods used by the extension.
 - `external_api_urls` - list of external apis used by the extension. Only the protocol, domain and top level domain need be defined. A wild card of `*.` may be used for sub domains. External api urls must be defined for both fetch proxy and server proxy calls.
 - `oauth2_urls` - list of OAUTH2 authentication URLs used by the extension. Note that these are URLs that do the authentication and code exchange..
@@ -405,6 +405,5 @@ extensionSDK.spartanLogout()
 
 ## Related Projects
 
-- [Looker extension template for React](https://github.com/looker-open-source/extension-template-react)
-- [Looker extension SDK for React](https://www.npmjs.com/package/@looker/extension-sdk-react)
-- [Looker SDK](https://www.npmjs.com/package/@looker/sdk)
+- [Looker extension examples](https://github.com/looker-open-source/extension-examples).
+- [Looker SDK](https://github.com/looker-open-source/sdk-codegen/tree/main/packages/sdk).
