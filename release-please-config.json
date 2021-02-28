@@ -1,0 +1,23 @@
+{
+  "bootstrap-sha": "6fc119838885b0cb831e78ddd23ac01cb819e585",
+  "packages": {
+    "packages/api-explorer": {},
+    "packages/extension-api-explorer": {},
+    "packages/extension-sdk-react": {},
+    "packages/extension-sdk": {},
+    "packages/hackathon": {},
+    "packages/run-it": {},
+    "packages/sdk-codegen-scripts": {},
+    "packages/sdk-codegen-utils": {},
+    "packages/sdk-codegen": {},
+    "packages/sdk-node": {},
+    "packages/sdk-rtl": {},
+    "packages/sdk": {},
+    "packages/wholly-sheet": {},
+    "python": {
+      "release-type": "python",
+      "package-name": "lktstpy",
+      "release-as": "21.0.0"
+    }
+  }
+}
