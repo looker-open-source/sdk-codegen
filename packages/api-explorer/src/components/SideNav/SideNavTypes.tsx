@@ -25,13 +25,13 @@
  */
 
 import React, { FC, useContext } from 'react'
+import { Heading } from '@looker/components'
 import { TypeList, IntrinsicType } from '@looker/sdk-codegen'
 import { NavLink } from 'react-router-dom'
 import styled from 'styled-components'
 
 import { buildTypePath, highlightHTML } from '../../utils'
 import { SearchContext } from '../../context'
-import { ApixHeading } from '../common'
 
 interface TypeProps {
   specKey: string
@@ -49,9 +49,9 @@ export const SideNavTypes: FC<TypeProps> = ({ types, specKey }) => {
         .filter((type) => !(type instanceof IntrinsicType))
         .map((type) => (
           <SideNavLink key={type.name} to={buildTypePath(specKey, type.name)}>
-            <ApixHeading as="h5" mb="0" pt="0" truncate>
+            <Heading as="h5" truncate>
               {highlightHTML(pattern, type.name)}
-            </ApixHeading>
+            </Heading>
           </SideNavLink>
         ))}
     </>
@@ -59,7 +59,6 @@ export const SideNavTypes: FC<TypeProps> = ({ types, specKey }) => {
 }
 
 const SideNavLink = styled(NavLink)`
-  cursor: pointer;
   display: block;
   padding: ${({
     theme: {
@@ -68,10 +67,16 @@ const SideNavLink = styled(NavLink)`
   }) => `${xsmall} ${large}`};
 
   &:hover,
-  &:focus,
-  &.active {
-    ${ApixHeading} {
+  &:focus {
+    ${Heading} {
       color: ${({ theme }) => theme.colors.key};
+    }
+  }
+
+  &.active {
+    ${Heading} {
+      color: ${({ theme }) => theme.colors.key};
+      font-weight: ${({ theme }) => theme.fontWeights.semiBold};
     }
   }
 `

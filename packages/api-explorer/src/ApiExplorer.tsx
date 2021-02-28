@@ -86,11 +86,16 @@ const ApiExplorer: FC<ApiExplorerProps> = ({
   }, [lodeUrl])
 
   return (
-    <ComponentsProvider loadGoogleFonts>
+    <ComponentsProvider
+      loadGoogleFonts
+      themeCustomizations={{
+        fontFamilies: { brand: 'Google Sans' },
+        colors: { key: '#1A73E8' },
+      }}
+    >
       <LodeContext.Provider value={{ ...lode }}>
         <SearchContext.Provider value={{ searchSettings, setSearchSettings }}>
-          {/* custom `style` will be removable after @looker/components > 0.9.22 */}
-          <Page style={{ width: '100%' }}>
+          <Page>
             <Header height="4rem">
               <AppHeader
                 specs={specs}

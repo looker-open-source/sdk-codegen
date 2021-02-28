@@ -29,10 +29,10 @@ import {
   Aside,
   Button,
   ButtonOutline,
-  ComponentsProvider,
   Space,
   Section,
   useToggle,
+  ExtendComponentsThemeProvider,
 } from '@looker/components'
 import { ThemeContext } from 'styled-components'
 import { useParams } from 'react-router-dom'
@@ -106,10 +106,12 @@ export const MethodScene: FC<DocMethodProps> = ({ api }) => {
       </Section>
       {sdk && value && (
         <Aside width="50rem">
-          <ComponentsProvider
-            globalStyle={false}
+          <ExtendComponentsThemeProvider
             themeCustomizations={{
-              colors: { background: colors.text, text: colors.background },
+              colors: {
+                background: colors.text,
+                text: colors.background,
+              },
             }}
           >
             <RunIt
@@ -117,7 +119,7 @@ export const MethodScene: FC<DocMethodProps> = ({ api }) => {
               inputs={createInputs(api, method)}
               method={method}
             />
-          </ComponentsProvider>
+          </ExtendComponentsThemeProvider>
         </Aside>
       )}
     </>
