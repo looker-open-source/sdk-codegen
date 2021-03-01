@@ -129,7 +129,12 @@ export const fetchSpec = (key: string, specs: SpecItems): SpecState => {
 export const getSpecKey = (location: AbstractLocation, specs?: SpecItems) => {
   const pathNodes = location.pathname.split('/')
   let specKey = ''
-  if (pathNodes.length > 1 && pathNodes[1] && pathNodes[1] !== 'oauth') {
+  if (
+    pathNodes.length > 1 &&
+    pathNodes[1] &&
+    pathNodes[1] !== 'oauth' &&
+    pathNodes[1] !== 'compare'
+  ) {
     specKey = pathNodes[1]
   } else if (specs) {
     specKey = getDefaultSpecKey(specs)

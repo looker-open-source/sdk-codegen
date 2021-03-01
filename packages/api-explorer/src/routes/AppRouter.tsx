@@ -30,13 +30,16 @@ import { OAuthScene, RunItContext } from '@looker/run-it'
 
 import { Looker40SDK } from '@looker/sdk'
 import { HomeScene, MethodScene, TagScene, TypeScene } from '../scenes'
+import { CompareScene } from '../scenes/CompareScene'
+import { SpecItems } from '../ApiExplorer'
 
 interface AppRouterProps {
   api: ApiModel
   specKey: string
+  specs: SpecItems
 }
 
-export const AppRouter: FC<AppRouterProps> = ({ specKey, api }) => {
+export const AppRouter: FC<AppRouterProps> = ({ specKey, api, specs }) => {
   const { sdk } = useContext(RunItContext)
   const maybeOauth = sdk && sdk instanceof Looker40SDK
   return (
@@ -47,6 +50,9 @@ export const AppRouter: FC<AppRouterProps> = ({ specKey, api }) => {
           <OAuthScene />
         </Route>
       )}
+      <Route path="/compare">
+        <CompareScene specs={specs} />
+      </Route>
       <Route path="/:specKey/(methods|types)?" exact>
         <HomeScene api={api} />
       </Route>

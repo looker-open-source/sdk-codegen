@@ -34,6 +34,7 @@ import {
   Space,
   IconButton,
   Heading,
+  Tooltip,
 } from '@looker/components'
 import { SpecItems } from '../../ApiExplorer'
 import { SpecState, SpecAction } from '../../reducers'
@@ -82,6 +83,13 @@ export const HeaderLayout: FC<HeaderProps> = ({
     </FlexItem>
     <FlexItem flexBasis="20rem" pl="large">
       <ApiSpecSelector specs={specs} spec={spec} specDispatch={specDispatch} />
+    </FlexItem>
+    <FlexItem flexBasis="2rem" pl="large">
+      <NavLink to={`/compare/${spec.key}`}>
+        <Tooltip content="compare specifications">
+          <Space gap="small">{`\u0394`}</Space>
+        </Tooltip>
+      </NavLink>
     </FlexItem>
   </Space>
 )
