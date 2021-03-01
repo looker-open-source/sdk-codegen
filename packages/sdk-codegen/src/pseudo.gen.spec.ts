@@ -37,7 +37,10 @@ describe('pseudocode', () => {
     it('optional body and additional param', () => {
       const method = apiTestModel.methods.create_user_credentials_email
       expect(method).toBeDefined()
-      const expected = `create_user_credentials_email(user_id, body, fields): CredentialsEmail`
+      const expected = `create_user_credentials_email(
+  user_id: int64,
+  body: CredentialsEmail,
+  [fields: string]): CredentialsEmail`
       const actual = gen.methodSignature('', method)
       expect(actual).toEqual(expected)
     })
@@ -46,6 +49,25 @@ describe('pseudocode', () => {
       expect(method).toBeDefined()
       const expected = `all_datagroups(): Datagroup[]`
       const actual = gen.methodSignature('', method)
+      expect(actual).toEqual(expected)
+    })
+  })
+  describe('declare type', () => {
+    it('declared a type', () => {
+      const type = apiTestModel.types.Datagroup
+      expect(type).toBeDefined()
+      const expected = `Datagroup {
+  [can: Hash[boolean]]
+  [created_at: int64]
+  [id: int64]
+  [model_name: string]
+  [name: string]
+  [stale_before: int64]
+  [trigger_check_at: int64]
+  [trigger_error: string]
+  [trigger_value: string]
+  [triggered_at: int64]}`
+      const actual = gen.declareType('', type)
       expect(actual).toEqual(expected)
     })
   })
