@@ -25,8 +25,8 @@
  */
 
 import React, { FC, useState } from 'react'
-import { DiffRow } from '@looker/sdk-codegen'
-import { useHistory, useParams } from 'react-router-dom'
+import { ApiModel, DiffRow } from '@looker/sdk-codegen'
+import { useHistory, useRouteMatch } from 'react-router-dom'
 import { Select, Space, SpaceVertical } from '@looker/components'
 import { SpecItems } from '../../ApiExplorer'
 import { getDefaultSpecKey } from '../../reducers/spec/utils'
@@ -37,10 +37,12 @@ export interface CompareSceneProps {
   specs: SpecItems
 }
 
-interface CompareSceneSpecProps {
-  specKey: string
-  rightSpec: string
-}
+// interface CompareSceneSpecProps {
+//   /** Left spec parameter */
+//   l: string
+//   /** Right spec parameter */
+//   r: string
+// }
 
 /**
  * Pick the left key, or default spec
@@ -66,15 +68,19 @@ const pickRight = (specs: SpecItems, rightKey: string, leftKey: string) => {
 
 export const CompareScene: FC<CompareSceneProps> = ({ specs }) => {
   const history = useHistory()
-  const { specKey, rightSpec } = useParams<CompareSceneSpecProps>()
+  const match = useRouteMatch<{ l: string; r: string }>('/compare/:l/:r')
+  const l = match?.params.l || ''
+  const r = match?.params.r || ''
   const options = Object.entries(specs).map(([key, spec]) => ({
     value: key,
     label: `${key} (${spec.status})`,
   }))
 
-  const [leftKey, setLeftKey] = useState<string>(pickLeft(specs, specKey))
-  const [rightKey, setRightKey] = useState<string>(
-    pickRight(specs, rightSpec, leftKey)
+  const [leftKey, setLeftKey] = useState<string>(pickLeft(specs, l))
+  const [rightKey, setRightKey] = useState<string>(pickRight(specs, r, leftKey))
+  const [leftApi, setLeftApi] = useState<ApiModel>(specs[leftKey].api!)
+  const [rightApi, setRightApi] = useState<ApiModel>(
+    rightKey ? specs[rightKey].api! : specs[leftKey].api!
   )
   const computeDelta = (left: string, right: string) => {
     if (left && right) {
@@ -86,9 +92,11 @@ export const CompareScene: FC<CompareSceneProps> = ({ specs }) => {
 
   const compareKeys = (left: string, right: string) => {
     setLeftKey(left)
+    setLeftApi(specs[left].api!)
     setRightKey(right)
+    setRightApi(specs[right].api!)
     setDelta(computeDelta(left, right))
-    history.push(`compare/${left}/${right}`)
+    history.push(`/compare/${left}/${right}`)
   }
 
   const handleLeftChange = (newLeft: string) => {
@@ -117,7 +125,7 @@ export const CompareScene: FC<CompareSceneProps> = ({ specs }) => {
           />
         </Space>
         <Space>
-          <DocDiff delta={delta} pageSize={15} />
+          <DocDiff delta={delta} leftSpec={leftApi} rightSpec={rightApi} />
         </Space>
       </SpaceVertical>
     </>

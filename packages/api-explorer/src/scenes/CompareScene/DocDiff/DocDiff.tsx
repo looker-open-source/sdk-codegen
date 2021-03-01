@@ -23,7 +23,7 @@
  SOFTWARE.
 
  */
-import { DiffRow } from '@looker/sdk-codegen'
+import { ApiModel, DiffRow } from '@looker/sdk-codegen'
 import {
   DataTable,
   Heading,
@@ -33,17 +33,30 @@ import {
   Text,
 } from '@looker/components'
 import React, { FC, useState } from 'react'
-import { docDiffHeaders, docDiffRows } from './docDiffUtils'
+import ReactDiffViewer, { DiffMethod } from 'react-diff-viewer'
+import { differ, docDiffHeaders, docDiffRows } from './docDiffUtils'
 
 export interface DocDiffProps {
   /** Using delta because IntelliJ has bugs with 'diff' in a react app */
   delta: DiffRow[]
+  /** Left side spec */
+  leftSpec: ApiModel
+  /** Right side spec */
+  rightSpec: ApiModel
   /** Number of rows per page. Defaults to 15 */
   pageSize?: number
 }
 
-export const DocDiff: FC<DocDiffProps> = ({ delta, pageSize = 15 }) => {
+export const DocDiff: FC<DocDiffProps> = ({
+  delta,
+  leftSpec,
+  rightSpec,
+  pageSize = 10,
+}) => {
   const [page, setPage] = useState(1)
+  const [leftSide, setLeftSide] = useState<string>('')
+  const [rightSide, setRightSide] = useState<string>('')
+
   if (delta.length === 0)
     return (
       <>
@@ -51,8 +64,11 @@ export const DocDiff: FC<DocDiffProps> = ({ delta, pageSize = 15 }) => {
       </>
     )
 
-  const handleSelect = (_item: DiffRow) => {
+  const handleSelect = (row: DiffRow) => {
     // TODO what should the click handler do? navigate to the method for lhs spec?
+    const { lhs, rhs } = differ(row, leftSpec, rightSpec)
+    setLeftSide(lhs)
+    setRightSide(rhs)
   }
 
   const headers = docDiffHeaders()
@@ -86,6 +102,14 @@ export const DocDiff: FC<DocDiffProps> = ({ delta, pageSize = 15 }) => {
             onChange={(nextPage) => {
               setPage(nextPage)
             }}
+          />
+        </Space>
+        <Space>
+          <ReactDiffViewer
+            oldValue={leftSide}
+            newValue={rightSide}
+            splitView={true}
+            compareMethod={DiffMethod.LINES}
           />
         </Space>
       </SpaceVertical>

@@ -32,5 +32,6 @@ import { compareSpecs, IApiModel } from '@looker/sdk-codegen'
  * @param rhs right sight API
  */
 export const compareApis = (lhs: IApiModel, rhs: IApiModel) => {
+  // TODO add switches for what to compare
   return compareSpecs(lhs, rhs)
 }
