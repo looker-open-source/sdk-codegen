@@ -32,7 +32,6 @@
     "watch:cjs": "yarn lerna exec --scope @looker/sdk-codegen --stream 'BABEL_ENV=build_cjs babel src --root-mode upward --out-dir lib --source-maps --extensions .ts,.tsx --no-comments --watch'"
   },
   "dependencies": {
-    "@looker/sdk": "^21.0.7",
     "@looker/sdk-codegen-utils": "^21.0.7",
     "@looker/sdk-node": "^21.0.7",
     "@looker/sdk-rtl": "^21.0.7",

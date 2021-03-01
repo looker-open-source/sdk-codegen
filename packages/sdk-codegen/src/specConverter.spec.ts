@@ -27,7 +27,6 @@
 import { readFileSync } from 'fs'
 import { isEmpty } from 'lodash'
 import { NodeSettingsIniFile, LookerNodeSDK } from '@looker/sdk-node'
-import { environmentPrefix } from '@looker/sdk'
 import {
   fixConversion,
   openApiStyle,
@@ -407,11 +406,7 @@ const apiFile = `${config.rootPath}spec/Looker.4.0.oas.json`
 const swaggerSource = readFileSync(swaggerFile, 'utf-8')
 const fullSwagger = JSON.parse(swaggerSource)
 const apiSource = readFileSync(apiFile, 'utf-8')
-const settings = new NodeSettingsIniFile(
-  environmentPrefix,
-  config.localIni,
-  'Looker'
-)
+const settings = new NodeSettingsIniFile('LOOKERSDK', config.localIni, 'Looker')
 const sdk = LookerNodeSDK.init40(settings)
 
 describe('spec conversion', () => {
