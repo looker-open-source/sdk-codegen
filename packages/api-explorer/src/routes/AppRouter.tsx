@@ -32,6 +32,7 @@ import { Looker40SDK } from '@looker/sdk'
 import { HomeScene, MethodScene, TagScene, TypeScene } from '../scenes'
 import { CompareScene } from '../scenes/CompareScene'
 import { SpecItems } from '../ApiExplorer'
+import { diffPath, oAuthPath } from '../utils'
 
 interface AppRouterProps {
   api: ApiModel
@@ -46,11 +47,11 @@ export const AppRouter: FC<AppRouterProps> = ({ specKey, api, specs }) => {
     <Switch>
       <Redirect from="/" to={`/${specKey}/`} exact />
       {maybeOauth && (
-        <Route path="/oauth">
+        <Route path={`/${oAuthPath}`}>
           <OAuthScene />
         </Route>
       )}
-      <Route path="/compare">
+      <Route path={`/${diffPath}/:l?/:r?`}>
         <CompareScene specs={specs} />
       </Route>
       <Route path="/:specKey/(methods|types)?" exact>

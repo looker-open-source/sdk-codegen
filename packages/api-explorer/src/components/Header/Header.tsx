@@ -39,6 +39,7 @@ import {
 import { SpecItems } from '../../ApiExplorer'
 import { SpecState, SpecAction } from '../../reducers'
 import { Search } from '../Search'
+import { diffPath } from '../../utils'
 import { ApiSpecSelector } from './ApiSpecSelector'
 
 interface HeaderProps {
@@ -85,8 +86,8 @@ export const HeaderLayout: FC<HeaderProps> = ({
       <ApiSpecSelector specs={specs} spec={spec} specDispatch={specDispatch} />
     </FlexItem>
     <FlexItem flexBasis="2rem" pl="large">
-      <NavLink to={`/compare/${spec.key}`}>
-        <Tooltip content="compare specifications">
+      <NavLink to={`/${diffPath}/${spec.key}/`}>
+        <Tooltip content="Compare Specifications">
           <Space gap="small">{`\u0394`}</Space>
         </Tooltip>
       </NavLink>

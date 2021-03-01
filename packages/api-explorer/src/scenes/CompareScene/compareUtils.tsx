@@ -24,14 +24,35 @@
 
  */
 
-import { compareSpecs, IApiModel } from '@looker/sdk-codegen'
+import { compareSpecs, DiffFilter, IApiModel } from '@looker/sdk-codegen'
 
+export const allDiffToggles = [
+  'missing',
+  'status',
+  'params',
+  'type',
+  'body',
+  'response',
+]
 /**
  * Abstraction of compareAPIs in case we need to transform compareSpecs diff rows
  * @param lhs left side API
  * @param rhs right sight API
+ * @params options to include
  */
-export const compareApis = (lhs: IApiModel, rhs: IApiModel) => {
-  // TODO add switches for what to compare
-  return compareSpecs(lhs, rhs)
+export const compareApis = (
+  lhs: IApiModel,
+  rhs: IApiModel,
+  options: string[]
+) => {
+  const includeOptions: DiffFilter = (delta, lMethod, rMethod) =>
+    (options.includes('missing') && !lMethod) ||
+    !rMethod! ||
+    (options.includes('status') && delta.lStatus !== delta.rStatus) ||
+    (options.includes('params') && !!delta.paramsDiff) ||
+    (options.includes('type') && !!delta.typeDiff) ||
+    (options.includes('body') && !!delta.bodyDiff) ||
+    (options.includes('response') && !!delta.responseDiff)
+
+  return compareSpecs(lhs, rhs, includeOptions)
 }
