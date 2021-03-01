@@ -32,7 +32,9 @@ module.exports = {
   mode: 'development',
   devServer: {
     contentBase: path.join(__dirname, 'public'),
-    historyApiFallback: true,
+    historyApiFallback: {
+      disableDotRule: true,
+    },
     publicPath: '/dist/',
     headers: {
       'Access-Control-Allow-Origin': '*',
