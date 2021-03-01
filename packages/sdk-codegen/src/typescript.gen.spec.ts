@@ -24,17 +24,6 @@
 
  */
 
-import {
-  IRequestAllUsers,
-  IRequestCreateQueryTask,
-  IWriteLookWithQuery,
-  ResultFormat,
-  IWriteMergeQuery,
-  IMergeQuerySourceQuery,
-  ISqlQueryCreate,
-  IDictionary,
-  IAccessToken,
-} from '@looker/sdk'
 import { DelimArray } from '@looker/sdk-rtl'
 import { TestConfig } from './testUtils'
 import { TypescriptGen } from './typescript.gen'
@@ -76,7 +65,7 @@ describe('typescript generator', () => {
     })
 
     it('returns DelimArray', () => {
-      const inputs: IRequestAllUsers = {
+      const inputs = {
         ids: new DelimArray<number>([1, 2, 3]),
       }
       const actual = trimInputs(inputs)
@@ -213,7 +202,7 @@ query_task_ids: DelimArray<string>`)
     })
 
     it('assigns a body param', () => {
-      const body: IWriteLookWithQuery = {
+      const body = {
         title: 'test title',
         description: 'gen test',
         query: {
@@ -251,10 +240,10 @@ query_task_ids: DelimArray<string>`)
     })
 
     it('assigns an enum', () => {
-      const inputs: IRequestCreateQueryTask = {
+      const inputs = {
         body: {
           query_id: 1,
-          result_format: ResultFormat.csv,
+          result_format: 'csv',
         },
       }
       const method = apiTestModel.methods.create_query_task
@@ -270,7 +259,7 @@ query_task_ids: DelimArray<string>`)
     })
 
     it('assigns a DelimArray', () => {
-      const inputs: IRequestAllUsers = {
+      const inputs = {
         ids: new DelimArray<number>([1, 2, 3]),
       }
       const method = apiTestModel.methods.all_users
@@ -283,7 +272,7 @@ query_task_ids: DelimArray<string>`)
     })
 
     it('assigns simple and complex arrays', () => {
-      const body: IWriteMergeQuery = {
+      const body = {
         pivots: ['one', 'two', 'three'],
         sorts: ['a'],
         source_queries: [
@@ -350,7 +339,7 @@ query_task_ids: DelimArray<string>`)
     })
 
     it('assigns dictionaries', () => {
-      const query: ISqlQueryCreate = {
+      const query = {
         connection_name: 'looker',
         model_name: 'the_look',
         vis_config: { first: 1, second: 'two' },
@@ -372,14 +361,14 @@ query_task_ids: DelimArray<string>`)
 
     describe('hashValue', () => {
       it('assigns a hash with heterogeneous values', () => {
-        const token: IAccessToken = {
+        const token = {
           access_token: 'backstage',
           token_type: 'test',
           expires_in: 10,
         }
         const oneItem = [1]
         const threeItems = ['Abe', 'Zeb', token]
-        const inputs: IDictionary<any> = {
+        const inputs = {
           item: oneItem,
           items: threeItems,
           first: 1,
@@ -413,7 +402,7 @@ query_task_ids: DelimArray<string>`)
     })
     describe('assignType', () => {
       it('assigns a complex type', () => {
-        const inputs: IMergeQuerySourceQuery = {
+        const inputs = {
           name: 'first query',
           query_id: 1,
           merge_fields: [
@@ -441,7 +430,7 @@ query_task_ids: DelimArray<string>`)
     })
     describe('arrayValue', () => {
       it('assigns complex arrays', () => {
-        const sourceQueries: IMergeQuerySourceQuery[] = [
+        const sourceQueries = [
           {
             name: 'first query',
             query_id: 1,

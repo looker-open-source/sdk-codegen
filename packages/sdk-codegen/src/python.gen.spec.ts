@@ -24,17 +24,6 @@
 
  */
 
-import {
-  IAccessToken,
-  IDictionary,
-  IMergeQuerySourceQuery,
-  IRequestAllUsers,
-  IRequestCreateQueryTask,
-  IWriteLookWithQuery,
-  IWriteMergeQuery,
-  ISqlQueryCreate,
-  ResultFormat,
-} from '@looker/sdk'
 import { DelimArray } from '@looker/sdk-rtl'
 import { TestConfig } from './testUtils'
 import { PythonGen } from './python.gen'
@@ -861,7 +850,7 @@ class MergeFields(model.Model):
     })
 
     it('assigns a body param', () => {
-      const body: IWriteLookWithQuery = {
+      const body = {
         title: 'test title',
         description: 'gen test',
         query: {
@@ -889,10 +878,10 @@ class MergeFields(model.Model):
     })
 
     it('assigns an enum', () => {
-      const inputs: IRequestCreateQueryTask = {
+      const inputs = {
         body: {
           query_id: 1,
-          result_format: ResultFormat.csv,
+          result_format: 'csv',
         },
       }
       const method = apiTestModel.methods.create_query_task
@@ -906,7 +895,7 @@ class MergeFields(model.Model):
     })
 
     it('assigns a DelimArray', () => {
-      const inputs: IRequestAllUsers = {
+      const inputs = {
         ids: new DelimArray<number>([1, 2, 3]),
       }
       const method = apiTestModel.methods.all_users
@@ -917,7 +906,7 @@ class MergeFields(model.Model):
     })
 
     it('assigns a DelimArray', () => {
-      const inputs: IRequestAllUsers = {
+      const inputs = {
         ids: new DelimArray<number>([1, 2, 3]),
       }
       const method = apiTestModel.methods.all_users
@@ -928,7 +917,7 @@ class MergeFields(model.Model):
     })
 
     it('assigns simple and complex arrays', () => {
-      const body: IWriteMergeQuery = {
+      const body = {
         column_limit: '5',
         pivots: ['one', 'two', 'three'],
         sorts: ['a'],
@@ -995,7 +984,7 @@ class MergeFields(model.Model):
     })
 
     it('assigns dictionaries', () => {
-      const query: ISqlQueryCreate = {
+      const query = {
         connection_name: 'looker',
         model_name: 'the_look',
         vis_config: { first: 1, second: 'two' },
@@ -1017,14 +1006,14 @@ class MergeFields(model.Model):
 
     describe('hashValue', () => {
       it('assigns a hash with heterogeneous values', () => {
-        const token: IAccessToken = {
+        const token = {
           access_token: 'backstage',
           token_type: 'test',
           expires_in: 10,
         }
         const oneItem = [1]
         const threeItems = ['Abe', 'Zeb', token]
-        const inputs: IDictionary<any> = {
+        const inputs = {
           /**
            * The below key is quoted in the generated dictionary. This is a bug
            * that might need addressing later on.
@@ -1068,7 +1057,7 @@ class MergeFields(model.Model):
     })
     describe('assignType', () => {
       it('assigns a complex type', () => {
-        const inputs: IMergeQuerySourceQuery = {
+        const inputs = {
           name: 'first query',
           query_id: 1,
           merge_fields: [
