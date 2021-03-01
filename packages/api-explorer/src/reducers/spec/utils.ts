@@ -29,6 +29,7 @@ import { Location as HLocation } from 'history'
 
 import { IApiVersion } from '@looker/sdk'
 import { SpecItem, SpecItems } from '../../ApiExplorer'
+import { diffPath, oAuthPath } from '../../utils'
 import { SpecState } from './reducer'
 
 export type AbstractLocation = HLocation | Location
@@ -132,8 +133,8 @@ export const getSpecKey = (location: AbstractLocation, specs?: SpecItems) => {
   if (
     pathNodes.length > 1 &&
     pathNodes[1] &&
-    pathNodes[1] !== 'oauth' &&
-    pathNodes[1] !== 'compare'
+    pathNodes[1] !== oAuthPath &&
+    pathNodes[1] !== diffPath
   ) {
     specKey = pathNodes[1]
   } else if (specs) {

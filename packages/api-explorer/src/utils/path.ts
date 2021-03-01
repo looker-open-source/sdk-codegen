@@ -45,3 +45,6 @@ export const buildMethodPath = (
  */
 export const buildTypePath = (specKey: string, typeName: string) =>
   `/${specKey}/types/${typeName}`
+
+export const diffPath = 'diff'
+export const oAuthPath = 'oauth'
