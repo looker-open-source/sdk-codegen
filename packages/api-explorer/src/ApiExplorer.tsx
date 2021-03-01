@@ -110,7 +110,7 @@ const ApiExplorer: FC<ApiExplorerProps> = ({
                   <SideNav api={spec.api} specKey={spec.key} />
                 </Aside>
               )}
-              <AppRouter api={spec.api} specKey={spec.key} />
+              <AppRouter api={spec.api} specKey={spec.key} specs={specs} />
             </Layout>
           </Page>
         </SearchContext.Provider>
