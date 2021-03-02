@@ -65,6 +65,7 @@ export const DocDiff: FC<DocDiffProps> = ({
     )
 
   const handleSelect = (row: DiffRow) => {
+    // TODO what should the click handler do? navigate to the method for lhs spec?
     const { lhs, rhs } = differ(row, leftSpec, rightSpec)
     setLeftSide(lhs)
     setRightSide(rhs)
@@ -77,19 +78,22 @@ export const DocDiff: FC<DocDiffProps> = ({
     (page - 1) * pageSize + 1,
     page * pageSize + 1
   )
-  const pageItems = docDiffRows(pageItemData, leftSpec, rightSpec, handleSelect)
+  const pageItems = docDiffRows(pageItemData, handleSelect)
 
   // TODO also handle sorting like PerfTable does?
-  // TODO support filtering?
   // TODO be less stupid about layout directives?
 
   return (
     <>
       <SpaceVertical>
-        <Heading as="h2">{`${delta.length} differences found between ${leftSpec.version} and ${rightSpec.version}`}</Heading>
-        <DataTable key="diff" columns={headers}>
-          {pageItems}
-        </DataTable>
+        <Space>
+          <Heading as="h2">{`${delta.length} differences found between ${leftSpec.version} and ${rightSpec.version}`}</Heading>
+        </Space>
+        <Space>
+          <DataTable key="diff" columns={headers}>
+            {pageItems}
+          </DataTable>
+        </Space>
         <Space>
           <Pagination
             current={page}
