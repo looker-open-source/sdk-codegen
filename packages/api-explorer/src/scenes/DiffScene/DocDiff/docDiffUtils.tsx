@@ -40,7 +40,6 @@ export const docDiffHeaders = () => {
       primaryKey: true,
       title: 'Method',
       type: 'string',
-      widthPercent: 20,
     },
     {
       canSort: true,
@@ -48,7 +47,6 @@ export const docDiffHeaders = () => {
       primaryKey: true,
       title: 'Operation',
       type: 'string',
-      widthPercent: 40,
     },
     {
       canSort: true,
@@ -56,7 +54,6 @@ export const docDiffHeaders = () => {
       primaryKey: false,
       title: 'Left Status',
       type: 'string',
-      widthPercent: 20,
     },
     {
       canSort: true,
@@ -64,7 +61,6 @@ export const docDiffHeaders = () => {
       primaryKey: false,
       title: 'Right Status',
       type: 'string',
-      widthPercent: 20,
     },
   ]
   return result as DataTableColumns

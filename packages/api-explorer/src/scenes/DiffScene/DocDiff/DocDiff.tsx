@@ -86,14 +86,10 @@ export const DocDiff: FC<DocDiffProps> = ({
   return (
     <>
       <SpaceVertical>
-        <Space>
-          <Heading as="h2">{`${delta.length} differences found between ${leftSpec.version} and ${rightSpec.version}`}</Heading>
-        </Space>
-        <Space>
-          <DataTable key="diff" columns={headers}>
-            {pageItems}
-          </DataTable>
-        </Space>
+        <Heading as="h2">{`${delta.length} differences found between ${leftSpec.version} and ${rightSpec.version}`}</Heading>
+        <DataTable key="diff" columns={headers}>
+          {pageItems}
+        </DataTable>
         <Space>
           <Pagination
             current={page}
