@@ -25,7 +25,7 @@
  */
 import { ApiModel, DiffRow } from '@looker/sdk-codegen'
 import {
-  DataTable,
+  Flex,
   Heading,
   Pagination,
   Space,
@@ -33,10 +33,9 @@ import {
   Text,
 } from '@looker/components'
 import React, { FC, useState } from 'react'
-import ReactDiffViewer, { DiffMethod } from 'react-diff-viewer'
-import { differ, docDiffHeaders, docDiffRows } from './docDiffUtils'
+import { DiffItem } from './DiffItem'
 
-export interface DocDiffProps {
+export interface DocDiffsProps {
   /** Using delta because IntelliJ has bugs with 'diff' in a react app */
   delta: DiffRow[]
   /** Left side spec */
@@ -47,70 +46,45 @@ export interface DocDiffProps {
   pageSize?: number
 }
 
-export const DocDiff: FC<DocDiffProps> = ({
+export const DocDiff: FC<DocDiffsProps> = ({
   delta,
   leftSpec,
   rightSpec,
   pageSize = 10,
 }) => {
   const [page, setPage] = useState(1)
-  const [leftSide, setLeftSide] = useState<string>('')
-  const [rightSide, setRightSide] = useState<string>('')
 
-  if (delta.length === 0)
-    return (
-      <>
-        <Text>{'No differences found'}</Text>
-      </>
-    )
+  if (delta.length === 0) return <Text>{'No differences found'}</Text>
 
-  const handleSelect = (row: DiffRow) => {
-    // TODO what should the click handler do? navigate to the method for lhs spec?
-    const { lhs, rhs } = differ(row, leftSpec, rightSpec)
-    setLeftSide(lhs)
-    setRightSide(rhs)
-  }
-
-  const headers = docDiffHeaders()
   const pageCount = Math.round((delta.length - 1) / pageSize)
   // The +1 is to skip the header row
   const pageItemData = delta.slice(
     (page - 1) * pageSize + 1,
     page * pageSize + 1
   )
-  const pageItems = docDiffRows(pageItemData, handleSelect)
-
-  // TODO also handle sorting like PerfTable does?
-  // TODO be less stupid about layout directives?
 
   return (
-    <SpaceVertical>
+    <Flex flexDirection="column" alignItems="center">
       <Space>
         <Heading as="h2">{`${delta.length} differences found between ${leftSpec.version} and ${rightSpec.version}`}</Heading>
       </Space>
-      <Space>
-        <DataTable key="diff" columns={headers}>
-          {pageItems}
-        </DataTable>
-      </Space>
-      <Space>
-        <Pagination
-          current={page}
-          pages={pageCount}
-          onChange={(nextPage) => {
-            setPage(nextPage)
-          }}
-        />
-      </Space>
-      <Space>
-        <ReactDiffViewer
-          oldValue={leftSide}
-          newValue={rightSide}
-          splitView={true}
-          compareMethod={DiffMethod.LINES}
-          showDiffOnly={true}
-        />
-      </Space>
-    </SpaceVertical>
+      <SpaceVertical mt="large" gap="xxsmall">
+        {pageItemData.map((item) => (
+          <DiffItem
+            key={item.id}
+            item={item}
+            leftSpec={leftSpec}
+            rightSpec={rightSpec}
+          />
+        ))}
+      </SpaceVertical>
+      <Pagination
+        current={page}
+        pages={pageCount}
+        onChange={(nextPage) => {
+          setPage(nextPage)
+        }}
+      />
+    </Flex>
   )
 }

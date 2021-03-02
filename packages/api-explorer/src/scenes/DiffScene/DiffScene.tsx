@@ -31,7 +31,7 @@ import {
   Box,
   Flex,
   FlexItem,
-  Icon,
+  IconButton,
   Label,
   Section,
   Select,
@@ -47,13 +47,6 @@ export interface DiffSceneProps {
   specs: SpecItems
   toggleNavigation: (target?: boolean) => void
 }
-
-// interface CompareSceneSpecProps {
-//   /** Left spec parameter */
-//   l: string
-//   /** Right spec parameter */
-//   r: string
-// }
 
 /**
  * Pick the left key, or default spec
@@ -161,6 +154,11 @@ export const DiffScene: FC<DiffSceneProps> = ({ specs, toggleNavigation }) => {
     compareKeys(leftKey, newRight)
   }
 
+  const handleSwitch = () => {
+    // TODO: Get this to update selectors
+    compareKeys(rightKey, leftKey)
+  }
+
   return (
     <Section p="xxlarge">
       <Box>
@@ -176,7 +174,13 @@ export const DiffScene: FC<DiffSceneProps> = ({ specs, toggleNavigation }) => {
               onChange={handleLeftChange}
             />
           </FlexItem>
-          <Icon size="small" name="ArrowBackward" mt="medium" />
+          <IconButton
+            label="switch"
+            size="small"
+            icon="Sync"
+            mt="medium"
+            onClick={handleSwitch}
+          />
           <FlexItem>
             <Label htmlFor="compare">Compare</Label>
             <Select

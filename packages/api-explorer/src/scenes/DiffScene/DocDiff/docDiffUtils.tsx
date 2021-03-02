@@ -24,68 +24,7 @@
 
  */
 
-import React from 'react'
-import {
-  DataTableCell,
-  DataTableColumns,
-  DataTableItem,
-} from '@looker/components'
 import { ApiModel, DiffRow, PseudoGen } from '@looker/sdk-codegen'
-
-export const docDiffHeaders = () => {
-  const result = [
-    {
-      canSort: true,
-      id: 'name',
-      primaryKey: true,
-      title: 'Method',
-      type: 'string',
-      widthPercent: 20,
-    },
-    {
-      canSort: true,
-      id: 'id',
-      primaryKey: true,
-      title: 'Operation',
-      type: 'string',
-      widthPercent: 40,
-    },
-    {
-      canSort: true,
-      id: 'lStatus',
-      primaryKey: false,
-      title: 'Left Status',
-      type: 'string',
-      widthPercent: 20,
-    },
-    {
-      canSort: true,
-      id: 'rStatus',
-      primaryKey: false,
-      title: 'Right Status',
-      type: 'string',
-      widthPercent: 20,
-    },
-  ]
-  return result as DataTableColumns
-}
-
-export const docDiffRows = (
-  data: DiffRow[],
-  onSelect: (item: DiffRow) => void
-) => {
-  return data.map((item) => {
-    const id = item.id
-    return (
-      <DataTableItem id={id} key={id} onClick={onSelect.bind(null, item)}>
-        <DataTableCell>{item.name}</DataTableCell>
-        <DataTableCell>{item.id}</DataTableCell>
-        <DataTableCell>{item.lStatus}</DataTableCell>
-        <DataTableCell>{item.rStatus}</DataTableCell>
-      </DataTableItem>
-    )
-  })
-}
 
 export const diffText = (row: DiffRow, status: string, api: ApiModel) => {
   const gen = new PseudoGen(api)
