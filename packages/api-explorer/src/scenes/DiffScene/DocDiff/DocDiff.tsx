@@ -35,7 +35,7 @@ import {
 import React, { FC, useState } from 'react'
 import { DiffItem } from './DiffItem'
 
-export interface DocDiffsProps {
+export interface DocDiffProps {
   /** Using delta because IntelliJ has bugs with 'diff' in a react app */
   delta: DiffRow[]
   /** Left side spec */
@@ -46,7 +46,7 @@ export interface DocDiffsProps {
   pageSize?: number
 }
 
-export const DocDiff: FC<DocDiffsProps> = ({
+export const DocDiff: FC<DocDiffProps> = ({
   delta,
   leftSpec,
   rightSpec,
