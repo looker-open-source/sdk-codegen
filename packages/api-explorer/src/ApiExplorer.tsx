@@ -79,7 +79,8 @@ const ApiExplorer: FC<ApiExplorerProps> = ({
   const [lode, setLode] = useState(defaultLodeContextValue)
 
   const [hasNavigation, setHasNavigation] = useState(true)
-  const toggleNavigation = () => setHasNavigation(!hasNavigation)
+  const toggleNavigation = (target?: boolean) =>
+    setHasNavigation(target || !hasNavigation)
 
   useEffect(() => {
     getLoded(lodeUrl).then((resp) => setLode(resp))
@@ -110,7 +111,12 @@ const ApiExplorer: FC<ApiExplorerProps> = ({
                   <SideNav api={spec.api} specKey={spec.key} />
                 </Aside>
               )}
-              <AppRouter api={spec.api} specKey={spec.key} specs={specs} />
+              <AppRouter
+                api={spec.api}
+                specKey={spec.key}
+                specs={specs}
+                toggleNavigation={toggleNavigation}
+              />
             </Layout>
           </Page>
         </SearchContext.Provider>

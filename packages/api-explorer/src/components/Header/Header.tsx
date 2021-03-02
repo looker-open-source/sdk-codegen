@@ -46,7 +46,7 @@ interface HeaderProps {
   specs: SpecItems
   spec: SpecState
   specDispatch: Dispatch<SpecAction>
-  toggleNavigation: () => void
+  toggleNavigation: (target?: boolean) => void
   className?: string
 }
 
@@ -61,7 +61,7 @@ export const HeaderLayout: FC<HeaderProps> = ({
     <Flex width="20rem" pr="large" alignItems="center">
       <IconButton
         size="small"
-        onClick={toggleNavigation}
+        onClick={() => toggleNavigation()}
         icon="Hamburger"
         label="Toggle Navigation"
         mr="medium"

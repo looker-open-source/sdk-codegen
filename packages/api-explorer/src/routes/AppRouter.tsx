@@ -38,9 +38,15 @@ interface AppRouterProps {
   api: ApiModel
   specKey: string
   specs: SpecItems
+  toggleNavigation: (target?: boolean) => void
 }
 
-export const AppRouter: FC<AppRouterProps> = ({ specKey, api, specs }) => {
+export const AppRouter: FC<AppRouterProps> = ({
+  specKey,
+  api,
+  specs,
+  toggleNavigation,
+}) => {
   const { sdk } = useContext(RunItContext)
   const maybeOauth = sdk && sdk instanceof Looker40SDK
   return (
@@ -52,7 +58,7 @@ export const AppRouter: FC<AppRouterProps> = ({ specKey, api, specs }) => {
         </Route>
       )}
       <Route path={`/${diffPath}/:l?/:r?`}>
-        <DiffScene specs={specs} />
+        <DiffScene specs={specs} toggleNavigation={toggleNavigation} />
       </Route>
       <Route path="/:specKey/(methods|types)?" exact>
         <HomeScene api={api} />
