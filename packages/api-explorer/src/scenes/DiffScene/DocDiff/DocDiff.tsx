@@ -109,6 +109,7 @@ export const DocDiff: FC<DocDiffProps> = ({
             newValue={rightSide}
             splitView={true}
             compareMethod={DiffMethod.LINES}
+            showDiffOnly={true}
           />
         </Space>
       </SpaceVertical>
