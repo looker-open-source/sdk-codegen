@@ -27,14 +27,20 @@
 import React, { FC, useState } from 'react'
 import { ApiModel, DiffRow } from '@looker/sdk-codegen'
 import { useHistory, useRouteMatch } from 'react-router-dom'
-import { SelectMulti, Select, Space, SpaceVertical } from '@looker/components'
+import {
+  Fieldset,
+  Select,
+  SelectMulti,
+  Space,
+  SpaceVertical,
+} from '@looker/components'
 import { SpecItems } from '../../ApiExplorer'
 import { getDefaultSpecKey } from '../../reducers/spec/utils'
 import { diffPath } from '../../utils'
-import { allDiffToggles, compareApis } from './compareUtils'
+import { diffSpecs, standardDiffToggles } from './diffUtils'
 import { DocDiff } from './DocDiff'
 
-export interface CompareSceneProps {
+export interface DiffSceneProps {
   specs: SpecItems
 }
 
@@ -89,12 +95,12 @@ const diffToggles = [
     value: 'body',
   },
   {
-    label: 'Responses',
+    label: 'Response',
     value: 'response',
   },
 ]
 
-export const CompareScene: FC<CompareSceneProps> = ({ specs }) => {
+export const DiffScene: FC<DiffSceneProps> = ({ specs }) => {
   const history = useHistory()
   const match = useRouteMatch<{ l: string; r: string }>(`/${diffPath}/:l?/:r?`)
   const l = match?.params.l || ''
@@ -110,23 +116,27 @@ export const CompareScene: FC<CompareSceneProps> = ({ specs }) => {
   const [rightApi, setRightApi] = useState<ApiModel>(
     rightKey ? specs[rightKey].api! : specs[leftKey].api!
   )
-  const [toggles, setToggles] = useState(allDiffToggles)
+  const [toggles, setToggles] = useState<string[]>(standardDiffToggles)
 
-  const computeDelta = (left: string, right: string) => {
+  const computeDelta = (left: string, right: string, toggles: string[]) => {
     if (left && right) {
-      return compareApis(specs[left].api!, specs[right].api!, toggles)
+      return diffSpecs(specs[left].api!, specs[right].api!, toggles)
     }
     return []
   }
-  const [delta, setDelta] = useState<DiffRow[]>(computeDelta(leftKey, rightKey))
+  const [delta, setDelta] = useState<DiffRow[]>(
+    computeDelta(leftKey, rightKey, toggles)
+  )
 
   const compareKeys = (left: string, right: string) => {
+    if (left !== leftKey || right !== rightKey) {
+      history.push(`/${diffPath}/${left}/${right}`)
+    }
     setLeftKey(left)
     setLeftApi(specs[left].api!)
     setRightKey(right)
     setRightApi(specs[right].api!)
-    setDelta(computeDelta(left, right))
-    history.push(`/${diffPath}/${left}/${right}`)
+    setDelta(computeDelta(left, right, toggles))
   }
 
   const handleLeftChange = (newLeft: string) => {
@@ -134,8 +144,9 @@ export const CompareScene: FC<CompareSceneProps> = ({ specs }) => {
   }
 
   const handleTogglesChange = (values?: string[]) => {
-    setToggles(values || [])
-    setDelta(computeDelta(leftKey, rightKey))
+    const newToggles = values || []
+    setToggles(newToggles)
+    setDelta(computeDelta(leftKey, rightKey, newToggles))
   }
 
   const handleRightChange = (newRight: string) => {
@@ -145,27 +156,30 @@ export const CompareScene: FC<CompareSceneProps> = ({ specs }) => {
   return (
     <>
       <SpaceVertical>
-        <Space between>
+        <Fieldset inline>
           <Select
+            width="25%"
             name="Left Version"
             defaultValue={leftKey}
             options={options}
             onChange={handleLeftChange}
           />
           <SelectMulti
+            width="50%"
             name="toggles"
             placeholder="Comparison options"
-            defaultValues={allDiffToggles}
+            defaultValues={toggles}
             onChange={handleTogglesChange}
             options={diffToggles}
           />
           <Select
+            width="25%"
             name="Right Version"
             defaultValue={rightKey}
             options={options}
             onChange={handleRightChange}
           />
-        </Space>
+        </Fieldset>
         <Space>
           <DocDiff delta={delta} leftSpec={leftApi} rightSpec={rightApi} />
         </Space>

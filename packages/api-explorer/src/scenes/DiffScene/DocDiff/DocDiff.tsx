@@ -81,14 +81,13 @@ export const DocDiff: FC<DocDiffProps> = ({
   const pageItems = docDiffRows(pageItemData, handleSelect)
 
   // TODO also handle sorting like PerfTable does?
-  // TODO interactive filtering out of status diffs, etc.
   // TODO be less stupid about layout directives?
 
   return (
     <>
       <SpaceVertical>
         <Space>
-          <Heading as="h2">{`${delta.length} differences found`}</Heading>
+          <Heading as="h2">{`${delta.length} differences found between ${leftSpec.version} and ${rightSpec.version}`}</Heading>
         </Space>
         <Space>
           <DataTable key="diff" columns={headers}>

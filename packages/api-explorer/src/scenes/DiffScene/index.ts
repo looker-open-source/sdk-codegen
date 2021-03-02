@@ -24,4 +24,4 @@
 
  */
 
-export { CompareScene } from './CompareScene'
+export { DiffScene } from './DiffScene'

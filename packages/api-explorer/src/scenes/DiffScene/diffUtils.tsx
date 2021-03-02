@@ -34,20 +34,28 @@ export const allDiffToggles = [
   'body',
   'response',
 ]
+
+export const standardDiffToggles = [
+  'missing',
+  'params',
+  'type',
+  'body',
+  'response',
+]
+
 /**
  * Abstraction of compareAPIs in case we need to transform compareSpecs diff rows
  * @param lhs left side API
  * @param rhs right sight API
- * @params options to include
+ * @param options to include
  */
-export const compareApis = (
+export const diffSpecs = (
   lhs: IApiModel,
   rhs: IApiModel,
   options: string[]
 ) => {
   const includeOptions: DiffFilter = (delta, lMethod, rMethod) =>
-    (options.includes('missing') && !lMethod) ||
-    !rMethod! ||
+    (options.includes('missing') && (!lMethod || !rMethod)) ||
     (options.includes('status') && delta.lStatus !== delta.rStatus) ||
     (options.includes('params') && !!delta.paramsDiff) ||
     (options.includes('type') && !!delta.typeDiff) ||

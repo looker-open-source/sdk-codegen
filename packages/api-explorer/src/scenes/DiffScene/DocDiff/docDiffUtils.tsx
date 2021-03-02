@@ -40,15 +40,15 @@ export const docDiffHeaders = () => {
       primaryKey: true,
       title: 'Method',
       type: 'string',
-      widthPercent: 8,
+      widthPercent: 20,
     },
     {
       canSort: true,
       id: 'id',
       primaryKey: true,
-      title: 'Op + URI',
+      title: 'Operation',
       type: 'string',
-      widthPercent: 10,
+      widthPercent: 40,
     },
     {
       canSort: true,
@@ -56,45 +56,13 @@ export const docDiffHeaders = () => {
       primaryKey: false,
       title: 'Left Status',
       type: 'string',
-      widthPercent: 5,
+      widthPercent: 20,
     },
     {
       canSort: true,
       id: 'rStatus',
       primaryKey: false,
       title: 'Right Status',
-      type: 'string',
-      widthPercent: 5,
-    },
-    {
-      canSort: false,
-      id: 'typeDiff',
-      primaryKey: false,
-      title: 'Type diff',
-      type: 'string',
-      widthPercent: 20,
-    },
-    {
-      canSort: false,
-      id: 'paramsDiff',
-      primaryKey: false,
-      title: 'params Diff',
-      type: 'string',
-      widthPercent: 20,
-    },
-    {
-      canSort: false,
-      id: 'bodyDiff',
-      primaryKey: false,
-      title: 'body Diff',
-      type: 'string',
-      widthPercent: 20,
-    },
-    {
-      canSort: false,
-      id: 'responseDiff',
-      primaryKey: false,
-      title: 'response Diff',
       type: 'string',
       widthPercent: 20,
     },
@@ -114,10 +82,6 @@ export const docDiffRows = (
         <DataTableCell>{item.id}</DataTableCell>
         <DataTableCell>{item.lStatus}</DataTableCell>
         <DataTableCell>{item.rStatus}</DataTableCell>
-        <DataTableCell>{item.typeDiff}</DataTableCell>
-        <DataTableCell>{item.paramsDiff}</DataTableCell>
-        <DataTableCell>{item.bodyDiff}</DataTableCell>
-        <DataTableCell>{item.responseDiff}</DataTableCell>
       </DataTableItem>
     )
   })

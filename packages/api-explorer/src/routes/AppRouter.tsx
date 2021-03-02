@@ -30,7 +30,7 @@ import { OAuthScene, RunItContext } from '@looker/run-it'
 
 import { Looker40SDK } from '@looker/sdk'
 import { HomeScene, MethodScene, TagScene, TypeScene } from '../scenes'
-import { CompareScene } from '../scenes/CompareScene'
+import { DiffScene } from '../scenes/DiffScene'
 import { SpecItems } from '../ApiExplorer'
 import { diffPath, oAuthPath } from '../utils'
 
@@ -52,7 +52,7 @@ export const AppRouter: FC<AppRouterProps> = ({ specKey, api, specs }) => {
         </Route>
       )}
       <Route path={`/${diffPath}/:l?/:r?`}>
-        <CompareScene specs={specs} />
+        <DiffScene specs={specs} />
       </Route>
       <Route path="/:specKey/(methods|types)?" exact>
         <HomeScene api={api} />
