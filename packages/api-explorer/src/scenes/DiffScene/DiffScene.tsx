@@ -24,15 +24,18 @@
 
  */
 
-import React, { FC, useState } from 'react'
+import React, { FC, useState, useEffect } from 'react'
 import { ApiModel, DiffRow } from '@looker/sdk-codegen'
 import { useHistory, useRouteMatch } from 'react-router-dom'
 import {
-  Fieldset,
+  Box,
+  Flex,
+  FlexItem,
+  Icon,
+  Label,
+  Section,
   Select,
   SelectMulti,
-  Space,
-  SpaceVertical,
 } from '@looker/components'
 import { SpecItems } from '../../ApiExplorer'
 import { getDefaultSpecKey } from '../../reducers/spec/utils'
@@ -42,6 +45,7 @@ import { DocDiff } from './DocDiff'
 
 export interface DiffSceneProps {
   specs: SpecItems
+  toggleNavigation: (target?: boolean) => void
 }
 
 // interface CompareSceneSpecProps {
@@ -100,7 +104,7 @@ const diffToggles = [
   },
 ]
 
-export const DiffScene: FC<DiffSceneProps> = ({ specs }) => {
+export const DiffScene: FC<DiffSceneProps> = ({ specs, toggleNavigation }) => {
   const history = useHistory()
   const match = useRouteMatch<{ l: string; r: string }>(`/${diffPath}/:l?/:r?`)
   const l = match?.params.l || ''
@@ -117,6 +121,10 @@ export const DiffScene: FC<DiffSceneProps> = ({ specs }) => {
     rightKey ? specs[rightKey].api! : specs[leftKey].api!
   )
   const [toggles, setToggles] = useState<string[]>(standardDiffToggles)
+
+  useEffect(() => {
+    toggleNavigation(false)
+  }, [])
 
   const computeDelta = (left: string, right: string, toggles: string[]) => {
     if (left && right) {
@@ -154,36 +162,47 @@ export const DiffScene: FC<DiffSceneProps> = ({ specs }) => {
   }
 
   return (
-    <>
-      <SpaceVertical>
-        <Fieldset inline>
-          <Select
-            width="25%"
-            name="Left Version"
-            defaultValue={leftKey}
-            options={options}
-            onChange={handleLeftChange}
-          />
-          <SelectMulti
-            width="50%"
-            name="toggles"
-            placeholder="Comparison options"
-            defaultValues={toggles}
-            onChange={handleTogglesChange}
-            options={diffToggles}
-          />
-          <Select
-            width="25%"
-            name="Right Version"
-            defaultValue={rightKey}
-            options={options}
-            onChange={handleRightChange}
-          />
-        </Fieldset>
-        <Space>
-          <DocDiff delta={delta} leftSpec={leftApi} rightSpec={rightApi} />
-        </Space>
-      </SpaceVertical>
-    </>
+    <Section p="xxlarge">
+      <Box>
+        <Flex bg="AliceBlue" padding="large" mb="xlarge" alignItems="center">
+          <FlexItem>
+            <Label htmlFor="base">Base</Label>
+            <Select
+              mt="xxsmall"
+              id="base"
+              name="Left Version"
+              defaultValue={leftKey}
+              options={options}
+              onChange={handleLeftChange}
+            />
+          </FlexItem>
+          <Icon size="small" name="ArrowBackward" mt="medium" />
+          <FlexItem>
+            <Label htmlFor="compare">Compare</Label>
+            <Select
+              mt="xxsmall"
+              id="compare"
+              name="Right Version"
+              defaultValue={rightKey}
+              options={options}
+              onChange={handleRightChange}
+            />
+          </FlexItem>
+          <FlexItem flex="2" ml="large">
+            <Label htmlFor="options">Comparison Options</Label>
+            <SelectMulti
+              mt="xxsmall"
+              id="options"
+              name="toggles"
+              placeholder="Comparison options"
+              defaultValues={toggles}
+              onChange={handleTogglesChange}
+              options={diffToggles}
+            />
+          </FlexItem>
+        </Flex>
+      </Box>
+      <DocDiff delta={delta} leftSpec={leftApi} rightSpec={rightApi} />
+    </Section>
   )
 }

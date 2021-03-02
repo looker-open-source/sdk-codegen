@@ -84,35 +84,33 @@ export const DocDiff: FC<DocDiffProps> = ({
   // TODO be less stupid about layout directives?
 
   return (
-    <>
-      <SpaceVertical>
-        <Space>
-          <Heading as="h2">{`${delta.length} differences found between ${leftSpec.version} and ${rightSpec.version}`}</Heading>
-        </Space>
-        <Space>
-          <DataTable key="diff" columns={headers}>
-            {pageItems}
-          </DataTable>
-        </Space>
-        <Space>
-          <Pagination
-            current={page}
-            pages={pageCount}
-            onChange={(nextPage) => {
-              setPage(nextPage)
-            }}
-          />
-        </Space>
-        <Space>
-          <ReactDiffViewer
-            oldValue={leftSide}
-            newValue={rightSide}
-            splitView={true}
-            compareMethod={DiffMethod.LINES}
-            showDiffOnly={true}
-          />
-        </Space>
-      </SpaceVertical>
-    </>
+    <SpaceVertical>
+      <Space>
+        <Heading as="h2">{`${delta.length} differences found between ${leftSpec.version} and ${rightSpec.version}`}</Heading>
+      </Space>
+      <Space>
+        <DataTable key="diff" columns={headers}>
+          {pageItems}
+        </DataTable>
+      </Space>
+      <Space>
+        <Pagination
+          current={page}
+          pages={pageCount}
+          onChange={(nextPage) => {
+            setPage(nextPage)
+          }}
+        />
+      </Space>
+      <Space>
+        <ReactDiffViewer
+          oldValue={leftSide}
+          newValue={rightSide}
+          splitView={true}
+          compareMethod={DiffMethod.LINES}
+          showDiffOnly={true}
+        />
+      </Space>
+    </SpaceVertical>
   )
 }
