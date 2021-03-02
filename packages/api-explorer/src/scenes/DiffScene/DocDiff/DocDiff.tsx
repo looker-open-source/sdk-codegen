@@ -50,7 +50,7 @@ export const DocDiff: FC<DocDiffProps> = ({
   delta,
   leftSpec,
   rightSpec,
-  pageSize = 10,
+  pageSize = 15,
 }) => {
   const [page, setPage] = useState(1)
 
