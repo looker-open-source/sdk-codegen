@@ -37,10 +37,9 @@ export const docDiffHeaders = () => {
     {
       canSort: true,
       id: 'name',
-      primaryKey: true,
+      primaryKey: false,
       title: 'Method',
       type: 'string',
-      widthPercent: 20,
     },
     {
       canSort: true,
@@ -48,7 +47,13 @@ export const docDiffHeaders = () => {
       primaryKey: true,
       title: 'Operation',
       type: 'string',
-      widthPercent: 40,
+    },
+    {
+      canSort: true,
+      id: 'summary',
+      primaryKey: false,
+      title: 'Summary',
+      type: 'string',
     },
     {
       canSort: true,
@@ -56,7 +61,6 @@ export const docDiffHeaders = () => {
       primaryKey: false,
       title: 'Left Status',
       type: 'string',
-      widthPercent: 20,
     },
     {
       canSort: true,
@@ -64,7 +68,6 @@ export const docDiffHeaders = () => {
       primaryKey: false,
       title: 'Right Status',
       type: 'string',
-      widthPercent: 20,
     },
   ]
   return result as DataTableColumns
@@ -72,14 +75,21 @@ export const docDiffHeaders = () => {
 
 export const docDiffRows = (
   data: DiffRow[],
+  leftSpec: ApiModel,
+  rightSpec: ApiModel,
   onSelect: (item: DiffRow) => void
 ) => {
   return data.map((item) => {
+    let method = leftSpec.methods[item.name]
+    if (!method) {
+      method = rightSpec.methods[item.name]
+    }
     const id = item.id
     return (
       <DataTableItem id={id} key={id} onClick={onSelect.bind(null, item)}>
         <DataTableCell>{item.name}</DataTableCell>
         <DataTableCell>{item.id}</DataTableCell>
+        <DataTableCell>{method.summary}</DataTableCell>
         <DataTableCell>{item.lStatus}</DataTableCell>
         <DataTableCell>{item.rStatus}</DataTableCell>
       </DataTableItem>
