@@ -23,38 +23,11 @@
  SOFTWARE.
 
  */
-export { connectExtensionHost } from './connect/connect_extension_host'
-export { getExtensionSDK } from './connect/global_listener'
-export {
-  ApiVersion,
-  ContextDataRequest,
-  ErrorEventRequest,
-  ExtensionClientApi,
-  ExtensionEvent,
-  ExtensionInitializationResponse,
-  ExtensionHostApi,
-  ExtensionHostApiConfiguration,
-  ExtensionHostConfiguration,
-  ExtensionNotification,
-  ExtensionNotificationType,
-  ExtensionRequest,
-  ExtensionRequestType,
-  ExtensionSDK,
-  FetchDataRequest,
-  FetchCustomParameters,
-  FetchProxy,
-  FetchProxyDataResponse,
-  FetchResponseBodyType,
-  InvokeCoreSdkRequest,
-  LocalStorageRequest,
-  LookerHostData,
-  RouteChangeData,
-  RouteChangeRequest,
-  TrackActionRequest,
-  UpdateLocationRequest,
-  UpdateTitleRequest,
-} from './connect/types'
-export { LookerExtensionSDK } from './sdk/extension_sdk'
-export { LookerExtensionSDK31 } from './sdk/extension_sdk_31'
-export { LookerExtensionSDK40 } from './sdk/extension_sdk_40'
-export { SdkConnection } from './sdk/sdk_connection'
+
+export * from './connect/connect_extension_host'
+export * from './connect/global_listener'
+export * from './connect/types'
+export * from './sdk/extension_sdk'
+export * from './sdk/extension_sdk_31'
+export * from './sdk/extension_sdk_40'
+export * from './sdk/sdk_connection'
