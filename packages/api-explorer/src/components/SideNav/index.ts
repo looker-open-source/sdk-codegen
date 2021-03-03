@@ -24,3 +24,5 @@
 
  */
 export { SideNav } from './SideNav'
+export { SideNavTags } from './SideNavTags'
+export { SideNavTypes } from './SideNavTypes'

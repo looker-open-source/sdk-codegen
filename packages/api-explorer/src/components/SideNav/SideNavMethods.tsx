@@ -42,6 +42,7 @@ import { SearchContext } from '../../context'
 
 interface MethodsProps {
   className?: string
+  defaultOpen: boolean
   methods: MethodList
   tag: string
   specKey: string
@@ -49,6 +50,7 @@ interface MethodsProps {
 
 const SideNavMethodsLayout: FC<MethodsProps> = ({
   className,
+  defaultOpen,
   methods,
   tag,
   specKey,
@@ -60,7 +62,7 @@ const SideNavMethodsLayout: FC<MethodsProps> = ({
     `/:specKey/methods/:methodTag/:methodName?`
   )
   const [isOpen, setIsOpen] = useState(
-    match ? match.params.methodTag === tag : false
+    match ? defaultOpen || match.params.methodTag === tag : defaultOpen
   )
   const history = useHistory()
 
@@ -71,8 +73,14 @@ const SideNavMethodsLayout: FC<MethodsProps> = ({
   }
 
   return (
-    <Accordion isOpen={isOpen} toggleOpen={handleOpen} className={className}>
+    <Accordion
+      defaultOpen={defaultOpen}
+      isOpen={isOpen}
+      toggleOpen={handleOpen}
+      className={className}
+    >
       <AccordionDisclosure>
+        {/* TODO: Fix highlighting. It is applied but it is somehow being overridden */}
         <Heading as="h5">{highlightHTML(pattern, tag)}</Heading>
       </AccordionDisclosure>
       <AccordionContent>

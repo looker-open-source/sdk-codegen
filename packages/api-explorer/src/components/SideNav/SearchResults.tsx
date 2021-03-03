@@ -24,34 +24,43 @@
 
  */
 import React, { FC } from 'react'
-import { TagList } from '@looker/sdk-codegen'
-import { NavLink } from 'react-router-dom'
-import { ComboboxOption, Icon } from '@looker/components'
+import { ISearchResult, TagList } from '@looker/sdk-codegen'
+import { Box, Divider, Heading } from '@looker/components'
 
-import { buildMethodPath } from '../../utils'
+import { SideNavTags, SideNavTypes } from '../SideNav'
 
-interface MethodResultsProps {
-  specKey: string
-  tags: TagList
+const countMethods = (tags: TagList) => {
+  let result = 0
+  Object.values(tags).forEach((methods) => {
+    result += Object.entries(methods).length
+  })
+  return result
 }
 
-export const MethodResults: FC<MethodResultsProps> = ({ specKey, tags }) => (
-  <>
-    {Object.entries(tags).map(([tag, methods]) =>
-      Object.values(methods).map((method) => (
-        <NavLink
-          key={method.name}
-          to={buildMethodPath(specKey, tag, method.name)}
-        >
-          <ComboboxOption value={method.name} indicator={false}>
-            {method.summary}
-            <Icon name="CaretLeft" />
-            {tag}
-            <Icon name="CaretLeft" />
-            {'Methods'}
-          </ComboboxOption>
-        </NavLink>
-      ))
-    )}
-  </>
-)
+interface SearchResultsProps extends ISearchResult {
+  specKey: string
+}
+
+export const SearchResults: FC<SearchResultsProps> = ({
+  tags,
+  types,
+  specKey,
+}) => {
+  const methodMatches = countMethods(tags)
+  const typeMatches = Object.entries(types).length
+
+  return (
+    <>
+      <Box pl="large" pr="large" pt="xxsmall">
+        <Heading as="h4">
+          {!methodMatches && !typeMatches
+            ? 'No matches found'
+            : `${methodMatches} methods and ${typeMatches} types found`}
+        </Heading>
+        <Divider />
+      </Box>
+      <SideNavTags defaultOpen={true} tags={tags} specKey={specKey} />
+      <SideNavTypes types={types} specKey={specKey} />
+    </>
+  )
+}

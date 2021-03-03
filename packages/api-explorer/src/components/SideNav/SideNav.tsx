@@ -24,19 +24,35 @@
 
  */
 
-import React, { FC } from 'react'
-import { TabList, Tab, TabPanel, TabPanels, useTabs } from '@looker/components'
+import React, { FC, useContext, useEffect, useState } from 'react'
+import {
+  TabList,
+  Tab,
+  TabPanel,
+  TabPanels,
+  useTabs,
+  InputSearch,
+} from '@looker/components'
 import styled from 'styled-components'
 import { useRouteMatch } from 'react-router-dom'
-import { ApiModel } from '@looker/sdk-codegen'
+import { ApiModel, CriteriaToSet, ISearchResult } from '@looker/sdk-codegen'
+
+import { SearchContext } from '../../context'
+import { setPattern } from '../../reducers'
 import { SideNavTags } from './SideNavTags'
 import { SideNavTypes } from './SideNavTypes'
+import { SearchResults } from './SearchResults'
+import { useDebounce } from './searchUtils'
 
 interface SideNavProps {
   api: ApiModel
+  diffApi?: ApiModel
+  diffKey?: string
   specKey: string
   className?: string
 }
+
+type SearchResult = ISearchResult
 
 interface SideNavParams {
   sideNavTab: string
@@ -53,20 +69,55 @@ const SideNavLayout: FC<SideNavProps> = ({ api, specKey, className }) => {
   const types = api.types || {}
   const tags = api.tags || {}
 
+  const { searchSettings, setSearchSettings } = useContext(SearchContext)
+  const [pattern, setSearchPattern] = useState(searchSettings.pattern)
+  const debouncedPattern = useDebounce(pattern, 250)
+  const [searchResults, setSearchResults] = useState<SearchResult>()
+  const searchCriteria = CriteriaToSet(searchSettings.criteria)
+
+  const handleInputChange = (value: string) => {
+    setSearchPattern(value)
+  }
+
+  useEffect(() => {
+    let results
+    if (debouncedPattern) {
+      results = api.search(pattern, searchCriteria)
+      setSearchSettings(setPattern(debouncedPattern!))
+    }
+    setSearchResults(results)
+  }, [debouncedPattern])
+
   return (
     <nav className={className}>
-      <TabList {...tabs} distribute>
-        <Tab>Methods</Tab>
-        <Tab>Types</Tab>
-      </TabList>
-      <TabPanels {...tabs} pt="xsmall">
-        <TabPanel>
-          <SideNavTags tags={tags} specKey={specKey} />
-        </TabPanel>
-        <TabPanel>
-          <SideNavTypes types={types} specKey={specKey} />
-        </TabPanel>
-      </TabPanels>
+      <InputSearch
+        onChange={handleInputChange}
+        placeholder="Search"
+        value={pattern}
+        isClearable
+        changeOnSelect
+        pl="large"
+        pr="large"
+        pb="large"
+      />
+      {searchResults ? (
+        <SearchResults {...searchResults} specKey={specKey} />
+      ) : (
+        <>
+          <TabList {...tabs} distribute>
+            <Tab>Methods</Tab>
+            <Tab>Types</Tab>
+          </TabList>
+          <TabPanels {...tabs} pt="xsmall">
+            <TabPanel>
+              <SideNavTags tags={tags} specKey={specKey} />
+            </TabPanel>
+            <TabPanel>
+              <SideNavTypes types={types} specKey={specKey} />
+            </TabPanel>
+          </TabPanels>
+        </>
+      )}
     </nav>
   )
 }
