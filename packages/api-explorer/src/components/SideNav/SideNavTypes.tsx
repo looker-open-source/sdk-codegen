@@ -27,9 +27,9 @@
 import React, { FC, useContext } from 'react'
 import { Heading } from '@looker/components'
 import { TypeList, IntrinsicType } from '@looker/sdk-codegen'
-import { NavLink } from 'react-router-dom'
 import styled from 'styled-components'
 
+import { NavHashLink } from 'react-router-hash-link'
 import { buildTypePath, highlightHTML } from '../../utils'
 import { SearchContext } from '../../context'
 
@@ -48,7 +48,10 @@ export const SideNavTypes: FC<TypeProps> = ({ types, specKey }) => {
       {Object.values(types)
         .filter((type) => !(type instanceof IntrinsicType))
         .map((type) => (
-          <SideNavLink key={type.name} to={buildTypePath(specKey, type.name)}>
+          <SideNavLink
+            key={type.name}
+            to={`${buildTypePath(specKey, type.name)}#top`}
+          >
             <Heading as="h5" truncate>
               {highlightHTML(pattern, type.name)}
             </Heading>
@@ -58,7 +61,7 @@ export const SideNavTypes: FC<TypeProps> = ({ types, specKey }) => {
   )
 }
 
-const SideNavLink = styled(NavLink)`
+const SideNavLink = styled(NavHashLink)`
   display: block;
   padding: ${({
     theme: {

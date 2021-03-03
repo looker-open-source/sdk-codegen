@@ -33,6 +33,7 @@ import {
 import { ApixHeading } from '../common'
 
 interface CollapserCardProps {
+  id?: string
   heading: string
   children: ReactElement
 }
@@ -41,13 +42,19 @@ interface CollapserCardProps {
  * Render a collapsable header and children
  */
 export const CollapserCard: FC<CollapserCardProps> = ({
+  id,
   heading,
   children,
 }) => {
   const { value, toggle } = useToggle(true)
 
   return (
-    <Accordion indicatorPosition="left" isOpen={value} toggleOpen={toggle}>
+    <Accordion
+      id={id}
+      indicatorPosition="left"
+      isOpen={value}
+      toggleOpen={toggle}
+    >
       <AccordionDisclosure>
         <ApixHeading as="h2">{heading}</ApixHeading>
       </AccordionDisclosure>

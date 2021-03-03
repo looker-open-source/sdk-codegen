@@ -46,7 +46,7 @@ export const DocSdkUsage: FC<DocSdkUsageProps> = ({ method }) => {
   if (languages.length === 0) return <></>
 
   return (
-    <CollapserCard heading="SDK Examples">
+    <CollapserCard id="examples" heading="SDK Examples">
       <>
         <TabList {...tabs}>
           {languages.map((language) => (
