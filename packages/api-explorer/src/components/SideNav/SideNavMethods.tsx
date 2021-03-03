@@ -42,7 +42,7 @@ import { SearchContext } from '../../context'
 
 interface MethodsProps {
   className?: string
-  defaultOpen: boolean
+  defaultOpen?: boolean
   methods: MethodList
   tag: string
   specKey: string

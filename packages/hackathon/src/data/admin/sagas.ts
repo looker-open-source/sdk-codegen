@@ -24,6 +24,7 @@
 
  */
 import { all, call, put, takeEvery } from 'redux-saga/effects'
+import { SagaIterator } from 'redux-saga'
 import { ValidationMessages } from '@looker/components'
 import { getCore40SDK } from '@looker/extension-sdk-react'
 import { getExtensionSDK } from '@looker/extension-sdk'
@@ -104,7 +105,7 @@ const validateUserAttributes = (
     : validationMessages
 }
 
-function* loadUserAttributesSaga() {
+function* loadUserAttributesSaga(): SagaIterator {
   try {
     yield put(beginLoading())
     const lookerSdk = getCore40SDK()
@@ -124,7 +125,7 @@ function* persistUserAttribute(
   userAttributes: IUserAttribute[],
   label: string,
   url?: string
-) {
+): SagaIterator {
   const userAttribute = userAttributes.find(
     (ua: IUserAttribute) => ua.name === attributeName
   )
@@ -152,7 +153,7 @@ function* persistUserAttribute(
 
 function* saveUserAttributesSaga(
   action: ReturnType<typeof saveUserAttributesRequest>
-) {
+): SagaIterator {
   const prefix = getAttributeNamePrefix()
   try {
     const updatedUserAttributes: AdminUserAttributes = action.payload
@@ -168,26 +169,26 @@ function* saveUserAttributesSaga(
         userAttributes,
         `${prefix} Hackathon Looker Client ID`,
         updatedUserAttributes.tokenServerUrl
-      )
+      ) as any
       yield persistUserAttribute(
         updatedUserAttributes.lookerClientSecret,
         `${prefix}_looker_client_secret`,
         userAttributes,
         `${prefix} Hackathon Looker Client Secret`,
         updatedUserAttributes.tokenServerUrl
-      )
+      ) as any
       yield persistUserAttribute(
         updatedUserAttributes.sheetId,
         `${prefix}_sheet_id`,
         userAttributes,
         `${prefix} Hackathon Sheet ID`
-      )
+      ) as any
       yield persistUserAttribute(
         updatedUserAttributes.tokenServerUrl,
         `${prefix}_token_server_url`,
         userAttributes,
         `${prefix} Hackathon Token Server URL`
-      )
+      ) as any
     }
     yield put(
       saveUserAttributesResponse(updatedUserAttributes, validationMessages)
