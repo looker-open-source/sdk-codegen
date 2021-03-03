@@ -35,7 +35,6 @@ import {
 } from '@looker/components'
 import { MethodList } from '@looker/sdk-codegen'
 import { useHistory, useRouteMatch } from 'react-router-dom'
-import { MethodBadge } from '@looker/run-it'
 
 import { NavHashLink } from 'react-router-hash-link'
 import { buildMethodPath, highlightHTML } from '../../utils'
@@ -92,13 +91,6 @@ const SideNavMethodsLayout: FC<MethodsProps> = ({
               to={`${buildMethodPath(specKey, tag, method.name)}#top`}
             >
               <li>
-                <MethodBadge
-                  textAlign="center"
-                  compact
-                  type={method.httpMethod}
-                >
-                  {method.httpMethod.toUpperCase()}
-                </MethodBadge>
                 <Heading as="h5" truncate>
                   {highlightHTML(pattern, method.summary)}
                 </Heading>
@@ -117,10 +109,6 @@ const SideNavLink = styled(NavHashLink)`
   &.active {
     li {
       background-color: ${({ theme }) => theme.colors.ui1};
-
-      ${MethodBadge} {
-        border: solid 1px ${({ theme }) => theme.colors.ui2};
-      }
     }
   }
 
@@ -128,10 +116,6 @@ const SideNavLink = styled(NavHashLink)`
     display: flex;
     border-radius: ${({ theme: { radii } }) => radii.medium};
     padding: ${({ theme }) => theme.space.xsmall};
-
-    ${MethodBadge} {
-      margin-right: ${({ theme }) => theme.space.small};
-    }
   }
 `
 
@@ -175,26 +159,14 @@ export const SideNavMethods = styled(SideNavMethodsLayout)`
     border-radius: ${({ theme: { radii } }) => radii.medium};
     padding: ${({ theme }) => theme.space.xsmall};
 
-    ${MethodBadge} {
-      margin-right: ${({ theme }) => theme.space.small};
-    }
-
     &:hover,
     &:focus {
       background-color: ${({ theme }) => theme.colors.ui1};
-
-      ${MethodBadge} {
-        border: solid 1px ${({ theme }) => theme.colors.ui2};
-      }
     }
   }
 
   [aria-current] {
     background-color: ${({ theme }) => theme.colors.ui1};
-
-    ${MethodBadge} {
-      border: solid 1px ${({ theme }) => theme.colors.ui2};
-    }
 
     ${Heading} {
       font-weight: ${({ theme }) => theme.fontWeights.semiBold};
