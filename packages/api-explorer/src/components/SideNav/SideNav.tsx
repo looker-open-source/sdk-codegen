@@ -32,6 +32,7 @@ import {
   TabPanels,
   useTabs,
   InputSearch,
+  Flex,
 } from '@looker/components'
 import styled from 'styled-components'
 import { useRouteMatch } from 'react-router-dom'
@@ -43,6 +44,7 @@ import { SideNavTags } from './SideNavTags'
 import { SideNavTypes } from './SideNavTypes'
 import { SearchResults } from './SearchResults'
 import { useDebounce } from './searchUtils'
+import { SearchCriteriaSelector } from './SearchCriteriaSelector'
 
 interface SideNavProps {
   api: ApiModel
@@ -90,16 +92,17 @@ const SideNavLayout: FC<SideNavProps> = ({ api, specKey, className }) => {
 
   return (
     <nav className={className}>
-      <InputSearch
-        onChange={handleInputChange}
-        placeholder="Search"
-        value={pattern}
-        isClearable
-        changeOnSelect
-        pl="large"
-        pr="large"
-        pb="large"
-      />
+      <Flex alignItems="center" pl="large" pr="large" pb="large">
+        <SearchCriteriaSelector />
+        <InputSearch
+          onChange={handleInputChange}
+          placeholder="Search"
+          value={pattern}
+          isClearable
+          changeOnSelect
+        />
+        {/* <WordIcon onClick={handleWordToggle}>W</WordIcon> */}
+      </Flex>
       {searchResults ? (
         <SearchResults {...searchResults} specKey={specKey} />
       ) : (
@@ -125,5 +128,9 @@ const SideNavLayout: FC<SideNavProps> = ({ api, specKey, className }) => {
 export const SideNav = styled(SideNavLayout)`
   padding: ${({ theme }) => theme.space.large} 0;
   border-right: 1px solid ${({ theme }) => theme.colors.ui2};
-  height: 100%;
 `
+
+// const WordIcon = styled(Text)`
+//   cursor: pointer;
+//   padding-left: ${({ theme }) => theme.space.xxsmall};
+// `
