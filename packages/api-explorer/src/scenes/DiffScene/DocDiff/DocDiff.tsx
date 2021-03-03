@@ -64,27 +64,33 @@ export const DocDiff: FC<DocDiffProps> = ({
   )
 
   return (
-    <Flex flexDirection="column" alignItems="center">
-      <Space>
-        <Heading as="h2">{`${delta.length} differences between ${leftSpec.version} and ${rightSpec.version}`}</Heading>
-      </Space>
-      <SpaceVertical mt="large" gap="xxsmall">
-        {pageItemData.map((item) => (
-          <DiffItem
-            key={item.id}
-            item={item}
-            leftSpec={leftSpec}
-            rightSpec={rightSpec}
+    <>
+      {delta.length === 0 ? (
+        <Text>{'No differences found'}</Text>
+      ) : (
+        <Flex flexDirection="column" alignItems="center">
+          <Space>
+            <Heading as="h2">{`${delta.length} differences between ${leftSpec.version} and ${rightSpec.version}`}</Heading>
+          </Space>
+          <SpaceVertical mt="large" gap="xxsmall">
+            {pageItemData.map((item) => (
+              <DiffItem
+                key={item.id}
+                item={item}
+                leftSpec={leftSpec}
+                rightSpec={rightSpec}
+              />
+            ))}
+          </SpaceVertical>
+          <Pagination
+            current={page}
+            pages={pageCount}
+            onChange={(nextPage) => {
+              setPage(nextPage)
+            }}
           />
-        ))}
-      </SpaceVertical>
-      <Pagination
-        current={page}
-        pages={pageCount}
-        onChange={(nextPage) => {
-          setPage(nextPage)
-        }}
-      />
-    </Flex>
+        </Flex>
+      )}
+    </>
   )
 }

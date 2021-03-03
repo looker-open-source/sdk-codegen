@@ -133,30 +133,33 @@ export const DiffScene: FC<DiffSceneProps> = ({ specs, toggleNavigation }) => {
     if (left !== leftKey || right !== rightKey) {
       history.push(`/${diffPath}/${left}/${right}`)
     }
-    setLeftKey(left)
     setLeftApi(specs[left].api!)
-    setRightKey(right)
     setRightApi(specs[right].api!)
-    setDelta(computeDelta(left, right, toggles))
+    setDelta([...computeDelta(left, right, toggles)])
   }
 
   const handleLeftChange = (newLeft: string) => {
-    compareKeys(newLeft, rightKey)
+    setLeftKey(newLeft)
   }
 
   const handleTogglesChange = (values?: string[]) => {
     const newToggles = values || []
     setToggles(newToggles)
-    setDelta(computeDelta(leftKey, rightKey, newToggles))
+    setDelta([...computeDelta(leftKey, rightKey, newToggles)])
   }
 
+  useEffect(() => {
+    compareKeys(leftKey, rightKey)
+  }, [leftKey, rightKey])
+
   const handleRightChange = (newRight: string) => {
-    compareKeys(leftKey, newRight)
+    setRightKey(newRight)
   }
 
   const handleSwitch = () => {
-    // TODO: Get this to update selectors
-    compareKeys(rightKey, leftKey)
+    const currLeftKey = leftKey
+    setLeftKey(rightKey)
+    setRightKey(currLeftKey)
   }
 
   return (
@@ -169,7 +172,7 @@ export const DiffScene: FC<DiffSceneProps> = ({ specs, toggleNavigation }) => {
               mt="xxsmall"
               id="base"
               name="Left Version"
-              defaultValue={leftKey}
+              value={leftKey}
               options={options}
               onChange={handleLeftChange}
             />
@@ -187,7 +190,7 @@ export const DiffScene: FC<DiffSceneProps> = ({ specs, toggleNavigation }) => {
               mt="xxsmall"
               id="compare"
               name="Right Version"
-              defaultValue={rightKey}
+              value={rightKey}
               options={options}
               onChange={handleRightChange}
             />
