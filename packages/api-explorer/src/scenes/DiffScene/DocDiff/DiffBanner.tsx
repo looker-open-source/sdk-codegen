@@ -24,7 +24,7 @@
 
  */
 import React, { FC } from 'react'
-import { Grid, Flex, FlexItem, Code, Text } from '@looker/components'
+import { Grid, Flex, FlexItem, Code, Heading } from '@looker/components'
 import { DiffRow, IMethod } from '@looker/sdk-codegen'
 import { DiffLegend } from './DiffLegend'
 
@@ -33,21 +33,19 @@ interface DiffBannerProps {
   method: IMethod
 }
 
-export const DiffBanner: FC<DiffBannerProps> = ({ item, method }) => {
-  return (
-    <Grid justifyContent="space-between" columns={4}>
-      <FlexItem>
-        <Code>{item.name}</Code>
-      </FlexItem>
-      <FlexItem>
-        <Code>{item.id}</Code>
-      </FlexItem>
-      <FlexItem>
-        <Text>{method?.summary}</Text>
-      </FlexItem>
-      <Flex width="100%" justifyContent="flex-end">
-        <DiffLegend count={item.diffCount} />
-      </Flex>
-    </Grid>
-  )
-}
+export const DiffBanner: FC<DiffBannerProps> = ({ item, method }) => (
+  <Grid justifyContent="space-between" columns={4}>
+    <FlexItem>
+      <Code>{item.name}</Code>
+    </FlexItem>
+    <FlexItem>
+      <Code>{item.id}</Code>
+    </FlexItem>
+    <FlexItem>
+      <Heading as="h4">{method?.summary}</Heading>
+    </FlexItem>
+    <Flex width="100%" justifyContent="flex-end">
+      <DiffLegend count={item.diffCount} />
+    </Flex>
+  </Grid>
+)
