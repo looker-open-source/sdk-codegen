@@ -83,9 +83,9 @@ const SideNavLayout: FC<SideNavProps> = ({ api, specKey, className }) => {
     let results
     if (debouncedPattern) {
       results = api.search(pattern, searchCriteria)
-      setSearchSettings(setPattern(debouncedPattern!))
     }
     setSearchResults(results)
+    setSearchSettings(setPattern(debouncedPattern!))
   }, [debouncedPattern])
 
   return (
