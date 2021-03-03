@@ -80,6 +80,8 @@ export class BrowserTransport extends BaseTransport {
 
   /** Does this browser have the necessary performance APIs? */
   static supportsPerformance() {
+    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+    // @ts-ignore
     return !!(performance && performance.mark && performance.measure)
   }
 
