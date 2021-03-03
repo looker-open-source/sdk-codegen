@@ -23,7 +23,7 @@
  SOFTWARE.
 
  */
-import React, { FC, useState } from 'react'
+import React, { FC, useState, useEffect } from 'react'
 import {
   Accordion,
   AccordionContent,
@@ -54,10 +54,13 @@ export const DiffItem: FC<DiffItemProps> = ({ item, leftSpec, rightSpec }) => {
   const [leftSide, setLeftSide] = useState<string>('')
   const [rightSide, setRightSide] = useState<string>('')
 
-  const handleOpen = () => {
+  useEffect(() => {
     const { lhs, rhs } = differ(item, leftSpec, rightSpec)
     setLeftSide(lhs)
     setRightSide(rhs)
+  }, [leftSpec, rightSpec, isOpen])
+
+  const handleOpen = () => {
     setIsOpen(!isOpen)
   }
 
