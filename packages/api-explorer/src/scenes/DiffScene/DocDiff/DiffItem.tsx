@@ -30,13 +30,13 @@ import {
   AccordionDisclosure,
   Box,
   Card,
-  Heading,
 } from '@looker/components'
 import { DiffRow } from '@looker/sdk-codegen/src'
 import ReactDiffViewer, { DiffMethod } from 'react-diff-viewer'
 import { ApiModel } from '@looker/sdk-codegen'
 
 import { differ } from './docDiffUtils'
+import { DiffBanner } from './DiffBanner'
 
 interface DiffItemProps {
   item: DiffRow
@@ -45,6 +45,11 @@ interface DiffItemProps {
 }
 
 export const DiffItem: FC<DiffItemProps> = ({ item, leftSpec, rightSpec }) => {
+  const [method] = useState(
+    leftSpec.methods[item.name]
+      ? leftSpec.methods[item.name]
+      : rightSpec.methods[item.name]
+  )
   const [isOpen, setIsOpen] = useState(false)
   const [leftSide, setLeftSide] = useState<string>('')
   const [rightSide, setRightSide] = useState<string>('')
@@ -64,8 +69,8 @@ export const DiffItem: FC<DiffItemProps> = ({ item, leftSpec, rightSpec }) => {
           isOpen={isOpen}
           toggleOpen={handleOpen}
         >
-          <AccordionDisclosure>
-            <Heading as="h5">{item.name}</Heading>
+          <AccordionDisclosure px="small">
+            <DiffBanner item={item} method={method} />
           </AccordionDisclosure>
           <AccordionContent>
             <ReactDiffViewer

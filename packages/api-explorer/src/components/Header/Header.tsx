@@ -88,7 +88,7 @@ export const HeaderLayout: FC<HeaderProps> = ({
     <FlexItem flexBasis="2rem" pl="large">
       <NavLink to={`/${diffPath}/${spec.key}/`}>
         <Tooltip content="Compare Specifications">
-          <Space gap="small">{`\u0394`}</Space>
+          <Icon name="ChangeHistory" size="small" />
         </Tooltip>
       </NavLink>
     </FlexItem>

@@ -34,6 +34,7 @@ import {
   compareTypes,
   DiffRow,
   includeDiffs,
+  startCount,
 } from './specDiff'
 import { rootFile, TestConfig } from './testUtils'
 import {
@@ -110,14 +111,17 @@ describe('spec differ', () => {
     const lType = apiTestModel.types.Dashboard
 
     it('should return undefined if types are identical', () => {
-      const actual = compareTypes(lType, lType)
+      const count = startCount()
+      const actual = compareTypes(lType, lType, count)
       expect(actual).toBeUndefined()
+      expect(count).toEqual(startCount())
     })
 
     it('should return an object containing all non matching entries', () => {
       const [key, lProp] = firstProperty(lType.properties)
       const rType = changeType(lType as Type)
-      const actual = compareTypes(lType, rType)
+      const count = startCount()
+      const actual = compareTypes(lType, rType, count)
       expect(actual).toBeDefined()
       if (actual) {
         expect(actual[key]).toBeDefined()
@@ -125,6 +129,11 @@ describe('spec differ', () => {
         expect(actual[key].rhs).toEqual(
           firstProperty(rType.properties)[1].summary()
         )
+        expect(count).toEqual({
+          added: 0,
+          changed: 1,
+          removed: 0,
+        })
       }
     })
   })
@@ -133,17 +142,25 @@ describe('spec differ', () => {
     const lMethod = apiTestModel.methods.create_look
 
     it('should return undefined if methods are identical', () => {
-      const actual = compareParams(lMethod, lMethod)
+      const count = startCount()
+      const actual = compareParams(lMethod, lMethod, count)
       expect(actual).toBeUndefined()
+      expect(count).toEqual(startCount())
     })
 
     it('should return an object containing all non matching entries', () => {
+      const count = startCount()
       const rMethod = changeMethod(lMethod as Method)
-      const actual = compareParams(lMethod, rMethod)
+      const actual = compareParams(lMethod, rMethod, count)
       expect(actual).toBeDefined()
       if (actual) {
         expect(actual.lhs).toEqual(lMethod.signature())
         expect(actual.rhs).toEqual(rMethod.signature())
+        expect(count).toEqual({
+          added: 0,
+          changed: 1,
+          removed: 0,
+        })
       }
     })
   })
@@ -170,31 +187,87 @@ describe('spec differ', () => {
       const actual = compareSpecs(lSpec, rSpec)
       expect(actual).toBeDefined()
       expect(actual).toHaveLength(2)
-      // TODO get this working again
+      // TODO get this working again?
       expect(actual).toEqual(
         expect.arrayContaining([
           {
             bodyDiff: '',
-            name: lMethod.name,
-            id: lMethod.id,
-            lStatus: lMethod.status,
+            diffCount: {
+              added: 0,
+              changed: 0,
+              removed: 1,
+            },
+            id: 'POST /looks',
+            lStatus: 'beta',
+            name: 'create_look',
+            paramsDiff: '',
             rStatus: '',
             responseDiff: '',
             typeDiff: '',
-            paramsDiff: '',
           },
           {
             bodyDiff: '',
-            name: rMethod.name,
-            id: rMethod.id,
+            diffCount: {
+              added: 1,
+              changed: 0,
+              removed: 0,
+            },
+            id: 'POST /queries',
             lStatus: '',
-            rStatus: rMethod.status,
+            name: 'create_query',
+            paramsDiff: '',
+            rStatus: 'stable',
             responseDiff: '',
             typeDiff: '',
-            paramsDiff: '',
           },
         ])
       )
+    })
+
+    it('should not overcount', () => {
+      const spec31 = ApiModel.fromString(
+        readFileSync(rootFile('spec/Looker.3.1.oas.json'), 'utf-8')
+      )
+      const spec40 = ApiModel.fromString(
+        readFileSync(rootFile('spec/Looker.4.0.oas.json'), 'utf-8')
+      )
+      const lMethod = spec31.methods.create_look
+      expect(lMethod.status).toEqual('stable')
+      const rMethod = spec40.methods.create_look
+      expect(rMethod.status).toEqual('beta')
+      spec31.methods = { create_look: lMethod }
+      spec40.methods = { create_look: rMethod }
+      const actual = compareSpecs(spec31, spec40)
+      expect(actual).toBeDefined()
+      expect(actual).toHaveLength(1)
+      expect(actual[0].diffCount).toEqual({
+        added: 0,
+        changed: 2,
+        removed: 3,
+      })
+    })
+
+    it('should count changes and additions', () => {
+      const spec31 = ApiModel.fromString(
+        readFileSync(rootFile('spec/Looker.3.1.oas.json'), 'utf-8')
+      )
+      const spec40 = ApiModel.fromString(
+        readFileSync(rootFile('spec/Looker.4.0.oas.json'), 'utf-8')
+      )
+      const lMethod = spec31.methods.search_dashboards
+      expect(lMethod.status).toEqual('stable')
+      const rMethod = spec40.methods.search_dashboards
+      expect(rMethod.status).toEqual('beta')
+      spec31.methods = { search_dashboards: lMethod }
+      spec40.methods = { search_dashboards: rMethod }
+      const actual = compareSpecs(spec31, spec40)
+      expect(actual).toBeDefined()
+      expect(actual).toHaveLength(1)
+      expect(actual[0].diffCount).toEqual({
+        added: 1,
+        changed: 4,
+        removed: 3,
+      })
     })
 
     it('should work with internal matches', () => {
