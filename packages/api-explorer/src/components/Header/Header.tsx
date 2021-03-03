@@ -36,9 +36,9 @@ import {
   Heading,
   Tooltip,
 } from '@looker/components'
+
 import { SpecItems } from '../../ApiExplorer'
 import { SpecState, SpecAction } from '../../reducers'
-import { Search } from '../Search'
 import { diffPath } from '../../utils'
 import { ApiSpecSelector } from './ApiSpecSelector'
 
@@ -79,19 +79,22 @@ export const HeaderLayout: FC<HeaderProps> = ({
         </Space>
       </NavLink>
     </Flex>
-    <FlexItem flex="1" px="large">
-      <Search api={spec.api} specKey={spec.key} />
-    </FlexItem>
-    <FlexItem flexBasis="20rem" pl="large">
-      <ApiSpecSelector specs={specs} spec={spec} specDispatch={specDispatch} />
-    </FlexItem>
-    <FlexItem flexBasis="2rem" pl="large">
-      <NavLink to={`/${diffPath}/${spec.key}/`}>
-        <Tooltip content="Compare Specifications">
-          <Icon name="ChangeHistory" size="small" />
-        </Tooltip>
-      </NavLink>
-    </FlexItem>
+    <Flex alignItems="center">
+      <FlexItem flexBasis="20rem" pl="large">
+        <ApiSpecSelector
+          specs={specs}
+          spec={spec}
+          specDispatch={specDispatch}
+        />
+      </FlexItem>
+      <FlexItem flexBasis="2rem" pl="small">
+        <NavLink to={`/${diffPath}/${spec.key}/`}>
+          <Tooltip content="Compare Specifications">
+            <Icon name="ChangeHistory" size="small" />
+          </Tooltip>
+        </NavLink>
+      </FlexItem>
+    </Flex>
   </Space>
 )
 
