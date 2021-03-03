@@ -24,7 +24,16 @@
 
  */
 
-import { compareSpecs, DiffFilter, IApiModel } from '@looker/sdk-codegen'
+import { cloneDeep } from 'lodash'
+import {
+  compareSpecs,
+  DiffFilter,
+  DiffRow,
+  IApiModel,
+  IMethod,
+  MethodList,
+  TagList,
+} from '@looker/sdk-codegen'
 
 export const allDiffToggles = [
   'missing',
@@ -63,4 +72,49 @@ export const diffSpecs = (
     (options.includes('response') && !!delta.responseDiff)
 
   return compareSpecs(lhs, rhs, includeOptions)
+}
+
+/**
+ * Local copy of private function from ApiModel
+ * @param tags list of all tags
+ * @param method to add
+ */
+const addMethodToTags = (tags: TagList, method: IMethod): TagList => {
+  for (const tag of method.schema.tags) {
+    let list: MethodList = tags[tag]
+    if (!list) {
+      list = {}
+      tags[tag] = list
+    }
+    list[method.name] = method
+  }
+  return tags
+}
+
+/**
+ * Combine diff into a psuedo api spec that contains an established method for each diff result
+ * @param delta complete diff to compose
+ * @param lSpec left spec
+ * @param rSpec right spec
+ */
+export const diffToSpec = (
+  delta: DiffRow[],
+  lSpec: IApiModel,
+  rSpec: IApiModel
+) => {
+  const result = cloneDeep(lSpec)
+  result.tags = {}
+  result.methods = {}
+
+  delta.forEach((row) => {
+    const name = row.name
+    let method = lSpec.methods[name]
+    if (!method) method = rSpec.methods[name]
+    result.methods[name] = method
+    addMethodToTags(result.tags, method)
+  })
+
+  // TODO diff types then we can populate this also
+  result.types = {}
+  return result
 }
