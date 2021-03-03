@@ -69,7 +69,7 @@ export const MethodScene: FC<DocMethodProps> = ({ api }) => {
 
   useEffect(() => {
     setMethod(api.methods[methodName])
-  }, [methodName])
+  }, [api, methodName])
 
   const { colors } = useContext(ThemeContext)
 
