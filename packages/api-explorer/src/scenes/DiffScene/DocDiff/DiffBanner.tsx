@@ -39,10 +39,14 @@ export const DiffBanner: FC<DiffBannerProps> = ({ item, method }) => (
       <Code>{item.name}</Code>
     </FlexItem>
     <FlexItem>
-      <Code>{item.id}</Code>
+      <Heading as="h4" truncate>
+        {item.id}
+      </Heading>
     </FlexItem>
     <FlexItem>
-      <Heading as="h4">{method?.summary}</Heading>
+      <Heading as="h4" truncate>
+        {method?.summary}
+      </Heading>
     </FlexItem>
     <Flex width="100%" justifyContent="flex-end">
       <DiffLegend count={item.diffCount} />

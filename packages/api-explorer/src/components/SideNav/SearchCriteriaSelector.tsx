@@ -23,7 +23,6 @@
  SOFTWARE.
 
  */
-
 import {
   Icon,
   Text,

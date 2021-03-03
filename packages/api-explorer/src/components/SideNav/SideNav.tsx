@@ -24,19 +24,37 @@
 
  */
 
-import React, { FC } from 'react'
-import { TabList, Tab, TabPanel, TabPanels, useTabs } from '@looker/components'
+import React, { FC, useContext, useEffect, useState } from 'react'
+import {
+  TabList,
+  Tab,
+  TabPanel,
+  TabPanels,
+  useTabs,
+  InputSearch,
+  Flex,
+} from '@looker/components'
 import styled from 'styled-components'
 import { useRouteMatch } from 'react-router-dom'
-import { ApiModel } from '@looker/sdk-codegen'
+import { ApiModel, CriteriaToSet, ISearchResult } from '@looker/sdk-codegen'
+
+import { SearchContext } from '../../context'
+import { setPattern } from '../../reducers'
 import { SideNavTags } from './SideNavTags'
 import { SideNavTypes } from './SideNavTypes'
+import { SearchResults } from './SearchResults'
+import { useDebounce } from './searchUtils'
+import { SearchCriteriaSelector } from './SearchCriteriaSelector'
 
 interface SideNavProps {
   api: ApiModel
+  diffApi?: ApiModel
+  diffKey?: string
   specKey: string
   className?: string
 }
+
+type SearchResult = ISearchResult
 
 interface SideNavParams {
   sideNavTab: string
@@ -53,20 +71,56 @@ const SideNavLayout: FC<SideNavProps> = ({ api, specKey, className }) => {
   const types = api.types || {}
   const tags = api.tags || {}
 
+  const { searchSettings, setSearchSettings } = useContext(SearchContext)
+  const [pattern, setSearchPattern] = useState(searchSettings.pattern)
+  const debouncedPattern = useDebounce(pattern, 250)
+  const [searchResults, setSearchResults] = useState<SearchResult>()
+  const searchCriteria = CriteriaToSet(searchSettings.criteria)
+
+  const handleInputChange = (value: string) => {
+    setSearchPattern(value)
+  }
+
+  useEffect(() => {
+    let results
+    if (debouncedPattern) {
+      results = api.search(pattern, searchCriteria)
+    }
+    setSearchResults(results)
+    setSearchSettings(setPattern(debouncedPattern!))
+  }, [debouncedPattern])
+
   return (
     <nav className={className}>
-      <TabList {...tabs} distribute>
-        <Tab>Methods</Tab>
-        <Tab>Types</Tab>
-      </TabList>
-      <TabPanels {...tabs} pt="xsmall">
-        <TabPanel>
-          <SideNavTags tags={tags} specKey={specKey} />
-        </TabPanel>
-        <TabPanel>
-          <SideNavTypes types={types} specKey={specKey} />
-        </TabPanel>
-      </TabPanels>
+      <Flex alignItems="center" pl="large" pr="large" pb="large">
+        <SearchCriteriaSelector />
+        <InputSearch
+          onChange={handleInputChange}
+          placeholder="Search"
+          value={pattern}
+          isClearable
+          changeOnSelect
+        />
+        {/* <WordIcon onClick={handleWordToggle}>W</WordIcon> */}
+      </Flex>
+      {searchResults ? (
+        <SearchResults {...searchResults} specKey={specKey} />
+      ) : (
+        <>
+          <TabList {...tabs} distribute>
+            <Tab>Methods</Tab>
+            <Tab>Types</Tab>
+          </TabList>
+          <TabPanels {...tabs} pt="xsmall">
+            <TabPanel>
+              <SideNavTags tags={tags} specKey={specKey} />
+            </TabPanel>
+            <TabPanel>
+              <SideNavTypes types={types} specKey={specKey} />
+            </TabPanel>
+          </TabPanels>
+        </>
+      )}
     </nav>
   )
 }
@@ -74,5 +128,9 @@ const SideNavLayout: FC<SideNavProps> = ({ api, specKey, className }) => {
 export const SideNav = styled(SideNavLayout)`
   padding: ${({ theme }) => theme.space.large} 0;
   border-right: 1px solid ${({ theme }) => theme.colors.ui2};
-  height: 100%;
 `
+
+// const WordIcon = styled(Text)`
+//   cursor: pointer;
+//   padding-left: ${({ theme }) => theme.space.xxsmall};
+// `
