@@ -36,7 +36,7 @@ SOFTWARE.
 package v3
 
 import (
-  "github.com/looker-open-source/sdk-codegen/go/rtl"
+  "github.com/mkaiser323/sdk-codegen/go/rtl"
   "net/url"
   "time"
 )

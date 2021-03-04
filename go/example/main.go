@@ -4,8 +4,8 @@ import (
 	"fmt"
 	"os"
 
-	"github.com/looker-open-source/sdk-codegen/go/rtl"
-	v4 "github.com/looker-open-source/sdk-codegen/go/sdk/v4"
+	"github.com/mkaiser323/sdk-codegen/go/rtl"
+	v4 "github.com/mkaiser323/sdk-codegen/go/sdk/v4"
 )
 
 func check(err error) {
