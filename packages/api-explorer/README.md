@@ -1,4 +1,5 @@
 # OpenAPI Explorer
+test
 
 Use this **OpenAPI Explorer** to read any [OpenAPI](https://www.openapis.org/) specification and explore its **methods** and **types**.
 Fast and powerful searching is also supported.
