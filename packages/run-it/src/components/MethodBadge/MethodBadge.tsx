@@ -37,7 +37,13 @@ import styled, { css } from 'styled-components'
 /**
  * Status of endpoint method.
  */
-type MethodStatus = 'beta' | 'stable' | 'experimental' | 'deprecated' | 'inform'
+type MethodStatus =
+  | 'beta'
+  | 'stable'
+  | 'experimental'
+  | 'deprecated'
+  | 'inform'
+  | 'undocumented'
 
 interface MethodBadgeProps
   extends CompatibleHTMLProps<HTMLDivElement>,
@@ -70,6 +76,7 @@ export const pickBadgeIntent = (type: HttpMethod | MethodStatus | string) => {
     case 'PATCH':
     case 'TRACE':
     case 'experimental':
+    case 'undocumented':
       return 'warn'
     case 'POST':
     case 'stable':

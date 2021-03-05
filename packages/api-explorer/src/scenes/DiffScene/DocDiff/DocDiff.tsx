@@ -38,8 +38,12 @@ import { DiffItem } from './DiffItem'
 export interface DocDiffProps {
   /** Using delta because IntelliJ has bugs with 'diff' in a react app */
   delta: DiffRow[]
+  /** Left side specKey */
+  leftKey: string
   /** Left side spec */
   leftSpec: ApiModel
+  /** Right side specKey */
+  rightKey: string
   /** Right side spec */
   rightSpec: ApiModel
   /** Number of rows per page. Defaults to 15 */
@@ -48,7 +52,9 @@ export interface DocDiffProps {
 
 export const DocDiff: FC<DocDiffProps> = ({
   delta,
+  leftKey,
   leftSpec,
+  rightKey,
   rightSpec,
   pageSize = 15,
 }) => {
@@ -70,14 +76,16 @@ export const DocDiff: FC<DocDiffProps> = ({
       ) : (
         <Flex flexDirection="column" alignItems="center">
           <Space>
-            <Heading as="h2">{`${delta.length} differences between ${leftSpec.version} and ${rightSpec.version}`}</Heading>
+            <Heading as="h2">{`${delta.length} differences between ${leftKey} and ${rightKey}`}</Heading>
           </Space>
           <SpaceVertical mt="large" gap="xxsmall">
             {pageItemData.map((item) => (
               <DiffItem
                 key={item.id}
                 item={item}
+                leftKey={leftKey}
                 leftSpec={leftSpec}
+                rightKey={rightKey}
                 rightSpec={rightSpec}
               />
             ))}

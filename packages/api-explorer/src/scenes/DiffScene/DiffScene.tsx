@@ -209,7 +209,13 @@ export const DiffScene: FC<DiffSceneProps> = ({ specs, toggleNavigation }) => {
           </FlexItem>
         </Flex>
       </Box>
-      <DocDiff delta={delta} leftSpec={leftApi} rightSpec={rightApi} />
+      <DocDiff
+        delta={delta}
+        leftKey={leftKey}
+        leftSpec={leftApi}
+        rightKey={rightKey}
+        rightSpec={rightApi}
+      />
     </Section>
   )
 }

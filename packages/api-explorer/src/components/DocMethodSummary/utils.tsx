@@ -39,6 +39,10 @@ export const pickStatus = (status: string) => {
       const title = 'experimental endpoint'
       return <Icon title={title} aria-label={title} name="Beaker" />
     }
+    case 'undocumented': {
+      const title = 'undocumented endpoint'
+      return <Icon title={title} aria-label={title} name="VisibilityOff" />
+    }
     case 'deprecated':
       return (
         <Status
@@ -76,6 +80,8 @@ export const pickTooltipContent = (status: string) => {
       return 'This endpoint has been deprecated and will be removed in the future.'
     case 'stable':
       return 'This endpoint is considered stable for this API version.'
+    case 'undocumented':
+      return 'This is an internal-only endpoint.'
     default:
       return 'This endpoint has no status associated with it.'
   }
