@@ -79,14 +79,7 @@ const calcSearchMessageValues = (
 }
 
 export const SearchMessage: FC<SearchMessageProps> = ({ search }) => {
-  const [values, setValues] = useState<SearchMessageValues>(
-    calcSearchMessageValues(search)
-  )
-
-  useEffect(() => {
-    setValues(calcSearchMessageValues(search))
-  }, [search])
-
+  const values = calcSearchMessageValues(search)
   return (
     <Flex alignItems="center">
       <Heading as="h4" color={values.color} truncate>
