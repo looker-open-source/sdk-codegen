@@ -338,6 +338,7 @@ export const SetToCriteria = (criteria: SearchCriteria): string[] => {
 }
 
 export interface ISearchResult {
+  ok: boolean
   tags: TagList
   types: TypeList
   message: string
@@ -1960,7 +1961,10 @@ export class ApiModel implements ISymbolTable, IApiModel {
   ): ISearchResult {
     const tags: TagList = {}
     const types: TypeList = {}
+    let methodCount = 0
+    let typeCount = 0
     const result = {
+      ok: true,
       message: 'Search done',
       tags,
       types,
@@ -1970,13 +1974,15 @@ export class ApiModel implements ISymbolTable, IApiModel {
     try {
       rx = new RegExp(expression, 'mi') // multi-line case insensitive, not global so first match returns
     } catch (e) {
-      result.message = `Error: Invalid search expression ${e}`
+      result.message = `Invalid search expression ${e}`
+      result.ok = false
       return result
     }
 
     if (ApiModel.isModelSearch(criteria)) {
       Object.entries(this.methods).forEach(([, method]) => {
         if (method.search(rx, criteria)) {
+          methodCount++
           ApiModel.addMethodToTags(tags, method)
         }
       })
@@ -1987,10 +1993,12 @@ export class ApiModel implements ISymbolTable, IApiModel {
           throw Error(`${key} rx undefined`)
         }
         if (type.search(rx, criteria)) {
+          typeCount++
           types[key] = type
         }
       })
     }
+    result.message = `${methodCount} methods and ${typeCount} types found`
     return result
   }
 

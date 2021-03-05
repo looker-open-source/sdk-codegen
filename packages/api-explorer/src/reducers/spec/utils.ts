@@ -190,7 +190,12 @@ export const getSpecsFromVersions = async (
           if (fetcher) {
             spec.api = await fetcher(spec)
           }
-          items[v.version] = spec
+          let specKey = v.version
+          if (items[specKey]) {
+            // More than one spec for this version
+            specKey = `${specKey}_${v.status}`
+          }
+          items[specKey] = spec
         }
       }
     }

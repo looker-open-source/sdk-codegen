@@ -104,7 +104,7 @@ const SideNavLayout: FC<SideNavProps> = ({ api, specKey, className }) => {
         {/* <WordIcon onClick={handleWordToggle}>W</WordIcon> */}
       </Flex>
       {searchResults ? (
-        <SearchResults {...searchResults} specKey={specKey} />
+        <SearchResults search={searchResults} specKey={specKey} />
       ) : (
         <>
           <TabList {...tabs} distribute>

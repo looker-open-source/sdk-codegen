@@ -23,9 +23,16 @@
  SOFTWARE.
 
  */
-import React, { FC } from 'react'
+import React, { FC, useEffect, useState } from 'react'
 import { ISearchResult, TagList } from '@looker/sdk-codegen'
-import { Box, Divider, Heading } from '@looker/components'
+import {
+  Box,
+  Divider,
+  Heading,
+  IconNames,
+  Icon,
+  Flex,
+} from '@looker/components'
 
 import { SideNavTags, SideNavTypes } from '../SideNav'
 
@@ -37,30 +44,72 @@ const countMethods = (tags: TagList) => {
   return result
 }
 
-interface SearchResultsProps extends ISearchResult {
+interface SearchMessageProps {
+  search: ISearchResult
+}
+
+interface SearchMessageValues {
+  icon: IconNames
+  color: string
+  message: string
+}
+
+const calcSearchMessageValues = (
+  search: ISearchResult
+): SearchMessageValues => {
+  const { ok, tags, types, message } = search
+  const methodMatches = countMethods(tags)
+  const typeMatches = Object.entries(types).length
+  const result: SearchMessageValues = {
+    icon: 'Functions',
+    color: 'positive',
+    message,
+  }
+  if (!ok) {
+    result.icon = 'Error'
+    result.color = 'critical'
+  } else {
+    if (methodMatches + typeMatches === 0) {
+      result.icon = 'CircleQuestion'
+      result.message = 'No matches found'
+      result.color = 'warn'
+    }
+  }
+  return { ...result }
+}
+
+export const SearchMessage: FC<SearchMessageProps> = ({ search }) => {
+  const [values, setValues] = useState<SearchMessageValues>(
+    calcSearchMessageValues(search)
+  )
+
+  useEffect(() => {
+    setValues(calcSearchMessageValues(search))
+  }, [search])
+
+  return (
+    <Flex alignItems="center">
+      <Heading as="h4" color={values.color} truncate>
+        <Icon key="resultIcon" name={values.icon} size="xxsmall" />
+        {values.message}
+      </Heading>
+    </Flex>
+  )
+}
+
+interface SearchResultsProps extends SearchMessageProps {
   specKey: string
 }
 
-export const SearchResults: FC<SearchResultsProps> = ({
-  tags,
-  types,
-  specKey,
-}) => {
-  const methodMatches = countMethods(tags)
-  const typeMatches = Object.entries(types).length
-
+export const SearchResults: FC<SearchResultsProps> = ({ search, specKey }) => {
   return (
     <>
       <Box pl="large" pr="large" pt="xxsmall">
-        <Heading as="h4">
-          {!methodMatches && !typeMatches
-            ? 'No matches found'
-            : `${methodMatches} methods and ${typeMatches} types found`}
-        </Heading>
+        <SearchMessage search={search} />
         <Divider />
       </Box>
-      <SideNavTags defaultOpen={true} tags={tags} specKey={specKey} />
-      <SideNavTypes types={types} specKey={specKey} />
+      <SideNavTags defaultOpen={true} tags={search.tags} specKey={specKey} />
+      <SideNavTypes types={search.types} specKey={specKey} />
     </>
   )
 }
