@@ -25,6 +25,7 @@
  */
 
 import { useState, useEffect } from 'react'
+import { TagList, TypeList } from '@looker/sdk-codegen'
 
 export const useDebounce = (value: any, delay: number) => {
   const [debouncedValue, setDebouncedValue] = useState()
@@ -40,3 +41,13 @@ export const useDebounce = (value: any, delay: number) => {
   }, [value])
   return debouncedValue
 }
+
+export const countMethods = (tags: TagList) => {
+  let result = 0
+  Object.values(tags).forEach((methods) => {
+    result += Object.entries(methods).length
+  })
+  return result
+}
+
+export const countTypes = (types: TypeList) => Object.entries(types).length

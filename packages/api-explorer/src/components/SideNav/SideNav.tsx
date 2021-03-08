@@ -42,9 +42,9 @@ import { SearchContext } from '../../context'
 import { setPattern } from '../../reducers'
 import { SideNavTags } from './SideNavTags'
 import { SideNavTypes } from './SideNavTypes'
-import { SearchResults } from './SearchResults'
-import { useDebounce } from './searchUtils'
+import { useDebounce, countMethods, countTypes } from './searchUtils'
 import { SearchCriteriaSelector } from './SearchCriteriaSelector'
+import { SearchMessage } from './SearchMessage'
 
 interface SideNavProps {
   api: ApiModel
@@ -53,8 +53,6 @@ interface SideNavProps {
   specKey: string
   className?: string
 }
-
-type SearchResult = ISearchResult
 
 interface SideNavParams {
   sideNavTab: string
@@ -68,14 +66,15 @@ const SideNavLayout: FC<SideNavProps> = ({ api, specKey, className }) => {
     defaultIndex = tabNames.indexOf(match.params.sideNavTab)
   }
   const tabs = useTabs({ defaultIndex })
-  const types = api.types || {}
-  const tags = api.tags || {}
-
   const { searchSettings, setSearchSettings } = useContext(SearchContext)
   const [pattern, setSearchPattern] = useState(searchSettings.pattern)
   const debouncedPattern = useDebounce(pattern, 250)
-  const [searchResults, setSearchResults] = useState<SearchResult>()
+  const [searchResults, setSearchResults] = useState<ISearchResult>()
   const searchCriteria = CriteriaToSet(searchSettings.criteria)
+  const [tags, setTags] = useState(api.tags || {})
+  const [types, setTypes] = useState(api.types || {})
+  const [methodCount, setMethodCount] = useState(countMethods(tags))
+  const [typeCount, setTypeCount] = useState(countTypes(types))
 
   const handleInputChange = (value: string) => {
     setSearchPattern(value)
@@ -83,12 +82,24 @@ const SideNavLayout: FC<SideNavProps> = ({ api, specKey, className }) => {
 
   useEffect(() => {
     let results
+    let newTags
+    let newTypes
     if (debouncedPattern) {
       results = api.search(pattern, searchCriteria)
+      newTags = results.tags
+      newTypes = results.types
+    } else {
+      newTags = api.tags || {}
+      newTypes = api.types || {}
     }
+
+    setTags(newTags)
+    setTypes(newTypes)
+    setMethodCount(countMethods(newTags))
+    setTypeCount(countTypes(newTypes))
     setSearchResults(results)
     setSearchSettings(setPattern(debouncedPattern!))
-  }, [debouncedPattern])
+  }, [debouncedPattern, specKey])
 
   return (
     <nav className={className}>
@@ -103,24 +114,19 @@ const SideNavLayout: FC<SideNavProps> = ({ api, specKey, className }) => {
         />
         {/* <WordIcon onClick={handleWordToggle}>W</WordIcon> */}
       </Flex>
-      {searchResults ? (
-        <SearchResults search={searchResults} specKey={specKey} />
-      ) : (
-        <>
-          <TabList {...tabs} distribute>
-            <Tab>Methods</Tab>
-            <Tab>Types</Tab>
-          </TabList>
-          <TabPanels {...tabs} pt="xsmall">
-            <TabPanel>
-              <SideNavTags tags={tags} specKey={specKey} />
-            </TabPanel>
-            <TabPanel>
-              <SideNavTypes types={types} specKey={specKey} />
-            </TabPanel>
-          </TabPanels>
-        </>
-      )}
+      <SearchMessage search={searchResults} />
+      <TabList {...tabs} distribute>
+        <Tab>Methods ({methodCount})</Tab>
+        <Tab>Types ({typeCount})</Tab>
+      </TabList>
+      <TabPanels {...tabs} pt="xsmall">
+        <TabPanel>
+          <SideNavTags tags={tags} specKey={specKey} />
+        </TabPanel>
+        <TabPanel>
+          <SideNavTypes types={types} specKey={specKey} />
+        </TabPanel>
+      </TabPanels>
     </nav>
   )
 }

@@ -23,4 +23,28 @@
  SOFTWARE.
 
  */
-export { SideNav } from './SideNav'
+import React, { FC } from 'react'
+import { ISearchResult } from '@looker/sdk-codegen'
+import { Heading, Icon, Flex } from '@looker/components'
+
+interface SearchMessageProps {
+  search?: ISearchResult
+}
+
+/**
+ * Renders search results message
+ * @param search Search Results
+ * @constructor
+ */
+export const SearchMessage: FC<SearchMessageProps> = ({ search }) => (
+  <>
+    {search && !search.ok && (
+      <Flex pl="large" pr="large" alignItems="center">
+        <Heading as="h4" color="critical">
+          <Icon key="resultIcon" name="Error" size="xxsmall" color="critical" />
+          {search.message}
+        </Heading>
+      </Flex>
+    )}
+  </>
+)
