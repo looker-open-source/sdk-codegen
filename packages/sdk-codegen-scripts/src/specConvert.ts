@@ -1,5 +1,3 @@
-#!/usr/bin/env node
-
 /*
 
  MIT License
