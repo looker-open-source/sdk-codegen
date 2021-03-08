@@ -27,12 +27,12 @@ import React from 'react'
 import { renderWithTheme } from '@looker/components-test-utils'
 import { screen, fireEvent, waitFor } from '@testing-library/react'
 
-import { api } from '../../test-data'
+import { api40 } from '../../test-data'
 import { DocStatus } from './DocStatus'
 
 describe('DocStatus', () => {
   test('it renders a badge with the status and a tooltip on hover', async () => {
-    renderWithTheme(<DocStatus method={api.methods.create_dashboard} />)
+    renderWithTheme(<DocStatus method={api40.methods.create_dashboard} />)
     const badge = screen.getByText('BETA')
     fireEvent.mouseOver(badge)
     await waitFor(() => {

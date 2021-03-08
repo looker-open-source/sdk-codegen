@@ -44,7 +44,7 @@ describe('SideNav', () => {
   test('it renders all tabs', () => {
     renderWithRouter(<SideNav api={testApi} specKey={'3.1'} />)
     const tabs = screen.getAllByRole('tab', {
-      name: /^Methods|Types$/,
+      name: /^Methods \(\d+\)|Types \(\d+\)$/,
     })
     expect(tabs).toHaveLength(2)
   })
@@ -56,7 +56,7 @@ describe('SideNav', () => {
       screen.queryAllByRole('link', { name: allTypesPattern })
     ).toHaveLength(0) // eslint-disable-line jest-dom/prefer-in-document
 
-    userEvent.click(screen.getByRole('tab', { name: /^Types$/ }))
+    userEvent.click(screen.getByRole('tab', { name: /^Types \(\d+\)$/ }))
 
     // eslint-disable-next-line jest-dom/prefer-in-document
     expect(screen.queryAllByText(allTagsPattern)).toHaveLength(0)
