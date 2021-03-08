@@ -36,9 +36,6 @@ import {
 } from '@looker/components'
 import { DiffRow } from '@looker/sdk-codegen/src'
 import { ApiModel, IMethod } from '@looker/sdk-codegen'
-import styled from 'styled-components'
-import { useHistory } from 'react-router-dom'
-import { buildMethodPath } from '../../../utils'
 import { DiffBanner } from './DiffBanner'
 import { differ } from './docDiffUtils'
 
@@ -47,42 +44,49 @@ interface DiffMethodLinkProps {
   specKey: string
 }
 
-const DiffLink = styled(Heading)`
-  color:${({ theme }) => theme.colors.ui5}
-  cursor: pointer;
-  display: block;
-  padding: ${({
-    theme: {
-      space: { xsmall, large },
-    },
-  }) => `${xsmall} ${large}`};
-  &:hover,
-  &:visited,
-  &:focus,
-  &.active {
-    color: ${({ theme }) => theme.colors.key};
-    cursor: pointer;
-  }
-`
+// const DiffLink = styled(Heading)`
+//   color:${({ theme }) => theme.colors.ui5}
+//   cursor: pointer;
+//   display: block;
+//   padding: ${({
+//     theme: {
+//       space: { xsmall, large },
+//     },
+//   }) => `${xsmall} ${large}`};
+//   &:hover,
+//   &:visited,
+//   &:focus,
+//   &.active {
+//     color: ${({ theme }) => theme.colors.key};
+//     cursor: pointer;
+//   }
+// `
 
 export const DiffMethodLink: FC<DiffMethodLinkProps> = ({
   method,
   specKey,
 }) => {
-  const history = useHistory()
+  // const history = useHistory()
   if (!method) return <Heading as="h4">{`Missing in ${specKey}`}</Heading>
-  const tag = method.schema.tags[0]
-  const path = `${buildMethodPath(specKey, tag, method.name)}#top`
 
-  const handleClick = () => {
-    history.push(path)
-  }
   return (
-    <DiffLink
-      as="h4"
-      onClick={handleClick}
-    >{`${method.name} for ${specKey}`}</DiffLink>
+    <Heading as="h4">
+      {method.name} for {specKey}
+    </Heading>
   )
+
+  // TODO restore click nav after we have spec selection working within the router
+  // const handleClick = () => {
+  //   const tag = method.schema.tags[0]
+  //   const path = `${buildMethodPath(specKey, tag, method.name)}#top`
+  //   history.push(path)
+  // }
+  // return (
+  //   <DiffLink
+  //     as="h4"
+  //     onClick={handleClick}
+  //   >{`${method.name} for ${specKey}`}</DiffLink>
+  // )
 }
 
 interface DiffItemProps {
