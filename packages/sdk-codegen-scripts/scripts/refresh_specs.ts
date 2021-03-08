@@ -27,6 +27,7 @@
  */
 
 import { updateSpecs } from './utils'
+
 ;(async () => {
   console.warn('Did you `yarn wipe` in the root to clear the old spec files?')
   await updateSpecs()

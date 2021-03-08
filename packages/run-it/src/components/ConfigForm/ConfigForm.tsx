@@ -77,9 +77,10 @@ export const ConfigForm: FC<ConfigFormProps> = ({
     lookerUrl: looker_url,
   })
 
-  const [validationMessages, setValidationMessages] = useState<
-    ValidationMessages
-  >({})
+  const [
+    validationMessages,
+    setValidationMessages,
+  ] = useState<ValidationMessages>({})
 
   const handleSubmit = (e: BaseSyntheticEvent) => {
     e.preventDefault()
