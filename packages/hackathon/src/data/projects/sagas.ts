@@ -24,6 +24,7 @@
 
  */
 import { all, call, put, takeEvery, select } from 'redux-saga/effects'
+import { SagaIterator } from 'redux-saga'
 import { IProjectProps } from '../../models'
 import { actionMessage, beginLoading, endLoading } from '../common/actions'
 import { sheetsClient } from '../sheets_client'
@@ -60,7 +61,7 @@ const createNewProject = (): IProjectProps => {
   return newProject as IProjectProps
 }
 
-function* allProjectsSaga() {
+function* allProjectsSaga(): SagaIterator {
   try {
     yield put(beginLoading())
     const result = yield call([sheetsClient, sheetsClient.getProjects])
@@ -72,7 +73,7 @@ function* allProjectsSaga() {
   }
 }
 
-function* currentProjectsSaga() {
+function* currentProjectsSaga(): SagaIterator<IProjectProps[]> {
   let projects: IProjectProps[] = []
   try {
     yield put(beginLoading())
@@ -86,7 +87,9 @@ function* currentProjectsSaga() {
   return projects
 }
 
-function* getProjectSaga({ payload: projectId }: GetProjectRequestAction) {
+function* getProjectSaga({
+  payload: projectId,
+}: GetProjectRequestAction): SagaIterator {
   try {
     if (!projectId) {
       // For new projects initialize empty project props
@@ -97,7 +100,7 @@ function* getProjectSaga({ payload: projectId }: GetProjectRequestAction) {
       let projects = getCurrentProjectsState(state)
       if (projects.length === 0) {
         // projects are lost on page reload so load them
-        projects = yield currentProjectsSaga()
+        projects = yield currentProjectsSaga() as any
       }
       const project = projects.find((p) => p._id === projectId)
       let isProjectMember
@@ -115,7 +118,7 @@ function* getProjectSaga({ payload: projectId }: GetProjectRequestAction) {
   }
 }
 
-function* createProjectSaga(action: CreateProjectAction) {
+function* createProjectSaga(action: CreateProjectAction): SagaIterator<void> {
   try {
     const { project, hackerId } = action.payload
     yield put(beginLoading())
@@ -152,7 +155,7 @@ function* createProjectSaga(action: CreateProjectAction) {
   }
 }
 
-function* updateProjectSaga(action: UpdateProjectAction) {
+function* updateProjectSaga(action: UpdateProjectAction): SagaIterator {
   try {
     yield put(beginLoading())
 
@@ -226,7 +229,7 @@ function* lockProjectsSaga(action: LockProjectsAction) {
   }
 }
 
-function* lockProjectSaga(action: LockProjectAction) {
+function* lockProjectSaga(action: LockProjectAction): SagaIterator {
   try {
     const { lock, projectId } = action.payload
     yield put(beginLoading())
@@ -253,7 +256,7 @@ function* lockProjectSaga(action: LockProjectAction) {
   }
 }
 
-function* changeMembershipSaga(action: ChangeMembershipAction) {
+function* changeMembershipSaga(action: ChangeMembershipAction): SagaIterator {
   try {
     yield put(beginLoading())
     const { projectId, hackerId, leave } = action.payload

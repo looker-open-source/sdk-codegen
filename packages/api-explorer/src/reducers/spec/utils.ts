@@ -29,6 +29,7 @@ import { Location as HLocation } from 'history'
 
 import { IApiVersion } from '@looker/sdk'
 import { SpecItem, SpecItems } from '../../ApiExplorer'
+import { diffPath, oAuthPath } from '../../utils'
 import { SpecState } from './reducer'
 
 export type AbstractLocation = HLocation | Location
@@ -129,7 +130,12 @@ export const fetchSpec = (key: string, specs: SpecItems): SpecState => {
 export const getSpecKey = (location: AbstractLocation, specs?: SpecItems) => {
   const pathNodes = location.pathname.split('/')
   let specKey = ''
-  if (pathNodes.length > 1 && pathNodes[1] && pathNodes[1] !== 'oauth') {
+  if (
+    pathNodes.length > 1 &&
+    pathNodes[1] &&
+    pathNodes[1] !== oAuthPath &&
+    pathNodes[1] !== diffPath
+  ) {
     specKey = pathNodes[1]
   } else if (specs) {
     specKey = getDefaultSpecKey(specs)
@@ -184,7 +190,12 @@ export const getSpecsFromVersions = async (
           if (fetcher) {
             spec.api = await fetcher(spec)
           }
-          items[v.version] = spec
+          let specKey = v.version
+          if (items[specKey]) {
+            // More than one spec for this version
+            specKey = `${specKey}_${v.status}`
+          }
+          items[specKey] = spec
         }
       }
     }

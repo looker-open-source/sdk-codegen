@@ -30,23 +30,36 @@ import { OAuthScene, RunItContext } from '@looker/run-it'
 
 import { Looker40SDK } from '@looker/sdk'
 import { HomeScene, MethodScene, TagScene, TypeScene } from '../scenes'
+import { DiffScene } from '../scenes/DiffScene'
+import { SpecItems } from '../ApiExplorer'
+import { diffPath, oAuthPath } from '../utils'
 
 interface AppRouterProps {
   api: ApiModel
   specKey: string
+  specs: SpecItems
+  toggleNavigation: (target?: boolean) => void
 }
 
-export const AppRouter: FC<AppRouterProps> = ({ specKey, api }) => {
+export const AppRouter: FC<AppRouterProps> = ({
+  specKey,
+  api,
+  specs,
+  toggleNavigation,
+}) => {
   const { sdk } = useContext(RunItContext)
   const maybeOauth = sdk && sdk instanceof Looker40SDK
   return (
     <Switch>
       <Redirect from="/" to={`/${specKey}/`} exact />
       {maybeOauth && (
-        <Route path="/oauth">
+        <Route path={`/${oAuthPath}`}>
           <OAuthScene />
         </Route>
       )}
+      <Route path={`/${diffPath}/:l?/:r?`}>
+        <DiffScene specs={specs} toggleNavigation={toggleNavigation} />
+      </Route>
       <Route path="/:specKey/(methods|types)?" exact>
         <HomeScene api={api} />
       </Route>

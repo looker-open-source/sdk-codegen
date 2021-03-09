@@ -24,19 +24,42 @@
 
  */
 
-import { useState, useEffect } from 'react'
+import { DiffRow, startCount } from '@looker/sdk-codegen'
+import { api, api40 } from '../../test-data'
+import { diffToSpec } from './diffUtils'
 
-export const useDebounce = (value: any, delay: number) => {
-  const [debouncedValue, setDebouncedValue] = useState()
-  useEffect(() => {
-    // Update debounced value only once delay has been elapsed
-    const handler = setTimeout(() => {
-      setDebouncedValue(value)
-    }, delay)
-    // Reset the timeout on receiving a new keyword
-    return () => {
-      clearTimeout(handler)
-    }
-  }, [value])
-  return debouncedValue
-}
+describe('diffUtils', () => {
+  test('builds a psuedo spec from diff', () => {
+    const delta: DiffRow[] = [
+      {
+        name: 'create_query',
+        id: 'POST /create_query',
+        diffCount: startCount(),
+        bodyDiff: '',
+        typeDiff: '',
+        lStatus: 'stable',
+        rStatus: 'beta',
+        paramsDiff: '',
+        responseDiff: '',
+      },
+      {
+        name: 'search_dashboards',
+        id: 'Get /search_dashboards',
+        diffCount: startCount(),
+        bodyDiff: '',
+        typeDiff: '',
+        lStatus: 'stable',
+        rStatus: 'beta',
+        paramsDiff: '',
+        responseDiff: '',
+      },
+    ]
+    const spec = diffToSpec(delta, api, api40)
+    expect(Object.keys(spec.methods)).toEqual([
+      'create_query',
+      'search_dashboards',
+    ])
+    expect(Object.keys(spec.tags)).toEqual(['Query', 'Dashboard'])
+    expect(Object.keys(spec.types)).toEqual([])
+  })
+})

@@ -24,17 +24,32 @@
 
  */
 import React, { FC } from 'react'
-import { ComboboxList, Icon, ListItem, Text } from '@looker/components'
+import { Grid, Flex, FlexItem, Code, Heading } from '@looker/components'
+import { DiffRow, IMethod } from '@looker/sdk-codegen'
+import { DiffLegend } from './DiffLegend'
 
-interface SearchErrorProps {
-  error: string
+interface DiffBannerProps {
+  item: DiffRow
+  method: IMethod
 }
 
-export const SearchError: FC<SearchErrorProps> = ({ error }) => (
-  <ComboboxList>
-    <ListItem>
-      <Icon name="Error" size="small" color="critical" mr="xxsmall" />
-      <Text>{error}</Text>
-    </ListItem>
-  </ComboboxList>
+export const DiffBanner: FC<DiffBannerProps> = ({ item, method }) => (
+  <Grid justifyContent="space-between" columns={4}>
+    <FlexItem>
+      <Code>{item.name}</Code>
+    </FlexItem>
+    <FlexItem>
+      <Heading as="h4" truncate>
+        {item.id}
+      </Heading>
+    </FlexItem>
+    <FlexItem>
+      <Heading as="h4" truncate>
+        {method?.summary}
+      </Heading>
+    </FlexItem>
+    <Flex width="100%" justifyContent="flex-end">
+      <DiffLegend count={item.diffCount} />
+    </Flex>
+  </Grid>
 )

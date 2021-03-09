@@ -324,7 +324,7 @@ export interface IDictionary<T> {
     const meta = type instanceof EnumType ? 'enum' : 'interface'
     return (
       this.commentHeader(indent, type.description) +
-      `${indent}export ${meta} ${this.typeName(type)} {\n`
+      `${indent}export ${meta} ${this.typeName(type)} ${this.typeOpen}\n`
     )
   }
 

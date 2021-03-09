@@ -24,6 +24,7 @@
 
  */
 import { all, call, put, takeEvery } from 'redux-saga/effects'
+import { SagaIterator } from 'redux-saga'
 import { actionMessage, beginLoading, endLoading } from '../common/actions'
 import { sheetsClient } from '../sheets_client'
 import {
@@ -32,7 +33,7 @@ import {
   initHackSessionFailure,
 } from './actions'
 
-function* initializeHackSessionSaga() {
+function* initializeHackSessionSaga(): SagaIterator {
   let hacker
   try {
     yield put(beginLoading())

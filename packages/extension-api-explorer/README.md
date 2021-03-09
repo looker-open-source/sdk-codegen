@@ -22,7 +22,7 @@ The API Explorer extension can be manually installed and run with a Looker insta
          use_form_submit: yes
          use_embeds: yes
          core_api_methods: ["versions", "api_spec"]
-         external_api_urls: []
+         external_api_urls: ["https://raw.githubusercontent.com"]
          oauth2_urls: []
       }
    }

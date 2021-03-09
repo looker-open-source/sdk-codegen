@@ -29,7 +29,8 @@
   ],
   "scripts": {
     "docs": "typedoc --mode file --out docs",
-    "watch:cjs": "yarn lerna exec --scope @looker/sdk-codegen --stream 'BABEL_ENV=build_cjs babel src --root-mode upward --out-dir lib --source-maps --extensions .ts,.tsx --no-comments --watch'"
+    "watch:cjs": "yarn lerna exec --scope @looker/sdk-codegen --stream 'BABEL_ENV=build_cjs babel src --root-mode upward --out-dir lib --source-maps --extensions .ts,.tsx --no-comments --watch'",
+    "watch": "yarn lerna exec --scope @looker/sdk-codegen --stream 'BABEL_ENV=build babel src --root-mode upward --out-dir lib --source-maps --extensions .ts,.tsx --no-comments --watch'"
   },
   "dependencies": {
     "@looker/sdk-codegen-utils": "^21.0.7",

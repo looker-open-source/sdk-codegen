@@ -23,4 +23,5 @@
  SOFTWARE.
 
  */
-export { Search } from './Search'
+
+export { DocDiff } from './DocDiff'

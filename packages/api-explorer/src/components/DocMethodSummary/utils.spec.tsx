@@ -32,7 +32,8 @@ describe('DocMethodSummary utils', () => {
     ${'experimental'} | ${'This experimental endpoint is not fully developed and may be significantly changed or completely removed in future releases.'}
     ${'deprecated'}   | ${'This endpoint has been deprecated and will be removed in the future.'}
     ${'stable'}       | ${'This endpoint is considered stable for this API version.'}
-    ${'undocumented'} | ${'This endpoint has no status associated with it.'}
+    ${'undocumented'} | ${'This is an internal-only endpoint.'}
+    ${'unknown'}      | ${'This endpoint has no status associated with it.'}
   `(
     'pickTooltipContent returns correct $status endpoint tooltip content',
     ({ status, expected }) => {

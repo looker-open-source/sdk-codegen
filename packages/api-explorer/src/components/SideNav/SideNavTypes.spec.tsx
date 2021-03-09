@@ -41,7 +41,7 @@ describe('SideNavTypes', () => {
       />
     )
     const dashboardType = screen.getByRole('link')
-    expect(dashboardType).toHaveAttribute('href', '/3.1/types/Dashboard')
+    expect(dashboardType).toHaveAttribute('href', '/3.1/types/Dashboard#top')
   })
 
   test('it highlights text matching search pattern', () => {

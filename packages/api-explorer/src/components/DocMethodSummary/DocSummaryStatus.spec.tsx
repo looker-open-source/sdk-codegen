@@ -27,13 +27,13 @@ import React from 'react'
 import { renderWithTheme } from '@looker/components-test-utils'
 import { screen, waitFor, fireEvent } from '@testing-library/react'
 
-import { api } from '../../test-data'
+import { api, api40 } from '../../test-data'
 import { DocSummaryStatus } from './DocSummaryStatus'
 
 describe('DocMethodSummaryStatus', () => {
   test.each`
     status          | method                              | expectedLabel            | expectedContent
-    ${'beta'}       | ${api.methods.workspace}            | ${'beta endpoint'}       | ${'This beta endpoint is under development and subject to change.'}
+    ${'beta'}       | ${api40.methods.workspace}          | ${'beta endpoint'}       | ${'This beta endpoint is under development and subject to change.'}
     ${'stable'}     | ${api.methods.login}                | ${'stable endpoint'}     | ${'This endpoint is considered stable for this API version.'}
     ${'deprecated'} | ${api.methods.backup_configuration} | ${'deprecated endpoint'} | ${'This endpoint has been deprecated and will be removed in the future.'}
   `(

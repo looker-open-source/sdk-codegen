@@ -24,42 +24,40 @@
 
  */
 import React, { FC } from 'react'
-import { ISearchResult, TagList } from '@looker/sdk-codegen'
-import { ComboboxList, ListItem } from '@looker/components'
+import { DiffCount } from '@looker/sdk-codegen'
+import { Code, Flex, Icon, Space } from '@looker/components'
 
-import { TypeResults } from './TypeResults'
-import { MethodResults } from './MethodResults'
-
-const countMethods = (tags: TagList) => {
-  let result = 0
-  Object.values(tags).forEach((methods) => {
-    result += Object.entries(methods).length
-  })
-  return result
+interface DiffLegendProps {
+  count: DiffCount
 }
 
-interface SearchResultsProps extends ISearchResult {
-  specKey: string
-}
-
-export const SearchResults: FC<SearchResultsProps> = ({
-  tags,
-  types,
-  specKey,
-}) => {
-  const methodMatches = countMethods(tags)
-  const typeMatches = Object.entries(types).length
-
+export const DiffLegend: FC<DiffLegendProps> = ({ count }) => {
   return (
-    <ComboboxList closeOnSelect={true}>
-      {!methodMatches && !typeMatches && <ListItem>No matches found.</ListItem>}
-      {(methodMatches || typeMatches) && (
-        <ListItem>
-          {methodMatches} methods and {typeMatches} types found
-        </ListItem>
+    <Flex>
+      {count.added > 0 && (
+        <Space gap="xxsmall">
+          <Icon name="Plus" color="positive" size="small" />
+          <Code color="positive" fontWeight="medium">
+            {count.added}
+          </Code>
+        </Space>
       )}
-      {methodMatches && <MethodResults specKey={specKey} tags={tags} />}
-      {typeMatches && <TypeResults specKey={specKey} types={types} />}
-    </ComboboxList>
+      {count.changed > 0 && (
+        <Space gap="xxsmall">
+          <Icon name="ChangeHistory" color="warn" size="small" />
+          <Code color="warn" fontWeight="medium">
+            {count.changed}
+          </Code>
+        </Space>
+      )}
+      {count.removed > 0 && (
+        <Space gap="xxsmall">
+          <Icon name="Minus" color="critical" size="small" />
+          <Code color="critical" fontWeight="medium">
+            {count.removed}
+          </Code>
+        </Space>
+      )}
+    </Flex>
   )
 }

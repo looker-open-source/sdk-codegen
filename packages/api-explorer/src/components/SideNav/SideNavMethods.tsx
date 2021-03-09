@@ -34,14 +34,15 @@ import {
   Heading,
 } from '@looker/components'
 import { MethodList } from '@looker/sdk-codegen'
-import { NavLink, useHistory, useRouteMatch } from 'react-router-dom'
-import { MethodBadge } from '@looker/run-it'
+import { useHistory, useRouteMatch } from 'react-router-dom'
 
+import { NavHashLink } from 'react-router-hash-link'
 import { buildMethodPath, highlightHTML } from '../../utils'
 import { SearchContext } from '../../context'
 
 interface MethodsProps {
   className?: string
+  defaultOpen?: boolean
   methods: MethodList
   tag: string
   specKey: string
@@ -49,6 +50,7 @@ interface MethodsProps {
 
 const SideNavMethodsLayout: FC<MethodsProps> = ({
   className,
+  defaultOpen,
   methods,
   tag,
   specKey,
@@ -60,7 +62,7 @@ const SideNavMethodsLayout: FC<MethodsProps> = ({
     `/:specKey/methods/:methodTag/:methodName?`
   )
   const [isOpen, setIsOpen] = useState(
-    match ? match.params.methodTag === tag : false
+    match ? defaultOpen || match.params.methodTag === tag : defaultOpen
   )
   const history = useHistory()
 
@@ -71,8 +73,14 @@ const SideNavMethodsLayout: FC<MethodsProps> = ({
   }
 
   return (
-    <Accordion isOpen={isOpen} toggleOpen={handleOpen} className={className}>
+    <Accordion
+      defaultOpen={defaultOpen}
+      isOpen={isOpen}
+      toggleOpen={handleOpen}
+      className={className}
+    >
       <AccordionDisclosure>
+        {/* TODO: Fix highlighting. It is applied but it is somehow being overridden */}
         <Heading as="h5">{highlightHTML(pattern, tag)}</Heading>
       </AccordionDisclosure>
       <AccordionContent>
@@ -80,16 +88,9 @@ const SideNavMethodsLayout: FC<MethodsProps> = ({
           {Object.values(methods).map((method) => (
             <SideNavLink
               key={method.name}
-              to={buildMethodPath(specKey, tag, method.name)}
+              to={`${buildMethodPath(specKey, tag, method.name)}#top`}
             >
               <li>
-                <MethodBadge
-                  textAlign="center"
-                  compact
-                  type={method.httpMethod}
-                >
-                  {method.httpMethod.toUpperCase()}
-                </MethodBadge>
                 <Heading as="h5" truncate>
                   {highlightHTML(pattern, method.summary)}
                 </Heading>
@@ -102,16 +103,12 @@ const SideNavMethodsLayout: FC<MethodsProps> = ({
   )
 }
 
-const SideNavLink = styled(NavLink)`
+const SideNavLink = styled(NavHashLink)`
   &:hover,
   &:focus,
   &.active {
     li {
       background-color: ${({ theme }) => theme.colors.ui1};
-
-      ${MethodBadge} {
-        border: solid 1px ${({ theme }) => theme.colors.ui2};
-      }
     }
   }
 
@@ -119,10 +116,6 @@ const SideNavLink = styled(NavLink)`
     display: flex;
     border-radius: ${({ theme: { radii } }) => radii.medium};
     padding: ${({ theme }) => theme.space.xsmall};
-
-    ${MethodBadge} {
-      margin-right: ${({ theme }) => theme.space.small};
-    }
   }
 `
 
@@ -166,26 +159,14 @@ export const SideNavMethods = styled(SideNavMethodsLayout)`
     border-radius: ${({ theme: { radii } }) => radii.medium};
     padding: ${({ theme }) => theme.space.xsmall};
 
-    ${MethodBadge} {
-      margin-right: ${({ theme }) => theme.space.small};
-    }
-
     &:hover,
     &:focus {
       background-color: ${({ theme }) => theme.colors.ui1};
-
-      ${MethodBadge} {
-        border: solid 1px ${({ theme }) => theme.colors.ui2};
-      }
     }
   }
 
   [aria-current] {
     background-color: ${({ theme }) => theme.colors.ui1};
-
-    ${MethodBadge} {
-      border: solid 1px ${({ theme }) => theme.colors.ui2};
-    }
 
     ${Heading} {
       font-weight: ${({ theme }) => theme.fontWeights.semiBold};

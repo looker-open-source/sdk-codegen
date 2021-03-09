@@ -55,7 +55,7 @@ export const DocReferences: FC<DocReferencesProps> = ({
   if (seeTypes.length === 0 && seeMethods.length === 0) return <></>
 
   return (
-    <Box mb="xlarge">
+    <Box id="references" mb="xlarge">
       <CollapserCard heading="References">
         <>
           {DocReferenceItems(

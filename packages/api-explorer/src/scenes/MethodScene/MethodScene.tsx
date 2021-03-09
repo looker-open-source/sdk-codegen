@@ -51,7 +51,6 @@ import {
 } from '../../components'
 import { DocOperation } from './components'
 import { createInputs } from './utils'
-
 interface DocMethodProps {
   api: ApiModel
 }
@@ -70,7 +69,7 @@ export const MethodScene: FC<DocMethodProps> = ({ api }) => {
 
   useEffect(() => {
     setMethod(api.methods[methodName])
-  }, [methodName])
+  }, [api, methodName])
 
   const { colors } = useContext(ThemeContext)
 
@@ -87,7 +86,7 @@ export const MethodScene: FC<DocMethodProps> = ({ api }) => {
 
   return (
     <>
-      <Section p="xxlarge">
+      <Section id="top" p="xxlarge">
         <Space between>
           <DocTitle>{method.summary}</DocTitle>
           {runItToggle}

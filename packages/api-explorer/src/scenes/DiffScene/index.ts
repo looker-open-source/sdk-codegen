@@ -2,7 +2,7 @@
 
  MIT License
 
- Copyright (c) 2020 Looker Data Sciences, Inc.
+ Copyright (c) 2021 Looker Data Sciences, Inc.
 
  Permission is hereby granted, free of charge, to any person obtaining a copy
  of this software and associated documentation files (the "Software"), to deal
@@ -24,23 +24,4 @@
 
  */
 
-const path = require('path')
-const base = require('../../webpack.base.config')(__dirname)
-
-module.exports = {
-  ...base,
-  mode: 'development',
-  devServer: {
-    contentBase: path.join(__dirname, 'public'),
-    historyApiFallback: {
-      disableDotRule: true,
-    },
-    publicPath: '/dist/',
-    headers: {
-      'Access-Control-Allow-Origin': '*',
-      'Access-Control-Allow-Methods': '*',
-      'Access-Control-Allow-Headers': '*',
-    },
-  },
-  devtool: 'inline-source-map',
-}
+export { DiffScene } from './DiffScene'

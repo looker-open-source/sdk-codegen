@@ -24,16 +24,32 @@
 
  */
 
-import React, { FC } from 'react'
-import { TabList, Tab, TabPanel, TabPanels, useTabs } from '@looker/components'
+import React, { FC, useContext, useEffect, useState } from 'react'
+import {
+  TabList,
+  Tab,
+  TabPanel,
+  TabPanels,
+  useTabs,
+  InputSearch,
+  Flex,
+} from '@looker/components'
 import styled from 'styled-components'
 import { useRouteMatch } from 'react-router-dom'
-import { ApiModel } from '@looker/sdk-codegen'
+import { ApiModel, CriteriaToSet, ISearchResult } from '@looker/sdk-codegen'
+
+import { SearchContext } from '../../context'
+import { setPattern } from '../../reducers'
 import { SideNavTags } from './SideNavTags'
 import { SideNavTypes } from './SideNavTypes'
+import { useDebounce, countMethods, countTypes } from './searchUtils'
+import { SearchCriteriaSelector } from './SearchCriteriaSelector'
+import { SearchMessage } from './SearchMessage'
 
 interface SideNavProps {
   api: ApiModel
+  diffApi?: ApiModel
+  diffKey?: string
   specKey: string
   className?: string
 }
@@ -50,14 +66,58 @@ const SideNavLayout: FC<SideNavProps> = ({ api, specKey, className }) => {
     defaultIndex = tabNames.indexOf(match.params.sideNavTab)
   }
   const tabs = useTabs({ defaultIndex })
-  const types = api.types || {}
-  const tags = api.tags || {}
+  const { searchSettings, setSearchSettings } = useContext(SearchContext)
+  const [pattern, setSearchPattern] = useState(searchSettings.pattern)
+  const debouncedPattern = useDebounce(pattern, 250)
+  const [searchResults, setSearchResults] = useState<ISearchResult>()
+  const searchCriteria = CriteriaToSet(searchSettings.criteria)
+  const [tags, setTags] = useState(api.tags || {})
+  const [types, setTypes] = useState(api.types || {})
+  const [methodCount, setMethodCount] = useState(countMethods(tags))
+  const [typeCount, setTypeCount] = useState(countTypes(types))
+
+  const handleInputChange = (value: string) => {
+    setSearchPattern(value)
+  }
+
+  useEffect(() => {
+    let results
+    let newTags
+    let newTypes
+    if (debouncedPattern) {
+      results = api.search(pattern, searchCriteria)
+      newTags = results.tags
+      newTypes = results.types
+    } else {
+      newTags = api.tags || {}
+      newTypes = api.types || {}
+    }
+
+    setTags(newTags)
+    setTypes(newTypes)
+    setMethodCount(countMethods(newTags))
+    setTypeCount(countTypes(newTypes))
+    setSearchResults(results)
+    setSearchSettings(setPattern(debouncedPattern!))
+  }, [debouncedPattern, specKey])
 
   return (
     <nav className={className}>
+      <Flex alignItems="center" pl="large" pr="large" pb="large">
+        <SearchCriteriaSelector />
+        <InputSearch
+          onChange={handleInputChange}
+          placeholder="Search"
+          value={pattern}
+          isClearable
+          changeOnSelect
+        />
+        {/* <WordIcon onClick={handleWordToggle}>W</WordIcon> */}
+      </Flex>
+      <SearchMessage search={searchResults} />
       <TabList {...tabs} distribute>
-        <Tab>Methods</Tab>
-        <Tab>Types</Tab>
+        <Tab>Methods ({methodCount})</Tab>
+        <Tab>Types ({typeCount})</Tab>
       </TabList>
       <TabPanels {...tabs} pt="xsmall">
         <TabPanel>
@@ -74,5 +134,9 @@ const SideNavLayout: FC<SideNavProps> = ({ api, specKey, className }) => {
 export const SideNav = styled(SideNavLayout)`
   padding: ${({ theme }) => theme.space.large} 0;
   border-right: 1px solid ${({ theme }) => theme.colors.ui2};
-  height: 100%;
 `
+
+// const WordIcon = styled(Text)`
+//   cursor: pointer;
+//   padding-left: ${({ theme }) => theme.space.xxsmall};
+// `

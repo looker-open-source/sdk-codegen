@@ -23,30 +23,31 @@
  SOFTWARE.
 
  */
-import React, { FC } from 'react'
-import { IntrinsicType, TypeList } from '@looker/sdk-codegen'
-import { NavLink } from 'react-router-dom'
-import { ComboboxOption, Icon } from '@looker/components'
 
-import { buildTypePath } from '../../utils'
+import { useState, useEffect } from 'react'
+import { TagList, TypeList } from '@looker/sdk-codegen'
 
-interface TypeResultsProps {
-  specKey: string
-  types: TypeList
+export const useDebounce = (value: any, delay: number) => {
+  const [debouncedValue, setDebouncedValue] = useState()
+  useEffect(() => {
+    // Update debounced value only once delay has been elapsed
+    const handler = setTimeout(() => {
+      setDebouncedValue(value)
+    }, delay)
+    // Reset the timeout on receiving a new keyword
+    return () => {
+      clearTimeout(handler)
+    }
+  }, [value])
+  return debouncedValue
 }
 
-export const TypeResults: FC<TypeResultsProps> = ({ specKey, types }) => (
-  <>
-    {Object.values(types)
-      .filter((type) => !(type instanceof IntrinsicType))
-      .map((type) => (
-        <NavLink key={type.name} to={buildTypePath(specKey, type.name)}>
-          <ComboboxOption value={type.name} indicator={false}>
-            {type.name}
-            <Icon name="CaretLeft" />
-            {'Types'}
-          </ComboboxOption>
-        </NavLink>
-      ))}
-  </>
-)
+export const countMethods = (tags: TagList) => {
+  let result = 0
+  Object.values(tags).forEach((methods) => {
+    result += Object.entries(methods).length
+  })
+  return result
+}
+
+export const countTypes = (types: TypeList) => Object.entries(types).length

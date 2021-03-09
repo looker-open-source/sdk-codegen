@@ -24,34 +24,27 @@
 
  */
 import React, { FC } from 'react'
-import { TagList } from '@looker/sdk-codegen'
-import { NavLink } from 'react-router-dom'
-import { ComboboxOption, Icon } from '@looker/components'
+import { ISearchResult } from '@looker/sdk-codegen'
+import { Heading, Icon, Flex } from '@looker/components'
 
-import { buildMethodPath } from '../../utils'
-
-interface MethodResultsProps {
-  specKey: string
-  tags: TagList
+interface SearchMessageProps {
+  search?: ISearchResult
 }
 
-export const MethodResults: FC<MethodResultsProps> = ({ specKey, tags }) => (
+/**
+ * Renders search results message
+ * @param search Search Results
+ * @constructor
+ */
+export const SearchMessage: FC<SearchMessageProps> = ({ search }) => (
   <>
-    {Object.entries(tags).map(([tag, methods]) =>
-      Object.values(methods).map((method) => (
-        <NavLink
-          key={method.name}
-          to={buildMethodPath(specKey, tag, method.name)}
-        >
-          <ComboboxOption value={method.name} indicator={false}>
-            {method.summary}
-            <Icon name="CaretLeft" />
-            {tag}
-            <Icon name="CaretLeft" />
-            {'Methods'}
-          </ComboboxOption>
-        </NavLink>
-      ))
+    {search && !search.ok && (
+      <Flex pl="large" pr="large" alignItems="center">
+        <Heading as="h4" color="critical">
+          <Icon key="resultIcon" name="Error" size="xxsmall" color="critical" />
+          {search.message}
+        </Heading>
+      </Flex>
     )}
   </>
 )

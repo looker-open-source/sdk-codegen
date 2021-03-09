@@ -24,5 +24,5 @@
 
  */
 export { highlightHTML } from './highlight'
-export { buildMethodPath, buildTypePath } from './path'
+export { buildMethodPath, buildTypePath, diffPath, oAuthPath } from './path'
 export { getLoded } from './lodeUtils'

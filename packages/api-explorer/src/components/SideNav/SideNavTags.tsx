@@ -31,13 +31,19 @@ import { SideNavMethods } from './SideNavMethods'
 interface TagsProps {
   tags: TagList
   specKey: string
+  defaultOpen?: boolean
 }
 
-export const SideNavTags: FC<TagsProps> = ({ tags, specKey }) => (
+export const SideNavTags: FC<TagsProps> = ({
+  tags,
+  specKey,
+  defaultOpen = false,
+}) => (
   <>
-    {Object.keys(tags).map((tag, index) => (
+    {Object.keys(tags).map((tag) => (
       <SideNavMethods
-        key={index}
+        key={tag}
+        defaultOpen={defaultOpen}
         tag={tag}
         methods={tags[tag]}
         specKey={specKey}

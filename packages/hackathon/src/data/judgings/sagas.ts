@@ -24,6 +24,7 @@
 
  */
 import { all, call, put, takeEvery, select } from 'redux-saga/effects'
+import { SagaIterator } from 'redux-saga'
 import { actionMessage, beginLoading, endLoading } from '../common/actions'
 import { IJudgingProps } from '../../models'
 import { sheetsClient } from '../sheets_client'
@@ -37,7 +38,7 @@ import {
 } from './actions'
 import { getJudgingsState } from './selectors'
 
-function* getJudgingsSaga() {
+function* getJudgingsSaga(): SagaIterator<IJudgingProps[]> {
   let judgings: IJudgingProps[] = []
   try {
     yield put(beginLoading())
@@ -51,14 +52,16 @@ function* getJudgingsSaga() {
   return judgings
 }
 
-function* getJudgingSaga({ payload: judgingId }: GetJudgingRequestAction) {
+function* getJudgingSaga({
+  payload: judgingId,
+}: GetJudgingRequestAction): SagaIterator {
   try {
     // Pull judging out of state.
     const state = yield select()
     let judgings = getJudgingsState(state)
     if (judgings.length === 0) {
       // judgings are lost on page reload so load them
-      judgings = yield getJudgingsSaga()
+      judgings = yield getJudgingsSaga() as any
     }
     const judging = judgings.find((j) => j._id === judgingId)
     yield put(getJudgingResponse(judging))
@@ -68,7 +71,7 @@ function* getJudgingSaga({ payload: judgingId }: GetJudgingRequestAction) {
   }
 }
 
-function* saveJudgingSaga(action: SaveJudgingRequestAction) {
+function* saveJudgingSaga(action: SaveJudgingRequestAction): SagaIterator {
   try {
     yield put(beginLoading())
     const judging = yield call(

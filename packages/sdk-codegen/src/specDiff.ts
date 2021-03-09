@@ -24,37 +24,159 @@
 
  */
 
-import { IMethod, IType, KeyedCollection, IApiModel } from './sdkModels'
+import {
+  IMethod,
+  IType,
+  KeyedCollection,
+  IApiModel,
+  EnumType,
+  ArrayType,
+} from './sdkModels'
 
 interface ITypeDelta {
   lhs: string
   rhs: string
 }
 
+enum DiffCompare {
+  RightMissing = -1,
+  Equal = 0,
+  LeftMissing = 1,
+}
+
+export interface DiffCount {
+  changed: number
+  added: number
+  removed: number
+}
+
 export type TypeDelta = KeyedCollection<ITypeDelta>
+
+export type DiffTracker = (lKey: string, rKey: string) => number
+
+export const startCount = (): DiffCount => {
+  return { changed: 0, added: 0, removed: 0 }
+}
+
+const diffCompare = (lKey: string, rKey: string) => {
+  if (lKey && rKey) return lKey.localeCompare(rKey)
+  if (lKey) return DiffCompare.RightMissing
+  return DiffCompare.LeftMissing
+}
+
+export const countDiffs = (
+  count: DiffCount,
+  lKeys: string[],
+  rKeys: string[],
+  comparer: DiffTracker = diffCompare
+) => {
+  lKeys = lKeys.sort((a, b) => a.localeCompare(b))
+  rKeys = rKeys.sort((a, b) => a.localeCompare(b))
+  let l = 0
+  let r = 0
+  while (l < lKeys.length || r < rKeys.length) {
+    const lk = lKeys[l]
+    const rk = rKeys[r]
+    const comp = comparer(lk, rk)
+    switch (comp) {
+      case DiffCompare.LeftMissing: {
+        count.added++
+        r++
+        break
+      }
+      case DiffCompare.RightMissing: {
+        count.removed++
+        l++
+        break
+      }
+      default: {
+        l++
+        r++
+      }
+    }
+  }
+  return count
+}
+
+export const compareEnumTypes = (
+  lType: IType,
+  rType: IType,
+  count: DiffCount
+) => {
+  const lNum = lType as EnumType
+  const rNum = rType as EnumType
+  const lKeys = lNum.values.map((v) => v.toString())
+  const rKeys = rNum.values.map((v) => v.toString())
+  countDiffs(count, lKeys, rKeys)
+  const lVal = JSON.stringify(lKeys)
+  const rVal = JSON.stringify(rKeys)
+  if (lVal === rVal) return
+  return {
+    lhs: lVal,
+    rhs: rVal,
+  }
+}
 
 /**
  * Compares two types and returns an object of non-matching entries
  * @param lType
  * @param rType
+ * @param count change tracking
  */
-export const compareTypes = (lType: IType, rType: IType) => {
+export const compareTypes = (lType: IType, rType: IType, count: DiffCount) => {
+  if (lType instanceof EnumType) {
+    return compareEnumTypes(lType, rType, count)
+  }
+
+  if (lType instanceof ArrayType) {
+    lType = lType.elementType
+  }
+
+  if (rType instanceof ArrayType) {
+    rType = rType.elementType
+  }
+
   if (lType.asHashString() === rType.asHashString()) return
 
   const diff: TypeDelta = {}
-  Object.entries(lType.properties).forEach(([key, lhsVal]) => {
-    const rhsVal = rType.properties[key]
-    if (rhsVal) {
-      const lhs = lhsVal.summary()
-      const rhs = rhsVal.summary()
-      if (lhs !== rhs) {
-        diff[key] = {
-          lhs,
-          rhs,
+  countDiffs(
+    count,
+    Object.keys(lType.properties),
+    Object.keys(rType.properties),
+    (lKey, rKey) => {
+      const comp = diffCompare(lKey, rKey)
+      switch (comp) {
+        case DiffCompare.LeftMissing: {
+          diff[rKey] = {
+            lhs: '',
+            rhs: rType.properties[rKey].summary(),
+          }
+          break
+        }
+        case DiffCompare.RightMissing: {
+          diff[lKey] = {
+            lhs: lType.properties[lKey].summary(),
+            rhs: '',
+          }
+          break
+        }
+        default: {
+          const lhsVal = lType.properties[lKey]
+          const rhsVal = rType.properties[rKey]
+          const lhs = lhsVal.summary()
+          const rhs = rhsVal.summary()
+          if (lhs !== rhs) {
+            count.changed++
+            diff[lKey] = {
+              lhs,
+              rhs,
+            }
+          }
         }
       }
+      return comp
     }
-  })
+  )
   if (Object.keys(diff).length === 0) return
   return diff
 }
@@ -64,11 +186,37 @@ export const compareTypes = (lType: IType, rType: IType) => {
  * if non matching.
  * @param lMethod
  * @param rMethod
+ * @param count change tracking
  */
-export const compareParams = (lMethod: IMethod, rMethod: IMethod) => {
+export const compareParams = (
+  lMethod: IMethod,
+  rMethod: IMethod,
+  count: DiffCount
+) => {
+  const lParams = {}
+  const rParams = {}
+  lMethod.allParams.forEach((p) => (lParams[p.name] = p))
+  rMethod.allParams.forEach((p) => (rParams[p.name] = p))
+  // TODO typediff the matching body types?
+  countDiffs(
+    count,
+    Object.keys(lParams),
+    Object.keys(rParams),
+    (lKey, rKey) => {
+      const comp = diffCompare(lKey, rKey)
+      if (comp === 0) {
+        const lsh = lParams[lKey].signature()
+        const rsh = rParams[rKey].signature()
+        if (lsh !== rsh) {
+          count.changed++
+        }
+      }
+      return comp
+    }
+  )
+
   const lSignature = lMethod.signature()
   const rSignature = rMethod.signature()
-
   if (lSignature === rSignature) return
 
   return {
@@ -77,7 +225,24 @@ export const compareParams = (lMethod: IMethod, rMethod: IMethod) => {
   }
 }
 
-export const compareBodies = (lMethod: IMethod, rMethod: IMethod) => {
+/**
+ * Compares the bodies of two methods and returns diffs if there are any
+ * @param lMethod
+ * @param rMethod
+ * @param count change tracking
+ */
+export const compareBodies = (
+  lMethod: IMethod,
+  rMethod: IMethod,
+  count: DiffCount
+) => {
+  const lParams = {}
+  const rParams = {}
+  lMethod.bodyParams.forEach((p) => (lParams[p.name] = p))
+  rMethod.bodyParams.forEach((p) => (rParams[p.name] = p))
+  // TODO typediff the matching body types?
+  countDiffs(count, Object.keys(lParams), Object.keys(rParams))
+
   const lSide = lMethod.bodyParams.map((p) => {
     return {
       name: p.name,
@@ -92,15 +257,28 @@ export const compareBodies = (lMethod: IMethod, rMethod: IMethod) => {
       required: p.required,
     }
   })
-  if (JSON.stringify(lSide) !== JSON.stringify(rSide))
-    return {
-      lhs: lSide,
-      rhs: rSide,
-    }
-  return undefined
+
+  if (JSON.stringify(lSide) === JSON.stringify(rSide)) return
+
+  count.changed++
+  return {
+    lhs: lSide,
+    rhs: rSide,
+  }
 }
 
-export const compareResponses = (lMethod: IMethod, rMethod: IMethod) => {
+/**
+ * Compare two response lists, returning diff
+ * @param lMethod
+ * @param rMethod
+ * @param count change tracking
+ */
+export const compareResponses = (
+  lMethod: IMethod,
+  rMethod: IMethod,
+  count: DiffCount
+) => {
+  // TODO deep type comparison? Probably diff all types instead
   const lSide = lMethod.responses.map((r) => {
     return {
       statusCode: r.statusCode,
@@ -115,26 +293,33 @@ export const compareResponses = (lMethod: IMethod, rMethod: IMethod) => {
       type: r.type.fullName,
     }
   })
-  if (JSON.stringify(lSide) !== JSON.stringify(rSide))
-    return {
-      lhs: lSide,
-      rhs: rSide,
-    }
-  return undefined
+  if (JSON.stringify(lSide) === JSON.stringify(rSide)) return
+
+  count.changed++
+  return {
+    lhs: lSide,
+    rhs: rSide,
+  }
 }
 
 export const csvHeaderRow =
-  'method name,"Op + URI",left status,right status,typeDiff,paramDiff,bodyDiff,responseDiff'
+  'method name,"Op + URI",left status,right status,typeDiff,paramDiff,bodyDiff,responseDiff,diffCount'
 
 export const csvDiffRow = (diff: DiffRow) => `
-${diff.name},${diff.id},${diff.lStatus},${diff.rStatus},${diff.typeDiff},${diff.paramsDiff},${diff.bodyDiff},${diff.responseDiff}`
+${diff.name},${diff.id},${diff.lStatus},${diff.rStatus},${diff.typeDiff},${
+  diff.paramsDiff
+},${diff.bodyDiff},${diff.responseDiff},${JSON.stringify(diff.diffCount)}`
 
 export const mdHeaderRow = `
-| method name  | Op + URI | 3.1 | 4.0 | typeDiff     | paramDiff | bodyDiff | responseDiff |
-| ------------ | -------- | --- | --- | ------------ | --------- | -------- | ------------ |`
+| method name  | Op + URI | 3.1 | 4.0 | typeDiff     | paramDiff | bodyDiff | responseDiff | diffCount |
+| ------------ | -------- | --- | --- | ------------ | --------- | -------- | ------------ | --------- |`
 
 export const mdDiffRow = (diff: DiffRow) => `
-  | ${diff.name} | ${diff.id} | ${diff.lStatus} | ${diff.rStatus} | ${diff.typeDiff} | ${diff.paramsDiff} | ${diff.bodyDiff} | ${diff.responseDiff}`
+  | ${diff.name} | ${diff.id} | ${diff.lStatus} | ${diff.rStatus} | ${
+  diff.typeDiff
+} | ${diff.paramsDiff} | ${diff.bodyDiff} | ${
+  diff.responseDiff
+} | ${JSON.stringify(diff.diffCount)} |`
 
 const diffToString = (diff: any) => {
   if (!diff) return ''
@@ -164,6 +349,8 @@ export interface DiffRow {
   bodyDiff: string
   /** Response diff if any */
   responseDiff: string
+  /** Count of differences */
+  diffCount: DiffCount
 }
 
 /**
@@ -174,21 +361,42 @@ export interface DiffRow {
 const computeDiff = (lMethod?: IMethod, rMethod?: IMethod) => {
   if (!lMethod && !rMethod) throw new Error('At least one method is required.')
 
+  const count = startCount()
+  const countStatus = () => {
+    if (!rMethod) {
+      count.removed++
+    } else if (!lMethod) {
+      count.added++
+    } else {
+      if (lMethod.status !== rMethod.status) count.changed++
+    }
+  }
+
   let result: DiffRow
+  countStatus()
   if (lMethod) {
+    const typeDiff = rMethod
+      ? diffToString(compareTypes(lMethod.type, rMethod.type, count))
+      : ''
+    const paramsDiff = rMethod
+      ? diffToString(compareParams(lMethod, rMethod, count))
+      : ''
+    const bodyDiff = rMethod
+      ? diffToString(compareBodies(lMethod, rMethod, count))
+      : ''
+    const responseDiff = rMethod
+      ? diffToString(compareResponses(lMethod, rMethod, count))
+      : ''
     result = {
       name: lMethod.name,
       id: lMethod.id,
       lStatus: lMethod.status,
       rStatus: rMethod ? rMethod.status : '',
-      typeDiff: rMethod
-        ? diffToString(compareTypes(lMethod.type, rMethod.type))
-        : '',
-      paramsDiff: rMethod ? diffToString(compareParams(lMethod, rMethod)) : '',
-      bodyDiff: rMethod ? diffToString(compareBodies(lMethod, rMethod)) : '',
-      responseDiff: rMethod
-        ? diffToString(compareResponses(lMethod, rMethod))
-        : '',
+      typeDiff,
+      paramsDiff,
+      bodyDiff,
+      responseDiff,
+      diffCount: count,
     }
   } else if (!lMethod && rMethod) {
     result = {
@@ -200,6 +408,7 @@ const computeDiff = (lMethod?: IMethod, rMethod?: IMethod) => {
       paramsDiff: '',
       bodyDiff: '',
       responseDiff: '',
+      diffCount: count,
     }
   }
 

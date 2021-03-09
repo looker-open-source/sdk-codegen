@@ -25,7 +25,7 @@
  */
 
 import { CodeGen } from './codeGen'
-import { IMethod, IParameter, IProperty, IType } from './sdkModels'
+import { ArrayType, IMethod, IParameter, IProperty, IType } from './sdkModels'
 
 // eslint-disable @typescript-eslint/no-unused-vars
 
@@ -33,6 +33,7 @@ import { IMethod, IParameter, IProperty, IType } from './sdkModels'
  * Pseudocde generator
  */
 export class PseudoGen extends CodeGen {
+  endTypeStr = '}'
   /**
    * Generic prototype-style method signature generator
    *
@@ -45,10 +46,13 @@ export class PseudoGen extends CodeGen {
   methodSignature(indent: string, method: IMethod): string {
     indent = ''
     const params = method.allParams
-    const args = params.map((p) => p.name)
-    return `${indent}${method.operationId}(${args.join(', ')}): ${
-      method.primaryResponse.type.name
-    }`
+    const args = params.map((p) => this.declareParameter(indent, method, p))
+    const bump = this.bumper(indent)
+    const fragment =
+      args.length === 0
+        ? ''
+        : `\n${bump}${args.join(',\n' + bump).trim()}${indent}\n`
+    return `${indent}${method.operationId}(${fragment}): ${method.primaryResponse.type.name}`
   }
 
   construct(_indent: string, _type: IType): string {
@@ -60,15 +64,19 @@ export class PseudoGen extends CodeGen {
   }
 
   declareParameter(
-    _indent: string,
+    indent: string,
     _method: IMethod,
-    _param: IParameter
+    param: IParameter
   ): string {
-    return ''
+    const result = `${indent}${param.name}: ${param.type.name}`
+    if (param.required) return result
+    return `[${result}]`
   }
 
-  declareProperty(_indent: string, _property: IProperty): string {
-    return ''
+  declareProperty(indent: string, property: IProperty): string {
+    const lb = property.required ? '' : '['
+    const rb = property.required ? '' : ']'
+    return `${indent}${lb}${property.name}: ${property.type.name}${rb}`
   }
 
   encodePathParams(_indent: string, _method: IMethod): string {
@@ -95,7 +103,16 @@ export class PseudoGen extends CodeGen {
     return ''
   }
 
-  typeSignature(_indent: string, _type: IType): string {
-    return ''
+  typeSignature(indent: string, type: IType): string {
+    return `${indent}${type.name} ${this.typeOpen}\n`
+  }
+
+  declareType(indent: string, type: IType): string {
+    if (!(type instanceof ArrayType)) {
+      return super.declareType(indent, type)
+    }
+    return `${indent}list of ${super
+      .declareType(indent, type.elementType)
+      .trimStart()}`
   }
 }
