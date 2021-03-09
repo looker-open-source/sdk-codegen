@@ -37,6 +37,7 @@ import {
   getLookerSpecs,
   getSpecLinks,
   loadSpecs,
+  ISpecItem,
 } from './specConverter'
 import { TestConfig } from './testUtils'
 import { compareSpecs } from './specDiff'
@@ -432,17 +433,23 @@ describe('spec conversion', () => {
   })
 
   describe('spec retrieval', () => {
+    const onlyPublic = (specs: ISpecItem[]) => {
+      return specs.filter((v) => v.status !== 'undocumented')
+    }
+
     it('gets looker specs', async () => {
       const actual = await getLookerSpecs(sdk, config.baseUrl)
       expect(actual).toBeDefined()
       expect(actual.looker_release_version).not.toEqual('')
       expect(actual.current_version.version).not.toEqual('')
-      expect(actual.supported_versions).toHaveLength(4)
+      const supported = onlyPublic(actual.supported_versions)
+      expect(supported).toHaveLength(4)
     })
 
     it('gets spec links', async () => {
       const versions = await getLookerSpecs(sdk, config.baseUrl)
       expect(versions).toBeDefined()
+      versions.supported_versions = onlyPublic(versions.supported_versions)
       const actual = getSpecLinks(versions)
       expect(actual).toBeDefined()
       expect(actual).toHaveLength(3)
@@ -461,6 +468,7 @@ describe('spec conversion', () => {
     it('fetches and parses all specs', async () => {
       const versions = await getLookerSpecs(sdk, config.baseUrl)
       expect(versions).toBeDefined()
+      versions.supported_versions = onlyPublic(versions.supported_versions)
       const links = getSpecLinks(versions)
       links.forEach(
         (link) =>
