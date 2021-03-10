@@ -56,6 +56,7 @@ export const ApiSpecSelector: FC<ApiSpecSelectorProps> = ({
 
   return (
     <Select
+      width="10rem"
       name="Version"
       defaultValue={spec.key}
       options={options}
