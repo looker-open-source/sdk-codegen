@@ -80,14 +80,14 @@ export const HeaderLayout: FC<HeaderProps> = ({
       </NavLink>
     </Flex>
     <Flex alignItems="center">
-      <FlexItem flexBasis="20rem" pl="large">
+      <FlexItem flexBasis="10rem" pl="large">
         <ApiSpecSelector
           specs={specs}
           spec={spec}
           specDispatch={specDispatch}
         />
       </FlexItem>
-      <FlexItem flexBasis="2rem" pl="small">
+      <FlexItem flexBasis="1rem" pl="small">
         <NavLink to={`/${diffPath}/${spec.key}/`}>
           <Tooltip content="Compare Specifications">
             <Icon name="ChangeHistory" size="small" />

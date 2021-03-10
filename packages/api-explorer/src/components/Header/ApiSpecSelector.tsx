@@ -45,7 +45,8 @@ export const ApiSpecSelector: FC<ApiSpecSelectorProps> = ({
   const history = useHistory()
   const options = Object.entries(specs).map(([key, spec]) => ({
     value: key,
-    label: `${key} (${spec.status})`,
+    label: key,
+    description: spec.status,
   }))
 
   const handleChange = (specKey: string) => {
