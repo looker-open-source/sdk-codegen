@@ -29,12 +29,10 @@ import styled from 'styled-components'
 import { NavLink } from 'react-router-dom'
 import {
   Icon,
-  Flex,
-  FlexItem,
   Space,
   IconButton,
   Heading,
-  Tooltip,
+  Header as SemanticHeader,
 } from '@looker/components'
 
 import { SpecItems } from '../../ApiExplorer'
@@ -57,14 +55,13 @@ export const HeaderLayout: FC<HeaderProps> = ({
   specDispatch,
   toggleNavigation,
 }) => (
-  <Space between className={className}>
-    <Flex width="20rem" pr="large" alignItems="center">
+  <SemanticHeader height="4rem" className={className} pl="small" pr="large">
+    <Space>
       <IconButton
         size="small"
         onClick={() => toggleNavigation()}
         icon="Hamburger"
         label="Toggle Navigation"
-        mr="medium"
       />
 
       <NavLink to={`/${spec.key}`}>
@@ -78,29 +75,21 @@ export const HeaderLayout: FC<HeaderProps> = ({
           <Heading color="key">API Explorer</Heading>
         </Space>
       </NavLink>
-    </Flex>
-    <Flex alignItems="center">
-      <FlexItem flexBasis="10rem" pl="large">
-        <ApiSpecSelector
-          specs={specs}
-          spec={spec}
-          specDispatch={specDispatch}
+    </Space>
+    <Space width="auto">
+      <ApiSpecSelector specs={specs} spec={spec} specDispatch={specDispatch} />
+      <NavLink to={`/${diffPath}/${spec.key}/`}>
+        <IconButton
+          toggle
+          label="Compare Specifications"
+          icon="ChangeHistory"
+          size="small"
         />
-      </FlexItem>
-      <FlexItem flexBasis="1rem" pl="small">
-        <NavLink to={`/${diffPath}/${spec.key}/`}>
-          <Tooltip content="Compare Specifications">
-            <Icon name="ChangeHistory" size="small" />
-          </Tooltip>
-        </NavLink>
-      </FlexItem>
-    </Flex>
-  </Space>
+      </NavLink>
+    </Space>
+  </SemanticHeader>
 )
 
 export const Header = styled(HeaderLayout)`
-  height: 100%;
   border-bottom: 1px solid ${({ theme }) => theme.colors.ui2};
-  padding-left: ${({ theme }) => theme.space.small};
-  padding-right: ${({ theme }) => theme.space.large};
 `

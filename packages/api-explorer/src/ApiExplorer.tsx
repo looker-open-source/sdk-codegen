@@ -26,18 +26,13 @@
 
 import React, { FC, useReducer, useState, useEffect } from 'react'
 import { useLocation } from 'react-router'
-import {
-  Aside,
-  ComponentsProvider,
-  Header,
-  Layout,
-  Page,
-} from '@looker/components'
+import styled from 'styled-components'
+import { Aside, ComponentsProvider, Layout, Page } from '@looker/components'
 import { ApiModel, KeyedCollection } from '@looker/sdk-codegen'
 import { Looker40SDK, Looker31SDK } from '@looker/sdk'
 import { SearchContext, LodeContext, defaultLodeContextValue } from './context'
 import { getLoded } from './utils'
-import { Header as AppHeader, SideNav } from './components'
+import { Header, SideNav } from './components'
 import {
   specReducer,
   initDefaultSpecState,
@@ -97,19 +92,17 @@ const ApiExplorer: FC<ApiExplorerProps> = ({
       <LodeContext.Provider value={{ ...lode }}>
         <SearchContext.Provider value={{ searchSettings, setSearchSettings }}>
           <Page>
-            <Header height="4rem">
-              <AppHeader
-                specs={specs}
-                spec={spec}
-                specDispatch={specDispatch}
-                toggleNavigation={toggleNavigation}
-              />
-            </Header>
+            <Header
+              specs={specs}
+              spec={spec}
+              specDispatch={specDispatch}
+              toggleNavigation={toggleNavigation}
+            />
             <Layout hasAside>
               {hasNavigation && (
-                <Aside width="20rem">
+                <AsideBorder pt="large" width="20rem">
                   <SideNav api={spec.api} specKey={spec.key} />
-                </Aside>
+                </AsideBorder>
               )}
               <AppRouter
                 api={spec.api}
@@ -124,5 +117,10 @@ const ApiExplorer: FC<ApiExplorerProps> = ({
     </ComponentsProvider>
   )
 }
+
+/* Border support for `Aside` coming in @looker/components very soon */
+export const AsideBorder = styled(Aside)`
+  border-right: 1px solid ${({ theme }) => theme.colors.ui2};
+`
 
 export default ApiExplorer
