@@ -1,4 +1,5 @@
 {
+  "plugins": ["node-workspace"],
   "bootstrap-sha": "6fc119838885b0cb831e78ddd23ac01cb819e585",
   "release-draft": true,
   "packages": {
