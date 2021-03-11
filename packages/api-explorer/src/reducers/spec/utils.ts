@@ -182,12 +182,12 @@ export const getSpecsFromVersions = async (
     let specKey = v.version || 'api'
     const max = v.status?.length || 0
     let frag = 1
-    while (items[specKey] && frag <= max) {
+    while (items[specKey]) {
       if (frag <= max) {
         // More than one spec for this version
         specKey = `${v.version}${v.status?.substr(0, frag)}`
       } else {
-        specKey = `${v.version}_${frag}`
+        specKey = `${v.version}${v.status}${frag}`
       }
       frag++
     }
