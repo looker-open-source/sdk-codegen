@@ -492,6 +492,7 @@ export class ExtensionHostApiImpl implements ExtensionHostApi {
     }
     if (
       authParameters.response_type !== 'token' &&
+      authParameters.response_type !== 'id_token' &&
       authParameters.response_type !== 'code'
     ) {
       return `invalid response_type, must be token or code, ${authParameters.response_type}`
