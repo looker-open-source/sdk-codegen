@@ -34,7 +34,6 @@ import {
   InputSearch,
   Flex,
 } from '@looker/components'
-import styled from 'styled-components'
 import { useRouteMatch } from 'react-router-dom'
 import { ApiModel, CriteriaToSet, ISearchResult } from '@looker/sdk-codegen'
 
@@ -58,7 +57,7 @@ interface SideNavParams {
   sideNavTab: string
 }
 
-const SideNavLayout: FC<SideNavProps> = ({ api, specKey, className }) => {
+export const SideNav: FC<SideNavProps> = ({ api, specKey }) => {
   const tabNames = ['methods', 'types']
   const match = useRouteMatch<SideNavParams>(`/:specKey/:sideNavTab?`)
   let defaultIndex = tabNames.indexOf('methods')
@@ -102,7 +101,7 @@ const SideNavLayout: FC<SideNavProps> = ({ api, specKey, className }) => {
   }, [debouncedPattern, specKey])
 
   return (
-    <nav className={className}>
+    <nav>
       <Flex alignItems="center" pl="large" pr="large" pb="large">
         <SearchCriteriaSelector />
         <InputSearch
@@ -130,13 +129,3 @@ const SideNavLayout: FC<SideNavProps> = ({ api, specKey, className }) => {
     </nav>
   )
 }
-
-export const SideNav = styled(SideNavLayout)`
-  padding: ${({ theme }) => theme.space.large} 0;
-  border-right: 1px solid ${({ theme }) => theme.colors.ui2};
-`
-
-// const WordIcon = styled(Text)`
-//   cursor: pointer;
-//   padding-left: ${({ theme }) => theme.space.xxsmall};
-// `

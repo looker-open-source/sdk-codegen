@@ -27,7 +27,7 @@
 import { ApiModel } from '@looker/sdk-codegen'
 import { Location as HLocation } from 'history'
 
-import { IApiVersion } from '@looker/sdk'
+import { IApiVersion, IApiVersionElement } from '@looker/sdk'
 import { SpecItem, SpecItems } from '../../ApiExplorer'
 import { diffPath, oAuthPath } from '../../utils'
 import { SpecState } from './reducer'
@@ -173,6 +173,27 @@ export const getSpecsFromVersions = async (
   fetcher: SpecFetcher | undefined = undefined
 ): Promise<SpecItems> => {
   const items = {}
+
+  /**
+   * Create a unique spec key for this version
+   * @param v version to identify
+   */
+  const uniqueId = (v: IApiVersionElement) => {
+    let specKey = v.version || 'api'
+    const max = v.status?.length || 0
+    let frag = 1
+    while (items[specKey]) {
+      if (frag <= max) {
+        // More than one spec for this version
+        specKey = `${v.version}${v.status?.substr(0, frag)}`
+      } else {
+        specKey = `${v.version}${v.status}${frag}`
+      }
+      frag++
+    }
+    return specKey
+  }
+
   if (versions.supported_versions) {
     for (const v of versions.supported_versions) {
       // Tell Typescript these are all defined because IApiVersion definition is lax
@@ -190,11 +211,7 @@ export const getSpecsFromVersions = async (
           if (fetcher) {
             spec.api = await fetcher(spec)
           }
-          let specKey = v.version
-          if (items[specKey]) {
-            // More than one spec for this version
-            specKey = `${specKey}_${v.status}`
-          }
+          const specKey = uniqueId(v)
           items[specKey] = spec
         }
       }

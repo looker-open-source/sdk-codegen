@@ -24,7 +24,7 @@
 
  */
 import { ApiModel } from '@looker/sdk-codegen'
-import { omit } from 'lodash'
+import { cloneDeep, omit } from 'lodash'
 
 import { specs } from '../../test-data'
 import { SpecItems } from '../../ApiExplorer'
@@ -230,6 +230,45 @@ describe('Spec reducer utils', () => {
         expect(current.status).toEqual('current')
         expect(current.isDefault).toEqual(true)
       }
+    })
+
+    test('specs have unique keys', async () => {
+      const moar = cloneDeep(versions)
+      moar.supported_versions.push(
+        {
+          version: '4.0',
+          full_version: 'full',
+          status: 'un',
+          swagger_url: 'http://localhost:19999/api/4.0/u.json',
+        },
+        {
+          version: '4.0',
+          full_version: 'full',
+          status: 'un',
+          swagger_url: 'http://localhost:19999/api/4.0/un.json',
+        },
+        {
+          version: '4.0',
+          full_version: 'full',
+          status: 'un',
+          swagger_url: 'http://localhost:19999/api/4.0/un3.json',
+        },
+        {
+          version: '4.0',
+          full_version: 'full',
+          status: 'un',
+          swagger_url: 'http://localhost:19999/api/4.0/un4.json',
+        }
+      )
+      const actual = await getSpecsFromVersions(moar)
+      expect(Object.keys(actual)).toEqual([
+        '3.1',
+        '4.0',
+        '4.0u',
+        '4.0un',
+        '4.0un3',
+        '4.0un4',
+      ])
     })
   })
 })

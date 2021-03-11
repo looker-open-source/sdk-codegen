@@ -46,7 +46,7 @@ describe('ApiSpecSelector', () => {
     )
 
     const selector = screen.getByRole('textbox')
-    expect(selector).toHaveValue(`${specState.key} (${specState.status})`)
+    expect(selector).toHaveValue(`${specState.key}`)
   })
 
   test('it lists all available specs', async () => {
@@ -76,9 +76,7 @@ describe('ApiSpecSelector', () => {
 
     await act(async () => {
       await userEvent.click(screen.getByRole('textbox'))
-      await userEvent.click(
-        screen.getByRole('option', { name: '3.1 (current)' })
-      )
+      await userEvent.click(screen.getByRole('option', { name: '3.1 current' }))
       await waitFor(() => {
         expect(specDispatch).toHaveBeenCalledTimes(1)
         expect(specDispatch).toHaveBeenCalledWith({
