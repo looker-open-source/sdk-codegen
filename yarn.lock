@@ -2177,14 +2177,14 @@
     npmlog "^4.1.2"
     write-file-atomic "^2.3.0"
 
-"@looker/chatty@^2.2.0":
-  version "2.2.0"
-  resolved "https://registry.yarnpkg.com/@looker/chatty/-/chatty-2.2.0.tgz#a12d54d9aaa383382db5fc072bb6b907721f538d"
-  integrity sha512-+4KJI0ACVFX/r7KY4MyTXOqbEq0sSV+n8N2hRA0Kq+FJ6VxM5PpwSG8R5QEe4MuT3hNMV3H/kkX2NlFMvtnS8w==
+"@looker/chatty@^2.3.0":
+  version "2.3.0"
+  resolved "https://registry.yarnpkg.com/@looker/chatty/-/chatty-2.3.0.tgz#380ff86bff34d8866f641fae3e53997266a3de3c"
+  integrity sha512-UO7pwQ+KU4UoV3+MSq7YVnWR74Pl1Jj15QO821W8Y+pW431KoHydiA7UUJmQnPEJDCgHLxepPs43jvJI/NMRhQ==
   dependencies:
-    core-js "^3.1.4"
+    core-js "^3.6.4"
     debug "^2.2.0"
-    es6-promise "^4.2.5"
+    es6-promise "^4.2.8"
 
 "@looker/components-providers@^0.9.29":
   version "0.9.29"
@@ -5239,7 +5239,7 @@ core-js@^2.1.0:
   resolved "https://registry.yarnpkg.com/core-js/-/core-js-2.6.12.tgz#d9333dfa7b065e347cc5682219d6f690859cc2ec"
   integrity sha512-Kb2wC0fvsWfQrgk8HU5lW6U/Lcs8+9aaYcy4ZFc6DDlo4nZ7n70dEgE5rtR0oG6ufKDUnrwfWL1mXR5ljDatrQ==
 
-core-js@^3.1.4, core-js@^3.6.5:
+core-js@^3.6.4, core-js@^3.6.5:
   version "3.9.1"
   resolved "https://registry.yarnpkg.com/core-js/-/core-js-3.9.1.tgz#cec8de593db8eb2a85ffb0dbdeb312cb6e5460ae"
   integrity sha512-gSjRvzkxQc1zjM/5paAmL4idJBFzuJoo+jDjF1tStYFMV2ERfD02HhahhCGXUyHxQRG4yFKVSdO6g62eoRMcDg==
@@ -6257,7 +6257,7 @@ es6-promise@^3.1.2, es6-promise@^3.2.1:
   resolved "https://registry.yarnpkg.com/es6-promise/-/es6-promise-3.3.1.tgz#a08cdde84ccdbf34d027a1451bc91d4bcd28a613"
   integrity sha1-oIzd6EzNvzTQJ6FFG8kdS80ophM=
 
-es6-promise@^4.0.3, es6-promise@^4.2.5:
+es6-promise@^4.0.3, es6-promise@^4.2.8:
   version "4.2.8"
   resolved "https://registry.yarnpkg.com/es6-promise/-/es6-promise-4.2.8.tgz#4eb21594c972bc40553d276e510539143db53e0a"
   integrity sha512-HJDGx5daxeIvxdBxvG2cb9g4tEvwIk3i8+nhX0yGrYmZUzbkdg8QbDevheDB8gd0//uPj4c1EQua8Q+MViT0/w==

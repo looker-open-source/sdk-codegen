@@ -39,7 +39,7 @@
     "@types/semver": "^7.3.4"
   },
   "dependencies": {
-    "@looker/chatty": "^2.2.0",
+    "@looker/chatty": "^2.3.0",
     "@looker/sdk": "^21.0.8",
     "@looker/sdk-rtl": "^21.0.8",
     "deepmerge": "^4.2.2",

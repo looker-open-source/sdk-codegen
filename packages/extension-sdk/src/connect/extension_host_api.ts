@@ -345,7 +345,7 @@ export class ExtensionHostApiImpl implements ExtensionHostApi {
         filename,
         lineno,
         colno,
-        error,
+        error: error && error.toString ? error.toString() : error,
       })
     } else {
       console.error(

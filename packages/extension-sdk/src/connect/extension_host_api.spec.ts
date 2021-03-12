@@ -379,7 +379,10 @@ describe('extension_host_api tests', () => {
     const hostApi = createHostApi()
     hostApi.error(new ErrorEvent('fake_error', errorDetail))
     expect(sendSpy).toHaveBeenCalledWith('EXTENSION_API_REQUEST', {
-      payload: errorDetail,
+      payload: {
+        ...errorDetail,
+        error: errorDetail.error.toString(),
+      },
       type: 'ERROR_EVENT',
     })
   })
