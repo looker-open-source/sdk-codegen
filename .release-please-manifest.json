@@ -1,16 +1,16 @@
 {
-  "packages/api-explorer": "21.0.7",
-  "packages/extension-api-explorer": "21.0.7",
-  "packages/extension-sdk": "21.0.7",
-  "packages/extension-sdk-react": "21.0.7",
-  "packages/hackathon": "21.0.7",
-  "packages/run-it": "21.0.7",
-  "packages/sdk": "21.0.7",
-  "packages/sdk-codegen": "21.0.8",
-  "packages/sdk-codegen-scripts": "21.0.7",
+  "packages/api-explorer": "21.1.0",
+  "packages/extension-api-explorer": "21.0.8",
+  "packages/extension-sdk": "21.0.8",
+  "packages/extension-sdk-react": "21.0.8",
+  "packages/hackathon": "21.0.8",
+  "packages/run-it": "21.0.8",
+  "packages/sdk": "21.1.0",
+  "packages/sdk-codegen": "21.1.0",
+  "packages/sdk-codegen-scripts": "21.0.8",
   "packages/sdk-codegen-utils": "21.0.7",
-  "packages/sdk-node": "21.0.7",
+  "packages/sdk-node": "21.0.8",
   "packages/sdk-rtl": "21.0.7",
-  "packages/wholly-sheet": "21.0.7",
-  "python": "21.0.0"
+  "packages/wholly-sheet": "21.0.8",
+  "python": "21.1.0"
 }
