@@ -27,7 +27,6 @@
 import * as fs from 'fs'
 import { danger, log } from '@looker/sdk-codegen-utils'
 import { IVersionInfo } from '@looker/sdk-codegen'
-import { ISDKConfigProps } from './sdkConfig'
 import { logConvertSpec } from './fetchSpec'
 import {
   MethodGenerator,
@@ -67,7 +66,7 @@ export const writeFile = (fileName: string, content: string): string => {
   try {
     for (const language of languages) {
       for (const api of apis) {
-        const p = JSON.parse(JSON.stringify(props)) as ISDKConfigProps
+        const p = { ...props }
         p.api_version = api
         const versions: IVersionInfo = {
           apiVersion: api,
