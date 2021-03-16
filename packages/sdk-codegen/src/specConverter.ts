@@ -72,6 +72,8 @@ export interface ILookerVersions {
   current_version: ISpecItem
   /** All API versions */
   supported_versions: ISpecItem[]
+  /** API server url */
+  api_server_url: string
 }
 
 /**

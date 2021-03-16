@@ -182,23 +182,9 @@ export const getUrl = async (
   options?: Partial<ITransportSettings>
 ) => {
   const xp = specTransport(props)
-  // log(`GETting ${url} ...`)
   return await sdkOk<string, Error>(
     xp.request('GET', url, undefined, undefined, undefined, options)
   )
-  //
-  // const response = await xp.rawRequest(
-  //   'GET',
-  //   url,
-  //   undefined,
-  //   undefined,
-  //   undefined,
-  //   options
-  // )
-  // if (!response.ok) {
-  //   throw new Error(response.body)
-  // }
-  // return response.body.toString()
 }
 
 export const authGetUrl = async (

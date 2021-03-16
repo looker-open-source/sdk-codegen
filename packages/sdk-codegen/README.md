@@ -2,6 +2,9 @@
 
 This package contains the OpenAPI analysis files, and all source code necessary to generate method and type declarations for supported languages.
 
+**DEPRECATED AND NOT SUPPORTED**: Looker does not support direct use of this package, other than via direct use in the
+[SDK Codegen project](https://github.com/looker-open-source/sdk-codegen) repository.
+
 ## Supported languages
 
 This package includes the following language generators:

@@ -26,13 +26,9 @@
 
 import * as fs from 'fs'
 import { danger, log } from '@looker/sdk-codegen-utils'
-import { IVersionInfo, ICodeGen, codeGenerators } from '@looker/sdk-codegen'
-import { ISDKConfigProps, SDKConfig } from './sdkConfig'
-import {
-  fetchLookerVersion,
-  fetchLookerVersions,
-  logConvertSpec,
-} from './fetchSpec'
+import { IVersionInfo } from '@looker/sdk-codegen'
+import { ISDKConfigProps } from './sdkConfig'
+import { logConvertSpec } from './fetchSpec'
 import {
   MethodGenerator,
   specFromFile,
@@ -40,23 +36,9 @@ import {
   TypeGenerator,
 } from './sdkGenerator'
 import { FilesFormatter } from './reformatter'
-import { isDirSync, quit } from './nodeUtils'
+import { quit } from './nodeUtils'
 import { getGenerator } from './languages'
-
-const apiVersions = (props: any) => {
-  const versions = props.api_versions ?? '3.1,4.0'
-  return versions.split(',')
-}
-
-/**
- * Ensures the existence
- * @param gen the SDK source code path
- */
-const sdkPathPrep = (gen: ICodeGen) => {
-  const path = `${gen.codePath}${gen.packagePath}/sdk/${gen.apiVersion}`
-  if (!isDirSync(path)) fs.mkdirSync(path, { recursive: true })
-  return path
-}
+import { prepGen, sdkPathPrep } from './utils'
 
 const formatter = new FilesFormatter()
 
@@ -66,54 +48,24 @@ const formatter = new FilesFormatter()
  * @param content contents to (over) write into source file
  * @returns the name of the file written
  */
-const writeFile = (fileName: string, content: string): string => {
+export const writeFile = (fileName: string, content: string): string => {
   fs.writeFileSync(fileName, content)
   formatter.addFile(fileName)
   return fileName
 }
 ;(async () => {
-  const args = process.argv.slice(2)
-  let languages = codeGenerators
-    .filter((l) => l.factory !== undefined)
-    .map((l) => l.language)
-  if (args.length > 0) {
-    if (args.toString().toLowerCase() !== 'all') {
-      languages = []
-      for (const arg of args) {
-        const values = arg.toString().split(',')
-        values.forEach((v) => (v.trim() ? languages.push(v.trim()) : null))
-      }
-    }
-  }
+  const {
+    name,
+    props,
+    languages,
+    apis,
+    lookerVersion,
+    lookerVersions,
+    lastApi,
+  } = await prepGen()
 
   try {
-    const config = SDKConfig()
     for (const language of languages) {
-      const [name, props] = Object.entries(config)[0]
-      let lookerVersions = {}
-      let lookerVersion = ''
-      try {
-        lookerVersions = await fetchLookerVersions(props)
-        lookerVersion = await fetchLookerVersion(props, lookerVersions)
-      } catch {
-        // Looker server may not be required, so default things for the generator
-        lookerVersions = {
-          supported_versions: [
-            {
-              version: '3.1',
-              swagger_url: `https://${props.base_url}/api/3.1/swagger.json`,
-            },
-            {
-              version: '4.0',
-              swagger_url: `https://${props.base_url}/api/4.0/swagger.json`,
-            },
-          ],
-        }
-        lookerVersion = ''
-      }
-      // Iterate through all specified API versions
-      const apis = apiVersions(props)
-      const lastApi = apis[apis.length - 1]
       for (const api of apis) {
         const p = JSON.parse(JSON.stringify(props)) as ISDKConfigProps
         p.api_version = api
@@ -135,7 +87,9 @@ const writeFile = (fileName: string, content: string): string => {
           )
           continue
         }
-        log(`generating ${language} from ${props.base_url} ${api}...`)
+        log(
+          `generating ${language} from ${props.base_url} ${api} (${oasFile})...`
+        )
 
         sdkPathPrep(gen)
         // Generate standard method declarations
