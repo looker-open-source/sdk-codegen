@@ -157,17 +157,3 @@ describe.skip('utils', () => {
     })
   })
 })
-
-describe('REMOVE THIS TEST', () => {
-  jest.unmock('fs')
-  test('TODO remove internal end to end test', async () => {
-    const verFile = path.resolve(
-      '/usr/local/google/home/kaster/Documents/helltool/test/core/versions.json'
-    )
-    const config = await prepGen([`-v`, verFile])
-    expect(config).toBeDefined()
-    const actual = await loadSpecs(config)
-    expect(actual).toBeDefined()
-    expect(config.apis).toEqual(['3.1', '4.0', '4.0u'])
-  })
-})
