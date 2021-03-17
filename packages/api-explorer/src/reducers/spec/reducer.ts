@@ -24,8 +24,7 @@
 
  */
 
-import { ApiModel } from '@looker/sdk-codegen'
-import { SpecItem, SpecItems } from '../../ApiExplorer'
+import { ApiModel, SpecItem, SpecList } from '@looker/sdk-codegen'
 import { fetchSpec } from './utils'
 
 export interface SpecState extends SpecItem {
@@ -36,7 +35,7 @@ export interface SpecState extends SpecItem {
 export interface SpecAction {
   type: string
   key: string
-  payload: SpecItems
+  payload: SpecList
 }
 
 export const specReducer = (

@@ -34,6 +34,7 @@
   },
   "dependencies": {
     "@looker/sdk-codegen-utils": "^21.0.8",
+    "@looker/sdk": "^21.0.8",
     "@looker/sdk-node": "^21.0.8",
     "@looker/sdk-rtl": "^21.0.8",
     "blueimp-md5": "^2.13.0",

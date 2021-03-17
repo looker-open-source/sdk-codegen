@@ -24,11 +24,25 @@
 
  */
 import fs from 'fs'
-import { codeGenerators, ICodeGen, ILookerVersions } from '@looker/sdk-codegen'
+import {
+  ApiModel,
+  codeGenerators,
+  findGenerator,
+  getSpecsFromVersions,
+  ICodeGen,
+  ILookerVersions,
+  SpecItem,
+} from '@looker/sdk-codegen'
 import { log } from '@looker/sdk-codegen-utils'
 import { isDirSync, readFileSync } from './nodeUtils'
 import { ISDKConfigProps, SDKConfig } from './sdkConfig'
-import { fetchLookerVersion, fetchLookerVersions } from './fetchSpec'
+import {
+  authGetUrl,
+  fetchLookerVersion,
+  fetchLookerVersions,
+  logConvertSpec,
+} from './fetchSpec'
+import { specFromFile } from './sdkGenerator'
 
 export const apiVersions = (props: any) => {
   const versions = props.api_versions ?? '3.1,4.0'
@@ -53,7 +67,7 @@ export interface IPrepGen {
   /** SDK config properties from the first section */
   props: ISDKConfigProps
   /** api specifications */
-  lookerVersions: any
+  lookerVersions: ILookerVersions
   /** Release version */
   lookerVersion: string
   /** Api version collection */
@@ -67,54 +81,15 @@ const generatorHelp = () => {
   process.exit(0)
 }
 
-// const foo = {
-//   looker_release_version: '21.0.25',
-//   current_version: {
-//     version: '3.1',
-//     full_version: '3.1.0',
-//     status: 'current',
-//     swagger_url: 'https://hack.looker.com:19999/api/3.1/swagger.json',
-//   },
-//   supported_versions: [
-//     {
-//       version: '2.99',
-//       full_version: '2.99.0',
-//       status: 'internal_test',
-//       swagger_url: 'https://hack.looker.com:19999/api/2.99/swagger.json',
-//     },
-//     {
-//       version: '3.0',
-//       full_version: '3.0.0',
-//       status: 'legacy',
-//       swagger_url: 'https://hack.looker.com:19999/api/3.0/swagger.json',
-//     },
-//     {
-//       version: '3.1',
-//       full_version: '3.1.0',
-//       status: 'current',
-//       swagger_url: 'https://hack.looker.com:19999/api/3.1/swagger.json',
-//     },
-//     {
-//       version: '4.0',
-//       full_version: '4.0.21.0',
-//       status: 'experimental',
-//       swagger_url: 'https://hack.looker.com:19999/api/4.0/swagger.json',
-//     },
-//   ],
-//   api_server_url: 'https://hack.looker.com:19999',
-// }
-
 /**
  * Process command-line switches for versions payload and languages
  * @param args
  */
 export const doArgs = (args: string[]) => {
-  let languages = codeGenerators
-    .filter((l) => l.factory !== undefined)
-    .map((l) => l.language)
   let versions: ILookerVersions | undefined
-  if (args.toString().toLowerCase() !== 'all') {
-    languages = []
+
+  const langs: string[] = []
+  if (args.length > 0 && args.toString().toLowerCase() !== 'all') {
     let i = 0
     while (i < args.length) {
       const arg = args[i].toLowerCase()
@@ -131,13 +106,28 @@ export const doArgs = (args: string[]) => {
         default:
           {
             const values = arg.split(',').filter((v) => v.trim())
-            values.forEach((v) => languages.push(v.trim()))
+            values.forEach((v) => {
+              const gen = findGenerator(v.trim())
+              if (gen) {
+                // Valid language match
+                langs.push(gen.language)
+              }
+            })
           }
           break
       }
       i++
     }
   }
+
+  // Default languages to all
+  const languages = (langs.length > 0
+    ? langs
+    : codeGenerators
+        .filter((l) => l.factory !== undefined)
+        .map((l) => l.language)
+  ).filter((value, index, all) => all.indexOf(value) === index)
+
   return { languages, versions }
 }
 
@@ -149,15 +139,17 @@ export const loadConfig = () => {
 
 /**
  * Prepare the generator configuration from all configuration options and return the config
+ * @param args command-line style arguments to parse. Defaults to process.argv.slice(2)
  */
-export const prepGen = async (): Promise<IPrepGen> => {
-  const args = process.argv.slice(2)
+export const prepGen = async (
+  args = process.argv.slice(2)
+): Promise<IPrepGen> => {
   const { languages, versions } = doArgs(args)
   const { name, props } = loadConfig()
   let lookerVersions = {}
   let lookerVersion = ''
   try {
-    lookerVersions = versions ? await fetchLookerVersions(props) : versions
+    lookerVersions = versions || (await fetchLookerVersions(props))
     lookerVersion = await fetchLookerVersion(props, lookerVersions)
   } catch {
     // Looker server may not be required, so default things for the generator
@@ -183,9 +175,44 @@ export const prepGen = async (): Promise<IPrepGen> => {
     name,
     props,
     languages,
-    lookerVersions,
+    lookerVersions: lookerVersions as ILookerVersions,
     lookerVersion,
     apis,
     lastApi,
   }
+}
+
+/**
+ * Load and save specifications from the versions file
+ * @param config generation configuration properties
+ * @param fetch false to skip fetching the spec, true to fetch. Defaults to true
+ */
+export const loadSpecs = async (config: IPrepGen, fetch = true) => {
+  const specFetch = async (spec: SpecItem) => {
+    if (!fetch) return undefined
+    if (!spec.specURL) return undefined
+    const content = await authGetUrl(config.props, spec.specURL)
+    const api = ApiModel.fromJson(content)
+    return api
+  }
+
+  const p = { ...config.props }
+
+  const specs = await getSpecsFromVersions(config.lookerVersions, specFetch)
+  // TODO Code smell? Reaching in and updating the api versions collection
+  config.apis = Object.keys(specs)
+  if (fetch) {
+    for (const api in config.apis) {
+      const spec = specs[api]
+      p.api_version = api
+      const oasFile = await logConvertSpec(
+        config.name,
+        p,
+        config.lookerVersions
+      )
+      spec.api = specFromFile(oasFile)
+    }
+  }
+
+  return specs
 }

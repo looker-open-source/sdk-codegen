@@ -245,7 +245,8 @@ export const fetchLookerVersion = async (
     }
   }
   const matches = versions.looker_release_version.match(/^\d+\.\d+/i)
-  return matches[0]
+  const release = matches[0].split('.', 2).join('.')
+  return release
 }
 
 /**

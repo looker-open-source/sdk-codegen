@@ -25,7 +25,7 @@
  */
 
 import { readFileSync } from 'fs'
-import { isEmpty } from 'lodash'
+import { cloneDeep, isEmpty } from 'lodash'
 import { NodeSettingsIniFile, LookerNodeSDK } from '@looker/sdk-node'
 import {
   fixConversion,
@@ -38,6 +38,7 @@ import {
   getSpecLinks,
   loadSpecs,
   ISpecItem,
+  getSpecsFromVersions,
 } from './specConverter'
 import { TestConfig } from './testUtils'
 import { compareSpecs } from './specDiff'
@@ -522,6 +523,103 @@ describe('spec conversion', () => {
       const right = ApiModel.fromString(spec)
       const diff = compareSpecs(left, right)
       expect(diff).toHaveLength(0)
+    })
+  })
+
+  describe('getSpecsFromVersions', () => {
+    const versions = {
+      looker_release_version: '21.3.0',
+      current_version: {
+        version: '3.1',
+        full_version: '3.1.0',
+        status: 'current',
+        swagger_url: 'http://localhost:19999/api/3.1/swagger.json',
+      },
+      supported_versions: [
+        {
+          version: '2.99',
+          full_version: '2.99.0',
+          status: 'internal_test',
+          swagger_url: 'http://localhost:19999/api/2.99/swagger.json',
+        },
+        {
+          version: '3.0',
+          full_version: '3.0.0',
+          status: 'legacy',
+          swagger_url: 'http://localhost:19999/api/3.0/swagger.json',
+        },
+        {
+          version: '3.1',
+          full_version: '3.1.0',
+          status: 'current',
+          swagger_url: 'http://localhost:19999/api/3.1/swagger.json',
+        },
+        {
+          version: '4.0',
+          full_version: '4.0.21.3',
+          status: 'experimental',
+          swagger_url: 'http://localhost:19999/api/4.0/swagger.json',
+        },
+      ],
+      api_server_url: 'http://localhost:19999',
+    }
+
+    test('only gets supported specifications', async () => {
+      const actual = await getSpecsFromVersions(versions)
+      expect(Object.keys(actual)).toEqual(['3.1', '4.0'])
+    })
+
+    test('current is the default spec', async () => {
+      const specs = await getSpecsFromVersions(versions)
+      const actual = Object.entries(specs).find(
+        ([_, a]) => a.status === 'current'
+      )
+      expect(actual).toBeDefined()
+      if (actual) {
+        const [, current] = actual
+        expect(current).toBeDefined()
+        expect(current.status).toEqual('current')
+        expect(current.isDefault).toEqual(true)
+      }
+    })
+
+    test('specs have unique keys', async () => {
+      const moar = cloneDeep(versions)
+      moar.supported_versions.push(
+        {
+          version: '4.0',
+          full_version: 'full',
+          status: 'un',
+          swagger_url: 'http://localhost:19999/api/4.0/u.json',
+        },
+        {
+          version: '4.0',
+          full_version: 'full',
+          status: 'un',
+          swagger_url: 'http://localhost:19999/api/4.0/un.json',
+        },
+        {
+          version: '4.0',
+          full_version: 'full',
+          status: 'un',
+          swagger_url: 'http://localhost:19999/api/4.0/un3.json',
+        },
+        {
+          version: '4.0',
+          full_version: 'full',
+          status: 'un',
+          swagger_url: 'http://localhost:19999/api/4.0/un4.json',
+        }
+      )
+      const actual = await getSpecsFromVersions(moar)
+      expect(Object.keys(actual)).toEqual([
+        '3.1',
+        '4.0',
+        '4.0u',
+        '4.0un',
+        '4.0un3',
+        '4.0un4',
+      ])
     })
   })
 })

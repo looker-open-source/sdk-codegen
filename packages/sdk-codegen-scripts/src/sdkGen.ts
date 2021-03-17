@@ -27,41 +27,31 @@
 import * as fs from 'fs'
 import { danger, log } from '@looker/sdk-codegen-utils'
 import { IVersionInfo } from '@looker/sdk-codegen'
-import { logConvertSpec } from './fetchSpec'
-import {
-  MethodGenerator,
-  specFromFile,
-  StreamGenerator,
-  TypeGenerator,
-} from './sdkGenerator'
+import { MethodGenerator, StreamGenerator, TypeGenerator } from './sdkGenerator'
 import { FilesFormatter } from './reformatter'
 import { quit } from './nodeUtils'
 import { getGenerator } from './languages'
-import { prepGen, sdkPathPrep } from './utils'
+import { loadSpecs, prepGen, sdkPathPrep } from './utils'
 
 const formatter = new FilesFormatter()
 
 /**
- * Writes the output file and registers it with the file reformatter for processing
+ * Writes the source code file and registers it with the file reformatter for processing
  * @param fileName name of source file
  * @param content contents to (over) write into source file
  * @returns the name of the file written
  */
-export const writeFile = (fileName: string, content: string): string => {
+export const writeCodeFile = (fileName: string, content: string): string => {
   fs.writeFileSync(fileName, content)
   formatter.addFile(fileName)
   return fileName
 }
 ;(async () => {
-  const {
-    name,
-    props,
-    languages,
-    apis,
-    lookerVersion,
-    lookerVersions,
-    lastApi,
-  } = await prepGen()
+  const config = await prepGen()
+  const { props, languages, apis, lookerVersion, lastApi } = config
+
+  // load the specifications and create the unique keys in case of spec API version overlap
+  const specs = await loadSpecs(config)
 
   try {
     for (const language of languages) {
@@ -72,9 +62,14 @@ export const writeFile = (fileName: string, content: string): string => {
           apiVersion: api,
           lookerVersion,
         }
-        const oasFile = await logConvertSpec(name, p, lookerVersions)
-        log(`Using specification ${oasFile} for code generation`)
-        const apiModel = specFromFile(oasFile)
+        const spec = specs[api]
+        const apiModel = spec.api
+        if (!apiModel) {
+          danger(
+            `Could not fetch or compile apiModel for ${api} ${spec.specURL}`
+          )
+          continue
+        }
         const gen = getGenerator(language, apiModel, versions)
         if (!gen) {
           danger(`${language} does not have a code generator defined`)
@@ -86,26 +81,24 @@ export const writeFile = (fileName: string, content: string): string => {
           )
           continue
         }
-        log(
-          `generating ${language} from ${props.base_url} ${api} (${oasFile})...`
-        )
+        log(`generating ${language} from ${props.base_url} ${api} ...`)
 
         sdkPathPrep(gen)
         // Generate standard method declarations
         const sdk = new MethodGenerator(apiModel, gen)
         let output = sdk.render(gen.indentStr)
-        writeFile(gen.sdkFileName(`methods`), output)
+        writeCodeFile(gen.sdkFileName(`methods`), output)
 
         if (gen.willItStream) {
           // Generate streaming method declarations
           const s = new StreamGenerator(apiModel, gen)
           const output = s.render(gen.indentStr)
-          writeFile(gen.sdkFileName(`streams`), output)
+          writeCodeFile(gen.sdkFileName(`streams`), output)
         }
 
         const types = new TypeGenerator(apiModel, gen)
         output = types.render('')
-        writeFile(gen.sdkFileName(`models`), output)
+        writeCodeFile(gen.sdkFileName(`models`), output)
         formatter.versionStamp(gen)
       }
     }

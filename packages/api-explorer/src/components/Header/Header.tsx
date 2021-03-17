@@ -35,13 +35,13 @@ import {
   Header as SemanticHeader,
 } from '@looker/components'
 
-import { SpecItems } from '../../ApiExplorer'
+import { SpecList } from '@looker/sdk-codegen'
 import { SpecState, SpecAction } from '../../reducers'
 import { diffPath } from '../../utils'
 import { ApiSpecSelector } from './ApiSpecSelector'
 
 interface HeaderProps {
-  specs: SpecItems
+  specs: SpecList
   spec: SpecState
   specDispatch: Dispatch<SpecAction>
   toggleNavigation: (target?: boolean) => void

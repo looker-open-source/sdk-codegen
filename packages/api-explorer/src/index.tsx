@@ -28,11 +28,10 @@ import React from 'react'
 import { BrowserRouter as Router } from 'react-router-dom'
 import ReactDOM from 'react-dom'
 
-import { ApiModel } from '@looker/sdk-codegen'
-import { SpecItems } from './ApiExplorer'
+import { ApiModel, SpecList } from '@looker/sdk-codegen'
 import { StandaloneApiExplorer } from './StandaloneApiExplorer'
 
-export const specs: SpecItems = {
+export const specs: SpecList = {
   '3.1': {
     status: 'current',
     specURL: 'https://self-signed.looker.com:19999/api/3.1/swagger.json',

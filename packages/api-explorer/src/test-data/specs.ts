@@ -23,12 +23,11 @@
  SOFTWARE.
 
  */
-import { ApiModel } from '@looker/sdk-codegen'
+import { ApiModel, SpecList } from '@looker/sdk-codegen'
 
-import { SpecItems } from '../ApiExplorer'
 import { initDefaultSpecState } from '../reducers'
 
-export const specs: SpecItems = {
+export const specs: SpecList = {
   '3.1': {
     status: 'current',
     specURL: 'https://self-signed.looker.com:19999/api/3.1/swagger.json',
