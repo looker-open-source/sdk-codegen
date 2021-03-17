@@ -428,6 +428,9 @@ export function addQueryParams(path: string, obj?: Values) {
  * @returns a new `Error` object with the failure message
  */
 export function sdkError(response: any) {
+  if (typeof response === 'string') {
+    return new Error(response)
+  }
   if ('error' in response) {
     const error = response.error
     if (typeof error === 'string') {

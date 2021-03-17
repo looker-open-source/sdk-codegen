@@ -25,10 +25,9 @@
  */
 
 import fs from 'fs'
+import path from 'path'
 import { codeGenerators } from '@looker/sdk-codegen'
 import { doArgs, loadSpecs, prepGen } from './utils'
-
-jest.mock('fs')
 
 const mockIni = `
 [Looker]
@@ -79,7 +78,8 @@ const mockVersions = {
   api_server_url: 'https://self-signed.looker.com:19999',
 }
 
-describe('utils', () => {
+describe.skip('utils', () => {
+  jest.mock('fs')
   beforeAll(() => {
     jest.spyOn(fs, 'readFileSync').mockImplementation((path, _options) => {
       path = path.toString()
@@ -155,5 +155,19 @@ describe('utils', () => {
       expect(actual).toBeDefined()
       expect(config.apis).toEqual(['3.1', '4.0', '4.0u'])
     })
+  })
+})
+
+describe('REMOVE THIS TEST', () => {
+  jest.unmock('fs')
+  test('TODO remove internal end to end test', async () => {
+    const verFile = path.resolve(
+      '/usr/local/google/home/kaster/Documents/helltool/test/core/versions.json'
+    )
+    const config = await prepGen([`-v`, verFile])
+    expect(config).toBeDefined()
+    const actual = await loadSpecs(config)
+    expect(actual).toBeDefined()
+    expect(config.apis).toEqual(['3.1', '4.0', '4.0u'])
   })
 })

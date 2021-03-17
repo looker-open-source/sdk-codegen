@@ -32,6 +32,7 @@ import {
   ICodeGen,
   ILookerVersions,
   SpecItem,
+  upgradeSpecObject,
 } from '@looker/sdk-codegen'
 import { log } from '@looker/sdk-codegen-utils'
 import { isDirSync, readFileSync } from './nodeUtils'
@@ -77,7 +78,7 @@ export interface IPrepGen {
 }
 
 const generatorHelp = () => {
-  log(`sdkGen [languages...] -v|--versions <versions file> -h|--help`)
+  log(`sdkGen [languages...] [-v|--versions <versions file>] [-h|--help]`)
   process.exit(0)
 }
 
@@ -96,8 +97,11 @@ export const doArgs = (args: string[]) => {
       switch (arg) {
         case '-v':
         case '--versions':
-          i++
-          versions = JSON.parse(readFileSync(args[i]))
+          {
+            i++
+            const content = readFileSync(args[i], 'utf8')
+            versions = JSON.parse(content)
+          }
           break
         case '-h':
         case '--help':
@@ -202,15 +206,26 @@ export const loadSpecs = async (config: IPrepGen, fetch = true) => {
   // TODO Code smell? Reaching in and updating the api versions collection
   config.apis = Object.keys(specs)
   if (fetch) {
-    for (const api in config.apis) {
+    for (const api of config.apis) {
       const spec = specs[api]
-      p.api_version = api
-      const oasFile = await logConvertSpec(
-        config.name,
-        p,
-        config.lookerVersions
-      )
-      spec.api = specFromFile(oasFile)
+      if (!spec.specURL) {
+        continue
+      }
+      const url = new URL(spec.specURL)
+      if (url.protocol === 'file:') {
+        // Working off local file specifications
+        const content = readFileSync(url.pathname)
+        const json = JSON.parse(content)
+        spec.api = ApiModel.fromJson(upgradeSpecObject(json))
+      } else {
+        p.api_version = api
+        const oasFile = await logConvertSpec(
+          config.name,
+          p,
+          config.lookerVersions
+        )
+        spec.api = specFromFile(oasFile)
+      }
     }
   }
 

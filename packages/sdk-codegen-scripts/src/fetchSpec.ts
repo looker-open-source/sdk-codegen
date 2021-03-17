@@ -34,7 +34,14 @@ import {
   sdkError,
 } from '@looker/sdk-rtl'
 import { NodeTransport } from '@looker/sdk-node'
-import { fail, quit, isFileSync, utf8Encoding, isDirSync } from './nodeUtils'
+import {
+  fail,
+  quit,
+  isFileSync,
+  utf8Encoding,
+  isDirSync,
+  readFileSync,
+} from './nodeUtils'
 import { ISDKConfigProps } from './sdkConfig'
 import { convertSpec } from './convert'
 
@@ -99,16 +106,18 @@ export const swaggerFileUrl = (props: ISDKConfigProps, versions: any) => {
   return version.swagger_url
 }
 
-export const openApiFileUrl = (props: ISDKConfigProps, versions: any) => {
-  const apiVersion = props.api_version
-  if (!versions) {
-    return ''
-  }
-  const version: any = supportedVersion(apiVersion, versions)
-  if (!version) {
-    throw sdkError(`${apiVersion} is not a supported version`)
-  }
-  return version.openapi_url
+export const openApiFileUrl = (_props: ISDKConfigProps, _versions: any) => {
+  // TODO enabled this if openapi_url is ever surfaced from Looker /versions
+  return undefined
+  // const apiVersion = props.api_version
+  // if (!versions) {
+  //   return ''
+  // }
+  // const version: any = supportedVersion(apiVersion, versions)
+  // if (!version) {
+  //   throw sdkError(`${apiVersion} is not a supported version`)
+  // }
+  // return version.openapi_url
 }
 
 export const specPath = 'spec'
@@ -176,11 +185,23 @@ NOTE! Certificate validation can be disabled with:
   return false
 }
 
+/**
+ * gets either an http(s) url, or a file URL by reading directly if it's a file url
+ * @param props SDK configuration props
+ * @param url to fetch
+ * @param options for transport call
+ */
 export const getUrl = async (
   props: ISDKConfigProps,
   url: string,
   options?: Partial<ITransportSettings>
 ) => {
+  const ref = new URL(url)
+
+  if (ref.protocol === 'file:') {
+    return readFileSync(ref.pathname)
+  }
+
   const xp = specTransport(props)
   return await sdkOk<string, Error>(
     xp.request('GET', url, undefined, undefined, undefined, options)
@@ -245,8 +266,7 @@ export const fetchLookerVersion = async (
     }
   }
   const matches = versions.looker_release_version.match(/^\d+\.\d+/i)
-  const release = matches[0].split('.', 2).join('.')
-  return release
+  return matches[0]
 }
 
 /**

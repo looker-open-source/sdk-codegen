@@ -639,8 +639,9 @@ export const loadSpecs = async (sdk: APIMethods, links: SpecLinks) => {
   for (const spec of links) {
     if (isEmpty(spec.api)) {
       // Not parsed yet
-      const content = upgradeSpec(await sdk.ok(sdk.get(spec.url)))
-      spec.api = ApiModel.fromString(content)
+      const content = await sdk.ok<string, Error>(sdk.get(spec.url))
+      const json = JSON.parse(content)
+      spec.api = ApiModel.fromJson(upgradeSpecObject(json))
     }
   }
   return links
