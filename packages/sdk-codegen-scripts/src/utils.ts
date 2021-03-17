@@ -23,19 +23,17 @@
  SOFTWARE.
 
  */
-import fs from 'fs'
 import {
   ApiModel,
   codeGenerators,
   findGenerator,
   getSpecsFromVersions,
-  ICodeGen,
   ILookerVersions,
   SpecItem,
   upgradeSpecObject,
 } from '@looker/sdk-codegen'
 import { log } from '@looker/sdk-codegen-utils'
-import { isDirSync, readFileSync } from './nodeUtils'
+import { readFileSync } from './nodeUtils'
 import { ISDKConfigProps, SDKConfig } from './sdkConfig'
 import {
   authGetUrl,
@@ -50,17 +48,7 @@ export const apiVersions = (props: any) => {
   return versions.split(',')
 }
 
-/**
- * Ensures the existence of the sdk generation path
- * @param gen the SDK source code path
- */
-export const sdkPathPrep = (gen: ICodeGen) => {
-  const path = `${gen.codePath}${gen.packagePath}/sdk/${gen.apiVersion}`
-  if (!isDirSync(path)) fs.mkdirSync(path, { recursive: true })
-  return path
-}
-
-export interface IPrepGen {
+export interface IGenProps {
   /** Languages to generate */
   languages: string[]
   /** name of first INI config section, used for package name */
@@ -135,6 +123,9 @@ export const doArgs = (args: string[]) => {
   return { languages, versions }
 }
 
+/**
+ * Load the default configuration settings from looker.ini
+ */
 export const loadConfig = () => {
   const config = SDKConfig()
   const [name, props] = Object.entries(config)[0]
@@ -143,14 +134,12 @@ export const loadConfig = () => {
 
 /**
  * Prepare the generator configuration from all configuration options and return the config
- * @param args command-line style arguments to parse. Defaults to process.argv.slice(2)
+ * @param args command-line style arguments to parse.
  */
-export const prepGen = async (
-  args = process.argv.slice(2)
-): Promise<IPrepGen> => {
+export const prepGen = async (args: string[]): Promise<IGenProps> => {
   const { languages, versions } = doArgs(args)
   const { name, props } = loadConfig()
-  let lookerVersions = {}
+  let lookerVersions
   let lookerVersion = ''
   try {
     lookerVersions = versions || (await fetchLookerVersions(props))
@@ -161,10 +150,14 @@ export const prepGen = async (
       supported_versions: [
         {
           version: '3.1',
+          status: 'stable',
+          full_version: '',
           swagger_url: `https://${props.base_url}/api/3.1/swagger.json`,
         },
         {
           version: '4.0',
+          status: 'experimental',
+          full_version: '',
           swagger_url: `https://${props.base_url}/api/4.0/swagger.json`,
         },
       ],
@@ -175,7 +168,7 @@ export const prepGen = async (
   const apis = apiVersions(props)
   const lastApi = apis[apis.length - 1]
 
-  return {
+  const result = {
     name,
     props,
     languages,
@@ -184,6 +177,8 @@ export const prepGen = async (
     apis,
     lastApi,
   }
+  console.log(JSON.stringify(result, null, 2))
+  return result
 }
 
 /**
@@ -191,7 +186,7 @@ export const prepGen = async (
  * @param config generation configuration properties
  * @param fetch false to skip fetching the spec, true to fetch. Defaults to true
  */
-export const loadSpecs = async (config: IPrepGen, fetch = true) => {
+export const loadSpecs = async (config: IGenProps, fetch = true) => {
   const specFetch = async (spec: SpecItem) => {
     if (!fetch) return undefined
     if (!spec.specURL) return undefined

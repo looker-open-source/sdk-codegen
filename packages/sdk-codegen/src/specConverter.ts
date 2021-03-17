@@ -52,8 +52,10 @@ export interface MimeFormats {
 /** codegen specification item */
 export interface SpecItem {
   status: string // 'current' | 'deprecated' | 'experimental' | 'stable'
+  /** API version of spec */
+  version: string
   /** true if this is the default spec */
-  isDefault?: boolean
+  isDefault: boolean
   /** Compiled version of spec */
   api?: ApiModel
   /** URL for retrieving spec */
@@ -126,6 +128,7 @@ export const getSpecsFromVersions = async (
         ) {
           const spec: SpecItem = {
             status: v.status,
+            version: v.version,
             isDefault: v.status === 'current',
             specURL: v.swagger_url,
           }

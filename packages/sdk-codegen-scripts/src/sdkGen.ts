@@ -25,13 +25,14 @@
  */
 
 import * as fs from 'fs'
+import path from 'path'
 import { danger, log } from '@looker/sdk-codegen-utils'
 import { IVersionInfo } from '@looker/sdk-codegen'
 import { MethodGenerator, StreamGenerator, TypeGenerator } from './sdkGenerator'
 import { FilesFormatter } from './reformatter'
-import { quit } from './nodeUtils'
+import { isDirSync, quit } from './nodeUtils'
 import { getGenerator } from './languages'
-import { loadSpecs, prepGen, sdkPathPrep } from './utils'
+import { loadSpecs, prepGen } from './utils'
 
 const formatter = new FilesFormatter()
 
@@ -42,12 +43,15 @@ const formatter = new FilesFormatter()
  * @returns the name of the file written
  */
 export const writeCodeFile = (fileName: string, content: string): string => {
+  const filePath = path.dirname(fileName)
+  if (!isDirSync(filePath)) fs.mkdirSync(filePath, { recursive: true })
+
   fs.writeFileSync(fileName, content)
   formatter.addFile(fileName)
   return fileName
 }
 ;(async () => {
-  const config = await prepGen()
+  const config = await prepGen(process.argv.slice(2))
   const { props, languages, lookerVersion, lastApi } = config
 
   // load the specifications and create the unique keys in case of spec API version overlap
@@ -58,13 +62,14 @@ export const writeCodeFile = (fileName: string, content: string): string => {
   try {
     for (const language of languages) {
       for (const api of apis) {
+        const spec = specs[api]
         const p = { ...props }
         p.api_version = api
         const versions: IVersionInfo = {
-          apiVersion: api,
+          spec,
           lookerVersion,
+          specKey: api,
         }
-        const spec = specs[api]
         const apiModel = spec.api
         if (!apiModel) {
           danger(
@@ -85,7 +90,6 @@ export const writeCodeFile = (fileName: string, content: string): string => {
         }
         log(`generating ${language} from ${props.base_url} ${api} ...`)
 
-        sdkPathPrep(gen)
         // Generate standard method declarations
         const sdk = new MethodGenerator(apiModel, gen)
         let output = sdk.render(gen.indentStr)
@@ -101,7 +105,9 @@ export const writeCodeFile = (fileName: string, content: string): string => {
         const types = new TypeGenerator(apiModel, gen)
         output = types.render('')
         writeCodeFile(gen.sdkFileName(`models`), output)
-        formatter.versionStamp(gen)
+        if (api === lastApi) {
+          formatter.versionStamp(gen)
+        }
       }
     }
     // finally, reformat all the files that have been generated

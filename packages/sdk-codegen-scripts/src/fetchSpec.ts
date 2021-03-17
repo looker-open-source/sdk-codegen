@@ -323,7 +323,8 @@ export const getVersionInfo = async (
   try {
     const lookerVersion = await fetchLookerVersion(props)
     return {
-      apiVersion: props.api_version,
+      specKey: props.api_version,
+      spec: { version: props.api_version, isDefault: false, status: 'mocked' },
       lookerVersion,
     }
   } catch (e) {

@@ -205,7 +205,7 @@ class KotlinFormatter extends BaseFormatter {
       )
       content = content.replace(
         apiPattern,
-        `API_VERSION = "${gen.versions.apiVersion}"`
+        `API_VERSION = "${gen.versions.spec.version}"`
       )
       content = content.replace(
         envPattern,
@@ -213,7 +213,7 @@ class KotlinFormatter extends BaseFormatter {
       )
       writeFile(stampFile, content)
       return success(
-        `updated ${stampFile} to ${gen.versions.apiVersion}.${gen.versions.lookerVersion}`
+        `updated ${stampFile} to ${gen.versions.spec.version}.${gen.versions.lookerVersion}`
       )
     }
     return this.skipping()
@@ -242,7 +242,7 @@ class SwiftFormatter extends BaseFormatter {
       )
       content = content.replace(
         apiPattern,
-        `apiVersion = "${gen.versions.apiVersion}"`
+        `apiVersion = "${gen.versions.spec.version}"`
       )
       content = content.replace(
         envPattern,
@@ -250,7 +250,7 @@ class SwiftFormatter extends BaseFormatter {
       )
       writeFile(stampFile, content)
       return success(
-        `updated ${stampFile} to ${gen.versions.apiVersion}.${gen.versions.lookerVersion}`
+        `updated ${stampFile} to ${gen.versions.spec.version}.${gen.versions.lookerVersion}`
       )
     }
     return this.skipping()
@@ -279,7 +279,7 @@ class CsharpFormatter extends BaseFormatter {
       )
       content = content.replace(
         apiPattern,
-        `ApiVersion = "${gen.versions.apiVersion}"`
+        `ApiVersion = "${gen.versions.spec.version}"`
       )
       content = content.replace(
         envPattern,
@@ -287,7 +287,7 @@ class CsharpFormatter extends BaseFormatter {
       )
       writeFile(stampFile, content)
       return success(
-        `updated ${stampFile} to ${gen.versions.apiVersion}.${gen.versions.lookerVersion}`
+        `updated ${stampFile} to ${gen.versions.spec.version}.${gen.versions.lookerVersion}`
       )
     }
     return this.skipping()

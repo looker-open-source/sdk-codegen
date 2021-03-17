@@ -25,7 +25,6 @@
  */
 
 import fs from 'fs'
-import path from 'path'
 import { codeGenerators } from '@looker/sdk-codegen'
 import { doArgs, loadSpecs, prepGen } from './utils'
 
@@ -128,6 +127,44 @@ describe.skip('utils', () => {
   })
 
   describe('prepGen', () => {
+    test('default prepGen', async () => {
+      const expLangs = codeGenerators
+        .filter((l) => l.factory !== undefined)
+        .map((l) => l.language)
+      const release = mockVersions.looker_release_version
+        .split('.', 2)
+        .join('.')
+      const actual = await prepGen([])
+      expect(actual).toBeDefined()
+      expect(actual.languages).toEqual(expLangs)
+      expect(actual.lookerVersion).toEqual(release)
+      expect(actual.lookerVersions).toEqual(mockVersions)
+      expect(actual.apis).toEqual(['3.1', '4.0'])
+      expect(actual.name).toEqual('Looker')
+      expect(actual.lastApi).toEqual('4.0')
+      expect(actual.props.base_url).toEqual(
+        'https://self-signed.looker.com:19999'
+      )
+    })
+    test('prepGen ts', async () => {
+      const expLangs = codeGenerators
+        .filter((l) => l.factory !== undefined)
+        .map((l) => l.language)
+      const release = mockVersions.looker_release_version
+        .split('.', 2)
+        .join('.')
+      const actual = await prepGen(['ts'])
+      expect(actual).toBeDefined()
+      expect(actual.languages).toEqual(expLangs)
+      expect(actual.lookerVersion).toEqual(release)
+      expect(actual.lookerVersions).toEqual(mockVersions)
+      expect(actual.apis).toEqual(['3.1', '4.0'])
+      expect(actual.name).toEqual('Looker')
+      expect(actual.lastApi).toEqual('4.0')
+      expect(actual.props.base_url).toEqual(
+        'https://self-signed.looker.com:19999'
+      )
+    })
     test('-v foo.json ts', async () => {
       const langs = ['Typescript']
       const release = mockVersions.looker_release_version
@@ -154,6 +191,13 @@ describe.skip('utils', () => {
       const actual = await loadSpecs(config, false)
       expect(actual).toBeDefined()
       expect(config.apis).toEqual(['3.1', '4.0', '4.0u'])
+    })
+    test('no version, with ts', async () => {
+      const config = await prepGen(['ts'])
+      expect(config).toBeDefined()
+      const actual = await loadSpecs(config, false)
+      expect(actual).toBeDefined()
+      expect(config.apis).toEqual(['3.1', '4.0'])
     })
   })
 })
