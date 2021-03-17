@@ -48,10 +48,12 @@ export const writeCodeFile = (fileName: string, content: string): string => {
 }
 ;(async () => {
   const config = await prepGen()
-  const { props, languages, apis, lookerVersion, lastApi } = config
+  const { props, languages, lookerVersion, lastApi } = config
 
   // load the specifications and create the unique keys in case of spec API version overlap
   const specs = await loadSpecs(config)
+  const apis = config.apis
+  log(`generating ${languages.join(',')} SDKs for APIs ${apis}`)
 
   try {
     for (const language of languages) {
