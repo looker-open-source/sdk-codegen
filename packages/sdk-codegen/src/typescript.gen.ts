@@ -67,7 +67,7 @@ export class TypescriptGen extends CodeGen {
   useNamedArguments = false
 
   sdkFileName(baseFileName: string) {
-    return this.fileName(`${this.versions?.specKey}/${baseFileName}`)
+    return this.fileName(`${this.versions?.spec.key}/${baseFileName}`)
   }
 
   methodsPrologue(_indent: string) {

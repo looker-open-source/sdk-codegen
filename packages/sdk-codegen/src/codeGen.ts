@@ -45,7 +45,6 @@ import { SpecItem } from './specConverter'
 
 export interface IVersionInfo {
   lookerVersion: string
-  specKey: string
   spec: SpecItem
 }
 
@@ -679,8 +678,8 @@ export abstract class CodeGen implements ICodeGen {
   constructor(public api: ApiModel, public versions?: IVersionInfo) {
     if (versions && versions.spec) {
       this.apiVersion = versions.spec.version
-      this.apiPath = `/${versions.specKey}`
-      this.apiRef = versions.specKey.replace('.', '')
+      this.apiPath = `/${versions.spec.key}`
+      this.apiRef = versions.spec.key.replace('.', '')
       this.packageName = this.supportsMultiApi()
         ? `Looker${this.apiRef}SDK`
         : `LookerSDK`

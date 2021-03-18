@@ -26,6 +26,7 @@
 
 import * as fs from 'fs'
 import { execSync, ExecSyncOptionsWithStringEncoding } from 'child_process'
+import path from 'path'
 import { warn } from '@looker/sdk-codegen-utils'
 
 const utf8: BufferEncoding = 'utf-8'
@@ -58,6 +59,30 @@ export const isDirSync = (filePath: string) => {
       throw e
     }
   }
+}
+
+const homeToRoost = '../../../'
+
+export const getRootPath = () => path.join(__dirname, homeToRoost)
+export const rootFile = (fileName = '') => path.join(getRootPath(), fileName)
+
+/**
+ * Creates the directory if needed, converts content to JSON string, writes file
+ *
+ * @param fileName to write that may include a relative path
+ * @param {object | string} content to convert to a JSON string
+ * @returns name of file written
+ */
+export const createJsonFile = (
+  fileName: string,
+  content: Record<string, unknown> | string
+) => {
+  const fullName = rootFile(fileName)
+  const dir = path.dirname(fullName)
+  const data = typeof content === 'string' ? content : JSON.stringify(content)
+  if (!isDirSync(dir)) fs.mkdirSync(dir, { recursive: true })
+  fs.writeFileSync(fullName, data, utf8Encoding)
+  return fullName
 }
 
 export const isFileSync = (filePath: string) => {

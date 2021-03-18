@@ -27,6 +27,7 @@
 import { log, success } from '@looker/sdk-codegen-utils'
 import { fixConversion, swapXLookerTags } from '@looker/sdk-codegen'
 import {
+  createJsonFile,
   fail,
   isFileSync,
   quit,
@@ -34,7 +35,6 @@ import {
   run,
   writeFileSync,
 } from './nodeUtils'
-import { writeSpecFile } from './fetchSpec'
 
 /**
  * Replaces Looker-specific tags with OpenAPI equivalents
@@ -95,7 +95,7 @@ export const convertSpec = (
   }
   const source = swapXLookerTagsInFile(openApiFilename)
   const result = fixConversion(source, readFileSync(specFileName))
-  writeSpecFile(openApiFilename, result.spec)
+  createJsonFile(openApiFilename, result.spec)
   success(`${openApiFilename} has ${result.fixes.length} fixes`)
   return openApiFilename
 }

@@ -33,6 +33,7 @@ import { StandaloneApiExplorer } from './StandaloneApiExplorer'
 
 export const specs: SpecList = {
   '3.1': {
+    key: '3.1',
     status: 'current',
     version: '3.1',
     specURL: 'https://self-signed.looker.com:19999/api/3.1/swagger.json',
@@ -40,6 +41,7 @@ export const specs: SpecList = {
     isDefault: false,
   },
   '4.0': {
+    key: '4.0',
     status: 'experimental',
     version: '4.0',
     specURL: 'https://self-signed.looker.com:19999/api/4.0/swagger.json',

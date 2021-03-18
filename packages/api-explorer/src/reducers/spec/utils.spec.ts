@@ -38,10 +38,30 @@ import {
 describe('Spec reducer utils', () => {
   const spec = specs['3.1']
   const specList: SpecList = {
-    defaultKey: { status: 'experimental', isDefault: true },
-    deprecatedKey: { status: 'deprecated' },
-    currentKey: { status: 'current' },
-    stableKey: { status: 'stable' },
+    defaultKey: {
+      key: 'defaultKey',
+      version: '4.0',
+      status: 'experimental',
+      isDefault: true,
+    },
+    deprecatedKey: {
+      key: 'deprecatedKey',
+      version: '3.0',
+      status: 'deprecated',
+      isDefault: false,
+    },
+    currentKey: {
+      key: 'currentKey',
+      version: '3.1',
+      status: 'current',
+      isDefault: false,
+    },
+    stableKey: {
+      key: 'stableKey',
+      version: '3.1',
+      status: 'stable',
+      isDefault: false,
+    },
   }
 
   describe('parseSpec', () => {
@@ -118,14 +138,25 @@ describe('Spec reducer utils', () => {
   describe('fetchSpec', () => {
     const specList: SpecList = {
       fromModel: {
+        key: 'fromModel',
         status: 'experimental',
+        isDefault: false,
         api: ApiModel.fromJson(specs['3.1'].specContent),
+        version: 'model',
       },
       fromSpecContent: {
+        key: 'fromSpecContent',
         status: 'current',
+        isDefault: true,
         specContent: specs['3.1'].specContent,
+        version: 'spec',
       },
-      emptySpecItem: { status: 'deprecated' },
+      emptySpecItem: {
+        key: 'emptySpecItem',
+        status: 'deprecated',
+        isDefault: false,
+        version: 'empty',
+      },
     }
 
     test('it uses api model if found ', () => {

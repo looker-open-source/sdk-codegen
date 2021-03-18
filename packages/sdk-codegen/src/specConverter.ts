@@ -51,6 +51,9 @@ export interface MimeFormats {
 
 /** codegen specification item */
 export interface SpecItem {
+  /** Key for specification in collection. Duplicated for atomic passing */
+  key: string
+  /** API version status */
   status: string // 'current' | 'deprecated' | 'experimental' | 'stable'
   /** API version of spec */
   version: string
@@ -127,6 +130,7 @@ export const getSpecsFromVersions = async (
           v.status !== 'legacy'
         ) {
           const spec: SpecItem = {
+            key: '?',
             status: v.status,
             version: v.version,
             isDefault: v.status === 'current',
@@ -135,8 +139,8 @@ export const getSpecsFromVersions = async (
           if (fetcher) {
             spec.api = await fetcher(spec)
           }
-          const specKey = uniqueId(v)
-          items[specKey] = spec
+          spec.key = uniqueId(v)
+          items[spec.key] = spec
         }
       }
     }
@@ -557,6 +561,7 @@ export const upgradeSpecObject = (spec: any) => {
     return JSON.parse(swapXLookerTags(JSON.stringify(spec)))
   }
   if (!isSwagger(spec)) {
+    console.log({ spec })
     throw new Error('Input is not a Swagger or OpenAPI specification')
   }
   const cleanup = swapRef(swapXLookerTags(JSON.stringify(spec)))
@@ -565,8 +570,8 @@ export const upgradeSpecObject = (spec: any) => {
   const produces = spec.produces || [appJson]
   const formats = { produces, consumes }
   const { paths, requestBodies } = convertPathsAndBodies(spec.paths, formats)
-  // TODO create a requestBodies entry for every struct used > 1x
-  // TODO reassign op.requestBody for all requestBodies entries
+  // TODO create a requestBodies entry for every struct used > 1x?
+  // TODO reassign op.requestBody for all requestBodies entries?
   const schemas = convertDefs(spec.definitions)
   const api = {
     openapi: '3.0.0',

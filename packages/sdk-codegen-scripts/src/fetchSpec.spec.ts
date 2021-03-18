@@ -24,13 +24,12 @@
 
  */
 
+import { getSpecsFromVersions } from '@looker/sdk-codegen'
 import { TestConfig } from './testUtils'
 import {
-  authGetUrl,
   fetchLookerVersions,
   getVersionInfo,
   login,
-  swaggerFileUrl,
   supportedVersion,
   logConvertSpec,
   fetchLookerVersion,
@@ -70,7 +69,7 @@ describe('fetch operations', () => {
     expect(version).toBeDefined()
     if (version) {
       expect(version.lookerVersion).toBeDefined()
-      expect(version.apiVersion).toBeDefined()
+      expect(version.spec).toBeDefined()
     }
   })
 
@@ -96,24 +95,17 @@ describe('fetch operations', () => {
     }
   })
 
-  it('authGetUrl', async () => {
-    expect(props).toBeDefined()
-    const versions = await fetchLookerVersions(props)
-    const fileUrl = (swaggerFileUrl(props, versions) as string).replace(
-      versions.api_server_url,
-      props.base_url
-    )
-    const content = await authGetUrl(props, fileUrl)
-    expect(content).toBeDefined()
-    expect(content.swagger).toBeDefined()
-    expect(content.swagger).toEqual('2.0')
-  })
-
   it('logConvertSpec', async () => {
     expect(props).toBeDefined()
     const name = 'Looker'
     const lookerVersions = await fetchLookerVersions(props)
-    const actual = await logConvertSpec(name, props, lookerVersions, true)
+    const specs = await getSpecsFromVersions(lookerVersions)
+    const actual = await logConvertSpec(
+      name,
+      specs[props.api_version],
+      lookerVersions,
+      true
+    )
     expect(actual).toBeDefined()
     expect(actual.length).toBeGreaterThan(0)
   })

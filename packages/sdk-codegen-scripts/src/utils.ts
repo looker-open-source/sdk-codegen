@@ -23,6 +23,7 @@
  SOFTWARE.
 
  */
+
 import {
   ApiModel,
   codeGenerators,
@@ -33,15 +34,16 @@ import {
   upgradeSpecObject,
 } from '@looker/sdk-codegen'
 import { log } from '@looker/sdk-codegen-utils'
-import { readFileSync } from './nodeUtils'
+import { createJsonFile, readFileSync } from './nodeUtils'
 import { ISDKConfigProps, SDKConfig } from './sdkConfig'
 import {
   authGetUrl,
   fetchLookerVersion,
   fetchLookerVersions,
-  logConvertSpec,
+  openApiFileName,
+  specPath,
+  swaggerFileName,
 } from './fetchSpec'
-import { specFromFile } from './sdkGenerator'
 
 export const apiVersions = (props: any) => {
   const versions = props.api_versions ?? '3.1,4.0'
@@ -142,10 +144,18 @@ export const prepGen = async (args: string[]): Promise<IGenProps> => {
   let lookerVersions
   let lookerVersion = ''
   try {
-    lookerVersions = versions || (await fetchLookerVersions(props))
+    if (versions) {
+      lookerVersions = versions
+    } else {
+      lookerVersions = await fetchLookerVersions(props)
+      createJsonFile(
+        `${specPath}/versions.json`,
+        JSON.stringify(lookerVersions, null, 2)
+      )
+    }
     lookerVersion = await fetchLookerVersion(props, lookerVersions)
   } catch {
-    // Looker server may not be required, so default things for the generator
+    // Looker server is not be required, so default values for the generator
     lookerVersions = {
       supported_versions: [
         {
@@ -177,7 +187,7 @@ export const prepGen = async (args: string[]): Promise<IGenProps> => {
     apis,
     lastApi,
   }
-  console.log(JSON.stringify(result, null, 2))
+  // console.log(JSON.stringify(result, null, 2))
   return result
 }
 
@@ -190,39 +200,21 @@ export const loadSpecs = async (config: IGenProps, fetch = true) => {
   const specFetch = async (spec: SpecItem) => {
     if (!fetch) return undefined
     if (!spec.specURL) return undefined
-    const content = await authGetUrl(config.props, spec.specURL)
-    const api = ApiModel.fromJson(content)
-    return api
+    const p = { ...config.props, ...{ api_version: spec.version } }
+    let source = await authGetUrl(p, spec.specURL)
+    if (typeof source === 'string') source = JSON.parse(source)
+    const upgrade = upgradeSpecObject(source)
+    spec.api = ApiModel.fromJson(upgrade)
+    const swagger = JSON.stringify(source, null, 2)
+    const oas = JSON.stringify(upgrade, null, 2)
+    createJsonFile(swaggerFileName(config.name, spec.key), swagger)
+    createJsonFile(openApiFileName(config.name, spec.key), oas)
+    return spec.api
   }
-
-  const p = { ...config.props }
 
   const specs = await getSpecsFromVersions(config.lookerVersions, specFetch)
-  // TODO Code smell? Reaching in and updating the api versions collection
+  // TODO NOTE: Code smell? Reaching in and updating the api versions collection
   config.apis = Object.keys(specs)
-  if (fetch) {
-    for (const api of config.apis) {
-      const spec = specs[api]
-      if (!spec.specURL) {
-        continue
-      }
-      const url = new URL(spec.specURL)
-      if (url.protocol === 'file:') {
-        // Working off local file specifications
-        const content = readFileSync(url.pathname)
-        const json = JSON.parse(content)
-        spec.api = ApiModel.fromJson(upgradeSpecObject(json))
-      } else {
-        p.api_version = api
-        const oasFile = await logConvertSpec(
-          config.name,
-          p,
-          config.lookerVersions
-        )
-        spec.api = specFromFile(oasFile)
-      }
-    }
-  }
 
   return specs
 }

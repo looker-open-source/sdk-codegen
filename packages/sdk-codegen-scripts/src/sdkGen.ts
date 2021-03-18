@@ -63,12 +63,9 @@ export const writeCodeFile = (fileName: string, content: string): string => {
     for (const language of languages) {
       for (const api of apis) {
         const spec = specs[api]
-        const p = { ...props }
-        p.api_version = api
         const versions: IVersionInfo = {
           spec,
           lookerVersion,
-          specKey: api,
         }
         const apiModel = spec.api
         if (!apiModel) {
