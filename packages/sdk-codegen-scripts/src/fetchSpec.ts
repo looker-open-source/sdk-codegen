@@ -157,7 +157,6 @@ export const getUrl = async (
   if (ref.protocol === 'file:') {
     return readFileSync(ref.pathname)
   }
-  console.log(`getting ${url} ...`)
   const xp = specTransport(props)
   return await sdkOk<string, Error>(
     xp.request('GET', url, undefined, undefined, undefined, options)

@@ -561,7 +561,6 @@ export const upgradeSpecObject = (spec: any) => {
     return JSON.parse(swapXLookerTags(JSON.stringify(spec)))
   }
   if (!isSwagger(spec)) {
-    console.log({ spec })
     throw new Error('Input is not a Swagger or OpenAPI specification')
   }
   const cleanup = swapRef(swapXLookerTags(JSON.stringify(spec)))
@@ -648,7 +647,7 @@ export const loadSpecs = async (sdk: APIMethods, links: SpecLinks) => {
     if (isEmpty(spec.api)) {
       // Not parsed yet
       const content = await sdk.ok<string, Error>(sdk.get(spec.url))
-      const json = JSON.parse(content)
+      const json = typeof content === 'string' ? JSON.parse(content) : content
       spec.api = ApiModel.fromJson(upgradeSpecObject(json))
     }
   }

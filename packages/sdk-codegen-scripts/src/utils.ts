@@ -178,7 +178,7 @@ export const prepGen = async (args: string[]): Promise<IGenProps> => {
   const apis = apiVersions(props)
   const lastApi = apis[apis.length - 1]
 
-  const result = {
+  return {
     name,
     props,
     languages,
@@ -187,8 +187,6 @@ export const prepGen = async (args: string[]): Promise<IGenProps> => {
     apis,
     lastApi,
   }
-  // console.log(JSON.stringify(result, null, 2))
-  return result
 }
 
 /**
@@ -205,10 +203,13 @@ export const loadSpecs = async (config: IGenProps, fetch = true) => {
     if (typeof source === 'string') source = JSON.parse(source)
     const upgrade = upgradeSpecObject(source)
     spec.api = ApiModel.fromJson(upgrade)
-    const swagger = JSON.stringify(source, null, 2)
-    const oas = JSON.stringify(upgrade, null, 2)
-    createJsonFile(swaggerFileName(config.name, spec.key), swagger)
-    createJsonFile(openApiFileName(config.name, spec.key), oas)
+    if (/^http[s]?:\/\//i.test(spec.specURL)) {
+      // copy fetched specs to the spec folder
+      const swagger = JSON.stringify(source, null, 2)
+      const oas = JSON.stringify(upgrade, null, 2)
+      createJsonFile(swaggerFileName(config.name, spec.key), swagger)
+      createJsonFile(openApiFileName(config.name, spec.key), oas)
+    }
     return spec.api
   }
 

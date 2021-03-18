@@ -2055,8 +2055,8 @@ export class ApiModel implements ISymbolTable, IApiModel {
         if (!resolved) {
           throw new Error(`Could not resolve ${JSON.stringify(schema)}`)
         }
-        if (style === 'simple') {
-          // FKA 'csv'
+        if (style === 'simple' || style === 'form') {
+          // FKA 'csv' .. OpenAPI converter now uses "form" instead of "simple" for this
           return new DelimArrayType(resolved, schema)
         }
         if (this.schemaHasEnums(schema)) {

@@ -40,7 +40,8 @@ describe('pseudocode', () => {
       const expected = `create_user_credentials_email(
   user_id: int64,
   body: CredentialsEmail,
-  [fields: string]): CredentialsEmail`
+  [fields: string]
+): CredentialsEmail`
       const actual = gen.methodSignature('', method)
       expect(actual).toEqual(expected)
     })
@@ -48,6 +49,17 @@ describe('pseudocode', () => {
       const method = apiTestModel.methods.all_datagroups
       expect(method).toBeDefined()
       const expected = `all_datagroups(): Datagroup[]`
+      const actual = gen.methodSignature('', method)
+      expect(actual).toEqual(expected)
+    })
+    test('import_lookml_dashboard', () => {
+      const method = apiTestModel.methods.import_lookml_dashboard
+      const expected = `import_lookml_dashboard(
+  lookml_dashboard_id: string,
+  space_id: string,
+  [body: Dashboard],
+  [raw_locale: boolean]
+): Dashboard`
       const actual = gen.methodSignature('', method)
       expect(actual).toEqual(expected)
     })
