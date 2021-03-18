@@ -130,7 +130,7 @@ export const getSpecsFromVersions = async (
           v.status !== 'legacy'
         ) {
           const spec: SpecItem = {
-            key: '?',
+            key: uniqueId(v),
             status: v.status,
             version: v.version,
             isDefault: v.status === 'current',
@@ -139,7 +139,6 @@ export const getSpecsFromVersions = async (
           if (fetcher) {
             spec.api = await fetcher(spec)
           }
-          spec.key = uniqueId(v)
           items[spec.key] = spec
         }
       }

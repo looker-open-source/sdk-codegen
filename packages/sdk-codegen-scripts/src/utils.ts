@@ -204,11 +204,13 @@ export const loadSpecs = async (config: IGenProps, fetch = true) => {
     const upgrade = upgradeSpecObject(source)
     spec.api = ApiModel.fromJson(upgrade)
     if (/^http[s]?:\/\//i.test(spec.specURL)) {
-      // copy fetched specs to the spec folder
       const swagger = JSON.stringify(source, null, 2)
       const oas = JSON.stringify(upgrade, null, 2)
-      createJsonFile(swaggerFileName(config.name, spec.key), swagger)
-      createJsonFile(openApiFileName(config.name, spec.key), oas)
+      const swaggerName = swaggerFileName(config.name, spec.key)
+      const oaName = openApiFileName(config.name, spec.key)
+      createJsonFile(swaggerName, swagger)
+      createJsonFile(oaName, oas)
+      log(`fetched and saved ${swaggerName} and converted it to ${oaName}`)
     }
     return spec.api
   }
