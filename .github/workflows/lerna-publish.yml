@@ -30,4 +30,4 @@ jobs:
           NPM_TOKEN_RELEASE_BACKED: ${{ secrets.NPM_TOKEN_RELEASE_BACKED }}
 
       - name: Publish to NPM registry
-        run: yarn lerna publish from-package --yes --no-verify-access
+        run: yarn lerna publish from-package --yes --no-verify-access --ignore-scripts
