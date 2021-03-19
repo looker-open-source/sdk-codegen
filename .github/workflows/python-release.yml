@@ -1,7 +1,7 @@
 name: Python Publish to PYPI
 on:
   release:
-    types: [edited]
+    types: [edited, published]
 
 defaults:
   run:
@@ -39,6 +39,4 @@ jobs:
         with:
           user: __token__
           password: ${{ secrets.PYPI_API_TOKEN }}
-          # TODO: remove repository_url to default to prod
-          repository_url: https://test.pypi.org/legacy/
           packages_dir: python/dist/
