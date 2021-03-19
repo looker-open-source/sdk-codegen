@@ -2,23 +2,48 @@
   "plugins": ["node-workspace"],
   "bootstrap-sha": "6fc119838885b0cb831e78ddd23ac01cb819e585",
   "release-draft": true,
+  "release-as": "21.4.0",
   "packages": {
-    "packages/api-explorer": {},
-    "packages/extension-api-explorer": {},
-    "packages/extension-sdk-react": {},
-    "packages/extension-sdk": {},
-    "packages/hackathon": {},
-    "packages/run-it": {},
-    "packages/sdk-codegen-scripts": {},
-    "packages/sdk-codegen-utils": {},
-    "packages/sdk-codegen": {},
-    "packages/sdk-node": {},
-    "packages/sdk-rtl": {},
-    "packages/sdk": {},
-    "packages/wholly-sheet": {},
+    "packages/api-explorer": {
+      "release-as": ""
+    },
+    "packages/extension-api-explorer": {
+      "release-as": ""
+    },
+    "packages/extension-sdk-react": {
+    },
+    "packages/extension-sdk": {
+    },
+    "packages/hackathon": {
+      "release-as": ""
+    },
+    "packages/run-it": {
+      "release-as": ""
+    },
+    "packages/sdk-codegen-scripts": {
+      "release-as": ""
+    },
+    "packages/sdk-codegen-utils": {
+      "release-as": ""
+    },
+    "packages/sdk-codegen": {
+      "release-as": ""
+    },
+    "packages/sdk-node": {
+      "release-as": ""
+    },
+    "packages/sdk-rtl": {
+      "release-as": ""
+    },
+    "packages/sdk": {
+    },
+    "packages/wholly-sheet": {
+      "release-as": ""
+    },
     "python": {
       "release-type": "python",
-      "package-name": "lktstpy"
+      "package-name": "lktstpy",
+      "release-as": ""
     }
   }
 }
