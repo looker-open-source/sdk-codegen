@@ -23,10 +23,10 @@ jobs:
 
       - run: echo 'registry "https://wombat-dressing-room.appspot.com"' > .yarnrc
       - run: echo //wombat-dressing-room.appspot.com/@joeldodge/sdk-node/_ns:_authToken=${NPM_TOKEN_SDK_NODE} > .npmrc
-      - run: echo //wombat-dressing-room.appspot.com/@joeldodge/extension-sdk/_ns:_authToken=${NPM_TOKEN_EXTENSION_SDK} > .npmrc
-      - run: echo //wombat-dressing-room.appspot.com/@joeldodge/extension-sdk-react/_ns:_authToken=${NPM_TOKEN_EXTENSION_SDK_REACT} > .npmrc
-      - run: echo //wombat-dressing-room.appspot.com/@joeldodge/sdk-rtl/_ns:_authToken=${NPM_TOKEN_SDK_RTL} > .npmrc
-      - run: echo //wombat-dressing-room.appspot.com/@joeldodge/sdk/_ns:_authToken=${NPM_TOKEN_SDK} > .npmrc
+      - run: echo //wombat-dressing-room.appspot.com/@joeldodge/extension-sdk/_ns:_authToken=${NPM_TOKEN_EXTENSION_SDK} >> .npmrc
+      - run: echo //wombat-dressing-room.appspot.com/@joeldodge/extension-sdk-react/_ns:_authToken=${NPM_TOKEN_EXTENSION_SDK_REACT} >> .npmrc
+      - run: echo //wombat-dressing-room.appspot.com/@joeldodge/sdk-rtl/_ns:_authToken=${NPM_TOKEN_SDK_RTL} >> .npmrc
+      - run: echo //wombat-dressing-room.appspot.com/@joeldodge/sdk/_ns:_authToken=${NPM_TOKEN_SDK} >> .npmrc
 
       - name: Publish to NPM registry
         run: yarn lerna publish from-package --yes --no-verify-access --ignore-scripts
