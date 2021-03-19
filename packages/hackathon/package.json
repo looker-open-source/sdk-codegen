@@ -1,6 +1,6 @@
 {
   "name": "@looker/hackathon",
-  "version": "21.0.7",
+  "version": "21.0.8",
   "description": "Looker Hackathon extension",
   "main": "lib/esm/index.js",
   "typings": "lib/index.d.ts",
@@ -34,11 +34,11 @@
   },
   "dependencies": {
     "@looker/components": "^0.9.30",
-    "@looker/extension-sdk": "^21.0.7",
-    "@looker/extension-sdk-react": "^21.0.7",
-    "@looker/sdk": "^21.0.7",
+    "@looker/extension-sdk": "^21.0.8",
+    "@looker/extension-sdk-react": "^21.0.8",
+    "@looker/sdk": "^21.1.0",
     "@looker/sdk-rtl": "^21.0.7",
-    "@looker/wholly-sheet": "^21.0.7",
+    "@looker/wholly-sheet": "^21.0.8",
     "lodash": "^4.17.20",
     "react": "^16.13.1",
     "react-dom": "^16.13.1",
