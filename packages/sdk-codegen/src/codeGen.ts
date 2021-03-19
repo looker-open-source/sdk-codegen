@@ -24,7 +24,6 @@
 
  */
 
-import { commentBlock } from '@looker/sdk-codegen-utils'
 import { DelimArray } from '@looker/sdk-rtl'
 import {
   ApiModel,
@@ -43,8 +42,24 @@ import {
 } from './sdkModels'
 import { SpecItem } from './specConverter'
 
+export const commentBlock = (
+  text: string | undefined,
+  indent = '',
+  commentStr = '// '
+) => {
+  if (!text) return ''
+  text = text.trim()
+  if (!text) return ''
+  const indentation = indent + commentStr
+  const parts = text.split('\n').map((x) => `${indentation}${x}`.trimRight())
+  return parts.join('\n')
+}
+
+/** Version and spec references for the generator */
 export interface IVersionInfo {
+  /** Server release version (Not the API version) */
   lookerVersion: string
+  /** API specification for generating the SDK */
   spec: SpecItem
 }
 

@@ -24,7 +24,6 @@
 
  */
 
-import { commentBlock } from '@looker/sdk-codegen-utils'
 import {
   Arg,
   ArgValues,
@@ -36,7 +35,13 @@ import {
   IType,
   strBody,
 } from './sdkModels'
-import { CodeAssignment, CodeGen, IMappedType, trimInputs } from './codeGen'
+import {
+  CodeAssignment,
+  CodeGen,
+  IMappedType,
+  trimInputs,
+  commentBlock,
+} from './codeGen'
 
 /**
  * TypeScript code generator

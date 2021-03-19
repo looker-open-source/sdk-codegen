@@ -29,15 +29,20 @@ import { initDefaultSpecState } from '../reducers'
 
 export const specs: SpecList = {
   '3.1': {
+    key: '3.1',
+    isDefault: false,
     status: 'current',
     specURL: 'https://self-signed.looker.com:19999/api/3.1/swagger.json',
     specContent: require('../../../../spec/Looker.3.1.oas.json'),
+    version: '3.1',
   },
   '4.0': {
+    key: '4.0',
     isDefault: true,
     status: 'experimental',
     specURL: 'https://self-signed.looker.com:19999/api/4.0/swagger.json',
     specContent: require('../../../../spec/Looker.4.0.oas.json'),
+    version: '4.0',
   },
 }
 

@@ -155,7 +155,7 @@ export const prepGen = async (args: string[]): Promise<IGenProps> => {
     }
     lookerVersion = await fetchLookerVersion(props, lookerVersions)
   } catch {
-    // Looker server is not be required, so default values for the generator
+    // Looker server is not required, so default values for the generator
     lookerVersions = {
       supported_versions: [
         {
@@ -216,7 +216,7 @@ export const loadSpecs = async (config: IGenProps, fetch = true) => {
   }
 
   const specs = await getSpecsFromVersions(config.lookerVersions, specFetch)
-  // TODO NOTE: Code smell? Reaching in and updating the api versions collection
+  // NOTE: Reaching in and updating the api versions list from established spec keys
   config.apis = Object.keys(specs)
 
   return specs
