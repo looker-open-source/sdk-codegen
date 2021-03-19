@@ -39,8 +39,7 @@
     },
     "python": {
       "release-type": "python",
-      "package-name": "lktstpy",
-      "release-as": ""
+      "package-name": "lktstpy"
     }
   }
 }
