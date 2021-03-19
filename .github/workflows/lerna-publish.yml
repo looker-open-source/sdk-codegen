@@ -6,7 +6,7 @@ on:
       branch:
         description: 'branch to release from'
         required: true
-        default: joeldodge-rp
+        default: joeldodge-rp2
 
 jobs:
   release:
