@@ -23,11 +23,11 @@ jobs:
         run: git fetch --depth=1 origin +refs/tags/*:refs/tags/*
 
       - uses: c-hive/gha-yarn-cache@v1
-      - run: yarn install
+      - run: yarn install --no-lockfile
 
       - run: echo //wombat-dressing-room.appspot.com/:_authToken=${NPM_TOKEN_RELEASE_BACKED} > .npmrc
         env:
           NPM_TOKEN_RELEASE_BACKED: ${{ secrets.NPM_TOKEN_RELEASE_BACKED }}
 
       - name: Publish to NPM registry
-        run: yarn lerna publish from-package --yes
+        run: yarn lerna publish from-package --yes --no-verify-access
