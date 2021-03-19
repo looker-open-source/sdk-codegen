@@ -21,7 +21,11 @@ jobs:
       - uses: c-hive/gha-yarn-cache@v1
       - run: yarn install --no-lockfile
 
-      - run: echo 'registry "https://wombat-dressing-room.appspot.com"' > .yarnrc
+      - run: echo 'registry "https://wombat-dressing-room.appspot.com/@joeldodge/sdk-node/_ns"' > .yarnrc
+      - run: echo 'registry "https://wombat-dressing-room.appspot.com/@joeldodge/extension-sdk/_ns"' >> .yarnrc
+      - run: echo 'registry "https://wombat-dressing-room.appspot.com/@joeldodge/extension-sdk-react/_ns"' >> .yarnrc
+      - run: echo 'registry "https://wombat-dressing-room.appspot.com/@joeldodge/sdk-rtl/_ns"' >> .yarnrc
+      - run: echo 'registry "https://wombat-dressing-room.appspot.com/@joeldodge/sdk/_ns"' >> .yarnrc
       - run: echo //wombat-dressing-room.appspot.com/@joeldodge/sdk-node/_ns:_authToken=${NPM_TOKEN_SDK_NODE} > .npmrc
       - run: echo //wombat-dressing-room.appspot.com/@joeldodge/extension-sdk/_ns:_authToken=${NPM_TOKEN_EXTENSION_SDK} >> .npmrc
       - run: echo //wombat-dressing-room.appspot.com/@joeldodge/extension-sdk-react/_ns:_authToken=${NPM_TOKEN_EXTENSION_SDK_REACT} >> .npmrc
