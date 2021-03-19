@@ -17,30 +17,22 @@ jobs:
         with:
           persist-credentials: false
           ref: ${{ github.event.inputs.branch }}
-          fetch-depth: 0
-
-      - name: Fetch all tags
-        run: git fetch --depth=1 origin +refs/tags/*:refs/tags/*
 
       - uses: c-hive/gha-yarn-cache@v1
       - run: yarn install --no-lockfile
 
       - run: echo 'registry "https://wombat-dressing-room.appspot.com"' > .yarnrc
       - run: echo //wombat-dressing-room.appspot.com/@joeldodge/sdk-node/_ns:_authToken=${NPM_TOKEN_SDK_NODE} > .npmrc
-        env:
-          NPM_TOKEN_SDK_NODE: ${{ secrets.NPM_TOKEN_SDK_NODE }}
       - run: echo //wombat-dressing-room.appspot.com/@joeldodge/extension-sdk/_ns:_authToken=${NPM_TOKEN_EXTENSION_SDK} > .npmrc
-        env:
-          NPM_TOKEN_EXTENSION_SDK: ${{ secrets.NPM_TOKEN_EXTENSION_SDK }}
       - run: echo //wombat-dressing-room.appspot.com/@joeldodge/extension-sdk-react/_ns:_authToken=${NPM_TOKEN_EXTENSION_SDK_REACT} > .npmrc
-        env:
-          NPM_TOKEN_EXTENSION_SDK_REACT: ${{ secrets.NPM_TOKEN_EXTENSION_SDK_REACT }}
       - run: echo //wombat-dressing-room.appspot.com/@joeldodge/sdk-rtl/_ns:_authToken=${NPM_TOKEN_SDK_RTL} > .npmrc
-        env:
-          NPM_TOKEN_SDK_RTL: ${{ secrets.NPM_TOKEN_SDK_RTL }}
       - run: echo //wombat-dressing-room.appspot.com/@joeldodge/sdk/_ns:_authToken=${NPM_TOKEN_SDK} > .npmrc
-        env:
-          NPM_TOKEN_SDK: ${{ secrets.NPM_TOKEN_SDK }}
 
       - name: Publish to NPM registry
-        run: yarn lerna publish from-package --yes --no-verify-access --ignore-scripts --registry https://wombat-dressing-room.appspot.com
+        run: yarn lerna publish from-package --yes --no-verify-access --ignore-scripts
+        env:
+          NPM_TOKEN_SDK: ${{ secrets.NPM_TOKEN_SDK }}
+          NPM_TOKEN_SDK_NODE: ${{ secrets.NPM_TOKEN_SDK_NODE }}
+          NPM_TOKEN_EXTENSION_SDK: ${{ secrets.NPM_TOKEN_EXTENSION_SDK }}
+          NPM_TOKEN_EXTENSION_SDK_REACT: ${{ secrets.NPM_TOKEN_EXTENSION_SDK_REACT }}
+          NPM_TOKEN_SDK_RTL: ${{ secrets.NPM_TOKEN_SDK_RTL }}
