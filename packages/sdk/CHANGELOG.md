@@ -5,6 +5,13 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [21.4.0](https://www.github.com/looker-open-source/sdk-codegen/compare/sdk-v21.0.7...sdk-v21.4.0) (2021-03-19)
+
+
+### Features
+
+* updating a bunch of docs ([#494](https://www.github.com/looker-open-source/sdk-codegen/issues/494)) ([8722051](https://www.github.com/looker-open-source/sdk-codegen/commit/872205152048f80dd7a1c2b9c4ecc1c8a9775b1c))
+
 ## [21.0.4]
 
 - **BREAKING CHANGE**: Functionality dependent on node has been moved to a separate package, `@looker/sdk-node`. When upgrading the SDK in a node project you must add this new package as a dependency.
