@@ -1,6 +1,6 @@
 {
   "name": "@joeldodge/sdk",
-  "version": "21.0.9",
+  "version": "21.4.0",
   "description": "Looker SDK",
   "main": "lib/index.js",
   "module": "lib/esm/index.js",

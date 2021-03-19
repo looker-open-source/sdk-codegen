@@ -1,6 +1,6 @@
 {
   "name": "@joeldodge/extension-sdk",
-  "version": "21.0.9",
+  "version": "21.0.10",
   "description": "Looker Extension SDK",
   "main": "lib/index.js",
   "module": "lib/esm/index.js",
@@ -40,7 +40,7 @@
   },
   "dependencies": {
     "@looker/chatty": "^2.3.0",
-    "@joeldodge/sdk": "^21.0.9",
+    "@joeldodge/sdk": "^21.4.0",
     "@joeldodge/sdk-rtl": "^21.0.9",
     "deepmerge": "^4.2.2",
     "readable-stream": "^3.4.0",
