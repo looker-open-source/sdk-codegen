@@ -26,9 +26,21 @@ jobs:
       - run: yarn install --no-lockfile
 
       - run: echo 'registry "https://wombat-dressing-room.appspot.com"' > .yarnrc
-      - run: echo //wombat-dressing-room.appspot.com/:_authToken=${NPM_TOKEN_RELEASE_BACKED} > .npmrc
+      - run: echo //wombat-dressing-room.appspot.com/@joeldodge/sdk-node/_ns:_authToken=${NPM_TOKEN_SDK_NODE} > .npmrc
         env:
-          NPM_TOKEN_RELEASE_BACKED: ${{ secrets.NPM_TOKEN_RELEASE_BACKED }}
+          NPM_TOKEN_SDK_NODE: ${{ secrets.NPM_TOKEN_SDK_NODE }}
+      - run: echo //wombat-dressing-room.appspot.com/@joeldodge/extension-sdk/_ns:_authToken=${NPM_TOKEN_EXTENSION_SDK} > .npmrc
+        env:
+          NPM_TOKEN_EXTENSION_SDK: ${{ secrets.NPM_TOKEN_EXTENSION_SDK }}
+      - run: echo //wombat-dressing-room.appspot.com/@joeldodge/extension-sdk-react/_ns:_authToken=${NPM_TOKEN_EXTENSION_SDK_REACT} > .npmrc
+        env:
+          NPM_TOKEN_EXTENSION_SDK_REACT: ${{ secrets.NPM_TOKEN_EXTENSION_SDK_REACT }}
+      - run: echo //wombat-dressing-room.appspot.com/@joeldodge/sdk-rtl/_ns:_authToken=${NPM_TOKEN_SDK_RTL} > .npmrc
+        env:
+          NPM_TOKEN_SDK_RTL: ${{ secrets.NPM_TOKEN_SDK_RTL }}
+      - run: echo //wombat-dressing-room.appspot.com/@joeldodge/sdk/_ns:_authToken=${NPM_TOKEN_SDK} > .npmrc
+        env:
+          NPM_TOKEN_SDK: ${{ secrets.NPM_TOKEN_SDK }}
 
       - name: Publish to NPM registry
         run: yarn lerna publish from-package --yes --no-verify-access --ignore-scripts --registry https://wombat-dressing-room.appspot.com
