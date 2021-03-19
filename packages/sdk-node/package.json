@@ -1,5 +1,5 @@
 {
-  "name": "@looker/sdk-node",
+  "name": "@joeldodge/sdk-node",
   "version": "21.0.7",
   "description": "Looker SDK Runtime for Node Library",
   "main": "lib/index.js",
@@ -20,7 +20,7 @@
   "license": "MIT",
   "scripts": {
     "docs": "typedoc --mode file --out docs",
-    "watch:cjs": "yarn lerna exec --scope @looker/sdk-node --stream 'BABEL_ENV=build_cjs babel src --root-mode upward --out-dir lib --source-maps --extensions .ts,.tsx --no-comments --watch'"
+    "watch:cjs": "yarn lerna exec --scope @joeldodge/sdk-node --stream 'BABEL_ENV=build_cjs babel src --root-mode upward --out-dir lib --source-maps --extensions .ts,.tsx --no-comments --watch'"
   },
   "bugs": {
     "url": "https://github.com/looker-open-source/sdk-codegen/issues"
@@ -38,8 +38,8 @@
     "dotenv": "^8.2.0"
   },
   "dependencies": {
-    "@looker/sdk": "^21.0.7",
-    "@looker/sdk-rtl": "^21.0.7",
+    "@joeldodge/sdk": "^21.0.7",
+    "@joeldodge/sdk-rtl": "^21.0.7",
     "ini": "^1.3.8",
     "readable-stream": "^3.4.0",
     "request": "^2.88.0",

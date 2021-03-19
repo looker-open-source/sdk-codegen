@@ -1,5 +1,5 @@
 {
-  "name": "@looker/extension-sdk-react",
+  "name": "@joeldodge/extension-sdk-react",
   "version": "21.0.7",
   "description": "Looker Extension SDK for React",
   "main": "lib/index.js",
@@ -22,7 +22,7 @@
   "license": "MIT",
   "scripts": {
     "docs": "typedoc --mode file --out docs",
-    "watch": "yarn lerna exec --scope @looker/extension-sdk-react --stream 'BABEL_ENV=build babel src --root-mode upward --out-dir lib/esm --source-maps --extensions .ts,.tsx --no-comments --watch'"
+    "watch": "yarn lerna exec --scope @joeldodge/extension-sdk-react --stream 'BABEL_ENV=build babel src --root-mode upward --out-dir lib/esm --source-maps --extensions .ts,.tsx --no-comments --watch'"
   },
   "bugs": {
     "url": "https://github.com/looker-open-source/sdk-codegen/issues"
@@ -41,9 +41,9 @@
     "enzyme": "^3.11.0"
   },
   "dependencies": {
-    "@looker/extension-sdk": "^21.0.7",
-    "@looker/sdk": "^21.0.7",
-    "@looker/sdk-rtl": "^21.0.7",
+    "@joeldodge/extension-sdk": "^21.0.7",
+    "@joeldodge/sdk": "^21.0.7",
+    "@joeldodge/sdk-rtl": "^21.0.7",
     "history": "^4.9.0",
     "lodash": "^4.17.20",
     "react": "^16.13.1",
