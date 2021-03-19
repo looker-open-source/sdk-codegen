@@ -1,5 +1,5 @@
 {
-  "name": "@looker/extension-sdk",
+  "name": "@joeldodge/extension-sdk",
   "version": "21.0.9",
   "description": "Looker Extension SDK",
   "main": "lib/index.js",
@@ -22,8 +22,8 @@
   "license": "MIT",
   "scripts": {
     "docs": "typedoc --mode file --out docs",
-    "watch": "yarn lerna exec --scope @looker/extension-sdk --stream 'BABEL_ENV=build babel src --root-mode upward --out-dir lib/esm --source-maps --extensions .ts,.tsx --no-comments --watch'",
-    "watch:cjs": "yarn lerna exec --scope @looker/extension-sdk --stream 'BABEL_ENV=build_cjs babel src --root-mode upward --out-dir lib --source-maps --extensions .ts,.tsx --no-comments --watch'"
+    "watch": "yarn lerna exec --scope @joeldodge/extension-sdk --stream 'BABEL_ENV=build babel src --root-mode upward --out-dir lib/esm --source-maps --extensions .ts,.tsx --no-comments --watch'",
+    "watch:cjs": "yarn lerna exec --scope @joeldodge/extension-sdk --stream 'BABEL_ENV=build_cjs babel src --root-mode upward --out-dir lib --source-maps --extensions .ts,.tsx --no-comments --watch'"
   },
   "bugs": {
     "url": "https://github.com/looker-open-source/sdk-codegen/issues"
@@ -40,8 +40,8 @@
   },
   "dependencies": {
     "@looker/chatty": "^2.3.0",
-    "@looker/sdk": "^21.0.9",
-    "@looker/sdk-rtl": "^21.0.9",
+    "@joeldodge/sdk": "^21.0.9",
+    "@joeldodge/sdk-rtl": "^21.0.9",
     "deepmerge": "^4.2.2",
     "readable-stream": "^3.4.0",
     "request": "^2.88.0",

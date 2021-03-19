@@ -10,10 +10,8 @@
     "packages/extension-api-explorer": {
       "release-as": ""
     },
-    "packages/extension-sdk-react": {
-    },
-    "packages/extension-sdk": {
-    },
+    "packages/extension-sdk-react": {},
+    "packages/extension-sdk": {},
     "packages/hackathon": {
       "release-as": ""
     },
@@ -35,8 +33,7 @@
     "packages/sdk-rtl": {
       "release-as": ""
     },
-    "packages/sdk": {
-    },
+    "packages/sdk": {},
     "packages/wholly-sheet": {
       "release-as": ""
     },
