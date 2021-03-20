@@ -11,8 +11,7 @@
   ],
   "private": false,
   "publishConfig": {
-    "access": "public",
-    "registry": "https://wombat-dressing-room.appspot.com/@joeldodge/sdk/_ns"
+    "access": "public"
   },
   "directories": {
     "test": "test"

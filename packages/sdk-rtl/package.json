@@ -11,8 +11,7 @@
   ],
   "private": false,
   "publishConfig": {
-    "access": "public",
-    "registry": "https://wombat-dressing-room.appspot.com/@joeldodge/sdk-rtl/_ns"
+    "access": "public"
   },
   "repository": {
     "type": "git",
