@@ -1,0 +1,33 @@
+name: Publish NPM Packages
+
+on:
+  workflow_dispatch:
+    inputs:
+      branch:
+        description: 'branch to release from'
+        required: true
+        default: joeldodge-rp
+
+jobs:
+  release:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Clone repository
+        uses: actions/checkout@v2
+        with:
+          persist-credentials: false
+          ref: github.event.inputs.branch
+          fetch-depth: 0
+
+      - name: Fetch all tags
+        run: git fetch --depth=1 origin +refs/tags/*:refs/tags/*
+
+      - uses: c-hive/gha-yarn-cache@v1
+      - run: yarn install
+
+      - run: echo //wombat-dressing-room.appspot.com/:_authToken=${NPM_TOKEN_RELEASE_BACKED} > .npmrc
+        env:
+          NPM_TOKEN_RELEASE_BACKED: ${{ secrets.NPM_TOKEN_RELEASE_BACKED }}
+
+      - name: Publish to NPM registry
+        run: yarn lerna publish from-package --yes
