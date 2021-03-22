@@ -1,6 +1,6 @@
 {
   "name": "@looker/wholly-sheet",
-  "version": "21.0.9",
+  "version": "21.0.10",
   "description": "Google sheets API wrapper for data table mimicking",
   "main": "lib/esm/index.js",
   "typings": "lib/index.d.ts",
@@ -31,13 +31,13 @@
     "watch": "yarn lerna exec --scope @looker/wholly-sheet --stream 'BABEL_ENV=build babel src --root-mode upward --out-dir lib/esm --source-maps --extensions .ts,.tsx --no-comments --watch'"
   },
   "dependencies": {
-    "@looker/sdk": "^21.0.9",
-    "@looker/sdk-rtl": "^21.0.9",
+    "@looker/sdk": "^21.0.10",
+    "@looker/sdk-rtl": "^21.0.10",
     "lodash": "^4.17.20",
     "uuid": "^8.3.1"
   },
   "devDependencies": {
-    "@looker/sdk-node": "^21.0.9",
+    "@looker/sdk-node": "^21.0.10",
     "@types/uuid": "^8.3.0",
     "google-auth-library": "^6.1.0"
   }
