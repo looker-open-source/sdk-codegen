@@ -55,7 +55,6 @@
     "test:iphone": "xcodebuild test -project swift/looker/looker.xcodeproj -scheme looker-Package -sdk iphonesimulator -destination 'platform=iOS Simulator,name=iPhone 11,OS=13.4.1' | xcpretty --test --color",
     "test:sdk": "yarn jest packages/sdk",
     "test:jest": "DOT_ENV_FILE=.env.test jest",
-    "bootstrap": "lerna clean -y && lerna bootstrap",
     "watch": "lerna run --parallel watch",
     "watch:cjs": "lerna run --parallel watch:cjs"
   },
