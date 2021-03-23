@@ -1,7 +1,19 @@
 name: Python Publish to PYPI
 on:
+  # Automatic release based on either creating a published release or
+  # publishing a draft release (creating a draft release will not trigger the
+  # "release" event type according to the docs).
+  # The workflow file version used is that from the tag corresponding to the
+  # release. This is why the "workflow_dispatch" trigger is configured as well:
+  # in case we need to manually re-publish a tag using a modified workflow
   release:
-    types: [edited, published]
+    types: [created, published]
+
+  workflow_dispatch:
+    inputs:
+      tag:
+        description: 'tag to release'
+        required: true
 
 defaults:
   run:
@@ -9,23 +21,32 @@ defaults:
     working-directory: python/
 
 jobs:
-  publish:
-
+  setref:
     if: >
-      startsWith(github.event.release.tag_name, 'looker_sdk') &&
+      (startsWith(github.event.release.tag_name, 'looker_sdk') &&
       !github.event.release.draft &&
-      !github.event.release.prerelease
-
+      !github.event.release.prerelease) ||
+      (github.event.inputs)
     runs-on: ubuntu-latest
-
+    outputs:
+      tag: ${{ steps.workflow.tag || steps.release.tag }}
     steps:
-      - name: Repo Checkout
-        uses: actions/checkout@v2
-        with:
-          ref: ${{ github.event.release.tag_name }}
+      - id: workflow
+        if: github.event.inputs
+        run: echo "::set-output name=tag::${{ github.event.inputs.tag }}"
+      - id: release
+        if: startsWith(github.event.release.tag_name, 'looker_sdk')
+        run: echo "::set-output name=tag::${{ github.event.release.tag_name }}"
 
-      - name: Set up Python
-        uses: actions/setup-python@v2
+  publish:
+    needs: setref
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+        with:
+          ref: ${{ needs.setref.outputs.tag }}
+
+      - uses: actions/setup-python@v2
         with:
           python-version: '3.x'
 
@@ -34,8 +55,7 @@ jobs:
           pip install wheel
           python setup.py sdist bdist_wheel
 
-      - name: Publish to pypi
-        uses: pypa/gh-action-pypi-publish@v1.4.1
+      - uses: pypa/gh-action-pypi-publish@v1.4.1
         with:
           user: __token__
           password: ${{ secrets.PYPI_API_TOKEN }}
