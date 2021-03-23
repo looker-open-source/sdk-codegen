@@ -16,7 +16,7 @@ This example is likely not suitable for repurposing to production use cases (Fla
 7. Have fun!
 
 ## What's Next
-This is an intentionally "incomplete" application that has room to grow— The best way to learn is to dig in and implement new functionality. If you also learn best by doing, try some of these ideas to get you started exploring:
+This is an intentionally "incomplete" application that has room to grow! Often the best way to learn is to dig in and implement new functionality. If you also learn best by doing, try some of these ideas to get you started exploring:
 - Allow a user to select between visualization or table when creating a new post.
 - What happens if a user creates a post with a broken Look?
 - Why is it so slow to create a new post? Or to just load the /create page in the first place?
