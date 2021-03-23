@@ -1,0 +1,39 @@
+{
+  "plugins": ["node-workspace"],
+  "bootstrap-sha": "78cc1e225bfc67300cfa9069fce257120fe92a6d",
+  "release-as": "21.4.0",
+  "packages": {
+    "packages/extension-api-explorer": {},
+    "packages/extension-sdk-react": {},
+    "packages/extension-sdk": {},
+    "packages/hackathon": {},
+    "packages/sdk-node": {},
+    "packages/sdk": {},
+    "packages/api-explorer": {
+      "release-as": ""
+    },
+    "packages/run-it": {
+      "release-as": ""
+    },
+    "packages/sdk-codegen-scripts": {
+      "release-as": ""
+    },
+    "packages/sdk-codegen-utils": {
+      "release-as": ""
+    },
+    "packages/sdk-codegen": {
+      "release-as": ""
+    },
+    "packages/sdk-rtl": {
+      "release-as": ""
+    },
+    "packages/wholly-sheet": {
+      "release-as": ""
+    },
+    "python": {
+      "release-type": "python",
+      "release-draft": true,
+      "package-name": "looker_sdk"
+    }
+  }
+}
