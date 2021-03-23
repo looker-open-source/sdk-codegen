@@ -98,7 +98,7 @@ Configuring the SDK
 ===================
 
 The SDK supports configuration through a ``.ini`` file on disk as well
-as setting environment variables <https://github.com/looker-open-source/sdk-codegen#environment-variable-configuration> (the latter override the former).
+as `setting environment variables <https://github.com/looker-open-source/sdk-codegen#environment-variable-configuration>`_ (the latter override the former).
 
 **Note**: The ``.ini`` configuration for the Looker SDK is a sample
 implementation intended to speed up the initial development of python
