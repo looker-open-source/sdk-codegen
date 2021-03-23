@@ -26,7 +26,8 @@
 
 import { isEmpty } from 'lodash'
 import { APIMethods } from '@looker/sdk-rtl'
-import { ApiModel, ArgValues, IApiModel } from './sdkModels'
+import { IApiVersion, IApiVersionElement } from '@looker/sdk'
+import { ApiModel, ArgValues, IApiModel, KeyedCollection } from './sdkModels'
 
 const warn = (warning: string) => {
   throw new Error(warning)
@@ -48,8 +49,29 @@ export interface MimeFormats {
   consumes: string[]
 }
 
+/** codegen specification item */
+export interface SpecItem {
+  /** Key for specification in collection. Duplicated for atomic passing */
+  key: string
+  /** API version status */
+  status: string // 'current' | 'deprecated' | 'experimental' | 'stable'
+  /** API version of spec */
+  version: string
+  /** true if this is the default spec */
+  isDefault: boolean
+  /** Compiled version of spec */
+  api?: ApiModel
+  /** URL for retrieving spec */
+  specURL?: string
+  /** string content of spec */
+  specContent?: string
+}
+
+/** Keyed collection of specification items */
+export type SpecList = KeyedCollection<SpecItem>
+
 /**
- * Looker spec version item
+ * Looker specification version item from versions payload
  */
 export interface ISpecItem {
   /** Abbreviated version of the API */
@@ -63,6 +85,69 @@ export interface ISpecItem {
 }
 
 /**
+ * Callback for fetching and compiling specification to ApiModel
+ */
+export type SpecFetcher = (spec: SpecItem) => Promise<ApiModel | undefined>
+
+/**
+ * Return all public API specifications from an ApiVersion payload
+ * @param versions payload from a Looker server
+ * @param fetcher fetches and compiles spec to ApiModel
+ */
+export const getSpecsFromVersions = async (
+  versions: IApiVersion,
+  fetcher: SpecFetcher | undefined = undefined
+): Promise<SpecList> => {
+  const items = {}
+
+  /**
+   * Create a unique spec key for this version
+   * @param v version to identify
+   */
+  const uniqueId = (v: IApiVersionElement) => {
+    let specKey = v.version || 'api'
+    const max = v.status?.length || 0
+    let frag = 1
+    while (items[specKey]) {
+      if (frag <= max) {
+        // More than one spec for this version
+        specKey = `${v.version}${v.status?.substr(0, frag)}`
+      } else {
+        specKey = `${v.version}${v.status}${frag}`
+      }
+      frag++
+    }
+    return specKey
+  }
+
+  if (versions.supported_versions) {
+    for (const v of versions.supported_versions) {
+      // Tell Typescript these are all defined because IApiVersion definition is lax
+      if (v.status && v.version && v.swagger_url) {
+        if (
+          v.status !== 'internal_test' &&
+          v.status !== 'deprecated' &&
+          v.status !== 'legacy'
+        ) {
+          const spec: SpecItem = {
+            key: uniqueId(v),
+            status: v.status,
+            version: v.version,
+            isDefault: v.status === 'current',
+            specURL: v.swagger_url,
+          }
+          if (fetcher) {
+            spec.api = await fetcher(spec)
+          }
+          items[spec.key] = spec
+        }
+      }
+    }
+  }
+  return items
+}
+
+/**
  * Payload returned by the Looker /versions endpoint
  */
 export interface ILookerVersions {
@@ -72,7 +157,11 @@ export interface ILookerVersions {
   current_version: ISpecItem
   /** All API versions */
   supported_versions: ISpecItem[]
+  /** API server url */
+  api_server_url: string
 }
+
+// TODO this work was duplicated in API Explorer. Need to merge and use one version.
 
 /**
  * Api Specification with on-demand determination of values
@@ -90,6 +179,7 @@ export interface IApiSpecLink {
   api: IApiModel
 }
 
+// TODO this work was duplicated in API Explorer. Need to merge and use one version.
 export type SpecLinks = IApiSpecLink[]
 
 /**
@@ -478,8 +568,8 @@ export const upgradeSpecObject = (spec: any) => {
   const produces = spec.produces || [appJson]
   const formats = { produces, consumes }
   const { paths, requestBodies } = convertPathsAndBodies(spec.paths, formats)
-  // TODO create a requestBodies entry for every struct used > 1x
-  // TODO reassign op.requestBody for all requestBodies entries
+  // TODO create a requestBodies entry for every struct used > 1x?
+  // TODO reassign op.requestBody for all requestBodies entries?
   const schemas = convertDefs(spec.definitions)
   const api = {
     openapi: '3.0.0',
@@ -516,6 +606,7 @@ export const getLookerSpecs = async (sdk: APIMethods, apiServerUrl: string) => {
   return versions
 }
 
+// TODO this work was duplicated in API Explorer. Need to merge and use one version.
 /**
  * Convert a Looker versions payload into API specification links
  * @param versions
@@ -554,8 +645,9 @@ export const loadSpecs = async (sdk: APIMethods, links: SpecLinks) => {
   for (const spec of links) {
     if (isEmpty(spec.api)) {
       // Not parsed yet
-      const content = upgradeSpec(await sdk.ok(sdk.get(spec.url)))
-      spec.api = ApiModel.fromString(content)
+      const content = await sdk.ok<string, Error>(sdk.get(spec.url))
+      const json = typeof content === 'string' ? JSON.parse(content) : content
+      spec.api = ApiModel.fromJson(upgradeSpecObject(json))
     }
   }
   return links

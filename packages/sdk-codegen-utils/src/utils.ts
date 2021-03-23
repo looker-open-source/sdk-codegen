@@ -76,16 +76,3 @@ export const debug = (message: any, value?: any) => {
 }
 
 export const dump = (value: any) => log(JSON.stringify(value, null, 2))
-
-export const commentBlock = (
-  text: string | undefined,
-  indent = '',
-  commentStr = '// '
-) => {
-  if (!text) return ''
-  text = text.trim()
-  if (!text) return ''
-  const indentation = indent + commentStr
-  const parts = text.split('\n').map((x) => `${indentation}${x}`.trimRight())
-  return parts.join('\n')
-}

@@ -28,8 +28,8 @@ import React, { FC, useReducer, useState, useEffect } from 'react'
 import { useLocation } from 'react-router'
 import styled from 'styled-components'
 import { Aside, ComponentsProvider, Layout, Page } from '@looker/components'
-import { ApiModel, KeyedCollection } from '@looker/sdk-codegen'
 import { Looker40SDK, Looker31SDK } from '@looker/sdk'
+import { SpecList } from '@looker/sdk-codegen'
 import { SearchContext, LodeContext, defaultLodeContextValue } from './context'
 import { getLoded } from './utils'
 import { Header, SideNav } from './components'
@@ -41,18 +41,8 @@ import {
 } from './reducers'
 import { AppRouter } from './routes'
 
-export interface SpecItem {
-  status: string // 'current' | 'deprecated' | 'experimental' | 'stable'
-  isDefault?: boolean
-  api?: ApiModel
-  specURL?: string
-  specContent?: string
-}
-
-export type SpecItems = KeyedCollection<SpecItem>
-
 export interface ApiExplorerProps {
-  specs: SpecItems
+  specs: SpecList
   sdk?: Looker31SDK | Looker40SDK
   lodeUrl?: string
 }

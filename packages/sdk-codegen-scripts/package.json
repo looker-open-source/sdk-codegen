@@ -1,6 +1,6 @@
 {
   "name": "@looker/sdk-codegen-scripts",
-  "version": "21.0.9",
+  "version": "21.0.10",
   "description": "Looker SDK Codegen scripts",
   "main": "lib/index.js",
   "typings": "lib/index.d.ts",
@@ -9,7 +9,7 @@
   ],
   "author": "Looker",
   "license": "MIT",
-  "private": true,
+  "private": false,
   "publishConfig": {
     "access": "public"
   },
@@ -27,11 +27,11 @@
     "watch:cjs": "yarn lerna exec --scope @looker/sdk-codegen-scripts --stream 'BABEL_ENV=build_cjs babel src --root-mode upward --out-dir lib --source-maps --extensions .ts,.tsx --no-comments --watch'"
   },
   "dependencies": {
-    "@looker/sdk": "^21.0.9",
-    "@looker/sdk-codegen": "^21.0.9",
-    "@looker/sdk-codegen-utils": "^21.0.9",
-    "@looker/sdk-node": "^21.0.9",
-    "@looker/sdk-rtl": "^21.0.9",
+    "@looker/sdk": "^21.0.10",
+    "@looker/sdk-codegen": "^21.0.10",
+    "@looker/sdk-codegen-utils": "^21.0.10",
+    "@looker/sdk-node": "^21.0.10",
+    "@looker/sdk-rtl": "^21.0.10",
     "config": "^3.3.1",
     "cross-env": "^7.0.2"
   },
@@ -47,5 +47,5 @@
     "prettier": "^2.1.2",
     "swagger2openapi": "^7.0.3"
   },
-  "gitHead": "308cb8c61290837e71345a5ef6fb17be9285990e"
+  "gitHead": "d16d6fd98594572f130dd0b7959d49a737de8722"
 }

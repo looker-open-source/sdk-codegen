@@ -25,19 +25,21 @@
  */
 
 import React, { FC, useContext, useEffect, useState } from 'react'
-import ApiExplorer, {
-  SpecItems,
-  SpecItem,
-} from '@looker/api-explorer/src/ApiExplorer'
 import { IStorageValue, RunItProvider, RunItConfigurator } from '@looker/run-it'
 import { useRouteMatch } from 'react-router-dom'
 import {
   ExtensionContext,
   ExtensionContextData,
 } from '@looker/extension-sdk-react'
-import { ApiModel, upgradeSpecObject } from '@looker/sdk-codegen'
+import {
+  ApiModel,
+  getSpecsFromVersions,
+  SpecItem,
+  SpecList,
+  upgradeSpecObject,
+} from '@looker/sdk-codegen'
 import { Looker31SDK, Looker40SDK } from '@looker/sdk'
-import { getSpecsFromVersions } from '@looker/api-explorer/src/reducers'
+import ApiExplorer from '@looker/api-explorer/lib/ApiExplorer'
 
 class ExtensionConfigurator implements RunItConfigurator {
   storage: Record<string, string> = {}
@@ -70,7 +72,7 @@ const configurator = new ExtensionConfigurator()
 export const ExtensionApiExplorer: FC = () => {
   const match = useRouteMatch<{ specKey: string }>(`/:specKey`)
   const extensionContext = useContext<ExtensionContextData>(ExtensionContext)
-  const [specs, setSpecs] = useState<SpecItems>()
+  const [specs, setSpecs] = useState<SpecList>()
 
   let sdk: Looker31SDK | Looker40SDK
   if (match?.params.specKey === '3.1') {
@@ -89,7 +91,8 @@ export const ExtensionApiExplorer: FC = () => {
     const sdk = extensionContext.core40SDK
     const [version, name] = spec.specURL.split('/').slice(-2)
     const content = await sdk.ok(sdk.api_spec(version, name))
-    // TODO figure out why this crazy step is required
+    // TODO switch this to just call const api = ApiModel.fromString(content) now
+    // TODO I think we can remove this this crazy step now that the api_spec endpoint is cleaner
     let json = JSON.parse(content)
     if (typeof json === 'string') {
       json = JSON.parse(json)
@@ -103,7 +106,7 @@ export const ExtensionApiExplorer: FC = () => {
     /** Load Looker /versions information and retrieve all supported specs */
     async function loadSpecs() {
       const versions = await sdk.ok(sdk.versions())
-      const result = await getSpecsFromVersions(versions, (spec) =>
+      const result = await getSpecsFromVersions(versions, (spec: SpecItem) =>
         extFetch(spec)
       )
       setSpecs(result)

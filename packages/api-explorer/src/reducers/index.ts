@@ -31,7 +31,6 @@ export {
   SpecState,
   SpecAction,
   getSpecKey,
-  getSpecsFromVersions,
 } from './spec'
 export {
   searchReducer,

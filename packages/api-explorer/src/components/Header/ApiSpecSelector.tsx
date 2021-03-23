@@ -28,11 +28,11 @@ import React, { FC, Dispatch } from 'react'
 import { Select } from '@looker/components'
 import { useHistory } from 'react-router-dom'
 
-import { SpecItems } from '../../ApiExplorer'
+import { SpecList } from '@looker/sdk-codegen'
 import { SpecAction, SpecState, selectSpec } from '../../reducers'
 
 interface ApiSpecSelectorProps {
-  specs: SpecItems
+  specs: SpecList
   spec: SpecState
   specDispatch: Dispatch<SpecAction>
 }

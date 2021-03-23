@@ -23,27 +23,45 @@
  SOFTWARE.
 
  */
-import { ApiModel } from '@looker/sdk-codegen'
-import { cloneDeep, omit } from 'lodash'
+import { ApiModel, SpecList } from '@looker/sdk-codegen'
+import { omit } from 'lodash'
 
 import { specs } from '../../test-data'
-import { SpecItems } from '../../ApiExplorer'
 import {
   getDefaultSpecKey,
   parseSpec,
   fetchSpec,
   initDefaultSpecState,
   getSpecKey,
-  getSpecsFromVersions,
 } from './utils'
 
 describe('Spec reducer utils', () => {
   const spec = specs['3.1']
-  const specList: SpecItems = {
-    defaultKey: { status: 'experimental', isDefault: true },
-    deprecatedKey: { status: 'deprecated' },
-    currentKey: { status: 'current' },
-    stableKey: { status: 'stable' },
+  const specList: SpecList = {
+    defaultKey: {
+      key: 'defaultKey',
+      version: '4.0',
+      status: 'experimental',
+      isDefault: true,
+    },
+    deprecatedKey: {
+      key: 'deprecatedKey',
+      version: '3.0',
+      status: 'deprecated',
+      isDefault: false,
+    },
+    currentKey: {
+      key: 'currentKey',
+      version: '3.1',
+      status: 'current',
+      isDefault: false,
+    },
+    stableKey: {
+      key: 'stableKey',
+      version: '3.1',
+      status: 'stable',
+      isDefault: false,
+    },
   }
 
   describe('parseSpec', () => {
@@ -98,7 +116,7 @@ describe('Spec reducer utils', () => {
   describe('getDefaultSpecKey', () => {
     test('it throws if no specs are provided', () => {
       expect(() => {
-        getDefaultSpecKey({} as SpecItems)
+        getDefaultSpecKey({} as SpecList)
       }).toThrow('No specs found.')
     })
 
@@ -118,16 +136,27 @@ describe('Spec reducer utils', () => {
   })
 
   describe('fetchSpec', () => {
-    const specList: SpecItems = {
+    const specList: SpecList = {
       fromModel: {
+        key: 'fromModel',
         status: 'experimental',
+        isDefault: false,
         api: ApiModel.fromJson(specs['3.1'].specContent),
+        version: 'model',
       },
       fromSpecContent: {
+        key: 'fromSpecContent',
         status: 'current',
+        isDefault: true,
         specContent: specs['3.1'].specContent,
+        version: 'spec',
       },
-      emptySpecItem: { status: 'deprecated' },
+      emptySpecItem: {
+        key: 'emptySpecItem',
+        status: 'deprecated',
+        isDefault: false,
+        version: 'empty',
+      },
     }
 
     test('it uses api model if found ', () => {
@@ -172,103 +201,6 @@ describe('Spec reducer utils', () => {
       const fetchedSpec = initDefaultSpecState(specs, window.location)
       expect(fetchedSpec).toBeDefined()
       expect(fetchedSpec.key).toEqual('4.0')
-    })
-  })
-
-  describe('getSpecsFromVersions', () => {
-    const versions = {
-      looker_release_version: '21.3.0',
-      current_version: {
-        version: '3.1',
-        full_version: '3.1.0',
-        status: 'current',
-        swagger_url: 'http://localhost:19999/api/3.1/swagger.json',
-      },
-      supported_versions: [
-        {
-          version: '2.99',
-          full_version: '2.99.0',
-          status: 'internal_test',
-          swagger_url: 'http://localhost:19999/api/2.99/swagger.json',
-        },
-        {
-          version: '3.0',
-          full_version: '3.0.0',
-          status: 'legacy',
-          swagger_url: 'http://localhost:19999/api/3.0/swagger.json',
-        },
-        {
-          version: '3.1',
-          full_version: '3.1.0',
-          status: 'current',
-          swagger_url: 'http://localhost:19999/api/3.1/swagger.json',
-        },
-        {
-          version: '4.0',
-          full_version: '4.0.21.3',
-          status: 'experimental',
-          swagger_url: 'http://localhost:19999/api/4.0/swagger.json',
-        },
-      ],
-      api_server_url: 'http://localhost:19999',
-    }
-
-    test('only gets supported specifications', async () => {
-      const actual = await getSpecsFromVersions(versions)
-      expect(Object.keys(actual)).toEqual(['3.1', '4.0'])
-    })
-
-    test('current is the default spec', async () => {
-      const specs = await getSpecsFromVersions(versions)
-      const actual = Object.entries(specs).find(
-        ([_, a]) => a.status === 'current'
-      )
-      expect(actual).toBeDefined()
-      if (actual) {
-        const [, current] = actual
-        expect(current).toBeDefined()
-        expect(current.status).toEqual('current')
-        expect(current.isDefault).toEqual(true)
-      }
-    })
-
-    test('specs have unique keys', async () => {
-      const moar = cloneDeep(versions)
-      moar.supported_versions.push(
-        {
-          version: '4.0',
-          full_version: 'full',
-          status: 'un',
-          swagger_url: 'http://localhost:19999/api/4.0/u.json',
-        },
-        {
-          version: '4.0',
-          full_version: 'full',
-          status: 'un',
-          swagger_url: 'http://localhost:19999/api/4.0/un.json',
-        },
-        {
-          version: '4.0',
-          full_version: 'full',
-          status: 'un',
-          swagger_url: 'http://localhost:19999/api/4.0/un3.json',
-        },
-        {
-          version: '4.0',
-          full_version: 'full',
-          status: 'un',
-          swagger_url: 'http://localhost:19999/api/4.0/un4.json',
-        }
-      )
-      const actual = await getSpecsFromVersions(moar)
-      expect(Object.keys(actual)).toEqual([
-        '3.1',
-        '4.0',
-        '4.0u',
-        '4.0un',
-        '4.0un3',
-        '4.0un4',
-      ])
     })
   })
 })

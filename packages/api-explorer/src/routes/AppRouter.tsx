@@ -25,19 +25,18 @@
  */
 import React, { FC, useContext } from 'react'
 import { Redirect, Route, Switch } from 'react-router-dom'
-import { ApiModel } from '@looker/sdk-codegen'
+import { ApiModel, SpecList } from '@looker/sdk-codegen'
 import { OAuthScene, RunItContext } from '@looker/run-it'
 
 import { Looker40SDK } from '@looker/sdk'
 import { HomeScene, MethodScene, TagScene, TypeScene } from '../scenes'
 import { DiffScene } from '../scenes/DiffScene'
-import { SpecItems } from '../ApiExplorer'
 import { diffPath, oAuthPath } from '../utils'
 
 interface AppRouterProps {
   api: ApiModel
   specKey: string
-  specs: SpecItems
+  specs: SpecList
   toggleNavigation: (target?: boolean) => void
 }
 

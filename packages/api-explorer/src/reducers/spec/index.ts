@@ -23,11 +23,6 @@
  SOFTWARE.
 
  */
-export {
-  initDefaultSpecState,
-  getSpecKey,
-  AbstractLocation,
-  getSpecsFromVersions,
-} from './utils'
+export { initDefaultSpecState, getSpecKey, AbstractLocation } from './utils'
 export { selectSpec } from './actions'
 export { specReducer, SpecAction, SpecState } from './reducer'

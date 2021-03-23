@@ -25,7 +25,7 @@
  */
 
 import React, { FC, useState, useEffect } from 'react'
-import { ApiModel, DiffRow } from '@looker/sdk-codegen'
+import { ApiModel, DiffRow, SpecList } from '@looker/sdk-codegen'
 import { useHistory, useRouteMatch } from 'react-router-dom'
 import {
   Box,
@@ -37,14 +37,13 @@ import {
   Select,
   SelectMulti,
 } from '@looker/components'
-import { SpecItems } from '../../ApiExplorer'
 import { getDefaultSpecKey } from '../../reducers/spec/utils'
 import { diffPath } from '../../utils'
 import { diffSpecs, standardDiffToggles } from './diffUtils'
 import { DocDiff } from './DocDiff'
 
 export interface DiffSceneProps {
-  specs: SpecItems
+  specs: SpecList
   toggleNavigation: (target?: boolean) => void
 }
 
@@ -53,7 +52,7 @@ export interface DiffSceneProps {
  * @param specs to pick from
  * @param leftKey spec key that may or may not have a value
  */
-const pickLeft = (specs: SpecItems, leftKey: string) => {
+const pickLeft = (specs: SpecList, leftKey: string) => {
   if (leftKey) return leftKey
   return getDefaultSpecKey(specs)
 }
@@ -64,7 +63,7 @@ const pickLeft = (specs: SpecItems, leftKey: string) => {
  * @param rightKey spec key from url path
  * @param leftKey spec key from url path
  */
-const pickRight = (specs: SpecItems, rightKey: string, leftKey: string) => {
+const pickRight = (specs: SpecList, rightKey: string, leftKey: string) => {
   if (rightKey) return rightKey
   if (!leftKey) leftKey = getDefaultSpecKey(specs)
   return Object.keys(specs).find((k) => k !== leftKey) || ''

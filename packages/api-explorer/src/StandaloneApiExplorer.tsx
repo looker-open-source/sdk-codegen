@@ -32,10 +32,11 @@ import {
   initRunItSdk,
 } from '@looker/run-it'
 import { Looker40SDK } from '@looker/sdk'
-import ApiExplorer, { SpecItems } from './ApiExplorer'
+import { SpecList } from '@looker/sdk-codegen'
+import ApiExplorer from './ApiExplorer'
 
 export interface StandloneApiExplorerProps {
-  specs: SpecItems
+  specs: SpecList
 }
 
 export const StandaloneApiExplorer: FC<StandloneApiExplorerProps> = ({

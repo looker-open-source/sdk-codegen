@@ -1,6 +1,6 @@
 {
   "name": "@looker/extension-sdk-react",
-  "version": "21.0.9",
+  "version": "21.0.10",
   "description": "Looker Extension SDK for React",
   "main": "lib/index.js",
   "module": "lib/esm/index.js",
@@ -41,9 +41,9 @@
     "enzyme": "^3.11.0"
   },
   "dependencies": {
-    "@looker/extension-sdk": "^21.0.9",
-    "@looker/sdk": "^21.0.9",
-    "@looker/sdk-rtl": "^21.0.9",
+    "@looker/extension-sdk": "^21.0.10",
+    "@looker/sdk": "^21.0.10",
+    "@looker/sdk-rtl": "^21.0.10",
     "history": "^4.9.0",
     "lodash": "^4.17.20",
     "react": "^16.13.1",

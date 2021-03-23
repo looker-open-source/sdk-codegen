@@ -28,6 +28,7 @@ import path from 'path'
 import fs from 'fs'
 import { IOauthClientApp } from '@looker/sdk'
 import { LookerNodeSDK, NodeSettingsIniFile } from '@looker/sdk-node'
+import { getSpecsFromVersions } from '@looker/sdk-codegen'
 import { SDKConfig } from '../../sdk-codegen-scripts/src/sdkConfig'
 import {
   fetchLookerVersions,
@@ -62,13 +63,10 @@ export const updateSpecs = async (apiVersions = supportedApiVersions) => {
     } in ${iniFile} ...`
   )
   const lookerVersions = await fetchLookerVersions(props)
+  const specs = getSpecsFromVersions(lookerVersions)
   for (const v of apiVersions) {
     try {
-      const specFile = await logConvertSpec(
-        name,
-        { ...props, ...{ api_version: v } },
-        lookerVersions
-      )
+      const specFile = await logConvertSpec(name, specs[v], lookerVersions)
       if (!specFile) {
         console.error(
           `Could not fetch spec for API ${v} from ${props.base_url}`

@@ -24,8 +24,7 @@
 
  */
 
-import { commentBlock } from '@looker/sdk-codegen-utils'
-import { CodeGen, IMappedType } from './codeGen'
+import { CodeGen, IMappedType, commentBlock } from './codeGen'
 import {
   IMethod,
   IParameter,
@@ -157,7 +156,7 @@ using Password = System.String;
 // ReSharper disable InconsistentNaming
 
 ${this.commentHeader('', this.warnEditing())}
-namespace Looker.SDK.API${this.apiRef} 
+namespace Looker.SDK.API${this.apiRef}
 {
 
 `

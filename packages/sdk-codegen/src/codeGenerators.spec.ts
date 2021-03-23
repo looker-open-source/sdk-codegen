@@ -67,6 +67,14 @@ describe('generator factory', () => {
       expect(actual).toBeDefined()
       expect(actual?.language).toEqual('Typescript')
     })
+    it('returns generator by implicit file extension', () => {
+      let actual = findGenerator('ts')
+      expect(actual).toBeDefined()
+      expect(actual?.language).toEqual('Typescript')
+      actual = findGenerator('TSX')
+      expect(actual).toBeDefined()
+      expect(actual?.language).toEqual('Typescript')
+    })
   })
 
   describe('getCodeGenerator', () => {

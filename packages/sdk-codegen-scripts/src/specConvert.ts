@@ -25,6 +25,8 @@
  */
 import * as path from 'path'
 import { log } from '@looker/sdk-codegen-utils'
+import { IApiVersion } from '@looker/sdk'
+import { getSpecsFromVersions } from '@looker/sdk-codegen'
 import { ISDKConfigProps, SDKConfig } from './sdkConfig'
 import { convertSpec } from './convert'
 import { quit } from './nodeUtils'
@@ -41,10 +43,11 @@ const fetchAndConvert = async () => {
   // Iterate through all specified API versions
   const apis = apiVersions(props)
   const lookerVersions = fetchLookerVersions(props)
+  const specs = await getSpecsFromVersions(lookerVersions as IApiVersion)
   for (const api of apis) {
     const p = JSON.parse(JSON.stringify(props)) as ISDKConfigProps
     p.api_version = api
-    await logConvertSpec(name, p, lookerVersions)
+    await logConvertSpec(name, specs[api], p, true)
   }
 }
 ;(async () => {

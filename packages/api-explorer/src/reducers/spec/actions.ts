@@ -23,9 +23,10 @@
  SOFTWARE.
 
  */
-import { SpecItems } from '../../ApiExplorer'
 
-export const selectSpec = (specs: SpecItems, specKey: string) => ({
+import { SpecList } from '@looker/sdk-codegen'
+
+export const selectSpec = (specs: SpecList, specKey: string) => ({
   type: 'SELECT_SPEC',
   key: specKey,
   payload: specs,

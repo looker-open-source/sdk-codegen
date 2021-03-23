@@ -24,30 +24,16 @@
 
  */
 
-import { log, success } from '@looker/sdk-codegen-utils'
-import { fixConversion, swapXLookerTags } from '@looker/sdk-codegen'
+import { log } from '@looker/sdk-codegen-utils'
+import { upgradeSpec } from '@looker/sdk-codegen'
 import {
+  createJsonFile,
   fail,
   isFileSync,
-  quit,
   readFileSync,
   run,
   writeFileSync,
 } from './nodeUtils'
-import { writeSpecFile } from './fetchSpec'
-
-/**
- * Replaces Looker-specific tags with OpenAPI equivalents
- * @param {string} openApiFile name of the Open API file to process
- * @returns {Promise<string>} the string contents of the updated spec
- */
-export const swapXLookerTagsInFile = (openApiFile: string) => {
-  if (!isFileSync(openApiFile)) {
-    return quit(`${openApiFile} was not found`)
-  }
-  const spec = readFileSync(openApiFile)
-  return swapXLookerTags(spec)
-}
 
 /**
  * Convert a Swagger specification to OpenAPI
@@ -93,9 +79,7 @@ export const convertSpec = (
   if (!isFileSync(openApiFilename)) {
     return fail('convertSpec', `creating ${openApiFilename} failed`)
   }
-  const source = swapXLookerTagsInFile(openApiFilename)
-  const result = fixConversion(source, readFileSync(specFileName))
-  writeSpecFile(openApiFilename, result.spec)
-  success(`${openApiFilename} has ${result.fixes.length} fixes`)
+  const source = upgradeSpec(readFileSync(openApiFilename))
+  createJsonFile(openApiFilename, source)
   return openApiFilename
 }

@@ -25,7 +25,12 @@
  */
 
 import { log } from '@looker/sdk-codegen-utils'
-import { IGeneratorSpec, legacyLanguages } from '@looker/sdk-codegen'
+import {
+  getSpecsFromVersions,
+  IGeneratorSpec,
+  legacyLanguages,
+} from '@looker/sdk-codegen'
+import { IApiVersion } from '@looker/sdk'
 import { ISDKConfigProps } from './sdkConfig'
 import { run } from './nodeUtils'
 import { fetchLookerVersions, logConvertSpec } from './fetchSpec'
@@ -89,7 +94,8 @@ export const runConfig = async (
   const apiVersion = defaultApiVersion(props)
   props.api_version = apiVersion
   const lookerVersions = fetchLookerVersions(props)
-  const openApiFile = await logConvertSpec(name, props, lookerVersions)
+  const specs = await getSpecsFromVersions(lookerVersions as IApiVersion)
+  const openApiFile = await logConvertSpec(name, specs[apiVersion], props)
   const languages = legacyLanguages()
 
   const results: any[] = []

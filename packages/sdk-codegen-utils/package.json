@@ -1,6 +1,6 @@
 {
   "name": "@looker/sdk-codegen-utils",
-  "version": "21.0.9",
+  "version": "21.0.10",
   "description": "Looker SDK Codegen utils",
   "main": "lib/index.js",
   "typings": "lib/index.d.ts",
@@ -9,7 +9,7 @@
   ],
   "author": "Looker",
   "license": "MIT",
-  "private": true,
+  "private": false,
   "publishConfig": {
     "access": "public"
   },

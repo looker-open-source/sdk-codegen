@@ -131,9 +131,10 @@ export const findGenerator = (target: string) => {
   // Convenience alias
   return codeGenerators.find(
     (item) =>
-      target.match(item.extension) ||
       item.language.toLocaleLowerCase() === target ||
-      item.label?.toLocaleLowerCase() === target
+      item.label?.toLocaleLowerCase() === target ||
+      target.match(item.extension) ||
+      ('.' + target).match(item.extension)
   )
 }
 

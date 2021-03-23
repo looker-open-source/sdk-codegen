@@ -42,7 +42,7 @@ const strPost: HttpMethod = 'POST'
 const strDelete: HttpMethod = 'DELETE'
 
 export class NodeSession extends AuthSession {
-  private readonly apiPath: string = '/api/3.1'
+  private readonly apiPath: string = '/api/4.0'
   _authToken: AuthToken = new AuthToken()
   _sudoToken: AuthToken = new AuthToken()
 

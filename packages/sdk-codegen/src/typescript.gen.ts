@@ -24,7 +24,6 @@
 
  */
 
-import { commentBlock } from '@looker/sdk-codegen-utils'
 import {
   Arg,
   ArgValues,
@@ -36,7 +35,13 @@ import {
   IType,
   strBody,
 } from './sdkModels'
-import { CodeAssignment, CodeGen, IMappedType, trimInputs } from './codeGen'
+import {
+  CodeAssignment,
+  CodeGen,
+  IMappedType,
+  trimInputs,
+  commentBlock,
+} from './codeGen'
 
 /**
  * TypeScript code generator
@@ -67,7 +72,7 @@ export class TypescriptGen extends CodeGen {
   useNamedArguments = false
 
   sdkFileName(baseFileName: string) {
-    return this.fileName(`${this.apiVersion}/${baseFileName}`)
+    return this.fileName(`${this.versions?.spec.key}/${baseFileName}`)
   }
 
   methodsPrologue(_indent: string) {

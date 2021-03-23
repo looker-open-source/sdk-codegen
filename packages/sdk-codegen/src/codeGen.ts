@@ -24,7 +24,6 @@
 
  */
 
-import { commentBlock } from '@looker/sdk-codegen-utils'
 import { DelimArray } from '@looker/sdk-rtl'
 import {
   ApiModel,
@@ -41,10 +40,27 @@ import {
   mayQuote,
   Type,
 } from './sdkModels'
+import { SpecItem } from './specConverter'
 
+export const commentBlock = (
+  text: string | undefined,
+  indent = '',
+  commentStr = '// '
+) => {
+  if (!text) return ''
+  text = text.trim()
+  if (!text) return ''
+  const indentation = indent + commentStr
+  const parts = text.split('\n').map((x) => `${indentation}${x}`.trimRight())
+  return parts.join('\n')
+}
+
+/** Version and spec references for the generator */
 export interface IVersionInfo {
+  /** Server release version (Not the API version) */
   lookerVersion: string
-  apiVersion: string
+  /** API specification for generating the SDK */
+  spec: SpecItem
 }
 
 /**
@@ -675,10 +691,10 @@ export abstract class CodeGen implements ICodeGen {
   apiPath = ''
 
   constructor(public api: ApiModel, public versions?: IVersionInfo) {
-    if (versions && versions.apiVersion) {
-      this.apiVersion = versions.apiVersion
-      this.apiRef = this.apiVersion.replace('.', '')
-      this.apiPath = `/${this.apiVersion}`
+    if (versions && versions.spec) {
+      this.apiVersion = versions.spec.version
+      this.apiPath = `/${versions.spec.key}`
+      this.apiRef = versions.spec.key.replace('.', '')
       this.packageName = this.supportsMultiApi()
         ? `Looker${this.apiRef}SDK`
         : `LookerSDK`

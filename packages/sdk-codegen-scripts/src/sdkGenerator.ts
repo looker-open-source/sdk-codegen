@@ -24,6 +24,7 @@
 
  */
 
+import { existsSync } from 'fs'
 import * as Models from '@looker/sdk-codegen'
 import { success, warn } from '@looker/sdk-codegen-utils'
 import { readFileSync } from './nodeUtils'
@@ -37,7 +38,10 @@ export interface IGeneratorCtor<T extends Models.IModel> {
   new (model: T, formatter: Models.ICodeGen): Generator<T>
 }
 
-const licenseText = readFileSync('./LICENSE')
+const licenseFile = `./LICENSE`
+const licenseText = existsSync(licenseFile)
+  ? readFileSync('./LICENSE')
+  : `${licenseFile} file not found`
 
 export abstract class Generator<T extends Models.IModel> {
   codeFormatter: Models.ICodeGen

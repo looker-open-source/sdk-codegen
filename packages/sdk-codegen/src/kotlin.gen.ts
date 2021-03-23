@@ -24,7 +24,6 @@
 
  */
 
-import { commentBlock } from '@looker/sdk-codegen-utils'
 import {
   Arg,
   EnumType,
@@ -36,7 +35,7 @@ import {
   mayQuote,
   strBody,
 } from './sdkModels'
-import { IMappedType, CodeGen } from './codeGen'
+import { IMappedType, CodeGen, commentBlock } from './codeGen'
 
 export class KotlinGen extends CodeGen {
   codePath = './kotlin/src/main/com/'
