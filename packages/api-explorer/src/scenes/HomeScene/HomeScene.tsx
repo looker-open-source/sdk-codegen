@@ -41,7 +41,7 @@ export const HomeScene: FC<DocHomeProps> = ({ api }) => {
   const { specKey } = useParams<DocHomeParams>()
 
   return (
-    <Section p="xxlarge">
+    <Section p="xxlarge" style={{ height: '100%', overflowY: 'visible' }}>
       <DocTitle>{`Looker API ${specKey} Reference`}</DocTitle>
       {api.spec.info.description && (
         <DocMarkdown source={api.spec.info.description} specKey={specKey} />

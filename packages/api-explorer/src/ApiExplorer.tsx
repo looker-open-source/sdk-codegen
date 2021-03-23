@@ -98,7 +98,7 @@ const ApiExplorer: FC<ApiExplorerProps> = ({
               specDispatch={specDispatch}
               toggleNavigation={toggleNavigation}
             />
-            <Layout hasAside>
+            <Layout hasAside height={'100%'}>
               {hasNavigation && (
                 <AsideBorder pt="large" width="20rem">
                   <SideNav api={spec.api} specKey={spec.key} />

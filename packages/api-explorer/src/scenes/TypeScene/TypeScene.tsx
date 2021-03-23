@@ -46,7 +46,7 @@ export const TypeScene: FC<DocTypeProps> = ({ api }) => {
   const seeMethods = methodRefs(api, type.methodRefs)
 
   return (
-    <Section p="xxlarge">
+    <Section p="xxlarge" style={{ height: '100%', overflowY: 'scroll' }}>
       <DocTitle>{type.name}</DocTitle>
       <ExploreType type={type} />
       <DocReferences

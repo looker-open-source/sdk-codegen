@@ -59,7 +59,7 @@ export const TagScene: FC<TagSceneProps> = ({ api }) => {
   }, [methodTag])
 
   return (
-    <Section p="xxlarge">
+    <Section p="xxlarge" style={{ height: '100%', overflowY: 'scroll' }}>
       <DocTitle>{`${tag.name}: ${tag.description}`}</DocTitle>
       <ButtonToggle mb="small" mt="xlarge" value={value} onChange={setValue}>
         <ButtonItem key="ALL" px="large" py="xsmall">

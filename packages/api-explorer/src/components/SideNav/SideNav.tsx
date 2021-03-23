@@ -118,7 +118,7 @@ export const SideNav: FC<SideNavProps> = ({ api, specKey }) => {
         <Tab>Methods ({methodCount})</Tab>
         <Tab>Types ({typeCount})</Tab>
       </TabList>
-      <TabPanels {...tabs} pt="xsmall">
+      <TabPanels {...tabs} pt="xsmall" height={'90%'} overflowY={'scroll'}>
         <TabPanel>
           <SideNavTags tags={tags} specKey={specKey} />
         </TabPanel>

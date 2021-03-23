@@ -86,7 +86,11 @@ export const MethodScene: FC<DocMethodProps> = ({ api }) => {
 
   return (
     <>
-      <Section id="top" p="xxlarge">
+      <Section
+        id="top"
+        p="xxlarge"
+        style={{ height: '100%', overflowY: 'scroll' }}
+      >
         <Space between>
           <DocTitle>{method.summary}</DocTitle>
           {runItToggle}
