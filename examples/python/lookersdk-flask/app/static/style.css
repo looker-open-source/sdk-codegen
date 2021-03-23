@@ -17,10 +17,6 @@ h1 {
 a {
     color: #4285F4;
 }
-hr {
-    border: none;
-    border-top: 1px solid lightgray;
-}
 nav {
     display: flex;
     width: 960px;
@@ -48,8 +44,6 @@ nav ul li a, nav ul li span, header .action {
 .content {
     padding: 0 1rem 1rem;
 }
-
-
 .content > header {
     border-bottom: 1px solid #E8EAED;
     display: flex;
