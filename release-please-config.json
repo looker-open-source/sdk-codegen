@@ -32,7 +32,7 @@
     },
     "python": {
       "release-type": "python",
-      "release-draft": true,
+      "draft": true,
       "package-name": "looker_sdk"
     }
   }
