@@ -172,6 +172,7 @@ export class NodeTransport extends BaseTransport {
     options?: Partial<ITransportSettings>
   ): Promise<SDKResponse<TSuccess, TError>> {
     try {
+      console.log(`PATH: ${path}`)
       const res = await this.rawRequest(
         method,
         path,
