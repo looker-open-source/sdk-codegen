@@ -70,6 +70,5 @@ export const SDKConfig = (
   if (!config.base_url) {
     throw Error('Fatal error: base_url is not configured. Exiting.')
   }
-  console.log(`BASE URL: ${config.base_url}`)
   return { [sectionName]: config }
 }
