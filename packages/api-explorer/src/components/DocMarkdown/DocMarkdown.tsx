@@ -64,7 +64,7 @@ export const DocMarkdown: FC<DocMarkdownProps> = ({ source, specKey }) => {
   }
 
   return (
-    <div onClick={handleClick}>
+    <span onClick={handleClick}>
       <ReactMarkdown
         source={highlightMarkdown(pattern, source)}
         escapeHtml={false}
@@ -84,6 +84,6 @@ export const DocMarkdown: FC<DocMarkdownProps> = ({ source, specKey }) => {
           tableCell: TableCell,
         }}
       />
-    </div>
+    </span>
   )
 }
