@@ -6,7 +6,7 @@ The code in this package is really trivial and should not be used directly in yo
 
 This package has no node dependencies.
 
-**DEPRECATED AND NOT SUPPORTED**: Looker does not support direct use of this package, other than via direct use in the
+**DEPRECATED AND NOT SUPPORTED**: Looker does not support direct use of this package, other than via indirect use in the
 [SDK Codegen project](https://github.com/looker-open-source/sdk-codegen) repository.
 
 See the [SDK Codegen project](https://github.com/looker-open-source/sdk-codegen) repository for more information.
