@@ -21,30 +21,17 @@ defaults:
     working-directory: python/
 
 jobs:
-  setref:
+  publish:
     if: >
+      (github.event.inputs) ||
       (startsWith(github.event.release.tag_name, 'looker_sdk') &&
       !github.event.release.draft &&
-      !github.event.release.prerelease) ||
-      (github.event.inputs)
-    runs-on: ubuntu-latest
-    outputs:
-      tag: ${{ steps.workflow.tag || steps.release.tag }}
-    steps:
-      - id: workflow
-        if: github.event.inputs
-        run: echo "::set-output name=tag::${{ github.event.inputs.tag }}"
-      - id: release
-        if: startsWith(github.event.release.tag_name, 'looker_sdk')
-        run: echo "::set-output name=tag::${{ github.event.release.tag_name }}"
-
-  publish:
-    needs: setref
+      !github.event.release.prerelease)
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
         with:
-          ref: ${{ needs.setref.outputs.tag }}
+          ref: ${{ github.event.release.tag_name || github.event.inputs.tag }}
 
       - uses: actions/setup-python@v2
         with:
