@@ -1,6 +1,6 @@
 {
   "name": "@looker/run-it",
-  "version": "21.0.10",
+  "version": "21.1.0",
   "description": "A dynamic REST request input form and response visualizer",
   "main": "lib/esm/index.js",
   "typings": "lib/index.d.ts",
@@ -50,8 +50,8 @@
   "dependencies": {
     "@looker/components": "^0.9.30",
     "@looker/design-tokens": "0.9.27",
-    "@looker/sdk": "^21.0.10",
-    "@looker/sdk-codegen": "^21.0.10",
+    "@looker/sdk": "^21.4.0",
+    "@looker/sdk-codegen": "^21.0.11",
     "@looker/sdk-codegen-utils": "^21.0.10",
     "@looker/sdk-rtl": "^21.0.10",
     "@types/readable-stream": "^2.3.5",
