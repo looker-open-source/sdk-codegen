@@ -34,13 +34,14 @@ jobs:
   unit:
     # 1st condition: push event (restricted to main above)
     # 2nd condition: PR opened/synchronized/reopened (types filter above)
-    #                except Release PRs, those need a manual CI:TEST
+    #                unless the PR has the CI:HOLD label
     # 3rd condition: PR labeled with "CI:TEST"
     if: >
       github.event_name == 'push' ||
       (
         github.event_name == 'pull_request' &&
-        github.event.action != 'labeled'
+        github.event.action != 'labeled' &&
+        !contains(github.event.pull_request.labels, 'CI:HOLD')
       ) ||
       (
         github.event_name == 'pull_request' &&
