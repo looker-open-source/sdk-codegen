@@ -1,0 +1,10 @@
+# Rename to looker.ini and add your credentials, or use environment variables instead
+[Looker]
+# Base URL for API. Do not include /api/* in the url
+base_url=https://your.cloud.looker.com
+# API 3 client id
+client_id=clientid
+# API 3 client secret
+client_secret=clientsecret
+# Set to false if testing locally against self-signed certs. Otherwise leave True
+verify_ssl=True
