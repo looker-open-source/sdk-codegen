@@ -24,7 +24,7 @@
 
  */
 
-import React, { FC } from 'react'
+import React, { FC, useState, useEffect } from 'react'
 import { Section } from '@looker/components'
 import { typeRefs, methodRefs, ApiModel } from '@looker/sdk-codegen'
 import { useParams } from 'react-router-dom'
@@ -44,9 +44,16 @@ export const TypeScene: FC<DocTypeProps> = ({ api }) => {
   const type = api.types[typeName]
   const seeTypes = typeRefs(api, type.customTypes)
   const seeMethods = methodRefs(api, type.methodRefs)
+  const [scrollPx, setScrollPx] = useState(0)
+
+  useEffect(() => {
+    setScrollPx(0)
+  }, [api, type])
+
+  document.getElementById('top')?.scrollTo(scrollPx, 0)
 
   return (
-    <Section p="xxlarge" style={{ height: '100%', overflowY: 'scroll' }}>
+    <Section id="top" p="xxlarge" style={{ height: '100%', overflow: 'auto' }}>
       <DocTitle>{type.name}</DocTitle>
       <ExploreType type={type} />
       <DocReferences

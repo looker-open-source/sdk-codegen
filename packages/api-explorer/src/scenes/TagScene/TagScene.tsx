@@ -52,14 +52,22 @@ export const TagScene: FC<TagSceneProps> = ({ api }) => {
   )!
   const operations = getOperations(methods)
   const [value, setValue] = useState('ALL')
+  const [scrollPx, setScrollPx] = useState(0)
 
   useEffect(() => {
     /** Reset ButtonToggle value on route change */
     setValue('ALL')
+    setScrollPx(0)
   }, [methodTag])
 
+  document.getElementById('top')?.scrollTo(scrollPx, 0)
+
   return (
-    <Section p="xxlarge" style={{ height: '100%', overflowY: 'scroll' }}>
+    <Section
+      p="xxlarge"
+      id={'top'}
+      style={{ height: '100%', overflow: 'auto' }}
+    >
       <DocTitle>{`${tag.name}: ${tag.description}`}</DocTitle>
       <ButtonToggle mb="small" mt="xlarge" value={value} onChange={setValue}>
         <ButtonItem key="ALL" px="large" py="xsmall">

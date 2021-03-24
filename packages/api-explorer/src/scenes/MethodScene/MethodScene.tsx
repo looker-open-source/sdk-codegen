@@ -65,10 +65,12 @@ export const MethodScene: FC<DocMethodProps> = ({ api }) => {
   const { methodName, specKey } = useParams<DocMethodParams>()
   const { value, toggle } = useToggle()
   const [method, setMethod] = useState(api.methods[methodName])
+  const [scrollPx, setScrollPx] = useState(0)
   const seeTypes = typeRefs(api, method.customTypes)
 
   useEffect(() => {
     setMethod(api.methods[methodName])
+    setScrollPx(0)
   }, [api, methodName])
 
   const { colors } = useContext(ThemeContext)
@@ -84,12 +86,14 @@ export const MethodScene: FC<DocMethodProps> = ({ api }) => {
     </RunItButton>
   )
 
+  document.getElementById('top')?.scrollTo(scrollPx, 0)
+
   return (
     <>
       <Section
         id="top"
         p="xxlarge"
-        style={{ height: '100%', overflowY: 'scroll' }}
+        style={{ height: '100%', overflow: 'auto' }}
       >
         <Space between>
           <DocTitle>{method.summary}</DocTitle>
