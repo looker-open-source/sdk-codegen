@@ -26,6 +26,6 @@ jobs:
       - run: git diff
       - run: git checkout package.json
       - name: Publish to NPM registry
-        run: $(npm bin)/npm lerna publish from-package --yes --no-verify-access --ignore-scripts
+        run: $(npm bin)/lerna publish from-package --yes --no-verify-access --ignore-scripts
         env:
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN_RELEASE_BACKED }}
