@@ -1,6 +1,6 @@
 {
   "name": "@looker/api-explorer",
-  "version": "21.0.10",
+  "version": "0.9.0",
   "description": "Looker API Explorer",
   "main": "lib/esm/index.js",
   "typings": "lib/index.d.ts",
@@ -48,7 +48,7 @@
   },
   "dependencies": {
     "@looker/components": "^0.9.30",
-    "@looker/run-it": "^21.0.10",
+    "@looker/run-it": "^0.9.0",
     "@looker/sdk": "^21.0.10",
     "@looker/sdk-codegen": "^21.0.10",
     "@looker/sdk-rtl": "^21.0.10",

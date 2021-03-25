@@ -1,6 +1,6 @@
 {
   "name": "@looker/run-it",
-  "version": "21.0.10",
+  "version": "0.9.0",
   "description": "A dynamic REST request input form and response visualizer",
   "main": "lib/esm/index.js",
   "typings": "lib/index.d.ts",

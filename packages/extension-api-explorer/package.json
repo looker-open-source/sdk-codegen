@@ -16,10 +16,10 @@
     "watch": "yarn lerna exec --scope @looker/extension-api-explorer --stream 'BABEL_ENV=build babel src --root-mode upward --out-dir lib/esm --source-maps --extensions .ts,.tsx --no-comments --watch'"
   },
   "dependencies": {
-    "@looker/api-explorer": "^21.0.10",
+    "@looker/api-explorer": "^0.9.0",
     "@looker/extension-sdk": "^21.0.10",
     "@looker/extension-sdk-react": "^21.0.10",
-    "@looker/run-it": "^21.0.10",
+    "@looker/run-it": "^0.9.0",
     "@looker/sdk": "^21.0.10",
     "@looker/sdk-codegen": "^21.0.10",
     "react": "^16.13.1",
