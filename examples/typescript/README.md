@@ -28,7 +28,7 @@ These examples assume that a `looker.ini` has been created in the root of the re
 An important note on dependencies. The Looker typescript SDK consists of the following packages:
 
 1. `@looker/sdk` - contains the Looker API methods.
-2. `@looker/sdk-rtl` - contains a run time library needed to invoke the Looker API methods. Referencing the `@looker/sdk` as a dependency should automatically pull this package in.
+2. `@looker/rtl` - contains a run time library needed to invoke the Looker API methods. Referencing the `@looker/sdk` as a dependency should automatically pull this package in.
 3. `@looker/sdk-node` - contains dependendencies needed to run the Looker SDK in a node environment. Do NOT include this package if you are using the Looker SDK in a browser.
 
 ## Example list

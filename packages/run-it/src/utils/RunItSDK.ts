@@ -31,7 +31,7 @@ import {
   DefaultSettings,
   IApiSection,
   IApiSettings,
-} from '@looker/sdk-rtl'
+} from '@looker/rtl'
 import { RunItConfigKey, RunItConfigurator } from '../components'
 
 // https://docs.looker.com/reference/api-and-integration/api-cors

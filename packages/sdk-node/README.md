@@ -2,7 +2,7 @@
 
 The Looker SDK for Typescript/Javascript works with Node and browser run-times. The SDK provides a convenient way to communicate with a Looker server's APIs.
 
-This package is specifically for using the Looker Typescript SDK with Node. It depends on the [@looker/sdk](https://www.npmjs.com/package/@looker/sdk) package and [@looker/sdk-rtl](https://www.npmjs.com/package/@looker/sdk-rtl).
+This package is specifically for using the Looker Typescript SDK with Node. It depends on the [@looker/sdk](https://www.npmjs.com/package/@looker/sdk) package and [@looker/rtl](https://www.npmjs.com/package/@looker/rtl).
 
 The SDK uses a plug-in architecture (also known as dependency injection) for initializing that supports run-time specific transports (like `NodeTransport` and `BrowserTransport`) and different approaches for managing API authentication (like `NodeSession`, `BrowserSession`, `ProxySession`, and `OauthSession`).
 
@@ -21,13 +21,13 @@ The Looker SDK can be used in a node application in 3 steps:
 Using `yarn`:
 
 ```bash
-yarn add @looker/sdk @looker/sdk-rtl @looker/sdk-node
+yarn add @looker/sdk @looker/rtl @looker/sdk-node
 ```
 
 Using `npm`:
 
 ```bash
-npm install @looker/sdk @looker/sdk-rtl @looker/sdk-node
+npm install @looker/sdk @looker/rtl @looker/sdk-node
 ```
 
 **Note**: If you are only intending to use the SDK in a browser, omit `@looker/sdk-node`.

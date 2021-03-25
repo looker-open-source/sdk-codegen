@@ -30,7 +30,7 @@ import {
   ITransport,
   sdkError,
   IPlatformServices,
-} from '@looker/sdk-rtl'
+} from '@looker/rtl'
 import { NodeCryptoHash, NodeTransport } from './nodeTransport'
 
 export class NodeServices implements IPlatformServices {

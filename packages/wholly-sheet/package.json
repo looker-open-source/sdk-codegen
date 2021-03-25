@@ -32,7 +32,7 @@
   },
   "dependencies": {
     "@looker/sdk": "^21.0.10",
-    "@looker/sdk-rtl": "^21.0.10",
+    "@looker/rtl": "^1.0.0",
     "lodash": "^4.17.20",
     "uuid": "^8.3.1"
   },

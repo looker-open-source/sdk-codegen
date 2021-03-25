@@ -32,7 +32,7 @@ import {
   IRequestProps,
   IApiSettings,
   ITransport,
-} from '@looker/sdk-rtl'
+} from '@looker/rtl'
 import { NodeTransport } from '@looker/sdk-node'
 import { defaultScopes, SheetSDK } from '../SheetSDK'
 

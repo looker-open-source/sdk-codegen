@@ -25,7 +25,7 @@
  */
 
 import { Looker31SDK, Looker40SDK } from '@looker/sdk'
-import { IRawResponse } from '@looker/sdk-rtl'
+import { IRawResponse } from '@looker/rtl'
 import { cloneDeep } from 'lodash'
 
 import { RunItHttpMethod, RunItInput, RunItValues } from '../RunIt'

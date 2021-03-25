@@ -25,7 +25,7 @@
  */
 import { omit } from 'lodash'
 import { ValidationMessages } from '@looker/components'
-import { DefaultSettings } from '@looker/sdk-rtl'
+import { DefaultSettings } from '@looker/rtl'
 import { ITabTable, SheetSDK } from '@looker/wholly-sheet'
 import { getExtensionSDK } from '@looker/extension-sdk'
 import { getCore40SDK } from '@looker/extension-sdk-react'

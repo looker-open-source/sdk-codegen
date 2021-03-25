@@ -25,7 +25,7 @@
  */
 
 import { Looker40SDK as LookerSDK } from '@looker/sdk'
-import { IAuthSession } from '@looker/sdk-rtl'
+import { IAuthSession } from '@looker/rtl'
 import { NodeSettingsIniFile, NodeSession } from '@looker/sdk-node'
 import { rootIni } from './utils'
 

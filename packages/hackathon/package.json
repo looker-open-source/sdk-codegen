@@ -37,7 +37,7 @@
     "@looker/extension-sdk": "^21.0.10",
     "@looker/extension-sdk-react": "^21.0.10",
     "@looker/sdk": "^21.0.10",
-    "@looker/sdk-rtl": "^21.0.10",
+    "@looker/rtl": "^1.0.0",
     "@looker/wholly-sheet": "^21.0.10",
     "lodash": "^4.17.20",
     "react": "^16.13.1",

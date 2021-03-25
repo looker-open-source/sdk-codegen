@@ -24,7 +24,7 @@
 
  */
 import { NodeSettings, LookerNodeSDK } from '@looker/sdk-node'
-import { IApiSettings, IApiSection } from '@looker/sdk-rtl'
+import { IApiSettings, IApiSection } from '@looker/rtl'
 
 /**
  * @class CustomConfigReader

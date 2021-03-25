@@ -26,7 +26,7 @@
 
 import * as fs from 'fs'
 import dotenv from 'dotenv'
-import { boolDefault } from '@looker/sdk-rtl'
+import { boolDefault } from '@looker/rtl'
 import { readIniConfig } from '@looker/sdk-node'
 
 export interface ISDKConfigProps {

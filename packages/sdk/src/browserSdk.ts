@@ -30,7 +30,7 @@ import {
   ITransport,
   BrowserSession,
   BrowserTransport,
-} from '@looker/sdk-rtl'
+} from '@looker/rtl'
 import { Looker40SDK } from './4.0/methods'
 import { Looker31SDK } from './3.1/methods'
 

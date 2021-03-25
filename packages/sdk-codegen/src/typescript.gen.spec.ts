@@ -24,7 +24,7 @@
 
  */
 
-import { DelimArray } from '@looker/sdk-rtl'
+import { DelimArray } from '@looker/rtl'
 import { TestConfig } from './testUtils'
 import { TypescriptGen } from './typescript.gen'
 import { EnumType, titleCase } from './sdkModels'

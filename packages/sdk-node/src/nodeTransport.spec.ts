@@ -24,7 +24,7 @@
 
  */
 
-import { ITransportSettings } from '@looker/sdk-rtl'
+import { ITransportSettings } from '@looker/rtl'
 import { NodeCryptoHash, NodeTransport } from './nodeTransport'
 
 describe('NodeTransport', () => {

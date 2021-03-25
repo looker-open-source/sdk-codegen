@@ -14,7 +14,7 @@
   },
   "dependencies": {
     "@looker/sdk": "^21.0.4",
-    "@looker/sdk-rtl": "^21.0.4",
+    "@looker/rtl": "^1.0.0",
     "@looker/sdk-node": "^21.0.4",
     "ts-node": "^9.0.0"
   },

@@ -37,7 +37,7 @@ import {
   IRequestProps,
   ISDKError,
   LookerAppId,
-} from '@looker/sdk-rtl'
+} from '@looker/rtl'
 import {
   ExtensionSDK,
   FetchCustomParameters,

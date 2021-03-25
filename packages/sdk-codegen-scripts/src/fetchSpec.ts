@@ -26,7 +26,7 @@
 
 import { danger, log, warn } from '@looker/sdk-codegen-utils'
 import { IVersionInfo, SpecItem } from '@looker/sdk-codegen'
-import { defaultTimeout, ITransportSettings, sdkOk } from '@looker/sdk-rtl'
+import { defaultTimeout, ITransportSettings, sdkOk } from '@looker/rtl'
 import { NodeTransport } from '@looker/sdk-node'
 import {
   fail,

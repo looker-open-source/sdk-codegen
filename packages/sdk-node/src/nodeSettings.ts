@@ -35,7 +35,7 @@ import {
   ValueSettings,
   sdkError,
   unquote,
-} from '@looker/sdk-rtl'
+} from '@looker/rtl'
 
 /**
  * Read an environment key. Use defaultValue if it doesn't exist

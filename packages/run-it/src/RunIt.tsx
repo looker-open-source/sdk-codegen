@@ -40,7 +40,7 @@ import {
   useTabs,
 } from '@looker/components'
 import { Looker40SDK } from '@looker/sdk'
-import { IRawResponse } from '@looker/sdk-rtl'
+import { IRawResponse } from '@looker/rtl'
 import { ApiModel, IMethod } from '@looker/sdk-codegen'
 import {
   RequestForm,

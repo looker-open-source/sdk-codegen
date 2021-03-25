@@ -26,12 +26,7 @@
 
 import * as OAS from 'openapi3-ts'
 import md5 from 'blueimp-md5'
-import {
-  HttpMethod,
-  ResponseMode,
-  responseMode,
-  StatusCode,
-} from '@looker/sdk-rtl'
+import { HttpMethod, ResponseMode, responseMode, StatusCode } from '@looker/rtl'
 
 /**
  * Handy specification references

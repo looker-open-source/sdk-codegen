@@ -31,7 +31,7 @@ import {
   DefaultSettings,
   IApiSection,
   IApiSettings,
-} from '@looker/sdk-rtl'
+} from '@looker/rtl'
 import { NodeServices } from './nodeServices'
 import { NodeCryptoHash } from './nodeTransport'
 

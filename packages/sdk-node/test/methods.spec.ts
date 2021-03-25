@@ -45,7 +45,7 @@ import {
   boolDefault,
   defaultTimeout,
   ApiConfigMap,
-} from '@looker/sdk-rtl'
+} from '@looker/rtl'
 import {
   NodeSettings,
   NodeSettingsIniFile,

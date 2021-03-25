@@ -35,7 +35,7 @@ import {
   AuthSession,
   IAccessToken,
   IError,
-} from '@looker/sdk-rtl'
+} from '@looker/rtl'
 import { NodeTransport } from './nodeTransport'
 
 const strPost: HttpMethod = 'POST'
