@@ -632,7 +632,7 @@ latest versions of the language.
 
 If a "standard" package manager exists for the platform/language, deployment to that package manager must be supported
 before the Language SDK can be placed into _open beta_. For example, the Typescript SDK is available via the
-[Node Package Manager](https://www.npmjs.com/package/@looker/sdk) and
+[Node Package Manager](https://www.npmjs.com/package/@joeldodge/sdk) and
 the Python SDK is on [PyPi](https://pypi.org/project/looker-sdk/).
 
 A script or command to deploy to the relevant package manager must be provided for the Language SDK.

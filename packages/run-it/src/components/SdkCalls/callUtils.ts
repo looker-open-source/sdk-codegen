@@ -28,7 +28,7 @@ import {
   KeyedCollection,
   CodeGen,
   codeGenerators,
-} from '@looker/sdk-codegen'
+} from '@joeldodge/sdk-codegen'
 
 /**
  * Returns a collection of generators for all supported (non legacy) languages

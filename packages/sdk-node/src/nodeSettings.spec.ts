@@ -30,7 +30,7 @@ import {
   boolDefault,
   ApiConfigMap,
   IApiSettings,
-} from '@looker/sdk-rtl'
+} from '@joeldodge/sdk-rtl'
 import { TestConfig } from './testUtils'
 import { ApiConfig, NodeSettings, NodeSettingsIniFile } from './nodeSettings'
 

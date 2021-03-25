@@ -30,8 +30,8 @@ import {
   csvHeaderRow,
   csvDiffRow,
   IMethod,
-} from '@looker/sdk-codegen'
-import { compareSpecs } from '@looker/sdk-codegen/src/specDiff'
+} from '@joeldodge/sdk-codegen'
+import { compareSpecs } from '@joeldodge/sdk-codegen/src/specDiff'
 import { readFileSync } from '../src'
 
 /**

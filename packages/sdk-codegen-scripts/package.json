@@ -1,5 +1,5 @@
 {
-  "name": "@looker/sdk-codegen-scripts",
+  "name": "@joeldodge/sdk-codegen-scripts",
   "version": "21.0.10",
   "description": "Looker SDK Codegen scripts",
   "main": "lib/index.js",
@@ -24,14 +24,14 @@
   "homepage": "https://github.com/looker-open-source/sdk-codegen/tree/main/packages/sdk-codegen-scripts",
   "scripts": {
     "docs": "typedoc --mode file --out docs",
-    "watch:cjs": "yarn lerna exec --scope @looker/sdk-codegen-scripts --stream 'BABEL_ENV=build_cjs babel src --root-mode upward --out-dir lib --source-maps --extensions .ts,.tsx --no-comments --watch'"
+    "watch:cjs": "yarn lerna exec --scope @joeldodge/sdk-codegen-scripts --stream 'BABEL_ENV=build_cjs babel src --root-mode upward --out-dir lib --source-maps --extensions .ts,.tsx --no-comments --watch'"
   },
   "dependencies": {
-    "@looker/sdk": "^21.0.9",
-    "@looker/sdk-codegen": "^21.1.0",
-    "@looker/sdk-codegen-utils": "^21.0.9",
-    "@looker/sdk-node": "^21.0.9",
-    "@looker/sdk-rtl": "^21.0.9",
+    "@joeldodge/sdk": "^21.0.9",
+    "@joeldodge/sdk-codegen": "^21.1.0",
+    "@joeldodge/sdk-codegen-utils": "^21.0.9",
+    "@joeldodge/sdk-node": "^21.0.9",
+    "@joeldodge/sdk-rtl": "^21.0.9",
     "config": "^3.3.1",
     "cross-env": "^7.0.2"
   },

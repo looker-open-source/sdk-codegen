@@ -33,7 +33,7 @@ import {
   List,
   Heading,
 } from '@looker/components'
-import { MethodList } from '@looker/sdk-codegen'
+import { MethodList } from '@joeldodge/sdk-codegen'
 import { useHistory, useRouteMatch } from 'react-router-dom'
 
 import { NavHashLink } from 'react-router-hash-link'

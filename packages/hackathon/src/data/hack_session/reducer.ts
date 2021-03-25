@@ -23,7 +23,7 @@
  SOFTWARE.
 
  */
-import { IUser as ILookerUser } from '@looker/sdk'
+import { IUser as ILookerUser } from '@joeldodge/sdk'
 import { IHackathonProps, ITechnologyProps, IHackerProps } from '../../models'
 import { ProjectsHeadings, HackersHeadings, JudgingsHeadings } from '../types'
 import { HackSessionAction, Actions } from './actions'

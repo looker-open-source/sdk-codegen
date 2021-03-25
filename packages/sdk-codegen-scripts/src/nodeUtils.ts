@@ -26,7 +26,7 @@
 
 import * as fs from 'fs'
 import { execSync, ExecSyncOptionsWithStringEncoding } from 'child_process'
-import { warn } from '@looker/sdk-codegen-utils'
+import { warn } from '@joeldodge/sdk-codegen-utils'
 
 const utf8: BufferEncoding = 'utf-8'
 export const utf8Encoding = { encoding: utf8 }

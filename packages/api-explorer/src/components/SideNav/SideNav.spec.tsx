@@ -24,7 +24,7 @@
 
  */
 import React from 'react'
-import { ApiModel } from '@looker/sdk-codegen'
+import { ApiModel } from '@joeldodge/sdk-codegen'
 import { pick } from 'lodash'
 import userEvent from '@testing-library/user-event'
 import { screen } from '@testing-library/react'

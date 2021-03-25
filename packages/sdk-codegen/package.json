@@ -1,5 +1,5 @@
 {
-  "name": "@looker/sdk-codegen",
+  "name": "@joeldodge/sdk-codegen",
   "version": "21.1.0",
   "description": "Looker SDK Codegen core",
   "main": "lib/index.js",
@@ -29,13 +29,13 @@
   ],
   "scripts": {
     "docs": "typedoc --mode file --out docs",
-    "watch:cjs": "yarn lerna exec --scope @looker/sdk-codegen --stream 'BABEL_ENV=build_cjs babel src --root-mode upward --out-dir lib --source-maps --extensions .ts,.tsx --no-comments --watch'",
-    "watch": "yarn lerna exec --scope @looker/sdk-codegen --stream 'BABEL_ENV=build babel src --root-mode upward --out-dir lib --source-maps --extensions .ts,.tsx --no-comments --watch'"
+    "watch:cjs": "yarn lerna exec --scope @joeldodge/sdk-codegen --stream 'BABEL_ENV=build_cjs babel src --root-mode upward --out-dir lib --source-maps --extensions .ts,.tsx --no-comments --watch'",
+    "watch": "yarn lerna exec --scope @joeldodge/sdk-codegen --stream 'BABEL_ENV=build babel src --root-mode upward --out-dir lib --source-maps --extensions .ts,.tsx --no-comments --watch'"
   },
   "dependencies": {
-    "@looker/sdk-codegen-utils": "^21.0.9",
-    "@looker/sdk-node": "^21.0.9",
-    "@looker/sdk-rtl": "^21.0.9",
+    "@joeldodge/sdk-codegen-utils": "^21.0.9",
+    "@joeldodge/sdk-node": "^21.0.9",
+    "@joeldodge/sdk-rtl": "^21.0.9",
     "blueimp-md5": "^2.13.0",
     "openapi3-ts": "^1.3.0"
   },

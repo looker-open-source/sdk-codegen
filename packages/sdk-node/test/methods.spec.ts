@@ -39,13 +39,13 @@ import {
   Looker40SDK,
   Looker31SDKStream,
   Looker40SDKStream,
-} from '@looker/sdk'
+} from '@joeldodge/sdk'
 import {
   DelimArray,
   boolDefault,
   defaultTimeout,
   ApiConfigMap,
-} from '@looker/sdk-rtl'
+} from '@joeldodge/sdk-rtl'
 import {
   NodeSettings,
   NodeSettingsIniFile,

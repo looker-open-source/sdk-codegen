@@ -27,7 +27,7 @@ import {
   SearchCriterionTerm,
   CriteriaToSet,
   SearchAll,
-} from '@looker/sdk-codegen'
+} from '@joeldodge/sdk-codegen'
 import { searchReducer, defaultSearchState } from './reducer'
 
 describe('Search reducer', () => {

@@ -26,7 +26,7 @@
 
 import React, { FC } from 'react'
 import { Heading } from '@looker/components'
-import { IRawResponse } from '@looker/sdk-rtl'
+import { IRawResponse } from '@joeldodge/sdk-rtl'
 
 import { pickResponseHandler } from './responseUtils'
 

@@ -24,7 +24,7 @@
 
  */
 
-import { SearchCriterionTerm } from '@looker/sdk-codegen'
+import { SearchCriterionTerm } from '@joeldodge/sdk-codegen'
 import { SearchAction } from './reducer'
 
 export const setPattern = (pattern: string): SearchAction => ({

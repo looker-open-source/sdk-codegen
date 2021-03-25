@@ -25,7 +25,7 @@
  */
 import React, { FC, useContext } from 'react'
 import { TabList, Tab, TabPanels, TabPanel, useTabs } from '@looker/components'
-import { findExampleLanguages, IMethod } from '@looker/sdk-codegen'
+import { findExampleLanguages, IMethod } from '@joeldodge/sdk-codegen'
 
 import { CollapserCard } from '../Collapser'
 import { LodeContext } from '../../context/examples'

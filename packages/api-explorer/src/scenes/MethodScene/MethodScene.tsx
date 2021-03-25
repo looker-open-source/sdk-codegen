@@ -37,7 +37,7 @@ import {
 import { ThemeContext } from 'styled-components'
 import { useParams } from 'react-router-dom'
 import { RunIt, RunItContext } from '@looker/run-it'
-import { ApiModel, typeRefs } from '@looker/sdk-codegen'
+import { ApiModel, typeRefs } from '@joeldodge/sdk-codegen'
 import {
   DocActivityType,
   DocMarkdown,

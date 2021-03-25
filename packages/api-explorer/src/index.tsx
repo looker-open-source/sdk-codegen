@@ -28,7 +28,7 @@ import React from 'react'
 import { BrowserRouter as Router } from 'react-router-dom'
 import ReactDOM from 'react-dom'
 
-import { ApiModel } from '@looker/sdk-codegen'
+import { ApiModel } from '@joeldodge/sdk-codegen'
 import { SpecItems } from './ApiExplorer'
 import { StandaloneApiExplorer } from './StandaloneApiExplorer'
 

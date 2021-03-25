@@ -25,7 +25,7 @@
  */
 
 import React, { FC } from 'react'
-import { TagList } from '@looker/sdk-codegen'
+import { TagList } from '@joeldodge/sdk-codegen'
 import { SideNavMethods } from './SideNavMethods'
 
 interface TagsProps {

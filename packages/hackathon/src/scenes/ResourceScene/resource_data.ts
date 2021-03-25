@@ -147,7 +147,7 @@ export const resources = [
       'The spec for the React Extension SDK. This lets you build a Looker extension— See the templates for more.',
     type: 'resource',
     tag: 'extension',
-    link: 'https://www.npmjs.com/package/@looker/extension-sdk-react',
+    link: 'https://www.npmjs.com/package/@joeldodge/extension-sdk-react',
     title: 'Extension SDK: React',
   },
   {

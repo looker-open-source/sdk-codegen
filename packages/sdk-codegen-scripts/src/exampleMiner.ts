@@ -27,7 +27,7 @@
 import * as fs from 'fs'
 import path from 'path'
 import { execSync } from 'child_process'
-import { warn } from '@looker/sdk-codegen-utils'
+import { warn } from '@joeldodge/sdk-codegen-utils'
 import {
   IFileCall,
   INugget,
@@ -37,7 +37,7 @@ import {
   SDKCalls,
   Summaries,
   IExampleMine,
-} from '@looker/sdk-codegen'
+} from '@joeldodge/sdk-codegen'
 
 export interface IFileMine {
   mineFile(fileName: string): SDKCalls

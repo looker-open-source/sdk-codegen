@@ -24,7 +24,7 @@
 
  */
 import React, { FC } from 'react'
-import { IParameter } from '@looker/sdk-codegen'
+import { IParameter } from '@joeldodge/sdk-codegen'
 import { Tooltip } from '@looker/components'
 
 export interface DocArgProps {

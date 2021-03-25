@@ -25,7 +25,7 @@
  */
 import React, { FC } from 'react'
 import { List, Link, Text, Tooltip, ListItem } from '@looker/components'
-import { findExamples, IExampleMine } from '@looker/sdk-codegen'
+import { findExamples, IExampleMine } from '@joeldodge/sdk-codegen'
 import ReactMarkdown from 'react-markdown'
 
 interface DocExamplesProps {

@@ -30,7 +30,7 @@ import {
   PopoverContent,
   FieldCheckbox,
 } from '@looker/components'
-import { SearchCriterion } from '@looker/sdk-codegen'
+import { SearchCriterion } from '@joeldodge/sdk-codegen'
 import React, { useContext, FC, BaseSyntheticEvent } from 'react'
 
 import { setCriteria } from '../../reducers'

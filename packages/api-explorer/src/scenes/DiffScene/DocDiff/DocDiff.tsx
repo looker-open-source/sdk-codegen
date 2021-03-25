@@ -23,7 +23,7 @@
  SOFTWARE.
 
  */
-import { ApiModel, DiffRow } from '@looker/sdk-codegen'
+import { ApiModel, DiffRow } from '@joeldodge/sdk-codegen'
 import {
   Flex,
   Heading,

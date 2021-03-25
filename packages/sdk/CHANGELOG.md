@@ -18,7 +18,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [21.0.4]
 
-- **BREAKING CHANGE**: Functionality dependent on node has been moved to a separate package, `@looker/sdk-node`. When upgrading the SDK in a node project you must add this new package as a dependency.
+- **BREAKING CHANGE**: Functionality dependent on node has been moved to a separate package, `@joeldodge/sdk-node`. When upgrading the SDK in a node project you must add this new package as a dependency.
 - **BREAKING CHANGE**: The `NodeSettingsIniFile` constructor has changed and now expects an enviroment prefix as the first parameter. If you are not using environment variables, set the prefix to an empty string.
 
 ## [21.0.0]
@@ -31,7 +31,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - **BREAKING CHANGE**: The internally constructed `stream` property of the SDK object has been removed. Instead, use:
 
 ```ts
-import { Looker40SDKStream } from '@looker/sdk'
+import { Looker40SDKStream } from '@joeldodge/sdk'
 
 const sdkStream = new Looker40SDKStream(sdk.authSession)
 ```

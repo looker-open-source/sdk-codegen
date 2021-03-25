@@ -34,7 +34,7 @@ import {
   Tooltip,
   Space,
 } from '@looker/components'
-import { IProperty } from '@looker/sdk-codegen'
+import { IProperty } from '@joeldodge/sdk-codegen'
 import ReactMarkdown from 'react-markdown'
 import {
   expandable,

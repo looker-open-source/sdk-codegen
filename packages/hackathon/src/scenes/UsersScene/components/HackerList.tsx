@@ -33,7 +33,7 @@ import {
   DataTable,
 } from '@looker/components'
 import { useSelector } from 'react-redux'
-import { getExtensionSDK } from '@looker/extension-sdk'
+import { getExtensionSDK } from '@joeldodge/extension-sdk'
 import { IHackerProps, sheetCell } from '../../../models'
 import { getHackersHeadings } from '../../../data/hack_session/selectors'
 import { PAGE_SIZE } from '../../../constants'

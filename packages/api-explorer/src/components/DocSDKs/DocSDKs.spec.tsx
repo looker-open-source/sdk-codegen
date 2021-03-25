@@ -27,7 +27,7 @@ import React from 'react'
 import { renderWithTheme } from '@looker/components-test-utils'
 import { screen } from '@testing-library/react'
 
-import { codeGenerators } from '@looker/sdk-codegen'
+import { codeGenerators } from '@joeldodge/sdk-codegen'
 import { api } from '../../test-data'
 import { DocSDKs } from './DocSDKs'
 

@@ -23,7 +23,7 @@
  SOFTWARE.
 
  */
-import { SearchCriterionTerm } from '@looker/sdk-codegen'
+import { SearchCriterionTerm } from '@joeldodge/sdk-codegen'
 import { setPattern, setCriteria } from './actions'
 
 describe('Search reducer actions', () => {

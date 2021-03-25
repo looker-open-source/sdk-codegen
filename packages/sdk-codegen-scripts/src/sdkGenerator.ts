@@ -24,8 +24,8 @@
 
  */
 
-import * as Models from '@looker/sdk-codegen'
-import { success, warn } from '@looker/sdk-codegen-utils'
+import * as Models from '@joeldodge/sdk-codegen'
+import { success, warn } from '@joeldodge/sdk-codegen-utils'
 import { readFileSync } from './nodeUtils'
 
 export const specFromFile = (specFile: string): Models.ApiModel => {

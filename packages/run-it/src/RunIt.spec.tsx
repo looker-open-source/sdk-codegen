@@ -28,7 +28,7 @@ import React from 'react'
 import { renderWithTheme } from '@looker/components-test-utils'
 import { screen, waitFor } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
-import { ApiModel, IMethod } from '@looker/sdk-codegen'
+import { ApiModel, IMethod } from '@joeldodge/sdk-codegen'
 
 import { RunIt, RunItInput } from './RunIt'
 import { api, testTextResponse } from './test-data'

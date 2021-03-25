@@ -26,7 +26,7 @@
 
 import { shallow } from 'enzyme'
 import * as React from 'react'
-import { Looker31SDK } from '@looker/sdk'
+import { Looker31SDK } from '@joeldodge/sdk'
 import { unregisterCoreSDK2 } from '../../sdk/core_sdk2'
 import { ExtensionProvider2 } from './ExtensionProvider2'
 
@@ -37,7 +37,7 @@ const mockHost = {
   },
 }
 
-jest.mock('@looker/extension-sdk', () => ({
+jest.mock('@joeldodge/extension-sdk', () => ({
   connectExtensionHost: () =>
     failConnection
       ? Promise.reject(new Error('Extension failed to load'))

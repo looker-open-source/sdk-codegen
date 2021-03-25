@@ -25,7 +25,7 @@
  */
 
 import path from 'path'
-import { NodeSettingsIniFile } from '@looker/sdk-node'
+import { NodeSettingsIniFile } from '@joeldodge/sdk-node'
 
 import {
   DeclarationMiner,

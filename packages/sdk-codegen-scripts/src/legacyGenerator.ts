@@ -24,8 +24,8 @@
 
  */
 
-import { log } from '@looker/sdk-codegen-utils'
-import { IGeneratorSpec, legacyLanguages } from '@looker/sdk-codegen'
+import { log } from '@joeldodge/sdk-codegen-utils'
+import { IGeneratorSpec, legacyLanguages } from '@joeldodge/sdk-codegen'
 import { ISDKConfigProps } from './sdkConfig'
 import { run } from './nodeUtils'
 import { fetchLookerVersions, logConvertSpec } from './fetchSpec'

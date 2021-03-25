@@ -34,8 +34,8 @@ import {
   Grid,
   Heading,
 } from '@looker/components'
-import { DiffRow } from '@looker/sdk-codegen/src'
-import { ApiModel, IMethod } from '@looker/sdk-codegen'
+import { DiffRow } from '@joeldodge/sdk-codegen/src'
+import { ApiModel, IMethod } from '@joeldodge/sdk-codegen'
 import { DiffBanner } from './DiffBanner'
 import { differ } from './docDiffUtils'
 

@@ -26,7 +26,7 @@
 
 import React, { useEffect } from 'react'
 import { useLocation, useHistory } from 'react-router-dom'
-import { ExtensionHostApi } from '@looker/extension-sdk'
+import { ExtensionHostApi } from '@joeldodge/extension-sdk'
 import { clone } from 'lodash'
 import { RouteChangeListenerProps } from './types'
 

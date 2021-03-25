@@ -25,10 +25,10 @@
  */
 import React, { FC, useContext } from 'react'
 import { Redirect, Route, Switch } from 'react-router-dom'
-import { ApiModel } from '@looker/sdk-codegen'
+import { ApiModel } from '@joeldodge/sdk-codegen'
 import { OAuthScene, RunItContext } from '@looker/run-it'
 
-import { Looker40SDK } from '@looker/sdk'
+import { Looker40SDK } from '@joeldodge/sdk'
 import { HomeScene, MethodScene, TagScene, TypeScene } from '../scenes'
 import { DiffScene } from '../scenes/DiffScene'
 import { SpecItems } from '../ApiExplorer'

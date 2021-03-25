@@ -31,7 +31,7 @@ import {
   ResponseMode,
   responseMode,
   StatusCode,
-} from '@looker/sdk-rtl'
+} from '@joeldodge/sdk-rtl'
 
 /**
  * Handy specification references

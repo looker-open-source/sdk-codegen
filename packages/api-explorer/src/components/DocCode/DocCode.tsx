@@ -27,7 +27,7 @@
 import React, { FC, useContext } from 'react'
 import AceEditor from 'react-ace'
 
-import { findGenerator } from '@looker/sdk-codegen'
+import { findGenerator } from '@joeldodge/sdk-codegen'
 import { SearchContext } from '../../context/search'
 import { highlightSourceCode } from './utils'
 

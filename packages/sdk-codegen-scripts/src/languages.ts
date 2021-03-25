@@ -31,7 +31,7 @@ import {
   getCodeGenerator,
   ICodeGen,
   IVersionInfo,
-} from '@looker/sdk-codegen'
+} from '@joeldodge/sdk-codegen'
 import { quit } from './nodeUtils'
 
 /**

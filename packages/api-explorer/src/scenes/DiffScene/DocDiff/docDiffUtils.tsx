@@ -24,7 +24,7 @@
 
  */
 
-import { ApiModel, DiffRow, PseudoGen } from '@looker/sdk-codegen'
+import { ApiModel, DiffRow, PseudoGen } from '@joeldodge/sdk-codegen'
 
 export const diffText = (row: DiffRow, status: string, api: ApiModel) => {
   const gen = new PseudoGen(api)

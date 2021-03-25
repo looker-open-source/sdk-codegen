@@ -23,7 +23,7 @@
  SOFTWARE.
 
  */
-import { ApiModel } from '@looker/sdk-codegen'
+import { ApiModel } from '@joeldodge/sdk-codegen'
 
 import { SpecItems } from '../ApiExplorer'
 import { initDefaultSpecState } from '../reducers'

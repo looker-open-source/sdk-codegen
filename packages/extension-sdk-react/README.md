@@ -5,13 +5,13 @@
 bump Add dependency to your project using yarn or npm
 
 ```sh
-yarn add @looker/extension-sdk-react
+yarn add @joeldodge/extension-sdk-react
 ```
 
 or
 
 ```sh
-npm install @looker/extension-sdk-react
+npm install @joeldodge/extension-sdk-react
 ```
 
 ## Usage
@@ -42,7 +42,7 @@ import React, { useContext } from "react"
 import {
   ExtensionContext,
   ExtensionContextData
-} from "@looker/extension-sdk-react"
+} from "@joeldodge/extension-sdk-react"
 
 export const MyComponent: React.FC<{}> = () => {
   const extensionContext = useContext<ExtensionContextData>(ExtensionContext)
@@ -115,7 +115,7 @@ The Looker SDK is available outside of the Extension provider using the `getCore
 #### Example saga
 
 ```tsx
-import { getCore40SDK } from '@looker/extension-sdk-react'
+import { getCore40SDK } from '@joeldodge/extension-sdk-react'
 import { all, call, put, takeEvery, select } from 'redux-saga/effects'
 import {
   Actions,

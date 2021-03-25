@@ -28,7 +28,7 @@ import {
   SearchCriterionTerm,
   SearchAll,
   SetToCriteria,
-} from '@looker/sdk-codegen'
+} from '@joeldodge/sdk-codegen'
 
 export interface SearchState {
   pattern: string

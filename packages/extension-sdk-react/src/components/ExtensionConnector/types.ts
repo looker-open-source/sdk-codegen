@@ -24,7 +24,7 @@
 
  */
 
-import { ExtensionHostApi, ExtensionSDK } from '@looker/extension-sdk'
+import { ExtensionHostApi, ExtensionSDK } from '@joeldodge/extension-sdk'
 
 /**
  * Base extension context

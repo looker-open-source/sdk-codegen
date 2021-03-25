@@ -24,7 +24,7 @@
 
  */
 
-import { ApiModel } from '@looker/sdk-codegen'
+import { ApiModel } from '@joeldodge/sdk-codegen'
 import { SpecItem, SpecItems } from '../../ApiExplorer'
 import { fetchSpec } from './utils'
 

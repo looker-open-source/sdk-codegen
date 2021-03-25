@@ -23,7 +23,7 @@
  SOFTWARE.
 
  */
-import { ApiModel } from '@looker/sdk-codegen'
+import { ApiModel } from '@joeldodge/sdk-codegen'
 import React, { FC } from 'react'
 import { useParams } from 'react-router-dom'
 import { Section } from '@looker/components'

@@ -26,7 +26,7 @@
 
 import React from 'react'
 import ReactDOM from 'react-dom'
-import { ExtensionProvider } from '@looker/extension-sdk-react'
+import { ExtensionProvider } from '@joeldodge/extension-sdk-react'
 import { ExtensionApiExplorer } from './ExtensionApiExplorer'
 
 window.addEventListener('DOMContentLoaded', () => {

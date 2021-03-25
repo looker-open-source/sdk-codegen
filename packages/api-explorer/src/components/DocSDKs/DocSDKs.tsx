@@ -33,7 +33,7 @@ import {
   TabPanels,
   useTabs,
 } from '@looker/components'
-import { IMethod, IType, ApiModel } from '@looker/sdk-codegen'
+import { IMethod, IType, ApiModel } from '@joeldodge/sdk-codegen'
 
 import { getGenerators } from '@looker/run-it'
 import { DocCode } from '../DocCode'

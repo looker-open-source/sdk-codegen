@@ -24,7 +24,7 @@
 
  */
 import React from 'react'
-import { methodRefs, typeRefs } from '@looker/sdk-codegen'
+import { methodRefs, typeRefs } from '@joeldodge/sdk-codegen'
 import { screen } from '@testing-library/react'
 
 import { renderWithSearchAndRouter } from '../../test-utils'

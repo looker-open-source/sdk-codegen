@@ -24,7 +24,7 @@
 
  */
 import React, { ReactElement } from 'react'
-import { IRawResponse, ResponseMode, responseMode } from '@looker/sdk-rtl'
+import { IRawResponse, ResponseMode, responseMode } from '@joeldodge/sdk-rtl'
 import { Paragraph, CodeBlock } from '@looker/components'
 
 import { CodeStructure } from '../CodeStructure'

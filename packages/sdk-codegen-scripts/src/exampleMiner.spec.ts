@@ -25,7 +25,7 @@
  */
 
 import path from 'path'
-import { SDKCalls } from '@looker/sdk-codegen'
+import { SDKCalls } from '@joeldodge/sdk-codegen'
 import {
   CodeMiner,
   filterCodeFiles,

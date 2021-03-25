@@ -26,7 +26,7 @@
 
 import React, { FC, useState } from 'react'
 import { BrowserRouter, Route } from 'react-router-dom'
-import { ApiModel } from '@looker/sdk-codegen'
+import { ApiModel } from '@joeldodge/sdk-codegen'
 import {
   ComponentsProvider,
   Select,

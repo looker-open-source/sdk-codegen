@@ -23,7 +23,7 @@
  SOFTWARE.
 
  */
-import { IParameter } from '@looker/sdk-codegen'
+import { IParameter } from '@joeldodge/sdk-codegen'
 import React, { FC, Fragment } from 'react'
 
 import { DocParam } from './DocParam'

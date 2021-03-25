@@ -25,10 +25,10 @@
  */
 import { omit } from 'lodash'
 import { ValidationMessages } from '@looker/components'
-import { DefaultSettings } from '@looker/sdk-rtl'
+import { DefaultSettings } from '@joeldodge/sdk-rtl'
 import { ITabTable, SheetSDK } from '@looker/wholly-sheet'
-import { getExtensionSDK } from '@looker/extension-sdk'
-import { getCore40SDK } from '@looker/extension-sdk-react'
+import { getExtensionSDK } from '@joeldodge/extension-sdk'
+import { getCore40SDK } from '@joeldodge/extension-sdk-react'
 import { initActiveSheet, SheetData } from '../models/SheetData'
 import { GAuthSession } from '../authToken/gAuthSession'
 import {

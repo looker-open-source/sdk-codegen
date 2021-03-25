@@ -24,8 +24,8 @@
 
  */
 
-import { commentBlock } from '@looker/sdk-codegen-utils'
-import { DelimArray } from '@looker/sdk-rtl'
+import { commentBlock } from '@joeldodge/sdk-codegen-utils'
+import { DelimArray } from '@joeldodge/sdk-rtl'
 import {
   ApiModel,
   Arg,

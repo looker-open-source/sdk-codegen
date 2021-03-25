@@ -33,7 +33,7 @@ import {
   IMethod,
   MethodList,
   TagList,
-} from '@looker/sdk-codegen'
+} from '@joeldodge/sdk-codegen'
 
 export const allDiffToggles = [
   'missing',

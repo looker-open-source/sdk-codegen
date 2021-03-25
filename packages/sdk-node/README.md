@@ -2,7 +2,7 @@
 
 BUMP The Looker SDK for Typescript/Javascript works with Node and browser run-times. The SDK provides a convenient way to communicate with a Looker server's APIs.
 
-This package is specifically for using the Looker Typescript SDK with Node. It depends on the [@looker/sdk](https://www.npmjs.com/package/@looker/sdk) package and [@looker/sdk-rtl](https://www.npmjs.com/package/@looker/sdk-rtl).
+This package is specifically for using the Looker Typescript SDK with Node. It depends on the [@joeldodge/sdk](https://www.npmjs.com/package/@joeldodge/sdk) package and [@joeldodge/sdk-rtl](https://www.npmjs.com/package/@joeldodge/sdk-rtl).
 
 The SDK uses a plug-in architecture (also known as dependency injection) for initializing that supports run-time specific transports (like `NodeTransport` and `BrowserTransport`) and different approaches for managing API authentication (like `NodeSession`, `BrowserSession`, `ProxySession`, and `OauthSession`).
 
@@ -21,16 +21,16 @@ The Looker SDK can be used in a node application in 3 steps:
 Using `yarn`:
 
 ```bash
-yarn add @looker/sdk @looker/sdk-rtl @looker/sdk-node
+yarn add @joeldodge/sdk @joeldodge/sdk-rtl @joeldodge/sdk-node
 ```
 
 Using `npm`:
 
 ```bash
-npm install @looker/sdk @looker/sdk-rtl @looker/sdk-node
+npm install @joeldodge/sdk @joeldodge/sdk-rtl @joeldodge/sdk-node
 ```
 
-**Note**: If you are only intending to use the SDK in a browser, omit `@looker/sdk-node`.
+**Note**: If you are only intending to use the SDK in a browser, omit `@joeldodge/sdk-node`.
 
 ### Configure the SDK for your Looker server
 
@@ -60,7 +60,7 @@ When the SDK is installed and the server location and API credentials are config
 Verify authentication works and that API calls will succeed with code similar to the following:
 
 ```typescript
-import { LookerNodeSDK } from '@looker/sdk-node'
+import { LookerNodeSDK } from '@joeldodge/sdk-node'
 (async () => {
   // create a Node SDK object for API 3.1
   const sdk = LookerNodeSDK.init31()
@@ -107,8 +107,8 @@ Starting with Looker release 7.2, the experimental version of API 4.0 is availab
 Code similar to the following can be used to develop with both the 3.1 and 4.0 SDKs in the same source file:
 
 ```typescript
-import { Looker40SDK, Looker31SDK } from '@looker/sdk'
-import { NodeSession, NodeSettingsIniFile } from '@looker/sdk-node'
+import { Looker40SDK, Looker31SDK } from '@joeldodge/sdk'
+import { NodeSession, NodeSettingsIniFile } from '@joeldodge/sdk-node'
 
 const settings = new NodeSettingsIniFile()
 const session = new NodeSession(settings)

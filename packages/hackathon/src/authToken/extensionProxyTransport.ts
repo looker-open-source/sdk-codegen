@@ -37,12 +37,12 @@ import {
   IRequestProps,
   ISDKError,
   LookerAppId,
-} from '@looker/sdk-rtl'
+} from '@joeldodge/sdk-rtl'
 import {
   ExtensionSDK,
   FetchCustomParameters,
   FetchProxyDataResponse,
-} from '@looker/extension-sdk'
+} from '@joeldodge/extension-sdk'
 
 export class ExtensionProxyTransport extends BaseTransport {
   constructor(public extensionSDK: ExtensionSDK, options: ITransportSettings) {

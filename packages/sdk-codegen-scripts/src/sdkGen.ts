@@ -25,8 +25,8 @@
  */
 
 import * as fs from 'fs'
-import { danger, log } from '@looker/sdk-codegen-utils'
-import { IVersionInfo, ICodeGen, codeGenerators } from '@looker/sdk-codegen'
+import { danger, log } from '@joeldodge/sdk-codegen-utils'
+import { IVersionInfo, ICodeGen, codeGenerators } from '@joeldodge/sdk-codegen'
 import { ISDKConfigProps, SDKConfig } from './sdkConfig'
 import {
   fetchLookerVersion,

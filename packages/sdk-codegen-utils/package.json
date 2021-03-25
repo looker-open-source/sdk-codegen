@@ -1,5 +1,5 @@
 {
-  "name": "@looker/sdk-codegen-utils",
+  "name": "@joeldodge/sdk-codegen-utils",
   "version": "21.0.9",
   "description": "Looker SDK Codegen utils",
   "main": "lib/index.js",
@@ -28,6 +28,6 @@
     "codegen"
   ],
   "scripts": {
-    "watch:cjs": "yarn lerna exec --scope @looker/sdk-codegen-utils --stream 'BABEL_ENV=build_cjs babel src --root-mode upward --out-dir lib --source-maps --extensions .ts,.tsx --no-comments --watch'"
+    "watch:cjs": "yarn lerna exec --scope @joeldodge/sdk-codegen-utils --stream 'BABEL_ENV=build_cjs babel src --root-mode upward --out-dir lib --source-maps --extensions .ts,.tsx --no-comments --watch'"
   }
 }

@@ -32,8 +32,8 @@ import {
   IRequestProps,
   ITransport,
   sdkError,
-} from '@looker/sdk-rtl'
-import { ExtensionSDK } from '@looker/extension-sdk'
+} from '@joeldodge/sdk-rtl'
+import { ExtensionSDK } from '@joeldodge/extension-sdk'
 import { defaultScopes } from '@looker/wholly-sheet'
 
 export class GAuthToken extends AuthToken {

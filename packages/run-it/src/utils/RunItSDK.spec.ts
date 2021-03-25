@@ -24,8 +24,8 @@
 
  */
 
-import { DefaultSettings, IApiSettings } from '@looker/sdk-rtl'
-import { LookerBrowserSDK } from '@looker/sdk'
+import { DefaultSettings, IApiSettings } from '@joeldodge/sdk-rtl'
+import { LookerBrowserSDK } from '@joeldodge/sdk'
 
 import { defaultConfigurator } from '..'
 import { RunItSettings } from './RunItSDK'

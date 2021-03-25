@@ -24,7 +24,7 @@
 
  */
 import React, { FC } from 'react'
-import { IMethod } from '@looker/sdk-codegen'
+import { IMethod } from '@joeldodge/sdk-codegen'
 import { Code, Flex, SpaceVertical, Text } from '@looker/components'
 import { MethodBadge } from '@looker/run-it'
 

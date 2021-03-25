@@ -38,7 +38,7 @@ const mockHost: any = {
   },
 }
 
-jest.mock('@looker/extension-sdk', () => ({
+jest.mock('@joeldodge/extension-sdk', () => ({
   connectExtensionHost: () =>
     failConnection
       ? Promise.reject(new Error('Extension failed to load'))

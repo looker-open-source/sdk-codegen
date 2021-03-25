@@ -24,7 +24,7 @@
 
  */
 
-import { ExtensionSDK } from '@looker/extension-sdk'
+import { ExtensionSDK } from '@joeldodge/extension-sdk'
 
 export const setupClosePopoversListener = (extensionSDK?: ExtensionSDK) => {
   const onBodyMousedown = () => {

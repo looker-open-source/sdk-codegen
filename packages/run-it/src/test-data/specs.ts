@@ -23,7 +23,7 @@
  SOFTWARE.
 
  */
-import { ApiModel } from '@looker/sdk-codegen'
+import { ApiModel } from '@joeldodge/sdk-codegen'
 
 // eslint-disable-next-line @typescript-eslint/no-var-requires
 const spec = require('../../../../spec/Looker.3.1.oas.json')

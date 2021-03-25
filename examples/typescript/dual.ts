@@ -24,8 +24,8 @@
 
  */
 
-import { Looker40SDK, Looker31SDK } from '@looker/sdk'
-import { NodeSession, NodeSettingsIniFile } from '@looker/sdk-node'
+import { Looker40SDK, Looker31SDK } from '@joeldodge/sdk'
+import { NodeSession, NodeSettingsIniFile } from '@joeldodge/sdk-node'
 import { rootIni } from './utils'
 
 const localConfig = rootIni()

@@ -23,7 +23,7 @@
  SOFTWARE.
 
  */
-import { IMethodResponse } from '@looker/sdk-codegen'
+import { IMethodResponse } from '@joeldodge/sdk-codegen'
 import React, { FC } from 'react'
 import { Tooltip } from '@looker/components'
 

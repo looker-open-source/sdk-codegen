@@ -18,9 +18,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 * The following workspace dependencies were updated
   * dependencies
     * @looker/run-it bumped from ^21.0.9 to ^21.0.10
-    * @looker/sdk-codegen bumped from ^21.0.9 to ^21.1.0
+    * @joeldodge/sdk-codegen bumped from ^21.0.9 to ^21.1.0
   * devDependencies
-    * @looker/sdk-codegen-scripts bumped from ^21.0.9 to ^21.0.10
+    * @joeldodge/sdk-codegen-scripts bumped from ^21.0.9 to ^21.0.10
 
 ## [Current]
 

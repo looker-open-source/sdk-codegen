@@ -25,7 +25,7 @@
  */
 
 import React, { FC, useState, useEffect } from 'react'
-import { ApiModel, DiffRow } from '@looker/sdk-codegen'
+import { ApiModel, DiffRow } from '@joeldodge/sdk-codegen'
 import { useHistory, useRouteMatch } from 'react-router-dom'
 import {
   Box,

@@ -24,7 +24,7 @@
 
  */
 
-import { DelimArray } from '@looker/sdk-rtl'
+import { DelimArray } from '@joeldodge/sdk-rtl'
 import { TestConfig } from './testUtils'
 import { PythonGen } from './python.gen'
 import { IEnumType, IType } from './sdkModels'

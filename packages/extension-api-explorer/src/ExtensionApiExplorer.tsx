@@ -34,9 +34,9 @@ import { useRouteMatch } from 'react-router-dom'
 import {
   ExtensionContext,
   ExtensionContextData,
-} from '@looker/extension-sdk-react'
-import { ApiModel, upgradeSpecObject } from '@looker/sdk-codegen'
-import { Looker31SDK, Looker40SDK } from '@looker/sdk'
+} from '@joeldodge/extension-sdk-react'
+import { ApiModel, upgradeSpecObject } from '@joeldodge/sdk-codegen'
+import { Looker31SDK, Looker40SDK } from '@joeldodge/sdk'
 import { getSpecsFromVersions } from '@looker/api-explorer/src/reducers'
 
 class ExtensionConfigurator implements RunItConfigurator {

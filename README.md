@@ -68,7 +68,7 @@ import {
   Looker31SDK,
   NodeSession,
   NodeSettingsIniFile,
-} from '@looker/sdk'
+} from '@joeldodge/sdk'
 
 const settings = new NodeSettingsIniFile()
 const session = new NodeSession(settings)
@@ -274,6 +274,6 @@ Configuration variables should be processed as follows:
 
 The Looker Typescript SDK has been refactored so that node dependencies do not pollute browser usage of the SDK (the node dependencies are not available in the browser and can cause compile errors). There are now three packages available on npm:
 
-1. `@looker/sdk` - contains the Looker API methods.
-2. `@looker/sdk-rtl` - contains a run time library needed to invoke the Looker API methods. Referencing the `@looker/sdk` as a dependency should automatically pull this package in.
-3. `@looker/sdk-node` - contains the dependendencies needed to run the Looker SDK in a node environment. Do NOT include this package if you are using the Looker SDK in a browser. You MUST include this package if you are using `node` or `ts-node`.
+1. `@joeldodge/sdk` - contains the Looker API methods.
+2. `@joeldodge/sdk-rtl` - contains a run time library needed to invoke the Looker API methods. Referencing the `@joeldodge/sdk` as a dependency should automatically pull this package in.
+3. `@joeldodge/sdk-node` - contains the dependendencies needed to run the Looker SDK in a node environment. Do NOT include this package if you are using the Looker SDK in a browser. You MUST include this package if you are using `node` or `ts-node`.

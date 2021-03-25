@@ -39,9 +39,9 @@ import {
   TabPanel,
   useTabs,
 } from '@looker/components'
-import { Looker40SDK } from '@looker/sdk'
-import { IRawResponse } from '@looker/sdk-rtl'
-import { ApiModel, IMethod } from '@looker/sdk-codegen'
+import { Looker40SDK } from '@joeldodge/sdk'
+import { IRawResponse } from '@joeldodge/sdk-rtl'
+import { ApiModel, IMethod } from '@joeldodge/sdk-codegen'
 import {
   RequestForm,
   ShowResponse,

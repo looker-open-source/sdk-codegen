@@ -24,7 +24,7 @@
 
  */
 
-import { ApiModel, IMethod, trimInputs } from '@looker/sdk-codegen'
+import { ApiModel, IMethod, trimInputs } from '@joeldodge/sdk-codegen'
 import React, { FC } from 'react'
 import { Tab, TabList, TabPanel, TabPanels, useTabs } from '@looker/components'
 import { RunItValues } from '../../RunIt'

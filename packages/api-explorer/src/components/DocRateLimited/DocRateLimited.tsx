@@ -25,7 +25,7 @@
  */
 import React, { FC } from 'react'
 import { Code, Tooltip } from '@looker/components'
-import { IMethod } from '@looker/sdk-codegen'
+import { IMethod } from '@joeldodge/sdk-codegen'
 
 interface DocRateLimitedProps {
   method: IMethod

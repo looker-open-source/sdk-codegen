@@ -24,7 +24,7 @@
 
  */
 import React, { FC } from 'react'
-import { ISearchResult } from '@looker/sdk-codegen'
+import { ISearchResult } from '@joeldodge/sdk-codegen'
 import { Heading, Icon, Flex } from '@looker/components'
 
 interface SearchMessageProps {

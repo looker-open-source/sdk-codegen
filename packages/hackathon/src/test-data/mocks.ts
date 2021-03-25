@@ -24,7 +24,7 @@
 
  */
 
-import { Looker40SDK } from '@looker/sdk'
+import { Looker40SDK } from '@joeldodge/sdk'
 import { addMinutes, ISheet, ITabTable, SheetSDK } from '@looker/wholly-sheet'
 import {
   Hackathon,

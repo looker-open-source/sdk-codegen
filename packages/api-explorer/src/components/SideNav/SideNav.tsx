@@ -35,7 +35,7 @@ import {
   Flex,
 } from '@looker/components'
 import { useRouteMatch } from 'react-router-dom'
-import { ApiModel, CriteriaToSet, ISearchResult } from '@looker/sdk-codegen'
+import { ApiModel, CriteriaToSet, ISearchResult } from '@joeldodge/sdk-codegen'
 
 import { SearchContext } from '../../context'
 import { setPattern } from '../../reducers'

@@ -23,7 +23,7 @@
  SOFTWARE.
 
  */
-import { MethodList } from '@looker/sdk-codegen'
+import { MethodList } from '@joeldodge/sdk-codegen'
 
 /**
  * Given a list of methods it returns a list of distinct operations

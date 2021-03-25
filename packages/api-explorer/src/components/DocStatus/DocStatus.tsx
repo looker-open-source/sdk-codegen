@@ -26,7 +26,7 @@
 import React, { FC } from 'react'
 import { Tooltip } from '@looker/components'
 import { MethodBadge } from '@looker/run-it'
-import { IMethod } from '@looker/sdk-codegen'
+import { IMethod } from '@joeldodge/sdk-codegen'
 
 import { pickTooltipContent } from '../DocMethodSummary'
 

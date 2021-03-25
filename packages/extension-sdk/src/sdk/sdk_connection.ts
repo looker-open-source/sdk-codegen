@@ -31,7 +31,7 @@ import {
   Authenticator,
   ITransportSettings,
   IHostConnection,
-} from '@looker/sdk-rtl'
+} from '@joeldodge/sdk-rtl'
 
 import { ExtensionHostApi, ApiVersion } from '../connect'
 

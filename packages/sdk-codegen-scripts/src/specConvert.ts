@@ -24,7 +24,7 @@
 
  */
 import * as path from 'path'
-import { log } from '@looker/sdk-codegen-utils'
+import { log } from '@joeldodge/sdk-codegen-utils'
 import { ISDKConfigProps, SDKConfig } from './sdkConfig'
 import { convertSpec } from './convert'
 import { quit } from './nodeUtils'

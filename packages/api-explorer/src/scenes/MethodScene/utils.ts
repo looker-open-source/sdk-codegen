@@ -32,7 +32,7 @@ import {
   IntrinsicType,
   IType,
   IMethod,
-} from '@looker/sdk-codegen'
+} from '@joeldodge/sdk-codegen'
 import { RunItInput } from '@looker/run-it'
 
 /**

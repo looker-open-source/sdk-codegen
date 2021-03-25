@@ -25,7 +25,7 @@
  */
 
 import { v4 as uuidv4 } from 'uuid'
-import { boolDefault } from '@looker/sdk-rtl'
+import { boolDefault } from '@joeldodge/sdk-rtl'
 import { omit } from 'lodash'
 import { SheetValues } from './SheetSDK'
 

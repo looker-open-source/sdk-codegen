@@ -27,7 +27,7 @@
 import React, { FC } from 'react'
 import { Code, Tree, TreeItem } from '@looker/components'
 import { NavLink } from 'react-router-dom'
-import { IType, TypeOfType, typeOfType } from '@looker/sdk-codegen'
+import { IType, TypeOfType, typeOfType } from '@joeldodge/sdk-codegen'
 import { useLocation } from 'react-router'
 import { buildTypePath } from '../../utils'
 import { getSpecKey } from '../../reducers'

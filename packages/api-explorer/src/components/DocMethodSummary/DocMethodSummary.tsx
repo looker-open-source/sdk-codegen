@@ -25,7 +25,7 @@
  */
 import React, { FC } from 'react'
 import { Card, CardContent, Flex, Space, Text } from '@looker/components'
-import { IMethod } from '@looker/sdk-codegen'
+import { IMethod } from '@joeldodge/sdk-codegen'
 import { MethodBadge } from '@looker/run-it'
 import { ApixHeading } from '../common'
 import { DocActivityType, DocRateLimited } from '../../components'

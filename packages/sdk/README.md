@@ -3,7 +3,7 @@ BUMP test
 
 The Looker SDK for Typescript/Javascript works with Node and browser run-times. The SDK provides a convenient way to communicate with a Looker server's APIs.
 
-This package supports using the Looker SDK in the browser. The [@looker/sdk-node](https://www.npmjs.com/package/@looker/sdk-node) package depends on this package (@looker/sdk) and [@looker/sdk-rtl](https://www.npmjs.com/package/@looker/sdk-rtl).
+This package supports using the Looker SDK in the browser. The [@joeldodge/sdk-node](https://www.npmjs.com/package/@joeldodge/sdk-node) package depends on this package (@joeldodge/sdk) and [@joeldodge/sdk-rtl](https://www.npmjs.com/package/@joeldodge/sdk-rtl).
 
 The SDK uses a plug-in architecture (also known as dependency injection) for initializing that supports run-time specific transports (like `NodeTransport` and `BrowserTransport`) and different approaches for managing API authentication (like `NodeSession`, `BrowserSession`, `ProxySession`, and `CorsSession`).
 
@@ -22,13 +22,13 @@ The Looker Browser SDK can be used in a browser application in 3 steps:
 Using `yarn`:
 
 ```bash
-yarn add @looker/sdk @looker/sdk-rtl
+yarn add @joeldodge/sdk @joeldodge/sdk-rtl
 ```
 
 Using `npm`:
 
 ```bash
-npm install @looker/sdk @looker/sdk-rtl
+npm install @joeldodge/sdk @joeldodge/sdk-rtl
 ```
 
 ### Authenticate your API calls

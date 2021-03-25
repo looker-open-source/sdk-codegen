@@ -26,9 +26,9 @@
 
 import * as path from 'path'
 import * as fs from 'fs'
-import { danger, success, warn } from '@looker/sdk-codegen-utils'
+import { danger, success, warn } from '@joeldodge/sdk-codegen-utils'
 import * as prettier from 'prettier'
-import { ICodeGen } from '@looker/sdk-codegen'
+import { ICodeGen } from '@joeldodge/sdk-codegen'
 import { isFileSync, readFileSync, run, utf8Encoding } from './nodeUtils'
 
 export interface IReformat {

@@ -25,7 +25,7 @@
  */
 
 import React, { createContext, FC, ReactElement } from 'react'
-import { Looker40SDK, Looker31SDK } from '@looker/sdk'
+import { Looker40SDK, Looker31SDK } from '@joeldodge/sdk'
 import { RunItConfigurator } from './components'
 
 export interface RunItContextProps {

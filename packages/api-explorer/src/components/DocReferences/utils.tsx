@@ -24,7 +24,7 @@
 
  */
 import React from 'react'
-import { ApiModel, IMethod, IType, Method } from '@looker/sdk-codegen'
+import { ApiModel, IMethod, IType, Method } from '@joeldodge/sdk-codegen'
 import { Link } from 'react-router-dom'
 
 import { buildMethodPath, buildTypePath, highlightHTML } from '../../utils'

@@ -25,7 +25,7 @@
  */
 import * as path from 'path'
 import * as fs from 'fs'
-import { NodeSettingsIniFile } from '@looker/sdk-node'
+import { NodeSettingsIniFile } from '@joeldodge/sdk-node'
 import {
   DeclarationMiner,
   rubyMethodProbe,

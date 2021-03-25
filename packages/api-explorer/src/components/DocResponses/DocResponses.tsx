@@ -33,7 +33,7 @@ import {
   TabPanels,
   useTabs,
 } from '@looker/components'
-import { IMethodResponse } from '@looker/sdk-codegen'
+import { IMethodResponse } from '@joeldodge/sdk-codegen'
 
 import { CollapserCard } from '../Collapser'
 import { DocResponseTypes } from './DocResponseTypes'

@@ -25,7 +25,7 @@
  */
 
 import React, { BaseSyntheticEvent, Dispatch, FC } from 'react'
-import { Looker40SDK } from '@looker/sdk'
+import { Looker40SDK } from '@joeldodge/sdk'
 import { Button, Heading, Text, Paragraph, Space } from '@looker/components'
 import { runItSDK } from '../../utils'
 import { ConfigDialog, RunItConfigurator } from '../ConfigForm'

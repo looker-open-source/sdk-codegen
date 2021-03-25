@@ -25,7 +25,7 @@
  */
 import path from 'path'
 // eslint-disable-next-line import/no-extraneous-dependencies
-import { NodeSettingsIniFile, LookerNodeSDK } from '@looker/sdk-node'
+import { NodeSettingsIniFile, LookerNodeSDK } from '@joeldodge/sdk-node'
 import { Hacker } from './Hacker'
 
 const iniFile = path.join(__dirname, '../../../../looker.ini')

@@ -13,13 +13,13 @@ Extensions are implemented as a sandboxed `<iframe>` and communication with Look
 Add dependency to your project using yarn or npm
 
 ```sh
-yarn add @looker/extension-sdk
+yarn add @joeldodge/extension-sdk
 ```
 
 or
 
 ```sh
-npm install @looker/extension-sdk
+npm install @joeldodge/extension-sdk
 ```
 
 ## Usage
@@ -29,8 +29,8 @@ npm install @looker/extension-sdk
 The Extension SDK must establish a connection with its host before further functionality will be available.
 
 ```ts
-import { LookerExtensionSDK, connectExtensionHost } from '@looker/extension-sdk'
-import { Looker40SDK } from '@looker/sdk'
+import { LookerExtensionSDK, connectExtensionHost } from '@joeldodge/extension-sdk'
+import { Looker40SDK } from '@joeldodge/sdk'
 
 let extensionSDK
 let coreSDK

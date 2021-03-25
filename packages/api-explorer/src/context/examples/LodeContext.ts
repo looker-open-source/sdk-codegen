@@ -24,7 +24,7 @@
 
  */
 import { createContext } from 'react'
-import { IExampleMine } from '@looker/sdk-codegen'
+import { IExampleMine } from '@joeldodge/sdk-codegen'
 
 interface LodeContextProps extends IExampleMine {}
 

@@ -25,7 +25,7 @@
  */
 import React, { FC, useState, useEffect } from 'react'
 import { ButtonToggle, ButtonItem } from '@looker/components'
-import { KeyedCollection, IMethodResponse } from '@looker/sdk-codegen'
+import { KeyedCollection, IMethodResponse } from '@joeldodge/sdk-codegen'
 
 import { ExploreType } from '..'
 

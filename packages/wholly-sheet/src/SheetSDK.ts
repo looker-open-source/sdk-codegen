@@ -24,7 +24,7 @@
 
  */
 
-import { HttpMethod, APIMethods, IAuthSession } from '@looker/sdk-rtl'
+import { HttpMethod, APIMethods, IAuthSession } from '@joeldodge/sdk-rtl'
 import { ColumnHeaders, IRowModel, rowPosition } from './RowModel'
 
 /** Keyed data for a tab, and the tab's header row */

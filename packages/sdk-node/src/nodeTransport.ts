@@ -48,7 +48,7 @@ import {
   safeBase64,
   BaseTransport,
   ICryptoHash,
-} from '@looker/sdk-rtl'
+} from '@joeldodge/sdk-rtl'
 
 export class NodeCryptoHash implements ICryptoHash {
   secureRandom(byteCount: number): string {

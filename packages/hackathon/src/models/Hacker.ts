@@ -24,7 +24,7 @@
 
  */
 
-import { IRole, IUser as ILookerUser, Looker40SDK } from '@looker/sdk'
+import { IRole, IUser as ILookerUser, Looker40SDK } from '@joeldodge/sdk'
 import { SheetError, TypedRows } from '@looker/wholly-sheet'
 import { SheetData, Registration, Hackathon } from '.'
 

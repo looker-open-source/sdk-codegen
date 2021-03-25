@@ -24,7 +24,7 @@
 
  */
 import React, { FC } from 'react'
-import { DiffCount } from '@looker/sdk-codegen'
+import { DiffCount } from '@joeldodge/sdk-codegen'
 import { Code, Flex, Icon, Space } from '@looker/components'
 
 interface DiffLegendProps {

@@ -31,8 +31,8 @@ import {
   IDashboardElement,
   IRequestRunQuery,
   Looker40SDKStream,
-} from '@looker/sdk'
-import { NodeSettingsIniFile, NodeSession } from '@looker/sdk-node'
+} from '@joeldodge/sdk'
+import { NodeSettingsIniFile, NodeSession } from '@joeldodge/sdk-node'
 import { getDashboard, getDashboardTile, rootIni, waitForRender } from './utils'
 
 const localConfig = rootIni()

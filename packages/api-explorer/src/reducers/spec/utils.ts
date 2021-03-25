@@ -24,10 +24,10 @@
 
  */
 
-import { ApiModel } from '@looker/sdk-codegen'
+import { ApiModel } from '@joeldodge/sdk-codegen'
 import { Location as HLocation } from 'history'
 
-import { IApiVersion, IApiVersionElement } from '@looker/sdk'
+import { IApiVersion, IApiVersionElement } from '@joeldodge/sdk'
 import { SpecItem, SpecItems } from '../../ApiExplorer'
 import { diffPath, oAuthPath } from '../../utils'
 import { SpecState } from './reducer'

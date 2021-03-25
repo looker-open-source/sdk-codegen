@@ -24,7 +24,7 @@
 
  */
 
-import { Looker40SDK } from '@looker/sdk'
+import { Looker40SDK } from '@joeldodge/sdk'
 
 let _core40SDK: Looker40SDK | undefined
 

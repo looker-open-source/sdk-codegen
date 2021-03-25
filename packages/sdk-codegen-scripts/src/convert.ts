@@ -24,8 +24,8 @@
 
  */
 
-import { log, success } from '@looker/sdk-codegen-utils'
-import { fixConversion, swapXLookerTags } from '@looker/sdk-codegen'
+import { log, success } from '@joeldodge/sdk-codegen-utils'
+import { fixConversion, swapXLookerTags } from '@joeldodge/sdk-codegen'
 import {
   fail,
   isFileSync,

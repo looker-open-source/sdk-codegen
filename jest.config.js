@@ -31,7 +31,7 @@ module.exports = {
   moduleDirectories: ['./node_modules', './packages'],
   moduleFileExtensions: ['js', 'jsx', 'ts', 'tsx', 'json', 'node'],
   moduleNameMapper: {
-    '@looker/sdk-codegen-utils/src': '<rootDir>/packages/sdk-codegen-utils/src',
+    '@joeldodge/sdk-codegen-utils/src': '<rootDir>/packages/sdk-codegen-utils/src',
     '@looker/((?!components|design|icons|chatty)(.+))$':
       '<rootDir>/packages/$1/src',
     '\\.(css)$': '<rootDir>/config/jest/styleMock.js',

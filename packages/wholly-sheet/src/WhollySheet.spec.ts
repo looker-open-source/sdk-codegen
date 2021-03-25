@@ -24,7 +24,7 @@
 
  */
 
-import { IAuthSession } from '@looker/sdk-rtl'
+import { IAuthSession } from '@joeldodge/sdk-rtl'
 import { addMinutes, IRowModel, noDate, stringer } from './RowModel'
 import { WhollySheet } from './WhollySheet'
 import { ITestRowProps, TestRow, testRowObject } from './RowModel.spec'

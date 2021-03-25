@@ -25,15 +25,15 @@
  */
 
 import * as fs from 'fs'
-import { danger, log, warn } from '@looker/sdk-codegen-utils'
-import { IVersionInfo } from '@looker/sdk-codegen'
+import { danger, log, warn } from '@joeldodge/sdk-codegen-utils'
+import { IVersionInfo } from '@joeldodge/sdk-codegen'
 import {
   defaultTimeout,
   ITransportSettings,
   sdkOk,
   sdkError,
-} from '@looker/sdk-rtl'
-import { NodeTransport } from '@looker/sdk-node'
+} from '@joeldodge/sdk-rtl'
+import { NodeTransport } from '@joeldodge/sdk-node'
 import { fail, quit, isFileSync, utf8Encoding, isDirSync } from './nodeUtils'
 import { ISDKConfigProps } from './sdkConfig'
 import { convertSpec } from './convert'

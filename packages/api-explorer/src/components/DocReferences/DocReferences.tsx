@@ -26,7 +26,7 @@
 
 import React, { FC, useContext } from 'react'
 import { Box } from '@looker/components'
-import { ApiModel, IMethod, IType } from '@looker/sdk-codegen'
+import { ApiModel, IMethod, IType } from '@joeldodge/sdk-codegen'
 
 import { SearchContext } from '../../context'
 import { CollapserCard } from '../Collapser'

@@ -25,7 +25,7 @@
  */
 
 import path from 'path'
-import { Looker40SDK as LookerSDK, IDashboard, IRenderTask } from '@looker/sdk'
+import { Looker40SDK as LookerSDK, IDashboard, IRenderTask } from '@joeldodge/sdk'
 
 /**
  * Resolve a file name relative to the root of the repository

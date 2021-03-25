@@ -26,10 +26,10 @@
 
 import * as fs from 'fs'
 import path from 'path'
-import { IApiConfig, ApiConfig } from '@looker/sdk-node'
-import { IApiSection } from '@looker/sdk-rtl'
-import { ApiModel } from '@looker/sdk-codegen'
-import * as Models from '@looker/sdk-codegen'
+import { IApiConfig, ApiConfig } from '@joeldodge/sdk-node'
+import { IApiSection } from '@joeldodge/sdk-rtl'
+import { ApiModel } from '@joeldodge/sdk-codegen'
+import * as Models from '@joeldodge/sdk-codegen'
 
 const utf8 = 'utf-8'
 

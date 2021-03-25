@@ -24,7 +24,7 @@
 
  */
 
-import { Looker31SDK, Looker40SDK } from '@looker/sdk'
+import { Looker31SDK, Looker40SDK } from '@joeldodge/sdk'
 import { BaseExtensionContextData } from '../ExtensionConnector'
 
 /**

@@ -24,8 +24,8 @@
 
  */
 
-import { DefaultSettings, IApiSection } from '@looker/sdk-rtl'
-import { NodeSession } from '@looker/sdk-node'
+import { DefaultSettings, IApiSection } from '@joeldodge/sdk-rtl'
+import { NodeSession } from '@joeldodge/sdk-node'
 import { getSettings } from '../shared/settings'
 
 /**

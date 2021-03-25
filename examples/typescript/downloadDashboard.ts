@@ -29,8 +29,8 @@ import {
   Looker40SDK as LookerSDK,
   IDashboard,
   IRequestCreateDashboardRenderTask,
-} from '@looker/sdk'
-import { NodeSettingsIniFile, NodeSession } from '@looker/sdk-node'
+} from '@joeldodge/sdk'
+import { NodeSettingsIniFile, NodeSession } from '@joeldodge/sdk-node'
 import { getDashboard, rootIni, waitForRender } from './utils'
 
 const localConfig = rootIni()

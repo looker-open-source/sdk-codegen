@@ -26,7 +26,7 @@
 
 import React, { FC } from 'react'
 import { Code, Flex } from '@looker/components'
-import { IMethod } from '@looker/sdk-codegen'
+import { IMethod } from '@joeldodge/sdk-codegen'
 
 import { DocPrimaryResponse } from './DocPrimaryResponse'
 import { DocParams } from './DocParams'

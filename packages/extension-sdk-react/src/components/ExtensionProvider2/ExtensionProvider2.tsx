@@ -25,8 +25,8 @@
  */
 
 import React, { useState, ReactNode } from 'react'
-import { ExtensionHostApi, SdkConnection } from '@looker/extension-sdk'
-import { LookerExtensionSDK } from '@looker/sdk'
+import { ExtensionHostApi, SdkConnection } from '@joeldodge/extension-sdk'
+import { LookerExtensionSDK } from '@joeldodge/sdk'
 import {
   BaseExtensionContextData,
   ExtensionConnector,

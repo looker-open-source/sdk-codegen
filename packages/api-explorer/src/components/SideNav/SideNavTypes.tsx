@@ -26,7 +26,7 @@
 
 import React, { FC, useContext } from 'react'
 import { Heading } from '@looker/components'
-import { TypeList, IntrinsicType } from '@looker/sdk-codegen'
+import { TypeList, IntrinsicType } from '@joeldodge/sdk-codegen'
 import styled from 'styled-components'
 
 import { NavHashLink } from 'react-router-hash-link'

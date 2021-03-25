@@ -25,7 +25,7 @@
  */
 
 import { IconNames } from '@looker/components'
-import { IType, TypeOfType, typeOfType } from '@looker/sdk-codegen'
+import { IType, TypeOfType, typeOfType } from '@joeldodge/sdk-codegen'
 
 /**
  * Get the type or element type if this type is a collection

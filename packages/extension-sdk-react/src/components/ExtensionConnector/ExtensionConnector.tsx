@@ -27,7 +27,7 @@
 import isEqual from 'lodash/isEqual'
 import React, { useState } from 'react'
 import { MemoryRouter } from 'react-router-dom'
-import { connectExtensionHost } from '@looker/extension-sdk'
+import { connectExtensionHost } from '@joeldodge/extension-sdk'
 import { ErrorMessage } from '../ErrorMessage'
 import { RouteChangeListener } from '../RouteChangeListener'
 import { getInitialRouteEntries } from '../utils/get_initial_route_entries'

@@ -7,4 +7,4 @@
 
 * The following workspace dependencies were updated
   * dependencies
-    * @looker/sdk-codegen bumped from ^21.0.9 to ^21.1.0
+    * @joeldodge/sdk-codegen bumped from ^21.0.9 to ^21.1.0
