@@ -1,4 +1,5 @@
 {
+  ".": "1.0.0",
   "packages/api-explorer": "21.1.0",
   "packages/extension-api-explorer": "21.0.10",
   "packages/extension-sdk": "21.0.10",
