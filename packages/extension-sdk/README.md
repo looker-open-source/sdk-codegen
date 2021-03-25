@@ -1,6 +1,6 @@
 # Looker Extension SDK
 
-An SDK that may be used by Looker extensions to make API calls or otherwise interact with their host context.
+Bump An SDK that may be used by Looker extensions to make API calls or otherwise interact with their host context.
 
 A Looker extension is JavaScript code that code that runs inside of the Looker UI and exposes an interface for custom functionality. (In this setup, the extension itself can be thought of as a client, while Looker can be thought of as a host.) Via this Extension SDK, the extension may request that the Looker host perform various tasks to enhance your extension. This allows the host to take care of complex functionality, including API authentication, so your extension does not need to perform any setup and does not need to deal with any credentials.
 

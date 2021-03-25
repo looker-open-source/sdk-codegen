@@ -2,7 +2,6 @@
   "plugins": ["node-workspace"],
   "bootstrap-sha": "3d081826eeb58debd9e78836cef29b5b5fe7cf4e",
   "release-draft": false,
-  "release-as": "21.4.0",
   "packages": {
     "packages/api-explorer": {
       "release-as": ""

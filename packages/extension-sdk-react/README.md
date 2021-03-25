@@ -2,7 +2,7 @@
 
 ## Installation
 
-Add dependency to your project using yarn or npm
+bump Add dependency to your project using yarn or npm
 
 ```sh
 yarn add @looker/extension-sdk-react
