@@ -19,11 +19,11 @@ jobs:
           ref: ${{ github.event.inputs.branch }}
       - uses: actions/setup-node@v2
         with:
-          node-version: 14
+          node-version: 15
           registry-url: https://wombat-dressing-room.appspot.com
 
-      - run: npm install --no-package-lock
+      - run: npm install --no-package-lock --legacy-peer-deps
       - name: Publish to NPM registry
-        run: npx lerna publish from-package --yes --no-verify-access --ignore-scripts
+        run: npm lerna publish from-package --yes --no-verify-access --ignore-scripts
         env:
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN_RELEASE_BACKED }}
