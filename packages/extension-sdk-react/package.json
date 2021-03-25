@@ -1,6 +1,6 @@
 {
   "name": "@joeldodge/extension-sdk-react",
-  "version": "21.0.10",
+  "version": "21.1.0",
   "description": "Looker Extension SDK for React",
   "main": "lib/index.js",
   "module": "lib/esm/index.js",
@@ -41,9 +41,9 @@
     "enzyme": "^3.11.0"
   },
   "dependencies": {
-    "@joeldodge/extension-sdk": "^21.0.10",
-    "@joeldodge/sdk": "^21.4.0",
-    "@joeldodge/sdk-rtl": "^21.0.9",
+    "@joeldodge/extension-sdk": "^21.1.0",
+    "@joeldodge/sdk": "^21.5.0",
+    "@joeldodge/sdk-rtl": "^21.1.0",
     "history": "^4.9.0",
     "lodash": "^4.17.20",
     "react": "^16.13.1",
