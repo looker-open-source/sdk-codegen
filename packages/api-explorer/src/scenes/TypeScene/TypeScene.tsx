@@ -24,11 +24,12 @@
 
  */
 
-import React, { FC, useState, useEffect } from 'react'
+import React, { FC, useEffect } from 'react'
 import { Section } from '@looker/components'
 import { typeRefs, methodRefs, ApiModel } from '@looker/sdk-codegen'
 import { useParams } from 'react-router-dom'
 import { DocReferences, DocSDKs, DocTitle, ExploreType } from '../../components'
+import { scrollToTop } from '../../utils'
 
 interface DocTypeProps {
   api: ApiModel
@@ -44,13 +45,10 @@ export const TypeScene: FC<DocTypeProps> = ({ api }) => {
   const type = api.types[typeName]
   const seeTypes = typeRefs(api, type.customTypes)
   const seeMethods = methodRefs(api, type.methodRefs)
-  const [scrollPx, setScrollPx] = useState(0)
 
   useEffect(() => {
-    setScrollPx(0)
+    scrollToTop()
   }, [api, type])
-
-  document.getElementById('top')?.scrollTo(scrollPx, 0)
 
   return (
     <Section id="top" p="xxlarge" style={{ height: '100%', overflow: 'auto' }}>

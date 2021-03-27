@@ -28,7 +28,7 @@ import { Grid, ButtonToggle, ButtonItem, Section } from '@looker/components'
 import { ApiModel } from '@looker/sdk-codegen'
 import { useParams, NavLink, useHistory } from 'react-router-dom'
 import { DocTitle, DocMethodSummary } from '../../components'
-import { buildMethodPath } from '../../utils'
+import { buildMethodPath, scrollToTop } from '../../utils'
 import { getOperations } from './utils'
 
 interface TagSceneProps {
@@ -52,15 +52,12 @@ export const TagScene: FC<TagSceneProps> = ({ api }) => {
   )!
   const operations = getOperations(methods)
   const [value, setValue] = useState('ALL')
-  const [scrollPx, setScrollPx] = useState(0)
 
   useEffect(() => {
     /** Reset ButtonToggle value on route change */
     setValue('ALL')
-    setScrollPx(0)
+    scrollToTop()
   }, [methodTag])
-
-  document.getElementById('top')?.scrollTo(scrollPx, 0)
 
   return (
     <Section

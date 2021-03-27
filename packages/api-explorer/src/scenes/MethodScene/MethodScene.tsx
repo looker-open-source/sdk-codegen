@@ -49,8 +49,10 @@ import {
   DocStatus,
   DocTitle,
 } from '../../components'
+import { scrollToTop } from '../../utils'
 import { DocOperation } from './components'
 import { createInputs } from './utils'
+
 interface DocMethodProps {
   api: ApiModel
 }
@@ -65,12 +67,11 @@ export const MethodScene: FC<DocMethodProps> = ({ api }) => {
   const { methodName, specKey } = useParams<DocMethodParams>()
   const { value, toggle } = useToggle()
   const [method, setMethod] = useState(api.methods[methodName])
-  const [scrollPx, setScrollPx] = useState(0)
   const seeTypes = typeRefs(api, method.customTypes)
 
   useEffect(() => {
     setMethod(api.methods[methodName])
-    setScrollPx(0)
+    scrollToTop()
   }, [api, methodName])
 
   const { colors } = useContext(ThemeContext)
@@ -85,8 +86,6 @@ export const MethodScene: FC<DocMethodProps> = ({ api }) => {
       Run It
     </RunItButton>
   )
-
-  document.getElementById('top')?.scrollTo(scrollPx, 0)
 
   return (
     <>
