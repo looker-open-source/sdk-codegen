@@ -37,7 +37,6 @@ export const userReducer = (
   state: UserState = defaultState,
   action: UserAction
 ): UserState => {
-  console.log('In reducer', action, state)
   switch (action.type) {
     case UserActionTypes.SET_SDK_LANGUAGES:
       return {

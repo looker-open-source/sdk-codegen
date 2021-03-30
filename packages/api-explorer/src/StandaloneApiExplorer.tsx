@@ -42,6 +42,8 @@ export interface StandloneApiExplorerProps {
   specs: SpecList
 }
 
+const store = configureStore()
+
 export const StandaloneApiExplorer: FC<StandloneApiExplorerProps> = ({
   specs,
 }) => {
@@ -56,7 +58,7 @@ export const StandaloneApiExplorer: FC<StandloneApiExplorerProps> = ({
       : initRunItSdk(defaultConfigurator)
 
   return (
-    <Provider store={configureStore()}>
+    <Provider store={store}>
       <RunItProvider
         sdk={chosenSdk}
         configurator={defaultConfigurator}

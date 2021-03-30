@@ -43,11 +43,9 @@ export const SdkLanguageSelector: FC = () => {
   }))
 
   const handleChange = (value?: string[]) => {
-    console.log(`Changing values to ${value}`)
     setSdkLanguagesAction(value!)
   }
 
-  console.log(sdkLanguages)
   return (
     <FieldSelectMulti
       options={options}
