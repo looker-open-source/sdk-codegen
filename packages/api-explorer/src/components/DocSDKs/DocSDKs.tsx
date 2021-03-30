@@ -33,11 +33,13 @@ import {
   TabPanels,
   useTabs,
 } from '@looker/components'
-import { IMethod, IType, ApiModel } from '@looker/sdk-codegen'
+import { useSelector } from 'react-redux'
 
+import { IMethod, IType, ApiModel } from '@looker/sdk-codegen'
 import { getGenerators } from '@looker/run-it'
 import { DocCode } from '../DocCode'
 import { CollapserCard } from '../Collapser'
+import { getSdkLanguages } from '../../state'
 import { noComment } from './utils'
 
 interface LanguageSDKProps {
@@ -53,6 +55,7 @@ interface LanguageSDKProps {
  * Given a method or a type, it renders its SDK declaration in all supported languages.
  */
 export const DocSDKs: FC<LanguageSDKProps> = ({ api, method, type }) => {
+  const sdkLanguages = useSelector(getSdkLanguages)
   const tabs = useTabs()
   const generators = getGenerators(api)
   const [item, setItem] = useState(method ? noComment(method) : type!)
@@ -66,9 +69,11 @@ export const DocSDKs: FC<LanguageSDKProps> = ({ api, method, type }) => {
       <CollapserCard heading="SDK declarations">
         <>
           <TabList {...tabs}>
-            {Object.keys(generators).map((language) => (
-              <Tab key={language}>{language}</Tab>
-            ))}
+            {Object.keys(generators)
+              .filter((language) => sdkLanguages.includes(language))
+              .map((language) => (
+                <Tab key={language}>{language}</Tab>
+              ))}
           </TabList>
           <TabPanels {...tabs} pt="0">
             {Object.entries(generators).map(([language, gen]) => {
