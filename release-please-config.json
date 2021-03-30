@@ -13,10 +13,12 @@
       "release-as": ""
     },
     "packages/api-explorer": {
-      "release-as": ""
+      "release-as": "",
+      "bump-minor-pre-major": true
     },
     "packages/run-it": {
-      "release-as": ""
+      "release-as": "",
+      "bump-minor-pre-major": true
     },
     "packages/sdk-codegen-scripts": {
       "release-as": ""
@@ -31,7 +33,8 @@
       "release-as": ""
     },
     "packages/wholly-sheet": {
-      "release-as": ""
+      "release-as": "",
+      "bump-minor-pre-major": true
     },
     "python": {
       "release-type": "python",
