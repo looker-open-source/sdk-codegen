@@ -98,24 +98,27 @@ export const Generators: Array<IGeneratorSpec> = [
     options: '-papiPackage=Looker -ppackageName=looker',
     extension: /\.java/gi,
   },
-
-  // {
-  //   language: 'php',
-  //   legacy: 'php',
-  //   options: '-papiPackage=Looker -ppackageName=looker'
-  // },
+  {
+    language: 'php',
+    legacy: 'php',
+    options: '-papiPackage=Looker -ppackageName=looker',
+    extension: /\.php/gi,
+  },
   // {
   //   language: 'R',
   //   legacy: 'r'
   //   options: '-papiPackage=Looker -ppackageName=looker'
+  //   extension: /\.r/gi,
   // },
   // {
   //   language: 'Ruby',
   //   options: '-papiPackage=Looker -ppackageName=looker'
+  //   extension: /\.rb/gi,
   // },
   // {
   //   language: 'Rust',
   //   options: '-papiPackage=Looker -ppackageName=looker'
+  //   extension: /\.rs/gi,
   // },
 ]
 

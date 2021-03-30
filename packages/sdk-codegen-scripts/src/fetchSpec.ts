@@ -285,6 +285,7 @@ export const getVersionInfo = async (
 /**
  * Fetch (if needed) and convert a Swagger API specification to OpenAPI
  * @param name base name of the target file
+ * @param spec specification derived
  * @param props SDK configuration properties to use
  * @param force true to force re-conversion of the spec
  * @returns {Promise<string>} name of converted OpenAPI file
