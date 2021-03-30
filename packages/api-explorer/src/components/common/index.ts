@@ -24,3 +24,4 @@
 
  */
 export { ApixHeading } from './common'
+export { ApixSection } from './ApixSection'

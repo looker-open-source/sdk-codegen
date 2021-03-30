@@ -30,7 +30,6 @@ import {
   Button,
   ButtonOutline,
   Space,
-  Section,
   useToggle,
   ExtendComponentsThemeProvider,
 } from '@looker/components'
@@ -49,7 +48,7 @@ import {
   DocStatus,
   DocTitle,
 } from '../../components'
-import { scrollToTop } from '../../utils'
+import { ApixSection } from '../../components/common'
 import { DocOperation } from './components'
 import { createInputs } from './utils'
 
@@ -71,7 +70,6 @@ export const MethodScene: FC<DocMethodProps> = ({ api }) => {
 
   useEffect(() => {
     setMethod(api.methods[methodName])
-    scrollToTop()
   }, [api, methodName])
 
   const { colors } = useContext(ThemeContext)
@@ -89,11 +87,7 @@ export const MethodScene: FC<DocMethodProps> = ({ api }) => {
 
   return (
     <>
-      <Section
-        id="top"
-        p="xxlarge"
-        style={{ height: '100%', overflow: 'auto' }}
-      >
+      <ApixSection>
         <Space between>
           <DocTitle>{method.summary}</DocTitle>
           {runItToggle}
@@ -109,7 +103,7 @@ export const MethodScene: FC<DocMethodProps> = ({ api }) => {
         <DocSdkUsage method={method} />
         <DocReferences seeTypes={seeTypes} api={api} specKey={specKey} />
         <DocResponses responses={method.responses} />
-      </Section>
+      </ApixSection>
       {sdk && value && (
         <Aside width="50rem">
           <ExtendComponentsThemeProvider

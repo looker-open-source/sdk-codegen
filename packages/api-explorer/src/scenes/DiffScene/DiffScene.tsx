@@ -33,13 +33,13 @@ import {
   FlexItem,
   IconButton,
   Label,
-  Section,
   Select,
   SelectMulti,
 } from '@looker/components'
 import { SpecItems } from '../../ApiExplorer'
 import { getDefaultSpecKey } from '../../reducers/spec/utils'
 import { diffPath } from '../../utils'
+import { ApixSection } from '../../components/common'
 import { diffSpecs, standardDiffToggles } from './diffUtils'
 import { DocDiff } from './DocDiff'
 
@@ -163,7 +163,7 @@ export const DiffScene: FC<DiffSceneProps> = ({ specs, toggleNavigation }) => {
   }
 
   return (
-    <Section p="xxlarge">
+    <ApixSection>
       <Box>
         <Flex bg="AliceBlue" padding="large" mb="xlarge" alignItems="center">
           <FlexItem>
@@ -216,6 +216,6 @@ export const DiffScene: FC<DiffSceneProps> = ({ specs, toggleNavigation }) => {
         rightKey={rightKey}
         rightSpec={rightApi}
       />
-    </Section>
+    </ApixSection>
   )
 }

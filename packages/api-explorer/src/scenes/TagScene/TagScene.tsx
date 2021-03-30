@@ -24,11 +24,12 @@
 
  */
 import React, { FC, useEffect, useState } from 'react'
-import { Grid, ButtonToggle, ButtonItem, Section } from '@looker/components'
+import { Grid, ButtonToggle, ButtonItem } from '@looker/components'
 import { ApiModel } from '@looker/sdk-codegen'
 import { useParams, NavLink, useHistory } from 'react-router-dom'
 import { DocTitle, DocMethodSummary } from '../../components'
-import { buildMethodPath, scrollToTop } from '../../utils'
+import { buildMethodPath } from '../../utils'
+import { ApixSection } from '../../components/common'
 import { getOperations } from './utils'
 
 interface TagSceneProps {
@@ -56,15 +57,10 @@ export const TagScene: FC<TagSceneProps> = ({ api }) => {
   useEffect(() => {
     /** Reset ButtonToggle value on route change */
     setValue('ALL')
-    scrollToTop()
   }, [methodTag])
 
   return (
-    <Section
-      p="xxlarge"
-      id={'top'}
-      style={{ height: '100%', overflow: 'auto' }}
-    >
+    <ApixSection>
       <DocTitle>{`${tag.name}: ${tag.description}`}</DocTitle>
       <ButtonToggle mb="small" mt="xlarge" value={value} onChange={setValue}>
         <ButtonItem key="ALL" px="large" py="xsmall">
@@ -89,6 +85,6 @@ export const TagScene: FC<TagSceneProps> = ({ api }) => {
             </NavLink>
           )
       )}
-    </Section>
+    </ApixSection>
   )
 }

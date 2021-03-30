@@ -24,38 +24,21 @@
 
  */
 
-import React, { FC } from 'react'
-import { typeRefs, methodRefs, ApiModel } from '@looker/sdk-codegen'
-import { useParams } from 'react-router-dom'
-import { DocReferences, DocSDKs, DocTitle, ExploreType } from '../../components'
-import { ApixSection } from '../../components/common'
+import React, { FC, useEffect } from 'react'
+import { Section, SectionProps } from '@looker/components'
+import { scrollToTop } from '../../utils'
 
-interface DocTypeProps {
-  api: ApiModel
-}
-
-interface DocTypeParams {
-  specKey: string
-  typeName: string
-}
-
-export const TypeScene: FC<DocTypeProps> = ({ api }) => {
-  const { specKey, typeName } = useParams<DocTypeParams>()
-  const type = api.types[typeName]
-  const seeTypes = typeRefs(api, type.customTypes)
-  const seeMethods = methodRefs(api, type.methodRefs)
+export const ApixSection: FC<SectionProps> = (props: any) => {
+  useEffect(() => {
+    scrollToTop()
+  }, [props])
 
   return (
-    <ApixSection>
-      <DocTitle>{type.name}</DocTitle>
-      <ExploreType type={type} />
-      <DocReferences
-        seeTypes={seeTypes}
-        seeMethods={seeMethods}
-        api={api}
-        specKey={specKey}
-      />
-      <DocSDKs type={type} api={api} />
-    </ApixSection>
+    <Section
+      {...props}
+      id="top"
+      p="xxlarge"
+      style={{ height: '100%', overflow: 'auto' }}
+    />
   )
 }

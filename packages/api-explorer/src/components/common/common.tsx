@@ -23,8 +23,10 @@
  SOFTWARE.
 
  */
+import React, { useEffect, FC } from 'react'
 import styled from 'styled-components'
-import { Heading } from '@looker/components'
+import { Heading, Section } from '@looker/components'
+import { scrollToTop } from '../../utils'
 
 /**
  * Common styled components to be used across the whole library
