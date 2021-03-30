@@ -9,6 +9,9 @@
     "packages/hackathon": {},
     "packages/sdk-node": {},
     "packages/sdk": {},
+    ".": {
+      "release-as": ""
+    },
     "packages/api-explorer": {
       "release-as": ""
     },
