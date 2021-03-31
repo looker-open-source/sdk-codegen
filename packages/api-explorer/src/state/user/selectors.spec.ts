@@ -23,14 +23,12 @@
  SOFTWARE.
 
  */
-export enum UserActionTypes {
-  SET_SDK_LANGUAGES = 'SET_SDK_LANGUAGES',
-}
+import { getSelectedSdkLanguages } from './selectors'
 
-/** Action for setting the languages for SDK references */
-export interface SetSdkLanguagesAction {
-  type: UserActionTypes.SET_SDK_LANGUAGES
-  payload: string[]
-}
-
-export type UserAction = SetSdkLanguagesAction
+describe('use selectors', () => {
+  test('getSelectedSdkLanguages returns selected sdk languages', () => {
+    const sdkLanguages = ['Kotlin', 'Go']
+    const state = { sdkLanguages }
+    expect(getSelectedSdkLanguages({ user: state })).toEqual(sdkLanguages)
+  })
+})

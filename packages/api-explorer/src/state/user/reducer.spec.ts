@@ -23,14 +23,19 @@
  SOFTWARE.
 
  */
-export enum UserActionTypes {
-  SET_SDK_LANGUAGES = 'SET_SDK_LANGUAGES',
-}
+import { UserActionTypes } from './actions'
+import { userReducer } from './reducer'
 
-/** Action for setting the languages for SDK references */
-export interface SetSdkLanguagesAction {
-  type: UserActionTypes.SET_SDK_LANGUAGES
-  payload: string[]
-}
-
-export type UserAction = SetSdkLanguagesAction
+describe('userReducer', () => {
+  test('it sets sdk languages', () => {
+    const currState = { sdkLanguages: ['Kotlin'] }
+    const action = {
+      type: UserActionTypes.SET_SDK_LANGUAGES,
+      payload: ['Typescript', 'Python'],
+    }
+    const state = userReducer(currState, action)
+    expect(state).toEqual({
+      sdkLanguages: ['Typescript', 'Python'],
+    })
+  })
+})

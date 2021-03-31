@@ -23,14 +23,15 @@
  SOFTWARE.
 
  */
-export enum UserActionTypes {
-  SET_SDK_LANGUAGES = 'SET_SDK_LANGUAGES',
-}
+import { UserActionTypes } from './actions'
+import { setSdkLanguagesAction } from './action_creators'
 
-/** Action for setting the languages for SDK references */
-export interface SetSdkLanguagesAction {
-  type: UserActionTypes.SET_SDK_LANGUAGES
-  payload: string[]
-}
-
-export type UserAction = SetSdkLanguagesAction
+describe('User reducer action creators', () => {
+  test('setSdkLanguagesAction returns a SET_SDK_LANGUAGES action option with provided values', () => {
+    const action = setSdkLanguagesAction(['Typescript', 'Python'])
+    expect(action).toEqual({
+      type: UserActionTypes.SET_SDK_LANGUAGES,
+      payload: ['Typescript', 'Python'],
+    })
+  })
+})
