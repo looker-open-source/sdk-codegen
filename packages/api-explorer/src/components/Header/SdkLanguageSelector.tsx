@@ -23,12 +23,18 @@
  SOFTWARE.
 
  */
-import React, { FC } from 'react'
+import React, { BaseSyntheticEvent, FC } from 'react'
 import { codeGenerators } from '@looker/sdk-codegen'
-import { FieldSelectMulti } from '@looker/components'
+import {
+  FieldCheckbox,
+  Icon,
+  Popover,
+  PopoverContent,
+  Text,
+} from '@looker/components'
 import { useSelector } from 'react-redux'
 import { useActions } from '../../hooks'
-import { getSdkLanguages } from '../../state'
+import { getSelectedSdkLanguages } from '../../state'
 
 /**
  * Allows the user to select their preferred language(s).
@@ -36,22 +42,45 @@ import { getSdkLanguages } from '../../state'
  */
 export const SdkLanguageSelector: FC = () => {
   const { setSdkLanguagesAction } = useActions()
-  const sdkLanguages = useSelector(getSdkLanguages)
+  const selectedSdkLanguages = useSelector(getSelectedSdkLanguages)
 
-  const options = codeGenerators.map((gen) => ({
-    value: gen.label || gen.language,
-  }))
+  const allSdkLanguages = codeGenerators.map((gen) => gen.label || gen.language)
 
-  const handleChange = (value?: string[]) => {
-    setSdkLanguagesAction(value!)
+  const handleChange = (e: BaseSyntheticEvent) => {
+    let sdkLanguages: string[]
+
+    if (e.target.checked) {
+      sdkLanguages = [...selectedSdkLanguages, e.target.value]
+    } else {
+      sdkLanguages = selectedSdkLanguages.filter(
+        (lang) => lang !== e.target.value
+      )
+    }
+
+    if (sdkLanguages.length) {
+      /** At least one language has to be selected */
+      setSdkLanguagesAction(sdkLanguages)
+    }
   }
 
   return (
-    <FieldSelectMulti
-      options={options}
-      defaultValues={sdkLanguages}
-      onChange={handleChange}
-      values={sdkLanguages}
-    />
+    <Popover
+      content={
+        <PopoverContent>
+          <Text>SDK Languages:</Text>
+          {allSdkLanguages.map((language) => (
+            <FieldCheckbox
+              checked={selectedSdkLanguages.includes(language)}
+              onChange={handleChange}
+              key={language}
+              value={language}
+              label={language}
+            />
+          ))}
+        </PopoverContent>
+      }
+    >
+      <Icon name="Code" size="small" />
+    </Popover>
   )
 }
