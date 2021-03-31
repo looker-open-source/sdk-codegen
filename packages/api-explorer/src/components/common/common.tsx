@@ -23,8 +23,11 @@
  SOFTWARE.
 
  */
+import React, { useEffect, FC } from 'react'
 import styled from 'styled-components'
-import { Heading } from '@looker/components'
+import { Heading, Section, SectionProps } from '@looker/components'
+import { useWindowSize } from '../../utils'
+import { HEADER_REM } from '../Header'
 
 /**
  * Common styled components to be used across the whole library
@@ -35,4 +38,27 @@ export const ApixHeading = styled(Heading)``
 ApixHeading.defaultProps = {
   mb: 'xsmall',
   pt: 'xsmall',
+}
+
+export const REM_TO_PX = 16
+
+/**
+ * Extends the looker Section to proper height and scrolls to top on use
+ * @param props - anything you want, but probably SectionProps
+ */
+export const ApixSection: FC<SectionProps> = (props: any) => {
+  const size = useWindowSize()
+  const sectionH = size.height - REM_TO_PX * HEADER_REM
+  useEffect(() => {
+    document.getElementById('top')?.scrollTo(REM_TO_PX * HEADER_REM, 0)
+  }, [props])
+
+  return (
+    <Section
+      {...props}
+      id="top"
+      p="xxlarge"
+      style={{ height: `${sectionH}px`, overflow: 'auto' }}
+    />
+  )
 }

@@ -30,7 +30,6 @@ import {
   Button,
   ButtonOutline,
   Space,
-  Section,
   useToggle,
   ExtendComponentsThemeProvider,
 } from '@looker/components'
@@ -39,6 +38,7 @@ import { useParams } from 'react-router-dom'
 import { RunIt, RunItContext } from '@looker/run-it'
 import { ApiModel, typeRefs } from '@looker/sdk-codegen'
 import {
+  ApixSection,
   DocActivityType,
   DocMarkdown,
   DocRateLimited,
@@ -51,6 +51,7 @@ import {
 } from '../../components'
 import { DocOperation } from './components'
 import { createInputs } from './utils'
+
 interface DocMethodProps {
   api: ApiModel
 }
@@ -86,7 +87,7 @@ export const MethodScene: FC<DocMethodProps> = ({ api }) => {
 
   return (
     <>
-      <Section id="top" p="xxlarge">
+      <ApixSection>
         <Space between>
           <DocTitle>{method.summary}</DocTitle>
           {runItToggle}
@@ -102,7 +103,7 @@ export const MethodScene: FC<DocMethodProps> = ({ api }) => {
         <DocSdkUsage method={method} />
         <DocReferences seeTypes={seeTypes} api={api} specKey={specKey} />
         <DocResponses responses={method.responses} />
-      </Section>
+      </ApixSection>
       {sdk && value && (
         <Aside width="50rem">
           <ExtendComponentsThemeProvider

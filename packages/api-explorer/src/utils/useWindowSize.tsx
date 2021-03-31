@@ -24,43 +24,25 @@
 
  */
 
-import React, { FC } from 'react'
-import { typeRefs, methodRefs, ApiModel } from '@looker/sdk-codegen'
-import { useParams } from 'react-router-dom'
-import {
-  ApixSection,
-  DocReferences,
-  DocSDKs,
-  DocTitle,
-  ExploreType,
-} from '../../components'
+import { useEffect, useState } from 'react'
+// from: https://usehooks.com/useWindowSize/
+export function useWindowSize() {
+  const [windowSize, setWindowSize] = useState({
+    width: 0,
+    height: 0,
+  })
 
-interface DocTypeProps {
-  api: ApiModel
-}
+  useEffect(() => {
+    function handleResize() {
+      setWindowSize({
+        width: window.innerWidth,
+        height: window.innerHeight,
+      })
+    }
+    window.addEventListener('resize', handleResize)
+    handleResize()
+    return () => window.removeEventListener('resize', handleResize)
+  }, [])
 
-interface DocTypeParams {
-  specKey: string
-  typeName: string
-}
-
-export const TypeScene: FC<DocTypeProps> = ({ api }) => {
-  const { specKey, typeName } = useParams<DocTypeParams>()
-  const type = api.types[typeName]
-  const seeTypes = typeRefs(api, type.customTypes)
-  const seeMethods = methodRefs(api, type.methodRefs)
-
-  return (
-    <ApixSection>
-      <DocTitle>{type.name}</DocTitle>
-      <ExploreType type={type} />
-      <DocReferences
-        seeTypes={seeTypes}
-        seeMethods={seeMethods}
-        api={api}
-        specKey={specKey}
-      />
-      <DocSDKs type={type} api={api} />
-    </ApixSection>
-  )
+  return windowSize
 }
