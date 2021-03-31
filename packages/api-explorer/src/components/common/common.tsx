@@ -46,7 +46,6 @@ export const REM_TO_PX = 16
  * Extends the looker Section to proper height and scrolls to top on use
  * @param props - anything you want, but probably SectionProps
  */
-
 export const ApixSection: FC<SectionProps> = (props: any) => {
   const size = useWindowSize()
   const sectionH = size.height - REM_TO_PX * HEADER_REM

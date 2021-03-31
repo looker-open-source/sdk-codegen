@@ -27,8 +27,13 @@
 import React, { FC } from 'react'
 import { typeRefs, methodRefs, ApiModel } from '@looker/sdk-codegen'
 import { useParams } from 'react-router-dom'
-import { DocReferences, DocSDKs, DocTitle, ExploreType } from '../../components'
-import { ApixSection } from '../../components/common'
+import {
+  ApixSection,
+  DocReferences,
+  DocSDKs,
+  DocTitle,
+  ExploreType,
+} from '../../components'
 
 interface DocTypeProps {
   api: ApiModel
