@@ -8,6 +8,8 @@ a looker user based on another value provided. It could be easily adapted to acc
 of email addresses, to catch a webhook from a third party service, and much more.
 
 It could also easily be adapted to accept a second parameter and disable users as well.
+
+Example body: {"email": "test@test.com"}
 """
 
 # We init the SDK in the "global scope" so that we don't have to do it on every execution.
@@ -55,6 +57,6 @@ def create_user(request):
             if res == 200:
                 return "User already existed; Password reset sent", 200
             else:
-                return "Failure in user creation", 400
+                return "Failure in user creation.", 400
     else:
         return "No email provided", 422
