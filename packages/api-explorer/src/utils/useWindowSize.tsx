@@ -24,21 +24,25 @@
 
  */
 
-import React, { FC, useEffect } from 'react'
-import { Section, SectionProps } from '@looker/components'
-import { scrollToTop } from '../../utils'
+import { useEffect, useState } from 'react'
+// from: https://usehooks.com/useWindowSize/
+export function useWindowSize() {
+  const [windowSize, setWindowSize] = useState({
+    width: 0,
+    height: 0,
+  })
 
-export const ApixSection: FC<SectionProps> = (props: any) => {
   useEffect(() => {
-    scrollToTop()
-  }, [props])
+    function handleResize() {
+      setWindowSize({
+        width: window.innerWidth,
+        height: window.innerHeight,
+      })
+    }
+    window.addEventListener('resize', handleResize)
+    handleResize()
+    return () => window.removeEventListener('resize', handleResize)
+  }, [])
 
-  return (
-    <Section
-      {...props}
-      id="top"
-      p="xxlarge"
-      style={{ height: '100%', overflow: 'auto' }}
-    />
-  )
+  return windowSize
 }

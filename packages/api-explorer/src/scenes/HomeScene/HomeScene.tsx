@@ -26,8 +26,7 @@
 import { ApiModel } from '@looker/sdk-codegen'
 import React, { FC } from 'react'
 import { useParams } from 'react-router-dom'
-import { ApixSection } from '../../components/common'
-import { DocMarkdown, DocTitle } from '../../components'
+import { ApixSection, DocMarkdown, DocTitle } from '../../components'
 
 interface DocHomeProps {
   api: ApiModel

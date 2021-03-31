@@ -39,6 +39,8 @@ import { ApiModel, CriteriaToSet, ISearchResult } from '@looker/sdk-codegen'
 
 import { SearchContext } from '../../context'
 import { setPattern } from '../../reducers'
+import { useWindowSize } from '../../utils'
+import { HEADER_REM } from '../Header'
 import { SideNavTags } from './SideNavTags'
 import { SideNavTypes } from './SideNavTypes'
 import { useDebounce, countMethods, countTypes } from './searchUtils'
@@ -100,6 +102,9 @@ export const SideNav: FC<SideNavProps> = ({ api, specKey }) => {
     setSearchSettings(setPattern(debouncedPattern!))
   }, [debouncedPattern, specKey])
 
+  const size = useWindowSize()
+  const menuH = size.height - 16 * HEADER_REM - 120
+
   return (
     <nav>
       <Flex alignItems="center" pl="large" pr="large" pb="large">
@@ -118,7 +123,7 @@ export const SideNav: FC<SideNavProps> = ({ api, specKey }) => {
         <Tab>Methods ({methodCount})</Tab>
         <Tab>Types ({typeCount})</Tab>
       </TabList>
-      <TabPanels {...tabs} pt="xsmall" height={'90%'} overflow={'auto'}>
+      <TabPanels {...tabs} pt="xsmall" height={`${menuH}px`} overflow="auto">
         <TabPanel>
           <SideNavTags tags={tags} specKey={specKey} />
         </TabPanel>

@@ -39,7 +39,7 @@ import {
 import { SpecItems } from '../../ApiExplorer'
 import { getDefaultSpecKey } from '../../reducers/spec/utils'
 import { diffPath } from '../../utils'
-import { ApixSection } from '../../components/common'
+import { ApixSection } from '../../components'
 import { diffSpecs, standardDiffToggles } from './diffUtils'
 import { DocDiff } from './DocDiff'
 

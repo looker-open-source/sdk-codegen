@@ -27,9 +27,8 @@ import React, { FC, useEffect, useState } from 'react'
 import { Grid, ButtonToggle, ButtonItem } from '@looker/components'
 import { ApiModel } from '@looker/sdk-codegen'
 import { useParams, NavLink, useHistory } from 'react-router-dom'
-import { DocTitle, DocMethodSummary } from '../../components'
+import { ApixSection, DocTitle, DocMethodSummary } from '../../components'
 import { buildMethodPath } from '../../utils'
-import { ApixSection } from '../../components/common'
 import { getOperations } from './utils'
 
 interface TagSceneProps {

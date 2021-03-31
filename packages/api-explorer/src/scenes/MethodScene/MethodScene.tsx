@@ -38,6 +38,7 @@ import { useParams } from 'react-router-dom'
 import { RunIt, RunItContext } from '@looker/run-it'
 import { ApiModel, typeRefs } from '@looker/sdk-codegen'
 import {
+  ApixSection,
   DocActivityType,
   DocMarkdown,
   DocRateLimited,
@@ -48,7 +49,6 @@ import {
   DocStatus,
   DocTitle,
 } from '../../components'
-import { ApixSection } from '../../components/common'
 import { DocOperation } from './components'
 import { createInputs } from './utils'
 
