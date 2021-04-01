@@ -244,7 +244,7 @@ ${this.hooks.join('\n')}
       (head ? `${head}\n\n` : '') +
       `${method.httpMethod} ${method.endpoint} -> ${returnType}`
     params.push(
-      `${bump}transport_options: Optional[transport.PTransportSettings] = None,`
+      `${bump}transport_options: Optional[transport.TransportOptions] = None,`
     )
     return (
       this.commentHeader(indent, head) +
@@ -294,7 +294,8 @@ ${this.hooks.join('\n')}
     if (type instanceof EnumType) {
       const invalid =
         'invalid_api_enum_value = "invalid_api_enum_value"' +
-        `\n\n\n${type.name}.__new__ = model.safe_enum__new__`
+        '\n\n\n# https://github.com/python/mypy/issues/2427' +
+        `\n${type.name}.__new__ = model.safe_enum__new__  # type: ignore`
       decl += `\n${this.bumper(indent)}${invalid}`
     }
     return decl
@@ -454,15 +455,6 @@ ${this.hooks.join('\n')}
 
   declareMethod(indent: string, method: IMethod) {
     const bump = this.bumper(indent)
-
-    // APIMethods/AuthSession handle auth
-    if (method.name === 'login') {
-      return `${indent}# login() using api3credentials is automated in the client`
-    } else if (method.name === 'login_user') {
-      return `${indent}def login_user(self, user_id: int) -> api_methods.APIMethods:\n${bump}return super().login_user(user_id)`
-    } else if (method.name === 'logout') {
-      return `${indent}def logout(self) -> None:\n${bump}super().logout()`
-    }
 
     return (
       this.methodSignature(indent, method) +

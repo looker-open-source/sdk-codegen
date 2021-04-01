@@ -37,7 +37,9 @@ from looker_sdk.sdk.api40 import models as models40  # noqa: F401
 API_SETTINGS_API_VERSION_DEPRECATED = "API_VERSION config value is no longer needed."
 
 
-def _settings(config_file: str, section: Optional[str] = None):
+def _settings(
+    config_file: str, section: Optional[str] = None
+) -> api_settings.ApiSettings:
     return api_settings.ApiSettings(
         filename=config_file,
         section=section,
@@ -49,8 +51,7 @@ def _settings(config_file: str, section: Optional[str] = None):
 def init31(
     config_file: str = "looker.ini", section: Optional[str] = None
 ) -> methods31.Looker31SDK:
-    """Default dependency configuration
-    """
+    """Default dependency configuration"""
     settings = _settings(config_file, section)
     settings.is_configured()
     transport = requests_transport.RequestsTransport.configure(settings)
@@ -66,8 +67,7 @@ def init31(
 def init40(
     config_file: str = "looker.ini", section: Optional[str] = None
 ) -> methods40.Looker40SDK:
-    """Default dependency configuration
-    """
+    """Default dependency configuration"""
     settings = _settings(config_file, section)
     settings.is_configured()
     transport = requests_transport.RequestsTransport.configure(settings)

@@ -222,7 +222,7 @@ sr.converter.register_structure_hook(
 # GET /datagroups -> Sequence[models.Datagroup]
 def all_datagroups(
     self,
-    transport_options: Optional[transport.PTransportSettings] = None,
+    transport_options: Optional[transport.TransportOptions] = None,
 ) -> Sequence[models.Datagroup]:
 `
       const actual = gen.methodSignature('', method)
@@ -246,7 +246,7 @@ def test_connection(
     connection_name: str,
     # Array of names of tests to run
     tests: Optional[models.DelimSequence[str]] = None,
-    transport_options: Optional[transport.PTransportSettings] = None,
+    transport_options: Optional[transport.TransportOptions] = None,
 ) -> Sequence[models.DBConnectionTestResult]:
 `
       const actual = gen.methodSignature('', method)
@@ -277,7 +277,7 @@ def render_task_results(
     self,
     # Id of render task
     render_task_id: str,
-    transport_options: Optional[transport.PTransportSettings] = None,
+    transport_options: Optional[transport.TransportOptions] = None,
 ) -> bytes:
 `
       const actual = gen.methodSignature('', method)
@@ -348,7 +348,7 @@ def run_url_encoded_query(
     view_name: str,
     # Format of result
     result_format: str,
-    transport_options: Optional[transport.PTransportSettings] = None,
+    transport_options: Optional[transport.TransportOptions] = None,
 ) -> Union[str, bytes]:
 `
       const actual = gen.methodSignature('', method)

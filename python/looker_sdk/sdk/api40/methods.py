@@ -36,13 +36,100 @@ class Looker40SDK(api_methods.APIMethods):
 
     # region ApiAuth: API Authentication
 
-    # login() using api3credentials is automated in the client
+    # ### Present client credentials to obtain an authorization token
+    #
+    # Looker API implements the OAuth2 [Resource Owner Password Credentials Grant](https://looker.com/docs/r/api/outh2_resource_owner_pc) pattern.
+    # The client credentials required for this login must be obtained by creating an API3 key on a user account
+    # in the Looker Admin console. The API3 key consists of a public `client_id` and a private `client_secret`.
+    #
+    # The access token returned by `login` must be used in the HTTP Authorization header of subsequent
+    # API requests, like this:
+    # ```
+    # Authorization: token 4QDkCyCtZzYgj4C2p2cj3csJH7zqS5RzKs2kTnG4
+    # ```
+    # Replace "4QDkCy..." with the `access_token` value returned by `login`.
+    # The word `token` is a string literal and must be included exactly as shown.
+    #
+    # This function can accept `client_id` and `client_secret` parameters as URL query params or as www-form-urlencoded params in the body of the HTTP request. Since there is a small risk that URL parameters may be visible to intermediate nodes on the network route (proxies, routers, etc), passing credentials in the body of the request is considered more secure than URL params.
+    #
+    # Example of passing credentials in the HTTP request body:
+    # ````
+    # POST HTTP /login
+    # Content-Type: application/x-www-form-urlencoded
+    #
+    # client_id=CGc9B7v7J48dQSJvxxx&client_secret=nNVS9cSS3xNpSC9JdsBvvvvv
+    # ````
+    #
+    # ### Best Practice:
+    # Always pass credentials in body params. Pass credentials in URL query params **only** when you cannot pass body params due to application, tool, or other limitations.
+    #
+    # For more information and detailed examples of Looker API authorization, see [How to Authenticate to Looker API3](https://github.com/looker/looker-sdk-ruby/blob/master/authentication.md).
+    #
+    # POST /login -> models.AccessToken
+    def login(
+        self,
+        # client_id part of API3 Key.
+        client_id: Optional[str] = None,
+        # client_secret part of API3 Key.
+        client_secret: Optional[str] = None,
+        transport_options: Optional[transport.TransportOptions] = None,
+    ) -> models.AccessToken:
+        """Login"""
+        response = self.post(
+            f"/login",
+            models.AccessToken,
+            query_params={"client_id": client_id, "client_secret": client_secret},
+            transport_options=transport_options,
+        )
+        assert isinstance(response, models.AccessToken)
+        return response
 
-    def login_user(self, user_id: int) -> api_methods.APIMethods:
-        return super().login_user(user_id)
+    # ### Create an access token that runs as a given user.
+    #
+    # This can only be called by an authenticated admin user. It allows that admin to generate a new
+    # authentication token for the user with the given user id. That token can then be used for subsequent
+    # API calls - which are then performed *as* that target user.
+    #
+    # The target user does *not* need to have a pre-existing API client_id/client_secret pair. And, no such
+    # credentials are created by this call.
+    #
+    # This allows for building systems where api user authentication for an arbitrary number of users is done
+    # outside of Looker and funneled through a single 'service account' with admin permissions. Note that a
+    # new access token is generated on each call. If target users are going to be making numerous API
+    # calls in a short period then it is wise to cache this authentication token rather than call this before
+    # each of those API calls.
+    #
+    # See 'login' for more detail on the access token and how to use it.
+    #
+    # POST /login/{user_id} -> models.AccessToken
+    def login_user(
+        self,
+        # Id of user.
+        user_id: int,
+        # When true (default), API calls using the returned access_token are attributed to the admin user who created the access_token. When false, API activity is attributed to the user the access_token runs as. False requires a looker license.
+        associative: Optional[bool] = None,
+        transport_options: Optional[transport.TransportOptions] = None,
+    ) -> models.AccessToken:
+        """Login user"""
+        response = self.post(
+            f"/login/{user_id}",
+            models.AccessToken,
+            query_params={"associative": associative},
+            transport_options=transport_options,
+        )
+        assert isinstance(response, models.AccessToken)
+        return response
 
-    def logout(self) -> None:
-        super().logout()
+    # ### Logout of the API and invalidate the current access token.
+    #
+    # DELETE /logout -> str
+    def logout(
+        self, transport_options: Optional[transport.TransportOptions] = None,
+    ) -> str:
+        """Logout"""
+        response = self.delete(f"/logout", str, transport_options=transport_options)
+        assert isinstance(response, str)
+        return response
 
     # endregion
 
@@ -87,7 +174,7 @@ class Looker40SDK(api_methods.APIMethods):
     def create_sso_embed_url(
         self,
         body: models.EmbedSsoParams,
-        transport_options: Optional[transport.PTransportSettings] = None,
+        transport_options: Optional[transport.TransportOptions] = None,
     ) -> models.EmbedUrlResponse:
         """Create SSO Embed Url"""
         response = self.post(
@@ -129,7 +216,7 @@ class Looker40SDK(api_methods.APIMethods):
     def create_embed_url_as_me(
         self,
         body: models.EmbedParams,
-        transport_options: Optional[transport.PTransportSettings] = None,
+        transport_options: Optional[transport.TransportOptions] = None,
     ) -> models.EmbedUrlResponse:
         """Create Embed URL"""
         response = self.post(
@@ -160,7 +247,7 @@ class Looker40SDK(api_methods.APIMethods):
     #
     # GET /ldap_config -> models.LDAPConfig
     def ldap_config(
-        self, transport_options: Optional[transport.PTransportSettings] = None,
+        self, transport_options: Optional[transport.TransportOptions] = None,
     ) -> models.LDAPConfig:
         """Get LDAP Configuration"""
         response = self.get(
@@ -185,7 +272,7 @@ class Looker40SDK(api_methods.APIMethods):
     def update_ldap_config(
         self,
         body: models.WriteLDAPConfig,
-        transport_options: Optional[transport.PTransportSettings] = None,
+        transport_options: Optional[transport.TransportOptions] = None,
     ) -> models.LDAPConfig:
         """Update LDAP Configuration"""
         response = self.patch(
@@ -220,7 +307,7 @@ class Looker40SDK(api_methods.APIMethods):
     def test_ldap_config_connection(
         self,
         body: models.WriteLDAPConfig,
-        transport_options: Optional[transport.PTransportSettings] = None,
+        transport_options: Optional[transport.TransportOptions] = None,
     ) -> models.LDAPConfigTestResult:
         """Test LDAP Connection"""
         response = self.put(
@@ -257,7 +344,7 @@ class Looker40SDK(api_methods.APIMethods):
     def test_ldap_config_auth(
         self,
         body: models.WriteLDAPConfig,
-        transport_options: Optional[transport.PTransportSettings] = None,
+        transport_options: Optional[transport.TransportOptions] = None,
     ) -> models.LDAPConfigTestResult:
         """Test LDAP Auth"""
         response = self.put(
@@ -283,7 +370,7 @@ class Looker40SDK(api_methods.APIMethods):
     def test_ldap_config_user_info(
         self,
         body: models.WriteLDAPConfig,
-        transport_options: Optional[transport.PTransportSettings] = None,
+        transport_options: Optional[transport.TransportOptions] = None,
     ) -> models.LDAPConfigTestResult:
         """Test LDAP User Info"""
         response = self.put(
@@ -309,7 +396,7 @@ class Looker40SDK(api_methods.APIMethods):
     def test_ldap_config_user_auth(
         self,
         body: models.WriteLDAPConfig,
-        transport_options: Optional[transport.PTransportSettings] = None,
+        transport_options: Optional[transport.TransportOptions] = None,
     ) -> models.LDAPConfigTestResult:
         """Test LDAP User Auth"""
         response = self.put(
@@ -334,7 +421,7 @@ class Looker40SDK(api_methods.APIMethods):
         self,
         # Requested fields.
         fields: Optional[str] = None,
-        transport_options: Optional[transport.PTransportSettings] = None,
+        transport_options: Optional[transport.TransportOptions] = None,
     ) -> Sequence[models.OauthClientApp]:
         """Get All OAuth Client Apps"""
         response = self.get(
@@ -357,7 +444,7 @@ class Looker40SDK(api_methods.APIMethods):
         client_guid: str,
         # Requested fields.
         fields: Optional[str] = None,
-        transport_options: Optional[transport.PTransportSettings] = None,
+        transport_options: Optional[transport.TransportOptions] = None,
     ) -> models.OauthClientApp:
         """Get OAuth Client App"""
         client_guid = self.encode_path_param(client_guid)
@@ -385,7 +472,7 @@ class Looker40SDK(api_methods.APIMethods):
         body: models.WriteOauthClientApp,
         # Requested fields.
         fields: Optional[str] = None,
-        transport_options: Optional[transport.PTransportSettings] = None,
+        transport_options: Optional[transport.TransportOptions] = None,
     ) -> models.OauthClientApp:
         """Register OAuth App"""
         client_guid = self.encode_path_param(client_guid)
@@ -411,7 +498,7 @@ class Looker40SDK(api_methods.APIMethods):
         body: models.WriteOauthClientApp,
         # Requested fields.
         fields: Optional[str] = None,
-        transport_options: Optional[transport.PTransportSettings] = None,
+        transport_options: Optional[transport.TransportOptions] = None,
     ) -> models.OauthClientApp:
         """Update OAuth App"""
         client_guid = self.encode_path_param(client_guid)
@@ -437,7 +524,7 @@ class Looker40SDK(api_methods.APIMethods):
         self,
         # The unique id of this application
         client_guid: str,
-        transport_options: Optional[transport.PTransportSettings] = None,
+        transport_options: Optional[transport.TransportOptions] = None,
     ) -> str:
         """Delete OAuth Client App"""
         client_guid = self.encode_path_param(client_guid)
@@ -459,7 +546,7 @@ class Looker40SDK(api_methods.APIMethods):
         self,
         # The unique id of the application
         client_guid: str,
-        transport_options: Optional[transport.PTransportSettings] = None,
+        transport_options: Optional[transport.TransportOptions] = None,
     ) -> str:
         """Invalidate Tokens"""
         client_guid = self.encode_path_param(client_guid)
@@ -488,7 +575,7 @@ class Looker40SDK(api_methods.APIMethods):
         user_id: int,
         # Requested fields.
         fields: Optional[str] = None,
-        transport_options: Optional[transport.PTransportSettings] = None,
+        transport_options: Optional[transport.TransportOptions] = None,
     ) -> str:
         """Activate OAuth App User"""
         client_guid = self.encode_path_param(client_guid)
@@ -521,7 +608,7 @@ class Looker40SDK(api_methods.APIMethods):
         user_id: int,
         # Requested fields.
         fields: Optional[str] = None,
-        transport_options: Optional[transport.PTransportSettings] = None,
+        transport_options: Optional[transport.TransportOptions] = None,
     ) -> str:
         """Deactivate OAuth App User"""
         client_guid = self.encode_path_param(client_guid)
@@ -549,7 +636,7 @@ class Looker40SDK(api_methods.APIMethods):
     #
     # GET /oidc_config -> models.OIDCConfig
     def oidc_config(
-        self, transport_options: Optional[transport.PTransportSettings] = None,
+        self, transport_options: Optional[transport.TransportOptions] = None,
     ) -> models.OIDCConfig:
         """Get OIDC Configuration"""
         response = self.get(
@@ -572,7 +659,7 @@ class Looker40SDK(api_methods.APIMethods):
     def update_oidc_config(
         self,
         body: models.WriteOIDCConfig,
-        transport_options: Optional[transport.PTransportSettings] = None,
+        transport_options: Optional[transport.TransportOptions] = None,
     ) -> models.OIDCConfig:
         """Update OIDC Configuration"""
         response = self.patch(
@@ -591,7 +678,7 @@ class Looker40SDK(api_methods.APIMethods):
         self,
         # Slug of test config
         test_slug: str,
-        transport_options: Optional[transport.PTransportSettings] = None,
+        transport_options: Optional[transport.TransportOptions] = None,
     ) -> models.OIDCConfig:
         """Get OIDC Test Configuration"""
         test_slug = self.encode_path_param(test_slug)
@@ -610,7 +697,7 @@ class Looker40SDK(api_methods.APIMethods):
         self,
         # Slug of test config
         test_slug: str,
-        transport_options: Optional[transport.PTransportSettings] = None,
+        transport_options: Optional[transport.TransportOptions] = None,
     ) -> str:
         """Delete OIDC Test Configuration"""
         test_slug = self.encode_path_param(test_slug)
@@ -626,7 +713,7 @@ class Looker40SDK(api_methods.APIMethods):
     def create_oidc_test_config(
         self,
         body: models.WriteOIDCConfig,
-        transport_options: Optional[transport.PTransportSettings] = None,
+        transport_options: Optional[transport.TransportOptions] = None,
     ) -> models.OIDCConfig:
         """Create OIDC Test Configuration"""
         response = self.post(
@@ -642,7 +729,7 @@ class Looker40SDK(api_methods.APIMethods):
     #
     # GET /password_config -> models.PasswordConfig
     def password_config(
-        self, transport_options: Optional[transport.PTransportSettings] = None,
+        self, transport_options: Optional[transport.TransportOptions] = None,
     ) -> models.PasswordConfig:
         """Get Password Config"""
         response = self.get(
@@ -659,7 +746,7 @@ class Looker40SDK(api_methods.APIMethods):
     def update_password_config(
         self,
         body: models.WritePasswordConfig,
-        transport_options: Optional[transport.PTransportSettings] = None,
+        transport_options: Optional[transport.TransportOptions] = None,
     ) -> models.PasswordConfig:
         """Update Password Config"""
         response = self.patch(
@@ -675,7 +762,7 @@ class Looker40SDK(api_methods.APIMethods):
     #
     # PUT /password_config/force_password_reset_at_next_login_for_all_users -> str
     def force_password_reset_at_next_login_for_all_users(
-        self, transport_options: Optional[transport.PTransportSettings] = None,
+        self, transport_options: Optional[transport.TransportOptions] = None,
     ) -> str:
         """Force password reset"""
         response = self.put(
@@ -701,7 +788,7 @@ class Looker40SDK(api_methods.APIMethods):
     #
     # GET /saml_config -> models.SamlConfig
     def saml_config(
-        self, transport_options: Optional[transport.PTransportSettings] = None,
+        self, transport_options: Optional[transport.TransportOptions] = None,
     ) -> models.SamlConfig:
         """Get SAML Configuration"""
         response = self.get(
@@ -724,7 +811,7 @@ class Looker40SDK(api_methods.APIMethods):
     def update_saml_config(
         self,
         body: models.WriteSamlConfig,
-        transport_options: Optional[transport.PTransportSettings] = None,
+        transport_options: Optional[transport.TransportOptions] = None,
     ) -> models.SamlConfig:
         """Update SAML Configuration"""
         response = self.patch(
@@ -743,7 +830,7 @@ class Looker40SDK(api_methods.APIMethods):
         self,
         # Slug of test config
         test_slug: str,
-        transport_options: Optional[transport.PTransportSettings] = None,
+        transport_options: Optional[transport.TransportOptions] = None,
     ) -> models.SamlConfig:
         """Get SAML Test Configuration"""
         test_slug = self.encode_path_param(test_slug)
@@ -762,7 +849,7 @@ class Looker40SDK(api_methods.APIMethods):
         self,
         # Slug of test config
         test_slug: str,
-        transport_options: Optional[transport.PTransportSettings] = None,
+        transport_options: Optional[transport.TransportOptions] = None,
     ) -> str:
         """Delete SAML Test Configuration"""
         test_slug = self.encode_path_param(test_slug)
@@ -778,7 +865,7 @@ class Looker40SDK(api_methods.APIMethods):
     def create_saml_test_config(
         self,
         body: models.WriteSamlConfig,
-        transport_options: Optional[transport.PTransportSettings] = None,
+        transport_options: Optional[transport.TransportOptions] = None,
     ) -> models.SamlConfig:
         """Create SAML Test Configuration"""
         response = self.post(
@@ -794,9 +881,7 @@ class Looker40SDK(api_methods.APIMethods):
     #
     # POST /parse_saml_idp_metadata -> models.SamlMetadataParseResult
     def parse_saml_idp_metadata(
-        self,
-        body: str,
-        transport_options: Optional[transport.PTransportSettings] = None,
+        self, body: str, transport_options: Optional[transport.TransportOptions] = None,
     ) -> models.SamlMetadataParseResult:
         """Parse SAML IdP XML"""
         response = self.post(
@@ -814,9 +899,7 @@ class Looker40SDK(api_methods.APIMethods):
     #
     # POST /fetch_and_parse_saml_idp_metadata -> models.SamlMetadataParseResult
     def fetch_and_parse_saml_idp_metadata(
-        self,
-        body: str,
-        transport_options: Optional[transport.PTransportSettings] = None,
+        self, body: str, transport_options: Optional[transport.TransportOptions] = None,
     ) -> models.SamlMetadataParseResult:
         """Parse SAML IdP Url"""
         response = self.post(
@@ -832,7 +915,7 @@ class Looker40SDK(api_methods.APIMethods):
     #
     # GET /session_config -> models.SessionConfig
     def session_config(
-        self, transport_options: Optional[transport.PTransportSettings] = None,
+        self, transport_options: Optional[transport.TransportOptions] = None,
     ) -> models.SessionConfig:
         """Get Session Config"""
         response = self.get(
@@ -849,7 +932,7 @@ class Looker40SDK(api_methods.APIMethods):
     def update_session_config(
         self,
         body: models.WriteSessionConfig,
-        transport_options: Optional[transport.PTransportSettings] = None,
+        transport_options: Optional[transport.TransportOptions] = None,
     ) -> models.SessionConfig:
         """Update Session Config"""
         response = self.patch(
@@ -868,7 +951,7 @@ class Looker40SDK(api_methods.APIMethods):
         self,
         # Include only these fields in the response
         fields: Optional[str] = None,
-        transport_options: Optional[transport.PTransportSettings] = None,
+        transport_options: Optional[transport.TransportOptions] = None,
     ) -> Sequence[models.UserLoginLockout]:
         """Get All User Login Lockouts"""
         response = self.get(
@@ -903,7 +986,7 @@ class Looker40SDK(api_methods.APIMethods):
         remote_id: Optional[str] = None,
         # Combine given search criteria in a boolean OR expression
         filter_or: Optional[bool] = None,
-        transport_options: Optional[transport.PTransportSettings] = None,
+        transport_options: Optional[transport.TransportOptions] = None,
     ) -> Sequence[models.UserLoginLockout]:
         """Search User Login Lockouts"""
         response = self.get(
@@ -932,7 +1015,7 @@ class Looker40SDK(api_methods.APIMethods):
         self,
         # The key associated with the locked user
         key: str,
-        transport_options: Optional[transport.PTransportSettings] = None,
+        transport_options: Optional[transport.TransportOptions] = None,
     ) -> str:
         """Delete User Login Lockout"""
         key = self.encode_path_param(key)
@@ -953,7 +1036,7 @@ class Looker40SDK(api_methods.APIMethods):
         self,
         # Requested fields.
         fields: Optional[str] = None,
-        transport_options: Optional[transport.PTransportSettings] = None,
+        transport_options: Optional[transport.TransportOptions] = None,
     ) -> Sequence[models.Board]:
         """Get All Boards"""
         response = self.get(
@@ -973,7 +1056,7 @@ class Looker40SDK(api_methods.APIMethods):
         body: models.WriteBoard,
         # Requested fields.
         fields: Optional[str] = None,
-        transport_options: Optional[transport.PTransportSettings] = None,
+        transport_options: Optional[transport.TransportOptions] = None,
     ) -> models.Board:
         """Create Board"""
         response = self.post(
@@ -1038,7 +1121,7 @@ class Looker40SDK(api_methods.APIMethods):
         limit: Optional[int] = None,
         # Combine given search criteria in a boolean OR expression
         filter_or: Optional[bool] = None,
-        transport_options: Optional[transport.PTransportSettings] = None,
+        transport_options: Optional[transport.TransportOptions] = None,
     ) -> Sequence[models.Board]:
         """Search Boards"""
         response = self.get(
@@ -1073,7 +1156,7 @@ class Looker40SDK(api_methods.APIMethods):
         board_id: int,
         # Requested fields.
         fields: Optional[str] = None,
-        transport_options: Optional[transport.PTransportSettings] = None,
+        transport_options: Optional[transport.TransportOptions] = None,
     ) -> models.Board:
         """Get Board"""
         response = self.get(
@@ -1095,7 +1178,7 @@ class Looker40SDK(api_methods.APIMethods):
         body: models.WriteBoard,
         # Requested fields.
         fields: Optional[str] = None,
-        transport_options: Optional[transport.PTransportSettings] = None,
+        transport_options: Optional[transport.TransportOptions] = None,
     ) -> models.Board:
         """Update Board"""
         response = self.patch(
@@ -1115,7 +1198,7 @@ class Looker40SDK(api_methods.APIMethods):
         self,
         # Id of board
         board_id: int,
-        transport_options: Optional[transport.PTransportSettings] = None,
+        transport_options: Optional[transport.TransportOptions] = None,
     ) -> str:
         """Delete Board"""
         response = self.delete(
@@ -1135,7 +1218,7 @@ class Looker40SDK(api_methods.APIMethods):
         sorts: Optional[str] = None,
         # Filter to a specific board section
         board_section_id: Optional[str] = None,
-        transport_options: Optional[transport.PTransportSettings] = None,
+        transport_options: Optional[transport.TransportOptions] = None,
     ) -> Sequence[models.BoardItem]:
         """Get All Board Items"""
         response = self.get(
@@ -1159,7 +1242,7 @@ class Looker40SDK(api_methods.APIMethods):
         body: models.WriteBoardItem,
         # Requested fields.
         fields: Optional[str] = None,
-        transport_options: Optional[transport.PTransportSettings] = None,
+        transport_options: Optional[transport.TransportOptions] = None,
     ) -> models.BoardItem:
         """Create Board Item"""
         response = self.post(
@@ -1181,7 +1264,7 @@ class Looker40SDK(api_methods.APIMethods):
         board_item_id: int,
         # Requested fields.
         fields: Optional[str] = None,
-        transport_options: Optional[transport.PTransportSettings] = None,
+        transport_options: Optional[transport.TransportOptions] = None,
     ) -> models.BoardItem:
         """Get Board Item"""
         response = self.get(
@@ -1203,7 +1286,7 @@ class Looker40SDK(api_methods.APIMethods):
         body: models.WriteBoardItem,
         # Requested fields.
         fields: Optional[str] = None,
-        transport_options: Optional[transport.PTransportSettings] = None,
+        transport_options: Optional[transport.TransportOptions] = None,
     ) -> models.BoardItem:
         """Update Board Item"""
         response = self.patch(
@@ -1223,7 +1306,7 @@ class Looker40SDK(api_methods.APIMethods):
         self,
         # Id of board_item
         board_item_id: int,
-        transport_options: Optional[transport.PTransportSettings] = None,
+        transport_options: Optional[transport.TransportOptions] = None,
     ) -> str:
         """Delete Board Item"""
         response = self.delete(
@@ -1241,7 +1324,7 @@ class Looker40SDK(api_methods.APIMethods):
         fields: Optional[str] = None,
         # Fields to sort by.
         sorts: Optional[str] = None,
-        transport_options: Optional[transport.PTransportSettings] = None,
+        transport_options: Optional[transport.TransportOptions] = None,
     ) -> Sequence[models.BoardSection]:
         """Get All Board sections"""
         response = self.get(
@@ -1261,7 +1344,7 @@ class Looker40SDK(api_methods.APIMethods):
         body: models.WriteBoardSection,
         # Requested fields.
         fields: Optional[str] = None,
-        transport_options: Optional[transport.PTransportSettings] = None,
+        transport_options: Optional[transport.TransportOptions] = None,
     ) -> models.BoardSection:
         """Create Board section"""
         response = self.post(
@@ -1283,7 +1366,7 @@ class Looker40SDK(api_methods.APIMethods):
         board_section_id: int,
         # Requested fields.
         fields: Optional[str] = None,
-        transport_options: Optional[transport.PTransportSettings] = None,
+        transport_options: Optional[transport.TransportOptions] = None,
     ) -> models.BoardSection:
         """Get Board section"""
         response = self.get(
@@ -1305,7 +1388,7 @@ class Looker40SDK(api_methods.APIMethods):
         body: models.WriteBoardSection,
         # Requested fields.
         fields: Optional[str] = None,
-        transport_options: Optional[transport.PTransportSettings] = None,
+        transport_options: Optional[transport.TransportOptions] = None,
     ) -> models.BoardSection:
         """Update Board section"""
         response = self.patch(
@@ -1325,7 +1408,7 @@ class Looker40SDK(api_methods.APIMethods):
         self,
         # Id of board section
         board_section_id: int,
-        transport_options: Optional[transport.PTransportSettings] = None,
+        transport_options: Optional[transport.TransportOptions] = None,
     ) -> str:
         """Delete Board section"""
         response = self.delete(
@@ -1354,7 +1437,7 @@ class Looker40SDK(api_methods.APIMethods):
         self,
         # Requested fields.
         fields: Optional[str] = None,
-        transport_options: Optional[transport.PTransportSettings] = None,
+        transport_options: Optional[transport.TransportOptions] = None,
     ) -> Sequence[models.ColorCollection]:
         """Get all Color Collections"""
         response = self.get(
@@ -1380,7 +1463,7 @@ class Looker40SDK(api_methods.APIMethods):
     def create_color_collection(
         self,
         body: models.WriteColorCollection,
-        transport_options: Optional[transport.PTransportSettings] = None,
+        transport_options: Optional[transport.TransportOptions] = None,
     ) -> models.ColorCollection:
         """Create ColorCollection"""
         response = self.post(
@@ -1404,7 +1487,7 @@ class Looker40SDK(api_methods.APIMethods):
         self,
         # Requested fields.
         fields: Optional[str] = None,
-        transport_options: Optional[transport.PTransportSettings] = None,
+        transport_options: Optional[transport.TransportOptions] = None,
     ) -> Sequence[models.ColorCollection]:
         """Get all Custom Color Collections"""
         response = self.get(
@@ -1428,7 +1511,7 @@ class Looker40SDK(api_methods.APIMethods):
         self,
         # Requested fields.
         fields: Optional[str] = None,
-        transport_options: Optional[transport.PTransportSettings] = None,
+        transport_options: Optional[transport.TransportOptions] = None,
     ) -> Sequence[models.ColorCollection]:
         """Get all Standard Color Collections"""
         response = self.get(
@@ -1448,7 +1531,7 @@ class Looker40SDK(api_methods.APIMethods):
     #
     # GET /color_collections/default -> models.ColorCollection
     def default_color_collection(
-        self, transport_options: Optional[transport.PTransportSettings] = None,
+        self, transport_options: Optional[transport.TransportOptions] = None,
     ) -> models.ColorCollection:
         """Get Default Color Collection"""
         response = self.get(
@@ -1469,7 +1552,7 @@ class Looker40SDK(api_methods.APIMethods):
         self,
         # ID of color collection to set as default
         collection_id: str,
-        transport_options: Optional[transport.PTransportSettings] = None,
+        transport_options: Optional[transport.TransportOptions] = None,
     ) -> models.ColorCollection:
         """Set Default Color Collection"""
         response = self.put(
@@ -1499,7 +1582,7 @@ class Looker40SDK(api_methods.APIMethods):
         collection_id: str,
         # Requested fields.
         fields: Optional[str] = None,
-        transport_options: Optional[transport.PTransportSettings] = None,
+        transport_options: Optional[transport.TransportOptions] = None,
     ) -> models.ColorCollection:
         """Get Color Collection by ID"""
         collection_id = self.encode_path_param(collection_id)
@@ -1521,7 +1604,7 @@ class Looker40SDK(api_methods.APIMethods):
         # Id of Custom Color Collection
         collection_id: str,
         body: models.WriteColorCollection,
-        transport_options: Optional[transport.PTransportSettings] = None,
+        transport_options: Optional[transport.TransportOptions] = None,
     ) -> models.ColorCollection:
         """Update Custom Color collection"""
         collection_id = self.encode_path_param(collection_id)
@@ -1548,7 +1631,7 @@ class Looker40SDK(api_methods.APIMethods):
         self,
         # Id of Color Collection
         collection_id: str,
-        transport_options: Optional[transport.PTransportSettings] = None,
+        transport_options: Optional[transport.TransportOptions] = None,
     ) -> str:
         """Delete ColorCollection"""
         collection_id = self.encode_path_param(collection_id)
@@ -1575,7 +1658,7 @@ class Looker40SDK(api_methods.APIMethods):
         content_type: Optional[str] = None,
         # Number of results to return.
         limit: Optional[int] = None,
-        transport_options: Optional[transport.PTransportSettings] = None,
+        transport_options: Optional[transport.TransportOptions] = None,
     ) -> Sequence[models.Command]:
         """Get All Commands"""
         response = self.get(
@@ -1600,7 +1683,7 @@ class Looker40SDK(api_methods.APIMethods):
     def create_command(
         self,
         body: models.WriteCommand,
-        transport_options: Optional[transport.PTransportSettings] = None,
+        transport_options: Optional[transport.TransportOptions] = None,
     ) -> models.Command:
         """Create a custom command"""
         response = self.post(
@@ -1619,7 +1702,7 @@ class Looker40SDK(api_methods.APIMethods):
         # ID of a command
         command_id: int,
         body: models.UpdateCommand,
-        transport_options: Optional[transport.PTransportSettings] = None,
+        transport_options: Optional[transport.TransportOptions] = None,
     ) -> models.Command:
         """Update a custom command"""
         response = self.patch(
@@ -1638,7 +1721,7 @@ class Looker40SDK(api_methods.APIMethods):
         self,
         # ID of a command
         command_id: int,
-        transport_options: Optional[transport.PTransportSettings] = None,
+        transport_options: Optional[transport.TransportOptions] = None,
     ) -> None:
         """Delete a custom command"""
         response = self.delete(
@@ -1655,7 +1738,7 @@ class Looker40SDK(api_methods.APIMethods):
     #
     # GET /cloud_storage -> models.BackupConfiguration
     def cloud_storage_configuration(
-        self, transport_options: Optional[transport.PTransportSettings] = None,
+        self, transport_options: Optional[transport.TransportOptions] = None,
     ) -> models.BackupConfiguration:
         """Get Cloud Storage"""
         response = self.get(
@@ -1672,7 +1755,7 @@ class Looker40SDK(api_methods.APIMethods):
     def update_cloud_storage_configuration(
         self,
         body: models.WriteBackupConfiguration,
-        transport_options: Optional[transport.PTransportSettings] = None,
+        transport_options: Optional[transport.TransportOptions] = None,
     ) -> models.BackupConfiguration:
         """Update Cloud Storage"""
         response = self.patch(
@@ -1688,7 +1771,7 @@ class Looker40SDK(api_methods.APIMethods):
     #
     # GET /custom_welcome_email -> models.CustomWelcomeEmail
     def custom_welcome_email(
-        self, transport_options: Optional[transport.PTransportSettings] = None,
+        self, transport_options: Optional[transport.TransportOptions] = None,
     ) -> models.CustomWelcomeEmail:
         """Get Custom Welcome Email"""
         response = self.get(
@@ -1707,7 +1790,7 @@ class Looker40SDK(api_methods.APIMethods):
         body: models.WriteCustomWelcomeEmail,
         # If true a test email with the content from the request will be sent to the current user after saving
         send_test_welcome_email: Optional[bool] = None,
-        transport_options: Optional[transport.PTransportSettings] = None,
+        transport_options: Optional[transport.TransportOptions] = None,
     ) -> models.CustomWelcomeEmail:
         """Update Custom Welcome Email Content"""
         response = self.patch(
@@ -1726,7 +1809,7 @@ class Looker40SDK(api_methods.APIMethods):
     def update_custom_welcome_email_test(
         self,
         body: models.WelcomeEmailTest,
-        transport_options: Optional[transport.PTransportSettings] = None,
+        transport_options: Optional[transport.TransportOptions] = None,
     ) -> models.WelcomeEmailTest:
         """Send a test welcome email to the currently logged in user with the supplied content """
         response = self.put(
@@ -1742,7 +1825,7 @@ class Looker40SDK(api_methods.APIMethods):
     #
     # GET /digest_emails_enabled -> models.DigestEmails
     def digest_emails_enabled(
-        self, transport_options: Optional[transport.PTransportSettings] = None,
+        self, transport_options: Optional[transport.TransportOptions] = None,
     ) -> models.DigestEmails:
         """Get Digest_emails"""
         response = self.get(
@@ -1759,7 +1842,7 @@ class Looker40SDK(api_methods.APIMethods):
     def update_digest_emails_enabled(
         self,
         body: models.DigestEmails,
-        transport_options: Optional[transport.PTransportSettings] = None,
+        transport_options: Optional[transport.TransportOptions] = None,
     ) -> models.DigestEmails:
         """Update Digest_emails"""
         response = self.patch(
@@ -1777,7 +1860,7 @@ class Looker40SDK(api_methods.APIMethods):
     #
     # POST /digest_email_send -> models.DigestEmailSend
     def create_digest_email_send(
-        self, transport_options: Optional[transport.PTransportSettings] = None,
+        self, transport_options: Optional[transport.TransportOptions] = None,
     ) -> models.DigestEmailSend:
         """Deliver digest email contents"""
         response = self.post(
@@ -1792,7 +1875,7 @@ class Looker40SDK(api_methods.APIMethods):
     #
     # GET /internal_help_resources_content -> models.InternalHelpResourcesContent
     def internal_help_resources_content(
-        self, transport_options: Optional[transport.PTransportSettings] = None,
+        self, transport_options: Optional[transport.TransportOptions] = None,
     ) -> models.InternalHelpResourcesContent:
         """Get Internal Help Resources Content"""
         response = self.get(
@@ -1809,7 +1892,7 @@ class Looker40SDK(api_methods.APIMethods):
     def update_internal_help_resources_content(
         self,
         body: models.WriteInternalHelpResourcesContent,
-        transport_options: Optional[transport.PTransportSettings] = None,
+        transport_options: Optional[transport.TransportOptions] = None,
     ) -> models.InternalHelpResourcesContent:
         """Update internal help resources content"""
         response = self.patch(
@@ -1825,7 +1908,7 @@ class Looker40SDK(api_methods.APIMethods):
     #
     # GET /internal_help_resources_enabled -> models.InternalHelpResources
     def internal_help_resources(
-        self, transport_options: Optional[transport.PTransportSettings] = None,
+        self, transport_options: Optional[transport.TransportOptions] = None,
     ) -> models.InternalHelpResources:
         """Get Internal Help Resources"""
         response = self.get(
@@ -1842,7 +1925,7 @@ class Looker40SDK(api_methods.APIMethods):
     def update_internal_help_resources(
         self,
         body: models.WriteInternalHelpResources,
-        transport_options: Optional[transport.PTransportSettings] = None,
+        transport_options: Optional[transport.TransportOptions] = None,
     ) -> models.InternalHelpResources:
         """Update internal help resources configuration"""
         response = self.patch(
@@ -1858,7 +1941,7 @@ class Looker40SDK(api_methods.APIMethods):
     #
     # GET /legacy_features -> Sequence[models.LegacyFeature]
     def all_legacy_features(
-        self, transport_options: Optional[transport.PTransportSettings] = None,
+        self, transport_options: Optional[transport.TransportOptions] = None,
     ) -> Sequence[models.LegacyFeature]:
         """Get All Legacy Features"""
         response = self.get(
@@ -1876,7 +1959,7 @@ class Looker40SDK(api_methods.APIMethods):
         self,
         # id of legacy feature
         legacy_feature_id: str,
-        transport_options: Optional[transport.PTransportSettings] = None,
+        transport_options: Optional[transport.TransportOptions] = None,
     ) -> models.LegacyFeature:
         """Get Legacy Feature"""
         legacy_feature_id = self.encode_path_param(legacy_feature_id)
@@ -1896,7 +1979,7 @@ class Looker40SDK(api_methods.APIMethods):
         # id of legacy feature
         legacy_feature_id: str,
         body: models.WriteLegacyFeature,
-        transport_options: Optional[transport.PTransportSettings] = None,
+        transport_options: Optional[transport.TransportOptions] = None,
     ) -> models.LegacyFeature:
         """Update Legacy Feature"""
         legacy_feature_id = self.encode_path_param(legacy_feature_id)
@@ -1913,7 +1996,7 @@ class Looker40SDK(api_methods.APIMethods):
     #
     # GET /locales -> Sequence[models.Locale]
     def all_locales(
-        self, transport_options: Optional[transport.PTransportSettings] = None,
+        self, transport_options: Optional[transport.TransportOptions] = None,
     ) -> Sequence[models.Locale]:
         """Get All Locales"""
         response = self.get(
@@ -1926,7 +2009,7 @@ class Looker40SDK(api_methods.APIMethods):
     #
     # GET /mobile/settings -> models.MobileSettings
     def mobile_settings(
-        self, transport_options: Optional[transport.PTransportSettings] = None,
+        self, transport_options: Optional[transport.TransportOptions] = None,
     ) -> models.MobileSettings:
         """Get Mobile_Settings"""
         response = self.get(
@@ -1941,7 +2024,7 @@ class Looker40SDK(api_methods.APIMethods):
     #
     # GET /timezones -> Sequence[models.Timezone]
     def all_timezones(
-        self, transport_options: Optional[transport.PTransportSettings] = None,
+        self, transport_options: Optional[transport.TransportOptions] = None,
     ) -> Sequence[models.Timezone]:
         """Get All Timezones"""
         response = self.get(
@@ -1959,7 +2042,7 @@ class Looker40SDK(api_methods.APIMethods):
         self,
         # Requested fields.
         fields: Optional[str] = None,
-        transport_options: Optional[transport.PTransportSettings] = None,
+        transport_options: Optional[transport.TransportOptions] = None,
     ) -> models.ApiVersion:
         """Get ApiVersion"""
         response = self.get(
@@ -1982,7 +2065,7 @@ class Looker40SDK(api_methods.APIMethods):
         api_version: str,
         # Specification name. Typically, this is "swagger.json"
         specification: str,
-        transport_options: Optional[transport.PTransportSettings] = None,
+        transport_options: Optional[transport.TransportOptions] = None,
     ) -> str:
         """Get an API specification"""
         api_version = self.encode_path_param(api_version)
@@ -2003,7 +2086,7 @@ class Looker40SDK(api_methods.APIMethods):
         self,
         # Requested fields.
         fields: Optional[str] = None,
-        transport_options: Optional[transport.PTransportSettings] = None,
+        transport_options: Optional[transport.TransportOptions] = None,
     ) -> models.WhitelabelConfiguration:
         """Get Whitelabel configuration"""
         response = self.get(
@@ -2021,7 +2104,7 @@ class Looker40SDK(api_methods.APIMethods):
     def update_whitelabel_configuration(
         self,
         body: models.WriteWhitelabelConfiguration,
-        transport_options: Optional[transport.PTransportSettings] = None,
+        transport_options: Optional[transport.TransportOptions] = None,
     ) -> models.WhitelabelConfiguration:
         """Update Whitelabel configuration"""
         response = self.put(
@@ -2044,7 +2127,7 @@ class Looker40SDK(api_methods.APIMethods):
         self,
         # Requested fields.
         fields: Optional[str] = None,
-        transport_options: Optional[transport.PTransportSettings] = None,
+        transport_options: Optional[transport.TransportOptions] = None,
     ) -> Sequence[models.DBConnection]:
         """Get All Connections"""
         response = self.get(
@@ -2062,7 +2145,7 @@ class Looker40SDK(api_methods.APIMethods):
     def create_connection(
         self,
         body: models.WriteDBConnection,
-        transport_options: Optional[transport.PTransportSettings] = None,
+        transport_options: Optional[transport.TransportOptions] = None,
     ) -> models.DBConnection:
         """Create Connection"""
         response = self.post(
@@ -2083,7 +2166,7 @@ class Looker40SDK(api_methods.APIMethods):
         connection_name: str,
         # Requested fields.
         fields: Optional[str] = None,
-        transport_options: Optional[transport.PTransportSettings] = None,
+        transport_options: Optional[transport.TransportOptions] = None,
     ) -> models.DBConnection:
         """Get Connection"""
         connection_name = self.encode_path_param(connection_name)
@@ -2104,7 +2187,7 @@ class Looker40SDK(api_methods.APIMethods):
         # Name of connection
         connection_name: str,
         body: models.WriteDBConnection,
-        transport_options: Optional[transport.PTransportSettings] = None,
+        transport_options: Optional[transport.TransportOptions] = None,
     ) -> models.DBConnection:
         """Update Connection"""
         connection_name = self.encode_path_param(connection_name)
@@ -2124,7 +2207,7 @@ class Looker40SDK(api_methods.APIMethods):
         self,
         # Name of connection
         connection_name: str,
-        transport_options: Optional[transport.PTransportSettings] = None,
+        transport_options: Optional[transport.TransportOptions] = None,
     ) -> str:
         """Delete Connection"""
         connection_name = self.encode_path_param(connection_name)
@@ -2143,7 +2226,7 @@ class Looker40SDK(api_methods.APIMethods):
         connection_name: str,
         # Context of connection override
         override_context: str,
-        transport_options: Optional[transport.PTransportSettings] = None,
+        transport_options: Optional[transport.TransportOptions] = None,
     ) -> str:
         """Delete Connection Override"""
         connection_name = self.encode_path_param(connection_name)
@@ -2172,7 +2255,7 @@ class Looker40SDK(api_methods.APIMethods):
         connection_name: str,
         # Array of names of tests to run
         tests: Optional[models.DelimSequence[str]] = None,
-        transport_options: Optional[transport.PTransportSettings] = None,
+        transport_options: Optional[transport.TransportOptions] = None,
     ) -> Sequence[models.DBConnectionTestResult]:
         """Test Connection"""
         connection_name = self.encode_path_param(connection_name)
@@ -2200,7 +2283,7 @@ class Looker40SDK(api_methods.APIMethods):
         body: models.WriteDBConnection,
         # Array of names of tests to run
         tests: Optional[models.DelimSequence[str]] = None,
-        transport_options: Optional[transport.PTransportSettings] = None,
+        transport_options: Optional[transport.TransportOptions] = None,
     ) -> Sequence[models.DBConnectionTestResult]:
         """Test Connection Configuration"""
         response = self.put(
@@ -2220,7 +2303,7 @@ class Looker40SDK(api_methods.APIMethods):
         self,
         # Requested fields.
         fields: Optional[str] = None,
-        transport_options: Optional[transport.PTransportSettings] = None,
+        transport_options: Optional[transport.TransportOptions] = None,
     ) -> Sequence[models.DialectInfo]:
         """Get All Dialect Infos"""
         response = self.get(
@@ -2241,7 +2324,7 @@ class Looker40SDK(api_methods.APIMethods):
         name: Optional[str] = None,
         # Application Client ID
         client_id: Optional[str] = None,
-        transport_options: Optional[transport.PTransportSettings] = None,
+        transport_options: Optional[transport.TransportOptions] = None,
     ) -> Sequence[models.ExternalOauthApplication]:
         """Get All External OAuth Application.  This is an OAuth Application which Looker uses to access external systems.s"""
         response = self.get(
@@ -2259,7 +2342,7 @@ class Looker40SDK(api_methods.APIMethods):
     def create_external_oauth_application(
         self,
         body: models.WriteExternalOauthApplication,
-        transport_options: Optional[transport.PTransportSettings] = None,
+        transport_options: Optional[transport.TransportOptions] = None,
     ) -> models.ExternalOauthApplication:
         """Create External OAuth Application.  This is an OAuth Application which Looker uses to access external systems."""
         response = self.post(
@@ -2278,7 +2361,7 @@ class Looker40SDK(api_methods.APIMethods):
         self,
         # Requested fields.
         fields: Optional[str] = None,
-        transport_options: Optional[transport.PTransportSettings] = None,
+        transport_options: Optional[transport.TransportOptions] = None,
     ) -> Sequence[models.SshServer]:
         """Get All SSH Servers"""
         response = self.get(
@@ -2296,7 +2379,7 @@ class Looker40SDK(api_methods.APIMethods):
     def create_ssh_server(
         self,
         body: models.WriteSshServer,
-        transport_options: Optional[transport.PTransportSettings] = None,
+        transport_options: Optional[transport.TransportOptions] = None,
     ) -> models.SshServer:
         """Create SSH Server"""
         response = self.post(
@@ -2315,7 +2398,7 @@ class Looker40SDK(api_methods.APIMethods):
         self,
         # Id of SSH Server
         ssh_server_id: str,
-        transport_options: Optional[transport.PTransportSettings] = None,
+        transport_options: Optional[transport.TransportOptions] = None,
     ) -> models.SshServer:
         """Get SSH Server"""
         ssh_server_id = self.encode_path_param(ssh_server_id)
@@ -2335,7 +2418,7 @@ class Looker40SDK(api_methods.APIMethods):
         # Id of SSH Server
         ssh_server_id: str,
         body: models.WriteSshServer,
-        transport_options: Optional[transport.PTransportSettings] = None,
+        transport_options: Optional[transport.TransportOptions] = None,
     ) -> models.SshServer:
         """Update SSH Server"""
         ssh_server_id = self.encode_path_param(ssh_server_id)
@@ -2355,7 +2438,7 @@ class Looker40SDK(api_methods.APIMethods):
         self,
         # Id of SSH Server
         ssh_server_id: str,
-        transport_options: Optional[transport.PTransportSettings] = None,
+        transport_options: Optional[transport.TransportOptions] = None,
     ) -> str:
         """Delete SSH Server"""
         ssh_server_id = self.encode_path_param(ssh_server_id)
@@ -2372,7 +2455,7 @@ class Looker40SDK(api_methods.APIMethods):
         self,
         # Id of SSH Server
         ssh_server_id: str,
-        transport_options: Optional[transport.PTransportSettings] = None,
+        transport_options: Optional[transport.TransportOptions] = None,
     ) -> models.SshServer:
         """Test SSH Server"""
         ssh_server_id = self.encode_path_param(ssh_server_id)
@@ -2391,7 +2474,7 @@ class Looker40SDK(api_methods.APIMethods):
         self,
         # Requested fields.
         fields: Optional[str] = None,
-        transport_options: Optional[transport.PTransportSettings] = None,
+        transport_options: Optional[transport.TransportOptions] = None,
     ) -> Sequence[models.SshTunnel]:
         """Get All SSH Tunnels"""
         response = self.get(
@@ -2409,7 +2492,7 @@ class Looker40SDK(api_methods.APIMethods):
     def create_ssh_tunnel(
         self,
         body: models.WriteSshTunnel,
-        transport_options: Optional[transport.PTransportSettings] = None,
+        transport_options: Optional[transport.TransportOptions] = None,
     ) -> models.SshTunnel:
         """Create SSH Tunnel"""
         response = self.post(
@@ -2428,7 +2511,7 @@ class Looker40SDK(api_methods.APIMethods):
         self,
         # Id of SSH Tunnel
         ssh_tunnel_id: str,
-        transport_options: Optional[transport.PTransportSettings] = None,
+        transport_options: Optional[transport.TransportOptions] = None,
     ) -> models.SshTunnel:
         """Get SSH Tunnel"""
         ssh_tunnel_id = self.encode_path_param(ssh_tunnel_id)
@@ -2448,7 +2531,7 @@ class Looker40SDK(api_methods.APIMethods):
         # Id of SSH Tunnel
         ssh_tunnel_id: str,
         body: models.WriteSshTunnel,
-        transport_options: Optional[transport.PTransportSettings] = None,
+        transport_options: Optional[transport.TransportOptions] = None,
     ) -> models.SshTunnel:
         """Update SSH Tunnel"""
         ssh_tunnel_id = self.encode_path_param(ssh_tunnel_id)
@@ -2468,7 +2551,7 @@ class Looker40SDK(api_methods.APIMethods):
         self,
         # Id of SSH Tunnel
         ssh_tunnel_id: str,
-        transport_options: Optional[transport.PTransportSettings] = None,
+        transport_options: Optional[transport.TransportOptions] = None,
     ) -> str:
         """Delete SSH Tunnel"""
         ssh_tunnel_id = self.encode_path_param(ssh_tunnel_id)
@@ -2485,7 +2568,7 @@ class Looker40SDK(api_methods.APIMethods):
         self,
         # Id of SSH Tunnel
         ssh_tunnel_id: str,
-        transport_options: Optional[transport.PTransportSettings] = None,
+        transport_options: Optional[transport.TransportOptions] = None,
     ) -> models.SshTunnel:
         """Test SSH Tunnel"""
         ssh_tunnel_id = self.encode_path_param(ssh_tunnel_id)
@@ -2503,7 +2586,7 @@ class Looker40SDK(api_methods.APIMethods):
     #
     # GET /ssh_public_key -> models.SshPublicKey
     def ssh_public_key(
-        self, transport_options: Optional[transport.PTransportSettings] = None,
+        self, transport_options: Optional[transport.TransportOptions] = None,
     ) -> models.SshPublicKey:
         """Get SSH Public Key"""
         response = self.get(
@@ -2564,7 +2647,7 @@ class Looker40SDK(api_methods.APIMethods):
         fields: Optional[str] = None,
         # Combine given search criteria in a boolean OR expression
         filter_or: Optional[bool] = None,
-        transport_options: Optional[transport.PTransportSettings] = None,
+        transport_options: Optional[transport.TransportOptions] = None,
     ) -> Sequence[models.ContentFavorite]:
         """Search Favorite Contents"""
         response = self.get(
@@ -2597,7 +2680,7 @@ class Looker40SDK(api_methods.APIMethods):
         content_favorite_id: int,
         # Requested fields.
         fields: Optional[str] = None,
-        transport_options: Optional[transport.PTransportSettings] = None,
+        transport_options: Optional[transport.TransportOptions] = None,
     ) -> models.ContentFavorite:
         """Get Favorite Content"""
         response = self.get(
@@ -2616,7 +2699,7 @@ class Looker40SDK(api_methods.APIMethods):
         self,
         # Id of favorite content
         content_favorite_id: int,
-        transport_options: Optional[transport.PTransportSettings] = None,
+        transport_options: Optional[transport.TransportOptions] = None,
     ) -> str:
         """Delete Favorite Content"""
         response = self.delete(
@@ -2633,7 +2716,7 @@ class Looker40SDK(api_methods.APIMethods):
     def create_content_favorite(
         self,
         body: models.WriteContentFavorite,
-        transport_options: Optional[transport.PTransportSettings] = None,
+        transport_options: Optional[transport.TransportOptions] = None,
     ) -> models.ContentFavorite:
         """Create Favorite Content"""
         response = self.post(
@@ -2654,7 +2737,7 @@ class Looker40SDK(api_methods.APIMethods):
         parent_id: int,
         # Requested fields.
         fields: Optional[str] = None,
-        transport_options: Optional[transport.PTransportSettings] = None,
+        transport_options: Optional[transport.TransportOptions] = None,
     ) -> Sequence[models.ContentMeta]:
         """Get All Content Metadatas"""
         response = self.get(
@@ -2675,7 +2758,7 @@ class Looker40SDK(api_methods.APIMethods):
         content_metadata_id: int,
         # Requested fields.
         fields: Optional[str] = None,
-        transport_options: Optional[transport.PTransportSettings] = None,
+        transport_options: Optional[transport.TransportOptions] = None,
     ) -> models.ContentMeta:
         """Get Content Metadata"""
         response = self.get(
@@ -2695,7 +2778,7 @@ class Looker40SDK(api_methods.APIMethods):
         # Id of content metadata
         content_metadata_id: int,
         body: models.WriteContentMeta,
-        transport_options: Optional[transport.PTransportSettings] = None,
+        transport_options: Optional[transport.TransportOptions] = None,
     ) -> models.ContentMeta:
         """Update Content Metadata"""
         response = self.patch(
@@ -2716,7 +2799,7 @@ class Looker40SDK(api_methods.APIMethods):
         content_metadata_id: int,
         # Requested fields.
         fields: Optional[str] = None,
-        transport_options: Optional[transport.PTransportSettings] = None,
+        transport_options: Optional[transport.TransportOptions] = None,
     ) -> Sequence[models.ContentMetaGroupUser]:
         """Get All Content Metadata Accesses"""
         response = self.get(
@@ -2736,7 +2819,7 @@ class Looker40SDK(api_methods.APIMethods):
         body: models.ContentMetaGroupUser,
         # Optionally sends notification email when granting access to a board.
         send_boards_notification_email: Optional[bool] = None,
-        transport_options: Optional[transport.PTransportSettings] = None,
+        transport_options: Optional[transport.TransportOptions] = None,
     ) -> models.ContentMetaGroupUser:
         """Create Content Metadata Access"""
         response = self.post(
@@ -2759,7 +2842,7 @@ class Looker40SDK(api_methods.APIMethods):
         # Id of content metadata access
         content_metadata_access_id: str,
         body: models.ContentMetaGroupUser,
-        transport_options: Optional[transport.PTransportSettings] = None,
+        transport_options: Optional[transport.TransportOptions] = None,
     ) -> models.ContentMetaGroupUser:
         """Update Content Metadata Access"""
         content_metadata_access_id = self.encode_path_param(content_metadata_access_id)
@@ -2779,7 +2862,7 @@ class Looker40SDK(api_methods.APIMethods):
         self,
         # Id of content metadata access
         content_metadata_access_id: int,
-        transport_options: Optional[transport.PTransportSettings] = None,
+        transport_options: Optional[transport.TransportOptions] = None,
     ) -> str:
         """Delete Content Metadata Access"""
         response = self.delete(
@@ -2810,7 +2893,7 @@ class Looker40SDK(api_methods.APIMethods):
         width: Optional[int] = None,
         # The height of the image if format is supplied
         height: Optional[int] = None,
-        transport_options: Optional[transport.PTransportSettings] = None,
+        transport_options: Optional[transport.TransportOptions] = None,
     ) -> Union[str, bytes]:
         """Get Content Thumbnail"""
         type = self.encode_path_param(type)
@@ -2839,7 +2922,7 @@ class Looker40SDK(api_methods.APIMethods):
         self,
         # Requested fields.
         fields: Optional[str] = None,
-        transport_options: Optional[transport.PTransportSettings] = None,
+        transport_options: Optional[transport.TransportOptions] = None,
     ) -> models.ContentValidation:
         """Validate Content"""
         response = self.get(
@@ -2903,7 +2986,7 @@ class Looker40SDK(api_methods.APIMethods):
         sorts: Optional[str] = None,
         # Combine given search criteria in a boolean OR expression
         filter_or: Optional[bool] = None,
-        transport_options: Optional[transport.PTransportSettings] = None,
+        transport_options: Optional[transport.TransportOptions] = None,
     ) -> Sequence[models.ContentView]:
         """Search Content Views"""
         response = self.get(
@@ -2945,7 +3028,7 @@ class Looker40SDK(api_methods.APIMethods):
         resource_id: str,
         # Whether or not to refresh the rendered image with the latest content
         reload: Optional[str] = None,
-        transport_options: Optional[transport.PTransportSettings] = None,
+        transport_options: Optional[transport.TransportOptions] = None,
     ) -> str:
         """Get Vector Thumbnail"""
         type = self.encode_path_param(type)
@@ -2976,7 +3059,7 @@ class Looker40SDK(api_methods.APIMethods):
         self,
         # Requested fields.
         fields: Optional[str] = None,
-        transport_options: Optional[transport.PTransportSettings] = None,
+        transport_options: Optional[transport.TransportOptions] = None,
     ) -> Sequence[models.DashboardBase]:
         """Get All Dashboards"""
         response = self.get(
@@ -3007,7 +3090,7 @@ class Looker40SDK(api_methods.APIMethods):
     def create_dashboard(
         self,
         body: models.WriteDashboard,
-        transport_options: Optional[transport.PTransportSettings] = None,
+        transport_options: Optional[transport.TransportOptions] = None,
     ) -> models.Dashboard:
         """Create Dashboard"""
         response = self.post(
@@ -3090,7 +3173,7 @@ class Looker40SDK(api_methods.APIMethods):
         sorts: Optional[str] = None,
         # Combine given search criteria in a boolean OR expression
         filter_or: Optional[bool] = None,
-        transport_options: Optional[transport.PTransportSettings] = None,
+        transport_options: Optional[transport.TransportOptions] = None,
     ) -> Sequence[models.Dashboard]:
         """Search Dashboards"""
         response = self.get(
@@ -3145,7 +3228,7 @@ class Looker40SDK(api_methods.APIMethods):
         body: Optional[models.WriteDashboard] = None,
         # If true, and this dashboard is localized, export it with the raw keys, not localized.
         raw_locale: Optional[bool] = None,
-        transport_options: Optional[transport.PTransportSettings] = None,
+        transport_options: Optional[transport.TransportOptions] = None,
     ) -> models.Dashboard:
         """Import LookML Dashboard"""
         lookml_dashboard_id = self.encode_path_param(lookml_dashboard_id)
@@ -3178,7 +3261,7 @@ class Looker40SDK(api_methods.APIMethods):
         body: models.WriteDashboard,
         # If true, and this dashboard is localized, export it with the raw keys, not localized.
         raw_locale: Optional[bool] = None,
-        transport_options: Optional[transport.PTransportSettings] = None,
+        transport_options: Optional[transport.TransportOptions] = None,
     ) -> Sequence[int]:
         """Sync LookML Dashboard"""
         lookml_dashboard_id = self.encode_path_param(lookml_dashboard_id)
@@ -3207,7 +3290,7 @@ class Looker40SDK(api_methods.APIMethods):
         dashboard_id: str,
         # Requested fields.
         fields: Optional[str] = None,
-        transport_options: Optional[transport.PTransportSettings] = None,
+        transport_options: Optional[transport.TransportOptions] = None,
     ) -> models.Dashboard:
         """Get Dashboard"""
         dashboard_id = self.encode_path_param(dashboard_id)
@@ -3237,7 +3320,7 @@ class Looker40SDK(api_methods.APIMethods):
         # Id of dashboard
         dashboard_id: str,
         body: models.WriteDashboard,
-        transport_options: Optional[transport.PTransportSettings] = None,
+        transport_options: Optional[transport.TransportOptions] = None,
     ) -> models.Dashboard:
         """Update Dashboard"""
         dashboard_id = self.encode_path_param(dashboard_id)
@@ -3263,7 +3346,7 @@ class Looker40SDK(api_methods.APIMethods):
         self,
         # Id of dashboard
         dashboard_id: str,
-        transport_options: Optional[transport.PTransportSettings] = None,
+        transport_options: Optional[transport.TransportOptions] = None,
     ) -> str:
         """Delete Dashboard"""
         dashboard_id = self.encode_path_param(dashboard_id)
@@ -3282,7 +3365,7 @@ class Looker40SDK(api_methods.APIMethods):
         self,
         # Id of dashboard
         dashboard_id: str,
-        transport_options: Optional[transport.PTransportSettings] = None,
+        transport_options: Optional[transport.TransportOptions] = None,
     ) -> models.DashboardAggregateTableLookml:
         """Get Aggregate Table LookML for a dashboard"""
         dashboard_id = self.encode_path_param(dashboard_id)
@@ -3303,7 +3386,7 @@ class Looker40SDK(api_methods.APIMethods):
         self,
         # Id of dashboard
         dashboard_id: str,
-        transport_options: Optional[transport.PTransportSettings] = None,
+        transport_options: Optional[transport.TransportOptions] = None,
     ) -> models.DashboardLookml:
         """Get lookml of a UDD"""
         dashboard_id = self.encode_path_param(dashboard_id)
@@ -3329,7 +3412,7 @@ class Looker40SDK(api_methods.APIMethods):
         dashboard_id: str,
         # Folder id to copy to.
         folder_id: str,
-        transport_options: Optional[transport.PTransportSettings] = None,
+        transport_options: Optional[transport.TransportOptions] = None,
     ) -> models.Dashboard:
         """Copy Dashboard"""
         dashboard_id = self.encode_path_param(dashboard_id)
@@ -3356,7 +3439,7 @@ class Looker40SDK(api_methods.APIMethods):
         dashboard_id: str,
         # Folder id to move to.
         folder_id: str,
-        transport_options: Optional[transport.PTransportSettings] = None,
+        transport_options: Optional[transport.TransportOptions] = None,
     ) -> models.Dashboard:
         """Move Dashboard"""
         dashboard_id = self.encode_path_param(dashboard_id)
@@ -3411,7 +3494,7 @@ class Looker40SDK(api_methods.APIMethods):
         filter_or: Optional[bool] = None,
         # Fields to sort by. Sortable fields: [:look_id, :dashboard_id, :deleted, :title]
         sorts: Optional[str] = None,
-        transport_options: Optional[transport.PTransportSettings] = None,
+        transport_options: Optional[transport.TransportOptions] = None,
     ) -> Sequence[models.DashboardElement]:
         """Search Dashboard Elements"""
         response = self.get(
@@ -3440,7 +3523,7 @@ class Looker40SDK(api_methods.APIMethods):
         dashboard_element_id: str,
         # Requested fields.
         fields: Optional[str] = None,
-        transport_options: Optional[transport.PTransportSettings] = None,
+        transport_options: Optional[transport.TransportOptions] = None,
     ) -> models.DashboardElement:
         """Get DashboardElement"""
         dashboard_element_id = self.encode_path_param(dashboard_element_id)
@@ -3463,7 +3546,7 @@ class Looker40SDK(api_methods.APIMethods):
         body: models.WriteDashboardElement,
         # Requested fields.
         fields: Optional[str] = None,
-        transport_options: Optional[transport.PTransportSettings] = None,
+        transport_options: Optional[transport.TransportOptions] = None,
     ) -> models.DashboardElement:
         """Update DashboardElement"""
         dashboard_element_id = self.encode_path_param(dashboard_element_id)
@@ -3484,7 +3567,7 @@ class Looker40SDK(api_methods.APIMethods):
         self,
         # Id of dashboard element
         dashboard_element_id: str,
-        transport_options: Optional[transport.PTransportSettings] = None,
+        transport_options: Optional[transport.TransportOptions] = None,
     ) -> str:
         """Delete DashboardElement"""
         dashboard_element_id = self.encode_path_param(dashboard_element_id)
@@ -3505,7 +3588,7 @@ class Looker40SDK(api_methods.APIMethods):
         dashboard_id: str,
         # Requested fields.
         fields: Optional[str] = None,
-        transport_options: Optional[transport.PTransportSettings] = None,
+        transport_options: Optional[transport.TransportOptions] = None,
     ) -> Sequence[models.DashboardElement]:
         """Get All DashboardElements"""
         dashboard_id = self.encode_path_param(dashboard_id)
@@ -3526,7 +3609,7 @@ class Looker40SDK(api_methods.APIMethods):
         body: models.WriteDashboardElement,
         # Requested fields.
         fields: Optional[str] = None,
-        transport_options: Optional[transport.PTransportSettings] = None,
+        transport_options: Optional[transport.TransportOptions] = None,
     ) -> models.DashboardElement:
         """Create DashboardElement"""
         response = self.post(
@@ -3548,7 +3631,7 @@ class Looker40SDK(api_methods.APIMethods):
         dashboard_filter_id: str,
         # Requested fields.
         fields: Optional[str] = None,
-        transport_options: Optional[transport.PTransportSettings] = None,
+        transport_options: Optional[transport.TransportOptions] = None,
     ) -> models.DashboardFilter:
         """Get Dashboard Filter"""
         dashboard_filter_id = self.encode_path_param(dashboard_filter_id)
@@ -3571,7 +3654,7 @@ class Looker40SDK(api_methods.APIMethods):
         body: models.WriteDashboardFilter,
         # Requested fields.
         fields: Optional[str] = None,
-        transport_options: Optional[transport.PTransportSettings] = None,
+        transport_options: Optional[transport.TransportOptions] = None,
     ) -> models.DashboardFilter:
         """Update Dashboard Filter"""
         dashboard_filter_id = self.encode_path_param(dashboard_filter_id)
@@ -3592,7 +3675,7 @@ class Looker40SDK(api_methods.APIMethods):
         self,
         # Id of dashboard filter
         dashboard_filter_id: str,
-        transport_options: Optional[transport.PTransportSettings] = None,
+        transport_options: Optional[transport.TransportOptions] = None,
     ) -> str:
         """Delete Dashboard Filter"""
         dashboard_filter_id = self.encode_path_param(dashboard_filter_id)
@@ -3613,7 +3696,7 @@ class Looker40SDK(api_methods.APIMethods):
         dashboard_id: str,
         # Requested fields.
         fields: Optional[str] = None,
-        transport_options: Optional[transport.PTransportSettings] = None,
+        transport_options: Optional[transport.TransportOptions] = None,
     ) -> Sequence[models.DashboardFilter]:
         """Get All Dashboard Filters"""
         dashboard_id = self.encode_path_param(dashboard_id)
@@ -3634,7 +3717,7 @@ class Looker40SDK(api_methods.APIMethods):
         body: models.WriteCreateDashboardFilter,
         # Requested fields
         fields: Optional[str] = None,
-        transport_options: Optional[transport.PTransportSettings] = None,
+        transport_options: Optional[transport.TransportOptions] = None,
     ) -> models.DashboardFilter:
         """Create Dashboard Filter"""
         response = self.post(
@@ -3656,7 +3739,7 @@ class Looker40SDK(api_methods.APIMethods):
         dashboard_layout_component_id: str,
         # Requested fields.
         fields: Optional[str] = None,
-        transport_options: Optional[transport.PTransportSettings] = None,
+        transport_options: Optional[transport.TransportOptions] = None,
     ) -> models.DashboardLayoutComponent:
         """Get DashboardLayoutComponent"""
         dashboard_layout_component_id = self.encode_path_param(
@@ -3681,7 +3764,7 @@ class Looker40SDK(api_methods.APIMethods):
         body: models.WriteDashboardLayoutComponent,
         # Requested fields.
         fields: Optional[str] = None,
-        transport_options: Optional[transport.PTransportSettings] = None,
+        transport_options: Optional[transport.TransportOptions] = None,
     ) -> models.DashboardLayoutComponent:
         """Update DashboardLayoutComponent"""
         dashboard_layout_component_id = self.encode_path_param(
@@ -3706,7 +3789,7 @@ class Looker40SDK(api_methods.APIMethods):
         dashboard_layout_id: str,
         # Requested fields.
         fields: Optional[str] = None,
-        transport_options: Optional[transport.PTransportSettings] = None,
+        transport_options: Optional[transport.TransportOptions] = None,
     ) -> Sequence[models.DashboardLayoutComponent]:
         """Get All DashboardLayoutComponents"""
         dashboard_layout_id = self.encode_path_param(dashboard_layout_id)
@@ -3728,7 +3811,7 @@ class Looker40SDK(api_methods.APIMethods):
         dashboard_layout_id: str,
         # Requested fields.
         fields: Optional[str] = None,
-        transport_options: Optional[transport.PTransportSettings] = None,
+        transport_options: Optional[transport.TransportOptions] = None,
     ) -> models.DashboardLayout:
         """Get DashboardLayout"""
         dashboard_layout_id = self.encode_path_param(dashboard_layout_id)
@@ -3751,7 +3834,7 @@ class Looker40SDK(api_methods.APIMethods):
         body: models.WriteDashboardLayout,
         # Requested fields.
         fields: Optional[str] = None,
-        transport_options: Optional[transport.PTransportSettings] = None,
+        transport_options: Optional[transport.TransportOptions] = None,
     ) -> models.DashboardLayout:
         """Update DashboardLayout"""
         dashboard_layout_id = self.encode_path_param(dashboard_layout_id)
@@ -3772,7 +3855,7 @@ class Looker40SDK(api_methods.APIMethods):
         self,
         # Id of dashboard layout
         dashboard_layout_id: str,
-        transport_options: Optional[transport.PTransportSettings] = None,
+        transport_options: Optional[transport.TransportOptions] = None,
     ) -> str:
         """Delete DashboardLayout"""
         dashboard_layout_id = self.encode_path_param(dashboard_layout_id)
@@ -3793,7 +3876,7 @@ class Looker40SDK(api_methods.APIMethods):
         dashboard_id: str,
         # Requested fields.
         fields: Optional[str] = None,
-        transport_options: Optional[transport.PTransportSettings] = None,
+        transport_options: Optional[transport.TransportOptions] = None,
     ) -> Sequence[models.DashboardLayout]:
         """Get All DashboardLayouts"""
         dashboard_id = self.encode_path_param(dashboard_id)
@@ -3814,7 +3897,7 @@ class Looker40SDK(api_methods.APIMethods):
         body: models.WriteDashboardLayout,
         # Requested fields.
         fields: Optional[str] = None,
-        transport_options: Optional[transport.PTransportSettings] = None,
+        transport_options: Optional[transport.TransportOptions] = None,
     ) -> models.DashboardLayout:
         """Create DashboardLayout"""
         response = self.post(
@@ -3837,7 +3920,7 @@ class Looker40SDK(api_methods.APIMethods):
     def perform_data_action(
         self,
         body: models.DataActionRequest,
-        transport_options: Optional[transport.PTransportSettings] = None,
+        transport_options: Optional[transport.TransportOptions] = None,
     ) -> models.DataActionResponse:
         """Send a Data Action"""
         response = self.post(
@@ -3855,7 +3938,7 @@ class Looker40SDK(api_methods.APIMethods):
     def fetch_remote_data_action_form(
         self,
         body: MutableMapping[str, Any],
-        transport_options: Optional[transport.PTransportSettings] = None,
+        transport_options: Optional[transport.TransportOptions] = None,
     ) -> models.DataActionForm:
         """Fetch Remote Data Action Form"""
         response = self.post(
@@ -3875,7 +3958,7 @@ class Looker40SDK(api_methods.APIMethods):
     #
     # GET /datagroups -> Sequence[models.Datagroup]
     def all_datagroups(
-        self, transport_options: Optional[transport.PTransportSettings] = None,
+        self, transport_options: Optional[transport.TransportOptions] = None,
     ) -> Sequence[models.Datagroup]:
         """Get All Datagroups"""
         response = self.get(
@@ -3893,7 +3976,7 @@ class Looker40SDK(api_methods.APIMethods):
         self,
         # ID of datagroup.
         datagroup_id: int,
-        transport_options: Optional[transport.PTransportSettings] = None,
+        transport_options: Optional[transport.TransportOptions] = None,
     ) -> models.Datagroup:
         """Get Datagroup"""
         response = self.get(
@@ -3912,7 +3995,7 @@ class Looker40SDK(api_methods.APIMethods):
         # ID of datagroup.
         datagroup_id: int,
         body: models.WriteDatagroup,
-        transport_options: Optional[transport.PTransportSettings] = None,
+        transport_options: Optional[transport.TransportOptions] = None,
     ) -> models.Datagroup:
         """Update Datagroup"""
         response = self.patch(
@@ -3955,7 +4038,7 @@ class Looker40SDK(api_methods.APIMethods):
         creator_id: Optional[str] = None,
         # Combine given search criteria in a boolean OR expression
         filter_or: Optional[bool] = None,
-        transport_options: Optional[transport.PTransportSettings] = None,
+        transport_options: Optional[transport.TransportOptions] = None,
     ) -> Sequence[models.Folder]:
         """Search Folders"""
         response = self.get(
@@ -3988,7 +4071,7 @@ class Looker40SDK(api_methods.APIMethods):
         folder_id: str,
         # Requested fields.
         fields: Optional[str] = None,
-        transport_options: Optional[transport.PTransportSettings] = None,
+        transport_options: Optional[transport.TransportOptions] = None,
     ) -> models.Folder:
         """Get Folder"""
         folder_id = self.encode_path_param(folder_id)
@@ -4009,7 +4092,7 @@ class Looker40SDK(api_methods.APIMethods):
         # Id of folder
         folder_id: str,
         body: models.UpdateFolder,
-        transport_options: Optional[transport.PTransportSettings] = None,
+        transport_options: Optional[transport.TransportOptions] = None,
     ) -> models.Folder:
         """Update Folder"""
         folder_id = self.encode_path_param(folder_id)
@@ -4030,7 +4113,7 @@ class Looker40SDK(api_methods.APIMethods):
         self,
         # Id of folder
         folder_id: str,
-        transport_options: Optional[transport.PTransportSettings] = None,
+        transport_options: Optional[transport.TransportOptions] = None,
     ) -> str:
         """Delete Folder"""
         folder_id = self.encode_path_param(folder_id)
@@ -4050,7 +4133,7 @@ class Looker40SDK(api_methods.APIMethods):
         self,
         # Requested fields.
         fields: Optional[str] = None,
-        transport_options: Optional[transport.PTransportSettings] = None,
+        transport_options: Optional[transport.TransportOptions] = None,
     ) -> Sequence[models.Folder]:
         """Get All Folders"""
         response = self.get(
@@ -4071,7 +4154,7 @@ class Looker40SDK(api_methods.APIMethods):
     def create_folder(
         self,
         body: models.CreateFolder,
-        transport_options: Optional[transport.PTransportSettings] = None,
+        transport_options: Optional[transport.TransportOptions] = None,
     ) -> models.Folder:
         """Create Folder"""
         response = self.post(
@@ -4095,7 +4178,7 @@ class Looker40SDK(api_methods.APIMethods):
         per_page: Optional[int] = None,
         # Fields to sort by.
         sorts: Optional[str] = None,
-        transport_options: Optional[transport.PTransportSettings] = None,
+        transport_options: Optional[transport.TransportOptions] = None,
     ) -> Sequence[models.Folder]:
         """Get Folder Children"""
         folder_id = self.encode_path_param(folder_id)
@@ -4126,7 +4209,7 @@ class Looker40SDK(api_methods.APIMethods):
         sorts: Optional[str] = None,
         # Match folder name.
         name: Optional[str] = None,
-        transport_options: Optional[transport.PTransportSettings] = None,
+        transport_options: Optional[transport.TransportOptions] = None,
     ) -> Sequence[models.Folder]:
         """Search Folder Children"""
         folder_id = self.encode_path_param(folder_id)
@@ -4148,7 +4231,7 @@ class Looker40SDK(api_methods.APIMethods):
         folder_id: str,
         # Requested fields.
         fields: Optional[str] = None,
-        transport_options: Optional[transport.PTransportSettings] = None,
+        transport_options: Optional[transport.TransportOptions] = None,
     ) -> models.Folder:
         """Get Folder Parent"""
         folder_id = self.encode_path_param(folder_id)
@@ -4170,7 +4253,7 @@ class Looker40SDK(api_methods.APIMethods):
         folder_id: str,
         # Requested fields.
         fields: Optional[str] = None,
-        transport_options: Optional[transport.PTransportSettings] = None,
+        transport_options: Optional[transport.TransportOptions] = None,
     ) -> Sequence[models.Folder]:
         """Get Folder Ancestors"""
         folder_id = self.encode_path_param(folder_id)
@@ -4194,7 +4277,7 @@ class Looker40SDK(api_methods.APIMethods):
         folder_id: str,
         # Requested fields.
         fields: Optional[str] = None,
-        transport_options: Optional[transport.PTransportSettings] = None,
+        transport_options: Optional[transport.TransportOptions] = None,
     ) -> Sequence[models.LookWithQuery]:
         """Get Folder Looks"""
         folder_id = self.encode_path_param(folder_id)
@@ -4216,7 +4299,7 @@ class Looker40SDK(api_methods.APIMethods):
         folder_id: str,
         # Requested fields.
         fields: Optional[str] = None,
-        transport_options: Optional[transport.PTransportSettings] = None,
+        transport_options: Optional[transport.TransportOptions] = None,
     ) -> Sequence[models.Dashboard]:
         """Get Folder Dashboards"""
         folder_id = self.encode_path_param(folder_id)
@@ -4252,7 +4335,7 @@ class Looker40SDK(api_methods.APIMethods):
         content_metadata_id: Optional[int] = None,
         # Select only groups that either can/cannot be given access to content.
         can_add_to_content_metadata: Optional[bool] = None,
-        transport_options: Optional[transport.PTransportSettings] = None,
+        transport_options: Optional[transport.TransportOptions] = None,
     ) -> Sequence[models.Group]:
         """Get All Groups"""
         response = self.get(
@@ -4280,7 +4363,7 @@ class Looker40SDK(api_methods.APIMethods):
         body: models.WriteGroup,
         # Requested fields.
         fields: Optional[str] = None,
-        transport_options: Optional[transport.PTransportSettings] = None,
+        transport_options: Optional[transport.TransportOptions] = None,
     ) -> models.Group:
         """Create Group"""
         response = self.post(
@@ -4341,7 +4424,7 @@ class Looker40SDK(api_methods.APIMethods):
         externally_managed: Optional[bool] = None,
         # Match group externally_orphaned.
         externally_orphaned: Optional[bool] = None,
-        transport_options: Optional[transport.PTransportSettings] = None,
+        transport_options: Optional[transport.TransportOptions] = None,
     ) -> Sequence[models.Group]:
         """Search Groups"""
         response = self.get(
@@ -4412,7 +4495,7 @@ class Looker40SDK(api_methods.APIMethods):
         externally_managed: Optional[bool] = None,
         # Match group externally_orphaned.
         externally_orphaned: Optional[bool] = None,
-        transport_options: Optional[transport.PTransportSettings] = None,
+        transport_options: Optional[transport.TransportOptions] = None,
     ) -> Sequence[models.GroupSearch]:
         """Search Groups with Roles"""
         response = self.get(
@@ -4484,7 +4567,7 @@ class Looker40SDK(api_methods.APIMethods):
         externally_managed: Optional[bool] = None,
         # Match group externally_orphaned.
         externally_orphaned: Optional[bool] = None,
-        transport_options: Optional[transport.PTransportSettings] = None,
+        transport_options: Optional[transport.TransportOptions] = None,
     ) -> Sequence[models.GroupHierarchy]:
         """Search Groups with Hierarchy"""
         response = self.get(
@@ -4516,7 +4599,7 @@ class Looker40SDK(api_methods.APIMethods):
         group_id: int,
         # Requested fields.
         fields: Optional[str] = None,
-        transport_options: Optional[transport.PTransportSettings] = None,
+        transport_options: Optional[transport.TransportOptions] = None,
     ) -> models.Group:
         """Get Group"""
         response = self.get(
@@ -4538,7 +4621,7 @@ class Looker40SDK(api_methods.APIMethods):
         body: models.WriteGroup,
         # Requested fields.
         fields: Optional[str] = None,
-        transport_options: Optional[transport.PTransportSettings] = None,
+        transport_options: Optional[transport.TransportOptions] = None,
     ) -> models.Group:
         """Update Group"""
         response = self.patch(
@@ -4558,7 +4641,7 @@ class Looker40SDK(api_methods.APIMethods):
         self,
         # Id of group
         group_id: int,
-        transport_options: Optional[transport.PTransportSettings] = None,
+        transport_options: Optional[transport.TransportOptions] = None,
     ) -> str:
         """Delete Group"""
         response = self.delete(
@@ -4576,7 +4659,7 @@ class Looker40SDK(api_methods.APIMethods):
         group_id: int,
         # Requested fields.
         fields: Optional[str] = None,
-        transport_options: Optional[transport.PTransportSettings] = None,
+        transport_options: Optional[transport.TransportOptions] = None,
     ) -> Sequence[models.Group]:
         """Get All Groups in Group"""
         response = self.get(
@@ -4596,7 +4679,7 @@ class Looker40SDK(api_methods.APIMethods):
         # Id of group
         group_id: int,
         body: models.GroupIdForGroupInclusion,
-        transport_options: Optional[transport.PTransportSettings] = None,
+        transport_options: Optional[transport.TransportOptions] = None,
     ) -> models.Group:
         """Add a Group to Group"""
         response = self.post(
@@ -4623,7 +4706,7 @@ class Looker40SDK(api_methods.APIMethods):
         per_page: Optional[int] = None,
         # Fields to sort by.
         sorts: Optional[str] = None,
-        transport_options: Optional[transport.PTransportSettings] = None,
+        transport_options: Optional[transport.TransportOptions] = None,
     ) -> Sequence[models.User]:
         """Get All Users in Group"""
         response = self.get(
@@ -4648,7 +4731,7 @@ class Looker40SDK(api_methods.APIMethods):
         # Id of group
         group_id: int,
         body: models.GroupIdForGroupUserInclusion,
-        transport_options: Optional[transport.PTransportSettings] = None,
+        transport_options: Optional[transport.TransportOptions] = None,
     ) -> models.User:
         """Add a User to Group"""
         response = self.post(
@@ -4669,7 +4752,7 @@ class Looker40SDK(api_methods.APIMethods):
         group_id: int,
         # Id of user to remove from group
         user_id: int,
-        transport_options: Optional[transport.PTransportSettings] = None,
+        transport_options: Optional[transport.TransportOptions] = None,
     ) -> None:
         """Remove a User from Group"""
         response = self.delete(
@@ -4689,7 +4772,7 @@ class Looker40SDK(api_methods.APIMethods):
         group_id: int,
         # Id of group to delete
         deleting_group_id: int,
-        transport_options: Optional[transport.PTransportSettings] = None,
+        transport_options: Optional[transport.TransportOptions] = None,
     ) -> None:
         """Deletes a Group from Group"""
         response = self.delete(
@@ -4712,7 +4795,7 @@ class Looker40SDK(api_methods.APIMethods):
         # Id of user attribute
         user_attribute_id: int,
         body: models.UserAttributeGroupValue,
-        transport_options: Optional[transport.PTransportSettings] = None,
+        transport_options: Optional[transport.TransportOptions] = None,
     ) -> models.UserAttributeGroupValue:
         """Set User Attribute Group Value"""
         response = self.patch(
@@ -4733,7 +4816,7 @@ class Looker40SDK(api_methods.APIMethods):
         group_id: int,
         # Id of user attribute
         user_attribute_id: int,
-        transport_options: Optional[transport.PTransportSettings] = None,
+        transport_options: Optional[transport.TransportOptions] = None,
     ) -> None:
         """Delete User Attribute Group Value"""
         response = self.delete(
@@ -4755,7 +4838,7 @@ class Looker40SDK(api_methods.APIMethods):
         self,
         # Requested fields.
         fields: Optional[str] = None,
-        transport_options: Optional[transport.PTransportSettings] = None,
+        transport_options: Optional[transport.TransportOptions] = None,
     ) -> Sequence[models.HomepageSection]:
         """Get All Primary homepage sections"""
         response = self.get(
@@ -4778,7 +4861,7 @@ class Looker40SDK(api_methods.APIMethods):
         self,
         # Requested fields.
         fields: Optional[str] = None,
-        transport_options: Optional[transport.PTransportSettings] = None,
+        transport_options: Optional[transport.TransportOptions] = None,
     ) -> Sequence[models.IntegrationHub]:
         """Get All Integration Hubs"""
         response = self.get(
@@ -4800,7 +4883,7 @@ class Looker40SDK(api_methods.APIMethods):
         body: models.WriteIntegrationHub,
         # Requested fields.
         fields: Optional[str] = None,
-        transport_options: Optional[transport.PTransportSettings] = None,
+        transport_options: Optional[transport.TransportOptions] = None,
     ) -> models.IntegrationHub:
         """Create Integration Hub"""
         response = self.post(
@@ -4822,7 +4905,7 @@ class Looker40SDK(api_methods.APIMethods):
         integration_hub_id: int,
         # Requested fields.
         fields: Optional[str] = None,
-        transport_options: Optional[transport.PTransportSettings] = None,
+        transport_options: Optional[transport.TransportOptions] = None,
     ) -> models.IntegrationHub:
         """Get Integration Hub"""
         response = self.get(
@@ -4846,7 +4929,7 @@ class Looker40SDK(api_methods.APIMethods):
         body: models.WriteIntegrationHub,
         # Requested fields.
         fields: Optional[str] = None,
-        transport_options: Optional[transport.PTransportSettings] = None,
+        transport_options: Optional[transport.TransportOptions] = None,
     ) -> models.IntegrationHub:
         """Update Integration Hub"""
         response = self.patch(
@@ -4866,7 +4949,7 @@ class Looker40SDK(api_methods.APIMethods):
         self,
         # Id of integration_hub
         integration_hub_id: int,
-        transport_options: Optional[transport.PTransportSettings] = None,
+        transport_options: Optional[transport.TransportOptions] = None,
     ) -> str:
         """Delete Integration Hub"""
         response = self.delete(
@@ -4884,7 +4967,7 @@ class Looker40SDK(api_methods.APIMethods):
         self,
         # Id of integration_hub
         integration_hub_id: int,
-        transport_options: Optional[transport.PTransportSettings] = None,
+        transport_options: Optional[transport.TransportOptions] = None,
     ) -> models.IntegrationHub:
         """Accept Integration Hub Legal Agreement"""
         response = self.post(
@@ -4904,7 +4987,7 @@ class Looker40SDK(api_methods.APIMethods):
         fields: Optional[str] = None,
         # Filter to a specific provider
         integration_hub_id: Optional[str] = None,
-        transport_options: Optional[transport.PTransportSettings] = None,
+        transport_options: Optional[transport.TransportOptions] = None,
     ) -> Sequence[models.Integration]:
         """Get All Integrations"""
         response = self.get(
@@ -4925,7 +5008,7 @@ class Looker40SDK(api_methods.APIMethods):
         integration_id: str,
         # Requested fields.
         fields: Optional[str] = None,
-        transport_options: Optional[transport.PTransportSettings] = None,
+        transport_options: Optional[transport.TransportOptions] = None,
     ) -> models.Integration:
         """Get Integration"""
         integration_id = self.encode_path_param(integration_id)
@@ -4948,7 +5031,7 @@ class Looker40SDK(api_methods.APIMethods):
         body: models.WriteIntegration,
         # Requested fields.
         fields: Optional[str] = None,
-        transport_options: Optional[transport.PTransportSettings] = None,
+        transport_options: Optional[transport.TransportOptions] = None,
     ) -> models.Integration:
         """Update Integration"""
         integration_id = self.encode_path_param(integration_id)
@@ -4970,7 +5053,7 @@ class Looker40SDK(api_methods.APIMethods):
         # Id of integration
         integration_id: str,
         body: Optional[MutableMapping[str, Any]] = None,
-        transport_options: Optional[transport.PTransportSettings] = None,
+        transport_options: Optional[transport.TransportOptions] = None,
     ) -> models.DataActionForm:
         """Fetch Remote Integration Form"""
         integration_id = self.encode_path_param(integration_id)
@@ -4990,7 +5073,7 @@ class Looker40SDK(api_methods.APIMethods):
         self,
         # Id of integration
         integration_id: str,
-        transport_options: Optional[transport.PTransportSettings] = None,
+        transport_options: Optional[transport.TransportOptions] = None,
     ) -> models.IntegrationTestResult:
         """Test integration"""
         integration_id = self.encode_path_param(integration_id)
@@ -5019,7 +5102,7 @@ class Looker40SDK(api_methods.APIMethods):
         self,
         # Requested fields.
         fields: Optional[str] = None,
-        transport_options: Optional[transport.PTransportSettings] = None,
+        transport_options: Optional[transport.TransportOptions] = None,
     ) -> Sequence[models.Look]:
         """Get All Looks"""
         response = self.get(
@@ -5045,7 +5128,7 @@ class Looker40SDK(api_methods.APIMethods):
         body: models.WriteLookWithQuery,
         # Requested fields.
         fields: Optional[str] = None,
-        transport_options: Optional[transport.PTransportSettings] = None,
+        transport_options: Optional[transport.TransportOptions] = None,
     ) -> models.LookWithQuery:
         """Create Look"""
         response = self.post(
@@ -5125,7 +5208,7 @@ class Looker40SDK(api_methods.APIMethods):
         sorts: Optional[str] = None,
         # Combine given search criteria in a boolean OR expression
         filter_or: Optional[bool] = None,
-        transport_options: Optional[transport.PTransportSettings] = None,
+        transport_options: Optional[transport.TransportOptions] = None,
     ) -> Sequence[models.Look]:
         """Search Looks"""
         response = self.get(
@@ -5167,7 +5250,7 @@ class Looker40SDK(api_methods.APIMethods):
         look_id: int,
         # Requested fields.
         fields: Optional[str] = None,
-        transport_options: Optional[transport.PTransportSettings] = None,
+        transport_options: Optional[transport.TransportOptions] = None,
     ) -> models.LookWithQuery:
         """Get Look"""
         response = self.get(
@@ -5208,7 +5291,7 @@ class Looker40SDK(api_methods.APIMethods):
         body: models.WriteLookWithQuery,
         # Requested fields.
         fields: Optional[str] = None,
-        transport_options: Optional[transport.PTransportSettings] = None,
+        transport_options: Optional[transport.TransportOptions] = None,
     ) -> models.LookWithQuery:
         """Update Look"""
         response = self.patch(
@@ -5234,7 +5317,7 @@ class Looker40SDK(api_methods.APIMethods):
         self,
         # Id of look
         look_id: int,
-        transport_options: Optional[transport.PTransportSettings] = None,
+        transport_options: Optional[transport.TransportOptions] = None,
     ) -> str:
         """Delete Look"""
         response = self.delete(
@@ -5293,7 +5376,7 @@ class Looker40SDK(api_methods.APIMethods):
         rebuild_pdts: Optional[bool] = None,
         # Perform table calculations on query results
         server_table_calcs: Optional[bool] = None,
-        transport_options: Optional[transport.PTransportSettings] = None,
+        transport_options: Optional[transport.TransportOptions] = None,
     ) -> Union[str, bytes]:
         """Run Look"""
         result_format = self.encode_path_param(result_format)
@@ -5334,7 +5417,7 @@ class Looker40SDK(api_methods.APIMethods):
         look_id: int,
         # Folder id to copy to.
         folder_id: int,
-        transport_options: Optional[transport.PTransportSettings] = None,
+        transport_options: Optional[transport.TransportOptions] = None,
     ) -> models.LookWithQuery:
         """Copy Look"""
         response = self.post(
@@ -5360,7 +5443,7 @@ class Looker40SDK(api_methods.APIMethods):
         look_id: int,
         # Folder id to move to.
         folder_id: int,
-        transport_options: Optional[transport.PTransportSettings] = None,
+        transport_options: Optional[transport.TransportOptions] = None,
     ) -> models.LookWithQuery:
         """Move Look"""
         response = self.patch(
@@ -5387,7 +5470,7 @@ class Looker40SDK(api_methods.APIMethods):
         format: Optional[str] = None,
         # Color denoting the build status of the graph. Grey = not built, green = built, yellow = building, red = error.
         color: Optional[str] = None,
-        transport_options: Optional[transport.PTransportSettings] = None,
+        transport_options: Optional[transport.TransportOptions] = None,
     ) -> models.DependencyGraph:
         """Get Derived Table"""
         model = self.encode_path_param(model)
@@ -5407,7 +5490,7 @@ class Looker40SDK(api_methods.APIMethods):
         self,
         # Requested fields.
         fields: Optional[str] = None,
-        transport_options: Optional[transport.PTransportSettings] = None,
+        transport_options: Optional[transport.TransportOptions] = None,
     ) -> Sequence[models.LookmlModel]:
         """Get All LookML Models"""
         response = self.get(
@@ -5425,7 +5508,7 @@ class Looker40SDK(api_methods.APIMethods):
     def create_lookml_model(
         self,
         body: models.WriteLookmlModel,
-        transport_options: Optional[transport.PTransportSettings] = None,
+        transport_options: Optional[transport.TransportOptions] = None,
     ) -> models.LookmlModel:
         """Create LookML Model"""
         response = self.post(
@@ -5446,7 +5529,7 @@ class Looker40SDK(api_methods.APIMethods):
         lookml_model_name: str,
         # Requested fields.
         fields: Optional[str] = None,
-        transport_options: Optional[transport.PTransportSettings] = None,
+        transport_options: Optional[transport.TransportOptions] = None,
     ) -> models.LookmlModel:
         """Get LookML Model"""
         lookml_model_name = self.encode_path_param(lookml_model_name)
@@ -5467,7 +5550,7 @@ class Looker40SDK(api_methods.APIMethods):
         # Name of lookml model.
         lookml_model_name: str,
         body: models.WriteLookmlModel,
-        transport_options: Optional[transport.PTransportSettings] = None,
+        transport_options: Optional[transport.TransportOptions] = None,
     ) -> models.LookmlModel:
         """Update LookML Model"""
         lookml_model_name = self.encode_path_param(lookml_model_name)
@@ -5487,7 +5570,7 @@ class Looker40SDK(api_methods.APIMethods):
         self,
         # Name of lookml model.
         lookml_model_name: str,
-        transport_options: Optional[transport.PTransportSettings] = None,
+        transport_options: Optional[transport.TransportOptions] = None,
     ) -> str:
         """Delete LookML Model"""
         lookml_model_name = self.encode_path_param(lookml_model_name)
@@ -5510,7 +5593,7 @@ class Looker40SDK(api_methods.APIMethods):
         explore_name: str,
         # Requested fields.
         fields: Optional[str] = None,
-        transport_options: Optional[transport.PTransportSettings] = None,
+        transport_options: Optional[transport.TransportOptions] = None,
     ) -> models.LookmlModelExplore:
         """Get LookML Model Explore"""
         lookml_model_name = self.encode_path_param(lookml_model_name)
@@ -5543,7 +5626,7 @@ class Looker40SDK(api_methods.APIMethods):
         term: Optional[str] = None,
         # Suggestion filters
         filters: Optional[str] = None,
-        transport_options: Optional[transport.PTransportSettings] = None,
+        transport_options: Optional[transport.TransportOptions] = None,
     ) -> models.ModelFieldSuggestions:
         """Model field name suggestions"""
         model_name = self.encode_path_param(model_name)
@@ -5573,7 +5656,7 @@ class Looker40SDK(api_methods.APIMethods):
         self,
         # Name of connection
         connection_name: str,
-        transport_options: Optional[transport.PTransportSettings] = None,
+        transport_options: Optional[transport.TransportOptions] = None,
     ) -> Sequence[str]:
         """List accessible databases to this connection"""
         connection_name = self.encode_path_param(connection_name)
@@ -5596,7 +5679,7 @@ class Looker40SDK(api_methods.APIMethods):
         connection_name: str,
         # Requested fields.
         fields: Optional[str] = None,
-        transport_options: Optional[transport.PTransportSettings] = None,
+        transport_options: Optional[transport.TransportOptions] = None,
     ) -> models.ConnectionFeatures:
         """Metadata features supported by this connection"""
         connection_name = self.encode_path_param(connection_name)
@@ -5622,7 +5705,7 @@ class Looker40SDK(api_methods.APIMethods):
         cache: Optional[bool] = None,
         # Requested fields.
         fields: Optional[str] = None,
-        transport_options: Optional[transport.PTransportSettings] = None,
+        transport_options: Optional[transport.TransportOptions] = None,
     ) -> Sequence[models.Schema]:
         """Get schemas for a connection"""
         connection_name = self.encode_path_param(connection_name)
@@ -5655,7 +5738,7 @@ class Looker40SDK(api_methods.APIMethods):
         cache: Optional[bool] = None,
         # Requested fields.
         fields: Optional[str] = None,
-        transport_options: Optional[transport.PTransportSettings] = None,
+        transport_options: Optional[transport.TransportOptions] = None,
     ) -> Sequence[models.SchemaTables]:
         """Get tables for a connection"""
         connection_name = self.encode_path_param(connection_name)
@@ -5692,7 +5775,7 @@ class Looker40SDK(api_methods.APIMethods):
         table_names: Optional[str] = None,
         # Requested fields.
         fields: Optional[str] = None,
-        transport_options: Optional[transport.PTransportSettings] = None,
+        transport_options: Optional[transport.TransportOptions] = None,
     ) -> Sequence[models.SchemaColumns]:
         """Get columns for a connection"""
         connection_name = self.encode_path_param(connection_name)
@@ -5725,7 +5808,7 @@ class Looker40SDK(api_methods.APIMethods):
         column_name: Optional[str] = None,
         # Requested fields.
         fields: Optional[str] = None,
-        transport_options: Optional[transport.PTransportSettings] = None,
+        transport_options: Optional[transport.TransportOptions] = None,
     ) -> Sequence[models.ColumnSearch]:
         """Search a connection for columns"""
         connection_name = self.encode_path_param(connection_name)
@@ -5752,7 +5835,7 @@ class Looker40SDK(api_methods.APIMethods):
         body: models.CreateCostEstimate,
         # Requested fields.
         fields: Optional[str] = None,
-        transport_options: Optional[transport.PTransportSettings] = None,
+        transport_options: Optional[transport.TransportOptions] = None,
     ) -> models.CostEstimate:
         """Estimate costs for a connection"""
         connection_name = self.encode_path_param(connection_name)
@@ -5785,7 +5868,7 @@ class Looker40SDK(api_methods.APIMethods):
         project_id: str,
         # Requested fields
         fields: Optional[str] = None,
-        transport_options: Optional[transport.PTransportSettings] = None,
+        transport_options: Optional[transport.TransportOptions] = None,
     ) -> str:
         """Lock All"""
         project_id = self.encode_path_param(project_id)
@@ -5807,7 +5890,7 @@ class Looker40SDK(api_methods.APIMethods):
         self,
         # Project Id
         project_id: str,
-        transport_options: Optional[transport.PTransportSettings] = None,
+        transport_options: Optional[transport.TransportOptions] = None,
     ) -> Sequence[models.GitBranch]:
         """Get All Git Branches"""
         project_id = self.encode_path_param(project_id)
@@ -5828,7 +5911,7 @@ class Looker40SDK(api_methods.APIMethods):
         self,
         # Project Id
         project_id: str,
-        transport_options: Optional[transport.PTransportSettings] = None,
+        transport_options: Optional[transport.TransportOptions] = None,
     ) -> models.GitBranch:
         """Get Active Git Branch"""
         project_id = self.encode_path_param(project_id)
@@ -5856,7 +5939,7 @@ class Looker40SDK(api_methods.APIMethods):
         # Project Id
         project_id: str,
         body: models.WriteGitBranch,
-        transport_options: Optional[transport.PTransportSettings] = None,
+        transport_options: Optional[transport.TransportOptions] = None,
     ) -> models.GitBranch:
         """Update Project Git Branch"""
         project_id = self.encode_path_param(project_id)
@@ -5884,7 +5967,7 @@ class Looker40SDK(api_methods.APIMethods):
         # Project Id
         project_id: str,
         body: models.WriteGitBranch,
-        transport_options: Optional[transport.PTransportSettings] = None,
+        transport_options: Optional[transport.TransportOptions] = None,
     ) -> models.GitBranch:
         """Checkout New Git Branch"""
         project_id = self.encode_path_param(project_id)
@@ -5908,7 +5991,7 @@ class Looker40SDK(api_methods.APIMethods):
         project_id: str,
         # Branch Name
         branch_name: str,
-        transport_options: Optional[transport.PTransportSettings] = None,
+        transport_options: Optional[transport.TransportOptions] = None,
     ) -> models.GitBranch:
         """Find a Git Branch"""
         project_id = self.encode_path_param(project_id)
@@ -5932,7 +6015,7 @@ class Looker40SDK(api_methods.APIMethods):
         project_id: str,
         # Branch Name
         branch_name: str,
-        transport_options: Optional[transport.PTransportSettings] = None,
+        transport_options: Optional[transport.TransportOptions] = None,
     ) -> str:
         """Delete a Git Branch"""
         project_id = self.encode_path_param(project_id)
@@ -5964,7 +6047,7 @@ class Looker40SDK(api_methods.APIMethods):
         branch: Optional[str] = None,
         # Ref to deploy to production
         ref: Optional[str] = None,
-        transport_options: Optional[transport.PTransportSettings] = None,
+        transport_options: Optional[transport.TransportOptions] = None,
     ) -> str:
         """Deploy Remote Branch or Ref to Production"""
         project_id = self.encode_path_param(project_id)
@@ -5995,7 +6078,7 @@ class Looker40SDK(api_methods.APIMethods):
         self,
         # Id of project
         project_id: str,
-        transport_options: Optional[transport.PTransportSettings] = None,
+        transport_options: Optional[transport.TransportOptions] = None,
     ) -> str:
         """Deploy To Production"""
         project_id = self.encode_path_param(project_id)
@@ -6016,7 +6099,7 @@ class Looker40SDK(api_methods.APIMethods):
         self,
         # Id of project
         project_id: str,
-        transport_options: Optional[transport.PTransportSettings] = None,
+        transport_options: Optional[transport.TransportOptions] = None,
     ) -> str:
         """Reset To Production"""
         project_id = self.encode_path_param(project_id)
@@ -6037,7 +6120,7 @@ class Looker40SDK(api_methods.APIMethods):
         self,
         # Id of project
         project_id: str,
-        transport_options: Optional[transport.PTransportSettings] = None,
+        transport_options: Optional[transport.TransportOptions] = None,
     ) -> str:
         """Reset To Remote"""
         project_id = self.encode_path_param(project_id)
@@ -6058,7 +6141,7 @@ class Looker40SDK(api_methods.APIMethods):
         self,
         # Requested fields
         fields: Optional[str] = None,
-        transport_options: Optional[transport.PTransportSettings] = None,
+        transport_options: Optional[transport.TransportOptions] = None,
     ) -> Sequence[models.Project]:
         """Get All Projects"""
         response = self.get(
@@ -6082,7 +6165,7 @@ class Looker40SDK(api_methods.APIMethods):
     def create_project(
         self,
         body: models.WriteProject,
-        transport_options: Optional[transport.PTransportSettings] = None,
+        transport_options: Optional[transport.TransportOptions] = None,
     ) -> models.Project:
         """Create Project"""
         response = self.post(
@@ -6102,7 +6185,7 @@ class Looker40SDK(api_methods.APIMethods):
         project_id: str,
         # Requested fields
         fields: Optional[str] = None,
-        transport_options: Optional[transport.PTransportSettings] = None,
+        transport_options: Optional[transport.TransportOptions] = None,
     ) -> models.Project:
         """Get Project"""
         project_id = self.encode_path_param(project_id)
@@ -6146,7 +6229,7 @@ class Looker40SDK(api_methods.APIMethods):
         body: models.WriteProject,
         # Requested fields
         fields: Optional[str] = None,
-        transport_options: Optional[transport.PTransportSettings] = None,
+        transport_options: Optional[transport.TransportOptions] = None,
     ) -> models.Project:
         """Update Project"""
         project_id = self.encode_path_param(project_id)
@@ -6169,7 +6252,7 @@ class Looker40SDK(api_methods.APIMethods):
         self,
         # Project Id
         project_id: str,
-        transport_options: Optional[transport.PTransportSettings] = None,
+        transport_options: Optional[transport.TransportOptions] = None,
     ) -> models.Manifest:
         """Get Manifest"""
         project_id = self.encode_path_param(project_id)
@@ -6190,7 +6273,7 @@ class Looker40SDK(api_methods.APIMethods):
         self,
         # Project Id
         project_id: str,
-        transport_options: Optional[transport.PTransportSettings] = None,
+        transport_options: Optional[transport.TransportOptions] = None,
     ) -> str:
         """Git Deploy Key"""
         project_id = self.encode_path_param(project_id)
@@ -6217,7 +6300,7 @@ class Looker40SDK(api_methods.APIMethods):
         self,
         # Project Id
         project_id: str,
-        transport_options: Optional[transport.PTransportSettings] = None,
+        transport_options: Optional[transport.TransportOptions] = None,
     ) -> str:
         """Create Deploy Key"""
         project_id = self.encode_path_param(project_id)
@@ -6249,7 +6332,7 @@ class Looker40SDK(api_methods.APIMethods):
         project_id: str,
         # Requested fields
         fields: Optional[str] = None,
-        transport_options: Optional[transport.PTransportSettings] = None,
+        transport_options: Optional[transport.TransportOptions] = None,
     ) -> models.ProjectValidationCache:
         """Cached Project Validation Results"""
         project_id = self.encode_path_param(project_id)
@@ -6279,7 +6362,7 @@ class Looker40SDK(api_methods.APIMethods):
         project_id: str,
         # Requested fields
         fields: Optional[str] = None,
-        transport_options: Optional[transport.PTransportSettings] = None,
+        transport_options: Optional[transport.TransportOptions] = None,
     ) -> models.ProjectValidation:
         """Validate Project"""
         project_id = self.encode_path_param(project_id)
@@ -6303,7 +6386,7 @@ class Looker40SDK(api_methods.APIMethods):
         project_id: str,
         # Requested fields
         fields: Optional[str] = None,
-        transport_options: Optional[transport.PTransportSettings] = None,
+        transport_options: Optional[transport.TransportOptions] = None,
     ) -> models.ProjectWorkspace:
         """Get Project Workspace"""
         project_id = self.encode_path_param(project_id)
@@ -6327,7 +6410,7 @@ class Looker40SDK(api_methods.APIMethods):
         project_id: str,
         # Requested fields
         fields: Optional[str] = None,
-        transport_options: Optional[transport.PTransportSettings] = None,
+        transport_options: Optional[transport.TransportOptions] = None,
     ) -> Sequence[models.ProjectFile]:
         """Get All Project Files"""
         project_id = self.encode_path_param(project_id)
@@ -6353,7 +6436,7 @@ class Looker40SDK(api_methods.APIMethods):
         file_id: str,
         # Requested fields
         fields: Optional[str] = None,
-        transport_options: Optional[transport.PTransportSettings] = None,
+        transport_options: Optional[transport.TransportOptions] = None,
     ) -> models.ProjectFile:
         """Get Project File"""
         project_id = self.encode_path_param(project_id)
@@ -6384,7 +6467,7 @@ class Looker40SDK(api_methods.APIMethods):
         project_id: str,
         # (Optional: leave blank for root project) The remote url for remote dependency to test.
         remote_url: Optional[str] = None,
-        transport_options: Optional[transport.PTransportSettings] = None,
+        transport_options: Optional[transport.TransportOptions] = None,
     ) -> Sequence[models.GitConnectionTest]:
         """Get All Git Connection Tests"""
         project_id = self.encode_path_param(project_id)
@@ -6416,7 +6499,7 @@ class Looker40SDK(api_methods.APIMethods):
         remote_url: Optional[str] = None,
         # (Optional: leave blank for dev credentials) Whether to use git production credentials.
         use_production: Optional[str] = None,
-        transport_options: Optional[transport.PTransportSettings] = None,
+        transport_options: Optional[transport.TransportOptions] = None,
     ) -> models.GitConnectionTestResult:
         """Run Git Connection Test"""
         project_id = self.encode_path_param(project_id)
@@ -6443,7 +6526,7 @@ class Looker40SDK(api_methods.APIMethods):
         project_id: str,
         # File Id
         file_id: Optional[str] = None,
-        transport_options: Optional[transport.PTransportSettings] = None,
+        transport_options: Optional[transport.TransportOptions] = None,
     ) -> Sequence[models.LookmlTest]:
         """Get All LookML Tests"""
         project_id = self.encode_path_param(project_id)
@@ -6471,7 +6554,7 @@ class Looker40SDK(api_methods.APIMethods):
         test: Optional[str] = None,
         # Model Name
         model: Optional[str] = None,
-        transport_options: Optional[transport.PTransportSettings] = None,
+        transport_options: Optional[transport.TransportOptions] = None,
     ) -> Sequence[models.LookmlTestResult]:
         """Run LookML Test"""
         project_id = self.encode_path_param(project_id)
@@ -6499,7 +6582,7 @@ class Looker40SDK(api_methods.APIMethods):
         # Credential Id
         credential_id: str,
         body: models.WriteRepositoryCredential,
-        transport_options: Optional[transport.PTransportSettings] = None,
+        transport_options: Optional[transport.TransportOptions] = None,
     ) -> models.RepositoryCredential:
         """Create Repository Credential"""
         root_project_id = self.encode_path_param(root_project_id)
@@ -6527,7 +6610,7 @@ class Looker40SDK(api_methods.APIMethods):
         root_project_id: str,
         # Credential Id
         credential_id: str,
-        transport_options: Optional[transport.PTransportSettings] = None,
+        transport_options: Optional[transport.TransportOptions] = None,
     ) -> str:
         """Delete Repository Credential"""
         root_project_id = self.encode_path_param(root_project_id)
@@ -6549,7 +6632,7 @@ class Looker40SDK(api_methods.APIMethods):
         self,
         # Root Project Id
         root_project_id: str,
-        transport_options: Optional[transport.PTransportSettings] = None,
+        transport_options: Optional[transport.TransportOptions] = None,
     ) -> Sequence[models.RepositoryCredential]:
         """Get All Repository Credentials"""
         root_project_id = self.encode_path_param(root_project_id)
@@ -6602,7 +6685,7 @@ class Looker40SDK(api_methods.APIMethods):
         server_table_calcs: Optional[bool] = None,
         # Requested fields
         fields: Optional[str] = None,
-        transport_options: Optional[transport.PTransportSettings] = None,
+        transport_options: Optional[transport.TransportOptions] = None,
     ) -> models.QueryTask:
         """Run Query Async"""
         response = self.post(
@@ -6642,7 +6725,7 @@ class Looker40SDK(api_methods.APIMethods):
         self,
         # List of Query Task IDs
         query_task_ids: models.DelimSequence[str],
-        transport_options: Optional[transport.PTransportSettings] = None,
+        transport_options: Optional[transport.TransportOptions] = None,
     ) -> MutableMapping[str, Any]:
         """Get Multiple Async Query Results"""
         response = self.get(
@@ -6669,7 +6752,7 @@ class Looker40SDK(api_methods.APIMethods):
         query_task_id: str,
         # Requested fields.
         fields: Optional[str] = None,
-        transport_options: Optional[transport.PTransportSettings] = None,
+        transport_options: Optional[transport.TransportOptions] = None,
     ) -> models.QueryTask:
         """Get Async Query Info"""
         query_task_id = self.encode_path_param(query_task_id)
@@ -6711,7 +6794,7 @@ class Looker40SDK(api_methods.APIMethods):
         self,
         # ID of the Query Task
         query_task_id: str,
-        transport_options: Optional[transport.PTransportSettings] = None,
+        transport_options: Optional[transport.TransportOptions] = None,
     ) -> str:
         """Get Async Query Results"""
         query_task_id = self.encode_path_param(query_task_id)
@@ -6748,7 +6831,7 @@ class Looker40SDK(api_methods.APIMethods):
         query_id: int,
         # Requested fields.
         fields: Optional[str] = None,
-        transport_options: Optional[transport.PTransportSettings] = None,
+        transport_options: Optional[transport.TransportOptions] = None,
     ) -> models.Query:
         """Get Query"""
         response = self.get(
@@ -6785,7 +6868,7 @@ class Looker40SDK(api_methods.APIMethods):
         slug: str,
         # Requested fields.
         fields: Optional[str] = None,
-        transport_options: Optional[transport.PTransportSettings] = None,
+        transport_options: Optional[transport.TransportOptions] = None,
     ) -> models.Query:
         """Get Query for Slug"""
         slug = self.encode_path_param(slug)
@@ -6813,7 +6896,7 @@ class Looker40SDK(api_methods.APIMethods):
         body: models.WriteQuery,
         # Requested fields.
         fields: Optional[str] = None,
-        transport_options: Optional[transport.PTransportSettings] = None,
+        transport_options: Optional[transport.TransportOptions] = None,
     ) -> models.Query:
         """Create Query"""
         response = self.post(
@@ -6879,7 +6962,7 @@ class Looker40SDK(api_methods.APIMethods):
         rebuild_pdts: Optional[bool] = None,
         # Perform table calculations on query results
         server_table_calcs: Optional[bool] = None,
-        transport_options: Optional[transport.PTransportSettings] = None,
+        transport_options: Optional[transport.TransportOptions] = None,
     ) -> Union[str, bytes]:
         """Run Query"""
         result_format = self.encode_path_param(result_format)
@@ -6986,7 +7069,7 @@ class Looker40SDK(api_methods.APIMethods):
         rebuild_pdts: Optional[bool] = None,
         # Perform table calculations on query results
         server_table_calcs: Optional[bool] = None,
-        transport_options: Optional[transport.PTransportSettings] = None,
+        transport_options: Optional[transport.TransportOptions] = None,
     ) -> Union[str, bytes]:
         """Run Inline Query"""
         result_format = self.encode_path_param(result_format)
@@ -7075,7 +7158,7 @@ class Looker40SDK(api_methods.APIMethods):
         view_name: str,
         # Format of result
         result_format: str,
-        transport_options: Optional[transport.PTransportSettings] = None,
+        transport_options: Optional[transport.TransportOptions] = None,
     ) -> Union[str, bytes]:
         """Run Url Encoded Query"""
         model_name = self.encode_path_param(model_name)
@@ -7100,7 +7183,7 @@ class Looker40SDK(api_methods.APIMethods):
         merge_query_id: str,
         # Requested fields
         fields: Optional[str] = None,
-        transport_options: Optional[transport.PTransportSettings] = None,
+        transport_options: Optional[transport.TransportOptions] = None,
     ) -> models.MergeQuery:
         """Get Merge Query"""
         merge_query_id = self.encode_path_param(merge_query_id)
@@ -7137,7 +7220,7 @@ class Looker40SDK(api_methods.APIMethods):
         body: Optional[models.WriteMergeQuery] = None,
         # Requested fields
         fields: Optional[str] = None,
-        transport_options: Optional[transport.PTransportSettings] = None,
+        transport_options: Optional[transport.TransportOptions] = None,
     ) -> models.MergeQuery:
         """Create Merge Query"""
         response = self.post(
@@ -7154,7 +7237,7 @@ class Looker40SDK(api_methods.APIMethods):
     #
     # GET /running_queries -> Sequence[models.RunningQueries]
     def all_running_queries(
-        self, transport_options: Optional[transport.PTransportSettings] = None,
+        self, transport_options: Optional[transport.TransportOptions] = None,
     ) -> Sequence[models.RunningQueries]:
         """Get All Running Queries"""
         response = self.get(
@@ -7172,7 +7255,7 @@ class Looker40SDK(api_methods.APIMethods):
         self,
         # Query task id.
         query_task_id: str,
-        transport_options: Optional[transport.PTransportSettings] = None,
+        transport_options: Optional[transport.TransportOptions] = None,
     ) -> str:
         """Kill Running Query"""
         query_task_id = self.encode_path_param(query_task_id)
@@ -7191,7 +7274,7 @@ class Looker40SDK(api_methods.APIMethods):
         self,
         # slug of query
         slug: str,
-        transport_options: Optional[transport.PTransportSettings] = None,
+        transport_options: Optional[transport.TransportOptions] = None,
     ) -> models.SqlQuery:
         """Get SQL Runner Query"""
         slug = self.encode_path_param(slug)
@@ -7209,7 +7292,7 @@ class Looker40SDK(api_methods.APIMethods):
     def create_sql_query(
         self,
         body: models.SqlQueryCreate,
-        transport_options: Optional[transport.PTransportSettings] = None,
+        transport_options: Optional[transport.TransportOptions] = None,
     ) -> models.SqlQuery:
         """Create SQL Runner Query"""
         response = self.post(
@@ -7232,7 +7315,7 @@ class Looker40SDK(api_methods.APIMethods):
         result_format: str,
         # Defaults to false. If set to true, the HTTP response will have content-disposition and other headers set to make the HTTP response behave as a downloadable attachment instead of as inline content.
         download: Optional[str] = None,
-        transport_options: Optional[transport.PTransportSettings] = None,
+        transport_options: Optional[transport.TransportOptions] = None,
     ) -> Union[str, bytes]:
         """Run SQL Runner Query"""
         slug = self.encode_path_param(slug)
@@ -7269,7 +7352,7 @@ class Looker40SDK(api_methods.APIMethods):
         height: int,
         # Requested fields.
         fields: Optional[str] = None,
-        transport_options: Optional[transport.PTransportSettings] = None,
+        transport_options: Optional[transport.TransportOptions] = None,
     ) -> models.RenderTask:
         """Create Look Render Task"""
         result_format = self.encode_path_param(result_format)
@@ -7301,7 +7384,7 @@ class Looker40SDK(api_methods.APIMethods):
         height: int,
         # Requested fields.
         fields: Optional[str] = None,
-        transport_options: Optional[transport.PTransportSettings] = None,
+        transport_options: Optional[transport.TransportOptions] = None,
     ) -> models.RenderTask:
         """Create Query Render Task"""
         result_format = self.encode_path_param(result_format)
@@ -7340,7 +7423,7 @@ class Looker40SDK(api_methods.APIMethods):
         pdf_landscape: Optional[bool] = None,
         # Whether or not to expand table vis to full length
         long_tables: Optional[bool] = None,
-        transport_options: Optional[transport.PTransportSettings] = None,
+        transport_options: Optional[transport.TransportOptions] = None,
     ) -> models.RenderTask:
         """Create Dashboard Render Task"""
         dashboard_id = self.encode_path_param(dashboard_id)
@@ -7375,7 +7458,7 @@ class Looker40SDK(api_methods.APIMethods):
         render_task_id: str,
         # Requested fields.
         fields: Optional[str] = None,
-        transport_options: Optional[transport.PTransportSettings] = None,
+        transport_options: Optional[transport.TransportOptions] = None,
     ) -> models.RenderTask:
         """Get Render Task"""
         render_task_id = self.encode_path_param(render_task_id)
@@ -7411,7 +7494,7 @@ class Looker40SDK(api_methods.APIMethods):
         self,
         # Id of render task
         render_task_id: str,
-        transport_options: Optional[transport.PTransportSettings] = None,
+        transport_options: Optional[transport.TransportOptions] = None,
     ) -> bytes:
         """Render Task Results"""
         render_task_id = self.encode_path_param(render_task_id)
@@ -7471,7 +7554,7 @@ class Looker40SDK(api_methods.APIMethods):
         built_in: Optional[bool] = None,
         # Combine given search criteria in a boolean OR expression.
         filter_or: Optional[bool] = None,
-        transport_options: Optional[transport.PTransportSettings] = None,
+        transport_options: Optional[transport.TransportOptions] = None,
     ) -> Sequence[models.ModelSet]:
         """Search Model Sets"""
         response = self.get(
@@ -7502,7 +7585,7 @@ class Looker40SDK(api_methods.APIMethods):
         model_set_id: int,
         # Requested fields.
         fields: Optional[str] = None,
-        transport_options: Optional[transport.PTransportSettings] = None,
+        transport_options: Optional[transport.TransportOptions] = None,
     ) -> models.ModelSet:
         """Get Model Set"""
         response = self.get(
@@ -7522,7 +7605,7 @@ class Looker40SDK(api_methods.APIMethods):
         # id of model set
         model_set_id: int,
         body: models.WriteModelSet,
-        transport_options: Optional[transport.PTransportSettings] = None,
+        transport_options: Optional[transport.TransportOptions] = None,
     ) -> models.ModelSet:
         """Update Model Set"""
         response = self.patch(
@@ -7541,7 +7624,7 @@ class Looker40SDK(api_methods.APIMethods):
         self,
         # id of model set
         model_set_id: int,
-        transport_options: Optional[transport.PTransportSettings] = None,
+        transport_options: Optional[transport.TransportOptions] = None,
     ) -> str:
         """Delete Model Set"""
         response = self.delete(
@@ -7557,7 +7640,7 @@ class Looker40SDK(api_methods.APIMethods):
         self,
         # Requested fields.
         fields: Optional[str] = None,
-        transport_options: Optional[transport.PTransportSettings] = None,
+        transport_options: Optional[transport.TransportOptions] = None,
     ) -> Sequence[models.ModelSet]:
         """Get All Model Sets"""
         response = self.get(
@@ -7575,7 +7658,7 @@ class Looker40SDK(api_methods.APIMethods):
     def create_model_set(
         self,
         body: models.WriteModelSet,
-        transport_options: Optional[transport.PTransportSettings] = None,
+        transport_options: Optional[transport.TransportOptions] = None,
     ) -> models.ModelSet:
         """Create Model Set"""
         response = self.post(
@@ -7591,7 +7674,7 @@ class Looker40SDK(api_methods.APIMethods):
     #
     # GET /permissions -> Sequence[models.Permission]
     def all_permissions(
-        self, transport_options: Optional[transport.PTransportSettings] = None,
+        self, transport_options: Optional[transport.TransportOptions] = None,
     ) -> Sequence[models.Permission]:
         """Get All Permissions"""
         response = self.get(
@@ -7646,7 +7729,7 @@ class Looker40SDK(api_methods.APIMethods):
         built_in: Optional[bool] = None,
         # Combine given search criteria in a boolean OR expression.
         filter_or: Optional[bool] = None,
-        transport_options: Optional[transport.PTransportSettings] = None,
+        transport_options: Optional[transport.TransportOptions] = None,
     ) -> Sequence[models.PermissionSet]:
         """Search Permission Sets"""
         response = self.get(
@@ -7677,7 +7760,7 @@ class Looker40SDK(api_methods.APIMethods):
         permission_set_id: int,
         # Requested fields.
         fields: Optional[str] = None,
-        transport_options: Optional[transport.PTransportSettings] = None,
+        transport_options: Optional[transport.TransportOptions] = None,
     ) -> models.PermissionSet:
         """Get Permission Set"""
         response = self.get(
@@ -7697,7 +7780,7 @@ class Looker40SDK(api_methods.APIMethods):
         # id of permission set
         permission_set_id: int,
         body: models.WritePermissionSet,
-        transport_options: Optional[transport.PTransportSettings] = None,
+        transport_options: Optional[transport.TransportOptions] = None,
     ) -> models.PermissionSet:
         """Update Permission Set"""
         response = self.patch(
@@ -7716,7 +7799,7 @@ class Looker40SDK(api_methods.APIMethods):
         self,
         # Id of permission set
         permission_set_id: int,
-        transport_options: Optional[transport.PTransportSettings] = None,
+        transport_options: Optional[transport.TransportOptions] = None,
     ) -> str:
         """Delete Permission Set"""
         response = self.delete(
@@ -7734,7 +7817,7 @@ class Looker40SDK(api_methods.APIMethods):
         self,
         # Requested fields.
         fields: Optional[str] = None,
-        transport_options: Optional[transport.PTransportSettings] = None,
+        transport_options: Optional[transport.TransportOptions] = None,
     ) -> Sequence[models.PermissionSet]:
         """Get All Permission Sets"""
         response = self.get(
@@ -7752,7 +7835,7 @@ class Looker40SDK(api_methods.APIMethods):
     def create_permission_set(
         self,
         body: models.WritePermissionSet,
-        transport_options: Optional[transport.PTransportSettings] = None,
+        transport_options: Optional[transport.TransportOptions] = None,
     ) -> models.PermissionSet:
         """Create Permission Set"""
         response = self.post(
@@ -7773,7 +7856,7 @@ class Looker40SDK(api_methods.APIMethods):
         fields: Optional[str] = None,
         # Optional list of ids to get specific roles.
         ids: Optional[models.DelimSequence[int]] = None,
-        transport_options: Optional[transport.PTransportSettings] = None,
+        transport_options: Optional[transport.TransportOptions] = None,
     ) -> Sequence[models.Role]:
         """Get All Roles"""
         response = self.get(
@@ -7791,7 +7874,7 @@ class Looker40SDK(api_methods.APIMethods):
     def create_role(
         self,
         body: models.WriteRole,
-        transport_options: Optional[transport.PTransportSettings] = None,
+        transport_options: Optional[transport.TransportOptions] = None,
     ) -> models.Role:
         """Create Role"""
         response = self.post(
@@ -7844,7 +7927,7 @@ class Looker40SDK(api_methods.APIMethods):
         built_in: Optional[bool] = None,
         # Combine given search criteria in a boolean OR expression.
         filter_or: Optional[bool] = None,
-        transport_options: Optional[transport.PTransportSettings] = None,
+        transport_options: Optional[transport.TransportOptions] = None,
     ) -> Sequence[models.Role]:
         """Search Roles"""
         response = self.get(
@@ -7872,7 +7955,7 @@ class Looker40SDK(api_methods.APIMethods):
         self,
         # id of role
         role_id: int,
-        transport_options: Optional[transport.PTransportSettings] = None,
+        transport_options: Optional[transport.TransportOptions] = None,
     ) -> models.Role:
         """Get Role"""
         response = self.get(
@@ -7889,7 +7972,7 @@ class Looker40SDK(api_methods.APIMethods):
         # id of role
         role_id: int,
         body: models.WriteRole,
-        transport_options: Optional[transport.PTransportSettings] = None,
+        transport_options: Optional[transport.TransportOptions] = None,
     ) -> models.Role:
         """Update Role"""
         response = self.patch(
@@ -7908,7 +7991,7 @@ class Looker40SDK(api_methods.APIMethods):
         self,
         # id of role
         role_id: int,
-        transport_options: Optional[transport.PTransportSettings] = None,
+        transport_options: Optional[transport.TransportOptions] = None,
     ) -> str:
         """Delete Role"""
         response = self.delete(
@@ -7926,7 +8009,7 @@ class Looker40SDK(api_methods.APIMethods):
         role_id: int,
         # Requested fields.
         fields: Optional[str] = None,
-        transport_options: Optional[transport.PTransportSettings] = None,
+        transport_options: Optional[transport.TransportOptions] = None,
     ) -> Sequence[models.Group]:
         """Get Role Groups"""
         response = self.get(
@@ -7946,7 +8029,7 @@ class Looker40SDK(api_methods.APIMethods):
         # Id of Role
         role_id: int,
         body: Sequence[int],
-        transport_options: Optional[transport.PTransportSettings] = None,
+        transport_options: Optional[transport.TransportOptions] = None,
     ) -> Sequence[models.Group]:
         """Update Role Groups"""
         response = self.put(
@@ -7969,7 +8052,7 @@ class Looker40SDK(api_methods.APIMethods):
         fields: Optional[str] = None,
         # Get only users associated directly with the role: exclude those only associated through groups.
         direct_association_only: Optional[bool] = None,
-        transport_options: Optional[transport.PTransportSettings] = None,
+        transport_options: Optional[transport.TransportOptions] = None,
     ) -> Sequence[models.User]:
         """Get Role Users"""
         response = self.get(
@@ -7992,7 +8075,7 @@ class Looker40SDK(api_methods.APIMethods):
         # id of role
         role_id: int,
         body: Sequence[int],
-        transport_options: Optional[transport.PTransportSettings] = None,
+        transport_options: Optional[transport.TransportOptions] = None,
     ) -> Sequence[models.User]:
         """Update Role Users"""
         response = self.put(
@@ -8019,7 +8102,7 @@ class Looker40SDK(api_methods.APIMethods):
         space_id: int,
         # Requested fields.
         fields: Optional[str] = None,
-        transport_options: Optional[transport.PTransportSettings] = None,
+        transport_options: Optional[transport.TransportOptions] = None,
     ) -> Sequence[models.ScheduledPlan]:
         """Scheduled Plans for Space"""
         response = self.get(
@@ -8042,7 +8125,7 @@ class Looker40SDK(api_methods.APIMethods):
         scheduled_plan_id: int,
         # Requested fields.
         fields: Optional[str] = None,
-        transport_options: Optional[transport.PTransportSettings] = None,
+        transport_options: Optional[transport.TransportOptions] = None,
     ) -> models.ScheduledPlan:
         """Get Scheduled Plan"""
         response = self.get(
@@ -8103,7 +8186,7 @@ class Looker40SDK(api_methods.APIMethods):
         # Scheduled Plan Id
         scheduled_plan_id: int,
         body: models.WriteScheduledPlan,
-        transport_options: Optional[transport.PTransportSettings] = None,
+        transport_options: Optional[transport.TransportOptions] = None,
     ) -> models.ScheduledPlan:
         """Update Scheduled Plan"""
         response = self.patch(
@@ -8126,7 +8209,7 @@ class Looker40SDK(api_methods.APIMethods):
         self,
         # Scheduled Plan Id
         scheduled_plan_id: int,
-        transport_options: Optional[transport.PTransportSettings] = None,
+        transport_options: Optional[transport.TransportOptions] = None,
     ) -> str:
         """Delete Scheduled Plan"""
         response = self.delete(
@@ -8158,7 +8241,7 @@ class Looker40SDK(api_methods.APIMethods):
         fields: Optional[str] = None,
         # Return scheduled plans belonging to all users (caller needs see_schedules permission)
         all_users: Optional[bool] = None,
-        transport_options: Optional[transport.PTransportSettings] = None,
+        transport_options: Optional[transport.TransportOptions] = None,
     ) -> Sequence[models.ScheduledPlan]:
         """Get All Scheduled Plans"""
         response = self.get(
@@ -8233,7 +8316,7 @@ class Looker40SDK(api_methods.APIMethods):
     def create_scheduled_plan(
         self,
         body: models.WriteScheduledPlan,
-        transport_options: Optional[transport.PTransportSettings] = None,
+        transport_options: Optional[transport.TransportOptions] = None,
     ) -> models.ScheduledPlan:
         """Create Scheduled Plan"""
         response = self.post(
@@ -8287,7 +8370,7 @@ class Looker40SDK(api_methods.APIMethods):
     def scheduled_plan_run_once(
         self,
         body: models.WriteScheduledPlan,
-        transport_options: Optional[transport.PTransportSettings] = None,
+        transport_options: Optional[transport.TransportOptions] = None,
     ) -> models.ScheduledPlan:
         """Run Scheduled Plan Once"""
         response = self.post(
@@ -8322,7 +8405,7 @@ class Looker40SDK(api_methods.APIMethods):
         fields: Optional[str] = None,
         # Return scheduled plans belonging to all users for the look
         all_users: Optional[bool] = None,
-        transport_options: Optional[transport.PTransportSettings] = None,
+        transport_options: Optional[transport.TransportOptions] = None,
     ) -> Sequence[models.ScheduledPlan]:
         """Scheduled Plans for Look"""
         response = self.get(
@@ -8357,7 +8440,7 @@ class Looker40SDK(api_methods.APIMethods):
         all_users: Optional[bool] = None,
         # Requested fields.
         fields: Optional[str] = None,
-        transport_options: Optional[transport.PTransportSettings] = None,
+        transport_options: Optional[transport.TransportOptions] = None,
     ) -> Sequence[models.ScheduledPlan]:
         """Scheduled Plans for Dashboard"""
         response = self.get(
@@ -8392,7 +8475,7 @@ class Looker40SDK(api_methods.APIMethods):
         fields: Optional[str] = None,
         # Return scheduled plans belonging to all users for the dashboard
         all_users: Optional[bool] = None,
-        transport_options: Optional[transport.PTransportSettings] = None,
+        transport_options: Optional[transport.TransportOptions] = None,
     ) -> Sequence[models.ScheduledPlan]:
         """Scheduled Plans for LookML Dashboard"""
         lookml_dashboard_id = self.encode_path_param(lookml_dashboard_id)
@@ -8459,7 +8542,7 @@ class Looker40SDK(api_methods.APIMethods):
         # Id of schedule plan to copy and run
         scheduled_plan_id: int,
         body: Optional[models.WriteScheduledPlan] = None,
-        transport_options: Optional[transport.PTransportSettings] = None,
+        transport_options: Optional[transport.TransportOptions] = None,
     ) -> models.ScheduledPlan:
         """Run Scheduled Plan Once by Id"""
         response = self.post(
@@ -8481,7 +8564,7 @@ class Looker40SDK(api_methods.APIMethods):
     #
     # GET /session -> models.ApiSession
     def session(
-        self, transport_options: Optional[transport.PTransportSettings] = None,
+        self, transport_options: Optional[transport.TransportOptions] = None,
     ) -> models.ApiSession:
         """Get Session"""
         response = self.get(
@@ -8515,7 +8598,7 @@ class Looker40SDK(api_methods.APIMethods):
     def update_session(
         self,
         body: models.WriteApiSession,
-        transport_options: Optional[transport.PTransportSettings] = None,
+        transport_options: Optional[transport.TransportOptions] = None,
     ) -> models.ApiSession:
         """Update Session"""
         response = self.patch(
@@ -8544,7 +8627,7 @@ class Looker40SDK(api_methods.APIMethods):
         self,
         # Requested fields.
         fields: Optional[str] = None,
-        transport_options: Optional[transport.PTransportSettings] = None,
+        transport_options: Optional[transport.TransportOptions] = None,
     ) -> Sequence[models.Theme]:
         """Get All Themes"""
         response = self.get(
@@ -8576,7 +8659,7 @@ class Looker40SDK(api_methods.APIMethods):
     def create_theme(
         self,
         body: models.WriteTheme,
-        transport_options: Optional[transport.PTransportSettings] = None,
+        transport_options: Optional[transport.TransportOptions] = None,
     ) -> models.Theme:
         """Create Theme"""
         response = self.post(
@@ -8645,7 +8728,7 @@ class Looker40SDK(api_methods.APIMethods):
         fields: Optional[str] = None,
         # Combine given search criteria in a boolean OR expression
         filter_or: Optional[bool] = None,
-        transport_options: Optional[transport.PTransportSettings] = None,
+        transport_options: Optional[transport.TransportOptions] = None,
     ) -> Sequence[models.Theme]:
         """Search Themes"""
         response = self.get(
@@ -8680,7 +8763,7 @@ class Looker40SDK(api_methods.APIMethods):
         self,
         # Timestamp representing the target datetime for the active period. Defaults to 'now'
         ts: Optional[datetime.datetime] = None,
-        transport_options: Optional[transport.PTransportSettings] = None,
+        transport_options: Optional[transport.TransportOptions] = None,
     ) -> models.Theme:
         """Get Default Theme"""
         response = self.get(
@@ -8709,7 +8792,7 @@ class Looker40SDK(api_methods.APIMethods):
         self,
         # Name of theme to set as default
         name: str,
-        transport_options: Optional[transport.PTransportSettings] = None,
+        transport_options: Optional[transport.TransportOptions] = None,
     ) -> models.Theme:
         """Set Default Theme"""
         response = self.put(
@@ -8740,7 +8823,7 @@ class Looker40SDK(api_methods.APIMethods):
         ts: Optional[datetime.datetime] = None,
         # Requested fields.
         fields: Optional[str] = None,
-        transport_options: Optional[transport.PTransportSettings] = None,
+        transport_options: Optional[transport.TransportOptions] = None,
     ) -> Sequence[models.Theme]:
         """Get Active Themes"""
         response = self.get(
@@ -8766,7 +8849,7 @@ class Looker40SDK(api_methods.APIMethods):
         name: str,
         # Timestamp representing the target datetime for the active period. Defaults to 'now'
         ts: Optional[datetime.datetime] = None,
-        transport_options: Optional[transport.PTransportSettings] = None,
+        transport_options: Optional[transport.TransportOptions] = None,
     ) -> models.Theme:
         """Get Theme or Default"""
         response = self.get(
@@ -8790,7 +8873,7 @@ class Looker40SDK(api_methods.APIMethods):
     def validate_theme(
         self,
         body: models.WriteTheme,
-        transport_options: Optional[transport.PTransportSettings] = None,
+        transport_options: Optional[transport.TransportOptions] = None,
     ) -> models.ValidationError:
         """Validate Theme"""
         response = self.post(
@@ -8815,7 +8898,7 @@ class Looker40SDK(api_methods.APIMethods):
         theme_id: int,
         # Requested fields.
         fields: Optional[str] = None,
-        transport_options: Optional[transport.PTransportSettings] = None,
+        transport_options: Optional[transport.TransportOptions] = None,
     ) -> models.Theme:
         """Get Theme"""
         response = self.get(
@@ -8837,7 +8920,7 @@ class Looker40SDK(api_methods.APIMethods):
         # Id of theme
         theme_id: int,
         body: models.WriteTheme,
-        transport_options: Optional[transport.PTransportSettings] = None,
+        transport_options: Optional[transport.TransportOptions] = None,
     ) -> models.Theme:
         """Update Theme"""
         response = self.patch(
@@ -8864,7 +8947,7 @@ class Looker40SDK(api_methods.APIMethods):
         self,
         # Id of theme
         theme_id: str,
-        transport_options: Optional[transport.PTransportSettings] = None,
+        transport_options: Optional[transport.TransportOptions] = None,
     ) -> str:
         """Delete Theme"""
         theme_id = self.encode_path_param(theme_id)
@@ -8885,7 +8968,7 @@ class Looker40SDK(api_methods.APIMethods):
         self,
         # Requested fields.
         fields: Optional[str] = None,
-        transport_options: Optional[transport.PTransportSettings] = None,
+        transport_options: Optional[transport.TransportOptions] = None,
     ) -> models.User:
         """Get Current User"""
         response = self.get(
@@ -8912,7 +8995,7 @@ class Looker40SDK(api_methods.APIMethods):
         sorts: Optional[str] = None,
         # Optional list of ids to get specific users.
         ids: Optional[models.DelimSequence[int]] = None,
-        transport_options: Optional[transport.PTransportSettings] = None,
+        transport_options: Optional[transport.TransportOptions] = None,
     ) -> Sequence[models.User]:
         """Get All Users"""
         response = self.get(
@@ -8938,7 +9021,7 @@ class Looker40SDK(api_methods.APIMethods):
         body: Optional[models.WriteUser] = None,
         # Requested fields.
         fields: Optional[str] = None,
-        transport_options: Optional[transport.PTransportSettings] = None,
+        transport_options: Optional[transport.TransportOptions] = None,
     ) -> models.User:
         """Create User"""
         response = self.post(
@@ -9011,7 +9094,7 @@ class Looker40SDK(api_methods.APIMethods):
         content_metadata_id: Optional[str] = None,
         # Search for users who are direct members of this group
         group_id: Optional[str] = None,
-        transport_options: Optional[transport.PTransportSettings] = None,
+        transport_options: Optional[transport.TransportOptions] = None,
     ) -> Sequence[models.User]:
         """Search Users"""
         response = self.get(
@@ -9069,7 +9152,7 @@ class Looker40SDK(api_methods.APIMethods):
         email: Optional[str] = None,
         # Include or exclude disabled accounts in the results
         is_disabled: Optional[bool] = None,
-        transport_options: Optional[transport.PTransportSettings] = None,
+        transport_options: Optional[transport.TransportOptions] = None,
     ) -> Sequence[models.User]:
         """Search User Names"""
         pattern = self.encode_path_param(pattern)
@@ -9106,7 +9189,7 @@ class Looker40SDK(api_methods.APIMethods):
         user_id: int,
         # Requested fields.
         fields: Optional[str] = None,
-        transport_options: Optional[transport.PTransportSettings] = None,
+        transport_options: Optional[transport.TransportOptions] = None,
     ) -> models.User:
         """Get User by Id"""
         response = self.get(
@@ -9128,7 +9211,7 @@ class Looker40SDK(api_methods.APIMethods):
         body: models.WriteUser,
         # Requested fields.
         fields: Optional[str] = None,
-        transport_options: Optional[transport.PTransportSettings] = None,
+        transport_options: Optional[transport.TransportOptions] = None,
     ) -> models.User:
         """Update User"""
         response = self.patch(
@@ -9150,7 +9233,7 @@ class Looker40SDK(api_methods.APIMethods):
         self,
         # Id of user
         user_id: int,
-        transport_options: Optional[transport.PTransportSettings] = None,
+        transport_options: Optional[transport.TransportOptions] = None,
     ) -> str:
         """Delete User"""
         response = self.delete(
@@ -9197,7 +9280,7 @@ class Looker40SDK(api_methods.APIMethods):
         credential_id: str,
         # Requested fields.
         fields: Optional[str] = None,
-        transport_options: Optional[transport.PTransportSettings] = None,
+        transport_options: Optional[transport.TransportOptions] = None,
     ) -> models.User:
         """Get User by Credential Id"""
         credential_type = self.encode_path_param(credential_type)
@@ -9220,7 +9303,7 @@ class Looker40SDK(api_methods.APIMethods):
         user_id: int,
         # Requested fields.
         fields: Optional[str] = None,
-        transport_options: Optional[transport.PTransportSettings] = None,
+        transport_options: Optional[transport.TransportOptions] = None,
     ) -> models.CredentialsEmail:
         """Get Email/Password Credential"""
         response = self.get(
@@ -9242,7 +9325,7 @@ class Looker40SDK(api_methods.APIMethods):
         body: models.WriteCredentialsEmail,
         # Requested fields.
         fields: Optional[str] = None,
-        transport_options: Optional[transport.PTransportSettings] = None,
+        transport_options: Optional[transport.TransportOptions] = None,
     ) -> models.CredentialsEmail:
         """Create Email/Password Credential"""
         response = self.post(
@@ -9265,7 +9348,7 @@ class Looker40SDK(api_methods.APIMethods):
         body: models.WriteCredentialsEmail,
         # Requested fields.
         fields: Optional[str] = None,
-        transport_options: Optional[transport.PTransportSettings] = None,
+        transport_options: Optional[transport.TransportOptions] = None,
     ) -> models.CredentialsEmail:
         """Update Email/Password Credential"""
         response = self.patch(
@@ -9285,7 +9368,7 @@ class Looker40SDK(api_methods.APIMethods):
         self,
         # id of user
         user_id: int,
-        transport_options: Optional[transport.PTransportSettings] = None,
+        transport_options: Optional[transport.TransportOptions] = None,
     ) -> str:
         """Delete Email/Password Credential"""
         response = self.delete(
@@ -9305,7 +9388,7 @@ class Looker40SDK(api_methods.APIMethods):
         user_id: int,
         # Requested fields.
         fields: Optional[str] = None,
-        transport_options: Optional[transport.PTransportSettings] = None,
+        transport_options: Optional[transport.TransportOptions] = None,
     ) -> models.CredentialsTotp:
         """Get Two-Factor Credential"""
         response = self.get(
@@ -9327,7 +9410,7 @@ class Looker40SDK(api_methods.APIMethods):
         body: Optional[models.CredentialsTotp] = None,
         # Requested fields.
         fields: Optional[str] = None,
-        transport_options: Optional[transport.PTransportSettings] = None,
+        transport_options: Optional[transport.TransportOptions] = None,
     ) -> models.CredentialsTotp:
         """Create Two-Factor Credential"""
         response = self.post(
@@ -9347,7 +9430,7 @@ class Looker40SDK(api_methods.APIMethods):
         self,
         # id of user
         user_id: int,
-        transport_options: Optional[transport.PTransportSettings] = None,
+        transport_options: Optional[transport.TransportOptions] = None,
     ) -> str:
         """Delete Two-Factor Credential"""
         response = self.delete(
@@ -9367,7 +9450,7 @@ class Looker40SDK(api_methods.APIMethods):
         user_id: int,
         # Requested fields.
         fields: Optional[str] = None,
-        transport_options: Optional[transport.PTransportSettings] = None,
+        transport_options: Optional[transport.TransportOptions] = None,
     ) -> models.CredentialsLDAP:
         """Get LDAP Credential"""
         response = self.get(
@@ -9386,7 +9469,7 @@ class Looker40SDK(api_methods.APIMethods):
         self,
         # id of user
         user_id: int,
-        transport_options: Optional[transport.PTransportSettings] = None,
+        transport_options: Optional[transport.TransportOptions] = None,
     ) -> str:
         """Delete LDAP Credential"""
         response = self.delete(
@@ -9406,7 +9489,7 @@ class Looker40SDK(api_methods.APIMethods):
         user_id: int,
         # Requested fields.
         fields: Optional[str] = None,
-        transport_options: Optional[transport.PTransportSettings] = None,
+        transport_options: Optional[transport.TransportOptions] = None,
     ) -> models.CredentialsGoogle:
         """Get Google Auth Credential"""
         response = self.get(
@@ -9425,7 +9508,7 @@ class Looker40SDK(api_methods.APIMethods):
         self,
         # id of user
         user_id: int,
-        transport_options: Optional[transport.PTransportSettings] = None,
+        transport_options: Optional[transport.TransportOptions] = None,
     ) -> str:
         """Delete Google Auth Credential"""
         response = self.delete(
@@ -9445,7 +9528,7 @@ class Looker40SDK(api_methods.APIMethods):
         user_id: int,
         # Requested fields.
         fields: Optional[str] = None,
-        transport_options: Optional[transport.PTransportSettings] = None,
+        transport_options: Optional[transport.TransportOptions] = None,
     ) -> models.CredentialsSaml:
         """Get Saml Auth Credential"""
         response = self.get(
@@ -9464,7 +9547,7 @@ class Looker40SDK(api_methods.APIMethods):
         self,
         # id of user
         user_id: int,
-        transport_options: Optional[transport.PTransportSettings] = None,
+        transport_options: Optional[transport.TransportOptions] = None,
     ) -> str:
         """Delete Saml Auth Credential"""
         response = self.delete(
@@ -9484,7 +9567,7 @@ class Looker40SDK(api_methods.APIMethods):
         user_id: int,
         # Requested fields.
         fields: Optional[str] = None,
-        transport_options: Optional[transport.PTransportSettings] = None,
+        transport_options: Optional[transport.TransportOptions] = None,
     ) -> models.CredentialsOIDC:
         """Get OIDC Auth Credential"""
         response = self.get(
@@ -9503,7 +9586,7 @@ class Looker40SDK(api_methods.APIMethods):
         self,
         # id of user
         user_id: int,
-        transport_options: Optional[transport.PTransportSettings] = None,
+        transport_options: Optional[transport.TransportOptions] = None,
     ) -> str:
         """Delete OIDC Auth Credential"""
         response = self.delete(
@@ -9525,7 +9608,7 @@ class Looker40SDK(api_methods.APIMethods):
         credentials_api3_id: int,
         # Requested fields.
         fields: Optional[str] = None,
-        transport_options: Optional[transport.PTransportSettings] = None,
+        transport_options: Optional[transport.TransportOptions] = None,
     ) -> models.CredentialsApi3:
         """Get API 3 Credential"""
         response = self.get(
@@ -9546,7 +9629,7 @@ class Looker40SDK(api_methods.APIMethods):
         user_id: int,
         # id of API 3 Credential
         credentials_api3_id: int,
-        transport_options: Optional[transport.PTransportSettings] = None,
+        transport_options: Optional[transport.TransportOptions] = None,
     ) -> str:
         """Delete API 3 Credential"""
         response = self.delete(
@@ -9566,7 +9649,7 @@ class Looker40SDK(api_methods.APIMethods):
         user_id: int,
         # Requested fields.
         fields: Optional[str] = None,
-        transport_options: Optional[transport.PTransportSettings] = None,
+        transport_options: Optional[transport.TransportOptions] = None,
     ) -> Sequence[models.CredentialsApi3]:
         """Get All API 3 Credentials"""
         response = self.get(
@@ -9588,7 +9671,7 @@ class Looker40SDK(api_methods.APIMethods):
         body: Optional[models.CredentialsApi3] = None,
         # Requested fields.
         fields: Optional[str] = None,
-        transport_options: Optional[transport.PTransportSettings] = None,
+        transport_options: Optional[transport.TransportOptions] = None,
     ) -> models.CredentialsApi3:
         """Create API 3 Credential"""
         response = self.post(
@@ -9612,7 +9695,7 @@ class Looker40SDK(api_methods.APIMethods):
         credentials_embed_id: int,
         # Requested fields.
         fields: Optional[str] = None,
-        transport_options: Optional[transport.PTransportSettings] = None,
+        transport_options: Optional[transport.TransportOptions] = None,
     ) -> models.CredentialsEmbed:
         """Get Embedding Credential"""
         response = self.get(
@@ -9633,7 +9716,7 @@ class Looker40SDK(api_methods.APIMethods):
         user_id: int,
         # id of Embedding Credential
         credentials_embed_id: int,
-        transport_options: Optional[transport.PTransportSettings] = None,
+        transport_options: Optional[transport.TransportOptions] = None,
     ) -> str:
         """Delete Embedding Credential"""
         response = self.delete(
@@ -9653,7 +9736,7 @@ class Looker40SDK(api_methods.APIMethods):
         user_id: int,
         # Requested fields.
         fields: Optional[str] = None,
-        transport_options: Optional[transport.PTransportSettings] = None,
+        transport_options: Optional[transport.TransportOptions] = None,
     ) -> Sequence[models.CredentialsEmbed]:
         """Get All Embedding Credentials"""
         response = self.get(
@@ -9674,7 +9757,7 @@ class Looker40SDK(api_methods.APIMethods):
         user_id: int,
         # Requested fields.
         fields: Optional[str] = None,
-        transport_options: Optional[transport.PTransportSettings] = None,
+        transport_options: Optional[transport.TransportOptions] = None,
     ) -> models.CredentialsLookerOpenid:
         """Get Looker OpenId Credential"""
         response = self.get(
@@ -9693,7 +9776,7 @@ class Looker40SDK(api_methods.APIMethods):
         self,
         # id of user
         user_id: int,
-        transport_options: Optional[transport.PTransportSettings] = None,
+        transport_options: Optional[transport.TransportOptions] = None,
     ) -> str:
         """Delete Looker OpenId Credential"""
         response = self.delete(
@@ -9715,7 +9798,7 @@ class Looker40SDK(api_methods.APIMethods):
         session_id: int,
         # Requested fields.
         fields: Optional[str] = None,
-        transport_options: Optional[transport.PTransportSettings] = None,
+        transport_options: Optional[transport.TransportOptions] = None,
     ) -> models.Session:
         """Get Web Login Session"""
         response = self.get(
@@ -9736,7 +9819,7 @@ class Looker40SDK(api_methods.APIMethods):
         user_id: int,
         # id of Web Login Session
         session_id: int,
-        transport_options: Optional[transport.PTransportSettings] = None,
+        transport_options: Optional[transport.TransportOptions] = None,
     ) -> str:
         """Delete Web Login Session"""
         response = self.delete(
@@ -9756,7 +9839,7 @@ class Looker40SDK(api_methods.APIMethods):
         user_id: int,
         # Requested fields.
         fields: Optional[str] = None,
-        transport_options: Optional[transport.PTransportSettings] = None,
+        transport_options: Optional[transport.TransportOptions] = None,
     ) -> Sequence[models.Session]:
         """Get All Web Login Sessions"""
         response = self.get(
@@ -9787,7 +9870,7 @@ class Looker40SDK(api_methods.APIMethods):
         expires: Optional[bool] = None,
         # Requested fields.
         fields: Optional[str] = None,
-        transport_options: Optional[transport.PTransportSettings] = None,
+        transport_options: Optional[transport.TransportOptions] = None,
     ) -> models.CredentialsEmail:
         """Create Password Reset Token"""
         response = self.post(
@@ -9810,7 +9893,7 @@ class Looker40SDK(api_methods.APIMethods):
         fields: Optional[str] = None,
         # Get only roles associated directly with the user: exclude those only associated through groups.
         direct_association_only: Optional[bool] = None,
-        transport_options: Optional[transport.PTransportSettings] = None,
+        transport_options: Optional[transport.TransportOptions] = None,
     ) -> Sequence[models.Role]:
         """Get User Roles"""
         response = self.get(
@@ -9835,7 +9918,7 @@ class Looker40SDK(api_methods.APIMethods):
         body: Sequence[int],
         # Requested fields.
         fields: Optional[str] = None,
-        transport_options: Optional[transport.PTransportSettings] = None,
+        transport_options: Optional[transport.TransportOptions] = None,
     ) -> Sequence[models.Role]:
         """Set User Roles"""
         response = self.put(
@@ -9878,7 +9961,7 @@ class Looker40SDK(api_methods.APIMethods):
         all_values: Optional[bool] = None,
         # If true, returns an empty record for each requested attribute that has no user, group, or default value.
         include_unset: Optional[bool] = None,
-        transport_options: Optional[transport.PTransportSettings] = None,
+        transport_options: Optional[transport.TransportOptions] = None,
     ) -> Sequence[models.UserAttributeWithValue]:
         """Get User Attribute Values"""
         response = self.get(
@@ -9907,7 +9990,7 @@ class Looker40SDK(api_methods.APIMethods):
         # Id of user attribute
         user_attribute_id: int,
         body: models.WriteUserAttributeWithValue,
-        transport_options: Optional[transport.PTransportSettings] = None,
+        transport_options: Optional[transport.TransportOptions] = None,
     ) -> models.UserAttributeWithValue:
         """Set User Attribute User Value"""
         response = self.patch(
@@ -9933,7 +10016,7 @@ class Looker40SDK(api_methods.APIMethods):
         user_id: int,
         # Id of user attribute
         user_attribute_id: int,
-        transport_options: Optional[transport.PTransportSettings] = None,
+        transport_options: Optional[transport.TransportOptions] = None,
     ) -> None:
         """Delete User Attribute User Value"""
         response = self.delete(
@@ -9959,7 +10042,7 @@ class Looker40SDK(api_methods.APIMethods):
         user_id: int,
         # Requested fields.
         fields: Optional[str] = None,
-        transport_options: Optional[transport.PTransportSettings] = None,
+        transport_options: Optional[transport.TransportOptions] = None,
     ) -> models.CredentialsEmail:
         """Send Password Reset Token"""
         response = self.post(
@@ -9984,7 +10067,7 @@ class Looker40SDK(api_methods.APIMethods):
         fields: Optional[str] = None,
         # Fields to order the results by. Sortable fields include: name, label
         sorts: Optional[str] = None,
-        transport_options: Optional[transport.PTransportSettings] = None,
+        transport_options: Optional[transport.TransportOptions] = None,
     ) -> Sequence[models.UserAttribute]:
         """Get All User Attributes"""
         response = self.get(
@@ -10013,7 +10096,7 @@ class Looker40SDK(api_methods.APIMethods):
         body: models.WriteUserAttribute,
         # Requested fields.
         fields: Optional[str] = None,
-        transport_options: Optional[transport.PTransportSettings] = None,
+        transport_options: Optional[transport.TransportOptions] = None,
     ) -> models.UserAttribute:
         """Create User Attribute"""
         response = self.post(
@@ -10035,7 +10118,7 @@ class Looker40SDK(api_methods.APIMethods):
         user_attribute_id: int,
         # Requested fields.
         fields: Optional[str] = None,
-        transport_options: Optional[transport.PTransportSettings] = None,
+        transport_options: Optional[transport.TransportOptions] = None,
     ) -> models.UserAttribute:
         """Get User Attribute"""
         response = self.get(
@@ -10057,7 +10140,7 @@ class Looker40SDK(api_methods.APIMethods):
         body: models.WriteUserAttribute,
         # Requested fields.
         fields: Optional[str] = None,
-        transport_options: Optional[transport.PTransportSettings] = None,
+        transport_options: Optional[transport.TransportOptions] = None,
     ) -> models.UserAttribute:
         """Update User Attribute"""
         response = self.patch(
@@ -10077,7 +10160,7 @@ class Looker40SDK(api_methods.APIMethods):
         self,
         # Id of user_attribute
         user_attribute_id: int,
-        transport_options: Optional[transport.PTransportSettings] = None,
+        transport_options: Optional[transport.TransportOptions] = None,
     ) -> str:
         """Delete User Attribute"""
         response = self.delete(
@@ -10103,7 +10186,7 @@ class Looker40SDK(api_methods.APIMethods):
         user_attribute_id: int,
         # Requested fields.
         fields: Optional[str] = None,
-        transport_options: Optional[transport.PTransportSettings] = None,
+        transport_options: Optional[transport.TransportOptions] = None,
     ) -> Sequence[models.UserAttributeGroupValue]:
         """Get User Attribute Group Values"""
         response = self.get(
@@ -10142,7 +10225,7 @@ class Looker40SDK(api_methods.APIMethods):
         # Id of user attribute
         user_attribute_id: int,
         body: Sequence[models.UserAttributeGroupValue],
-        transport_options: Optional[transport.PTransportSettings] = None,
+        transport_options: Optional[transport.TransportOptions] = None,
     ) -> Sequence[models.UserAttributeGroupValue]:
         """Set User Attribute Group Values"""
         response = self.post(
@@ -10164,7 +10247,7 @@ class Looker40SDK(api_methods.APIMethods):
     #
     # GET /workspaces -> Sequence[models.Workspace]
     def all_workspaces(
-        self, transport_options: Optional[transport.PTransportSettings] = None,
+        self, transport_options: Optional[transport.TransportOptions] = None,
     ) -> Sequence[models.Workspace]:
         """Get All Workspaces"""
         response = self.get(
@@ -10210,7 +10293,7 @@ class Looker40SDK(api_methods.APIMethods):
         self,
         # Id of the workspace
         workspace_id: str,
-        transport_options: Optional[transport.PTransportSettings] = None,
+        transport_options: Optional[transport.TransportOptions] = None,
     ) -> models.Workspace:
         """Get Workspace"""
         workspace_id = self.encode_path_param(workspace_id)

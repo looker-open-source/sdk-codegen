@@ -42,8 +42,7 @@ from looker_sdk.rtl import model
 
 
 class DeserializeError(Exception):
-    """Improperly formatted data to deserialize.
-    """
+    """Improperly formatted data to deserialize."""
 
 
 TModelOrSequence = Union[
@@ -62,8 +61,7 @@ TSerialize = Callable[[TModelOrSequence], bytes]
 def deserialize(
     *, data: str, structure: TStructure, converter: cattr.Converter
 ) -> TDeserializeReturn:
-    """Translate API data into models.
-    """
+    """Translate API data into models."""
     try:
         data = json.loads(data)
     except json.JSONDecodeError as ex:
@@ -84,8 +82,7 @@ deserialize40 = functools.partial(deserialize, converter=converter40)
 
 
 def serialize(api_model: TModelOrSequence) -> bytes:
-    """Translate api_model into formdata encoded json bytes
-    """
+    """Translate api_model into formdata encoded json bytes"""
     data = cattr.unstructure(api_model)  # type: ignore
     return json.dumps(data).encode("utf-8")  # type: ignore
 
@@ -102,8 +99,7 @@ def _tr_data_keys(data):
 
 
 def translate_keys_structure_hook(converter, data, model_type):
-    """Applied only to models.Model
-    """
+    """Applied only to models.Model"""
     return converter.structure_attrs_fromdict(_tr_data_keys(data), model_type)
 
 
@@ -151,13 +147,17 @@ def unstructure_hook(api_model):
 if sys.version_info < (3, 7):
     from dateutil import parser
 
-    def datetime_structure_hook(d: str, t: datetime.datetime) -> datetime.datetime:
+    def datetime_structure_hook(
+        d: str, t: Type[datetime.datetime]
+    ) -> datetime.datetime:
         return parser.isoparse(d)
 
 
 else:
 
-    def datetime_structure_hook(d: str, t: datetime.datetime) -> datetime.datetime:
+    def datetime_structure_hook(
+        d: str, t: Type[datetime.datetime]
+    ) -> datetime.datetime:
         return datetime.datetime.strptime(d, "%Y-%m-%dT%H:%M:%S.%f%z")
 
 
