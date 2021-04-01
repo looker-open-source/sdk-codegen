@@ -91,6 +91,11 @@ export const unquote = (value: string | undefined | null): string => {
  */
 export type Url = string
 
+/** Documented type to clarify SDK hash types */
+export interface IDictionary<T> {
+  [key: string]: T
+}
+
 /**
  * Documented type alias for password spec
  */

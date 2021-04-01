@@ -86,6 +86,7 @@ export const writeCodeFile = (fileName: string, content: string): string => {
           continue
         }
         log(`generating ${language} from ${props.base_url} ${api} ...`)
+        log(`generating ${api} methods ...`)
 
         // Generate standard method declarations
         const sdk = new MethodGenerator(apiModel, gen)
@@ -94,11 +95,13 @@ export const writeCodeFile = (fileName: string, content: string): string => {
 
         if (gen.willItStream) {
           // Generate streaming method declarations
+          log(`generating ${api} streaming methods ...`)
           const s = new StreamGenerator(apiModel, gen)
           const output = s.render(gen.indentStr)
           writeCodeFile(gen.sdkFileName(`streams`), output)
         }
 
+        log(`generating ${api} models ...`)
         const types = new TypeGenerator(apiModel, gen)
         output = types.render('')
         writeCodeFile(gen.sdkFileName(`models`), output)

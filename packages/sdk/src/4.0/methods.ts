@@ -29,8 +29,9 @@
  */
 
 import {
-  APIMethods,
   DelimArray,
+  IDictionary,
+  APIMethods,
   IAuthSession,
   ITransportSettings,
   encodeParam,
@@ -41,7 +42,6 @@ import {
  */
 import { sdkVersion } from '../constants'
 import {
-  IDictionary,
   IAccessToken,
   IApiSession,
   IApiVersion,
