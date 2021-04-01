@@ -25,5 +25,5 @@
  */
 import { RootState } from '../store'
 
-export const getSelectedSdkLanguages = (state: RootState) =>
-  state.user!.sdkLanguages
+export const getSelectedSdkLanguage = (state: RootState) =>
+  state.user!.sdkLanguage

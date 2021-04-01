@@ -23,12 +23,12 @@
  SOFTWARE.
 
  */
-import { getSelectedSdkLanguages } from './selectors'
+import { getSelectedSdkLanguage } from './selectors'
 
 describe('use selectors', () => {
   test('getSelectedSdkLanguages returns selected sdk languages', () => {
     const sdkLanguages = ['Kotlin', 'Go']
     const state = { sdkLanguages }
-    expect(getSelectedSdkLanguages({ user: state })).toEqual(sdkLanguages)
+    expect(getSelectedSdkLanguage({ user: state })).toEqual(sdkLanguages)
   })
 })

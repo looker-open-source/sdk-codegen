@@ -23,64 +23,43 @@
  SOFTWARE.
 
  */
-import React, { BaseSyntheticEvent, FC } from 'react'
+import React, { FC } from 'react'
 import { codeGenerators } from '@looker/sdk-codegen'
-import {
-  FieldCheckbox,
-  Icon,
-  Popover,
-  PopoverContent,
-  Text,
-} from '@looker/components'
+import { Select } from '@looker/components'
 import { useSelector } from 'react-redux'
+import { SelectOptionProps } from '@looker/components/lib/Form/Inputs/Select/SelectOptions'
 import { useActions } from '../../hooks'
-import { getSelectedSdkLanguages } from '../../state'
+import { getSelectedSdkLanguage } from '../../state'
 
 /**
- * Allows the user to select their preferred language(s).
+ * Allows the user to select their preferred language
  * @constructor
  */
 export const SdkLanguageSelector: FC = () => {
-  const { setSdkLanguagesAction } = useActions()
-  const selectedSdkLanguages = useSelector(getSelectedSdkLanguages)
+  const { setSdkLanguageAction } = useActions()
+  const selectedSdkLanguage = useSelector(getSelectedSdkLanguage)
 
-  const allSdkLanguages = codeGenerators.map((gen) => gen.label || gen.language)
+  const allSdkLanguages: SelectOptionProps[] = codeGenerators.map((gen) => ({
+    value: gen.label || gen.language,
+  }))
 
-  const handleChange = (e: BaseSyntheticEvent) => {
-    let sdkLanguages: string[]
+  allSdkLanguages.push({
+    options: [
+      {
+        value: 'All',
+      },
+    ],
+  })
 
-    if (e.target.checked) {
-      sdkLanguages = [...selectedSdkLanguages, e.target.value]
-    } else {
-      sdkLanguages = selectedSdkLanguages.filter(
-        (lang) => lang !== e.target.value
-      )
-    }
-
-    if (sdkLanguages.length) {
-      /** At least one language has to be selected */
-      setSdkLanguagesAction(sdkLanguages)
-    }
+  const handleChange = (language: string) => {
+    setSdkLanguageAction(language)
   }
 
   return (
-    <Popover
-      content={
-        <PopoverContent>
-          <Text>SDK Languages:</Text>
-          {allSdkLanguages.map((language) => (
-            <FieldCheckbox
-              checked={selectedSdkLanguages.includes(language)}
-              onChange={handleChange}
-              key={language}
-              value={language}
-              label={language}
-            />
-          ))}
-        </PopoverContent>
-      }
-    >
-      <Icon name="Code" size="small" />
-    </Popover>
+    <Select
+      value={selectedSdkLanguage}
+      onChange={handleChange}
+      options={allSdkLanguages}
+    />
   )
 }

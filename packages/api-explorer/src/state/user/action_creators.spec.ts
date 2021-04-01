@@ -24,13 +24,13 @@
 
  */
 import { UserActionTypes } from './actions'
-import { setSdkLanguagesAction } from './action_creators'
+import { setSdkLanguageAction } from './action_creators'
 
 describe('User reducer action creators', () => {
   test('setSdkLanguagesAction returns a SET_SDK_LANGUAGES action option with provided values', () => {
-    const action = setSdkLanguagesAction(['Typescript', 'Python'])
+    const action = setSdkLanguageAction(['Typescript', 'Python'])
     expect(action).toEqual({
-      type: UserActionTypes.SET_SDK_LANGUAGES,
+      type: UserActionTypes.SET_SDK_LANGUAGE,
       payload: ['Typescript', 'Python'],
     })
   })

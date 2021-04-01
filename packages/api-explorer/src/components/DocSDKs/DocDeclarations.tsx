@@ -23,14 +23,32 @@
  SOFTWARE.
 
  */
-export enum UserActionTypes {
-  SET_SDK_LANGUAGE = 'SET_SDK_LANGUAGE',
+import { Tab, TabList, TabPanel, TabPanels, useTabs } from '@looker/components'
+import { KeyedCollection } from '@looker/sdk-codegen'
+import React, { FC } from 'react'
+import { DocCode } from '../DocCode'
+
+interface DocDeclarationsProps {
+  declarations: KeyedCollection<string>
 }
 
-/** Action for setting the language for SDK references */
-export interface SetSdkLanguageAction {
-  type: UserActionTypes.SET_SDK_LANGUAGE
-  payload: string
-}
+export const DocDeclarations: FC<DocDeclarationsProps> = ({ declarations }) => {
+  const tabs = useTabs()
 
-export type UserAction = SetSdkLanguageAction
+  return (
+    <>
+      <TabList {...tabs}>
+        {Object.keys(declarations).map((language) => (
+          <Tab key={language}>{language}</Tab>
+        ))}
+      </TabList>
+      <TabPanels {...tabs} pt="0">
+        {Object.entries(declarations).map(([language, code]) => (
+          <TabPanel key={language}>
+            <DocCode language={language} code={code} />
+          </TabPanel>
+        ))}
+      </TabPanels>
+    </>
+  )
+}

@@ -26,11 +26,12 @@
 import { UserAction, UserActionTypes } from './actions'
 
 export interface UserState {
-  sdkLanguages: string[]
+  sdkLanguage: string
 }
 
 const defaultState: UserState = Object.freeze({
-  sdkLanguages: ['Typescript'],
+  /** The Python SDK has the most activity on GitHub */
+  sdkLanguage: 'Python',
 })
 
 export const userReducer = (
@@ -38,9 +39,9 @@ export const userReducer = (
   action: UserAction
 ): UserState => {
   switch (action.type) {
-    case UserActionTypes.SET_SDK_LANGUAGES:
+    case UserActionTypes.SET_SDK_LANGUAGE:
       return {
-        sdkLanguages: action.payload,
+        sdkLanguage: action.payload,
       }
     default:
       return state

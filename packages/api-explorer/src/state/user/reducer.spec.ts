@@ -30,7 +30,7 @@ describe('userReducer', () => {
   test('it sets sdk languages', () => {
     const currState = { sdkLanguages: ['Kotlin'] }
     const action = {
-      type: UserActionTypes.SET_SDK_LANGUAGES,
+      type: UserActionTypes.SET_SDK_LANGUAGE,
       payload: ['Typescript', 'Python'],
     }
     const state = userReducer(currState, action)
