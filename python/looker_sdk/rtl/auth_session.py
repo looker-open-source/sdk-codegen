@@ -38,8 +38,7 @@ from looker_sdk.rtl import transport
 
 
 class AuthSession:
-    """AuthSession to provide automatic authentication
-    """
+    """AuthSession to provide automatic authentication"""
 
     def __init__(
         self,
@@ -72,31 +71,41 @@ class AuthSession:
     def is_authenticated(self) -> bool:
         return self._is_authenticated(self.token)
 
-    def _get_sudo_token(self) -> auth_token.AuthToken:
+    def _get_sudo_token(
+        self, transport_options: transport.TransportOptions
+    ) -> auth_token.AuthToken:
         """Returns an active sudo token."""
         if not self.is_sudo_authenticated:
-            self._login_sudo()
+            self._login_sudo(transport_options)
         return self.sudo_token
 
-    def _get_token(self) -> auth_token.AuthToken:
+    def _get_token(
+        self, transport_options: transport.TransportOptions
+    ) -> auth_token.AuthToken:
         """Returns an active token."""
         if not self.is_authenticated:
-            self._login()
+            self._login(transport_options)
         return self.token
 
-    def authenticate(self) -> Dict[str, str]:
+    def authenticate(
+        self, transport_options: transport.TransportOptions
+    ) -> Dict[str, str]:
         """Return the Authorization header to authenticate each API call.
 
         Expired token renewal happens automatically.
         """
         if self._sudo_id:
-            token = self._get_sudo_token()
+            token = self._get_sudo_token(transport_options)
         else:
-            token = self._get_token()
+            token = self._get_token(transport_options)
 
         return {"Authorization": f"Bearer {token.access_token}"}
 
-    def login_user(self, sudo_id: int) -> None:
+    def login_user(
+        self,
+        sudo_id: int,
+        transport_options: Optional[transport.TransportOptions] = None,
+    ) -> None:
         """Authenticate using settings credentials and sudo as sudo_id.
 
         Make API calls as if authenticated as sudo_id. The sudo_id
@@ -106,7 +115,7 @@ class AuthSession:
         if self._sudo_id is None:
             self._sudo_id = sudo_id
             try:
-                self._login_sudo()
+                self._login_sudo(transport_options or {})
             except error.SDKError:
                 self._sudo_id = None
                 raise
@@ -118,9 +127,9 @@ class AuthSession:
                     "is already logged in. Log them out first."
                 )
             elif not self.is_sudo_authenticated:
-                self._login_sudo()
+                self._login_sudo(transport_options or {})
 
-    def _login(self) -> None:
+    def _login(self, transport_options: transport.TransportOptions) -> None:
         client_id = self.settings.read_config().get("client_id")
         client_secret = self.settings.read_config().get("client_secret")
         if not (client_id and client_secret):
@@ -133,14 +142,15 @@ class AuthSession:
             }
         ).encode("utf-8")
 
+        transport_options.setdefault("headers", {}).update(
+            {"Content-Type": "application/x-www-form-urlencoded"}
+        )
         response = self._ok(
             self.transport.request(
                 transport.HttpMethod.POST,
                 f"{self.settings.base_url}/api/{self.api_version}/login",
                 body=serialized,
-                transport_options={
-                    "headers": {"Content-Type": "application/x-www-form-urlencoded"}
-                },
+                transport_options=transport_options,
             )
         )
 
@@ -151,14 +161,20 @@ class AuthSession:
         assert isinstance(access_token, auth_token.AccessToken)
         self.token = auth_token.AuthToken(access_token)
 
-    def _login_sudo(self) -> None:
+    def _login_sudo(self, transport_options: transport.TransportOptions) -> None:
+        def authenticator(
+            transport_options: transport.TransportOptions,
+        ) -> Dict[str, str]:
+            return {
+                "Authorization": f"Bearer {self._get_token(transport_options).access_token}"
+            }
+
         response = self._ok(
             self.transport.request(
                 transport.HttpMethod.POST,
                 f"{self.settings.base_url}/api/{self.api_version}/login/{self._sudo_id}",
-                authenticator=lambda: {
-                    "Authorization": f"Bearer {self._get_token().access_token}"
-                },
+                authenticator=authenticator,
+                transport_options=transport_options,
             )
         )
         # ignore type: mypy bug doesn't recognized kwarg `structure` to partial func
@@ -168,7 +184,11 @@ class AuthSession:
         assert isinstance(access_token, auth_token.AccessToken)
         self.sudo_token = auth_token.AuthToken(access_token)
 
-    def logout(self, full: bool = False) -> None:
+    def logout(
+        self,
+        full: bool = False,
+        transport_options: Optional[transport.TransportOptions] = None,
+    ) -> None:
         """Logout of API.
 
         If the session is authenticated as sudo_id, logout() "undoes"
@@ -181,14 +201,18 @@ class AuthSession:
         if self._sudo_id:
             self._sudo_id = None
             if self.is_sudo_authenticated:
-                self._logout(sudo=True)
+                self._logout(sudo=True, transport_options=transport_options)
                 if full:
-                    self._logout()
+                    self._logout(transport_options=transport_options)
 
         elif self.is_authenticated:
-            self._logout()
+            self._logout(transport_options=transport_options)
 
-    def _logout(self, sudo: bool = False) -> None:
+    def _logout(
+        self,
+        sudo: bool = False,
+        transport_options: Optional[transport.TransportOptions] = None,
+    ) -> None:
 
         if sudo:
             token = self.sudo_token.access_token
@@ -197,11 +221,17 @@ class AuthSession:
             token = self.token.access_token
             self.token = auth_token.AuthToken()
 
+        def authenticator(
+            _transport_options: transport.TransportOptions,
+        ) -> Dict[str, str]:
+            return {"Authorization": f"Bearer {token}"}
+
         self._ok(
             self.transport.request(
                 transport.HttpMethod.DELETE,
                 f"{self.settings.base_url}/api/logout",
-                authenticator=lambda: {"Authorization": f"Bearer {token}"},
+                authenticator=authenticator,
+                transport_options=transport_options,
             )
         )
 
@@ -280,7 +310,9 @@ class OAuthSession(AuthSession):
         grant_type: str = "refresh_token"
 
     def _request_token(
-        self, grant_type: Union[AuthCodeGrantTypeParams, RefreshTokenGrantTypeParams]
+        self,
+        grant_type: Union[AuthCodeGrantTypeParams, RefreshTokenGrantTypeParams],
+        transport_options: transport.TransportOptions,
     ) -> auth_token.AccessToken:
         response = self.transport.request(
             transport.HttpMethod.POST,
@@ -296,7 +328,10 @@ class OAuthSession(AuthSession):
         )  # type: ignore
 
     def redeem_auth_code(
-        self, auth_code: str, code_verifier: Optional[str] = None
+        self,
+        auth_code: str,
+        code_verifier: Optional[str] = None,
+        transport_options: Optional[transport.TransportOptions] = None,
     ) -> None:
         params = self.AuthCodeGrantTypeParams(
             client_id=self.client_id,
@@ -305,14 +340,14 @@ class OAuthSession(AuthSession):
             code_verifier=code_verifier or self.code_verifier,
         )
 
-        access_token = self._request_token(params)
+        access_token = self._request_token(params, transport_options or {})
         self.token = auth_token.AuthToken(access_token)
 
-    def _login(self) -> None:
+    def _login(self, transport_options: transport.TransportOptions) -> None:
         params = self.RefreshTokenGrantTypeParams(
             client_id=self.client_id,
             redirect_uri=self.redirect_uri,
             refresh_token=self.token.refresh_token,
         )
-        access_token = self._request_token(params)
+        access_token = self._request_token(params, transport_options)
         self.token = auth_token.AuthToken(access_token)

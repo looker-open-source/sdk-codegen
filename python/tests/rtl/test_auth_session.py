@@ -89,16 +89,17 @@ class MockTransport(transport.Transport):
         transport_options=None,
     ):
         if authenticator:
-            authenticator()
+            authenticator(transport_options)
         if method == transport.HttpMethod.POST:
             if path.endswith(("login", "login/5")):
                 if path.endswith("login"):
                     token = "AdminAccessToken"
-                    expected_header = {
+                    expected_headers = {
                         "Content-Type": "application/x-www-form-urlencoded"
                     }
-                    if transport_options["headers"] != expected_header:
-                        raise TypeError(f"Must send {expected_header}")
+                    expected_headers.update(transport_options.get("headers", {}))
+                    if transport_options["headers"] != expected_headers:
+                        raise TypeError(f"Must send {expected_headers}")
                 else:
                     token = "UserAccessToken"
                 access_token = json.dumps(
@@ -132,15 +133,22 @@ class MockTransport(transport.Transport):
 
 def test_auto_login(auth_session: auth.AuthSession):
     assert not auth_session.is_authenticated
-    auth_header = auth_session.authenticate()
+    auth_header = auth_session.authenticate({})
     assert auth_header["Authorization"] == "Bearer AdminAccessToken"
     assert auth_session.is_authenticated
 
     # even after explicit logout
     auth_session.logout()
     assert not auth_session.is_authenticated
-    auth_header = auth_session.authenticate()
+    auth_header = auth_session.authenticate({})
     assert isinstance(auth_header, dict)
+    assert auth_header["Authorization"] == "Bearer AdminAccessToken"
+    assert auth_session.is_authenticated
+
+
+def test_auto_login_with_transport_options(auth_session: auth.AuthSession):
+    assert not auth_session.is_authenticated
+    auth_header = auth_session.authenticate({"headers": {"foo": "bar"}})
     assert auth_header["Authorization"] == "Bearer AdminAccessToken"
     assert auth_session.is_authenticated
 
@@ -151,7 +159,7 @@ def test_sudo_login_auto_logs_in(auth_session: auth.AuthSession):
     auth_session.login_user(5)
     assert auth_session.is_authenticated
     assert auth_session.is_sudo_authenticated
-    auth_header = auth_session.authenticate()
+    auth_header = auth_session.authenticate({})
     assert auth_header["Authorization"] == "Bearer UserAccessToken"
 
 
@@ -193,7 +201,7 @@ def test_it_fails_with_missing_credentials(
     )
 
     with pytest.raises(error.SDKError) as exc_info:
-        auth_session.authenticate()
+        auth_session.authenticate({})
     assert "auth credentials not found" in str(exc_info.value)
 
 
@@ -228,7 +236,7 @@ def test_env_variables_override_config_file_credentials(
         response_mode=transport.ResponseMode.STRING,
     )
 
-    auth_session.authenticate()
+    auth_session.authenticate({})
 
     expected_body = urllib.parse.urlencode(
         {"client_id": expected_id, "client_secret": expected_secret}
