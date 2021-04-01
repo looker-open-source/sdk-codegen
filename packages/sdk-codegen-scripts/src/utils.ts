@@ -72,7 +72,7 @@ export interface IGenProps {
 const generatorHelp = () => {
   log(
     `sdkGen [languages...] [-v|--versions <versions file>] [-n|--nostreams] [-h|--help]
-  languages...:   zero or more language specifiers separated by space or comma. Defaults to 'all'
+  languages...:   zero or more language specifiers separated by space or comma. Defaults to all supported languages.
   -v|--versions:  location of a JSON versions file in ILookerVersions format to read for getting specs
   -n|--nostreams: skip generation of a language SDK 'streams' files (if it supports streaming)
   -h|--help:      display this output
@@ -124,13 +124,17 @@ export const doArgs = (args: string[]) => {
         default:
           {
             const values = arg.split(',').filter((v) => v.trim())
-            values.forEach((v) => {
-              const gen = findGenerator(v.trim())
-              if (gen) {
-                // Valid language match
-                langs.push(gen.language)
-              }
-            })
+            if (values[0] !== 'all') {
+              values.forEach((v) => {
+                const gen = findGenerator(v.trim())
+                if (gen) {
+                  // Valid language match
+                  langs.push(gen.language)
+                } else {
+                  throw new Error(`"${v}" is not a valid option`)
+                }
+              })
+            }
           }
           break
       }

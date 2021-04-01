@@ -51,7 +51,13 @@ export const writeCodeFile = (fileName: string, content: string): string => {
   return fileName
 }
 ;(async () => {
-  const config = await prepGen(process.argv.slice(2))
+  let config
+  try {
+    config = await prepGen(process.argv.slice(2))
+  } catch (e) {
+    quit(e)
+  }
+  if (!config) return
   const { props, languages, lookerVersion, lastApi, noStreams } = config
 
   // load the specifications and create the unique keys in case of spec API version overlap
