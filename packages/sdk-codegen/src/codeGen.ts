@@ -242,6 +242,11 @@ export interface ICodeGen {
   useModelClassForTypes: boolean
 
   /**
+   * Resets the generator for a new emission
+   */
+  reset(): void
+
+  /**
    * Quote a string value for the language
    * @param value to quote
    */
@@ -700,6 +705,11 @@ export abstract class CodeGen implements ICodeGen {
         : `LookerSDK`
       this.packagePath += this.apiPath
     }
+  }
+
+  /** base level reset does nothing */
+  reset() {
+    // eslint-disable-next-line @typescript-eslint/no-empty-function
   }
 
   /**
@@ -1190,6 +1200,13 @@ export abstract class CodeGen implements ICodeGen {
     return items
   }
 
+  /**
+   * Gets the type mapping to use for generation
+   *
+   * Also tracks refCounts for the type for generators that need explicit type imports
+   *
+   * @param type to map for generation
+   */
   typeMap(type: IType): IMappedType {
     type.refCount++ // increment refcount
     return { default: this.nullStr || '', name: type.name || '' }
