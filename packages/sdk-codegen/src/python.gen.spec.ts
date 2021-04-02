@@ -666,7 +666,8 @@ class PermissionType(enum.Enum):
     invalid_api_enum_value = "invalid_api_enum_value"
 
 
-PermissionType.__new__ = model.safe_enum__new__`
+# https://github.com/python/mypy/issues/2427
+PermissionType.__new__ = model.safe_enum__new__  # type: ignore`
       expect(actual).toEqual(expected)
     })
 
