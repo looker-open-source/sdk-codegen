@@ -33,9 +33,7 @@
     "watch": "yarn lerna exec --scope @looker/sdk-codegen --stream 'BABEL_ENV=build babel src --root-mode upward --out-dir lib --source-maps --extensions .ts,.tsx --no-comments --watch'"
   },
   "dependencies": {
-    "@looker/sdk": "^21.0.10",
     "@looker/sdk-codegen-utils": "^21.0.10",
-    "@looker/sdk-node": "^21.0.10",
     "@looker/sdk-rtl": "^21.0.10",
     "blueimp-md5": "^2.13.0",
     "openapi3-ts": "^1.3.0"
