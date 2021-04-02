@@ -78,7 +78,7 @@ class TransportOptions(TypedDict, total=False):
     headers: MutableMapping[str, str]
 
 
-TAuthenticator = Optional[Callable[[], Dict[str, str]]]
+TAuthenticator = Optional[Callable[[TransportOptions], Dict[str, str]]]
 
 
 class ResponseMode(enum.Enum):
