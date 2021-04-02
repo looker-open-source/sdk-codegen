@@ -10,7 +10,7 @@
     "packages/sdk-node": {},
     "packages/sdk": {},
     ".": {
-      "release-as": ""
+      "release-as": "1.1.0"
     },
     "packages/api-explorer": {
       "release-as": "",
@@ -27,7 +27,7 @@
       "release-as": ""
     },
     "packages/sdk-codegen": {
-      "release-as": ""
+      "release-as": "21.1.0"
     },
     "packages/sdk-rtl": {
       "release-as": ""
