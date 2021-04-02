@@ -12,7 +12,6 @@ verify_ssl = true
 
 [packages]
 looker-sdk = "*"
-#looker-sdk = {version="7.20.0", index="testpypi"}
 mypy = "*"
 black = "*"
 flake8 = "*"
