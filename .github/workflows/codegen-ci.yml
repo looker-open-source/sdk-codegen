@@ -1,0 +1,146 @@
+name: Typescript SDK CI
+on:
+  pull_request:
+    types:
+      - opened
+      - synchronize
+      - reopened
+      # first three are default, adding labeled for "CI:TEST" support
+      # (see jobs.unit.if below)
+      - labeled
+    paths:
+      - packages/sdk-codegen/**
+      - packages/sdk-codegen-utils/**
+      - packages/sdk-codegen-scripts/**
+
+  push:
+    branches:
+      - main
+    paths:
+      - packages/sdk-codegen/**
+      - packages/sdk-codegen-utils/**
+      - packages/sdk-codegen-scripts/**
+
+env:
+  LOOKERSDK_BASE_URL: https://localhost:20000
+  LOOKERSDK_VERIFY_SSL: false
+  TS_JUNIT_OUTPUT_DIR: results/sdk-codegen
+
+jobs:
+  unit:
+    # 1st condition: push event (restricted to main above)
+    # 2nd condition: PR opened/synchronized/reopened (types filter above)
+    #                unless the PR has the CI:HOLD label
+    # 3rd condition: PR labeled with "CI:TEST"
+    if: >
+      github.event_name == 'push' ||
+      (
+        github.event_name == 'pull_request' &&
+        github.event.action != 'labeled' &&
+        !contains(github.event.pull_request.labels, 'CI:HOLD')
+      ) ||
+      (
+        github.event_name == 'pull_request' &&
+        github.event.action == 'labeled' &&
+        github.event.label.name == 'CI:TEST'
+      )
+
+    name: Unit - ${{ matrix.os }} / Node ${{ matrix.node-version }}
+    env:
+      JEST_JUNIT_OUTPUT_DIR: results/sdk-codegen
+      JEST_JUNIT_OUTPUT_NAME: ${{ matrix.os }}.sdk-codegen${{ matrix.node-version }}.xml
+    runs-on: ${{ matrix.os }}-latest
+
+    strategy:
+      matrix:
+        os:
+          - ubuntu
+        node-version: [12.x, 14.x, 15.x]
+
+    steps:
+      - name: Cancel Previous Runs
+        uses: styfle/cancel-workflow-action@0.6.0
+        with:
+          access_token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Repo Checkout
+        uses: actions/checkout@v2
+
+      - name: Install Node ${{ matrix.node-version }}
+        uses: actions/setup-node@v1
+        with:
+          node-version: ${{ matrix.node-version }}
+
+      - name: Install dependencies
+        run: |
+          yarn
+          yarn lint:es --quiet
+          yarn build
+
+      - name: Mock looker.ini
+        run: |
+          echo "[Looker]" > looker.ini
+          echo "base_url=https://self-signed.looker.com:19999" >> looker.ini
+          echo "client_id=id" >> looker.ini
+          echo "client_secret=secret" >> looker.ini
+          echo "verify_ssl=False" >> looker.ini
+          echo "timeout=31" >> looker.ini
+          echo "[Looker31]" >> looker.ini
+          echo "base_url=https://self-signed.looker.com:19999" >> looker.ini
+          echo "verify_ssl=False" >> looker.ini
+          echo "timeout=30" >> looker.ini
+
+      - name: Run unit tests
+        run: yarn jest "packages/sdk-codegen(-utils|-scripts)/src" --reporters=default --reporters=jest-junit
+
+      - name: Delete looker.ini mock
+        run: rm looker.ini
+
+      - name: Upload ts unit test results
+        if: ${{ always() }}
+        uses: actions/upload-artifact@v2
+        with:
+          name: sdk-codegen-test-results
+          path: results/sdk-codegen
+
+  publish-test-results:
+    name: Publish Test Results
+    needs: [unit, integration]
+    if: success() || failure()
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Download Artifacts
+        uses: actions/download-artifact@v2
+        with:
+          path: artifacts
+
+      - name: Publish Unit Test Results
+        uses: EnricoMi/publish-unit-test-result-action@v1.6
+        with:
+          check_name: Test Results
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          report_individual_runs: true
+          files: 'artifacts/sdk-codegen-test-results/*.xml'
+
+  remove-CI-TEST-label:
+    name: Remove CI:TEST Label
+    if: >
+      (
+        github.event_name == 'pull_request' &&
+        github.event.action == 'labeled' &&
+        github.event.label.name == 'CI:TEST'
+      )
+    runs-on: ubuntu-latest
+    steps:
+      - name: Remove CI:TEST Label
+        uses: actions/github-script@v3
+        with:
+          github-token: ${{secrets.GITHUB_TOKEN}}
+          script: |
+            github.issues.removeLabel({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              issue_number: context.issue.number,
+              name: 'CI:TEST'
+            })
