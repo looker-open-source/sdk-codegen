@@ -45,7 +45,8 @@
     "js-yaml": "^3.13.1",
     "openapi3-ts": "^2.0.0",
     "prettier": "^2.1.2",
-    "swagger2openapi": "^7.0.3"
+    "swagger2openapi": "^7.0.3",
+    "lodash": "^4.17.21"
   },
   "gitHead": "d16d6fd98594572f130dd0b7959d49a737de8722"
 }
