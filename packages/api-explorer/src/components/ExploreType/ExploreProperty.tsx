@@ -158,7 +158,7 @@ export const ExplorePropertyDescription: FC<ExplorePropertyProps> = ({
 export const ExplorePropertyDetail: FC<ExplorePropertyProps> = ({
   property,
 }) => (
-  <Space>
+  <Space style={{ fontSize: 'small', marginLeft: '10rem' }}>
     <FlexItem width="10rem">
       <ExploreTypeLink type={property.type} />
     </FlexItem>

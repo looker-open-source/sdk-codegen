@@ -69,6 +69,7 @@ export const CodeStructure: FC<CodeStructureProps> = ({
     showGutter={false}
     tabSize={2}
     width={width}
+    height={`85%`}
     theme={'dracula'}
     value={code}
     wrapEnabled={true}
