@@ -23,15 +23,35 @@
  SOFTWARE.
 
  */
-import { UserActionTypes } from './actions'
-import { setSdkLanguageAction } from './action_creators'
+import { ExtensionSDK } from '@looker/extension-sdk'
 
-describe('User reducer action creators', () => {
-  test('setSdkLanguageAction returns a SET_SDK_LANGUAGE action option with provided values', () => {
-    const action = setSdkLanguageAction('Typescript')
-    expect(action).toEqual({
-      type: UserActionTypes.SET_SDK_LANGUAGE,
-      payload: 'Typescript',
-    })
-  })
-})
+export interface IDualModeConfigurator {
+  getLocalStorageItem: (key: string) => Promise<string | null>
+  setLocalStorageItem: (key: string, value: string) => void
+}
+
+/**
+ * A dual mode configurator class for interacting with browser APIs both in the
+ * standalone and extension versions
+ */
+export class DualModeConfigurator implements IDualModeConfigurator {
+  extensionSDK?: ExtensionSDK
+
+  constructor(extensionSDK?: ExtensionSDK) {
+    this.extensionSDK = extensionSDK
+  }
+
+  async getLocalStorageItem(key: string): Promise<string | null> {
+    const item =
+      this.extensionSDK?.localStorageGetItem(key) || localStorage.getItem(key)
+    return item
+  }
+
+  async setLocalStorageItem(key: string, value: string) {
+    if (this.extensionSDK) {
+      await this.extensionSDK.localStorageSetItem(key, value)
+    } else {
+      localStorage.setItem(key, value)
+    }
+  }
+}

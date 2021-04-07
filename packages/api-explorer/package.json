@@ -49,6 +49,7 @@
   },
   "dependencies": {
     "@looker/components": "^0.9.30",
+    "@looker/extension-sdk": "^21.4.0",
     "@looker/run-it": "^0.9.0",
     "@looker/sdk": "^21.0.10",
     "@looker/sdk-codegen": "^21.0.10",

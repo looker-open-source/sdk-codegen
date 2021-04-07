@@ -38,6 +38,8 @@ import { ThemeContext } from 'styled-components'
 import { useParams } from 'react-router-dom'
 import { RunIt, RunItContext } from '@looker/run-it'
 import { ApiModel, typeRefs } from '@looker/sdk-codegen'
+import { useSelector } from 'react-redux'
+
 import {
   DocActivityType,
   DocMarkdown,
@@ -49,6 +51,7 @@ import {
   DocStatus,
   DocTitle,
 } from '../../components'
+import { getSelectedSdkLanguage } from '../../state'
 import { DocOperation } from './components'
 import { createInputs } from './utils'
 interface DocMethodProps {
@@ -62,6 +65,7 @@ interface DocMethodParams {
 
 export const MethodScene: FC<DocMethodProps> = ({ api }) => {
   const { sdk } = useContext(RunItContext)
+  const sdkLanguage = useSelector(getSelectedSdkLanguage)
   const { methodName, specKey } = useParams<DocMethodParams>()
   const { value, toggle } = useToggle()
   const [method, setMethod] = useState(api.methods[methodName])
@@ -114,6 +118,7 @@ export const MethodScene: FC<DocMethodProps> = ({ api }) => {
             }}
           >
             <RunIt
+              sdkLanguage={sdkLanguage}
               api={api}
               inputs={createInputs(api, method)}
               method={method}

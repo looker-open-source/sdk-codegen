@@ -25,4 +25,4 @@
  */
 
 export { getGenerators } from './callUtils'
-export { SdkCalls } from './SdkCalls'
+export { DocSdkCalls } from './DocSdkCalls'

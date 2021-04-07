@@ -30,8 +30,11 @@ import styled from 'styled-components'
 import { Aside, ComponentsProvider, Layout, Page } from '@looker/components'
 import { Looker40SDK, Looker31SDK } from '@looker/sdk'
 import { SpecList } from '@looker/sdk-codegen'
+import { ExtensionSDK } from '@looker/extension-sdk/src'
+import { useSelector } from 'react-redux'
+
 import { SearchContext, LodeContext, defaultLodeContextValue } from './context'
-import { getLoded } from './utils'
+import { DualModeConfigurator, getLoded } from './utils'
 import { Header, SideNav } from './components'
 import {
   specReducer,
@@ -40,18 +43,25 @@ import {
   defaultSearchState,
 } from './reducers'
 import { AppRouter } from './routes'
+import { useActions } from './hooks'
+import { getDualModeConfigurator } from './state'
 
 export interface ApiExplorerProps {
   specs: SpecList
   sdk?: Looker31SDK | Looker40SDK
+  extensionSdk?: ExtensionSDK
   lodeUrl?: string
 }
 
 const ApiExplorer: FC<ApiExplorerProps> = ({
   specs,
   lodeUrl = 'https://raw.githubusercontent.com/looker-open-source/sdk-codegen/main/motherlode.json',
+  extensionSdk,
 }) => {
   const location = useLocation()
+  const { setSdkLanguageAction, setDualModeConfiguratorAction } = useActions()
+  const configurator = useSelector(getDualModeConfigurator)
+
   const [spec, specDispatch] = useReducer(
     specReducer,
     initDefaultSpecState(specs, location)
@@ -70,6 +80,22 @@ const ApiExplorer: FC<ApiExplorerProps> = ({
   useEffect(() => {
     getLoded(lodeUrl).then((resp) => setLode(resp))
   }, [lodeUrl])
+
+  useEffect(() => {
+    if (extensionSdk) {
+      setDualModeConfiguratorAction(new DualModeConfigurator(extensionSdk))
+    }
+  }, [extensionSdk, setDualModeConfiguratorAction])
+
+  useEffect(() => {
+    const getSettings = async () => {
+      const resp = await configurator.getLocalStorageItem('language')
+      if (resp) {
+        setSdkLanguageAction(resp)
+      }
+    }
+    getSettings()
+  }, [configurator, setSdkLanguageAction])
 
   return (
     <ComponentsProvider

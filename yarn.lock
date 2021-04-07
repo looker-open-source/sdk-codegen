@@ -2262,6 +2262,20 @@
     prettier "^2.2.1"
     typescript "4.1.2"
 
+"@looker/extension-sdk@^21.4.0":
+  version "21.4.0"
+  resolved "https://registry.yarnpkg.com/@looker/extension-sdk/-/extension-sdk-21.4.0.tgz#6ef8d96e8b03a08aba2ebf2050e4191deea37f94"
+  integrity sha512-NkJEpc1KfXXabLsuZkPn/HyBYzdpTOLAEt86xPnL2En4PJTU9X9pSPLjVtuIBr1f0d/g+z/roqR8PD1q9rGBCQ==
+  dependencies:
+    "@looker/chatty" "^2.3.0"
+    "@looker/sdk" "^21.4.0"
+    "@looker/sdk-rtl" "^21.0.11"
+    deepmerge "^4.2.2"
+    readable-stream "^3.4.0"
+    request "^2.88.0"
+    request-promise-native "^1.0.8"
+    semver "^7.3.4"
+
 "@looker/icons@^0.9.26":
   version "0.9.26"
   resolved "https://registry.yarnpkg.com/@looker/icons/-/icons-0.9.26.tgz#04aee9b8108accb7b02b6b0f663c8bfa02e00785"
@@ -2273,6 +2287,27 @@
   integrity sha512-KOnWFoLPdc/iHatebYsNb8UyjbP3//gDK/ZmEhtyO1OC0WOSf8MsKEEM7rnMgFmrzjQCE8aLOxJrkCTzE0FVfA==
   dependencies:
     prettier ">=2.2.1"
+
+"@looker/sdk-rtl@^21.0.11":
+  version "21.0.11"
+  resolved "https://registry.yarnpkg.com/@looker/sdk-rtl/-/sdk-rtl-21.0.11.tgz#77f3cbba25ebecc3da72574210cb0c8467773356"
+  integrity sha512-2SG5DTsD0HEMBAfYkC3n/tILTnXbciTjjyJa5CAjkOHENRGpI6EgOZgEGRAEURFwEqIXqdGf/QjLms0svHhF+g==
+  dependencies:
+    ini "^1.3.8"
+    readable-stream "^3.4.0"
+    request "^2.88.0"
+    request-promise-native "^1.0.8"
+
+"@looker/sdk@^21.4.0":
+  version "21.4.0"
+  resolved "https://registry.yarnpkg.com/@looker/sdk/-/sdk-21.4.0.tgz#735758c96ab25bdf9f9a93a8c534ec9874c2c089"
+  integrity sha512-aEBQilxhLLAksJ+sZzGHaH/SmIRYWgL5jGR0nrq0ssmfkVZjwwCv5TUq62mK5YAeEKYB7pCN5Bv0g3CVQqKKDg==
+  dependencies:
+    "@looker/sdk-rtl" "^21.0.11"
+    ini "^1.3.8"
+    readable-stream "^3.4.0"
+    request "^2.88.0"
+    request-promise-native "^1.0.8"
 
 "@mdx-js/util@1.6.22":
   version "1.6.22"

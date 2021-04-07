@@ -23,39 +23,51 @@
  SOFTWARE.
 
  */
-import {
-  ApiModel,
-  KeyedCollection,
-  CodeGen,
-  codeGenerators,
-} from '@looker/sdk-codegen'
 
-/**
- * Returns a collection of generators for all supported (non legacy) languages
- * @param api Api spec
- */
-export const getGenerators = (api: ApiModel): KeyedCollection<CodeGen> => {
-  const codeGens = {}
-  codeGenerators
-    .filter((x) => x.factory !== undefined)
-    .forEach((gen) => {
-      codeGens[gen.label || gen.language] = gen.factory!(api)
-    })
-  return codeGens
+import { ApiModel, IMethod, trimInputs } from '@looker/sdk-codegen'
+import React, { FC } from 'react'
+import { RunItValues } from '../../RunIt'
+import { DocCall } from './DocCall'
+import { DocCalls } from './DocCalls'
+
+export interface DocSdkCallsProps {
+  /** API spec */
+  api: ApiModel
+  /** current method */
+  method: IMethod
+  /** Entered RunIt form values */
+  inputs: RunItValues
+  /** Language to generate Sdk calls in*/
+  language: string
 }
 
 /**
- * Returns a collection of generators for all supported (non legacy) languages
+ * Generates the SDK call syntax for a given language or all supported languages
  * @param api Api spec
+ * @param method Api method
+ * @param inputs Method parameters
+ * @param language SDK language to generate the call syntax in
  */
-export const getGenerator = (api: ApiModel, language: string): CodeGen => {
-  const generators = codeGenerators.filter(
-    (x) =>
-      x.factory !== undefined &&
-      (x.label === language || x.language === language)
+export const DocSdkCalls: FC<DocSdkCallsProps> = ({
+  api,
+  method,
+  inputs,
+  language = 'All',
+}) => {
+  const trimmedInputs = trimInputs(inputs)
+
+  return (
+    <>
+      {language === 'All' ? (
+        <DocCalls api={api} inputs={trimmedInputs} method={method} />
+      ) : (
+        <DocCall
+          api={api}
+          method={method}
+          inputs={trimmedInputs}
+          language={language}
+        />
+      )}
+    </>
   )
-  if (!generators) {
-    throw new Error(`Language generator for ${language} not found.`)
-  }
-  return <CodeGen>generators[0].factory!(api)
 }

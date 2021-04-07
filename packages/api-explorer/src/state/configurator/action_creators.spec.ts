@@ -23,15 +23,17 @@
  SOFTWARE.
 
  */
-import { UserActionTypes } from './actions'
-import { setSdkLanguageAction } from './action_creators'
+import { DualModeConfigurator } from '../../utils'
+import { setDualModeConfiguratorAction } from './action_creators'
+import { ConfiguratorActionTypes } from './actions'
 
-describe('User reducer action creators', () => {
-  test('setSdkLanguageAction returns a SET_SDK_LANGUAGE action option with provided values', () => {
-    const action = setSdkLanguageAction('Typescript')
+describe('Dual mode configurator reducer action creators', () => {
+  test('setDualModeConfiguratorAction returns a SET_CONFIGURATOR action with provided values', () => {
+    const configurator = new DualModeConfigurator()
+    const action = setDualModeConfiguratorAction(configurator)
     expect(action).toEqual({
-      type: UserActionTypes.SET_SDK_LANGUAGE,
-      payload: 'Typescript',
+      type: ConfiguratorActionTypes.SET_CONFIGURATOR,
+      payload: configurator,
     })
   })
 })

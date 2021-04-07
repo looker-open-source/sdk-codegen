@@ -23,15 +23,5 @@
  SOFTWARE.
 
  */
-import { UserActionTypes } from './actions'
-import { setSdkLanguageAction } from './action_creators'
-
-describe('User reducer action creators', () => {
-  test('setSdkLanguageAction returns a SET_SDK_LANGUAGE action option with provided values', () => {
-    const action = setSdkLanguageAction('Typescript')
-    expect(action).toEqual({
-      type: UserActionTypes.SET_SDK_LANGUAGE,
-      payload: 'Typescript',
-    })
-  })
-})
+export * from './reducer'
+export * from './selectors'

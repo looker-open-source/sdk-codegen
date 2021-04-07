@@ -25,4 +25,5 @@
  */
 export * as actionCreators from './action_creators'
 export * from './user'
+export * from './configurator'
 export * from './store'

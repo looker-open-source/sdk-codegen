@@ -23,15 +23,22 @@
  SOFTWARE.
 
  */
-import { UserActionTypes } from './actions'
-import { setSdkLanguageAction } from './action_creators'
+import React, { FC } from 'react'
+import { CodeStructure } from '../CodeStructure'
+import { DocSdkCallsProps } from './DocSdkCalls'
+import { getGenerator } from './callUtils'
 
-describe('User reducer action creators', () => {
-  test('setSdkLanguageAction returns a SET_SDK_LANGUAGE action option with provided values', () => {
-    const action = setSdkLanguageAction('Typescript')
-    expect(action).toEqual({
-      type: UserActionTypes.SET_SDK_LANGUAGE,
-      payload: 'Typescript',
-    })
-  })
-})
+/**
+ * Generates the SDK call syntax for a given language
+ */
+export const DocCall: FC<DocSdkCallsProps> = ({
+  api,
+  method,
+  inputs,
+  language,
+}) => {
+  const generator = getGenerator(api, language)
+  const code = generator.makeTheCall(method, inputs)
+
+  return <CodeStructure code={code} language={language} />
+}

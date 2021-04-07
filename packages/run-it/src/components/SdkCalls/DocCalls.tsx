@@ -23,33 +23,23 @@
  SOFTWARE.
 
  */
-
-import { ApiModel, IMethod, trimInputs } from '@looker/sdk-codegen'
 import React, { FC } from 'react'
 import { Tab, TabList, TabPanel, TabPanels, useTabs } from '@looker/components'
-import { RunItValues } from '../../RunIt'
+
 import { CodeStructure } from '../CodeStructure'
 import { getGenerators } from './callUtils'
-
-interface SdkCallsProps {
-  /** API spec */
-  api: ApiModel
-  /** current method */
-  method: IMethod
-  /** Entered RunIt form values */
-  inputs: RunItValues
-}
+import { DocSdkCallsProps } from './DocSdkCalls'
 
 /**
  * Generates the SDK call syntax for all supported languages
- * @param api Api spec
- * @param method Api method
- * @param inputs Method parameters
  */
-export const SdkCalls: FC<SdkCallsProps> = ({ api, method, inputs }) => {
+export const DocCalls: FC<Omit<DocSdkCallsProps, 'language'>> = ({
+  api,
+  inputs,
+  method,
+}) => {
   const tabs = useTabs()
   const generators = getGenerators(api)
-  const trimmed = trimInputs(inputs)
   return (
     <>
       <TabList {...tabs}>
@@ -59,7 +49,7 @@ export const SdkCalls: FC<SdkCallsProps> = ({ api, method, inputs }) => {
       </TabList>
       <TabPanels {...tabs} pt="0">
         {Object.entries(generators).map(([language, gen]) => {
-          const code = gen.makeTheCall(method, trimmed)
+          const code = gen.makeTheCall(method, inputs)
           return (
             <TabPanel key={language}>
               <CodeStructure code={code} language={language} />

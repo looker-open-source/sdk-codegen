@@ -28,8 +28,9 @@ import { codeGenerators } from '@looker/sdk-codegen'
 import { Select } from '@looker/components'
 import { useSelector } from 'react-redux'
 import { SelectOptionProps } from '@looker/components/lib/Form/Inputs/Select/SelectOptions'
+
 import { useActions } from '../../hooks'
-import { getSelectedSdkLanguage } from '../../state'
+import { getDualModeConfigurator, getSelectedSdkLanguage } from '../../state'
 
 /**
  * Allows the user to select their preferred language
@@ -37,6 +38,7 @@ import { getSelectedSdkLanguage } from '../../state'
  */
 export const SdkLanguageSelector: FC = () => {
   const { setSdkLanguageAction } = useActions()
+  const configurator = useSelector(getDualModeConfigurator)
   const selectedSdkLanguage = useSelector(getSelectedSdkLanguage)
 
   const allSdkLanguages: SelectOptionProps[] = codeGenerators.map((gen) => ({
@@ -53,6 +55,7 @@ export const SdkLanguageSelector: FC = () => {
 
   const handleChange = (language: string) => {
     setSdkLanguageAction(language)
+    configurator.setLocalStorageItem('language', language)
   }
 
   return (

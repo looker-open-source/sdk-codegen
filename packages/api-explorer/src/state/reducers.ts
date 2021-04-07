@@ -25,9 +25,11 @@
  */
 import { combineReducers } from 'redux'
 import { userReducer } from './user'
+import { dualModeConfiguratorReducer } from './configurator'
 
 export const reducers = combineReducers({
   user: userReducer,
+  configurator: dualModeConfiguratorReducer,
 })
 
 export type RootState = ReturnType<typeof reducers>

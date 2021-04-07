@@ -39,7 +39,10 @@ import {
   upgradeSpecObject,
 } from '@looker/sdk-codegen'
 import { Looker31SDK, Looker40SDK } from '@looker/sdk'
-import ApiExplorer from '@looker/api-explorer/lib/ApiExplorer'
+import ApiExplorer from '@looker/api-explorer/src/ApiExplorer'
+import { getExtensionSDK } from '@looker/extension-sdk'
+import { configureStore } from '@looker/api-explorer/src/state'
+import { Provider } from 'react-redux'
 
 class ExtensionConfigurator implements RunItConfigurator {
   storage: Record<string, string> = {}
@@ -68,6 +71,8 @@ class ExtensionConfigurator implements RunItConfigurator {
 }
 
 const configurator = new ExtensionConfigurator()
+
+const store = configureStore()
 
 export const ExtensionApiExplorer: FC = () => {
   const match = useRouteMatch<{ specKey: string }>(`/:specKey`)
@@ -116,11 +121,15 @@ export const ExtensionApiExplorer: FC = () => {
   }, [specs, sdk])
 
   return (
-    <RunItProvider sdk={sdk} configurator={configurator} basePath="">
-      <>
-        {specs && <ApiExplorer specs={specs} />}
-        {!specs && 'Loading API specifications from Looker ...'}
-      </>
-    </RunItProvider>
+    <Provider store={store}>
+      <RunItProvider sdk={sdk} configurator={configurator} basePath="">
+        <>
+          {specs && (
+            <ApiExplorer specs={specs} extensionSdk={getExtensionSDK()} />
+          )}
+          {!specs && 'Loading API specifications from Looker ...'}
+        </>
+      </RunItProvider>
+    </Provider>
   )
 }
