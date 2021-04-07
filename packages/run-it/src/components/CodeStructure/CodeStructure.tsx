@@ -51,6 +51,7 @@ interface CodeStructureProps {
   onChange?: (e: string) => void
   fontSize?: number
   width?: string
+  height?: string
 }
 
 export const CodeStructure: FC<CodeStructureProps> = ({
@@ -59,6 +60,7 @@ export const CodeStructure: FC<CodeStructureProps> = ({
   onChange,
   fontSize = 16,
   width = 'auto',
+  height = '500px',
 }) => (
   <AceEditor
     mode={language.toLowerCase()}
@@ -69,6 +71,7 @@ export const CodeStructure: FC<CodeStructureProps> = ({
     showGutter={false}
     tabSize={2}
     width={width}
+    height={height}
     theme={'dracula'}
     value={code}
     wrapEnabled={true}
