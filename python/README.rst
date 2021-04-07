@@ -33,7 +33,7 @@ Basic Usage
         body=looker_sdk.models.WriteUser(first_name="Jane", last_name="Doe")
     )
     # or plain dictionaries
-    sdk.create_user(body={"first_name": "Jane", last_name: "Doe"})
+    sdk.create_user(body={"first_name": "Jane", "last_name": "Doe"})
 
 Full tutorial
 =============
