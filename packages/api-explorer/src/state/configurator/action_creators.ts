@@ -26,12 +26,12 @@
 import { IDualModeConfigurator } from '../../utils'
 import {
   SetDualModeConfiguratorAction,
-  ConfiguratorActionTypes,
+  DualModeConfiguratorActionTypes,
 } from './actions'
 
 export const setDualModeConfiguratorAction = (
   configurator: IDualModeConfigurator
 ): SetDualModeConfiguratorAction => ({
-  type: ConfiguratorActionTypes.SET_CONFIGURATOR,
+  type: DualModeConfiguratorActionTypes.SET_CONFIGURATOR,
   payload: configurator,
 })

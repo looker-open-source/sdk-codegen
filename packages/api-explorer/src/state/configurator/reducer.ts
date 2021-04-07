@@ -24,7 +24,10 @@
 
  */
 import { DualModeConfigurator, IDualModeConfigurator } from '../../utils'
-import { ConfiguratorActions, ConfiguratorActionTypes } from './actions'
+import {
+  DualModeConfiguratorActions,
+  DualModeConfiguratorActionTypes,
+} from './actions'
 
 export type DualModeConfiguratorState = IDualModeConfigurator
 
@@ -32,10 +35,10 @@ const defaultState: DualModeConfiguratorState = new DualModeConfigurator()
 
 export const dualModeConfiguratorReducer = (
   state: DualModeConfiguratorState = defaultState,
-  action: ConfiguratorActions
+  action: DualModeConfiguratorActions
 ): DualModeConfiguratorState => {
   switch (action.type) {
-    case ConfiguratorActionTypes.SET_CONFIGURATOR:
+    case DualModeConfiguratorActionTypes.SET_CONFIGURATOR:
       return action.payload
     default:
       return state

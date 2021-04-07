@@ -25,13 +25,13 @@
  */
 import { IDualModeConfigurator } from '../../utils'
 
-export enum ConfiguratorActionTypes {
+export enum DualModeConfiguratorActionTypes {
   SET_CONFIGURATOR = 'SET_CONFIGURATOR',
 }
 
 export interface SetDualModeConfiguratorAction {
-  type: ConfiguratorActionTypes.SET_CONFIGURATOR
+  type: DualModeConfiguratorActionTypes.SET_CONFIGURATOR
   payload: IDualModeConfigurator
 }
 
-export type ConfiguratorActions = SetDualModeConfiguratorAction
+export type DualModeConfiguratorActions = SetDualModeConfiguratorAction

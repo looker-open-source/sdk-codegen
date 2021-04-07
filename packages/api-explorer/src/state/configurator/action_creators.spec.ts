@@ -25,14 +25,14 @@
  */
 import { DualModeConfigurator } from '../../utils'
 import { setDualModeConfiguratorAction } from './action_creators'
-import { ConfiguratorActionTypes } from './actions'
+import { DualModeConfiguratorActionTypes } from './actions'
 
 describe('Dual mode configurator reducer action creators', () => {
   test('setDualModeConfiguratorAction returns a SET_CONFIGURATOR action with provided values', () => {
     const configurator = new DualModeConfigurator()
     const action = setDualModeConfiguratorAction(configurator)
     expect(action).toEqual({
-      type: ConfiguratorActionTypes.SET_CONFIGURATOR,
+      type: DualModeConfiguratorActionTypes.SET_CONFIGURATOR,
       payload: configurator,
     })
   })
