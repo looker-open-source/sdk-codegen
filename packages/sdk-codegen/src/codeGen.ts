@@ -241,6 +241,9 @@ export interface ICodeGen {
   /** Do type declarations use a class definition */
   useModelClassForTypes: boolean
 
+  /** Increase indent */
+  bumper(indent: string): string
+
   /**
    * Quote a string value for the language
    * @param value to quote

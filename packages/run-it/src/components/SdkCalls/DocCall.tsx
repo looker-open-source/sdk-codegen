@@ -24,9 +24,10 @@
 
  */
 import React, { FC } from 'react'
+import { getCodeGenerator } from '@looker/sdk-codegen'
+
 import { CodeStructure } from '../CodeStructure'
 import { DocSdkCallsProps } from './DocSdkCalls'
-import { getGenerator } from './callUtils'
 
 /**
  * Generates the SDK call syntax for a given language
@@ -37,8 +38,8 @@ export const DocCall: FC<DocSdkCallsProps> = ({
   inputs,
   language,
 }) => {
-  const generator = getGenerator(api, language)
-  const code = generator.makeTheCall(method, inputs)
+  const generator = getCodeGenerator(language, api)
+  const code = generator!.makeTheCall(method, inputs)
 
   return <CodeStructure code={code} language={language} />
 }
