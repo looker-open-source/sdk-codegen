@@ -40,10 +40,10 @@ import {
 } from '@looker/sdk-codegen'
 import { Looker31SDK, Looker40SDK } from '@looker/sdk'
 import ApiExplorer from '@looker/api-explorer/src/ApiExplorer'
-import { ExtensionSDK, getExtensionSDK } from '@looker/extension-sdk'
+import { getExtensionSDK } from '@looker/extension-sdk'
 import { configureStore } from '@looker/api-explorer/src/state'
 import { Provider } from 'react-redux'
-import { IApixEnvAdaptor } from '@looker/api-explorer/src/utils'
+import { ExtensionEnvAdaptor } from './utils'
 
 class ExtensionConfigurator implements RunItConfigurator {
   storage: Record<string, string> = {}
@@ -72,22 +72,6 @@ class ExtensionConfigurator implements RunItConfigurator {
 }
 
 const configurator = new ExtensionConfigurator()
-
-class ExtensionEnvAdaptor implements IApixEnvAdaptor {
-  constructor(public extensionSdk: ExtensionSDK) {}
-
-  async localStorageGetItem(key: string) {
-    return await this.extensionSdk.localStorageGetItem(key)
-  }
-
-  async localStorageSetItem(key: string, value: string) {
-    await this.extensionSdk.localStorageSetItem(key, value)
-  }
-
-  async localStorageRemoveItem(key: string) {
-    await this.extensionSdk.localStorageRemoveItem(key)
-  }
-}
 
 export const ExtensionApiExplorer: FC = () => {
   const match = useRouteMatch<{ specKey: string }>(`/:specKey`)
