@@ -47,6 +47,8 @@ const csharp = require('ace-builds/src-noconflict/mode-csharp')
 const json = require('ace-builds/src-noconflict/mode-json')
 // @ts-ignore
 const theme = require('ace-builds/src-noconflict/theme-dracula')
+// @ts-ignore
+const golang = require('ace-builds/src-noconflict/mode-golang')
 /* eslint-enable  @typescript-eslint/ban-ts-comment,@typescript-eslint/no-unused-vars,@typescript-eslint/no-var-requires,import/no-extraneous-dependencies */
 
 interface DocCodeProps {
