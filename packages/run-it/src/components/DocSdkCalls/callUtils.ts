@@ -43,19 +43,3 @@ export const getGenerators = (api: ApiModel): KeyedCollection<CodeGen> => {
     })
   return codeGens
 }
-
-/**
- * Returns a collection of generators for all supported (non legacy) languages
- * @param api Api spec
- */
-export const getGenerator = (api: ApiModel, language: string): CodeGen => {
-  const generators = codeGenerators.filter(
-    (x) =>
-      x.factory !== undefined &&
-      (x.label === language || x.language === language)
-  )
-  if (!generators) {
-    throw new Error(`Language generator for ${language} not found.`)
-  }
-  return <CodeGen>generators[0].factory!(api)
-}
