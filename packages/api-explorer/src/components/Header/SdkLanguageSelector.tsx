@@ -33,7 +33,7 @@ import { useActions } from '../../hooks'
 import { getEnvAdaptor, getSelectedSdkLanguage } from '../../state'
 
 /**
- * Allows the user to select their preferred language
+ * Allows the user to select their preferred SDK language
  * @constructor
  */
 export const SdkLanguageSelector: FC = () => {
@@ -55,7 +55,7 @@ export const SdkLanguageSelector: FC = () => {
 
   const handleChange = (language: string) => {
     setSdkLanguageAction(language)
-    envAdaptor.localStorageSetItem('language', language)
+    envAdaptor.localStorageSetItem('sdkLanguage', language)
   }
 
   return (

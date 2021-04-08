@@ -29,13 +29,13 @@ export interface UserState {
   sdkLanguage: string
 }
 
-const defaultState: UserState = Object.freeze({
+export const defaultUserState: UserState = Object.freeze({
   /** The Python SDK has the most activity on GitHub */
   sdkLanguage: 'Python',
 })
 
 export const userReducer = (
-  state: UserState = defaultState,
+  state: UserState = defaultUserState,
   action: UserAction
 ): UserState => {
   switch (action.type) {

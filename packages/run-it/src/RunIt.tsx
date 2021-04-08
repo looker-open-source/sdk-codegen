@@ -249,7 +249,7 @@ export const RunIt: FC<RunItProps> = ({
         )}
         <TabPanel key="makeTheCall">
           <DocSdkCalls
-            language={sdkLanguage}
+            sdkLanguage={sdkLanguage}
             api={api}
             method={method}
             inputs={prepareInputs(inputs, requestContent)}

@@ -38,7 +38,7 @@ export interface DocSdkCallsProps {
   /** Entered RunIt form values */
   inputs: RunItValues
   /** Language to generate Sdk calls in*/
-  language: string
+  sdkLanguage: string
 }
 
 /**
@@ -52,20 +52,20 @@ export const DocSdkCalls: FC<DocSdkCallsProps> = ({
   api,
   method,
   inputs,
-  language = 'All',
+  sdkLanguage = 'All',
 }) => {
   const trimmedInputs = trimInputs(inputs)
 
   return (
     <>
-      {language === 'All' ? (
+      {sdkLanguage === 'All' ? (
         <DocCalls api={api} inputs={trimmedInputs} method={method} />
       ) : (
         <DocCall
           api={api}
           method={method}
           inputs={trimmedInputs}
-          language={language}
+          sdkLanguage={sdkLanguage}
         />
       )}
     </>

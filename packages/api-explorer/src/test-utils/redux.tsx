@@ -23,9 +23,19 @@
  SOFTWARE.
 
  */
-export {
-  renderWithSearch,
-  renderWithSearchAndRouter,
-} from './render_with_search'
-export { renderWithRouter, withRouter } from './router'
-export { withReduxProvider } from './redux'
+import React, { ReactElement } from 'react'
+import { Provider } from 'react-redux'
+import { Store } from 'redux'
+import { configureStore, RootState } from '../state'
+import { StandaloneEnvAdaptor } from '../utils'
+
+const standaloneEnvAdaptor = new StandaloneEnvAdaptor()
+
+const defaultStore = configureStore({ envAdaptor: standaloneEnvAdaptor })
+
+export const withReduxProvider = (
+  consumers: ReactElement<any>,
+  store: Store<RootState> = defaultStore
+) => {
+  return <Provider store={store}>{consumers}</Provider>
+}

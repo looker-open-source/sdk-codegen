@@ -42,6 +42,7 @@
     "babel-loader": "^8.1.0",
     "css-loader": "^3.4.2",
     "jest-config": "^25.3.0",
+    "jest-localstorage-mock": "^2.4.9",
     "react-test-renderer": "^17.0.1",
     "style-loader": "^1.1.3",
     "webpack-cli": "^3.3.11",

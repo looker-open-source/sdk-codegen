@@ -36,10 +36,10 @@ export const DocCall: FC<DocSdkCallsProps> = ({
   api,
   method,
   inputs,
-  language,
+  sdkLanguage,
 }) => {
-  const generator = getCodeGenerator(language, api)
+  const generator = getCodeGenerator(sdkLanguage, api)
   const code = generator!.makeTheCall(method, inputs)
 
-  return <CodeStructure code={code} language={language} />
+  return <CodeStructure code={code} language={sdkLanguage} />
 }

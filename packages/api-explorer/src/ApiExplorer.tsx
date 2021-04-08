@@ -80,7 +80,7 @@ const ApiExplorer: FC<ApiExplorerProps> = ({
 
   useEffect(() => {
     const getSettings = async () => {
-      const resp = await envAdaptor.localStorageGetItem('language')
+      const resp = await envAdaptor.localStorageGetItem('sdkLanguage')
       if (resp) {
         setSdkLanguageAction(resp)
       }
