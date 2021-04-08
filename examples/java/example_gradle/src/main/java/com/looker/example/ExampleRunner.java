@@ -33,7 +33,7 @@ public class ExampleRunner {
     Dotenv dotenv = Dotenv.load();
     dotenv.entries().forEach(e -> System.setProperty(e.getKey(), e.getValue()));
     // Setup the settings from system properties
-    ConfigurationProvider settings = ApiSettings.Companion.fromMap(new HashMap<>());
+    ConfigurationProvider settings = ApiSettings.fromMap(new HashMap<>());
     settings.readConfig();
     session = new AuthSession(settings, new Transport(settings));
     sdk = new LookerSDK(session);
