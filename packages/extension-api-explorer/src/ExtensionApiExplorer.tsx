@@ -40,6 +40,7 @@ import {
 } from '@looker/sdk-codegen'
 import { Looker31SDK, Looker40SDK } from '@looker/sdk'
 import ApiExplorer from '@looker/api-explorer/lib/ApiExplorer'
+import './styles.css'
 
 class ExtensionConfigurator implements RunItConfigurator {
   storage: Record<string, string> = {}
