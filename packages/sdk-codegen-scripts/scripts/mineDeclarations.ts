@@ -45,7 +45,7 @@ import {
         path.join(root, 'looker.ini'),
         'Miner'
       ).readConfig()
-      sourcePath = settings.base_url
+      sourcePath = path.join(root, settings.base_url)
     } catch (e) {
       console.error(
         'A source path is required. Specify it with "base_url" in the Miner section in looker.ini or pass it as an argument'
@@ -54,7 +54,7 @@ import {
     }
   }
   const indexFile = path.join(root, '/declarationsIndex.json')
-  console.log(`Mining ${sourcePath} ...`)
+  console.log(`Mining declarations from ${sourcePath} ...`)
 
   const miner = new DeclarationMiner(sourcePath, rubyMethodProbe, rubyTypeProbe)
   const result = miner.execute()
