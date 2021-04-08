@@ -14,7 +14,7 @@ on how to create these.
 ## Kotlin Looker SDK Jar
 
 Currently Looker does not publish the Kotlin Looker SDK jar so you need to do
-this and copy the resultant jar into the `lib` folder of this project. Build
+the following steps and copy the resultant jar into the `lib` folder of this project. Build
 the Kotlin Looker SDK jar as follows
 
 1. clone this repo.
