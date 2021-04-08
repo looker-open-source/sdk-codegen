@@ -23,24 +23,17 @@
  SOFTWARE.
 
  */
-import { DualModeConfigurator, IDualModeConfigurator } from '../../utils'
-import {
-  DualModeConfiguratorActions,
-  DualModeConfiguratorActionTypes,
-} from './actions'
+import { StandaloneEnvAdaptor } from '../../utils'
+import { setEnvAdaptorAction } from './action_creators'
+import { EnvAdaptorActionTypes } from './actions'
 
-export type DualModeConfiguratorState = IDualModeConfigurator
-
-const defaultState: DualModeConfiguratorState = new DualModeConfigurator()
-
-export const dualModeConfiguratorReducer = (
-  state: DualModeConfiguratorState = defaultState,
-  action: DualModeConfiguratorActions
-): DualModeConfiguratorState => {
-  switch (action.type) {
-    case DualModeConfiguratorActionTypes.SET_CONFIGURATOR:
-      return action.payload
-    default:
-      return state
-  }
-}
+describe('envAdaptor reducer action creators', () => {
+  test('setEnvAdaptor returns a SET_ENV_ADAPTOR action with provided values', () => {
+    const envAdaptor = new StandaloneEnvAdaptor()
+    const action = setEnvAdaptorAction(envAdaptor)
+    expect(action).toEqual({
+      type: EnvAdaptorActionTypes.SET_ENV_ADAPTOR,
+      payload: envAdaptor,
+    })
+  })
+})

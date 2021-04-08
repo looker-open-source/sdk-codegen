@@ -30,11 +30,10 @@ import styled from 'styled-components'
 import { Aside, ComponentsProvider, Layout, Page } from '@looker/components'
 import { Looker40SDK, Looker31SDK } from '@looker/sdk'
 import { SpecList } from '@looker/sdk-codegen'
-import { ExtensionSDK } from '@looker/extension-sdk/src'
 import { useSelector } from 'react-redux'
 
 import { SearchContext, LodeContext, defaultLodeContextValue } from './context'
-import { DualModeConfigurator, getLoded } from './utils'
+import { getLoded } from './utils'
 import { Header, SideNav } from './components'
 import {
   specReducer,
@@ -44,23 +43,21 @@ import {
 } from './reducers'
 import { AppRouter } from './routes'
 import { useActions } from './hooks'
-import { getDualModeConfigurator } from './state'
+import { getEnvAdaptor } from './state'
 
 export interface ApiExplorerProps {
   specs: SpecList
   sdk?: Looker31SDK | Looker40SDK
-  extensionSdk?: ExtensionSDK
   lodeUrl?: string
 }
 
 const ApiExplorer: FC<ApiExplorerProps> = ({
   specs,
   lodeUrl = 'https://raw.githubusercontent.com/looker-open-source/sdk-codegen/main/motherlode.json',
-  extensionSdk,
 }) => {
   const location = useLocation()
-  const { setSdkLanguageAction, setDualModeConfiguratorAction } = useActions()
-  const configurator = useSelector(getDualModeConfigurator)
+  const { setSdkLanguageAction } = useActions()
+  const envAdaptor = useSelector(getEnvAdaptor)
 
   const [spec, specDispatch] = useReducer(
     specReducer,
@@ -82,20 +79,14 @@ const ApiExplorer: FC<ApiExplorerProps> = ({
   }, [lodeUrl])
 
   useEffect(() => {
-    if (extensionSdk) {
-      setDualModeConfiguratorAction(new DualModeConfigurator(extensionSdk))
-    }
-  }, [extensionSdk, setDualModeConfiguratorAction])
-
-  useEffect(() => {
     const getSettings = async () => {
-      const resp = await configurator.getLocalStorageItem('language')
+      const resp = await envAdaptor.localStorageGetItem('language')
       if (resp) {
         setSdkLanguageAction(resp)
       }
     }
     getSettings()
-  }, [configurator, setSdkLanguageAction])
+  }, [envAdaptor, setSdkLanguageAction])
 
   return (
     <ComponentsProvider

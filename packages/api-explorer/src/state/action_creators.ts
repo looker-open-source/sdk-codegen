@@ -24,4 +24,4 @@
 
  */
 export * from './user/action_creators'
-export * from './configurator/action_creators'
+export * from './envAdaptor/action_creators'

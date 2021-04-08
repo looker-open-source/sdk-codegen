@@ -23,15 +23,33 @@
  SOFTWARE.
 
  */
-import { IDualModeConfigurator } from '../../utils'
 
-export enum DualModeConfiguratorActionTypes {
-  SET_CONFIGURATOR = 'SET_CONFIGURATOR',
+/**
+ * NOTE: This interface should describe all methods that require an adaptor when running in standalone vs extension mode
+ * Examples include: local storage operations, writing to clipboard and various link navigation functions amongst others
+ */
+export interface IApixEnvAdaptor {
+  /** Method for retrieving a keyed value from local storage */
+  localStorageGetItem(key: string): Promise<string | null>
+  /** Method for setting a keyed value in local storage */
+  localStorageSetItem(key: string, value: string): void
+  /** Method for removing a keyed value from local storage */
+  localStorageRemoveItem(key: string): void
 }
 
-export interface SetDualModeConfiguratorAction {
-  type: DualModeConfiguratorActionTypes.SET_CONFIGURATOR
-  payload: IDualModeConfigurator
-}
+/**
+ * An adaptor class for interacting with browser APIs when running in standalone mode
+ */
+export class StandaloneEnvAdaptor implements IApixEnvAdaptor {
+  async localStorageGetItem(key: string) {
+    return localStorage.getItem(key)
+  }
 
-export type DualModeConfiguratorActions = SetDualModeConfiguratorAction
+  async localStorageSetItem(key: string, value: string) {
+    await localStorage.setItem(key, value)
+  }
+
+  async localStorageRemoveItem(key: string) {
+    await localStorage.removeItem(key)
+  }
+}

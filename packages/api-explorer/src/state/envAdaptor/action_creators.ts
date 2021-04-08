@@ -23,16 +23,12 @@
  SOFTWARE.
 
  */
-import { DualModeConfigurator } from '../../utils'
-import { getDualModeConfigurator } from './selectors'
+import { IApixEnvAdaptor } from '../../utils'
+import { SetEnvAdaptorAction, EnvAdaptorActionTypes } from './actions'
 
-describe('configurator selector', () => {
-  test('getDualModeConfigurator gets the configurator', () => {
-    const configurator = new DualModeConfigurator()
-    const state = {
-      user: { sdkLanguage: 'foo' },
-      configurator,
-    }
-    expect(getDualModeConfigurator(state)).toEqual(configurator)
-  })
+export const setEnvAdaptorAction = (
+  envAdaptor: IApixEnvAdaptor
+): SetEnvAdaptorAction => ({
+  type: EnvAdaptorActionTypes.SET_ENV_ADAPTOR,
+  payload: envAdaptor,
 })

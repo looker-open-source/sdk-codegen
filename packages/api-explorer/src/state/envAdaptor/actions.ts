@@ -23,15 +23,15 @@
  SOFTWARE.
 
  */
-import { IDualModeConfigurator } from '../../utils'
-import {
-  SetDualModeConfiguratorAction,
-  DualModeConfiguratorActionTypes,
-} from './actions'
+import { IApixEnvAdaptor } from '../../utils'
 
-export const setDualModeConfiguratorAction = (
-  configurator: IDualModeConfigurator
-): SetDualModeConfiguratorAction => ({
-  type: DualModeConfiguratorActionTypes.SET_CONFIGURATOR,
-  payload: configurator,
-})
+export enum EnvAdaptorActionTypes {
+  SET_ENV_ADAPTOR = 'SET_ENV_ADAPTOR',
+}
+
+export interface SetEnvAdaptorAction {
+  type: EnvAdaptorActionTypes.SET_ENV_ADAPTOR
+  payload: IApixEnvAdaptor
+}
+
+export type EnvAdaptorActions = SetEnvAdaptorAction

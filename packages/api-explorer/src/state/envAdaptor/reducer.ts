@@ -23,6 +23,21 @@
  SOFTWARE.
 
  */
-import { RootState } from '../store'
+import { IApixEnvAdaptor, StandaloneEnvAdaptor } from '../../utils'
+import { EnvAdaptorActions, EnvAdaptorActionTypes } from './actions'
 
-export const getDualModeConfigurator = (state: RootState) => state.configurator
+export type EnvAdaptorState = IApixEnvAdaptor
+
+const defaultState: EnvAdaptorState = new StandaloneEnvAdaptor()
+
+export const envAdaptorReducer = (
+  state: EnvAdaptorState = defaultState,
+  action: EnvAdaptorActions
+): EnvAdaptorState => {
+  switch (action.type) {
+    case EnvAdaptorActionTypes.SET_ENV_ADAPTOR:
+      return action.payload
+    default:
+      return state
+  }
+}

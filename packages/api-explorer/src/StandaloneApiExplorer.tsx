@@ -37,12 +37,11 @@ import { Provider } from 'react-redux'
 
 import ApiExplorer from './ApiExplorer'
 import { configureStore } from './state'
+import { StandaloneEnvAdaptor } from './utils'
 
 export interface StandloneApiExplorerProps {
   specs: SpecList
 }
-
-const store = configureStore()
 
 export const StandaloneApiExplorer: FC<StandloneApiExplorerProps> = ({
   specs,
@@ -56,6 +55,9 @@ export const StandaloneApiExplorer: FC<StandloneApiExplorerProps> = ({
     specKey === '3.0' || specKey === '3.1'
       ? undefined
       : initRunItSdk(defaultConfigurator)
+
+  const standaloneEnvAdaptor = new StandaloneEnvAdaptor()
+  const store = configureStore({ envAdaptor: standaloneEnvAdaptor })
 
   return (
     <Provider store={store}>

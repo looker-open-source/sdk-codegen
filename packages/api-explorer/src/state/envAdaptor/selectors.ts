@@ -23,35 +23,6 @@
  SOFTWARE.
 
  */
-import { ExtensionSDK } from '@looker/extension-sdk'
+import { RootState } from '../store'
 
-export interface IDualModeConfigurator {
-  getLocalStorageItem: (key: string) => Promise<string | null>
-  setLocalStorageItem: (key: string, value: string) => void
-}
-
-/**
- * A dual mode configurator class for interacting with browser APIs both in the
- * standalone and extension versions
- */
-export class DualModeConfigurator implements IDualModeConfigurator {
-  extensionSDK?: ExtensionSDK
-
-  constructor(extensionSDK?: ExtensionSDK) {
-    this.extensionSDK = extensionSDK
-  }
-
-  async getLocalStorageItem(key: string): Promise<string | null> {
-    const item =
-      this.extensionSDK?.localStorageGetItem(key) || localStorage.getItem(key)
-    return item
-  }
-
-  async setLocalStorageItem(key: string, value: string) {
-    if (this.extensionSDK) {
-      await this.extensionSDK.localStorageSetItem(key, value)
-    } else {
-      localStorage.setItem(key, value)
-    }
-  }
-}
+export const getEnvAdaptor = (state: RootState) => state.envAdaptor

@@ -23,17 +23,16 @@
  SOFTWARE.
 
  */
-import { DualModeConfigurator } from '../../utils'
-import { setDualModeConfiguratorAction } from './action_creators'
-import { DualModeConfiguratorActionTypes } from './actions'
+import { StandaloneEnvAdaptor } from '../../utils'
+import { getEnvAdaptor } from './selectors'
 
-describe('Dual mode configurator reducer action creators', () => {
-  test('setDualModeConfiguratorAction returns a SET_CONFIGURATOR action with provided values', () => {
-    const configurator = new DualModeConfigurator()
-    const action = setDualModeConfiguratorAction(configurator)
-    expect(action).toEqual({
-      type: DualModeConfiguratorActionTypes.SET_CONFIGURATOR,
-      payload: configurator,
-    })
+describe('configurator selector', () => {
+  test('getEnvAdaptor gets the adaptor', () => {
+    const envAdaptor = new StandaloneEnvAdaptor()
+    const state = {
+      user: { sdkLanguage: 'foo' },
+      envAdaptor,
+    }
+    expect(getEnvAdaptor(state)).toEqual(envAdaptor)
   })
 })
