@@ -33,9 +33,9 @@ import { withReduxProvider } from '../../test-utils'
 import { defaultUserState } from '../../state'
 import { SdkLanguageSelector } from './SdkLanguageSelector'
 
-window.HTMLElement.prototype.scrollIntoView = jest.fn()
-
 describe('SdkLanguageSelector', () => {
+  window.HTMLElement.prototype.scrollIntoView = jest.fn()
+
   beforeEach(() => {
     localStorage.clear()
   })

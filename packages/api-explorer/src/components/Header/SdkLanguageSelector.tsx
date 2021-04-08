@@ -60,6 +60,7 @@ export const SdkLanguageSelector: FC = () => {
 
   return (
     <Select
+      aria-label="sdk language selector"
       value={selectedSdkLanguage}
       onChange={handleChange}
       options={allSdkLanguages}
