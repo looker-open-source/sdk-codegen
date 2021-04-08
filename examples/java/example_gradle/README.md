@@ -6,7 +6,6 @@ simple Java class.
 
 # Prerequisites
 
-
 ## Looker client id and secret
 
 See [Looker documentation](https://docs.looker.com/reference/api-and-integration/api-auth#authentication_with_an_sdk)
