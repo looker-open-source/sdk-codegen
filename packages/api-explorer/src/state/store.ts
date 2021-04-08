@@ -24,9 +24,9 @@
 
  */
 
-import { createStore } from 'redux'
+import { createStore, Store } from 'redux'
 import { reducers } from './reducers'
 
-export const configureStore = () => createStore(reducers)
+export const configureStore = (): Store<RootState> => createStore(reducers)
 
 export type RootState = ReturnType<typeof reducers>
