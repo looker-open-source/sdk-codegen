@@ -24,15 +24,15 @@
 
  */
 import { createContext } from 'react'
-import { IExampleMine } from '@looker/sdk-codegen'
+import { IDeclarationMine, IExampleMine } from '@looker/sdk-codegen'
 
-interface LodeContextProps extends IExampleMine {}
+interface LodeContextProps {
+  examples: IExampleMine
+  declarations?: IDeclarationMine
+}
 
 export const defaultLodeContextValue: LodeContextProps = {
-  commitHash: '',
-  nuggets: {},
-  summaries: {},
-  remoteOrigin: '',
+  examples: { commitHash: '', remoteOrigin: '', nuggets: {}, summaries: {} },
 }
 
 export const LodeContext = createContext<LodeContextProps>(

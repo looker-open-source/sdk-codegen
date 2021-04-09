@@ -98,7 +98,7 @@ export const getAllFiles = (
 
   files.forEach((file) => {
     if (fs.statSync(searchPath + '/' + file).isDirectory()) {
-      if (!skipFolder(file, ['node_modules', 'lib']))
+      if (!skipFolder(file, ['node_modules']))
         listOfFiles = getAllFiles(searchPath + '/' + file, listOfFiles, filter)
     } else {
       if (filter(file)) {

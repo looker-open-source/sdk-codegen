@@ -52,7 +52,7 @@ export const findDeclaration = (
   if (methodId) {
     declaration = lode.methods[methodId]
   } else if (typeId) {
-    declaration = lode.methods[typeId]
+    declaration = lode.types[typeId]
   }
 
   let link

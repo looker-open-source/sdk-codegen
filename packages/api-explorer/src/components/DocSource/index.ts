@@ -23,5 +23,4 @@
  SOFTWARE.
 
  */
-export { LodeContext, defaultLodeContextValue } from './motherlode'
-export { SearchContext, defaultSearchContextValue } from './search'
+export { DocSource } from './DocSource'

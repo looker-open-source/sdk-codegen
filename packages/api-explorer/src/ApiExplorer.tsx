@@ -44,12 +44,14 @@ import { AppRouter } from './routes'
 export interface ApiExplorerProps {
   specs: SpecList
   sdk?: Looker31SDK | Looker40SDK
-  lodeUrl?: string
+  exampleLodeUrl?: string
+  declarationsLodeUrl?: string
 }
 
 const ApiExplorer: FC<ApiExplorerProps> = ({
   specs,
-  lodeUrl = 'https://raw.githubusercontent.com/looker-open-source/sdk-codegen/main/motherlode.json',
+  exampleLodeUrl = 'https://raw.githubusercontent.com/looker-open-source/sdk-codegen/main/motherlode.json',
+  declarationsLodeUrl,
 }) => {
   const location = useLocation()
   const [spec, specDispatch] = useReducer(
@@ -68,8 +70,8 @@ const ApiExplorer: FC<ApiExplorerProps> = ({
     setHasNavigation(target || !hasNavigation)
 
   useEffect(() => {
-    getLoded(lodeUrl).then((resp) => setLode(resp))
-  }, [lodeUrl])
+    getLoded(exampleLodeUrl, declarationsLodeUrl).then((resp) => setLode(resp))
+  }, [exampleLodeUrl, declarationsLodeUrl])
 
   return (
     <ComponentsProvider

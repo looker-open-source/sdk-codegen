@@ -27,10 +27,13 @@
 import React, { FC } from 'react'
 import { typeRefs, methodRefs, ApiModel } from '@looker/sdk-codegen'
 import { useParams } from 'react-router-dom'
+import { Space } from '@looker/components'
+
 import {
   ApixSection,
   DocReferences,
   DocSDKs,
+  DocSource,
   DocTitle,
   ExploreType,
 } from '../../components'
@@ -52,7 +55,10 @@ export const TypeScene: FC<DocTypeProps> = ({ api }) => {
 
   return (
     <ApixSection>
-      <DocTitle>{type.name}</DocTitle>
+      <Space>
+        <DocTitle>{type.name}</DocTitle>
+        <DocSource type={type} />
+      </Space>
       <ExploreType type={type} />
       <DocReferences
         seeTypes={seeTypes}

@@ -70,3 +70,6 @@ csharp/*.cache
 
 # hackathon
 **/google-creds.json
+
+# indexes
+declarationsIndex.json

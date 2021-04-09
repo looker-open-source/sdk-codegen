@@ -23,5 +23,31 @@
  SOFTWARE.
 
  */
-export { LodeContext, defaultLodeContextValue } from './motherlode'
-export { SearchContext, defaultSearchContextValue } from './search'
+import React, { FC, useContext } from 'react'
+import { findDeclaration, IMethod, IType } from '@looker/sdk-codegen'
+import { Icon, Link } from '@looker/components'
+
+import { LodeContext } from '../../context'
+
+interface DocSourceProps {
+  method?: IMethod
+  type?: IType
+}
+
+export const DocSource: FC<DocSourceProps> = ({ method, type }) => {
+  const { declarations } = useContext(LodeContext)
+  let sourceLink
+  if (declarations) {
+    sourceLink = findDeclaration(declarations, method?.operationId, type?.name)
+  }
+
+  return (
+    <>
+      {sourceLink && (
+        <Link href={sourceLink}>
+          <Icon name="IdeFileDocument" />
+        </Link>
+      )}
+    </>
+  )
+}

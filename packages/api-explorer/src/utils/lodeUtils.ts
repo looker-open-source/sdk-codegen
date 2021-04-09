@@ -24,12 +24,43 @@
 
  */
 
-const fetchLode = async (lodeUrl: string) => fetch(lodeUrl, { mode: 'cors' })
+import { IDeclarationMine, IExampleMine } from '@looker/sdk-codegen'
 
-export const getLoded = async (lodeUrl: string) => {
-  const resp = await fetchLode(lodeUrl)
-  const body = await resp.text()
-  if (body) {
-    return JSON.parse(body)
+const fetchLode = async (lodeUrl: string) => {
+  try {
+    await fetch(lodeUrl, { method: 'HEAD' })
+  } catch (error) {
+    throw new Error(`The server appears not to be running: ${lodeUrl}`)
   }
+  return fetch(lodeUrl, { mode: 'cors' })
+}
+
+interface Motherlode {
+  examples: IExampleMine
+  declarations?: IDeclarationMine
+}
+
+export const getLoded = async (
+  examplesLodeUrl: string,
+  declarationsLodeUrl?: string
+): Promise<Motherlode> => {
+  const examplesLode = await fetchLode(examplesLodeUrl)
+  const examples = await examplesLode.text()
+
+  let declarations
+  if (declarationsLodeUrl) {
+    const declarationsLode = await fetchLode(declarationsLodeUrl)
+    declarations = await declarationsLode.text()
+  }
+
+  const lode: Motherlode = {
+    examples: { commitHash: '', nuggets: {}, remoteOrigin: '', summaries: {} },
+  }
+  if (examples) {
+    lode.examples = JSON.parse(examples)
+  }
+  if (declarations) {
+    lode.declarations = JSON.parse(declarations)
+  }
+  return lode
 }

@@ -46,6 +46,7 @@ import {
   DocResponses,
   DocSDKs,
   DocSdkUsage,
+  DocSource,
   DocStatus,
   DocTitle,
 } from '../../components'
@@ -90,6 +91,7 @@ export const MethodScene: FC<DocMethodProps> = ({ api }) => {
       <ApixSection>
         <Space between>
           <DocTitle>{method.summary}</DocTitle>
+          <DocSource method={method} />
           {runItToggle}
         </Space>
         <Space mb="xlarge" gap="small">
