@@ -29,4 +29,5 @@ import { reducers } from './reducers'
 
 export type RootState = ReturnType<typeof reducers>
 
-export const configureStore = (): Store<RootState> => createStore(reducers)
+export const configureStore = (preloadedState?: RootState): Store<RootState> =>
+  createStore(reducers, preloadedState)

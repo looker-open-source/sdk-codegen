@@ -24,11 +24,13 @@
 
  */
 import React from 'react'
-import { renderWithTheme } from '@looker/components-test-utils'
 import { screen } from '@testing-library/react'
-
 import { codeGenerators } from '@looker/sdk-codegen'
+import { Store } from 'redux'
+
 import { api } from '../../test-data'
+import { renderWithReduxProvider } from '../../test-utils'
+import { configureStore, RootState } from '../../state'
 import { DocSDKs } from './DocSDKs'
 
 const languages = codeGenerators
@@ -38,18 +40,42 @@ const languages = codeGenerators
 const pattern = new RegExp(`${languages.join('|')}`)
 
 describe('DocSDKs', () => {
+  let store: Store<RootState>
+  const supportedLanguages = codeGenerators.map(
+    (gen) => gen.label || gen.language
+  )
+
+  beforeAll(() => {
+    store = configureStore({ user: { sdkLanguage: 'All' } })
+  })
+
   test.each([
     ['method', { method: api.methods.run_look }],
     ['type', { type: api.types.Look }],
   ])(
-    'it renders an SDK %s declaration for all supported languages',
+    'it can render an SDK declaration for all supported languages',
     (_, props) => {
-      renderWithTheme(<DocSDKs api={api} {...props} />)
+      renderWithReduxProvider(<DocSDKs api={api} {...props} />, store)
       expect(
         screen.getAllByRole('tab', {
           name: pattern,
         })
       ).toHaveLength(languages.length)
+    }
+  )
+
+  test.each(supportedLanguages)(
+    'it can render a %s method declaration',
+    (sdkLanguage) => {
+      store = configureStore({ user: { sdkLanguage } })
+      renderWithReduxProvider(
+        <DocSDKs api={api} method={api.methods.run_look} />,
+        store
+      )
+      expect(screen.queryByRole('tab')).not.toBeInTheDocument()
+      expect(
+        screen.getByRole('heading', { name: `${sdkLanguage} Declaration` })
+      ).toBeInTheDocument()
     }
   )
 })
