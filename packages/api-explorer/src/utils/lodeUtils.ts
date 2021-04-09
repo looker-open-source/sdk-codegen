@@ -26,6 +26,8 @@
 
 import { IDeclarationMine, IExampleMine } from '@looker/sdk-codegen'
 
+export const apixFilesHost = 'http://localhost:30000'
+
 const fetchLode = async (lodeUrl: string) => {
   try {
     const result = await fetch(lodeUrl, { mode: 'cors' })
@@ -44,7 +46,11 @@ export const getLoded = async (
   examplesLodeUrl: string,
   declarationsLodeUrl?: string
 ): Promise<Motherlode> => {
-  const examples = await fetchLode(examplesLodeUrl)
+  // First try to load from the apix-files server
+  let examples = await fetchLode(`${apixFilesHost}/motherlode.json`)
+  if (!examples) {
+    examples = await fetchLode(examplesLodeUrl)
+  }
 
   let declarations
   if (declarationsLodeUrl) {

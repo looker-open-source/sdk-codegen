@@ -40,6 +40,7 @@ import {
   defaultSearchState,
 } from './reducers'
 import { AppRouter } from './routes'
+import { apixFilesHost } from './utils/lodeUtils'
 
 export interface ApiExplorerProps {
   specs: SpecList
@@ -51,7 +52,7 @@ export interface ApiExplorerProps {
 const ApiExplorer: FC<ApiExplorerProps> = ({
   specs,
   exampleLodeUrl = 'https://raw.githubusercontent.com/looker-open-source/sdk-codegen/main/motherlode.json',
-  declarationsLodeUrl = 'http://localhost:30000/declarationsIndex.json',
+  declarationsLodeUrl = `${apixFilesHost}/declarationsIndex.json`,
 }) => {
   const location = useLocation()
   const [spec, specDispatch] = useReducer(
