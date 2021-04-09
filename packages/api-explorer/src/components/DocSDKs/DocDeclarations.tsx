@@ -32,6 +32,10 @@ interface DocDeclarationsProps {
   declarations: KeyedCollection<string>
 }
 
+/**
+ * Renders all provided declarations
+ * @param declarations A collection of SDK declarations in various languages
+ */
 export const DocDeclarations: FC<DocDeclarationsProps> = ({ declarations }) => {
   const tabs = useTabs()
 

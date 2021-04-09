@@ -24,8 +24,10 @@
 
  */
 
+import React, { FC, useEffect, useState } from 'react'
 import { ApiModel, IMethod, trimInputs } from '@looker/sdk-codegen'
-import React, { FC } from 'react'
+import { Heading } from '@looker/components'
+
 import { RunItValues } from '../../RunIt'
 import { DocCall } from './DocCall'
 import { DocCalls } from './DocCalls'
@@ -55,9 +57,20 @@ export const DocSdkCalls: FC<DocSdkCallsProps> = ({
   sdkLanguage = 'All',
 }) => {
   const trimmedInputs = trimInputs(inputs)
+  const [heading, setHeading] = useState('')
 
+  useEffect(() => {
+    const text =
+      sdkLanguage === 'All'
+        ? 'SDKs call syntax'
+        : `${sdkLanguage} SDK call syntax`
+    setHeading(text)
+  }, [sdkLanguage])
   return (
     <>
+      <Heading as="h4" mb="medium">
+        {heading}
+      </Heading>
       {sdkLanguage === 'All' ? (
         <DocCalls api={api} inputs={trimmedInputs} method={method} />
       ) : (
