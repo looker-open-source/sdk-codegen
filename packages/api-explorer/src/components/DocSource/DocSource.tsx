@@ -44,7 +44,7 @@ export const DocSource: FC<DocSourceProps> = ({ method, type }) => {
   return (
     <>
       {sourceLink && (
-        <Link href={sourceLink}>
+        <Link href={sourceLink} target="_blank">
           <Icon name="IdeFileDocument" />
         </Link>
       )}
