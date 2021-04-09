@@ -31,8 +31,10 @@ const fetchLode = async (lodeUrl: string) => {
     await fetch(lodeUrl, { method: 'HEAD' })
   } catch (error) {
     console.warn(`The server appears not to be running: ${lodeUrl}`)
+    return ''
   }
-  return fetch(lodeUrl, { mode: 'cors' })
+  const result = await fetch(lodeUrl, { mode: 'cors' })
+  return result.text()
 }
 
 interface Motherlode {
@@ -44,13 +46,11 @@ export const getLoded = async (
   examplesLodeUrl: string,
   declarationsLodeUrl?: string
 ): Promise<Motherlode> => {
-  const examplesLode = await fetchLode(examplesLodeUrl)
-  const examples = await examplesLode.text()
+  const examples = await fetchLode(examplesLodeUrl)
 
   let declarations
   if (declarationsLodeUrl) {
-    const declarationsLode = await fetchLode(declarationsLodeUrl)
-    declarations = await declarationsLode.text()
+    declarations = await fetchLode(declarationsLodeUrl)
   }
 
   const lode: Motherlode = {
