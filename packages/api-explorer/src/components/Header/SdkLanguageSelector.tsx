@@ -32,6 +32,7 @@ import { SelectOptionProps } from '@looker/components/lib/Form/Inputs/Select/Sel
 import { useActions } from '../../hooks'
 import { getSelectedSdkLanguage } from '../../state'
 import { EnvAdaptorContext } from '../../context'
+import { EnvAdaptorConstants } from '../../utils'
 
 /**
  * Allows the user to select their preferred SDK language
@@ -56,7 +57,10 @@ export const SdkLanguageSelector: FC = () => {
 
   const handleChange = (language: string) => {
     setSdkLanguageAction(language)
-    envAdaptor.localStorageSetItem('sdkLanguage', language)
+    envAdaptor.localStorageSetItem(
+      EnvAdaptorConstants.LOCALSTORAGE_SDK_LANGUAGE_KEY,
+      language
+    )
   }
 
   return (

@@ -26,4 +26,8 @@
 export { highlightHTML } from './highlight'
 export { buildMethodPath, buildTypePath, diffPath, oAuthPath } from './path'
 export { getLoded } from './lodeUtils'
-export { IApixEnvAdaptor, StandaloneEnvAdaptor } from './envAdaptor'
+export {
+  IApixEnvAdaptor,
+  StandaloneEnvAdaptor,
+  EnvAdaptorConstants,
+} from './envAdaptor'

@@ -53,3 +53,7 @@ export class StandaloneEnvAdaptor implements IApixEnvAdaptor {
     await localStorage.removeItem(key)
   }
 }
+
+export enum EnvAdaptorConstants {
+  LOCALSTORAGE_SDK_LANGUAGE_KEY = 'sdkLanguage',
+}

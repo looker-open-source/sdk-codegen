@@ -37,7 +37,7 @@ import {
   defaultLodeContextValue,
   EnvAdaptorContext,
 } from './context'
-import { getLoded, IApixEnvAdaptor } from './utils'
+import { EnvAdaptorConstants, getLoded, IApixEnvAdaptor } from './utils'
 import { Header, SideNav } from './components'
 import {
   specReducer,
@@ -84,7 +84,9 @@ const ApiExplorer: FC<ApiExplorerProps> = ({
 
   useEffect(() => {
     const getSettings = async () => {
-      const resp = await envAdaptor.localStorageGetItem('sdkLanguage')
+      const resp = await envAdaptor.localStorageGetItem(
+        EnvAdaptorConstants.LOCALSTORAGE_SDK_LANGUAGE_KEY
+      )
       if (resp) {
         setSdkLanguageAction(resp)
       }

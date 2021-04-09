@@ -30,6 +30,7 @@ import { codeGenerators } from '@looker/sdk-codegen'
 
 import { defaultUserState } from '../../state'
 import { renderWithReduxProvider } from '../../test-utils'
+import { EnvAdaptorConstants } from '../../utils'
 import { SdkLanguageSelector } from './SdkLanguageSelector'
 
 describe('SdkLanguageSelector', () => {
@@ -69,7 +70,7 @@ describe('SdkLanguageSelector', () => {
       await userEvent.click(screen.getByRole('option', { name: 'Typescript' }))
       await waitFor(() => {
         expect(localStorage.setItem).toHaveBeenLastCalledWith(
-          'sdkLanguage',
+          EnvAdaptorConstants.LOCALSTORAGE_SDK_LANGUAGE_KEY,
           'Typescript'
         )
       })
