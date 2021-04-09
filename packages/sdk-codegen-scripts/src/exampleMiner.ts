@@ -92,14 +92,20 @@ const skipFolder = (name: string, excludeList: string[] = ['node_modules']) =>
 export const getAllFiles = (
   searchPath: string,
   listOfFiles: string[] = [],
-  filter: FileFilter = filterAllFiles
+  filter: FileFilter = filterAllFiles,
+  ignorePaths: string[] = []
 ) => {
   const files = fs.readdirSync(searchPath)
 
   files.forEach((file) => {
     if (fs.statSync(searchPath + '/' + file).isDirectory()) {
-      if (!skipFolder(file, ['node_modules']))
-        listOfFiles = getAllFiles(searchPath + '/' + file, listOfFiles, filter)
+      if (!skipFolder(file, ignorePaths))
+        listOfFiles = getAllFiles(
+          searchPath + '/' + file,
+          listOfFiles,
+          filter,
+          ignorePaths
+        )
     } else {
       if (filter(file)) {
         const fileName = path.join(searchPath, '/', file)
@@ -119,9 +125,10 @@ export const getAllFiles = (
 export const getCodeFiles = (
   searchPath: string,
   listOfFiles: string[] = [],
-  filter: FileFilter = filterCodeFiles
+  filter: FileFilter = filterCodeFiles,
+  ignorePaths: string[] = ['node_modules', 'lib', 'dist']
 ) => {
-  return getAllFiles(searchPath, listOfFiles, filter)
+  return getAllFiles(searchPath, listOfFiles, filter, ignorePaths)
 }
 
 /** get the trimmed output of the command as a UTF-8 string */

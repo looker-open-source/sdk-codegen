@@ -38,7 +38,7 @@ export const DocSource: FC<DocSourceProps> = ({ method, type }) => {
   const { declarations } = useContext(LodeContext)
   let sourceLink
   if (declarations) {
-    sourceLink = findDeclaration(declarations, method?.operationId, type?.name)
+    sourceLink = findDeclaration(declarations, method?.id, type?.name)
   }
 
   return (

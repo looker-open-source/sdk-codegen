@@ -90,8 +90,10 @@ export const MethodScene: FC<DocMethodProps> = ({ api }) => {
     <>
       <ApixSection>
         <Space between>
-          <DocTitle>{method.summary}</DocTitle>
-          <DocSource method={method} />
+          <Space>
+            <DocTitle>{method.summary}</DocTitle>
+            <DocSource method={method} />
+          </Space>
           {runItToggle}
         </Space>
         <Space mb="xlarge" gap="small">

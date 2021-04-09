@@ -55,7 +55,7 @@ const fileFilter = (
  * Reference method probe for a Ruby controller
  */
 export const rubyMethodProbe = {
-  fileNamePattern: /^(?!test).*_controller$/,
+  fileNamePattern: /^(?!test).*_controller.rb$/,
   declarationPattern: /(?<verb>GET|POST|DELETE|PUT|PATCH)\s(?:"|')\/api\/3\.x(?<path>\S+)(?:"|')/i,
   matchToSpecKeyTransform: (match: RegExpExecArray) => {
     const verb = match.groups!.verb.toLocaleUpperCase()
@@ -104,7 +104,8 @@ export class DeclarationMiner {
     const files = getCodeFiles(
       filePath,
       undefined,
-      fileFilter.bind(null, mProbe.fileNamePattern, tProbe.fileNamePattern)
+      fileFilter.bind(null, mProbe.fileNamePattern, tProbe.fileNamePattern),
+      ['node_modules', 'dist']
     )
 
     files.forEach((f) => {
