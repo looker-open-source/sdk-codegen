@@ -12,5 +12,18 @@ jobs:
           project_id: ${{ secrets.GCP_PROJECT_ID }}
           service_account_key: ${{ secrets.GCP_BQ_METRICS_KEY }}
           export_default_credentials: true
-      - run: echo '${{ github.event }}' | jq -c '.release | {package_name: .name | split(" ")[0], name, tag_name, version: .tag_name | split("-v")[1], html_url, target_commitish, created_at, published_at, draft, prerelease}' > releases.json
+      - run: 'echo ''${{ github.event }}'' |
+             jq -c ''.release |
+             {
+               package_name: .name | split(" ")[0],
+               name,
+               tag_name,
+               version: .tag_name | split("-v")[1],
+               html_url,
+               target_commitish,
+               created_at,
+               published_at,
+               draft,
+               prerelease
+             }'' > releases.json'
       - run: bq load metrics.releases releases.json
