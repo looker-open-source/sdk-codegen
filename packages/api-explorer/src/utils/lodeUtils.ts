@@ -28,13 +28,11 @@ import { IDeclarationMine, IExampleMine } from '@looker/sdk-codegen'
 
 const fetchLode = async (lodeUrl: string) => {
   try {
-    await fetch(lodeUrl, { method: 'HEAD' })
+    const result = await fetch(lodeUrl, { mode: 'cors' })
+    return result.text()
   } catch (error) {
-    console.warn(`The server appears not to be running: ${lodeUrl}`)
     return ''
   }
-  const result = await fetch(lodeUrl, { mode: 'cors' })
-  return result.text()
 }
 
 interface Motherlode {

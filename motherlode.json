@@ -1,5 +1,5 @@
 {
-  "commitHash": "e2ae33eb1d63b0f8d9987bf86bbed64641d4bea3",
+  "commitHash": "df27d7a53e43916c2c1069f38d8e74baf42c17f1",
   "remoteOrigin": "https://github.com/looker-open-source/sdk-codegen",
   "summaries": {
     "packages/sdk-codegen/src/codeGenerators.ts": {
