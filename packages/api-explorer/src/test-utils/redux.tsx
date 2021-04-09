@@ -26,16 +26,32 @@
 import React, { ReactElement } from 'react'
 import { Provider } from 'react-redux'
 import { Store } from 'redux'
+import { renderWithTheme } from '@looker/components-test-utils'
+import { RenderOptions } from '@testing-library/react'
+
 import { configureStore, RootState } from '../state'
-import { StandaloneEnvAdaptor } from '../utils'
+import { IApixEnvAdaptor, StandaloneEnvAdaptor } from '../utils'
+import { EnvAdaptorContext } from '../context'
 
-const standaloneEnvAdaptor = new StandaloneEnvAdaptor()
-
-const defaultStore = configureStore({ envAdaptor: standaloneEnvAdaptor })
+const defaultStore = configureStore()
 
 export const withReduxProvider = (
   consumers: ReactElement<any>,
-  store: Store<RootState> = defaultStore
+  store: Store<RootState> = defaultStore,
+  envAdaptor: IApixEnvAdaptor = new StandaloneEnvAdaptor()
 ) => {
-  return <Provider store={store}>{consumers}</Provider>
+  return (
+    <Provider store={store}>
+      <EnvAdaptorContext.Provider value={{ envAdaptor }}>
+        {consumers}
+      </EnvAdaptorContext.Provider>
+    </Provider>
+  )
 }
+
+export const renderWithReduxProvider = (
+  consumers: ReactElement<any>,
+  store?: Store<RootState>,
+  envAdaptor?: IApixEnvAdaptor,
+  options?: Omit<RenderOptions, 'queries'>
+) => renderWithTheme(withReduxProvider(consumers, store, envAdaptor), options)

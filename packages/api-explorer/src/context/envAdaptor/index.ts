@@ -23,17 +23,7 @@
  SOFTWARE.
 
  */
-import { StandaloneEnvAdaptor } from '../../utils'
-import { setEnvAdaptorAction } from './action_creators'
-import { EnvAdaptorActionTypes } from './actions'
-
-describe('envAdaptor reducer action creators', () => {
-  test('setEnvAdaptor returns a SET_ENV_ADAPTOR action with provided values', () => {
-    const envAdaptor = new StandaloneEnvAdaptor()
-    const action = setEnvAdaptorAction(envAdaptor)
-    expect(action).toEqual({
-      type: EnvAdaptorActionTypes.SET_ENV_ADAPTOR,
-      payload: envAdaptor,
-    })
-  })
-})
+export {
+  defaultEnvAdaptorContextValue,
+  EnvAdaptorContext,
+} from './EnvAdaptorContext'

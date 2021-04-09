@@ -29,8 +29,4 @@ import { reducers } from './reducers'
 
 export type RootState = ReturnType<typeof reducers>
 
-type PreloadedState = Pick<RootState, 'envAdaptor'>
-
-export const configureStore = (
-  preloadedState: PreloadedState
-): Store<RootState> => createStore(reducers, preloadedState)
+export const configureStore = (): Store<RootState> => createStore(reducers)

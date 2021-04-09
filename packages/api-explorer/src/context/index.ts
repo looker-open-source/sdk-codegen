@@ -25,3 +25,4 @@
  */
 export { LodeContext, defaultLodeContextValue } from './examples'
 export { SearchContext, defaultSearchContextValue } from './search'
+export { EnvAdaptorContext, defaultEnvAdaptorContextValue } from './envAdaptor'

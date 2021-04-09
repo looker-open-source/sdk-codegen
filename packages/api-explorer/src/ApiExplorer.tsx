@@ -30,10 +30,14 @@ import styled from 'styled-components'
 import { Aside, ComponentsProvider, Layout, Page } from '@looker/components'
 import { Looker40SDK, Looker31SDK } from '@looker/sdk'
 import { SpecList } from '@looker/sdk-codegen'
-import { useSelector } from 'react-redux'
 
-import { SearchContext, LodeContext, defaultLodeContextValue } from './context'
-import { getLoded } from './utils'
+import {
+  SearchContext,
+  LodeContext,
+  defaultLodeContextValue,
+  EnvAdaptorContext,
+} from './context'
+import { getLoded, IApixEnvAdaptor } from './utils'
 import { Header, SideNav } from './components'
 import {
   specReducer,
@@ -43,21 +47,21 @@ import {
 } from './reducers'
 import { AppRouter } from './routes'
 import { useActions } from './hooks'
-import { getEnvAdaptor } from './state'
 
 export interface ApiExplorerProps {
   specs: SpecList
   sdk?: Looker31SDK | Looker40SDK
   lodeUrl?: string
+  envAdaptor: IApixEnvAdaptor
 }
 
 const ApiExplorer: FC<ApiExplorerProps> = ({
   specs,
   lodeUrl = 'https://raw.githubusercontent.com/looker-open-source/sdk-codegen/main/motherlode.json',
+  envAdaptor,
 }) => {
   const location = useLocation()
   const { setSdkLanguageAction } = useActions()
-  const envAdaptor = useSelector(getEnvAdaptor)
 
   const [spec, specDispatch] = useReducer(
     specReducer,
@@ -96,31 +100,33 @@ const ApiExplorer: FC<ApiExplorerProps> = ({
         colors: { key: '#1A73E8' },
       }}
     >
-      <LodeContext.Provider value={{ ...lode }}>
-        <SearchContext.Provider value={{ searchSettings, setSearchSettings }}>
-          <Page>
-            <Header
-              specs={specs}
-              spec={spec}
-              specDispatch={specDispatch}
-              toggleNavigation={toggleNavigation}
-            />
-            <Layout hasAside>
-              {hasNavigation && (
-                <AsideBorder pt="large" width="20rem">
-                  <SideNav api={spec.api} specKey={spec.key} />
-                </AsideBorder>
-              )}
-              <AppRouter
-                api={spec.api}
-                specKey={spec.key}
+      <EnvAdaptorContext.Provider value={{ envAdaptor }}>
+        <LodeContext.Provider value={{ ...lode }}>
+          <SearchContext.Provider value={{ searchSettings, setSearchSettings }}>
+            <Page>
+              <Header
                 specs={specs}
+                spec={spec}
+                specDispatch={specDispatch}
                 toggleNavigation={toggleNavigation}
               />
-            </Layout>
-          </Page>
-        </SearchContext.Provider>
-      </LodeContext.Provider>
+              <Layout hasAside>
+                {hasNavigation && (
+                  <AsideBorder pt="large" width="20rem">
+                    <SideNav api={spec.api} specKey={spec.key} />
+                  </AsideBorder>
+                )}
+                <AppRouter
+                  api={spec.api}
+                  specKey={spec.key}
+                  specs={specs}
+                  toggleNavigation={toggleNavigation}
+                />
+              </Layout>
+            </Page>
+          </SearchContext.Provider>
+        </LodeContext.Provider>
+      </EnvAdaptorContext.Provider>
     </ComponentsProvider>
   )
 }

@@ -25,5 +25,4 @@
  */
 export * as actionCreators from './action_creators'
 export * from './user'
-export * from './envAdaptor'
 export * from './store'

@@ -120,13 +120,15 @@ export const ExtensionApiExplorer: FC = () => {
   }, [specs, sdk])
 
   const extensionEnvAdaptor = new ExtensionEnvAdaptor(getExtensionSDK())
-  const store = configureStore({ envAdaptor: extensionEnvAdaptor })
+  const store = configureStore()
 
   return (
     <Provider store={store}>
       <RunItProvider sdk={sdk} configurator={configurator} basePath="">
         <>
-          {specs && <ApiExplorer specs={specs} />}
+          {specs && (
+            <ApiExplorer specs={specs} envAdaptor={extensionEnvAdaptor} />
+          )}
           {!specs && 'Loading API specifications from Looker ...'}
         </>
       </RunItProvider>

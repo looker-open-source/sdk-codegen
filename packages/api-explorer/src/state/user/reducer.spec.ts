@@ -35,7 +35,7 @@ describe('userReducer', () => {
     }
     const state = userReducer(currState, action)
     expect(state).toEqual({
-      sdkLanguages: 'Typescript',
+      sdkLanguage: 'Typescript',
     })
   })
 })

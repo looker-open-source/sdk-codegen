@@ -28,4 +28,4 @@ export {
   renderWithSearchAndRouter,
 } from './render_with_search'
 export { renderWithRouter, withRouter } from './router'
-export { withReduxProvider } from './redux'
+export { renderWithReduxProvider, withReduxProvider } from './redux'

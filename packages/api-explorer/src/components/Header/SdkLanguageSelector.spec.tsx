@@ -24,13 +24,12 @@
 
  */
 import React from 'react'
-import { renderWithTheme } from '@looker/components-test-utils'
 import { act, screen, waitFor } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 import { codeGenerators } from '@looker/sdk-codegen'
 
-import { withReduxProvider } from '../../test-utils'
 import { defaultUserState } from '../../state'
+import { renderWithReduxProvider } from '../../test-utils'
 import { SdkLanguageSelector } from './SdkLanguageSelector'
 
 describe('SdkLanguageSelector', () => {
@@ -41,14 +40,14 @@ describe('SdkLanguageSelector', () => {
   })
 
   test('it has the correct default language selected', () => {
-    renderWithTheme(withReduxProvider(<SdkLanguageSelector />))
+    renderWithReduxProvider(<SdkLanguageSelector />)
     expect(screen.getByRole('textbox')).toHaveValue(
       defaultUserState.sdkLanguage
     )
   })
 
   test('it lists all available languages and "All" as options', async () => {
-    renderWithTheme(withReduxProvider(<SdkLanguageSelector />))
+    renderWithReduxProvider(<SdkLanguageSelector />)
     await act(async () => {
       await userEvent.click(screen.getByRole('textbox'))
       await waitFor(() => {
@@ -60,7 +59,7 @@ describe('SdkLanguageSelector', () => {
   })
 
   test('it stores the selected language in localStorage', async () => {
-    renderWithTheme(withReduxProvider(<SdkLanguageSelector />))
+    renderWithReduxProvider(<SdkLanguageSelector />)
     const selector = screen.getByRole('textbox')
     expect(defaultUserState.sdkLanguage).toEqual('Python')
     expect(selector).toHaveValue('Python')

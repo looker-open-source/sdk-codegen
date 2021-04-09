@@ -23,21 +23,16 @@
  SOFTWARE.
 
  */
+import { createContext } from 'react'
 import { IApixEnvAdaptor, StandaloneEnvAdaptor } from '../../utils'
-import { EnvAdaptorActions, EnvAdaptorActionTypes } from './actions'
 
-export type EnvAdaptorState = IApixEnvAdaptor
-
-const defaultState: EnvAdaptorState = new StandaloneEnvAdaptor()
-
-export const envAdaptorReducer = (
-  state: EnvAdaptorState = defaultState,
-  action: EnvAdaptorActions
-): EnvAdaptorState => {
-  switch (action.type) {
-    case EnvAdaptorActionTypes.SET_ENV_ADAPTOR:
-      return action.payload
-    default:
-      return state
-  }
+export interface EnvAdaptorContextProps {
+  envAdaptor: IApixEnvAdaptor
 }
+
+export const defaultEnvAdaptorContextValue: EnvAdaptorContextProps = {
+  envAdaptor: new StandaloneEnvAdaptor(),
+}
+export const EnvAdaptorContext = createContext<EnvAdaptorContextProps>(
+  defaultEnvAdaptorContextValue
+)

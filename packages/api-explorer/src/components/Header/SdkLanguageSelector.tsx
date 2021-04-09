@@ -23,14 +23,15 @@
  SOFTWARE.
 
  */
-import React, { FC } from 'react'
+import React, { FC, useContext } from 'react'
 import { codeGenerators } from '@looker/sdk-codegen'
 import { Select } from '@looker/components'
 import { useSelector } from 'react-redux'
 import { SelectOptionProps } from '@looker/components/lib/Form/Inputs/Select/SelectOptions'
 
 import { useActions } from '../../hooks'
-import { getEnvAdaptor, getSelectedSdkLanguage } from '../../state'
+import { getSelectedSdkLanguage } from '../../state'
+import { EnvAdaptorContext } from '../../context'
 
 /**
  * Allows the user to select their preferred SDK language
@@ -38,8 +39,8 @@ import { getEnvAdaptor, getSelectedSdkLanguage } from '../../state'
  */
 export const SdkLanguageSelector: FC = () => {
   const { setSdkLanguageAction } = useActions()
-  const envAdaptor = useSelector(getEnvAdaptor)
   const selectedSdkLanguage = useSelector(getSelectedSdkLanguage)
+  const { envAdaptor } = useContext(EnvAdaptorContext)
 
   const allSdkLanguages: SelectOptionProps[] = codeGenerators.map((gen) => ({
     value: gen.label || gen.language,

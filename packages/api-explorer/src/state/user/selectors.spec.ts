@@ -23,7 +23,6 @@
  SOFTWARE.
 
  */
-import { DualModeConfigurator } from '../../utils'
 import { getSelectedSdkLanguage } from './selectors'
 
 describe('user selectors', () => {
@@ -31,7 +30,6 @@ describe('user selectors', () => {
     const sdkLanguage = 'Kotlin'
     const state = {
       user: { sdkLanguage },
-      configurator: new DualModeConfigurator(),
     }
     expect(getSelectedSdkLanguage(state)).toEqual(sdkLanguage)
   })

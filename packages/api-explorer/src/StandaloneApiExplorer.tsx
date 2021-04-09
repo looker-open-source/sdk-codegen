@@ -57,7 +57,7 @@ export const StandaloneApiExplorer: FC<StandloneApiExplorerProps> = ({
       : initRunItSdk(defaultConfigurator)
 
   const standaloneEnvAdaptor = new StandaloneEnvAdaptor()
-  const store = configureStore({ envAdaptor: standaloneEnvAdaptor })
+  const store = configureStore()
 
   return (
     <Provider store={store}>
@@ -66,7 +66,7 @@ export const StandaloneApiExplorer: FC<StandloneApiExplorerProps> = ({
         configurator={defaultConfigurator}
         basePath="/api/4.0"
       >
-        <ApiExplorer specs={specs} />
+        <ApiExplorer specs={specs} envAdaptor={standaloneEnvAdaptor} />
       </RunItProvider>
     </Provider>
   )

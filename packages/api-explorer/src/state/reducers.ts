@@ -25,11 +25,9 @@
  */
 import { combineReducers } from 'redux'
 import { userReducer } from './user'
-import { envAdaptorReducer } from './envAdaptor'
 
 export const reducers = combineReducers({
   user: userReducer,
-  envAdaptor: envAdaptorReducer,
 })
 
 export type RootState = ReturnType<typeof reducers>
