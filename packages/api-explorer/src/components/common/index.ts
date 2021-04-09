@@ -23,4 +23,4 @@
  SOFTWARE.
 
  */
-export { ApixHeading } from './common'
+export { ApixHeading, ApixSection } from './common'

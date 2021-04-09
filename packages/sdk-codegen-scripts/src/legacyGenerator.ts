@@ -93,7 +93,7 @@ export const runConfig = async (
   log(`processing ${name} configuration ...`)
   const apiVersion = defaultApiVersion(props)
   props.api_version = apiVersion
-  const lookerVersions = fetchLookerVersions(props)
+  const lookerVersions = await fetchLookerVersions(props)
   const specs = await getSpecsFromVersions(lookerVersions as IApiVersion)
   const openApiFile = await logConvertSpec(name, specs[apiVersion], props)
   const languages = legacyLanguages()

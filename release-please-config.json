@@ -1,7 +1,6 @@
 {
   "plugins": ["node-workspace"],
-  "bootstrap-sha": "78cc1e225bfc67300cfa9069fce257120fe92a6d",
-  "release-as": "21.4.0",
+  "release-as": "21.6.0",
   "packages": {
     "packages/extension-api-explorer": {},
     "packages/extension-sdk-react": {},
@@ -9,26 +8,32 @@
     "packages/hackathon": {},
     "packages/sdk-node": {},
     "packages/sdk": {},
-    "packages/api-explorer": {
+    ".": {
       "release-as": ""
+    },
+    "packages/api-explorer": {
+      "release-as": "",
+      "bump-minor-pre-major": true
     },
     "packages/run-it": {
-      "release-as": ""
+      "release-as": "",
+      "bump-minor-pre-major": true
     },
     "packages/sdk-codegen-scripts": {
-      "release-as": ""
+      "release-as": "21.0.12"
     },
     "packages/sdk-codegen-utils": {
-      "release-as": ""
+      "release-as": "21.0.12"
     },
     "packages/sdk-codegen": {
-      "release-as": ""
+      "release-as": "21.0.12"
     },
     "packages/sdk-rtl": {
-      "release-as": ""
+      "release-as": "21.0.12"
     },
     "packages/wholly-sheet": {
-      "release-as": ""
+      "release-as": "",
+      "bump-minor-pre-major": true
     },
     "python": {
       "release-type": "python",

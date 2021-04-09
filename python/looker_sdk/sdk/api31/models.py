@@ -78,7 +78,8 @@ class Align(enum.Enum):
     invalid_api_enum_value = "invalid_api_enum_value"
 
 
-Align.__new__ = model.safe_enum__new__
+# https://github.com/python/mypy/issues/2427
+Align.__new__ = model.safe_enum__new__  # type: ignore
 
 
 @attr.s(auto_attribs=True, init=False)
@@ -218,7 +219,8 @@ class Category(enum.Enum):
     invalid_api_enum_value = "invalid_api_enum_value"
 
 
-Category.__new__ = model.safe_enum__new__
+# https://github.com/python/mypy/issues/2427
+Category.__new__ = model.safe_enum__new__  # type: ignore
 
 
 @attr.s(auto_attribs=True, init=False)
@@ -2777,7 +2779,8 @@ class DependencyStatus(enum.Enum):
     invalid_api_enum_value = "invalid_api_enum_value"
 
 
-DependencyStatus.__new__ = model.safe_enum__new__
+# https://github.com/python/mypy/issues/2427
+DependencyStatus.__new__ = model.safe_enum__new__  # type: ignore
 
 
 @attr.s(auto_attribs=True, init=False)
@@ -3109,7 +3112,8 @@ class FillStyle(enum.Enum):
     invalid_api_enum_value = "invalid_api_enum_value"
 
 
-FillStyle.__new__ = model.safe_enum__new__
+# https://github.com/python/mypy/issues/2427
+FillStyle.__new__ = model.safe_enum__new__  # type: ignore
 
 
 @attr.s(auto_attribs=True, init=False)
@@ -3285,7 +3289,8 @@ class Format(enum.Enum):
     invalid_api_enum_value = "invalid_api_enum_value"
 
 
-Format.__new__ = model.safe_enum__new__
+# https://github.com/python/mypy/issues/2427
+Format.__new__ = model.safe_enum__new__  # type: ignore
 
 
 class GitApplicationServerHttpScheme(enum.Enum):
@@ -3299,7 +3304,8 @@ class GitApplicationServerHttpScheme(enum.Enum):
     invalid_api_enum_value = "invalid_api_enum_value"
 
 
-GitApplicationServerHttpScheme.__new__ = model.safe_enum__new__
+# https://github.com/python/mypy/issues/2427
+GitApplicationServerHttpScheme.__new__ = model.safe_enum__new__  # type: ignore
 
 
 @attr.s(auto_attribs=True, init=False)
@@ -6268,7 +6274,8 @@ class Name(enum.Enum):
     invalid_api_enum_value = "invalid_api_enum_value"
 
 
-Name.__new__ = model.safe_enum__new__
+# https://github.com/python/mypy/issues/2427
+Name.__new__ = model.safe_enum__new__  # type: ignore
 
 
 @attr.s(auto_attribs=True, init=False)
@@ -6654,7 +6661,8 @@ class PermissionType(enum.Enum):
     invalid_api_enum_value = "invalid_api_enum_value"
 
 
-PermissionType.__new__ = model.safe_enum__new__
+# https://github.com/python/mypy/issues/2427
+PermissionType.__new__ = model.safe_enum__new__  # type: ignore
 
 
 @attr.s(auto_attribs=True, init=False)
@@ -6988,7 +6996,8 @@ class PullRequestMode(enum.Enum):
     invalid_api_enum_value = "invalid_api_enum_value"
 
 
-PullRequestMode.__new__ = model.safe_enum__new__
+# https://github.com/python/mypy/issues/2427
+PullRequestMode.__new__ = model.safe_enum__new__  # type: ignore
 
 
 @attr.s(auto_attribs=True, init=False)
@@ -7354,7 +7363,8 @@ class ResultFormat(enum.Enum):
     invalid_api_enum_value = "invalid_api_enum_value"
 
 
-ResultFormat.__new__ = model.safe_enum__new__
+# https://github.com/python/mypy/issues/2427
+ResultFormat.__new__ = model.safe_enum__new__  # type: ignore
 
 
 @attr.s(auto_attribs=True, init=False)
@@ -8535,7 +8545,8 @@ class SupportedActionTypes(enum.Enum):
     invalid_api_enum_value = "invalid_api_enum_value"
 
 
-SupportedActionTypes.__new__ = model.safe_enum__new__
+# https://github.com/python/mypy/issues/2427
+SupportedActionTypes.__new__ = model.safe_enum__new__  # type: ignore
 
 
 class SupportedDownloadSettings(enum.Enum):
@@ -8549,7 +8560,8 @@ class SupportedDownloadSettings(enum.Enum):
     invalid_api_enum_value = "invalid_api_enum_value"
 
 
-SupportedDownloadSettings.__new__ = model.safe_enum__new__
+# https://github.com/python/mypy/issues/2427
+SupportedDownloadSettings.__new__ = model.safe_enum__new__  # type: ignore
 
 
 class SupportedFormats(enum.Enum):
@@ -8574,7 +8586,8 @@ class SupportedFormats(enum.Enum):
     invalid_api_enum_value = "invalid_api_enum_value"
 
 
-SupportedFormats.__new__ = model.safe_enum__new__
+# https://github.com/python/mypy/issues/2427
+SupportedFormats.__new__ = model.safe_enum__new__  # type: ignore
 
 
 class SupportedFormattings(enum.Enum):
@@ -8588,7 +8601,8 @@ class SupportedFormattings(enum.Enum):
     invalid_api_enum_value = "invalid_api_enum_value"
 
 
-SupportedFormattings.__new__ = model.safe_enum__new__
+# https://github.com/python/mypy/issues/2427
+SupportedFormattings.__new__ = model.safe_enum__new__  # type: ignore
 
 
 class SupportedVisualizationFormattings(enum.Enum):
@@ -8602,7 +8616,8 @@ class SupportedVisualizationFormattings(enum.Enum):
     invalid_api_enum_value = "invalid_api_enum_value"
 
 
-SupportedVisualizationFormattings.__new__ = model.safe_enum__new__
+# https://github.com/python/mypy/issues/2427
+SupportedVisualizationFormattings.__new__ = model.safe_enum__new__  # type: ignore
 
 
 @attr.s(auto_attribs=True, init=False)
@@ -9020,7 +9035,8 @@ class UserAttributeFilterTypes(enum.Enum):
     invalid_api_enum_value = "invalid_api_enum_value"
 
 
-UserAttributeFilterTypes.__new__ = model.safe_enum__new__
+# https://github.com/python/mypy/issues/2427
+UserAttributeFilterTypes.__new__ = model.safe_enum__new__  # type: ignore
 
 
 @attr.s(auto_attribs=True, init=False)
@@ -9298,7 +9314,8 @@ class WeekStartDay(enum.Enum):
     invalid_api_enum_value = "invalid_api_enum_value"
 
 
-WeekStartDay.__new__ = model.safe_enum__new__
+# https://github.com/python/mypy/issues/2427
+WeekStartDay.__new__ = model.safe_enum__new__  # type: ignore
 
 
 @attr.s(auto_attribs=True, init=False)

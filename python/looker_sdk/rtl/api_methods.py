@@ -52,8 +52,7 @@ TQueryParams = MutableMapping[
 
 
 class APIMethods:
-    """Functionality for making authenticated API calls
-    """
+    """Functionality for making authenticated API calls"""
 
     def __init__(
         self,
@@ -118,13 +117,6 @@ class APIMethods:
                 params[k] = json.dumps(v)
         return params
 
-    def login_user(self, user_id: int) -> "APIMethods":
-        self.auth.login_user(user_id)
-        return self
-
-    def logout(self) -> None:
-        self.auth.logout()
-
     @staticmethod
     def encode_path_param(value: str) -> str:
         if value == urllib.parse.unquote(value):
@@ -136,10 +128,9 @@ class APIMethods:
         path: str,
         structure: TStructure,
         query_params: Optional[TQueryParams] = None,
-        transport_options: Optional[transport.PTransportSettings] = None,
+        transport_options: Optional[transport.TransportOptions] = None,
     ) -> TReturn:
-        """GET method
-        """
+        """GET method"""
         params = self._convert_query_params(query_params) if query_params else None
         response = self.transport.request(
             transport.HttpMethod.GET,
@@ -167,10 +158,9 @@ class APIMethods:
         structure: TStructure,
         query_params: Optional[TQueryParams] = None,
         body: TBody = None,
-        transport_options: Optional[transport.PTransportSettings] = None,
+        transport_options: Optional[transport.TransportOptions] = None,
     ) -> TReturn:
-        """POST method
-        """
+        """POST method"""
         params = self._convert_query_params(query_params) if query_params else None
         serialized = self._get_serialized(body)
         response = self.transport.request(
@@ -189,10 +179,9 @@ class APIMethods:
         structure: TStructure,
         query_params: Optional[TQueryParams] = None,
         body: TBody = None,
-        transport_options: Optional[transport.PTransportSettings] = None,
+        transport_options: Optional[transport.TransportOptions] = None,
     ) -> TReturn:
-        """PATCH method
-        """
+        """PATCH method"""
         params = self._convert_query_params(query_params) if query_params else None
         serialized = self._get_serialized(body)
         response = self.transport.request(
@@ -211,10 +200,9 @@ class APIMethods:
         structure: TStructure = None,
         query_params: Optional[TQueryParams] = None,
         body: TBody = None,
-        transport_options: Optional[transport.PTransportSettings] = None,
+        transport_options: Optional[transport.TransportOptions] = None,
     ) -> TReturn:
-        """PUT method
-        """
+        """PUT method"""
         params = self._convert_query_params(query_params) if query_params else None
         serialized = self._get_serialized(body)
         response = self.transport.request(
@@ -231,11 +219,10 @@ class APIMethods:
         self,
         path: str,
         structure: TStructure = None,
-        query_params: Optional[MutableMapping[str, str]] = None,
-        transport_options: Optional[transport.PTransportSettings] = None,
+        query_params: Optional[TQueryParams] = None,
+        transport_options: Optional[transport.TransportOptions] = None,
     ) -> TReturn:
-        """DELETE method
-        """
+        """DELETE method"""
         response = self.transport.request(
             transport.HttpMethod.DELETE,
             self._path(path),

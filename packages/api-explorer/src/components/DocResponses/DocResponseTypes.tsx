@@ -62,12 +62,14 @@ export const DocResponseTypes: FC<DocResponseTypesProps> = ({ responses }) => {
           <ButtonItem key={mediaType}>{mediaType}</ButtonItem>
         ))}
       </ButtonToggle>
-      <ExploreType
-        key={selectedMediaType}
-        type={resps[selectedMediaType].type}
-        link={true}
-        maxDepth={2}
-      />
+      <div style={{ overflow: 'auto' }}>
+        <ExploreType
+          key={selectedMediaType}
+          type={resps[selectedMediaType].type}
+          link={true}
+          maxDepth={2}
+        />
+      </div>
     </>
   )
 }

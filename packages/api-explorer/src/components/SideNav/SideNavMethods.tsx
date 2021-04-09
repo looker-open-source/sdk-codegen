@@ -34,9 +34,7 @@ import {
   Heading,
 } from '@looker/components'
 import { MethodList } from '@looker/sdk-codegen'
-import { useHistory, useRouteMatch } from 'react-router-dom'
-
-import { NavHashLink } from 'react-router-hash-link'
+import { useHistory, useRouteMatch, NavLink } from 'react-router-dom'
 import { buildMethodPath, highlightHTML } from '../../utils'
 import { SearchContext } from '../../context'
 
@@ -88,7 +86,7 @@ const SideNavMethodsLayout: FC<MethodsProps> = ({
           {Object.values(methods).map((method) => (
             <SideNavLink
               key={method.name}
-              to={`${buildMethodPath(specKey, tag, method.name)}#top`}
+              to={`${buildMethodPath(specKey, tag, method.name)}`}
             >
               <li>
                 <Heading as="h5" truncate>
@@ -103,7 +101,7 @@ const SideNavMethodsLayout: FC<MethodsProps> = ({
   )
 }
 
-const SideNavLink = styled(NavHashLink)`
+const SideNavLink = styled(NavLink)`
   &:hover,
   &:focus,
   &.active {

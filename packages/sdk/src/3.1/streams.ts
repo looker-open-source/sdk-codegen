@@ -30,9 +30,10 @@
 
 import { Readable } from 'readable-stream'
 import {
+  DelimArray,
+  IDictionary,
   APIMethods,
   IAuthSession,
-  DelimArray,
   ITransportSettings,
   encodeParam,
 } from '@looker/sdk-rtl'
@@ -42,7 +43,6 @@ import {
  */
 import { sdkVersion } from '../constants'
 import {
-  IDictionary,
   IAccessToken,
   IApiSession,
   IApiVersion,

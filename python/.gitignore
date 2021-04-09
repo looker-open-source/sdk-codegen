@@ -7,3 +7,4 @@ looker_sdk.egg-info/
 *.pyc
 *.pyo
 *.mypy_cache
+Pipfile.lock

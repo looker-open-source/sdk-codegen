@@ -1,0 +1,31 @@
+plugins {
+    id 'application'
+}
+apply plugin : "java"
+
+group 'com.looker'
+version '1.0-SNAPSHOT'
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    implementation "io.github.cdimascio:dotenv-kotlin:6.2.2"
+    implementation "org.ini4j:ini4j:0.5.4"
+    implementation "io.ktor:ktor-client-okhttp:$ktorVersion"
+    implementation "io.ktor:ktor-client-json:$ktorVersion"
+    implementation "io.ktor:ktor-client-jackson:$ktorVersion"
+
+    implementation 'io.github.cdimascio:java-dotenv:5.2.2'
+    implementation "org.ini4j:ini4j:0.5.4"
+    compile files('lib/looker-kotlin-sdk.jar')
+}
+
+ext {
+    javaMainClass = "com.looker.example.ExampleRunner"
+}
+
+application {
+    mainClassName = javaMainClass
+}

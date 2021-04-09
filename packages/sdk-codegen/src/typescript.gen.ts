@@ -70,20 +70,41 @@ export class TypescriptGen extends CodeGen {
   willItStream = true
   useNamedParameters = false
   useNamedArguments = false
+  /** Track special imports of sdk-rtl */
+  rtlNeeds = new Set<string>()
+
+  reset() {
+    this.rtlNeeds = new Set<string>()
+  }
 
   sdkFileName(baseFileName: string) {
     return this.fileName(`${this.versions?.spec.key}/${baseFileName}`)
   }
 
+  /** lists all special sdk-rtl import types encountered */
+  rtlImports() {
+    let rtl = Array.from(this.rtlNeeds).join(', ')
+    if (rtl) {
+      rtl += ', '
+    }
+    return rtl
+  }
+
+  /** creates a full @looker/sdk-rtl import statement if one is required */
+  rtlImportStatement() {
+    const rtl = this.rtlImports()
+    return rtl ? `\nimport { ${rtl} } from '@looker/sdk-rtl'\n` : ''
+  }
+
   methodsPrologue(_indent: string) {
     return `
-import { APIMethods, DelimArray, IAuthSession, ITransportSettings, encodeParam } from '@looker/sdk-rtl'
+import { ${this.rtlImports()}APIMethods, IAuthSession, ITransportSettings, encodeParam } from '@looker/sdk-rtl'
 /**
  * ${this.warnEditing()}
  *
  */
 import { sdkVersion } from '../constants'
-import { IDictionary, ${this.typeNames().join(', ')} } from './models'
+import { ${this.typeNames().join(', ')} } from './models'
 
 export class ${this.packageName} extends APIMethods {
   static readonly ApiVersion = '${this.apiVersion}'
@@ -102,13 +123,13 @@ export class ${this.packageName} extends APIMethods {
   streamsPrologue(_indent: string): string {
     return `
 import { Readable } from 'readable-stream'
-import { APIMethods, IAuthSession, DelimArray, ITransportSettings, encodeParam } from '@looker/sdk-rtl'
+import { ${this.rtlImports()}APIMethods, IAuthSession, ITransportSettings, encodeParam } from '@looker/sdk-rtl'
 /**
  * ${this.warnEditing()}
  *
  */
 import { sdkVersion } from '../constants'
-import { IDictionary, ${this.typeNames(false).join(', ')} } from './models'
+import { ${this.typeNames().join(', ')} } from './models'
 
 export class ${this.packageName}Stream extends APIMethods {
   static readonly ApiVersion = '${this.apiVersion}'
@@ -128,16 +149,10 @@ export class ${this.packageName}Stream extends APIMethods {
   }
 
   modelsPrologue(_indent: string) {
-    return `
-import { DelimArray, Url } from '@looker/sdk-rtl'
-
+    return `${this.rtlImportStatement()}
 /*
  * ${this.warnEditing()}
  */
-
-export interface IDictionary<T> {
-  [key: string]: T
-}
 
 `
   }
@@ -318,7 +333,16 @@ export interface IDictionary<T> {
     return `'${name}'`
   }
 
+  /**
+   * Get the language's type name for generation
+   *
+   * Also refcounts the type
+   *
+   * @param type to name
+   * @private
+   */
   private typeName(type: IType) {
+    type.refCount++
     if (type.customType && !(type instanceof EnumType)) {
       return this.reserve(`I${type.name}`)
     }
@@ -459,14 +483,9 @@ export interface IDictionary<T> {
   }
 
   // TODO avoid duplicate code
-  typeNames(countError = true) {
+  typeNames() {
     const names: string[] = []
     if (!this.api) return names
-    if (countError) {
-      this.api.types.Error.refCount++
-    } else {
-      this.api.types.Error.refCount = 0
-    }
     const types = this.api.types
     Object.values(types)
       .filter((type) => type.refCount > 0 && !type.intrinsic)
@@ -510,11 +529,13 @@ export interface IDictionary<T> {
             name: `${map.name}[]`,
           }
         case 'HashType':
+          this.rtlNeeds.add('IDictionary')
           return {
             default: '{}',
             name: `IDictionary<${map.name}>`,
           }
         case 'DelimArrayType':
+          this.rtlNeeds.add('DelimArray')
           return {
             default: '',
             name: `DelimArray<${map.name}>`,
@@ -531,7 +552,9 @@ export interface IDictionary<T> {
     }
 
     if (type.name) {
-      return tsTypes[type.name] || { default: '', name: this.typeName(type) } // No null default for complex types
+      const mapped = tsTypes[type.name]
+      if (mapped && mapped.name === 'Url') this.rtlNeeds.add(mapped.name)
+      return mapped || { default: '', name: this.typeName(type) } // No null default for complex types
     } else {
       throw new Error('Cannot output a nameless type.')
     }

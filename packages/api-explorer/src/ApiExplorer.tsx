@@ -105,14 +105,14 @@ const ApiExplorer: FC<ApiExplorerProps> = ({
       <EnvAdaptorContext.Provider value={{ envAdaptor }}>
         <LodeContext.Provider value={{ ...lode }}>
           <SearchContext.Provider value={{ searchSettings, setSearchSettings }}>
-            <Page>
+            <Page style={{ overflow: 'hidden' }}>
               <Header
                 specs={specs}
                 spec={spec}
                 specDispatch={specDispatch}
                 toggleNavigation={toggleNavigation}
               />
-              <Layout hasAside>
+              <Layout hasAside height="100%">
                 {hasNavigation && (
                   <AsideBorder pt="large" width="20rem">
                     <SideNav api={spec.api} specKey={spec.key} />

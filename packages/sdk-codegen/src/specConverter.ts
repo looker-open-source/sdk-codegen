@@ -25,8 +25,7 @@
  */
 
 import { isEmpty } from 'lodash'
-import { APIMethods } from '@looker/sdk-rtl'
-import { IApiVersion, IApiVersionElement } from '@looker/sdk'
+import { APIMethods, Url } from '@looker/sdk-rtl'
 import { ApiModel, ArgValues, IApiModel, KeyedCollection } from './sdkModels'
 
 const warn = (warning: string) => {
@@ -34,6 +33,43 @@ const warn = (warning: string) => {
 }
 
 const appJson = 'application/json'
+
+/** This declaration is duplicated DIRECTLY from @looker/sdk to detach dependency */
+export interface IApiVersion {
+  /**
+   * Current Looker release version number (read-only)
+   */
+  looker_release_version?: string
+  current_version?: IApiVersionElement
+  /**
+   * Array of versions supported by this Looker instance (read-only)
+   */
+  supported_versions?: IApiVersionElement[]
+  /**
+   * API server base url (read-only)
+   */
+  api_server_url?: string
+}
+
+/** This declaration is duplicated DIRECTLY from @looker/sdk to detach dependency */
+export interface IApiVersionElement {
+  /**
+   * Version number as it appears in '/api/xxx/' urls (read-only)
+   */
+  version?: string
+  /**
+   * Full version number including minor version (read-only)
+   */
+  full_version?: string
+  /**
+   * Status of this version (read-only)
+   */
+  status?: string
+  /**
+   * Url for swagger.json for this version (read-only)
+   */
+  swagger_url?: Url
+}
 
 /**
  * Describes the mime types supported by an operation
@@ -538,7 +574,7 @@ export const convertPathsAndBodies = (
  * Convert structure definitions
  * @param defs to convert
  */
-export const convertDefs = (defs: ArgValues) => {
+export const convertDefs = (defs: ArgValues): ArgValues => {
   Object.entries(defs).forEach(([_, struct]) => {
     Object.entries(struct.properties as ArgValues).forEach(([name, prop]) => {
       if (prop.$ref) {

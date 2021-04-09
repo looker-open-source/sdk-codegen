@@ -112,6 +112,7 @@ export class MethodGenerator extends Generator<Models.IApiModel> {
   }
 
   render(indent: string) {
+    this.codeFormatter.reset()
     const items: string[] = []
     // reset refcounts for ALL types so dynamic import statement will work
     Object.values(this.model.types).forEach((type) => (type.refCount = 0))
@@ -171,6 +172,7 @@ export class StreamGenerator extends MethodGenerator {
 
 export class TypeGenerator extends Generator<Models.IApiModel> {
   render(indent: string) {
+    this.codeFormatter.reset()
     const items: string[] = []
     Object.values(this.model.types).forEach((type) => {
       if (!(type instanceof Models.IntrinsicType)) {

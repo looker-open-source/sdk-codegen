@@ -49,6 +49,8 @@ interface HeaderProps {
   className?: string
 }
 
+export const HEADER_REM = 4
+
 /**
  * Renders the API Explorer header
  * @param className
@@ -65,7 +67,12 @@ export const HeaderLayout: FC<HeaderProps> = ({
   specDispatch,
   toggleNavigation,
 }) => (
-  <SemanticHeader height="4rem" className={className} pl="small" pr="large">
+  <SemanticHeader
+    height={`${HEADER_REM}rem`}
+    className={className}
+    pl="small"
+    pr="large"
+  >
     <Space>
       <IconButton
         size="small"

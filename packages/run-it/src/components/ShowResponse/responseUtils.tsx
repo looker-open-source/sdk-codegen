@@ -73,6 +73,7 @@ const ShowJSON = (response: IRawResponse) => {
     <CodeStructure
       code={JSON.stringify(JSON.parse(response.body), null, 2)}
       language={'json'}
+      height="85%"
     />
   )
   if (!showGrid) return raw

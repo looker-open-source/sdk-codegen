@@ -65,10 +65,29 @@ export interface IGenProps {
   apis: string[]
   /** Last API version */
   lastApi: string
+  /** Skip generating streams files? */
+  noStreams: boolean
 }
 
 const generatorHelp = () => {
-  log(`sdkGen [languages...] [-v|--versions <versions file>] [-h|--help]`)
+  log(
+    `sdkGen [languages...] [-v|--versions <versions file>] [-n|--nostreams] [-h|--help]
+  languages...:   zero or more language specifiers separated by space or comma. Defaults to all supported languages.
+  -v|--versions:  location of a JSON versions file in ILookerVersions format to read for getting specs
+  -n|--nostreams: skip generation of a language SDK 'streams' files (if it supports streaming)
+  -h|--help:      display this output
+
+  examples:
+    # Generates all supported SDKs
+    yarn gen
+
+    # Generates Typescript and Python SDKs
+    yarn gen ts,py
+
+    # reads specs from './versions.json' and generates Typescript and Python SDKs
+    yarn gen ts -v ./versions.json py
+`
+  )
   process.exit(0)
 }
 
@@ -78,6 +97,7 @@ const generatorHelp = () => {
  */
 export const doArgs = (args: string[]) => {
   let versions: ILookerVersions | undefined
+  let noStreams = false
 
   const langs: string[] = []
   if (args.length > 0 && args.toString().toLowerCase() !== 'all') {
@@ -97,16 +117,24 @@ export const doArgs = (args: string[]) => {
         case '--help':
           generatorHelp()
           break
+        case '-n':
+        case '--nostreams':
+          noStreams = true
+          break
         default:
           {
             const values = arg.split(',').filter((v) => v.trim())
-            values.forEach((v) => {
-              const gen = findGenerator(v.trim())
-              if (gen) {
-                // Valid language match
-                langs.push(gen.language)
-              }
-            })
+            if (values[0] !== 'all') {
+              values.forEach((v) => {
+                const gen = findGenerator(v.trim())
+                if (gen) {
+                  // Valid language match
+                  langs.push(gen.language)
+                } else {
+                  throw new Error(`"${v}" is not a valid option`)
+                }
+              })
+            }
           }
           break
       }
@@ -122,7 +150,7 @@ export const doArgs = (args: string[]) => {
         .map((l) => l.language)
   ).filter((value, index, all) => all.indexOf(value) === index)
 
-  return { languages, versions }
+  return { languages, versions, noStreams }
 }
 
 /**
@@ -139,7 +167,7 @@ export const loadConfig = () => {
  * @param args command-line style arguments to parse.
  */
 export const prepGen = async (args: string[]): Promise<IGenProps> => {
-  const { languages, versions } = doArgs(args)
+  const { languages, versions, noStreams } = doArgs(args)
   const { name, props } = loadConfig()
   let lookerVersions
   let lookerVersion = ''
@@ -186,6 +214,7 @@ export const prepGen = async (args: string[]): Promise<IGenProps> => {
     lookerVersion,
     apis,
     lastApi,
+    noStreams,
   }
 }
 

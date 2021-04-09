@@ -28,7 +28,24 @@ defaults:
     working-directory: python/
 
 jobs:
+  typecheck:
+    name: Mypy
+    runs-on: ubuntu-latest
+    steps:
+      - name: Cancel Previous Runs
+        uses: styfle/cancel-workflow-action@0.6.0
+        with:
+          access_token: ${{ secrets.GITHUB_TOKEN }}
+      - uses: actions/checkout@v1
+      - uses: actions/setup-python@v2
+        with:
+          python-version: 3.x
+      - run: pip install -e .
+      - run: pip install mypy
+      - run: mypy looker_sdk/
+
   unit:
+    needs: typecheck
     # 1st condition: push event (restricted to main above)
     # 2nd condition: PR opened/synchronized/reopened (types filter above)
     #                unless the PR has the CI:HOLD label
@@ -69,10 +86,6 @@ jobs:
             os: ubuntu
 
     steps:
-      - name: Cancel Previous Runs
-        uses: styfle/cancel-workflow-action@0.6.0
-        with:
-          access_token: ${{ secrets.GITHUB_TOKEN }}
       - name: Repo Checkout
         uses: actions/checkout@v2
       - name: Set up Python ${{ matrix.python-version }}
