@@ -87,7 +87,8 @@ const skipFolder = (name: string, excludeList: string[] = ['node_modules']) =>
  * Finds all file recursively
  * @param searchPath starting directory for file search
  * @param listOfFiles list of current files already found
- * @param filter lambda for file inclusion in results. truthy includes the file
+ * @param filter lambda for file inclusion in results. truthy analyzes the file
+ * @param ignorePaths paths to ignore
  */
 export const getAllFiles = (
   searchPath: string,
@@ -121,6 +122,8 @@ export const getAllFiles = (
  * Find all source code files recursively
  * @param searchPath starting directory for file search
  * @param listOfFiles list of source code files that can be mined
+ * @param filter function to determine whether a file should be analyzed
+ * @param ignorePaths paths to ignore
  */
 export const getCodeFiles = (
   searchPath: string,
@@ -290,7 +293,8 @@ const fileMiners: IMiners = {
   '.rb': new CodeMiner(),
   '.md': new MarkdownMiner(),
   '.dart': new CodeMiner(),
-  // '.go': new CodeMiner(),
+  '.go': new CodeMiner(),
+  '.java': new CodeMiner(),
   // '.rst': new MarkdownMiner(), // TODO .rst miner? Probably not needed
 }
 

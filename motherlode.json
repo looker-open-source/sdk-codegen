@@ -1,5 +1,5 @@
 {
-  "commitHash": "df27d7a53e43916c2c1069f38d8e74baf42c17f1",
+  "commitHash": "ea67ee60595f25fb370578bcd8ab16f9a1b235d6",
   "remoteOrigin": "https://github.com/looker-open-source/sdk-codegen",
   "summaries": {
     "packages/sdk-codegen/src/codeGenerators.ts": {
@@ -406,6 +406,13 @@
             "line": 46
           }
         ],
+        ".java": [
+          {
+            "sourceFile": "examples/java/example_gradle/src/main/java/com/looker/example/ExampleRunner.java",
+            "column": 23,
+            "line": 44
+          }
+        ],
         ".py": [
           {
             "sourceFile": "examples/python/hackathon_app/looker.py",
@@ -611,6 +618,18 @@
             "line": 6014
           }
         ],
+        ".go": [
+          {
+            "sourceFile": "go/sdk/v3/methods.go",
+            "column": 14,
+            "line": 3886
+          },
+          {
+            "sourceFile": "go/sdk/v4/methods.go",
+            "column": 14,
+            "line": 4621
+          }
+        ],
         ".kt": [
           {
             "sourceFile": "kotlin/build/spotless/spotlessKotlin/src/main/com/looker/sdk/4.0/methods.kt",
@@ -701,6 +720,18 @@
             "line": 7877
           }
         ],
+        ".go": [
+          {
+            "sourceFile": "go/sdk/v3/methods.go",
+            "column": 4,
+            "line": 5523
+          },
+          {
+            "sourceFile": "go/sdk/v4/methods.go",
+            "column": 4,
+            "line": 6041
+          }
+        ],
         ".kt": [
           {
             "sourceFile": "kotlin/build/spotless/spotlessKotlin/src/main/com/looker/sdk/4.0/methods.kt",
@@ -767,6 +798,54 @@
             "sourceFile": "swift/looker/sdk/streams.swift",
             "column": 8,
             "line": 9362
+          }
+        ]
+      }
+    },
+    "SearchDashboards": {
+      "operationId": "SearchDashboards",
+      "calls": {
+        ".go": [
+          {
+            "sourceFile": "examples/go/get_all_dashboards.go",
+            "column": 20,
+            "line": 21
+          }
+        ]
+      }
+    },
+    "SearchFolders": {
+      "operationId": "SearchFolders",
+      "calls": {
+        ".go": [
+          {
+            "sourceFile": "examples/go/get_all_folders.go",
+            "column": 17,
+            "line": 21
+          }
+        ]
+      }
+    },
+    "AllGroups": {
+      "operationId": "AllGroups",
+      "calls": {
+        ".go": [
+          {
+            "sourceFile": "examples/go/get_all_groups.go",
+            "column": 15,
+            "line": 21
+          }
+        ]
+      }
+    },
+    "SearchLooks": {
+      "operationId": "SearchLooks",
+      "calls": {
+        ".go": [
+          {
+            "sourceFile": "examples/go/get_all_looks.go",
+            "column": 15,
+            "line": 21
           }
         ]
       }
@@ -2808,6 +2887,54 @@
             "sourceFile": "examples/ruby/validate_projects.rb",
             "column": 25,
             "line": 22
+          }
+        ]
+      }
+    },
+    "AllUsers": {
+      "operationId": "AllUsers",
+      "calls": {
+        ".go": [
+          {
+            "sourceFile": "go/example/main.go",
+            "column": 15,
+            "line": 19
+          }
+        ]
+      }
+    },
+    "AllProjects": {
+      "operationId": "AllProjects",
+      "calls": {
+        ".go": [
+          {
+            "sourceFile": "go/example/main.go",
+            "column": 18,
+            "line": 31
+          }
+        ]
+      }
+    },
+    "Me": {
+      "operationId": "Me",
+      "calls": {
+        ".go": [
+          {
+            "sourceFile": "go/example/main.go",
+            "column": 11,
+            "line": 40
+          }
+        ]
+      }
+    },
+    "SearchUsers": {
+      "operationId": "SearchUsers",
+      "calls": {
+        ".go": [
+          {
+            "sourceFile": "go/example/main.go",
+            "column": 14,
+            "line": 46
           }
         ]
       }

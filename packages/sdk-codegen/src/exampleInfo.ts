@@ -156,6 +156,7 @@ export const exampleLink = (
   }
 }
 
+// TODO create one data set for extensionToLanguage and getLanguageExtensions
 /** map file extension to language name */
 export const extensionToLanguage = {
   '.py': 'Python',
@@ -168,6 +169,7 @@ export const extensionToLanguage = {
   '.dart': 'Dart',
   '.go': 'Go',
   '.md': 'Markdown',
+  '.java': 'Java',
 }
 
 /**
@@ -194,6 +196,8 @@ export const getLanguageExtensions = (language: string): string[] => {
       return ['.dart']
     case 'go':
       return ['.go']
+    case 'java':
+      return ['.java']
     default:
       return []
   }
