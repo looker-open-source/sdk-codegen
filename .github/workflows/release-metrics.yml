@@ -25,4 +25,4 @@ jobs:
                draft,
                prerelease
              }'' $GITHUB_EVENT_PATH > releases.json'
-      - run: bq load metrics.releases releases.json
+      - run: bq load --source_format=NEWLINE_DELIMITED_JSON metrics.releases releases.json
