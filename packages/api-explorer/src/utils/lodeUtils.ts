@@ -30,7 +30,7 @@ const fetchLode = async (lodeUrl: string) => {
   try {
     await fetch(lodeUrl, { method: 'HEAD' })
   } catch (error) {
-    throw new Error(`The server appears not to be running: ${lodeUrl}`)
+    console.warn(`The server appears not to be running: ${lodeUrl}`)
   }
   return fetch(lodeUrl, { mode: 'cors' })
 }
