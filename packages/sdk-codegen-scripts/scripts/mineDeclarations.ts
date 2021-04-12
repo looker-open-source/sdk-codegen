@@ -81,7 +81,7 @@ import {
       encoding: 'utf-8',
     })
     console.log(`Copied declaration nuggets to ${indexCopy}`)
-    const examplesIndex = 'motherlode.json'
+    const examplesIndex = 'examplesIndex.json'
     const examples = path.join(root, examplesIndex)
     if (fs.existsSync(examples)) {
       const examplesCopy = path.join(copyPath, examplesIndex)

@@ -27,7 +27,7 @@ The API Explorer extension can be manually installed and run with a Looker insta
       }
    }
    ```
-   the `http://localhost:3000` is for when you want to use the [API Explorer file server](/apix-files/README.md)
+   the `http://localhost:30000` is for when you want to use the [API Explorer file server](/apix-files/README.md)
 1. save all changes and deploy to production
 1. in the root of `sdk-codegen`:
    ```sh

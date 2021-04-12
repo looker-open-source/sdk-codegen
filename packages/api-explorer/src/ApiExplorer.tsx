@@ -51,7 +51,7 @@ export interface ApiExplorerProps {
 
 const ApiExplorer: FC<ApiExplorerProps> = ({
   specs,
-  exampleLodeUrl = 'https://raw.githubusercontent.com/looker-open-source/sdk-codegen/main/motherlode.json',
+  exampleLodeUrl = 'https://raw.githubusercontent.com/looker-open-source/sdk-codegen/main/examplesIndex.json',
   declarationsLodeUrl = `${apixFilesHost}/declarationsIndex.json`,
 }) => {
   const location = useLocation()

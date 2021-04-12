@@ -32,7 +32,7 @@ import { ExampleMiner } from '../src/exampleMiner'
   const total = args.length
   const root = path.join(__dirname, '/../../../')
   const sourcePath = total < 1 ? root : path.join(root, args[0])
-  const indexFile = path.join(sourcePath, '/motherlode.json')
+  const indexFile = path.join(sourcePath, '/examplesIndex.json')
   console.log(`Mining examples from ${sourcePath} ...`)
   const miner = new ExampleMiner(sourcePath)
   const result = miner.execute()

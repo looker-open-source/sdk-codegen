@@ -117,7 +117,7 @@ export class DeclarationMiner {
         this.types = { ...this.types, ...this.mineFile(relFile, f, tProbe) }
       }
     })
-    return this.motherLode
+    return this.lode
   }
 
   get commitHash(): string {
@@ -130,7 +130,7 @@ export class DeclarationMiner {
     return getRemoteHttpOrigin()
   }
 
-  get motherLode(): IDeclarationMine {
+  get lode(): IDeclarationMine {
     return {
       commitHash: this.commitHash,
       remoteOrigin: this.remoteOrigin,

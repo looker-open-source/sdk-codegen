@@ -28,7 +28,7 @@ import { TabList, Tab, TabPanels, TabPanel, useTabs } from '@looker/components'
 import { findExampleLanguages, IMethod } from '@looker/sdk-codegen'
 
 import { CollapserCard } from '../Collapser'
-import { LodeContext } from '../../context/motherlode'
+import { LodeContext } from '../../context'
 import { DocExamples } from './DocExamples'
 
 interface DocSdkUsageProps {

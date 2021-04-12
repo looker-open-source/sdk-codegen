@@ -37,7 +37,7 @@ const fetchLode = async (lodeUrl: string) => {
   }
 }
 
-interface Motherlode {
+interface FullLode {
   examples: IExampleMine
   declarations?: IDeclarationMine
 }
@@ -45,9 +45,9 @@ interface Motherlode {
 export const getLoded = async (
   examplesLodeUrl: string,
   declarationsLodeUrl?: string
-): Promise<Motherlode> => {
+): Promise<FullLode> => {
   // First try to load from the apix-files server
-  let examples = await fetchLode(`${apixFilesHost}/motherlode.json`)
+  let examples = await fetchLode(`${apixFilesHost}/examplesIndex.json`)
   if (!examples) {
     examples = await fetchLode(examplesLodeUrl)
   }
@@ -57,7 +57,7 @@ export const getLoded = async (
     declarations = await fetchLode(declarationsLodeUrl)
   }
 
-  const lode: Motherlode = {
+  const lode: FullLode = {
     examples: { commitHash: '', nuggets: {}, remoteOrigin: '', summaries: {} },
   }
   if (examples) {

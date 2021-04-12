@@ -237,7 +237,7 @@ describe('example mining', () => {
 
     it('processes files', () => {
       const miner = new ExampleMiner(sourcePath)
-      const actual = miner.motherLode
+      const actual = miner.lode
       expect(actual).toBeDefined()
       expect(actual.commitHash).toBeDefined()
       expect(Object.entries(actual.nuggets).length).toBeGreaterThan(50)

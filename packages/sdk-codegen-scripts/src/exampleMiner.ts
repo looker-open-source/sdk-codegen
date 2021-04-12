@@ -308,7 +308,7 @@ export class ExampleMiner {
     this.execute(sourcePath)
   }
 
-  get motherLode(): IExampleMine {
+  get lode(): IExampleMine {
     return {
       commitHash: this.commitHash,
       remoteOrigin: this.remoteOrigin,
@@ -385,6 +385,6 @@ export class ExampleMiner {
     const dirPath = sourcePath ?? this.sourcePath
     const files = getCodeFiles(dirPath)
     files.forEach((f) => this.processFile(f))
-    return this.motherLode
+    return this.lode
   }
 }

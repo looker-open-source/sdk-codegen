@@ -1,6 +1,6 @@
 # API Explorer file server
 
-API Explorer (aka APIX) can be uses some JSON-formatted "index" files to augment the information provided in a specification.
+API Explorer (aka APIX) uses some JSON-formatted "index" files to augment the information provided in a specification.
 
 To use this server, clone this repository and:
 
@@ -13,7 +13,7 @@ yarn serve
 
 This will start the API Explorer file server at `http://localhost:30000`
 
-## Mining the mother lode
+## Mining the source code
 
 `yarn mine` runs two specific miners:
 - `yarn mine:examples`
@@ -28,7 +28,7 @@ The source code in this repository is mined to find examples of using the Looker
 ```sh
 yarn mine:examples
 ```
-produces [motherlode.json](/motherlode.json), which is checked in.
+produces [examplesIndex.json](/examplesIndex.json), which is checked in.
 
 ### Declaration mining
 
