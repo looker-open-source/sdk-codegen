@@ -23,41 +23,31 @@
  SOFTWARE.
 
  */
-import React, { FC, useContext } from 'react'
-import { findDeclaration, IMethod, IType } from '@looker/sdk-codegen'
-import { Icon, Link, Tooltip } from '@looker/components'
 
-import { LodeContext } from '../../context'
+import React, { ReactElement } from 'react'
+import { RenderOptions } from '@testing-library/react'
 
-interface DocSourceProps {
-  method?: IMethod
-  type?: IType
+import { renderWithTheme } from '@looker/components-test-utils'
+import { IDeclarationMine, IExampleMine } from '@looker/sdk-codegen'
+import { LodeContext } from '../context'
+
+const withLode = (
+  consumer: ReactElement<any>,
+  examples: IExampleMine,
+  declarations?: IDeclarationMine
+) => {
+  return (
+    <LodeContext.Provider value={{ examples, declarations }}>
+      {consumer}
+    </LodeContext.Provider>
+  )
 }
 
-export const DocSource: FC<DocSourceProps> = ({ method, type }) => {
-  const { declarations } = useContext(LodeContext)
-  let sourceLink
-  let declaration
-  if (declarations) {
-    ;({ declaration, link: sourceLink } = findDeclaration(
-      declarations,
-      method?.id,
-      type?.name
-    ))
-  }
-
-  return (
-    <>
-      {sourceLink && declaration && (
-        <Tooltip
-          content={`${declaration.sourceFile}#L${declaration.line}`}
-          width="none"
-        >
-          <Link href={sourceLink} target="_blank">
-            <Icon name="IdeFileDocument" />
-          </Link>
-        </Tooltip>
-      )}
-    </>
-  )
+export const renderWithLode = (
+  component: ReactElement<any>,
+  examples: IExampleMine,
+  declarations?: IDeclarationMine,
+  options?: Omit<RenderOptions, 'queries'>
+) => {
+  return renderWithTheme(withLode(component, examples, declarations), options)
 }

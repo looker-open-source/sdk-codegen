@@ -47,7 +47,7 @@ export const findDeclaration = (
   lode: IDeclarationMine,
   methodId?: string,
   typeId?: string
-): string | undefined => {
+) => {
   let declaration
   if (methodId) {
     declaration = lode.methods[methodId]
@@ -66,5 +66,5 @@ export const findDeclaration = (
     )
     // link = ideLink(parentPath, declaration.sourceFile, declaration.line)
   }
-  return link
+  return { declaration, link }
 }
