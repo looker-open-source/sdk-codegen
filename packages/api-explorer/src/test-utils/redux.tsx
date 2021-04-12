@@ -32,6 +32,7 @@ import { RenderOptions } from '@testing-library/react'
 import { configureStore, RootState } from '../state'
 import { IApixEnvAdaptor, StandaloneEnvAdaptor } from '../utils'
 import { EnvAdaptorContext } from '../context'
+import { renderWithRouter } from '.'
 
 const defaultStore = configureStore()
 
@@ -55,3 +56,16 @@ export const renderWithReduxProvider = (
   envAdaptor?: IApixEnvAdaptor,
   options?: Omit<RenderOptions, 'queries'>
 ) => renderWithTheme(withReduxProvider(consumers, store, envAdaptor), options)
+
+export const renderWithRouterAndReduxProvider = (
+  consumers: ReactElement<any>,
+  initialEntries: string[] = ['/'],
+  store?: Store<RootState>,
+  envAdaptor?: IApixEnvAdaptor,
+  options?: Omit<RenderOptions, 'queries'>
+) =>
+  renderWithRouter(
+    withReduxProvider(consumers, store, envAdaptor),
+    initialEntries,
+    options
+  )
