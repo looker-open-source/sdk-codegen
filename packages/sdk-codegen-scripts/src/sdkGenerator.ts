@@ -170,6 +170,34 @@ export class StreamGenerator extends MethodGenerator {
   }
 }
 
+export class InterfaceGenerator extends MethodGenerator {
+  itemGenerator(indent: string, method: Models.IMethod) {
+    return this.codeFormatter.declareInterface(indent, method)
+  }
+
+  prologue(indent: string) {
+    return this.codeFormatter.interfacesPrologue(indent)
+  }
+
+  epilogue(indent: string) {
+    return this.codeFormatter.methodsEpilogue(indent)
+  }
+}
+
+export class FunctionGenerator extends MethodGenerator {
+  itemGenerator(indent: string, method: Models.IMethod) {
+    return this.codeFormatter.declareFunction(indent, method)
+  }
+
+  prologue(indent: string) {
+    return this.codeFormatter.functionsPrologue(indent)
+  }
+
+  epilogue(indent: string) {
+    return this.codeFormatter.functionsEpilogue(indent)
+  }
+}
+
 export class TypeGenerator extends Generator<Models.IApiModel> {
   render(indent: string) {
     this.codeFormatter.reset()

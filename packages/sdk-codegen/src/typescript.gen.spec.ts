@@ -653,7 +653,9 @@ async all_datagroups(options?: Partial<ITransportSettings>) {
       const actual = gen.accessor(name, prefix)
       expect(actual).toEqual(expected)
     })
+  })
 
+  describe('complete declarations', () => {
     it('method with request body', () => {
       const method = apiTestModel.methods.create_dashboard_render_task
       const expected = `/**
@@ -671,6 +673,102 @@ async create_dashboard_render_task(request: IRequestCreateDashboardRenderTask, o
   return this.post<IRenderTask, IError | IValidationError>(\`/render_tasks/dashboards/\${request.dashboard_id}/\${request.result_format}\`, {width: request.width, height: request.height, fields: request.fields, pdf_paper_size: request.pdf_paper_size, pdf_landscape: request.pdf_landscape, long_tables: request.long_tables}, request.body, options)
 }`
       const actual = gen.declareMethod(indent, method)
+      expect(actual).toEqual(expected)
+    })
+
+    it('function with request body', () => {
+      const method = apiTestModel.methods.create_dashboard_render_task
+      const expected = `/**
+ * ### Create a new task to render a dashboard to a document or image.
+ *
+ * Returns a render task object.
+ * To check the status of a render task, pass the render_task.id to [Get Render Task](#!/RenderTask/get_render_task).
+ * Once the render task is complete, you can download the resulting document or image using [Get Render Task Results](#!/RenderTask/get_render_task_results).
+ *
+ * POST /render_tasks/dashboards/{dashboard_id}/{result_format} -> IRenderTask
+ */
+expore const create_dashboard_render_task = async (sdk: APIMethods, request: IRequestCreateDashboardRenderTask, options?: Partial<ITransportSettings>) => {
+  request.dashboard_id = encodeParam(request.dashboard_id)
+  request.result_format = encodeParam(request.result_format)
+  return sdk.post<IRenderTask, IError | IValidationError>(\`/render_tasks/dashboards/\${request.dashboard_id}/\${request.result_format}\`, {width: request.width, height: request.height, fields: request.fields, pdf_paper_size: request.pdf_paper_size, pdf_landscape: request.pdf_landscape, long_tables: request.long_tables}, request.body, options)
+}`
+      const actual = gen.declareFunction(indent, method)
+      expect(actual).toEqual(expected)
+    })
+
+    it('interface with request body', () => {
+      const method = apiTestModel.methods.create_dashboard_render_task
+      const expected = `/**
+ * ### Create a new task to render a dashboard to a document or image.
+ *
+ * Returns a render task object.
+ * To check the status of a render task, pass the render_task.id to [Get Render Task](#!/RenderTask/get_render_task).
+ * Once the render task is complete, you can download the resulting document or image using [Get Render Task Results](#!/RenderTask/get_render_task_results).
+ *
+ * POST /render_tasks/dashboards/{dashboard_id}/{result_format} -> IRenderTask
+ */
+create_dashboard_render_task(request: IRequestCreateDashboardRenderTask, options?: Partial<ITransportSettings>): Promise<SDKResult<IRenderTask, IError | IValidationError>>
+`
+      const actual = gen.declareInterface(indent, method)
+      expect(actual).toEqual(expected)
+    })
+    it('method without request body', () => {
+      const method = apiTestModel.methods.content_thumbnail
+      const expected = `/**
+ * ### Get an image representing the contents of a dashboard or look.
+ *
+ * The returned thumbnail is an abstract representation of the contents of a dashbord or look and does not
+ * reflect the actual data displayed in the respective visualizations.
+ *
+ * GET /content_thumbnail/{type}/{resource_id} -> string
+ *
+ * **Note**: Binary content may be returned by this function.
+ */
+async content_thumbnail(request: IRequestContentThumbnail, options?: Partial<ITransportSettings>) {
+  request.type = encodeParam(request.type)
+  request.resource_id = encodeParam(request.resource_id)
+  return this.get<string, IError>(\`/content_thumbnail/$\{request.type}/\${request.resource_id}\`, {reload: request.reload, format: request.format, width: request.width, height: request.height}, null, options)
+}`
+      const actual = gen.declareMethod(indent, method)
+      expect(actual).toEqual(expected)
+    })
+
+    it('function without request body', () => {
+      const method = apiTestModel.methods.content_thumbnail
+      const expected = `/**
+ * ### Get an image representing the contents of a dashboard or look.
+ *
+ * The returned thumbnail is an abstract representation of the contents of a dashbord or look and does not
+ * reflect the actual data displayed in the respective visualizations.
+ *
+ * GET /content_thumbnail/{type}/{resource_id} -> string
+ *
+ * **Note**: Binary content may be returned by this function.
+ */
+export const content_thumbnail = async (sdk: APIMethods, request: IRequestContentThumbnail, options?: Partial<ITransportSettings>) => {
+  request.type = encodeParam(request.type)
+  request.resource_id = encodeParam(request.resource_id)
+  return sdk.get<string, IError>(\`/content_thumbnail/$\{request.type}/\${request.resource_id}\`, {reload: request.reload, format: request.format, width: request.width, height: request.height}, null, options)
+}`
+      const actual = gen.declareFunction(indent, method)
+      expect(actual).toEqual(expected)
+    })
+
+    it('interface without request body', () => {
+      const method = apiTestModel.methods.content_thumbnail
+      const expected = `/**
+ * ### Get an image representing the contents of a dashboard or look.
+ *
+ * The returned thumbnail is an abstract representation of the contents of a dashbord or look and does not
+ * reflect the actual data displayed in the respective visualizations.
+ *
+ * GET /content_thumbnail/{type}/{resource_id} -> string
+ *
+ * **Note**: Binary content may be returned by this function.
+ */
+content_thumbnail(request: IRequestContentThumbnail, options?: Partial<ITransportSettings>): Promise<SDKResult<string, IError>>
+`
+      const actual = gen.declareInterface(indent, method)
       expect(actual).toEqual(expected)
     })
   })

@@ -214,6 +214,12 @@ export interface ICodeGen {
   /** Use named/keyword arguments in calling syntax */
   useNamedArguments: boolean
 
+  /** Mainly for Typescript SDK tree-shaking support. True produces funcs.ext */
+  useFunctions: boolean
+
+  /** Does this language implement interfaces? True produces methodInterfaces.ext */
+  useInterfaces: boolean
+
   /** Does this language have streaming methods? */
   willItStream: boolean
 
@@ -358,22 +364,37 @@ export interface ICodeGen {
 
   /**
    * standard code to insert at the top of the generated "methods" file(s)
-   * @param {string} indent code indentation
-   * @returns {string}
+   * @param indent code indentation
    */
   methodsPrologue(indent: string): string
 
   /**
+   * standard code to insert at the top of the generated "funcs" file(s)
+   * @param indent code indentation
+   */
+  functionsPrologue(indent: string): string
+
+  /**
+   * standard code to insert at the top of the generated "methodsInterface" file(s)
+   * @param indent code indentation
+   */
+  interfacesPrologue(indent: string): string
+
+  /**
    * standard code to append to the bottom of the generated "methods" file(s)
-   * @param {string} indent code indentation
-   * @returns {string} generated code
+   * @param indent code indentation
    */
   methodsEpilogue(indent: string): string
 
   /**
+   * standard code to append to the bottom of the generated "funcs" file(s)
+   * @param indent code indentation
+   */
+  functionsEpilogue(indent: string): string
+
+  /**
    * standard code to insert at the top of the generated "streams" file(s)
-   * @param {string} indent code indentation
-   * @returns {string} generated code
+   * @param indent code indentation
    */
   streamsPrologue(indent: string): string
 
@@ -476,11 +497,17 @@ export interface ICodeGen {
 
   /**
    * generates the method signature including parameter list and return type.
-   * @param {string} indent code indentation
-   * @param {IMethod} method to declare
-   * @returns {string} source code
+   * @param indent code indentation
+   * @param method to declare
    */
   methodSignature(indent: string, method: IMethod): string
+
+  /**
+   * generates the function signature including parameter list and return type.
+   * @param indent code indentation
+   * @param method to declare
+   */
+  functionSignature(indent: string, method: IMethod): string
 
   /**
    * convert endpoint pattern to platform-specific string template
@@ -554,11 +581,27 @@ export interface ICodeGen {
 
   /**
    * generates the entire method
-   * @param {string} indent code indentation
-   * @param {IMethod} method structure of method to declare
-   * @returns {string} the resolved API endpoint path
+   * @param indent code indentation
+   * @param method structure of method to declare
+   * @returns the declaration code for the method
    */
   declareMethod(indent: string, method: IMethod): string
+
+  /**
+   * generates the entire function
+   * @param indent code indentation
+   * @param method structure of method to declare
+   * @returns the declaration code for the function
+   */
+  declareFunction(indent: string, method: IMethod): string
+
+  /**
+   * generates the method's interface declaration
+   * @param indent code indentation
+   * @param method structure of method to declare
+   * @returns the declaration code for the method's interface
+   */
+  declareInterface(indent: string, method: IMethod): string
 
   /**
    * generates the streaming method signature including parameter list and return type.
@@ -676,6 +719,8 @@ export abstract class CodeGen implements ICodeGen {
   codeQuote = `'`
   useNamedParameters = true
   useNamedArguments = true
+  useFunctions = false
+  useInterfaces = false
   arrayOpen = '['
   arrayClose = ']'
   hashOpen = '{'
@@ -727,6 +772,19 @@ export abstract class CodeGen implements ICodeGen {
    * @returns {string}
    */
   abstract methodsPrologue(indent: string): string
+
+  functionsPrologue(_indent: string): string {
+    // usually, nothing to "close" atomic function declarations
+    return ''
+  }
+
+  functionsEpilogue(_indent: string): string {
+    return ''
+  }
+
+  interfacesPrologue(_indent: string): string {
+    return ''
+  }
 
   /**
    * ending of the "methods" file for a language
@@ -782,7 +840,19 @@ export abstract class CodeGen implements ICodeGen {
 
   abstract methodSignature(indent: string, method: IMethod): string
 
+  functionSignature(_indent: string, _method: IMethod): string {
+    return ''
+  }
+
   abstract declareMethod(indent: string, method: IMethod): string
+
+  declareFunction(_indent: string, _method: IMethod): string {
+    return ''
+  }
+
+  declareInterface(_indent: string, _method: IMethod): string {
+    return ''
+  }
 
   argIndent(indent: string, args: string[], opener: string, closer: string) {
     const bump = this.bumper(indent)

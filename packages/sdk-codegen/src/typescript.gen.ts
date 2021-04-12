@@ -54,6 +54,8 @@ export class TypescriptGen extends CodeGen {
   /**
    * special case for Typescript output path due to mono repository
    */
+  useFunctions = true
+  useInterfaces = true
   packagePath = 'sdk/src'
   itself = 'this'
   fileExtension = '.ts'
@@ -116,6 +118,34 @@ export class ${this.packageName} extends APIMethods {
         ? ''
         : authSession.settings.base_url + '/api/' + this.apiVersion
   }
+
+`
+  }
+
+  functionsPrologue(_indent: string) {
+    return `
+import { ${this.rtlImports()}APIMethods, IAuthSession, ITransportSettings, encodeParam } from '@looker/sdk-rtl'
+
+/**
+ * ${this.warnEditing()}
+ *
+ */
+
+import { ${this.typeNames().join(', ')} } from './models'
+
+`
+  }
+
+  interfacesPrologue(_indent: string) {
+    return `
+import { ${this.rtlImports()}APIMethods, IAuthSession, ITransportSettings, encodeParam } from '@looker/sdk-rtl'
+/**
+ * ${this.warnEditing()}
+ *
+ */
+import { ${this.typeNames().join(', ')} } from './models'
+
+export interface I${this.packageName} {
 
 `
   }
@@ -240,7 +270,12 @@ export class ${this.packageName}Stream extends APIMethods {
     return `${resp}${args}))`
   }
 
-  methodHeaderDeclaration(indent: string, method: IMethod, streamer = false) {
+  methodHeaderDeclaration(
+    indent: string,
+    method: IMethod,
+    streamer = false,
+    params: string[] = []
+  ) {
     const mapped = this.typeMap(method.type)
     const head = method.description?.trim()
     let headComment =
@@ -258,8 +293,9 @@ export class ${this.packageName}Stream extends APIMethods {
         method.httpMethod === 'PATCH'
           ? `request: Partial<I${requestType}>`
           : `request: I${requestType}`
+      params.push(fragment)
+      fragment = params.join(', ')
     } else {
-      const params: string[] = []
       const args = method.allParams // get the params in signature order
       if (args && args.length > 0)
         args.forEach((p) => params.push(this.declareParameter(bump, method, p)))
@@ -267,9 +303,9 @@ export class ${this.packageName}Stream extends APIMethods {
         params.length > 0 ? `\n${params.join(this.paramDelimiter)}` : ''
     }
     if (method.responseIsBoth()) {
-      headComment += `\n\n**Note**: Binary content may be returned by this method.`
+      headComment += `\n\n**Note**: Binary content may be returned by this function.`
     } else if (method.responseIsBinary()) {
-      headComment += `\n\n**Note**: Binary content is returned by this method.\n`
+      headComment += `\n\n**Note**: Binary content is returned by this function.\n`
     }
     const callback = `callback: (readable: Readable) => Promise<${mapped.name}>,`
     const header =
@@ -312,6 +348,34 @@ export class ${this.packageName}Stream extends APIMethods {
       this.httpCall(bump, method) +
       `\n${indent}}`
     )
+  }
+
+  functionSignature(indent: string, method: IMethod): string {
+    return this.methodHeaderDeclaration(indent, method, false, [
+      'sdk: APIMethods',
+    ])
+  }
+
+  declareFunction(indent: string, method: IMethod): string {
+    const bump = this.bumper(indent)
+    // horribly hacky tweak to httpCall
+    this.itself = 'sdk'
+    const result =
+      this.functionSignature(indent, method) +
+      this.encodePathParams(indent, method) +
+      this.httpCall(bump, method) +
+      `\n${indent}}`
+    this.itself = 'this'
+    return result
+  }
+
+  declareInterface(indent: string, method: IMethod): string {
+    const mapped = this.typeMap(method.type)
+    const errors = this.errorResponses(indent, method)
+    let sig = this.methodSignature(indent, method).trimRight()
+    sig = sig.replace(/^\s*async /gm, '')
+    sig = sig.substr(0, sig.length - 2)
+    return `${sig}: Promise<SDKResult<${mapped.name}, ${errors}>>\n`
   }
 
   streamerSignature(indent: string, method: IMethod) {

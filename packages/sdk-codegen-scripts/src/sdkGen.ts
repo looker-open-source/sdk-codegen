@@ -28,7 +28,12 @@ import * as fs from 'fs'
 import path from 'path'
 import { danger, log, warn } from '@looker/sdk-codegen-utils'
 import { IVersionInfo } from '@looker/sdk-codegen'
-import { MethodGenerator, StreamGenerator, TypeGenerator } from './sdkGenerator'
+import {
+  InterfaceGenerator,
+  MethodGenerator,
+  StreamGenerator,
+  TypeGenerator,
+} from './sdkGenerator'
 import { FilesFormatter } from './reformatter'
 import { isDirSync, quit } from './nodeUtils'
 import { getGenerator } from './languages'
@@ -93,6 +98,20 @@ export const writeCodeFile = (fileName: string, content: string): string => {
         }
         log(`generating ${language} from ${props.base_url} ${api} ...`)
         log(`generating ${api} methods ...`)
+
+        // if (gen.useFunctions) {
+        //   log(`generating ${api} functions ...`)
+        //   const s = new FunctionGenerator(apiModel, gen)
+        //   const output = s.render(gen.indentStr)
+        //   writeCodeFile(gen.sdkFileName(`funcs`), output)
+        // }
+
+        if (gen.useInterfaces) {
+          log(`generating ${api} interfaces ...`)
+          const s = new InterfaceGenerator(apiModel, gen)
+          const output = s.render(gen.indentStr)
+          writeCodeFile(gen.sdkFileName(`methodInterfaces`), output)
+        }
 
         // Generate standard method declarations
         const sdk = new MethodGenerator(apiModel, gen)
