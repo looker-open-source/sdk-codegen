@@ -33,7 +33,7 @@ import { DocSdkCallsProps } from './DocSdkCalls'
 /**
  * Generates the SDK call syntax for all supported languages
  */
-export const DocCalls: FC<Omit<DocSdkCallsProps, 'sdkLanguage'>> = ({
+export const DocMultiCall: FC<Omit<DocSdkCallsProps, 'sdkLanguage'>> = ({
   api,
   inputs,
   method,

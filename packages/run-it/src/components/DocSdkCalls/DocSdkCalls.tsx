@@ -29,8 +29,8 @@ import { ApiModel, IMethod, trimInputs } from '@looker/sdk-codegen'
 import { Heading } from '@looker/components'
 
 import { RunItValues } from '../../RunIt'
-import { DocCall } from './DocCall'
-import { DocCalls } from './DocCalls'
+import { DocSingleCall } from './DocSingleCall'
+import { DocMultiCall } from './DocMultiCall'
 
 export interface DocSdkCallsProps {
   /** API spec */
@@ -72,9 +72,9 @@ export const DocSdkCalls: FC<DocSdkCallsProps> = ({
         {heading}
       </Heading>
       {sdkLanguage === 'All' ? (
-        <DocCalls api={api} inputs={trimmedInputs} method={method} />
+        <DocMultiCall api={api} inputs={trimmedInputs} method={method} />
       ) : (
-        <DocCall
+        <DocSingleCall
           api={api}
           method={method}
           inputs={trimmedInputs}

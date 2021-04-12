@@ -32,7 +32,7 @@ import { DocSdkCallsProps } from './DocSdkCalls'
 /**
  * Generates the SDK call syntax for a given language
  */
-export const DocCall: FC<DocSdkCallsProps> = ({
+export const DocSingleCall: FC<DocSdkCallsProps> = ({
   api,
   method,
   inputs,
