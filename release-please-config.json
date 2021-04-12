@@ -40,6 +40,7 @@
     },
     "python": {
       "release-type": "python",
+      "release-as": "21.4.1",
       "draft": true,
       "package-name": "looker_sdk"
     }

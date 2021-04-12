@@ -108,6 +108,7 @@ export class PythonGen extends CodeGen {
 # ${this.warnEditing()}
 import datetime
 from typing import Any, MutableMapping, Optional, Sequence, Union
+import warnings
 
 from . import models
 from ${this.packagePath}.rtl import api_methods
@@ -401,15 +402,20 @@ ${this.hooks.join('\n')}
     }
     result = this.argFill(result, returnType)
     result = this.argFill(result, `f"${method.endpoint}"`)
-    return result
+    return this.bumper(indent) + result
   }
 
   httpCall(indent: string, method: IMethod) {
     const bump = indent + this.indentStr
     const args = this.httpArgs(bump, method)
-    const methodCall = `${indent}response = ${this.it(
+    let methodCall = `${indent}response = ${this.it(
       method.httpMethod.toLowerCase()
     )}`
+    if (method.name === 'login_user') {
+      methodCall =
+        `${indent}warnings.warn("login_user behavior changed significantly ` +
+        `in 21.4.0. See https://git.io/JOtH1")\n${methodCall}`
+    }
     let assertTypeName = this.methodReturnType(method)
     switch (method.type.className) {
       case 'ArrayType':
@@ -432,7 +438,7 @@ ${this.hooks.join('\n')}
     const returnStmt = `${indent}return response`
     return (
       `${methodCall}(\n` +
-      `${bump.repeat(3)}${args}\n` +
+      `${this.bumper(indent)}${args}\n` +
       `${indent})\n` +
       `${assertion}\n` +
       `${returnStmt}`
