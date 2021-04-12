@@ -162,12 +162,9 @@ import { ${this.rtlImports()}APIMethods, IAuthSession, ITransportSettings, encod
  *
  */
 import { sdkVersion } from '../constants'
-import { I${this.packageName} } from './methodsInterface'
 import { ${this.typeNames().join(', ')} } from './models'
 
-export class ${this.packageName}Stream extends APIMethods implements I${
-      this.packageName
-    } {
+export class ${this.packageName}Stream extends APIMethods {
   static readonly ApiVersion = '${this.apiVersion}'
   constructor(authSession: IAuthSession) {
     super(authSession, sdkVersion)
