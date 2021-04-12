@@ -241,9 +241,6 @@ export interface ICodeGen {
   /** Do type declarations use a class definition */
   useModelClassForTypes: boolean
 
-  /** Increase indent */
-  bumper(indent: string): string
-
   /**
    * Resets the generator for a new emission
    */
