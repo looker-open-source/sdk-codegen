@@ -36,7 +36,6 @@ import { EnvAdaptorConstants } from '../../utils'
 
 /**
  * Allows the user to select their preferred SDK language
- * @constructor
  */
 export const SdkLanguageSelector: FC = () => {
   const { setSdkLanguageAction } = useActions()

@@ -58,7 +58,6 @@ export const HEADER_REM = 4
  * @param spec              Current selected spec
  * @param specDispatch      Spec state setter
  * @param toggleNavigation  Nav state setter
- * @constructor
  */
 export const HeaderLayout: FC<HeaderProps> = ({
   className,
