@@ -581,7 +581,7 @@ async create_user_credentials_email(
   /**
    * @param {string} fields Requested fields.
    */
-  fields?: string, options?: Partial<ITransportSettings>) {
+  fields?: string, options?: Partial<ITransportSettings>): Promise<SDKResponse<ICredentialsEmail, IError | IValidationError>> {
 `
       const actual = gen.methodSignature('', method)
       expect(actual).toEqual(expected)
@@ -594,7 +594,7 @@ async create_user_credentials_email(
  *
  * GET /datagroups -> IDatagroup[]
  */
-async all_datagroups(options?: Partial<ITransportSettings>) {
+async all_datagroups(options?: Partial<ITransportSettings>): Promise<SDKResponse<IDatagroup[], IError>> {
 `
       const actual = gen.methodSignature('', method)
       expect(actual).toEqual(expected)
@@ -667,7 +667,7 @@ async all_datagroups(options?: Partial<ITransportSettings>) {
  *
  * POST /render_tasks/dashboards/{dashboard_id}/{result_format} -> IRenderTask
  */
-async create_dashboard_render_task(request: IRequestCreateDashboardRenderTask, options?: Partial<ITransportSettings>) {
+async create_dashboard_render_task(request: IRequestCreateDashboardRenderTask, options?: Partial<ITransportSettings>): Promise<SDKResponse<IRenderTask, IError | IValidationError>> {
   request.dashboard_id = encodeParam(request.dashboard_id)
   request.result_format = encodeParam(request.result_format)
   return this.post<IRenderTask, IError | IValidationError>(\`/render_tasks/dashboards/\${request.dashboard_id}/\${request.result_format}\`, {width: request.width, height: request.height, fields: request.fields, pdf_paper_size: request.pdf_paper_size, pdf_landscape: request.pdf_landscape, long_tables: request.long_tables}, request.body, options)
@@ -687,7 +687,7 @@ async create_dashboard_render_task(request: IRequestCreateDashboardRenderTask, o
  *
  * POST /render_tasks/dashboards/{dashboard_id}/{result_format} -> IRenderTask
  */
-expore const create_dashboard_render_task = async (sdk: APIMethods, request: IRequestCreateDashboardRenderTask, options?: Partial<ITransportSettings>) => {
+export const create_dashboard_render_task = async (sdk: IAPIMethods, request: IRequestCreateDashboardRenderTask, options?: Partial<ITransportSettings>): Promise<SDKResponse<IRenderTask, IError | IValidationError>> => {
   request.dashboard_id = encodeParam(request.dashboard_id)
   request.result_format = encodeParam(request.result_format)
   return sdk.post<IRenderTask, IError | IValidationError>(\`/render_tasks/dashboards/\${request.dashboard_id}/\${request.result_format}\`, {width: request.width, height: request.height, fields: request.fields, pdf_paper_size: request.pdf_paper_size, pdf_landscape: request.pdf_landscape, long_tables: request.long_tables}, request.body, options)
@@ -707,7 +707,7 @@ expore const create_dashboard_render_task = async (sdk: APIMethods, request: IRe
  *
  * POST /render_tasks/dashboards/{dashboard_id}/{result_format} -> IRenderTask
  */
-create_dashboard_render_task(request: IRequestCreateDashboardRenderTask, options?: Partial<ITransportSettings>): Promise<SDKResult<IRenderTask, IError | IValidationError>>
+create_dashboard_render_task(request: IRequestCreateDashboardRenderTask, options?: Partial<ITransportSettings>): Promise<SDKResponse<IRenderTask, IError | IValidationError>>
 `
       const actual = gen.declareInterface(indent, method)
       expect(actual).toEqual(expected)
@@ -724,7 +724,7 @@ create_dashboard_render_task(request: IRequestCreateDashboardRenderTask, options
  *
  * **Note**: Binary content may be returned by this function.
  */
-async content_thumbnail(request: IRequestContentThumbnail, options?: Partial<ITransportSettings>) {
+async content_thumbnail(request: IRequestContentThumbnail, options?: Partial<ITransportSettings>): Promise<SDKResponse<string, IError>> {
   request.type = encodeParam(request.type)
   request.resource_id = encodeParam(request.resource_id)
   return this.get<string, IError>(\`/content_thumbnail/$\{request.type}/\${request.resource_id}\`, {reload: request.reload, format: request.format, width: request.width, height: request.height}, null, options)
@@ -745,7 +745,7 @@ async content_thumbnail(request: IRequestContentThumbnail, options?: Partial<ITr
  *
  * **Note**: Binary content may be returned by this function.
  */
-export const content_thumbnail = async (sdk: APIMethods, request: IRequestContentThumbnail, options?: Partial<ITransportSettings>) => {
+export const content_thumbnail = async (sdk: IAPIMethods, request: IRequestContentThumbnail, options?: Partial<ITransportSettings>): Promise<SDKResponse<string, IError>> => {
   request.type = encodeParam(request.type)
   request.resource_id = encodeParam(request.resource_id)
   return sdk.get<string, IError>(\`/content_thumbnail/$\{request.type}/\${request.resource_id}\`, {reload: request.reload, format: request.format, width: request.width, height: request.height}, null, options)
@@ -766,7 +766,28 @@ export const content_thumbnail = async (sdk: APIMethods, request: IRequestConten
  *
  * **Note**: Binary content may be returned by this function.
  */
-content_thumbnail(request: IRequestContentThumbnail, options?: Partial<ITransportSettings>): Promise<SDKResult<string, IError>>
+content_thumbnail(request: IRequestContentThumbnail, options?: Partial<ITransportSettings>): Promise<SDKResponse<string, IError>>
+`
+      const actual = gen.declareInterface(indent, method)
+      expect(actual).toEqual(expected)
+    })
+
+    it('interface without initializer', () => {
+      const method = apiTestModel.methods.fetch_integration_form
+      const expected = `/**
+ * Returns the Integration form for presentation to the user.
+ *
+ * POST /integrations/{integration_id}/form -> IDataActionForm
+ */
+fetch_integration_form(
+  /**
+   * @param {string} integration_id Id of integration
+   */
+  integration_id: string,
+  /**
+   * @param {Partial<IDictionary<string>>} body
+   */
+  body?: Partial<IDictionary<string>>, options?: Partial<ITransportSettings>): Promise<SDKResponse<IDataActionForm, IError | IValidationError>>
 `
       const actual = gen.declareInterface(indent, method)
       expect(actual).toEqual(expected)
@@ -892,7 +913,7 @@ async me(
   /**
    * @param {string} hi-test Requested fields.
    */
-  'hi-test'?: string, options?: Partial<ITransportSettings>) {
+  'hi-test'?: string, options?: Partial<ITransportSettings>): Promise<SDKResponse<IUser, IError>> {
   return this.get<IUser, IError>('/user', {'hi-test'}, null, options)
 }`
         expect(actual).toEqual(expected)
@@ -910,7 +931,7 @@ async me(
  *
  * GET /roles/{role_id}/users -> IUser[]
  */
-async role_users(request: IRequestRoleUsers, options?: Partial<ITransportSettings>) {
+async role_users(request: IRequestRoleUsers, options?: Partial<ITransportSettings>): Promise<SDKResponse<IUser[], IError>> {
   return this.get<IUser[], IError>(\`/roles/\${request.role_id}/users\`, {fields: request.fields, 'direct-association-only': request['direct-association-only']}, null, options)
 }`
         expect(actual).toEqual(expected)
