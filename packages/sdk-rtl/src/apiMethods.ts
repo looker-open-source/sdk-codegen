@@ -36,7 +36,7 @@ import {
 } from './transport'
 import { IAuthSession } from './authSession'
 
-interface IAPIMethods {
+export interface IAPIMethods {
   authSession: IAuthSession
   sdkVersion: string
   apiPath: string

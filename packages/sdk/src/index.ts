@@ -24,14 +24,23 @@
 
  */
 
-// Version 21.0.4
+// Version 21.4
+
+/**
+ * Note: functions should be deep-linked from their 4.0/funcs or 3.1/funcs path
+ */
 import * as models31 from './3.1/models'
-export * from './3.1/methods'
 export { models31 }
-export * from './constants'
+
+export * from './3.1/methodsInterface'
+export * from './3.1/methods'
 export * from './3.1/streams'
+
+export * from './4.0/methodsInterface'
 export * from './4.0/methods'
 export * from './4.0/models'
 export * from './4.0/streams'
+
+export * from './constants'
 export * from './extensionSdk'
 export * from './browserSdk'

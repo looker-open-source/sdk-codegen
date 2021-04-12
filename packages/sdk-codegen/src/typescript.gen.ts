@@ -100,7 +100,7 @@ export class TypescriptGen extends CodeGen {
 
   methodsPrologue(_indent: string) {
     return `
-import { ${this.rtlImports()}APIMethods, IAuthSession, ITransportSettings, encodeParam } from '@looker/sdk-rtl'
+import { ${this.rtlImports()}APIMethods, IAuthSession, ITransportSettings, encodeParam, SDKResponse } from '@looker/sdk-rtl'
 /**
  * ${this.warnEditing()}
  *
@@ -127,7 +127,7 @@ export class ${this.packageName} extends APIMethods implements I${
 
   functionsPrologue(_indent: string) {
     return `
-import { ${this.rtlImports()}IAPIMethods, ITransportSettings, encodeParam } from '@looker/sdk-rtl'
+import { ${this.rtlImports()}IAPIMethods, ITransportSettings, encodeParam, SDKResponse } from '@looker/sdk-rtl'
 
 /**
  * ${this.warnEditing()}
@@ -318,13 +318,13 @@ export class ${this.packageName}Stream extends APIMethods implements I${
       this.commentHeader(indent, headComment) +
       `${indent}async ${method.name}(` +
       (streamer ? `\n${bump}${callback}` : '')
-    const returns = this.returnValue(indent, method)
+    const returns = streamer ? '' : `: ${this.returnValue(indent, method)}`
 
     return (
       header +
       fragment +
       (fragment ? ', ' : '') +
-      `options?: Partial<ITransportSettings>): ${returns} {\n`
+      `options?: Partial<ITransportSettings>)${returns} {\n`
     )
   }
 
