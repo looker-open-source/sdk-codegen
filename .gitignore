@@ -70,3 +70,7 @@ csharp/*.cache
 
 # hackathon
 **/google-creds.json
+
+# apix indexes
+declarationsIndex.json
+/apix-files/yarn.lock

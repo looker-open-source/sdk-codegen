@@ -23,29 +23,18 @@
  SOFTWARE.
 
  */
-import * as fs from 'fs'
-import path from 'path'
-import { IExampleMine, findExamples, findExampleLanguages } from './exampleInfo'
+import { createContext } from 'react'
+import { IDeclarationMine, IExampleMine } from '@looker/sdk-codegen'
 
-const fileName = path.join(__dirname, '../../../examplesIndex.json')
-const file = fs.readFileSync(fileName, { encoding: 'utf-8' })
-const lode: IExampleMine = JSON.parse(file)
-const op = 'render_task'
+interface LodeContextProps {
+  examples: IExampleMine
+  declarations?: IDeclarationMine
+}
 
-describe('exampleInfo', () => {
-  it('finds language examples for "render_task"', () => {
-    const actual = findExampleLanguages(lode, op)
-    expect(actual).toBeDefined()
-    expect(actual).toEqual(['Python', 'Typescript', 'Kotlin', 'Ruby'])
-    actual.forEach((language) => {
-      const ex = findExamples(lode, language, op)
-      expect(ex).toBeDefined()
-      expect(ex.length).toBeGreaterThan(0)
-    })
-  })
-  it('findExamples finds examples', () => {
-    const actual = findExamples(lode, 'typescript', 'me')
-    expect(actual).toBeDefined()
-    expect(actual.length).toBeGreaterThan(0)
-  })
-})
+export const defaultLodeContextValue: LodeContextProps = {
+  examples: { commitHash: '', remoteOrigin: '', nuggets: {}, summaries: {} },
+}
+
+export const LodeContext = createContext<LodeContextProps>(
+  defaultLodeContextValue
+)

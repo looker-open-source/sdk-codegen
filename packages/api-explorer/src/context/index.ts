@@ -23,5 +23,5 @@
  SOFTWARE.
 
  */
-export { LodeContext, defaultLodeContextValue } from './examples'
+export { LodeContext, defaultLodeContextValue } from './lode'
 export { SearchContext, defaultSearchContextValue } from './search'

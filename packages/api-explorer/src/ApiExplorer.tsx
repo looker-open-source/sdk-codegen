@@ -40,16 +40,19 @@ import {
   defaultSearchState,
 } from './reducers'
 import { AppRouter } from './routes'
+import { apixFilesHost } from './utils/lodeUtils'
 
 export interface ApiExplorerProps {
   specs: SpecList
   sdk?: Looker31SDK | Looker40SDK
-  lodeUrl?: string
+  exampleLodeUrl?: string
+  declarationsLodeUrl?: string
 }
 
 const ApiExplorer: FC<ApiExplorerProps> = ({
   specs,
-  lodeUrl = 'https://raw.githubusercontent.com/looker-open-source/sdk-codegen/main/motherlode.json',
+  exampleLodeUrl = 'https://raw.githubusercontent.com/looker-open-source/sdk-codegen/main/examplesIndex.json',
+  declarationsLodeUrl = `${apixFilesHost}/declarationsIndex.json`,
 }) => {
   const location = useLocation()
   const [spec, specDispatch] = useReducer(
@@ -68,8 +71,8 @@ const ApiExplorer: FC<ApiExplorerProps> = ({
     setHasNavigation(target || !hasNavigation)
 
   useEffect(() => {
-    getLoded(lodeUrl).then((resp) => setLode(resp))
-  }, [lodeUrl])
+    getLoded(exampleLodeUrl, declarationsLodeUrl).then((resp) => setLode(resp))
+  }, [exampleLodeUrl, declarationsLodeUrl])
 
   return (
     <ComponentsProvider

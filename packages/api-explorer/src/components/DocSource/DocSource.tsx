@@ -23,29 +23,41 @@
  SOFTWARE.
 
  */
-import * as fs from 'fs'
-import path from 'path'
-import { IExampleMine, findExamples, findExampleLanguages } from './exampleInfo'
+import React, { FC, useContext } from 'react'
+import { findDeclaration, IMethod, IType } from '@looker/sdk-codegen'
+import { Icon, Link, Tooltip } from '@looker/components'
 
-const fileName = path.join(__dirname, '../../../examplesIndex.json')
-const file = fs.readFileSync(fileName, { encoding: 'utf-8' })
-const lode: IExampleMine = JSON.parse(file)
-const op = 'render_task'
+import { LodeContext } from '../../context'
 
-describe('exampleInfo', () => {
-  it('finds language examples for "render_task"', () => {
-    const actual = findExampleLanguages(lode, op)
-    expect(actual).toBeDefined()
-    expect(actual).toEqual(['Python', 'Typescript', 'Kotlin', 'Ruby'])
-    actual.forEach((language) => {
-      const ex = findExamples(lode, language, op)
-      expect(ex).toBeDefined()
-      expect(ex.length).toBeGreaterThan(0)
-    })
-  })
-  it('findExamples finds examples', () => {
-    const actual = findExamples(lode, 'typescript', 'me')
-    expect(actual).toBeDefined()
-    expect(actual.length).toBeGreaterThan(0)
-  })
-})
+interface DocSourceProps {
+  method?: IMethod
+  type?: IType
+}
+
+export const DocSource: FC<DocSourceProps> = ({ method, type }) => {
+  const { declarations } = useContext(LodeContext)
+  let sourceLink
+  let declaration
+  if (declarations) {
+    ;({ declaration, link: sourceLink } = findDeclaration(
+      declarations,
+      method?.id,
+      type?.name
+    ))
+  }
+
+  return (
+    <>
+      {sourceLink && declaration && (
+        <Tooltip
+          content={`${declaration.sourceFile}#L${declaration.line}`}
+          width="none"
+        >
+          <Link href={sourceLink} target="_blank">
+            <Icon name="IdeFileDocument" />
+          </Link>
+        </Tooltip>
+      )}
+    </>
+  )
+}
