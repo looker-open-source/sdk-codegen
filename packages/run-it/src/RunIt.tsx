@@ -48,7 +48,7 @@ import {
   ConfigForm,
   LoginForm,
   Loading,
-  SdkCalls,
+  DocSdkCalls,
 } from './components'
 import {
   createRequestParams,
@@ -112,6 +112,8 @@ interface RunItProps {
   inputs: RunItInput[]
   /** Method to test */
   method: IMethod
+  /** Sdk language to use for generating call syntax */
+  sdkLanguage?: string
 }
 
 type ResponseContent = IRawResponse | undefined
@@ -120,7 +122,12 @@ type ResponseContent = IRawResponse | undefined
  * Given an array of inputs, a method, and an api model it renders a REST request form
  * which on submit performs a REST request and renders the response with the appropriate MIME type handler
  */
-export const RunIt: FC<RunItProps> = ({ api, inputs, method }) => {
+export const RunIt: FC<RunItProps> = ({
+  api,
+  inputs,
+  method,
+  sdkLanguage = 'All',
+}) => {
   const httpMethod = method.httpMethod as RunItHttpMethod
   const endpoint = method.endpoint
   const { sdk, configurator, basePath } = useContext(RunItContext)
@@ -241,7 +248,8 @@ export const RunIt: FC<RunItProps> = ({ api, inputs, method }) => {
           </TabPanel>
         )}
         <TabPanel key="makeTheCall">
-          <SdkCalls
+          <DocSdkCalls
+            sdkLanguage={sdkLanguage}
             api={api}
             method={method}
             inputs={prepareInputs(inputs, requestContent)}

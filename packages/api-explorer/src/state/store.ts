@@ -23,12 +23,11 @@
  SOFTWARE.
 
  */
-export { highlightHTML } from './highlight'
-export { buildMethodPath, buildTypePath, diffPath, oAuthPath } from './path'
-export { getLoded } from './lodeUtils'
-export { useWindowSize } from './useWindowSize'
-export {
-  IApixEnvAdaptor,
-  StandaloneEnvAdaptor,
-  EnvAdaptorConstants,
-} from './envAdaptor'
+
+import { createStore, Store } from 'redux'
+import { reducers } from './reducers'
+
+export type RootState = ReturnType<typeof reducers>
+
+export const configureStore = (preloadedState?: RootState): Store<RootState> =>
+  createStore(reducers, preloadedState)

@@ -23,12 +23,23 @@
  SOFTWARE.
 
  */
-export { highlightHTML } from './highlight'
-export { buildMethodPath, buildTypePath, diffPath, oAuthPath } from './path'
-export { getLoded } from './lodeUtils'
-export { useWindowSize } from './useWindowSize'
-export {
-  IApixEnvAdaptor,
-  StandaloneEnvAdaptor,
-  EnvAdaptorConstants,
-} from './envAdaptor'
+import React, { FC } from 'react'
+import { getCodeGenerator } from '@looker/sdk-codegen'
+
+import { CodeStructure } from '../CodeStructure'
+import { DocSdkCallsProps } from './DocSdkCalls'
+
+/**
+ * Generates the SDK call syntax for a given language
+ */
+export const DocSingleCall: FC<DocSdkCallsProps> = ({
+  api,
+  method,
+  inputs,
+  sdkLanguage,
+}) => {
+  const generator = getCodeGenerator(sdkLanguage, api)
+  const code = generator!.makeTheCall(method, inputs)
+
+  return <CodeStructure code={code} language={sdkLanguage} />
+}

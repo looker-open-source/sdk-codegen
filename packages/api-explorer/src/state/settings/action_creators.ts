@@ -23,12 +23,11 @@
  SOFTWARE.
 
  */
-export { highlightHTML } from './highlight'
-export { buildMethodPath, buildTypePath, diffPath, oAuthPath } from './path'
-export { getLoded } from './lodeUtils'
-export { useWindowSize } from './useWindowSize'
-export {
-  IApixEnvAdaptor,
-  StandaloneEnvAdaptor,
-  EnvAdaptorConstants,
-} from './envAdaptor'
+import { SetSdkLanguageAction, SettingsActionTypes } from './actions'
+
+export const setSdkLanguageAction = (
+  sdkLanguage: string
+): SetSdkLanguageAction => ({
+  type: SettingsActionTypes.SET_SDK_LANGUAGE,
+  payload: sdkLanguage,
+})

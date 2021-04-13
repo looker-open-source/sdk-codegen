@@ -23,12 +23,14 @@
  SOFTWARE.
 
  */
-export { highlightHTML } from './highlight'
-export { buildMethodPath, buildTypePath, diffPath, oAuthPath } from './path'
-export { getLoded } from './lodeUtils'
-export { useWindowSize } from './useWindowSize'
-export {
-  IApixEnvAdaptor,
-  StandaloneEnvAdaptor,
-  EnvAdaptorConstants,
-} from './envAdaptor'
+export enum SettingsActionTypes {
+  SET_SDK_LANGUAGE = 'SET_SDK_LANGUAGE',
+}
+
+/** Action for setting the language for SDK references */
+export interface SetSdkLanguageAction {
+  type: SettingsActionTypes.SET_SDK_LANGUAGE
+  payload: string
+}
+
+export type SettingsAction = SetSdkLanguageAction

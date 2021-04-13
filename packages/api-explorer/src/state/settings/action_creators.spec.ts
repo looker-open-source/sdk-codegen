@@ -23,12 +23,15 @@
  SOFTWARE.
 
  */
-export { highlightHTML } from './highlight'
-export { buildMethodPath, buildTypePath, diffPath, oAuthPath } from './path'
-export { getLoded } from './lodeUtils'
-export { useWindowSize } from './useWindowSize'
-export {
-  IApixEnvAdaptor,
-  StandaloneEnvAdaptor,
-  EnvAdaptorConstants,
-} from './envAdaptor'
+import { SettingsActionTypes } from './actions'
+import { setSdkLanguageAction } from './action_creators'
+
+describe('Settings reducer action creators', () => {
+  test('setSdkLanguageAction returns a SET_SDK_LANGUAGE action option with provided values', () => {
+    const action = setSdkLanguageAction('Typescript')
+    expect(action).toEqual({
+      type: SettingsActionTypes.SET_SDK_LANGUAGE,
+      payload: 'Typescript',
+    })
+  })
+})
