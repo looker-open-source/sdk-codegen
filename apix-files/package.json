@@ -1,0 +1,38 @@
+{
+  "name": "@looker/apix-files",
+  "version": "21.0.11",
+  "description": "Looker File Server for API Explorer",
+  "main": "lib/index.js",
+  "typings": "lib/index.d.ts",
+  "files": [
+    "lib"
+  ],
+  "author": "Looker",
+  "license": "MIT",
+  "private": true,
+  "publishConfig": {
+    "access": "public"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/looker-open-source/sdk-codegen.git",
+    "directory": "packages/sdk-codegen-utils"
+  },
+  "bugs": {
+    "url": "https://github.com/looker-open-source/sdk-codegen/issues"
+  },
+  "homepage": "https://github.com/looker-open-source/sdk-codegen/tree/main/packages/sdk-codegen-utils",
+  "keywords": [
+    "Looker",
+    "SDK",
+    "API",
+    "Explorer",
+    "Files"
+  ],
+  "dependencies": {
+    "http-server": "^0.12.3"
+  },
+  "scripts": {
+    "serve": "http-server ../ -p 30000 --cors"
+  }
+}

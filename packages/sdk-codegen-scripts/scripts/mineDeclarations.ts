@@ -35,9 +35,14 @@ import {
   const args = process.argv.slice(2)
   const total = args.length
   const root = path.join(__dirname, '/../../../')
-  let sourcePath: string
+  const indexName = `declarationsIndex.json`
+  let sourcePath = ''
+  let copyPath = ''
   if (total > 0) {
     sourcePath = path.join(root, args[0])
+    if (total > 1) {
+      copyPath = path.join(root, args[1])
+    }
   } else {
     try {
       const settings = new NodeSettingsIniFile(
@@ -45,7 +50,10 @@ import {
         path.join(root, 'looker.ini'),
         'Miner'
       ).readConfig()
-      sourcePath = settings.base_url
+      sourcePath = path.join(root, settings.base_url)
+      if (settings.copy_path) {
+        copyPath = path.join(root, settings.copy_path)
+      }
     } catch (e) {
       console.error(
         'A source path is required. Specify it with "base_url" in the Miner section in looker.ini or pass it as an argument'
@@ -53,8 +61,8 @@ import {
       process.exit(1)
     }
   }
-  const indexFile = path.join(root, '/declarationsIndex.json')
-  console.log(`Mining ${sourcePath} ...`)
+  const indexFile = path.join(root, indexName)
+  console.log(`Mining declarations from ${sourcePath} ...`)
 
   const miner = new DeclarationMiner(sourcePath, rubyMethodProbe, rubyTypeProbe)
   const result = miner.execute()
@@ -67,4 +75,18 @@ import {
       Object.entries(result.types).length
     } nuggets written to ${indexFile}`
   )
+  if (copyPath) {
+    const indexCopy = path.join(copyPath, indexName)
+    fs.writeFileSync(indexCopy, JSON.stringify(result, null, 2), {
+      encoding: 'utf-8',
+    })
+    console.log(`Copied declaration nuggets to ${indexCopy}`)
+    const examplesIndex = 'examplesIndex.json'
+    const examples = path.join(root, examplesIndex)
+    if (fs.existsSync(examples)) {
+      const examplesCopy = path.join(copyPath, examplesIndex)
+      fs.copyFileSync(examples, examplesCopy)
+      console.log(`Copied example nuggets to ${examplesCopy}`)
+    }
+  }
 })()

@@ -28,7 +28,7 @@ import { TabList, Tab, TabPanels, TabPanel, useTabs } from '@looker/components'
 import { findExampleLanguages, IMethod } from '@looker/sdk-codegen'
 
 import { CollapserCard } from '../Collapser'
-import { LodeContext } from '../../context/examples'
+import { LodeContext } from '../../context'
 import { DocExamples } from './DocExamples'
 
 interface DocSdkUsageProps {
@@ -41,8 +41,8 @@ interface DocSdkUsageProps {
  */
 export const DocSdkUsage: FC<DocSdkUsageProps> = ({ method }) => {
   const tabs = useTabs()
-  const lode = useContext(LodeContext)
-  const languages = findExampleLanguages(lode, method.name)
+  const { examples } = useContext(LodeContext)
+  const languages = findExampleLanguages(examples, method.name)
   if (languages.length === 0) return <></>
 
   return (
@@ -57,7 +57,7 @@ export const DocSdkUsage: FC<DocSdkUsageProps> = ({ method }) => {
           {languages.map((language) => (
             <TabPanel key={language}>
               <DocExamples
-                lode={lode}
+                lode={examples}
                 language={language}
                 operationId={method.operationId}
               />

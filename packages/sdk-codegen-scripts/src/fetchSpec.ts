@@ -112,8 +112,8 @@ export const logout = async (props: ISDKConfigProps, token: string) => {
 export const login = async (props: ISDKConfigProps) => {
   const xp = specTransport(props)
   const creds = {
-    client_id: props.client_id,
-    client_secret: props.client_secret,
+    client_id: props.client_id ?? process.env.LOOKERSDK_CLIENT_ID,
+    client_secret: props.client_secret ?? process.env.LOOKERSDK_CLIENT_SECRET,
   }
   const url = loginUrl(props)
 

@@ -24,17 +24,15 @@
 
  */
 import { createContext } from 'react'
-import { IExampleMine } from '@looker/sdk-codegen'
+import { IApixEnvAdaptor, StandaloneEnvAdaptor } from '../../utils'
 
-interface LodeContextProps extends IExampleMine {}
-
-export const defaultLodeContextValue: LodeContextProps = {
-  commitHash: '',
-  nuggets: {},
-  summaries: {},
-  remoteOrigin: '',
+export interface EnvAdaptorContextProps {
+  envAdaptor: IApixEnvAdaptor
 }
 
-export const LodeContext = createContext<LodeContextProps>(
-  defaultLodeContextValue
+export const defaultEnvAdaptorContextValue: EnvAdaptorContextProps = {
+  envAdaptor: new StandaloneEnvAdaptor(),
+}
+export const EnvAdaptorContext = createContext<EnvAdaptorContextProps>(
+  defaultEnvAdaptorContextValue
 )

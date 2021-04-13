@@ -35,6 +35,8 @@ import { TagScene } from './TagScene'
 const opBtnNames = /ALL|GET|POST|PUT|PATCH|DELETE/
 
 describe('TagScene', () => {
+  Element.prototype.scrollTo = jest.fn()
+
   test('it renders operation buttons and all methods for a given method tag', () => {
     renderWithRouter(
       <Route path="/:specKey/methods/:methodTag">

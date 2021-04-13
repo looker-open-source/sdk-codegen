@@ -24,7 +24,7 @@
 
  */
 
-import React, { FC, useContext, useState } from 'react'
+import React, { FC, useContext, useEffect, useState } from 'react'
 import styled from 'styled-components'
 import {
   Accordion,
@@ -48,7 +48,7 @@ interface MethodsProps {
 
 const SideNavMethodsLayout: FC<MethodsProps> = ({
   className,
-  defaultOpen,
+  defaultOpen = false,
   methods,
   tag,
   specKey,
@@ -59,9 +59,7 @@ const SideNavMethodsLayout: FC<MethodsProps> = ({
   const match = useRouteMatch<{ methodTag: string }>(
     `/:specKey/methods/:methodTag/:methodName?`
   )
-  const [isOpen, setIsOpen] = useState(
-    match ? defaultOpen || match.params.methodTag === tag : defaultOpen
-  )
+  const [isOpen, setIsOpen] = useState(defaultOpen)
   const history = useHistory()
 
   const handleOpen = () => {
@@ -69,6 +67,13 @@ const SideNavMethodsLayout: FC<MethodsProps> = ({
     setIsOpen(_isOpen)
     if (_isOpen) history.push(`/${specKey}/methods/${tag}`)
   }
+
+  useEffect(() => {
+    const status = match
+      ? defaultOpen || match.params.methodTag === tag
+      : defaultOpen
+    setIsOpen(status)
+  }, [defaultOpen])
 
   return (
     <Accordion

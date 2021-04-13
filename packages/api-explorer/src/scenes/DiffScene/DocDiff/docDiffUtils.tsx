@@ -24,10 +24,27 @@
 
  */
 
-import { ApiModel, DiffRow, PseudoGen } from '@looker/sdk-codegen'
+import {
+  ApiModel,
+  DiffRow,
+  getCodeGenerator,
+  ICodeGen,
+  PseudoGen,
+} from '@looker/sdk-codegen'
 
-export const diffText = (row: DiffRow, status: string, api: ApiModel) => {
-  const gen = new PseudoGen(api)
+export const diffText = (
+  row: DiffRow,
+  status: string,
+  api: ApiModel,
+  sdkLanguage: string
+) => {
+  let gen: ICodeGen
+  if (sdkLanguage === 'All') {
+    gen = new PseudoGen(api)
+  } else {
+    gen = getCodeGenerator(sdkLanguage, api)!
+  }
+
   const method = api.methods[row.name]
   if (!method) return `${row.name} is missing`
   const indent = ''
@@ -57,17 +74,20 @@ ${bump}Type:${r.type.fullName}`
 export const differ = (
   row: DiffRow,
   leftSpec: ApiModel,
-  rightSpec: ApiModel
+  rightSpec: ApiModel,
+  sdkLanguage: string
 ) => {
   const lhs = diffText(
     row,
     row.lStatus !== row.rStatus ? row.lStatus : '',
-    leftSpec
+    leftSpec,
+    sdkLanguage
   )
   const rhs = diffText(
     row,
     row.lStatus !== row.rStatus ? row.rStatus : '',
-    rightSpec
+    rightSpec,
+    sdkLanguage
   )
   return { lhs, rhs }
 }

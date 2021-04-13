@@ -54,7 +54,7 @@ fun apiConfig(contents: String): ApiSections {
 open class ApiSettings(val rawReadConfig: () -> Map<String, String>) : ConfigurationProvider {
 
     companion object {
-        fun fromIniFile(filename: String = "./looker.ini", section: String = ""): ConfigurationProvider {
+        @JvmStatic fun fromIniFile(filename: String = "./looker.ini", section: String = ""): ConfigurationProvider {
             val file = File(filename)
             return if (!file.exists()) {
                 fromMap( emptyMap() )
@@ -64,7 +64,7 @@ open class ApiSettings(val rawReadConfig: () -> Map<String, String>) : Configura
             }
         }
 
-        fun fromIniText(contents: String, section: String = ""): ConfigurationProvider {
+        @JvmStatic fun fromIniText(contents: String, section: String = ""): ConfigurationProvider {
             val config = apiConfig(contents)
             val firstSection = if (section.isNotBlank()) section else config.keys.first()
 
@@ -76,7 +76,7 @@ open class ApiSettings(val rawReadConfig: () -> Map<String, String>) : Configura
             return ApiSettings { settings }
         }
 
-        fun fromMap(config: Map<String, String>): ConfigurationProvider {
+        @JvmStatic fun fromMap(config: Map<String, String>): ConfigurationProvider {
             return ApiSettings { config }
         }
     }

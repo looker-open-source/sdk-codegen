@@ -23,6 +23,24 @@
  SOFTWARE.
 
  */
+import { IApixEnvAdaptor } from '@looker/api-explorer/src/utils'
+import { ExtensionSDK } from '@looker/extension-sdk'
 
-export { getGenerators } from './callUtils'
-export { SdkCalls } from './SdkCalls'
+/**
+ * An adaptor class for interacting with browser APIs when running as an extension
+ */
+export class ExtensionEnvAdaptor implements IApixEnvAdaptor {
+  constructor(public extensionSdk: ExtensionSDK) {}
+
+  async localStorageGetItem(key: string) {
+    return await this.extensionSdk.localStorageGetItem(key)
+  }
+
+  async localStorageSetItem(key: string, value: string) {
+    await this.extensionSdk.localStorageSetItem(key, value)
+  }
+
+  async localStorageRemoveItem(key: string) {
+    await this.extensionSdk.localStorageRemoveItem(key)
+  }
+}

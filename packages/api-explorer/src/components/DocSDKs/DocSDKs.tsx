@@ -25,20 +25,23 @@
  */
 
 import React, { FC, useState, useEffect } from 'react'
+import { useSelector } from 'react-redux'
 import {
-  Box,
-  Tab,
-  TabList,
-  TabPanel,
-  TabPanels,
-  useTabs,
-} from '@looker/components'
-import { IMethod, IType, ApiModel } from '@looker/sdk-codegen'
-
+  IMethod,
+  IType,
+  ApiModel,
+  KeyedCollection,
+  CodeGen,
+  Method,
+} from '@looker/sdk-codegen'
 import { getGenerators } from '@looker/run-it'
+import { Box } from '@looker/components'
+
 import { DocCode } from '../DocCode'
+import { getSelectedSdkLanguage } from '../../state'
 import { CollapserCard } from '../Collapser'
 import { noComment } from './utils'
+import { DocDeclarations } from './DocDeclarations'
 
 interface LanguageSDKProps {
   /** API spec */
@@ -49,40 +52,62 @@ interface LanguageSDKProps {
   type?: IType
 }
 
+const getDeclarations = (
+  generators: KeyedCollection<CodeGen>,
+  sdkLanguage: string,
+  item: IMethod | IType
+) => {
+  const declarations: KeyedCollection<string> = {}
+  Object.entries(generators).forEach(([language, gen]) => {
+    if (sdkLanguage === 'All' || language === sdkLanguage) {
+      const code =
+        item instanceof Method
+          ? gen.declareMethod('', item as IMethod)
+          : gen.declareType('', item as IType)
+      declarations[language] = code
+    }
+  })
+  return declarations
+}
+
 /**
  * Given a method or a type, it renders its SDK declaration in all supported languages.
  */
 export const DocSDKs: FC<LanguageSDKProps> = ({ api, method, type }) => {
-  const tabs = useTabs()
+  const sdkLanguage = useSelector(getSelectedSdkLanguage)
   const generators = getGenerators(api)
   const [item, setItem] = useState(method ? noComment(method) : type!)
+  const [declarations, setDeclarations] = useState(
+    getDeclarations(generators, sdkLanguage, item)
+  )
+  const [header, setHeader] = useState(`${sdkLanguage} Declaration`)
 
   useEffect(() => {
     setItem(method ? noComment(method) : type!)
   }, [method, type])
 
+  useEffect(() => {
+    const declarations = getDeclarations(generators, sdkLanguage, item)
+    setDeclarations(declarations)
+    const languages = Object.keys(declarations)
+    if (languages.length > 1) {
+      setHeader('Declarations')
+    } else {
+      setHeader(`${languages[0]} Declaration`)
+    }
+  }, [sdkLanguage])
+
   return (
     <Box mb="xlarge">
-      <CollapserCard heading="SDK declarations">
-        <>
-          <TabList {...tabs}>
-            {Object.keys(generators).map((language) => (
-              <Tab key={language}>{language}</Tab>
-            ))}
-          </TabList>
-          <TabPanels {...tabs} pt="0">
-            {Object.entries(generators).map(([language, gen]) => {
-              const code = method
-                ? gen.declareMethod('', item as IMethod)
-                : gen.declareType('', item as IType)
-              return (
-                <TabPanel key={language}>
-                  <DocCode language={language} code={code} />
-                </TabPanel>
-              )
-            })}
-          </TabPanels>
-        </>
+      <CollapserCard heading={header}>
+        {Object.keys(declarations).length > 1 ? (
+          <DocDeclarations declarations={declarations} />
+        ) : (
+          <DocCode
+            language={Object.keys(declarations)[0]}
+            code={Object.values(declarations)[0]}
+          />
+        )}
       </CollapserCard>
     </Box>
   )

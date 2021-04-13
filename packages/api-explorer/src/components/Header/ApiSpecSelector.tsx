@@ -57,7 +57,7 @@ export const ApiSpecSelector: FC<ApiSpecSelectorProps> = ({
   return (
     <Select
       width="10rem"
-      name="Version"
+      aria-label="spec selector"
       defaultValue={spec.key}
       options={options}
       onChange={handleChange}
