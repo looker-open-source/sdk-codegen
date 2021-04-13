@@ -1,5 +1,19 @@
 # Changelog
 
+### [21.0.12](https://www.github.com/looker-open-source/sdk-codegen/compare/sdk-codegen-scripts-v21.0.11...sdk-codegen-scripts-v21.0.12) (2021-04-13)
+
+
+### Features
+
+* add source declaration links to API Explorer ([#578](https://www.github.com/looker-open-source/sdk-codegen/issues/578)) ([ce0e588](https://www.github.com/looker-open-source/sdk-codegen/commit/ce0e588787bdbc2e8ca4aadd44c31dc3ba1a0ef1))
+
+
+### Dependencies
+
+* The following workspace dependencies were updated
+  * dependencies
+    * @looker/sdk-codegen bumped from ^21.0.11 to ^21.0.12
+
 ### [21.0.11](https://www.github.com/looker-open-source/sdk-codegen/compare/sdk-codegen-scripts-v21.0.10...sdk-codegen-scripts-v21.0.11) (2021-04-02)
 
 

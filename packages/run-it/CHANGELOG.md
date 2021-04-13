@@ -1,5 +1,25 @@
 # Changelog
 
+### [0.9.2](https://www.github.com/looker-open-source/sdk-codegen/compare/run-it-v0.9.1...run-it-v0.9.2) (2021-04-13)
+
+
+### Features
+
+* remember user's SDK language preference ([#567](https://www.github.com/looker-open-source/sdk-codegen/issues/567)) ([faa2511](https://www.github.com/looker-open-source/sdk-codegen/commit/faa25113d87072875ec5fb718da7eb10e0a518e4))
+
+
+### Bug Fixes
+
+* extends runit response height and fixes response models scrolling ([#558](https://www.github.com/looker-open-source/sdk-codegen/issues/558)) ([61627ce](https://www.github.com/looker-open-source/sdk-codegen/commit/61627ce282c1f7e4eaf082ccd66466060d2e7b98))
+* RunIt request overflow  ([#565](https://www.github.com/looker-open-source/sdk-codegen/issues/565)) ([38665ac](https://www.github.com/looker-open-source/sdk-codegen/commit/38665ac40b6abc20557db66d0dc536c347c6a862))
+
+
+### Dependencies
+
+* The following workspace dependencies were updated
+  * dependencies
+    * @looker/sdk-codegen bumped from ^21.0.11 to ^21.0.12
+
 ### [0.9.1](https://www.github.com/looker-open-source/sdk-codegen/compare/run-it-v0.9.0...run-it-v0.9.1) (2021-04-02)
 
 
