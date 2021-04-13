@@ -44,7 +44,6 @@ import { HEADER_REM } from '../Header'
 import { SideNavTags } from './SideNavTags'
 import { SideNavTypes } from './SideNavTypes'
 import { useDebounce, countMethods, countTypes } from './searchUtils'
-import { SearchCriteriaSelector } from './SearchCriteriaSelector'
 import { SearchMessage } from './SearchMessage'
 
 interface SideNavProps {
@@ -108,8 +107,8 @@ export const SideNav: FC<SideNavProps> = ({ api, specKey }) => {
   return (
     <nav>
       <Flex alignItems="center" pl="large" pr="large" pb="large">
-        <SearchCriteriaSelector />
         <InputSearch
+          aria-label="Search"
           onChange={handleInputChange}
           placeholder="Search"
           value={pattern}
@@ -125,7 +124,11 @@ export const SideNav: FC<SideNavProps> = ({ api, specKey }) => {
       </TabList>
       <TabPanels {...tabs} pt="xsmall" height={`${menuH}px`} overflow="auto">
         <TabPanel>
-          <SideNavTags tags={tags} specKey={specKey} />
+          <SideNavTags
+            tags={tags}
+            specKey={specKey}
+            defaultOpen={!!searchResults}
+          />
         </TabPanel>
         <TabPanel>
           <SideNavTypes types={types} specKey={specKey} />
