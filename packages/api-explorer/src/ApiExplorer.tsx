@@ -110,7 +110,9 @@ const ApiExplorer: FC<ApiExplorerProps> = ({
       >
         <EnvAdaptorContext.Provider value={{ envAdaptor }}>
           <LodeContext.Provider value={{ ...lode }}>
-            <SearchContext.Provider value={{ searchSettings, setSearchSettings }}>
+            <SearchContext.Provider
+              value={{ searchSettings, setSearchSettings }}
+            >
               <Page style={{ overflow: 'hidden' }}>
                 <Header
                   specs={specs}
