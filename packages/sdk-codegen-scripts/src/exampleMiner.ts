@@ -152,9 +152,17 @@ export const getRemoteOrigin = () => {
  */
 export const getRemoteHttpOrigin = () => {
   const origin = getRemoteOrigin()
-  const extractor = /git@github\.com:(.*)\.git/gi
-  const match = extractor.exec(origin)
-  if (!match) return ''
+  const gitExtractor = /git@github\.com:(.*)\.git/gi
+  let match = gitExtractor.exec(origin)
+  if (!match) {
+    // git origin on CI: https://github.com/looker-open-source/sdk-codegen
+    const httpExtractor = /(https:\/\/github.com.*)(|.git)/
+    match = httpExtractor.exec(origin)
+    if (!match) {
+      return ''
+    }
+    return match[1]
+  }
   return `https://github.com/${match[1]}`
 }
 
