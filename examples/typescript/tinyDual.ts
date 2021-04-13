@@ -26,8 +26,8 @@
 
 import { NodeSession, NodeSettingsIniFile } from '@looker/sdk-node'
 import { functionalSdk } from '@looker/sdk-rtl'
-import { me } from '@looker/sdk/src/4.0/funcs'
-import { me as me31 } from '@looker/sdk/src/3.1/funcs'
+import { me } from '@looker/sdk/lib/4.0/funcs'
+import { me as me31 } from '@looker/sdk/lib/3.1/funcs'
 import { sdkVersion } from '@looker/sdk'
 import { rootIni } from './utils'
 

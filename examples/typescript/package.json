@@ -14,9 +14,9 @@
     "run-sudo": "ts-node ./sudoAsUser"
   },
   "dependencies": {
-    "@looker/sdk": "^21.4.0",
-    "@looker/sdk-rtl": "^21.0.11",
-    "@looker/sdk-node": "^21.4.0",
+    "@looker/sdk": "*",
+    "@looker/sdk-rtl": "*",
+    "@looker/sdk-node": "*",
     "ts-node": "^9.0.0"
   },
   "devDependencies": {
