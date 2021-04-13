@@ -26,7 +26,7 @@
 
 import React, { FC, useReducer, useState, useEffect } from 'react'
 import { useLocation } from 'react-router'
-import styled from 'styled-components'
+import styled, { createGlobalStyle } from 'styled-components'
 import { Aside, ComponentsProvider, Layout, Page } from '@looker/components'
 import { Looker40SDK, Looker31SDK } from '@looker/sdk'
 import { SpecList } from '@looker/sdk-codegen'
@@ -46,6 +46,8 @@ export interface ApiExplorerProps {
   sdk?: Looker31SDK | Looker40SDK
   lodeUrl?: string
 }
+
+export const BodyOverride = createGlobalStyle` html { height: 100%; overflow: hidden; } `
 
 const ApiExplorer: FC<ApiExplorerProps> = ({
   specs,
@@ -72,39 +74,42 @@ const ApiExplorer: FC<ApiExplorerProps> = ({
   }, [lodeUrl])
 
   return (
-    <ComponentsProvider
-      loadGoogleFonts
-      themeCustomizations={{
-        fontFamilies: { brand: 'Google Sans' },
-        colors: { key: '#1A73E8' },
-      }}
-    >
-      <LodeContext.Provider value={{ ...lode }}>
-        <SearchContext.Provider value={{ searchSettings, setSearchSettings }}>
-          <Page style={{ overflow: 'hidden' }}>
-            <Header
-              specs={specs}
-              spec={spec}
-              specDispatch={specDispatch}
-              toggleNavigation={toggleNavigation}
-            />
-            <Layout hasAside height="100%">
-              {hasNavigation && (
-                <AsideBorder pt="large" width="20rem">
-                  <SideNav api={spec.api} specKey={spec.key} />
-                </AsideBorder>
-              )}
-              <AppRouter
-                api={spec.api}
-                specKey={spec.key}
+    <>
+      <ComponentsProvider
+        loadGoogleFonts
+        themeCustomizations={{
+          fontFamilies: { brand: 'Google Sans' },
+          colors: { key: '#1A73E8' },
+        }}
+      >
+        <LodeContext.Provider value={{ ...lode }}>
+          <SearchContext.Provider value={{ searchSettings, setSearchSettings }}>
+            <Page style={{ overflow: 'hidden' }}>
+              <Header
                 specs={specs}
+                spec={spec}
+                specDispatch={specDispatch}
                 toggleNavigation={toggleNavigation}
               />
-            </Layout>
-          </Page>
-        </SearchContext.Provider>
-      </LodeContext.Provider>
-    </ComponentsProvider>
+              <Layout hasAside height="100%">
+                {hasNavigation && (
+                  <AsideBorder pt="large" width="20rem">
+                    <SideNav api={spec.api} specKey={spec.key} />
+                  </AsideBorder>
+                )}
+                <AppRouter
+                  api={spec.api}
+                  specKey={spec.key}
+                  specs={specs}
+                  toggleNavigation={toggleNavigation}
+                />
+              </Layout>
+            </Page>
+          </SearchContext.Provider>
+        </LodeContext.Provider>
+      </ComponentsProvider>
+      <BodyOverride />
+    </>
   )
 }
 
