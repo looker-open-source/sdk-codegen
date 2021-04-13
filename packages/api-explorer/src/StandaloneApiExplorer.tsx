@@ -43,6 +43,8 @@ export interface StandloneApiExplorerProps {
   specs: SpecList
 }
 
+const store = configureStore()
+
 export const StandaloneApiExplorer: FC<StandloneApiExplorerProps> = ({
   specs,
 }) => {
@@ -57,7 +59,6 @@ export const StandaloneApiExplorer: FC<StandloneApiExplorerProps> = ({
       : initRunItSdk(defaultConfigurator)
 
   const standaloneEnvAdaptor = new StandaloneEnvAdaptor()
-  const store = configureStore()
 
   return (
     <Provider store={store}>

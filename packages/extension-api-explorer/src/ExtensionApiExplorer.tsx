@@ -72,6 +72,7 @@ class ExtensionConfigurator implements RunItConfigurator {
 }
 
 const configurator = new ExtensionConfigurator()
+const store = configureStore()
 
 export const ExtensionApiExplorer: FC = () => {
   const match = useRouteMatch<{ specKey: string }>(`/:specKey`)
@@ -120,7 +121,6 @@ export const ExtensionApiExplorer: FC = () => {
   }, [specs, sdk])
 
   const extensionEnvAdaptor = new ExtensionEnvAdaptor(getExtensionSDK())
-  const store = configureStore()
 
   return (
     <Provider store={store}>
