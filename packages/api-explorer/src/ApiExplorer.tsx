@@ -26,12 +26,18 @@
 
 import React, { FC, useReducer, useState, useEffect } from 'react'
 import { useLocation } from 'react-router'
-import styled from 'styled-components'
+import styled, { createGlobalStyle } from 'styled-components'
 import { Aside, ComponentsProvider, Layout, Page } from '@looker/components'
 import { Looker40SDK, Looker31SDK } from '@looker/sdk'
 import { SpecList } from '@looker/sdk-codegen'
-import { SearchContext, LodeContext, defaultLodeContextValue } from './context'
-import { getLoded } from './utils'
+
+import {
+  SearchContext,
+  LodeContext,
+  defaultLodeContextValue,
+  EnvAdaptorContext,
+} from './context'
+import { EnvAdaptorConstants, getLoded, IApixEnvAdaptor } from './utils'
 import { Header, SideNav } from './components'
 import {
   specReducer,
@@ -40,18 +46,28 @@ import {
   defaultSearchState,
 } from './reducers'
 import { AppRouter } from './routes'
+import { apixFilesHost } from './utils/lodeUtils'
+import { useActions } from './hooks'
 
 export interface ApiExplorerProps {
   specs: SpecList
   sdk?: Looker31SDK | Looker40SDK
-  lodeUrl?: string
+  exampleLodeUrl?: string
+  declarationsLodeUrl?: string
+  envAdaptor: IApixEnvAdaptor
 }
+
+export const BodyOverride = createGlobalStyle` html { height: 100%; overflow: hidden; } `
 
 const ApiExplorer: FC<ApiExplorerProps> = ({
   specs,
-  lodeUrl = 'https://raw.githubusercontent.com/looker-open-source/sdk-codegen/main/motherlode.json',
+  envAdaptor,
+  exampleLodeUrl = 'https://raw.githubusercontent.com/looker-open-source/sdk-codegen/main/examplesIndex.json',
+  declarationsLodeUrl = `${apixFilesHost}/declarationsIndex.json`,
 }) => {
   const location = useLocation()
+  const { setSdkLanguageAction } = useActions()
+
   const [spec, specDispatch] = useReducer(
     specReducer,
     initDefaultSpecState(specs, location)
@@ -68,43 +84,60 @@ const ApiExplorer: FC<ApiExplorerProps> = ({
     setHasNavigation(target || !hasNavigation)
 
   useEffect(() => {
-    getLoded(lodeUrl).then((resp) => setLode(resp))
-  }, [lodeUrl])
+    getLoded(exampleLodeUrl, declarationsLodeUrl).then((resp) => setLode(resp))
+  }, [exampleLodeUrl, declarationsLodeUrl])
+
+  useEffect(() => {
+    const getSettings = async () => {
+      const resp = await envAdaptor.localStorageGetItem(
+        EnvAdaptorConstants.LOCALSTORAGE_SDK_LANGUAGE_KEY
+      )
+      if (resp) {
+        setSdkLanguageAction(resp)
+      }
+    }
+    getSettings()
+  }, [envAdaptor, setSdkLanguageAction])
 
   return (
-    <ComponentsProvider
-      loadGoogleFonts
-      themeCustomizations={{
-        fontFamilies: { brand: 'Google Sans' },
-        colors: { key: '#1A73E8' },
-      }}
-    >
-      <LodeContext.Provider value={{ ...lode }}>
-        <SearchContext.Provider value={{ searchSettings, setSearchSettings }}>
-          <Page style={{ overflow: 'hidden' }}>
-            <Header
-              specs={specs}
-              spec={spec}
-              specDispatch={specDispatch}
-              toggleNavigation={toggleNavigation}
-            />
-            <Layout hasAside height="100%">
-              {hasNavigation && (
-                <AsideBorder pt="large" width="20rem">
-                  <SideNav api={spec.api} specKey={spec.key} />
-                </AsideBorder>
-              )}
-              <AppRouter
-                api={spec.api}
-                specKey={spec.key}
-                specs={specs}
-                toggleNavigation={toggleNavigation}
-              />
-            </Layout>
-          </Page>
-        </SearchContext.Provider>
-      </LodeContext.Provider>
-    </ComponentsProvider>
+    <>
+      <ComponentsProvider
+        loadGoogleFonts
+        themeCustomizations={{
+          fontFamilies: { brand: 'Google Sans' },
+          colors: { key: '#1A73E8' },
+        }}
+      >
+        <EnvAdaptorContext.Provider value={{ envAdaptor }}>
+          <LodeContext.Provider value={{ ...lode }}>
+            <SearchContext.Provider value={{ searchSettings, setSearchSettings }}>
+              <Page style={{ overflow: 'hidden' }}>
+                <Header
+                  specs={specs}
+                  spec={spec}
+                  specDispatch={specDispatch}
+                  toggleNavigation={toggleNavigation}
+                />
+                <Layout hasAside height="100%">
+                  {hasNavigation && (
+                    <AsideBorder pt="large" width="20rem">
+                      <SideNav api={spec.api} specKey={spec.key} />
+                    </AsideBorder>
+                  )}
+                  <AppRouter
+                    api={spec.api}
+                    specKey={spec.key}
+                    specs={specs}
+                    toggleNavigation={toggleNavigation}
+                  />
+                </Layout>
+              </Page>
+            </SearchContext.Provider>
+          </LodeContext.Provider>
+        </EnvAdaptorContext.Provider>
+      </ComponentsProvider>
+      <BodyOverride />
+    </>
   )
 }
 

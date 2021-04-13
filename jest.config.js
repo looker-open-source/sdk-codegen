@@ -41,6 +41,7 @@ module.exports = {
   restoreMocks: true,
   // eslint-disable-next-line node/no-path-concat
   setupFilesAfterEnv: [`${__dirname}/jest.setup.js`],
+  setupFiles: ['jest-localstorage-mock'],
   testMatch: ['**/?(*.)(spec|test).(ts|js)?(x)'],
   transform: {
     '^.+\\.(js|jsx|ts|tsx)$': 'ts-jest',

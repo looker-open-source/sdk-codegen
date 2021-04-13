@@ -33,11 +33,17 @@ import {
 } from '@looker/run-it'
 import { Looker40SDK } from '@looker/sdk'
 import { SpecList } from '@looker/sdk-codegen'
+import { Provider } from 'react-redux'
+
 import ApiExplorer from './ApiExplorer'
+import { configureStore } from './state'
+import { StandaloneEnvAdaptor } from './utils'
 
 export interface StandloneApiExplorerProps {
   specs: SpecList
 }
+
+const store = configureStore()
 
 export const StandaloneApiExplorer: FC<StandloneApiExplorerProps> = ({
   specs,
@@ -52,13 +58,17 @@ export const StandaloneApiExplorer: FC<StandloneApiExplorerProps> = ({
       ? undefined
       : initRunItSdk(defaultConfigurator)
 
+  const standaloneEnvAdaptor = new StandaloneEnvAdaptor()
+
   return (
-    <RunItProvider
-      sdk={chosenSdk}
-      configurator={defaultConfigurator}
-      basePath="/api/4.0"
-    >
-      <ApiExplorer specs={specs} />
-    </RunItProvider>
+    <Provider store={store}>
+      <RunItProvider
+        sdk={chosenSdk}
+        configurator={defaultConfigurator}
+        basePath="/api/4.0"
+      >
+        <ApiExplorer specs={specs} envAdaptor={standaloneEnvAdaptor} />
+      </RunItProvider>
+    </Provider>
   )
 }

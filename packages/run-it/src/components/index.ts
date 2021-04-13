@@ -38,5 +38,5 @@ export {
 } from './ConfigForm'
 export { LoginForm } from './LoginForm'
 export { Loading } from './Loading'
-export { getGenerators, SdkCalls } from './SdkCalls'
+export { getGenerators, DocSdkCalls } from './DocSdkCalls'
 export { DataGrid } from './DataGrid'

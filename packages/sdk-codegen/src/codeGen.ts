@@ -338,6 +338,9 @@ export interface ICodeGen {
    */
   anyValue(indent: string, val: any): string
 
+  /** Increase indent */
+  bumper(indent: string): string
+
   /**
    * Converts val to a dictionary/hash code expression
    * @param indent code indentation

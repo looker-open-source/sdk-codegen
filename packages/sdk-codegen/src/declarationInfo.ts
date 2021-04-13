@@ -23,7 +23,7 @@
  SOFTWARE.
 
  */
-import { IMine, permaLink, IFileCall } from './exampleInfo'
+import { IMine, IFileCall, permaLink } from './exampleInfo'
 import { KeyedCollection } from './sdkModels'
 
 /** All mined declaration data */
@@ -47,22 +47,24 @@ export const findDeclaration = (
   lode: IDeclarationMine,
   methodId?: string,
   typeId?: string
-): string | undefined => {
+) => {
   let declaration
   if (methodId) {
     declaration = lode.methods[methodId]
   } else if (typeId) {
-    declaration = lode.methods[typeId]
+    declaration = lode.types[typeId]
   }
 
   let link
   if (declaration) {
+    // TODO make link configurable
     link = permaLink(
       lode.remoteOrigin,
       lode.commitHash,
       declaration.sourceFile,
       declaration.line
     )
+    // link = ideLink(parentPath, declaration.sourceFile, declaration.line)
   }
-  return link
+  return { declaration, link }
 }

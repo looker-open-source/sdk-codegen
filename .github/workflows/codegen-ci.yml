@@ -25,6 +25,8 @@ env:
   LOOKERSDK_BASE_URL: https://localhost:20000
   LOOKERSDK_VERIFY_SSL: false
   TS_JUNIT_OUTPUT_DIR: results/sdk-codegen
+  LOOKERSDK_CLIENT_ID: ${{ secrets.LOOKERSDK_CLIENT_ID__21_4 }}
+  LOOKERSDK_CLIENT_SECRET: ${{ secrets.LOOKERSDK_CLIENT_SECRET__21_4 }}
 
 jobs:
   unit:
@@ -45,17 +47,11 @@ jobs:
         github.event.label.name == 'CI:TEST'
       )
 
-    name: Unit - ${{ matrix.os }} / Node ${{ matrix.node-version }}
     env:
       JEST_JUNIT_OUTPUT_DIR: results/sdk-codegen
-      JEST_JUNIT_OUTPUT_NAME: ${{ matrix.os }}.sdk-codegen${{ matrix.node-version }}.xml
-    runs-on: ${{ matrix.os }}-latest
+      JEST_JUNIT_OUTPUT_NAME: ubuntu-latest.sdk-codegen15x.xml
 
-    strategy:
-      matrix:
-        os:
-          - ubuntu
-        node-version: [12.x, 14.x, 15.x]
+    runs-on: ubuntu-latest
 
     steps:
       - name: Cancel Previous Runs
@@ -66,10 +62,9 @@ jobs:
       - name: Repo Checkout
         uses: actions/checkout@v2
 
-      - name: Install Node ${{ matrix.node-version }}
-        uses: actions/setup-node@v1
+      - uses: actions/setup-node@v1
         with:
-          node-version: ${{ matrix.node-version }}
+          node-version: 15.x
 
       - name: Install dependencies
         run: |
@@ -80,15 +75,36 @@ jobs:
       - name: Mock looker.ini
         run: |
           echo "[Looker]" > looker.ini
-          echo "base_url=https://self-signed.looker.com:19999" >> looker.ini
-          echo "client_id=id" >> looker.ini
-          echo "client_secret=secret" >> looker.ini
-          echo "verify_ssl=False" >> looker.ini
-          echo "timeout=31" >> looker.ini
-          echo "[Looker31]" >> looker.ini
-          echo "base_url=https://self-signed.looker.com:19999" >> looker.ini
-          echo "verify_ssl=False" >> looker.ini
+          echo "base_url=https://localhost:20000" >> looker.ini
+          echo "verify_ssl=false" >> looker.ini
           echo "timeout=30" >> looker.ini
+          echo "[Miner]" >> looker.ini
+          echo "base_url=." >> looker.ini
+
+      - name: Set up Cloud SDK
+        uses: google-github-actions/setup-gcloud@v0.2.0
+        with:
+          project_id: ${{ secrets.GCP_PROJECT_ID }}
+          service_account_key: ${{ secrets.GCP_AR_READER_SA_KEY }}
+          export_default_credentials: true
+
+      - name: Authenticate Artifact Repository
+        run: gcloud auth configure-docker us-west1-docker.pkg.dev --quiet
+
+      - name: Set up Python
+        uses: actions/setup-python@v2
+        with:
+          python-version: 3.x
+
+      - name: Pull and run Looker docker image
+        # TODO: can we cache some layers of the image for faster download?
+        # we probably don't want to cache the final image for IP security...
+        run: |
+          docker pull --quiet us-west1-docker.pkg.dev/cloud-looker-sdk-codegen-cicd/looker/21_4
+          # set $LOOKER_OPTS to --no-ssl if we want to turn off ssl
+          docker run --name looker-sdk-codegen-ci -d -p 10000:9999 -p 20000:19999 us-west1-docker.pkg.dev/cloud-looker-sdk-codegen-cicd/looker/21_4
+          docker logs -f looker-sdk-codegen-ci --until=30s &
+          python ${{ github.workspace }}/.github/scripts/wait_for_looker.py
 
       - name: Run unit tests
         run: yarn jest "packages/sdk-codegen(-utils|-scripts)/src" --reporters=default --reporters=jest-junit
