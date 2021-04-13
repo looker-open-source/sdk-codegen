@@ -26,10 +26,10 @@
 
 import React, { FC, useContext } from 'react'
 import AceEditor from 'react-ace'
-
 import { findGenerator } from '@looker/sdk-codegen'
 import { SearchContext } from '../../context/search'
 import { highlightSourceCode } from './utils'
+import { PrismEditor } from './PrismEditor'
 
 // TODO Use webpack resolver instead.
 /* eslint-disable  @typescript-eslint/ban-ts-comment,@typescript-eslint/no-unused-vars,@typescript-eslint/no-var-requires,import/no-extraneous-dependencies */
@@ -56,6 +56,7 @@ interface DocCodeProps {
   language?: string
   fontSize?: number
   width?: string
+  editor?: string
 }
 
 export const DocCode: FC<DocCodeProps> = ({
@@ -63,6 +64,7 @@ export const DocCode: FC<DocCodeProps> = ({
   language = 'json',
   fontSize = 16,
   width = 'auto',
+  editor = 'prism',
 }) => {
   const gen = findGenerator(language)
   if (gen) language = gen.language.toLocaleLowerCase()
@@ -71,7 +73,7 @@ export const DocCode: FC<DocCodeProps> = ({
   } = useContext(SearchContext)
   const markers = highlightSourceCode(pattern, code)
 
-  return (
+  return editor === 'ace' ? (
     <AceEditor
       mode={language}
       name={language}
@@ -89,5 +91,7 @@ export const DocCode: FC<DocCodeProps> = ({
         useWorker: false,
       }}
     />
+  ) : (
+    <PrismEditor language={language} code={code} pattern={pattern} />
   )
 }
