@@ -25,17 +25,15 @@
  */
 
 import { NodeSession, NodeSettingsIniFile } from '@looker/sdk-node'
-import { functionalSdk } from '@looker/sdk-rtl'
-import { me } from '@looker/sdk/lib/4.0/funcs'
-import { me as me31 } from '@looker/sdk/lib/3.1/funcs'
-import { sdkVersion } from '@looker/sdk'
+import { me, functionalSdk40 } from '@looker/sdk/lib/4.0/funcs'
+import { me as me31, functionalSdk31 } from '@looker/sdk/lib/3.1/funcs'
 import { rootIni } from './utils'
 
 const localConfig = rootIni()
 const settings = new NodeSettingsIniFile('', localConfig, 'Looker')
 const session = new NodeSession(settings)
-const sdk = functionalSdk(session, '4.0', sdkVersion)
-const sdk31 = functionalSdk(session, '3.1', sdkVersion)
+const sdk = functionalSdk40(session)
+const sdk31 = functionalSdk31(session)
 ;(async () => {
   const [resp, resp31] = await Promise.all([
     sdk.ok(me(sdk)),

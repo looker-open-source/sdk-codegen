@@ -33,8 +33,10 @@ import {
   IDictionary,
   IAPIMethods,
   ITransportSettings,
+  IAuthSession,
   encodeParam,
   SDKResponse,
+  functionalSdk,
 } from '@looker/sdk-rtl'
 
 /**
@@ -42,6 +44,7 @@ import {
  *
  */
 
+import { sdkVersion } from '../constants'
 import {
   IAccessToken,
   IApiSession,
@@ -268,6 +271,14 @@ import {
   IWriteUserAttributeWithValue,
   IWriteWhitelabelConfiguration,
 } from './models'
+
+/**
+ * Creates a "functional sdk" that knows the API and Looker release version
+ * @param authSession authentication session
+ */
+export const functionalSdk40 = (authSession: IAuthSession) => {
+  return functionalSdk(authSession, '4.0', sdkVersion)
+}
 
 //#region ApiAuth: API Authentication
 

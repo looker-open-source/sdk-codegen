@@ -127,14 +127,25 @@ export class ${this.packageName} extends APIMethods implements I${
 
   functionsPrologue(_indent: string) {
     return `
-import { ${this.rtlImports()}IAPIMethods, ITransportSettings, encodeParam, SDKResponse } from '@looker/sdk-rtl'
+import { ${this.rtlImports()}IAPIMethods, ITransportSettings, IAuthSession, encodeParam, SDKResponse, functionalSdk } from '@looker/sdk-rtl'
 
 /**
  * ${this.warnEditing()}
  *
  */
 
+import { sdkVersion } from '../constants'
 import { ${this.typeNames().join(', ')} } from './models'
+
+/**
+ * Creates a "functional sdk" that knows the API and Looker release version
+ * @param authSession authentication session
+ */
+export const functionalSdk${this.apiRef} = (
+  authSession: IAuthSession,
+) => {
+  return functionalSdk(authSession, '${this.apiVersion}', sdkVersion)
+}
 
 `
   }

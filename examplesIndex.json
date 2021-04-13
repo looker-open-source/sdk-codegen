@@ -1,5 +1,5 @@
 {
-  "commitHash": "4860b62016782ecd79ba960cc309dcdf12e716c9",
+  "commitHash": "aea042439d2358a61bbf705528d6006d694d5ea5",
   "remoteOrigin": "https://github.com/looker-open-source/sdk-codegen",
   "summaries": {
     "packages/sdk-codegen/src/codeGenerators.ts": {
@@ -409,6 +409,11 @@
         ".java": [
           {
             "sourceFile": "examples/java/example_gradle/src/main/java/com/looker/example/ExampleRunner.java",
+            "column": 23,
+            "line": 44
+          },
+          {
+            "sourceFile": "examples/java/example_maven/src/main/java/com/looker/example/ExampleRunner.java",
             "column": 23,
             "line": 44
           }
@@ -4136,7 +4141,7 @@
           {
             "sourceFile": "packages/extension-api-explorer/src/ExtensionApiExplorer.tsx",
             "column": 33,
-            "line": 93
+            "line": 98
           }
         ]
       }
@@ -4148,7 +4153,43 @@
           {
             "sourceFile": "packages/extension-api-explorer/src/ExtensionApiExplorer.tsx",
             "column": 36,
-            "line": 108
+            "line": 113
+          }
+        ]
+      }
+    },
+    "localStorageGetItem": {
+      "operationId": "localStorageGetItem",
+      "calls": {
+        ".ts": [
+          {
+            "sourceFile": "packages/extension-api-explorer/src/utils.ts",
+            "column": 22,
+            "line": 36
+          }
+        ]
+      }
+    },
+    "localStorageSetItem": {
+      "operationId": "localStorageSetItem",
+      "calls": {
+        ".ts": [
+          {
+            "sourceFile": "packages/extension-api-explorer/src/utils.ts",
+            "column": 15,
+            "line": 40
+          }
+        ]
+      }
+    },
+    "localStorageRemoveItem": {
+      "operationId": "localStorageRemoveItem",
+      "calls": {
+        ".ts": [
+          {
+            "sourceFile": "packages/extension-api-explorer/src/utils.ts",
+            "column": 15,
+            "line": 44
           }
         ]
       }

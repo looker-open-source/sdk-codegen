@@ -24,19 +24,5 @@
 
  */
 
-import { IAuthSession, functionalSdk as rtlSdk } from '@looker/sdk-rtl'
-
 export const sdkVersion = '21.4'
 export const environmentPrefix = 'LOOKERSDK'
-
-/**
- * Creates an "sdk" to be used with the Typescript SDK's funcs.ts file
- * @param authSession authentication session
- * @param apiVersion version of API to use (e.g. "3.1" or "4.0")
- */
-export const functionalSdk = (
-  authSession: IAuthSession,
-  apiVersion: string
-) => {
-  return rtlSdk(authSession, apiVersion, sdkVersion)
-}

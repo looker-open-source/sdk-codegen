@@ -3709,7 +3709,7 @@ export class Looker40SDKStream extends APIMethods {
    *
    * GET /content_thumbnail/{type}/{resource_id} -> string
    *
-   * **Note**: Binary content may be returned by this method.
+   * **Note**: Binary content may be returned by this function.
    */
   async content_thumbnail(
     callback: (readable: Readable) => Promise<string>,
@@ -6114,7 +6114,7 @@ export class Looker40SDKStream extends APIMethods {
     /**
      * @param {Partial<IDictionary<string>>} body
      */
-    body: Partial<IDictionary<string>> = {},
+    body?: Partial<IDictionary<string>>,
     options?: Partial<ITransportSettings>
   ) {
     integration_id = encodeParam(integration_id)
@@ -6413,7 +6413,7 @@ export class Looker40SDKStream extends APIMethods {
    *
    * GET /looks/{look_id}/run/{result_format} -> string
    *
-   * **Note**: Binary content may be returned by this method.
+   * **Note**: Binary content may be returned by this function.
    */
   async run_look(
     callback: (readable: Readable) => Promise<string>,
@@ -8173,7 +8173,7 @@ export class Looker40SDKStream extends APIMethods {
    *
    * GET /queries/{query_id}/run/{result_format} -> string
    *
-   * **Note**: Binary content may be returned by this method.
+   * **Note**: Binary content may be returned by this function.
    */
   async run_query(
     callback: (readable: Readable) => Promise<string>,
@@ -8258,7 +8258,7 @@ export class Looker40SDKStream extends APIMethods {
    *
    * POST /queries/run/{result_format} -> string
    *
-   * **Note**: Binary content may be returned by this method.
+   * **Note**: Binary content may be returned by this function.
    */
   async run_inline_query(
     callback: (readable: Readable) => Promise<string>,
@@ -8345,7 +8345,7 @@ export class Looker40SDKStream extends APIMethods {
    *
    * GET /queries/models/{model_name}/views/{view_name}/run/{result_format} -> string
    *
-   * **Note**: Binary content may be returned by this method.
+   * **Note**: Binary content may be returned by this function.
    */
   async run_url_encoded_query(
     callback: (readable: Readable) => Promise<string>,
@@ -8546,7 +8546,7 @@ export class Looker40SDKStream extends APIMethods {
    *
    * POST /sql_queries/{slug}/run/{result_format} -> string
    *
-   * **Note**: Binary content may be returned by this method.
+   * **Note**: Binary content may be returned by this function.
    */
   async run_sql_query(
     callback: (readable: Readable) => Promise<string>,
@@ -8754,7 +8754,7 @@ export class Looker40SDKStream extends APIMethods {
    *
    * GET /render_tasks/{render_task_id}/results -> string
    *
-   * **Note**: Binary content is returned by this method.
+   * **Note**: Binary content is returned by this function.
    */
   async render_task_results(
     callback: (readable: Readable) => Promise<string>,
