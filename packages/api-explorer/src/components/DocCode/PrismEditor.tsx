@@ -68,9 +68,12 @@ export const PrismEditor: FC<PrismEditorProps> = ({
   pattern,
 }) => {
   const getPrismLanguage = (language: string) => {
+    const unstyled = ['kotlin', 'csharp', 'swift']
     // TODO revert back to `go` in generator language definitions instead of using this
     if (language === 'golang') {
       return 'go'
+    } else if (unstyled.includes(language)) {
+      return 'clike'
     }
     return language as Language
   }
