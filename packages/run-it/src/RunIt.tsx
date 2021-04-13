@@ -199,7 +199,13 @@ export const RunIt: FC<RunItProps> = ({
         {isExtension ? <></> : <Tab key="performance">Performance</Tab>}
         <Tab key="makeTheCall">Code</Tab>
       </TabList>
-      <TabPanels px="xxlarge" {...tabs}>
+      <TabPanels
+        px="xxlarge"
+        {...tabs}
+        height="90%"
+        overflowX="hidden"
+        overflowY="auto"
+      >
         <TabPanel key="request">
           {!needsAuth && hasConfig && (
             <RequestForm
