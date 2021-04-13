@@ -23,44 +23,51 @@
  SOFTWARE.
 
  */
-
-import React, { FC, Dispatch } from 'react'
+import React, { FC, useContext } from 'react'
+import { codeGenerators } from '@looker/sdk-codegen'
 import { Select } from '@looker/components'
-import { useHistory } from 'react-router-dom'
+import { useSelector } from 'react-redux'
+import { SelectOptionProps } from '@looker/components/lib/Form/Inputs/Select/SelectOptions'
 
-import { SpecList } from '@looker/sdk-codegen'
-import { SpecAction, SpecState, selectSpec } from '../../reducers'
+import { useActions } from '../../hooks'
+import { getSelectedSdkLanguage } from '../../state'
+import { EnvAdaptorContext } from '../../context'
+import { EnvAdaptorConstants } from '../../utils'
 
-interface ApiSpecSelectorProps {
-  specs: SpecList
-  spec: SpecState
-  specDispatch: Dispatch<SpecAction>
-}
+/**
+ * Allows the user to select their preferred SDK language
+ */
+export const SdkLanguageSelector: FC = () => {
+  const { setSdkLanguageAction } = useActions()
+  const selectedSdkLanguage = useSelector(getSelectedSdkLanguage)
+  const { envAdaptor } = useContext(EnvAdaptorContext)
 
-export const ApiSpecSelector: FC<ApiSpecSelectorProps> = ({
-  specs,
-  spec,
-  specDispatch,
-}) => {
-  const history = useHistory()
-  const options = Object.entries(specs).map(([key, spec]) => ({
-    value: key,
-    label: key,
-    description: spec.status,
+  const allSdkLanguages: SelectOptionProps[] = codeGenerators.map((gen) => ({
+    value: gen.label || gen.language,
   }))
 
-  const handleChange = (specKey: string) => {
-    specDispatch(selectSpec(specs, specKey))
-    history.push(`/${specKey}`)
+  allSdkLanguages.push({
+    options: [
+      {
+        value: 'All',
+      },
+    ],
+  })
+
+  const handleChange = (language: string) => {
+    setSdkLanguageAction(language)
+    envAdaptor.localStorageSetItem(
+      EnvAdaptorConstants.LOCALSTORAGE_SDK_LANGUAGE_KEY,
+      language
+    )
   }
 
   return (
     <Select
-      width="10rem"
-      aria-label="spec selector"
-      defaultValue={spec.key}
-      options={options}
+      aria-label="sdk language selector"
+      value={selectedSdkLanguage}
       onChange={handleChange}
+      options={allSdkLanguages}
     />
   )
 }

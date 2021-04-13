@@ -23,12 +23,19 @@
  SOFTWARE.
 
  */
-export { highlightHTML } from './highlight'
-export { buildMethodPath, buildTypePath, diffPath, oAuthPath } from './path'
-export { getLoded } from './lodeUtils'
-export { useWindowSize } from './useWindowSize'
-export {
-  IApixEnvAdaptor,
-  StandaloneEnvAdaptor,
-  EnvAdaptorConstants,
-} from './envAdaptor'
+import { SettingsActionTypes } from './actions'
+import { settingsReducer } from './reducer'
+
+describe('settingsReducer', () => {
+  test('it sets the sdk language', () => {
+    const currState = { sdkLanguage: 'Kotlin' }
+    const action = {
+      type: SettingsActionTypes.SET_SDK_LANGUAGE,
+      payload: 'Typescript',
+    }
+    const state = settingsReducer(currState, action)
+    expect(state).toEqual({
+      sdkLanguage: 'Typescript',
+    })
+  })
+})

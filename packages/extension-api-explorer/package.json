@@ -24,8 +24,13 @@
     "@looker/sdk-codegen": "^21.0.11",
     "react": "^16.13.1",
     "react-dom": "^16.13.1",
+    "react-redux": "^7.2.3",
     "react-router-dom": "^5.2.0",
+    "redux": "^4.0.5",
     "webpack-cli": "^3.3.12",
     "webpack-dev-server": "^3.11.0"
+  },
+  "devDependencies": {
+    "@types/redux": "^3.6.0"
   }
 }

@@ -36,7 +36,10 @@ import {
 } from '@looker/components'
 import { DiffRow } from '@looker/sdk-codegen/src'
 import { ApiModel, IMethod } from '@looker/sdk-codegen'
+import { useSelector } from 'react-redux'
+import { getSelectedSdkLanguage } from '../../../state'
 import { DiffBanner } from './DiffBanner'
+
 import { differ } from './docDiffUtils'
 
 interface DiffMethodLinkProps {
@@ -104,6 +107,7 @@ export const DiffItem: FC<DiffItemProps> = ({
   rightKey,
   rightSpec,
 }) => {
+  const selectedSdkLanguage = useSelector(getSelectedSdkLanguage)
   const [leftMethod, setLeftMethod] = useState<IMethod | undefined>(
     leftSpec.methods[item.name]
   )
@@ -116,7 +120,7 @@ export const DiffItem: FC<DiffItemProps> = ({
   const [rightSide, setRightSide] = useState<string>('')
 
   useEffect(() => {
-    const { lhs, rhs } = differ(item, leftSpec, rightSpec)
+    const { lhs, rhs } = differ(item, leftSpec, rightSpec, selectedSdkLanguage)
     const lMethod = leftSpec.methods[item.name]
     const rMethod = rightSpec.methods[item.name]
     setLeftMethod(lMethod)
@@ -124,7 +128,7 @@ export const DiffItem: FC<DiffItemProps> = ({
     setMethod((lMethod || rMethod)!)
     setLeftSide(lhs)
     setRightSide(rhs)
-  }, [leftSpec, rightSpec, isOpen])
+  }, [leftSpec, rightSpec, isOpen, selectedSdkLanguage])
 
   const handleOpen = () => {
     setIsOpen(!isOpen)

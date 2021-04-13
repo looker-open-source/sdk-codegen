@@ -38,18 +38,26 @@ import {
 import { SpecList } from '@looker/sdk-codegen'
 import { SpecState, SpecAction } from '../../reducers'
 import { diffPath } from '../../utils'
+import { SdkLanguageSelector } from './SdkLanguageSelector'
 import { ApiSpecSelector } from './ApiSpecSelector'
 
 interface HeaderProps {
+  /** Specs to choose from */
   specs: SpecList
+  /** Current selected spec */
   spec: SpecState
+  /** Spec state setter */
   specDispatch: Dispatch<SpecAction>
+  /** Nav state setter */
   toggleNavigation: (target?: boolean) => void
   className?: string
 }
 
 export const HEADER_REM = 4
 
+/**
+ * Renders the API Explorer header
+ */
 export const HeaderLayout: FC<HeaderProps> = ({
   className,
   specs,
@@ -84,6 +92,7 @@ export const HeaderLayout: FC<HeaderProps> = ({
       </NavLink>
     </Space>
     <Space width="auto">
+      <SdkLanguageSelector />
       <ApiSpecSelector specs={specs} spec={spec} specDispatch={specDispatch} />
       <NavLink to={`/${diffPath}/${spec.key}/`}>
         <IconButton

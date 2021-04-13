@@ -23,49 +23,35 @@
  SOFTWARE.
 
  */
-
-import { ApiModel, IMethod, trimInputs } from '@looker/sdk-codegen'
-import React, { FC } from 'react'
 import { Tab, TabList, TabPanel, TabPanels, useTabs } from '@looker/components'
-import { RunItValues } from '../../RunIt'
-import { CodeStructure } from '../CodeStructure'
-import { getGenerators } from './callUtils'
+import { KeyedCollection } from '@looker/sdk-codegen'
+import React, { FC } from 'react'
+import { DocCode } from '../DocCode'
 
-interface SdkCallsProps {
-  /** API spec */
-  api: ApiModel
-  /** current method */
-  method: IMethod
-  /** Entered RunIt form values */
-  inputs: RunItValues
+interface DocDeclarationsProps {
+  declarations: KeyedCollection<string>
 }
 
 /**
- * Generates the SDK call syntax for all supported languages
- * @param api Api spec
- * @param method Api method
- * @param inputs Method parameters
+ * Renders all provided declarations
+ * @param declarations A collection of SDK declarations in various languages
  */
-export const SdkCalls: FC<SdkCallsProps> = ({ api, method, inputs }) => {
+export const DocDeclarations: FC<DocDeclarationsProps> = ({ declarations }) => {
   const tabs = useTabs()
-  const generators = getGenerators(api)
-  const trimmed = trimInputs(inputs)
+
   return (
     <>
       <TabList {...tabs}>
-        {Object.keys(generators).map((language) => (
+        {Object.keys(declarations).map((language) => (
           <Tab key={language}>{language}</Tab>
         ))}
       </TabList>
       <TabPanels {...tabs} pt="0">
-        {Object.entries(generators).map(([language, gen]) => {
-          const code = gen.makeTheCall(method, trimmed)
-          return (
-            <TabPanel key={language}>
-              <CodeStructure code={code} language={language} />
-            </TabPanel>
-          )
-        })}
+        {Object.entries(declarations).map(([language, code]) => (
+          <TabPanel key={language}>
+            <DocCode language={language} code={code} />
+          </TabPanel>
+        ))}
       </TabPanels>
     </>
   )

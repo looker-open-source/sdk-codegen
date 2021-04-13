@@ -23,12 +23,14 @@
  SOFTWARE.
 
  */
-export { highlightHTML } from './highlight'
-export { buildMethodPath, buildTypePath, diffPath, oAuthPath } from './path'
-export { getLoded } from './lodeUtils'
-export { useWindowSize } from './useWindowSize'
-export {
-  IApixEnvAdaptor,
-  StandaloneEnvAdaptor,
-  EnvAdaptorConstants,
-} from './envAdaptor'
+import { getSelectedSdkLanguage } from './selectors'
+
+describe('settings selectors', () => {
+  test('getSelectedSdkLanguages returns selected sdk languages', () => {
+    const sdkLanguage = 'Kotlin'
+    const state = {
+      settings: { sdkLanguage },
+    }
+    expect(getSelectedSdkLanguage(state)).toEqual(sdkLanguage)
+  })
+})

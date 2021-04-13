@@ -24,50 +24,66 @@
 
  */
 import React from 'react'
+import { renderWithTheme } from '@looker/components-test-utils'
 import { screen } from '@testing-library/react'
 import { codeGenerators } from '@looker/sdk-codegen'
-import { Store } from 'redux'
 
 import { api } from '../../test-data'
-import { renderWithReduxProvider } from '../../test-utils'
-import { configureStore, RootState } from '../../state'
-import { DocSDKs } from './DocSDKs'
+import { DocSdkCalls } from './DocSdkCalls'
 
-describe('DocSDKs', () => {
-  let store: Store<RootState>
+describe('DocSdkCalls', () => {
   const supportedLanguages = codeGenerators.map((g) => g.label || g.language)
   const pattern = new RegExp(`${supportedLanguages.join('|')}`)
 
-  beforeAll(() => {
-    store = configureStore({ settings: { sdkLanguage: 'All' } })
+  test('it can render SDK call syntax for all supported languages', () => {
+    renderWithTheme(
+      <DocSdkCalls
+        api={api}
+        method={api.methods.user}
+        inputs={[
+          {
+            name: 'user_id',
+            location: 'path',
+            type: 'string',
+            required: true,
+            description: 'A unique identifier for a user',
+          },
+        ]}
+        sdkLanguage="All"
+      />
+    )
+    expect(
+      screen.getByRole('heading', { name: 'SDKs call syntax' })
+    ).toBeInTheDocument()
+    expect(
+      screen.getAllByRole('tab', {
+        name: pattern,
+      })
+    ).toHaveLength(supportedLanguages.length)
   })
-
-  test.each([
-    ['method', { method: api.methods.run_look }],
-    ['type', { type: api.types.Look }],
-  ])(
-    'it can render an SDK declaration for all supported languages',
-    (_, props) => {
-      renderWithReduxProvider(<DocSDKs api={api} {...props} />, store)
-      expect(
-        screen.getAllByRole('tab', {
-          name: pattern,
-        })
-      ).toHaveLength(supportedLanguages.length)
-    }
-  )
 
   test.each(supportedLanguages)(
     'it can render a %s method declaration',
     (sdkLanguage) => {
-      store = configureStore({ settings: { sdkLanguage } })
-      renderWithReduxProvider(
-        <DocSDKs api={api} method={api.methods.run_look} />,
-        store
+      renderWithTheme(
+        <DocSdkCalls
+          api={api}
+          method={api.methods.user}
+          inputs={[
+            {
+              name: 'user_id',
+              location: 'path',
+              type: 'string',
+              required: true,
+              description: 'A unique identifier for a user',
+            },
+          ]}
+          sdkLanguage={sdkLanguage}
+        />
       )
       expect(screen.queryByRole('tab')).not.toBeInTheDocument()
       expect(
-        screen.getByRole('heading', { name: `${sdkLanguage} Declaration` })
+        screen.getByRole('heading', { name: `${sdkLanguage} SDK call syntax` })
       ).toBeInTheDocument()
     }
   )

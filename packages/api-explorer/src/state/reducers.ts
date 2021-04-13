@@ -23,12 +23,11 @@
  SOFTWARE.
 
  */
-export { highlightHTML } from './highlight'
-export { buildMethodPath, buildTypePath, diffPath, oAuthPath } from './path'
-export { getLoded } from './lodeUtils'
-export { useWindowSize } from './useWindowSize'
-export {
-  IApixEnvAdaptor,
-  StandaloneEnvAdaptor,
-  EnvAdaptorConstants,
-} from './envAdaptor'
+import { combineReducers } from 'redux'
+import { settingsReducer } from './settings'
+
+export const reducers = combineReducers({
+  settings: settingsReducer,
+})
+
+export type RootState = ReturnType<typeof reducers>

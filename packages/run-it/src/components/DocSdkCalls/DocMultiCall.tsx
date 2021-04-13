@@ -23,12 +23,40 @@
  SOFTWARE.
 
  */
-export { highlightHTML } from './highlight'
-export { buildMethodPath, buildTypePath, diffPath, oAuthPath } from './path'
-export { getLoded } from './lodeUtils'
-export { useWindowSize } from './useWindowSize'
-export {
-  IApixEnvAdaptor,
-  StandaloneEnvAdaptor,
-  EnvAdaptorConstants,
-} from './envAdaptor'
+import React, { FC } from 'react'
+import { Tab, TabList, TabPanel, TabPanels, useTabs } from '@looker/components'
+
+import { CodeStructure } from '../CodeStructure'
+import { getGenerators } from './callUtils'
+import { DocSdkCallsProps } from './DocSdkCalls'
+
+/**
+ * Generates the SDK call syntax for all supported languages
+ */
+export const DocMultiCall: FC<Omit<DocSdkCallsProps, 'sdkLanguage'>> = ({
+  api,
+  inputs,
+  method,
+}) => {
+  const tabs = useTabs()
+  const generators = getGenerators(api)
+  return (
+    <>
+      <TabList {...tabs}>
+        {Object.keys(generators).map((language) => (
+          <Tab key={language}>{language}</Tab>
+        ))}
+      </TabList>
+      <TabPanels {...tabs} pt="0">
+        {Object.entries(generators).map(([language, gen]) => {
+          const code = gen.makeTheCall(method, inputs)
+          return (
+            <TabPanel key={language}>
+              <CodeStructure code={code} language={language} />
+            </TabPanel>
+          )
+        })}
+      </TabPanels>
+    </>
+  )
+}
