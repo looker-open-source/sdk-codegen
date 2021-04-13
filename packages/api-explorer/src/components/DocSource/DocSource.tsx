@@ -23,6 +23,41 @@
  SOFTWARE.
 
  */
-export { LodeContext, defaultLodeContextValue } from './lode'
-export { SearchContext, defaultSearchContextValue } from './search'
-export { EnvAdaptorContext, defaultEnvAdaptorContextValue } from './envAdaptor'
+import React, { FC, useContext } from 'react'
+import { findDeclaration, IMethod, IType } from '@looker/sdk-codegen'
+import { Icon, Link, Tooltip } from '@looker/components'
+
+import { LodeContext } from '../../context'
+
+interface DocSourceProps {
+  method?: IMethod
+  type?: IType
+}
+
+export const DocSource: FC<DocSourceProps> = ({ method, type }) => {
+  const { declarations } = useContext(LodeContext)
+  let sourceLink
+  let declaration
+  if (declarations) {
+    ;({ declaration, link: sourceLink } = findDeclaration(
+      declarations,
+      method?.id,
+      type?.name
+    ))
+  }
+
+  return (
+    <>
+      {sourceLink && declaration && (
+        <Tooltip
+          content={`${declaration.sourceFile}#L${declaration.line}`}
+          width="none"
+        >
+          <Link href={sourceLink} target="_blank">
+            <Icon name="IdeFileDocument" />
+          </Link>
+        </Tooltip>
+      )}
+    </>
+  )
+}

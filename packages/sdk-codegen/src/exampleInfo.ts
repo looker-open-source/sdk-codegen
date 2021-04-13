@@ -123,6 +123,26 @@ export const permaLink = (
 ) => `${remote}/blob/${hash}/${fileName}#L${line}`
 
 /**
+ * Create an IDE file link with line number
+ * @param parentPath to fully qualify the source file
+ * @param fileName full name of file
+ * @param line line number in file
+ */
+export const ideLink = (
+  // https://plugins.jetbrains.com/plugin/6027-remote-call
+  // https://github.com/microsoft/vscode/issues/4883#issuecomment-270141535
+  // pattern:
+  parentPath: string,
+  fileName: string,
+  line: number
+) => {
+  // const idea = 'http//localhost:8091'
+  const vscode = 'vscode://'
+
+  return `${vscode}${parentPath}/${fileName}:L:${line}`
+}
+
+/**
  * Gets the summary for an example file, or defaults to the file and line number
  * @param lode all mined example data
  * @param call specific call to summarize
@@ -144,18 +164,21 @@ export const exampleLink = (
   lode: IExampleMine,
   call: IFileCall
 ): IExampleLink => {
+  const link = permaLink(
+    lode.remoteOrigin,
+    lode.commitHash,
+    call.sourceFile,
+    call.line
+  )
+
   return {
-    permalink: permaLink(
-      lode.remoteOrigin,
-      lode.commitHash,
-      call.sourceFile,
-      call.line
-    ),
+    permalink: link,
     description: summarize(lode, call),
     tooltip: `${call.sourceFile} line ${call.line}`,
   }
 }
 
+// TODO create one data set for extensionToLanguage and getLanguageExtensions
 /** map file extension to language name */
 export const extensionToLanguage = {
   '.py': 'Python',
@@ -168,6 +191,7 @@ export const extensionToLanguage = {
   '.dart': 'Dart',
   '.go': 'Go',
   '.md': 'Markdown',
+  '.java': 'Java',
 }
 
 /**
@@ -194,6 +218,8 @@ export const getLanguageExtensions = (language: string): string[] => {
       return ['.dart']
     case 'go':
       return ['.go']
+    case 'java':
+      return ['.java']
     default:
       return []
   }

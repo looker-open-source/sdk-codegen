@@ -22,11 +22,12 @@ The API Explorer extension can be manually installed and run with a Looker insta
          use_form_submit: yes
          use_embeds: yes
          core_api_methods: ["versions", "api_spec"]
-         external_api_urls: ["https://raw.githubusercontent.com"]
+         external_api_urls: ["https://raw.githubusercontent.com", "http://localhost:30000"]
          oauth2_urls: []
       }
    }
    ```
+   the `http://localhost:30000` is for when you want to use the [API Explorer file server](/apix-files/README.md)
 1. save all changes and deploy to production
 1. in the root of `sdk-codegen`:
    ```sh

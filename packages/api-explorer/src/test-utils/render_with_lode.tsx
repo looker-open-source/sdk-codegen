@@ -23,18 +23,31 @@
  SOFTWARE.
 
  */
-import { createContext } from 'react'
-import { IExampleMine } from '@looker/sdk-codegen'
 
-interface LodeContextProps extends IExampleMine {}
+import React, { ReactElement } from 'react'
+import { RenderOptions } from '@testing-library/react'
 
-export const defaultLodeContextValue: LodeContextProps = {
-  commitHash: '',
-  nuggets: {},
-  summaries: {},
-  remoteOrigin: '',
+import { renderWithTheme } from '@looker/components-test-utils'
+import { IDeclarationMine, IExampleMine } from '@looker/sdk-codegen'
+import { LodeContext } from '../context'
+
+const withLode = (
+  consumer: ReactElement<any>,
+  examples: IExampleMine,
+  declarations?: IDeclarationMine
+) => {
+  return (
+    <LodeContext.Provider value={{ examples, declarations }}>
+      {consumer}
+    </LodeContext.Provider>
+  )
 }
 
-export const LodeContext = createContext<LodeContextProps>(
-  defaultLodeContextValue
-)
+export const renderWithLode = (
+  component: ReactElement<any>,
+  examples: IExampleMine,
+  declarations?: IDeclarationMine,
+  options?: Omit<RenderOptions, 'queries'>
+) => {
+  return renderWithTheme(withLode(component, examples, declarations), options)
+}

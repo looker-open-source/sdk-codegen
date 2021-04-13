@@ -13,11 +13,13 @@
     },
     "packages/api-explorer": {
       "release-as": "",
-      "bump-minor-pre-major": true
+      "bump-minor-pre-major": true,
+      "bump-patch-for-minor-pre-major": true
     },
     "packages/run-it": {
       "release-as": "",
-      "bump-minor-pre-major": true
+      "bump-minor-pre-major": true,
+      "bump-patch-for-minor-pre-major": true
     },
     "packages/sdk-codegen-scripts": {
       "release-as": "21.0.12"
@@ -33,7 +35,8 @@
     },
     "packages/wholly-sheet": {
       "release-as": "",
-      "bump-minor-pre-major": true
+      "bump-minor-pre-major": true,
+      "bump-patch-for-minor-pre-major": true
     },
     "python": {
       "release-type": "python",

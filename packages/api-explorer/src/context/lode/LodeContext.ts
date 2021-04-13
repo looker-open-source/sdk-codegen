@@ -23,6 +23,18 @@
  SOFTWARE.
 
  */
-export { LodeContext, defaultLodeContextValue } from './lode'
-export { SearchContext, defaultSearchContextValue } from './search'
-export { EnvAdaptorContext, defaultEnvAdaptorContextValue } from './envAdaptor'
+import { createContext } from 'react'
+import { IDeclarationMine, IExampleMine } from '@looker/sdk-codegen'
+
+interface LodeContextProps {
+  examples: IExampleMine
+  declarations?: IDeclarationMine
+}
+
+export const defaultLodeContextValue: LodeContextProps = {
+  examples: { commitHash: '', remoteOrigin: '', nuggets: {}, summaries: {} },
+}
+
+export const LodeContext = createContext<LodeContextProps>(
+  defaultLodeContextValue
+)

@@ -54,7 +54,7 @@ export const DocExamples: FC<DocExamplesProps> = ({
           {examples.map((example, index) => (
             <ListItem key={index}>
               <Tooltip content={example.tooltip} placement="right">
-                <Link href={example.permalink}>
+                <Link href={example.permalink} target={'_blank'}>
                   <ReactMarkdown source={example.description} />
                 </Link>
               </Tooltip>
@@ -67,7 +67,10 @@ export const DocExamples: FC<DocExamplesProps> = ({
         <>
           <Text>
             No examples found for {language}. Please{' '}
-            <Link href="https://github.com/looker-open-source/sdk-codegen/tree/main/examples">
+            <Link
+              href="https://github.com/looker-open-source/sdk-codegen/tree/main/examples"
+              target={'_blank'}
+            >
               add some!
             </Link>
           </Text>
