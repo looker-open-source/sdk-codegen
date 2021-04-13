@@ -30,7 +30,7 @@ import userEvent from '@testing-library/user-event'
 
 import { specs, specState } from '../../test-data'
 import { renderWithRouter, withReduxProvider } from '../../test-utils'
-import { defaultUserState } from '../../state'
+import { defaultSettingsState } from '../../state'
 import { Header } from './Header'
 
 describe('Header', () => {
@@ -94,7 +94,7 @@ describe('Header', () => {
       )
     )
     const selector = screen.getByLabelText('sdk language selector')
-    expect(selector).toHaveValue(defaultUserState.sdkLanguage)
+    expect(selector).toHaveValue(defaultSettingsState.sdkLanguage)
     await act(async () => {
       await userEvent.click(selector)
       await waitFor(() => {

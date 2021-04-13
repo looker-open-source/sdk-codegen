@@ -23,17 +23,17 @@
  SOFTWARE.
 
  */
-import { UserActionTypes } from './actions'
-import { userReducer } from './reducer'
+import { SettingsActionTypes } from './actions'
+import { settingsReducer } from './reducer'
 
 describe('userReducer', () => {
   test('it sets the sdk language', () => {
     const currState = { sdkLanguage: 'Kotlin' }
     const action = {
-      type: UserActionTypes.SET_SDK_LANGUAGE,
+      type: SettingsActionTypes.SET_SDK_LANGUAGE,
       payload: 'Typescript',
     }
-    const state = userReducer(currState, action)
+    const state = settingsReducer(currState, action)
     expect(state).toEqual({
       sdkLanguage: 'Typescript',
     })

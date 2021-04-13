@@ -23,23 +23,23 @@
  SOFTWARE.
 
  */
-import { UserAction, UserActionTypes } from './actions'
+import { SettingsAction, SettingsActionTypes } from './actions'
 
-export interface UserState {
+export interface SettingsState {
   sdkLanguage: string
 }
 
-export const defaultUserState: UserState = Object.freeze({
+export const defaultSettingsState: SettingsState = Object.freeze({
   /** The Python SDK has the most activity on GitHub */
   sdkLanguage: 'Python',
 })
 
-export const userReducer = (
-  state: UserState = defaultUserState,
-  action: UserAction
-): UserState => {
+export const settingsReducer = (
+  state: SettingsState = defaultSettingsState,
+  action: SettingsAction
+): SettingsState => {
   switch (action.type) {
-    case UserActionTypes.SET_SDK_LANGUAGE:
+    case SettingsActionTypes.SET_SDK_LANGUAGE:
       return {
         sdkLanguage: action.payload,
       }

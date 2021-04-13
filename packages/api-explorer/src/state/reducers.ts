@@ -24,10 +24,10 @@
 
  */
 import { combineReducers } from 'redux'
-import { userReducer } from './user'
+import { settingsReducer } from './user'
 
 export const reducers = combineReducers({
-  user: userReducer,
+  settings: settingsReducer,
 })
 
 export type RootState = ReturnType<typeof reducers>

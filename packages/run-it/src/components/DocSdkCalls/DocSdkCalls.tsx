@@ -45,10 +45,6 @@ export interface DocSdkCallsProps {
 
 /**
  * Generates the SDK call syntax for a given language or all supported languages
- * @param api Api spec
- * @param method Api method
- * @param inputs Method parameters
- * @param language SDK language to generate the call syntax in
  */
 export const DocSdkCalls: FC<DocSdkCallsProps> = ({
   api,

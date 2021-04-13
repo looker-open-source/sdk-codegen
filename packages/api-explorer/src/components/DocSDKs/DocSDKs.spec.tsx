@@ -39,7 +39,7 @@ describe('DocSDKs', () => {
   const pattern = new RegExp(`${supportedLanguages.join('|')}`)
 
   beforeAll(() => {
-    store = configureStore({ user: { sdkLanguage: 'All' } })
+    store = configureStore({ settings: { sdkLanguage: 'All' } })
   })
 
   test.each([
@@ -60,7 +60,7 @@ describe('DocSDKs', () => {
   test.each(supportedLanguages)(
     'it can render a %s method declaration',
     (sdkLanguage) => {
-      store = configureStore({ user: { sdkLanguage } })
+      store = configureStore({ settings: { sdkLanguage } })
       renderWithReduxProvider(
         <DocSDKs api={api} method={api.methods.run_look} />,
         store

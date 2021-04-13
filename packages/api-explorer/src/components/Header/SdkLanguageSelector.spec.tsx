@@ -28,7 +28,7 @@ import { act, screen, waitFor } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 import { codeGenerators } from '@looker/sdk-codegen'
 
-import { defaultUserState } from '../../state'
+import { defaultSettingsState } from '../../state'
 import { renderWithReduxProvider } from '../../test-utils'
 import { EnvAdaptorConstants } from '../../utils'
 import { SdkLanguageSelector } from './SdkLanguageSelector'
@@ -43,7 +43,7 @@ describe('SdkLanguageSelector', () => {
   test('it has the correct default language selected', () => {
     renderWithReduxProvider(<SdkLanguageSelector />)
     expect(screen.getByRole('textbox')).toHaveValue(
-      defaultUserState.sdkLanguage
+      defaultSettingsState.sdkLanguage
     )
   })
 
@@ -62,7 +62,7 @@ describe('SdkLanguageSelector', () => {
   test('it stores the selected language in localStorage', async () => {
     renderWithReduxProvider(<SdkLanguageSelector />)
     const selector = screen.getByRole('textbox')
-    expect(defaultUserState.sdkLanguage).toEqual('Python')
+    expect(defaultSettingsState.sdkLanguage).toEqual('Python')
     expect(selector).toHaveValue('Python')
 
     await act(async () => {

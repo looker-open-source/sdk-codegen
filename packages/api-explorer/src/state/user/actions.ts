@@ -23,14 +23,14 @@
  SOFTWARE.
 
  */
-export enum UserActionTypes {
+export enum SettingsActionTypes {
   SET_SDK_LANGUAGE = 'SET_SDK_LANGUAGE',
 }
 
 /** Action for setting the language for SDK references */
 export interface SetSdkLanguageAction {
-  type: UserActionTypes.SET_SDK_LANGUAGE
+  type: SettingsActionTypes.SET_SDK_LANGUAGE
   payload: string
 }
 
-export type UserAction = SetSdkLanguageAction
+export type SettingsAction = SetSdkLanguageAction
