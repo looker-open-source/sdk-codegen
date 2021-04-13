@@ -26,7 +26,7 @@
 import { SettingsActionTypes } from './actions'
 import { settingsReducer } from './reducer'
 
-describe('userReducer', () => {
+describe('settingsReducer', () => {
   test('it sets the sdk language', () => {
     const currState = { sdkLanguage: 'Kotlin' }
     const action = {

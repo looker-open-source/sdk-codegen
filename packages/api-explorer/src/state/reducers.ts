@@ -24,7 +24,7 @@
 
  */
 import { combineReducers } from 'redux'
-import { settingsReducer } from './user'
+import { settingsReducer } from './settings'
 
 export const reducers = combineReducers({
   settings: settingsReducer,

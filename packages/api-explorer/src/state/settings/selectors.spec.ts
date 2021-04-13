@@ -25,11 +25,11 @@
  */
 import { getSelectedSdkLanguage } from './selectors'
 
-describe('user selectors', () => {
+describe('settings selectors', () => {
   test('getSelectedSdkLanguages returns selected sdk languages', () => {
     const sdkLanguage = 'Kotlin'
     const state = {
-      user: { sdkLanguage },
+      settings: { sdkLanguage },
     }
     expect(getSelectedSdkLanguage(state)).toEqual(sdkLanguage)
   })

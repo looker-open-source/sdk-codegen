@@ -126,10 +126,11 @@ export const ExtensionApiExplorer: FC = () => {
     <Provider store={store}>
       <RunItProvider sdk={sdk} configurator={configurator} basePath="">
         <>
-          {specs && (
+          {specs ? (
             <ApiExplorer specs={specs} envAdaptor={extensionEnvAdaptor} />
+          ) : (
+            'Loading API specifications from Looker ...'
           )}
-          {!specs && 'Loading API specifications from Looker ...'}
         </>
       </RunItProvider>
     </Provider>
