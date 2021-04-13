@@ -10,6 +10,7 @@
     "run-dashboard": "ts-node ./downloadDashboard",
     "run-tile": "ts-node ./downloadTile",
     "run-dual": "ts-node ./dual",
+    "run-tiny-dual": "ts-node ./tinyDual",
     "run-sudo": "ts-node ./sudoAsUser"
   },
   "dependencies": {

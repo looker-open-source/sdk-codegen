@@ -20,6 +20,7 @@ These examples assume that a `looker.ini` has been created in the root of the re
 2. Run `yarn` to install the dependencies.
 3. Run the examples - `yarn {command} [other command-line options]`
    - `yarn run-dual` - runs multiple apis example.
+   - `yarn run-tiny-dual` - runs the compact multiple apis example
    - `yarn run-config` - runs custom config reader example.
    - `yarn run-sudo` - runs sudo as user example.
    - `yarn run-tile` - runs download dashboard tile example.
@@ -29,11 +30,11 @@ An important note on dependencies. The Looker typescript SDK consists of the fol
 
 1. `@looker/sdk` - contains the Looker API methods.
 2. `@looker/sdk-rtl` - contains a run time library needed to invoke the Looker API methods. Referencing the `@looker/sdk` as a dependency should automatically pull this package in.
-3. `@looker/sdk-node` - contains dependendencies needed to run the Looker SDK in a node environment. Do NOT include this package if you are using the Looker SDK in a browser.
+3. `@looker/sdk-node` - contains dependencies needed to run the Looker SDK in a node environment. Do NOT include this package if you are using the Looker SDK in a browser.
 
 ## Example list
 
-Very brief descriptions of the examples and the link to the main example/project file are provided here. For more information on an example, look at the source file.
+Very brief descriptions of the examples, and the link to the main example/project file are provided here. For more information on an example, look at the source file.
 
 ### General examples
 

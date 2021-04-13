@@ -24,19 +24,25 @@
 
  */
 
-import { IAuthSession, functionalSdk as rtlSdk } from '@looker/sdk-rtl'
+import { NodeSession, NodeSettingsIniFile } from '@looker/sdk-node'
+import { functionalSdk } from '@looker/sdk-rtl'
+import { me } from '@looker/sdk/src/4.0/funcs'
+import { me as me31 } from '@looker/sdk/src/3.1/funcs'
+import { sdkVersion } from '@looker/sdk'
+import { rootIni } from './utils'
 
-export const sdkVersion = '21.4'
-export const environmentPrefix = 'LOOKERSDK'
-
-/**
- * Creates an "sdk" to be used with the Typescript SDK's funcs.ts file
- * @param authSession authentication session
- * @param apiVersion version of API to use (e.g. "3.1" or "4.0")
- */
-export const functionalSdk = (
-  authSession: IAuthSession,
-  apiVersion: string
-) => {
-  return rtlSdk(authSession, apiVersion, sdkVersion)
-}
+const localConfig = rootIni()
+const settings = new NodeSettingsIniFile('', localConfig, 'Looker')
+const session = new NodeSession(settings)
+const sdk = functionalSdk(session, '4.0', sdkVersion)
+const sdk31 = functionalSdk(session, '3.1', sdkVersion)
+;(async () => {
+  const [resp, resp31] = await Promise.all([
+    sdk.ok(me(sdk)),
+    sdk.ok(me31(sdk31)),
+  ])
+  if (resp.id === resp31.id) {
+    console.log('Congratulations! You are using dual SDKs!')
+    console.log({ resp, resp31 })
+  }
+})()

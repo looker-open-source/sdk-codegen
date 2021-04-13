@@ -36,6 +36,26 @@ import {
 } from './transport'
 import { IAuthSession } from './authSession'
 
+/**
+ * Creates an "sdk" to be used with the Typescript SDK's funcs.ts file
+ * @param authSession authentication session
+ * @param apiVersion version of API to use (e.g. "3.1" or "4.0")
+ * @param sdkVersion Looker release version (e.g. "21.4")
+ */
+export const functionalSdk = (
+  authSession: IAuthSession,
+  apiVersion: string,
+  sdkVersion: string
+) => {
+  const sdk = new APIMethods(authSession, sdkVersion)
+  sdk.apiVersion = apiVersion
+  sdk.apiPath =
+    authSession.settings.base_url === ''
+      ? ''
+      : authSession.settings.base_url + '/api/' + apiVersion
+  return sdk
+}
+
 export interface IAPIMethods {
   authSession: IAuthSession
   sdkVersion: string
