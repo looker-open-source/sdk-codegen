@@ -108,6 +108,7 @@ export const SideNav: FC<SideNavProps> = ({ api, specKey }) => {
     <nav>
       <Flex alignItems="center" pl="large" pr="large" pb="large">
         <InputSearch
+          aria-label="Search"
           onChange={handleInputChange}
           placeholder="Search"
           value={pattern}
