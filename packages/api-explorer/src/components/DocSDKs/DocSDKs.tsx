@@ -77,7 +77,7 @@ export const DocSDKs: FC<LanguageSDKProps> = ({ api, method, type }) => {
                 : gen.declareType('', item as IType)
               return (
                 <TabPanel key={language}>
-                  <DocCode language={language} code={code} />
+                  <DocCode language={language} code={code} editor="prism" />
                 </TabPanel>
               )
             })}
