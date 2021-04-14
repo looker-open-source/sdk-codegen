@@ -1,7 +1,7 @@
 {
-  "name": "@looker/run-it",
-  "version": "0.9.1",
-  "description": "A dynamic REST request input form and response visualizer",
+  "name": "@looker/prism-editor",
+  "version": "0.0.1",
+  "description": "A prism-react-renderer implementation for Looker apps.",
   "main": "lib/esm/index.js",
   "typings": "lib/index.d.ts",
   "files": [
@@ -13,9 +13,9 @@
   "repository": {
     "type": "git",
     "url": "git+https://github.com/looker-open-source/sdk-codegen.git",
-    "directory": "packages/api-explorer"
+    "directory": "packages/prism-editor"
   },
-  "homepage": "https://github.com/looker-open-source/sdk-codegen/tree/main/packages/run-it",
+  "homepage": "https://github.com/looker-open-source/sdk-codegen/tree/main/packages/prism-editor",
   "bugs": {
     "url": "https://github.com/looker-open-source/sdk-codegen/issues?q=is%3Aopen+is%3Aissue+project%3Alooker-open-source%2Fsdk-codegen%2F7"
   },
@@ -54,8 +54,8 @@
     "@looker/sdk-codegen": "^21.0.11",
     "@looker/sdk-codegen-utils": "^21.0.11",
     "@looker/sdk-rtl": "^21.0.11",
-    "@looker/prism-editor": "^0.0.1",
     "@types/readable-stream": "^2.3.5",
+    "prism-react-renderer": "^1.2.0",
     "lodash": "^4.17.19",
     "papaparse": "^5.3.0",
     "react": "^16.13.1",

@@ -23,40 +23,4 @@
  SOFTWARE.
 
  */
-import React, { FC } from 'react'
-import { Tab, TabList, TabPanel, TabPanels, useTabs } from '@looker/components'
-
-import { PrismEditor } from '@looker/prism-editor'
-import { getGenerators } from './callUtils'
-import { DocSdkCallsProps } from './DocSdkCalls'
-
-/**
- * Generates the SDK call syntax for all supported languages
- */
-export const DocMultiCall: FC<Omit<DocSdkCallsProps, 'sdkLanguage'>> = ({
-  api,
-  inputs,
-  method,
-}) => {
-  const tabs = useTabs()
-  const generators = getGenerators(api)
-  return (
-    <>
-      <TabList {...tabs}>
-        {Object.keys(generators).map((language) => (
-          <Tab key={language}>{language}</Tab>
-        ))}
-      </TabList>
-      <TabPanels {...tabs} pt="0">
-        {Object.entries(generators).map(([language, gen]) => {
-          const code = gen.makeTheCall(method, inputs)
-          return (
-            <TabPanel key={language}>
-              <PrismEditor code={code} language={language} />
-            </TabPanel>
-          )
-        })}
-      </TabPanels>
-    </>
-  )
-}
+export { getPrismLanguage } from './utils'

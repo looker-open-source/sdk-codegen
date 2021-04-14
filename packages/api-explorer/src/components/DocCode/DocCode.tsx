@@ -27,9 +27,9 @@
 import React, { FC, useContext } from 'react'
 import AceEditor from 'react-ace'
 import { findGenerator } from '@looker/sdk-codegen'
+import { PrismEditor } from '@looker/prism-editor'
 import { SearchContext } from '../../context/search'
 import { highlightSourceCode } from './utils'
-import { PrismEditor } from './PrismEditor'
 
 // TODO Use webpack resolver instead.
 /* eslint-disable  @typescript-eslint/ban-ts-comment,@typescript-eslint/no-unused-vars,@typescript-eslint/no-var-requires,import/no-extraneous-dependencies */

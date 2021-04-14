@@ -26,9 +26,10 @@
 
 import React, { FC } from 'react'
 import styled from 'styled-components'
-import Highlight, { defaultProps, Language } from 'prism-react-renderer'
+import Highlight, { defaultProps } from 'prism-react-renderer'
 // import { Prism } from "prism-react-renderer"
 import dracula from 'prism-react-renderer/themes/dracula'
+import { getPrismLanguage } from './utils'
 
 // (typeof global !== "undefined" ? global : window).Prism = Prism
 // require("prismjs/components/prism-kotlin")
@@ -36,9 +37,9 @@ import dracula from 'prism-react-renderer/themes/dracula'
 // require("prismjs/components/prism-swift")
 
 interface PrismEditorProps {
-  language: string
+  language?: string
   code: string
-  pattern: string
+  pattern?: string
 }
 
 const Pre = styled.pre`
@@ -62,22 +63,16 @@ const LineContent = styled.span`
   display: table-cell;
 `
 
+/**
+ * The PrismEditor provides a useful implementation of prism-react-renderer
+ * for Looker apps. All @looker/sdk languages are supported.
+ * TODO: LookML syntax highlighting
+ */
 export const PrismEditor: FC<PrismEditorProps> = ({
-  language,
+  language = 'json',
   code,
-  pattern,
+  pattern = '',
 }) => {
-  const getPrismLanguage = (language: string) => {
-    const unstyled = ['kotlin', 'csharp', 'swift']
-    // TODO revert back to `go` in generator language definitions instead of using this
-    if (language === 'golang') {
-      return 'go'
-    } else if (unstyled.includes(language)) {
-      return 'clike'
-    }
-    return language as Language
-  }
-
   return (
     <Highlight
       {...defaultProps}
@@ -89,7 +84,7 @@ export const PrismEditor: FC<PrismEditorProps> = ({
         <Pre className={className} style={style}>
           {tokens.map((line, i) => (
             <Line key={i} {...getLineProps({ line, key: i })}>
-              <LineNo>{i + 1}</LineNo>
+              {language === 'json' || <LineNo>{i + 1}</LineNo>}
               <LineContent>
                 {line.map((token, key) => {
                   const tokenProps = getTokenProps({ token, key })
