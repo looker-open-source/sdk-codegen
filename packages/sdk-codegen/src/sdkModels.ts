@@ -1533,9 +1533,6 @@ export class Type implements IType {
     Object.entries(this.schema.properties || {}).forEach(
       ([propName, propSchema]) => {
         const propType = api.resolveType(propSchema, undefined, propName)
-        if (!propType) {
-          throw new Error(propName)
-        }
         // Using class name instead of instanceof check because Typescript
         // linting complains about declaration order
         if (propType.instanceOf('EnumType')) {
