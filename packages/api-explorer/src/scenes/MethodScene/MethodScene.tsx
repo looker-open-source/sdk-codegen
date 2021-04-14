@@ -53,7 +53,7 @@ import {
   DocTitle,
 } from '../../components'
 import { getSelectedSdkLanguage } from '../../state'
-import { DocOperation } from './components'
+import { DocOperation, DocRequestBody } from './components'
 import { createInputs } from './utils'
 
 interface DocMethodProps {
@@ -108,6 +108,7 @@ export const MethodScene: FC<DocMethodProps> = ({ api }) => {
         <DocOperation method={method} />
         <DocMarkdown source={method.description} specKey={specKey} />
         <DocSDKs api={api} method={method} />
+        <DocRequestBody method={method} />
         <DocSdkUsage method={method} />
         <DocReferences seeTypes={seeTypes} api={api} specKey={specKey} />
         <DocResponses responses={method.responses} />
