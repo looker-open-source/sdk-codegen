@@ -54,6 +54,8 @@ export class TypescriptGen extends CodeGen {
   /**
    * special case for Typescript output path due to mono repository
    */
+  useFunctions = true
+  useInterfaces = true
   packagePath = 'sdk/src'
   itself = 'this'
   fileExtension = '.ts'
@@ -98,15 +100,18 @@ export class TypescriptGen extends CodeGen {
 
   methodsPrologue(_indent: string) {
     return `
-import { ${this.rtlImports()}APIMethods, IAuthSession, ITransportSettings, encodeParam } from '@looker/sdk-rtl'
+import { ${this.rtlImports()}APIMethods, IAuthSession, ITransportSettings, encodeParam, SDKResponse } from '@looker/sdk-rtl'
 /**
  * ${this.warnEditing()}
  *
  */
 import { sdkVersion } from '../constants'
+import { I${this.packageName} } from './methodsInterface'
 import { ${this.typeNames().join(', ')} } from './models'
 
-export class ${this.packageName} extends APIMethods {
+export class ${this.packageName} extends APIMethods implements I${
+      this.packageName
+    } {
   static readonly ApiVersion = '${this.apiVersion}'
   constructor(authSession: IAuthSession) {
     super(authSession, sdkVersion)
@@ -116,6 +121,45 @@ export class ${this.packageName} extends APIMethods {
         ? ''
         : authSession.settings.base_url + '/api/' + this.apiVersion
   }
+
+`
+  }
+
+  functionsPrologue(_indent: string) {
+    return `
+import { ${this.rtlImports()}IAPIMethods, ITransportSettings, IAuthSession, encodeParam, SDKResponse, functionalSdk } from '@looker/sdk-rtl'
+
+/**
+ * ${this.warnEditing()}
+ *
+ */
+
+import { sdkVersion } from '../constants'
+import { ${this.typeNames().join(', ')} } from './models'
+
+/**
+ * Creates a "functional sdk" that knows the API and Looker release version
+ * @param authSession authentication session
+ */
+export const functionalSdk${this.apiRef} = (
+  authSession: IAuthSession,
+) => {
+  return functionalSdk(authSession, '${this.apiVersion}', sdkVersion)
+}
+
+`
+  }
+
+  interfacesPrologue(_indent: string) {
+    return `
+import { ${this.rtlImports()} ITransportSettings, SDKResponse } from '@looker/sdk-rtl'
+/**
+ * ${this.warnEditing()}
+ *
+ */
+import { ${this.typeNames().join(', ')} } from './models'
+
+export interface I${this.packageName} {
 
 `
   }
@@ -240,7 +284,12 @@ export class ${this.packageName}Stream extends APIMethods {
     return `${resp}${args}))`
   }
 
-  methodHeaderDeclaration(indent: string, method: IMethod, streamer = false) {
+  methodHeaderDeclaration(
+    indent: string,
+    method: IMethod,
+    streamer = false,
+    params: string[] = []
+  ) {
     const mapped = this.typeMap(method.type)
     const head = method.description?.trim()
     let headComment =
@@ -258,8 +307,9 @@ export class ${this.packageName}Stream extends APIMethods {
         method.httpMethod === 'PATCH'
           ? `request: Partial<I${requestType}>`
           : `request: I${requestType}`
+      params.push(fragment)
+      fragment = params.join(', ')
     } else {
-      const params: string[] = []
       const args = method.allParams // get the params in signature order
       if (args && args.length > 0)
         args.forEach((p) => params.push(this.declareParameter(bump, method, p)))
@@ -267,21 +317,22 @@ export class ${this.packageName}Stream extends APIMethods {
         params.length > 0 ? `\n${params.join(this.paramDelimiter)}` : ''
     }
     if (method.responseIsBoth()) {
-      headComment += `\n\n**Note**: Binary content may be returned by this method.`
+      headComment += `\n\n**Note**: Binary content may be returned by this function.`
     } else if (method.responseIsBinary()) {
-      headComment += `\n\n**Note**: Binary content is returned by this method.\n`
+      headComment += `\n\n**Note**: Binary content is returned by this function.\n`
     }
     const callback = `callback: (readable: Readable) => Promise<${mapped.name}>,`
     const header =
       this.commentHeader(indent, headComment) +
       `${indent}async ${method.name}(` +
       (streamer ? `\n${bump}${callback}` : '')
+    const returns = streamer ? '' : `: ${this.returnValue(indent, method)}`
 
     return (
       header +
       fragment +
       (fragment ? ', ' : '') +
-      'options?: Partial<ITransportSettings>) {\n'
+      `options?: Partial<ITransportSettings>)${returns} {\n`
     )
   }
 
@@ -312,6 +363,78 @@ export class ${this.packageName}Stream extends APIMethods {
       this.httpCall(bump, method) +
       `\n${indent}}`
     )
+  }
+
+  returnValue(indent: string, method: IMethod): string {
+    const mapped = this.typeMap(method.type)
+    const errors = this.errorResponses(indent, method)
+    return `Promise<SDKResponse<${mapped.name}, ${errors}>>`
+  }
+
+  functionSignature(indent: string, method: IMethod): string {
+    const mapped = this.typeMap(method.type)
+    const head = method.description?.trim()
+    let headComment =
+      (head ? `${head}\n\n` : '') +
+      `${method.httpMethod} ${method.endpoint} -> ${mapped.name}`
+    let fragment: string
+    const requestType = this.requestTypeName(method)
+    const bump = this.bumper(indent)
+    const params = ['sdk: IAPIMethods']
+
+    if (requestType) {
+      // use the request type that will be generated in models.ts
+      // No longer using Partial<T> by default here because required and optional are supposed to be accurate
+      // However, for update methods (iow, patch) Partial<T> is still necessary since only the delta gets set
+      fragment =
+        method.httpMethod === 'PATCH'
+          ? `request: Partial<I${requestType}>`
+          : `request: I${requestType}`
+      params.push(fragment)
+      fragment = params.join(', ')
+    } else {
+      const args = method.allParams // get the params in signature order
+      if (args && args.length > 0)
+        args.forEach((p) => params.push(this.declareParameter(bump, method, p)))
+      fragment =
+        params.length > 0 ? `\n${params.join(this.paramDelimiter)}` : ''
+    }
+    if (method.responseIsBoth()) {
+      headComment += `\n\n**Note**: Binary content may be returned by this function.`
+    } else if (method.responseIsBinary()) {
+      headComment += `\n\n**Note**: Binary content is returned by this function.\n`
+    }
+    const header =
+      this.commentHeader(indent, headComment) +
+      `${indent}export const ${method.name} = async (`
+    const returns = this.returnValue(indent, method)
+
+    return (
+      header +
+      fragment +
+      (fragment ? ', ' : '') +
+      `options?: Partial<ITransportSettings>): ${returns} => {\n`
+    )
+  }
+
+  declareFunction(indent: string, method: IMethod): string {
+    const bump = this.bumper(indent)
+    // horribly hacky tweak to httpCall
+    this.itself = 'sdk'
+    const result =
+      this.functionSignature(indent, method) +
+      this.encodePathParams(indent, method) +
+      this.httpCall(bump, method) +
+      `\n${indent}}`
+    this.itself = 'this'
+    return result
+  }
+
+  declareInterface(indent: string, method: IMethod): string {
+    let sig = this.methodSignature(indent, method).trimRight()
+    sig = sig.replace(/^\s*async /gm, '')
+    sig = sig.substr(0, sig.length - 2)
+    return `${sig}\n`
   }
 
   streamerSignature(indent: string, method: IMethod) {
@@ -531,7 +654,7 @@ export class ${this.packageName}Stream extends APIMethods {
         case 'HashType':
           this.rtlNeeds.add('IDictionary')
           return {
-            default: '{}',
+            default: '',
             name: `IDictionary<${map.name}>`,
           }
         case 'DelimArrayType':

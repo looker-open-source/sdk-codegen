@@ -24,23 +24,23 @@
 
  */
 
-// Version 21.4
+import { NodeSession, NodeSettingsIniFile } from '@looker/sdk-node'
+import { me, functionalSdk40 } from '@looker/sdk/lib/4.0/funcs'
+import { me as me31, functionalSdk31 } from '@looker/sdk/lib/3.1/funcs'
+import { rootIni } from './utils'
 
-/**
- * Note: functions should be deep-linked from their 4.0/funcs or 3.1/funcs path
- */
-import * as models31 from './3.1/models'
-export { models31 }
-
-export * from './3.1/methodsInterface'
-export * from './3.1/methods'
-export * from './3.1/streams'
-
-export * from './4.0/methodsInterface'
-export * from './4.0/methods'
-export * from './4.0/models'
-export * from './4.0/streams'
-
-export * from './constants'
-export * from './extensionSdk'
-export * from './browserSdk'
+const localConfig = rootIni()
+const settings = new NodeSettingsIniFile('', localConfig, 'Looker')
+const session = new NodeSession(settings)
+const sdk = functionalSdk40(session)
+const sdk31 = functionalSdk31(session)
+;(async () => {
+  const [resp, resp31] = await Promise.all([
+    sdk.ok(me(sdk)),
+    sdk.ok(me31(sdk31)),
+  ])
+  if (resp.id === resp31.id) {
+    console.log('Congratulations! You are using dual SDKs!')
+    console.log({ resp, resp31 })
+  }
+})()
