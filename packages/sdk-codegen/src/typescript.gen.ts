@@ -326,7 +326,7 @@ export class ${this.packageName}Stream extends APIMethods {
       this.commentHeader(indent, headComment) +
       `${indent}async ${method.name}(` +
       (streamer ? `\n${bump}${callback}` : '')
-    const returns = streamer ? '' : `: ${this.returnValue(indent, method)}`
+    const returns = streamer ? '' : `: ${this.returnType(indent, method)}`
 
     return (
       header +
@@ -365,7 +365,12 @@ export class ${this.packageName}Stream extends APIMethods {
     )
   }
 
-  returnValue(indent: string, method: IMethod): string {
+  /**
+   * Return type declaration for the method
+   * @param indent
+   * @param method
+   */
+  returnType(indent: string, method: IMethod): string {
     const mapped = this.typeMap(method.type)
     const errors = this.errorResponses(indent, method)
     return `Promise<SDKResponse<${mapped.name}, ${errors}>>`
@@ -407,7 +412,7 @@ export class ${this.packageName}Stream extends APIMethods {
     const header =
       this.commentHeader(indent, headComment) +
       `${indent}export const ${method.name} = async (`
-    const returns = this.returnValue(indent, method)
+    const returns = this.returnType(indent, method)
 
     return (
       header +
