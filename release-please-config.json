@@ -9,7 +9,9 @@
     "packages/extension-sdk": {},
     "packages/hackathon": {},
     "packages/sdk-node": {},
-    "packages/sdk": {},
+    "packages/sdk": {
+      "release-as": "21.4.1"
+    },
     ".": {
       "release-as": ""
     },
