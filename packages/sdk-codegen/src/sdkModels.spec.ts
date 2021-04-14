@@ -291,15 +291,14 @@ describe('sdkModels', () => {
       }
     })
 
-    // TODO create a mock spec that has a recursive type, since this no longer does
-    // it ('detects recursive types', () => {
-    //   const type = apiTestModel.types['LookmlModelExploreField']
-    //   const actual = type.isRecursive()
-    //   expect(actual).toEqual(true)
-    //   type = apiTestModel.types['CredentialsApi3']
-    //   actual = type.isRecursive()
-    //   expect(actual).toEqual(false)
-    // })
+    it('detects recursive types', () => {
+      let type = apiTestModel.types.LookmlModelExploreField
+      let actual = type.isRecursive()
+      expect(actual).toEqual(true)
+      type = apiTestModel.types.CredentialsApi3
+      actual = type.isRecursive()
+      expect(actual).toEqual(false)
+    })
   })
 
   describe('response modes', () => {
