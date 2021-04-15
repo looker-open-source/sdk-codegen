@@ -22,6 +22,7 @@
     "@looker/run-it": "^0.9.1",
     "@looker/sdk": "^21.4.0",
     "@looker/sdk-codegen": "^21.0.11",
+    "@looker/components": "^1.1.3",
     "react": "^16.13.1",
     "react-dom": "^16.13.1",
     "react-redux": "^7.2.3",
