@@ -41,16 +41,16 @@ We're so excited that you're ready to make your first contribution! Go ahead and
 
 We squash Pull Requests (all commits in a pull request show up in our `main` branch history as a single commit) and we use [Conventional Commits](https://www.conventionalcommits.org/en/v1.0.0/) to generate our CHANGELOG.
 
-So we use Conventional Commit style Pull Request titles:
+So we use Conventional Commit style Pull Request titles (sans scopes as explained further below):
 
-`<type>[optional scope]: <description>`
+`<type>: <description>`
 
 Examples:
 
 ```
-fix(BrowserSession): Fixed issue with Oauth flow
-feat(NewComponentName): Component to support exciting new thing
-chore(deps): Updated package dependency X from version y to z
+fix: Fixed issue with Oauth flow
+feat: Component to support exciting new thing
+chore: Updated package dependency X from version y to z
 ```
 
 #### Types
@@ -67,14 +67,11 @@ If a change does _NOT_ make a change to the build artifacts produced (`fix` or `
 - refactor: A code change that neither fixes a bug nor adds a feature
 - style: Changes that do not affect the meaning of the code (white-space, formatting, missing semi-colons, etc)
 - test: Adding missing tests or correcting existing tests
+- chore: catchall prefix for a non-user facing change.
 
 #### Scope
 
-Specify a scope when your change is focused on a specific component, package, or portion of the code. E.g.:
-
-```
-feat(RunIt): Now has even more colors 🌈
-```
+Do not use the `(scope)` syntax in your PR Title. We use automation to maintain per-package changelogs as well as a top level changelog. When a scope is introduced, it often looks redundant in the per-package changelog or breaks the auto-scope-per-package feature of the root changelog.
 
 ### Developer Checklist
 
