@@ -129,7 +129,7 @@ export const ExtensionApiExplorer: FC = () => {
           {specs ? (
             <ApiExplorer specs={specs} envAdaptor={extensionEnvAdaptor} />
           ) : (
-            'Loading API specifications from Looker ...'
+            'Loading API specifications ...'
           )}
         </>
       </RunItProvider>
