@@ -23,5 +23,29 @@
  SOFTWARE.
 
  */
-export { api, api40, specs, specState } from './specs'
-export { examples } from './examples'
+import React from 'react'
+import { screen } from '@testing-library/react'
+import { findExampleLanguages } from '@looker/sdk-codegen'
+
+import { renderWithLode } from '../../test-utils'
+import { api, examples } from '../../test-data'
+import { DocSdkUsage } from './DocSdkUsage'
+import { prepareExampleTableData } from './utils'
+
+describe('DocSdkUsage', () => {
+  test('it renders links to sdk examples', () => {
+    const method = api.methods.run_look
+    const languages = findExampleLanguages(examples, method.name)
+    const tableExamples = prepareExampleTableData(
+      languages,
+      examples,
+      method.operationId
+    )
+    renderWithLode(<DocSdkUsage method={method} />, examples)
+    expect(screen.getAllByRole('link')).toHaveLength(tableExamples.length)
+
+    expect(
+      screen.getAllByText(tableExamples[0].filename)[0].closest('a')
+    ).toHaveAttribute('href', tableExamples[0].permalink)
+  })
+})

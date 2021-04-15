@@ -24,12 +24,20 @@
 
  */
 import React, { FC, useContext } from 'react'
-import { TabList, Tab, TabPanels, TabPanel, useTabs } from '@looker/components'
+import {
+  Card,
+  Icon,
+  Flex,
+  FlexItem,
+  Text,
+  Divider,
+  Link,
+} from '@looker/components'
 import { findExampleLanguages, IMethod } from '@looker/sdk-codegen'
 
 import { CollapserCard } from '../Collapser'
 import { LodeContext } from '../../context'
-import { DocExamples } from './DocExamples'
+import { ExampleLinkTableRow, prepareExampleTableData } from './utils'
 
 interface DocSdkUsageProps {
   method: IMethod
@@ -40,31 +48,59 @@ interface DocSdkUsageProps {
  *  links to the source files
  */
 export const DocSdkUsage: FC<DocSdkUsageProps> = ({ method }) => {
-  const tabs = useTabs()
   const { examples } = useContext(LodeContext)
   const languages = findExampleLanguages(examples, method.name)
   if (languages.length === 0) return <></>
 
+  const tableExamples = prepareExampleTableData(
+    languages,
+    examples,
+    method.operationId
+  )
+
   return (
     <CollapserCard id="examples" heading="SDK Examples">
-      <>
-        <TabList {...tabs}>
-          {languages.map((language) => (
-            <Tab key={language}>{language}</Tab>
-          ))}
-        </TabList>
-        <TabPanels {...tabs} pt="0">
-          {languages.map((language) => (
-            <TabPanel key={language}>
-              <DocExamples
-                lode={examples}
-                language={language}
-                operationId={method.operationId}
-              />
-            </TabPanel>
-          ))}
-        </TabPanels>
-      </>
+      <Card height="auto" p="medium" mt="small">
+        <Flex alignItems="center" mx="medium" minHeight="2rem">
+          <FlexItem flexBasis="50%">
+            <Text fontWeight="semiBold">Filename</Text>
+          </FlexItem>
+          <FlexItem flexBasis="40%">
+            <Text fontWeight="semiBold">Language</Text>
+          </FlexItem>
+          <FlexItem flexBasis="10%">
+            <Text fontWeight="semiBold" style={{ float: 'right' }}>
+              Line
+            </Text>
+          </FlexItem>
+        </Flex>
+        {tableExamples.map((exampleRow: ExampleLinkTableRow, i: number) => (
+          <div key={i}>
+            <Divider appearance="light" />
+            <Flex alignItems="center" mx="medium" minHeight="2rem">
+              <FlexItem flexBasis="2%">
+                <Icon
+                  style={{ float: 'right' }}
+                  mr="small"
+                  name="IdeFileGeneric"
+                  color="text1"
+                />
+              </FlexItem>
+              <FlexItem flexBasis="48%">
+                <Link href={exampleRow.permalink} target={'_blank'} role="link">
+                  {exampleRow.filename}
+                </Link>
+              </FlexItem>
+              <FlexItem flexBasis="40%">
+                <Text textTransform="lowercase">{exampleRow.language}</Text>
+              </FlexItem>
+              <FlexItem flexBasis="10%">
+                <Text style={{ float: 'right' }}>{exampleRow.line}</Text>
+              </FlexItem>
+            </Flex>
+          </div>
+        ))}
+      </Card>
     </CollapserCard>
   )
 }
