@@ -82,7 +82,7 @@ export const DocSdkUsage: FC<DocSdkUsageProps> = ({ method }) => {
                 <Icon
                   style={{ float: 'right' }}
                   mr="small"
-                  name="IdeFileGeneric"
+                  name="IdeFileGeneric" // TODO use InsertDriveFile when available
                   color="text1"
                 />
               </FlexItem>
