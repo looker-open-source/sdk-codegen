@@ -26,7 +26,7 @@
 import React, { ReactElement } from 'react'
 import { IRawResponse, ResponseMode, responseMode } from '@looker/sdk-rtl'
 import { Paragraph, CodeBlock } from '@looker/components'
-import { PrismEditor } from '@looker/prism-editor'
+import { CodeDisplay } from '@looker/code-display'
 
 import { CodeStructure } from '../CodeStructure'
 import { DataGrid, parseCsv, parseJson } from '../DataGrid'
@@ -71,7 +71,7 @@ const ShowJSON = (response: IRawResponse) => {
   const data = parseJson(content)
   const showGrid = isColumnar(data.data)
   const raw = (
-    <PrismEditor code={JSON.stringify(JSON.parse(response.body), null, 2)} />
+    <CodeDisplay code={JSON.stringify(JSON.parse(response.body), null, 2)} />
   )
   if (!showGrid) return raw
   return <DataGrid data={data.data} raw={raw} />

@@ -25,7 +25,7 @@
  */
 import React, { FC } from 'react'
 import { getCodeGenerator } from '@looker/sdk-codegen'
-import { PrismEditor } from '@looker/prism-editor'
+import { CodeDisplay } from '@looker/code-display'
 
 import { DocSdkCallsProps } from './DocSdkCalls'
 
@@ -41,5 +41,5 @@ export const DocSingleCall: FC<DocSdkCallsProps> = ({
   const generator = getCodeGenerator(sdkLanguage, api)
   const code = generator!.makeTheCall(method, inputs)
 
-  return <PrismEditor code={code} language={sdkLanguage} />
+  return <CodeDisplay code={code} language={sdkLanguage} />
 }

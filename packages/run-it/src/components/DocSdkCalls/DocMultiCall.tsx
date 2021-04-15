@@ -26,7 +26,7 @@
 import React, { FC } from 'react'
 import { Tab, TabList, TabPanel, TabPanels, useTabs } from '@looker/components'
 
-import { PrismEditor } from '@looker/prism-editor'
+import { CodeDisplay } from '@looker/code-display'
 import { getGenerators } from './callUtils'
 import { DocSdkCallsProps } from './DocSdkCalls'
 
@@ -52,7 +52,7 @@ export const DocMultiCall: FC<Omit<DocSdkCallsProps, 'sdkLanguage'>> = ({
           const code = gen.makeTheCall(method, inputs)
           return (
             <TabPanel key={language}>
-              <PrismEditor code={code} language={language} />
+              <CodeDisplay code={code} language={language} />
             </TabPanel>
           )
         })}

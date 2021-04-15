@@ -23,4 +23,4 @@
  SOFTWARE.
 
  */
-export { PrismEditor } from './PrismEditor'
+export { CodeDisplay } from './CodeDisplay'

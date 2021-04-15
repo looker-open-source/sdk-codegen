@@ -26,32 +26,37 @@
 
 import React, { FC } from 'react'
 import styled from 'styled-components'
+import { Span } from '@looker/components'
 import Highlight, { defaultProps } from 'prism-react-renderer'
 // import { Prism } from "prism-react-renderer"
 import dracula from 'prism-react-renderer/themes/dracula'
 import { getPrismLanguage } from './utils'
-
+// TODO enable kotlin, csharp, swift highlighting
 // (typeof global !== "undefined" ? global : window).Prism = Prism
 // require("prismjs/components/prism-kotlin")
 // require("prismjs/components/prism-csharp")
 // require("prismjs/components/prism-swift")
 
 interface PrismEditorProps {
+  /** SDK programming language */
   language?: string
+  /** Code blob to be highlighted */
   code: string
+  /** Pattern to be search (if applicable) */
   pattern?: string
 }
 
 const Pre = styled.pre`
   padding: 1rem;
   overflow: auto;
+  white-space: pre-wrap;
 `
 
 const Line = styled.div`
   display: table-row;
 `
 
-const LineNo = styled.span`
+const LineNo = styled(Span)`
   display: table-cell;
   text-align: right;
   padding-right: 1em;
@@ -59,7 +64,7 @@ const LineNo = styled.span`
   opacity: 0.5;
 `
 
-const LineContent = styled.span`
+const LineContent = styled(Span)`
   display: table-cell;
 `
 
@@ -68,7 +73,7 @@ const LineContent = styled.span`
  * for Looker apps. All @looker/sdk languages are supported.
  * TODO: LookML syntax highlighting
  */
-export const PrismEditor: FC<PrismEditorProps> = ({
+export const CodeDisplay: FC<PrismEditorProps> = ({
   language = 'json',
   code,
   pattern = '',

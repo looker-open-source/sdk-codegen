@@ -27,7 +27,7 @@
 import React, { FC, useContext } from 'react'
 import AceEditor from 'react-ace'
 import { findGenerator } from '@looker/sdk-codegen'
-import { PrismEditor } from '@looker/prism-editor'
+import { CodeDisplay } from '@looker/code-display'
 import { SearchContext } from '../../context/search'
 import { highlightSourceCode } from './utils'
 
@@ -92,6 +92,6 @@ export const DocCode: FC<DocCodeProps> = ({
       }}
     />
   ) : (
-    <PrismEditor language={language} code={code} pattern={pattern} />
+    <CodeDisplay language={language} code={code} pattern={pattern} />
   )
 }
