@@ -23,31 +23,28 @@
  SOFTWARE.
 
  */
+// Despite its name, this module is not specific to webpack or babel-loader.
+// It simply builds a cross-platform (i.e. windows-friendly) negative
+// lookahead RegExp that will exclude all node modules except those supplied
+// as its arguments.
+const excludeNodeModuleExcept = require('babel-loader-exclude-node-modules-except')
 
-/* eslint-disable @typescript-eslint/no-var-requires */
-const Adapter = require('enzyme-adapter-react-16')
-const { configure } = require('enzyme')
+// Our own modules are built as esm to allow for tree shaking.
+const ownModules = [
+  '@looker/components-test-utils',
+  '@looker/components',
+  '@looker/icons',
+  '@looker/design-tokens',
+]
 
-require('@testing-library/jest-dom/extend-expect')
-require('jest-canvas-mock')
-require('jest-styled-components')
+const excludeNodeModulesExceptRegExp = excludeNodeModuleExcept([...ownModules])
 
-configure({ adapter: new Adapter() })
-
-const observeMock = function (cb, config) {
-  this.observeCallback = cb
-  this.observeConfig = config
-  this.disconnect = jest.fn()
-  this.observe = jest.fn()
+// Attach as a property to the exported function object so that we can
+// conveniently import it in webpack.config.js and jest.config.js without
+// interfering with babel's string requires.
+module.exports.excludeNodeModulesExcept = {
+  // RegExp representation for webpack.config.js
+  regExp: excludeNodeModulesExceptRegExp,
+  // string representation for jest.config.js
+  string: excludeNodeModulesExceptRegExp.toString().slice(1, -2),
 }
-
-const globalAny = global
-globalAny.IntersectionObserver = observeMock
-
-// js-dom doesn't do scrollIntoView
-// Element.prototype.scrollIntoView = jest.fn()
-
-// Seems to break localStorage mocking
-// beforeAll(() => {
-//   jest.resetAllMocks()
-// })

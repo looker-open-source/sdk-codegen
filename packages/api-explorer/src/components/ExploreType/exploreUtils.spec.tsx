@@ -24,6 +24,10 @@
 
  */
 
+import React from 'react'
+import { FieldString, IdeFileManifest } from '@looker/icons'
+import { CalendarToday, Code } from '@styled-icons/material'
+import { Tag } from '@styled-icons/material-rounded'
 import { api40 as api } from '../../test-data'
 import { expandable, pickType, pickTypeProps, typeIcon } from './exploreUtils'
 
@@ -43,22 +47,22 @@ describe('exploreUtils', () => {
   test('iconType', () => {
     const type = api.types.BoardSection
     const actual = typeIcon(type)
-    expect(actual).toEqual({ icon: 'Code', title: 'BoardSection' })
+    expect(actual).toEqual({ icon: <Code />, title: 'BoardSection' })
     const props = type.properties
     expect(typeIcon(props.can.type)).toEqual({
-      icon: 'IdeFileManifest',
+      icon: <IdeFileManifest />,
       title: 'Hash[boolean]',
     })
     expect(typeIcon(props.created_at.type)).toEqual({
-      icon: 'FieldDate',
+      icon: <CalendarToday />,
       title: 'datetime',
     })
     expect(typeIcon(props.description.type)).toEqual({
-      icon: 'FieldString',
+      icon: <FieldString />,
       title: 'string',
     })
     expect(typeIcon(props.id.type)).toEqual({
-      icon: 'FieldNumber',
+      icon: <Tag />,
       title: 'int64',
     })
   })

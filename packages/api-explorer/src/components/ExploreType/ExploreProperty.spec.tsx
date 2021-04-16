@@ -26,6 +26,9 @@
 
 import React from 'react'
 import { fireEvent, screen, waitFor } from '@testing-library/react'
+import { IdeFileManifest } from '@looker/icons'
+import { Toc } from '@styled-icons/material'
+import { Tag } from '@styled-icons/material-rounded'
 import { api } from '../../test-data'
 import { renderWithSearchAndRouter } from '../../test-utils'
 import { ExploreProperty, ExplorePropertyDetail, typeIcon } from '.'
@@ -78,7 +81,7 @@ describe('ExploreProperty', () => {
       renderWithSearchAndRouter(<ExploreProperty property={property} />)
       expect(screen.getByTitle('int64')).toBeInTheDocument()
       const legend = typeIcon(property.type)
-      expect(legend).toEqual({ icon: 'FieldNumber', title: 'int64' })
+      expect(legend).toEqual({ icon: <Tag />, title: 'int64' })
     })
     test('array property icon is correct', () => {
       const property = type.properties.listens_to_filters
@@ -86,7 +89,7 @@ describe('ExploreProperty', () => {
       renderWithSearchAndRouter(<ExploreProperty property={property} />)
       expect(screen.getByTitle(property.type.jsonName)).toBeInTheDocument()
       const legend = typeIcon(property.type)
-      expect(legend).toEqual({ icon: 'ChartSingleRecord', title: 'string[]' })
+      expect(legend).toEqual({ icon: <Toc />, title: 'string[]' })
     })
     test('hash property icon is correct', () => {
       const property = type.properties.field
@@ -94,7 +97,7 @@ describe('ExploreProperty', () => {
       renderWithSearchAndRouter(<ExploreProperty property={property} />)
       expect(screen.getByTitle(property.type.jsonName)).toBeInTheDocument()
       const legend = typeIcon(property.type)
-      expect(legend).toEqual({ icon: 'IdeFileManifest', title: 'Hash[any]' })
+      expect(legend).toEqual({ icon: <IdeFileManifest />, title: 'Hash[any]' })
     })
   })
 })
