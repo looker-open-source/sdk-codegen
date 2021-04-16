@@ -148,7 +148,7 @@ export const findGenerator = (target: string) => {
  *
  * See the `config` folder in this package for more sample config files
  *
- * @param language name or alias of code language to generate
+ * @param language name, file extension, or alias of code language to generate
  * @param api API specification
  * @param versions version info to use for stamping the agentTag
  * @returns either an ICodeGen implementation or undefined

@@ -19,7 +19,7 @@
   "scripts": {
     "test": "jest",
     "build": "tsc && webpack --config webpack.prod.config.js",
-    "develop": "webpack-dev-server --host=0.0.0.0 --disable-host-check --config webpack.dev.config.js",
+    "develop": "webpack-dev-server --host=0.0.0.0 --https --disable-host-check --config webpack.dev.config.js",
     "docs": "typedoc --mode file --out docs",
     "watch": "yarn lerna exec --scope @looker/api-explorer --stream 'BABEL_ENV=build babel src --root-mode upward --out-dir lib/esm --source-maps --extensions .ts,.tsx --no-comments --watch'"
   },
