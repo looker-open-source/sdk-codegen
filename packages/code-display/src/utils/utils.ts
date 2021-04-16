@@ -23,16 +23,41 @@
  SOFTWARE.
 
  */
-import { Language } from 'prism-react-renderer'
+import { theme } from '@looker/components'
+import { Language, Prism } from 'prism-react-renderer'
+import prismTheme from 'prism-react-renderer/themes/vsDark'
 
+/**
+ * checks whether object is Language
+ * @param object any object to be tested
+ * @returns boolean
+ */
+function instanceOfPrismLanguage(object: any): boolean {
+  return Object.keys(Prism.languages).includes(object)
+}
+
+/**
+ * gets highlighter language type for input language name
+ * @param language sdk language to be highlighted
+ * @returns prism language if it exists
+ */
 export const getPrismLanguage = (language: string): Language => {
   language = language.toLowerCase()
   const unstyled = ['kotlin', 'csharp', 'swift']
   // TODO revert back to `go` in generator language definitions instead of using this
   if (language === 'golang') {
-    return 'go'
+    language = 'go'
   } else if (unstyled.includes(language)) {
-    return 'clike'
+    language = 'clike'
   }
-  return language as Language
+  return instanceOfPrismLanguage(language) ? (language as Language) : 'json'
+}
+
+/**
+ * applies package overrides to the default vsCode prism theme
+ * @returns modified prism theme object
+ */
+export function getOverridenTheme() {
+  prismTheme.plain.backgroundColor = theme.colors.text
+  return prismTheme
 }

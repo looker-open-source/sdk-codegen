@@ -24,24 +24,19 @@
 
  */
 import { codeGenerators } from '@looker/sdk-codegen'
-import { Language } from 'prism-react-renderer'
 
 import { getPrismLanguage } from './utils'
 
-function instanceOfLanguage(object: any): object is Language {
-  return object
-}
-
 describe('CodeDisplay utils', () => {
-  test('highlight each supported sdk lang', () => {
-    const allSdkLanguages: string[] = codeGenerators.map((gen) => gen.language)
-    expect(
-      allSdkLanguages
-        .map((language) => {
-          const prismLang = getPrismLanguage(language)
-          return instanceOfLanguage(prismLang)
-        })
-        .filter(Boolean)
-    ).toHaveLength(allSdkLanguages.length)
+  const allSdkLanguages: string[] = codeGenerators.map((gen) => gen.language)
+
+  test.each([...allSdkLanguages, 'html', 'json'])(
+    'it can syntax highlight all supported sdk langs',
+    (sdkLanguage) => {
+      expect(getPrismLanguage(sdkLanguage)).toBeTruthy()
+    }
+  )
+  test('it highlights as json for unsupported/undefined language', () => {
+    expect(getPrismLanguage('foobar-lang')).toEqual('json')
   })
 })

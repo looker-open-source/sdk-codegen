@@ -28,7 +28,6 @@ import { IRawResponse, ResponseMode, responseMode } from '@looker/sdk-rtl'
 import { Paragraph, CodeBlock } from '@looker/components'
 import { CodeDisplay } from '@looker/code-display'
 
-import { CodeStructure } from '../CodeStructure'
 import { DataGrid, parseCsv, parseJson } from '../DataGrid'
 
 /**
@@ -114,7 +113,7 @@ const ShowImage = (response: IRawResponse) => {
 
 /** A handler for HTTP type responses */
 const ShowHTML = (response: IRawResponse) => (
-  <CodeStructure language={'html'} code={response.body.toString()} />
+  <CodeDisplay language={'html'} code={response.body.toString()} />
 )
 
 /**

@@ -29,8 +29,7 @@ import styled from 'styled-components'
 import { Span } from '@looker/components'
 import Highlight, { defaultProps } from 'prism-react-renderer'
 // import { Prism } from "prism-react-renderer"
-import dracula from 'prism-react-renderer/themes/dracula'
-import { getPrismLanguage } from './utils'
+import { getPrismLanguage, getOverridenTheme } from './utils'
 // TODO enable kotlin, csharp, swift highlighting
 // (typeof global !== "undefined" ? global : window).Prism = Prism
 // require("prismjs/components/prism-kotlin")
@@ -50,6 +49,11 @@ const Pre = styled.pre`
   padding: 1rem;
   overflow: auto;
   white-space: pre-wrap;
+
+  .match {
+    border: 1px yellow solid;
+    border-radius: 4px;
+  }
 `
 
 const Line = styled.div`
@@ -70,7 +74,7 @@ const LineContent = styled(Span)`
 
 /**
  * The PrismEditor provides a useful implementation of prism-react-renderer
- * for Looker apps. All @looker/sdk languages are supported.
+ * for Looker apps. Syntax highlighting is available for all supported SDK languages.
  * TODO: LookML syntax highlighting
  */
 export const CodeDisplay: FC<PrismEditorProps> = ({
@@ -78,12 +82,13 @@ export const CodeDisplay: FC<PrismEditorProps> = ({
   code,
   pattern = '',
 }) => {
+  const highlighterLang = getPrismLanguage(language)
   return (
     <Highlight
       {...defaultProps}
       code={code}
-      language={getPrismLanguage(language)}
-      theme={dracula}
+      language={highlighterLang}
+      theme={getOverridenTheme()}
     >
       {({ className, style, tokens, getLineProps, getTokenProps }) => (
         <Pre className={className} style={style}>
@@ -95,11 +100,7 @@ export const CodeDisplay: FC<PrismEditorProps> = ({
                   const tokenProps = getTokenProps({ token, key })
                   const text = tokenProps.children
                   if (pattern !== '' && text.includes(pattern)) {
-                    tokenProps.style = {
-                      ...tokenProps.style,
-                      border: '1px yellow solid',
-                      borderRadius: '4px',
-                    }
+                    tokenProps.className += ' match'
                   }
                   return <span key={key} {...tokenProps} />
                 })}
