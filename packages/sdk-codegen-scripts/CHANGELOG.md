@@ -1,5 +1,23 @@
 # Changelog
 
+### [21.0.12](https://www.github.com/looker-open-source/sdk-codegen/compare/sdk-codegen-scripts-v21.0.11...sdk-codegen-scripts-v21.0.12) (2021-04-15)
+
+
+### Features
+
+* add source declaration links to API Explorer ([#578](https://www.github.com/looker-open-source/sdk-codegen/issues/578)) ([ce0e588](https://www.github.com/looker-open-source/sdk-codegen/commit/ce0e588787bdbc2e8ca4aadd44c31dc3ba1a0ef1))
+* Typescript SDK tree-shaking support ([#580](https://www.github.com/looker-open-source/sdk-codegen/issues/580)) ([8b7f2f0](https://www.github.com/looker-open-source/sdk-codegen/commit/8b7f2f00ab1a765a04bd460a1ca88e9b7bd66a98))
+
+
+### Dependencies
+
+* The following workspace dependencies were updated
+  * dependencies
+    * @looker/sdk bumped from ^21.4.0 to ^21.4.1
+    * @looker/sdk-codegen bumped from ^21.0.11 to ^21.0.12
+    * @looker/sdk-node bumped from ^21.4.0 to ^21.4.1
+    * @looker/sdk-rtl bumped from ^21.0.11 to ^21.0.12
+
 ### [21.0.11](https://www.github.com/looker-open-source/sdk-codegen/compare/sdk-codegen-scripts-v21.0.10...sdk-codegen-scripts-v21.0.11) (2021-04-02)
 
 
