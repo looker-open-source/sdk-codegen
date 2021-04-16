@@ -23,5 +23,28 @@
  SOFTWARE.
 
  */
-export { DocOperation } from './DocOperation'
-export { DocRequestBody } from './DocRequestBody'
+
+import React from 'react'
+import { renderWithTheme } from '@looker/components-test-utils'
+import { screen } from '@testing-library/react'
+
+import { api } from '../../../test-data'
+import { DocRequestBody } from './DocRequestBody'
+
+describe('DocRequestBody', () => {
+  test('it shows Request body for a method with a body type', () => {
+    const method = api.methods.create_dashboard
+    renderWithTheme(<DocRequestBody method={method} />)
+    expect(
+      screen.getByText('Request body', { exact: false })
+    ).toBeInTheDocument()
+  })
+
+  test('it skips Request body for a method without a body type', () => {
+    const method = api.methods.dashboard
+    renderWithTheme(<DocRequestBody method={method} />)
+    expect(
+      screen.queryByText('Request body', { exact: false })
+    ).not.toBeInTheDocument()
+  })
+})

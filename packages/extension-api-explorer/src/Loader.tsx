@@ -23,5 +23,32 @@
  SOFTWARE.
 
  */
-export { DocOperation } from './DocOperation'
-export { DocRequestBody } from './DocRequestBody'
+import React from 'react'
+import {
+  ComponentsProvider,
+  Flex,
+  FlexItem,
+  Heading,
+  Spinner,
+} from '@looker/components'
+
+export const Loader = () => (
+  <ComponentsProvider
+    loadGoogleFonts
+    themeCustomizations={{
+      fontFamilies: { brand: 'Google Sans' },
+      colors: { key: '#1A73E8' },
+    }}
+  >
+    <Flex flexDirection="column" justifyContent="center" mt="25%">
+      <FlexItem alignSelf="center">
+        <Spinner color="key" size={150} />
+      </FlexItem>
+      <FlexItem mt="large" alignSelf="center">
+        <Heading color="key" as="h2">
+          Loading API Specifications
+        </Heading>
+      </FlexItem>
+    </Flex>
+  </ComponentsProvider>
+)

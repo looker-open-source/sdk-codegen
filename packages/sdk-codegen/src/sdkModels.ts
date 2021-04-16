@@ -1608,10 +1608,13 @@ export class Type implements IType {
       return false
     let result = rx.test(this.searchString(criteria))
     if (!result && Type.isPropSearch(criteria)) {
-      for (const [, p] of Object.entries(this.properties)) {
-        if (p.search(rx, criteria)) {
-          result = true
-          break
+      for (const [, prop] of Object.entries(this.properties)) {
+        if (this.name !== prop.type.name) {
+          /** Avoiding recursion */
+          if (prop.search(rx, criteria)) {
+            result = true
+            break
+          }
         }
       }
     }
@@ -1630,7 +1633,10 @@ export class Type implements IType {
     }
     if (criteria.has(SearchCriterion.property)) {
       Object.entries(this.properties).forEach(([, prop]) => {
-        result += prop.searchString(criteria)
+        if (this.name !== prop.type.name) {
+          /** Avoiding recursion */
+          result += prop.searchString(criteria)
+        }
       })
     }
     return result
@@ -1915,7 +1921,7 @@ export class ApiModel implements ISymbolTable, IApiModel {
     return new ApiModel(spec)
   }
 
-  private static isModelSearch(criteria: SearchCriteria): boolean {
+  private static isMethodSearch(criteria: SearchCriteria): boolean {
     return (
       criteria.has(SearchCriterion.method) ||
       criteria.has(SearchCriterion.argument) ||
@@ -1979,7 +1985,7 @@ export class ApiModel implements ISymbolTable, IApiModel {
       return result
     }
 
-    if (ApiModel.isModelSearch(criteria)) {
+    if (ApiModel.isMethodSearch(criteria)) {
       Object.entries(this.methods).forEach(([, method]) => {
         if (method.search(rx, criteria)) {
           methodCount++
@@ -2029,6 +2035,21 @@ export class ApiModel implements ISymbolTable, IApiModel {
     typeName?: string,
     methodName?: string
   ): IType {
+    const getRef = (schema: OAS.SchemaObject | OAS.ReferenceObject) => {
+      const ref = schema.$ref
+      let result = this.refs[ref]
+
+      if (!result) {
+        /** This must be recursive */
+        const parts: string[] = ref.split('/')
+        const name = parts[parts.length - 1]
+        const t = new Type(schema, name)
+        this.refs[ref] = t
+        result = t
+      }
+      return result
+    }
+
     if (typeof schema === 'string') {
       if (schema.indexOf('/requestBodies/') < 0)
         return this.types[schema.substr(schema.lastIndexOf('/') + 1)]
@@ -2042,7 +2063,7 @@ export class ApiModel implements ISymbolTable, IApiModel {
         if (ref) return this.resolveType(ref, style, typeName, methodName)
       }
     } else if (OAS.isReferenceObject(schema)) {
-      return this.refs[schema.$ref]
+      return getRef(schema)
     } else if (schema.type) {
       if (schema.type === 'integer' && schema.format === 'int64') {
         return this.types.int64

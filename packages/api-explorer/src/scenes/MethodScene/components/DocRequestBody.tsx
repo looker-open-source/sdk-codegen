@@ -23,5 +23,35 @@
  SOFTWARE.
 
  */
-export { DocOperation } from './DocOperation'
-export { DocRequestBody } from './DocRequestBody'
+import React, { FC } from 'react'
+import { IMethod } from '@looker/sdk-codegen'
+
+import { ExploreType, CollapserCard } from '../../../components'
+
+interface DocRequestBodyProps {
+  method: IMethod
+}
+
+/**
+ * If a method has request body parameters, display them
+ * @param method to document
+ */
+export const DocRequestBody: FC<DocRequestBodyProps> = ({ method }) => {
+  const bodies = method.bodyParams
+  if (bodies.length === 0) return <></>
+  const header = bodies.length > 1 ? 'Request bodies' : 'Request body'
+
+  return (
+    <CollapserCard id="bodies" heading={header}>
+      <>
+        {bodies.map((body) => (
+          <ExploreType
+            type={body.type}
+            open={false}
+            key={`body.${body.name}`}
+          />
+        ))}
+      </>
+    </CollapserCard>
+  )
+}

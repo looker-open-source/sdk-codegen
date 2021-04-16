@@ -44,6 +44,7 @@ import { getExtensionSDK } from '@looker/extension-sdk'
 import { configureStore } from '@looker/api-explorer/src/state'
 import { Provider } from 'react-redux'
 import { ExtensionEnvAdaptor } from './utils'
+import { Loader } from './Loader'
 
 class ExtensionConfigurator implements RunItConfigurator {
   storage: Record<string, string> = {}
@@ -129,7 +130,7 @@ export const ExtensionApiExplorer: FC = () => {
           {specs ? (
             <ApiExplorer specs={specs} envAdaptor={extensionEnvAdaptor} />
           ) : (
-            'Loading API specifications from Looker ...'
+            <Loader />
           )}
         </>
       </RunItProvider>

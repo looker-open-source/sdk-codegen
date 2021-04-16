@@ -1,7 +1,7 @@
 {
   "license": "MIT",
   "name": "sdk-codegen-all",
-  "version": "1.1.0",
+  "version": "1.2.0",
   "description": "All workspaces for SDK code generation",
   "author": "Looker",
   "private": true,
@@ -53,6 +53,7 @@
     "test:ts": "yarn jest --reporters=default --reporters=jest-junit",
     "test:apix": "yarn jest packages/api-explorer packages/run-it packages/extension-api-explorer",
     "test:iphone": "xcodebuild test -project swift/looker/looker.xcodeproj -scheme looker-Package -sdk iphonesimulator -destination 'platform=iOS Simulator,name=iPhone 11,OS=13.4.1' | xcpretty --test --color",
+    "test:gen": "yarn jest packages/sdk-codegen",
     "test:sdk": "yarn jest packages/sdk",
     "test:jest": "DOT_ENV_FILE=.env.test jest",
     "test:ext": "yarn jest packages/extension-sdk packages/extension-sdk-react",
