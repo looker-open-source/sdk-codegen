@@ -87,7 +87,7 @@ const SideNavMethodsLayout: FC<MethodsProps> = ({
         <Heading as="h5">{highlightHTML(pattern, tag)}</Heading>
       </AccordionDisclosure>
       <AccordionContent>
-        <List>
+        <AutoHeightList>
           {Object.values(methods).map((method) => (
             <SideNavLink
               key={method.name}
@@ -100,11 +100,15 @@ const SideNavMethodsLayout: FC<MethodsProps> = ({
               </li>
             </SideNavLink>
           ))}
-        </List>
+        </AutoHeightList>
       </AccordionContent>
     </Accordion>
   )
 }
+
+const AutoHeightList = styled(List)`
+  height: auto;
+`
 
 const SideNavLink = styled(NavLink)`
   &:hover,

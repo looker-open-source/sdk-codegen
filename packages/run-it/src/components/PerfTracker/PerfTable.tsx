@@ -72,7 +72,11 @@ export const PerfTable: FC<PerfTableProps> = ({
     setRows(createTableRows(data, onSelect, showAllColumns))
   }, [data, onSelect, showAllColumns])
   return (
-    <DataTable onSort={handleSort} columns={columns}>
+    <DataTable
+      onSort={handleSort}
+      columns={columns}
+      caption="Performance load times"
+    >
       {rows}
     </DataTable>
   )

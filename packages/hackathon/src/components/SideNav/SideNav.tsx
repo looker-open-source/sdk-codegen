@@ -26,6 +26,9 @@
 import React, { FC } from 'react'
 import styled from 'styled-components'
 import { Box, MenuList, MenuItem } from '@looker/components'
+import { Beaker } from '@looker/icons'
+import { Map, Settings } from '@styled-icons/material'
+import { Home, Group, FactCheck } from '@styled-icons/material-outlined'
 import { NavLink } from 'react-router-dom'
 import { Routes } from '../../routes/AppRouter'
 
@@ -37,32 +40,32 @@ export const SideNav: FC<SideNavProps> = ({ authorizedRoutes }) => (
   <Box fontSize="xxlarge" mt="40px">
     <MenuList type="none">
       {authorizedRoutes.includes(Routes.HOME) && (
-        <MenuItem icon="Home">
+        <MenuItem icon={<Home />}>
           <Link to={Routes.HOME}>Home</Link>
         </MenuItem>
       )}
       {authorizedRoutes.includes(Routes.RESOURCES) && (
-        <MenuItem icon="ChartMap">
+        <MenuItem icon={<Map />}>
           <Link to={Routes.RESOURCES}>Resources</Link>
         </MenuItem>
       )}
       {authorizedRoutes.includes(Routes.USERS) && (
-        <MenuItem icon="Group">
+        <MenuItem icon={<Group />}>
           <Link to={Routes.USERS}>Users</Link>
         </MenuItem>
       )}
       {authorizedRoutes.includes(Routes.PROJECTS) && (
-        <MenuItem icon="Beaker">
+        <MenuItem icon={<Beaker />}>
           <Link to={Routes.PROJECTS}>Projects</Link>
         </MenuItem>
       )}
       {authorizedRoutes.includes(Routes.JUDGING) && (
-        <MenuItem icon="FactCheck">
+        <MenuItem icon={<FactCheck />}>
           <Link to={Routes.JUDGING}>Judging</Link>
         </MenuItem>
       )}
       {authorizedRoutes.includes(Routes.ADMIN) && (
-        <MenuItem icon="Gear">
+        <MenuItem icon={<Settings />}>
           <Link to={Routes.ADMIN}>Admin</Link>
         </MenuItem>
       )}

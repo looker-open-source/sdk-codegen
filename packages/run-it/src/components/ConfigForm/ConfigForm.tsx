@@ -43,6 +43,7 @@ import {
   Form,
   ValidationMessages,
 } from '@looker/components'
+import { Delete, Done } from '@styled-icons/material'
 import { RunItConfigKey, validateUrl, RunItConfigurator } from './configUtils'
 
 interface ConfigFormProps {
@@ -158,7 +159,7 @@ export const ConfigForm: FC<ConfigFormProps> = ({
       </DialogContent>
       <DialogFooter>
         <Button
-          iconBefore="Check"
+          iconBefore={<Done />}
           disabled={Object.keys(validationMessages).length > 0}
           // TODO maybe validationMessages is breaking the submit?
           onClick={handleSubmit}
@@ -166,7 +167,7 @@ export const ConfigForm: FC<ConfigFormProps> = ({
         >
           Save
         </Button>
-        <Button onClick={handleRemove} iconBefore="Trash" color="critical">
+        <Button onClick={handleRemove} iconBefore={<Delete />} color="critical">
           Remove
         </Button>
       </DialogFooter>

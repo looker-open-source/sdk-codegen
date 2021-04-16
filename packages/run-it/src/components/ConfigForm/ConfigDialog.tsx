@@ -26,6 +26,7 @@
 
 import React, { Dispatch, FC } from 'react'
 import { Dialog, IconButton } from '@looker/components'
+import { Settings } from '@styled-icons/material-outlined'
 import { ConfigForm, RunItConfigurator } from '.'
 
 interface ConfigDialogProps {
@@ -46,6 +47,6 @@ export const ConfigDialog: FC<ConfigDialogProps> = ({
       <ConfigForm setHasConfig={setHasConfig} configurator={configurator} />
     }
   >
-    <IconButton label="Settings" icon="GearOutline" />
+    <IconButton label="Settings" icon={<Settings />} />
   </Dialog>
 )

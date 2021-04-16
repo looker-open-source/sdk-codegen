@@ -23,8 +23,9 @@
  SOFTWARE.
 
  */
+import React from 'react'
 import styled from 'styled-components'
-import { Code, List, Paragraph, Table, CodeBlock } from '@looker/components'
+import { Code, Paragraph, Table, CodeBlock } from '@looker/components'
 
 /**
  * Common styled components used by DocMarkdown
@@ -58,12 +59,24 @@ MDParagraph.defaultProps = {
   mb: 'large',
 }
 
-export const MDList = styled(List)`
+const OListInternal = styled.ol`
   max-width: 600px;
+  margin-bottom: 20px;
 `
-MDList.defaultProps = {
-  mb: 'large',
+
+const UListInternal = styled.ul`
+  max-width: 600px;
+  margin-bottom: 20px;
+`
+
+export const MDList: React.FC<any> = ({ ordered, ...rest }) => {
+  return ordered ? <OListInternal {...rest} /> : <UListInternal {...rest} />
 }
+
+export const MDListItem = styled.li`
+  max-width: 600px;
+  margin-bottom: 4px;
+`
 
 export const MDTable = styled(Table)``
 MDTable.defaultProps = { mb: 'large' }

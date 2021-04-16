@@ -27,13 +27,14 @@
 import React, { FC } from 'react'
 import {
   FlexItem,
-  IconNames,
+  IconType,
   Icon,
   Tree,
   TreeItem,
   Tooltip,
   Space,
 } from '@looker/components'
+import { Done, Lock, Remove } from '@styled-icons/material'
 import { IProperty } from '@looker/sdk-codegen'
 import ReactMarkdown from 'react-markdown'
 import {
@@ -47,7 +48,7 @@ import {
 interface TipIconProps {
   show: boolean
   tip: string
-  icon: IconNames
+  icon: IconType
   title: string
 }
 
@@ -63,7 +64,7 @@ export const TipIcon: FC<TipIconProps> = ({ show, tip, icon, title }) => {
   if (!show) return <></>
   return (
     <Tooltip content={tip}>
-      <Icon name={icon} size="xsmall" content={tip} title={title} />
+      <Icon icon={icon} size="xsmall" content={tip} title={title} />
     </Tooltip>
   )
 }
@@ -94,7 +95,7 @@ export const ExplorePropertyRequired: FC<ExplorePropertyProps> = ({
   return (
     <TipIcon
       show={property.required}
-      icon="Check"
+      icon={<Done />}
       tip={tip}
       title="required property"
     />
@@ -113,7 +114,7 @@ export const ExplorePropertyDeprecated: FC<ExplorePropertyProps> = ({
   return (
     <TipIcon
       show={property.deprecated}
-      icon="Minus"
+      icon={<Remove />}
       tip={tip}
       title="deprecated property"
     />
@@ -132,7 +133,7 @@ export const ExplorePropertyReadOnly: FC<ExplorePropertyProps> = ({
   return (
     <TipIcon
       show={property.readOnly}
-      icon="LockClosed"
+      icon={<Lock />}
       tip={tip}
       title="read-only property"
     />
@@ -244,6 +245,7 @@ export const ExplorePropertyType: FC<ExplorePropertyTypeProps> = ({
       label={`${property.jsonName}`}
       icon={legend.icon}
       defaultOpen={open || openAll}
+      density={-3}
       detail={<ExplorePropertyDetail property={property} />}
     >
       {Object.values(props).map((property) => (
