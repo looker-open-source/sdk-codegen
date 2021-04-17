@@ -49,4 +49,11 @@ module.exports = {
     '^.+\\.(js|jsx|ts|tsx)$': 'ts-jest',
   },
   transformIgnorePatterns: [excludeNodeModulesExcept.string],
+  testPathIgnorePatterns: ['packages/.*?/lib'],
+  globals: {
+    'ts-jest': {
+      isolatedModules: true,
+      diagnostics: false,
+    },
+  },
 }
