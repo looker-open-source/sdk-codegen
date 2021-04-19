@@ -546,7 +546,9 @@ class TestMethods {
                 value_is_hidden=false,
                 user_can_view=true,
                 user_can_edit=true,
-//                hidden_value_domain_whitelist=null // this will cause validation error. It should be omitted
+                // this will cause a validation error. It should comply with the correct pattern.
+                // hidden_value_domain_whitelist must be a comma-separated list of urls with optional wildcards
+                hidden_value_domain_whitelist=null
             )
             val actual = sdk.ok<UserAttribute>(sdk.create_user_attribute(body))
             // We won't get here when there's an error
