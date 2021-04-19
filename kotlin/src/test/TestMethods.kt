@@ -537,6 +537,27 @@ class TestMethods {
     }
 
     @Test
+    fun testCreateAttribute() {
+        try {
+            val body = WriteUserAttribute(
+                name="git_username",
+                label="Git Username",
+                type="string",
+                value_is_hidden=false,
+                user_can_view=true,
+                user_can_edit=true,
+//                hidden_value_domain_whitelist=null // this will cause validation error. It should be omitted
+            )
+            val actual = sdk.ok<UserAttribute>(sdk.create_user_attribute(body))
+            // We won't get here when there's an error
+            sdk.ok(sdk.delete_user_attribute(actual.id!!))
+        } catch (e: java.lang.Error) {
+            val msg = e.toString()
+            assertTrue(msg.contains("POST /user_attributes"))
+        }
+    }
+
+    @Test
     fun testAllWorkspaces() {
         testAll<Workspace, String, Workspace>(
             { sdk.all_workspaces() },
