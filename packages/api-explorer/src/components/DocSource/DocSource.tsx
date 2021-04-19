@@ -26,6 +26,7 @@
 import React, { FC, useContext } from 'react'
 import { findDeclaration, IMethod, IType } from '@looker/sdk-codegen'
 import { Icon, Link, Tooltip } from '@looker/components'
+import { IdeFileDocument } from '@looker/icons'
 
 import { LodeContext } from '../../context'
 
@@ -54,7 +55,7 @@ export const DocSource: FC<DocSourceProps> = ({ method, type }) => {
           width="none"
         >
           <Link href={sourceLink} target="_blank">
-            <Icon name="IdeFileDocument" />
+            <Icon icon={<IdeFileDocument />} />
           </Link>
         </Tooltip>
       )}

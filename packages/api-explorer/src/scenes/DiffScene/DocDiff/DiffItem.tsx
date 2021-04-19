@@ -132,7 +132,7 @@ export const DiffItem: FC<DiffItemProps> = ({
   }
 
   return (
-    <Card border="1px solid" borderColor="ui2">
+    <Card border="1px solid" borderColor="ui2" width="100%">
       <Box>
         <Accordion
           indicatorPosition="left"

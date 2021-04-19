@@ -2,7 +2,7 @@
 
  MIT License
 
- Copyright (c) 2020 Looker Data Sciences, Inc.
+ Copyright (c) 2021 Looker Data Sciences, Inc.
 
  Permission is hereby granted, free of charge, to any person obtaining a copy
  of this software and associated documentation files (the "Software"), to deal
@@ -34,7 +34,7 @@ require('jest-styled-components')
 
 configure({ adapter: new Adapter() })
 
-const observeMock = function(cb, config) {
+const observeMock = function (cb, config) {
   this.observeCallback = cb
   this.observeConfig = config
   this.disconnect = jest.fn()
@@ -47,6 +47,7 @@ globalAny.IntersectionObserver = observeMock
 // js-dom doesn't do scrollIntoView
 // Element.prototype.scrollIntoView = jest.fn()
 
-beforeAll(() => {
-  jest.resetAllMocks()
-})
+// Seems to break localStorage mocking
+// beforeAll(() => {
+//   jest.resetAllMocks()
+// })

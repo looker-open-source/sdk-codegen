@@ -2193,15 +2193,6 @@
     debug "^2.2.0"
     es6-promise "^4.2.8"
 
-"@looker/components-providers@^0.9.29":
-  version "0.9.29"
-  resolved "https://registry.yarnpkg.com/@looker/components-providers/-/components-providers-0.9.29.tgz#5e07bacb641e2d525ecf87c1a1e6b00d6f0bb4a4"
-  integrity sha512-WRb1E0wAYDP13XV0PliW/TScyxDeFrhW1OgET4b0saqxHVj/AaTyH2/OCg5JWkvcmy/WQ4UHXh4i72kzejmYzA==
-  dependencies:
-    "@looker/design-tokens" "^0.9.27"
-    lodash "^4.17.20"
-    tabbable "^5.1.4"
-
 "@looker/components-providers@^1.1.3":
   version "1.1.3"
   resolved "https://registry.yarnpkg.com/@looker/components-providers/-/components-providers-1.1.3.tgz#76a5b5ae0850eaffd1661f70be8fe622bc7fe0e9"
@@ -2214,32 +2205,10 @@
     react-i18next "11.8.8"
     tabbable "^5.1.6"
 
-"@looker/components-test-utils@^0.9.29":
-  version "0.9.29"
-  resolved "https://registry.yarnpkg.com/@looker/components-test-utils/-/components-test-utils-0.9.29.tgz#5e61437806c9a26c2d4a4759eb2ca406eee8e73d"
-  integrity sha512-m+JJ9rmvveWJRGF3vZRQo8cI35dTac1gW5pkEbs67pa5uIasyfTfI/kDWDiW7NbBClWX9aVlnpl3elsGnbt2Lw==
-
-"@looker/components@^0.9.30":
-  version "0.9.30"
-  resolved "https://registry.yarnpkg.com/@looker/components/-/components-0.9.30.tgz#7cdc5d188f3f9cc48bcd173273edb6c843e53384"
-  integrity sha512-aMyOeS0E7zYSfRT46IpLewM2jaNmkBzHDZqkpXHwe6Ig+wIZ9HFmbP60lfv83WqnhGM3P/RoU1ANpkYEJLpviA==
-  dependencies:
-    "@looker/components-providers" "^0.9.29"
-    "@looker/design-tokens" "^0.9.27"
-    "@looker/icons" "^0.9.26"
-    "@popperjs/core" "^2.5.4"
-    d3-color "^2.0.0"
-    d3-hsv "^0.1.0"
-    date-fns "^2.16.1"
-    date-fns-tz "^1.0.12"
-    hotkeys-js "^3.8.1"
-    lodash "^4.17.20"
-    react-day-picker "^7.4.8"
-    react-hotkeys-hook "^2.4.0"
-    react-resize-detector "^5.2.0"
-    resize-observer-polyfill "^1.5.1"
-    styled-system "^5.1.5"
-    uuid "^8.3.2"
+"@looker/components-test-utils@^1.1.3":
+  version "1.1.3"
+  resolved "https://registry.yarnpkg.com/@looker/components-test-utils/-/components-test-utils-1.1.3.tgz#53ac11522cc7d485178c1a1d89f0751d8af88475"
+  integrity sha512-z6fqkdTWw5YLcVd1FOSovl4y7W/Jsjc6GzA8sdeIMn9ghDMeH9GyGvoFIGV2tEQ/b6x1gZ+zDnKBSe8vUo4Fjg==
 
 "@looker/components@^1.1.3":
   version "1.1.3"
@@ -2267,7 +2236,7 @@
     styled-system "^5.1.5"
     uuid "^8.3.2"
 
-"@looker/design-tokens@0.9.27", "@looker/design-tokens@^0.9.27":
+"@looker/design-tokens@0.9.27":
   version "0.9.27"
   resolved "https://registry.yarnpkg.com/@looker/design-tokens/-/design-tokens-0.9.27.tgz#667ce852a0702bbeb28c98181db9bb3a41a7751b"
   integrity sha512-2Jzo3i/yeCJS7dWrByJ7b0NI/oh+MBymUMO9p1vYVgTx2LUdv+7QDSMBU5T+SgNWY5fckfjooDwmuQuKWstwJw==
@@ -2319,10 +2288,12 @@
     prettier "^2.2.1"
     typescript "4.1.2"
 
-"@looker/icons@^0.9.26":
-  version "0.9.26"
-  resolved "https://registry.yarnpkg.com/@looker/icons/-/icons-0.9.26.tgz#04aee9b8108accb7b02b6b0f663c8bfa02e00785"
-  integrity sha512-fSfwc8lrrAQL2i+cNeOt7szZ7gHRoGzi8LMc9ml2052YlfXwCf8xzhHwMgixjxHDMQ15hz3Ry1CwJb1Vnkytsw==
+"@looker/icons@1.1.3":
+  version "1.1.3"
+  resolved "https://registry.yarnpkg.com/@looker/icons/-/icons-1.1.3.tgz#9693c031752eb0e327a9c6e3806781a9b4dedc5b"
+  integrity sha512-/RamQ6ZycMfcggQ7v1Dj9jF7Y/k9yEW4GrsvM3Zch4D2qWMVE0B0LamKhnGkaUF4P06XZO5m20jKbUJjABTiSA==
+  dependencies:
+    "@styled-icons/styled-icon" "^10.6.3"
 
 "@looker/prettier-config@^0.10.4":
   version "0.10.4"
@@ -2553,11 +2524,6 @@
     reflect-metadata "0.1.13"
     rxjs "6.6.6"
     tslib "1.13.0"
-
-"@popperjs/core@^2.5.4":
-  version "2.9.0"
-  resolved "https://registry.yarnpkg.com/@popperjs/core/-/core-2.9.0.tgz#32e63212293dd3efbb521cd35a5020ab66eaa546"
-  integrity sha512-wjtKehFAIARq2OxK8j3JrggNlEslJfNuSm2ArteIbKyRMts2g0a7KzTxfRVNUM+O0gnBJ2hNV8nWPOYBgI1sew==
 
 "@popperjs/core@^2.6.0":
   version "2.9.2"
@@ -4052,6 +4018,13 @@ babel-jest@^26.6.3:
     chalk "^4.0.0"
     graceful-fs "^4.2.4"
     slash "^3.0.0"
+
+babel-loader-exclude-node-modules-except@^1.1.2:
+  version "1.1.2"
+  resolved "https://registry.yarnpkg.com/babel-loader-exclude-node-modules-except/-/babel-loader-exclude-node-modules-except-1.1.2.tgz#6ba549aed1dcc2eea09e5b06606b0258368f4fb9"
+  integrity sha512-WXp2d5mtOQQz6LPYQi+LvEvcWdzUonL4G7Gj30wcebXRGLGaj44BWa8o5hmOCrwqgA1ZE5TCvokKZzogWIGoJQ==
+  dependencies:
+    escape-string-regexp "2.0.0"
 
 babel-loader@^8.1.0:
   version "8.2.2"
@@ -5657,7 +5630,7 @@ date-fns-tz@^1.0.12:
   resolved "https://registry.yarnpkg.com/date-fns-tz/-/date-fns-tz-1.1.3.tgz#8783489c9d90e5785548869af5bb8c4642a03855"
   integrity sha512-mD26WkejWz842RggjFrKsY6ehGgyBQSJ209mn83/vsjhgQ5WbdVvBzJ0CuosnGdklDxOvOppQ/wn1UgvTOPKPw==
 
-date-fns@^2.0.1, date-fns@^2.16.1:
+date-fns@^2.0.1:
   version "2.18.0"
   resolved "https://registry.yarnpkg.com/date-fns/-/date-fns-2.18.0.tgz#08e50aee300ad0d2c5e054e3f0d10d8f9cdfe09e"
   integrity sha512-NYyAg4wRmGVU4miKq5ivRACOODdZRY3q5WLmOJSq8djyzftYphU7dTHLcEtLqEvfqMKQ0jVv91P4BAwIjsXIcw==
@@ -6384,15 +6357,15 @@ escape-html@~1.0.3:
   resolved "https://registry.yarnpkg.com/escape-html/-/escape-html-1.0.3.tgz#0258eae4d3d0c0974de1c169188ef0051d1d1988"
   integrity sha1-Aljq5NPQwJdN4cFpGI7wBR0dGYg=
 
+escape-string-regexp@2.0.0, escape-string-regexp@^2.0.0:
+  version "2.0.0"
+  resolved "https://registry.yarnpkg.com/escape-string-regexp/-/escape-string-regexp-2.0.0.tgz#a30304e99daa32e23b2fd20f51babd07cffca344"
+  integrity sha512-UpzcLCXolUWcNu5HtVMHYdXJjArjsF9C0aNnquZYY4uW/Vu0miy5YoWvbV345HauVvcAUnpRuhMMcqTcGOY2+w==
+
 escape-string-regexp@^1.0.5:
   version "1.0.5"
   resolved "https://registry.yarnpkg.com/escape-string-regexp/-/escape-string-regexp-1.0.5.tgz#1b61c0562190a8dff6ae3bb2cf0200ca130b86d4"
   integrity sha1-G2HAViGQqN/2rjuyzwIAyhMLhtQ=
-
-escape-string-regexp@^2.0.0:
-  version "2.0.0"
-  resolved "https://registry.yarnpkg.com/escape-string-regexp/-/escape-string-regexp-2.0.0.tgz#a30304e99daa32e23b2fd20f51babd07cffca344"
-  integrity sha512-UpzcLCXolUWcNu5HtVMHYdXJjArjsF9C0aNnquZYY4uW/Vu0miy5YoWvbV345HauVvcAUnpRuhMMcqTcGOY2+w==
 
 escodegen@^1.11.1, escodegen@^1.14.1:
   version "1.14.3"
@@ -7888,11 +7861,6 @@ hotkeys-js@3.8.1:
   version "3.8.1"
   resolved "https://registry.yarnpkg.com/hotkeys-js/-/hotkeys-js-3.8.1.tgz#fa7051f73bf1dc92a8b8d580a40b247f91966376"
   integrity sha512-YlhVQtyG9f1b7GhtzdhR0Pl+cImD1ZrKI6zYUa7QLd0zuThiL7RzZ+ANJyy7z+kmcCpNYBf5PjBa3CjiQ5PFpw==
-
-hotkeys-js@^3.8.1:
-  version "3.8.2"
-  resolved "https://registry.yarnpkg.com/hotkeys-js/-/hotkeys-js-3.8.2.tgz#177c3e7dc19279c881e69983177849bed76e4747"
-  integrity sha512-HZZ9RVNr3nBbs2nW968o4rp3xXSdPjJ4B7GTXE375WwboltDJMsP9mcHfAAv+igsTeVxetr10mEbnoac/1U+oQ==
 
 hotkeys-js@^3.8.3:
   version "3.8.3"
@@ -12084,11 +12052,6 @@ quick-lru@^4.0.1:
   resolved "https://registry.yarnpkg.com/quick-lru/-/quick-lru-4.0.1.tgz#5b8878f113a58217848c6482026c73e1ba57727f"
   integrity sha512-ARhCpm70fzdcvNQfPoy49IaanKkTlRWF2JMzqhcJbhSFRZv7nPTvZJdcY7301IPmvW+/p0RgIWnQDLJxifsQ7g==
 
-raf-schd@^4.0.2:
-  version "4.0.2"
-  resolved "https://registry.yarnpkg.com/raf-schd/-/raf-schd-4.0.2.tgz#bd44c708188f2e84c810bf55fcea9231bcaed8a0"
-  integrity sha512-VhlMZmGy6A6hrkJWHLNTGl5gtgMUm+xfGza6wbwnE914yeQ5Ybm18vgM734RZhMgfw4tacUrWseGZlpUrrakEQ==
-
 raf@^3.4.1:
   version "3.4.1"
   resolved "https://registry.yarnpkg.com/raf/-/raf-3.4.1.tgz#0742e99a4a6552f445d73e3ee0328af0ff1ede39"
@@ -12228,13 +12191,6 @@ react-hotkeys-hook@2.3.1:
   dependencies:
     hotkeys-js "3.8.1"
 
-react-hotkeys-hook@^2.4.0:
-  version "2.4.1"
-  resolved "https://registry.yarnpkg.com/react-hotkeys-hook/-/react-hotkeys-hook-2.4.1.tgz#9e495cbe9872a2bcf9b0f8ff776f031064d33968"
-  integrity sha512-IsQEOdY26vu2xlsXFN0B6xytDa3y8VL53yY49Qq4f1zXefNqtGRzWnmyHSc84K/ZGozcz38xgn9SmwZsbW0nRg==
-  dependencies:
-    hotkeys-js "3.8.1"
-
 react-i18next@11.8.8:
   version "11.8.8"
   resolved "https://registry.yarnpkg.com/react-i18next/-/react-i18next-11.8.8.tgz#23d34518c784f2ada7cec41cfe439ac4ae51875c"
@@ -12299,16 +12255,6 @@ react-redux@^7.2.3:
     loose-envify "^1.4.0"
     prop-types "^15.7.2"
     react-is "^16.13.1"
-
-react-resize-detector@^5.2.0:
-  version "5.2.0"
-  resolved "https://registry.yarnpkg.com/react-resize-detector/-/react-resize-detector-5.2.0.tgz#992083834432308c551a8251a2c52306d9d16718"
-  integrity sha512-PQAc03J2eyhvaiWgEdQ8+bKbbyGJzLEr70KuivBd1IEmP/iewNakLUMkxm6MWnDqsRPty85pioyg8MvGb0qC8A==
-  dependencies:
-    lodash "^4.17.20"
-    prop-types "^15.7.2"
-    raf-schd "^4.0.2"
-    resize-observer-polyfill "^1.5.1"
 
 react-router-dom@^5.1.2, react-router-dom@^5.2.0:
   version "5.2.0"
@@ -13658,9 +13604,9 @@ sshpk@^1.7.0:
     tweetnacl "~0.14.0"
 
 ssri@^6.0.0, ssri@^6.0.1:
-  version "6.0.1"
-  resolved "https://registry.yarnpkg.com/ssri/-/ssri-6.0.1.tgz#2a3c41b28dd45b62b63676ecb74001265ae9edd8"
-  integrity sha512-3Wge10hNcT1Kur4PDFwEieXSCMCJs/7WvSACcrMYrNp+b8kDL1/0wJch5Ni2WrtwEa2IO8OsVfeKIciKCDx/QA==
+  version "6.0.2"
+  resolved "https://registry.yarnpkg.com/ssri/-/ssri-6.0.2.tgz#157939134f20464e7301ddba3e90ffa8f7728ac5"
+  integrity sha512-cepbSq/neFK7xB6A50KHN0xHDotYzq58wWCa5LeWqnPrHG8GzfEjO/4O8kpmcGW+oaxkvhEJCWgbgNk4/ZV93Q==
   dependencies:
     figgy-pudding "^3.5.1"
 
@@ -14056,11 +14002,6 @@ symbol-tree@^3.2.2, symbol-tree@^3.2.4:
   version "3.2.4"
   resolved "https://registry.yarnpkg.com/symbol-tree/-/symbol-tree-3.2.4.tgz#430637d248ba77e078883951fb9aa0eed7c63fa2"
   integrity sha512-9QNk5KwDF+Bvz+PyObkmSYjI5ksVUYtjW7AU22r2NKcfLJcXp96hkDWU3+XndOsUb+AQ9QhfzfCT2O+CNWT5Tw==
-
-tabbable@^5.1.4:
-  version "5.1.6"
-  resolved "https://registry.yarnpkg.com/tabbable/-/tabbable-5.1.6.tgz#dd495abe81d5e41e003fbfa70952e20d5e1e1e89"
-  integrity sha512-KSlGaSX9PbL7FHDTn2dB+zv61prkY8BeGioTsKfeN7dKhw5uz1S4U2iFaWMK4GR8oU+5OFBkFuxbMsaUxVVlrQ==
 
 tabbable@^5.1.6:
   version "5.2.0"

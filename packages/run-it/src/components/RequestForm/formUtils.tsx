@@ -31,7 +31,7 @@ import {
   FieldCheckbox,
 } from '@looker/components'
 
-import { InputDate } from '@looker/components/lib/InputDate'
+import { InputDate } from '@looker/components/lib/date'
 import { CodeStructure } from '../CodeStructure'
 import { RunItInput, RunItValues } from '../../RunIt'
 

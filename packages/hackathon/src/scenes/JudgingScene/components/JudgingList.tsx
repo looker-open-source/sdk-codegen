@@ -31,6 +31,7 @@ import {
   DataTableCell,
   Pagination,
 } from '@looker/components'
+import { Info, Create } from '@styled-icons/material'
 import { useSelector, useDispatch } from 'react-redux'
 import { useHistory } from 'react-router-dom'
 import { MoreInfoDialog } from '../../../components/MoreInfoDialog'
@@ -85,14 +86,14 @@ export const JudgingList: FC<JudgingListProps> = () => {
         {judging.$more_info && judging.$more_info !== '\0' && (
           <DataTableAction
             onClick={openMoreInfo.bind(null, judging)}
-            icon="CircleInfo"
+            icon={<Info />}
           >
             More Information
           </DataTableAction>
         )}
         <DataTableAction
           onClick={showJudging.bind(null, judging._id)}
-          icon="Edit"
+          icon={<Create />}
           itemRole="link"
         >
           {canDoJudgingAction(hacker, judging)
@@ -120,7 +121,9 @@ export const JudgingList: FC<JudgingListProps> = () => {
 
   return (
     <>
-      <DataTable columns={columns}>{rows}</DataTable>
+      <DataTable columns={columns} caption="List of hackathon judges">
+        {rows}
+      </DataTable>
       <Pagination
         current={currentPage}
         pages={totalPages}

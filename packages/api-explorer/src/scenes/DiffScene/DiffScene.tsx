@@ -36,6 +36,7 @@ import {
   Select,
   SelectMulti,
 } from '@looker/components'
+import { SyncAlt } from '@styled-icons/material'
 import { getDefaultSpecKey } from '../../reducers/spec/utils'
 import { diffPath } from '../../utils'
 import { ApixSection } from '../../components'
@@ -179,7 +180,7 @@ export const DiffScene: FC<DiffSceneProps> = ({ specs, toggleNavigation }) => {
           <IconButton
             label="switch"
             size="small"
-            icon="Sync"
+            icon={<SyncAlt />}
             mt="medium"
             onClick={handleSwitch}
           />
