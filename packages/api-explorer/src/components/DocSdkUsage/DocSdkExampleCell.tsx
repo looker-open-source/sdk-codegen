@@ -23,17 +23,17 @@
  SOFTWARE.
 
  */
-export {
-  renderWithSearch,
-  renderWithSearchAndRouter,
-} from './render_with_search'
-export {
-  renderWithLode,
-  renderWithReduxProviderAndLode,
-} from './render_with_lode'
-export { renderWithRouter, withRouter } from './router'
-export {
-  renderWithRouterAndReduxProvider,
-  renderWithReduxProvider,
-  withReduxProvider,
-} from './redux'
+import React, { FC, PropsWithChildren } from 'react'
+import { DataTableCell, Span } from '@looker/components'
+
+import { getTableItemBottomBorder } from './utils'
+
+export const DocSdkExampleCell: FC<PropsWithChildren<any>> = (props) => (
+  <DataTableCell
+    style={{ borderBottom: getTableItemBottomBorder(props.hideBorderBottom) }}
+  >
+    <Span style={{ overflow: 'hidden', width: '100%', display: 'block' }}>
+      {props.children}
+    </Span>
+  </DataTableCell>
+)
