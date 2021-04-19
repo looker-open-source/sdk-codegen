@@ -66,7 +66,7 @@ export const DataGrid: FC<DataGridProps> = ({ data, raw, pageSize = 15 }) => {
       </TabList>
       <TabPanels {...tabs} pt="0">
         <TabPanel key="grid">
-          <DataTable key="datagrid" columns={headers}>
+          <DataTable key="datagrid" columns={headers} caption="Response data">
             {pageItems}
           </DataTable>
           <Pagination

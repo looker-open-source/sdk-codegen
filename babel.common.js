@@ -23,30 +23,28 @@
  SOFTWARE.
 
  */
+// Despite its name, this module is not specific to webpack or babel-loader.
+// It simply builds a cross-platform (i.e. windows-friendly) negative
+// lookahead RegExp that will exclude all node modules except those supplied
+// as its arguments.
+const excludeNodeModuleExcept = require('babel-loader-exclude-node-modules-except')
 
-import React, { Dispatch, FC } from 'react'
-import { Dialog, IconButton } from '@looker/components'
-import { Settings } from '@styled-icons/material-outlined'
-import { ConfigForm, RunItConfigurator } from '.'
+// Our own modules are built as esm to allow for tree shaking.
+const ownModules = [
+  '@looker/components-test-utils',
+  '@looker/components',
+  '@looker/icons',
+  '@looker/design-tokens',
+]
 
-interface ConfigDialogProps {
-  /**
-   * A set state callback fn used to set a hasConfig flag indicating whether OAuth config details are present
-   * */
-  setHasConfig?: Dispatch<boolean>
-  configurator: RunItConfigurator
+const excludeNodeModulesExceptRegExp = excludeNodeModuleExcept([...ownModules])
+
+// Attach as a property to the exported function object so that we can
+// conveniently import it in webpack.config.js and jest.config.js without
+// interfering with babel's string requires.
+module.exports.excludeNodeModulesExcept = {
+  // RegExp representation for webpack.config.js
+  regExp: excludeNodeModulesExceptRegExp,
+  // string representation for jest.config.js
+  string: excludeNodeModulesExceptRegExp.toString().slice(1, -2),
 }
-
-export const ConfigDialog: FC<ConfigDialogProps> = ({
-  setHasConfig,
-  configurator,
-}) => (
-  <Dialog
-    width="small"
-    content={
-      <ConfigForm setHasConfig={setHasConfig} configurator={configurator} />
-    }
-  >
-    <IconButton label="Settings" icon={<Settings />} />
-  </Dialog>
-)

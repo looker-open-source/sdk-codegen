@@ -27,20 +27,14 @@
 import React, { BaseSyntheticEvent, FC, useContext } from 'react'
 import ReactMarkdown from 'react-markdown'
 import { useHistory } from 'react-router-dom'
-import {
-  TableHead,
-  TableBody,
-  TableRow,
-  Link,
-  ListItem,
-} from '@looker/components'
+import { TableHead, TableBody, TableRow, Link } from '@looker/components'
 
 import { SearchContext } from '../../context'
 import { ApixHeading } from '../common'
 import { highlightMarkdown, transformURL } from './utils'
 import { MDCodeBlockWrapper } from './MDCodeBlockWrapper'
 import { TableCell } from './TableCell'
-import { MDCode, MDList, MDParagraph, MDTable } from './common'
+import { MDCode, MDList, MDListItem, MDParagraph, MDTable } from './common'
 
 interface DocMarkdownProps {
   source: string
@@ -76,7 +70,7 @@ export const DocMarkdown: FC<DocMarkdownProps> = ({ source, specKey }) => {
           inlineCode: MDCode,
           link: Link,
           list: MDList,
-          listItem: ListItem,
+          listItem: MDListItem,
           table: MDTable,
           tableHead: TableHead,
           tableBody: TableBody,

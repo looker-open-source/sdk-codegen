@@ -33,6 +33,7 @@ import {
   useToggle,
   ExtendComponentsThemeProvider,
 } from '@looker/components'
+import { Beaker } from '@looker/icons'
 import { ThemeContext } from 'styled-components'
 import { useParams } from 'react-router-dom'
 import { RunIt, RunItContext } from '@looker/run-it'
@@ -83,7 +84,7 @@ export const MethodScene: FC<DocMethodProps> = ({ api }) => {
   const runItToggle = (
     <RunItButton
       color={value ? 'key' : 'neutral'}
-      iconBefore="Beaker"
+      iconBefore={<Beaker />}
       onClick={toggle}
     >
       Run It

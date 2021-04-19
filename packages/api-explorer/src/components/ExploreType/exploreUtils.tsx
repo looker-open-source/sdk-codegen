@@ -24,7 +24,19 @@
 
  */
 
-import { IconNames } from '@looker/components'
+import React from 'react'
+import { IconType } from '@looker/components'
+import { FieldString, IdeFileManifest, IdeParameter } from '@looker/icons'
+import {
+  CalendarToday,
+  Check,
+  Code,
+  Link,
+  Toc,
+  VpnKey,
+} from '@styled-icons/material'
+import { Tag } from '@styled-icons/material-rounded'
+import { Email } from '@styled-icons/material-outlined'
 import { IType, TypeOfType, typeOfType } from '@looker/sdk-codegen'
 
 /**
@@ -88,7 +100,7 @@ export const typeLinkSuffix = (value: IType) => {
 }
 
 interface TypedIcon {
-  icon: IconNames
+  icon: IconType
   title: string
 }
 
@@ -99,39 +111,39 @@ interface TypedIcon {
 export const typeIcon = (value: IType): TypedIcon => {
   switch (value.className) {
     case 'ArrayType':
-      return { icon: 'ChartSingleRecord', title: value.jsonName }
+      return { icon: <Toc />, title: value.jsonName }
     case 'DelimArrayType':
-      return { icon: 'ChartSingleRecord', title: value.jsonName }
+      return { icon: <Toc />, title: value.jsonName }
     case 'HashType':
-      return { icon: 'IdeFileManifest', title: value.jsonName }
+      return { icon: <IdeFileManifest />, title: value.jsonName }
     case 'EnumType':
-      return { icon: 'IdeParameter', title: value.jsonName }
+      return { icon: <IdeParameter />, title: value.jsonName }
   }
 
   const type = pickType(value)
   switch (type.jsonName) {
     case 'boolean':
-      return { icon: 'FieldYesNo', title: type.jsonName }
+      return { icon: <Check />, title: type.jsonName }
     case 'int64':
     case 'integer':
     case 'float':
     case 'double':
-      return { icon: 'FieldNumber', title: type.jsonName }
+      return { icon: <Tag />, title: type.jsonName }
     case 'string':
     case 'hostname':
     case 'uuid':
     case 'ipv4':
     case 'ipv6':
-      return { icon: 'FieldString', title: type.jsonName }
+      return { icon: <FieldString />, title: type.jsonName }
     case 'email':
-      return { icon: 'SendEmail', title: type.jsonName }
+      return { icon: <Email />, title: type.jsonName }
     case 'password':
-      return { icon: 'Key', title: type.jsonName }
+      return { icon: <VpnKey />, title: type.jsonName }
     case 'uri':
-      return { icon: 'Link', title: type.jsonName }
+      return { icon: <Link />, title: type.jsonName }
     case 'datetime':
-      return { icon: 'FieldDate', title: type.jsonName }
+      return { icon: <CalendarToday />, title: type.jsonName }
     default:
-      return { icon: 'Code', title: type.jsonName }
+      return { icon: <Code />, title: type.jsonName }
   }
 }

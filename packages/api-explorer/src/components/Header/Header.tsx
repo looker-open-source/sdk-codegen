@@ -34,6 +34,8 @@ import {
   Heading,
   Header as SemanticHeader,
 } from '@looker/components'
+import { LookerLogo } from '@looker/icons'
+import { ChangeHistory, Menu } from '@styled-icons/material'
 
 import { SpecList } from '@looker/sdk-codegen'
 import { SpecState, SpecAction } from '../../reducers'
@@ -75,14 +77,14 @@ export const HeaderLayout: FC<HeaderProps> = ({
       <IconButton
         size="small"
         onClick={() => toggleNavigation()}
-        icon="Hamburger"
+        icon={<Menu />}
         label="Toggle Navigation"
       />
 
       <NavLink to={`/${spec.key}`}>
         <Space gap="small">
           <Icon
-            name="LookerLogo"
+            icon={<LookerLogo />}
             alt="Looker"
             color="text5"
             style={{ width: '82px' }}
@@ -98,7 +100,7 @@ export const HeaderLayout: FC<HeaderProps> = ({
         <IconButton
           toggle
           label="Compare Specifications"
-          icon="ChangeHistory"
+          icon={<ChangeHistory />}
           size="small"
         />
       </NavLink>

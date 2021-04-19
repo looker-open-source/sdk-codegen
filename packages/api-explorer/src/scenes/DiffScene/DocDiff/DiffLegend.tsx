@@ -26,6 +26,7 @@
 import React, { FC } from 'react'
 import { DiffCount } from '@looker/sdk-codegen'
 import { Code, Flex, Icon, Space } from '@looker/components'
+import { Add, ChangeHistory, Remove } from '@styled-icons/material'
 
 interface DiffLegendProps {
   count: DiffCount
@@ -36,7 +37,7 @@ export const DiffLegend: FC<DiffLegendProps> = ({ count }) => {
     <Flex>
       {count.added > 0 && (
         <Space gap="xxsmall">
-          <Icon name="Plus" color="positive" size="small" />
+          <Icon icon={<Add />} color="positive" size="small" />
           <Code color="positive" fontWeight="medium">
             {count.added}
           </Code>
@@ -44,7 +45,7 @@ export const DiffLegend: FC<DiffLegendProps> = ({ count }) => {
       )}
       {count.changed > 0 && (
         <Space gap="xxsmall">
-          <Icon name="ChangeHistory" color="warn" size="small" />
+          <Icon icon={<ChangeHistory />} color="warn" size="small" />
           <Code color="warn" fontWeight="medium">
             {count.changed}
           </Code>
@@ -52,7 +53,7 @@ export const DiffLegend: FC<DiffLegendProps> = ({ count }) => {
       )}
       {count.removed > 0 && (
         <Space gap="xxsmall">
-          <Icon name="Minus" color="critical" size="small" />
+          <Icon icon={<Remove />} color="critical" size="small" />
           <Code color="critical" fontWeight="medium">
             {count.removed}
           </Code>

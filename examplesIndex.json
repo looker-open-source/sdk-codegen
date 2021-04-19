@@ -1,5 +1,5 @@
 {
-  "commitHash": "f3a9b8c40a5394e4553a5ac48defd106253bdaeb",
+  "commitHash": "ed8cf9e72fabff3266edb5235448a4a27ce0b1c7",
   "remoteOrigin": "https://github.com/looker-open-source/sdk-codegen",
   "summaries": {
     "packages/sdk-codegen/src/codeGenerators.ts": {
@@ -534,52 +534,52 @@
           {
             "sourceFile": "packages/sdk-node/test/methods.spec.ts",
             "column": 34,
-            "line": 289
+            "line": 293
           },
           {
             "sourceFile": "packages/sdk-node/test/methods.spec.ts",
             "column": 34,
-            "line": 299
+            "line": 303
           },
           {
             "sourceFile": "packages/sdk-node/test/methods.spec.ts",
             "column": 37,
-            "line": 322
+            "line": 326
           },
           {
             "sourceFile": "packages/sdk-node/test/methods.spec.ts",
             "column": 34,
-            "line": 337
+            "line": 341
           },
           {
             "sourceFile": "packages/sdk-node/test/methods.spec.ts",
             "column": 30,
-            "line": 342
+            "line": 346
           },
           {
             "sourceFile": "packages/sdk-node/test/methods.spec.ts",
             "column": 34,
-            "line": 347
+            "line": 351
           },
           {
             "sourceFile": "packages/sdk-node/test/methods.spec.ts",
             "column": 30,
-            "line": 353
+            "line": 357
           },
           {
             "sourceFile": "packages/sdk-node/test/methods.spec.ts",
             "column": 30,
-            "line": 358
+            "line": 362
           },
           {
             "sourceFile": "packages/sdk-node/test/methods.spec.ts",
             "column": 32,
-            "line": 770
+            "line": 774
           },
           {
             "sourceFile": "packages/sdk-node/test/methods.spec.ts",
             "column": 30,
-            "line": 951
+            "line": 955
           }
         ],
         ".kt": [
@@ -1045,12 +1045,12 @@
           {
             "sourceFile": "packages/sdk-node/test/methods.spec.ts",
             "column": 12,
-            "line": 453
+            "line": 457
           },
           {
             "sourceFile": "packages/sdk-node/test/methods.spec.ts",
             "column": 12,
-            "line": 464
+            "line": 468
           }
         ],
         ".swift": [
@@ -1176,7 +1176,7 @@
           {
             "sourceFile": "packages/sdk-node/test/methods.spec.ts",
             "column": 8,
-            "line": 494
+            "line": 498
           }
         ],
         ".kt": [
@@ -1239,17 +1239,17 @@
           {
             "sourceFile": "packages/sdk-node/test/methods.spec.ts",
             "column": 42,
-            "line": 236
+            "line": 240
           },
           {
             "sourceFile": "packages/sdk-node/test/methods.spec.ts",
             "column": 32,
-            "line": 760
+            "line": 764
           },
           {
             "sourceFile": "packages/sdk-node/test/methods.spec.ts",
             "column": 38,
-            "line": 785
+            "line": 789
           }
         ],
         ".kt": [
@@ -1459,22 +1459,22 @@
           {
             "sourceFile": "packages/sdk-node/test/methods.spec.ts",
             "column": 35,
-            "line": 228
+            "line": 232
           },
           {
             "sourceFile": "packages/sdk-node/test/methods.spec.ts",
             "column": 34,
-            "line": 372
+            "line": 376
           },
           {
             "sourceFile": "packages/sdk-node/test/methods.spec.ts",
             "column": 8,
-            "line": 384
+            "line": 388
           },
           {
             "sourceFile": "packages/sdk-node/test/methods.spec.ts",
             "column": 10,
-            "line": 405
+            "line": 409
           }
         ],
         ".swift": [
@@ -1649,7 +1649,7 @@
           {
             "sourceFile": "packages/sdk-node/test/methods.spec.ts",
             "column": 12,
-            "line": 440
+            "line": 444
           }
         ],
         ".swift": [
@@ -1743,7 +1743,7 @@
           {
             "sourceFile": "packages/sdk-node/test/methods.spec.ts",
             "column": 12,
-            "line": 472
+            "line": 476
           }
         ]
       }
@@ -1902,7 +1902,7 @@
           {
             "sourceFile": "packages/sdk-node/test/methods.spec.ts",
             "column": 38,
-            "line": 475
+            "line": 479
           }
         ],
         ".swift": [
@@ -2009,12 +2009,12 @@
           {
             "sourceFile": "packages/sdk-node/test/methods.spec.ts",
             "column": 10,
-            "line": 318
+            "line": 322
           },
           {
             "sourceFile": "packages/sdk-node/test/methods.spec.ts",
             "column": 33,
-            "line": 528
+            "line": 532
           }
         ],
         ".swift": [
@@ -2108,7 +2108,7 @@
           {
             "sourceFile": "packages/sdk-node/test/methods.spec.ts",
             "column": 35,
-            "line": 401
+            "line": 405
           }
         ],
         ".swift": [
@@ -2281,12 +2281,12 @@
           {
             "sourceFile": "packages/sdk-node/test/methods.spec.ts",
             "column": 37,
-            "line": 622
+            "line": 626
           },
           {
             "sourceFile": "packages/sdk-node/test/methods.spec.ts",
             "column": 12,
-            "line": 779
+            "line": 783
           }
         ],
         ".swift": [
@@ -2516,12 +2516,12 @@
           {
             "sourceFile": "packages/sdk-node/test/methods.spec.ts",
             "column": 36,
-            "line": 696
+            "line": 700
           },
           {
             "sourceFile": "packages/sdk-node/test/methods.spec.ts",
             "column": 35,
-            "line": 707
+            "line": 711
           }
         ]
       }
@@ -2550,12 +2550,12 @@
           {
             "sourceFile": "packages/sdk-node/test/methods.spec.ts",
             "column": 12,
-            "line": 844
+            "line": 848
           },
           {
             "sourceFile": "packages/sdk-node/test/methods.spec.ts",
             "column": 12,
-            "line": 852
+            "line": 856
           }
         ]
       }
@@ -3083,7 +3083,7 @@
           {
             "sourceFile": "packages/sdk-node/test/methods.spec.ts",
             "column": 12,
-            "line": 788
+            "line": 792
           }
         ],
         ".py": [
@@ -3273,17 +3273,17 @@
           {
             "sourceFile": "packages/sdk-node/test/methods.spec.ts",
             "column": 14,
-            "line": 628
+            "line": 632
           },
           {
             "sourceFile": "packages/sdk-node/test/methods.spec.ts",
             "column": 14,
-            "line": 638
+            "line": 642
           },
           {
             "sourceFile": "packages/sdk-node/test/methods.spec.ts",
             "column": 14,
-            "line": 641
+            "line": 645
           }
         ],
         ".py": [
@@ -3351,7 +3351,7 @@
           {
             "sourceFile": "packages/sdk-node/test/methods.spec.ts",
             "column": 34,
-            "line": 267
+            "line": 271
           }
         ],
         ".py": [
@@ -3445,7 +3445,7 @@
           {
             "sourceFile": "packages/sdk-node/test/methods.spec.ts",
             "column": 40,
-            "line": 583
+            "line": 587
           }
         ]
       }
@@ -4049,12 +4049,12 @@
           {
             "sourceFile": "packages/sdk-node/test/methods.spec.ts",
             "column": 10,
-            "line": 246
+            "line": 250
           },
           {
             "sourceFile": "packages/sdk-node/test/methods.spec.ts",
             "column": 10,
-            "line": 251
+            "line": 255
           }
         ],
         ".py": [
@@ -4097,12 +4097,12 @@
           {
             "sourceFile": "packages/sdk-node/test/methods.spec.ts",
             "column": 37,
-            "line": 265
+            "line": 269
           },
           {
             "sourceFile": "packages/sdk-node/test/methods.spec.ts",
             "column": 39,
-            "line": 277
+            "line": 281
           }
         ],
         ".py": [
@@ -4145,12 +4145,12 @@
           {
             "sourceFile": "packages/sdk-node/test/methods.spec.ts",
             "column": 12,
-            "line": 273
+            "line": 277
           },
           {
             "sourceFile": "packages/sdk-node/test/methods.spec.ts",
             "column": 23,
-            "line": 279
+            "line": 283
           }
         ],
         ".py": [
@@ -4186,7 +4186,7 @@
           {
             "sourceFile": "packages/extension-api-explorer/src/ExtensionApiExplorer.tsx",
             "column": 33,
-            "line": 98
+            "line": 99
           }
         ]
       }
@@ -4198,7 +4198,7 @@
           {
             "sourceFile": "packages/extension-api-explorer/src/ExtensionApiExplorer.tsx",
             "column": 36,
-            "line": 113
+            "line": 114
           }
         ]
       }
@@ -8292,22 +8292,22 @@
           {
             "sourceFile": "packages/sdk-node/test/methods.spec.ts",
             "column": 10,
-            "line": 505
+            "line": 509
           },
           {
             "sourceFile": "packages/sdk-node/test/methods.spec.ts",
             "column": 10,
-            "line": 520
+            "line": 524
           },
           {
             "sourceFile": "packages/sdk-node/test/methods.spec.ts",
             "column": 10,
-            "line": 550
+            "line": 554
           },
           {
             "sourceFile": "packages/sdk-node/test/methods.spec.ts",
             "column": 10,
-            "line": 561
+            "line": 565
           }
         ],
         ".py": [
@@ -8346,7 +8346,7 @@
           {
             "sourceFile": "packages/sdk-node/test/methods.spec.ts",
             "column": 14,
-            "line": 859
+            "line": 863
           }
         ],
         ".py": [
@@ -8365,7 +8365,7 @@
           {
             "sourceFile": "packages/sdk-node/test/methods.spec.ts",
             "column": 14,
-            "line": 888
+            "line": 892
           }
         ],
         ".py": [

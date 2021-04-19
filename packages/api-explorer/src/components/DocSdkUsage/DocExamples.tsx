@@ -24,9 +24,14 @@
 
  */
 import React, { FC } from 'react'
-import { List, Link, Text, Tooltip, ListItem } from '@looker/components'
+import { Link, Text, Tooltip } from '@looker/components'
+import styled from 'styled-components'
 import { findExamples, IExampleMine } from '@looker/sdk-codegen'
 import ReactMarkdown from 'react-markdown'
+
+const UList = styled.ul`
+  list-style-type: none;
+`
 
 interface DocExamplesProps {
   /** mined examples */
@@ -50,17 +55,17 @@ export const DocExamples: FC<DocExamplesProps> = ({
   return (
     <>
       {examples && examples.length > 0 && (
-        <List>
+        <UList>
           {examples.map((example, index) => (
-            <ListItem key={index}>
+            <li key={index}>
               <Tooltip content={example.tooltip} placement="right">
                 <Link href={example.permalink} target={'_blank'}>
                   <ReactMarkdown source={example.description} />
                 </Link>
               </Tooltip>
-            </ListItem>
+            </li>
           ))}
-        </List>
+        </UList>
       )}
 
       {(!examples || examples.length === 0) && (
