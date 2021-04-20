@@ -1,26 +1,13 @@
  on:
    push:
      branches:
-      - master
+      - main
  name: release-please
  jobs:
-   release-please-py:
+   release-please:
      runs-on: ubuntu-latest
      steps:
-       - uses: google-github-actions/release-please-action@master
+       - uses: google-github-actions/release-please-action@v2
          with:
-           release-type: python
-           package-name: looker_sdk
-           monorepo-tags: true
-           path: python/
-           token: ${{ secrets.GITHUB_TOKEN }}
-
-   release-please-ts:
-     runs-on: ubuntu-latest
-     steps:
-       - uses: google-github-actions/release-please-action@master
-         with:
-           release-type: node
-           monorepo-tags: true
-           path: packages/sdk/
+           command: manifest
            token: ${{ secrets.GITHUB_TOKEN }}
