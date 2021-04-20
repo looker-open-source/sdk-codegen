@@ -57,6 +57,7 @@
     "@looker/sdk": "^21.4.1",
     "@looker/sdk-codegen": "^21.0.12",
     "@looker/sdk-codegen-utils": "^21.0.11",
+    "@looker/code-display": "^0.0.1",
     "@looker/sdk-rtl": "^21.0.12",
     "@types/readable-stream": "^2.3.5",
     "lodash": "^4.17.19",

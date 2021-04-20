@@ -23,23 +23,4 @@
  SOFTWARE.
 
  */
-import React, { FC } from 'react'
-import { getCodeGenerator } from '@looker/sdk-codegen'
-import { CodeDisplay } from '@looker/code-display'
-
-import { DocSdkCallsProps } from './DocSdkCalls'
-
-/**
- * Generates the SDK call syntax for a given language
- */
-export const DocSingleCall: FC<DocSdkCallsProps> = ({
-  api,
-  method,
-  inputs,
-  sdkLanguage,
-}) => {
-  const generator = getCodeGenerator(sdkLanguage, api)
-  const code = generator!.makeTheCall(method, inputs)
-
-  return <CodeDisplay code={code} language={sdkLanguage} />
-}
+export { getPrismLanguage, getOverridenTheme } from './utils'

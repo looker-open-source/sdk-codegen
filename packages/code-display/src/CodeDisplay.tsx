@@ -26,31 +26,41 @@
 
 import React, { FC } from 'react'
 import styled from 'styled-components'
-import Highlight, { defaultProps, Language } from 'prism-react-renderer'
+import { Span } from '@looker/components'
+import Highlight, { defaultProps } from 'prism-react-renderer'
 // import { Prism } from "prism-react-renderer"
-import dracula from 'prism-react-renderer/themes/dracula'
-
+import { getPrismLanguage, getOverridenTheme } from './utils'
+// TODO enable kotlin, csharp, swift highlighting
 // (typeof global !== "undefined" ? global : window).Prism = Prism
 // require("prismjs/components/prism-kotlin")
 // require("prismjs/components/prism-csharp")
 // require("prismjs/components/prism-swift")
 
 interface PrismEditorProps {
-  language: string
+  /** SDK programming language */
+  language?: string
+  /** Code blob to be highlighted */
   code: string
-  pattern: string
+  /** Pattern to be search (if applicable) */
+  pattern?: string
 }
 
 const Pre = styled.pre`
   padding: 1rem;
   overflow: auto;
+  white-space: pre-wrap;
+
+  .match {
+    border: 1px yellow solid;
+    border-radius: 4px;
+  }
 `
 
 const Line = styled.div`
   display: table-row;
 `
 
-const LineNo = styled.span`
+const LineNo = styled(Span)`
   display: table-cell;
   text-align: right;
   padding-right: 1em;
@@ -58,48 +68,40 @@ const LineNo = styled.span`
   opacity: 0.5;
 `
 
-const LineContent = styled.span`
+const LineContent = styled(Span)`
   display: table-cell;
+  font-family: monospace;
 `
 
-export const PrismEditor: FC<PrismEditorProps> = ({
-  language,
+/**
+ * The PrismEditor provides a useful implementation of prism-react-renderer
+ * for Looker apps. Syntax highlighting is available for all supported SDK languages.
+ * TODO: LookML syntax highlighting
+ */
+export const CodeDisplay: FC<PrismEditorProps> = ({
+  language = 'json',
   code,
-  pattern,
+  pattern = '',
 }) => {
-  const getPrismLanguage = (language: string) => {
-    const unstyled = ['kotlin', 'csharp', 'swift']
-    // TODO revert back to `go` in generator language definitions instead of using this
-    if (language === 'golang') {
-      return 'go'
-    } else if (unstyled.includes(language)) {
-      return 'clike'
-    }
-    return language as Language
-  }
-
+  const highlighterLang = getPrismLanguage(language)
   return (
     <Highlight
       {...defaultProps}
       code={code}
-      language={getPrismLanguage(language)}
-      theme={dracula}
+      language={highlighterLang}
+      theme={getOverridenTheme()}
     >
       {({ className, style, tokens, getLineProps, getTokenProps }) => (
         <Pre className={className} style={style}>
           {tokens.map((line, i) => (
             <Line key={i} {...getLineProps({ line, key: i })}>
-              <LineNo>{i + 1}</LineNo>
+              {language === 'json' || <LineNo>{i + 1}</LineNo>}
               <LineContent>
                 {line.map((token, key) => {
                   const tokenProps = getTokenProps({ token, key })
                   const text = tokenProps.children
                   if (pattern !== '' && text.includes(pattern)) {
-                    tokenProps.style = {
-                      ...tokenProps.style,
-                      border: '1px yellow solid',
-                      borderRadius: '4px',
-                    }
+                    tokenProps.className += ' match'
                   }
                   return <span key={key} {...tokenProps} />
                 })}

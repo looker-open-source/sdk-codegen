@@ -23,23 +23,20 @@
  SOFTWARE.
 
  */
-import React, { FC } from 'react'
-import { getCodeGenerator } from '@looker/sdk-codegen'
-import { CodeDisplay } from '@looker/code-display'
+import { codeGenerators } from '@looker/sdk-codegen'
 
-import { DocSdkCallsProps } from './DocSdkCalls'
+import { getPrismLanguage } from './utils'
 
-/**
- * Generates the SDK call syntax for a given language
- */
-export const DocSingleCall: FC<DocSdkCallsProps> = ({
-  api,
-  method,
-  inputs,
-  sdkLanguage,
-}) => {
-  const generator = getCodeGenerator(sdkLanguage, api)
-  const code = generator!.makeTheCall(method, inputs)
+describe('CodeDisplay utils', () => {
+  const allSdkLanguages: string[] = codeGenerators.map((gen) => gen.language)
 
-  return <CodeDisplay code={code} language={sdkLanguage} />
-}
+  test.each([...allSdkLanguages, 'html', 'json'])(
+    'it can syntax highlight all supported sdk langs',
+    (sdkLanguage) => {
+      expect(getPrismLanguage(sdkLanguage)).toBeTruthy()
+    }
+  )
+  test('it highlights as json for unsupported/undefined language', () => {
+    expect(getPrismLanguage('foobar-lang')).toEqual('json')
+  })
+})
