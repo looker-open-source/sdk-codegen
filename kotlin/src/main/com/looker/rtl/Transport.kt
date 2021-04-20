@@ -24,12 +24,12 @@
 
 package com.looker.rtl
 
+import com.google.gson.Gson
 import io.ktor.client.HttpClient
 import io.ktor.client.call.receive
 import io.ktor.client.engine.okhttp.OkHttp
 import io.ktor.client.features.json.JacksonSerializer
 import io.ktor.client.features.json.JsonFeature
-import io.ktor.client.features.json.defaultSerializer
 import io.ktor.client.request.HttpRequestBuilder
 import io.ktor.client.request.forms.FormDataContent
 import io.ktor.client.request.request
@@ -336,11 +336,12 @@ class Transport(val options: TransportOptions) {
                 }
                 else -> {
                     // Request body
-                    val json = defaultSerializer()
+//                    val gson = GsonBuilder().setDateFormat("yyyy-MM-dd'T'HH:mm:ssX").create()
+                    val gson = Gson()
+                    val jsonBody = gson.toJson(body)
 
-                    val jsonBody = json.write(body)
-                    builder.body = jsonBody // TODO: I think having to do this is a bug? https://github.com/ktorio/ktor/issues/1265 aka https://youtrack.jetbrains.com/issue/KTOR-576
-                    headers["Content-Length"] = jsonBody.contentLength.toString()
+                    builder.body = jsonBody
+                    headers["Content-Length"] = jsonBody.length.toString()
                 }
             }
         }

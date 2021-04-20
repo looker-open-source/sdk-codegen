@@ -546,8 +546,7 @@ class TestMethods {
                 value_is_hidden=false,
                 user_can_view=true,
                 user_can_edit=true,
-                // this will cause a validation error. It should comply with the correct pattern.
-                // hidden_value_domain_whitelist must be a comma-separated list of urls with optional wildcards
+                // Now that Transport.kt uses GSon, this null property will be stripped from the request payload
                 hidden_value_domain_whitelist=null
             )
             val actual = sdk.ok<UserAttribute>(sdk.create_user_attribute(body))
@@ -556,6 +555,7 @@ class TestMethods {
         } catch (e: java.lang.Error) {
             val msg = e.toString()
             assertTrue(msg.contains("POST /user_attributes"))
+            assertTrue(false, "create_user_attribute should have removed hidden_value_domain_whitelist")
         }
     }
 
