@@ -3,7 +3,7 @@
 ## Purpose
 
 The extension playground is a simple extension that allows changes to the extension SDKs to be
-quickly prototyped and tested. Do not save prototyping to this repo as the this extension should
+quickly prototyped and tested. Do not save prototyping to this repo as this extension should
 remain simple. Instead, demos of extension SDK changes should be added to the
 [extension examples repo](https://github.com/looker-open-source/extension-examples).
 
