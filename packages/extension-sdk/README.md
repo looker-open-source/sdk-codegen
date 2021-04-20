@@ -162,6 +162,15 @@ const myDataObj = JSON.parse(value)
 await extensionSDK.localStorageRemoveItem('data')
 ```
 
+### Clipboard
+
+** Looker >=21.8 **. Extensions may write to the system clipboard. For security reasons, the extension
+is not given read access to the clipboard.
+
+```ts
+extensionSDK.clipboardWrite('Hello Clipboard')
+```
+
 ### User Attributes
 
 Extensions can read Looker provided user attributes, and can define, read and modify their own user attributes. For extension scoped user attributes the key should be namespaced as follows:

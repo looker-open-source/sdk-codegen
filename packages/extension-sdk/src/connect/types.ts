@@ -79,6 +79,10 @@ export enum ExtensionRequestType {
    */
   CLOSE_HOST_POPOVERS = 'CLOSE_HOST_POPOVERS',
   /**
+   * Clipboard request
+   */
+  CLIPBOARD = 'CLIPBOARD',
+  /**
    * Local storage request
    */
   LOCAL_STORAGE = 'LOCAL_STORAGE',
@@ -183,6 +187,11 @@ export interface ContextDataRequest {
 
 export interface RouteChangeRequest {
   route: string
+}
+
+export interface ClipboardRequest {
+  type: 'write'
+  value: string
 }
 
 export interface LocalStorageRequest {
@@ -480,6 +489,12 @@ export interface ExtensionSDK {
    * @param name of item
    */
   localStorageGetItem(name: string): Promise<string | null>
+
+  /**
+   * Write string to clipboard.
+   * @param value to write to clipboard.
+   */
+  clipboardWrite(value: string): Promise<void>
 
   /**
    * Set a user attribute value.
