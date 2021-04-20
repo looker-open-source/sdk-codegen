@@ -76,15 +76,6 @@ export interface DataTablePage {
 }
 
 /**
- * Gets the line number from the end of a Github permalink
- * @param link - github permalink
- * @returns A stringified line number of the link
- */
-export function getLineNumberFromLink(link: string): string {
-  return link.split('#L')[1]
-}
-
-/**
  * Gets the filename from the end of a path
  * @param path - repository path
  * @returns file name
@@ -120,7 +111,7 @@ export function prepareExampleDataTable(
       ...languageExamples.map((exampleLink) => {
         return {
           filename: getFileNameFromPath(exampleLink.tooltip),
-          line: getLineNumberFromLink(exampleLink.permalink),
+          line: exampleLink.lineNumber,
           language: language.toLowerCase(),
           permalink: exampleLink.permalink,
           description: exampleLink.description,

@@ -35,7 +35,6 @@ import {
   PER_PAGE_COUNT,
   sortLanguagesByPreference,
   getFileNameFromPath,
-  getLineNumberFromLink,
 } from './utils'
 
 describe('DocSdkUsage', () => {
@@ -71,13 +70,5 @@ describe('DocSdkUsage utils', () => {
     expect(
       getFileNameFromPath('/sdk-codegen/packages/foo.py line 200')
     ).toEqual('foo.py')
-  })
-
-  test('can get line number from permalink', () => {
-    expect(
-      getLineNumberFromLink(
-        'https://github.com/looker-open-source/sdk-codegen/blob/ed8cf9e72fabff3266edb5235448a4a27ce0b1c7/packages/sdk-node/test/methods.spec.ts#L498'
-      )
-    ).toEqual('498')
   })
 })
