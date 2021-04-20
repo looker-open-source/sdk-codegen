@@ -28,6 +28,7 @@ import React, { FC } from 'react'
 import styled from 'styled-components'
 import { Span } from '@looker/components'
 import Highlight, { defaultProps } from 'prism-react-renderer'
+import Editor from 'react-simple-code-editor'
 // import { Prism } from "prism-react-renderer"
 import { getPrismLanguage, getOverridenTheme } from './utils'
 // TODO enable kotlin, csharp, swift highlighting
@@ -36,13 +37,15 @@ import { getPrismLanguage, getOverridenTheme } from './utils'
 // require("prismjs/components/prism-csharp")
 // require("prismjs/components/prism-swift")
 
-interface PrismEditorProps {
+interface CodeDisplayProps {
   /** SDK programming language */
   language?: string
   /** Code blob to be highlighted */
   code: string
   /** Pattern to be search (if applicable) */
   pattern?: string
+  /** onChange event handler, for Editor functionality */
+  onChange?: (text: string) => void
 }
 
 const Pre = styled.pre`
@@ -74,17 +77,18 @@ const LineContent = styled(Span)`
 `
 
 /**
- * The PrismEditor provides a useful implementation of prism-react-renderer
+ * The CodeDisplay provides a useful implementation of prism-react-renderer
  * for Looker apps. Syntax highlighting is available for all supported SDK languages.
  * TODO: LookML syntax highlighting
  */
-export const CodeDisplay: FC<PrismEditorProps> = ({
+export const CodeDisplay: FC<CodeDisplayProps> = ({
   language = 'json',
   code,
   pattern = '',
+  onChange,
 }) => {
   const highlighterLang = getPrismLanguage(language)
-  return (
+  const highlight = (code: string) => (
     <Highlight
       {...defaultProps}
       code={code}
@@ -112,4 +116,8 @@ export const CodeDisplay: FC<PrismEditorProps> = ({
       )}
     </Highlight>
   )
+  if (!onChange) {
+    return highlight(code)
+  }
+  return <Editor value={code} onValueChange={onChange} highlight={highlight} />
 }
