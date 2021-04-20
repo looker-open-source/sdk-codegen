@@ -44,8 +44,10 @@
     "@looker/extension-sdk": "^21.4.1",
     "@looker/sdk": "^21.4.1",
     "@looker/sdk-rtl": "^21.0.12",
+    "lodash": "^4.17.20"
+  },
+  "peerDependencies": {
     "history": "^4.9.0",
-    "lodash": "^4.17.20",
     "react": "^16.13.1",
     "react-dom": "^16.13.1",
     "react-router": "^5.1.2",
