@@ -70,6 +70,7 @@ const LineNo = styled(Span)`
 
 const LineContent = styled(Span)`
   display: table-cell;
+  font-family: monospace;
 `
 
 /**
