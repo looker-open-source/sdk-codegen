@@ -1,4 +1,13 @@
-# Using the Extension Playground
+# Extension Playground
+
+## Purpose
+
+The extension playground is a simple extension that allows changes to the extension SDKs to be
+quickly prototyped and tested. Do not save prototyping to this repo as the this extension should
+remain simple. Instead, demos of extension SDK changes should be added to the
+[extension examples repo](https://github.com/looker-open-source/extension-examples).
+
+## Using the Extension Playground
 
 The extension playground can be manually installed and run with a Looker instance using the following steps:
 
