@@ -26,7 +26,6 @@
 
 import React, { FC, useContext, useEffect, useState } from 'react'
 import { useHistory } from 'react-router-dom'
-import { Looker40SDK } from '@looker/sdk'
 import { BrowserSession } from '@looker/sdk-rtl'
 import { RunItContext } from '../..'
 import { Loading } from '../../components'
@@ -39,7 +38,7 @@ export const OAuthScene: FC = () => {
   const { sdk } = useContext(RunItContext)
 
   useEffect(() => {
-    if (sdk && sdk instanceof Looker40SDK) {
+    if (sdk) {
       setAuth(sdk.authSession as BrowserSession)
       /** capture the stored return URL before `OAuthSession.login()` clears it */
       setOldUrl((sdk.authSession as BrowserSession).returnUrl || `/`)
@@ -79,7 +78,7 @@ export const OAuthScene: FC = () => {
   }, [auth, history])
 
   // No LookerSDK40 no OAuth for you
-  if (!(sdk && sdk instanceof Looker40SDK)) return <></>
+  if (!sdk) return <></>
 
   return (
     <Loading

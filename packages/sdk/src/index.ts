@@ -44,3 +44,6 @@ export * from './4.0/streams'
 export * from './constants'
 export * from './extensionSdk'
 export * from './browserSdk'
+
+export { functionalSdk40 } from './4.0/funcs'
+export { functionalSdk31 } from './3.1/funcs'

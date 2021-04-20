@@ -25,8 +25,9 @@
  */
 
 import { NodeSession, NodeSettingsIniFile } from '@looker/sdk-node'
-import { me, functionalSdk40 } from '@looker/sdk/lib/4.0/funcs'
-import { me as me31, functionalSdk31 } from '@looker/sdk/lib/3.1/funcs'
+import { functionalSdk40, functionalSdk31 } from '@looker/sdk'
+import { me } from '@looker/sdk/lib/4.0/funcs'
+import { me as me31 } from '@looker/sdk/lib/3.1/funcs'
 import { rootIni } from './utils'
 
 const localConfig = rootIni()

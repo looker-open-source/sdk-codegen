@@ -24,7 +24,7 @@
 
  */
 
-import { functionalSdk40 } from '@looker/sdk/lib/4.0/funcs'
+import { functionalSdk40 } from '@looker/sdk'
 import {
   ApiSettings,
   BrowserSession,
