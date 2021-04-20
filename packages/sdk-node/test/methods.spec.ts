@@ -220,6 +220,35 @@ describe('LookerNodeSDK', () => {
     expect(Looker40SDKStream.ApiVersion).toEqual('4.0')
   })
 
+  describe('issue-related tests', () => {
+    it('create_user_attribute options', async () => {
+      // Reported in #544
+      // WriteUserAttribute(name=git_username, label=Git Username, type=string, default_value=, value_is_hidden=false, user_can_view=true, user_can_edit=true, hidden_value_domain_whitelist=null)
+      const sdk = new LookerSDK(session)
+      try {
+        const attrib = await sdk.ok(
+          sdk.create_user_attribute({
+            name: 'git_username',
+            label: 'Git Username',
+            type: 'string',
+            default_value: undefined,
+            value_is_hidden: false,
+            user_can_edit: true,
+            user_can_view: true,
+            hidden_value_domain_whitelist: '',
+          })
+        )
+        // We shouldn't get here but if we do, delete the test attribute
+        await sdk.ok(sdk.delete_user_attribute(attrib.id!))
+      } catch (e) {
+        // Using this instead of `rejects.toThrowError` because that pattern fails to match valid RegEx condition
+        expect(e.message).toMatch(
+          /hidden_value_domain_whitelist must be a comma-separated list of urls with optional wildcards/gim
+        )
+      }
+    })
+  })
+
   describe('downloads', () => {
     it(
       'png and svg',

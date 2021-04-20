@@ -136,14 +136,15 @@ export class NodeTransport extends BaseTransport {
       if (e instanceof StatusCodeError) {
         statusCode = e.statusCode
         const text = e.message
+        body = e.message
         // Need to re-parse the error message
         const matches = /^\d+\s*-\s*({.*})/gim.exec(text)
         if (matches && matches.length > 1) {
           const json = matches[1]
           const obj = JSON.parse(json)
-          body = Buffer.from(obj.data).toString('utf8')
-        } else {
-          body = e.message
+          if (obj.data) {
+            body = Buffer.from(obj.data).toString('utf8')
+          }
         }
         body = `${statusMessage} ${body}`
       } else if (e.error instanceof Buffer) {
