@@ -1,0 +1,38 @@
+{
+  "name": "@looker/extension-playground",
+  "version": "21.4.1",
+  "description": "Extension Playground",
+  "main": "lib/index.js",
+  "module": "lib/esm/index.js",
+  "sideEffects": "false",
+  "typings": "lib/index.d.ts",
+  "license": "MIT",
+  "private": true,
+  "scripts": {
+    "bundle": "tsc && webpack --config webpack.prod.config.js",
+    "develop": "webpack-dev-server --hot --disable-host-check --port 8080 --config webpack.dev.config.js",
+    "watch": "yarn lerna exec --scope @looker/extension-playground --stream 'BABEL_ENV=build babel src --root-mode upward --out-dir lib/esm --source-maps --extensions .ts,.tsx --no-comments --watch'"
+  },
+  "dependencies": {
+    "@looker/extension-sdk": "^21.4.1",
+    "@looker/extension-sdk-react": "^21.4.1",
+    "@looker/sdk": "^21.4.1",
+    "@looker/sdk-codegen": "^21.0.12",
+    "@looker/components": "^1.1.3",
+    "@looker/icons": "1.1.3",
+    "@styled-icons/material": "^10.28.0",
+    "@styled-icons/material-outlined": "^10.28.0",
+    "@styled-icons/material-rounded": "^10.28.0",
+    "react": "^16.13.1",
+    "react-dom": "^16.13.1",
+    "react-redux": "^7.2.3",
+    "react-router-dom": "^5.2.0",
+    "redux": "^4.0.5",
+    "react-hot-loader": "^4.12.20",
+    "webpack-cli": "^3.3.12",
+    "webpack-dev-server": "^3.11.0"
+  },
+  "devDependencies": {
+    "@types/redux": "^3.6.0"
+  }
+}
