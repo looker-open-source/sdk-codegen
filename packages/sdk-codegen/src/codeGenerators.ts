@@ -61,7 +61,7 @@ export const Generators: Array<IGeneratorSpec> = [
   {
     factory: (api: ApiModel, versions?: IVersionInfo) =>
       new TypescriptGen(api, versions),
-    language: 'Typescript',
+    language: 'TypeScript',
     extension: /\.ts(x?)/gi,
   },
   {
@@ -88,7 +88,7 @@ export const Generators: Array<IGeneratorSpec> = [
   {
     factory: (api: ApiModel, versions?: IVersionInfo) =>
       new GoGen(api, versions),
-    language: 'Golang',
+    language: 'Go',
     options: '-papiPackage=Looker -ppackageName=looker',
     extension: /\.go/gi,
   },
