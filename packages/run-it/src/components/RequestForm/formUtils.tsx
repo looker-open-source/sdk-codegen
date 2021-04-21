@@ -30,9 +30,9 @@ import {
   Label,
   FieldCheckbox,
 } from '@looker/components'
-
 import { InputDate } from '@looker/components/lib/date'
-import { CodeStructure } from '../CodeStructure'
+import { CodeEditor } from '@looker/code-editor'
+
 import { RunItInput, RunItValues } from '../../RunIt'
 
 const inputTextType = (type: string) => {
@@ -221,16 +221,15 @@ export const createComplexItem = (
 ) => (
   <div key={input.name}>
     <Label>{input.name}</Label>
-    <CodeStructure
+    <CodeEditor
       language="json"
       code={
         input.name in requestContent
           ? requestContent[input.name]
           : JSON.stringify(input.type, null, 2)
       }
-      fontSize={14}
-      width={'810px'}
       onChange={handleComplexChange.bind(null, input.name)}
+      transparent={true}
     />
   </div>
 )

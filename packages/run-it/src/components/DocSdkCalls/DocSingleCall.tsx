@@ -25,7 +25,7 @@
  */
 import React, { FC } from 'react'
 import { getCodeGenerator } from '@looker/sdk-codegen'
-import { CodeDisplay } from '@looker/code-display'
+import { CodeDisplay } from '@looker/code-editor'
 
 import { DocSdkCallsProps } from './DocSdkCalls'
 

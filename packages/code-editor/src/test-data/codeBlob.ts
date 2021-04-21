@@ -23,32 +23,21 @@
  SOFTWARE.
 
  */
-
-import { IMarker } from 'react-ace'
-
-export const highlightSourceCode = (
-  pattern: string,
-  content: string,
-  className = 'codeMarker'
-): IMarker[] => {
-  const result: IMarker[] = []
-  if (pattern) {
-    const lines = content.split('\n')
-    const target = new RegExp(pattern, 'gi')
-    lines.forEach((line, index) => {
-      let found
-      while ((found = target.exec(line))) {
-        const mark: IMarker = {
-          className,
-          endCol: found.index + found[0].length,
-          endRow: index,
-          startCol: found.index,
-          startRow: index,
-          type: 'text',
-        }
-        result.push(mark)
-      }
-    })
-  }
-  return result
-}
+export const pythonTestCode = `
+# GET /lookml_models -> Sequence[models.LookmlModel]
+def all_lookml_models(
+    self,
+    # Requested fields.
+    fields: Optional[str] = None,
+    transport_options: Optional[transport.TransportOptions] = None,
+) -> Sequence[models.LookmlModel]:
+    """Get All LookML Models"""
+    response = self.get(
+                    f"/lookml_models",
+            Sequence[models.LookmlModel],
+            query_params={"fields": fields},
+            transport_options=transport_options
+    )
+    assert isinstance(response, list)
+    return response
+`

@@ -36,20 +36,25 @@ import { getPrismLanguage, getOverridenTheme } from './utils'
 // require("prismjs/components/prism-csharp")
 // require("prismjs/components/prism-swift")
 
-interface PrismEditorProps {
-  /** SDK programming language */
-  language?: string
+export interface CodeDisplayProps {
   /** Code blob to be highlighted */
   code: string
-  /** Pattern to be search (if applicable) */
+  /** SDK programming language to syntax highlight */
+  language?: string
+  /** Search pattern to be marked */
   pattern?: string
+  /** Flag to provide background or not */
+  transparent?: boolean
 }
 
 const Pre = styled.pre`
-  padding: 1rem;
-  overflow: auto;
   white-space: pre-wrap;
+  overflow: auto;
+  // override default margin for Pre
+  // so we can set from parent
+  margin: 0px;
 
+  // selector for search matches
   .match {
     border: 1px yellow solid;
     border-radius: 4px;
@@ -74,22 +79,21 @@ const LineContent = styled(Span)`
 `
 
 /**
- * The PrismEditor provides a useful implementation of prism-react-renderer
- * for Looker apps. Syntax highlighting is available for all supported SDK languages.
+ * Provides a view-only syntax highlighter for all supported SDK languages.
  * TODO: LookML syntax highlighting
  */
-export const CodeDisplay: FC<PrismEditorProps> = ({
+export const CodeDisplay: FC<CodeDisplayProps> = ({
   language = 'json',
   code,
   pattern = '',
+  transparent = false,
 }) => {
-  const highlighterLang = getPrismLanguage(language)
   return (
     <Highlight
       {...defaultProps}
       code={code}
-      language={highlighterLang}
-      theme={getOverridenTheme()}
+      language={getPrismLanguage(language)}
+      theme={getOverridenTheme(transparent)}
     >
       {({ className, style, tokens, getLineProps, getTokenProps }) => (
         <Pre className={className} style={style}>
