@@ -31,7 +31,7 @@ import {
   FieldCheckbox,
 } from '@looker/components'
 import { InputDate } from '@looker/components/lib/date'
-import { CodeDisplay } from '@looker/code-display'
+import { CodeEditor } from '@looker/code-editor'
 
 import { RunItInput, RunItValues } from '../../RunIt'
 
@@ -221,7 +221,7 @@ export const createComplexItem = (
 ) => (
   <div key={input.name}>
     <Label>{input.name}</Label>
-    <CodeDisplay
+    <CodeEditor
       language="json"
       code={
         input.name in requestContent

@@ -23,4 +23,5 @@
  SOFTWARE.
 
  */
-export { CodeStructure } from './CodeStructure'
+export { CodeDisplay } from './CodeDisplay'
+export { CodeEditor } from './CodeEditor'

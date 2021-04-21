@@ -28,7 +28,6 @@ import React, { FC } from 'react'
 import styled from 'styled-components'
 import { Span } from '@looker/components'
 import Highlight, { defaultProps } from 'prism-react-renderer'
-import Editor from 'react-simple-code-editor'
 // import { Prism } from "prism-react-renderer"
 import { getPrismLanguage, getOverridenTheme } from './utils'
 // TODO enable kotlin, csharp, swift highlighting
@@ -37,16 +36,14 @@ import { getPrismLanguage, getOverridenTheme } from './utils'
 // require("prismjs/components/prism-csharp")
 // require("prismjs/components/prism-swift")
 
-interface CodeDisplayProps {
-  /** SDK programming language */
-  language?: string
+export interface CodeDisplayProps {
   /** Code blob to be highlighted */
   code: string
-  /** Pattern to be search (if applicable) */
+  /** SDK programming language to syntax highlight */
+  language?: string
+  /** Search pattern to be marked */
   pattern?: string
-  /** onChange event handler, for Editor functionality */
-  onChange?: (text: string) => void
-  /** whether or not to render transparent background */
+  /** Flag to provide background or not */
   transparent?: boolean
 }
 
@@ -82,23 +79,20 @@ const LineContent = styled(Span)`
 `
 
 /**
- * The CodeDisplay provides a useful implementation of prism-react-renderer
- * for Looker apps. Syntax highlighting is available for all supported SDK languages.
+ * Provides a view-only syntax highlighter for all supported SDK languages.
  * TODO: LookML syntax highlighting
  */
 export const CodeDisplay: FC<CodeDisplayProps> = ({
   language = 'json',
   code,
   pattern = '',
-  onChange,
   transparent = false,
 }) => {
-  const highlighterLang = getPrismLanguage(language)
-  const highlight = (code: string) => (
+  return (
     <Highlight
       {...defaultProps}
       code={code}
-      language={highlighterLang}
+      language={getPrismLanguage(language)}
       theme={getOverridenTheme(transparent)}
     >
       {({ className, style, tokens, getLineProps, getTokenProps }) => (
@@ -121,24 +115,5 @@ export const CodeDisplay: FC<CodeDisplayProps> = ({
         </Pre>
       )}
     </Highlight>
-  )
-  // if no `onChange` handler received, show just syntax highlighter
-  if (!onChange) {
-    return highlight(code)
-  }
-  return (
-    <Editor
-      value={code}
-      onValueChange={onChange}
-      highlight={highlight}
-      padding="1rem"
-      style={{
-        width: '100%',
-        color: '#FFF',
-        whiteSpace: 'pre-wrap',
-        overflow: 'auto',
-        fontFamily: 'monospace',
-      }}
-    />
   )
 }

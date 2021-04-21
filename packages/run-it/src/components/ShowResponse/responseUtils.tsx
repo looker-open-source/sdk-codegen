@@ -26,7 +26,7 @@
 import React, { ReactElement } from 'react'
 import { IRawResponse, ResponseMode, responseMode } from '@looker/sdk-rtl'
 import { Paragraph, CodeBlock } from '@looker/components'
-import { CodeDisplay } from '@looker/code-display'
+import { CodeDisplay } from '@looker/code-editor'
 
 import { DataGrid, parseCsv, parseJson } from '../DataGrid'
 
