@@ -23,7 +23,7 @@
       "bump-minor-pre-major": true,
       "bump-patch-for-minor-pre-major": true
     },
-    "packages/code-display": {
+    "packages/code-editor": {
       "release-as": "0.0.1"
     },
     "packages/sdk-codegen-scripts": {},
