@@ -48,7 +48,6 @@ interface CodeDisplayProps {
   onChange?: (text: string) => void
   /** whether or not to render transparent background */
   transparent?: boolean
-  height?: string
 }
 
 const Pre = styled.pre`
