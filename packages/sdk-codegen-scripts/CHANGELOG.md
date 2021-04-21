@@ -1,5 +1,20 @@
 # Changelog
 
+### [21.0.13](https://www.github.com/looker-open-source/sdk-codegen/compare/sdk-codegen-scripts-v21.0.12...sdk-codegen-scripts-v21.0.13) (2021-04-21)
+
+
+### Bug Fixes
+
+* updated TypeScript, C#, Go language names in codeGenerators.ts ([#610](https://www.github.com/looker-open-source/sdk-codegen/issues/610)) ([13fb42b](https://www.github.com/looker-open-source/sdk-codegen/commit/13fb42b6bfa651a137e75b04fc6ee00620705ede))
+
+
+### Dependencies
+
+* The following workspace dependencies were updated
+  * dependencies
+    * @looker/sdk-codegen bumped from ^21.0.12 to ^21.0.13
+    * @looker/sdk-node bumped from ^21.4.1 to ^21.4.2
+
 ### [21.0.12](https://www.github.com/looker-open-source/sdk-codegen/compare/sdk-codegen-scripts-v21.0.11...sdk-codegen-scripts-v21.0.12) (2021-04-15)
 
 

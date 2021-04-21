@@ -43,7 +43,7 @@ export const SdkLanguageSelector: FC = () => {
   const { envAdaptor } = useContext(EnvAdaptorContext)
 
   const allSdkLanguages: SelectOptionProps[] = codeGenerators.map((gen) => ({
-    value: gen.label || gen.language,
+    value: gen.language,
   }))
 
   allSdkLanguages.push({

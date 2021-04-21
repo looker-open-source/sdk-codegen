@@ -5,6 +5,30 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+### [0.9.3](https://www.github.com/looker-open-source/sdk-codegen/compare/api-explorer-v0.9.2...api-explorer-v0.9.3) (2021-04-21)
+
+
+### Features
+
+* adds 'SDK Examples' data table ([#602](https://www.github.com/looker-open-source/sdk-codegen/issues/602)) ([3678c96](https://www.github.com/looker-open-source/sdk-codegen/commit/3678c96cc7c2edadd00013b66711c917a62d1000))
+* introduces prism-editor package; implements read-only usage ([#588](https://www.github.com/looker-open-source/sdk-codegen/issues/588)) ([863c88d](https://www.github.com/looker-open-source/sdk-codegen/commit/863c88dfb0569f7c829602acee2404e1c840097e))
+
+
+### Bug Fixes
+
+* updated TypeScript, C#, Go language names in codeGenerators.ts ([#610](https://www.github.com/looker-open-source/sdk-codegen/issues/610)) ([13fb42b](https://www.github.com/looker-open-source/sdk-codegen/commit/13fb42b6bfa651a137e75b04fc6ee00620705ede))
+
+
+### Dependencies
+
+* The following workspace dependencies were updated
+  * dependencies
+    * @looker/run-it bumped from ^0.9.2 to ^0.9.3
+    * @looker/sdk-codegen bumped from ^21.0.12 to ^21.0.13
+  * devDependencies
+    * @looker/sdk-codegen-scripts bumped from ^21.0.12 to ^21.0.13
+    * @looker/sdk-node bumped from ^21.4.1 to ^21.4.2
+
 ### [0.9.2](https://www.github.com/looker-open-source/sdk-codegen/compare/api-explorer-v0.9.1...api-explorer-v0.9.2) (2021-04-15)
 
 

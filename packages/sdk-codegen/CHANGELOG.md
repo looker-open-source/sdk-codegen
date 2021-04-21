@@ -5,6 +5,18 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+### [21.0.13](https://www.github.com/looker-open-source/sdk-codegen/compare/sdk-codegen-v21.0.12...sdk-codegen-v21.0.13) (2021-04-21)
+
+
+### Features
+
+* adds 'SDK Examples' data table ([#602](https://www.github.com/looker-open-source/sdk-codegen/issues/602)) ([3678c96](https://www.github.com/looker-open-source/sdk-codegen/commit/3678c96cc7c2edadd00013b66711c917a62d1000))
+
+
+### Bug Fixes
+
+* updated TypeScript, C#, Go language names in codeGenerators.ts ([#610](https://www.github.com/looker-open-source/sdk-codegen/issues/610)) ([13fb42b](https://www.github.com/looker-open-source/sdk-codegen/commit/13fb42b6bfa651a137e75b04fc6ee00620705ede))
+
 ### [21.0.12](https://www.github.com/looker-open-source/sdk-codegen/compare/sdk-codegen-v21.0.11...sdk-codegen-v21.0.12) (2021-04-15)
 
 
