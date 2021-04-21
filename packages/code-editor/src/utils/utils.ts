@@ -58,12 +58,12 @@ export const getPrismLanguage = (language: string): Language => {
  * @returns modified prism theme object
  */
 export function getOverridenTheme(transparent: boolean) {
-  if (!transparent) {
-    prismTheme.plain.backgroundColor = theme.colors.text
-    prismTheme.plain.padding = '1rem'
-  } else {
+  if (transparent) {
     prismTheme.plain.backgroundColor = 'none'
     prismTheme.plain.padding = '0px'
+  } else {
+    prismTheme.plain.backgroundColor = theme.colors.text
+    prismTheme.plain.padding = '1rem'
   }
   return prismTheme
 }
