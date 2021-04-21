@@ -4,7 +4,9 @@
   "packages": {
     "packages/extension-api-explorer": {},
     "packages/extension-sdk-react": {},
-    "packages/extension-sdk": {},
+    "packages/extension-sdk": {
+      "release-as": "21.4.2"
+    },
     "packages/hackathon": {},
     "packages/sdk-node": {},
     "packages/sdk": {},
@@ -23,7 +25,9 @@
     },
     "packages/sdk-codegen-scripts": {},
     "packages/sdk-codegen-utils": {},
-    "packages/sdk-codegen": {},
+    "packages/sdk-codegen": {
+      "release-as": "21.0.13"
+    },
     "packages/sdk-rtl": {},
     "packages/wholly-sheet": {
       "release-as": "",
