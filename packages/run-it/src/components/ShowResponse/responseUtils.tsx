@@ -70,7 +70,10 @@ const ShowJSON = (response: IRawResponse) => {
   const data = parseJson(content)
   const showGrid = isColumnar(data.data)
   const raw = (
-    <CodeDisplay code={JSON.stringify(JSON.parse(response.body), null, 2)} />
+    <CodeDisplay
+      code={JSON.stringify(JSON.parse(response.body), null, 2)}
+      transparent
+    />
   )
   if (!showGrid) return raw
   return <DataGrid data={data.data} raw={raw} />
@@ -113,7 +116,7 @@ const ShowImage = (response: IRawResponse) => {
 
 /** A handler for HTTP type responses */
 const ShowHTML = (response: IRawResponse) => (
-  <CodeDisplay language={'html'} code={response.body.toString()} />
+  <CodeDisplay language={'html'} code={response.body.toString()} transparent />
 )
 
 /**

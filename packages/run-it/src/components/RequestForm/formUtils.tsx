@@ -229,6 +229,7 @@ export const createComplexItem = (
           : JSON.stringify(input.type, null, 2)
       }
       onChange={handleComplexChange.bind(null, input.name)}
+      transparent={true}
     />
   </div>
 )

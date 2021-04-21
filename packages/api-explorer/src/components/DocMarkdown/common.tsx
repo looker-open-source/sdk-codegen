@@ -43,7 +43,7 @@ MDCode.defaultProps = {
   pr: 'xxsmall',
 }
 
-export const MDCodeBlock = styled(CodeBlock)`
+export const MDCodeBlock = styled(CodeBlock as any)`
   max-width: 800px;
 `
 MDCodeBlock.defaultProps = {

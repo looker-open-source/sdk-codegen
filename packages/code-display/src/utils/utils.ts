@@ -57,7 +57,13 @@ export const getPrismLanguage = (language: string): Language => {
  * applies package overrides to the default vsCode prism theme
  * @returns modified prism theme object
  */
-export function getOverridenTheme() {
-  prismTheme.plain.backgroundColor = theme.colors.text
+export function getOverridenTheme(transparent: boolean) {
+  if (!transparent) {
+    prismTheme.plain.backgroundColor = theme.colors.text
+    prismTheme.plain.padding = '1rem'
+  } else {
+    prismTheme.plain.backgroundColor = 'none'
+    prismTheme.plain.padding = '0px'
+  }
   return prismTheme
 }

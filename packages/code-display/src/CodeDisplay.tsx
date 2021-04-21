@@ -46,13 +46,19 @@ interface CodeDisplayProps {
   pattern?: string
   /** onChange event handler, for Editor functionality */
   onChange?: (text: string) => void
+  /** whether or not to render transparent background */
+  transparent?: boolean
+  height?: string
 }
 
 const Pre = styled.pre`
-  padding: 1rem;
-  overflow: auto;
   white-space: pre-wrap;
+  overflow: auto;
+  // override default margin for Pre
+  // so we can set from parent
+  margin: 0px;
 
+  // selector for search matches
   .match {
     border: 1px yellow solid;
     border-radius: 4px;
@@ -86,6 +92,7 @@ export const CodeDisplay: FC<CodeDisplayProps> = ({
   code,
   pattern = '',
   onChange,
+  transparent = false,
 }) => {
   const highlighterLang = getPrismLanguage(language)
   const highlight = (code: string) => (
@@ -93,7 +100,7 @@ export const CodeDisplay: FC<CodeDisplayProps> = ({
       {...defaultProps}
       code={code}
       language={highlighterLang}
-      theme={getOverridenTheme()}
+      theme={getOverridenTheme(transparent)}
     >
       {({ className, style, tokens, getLineProps, getTokenProps }) => (
         <Pre className={className} style={style}>
@@ -119,5 +126,19 @@ export const CodeDisplay: FC<CodeDisplayProps> = ({
   if (!onChange) {
     return highlight(code)
   }
-  return <Editor value={code} onValueChange={onChange} highlight={highlight} />
+  return (
+    <Editor
+      value={code}
+      onValueChange={onChange}
+      highlight={highlight}
+      padding="1rem"
+      style={{
+        width: '100%',
+        color: '#FFF',
+        whiteSpace: 'pre-wrap',
+        overflow: 'auto',
+        fontFamily: 'monospace',
+      }}
+    />
+  )
 }
