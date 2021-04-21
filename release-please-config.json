@@ -36,7 +36,6 @@
     },
     "python": {
       "release-type": "python",
-      "draft": true,
       "package-name": "looker_sdk"
     }
   }
