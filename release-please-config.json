@@ -23,6 +23,9 @@
       "bump-minor-pre-major": true,
       "bump-patch-for-minor-pre-major": true
     },
+    "packages/code-editor": {
+      "release-as": "0.0.1"
+    },
     "packages/sdk-codegen-scripts": {},
     "packages/sdk-codegen-utils": {},
     "packages/sdk-codegen": {
