@@ -116,7 +116,7 @@ const ShowImage = (response: IRawResponse) => {
 
 /** A handler for HTTP type responses */
 const ShowHTML = (response: IRawResponse) => (
-  <CodeDisplay language={'html'} code={response.body.toString()} transparent />
+  <CodeDisplay language="html" code={response.body.toString()} transparent />
 )
 
 /**

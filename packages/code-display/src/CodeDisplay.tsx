@@ -114,7 +114,7 @@ export const CodeDisplay: FC<CodeDisplayProps> = ({
                   if (pattern !== '' && text.includes(pattern)) {
                     tokenProps.className += ' match'
                   }
-                  return <span key={key} {...tokenProps} />
+                  return <Span key={key} {...tokenProps} />
                 })}
               </LineContent>
             </Line>
@@ -123,6 +123,7 @@ export const CodeDisplay: FC<CodeDisplayProps> = ({
       )}
     </Highlight>
   )
+  // if no `onChange` handler received, show just syntax highlighter
   if (!onChange) {
     return highlight(code)
   }
