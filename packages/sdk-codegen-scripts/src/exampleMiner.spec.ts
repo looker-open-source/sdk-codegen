@@ -240,7 +240,7 @@ describe('example mining', () => {
       const actual = miner.lode
       expect(actual).toBeDefined()
       expect(actual.commitHash).toBeDefined()
-      expect(Object.entries(actual.nuggets).length).toBeGreaterThan(50)
+      expect(Object.entries(actual.nuggets).length).toBeGreaterThan(40)
     })
   })
 })
