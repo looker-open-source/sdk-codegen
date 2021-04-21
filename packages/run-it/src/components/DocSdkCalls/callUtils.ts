@@ -39,7 +39,7 @@ export const getGenerators = (api: ApiModel): KeyedCollection<CodeGen> => {
   codeGenerators
     .filter((x) => x.factory !== undefined)
     .forEach((gen) => {
-      codeGens[gen.label || gen.language] = gen.factory!(api)
+      codeGens[gen.language] = gen.factory!(api)
     })
   return codeGens
 }
