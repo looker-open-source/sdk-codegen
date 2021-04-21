@@ -1,5 +1,23 @@
 # Changelog
 
+## [1.3.0](https://www.github.com/looker-open-source/sdk-codegen/compare/sdk-codegen-all-v1.2.0...sdk-codegen-all-v1.3.0) (2021-04-21)
+
+
+### Features
+
+* Add clipboard write capability to extension framework ([#603](https://www.github.com/looker-open-source/sdk-codegen/issues/603)) ([d6b52ea](https://www.github.com/looker-open-source/sdk-codegen/commit/d6b52ea4f009f64e43167a4acac973fcbfb91e2e))
+* adds 'SDK Examples' data table ([#602](https://www.github.com/looker-open-source/sdk-codegen/issues/602)) ([3678c96](https://www.github.com/looker-open-source/sdk-codegen/commit/3678c96cc7c2edadd00013b66711c917a62d1000))
+* introduces prism-editor package; implements read-only usage ([#588](https://www.github.com/looker-open-source/sdk-codegen/issues/588)) ([863c88d](https://www.github.com/looker-open-source/sdk-codegen/commit/863c88dfb0569f7c829602acee2404e1c840097e))
+* Playground for extension SDK changes ([#605](https://www.github.com/looker-open-source/sdk-codegen/issues/605)) ([f99de7e](https://www.github.com/looker-open-source/sdk-codegen/commit/f99de7e5bf590056b797b4b05c7a0a1c60f9d8dd))
+
+
+### Bug Fixes
+
+* error handling for TS SDK, GSon body serialization for Kotlin SDK ([#601](https://www.github.com/looker-open-source/sdk-codegen/issues/601)) ([11e924f](https://www.github.com/looker-open-source/sdk-codegen/commit/11e924fb81af00c7b20a1af2330f43873c016f83)), closes [#544](https://www.github.com/looker-open-source/sdk-codegen/issues/544)
+* lint dependencies ([#617](https://www.github.com/looker-open-source/sdk-codegen/issues/617)) ([7b172b1](https://www.github.com/looker-open-source/sdk-codegen/commit/7b172b1c6927fbf62eb668a503313ced10558dfd))
+* looker component version merge issue ([#609](https://www.github.com/looker-open-source/sdk-codegen/issues/609)) ([6aa9f60](https://www.github.com/looker-open-source/sdk-codegen/commit/6aa9f601019bb3f7105c48e3d360c3e61f57c6e1))
+* updated TypeScript, C#, Go language names in codeGenerators.ts ([#610](https://www.github.com/looker-open-source/sdk-codegen/issues/610)) ([13fb42b](https://www.github.com/looker-open-source/sdk-codegen/commit/13fb42b6bfa651a137e75b04fc6ee00620705ede))
+
 ## [1.2.0](https://www.github.com/looker-open-source/sdk-codegen/compare/sdk-codegen-all-v1.1.0...sdk-codegen-all-v1.2.0) (2021-04-15)
 
 

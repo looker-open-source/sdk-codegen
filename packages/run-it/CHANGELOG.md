@@ -1,5 +1,24 @@
 # Changelog
 
+### [0.9.3](https://www.github.com/looker-open-source/sdk-codegen/compare/run-it-v0.9.2...run-it-v0.9.3) (2021-04-21)
+
+
+### Features
+
+* introduces prism-editor package; implements read-only usage ([#588](https://www.github.com/looker-open-source/sdk-codegen/issues/588)) ([863c88d](https://www.github.com/looker-open-source/sdk-codegen/commit/863c88dfb0569f7c829602acee2404e1c840097e))
+
+
+### Bug Fixes
+
+* updated TypeScript, C#, Go language names in codeGenerators.ts ([#610](https://www.github.com/looker-open-source/sdk-codegen/issues/610)) ([13fb42b](https://www.github.com/looker-open-source/sdk-codegen/commit/13fb42b6bfa651a137e75b04fc6ee00620705ede))
+
+
+### Dependencies
+
+* The following workspace dependencies were updated
+  * dependencies
+    * @looker/sdk-codegen bumped from ^21.0.12 to ^21.0.13
+
 ### [0.9.2](https://www.github.com/looker-open-source/sdk-codegen/compare/run-it-v0.9.1...run-it-v0.9.2) (2021-04-15)
 
 
