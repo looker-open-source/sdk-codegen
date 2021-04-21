@@ -1,5 +1,5 @@
 {
-  "commitHash": "ed8cf9e72fabff3266edb5235448a4a27ce0b1c7",
+  "commitHash": "7b172b1c6927fbf62eb668a503313ced10558dfd",
   "remoteOrigin": "https://github.com/looker-open-source/sdk-codegen",
   "summaries": {
     "packages/sdk-codegen/src/codeGenerators.ts": {
@@ -420,11 +420,6 @@
         ],
         ".py": [
           {
-            "sourceFile": "examples/python/hackathon_app/looker.py",
-            "column": 11,
-            "line": 223
-          },
-          {
             "sourceFile": "examples/python/lookersdk-flask/app/looker.py",
             "column": 14,
             "line": 18
@@ -534,52 +529,52 @@
           {
             "sourceFile": "packages/sdk-node/test/methods.spec.ts",
             "column": 34,
-            "line": 293
+            "line": 318
           },
           {
             "sourceFile": "packages/sdk-node/test/methods.spec.ts",
             "column": 34,
-            "line": 303
+            "line": 328
           },
           {
             "sourceFile": "packages/sdk-node/test/methods.spec.ts",
             "column": 37,
-            "line": 326
-          },
-          {
-            "sourceFile": "packages/sdk-node/test/methods.spec.ts",
-            "column": 34,
-            "line": 341
-          },
-          {
-            "sourceFile": "packages/sdk-node/test/methods.spec.ts",
-            "column": 30,
-            "line": 346
-          },
-          {
-            "sourceFile": "packages/sdk-node/test/methods.spec.ts",
-            "column": 34,
             "line": 351
           },
           {
             "sourceFile": "packages/sdk-node/test/methods.spec.ts",
-            "column": 30,
-            "line": 357
+            "column": 34,
+            "line": 366
           },
           {
             "sourceFile": "packages/sdk-node/test/methods.spec.ts",
             "column": 30,
-            "line": 362
+            "line": 371
+          },
+          {
+            "sourceFile": "packages/sdk-node/test/methods.spec.ts",
+            "column": 34,
+            "line": 376
+          },
+          {
+            "sourceFile": "packages/sdk-node/test/methods.spec.ts",
+            "column": 30,
+            "line": 382
+          },
+          {
+            "sourceFile": "packages/sdk-node/test/methods.spec.ts",
+            "column": 30,
+            "line": 387
           },
           {
             "sourceFile": "packages/sdk-node/test/methods.spec.ts",
             "column": 32,
-            "line": 774
+            "line": 799
           },
           {
             "sourceFile": "packages/sdk-node/test/methods.spec.ts",
             "column": 30,
-            "line": 955
+            "line": 980
           }
         ],
         ".kt": [
@@ -977,21 +972,6 @@
             "line": 20
           },
           {
-            "sourceFile": "examples/python/hackathon_app/looker.py",
-            "column": 23,
-            "line": 107
-          },
-          {
-            "sourceFile": "examples/python/hackathon_app/looker.py",
-            "column": 12,
-            "line": 137
-          },
-          {
-            "sourceFile": "examples/python/hackathon_app/looker.py",
-            "column": 4,
-            "line": 218
-          },
-          {
             "sourceFile": "python/tests/integration/test_methods.py",
             "column": 4,
             "line": 59
@@ -1045,12 +1025,12 @@
           {
             "sourceFile": "packages/sdk-node/test/methods.spec.ts",
             "column": 12,
-            "line": 457
+            "line": 482
           },
           {
             "sourceFile": "packages/sdk-node/test/methods.spec.ts",
             "column": 12,
-            "line": 468
+            "line": 493
           }
         ],
         ".swift": [
@@ -1075,66 +1055,6 @@
             "sourceFile": "examples/python/disable_users_by_email.py",
             "column": 20,
             "line": 34
-          },
-          {
-            "sourceFile": "examples/python/hackathon_app/looker.py",
-            "column": 16,
-            "line": 98
-          },
-          {
-            "sourceFile": "examples/python/hackathon_app/looker.py",
-            "column": 20,
-            "line": 134
-          },
-          {
-            "sourceFile": "examples/python/hackathon_app/tests/integration/test_looker.py",
-            "column": 16,
-            "line": 22
-          },
-          {
-            "sourceFile": "examples/python/hackathon_app/tests/integration/test_looker.py",
-            "column": 12,
-            "line": 50
-          },
-          {
-            "sourceFile": "examples/python/hackathon_app/tests/integration/test_looker.py",
-            "column": 11,
-            "line": 124
-          },
-          {
-            "sourceFile": "examples/python/hackathon_app/tests/integration/test_looker.py",
-            "column": 11,
-            "line": 125
-          },
-          {
-            "sourceFile": "examples/python/hackathon_app/tests/integration/test_looker.py",
-            "column": 11,
-            "line": 126
-          },
-          {
-            "sourceFile": "examples/python/hackathon_app/tests/integration/test_looker.py",
-            "column": 11,
-            "line": 127
-          },
-          {
-            "sourceFile": "examples/python/hackathon_app/tests/integration/test_looker.py",
-            "column": 15,
-            "line": 131
-          },
-          {
-            "sourceFile": "examples/python/hackathon_app/tests/integration/test_looker.py",
-            "column": 15,
-            "line": 134
-          },
-          {
-            "sourceFile": "examples/python/hackathon_app/tests/integration/test_looker.py",
-            "column": 15,
-            "line": 137
-          },
-          {
-            "sourceFile": "examples/python/hackathon_app/tests/integration/test_looker.py",
-            "column": 15,
-            "line": 140
           },
           {
             "sourceFile": "python/tests/integration/test_methods.py",
@@ -1176,7 +1096,7 @@
           {
             "sourceFile": "packages/sdk-node/test/methods.spec.ts",
             "column": 8,
-            "line": 498
+            "line": 523
           }
         ],
         ".kt": [
@@ -1239,17 +1159,17 @@
           {
             "sourceFile": "packages/sdk-node/test/methods.spec.ts",
             "column": 42,
-            "line": 240
+            "line": 265
           },
           {
             "sourceFile": "packages/sdk-node/test/methods.spec.ts",
             "column": 32,
-            "line": 764
+            "line": 789
           },
           {
             "sourceFile": "packages/sdk-node/test/methods.spec.ts",
             "column": 38,
-            "line": 789
+            "line": 814
           }
         ],
         ".kt": [
@@ -1459,22 +1379,22 @@
           {
             "sourceFile": "packages/sdk-node/test/methods.spec.ts",
             "column": 35,
-            "line": 232
+            "line": 257
           },
           {
             "sourceFile": "packages/sdk-node/test/methods.spec.ts",
             "column": 34,
-            "line": 376
+            "line": 401
           },
           {
             "sourceFile": "packages/sdk-node/test/methods.spec.ts",
             "column": 8,
-            "line": 388
+            "line": 413
           },
           {
             "sourceFile": "packages/sdk-node/test/methods.spec.ts",
             "column": 10,
-            "line": 409
+            "line": 434
           }
         ],
         ".swift": [
@@ -1527,401 +1447,6 @@
             "sourceFile": "kotlin/src/test/KotlinExample.kt",
             "column": 42,
             "line": 37
-          }
-        ]
-      }
-    },
-    "all_user_attributes": {
-      "operationId": "all_user_attributes",
-      "calls": {
-        ".py": [
-          {
-            "sourceFile": "examples/python/hackathon_app/looker.py",
-            "column": 17,
-            "line": 35
-          },
-          {
-            "sourceFile": "examples/python/hackathon_app/looker.py",
-            "column": 21,
-            "line": 187
-          }
-        ],
-        ".kt": [
-          {
-            "sourceFile": "kotlin/build/spotless/spotlessKotlin/src/test/TestMethods.kt",
-            "column": 14,
-            "line": 506
-          },
-          {
-            "sourceFile": "kotlin/src/test/TestMethods.kt",
-            "column": 14,
-            "line": 506
-          }
-        ]
-      }
-    },
-    "create_user_attribute": {
-      "operationId": "create_user_attribute",
-      "calls": {
-        ".py": [
-          {
-            "sourceFile": "examples/python/hackathon_app/looker.py",
-            "column": 17,
-            "line": 42
-          }
-        ]
-      }
-    },
-    "all_roles": {
-      "operationId": "all_roles",
-      "calls": {
-        ".py": [
-          {
-            "sourceFile": "examples/python/hackathon_app/looker.py",
-            "column": 16,
-            "line": 62
-          },
-          {
-            "sourceFile": "examples/python/hackathon_app/tests/integration/test_looker.py",
-            "column": 16,
-            "line": 69
-          }
-        ],
-        ".kt": [
-          {
-            "sourceFile": "kotlin/build/spotless/spotlessKotlin/src/test/TestMethods.kt",
-            "column": 14,
-            "line": 451
-          },
-          {
-            "sourceFile": "kotlin/src/test/TestMethods.kt",
-            "column": 14,
-            "line": 451
-          }
-        ],
-        ".ts": [
-          {
-            "sourceFile": "packages/hackathon/src/models/Hacker.ts",
-            "column": 43,
-            "line": 297
-          }
-        ]
-      }
-    },
-    "create_user": {
-      "operationId": "create_user",
-      "calls": {
-        ".py": [
-          {
-            "sourceFile": "examples/python/hackathon_app/looker.py",
-            "column": 19,
-            "line": 114
-          },
-          {
-            "sourceFile": "python/tests/integration/test_methods.py",
-            "column": 11,
-            "line": 28
-          },
-          {
-            "sourceFile": "python/tests/integration/test_methods.py",
-            "column": 15,
-            "line": 93
-          },
-          {
-            "sourceFile": "python/tests/integration/test_methods.py",
-            "column": 8,
-            "line": 197
-          }
-        ],
-        ".kt": [
-          {
-            "sourceFile": "kotlin/src/test/TestSmoke.kt",
-            "column": 19,
-            "line": 20
-          }
-        ],
-        ".ts": [
-          {
-            "sourceFile": "packages/sdk-node/test/methods.spec.ts",
-            "column": 10,
-            "line": 157
-          },
-          {
-            "sourceFile": "packages/sdk-node/test/methods.spec.ts",
-            "column": 12,
-            "line": 444
-          }
-        ],
-        ".swift": [
-          {
-            "sourceFile": "swift/looker/Tests/lookerTests/smokeTests.swift",
-            "column": 31,
-            "line": 75
-          }
-        ]
-      }
-    },
-    "all_groups": {
-      "operationId": "all_groups",
-      "calls": {
-        ".py": [
-          {
-            "sourceFile": "examples/python/hackathon_app/looker.py",
-            "column": 36,
-            "line": 127
-          },
-          {
-            "sourceFile": "examples/python/hackathon_app/looker.py",
-            "column": 13,
-            "line": 169
-          },
-          {
-            "sourceFile": "examples/python/hackathon_app/tests/integration/test_looker.py",
-            "column": 13,
-            "line": 63
-          }
-        ],
-        ".rb": [
-          {
-            "sourceFile": "examples/ruby/all_users_to_group.rb",
-            "column": 13,
-            "line": 10
-          }
-        ],
-        ".kt": [
-          {
-            "sourceFile": "kotlin/build/spotless/spotlessKotlin/src/test/TestMethods.kt",
-            "column": 14,
-            "line": 320
-          },
-          {
-            "sourceFile": "kotlin/src/test/TestMethods.kt",
-            "column": 14,
-            "line": 320
-          }
-        ]
-      }
-    },
-    "create_user_credentials_email_password_reset": {
-      "operationId": "create_user_credentials_email_password_reset",
-      "calls": {
-        ".py": [
-          {
-            "sourceFile": "examples/python/hackathon_app/looker.py",
-            "column": 33,
-            "line": 138
-          }
-        ]
-      }
-    },
-    "create_user_credentials_email": {
-      "operationId": "create_user_credentials_email",
-      "calls": {
-        ".py": [
-          {
-            "sourceFile": "examples/python/hackathon_app/looker.py",
-            "column": 4,
-            "line": 149
-          },
-          {
-            "sourceFile": "python/tests/integration/test_methods.py",
-            "column": 4,
-            "line": 77
-          },
-          {
-            "sourceFile": "python/tests/integration/test_methods.py",
-            "column": 4,
-            "line": 136
-          }
-        ],
-        ".ts": [
-          {
-            "sourceFile": "packages/sdk-node/test/methods.spec.ts",
-            "column": 21,
-            "line": 170
-          },
-          {
-            "sourceFile": "packages/sdk-node/test/methods.spec.ts",
-            "column": 12,
-            "line": 476
-          }
-        ]
-      }
-    },
-    "send_user_credentials_email_password_reset": {
-      "operationId": "send_user_credentials_email_password_reset",
-      "calls": {
-        ".py": [
-          {
-            "sourceFile": "examples/python/hackathon_app/looker.py",
-            "column": 4,
-            "line": 152
-          }
-        ]
-      }
-    },
-    "create_user_credentials_api3": {
-      "operationId": "create_user_credentials_api3",
-      "calls": {
-        ".py": [
-          {
-            "sourceFile": "examples/python/hackathon_app/looker.py",
-            "column": 11,
-            "line": 159
-          }
-        ]
-      }
-    },
-    "role_groups": {
-      "operationId": "role_groups",
-      "calls": {
-        ".py": [
-          {
-            "sourceFile": "examples/python/hackathon_app/looker.py",
-            "column": 17,
-            "line": 179
-          },
-          {
-            "sourceFile": "examples/python/hackathon_app/tests/integration/test_looker.py",
-            "column": 18,
-            "line": 75
-          }
-        ]
-      }
-    },
-    "create_group": {
-      "operationId": "create_group",
-      "calls": {
-        ".py": [
-          {
-            "sourceFile": "examples/python/hackathon_app/looker.py",
-            "column": 16,
-            "line": 182
-          }
-        ]
-      }
-    },
-    "set_role_groups": {
-      "operationId": "set_role_groups",
-      "calls": {
-        ".py": [
-          {
-            "sourceFile": "examples/python/hackathon_app/looker.py",
-            "column": 8,
-            "line": 185
-          }
-        ]
-      }
-    },
-    "set_user_attribute_group_values": {
-      "operationId": "set_user_attribute_group_values",
-      "calls": {
-        ".py": [
-          {
-            "sourceFile": "examples/python/hackathon_app/looker.py",
-            "column": 8,
-            "line": 192
-          }
-        ]
-      }
-    },
-    "add_group_user": {
-      "operationId": "add_group_user",
-      "calls": {
-        ".py": [
-          {
-            "sourceFile": "examples/python/hackathon_app/looker.py",
-            "column": 4,
-            "line": 200
-          }
-        ]
-      }
-    },
-    "set_user_attribute_user_value": {
-      "operationId": "set_user_attribute_user_value",
-      "calls": {
-        ".py": [
-          {
-            "sourceFile": "examples/python/hackathon_app/looker.py",
-            "column": 4,
-            "line": 209
-          }
-        ]
-      }
-    },
-    "logout": {
-      "operationId": "logout",
-      "calls": {
-        ".py": [
-          {
-            "sourceFile": "examples/python/hackathon_app/tests/integration/test_looker.py",
-            "column": 4,
-            "line": 15
-          }
-        ]
-      }
-    },
-    "delete_user": {
-      "operationId": "delete_user",
-      "calls": {
-        ".py": [
-          {
-            "sourceFile": "examples/python/hackathon_app/tests/integration/test_looker.py",
-            "column": 12,
-            "line": 25
-          },
-          {
-            "sourceFile": "python/tests/integration/test_methods.py",
-            "column": 11,
-            "line": 85
-          },
-          {
-            "sourceFile": "python/tests/integration/test_methods.py",
-            "column": 11,
-            "line": 141
-          },
-          {
-            "sourceFile": "python/tests/integration/test_methods.py",
-            "column": 15,
-            "line": 205
-          }
-        ],
-        ".kt": [
-          {
-            "sourceFile": "kotlin/src/test/TestSmoke.kt",
-            "column": 25,
-            "line": 143
-          }
-        ],
-        ".ts": [
-          {
-            "sourceFile": "packages/sdk-node/test/methods.spec.ts",
-            "column": 23,
-            "line": 195
-          },
-          {
-            "sourceFile": "packages/sdk-node/test/methods.spec.ts",
-            "column": 38,
-            "line": 479
-          }
-        ],
-        ".swift": [
-          {
-            "sourceFile": "swift/looker/Tests/lookerTests/smokeTests.swift",
-            "column": 27,
-            "line": 251
-          }
-        ]
-      }
-    },
-    "user_attribute_user_values": {
-      "operationId": "user_attribute_user_values",
-      "calls": {
-        ".py": [
-          {
-            "sourceFile": "examples/python/hackathon_app/tests/integration/test_looker.py",
-            "column": 24,
-            "line": 85
           }
         ]
       }
@@ -2009,12 +1534,12 @@
           {
             "sourceFile": "packages/sdk-node/test/methods.spec.ts",
             "column": 10,
-            "line": 322
+            "line": 347
           },
           {
             "sourceFile": "packages/sdk-node/test/methods.spec.ts",
             "column": 33,
-            "line": 532
+            "line": 557
           }
         ],
         ".swift": [
@@ -2108,7 +1633,7 @@
           {
             "sourceFile": "packages/sdk-node/test/methods.spec.ts",
             "column": 35,
-            "line": 405
+            "line": 430
           }
         ],
         ".swift": [
@@ -2281,12 +1806,12 @@
           {
             "sourceFile": "packages/sdk-node/test/methods.spec.ts",
             "column": 37,
-            "line": 626
+            "line": 651
           },
           {
             "sourceFile": "packages/sdk-node/test/methods.spec.ts",
             "column": 12,
-            "line": 783
+            "line": 808
           }
         ],
         ".swift": [
@@ -2516,12 +2041,12 @@
           {
             "sourceFile": "packages/sdk-node/test/methods.spec.ts",
             "column": 36,
-            "line": 700
+            "line": 725
           },
           {
             "sourceFile": "packages/sdk-node/test/methods.spec.ts",
             "column": 35,
-            "line": 711
+            "line": 736
           }
         ]
       }
@@ -2550,12 +2075,12 @@
           {
             "sourceFile": "packages/sdk-node/test/methods.spec.ts",
             "column": 12,
-            "line": 848
+            "line": 873
           },
           {
             "sourceFile": "packages/sdk-node/test/methods.spec.ts",
             "column": 12,
-            "line": 856
+            "line": 881
           }
         ]
       }
@@ -2638,6 +2163,30 @@
             "sourceFile": "examples/ruby/all_git_branches.rb",
             "column": 16,
             "line": 15
+          }
+        ]
+      }
+    },
+    "all_groups": {
+      "operationId": "all_groups",
+      "calls": {
+        ".rb": [
+          {
+            "sourceFile": "examples/ruby/all_users_to_group.rb",
+            "column": 13,
+            "line": 10
+          }
+        ],
+        ".kt": [
+          {
+            "sourceFile": "kotlin/build/spotless/spotlessKotlin/src/test/TestMethods.kt",
+            "column": 14,
+            "line": 320
+          },
+          {
+            "sourceFile": "kotlin/src/test/TestMethods.kt",
+            "column": 14,
+            "line": 320
           }
         ]
       }
@@ -3083,7 +2632,7 @@
           {
             "sourceFile": "packages/sdk-node/test/methods.spec.ts",
             "column": 12,
-            "line": 792
+            "line": 817
           }
         ],
         ".py": [
@@ -3273,17 +2822,17 @@
           {
             "sourceFile": "packages/sdk-node/test/methods.spec.ts",
             "column": 14,
-            "line": 632
+            "line": 657
           },
           {
             "sourceFile": "packages/sdk-node/test/methods.spec.ts",
             "column": 14,
-            "line": 642
+            "line": 667
           },
           {
             "sourceFile": "packages/sdk-node/test/methods.spec.ts",
             "column": 14,
-            "line": 645
+            "line": 670
           }
         ],
         ".py": [
@@ -3351,7 +2900,7 @@
           {
             "sourceFile": "packages/sdk-node/test/methods.spec.ts",
             "column": 34,
-            "line": 271
+            "line": 296
           }
         ],
         ".py": [
@@ -3445,7 +2994,7 @@
           {
             "sourceFile": "packages/sdk-node/test/methods.spec.ts",
             "column": 40,
-            "line": 587
+            "line": 612
           }
         ]
       }
@@ -3899,6 +3448,30 @@
         ]
       }
     },
+    "all_roles": {
+      "operationId": "all_roles",
+      "calls": {
+        ".kt": [
+          {
+            "sourceFile": "kotlin/build/spotless/spotlessKotlin/src/test/TestMethods.kt",
+            "column": 14,
+            "line": 451
+          },
+          {
+            "sourceFile": "kotlin/src/test/TestMethods.kt",
+            "column": 14,
+            "line": 451
+          }
+        ],
+        ".ts": [
+          {
+            "sourceFile": "packages/hackathon/src/models/Hacker.ts",
+            "column": 43,
+            "line": 297
+          }
+        ]
+      }
+    },
     "role": {
       "operationId": "role",
       "calls": {
@@ -3967,6 +3540,23 @@
         ]
       }
     },
+    "all_user_attributes": {
+      "operationId": "all_user_attributes",
+      "calls": {
+        ".kt": [
+          {
+            "sourceFile": "kotlin/build/spotless/spotlessKotlin/src/test/TestMethods.kt",
+            "column": 14,
+            "line": 506
+          },
+          {
+            "sourceFile": "kotlin/src/test/TestMethods.kt",
+            "column": 14,
+            "line": 506
+          }
+        ]
+      }
+    },
     "user_attribute": {
       "operationId": "user_attribute",
       "calls": {
@@ -4013,7 +3603,7 @@
           {
             "sourceFile": "kotlin/src/test/TestMethods.kt",
             "column": 14,
-            "line": 542
+            "line": 565
           }
         ]
       }
@@ -4030,7 +3620,93 @@
           {
             "sourceFile": "kotlin/src/test/TestMethods.kt",
             "column": 23,
-            "line": 544
+            "line": 567
+          }
+        ]
+      }
+    },
+    "create_user_attribute": {
+      "operationId": "create_user_attribute",
+      "calls": {
+        ".kt": [
+          {
+            "sourceFile": "kotlin/src/test/TestMethods.kt",
+            "column": 47,
+            "line": 552
+          }
+        ],
+        ".ts": [
+          {
+            "sourceFile": "packages/sdk-node/test/methods.spec.ts",
+            "column": 10,
+            "line": 230
+          }
+        ]
+      }
+    },
+    "delete_user_attribute": {
+      "operationId": "delete_user_attribute",
+      "calls": {
+        ".kt": [
+          {
+            "sourceFile": "kotlin/src/test/TestMethods.kt",
+            "column": 19,
+            "line": 554
+          }
+        ],
+        ".ts": [
+          {
+            "sourceFile": "packages/sdk-node/test/methods.spec.ts",
+            "column": 21,
+            "line": 242
+          }
+        ]
+      }
+    },
+    "create_user": {
+      "operationId": "create_user",
+      "calls": {
+        ".kt": [
+          {
+            "sourceFile": "kotlin/src/test/TestSmoke.kt",
+            "column": 19,
+            "line": 20
+          }
+        ],
+        ".ts": [
+          {
+            "sourceFile": "packages/sdk-node/test/methods.spec.ts",
+            "column": 10,
+            "line": 157
+          },
+          {
+            "sourceFile": "packages/sdk-node/test/methods.spec.ts",
+            "column": 12,
+            "line": 469
+          }
+        ],
+        ".py": [
+          {
+            "sourceFile": "python/tests/integration/test_methods.py",
+            "column": 11,
+            "line": 28
+          },
+          {
+            "sourceFile": "python/tests/integration/test_methods.py",
+            "column": 15,
+            "line": 93
+          },
+          {
+            "sourceFile": "python/tests/integration/test_methods.py",
+            "column": 8,
+            "line": 197
+          }
+        ],
+        ".swift": [
+          {
+            "sourceFile": "swift/looker/Tests/lookerTests/smokeTests.swift",
+            "column": 31,
+            "line": 75
           }
         ]
       }
@@ -4049,12 +3725,12 @@
           {
             "sourceFile": "packages/sdk-node/test/methods.spec.ts",
             "column": 10,
-            "line": 250
+            "line": 275
           },
           {
             "sourceFile": "packages/sdk-node/test/methods.spec.ts",
             "column": 10,
-            "line": 255
+            "line": 280
           }
         ],
         ".py": [
@@ -4078,6 +3754,54 @@
         ]
       }
     },
+    "delete_user": {
+      "operationId": "delete_user",
+      "calls": {
+        ".kt": [
+          {
+            "sourceFile": "kotlin/src/test/TestSmoke.kt",
+            "column": 25,
+            "line": 143
+          }
+        ],
+        ".ts": [
+          {
+            "sourceFile": "packages/sdk-node/test/methods.spec.ts",
+            "column": 23,
+            "line": 195
+          },
+          {
+            "sourceFile": "packages/sdk-node/test/methods.spec.ts",
+            "column": 38,
+            "line": 504
+          }
+        ],
+        ".py": [
+          {
+            "sourceFile": "python/tests/integration/test_methods.py",
+            "column": 11,
+            "line": 85
+          },
+          {
+            "sourceFile": "python/tests/integration/test_methods.py",
+            "column": 11,
+            "line": 141
+          },
+          {
+            "sourceFile": "python/tests/integration/test_methods.py",
+            "column": 15,
+            "line": 205
+          }
+        ],
+        ".swift": [
+          {
+            "sourceFile": "swift/looker/Tests/lookerTests/smokeTests.swift",
+            "column": 27,
+            "line": 251
+          }
+        ]
+      }
+    },
     "default_color_collection": {
       "operationId": "default_color_collection",
       "calls": {
@@ -4097,12 +3821,12 @@
           {
             "sourceFile": "packages/sdk-node/test/methods.spec.ts",
             "column": 37,
-            "line": 269
+            "line": 294
           },
           {
             "sourceFile": "packages/sdk-node/test/methods.spec.ts",
             "column": 39,
-            "line": 281
+            "line": 306
           }
         ],
         ".py": [
@@ -4145,12 +3869,12 @@
           {
             "sourceFile": "packages/sdk-node/test/methods.spec.ts",
             "column": 12,
-            "line": 277
+            "line": 302
           },
           {
             "sourceFile": "packages/sdk-node/test/methods.spec.ts",
             "column": 23,
-            "line": 283
+            "line": 308
           }
         ],
         ".py": [
@@ -8273,6 +7997,35 @@
         ]
       }
     },
+    "create_user_credentials_email": {
+      "operationId": "create_user_credentials_email",
+      "calls": {
+        ".ts": [
+          {
+            "sourceFile": "packages/sdk-node/test/methods.spec.ts",
+            "column": 21,
+            "line": 170
+          },
+          {
+            "sourceFile": "packages/sdk-node/test/methods.spec.ts",
+            "column": 12,
+            "line": 501
+          }
+        ],
+        ".py": [
+          {
+            "sourceFile": "python/tests/integration/test_methods.py",
+            "column": 4,
+            "line": 77
+          },
+          {
+            "sourceFile": "python/tests/integration/test_methods.py",
+            "column": 4,
+            "line": 136
+          }
+        ]
+      }
+    },
     "delete_dashboard": {
       "operationId": "delete_dashboard",
       "calls": {
@@ -8292,22 +8045,22 @@
           {
             "sourceFile": "packages/sdk-node/test/methods.spec.ts",
             "column": 10,
-            "line": 509
+            "line": 534
           },
           {
             "sourceFile": "packages/sdk-node/test/methods.spec.ts",
             "column": 10,
-            "line": 524
+            "line": 549
           },
           {
             "sourceFile": "packages/sdk-node/test/methods.spec.ts",
             "column": 10,
-            "line": 554
+            "line": 579
           },
           {
             "sourceFile": "packages/sdk-node/test/methods.spec.ts",
             "column": 10,
-            "line": 565
+            "line": 590
           }
         ],
         ".py": [
@@ -8346,7 +8099,7 @@
           {
             "sourceFile": "packages/sdk-node/test/methods.spec.ts",
             "column": 14,
-            "line": 863
+            "line": 888
           }
         ],
         ".py": [
@@ -8365,7 +8118,7 @@
           {
             "sourceFile": "packages/sdk-node/test/methods.spec.ts",
             "column": 14,
-            "line": 892
+            "line": 917
           }
         ],
         ".py": [
