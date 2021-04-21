@@ -38,8 +38,10 @@
     "webpack-cli": "^3.3.11"
   },
   "dependencies": {
+    "@looker/components-test-utils": "^1.1.3",
     "@looker/components": "^1.1.3",
     "@looker/design-tokens": "^1.1.3",
+    "@looker/sdk-codegen": "^21.0.12",
     "prism-react-renderer": "^1.2.0",
     "react": "^16.13.1",
     "react-dom": "^16.13.1",
