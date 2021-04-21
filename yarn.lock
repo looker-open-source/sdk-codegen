@@ -2205,11 +2205,6 @@
     react-i18next "11.8.8"
     tabbable "^5.1.6"
 
-"@looker/components-test-utils@^0.9.29":
-  version "0.9.29"
-  resolved "https://registry.yarnpkg.com/@looker/components-test-utils/-/components-test-utils-0.9.29.tgz#5e61437806c9a26c2d4a4759eb2ca406eee8e73d"
-  integrity sha512-m+JJ9rmvveWJRGF3vZRQo8cI35dTac1gW5pkEbs67pa5uIasyfTfI/kDWDiW7NbBClWX9aVlnpl3elsGnbt2Lw==
-
 "@looker/components-test-utils@^1.1.3":
   version "1.1.3"
   resolved "https://registry.yarnpkg.com/@looker/components-test-utils/-/components-test-utils-1.1.3.tgz#53ac11522cc7d485178c1a1d89f0751d8af88475"
