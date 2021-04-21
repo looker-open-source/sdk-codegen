@@ -113,7 +113,7 @@ export const CodeDisplay: FC<CodeDisplayProps> = ({
                   if (pattern !== '' && text.includes(pattern)) {
                     tokenProps.className += ' match'
                   }
-                  return <Span key={key} {...tokenProps} />
+                  return <span key={key} {...tokenProps} />
                 })}
               </LineContent>
             </Line>
