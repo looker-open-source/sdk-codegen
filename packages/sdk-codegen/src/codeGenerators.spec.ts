@@ -30,6 +30,7 @@ const config = TestConfig()
 
 describe('generator factory', () => {
   describe('findGenerator', () => {
+    const typeScript = 'TypeScript'
     it('returns undefined for invalid language', () => {
       const actual = findGenerator('not here')
       expect(actual).not.toBeDefined()
@@ -62,18 +63,18 @@ describe('generator factory', () => {
     it('returns generator by file extension', () => {
       let actual = findGenerator('.ts')
       expect(actual).toBeDefined()
-      expect(actual?.language).toEqual('Typescript')
+      expect(actual?.language).toEqual(typeScript)
       actual = findGenerator('.TSX')
       expect(actual).toBeDefined()
-      expect(actual?.language).toEqual('Typescript')
+      expect(actual?.language).toEqual(typeScript)
     })
     it('returns generator by implicit file extension', () => {
       let actual = findGenerator('ts')
       expect(actual).toBeDefined()
-      expect(actual?.language).toEqual('Typescript')
+      expect(actual?.language).toEqual(typeScript)
       actual = findGenerator('TSX')
       expect(actual).toBeDefined()
-      expect(actual?.language).toEqual('Typescript')
+      expect(actual?.language).toEqual(typeScript)
     })
   })
 
