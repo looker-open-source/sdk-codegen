@@ -35,7 +35,7 @@ import { DocSDKs } from './DocSDKs'
 
 describe('DocSDKs', () => {
   let store: Store<RootState>
-  const supportedLanguages = codeGenerators.map((g) => g.label || g.language)
+  const supportedLanguages = codeGenerators.map((g) => g.language)
   const pattern = new RegExp(`${supportedLanguages.join('|')}`)
 
   beforeAll(() => {
