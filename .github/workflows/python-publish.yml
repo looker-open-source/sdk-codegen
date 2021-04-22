@@ -1,18 +1,12 @@
 name: Python Publish to PYPI
 on:
-  # Automatic release based on either creating a published release or
-  # publishing a draft release (creating a draft release will not trigger the
-  # "release" event type according to the docs).
-  # The workflow file version used is that from the tag corresponding to the
-  # release. This is why the "workflow_dispatch" trigger is configured as well:
-  # in case we need to manually re-publish a tag using a modified workflow
   release:
-    types: [created, published]
+    types: published
 
   workflow_dispatch:
     inputs:
-      tag:
-        description: 'tag to release'
+      ref:
+        description: 'commit/tag/branch to release from'
         required: true
 
 defaults:
@@ -31,7 +25,7 @@ jobs:
     steps:
       - uses: actions/checkout@v2
         with:
-          ref: ${{ github.event.release.tag_name || github.event.inputs.tag }}
+          ref: ${{ github.event.release.tag_name || github.event.inputs.ref }}
 
       - uses: actions/setup-python@v2
         with:
