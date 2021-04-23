@@ -131,7 +131,7 @@ import java.util.*
 
   // TODO create methodHeader(IMethod) and typeHeader(IType) https://kotlinlang.org/docs/reference/kotlin-doc.html
   commentHeader(indent: string, text: string | undefined, commentStr = ' * ') {
-    if (!text) return ''
+    if (this.noComment || !text) return ''
     if (commentStr === ' ') {
       return `${indent}/**\n\n${commentBlock(
         text,

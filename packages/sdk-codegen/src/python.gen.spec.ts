@@ -285,6 +285,19 @@ def render_task_results(
       expect(actual).toEqual(expected)
     })
 
+    it('noComment binary return type render_task_results', () => {
+      const method = apiTestModel.methods.render_task_results
+      const expected = `def render_task_results(
+    self,
+    render_task_id: str,
+    transport_options: Optional[transport.TransportOptions] = None,
+) -> bytes:
+`
+      gen.noComment = true
+      const actual = gen.methodSignature('', method)
+      gen.noComment = false
+      expect(actual).toEqual(expected)
+    })
     it('binary or string return type run_url_encoded_query', () => {
       const method = apiTestModel.methods.run_url_encoded_query
       const expected = `# ### Run an URL encoded query.

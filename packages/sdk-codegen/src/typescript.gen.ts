@@ -210,7 +210,7 @@ export class ${this.packageName}Stream extends APIMethods {
   }
 
   commentHeader(indent: string, text: string | undefined, commentStr = ' * ') {
-    if (!text) return ''
+    if (this.noComment || !text) return ''
     const commentPrefix =
       text.includes(' License') && text.includes('Copyright (c)') ? '/*' : '/**'
     if (commentStr === ' ') {

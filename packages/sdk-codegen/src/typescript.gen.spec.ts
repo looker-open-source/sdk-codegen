@@ -586,6 +586,19 @@ async create_user_credentials_email(
       const actual = gen.methodSignature('', method)
       expect(actual).toEqual(expected)
     })
+    it('noComment optional body and additional param', () => {
+      const method = apiTestModel.methods.create_user_credentials_email
+      expect(method).toBeDefined()
+      const expected = `async create_user_credentials_email(
+  user_id: number,
+  body: Partial<IWriteCredentialsEmail>,
+  fields?: string, options?: Partial<ITransportSettings>): Promise<SDKResponse<ICredentialsEmail, IError | IValidationError>> {
+`
+      gen.noComment = true
+      const actual = gen.methodSignature('', method)
+      gen.noComment = false
+      expect(actual).toEqual(expected)
+    })
     it('no params', () => {
       const method = apiTestModel.methods.all_datagroups
       expect(method).toBeDefined()

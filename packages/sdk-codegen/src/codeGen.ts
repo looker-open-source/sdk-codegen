@@ -168,6 +168,9 @@ export interface ICodeGen {
    */
   commentStr: string
 
+  /** Generate comments in source code? */
+  noComment: boolean
+
   /**
    * string representation of null value
    * e.g. Python None, C# null, Delphi nil
@@ -735,6 +738,7 @@ export abstract class CodeGen implements ICodeGen {
 
   indentStr = '  '
   commentStr = '// '
+  noComment = false
   nullStr = 'null'
   endTypeStr = ''
   transport = 'rtl'
@@ -1106,6 +1110,7 @@ export abstract class CodeGen implements ICodeGen {
   }
 
   comment(indent: string, description: string) {
+    if (this.noComment) return ''
     return commentBlock(description, indent, this.commentStr)
   }
 
@@ -1114,6 +1119,7 @@ export abstract class CodeGen implements ICodeGen {
     text: string | undefined,
     _commentStr?: string
   ) {
+    if (this.noComment) return ''
     return text ? `${this.comment(indent, text)}\n` : ''
   }
 
