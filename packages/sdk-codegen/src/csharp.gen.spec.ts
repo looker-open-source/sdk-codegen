@@ -89,6 +89,21 @@ describe('c# generator', () => {
       expect(actual).toEqual(expected)
     })
 
+    it('noComment type', () => {
+      const type = apiTestModel.types.AccessToken
+      const expected = `public class AccessToken : SdkModel
+{
+  public string? access_token { get; set; } = null;
+  public string? token_type { get; set; } = null;
+  public long? expires_in { get; set; } = null;
+  public string? refresh_token { get; set; } = null;
+}`
+      gen.noComment = true
+      const actual = gen.declareType(indent, type)
+      gen.noComment = false
+      expect(actual).toEqual(expected)
+    })
+
     it('with special names', () => {
       const type = apiTestModel.types.HyphenType
       const actual = gen.declareType(indent, type)
@@ -202,6 +217,24 @@ public async Task<SdkResponse<TSuccess, Exception>> run_sql_query<TSuccess>(
       { "download", download }},null,options);
 }`
       const actual = gen.declareMethod(indent, method)
+      expect(actual).toEqual(expected)
+    })
+    it('noComment method with multiple return types', () => {
+      const method = apiTestModel.methods.run_sql_query
+      const expected = `public async Task<SdkResponse<TSuccess, Exception>> run_sql_query<TSuccess>(
+  string slug,
+  string result_format,
+  string? download = null,
+  ITransportSettings? options = null) where TSuccess : class
+{
+    slug = SdkUtils.EncodeParam(slug);
+    result_format = SdkUtils.EncodeParam(result_format);
+  return await AuthRequest<TSuccess, Exception>(HttpMethod.Post, $"/sql_queries/{slug}/run/{result_format}", new Values {
+      { "download", download }},null,options);
+}`
+      gen.noComment = true
+      const actual = gen.declareMethod(indent, method)
+      gen.noComment = false
       expect(actual).toEqual(expected)
     })
     it('generates a method with a single return type', () => {

@@ -64,7 +64,7 @@ class AlignColumnWriter {
         result +=
           rowSize - 1 === colIndex ? col : align(col, this.sizes[colIndex])
       })
-      result += '\n'
+      result = result.trimRight() + '\n'
     })
     return result
   }
@@ -133,12 +133,14 @@ export class GoGen extends CodeGen {
   }
 
   commentHeader(indent: string, text: string | undefined) {
+    if (this.noComment) return ''
     return text
       ? `${indent}/*\n\n${commentBlock(text, indent, '')}\n\n${indent}*/\n`
       : ''
   }
 
   comment(indent: string, description: string) {
+    if (this.noComment) return ''
     return commentBlock(description, indent, this.commentStr)
   }
 
@@ -481,7 +483,7 @@ import (
         let propertyValues = ''
         const num = type as EnumType
         const typeName = this.capitalize(type.name)
-        props.push(`type ${typeName} string`) // todo: handle other types then string
+        props.push(`type ${typeName} string`) // todo: handle other types than string
         num.values.forEach((value) => {
           // props.push(this.declareEnumValue(bump, value, typeName))
           this.declareEnumValue(bump, value, typeName, writer)

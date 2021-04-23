@@ -26,24 +26,26 @@
 
 import { TestConfig } from './testUtils'
 import { IEnumType } from './sdkModels'
-import { KotlinGen } from './kotlin.gen'
+import { GoGen } from './go.gen'
 
 const config = TestConfig()
 const apiTestModel = config.apiTestModel
-const gen = new KotlinGen(apiTestModel)
+const gen = new GoGen(apiTestModel)
 const indent = ''
 
-describe('Kotlin generator', () => {
+describe('Go generator', () => {
   describe('comment header', () => {
     it('is empty with no comment', () => {
       expect(gen.commentHeader(indent, '')).toEqual('')
     })
 
-    it('is four lines with a two line comment', () => {
-      const expected = `/**
- * foo
- * bar
- */
+    it('is multiple lines with a two line comment', () => {
+      const expected = `/*
+
+foo
+bar
+
+*/
 `
       expect(gen.commentHeader(indent, 'foo\nbar')).toEqual(expected)
     })
@@ -54,47 +56,36 @@ describe('Kotlin generator', () => {
       const type = apiTestModel.types.PermissionType as IEnumType
       expect(type).toBeDefined()
       expect(type.values).toEqual(['view', 'edit'])
-      const expected = `/**
- * Type of permission: "view" or "edit" Valid values are: "view", "edit".
- */
-enum class PermissionType : Serializable {
-    view,
-    edit
-}`
+      const expected = `type PermissionType string
+const PermissionType_View PermissionType = "view"
+const PermissionType_Edit PermissionType = "edit"
+`
       const actual = gen.declareType('', type)
       expect(actual).toEqual(expected)
     })
 
-    it('noComment enum type', () => {
-      const type = apiTestModel.types.PermissionType as IEnumType
-      expect(type).toBeDefined()
-      expect(type.values).toEqual(['view', 'edit'])
-      const expected = `enum class PermissionType : Serializable {
-    view,
-    edit
+    it('special needs', () => {
+      const type = apiTestModel.types.HyphenType
+      const expected = `
+type HyphenType struct {
+  ProjectName     *string  \`json:"project_name,omitempty"\`      // A normal variable name
+  ProjectDigest   *string  \`json:"project_digest,omitempty"\`    // A hyphenated property name
+  ComputationTime *float32 \`json:"computation_time,omitempty"\`  // A spaced out property name
+}`
+      const actual = gen.declareType('', type)
+      expect(actual).toEqual(expected)
+    })
+    it('noComment special needs', () => {
+      const type = apiTestModel.types.HyphenType
+      const expected = `
+type HyphenType struct {
+  ProjectName     *string  \`json:"project_name,omitempty"\`
+  ProjectDigest   *string  \`json:"project_digest,omitempty"\`
+  ComputationTime *float32 \`json:"computation_time,omitempty"\`
 }`
       gen.noComment = true
       const actual = gen.declareType('', type)
       gen.noComment = false
-      expect(actual).toEqual(expected)
-    })
-    it('special needs', () => {
-      const type = apiTestModel.types.HyphenType
-      const actual = gen.declareType('', type)
-      const expected = `/**
- * @property project_name A normal variable name (read-only)
- * @property project_digest A hyphenated property name (read-only)
- * @property computation_time A spaced out property name (read-only)
- */
-data class HyphenType (
-    var project_name: String? = null,
-    @get:JsonProperty("project-digest")
-    @param:JsonProperty("project-digest")
-    var project_digest: String? = null,
-    @get:JsonProperty("computation time")
-    @param:JsonProperty("computation time")
-    var computation_time: Float? = null
-) : Serializable`
       expect(actual).toEqual(expected)
     })
   })

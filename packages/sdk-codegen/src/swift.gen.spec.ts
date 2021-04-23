@@ -54,7 +54,6 @@ describe('swift generator', () => {
       const type = apiTestModel.types.PermissionType as IEnumType
       expect(type).toBeDefined()
       expect(type.values).toEqual(['view', 'edit'])
-      const actual = gen.declareType('', type)
       const expected = `/**
  * Type of permission: "view" or "edit" Valid values are: "view", "edit".
  */
@@ -62,6 +61,20 @@ public enum PermissionType: String, Codable {
     case view = "view"
     case edit = "edit"
 }`
+      const actual = gen.declareType('', type)
+      expect(actual).toEqual(expected)
+    })
+    it('noComment enum type', () => {
+      const type = apiTestModel.types.PermissionType as IEnumType
+      expect(type).toBeDefined()
+      expect(type.values).toEqual(['view', 'edit'])
+      const expected = `public enum PermissionType: String, Codable {
+    case view = "view"
+    case edit = "edit"
+}`
+      gen.noComment = true
+      const actual = gen.declareType('', type)
+      gen.noComment = false
       expect(actual).toEqual(expected)
     })
   })
