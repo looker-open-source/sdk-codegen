@@ -7,7 +7,11 @@
     "packages/extension-sdk": {},
     "packages/hackathon": {},
     "packages/sdk-node": {},
-    "packages/sdk": {},
+    "packages/sdk": {
+      "changelog-sections": [
+        {"type": "chore", "section": "Bug Fixes"}
+      ]
+    },
     ".": {
       "release-as": ""
     },
@@ -21,10 +25,14 @@
       "bump-minor-pre-major": true,
       "bump-patch-for-minor-pre-major": true
     },
-    "packages/code-editor": {},
+    "packages/code-editor": {
+      "release-as": "0.0.1"
+    },
     "packages/sdk-codegen-scripts": {},
     "packages/sdk-codegen-utils": {},
-    "packages/sdk-codegen": {},
+    "packages/sdk-codegen": {
+      "release-as": "21.0.14"
+    },
     "packages/sdk-rtl": {},
     "packages/wholly-sheet": {
       "release-as": "",
