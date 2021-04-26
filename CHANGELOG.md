@@ -1,5 +1,18 @@
 # Changelog
 
+## [1.4.0](https://www.github.com/looker-open-source/sdk-codegen/compare/sdk-codegen-all-v1.3.0...sdk-codegen-all-v1.4.0) (2021-04-26)
+
+
+### Features
+
+* add noComment toggle to code generators ([#627](https://www.github.com/looker-open-source/sdk-codegen/issues/627)) ([90bbecb](https://www.github.com/looker-open-source/sdk-codegen/commit/90bbecbeb31c66bda31f6d14abcc50288e6d7ea1)), closes [#626](https://www.github.com/looker-open-source/sdk-codegen/issues/626)
+* adds editor functionality to CodeDisplay ([#615](https://www.github.com/looker-open-source/sdk-codegen/issues/615)) ([b256d14](https://www.github.com/looker-open-source/sdk-codegen/commit/b256d14c279e47f531c8291d11146d07a7b5ad94))
+
+
+### Bug Fixes
+
+* remove deprecated object attribute reference in APIX tests ([#622](https://www.github.com/looker-open-source/sdk-codegen/issues/622)) ([581b351](https://www.github.com/looker-open-source/sdk-codegen/commit/581b3511fdc8431f80d54fd315a12192ceb86382))
+
 ## [1.3.0](https://www.github.com/looker-open-source/sdk-codegen/compare/sdk-codegen-all-v1.2.0...sdk-codegen-all-v1.3.0) (2021-04-21)
 
 

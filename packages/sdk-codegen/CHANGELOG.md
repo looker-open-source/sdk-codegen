@@ -5,6 +5,13 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+### [21.0.14](https://www.github.com/looker-open-source/sdk-codegen/compare/sdk-codegen-v21.0.13...sdk-codegen-v21.0.14) (2021-04-26)
+
+
+### Features
+
+* add noComment toggle to code generators ([#627](https://www.github.com/looker-open-source/sdk-codegen/issues/627)) ([90bbecb](https://www.github.com/looker-open-source/sdk-codegen/commit/90bbecbeb31c66bda31f6d14abcc50288e6d7ea1)), closes [#626](https://www.github.com/looker-open-source/sdk-codegen/issues/626)
+
 ### [21.0.13](https://www.github.com/looker-open-source/sdk-codegen/compare/sdk-codegen-v21.0.12...sdk-codegen-v21.0.13) (2021-04-21)
 
 

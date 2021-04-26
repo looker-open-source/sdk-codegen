@@ -5,6 +5,30 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+### [0.9.4](https://www.github.com/looker-open-source/sdk-codegen/compare/api-explorer-v0.9.3...api-explorer-v0.9.4) (2021-04-26)
+
+
+### Features
+
+* adds editor functionality to CodeDisplay ([#615](https://www.github.com/looker-open-source/sdk-codegen/issues/615)) ([b256d14](https://www.github.com/looker-open-source/sdk-codegen/commit/b256d14c279e47f531c8291d11146d07a7b5ad94))
+
+
+### Bug Fixes
+
+* remove deprecated object attribute reference in APIX tests ([#622](https://www.github.com/looker-open-source/sdk-codegen/issues/622)) ([581b351](https://www.github.com/looker-open-source/sdk-codegen/commit/581b3511fdc8431f80d54fd315a12192ceb86382))
+
+
+### Dependencies
+
+* The following workspace dependencies were updated
+  * dependencies
+    * @looker/run-it bumped from ^0.9.3 to ^0.9.4
+    * @looker/sdk bumped from ^21.4.1 to ^21.4.2
+    * @looker/sdk-codegen bumped from ^21.0.13 to ^21.0.14
+  * devDependencies
+    * @looker/sdk-codegen-scripts bumped from ^21.0.13 to ^21.0.14
+    * @looker/sdk-node bumped from ^21.4.2 to ^21.4.3
+
 ### [0.9.3](https://www.github.com/looker-open-source/sdk-codegen/compare/api-explorer-v0.9.2...api-explorer-v0.9.3) (2021-04-21)
 
 
