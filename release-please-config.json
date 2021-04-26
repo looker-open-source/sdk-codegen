@@ -4,9 +4,7 @@
   "packages": {
     "packages/extension-api-explorer": {},
     "packages/extension-sdk-react": {},
-    "packages/extension-sdk": {
-      "release-as": "21.4.2"
-    },
+    "packages/extension-sdk": {},
     "packages/hackathon": {},
     "packages/sdk-node": {},
     "packages/sdk": {},
@@ -23,14 +21,10 @@
       "bump-minor-pre-major": true,
       "bump-patch-for-minor-pre-major": true
     },
-    "packages/code-editor": {
-      "release-as": "0.0.1"
-    },
+    "packages/code-editor": {},
     "packages/sdk-codegen-scripts": {},
     "packages/sdk-codegen-utils": {},
-    "packages/sdk-codegen": {
-      "release-as": "21.0.13"
-    },
+    "packages/sdk-codegen": {},
     "packages/sdk-rtl": {},
     "packages/wholly-sheet": {
       "release-as": "",
