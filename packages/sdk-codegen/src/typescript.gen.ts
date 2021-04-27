@@ -95,7 +95,7 @@ export class TypescriptGen extends CodeGen {
   /** creates a full @looker/sdk-rtl import statement if one is required */
   rtlImportStatement() {
     const rtl = this.rtlImports()
-    return rtl ? `\nimport { ${rtl} } from '@looker/sdk-rtl'\n` : ''
+    return rtl ? `\nimport type { ${rtl} } from '@looker/sdk-rtl'\n` : ''
   }
 
   methodsPrologue(_indent: string) {
