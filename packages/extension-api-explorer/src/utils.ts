@@ -23,7 +23,7 @@
  SOFTWARE.
 
  */
-import { IApixEnvAdaptor } from '@looker/api-explorer/src/utils'
+import { IApixEnvAdaptor, ThemeOverrides } from '@looker/api-explorer/src/utils'
 import { ExtensionSDK } from '@looker/extension-sdk'
 
 /**
@@ -42,5 +42,17 @@ export class ExtensionEnvAdaptor implements IApixEnvAdaptor {
 
   async localStorageRemoveItem(key: string) {
     await this.extensionSdk.localStorageRemoveItem(key)
+  }
+
+  themeOverrides(): ThemeOverrides {
+    return (this.extensionSdk.lookerHostData || {}).hostType === 'standard'
+      ? {
+          loadGoogleFonts: true,
+          themeCustomizations: {
+            fontFamilies: { brand: 'Google Sans' },
+            colors: { key: '#1A73E8' },
+          },
+        }
+      : {}
   }
 }

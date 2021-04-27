@@ -99,15 +99,11 @@ const ApiExplorer: FC<ApiExplorerProps> = ({
     getSettings()
   }, [envAdaptor, setSdkLanguageAction])
 
+  const themeOverrides = envAdaptor.themeOverrides()
+
   return (
     <>
-      <ComponentsProvider
-        loadGoogleFonts
-        themeCustomizations={{
-          fontFamilies: { brand: 'Google Sans' },
-          colors: { key: '#1A73E8' },
-        }}
-      >
+      <ComponentsProvider {...themeOverrides}>
         <EnvAdaptorContext.Provider value={{ envAdaptor }}>
           <LodeContext.Provider value={{ ...lode }}>
             <SearchContext.Provider

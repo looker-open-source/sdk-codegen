@@ -23,31 +23,34 @@
  SOFTWARE.
 
  */
-import React, { FC } from 'react'
-import {
-  ComponentsProvider,
-  Flex,
-  FlexItem,
-  Heading,
-  Spinner,
-} from '@looker/components'
 import { ThemeOverrides } from '@looker/api-explorer/src/utils'
+import { ExtensionSDK, LookerHostData } from '@looker/extension-sdk'
+import { ExtensionEnvAdaptor } from './utils'
 
-export interface LoaderProps {
-  themeOverrides: ThemeOverrides
+const googleFontOverrides = {
+  loadGoogleFonts: true,
+  themeCustomizations: {
+    fontFamilies: { brand: 'Google Sans' },
+    colors: { key: '#1A73E8' },
+  },
 }
 
-export const Loader: FC<LoaderProps> = ({ themeOverrides }) => (
-  <ComponentsProvider {...themeOverrides}>
-    <Flex flexDirection="column" justifyContent="center" mt="25%">
-      <FlexItem alignSelf="center">
-        <Spinner color="key" size={150} />
-      </FlexItem>
-      <FlexItem mt="large" alignSelf="center">
-        <Heading color="key" as="h2">
-          Loading API Specifications
-        </Heading>
-      </FlexItem>
-    </Flex>
-  </ComponentsProvider>
-)
+describe('ExtensionEnvAdaptor', () => {
+  test.each([
+    [undefined, {}],
+    ['standard', googleFontOverrides],
+    ['embed', {}],
+    ['spartan', {}],
+  ])(
+    'returns correct font overrides',
+    (hostType?: string, expectedOverrides?: ThemeOverrides) => {
+      expect(
+        new ExtensionEnvAdaptor({
+          lookerHostData: {
+            hostType,
+          } as Readonly<LookerHostData>,
+        } as ExtensionSDK).themeOverrides()
+      ).toEqual(expectedOverrides)
+    }
+  )
+})

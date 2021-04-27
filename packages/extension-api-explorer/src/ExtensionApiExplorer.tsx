@@ -130,7 +130,7 @@ export const ExtensionApiExplorer: FC = () => {
           {specs ? (
             <ApiExplorer specs={specs} envAdaptor={extensionEnvAdaptor} />
           ) : (
-            <Loader />
+            <Loader themeOverrides={extensionEnvAdaptor.themeOverrides()} />
           )}
         </>
       </RunItProvider>
