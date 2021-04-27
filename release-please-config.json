@@ -2,7 +2,9 @@
   "plugins": ["node-workspace"],
   "release-as": "",
   "packages": {
-    "packages/extension-api-explorer": {},
+    "packages/extension-api-explorer": {
+      "release-as": "21.4.5"
+    },
     "packages/extension-sdk-react": {},
     "packages/extension-sdk": {
       "release-as": "21.4.5"
