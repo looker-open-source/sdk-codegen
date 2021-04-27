@@ -1,5 +1,16 @@
 # Changelog
 
+### [0.9.5](https://www.github.com/looker-open-source/sdk-codegen/compare/run-it-v0.9.4...run-it-v0.9.5) (2021-04-27)
+
+
+### Dependencies
+
+* The following workspace dependencies were updated
+  * dependencies
+    * @looker/sdk bumped from ^21.4.2 to ^21.4.3
+    * @looker/sdk-codegen bumped from ^21.0.14 to ^21.0.15
+    * @looker/code-editor bumped from ^0.0.1 to ^0.0.2
+
 ### [0.9.4](https://www.github.com/looker-open-source/sdk-codegen/compare/run-it-v0.9.3...run-it-v0.9.4) (2021-04-26)
 
 

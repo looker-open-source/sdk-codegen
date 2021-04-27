@@ -1,5 +1,12 @@
 # Changelog
 
+### [1.4.1](https://www.github.com/looker-open-source/sdk-codegen/compare/sdk-codegen-all-v1.4.0...sdk-codegen-all-v1.4.1) (2021-04-27)
+
+
+### Bug Fixes
+
+* added a missing "import type" statement to the TS SDK ([#632](https://www.github.com/looker-open-source/sdk-codegen/issues/632)) ([59c0f3d](https://www.github.com/looker-open-source/sdk-codegen/commit/59c0f3d418ca557c65e5690435ee2eca96c5231d))
+
 ## [1.4.0](https://www.github.com/looker-open-source/sdk-codegen/compare/sdk-codegen-all-v1.3.0...sdk-codegen-all-v1.4.0) (2021-04-26)
 
 
