@@ -4,7 +4,9 @@
   "packages": {
     "packages/extension-api-explorer": {},
     "packages/extension-sdk-react": {},
-    "packages/extension-sdk": {},
+    "packages/extension-sdk": {
+      "release-as": "21.4.5"
+    },
     "packages/hackathon": {},
     "packages/sdk-node": {},
     "packages/sdk": {},
