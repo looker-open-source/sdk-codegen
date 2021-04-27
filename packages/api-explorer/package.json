@@ -59,7 +59,7 @@
     "@looker/sdk": "^21.4.3",
     "@looker/sdk-codegen": "^21.0.15",
     "@looker/sdk-rtl": "^21.0.12",
-    "@looker/code-editor": "^0.0.2",
+    "@looker/code-editor": "^0.1.0",
     "history": "^4.10.1",
     "lodash": "^4.17.19",
     "react": "^16.13.1",
