@@ -252,6 +252,20 @@ export interface RouteChangeData {
 }
 
 /**
+ * Looker host type.
+ * standard - Standard Looker host with the navigation bar.
+ * embed - Embedded Looker host.
+ * spartan - Spartan Looker host.
+ */
+export type HostType = 'standard' | 'embed' | 'spartan'
+
+/**
+ * Extension mount type.
+ * Fullscreen mount.
+ */
+export type MountType = 'fullscreen'
+
+/**
  * Initialization data. Looker host data.
  */
 export interface LookerHostData {
@@ -272,9 +286,25 @@ export interface LookerHostData {
    */
   routeState?: any
   /**
-   * hostUrl url of Looker host
+   * Origin of Looker host
+   * @deprecated
    */
   hostUrl?: string
+  /**
+   * Origin of Looker host
+   * <code>Looker >=21.8</code>
+   */
+  hostOrigin?: string
+  /**
+   * Looker host type (standard, embed, spartan)
+   * <code>Looker >=21.8</code>
+   */
+  hostType?: HostType
+  /**
+   * Extension mount type.
+   * <code>Looker >=21.8</code>
+   */
+  mountType?: MountType
   /**
    * Extension context data
    */
