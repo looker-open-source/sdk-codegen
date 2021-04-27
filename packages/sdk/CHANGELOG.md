@@ -5,6 +5,13 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+### [21.4.3](https://www.github.com/looker-open-source/sdk-codegen/compare/sdk-v21.4.2...sdk-v21.4.3) (2021-04-27)
+
+
+### Bug Fixes
+
+* added a missing "import type" statement to the TS SDK ([#632](https://www.github.com/looker-open-source/sdk-codegen/issues/632)) ([59c0f3d](https://www.github.com/looker-open-source/sdk-codegen/commit/59c0f3d418ca557c65e5690435ee2eca96c5231d))
+
 ### [21.4.2](https://www.github.com/looker-open-source/sdk-codegen/compare/sdk-v21.4.1...sdk-v21.4.2) (2021-04-26)
 
 
