@@ -2236,19 +2236,7 @@
     styled-system "^5.1.5"
     uuid "^8.3.2"
 
-"@looker/design-tokens@0.9.27":
-  version "0.9.27"
-  resolved "https://registry.yarnpkg.com/@looker/design-tokens/-/design-tokens-0.9.27.tgz#667ce852a0702bbeb28c98181db9bb3a41a7751b"
-  integrity sha512-2Jzo3i/yeCJS7dWrByJ7b0NI/oh+MBymUMO9p1vYVgTx2LUdv+7QDSMBU5T+SgNWY5fckfjooDwmuQuKWstwJw==
-  dependencies:
-    "@styled-system/props" "^5.1.5"
-    "@styled-system/should-forward-prop" "5.1.5"
-    "@types/styled-system" "^5.1.10"
-    lodash "^4.17.20"
-    polished "^4.0.5"
-    styled-system "^5.1.5"
-
-"@looker/design-tokens@^1.1.3":
+"@looker/design-tokens@1.1.3", "@looker/design-tokens@^1.1.3":
   version "1.1.3"
   resolved "https://registry.yarnpkg.com/@looker/design-tokens/-/design-tokens-1.1.3.tgz#620ef2be3de589b64b92e76f379f194a97a3d46f"
   integrity sha512-Is9GoNsXCWSvf32AQclBh8ynVs6F+RfJ22t6jBwYAvRpnLOb8VV+wqGjY1t2lZFSTTPEnM4JOr6I9H2EPgDLBA==

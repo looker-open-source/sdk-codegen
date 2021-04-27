@@ -50,7 +50,7 @@
     "register": "SUPPRESS_NO_CONFIG_WARNING=1 ts-node -O '{ \"module\": \"commonjs\", \"target\": \"es2019\" }' packages/sdk-codegen-scripts/scripts/register.ts",
     "test": "yarn jest",
     "test:ts": "yarn jest --reporters=default --reporters=jest-junit",
-    "test:apix": "yarn jest packages/api-explorer packages/run-it packages/code-editor",
+    "test:apix": "yarn jest packages/api-explorer packages/run-it packages/code-editor  packages/extension-api-explorer",
     "test:iphone": "xcodebuild test -project swift/looker/looker.xcodeproj -scheme looker-Package -sdk iphonesimulator -destination 'platform=iOS Simulator,name=iPhone 11,OS=13.4.1' | xcpretty --test --color",
     "test:gen": "yarn jest packages/sdk-codegen",
     "test:sdk": "yarn jest packages/sdk",
