@@ -549,12 +549,22 @@ class TestMethods {
                 // Now that Transport.kt uses GSon, this null property will be stripped from the request payload
                 hidden_value_domain_whitelist=null
             )
-            val actual = sdk.ok<UserAttribute>(sdk.create_user_attribute(body))
+            val groups = sdk.ok<Array<Group>>(sdk.all_groups("id, name"))
+            val group = groups.first()
+
+            val all = sdk.ok<Array<UserAttribute>>(sdk.all_user_attributes("id, name"))
+            var attribute = all.find { a -> a.name == body.name}
+            if (attribute == null) {
+                attribute = sdk.ok<UserAttribute>(sdk.create_user_attribute(body))
+            }
+            val attrGroup = UserAttributeGroupValue(group_id=group.id!!, user_attribute_id=attribute.id!!, value_is_hidden=false, value="1.2.3.4")
+            sdk.ok<Array<UserAttributeGroupValue>>(sdk.set_user_attribute_group_values(attribute.id!!, arrayOf(attrGroup))).first()
             // We won't get here when there's an error
-            sdk.ok(sdk.delete_user_attribute(actual.id!!))
+            sdk.delete_user_attribute_group_value(group.id!!, attribute.id!!)
+            sdk.delete_user_attribute(attribute.id!!)
         } catch (e: java.lang.Error) {
             val msg = e.toString()
-            assertTrue(msg.contains("POST /user_attributes"))
+            assertTrue(msg.contains("POST /user_attributes"), msg)
             assertTrue(false, "create_user_attribute should have removed hidden_value_domain_whitelist")
         }
     }
