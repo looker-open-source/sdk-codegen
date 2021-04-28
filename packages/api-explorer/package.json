@@ -1,6 +1,6 @@
 {
   "name": "@looker/api-explorer",
-  "version": "0.9.5",
+  "version": "0.9.6",
   "description": "Looker API Explorer",
   "main": "lib/esm/index.js",
   "typings": "lib/index.d.ts",
@@ -55,7 +55,7 @@
     "@styled-icons/material": "^10.28.0",
     "@styled-icons/material-outlined": "^10.28.0",
     "@styled-icons/material-rounded": "^10.28.0",
-    "@looker/run-it": "^0.9.5",
+    "@looker/run-it": "^0.9.6",
     "@looker/sdk": "^21.4.3",
     "@looker/sdk-codegen": "^21.0.15",
     "@looker/sdk-rtl": "^21.0.12",

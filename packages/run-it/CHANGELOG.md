@@ -1,5 +1,13 @@
 # Changelog
 
+### [0.9.6](https://www.github.com/looker-open-source/sdk-codegen/compare/run-it-v0.9.5...run-it-v0.9.6) (2021-04-27)
+
+
+### Features
+
+* APIX now uses google font appropriately ([#636](https://www.github.com/looker-open-source/sdk-codegen/issues/636)) ([ed932d6](https://www.github.com/looker-open-source/sdk-codegen/commit/ed932d6744fd3c102bfff7417643667bb57aee00))
+* extension framework identifies looker host type ([#634](https://www.github.com/looker-open-source/sdk-codegen/issues/634)) ([c6c6f64](https://www.github.com/looker-open-source/sdk-codegen/commit/c6c6f64bf4d2ec5eef4ac2f082868f80d11a180d))
+
 ### [0.9.5](https://www.github.com/looker-open-source/sdk-codegen/compare/run-it-v0.9.4...run-it-v0.9.5) (2021-04-27)
 
 

@@ -1,5 +1,15 @@
 # Changelog
 
+### [21.4.5](https://www.github.com/looker-open-source/sdk-codegen/compare/hackathon-v21.4.4...hackathon-v21.4.5) (2021-04-27)
+
+
+### Dependencies
+
+* The following workspace dependencies were updated
+  * dependencies
+    * @looker/extension-sdk bumped from ^21.4.4 to ^21.4.5
+    * @looker/extension-sdk-react bumped from ^21.4.4 to ^21.4.5
+
 ### [21.4.4](https://www.github.com/looker-open-source/sdk-codegen/compare/hackathon-v21.4.3...hackathon-v21.4.4) (2021-04-27)
 
 

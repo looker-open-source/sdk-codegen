@@ -5,6 +5,13 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+### [21.4.5](https://www.github.com/looker-open-source/sdk-codegen/compare/extension-sdk-v21.4.4...extension-sdk-v21.4.5) (2021-04-27)
+
+
+### Features
+
+* extension framework identifies looker host type ([#634](https://www.github.com/looker-open-source/sdk-codegen/issues/634)) ([c6c6f64](https://www.github.com/looker-open-source/sdk-codegen/commit/c6c6f64bf4d2ec5eef4ac2f082868f80d11a180d))
+
 ### [21.4.4](https://www.github.com/looker-open-source/sdk-codegen/compare/extension-sdk-v21.4.3...extension-sdk-v21.4.4) (2021-04-27)
 
 

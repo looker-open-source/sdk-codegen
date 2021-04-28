@@ -1,5 +1,22 @@
 # Changelog
 
+### [21.4.5](https://www.github.com/looker-open-source/sdk-codegen/compare/extension-api-explorer-v21.4.4...extension-api-explorer-v21.4.5) (2021-04-27)
+
+
+### Features
+
+* APIX now uses google font appropriately ([#636](https://www.github.com/looker-open-source/sdk-codegen/issues/636)) ([ed932d6](https://www.github.com/looker-open-source/sdk-codegen/commit/ed932d6744fd3c102bfff7417643667bb57aee00))
+
+
+### Dependencies
+
+* The following workspace dependencies were updated
+  * dependencies
+    * @looker/api-explorer bumped from ^0.9.5 to ^0.9.6
+    * @looker/extension-sdk bumped from ^21.4.4 to ^21.4.5
+    * @looker/extension-sdk-react bumped from ^21.4.4 to ^21.4.5
+    * @looker/run-it bumped from ^0.9.5 to ^0.9.6
+
 ### [21.4.4](https://www.github.com/looker-open-source/sdk-codegen/compare/extension-api-explorer-v21.4.3...extension-api-explorer-v21.4.4) (2021-04-27)
 
 
