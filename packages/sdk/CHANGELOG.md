@@ -5,12 +5,26 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+### [21.4.3](https://www.github.com/looker-open-source/sdk-codegen/compare/sdk-v21.4.2...sdk-v21.4.3) (2021-04-27)
+
+
+### Bug Fixes
+
+* added a missing "import type" statement to the TS SDK ([#632](https://www.github.com/looker-open-source/sdk-codegen/issues/632)) ([59c0f3d](https://www.github.com/looker-open-source/sdk-codegen/commit/59c0f3d418ca557c65e5690435ee2eca96c5231d))
+
+### [21.4.2](https://www.github.com/looker-open-source/sdk-codegen/compare/sdk-v21.4.1...sdk-v21.4.2) (2021-04-26)
+
+
+### Bug Fixes
+
+* use "import type" in the TypeScript SDK ([#623](https://www.github.com/looker-open-source/sdk-codegen/issues/623)) ([c7b5bf8](https://www.github.com/looker-open-source/sdk-codegen/commit/c7b5bf8135db37256b8b119240f1c5a6103dde63))
+
 ### [21.4.1](https://www.github.com/looker-open-source/sdk-codegen/compare/sdk-v21.4.0...sdk-v21.4.1) (2021-04-15)
 
 
 ### Features
 
-* Typescript SDK tree-shaking support ([#580](https://www.github.com/looker-open-source/sdk-codegen/issues/580)) ([8b7f2f0](https://www.github.com/looker-open-source/sdk-codegen/commit/8b7f2f00ab1a765a04bd460a1ca88e9b7bd66a98))
+* TypeScript SDK tree-shaking support ([#580](https://www.github.com/looker-open-source/sdk-codegen/issues/580)) ([8b7f2f0](https://www.github.com/looker-open-source/sdk-codegen/commit/8b7f2f00ab1a765a04bd460a1ca88e9b7bd66a98))
 
 
 ### Dependencies
@@ -30,7 +44,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Bug Fixes
 
-* Typescript SDK generator import logic ([#547](https://www.github.com/looker-open-source/sdk-codegen/issues/547)) ([c5aa033](https://www.github.com/looker-open-source/sdk-codegen/commit/c5aa033c749a2db8a0f98d5b8f49dc287fad06a2))
+* TypeScript SDK generator import logic ([#547](https://www.github.com/looker-open-source/sdk-codegen/issues/547)) ([c5aa033](https://www.github.com/looker-open-source/sdk-codegen/commit/c5aa033c749a2db8a0f98d5b8f49dc287fad06a2))
 
 
 ### Dependencies

@@ -67,11 +67,11 @@ describe('SdkLanguageSelector', () => {
 
     await act(async () => {
       await userEvent.click(selector)
-      await userEvent.click(screen.getByRole('option', { name: 'Typescript' }))
+      await userEvent.click(screen.getByRole('option', { name: 'TypeScript' }))
       await waitFor(() => {
         expect(localStorage.setItem).toHaveBeenLastCalledWith(
           EnvAdaptorConstants.LOCALSTORAGE_SDK_LANGUAGE_KEY,
-          'Typescript'
+          'TypeScript'
         )
       })
     })

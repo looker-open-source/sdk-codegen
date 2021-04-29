@@ -47,6 +47,8 @@ export interface IExampleLink {
   permalink: string
   /** text to show on hover */
   tooltip: string
+  /** line number text */
+  lineNumber: string
 }
 
 export type SDKCalls = ISDKCall[]
@@ -175,6 +177,7 @@ export const exampleLink = (
     permalink: link,
     description: summarize(lode, call),
     tooltip: `${call.sourceFile} line ${call.line}`,
+    lineNumber: call.line.toString(),
   }
 }
 
@@ -182,8 +185,8 @@ export const exampleLink = (
 /** map file extension to language name */
 export const extensionToLanguage = {
   '.py': 'Python',
-  '.ts': 'Typescript',
-  '.tsx': 'Typescript',
+  '.ts': 'TypeScript',
+  '.tsx': 'TypeScript',
   '.cs': 'C#',
   '.kt': 'Kotlin',
   '.swift': 'Swift',

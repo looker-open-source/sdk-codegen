@@ -33,6 +33,8 @@ module.exports = {
   moduleDirectories: ['./node_modules', './packages'],
   moduleFileExtensions: ['js', 'jsx', 'ts', 'tsx', 'json', 'node'],
   moduleNameMapper: {
+    '@looker/api-explorer/src/utils':
+      '<rootDir>/packages/api-explorer/src/utils',
     '@looker/sdk-codegen-utils/src': '<rootDir>/packages/sdk-codegen-utils/src',
     '@looker/((?!components-test-utils|components|design|icons|chatty)(.+))$':
       '<rootDir>/packages/$1/src',

@@ -54,7 +54,6 @@ describe('Kotlin generator', () => {
       const type = apiTestModel.types.PermissionType as IEnumType
       expect(type).toBeDefined()
       expect(type.values).toEqual(['view', 'edit'])
-      const actual = gen.declareType('', type)
       const expected = `/**
  * Type of permission: "view" or "edit" Valid values are: "view", "edit".
  */
@@ -62,9 +61,23 @@ enum class PermissionType : Serializable {
     view,
     edit
 }`
+      const actual = gen.declareType('', type)
       expect(actual).toEqual(expected)
     })
 
+    it('noComment enum type', () => {
+      const type = apiTestModel.types.PermissionType as IEnumType
+      expect(type).toBeDefined()
+      expect(type.values).toEqual(['view', 'edit'])
+      const expected = `enum class PermissionType : Serializable {
+    view,
+    edit
+}`
+      gen.noComment = true
+      const actual = gen.declareType('', type)
+      gen.noComment = false
+      expect(actual).toEqual(expected)
+    })
     it('special needs', () => {
       const type = apiTestModel.types.HyphenType
       const actual = gen.declareType('', type)

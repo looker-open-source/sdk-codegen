@@ -26,10 +26,14 @@
 
 import React, { ReactElement } from 'react'
 import { RenderOptions } from '@testing-library/react'
+import { Store } from 'redux'
 
 import { renderWithTheme } from '@looker/components-test-utils'
 import { IDeclarationMine, IExampleMine } from '@looker/sdk-codegen'
 import { LodeContext } from '../context'
+import { RootState } from '../state'
+import { IApixEnvAdaptor } from '../utils'
+import { withReduxProvider } from './redux'
 
 const withLode = (
   consumer: ReactElement<any>,
@@ -51,3 +55,20 @@ export const renderWithLode = (
 ) => {
   return renderWithTheme(withLode(component, examples, declarations), options)
 }
+
+export const renderWithReduxProviderAndLode = (
+  component: ReactElement<any>,
+  examples: IExampleMine,
+  declarations?: IDeclarationMine,
+  store?: Store<RootState>,
+  envAdaptor?: IApixEnvAdaptor,
+  options?: Omit<RenderOptions, 'queries'>
+) =>
+  renderWithTheme(
+    withReduxProvider(
+      withLode(component, examples, declarations),
+      store,
+      envAdaptor
+    ),
+    options
+  )

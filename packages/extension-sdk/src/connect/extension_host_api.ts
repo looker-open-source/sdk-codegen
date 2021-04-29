@@ -244,6 +244,17 @@ export class ExtensionHostApiImpl implements ExtensionHostApi {
     })
   }
 
+  async clipboardWrite(value: string): Promise<void> {
+    const errorMessage = this.verifyLookerVersion('>=21.7')
+    if (errorMessage) {
+      return Promise.reject(new Error(errorMessage))
+    }
+    return this.sendAndReceive(ExtensionRequestType.CLIPBOARD, {
+      type: 'write',
+      value,
+    })
+  }
+
   async userAttributeSetItem(name: string, value = ''): Promise<boolean> {
     // User attributes added in Looker version 7.13, updated in 7.15
     const errorMessage = this.verifyLookerVersion('>=7.15')

@@ -27,7 +27,10 @@ export {
   renderWithSearch,
   renderWithSearchAndRouter,
 } from './render_with_search'
-export { renderWithLode } from './render_with_lode'
+export {
+  renderWithLode,
+  renderWithReduxProviderAndLode,
+} from './render_with_lode'
 export { renderWithRouter, withRouter } from './router'
 export {
   renderWithRouterAndReduxProvider,

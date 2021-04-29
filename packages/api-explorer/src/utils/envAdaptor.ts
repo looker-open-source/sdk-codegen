@@ -24,6 +24,8 @@
 
  */
 
+import { ThemeCustomizations } from '@looker/design-tokens'
+
 /**
  * NOTE: This interface should describe all methods that require an adaptor when running in standalone vs extension mode
  * Examples include: local storage operations, writing to clipboard and various link navigation functions amongst others
@@ -35,7 +37,34 @@ export interface IApixEnvAdaptor {
   localStorageSetItem(key: string, value: string): void
   /** Method for removing a keyed value from local storage */
   localStorageRemoveItem(key: string): void
+  /** Theme settings for extension */
+  themeOverrides(): ThemeOverrides
 }
+
+/**
+ * Theme overrides used to load google fonts in Google environments only.
+ * Google fonts should NOT be used when it is not obvious that a Google
+ * system is being used (for example an embedded extension).
+ */
+export interface ThemeOverrides {
+  loadGoogleFonts?: boolean
+  themeCustomizations?: ThemeCustomizations
+}
+
+export const getThemeOverrides = (useGoogleFonts: boolean): ThemeOverrides =>
+  useGoogleFonts
+    ? {
+        loadGoogleFonts: true,
+        themeCustomizations: {
+          fontFamilies: { brand: 'Google Sans' },
+          colors: { key: '#1A73E8' },
+        },
+      }
+    : {
+        themeCustomizations: {
+          colors: { key: '#1A73E8' },
+        },
+      }
 
 /**
  * An adaptor class for interacting with browser APIs when running in standalone mode
@@ -51,6 +80,15 @@ export class StandaloneEnvAdaptor implements IApixEnvAdaptor {
 
   async localStorageRemoveItem(key: string) {
     await localStorage.removeItem(key)
+  }
+
+  themeOverrides(): ThemeOverrides {
+    const { hostname } = location
+    return getThemeOverrides(
+      hostname.endsWith('.looker.com') ||
+        hostname.endsWith('.google.com') ||
+        hostname === 'localhost'
+    )
   }
 }
 

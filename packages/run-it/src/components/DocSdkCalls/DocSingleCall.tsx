@@ -25,8 +25,8 @@
  */
 import React, { FC } from 'react'
 import { getCodeGenerator } from '@looker/sdk-codegen'
+import { CodeDisplay } from '@looker/code-editor'
 
-import { CodeStructure } from '../CodeStructure'
 import { DocSdkCallsProps } from './DocSdkCalls'
 
 /**
@@ -41,5 +41,5 @@ export const DocSingleCall: FC<DocSdkCallsProps> = ({
   const generator = getCodeGenerator(sdkLanguage, api)
   const code = generator!.makeTheCall(method, inputs)
 
-  return <CodeStructure code={code} language={sdkLanguage} />
+  return <CodeDisplay code={code} language={sdkLanguage} />
 }

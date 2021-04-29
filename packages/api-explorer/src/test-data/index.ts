@@ -24,3 +24,4 @@
 
  */
 export { api, api40, specs, specState } from './specs'
+export { examples } from './examples'

@@ -141,6 +141,7 @@ export class CSharpGen extends CodeGen {
   codeQuote = '"'
 
   commentHeader(indent: string, text: string | undefined) {
+    if (this.noComment) return ''
     return text ? `${commentBlock(text, indent, '/// ')}\n` : ''
   }
 
@@ -381,7 +382,7 @@ namespace Looker.SDK.API${this.apiRef}
   }
 
   summary(indent: string, summary: string) {
-    if (!summary) return ''
+    if (this.noComment || !summary) return ''
     const nl = summary.indexOf('\n') >= 0 ? '\n' : ''
     return this.commentHeader(indent, `<summary>${nl}${summary}${nl}</summary>`)
   }

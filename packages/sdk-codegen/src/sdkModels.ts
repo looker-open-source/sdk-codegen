@@ -1533,7 +1533,7 @@ export class Type implements IType {
     Object.entries(this.schema.properties || {}).forEach(
       ([propName, propSchema]) => {
         const propType = api.resolveType(propSchema, undefined, propName)
-        // Using class name instead of instanceof check because Typescript
+        // Using class name instead of instanceof check because TypeScript
         // linting complains about declaration order
         if (propType.instanceOf('EnumType')) {
           api.registerEnum(propType, propName)

@@ -31,4 +31,6 @@ export {
   IApixEnvAdaptor,
   StandaloneEnvAdaptor,
   EnvAdaptorConstants,
+  ThemeOverrides,
+  getThemeOverrides,
 } from './envAdaptor'

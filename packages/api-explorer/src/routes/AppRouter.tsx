@@ -28,7 +28,6 @@ import { Redirect, Route, Switch } from 'react-router-dom'
 import { ApiModel, SpecList } from '@looker/sdk-codegen'
 import { OAuthScene, RunItContext } from '@looker/run-it'
 
-import { Looker40SDK } from '@looker/sdk'
 import { HomeScene, MethodScene, TagScene, TypeScene } from '../scenes'
 import { DiffScene } from '../scenes/DiffScene'
 import { diffPath, oAuthPath } from '../utils'
@@ -47,7 +46,7 @@ export const AppRouter: FC<AppRouterProps> = ({
   toggleNavigation,
 }) => {
   const { sdk } = useContext(RunItContext)
-  const maybeOauth = sdk && sdk instanceof Looker40SDK
+  const maybeOauth = sdk && sdk.apiVersion === '4.0'
   return (
     <Switch>
       <Redirect from="/" to={`/${specKey}/`} exact />

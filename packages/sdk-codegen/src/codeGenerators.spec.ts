@@ -30,6 +30,9 @@ const config = TestConfig()
 
 describe('generator factory', () => {
   describe('findGenerator', () => {
+    const typeScript = 'TypeScript'
+    const kotlin = 'Kotlin'
+    const csharp = 'C#'
     it('returns undefined for invalid language', () => {
       const actual = findGenerator('not here')
       expect(actual).not.toBeDefined()
@@ -41,39 +44,39 @@ describe('generator factory', () => {
     it('returns generator by language name', () => {
       const actual = findGenerator('csharp')
       expect(actual).toBeDefined()
-      expect(actual?.language).toEqual('Csharp')
+      expect(actual?.language).toEqual(csharp)
     })
     it('returns generator with language name in any casing', () => {
-      let actual = findGenerator('Kotlin')
+      let actual = findGenerator(kotlin)
       expect(actual).toBeDefined()
-      expect(actual?.language).toEqual('Kotlin')
+      expect(actual?.language).toEqual(kotlin)
       actual = findGenerator('kotlin')
       expect(actual).toBeDefined()
-      expect(actual?.language).toEqual('Kotlin')
+      expect(actual?.language).toEqual(kotlin)
       actual = findGenerator('KOTLIN')
       expect(actual).toBeDefined()
-      expect(actual?.language).toEqual('Kotlin')
+      expect(actual?.language).toEqual(kotlin)
     })
     it('returns generator by language label', () => {
       const actual = findGenerator('c#')
       expect(actual).toBeDefined()
-      expect(actual?.language).toEqual('Csharp')
+      expect(actual?.language).toEqual(csharp)
     })
     it('returns generator by file extension', () => {
       let actual = findGenerator('.ts')
       expect(actual).toBeDefined()
-      expect(actual?.language).toEqual('Typescript')
+      expect(actual?.language).toEqual(typeScript)
       actual = findGenerator('.TSX')
       expect(actual).toBeDefined()
-      expect(actual?.language).toEqual('Typescript')
+      expect(actual?.language).toEqual(typeScript)
     })
     it('returns generator by implicit file extension', () => {
       let actual = findGenerator('ts')
       expect(actual).toBeDefined()
-      expect(actual?.language).toEqual('Typescript')
+      expect(actual?.language).toEqual(typeScript)
       actual = findGenerator('TSX')
       expect(actual).toBeDefined()
-      expect(actual?.language).toEqual('Typescript')
+      expect(actual?.language).toEqual(typeScript)
     })
   })
 

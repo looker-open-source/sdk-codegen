@@ -63,7 +63,7 @@ describe('extension_host_api tests', () => {
     console.error = originalConsoleError
   })
 
-  const createHostApi = (initMessage = {}) => {
+  const createHostApi = (initMessage = {}, lookerVersion = '6.25.0') => {
     const initializedCallback = jest.fn()
     const hostApi = new ExtensionHostApiImpl({
       chattyHost,
@@ -73,7 +73,7 @@ describe('extension_host_api tests', () => {
     const resp = hostApi.handleNotification({
       type: ExtensionNotificationType.INITIALIZE,
       payload: {
-        lookerVersion: '6.25.0',
+        lookerVersion,
         extensionId: 'ks::ks',
         route: '/sandbox',
         hostUrl: 'https://self-signed.looker.com:9999',
@@ -350,6 +350,16 @@ describe('extension_host_api tests', () => {
     expect(sendAndReceiveSpy).toHaveBeenCalledWith('EXTENSION_API_REQUEST', {
       payload: { type: 'remove', name: 'keyName' },
       type: 'LOCAL_STORAGE',
+    })
+    done()
+  })
+
+  it('writes to clipboard', async (done) => {
+    const hostApi = createHostApi({}, '21.7.0')
+    await hostApi.clipboardWrite('ABCD')
+    expect(sendAndReceiveSpy).toHaveBeenCalledWith('EXTENSION_API_REQUEST', {
+      payload: { type: 'write', value: 'ABCD' },
+      type: 'CLIPBOARD',
     })
     done()
   })

@@ -15,7 +15,7 @@ The API Explorer extension can be manually installed and run with a Looker insta
       # file: "bundle.js"
       url: "https://localhost:8080/dist/bundle.js"
       entitlements: {
-         local_storage: no
+         local_storage: yes
          navigation: no
          new_window: no
          raw_api_request: yes

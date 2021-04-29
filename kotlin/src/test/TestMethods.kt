@@ -537,6 +537,29 @@ class TestMethods {
     }
 
     @Test
+    fun testCreateAttribute() {
+        try {
+            val body = WriteUserAttribute(
+                name="git_username",
+                label="Git Username",
+                type="string",
+                value_is_hidden=false,
+                user_can_view=true,
+                user_can_edit=true,
+                // Now that Transport.kt uses GSon, this null property will be stripped from the request payload
+                hidden_value_domain_whitelist=null
+            )
+            val actual = sdk.ok<UserAttribute>(sdk.create_user_attribute(body))
+            // We won't get here when there's an error
+            sdk.ok(sdk.delete_user_attribute(actual.id!!))
+        } catch (e: java.lang.Error) {
+            val msg = e.toString()
+            assertTrue(msg.contains("POST /user_attributes"))
+            assertTrue(false, "create_user_attribute should have removed hidden_value_domain_whitelist")
+        }
+    }
+
+    @Test
     fun testAllWorkspaces() {
         testAll<Workspace, String, Workspace>(
             { sdk.all_workspaces() },

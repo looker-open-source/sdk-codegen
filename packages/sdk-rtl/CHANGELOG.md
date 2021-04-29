@@ -10,12 +10,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Features
 
-* Typescript SDK tree-shaking support ([#580](https://www.github.com/looker-open-source/sdk-codegen/issues/580)) ([8b7f2f0](https://www.github.com/looker-open-source/sdk-codegen/commit/8b7f2f00ab1a765a04bd460a1ca88e9b7bd66a98))
+* TypeScript SDK tree-shaking support ([#580](https://www.github.com/looker-open-source/sdk-codegen/issues/580)) ([8b7f2f0](https://www.github.com/looker-open-source/sdk-codegen/commit/8b7f2f00ab1a765a04bd460a1ca88e9b7bd66a98))
 
 
 ### Bug Fixes
 
-* Typescript OAuth test ([#597](https://www.github.com/looker-open-source/sdk-codegen/issues/597)) ([d84d1fc](https://www.github.com/looker-open-source/sdk-codegen/commit/d84d1fc976b52f01981592eacb3abc8e1aab9f1f))
+* TypeScript OAuth test ([#597](https://www.github.com/looker-open-source/sdk-codegen/issues/597)) ([d84d1fc](https://www.github.com/looker-open-source/sdk-codegen/commit/d84d1fc976b52f01981592eacb3abc8e1aab9f1f))
 
 ### [21.0.11](https://www.github.com/looker-open-source/sdk-codegen/compare/sdk-rtl-v21.0.10...sdk-rtl-v21.0.11) (2021-04-02)
 
@@ -27,7 +27,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Bug Fixes
 
-* Typescript SDK generator import logic ([#547](https://www.github.com/looker-open-source/sdk-codegen/issues/547)) ([c5aa033](https://www.github.com/looker-open-source/sdk-codegen/commit/c5aa033c749a2db8a0f98d5b8f49dc287fad06a2))
+* TypeScript SDK generator import logic ([#547](https://www.github.com/looker-open-source/sdk-codegen/issues/547)) ([c5aa033](https://www.github.com/looker-open-source/sdk-codegen/commit/c5aa033c749a2db8a0f98d5b8f49dc287fad06a2))
 
 ## [21.0.8]
 

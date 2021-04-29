@@ -26,8 +26,8 @@
 import React, { ReactElement } from 'react'
 import { IRawResponse, ResponseMode, responseMode } from '@looker/sdk-rtl'
 import { Paragraph, CodeBlock } from '@looker/components'
+import { CodeDisplay } from '@looker/code-editor'
 
-import { CodeStructure } from '../CodeStructure'
 import { DataGrid, parseCsv, parseJson } from '../DataGrid'
 
 /**
@@ -70,10 +70,9 @@ const ShowJSON = (response: IRawResponse) => {
   const data = parseJson(content)
   const showGrid = isColumnar(data.data)
   const raw = (
-    <CodeStructure
+    <CodeDisplay
       code={JSON.stringify(JSON.parse(response.body), null, 2)}
-      language={'json'}
-      height="85%"
+      transparent
     />
   )
   if (!showGrid) return raw
@@ -117,7 +116,7 @@ const ShowImage = (response: IRawResponse) => {
 
 /** A handler for HTTP type responses */
 const ShowHTML = (response: IRawResponse) => (
-  <CodeStructure language={'html'} code={response.body.toString()} />
+  <CodeDisplay language="html" code={response.body.toString()} transparent />
 )
 
 /**

@@ -38,8 +38,6 @@ export interface IGeneratorSpec {
   extension: RegExp
   /** name of language SDK to generate */
   language: string
-  /** label/alias for language. e.g. C# for csharp */
-  label?: string
   /** path name for legacy generator output. Defaults to language */
   path?: string
   /** code generator constructor */
@@ -61,7 +59,7 @@ export const Generators: Array<IGeneratorSpec> = [
   {
     factory: (api: ApiModel, versions?: IVersionInfo) =>
       new TypescriptGen(api, versions),
-    language: 'Typescript',
+    language: 'TypeScript',
     extension: /\.ts(x?)/gi,
   },
   {
@@ -73,8 +71,7 @@ export const Generators: Array<IGeneratorSpec> = [
   {
     factory: (api: ApiModel, versions?: IVersionInfo) =>
       new CSharpGen(api, versions),
-    language: 'Csharp',
-    label: 'C#',
+    language: 'C#',
     legacy: 'csharp',
     options: '-papiPackage=Looker -ppackageName=looker',
     extension: /\.cs/gi,
@@ -88,7 +85,7 @@ export const Generators: Array<IGeneratorSpec> = [
   {
     factory: (api: ApiModel, versions?: IVersionInfo) =>
       new GoGen(api, versions),
-    language: 'Golang',
+    language: 'Go',
     options: '-papiPackage=Looker -ppackageName=looker',
     extension: /\.go/gi,
   },
@@ -125,7 +122,7 @@ export const Generators: Array<IGeneratorSpec> = [
 export const codeGenerators = Generators.filter((x) => x.factory !== undefined)
 
 /**
- * Matches the code generator based on the language name, alias, or file extension
+ * Matches the code generator based on the language name, alias, file extension, or legacy name
  * @param target label/language/file extension to find in the generator list
  * @returns undefined if the label/language/extension isn't found, otherwise the generator entry
  */
@@ -135,9 +132,9 @@ export const findGenerator = (target: string) => {
   return codeGenerators.find(
     (item) =>
       item.language.toLocaleLowerCase() === target ||
-      item.label?.toLocaleLowerCase() === target ||
       target.match(item.extension) ||
-      ('.' + target).match(item.extension)
+      ('.' + target).match(item.extension) ||
+      item.legacy?.toLocaleLowerCase() === target
   )
 }
 

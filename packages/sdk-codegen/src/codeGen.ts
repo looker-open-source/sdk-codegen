@@ -168,6 +168,9 @@ export interface ICodeGen {
    */
   commentStr: string
 
+  /** Generate comments in source code? */
+  noComment: boolean
+
   /**
    * string representation of null value
    * e.g. Python None, C# null, Delphi nil
@@ -183,13 +186,13 @@ export interface ICodeGen {
   /** argument separator string. Typically ', ' */
   argDelimiter: string
 
-  /** type properties/args expression separator. E.g ': ' for Typescript */
+  /** type properties/args expression separator. E.g ': ' for TypeScript */
   argSetSep: string
 
-  /** hash type properties/args expression separator. E.g ': ' for Typescript */
+  /** hash type properties/args expression separator. E.g ': ' for TypeScript */
   hashSetSep: string
 
-  /** hash key quotes E.g '' for Typescript and '"' for Python */
+  /** hash key quotes E.g '' for TypeScript and '"' for Python */
   hashKeyQuote: string
 
   /** parameter delimiter. Typically ",\n" */
@@ -214,7 +217,7 @@ export interface ICodeGen {
   /** Use named/keyword arguments in calling syntax */
   useNamedArguments: boolean
 
-  /** Mainly for Typescript SDK tree-shaking support. True produces funcs.ext */
+  /** Mainly for TypeScript SDK tree-shaking support. True produces funcs.ext */
   useFunctions: boolean
 
   /** Does this language implement interfaces? True produces methodInterfaces.ext */
@@ -319,7 +322,7 @@ export interface ICodeGen {
    * @param sep spacing to separate value. Could be newline or single space or something else
    * @param exp expression (as valid code fragment) to assign
    *
-   * @example `foo: bar` for Typescript where `name` is "foo", `sep` is ": " and `exp` is "bar"
+   * @example `foo: bar` for TypeScript where `name` is "foo", `sep` is ": " and `exp` is "bar"
    */
   argSet(name: string, sep: string, exp: string): string
 
@@ -735,6 +738,7 @@ export abstract class CodeGen implements ICodeGen {
 
   indentStr = '  '
   commentStr = '// '
+  noComment = false
   nullStr = 'null'
   endTypeStr = ''
   transport = 'rtl'
@@ -1106,6 +1110,7 @@ export abstract class CodeGen implements ICodeGen {
   }
 
   comment(indent: string, description: string) {
+    if (this.noComment) return ''
     return commentBlock(description, indent, this.commentStr)
   }
 
@@ -1114,6 +1119,7 @@ export abstract class CodeGen implements ICodeGen {
     text: string | undefined,
     _commentStr?: string
   ) {
+    if (this.noComment) return ''
     return text ? `${this.comment(indent, text)}\n` : ''
   }
 

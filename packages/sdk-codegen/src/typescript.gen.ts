@@ -48,11 +48,11 @@ import {
  */
 export class TypescriptGen extends CodeGen {
   /**
-   * special case for Typescript output path due to mono repository
+   * special case for TypeScript output path due to mono repository
    */
   codePath = './packages/'
   /**
-   * special case for Typescript output path due to mono repository
+   * special case for TypeScript output path due to mono repository
    */
   useFunctions = true
   useInterfaces = true
@@ -95,19 +95,20 @@ export class TypescriptGen extends CodeGen {
   /** creates a full @looker/sdk-rtl import statement if one is required */
   rtlImportStatement() {
     const rtl = this.rtlImports()
-    return rtl ? `\nimport { ${rtl} } from '@looker/sdk-rtl'\n` : ''
+    return rtl ? `\nimport type { ${rtl} } from '@looker/sdk-rtl'\n` : ''
   }
 
   methodsPrologue(_indent: string) {
     return `
-import { ${this.rtlImports()}APIMethods, IAuthSession, ITransportSettings, encodeParam, SDKResponse } from '@looker/sdk-rtl'
+import type { ${this.rtlImports()}IAuthSession, ITransportSettings, SDKResponse } from '@looker/sdk-rtl'
+import { APIMethods, encodeParam } from '@looker/sdk-rtl'
 /**
  * ${this.warnEditing()}
  *
  */
 import { sdkVersion } from '../constants'
-import { I${this.packageName} } from './methodsInterface'
-import { ${this.typeNames().join(', ')} } from './models'
+import type { I${this.packageName} } from './methodsInterface'
+import type { ${this.typeNames().join(', ')} } from './models'
 
 export class ${this.packageName} extends APIMethods implements I${
       this.packageName
@@ -127,7 +128,8 @@ export class ${this.packageName} extends APIMethods implements I${
 
   functionsPrologue(_indent: string) {
     return `
-import { ${this.rtlImports()}IAPIMethods, ITransportSettings, IAuthSession, encodeParam, SDKResponse, functionalSdk } from '@looker/sdk-rtl'
+import type { ${this.rtlImports()}IAPIMethods, IAuthSession, ITransportSettings, SDKResponse } from '@looker/sdk-rtl'
+import { encodeParam, functionalSdk } from '@looker/sdk-rtl'
 
 /**
  * ${this.warnEditing()}
@@ -135,7 +137,7 @@ import { ${this.rtlImports()}IAPIMethods, ITransportSettings, IAuthSession, enco
  */
 
 import { sdkVersion } from '../constants'
-import { ${this.typeNames().join(', ')} } from './models'
+import type { ${this.typeNames().join(', ')} } from './models'
 
 /**
  * Creates a "functional sdk" that knows the API and Looker release version
@@ -152,12 +154,12 @@ export const functionalSdk${this.apiRef} = (
 
   interfacesPrologue(_indent: string) {
     return `
-import { ${this.rtlImports()} ITransportSettings, SDKResponse } from '@looker/sdk-rtl'
+import type { ${this.rtlImports()} ITransportSettings, SDKResponse } from '@looker/sdk-rtl'
 /**
  * ${this.warnEditing()}
  *
  */
-import { ${this.typeNames().join(', ')} } from './models'
+import type { ${this.typeNames().join(', ')} } from './models'
 
 export interface I${this.packageName} {
 
@@ -167,13 +169,15 @@ export interface I${this.packageName} {
   streamsPrologue(_indent: string): string {
     return `
 import { Readable } from 'readable-stream'
-import { ${this.rtlImports()}APIMethods, IAuthSession, ITransportSettings, encodeParam } from '@looker/sdk-rtl'
+import type { ${this.rtlImports()}IAuthSession, ITransportSettings } from '@looker/sdk-rtl'
+import { APIMethods, encodeParam } from '@looker/sdk-rtl'
+
 /**
  * ${this.warnEditing()}
  *
  */
 import { sdkVersion } from '../constants'
-import { ${this.typeNames().join(', ')} } from './models'
+import type { ${this.typeNames().join(', ')} } from './models'
 
 export class ${this.packageName}Stream extends APIMethods {
   static readonly ApiVersion = '${this.apiVersion}'
@@ -206,7 +210,7 @@ export class ${this.packageName}Stream extends APIMethods {
   }
 
   commentHeader(indent: string, text: string | undefined, commentStr = ' * ') {
-    if (!text) return ''
+    if (this.noComment || !text) return ''
     const commentPrefix =
       text.includes(' License') && text.includes('Copyright (c)') ? '/*' : '/**'
     if (commentStr === ' ') {

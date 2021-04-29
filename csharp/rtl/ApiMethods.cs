@@ -36,7 +36,7 @@ namespace Looker.RTL
                 : $"{AuthSession.Settings.BaseUrl}/api/{ApiVersion}";
         }
 
-        // TODO do we need a factory for the various looker versions similar to Typescript's:
+        // TODO do we need a factory for the various looker versions similar to TypeScript's:
         // static create<T extends APIMethods>(
         // type: new (authSession: IAuthSession) => T,
         // authSession: IAuthSession

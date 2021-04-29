@@ -23,7 +23,7 @@
  SOFTWARE.
 
  */
-import React from 'react'
+import React, { FC } from 'react'
 import {
   ComponentsProvider,
   Flex,
@@ -31,15 +31,14 @@ import {
   Heading,
   Spinner,
 } from '@looker/components'
+import { ThemeOverrides } from '@looker/api-explorer/src/utils'
 
-export const Loader = () => (
-  <ComponentsProvider
-    loadGoogleFonts
-    themeCustomizations={{
-      fontFamilies: { brand: 'Google Sans' },
-      colors: { key: '#1A73E8' },
-    }}
-  >
+export interface LoaderProps {
+  themeOverrides: ThemeOverrides
+}
+
+export const Loader: FC<LoaderProps> = ({ themeOverrides }) => (
+  <ComponentsProvider {...themeOverrides}>
     <Flex flexDirection="column" justifyContent="center" mt="25%">
       <FlexItem alignSelf="center">
         <Spinner color="key" size={150} />

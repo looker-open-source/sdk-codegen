@@ -23,7 +23,11 @@
  SOFTWARE.
 
  */
-import { IApixEnvAdaptor } from '@looker/api-explorer/src/utils'
+import {
+  IApixEnvAdaptor,
+  ThemeOverrides,
+  getThemeOverrides,
+} from '@looker/api-explorer/src/utils'
 import { ExtensionSDK } from '@looker/extension-sdk'
 
 /**
@@ -42,5 +46,12 @@ export class ExtensionEnvAdaptor implements IApixEnvAdaptor {
 
   async localStorageRemoveItem(key: string) {
     await this.extensionSdk.localStorageRemoveItem(key)
+  }
+
+  themeOverrides(): ThemeOverrides {
+    return getThemeOverrides(
+      (this.extensionSdk.lookerHostData || { hostType: 'standard' })
+        .hostType === 'standard'
+    )
   }
 }

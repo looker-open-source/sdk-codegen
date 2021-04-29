@@ -81,10 +81,10 @@ const generatorHelp = () => {
     # Generates all supported SDKs
     yarn gen
 
-    # Generates Typescript and Python SDKs
+    # Generates TypeScript and Python SDKs
     yarn gen ts,py
 
-    # reads specs from './versions.json' and generates Typescript and Python SDKs
+    # reads specs from './versions.json' and generates TypeScript and Python SDKs
     yarn gen ts -v ./versions.json py
 `
   )
