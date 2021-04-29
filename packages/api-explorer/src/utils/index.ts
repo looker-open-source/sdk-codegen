@@ -32,4 +32,5 @@ export {
   StandaloneEnvAdaptor,
   EnvAdaptorConstants,
   ThemeOverrides,
+  getThemeOverrides,
 } from './envAdaptor'

@@ -51,6 +51,21 @@ export interface ThemeOverrides {
   themeCustomizations?: ThemeCustomizations
 }
 
+export const getThemeOverrides = (useGoogleFonts: boolean): ThemeOverrides =>
+  useGoogleFonts
+    ? {
+        loadGoogleFonts: true,
+        themeCustomizations: {
+          fontFamilies: { brand: 'Google Sans' },
+          colors: { key: '#1A73E8' },
+        },
+      }
+    : {
+        themeCustomizations: {
+          colors: { key: '#1A73E8' },
+        },
+      }
+
 /**
  * An adaptor class for interacting with browser APIs when running in standalone mode
  */
@@ -69,17 +84,11 @@ export class StandaloneEnvAdaptor implements IApixEnvAdaptor {
 
   themeOverrides(): ThemeOverrides {
     const { hostname } = location
-    return hostname.endsWith('.looker.com') ||
-      hostname.endsWith('.google.com') ||
-      hostname === 'localhost'
-      ? {
-          loadGoogleFonts: true,
-          themeCustomizations: {
-            fontFamilies: { brand: 'Google Sans' },
-            colors: { key: '#1A73E8' },
-          },
-        }
-      : {}
+    return getThemeOverrides(
+      hostname.endsWith('.looker.com') ||
+        hostname.endsWith('.google.com') ||
+        hostname === 'localhost'
+    )
   }
 }
 

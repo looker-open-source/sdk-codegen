@@ -23,22 +23,18 @@
  SOFTWARE.
 
  */
-import { StandaloneEnvAdaptor, ThemeOverrides } from './envAdaptor'
-
-const googleFontOverrides = {
-  loadGoogleFonts: true,
-  themeCustomizations: {
-    fontFamilies: { brand: 'Google Sans' },
-    colors: { key: '#1A73E8' },
-  },
-}
+import {
+  StandaloneEnvAdaptor,
+  ThemeOverrides,
+  getThemeOverrides,
+} from './envAdaptor'
 
 describe('StandaloneEnvAdaptor', () => {
   test.each([
-    ['www.looker.com', googleFontOverrides],
-    ['www.google.com', googleFontOverrides],
-    ['localhost', googleFontOverrides],
-    ['127.0.0.1', {}],
+    ['www.looker.com', getThemeOverrides(true)],
+    ['www.google.com', getThemeOverrides(true)],
+    ['localhost', getThemeOverrides(true)],
+    ['127.0.0.1', getThemeOverrides(false)],
   ])(
     'returns correct font overrides',
     (hostname: string, expectedOverrides: ThemeOverrides) => {
