@@ -1,6 +1,6 @@
 # Looker SDK Runtime Library
 
-The Looker Typescript/Javascript SDK depends on the runtime code in this package.
+The Looker TypeScript/JavaScript SDK depends on the runtime code in this package.
 
 The source code in this package is almost all completely generic REST request/response processing code.
 

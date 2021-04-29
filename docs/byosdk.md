@@ -10,7 +10,7 @@ The high-level steps for building a new Language SDK include:
 
 1. Create the Language SDK [code generator](#code-generator) by descending from
    [codeGen.ts](/packages/sdk-codegen/src/codeGen.ts) or perhaps the
-   [Typescript generator](/packages/sdk-codegen/src/typescript.gen.ts) or [Python generator](/packages/sdk-codegen/src/python.gen.ts)
+   [TypeScript generator](/packages/sdk-codegen/src/typescript.gen.ts) or [Python generator](/packages/sdk-codegen/src/python.gen.ts)
 
 1. Create [unit](#unit-tests) and [functional](#functional-or-integration-tests) tests
 
@@ -23,7 +23,7 @@ When implementing the syntax and features for the new language SDK, keep in mind
 - [discoverability](/docs/rationale.md#discoverability), and
 - [correctness](/docs/rationale.md#correctness).
 
-Most examples in this document will use the Typescript SDK, which is typically our lead language SDK the other SDKs
+Most examples in this document will use the TypeScript SDK, which is typically our lead language SDK the other SDKs
 follow. The other language SDK implementations found in this repository will have similarly named or designed classes.
 
 ## Run-time Library
@@ -48,7 +48,7 @@ All SDKs implement something like a `readConfig() -> [String: String]` method th
 to determine configuration values. See [securing your SDK credentials](/README.md#securing-your-sdk-credentials) for more information
 on this topic, including links to `readConfig()` examples.
 
-The Typescript SDK configuration support is in [`apiSettings.ts`](/packages/sdk-rtl/src/apiSettings.ts).
+The TypeScript SDK configuration support is in [`apiSettings.ts`](/packages/sdk-rtl/src/apiSettings.ts).
 
 Once the RTL can read the configuration values for `base_url` and API credentials, the HTTP request processor and
 `AuthSession` implementation work can begin.
@@ -221,7 +221,7 @@ In the `ITransport` function parameters shown above:
   `verify_ssl` to `false`) for a specific request.
   - `agentTag` is a string that identifies the SDK language and SDK version. Pass the tag with the `x-looker-appid` header.
 
-The value for AgentTag is assigned in Typescript with the following:
+The value for AgentTag is assigned in TypeScript with the following:
 
 ```ts
 export const agentPrefix = 'TS-SDK'
@@ -253,7 +253,7 @@ The `stream()` implementation:
 - passes the streamable HTTP response to the stream parameter of the method
 - for successful requests, the response body is deserialized into the type indicated for the success value
 
-Here's a Typescript code sample for streaming the download of a query's CSV result:
+Here's a TypeScript code sample for streaming the download of a query's CSV result:
 
 ```ts
   const request: IRequestRunInlineQuery = {
@@ -314,7 +314,7 @@ This section discusses how parameters should be processed by the run-time **befo
 When the codegen project began, there was one method of authenticating for Looker API requests, which was providing the
 API credentials `client_id` and `client_secret` to the API. `AuthSession` is commonly the name of this class.
 Due to the complexities of Node vs. Browser implementations and authentication methods, the reference
-implementation for the Typescript SDK is called [`NodeSession`](/packages/sdk-rtl/src/nodeSession.ts) but for this
+implementation for the TypeScript SDK is called [`NodeSession`](/packages/sdk-rtl/src/nodeSession.ts) but for this
 document we'll pretend it's called `AuthSession`.
 
 Recent (Looker 7.6 and above) API implementations additionally offer an OAuth authentication flow for API calls. Both
@@ -349,11 +349,11 @@ create or retrieve an API authorization token, but typically the `Authorization`
 value as a `Bearer` token.
 
 The `login([sudoUserId])` and `logout()` methods may not be required for a given SDK run-time scenario.
-e.g., for several Browser-based implementations of the Typescript SDK such as same origin requests or as a Looker
+e.g., for several Browser-based implementations of the TypeScript SDK such as same origin requests or as a Looker
 extension, the run-time environment can provide API authentication support without requiring `login()` and `logout()`.
 
 When an SDK supports significantly different runtime behavior, use a different `AuthSession` implementation.
-For example, the Typescript SDK has:
+For example, the TypeScript SDK has:
 
 - [`CSRFSession`](/packages/sdk-rtl/src/CSRFSession.ts) for browser-based same-origin usage
 - [`BrowserSession`](/packages/sdk-rtl/src/browserSession.ts) for browser-based CORS usage
@@ -363,7 +363,7 @@ For example, the Typescript SDK has:
 
 ## Code generator
 
-The code generator "template" is written in Typescript. The `ICodegen` interface (currently found at the bottom of [`sdkModels.ts`](/packages/sdk-codegen/src/sdkModels.ts))
+The code generator "template" is written in TypeScript. The `ICodegen` interface (currently found at the bottom of [`sdkModels.ts`](/packages/sdk-codegen/src/sdkModels.ts))
 describes the properties and methods used to generate an API language binding for an SDK.
 
 [`codeGen.ts`](/packages/sdk-codegen/src/codeGen.ts) is the base implementation of all code generators, and is partially
@@ -405,9 +405,9 @@ request processor **must not** convert the response to `UTF8`.
 by optional parameters.
 
 If the language doesn't have "named parameter" support the generator supports generation of
-[request structures](/docs/rationale.md#request-structures). Typescript is a language without named parameter support, so a
+[request structures](/docs/rationale.md#request-structures). TypeScript is a language without named parameter support, so a
 request interface is created for methods with complex arguments. The code generator's `needRequestTypes` property should
-be set to `true` in this circumstance. In the [Typescript generator](/packages/sdk-codegen/src/typescript.gen.ts),
+be set to `true` in this circumstance. In the [TypeScript generator](/packages/sdk-codegen/src/typescript.gen.ts),
 the `methodHeaderDeclaration` function has this line:
 
 ```ts
@@ -416,9 +416,9 @@ const requestType = this.requestTypeName(method)
 
 If the method requires a request type and `needRequestTypes` is `true`, the [`codeGen.ts`](/packages/sdk-codegen/src/codeGen.ts)
 implementation of `requestTypeName()` will get or create the existing request type and return its name as the result of
-the function. Refer to the Typescript generator for more information if your language needs a request type.
+the function. Refer to the TypeScript generator for more information if your language needs a request type.
 
-See the Typescript SDK [`methods.ts`](/packages/sdk/src/sdk/4.0/methods.ts) for method declaration examples.
+See the TypeScript SDK [`methods.ts`](/packages/sdk/src/sdk/4.0/methods.ts) for method declaration examples.
 
 ### Models
 
@@ -460,7 +460,7 @@ Here's an example `typeMap` for Kotlin:
         case 'ArrayType':
           return { default: this.nullStr, name: `Array<${map.name}>` }
         case 'HashType':
-          // TODO figure out this bizarre string template error either in IntelliJ or Typescript
+          // TODO figure out this bizarre string template error either in IntelliJ or TypeScript
           // return {name: `Map<String,${map.name}>`, default: '{}'}
           if (map.name === 'String') map.name = 'Any' // TODO fix messy hash values
           return { default: this.nullStr, name: 'Map<String' + `,${map.name}>` }
@@ -480,13 +480,13 @@ Here's an example `typeMap` for Kotlin:
   }
 ```
 
-See the Typescript SDK [`models.ts`](/packages/sdk/src/sdk/4.0/models.ts) for type/structure declaration examples.
+See the TypeScript SDK [`models.ts`](/packages/sdk/src/sdk/4.0/models.ts) for type/structure declaration examples.
 
 ### Streams
 
 Streaming declarations are basically the same as [Methods](#methods), but with a parameter for a streaming callback.
 
-See the Typescript SDK [`streams.ts`](/packages/sdk/src/sdk/4.0/streams.ts) for streaming method examples.
+See the TypeScript SDK [`streams.ts`](/packages/sdk/src/sdk/4.0/streams.ts) for streaming method examples.
 
 ### API version tracking
 
@@ -631,7 +631,7 @@ multiple package managers. Choose the package manager that is best supported, mo
 latest versions of the language.
 
 If a "standard" package manager exists for the platform/language, deployment to that package manager must be supported
-before the Language SDK can be placed into _open beta_. For example, the Typescript SDK is available via the
+before the Language SDK can be placed into _open beta_. For example, the TypeScript SDK is available via the
 [Node Package Manager](https://www.npmjs.com/package/@looker/sdk) and
 the Python SDK is on [PyPi](https://pypi.org/project/looker-sdk/).
 

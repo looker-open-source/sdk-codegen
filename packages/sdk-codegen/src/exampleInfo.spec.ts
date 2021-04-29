@@ -36,7 +36,7 @@ describe('exampleInfo', () => {
   it('finds language examples for "render_task"', () => {
     const actual = findExampleLanguages(lode, op)
     expect(actual).toBeDefined()
-    expect(actual).toEqual(['Python', 'Typescript', 'Kotlin', 'Ruby'])
+    expect(actual).toEqual(['Python', 'TypeScript', 'Kotlin', 'Ruby'])
     actual.forEach((language) => {
       const ex = findExamples(lode, language, op)
       expect(ex).toBeDefined()

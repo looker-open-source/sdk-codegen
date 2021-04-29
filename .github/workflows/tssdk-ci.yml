@@ -1,4 +1,4 @@
-name: Typescript SDK CI
+name: TypeScript SDK CI
 on:
   pull_request:
     types:

@@ -444,7 +444,7 @@ import (
         case 'HashType': {
           const mapName =
             type.elementType.name === 'string' ? 'interface{}' : map.name // TODO fix bad API spec, like MergeQuery vis_config
-          // TODO figure out this bizarre string template error either in IntelliJ or Typescript
+          // TODO figure out this bizarre string template error either in IntelliJ or TypeScript
           // return {name: `Map<String,${map.name}>`, default: '{}'}
           return {
             default: this.nullStr,

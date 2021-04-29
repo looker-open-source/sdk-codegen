@@ -61,4 +61,4 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [21.0.4]
 
-- introduces `@looker/node-sdk` for using the Looker Typescript SDK with Node
+- introduces `@looker/node-sdk` for using the Looker TypeScript SDK with Node

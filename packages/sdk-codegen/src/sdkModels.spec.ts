@@ -527,7 +527,7 @@ describe('sdkModels', () => {
         expect(actual.name).toEqual('ResultFormat')
 
         // Returns first enum for same values
-        // the `style` parameter is undefined because it is not part of this tests. Because Typescript arguments are
+        // the `style` parameter is undefined because it is not part of this tests. Because TypeScript arguments are
         // positional only (no named arguments) the parameter must be skipped with an "ignore this" value
         const actual4 = api.resolveType(rf4, undefined, 'Foo')
         expect(actual4.name).toEqual('ResultFormat')

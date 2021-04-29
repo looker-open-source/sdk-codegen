@@ -39,7 +39,7 @@ export const examples: IExampleMine = {
       'sourceFile': 'packages/sdk-codegen/src/codeGen.ts'
     },
     'packages/sdk-codegen/src/typescript.gen.ts': {
-      'summary': 'Typescript',
+      'summary': 'TypeScript',
       'sourceFile': 'packages/sdk-codegen/src/typescript.gen.ts'
     },
     'packages/sdk-codegen/src/python.gen.ts': {

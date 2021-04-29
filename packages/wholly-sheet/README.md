@@ -8,11 +8,11 @@ This package contains routines for treating a GSheet (Google Sheet) as a databas
 
 The original version of WhollySheet is the Python [sheets.py](/examples/python/hackathon_app/sheets.py) created for the initial Looker Hackathon registration application in 2019.
 
-WhollySheet was ported to Typescript for the new Looker-based [Hackathon application](/packages/hackathon) using the [Looker Extension Framework](https://docs.looker.com/data-modeling/extension-framework/extension-framework-intro).
+WhollySheet was ported to TypeScript for the new Looker-based [Hackathon application](/packages/hackathon) using the [Looker Extension Framework](https://docs.looker.com/data-modeling/extension-framework/extension-framework-intro).
 
 ## SheetSDK
 
-The Google API for Javascript can't be used inside the Looker extension framework.
+The Google API for JavaScript can't be used inside the Looker extension framework.
 
 Instead, [`SheetSDK.ts`](src/SheetSDK.ts) uses the Google Sheets API [RESTful endpoints](https://developers.google.com/sheets/api/reference/rest).
 
@@ -73,7 +73,7 @@ WhollySheet supports the following raw value conversions. No raw values should h
 | integer   | `123`                      | `0`              | if the number has no decimal, it will be parsed as integer                                                                                         |
 | float     | `1.23`                     | `0`              | if the number has a decimal, it will be parsed as float                                                                                            |
 | boolean   | `TRUE`                     | `false`          | If it matches a standard set of "true" values, it will be true. Otherwise it will be false.                                                        |
-| Date      | `2020-10-15T00:00:00.005Z` | `noDate`         | Zulu-time date string. If it can be parsed to a Datetime, the value will be a Javascript `Date` value                                              |
+| Date      | `2020-10-15T00:00:00.005Z` | `noDate`         | Zulu-time date string. If it can be parsed to a Datetime, the value will be a JavaScript `Date` value                                              |
 | string[]  | `a,b`                      | `[]`             | Comma-delimited string converted to `string[]`. If the cell is empty, it's an empty array. Otherwise, there will be at least one item in the array |
 
 When converting from typed properties to a raw value array, `undefined`, `null`, and `noDate` will be set to `nilCell` (ASCII character zero), our convention for indicating that cell has no data.
