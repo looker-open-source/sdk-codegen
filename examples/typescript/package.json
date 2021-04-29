@@ -1,7 +1,7 @@
 {
   "name": "sdkexamples",
   "version": "1.0.0",
-  "description": "Looker SDK examples in Typescript/Javascript",
+  "description": "Looker SDK examples in TypeScript/JavaScript",
   "main": "index.ts",
   "author": "Looker",
   "license": "MIT",

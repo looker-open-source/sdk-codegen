@@ -6,9 +6,9 @@ This document will attempt to answer that question by providing Looker's goals a
 
 ## Support for multiple SDK languages
 
-The Looker API is used with a wide variety of languages. Data scientists may like using `R` or `Python` while other customers may want to use `Typescript`, `Javascript`, `Java`, or `C#`.
+The Looker API is used with a wide variety of languages. Data scientists may like using `R` or `Python` while other customers may want to use `TypeScript`, `JavaScript`, `Java`, or `C#`.
 
-At the time of this writing, the SDK code generator only supports `Python` and `Typescript` so the examples used will be based on those languages.
+At the time of this writing, the SDK code generator only supports `Python` and `TypeScript` so the examples used will be based on those languages.
 
 When looking at the languages supported by the existing code generators, we found the patterns and quality of the generated code varied widely. As Looker increases the number of supported client-language SDKs, these differences would become unsupportable.
 
@@ -46,7 +46,7 @@ Prioritizing the parameter declarations minimizes the number of arguments needin
 
 The Looker API specification provides a consistent naming scheme for the methods. For example, functional categories of methods are prefixed with `all`, `delete`, `create`, `update`, or `search`.
 
-Method names are preserved from the specification's `operationId`. No conversion to `CamelCase` or `snake_case` is made by the generator. Even though Typescript does not usually have `snake_case` conventions, no conversion is made, so SDK method names remain identical across languages. Furthermore, every endpoint in the specification has a unique operationId, so the method name is also unique across the entire SDK.
+Method names are preserved from the specification's `operationId`. No conversion to `CamelCase` or `snake_case` is made by the generator. Even though TypeScript does not usually have `snake_case` conventions, no conversion is made, so SDK method names remain identical across languages. Furthermore, every endpoint in the specification has a unique operationId, so the method name is also unique across the entire SDK.
 
 The Python code:
 
@@ -54,7 +54,7 @@ The Python code:
 me = sdk.me("id, first_name, last_name")
 ```
 
-Is nearly identical to the Typescript code:
+Is nearly identical to the TypeScript code:
 
 ```typescript
 me = await sdk.me("id, first_name, last_name")
@@ -62,21 +62,21 @@ me = await sdk.me("id, first_name, last_name")
 
 and that's a good thing.
 
-The generated SDK methods are written to a file called `methods.<ext>`. For Python, this file is called `methods.py` and for Typescript it's `methods.ts`.
+The generated SDK methods are written to a file called `methods.<ext>`. For Python, this file is called `methods.py` and for TypeScript it's `methods.ts`.
 
-The API structures are written to a file called `models.<ext>`. For Python, this file is called `models.py` and for Typescript it's `models.ts`.
+The API structures are written to a file called `models.<ext>`. For Python, this file is called `models.py` and for TypeScript it's `models.ts`.
 
 Whenever support is added for another language, code consistency is re-evaluated, which encourages simplicity and elegance in the generated code implementation.
 
 #### Diverging while remaining consistent
 
-One discovery made during the development of the code generator is that some languages (like Python) support "default named parameters" while some others (like Typescript) do not. This means that in Python, the following code works fine:
+One discovery made during the development of the code generator is that some languages (like Python) support "default named parameters" while some others (like TypeScript) do not. This means that in Python, the following code works fine:
 
 ```python
 looks = sdk.search_looks(fields="id, title, description")
 ```
 
-and the first iteration of the Typescript implementation looked like this:
+and the first iteration of the TypeScript implementation looked like this:
 
 ```typescript
 looks = await sdk.search_looks(undefined, undefined, undefined, undefined, undefined, undefined, undefined, undefined, "id, title, description")
@@ -84,7 +84,7 @@ looks = await sdk.search_looks(undefined, undefined, undefined, undefined, undef
 
 Clearly, this would not be a pleasant way to make SDK calls.
 
-To make Typescript coding more enjoyable, methods that have more than one optional parameter (or two, if the body parameter is also present but optional), a `Request` structure is created that supports the sparse assignment of arguments. Thanks to the `IRequestSearchLooks` interface generated for Typescript, `search_looks` can be called like this:
+To make TypeScript coding more enjoyable, methods that have more than one optional parameter (or two, if the body parameter is also present but optional), a `Request` structure is created that supports the sparse assignment of arguments. Thanks to the `IRequestSearchLooks` interface generated for TypeScript, `search_looks` can be called like this:
 
 ```typescript
 looks = await sdk.search_looks({fields: 'id,title,description'})
@@ -110,7 +110,7 @@ Strong types and generics are used for any language that supports them. This imp
 
 The Looker SDK for Python requires Python 3.7, due to the language features adopted for the code generator. A quick perusal of `methods.py` from the Python SDK package will show how types and generics are used in the Python SDK.
 
-The Looker SDK for Javascript is implemented in Typescript to take advantage of strong typing to encourage correctness. Interfaces are used to describe the API method structures, so property names and requirements are verified while editing or compiling any SDK code.
+The Looker SDK for JavaScript is implemented in TypeScript to take advantage of strong typing to encourage correctness. Interfaces are used to describe the API method structures, so property names and requirements are verified while editing or compiling any SDK code.
 
 ## RESTful API support
 
@@ -186,7 +186,7 @@ This third-party tool loses some attributes during the conversion, so the SDK co
 
 ## Code generation
 
-The [Python generator](/packages/sdk-codegen/src/python.gen.ts) and [Typescript generator](/packages/sdk-codegen/src/typescript.gen.ts) descend from a common class declared in [codeGen.ts](/packages/sdk-codegen/src/codeGen.ts). The base `CodeGen` class implements the `ICodeGen` interface, which is the contract for all the language-specific options the generator needs to support. Expect to see the internal implementation of this source change throughout the beta process as we refine the generators.
+The [Python generator](/packages/sdk-codegen/src/python.gen.ts) and [TypeScript generator](/packages/sdk-codegen/src/typescript.gen.ts) descend from a common class declared in [codeGen.ts](/packages/sdk-codegen/src/codeGen.ts). The base `CodeGen` class implements the `ICodeGen` interface, which is the contract for all the language-specific options the generator needs to support. Expect to see the internal implementation of this source change throughout the beta process as we refine the generators.
 
 ### Model declarations
 
@@ -289,11 +289,11 @@ export interface IRequestAllHomepageSections {
 
 ### Method implementations
 
-Method signatures are produced using the parameter order described in [Consistency](#consistency) above. All API methods are generated into the same class. For the default configuration of the code generator, this class is called `LookerSDK` in Typescript.
+Method signatures are produced using the parameter order described in [Consistency](#consistency) above. All API methods are generated into the same class. For the default configuration of the code generator, this class is called `LookerSDK` in TypeScript.
 
 #### Method with standard parameters
 
-Methods that don't cause a Request structure to be created for Typescript end up being very similar in all languages.
+Methods that don't cause a Request structure to be created for TypeScript end up being very similar in all languages.
 
 These code samples are taken directly from the generated code, so they're subject to change at any time.
 
@@ -315,7 +315,7 @@ def create_user_credentials_api3(
     return response
 ```
 
-And the Typescript version:
+And the TypeScript version:
 
 ```typescript
 /**
@@ -345,11 +345,11 @@ async create_user_credentials_api3(
 }
 ```
 
-Each declared `Typescript` method has one last optional parameter that can be used to override the default transport settings. Typically, the `timeout` setting is the option that will be overridden for longer-running API requests that exceed the default timeout for the SDK.
+Each declared `TypeScript` method has one last optional parameter that can be used to override the default transport settings. Typically, the `timeout` setting is the option that will be overridden for longer-running API requests that exceed the default timeout for the SDK.
 
 #### Method with a request object
 
-Because Python supports default named parameter arguments, it has methods declared with simple parameter lists that use Request structures Typescript, as shown below:
+Because Python supports default named parameter arguments, it has methods declared with simple parameter lists that use Request structures TypeScript, as shown below:
 
 Python:
 
@@ -391,7 +391,7 @@ def create_query_task(
     return response
 ```
 
-Typescript:
+TypeScript:
 
 ```typescript
 /**
@@ -494,11 +494,11 @@ export interface IRequestCreateQueryTask {
 
 As indicated in the [style values section of the OpenAPI specification](https://github.com/OAI/OpenAPI-Specification/blob/master/versions/3.0.2.md#style-values), a list of values can be provided to a REST call in a variety of delimited formats. The Looker API uses "csv" formatting for some requests that receive simple lists, such as IDs.
 
-In Typescript, calling `toString()` on an array of numbers such as `[1,2,3]` would return `1, 2, 3`, which is fine for the Looker API methods expecting "csv-formatted" lists. However, in Python, the equivalent function returns `[1, 2, 3]` which would cause a parsing error by the Looker API endpoint.
+In TypeScript, calling `toString()` on an array of numbers such as `[1,2,3]` would return `1, 2, 3`, which is fine for the Looker API methods expecting "csv-formatted" lists. However, in Python, the equivalent function returns `[1, 2, 3]` which would cause a parsing error by the Looker API endpoint.
 
 As indicated in the OpenAPI specification style values, other delimiters such as pipe (`|`), space, or tab characters could be expected by an API endpoint.
 
-To guarantee consistency in the serialization of "csv-formatted" array values, the code generator uses a **Delim** type for parameters that are specified as having a special delimiter. In Typescript, this type is called `DelimArray`. In Python, it's called `DelimSequence`.
+To guarantee consistency in the serialization of "csv-formatted" array values, the code generator uses a **Delim** type for parameters that are specified as having a special delimiter. In TypeScript, this type is called `DelimArray`. In Python, it's called `DelimSequence`.
 Using this type for the parameter also helps document the expected format for the list submitted to the API endpoint.
 
 Both `DelimArray` and `DelimSequence` accept optional overrides for:
@@ -511,7 +511,7 @@ Both `DelimArray` and `DelimSequence` accept optional overrides for:
 
 ### Binary response handling
 
-The popular request libraries currently used by the RTLs for both Python and the Node-based Typescript SDK treat response content as string by default, with binary mode as an opt-in setting. By default, this results in the download of binary content like images or PDFs from SDK methods to be corrupted.
+The popular request libraries currently used by the RTLs for both Python and the Node-based TypeScript SDK treat response content as string by default, with binary mode as an opt-in setting. By default, this results in the download of binary content like images or PDFs from SDK methods to be corrupted.
 
 We've resolved this issue by setting up the request methods to process requests as binary by default, with the RTL using the `Content-Type` of the response to determine whether it's binary before returning the response payload to the SDK method.
 

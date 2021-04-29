@@ -11,7 +11,7 @@ This package can be used in a browser because it has no node dependencies.
 
 This package includes the following language generators:
 
-- [Typescript](src/typescript.gen.ts)
+- [TypeScript](src/typescript.gen.ts)
 - [Python](src/python.gen.ts)
 - [Kotlin](src/kotlin.gen.ts)
 - [Swift](src/swift.gen.ts)

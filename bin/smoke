@@ -23,7 +23,7 @@ echo "Smoking SDKs: ${tests} ..."
 
 if [[ $tests == *typescript* ]]
 then
-  echo "Smoking Typescript SDK ..."
+  echo "Smoking TypeScript SDK ..."
   JEST_JUNIT_OUTPUT_DIR=results JEST_JUNIT_OUTPUT_NAME=ts_sdk_smoke.xml yarn jest packages/sdk-node/test --reporters=default --reporters=jest-junit
 fi
 

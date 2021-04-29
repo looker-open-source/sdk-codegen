@@ -143,7 +143,7 @@ const prettierOptions: prettier.Options = {
 
 class TypescriptFormatter extends BaseFormatter {
   constructor() {
-    super('Typescript')
+    super('TypeScript')
   }
 
   reformat(files: string[]): string {

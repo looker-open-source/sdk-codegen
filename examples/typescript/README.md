@@ -1,4 +1,4 @@
-# Typescript Examples for the Looker API
+# TypeScript Examples for the Looker API
 
 The examples in this folder use `yarn`. If you don't have `yarn` installed already, you'll need to [install](https://yarnpkg.com/en/docs/install) it.
 
@@ -10,7 +10,7 @@ Use
 yarn {command} [other command-line options]
 ```
 
-to run a Typescript SDK example file.
+to run a TypeScript SDK example file.
 
 ## Setup and run the typescript examples
 

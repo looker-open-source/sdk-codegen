@@ -48,11 +48,11 @@ import {
  */
 export class TypescriptGen extends CodeGen {
   /**
-   * special case for Typescript output path due to mono repository
+   * special case for TypeScript output path due to mono repository
    */
   codePath = './packages/'
   /**
-   * special case for Typescript output path due to mono repository
+   * special case for TypeScript output path due to mono repository
    */
   useFunctions = true
   useInterfaces = true

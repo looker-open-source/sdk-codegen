@@ -28,10 +28,10 @@ import { setSdkLanguageAction } from './action_creators'
 
 describe('Settings reducer action creators', () => {
   test('setSdkLanguageAction returns a SET_SDK_LANGUAGE action option with provided values', () => {
-    const action = setSdkLanguageAction('Typescript')
+    const action = setSdkLanguageAction('TypeScript')
     expect(action).toEqual({
       type: SettingsActionTypes.SET_SDK_LANGUAGE,
-      payload: 'Typescript',
+      payload: 'TypeScript',
     })
   })
 })

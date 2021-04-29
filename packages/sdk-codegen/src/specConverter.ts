@@ -158,7 +158,7 @@ export const getSpecsFromVersions = async (
 
   if (versions.supported_versions) {
     for (const v of versions.supported_versions) {
-      // Tell Typescript these are all defined because IApiVersion definition is lax
+      // Tell TypeScript these are all defined because IApiVersion definition is lax
       if (v.status && v.version && v.swagger_url) {
         if (
           v.status !== 'internal_test' &&
