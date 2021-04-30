@@ -2,7 +2,7 @@
 
  MIT License
 
- Copyright (c) 2020 Looker Data Sciences, Inc.
+ Copyright (c) 2021 Looker Data Sciences, Inc.
 
  Permission is hereby granted, free of charge, to any person obtaining a copy
  of this software and associated documentation files (the "Software"), to deal
@@ -23,13 +23,16 @@
  SOFTWARE.
 
  */
-
+const { merge } = require('webpack-merge')
 const base = require('../../webpack.base.config')(__dirname)
+const browser = require('../../webpack.browser.config')()
 
-module.exports = {
-  ...base,
+module.exports = merge(base, browser, {
+  mode: 'development',
   devServer: {
-    historyApiFallback: true,
+    historyApiFallback: {
+      disableDotRule: true,
+    },
     publicPath: '/dist/',
     headers: {
       'Access-Control-Allow-Origin': '*',
@@ -38,5 +41,4 @@ module.exports = {
         'X-Requested-With, content-type, Authorization',
     },
   },
-  devtool: 'inline-source-map',
-}
+})
