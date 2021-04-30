@@ -39,7 +39,6 @@ import {
   TabPanel,
   useTabs,
 } from '@looker/components'
-import { Looker40SDK } from '@looker/sdk'
 import { IRawResponse } from '@looker/sdk-rtl'
 import { ApiModel, IMethod } from '@looker/sdk-codegen'
 import {
@@ -146,7 +145,7 @@ export const RunIt: FC<RunItProps> = ({
   const perf = new PerfTimings()
 
   useEffect(() => {
-    if (sdk && sdk instanceof Looker40SDK) {
+    if (sdk) {
       const settings = sdk.authSession.settings as RunItSettings
       const configIsNeeded = sdkNeedsConfig(sdk)
       setIsExtension(!configIsNeeded)
@@ -221,7 +220,7 @@ export const RunIt: FC<RunItProps> = ({
           )}
           {hasConfig && needsAuth && (
             <LoginForm
-              sdk={sdk as Looker40SDK}
+              sdk={sdk}
               setHasConfig={setHasConfig}
               configurator={configurator}
             />

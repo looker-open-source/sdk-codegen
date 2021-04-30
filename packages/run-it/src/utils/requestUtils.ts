@@ -24,8 +24,7 @@
 
  */
 
-import { Looker31SDK, Looker40SDK } from '@looker/sdk'
-import { IRawResponse } from '@looker/sdk-rtl'
+import { IAPIMethods, IRawResponse } from '@looker/sdk-rtl'
 import { cloneDeep } from 'lodash'
 
 import { RunItHttpMethod, RunItInput, RunItValues } from '../RunIt'
@@ -108,6 +107,7 @@ export const createRequestParams = (
 
 /**
  * Makes an http request using the SDK browser transport rawRequest method
+ * @param sdk functional SDK that supports rawRequest via its transport
  * @param basePath base path for the URL. For standalone this includes the specKey. Empty for extension.
  * @param httpMethod Request operation
  * @param endpoint Request path with path params in curly braces e.g. /queries/{query_id}/run/{result_format}
@@ -116,7 +116,7 @@ export const createRequestParams = (
  * @param body Collection of body params
  */
 export const runRequest = async (
-  sdk: Looker31SDK | Looker40SDK,
+  sdk: IAPIMethods,
   basePath: string,
   httpMethod: RunItHttpMethod,
   endpoint: string,
