@@ -24,16 +24,11 @@
 
  */
 
+import { IStorageValue } from '../../index'
+
 export const RunItConfigKey = 'RunItConfig'
 
 export const RunItValuesKey = 'RunItValues'
-
-export type StorageLocation = 'session' | 'local'
-
-export interface IStorageValue {
-  location: StorageLocation
-  value: string
-}
 
 export interface RunItConfigurator {
   getStorage: (key: string, defaultValue?: string) => IStorageValue

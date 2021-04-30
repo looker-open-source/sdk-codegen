@@ -24,18 +24,8 @@
 
  */
 
-export { RunIt, RunItInput, RunItHttpMethod, IStorageValue } from './RunIt'
-export {
-  RunItContext,
-  RunItContextProps,
-  RunItProvider,
-  RunItProviderProps,
-} from './RunItProvider'
-export { pathify, runItSDK, RunItSettings, initRunItSdk } from './utils'
-export {
-  defaultConfigurator,
-  MethodBadge,
-  RunItConfigurator,
-  getGenerators,
-} from './components'
-export { OAuthScene } from './scenes'
+export * from './RunIt'
+export * from './RunItProvider'
+export * from './utils'
+export * from './components'
+export * from './scenes'
