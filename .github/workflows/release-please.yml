@@ -10,4 +10,4 @@
        - uses: google-github-actions/release-please-action@v2
          with:
            command: manifest
-           token: ${{ secrets.GITHUB_TOKEN }}
+           token: ${{ secrets.LOS_AUTO_BOT_RP_TOKEN }}
