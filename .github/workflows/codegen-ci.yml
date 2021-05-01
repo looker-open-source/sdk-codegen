@@ -98,7 +98,6 @@ jobs:
           path: results/sdk-codegen
 
   publish-test-results:
-    name: Codegen Test Results
     needs: [unit]
     if: success() || failure()
     runs-on: ubuntu-latest
@@ -126,7 +125,7 @@ jobs:
   # there will be duplicate PR check names but github handles this and requires
   # both to be passing.
   noop-python-results:
-    name: Python Test Results
+    name: Python Tests
     needs: [publish-test-results]
     if: success() || failure()
     runs-on: ubuntu-latest
@@ -134,7 +133,7 @@ jobs:
       - run: exit 0
 
   noop-typescript-results:
-    name: Typescript Test Results
+    name: Typescript Tests
     needs: [publish-test-results]
     if: success() || failure()
     runs-on: ubuntu-latest
