@@ -43,8 +43,8 @@ import ApiExplorer from '@looker/api-explorer/src/ApiExplorer'
 import { getExtensionSDK } from '@looker/extension-sdk'
 import { configureStore } from '@looker/api-explorer/src/state'
 import { Provider } from 'react-redux'
+import { Loader } from '@looker/api-explorer/lib/components'
 import { ExtensionEnvAdaptor } from './utils'
-import { Loader } from './Loader'
 
 class ExtensionConfigurator implements RunItConfigurator {
   storage: Record<string, string> = {}
@@ -98,11 +98,11 @@ export const ExtensionApiExplorer: FC = () => {
     const [version, name] = spec.specURL.split('/').slice(-2)
     const content = await sdk.ok(sdk.api_spec(version, name))
     // TODO switch this to just call const api = ApiModel.fromString(content) now
-    // TODO I think we can remove this this crazy step now that the api_spec endpoint is cleaner
     let json = JSON.parse(content)
-    if (typeof json === 'string') {
-      json = JSON.parse(json)
-    }
+    // // TODO I think we can remove this this crazy step now that the api_spec endpoint is cleaner
+    // if (typeof json === 'string') {
+    //   json = JSON.parse(json)
+    // }
     json = upgradeSpecObject(json)
     const api = ApiModel.fromJson(json)
     return api

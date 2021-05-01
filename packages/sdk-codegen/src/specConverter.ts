@@ -632,12 +632,12 @@ export const upgradeSpec = (spec: string | Record<string, unknown>) => {
 }
 
 /**
- * Fetches Looker specs from the API server url
+ * Fetches specs via /versions payload from the API server url
  * @param sdk APIMethods implementation that supports authenticating a request
- * @param apiServerUrl base url of the API server. Typically something like https://my.looker.com:19999
+ * @param serverUrl base url of the /versions server. Typically something like https://my.looker.com:19999 or https://my.looker.com
  */
-export const getLookerSpecs = async (sdk: APIMethods, apiServerUrl: string) => {
-  const versionUrl = `${apiServerUrl}/versions`
+export const getLookerSpecs = async (sdk: APIMethods, serverUrl: string) => {
+  const versionUrl = `${serverUrl}/versions`
   const versions = await sdk.ok(sdk.get<ILookerVersions, Error>(versionUrl))
   return versions
 }

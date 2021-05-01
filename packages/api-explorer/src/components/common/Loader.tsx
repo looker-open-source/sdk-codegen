@@ -31,13 +31,17 @@ import {
   Heading,
   Spinner,
 } from '@looker/components'
-import { ThemeOverrides } from '@looker/api-explorer/src/utils'
+import { ThemeOverrides } from '../../utils'
 
 export interface LoaderProps {
   themeOverrides: ThemeOverrides
+  message?: string
 }
 
-export const Loader: FC<LoaderProps> = ({ themeOverrides }) => (
+export const Loader: FC<LoaderProps> = ({
+  themeOverrides,
+  message = 'Loading API Specifications',
+}) => (
   <ComponentsProvider {...themeOverrides}>
     <Flex flexDirection="column" justifyContent="center" mt="25%">
       <FlexItem alignSelf="center">
@@ -45,7 +49,7 @@ export const Loader: FC<LoaderProps> = ({ themeOverrides }) => (
       </FlexItem>
       <FlexItem mt="large" alignSelf="center">
         <Heading color="key" as="h2">
-          Loading API Specifications
+          {message}
         </Heading>
       </FlexItem>
     </Flex>

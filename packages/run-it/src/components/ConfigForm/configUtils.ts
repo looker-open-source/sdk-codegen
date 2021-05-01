@@ -24,6 +24,14 @@
 
  */
 
+import {
+  ApiModel,
+  getSpecsFromVersions,
+  ILookerVersions,
+  SpecItem,
+  SpecList,
+  upgradeSpecObject,
+} from '@looker/sdk-codegen'
 import { IStorageValue } from '../../index'
 
 export const RunItConfigKey = 'RunItConfig'
@@ -95,6 +103,59 @@ export const validateUrl = (url: string) => {
     return result.origin
   } catch {
     return ''
+  }
+}
+
+export interface ILoadedSpecs {
+  /** apiServerUrl */
+  baseUrl: string
+  /** /versions server url */
+  lookerUrl: string
+  /** loaded specifications */
+  specs: SpecList
+  /** communication errors */
+  fetchError: string
+}
+
+const getUrl = async (url: string) => {
+  const response = await fetch(url, { mode: 'no-cors' })
+  return await response.text()
+}
+
+/**
+ * Load /versions payload and retrieve all supported specs
+ * @param url that has an unauthenticated /versions endpoint
+ */
+export const loadSpecsFromVersions = async (
+  url: string
+): Promise<ILoadedSpecs> => {
+  let fetchError = ''
+  let specs: SpecList = {}
+  let baseUrl = ''
+  try {
+    const endpoint = `${url}/versions`
+    const content = await getUrl(endpoint)
+    const versions = JSON.parse(content) as ILookerVersions
+    baseUrl = versions.api_server_url
+    const fetchSpec = async (spec: SpecItem) => {
+      if (spec.specURL) {
+        const source = await getUrl(spec.specURL!)
+        const obj = JSON.parse(source)
+        const upgrade = upgradeSpecObject(obj)
+        spec.api = ApiModel.fromJson(upgrade)
+      }
+      return spec.api
+    }
+    specs = await getSpecsFromVersions(versions, fetchSpec)
+  } catch (e) {
+    fetchError = e.message
+  }
+
+  return {
+    baseUrl,
+    specs,
+    lookerUrl: url,
+    fetchError,
   }
 }
 

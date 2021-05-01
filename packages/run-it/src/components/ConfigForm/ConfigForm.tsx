@@ -31,6 +31,7 @@ import React, {
   FormEvent,
   useState,
   useContext,
+  useEffect,
 } from 'react'
 import {
   Button,
@@ -41,10 +42,17 @@ import {
   Fieldset,
   FieldText,
   Form,
+  Text,
   ValidationMessages,
 } from '@looker/components'
 import { Delete, Done } from '@styled-icons/material'
-import { RunItConfigKey, validateUrl, RunItConfigurator } from './configUtils'
+import {
+  RunItConfigKey,
+  validateUrl,
+  RunItConfigurator,
+  loadSpecsFromVersions,
+  ILoadedSpecs,
+} from './configUtils'
 
 interface ConfigFormProps {
   /** Title for the config form */
@@ -73,9 +81,11 @@ export const ConfigForm: FC<ConfigFormProps> = ({
   if (storage.value) config = JSON.parse(storage.value)
   const { base_url, looker_url } = config
 
-  const [fields, setFields] = useState({
+  const [fields, setFields] = useState<ILoadedSpecs>({
     baseUrl: base_url,
     lookerUrl: looker_url,
+    specs: {},
+    fetchError: '',
   })
 
   const [
@@ -106,8 +116,11 @@ export const ConfigForm: FC<ConfigFormProps> = ({
   }
 
   const handleInputChange = (event: FormEvent<HTMLInputElement>) => {
-    const newFields = { ...fields }
+    let newFields = { ...fields }
     newFields[event.currentTarget.name] = event.currentTarget.value
+    loadSpecsFromVersions(fields.lookerUrl)
+      .then((resp) => (newFields = resp))
+      .catch((err) => (newFields.fetchError = err.message))
     setFields(newFields)
   }
 
@@ -140,22 +153,27 @@ export const ConfigForm: FC<ConfigFormProps> = ({
           <Fieldset legend="Server locations">
             <FieldText
               required
-              label="API server url"
-              placeholder="typically https://myserver.looker.com:19999"
-              name="baseUrl"
-              defaultValue={fields.baseUrl}
-              onChange={handleUrlChange}
-            />
-            <FieldText
-              required
-              label="Auth server url"
+              label="Looker server url"
               placeholder="typically https://myserver.looker.com:9999"
               name="lookerUrl"
               defaultValue={fields.lookerUrl}
               onChange={handleUrlChange}
             />
+            <FieldText
+              required
+              label="API server url"
+              placeholder="typically https://myserver.looker.com:19999"
+              name="baseUrl"
+              defaultValue={fields.baseUrl}
+              disabled={true}
+            />
           </Fieldset>
         </Form>
+        {fields.fetchError && (
+          <>
+            <Text color="danger">{fields.fetchError}</Text>
+          </>
+        )}
       </DialogContent>
       <DialogFooter>
         <Button

@@ -39,13 +39,13 @@ import ApiExplorer from './ApiExplorer'
 import { configureStore } from './state'
 import { StandaloneEnvAdaptor } from './utils'
 
-export interface StandloneApiExplorerProps {
+export interface StandaloneApiExplorerProps {
   specs: SpecList
 }
 
 const store = configureStore()
 
-export const StandaloneApiExplorer: FC<StandloneApiExplorerProps> = ({
+export const StandaloneApiExplorer: FC<StandaloneApiExplorerProps> = ({
   specs,
 }) => {
   const match = useRouteMatch<{ specKey: string }>(`/:specKey`)
