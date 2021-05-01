@@ -1,13 +1,6 @@
 name: Codegen CI
 on:
   pull_request:
-    types:
-      - opened
-      - synchronize
-      - reopened
-      # first three are default, adding labeled for "CI:TEST" support
-      # (see jobs.unit.if below)
-      - labeled
     paths:
       - packages/sdk-codegen/**
       - packages/sdk-codegen-utils/**
@@ -21,6 +14,8 @@ on:
       - packages/sdk-codegen-utils/**
       - packages/sdk-codegen-scripts/**
 
+  workflow_dispatch:
+
 env:
   LOOKERSDK_BASE_URL: https://localhost:20000
   LOOKERSDK_VERIFY_SSL: false
@@ -30,23 +25,6 @@ env:
 
 jobs:
   unit:
-    # 1st condition: push event (restricted to main above)
-    # 2nd condition: PR opened/synchronized/reopened (types filter above)
-    #                unless the PR has the CI:HOLD label
-    # 3rd condition: PR labeled with "CI:TEST"
-    if: >
-      github.event_name == 'push' ||
-      (
-        github.event_name == 'pull_request' &&
-        github.event.action != 'labeled' &&
-        !contains(github.event.pull_request.labels, 'CI:HOLD')
-      ) ||
-      (
-        github.event_name == 'pull_request' &&
-        github.event.action == 'labeled' &&
-        github.event.label.name == 'CI:TEST'
-      )
-
     env:
       JEST_JUNIT_OUTPUT_DIR: results/sdk-codegen
       JEST_JUNIT_OUTPUT_NAME: ubuntu-latest.sdk-codegen15x.xml
@@ -120,7 +98,7 @@ jobs:
           path: results/sdk-codegen
 
   publish-test-results:
-    name: Publish Test Results
+    name: Codegen Test Results
     needs: [unit]
     if: success() || failure()
     runs-on: ubuntu-latest
@@ -132,31 +110,33 @@ jobs:
           path: artifacts
 
       - name: Publish Unit Test Results
-        uses: EnricoMi/publish-unit-test-result-action@v1.6
+        uses: EnricoMi/publish-unit-test-result-action@v1.12
         with:
-          check_name: Test Results
+          check_name: Codegen Tests
           github_token: ${{ secrets.GITHUB_TOKEN }}
           report_individual_runs: true
+          hide_comments: orphaned commits
+          check_run_annotations_branch: '*'
           files: 'artifacts/sdk-codegen-test-results/*.xml'
 
-  remove-CI-TEST-label:
-    name: Remove CI:TEST Label
-    if: >
-      (
-        github.event_name == 'pull_request' &&
-        github.event.action == 'labeled' &&
-        github.event.label.name == 'CI:TEST'
-      )
+  # The following jobs are necessary because they are configured as required
+  # checks on PRs and would not otherwise run in this workflow. If the PR/branch
+  # triggering this workflow file also needs to actually run these tests, the
+  # other workflow files will pick it up and submit the results. In that case
+  # there will be duplicate PR check names but github handles this and requires
+  # both to be passing.
+  noop-python-results:
+    name: Python Test Results
+    needs: [publish-test-results]
+    if: success() || failure()
     runs-on: ubuntu-latest
     steps:
-      - name: Remove CI:TEST Label
-        uses: actions/github-script@v3
-        with:
-          github-token: ${{secrets.GITHUB_TOKEN}}
-          script: |
-            github.issues.removeLabel({
-              owner: context.repo.owner,
-              repo: context.repo.repo,
-              issue_number: context.issue.number,
-              name: 'CI:TEST'
-            })
+      - run: exit 0
+
+  noop-typescript-results:
+    name: Typescript Test Results
+    needs: [publish-test-results]
+    if: success() || failure()
+    runs-on: ubuntu-latest
+    steps:
+      - run: exit 0
