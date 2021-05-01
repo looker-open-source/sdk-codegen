@@ -159,7 +159,6 @@ jobs:
           path: results/tssdk
 
   publish-test-results:
-    name: Typescript Test Results
     needs: [unit, integration]
     if: success() || failure()
     runs-on: ubuntu-latest
@@ -173,7 +172,7 @@ jobs:
       - name: Publish Unit Test Results
         uses: EnricoMi/publish-unit-test-result-action@v1.12
         with:
-          check_name: Test Results
+          check_name: Typescript Tests
           github_token: ${{ secrets.GITHUB_TOKEN }}
           report_individual_runs: true
           hide_comments: orphaned commits
@@ -187,7 +186,7 @@ jobs:
   # there will be duplicate PR check names but github handles this and requires
   # both to be passing.
   noop-codegen-results:
-    name: Codegen Test Results
+    name: Codegen Tests
     needs: [publish-test-results]
     if: success() || failure()
     runs-on: ubuntu-latest
@@ -195,7 +194,7 @@ jobs:
       - run: exit 0
 
   noop-python-results:
-    name: Python Test Results
+    name: Python Tests
     needs: [publish-test-results]
     if: success() || failure()
     runs-on: ubuntu-latest
