@@ -1,5 +1,22 @@
 # Changelog
 
+### [0.5.6](https://www.github.com/looker-open-source/sdk-codegen/compare/wholly-sheet-v0.5.5...wholly-sheet-v0.5.6) (2021-05-01)
+
+
+### Bug Fixes
+
+* use "TypeScript" and "JavaScript" everywhere ([#644](https://www.github.com/looker-open-source/sdk-codegen/issues/644)) ([c15031c](https://www.github.com/looker-open-source/sdk-codegen/commit/c15031cee189556adbd9e18641e7c992e86e3611))
+
+
+### Dependencies
+
+* The following workspace dependencies were updated
+  * dependencies
+    * @looker/sdk bumped from ^21.4.3 to ^21.4.4
+    * @looker/sdk-rtl bumped from ^21.0.12 to ^21.0.13
+  * devDependencies
+    * @looker/sdk-node bumped from ^21.4.4 to ^21.4.5
+
 ### [0.5.5](https://www.github.com/looker-open-source/sdk-codegen/compare/wholly-sheet-v0.5.4...wholly-sheet-v0.5.5) (2021-04-27)
 
 
