@@ -23,10 +23,27 @@
  SOFTWARE.
 
  */
-const { merge } = require('webpack-merge')
-const base = require('../../webpack.base.config')(__dirname)
-const browser = require('../../webpack.browser.config')()
+const webpack = require('webpack')
 
-module.exports = merge(base, browser, {
-  mode: 'production',
-})
+const BundleAnalyzerPlugin = require('webpack-bundle-analyzer')
+  .BundleAnalyzerPlugin
+
+module.exports = function () {
+  return {
+    resolve: {
+      fallback: {
+        buffer: false,
+        path: require.resolve('path-browserify'),
+      },
+    },
+    plugins: [
+      new webpack.ProvidePlugin({
+        process: 'process/browser',
+      }),
+      new BundleAnalyzerPlugin({
+        analyzerMode: process.env.ANALYZE_MODE || 'disabled',
+      }),
+    ],
+    devtool: 'source-map',
+  }
+}
