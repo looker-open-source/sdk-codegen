@@ -1,5 +1,22 @@
 # Changelog
 
+### [21.0.16](https://www.github.com/looker-open-source/sdk-codegen/compare/sdk-codegen-scripts-v21.0.15...sdk-codegen-scripts-v21.0.16) (2021-05-03)
+
+
+### Bug Fixes
+
+* use "TypeScript" and "JavaScript" everywhere ([#644](https://www.github.com/looker-open-source/sdk-codegen/issues/644)) ([c15031c](https://www.github.com/looker-open-source/sdk-codegen/commit/c15031cee189556adbd9e18641e7c992e86e3611))
+
+
+### Dependencies
+
+* The following workspace dependencies were updated
+  * dependencies
+    * @looker/sdk bumped from ^21.4.3 to ^21.4.4
+    * @looker/sdk-codegen bumped from ^21.0.15 to ^21.0.16
+    * @looker/sdk-node bumped from ^21.4.4 to ^21.4.5
+    * @looker/sdk-rtl bumped from ^21.0.12 to ^21.0.13
+
 ### [21.0.15](https://www.github.com/looker-open-source/sdk-codegen/compare/sdk-codegen-scripts-v21.0.14...sdk-codegen-scripts-v21.0.15) (2021-04-27)
 
 

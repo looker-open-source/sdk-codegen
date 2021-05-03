@@ -1,5 +1,14 @@
 # Changelog
 
+### [1.5.1](https://www.github.com/looker-open-source/sdk-codegen/compare/sdk-codegen-all-v1.5.0...sdk-codegen-all-v1.5.1) (2021-05-03)
+
+
+### Bug Fixes
+
+* Fix transpiler warnings in hackathon extension ([#651](https://www.github.com/looker-open-source/sdk-codegen/issues/651)) ([bdd9428](https://www.github.com/looker-open-source/sdk-codegen/commit/bdd9428550e60d7eef9016519e07b3c65ad81550))
+* improve TS SDK imports/exports ([#657](https://www.github.com/looker-open-source/sdk-codegen/issues/657)) ([4c2ec6e](https://www.github.com/looker-open-source/sdk-codegen/commit/4c2ec6ea390bb27d123c333f6d559749efa33830))
+* use "TypeScript" and "JavaScript" everywhere ([#644](https://www.github.com/looker-open-source/sdk-codegen/issues/644)) ([c15031c](https://www.github.com/looker-open-source/sdk-codegen/commit/c15031cee189556adbd9e18641e7c992e86e3611))
+
 ## [1.5.0](https://www.github.com/looker-open-source/sdk-codegen/compare/sdk-codegen-all-v1.4.1...sdk-codegen-all-v1.5.0) (2021-04-27)
 
 
