@@ -30,20 +30,22 @@
  * Note: functions should be deep-linked from their 4.0/funcs or 3.1/funcs path
  */
 import * as models31 from './3.1/models'
+import * as funcs31 from './3.1/funcs'
 export { models31 }
+export { funcs31 }
 
-export * from './3.1/methodsInterface'
-export * from './3.1/methods'
-export * from './3.1/streams'
+export { ILooker31SDK } from './3.1/methodsInterface'
+export { Looker31SDK } from './3.1/methods'
+export { Looker31SDKStream } from './3.1/streams'
 
-export * from './4.0/methodsInterface'
-export * from './4.0/methods'
+export { ILooker40SDK } from './4.0/methodsInterface'
+export { Looker40SDK } from './4.0/methods'
+export { Looker40SDKStream } from './4.0/streams'
 export * from './4.0/models'
-export * from './4.0/streams'
 
-export * from './constants'
-export * from './extensionSdk'
-export * from './browserSdk'
+export { sdkVersion, environmentPrefix } from './constants'
+export { LookerExtensionSDK } from './extensionSdk'
+export { BrowserSettings, LookerBrowserSDK } from './browserSdk'
 
 export { functionalSdk40 } from './4.0/funcs'
 export { functionalSdk31 } from './3.1/funcs'
