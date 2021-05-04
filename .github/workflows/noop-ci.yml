@@ -8,36 +8,38 @@ on:
 
 jobs:
   noop-test-results:
-    - uses: octokit/request-action@v2.x
-      name: Noop Codegen Tests
-      with:
-        route: POST /repos/{owner}/{repo}/check-runs
-        owner: looker-open-source
-        repo: sdk-codegen
-        name: Codegen Tests
-        head_sha: ${{ github.sha }}
-        conclusion: success
-      env:
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-    - uses: octokit/request-action@v2.x
-      name: Noop Python Tests
-      with:
-        route: POST /repos/{owner}/{repo}/check-runs
-        owner: looker-open-source
-        repo: sdk-codegen
-        name: Python Tests
-        head_sha: ${{ github.sha }}
-        conclusion: success
-      env:
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-    - uses: octokit/request-action@v2.x
-      name: Noop Typescript Tests
-      with:
-        route: POST /repos/{owner}/{repo}/check-runs
-        owner: looker-open-source
-        repo: sdk-codegen
-        name: Typescript Tests
-        head_sha: ${{ github.sha }}
-        conclusion: success
-      env:
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+    runs-on: ubuntu-latest
+    steps:
+      - uses: octokit/request-action@v2.x
+        name: Noop Codegen Tests
+        with:
+          route: POST /repos/{owner}/{repo}/check-runs
+          owner: looker-open-source
+          repo: sdk-codegen
+          name: Codegen Tests
+          head_sha: ${{ github.sha }}
+          conclusion: success
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      - uses: octokit/request-action@v2.x
+        name: Noop Python Tests
+        with:
+          route: POST /repos/{owner}/{repo}/check-runs
+          owner: looker-open-source
+          repo: sdk-codegen
+          name: Python Tests
+          head_sha: ${{ github.sha }}
+          conclusion: success
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      - uses: octokit/request-action@v2.x
+        name: Noop Typescript Tests
+        with:
+          route: POST /repos/{owner}/{repo}/check-runs
+          owner: looker-open-source
+          repo: sdk-codegen
+          name: Typescript Tests
+          head_sha: ${{ github.sha }}
+          conclusion: success
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
