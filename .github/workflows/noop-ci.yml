@@ -13,7 +13,7 @@ jobs:
     steps:
       - run: exit 0
 
-  noop-codegen-results:
+  noop-python-results:
     name: Python Tests
     if: success() || failure()
     runs-on: ubuntu-latest
