@@ -23,31 +23,27 @@
  SOFTWARE.
 
  */
-import React, { FC } from 'react'
-import {
-  ComponentsProvider,
-  Flex,
-  FlexItem,
-  Heading,
-  Spinner,
-} from '@looker/components'
-import { ThemeOverrides } from '@looker/api-explorer/src/utils'
+const webpack = require('webpack')
 
-export interface LoaderProps {
-  themeOverrides: ThemeOverrides
+const BundleAnalyzerPlugin = require('webpack-bundle-analyzer')
+  .BundleAnalyzerPlugin
+
+module.exports = function () {
+  return {
+    resolve: {
+      fallback: {
+        buffer: false,
+        path: require.resolve('path-browserify'),
+      },
+    },
+    plugins: [
+      new webpack.ProvidePlugin({
+        process: 'process/browser',
+      }),
+      new BundleAnalyzerPlugin({
+        analyzerMode: process.env.ANALYZE_MODE || 'disabled',
+      }),
+    ],
+    devtool: 'source-map',
+  }
 }
-
-export const Loader: FC<LoaderProps> = ({ themeOverrides }) => (
-  <ComponentsProvider {...themeOverrides}>
-    <Flex flexDirection="column" justifyContent="center" mt="25%">
-      <FlexItem alignSelf="center">
-        <Spinner color="key" size={150} />
-      </FlexItem>
-      <FlexItem mt="large" alignSelf="center">
-        <Heading color="key" as="h2">
-          Loading API Specifications
-        </Heading>
-      </FlexItem>
-    </Flex>
-  </ComponentsProvider>
-)

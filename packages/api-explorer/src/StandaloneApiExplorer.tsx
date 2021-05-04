@@ -31,7 +31,7 @@ import {
   defaultConfigurator,
   initRunItSdk,
 } from '@looker/run-it'
-import { Looker40SDK } from '@looker/sdk'
+import { IAPIMethods } from '@looker/sdk-rtl'
 import { SpecList } from '@looker/sdk-codegen'
 import { Provider } from 'react-redux'
 
@@ -50,10 +50,11 @@ export const StandaloneApiExplorer: FC<StandloneApiExplorerProps> = ({
 }) => {
   const match = useRouteMatch<{ specKey: string }>(`/:specKey`)
   const specKey = match?.params.specKey || ''
+  // TODO we may not need this restriction any more?
   // Check explicitly for specs 3.0 and 3.1 as run it is not supported.
   // This is done as the return from OAUTH does not provide a spec key
   // but an SDK is needed.
-  const chosenSdk: Looker40SDK | undefined =
+  const chosenSdk: IAPIMethods | undefined =
     specKey === '3.0' || specKey === '3.1'
       ? undefined
       : initRunItSdk(defaultConfigurator)

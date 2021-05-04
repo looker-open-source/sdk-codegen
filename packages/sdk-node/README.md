@@ -1,8 +1,8 @@
 # Looker SDK for Node
 
-The Looker SDK for Typescript/Javascript works with Node and browser run-times. The SDK provides a convenient way to communicate with a Looker server's APIs.
+The Looker SDK for TypeScript/JavaScript works with Node and browser run-times. The SDK provides a convenient way to communicate with a Looker server's APIs.
 
-This package is specifically for using the Looker Typescript SDK with Node. It depends on the [@looker/sdk](https://www.npmjs.com/package/@looker/sdk) package and [@looker/sdk-rtl](https://www.npmjs.com/package/@looker/sdk-rtl).
+This package is specifically for using the Looker TypeScript SDK with Node. It depends on the [@looker/sdk](https://www.npmjs.com/package/@looker/sdk) package and [@looker/sdk-rtl](https://www.npmjs.com/package/@looker/sdk-rtl).
 
 The SDK uses a plug-in architecture (also known as dependency injection) for initializing that supports run-time specific transports (like `NodeTransport` and `BrowserTransport`) and different approaches for managing API authentication (like `NodeSession`, `BrowserSession`, `ProxySession`, and `OauthSession`).
 
@@ -251,7 +251,7 @@ const downloadTileAs = async (
 
 ### More examples
 
-See the [SDK Examples](/examples/typescript) folder for additional Typescript SDK examples.
+See the [SDK Examples](/examples/typescript) folder for additional TypeScript SDK examples.
 
 ## A note about security
 

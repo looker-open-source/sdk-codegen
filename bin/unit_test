@@ -24,7 +24,7 @@ echo "Unit testing SDKs: ${tests} ..."
 
 if [[ $tests == *typescript* ]]
 then
-  echo "Unit testing Typescript SDK ..."
+  echo "Unit testing TypeScript SDK ..."
   JEST_JUNIT_OUTPUT_DIR=results JEST_JUNIT_OUTPUT_NAME=ts_sdk_unit.xml yarn jest packages/sdk-rtl --reporters=default --reporters=jest-junit
 fi
 

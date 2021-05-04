@@ -23,31 +23,31 @@
  SOFTWARE.
 
  */
-import React, { FC } from 'react'
 import {
-  ComponentsProvider,
-  Flex,
-  FlexItem,
-  Heading,
-  Spinner,
-} from '@looker/components'
-import { ThemeOverrides } from '@looker/api-explorer/src/utils'
+  StandaloneEnvAdaptor,
+  ThemeOverrides,
+  getThemeOverrides,
+} from './envAdaptor'
 
-export interface LoaderProps {
-  themeOverrides: ThemeOverrides
-}
-
-export const Loader: FC<LoaderProps> = ({ themeOverrides }) => (
-  <ComponentsProvider {...themeOverrides}>
-    <Flex flexDirection="column" justifyContent="center" mt="25%">
-      <FlexItem alignSelf="center">
-        <Spinner color="key" size={150} />
-      </FlexItem>
-      <FlexItem mt="large" alignSelf="center">
-        <Heading color="key" as="h2">
-          Loading API Specifications
-        </Heading>
-      </FlexItem>
-    </Flex>
-  </ComponentsProvider>
-)
+describe('StandaloneEnvAdaptor', () => {
+  test.each([
+    ['www.looker.com', getThemeOverrides(true)],
+    ['www.google.com', getThemeOverrides(true)],
+    ['localhost', getThemeOverrides(true)],
+    ['127.0.0.1', getThemeOverrides(false)],
+  ])(
+    'returns correct font overrides',
+    (hostname: string, expectedOverrides: ThemeOverrides) => {
+      const saveLoc = window.location
+      delete (window as any).location
+      window.location = {
+        ...saveLoc,
+        hostname,
+      }
+      expect(new StandaloneEnvAdaptor().themeOverrides()).toEqual(
+        expectedOverrides
+      )
+      window.location = saveLoc
+    }
+  )
+})

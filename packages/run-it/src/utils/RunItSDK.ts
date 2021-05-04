@@ -24,11 +24,13 @@
 
  */
 
-import { Looker40SDK, LookerBrowserSDK } from '@looker/sdk'
+import { functionalSdk40 } from '@looker/sdk'
 import {
   ApiSettings,
+  BrowserSession,
   BrowserTransport,
   DefaultSettings,
+  IAPIMethods,
   IApiSection,
   IApiSettings,
 } from '@looker/sdk-rtl'
@@ -102,7 +104,10 @@ const perfSDK = (
   settings: Partial<IApiSettings>,
   configurator: RunItConfigurator
 ) => {
-  const sdk = LookerBrowserSDK.init40(new RunItSettings(settings, configurator))
+  const options = new RunItSettings(settings, configurator)
+  const transport = new BrowserTransport(options)
+  const session = new BrowserSession(options, transport)
+  const sdk = functionalSdk40(session)
   BrowserTransport.trackPerformance = true
   return sdk
 }
@@ -110,7 +115,7 @@ const perfSDK = (
 // TODO the runItSdk should be created by the StandaloneApiExplorer and the ExtensionApiExplorer
 // and passed into runit. Once that is done this goes away
 /** stand-alone API test runner */
-export let runItSDK: Looker40SDK
+export let runItSDK: IAPIMethods
 // And this which sucks
 export const initRunItSdk = (configurator: RunItConfigurator) => {
   if (!runItSDK) {
@@ -120,5 +125,5 @@ export const initRunItSdk = (configurator: RunItConfigurator) => {
 }
 
 /** Is this a stand-alone version of Run-It that needs server and auth configuration? */
-export const sdkNeedsConfig = (sdk: Looker40SDK | undefined) =>
+export const sdkNeedsConfig = (sdk: IAPIMethods | undefined) =>
   sdk?.authSession.settings instanceof RunItSettings

@@ -56,9 +56,9 @@ describe('ShowResponse', () => {
   })
 
   test('it renders html responses', () => {
-    render(<ShowResponse response={testHtmlResponse} />)
+    renderWithTheme(<ShowResponse response={testHtmlResponse} />)
     expect(screen.getByText('200: text/html;charset=utf-8')).toBeInTheDocument()
-    expect(screen.getByRole('textbox', { name: '' })).toBeInTheDocument()
+    expect(screen.getByText('Orders Created Date')).toBeInTheDocument()
   })
 
   test('it renders png responses', () => {
@@ -79,8 +79,8 @@ describe('ShowResponse', () => {
     expect(screen.getByRole('img')).toBeInTheDocument()
   })
 
-  test.skip('it renders a message for unknown response types', () => {
-    render(<ShowResponse response={testUnknownResponse} />)
+  test('it renders a message for unknown response types', () => {
+    renderWithTheme(<ShowResponse response={testUnknownResponse} />)
     expect(
       screen.getByText(
         `Received ${testUnknownResponse.body.length} bytes of ${testUnknownResponse.contentType} data.`

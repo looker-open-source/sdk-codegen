@@ -488,7 +488,7 @@ ${props.join(this.propDelimiter)}
           return { default: this.nullStr, name: `Array<${map.name}>` }
         case 'HashType': {
           const mapName = type.elementType.name === 'string' ? 'Any' : map.name // TODO fix bad API spec, like MergeQuery vis_config
-          // TODO figure out this bizarre string template error either in IntelliJ or Typescript
+          // TODO figure out this bizarre string template error either in IntelliJ or TypeScript
           // return {name: `Map<String,${map.name}>`, default: '{}'}
           return { default: this.nullStr, name: 'Map<String' + `,${mapName}>` }
         }

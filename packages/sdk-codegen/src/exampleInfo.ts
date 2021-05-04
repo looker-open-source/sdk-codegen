@@ -185,8 +185,8 @@ export const exampleLink = (
 /** map file extension to language name */
 export const extensionToLanguage = {
   '.py': 'Python',
-  '.ts': 'Typescript',
-  '.tsx': 'Typescript',
+  '.ts': 'TypeScript',
+  '.tsx': 'TypeScript',
   '.cs': 'C#',
   '.kt': 'Kotlin',
   '.swift': 'Swift',

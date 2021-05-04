@@ -229,7 +229,7 @@ ${this.hooks.join('\n')}
   }
 
   // because Python has named default parameters, Request types are not required like
-  // they are for Typescript
+  // they are for TypeScript
   methodSignature(indent: string, method: IMethod) {
     const returnType = this.methodReturnType(method)
     const bump = this.bumper(indent)

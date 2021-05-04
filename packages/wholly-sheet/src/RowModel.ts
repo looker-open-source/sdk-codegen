@@ -284,7 +284,7 @@ export class RowModel<T extends IRowModel> implements IRowModel {
   }
 }
 
-// TODO figure out the Typescript magic for this to work
+// TODO figure out the TypeScript magic for this to work
 export type RowModelFactory<T extends IRowModel> = { new (values?: any): T }
 
 // export const RowModelCreator: RowModelFactory<IRowModel> = (values?: any) =>

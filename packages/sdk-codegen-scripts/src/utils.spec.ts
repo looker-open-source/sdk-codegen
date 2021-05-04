@@ -103,7 +103,7 @@ describe.skip('utils', () => {
       expect(actual.languages).toEqual(expLangs)
     })
     test('ts,python,cs,typescript', () => {
-      const expected = ['Typescript', 'Python', 'Csharp']
+      const expected = ['TypeScript', 'Python', 'Csharp']
 
       const actual = doArgs(['ts,python,cs,typescript'])
       expect(actual).toBeDefined()
@@ -118,7 +118,7 @@ describe.skip('utils', () => {
       expect(actual.versions).toEqual(mockVersions)
     })
     test('ts,py --versions foo.json kotlin', () => {
-      const expected = ['Typescript', 'Python', 'Kotlin']
+      const expected = ['TypeScript', 'Python', 'Kotlin']
       const actual = doArgs('ts,py --versions foo.json kotlin'.split(' '))
       expect(actual).toBeDefined()
       expect(actual.languages).toEqual(expected)
@@ -166,7 +166,7 @@ describe.skip('utils', () => {
       )
     })
     test('-v foo.json ts', async () => {
-      const langs = ['Typescript']
+      const langs = ['TypeScript']
       const release = mockVersions.looker_release_version
         .split('.', 2)
         .join('.')

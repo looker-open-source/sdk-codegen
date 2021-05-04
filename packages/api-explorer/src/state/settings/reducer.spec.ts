@@ -31,11 +31,11 @@ describe('settingsReducer', () => {
     const currState = { sdkLanguage: 'Kotlin' }
     const action = {
       type: SettingsActionTypes.SET_SDK_LANGUAGE,
-      payload: 'Typescript',
+      payload: 'TypeScript',
     }
     const state = settingsReducer(currState, action)
     expect(state).toEqual({
-      sdkLanguage: 'Typescript',
+      sdkLanguage: 'TypeScript',
     })
   })
 })

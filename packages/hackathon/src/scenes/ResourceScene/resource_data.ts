@@ -61,7 +61,7 @@ export const resources = [
   {
     id: 5,
     content:
-      'These are all the examples we catalog for our SDKs. Currently: C#, Java, Kotlin, Python, R, Ruby, Swift, and Typescript.',
+      'These are all the examples we catalog for our SDKs. Currently: C#, Java, Kotlin, Python, R, Ruby, Swift, and TypeScript.',
     type: 'Resource',
     tag: 'api',
     link:
