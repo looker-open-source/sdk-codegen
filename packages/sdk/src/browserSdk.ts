@@ -23,16 +23,15 @@
  SOFTWARE.
 
  */
+import type { IApiSettings, IAuthSession, ITransport } from '@looker/sdk-rtl'
 import {
   DefaultSettings,
-  IApiSettings,
-  IAuthSession,
-  ITransport,
   BrowserSession,
   BrowserTransport,
 } from '@looker/sdk-rtl'
-import { Looker40SDK } from './4.0/methods'
+
 import { Looker31SDK } from './3.1/methods'
+import { Looker40SDK } from './4.0/methods'
 
 export const BrowserSettings = (): IApiSettings => {
   const settings = DefaultSettings()
