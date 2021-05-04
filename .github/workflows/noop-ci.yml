@@ -1,28 +1,43 @@
 name: Noop CI
 on:
-  # This workflow is intended to be manually run on a PR that triggers no other
-  # CI workflow (and thus cannot trigger any of the required jobs). Eg. docs,
-  # examples, new packages that don't have a CI workflow setup yet.
+  # This workflow is intended to be manually run on a branch for which the
+  # PR triggers no other CI workflow (and thus cannot trigger any of the
+  # required jobs). Eg. docs, examples, new packages that don't have a CI
+  # workflow setup yet.
   workflow_dispatch:
 
 jobs:
-  noop-codegen-results:
-    name: Codegen Tests
-    if: success() || failure()
-    runs-on: ubuntu-latest
-    steps:
-      - run: exit 0
-
-  noop-python-results:
-    name: Python Tests
-    if: success() || failure()
-    runs-on: ubuntu-latest
-    steps:
-      - run: exit 0
-
-  noop-typescript-results:
-    name: Typescript Tests
-    if: success() || failure()
-    runs-on: ubuntu-latest
-    steps:
-      - run: exit 0
+  noop-test-results:
+    - uses: octokit/request-action@v2.x
+      name: Noop Codegen Tests
+      with:
+        route: POST /repos/{owner}/{repo}/check-runs
+        owner: looker-open-source
+        repo: sdk-codegen
+        name: Codegen Tests
+        head_sha: ${{ github.sha }}
+        conclusion: success
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+    - uses: octokit/request-action@v2.x
+      name: Noop Python Tests
+      with:
+        route: POST /repos/{owner}/{repo}/check-runs
+        owner: looker-open-source
+        repo: sdk-codegen
+        name: Python Tests
+        head_sha: ${{ github.sha }}
+        conclusion: success
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+    - uses: octokit/request-action@v2.x
+      name: Noop Typescript Tests
+      with:
+        route: POST /repos/{owner}/{repo}/check-runs
+        owner: looker-open-source
+        repo: sdk-codegen
+        name: Typescript Tests
+        head_sha: ${{ github.sha }}
+        conclusion: success
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
