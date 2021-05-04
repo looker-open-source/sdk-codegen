@@ -95,7 +95,7 @@ export const DocSDKs: FC<LanguageSDKProps> = ({ api, method, type }) => {
     } else {
       setHeader(`${languages[0]} Declaration`)
     }
-  }, [sdkLanguage])
+  }, [sdkLanguage, item])
 
   return (
     <Box mb="xlarge">
