@@ -1,0 +1,28 @@
+name: Noop CI
+on:
+  # This workflow is intended to be manually run on a PR that triggers no other
+  # CI workflow (and thus cannot trigger any of the required jobs). Eg. docs,
+  # examples, new packages that don't have a CI workflow setup yet.
+  workflow_dispatch:
+
+jobs:
+  noop-codegen-results:
+    name: Codegen Tests
+    if: success() || failure()
+    runs-on: ubuntu-latest
+    steps:
+      - run: exit 0
+
+  noop-python-results:
+    name: Python Tests
+    if: success() || failure()
+    runs-on: ubuntu-latest
+    steps:
+      - run: exit 0
+
+  noop-typescript-results:
+    name: Typescript Tests
+    if: success() || failure()
+    runs-on: ubuntu-latest
+    steps:
+      - run: exit 0
