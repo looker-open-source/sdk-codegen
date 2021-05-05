@@ -5,6 +5,26 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [21.6.0](https://www.github.com/looker-open-source/sdk-codegen/compare/sdk-v21.4.3...sdk-v21.6.0) (2021-05-05)
+
+
+### Features
+
+* update SDKs to Looker 21.6 ([#666](https://www.github.com/looker-open-source/sdk-codegen/issues/666)) ([b2b6b79](https://www.github.com/looker-open-source/sdk-codegen/commit/b2b6b793e38d05d0fcb6236505fb581778d12094))
+
+
+### Bug Fixes
+
+* improve TS SDK imports/exports ([#657](https://www.github.com/looker-open-source/sdk-codegen/issues/657)) ([4c2ec6e](https://www.github.com/looker-open-source/sdk-codegen/commit/4c2ec6ea390bb27d123c333f6d559749efa33830))
+* use "TypeScript" and "JavaScript" everywhere ([#644](https://www.github.com/looker-open-source/sdk-codegen/issues/644)) ([c15031c](https://www.github.com/looker-open-source/sdk-codegen/commit/c15031cee189556adbd9e18641e7c992e86e3611))
+
+
+### Dependencies
+
+* The following workspace dependencies were updated
+  * dependencies
+    * @looker/sdk-rtl bumped from ^21.0.12 to ^21.0.13
+
 ### [21.4.3](https://www.github.com/looker-open-source/sdk-codegen/compare/sdk-v21.4.2...sdk-v21.4.3) (2021-04-27)
 
 

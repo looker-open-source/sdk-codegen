@@ -1,5 +1,24 @@
 # Changelog
 
+## [21.6.0](https://www.github.com/looker-open-source/sdk-codegen/compare/hackathon-v21.4.5...hackathon-v21.6.0) (2021-05-05)
+
+
+### Bug Fixes
+
+* Fix transpiler warnings in hackathon extension ([#651](https://www.github.com/looker-open-source/sdk-codegen/issues/651)) ([bdd9428](https://www.github.com/looker-open-source/sdk-codegen/commit/bdd9428550e60d7eef9016519e07b3c65ad81550))
+* use "TypeScript" and "JavaScript" everywhere ([#644](https://www.github.com/looker-open-source/sdk-codegen/issues/644)) ([c15031c](https://www.github.com/looker-open-source/sdk-codegen/commit/c15031cee189556adbd9e18641e7c992e86e3611))
+
+
+### Dependencies
+
+* The following workspace dependencies were updated
+  * dependencies
+    * @looker/extension-sdk bumped from ^21.4.5 to ^21.4.6
+    * @looker/extension-sdk-react bumped from ^21.4.5 to ^21.4.6
+    * @looker/sdk bumped from ^21.4.3 to ^21.6.0
+    * @looker/sdk-rtl bumped from ^21.0.12 to ^21.0.13
+    * @looker/wholly-sheet bumped from ^0.5.5 to ^0.5.6
+
 ### [21.4.5](https://www.github.com/looker-open-source/sdk-codegen/compare/hackathon-v21.4.4...hackathon-v21.4.5) (2021-04-27)
 
 

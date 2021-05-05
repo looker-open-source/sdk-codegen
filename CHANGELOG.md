@@ -1,5 +1,20 @@
 # Changelog
 
+## [1.6.0](https://www.github.com/looker-open-source/sdk-codegen/compare/sdk-codegen-all-v1.5.0...sdk-codegen-all-v1.6.0) (2021-05-05)
+
+
+### Features
+
+* update SDKs to Looker 21.6 ([#666](https://www.github.com/looker-open-source/sdk-codegen/issues/666)) ([b2b6b79](https://www.github.com/looker-open-source/sdk-codegen/commit/b2b6b793e38d05d0fcb6236505fb581778d12094))
+
+
+### Bug Fixes
+
+* Fix transpiler warnings in hackathon extension ([#651](https://www.github.com/looker-open-source/sdk-codegen/issues/651)) ([bdd9428](https://www.github.com/looker-open-source/sdk-codegen/commit/bdd9428550e60d7eef9016519e07b3c65ad81550))
+* improve TS SDK imports/exports ([#657](https://www.github.com/looker-open-source/sdk-codegen/issues/657)) ([4c2ec6e](https://www.github.com/looker-open-source/sdk-codegen/commit/4c2ec6ea390bb27d123c333f6d559749efa33830))
+* rerender sdk declarations on type/method change ([#659](https://www.github.com/looker-open-source/sdk-codegen/issues/659)) ([77139f6](https://www.github.com/looker-open-source/sdk-codegen/commit/77139f672200d31518543eb76546e9bb2ccf64c3))
+* use "TypeScript" and "JavaScript" everywhere ([#644](https://www.github.com/looker-open-source/sdk-codegen/issues/644)) ([c15031c](https://www.github.com/looker-open-source/sdk-codegen/commit/c15031cee189556adbd9e18641e7c992e86e3611))
+
 ## [1.5.0](https://www.github.com/looker-open-source/sdk-codegen/compare/sdk-codegen-all-v1.4.1...sdk-codegen-all-v1.5.0) (2021-04-27)
 
 
