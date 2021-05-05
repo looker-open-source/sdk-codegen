@@ -1,10 +1,10 @@
 {
   "swagger": "2.0",
   "info": {
-    "version": "4.0.21.4",
-    "x-looker-release-version": "21.4.0",
+    "version": "4.0.21.6",
+    "x-looker-release-version": "21.6.0",
     "title": "Looker API 4.0 (Experimental) Reference",
-    "description": "\nWelcome to the future! This is an early preview of our next-generation Looker API 4.0.\nAPI 4.0 runs alongside APIs 3.1 and 3.0. We've tagged 4.0 as \"experimental\" to reflect\nthat we have more work planned for API 4.0 which may include breaking changes.\nPlease pardon our dust while we remodel a few rooms!\n\n### In This Release\n\nWe're spinning up this new API 4.0 version so that we can make adjustments to our API\nfunctions, parameters, and response types to fix bugs and inconsistencies. These changes\nfall outside the bounds of non-breaking additive changes we can make to our stable API 3.1.\n\nOne benefit of these type adjustments in API 4.0 is dramatically better support for strongly\ntyped languages like TypeScript, Kotlin, Java, and more. Looker is also creating client SDKs\nto call the Looker API from these and other languages. These client SDKs will be available\nas pre-built packages for download from public repositories such as npmjs.org, RubyGems.org,\nPyPi.org. If you use an IDE for software development, you will soon be able to install a\nLooker SDK for your programming language with the click of a button!\n\nWhile API 3.1 is still the defacto Looker API (\"current\", \"stable\", \"default\", etc), the bulk\nof our development activity will gradually shift to API 4.0.\n\n",
+    "description": "\nWelcome to the future! API 4.0 co-exists with APIs 3.1 and 3.0. We've tagged 4.0 as \"experimental\" to indicate\nwork still planned for API 4.0 may include breaking changes. Please pardon our dust while we remodel a few rooms!\n\n### In This Release\n\nAPI 4.0 version was introduced so we can make adjustments to API\nfunctions, parameters, and response types to fix bugs and inconsistencies. These changes\nfall outside the bounds of non-breaking additive changes we can make to our stable API 3.1.\n\nOne benefit of these type adjustments in API 4.0 is dramatically better support for strongly\ntyped languages like TypeScript, Kotlin, Java, and more. Looker has also created client SDKs\nto call the Looker API from these and other languages. Some of these client SDKs are available\nas pre-built packages for download from public repositories such as npmjs.org, RubyGems.org,\nPyPi.org. If you use an IDE for software development, you will soon be able to install a\nLooker SDK for your programming language with the click of a button!\n\nWhile API 3.1 is still the de-facto Looker API (\"current\", \"stable\", \"default\", etc), the bulk\nof our development activity has shifted to API 4.0.\n\n",
     "contact": {
       "name": "Looker Team",
       "url": "https://help.looker.com"
@@ -3509,7 +3509,7 @@
         "tags": ["Dashboard"],
         "operationId": "copy_dashboard",
         "summary": "Copy Dashboard",
-        "description": "### Copy an existing dashboard\n\nCreates a copy of an existing dashboard, in a specified folder, and returns the copied dashboard.\n\n`dashboard_id` and `folder_id` are required.\n`dashboard_id` and `folder_id` must already exist, and `folder_id` must be different from the current `folder_id` of the dashboard.\n",
+        "description": "### Copy an existing dashboard\n\nCreates a copy of an existing dashboard, in a specified folder, and returns the copied dashboard.\n\n`dashboard_id` is required, `dashboard_id` and `folder_id` must already exist if specified.\n`folder_id` will default to the existing folder.\n\nIf a dashboard with the same title already exists in the target folder, the copy will have '(copy)'\n  or '(copy <# of copies>)' appended.\n",
         "parameters": [
           {
             "name": "dashboard_id",
@@ -3522,7 +3522,7 @@
             "name": "folder_id",
             "in": "query",
             "description": "Folder id to copy to.",
-            "required": true,
+            "required": false,
             "type": "string"
           }
         ],
@@ -5819,6 +5819,65 @@
             "description": "External OAuth Application.  This is an OAuth Application which Looker uses to access external systems.",
             "schema": {
               "$ref": "#/definitions/ExternalOauthApplication"
+            }
+          },
+          "400": {
+            "description": "Bad Request",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          },
+          "404": {
+            "description": "Not Found",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          },
+          "409": {
+            "description": "Resource Already Exists",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "schema": {
+              "$ref": "#/definitions/ValidationError"
+            }
+          },
+          "429": {
+            "description": "Too Many Requests",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          }
+        },
+        "x-looker-status": "beta",
+        "x-looker-activity-type": "non_query"
+      }
+    },
+    "/external_oauth_applications/user_state": {
+      "post": {
+        "tags": ["Connection"],
+        "operationId": "create_oauth_application_user_state",
+        "summary": "Create Create OAuth user state.",
+        "description": "### Create OAuth User state.\n",
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "description": "Create OAuth user state.",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/CreateOAuthApplicationUserStateRequest"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Created user state",
+            "schema": {
+              "$ref": "#/definitions/CreateOAuthApplicationUserStateResponse"
             }
           },
           "400": {
@@ -9969,7 +10028,7 @@
             "name": "folder_id",
             "in": "query",
             "description": "Folder id to copy to.",
-            "required": true,
+            "required": false,
             "type": "integer",
             "format": "int64"
           }
@@ -10547,6 +10606,45 @@
             "description": "Model view field suggestions",
             "schema": {
               "$ref": "#/definitions/ModelFieldSuggestions"
+            }
+          },
+          "400": {
+            "description": "Bad Request",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          },
+          "404": {
+            "description": "Not Found",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          }
+        },
+        "x-looker-status": "beta",
+        "x-looker-activity-type": "non_query"
+      }
+    },
+    "/models/{model_name}": {
+      "get": {
+        "tags": ["Metadata"],
+        "operationId": "get_model",
+        "summary": "Get a single model",
+        "description": "### Get a single model\n\n",
+        "parameters": [
+          {
+            "name": "model_name",
+            "in": "path",
+            "description": "Name of model",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "A Model",
+            "schema": {
+              "$ref": "#/definitions/Model"
             }
           },
           "400": {
@@ -13660,6 +13758,96 @@
         "x-looker-activity-type": "non_query"
       }
     },
+    "/projects/{project_id}/tag": {
+      "post": {
+        "tags": ["Project"],
+        "operationId": "tag_ref",
+        "summary": "Tag Ref",
+        "description": "### Creates a tag for the most recent commit, or a specific ref is a SHA is provided\n\nThis is an internal-only, undocumented route.\n",
+        "parameters": [
+          {
+            "name": "project_id",
+            "in": "path",
+            "description": "Project Id",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "body",
+            "in": "body",
+            "description": "Project",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/Project"
+            }
+          },
+          {
+            "name": "commit_sha",
+            "in": "query",
+            "description": "(Optional): Commit Sha to Tag",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "name": "tag_name",
+            "in": "query",
+            "description": "Tag Name",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "name": "tag_message",
+            "in": "query",
+            "description": "(Optional): Tag Message",
+            "required": false,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Project",
+            "schema": {
+              "$ref": "#/definitions/Project"
+            }
+          },
+          "204": {
+            "description": "Returns 204 if tagging a ref was successful, otherwise 400 with an error message"
+          },
+          "400": {
+            "description": "Bad Request",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          },
+          "404": {
+            "description": "Not Found",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          },
+          "409": {
+            "description": "Resource Already Exists",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "schema": {
+              "$ref": "#/definitions/ValidationError"
+            }
+          },
+          "429": {
+            "description": "Too Many Requests",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          }
+        },
+        "x-looker-status": "stable",
+        "x-looker-activity-type": "non_query"
+      }
+    },
     "/render_tasks/looks/{look_id}/{result_format}": {
       "post": {
         "tags": ["RenderTask"],
@@ -16050,6 +16238,13 @@
             "name": "filter_or",
             "in": "query",
             "description": "Combine given search criteria in a boolean OR expression",
+            "required": false,
+            "type": "boolean"
+          },
+          {
+            "name": "is_shared_root",
+            "in": "query",
+            "description": "Match is shared root",
             "required": false,
             "type": "boolean"
           }
@@ -18859,6 +19054,13 @@
             "type": "boolean"
           },
           {
+            "name": "embed_user",
+            "in": "query",
+            "description": "Search for only embed users",
+            "required": false,
+            "type": "boolean"
+          },
+          {
             "name": "email",
             "in": "query",
             "description": "Search for the user with this email address",
@@ -21025,6 +21227,47 @@
         "x-looker-activity-type": "non_query"
       }
     },
+    "/users/embed_user": {
+      "post": {
+        "tags": ["User"],
+        "operationId": "create_embed_user",
+        "summary": "Create an embed user from an external user ID",
+        "description": "Create an embed user from an external user ID\n",
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "description": null,
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/CreateEmbedUserRequest"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Created embed user",
+            "schema": {
+              "$ref": "#/definitions/UserPublic"
+            }
+          },
+          "400": {
+            "description": "Bad Request",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          },
+          "404": {
+            "description": "Not Found",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          }
+        },
+        "x-looker-status": "stable",
+        "x-looker-activity-type": "non_query"
+      }
+    },
     "/vector_thumbnail/{type}/{resource_id}": {
       "get": {
         "tags": ["Content"],
@@ -21439,6 +21682,18 @@
           "format": "int64",
           "readOnly": true,
           "description": "Id of User",
+          "x-looker-nullable": true
+        },
+        "slug": {
+          "type": "string",
+          "readOnly": true,
+          "description": "Content Metadata Slug",
+          "x-looker-nullable": true
+        },
+        "preferred_viewer": {
+          "type": "string",
+          "readOnly": true,
+          "description": "The preferred route for viewing this dashboard (ie: dashboards or dashboards-next)",
           "x-looker-nullable": true
         }
       },
@@ -23048,6 +23303,73 @@
       },
       "x-looker-status": "stable"
     },
+    "CreateEmbedUserRequest": {
+      "properties": {
+        "external_user_id": {
+          "type": "string",
+          "x-looker-nullable": false
+        }
+      },
+      "x-looker-status": "stable",
+      "required": ["external_user_id"]
+    },
+    "CreateOAuthApplicationUserStateRequest": {
+      "properties": {
+        "user_id": {
+          "type": "string",
+          "x-looker-nullable": false
+        },
+        "oauth_application_id": {
+          "type": "string",
+          "x-looker-nullable": false
+        },
+        "access_token": {
+          "type": "string",
+          "x-looker-nullable": false
+        },
+        "access_token_expires_at": {
+          "type": "string",
+          "format": "date-time",
+          "x-looker-nullable": false
+        },
+        "refresh_token": {
+          "type": "string",
+          "x-looker-nullable": true
+        },
+        "refresh_token_expires_at": {
+          "type": "string",
+          "format": "date-time",
+          "x-looker-nullable": true
+        }
+      },
+      "x-looker-status": "beta",
+      "required": [
+        "user_id",
+        "oauth_application_id",
+        "access_token",
+        "access_token_expires_at"
+      ]
+    },
+    "CreateOAuthApplicationUserStateResponse": {
+      "properties": {
+        "user_id": {
+          "type": "integer",
+          "format": "int64",
+          "readOnly": true,
+          "description": "User Id",
+          "x-looker-nullable": false
+        },
+        "oauth_application_id": {
+          "type": "integer",
+          "format": "int64",
+          "readOnly": true,
+          "description": "OAuth Application ID",
+          "x-looker-nullable": false
+        }
+      },
+      "x-looker-status": "beta",
+      "required": ["user_id", "oauth_application_id"]
+    },
     "CredentialsApi3": {
       "properties": {
         "can": {
@@ -24289,6 +24611,16 @@
           "description": "Id of User",
           "x-looker-nullable": true
         },
+        "slug": {
+          "type": "string",
+          "description": "Content Metadata Slug",
+          "x-looker-nullable": true
+        },
+        "preferred_viewer": {
+          "type": "string",
+          "description": "The preferred route for viewing this dashboard (ie: dashboards or dashboards-next)",
+          "x-looker-nullable": true
+        },
         "background_color": {
           "type": "string",
           "description": "Background color",
@@ -24400,11 +24732,6 @@
           "description": "Show title",
           "x-looker-nullable": false
         },
-        "slug": {
-          "type": "string",
-          "description": "Content Metadata Slug",
-          "x-looker-nullable": true
-        },
         "folder_id": {
           "type": "string",
           "description": "Id of folder",
@@ -24440,11 +24767,6 @@
         "appearance": {
           "$ref": "#/definitions/DashboardAppearance",
           "description": "Dashboard visual settings only applicable to dashboards-next (beta)",
-          "x-looker-nullable": true
-        },
-        "preferred_viewer": {
-          "type": "string",
-          "description": "The preferred route for viewing this dashboard (ie: dashboards or dashboards-next)",
           "x-looker-nullable": true
         }
       },
@@ -32506,6 +32828,55 @@
           "readOnly": true,
           "description": "True if calcite was used",
           "x-looker-nullable": false
+        }
+      },
+      "x-looker-status": "beta"
+    },
+    "ModelNamedValueFormats": {
+      "properties": {
+        "format_string": {
+          "type": "string",
+          "readOnly": true,
+          "x-looker-nullable": false
+        },
+        "label": {
+          "type": "string",
+          "readOnly": true,
+          "x-looker-nullable": false
+        },
+        "name": {
+          "type": "string",
+          "readOnly": true,
+          "x-looker-nullable": false
+        },
+        "strict_value_format": {
+          "type": "boolean",
+          "readOnly": true,
+          "x-looker-nullable": false
+        }
+      },
+      "x-looker-status": "beta"
+    },
+    "Model": {
+      "properties": {
+        "connection": {
+          "type": "string",
+          "readOnly": true,
+          "x-looker-nullable": true
+        },
+        "name": {
+          "type": "string",
+          "readOnly": true,
+          "x-looker-nullable": false
+        },
+        "value_formats": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/ModelNamedValueFormats"
+          },
+          "readOnly": true,
+          "description": "Array of named value formats",
+          "x-looker-nullable": true
         }
       },
       "x-looker-status": "beta"
