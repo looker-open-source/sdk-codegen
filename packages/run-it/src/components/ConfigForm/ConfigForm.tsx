@@ -31,6 +31,7 @@ import React, {
   FormEvent,
   useState,
   useContext,
+  useEffect,
 } from 'react'
 import {
   Button,
@@ -79,7 +80,6 @@ export const ConfigForm: FC<ConfigFormProps> = ({
   let config = { base_url: '', looker_url: '' }
   if (storage.value) config = JSON.parse(storage.value)
   const { base_url, looker_url } = config
-
   const [fields, setFields] = useState<ILoadedSpecs>({
     baseUrl: base_url,
     lookerUrl: looker_url,
@@ -114,13 +114,23 @@ export const ConfigForm: FC<ConfigFormProps> = ({
     if (setHasConfig) setHasConfig(false)
   }
 
-  const handleInputChange = (event: FormEvent<HTMLInputElement>) => {
+  const updateFields = (name: string, value: string) => {
     let newFields = { ...fields }
-    newFields[event.currentTarget.name] = event.currentTarget.value
+    newFields[name] = value
     loadSpecsFromVersions(fields.lookerUrl)
       .then((resp) => (newFields = resp))
       .catch((err) => (newFields.fetchError = err.message))
     setFields(newFields)
+  }
+
+  useEffect(() => {
+    if (looker_url) {
+      updateFields('lookerUrl', looker_url)
+    }
+  }, [looker_url])
+
+  const handleInputChange = (event: FormEvent<HTMLInputElement>) => {
+    updateFields(event.currentTarget.name, event.currentTarget.value)
   }
 
   const handleUrlChange = (event: FormEvent<HTMLInputElement>) => {

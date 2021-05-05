@@ -32,6 +32,7 @@ import {
   SpecList,
   upgradeSpecObject,
 } from '@looker/sdk-codegen'
+import { BrowserTransport, DefaultSettings } from '@looker/sdk-rtl'
 import { IStorageValue } from '../../index'
 
 export const RunItConfigKey = 'RunItConfig'
@@ -118,8 +119,13 @@ export interface ILoadedSpecs {
 }
 
 const getUrl = async (url: string) => {
-  const response = await fetch(url, { mode: 'no-cors' })
-  return await response.text()
+  const settings = {
+    ...DefaultSettings(),
+    ...{ base_url: url, verify_ssl: false, headers: { mode: 'cors' } },
+  }
+  const xp = new BrowserTransport(settings)
+  const response = await xp.rawRequest('GET', url)
+  return response.body
 }
 
 /**
