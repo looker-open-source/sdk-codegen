@@ -1,6 +1,6 @@
 {
   "plugins": ["node-workspace"],
-  "release-as": "",
+  "release-as": "21.6.0",
   "packages": {
     "packages/extension-api-explorer": {},
     "packages/extension-sdk-react": {},
@@ -22,10 +22,17 @@
       "bump-patch-for-minor-pre-major": true
     },
     "packages/code-editor": {},
-    "packages/sdk-codegen-scripts": {},
-    "packages/sdk-codegen-utils": {},
-    "packages/sdk-codegen": {},
-    "packages/sdk-rtl": {},
+    "packages/sdk-codegen-scripts": {
+      "release-as": "21.0.16"
+    },
+    "packages/sdk-codegen-utils": {
+    },
+    "packages/sdk-codegen": {
+      "release-as": "21.0.16"
+    },
+    "packages/sdk-rtl": {
+      "release-as": "21.0.13"
+    },
     "packages/wholly-sheet": {
       "release-as": "",
       "bump-minor-pre-major": true,
