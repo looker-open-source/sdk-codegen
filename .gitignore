@@ -57,6 +57,7 @@ kotlin/.*
 kotlin/bin/*
 kotlin/build/*
 kotlin/out/*
+spec/versions.json
 
 # test output
 junit.xml

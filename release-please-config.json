@@ -22,10 +22,14 @@
       "bump-patch-for-minor-pre-major": true
     },
     "packages/code-editor": {},
-    "packages/sdk-codegen-scripts": {},
-    "packages/sdk-codegen-utils": {},
-    "packages/sdk-codegen": {},
-    "packages/sdk-rtl": {},
+    "packages/sdk-codegen-scripts": {
+    },
+    "packages/sdk-codegen-utils": {
+    },
+    "packages/sdk-codegen": {
+    },
+    "packages/sdk-rtl": {
+    },
     "packages/wholly-sheet": {
       "release-as": "",
       "bump-minor-pre-major": true,

@@ -5,6 +5,20 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+### [21.0.16](https://www.github.com/looker-open-source/sdk-codegen/compare/sdk-codegen-v21.0.15...sdk-codegen-v21.0.16) (2021-05-05)
+
+
+### Bug Fixes
+
+* use "TypeScript" and "JavaScript" everywhere ([#644](https://www.github.com/looker-open-source/sdk-codegen/issues/644)) ([c15031c](https://www.github.com/looker-open-source/sdk-codegen/commit/c15031cee189556adbd9e18641e7c992e86e3611))
+
+
+### Dependencies
+
+* The following workspace dependencies were updated
+  * dependencies
+    * @looker/sdk-rtl bumped from ^21.0.12 to ^21.0.13
+
 ### [21.0.15](https://www.github.com/looker-open-source/sdk-codegen/compare/sdk-codegen-v21.0.14...sdk-codegen-v21.0.15) (2021-04-27)
 
 
