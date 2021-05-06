@@ -43,6 +43,7 @@ MDCode.defaultProps = {
   pr: 'xxsmall',
 }
 
+// Temp fix for release build failure
 export const MDCodeBlock = styled(CodeBlock)`
   max-width: 800px;
 `

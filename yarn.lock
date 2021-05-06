@@ -2456,7 +2456,7 @@
     styled-system "^5.1.5"
     uuid "^8.3.2"
 
-"@looker/design-tokens@1.1.3", "@looker/design-tokens@^1.1.3":
+"@looker/design-tokens@^1.1.3":
   version "1.1.3"
   resolved "https://registry.yarnpkg.com/@looker/design-tokens/-/design-tokens-1.1.3.tgz#620ef2be3de589b64b92e76f379f194a97a3d46f"
   integrity sha512-Is9GoNsXCWSvf32AQclBh8ynVs6F+RfJ22t6jBwYAvRpnLOb8VV+wqGjY1t2lZFSTTPEnM4JOr6I9H2EPgDLBA==
@@ -2500,6 +2500,13 @@
   version "1.1.3"
   resolved "https://registry.yarnpkg.com/@looker/icons/-/icons-1.1.3.tgz#9693c031752eb0e327a9c6e3806781a9b4dedc5b"
   integrity sha512-/RamQ6ZycMfcggQ7v1Dj9jF7Y/k9yEW4GrsvM3Zch4D2qWMVE0B0LamKhnGkaUF4P06XZO5m20jKbUJjABTiSA==
+  dependencies:
+    "@styled-icons/styled-icon" "^10.6.3"
+
+"@looker/icons@^1.1.3":
+  version "1.1.5"
+  resolved "https://registry.yarnpkg.com/@looker/icons/-/icons-1.1.5.tgz#43e39ea8d7d5a62db77779715f7afc283f20e30e"
+  integrity sha512-PZX9fboduoQfemRJdWWqjazJ98murGVxW/5BN0kN9detPLQDZEGtSKM9XFUVaVg5zGeNc3mVx4imYFcuvtqTjA==
   dependencies:
     "@styled-icons/styled-icon" "^10.6.3"
 
