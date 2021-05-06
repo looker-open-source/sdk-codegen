@@ -1,6 +1,6 @@
 {
   "plugins": ["node-workspace"],
-  "release-as": "21.6.0",
+  "release-as": "",
   "packages": {
     "packages/extension-api-explorer": {},
     "packages/extension-sdk-react": {},
@@ -23,15 +23,12 @@
     },
     "packages/code-editor": {},
     "packages/sdk-codegen-scripts": {
-      "release-as": "21.0.16"
     },
     "packages/sdk-codegen-utils": {
     },
     "packages/sdk-codegen": {
-      "release-as": "21.0.16"
     },
     "packages/sdk-rtl": {
-      "release-as": "21.0.13"
     },
     "packages/wholly-sheet": {
       "release-as": "",
