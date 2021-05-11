@@ -24,7 +24,7 @@
 
  */
 import { IMethod } from '@looker/sdk-codegen'
-import { clone } from 'lodash'
+import clone from 'lodash/clone'
 
 /**
  * Given a method create a copy and remove its description
