@@ -26,7 +26,7 @@
 
 import { v4 as uuidv4 } from 'uuid'
 import { boolDefault } from '@looker/sdk-rtl'
-import { omit } from 'lodash'
+import omit from 'lodash/omit'
 import { SheetValues } from './SheetSDK'
 
 export const noDate = new Date(-8640000000000000)
