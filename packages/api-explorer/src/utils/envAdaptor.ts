@@ -70,6 +70,17 @@ export const getThemeOverrides = (useGoogleFonts: boolean): ThemeOverrides =>
  * An adaptor class for interacting with browser APIs when running in standalone mode
  */
 export class StandaloneEnvAdaptor implements IApixEnvAdaptor {
+  private _themeOverrides: ThemeOverrides
+
+  constructor() {
+    const { hostname } = location
+    this._themeOverrides = getThemeOverrides(
+      hostname.endsWith('.looker.com') ||
+        hostname.endsWith('.google.com') ||
+        hostname === 'localhost'
+    )
+  }
+
   async localStorageGetItem(key: string) {
     return localStorage.getItem(key)
   }
@@ -82,13 +93,8 @@ export class StandaloneEnvAdaptor implements IApixEnvAdaptor {
     await localStorage.removeItem(key)
   }
 
-  themeOverrides(): ThemeOverrides {
-    const { hostname } = location
-    return getThemeOverrides(
-      hostname.endsWith('.looker.com') ||
-        hostname.endsWith('.google.com') ||
-        hostname === 'localhost'
-    )
+  themeOverrides() {
+    return this._themeOverrides
   }
 }
 
