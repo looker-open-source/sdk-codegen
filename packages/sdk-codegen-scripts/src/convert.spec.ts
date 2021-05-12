@@ -25,7 +25,8 @@
  */
 
 import { readFileSync } from 'fs'
-import { cloneDeep, isEmpty } from 'lodash'
+import cloneDeep from 'lodash/cloneDeep'
+import isEmpty from 'lodash/isEmpty'
 import { NodeSettingsIniFile, LookerNodeSDK } from '@looker/sdk-node'
 import {
   fixConversion,

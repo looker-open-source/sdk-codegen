@@ -24,7 +24,7 @@
 
  */
 
-import { isEmpty } from 'lodash'
+import isEmpty from 'lodash/isEmpty'
 import { APIMethods, Url } from '@looker/sdk-rtl'
 import { ApiModel, ArgValues, IApiModel, KeyedCollection } from './sdkModels'
 

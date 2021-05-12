@@ -23,7 +23,7 @@
  SOFTWARE.
 
  */
-import { omit } from 'lodash'
+import omit from 'lodash/omit'
 import { ValidationMessages } from '@looker/components'
 import { DefaultSettings } from '@looker/sdk-rtl'
 import { ITabTable, SheetSDK } from '@looker/wholly-sheet'

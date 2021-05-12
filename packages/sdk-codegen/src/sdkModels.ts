@@ -1286,7 +1286,7 @@ export class Method extends SchemadSymbol implements IMethod {
   }
 
   get errorResponses() {
-    // TODO use lodash or underscore?
+    // TODO use lodash?
     const result = []
     const map = new Map()
     for (const item of this.responses.filter((r) => r.statusCode >= 400)) {

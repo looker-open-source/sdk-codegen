@@ -27,7 +27,7 @@
 import React, { useEffect } from 'react'
 import { useLocation, useHistory } from 'react-router-dom'
 import { ExtensionHostApi } from '@looker/extension-sdk'
-import { clone } from 'lodash'
+import clone from 'lodash/clone'
 import { RouteChangeListenerProps } from './types'
 
 export const RouteChangeListener: React.FC<RouteChangeListenerProps> = ({
