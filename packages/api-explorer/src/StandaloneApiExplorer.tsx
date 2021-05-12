@@ -43,6 +43,7 @@ export interface StandloneApiExplorerProps {
   specs: SpecList
 }
 
+const standaloneEnvAdaptor = new StandaloneEnvAdaptor()
 const store = configureStore()
 
 export const StandaloneApiExplorer: FC<StandloneApiExplorerProps> = ({
@@ -58,8 +59,6 @@ export const StandaloneApiExplorer: FC<StandloneApiExplorerProps> = ({
     specKey === '3.0' || specKey === '3.1'
       ? undefined
       : initRunItSdk(defaultConfigurator)
-
-  const standaloneEnvAdaptor = new StandaloneEnvAdaptor()
 
   return (
     <Provider store={store}>
