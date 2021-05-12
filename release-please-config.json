@@ -1,5 +1,7 @@
 {
   "plugins": ["node-workspace"],
+  "bump-minor-pre-major": true,
+  "bump-patch-for-minor-pre-major": true,
   "release-as": "",
   "packages": {
     "packages/extension-api-explorer": {},
@@ -12,14 +14,10 @@
       "release-as": ""
     },
     "packages/api-explorer": {
-      "release-as": "",
-      "bump-minor-pre-major": true,
-      "bump-patch-for-minor-pre-major": true
+      "release-as": ""
     },
     "packages/run-it": {
-      "release-as": "",
-      "bump-minor-pre-major": true,
-      "bump-patch-for-minor-pre-major": true
+      "release-as": ""
     },
     "packages/code-editor": {},
     "packages/sdk-codegen-scripts": {
@@ -31,9 +29,7 @@
     "packages/sdk-rtl": {
     },
     "packages/wholly-sheet": {
-      "release-as": "",
-      "bump-minor-pre-major": true,
-      "bump-patch-for-minor-pre-major": true
+      "release-as": ""
     },
     "python": {
       "release-type": "python",
