@@ -1,45 +1,43 @@
+# The jobs in this workflow are necessary because they are configured as
+# required checks on PRs. Each job actually has a corresponding "real" job
+# definition in a different workflow file:
+#
+# codegen-ci.yml: Codegen Tests
+# tssdk-ci.yml: Typescript Tests
+# python-ci.yml: Python Tests
+#
+# By hard-coding passing jobs with the same name here every PR will satisfy the
+# repo's "required checks" EXCEPT those that trigger the "real" job AND that
+# "real" job fails.
+#
+# It will look a little confusing: any PR that triggers a corresponding "real"
+# job will have duplicate check entries, one that passes (this noop job) and the
+# "real" job that either passes or fails.
 name: Noop CI
 on:
-  # This workflow is intended to be manually run on a branch for which the
-  # PR triggers no other CI workflow (and thus cannot trigger any of the
-  # required jobs). Eg. docs, examples, new packages that don't have a CI
-  # workflow setup yet.
-  workflow_dispatch:
+  pull_request:
 
 jobs:
-  noop-test-results:
+  noop-codegen-results:
+    name: Codegen Tests
     runs-on: ubuntu-latest
     steps:
-      - uses: octokit/request-action@v2.x
-        name: Noop Codegen Tests
-        with:
-          route: POST /repos/{owner}/{repo}/check-runs
-          owner: looker-open-source
-          repo: sdk-codegen
-          name: Codegen Tests
-          head_sha: ${{ github.sha }}
-          conclusion: success
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-      - uses: octokit/request-action@v2.x
-        name: Noop Python Tests
-        with:
-          route: POST /repos/{owner}/{repo}/check-runs
-          owner: looker-open-source
-          repo: sdk-codegen
-          name: Python Tests
-          head_sha: ${{ github.sha }}
-          conclusion: success
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-      - uses: octokit/request-action@v2.x
-        name: Noop Typescript Tests
-        with:
-          route: POST /repos/{owner}/{repo}/check-runs
-          owner: looker-open-source
-          repo: sdk-codegen
-          name: Typescript Tests
-          head_sha: ${{ github.sha }}
-          conclusion: success
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      - run: exit 0
+
+  noop-typescript-results:
+    name: Typescript Tests
+    runs-on: ubuntu-latest
+    steps:
+      - run: exit 0
+
+  noop-python-results:
+    name: Python Tests
+    runs-on: ubuntu-latest
+    steps:
+      - run: exit 0
+
+  noop-apix-results:
+    name: APIX Tests
+    runs-on: ubuntu-latest
+    steps:
+      - run: exit 0

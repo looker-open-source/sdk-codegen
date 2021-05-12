@@ -6,7 +6,7 @@ This package supports using the Looker SDK in the browser. The [@looker/sdk-node
 
 The SDK uses a plug-in architecture (also known as dependency injection) for initializing that supports run-time specific transports (like `NodeTransport` and `BrowserTransport`) and different approaches for managing API authentication (like `NodeSession`, `BrowserSession`, `ProxySession`, and `CorsSession`).
 
-**DISCLAIMER**: This is a _beta_ version of the Looker SDK. Implementations are still subject to change, but SDK method calls are expected to work correctly. Please [report any issues](https://github.com/looker-open-source/sdk-codegen/issues) encountered, and indicate the SDK language in the report.
+Please [report any issues](https://github.com/looker-open-source/sdk-codegen/issues) encountered, and indicate the SDK language in the report.
 
 ## Getting started
 

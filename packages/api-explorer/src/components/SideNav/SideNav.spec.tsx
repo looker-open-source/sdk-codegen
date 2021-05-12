@@ -25,7 +25,7 @@
  */
 import React from 'react'
 import { ApiModel, CriteriaToSet } from '@looker/sdk-codegen'
-import { pick } from 'lodash'
+import pick from 'lodash/pick'
 import userEvent from '@testing-library/user-event'
 import { act, screen, waitFor } from '@testing-library/react'
 

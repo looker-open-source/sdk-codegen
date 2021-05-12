@@ -25,7 +25,8 @@
  */
 
 import { readFileSync } from 'fs'
-import { cloneDeep, pick } from 'lodash'
+import cloneDeep from 'lodash/cloneDeep'
+import pick from 'lodash/pick'
 import { OperationObject } from 'openapi3-ts'
 
 import {

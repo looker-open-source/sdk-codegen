@@ -2,7 +2,9 @@
   "name": "@looker/run-it",
   "version": "0.9.7",
   "description": "A dynamic REST request input form and response visualizer",
-  "main": "lib/esm/index.js",
+  "main": "lib/index.js",
+  "module": "lib/esm/index.js",
+  "sideEffects": "false",
   "typings": "lib/index.d.ts",
   "files": [
     "lib"

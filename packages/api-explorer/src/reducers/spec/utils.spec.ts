@@ -24,7 +24,7 @@
 
  */
 import { ApiModel, SpecList } from '@looker/sdk-codegen'
-import { omit } from 'lodash'
+import omit from 'lodash/omit'
 
 import { specs } from '../../test-data'
 import {

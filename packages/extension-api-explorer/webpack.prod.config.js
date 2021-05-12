@@ -29,4 +29,7 @@ const browser = require('../../webpack.browser.config')()
 
 module.exports = merge(base, browser, {
   mode: 'production',
+  optimization: {
+    chunkIds: 'named',
+  },
 })
