@@ -85,25 +85,3 @@ jobs:
           hide_comments: orphaned commits
           check_run_annotations_branch: '*'
           files: 'artifacts/apix-test-results/*.xml'
-
-  # The following jobs are necessary because they are configured as required
-  # checks on PRs and would not otherwise run in this workflow. If the PR/branch
-  # triggering this workflow file also needs to actually run these tests, the
-  # other workflow files will pick it up and submit the results. In that case
-  # there will be duplicate PR check names but github handles this and requires
-  # both to be passing.
-  noop-codegen-results:
-    name: Codegen Tests
-    needs: [publish-test-results]
-    if: success() || failure()
-    runs-on: ubuntu-latest
-    steps:
-      - run: exit 0
-
-  noop-python-results:
-    name: Python Tests
-    needs: [publish-test-results]
-    if: success() || failure()
-    runs-on: ubuntu-latest
-    steps:
-      - run: exit 0
