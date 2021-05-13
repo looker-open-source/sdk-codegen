@@ -256,9 +256,9 @@ export class ${this.packageName}Stream extends APIMethods {
     )
   }
 
-  paramComment(param: IParameter, mapped: IMappedType) {
-    // TODO remove mapped name type signature?
-    return `@param {${mapped.name}} ${param.name} ${param.description}`
+  paramComment(param: IParameter, _mapped: IMappedType) {
+    // Don't use mapped type name for Typescript
+    return `@param ${param.name} ${param.description}`
   }
 
   declareParameter(indent: string, method: IMethod, param: IParameter) {
@@ -286,6 +286,52 @@ export class ${this.packageName}Stream extends APIMethods {
     const resp = `let response = await sdk.ok(sdk.${method.name}(`
     const args = this.assignParams(method, inputs)
     return `${resp}${args}))`
+  }
+
+  methodHeaderComment(method: IMethod, params: string[] = []) {
+    const lines: string[] = []
+
+    const desc = method.description?.trim()
+    if (desc) {
+      lines.push(desc)
+      lines.push('')
+    }
+
+    const resultType = this.typeMap(method.type).name
+    lines.push(`${method.httpMethod} ${method.endpoint} -> ${resultType}`)
+    lines.push('')
+
+    params.forEach((p) => lines.push(p))
+
+    const args = method.allParams
+    if (args.length) {
+      const requestType = this.requestTypeName(method)
+
+      if (requestType) {
+        // use the request type that will be generated in models.ts
+        // No longer using Partial<T> by default here because required and optional are supposed to be accurate
+        // However, for update methods (iow, patch) Partial<T> is still necessary since only the delta gets set
+        lines.push(
+          '@param ' + method.httpMethod === 'PATCH'
+            ? `request: Partial<I${requestType}>`
+            : `request: I${requestType}`
+        )
+      } else {
+        args.forEach((p) =>
+          lines.push(this.paramComment(p, this.paramMappedType(p, method)))
+        )
+      }
+    }
+
+    if (method.responseIsBoth()) {
+      lines.push('')
+      lines.push('**Note**: Binary content may be returned by this method.')
+    } else if (method.responseIsBinary()) {
+      lines.push('')
+      lines.push('**Note**: Binary content is returned by this method.')
+    }
+
+    return lines.join('\n')
   }
 
   methodHeaderDeclaration(
