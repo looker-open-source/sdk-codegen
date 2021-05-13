@@ -1,0 +1,75 @@
+# The jobs in this workflow are necessary because they are configured as
+# required checks on PRs. Github does not currently support configuring required
+# checks per workflow. A PR that only triggers codegen-ci.yml jobs will only
+# report back with the "Codegen Tests" check. But because there is only a global
+# option for required PR checks, that PR would otherwise never satisfy the
+# "Typescript/Python/APIX Tests" checks without these noop jobs.
+#
+# References:
+# https://github.community/t/github-actions-and-required-checks-in-a-monorepo-using-paths-to-limit-execution/16586
+# https://github.community/t/feature-request-conditional-required-checks/16761/6
+#
+# Each job actually has a corresponding "real" job
+# definition in a different workflow file:
+#
+# codegen-ci.yml: Codegen Tests
+# tssdk-ci.yml: Typescript Tests
+# python-ci.yml: Python Tests
+# apix-ci.yml: APIX Tests
+#
+# By hard-coding passing jobs with the same name here every PR will satisfy the
+# repo's "required checks" EXCEPT those that trigger the "real" job AND that
+# "real" job fails.
+#
+# It will look a little confusing: any PR that triggers a corresponding "real"
+# job will have duplicate check entries (namespaced by the workflow name): one
+# that passes (this noop job) and the "real" job that either passes or fails.
+#
+# The real versions of these checks are provided by the
+# EnricoMi/publish-unit-test-result-action github action that parses junit
+# results and provides a nice visual report as a comment on the PR. Additionally
+# it will report itself as a separate check from the workflow job with a
+# pass/fail status according to the junit results. To add confusion, there is a
+# github checks API limitation the author has identified which accounts for
+# the "real" version of these checks not actually being associated with the
+# workflow file that triggered them. Rather they are all associated with the
+# workflow that triggered last on the PR:
+# https://github.com/EnricoMi/publish-unit-test-result-action/issues/12
+#
+name: Required Checks Hack
+on:
+  pull_request:
+
+jobs:
+  noop-codegen-results:
+    name: Codegen Tests
+    runs-on: ubuntu-latest
+    steps:
+      # using `sleep 900` as a naive solution to avoiding early approval: 99% of
+      # real CI jobs finish in under 15 minutes. Waiting 15 minutes here should
+      # mostly avoid the scenario where these noop jobs meet all required checks
+      # on a PR prior to a corresponding real CI job being able to report.
+      #
+      # A more elegant hack to this github-lack-of-configurable-required-checks
+      # might be to run a script with https://github.com/octokit/action.js/
+      # that uses either the REST or GraphQL API to figure out when all
+      # outstanding workflows for this PR have finished and only then `exit 0`
+      - run: sleep 900 && exit 0
+
+  noop-typescript-results:
+    name: Typescript Tests
+    runs-on: ubuntu-latest
+    steps:
+      - run: sleep 900 && exit 0
+
+  noop-python-results:
+    name: Python Tests
+    runs-on: ubuntu-latest
+    steps:
+      - run: sleep 900 && exit 0
+
+  noop-apix-results:
+    name: APIX Tests
+    runs-on: ubuntu-latest
+    steps:
+      - run: sleep 900 && exit 0
