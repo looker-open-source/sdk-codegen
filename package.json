@@ -207,6 +207,7 @@
   },
   "keywords": [],
   "resolutions": {
-    "set-value": "^2.0.1"
+    "set-value": "^2.0.1",
+    "trim": ">= 0.0.3"
   }
 }
