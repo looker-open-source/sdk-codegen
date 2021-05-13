@@ -90,6 +90,6 @@ export class TeamMembers extends WhollySheet<TeamMember, ITeamMemberProps> {
     const member = new TeamMember(values)
     const user = this.data?.users.find(member.user_id)
     if (user) member.$user = user
-    return (member as unknown) as TeamMember
+    return member as unknown as TeamMember
   }
 }

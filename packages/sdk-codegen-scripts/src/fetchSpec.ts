@@ -51,7 +51,7 @@ export const specTransport = (props: ISDKConfigProps) => {
   const options: ITransportSettings = {
     agentTag: 'SDK Codegen',
     base_url: props.base_url,
-    timeout: ((props as unknown) as any).timeout || defaultTimeout,
+    timeout: (props as unknown as any).timeout || defaultTimeout,
     verify_ssl: props.verify_ssl,
   }
   transport = new NodeTransport(options)

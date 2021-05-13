@@ -43,7 +43,8 @@ import {
   Form,
   ValidationMessages,
 } from '@looker/components'
-import { Delete, Done } from '@styled-icons/material'
+import { Delete } from '@styled-icons/material/Delete'
+import { Done } from '@styled-icons/material/Done'
 import { RunItConfigKey, validateUrl, RunItConfigurator } from './configUtils'
 
 interface ConfigFormProps {
@@ -78,10 +79,8 @@ export const ConfigForm: FC<ConfigFormProps> = ({
     lookerUrl: looker_url,
   })
 
-  const [
-    validationMessages,
-    setValidationMessages,
-  ] = useState<ValidationMessages>({})
+  const [validationMessages, setValidationMessages] =
+    useState<ValidationMessages>({})
 
   const handleSubmit = (e: BaseSyntheticEvent) => {
     e.preventDefault()

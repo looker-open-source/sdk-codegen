@@ -35,9 +35,10 @@ import {
 /**
  * React context provider for extension API and SDK
  */
-export const ExtensionContextBase = React.createContext<BaseExtensionContextData>(
-  undefined as any // no one will ever see this undefined!
-)
+export const ExtensionContextBase =
+  React.createContext<BaseExtensionContextData>(
+    undefined as any // no one will ever see this undefined!
+  )
 
 /**
  * ExtensionProviderBase component. Provides access to the extension API but no SDK is

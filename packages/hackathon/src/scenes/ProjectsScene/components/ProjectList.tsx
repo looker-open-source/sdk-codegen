@@ -34,8 +34,11 @@ import {
   Icon,
 } from '@looker/components'
 import { ModelFile } from '@looker/icons'
-import { Lock, Info, Create, Delete } from '@styled-icons/material'
-import { FactCheck } from '@styled-icons/material-outlined'
+import { Lock } from '@styled-icons/material/Lock'
+import { Info } from '@styled-icons/material/Info'
+import { Create } from '@styled-icons/material/Create'
+import { Delete } from '@styled-icons/material/Delete'
+import { FactCheck } from '@styled-icons/material-outlined/FactCheck'
 import { useSelector, useDispatch } from 'react-redux'
 import { useHistory } from 'react-router-dom'
 import { MoreInfoDialog } from '../../../components/MoreInfoDialog'

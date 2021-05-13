@@ -166,7 +166,8 @@ describe('LookerNodeSDK', () => {
       }
       if (!user.credentials_email) {
         // Ensure email credentials are created
-        const email = `${u.first_name}.${u.last_name}${emailDomain}`.toLocaleLowerCase()
+        const email =
+          `${u.first_name}.${u.last_name}${emailDomain}`.toLocaleLowerCase()
         await sdk.ok(sdk.create_user_credentials_email(user.id!, { email }))
         user = await sdk.ok(sdk.user(user.id!))
       }
@@ -496,7 +497,8 @@ describe('LookerNodeSDK', () => {
             })
           )
           expect(user.is_disabled).toEqual(false)
-          const email = `${u.first_name}.${u.last_name}${emailDomain}`.toLocaleLowerCase()
+          const email =
+            `${u.first_name}.${u.last_name}${emailDomain}`.toLocaleLowerCase()
           const creds = await sdk.ok(
             sdk.create_user_credentials_email(user.id!, { email: email })
           )

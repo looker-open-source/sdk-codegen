@@ -276,7 +276,8 @@ export interface IWhollySheet<T extends IRowModel, P> {
 /** CRUDF operations for a GSheet tab */
 export abstract class WhollySheet<T extends IRowModel, P>
   extends TypedRows<T>
-  implements IWhollySheet<T, P> {
+  implements IWhollySheet<T, P>
+{
   index: Record<string, T> = {}
 
   constructor(
@@ -294,7 +295,7 @@ export abstract class WhollySheet<T extends IRowModel, P>
     this.rows = this.typeRows(rows)
     this.checkHeader()
     this.createIndex()
-    return (this.rows as unknown) as T[]
+    return this.rows as unknown as T[]
   }
 
   abstract typeRow<T extends IRowModel>(values?: any): T
@@ -378,7 +379,7 @@ export abstract class WhollySheet<T extends IRowModel, P>
     // A model with a non-zero row is an update
     if (model._row) return await this.update<T>(model, force)
     // Create currently returns the row not the model
-    return ((await this.create<T>(model)) as unknown) as T
+    return (await this.create<T>(model)) as unknown as T
   }
 
   checkId<T extends IRowModel>(model: T) {
@@ -408,12 +409,12 @@ export abstract class WhollySheet<T extends IRowModel, P>
       // No other rows have been added
       // eslint-disable-next-line @typescript-eslint/ban-ts-comment
       // @ts-ignore
-      this.rows.push((newRow as unknown) as T)
+      this.rows.push(newRow as unknown as T)
       this.createIndex()
     } else {
       await this.refresh()
     }
-    return (this.index[newRow[this.keyColumn]] as unknown) as T
+    return this.index[newRow[this.keyColumn]] as unknown as T
   }
 
   async update<T extends IRowModel>(model: T, force = false): Promise<T> {
@@ -437,7 +438,7 @@ export abstract class WhollySheet<T extends IRowModel, P>
     }
     // ID may have changed?
     this.createIndex()
-    return (this.rows[rowPos] as unknown) as T
+    return this.rows[rowPos] as unknown as T
   }
 
   find(value: any, columnName?: string): T | undefined {
@@ -482,7 +483,7 @@ export abstract class WhollySheet<T extends IRowModel, P>
     // Returns a nested array of values, 1 top element per row
     const typed = this.typeRow(values[0])
     // ugly hack cheat for type conversion
-    return (typed as unknown) as T
+    return typed as unknown as T
   }
 
   async checkOutdated<T extends IRowModel>(model: T, source?: T) {
@@ -516,7 +517,7 @@ export abstract class WhollySheet<T extends IRowModel, P>
     let values = await this.sheets.tabValues(this.name)
     // trim header row
     values = values.slice(1)
-    const rows = (this.typeRows(values) as unknown) as T[]
+    const rows = this.typeRows(values) as unknown as T[]
     // eslint-disable-next-line @typescript-eslint/ban-ts-comment
     // @ts-ignore
     this.rows = rows
@@ -526,11 +527,11 @@ export abstract class WhollySheet<T extends IRowModel, P>
 
   fromObject<T extends IRowModel>(obj: P[]): T[] {
     this.loadRows(obj)
-    return (this.rows as unknown) as T[]
+    return this.rows as unknown as T[]
   }
 
   toObject(): P[] {
-    return this.rows.map((r) => (r.toObject() as unknown) as P)
+    return this.rows.map((r) => r.toObject() as unknown as P)
   }
 
   async batchUpdate<T extends IRowModel>(force = false): Promise<T[]> {
@@ -552,9 +553,9 @@ export abstract class WhollySheet<T extends IRowModel, P>
     const creates = this.rows.filter((r) => r.$action === RowAction.Create)
 
     return {
-      updates: (updates as unknown) as T[],
-      deletes: (deletes as unknown) as T[],
-      creates: (creates as unknown) as T[],
+      updates: updates as unknown as T[],
+      deletes: deletes as unknown as T[],
+      creates: creates as unknown as T[],
     }
   }
 
