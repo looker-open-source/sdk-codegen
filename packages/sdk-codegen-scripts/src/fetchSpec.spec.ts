@@ -37,7 +37,7 @@ import {
 import { ISDKConfigProps } from './sdkConfig'
 
 const config = TestConfig()
-const props = (config.section as unknown) as ISDKConfigProps
+const props = config.section as unknown as ISDKConfigProps
 // api_version is no longer part of the INI, now set by sdkGen iterator
 props.api_version = '4.0'
 

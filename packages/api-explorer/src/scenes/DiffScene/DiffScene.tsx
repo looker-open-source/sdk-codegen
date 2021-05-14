@@ -36,7 +36,7 @@ import {
   Select,
   SelectMulti,
 } from '@looker/components'
-import { SyncAlt } from '@styled-icons/material'
+import { SyncAlt } from '@styled-icons/material/SyncAlt'
 import { getDefaultSpecKey } from '../../reducers/spec/utils'
 import { diffPath } from '../../utils'
 import { ApixSection } from '../../components'

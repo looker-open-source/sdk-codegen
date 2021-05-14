@@ -30,7 +30,7 @@ import {
   PopoverContent,
   FieldCheckbox,
 } from '@looker/components'
-import { FilterList } from '@styled-icons/material'
+import { FilterList } from '@styled-icons/material/FilterList'
 import { SearchCriterion } from '@looker/sdk-codegen'
 import React, { useContext, FC, BaseSyntheticEvent } from 'react'
 

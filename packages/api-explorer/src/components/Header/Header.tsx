@@ -35,7 +35,8 @@ import {
   Header as SemanticHeader,
 } from '@looker/components'
 import { LookerLogo } from '@looker/icons'
-import { ChangeHistory, Menu } from '@styled-icons/material'
+import { ChangeHistory } from '@styled-icons/material/ChangeHistory'
+import { Menu } from '@styled-icons/material/Menu'
 
 import { SpecList } from '@looker/sdk-codegen'
 import { SpecState, SpecAction } from '../../reducers'

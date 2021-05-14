@@ -91,7 +91,7 @@ export class Hackathons extends WhollySheet<Hackathon, IHackathonProps> {
   }
 
   typeRow<Hackathon>(values?: any) {
-    return (new Hackathon(values) as unknown) as Hackathon
+    return new Hackathon(values) as unknown as Hackathon
   }
 
   getCurrentHackathon(): Hackathon | undefined {

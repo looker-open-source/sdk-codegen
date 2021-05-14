@@ -33,7 +33,7 @@ import { initSheetSDK } from './testUtils/testUtils'
 
 export class TestSheet extends WhollySheet<TestRow, ITestRowProps> {
   typeRow<T extends IRowModel>(values?: any): T {
-    return (new TestRow(values) as unknown) as T
+    return new TestRow(values) as unknown as T
   }
 }
 
