@@ -34,7 +34,9 @@ import {
   Tooltip,
   Space,
 } from '@looker/components'
-import { Done, Lock, Remove } from '@styled-icons/material'
+import { Done } from '@styled-icons/material/Done'
+import { Lock } from '@styled-icons/material/Lock'
+import { Remove } from '@styled-icons/material/Remove'
 import { IProperty } from '@looker/sdk-codegen'
 import ReactMarkdown from 'react-markdown'
 import {

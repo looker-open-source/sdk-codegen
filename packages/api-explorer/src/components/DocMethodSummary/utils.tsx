@@ -27,7 +27,7 @@ import React from 'react'
 import styled from 'styled-components'
 import { Icon, Status } from '@looker/components'
 import { Beaker } from '@looker/icons'
-import { VisibilityOff } from '@styled-icons/material'
+import { VisibilityOff } from '@styled-icons/material/VisibilityOff'
 
 /**
  * Return a Status react element based on an endpoint's status

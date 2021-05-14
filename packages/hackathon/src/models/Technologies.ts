@@ -68,6 +68,6 @@ export class Technologies extends WhollySheet<Technology, ITechnologyProps> {
   }
 
   typeRow<Technology>(values?: any) {
-    return (new Technology(values) as unknown) as Technology
+    return new Technology(values) as unknown as Technology
   }
 }
