@@ -732,6 +732,25 @@ describe('sdkModels', () => {
 
   describe('method and type xrefs', () => {
     describe('custom types', () => {
+      it('determines parent type of array types', () => {
+        const arrayType = apiTestModel.types.DashboardElement
+        const parents = arrayType.parentTypes
+        expect(parents).toEqual(new Set(['DashboardElement[]', 'Dashboard']))
+      })
+
+      it('determines parent type of enum types', () => {
+        const enumType = apiTestModel.types.LinkedContentType
+        const parents = enumType.parentTypes
+        expect(parents).toEqual(new Set(['Command']))
+      })
+
+      it('determines parent type of complex hash types', () => {
+        const hashProp = apiTestModel.types.ComplexHashProp
+        expect(hashProp.parentTypes).toEqual(
+          new Set(['Hash[ComplexHashProp]', 'ComplexHash'])
+        )
+      })
+
       it('intrinsic types have undefined custom types', () => {
         const actual = new IntrinsicType('integer')
         expect(actual.customType).toEqual('')

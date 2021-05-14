@@ -111,7 +111,7 @@ export const MethodScene: FC<DocMethodProps> = ({ api }) => {
         <DocSDKs api={api} method={method} />
         <DocRequestBody method={method} />
         <DocSdkUsage method={method} />
-        <DocReferences seeTypes={seeTypes} api={api} specKey={specKey} />
+        <DocReferences typesUsed={seeTypes} api={api} specKey={specKey} />
         <DocResponses responses={method.responses} />
       </ApixSection>
       {sdk && value && (

@@ -35124,6 +35124,27 @@
           }
         },
         "x-looker-status": "beta"
+      },
+      "ComplexHash": {
+        "properties": {
+          "complex_prop": {
+            "type": "object",
+            "additionalProperties": {
+              "$ref": "#/components/schemas/ComplexHashProp"
+            },
+            "description": "A complex hash prop ",
+            "nullable": false
+          }
+        }
+      },
+      "ComplexHashProp": {
+        "properties": {
+          "id": {
+            "type": "string",
+            "description": "A simple string used to annotate a property in a complex hash",
+            "nullable": false
+          }
+        }
       }
     }
   }
