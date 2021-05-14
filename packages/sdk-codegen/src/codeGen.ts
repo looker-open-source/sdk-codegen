@@ -48,12 +48,10 @@ export const commentBlock = (
   indent = '',
   commentStr = '// '
 ) => {
-  if (!text) return ''
-  text = text.trim()
-  if (!text) return ''
+  if (!text || !text.trim()) return ''
   const indentation = indent + commentStr
-  const parts = text.split('\n').map((x) => `${indentation}${x}`.trimRight())
-  return parts.join('\n')
+  const lines = text.split('\n').map((x) => `${indentation}${x}`.trimRight())
+  return lines.join('\n')
 }
 
 /** Version and spec references for the generator */

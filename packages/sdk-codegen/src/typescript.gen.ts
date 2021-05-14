@@ -218,7 +218,7 @@ export class ${this.packageName}Stream extends APIMethods {
         text,
         indent,
         commentStr
-      )}\n\n${indent} */\n`
+      )}\n${indent} */\n`
     }
     return `${indent}${commentPrefix}\n${commentBlock(
       text,
@@ -256,9 +256,15 @@ export class ${this.packageName}Stream extends APIMethods {
     )
   }
 
-  paramComment(param: IParameter, _mapped: IMappedType) {
-    // Don't use mapped type name for Typescript
-    return `@param ${param.name} ${param.description}`
+  paramComment(param: IParameter, mapped: IMappedType) {
+    // Don't include mapped type name for Typescript param comments in headers
+    let desc = param.description || param.type.description
+    if (!desc) {
+      if (param.location === strBody) {
+        desc = `Partial<${mapped.name}>`
+      }
+    }
+    return `@param ${param.name} ${desc}`
   }
 
   declareParameter(indent: string, method: IMethod, param: IParameter) {
@@ -275,7 +281,6 @@ export class ${this.packageName}Stream extends APIMethods {
       pOpt = mapped.default ? '' : '?'
     }
     return (
-      this.commentHeader(indent, this.paramComment(param, mapped)) +
       `${indent}${this.reserve(param.name)}${pOpt}: ${mapped.name}` +
       (param.required ? '' : mapped.default ? ` = ${mapped.default}` : '')
     )
@@ -301,20 +306,34 @@ export class ${this.packageName}Stream extends APIMethods {
     lines.push(`${method.httpMethod} ${method.endpoint} -> ${resultType}`)
     lines.push('')
 
-    params.forEach((p) => lines.push(p))
+    if (method.deprecated) {
+      lines.push('@deprecated')
+      lines.push('')
+    }
+
+    if (method.responseIsBoth()) {
+      lines.push('@remarks')
+      lines.push('**NOTE**: Binary content may be returned by this function.')
+      lines.push('')
+    } else if (method.responseIsBinary()) {
+      lines.push('@remarks')
+      lines.push('**NOTE**: Binary content is returned by this function.')
+      lines.push('')
+    }
+
+    params.forEach((p) => lines.push(`@param ${p}`))
 
     const args = method.allParams
     if (args.length) {
-      const requestType = this.requestTypeName(method)
+      let requestType = this.requestTypeName(method)
 
       if (requestType) {
-        // use the request type that will be generated in models.ts
-        // No longer using Partial<T> by default here because required and optional are supposed to be accurate
-        // However, for update methods (iow, patch) Partial<T> is still necessary since only the delta gets set
+        requestType =
+          method.httpMethod === 'PATCH'
+            ? `Partial<I${requestType}>`
+            : `I${requestType}`
         lines.push(
-          '@param ' + method.httpMethod === 'PATCH'
-            ? `request: Partial<I${requestType}>`
-            : `request: I${requestType}`
+          `@param request composed interface "${requestType}" for complex method parameters`
         )
       } else {
         args.forEach((p) =>
@@ -322,14 +341,8 @@ export class ${this.packageName}Stream extends APIMethods {
         )
       }
     }
-
-    if (method.responseIsBoth()) {
-      lines.push('')
-      lines.push('**Note**: Binary content may be returned by this method.')
-    } else if (method.responseIsBinary()) {
-      lines.push('')
-      lines.push('**Note**: Binary content is returned by this method.')
-    }
+    lines.push('@param options one-time API call overrides')
+    lines.push('')
 
     return lines.join('\n')
   }
@@ -341,14 +354,12 @@ export class ${this.packageName}Stream extends APIMethods {
     params: string[] = []
   ) {
     const mapped = this.typeMap(method.type)
-    const head = method.description?.trim()
-    let headComment =
-      (head ? `${head}\n\n` : '') +
-      `${method.httpMethod} ${method.endpoint} -> ${mapped.name}`
     let fragment: string
     const requestType = this.requestTypeName(method)
     const bump = this.bumper(indent)
-
+    const headComment = streamer
+      ? this.methodHeaderComment(method, ['callback streaming output function'])
+      : this.methodHeaderComment(method, params)
     if (requestType) {
       // use the request type that will be generated in models.ts
       // No longer using Partial<T> by default here because required and optional are supposed to be accurate
@@ -365,11 +376,6 @@ export class ${this.packageName}Stream extends APIMethods {
         args.forEach((p) => params.push(this.declareParameter(bump, method, p)))
       fragment =
         params.length > 0 ? `\n${params.join(this.paramDelimiter)}` : ''
-    }
-    if (method.responseIsBoth()) {
-      headComment += `\n\n**Note**: Binary content may be returned by this function.`
-    } else if (method.responseIsBinary()) {
-      headComment += `\n\n**Note**: Binary content is returned by this function.\n`
     }
     const callback = `callback: (readable: Readable) => Promise<${mapped.name}>,`
     const header =
@@ -427,16 +433,14 @@ export class ${this.packageName}Stream extends APIMethods {
   }
 
   functionSignature(indent: string, method: IMethod): string {
-    const mapped = this.typeMap(method.type)
-    const head = method.description?.trim()
-    let headComment =
-      (head ? `${head}\n\n` : '') +
-      `${method.httpMethod} ${method.endpoint} -> ${mapped.name}`
     let fragment: string
     const requestType = this.requestTypeName(method)
     const bump = this.bumper(indent)
     const params = ['sdk: IAPIMethods']
 
+    const headComment = this.methodHeaderComment(method, [
+      'sdk IAPIMethods implementation',
+    ])
     if (requestType) {
       // use the request type that will be generated in models.ts
       // No longer using Partial<T> by default here because required and optional are supposed to be accurate
@@ -453,11 +457,6 @@ export class ${this.packageName}Stream extends APIMethods {
         args.forEach((p) => params.push(this.declareParameter(bump, method, p)))
       fragment =
         params.length > 0 ? `\n${params.join(this.paramDelimiter)}` : ''
-    }
-    if (method.responseIsBoth()) {
-      headComment += `\n\n**Note**: Binary content may be returned by this function.`
-    } else if (method.responseIsBinary()) {
-      headComment += `\n\n**Note**: Binary content is returned by this function.\n`
     }
     const header =
       this.commentHeader(indent, headComment) +
