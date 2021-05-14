@@ -25,34 +25,16 @@
  */
 
 /**
- * Returns a markdown string with matches wrapped with mark tags
- * @param pattern The regex pattern to match
- * @param content The content to search
- * @returns content with highlighted matches
- */
-export const highlightMarkdown = (pattern: string, content: string): string => {
-  let highlightedContent
-  if (!pattern) {
-    highlightedContent = content
-  } else {
-    try {
-      const replacement = (match: string) => `<mark>${match}</mark>`
-      const target = new RegExp(pattern, 'gi')
-      highlightedContent = content.replace(target, replacement)
-    } catch (e) {
-      highlightedContent = content
-    }
-  }
-  return highlightedContent
-}
-
-/**
  * Remove mark tags from url
  * @param url
  * @returns a clean url
  */
 const cleanURL = (url: string) =>
-  (url || '').replace(/<mark>/gi, '').replace(/<\/mark>/gi, '')
+  (url || '')
+    .replace(/<mark>/gi, '')
+    .replace(/<\/mark>/gi, '')
+    .replace(/%3Cmark%3E/gi, '')
+    .replace(/%3C\/mark%3E/gi, '')
 
 /**
  * Remaps tag/method a hashbang url to match the MethodScene route.
@@ -70,8 +52,9 @@ export const remapHashURL = (specKey: string, url: string) =>
 /**
  * Clean urls from mark tags and remap tag/method hashbang urls to match the MethodScene route
  * @param specKey A string to identify the spec in the URL
- * @param url
+ * @param url - url
  * Returns transformed url
  */
-export const transformURL = (specKey: string, url: string) =>
-  remapHashURL(specKey, cleanURL(url))
+export const transformURL = (specKey: string, url: string) => {
+  return remapHashURL(specKey, cleanURL(url))
+}

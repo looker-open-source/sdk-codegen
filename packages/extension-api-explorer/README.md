@@ -17,7 +17,8 @@ The API Explorer extension can be manually installed and run with a Looker insta
       entitlements: {
          local_storage: yes
          navigation: no
-         new_window: no
+         new_window: yes
+         new_window_external_urls: ["https://looker.com/*"]
          raw_api_request: yes
          use_form_submit: yes
          use_embeds: yes

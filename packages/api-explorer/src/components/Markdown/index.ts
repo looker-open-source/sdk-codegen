@@ -23,42 +23,4 @@
  SOFTWARE.
 
  */
-import {
-  IApixEnvAdaptor,
-  ThemeOverrides,
-  getThemeOverrides,
-} from '@looker/api-explorer/src/utils'
-import { ExtensionSDK } from '@looker/extension-sdk'
-
-/**
- * An adaptor class for interacting with browser APIs when running as an extension
- */
-export class ExtensionEnvAdaptor implements IApixEnvAdaptor {
-  _themeOverrides: ThemeOverrides
-  constructor(public extensionSdk: ExtensionSDK) {
-    this._themeOverrides = getThemeOverrides(
-      (this.extensionSdk.lookerHostData || { hostType: 'standard' })
-        .hostType === 'standard'
-    )
-  }
-
-  async localStorageGetItem(key: string) {
-    return await this.extensionSdk.localStorageGetItem(key)
-  }
-
-  async localStorageSetItem(key: string, value: string) {
-    await this.extensionSdk.localStorageSetItem(key, value)
-  }
-
-  async localStorageRemoveItem(key: string) {
-    await this.extensionSdk.localStorageRemoveItem(key)
-  }
-
-  themeOverrides(): ThemeOverrides {
-    return this._themeOverrides
-  }
-
-  openBrowserWindow(url: string, target?: string) {
-    this.extensionSdk.openBrowserWindow(url, target)
-  }
-}
+export * from './Markdown'
