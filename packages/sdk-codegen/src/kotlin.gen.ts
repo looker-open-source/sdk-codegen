@@ -136,7 +136,7 @@ import java.util.*
         text,
         indent,
         commentStr
-      )}\n\n${indent} */\n`
+      )}\n${indent} */\n`
     }
     return `${indent}/**\n${commentBlock(
       text,

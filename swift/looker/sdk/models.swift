@@ -6397,11 +6397,11 @@ public struct LookmlModelExploreSet: SDKModel {
 
 public struct LookmlModelExploreSupportedMeasureType: SDKModel {
     /**
-     * (read-only)
+     *  (read-only)
      */
     public var dimension_type: String?
     /**
-     * (read-only)
+     *  (read-only)
      */
     public var measure_types: [String]?
 
@@ -7003,11 +7003,11 @@ public struct MobileSettings: SDKModel {
 
 public struct Model: SDKModel {
     /**
-     * (read-only)
+     *  (read-only)
      */
     public var connection: String?
     /**
-     * (read-only)
+     *  (read-only)
      */
     public var name: String?
     /**
@@ -7057,19 +7057,19 @@ public struct ModelFieldSuggestions: SDKModel {
 
 public struct ModelNamedValueFormats: SDKModel {
     /**
-     * (read-only)
+     *  (read-only)
      */
     public var format_string: String?
     /**
-     * (read-only)
+     *  (read-only)
      */
     public var label: String?
     /**
-     * (read-only)
+     *  (read-only)
      */
     public var name: String?
     /**
-     * (read-only)
+     *  (read-only)
      */
     public var strict_value_format: Bool?
 
@@ -7088,11 +7088,11 @@ public struct ModelSet: SDKModel {
      */
     public var can: StringDictionary<Bool>?
     /**
-     * (read-only)
+     *  (read-only)
      */
     public var all_access: Bool?
     /**
-     * (read-only)
+     *  (read-only)
      */
     public var built_in: Bool?
     /**
@@ -7551,11 +7551,11 @@ public struct PermissionSet: SDKModel {
      */
     public var can: StringDictionary<Bool>?
     /**
-     * (read-only)
+     *  (read-only)
      */
     public var all_access: Bool?
     /**
-     * (read-only)
+     *  (read-only)
      */
     public var built_in: Bool?
     /**

@@ -7634,6 +7634,7 @@ open class LookerSDKStream: APIMethods {
      * GET /render_tasks/{render_task_id}/results -> String
      *
      * **Note**: Binary content is returned by this method.
+     *
      */
     public func render_task_results(
         /**
