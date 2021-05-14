@@ -27,14 +27,12 @@
 import React from 'react'
 import { IconType } from '@looker/components'
 import { FieldString, IdeFileManifest, IdeParameter } from '@looker/icons'
-import {
-  CalendarToday,
-  Check,
-  Code,
-  Link,
-  Toc,
-  VpnKey,
-} from '@styled-icons/material'
+import { CalendarToday } from '@styled-icons/material/CalendarToday'
+import { Check } from '@styled-icons/material/Check'
+import { Code } from '@styled-icons/material/Code'
+import { Link } from '@styled-icons/material/Link'
+import { Toc } from '@styled-icons/material/Toc'
+import { VpnKey } from '@styled-icons/material/VpnKey'
 import { Tag } from '@styled-icons/material-rounded'
 import { Email } from '@styled-icons/material-outlined'
 import { IType, TypeOfType, typeOfType } from '@looker/sdk-codegen'

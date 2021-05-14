@@ -55,12 +55,10 @@ export const ExtensionProvider: React.FC<ExtensionProviderProps> = ({
     {} as ExtensionContextData
   )
   const connectedCallback = (extensionHost: ExtensionHostApi) => {
-    const core31SDK: Looker31SDK = LookerExtensionSDK.create31Client(
-      extensionHost
-    )
-    const core40SDK: Looker40SDK = LookerExtensionSDK.create40Client(
-      extensionHost
-    )
+    const core31SDK: Looker31SDK =
+      LookerExtensionSDK.create31Client(extensionHost)
+    const core40SDK: Looker40SDK =
+      LookerExtensionSDK.create40Client(extensionHost)
     // Provide global access for use by redux if needed
     registerCore31SDK(core31SDK)
     registerCore40SDK(core40SDK)

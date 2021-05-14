@@ -54,11 +54,8 @@ export class ExtensionHostApiImpl implements ExtensionHostApi {
 
   constructor(configuration: ExtensionHostApiConfiguration) {
     this._configuration = configuration
-    const {
-      chattyHost,
-      setInitialRoute,
-      hostChangedRoute,
-    } = this._configuration
+    const { chattyHost, setInitialRoute, hostChangedRoute } =
+      this._configuration
     this.chattyHost = chattyHost
     this.setInitialRoute = setInitialRoute
     this.hostChangedRoute = hostChangedRoute

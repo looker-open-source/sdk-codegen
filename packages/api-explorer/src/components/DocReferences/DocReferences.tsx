@@ -33,8 +33,9 @@ import { CollapserCard } from '../Collapser'
 import { DocReferenceItems } from './utils'
 
 interface DocReferencesProps {
-  seeTypes: IType[]
-  seeMethods?: IMethod[]
+  typesUsed: IType[]
+  methodsUsedBy?: IMethod[]
+  typesUsedBy?: IType[]
   specKey: string
   api: ApiModel
 }
@@ -43,16 +44,22 @@ interface DocReferencesProps {
  * It renders links to the given types and/or methods references
  */
 export const DocReferences: FC<DocReferencesProps> = ({
-  seeTypes,
+  typesUsed,
   specKey,
   api,
-  seeMethods = [],
+  methodsUsedBy = [],
+  typesUsedBy = [],
 }) => {
   const {
     searchSettings: { pattern },
   } = useContext(SearchContext)
 
-  if (seeTypes.length === 0 && seeMethods.length === 0) return <></>
+  if (
+    typesUsed.length === 0 &&
+    methodsUsedBy.length === 0 &&
+    typesUsedBy.length === 0
+  )
+    return <></>
 
   return (
     <Box id="references" mb="xlarge">
@@ -60,14 +67,21 @@ export const DocReferences: FC<DocReferencesProps> = ({
         <>
           {DocReferenceItems(
             'Referenced Types:',
-            seeTypes,
+            typesUsed,
+            api,
+            specKey,
+            pattern
+          )}
+          {DocReferenceItems(
+            'Used by types:',
+            typesUsedBy,
             api,
             specKey,
             pattern
           )}
           {DocReferenceItems(
             'Used by methods:',
-            seeMethods,
+            methodsUsedBy,
             api,
             specKey,
             pattern

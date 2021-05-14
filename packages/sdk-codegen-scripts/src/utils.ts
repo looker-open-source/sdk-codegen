@@ -143,11 +143,12 @@ export const doArgs = (args: string[]) => {
   }
 
   // Default languages to all
-  const languages = (langs.length > 0
-    ? langs
-    : codeGenerators
-        .filter((l) => l.factory !== undefined)
-        .map((l) => l.language)
+  const languages = (
+    langs.length > 0
+      ? langs
+      : codeGenerators
+          .filter((l) => l.factory !== undefined)
+          .map((l) => l.language)
   ).filter((value, index, all) => all.indexOf(value) === index)
 
   return { languages, versions, noStreams }

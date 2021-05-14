@@ -427,7 +427,9 @@ class SheetsClient {
       return await hackathons.find(hackathonId, '_id')
     } else {
       const data = this.getSheetData()
-      return await (await data).currentHackathon
+      return await (
+        await data
+      ).currentHackathon
     }
   }
 
