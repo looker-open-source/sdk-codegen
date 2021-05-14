@@ -744,6 +744,13 @@ describe('sdkModels', () => {
         expect(parents).toEqual(new Set(['Command']))
       })
 
+      it('determines parent type of complex hash types', () => {
+        const hashProp = apiTestModel.types.ComplexHashProp
+        expect(hashProp.parentTypes).toEqual(
+          new Set(['Hash[ComplexHashProp]', 'ComplexHash'])
+        )
+      })
+
       it('intrinsic types have undefined custom types', () => {
         const actual = new IntrinsicType('integer')
         expect(actual.customType).toEqual('')
