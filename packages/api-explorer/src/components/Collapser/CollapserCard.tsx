@@ -29,13 +29,18 @@ import {
   Accordion,
   AccordionDisclosure,
   AccordionContent,
+  Divider,
+  Box,
 } from '@looker/components'
+import { ArrowRight } from '@styled-icons/material/ArrowRight'
+import { ArrowDropDown } from '@styled-icons/material/ArrowDropDown'
 import { ApixHeading } from '../common'
 
 interface CollapserCardProps {
   id?: string
   heading: string
   children: ReactElement
+  defaultOpen?: boolean
 }
 
 /**
@@ -45,20 +50,27 @@ export const CollapserCard: FC<CollapserCardProps> = ({
   id,
   heading,
   children,
+  defaultOpen = true,
 }) => {
-  const { value, toggle } = useToggle(true)
+  const { value, toggle } = useToggle(defaultOpen)
 
   return (
-    <Accordion
-      id={id}
-      indicatorPosition="left"
-      isOpen={value}
-      toggleOpen={toggle}
-    >
-      <AccordionDisclosure>
-        <ApixHeading as="h2">{heading}</ApixHeading>
-      </AccordionDisclosure>
-      <AccordionContent>{children}</AccordionContent>
-    </Accordion>
+    <>
+      <Divider appearance="light" />
+      <Accordion
+        id={id}
+        indicatorPosition="left"
+        isOpen={value}
+        toggleOpen={toggle}
+        indicatorIcons={{ close: <ArrowRight />, open: <ArrowDropDown /> }}
+      >
+        <AccordionDisclosure>
+          <ApixHeading as="h3">{heading}</ApixHeading>
+        </AccordionDisclosure>
+        <AccordionContent>
+          <Box pb="xlarge">{children}</Box>
+        </AccordionContent>
+      </Accordion>
+    </>
   )
 }
