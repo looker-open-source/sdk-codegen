@@ -4324,11 +4324,11 @@ export interface ILookmlModelExploreSet {
 
 export interface ILookmlModelExploreSupportedMeasureType {
   /**
-   * (read-only)
+   *  (read-only)
    */
   dimension_type?: string
   /**
-   * (read-only)
+   *  (read-only)
    */
   measure_types?: string[]
 }
@@ -4783,11 +4783,11 @@ export interface IModelSet {
    */
   can?: IDictionary<boolean>
   /**
-   * (read-only)
+   *  (read-only)
    */
   all_access?: boolean
   /**
-   * (read-only)
+   *  (read-only)
    */
   built_in?: boolean
   /**
@@ -5099,11 +5099,11 @@ export interface IPermissionSet {
    */
   can?: IDictionary<boolean>
   /**
-   * (read-only)
+   *  (read-only)
    */
   all_access?: boolean
   /**
-   * (read-only)
+   *  (read-only)
    */
   built_in?: boolean
   /**

@@ -19,6 +19,7 @@
 /// LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 /// OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 /// SOFTWARE.
+///
 
 /// 376 API methods
 
@@ -122,6 +123,7 @@ namespace Looker.SDK.API31
   /// DELETE /logout -> string
   ///
   /// <returns><c>string</c> Logged out successfully. (application/json)</returns>
+  ///
   public async Task<SdkResponse<string, Exception>> logout(
     ITransportSettings? options = null)
 {  
@@ -170,6 +172,7 @@ namespace Looker.SDK.API31
   /// POST /embed/sso_url -> EmbedUrlResponse
   ///
   /// <returns><c>EmbedUrlResponse</c> Signed SSO URL (application/json)</returns>
+  ///
   public async Task<SdkResponse<EmbedUrlResponse, Exception>> create_sso_embed_url(
     EmbedSsoParams body,
     ITransportSettings? options = null)
@@ -197,6 +200,7 @@ namespace Looker.SDK.API31
   /// GET /ldap_config -> LDAPConfig
   ///
   /// <returns><c>LDAPConfig</c> LDAP Configuration. (application/json)</returns>
+  ///
   public async Task<SdkResponse<LDAPConfig, Exception>> ldap_config(
     ITransportSettings? options = null)
 {  
@@ -218,6 +222,7 @@ namespace Looker.SDK.API31
   /// PATCH /ldap_config -> LDAPConfig
   ///
   /// <returns><c>LDAPConfig</c> New state for LDAP Configuration. (application/json)</returns>
+  ///
   public async Task<SdkResponse<LDAPConfig, Exception>> update_ldap_config(
     WriteLDAPConfig body,
     ITransportSettings? options = null)
@@ -247,6 +252,7 @@ namespace Looker.SDK.API31
   /// PUT /ldap_config/test_connection -> LDAPConfigTestResult
   ///
   /// <returns><c>LDAPConfigTestResult</c> Result info. (application/json)</returns>
+  ///
   public async Task<SdkResponse<LDAPConfigTestResult, Exception>> test_ldap_config_connection(
     WriteLDAPConfig body,
     ITransportSettings? options = null)
@@ -278,6 +284,7 @@ namespace Looker.SDK.API31
   /// PUT /ldap_config/test_auth -> LDAPConfigTestResult
   ///
   /// <returns><c>LDAPConfigTestResult</c> Result info. (application/json)</returns>
+  ///
   public async Task<SdkResponse<LDAPConfigTestResult, Exception>> test_ldap_config_auth(
     WriteLDAPConfig body,
     ITransportSettings? options = null)
@@ -298,6 +305,7 @@ namespace Looker.SDK.API31
   /// PUT /ldap_config/test_user_info -> LDAPConfigTestResult
   ///
   /// <returns><c>LDAPConfigTestResult</c> Result info. (application/json)</returns>
+  ///
   public async Task<SdkResponse<LDAPConfigTestResult, Exception>> test_ldap_config_user_info(
     WriteLDAPConfig body,
     ITransportSettings? options = null)
@@ -318,6 +326,7 @@ namespace Looker.SDK.API31
   /// PUT /ldap_config/test_user_auth -> LDAPConfigTestResult
   ///
   /// <returns><c>LDAPConfigTestResult</c> Result info. (application/json)</returns>
+  ///
   public async Task<SdkResponse<LDAPConfigTestResult, Exception>> test_ldap_config_user_auth(
     WriteLDAPConfig body,
     ITransportSettings? options = null)
@@ -341,6 +350,7 @@ namespace Looker.SDK.API31
   /// GET /oidc_config -> OIDCConfig
   ///
   /// <returns><c>OIDCConfig</c> OIDC Configuration. (application/json)</returns>
+  ///
   public async Task<SdkResponse<OIDCConfig, Exception>> oidc_config(
     ITransportSettings? options = null)
 {  
@@ -360,6 +370,7 @@ namespace Looker.SDK.API31
   /// PATCH /oidc_config -> OIDCConfig
   ///
   /// <returns><c>OIDCConfig</c> New state for OIDC Configuration. (application/json)</returns>
+  ///
   public async Task<SdkResponse<OIDCConfig, Exception>> update_oidc_config(
     WriteOIDCConfig body,
     ITransportSettings? options = null)
@@ -402,6 +413,7 @@ namespace Looker.SDK.API31
   /// POST /oidc_test_configs -> OIDCConfig
   ///
   /// <returns><c>OIDCConfig</c> OIDC test config (application/json)</returns>
+  ///
   public async Task<SdkResponse<OIDCConfig, Exception>> create_oidc_test_config(
     WriteOIDCConfig body,
     ITransportSettings? options = null)
@@ -414,6 +426,7 @@ namespace Looker.SDK.API31
   /// GET /password_config -> PasswordConfig
   ///
   /// <returns><c>PasswordConfig</c> Password Config (application/json)</returns>
+  ///
   public async Task<SdkResponse<PasswordConfig, Exception>> password_config(
     ITransportSettings? options = null)
 {  
@@ -425,6 +438,7 @@ namespace Looker.SDK.API31
   /// PATCH /password_config -> PasswordConfig
   ///
   /// <returns><c>PasswordConfig</c> Password Config (application/json)</returns>
+  ///
   public async Task<SdkResponse<PasswordConfig, Exception>> update_password_config(
     WritePasswordConfig body,
     ITransportSettings? options = null)
@@ -437,6 +451,7 @@ namespace Looker.SDK.API31
   /// PUT /password_config/force_password_reset_at_next_login_for_all_users -> string
   ///
   /// <returns><c>string</c> Password Config (application/json)</returns>
+  ///
   public async Task<SdkResponse<string, Exception>> force_password_reset_at_next_login_for_all_users(
     ITransportSettings? options = null)
 {  
@@ -459,6 +474,7 @@ namespace Looker.SDK.API31
   /// GET /saml_config -> SamlConfig
   ///
   /// <returns><c>SamlConfig</c> SAML Configuration. (application/json)</returns>
+  ///
   public async Task<SdkResponse<SamlConfig, Exception>> saml_config(
     ITransportSettings? options = null)
 {  
@@ -478,6 +494,7 @@ namespace Looker.SDK.API31
   /// PATCH /saml_config -> SamlConfig
   ///
   /// <returns><c>SamlConfig</c> New state for SAML Configuration. (application/json)</returns>
+  ///
   public async Task<SdkResponse<SamlConfig, Exception>> update_saml_config(
     WriteSamlConfig body,
     ITransportSettings? options = null)
@@ -520,6 +537,7 @@ namespace Looker.SDK.API31
   /// POST /saml_test_configs -> SamlConfig
   ///
   /// <returns><c>SamlConfig</c> SAML test config (application/json)</returns>
+  ///
   public async Task<SdkResponse<SamlConfig, Exception>> create_saml_test_config(
     WriteSamlConfig body,
     ITransportSettings? options = null)
@@ -532,6 +550,7 @@ namespace Looker.SDK.API31
   /// POST /parse_saml_idp_metadata -> SamlMetadataParseResult
   ///
   /// <returns><c>SamlMetadataParseResult</c> Parse result (application/json)</returns>
+  ///
   public async Task<SdkResponse<SamlMetadataParseResult, Exception>> parse_saml_idp_metadata(
     string body,
     ITransportSettings? options = null)
@@ -546,6 +565,7 @@ namespace Looker.SDK.API31
   /// POST /fetch_and_parse_saml_idp_metadata -> SamlMetadataParseResult
   ///
   /// <returns><c>SamlMetadataParseResult</c> Parse result (application/json)</returns>
+  ///
   public async Task<SdkResponse<SamlMetadataParseResult, Exception>> fetch_and_parse_saml_idp_metadata(
     string body,
     ITransportSettings? options = null)
@@ -558,6 +578,7 @@ namespace Looker.SDK.API31
   /// GET /session_config -> SessionConfig
   ///
   /// <returns><c>SessionConfig</c> Session Config (application/json)</returns>
+  ///
   public async Task<SdkResponse<SessionConfig, Exception>> session_config(
     ITransportSettings? options = null)
 {  
@@ -569,6 +590,7 @@ namespace Looker.SDK.API31
   /// PATCH /session_config -> SessionConfig
   ///
   /// <returns><c>SessionConfig</c> Session Config (application/json)</returns>
+  ///
   public async Task<SdkResponse<SessionConfig, Exception>> update_session_config(
     WriteSessionConfig body,
     ITransportSettings? options = null)
@@ -684,6 +706,7 @@ namespace Looker.SDK.API31
   /// POST /color_collections -> ColorCollection
   ///
   /// <returns><c>ColorCollection</c> ColorCollection (application/json)</returns>
+  ///
   public async Task<SdkResponse<ColorCollection, Exception>> create_color_collection(
     WriteColorCollection body,
     ITransportSettings? options = null)
@@ -740,6 +763,7 @@ namespace Looker.SDK.API31
   /// GET /color_collections/default -> ColorCollection
   ///
   /// <returns><c>ColorCollection</c> ColorCollection (application/json)</returns>
+  ///
   public async Task<SdkResponse<ColorCollection, Exception>> default_color_collection(
     ITransportSettings? options = null)
 {  
@@ -839,6 +863,7 @@ namespace Looker.SDK.API31
   /// GET /backup_configuration -> BackupConfiguration
   ///
   /// <returns><c>BackupConfiguration</c> Current Backup Configuration (application/json)</returns>
+  ///
   public async Task<SdkResponse<BackupConfiguration, Exception>> backup_configuration(
     ITransportSettings? options = null)
 {  
@@ -850,6 +875,7 @@ namespace Looker.SDK.API31
   /// PATCH /backup_configuration -> BackupConfiguration
   ///
   /// <returns><c>BackupConfiguration</c> New state for specified model set. (application/json)</returns>
+  ///
   public async Task<SdkResponse<BackupConfiguration, Exception>> update_backup_configuration(
     WriteBackupConfiguration body,
     ITransportSettings? options = null)
@@ -862,6 +888,7 @@ namespace Looker.SDK.API31
   /// GET /cloud_storage -> BackupConfiguration
   ///
   /// <returns><c>BackupConfiguration</c> Current Cloud Storage Configuration (application/json)</returns>
+  ///
   public async Task<SdkResponse<BackupConfiguration, Exception>> cloud_storage_configuration(
     ITransportSettings? options = null)
 {  
@@ -873,6 +900,7 @@ namespace Looker.SDK.API31
   /// PATCH /cloud_storage -> BackupConfiguration
   ///
   /// <returns><c>BackupConfiguration</c> New state for specified model set. (application/json)</returns>
+  ///
   public async Task<SdkResponse<BackupConfiguration, Exception>> update_cloud_storage_configuration(
     WriteBackupConfiguration body,
     ITransportSettings? options = null)
@@ -885,6 +913,7 @@ namespace Looker.SDK.API31
   /// GET /custom_welcome_email -> CustomWelcomeEmail
   ///
   /// <returns><c>CustomWelcomeEmail</c> Custom Welcome Email (application/json)</returns>
+  ///
   public async Task<SdkResponse<CustomWelcomeEmail, Exception>> custom_welcome_email(
     ITransportSettings? options = null)
 {  
@@ -912,6 +941,7 @@ namespace Looker.SDK.API31
   /// PUT /custom_welcome_email_test -> WelcomeEmailTest
   ///
   /// <returns><c>WelcomeEmailTest</c> Send Test Welcome Email (application/json)</returns>
+  ///
   public async Task<SdkResponse<WelcomeEmailTest, Exception>> update_custom_welcome_email_test(
     WelcomeEmailTest body,
     ITransportSettings? options = null)
@@ -924,6 +954,7 @@ namespace Looker.SDK.API31
   /// GET /digest_emails_enabled -> DigestEmails
   ///
   /// <returns><c>DigestEmails</c> Digest_emails (application/json)</returns>
+  ///
   public async Task<SdkResponse<DigestEmails, Exception>> digest_emails_enabled(
     ITransportSettings? options = null)
 {  
@@ -935,6 +966,7 @@ namespace Looker.SDK.API31
   /// PATCH /digest_emails_enabled -> DigestEmails
   ///
   /// <returns><c>DigestEmails</c> Digest_emails (application/json)</returns>
+  ///
   public async Task<SdkResponse<DigestEmails, Exception>> update_digest_emails_enabled(
     DigestEmails body,
     ITransportSettings? options = null)
@@ -949,6 +981,7 @@ namespace Looker.SDK.API31
   /// POST /digest_email_send -> DigestEmailSend
   ///
   /// <returns><c>DigestEmailSend</c> Status of generating and sending the data (application/json)</returns>
+  ///
   public async Task<SdkResponse<DigestEmailSend, Exception>> create_digest_email_send(
     ITransportSettings? options = null)
 {  
@@ -960,6 +993,7 @@ namespace Looker.SDK.API31
   /// GET /internal_help_resources_content -> InternalHelpResourcesContent
   ///
   /// <returns><c>InternalHelpResourcesContent</c> Internal Help Resources Content (application/json)</returns>
+  ///
   public async Task<SdkResponse<InternalHelpResourcesContent, Exception>> internal_help_resources_content(
     ITransportSettings? options = null)
 {  
@@ -971,6 +1005,7 @@ namespace Looker.SDK.API31
   /// PATCH /internal_help_resources_content -> InternalHelpResourcesContent
   ///
   /// <returns><c>InternalHelpResourcesContent</c> Internal Help Resources Content (application/json)</returns>
+  ///
   public async Task<SdkResponse<InternalHelpResourcesContent, Exception>> update_internal_help_resources_content(
     WriteInternalHelpResourcesContent body,
     ITransportSettings? options = null)
@@ -983,6 +1018,7 @@ namespace Looker.SDK.API31
   /// GET /internal_help_resources_enabled -> InternalHelpResources
   ///
   /// <returns><c>InternalHelpResources</c> Internal Help Resources (application/json)</returns>
+  ///
   public async Task<SdkResponse<InternalHelpResources, Exception>> internal_help_resources(
     ITransportSettings? options = null)
 {  
@@ -994,6 +1030,7 @@ namespace Looker.SDK.API31
   /// PATCH /internal_help_resources -> InternalHelpResources
   ///
   /// <returns><c>InternalHelpResources</c> Custom Welcome Email (application/json)</returns>
+  ///
   public async Task<SdkResponse<InternalHelpResources, Exception>> update_internal_help_resources(
     WriteInternalHelpResources body,
     ITransportSettings? options = null)
@@ -1006,6 +1043,7 @@ namespace Looker.SDK.API31
   /// GET /legacy_features -> LegacyFeature[]
   ///
   /// <returns><c>LegacyFeature[]</c> Legacy Feature (application/json)</returns>
+  ///
   public async Task<SdkResponse<LegacyFeature[], Exception>> all_legacy_features(
     ITransportSettings? options = null)
 {  
@@ -1046,6 +1084,7 @@ namespace Looker.SDK.API31
   /// GET /locales -> Locale[]
   ///
   /// <returns><c>Locale[]</c> Locale (application/json)</returns>
+  ///
   public async Task<SdkResponse<Locale[], Exception>> all_locales(
     ITransportSettings? options = null)
 {  
@@ -1057,6 +1096,7 @@ namespace Looker.SDK.API31
   /// GET /timezones -> Timezone[]
   ///
   /// <returns><c>Timezone[]</c> Timezone (application/json)</returns>
+  ///
   public async Task<SdkResponse<Timezone[], Exception>> all_timezones(
     ITransportSettings? options = null)
 {  
@@ -1099,6 +1139,7 @@ namespace Looker.SDK.API31
   /// PUT /whitelabel_configuration -> WhitelabelConfiguration
   ///
   /// <returns><c>WhitelabelConfiguration</c> Whitelabel configuration (application/json)</returns>
+  ///
   public async Task<SdkResponse<WhitelabelConfiguration, Exception>> update_whitelabel_configuration(
     WriteWhitelabelConfiguration body,
     ITransportSettings? options = null)
@@ -1130,6 +1171,7 @@ namespace Looker.SDK.API31
   /// POST /connections -> DBConnection
   ///
   /// <returns><c>DBConnection</c> Connection (application/json)</returns>
+  ///
   public async Task<SdkResponse<DBConnection, Exception>> create_connection(
     WriteDBConnection body,
     ITransportSettings? options = null)
@@ -1370,6 +1412,7 @@ namespace Looker.SDK.API31
   /// POST /content_favorite -> ContentFavorite
   ///
   /// <returns><c>ContentFavorite</c> Favorite Content (application/json)</returns>
+  ///
   public async Task<SdkResponse<ContentFavorite, Exception>> create_content_favorite(
     WriteContentFavorite body,
     ITransportSettings? options = null)
@@ -1687,6 +1730,7 @@ namespace Looker.SDK.API31
   /// POST /dashboards -> Dashboard
   ///
   /// <returns><c>Dashboard</c> Dashboard (application/json)</returns>
+  ///
   public async Task<SdkResponse<Dashboard, Exception>> create_dashboard(
     WriteDashboard body,
     ITransportSettings? options = null)
@@ -2333,6 +2377,7 @@ namespace Looker.SDK.API31
   /// POST /data_actions -> DataActionResponse
   ///
   /// <returns><c>DataActionResponse</c> Data Action Response (application/json)</returns>
+  ///
   public async Task<SdkResponse<DataActionResponse, Exception>> perform_data_action(
     DataActionRequest body,
     ITransportSettings? options = null)
@@ -2345,6 +2390,7 @@ namespace Looker.SDK.API31
   /// POST /data_actions/form -> DataActionForm
   ///
   /// <returns><c>DataActionForm</c> Data Action Form (application/json)</returns>
+  ///
   public async Task<SdkResponse<DataActionForm, Exception>> fetch_remote_data_action_form(
     StringDictionary<string> body,
     ITransportSettings? options = null)
@@ -2361,6 +2407,7 @@ namespace Looker.SDK.API31
   /// GET /datagroups -> Datagroup[]
   ///
   /// <returns><c>Datagroup[]</c> Datagroup (application/json)</returns>
+  ///
   public async Task<SdkResponse<Datagroup[], Exception>> all_datagroups(
     ITransportSettings? options = null)
 {  
@@ -2526,6 +2573,7 @@ namespace Looker.SDK.API31
   /// POST /folders -> Folder
   ///
   /// <returns><c>Folder</c> Folder (application/json)</returns>
+  ///
   public async Task<SdkResponse<Folder, Exception>> create_folder(
     CreateFolder body,
     ITransportSettings? options = null)
@@ -3827,6 +3875,7 @@ namespace Looker.SDK.API31
   /// POST /lookml_models -> LookmlModel
   ///
   /// <returns><c>LookmlModel</c> LookML Model (application/json)</returns>
+  ///
   public async Task<SdkResponse<LookmlModel, Exception>> create_lookml_model(
     WriteLookmlModel body,
     ITransportSettings? options = null)
@@ -4158,6 +4207,7 @@ namespace Looker.SDK.API31
   /// POST /projects -> Project
   ///
   /// <returns><c>Project</c> Project (application/json)</returns>
+  ///
   public async Task<SdkResponse<Project, Exception>> create_project(
     WriteProject body,
     ITransportSettings? options = null)
@@ -5164,6 +5214,7 @@ namespace Looker.SDK.API31
   /// GET /running_queries -> RunningQueries[]
   ///
   /// <returns><c>RunningQueries[]</c> Running Queries. (application/json)</returns>
+  ///
   public async Task<SdkResponse<RunningQueries[], Exception>> all_running_queries(
     ITransportSettings? options = null)
 {  
@@ -5207,6 +5258,7 @@ namespace Looker.SDK.API31
   /// POST /sql_queries -> SqlQuery
   ///
   /// <returns><c>SqlQuery</c> SQL Runner Query (application/json)</returns>
+  ///
   public async Task<SdkResponse<SqlQuery, Exception>> create_sql_query(
     SqlQueryCreate body,
     ITransportSettings? options = null)
@@ -5572,6 +5624,7 @@ namespace Looker.SDK.API31
   /// POST /model_sets -> ModelSet
   ///
   /// <returns><c>ModelSet</c> Newly created ModelSet (application/json)</returns>
+  ///
   public async Task<SdkResponse<ModelSet, Exception>> create_model_set(
     WriteModelSet body,
     ITransportSettings? options = null)
@@ -5584,6 +5637,7 @@ namespace Looker.SDK.API31
   /// GET /permissions -> Permission[]
   ///
   /// <returns><c>Permission[]</c> Permission (application/json)</returns>
+  ///
   public async Task<SdkResponse<Permission[], Exception>> all_permissions(
     ITransportSettings? options = null)
 {  
@@ -5716,6 +5770,7 @@ namespace Looker.SDK.API31
   /// POST /permission_sets -> PermissionSet
   ///
   /// <returns><c>PermissionSet</c> Permission Set (application/json)</returns>
+  ///
   public async Task<SdkResponse<PermissionSet, Exception>> create_permission_set(
     WritePermissionSet body,
     ITransportSettings? options = null)
@@ -5746,6 +5801,7 @@ namespace Looker.SDK.API31
   /// POST /roles -> Role
   ///
   /// <returns><c>Role</c> Role (application/json)</returns>
+  ///
   public async Task<SdkResponse<Role, Exception>> create_role(
     WriteRole body,
     ITransportSettings? options = null)
@@ -6131,6 +6187,7 @@ namespace Looker.SDK.API31
   /// POST /scheduled_plans -> ScheduledPlan
   ///
   /// <returns><c>ScheduledPlan</c> Scheduled Plan (application/json)</returns>
+  ///
   public async Task<SdkResponse<ScheduledPlan, Exception>> create_scheduled_plan(
     WriteScheduledPlan body,
     ITransportSettings? options = null)
@@ -6179,6 +6236,7 @@ namespace Looker.SDK.API31
   /// POST /scheduled_plans/run_once -> ScheduledPlan
   ///
   /// <returns><c>ScheduledPlan</c> Scheduled Plan (application/json)</returns>
+  ///
   public async Task<SdkResponse<ScheduledPlan, Exception>> scheduled_plan_run_once(
     WriteScheduledPlan body,
     ITransportSettings? options = null)
@@ -6358,6 +6416,7 @@ namespace Looker.SDK.API31
   /// GET /session -> ApiSession
   ///
   /// <returns><c>ApiSession</c> Session (application/json)</returns>
+  ///
   public async Task<SdkResponse<ApiSession, Exception>> session(
     ITransportSettings? options = null)
 {  
@@ -6388,6 +6447,7 @@ namespace Looker.SDK.API31
   /// PATCH /session -> ApiSession
   ///
   /// <returns><c>ApiSession</c> Session (application/json)</returns>
+  ///
   public async Task<SdkResponse<ApiSession, Exception>> update_session(
     WriteApiSession body,
     ITransportSettings? options = null)
@@ -6551,6 +6611,7 @@ namespace Looker.SDK.API31
   /// POST /spaces -> Space
   ///
   /// <returns><c>Space</c> Space (application/json)</returns>
+  ///
   public async Task<SdkResponse<Space, Exception>> create_space(
     CreateSpace body,
     ITransportSettings? options = null)
@@ -6727,6 +6788,7 @@ namespace Looker.SDK.API31
   /// POST /themes -> Theme
   ///
   /// <returns><c>Theme</c> Theme (application/json)</returns>
+  ///
   public async Task<SdkResponse<Theme, Exception>> create_theme(
     WriteTheme body,
     ITransportSettings? options = null)
@@ -6922,6 +6984,7 @@ namespace Looker.SDK.API31
   /// <c>ValidationError</c> Theme validation results (application/json)
   /// <c>string</c> No errors detected with the theme (application/json)
   /// </returns>
+  ///
   public async Task<SdkResponse<TSuccess, Exception>> validate_theme<TSuccess>(
     WriteTheme body,
     ITransportSettings? options = null) where TSuccess : class
@@ -8046,6 +8109,7 @@ namespace Looker.SDK.API31
   /// GET /workspaces -> Workspace[]
   ///
   /// <returns><c>Workspace[]</c> Workspace (application/json)</returns>
+  ///
   public async Task<SdkResponse<Workspace[], Exception>> all_workspaces(
     ITransportSettings? options = null)
 {  

@@ -33,7 +33,6 @@ import {
   IProperty,
   IType,
   mayQuote,
-  strBody,
 } from './sdkModels'
 import { IMappedType, CodeGen, commentBlock } from './codeGen'
 
@@ -137,7 +136,7 @@ import java.util.*
         text,
         indent,
         commentStr
-      )}\n\n${indent} */\n`
+      )}\n${indent} */\n`
     }
     return `${indent}/**\n${commentBlock(
       text,
@@ -152,14 +151,6 @@ import java.util.*
 
   endRegion(indent: string, description: string): string {
     return `${indent}//endregion ${description}`
-  }
-
-  paramMappedType(param: IParameter, method: IMethod) {
-    const type =
-      param.location === strBody
-        ? this.writeableType(param.type, method) || param.type
-        : param.type
-    return this.typeMap(type)
   }
 
   declareProperty(indent: string, property: IProperty) {
@@ -193,23 +184,7 @@ import java.util.*
     )
   }
 
-  methodHeaderDeclaration(indent: string, method: IMethod, streamer = false) {
-    const bump = indent + this.indentStr
-
-    const params: string[] = []
-    const args = method.allParams // get the params in signature order
-    if (args && args.length > 0)
-      args.forEach((p) => params.push(this.declareParameter(bump, method, p)))
-
-    return `
-${this.commentHeader(indent, this.headerComment(method, streamer)).trimEnd()}
-${indent}${this.jvmOverloads(method)}fun ${method.name}(
-${params.join(this.paramDelimiter)}
-${indent}) : SDKResponse {
-`
-  }
-
-  headerComment(method: IMethod, streamer = false) {
+  methodHeaderComment(method: IMethod, streamer = false) {
     const lines: string[] = []
 
     lines.push(method.description?.trim())
@@ -234,6 +209,25 @@ ${indent}) : SDKResponse {
     }
 
     return lines.join('\n')
+  }
+
+  methodHeaderDeclaration(indent: string, method: IMethod, streamer = false) {
+    const bump = indent + this.indentStr
+
+    const params: string[] = []
+    const args = method.allParams // get the params in signature order
+    if (args && args.length > 0)
+      args.forEach((p) => params.push(this.declareParameter(bump, method, p)))
+
+    return `
+${this.commentHeader(
+  indent,
+  this.methodHeaderComment(method, streamer)
+).trimEnd()}
+${indent}${this.jvmOverloads(method)}fun ${method.name}(
+${params.join(this.paramDelimiter)}
+${indent}) : SDKResponse {
+`
   }
 
   jvmOverloads(method: IMethod) {
