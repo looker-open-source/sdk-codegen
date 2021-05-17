@@ -294,6 +294,7 @@ export class ${this.packageName}Stream extends APIMethods {
   }
 
   methodHeaderComment(method: IMethod, params: string[] = []) {
+    if (this.noComment) return ''
     const lines: string[] = []
 
     const desc = method.description?.trim()
