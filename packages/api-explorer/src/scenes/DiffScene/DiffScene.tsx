@@ -165,7 +165,7 @@ export const DiffScene: FC<DiffSceneProps> = ({ specs, toggleNavigation }) => {
   return (
     <ApixSection>
       <Box>
-        <Flex bg="AliceBlue" padding="large" mb="xlarge" alignItems="center">
+        <Flex bg="AliceBlue" padding="large" mb="large" alignItems="center">
           <FlexItem>
             <Label htmlFor="base">Base</Label>
             <Select

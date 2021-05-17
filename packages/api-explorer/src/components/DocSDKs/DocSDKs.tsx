@@ -35,7 +35,6 @@ import {
   Method,
 } from '@looker/sdk-codegen'
 import { getGenerators } from '@looker/run-it'
-import { Box } from '@looker/components'
 
 import { DocCode } from '../DocCode'
 import { getSelectedSdkLanguage } from '../../state'
@@ -98,17 +97,15 @@ export const DocSDKs: FC<LanguageSDKProps> = ({ api, method, type }) => {
   }, [sdkLanguage, item])
 
   return (
-    <Box mb="xlarge">
-      <CollapserCard heading={header}>
-        {Object.keys(declarations).length > 1 ? (
-          <DocDeclarations declarations={declarations} />
-        ) : (
-          <DocCode
-            language={Object.keys(declarations)[0]}
-            code={Object.values(declarations)[0]}
-          />
-        )}
-      </CollapserCard>
-    </Box>
+    <CollapserCard heading={header} id="sdk declarations">
+      {Object.keys(declarations).length > 1 ? (
+        <DocDeclarations declarations={declarations} />
+      ) : (
+        <DocCode
+          language={Object.keys(declarations)[0]}
+          code={Object.values(declarations)[0]}
+        />
+      )}
+    </CollapserCard>
   )
 }

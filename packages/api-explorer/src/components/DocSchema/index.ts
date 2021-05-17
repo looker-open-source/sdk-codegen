@@ -23,25 +23,5 @@
  SOFTWARE.
 
  */
-import {
-  ApiModel,
-  KeyedCollection,
-  CodeGen,
-  codeGenerators,
-} from '@looker/sdk-codegen'
 
-/**
- * Returns a collection of generators for all supported (non legacy) languages
- * @param api Api spec
- */
-export const getGenerators = (api: ApiModel): KeyedCollection<CodeGen> => {
-  const codeGens = {}
-  codeGenerators
-    .filter((x) => x.factory !== undefined)
-    .forEach((gen) => {
-      const sdkGen = gen.factory!(api)
-      // sdkGen.noComment = true
-      codeGens[gen.language] = sdkGen
-    })
-  return codeGens
-}
+export { DocSchema } from './DocSchema'

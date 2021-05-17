@@ -36,6 +36,7 @@ import {
   DocSource,
   DocTitle,
   ExploreType,
+  DocSchema,
 } from '../../components'
 
 interface DocTypeProps {
@@ -69,6 +70,7 @@ export const TypeScene: FC<DocTypeProps> = ({ api }) => {
         specKey={specKey}
       />
       <DocSDKs type={type} api={api} />
+      <DocSchema object={type.schema} />
     </ApixSection>
   )
 }

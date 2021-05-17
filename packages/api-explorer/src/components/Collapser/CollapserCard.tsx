@@ -36,6 +36,7 @@ interface CollapserCardProps {
   id?: string
   heading: string
   children: ReactElement
+  defaultOpen?: boolean
 }
 
 /**
@@ -45,8 +46,9 @@ export const CollapserCard: FC<CollapserCardProps> = ({
   id,
   heading,
   children,
+  defaultOpen = true,
 }) => {
-  const { value, toggle } = useToggle(true)
+  const { value, toggle } = useToggle(defaultOpen)
 
   return (
     <Accordion
@@ -54,6 +56,8 @@ export const CollapserCard: FC<CollapserCardProps> = ({
       indicatorPosition="left"
       isOpen={value}
       toggleOpen={toggle}
+      mb="small"
+      mt="small"
     >
       <AccordionDisclosure>
         <ApixHeading as="h2">{heading}</ApixHeading>
