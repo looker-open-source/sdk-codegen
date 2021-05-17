@@ -25,9 +25,9 @@
  */
 import {
   ApiModel,
-  KeyedCollection,
   CodeGen,
   codeGenerators,
+  KeyedCollection,
 } from '@looker/sdk-codegen'
 
 /**
@@ -39,9 +39,7 @@ export const getGenerators = (api: ApiModel): KeyedCollection<CodeGen> => {
   codeGenerators
     .filter((x) => x.factory !== undefined)
     .forEach((gen) => {
-      const sdkGen = gen.factory!(api)
-      // sdkGen.noComment = true
-      codeGens[gen.language] = sdkGen
+      codeGens[gen.language] = gen.factory!(api)
     })
   return codeGens
 }
