@@ -27,7 +27,7 @@
 import React, { FC } from 'react'
 import { typeRefs, methodRefs, ApiModel } from '@looker/sdk-codegen'
 import { useParams } from 'react-router-dom'
-import { Space } from '@looker/components'
+import { Space, Box } from '@looker/components'
 
 import {
   ApixSection,
@@ -61,7 +61,9 @@ export const TypeScene: FC<DocTypeProps> = ({ api }) => {
         <DocTitle>{type.name}</DocTitle>
         <DocSource type={type} />
       </Space>
-      <ExploreType type={type} />
+      <Box pb="xlarge">
+        <ExploreType type={type} />
+      </Box>
       <DocReferences
         typesUsed={typesUsed}
         typesUsedBy={typesUsedBy}
