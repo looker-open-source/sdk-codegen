@@ -50,9 +50,8 @@ const tabnames = ['hackers', 'staff', 'judges', 'admins']
 
 export const UsersScene: FC<UsersSceneProps> = () => {
   const history = useHistory()
-  const match = useRouteMatch<{ func: string; tabname: string }>(
-    '/:func/:tabname'
-  )
+  const match =
+    useRouteMatch<{ func: string; tabname: string }>('/:func/:tabname')
   const dispatch = useDispatch()
   useEffect(() => {
     dispatch(allHackersRequest())

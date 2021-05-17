@@ -25,7 +25,7 @@
  */
 import { SheetValues } from '@looker/wholly-sheet'
 import { DataTableColumn, DataTableColumns, Icon } from '@looker/components'
-import { Done } from '@styled-icons/material'
+import { Done } from '@styled-icons/material/Done'
 import React from 'react'
 
 /**

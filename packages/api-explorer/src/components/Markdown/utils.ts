@@ -23,42 +23,25 @@
  SOFTWARE.
 
  */
-import {
-  IApixEnvAdaptor,
-  ThemeOverrides,
-  getThemeOverrides,
-} from '@looker/api-explorer/src/utils'
-import { ExtensionSDK } from '@looker/extension-sdk'
 
 /**
- * An adaptor class for interacting with browser APIs when running as an extension
+ * Returns a markdown string with matches wrapped with mark tags
+ * @param pattern The regex pattern to match
+ * @param content The content to search
+ * @returns content with highlighted matches
  */
-export class ExtensionEnvAdaptor implements IApixEnvAdaptor {
-  _themeOverrides: ThemeOverrides
-  constructor(public extensionSdk: ExtensionSDK) {
-    this._themeOverrides = getThemeOverrides(
-      (this.extensionSdk.lookerHostData || { hostType: 'standard' })
-        .hostType === 'standard'
-    )
+export const highlightMarkdown = (pattern: string, content: string): string => {
+  let highlightedContent
+  if (!pattern) {
+    highlightedContent = content
+  } else {
+    try {
+      const replacement = (match: string) => `<mark>${match}</mark>`
+      const target = new RegExp(pattern, 'gi')
+      highlightedContent = content.replace(target, replacement)
+    } catch (e) {
+      highlightedContent = content
+    }
   }
-
-  async localStorageGetItem(key: string) {
-    return await this.extensionSdk.localStorageGetItem(key)
-  }
-
-  async localStorageSetItem(key: string, value: string) {
-    await this.extensionSdk.localStorageSetItem(key, value)
-  }
-
-  async localStorageRemoveItem(key: string) {
-    await this.extensionSdk.localStorageRemoveItem(key)
-  }
-
-  themeOverrides(): ThemeOverrides {
-    return this._themeOverrides
-  }
-
-  openBrowserWindow(url: string, target?: string) {
-    this.extensionSdk.openBrowserWindow(url, target)
-  }
+  return highlightedContent
 }

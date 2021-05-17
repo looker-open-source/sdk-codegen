@@ -52,7 +52,7 @@ export class PseudoGen extends CodeGen {
         ? ''
         : `\n${bump}${args.join(',\n' + bump).trim()}${indent}\n`
     return (
-      this.commentHeader(indent, method.description) +
+      this.commentHeader(indent, method.description.trimRight()) +
       `${indent}${method.operationId}(${fragment}): ${method.primaryResponse.type.name}`
     )
   }

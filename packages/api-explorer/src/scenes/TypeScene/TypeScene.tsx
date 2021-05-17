@@ -50,8 +50,9 @@ interface DocTypeParams {
 export const TypeScene: FC<DocTypeProps> = ({ api }) => {
   const { specKey, typeName } = useParams<DocTypeParams>()
   const type = api.types[typeName]
-  const seeTypes = typeRefs(api, type.customTypes)
-  const seeMethods = methodRefs(api, type.methodRefs)
+  const typesUsed = typeRefs(api, type.customTypes)
+  const methodsUsedBy = methodRefs(api, type.methodRefs)
+  const typesUsedBy = typeRefs(api, type.parentTypes)
 
   return (
     <ApixSection>
@@ -61,8 +62,9 @@ export const TypeScene: FC<DocTypeProps> = ({ api }) => {
       </Space>
       <ExploreType type={type} />
       <DocReferences
-        seeTypes={seeTypes}
-        seeMethods={seeMethods}
+        typesUsed={typesUsed}
+        typesUsedBy={typesUsedBy}
+        methodsUsedBy={methodsUsedBy}
         api={api}
         specKey={specKey}
       />

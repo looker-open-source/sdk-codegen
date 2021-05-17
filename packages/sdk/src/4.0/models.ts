@@ -4732,11 +4732,11 @@ export interface ILookmlModelExploreSet {
 
 export interface ILookmlModelExploreSupportedMeasureType {
   /**
-   * (read-only)
+   *  (read-only)
    */
   dimension_type?: string
   /**
-   * (read-only)
+   *  (read-only)
    */
   measure_types?: string[]
 }
@@ -5182,11 +5182,11 @@ export interface IMobileSettings {
 
 export interface IModel {
   /**
-   * (read-only)
+   *  (read-only)
    */
   connection?: string
   /**
-   * (read-only)
+   *  (read-only)
    */
   name?: string
   /**
@@ -5220,19 +5220,19 @@ export interface IModelFieldSuggestions {
 
 export interface IModelNamedValueFormats {
   /**
-   * (read-only)
+   *  (read-only)
    */
   format_string?: string
   /**
-   * (read-only)
+   *  (read-only)
    */
   label?: string
   /**
-   * (read-only)
+   *  (read-only)
    */
   name?: string
   /**
-   * (read-only)
+   *  (read-only)
    */
   strict_value_format?: boolean
 }
@@ -5243,11 +5243,11 @@ export interface IModelSet {
    */
   can?: IDictionary<boolean>
   /**
-   * (read-only)
+   *  (read-only)
    */
   all_access?: boolean
   /**
-   * (read-only)
+   *  (read-only)
    */
   built_in?: boolean
   /**
@@ -5590,11 +5590,11 @@ export interface IPermissionSet {
    */
   can?: IDictionary<boolean>
   /**
-   * (read-only)
+   *  (read-only)
    */
   all_access?: boolean
   /**
-   * (read-only)
+   *  (read-only)
    */
   built_in?: boolean
   /**

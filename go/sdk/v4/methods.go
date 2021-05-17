@@ -27,7 +27,6 @@ SOFTWARE.
 /*
 
 412 API methods
-
 */
 
 
@@ -4915,6 +4914,7 @@ func (l *LookerSDK) RenderTask(
 // GET /render_tasks/{render_task_id}/results -> string
 //
 // **Note**: Binary content is returned by this method.
+//
 func (l *LookerSDK) RenderTaskResults(
     renderTaskId string,
     options *rtl.ApiSettings) (string, error) {

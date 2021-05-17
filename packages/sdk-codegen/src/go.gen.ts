@@ -135,7 +135,7 @@ export class GoGen extends CodeGen {
   commentHeader(indent: string, text: string | undefined) {
     if (this.noComment) return ''
     return text
-      ? `${indent}/*\n\n${commentBlock(text, indent, '')}\n\n${indent}*/\n`
+      ? `${indent}/*\n\n${commentBlock(text, indent, '')}\n${indent}*/\n`
       : ''
   }
 

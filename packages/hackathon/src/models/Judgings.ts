@@ -133,7 +133,7 @@ export class Judging extends SheetRow<IJudging> {
       this.coolness,
       this.impact
     )
-    return (this as unknown) as IJudging
+    return this as unknown as IJudging
   }
 
   toObject(): IJudgingProps {
@@ -153,7 +153,7 @@ export class Judgings extends WhollySheet<Judging, IJudgingProps> {
   typeRow<Judging>(values?: any) {
     const j = new Judging(values)
     j.load(this.data)
-    return (j as unknown) as Judging
+    return j as unknown as Judging
   }
 
   filterBy(hackathon: Hackathon, hacker?: Hacker): Judging[] {

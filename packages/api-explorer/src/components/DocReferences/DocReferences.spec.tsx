@@ -33,34 +33,42 @@ import { DocReferences } from './DocReferences'
 
 describe('DocReferences', () => {
   test('it renders method and type references', () => {
-    const seeTypes = typeRefs(api, api.types.Dashboard.customTypes)
-    const seeMethods = methodRefs(api, api.types.Dashboard.methodRefs)
+    const typesUsed = typeRefs(api, api.types.DashboardElement.customTypes)
+    const typesUsedBy = typeRefs(api, api.types.DashboardElement.parentTypes)
+    const methodsUsedBy = methodRefs(api, api.types.DashboardElement.methodRefs)
     renderWithSearchAndRouter(
       <DocReferences
-        seeTypes={seeTypes}
-        seeMethods={seeMethods}
+        typesUsed={typesUsed}
+        typesUsedBy={typesUsedBy}
+        methodsUsedBy={methodsUsedBy}
         specKey={'3.1'}
         api={api}
       />
     )
     expect(screen.getAllByRole('link')).toHaveLength(
-      seeTypes.length + seeMethods.length
+      typesUsed.length + typesUsedBy.length + methodsUsedBy.length
     )
-    expect(screen.getByText(seeTypes[0].name).closest('a')).toHaveAttribute(
+    expect(screen.getByText(typesUsed[0].name).closest('a')).toHaveAttribute(
       'href',
-      `/3.1/types/${seeTypes[0].name}`
+      `/3.1/types/${typesUsed[0].name}`
     )
-    expect(screen.getByText(seeMethods[0].name).closest('a')).toHaveAttribute(
+
+    expect(typesUsedBy).toHaveLength(1)
+    expect(typesUsedBy[0].name).toEqual('Dashboard')
+    expect(screen.getByText(typesUsedBy[0].name).closest('a')).toHaveAttribute(
       'href',
-      `/3.1/methods/Dashboard/${seeMethods[0].name}`
+      `/3.1/types/${typesUsedBy[0].name}`
     )
+    expect(
+      screen.getByText(methodsUsedBy[0].name).closest('a')
+    ).toHaveAttribute('href', `/3.1/methods/Dashboard/${methodsUsedBy[0].name}`)
   })
 
   test('it highlights text matching search pattern', () => {
     const highlightPattern = 'dash'
     renderWithSearchAndRouter(
       <DocReferences
-        seeTypes={[api.types.Dashboard]}
+        typesUsed={[api.types.Dashboard]}
         specKey={'3.1'}
         api={api}
       />,

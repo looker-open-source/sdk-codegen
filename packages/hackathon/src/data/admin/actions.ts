@@ -75,9 +75,10 @@ export type AdminAction =
   | SaveUserAttributesRequestAction
   | SaveUserAttributesResponseAction
 
-export const loadUserAttributesRequest = (): LoadUserAttributesRequestAction => ({
-  type: Actions.LOAD_USER_ATTRIBUTES_REQUEST,
-})
+export const loadUserAttributesRequest =
+  (): LoadUserAttributesRequestAction => ({
+    type: Actions.LOAD_USER_ATTRIBUTES_REQUEST,
+  })
 
 export const loadUserAttributesResponse = (
   adminUserAttributes: AdminUserAttributes

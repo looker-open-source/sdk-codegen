@@ -208,7 +208,7 @@ export class RowModel<T extends IRowModel> implements IRowModel {
     }
     /** Always update the "updated" value before saving */
     this._updated = new Date()
-    return (this as unknown) as T
+    return this as unknown as T
   }
 
   values() {
@@ -267,7 +267,7 @@ export class RowModel<T extends IRowModel> implements IRowModel {
         })
       }
     }
-    return (this as unknown) as T
+    return this as unknown as T
   }
 
   /** default to no errors */

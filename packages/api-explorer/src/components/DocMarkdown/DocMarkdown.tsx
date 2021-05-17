@@ -24,17 +24,11 @@
 
  */
 
-import React, { BaseSyntheticEvent, FC, useContext } from 'react'
-import ReactMarkdown from 'react-markdown'
+import React, { FC, useContext } from 'react'
 import { useHistory } from 'react-router-dom'
-import { TableHead, TableBody, TableRow, Link } from '@looker/components'
-
-import { SearchContext } from '../../context'
-import { ApixHeading } from '../common'
-import { highlightMarkdown, transformURL } from './utils'
-import { MDCodeBlockWrapper } from './MDCodeBlockWrapper'
-import { TableCell } from './TableCell'
-import { MDCode, MDList, MDListItem, MDParagraph, MDTable } from './common'
+import { Markdown } from '../Markdown'
+import { EnvAdaptorContext } from '../../context'
+import { transformURL } from './utils'
 
 interface DocMarkdownProps {
   source: string
@@ -42,42 +36,22 @@ interface DocMarkdownProps {
 }
 
 export const DocMarkdown: FC<DocMarkdownProps> = ({ source, specKey }) => {
-  const {
-    searchSettings: { pattern },
-  } = useContext(SearchContext)
+  const { envAdaptor } = useContext(EnvAdaptorContext)
+
   const history = useHistory()
 
-  const handleClick = (e: BaseSyntheticEvent) => {
-    if (
-      e.target.tagName === 'A' &&
-      e.target.pathname.startsWith(`/${specKey}`)
-    ) {
-      e.preventDefault()
-      history.push(e.target.pathname)
+  const linkClickHandler = (pathname: string, url: string) => {
+    if (pathname.startsWith(`/${specKey}`)) {
+      history.push(pathname)
+    } else if (url.startsWith('https://')) {
+      envAdaptor.openBrowserWindow(url)
     }
   }
-
   return (
-    <span onClick={handleClick}>
-      <ReactMarkdown
-        source={highlightMarkdown(pattern, source)}
-        escapeHtml={false}
-        transformLinkUri={transformURL.bind(null, specKey)}
-        renderers={{
-          code: MDCodeBlockWrapper,
-          heading: ApixHeading,
-          paragraph: MDParagraph,
-          inlineCode: MDCode,
-          link: Link,
-          list: MDList,
-          listItem: MDListItem,
-          table: MDTable,
-          tableHead: TableHead,
-          tableBody: TableBody,
-          tableRow: TableRow,
-          tableCell: TableCell,
-        }}
-      />
-    </span>
+    <Markdown
+      source={source}
+      linkClickHandler={linkClickHandler}
+      transformLinkUri={transformURL.bind(null, specKey)}
+    />
   )
 }

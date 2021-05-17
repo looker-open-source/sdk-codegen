@@ -26,7 +26,9 @@
 import React, { FC } from 'react'
 import { DiffCount } from '@looker/sdk-codegen'
 import { Code, Flex, Icon, Space } from '@looker/components'
-import { Add, ChangeHistory, Remove } from '@styled-icons/material'
+import { Add } from '@styled-icons/material/Add'
+import { ChangeHistory } from '@styled-icons/material/ChangeHistory'
+import { Remove } from '@styled-icons/material/Remove'
 
 interface DiffLegendProps {
   count: DiffCount

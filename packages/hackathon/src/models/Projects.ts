@@ -284,7 +284,7 @@ export class Projects extends WhollySheet<Project, IProjectProps> {
   typeRow<Project>(values?: any) {
     const project = new Project(values)
     // this.getMembers(project)
-    return (project as unknown) as Project
+    return project as unknown as Project
   }
 
   /**

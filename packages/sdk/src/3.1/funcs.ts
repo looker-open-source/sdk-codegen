@@ -288,6 +288,11 @@ export const functionalSdk31 = (authSession: IAuthSession) => {
  * For more information and detailed examples of Looker API authorization, see [How to Authenticate to Looker API3](https://github.com/looker/looker-sdk-ruby/blob/master/authentication.md).
  *
  * POST /login -> IAccessToken
+ *
+ * @param sdk IAPIMethods implementation
+ * @param request composed interface "IRequestLogin" for complex method parameters
+ * @param options one-time API call overrides
+ *
  */
 export const login = async (
   sdk: IAPIMethods,
@@ -321,16 +326,16 @@ export const login = async (
  * See 'login' for more detail on the access token and how to use it.
  *
  * POST /login/{user_id} -> IAccessToken
+ *
+ * @param sdk IAPIMethods implementation
+ * @param user_id Id of user.
+ * @param associative When true (default), API calls using the returned access_token are attributed to the admin user who created the access_token. When false, API activity is attributed to the user the access_token runs as. False requires a looker license.
+ * @param options one-time API call overrides
+ *
  */
 export const login_user = async (
   sdk: IAPIMethods,
-  /**
-   * @param {number} user_id Id of user.
-   */
   user_id: number,
-  /**
-   * @param {boolean} associative When true (default), API calls using the returned access_token are attributed to the admin user who created the access_token. When false, API activity is attributed to the user the access_token runs as. False requires a looker license.
-   */
   associative?: boolean,
   options?: Partial<ITransportSettings>
 ): Promise<SDKResponse<IAccessToken, IError>> => {
@@ -346,6 +351,10 @@ export const login_user = async (
  * ### Logout of the API and invalidate the current access token.
  *
  * DELETE /logout -> string
+ *
+ * @param sdk IAPIMethods implementation
+ * @param options one-time API call overrides
+ *
  */
 export const logout = async (
   sdk: IAPIMethods,
@@ -395,12 +404,14 @@ export const logout = async (
  * encrypted transport.
  *
  * POST /embed/sso_url -> IEmbedUrlResponse
+ *
+ * @param sdk IAPIMethods implementation
+ * @param body Partial<IEmbedSsoParams>
+ * @param options one-time API call overrides
+ *
  */
 export const create_sso_embed_url = async (
   sdk: IAPIMethods,
-  /**
-   * @param {Partial<IEmbedSsoParams>} body
-   */
   body: Partial<IEmbedSsoParams>,
   options?: Partial<ITransportSettings>
 ): Promise<SDKResponse<IEmbedUrlResponse, IError | IValidationError>> => {
@@ -431,6 +442,10 @@ export const create_sso_embed_url = async (
  * See the [Looker LDAP docs](https://www.looker.com/docs/r/api/ldap_setup) for additional information.
  *
  * GET /ldap_config -> ILDAPConfig
+ *
+ * @param sdk IAPIMethods implementation
+ * @param options one-time API call overrides
+ *
  */
 export const ldap_config = async (
   sdk: IAPIMethods,
@@ -453,12 +468,14 @@ export const ldap_config = async (
  * See the [Looker LDAP docs](https://www.looker.com/docs/r/api/ldap_setup) for additional information.
  *
  * PATCH /ldap_config -> ILDAPConfig
+ *
+ * @param sdk IAPIMethods implementation
+ * @param body Partial<IWriteLDAPConfig>
+ * @param options one-time API call overrides
+ *
  */
 export const update_ldap_config = async (
   sdk: IAPIMethods,
-  /**
-   * @param {Partial<IWriteLDAPConfig>} body
-   */
   body: Partial<IWriteLDAPConfig>,
   options?: Partial<ITransportSettings>
 ): Promise<SDKResponse<ILDAPConfig, IError | IValidationError>> => {
@@ -491,12 +508,14 @@ export const update_ldap_config = async (
  * The active LDAP settings are not modified.
  *
  * PUT /ldap_config/test_connection -> ILDAPConfigTestResult
+ *
+ * @param sdk IAPIMethods implementation
+ * @param body Partial<IWriteLDAPConfig>
+ * @param options one-time API call overrides
+ *
  */
 export const test_ldap_config_connection = async (
   sdk: IAPIMethods,
-  /**
-   * @param {Partial<IWriteLDAPConfig>} body
-   */
   body: Partial<IWriteLDAPConfig>,
   options?: Partial<ITransportSettings>
 ): Promise<SDKResponse<ILDAPConfigTestResult, IError | IValidationError>> => {
@@ -531,12 +550,14 @@ export const test_ldap_config_connection = async (
  * The active LDAP settings are not modified.
  *
  * PUT /ldap_config/test_auth -> ILDAPConfigTestResult
+ *
+ * @param sdk IAPIMethods implementation
+ * @param body Partial<IWriteLDAPConfig>
+ * @param options one-time API call overrides
+ *
  */
 export const test_ldap_config_auth = async (
   sdk: IAPIMethods,
-  /**
-   * @param {Partial<IWriteLDAPConfig>} body
-   */
   body: Partial<IWriteLDAPConfig>,
   options?: Partial<ITransportSettings>
 ): Promise<SDKResponse<ILDAPConfigTestResult, IError | IValidationError>> => {
@@ -560,12 +581,14 @@ export const test_ldap_config_auth = async (
  * The active LDAP settings are not modified.
  *
  * PUT /ldap_config/test_user_info -> ILDAPConfigTestResult
+ *
+ * @param sdk IAPIMethods implementation
+ * @param body Partial<IWriteLDAPConfig>
+ * @param options one-time API call overrides
+ *
  */
 export const test_ldap_config_user_info = async (
   sdk: IAPIMethods,
-  /**
-   * @param {Partial<IWriteLDAPConfig>} body
-   */
   body: Partial<IWriteLDAPConfig>,
   options?: Partial<ITransportSettings>
 ): Promise<SDKResponse<ILDAPConfigTestResult, IError | IValidationError>> => {
@@ -589,12 +612,14 @@ export const test_ldap_config_user_info = async (
  * The active LDAP settings are not modified.
  *
  * PUT /ldap_config/test_user_auth -> ILDAPConfigTestResult
+ *
+ * @param sdk IAPIMethods implementation
+ * @param body Partial<IWriteLDAPConfig>
+ * @param options one-time API call overrides
+ *
  */
 export const test_ldap_config_user_auth = async (
   sdk: IAPIMethods,
-  /**
-   * @param {Partial<IWriteLDAPConfig>} body
-   */
   body: Partial<IWriteLDAPConfig>,
   options?: Partial<ITransportSettings>
 ): Promise<SDKResponse<ILDAPConfigTestResult, IError | IValidationError>> => {
@@ -621,6 +646,10 @@ export const test_ldap_config_user_auth = async (
  * OIDC is enabled or disabled for Looker using the **enabled** field.
  *
  * GET /oidc_config -> IOIDCConfig
+ *
+ * @param sdk IAPIMethods implementation
+ * @param options one-time API call overrides
+ *
  */
 export const oidc_config = async (
   sdk: IAPIMethods,
@@ -641,12 +670,14 @@ export const oidc_config = async (
  * It is **highly** recommended that any OIDC setting changes be tested using the APIs below before being set globally.
  *
  * PATCH /oidc_config -> IOIDCConfig
+ *
+ * @param sdk IAPIMethods implementation
+ * @param body Partial<IWriteOIDCConfig>
+ * @param options one-time API call overrides
+ *
  */
 export const update_oidc_config = async (
   sdk: IAPIMethods,
-  /**
-   * @param {Partial<IWriteOIDCConfig>} body
-   */
   body: Partial<IWriteOIDCConfig>,
   options?: Partial<ITransportSettings>
 ): Promise<SDKResponse<IOIDCConfig, IError | IValidationError>> => {
@@ -662,12 +693,14 @@ export const update_oidc_config = async (
  * ### Get a OIDC test configuration by test_slug.
  *
  * GET /oidc_test_configs/{test_slug} -> IOIDCConfig
+ *
+ * @param sdk IAPIMethods implementation
+ * @param test_slug Slug of test config
+ * @param options one-time API call overrides
+ *
  */
 export const oidc_test_config = async (
   sdk: IAPIMethods,
-  /**
-   * @param {string} test_slug Slug of test config
-   */
   test_slug: string,
   options?: Partial<ITransportSettings>
 ): Promise<SDKResponse<IOIDCConfig, IError>> => {
@@ -684,12 +717,14 @@ export const oidc_test_config = async (
  * ### Delete a OIDC test configuration.
  *
  * DELETE /oidc_test_configs/{test_slug} -> string
+ *
+ * @param sdk IAPIMethods implementation
+ * @param test_slug Slug of test config
+ * @param options one-time API call overrides
+ *
  */
 export const delete_oidc_test_config = async (
   sdk: IAPIMethods,
-  /**
-   * @param {string} test_slug Slug of test config
-   */
   test_slug: string,
   options?: Partial<ITransportSettings>
 ): Promise<SDKResponse<string, IError>> => {
@@ -706,12 +741,14 @@ export const delete_oidc_test_config = async (
  * ### Create a OIDC test configuration.
  *
  * POST /oidc_test_configs -> IOIDCConfig
+ *
+ * @param sdk IAPIMethods implementation
+ * @param body Partial<IWriteOIDCConfig>
+ * @param options one-time API call overrides
+ *
  */
 export const create_oidc_test_config = async (
   sdk: IAPIMethods,
-  /**
-   * @param {Partial<IWriteOIDCConfig>} body
-   */
   body: Partial<IWriteOIDCConfig>,
   options?: Partial<ITransportSettings>
 ): Promise<SDKResponse<IOIDCConfig, IError | IValidationError>> => {
@@ -727,6 +764,10 @@ export const create_oidc_test_config = async (
  * ### Get password config.
  *
  * GET /password_config -> IPasswordConfig
+ *
+ * @param sdk IAPIMethods implementation
+ * @param options one-time API call overrides
+ *
  */
 export const password_config = async (
   sdk: IAPIMethods,
@@ -744,12 +785,14 @@ export const password_config = async (
  * ### Update password config.
  *
  * PATCH /password_config -> IPasswordConfig
+ *
+ * @param sdk IAPIMethods implementation
+ * @param body Partial<IWritePasswordConfig>
+ * @param options one-time API call overrides
+ *
  */
 export const update_password_config = async (
   sdk: IAPIMethods,
-  /**
-   * @param {Partial<IWritePasswordConfig>} body
-   */
   body: Partial<IWritePasswordConfig>,
   options?: Partial<ITransportSettings>
 ): Promise<SDKResponse<IPasswordConfig, IError | IValidationError>> => {
@@ -765,6 +808,10 @@ export const update_password_config = async (
  * ### Force all credentials_email users to reset their login passwords upon their next login.
  *
  * PUT /password_config/force_password_reset_at_next_login_for_all_users -> string
+ *
+ * @param sdk IAPIMethods implementation
+ * @param options one-time API call overrides
+ *
  */
 export const force_password_reset_at_next_login_for_all_users = async (
   sdk: IAPIMethods,
@@ -793,6 +840,10 @@ export const force_password_reset_at_next_login_for_all_users = async (
  * SAML is enabled or disabled for Looker using the **enabled** field.
  *
  * GET /saml_config -> ISamlConfig
+ *
+ * @param sdk IAPIMethods implementation
+ * @param options one-time API call overrides
+ *
  */
 export const saml_config = async (
   sdk: IAPIMethods,
@@ -813,12 +864,14 @@ export const saml_config = async (
  * It is **highly** recommended that any SAML setting changes be tested using the APIs below before being set globally.
  *
  * PATCH /saml_config -> ISamlConfig
+ *
+ * @param sdk IAPIMethods implementation
+ * @param body Partial<IWriteSamlConfig>
+ * @param options one-time API call overrides
+ *
  */
 export const update_saml_config = async (
   sdk: IAPIMethods,
-  /**
-   * @param {Partial<IWriteSamlConfig>} body
-   */
   body: Partial<IWriteSamlConfig>,
   options?: Partial<ITransportSettings>
 ): Promise<SDKResponse<ISamlConfig, IError | IValidationError>> => {
@@ -834,12 +887,14 @@ export const update_saml_config = async (
  * ### Get a SAML test configuration by test_slug.
  *
  * GET /saml_test_configs/{test_slug} -> ISamlConfig
+ *
+ * @param sdk IAPIMethods implementation
+ * @param test_slug Slug of test config
+ * @param options one-time API call overrides
+ *
  */
 export const saml_test_config = async (
   sdk: IAPIMethods,
-  /**
-   * @param {string} test_slug Slug of test config
-   */
   test_slug: string,
   options?: Partial<ITransportSettings>
 ): Promise<SDKResponse<ISamlConfig, IError>> => {
@@ -856,12 +911,14 @@ export const saml_test_config = async (
  * ### Delete a SAML test configuration.
  *
  * DELETE /saml_test_configs/{test_slug} -> string
+ *
+ * @param sdk IAPIMethods implementation
+ * @param test_slug Slug of test config
+ * @param options one-time API call overrides
+ *
  */
 export const delete_saml_test_config = async (
   sdk: IAPIMethods,
-  /**
-   * @param {string} test_slug Slug of test config
-   */
   test_slug: string,
   options?: Partial<ITransportSettings>
 ): Promise<SDKResponse<string, IError>> => {
@@ -878,12 +935,14 @@ export const delete_saml_test_config = async (
  * ### Create a SAML test configuration.
  *
  * POST /saml_test_configs -> ISamlConfig
+ *
+ * @param sdk IAPIMethods implementation
+ * @param body Partial<IWriteSamlConfig>
+ * @param options one-time API call overrides
+ *
  */
 export const create_saml_test_config = async (
   sdk: IAPIMethods,
-  /**
-   * @param {Partial<IWriteSamlConfig>} body
-   */
   body: Partial<IWriteSamlConfig>,
   options?: Partial<ITransportSettings>
 ): Promise<SDKResponse<ISamlConfig, IError | IValidationError>> => {
@@ -899,12 +958,14 @@ export const create_saml_test_config = async (
  * ### Parse the given xml as a SAML IdP metadata document and return the result.
  *
  * POST /parse_saml_idp_metadata -> ISamlMetadataParseResult
+ *
+ * @param sdk IAPIMethods implementation
+ * @param body Partial<string>
+ * @param options one-time API call overrides
+ *
  */
 export const parse_saml_idp_metadata = async (
   sdk: IAPIMethods,
-  /**
-   * @param {Partial<string>} body
-   */
   body: Partial<string>,
   options?: Partial<ITransportSettings>
 ): Promise<SDKResponse<ISamlMetadataParseResult, IError>> => {
@@ -922,12 +983,14 @@ export const parse_saml_idp_metadata = async (
  * can fetch it without requiring any special authentication.
  *
  * POST /fetch_and_parse_saml_idp_metadata -> ISamlMetadataParseResult
+ *
+ * @param sdk IAPIMethods implementation
+ * @param body Partial<string>
+ * @param options one-time API call overrides
+ *
  */
 export const fetch_and_parse_saml_idp_metadata = async (
   sdk: IAPIMethods,
-  /**
-   * @param {Partial<string>} body
-   */
   body: Partial<string>,
   options?: Partial<ITransportSettings>
 ): Promise<SDKResponse<ISamlMetadataParseResult, IError>> => {
@@ -943,6 +1006,10 @@ export const fetch_and_parse_saml_idp_metadata = async (
  * ### Get session config.
  *
  * GET /session_config -> ISessionConfig
+ *
+ * @param sdk IAPIMethods implementation
+ * @param options one-time API call overrides
+ *
  */
 export const session_config = async (
   sdk: IAPIMethods,
@@ -955,12 +1022,14 @@ export const session_config = async (
  * ### Update session config.
  *
  * PATCH /session_config -> ISessionConfig
+ *
+ * @param sdk IAPIMethods implementation
+ * @param body Partial<IWriteSessionConfig>
+ * @param options one-time API call overrides
+ *
  */
 export const update_session_config = async (
   sdk: IAPIMethods,
-  /**
-   * @param {Partial<IWriteSessionConfig>} body
-   */
   body: Partial<IWriteSessionConfig>,
   options?: Partial<ITransportSettings>
 ): Promise<SDKResponse<ISessionConfig, IError | IValidationError>> => {
@@ -976,12 +1045,14 @@ export const update_session_config = async (
  * ### Get currently locked-out users.
  *
  * GET /user_login_lockouts -> IUserLoginLockout[]
+ *
+ * @param sdk IAPIMethods implementation
+ * @param fields Include only these fields in the response
+ * @param options one-time API call overrides
+ *
  */
 export const all_user_login_lockouts = async (
   sdk: IAPIMethods,
-  /**
-   * @param {string} fields Include only these fields in the response
-   */
   fields?: string,
   options?: Partial<ITransportSettings>
 ): Promise<SDKResponse<IUserLoginLockout[], IError>> => {
@@ -997,6 +1068,11 @@ export const all_user_login_lockouts = async (
  * ### Search currently locked-out users.
  *
  * GET /user_login_lockouts/search -> IUserLoginLockout[]
+ *
+ * @param sdk IAPIMethods implementation
+ * @param request composed interface "IRequestSearchUserLoginLockouts" for complex method parameters
+ * @param options one-time API call overrides
+ *
  */
 export const search_user_login_lockouts = async (
   sdk: IAPIMethods,
@@ -1025,12 +1101,14 @@ export const search_user_login_lockouts = async (
  * ### Removes login lockout for the associated user.
  *
  * DELETE /user_login_lockout/{key} -> string
+ *
+ * @param sdk IAPIMethods implementation
+ * @param key The key associated with the locked user
+ * @param options one-time API call overrides
+ *
  */
 export const delete_user_login_lockout = async (
   sdk: IAPIMethods,
-  /**
-   * @param {string} key The key associated with the locked user
-   */
   key: string,
   options?: Partial<ITransportSettings>
 ): Promise<SDKResponse<string, IError>> => {
@@ -1058,12 +1136,14 @@ export const delete_user_login_lockout = async (
  * **Note**: Only an API user with the Admin role can call this endpoint. Unauthorized requests will return `Not Found` (404) errors.
  *
  * GET /color_collections -> IColorCollection[]
+ *
+ * @param sdk IAPIMethods implementation
+ * @param fields Requested fields.
+ * @param options one-time API call overrides
+ *
  */
 export const all_color_collections = async (
   sdk: IAPIMethods,
-  /**
-   * @param {string} fields Requested fields.
-   */
   fields?: string,
   options?: Partial<ITransportSettings>
 ): Promise<SDKResponse<IColorCollection[], IError>> => {
@@ -1087,12 +1167,14 @@ export const all_color_collections = async (
  * **Note**: Only an API user with the Admin role can call this endpoint. Unauthorized requests will return `Not Found` (404) errors.
  *
  * POST /color_collections -> IColorCollection
+ *
+ * @param sdk IAPIMethods implementation
+ * @param body Partial<IWriteColorCollection>
+ * @param options one-time API call overrides
+ *
  */
 export const create_color_collection = async (
   sdk: IAPIMethods,
-  /**
-   * @param {Partial<IWriteColorCollection>} body
-   */
   body: Partial<IWriteColorCollection>,
   options?: Partial<ITransportSettings>
 ): Promise<SDKResponse<IColorCollection, IError | IValidationError>> => {
@@ -1113,12 +1195,14 @@ export const create_color_collection = async (
  * **Note**: Only an API user with the Admin role can call this endpoint. Unauthorized requests will return `Not Found` (404) errors.
  *
  * GET /color_collections/custom -> IColorCollection[]
+ *
+ * @param sdk IAPIMethods implementation
+ * @param fields Requested fields.
+ * @param options one-time API call overrides
+ *
  */
 export const color_collections_custom = async (
   sdk: IAPIMethods,
-  /**
-   * @param {string} fields Requested fields.
-   */
   fields?: string,
   options?: Partial<ITransportSettings>
 ): Promise<SDKResponse<IColorCollection[], IError>> => {
@@ -1139,12 +1223,14 @@ export const color_collections_custom = async (
  * **Note**: Only an API user with the Admin role can call this endpoint. Unauthorized requests will return `Not Found` (404) errors.
  *
  * GET /color_collections/standard -> IColorCollection[]
+ *
+ * @param sdk IAPIMethods implementation
+ * @param fields Requested fields.
+ * @param options one-time API call overrides
+ *
  */
 export const color_collections_standard = async (
   sdk: IAPIMethods,
-  /**
-   * @param {string} fields Requested fields.
-   */
   fields?: string,
   options?: Partial<ITransportSettings>
 ): Promise<SDKResponse<IColorCollection[], IError>> => {
@@ -1164,6 +1250,10 @@ export const color_collections_standard = async (
  * Set the default color collection with [ColorCollection](#!/ColorCollection/set_default_color_collection)
  *
  * GET /color_collections/default -> IColorCollection
+ *
+ * @param sdk IAPIMethods implementation
+ * @param options one-time API call overrides
+ *
  */
 export const default_color_collection = async (
   sdk: IAPIMethods,
@@ -1184,12 +1274,14 @@ export const default_color_collection = async (
  * **Note**: Only an API user with the Admin role can call this endpoint. Unauthorized requests will return `Not Found` (404) errors.
  *
  * PUT /color_collections/default -> IColorCollection
+ *
+ * @param sdk IAPIMethods implementation
+ * @param collection_id ID of color collection to set as default
+ * @param options one-time API call overrides
+ *
  */
 export const set_default_color_collection = async (
   sdk: IAPIMethods,
-  /**
-   * @param {string} collection_id ID of color collection to set as default
-   */
   collection_id: string,
   options?: Partial<ITransportSettings>
 ): Promise<SDKResponse<IColorCollection, IError | IValidationError>> => {
@@ -1214,16 +1306,16 @@ export const set_default_color_collection = async (
  * **Note**: Only an API user with the Admin role can call this endpoint. Unauthorized requests will return `Not Found` (404) errors.
  *
  * GET /color_collections/{collection_id} -> IColorCollection
+ *
+ * @param sdk IAPIMethods implementation
+ * @param collection_id Id of Color Collection
+ * @param fields Requested fields.
+ * @param options one-time API call overrides
+ *
  */
 export const color_collection = async (
   sdk: IAPIMethods,
-  /**
-   * @param {string} collection_id Id of Color Collection
-   */
   collection_id: string,
-  /**
-   * @param {string} fields Requested fields.
-   */
   fields?: string,
   options?: Partial<ITransportSettings>
 ): Promise<SDKResponse<IColorCollection, IError>> => {
@@ -1241,16 +1333,16 @@ export const color_collection = async (
  * **Note**: Only an API user with the Admin role can call this endpoint. Unauthorized requests will return `Not Found` (404) errors.
  *
  * PATCH /color_collections/{collection_id} -> IColorCollection
+ *
+ * @param sdk IAPIMethods implementation
+ * @param collection_id Id of Custom Color Collection
+ * @param body Partial<IWriteColorCollection>
+ * @param options one-time API call overrides
+ *
  */
 export const update_color_collection = async (
   sdk: IAPIMethods,
-  /**
-   * @param {string} collection_id Id of Custom Color Collection
-   */
   collection_id: string,
-  /**
-   * @param {Partial<IWriteColorCollection>} body
-   */
   body: Partial<IWriteColorCollection>,
   options?: Partial<ITransportSettings>
 ): Promise<SDKResponse<IColorCollection, IError | IValidationError>> => {
@@ -1274,12 +1366,14 @@ export const update_color_collection = async (
  * **Note**: Only an API user with the Admin role can call this endpoint. Unauthorized requests will return `Not Found` (404) errors.
  *
  * DELETE /color_collections/{collection_id} -> string
+ *
+ * @param sdk IAPIMethods implementation
+ * @param collection_id Id of Color Collection
+ * @param options one-time API call overrides
+ *
  */
 export const delete_color_collection = async (
   sdk: IAPIMethods,
-  /**
-   * @param {string} collection_id Id of Color Collection
-   */
   collection_id: string,
   options?: Partial<ITransportSettings>
 ): Promise<SDKResponse<string, IError>> => {
@@ -1300,6 +1394,12 @@ export const delete_color_collection = async (
  * ### WARNING: The Looker internal database backup function has been deprecated.
  *
  * GET /backup_configuration -> IBackupConfiguration
+ *
+ * @deprecated
+ *
+ * @param sdk IAPIMethods implementation
+ * @param options one-time API call overrides
+ *
  */
 export const backup_configuration = async (
   sdk: IAPIMethods,
@@ -1317,12 +1417,16 @@ export const backup_configuration = async (
  * ### WARNING: The Looker internal database backup function has been deprecated.
  *
  * PATCH /backup_configuration -> IBackupConfiguration
+ *
+ * @deprecated
+ *
+ * @param sdk IAPIMethods implementation
+ * @param body Partial<IWriteBackupConfiguration>
+ * @param options one-time API call overrides
+ *
  */
 export const update_backup_configuration = async (
   sdk: IAPIMethods,
-  /**
-   * @param {Partial<IWriteBackupConfiguration>} body
-   */
   body: Partial<IWriteBackupConfiguration>,
   options?: Partial<ITransportSettings>
 ): Promise<SDKResponse<IBackupConfiguration, IError | IValidationError>> => {
@@ -1338,6 +1442,10 @@ export const update_backup_configuration = async (
  * Get the current Cloud Storage Configuration.
  *
  * GET /cloud_storage -> IBackupConfiguration
+ *
+ * @param sdk IAPIMethods implementation
+ * @param options one-time API call overrides
+ *
  */
 export const cloud_storage_configuration = async (
   sdk: IAPIMethods,
@@ -1355,12 +1463,14 @@ export const cloud_storage_configuration = async (
  * Update the current Cloud Storage Configuration.
  *
  * PATCH /cloud_storage -> IBackupConfiguration
+ *
+ * @param sdk IAPIMethods implementation
+ * @param body Partial<IWriteBackupConfiguration>
+ * @param options one-time API call overrides
+ *
  */
 export const update_cloud_storage_configuration = async (
   sdk: IAPIMethods,
-  /**
-   * @param {Partial<IWriteBackupConfiguration>} body
-   */
   body: Partial<IWriteBackupConfiguration>,
   options?: Partial<ITransportSettings>
 ): Promise<SDKResponse<IBackupConfiguration, IError | IValidationError>> => {
@@ -1376,6 +1486,10 @@ export const update_cloud_storage_configuration = async (
  * ### Get the current status and content of custom welcome emails
  *
  * GET /custom_welcome_email -> ICustomWelcomeEmail
+ *
+ * @param sdk IAPIMethods implementation
+ * @param options one-time API call overrides
+ *
  */
 export const custom_welcome_email = async (
   sdk: IAPIMethods,
@@ -1393,16 +1507,16 @@ export const custom_welcome_email = async (
  * Update custom welcome email setting and values. Optionally send a test email with the new content to the currently logged in user.
  *
  * PATCH /custom_welcome_email -> ICustomWelcomeEmail
+ *
+ * @param sdk IAPIMethods implementation
+ * @param body Partial<IWriteCustomWelcomeEmail>
+ * @param send_test_welcome_email If true a test email with the content from the request will be sent to the current user after saving
+ * @param options one-time API call overrides
+ *
  */
 export const update_custom_welcome_email = async (
   sdk: IAPIMethods,
-  /**
-   * @param {Partial<IWriteCustomWelcomeEmail>} body
-   */
   body: Partial<IWriteCustomWelcomeEmail>,
-  /**
-   * @param {boolean} send_test_welcome_email If true a test email with the content from the request will be sent to the current user after saving
-   */
   send_test_welcome_email?: boolean,
   options?: Partial<ITransportSettings>
 ): Promise<SDKResponse<ICustomWelcomeEmail, IError | IValidationError>> => {
@@ -1418,12 +1532,14 @@ export const update_custom_welcome_email = async (
  * Requests to this endpoint will send a welcome email with the custom content provided in the body to the currently logged in user.
  *
  * PUT /custom_welcome_email_test -> IWelcomeEmailTest
+ *
+ * @param sdk IAPIMethods implementation
+ * @param body Partial<IWelcomeEmailTest>
+ * @param options one-time API call overrides
+ *
  */
 export const update_custom_welcome_email_test = async (
   sdk: IAPIMethods,
-  /**
-   * @param {Partial<IWelcomeEmailTest>} body
-   */
   body: Partial<IWelcomeEmailTest>,
   options?: Partial<ITransportSettings>
 ): Promise<SDKResponse<IWelcomeEmailTest, IError | IValidationError>> => {
@@ -1439,6 +1555,10 @@ export const update_custom_welcome_email_test = async (
  * ### Retrieve the value for whether or not digest emails is enabled
  *
  * GET /digest_emails_enabled -> IDigestEmails
+ *
+ * @param sdk IAPIMethods implementation
+ * @param options one-time API call overrides
+ *
  */
 export const digest_emails_enabled = async (
   sdk: IAPIMethods,
@@ -1456,12 +1576,14 @@ export const digest_emails_enabled = async (
  * ### Update the setting for enabling/disabling digest emails
  *
  * PATCH /digest_emails_enabled -> IDigestEmails
+ *
+ * @param sdk IAPIMethods implementation
+ * @param body Partial<IDigestEmails>
+ * @param options one-time API call overrides
+ *
  */
 export const update_digest_emails_enabled = async (
   sdk: IAPIMethods,
-  /**
-   * @param {Partial<IDigestEmails>} body
-   */
   body: Partial<IDigestEmails>,
   options?: Partial<ITransportSettings>
 ): Promise<SDKResponse<IDigestEmails, IError | IValidationError>> => {
@@ -1479,6 +1601,10 @@ export const update_digest_emails_enabled = async (
  * Emails will be sent at a later time from Looker's internal system if the Digest Emails feature is enabled in settings.
  *
  * POST /digest_email_send -> IDigestEmailSend
+ *
+ * @param sdk IAPIMethods implementation
+ * @param options one-time API call overrides
+ *
  */
 export const create_digest_email_send = async (
   sdk: IAPIMethods,
@@ -1496,6 +1622,10 @@ export const create_digest_email_send = async (
  * ### Set the menu item name and content for internal help resources
  *
  * GET /internal_help_resources_content -> IInternalHelpResourcesContent
+ *
+ * @param sdk IAPIMethods implementation
+ * @param options one-time API call overrides
+ *
  */
 export const internal_help_resources_content = async (
   sdk: IAPIMethods,
@@ -1513,12 +1643,14 @@ export const internal_help_resources_content = async (
  * Update internal help resources content
  *
  * PATCH /internal_help_resources_content -> IInternalHelpResourcesContent
+ *
+ * @param sdk IAPIMethods implementation
+ * @param body Partial<IWriteInternalHelpResourcesContent>
+ * @param options one-time API call overrides
+ *
  */
 export const update_internal_help_resources_content = async (
   sdk: IAPIMethods,
-  /**
-   * @param {Partial<IWriteInternalHelpResourcesContent>} body
-   */
   body: Partial<IWriteInternalHelpResourcesContent>,
   options?: Partial<ITransportSettings>
 ): Promise<
@@ -1536,6 +1668,10 @@ export const update_internal_help_resources_content = async (
  * ### Get and set the options for internal help resources
  *
  * GET /internal_help_resources_enabled -> IInternalHelpResources
+ *
+ * @param sdk IAPIMethods implementation
+ * @param options one-time API call overrides
+ *
  */
 export const internal_help_resources = async (
   sdk: IAPIMethods,
@@ -1553,12 +1689,14 @@ export const internal_help_resources = async (
  * Update internal help resources settings
  *
  * PATCH /internal_help_resources -> IInternalHelpResources
+ *
+ * @param sdk IAPIMethods implementation
+ * @param body Partial<IWriteInternalHelpResources>
+ * @param options one-time API call overrides
+ *
  */
 export const update_internal_help_resources = async (
   sdk: IAPIMethods,
-  /**
-   * @param {Partial<IWriteInternalHelpResources>} body
-   */
   body: Partial<IWriteInternalHelpResources>,
   options?: Partial<ITransportSettings>
 ): Promise<SDKResponse<IInternalHelpResources, IError | IValidationError>> => {
@@ -1574,6 +1712,10 @@ export const update_internal_help_resources = async (
  * ### Get all legacy features.
  *
  * GET /legacy_features -> ILegacyFeature[]
+ *
+ * @param sdk IAPIMethods implementation
+ * @param options one-time API call overrides
+ *
  */
 export const all_legacy_features = async (
   sdk: IAPIMethods,
@@ -1591,12 +1733,14 @@ export const all_legacy_features = async (
  * ### Get information about the legacy feature with a specific id.
  *
  * GET /legacy_features/{legacy_feature_id} -> ILegacyFeature
+ *
+ * @param sdk IAPIMethods implementation
+ * @param legacy_feature_id id of legacy feature
+ * @param options one-time API call overrides
+ *
  */
 export const legacy_feature = async (
   sdk: IAPIMethods,
-  /**
-   * @param {number} legacy_feature_id id of legacy feature
-   */
   legacy_feature_id: number,
   options?: Partial<ITransportSettings>
 ): Promise<SDKResponse<ILegacyFeature, IError>> => {
@@ -1612,16 +1756,16 @@ export const legacy_feature = async (
  * ### Update information about the legacy feature with a specific id.
  *
  * PATCH /legacy_features/{legacy_feature_id} -> ILegacyFeature
+ *
+ * @param sdk IAPIMethods implementation
+ * @param legacy_feature_id id of legacy feature
+ * @param body Partial<IWriteLegacyFeature>
+ * @param options one-time API call overrides
+ *
  */
 export const update_legacy_feature = async (
   sdk: IAPIMethods,
-  /**
-   * @param {number} legacy_feature_id id of legacy feature
-   */
   legacy_feature_id: number,
-  /**
-   * @param {Partial<IWriteLegacyFeature>} body
-   */
   body: Partial<IWriteLegacyFeature>,
   options?: Partial<ITransportSettings>
 ): Promise<SDKResponse<ILegacyFeature, IError | IValidationError>> => {
@@ -1637,6 +1781,10 @@ export const update_legacy_feature = async (
  * ### Get a list of locales that Looker supports.
  *
  * GET /locales -> ILocale[]
+ *
+ * @param sdk IAPIMethods implementation
+ * @param options one-time API call overrides
+ *
  */
 export const all_locales = async (
   sdk: IAPIMethods,
@@ -1649,6 +1797,10 @@ export const all_locales = async (
  * ### Get a list of timezones that Looker supports (e.g. useful for scheduling tasks).
  *
  * GET /timezones -> ITimezone[]
+ *
+ * @param sdk IAPIMethods implementation
+ * @param options one-time API call overrides
+ *
  */
 export const all_timezones = async (
   sdk: IAPIMethods,
@@ -1661,12 +1813,14 @@ export const all_timezones = async (
  * ### Get information about all API versions supported by this Looker instance.
  *
  * GET /versions -> IApiVersion
+ *
+ * @param sdk IAPIMethods implementation
+ * @param fields Requested fields.
+ * @param options one-time API call overrides
+ *
  */
 export const versions = async (
   sdk: IAPIMethods,
-  /**
-   * @param {string} fields Requested fields.
-   */
   fields?: string,
   options?: Partial<ITransportSettings>
 ): Promise<SDKResponse<IApiVersion, IError>> => {
@@ -1678,12 +1832,14 @@ export const versions = async (
  * ### Gets the whitelabel configuration, which includes hiding documentation links, custom favicon uploading, etc.
  *
  * GET /whitelabel_configuration -> IWhitelabelConfiguration
+ *
+ * @param sdk IAPIMethods implementation
+ * @param fields Requested fields.
+ * @param options one-time API call overrides
+ *
  */
 export const whitelabel_configuration = async (
   sdk: IAPIMethods,
-  /**
-   * @param {string} fields Requested fields.
-   */
   fields?: string,
   options?: Partial<ITransportSettings>
 ): Promise<SDKResponse<IWhitelabelConfiguration, IError>> => {
@@ -1699,12 +1855,14 @@ export const whitelabel_configuration = async (
  * ### Update the whitelabel configuration
  *
  * PUT /whitelabel_configuration -> IWhitelabelConfiguration
+ *
+ * @param sdk IAPIMethods implementation
+ * @param body Partial<IWriteWhitelabelConfiguration>
+ * @param options one-time API call overrides
+ *
  */
 export const update_whitelabel_configuration = async (
   sdk: IAPIMethods,
-  /**
-   * @param {Partial<IWriteWhitelabelConfiguration>} body
-   */
   body: Partial<IWriteWhitelabelConfiguration>,
   options?: Partial<ITransportSettings>
 ): Promise<
@@ -1726,12 +1884,14 @@ export const update_whitelabel_configuration = async (
  * ### Get information about all connections.
  *
  * GET /connections -> IDBConnection[]
+ *
+ * @param sdk IAPIMethods implementation
+ * @param fields Requested fields.
+ * @param options one-time API call overrides
+ *
  */
 export const all_connections = async (
   sdk: IAPIMethods,
-  /**
-   * @param {string} fields Requested fields.
-   */
   fields?: string,
   options?: Partial<ITransportSettings>
 ): Promise<SDKResponse<IDBConnection[], IError>> => {
@@ -1747,12 +1907,14 @@ export const all_connections = async (
  * ### Create a connection using the specified configuration.
  *
  * POST /connections -> IDBConnection
+ *
+ * @param sdk IAPIMethods implementation
+ * @param body Partial<IWriteDBConnection>
+ * @param options one-time API call overrides
+ *
  */
 export const create_connection = async (
   sdk: IAPIMethods,
-  /**
-   * @param {Partial<IWriteDBConnection>} body
-   */
   body: Partial<IWriteDBConnection>,
   options?: Partial<ITransportSettings>
 ): Promise<SDKResponse<IDBConnection, IError | IValidationError>> => {
@@ -1768,16 +1930,16 @@ export const create_connection = async (
  * ### Get information about a connection.
  *
  * GET /connections/{connection_name} -> IDBConnection
+ *
+ * @param sdk IAPIMethods implementation
+ * @param connection_name Name of connection
+ * @param fields Requested fields.
+ * @param options one-time API call overrides
+ *
  */
 export const connection = async (
   sdk: IAPIMethods,
-  /**
-   * @param {string} connection_name Name of connection
-   */
   connection_name: string,
-  /**
-   * @param {string} fields Requested fields.
-   */
   fields?: string,
   options?: Partial<ITransportSettings>
 ): Promise<SDKResponse<IDBConnection, IError>> => {
@@ -1794,16 +1956,16 @@ export const connection = async (
  * ### Update a connection using the specified configuration.
  *
  * PATCH /connections/{connection_name} -> IDBConnection
+ *
+ * @param sdk IAPIMethods implementation
+ * @param connection_name Name of connection
+ * @param body Partial<IWriteDBConnection>
+ * @param options one-time API call overrides
+ *
  */
 export const update_connection = async (
   sdk: IAPIMethods,
-  /**
-   * @param {string} connection_name Name of connection
-   */
   connection_name: string,
-  /**
-   * @param {Partial<IWriteDBConnection>} body
-   */
   body: Partial<IWriteDBConnection>,
   options?: Partial<ITransportSettings>
 ): Promise<SDKResponse<IDBConnection, IError | IValidationError>> => {
@@ -1820,12 +1982,14 @@ export const update_connection = async (
  * ### Delete a connection.
  *
  * DELETE /connections/{connection_name} -> string
+ *
+ * @param sdk IAPIMethods implementation
+ * @param connection_name Name of connection
+ * @param options one-time API call overrides
+ *
  */
 export const delete_connection = async (
   sdk: IAPIMethods,
-  /**
-   * @param {string} connection_name Name of connection
-   */
   connection_name: string,
   options?: Partial<ITransportSettings>
 ): Promise<SDKResponse<string, IError>> => {
@@ -1842,16 +2006,16 @@ export const delete_connection = async (
  * ### Delete a connection override.
  *
  * DELETE /connections/{connection_name}/connection_override/{override_context} -> string
+ *
+ * @param sdk IAPIMethods implementation
+ * @param connection_name Name of connection
+ * @param override_context Context of connection override
+ * @param options one-time API call overrides
+ *
  */
 export const delete_connection_override = async (
   sdk: IAPIMethods,
-  /**
-   * @param {string} connection_name Name of connection
-   */
   connection_name: string,
-  /**
-   * @param {string} override_context Context of connection override
-   */
   override_context: string,
   options?: Partial<ITransportSettings>
 ): Promise<SDKResponse<string, IError | IValidationError>> => {
@@ -1876,16 +2040,16 @@ export const delete_connection_override = async (
  * Unsupported tests in the request will be ignored.
  *
  * PUT /connections/{connection_name}/test -> IDBConnectionTestResult[]
+ *
+ * @param sdk IAPIMethods implementation
+ * @param connection_name Name of connection
+ * @param tests Array of names of tests to run
+ * @param options one-time API call overrides
+ *
  */
 export const test_connection = async (
   sdk: IAPIMethods,
-  /**
-   * @param {string} connection_name Name of connection
-   */
   connection_name: string,
-  /**
-   * @param {DelimArray<string>} tests Array of names of tests to run
-   */
   tests?: DelimArray<string>,
   options?: Partial<ITransportSettings>
 ): Promise<
@@ -1911,16 +2075,16 @@ export const test_connection = async (
  * Unsupported tests in the request will be ignored.
  *
  * PUT /connections/test -> IDBConnectionTestResult[]
+ *
+ * @param sdk IAPIMethods implementation
+ * @param body Partial<IWriteDBConnection>
+ * @param tests Array of names of tests to run
+ * @param options one-time API call overrides
+ *
  */
 export const test_connection_config = async (
   sdk: IAPIMethods,
-  /**
-   * @param {Partial<IWriteDBConnection>} body
-   */
   body: Partial<IWriteDBConnection>,
-  /**
-   * @param {DelimArray<string>} tests Array of names of tests to run
-   */
   tests?: DelimArray<string>,
   options?: Partial<ITransportSettings>
 ): Promise<SDKResponse<IDBConnectionTestResult[], IError>> => {
@@ -1936,12 +2100,14 @@ export const test_connection_config = async (
  * ### Get information about all dialects.
  *
  * GET /dialect_info -> IDialectInfo[]
+ *
+ * @param sdk IAPIMethods implementation
+ * @param fields Requested fields.
+ * @param options one-time API call overrides
+ *
  */
 export const all_dialect_infos = async (
   sdk: IAPIMethods,
-  /**
-   * @param {string} fields Requested fields.
-   */
   fields?: string,
   options?: Partial<ITransportSettings>
 ): Promise<SDKResponse<IDialectInfo[], IError>> => {
@@ -1982,6 +2148,11 @@ export const all_dialect_infos = async (
  * Boolean search params accept only "true" and "false" as values.
  *
  * GET /content_favorite/search -> IContentFavorite[]
+ *
+ * @param sdk IAPIMethods implementation
+ * @param request composed interface "IRequestSearchContentFavorites" for complex method parameters
+ * @param options one-time API call overrides
+ *
  */
 export const search_content_favorites = async (
   sdk: IAPIMethods,
@@ -2011,16 +2182,16 @@ export const search_content_favorites = async (
  * ### Get favorite content by its id
  *
  * GET /content_favorite/{content_favorite_id} -> IContentFavorite
+ *
+ * @param sdk IAPIMethods implementation
+ * @param content_favorite_id Id of favorite content
+ * @param fields Requested fields.
+ * @param options one-time API call overrides
+ *
  */
 export const content_favorite = async (
   sdk: IAPIMethods,
-  /**
-   * @param {number} content_favorite_id Id of favorite content
-   */
   content_favorite_id: number,
-  /**
-   * @param {string} fields Requested fields.
-   */
   fields?: string,
   options?: Partial<ITransportSettings>
 ): Promise<SDKResponse<IContentFavorite, IError>> => {
@@ -2036,12 +2207,14 @@ export const content_favorite = async (
  * ### Delete favorite content
  *
  * DELETE /content_favorite/{content_favorite_id} -> string
+ *
+ * @param sdk IAPIMethods implementation
+ * @param content_favorite_id Id of favorite content
+ * @param options one-time API call overrides
+ *
  */
 export const delete_content_favorite = async (
   sdk: IAPIMethods,
-  /**
-   * @param {number} content_favorite_id Id of favorite content
-   */
   content_favorite_id: number,
   options?: Partial<ITransportSettings>
 ): Promise<SDKResponse<string, IError>> => {
@@ -2057,12 +2230,14 @@ export const delete_content_favorite = async (
  * ### Create favorite content
  *
  * POST /content_favorite -> IContentFavorite
+ *
+ * @param sdk IAPIMethods implementation
+ * @param body Partial<IWriteContentFavorite>
+ * @param options one-time API call overrides
+ *
  */
 export const create_content_favorite = async (
   sdk: IAPIMethods,
-  /**
-   * @param {Partial<IWriteContentFavorite>} body
-   */
   body: Partial<IWriteContentFavorite>,
   options?: Partial<ITransportSettings>
 ): Promise<SDKResponse<IContentFavorite, IError | IValidationError>> => {
@@ -2078,16 +2253,16 @@ export const create_content_favorite = async (
  * ### Get information about all content metadata in a space.
  *
  * GET /content_metadata -> IContentMeta[]
+ *
+ * @param sdk IAPIMethods implementation
+ * @param parent_id Parent space of content.
+ * @param fields Requested fields.
+ * @param options one-time API call overrides
+ *
  */
 export const all_content_metadatas = async (
   sdk: IAPIMethods,
-  /**
-   * @param {number} parent_id Parent space of content.
-   */
   parent_id: number,
-  /**
-   * @param {string} fields Requested fields.
-   */
   fields?: string,
   options?: Partial<ITransportSettings>
 ): Promise<SDKResponse<IContentMeta[], IError>> => {
@@ -2103,16 +2278,16 @@ export const all_content_metadatas = async (
  * ### Get information about an individual content metadata record.
  *
  * GET /content_metadata/{content_metadata_id} -> IContentMeta
+ *
+ * @param sdk IAPIMethods implementation
+ * @param content_metadata_id Id of content metadata
+ * @param fields Requested fields.
+ * @param options one-time API call overrides
+ *
  */
 export const content_metadata = async (
   sdk: IAPIMethods,
-  /**
-   * @param {number} content_metadata_id Id of content metadata
-   */
   content_metadata_id: number,
-  /**
-   * @param {string} fields Requested fields.
-   */
   fields?: string,
   options?: Partial<ITransportSettings>
 ): Promise<SDKResponse<IContentMeta, IError>> => {
@@ -2128,16 +2303,16 @@ export const content_metadata = async (
  * ### Move a piece of content.
  *
  * PATCH /content_metadata/{content_metadata_id} -> IContentMeta
+ *
+ * @param sdk IAPIMethods implementation
+ * @param content_metadata_id Id of content metadata
+ * @param body Partial<IWriteContentMeta>
+ * @param options one-time API call overrides
+ *
  */
 export const update_content_metadata = async (
   sdk: IAPIMethods,
-  /**
-   * @param {number} content_metadata_id Id of content metadata
-   */
   content_metadata_id: number,
-  /**
-   * @param {Partial<IWriteContentMeta>} body
-   */
   body: Partial<IWriteContentMeta>,
   options?: Partial<ITransportSettings>
 ): Promise<SDKResponse<IContentMeta, IError | IValidationError>> => {
@@ -2153,16 +2328,16 @@ export const update_content_metadata = async (
  * ### All content metadata access records for a content metadata item.
  *
  * GET /content_metadata_access -> IContentMetaGroupUser[]
+ *
+ * @param sdk IAPIMethods implementation
+ * @param content_metadata_id Id of content metadata
+ * @param fields Requested fields.
+ * @param options one-time API call overrides
+ *
  */
 export const all_content_metadata_accesses = async (
   sdk: IAPIMethods,
-  /**
-   * @param {number} content_metadata_id Id of content metadata
-   */
   content_metadata_id: number,
-  /**
-   * @param {string} fields Requested fields.
-   */
   fields?: string,
   options?: Partial<ITransportSettings>
 ): Promise<SDKResponse<IContentMetaGroupUser[], IError>> => {
@@ -2178,16 +2353,16 @@ export const all_content_metadata_accesses = async (
  * ### Create content metadata access.
  *
  * POST /content_metadata_access -> IContentMetaGroupUser
+ *
+ * @param sdk IAPIMethods implementation
+ * @param body Partial<IContentMetaGroupUser>
+ * @param send_boards_notification_email Optionally sends notification email when granting access to a board.
+ * @param options one-time API call overrides
+ *
  */
 export const create_content_metadata_access = async (
   sdk: IAPIMethods,
-  /**
-   * @param {Partial<IContentMetaGroupUser>} body
-   */
   body: Partial<IContentMetaGroupUser>,
-  /**
-   * @param {boolean} send_boards_notification_email Optionally sends notification email when granting access to a board.
-   */
   send_boards_notification_email?: boolean,
   options?: Partial<ITransportSettings>
 ): Promise<SDKResponse<IContentMetaGroupUser, IError | IValidationError>> => {
@@ -2203,16 +2378,16 @@ export const create_content_metadata_access = async (
  * ### Update type of access for content metadata.
  *
  * PUT /content_metadata_access/{content_metadata_access_id} -> IContentMetaGroupUser
+ *
+ * @param sdk IAPIMethods implementation
+ * @param content_metadata_access_id Id of content metadata access
+ * @param body Partial<IContentMetaGroupUser>
+ * @param options one-time API call overrides
+ *
  */
 export const update_content_metadata_access = async (
   sdk: IAPIMethods,
-  /**
-   * @param {number} content_metadata_access_id Id of content metadata access
-   */
   content_metadata_access_id: number,
-  /**
-   * @param {Partial<IContentMetaGroupUser>} body
-   */
   body: Partial<IContentMetaGroupUser>,
   options?: Partial<ITransportSettings>
 ): Promise<SDKResponse<IContentMetaGroupUser, IError | IValidationError>> => {
@@ -2228,12 +2403,14 @@ export const update_content_metadata_access = async (
  * ### Remove content metadata access.
  *
  * DELETE /content_metadata_access/{content_metadata_access_id} -> string
+ *
+ * @param sdk IAPIMethods implementation
+ * @param content_metadata_access_id Id of content metadata access
+ * @param options one-time API call overrides
+ *
  */
 export const delete_content_metadata_access = async (
   sdk: IAPIMethods,
-  /**
-   * @param {number} content_metadata_access_id Id of content metadata access
-   */
   content_metadata_access_id: number,
   options?: Partial<ITransportSettings>
 ): Promise<SDKResponse<string, IError>> => {
@@ -2253,7 +2430,13 @@ export const delete_content_metadata_access = async (
  *
  * GET /content_thumbnail/{type}/{resource_id} -> string
  *
- * **Note**: Binary content may be returned by this function.
+ * @remarks
+ * **NOTE**: Binary content may be returned by this function.
+ *
+ * @param sdk IAPIMethods implementation
+ * @param request composed interface "IRequestContentThumbnail" for complex method parameters
+ * @param options one-time API call overrides
+ *
  */
 export const content_thumbnail = async (
   sdk: IAPIMethods,
@@ -2282,12 +2465,14 @@ export const content_thumbnail = async (
  * Returns a list of errors found as well as metadata about the content validation run.
  *
  * GET /content_validation -> IContentValidation
+ *
+ * @param sdk IAPIMethods implementation
+ * @param fields Requested fields.
+ * @param options one-time API call overrides
+ *
  */
 export const content_validation = async (
   sdk: IAPIMethods,
-  /**
-   * @param {string} fields Requested fields.
-   */
   fields?: string,
   options?: Partial<ITransportSettings>
 ): Promise<SDKResponse<IContentValidation, IError | IValidationError>> => {
@@ -2324,6 +2509,11 @@ export const content_validation = async (
  * Boolean search params accept only "true" and "false" as values.
  *
  * GET /content_view/search -> IContentView[]
+ *
+ * @param sdk IAPIMethods implementation
+ * @param request composed interface "IRequestSearchContentViews" for complex method parameters
+ * @param options one-time API call overrides
+ *
  */
 export const search_content_views = async (
   sdk: IAPIMethods,
@@ -2361,20 +2551,20 @@ export const search_content_views = async (
  * reflect the actual data displayed in the respective visualizations.
  *
  * GET /vector_thumbnail/{type}/{resource_id} -> string
+ *
+ * @deprecated
+ *
+ * @param sdk IAPIMethods implementation
+ * @param type Either dashboard or look
+ * @param resource_id ID of the dashboard or look to render
+ * @param reload Whether or not to refresh the rendered image with the latest content
+ * @param options one-time API call overrides
+ *
  */
 export const vector_thumbnail = async (
   sdk: IAPIMethods,
-  /**
-   * @param {string} type Either dashboard or look
-   */
   type: string,
-  /**
-   * @param {string} resource_id ID of the dashboard or look to render
-   */
   resource_id: string,
-  /**
-   * @param {string} reload Whether or not to refresh the rendered image with the latest content
-   */
   reload?: string,
   options?: Partial<ITransportSettings>
 ): Promise<SDKResponse<string, IError>> => {
@@ -2402,12 +2592,14 @@ export const vector_thumbnail = async (
  * Find **deleted dashboards** with [search_dashboards()](#!/Dashboard/search_dashboards)
  *
  * GET /dashboards -> IDashboardBase[]
+ *
+ * @param sdk IAPIMethods implementation
+ * @param fields Requested fields.
+ * @param options one-time API call overrides
+ *
  */
 export const all_dashboards = async (
   sdk: IAPIMethods,
-  /**
-   * @param {string} fields Requested fields.
-   */
   fields?: string,
   options?: Partial<ITransportSettings>
 ): Promise<SDKResponse<IDashboardBase[], IError>> => {
@@ -2436,12 +2628,14 @@ export const all_dashboards = async (
  * You can **permanently delete** an existing dashboard with [delete_dashboard()](#!/Dashboard/delete_dashboard)
  *
  * POST /dashboards -> IDashboard
+ *
+ * @param sdk IAPIMethods implementation
+ * @param body Partial<IWriteDashboard>
+ * @param options one-time API call overrides
+ *
  */
 export const create_dashboard = async (
   sdk: IAPIMethods,
-  /**
-   * @param {Partial<IWriteDashboard>} body
-   */
   body: Partial<IWriteDashboard>,
   options?: Partial<ITransportSettings>
 ): Promise<SDKResponse<IDashboard, IError | IValidationError>> => {
@@ -2485,6 +2679,11 @@ export const create_dashboard = async (
  * Get a **single dashboard** by id with [dashboard()](#!/Dashboard/dashboard)
  *
  * GET /dashboards/search -> IDashboard[]
+ *
+ * @param sdk IAPIMethods implementation
+ * @param request composed interface "IRequestSearchDashboards" for complex method parameters
+ * @param options one-time API call overrides
+ *
  */
 export const search_dashboards = async (
   sdk: IAPIMethods,
@@ -2534,24 +2733,20 @@ export const search_dashboards = async (
  * **Unlink** a linked UDD by setting lookml_link_id to null with [update_dashboard()](#!/Dashboard/update_dashboard)
  *
  * POST /dashboards/{lookml_dashboard_id}/import/{space_id} -> IDashboard
+ *
+ * @param sdk IAPIMethods implementation
+ * @param lookml_dashboard_id Id of LookML dashboard
+ * @param space_id Id of space to import the dashboard to
+ * @param body Partial<IWriteDashboard>
+ * @param raw_locale If true, and this dashboard is localized, export it with the raw keys, not localized.
+ * @param options one-time API call overrides
+ *
  */
 export const import_lookml_dashboard = async (
   sdk: IAPIMethods,
-  /**
-   * @param {string} lookml_dashboard_id Id of LookML dashboard
-   */
   lookml_dashboard_id: string,
-  /**
-   * @param {string} space_id Id of space to import the dashboard to
-   */
   space_id: string,
-  /**
-   * @param {Partial<IWriteDashboard>} body
-   */
   body?: Partial<IWriteDashboard>,
-  /**
-   * @param {boolean} raw_locale If true, and this dashboard is localized, export it with the raw keys, not localized.
-   */
   raw_locale?: boolean,
   options?: Partial<ITransportSettings>
 ): Promise<SDKResponse<IDashboard, IError | IValidationError>> => {
@@ -2577,20 +2772,18 @@ export const import_lookml_dashboard = async (
  * To **link** or **unlink** a UDD set the `lookml_link_id` property with [update_dashboard()](#!/Dashboard/update_dashboard)
  *
  * PATCH /dashboards/{lookml_dashboard_id}/sync -> number[]
+ *
+ * @param sdk IAPIMethods implementation
+ * @param lookml_dashboard_id Id of LookML dashboard, in the form 'model::dashboardname'
+ * @param body Partial<IWriteDashboard>
+ * @param raw_locale If true, and this dashboard is localized, export it with the raw keys, not localized.
+ * @param options one-time API call overrides
+ *
  */
 export const sync_lookml_dashboard = async (
   sdk: IAPIMethods,
-  /**
-   * @param {string} lookml_dashboard_id Id of LookML dashboard, in the form 'model::dashboardname'
-   */
   lookml_dashboard_id: string,
-  /**
-   * @param {Partial<IWriteDashboard>} body
-   */
   body: Partial<IWriteDashboard>,
-  /**
-   * @param {boolean} raw_locale If true, and this dashboard is localized, export it with the raw keys, not localized.
-   */
   raw_locale?: boolean,
   options?: Partial<ITransportSettings>
 ): Promise<SDKResponse<number[], IError | IValidationError>> => {
@@ -2613,16 +2806,16 @@ export const sync_lookml_dashboard = async (
  * You can **Search** for dashboards with [search_dashboards()](#!/Dashboard/search_dashboards)
  *
  * GET /dashboards/{dashboard_id} -> IDashboard
+ *
+ * @param sdk IAPIMethods implementation
+ * @param dashboard_id Id of dashboard
+ * @param fields Requested fields.
+ * @param options one-time API call overrides
+ *
  */
 export const dashboard = async (
   sdk: IAPIMethods,
-  /**
-   * @param {string} dashboard_id Id of dashboard
-   */
   dashboard_id: string,
-  /**
-   * @param {string} fields Requested fields.
-   */
   fields?: string,
   options?: Partial<ITransportSettings>
 ): Promise<SDKResponse<IDashboard, IError>> => {
@@ -2648,16 +2841,16 @@ export const dashboard = async (
  * response body for information about exactly which fields are missing or contain invalid data.
  *
  * PATCH /dashboards/{dashboard_id} -> IDashboard
+ *
+ * @param sdk IAPIMethods implementation
+ * @param dashboard_id Id of dashboard
+ * @param body Partial<IWriteDashboard>
+ * @param options one-time API call overrides
+ *
  */
 export const update_dashboard = async (
   sdk: IAPIMethods,
-  /**
-   * @param {string} dashboard_id Id of dashboard
-   */
   dashboard_id: string,
-  /**
-   * @param {Partial<IWriteDashboard>} body
-   */
   body: Partial<IWriteDashboard>,
   options?: Partial<ITransportSettings>
 ): Promise<SDKResponse<IDashboard, IError | IValidationError>> => {
@@ -2680,12 +2873,14 @@ export const update_dashboard = async (
  * Note: When a dashboard is deleted in the UI, it is soft deleted. Use this API call to permanently remove it, if desired.
  *
  * DELETE /dashboards/{dashboard_id} -> string
+ *
+ * @param sdk IAPIMethods implementation
+ * @param dashboard_id Id of dashboard
+ * @param options one-time API call overrides
+ *
  */
 export const delete_dashboard = async (
   sdk: IAPIMethods,
-  /**
-   * @param {string} dashboard_id Id of dashboard
-   */
   dashboard_id: string,
   options?: Partial<ITransportSettings>
 ): Promise<SDKResponse<string, IError>> => {
@@ -2704,12 +2899,14 @@ export const delete_dashboard = async (
  * Returns a JSON object that contains the dashboard id and Aggregate Table lookml
  *
  * GET /dashboards/aggregate_table_lookml/{dashboard_id} -> IDashboardAggregateTableLookml
+ *
+ * @param sdk IAPIMethods implementation
+ * @param dashboard_id Id of dashboard
+ * @param options one-time API call overrides
+ *
  */
 export const dashboard_aggregate_table_lookml = async (
   sdk: IAPIMethods,
-  /**
-   * @param {string} dashboard_id Id of dashboard
-   */
   dashboard_id: string,
   options?: Partial<ITransportSettings>
 ): Promise<SDKResponse<IDashboardAggregateTableLookml, IError>> => {
@@ -2728,12 +2925,14 @@ export const dashboard_aggregate_table_lookml = async (
  * Returns a JSON object that contains the dashboard id and the full lookml
  *
  * GET /dashboards/lookml/{dashboard_id} -> IDashboardLookml
+ *
+ * @param sdk IAPIMethods implementation
+ * @param dashboard_id Id of dashboard
+ * @param options one-time API call overrides
+ *
  */
 export const dashboard_lookml = async (
   sdk: IAPIMethods,
-  /**
-   * @param {string} dashboard_id Id of dashboard
-   */
   dashboard_id: string,
   options?: Partial<ITransportSettings>
 ): Promise<SDKResponse<IDashboardLookml, IError>> => {
@@ -2773,6 +2972,11 @@ export const dashboard_lookml = async (
  * Boolean search params accept only "true" and "false" as values.
  *
  * GET /dashboard_elements/search -> IDashboardElement[]
+ *
+ * @param sdk IAPIMethods implementation
+ * @param request composed interface "IRequestSearchDashboardElements" for complex method parameters
+ * @param options one-time API call overrides
+ *
  */
 export const search_dashboard_elements = async (
   sdk: IAPIMethods,
@@ -2799,16 +3003,16 @@ export const search_dashboard_elements = async (
  * ### Get information about the dashboard element with a specific id.
  *
  * GET /dashboard_elements/{dashboard_element_id} -> IDashboardElement
+ *
+ * @param sdk IAPIMethods implementation
+ * @param dashboard_element_id Id of dashboard element
+ * @param fields Requested fields.
+ * @param options one-time API call overrides
+ *
  */
 export const dashboard_element = async (
   sdk: IAPIMethods,
-  /**
-   * @param {string} dashboard_element_id Id of dashboard element
-   */
   dashboard_element_id: string,
-  /**
-   * @param {string} fields Requested fields.
-   */
   fields?: string,
   options?: Partial<ITransportSettings>
 ): Promise<SDKResponse<IDashboardElement, IError>> => {
@@ -2825,20 +3029,18 @@ export const dashboard_element = async (
  * ### Update the dashboard element with a specific id.
  *
  * PATCH /dashboard_elements/{dashboard_element_id} -> IDashboardElement
+ *
+ * @param sdk IAPIMethods implementation
+ * @param dashboard_element_id Id of dashboard element
+ * @param body Partial<IWriteDashboardElement>
+ * @param fields Requested fields.
+ * @param options one-time API call overrides
+ *
  */
 export const update_dashboard_element = async (
   sdk: IAPIMethods,
-  /**
-   * @param {string} dashboard_element_id Id of dashboard element
-   */
   dashboard_element_id: string,
-  /**
-   * @param {Partial<IWriteDashboardElement>} body
-   */
   body: Partial<IWriteDashboardElement>,
-  /**
-   * @param {string} fields Requested fields.
-   */
   fields?: string,
   options?: Partial<ITransportSettings>
 ): Promise<SDKResponse<IDashboardElement, IError | IValidationError>> => {
@@ -2855,12 +3057,14 @@ export const update_dashboard_element = async (
  * ### Delete a dashboard element with a specific id.
  *
  * DELETE /dashboard_elements/{dashboard_element_id} -> string
+ *
+ * @param sdk IAPIMethods implementation
+ * @param dashboard_element_id Id of dashboard element
+ * @param options one-time API call overrides
+ *
  */
 export const delete_dashboard_element = async (
   sdk: IAPIMethods,
-  /**
-   * @param {string} dashboard_element_id Id of dashboard element
-   */
   dashboard_element_id: string,
   options?: Partial<ITransportSettings>
 ): Promise<SDKResponse<string, IError>> => {
@@ -2877,16 +3081,16 @@ export const delete_dashboard_element = async (
  * ### Get information about all the dashboard elements on a dashboard with a specific id.
  *
  * GET /dashboards/{dashboard_id}/dashboard_elements -> IDashboardElement[]
+ *
+ * @param sdk IAPIMethods implementation
+ * @param dashboard_id Id of dashboard
+ * @param fields Requested fields.
+ * @param options one-time API call overrides
+ *
  */
 export const dashboard_dashboard_elements = async (
   sdk: IAPIMethods,
-  /**
-   * @param {string} dashboard_id Id of dashboard
-   */
   dashboard_id: string,
-  /**
-   * @param {string} fields Requested fields.
-   */
   fields?: string,
   options?: Partial<ITransportSettings>
 ): Promise<SDKResponse<IDashboardElement[], IError>> => {
@@ -2903,16 +3107,16 @@ export const dashboard_dashboard_elements = async (
  * ### Create a dashboard element on the dashboard with a specific id.
  *
  * POST /dashboard_elements -> IDashboardElement
+ *
+ * @param sdk IAPIMethods implementation
+ * @param body Partial<IWriteDashboardElement>
+ * @param fields Requested fields.
+ * @param options one-time API call overrides
+ *
  */
 export const create_dashboard_element = async (
   sdk: IAPIMethods,
-  /**
-   * @param {Partial<IWriteDashboardElement>} body
-   */
   body: Partial<IWriteDashboardElement>,
-  /**
-   * @param {string} fields Requested fields.
-   */
   fields?: string,
   options?: Partial<ITransportSettings>
 ): Promise<SDKResponse<IDashboardElement, IError | IValidationError>> => {
@@ -2928,16 +3132,16 @@ export const create_dashboard_element = async (
  * ### Get information about the dashboard filters with a specific id.
  *
  * GET /dashboard_filters/{dashboard_filter_id} -> IDashboardFilter
+ *
+ * @param sdk IAPIMethods implementation
+ * @param dashboard_filter_id Id of dashboard filters
+ * @param fields Requested fields.
+ * @param options one-time API call overrides
+ *
  */
 export const dashboard_filter = async (
   sdk: IAPIMethods,
-  /**
-   * @param {string} dashboard_filter_id Id of dashboard filters
-   */
   dashboard_filter_id: string,
-  /**
-   * @param {string} fields Requested fields.
-   */
   fields?: string,
   options?: Partial<ITransportSettings>
 ): Promise<SDKResponse<IDashboardFilter, IError>> => {
@@ -2954,20 +3158,18 @@ export const dashboard_filter = async (
  * ### Update the dashboard filter with a specific id.
  *
  * PATCH /dashboard_filters/{dashboard_filter_id} -> IDashboardFilter
+ *
+ * @param sdk IAPIMethods implementation
+ * @param dashboard_filter_id Id of dashboard filter
+ * @param body Partial<IWriteDashboardFilter>
+ * @param fields Requested fields.
+ * @param options one-time API call overrides
+ *
  */
 export const update_dashboard_filter = async (
   sdk: IAPIMethods,
-  /**
-   * @param {string} dashboard_filter_id Id of dashboard filter
-   */
   dashboard_filter_id: string,
-  /**
-   * @param {Partial<IWriteDashboardFilter>} body
-   */
   body: Partial<IWriteDashboardFilter>,
-  /**
-   * @param {string} fields Requested fields.
-   */
   fields?: string,
   options?: Partial<ITransportSettings>
 ): Promise<SDKResponse<IDashboardFilter, IError | IValidationError>> => {
@@ -2984,12 +3186,14 @@ export const update_dashboard_filter = async (
  * ### Delete a dashboard filter with a specific id.
  *
  * DELETE /dashboard_filters/{dashboard_filter_id} -> string
+ *
+ * @param sdk IAPIMethods implementation
+ * @param dashboard_filter_id Id of dashboard filter
+ * @param options one-time API call overrides
+ *
  */
 export const delete_dashboard_filter = async (
   sdk: IAPIMethods,
-  /**
-   * @param {string} dashboard_filter_id Id of dashboard filter
-   */
   dashboard_filter_id: string,
   options?: Partial<ITransportSettings>
 ): Promise<SDKResponse<string, IError>> => {
@@ -3006,16 +3210,16 @@ export const delete_dashboard_filter = async (
  * ### Get information about all the dashboard filters on a dashboard with a specific id.
  *
  * GET /dashboards/{dashboard_id}/dashboard_filters -> IDashboardFilter[]
+ *
+ * @param sdk IAPIMethods implementation
+ * @param dashboard_id Id of dashboard
+ * @param fields Requested fields.
+ * @param options one-time API call overrides
+ *
  */
 export const dashboard_dashboard_filters = async (
   sdk: IAPIMethods,
-  /**
-   * @param {string} dashboard_id Id of dashboard
-   */
   dashboard_id: string,
-  /**
-   * @param {string} fields Requested fields.
-   */
   fields?: string,
   options?: Partial<ITransportSettings>
 ): Promise<SDKResponse<IDashboardFilter[], IError>> => {
@@ -3032,16 +3236,16 @@ export const dashboard_dashboard_filters = async (
  * ### Create a dashboard filter on the dashboard with a specific id.
  *
  * POST /dashboard_filters -> IDashboardFilter
+ *
+ * @param sdk IAPIMethods implementation
+ * @param body Partial<IWriteCreateDashboardFilter>
+ * @param fields Requested fields
+ * @param options one-time API call overrides
+ *
  */
 export const create_dashboard_filter = async (
   sdk: IAPIMethods,
-  /**
-   * @param {Partial<IWriteCreateDashboardFilter>} body
-   */
   body: Partial<IWriteCreateDashboardFilter>,
-  /**
-   * @param {string} fields Requested fields
-   */
   fields?: string,
   options?: Partial<ITransportSettings>
 ): Promise<SDKResponse<IDashboardFilter, IError | IValidationError>> => {
@@ -3057,16 +3261,16 @@ export const create_dashboard_filter = async (
  * ### Get information about the dashboard elements with a specific id.
  *
  * GET /dashboard_layout_components/{dashboard_layout_component_id} -> IDashboardLayoutComponent
+ *
+ * @param sdk IAPIMethods implementation
+ * @param dashboard_layout_component_id Id of dashboard layout component
+ * @param fields Requested fields.
+ * @param options one-time API call overrides
+ *
  */
 export const dashboard_layout_component = async (
   sdk: IAPIMethods,
-  /**
-   * @param {string} dashboard_layout_component_id Id of dashboard layout component
-   */
   dashboard_layout_component_id: string,
-  /**
-   * @param {string} fields Requested fields.
-   */
   fields?: string,
   options?: Partial<ITransportSettings>
 ): Promise<SDKResponse<IDashboardLayoutComponent, IError>> => {
@@ -3083,20 +3287,18 @@ export const dashboard_layout_component = async (
  * ### Update the dashboard element with a specific id.
  *
  * PATCH /dashboard_layout_components/{dashboard_layout_component_id} -> IDashboardLayoutComponent
+ *
+ * @param sdk IAPIMethods implementation
+ * @param dashboard_layout_component_id Id of dashboard layout component
+ * @param body Partial<IWriteDashboardLayoutComponent>
+ * @param fields Requested fields.
+ * @param options one-time API call overrides
+ *
  */
 export const update_dashboard_layout_component = async (
   sdk: IAPIMethods,
-  /**
-   * @param {string} dashboard_layout_component_id Id of dashboard layout component
-   */
   dashboard_layout_component_id: string,
-  /**
-   * @param {Partial<IWriteDashboardLayoutComponent>} body
-   */
   body: Partial<IWriteDashboardLayoutComponent>,
-  /**
-   * @param {string} fields Requested fields.
-   */
   fields?: string,
   options?: Partial<ITransportSettings>
 ): Promise<
@@ -3115,16 +3317,16 @@ export const update_dashboard_layout_component = async (
  * ### Get information about all the dashboard layout components for a dashboard layout with a specific id.
  *
  * GET /dashboard_layouts/{dashboard_layout_id}/dashboard_layout_components -> IDashboardLayoutComponent[]
+ *
+ * @param sdk IAPIMethods implementation
+ * @param dashboard_layout_id Id of dashboard layout component
+ * @param fields Requested fields.
+ * @param options one-time API call overrides
+ *
  */
 export const dashboard_layout_dashboard_layout_components = async (
   sdk: IAPIMethods,
-  /**
-   * @param {string} dashboard_layout_id Id of dashboard layout component
-   */
   dashboard_layout_id: string,
-  /**
-   * @param {string} fields Requested fields.
-   */
   fields?: string,
   options?: Partial<ITransportSettings>
 ): Promise<SDKResponse<IDashboardLayoutComponent[], IError>> => {
@@ -3141,16 +3343,16 @@ export const dashboard_layout_dashboard_layout_components = async (
  * ### Get information about the dashboard layouts with a specific id.
  *
  * GET /dashboard_layouts/{dashboard_layout_id} -> IDashboardLayout
+ *
+ * @param sdk IAPIMethods implementation
+ * @param dashboard_layout_id Id of dashboard layouts
+ * @param fields Requested fields.
+ * @param options one-time API call overrides
+ *
  */
 export const dashboard_layout = async (
   sdk: IAPIMethods,
-  /**
-   * @param {string} dashboard_layout_id Id of dashboard layouts
-   */
   dashboard_layout_id: string,
-  /**
-   * @param {string} fields Requested fields.
-   */
   fields?: string,
   options?: Partial<ITransportSettings>
 ): Promise<SDKResponse<IDashboardLayout, IError>> => {
@@ -3167,20 +3369,18 @@ export const dashboard_layout = async (
  * ### Update the dashboard layout with a specific id.
  *
  * PATCH /dashboard_layouts/{dashboard_layout_id} -> IDashboardLayout
+ *
+ * @param sdk IAPIMethods implementation
+ * @param dashboard_layout_id Id of dashboard layout
+ * @param body Partial<IWriteDashboardLayout>
+ * @param fields Requested fields.
+ * @param options one-time API call overrides
+ *
  */
 export const update_dashboard_layout = async (
   sdk: IAPIMethods,
-  /**
-   * @param {string} dashboard_layout_id Id of dashboard layout
-   */
   dashboard_layout_id: string,
-  /**
-   * @param {Partial<IWriteDashboardLayout>} body
-   */
   body: Partial<IWriteDashboardLayout>,
-  /**
-   * @param {string} fields Requested fields.
-   */
   fields?: string,
   options?: Partial<ITransportSettings>
 ): Promise<SDKResponse<IDashboardLayout, IError | IValidationError>> => {
@@ -3197,12 +3397,14 @@ export const update_dashboard_layout = async (
  * ### Delete a dashboard layout with a specific id.
  *
  * DELETE /dashboard_layouts/{dashboard_layout_id} -> string
+ *
+ * @param sdk IAPIMethods implementation
+ * @param dashboard_layout_id Id of dashboard layout
+ * @param options one-time API call overrides
+ *
  */
 export const delete_dashboard_layout = async (
   sdk: IAPIMethods,
-  /**
-   * @param {string} dashboard_layout_id Id of dashboard layout
-   */
   dashboard_layout_id: string,
   options?: Partial<ITransportSettings>
 ): Promise<SDKResponse<string, IError | IValidationError>> => {
@@ -3219,16 +3421,16 @@ export const delete_dashboard_layout = async (
  * ### Get information about all the dashboard elements on a dashboard with a specific id.
  *
  * GET /dashboards/{dashboard_id}/dashboard_layouts -> IDashboardLayout[]
+ *
+ * @param sdk IAPIMethods implementation
+ * @param dashboard_id Id of dashboard
+ * @param fields Requested fields.
+ * @param options one-time API call overrides
+ *
  */
 export const dashboard_dashboard_layouts = async (
   sdk: IAPIMethods,
-  /**
-   * @param {string} dashboard_id Id of dashboard
-   */
   dashboard_id: string,
-  /**
-   * @param {string} fields Requested fields.
-   */
   fields?: string,
   options?: Partial<ITransportSettings>
 ): Promise<SDKResponse<IDashboardLayout[], IError>> => {
@@ -3245,16 +3447,16 @@ export const dashboard_dashboard_layouts = async (
  * ### Create a dashboard layout on the dashboard with a specific id.
  *
  * POST /dashboard_layouts -> IDashboardLayout
+ *
+ * @param sdk IAPIMethods implementation
+ * @param body Partial<IWriteDashboardLayout>
+ * @param fields Requested fields.
+ * @param options one-time API call overrides
+ *
  */
 export const create_dashboard_layout = async (
   sdk: IAPIMethods,
-  /**
-   * @param {Partial<IWriteDashboardLayout>} body
-   */
   body: Partial<IWriteDashboardLayout>,
-  /**
-   * @param {string} fields Requested fields.
-   */
   fields?: string,
   options?: Partial<ITransportSettings>
 ): Promise<SDKResponse<IDashboardLayout, IError | IValidationError>> => {
@@ -3274,12 +3476,14 @@ export const create_dashboard_layout = async (
  * Perform a data action. The data action object can be obtained from query results, and used to perform an arbitrary action.
  *
  * POST /data_actions -> IDataActionResponse
+ *
+ * @param sdk IAPIMethods implementation
+ * @param body Partial<IDataActionRequest>
+ * @param options one-time API call overrides
+ *
  */
 export const perform_data_action = async (
   sdk: IAPIMethods,
-  /**
-   * @param {Partial<IDataActionRequest>} body
-   */
   body: Partial<IDataActionRequest>,
   options?: Partial<ITransportSettings>
 ): Promise<SDKResponse<IDataActionResponse, IError>> => {
@@ -3295,12 +3499,14 @@ export const perform_data_action = async (
  * For some data actions, the remote server may supply a form requesting further user input. This endpoint takes a data action, asks the remote server to generate a form for it, and returns that form to you for presentation to the user.
  *
  * POST /data_actions/form -> IDataActionForm
+ *
+ * @param sdk IAPIMethods implementation
+ * @param body Partial<IDictionary<string>>
+ * @param options one-time API call overrides
+ *
  */
 export const fetch_remote_data_action_form = async (
   sdk: IAPIMethods,
-  /**
-   * @param {Partial<IDictionary<string>>} body
-   */
   body: Partial<IDictionary<string>>,
   options?: Partial<ITransportSettings>
 ): Promise<SDKResponse<IDataActionForm, IError | IValidationError>> => {
@@ -3320,6 +3526,10 @@ export const fetch_remote_data_action_form = async (
  * ### Get information about all datagroups.
  *
  * GET /datagroups -> IDatagroup[]
+ *
+ * @param sdk IAPIMethods implementation
+ * @param options one-time API call overrides
+ *
  */
 export const all_datagroups = async (
   sdk: IAPIMethods,
@@ -3332,12 +3542,14 @@ export const all_datagroups = async (
  * ### Get information about a datagroup.
  *
  * GET /datagroups/{datagroup_id} -> IDatagroup
+ *
+ * @param sdk IAPIMethods implementation
+ * @param datagroup_id ID of datagroup.
+ * @param options one-time API call overrides
+ *
  */
 export const datagroup = async (
   sdk: IAPIMethods,
-  /**
-   * @param {string} datagroup_id ID of datagroup.
-   */
   datagroup_id: string,
   options?: Partial<ITransportSettings>
 ): Promise<SDKResponse<IDatagroup, IError>> => {
@@ -3354,16 +3566,16 @@ export const datagroup = async (
  * ### Update a datagroup using the specified params.
  *
  * PATCH /datagroups/{datagroup_id} -> IDatagroup
+ *
+ * @param sdk IAPIMethods implementation
+ * @param datagroup_id ID of datagroup.
+ * @param body Partial<IWriteDatagroup>
+ * @param options one-time API call overrides
+ *
  */
 export const update_datagroup = async (
   sdk: IAPIMethods,
-  /**
-   * @param {string} datagroup_id ID of datagroup.
-   */
   datagroup_id: string,
-  /**
-   * @param {Partial<IWriteDatagroup>} body
-   */
   body: Partial<IWriteDatagroup>,
   options?: Partial<ITransportSettings>
 ): Promise<SDKResponse<IDatagroup, IError | IValidationError>> => {
@@ -3384,6 +3596,11 @@ export const update_datagroup = async (
  * Search for folders by creator id, parent id, name, etc
  *
  * GET /folders/search -> IFolder[]
+ *
+ * @param sdk IAPIMethods implementation
+ * @param request composed interface "IRequestSearchSpaces" for complex method parameters
+ * @param options one-time API call overrides
+ *
  */
 export const search_folders = async (
   sdk: IAPIMethods,
@@ -3415,16 +3632,16 @@ export const search_folders = async (
  * ### Get information about the folder with a specific id.
  *
  * GET /folders/{folder_id} -> IFolder
+ *
+ * @param sdk IAPIMethods implementation
+ * @param folder_id Id of folder
+ * @param fields Requested fields.
+ * @param options one-time API call overrides
+ *
  */
 export const folder = async (
   sdk: IAPIMethods,
-  /**
-   * @param {string} folder_id Id of folder
-   */
   folder_id: string,
-  /**
-   * @param {string} fields Requested fields.
-   */
   fields?: string,
   options?: Partial<ITransportSettings>
 ): Promise<SDKResponse<IFolder, IError>> => {
@@ -3441,16 +3658,16 @@ export const folder = async (
  * ### Update the folder with a specific id.
  *
  * PATCH /folders/{folder_id} -> IFolder
+ *
+ * @param sdk IAPIMethods implementation
+ * @param folder_id Id of folder
+ * @param body Partial<IUpdateFolder>
+ * @param options one-time API call overrides
+ *
  */
 export const update_folder = async (
   sdk: IAPIMethods,
-  /**
-   * @param {string} folder_id Id of folder
-   */
   folder_id: string,
-  /**
-   * @param {Partial<IUpdateFolder>} body
-   */
   body: Partial<IUpdateFolder>,
   options?: Partial<ITransportSettings>
 ): Promise<SDKResponse<IFolder, IError | IValidationError>> => {
@@ -3468,12 +3685,14 @@ export const update_folder = async (
  * **DANGER** this will delete all looks and dashboards in the folder.
  *
  * DELETE /folders/{folder_id} -> string
+ *
+ * @param sdk IAPIMethods implementation
+ * @param folder_id Id of folder
+ * @param options one-time API call overrides
+ *
  */
 export const delete_folder = async (
   sdk: IAPIMethods,
-  /**
-   * @param {string} folder_id Id of folder
-   */
   folder_id: string,
   options?: Partial<ITransportSettings>
 ): Promise<SDKResponse<string, IError>> => {
@@ -3493,12 +3712,14 @@ export const delete_folder = async (
  * In API 4.0+, all personal folders will be returned.
  *
  * GET /folders -> IFolder[]
+ *
+ * @param sdk IAPIMethods implementation
+ * @param fields Requested fields.
+ * @param options one-time API call overrides
+ *
  */
 export const all_folders = async (
   sdk: IAPIMethods,
-  /**
-   * @param {string} fields Requested fields.
-   */
   fields?: string,
   options?: Partial<ITransportSettings>
 ): Promise<SDKResponse<IFolder[], IError>> => {
@@ -3512,12 +3733,14 @@ export const all_folders = async (
  * returns 404 Not Found.
  *
  * POST /folders -> IFolder
+ *
+ * @param sdk IAPIMethods implementation
+ * @param body Partial<ICreateFolder>
+ * @param options one-time API call overrides
+ *
  */
 export const create_folder = async (
   sdk: IAPIMethods,
-  /**
-   * @param {Partial<ICreateFolder>} body
-   */
   body: Partial<ICreateFolder>,
   options?: Partial<ITransportSettings>
 ): Promise<SDKResponse<IFolder, IError | IValidationError>> => {
@@ -3533,6 +3756,11 @@ export const create_folder = async (
  * ### Get the children of a folder.
  *
  * GET /folders/{folder_id}/children -> IFolder[]
+ *
+ * @param sdk IAPIMethods implementation
+ * @param request composed interface "IRequestFolderChildren" for complex method parameters
+ * @param options one-time API call overrides
+ *
  */
 export const folder_children = async (
   sdk: IAPIMethods,
@@ -3557,6 +3785,11 @@ export const folder_children = async (
  * ### Search the children of a folder
  *
  * GET /folders/{folder_id}/children/search -> IFolder[]
+ *
+ * @param sdk IAPIMethods implementation
+ * @param request composed interface "IRequestFolderChildrenSearch" for complex method parameters
+ * @param options one-time API call overrides
+ *
  */
 export const folder_children_search = async (
   sdk: IAPIMethods,
@@ -3576,16 +3809,16 @@ export const folder_children_search = async (
  * ### Get the parent of a folder
  *
  * GET /folders/{folder_id}/parent -> IFolder
+ *
+ * @param sdk IAPIMethods implementation
+ * @param folder_id Id of folder
+ * @param fields Requested fields.
+ * @param options one-time API call overrides
+ *
  */
 export const folder_parent = async (
   sdk: IAPIMethods,
-  /**
-   * @param {string} folder_id Id of folder
-   */
   folder_id: string,
-  /**
-   * @param {string} fields Requested fields.
-   */
   fields?: string,
   options?: Partial<ITransportSettings>
 ): Promise<SDKResponse<IFolder, IError>> => {
@@ -3602,16 +3835,16 @@ export const folder_parent = async (
  * ### Get the ancestors of a folder
  *
  * GET /folders/{folder_id}/ancestors -> IFolder[]
+ *
+ * @param sdk IAPIMethods implementation
+ * @param folder_id Id of folder
+ * @param fields Requested fields.
+ * @param options one-time API call overrides
+ *
  */
 export const folder_ancestors = async (
   sdk: IAPIMethods,
-  /**
-   * @param {string} folder_id Id of folder
-   */
   folder_id: string,
-  /**
-   * @param {string} fields Requested fields.
-   */
   fields?: string,
   options?: Partial<ITransportSettings>
 ): Promise<SDKResponse<IFolder[], IError>> => {
@@ -3630,16 +3863,16 @@ export const folder_ancestors = async (
  * In API 4.0+, all looks in a folder will be returned, excluding looks in the trash.
  *
  * GET /folders/{folder_id}/looks -> ILookWithQuery[]
+ *
+ * @param sdk IAPIMethods implementation
+ * @param folder_id Id of folder
+ * @param fields Requested fields.
+ * @param options one-time API call overrides
+ *
  */
 export const folder_looks = async (
   sdk: IAPIMethods,
-  /**
-   * @param {string} folder_id Id of folder
-   */
   folder_id: string,
-  /**
-   * @param {string} fields Requested fields.
-   */
   fields?: string,
   options?: Partial<ITransportSettings>
 ): Promise<SDKResponse<ILookWithQuery[], IError>> => {
@@ -3656,16 +3889,16 @@ export const folder_looks = async (
  * ### Get the dashboards in a folder
  *
  * GET /folders/{folder_id}/dashboards -> IDashboard[]
+ *
+ * @param sdk IAPIMethods implementation
+ * @param folder_id Id of folder
+ * @param fields Requested fields.
+ * @param options one-time API call overrides
+ *
  */
 export const folder_dashboards = async (
   sdk: IAPIMethods,
-  /**
-   * @param {string} folder_id Id of folder
-   */
   folder_id: string,
-  /**
-   * @param {string} fields Requested fields.
-   */
   fields?: string,
   options?: Partial<ITransportSettings>
 ): Promise<SDKResponse<IDashboard[], IError>> => {
@@ -3686,6 +3919,11 @@ export const folder_dashboards = async (
  * ### Get information about all groups.
  *
  * GET /groups -> IGroup[]
+ *
+ * @param sdk IAPIMethods implementation
+ * @param request composed interface "IRequestAllGroups" for complex method parameters
+ * @param options one-time API call overrides
+ *
  */
 export const all_groups = async (
   sdk: IAPIMethods,
@@ -3712,16 +3950,16 @@ export const all_groups = async (
  * ### Creates a new group (admin only).
  *
  * POST /groups -> IGroup
+ *
+ * @param sdk IAPIMethods implementation
+ * @param body Partial<IWriteGroup>
+ * @param fields Requested fields.
+ * @param options one-time API call overrides
+ *
  */
 export const create_group = async (
   sdk: IAPIMethods,
-  /**
-   * @param {Partial<IWriteGroup>} body
-   */
   body: Partial<IWriteGroup>,
-  /**
-   * @param {string} fields Requested fields.
-   */
   fields?: string,
   options?: Partial<ITransportSettings>
 ): Promise<SDKResponse<IGroup, IError | IValidationError>> => {
@@ -3760,6 +3998,11 @@ export const create_group = async (
  * Boolean search params accept only "true" and "false" as values.
  *
  * GET /groups/search -> IGroup[]
+ *
+ * @param sdk IAPIMethods implementation
+ * @param request composed interface "IRequestSearchGroups" for complex method parameters
+ * @param options one-time API call overrides
+ *
  */
 export const search_groups = async (
   sdk: IAPIMethods,
@@ -3789,16 +4032,16 @@ export const search_groups = async (
  * ### Get information about a group.
  *
  * GET /groups/{group_id} -> IGroup
+ *
+ * @param sdk IAPIMethods implementation
+ * @param group_id Id of group
+ * @param fields Requested fields.
+ * @param options one-time API call overrides
+ *
  */
 export const group = async (
   sdk: IAPIMethods,
-  /**
-   * @param {number} group_id Id of group
-   */
   group_id: number,
-  /**
-   * @param {string} fields Requested fields.
-   */
   fields?: string,
   options?: Partial<ITransportSettings>
 ): Promise<SDKResponse<IGroup, IError>> => {
@@ -3814,20 +4057,18 @@ export const group = async (
  * ### Updates the a group (admin only).
  *
  * PATCH /groups/{group_id} -> IGroup
+ *
+ * @param sdk IAPIMethods implementation
+ * @param group_id Id of group
+ * @param body Partial<IWriteGroup>
+ * @param fields Requested fields.
+ * @param options one-time API call overrides
+ *
  */
 export const update_group = async (
   sdk: IAPIMethods,
-  /**
-   * @param {number} group_id Id of group
-   */
   group_id: number,
-  /**
-   * @param {Partial<IWriteGroup>} body
-   */
   body: Partial<IWriteGroup>,
-  /**
-   * @param {string} fields Requested fields.
-   */
   fields?: string,
   options?: Partial<ITransportSettings>
 ): Promise<SDKResponse<IGroup, IError | IValidationError>> => {
@@ -3843,12 +4084,14 @@ export const update_group = async (
  * ### Deletes a group (admin only).
  *
  * DELETE /groups/{group_id} -> string
+ *
+ * @param sdk IAPIMethods implementation
+ * @param group_id Id of group
+ * @param options one-time API call overrides
+ *
  */
 export const delete_group = async (
   sdk: IAPIMethods,
-  /**
-   * @param {number} group_id Id of group
-   */
   group_id: number,
   options?: Partial<ITransportSettings>
 ): Promise<SDKResponse<string, IError>> => {
@@ -3859,16 +4102,16 @@ export const delete_group = async (
  * ### Get information about all the groups in a group
  *
  * GET /groups/{group_id}/groups -> IGroup[]
+ *
+ * @param sdk IAPIMethods implementation
+ * @param group_id Id of group
+ * @param fields Requested fields.
+ * @param options one-time API call overrides
+ *
  */
 export const all_group_groups = async (
   sdk: IAPIMethods,
-  /**
-   * @param {number} group_id Id of group
-   */
   group_id: number,
-  /**
-   * @param {string} fields Requested fields.
-   */
   fields?: string,
   options?: Partial<ITransportSettings>
 ): Promise<SDKResponse<IGroup[], IError>> => {
@@ -3884,16 +4127,16 @@ export const all_group_groups = async (
  * ### Adds a new group to a group.
  *
  * POST /groups/{group_id}/groups -> IGroup
+ *
+ * @param sdk IAPIMethods implementation
+ * @param group_id Id of group
+ * @param body Partial<IGroupIdForGroupInclusion>
+ * @param options one-time API call overrides
+ *
  */
 export const add_group_group = async (
   sdk: IAPIMethods,
-  /**
-   * @param {number} group_id Id of group
-   */
   group_id: number,
-  /**
-   * @param {Partial<IGroupIdForGroupInclusion>} body
-   */
   body: Partial<IGroupIdForGroupInclusion>,
   options?: Partial<ITransportSettings>
 ): Promise<SDKResponse<IGroup, IError>> => {
@@ -3909,6 +4152,11 @@ export const add_group_group = async (
  * ### Get information about all the users directly included in a group.
  *
  * GET /groups/{group_id}/users -> IUser[]
+ *
+ * @param sdk IAPIMethods implementation
+ * @param request composed interface "IRequestAllGroupUsers" for complex method parameters
+ * @param options one-time API call overrides
+ *
  */
 export const all_group_users = async (
   sdk: IAPIMethods,
@@ -3932,16 +4180,16 @@ export const all_group_users = async (
  * ### Adds a new user to a group.
  *
  * POST /groups/{group_id}/users -> IUser
+ *
+ * @param sdk IAPIMethods implementation
+ * @param group_id Id of group
+ * @param body Partial<IGroupIdForGroupUserInclusion>
+ * @param options one-time API call overrides
+ *
  */
 export const add_group_user = async (
   sdk: IAPIMethods,
-  /**
-   * @param {number} group_id Id of group
-   */
   group_id: number,
-  /**
-   * @param {Partial<IGroupIdForGroupUserInclusion>} body
-   */
   body: Partial<IGroupIdForGroupUserInclusion>,
   options?: Partial<ITransportSettings>
 ): Promise<SDKResponse<IUser, IError>> => {
@@ -3957,16 +4205,16 @@ export const add_group_user = async (
  * ### Removes a user from a group.
  *
  * DELETE /groups/{group_id}/users/{user_id} -> void
+ *
+ * @param sdk IAPIMethods implementation
+ * @param group_id Id of group
+ * @param user_id Id of user to remove from group
+ * @param options one-time API call overrides
+ *
  */
 export const delete_group_user = async (
   sdk: IAPIMethods,
-  /**
-   * @param {number} group_id Id of group
-   */
   group_id: number,
-  /**
-   * @param {number} user_id Id of user to remove from group
-   */
   user_id: number,
   options?: Partial<ITransportSettings>
 ): Promise<SDKResponse<void, IError>> => {
@@ -3982,16 +4230,16 @@ export const delete_group_user = async (
  * ### Removes a group from a group.
  *
  * DELETE /groups/{group_id}/groups/{deleting_group_id} -> void
+ *
+ * @param sdk IAPIMethods implementation
+ * @param group_id Id of group
+ * @param deleting_group_id Id of group to delete
+ * @param options one-time API call overrides
+ *
  */
 export const delete_group_from_group = async (
   sdk: IAPIMethods,
-  /**
-   * @param {number} group_id Id of group
-   */
   group_id: number,
-  /**
-   * @param {number} deleting_group_id Id of group to delete
-   */
   deleting_group_id: number,
   options?: Partial<ITransportSettings>
 ): Promise<SDKResponse<void, IError>> => {
@@ -4009,20 +4257,18 @@ export const delete_group_from_group = async (
  * For information about how user attribute values are calculated, see [Set User Attribute Group Values](#!/UserAttribute/set_user_attribute_group_values).
  *
  * PATCH /groups/{group_id}/attribute_values/{user_attribute_id} -> IUserAttributeGroupValue
+ *
+ * @param sdk IAPIMethods implementation
+ * @param group_id Id of group
+ * @param user_attribute_id Id of user attribute
+ * @param body Partial<IUserAttributeGroupValue>
+ * @param options one-time API call overrides
+ *
  */
 export const update_user_attribute_group_value = async (
   sdk: IAPIMethods,
-  /**
-   * @param {number} group_id Id of group
-   */
   group_id: number,
-  /**
-   * @param {number} user_attribute_id Id of user attribute
-   */
   user_attribute_id: number,
-  /**
-   * @param {Partial<IUserAttributeGroupValue>} body
-   */
   body: Partial<IUserAttributeGroupValue>,
   options?: Partial<ITransportSettings>
 ): Promise<
@@ -4040,16 +4286,16 @@ export const update_user_attribute_group_value = async (
  * ### Remove a user attribute value from a group.
  *
  * DELETE /groups/{group_id}/attribute_values/{user_attribute_id} -> void
+ *
+ * @param sdk IAPIMethods implementation
+ * @param group_id Id of group
+ * @param user_attribute_id Id of user attribute
+ * @param options one-time API call overrides
+ *
  */
 export const delete_user_attribute_group_value = async (
   sdk: IAPIMethods,
-  /**
-   * @param {number} group_id Id of group
-   */
   group_id: number,
-  /**
-   * @param {number} user_attribute_id Id of user attribute
-   */
   user_attribute_id: number,
   options?: Partial<ITransportSettings>
 ): Promise<SDKResponse<void, IError>> => {
@@ -4069,12 +4315,16 @@ export const delete_user_attribute_group_value = async (
  * ### Get information about all homepages.
  *
  * GET /homepages -> IHomepage[]
+ *
+ * @deprecated
+ *
+ * @param sdk IAPIMethods implementation
+ * @param fields Requested fields.
+ * @param options one-time API call overrides
+ *
  */
 export const all_homepages = async (
   sdk: IAPIMethods,
-  /**
-   * @param {string} fields Requested fields.
-   */
   fields?: string,
   options?: Partial<ITransportSettings>
 ): Promise<SDKResponse<IHomepage[], IError>> => {
@@ -4085,16 +4335,18 @@ export const all_homepages = async (
  * ### Create a new homepage.
  *
  * POST /homepages -> IHomepage
+ *
+ * @deprecated
+ *
+ * @param sdk IAPIMethods implementation
+ * @param body Partial<IWriteHomepage>
+ * @param fields Requested fields.
+ * @param options one-time API call overrides
+ *
  */
 export const create_homepage = async (
   sdk: IAPIMethods,
-  /**
-   * @param {Partial<IWriteHomepage>} body
-   */
   body: Partial<IWriteHomepage>,
-  /**
-   * @param {string} fields Requested fields.
-   */
   fields?: string,
   options?: Partial<ITransportSettings>
 ): Promise<SDKResponse<IHomepage, IError | IValidationError>> => {
@@ -4131,6 +4383,13 @@ export const create_homepage = async (
  * Boolean search params accept only "true" and "false" as values.
  *
  * GET /homepages/search -> IHomepage[]
+ *
+ * @deprecated
+ *
+ * @param sdk IAPIMethods implementation
+ * @param request composed interface "IRequestSearchHomepages" for complex method parameters
+ * @param options one-time API call overrides
+ *
  */
 export const search_homepages = async (
   sdk: IAPIMethods,
@@ -4163,16 +4422,18 @@ export const search_homepages = async (
  * ### Get information about a homepage.
  *
  * GET /homepages/{homepage_id} -> IHomepage
+ *
+ * @deprecated
+ *
+ * @param sdk IAPIMethods implementation
+ * @param homepage_id Id of homepage
+ * @param fields Requested fields.
+ * @param options one-time API call overrides
+ *
  */
 export const homepage = async (
   sdk: IAPIMethods,
-  /**
-   * @param {number} homepage_id Id of homepage
-   */
   homepage_id: number,
-  /**
-   * @param {string} fields Requested fields.
-   */
   fields?: string,
   options?: Partial<ITransportSettings>
 ): Promise<SDKResponse<IHomepage, IError>> => {
@@ -4188,20 +4449,20 @@ export const homepage = async (
  * ### Update a homepage definition.
  *
  * PATCH /homepages/{homepage_id} -> IHomepage
+ *
+ * @deprecated
+ *
+ * @param sdk IAPIMethods implementation
+ * @param homepage_id Id of homepage
+ * @param body Partial<IWriteHomepage>
+ * @param fields Requested fields.
+ * @param options one-time API call overrides
+ *
  */
 export const update_homepage = async (
   sdk: IAPIMethods,
-  /**
-   * @param {number} homepage_id Id of homepage
-   */
   homepage_id: number,
-  /**
-   * @param {Partial<IWriteHomepage>} body
-   */
   body: Partial<IWriteHomepage>,
-  /**
-   * @param {string} fields Requested fields.
-   */
   fields?: string,
   options?: Partial<ITransportSettings>
 ): Promise<SDKResponse<IHomepage, IError | IValidationError>> => {
@@ -4217,12 +4478,16 @@ export const update_homepage = async (
  * ### Delete a homepage.
  *
  * DELETE /homepages/{homepage_id} -> string
+ *
+ * @deprecated
+ *
+ * @param sdk IAPIMethods implementation
+ * @param homepage_id Id of homepage
+ * @param options one-time API call overrides
+ *
  */
 export const delete_homepage = async (
   sdk: IAPIMethods,
-  /**
-   * @param {number} homepage_id Id of homepage
-   */
   homepage_id: number,
   options?: Partial<ITransportSettings>
 ): Promise<SDKResponse<string, IError>> => {
@@ -4238,6 +4503,13 @@ export const delete_homepage = async (
  * ### Get information about all homepage items.
  *
  * GET /homepage_items -> IHomepageItem[]
+ *
+ * @deprecated
+ *
+ * @param sdk IAPIMethods implementation
+ * @param request composed interface "IRequestAllHomepageItems" for complex method parameters
+ * @param options one-time API call overrides
+ *
  */
 export const all_homepage_items = async (
   sdk: IAPIMethods,
@@ -4260,16 +4532,18 @@ export const all_homepage_items = async (
  * ### Create a new homepage item.
  *
  * POST /homepage_items -> IHomepageItem
+ *
+ * @deprecated
+ *
+ * @param sdk IAPIMethods implementation
+ * @param body Partial<IWriteHomepageItem>
+ * @param fields Requested fields.
+ * @param options one-time API call overrides
+ *
  */
 export const create_homepage_item = async (
   sdk: IAPIMethods,
-  /**
-   * @param {Partial<IWriteHomepageItem>} body
-   */
   body: Partial<IWriteHomepageItem>,
-  /**
-   * @param {string} fields Requested fields.
-   */
   fields?: string,
   options?: Partial<ITransportSettings>
 ): Promise<SDKResponse<IHomepageItem, IError | IValidationError>> => {
@@ -4285,16 +4559,18 @@ export const create_homepage_item = async (
  * ### Get information about a homepage item.
  *
  * GET /homepage_items/{homepage_item_id} -> IHomepageItem
+ *
+ * @deprecated
+ *
+ * @param sdk IAPIMethods implementation
+ * @param homepage_item_id Id of homepage item
+ * @param fields Requested fields.
+ * @param options one-time API call overrides
+ *
  */
 export const homepage_item = async (
   sdk: IAPIMethods,
-  /**
-   * @param {number} homepage_item_id Id of homepage item
-   */
   homepage_item_id: number,
-  /**
-   * @param {string} fields Requested fields.
-   */
   fields?: string,
   options?: Partial<ITransportSettings>
 ): Promise<SDKResponse<IHomepageItem, IError>> => {
@@ -4310,20 +4586,20 @@ export const homepage_item = async (
  * ### Update a homepage item definition.
  *
  * PATCH /homepage_items/{homepage_item_id} -> IHomepageItem
+ *
+ * @deprecated
+ *
+ * @param sdk IAPIMethods implementation
+ * @param homepage_item_id Id of homepage item
+ * @param body Partial<IWriteHomepageItem>
+ * @param fields Requested fields.
+ * @param options one-time API call overrides
+ *
  */
 export const update_homepage_item = async (
   sdk: IAPIMethods,
-  /**
-   * @param {number} homepage_item_id Id of homepage item
-   */
   homepage_item_id: number,
-  /**
-   * @param {Partial<IWriteHomepageItem>} body
-   */
   body: Partial<IWriteHomepageItem>,
-  /**
-   * @param {string} fields Requested fields.
-   */
   fields?: string,
   options?: Partial<ITransportSettings>
 ): Promise<SDKResponse<IHomepageItem, IError | IValidationError>> => {
@@ -4339,12 +4615,16 @@ export const update_homepage_item = async (
  * ### Delete a homepage item.
  *
  * DELETE /homepage_items/{homepage_item_id} -> string
+ *
+ * @deprecated
+ *
+ * @param sdk IAPIMethods implementation
+ * @param homepage_item_id Id of homepage_item
+ * @param options one-time API call overrides
+ *
  */
 export const delete_homepage_item = async (
   sdk: IAPIMethods,
-  /**
-   * @param {number} homepage_item_id Id of homepage_item
-   */
   homepage_item_id: number,
   options?: Partial<ITransportSettings>
 ): Promise<SDKResponse<string, IError>> => {
@@ -4360,6 +4640,13 @@ export const delete_homepage_item = async (
  * ### Get information about all homepage sections.
  *
  * GET /homepage_sections -> IHomepageSection[]
+ *
+ * @deprecated
+ *
+ * @param sdk IAPIMethods implementation
+ * @param request composed interface "IRequestAllHomepageSections" for complex method parameters
+ * @param options one-time API call overrides
+ *
  */
 export const all_homepage_sections = async (
   sdk: IAPIMethods,
@@ -4378,16 +4665,18 @@ export const all_homepage_sections = async (
  * ### Create a new homepage section.
  *
  * POST /homepage_sections -> IHomepageSection
+ *
+ * @deprecated
+ *
+ * @param sdk IAPIMethods implementation
+ * @param body Partial<IWriteHomepageSection>
+ * @param fields Requested fields.
+ * @param options one-time API call overrides
+ *
  */
 export const create_homepage_section = async (
   sdk: IAPIMethods,
-  /**
-   * @param {Partial<IWriteHomepageSection>} body
-   */
   body: Partial<IWriteHomepageSection>,
-  /**
-   * @param {string} fields Requested fields.
-   */
   fields?: string,
   options?: Partial<ITransportSettings>
 ): Promise<SDKResponse<IHomepageSection, IError | IValidationError>> => {
@@ -4403,16 +4692,18 @@ export const create_homepage_section = async (
  * ### Get information about a homepage section.
  *
  * GET /homepage_sections/{homepage_section_id} -> IHomepageSection
+ *
+ * @deprecated
+ *
+ * @param sdk IAPIMethods implementation
+ * @param homepage_section_id Id of homepage section
+ * @param fields Requested fields.
+ * @param options one-time API call overrides
+ *
  */
 export const homepage_section = async (
   sdk: IAPIMethods,
-  /**
-   * @param {number} homepage_section_id Id of homepage section
-   */
   homepage_section_id: number,
-  /**
-   * @param {string} fields Requested fields.
-   */
   fields?: string,
   options?: Partial<ITransportSettings>
 ): Promise<SDKResponse<IHomepageSection, IError>> => {
@@ -4428,20 +4719,20 @@ export const homepage_section = async (
  * ### Update a homepage section definition.
  *
  * PATCH /homepage_sections/{homepage_section_id} -> IHomepageSection
+ *
+ * @deprecated
+ *
+ * @param sdk IAPIMethods implementation
+ * @param homepage_section_id Id of homepage section
+ * @param body Partial<IWriteHomepageSection>
+ * @param fields Requested fields.
+ * @param options one-time API call overrides
+ *
  */
 export const update_homepage_section = async (
   sdk: IAPIMethods,
-  /**
-   * @param {number} homepage_section_id Id of homepage section
-   */
   homepage_section_id: number,
-  /**
-   * @param {Partial<IWriteHomepageSection>} body
-   */
   body: Partial<IWriteHomepageSection>,
-  /**
-   * @param {string} fields Requested fields.
-   */
   fields?: string,
   options?: Partial<ITransportSettings>
 ): Promise<SDKResponse<IHomepageSection, IError | IValidationError>> => {
@@ -4457,12 +4748,16 @@ export const update_homepage_section = async (
  * ### Delete a homepage section.
  *
  * DELETE /homepage_sections/{homepage_section_id} -> string
+ *
+ * @deprecated
+ *
+ * @param sdk IAPIMethods implementation
+ * @param homepage_section_id Id of homepage_section
+ * @param options one-time API call overrides
+ *
  */
 export const delete_homepage_section = async (
   sdk: IAPIMethods,
-  /**
-   * @param {number} homepage_section_id Id of homepage_section
-   */
   homepage_section_id: number,
   options?: Partial<ITransportSettings>
 ): Promise<SDKResponse<string, IError>> => {
@@ -4478,12 +4773,14 @@ export const delete_homepage_section = async (
  * ### Get information about the primary homepage's sections.
  *
  * GET /primary_homepage_sections -> IHomepageSection[]
+ *
+ * @param sdk IAPIMethods implementation
+ * @param fields Requested fields.
+ * @param options one-time API call overrides
+ *
  */
 export const all_primary_homepage_sections = async (
   sdk: IAPIMethods,
-  /**
-   * @param {string} fields Requested fields.
-   */
   fields?: string,
   options?: Partial<ITransportSettings>
 ): Promise<SDKResponse<IHomepageSection[], IError>> => {
@@ -4503,12 +4800,14 @@ export const all_primary_homepage_sections = async (
  * ### Get information about all Integration Hubs.
  *
  * GET /integration_hubs -> IIntegrationHub[]
+ *
+ * @param sdk IAPIMethods implementation
+ * @param fields Requested fields.
+ * @param options one-time API call overrides
+ *
  */
 export const all_integration_hubs = async (
   sdk: IAPIMethods,
-  /**
-   * @param {string} fields Requested fields.
-   */
   fields?: string,
   options?: Partial<ITransportSettings>
 ): Promise<SDKResponse<IIntegrationHub[], IError>> => {
@@ -4526,16 +4825,16 @@ export const all_integration_hubs = async (
  * This API is rate limited to prevent it from being used for SSRF attacks
  *
  * POST /integration_hubs -> IIntegrationHub
+ *
+ * @param sdk IAPIMethods implementation
+ * @param body Partial<IWriteIntegrationHub>
+ * @param fields Requested fields.
+ * @param options one-time API call overrides
+ *
  */
 export const create_integration_hub = async (
   sdk: IAPIMethods,
-  /**
-   * @param {Partial<IWriteIntegrationHub>} body
-   */
   body: Partial<IWriteIntegrationHub>,
-  /**
-   * @param {string} fields Requested fields.
-   */
   fields?: string,
   options?: Partial<ITransportSettings>
 ): Promise<SDKResponse<IIntegrationHub, IError | IValidationError>> => {
@@ -4551,16 +4850,16 @@ export const create_integration_hub = async (
  * ### Get information about a Integration Hub.
  *
  * GET /integration_hubs/{integration_hub_id} -> IIntegrationHub
+ *
+ * @param sdk IAPIMethods implementation
+ * @param integration_hub_id Id of Integration Hub
+ * @param fields Requested fields.
+ * @param options one-time API call overrides
+ *
  */
 export const integration_hub = async (
   sdk: IAPIMethods,
-  /**
-   * @param {number} integration_hub_id Id of Integration Hub
-   */
   integration_hub_id: number,
-  /**
-   * @param {string} fields Requested fields.
-   */
   fields?: string,
   options?: Partial<ITransportSettings>
 ): Promise<SDKResponse<IIntegrationHub, IError>> => {
@@ -4578,20 +4877,18 @@ export const integration_hub = async (
  * This API is rate limited to prevent it from being used for SSRF attacks
  *
  * PATCH /integration_hubs/{integration_hub_id} -> IIntegrationHub
+ *
+ * @param sdk IAPIMethods implementation
+ * @param integration_hub_id Id of Integration Hub
+ * @param body Partial<IWriteIntegrationHub>
+ * @param fields Requested fields.
+ * @param options one-time API call overrides
+ *
  */
 export const update_integration_hub = async (
   sdk: IAPIMethods,
-  /**
-   * @param {number} integration_hub_id Id of Integration Hub
-   */
   integration_hub_id: number,
-  /**
-   * @param {Partial<IWriteIntegrationHub>} body
-   */
   body: Partial<IWriteIntegrationHub>,
-  /**
-   * @param {string} fields Requested fields.
-   */
   fields?: string,
   options?: Partial<ITransportSettings>
 ): Promise<SDKResponse<IIntegrationHub, IError | IValidationError>> => {
@@ -4607,12 +4904,14 @@ export const update_integration_hub = async (
  * ### Delete a Integration Hub.
  *
  * DELETE /integration_hubs/{integration_hub_id} -> string
+ *
+ * @param sdk IAPIMethods implementation
+ * @param integration_hub_id Id of integration_hub
+ * @param options one-time API call overrides
+ *
  */
 export const delete_integration_hub = async (
   sdk: IAPIMethods,
-  /**
-   * @param {number} integration_hub_id Id of integration_hub
-   */
   integration_hub_id: number,
   options?: Partial<ITransportSettings>
 ): Promise<SDKResponse<string, IError>> => {
@@ -4628,12 +4927,14 @@ export const delete_integration_hub = async (
  * Accepts the legal agreement for a given integration hub. This only works for integration hubs that have legal_agreement_required set to true and legal_agreement_signed set to false.
  *
  * POST /integration_hubs/{integration_hub_id}/accept_legal_agreement -> IIntegrationHub
+ *
+ * @param sdk IAPIMethods implementation
+ * @param integration_hub_id Id of integration_hub
+ * @param options one-time API call overrides
+ *
  */
 export const accept_integration_hub_legal_agreement = async (
   sdk: IAPIMethods,
-  /**
-   * @param {number} integration_hub_id Id of integration_hub
-   */
   integration_hub_id: number,
   options?: Partial<ITransportSettings>
 ): Promise<SDKResponse<IIntegrationHub, IError | IValidationError>> => {
@@ -4649,6 +4950,11 @@ export const accept_integration_hub_legal_agreement = async (
  * ### Get information about all Integrations.
  *
  * GET /integrations -> IIntegration[]
+ *
+ * @param sdk IAPIMethods implementation
+ * @param request composed interface "IRequestAllIntegrations" for complex method parameters
+ * @param options one-time API call overrides
+ *
  */
 export const all_integrations = async (
   sdk: IAPIMethods,
@@ -4667,16 +4973,16 @@ export const all_integrations = async (
  * ### Get information about a Integration.
  *
  * GET /integrations/{integration_id} -> IIntegration
+ *
+ * @param sdk IAPIMethods implementation
+ * @param integration_id Id of integration
+ * @param fields Requested fields.
+ * @param options one-time API call overrides
+ *
  */
 export const integration = async (
   sdk: IAPIMethods,
-  /**
-   * @param {string} integration_id Id of integration
-   */
   integration_id: string,
-  /**
-   * @param {string} fields Requested fields.
-   */
   fields?: string,
   options?: Partial<ITransportSettings>
 ): Promise<SDKResponse<IIntegration, IError>> => {
@@ -4693,20 +4999,18 @@ export const integration = async (
  * ### Update parameters on a Integration.
  *
  * PATCH /integrations/{integration_id} -> IIntegration
+ *
+ * @param sdk IAPIMethods implementation
+ * @param integration_id Id of integration
+ * @param body Partial<IWriteIntegration>
+ * @param fields Requested fields.
+ * @param options one-time API call overrides
+ *
  */
 export const update_integration = async (
   sdk: IAPIMethods,
-  /**
-   * @param {string} integration_id Id of integration
-   */
   integration_id: string,
-  /**
-   * @param {Partial<IWriteIntegration>} body
-   */
   body: Partial<IWriteIntegration>,
-  /**
-   * @param {string} fields Requested fields.
-   */
   fields?: string,
   options?: Partial<ITransportSettings>
 ): Promise<SDKResponse<IIntegration, IError | IValidationError>> => {
@@ -4723,16 +5027,16 @@ export const update_integration = async (
  * Returns the Integration form for presentation to the user.
  *
  * POST /integrations/{integration_id}/form -> IDataActionForm
+ *
+ * @param sdk IAPIMethods implementation
+ * @param integration_id Id of integration
+ * @param body Partial<IDictionary<string>>
+ * @param options one-time API call overrides
+ *
  */
 export const fetch_integration_form = async (
   sdk: IAPIMethods,
-  /**
-   * @param {string} integration_id Id of integration
-   */
   integration_id: string,
-  /**
-   * @param {Partial<IDictionary<string>>} body
-   */
   body?: Partial<IDictionary<string>>,
   options?: Partial<ITransportSettings>
 ): Promise<SDKResponse<IDataActionForm, IError | IValidationError>> => {
@@ -4749,12 +5053,14 @@ export const fetch_integration_form = async (
  * Tests the integration to make sure all the settings are working.
  *
  * POST /integrations/{integration_id}/test -> IIntegrationTestResult
+ *
+ * @param sdk IAPIMethods implementation
+ * @param integration_id Id of integration
+ * @param options one-time API call overrides
+ *
  */
 export const test_integration = async (
   sdk: IAPIMethods,
-  /**
-   * @param {string} integration_id Id of integration
-   */
   integration_id: string,
   options?: Partial<ITransportSettings>
 ): Promise<SDKResponse<IIntegrationTestResult, IError | IValidationError>> => {
@@ -4781,12 +5087,14 @@ export const test_integration = async (
  * Find **soft-deleted looks** with [search_looks()](#!/Look/search_looks)
  *
  * GET /looks -> ILook[]
+ *
+ * @param sdk IAPIMethods implementation
+ * @param fields Requested fields.
+ * @param options one-time API call overrides
+ *
  */
 export const all_looks = async (
   sdk: IAPIMethods,
-  /**
-   * @param {string} fields Requested fields.
-   */
   fields?: string,
   options?: Partial<ITransportSettings>
 ): Promise<SDKResponse<ILook[], IError>> => {
@@ -4803,16 +5111,16 @@ export const all_looks = async (
  * in the call to `create_look()`.
  *
  * POST /looks -> ILookWithQuery
+ *
+ * @param sdk IAPIMethods implementation
+ * @param body Partial<IWriteLookWithQuery>
+ * @param fields Requested fields.
+ * @param options one-time API call overrides
+ *
  */
 export const create_look = async (
   sdk: IAPIMethods,
-  /**
-   * @param {Partial<IWriteLookWithQuery>} body
-   */
   body: Partial<IWriteLookWithQuery>,
-  /**
-   * @param {string} fields Requested fields.
-   */
   fields?: string,
   options?: Partial<ITransportSettings>
 ): Promise<SDKResponse<ILookWithQuery, IError | IValidationError>> => {
@@ -4854,6 +5162,11 @@ export const create_look = async (
  * Get a **single look** by id with [look(id)](#!/Look/look)
  *
  * GET /looks/search -> ILook[]
+ *
+ * @param sdk IAPIMethods implementation
+ * @param request composed interface "IRequestSearchLooks" for complex method parameters
+ * @param options one-time API call overrides
+ *
  */
 export const search_looks = async (
   sdk: IAPIMethods,
@@ -4892,16 +5205,16 @@ export const search_looks = async (
  * Returns detailed information about a Look and its associated Query.
  *
  * GET /looks/{look_id} -> ILookWithQuery
+ *
+ * @param sdk IAPIMethods implementation
+ * @param look_id Id of look
+ * @param fields Requested fields.
+ * @param options one-time API call overrides
+ *
  */
 export const look = async (
   sdk: IAPIMethods,
-  /**
-   * @param {number} look_id Id of look
-   */
   look_id: number,
-  /**
-   * @param {string} fields Requested fields.
-   */
   fields?: string,
   options?: Partial<ITransportSettings>
 ): Promise<SDKResponse<ILookWithQuery, IError>> => {
@@ -4936,20 +5249,18 @@ export const look = async (
  * database and destroyed. There is no "undo" for `delete_look()`.
  *
  * PATCH /looks/{look_id} -> ILookWithQuery
+ *
+ * @param sdk IAPIMethods implementation
+ * @param look_id Id of look
+ * @param body Partial<IWriteLookWithQuery>
+ * @param fields Requested fields.
+ * @param options one-time API call overrides
+ *
  */
 export const update_look = async (
   sdk: IAPIMethods,
-  /**
-   * @param {number} look_id Id of look
-   */
   look_id: number,
-  /**
-   * @param {Partial<IWriteLookWithQuery>} body
-   */
   body: Partial<IWriteLookWithQuery>,
-  /**
-   * @param {string} fields Requested fields.
-   */
   fields?: string,
   options?: Partial<ITransportSettings>
 ): Promise<SDKResponse<ILookWithQuery, IError | IValidationError>> => {
@@ -4971,12 +5282,14 @@ export const update_look = async (
  * For information about soft-delete (which can be undone) see [update_look()](#!/Look/update_look).
  *
  * DELETE /looks/{look_id} -> string
+ *
+ * @param sdk IAPIMethods implementation
+ * @param look_id Id of look
+ * @param options one-time API call overrides
+ *
  */
 export const delete_look = async (
   sdk: IAPIMethods,
-  /**
-   * @param {number} look_id Id of look
-   */
   look_id: number,
   options?: Partial<ITransportSettings>
 ): Promise<SDKResponse<string, IError>> => {
@@ -5005,7 +5318,13 @@ export const delete_look = async (
  *
  * GET /looks/{look_id}/run/{result_format} -> string
  *
- * **Note**: Binary content may be returned by this function.
+ * @remarks
+ * **NOTE**: Binary content may be returned by this function.
+ *
+ * @param sdk IAPIMethods implementation
+ * @param request composed interface "IRequestRunLook" for complex method parameters
+ * @param options one-time API call overrides
+ *
  */
 export const run_look = async (
   sdk: IAPIMethods,
@@ -5042,6 +5361,11 @@ export const run_look = async (
  * ### Discover information about derived tables
  *
  * GET /derived_table/graph/model/{model} -> IDependencyGraph
+ *
+ * @param sdk IAPIMethods implementation
+ * @param request composed interface "IRequestGraphDerivedTablesForModel" for complex method parameters
+ * @param options one-time API call overrides
+ *
  */
 export const graph_derived_tables_for_model = async (
   sdk: IAPIMethods,
@@ -5061,12 +5385,14 @@ export const graph_derived_tables_for_model = async (
  * ### Get information about all lookml models.
  *
  * GET /lookml_models -> ILookmlModel[]
+ *
+ * @param sdk IAPIMethods implementation
+ * @param fields Requested fields.
+ * @param options one-time API call overrides
+ *
  */
 export const all_lookml_models = async (
   sdk: IAPIMethods,
-  /**
-   * @param {string} fields Requested fields.
-   */
   fields?: string,
   options?: Partial<ITransportSettings>
 ): Promise<SDKResponse<ILookmlModel[], IError>> => {
@@ -5082,12 +5408,14 @@ export const all_lookml_models = async (
  * ### Create a lookml model using the specified configuration.
  *
  * POST /lookml_models -> ILookmlModel
+ *
+ * @param sdk IAPIMethods implementation
+ * @param body Partial<IWriteLookmlModel>
+ * @param options one-time API call overrides
+ *
  */
 export const create_lookml_model = async (
   sdk: IAPIMethods,
-  /**
-   * @param {Partial<IWriteLookmlModel>} body
-   */
   body: Partial<IWriteLookmlModel>,
   options?: Partial<ITransportSettings>
 ): Promise<SDKResponse<ILookmlModel, IError | IValidationError>> => {
@@ -5103,16 +5431,16 @@ export const create_lookml_model = async (
  * ### Get information about a lookml model.
  *
  * GET /lookml_models/{lookml_model_name} -> ILookmlModel
+ *
+ * @param sdk IAPIMethods implementation
+ * @param lookml_model_name Name of lookml model.
+ * @param fields Requested fields.
+ * @param options one-time API call overrides
+ *
  */
 export const lookml_model = async (
   sdk: IAPIMethods,
-  /**
-   * @param {string} lookml_model_name Name of lookml model.
-   */
   lookml_model_name: string,
-  /**
-   * @param {string} fields Requested fields.
-   */
   fields?: string,
   options?: Partial<ITransportSettings>
 ): Promise<SDKResponse<ILookmlModel, IError>> => {
@@ -5129,16 +5457,16 @@ export const lookml_model = async (
  * ### Update a lookml model using the specified configuration.
  *
  * PATCH /lookml_models/{lookml_model_name} -> ILookmlModel
+ *
+ * @param sdk IAPIMethods implementation
+ * @param lookml_model_name Name of lookml model.
+ * @param body Partial<IWriteLookmlModel>
+ * @param options one-time API call overrides
+ *
  */
 export const update_lookml_model = async (
   sdk: IAPIMethods,
-  /**
-   * @param {string} lookml_model_name Name of lookml model.
-   */
   lookml_model_name: string,
-  /**
-   * @param {Partial<IWriteLookmlModel>} body
-   */
   body: Partial<IWriteLookmlModel>,
   options?: Partial<ITransportSettings>
 ): Promise<SDKResponse<ILookmlModel, IError | IValidationError>> => {
@@ -5155,12 +5483,14 @@ export const update_lookml_model = async (
  * ### Delete a lookml model.
  *
  * DELETE /lookml_models/{lookml_model_name} -> string
+ *
+ * @param sdk IAPIMethods implementation
+ * @param lookml_model_name Name of lookml model.
+ * @param options one-time API call overrides
+ *
  */
 export const delete_lookml_model = async (
   sdk: IAPIMethods,
-  /**
-   * @param {string} lookml_model_name Name of lookml model.
-   */
   lookml_model_name: string,
   options?: Partial<ITransportSettings>
 ): Promise<SDKResponse<string, IError>> => {
@@ -5177,20 +5507,18 @@ export const delete_lookml_model = async (
  * ### Get information about a lookml model explore.
  *
  * GET /lookml_models/{lookml_model_name}/explores/{explore_name} -> ILookmlModelExplore
+ *
+ * @param sdk IAPIMethods implementation
+ * @param lookml_model_name Name of lookml model.
+ * @param explore_name Name of explore.
+ * @param fields Requested fields.
+ * @param options one-time API call overrides
+ *
  */
 export const lookml_model_explore = async (
   sdk: IAPIMethods,
-  /**
-   * @param {string} lookml_model_name Name of lookml model.
-   */
   lookml_model_name: string,
-  /**
-   * @param {string} explore_name Name of explore.
-   */
   explore_name: string,
-  /**
-   * @param {string} fields Requested fields.
-   */
   fields?: string,
   options?: Partial<ITransportSettings>
 ): Promise<SDKResponse<ILookmlModelExplore, IError>> => {
@@ -5214,12 +5542,14 @@ export const lookml_model_explore = async (
  * Returns a list of git branches in the project repository
  *
  * GET /projects/{project_id}/git_branches -> IGitBranch[]
+ *
+ * @param sdk IAPIMethods implementation
+ * @param project_id Project Id
+ * @param options one-time API call overrides
+ *
  */
 export const all_git_branches = async (
   sdk: IAPIMethods,
-  /**
-   * @param {string} project_id Project Id
-   */
   project_id: string,
   options?: Partial<ITransportSettings>
 ): Promise<SDKResponse<IGitBranch[], IError>> => {
@@ -5238,12 +5568,14 @@ export const all_git_branches = async (
  * Returns the git branch currently checked out in the given project repository
  *
  * GET /projects/{project_id}/git_branch -> IGitBranch
+ *
+ * @param sdk IAPIMethods implementation
+ * @param project_id Project Id
+ * @param options one-time API call overrides
+ *
  */
 export const git_branch = async (
   sdk: IAPIMethods,
-  /**
-   * @param {string} project_id Project Id
-   */
   project_id: string,
   options?: Partial<ITransportSettings>
 ): Promise<SDKResponse<IGitBranch, IError>> => {
@@ -5268,16 +5600,16 @@ export const git_branch = async (
  *   **DANGER** hard reset will be force pushed to the remote. Unsaved changes and commits may be permanently lost.
  *
  * PUT /projects/{project_id}/git_branch -> IGitBranch
+ *
+ * @param sdk IAPIMethods implementation
+ * @param project_id Project Id
+ * @param body Partial<IWriteGitBranch>
+ * @param options one-time API call overrides
+ *
  */
 export const update_git_branch = async (
   sdk: IAPIMethods,
-  /**
-   * @param {string} project_id Project Id
-   */
   project_id: string,
-  /**
-   * @param {Partial<IWriteGitBranch>} body
-   */
   body: Partial<IWriteGitBranch>,
   options?: Partial<ITransportSettings>
 ): Promise<SDKResponse<IGitBranch, IError | IValidationError>> => {
@@ -5301,16 +5633,16 @@ export const update_git_branch = async (
  *   If no ref is specified, HEAD of the current branch will be used as the start point for the new branch.
  *
  * POST /projects/{project_id}/git_branch -> IGitBranch
+ *
+ * @param sdk IAPIMethods implementation
+ * @param project_id Project Id
+ * @param body Partial<IWriteGitBranch>
+ * @param options one-time API call overrides
+ *
  */
 export const create_git_branch = async (
   sdk: IAPIMethods,
-  /**
-   * @param {string} project_id Project Id
-   */
   project_id: string,
-  /**
-   * @param {Partial<IWriteGitBranch>} body
-   */
   body: Partial<IWriteGitBranch>,
   options?: Partial<ITransportSettings>
 ): Promise<SDKResponse<IGitBranch, IError | IValidationError>> => {
@@ -5329,16 +5661,16 @@ export const create_git_branch = async (
  * Returns the git branch specified in branch_name path param if it exists in the given project repository
  *
  * GET /projects/{project_id}/git_branch/{branch_name} -> IGitBranch
+ *
+ * @param sdk IAPIMethods implementation
+ * @param project_id Project Id
+ * @param branch_name Branch Name
+ * @param options one-time API call overrides
+ *
  */
 export const find_git_branch = async (
   sdk: IAPIMethods,
-  /**
-   * @param {string} project_id Project Id
-   */
   project_id: string,
-  /**
-   * @param {string} branch_name Branch Name
-   */
   branch_name: string,
   options?: Partial<ITransportSettings>
 ): Promise<SDKResponse<IGitBranch, IError>> => {
@@ -5358,16 +5690,16 @@ export const find_git_branch = async (
  * Delete git branch specified in branch_name path param from local and remote of specified project repository
  *
  * DELETE /projects/{project_id}/git_branch/{branch_name} -> string
+ *
+ * @param sdk IAPIMethods implementation
+ * @param project_id Project Id
+ * @param branch_name Branch Name
+ * @param options one-time API call overrides
+ *
  */
 export const delete_git_branch = async (
   sdk: IAPIMethods,
-  /**
-   * @param {string} project_id Project Id
-   */
   project_id: string,
-  /**
-   * @param {string} branch_name Branch Name
-   */
   branch_name: string,
   options?: Partial<ITransportSettings>
 ): Promise<SDKResponse<string, IError>> => {
@@ -5393,6 +5725,11 @@ export const delete_git_branch = async (
  * Can only specify either a branch or a ref.
  *
  * POST /projects/{project_id}/deploy_ref_to_production -> string
+ *
+ * @param sdk IAPIMethods implementation
+ * @param request composed interface "IRequestDeployRefToProduction" for complex method parameters
+ * @param options one-time API call overrides
+ *
  */
 export const deploy_ref_to_production = async (
   sdk: IAPIMethods,
@@ -5423,12 +5760,14 @@ export const deploy_ref_to_production = async (
  * 3. Pull the production branch into the production project.
  *
  * POST /projects/{project_id}/deploy_to_production -> string
+ *
+ * @param sdk IAPIMethods implementation
+ * @param project_id Id of project
+ * @param options one-time API call overrides
+ *
  */
 export const deploy_to_production = async (
   sdk: IAPIMethods,
-  /**
-   * @param {string} project_id Id of project
-   */
   project_id: string,
   options?: Partial<ITransportSettings>
 ): Promise<SDKResponse<string, IError | IValidationError>> => {
@@ -5447,12 +5786,14 @@ export const deploy_to_production = async (
  * **DANGER** this will delete any changes that have not been pushed to a remote repository.
  *
  * POST /projects/{project_id}/reset_to_production -> string
+ *
+ * @param sdk IAPIMethods implementation
+ * @param project_id Id of project
+ * @param options one-time API call overrides
+ *
  */
 export const reset_project_to_production = async (
   sdk: IAPIMethods,
-  /**
-   * @param {string} project_id Id of project
-   */
   project_id: string,
   options?: Partial<ITransportSettings>
 ): Promise<SDKResponse<string, IError | IValidationError>> => {
@@ -5471,12 +5812,14 @@ export const reset_project_to_production = async (
  * **DANGER** this will delete any changes that have not been pushed to a remote repository.
  *
  * POST /projects/{project_id}/reset_to_remote -> string
+ *
+ * @param sdk IAPIMethods implementation
+ * @param project_id Id of project
+ * @param options one-time API call overrides
+ *
  */
 export const reset_project_to_remote = async (
   sdk: IAPIMethods,
-  /**
-   * @param {string} project_id Id of project
-   */
   project_id: string,
   options?: Partial<ITransportSettings>
 ): Promise<SDKResponse<string, IError | IValidationError>> => {
@@ -5495,12 +5838,14 @@ export const reset_project_to_remote = async (
  * Returns all projects visible to the current user
  *
  * GET /projects -> IProject[]
+ *
+ * @param sdk IAPIMethods implementation
+ * @param fields Requested fields
+ * @param options one-time API call overrides
+ *
  */
 export const all_projects = async (
   sdk: IAPIMethods,
-  /**
-   * @param {string} fields Requested fields
-   */
   fields?: string,
   options?: Partial<ITransportSettings>
 ): Promise<SDKResponse<IProject[], IError>> => {
@@ -5517,12 +5862,14 @@ export const all_projects = async (
  * `git_remote_url` is not allowed. To configure Git for the newly created project, follow the instructions in `update_project`.
  *
  * POST /projects -> IProject
+ *
+ * @param sdk IAPIMethods implementation
+ * @param body Partial<IWriteProject>
+ * @param options one-time API call overrides
+ *
  */
 export const create_project = async (
   sdk: IAPIMethods,
-  /**
-   * @param {Partial<IWriteProject>} body
-   */
   body: Partial<IWriteProject>,
   options?: Partial<ITransportSettings>
 ): Promise<SDKResponse<IProject, IError | IValidationError>> => {
@@ -5540,16 +5887,16 @@ export const create_project = async (
  * Returns the project with the given project id
  *
  * GET /projects/{project_id} -> IProject
+ *
+ * @param sdk IAPIMethods implementation
+ * @param project_id Project Id
+ * @param fields Requested fields
+ * @param options one-time API call overrides
+ *
  */
 export const project = async (
   sdk: IAPIMethods,
-  /**
-   * @param {string} project_id Project Id
-   */
   project_id: string,
-  /**
-   * @param {string} fields Requested fields
-   */
   fields?: string,
   options?: Partial<ITransportSettings>
 ): Promise<SDKResponse<IProject, IError>> => {
@@ -5587,20 +5934,18 @@ export const project = async (
  * 1. Call `update_project` setting `git_remote_url` to null and `git_service_name` to "bare".
  *
  * PATCH /projects/{project_id} -> IProject
+ *
+ * @param sdk IAPIMethods implementation
+ * @param project_id Project Id
+ * @param body Partial<IWriteProject>
+ * @param fields Requested fields
+ * @param options one-time API call overrides
+ *
  */
 export const update_project = async (
   sdk: IAPIMethods,
-  /**
-   * @param {string} project_id Project Id
-   */
   project_id: string,
-  /**
-   * @param {Partial<IWriteProject>} body
-   */
   body: Partial<IWriteProject>,
-  /**
-   * @param {string} fields Requested fields
-   */
   fields?: string,
   options?: Partial<ITransportSettings>
 ): Promise<SDKResponse<IProject, IError | IValidationError>> => {
@@ -5619,12 +5964,14 @@ export const update_project = async (
  * Returns the project with the given project id
  *
  * GET /projects/{project_id}/manifest -> IManifest
+ *
+ * @param sdk IAPIMethods implementation
+ * @param project_id Project Id
+ * @param options one-time API call overrides
+ *
  */
 export const manifest = async (
   sdk: IAPIMethods,
-  /**
-   * @param {string} project_id Project Id
-   */
   project_id: string,
   options?: Partial<ITransportSettings>
 ): Promise<SDKResponse<IManifest, IError>> => {
@@ -5643,12 +5990,14 @@ export const manifest = async (
  * Returns the ssh public key previously created for a project's git repository.
  *
  * GET /projects/{project_id}/git/deploy_key -> string
+ *
+ * @param sdk IAPIMethods implementation
+ * @param project_id Project Id
+ * @param options one-time API call overrides
+ *
  */
 export const git_deploy_key = async (
   sdk: IAPIMethods,
-  /**
-   * @param {string} project_id Project Id
-   */
   project_id: string,
   options?: Partial<ITransportSettings>
 ): Promise<SDKResponse<string, IError>> => {
@@ -5673,12 +6022,14 @@ export const git_deploy_key = async (
  * validate and accept git requests from the Looker server.
  *
  * POST /projects/{project_id}/git/deploy_key -> string
+ *
+ * @param sdk IAPIMethods implementation
+ * @param project_id Project Id
+ * @param options one-time API call overrides
+ *
  */
 export const create_git_deploy_key = async (
   sdk: IAPIMethods,
-  /**
-   * @param {string} project_id Project Id
-   */
   project_id: string,
   options?: Partial<ITransportSettings>
 ): Promise<SDKResponse<string, IError | IValidationError>> => {
@@ -5706,16 +6057,16 @@ export const create_git_deploy_key = async (
  * reflect the current state of the project.
  *
  * GET /projects/{project_id}/validate -> IProjectValidationCache
+ *
+ * @param sdk IAPIMethods implementation
+ * @param project_id Project Id
+ * @param fields Requested fields
+ * @param options one-time API call overrides
+ *
  */
 export const project_validation_results = async (
   sdk: IAPIMethods,
-  /**
-   * @param {string} project_id Project Id
-   */
   project_id: string,
-  /**
-   * @param {string} fields Requested fields
-   */
   fields?: string,
   options?: Partial<ITransportSettings>
 ): Promise<SDKResponse<IProjectValidationCache, IError>> => {
@@ -5740,16 +6091,16 @@ export const project_validation_results = async (
  * the most recent project validation (without recomputing), use `project_validation_results(project_id)`
  *
  * POST /projects/{project_id}/validate -> IProjectValidation
+ *
+ * @param sdk IAPIMethods implementation
+ * @param project_id Project Id
+ * @param fields Requested fields
+ * @param options one-time API call overrides
+ *
  */
 export const validate_project = async (
   sdk: IAPIMethods,
-  /**
-   * @param {string} project_id Project Id
-   */
   project_id: string,
-  /**
-   * @param {string} fields Requested fields
-   */
   fields?: string,
   options?: Partial<ITransportSettings>
 ): Promise<SDKResponse<IProjectValidation, IError | IValidationError>> => {
@@ -5768,16 +6119,16 @@ export const validate_project = async (
  * Returns information about the state of the project files in the currently selected workspace
  *
  * GET /projects/{project_id}/current_workspace -> IProjectWorkspace
+ *
+ * @param sdk IAPIMethods implementation
+ * @param project_id Project Id
+ * @param fields Requested fields
+ * @param options one-time API call overrides
+ *
  */
 export const project_workspace = async (
   sdk: IAPIMethods,
-  /**
-   * @param {string} project_id Project Id
-   */
   project_id: string,
-  /**
-   * @param {string} fields Requested fields
-   */
   fields?: string,
   options?: Partial<ITransportSettings>
 ): Promise<SDKResponse<IProjectWorkspace, IError>> => {
@@ -5796,16 +6147,16 @@ export const project_workspace = async (
  * Returns a list of the files in the project
  *
  * GET /projects/{project_id}/files -> IProjectFile[]
+ *
+ * @param sdk IAPIMethods implementation
+ * @param project_id Project Id
+ * @param fields Requested fields
+ * @param options one-time API call overrides
+ *
  */
 export const all_project_files = async (
   sdk: IAPIMethods,
-  /**
-   * @param {string} project_id Project Id
-   */
   project_id: string,
-  /**
-   * @param {string} fields Requested fields
-   */
   fields?: string,
   options?: Partial<ITransportSettings>
 ): Promise<SDKResponse<IProjectFile[], IError>> => {
@@ -5824,20 +6175,18 @@ export const all_project_files = async (
  * Returns information about a file in the project
  *
  * GET /projects/{project_id}/files/file -> IProjectFile
+ *
+ * @param sdk IAPIMethods implementation
+ * @param project_id Project Id
+ * @param file_id File Id
+ * @param fields Requested fields
+ * @param options one-time API call overrides
+ *
  */
 export const project_file = async (
   sdk: IAPIMethods,
-  /**
-   * @param {string} project_id Project Id
-   */
   project_id: string,
-  /**
-   * @param {string} file_id File Id
-   */
   file_id: string,
-  /**
-   * @param {string} fields Requested fields
-   */
   fields?: string,
   options?: Partial<ITransportSettings>
 ): Promise<SDKResponse<IProjectFile, IError>> => {
@@ -5863,16 +6212,16 @@ export const project_file = async (
  * For example, a late-stage test for write access is meaningless if connecting to the git server (an early test) is failing.
  *
  * GET /projects/{project_id}/git_connection_tests -> IGitConnectionTest[]
+ *
+ * @param sdk IAPIMethods implementation
+ * @param project_id Project Id
+ * @param remote_url (Optional: leave blank for root project) The remote url for remote dependency to test.
+ * @param options one-time API call overrides
+ *
  */
 export const all_git_connection_tests = async (
   sdk: IAPIMethods,
-  /**
-   * @param {string} project_id Project Id
-   */
   project_id: string,
-  /**
-   * @param {string} remote_url (Optional: leave blank for root project) The remote url for remote dependency to test.
-   */
   remote_url?: string,
   options?: Partial<ITransportSettings>
 ): Promise<SDKResponse<IGitConnectionTest[], IError>> => {
@@ -5895,6 +6244,11 @@ export const all_git_connection_tests = async (
  * Tests should be run in the order they are returned by [Get All Git Connection Tests](#!/Project/all_git_connection_tests).
  *
  * GET /projects/{project_id}/git_connection_tests/{test_id} -> IGitConnectionTestResult
+ *
+ * @param sdk IAPIMethods implementation
+ * @param request composed interface "IRequestRunGitConnectionTest" for complex method parameters
+ * @param options one-time API call overrides
+ *
  */
 export const run_git_connection_test = async (
   sdk: IAPIMethods,
@@ -5921,16 +6275,16 @@ export const run_git_connection_test = async (
  * Call [Run LookML Test](#!/Project/run_lookml_test) to execute tests.
  *
  * GET /projects/{project_id}/lookml_tests -> ILookmlTest[]
+ *
+ * @param sdk IAPIMethods implementation
+ * @param project_id Project Id
+ * @param file_id File Id
+ * @param options one-time API call overrides
+ *
  */
 export const all_lookml_tests = async (
   sdk: IAPIMethods,
-  /**
-   * @param {string} project_id Project Id
-   */
   project_id: string,
-  /**
-   * @param {string} file_id File Id
-   */
   file_id?: string,
   options?: Partial<ITransportSettings>
 ): Promise<SDKResponse<ILookmlTest[], IError>> => {
@@ -5949,6 +6303,11 @@ export const all_lookml_tests = async (
  * Runs all tests in the project, optionally filtered by file, test, and/or model.
  *
  * GET /projects/{project_id}/lookml_tests/run -> ILookmlTestResult[]
+ *
+ * @param sdk IAPIMethods implementation
+ * @param request composed interface "IRequestRunLookmlTest" for complex method parameters
+ * @param options one-time API call overrides
+ *
  */
 export const run_lookml_test = async (
   sdk: IAPIMethods,
@@ -5970,6 +6329,11 @@ export const run_lookml_test = async (
  * This is an internal-only, undocumented route.
  *
  * POST /projects/{project_id}/tag -> IProject
+ *
+ * @param sdk IAPIMethods implementation
+ * @param request composed interface "IRequestTagRef" for complex method parameters
+ * @param options one-time API call overrides
+ *
  */
 export const tag_ref = async (
   sdk: IAPIMethods,
@@ -5998,20 +6362,18 @@ export const tag_ref = async (
  * `credential_id` is required.
  *
  * PUT /projects/{root_project_id}/credential/{credential_id} -> IRepositoryCredential
+ *
+ * @param sdk IAPIMethods implementation
+ * @param root_project_id Root Project Id
+ * @param credential_id Credential Id
+ * @param body Partial<IWriteRepositoryCredential>
+ * @param options one-time API call overrides
+ *
  */
 export const update_repository_credential = async (
   sdk: IAPIMethods,
-  /**
-   * @param {string} root_project_id Root Project Id
-   */
   root_project_id: string,
-  /**
-   * @param {string} credential_id Credential Id
-   */
   credential_id: string,
-  /**
-   * @param {Partial<IWriteRepositoryCredential>} body
-   */
   body: Partial<IWriteRepositoryCredential>,
   options?: Partial<ITransportSettings>
 ): Promise<SDKResponse<IRepositoryCredential, IError | IValidationError>> => {
@@ -6034,16 +6396,16 @@ export const update_repository_credential = async (
  * `credential_id` is required.
  *
  * DELETE /projects/{root_project_id}/credential/{credential_id} -> string
+ *
+ * @param sdk IAPIMethods implementation
+ * @param root_project_id Root Project Id
+ * @param credential_id Credential Id
+ * @param options one-time API call overrides
+ *
  */
 export const delete_repository_credential = async (
   sdk: IAPIMethods,
-  /**
-   * @param {string} root_project_id Root Project Id
-   */
   root_project_id: string,
-  /**
-   * @param {string} credential_id Credential Id
-   */
   credential_id: string,
   options?: Partial<ITransportSettings>
 ): Promise<SDKResponse<string, IError>> => {
@@ -6063,12 +6425,14 @@ export const delete_repository_credential = async (
  * `root_project_id` is required.
  *
  * GET /projects/{root_project_id}/credentials -> IRepositoryCredential[]
+ *
+ * @param sdk IAPIMethods implementation
+ * @param root_project_id Root Project Id
+ * @param options one-time API call overrides
+ *
  */
 export const get_all_repository_credentials = async (
   sdk: IAPIMethods,
-  /**
-   * @param {string} root_project_id Root Project Id
-   */
   root_project_id: string,
   options?: Partial<ITransportSettings>
 ): Promise<SDKResponse<IRepositoryCredential[], IError>> => {
@@ -6094,6 +6458,11 @@ export const get_all_repository_credentials = async (
  * After the query task status reaches "Complete", use [query_task_results(query_task_id)](#!/Query/query_task_results) to fetch the results of the query.
  *
  * POST /query_tasks -> IQueryTask
+ *
+ * @param sdk IAPIMethods implementation
+ * @param request composed interface "IRequestCreateQueryTask" for complex method parameters
+ * @param options one-time API call overrides
+ *
  */
 export const create_query_task = async (
   sdk: IAPIMethods,
@@ -6132,12 +6501,14 @@ export const create_query_task = async (
  * If the user making the API request does not have sufficient privileges to view a Query Task result, the result will have a status of 'missing'
  *
  * GET /query_tasks/multi_results -> IDictionary<string>
+ *
+ * @param sdk IAPIMethods implementation
+ * @param query_task_ids List of Query Task IDs
+ * @param options one-time API call overrides
+ *
  */
 export const query_task_multi_results = async (
   sdk: IAPIMethods,
-  /**
-   * @param {DelimArray<string>} query_task_ids List of Query Task IDs
-   */
   query_task_ids: DelimArray<string>,
   options?: Partial<ITransportSettings>
 ): Promise<SDKResponse<IDictionary<string>, IError>> => {
@@ -6159,16 +6530,16 @@ export const query_task_multi_results = async (
  * Use [create_query_task()](#!/Query/create_query_task) to create an async query task.
  *
  * GET /query_tasks/{query_task_id} -> IQueryTask
+ *
+ * @param sdk IAPIMethods implementation
+ * @param query_task_id ID of the Query Task
+ * @param fields Requested fields.
+ * @param options one-time API call overrides
+ *
  */
 export const query_task = async (
   sdk: IAPIMethods,
-  /**
-   * @param {string} query_task_id ID of the Query Task
-   */
   query_task_id: string,
-  /**
-   * @param {string} fields Requested fields.
-   */
   fields?: string,
   options?: Partial<ITransportSettings>
 ): Promise<SDKResponse<IQueryTask, IError>> => {
@@ -6207,12 +6578,14 @@ export const query_task = async (
  * These data formats can only carry row data, and error info is not row data.
  *
  * GET /query_tasks/{query_task_id}/results -> string
+ *
+ * @param sdk IAPIMethods implementation
+ * @param query_task_id ID of the Query Task
+ * @param options one-time API call overrides
+ *
  */
 export const query_task_results = async (
   sdk: IAPIMethods,
-  /**
-   * @param {string} query_task_id ID of the Query Task
-   */
   query_task_id: string,
   options?: Partial<ITransportSettings>
 ): Promise<SDKResponse<string, IError>> => {
@@ -6245,16 +6618,16 @@ export const query_task_results = async (
  * creating new queries and can usually just be ignored.
  *
  * GET /queries/{query_id} -> IQuery
+ *
+ * @param sdk IAPIMethods implementation
+ * @param query_id Id of query
+ * @param fields Requested fields.
+ * @param options one-time API call overrides
+ *
  */
 export const query = async (
   sdk: IAPIMethods,
-  /**
-   * @param {number} query_id Id of query
-   */
   query_id: number,
-  /**
-   * @param {string} fields Requested fields.
-   */
   fields?: string,
   options?: Partial<ITransportSettings>
 ): Promise<SDKResponse<IQuery, IError>> => {
@@ -6286,16 +6659,16 @@ export const query = async (
  * 'aogBgL6o3cKK1jN3RoZl5s' is the slug.
  *
  * GET /queries/slug/{slug} -> IQuery
+ *
+ * @param sdk IAPIMethods implementation
+ * @param slug Slug of query
+ * @param fields Requested fields.
+ * @param options one-time API call overrides
+ *
  */
 export const query_for_slug = async (
   sdk: IAPIMethods,
-  /**
-   * @param {string} slug Slug of query
-   */
   slug: string,
-  /**
-   * @param {string} fields Requested fields.
-   */
   fields?: string,
   options?: Partial<ITransportSettings>
 ): Promise<SDKResponse<IQuery, IError>> => {
@@ -6319,16 +6692,16 @@ export const query_for_slug = async (
  * The query parameters are passed as json in the body of the request.
  *
  * POST /queries -> IQuery
+ *
+ * @param sdk IAPIMethods implementation
+ * @param body Partial<IWriteQuery>
+ * @param fields Requested fields.
+ * @param options one-time API call overrides
+ *
  */
 export const create_query = async (
   sdk: IAPIMethods,
-  /**
-   * @param {Partial<IWriteQuery>} body
-   */
   body: Partial<IWriteQuery>,
-  /**
-   * @param {string} fields Requested fields.
-   */
   fields?: string,
   options?: Partial<ITransportSettings>
 ): Promise<SDKResponse<IQuery, IError | IValidationError>> => {
@@ -6365,7 +6738,13 @@ export const create_query = async (
  *
  * GET /queries/{query_id}/run/{result_format} -> string
  *
- * **Note**: Binary content may be returned by this function.
+ * @remarks
+ * **NOTE**: Binary content may be returned by this function.
+ *
+ * @param sdk IAPIMethods implementation
+ * @param request composed interface "IRequestRunQuery" for complex method parameters
+ * @param options one-time API call overrides
+ *
  */
 export const run_query = async (
   sdk: IAPIMethods,
@@ -6448,7 +6827,13 @@ export const run_query = async (
  *
  * POST /queries/run/{result_format} -> string
  *
- * **Note**: Binary content may be returned by this function.
+ * @remarks
+ * **NOTE**: Binary content may be returned by this function.
+ *
+ * @param sdk IAPIMethods implementation
+ * @param request composed interface "IRequestRunInlineQuery" for complex method parameters
+ * @param options one-time API call overrides
+ *
  */
 export const run_inline_query = async (
   sdk: IAPIMethods,
@@ -6533,21 +6918,20 @@ export const run_inline_query = async (
  *
  * GET /queries/models/{model_name}/views/{view_name}/run/{result_format} -> string
  *
- * **Note**: Binary content may be returned by this function.
+ * @remarks
+ * **NOTE**: Binary content may be returned by this function.
+ *
+ * @param sdk IAPIMethods implementation
+ * @param model_name Model name
+ * @param view_name View name
+ * @param result_format Format of result
+ * @param options one-time API call overrides
+ *
  */
 export const run_url_encoded_query = async (
   sdk: IAPIMethods,
-  /**
-   * @param {string} model_name Model name
-   */
   model_name: string,
-  /**
-   * @param {string} view_name View name
-   */
   view_name: string,
-  /**
-   * @param {string} result_format Format of result
-   */
   result_format: string,
   options?: Partial<ITransportSettings>
 ): Promise<SDKResponse<string, IError | IValidationError>> => {
@@ -6568,16 +6952,16 @@ export const run_url_encoded_query = async (
  * Returns a merge query object given its id.
  *
  * GET /merge_queries/{merge_query_id} -> IMergeQuery
+ *
+ * @param sdk IAPIMethods implementation
+ * @param merge_query_id Merge Query Id
+ * @param fields Requested fields
+ * @param options one-time API call overrides
+ *
  */
 export const merge_query = async (
   sdk: IAPIMethods,
-  /**
-   * @param {string} merge_query_id Merge Query Id
-   */
   merge_query_id: string,
-  /**
-   * @param {string} fields Requested fields
-   */
   fields?: string,
   options?: Partial<ITransportSettings>
 ): Promise<SDKResponse<IMergeQuery, IError>> => {
@@ -6610,16 +6994,16 @@ export const merge_query = async (
  * change to the contents of a merge query will produce a new object with a new id.
  *
  * POST /merge_queries -> IMergeQuery
+ *
+ * @param sdk IAPIMethods implementation
+ * @param body Partial<IWriteMergeQuery>
+ * @param fields Requested fields
+ * @param options one-time API call overrides
+ *
  */
 export const create_merge_query = async (
   sdk: IAPIMethods,
-  /**
-   * @param {Partial<IWriteMergeQuery>} body
-   */
   body?: Partial<IWriteMergeQuery>,
-  /**
-   * @param {string} fields Requested fields
-   */
   fields?: string,
   options?: Partial<ITransportSettings>
 ): Promise<SDKResponse<IMergeQuery, IError | IValidationError>> => {
@@ -6635,6 +7019,10 @@ export const create_merge_query = async (
  * Get information about all running queries.
  *
  * GET /running_queries -> IRunningQueries[]
+ *
+ * @param sdk IAPIMethods implementation
+ * @param options one-time API call overrides
+ *
  */
 export const all_running_queries = async (
   sdk: IAPIMethods,
@@ -6652,12 +7040,14 @@ export const all_running_queries = async (
  * Kill a query with a specific query_task_id.
  *
  * DELETE /running_queries/{query_task_id} -> string
+ *
+ * @param sdk IAPIMethods implementation
+ * @param query_task_id Query task id.
+ * @param options one-time API call overrides
+ *
  */
 export const kill_query = async (
   sdk: IAPIMethods,
-  /**
-   * @param {string} query_task_id Query task id.
-   */
   query_task_id: string,
   options?: Partial<ITransportSettings>
 ): Promise<SDKResponse<string, IError | IValidationError>> => {
@@ -6674,12 +7064,14 @@ export const kill_query = async (
  * Get a SQL Runner query.
  *
  * GET /sql_queries/{slug} -> ISqlQuery
+ *
+ * @param sdk IAPIMethods implementation
+ * @param slug slug of query
+ * @param options one-time API call overrides
+ *
  */
 export const sql_query = async (
   sdk: IAPIMethods,
-  /**
-   * @param {string} slug slug of query
-   */
   slug: string,
   options?: Partial<ITransportSettings>
 ): Promise<SDKResponse<ISqlQuery, IError>> => {
@@ -6693,12 +7085,14 @@ export const sql_query = async (
  * Either the `connection_name` or `model_name` parameter MUST be provided.
  *
  * POST /sql_queries -> ISqlQuery
+ *
+ * @param sdk IAPIMethods implementation
+ * @param body Partial<ISqlQueryCreate>
+ * @param options one-time API call overrides
+ *
  */
 export const create_sql_query = async (
   sdk: IAPIMethods,
-  /**
-   * @param {Partial<ISqlQueryCreate>} body
-   */
   body: Partial<ISqlQueryCreate>,
   options?: Partial<ITransportSettings>
 ): Promise<SDKResponse<ISqlQuery, IError | IValidationError>> => {
@@ -6715,21 +7109,20 @@ export const create_sql_query = async (
  *
  * POST /sql_queries/{slug}/run/{result_format} -> string
  *
- * **Note**: Binary content may be returned by this function.
+ * @remarks
+ * **NOTE**: Binary content may be returned by this function.
+ *
+ * @param sdk IAPIMethods implementation
+ * @param slug slug of query
+ * @param result_format Format of result, options are: ["inline_json", "json", "json_detail", "json_fe", "csv", "html", "md", "txt", "xlsx", "gsxml", "json_label"]
+ * @param download Defaults to false. If set to true, the HTTP response will have content-disposition and other headers set to make the HTTP response behave as a downloadable attachment instead of as inline content.
+ * @param options one-time API call overrides
+ *
  */
 export const run_sql_query = async (
   sdk: IAPIMethods,
-  /**
-   * @param {string} slug slug of query
-   */
   slug: string,
-  /**
-   * @param {string} result_format Format of result, options are: ["inline_json", "json", "json_detail", "json_fe", "csv", "html", "md", "txt", "xlsx", "gsxml", "json_label"]
-   */
   result_format: string,
-  /**
-   * @param {string} download Defaults to false. If set to true, the HTTP response will have content-disposition and other headers set to make the HTTP response behave as a downloadable attachment instead of as inline content.
-   */
   download?: string,
   options?: Partial<ITransportSettings>
 ): Promise<SDKResponse<string, IError | IValidationError>> => {
@@ -6757,6 +7150,13 @@ export const run_sql_query = async (
  * Once the render task is complete, you can download the resulting document or image using [Get Render Task Results](#!/RenderTask/get_render_task_results).
  *
  * POST /render_tasks/lookml_dashboards/{dashboard_id}/{result_format} -> IRenderTask
+ *
+ * @deprecated
+ *
+ * @param sdk IAPIMethods implementation
+ * @param request composed interface "IRequestCreateLookmlDashboardRenderTask" for complex method parameters
+ * @param options one-time API call overrides
+ *
  */
 export const create_lookml_dashboard_render_task = async (
   sdk: IAPIMethods,
@@ -6787,28 +7187,22 @@ export const create_lookml_dashboard_render_task = async (
  * Once the render task is complete, you can download the resulting document or image using [Get Render Task Results](#!/RenderTask/get_render_task_results).
  *
  * POST /render_tasks/looks/{look_id}/{result_format} -> IRenderTask
+ *
+ * @param sdk IAPIMethods implementation
+ * @param look_id Id of look to render
+ * @param result_format Output type: png, or jpg
+ * @param width Output width in pixels
+ * @param height Output height in pixels
+ * @param fields Requested fields.
+ * @param options one-time API call overrides
+ *
  */
 export const create_look_render_task = async (
   sdk: IAPIMethods,
-  /**
-   * @param {number} look_id Id of look to render
-   */
   look_id: number,
-  /**
-   * @param {string} result_format Output type: png, or jpg
-   */
   result_format: string,
-  /**
-   * @param {number} width Output width in pixels
-   */
   width: number,
-  /**
-   * @param {number} height Output height in pixels
-   */
   height: number,
-  /**
-   * @param {string} fields Requested fields.
-   */
   fields?: string,
   options?: Partial<ITransportSettings>
 ): Promise<SDKResponse<IRenderTask, IError | IValidationError>> => {
@@ -6829,28 +7223,22 @@ export const create_look_render_task = async (
  * Once the render task is complete, you can download the resulting document or image using [Get Render Task Results](#!/RenderTask/get_render_task_results).
  *
  * POST /render_tasks/queries/{query_id}/{result_format} -> IRenderTask
+ *
+ * @param sdk IAPIMethods implementation
+ * @param query_id Id of the query to render
+ * @param result_format Output type: png or jpg
+ * @param width Output width in pixels
+ * @param height Output height in pixels
+ * @param fields Requested fields.
+ * @param options one-time API call overrides
+ *
  */
 export const create_query_render_task = async (
   sdk: IAPIMethods,
-  /**
-   * @param {number} query_id Id of the query to render
-   */
   query_id: number,
-  /**
-   * @param {string} result_format Output type: png or jpg
-   */
   result_format: string,
-  /**
-   * @param {number} width Output width in pixels
-   */
   width: number,
-  /**
-   * @param {number} height Output height in pixels
-   */
   height: number,
-  /**
-   * @param {string} fields Requested fields.
-   */
   fields?: string,
   options?: Partial<ITransportSettings>
 ): Promise<SDKResponse<IRenderTask, IError | IValidationError>> => {
@@ -6871,6 +7259,11 @@ export const create_query_render_task = async (
  * Once the render task is complete, you can download the resulting document or image using [Get Render Task Results](#!/RenderTask/get_render_task_results).
  *
  * POST /render_tasks/dashboards/{dashboard_id}/{result_format} -> IRenderTask
+ *
+ * @param sdk IAPIMethods implementation
+ * @param request composed interface "IRequestCreateDashboardRenderTask" for complex method parameters
+ * @param options one-time API call overrides
+ *
  */
 export const create_dashboard_render_task = async (
   sdk: IAPIMethods,
@@ -6900,16 +7293,16 @@ export const create_dashboard_render_task = async (
  * Once the render task is complete, you can download the resulting document or image using [Get Render Task Results](#!/RenderTask/get_render_task_results).
  *
  * GET /render_tasks/{render_task_id} -> IRenderTask
+ *
+ * @param sdk IAPIMethods implementation
+ * @param render_task_id Id of render task
+ * @param fields Requested fields.
+ * @param options one-time API call overrides
+ *
  */
 export const render_task = async (
   sdk: IAPIMethods,
-  /**
-   * @param {string} render_task_id Id of render task
-   */
   render_task_id: string,
-  /**
-   * @param {string} fields Requested fields.
-   */
   fields?: string,
   options?: Partial<ITransportSettings>
 ): Promise<SDKResponse<IRenderTask, IError>> => {
@@ -6943,13 +7336,16 @@ export const render_task = async (
  *
  * GET /render_tasks/{render_task_id}/results -> string
  *
- * **Note**: Binary content is returned by this function.
+ * @remarks
+ * **NOTE**: Binary content is returned by this function.
+ *
+ * @param sdk IAPIMethods implementation
+ * @param render_task_id Id of render task
+ * @param options one-time API call overrides
+ *
  */
 export const render_task_results = async (
   sdk: IAPIMethods,
-  /**
-   * @param {string} render_task_id Id of render task
-   */
   render_task_id: string,
   options?: Partial<ITransportSettings>
 ): Promise<SDKResponse<string, IError>> => {
@@ -6991,6 +7387,11 @@ export const render_task_results = async (
  * Boolean search params accept only "true" and "false" as values.
  *
  * GET /model_sets/search -> IModelSet[]
+ *
+ * @param sdk IAPIMethods implementation
+ * @param request composed interface "IRequestSearchModelSets" for complex method parameters
+ * @param options one-time API call overrides
+ *
  */
 export const search_model_sets = async (
   sdk: IAPIMethods,
@@ -7019,16 +7420,16 @@ export const search_model_sets = async (
  * ### Get information about the model set with a specific id.
  *
  * GET /model_sets/{model_set_id} -> IModelSet
+ *
+ * @param sdk IAPIMethods implementation
+ * @param model_set_id Id of model set
+ * @param fields Requested fields.
+ * @param options one-time API call overrides
+ *
  */
 export const model_set = async (
   sdk: IAPIMethods,
-  /**
-   * @param {number} model_set_id Id of model set
-   */
   model_set_id: number,
-  /**
-   * @param {string} fields Requested fields.
-   */
   fields?: string,
   options?: Partial<ITransportSettings>
 ): Promise<SDKResponse<IModelSet, IError>> => {
@@ -7044,16 +7445,16 @@ export const model_set = async (
  * ### Update information about the model set with a specific id.
  *
  * PATCH /model_sets/{model_set_id} -> IModelSet
+ *
+ * @param sdk IAPIMethods implementation
+ * @param model_set_id id of model set
+ * @param body Partial<IWriteModelSet>
+ * @param options one-time API call overrides
+ *
  */
 export const update_model_set = async (
   sdk: IAPIMethods,
-  /**
-   * @param {number} model_set_id id of model set
-   */
   model_set_id: number,
-  /**
-   * @param {Partial<IWriteModelSet>} body
-   */
   body: Partial<IWriteModelSet>,
   options?: Partial<ITransportSettings>
 ): Promise<SDKResponse<IModelSet, IError | IValidationError>> => {
@@ -7069,12 +7470,14 @@ export const update_model_set = async (
  * ### Delete the model set with a specific id.
  *
  * DELETE /model_sets/{model_set_id} -> string
+ *
+ * @param sdk IAPIMethods implementation
+ * @param model_set_id id of model set
+ * @param options one-time API call overrides
+ *
  */
 export const delete_model_set = async (
   sdk: IAPIMethods,
-  /**
-   * @param {number} model_set_id id of model set
-   */
   model_set_id: number,
   options?: Partial<ITransportSettings>
 ): Promise<SDKResponse<string, IError>> => {
@@ -7090,12 +7493,14 @@ export const delete_model_set = async (
  * ### Get information about all model sets.
  *
  * GET /model_sets -> IModelSet[]
+ *
+ * @param sdk IAPIMethods implementation
+ * @param fields Requested fields.
+ * @param options one-time API call overrides
+ *
  */
 export const all_model_sets = async (
   sdk: IAPIMethods,
-  /**
-   * @param {string} fields Requested fields.
-   */
   fields?: string,
   options?: Partial<ITransportSettings>
 ): Promise<SDKResponse<IModelSet[], IError>> => {
@@ -7106,12 +7511,14 @@ export const all_model_sets = async (
  * ### Create a model set with the specified information. Model sets are used by Roles.
  *
  * POST /model_sets -> IModelSet
+ *
+ * @param sdk IAPIMethods implementation
+ * @param body Partial<IWriteModelSet>
+ * @param options one-time API call overrides
+ *
  */
 export const create_model_set = async (
   sdk: IAPIMethods,
-  /**
-   * @param {Partial<IWriteModelSet>} body
-   */
   body: Partial<IWriteModelSet>,
   options?: Partial<ITransportSettings>
 ): Promise<SDKResponse<IModelSet, IError | IValidationError>> => {
@@ -7127,6 +7534,10 @@ export const create_model_set = async (
  * ### Get all supported permissions.
  *
  * GET /permissions -> IPermission[]
+ *
+ * @param sdk IAPIMethods implementation
+ * @param options one-time API call overrides
+ *
  */
 export const all_permissions = async (
   sdk: IAPIMethods,
@@ -7160,6 +7571,11 @@ export const all_permissions = async (
  * Boolean search params accept only "true" and "false" as values.
  *
  * GET /permission_sets/search -> IPermissionSet[]
+ *
+ * @param sdk IAPIMethods implementation
+ * @param request composed interface "IRequestSearchModelSets" for complex method parameters
+ * @param options one-time API call overrides
+ *
  */
 export const search_permission_sets = async (
   sdk: IAPIMethods,
@@ -7188,16 +7604,16 @@ export const search_permission_sets = async (
  * ### Get information about the permission set with a specific id.
  *
  * GET /permission_sets/{permission_set_id} -> IPermissionSet
+ *
+ * @param sdk IAPIMethods implementation
+ * @param permission_set_id Id of permission set
+ * @param fields Requested fields.
+ * @param options one-time API call overrides
+ *
  */
 export const permission_set = async (
   sdk: IAPIMethods,
-  /**
-   * @param {number} permission_set_id Id of permission set
-   */
   permission_set_id: number,
-  /**
-   * @param {string} fields Requested fields.
-   */
   fields?: string,
   options?: Partial<ITransportSettings>
 ): Promise<SDKResponse<IPermissionSet, IError>> => {
@@ -7213,16 +7629,16 @@ export const permission_set = async (
  * ### Update information about the permission set with a specific id.
  *
  * PATCH /permission_sets/{permission_set_id} -> IPermissionSet
+ *
+ * @param sdk IAPIMethods implementation
+ * @param permission_set_id id of permission set
+ * @param body Partial<IWritePermissionSet>
+ * @param options one-time API call overrides
+ *
  */
 export const update_permission_set = async (
   sdk: IAPIMethods,
-  /**
-   * @param {number} permission_set_id id of permission set
-   */
   permission_set_id: number,
-  /**
-   * @param {Partial<IWritePermissionSet>} body
-   */
   body: Partial<IWritePermissionSet>,
   options?: Partial<ITransportSettings>
 ): Promise<SDKResponse<IPermissionSet, IError | IValidationError>> => {
@@ -7238,12 +7654,14 @@ export const update_permission_set = async (
  * ### Delete the permission set with a specific id.
  *
  * DELETE /permission_sets/{permission_set_id} -> string
+ *
+ * @param sdk IAPIMethods implementation
+ * @param permission_set_id Id of permission set
+ * @param options one-time API call overrides
+ *
  */
 export const delete_permission_set = async (
   sdk: IAPIMethods,
-  /**
-   * @param {number} permission_set_id Id of permission set
-   */
   permission_set_id: number,
   options?: Partial<ITransportSettings>
 ): Promise<SDKResponse<string, IError>> => {
@@ -7259,12 +7677,14 @@ export const delete_permission_set = async (
  * ### Get information about all permission sets.
  *
  * GET /permission_sets -> IPermissionSet[]
+ *
+ * @param sdk IAPIMethods implementation
+ * @param fields Requested fields.
+ * @param options one-time API call overrides
+ *
  */
 export const all_permission_sets = async (
   sdk: IAPIMethods,
-  /**
-   * @param {string} fields Requested fields.
-   */
   fields?: string,
   options?: Partial<ITransportSettings>
 ): Promise<SDKResponse<IPermissionSet[], IError>> => {
@@ -7280,12 +7700,14 @@ export const all_permission_sets = async (
  * ### Create a permission set with the specified information. Permission sets are used by Roles.
  *
  * POST /permission_sets -> IPermissionSet
+ *
+ * @param sdk IAPIMethods implementation
+ * @param body Partial<IWritePermissionSet>
+ * @param options one-time API call overrides
+ *
  */
 export const create_permission_set = async (
   sdk: IAPIMethods,
-  /**
-   * @param {Partial<IWritePermissionSet>} body
-   */
   body: Partial<IWritePermissionSet>,
   options?: Partial<ITransportSettings>
 ): Promise<SDKResponse<IPermissionSet, IError | IValidationError>> => {
@@ -7301,6 +7723,11 @@ export const create_permission_set = async (
  * ### Get information about all roles.
  *
  * GET /roles -> IRole[]
+ *
+ * @param sdk IAPIMethods implementation
+ * @param request composed interface "IRequestAllRoles" for complex method parameters
+ * @param options one-time API call overrides
+ *
  */
 export const all_roles = async (
   sdk: IAPIMethods,
@@ -7319,12 +7746,14 @@ export const all_roles = async (
  * ### Create a role with the specified information.
  *
  * POST /roles -> IRole
+ *
+ * @param sdk IAPIMethods implementation
+ * @param body Partial<IWriteRole>
+ * @param options one-time API call overrides
+ *
  */
 export const create_role = async (
   sdk: IAPIMethods,
-  /**
-   * @param {Partial<IWriteRole>} body
-   */
   body: Partial<IWriteRole>,
   options?: Partial<ITransportSettings>
 ): Promise<SDKResponse<IRole, IError | IValidationError>> => {
@@ -7363,6 +7792,11 @@ export const create_role = async (
  * Boolean search params accept only "true" and "false" as values.
  *
  * GET /roles/search -> IRole[]
+ *
+ * @param sdk IAPIMethods implementation
+ * @param request composed interface "IRequestSearchRoles" for complex method parameters
+ * @param options one-time API call overrides
+ *
  */
 export const search_roles = async (
   sdk: IAPIMethods,
@@ -7390,12 +7824,14 @@ export const search_roles = async (
  * ### Get information about the role with a specific id.
  *
  * GET /roles/{role_id} -> IRole
+ *
+ * @param sdk IAPIMethods implementation
+ * @param role_id id of role
+ * @param options one-time API call overrides
+ *
  */
 export const role = async (
   sdk: IAPIMethods,
-  /**
-   * @param {number} role_id id of role
-   */
   role_id: number,
   options?: Partial<ITransportSettings>
 ): Promise<SDKResponse<IRole, IError>> => {
@@ -7406,16 +7842,16 @@ export const role = async (
  * ### Update information about the role with a specific id.
  *
  * PATCH /roles/{role_id} -> IRole
+ *
+ * @param sdk IAPIMethods implementation
+ * @param role_id id of role
+ * @param body Partial<IWriteRole>
+ * @param options one-time API call overrides
+ *
  */
 export const update_role = async (
   sdk: IAPIMethods,
-  /**
-   * @param {number} role_id id of role
-   */
   role_id: number,
-  /**
-   * @param {Partial<IWriteRole>} body
-   */
   body: Partial<IWriteRole>,
   options?: Partial<ITransportSettings>
 ): Promise<SDKResponse<IRole, IError | IValidationError>> => {
@@ -7431,12 +7867,14 @@ export const update_role = async (
  * ### Delete the role with a specific id.
  *
  * DELETE /roles/{role_id} -> string
+ *
+ * @param sdk IAPIMethods implementation
+ * @param role_id id of role
+ * @param options one-time API call overrides
+ *
  */
 export const delete_role = async (
   sdk: IAPIMethods,
-  /**
-   * @param {number} role_id id of role
-   */
   role_id: number,
   options?: Partial<ITransportSettings>
 ): Promise<SDKResponse<string, IError>> => {
@@ -7447,16 +7885,16 @@ export const delete_role = async (
  * ### Get information about all the groups with the role that has a specific id.
  *
  * GET /roles/{role_id}/groups -> IGroup[]
+ *
+ * @param sdk IAPIMethods implementation
+ * @param role_id id of role
+ * @param fields Requested fields.
+ * @param options one-time API call overrides
+ *
  */
 export const role_groups = async (
   sdk: IAPIMethods,
-  /**
-   * @param {number} role_id id of role
-   */
   role_id: number,
-  /**
-   * @param {string} fields Requested fields.
-   */
   fields?: string,
   options?: Partial<ITransportSettings>
 ): Promise<SDKResponse<IGroup[], IError>> => {
@@ -7472,16 +7910,16 @@ export const role_groups = async (
  * ### Set all groups for a role, removing all existing group associations from that role.
  *
  * PUT /roles/{role_id}/groups -> IGroup[]
+ *
+ * @param sdk IAPIMethods implementation
+ * @param role_id Id of Role
+ * @param body Partial<number[]>
+ * @param options one-time API call overrides
+ *
  */
 export const set_role_groups = async (
   sdk: IAPIMethods,
-  /**
-   * @param {number} role_id Id of Role
-   */
   role_id: number,
-  /**
-   * @param {Partial<number[]>} body
-   */
   body: Partial<number[]>,
   options?: Partial<ITransportSettings>
 ): Promise<SDKResponse<IGroup[], IError | IValidationError>> => {
@@ -7497,6 +7935,11 @@ export const set_role_groups = async (
  * ### Get information about all the users with the role that has a specific id.
  *
  * GET /roles/{role_id}/users -> IUser[]
+ *
+ * @param sdk IAPIMethods implementation
+ * @param request composed interface "IRequestRoleUsers" for complex method parameters
+ * @param options one-time API call overrides
+ *
  */
 export const role_users = async (
   sdk: IAPIMethods,
@@ -7518,16 +7961,16 @@ export const role_users = async (
  * ### Set all the users of the role with a specific id.
  *
  * PUT /roles/{role_id}/users -> IUser[]
+ *
+ * @param sdk IAPIMethods implementation
+ * @param role_id id of role
+ * @param body Partial<number[]>
+ * @param options one-time API call overrides
+ *
  */
 export const set_role_users = async (
   sdk: IAPIMethods,
-  /**
-   * @param {number} role_id id of role
-   */
   role_id: number,
-  /**
-   * @param {Partial<number[]>} body
-   */
   body: Partial<number[]>,
   options?: Partial<ITransportSettings>
 ): Promise<SDKResponse<IUser[], IError | IValidationError>> => {
@@ -7549,16 +7992,16 @@ export const set_role_users = async (
  * Returns scheduled plans owned by the caller for a given space id.
  *
  * GET /scheduled_plans/space/{space_id} -> IScheduledPlan[]
+ *
+ * @param sdk IAPIMethods implementation
+ * @param space_id Space Id
+ * @param fields Requested fields.
+ * @param options one-time API call overrides
+ *
  */
 export const scheduled_plans_for_space = async (
   sdk: IAPIMethods,
-  /**
-   * @param {number} space_id Space Id
-   */
   space_id: number,
-  /**
-   * @param {string} fields Requested fields.
-   */
   fields?: string,
   options?: Partial<ITransportSettings>
 ): Promise<SDKResponse<IScheduledPlan[], IError>> => {
@@ -7576,16 +8019,16 @@ export const scheduled_plans_for_space = async (
  * Admins can fetch information about other users' Scheduled Plans.
  *
  * GET /scheduled_plans/{scheduled_plan_id} -> IScheduledPlan
+ *
+ * @param sdk IAPIMethods implementation
+ * @param scheduled_plan_id Scheduled Plan Id
+ * @param fields Requested fields.
+ * @param options one-time API call overrides
+ *
  */
 export const scheduled_plan = async (
   sdk: IAPIMethods,
-  /**
-   * @param {number} scheduled_plan_id Scheduled Plan Id
-   */
   scheduled_plan_id: number,
-  /**
-   * @param {string} fields Requested fields.
-   */
   fields?: string,
   options?: Partial<ITransportSettings>
 ): Promise<SDKResponse<IScheduledPlan, IError>> => {
@@ -7642,16 +8085,16 @@ export const scheduled_plan = async (
  * Valid formats vary by destination type and source object. `wysiwyg_pdf` is only valid for dashboards, for example.
  *
  * PATCH /scheduled_plans/{scheduled_plan_id} -> IScheduledPlan
+ *
+ * @param sdk IAPIMethods implementation
+ * @param scheduled_plan_id Scheduled Plan Id
+ * @param body Partial<IWriteScheduledPlan>
+ * @param options one-time API call overrides
+ *
  */
 export const update_scheduled_plan = async (
   sdk: IAPIMethods,
-  /**
-   * @param {number} scheduled_plan_id Scheduled Plan Id
-   */
   scheduled_plan_id: number,
-  /**
-   * @param {Partial<IWriteScheduledPlan>} body
-   */
   body: Partial<IWriteScheduledPlan>,
   options?: Partial<ITransportSettings>
 ): Promise<SDKResponse<IScheduledPlan, IError | IValidationError>> => {
@@ -7671,12 +8114,14 @@ export const update_scheduled_plan = async (
  * This delete cannot be undone.
  *
  * DELETE /scheduled_plans/{scheduled_plan_id} -> string
+ *
+ * @param sdk IAPIMethods implementation
+ * @param scheduled_plan_id Scheduled Plan Id
+ * @param options one-time API call overrides
+ *
  */
 export const delete_scheduled_plan = async (
   sdk: IAPIMethods,
-  /**
-   * @param {number} scheduled_plan_id Scheduled Plan Id
-   */
   scheduled_plan_id: number,
   options?: Partial<ITransportSettings>
 ): Promise<SDKResponse<string, IError>> => {
@@ -7702,6 +8147,11 @@ export const delete_scheduled_plan = async (
  * The caller must have `see_schedules` permission to see other users' scheduled plans.
  *
  * GET /scheduled_plans -> IScheduledPlan[]
+ *
+ * @param sdk IAPIMethods implementation
+ * @param request composed interface "IRequestAllScheduledPlans" for complex method parameters
+ * @param options one-time API call overrides
+ *
  */
 export const all_scheduled_plans = async (
   sdk: IAPIMethods,
@@ -7781,12 +8231,14 @@ export const all_scheduled_plans = async (
  * Valid formats vary by destination type and source object. `wysiwyg_pdf` is only valid for dashboards, for example.
  *
  * POST /scheduled_plans -> IScheduledPlan
+ *
+ * @param sdk IAPIMethods implementation
+ * @param body Partial<IWriteScheduledPlan>
+ * @param options one-time API call overrides
+ *
  */
 export const create_scheduled_plan = async (
   sdk: IAPIMethods,
-  /**
-   * @param {Partial<IWriteScheduledPlan>} body
-   */
   body: Partial<IWriteScheduledPlan>,
   options?: Partial<ITransportSettings>
 ): Promise<SDKResponse<IScheduledPlan, IError | IValidationError>> => {
@@ -7838,12 +8290,14 @@ export const create_scheduled_plan = async (
  * Valid formats vary by destination type and source object. `wysiwyg_pdf` is only valid for dashboards, for example.
  *
  * POST /scheduled_plans/run_once -> IScheduledPlan
+ *
+ * @param sdk IAPIMethods implementation
+ * @param body Partial<IWriteScheduledPlan>
+ * @param options one-time API call overrides
+ *
  */
 export const scheduled_plan_run_once = async (
   sdk: IAPIMethods,
-  /**
-   * @param {Partial<IWriteScheduledPlan>} body
-   */
   body: Partial<IWriteScheduledPlan>,
   options?: Partial<ITransportSettings>
 ): Promise<SDKResponse<IScheduledPlan, IError | IValidationError>> => {
@@ -7869,6 +8323,11 @@ export const scheduled_plan_run_once = async (
  * The caller must have `see_schedules` permission to see other users' scheduled plans.
  *
  * GET /scheduled_plans/look/{look_id} -> IScheduledPlan[]
+ *
+ * @param sdk IAPIMethods implementation
+ * @param request composed interface "IRequestScheduledPlansForLook" for complex method parameters
+ * @param options one-time API call overrides
+ *
  */
 export const scheduled_plans_for_look = async (
   sdk: IAPIMethods,
@@ -7901,6 +8360,11 @@ export const scheduled_plans_for_look = async (
  * The caller must have `see_schedules` permission to see other users' scheduled plans.
  *
  * GET /scheduled_plans/dashboard/{dashboard_id} -> IScheduledPlan[]
+ *
+ * @param sdk IAPIMethods implementation
+ * @param request composed interface "IRequestScheduledPlansForDashboard" for complex method parameters
+ * @param options one-time API call overrides
+ *
  */
 export const scheduled_plans_for_dashboard = async (
   sdk: IAPIMethods,
@@ -7933,6 +8397,11 @@ export const scheduled_plans_for_dashboard = async (
  * The caller must have `see_schedules` permission to see other users' scheduled plans.
  *
  * GET /scheduled_plans/lookml_dashboard/{lookml_dashboard_id} -> IScheduledPlan[]
+ *
+ * @param sdk IAPIMethods implementation
+ * @param request composed interface "IRequestScheduledPlansForLookmlDashboard" for complex method parameters
+ * @param options one-time API call overrides
+ *
  */
 export const scheduled_plans_for_lookml_dashboard = async (
   sdk: IAPIMethods,
@@ -8002,16 +8471,16 @@ export const scheduled_plans_for_lookml_dashboard = async (
  * This API is rate limited to prevent it from being used for relay spam or DoS attacks
  *
  * POST /scheduled_plans/{scheduled_plan_id}/run_once -> IScheduledPlan
+ *
+ * @param sdk IAPIMethods implementation
+ * @param scheduled_plan_id Id of schedule plan to copy and run
+ * @param body Partial<IWriteScheduledPlan>
+ * @param options one-time API call overrides
+ *
  */
 export const scheduled_plan_run_once_by_id = async (
   sdk: IAPIMethods,
-  /**
-   * @param {number} scheduled_plan_id Id of schedule plan to copy and run
-   */
   scheduled_plan_id: number,
-  /**
-   * @param {Partial<IWriteScheduledPlan>} body
-   */
   body?: Partial<IWriteScheduledPlan>,
   options?: Partial<ITransportSettings>
 ): Promise<SDKResponse<IScheduledPlan, IError | IValidationError>> => {
@@ -8033,6 +8502,10 @@ export const scheduled_plan_run_once_by_id = async (
  * Returns information about the current API session, such as which workspace is selected for the session.
  *
  * GET /session -> IApiSession
+ *
+ * @param sdk IAPIMethods implementation
+ * @param options one-time API call overrides
+ *
  */
 export const session = async (
   sdk: IAPIMethods,
@@ -8064,12 +8537,14 @@ export const session = async (
  * API sessions, be sure to select the dev workspace after each login.
  *
  * PATCH /session -> IApiSession
+ *
+ * @param sdk IAPIMethods implementation
+ * @param body Partial<IWriteApiSession>
+ * @param options one-time API call overrides
+ *
  */
 export const update_session = async (
   sdk: IAPIMethods,
-  /**
-   * @param {Partial<IWriteApiSession>} body
-   */
   body: Partial<IWriteApiSession>,
   options?: Partial<ITransportSettings>
 ): Promise<SDKResponse<IApiSession, IError | IValidationError>> => {
@@ -8117,6 +8592,13 @@ export const update_session = async (
  *   Get a **single space** by id with [Space](#!/Space/space)
  *
  * GET /spaces/search -> ISpace[]
+ *
+ * @deprecated
+ *
+ * @param sdk IAPIMethods implementation
+ * @param request composed interface "IRequestSearchSpaces" for complex method parameters
+ * @param options one-time API call overrides
+ *
  */
 export const search_spaces = async (
   sdk: IAPIMethods,
@@ -8148,16 +8630,18 @@ export const search_spaces = async (
  * ### Get information about the space with a specific id.
  *
  * GET /spaces/{space_id} -> ISpace
+ *
+ * @deprecated
+ *
+ * @param sdk IAPIMethods implementation
+ * @param space_id Id of space
+ * @param fields Requested fields.
+ * @param options one-time API call overrides
+ *
  */
 export const space = async (
   sdk: IAPIMethods,
-  /**
-   * @param {string} space_id Id of space
-   */
   space_id: string,
-  /**
-   * @param {string} fields Requested fields.
-   */
   fields?: string,
   options?: Partial<ITransportSettings>
 ): Promise<SDKResponse<ISpace, IError>> => {
@@ -8174,16 +8658,18 @@ export const space = async (
  * ### Update the space with a specific id.
  *
  * PATCH /spaces/{space_id} -> ISpace
+ *
+ * @deprecated
+ *
+ * @param sdk IAPIMethods implementation
+ * @param space_id Id of space
+ * @param body Partial<IUpdateSpace>
+ * @param options one-time API call overrides
+ *
  */
 export const update_space = async (
   sdk: IAPIMethods,
-  /**
-   * @param {string} space_id Id of space
-   */
   space_id: string,
-  /**
-   * @param {Partial<IUpdateSpace>} body
-   */
   body: Partial<IUpdateSpace>,
   options?: Partial<ITransportSettings>
 ): Promise<SDKResponse<ISpace, IError | IValidationError>> => {
@@ -8201,12 +8687,16 @@ export const update_space = async (
  * **DANGER** this will delete all looks and dashboards in the space.
  *
  * DELETE /spaces/{space_id} -> string
+ *
+ * @deprecated
+ *
+ * @param sdk IAPIMethods implementation
+ * @param space_id Id of space
+ * @param options one-time API call overrides
+ *
  */
 export const delete_space = async (
   sdk: IAPIMethods,
-  /**
-   * @param {string} space_id Id of space
-   */
   space_id: string,
   options?: Partial<ITransportSettings>
 ): Promise<SDKResponse<string, IError>> => {
@@ -8221,12 +8711,16 @@ export const delete_space = async (
  * In API 4.0+, all personal spaces will be returned.
  *
  * GET /spaces -> ISpaceBase[]
+ *
+ * @deprecated
+ *
+ * @param sdk IAPIMethods implementation
+ * @param fields Requested fields.
+ * @param options one-time API call overrides
+ *
  */
 export const all_spaces = async (
   sdk: IAPIMethods,
-  /**
-   * @param {string} fields Requested fields.
-   */
   fields?: string,
   options?: Partial<ITransportSettings>
 ): Promise<SDKResponse<ISpaceBase[], IError>> => {
@@ -8240,12 +8734,16 @@ export const all_spaces = async (
  * returns 404 Not Found.
  *
  * POST /spaces -> ISpace
+ *
+ * @deprecated
+ *
+ * @param sdk IAPIMethods implementation
+ * @param body Partial<ICreateSpace>
+ * @param options one-time API call overrides
+ *
  */
 export const create_space = async (
   sdk: IAPIMethods,
-  /**
-   * @param {Partial<ICreateSpace>} body
-   */
   body: Partial<ICreateSpace>,
   options?: Partial<ITransportSettings>
 ): Promise<SDKResponse<ISpace, IError | IValidationError>> => {
@@ -8261,6 +8759,13 @@ export const create_space = async (
  * ### Get the children of a space.
  *
  * GET /spaces/{space_id}/children -> ISpace[]
+ *
+ * @deprecated
+ *
+ * @param sdk IAPIMethods implementation
+ * @param request composed interface "IRequestSpaceChildren" for complex method parameters
+ * @param options one-time API call overrides
+ *
  */
 export const space_children = async (
   sdk: IAPIMethods,
@@ -8285,6 +8790,13 @@ export const space_children = async (
  * ### Search the children of a space
  *
  * GET /spaces/{space_id}/children/search -> ISpace[]
+ *
+ * @deprecated
+ *
+ * @param sdk IAPIMethods implementation
+ * @param request composed interface "IRequestSpaceChildrenSearch" for complex method parameters
+ * @param options one-time API call overrides
+ *
  */
 export const space_children_search = async (
   sdk: IAPIMethods,
@@ -8304,16 +8816,18 @@ export const space_children_search = async (
  * ### Get the parent of a space
  *
  * GET /spaces/{space_id}/parent -> ISpace
+ *
+ * @deprecated
+ *
+ * @param sdk IAPIMethods implementation
+ * @param space_id Id of space
+ * @param fields Requested fields.
+ * @param options one-time API call overrides
+ *
  */
 export const space_parent = async (
   sdk: IAPIMethods,
-  /**
-   * @param {string} space_id Id of space
-   */
   space_id: string,
-  /**
-   * @param {string} fields Requested fields.
-   */
   fields?: string,
   options?: Partial<ITransportSettings>
 ): Promise<SDKResponse<ISpace, IError>> => {
@@ -8330,16 +8844,18 @@ export const space_parent = async (
  * ### Get the ancestors of a space
  *
  * GET /spaces/{space_id}/ancestors -> ISpace[]
+ *
+ * @deprecated
+ *
+ * @param sdk IAPIMethods implementation
+ * @param space_id Id of space
+ * @param fields Requested fields.
+ * @param options one-time API call overrides
+ *
  */
 export const space_ancestors = async (
   sdk: IAPIMethods,
-  /**
-   * @param {string} space_id Id of space
-   */
   space_id: string,
-  /**
-   * @param {string} fields Requested fields.
-   */
   fields?: string,
   options?: Partial<ITransportSettings>
 ): Promise<SDKResponse<ISpace[], IError>> => {
@@ -8358,16 +8874,18 @@ export const space_ancestors = async (
  * In API 4.0+, all looks in a space will be returned, excluding looks in the trash.
  *
  * GET /spaces/{space_id}/looks -> ILookWithQuery[]
+ *
+ * @deprecated
+ *
+ * @param sdk IAPIMethods implementation
+ * @param space_id Id of space
+ * @param fields Requested fields.
+ * @param options one-time API call overrides
+ *
  */
 export const space_looks = async (
   sdk: IAPIMethods,
-  /**
-   * @param {string} space_id Id of space
-   */
   space_id: string,
-  /**
-   * @param {string} fields Requested fields.
-   */
   fields?: string,
   options?: Partial<ITransportSettings>
 ): Promise<SDKResponse<ILookWithQuery[], IError>> => {
@@ -8384,16 +8902,18 @@ export const space_looks = async (
  * ### Get the dashboards in a space
  *
  * GET /spaces/{space_id}/dashboards -> IDashboard[]
+ *
+ * @deprecated
+ *
+ * @param sdk IAPIMethods implementation
+ * @param space_id Id of space
+ * @param fields Requested fields.
+ * @param options one-time API call overrides
+ *
  */
 export const space_dashboards = async (
   sdk: IAPIMethods,
-  /**
-   * @param {string} space_id Id of space
-   */
   space_id: string,
-  /**
-   * @param {string} fields Requested fields.
-   */
   fields?: string,
   options?: Partial<ITransportSettings>
 ): Promise<SDKResponse<IDashboard[], IError>> => {
@@ -8420,12 +8940,14 @@ export const space_dashboards = async (
  * **Note**: Custom themes needs to be enabled by Looker. Unless custom themes are enabled, only the automatically generated default theme can be used. Please contact your Account Manager or help.looker.com to update your license for this feature.
  *
  * GET /themes -> ITheme[]
+ *
+ * @param sdk IAPIMethods implementation
+ * @param fields Requested fields.
+ * @param options one-time API call overrides
+ *
  */
 export const all_themes = async (
   sdk: IAPIMethods,
-  /**
-   * @param {string} fields Requested fields.
-   */
   fields?: string,
   options?: Partial<ITransportSettings>
 ): Promise<SDKResponse<ITheme[], IError>> => {
@@ -8450,12 +8972,14 @@ export const all_themes = async (
  * **Note**: Custom themes needs to be enabled by Looker. Unless custom themes are enabled, only the automatically generated default theme can be used. Please contact your Account Manager or help.looker.com to update your license for this feature.
  *
  * POST /themes -> ITheme
+ *
+ * @param sdk IAPIMethods implementation
+ * @param body Partial<IWriteTheme>
+ * @param options one-time API call overrides
+ *
  */
 export const create_theme = async (
   sdk: IAPIMethods,
-  /**
-   * @param {Partial<IWriteTheme>} body
-   */
   body: Partial<IWriteTheme>,
   options?: Partial<ITransportSettings>
 ): Promise<SDKResponse<ITheme, IError | IValidationError>> => {
@@ -8508,6 +9032,11 @@ export const create_theme = async (
  * **Note**: Custom themes needs to be enabled by Looker. Unless custom themes are enabled, only the automatically generated default theme can be used. Please contact your Account Manager or help.looker.com to update your license for this feature.
  *
  * GET /themes/search -> ITheme[]
+ *
+ * @param sdk IAPIMethods implementation
+ * @param request composed interface "IRequestSearchThemes" for complex method parameters
+ * @param options one-time API call overrides
+ *
  */
 export const search_themes = async (
   sdk: IAPIMethods,
@@ -8542,12 +9071,14 @@ export const search_themes = async (
  * The optional `ts` parameter can specify a different timestamp than "now." If specified, it returns the default theme at the time indicated.
  *
  * GET /themes/default -> ITheme
+ *
+ * @param sdk IAPIMethods implementation
+ * @param ts Timestamp representing the target datetime for the active period. Defaults to 'now'
+ * @param options one-time API call overrides
+ *
  */
 export const default_theme = async (
   sdk: IAPIMethods,
-  /**
-   * @param {Date} ts Timestamp representing the target datetime for the active period. Defaults to 'now'
-   */
   ts?: Date,
   options?: Partial<ITransportSettings>
 ): Promise<SDKResponse<ITheme, IError>> => {
@@ -8568,12 +9099,14 @@ export const default_theme = async (
  * **Note**: Custom themes needs to be enabled by Looker. Unless custom themes are enabled, only the automatically generated default theme can be used. Please contact your Account Manager or help.looker.com to update your license for this feature.
  *
  * PUT /themes/default -> ITheme
+ *
+ * @param sdk IAPIMethods implementation
+ * @param name Name of theme to set as default
+ * @param options one-time API call overrides
+ *
  */
 export const set_default_theme = async (
   sdk: IAPIMethods,
-  /**
-   * @param {string} name Name of theme to set as default
-   */
   name: string,
   options?: Partial<ITransportSettings>
 ): Promise<SDKResponse<ITheme, IError | IValidationError>> => {
@@ -8597,6 +9130,11 @@ export const set_default_theme = async (
  * **Note**: Custom themes needs to be enabled by Looker. Unless custom themes are enabled, only the automatically generated default theme can be used. Please contact your Account Manager or help.looker.com to update your license for this feature.
  *
  * GET /themes/active -> ITheme[]
+ *
+ * @param sdk IAPIMethods implementation
+ * @param request composed interface "IRequestActiveThemes" for complex method parameters
+ * @param options one-time API call overrides
+ *
  */
 export const active_themes = async (
   sdk: IAPIMethods,
@@ -8620,16 +9158,16 @@ export const active_themes = async (
  * **Note**: Custom themes needs to be enabled by Looker. Unless custom themes are enabled, only the automatically generated default theme can be used. Please contact your Account Manager or help.looker.com to update your license for this feature.
  *
  * GET /themes/theme_or_default -> ITheme
+ *
+ * @param sdk IAPIMethods implementation
+ * @param name Name of theme
+ * @param ts Timestamp representing the target datetime for the active period. Defaults to 'now'
+ * @param options one-time API call overrides
+ *
  */
 export const theme_or_default = async (
   sdk: IAPIMethods,
-  /**
-   * @param {string} name Name of theme
-   */
   name: string,
-  /**
-   * @param {Date} ts Timestamp representing the target datetime for the active period. Defaults to 'now'
-   */
   ts?: Date,
   options?: Partial<ITransportSettings>
 ): Promise<SDKResponse<ITheme, IError>> => {
@@ -8651,12 +9189,14 @@ export const theme_or_default = async (
  * **Note**: Custom themes needs to be enabled by Looker. Unless custom themes are enabled, only the automatically generated default theme can be used. Please contact your Account Manager or help.looker.com to update your license for this feature.
  *
  * POST /themes/validate -> IValidationError
+ *
+ * @param sdk IAPIMethods implementation
+ * @param body Partial<IWriteTheme>
+ * @param options one-time API call overrides
+ *
  */
 export const validate_theme = async (
   sdk: IAPIMethods,
-  /**
-   * @param {Partial<IWriteTheme>} body
-   */
   body: Partial<IWriteTheme>,
   options?: Partial<ITransportSettings>
 ): Promise<SDKResponse<IValidationError, IError | IValidationError>> => {
@@ -8676,16 +9216,16 @@ export const validate_theme = async (
  * **Note**: Custom themes needs to be enabled by Looker. Unless custom themes are enabled, only the automatically generated default theme can be used. Please contact your Account Manager or help.looker.com to update your license for this feature.
  *
  * GET /themes/{theme_id} -> ITheme
+ *
+ * @param sdk IAPIMethods implementation
+ * @param theme_id Id of theme
+ * @param fields Requested fields.
+ * @param options one-time API call overrides
+ *
  */
 export const theme = async (
   sdk: IAPIMethods,
-  /**
-   * @param {string} theme_id Id of theme
-   */
   theme_id: string,
-  /**
-   * @param {string} fields Requested fields.
-   */
   fields?: string,
   options?: Partial<ITransportSettings>
 ): Promise<SDKResponse<ITheme, IError>> => {
@@ -8704,16 +9244,16 @@ export const theme = async (
  * **Note**: Custom themes needs to be enabled by Looker. Unless custom themes are enabled, only the automatically generated default theme can be used. Please contact your Account Manager or help.looker.com to update your license for this feature.
  *
  * PATCH /themes/{theme_id} -> ITheme
+ *
+ * @param sdk IAPIMethods implementation
+ * @param theme_id Id of theme
+ * @param body Partial<IWriteTheme>
+ * @param options one-time API call overrides
+ *
  */
 export const update_theme = async (
   sdk: IAPIMethods,
-  /**
-   * @param {string} theme_id Id of theme
-   */
   theme_id: string,
-  /**
-   * @param {Partial<IWriteTheme>} body
-   */
   body: Partial<IWriteTheme>,
   options?: Partial<ITransportSettings>
 ): Promise<SDKResponse<ITheme, IError | IValidationError>> => {
@@ -8738,12 +9278,14 @@ export const update_theme = async (
  * **Note**: Custom themes needs to be enabled by Looker. Unless custom themes are enabled, only the automatically generated default theme can be used. Please contact your Account Manager or help.looker.com to update your license for this feature.
  *
  * DELETE /themes/{theme_id} -> string
+ *
+ * @param sdk IAPIMethods implementation
+ * @param theme_id Id of theme
+ * @param options one-time API call overrides
+ *
  */
 export const delete_theme = async (
   sdk: IAPIMethods,
-  /**
-   * @param {string} theme_id Id of theme
-   */
   theme_id: string,
   options?: Partial<ITransportSettings>
 ): Promise<SDKResponse<string, IError>> => {
@@ -8759,12 +9301,14 @@ export const delete_theme = async (
  * ### Get information about the current user; i.e. the user account currently calling the API.
  *
  * GET /user -> IUser
+ *
+ * @param sdk IAPIMethods implementation
+ * @param fields Requested fields.
+ * @param options one-time API call overrides
+ *
  */
 export const me = async (
   sdk: IAPIMethods,
-  /**
-   * @param {string} fields Requested fields.
-   */
   fields?: string,
   options?: Partial<ITransportSettings>
 ): Promise<SDKResponse<IUser, IError>> => {
@@ -8775,6 +9319,11 @@ export const me = async (
  * ### Get information about all users.
  *
  * GET /users -> IUser[]
+ *
+ * @param sdk IAPIMethods implementation
+ * @param request composed interface "IRequestAllUsers" for complex method parameters
+ * @param options one-time API call overrides
+ *
  */
 export const all_users = async (
   sdk: IAPIMethods,
@@ -8799,16 +9348,16 @@ export const all_users = async (
  * ### Create a user with the specified information.
  *
  * POST /users -> IUser
+ *
+ * @param sdk IAPIMethods implementation
+ * @param body Partial<IWriteUser>
+ * @param fields Requested fields.
+ * @param options one-time API call overrides
+ *
  */
 export const create_user = async (
   sdk: IAPIMethods,
-  /**
-   * @param {Partial<IWriteUser>} body
-   */
   body?: Partial<IWriteUser>,
-  /**
-   * @param {string} fields Requested fields.
-   */
   fields?: string,
   options?: Partial<ITransportSettings>
 ): Promise<SDKResponse<IUser, IError | IValidationError>> => {
@@ -8853,6 +9402,11 @@ export const create_user = async (
  * names of other users who are members of the same group as the user.
  *
  * GET /users/search -> IUser[]
+ *
+ * @param sdk IAPIMethods implementation
+ * @param request composed interface "IRequestSearchUsers" for complex method parameters
+ * @param options one-time API call overrides
+ *
  */
 export const search_users = async (
   sdk: IAPIMethods,
@@ -8891,6 +9445,11 @@ export const search_users = async (
  * Any additional search params will be combined into a logical AND expression.
  *
  * GET /users/search/names/{pattern} -> IUser[]
+ *
+ * @param sdk IAPIMethods implementation
+ * @param request composed interface "IRequestSearchUsersNames" for complex method parameters
+ * @param options one-time API call overrides
+ *
  */
 export const search_users_names = async (
   sdk: IAPIMethods,
@@ -8925,16 +9484,16 @@ export const search_users_names = async (
  * The user name and avatar url, but no sensitive information.
  *
  * GET /users/{user_id} -> IUser
+ *
+ * @param sdk IAPIMethods implementation
+ * @param user_id Id of user
+ * @param fields Requested fields.
+ * @param options one-time API call overrides
+ *
  */
 export const user = async (
   sdk: IAPIMethods,
-  /**
-   * @param {number} user_id Id of user
-   */
   user_id: number,
-  /**
-   * @param {string} fields Requested fields.
-   */
   fields?: string,
   options?: Partial<ITransportSettings>
 ): Promise<SDKResponse<IUser, IError>> => {
@@ -8945,20 +9504,18 @@ export const user = async (
  * ### Update information about the user with a specific id.
  *
  * PATCH /users/{user_id} -> IUser
+ *
+ * @param sdk IAPIMethods implementation
+ * @param user_id Id of user
+ * @param body Partial<IWriteUser>
+ * @param fields Requested fields.
+ * @param options one-time API call overrides
+ *
  */
 export const update_user = async (
   sdk: IAPIMethods,
-  /**
-   * @param {number} user_id Id of user
-   */
   user_id: number,
-  /**
-   * @param {Partial<IWriteUser>} body
-   */
   body: Partial<IWriteUser>,
-  /**
-   * @param {string} fields Requested fields.
-   */
   fields?: string,
   options?: Partial<ITransportSettings>
 ): Promise<SDKResponse<IUser, IError | IValidationError>> => {
@@ -8976,12 +9533,14 @@ export const update_user = async (
  * **DANGER** this will delete the user and all looks and other information owned by the user.
  *
  * DELETE /users/{user_id} -> string
+ *
+ * @param sdk IAPIMethods implementation
+ * @param user_id Id of user
+ * @param options one-time API call overrides
+ *
  */
 export const delete_user = async (
   sdk: IAPIMethods,
-  /**
-   * @param {number} user_id Id of user
-   */
   user_id: number,
   options?: Partial<ITransportSettings>
 ): Promise<SDKResponse<string, IError>> => {
@@ -9019,20 +9578,18 @@ export const delete_user = async (
  * **NOTE**: The 'api' credential type was only used with the legacy Looker query API and is no longer supported. The credential type for API you are currently looking at is 'api3'.
  *
  * GET /users/credential/{credential_type}/{credential_id} -> IUser
+ *
+ * @param sdk IAPIMethods implementation
+ * @param credential_type Type name of credential
+ * @param credential_id Id of credential
+ * @param fields Requested fields.
+ * @param options one-time API call overrides
+ *
  */
 export const user_for_credential = async (
   sdk: IAPIMethods,
-  /**
-   * @param {string} credential_type Type name of credential
-   */
   credential_type: string,
-  /**
-   * @param {string} credential_id Id of credential
-   */
   credential_id: string,
-  /**
-   * @param {string} fields Requested fields.
-   */
   fields?: string,
   options?: Partial<ITransportSettings>
 ): Promise<SDKResponse<IUser, IError>> => {
@@ -9050,16 +9607,16 @@ export const user_for_credential = async (
  * ### Email/password login information for the specified user.
  *
  * GET /users/{user_id}/credentials_email -> ICredentialsEmail
+ *
+ * @param sdk IAPIMethods implementation
+ * @param user_id id of user
+ * @param fields Requested fields.
+ * @param options one-time API call overrides
+ *
  */
 export const user_credentials_email = async (
   sdk: IAPIMethods,
-  /**
-   * @param {number} user_id id of user
-   */
   user_id: number,
-  /**
-   * @param {string} fields Requested fields.
-   */
   fields?: string,
   options?: Partial<ITransportSettings>
 ): Promise<SDKResponse<ICredentialsEmail, IError>> => {
@@ -9075,20 +9632,18 @@ export const user_credentials_email = async (
  * ### Email/password login information for the specified user.
  *
  * POST /users/{user_id}/credentials_email -> ICredentialsEmail
+ *
+ * @param sdk IAPIMethods implementation
+ * @param user_id id of user
+ * @param body Partial<IWriteCredentialsEmail>
+ * @param fields Requested fields.
+ * @param options one-time API call overrides
+ *
  */
 export const create_user_credentials_email = async (
   sdk: IAPIMethods,
-  /**
-   * @param {number} user_id id of user
-   */
   user_id: number,
-  /**
-   * @param {Partial<IWriteCredentialsEmail>} body
-   */
   body: Partial<IWriteCredentialsEmail>,
-  /**
-   * @param {string} fields Requested fields.
-   */
   fields?: string,
   options?: Partial<ITransportSettings>
 ): Promise<SDKResponse<ICredentialsEmail, IError | IValidationError>> => {
@@ -9104,20 +9659,18 @@ export const create_user_credentials_email = async (
  * ### Email/password login information for the specified user.
  *
  * PATCH /users/{user_id}/credentials_email -> ICredentialsEmail
+ *
+ * @param sdk IAPIMethods implementation
+ * @param user_id id of user
+ * @param body Partial<IWriteCredentialsEmail>
+ * @param fields Requested fields.
+ * @param options one-time API call overrides
+ *
  */
 export const update_user_credentials_email = async (
   sdk: IAPIMethods,
-  /**
-   * @param {number} user_id id of user
-   */
   user_id: number,
-  /**
-   * @param {Partial<IWriteCredentialsEmail>} body
-   */
   body: Partial<IWriteCredentialsEmail>,
-  /**
-   * @param {string} fields Requested fields.
-   */
   fields?: string,
   options?: Partial<ITransportSettings>
 ): Promise<SDKResponse<ICredentialsEmail, IError | IValidationError>> => {
@@ -9133,12 +9686,14 @@ export const update_user_credentials_email = async (
  * ### Email/password login information for the specified user.
  *
  * DELETE /users/{user_id}/credentials_email -> string
+ *
+ * @param sdk IAPIMethods implementation
+ * @param user_id id of user
+ * @param options one-time API call overrides
+ *
  */
 export const delete_user_credentials_email = async (
   sdk: IAPIMethods,
-  /**
-   * @param {number} user_id id of user
-   */
   user_id: number,
   options?: Partial<ITransportSettings>
 ): Promise<SDKResponse<string, IError>> => {
@@ -9154,16 +9709,16 @@ export const delete_user_credentials_email = async (
  * ### Two-factor login information for the specified user.
  *
  * GET /users/{user_id}/credentials_totp -> ICredentialsTotp
+ *
+ * @param sdk IAPIMethods implementation
+ * @param user_id id of user
+ * @param fields Requested fields.
+ * @param options one-time API call overrides
+ *
  */
 export const user_credentials_totp = async (
   sdk: IAPIMethods,
-  /**
-   * @param {number} user_id id of user
-   */
   user_id: number,
-  /**
-   * @param {string} fields Requested fields.
-   */
   fields?: string,
   options?: Partial<ITransportSettings>
 ): Promise<SDKResponse<ICredentialsTotp, IError>> => {
@@ -9179,20 +9734,18 @@ export const user_credentials_totp = async (
  * ### Two-factor login information for the specified user.
  *
  * POST /users/{user_id}/credentials_totp -> ICredentialsTotp
+ *
+ * @param sdk IAPIMethods implementation
+ * @param user_id id of user
+ * @param body Partial<ICredentialsTotp>
+ * @param fields Requested fields.
+ * @param options one-time API call overrides
+ *
  */
 export const create_user_credentials_totp = async (
   sdk: IAPIMethods,
-  /**
-   * @param {number} user_id id of user
-   */
   user_id: number,
-  /**
-   * @param {Partial<ICredentialsTotp>} body
-   */
   body?: Partial<ICredentialsTotp>,
-  /**
-   * @param {string} fields Requested fields.
-   */
   fields?: string,
   options?: Partial<ITransportSettings>
 ): Promise<SDKResponse<ICredentialsTotp, IError | IValidationError>> => {
@@ -9208,12 +9761,14 @@ export const create_user_credentials_totp = async (
  * ### Two-factor login information for the specified user.
  *
  * DELETE /users/{user_id}/credentials_totp -> string
+ *
+ * @param sdk IAPIMethods implementation
+ * @param user_id id of user
+ * @param options one-time API call overrides
+ *
  */
 export const delete_user_credentials_totp = async (
   sdk: IAPIMethods,
-  /**
-   * @param {number} user_id id of user
-   */
   user_id: number,
   options?: Partial<ITransportSettings>
 ): Promise<SDKResponse<string, IError>> => {
@@ -9229,16 +9784,16 @@ export const delete_user_credentials_totp = async (
  * ### LDAP login information for the specified user.
  *
  * GET /users/{user_id}/credentials_ldap -> ICredentialsLDAP
+ *
+ * @param sdk IAPIMethods implementation
+ * @param user_id id of user
+ * @param fields Requested fields.
+ * @param options one-time API call overrides
+ *
  */
 export const user_credentials_ldap = async (
   sdk: IAPIMethods,
-  /**
-   * @param {number} user_id id of user
-   */
   user_id: number,
-  /**
-   * @param {string} fields Requested fields.
-   */
   fields?: string,
   options?: Partial<ITransportSettings>
 ): Promise<SDKResponse<ICredentialsLDAP, IError>> => {
@@ -9254,12 +9809,14 @@ export const user_credentials_ldap = async (
  * ### LDAP login information for the specified user.
  *
  * DELETE /users/{user_id}/credentials_ldap -> string
+ *
+ * @param sdk IAPIMethods implementation
+ * @param user_id id of user
+ * @param options one-time API call overrides
+ *
  */
 export const delete_user_credentials_ldap = async (
   sdk: IAPIMethods,
-  /**
-   * @param {number} user_id id of user
-   */
   user_id: number,
   options?: Partial<ITransportSettings>
 ): Promise<SDKResponse<string, IError>> => {
@@ -9275,16 +9832,16 @@ export const delete_user_credentials_ldap = async (
  * ### Google authentication login information for the specified user.
  *
  * GET /users/{user_id}/credentials_google -> ICredentialsGoogle
+ *
+ * @param sdk IAPIMethods implementation
+ * @param user_id id of user
+ * @param fields Requested fields.
+ * @param options one-time API call overrides
+ *
  */
 export const user_credentials_google = async (
   sdk: IAPIMethods,
-  /**
-   * @param {number} user_id id of user
-   */
   user_id: number,
-  /**
-   * @param {string} fields Requested fields.
-   */
   fields?: string,
   options?: Partial<ITransportSettings>
 ): Promise<SDKResponse<ICredentialsGoogle, IError>> => {
@@ -9300,12 +9857,14 @@ export const user_credentials_google = async (
  * ### Google authentication login information for the specified user.
  *
  * DELETE /users/{user_id}/credentials_google -> string
+ *
+ * @param sdk IAPIMethods implementation
+ * @param user_id id of user
+ * @param options one-time API call overrides
+ *
  */
 export const delete_user_credentials_google = async (
   sdk: IAPIMethods,
-  /**
-   * @param {number} user_id id of user
-   */
   user_id: number,
   options?: Partial<ITransportSettings>
 ): Promise<SDKResponse<string, IError>> => {
@@ -9321,16 +9880,16 @@ export const delete_user_credentials_google = async (
  * ### Saml authentication login information for the specified user.
  *
  * GET /users/{user_id}/credentials_saml -> ICredentialsSaml
+ *
+ * @param sdk IAPIMethods implementation
+ * @param user_id id of user
+ * @param fields Requested fields.
+ * @param options one-time API call overrides
+ *
  */
 export const user_credentials_saml = async (
   sdk: IAPIMethods,
-  /**
-   * @param {number} user_id id of user
-   */
   user_id: number,
-  /**
-   * @param {string} fields Requested fields.
-   */
   fields?: string,
   options?: Partial<ITransportSettings>
 ): Promise<SDKResponse<ICredentialsSaml, IError>> => {
@@ -9346,12 +9905,14 @@ export const user_credentials_saml = async (
  * ### Saml authentication login information for the specified user.
  *
  * DELETE /users/{user_id}/credentials_saml -> string
+ *
+ * @param sdk IAPIMethods implementation
+ * @param user_id id of user
+ * @param options one-time API call overrides
+ *
  */
 export const delete_user_credentials_saml = async (
   sdk: IAPIMethods,
-  /**
-   * @param {number} user_id id of user
-   */
   user_id: number,
   options?: Partial<ITransportSettings>
 ): Promise<SDKResponse<string, IError>> => {
@@ -9367,16 +9928,16 @@ export const delete_user_credentials_saml = async (
  * ### OpenID Connect (OIDC) authentication login information for the specified user.
  *
  * GET /users/{user_id}/credentials_oidc -> ICredentialsOIDC
+ *
+ * @param sdk IAPIMethods implementation
+ * @param user_id id of user
+ * @param fields Requested fields.
+ * @param options one-time API call overrides
+ *
  */
 export const user_credentials_oidc = async (
   sdk: IAPIMethods,
-  /**
-   * @param {number} user_id id of user
-   */
   user_id: number,
-  /**
-   * @param {string} fields Requested fields.
-   */
   fields?: string,
   options?: Partial<ITransportSettings>
 ): Promise<SDKResponse<ICredentialsOIDC, IError>> => {
@@ -9392,12 +9953,14 @@ export const user_credentials_oidc = async (
  * ### OpenID Connect (OIDC) authentication login information for the specified user.
  *
  * DELETE /users/{user_id}/credentials_oidc -> string
+ *
+ * @param sdk IAPIMethods implementation
+ * @param user_id id of user
+ * @param options one-time API call overrides
+ *
  */
 export const delete_user_credentials_oidc = async (
   sdk: IAPIMethods,
-  /**
-   * @param {number} user_id id of user
-   */
   user_id: number,
   options?: Partial<ITransportSettings>
 ): Promise<SDKResponse<string, IError>> => {
@@ -9413,20 +9976,18 @@ export const delete_user_credentials_oidc = async (
  * ### API 3 login information for the specified user. This is for the newer API keys that can be added for any user.
  *
  * GET /users/{user_id}/credentials_api3/{credentials_api3_id} -> ICredentialsApi3
+ *
+ * @param sdk IAPIMethods implementation
+ * @param user_id Id of user
+ * @param credentials_api3_id Id of API 3 Credential
+ * @param fields Requested fields.
+ * @param options one-time API call overrides
+ *
  */
 export const user_credentials_api3 = async (
   sdk: IAPIMethods,
-  /**
-   * @param {number} user_id Id of user
-   */
   user_id: number,
-  /**
-   * @param {number} credentials_api3_id Id of API 3 Credential
-   */
   credentials_api3_id: number,
-  /**
-   * @param {string} fields Requested fields.
-   */
   fields?: string,
   options?: Partial<ITransportSettings>
 ): Promise<SDKResponse<ICredentialsApi3, IError>> => {
@@ -9442,16 +10003,16 @@ export const user_credentials_api3 = async (
  * ### API 3 login information for the specified user. This is for the newer API keys that can be added for any user.
  *
  * DELETE /users/{user_id}/credentials_api3/{credentials_api3_id} -> string
+ *
+ * @param sdk IAPIMethods implementation
+ * @param user_id id of user
+ * @param credentials_api3_id id of API 3 Credential
+ * @param options one-time API call overrides
+ *
  */
 export const delete_user_credentials_api3 = async (
   sdk: IAPIMethods,
-  /**
-   * @param {number} user_id id of user
-   */
   user_id: number,
-  /**
-   * @param {number} credentials_api3_id id of API 3 Credential
-   */
   credentials_api3_id: number,
   options?: Partial<ITransportSettings>
 ): Promise<SDKResponse<string, IError>> => {
@@ -9467,16 +10028,16 @@ export const delete_user_credentials_api3 = async (
  * ### API 3 login information for the specified user. This is for the newer API keys that can be added for any user.
  *
  * GET /users/{user_id}/credentials_api3 -> ICredentialsApi3[]
+ *
+ * @param sdk IAPIMethods implementation
+ * @param user_id id of user
+ * @param fields Requested fields.
+ * @param options one-time API call overrides
+ *
  */
 export const all_user_credentials_api3s = async (
   sdk: IAPIMethods,
-  /**
-   * @param {number} user_id id of user
-   */
   user_id: number,
-  /**
-   * @param {string} fields Requested fields.
-   */
   fields?: string,
   options?: Partial<ITransportSettings>
 ): Promise<SDKResponse<ICredentialsApi3[], IError>> => {
@@ -9492,20 +10053,18 @@ export const all_user_credentials_api3s = async (
  * ### API 3 login information for the specified user. This is for the newer API keys that can be added for any user.
  *
  * POST /users/{user_id}/credentials_api3 -> ICredentialsApi3
+ *
+ * @param sdk IAPIMethods implementation
+ * @param user_id id of user
+ * @param body Partial<ICredentialsApi3>
+ * @param fields Requested fields.
+ * @param options one-time API call overrides
+ *
  */
 export const create_user_credentials_api3 = async (
   sdk: IAPIMethods,
-  /**
-   * @param {number} user_id id of user
-   */
   user_id: number,
-  /**
-   * @param {Partial<ICredentialsApi3>} body
-   */
   body?: Partial<ICredentialsApi3>,
-  /**
-   * @param {string} fields Requested fields.
-   */
   fields?: string,
   options?: Partial<ITransportSettings>
 ): Promise<SDKResponse<ICredentialsApi3, IError | IValidationError>> => {
@@ -9521,20 +10080,18 @@ export const create_user_credentials_api3 = async (
  * ### Embed login information for the specified user.
  *
  * GET /users/{user_id}/credentials_embed/{credentials_embed_id} -> ICredentialsEmbed
+ *
+ * @param sdk IAPIMethods implementation
+ * @param user_id Id of user
+ * @param credentials_embed_id Id of Embedding Credential
+ * @param fields Requested fields.
+ * @param options one-time API call overrides
+ *
  */
 export const user_credentials_embed = async (
   sdk: IAPIMethods,
-  /**
-   * @param {number} user_id Id of user
-   */
   user_id: number,
-  /**
-   * @param {number} credentials_embed_id Id of Embedding Credential
-   */
   credentials_embed_id: number,
-  /**
-   * @param {string} fields Requested fields.
-   */
   fields?: string,
   options?: Partial<ITransportSettings>
 ): Promise<SDKResponse<ICredentialsEmbed, IError>> => {
@@ -9550,16 +10107,16 @@ export const user_credentials_embed = async (
  * ### Embed login information for the specified user.
  *
  * DELETE /users/{user_id}/credentials_embed/{credentials_embed_id} -> string
+ *
+ * @param sdk IAPIMethods implementation
+ * @param user_id id of user
+ * @param credentials_embed_id id of Embedding Credential
+ * @param options one-time API call overrides
+ *
  */
 export const delete_user_credentials_embed = async (
   sdk: IAPIMethods,
-  /**
-   * @param {number} user_id id of user
-   */
   user_id: number,
-  /**
-   * @param {number} credentials_embed_id id of Embedding Credential
-   */
   credentials_embed_id: number,
   options?: Partial<ITransportSettings>
 ): Promise<SDKResponse<string, IError>> => {
@@ -9575,16 +10132,16 @@ export const delete_user_credentials_embed = async (
  * ### Embed login information for the specified user.
  *
  * GET /users/{user_id}/credentials_embed -> ICredentialsEmbed[]
+ *
+ * @param sdk IAPIMethods implementation
+ * @param user_id id of user
+ * @param fields Requested fields.
+ * @param options one-time API call overrides
+ *
  */
 export const all_user_credentials_embeds = async (
   sdk: IAPIMethods,
-  /**
-   * @param {number} user_id id of user
-   */
   user_id: number,
-  /**
-   * @param {string} fields Requested fields.
-   */
   fields?: string,
   options?: Partial<ITransportSettings>
 ): Promise<SDKResponse<ICredentialsEmbed[], IError>> => {
@@ -9600,16 +10157,16 @@ export const all_user_credentials_embeds = async (
  * ### Looker Openid login information for the specified user. Used by Looker Analysts.
  *
  * GET /users/{user_id}/credentials_looker_openid -> ICredentialsLookerOpenid
+ *
+ * @param sdk IAPIMethods implementation
+ * @param user_id id of user
+ * @param fields Requested fields.
+ * @param options one-time API call overrides
+ *
  */
 export const user_credentials_looker_openid = async (
   sdk: IAPIMethods,
-  /**
-   * @param {number} user_id id of user
-   */
   user_id: number,
-  /**
-   * @param {string} fields Requested fields.
-   */
   fields?: string,
   options?: Partial<ITransportSettings>
 ): Promise<SDKResponse<ICredentialsLookerOpenid, IError>> => {
@@ -9625,12 +10182,14 @@ export const user_credentials_looker_openid = async (
  * ### Looker Openid login information for the specified user. Used by Looker Analysts.
  *
  * DELETE /users/{user_id}/credentials_looker_openid -> string
+ *
+ * @param sdk IAPIMethods implementation
+ * @param user_id id of user
+ * @param options one-time API call overrides
+ *
  */
 export const delete_user_credentials_looker_openid = async (
   sdk: IAPIMethods,
-  /**
-   * @param {number} user_id id of user
-   */
   user_id: number,
   options?: Partial<ITransportSettings>
 ): Promise<SDKResponse<string, IError>> => {
@@ -9646,20 +10205,18 @@ export const delete_user_credentials_looker_openid = async (
  * ### Web login session for the specified user.
  *
  * GET /users/{user_id}/sessions/{session_id} -> ISession
+ *
+ * @param sdk IAPIMethods implementation
+ * @param user_id Id of user
+ * @param session_id Id of Web Login Session
+ * @param fields Requested fields.
+ * @param options one-time API call overrides
+ *
  */
 export const user_session = async (
   sdk: IAPIMethods,
-  /**
-   * @param {number} user_id Id of user
-   */
   user_id: number,
-  /**
-   * @param {number} session_id Id of Web Login Session
-   */
   session_id: number,
-  /**
-   * @param {string} fields Requested fields.
-   */
   fields?: string,
   options?: Partial<ITransportSettings>
 ): Promise<SDKResponse<ISession, IError>> => {
@@ -9675,16 +10232,16 @@ export const user_session = async (
  * ### Web login session for the specified user.
  *
  * DELETE /users/{user_id}/sessions/{session_id} -> string
+ *
+ * @param sdk IAPIMethods implementation
+ * @param user_id id of user
+ * @param session_id id of Web Login Session
+ * @param options one-time API call overrides
+ *
  */
 export const delete_user_session = async (
   sdk: IAPIMethods,
-  /**
-   * @param {number} user_id id of user
-   */
   user_id: number,
-  /**
-   * @param {number} session_id id of Web Login Session
-   */
   session_id: number,
   options?: Partial<ITransportSettings>
 ): Promise<SDKResponse<string, IError>> => {
@@ -9700,16 +10257,16 @@ export const delete_user_session = async (
  * ### Web login session for the specified user.
  *
  * GET /users/{user_id}/sessions -> ISession[]
+ *
+ * @param sdk IAPIMethods implementation
+ * @param user_id id of user
+ * @param fields Requested fields.
+ * @param options one-time API call overrides
+ *
  */
 export const all_user_sessions = async (
   sdk: IAPIMethods,
-  /**
-   * @param {number} user_id id of user
-   */
   user_id: number,
-  /**
-   * @param {string} fields Requested fields.
-   */
   fields?: string,
   options?: Partial<ITransportSettings>
 ): Promise<SDKResponse<ISession[], IError>> => {
@@ -9733,6 +10290,11 @@ export const all_user_sessions = async (
  * This method can be called with an empty body.
  *
  * POST /users/{user_id}/credentials_email/password_reset -> ICredentialsEmail
+ *
+ * @param sdk IAPIMethods implementation
+ * @param request composed interface "IRequestCreateUserCredentialsEmailPasswordReset" for complex method parameters
+ * @param options one-time API call overrides
+ *
  */
 export const create_user_credentials_email_password_reset = async (
   sdk: IAPIMethods,
@@ -9751,6 +10313,11 @@ export const create_user_credentials_email_password_reset = async (
  * ### Get information about roles of a given user
  *
  * GET /users/{user_id}/roles -> IRole[]
+ *
+ * @param sdk IAPIMethods implementation
+ * @param request composed interface "IRequestUserRoles" for complex method parameters
+ * @param options one-time API call overrides
+ *
  */
 export const user_roles = async (
   sdk: IAPIMethods,
@@ -9772,20 +10339,18 @@ export const user_roles = async (
  * ### Set roles of the user with a specific id.
  *
  * PUT /users/{user_id}/roles -> IRole[]
+ *
+ * @param sdk IAPIMethods implementation
+ * @param user_id id of user
+ * @param body Partial<number[]>
+ * @param fields Requested fields.
+ * @param options one-time API call overrides
+ *
  */
 export const set_user_roles = async (
   sdk: IAPIMethods,
-  /**
-   * @param {number} user_id id of user
-   */
   user_id: number,
-  /**
-   * @param {Partial<number[]>} body
-   */
   body: Partial<number[]>,
-  /**
-   * @param {string} fields Requested fields.
-   */
   fields?: string,
   options?: Partial<ITransportSettings>
 ): Promise<SDKResponse<IRole[], IError>> => {
@@ -9816,6 +10381,11 @@ export const set_user_roles = async (
  * The value of all hidden user attributes will be blank.
  *
  * GET /users/{user_id}/attribute_values -> IUserAttributeWithValue[]
+ *
+ * @param sdk IAPIMethods implementation
+ * @param request composed interface "IRequestUserAttributeUserValues" for complex method parameters
+ * @param options one-time API call overrides
+ *
  */
 export const user_attribute_user_values = async (
   sdk: IAPIMethods,
@@ -9841,20 +10411,18 @@ export const user_attribute_user_values = async (
  * Per-user user attribute values take precedence over group or default values.
  *
  * PATCH /users/{user_id}/attribute_values/{user_attribute_id} -> IUserAttributeWithValue
+ *
+ * @param sdk IAPIMethods implementation
+ * @param user_id Id of user
+ * @param user_attribute_id Id of user attribute
+ * @param body Partial<IWriteUserAttributeWithValue>
+ * @param options one-time API call overrides
+ *
  */
 export const set_user_attribute_user_value = async (
   sdk: IAPIMethods,
-  /**
-   * @param {number} user_id Id of user
-   */
   user_id: number,
-  /**
-   * @param {number} user_attribute_id Id of user attribute
-   */
   user_attribute_id: number,
-  /**
-   * @param {Partial<IWriteUserAttributeWithValue>} body
-   */
   body: Partial<IWriteUserAttributeWithValue>,
   options?: Partial<ITransportSettings>
 ): Promise<SDKResponse<IUserAttributeWithValue, IError | IValidationError>> => {
@@ -9875,16 +10443,16 @@ export const set_user_attribute_user_value = async (
  * information about how user attribute values are resolved.
  *
  * DELETE /users/{user_id}/attribute_values/{user_attribute_id} -> void
+ *
+ * @param sdk IAPIMethods implementation
+ * @param user_id Id of user
+ * @param user_attribute_id Id of user attribute
+ * @param options one-time API call overrides
+ *
  */
 export const delete_user_attribute_user_value = async (
   sdk: IAPIMethods,
-  /**
-   * @param {number} user_id Id of user
-   */
   user_id: number,
-  /**
-   * @param {number} user_attribute_id Id of user attribute
-   */
   user_attribute_id: number,
   options?: Partial<ITransportSettings>
 ): Promise<SDKResponse<void, IError>> => {
@@ -9904,6 +10472,11 @@ export const delete_user_attribute_user_value = async (
  * ### Get information about all user attributes.
  *
  * GET /user_attributes -> IUserAttribute[]
+ *
+ * @param sdk IAPIMethods implementation
+ * @param request composed interface "IRequestAllHomepageSections" for complex method parameters
+ * @param options one-time API call overrides
+ *
  */
 export const all_user_attributes = async (
   sdk: IAPIMethods,
@@ -9931,16 +10504,16 @@ export const all_user_attributes = async (
  * user attribute will fail with a 422 error.
  *
  * POST /user_attributes -> IUserAttribute
+ *
+ * @param sdk IAPIMethods implementation
+ * @param body Partial<IWriteUserAttribute>
+ * @param fields Requested fields.
+ * @param options one-time API call overrides
+ *
  */
 export const create_user_attribute = async (
   sdk: IAPIMethods,
-  /**
-   * @param {Partial<IWriteUserAttribute>} body
-   */
   body: Partial<IWriteUserAttribute>,
-  /**
-   * @param {string} fields Requested fields.
-   */
   fields?: string,
   options?: Partial<ITransportSettings>
 ): Promise<SDKResponse<IUserAttribute, IError | IValidationError>> => {
@@ -9956,16 +10529,16 @@ export const create_user_attribute = async (
  * ### Get information about a user attribute.
  *
  * GET /user_attributes/{user_attribute_id} -> IUserAttribute
+ *
+ * @param sdk IAPIMethods implementation
+ * @param user_attribute_id Id of user attribute
+ * @param fields Requested fields.
+ * @param options one-time API call overrides
+ *
  */
 export const user_attribute = async (
   sdk: IAPIMethods,
-  /**
-   * @param {number} user_attribute_id Id of user attribute
-   */
   user_attribute_id: number,
-  /**
-   * @param {string} fields Requested fields.
-   */
   fields?: string,
   options?: Partial<ITransportSettings>
 ): Promise<SDKResponse<IUserAttribute, IError>> => {
@@ -9981,20 +10554,18 @@ export const user_attribute = async (
  * ### Update a user attribute definition.
  *
  * PATCH /user_attributes/{user_attribute_id} -> IUserAttribute
+ *
+ * @param sdk IAPIMethods implementation
+ * @param user_attribute_id Id of user attribute
+ * @param body Partial<IWriteUserAttribute>
+ * @param fields Requested fields.
+ * @param options one-time API call overrides
+ *
  */
 export const update_user_attribute = async (
   sdk: IAPIMethods,
-  /**
-   * @param {number} user_attribute_id Id of user attribute
-   */
   user_attribute_id: number,
-  /**
-   * @param {Partial<IWriteUserAttribute>} body
-   */
   body: Partial<IWriteUserAttribute>,
-  /**
-   * @param {string} fields Requested fields.
-   */
   fields?: string,
   options?: Partial<ITransportSettings>
 ): Promise<SDKResponse<IUserAttribute, IError | IValidationError>> => {
@@ -10010,12 +10581,14 @@ export const update_user_attribute = async (
  * ### Delete a user attribute (admin only).
  *
  * DELETE /user_attributes/{user_attribute_id} -> string
+ *
+ * @param sdk IAPIMethods implementation
+ * @param user_attribute_id Id of user_attribute
+ * @param options one-time API call overrides
+ *
  */
 export const delete_user_attribute = async (
   sdk: IAPIMethods,
-  /**
-   * @param {number} user_attribute_id Id of user_attribute
-   */
   user_attribute_id: number,
   options?: Partial<ITransportSettings>
 ): Promise<SDKResponse<string, IError>> => {
@@ -10037,16 +10610,16 @@ export const delete_user_attribute = async (
  * Results will only include groups that the caller's user account has permission to see.
  *
  * GET /user_attributes/{user_attribute_id}/group_values -> IUserAttributeGroupValue[]
+ *
+ * @param sdk IAPIMethods implementation
+ * @param user_attribute_id Id of user attribute
+ * @param fields Requested fields.
+ * @param options one-time API call overrides
+ *
  */
 export const all_user_attribute_group_values = async (
   sdk: IAPIMethods,
-  /**
-   * @param {number} user_attribute_id Id of user attribute
-   */
   user_attribute_id: number,
-  /**
-   * @param {string} fields Requested fields.
-   */
   fields?: string,
   options?: Partial<ITransportSettings>
 ): Promise<SDKResponse<IUserAttributeGroupValue[], IError>> => {
@@ -10081,16 +10654,16 @@ export const all_user_attribute_group_values = async (
  * To set a user attribute value for all members of a group, see [Set User Attribute Group Value](#!/Group/update_user_attribute_group_value).
  *
  * POST /user_attributes/{user_attribute_id}/group_values -> IUserAttributeGroupValue[]
+ *
+ * @param sdk IAPIMethods implementation
+ * @param user_attribute_id Id of user attribute
+ * @param body Partial<IUserAttributeGroupValue[]>
+ * @param options one-time API call overrides
+ *
  */
 export const set_user_attribute_group_values = async (
   sdk: IAPIMethods,
-  /**
-   * @param {number} user_attribute_id Id of user attribute
-   */
   user_attribute_id: number,
-  /**
-   * @param {Partial<IUserAttributeGroupValue[]>} body
-   */
   body: Partial<IUserAttributeGroupValue[]>,
   options?: Partial<ITransportSettings>
 ): Promise<
@@ -10114,6 +10687,10 @@ export const set_user_attribute_group_values = async (
  * Returns all workspaces available to the calling user.
  *
  * GET /workspaces -> IWorkspace[]
+ *
+ * @param sdk IAPIMethods implementation
+ * @param options one-time API call overrides
+ *
  */
 export const all_workspaces = async (
   sdk: IAPIMethods,
@@ -10154,12 +10731,14 @@ export const all_workspaces = async (
  * later and use update_session(workspace_id: "dev") to select the dev workspace for the new API session.
  *
  * GET /workspaces/{workspace_id} -> IWorkspace
+ *
+ * @param sdk IAPIMethods implementation
+ * @param workspace_id Id of the workspace
+ * @param options one-time API call overrides
+ *
  */
 export const workspace = async (
   sdk: IAPIMethods,
-  /**
-   * @param {string} workspace_id Id of the workspace
-   */
   workspace_id: string,
   options?: Partial<ITransportSettings>
 ): Promise<SDKResponse<IWorkspace, IError>> => {
