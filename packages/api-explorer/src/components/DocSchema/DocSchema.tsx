@@ -24,66 +24,30 @@
 
  */
 
-import React, { FC, useContext } from 'react'
-import { ApiModel, IMethod, IType } from '@looker/sdk-codegen'
+import React, { FC } from 'react'
 
-import { SearchContext } from '../../context'
+import { CodeDisplay } from '@looker/code-editor'
 import { CollapserCard } from '../Collapser'
-import { DocReferenceItems } from './utils'
 
-interface DocReferencesProps {
-  typesUsed: IType[]
-  methodsUsedBy?: IMethod[]
-  typesUsedBy?: IType[]
-  specKey: string
-  api: ApiModel
+interface DocSchemaProps {
+  object: any
 }
 
 /**
  * It renders links to the given types and/or methods references
  */
-export const DocReferences: FC<DocReferencesProps> = ({
-  typesUsed,
-  specKey,
-  api,
-  methodsUsedBy = [],
-  typesUsedBy = [],
-}) => {
-  const {
-    searchSettings: { pattern },
-  } = useContext(SearchContext)
-
-  if (
-    typesUsed.length === 0 &&
-    methodsUsedBy.length === 0 &&
-    typesUsedBy.length === 0
-  )
-    return <></>
+export const DocSchema: FC<DocSchemaProps> = ({ object }) => {
+  if (!object) return <></>
+  const json = JSON.stringify(object, null, 2)
 
   return (
-    <CollapserCard heading="References" id="references">
+    <CollapserCard
+      heading="Original Schema"
+      defaultOpen={false}
+      id="original schema"
+    >
       <>
-        {DocReferenceItems(
-          'Referenced Types:',
-          typesUsed,
-          api,
-          specKey,
-          pattern
-        )}
-        {DocReferenceItems(
-          'Used by types:',
-          typesUsedBy,
-          api,
-          specKey,
-          pattern
-        )}
-        {DocReferenceItems(
-          'Used by methods:',
-          methodsUsedBy,
-          api,
-          specKey,
-          pattern
-        )}
+        <CodeDisplay language="json" code={json} />
       </>
     </CollapserCard>
   )

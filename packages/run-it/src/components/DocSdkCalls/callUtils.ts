@@ -25,9 +25,9 @@
  */
 import {
   ApiModel,
-  KeyedCollection,
   CodeGen,
   codeGenerators,
+  KeyedCollection,
 } from '@looker/sdk-codegen'
 
 /**

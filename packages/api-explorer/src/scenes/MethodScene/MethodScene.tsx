@@ -52,6 +52,7 @@ import {
   DocSource,
   DocStatus,
   DocTitle,
+  DocSchema,
 } from '../../components'
 import { getSelectedSdkLanguage } from '../../state'
 import { DocOperation, DocRequestBody } from './components'
@@ -101,7 +102,7 @@ export const MethodScene: FC<DocMethodProps> = ({ api }) => {
           </Space>
           {runItToggle}
         </Space>
-        <Space mb="xlarge" gap="small">
+        <Space mb="large" gap="small">
           <DocStatus method={method} />
           <DocActivityType method={method} />
           <DocRateLimited method={method} />
@@ -113,6 +114,7 @@ export const MethodScene: FC<DocMethodProps> = ({ api }) => {
         <DocSdkUsage method={method} />
         <DocReferences typesUsed={seeTypes} api={api} specKey={specKey} />
         <DocResponses responses={method.responses} />
+        <DocSchema object={method.schema} />
       </ApixSection>
       {sdk && value && (
         <Aside width="50rem">
