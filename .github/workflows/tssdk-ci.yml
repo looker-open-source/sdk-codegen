@@ -172,6 +172,8 @@ jobs:
       - name: Publish Unit Test Results
         uses: EnricoMi/publish-unit-test-result-action@v1.12
         with:
+          # Cosmetic issue with `check_name` being associated to the wrong
+          # workflow: https://github.com/EnricoMi/publish-unit-test-result-action/issues/12
           check_name: Typescript Tests
           github_token: ${{ secrets.GITHUB_TOKEN }}
           report_individual_runs: true
