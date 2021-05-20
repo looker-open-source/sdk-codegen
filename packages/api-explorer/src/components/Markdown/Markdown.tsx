@@ -28,6 +28,7 @@ import React, { BaseSyntheticEvent, FC, useContext, ReactNode } from 'react'
 import styled from 'styled-components'
 import ReactMarkdown from 'react-markdown'
 import rehypeRaw from 'rehype-raw'
+import gfm from 'remark-gfm'
 import { TableHead, TableBody, TableRow, Link } from '@looker/components'
 
 import { SearchContext } from '../../context'
@@ -117,11 +118,13 @@ export const Markdown: FC<MarkdownProps> = ({
     tbody: TableBody,
     tr: TableRow,
     td: TableCell,
+    th: TableCell,
   }
 
   return (
     <MarkdownWrapper onClick={handleClick}>
       <ReactMarkdown
+        remarkPlugins={[gfm]}
         rehypePlugins={[rehypeRaw]}
         transformLinkUri={transformLinkUri}
         components={components}
