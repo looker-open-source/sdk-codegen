@@ -29,9 +29,11 @@ import {
   addQueryParams,
   Authenticator,
   HttpMethod,
+  IPaginate,
   IRawResponse,
   ITransport,
   ITransportSettings,
+  PaginateFunc,
   SDKResponse,
   StatusCode,
   Values,
@@ -131,4 +133,10 @@ export abstract class BaseTransport implements ITransport {
     path = addQueryParams(path, queryParams)
     return path
   }
+
+  abstract paginate<TSuccess, TError>(
+    func: PaginateFunc<TSuccess, TError>,
+    authenticator?: Authenticator,
+    options?: Partial<ITransportSettings>
+  ): Promise<IPaginate<TSuccess, TError>>
 }

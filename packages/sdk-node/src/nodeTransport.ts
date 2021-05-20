@@ -48,6 +48,8 @@ import {
   safeBase64,
   BaseTransport,
   ICryptoHash,
+  IPaginate,
+  PaginateFunc,
 } from '@looker/sdk-rtl'
 
 export class NodeCryptoHash implements ICryptoHash {
@@ -162,6 +164,15 @@ export class NodeTransport extends BaseTransport {
         statusMessage,
       }
     }
+  }
+
+  async paginate<TSuccess, TError>(
+    func: PaginateFunc<TSuccess, TError>,
+    authenticator?: Authenticator,
+    options?: Partial<ITransportSettings>
+  ): Promise<IPaginate<TSuccess, TError>> {
+    const paged: IPaginate<TSuccess, TError> = {}
+    throw new Error('Method not implemented.')
   }
 
   async request<TSuccess, TError>(

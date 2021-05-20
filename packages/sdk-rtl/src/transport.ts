@@ -185,6 +185,50 @@ export interface IRawResponse {
 }
 
 /**
+ * Types of pagination link relative URLs
+ * based on https://docs.github.com/en/rest/overview/resources-in-the-rest-api#link-header
+ */
+export type PageLinkRel = 'first' | 'last' | 'next' | 'prev'
+
+/** Page link structure */
+export interface IPageLink {
+  /** Name of link */
+  name: string
+  /** Type of link */
+  rel: PageLinkRel
+  /** Media type for link */
+  mediaType: string
+  /** URL for retrieving the link results */
+  url: string
+}
+
+export interface IPaginate<TSuccess, TError> {
+  /** Total number of available items being paginated */
+  total: bigint
+  /** Links extracted from Pagination link header */
+  links: Record<PageLinkRel, IPageLink>
+  /** Latest items returned from paginate response */
+  items: TSuccess
+  /** Captured from the original pagination request */
+  authenticator?: Authenticator
+  /** Captured from the original pagination request */
+  options?: Partial<ITransportSettings>
+  /** Get the first page of items */
+  first(): Promise<SDKResponse<TSuccess, TError>>
+  /** Get the last page of items */
+  last(): Promise<SDKResponse<TSuccess, TError>>
+  /** Get the next page of items */
+  next(): Promise<SDKResponse<TSuccess, TError>>
+  /** Get the previous page of items */
+  prev(): Promise<SDKResponse<TSuccess, TError>>
+}
+
+/** Pagination function call */
+export type PaginateFunc<TSuccess, TError> = () => Promise<SDKResponse<TSuccess, TError>>
+
+export const Paginator<TSuccess, TError> = async (response: IRawResponse, authenticator: Authenticator, options?: Partial<ITransportSettings> ): Promise<IPaginate<TSuccess, TError>>
+
+/**
  * Transport plug-in interface
  */
 export interface ITransport {
@@ -209,6 +253,18 @@ export interface ITransport {
     authenticator?: Authenticator,
     options?: Partial<ITransportSettings>
   ): Promise<IRawResponse>
+
+  /**
+   * Make a paginated SDK call
+   * @param func SDK function to call to initialize the pagination object
+   * @param authenticator authenticator callback, typically from `IAuthSession` implementation
+   * @param options overrides of default transport settings
+   */
+  paginate<TSuccess, TError>(
+    func: PaginateFunc<TSuccess, TError>,
+    authenticator?: Authenticator,
+    options?: Partial<ITransportSettings>
+  ): Promise<IPaginate<TSuccess, TError>>
 
   /**
    * HTTP request function for atomic, fully downloaded responses
