@@ -43,14 +43,11 @@ MDCode.defaultProps = {
   pr: 'xxsmall',
 }
 
-// Temp fix for release build failure
-export const MDCodeBlock = styled(CodeBlock)`
+export const MDCodeBlock = styled(CodeBlock).attrs(
+  ({ fontSize = 'small', mb = 'large' }) => ({ fontSize, mb })
+)`
   max-width: 800px;
 `
-MDCodeBlock.defaultProps = {
-  fontSize: 'small',
-  mb: 'large',
-}
 
 export const MDParagraph = styled(Paragraph)`
   color: ${({ theme }) => theme.colors.text5};
