@@ -26,7 +26,6 @@
 
 import React, { FC } from 'react'
 import { Code, Tree, TreeItem } from '@looker/components'
-import styled from 'styled-components'
 import { NavLink } from 'react-router-dom'
 import { IType, TypeOfType, typeOfType } from '@looker/sdk-codegen'
 import { useLocation } from 'react-router'
@@ -94,7 +93,7 @@ export const ExploreType: FC<ExploreTypeProps> = ({
   const nest = maxDepth === -1 || level < maxDepth
   const legend = typeIcon(type)
   return (
-    <TreeFix
+    <Tree
       border
       label={type.name}
       icon={legend.icon}
@@ -119,12 +118,6 @@ export const ExploreType: FC<ExploreTypeProps> = ({
             openAll={openAll}
           />
         ))}
-    </TreeFix>
+    </Tree>
   )
 }
-
-export const TreeFix = styled(Tree)`
-  & ul {
-    height: auto;
-  }
-`
