@@ -16,10 +16,10 @@
   },
   "dependencies": {
     "@looker/api-explorer": "^0.9.7",
-    "@looker/components": "^1.1.3",
+    "@looker/components": "^1.4.1",
     "@looker/extension-sdk": "^21.6.0",
     "@looker/extension-sdk-react": "^21.6.0",
-    "@looker/icons": "1.1.3",
+    "@looker/icons": "1.3.0",
     "@looker/run-it": "^0.9.7",
     "@looker/sdk": "^21.6.0",
     "@looker/sdk-codegen": "^21.0.16",

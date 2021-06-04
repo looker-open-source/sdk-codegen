@@ -97,4 +97,23 @@ describe('Markdown', () => {
     renderWithTheme(<Markdown source={markdown} />)
     expect(screen.getByText('const noop = () => null')).toBeInTheDocument()
   })
+
+  test('it renders table', () => {
+    const markdown = `
+Before.
+
+| Search Parameters | Description |
+| :-------------------: | :------ |
+| \`begin_at\` only | Find themes active at or after \`begin_at\` |
+| \`end_at\` only | Find themes active at or before \`end_at\` |
+| both set | Find themes with an active inclusive period between \`begin_at\` and \`end_at\` |
+
+After.
+    `
+    const { container } = renderWithTheme(<Markdown source={markdown} />)
+    expect(container.querySelector('th')?.innerHTML).toContain(
+      'Search Parameters'
+    )
+    expect(container.querySelector('td')?.innerHTML).toContain('begin_at')
+  })
 })
