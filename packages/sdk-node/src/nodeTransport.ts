@@ -31,25 +31,25 @@ import rp from 'request-promise-native'
 import { PassThrough, Readable } from 'readable-stream'
 import { StatusCodeError } from 'request-promise-native/errors'
 import {
-  Authenticator,
+  BaseTransport,
+  ResponseMode,
   defaultTimeout,
+  responseMode,
+  trace,
+  LookerAppId,
+  agentPrefix,
+  safeBase64,
+} from '@looker/sdk-rtl'
+import type {
+  Authenticator,
   HttpMethod,
   ISDKError,
   ITransportSettings,
-  responseMode,
-  ResponseMode,
   SDKResponse,
-  trace,
   Values,
   IRequestHeaders,
-  LookerAppId,
   IRawResponse,
-  agentPrefix,
-  safeBase64,
-  BaseTransport,
   ICryptoHash,
-  IPaginate,
-  PaginateFunc,
 } from '@looker/sdk-rtl'
 
 export class NodeCryptoHash implements ICryptoHash {
@@ -65,37 +65,6 @@ export class NodeCryptoHash implements ICryptoHash {
 }
 
 export type RequestOptions = rq.RequiredUriUrl & rp.RequestPromiseOptions
-
-async function parseResponse(res: IRawResponse) {
-  const mode = responseMode(res.contentType)
-  const utf8 = 'utf8'
-  let result = await res.body
-  if (mode === ResponseMode.string) {
-    if (res.contentType.match(/^application\/.*\bjson\b/g)) {
-      try {
-        if (result instanceof Buffer) {
-          result = (result as Buffer).toString(utf8)
-        }
-        if (result instanceof Object) {
-          return result
-        }
-        return JSON.parse(result.toString())
-      } catch (error) {
-        return Promise.reject(error)
-      }
-    }
-    if (result instanceof Buffer) {
-      result = (result as Buffer).toString(utf8)
-    }
-    return result.toString()
-  } else {
-    try {
-      return (result as Buffer).toString('binary')
-    } catch (error) {
-      return Promise.reject(error)
-    }
-  }
-}
 
 export class NodeTransport extends BaseTransport {
   constructor(protected readonly options: ITransportSettings) {
@@ -119,16 +88,18 @@ export class NodeTransport extends BaseTransport {
       options
     )
     const req = rp(init).promise()
+    let rawResponse: IRawResponse
     try {
       const res = await req
       const resTyped = res as rq.Response
-      return {
+      rawResponse = {
         url: resTyped.url || '',
         body: await resTyped.body,
         contentType: String(resTyped.headers['content-type']),
         ok: true,
         statusCode: resTyped.statusCode,
         statusMessage: resTyped.statusMessage,
+        headers: res.headers,
       }
     } catch (e) {
       const statusMessage = `${method} ${path}`
@@ -155,24 +126,56 @@ export class NodeTransport extends BaseTransport {
         body = JSON.stringify(e)
         contentType = 'application/json'
       }
-      return {
+      rawResponse = {
         url: this.makeUrl(path, { ...this.options, ...options }, queryParams),
         body,
         contentType,
         ok: false,
         statusCode,
         statusMessage,
+        headers: {},
       }
     }
+    return this.observer ? this.observer(rawResponse) : rawResponse
   }
 
-  async paginate<TSuccess, TError>(
-    func: PaginateFunc<TSuccess, TError>,
-    authenticator?: Authenticator,
-    options?: Partial<ITransportSettings>
-  ): Promise<IPaginate<TSuccess, TError>> {
-    const paged: IPaginate<TSuccess, TError> = {}
-    throw new Error('Method not implemented.')
+  async parseResponse<TSuccess, TError>(res: IRawResponse) {
+    const mode = responseMode(res.contentType)
+    const utf8 = 'utf8'
+    let result = await res.body
+    let error
+    if (mode === ResponseMode.string) {
+      if (res.contentType.match(/^application\/.*\bjson\b/g)) {
+        try {
+          if (result instanceof Buffer) {
+            result = (result as Buffer).toString(utf8)
+          }
+          if (!(result instanceof Object)) {
+            result = JSON.parse(result.toString())
+          }
+        } catch (err) {
+          error = err
+        }
+      } else if (result instanceof Buffer) {
+        result = (result as Buffer).toString(utf8)
+      }
+      if (!error) {
+        result = result.toString()
+      }
+    } else {
+      try {
+        result = (result as Buffer).toString('binary')
+      } catch (err) {
+        error = err
+      }
+    }
+    let response: SDKResponse<TSuccess, TError>
+    if (!error) {
+      response = { ok: true, value: result }
+    } else {
+      response = { ok: false, error }
+    }
+    return response
   }
 
   async request<TSuccess, TError>(
@@ -192,12 +195,7 @@ export class NodeTransport extends BaseTransport {
         authenticator,
         options
       )
-      const parsed = await parseResponse(res)
-      if (this.ok(res)) {
-        return { ok: true, value: parsed }
-      } else {
-        return { error: parsed, ok: false }
-      }
+      return await this.parseResponse<TSuccess, TError>(res)
     } catch (e) {
       const error: ISDKError = {
         message:

@@ -90,6 +90,16 @@ export class ExtensionProxyTransport extends BaseTransport {
     return props
   }
 
+  parseResponse<TSuccess, TError>(
+    _raw: IRawResponse
+  ): Promise<SDKResponse<TSuccess, TError>> {
+    const result: SDKResponse<TSuccess, TError> = {
+      ok: false,
+      error: new Error('Should not be called!') as unknown as TError,
+    }
+    return Promise.resolve(result)
+  }
+
   async rawRequest(
     method: HttpMethod,
     path: string,
@@ -131,6 +141,7 @@ export class ExtensionProxyTransport extends BaseTransport {
       ok: true,
       statusCode: res.status,
       statusMessage: `${res.status} fetched`,
+      headers: res.headers,
     }
   }
 
