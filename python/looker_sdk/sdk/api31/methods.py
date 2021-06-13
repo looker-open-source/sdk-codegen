@@ -5674,13 +5674,13 @@ class Looker31SDK(api_methods.APIMethods):
     # will be in the message of the 400 error response, but not as detailed as expressed in `json_detail.errors`.
     # These data formats can only carry row data, and error info is not row data.
     #
-    # GET /query_tasks/{query_task_id}/results -> str
+    # GET /query_tasks/{query_task_id}/results -> Union[str, bytes]
     def query_task_results(
         self,
         # ID of the Query Task
         query_task_id: str,
         transport_options: Optional[transport.TransportOptions] = None,
-    ) -> str:
+    ) -> Union[str, bytes]:
         """Get Async Query Results"""
         query_task_id = self.encode_path_param(query_task_id)
         response = self.get(
@@ -5688,7 +5688,7 @@ class Looker31SDK(api_methods.APIMethods):
             str,
             transport_options=transport_options,
         )
-        assert isinstance(response, str)
+        assert isinstance(response, str) or isinstance(response, bytes)
         return response
 
     # ### Get a previously created query by id.
