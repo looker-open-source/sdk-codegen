@@ -23,7 +23,26 @@
  SOFTWARE.
 
  */
-export { CodeDisplay } from './CodeDisplay'
-export type { CodeDisplayProps } from './CodeDisplay'
-export { CodeEditor } from './CodeEditor'
-export { Markdown } from './Markdown'
+
+export interface CodeDisplayProps {
+  code: string
+  language?: string
+  pattern?: string
+  transparent?: boolean
+  inline?: boolean
+  lineNumbers?: boolean
+}
+
+export type TokenOutputProps = {
+  key?: React.Key
+  style?: any
+  className: string
+  children: string
+  [otherProp: string]: any
+}
+
+export interface LineItemProps {
+  key: number
+  tokenProps: TokenOutputProps
+  pattern: string
+}

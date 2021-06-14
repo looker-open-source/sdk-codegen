@@ -24,22 +24,21 @@
 
  */
 
-import React, { BaseSyntheticEvent, FC, useContext, ReactNode } from 'react'
+import React, { BaseSyntheticEvent, FC, ReactNode } from 'react'
 import styled from 'styled-components'
 import ReactMarkdown from 'react-markdown'
 import rehypeRaw from 'rehype-raw'
 import gfm from 'remark-gfm'
 import { TableHead, TableBody, TableRow, Link } from '@looker/components'
 
-import { SearchContext } from '../../context'
-import { ApixHeading } from '../common'
+import { CodeDisplay } from '../CodeDisplay'
 import { highlightMarkdown } from './utils'
-import { MDCodeBlockWrapper } from './MDCodeBlockWrapper'
 import { TableCell } from './TableCell'
-import { MDCode, MDList, MDListItem, MDParagraph, MDTable } from './common'
+import { MDHeading, MDList, MDListItem, MDParagraph, MDTable } from './common'
 
 interface MarkdownProps {
   source: string
+  pattern?: string
   transformLinkUri?: (url: string) => string
   linkClickHandler?: (pathname: string, href: string) => void
 }
@@ -48,13 +47,10 @@ type HeadingLevels = 'h1' | 'h2' | 'h3' | 'h4' | 'h5' | 'h6'
 
 export const Markdown: FC<MarkdownProps> = ({
   source,
+  pattern = '',
   transformLinkUri,
   linkClickHandler,
 }) => {
-  const {
-    searchSettings: { pattern },
-  } = useContext(SearchContext)
-
   const findAnchor = (ele: HTMLElement): HTMLAnchorElement | undefined => {
     if (ele.tagName === 'A') return ele as HTMLAnchorElement
     if (ele.parentElement) {
@@ -80,7 +76,7 @@ export const Markdown: FC<MarkdownProps> = ({
   }: {
     level: number
     children: ReactNode
-  }) => <ApixHeading as={`h${level}` as HeadingLevels}>{children}</ApixHeading>
+  }) => <MDHeading as={`h${level}` as HeadingLevels}>{children}</MDHeading>
 
   const paragraph = ({ children }: { children: ReactNode }) => (
     <MDParagraph>{children}</MDParagraph>
@@ -93,10 +89,24 @@ export const Markdown: FC<MarkdownProps> = ({
     inline?: boolean
     children: ReactNode
   }) => {
+    const codeText = children?.toString() || ''
     if (inline) {
-      return <MDCode>{children}</MDCode>
+      return (
+        <CodeDisplay
+          code={codeText.trim()}
+          pattern={pattern}
+          inline
+          lineNumbers={false}
+        />
+      )
     }
-    return <MDCodeBlockWrapper value={children} />
+    return (
+      <CodeDisplay
+        code={codeText.trim()}
+        pattern={pattern}
+        lineNumbers={false}
+      />
+    )
   }
 
   const components = {

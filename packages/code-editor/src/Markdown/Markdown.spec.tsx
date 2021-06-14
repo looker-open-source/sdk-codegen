@@ -28,7 +28,7 @@ import React from 'react'
 import { screen } from '@testing-library/react'
 import { renderWithTheme } from '@looker/components-test-utils'
 
-import { renderWithSearch } from '../../test-utils'
+import { renderWithSearch } from '../../../api-explorer/src/test-utils'
 import { Markdown } from './Markdown'
 
 describe('Markdown', () => {

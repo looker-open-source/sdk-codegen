@@ -24,8 +24,9 @@
 
  */
 import { theme } from '@looker/components'
-import { Language, Prism } from 'prism-react-renderer'
-import prismTheme from 'prism-react-renderer/themes/vsDark'
+import { Language, Prism, PrismTheme } from 'prism-react-renderer'
+import blockTheme from 'prism-react-renderer/themes/vsDark'
+import inlineTheme from 'prism-react-renderer/themes/github'
 
 /**
  * checks whether object is Language
@@ -57,13 +58,23 @@ export const getPrismLanguage = (language: string): Language => {
  * applies package overrides to the default vsCode prism theme
  * @returns modified prism theme object
  */
-export function getOverridenTheme(transparent: boolean) {
-  if (transparent) {
-    prismTheme.plain.backgroundColor = 'none'
-    prismTheme.plain.padding = '0px'
+export function getOverridenTheme(
+  transparent: boolean,
+  inline: boolean
+): PrismTheme {
+  if (inline) {
+    inlineTheme.plain.backgroundColor = theme.colors.ui1
+    inlineTheme.plain.border = `1px solid ${theme.colors.ui2}`
+    inlineTheme.plain.borderRadius = '4px'
+    inlineTheme.plain.padding = '4px'
+    inlineTheme.plain.fontSize = theme.fontSizes.small
+    return inlineTheme
+  } else if (transparent) {
+    blockTheme.plain.backgroundColor = 'none'
+    blockTheme.plain.padding = '0px'
   } else {
-    prismTheme.plain.backgroundColor = theme.colors.text
-    prismTheme.plain.padding = '1rem'
+    blockTheme.plain.backgroundColor = theme.colors.text
+    blockTheme.plain.padding = '1rem'
   }
-  return prismTheme
+  return blockTheme
 }

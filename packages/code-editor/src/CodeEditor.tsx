@@ -27,7 +27,8 @@
 import React, { FC } from 'react'
 import Editor from 'react-simple-code-editor'
 
-import { CodeDisplay, CodeDisplayProps } from './CodeDisplay'
+import { CodeDisplayProps } from './CodeDisplay/types'
+import { CodeDisplay } from './index'
 
 interface CodeEditorProps extends CodeDisplayProps {
   /** onChange event handler, for Editor functionality */

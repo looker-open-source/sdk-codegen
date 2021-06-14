@@ -23,7 +23,30 @@
  SOFTWARE.
 
  */
-export { CodeDisplay } from './CodeDisplay'
-export type { CodeDisplayProps } from './CodeDisplay'
-export { CodeEditor } from './CodeEditor'
-export { Markdown } from './Markdown'
+
+import React, { FC } from 'react'
+import { LineItemProps } from './types'
+
+/**
+ * Removes <mark /> tags from markdown text
+ * @param markedText - the markdown text input that contains <mark /> tags
+ */
+const removeMarkTag = (markedText: string) => {
+  // TODO: set build target to `esnext` and use replaceAll
+  return markedText.replace(/<mark>/g, '').replace(/<\/mark>/g, '')
+}
+
+/**
+ * Takes a 'line of code' as a list of Tokens and returns syntax highlighting styled spans
+ * @param key - component identifier
+ * @param tokenProps - the style props from prism renderer
+ * @param pattern - search pattern to consider
+ */
+export const LineItem: FC<LineItemProps> = ({ key, tokenProps, pattern }) => {
+  const text = tokenProps.children.toLowerCase()
+  if (pattern !== '' && text.includes(pattern.toLowerCase())) {
+    tokenProps.className += ' match'
+    tokenProps.children = removeMarkTag(tokenProps.children)
+  }
+  return <span key={key} {...tokenProps} />
+}
