@@ -34,6 +34,9 @@ import {
 import { IAPIMethods } from './apiMethods'
 import { BaseTransport } from './baseTransport'
 
+export const LinkHeader = 'Link'
+export const TotalCountHeader = 'X-Total-Count'
+
 /**
  * Types of pagination link relative URLs
  * based on https://docs.github.com/en/rest/overview/resources-in-the-rest-api#link-header
@@ -62,14 +65,31 @@ export type PageLinks = Record<string, IPageLink>
 export interface IPaginate<TSuccess, TError> {
   /** Total number of available items being paginated */
   total: number
+  /** Offset extracted from paginate request */
+  offset: number
+  /** Limit extracted from paginate request */
+  limit: number
   /** Links extracted from Pagination link header */
   links: PageLinks
-  /** Latest items returned from paginate response */
+  /** Latest items returned from response */
   items: TSuccess
   /** Captured from the original pagination request */
   authenticator?: Authenticator
   /** Captured from the original pagination request */
   options?: Partial<ITransportSettings>
+  /** Total number of pages. -1 if not known. */
+  pages: number
+  /** Current page. -1 if not known. */
+  page: number
+
+  /**
+   * Is the specified link defined for this Link header?
+   * @param link to check
+   */
+  hasRel(link: PageLinkRel): boolean
+
+  /** Get the requested relative link */
+  getRel(link: PageLinkRel): Promise<SDKResponse<TSuccess, TError>>
   /** Get the first page of items */
   first(): Promise<SDKResponse<TSuccess, TError>>
   /** Get the last page of items */
@@ -94,18 +114,6 @@ export type PaginateFunc<TSuccess, TError> = () => Promise<
     looks.push(paged.items)
   } while (page.length < 1)
  */
-
-export async function paginate<TSuccess, TError>(
-  sdk: IAPIMethods,
-  func: PaginateFunc<TSuccess, TError>,
-  options?: Partial<ITransportSettings>
-): Promise<IPaginate<TSuccess, TError>> {
-  const result: IPaginate<TSuccess, TError> = await new Paginator<
-    TSuccess,
-    TError
-  >(sdk, func, options).init()
-  return result
-}
 
 /**
  * Parse a link header to extract rels
@@ -137,6 +145,33 @@ export const linkHeaderParser = (linkHeader: string): PageLinks => {
 }
 
 /**
+ * Create an API paginator for an endpoint that returns a Link header
+ * @param sdk implementation of IAPIMethods. Can be full SDK or functional auth session
+ * @param func sdk call that includes a pagination header
+ * @param options transport options override to capture and use in paging requests
+ *
+ * @example
+ * ```ts
+ * const paged = new paginate(sdk, (sdk) => search_dashboards(sdk, { limit: 10 })
+ * const dashboards = paged.items
+ * while (paged.has('next')) {
+ *   paged.next()
+ *   dashboards.push(pages.items)
+ * }
+ * console.log(`${paged.total} dashboards retrieved`)
+ * ... (some code to list all dashboards )
+ *
+ * ```
+ */
+export async function paginate<TSuccess, TError>(
+  sdk: IAPIMethods,
+  func: PaginateFunc<TSuccess, TError>,
+  options?: Partial<ITransportSettings>
+): Promise<IPaginate<TSuccess, TError>> {
+  return await new Paginator<TSuccess, TError>(sdk, func, options).init()
+}
+
+/**
  * Pagination support class
  */
 export class Paginator<TSuccess, TError>
@@ -145,9 +180,17 @@ export class Paginator<TSuccess, TError>
   items: TSuccess = [] as unknown as TSuccess
   links: PageLinks = {}
   total = -1
+  offset = -1
+  limit = -1
 
   private transport: BaseTransport
 
+  /**
+   * Create an API paginator
+   * @param sdk functional AuthSession or full SDK implementation
+   * @param func sdk function to call
+   * @param options transport overrides to use for subsequent requests
+   */
   constructor(
     public sdk: IAPIMethods,
     public func: PaginateFunc<TSuccess, TError>,
@@ -156,68 +199,133 @@ export class Paginator<TSuccess, TError>
     this.transport = sdk.authSession.transport as BaseTransport
   }
 
-  async init() {
+  private async rawCatch(func: () => any) {
     let raw: IRawResponse = {} as IRawResponse
-    const base = this.sdk.authSession.transport as BaseTransport
-    const saved = base.observer
+    const saved = this.transport.observer
     try {
-      base.observer = (response: IRawResponse) => {
+      this.transport.observer = (response: IRawResponse) => {
         raw = response
         return response
       }
-      this.items = await sdkOk(this.func())
+      this.items = await sdkOk(func())
     } finally {
-      base.observer = saved
+      this.transport.observer = saved
     }
+    if (Object.keys(raw).length === 0 || Object.keys(raw.headers).length === 0)
+      throw new Error('No headers were retrieved for pagination')
     this.parse(raw)
     return this
   }
 
-  async getRel(url: string) {
-    const raw = await this.transport.rawRequest('GET', url)
-    this.items = await sdkOk(this.transport.parseResponse(raw))
+  get page(): number {
+    if (this.limit < 1 || this.offset < 0) return -1
+    const x = this.offset / this.limit + 1
+    return Math.ceil(x)
+  }
+
+  get pages(): number {
+    if (this.total < 1 || this.limit < 1) return -1
+    const x = this.total / this.limit
+    return Math.ceil(x)
+  }
+
+  async init() {
+    return await this.rawCatch(this.func)
+  }
+
+  hasRel(link: PageLinkRel): boolean {
+    return !!this.links[link]
+  }
+
+  /**
+   * Default string value
+   * @param value to retrieve or default
+   * @param defaultValue to apply if string is null
+   * @param convert function to convert assigned string value
+   * @private
+   */
+  private static paramDefault(
+    value: string | null,
+    defaultValue: any,
+    convert = (v: string) => parseInt(v, 10)
+  ) {
+    if (value === null) return defaultValue
+    return convert(value)
+  }
+
+  reset() {
+    this.links = {}
+    this.total = this.offset = this.limit = -1
+    this.items = [] as unknown as TSuccess
+  }
+
+  async getRel(link: PageLinkRel): Promise<SDKResponse<TSuccess, TError>> {
+    const rel = this.links[link]
+    let result: SDKResponse<TSuccess, TError>
+    this.reset()
+    if (!rel) {
+      result = { ok: true, value: this.items }
+      return result
+    }
+    const raw = await this.transport.rawRequest(
+      'GET',
+      rel.url,
+      undefined,
+      undefined,
+      undefined,
+      this.options
+    )
+    try {
+      this.parse(raw)
+      this.items = await sdkOk(this.transport.parseResponse(raw))
+      result = { ok: true, value: this.items }
+    } catch (e) {
+      result = { ok: false, error: e }
+    }
+    return result
   }
 
   parse(raw: IRawResponse): IPaginate<TSuccess, TError> {
-    this.links = {}
-    this.total = -1
-    const linkHeader = raw.headers.Link
+    const req = new URL(raw.url)
+    const params = req.searchParams
+    this.offset = Paginator.paramDefault(params.get('offset'), -1)
+    this.limit = Paginator.paramDefault(params.get('limit'), -1)
+    const linkHeader = raw.headers[LinkHeader]
     if (linkHeader) {
-      const parsed = linkHeaderParser(linkHeader)
-      this.links = parsed
+      this.links = linkHeaderParser(linkHeader)
+    } else {
+      this.links = {}
     }
-    return this
+    const totalHeader = raw.headers[TotalCountHeader]
+    if (totalHeader) {
+      this.total = parseInt(totalHeader.trim(), 10)
+    } else {
+      this.total = -1
+    }
+    return this as unknown as IPaginate<TSuccess, TError>
+  }
+
+  async tbd(name: string): Promise<SDKResponse<TSuccess, TError>> {
+    const result: SDKResponse<TSuccess, TError> = {
+      ok: false,
+      error: new Error(`TBD ${name}`) as unknown as TError,
+    }
+    return Promise.resolve(result)
   }
 
   async first(): Promise<SDKResponse<TSuccess, TError>> {
-    const result: SDKResponse<TSuccess, TError> = {
-      ok: false,
-      error: new Error('TBD') as unknown as TError,
-    }
-    return Promise.resolve(result)
+    return await this.getRel('first')
   }
 
   async last(): Promise<SDKResponse<TSuccess, TError>> {
-    const result: SDKResponse<TSuccess, TError> = {
-      ok: false,
-      error: new Error('TBD') as unknown as TError,
-    }
-    return Promise.resolve(result)
+    return await this.getRel('last')
   }
 
   async next(): Promise<SDKResponse<TSuccess, TError>> {
-    const result: SDKResponse<TSuccess, TError> = {
-      ok: false,
-      error: new Error('TBD') as unknown as TError,
-    }
-    return Promise.resolve(result)
+    return await this.getRel('next')
   }
 
   async prev(): Promise<SDKResponse<TSuccess, TError>> {
-    const result: SDKResponse<TSuccess, TError> = {
-      ok: false,
-      error: new Error('TBD') as unknown as TError,
-    }
-    return Promise.resolve(result)
+    return await this.getRel('prev')
   }
 }

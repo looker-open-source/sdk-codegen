@@ -24,13 +24,104 @@
 
  */
 
-import { linkHeaderParser } from './paginator'
+import {
+  LinkHeader,
+  linkHeaderParser,
+  paginate,
+  TotalCountHeader,
+} from './paginator'
+import { APIMethods } from './apiMethods'
+import { AuthSession } from './authSession'
+import { ApiSettings, IApiSettings } from './apiSettings'
+import { BrowserTransport } from './browserTransport'
+import {
+  IRawResponse,
+  IRequestProps,
+  ITransport,
+  sdkOk,
+  SDKResponse,
+} from './transport'
 
-const firstLink = `<http://localhost/api/4.0/alerts/search?fields=id&limit=3&offset=0>; rel="first"`
-const lastLink = `< http://localhost/api/4.0/alerts/search?fields=id&limit=3&offset=9 >; rel="\tlast (end of line!)\t"`
-const prevLink = `<\thttp://localhost/api/4.0/alerts/search?fields=id&limit=3&offset=3\n>;\nrel="prev"`
-const nextLink = `<http://localhost/api/4.0/alerts/search?fields=id&limit=3&offset=6>; rel="next"`
+const firstUrl =
+  'http://localhost/api/4.0/alerts/search?fields=id&limit=3&offset=0'
+const lastUrl =
+  'http://localhost/api/4.0/alerts/search?fields=id&limit=3&offset=9'
+const prevUrl =
+  'http://localhost/api/4.0/alerts/search?fields=id&limit=3&offset=3'
+const nextUrl =
+  'http://localhost/api/4.0/alerts/search?fields=id&limit=3&offset=6'
+
+const firstLink = `<${firstUrl}>; rel="first"`
+const lastLink = `< ${lastUrl} >; rel="\tlast (end of line!)\t"`
+const prevLink = `<\t${prevUrl}\n>;\nrel="prev"`
+const nextLink = `<${nextUrl}>; rel="next"`
 const allLinks = `${firstLink},${lastLink},${prevLink},${nextLink}`
+const settings = new ApiSettings({ base_url: 'mocked' })
+
+class MockSession extends AuthSession {
+  constructor(
+    public readonly activeToken: string,
+    settings: IApiSettings,
+    transport: ITransport
+  ) {
+    super(settings, transport)
+  }
+
+  async authenticate(props: IRequestProps) {
+    props.headers.Authorization = `Bearer ${this.activeToken}`
+    return props
+  }
+
+  getToken() {
+    return Promise.resolve(this.activeToken)
+  }
+
+  isAuthenticated(): boolean {
+    return !!this.activeToken
+  }
+}
+
+const transport = new BrowserTransport(settings)
+const session = new MockSession('mocked', settings, transport)
+const sdk = new APIMethods(session, '4.0')
+const mockedRows = ['one', 'two', 'three', 'four', 'five']
+const totalCount = 10
+const mockedRawResponse: IRawResponse = {
+  ok: true,
+  body: JSON.stringify(mockedRows),
+  headers: { [LinkHeader]: allLinks, [TotalCountHeader]: ` ${totalCount}` },
+  statusCode: 200,
+  statusMessage: 'Mocking',
+  contentType: 'application/json',
+  url: 'https://mocked',
+}
+
+const mockRawResponse = (url: string, body?: any): IRawResponse => {
+  const result = { ...mockedRawResponse, ...{ url: url } }
+  if (body) {
+    result.body = body
+  }
+  return result
+}
+
+const mockRaw = (
+  transport: BrowserTransport,
+  value: any,
+  rawResponse: IRawResponse
+) => {
+  if (transport.observer) {
+    transport.observer(rawResponse)
+  }
+  return mockSDKSuccess(value)
+}
+
+async function mockSDKSuccess<T>(value: T) {
+  return Promise.resolve<SDKResponse<T, any>>({ ok: true, value })
+}
+
+// async function mockSDKError<T>(value: T) {
+//   return Promise.resolve<SDKResponse<any, T>>({ ok: false, error: value })
+// }
 
 describe('pagination', () => {
   describe('linkHeaderParser', () => {
@@ -65,6 +156,93 @@ describe('pagination', () => {
       expect(actual.first.url).toEqual(
         'http://localhost/api/4.0/alerts/search?fields=id&limit=3&offset=0'
       )
+    })
+  })
+
+  describe('paginate', () => {
+    beforeEach(() => {
+      jest
+        .spyOn(BrowserTransport.prototype, 'rawRequest')
+        .mockReturnValue(Promise.resolve(mockedRawResponse))
+    })
+    afterAll(() => {
+      jest.clearAllMocks()
+    })
+
+    it('initializes', async () => {
+      const actual = await paginate(
+        sdk,
+        () => mockRaw(transport, mockedRows, mockRawResponse(firstUrl)),
+        {
+          timeout: 99,
+        }
+      )
+      expect(actual).toBeDefined()
+      expect(actual.limit).toEqual(3)
+      expect(actual.offset).toEqual(0)
+      expect(actual.total).toEqual(totalCount)
+      expect(actual.items).toEqual(mockedRows)
+      expect(actual.pages).toEqual(4)
+      expect(actual.page).toEqual(1)
+
+      expect(actual.hasRel('first')).toEqual(true)
+      expect(actual.hasRel('next')).toEqual(true)
+      expect(actual.hasRel('prev')).toEqual(true)
+      expect(actual.hasRel('last')).toEqual(true)
+      expect(actual.options?.timeout).toEqual(99)
+    })
+
+    it('supports paging', async () => {
+      const paged = await paginate(sdk, () =>
+        mockRaw(transport, mockedRows, mockedRawResponse)
+      )
+      expect(paged).toBeDefined()
+      expect(paged.items).toEqual(mockedRows)
+      jest
+        .spyOn(BrowserTransport.prototype, 'rawRequest')
+        .mockReturnValue(Promise.resolve(mockRawResponse(nextUrl)))
+      let items = await sdkOk(paged.next())
+      expect(items).toBeDefined()
+      expect(items).toEqual(mockedRows)
+      expect(paged.offset).toEqual(6)
+      expect(paged.limit).toEqual(3)
+      expect(paged.total).toEqual(totalCount)
+      expect(paged.pages).toEqual(4)
+      expect(paged.page).toEqual(3)
+
+      jest
+        .spyOn(BrowserTransport.prototype, 'rawRequest')
+        .mockReturnValue(Promise.resolve(mockRawResponse(prevUrl)))
+      items = await sdkOk(paged.prev())
+      expect(items).toBeDefined()
+      expect(items).toEqual(mockedRows)
+      expect(paged.offset).toEqual(3)
+      expect(paged.limit).toEqual(3)
+      expect(paged.total).toEqual(totalCount)
+      expect(paged.pages).toEqual(4)
+      expect(paged.page).toEqual(2)
+
+      jest
+        .spyOn(BrowserTransport.prototype, 'rawRequest')
+        .mockReturnValue(Promise.resolve(mockRawResponse(lastUrl)))
+      items = await sdkOk(paged.last())
+      expect(items).toBeDefined()
+      expect(items).toEqual(mockedRows)
+      expect(paged.offset).toEqual(9)
+      expect(paged.limit).toEqual(3)
+      expect(paged.total).toEqual(totalCount)
+      expect(paged.pages).toEqual(4)
+      expect(paged.page).toEqual(4)
+
+      jest
+        .spyOn(BrowserTransport.prototype, 'rawRequest')
+        .mockReturnValue(Promise.resolve(mockRawResponse(firstUrl)))
+      items = await sdkOk(paged.first())
+      expect(items).toBeDefined()
+      expect(items).toEqual(mockedRows)
+      expect(paged.offset).toEqual(0)
+      expect(paged.limit).toEqual(3)
+      expect(paged.total).toEqual(totalCount)
     })
   })
 })
