@@ -105,16 +105,6 @@ export type PaginateFunc<TSuccess, TError> = () => Promise<
   SDKResponse<TSuccess, TError>
 >
 
-// const paged = paginate(sdk, sdk.all_looks({ offset: 0, limit: 10 }))
-// const paged = paginate(sdk, all_looks(sdk, { offset: 0, limit: 10 }))
-// const looks = paged.items
-/*
- while (paged.hasNext) {
-    const page = paged.next()
-    looks.push(paged.items)
-  } while (page.length < 1)
- */
-
 /**
  * Parse a link header to extract rels
  * @param linkHeader to parse
@@ -155,8 +145,8 @@ export const linkHeaderParser = (linkHeader: string): PageLinks => {
  * const paged = new paginate(sdk, (sdk) => search_dashboards(sdk, { limit: 10 })
  * const dashboards = paged.items
  * while (paged.has('next')) {
- *   paged.next()
- *   dashboards.push(pages.items)
+ *   await paged.next()
+ *   dashboards.push(paged.items)
  * }
  * console.log(`${paged.total} dashboards retrieved`)
  * ... (some code to list all dashboards )
