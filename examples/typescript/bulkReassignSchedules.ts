@@ -4,7 +4,7 @@ import {IScheduledPlan} from '@looker/sdk'
 
 const sdk = LookerNodeSDK.init40()
 
-// schedules will either retunr for all users or for a specific user id if passed
+// schedules will either return for all users or for a specific user id if passed
 const getSchedules = async (allUsers: boolean, userID?: number): Promise<IScheduledPlan[]> => {
 
     let schedules: IScheduledPlan[];
@@ -20,7 +20,6 @@ const getSchedules = async (allUsers: boolean, userID?: number): Promise<ISchedu
         }
     }
 
-    // console.log(schedules.length)
     return schedules
 
 }
@@ -42,5 +41,6 @@ const bulkReAssignSchedules = async (allUsers: boolean, newOwner: number, userID
     }
 }
 
+// Examples
 // bulkDisableSchedules(false, 200, 300)
 // bulkDisableSchedules(true, 200)

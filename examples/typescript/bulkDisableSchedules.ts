@@ -20,7 +20,6 @@ const getSchedules = async (allUsers: boolean, userID?: number): Promise<ISchedu
         }
     }
 
-    // console.log(schedules.length)
     return schedules
 
 }
@@ -42,5 +41,6 @@ const bulkDisableSchedules = async (allUsers: boolean, userID?: number): Promise
     }
 }
 
+// Example
 // bulkDisableSchedules(false, 300)
 // bulkDisableSchedules(true)
