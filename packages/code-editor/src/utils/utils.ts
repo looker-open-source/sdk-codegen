@@ -55,7 +55,7 @@ export const getPrismLanguage = (language: string): Language => {
 }
 
 /**
- * applies package overrides to the default vsCode prism theme
+ * applies package overrides to the default theme. Inline CodeDisplay uses githubLight theme, else uses vsCodeDark theme.
  * @returns modified prism theme object
  */
 export function getOverridenTheme(

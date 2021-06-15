@@ -152,6 +152,7 @@ export const ExplorePropertyDescription: FC<ExplorePropertyProps> = ({
 }) => (
   <>
     {property.description && (
+      // TODO: Replace with @looker/code-editor Markdown
       <ReactMarkdown>{property.description}</ReactMarkdown>
     )}
   </>

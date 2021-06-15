@@ -45,6 +45,7 @@ export const CodeEditor: FC<CodeEditorProps> = ({
   language = 'json',
   pattern = '',
   transparent = false,
+  lineNumbers = true,
 }) => {
   return (
     <Editor
@@ -57,6 +58,7 @@ export const CodeEditor: FC<CodeEditorProps> = ({
           language={language}
           pattern={pattern}
           transparent={transparent}
+          lineNumbers={lineNumbers}
         />
       )}
       padding="1rem"

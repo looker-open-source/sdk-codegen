@@ -25,23 +25,114 @@
  */
 
 /**
- * Returns a markdown string with matches wrapped with mark tags
- * @param pattern The regex pattern to match
- * @param content The content to search
- * @returns content with highlighted matches
+ * TODO: Upgrade build to esnext and use `replaceAll`
  */
-export const highlightMarkdown = (pattern: string, content: string): string => {
-  let highlightedContent
-  if (!pattern) {
-    highlightedContent = content
-  } else {
-    try {
-      const replacement = (match: string) => `<mark>${match}</mark>`
-      const target = new RegExp(pattern, 'gi')
-      highlightedContent = content.replace(target, replacement)
-    } catch (e) {
-      highlightedContent = content
-    }
+export const regReplaceAll = (
+  content: string,
+  pattern: string,
+  replacementFunc: any
+) => {
+  const target = new RegExp(pattern, 'gi')
+  return content.replace(target, replacementFunc)
+}
+/**
+ * Adds <mark> tags around text if search pattern is detected
+ * @param content - the main content to render
+ * @param searchPattern - the search pattern to consider
+ * @returns - a 'marked' string to be rendered by markdown component
+ */
+export const addMarkTags = (content: string, searchPattern: string) => {
+  let markedContent
+  try {
+    const replacement = (match: string) => `<mark>${match}</mark>`
+    markedContent = regReplaceAll(content, searchPattern, replacement)
+  } catch (e) {
+    markedContent = content
   }
-  return highlightedContent
+  return markedContent
+}
+
+/**
+ * Removes <mark><mark/> tags from markdown text. The mark tag is removed from code styled
+ * text as the code renderer cannot differentiate <mark><mark/> from the code text.
+ * @param markedText - the markdown text input that contains <mark /> tags
+ */
+const removeMarkTags = (markedText: string) => {
+  return markedText.replace(/<mark>/g, '').replace(/<\/mark>/g, '')
+}
+
+/**
+ * Checks the input for code block decorators, the programming language used (```json), and returns a language tag
+ * that is later used to inform syntax highlighting rules
+ * @param content - the code blob to render
+ * @returns - code blob string with code language tag
+ */
+const addCodeLanguageTags = (content: string) => {
+  let languageTaggedContent
+  try {
+    const replacement = () => '```\n<json/>'
+    const searchPattern = '```json'
+    languageTaggedContent = regReplaceAll(content, searchPattern, replacement)
+  } catch (e) {
+    languageTaggedContent = content
+  }
+  return languageTaggedContent
+}
+
+/**
+ * Removes the code language tag from the code blob text before text presentation to screen
+ * @param content - code blob text with language tag
+ * @returns - code blob text without language tag
+ */
+const removeCodeLanguageTags = (content: string) => {
+  let untaggedContent
+  try {
+    const replacement = () => ''
+    const searchPattern = '<json/>'
+    untaggedContent = regReplaceAll(content, searchPattern, replacement)
+  } catch (e) {
+    untaggedContent = content
+  }
+  return untaggedContent
+}
+
+/**
+ * Extracts the syntax highlighting language, if specified
+ * @param content - language tagged code blob
+ * @returns
+ */
+const getCodeLanguageFromTaggedText = (content: string): string => {
+  return content.match(/<json\/>/g) ? 'json' : 'markup'
+}
+
+/**
+ * Removes tags that were applied for syntax highlighting or search pattern matching and returns just the code blob text
+ * @param content - code blob text to render
+ * @returns - rendered code text
+ */
+export const prepareCodeText = (content: string) => {
+  let text = content
+  const language = getCodeLanguageFromTaggedText(text)
+  text = removeCodeLanguageTags(text)
+  text = removeMarkTags(text)
+  text = text.trim()
+  return { text, language }
+}
+
+/**
+ * Returns a 'qualified markdown' text, a string which contains search pattern match and syntax highlighting qualifiers used by this package
+ * @param content The content to qualify
+ * @param pattern The regex pattern to search
+ * @returns qualified content
+ */
+export const qualifyMarkdownText = (
+  content: string,
+  pattern: string
+): string => {
+  let qualifiedContent
+  if (pattern !== '') {
+    qualifiedContent = addMarkTags(content, pattern)
+  }
+  qualifiedContent = addCodeLanguageTags(qualifiedContent || content)
+  return qualifiedContent
 }

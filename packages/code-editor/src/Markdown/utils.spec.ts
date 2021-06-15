@@ -23,32 +23,32 @@
  SOFTWARE.
 
  */
-import { highlightMarkdown } from './utils'
+import { qualifyMarkdownText } from './utils'
 
 describe('DocMarkdown utils', () => {
   describe('highlighting', () => {
     const str = 'Get the query for a given query slug'
     test('it returns original string when there are no matches', () => {
-      const result = highlightMarkdown('dashboard', str)
+      const result = qualifyMarkdownText(str, 'dashboard')
       expect(result).toEqual(str)
     })
 
     test('it returns original string when no pattern is provided', () => {
-      const result = highlightMarkdown('', str)
+      const result = qualifyMarkdownText(str, '')
       expect(result).toEqual(str)
     })
 
     test('it wraps matches with mark tags', () => {
-      const result = highlightMarkdown('query', str)
+      const result = qualifyMarkdownText(str, 'query')
       expect(result).toEqual(
         'Get the <mark>query</mark> for a given <mark>query</mark> slug'
       )
     })
 
     test('it highlights matches in both the display text and url of an inline-style hashbang link', () => {
-      const result = highlightMarkdown(
-        'query',
-        'Here is some text [Query](#!/methods/Query/create_query)'
+      const result = qualifyMarkdownText(
+        'Here is some text [Query](#!/methods/Query/create_query)',
+        'query'
       )
       expect(result).toEqual(
         'Here is some text [<mark>Query</mark>](#!/methods/<mark>Query</mark>/create_<mark>query</mark>)'

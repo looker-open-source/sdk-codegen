@@ -32,7 +32,7 @@ import gfm from 'remark-gfm'
 import { TableHead, TableBody, TableRow, Link } from '@looker/components'
 
 import { CodeDisplay } from '../CodeDisplay'
-import { highlightMarkdown } from './utils'
+import { qualifyMarkdownText, prepareCodeText } from './utils'
 import { TableCell } from './TableCell'
 import { MDHeading, MDList, MDListItem, MDParagraph, MDTable } from './common'
 
@@ -89,24 +89,17 @@ export const Markdown: FC<MarkdownProps> = ({
     inline?: boolean
     children: ReactNode
   }) => {
-    const codeText = children?.toString() || ''
-    if (inline) {
-      return (
-        <CodeDisplay
-          code={codeText.trim()}
-          pattern={pattern}
-          inline
-          lineNumbers={false}
-        />
-      )
+    const { text, language } = prepareCodeText(children?.toString() || '')
+    const codeProps = {
+      language: language,
+      code: text,
+      pattern: pattern,
+      lineNumbers: false,
     }
-    return (
-      <CodeDisplay
-        code={codeText.trim()}
-        pattern={pattern}
-        lineNumbers={false}
-      />
-    )
+    if (inline) {
+      return <CodeDisplay {...codeProps} inline />
+    }
+    return <CodeDisplay {...codeProps} />
   }
 
   const components = {
@@ -139,7 +132,7 @@ export const Markdown: FC<MarkdownProps> = ({
         transformLinkUri={transformLinkUri}
         components={components}
       >
-        {highlightMarkdown(pattern, source)}
+        {qualifyMarkdownText(source, pattern)}
       </ReactMarkdown>
     </MarkdownWrapper>
   )

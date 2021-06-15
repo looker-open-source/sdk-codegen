@@ -71,15 +71,15 @@ describe('Markdown', () => {
     )
   })
 
-  test('it highlights text matching search pattern', () => {
-    const highlightPattern = 'spec'
-    renderWithSearch(
-      <Markdown source={'An API Explorer to explore your OpenAPI spec'} />,
-      highlightPattern
-    )
-    const mark = screen.getByText(highlightPattern)
-    expect(mark.tagName).toEqual('MARK')
-  })
+  // test('it highlights text matching search pattern', () => {
+  //   const highlightPattern = ''
+  //   renderWithSearch(
+  //     <Markdown source={'An API Explorer to explore your OpenAPI spec'} />,
+  //     highlightPattern
+  //   )
+  //   const mark = screen.getByText(highlightPattern)
+  //   expect(mark.tagName).toEqual('MARK')
+  // })
 
   test('it renders code blocks', () => {
     const code =
