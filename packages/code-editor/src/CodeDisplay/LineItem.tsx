@@ -33,10 +33,10 @@ import { LineItemProps } from './types'
  * @param tokenProps - the style props from prism renderer
  * @param pattern - search pattern to consider
  */
-export const LineItem: FC<LineItemProps> = ({ key, tokenProps, pattern }) => {
+export const LineItem: FC<LineItemProps> = ({ index, tokenProps, pattern }) => {
   const text = tokenProps.children.toLowerCase()
   if (pattern !== '' && text.includes(pattern.toLowerCase())) {
     tokenProps.className += ' match'
   }
-  return <span key={key} {...tokenProps} />
+  return <span key={index} {...tokenProps} />
 }

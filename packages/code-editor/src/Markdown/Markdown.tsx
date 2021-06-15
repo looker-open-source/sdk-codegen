@@ -95,9 +95,7 @@ export const Markdown: FC<MarkdownProps> = ({
       code: text,
       pattern: pattern,
       lineNumbers: false,
-    }
-    if (inline) {
-      return <CodeDisplay {...codeProps} inline />
+      inline: inline,
     }
     return <CodeDisplay {...codeProps} />
   }

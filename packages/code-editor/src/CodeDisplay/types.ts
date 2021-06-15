@@ -42,7 +42,7 @@ export type TokenOutputProps = {
 }
 
 export interface LineItemProps {
-  key: number
+  index: number
   tokenProps: TokenOutputProps
   pattern: string
 }

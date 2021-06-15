@@ -71,15 +71,17 @@ describe('Markdown', () => {
     )
   })
 
-  // test('it highlights text matching search pattern', () => {
-  //   const highlightPattern = ''
-  //   renderWithSearch(
-  //     <Markdown source={'An API Explorer to explore your OpenAPI spec'} />,
-  //     highlightPattern
-  //   )
-  //   const mark = screen.getByText(highlightPattern)
-  //   expect(mark.tagName).toEqual('MARK')
-  // })
+  test('it highlights text matching search pattern', () => {
+    const highlightPattern = 'OpenAPI'
+    renderWithTheme(
+      <Markdown
+        source={'An API Explorer to explore your OpenAPI spec'}
+        pattern={highlightPattern}
+      />
+    )
+    const mark = screen.getByText(highlightPattern)
+    expect(mark.tagName).toEqual('MARK')
+  })
 
   test('it renders code blocks', () => {
     const code =
@@ -90,6 +92,18 @@ describe('Markdown', () => {
         'Authorization: token 4QDkCyCtZzYgj4C2p2cj3csJH7zqS5RzKs2kTnG4'
       )
     ).toBeInTheDocument()
+  })
+
+  test('it renders syntax highlighted code blocks', () => {
+    const code = '```json\n{\n"model":"thelook"}```'
+    renderWithTheme(<Markdown source={code} />)
+    expect(screen.getByText('"model"')).toHaveClass('property')
+  })
+
+  test('it renders search matches in syntax highlighted code blocks', () => {
+    const code = '```json\n{\n"model":"thelook"}```'
+    renderWithTheme(<Markdown source={code} pattern={'model'} />)
+    expect(screen.getByText('"model"')).toHaveClass('match')
   })
 
   test('it renders inline code', () => {

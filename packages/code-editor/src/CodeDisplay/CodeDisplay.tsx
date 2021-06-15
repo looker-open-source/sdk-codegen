@@ -39,7 +39,7 @@ import { CodeWrapper } from '../CodeWrapper'
 import { LineItem } from './LineItem'
 import { CodeDisplayProps } from './types'
 
-const Line = styled.div`
+const Line = styled(Span)`
   display: table-row;
 `
 
@@ -91,6 +91,7 @@ export const CodeDisplay: FC<CodeDisplayProps> = ({
                   return (
                     <LineItem
                       key={key}
+                      index={key}
                       tokenProps={tokenProps}
                       pattern={pattern}
                     />
