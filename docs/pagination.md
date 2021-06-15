@@ -71,8 +71,6 @@ export interface IPageLink {
 
 /**
  * Collection of page links
- *
- * TODO can this be Record<PageLinkRel, IPageLink> instead and still init to {}?
  */
 export type PageLinks = Record<string, IPageLink>
 
