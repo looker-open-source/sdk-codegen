@@ -198,17 +198,34 @@ describe('pagination', () => {
       )
       expect(paged).toBeDefined()
       expect(paged.items).toEqual(mockedRows)
+      const threeRows = ['one', 'two', 'three']
       jest
         .spyOn(BrowserTransport.prototype, 'rawRequest')
-        .mockReturnValue(Promise.resolve(mockRawResponse(nextUrl)))
+        .mockReturnValue(
+          Promise.resolve(mockRawResponse(nextUrl, JSON.stringify(threeRows)))
+        )
       let items = await sdkOk(paged.nextPage())
       expect(items).toBeDefined()
-      expect(items).toEqual(mockedRows)
+      expect(items).toEqual(threeRows)
       expect(paged.offset).toEqual(6)
       expect(paged.limit).toEqual(3)
       expect(paged.total).toEqual(totalCount)
       expect(paged.pages).toEqual(4)
       expect(paged.page).toEqual(3)
+      expect(paged.more()).toEqual(true)
+
+      jest
+        .spyOn(BrowserTransport.prototype, 'rawRequest')
+        .mockReturnValue(Promise.resolve(mockRawResponse(nextUrl, '[]')))
+      items = await sdkOk(paged.nextPage())
+      expect(items).toBeDefined()
+      expect(items).toEqual([])
+      expect(paged.offset).toEqual(6)
+      expect(paged.limit).toEqual(3)
+      expect(paged.total).toEqual(totalCount)
+      expect(paged.pages).toEqual(4)
+      expect(paged.page).toEqual(3)
+      expect(paged.more()).toEqual(false)
 
       jest
         .spyOn(BrowserTransport.prototype, 'rawRequest')

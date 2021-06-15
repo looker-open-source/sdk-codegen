@@ -23,6 +23,7 @@
  SOFTWARE.
 
  */
+
 import { Agent } from 'https'
 import { Headers } from 'request'
 import { Readable } from 'readable-stream'
@@ -31,9 +32,7 @@ import { matchCharsetUtf8, matchModeBinary, matchModeString } from './constants'
 export const agentPrefix = 'TS-SDK'
 export const LookerAppId = 'x-looker-appid'
 
-/**
- * Set to `true` to follow streaming process
- */
+/** Set to `true` to follow streaming process */
 const tracing = false
 
 /**
@@ -52,9 +51,7 @@ export function trace(message: string, info?: any) {
   }
 }
 
-/**
- * ResponseMode for an HTTP request - either binary or "string"
- */
+/** ResponseMode for an HTTP request */
 export enum ResponseMode {
   'binary', // this is a binary response
   'string', // this is a "string" response
@@ -85,9 +82,7 @@ export const charsetUtf8Pattern = new RegExp(matchCharsetUtf8, 'i')
  */
 export const defaultTimeout = 120
 
-/**
- * Recognized HTTP methods
- */
+/** Recognized HTTP methods */
 export type HttpMethod =
   | 'GET'
   | 'POST'
@@ -164,9 +159,7 @@ export enum StatusCode {
   NetworkAuthRequired,
 }
 
-/**
- * Untyped basic HTTP response type for "raw" HTTP requests
- */
+/** Untyped basic HTTP response type for "raw" HTTP requests */
 export interface IRawResponse {
   /** ok is `true` if the response is successful, `false` otherwise */
   ok: boolean
@@ -186,15 +179,12 @@ export interface IRawResponse {
   headers: IRequestHeaders
 }
 
+/** IRawResponse observer function type */
 export type RawObserver = (raw: IRawResponse) => IRawResponse
 
-/**
- * Transport plug-in interface
- */
+/** Transport plug-in interface */
 export interface ITransport {
-  /**
-   * Observer lambda to process raw requests
-   */
+  /** Observer lambda to process raw responses */
   observer: RawObserver | undefined
 
   /**
@@ -277,7 +267,7 @@ export interface ISDKSuccessResponse<T> {
   value: T
 }
 
-/** An erroring SDK call. */
+/** An errant SDK call. */
 export interface ISDKErrorResponse<T> {
   /** Whether the SDK call was successful. */
   ok: false
@@ -295,9 +285,7 @@ export type SDKResponse<TSuccess, TError> =
   | ISDKSuccessResponse<TSuccess>
   | ISDKErrorResponse<TError | ISDKError>
 
-/**
- * Generic collection
- */
+/** Generic collection */
 export interface IRequestHeaders {
   [key: string]: string
 }
@@ -378,9 +366,7 @@ export function isUtf8(contentType: string) {
   return contentType.match(/;.*\bcharset\b=\butf-8\b/i)
 }
 
-/**
- * Used for name/value pair collections like for QueryParams
- */
+/** Used for name/value pair collections like for QueryParams */
 export type Values = { [key: string]: any } | null | undefined
 
 /**

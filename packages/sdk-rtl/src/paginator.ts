@@ -42,6 +42,11 @@ export const TotalCountHeader = 'X-Total-Count'
  */
 export type PageLinkRel = 'first' | 'last' | 'next' | 'prev'
 
+/** Pagination function call */
+export type PaginateFunc<TSuccess, TError> = () => Promise<
+  SDKResponse<TSuccess, TError>
+>
+
 /** Page link structure */
 export interface IPageLink {
   /** Name of link */
@@ -80,7 +85,7 @@ export interface IPaginate<TSuccess, TError> {
   page: number
 
   /**
-   * Is the specified link defined for this Link header?
+   * Is the specified link rel defined in the Link header?
    * @param link to check
    */
   hasRel(link: PageLinkRel): boolean
@@ -110,12 +115,10 @@ export interface IPaginate<TSuccess, TError> {
    * @remarks This link is provided if the last page was not the first page.
    */
   prevPage(): Promise<SDKResponse<TSuccess, TError>>
-}
 
-/** Pagination function call */
-export type PaginateFunc<TSuccess, TError> = () => Promise<
-  SDKResponse<TSuccess, TError>
->
+  /** `true` if the `next` link is defined and the current items count === `limit` */
+  more(): boolean
+}
 
 /**
  * Parse a link header to extract rels
@@ -146,26 +149,20 @@ export const linkHeaderParser = (linkHeader: string): PageLinks => {
   return obj
 }
 
+/** Constraint for generic TSuccess pagination types */
+interface ILength {
+  length: number
+}
+
 /**
  * Create an API paginator for an endpoint that returns a Link header
  * @param sdk implementation of IAPIMethods. Can be full SDK or functional auth session
  * @param func sdk call that includes a pagination header
  * @param options transport options override to capture and use in paging requests
  *
- * @example
- * ```ts
- * const paged = new paginate(sdk, (sdk) => search_dashboards(sdk, { limit: 10 })
- * const dashboards = paged.items
- * while (paged.has('next')) {
- *   await paged.next()
- *   dashboards.push(paged.items)
- * }
- * console.log(`${paged.total} dashboards retrieved`)
- * ... (some code to list all dashboards )
- *
- * ```
+ * @remarks `TSuccess` must be a collection type that supports `length`
  */
-export async function paginate<TSuccess, TError>(
+export async function paginate<TSuccess extends ILength, TError>(
   sdk: IAPIMethods,
   func: PaginateFunc<TSuccess, TError>,
   options?: Partial<ITransportSettings>
@@ -176,7 +173,7 @@ export async function paginate<TSuccess, TError>(
 /**
  * Pagination support class
  */
-export class Paginator<TSuccess, TError>
+export class Paginator<TSuccess extends ILength, TError>
   implements IPaginate<TSuccess, TError>
 {
   items: TSuccess = [] as unknown as TSuccess
@@ -237,6 +234,10 @@ export class Paginator<TSuccess, TError>
 
   hasRel(link: PageLinkRel): boolean {
     return !!this.links[link]
+  }
+
+  more() {
+    return this.hasRel('next') && this.items.length === this.limit
   }
 
   /**
