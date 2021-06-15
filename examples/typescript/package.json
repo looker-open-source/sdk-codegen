@@ -11,7 +11,13 @@
     "run-tile": "ts-node ./downloadTile",
     "run-dual": "ts-node ./dual",
     "run-tiny-dual": "ts-node ./tinyDual",
-    "run-sudo": "ts-node ./sudoAsUser"
+    "run-sudo": "ts-node ./sudoAsUser",
+    "run-bulk-disable-schedules": "ts-node ./bulkDisableSchedules",
+    "run-bulk-reassign-schedules": "ts-node ./bulkReassignSchedules",
+    "run-validate-branch": "ts-node ./validateBranch",
+    "run-generate-api-credentials": "ts-node ./generateApiCredentials",
+    "run-test-connections": "ts-node ./testDBConnections",
+    "run-pdt-mapping": "ts-node ./dependencyGraph"
   },
   "dependencies": {
     "@looker/sdk": "*",
