@@ -25,7 +25,6 @@
  */
 
 import {
-  Authenticator,
   IRawResponse,
   ITransportSettings,
   sdkOk,
@@ -74,8 +73,6 @@ export interface IPaginate<TSuccess, TError> {
   /** Latest items returned from response */
   items: TSuccess
   /** Captured from the original pagination request */
-  authenticator?: Authenticator
-  /** Captured from the original pagination request */
   options?: Partial<ITransportSettings>
   /** Total number of pages. -1 if not known. */
   pages: number
@@ -88,16 +85,31 @@ export interface IPaginate<TSuccess, TError> {
    */
   hasRel(link: PageLinkRel): boolean
 
-  /** Get the requested relative link */
+  /** Get the requested relative link
+   * if the requested link is not defined, all calculated values are reset, including
+   * `total`, `items`, `offset`, and `limit`
+   */
   getRel(link: PageLinkRel): Promise<SDKResponse<TSuccess, TError>>
-  /** Get the first page of items */
-  first(): Promise<SDKResponse<TSuccess, TError>>
-  /** Get the last page of items */
-  last(): Promise<SDKResponse<TSuccess, TError>>
-  /** Get the next page of items */
-  next(): Promise<SDKResponse<TSuccess, TError>>
-  /** Get the previous page of items */
-  prev(): Promise<SDKResponse<TSuccess, TError>>
+  /** Get the first page of items. This is the same as offset=0 */
+  firstPage(): Promise<SDKResponse<TSuccess, TError>>
+  /**
+   * Get the last page of items
+   *
+   * @remarks This link is only provided if `total` is known.
+   */
+  lastPage(): Promise<SDKResponse<TSuccess, TError>>
+  /**
+   * Get the next page of items
+   *
+   * @remarks This link is provided if `total` is known, or if the number of items returned == `limit`. In the latter case, this function may return an empty result set.
+   */
+  nextPage(): Promise<SDKResponse<TSuccess, TError>>
+  /**
+   * Get the previous page of items
+   *
+   * @remarks This link is provided if the last page was not the first page.
+   */
+  prevPage(): Promise<SDKResponse<TSuccess, TError>>
 }
 
 /** Pagination function call */
@@ -262,7 +274,7 @@ export class Paginator<TSuccess, TError>
       rel.url,
       undefined,
       undefined,
-      undefined,
+      this.sdk.authSession.authenticate,
       this.options
     )
     try {
@@ -295,27 +307,19 @@ export class Paginator<TSuccess, TError>
     return this as unknown as IPaginate<TSuccess, TError>
   }
 
-  async tbd(name: string): Promise<SDKResponse<TSuccess, TError>> {
-    const result: SDKResponse<TSuccess, TError> = {
-      ok: false,
-      error: new Error(`TBD ${name}`) as unknown as TError,
-    }
-    return Promise.resolve(result)
-  }
-
-  async first(): Promise<SDKResponse<TSuccess, TError>> {
+  async firstPage(): Promise<SDKResponse<TSuccess, TError>> {
     return await this.getRel('first')
   }
 
-  async last(): Promise<SDKResponse<TSuccess, TError>> {
+  async lastPage(): Promise<SDKResponse<TSuccess, TError>> {
     return await this.getRel('last')
   }
 
-  async next(): Promise<SDKResponse<TSuccess, TError>> {
+  async nextPage(): Promise<SDKResponse<TSuccess, TError>> {
     return await this.getRel('next')
   }
 
-  async prev(): Promise<SDKResponse<TSuccess, TError>> {
+  async prevPage(): Promise<SDKResponse<TSuccess, TError>> {
     return await this.getRel('prev')
   }
 }

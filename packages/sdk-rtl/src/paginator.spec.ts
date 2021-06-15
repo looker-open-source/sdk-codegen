@@ -201,7 +201,7 @@ describe('pagination', () => {
       jest
         .spyOn(BrowserTransport.prototype, 'rawRequest')
         .mockReturnValue(Promise.resolve(mockRawResponse(nextUrl)))
-      let items = await sdkOk(paged.next())
+      let items = await sdkOk(paged.nextPage())
       expect(items).toBeDefined()
       expect(items).toEqual(mockedRows)
       expect(paged.offset).toEqual(6)
@@ -213,7 +213,7 @@ describe('pagination', () => {
       jest
         .spyOn(BrowserTransport.prototype, 'rawRequest')
         .mockReturnValue(Promise.resolve(mockRawResponse(prevUrl)))
-      items = await sdkOk(paged.prev())
+      items = await sdkOk(paged.prevPage())
       expect(items).toBeDefined()
       expect(items).toEqual(mockedRows)
       expect(paged.offset).toEqual(3)
@@ -225,7 +225,7 @@ describe('pagination', () => {
       jest
         .spyOn(BrowserTransport.prototype, 'rawRequest')
         .mockReturnValue(Promise.resolve(mockRawResponse(lastUrl)))
-      items = await sdkOk(paged.last())
+      items = await sdkOk(paged.lastPage())
       expect(items).toBeDefined()
       expect(items).toEqual(mockedRows)
       expect(paged.offset).toEqual(9)
@@ -237,7 +237,7 @@ describe('pagination', () => {
       jest
         .spyOn(BrowserTransport.prototype, 'rawRequest')
         .mockReturnValue(Promise.resolve(mockRawResponse(firstUrl)))
-      items = await sdkOk(paged.first())
+      items = await sdkOk(paged.firstPage())
       expect(items).toBeDefined()
       expect(items).toEqual(mockedRows)
       expect(paged.offset).toEqual(0)
