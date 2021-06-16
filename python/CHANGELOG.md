@@ -5,6 +5,13 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+### [21.6.1](https://www.github.com/looker-open-source/sdk-codegen/compare/looker_sdk-v21.6.0...looker_sdk-v21.6.1) (2021-06-16)
+
+
+### Documentation
+
+* Typescript and Python README updates for GA ([#674](https://www.github.com/looker-open-source/sdk-codegen/issues/674)) ([c0c7ce7](https://www.github.com/looker-open-source/sdk-codegen/commit/c0c7ce721c000564e85d239d7c9059f2f54876f9))
+
 ## [21.6.0](https://www.github.com/looker-open-source/sdk-codegen/compare/looker_sdk-v21.4.1...looker_sdk-v21.6.0) (2021-05-05)
 
 
