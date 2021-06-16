@@ -431,6 +431,7 @@ export function addQueryParams(path: string, obj?: Values) {
  * @returns a new `Error` object with the failure message
  */
 export function sdkError(response: any) {
+  const utf8 = 'utf-8'
   if (typeof response === 'string') {
     return new Error(response)
   }
@@ -444,11 +445,11 @@ export function sdkError(response: any) {
       return new Error(error.statusMessage)
     }
     if ('error' in error && error.error instanceof Buffer) {
-      const result = Buffer.from(error.error).toString('utf-8')
+      const result = Buffer.from(error.error).toString(utf8)
       return new Error(result)
     }
     if (error instanceof Buffer) {
-      const result = Buffer.from(error).toString('utf-8')
+      const result = Buffer.from(error).toString(utf8)
       return new Error(result)
     }
     if ('message' in error) {

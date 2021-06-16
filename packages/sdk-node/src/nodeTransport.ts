@@ -52,6 +52,18 @@ import type {
   ICryptoHash,
 } from '@looker/sdk-rtl'
 
+const utf8 = 'utf8'
+
+const asString = (value: any): string => {
+  if (value instanceof Buffer) {
+    return Buffer.from(value).toString(utf8)
+  }
+  if (value instanceof Object) {
+    return JSON.stringify(value)
+  }
+  return value.toString()
+}
+
 export class NodeCryptoHash implements ICryptoHash {
   secureRandom(byteCount: number): string {
     return nodeCrypto.randomBytes(byteCount).toString('hex')
@@ -64,7 +76,9 @@ export class NodeCryptoHash implements ICryptoHash {
   }
 }
 
-export type RequestOptions = rq.RequiredUriUrl & rp.RequestPromiseOptions
+export type RequestOptions = rq.RequiredUriUrl &
+  rp.RequestPromiseOptions &
+  rq.OptionsWithUrl
 
 export class NodeTransport extends BaseTransport {
   constructor(protected readonly options: ITransportSettings) {
@@ -79,7 +93,7 @@ export class NodeTransport extends BaseTransport {
     authenticator?: Authenticator,
     options?: Partial<ITransportSettings>
   ): Promise<IRawResponse> {
-    const init = await this.initRequest(
+    const init: RequestOptions = await this.initRequest(
       method,
       path,
       queryParams,
@@ -93,7 +107,7 @@ export class NodeTransport extends BaseTransport {
       const res = await req
       const resTyped = res as rq.Response
       rawResponse = {
-        url: resTyped.url || '',
+        url: resTyped.url || init.url.toString() || '',
         body: await resTyped.body,
         contentType: String(resTyped.headers['content-type']),
         ok: true,
@@ -102,32 +116,31 @@ export class NodeTransport extends BaseTransport {
         headers: res.headers,
       }
     } catch (e) {
-      const statusMessage = `${method} ${path}`
+      let statusMessage = `${method} ${path}`
       let statusCode = 404
       let contentType = 'text'
-      let body: string
+      let body
       if (e instanceof StatusCodeError) {
         statusCode = e.statusCode
-        const text = e.message
-        body = e.message
-        // Need to re-parse the error message
-        const matches = /^\d+\s*-\s*({.*})/gim.exec(text)
-        if (matches && matches.length > 1) {
-          const json = matches[1]
-          const obj = JSON.parse(json)
-          if (obj.data) {
-            body = Buffer.from(obj.data).toString('utf8')
-          }
+        if (e.error instanceof Buffer) {
+          body = asString(e.error)
+          statusMessage += `: ${statusCode}`
+        } else if (e.error instanceof Object) {
+          // Capture error object as body
+          body = e.error
+          statusMessage += `: ${e.message}`
+          // Clarify the error message
+          body.message = statusMessage
+          contentType = 'application/json'
         }
-        body = `${statusMessage} ${body}`
       } else if (e.error instanceof Buffer) {
-        body = Buffer.from(e.error).toString('utf8')
+        body = asString(e.error)
       } else {
         body = JSON.stringify(e)
         contentType = 'application/json'
       }
       rawResponse = {
-        url: this.makeUrl(path, { ...this.options, ...options }, queryParams),
+        url: init.url.toString(),
         body,
         contentType,
         ok: false,
@@ -141,14 +154,21 @@ export class NodeTransport extends BaseTransport {
 
   async parseResponse<TSuccess, TError>(res: IRawResponse) {
     const mode = responseMode(res.contentType)
-    const utf8 = 'utf8'
-    let result = await res.body
+    let response: SDKResponse<TSuccess, TError>
     let error
+    if (!res.ok) {
+      // Raw request had an error. Make sure it's a string before parsing the result
+      error = res.body
+      if (typeof error === 'string') error = JSON.parse(error)
+      response = { ok: false, error }
+      return response
+    }
+    let result = await res.body
     if (mode === ResponseMode.string) {
       if (res.contentType.match(/^application\/.*\bjson\b/g)) {
         try {
           if (result instanceof Buffer) {
-            result = (result as Buffer).toString(utf8)
+            result = Buffer.from(result).toString(utf8)
           }
           if (!(result instanceof Object)) {
             result = JSON.parse(result.toString())
@@ -156,20 +176,17 @@ export class NodeTransport extends BaseTransport {
         } catch (err) {
           error = err
         }
-      } else if (result instanceof Buffer) {
-        result = (result as Buffer).toString(utf8)
-      }
-      if (!error) {
-        result = result.toString()
+      } else if (!error) {
+        // Convert to string otherwise
+        result = asString(result)
       }
     } else {
       try {
-        result = (result as Buffer).toString('binary')
+        result = Buffer.from(result).toString('binary')
       } catch (err) {
         error = err
       }
     }
-    let response: SDKResponse<TSuccess, TError>
     if (!error) {
       response = { ok: true, value: result }
     } else {
