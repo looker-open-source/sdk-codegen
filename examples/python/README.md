@@ -24,7 +24,7 @@ You can find Python language examples in this folder.
 
 - [Transfer all schedules of a user to another user](transfer_all_schedules.py)
 
-## User 
+## User Management
 
 - [Disable all active user sessions](logout_all_users.py)
 
