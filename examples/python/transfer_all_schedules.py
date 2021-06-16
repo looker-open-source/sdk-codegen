@@ -12,12 +12,6 @@ Last modified: June 16, 2021
 import looker_sdk
 #sdk = looker_sdk.init40()
 
-import os
-
-os.environ['LOOKERSDK_BASE_URL'] = 'https://dcleu.eu.looker.com:19999'
-os.environ['LOOKERSDK_CLIENT_ID'] = 'HQ6fRqF27QPwss2B9XSt'
-os.environ['LOOKERSDK_CLIENT_SECRET'] = 'sTQ8RW4wb8tKbTCVCYx94W43'
-
 sdk = looker_sdk.init40()
 
 def find_user_id(email: str):
@@ -80,4 +74,4 @@ def update_owner(current_owner_email: str, new_owner_email: str):
     print("Successfully transfer all schedules of " + current_owner_email + " to " + new_owner_email)
 
 # Call the function 
-update_owner('lan.tran@looker.com', 'lantrann@google.com')
+update_owner('foo@looker.com', 'bar@looker.com')
