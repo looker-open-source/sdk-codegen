@@ -26,7 +26,7 @@ SOFTWARE.
 
 /*
 
-303 API models: 188 Spec, 47 Request, 51 Write, 17 Enum
+302 API models: 188 Spec, 47 Request, 51 Write, 16 Enum
 */
 
 
@@ -928,11 +928,6 @@ type FolderBase struct {
 type Format string
 const Format_Topojson         Format = "topojson"
 const Format_VectorTileRegion Format = "vector_tile_region"
-
-
-type GitApplicationServerHttpScheme string
-const GitApplicationServerHttpScheme_Http  GitApplicationServerHttpScheme = "http"
-const GitApplicationServerHttpScheme_Https GitApplicationServerHttpScheme = "https"
 
 
 
@@ -1846,27 +1841,27 @@ const PermissionType_Edit PermissionType = "edit"
 
 
 type Project struct {
-  Can                            *map[string]bool                `json:"can,omitempty"`                                 // Operations the current user is able to perform on this object
-  Id                             *string                         `json:"id,omitempty"`                                  // Project Id
-  Name                           *string                         `json:"name,omitempty"`                                // Project display name
-  UsesGit                        *bool                           `json:"uses_git,omitempty"`                            // If true the project is configured with a git repository
-  GitRemoteUrl                   *string                         `json:"git_remote_url,omitempty"`                      // Git remote repository url
-  GitUsername                    *string                         `json:"git_username,omitempty"`                        // Git username for HTTPS authentication. (For production only, if using user attributes.)
-  GitPassword                    *string                         `json:"git_password,omitempty"`                        // (Write-Only) Git password for HTTPS authentication. (For production only, if using user attributes.)
-  GitProductionBranchName        *string                         `json:"git_production_branch_name,omitempty"`          // Git production branch name. Defaults to master. Supported only in Looker 21.0 and higher.
-  UseGitCookieAuth               *bool                           `json:"use_git_cookie_auth,omitempty"`                 // If true, the project uses a git cookie for authentication.
-  GitUsernameUserAttribute       *string                         `json:"git_username_user_attribute,omitempty"`         // User attribute name for username in per-user HTTPS authentication.
-  GitPasswordUserAttribute       *string                         `json:"git_password_user_attribute,omitempty"`         // User attribute name for password in per-user HTTPS authentication.
-  GitServiceName                 *string                         `json:"git_service_name,omitempty"`                    // Name of the git service provider
-  GitApplicationServerHttpPort   *int64                          `json:"git_application_server_http_port,omitempty"`    // Port that HTTP(S) application server is running on (for PRs, file browsing, etc.)
-  GitApplicationServerHttpScheme *GitApplicationServerHttpScheme `json:"git_application_server_http_scheme,omitempty"`  // Scheme that is running on application server (for PRs, file browsing, etc.) Valid values are: "http", "https".
-  DeploySecret                   *string                         `json:"deploy_secret,omitempty"`                       // (Write-Only) Optional secret token with which to authenticate requests to the webhook deploy endpoint. If not set, endpoint is unauthenticated.
-  UnsetDeploySecret              *bool                           `json:"unset_deploy_secret,omitempty"`                 // (Write-Only) When true, unsets the deploy secret to allow unauthenticated access to the webhook deploy endpoint.
-  PullRequestMode                *PullRequestMode                `json:"pull_request_mode,omitempty"`                   // The git pull request policy for this project. Valid values are: "off", "links", "recommended", "required".
-  ValidationRequired             *bool                           `json:"validation_required,omitempty"`                 // Validation policy: If true, the project must pass validation checks before project changes can be committed to the git repository
-  GitReleaseMgmtEnabled          *bool                           `json:"git_release_mgmt_enabled,omitempty"`            // If true, advanced git release management is enabled for this project
-  AllowWarnings                  *bool                           `json:"allow_warnings,omitempty"`                      // Validation policy: If true, the project can be committed with warnings when `validation_required` is true. (`allow_warnings` does nothing if `validation_required` is false).
-  IsExample                      *bool                           `json:"is_example,omitempty"`                          // If true the project is an example project and cannot be modified
+  Can                            *map[string]bool `json:"can,omitempty"`                                 // Operations the current user is able to perform on this object
+  Id                             *string          `json:"id,omitempty"`                                  // Project Id
+  Name                           *string          `json:"name,omitempty"`                                // Project display name
+  UsesGit                        *bool            `json:"uses_git,omitempty"`                            // If true the project is configured with a git repository
+  GitRemoteUrl                   *string          `json:"git_remote_url,omitempty"`                      // Git remote repository url
+  GitUsername                    *string          `json:"git_username,omitempty"`                        // Git username for HTTPS authentication. (For production only, if using user attributes.)
+  GitPassword                    *string          `json:"git_password,omitempty"`                        // (Write-Only) Git password for HTTPS authentication. (For production only, if using user attributes.)
+  GitProductionBranchName        *string          `json:"git_production_branch_name,omitempty"`          // Git production branch name. Defaults to master. Supported only in Looker 21.0 and higher.
+  UseGitCookieAuth               *bool            `json:"use_git_cookie_auth,omitempty"`                 // If true, the project uses a git cookie for authentication.
+  GitUsernameUserAttribute       *string          `json:"git_username_user_attribute,omitempty"`         // User attribute name for username in per-user HTTPS authentication.
+  GitPasswordUserAttribute       *string          `json:"git_password_user_attribute,omitempty"`         // User attribute name for password in per-user HTTPS authentication.
+  GitServiceName                 *string          `json:"git_service_name,omitempty"`                    // Name of the git service provider
+  GitApplicationServerHttpPort   *int64           `json:"git_application_server_http_port,omitempty"`    // Port that HTTP(S) application server is running on (for PRs, file browsing, etc.)
+  GitApplicationServerHttpScheme *string          `json:"git_application_server_http_scheme,omitempty"`  // Scheme that is running on application server (for PRs, file browsing, etc.)
+  DeploySecret                   *string          `json:"deploy_secret,omitempty"`                       // (Write-Only) Optional secret token with which to authenticate requests to the webhook deploy endpoint. If not set, endpoint is unauthenticated.
+  UnsetDeploySecret              *bool            `json:"unset_deploy_secret,omitempty"`                 // (Write-Only) When true, unsets the deploy secret to allow unauthenticated access to the webhook deploy endpoint.
+  PullRequestMode                *PullRequestMode `json:"pull_request_mode,omitempty"`                   // The git pull request policy for this project. Valid values are: "off", "links", "recommended", "required".
+  ValidationRequired             *bool            `json:"validation_required,omitempty"`                 // Validation policy: If true, the project must pass validation checks before project changes can be committed to the git repository
+  GitReleaseMgmtEnabled          *bool            `json:"git_release_mgmt_enabled,omitempty"`            // If true, advanced git release management is enabled for this project
+  AllowWarnings                  *bool            `json:"allow_warnings,omitempty"`                      // Validation policy: If true, the project can be committed with warnings when `validation_required` is true. (`allow_warnings` does nothing if `validation_required` is false).
+  IsExample                      *bool            `json:"is_example,omitempty"`                          // If true the project is an example project and cannot be modified
 }
 
 
@@ -3596,23 +3591,23 @@ type WritePermissionSet struct {
 // Dynamically generated writeable type for Project removes properties:
 // can, id, uses_git, is_example
 type WriteProject struct {
-  Name                           *string                         `json:"name,omitempty"`                                // Project display name
-  GitRemoteUrl                   *string                         `json:"git_remote_url,omitempty"`                      // Git remote repository url
-  GitUsername                    *string                         `json:"git_username,omitempty"`                        // Git username for HTTPS authentication. (For production only, if using user attributes.)
-  GitPassword                    *string                         `json:"git_password,omitempty"`                        // (Write-Only) Git password for HTTPS authentication. (For production only, if using user attributes.)
-  GitProductionBranchName        *string                         `json:"git_production_branch_name,omitempty"`          // Git production branch name. Defaults to master. Supported only in Looker 21.0 and higher.
-  UseGitCookieAuth               *bool                           `json:"use_git_cookie_auth,omitempty"`                 // If true, the project uses a git cookie for authentication.
-  GitUsernameUserAttribute       *string                         `json:"git_username_user_attribute,omitempty"`         // User attribute name for username in per-user HTTPS authentication.
-  GitPasswordUserAttribute       *string                         `json:"git_password_user_attribute,omitempty"`         // User attribute name for password in per-user HTTPS authentication.
-  GitServiceName                 *string                         `json:"git_service_name,omitempty"`                    // Name of the git service provider
-  GitApplicationServerHttpPort   *int64                          `json:"git_application_server_http_port,omitempty"`    // Port that HTTP(S) application server is running on (for PRs, file browsing, etc.)
-  GitApplicationServerHttpScheme *GitApplicationServerHttpScheme `json:"git_application_server_http_scheme,omitempty"`  // Scheme that is running on application server (for PRs, file browsing, etc.) Valid values are: "http", "https".
-  DeploySecret                   *string                         `json:"deploy_secret,omitempty"`                       // (Write-Only) Optional secret token with which to authenticate requests to the webhook deploy endpoint. If not set, endpoint is unauthenticated.
-  UnsetDeploySecret              *bool                           `json:"unset_deploy_secret,omitempty"`                 // (Write-Only) When true, unsets the deploy secret to allow unauthenticated access to the webhook deploy endpoint.
-  PullRequestMode                *PullRequestMode                `json:"pull_request_mode,omitempty"`                   // The git pull request policy for this project. Valid values are: "off", "links", "recommended", "required".
-  ValidationRequired             *bool                           `json:"validation_required,omitempty"`                 // Validation policy: If true, the project must pass validation checks before project changes can be committed to the git repository
-  GitReleaseMgmtEnabled          *bool                           `json:"git_release_mgmt_enabled,omitempty"`            // If true, advanced git release management is enabled for this project
-  AllowWarnings                  *bool                           `json:"allow_warnings,omitempty"`                      // Validation policy: If true, the project can be committed with warnings when `validation_required` is true. (`allow_warnings` does nothing if `validation_required` is false).
+  Name                           *string          `json:"name,omitempty"`                                // Project display name
+  GitRemoteUrl                   *string          `json:"git_remote_url,omitempty"`                      // Git remote repository url
+  GitUsername                    *string          `json:"git_username,omitempty"`                        // Git username for HTTPS authentication. (For production only, if using user attributes.)
+  GitPassword                    *string          `json:"git_password,omitempty"`                        // (Write-Only) Git password for HTTPS authentication. (For production only, if using user attributes.)
+  GitProductionBranchName        *string          `json:"git_production_branch_name,omitempty"`          // Git production branch name. Defaults to master. Supported only in Looker 21.0 and higher.
+  UseGitCookieAuth               *bool            `json:"use_git_cookie_auth,omitempty"`                 // If true, the project uses a git cookie for authentication.
+  GitUsernameUserAttribute       *string          `json:"git_username_user_attribute,omitempty"`         // User attribute name for username in per-user HTTPS authentication.
+  GitPasswordUserAttribute       *string          `json:"git_password_user_attribute,omitempty"`         // User attribute name for password in per-user HTTPS authentication.
+  GitServiceName                 *string          `json:"git_service_name,omitempty"`                    // Name of the git service provider
+  GitApplicationServerHttpPort   *int64           `json:"git_application_server_http_port,omitempty"`    // Port that HTTP(S) application server is running on (for PRs, file browsing, etc.)
+  GitApplicationServerHttpScheme *string          `json:"git_application_server_http_scheme,omitempty"`  // Scheme that is running on application server (for PRs, file browsing, etc.)
+  DeploySecret                   *string          `json:"deploy_secret,omitempty"`                       // (Write-Only) Optional secret token with which to authenticate requests to the webhook deploy endpoint. If not set, endpoint is unauthenticated.
+  UnsetDeploySecret              *bool            `json:"unset_deploy_secret,omitempty"`                 // (Write-Only) When true, unsets the deploy secret to allow unauthenticated access to the webhook deploy endpoint.
+  PullRequestMode                *PullRequestMode `json:"pull_request_mode,omitempty"`                   // The git pull request policy for this project. Valid values are: "off", "links", "recommended", "required".
+  ValidationRequired             *bool            `json:"validation_required,omitempty"`                 // Validation policy: If true, the project must pass validation checks before project changes can be committed to the git repository
+  GitReleaseMgmtEnabled          *bool            `json:"git_release_mgmt_enabled,omitempty"`            // If true, advanced git release management is enabled for this project
+  AllowWarnings                  *bool            `json:"allow_warnings,omitempty"`                      // Validation policy: If true, the project can be committed with warnings when `validation_required` is true. (`allow_warnings` does nothing if `validation_required` is false).
 }
 
 // Dynamically generated writeable type for Query removes properties:
