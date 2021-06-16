@@ -36,7 +36,7 @@ jobs:
         with:
           python-version: 3.x
       - run: pip install -e .
-      - run: pip install mypy
+      - run: pip install mypy types-requests
       - run: mypy looker_sdk/
 
   unit:
