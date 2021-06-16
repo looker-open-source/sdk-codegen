@@ -10,7 +10,6 @@ Author: Lan
 Last modified: June 16, 2021
 """
 import looker_sdk
-#sdk = looker_sdk.init40()
 
 sdk = looker_sdk.init40()
 
