@@ -34,8 +34,10 @@ jobs:
           node-version: 15
           registry-url: https://wombat-dressing-room.appspot.com
 
-      - run: npm install --no-save --no-package-lock --legacy-peer-deps --registry=https://registry.npmjs.org/
-      - run: npm run build
+      - name: Install dependencies and build
+        run: |
+          yarn
+          yarn build
 
       # setup test env so prepublishOnly lifecycle script can run
       - name: Mock looker.ini
