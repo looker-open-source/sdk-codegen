@@ -25,7 +25,7 @@
  */
 
 /**
- * 303 API models: 188 Spec, 47 Request, 51 Write, 17 Enum
+ * 302 API models: 188 Spec, 47 Request, 51 Write, 16 Enum
  */
 
 import type { IDictionary, Url, DelimArray } from '@looker/sdk-rtl'
@@ -2475,14 +2475,6 @@ export interface IFolderBase {
 export enum Format {
   topojson = 'topojson',
   vector_tile_region = 'vector_tile_region',
-}
-
-/**
- * Scheme that is running on application server (for PRs, file browsing, etc.) Valid values are: "http", "https".
- */
-export enum GitApplicationServerHttpScheme {
-  http = 'http',
-  https = 'https',
 }
 
 export interface IGitBranch {
@@ -5183,9 +5175,9 @@ export interface IProject {
    */
   git_application_server_http_port?: number
   /**
-   * Scheme that is running on application server (for PRs, file browsing, etc.) Valid values are: "http", "https".
+   * Scheme that is running on application server (for PRs, file browsing, etc.)
    */
-  git_application_server_http_scheme?: GitApplicationServerHttpScheme
+  git_application_server_http_scheme?: string
   /**
    * (Write-Only) Optional secret token with which to authenticate requests to the webhook deploy endpoint. If not set, endpoint is unauthenticated.
    */
@@ -10291,9 +10283,9 @@ export interface IWriteProject {
    */
   git_application_server_http_port?: number
   /**
-   * Scheme that is running on application server (for PRs, file browsing, etc.) Valid values are: "http", "https".
+   * Scheme that is running on application server (for PRs, file browsing, etc.)
    */
-  git_application_server_http_scheme?: GitApplicationServerHttpScheme
+  git_application_server_http_scheme?: string
   /**
    * (Write-Only) Optional secret token with which to authenticate requests to the webhook deploy endpoint. If not set, endpoint is unauthenticated.
    */

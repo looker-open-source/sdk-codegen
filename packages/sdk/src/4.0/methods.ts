@@ -5928,7 +5928,7 @@ export class Looker40SDK extends APIMethods implements ILooker40SDK {
    */
   async copy_look(
     look_id: number,
-    folder_id?: number,
+    folder_id?: string,
     options?: Partial<ITransportSettings>
   ): Promise<SDKResponse<ILookWithQuery, IError | IValidationError>> {
     return this.post<ILookWithQuery, IError | IValidationError>(
@@ -5956,7 +5956,7 @@ export class Looker40SDK extends APIMethods implements ILooker40SDK {
    */
   async move_look(
     look_id: number,
-    folder_id: number,
+    folder_id: string,
     options?: Partial<ITransportSettings>
   ): Promise<SDKResponse<ILookWithQuery, IError | IValidationError>> {
     return this.patch<ILookWithQuery, IError | IValidationError>(
@@ -7316,7 +7316,7 @@ export class Looker40SDK extends APIMethods implements ILooker40SDK {
    * Query Tasks whose results have expired will have a status of 'expired'.
    * If the user making the API request does not have sufficient privileges to view a Query Task result, the result will have a status of 'missing'
    *
-   * GET /query_tasks/multi_results -> IDictionary<string>
+   * GET /query_tasks/multi_results -> IDictionary<any>
    *
    * @param query_task_ids List of Query Task IDs
    * @param options one-time API call overrides
@@ -7325,8 +7325,8 @@ export class Looker40SDK extends APIMethods implements ILooker40SDK {
   async query_task_multi_results(
     query_task_ids: DelimArray<string>,
     options?: Partial<ITransportSettings>
-  ): Promise<SDKResponse<IDictionary<string>, IError>> {
-    return this.get<IDictionary<string>, IError>(
+  ): Promise<SDKResponse<IDictionary<any>, IError>> {
+    return this.get<IDictionary<any>, IError>(
       '/query_tasks/multi_results',
       { query_task_ids },
       null,

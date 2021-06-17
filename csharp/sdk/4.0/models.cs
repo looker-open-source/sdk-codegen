@@ -21,7 +21,7 @@
 /// SOFTWARE.
 ///
 
-/// 284 API models: 210 Spec, 0 Request, 56 Write, 18 Enum
+/// 283 API models: 210 Spec, 0 Request, 56 Write, 17 Enum
 
 #nullable enable
 using System;
@@ -90,7 +90,7 @@ public class ApiVersionElement : SdkModel
   /// <summary>Status of this version (read-only)</summary>
   public string? status { get; set; } = null;
   /// <summary>Url for swagger.json for this version (read-only)</summary>
-  public Url? swagger_url { get; set; } = null;
+  public string? swagger_url { get; set; } = null;
 }
 
 public class BackupConfiguration : SdkModel
@@ -108,7 +108,7 @@ public class BackupConfiguration : SdkModel
   /// <summary>(Write-Only) AWS S3 secret used for custom-s3 backups</summary>
   public string? custom_s3_secret { get; set; } = null;
   /// <summary>Link to get this item (read-only)</summary>
-  public Url? url { get; set; } = null;
+  public string? url { get; set; } = null;
 }
 
 public class Board : SdkModel
@@ -701,7 +701,7 @@ public class CredentialsApi3 : SdkModel
   /// <summary>Short name for the type of this kind of credential (read-only)</summary>
   public string? type { get; set; } = null;
   /// <summary>Link to get this item (read-only)</summary>
-  public Url? url { get; set; } = null;
+  public string? url { get; set; } = null;
 }
 
 public class CredentialsEmail : SdkModel
@@ -723,9 +723,9 @@ public class CredentialsEmail : SdkModel
   /// <summary>Short name for the type of this kind of credential (read-only)</summary>
   public string? type { get; set; } = null;
   /// <summary>Link to get this item (read-only)</summary>
-  public Url? url { get; set; } = null;
+  public string? url { get; set; } = null;
   /// <summary>Link to get this user (read-only)</summary>
-  public Url? user_url { get; set; } = null;
+  public string? user_url { get; set; } = null;
 }
 
 public class CredentialsEmbed : SdkModel
@@ -747,7 +747,7 @@ public class CredentialsEmbed : SdkModel
   /// <summary>Short name for the type of this kind of credential (read-only)</summary>
   public string? type { get; set; } = null;
   /// <summary>Link to get this item (read-only)</summary>
-  public Url? url { get; set; } = null;
+  public string? url { get; set; } = null;
 }
 
 public class CredentialsGoogle : SdkModel
@@ -769,7 +769,7 @@ public class CredentialsGoogle : SdkModel
   /// <summary>Short name for the type of this kind of credential (read-only)</summary>
   public string? type { get; set; } = null;
   /// <summary>Link to get this item (read-only)</summary>
-  public Url? url { get; set; } = null;
+  public string? url { get; set; } = null;
 }
 
 public class CredentialsLDAP : SdkModel
@@ -791,7 +791,7 @@ public class CredentialsLDAP : SdkModel
   /// <summary>Short name for the type of this kind of credential (read-only)</summary>
   public string? type { get; set; } = null;
   /// <summary>Link to get this item (read-only)</summary>
-  public Url? url { get; set; } = null;
+  public string? url { get; set; } = null;
 }
 
 public class CredentialsLookerOpenid : SdkModel
@@ -811,9 +811,9 @@ public class CredentialsLookerOpenid : SdkModel
   /// <summary>Short name for the type of this kind of credential (read-only)</summary>
   public string? type { get; set; } = null;
   /// <summary>Link to get this item (read-only)</summary>
-  public Url? url { get; set; } = null;
+  public string? url { get; set; } = null;
   /// <summary>Link to get this user (read-only)</summary>
-  public Url? user_url { get; set; } = null;
+  public string? user_url { get; set; } = null;
 }
 
 public class CredentialsOIDC : SdkModel
@@ -833,7 +833,7 @@ public class CredentialsOIDC : SdkModel
   /// <summary>Short name for the type of this kind of credential (read-only)</summary>
   public string? type { get; set; } = null;
   /// <summary>Link to get this item (read-only)</summary>
-  public Url? url { get; set; } = null;
+  public string? url { get; set; } = null;
 }
 
 public class CredentialsSaml : SdkModel
@@ -853,7 +853,7 @@ public class CredentialsSaml : SdkModel
   /// <summary>Short name for the type of this kind of credential (read-only)</summary>
   public string? type { get; set; } = null;
   /// <summary>Link to get this item (read-only)</summary>
-  public Url? url { get; set; } = null;
+  public string? url { get; set; } = null;
 }
 
 public class CredentialsTotp : SdkModel
@@ -869,7 +869,7 @@ public class CredentialsTotp : SdkModel
   /// <summary>User has verified (read-only)</summary>
   public bool? verified { get; set; } = null;
   /// <summary>Link to get this item (read-only)</summary>
-  public Url? url { get; set; } = null;
+  public string? url { get; set; } = null;
 }
 
 public class CustomWelcomeEmail : SdkModel
@@ -937,7 +937,7 @@ public class Dashboard : SdkModel
   /// <summary>Id of User that 'soft' deleted the dashboard. (read-only)</summary>
   public long? deleter_id { get; set; } = null;
   /// <summary>Relative path of URI of LookML file to edit the dashboard (LookML dashboard only). (read-only)</summary>
-  public Url? edit_uri { get; set; } = null;
+  public string? edit_uri { get; set; } = null;
   /// <summary>Number of times favorited (read-only)</summary>
   public long? favorite_count { get; set; } = null;
   /// <summary>Time the dashboard was last accessed (read-only)</summary>
@@ -1038,7 +1038,7 @@ public class DashboardElement : SdkModel
   /// <summary>Id of Dashboard</summary>
   public string? dashboard_id { get; set; } = null;
   /// <summary>Relative path of URI of LookML file to edit the dashboard element (LookML dashboard only). (read-only)</summary>
-  public Url? edit_uri { get; set; } = null;
+  public string? edit_uri { get; set; } = null;
   /// <summary>Unique Id (read-only)</summary>
   public string? id { get; set; } = null;
   public LookWithQuery? look { get; set; }
@@ -1540,7 +1540,7 @@ public class DiscretePalette : SdkModel
 public class EmbedParams : SdkModel
 {
   /// <summary>The complete URL of the Looker UI page to display in the embed context. For example, to display the dashboard with id 34, `target_url` would look like: `https://mycompany.looker.com:9999/dashboards/34`. `target_uri` MUST contain a scheme (HTTPS), domain name, and URL path. Port must be included if it is required to reach the Looker server from browser clients. If the Looker instance is behind a load balancer or other proxy, `target_uri` must be the public-facing domain name and port required to reach the Looker instance, not the actual internal network machine name of the Looker instance.</summary>
-  public Url target_url { get; set; } = "";
+  public string target_url { get; set; } = "";
   /// <summary>Number of seconds the SSO embed session will be valid after the embed session is started. Defaults to 300 seconds. Maximum session length accepted is 2592000 seconds (30 days).</summary>
   public long? session_length { get; set; } = null;
   /// <summary>When true, the embed session will purge any residual Looker login state (such as in browser cookies) before creating a new login state with the given embed user info. Defaults to true.</summary>
@@ -1550,7 +1550,7 @@ public class EmbedParams : SdkModel
 public class EmbedSsoParams : SdkModel
 {
   /// <summary>The complete URL of the Looker UI page to display in the embed context. For example, to display the dashboard with id 34, `target_url` would look like: `https://mycompany.looker.com:9999/dashboards/34`. `target_uri` MUST contain a scheme (HTTPS), domain name, and URL path. Port must be included if it is required to reach the Looker server from browser clients. If the Looker instance is behind a load balancer or other proxy, `target_uri` must be the public-facing domain name and port required to reach the Looker instance, not the actual internal network machine name of the Looker instance.</summary>
-  public Url target_url { get; set; } = "";
+  public string target_url { get; set; } = "";
   /// <summary>Number of seconds the SSO embed session will be valid after the embed session is started. Defaults to 300 seconds. Maximum session length accepted is 2592000 seconds (30 days).</summary>
   public long? session_length { get; set; } = null;
   /// <summary>When true, the embed session will purge any residual Looker login state (such as in browser cookies) before creating a new login state with the given embed user info. Defaults to true.</summary>
@@ -1588,7 +1588,7 @@ public class Error : SdkModel
   /// <summary>Error details (read-only)</summary>
   public string message { get; set; } = "";
   /// <summary>Documentation link (read-only)</summary>
-  public Url documentation_url { get; set; } = "";
+  public string documentation_url { get; set; } = "";
 }
 
 public class ExternalOauthApplication : SdkModel
@@ -1701,15 +1701,6 @@ public enum Format
   topojson,
   [EnumMember(Value = "vector_tile_region")]
   vector_tile_region
-}
-
-/// Scheme that is running on application server (for PRs, file browsing, etc.) Valid values are: "http", "https".
-public enum GitApplicationServerHttpScheme
-{
-  [EnumMember(Value = "http")]
-  http,
-  [EnumMember(Value = "https")]
-  https
 }
 
 public class GitBranch : SdkModel
@@ -2183,7 +2174,7 @@ public class LDAPConfig : SdkModel
   /// <summary>Allows roles to be directly assigned to LDAP auth'd users.</summary>
   public bool? allow_direct_roles { get; set; } = null;
   /// <summary>Link to get this item (read-only)</summary>
-  public Url? url { get; set; } = null;
+  public string? url { get; set; } = null;
 }
 
 public class LDAPConfigTestIssue : SdkModel
@@ -2208,7 +2199,7 @@ public class LDAPConfigTestResult : SdkModel
   public string? trace { get; set; } = null;
   public LDAPUser? user { get; set; }
   /// <summary>Link to ldap config (read-only)</summary>
-  public Url? url { get; set; } = null;
+  public string? url { get; set; } = null;
 }
 
 public class LDAPGroupRead : SdkModel
@@ -2224,7 +2215,7 @@ public class LDAPGroupRead : SdkModel
   /// <summary>Looker Roles (read-only)</summary>
   public Role[]? roles { get; set; } = null;
   /// <summary>Link to ldap config (read-only)</summary>
-  public Url? url { get; set; } = null;
+  public string? url { get; set; } = null;
 }
 
 public class LDAPGroupWrite : SdkModel
@@ -2240,7 +2231,7 @@ public class LDAPGroupWrite : SdkModel
   /// <summary>Looker Role Ids</summary>
   public long[]? role_ids { get; set; } = null;
   /// <summary>Link to ldap config (read-only)</summary>
-  public Url? url { get; set; } = null;
+  public string? url { get; set; } = null;
 }
 
 public class LDAPUser : SdkModel
@@ -2264,7 +2255,7 @@ public class LDAPUser : SdkModel
   /// <summary>Array of user's roles (role names only) (read-only)</summary>
   public string[]? roles { get; set; } = null;
   /// <summary>Link to ldap config (read-only)</summary>
-  public Url? url { get; set; } = null;
+  public string? url { get; set; } = null;
 }
 
 public class LDAPUserAttributeRead : SdkModel
@@ -2276,7 +2267,7 @@ public class LDAPUserAttributeRead : SdkModel
   /// <summary>Looker User Attributes (read-only)</summary>
   public UserAttribute[]? user_attributes { get; set; } = null;
   /// <summary>Link to ldap config (read-only)</summary>
-  public Url? url { get; set; } = null;
+  public string? url { get; set; } = null;
 }
 
 public class LDAPUserAttributeWrite : SdkModel
@@ -2288,7 +2279,7 @@ public class LDAPUserAttributeWrite : SdkModel
   /// <summary>Looker User Attribute Ids</summary>
   public long[]? user_attribute_ids { get; set; } = null;
   /// <summary>Link to ldap config (read-only)</summary>
-  public Url? url { get; set; } = null;
+  public string? url { get; set; } = null;
 }
 
 public class LegacyFeature : SdkModel
@@ -2677,6 +2668,8 @@ public class LookmlModelExploreField : SdkModel
   public WeekStartDay? week_start_day { get; set; }
   /// <summary>The number of times this field has been used in queries (read-only)</summary>
   public long? times_used { get; set; } = null;
+  /// <summary>The name of the view this field is defined in. This will be different than "view" when the view has been joined via a different name using the "from" parameter. (read-only)</summary>
+  public string? original_view { get; set; } = null;
 }
 
 public class LookmlModelExploreFieldEnumeration : SdkModel
@@ -3095,7 +3088,7 @@ public class ModelSet : SdkModel
   /// <summary>Name of ModelSet</summary>
   public string? name { get; set; } = null;
   /// <summary>Link to get this item (read-only)</summary>
-  public Url? url { get; set; } = null;
+  public string? url { get; set; } = null;
 }
 
 public class ModelsNotValidated : SdkModel
@@ -3164,7 +3157,7 @@ public class OIDCConfig : SdkModel
   /// <summary>Users will not be allowed to login at all unless a role for them is found in OIDC if set to true</summary>
   public bool? auth_requires_role { get; set; } = null;
   /// <summary>OpenID Provider Authorization Url</summary>
-  public Url? authorization_endpoint { get; set; } = null;
+  public string? authorization_endpoint { get; set; } = null;
   /// <summary>(Write-Only) Array of ids of groups that will be applied to new users the first time they login via OIDC</summary>
   public long[]? default_new_user_group_ids { get; set; } = null;
   /// <summary>(Read-only) Groups that will be applied to new users the first time they login via OIDC (read-only)</summary>
@@ -3212,7 +3205,7 @@ public class OIDCConfig : SdkModel
   /// <summary>(Read/Write) Array of mappings between OIDC User Attributes and arrays of Looker User Attribute ids</summary>
   public OIDCUserAttributeWrite[]? user_attributes_with_ids { get; set; } = null;
   /// <summary>OpenID Provider User Information Url</summary>
-  public Url? userinfo_endpoint { get; set; } = null;
+  public string? userinfo_endpoint { get; set; } = null;
   /// <summary>Allow OIDC auth'd users to be members of non-reflected Looker groups. If 'false', user will be removed from non-reflected groups on login.</summary>
   public bool? allow_normal_group_membership { get; set; } = null;
   /// <summary>OIDC auth'd users will inherit roles from non-reflected Looker groups.</summary>
@@ -3220,7 +3213,7 @@ public class OIDCConfig : SdkModel
   /// <summary>Allows roles to be directly assigned to OIDC auth'd users.</summary>
   public bool? allow_direct_roles { get; set; } = null;
   /// <summary>Link to get this item (read-only)</summary>
-  public Url? url { get; set; } = null;
+  public string? url { get; set; } = null;
 }
 
 public class OIDCGroupRead : SdkModel
@@ -3311,7 +3304,7 @@ public class PermissionSet : SdkModel
   public string? name { get; set; } = null;
   public string[]? permissions { get; set; } = null;
   /// <summary>Link to get this item (read-only)</summary>
-  public Url? url { get; set; } = null;
+  public string? url { get; set; } = null;
 }
 
 /// Type of permission: "view" or "edit" Valid values are: "view", "edit".
@@ -3351,9 +3344,8 @@ public class Project : SdkModel
   public string? git_service_name { get; set; } = null;
   /// <summary>Port that HTTP(S) application server is running on (for PRs, file browsing, etc.)</summary>
   public long? git_application_server_http_port { get; set; } = null;
-  /// <summary>Scheme that is running on application server (for PRs, file browsing, etc.) Valid values are: "http", "https".</summary>
-  [JsonConverter(typeof(StringEnumConverter))]
-  public GitApplicationServerHttpScheme? git_application_server_http_scheme { get; set; }
+  /// <summary>Scheme that is running on application server (for PRs, file browsing, etc.)</summary>
+  public string? git_application_server_http_scheme { get; set; } = null;
   /// <summary>(Write-Only) Optional secret token with which to authenticate requests to the webhook deploy endpoint. If not set, endpoint is unauthenticated.</summary>
   public string? deploy_secret { get; set; } = null;
   /// <summary>(Write-Only) When true, unsets the deploy secret to allow unauthenticated access to the webhook deploy endpoint.</summary>
@@ -3396,7 +3388,7 @@ public class ProjectError : SdkModel
   /// <summary>A link to Looker documentation about this error (read-only)</summary>
   public string? help_url { get; set; } = null;
   /// <summary>Error parameters (read-only)</summary>
-  public StringDictionary<string>? @params { get; set; } = null;
+  public StringDictionary<object>? @params { get; set; } = null;
   /// <summary>A version of the error message that does not contain potentially sensitive information. Suitable for situations in which messages are stored or sent to consumers outside of Looker, such as external logs. Sanitized messages will display "(?)" where sensitive information would appear in the corresponding non-sanitized message (read-only)</summary>
   public string? sanitized_message { get; set; } = null;
 }
@@ -3705,7 +3697,7 @@ public class ResultMakerWithIdVisConfigAndDynamicFields : SdkModel
   public string? sql_query_id { get; set; } = null;
   public Query? query { get; set; }
   /// <summary>Vis config of the constituent Query, or Merge Query. (read-only)</summary>
-  public StringDictionary<string>? vis_config { get; set; } = null;
+  public StringDictionary<object>? vis_config { get; set; } = null;
 }
 
 public class Role : SdkModel
@@ -3725,9 +3717,9 @@ public class Role : SdkModel
   /// <summary>Count of users with this role, only returned if user_count field is requested (read-only)</summary>
   public long? user_count { get; set; } = null;
   /// <summary>Link to get this item (read-only)</summary>
-  public Url? url { get; set; } = null;
+  public string? url { get; set; } = null;
   /// <summary>Link to get list of users with this role (read-only)</summary>
-  public Url? users_url { get; set; } = null;
+  public string? users_url { get; set; } = null;
 }
 
 public class RunningQueries : SdkModel
@@ -3839,7 +3831,7 @@ public class SamlConfig : SdkModel
   /// <summary>Allows roles to be directly assigned to SAML auth'd users.</summary>
   public bool? allow_direct_roles { get; set; } = null;
   /// <summary>Link to get this item (read-only)</summary>
-  public Url? url { get; set; } = null;
+  public string? url { get; set; } = null;
 }
 
 public class SamlGroupRead : SdkModel
@@ -3855,7 +3847,7 @@ public class SamlGroupRead : SdkModel
   /// <summary>Looker Roles (read-only)</summary>
   public Role[]? roles { get; set; } = null;
   /// <summary>Link to saml config (read-only)</summary>
-  public Url? url { get; set; } = null;
+  public string? url { get; set; } = null;
 }
 
 public class SamlGroupWrite : SdkModel
@@ -3871,7 +3863,7 @@ public class SamlGroupWrite : SdkModel
   /// <summary>Looker Role Ids</summary>
   public long[]? role_ids { get; set; } = null;
   /// <summary>Link to saml config (read-only)</summary>
-  public Url? url { get; set; } = null;
+  public string? url { get; set; } = null;
 }
 
 public class SamlMetadataParseResult : SdkModel
@@ -3895,7 +3887,7 @@ public class SamlUserAttributeRead : SdkModel
   /// <summary>Looker User Attributes (read-only)</summary>
   public UserAttribute[]? user_attributes { get; set; } = null;
   /// <summary>Link to saml config (read-only)</summary>
-  public Url? url { get; set; } = null;
+  public string? url { get; set; } = null;
 }
 
 public class SamlUserAttributeWrite : SdkModel
@@ -3907,7 +3899,7 @@ public class SamlUserAttributeWrite : SdkModel
   /// <summary>Looker User Attribute Ids</summary>
   public long[]? user_attribute_ids { get; set; } = null;
   /// <summary>Link to saml config (read-only)</summary>
-  public Url? url { get; set; } = null;
+  public string? url { get; set; } = null;
 }
 
 public class ScheduledPlan : SdkModel
@@ -4106,7 +4098,7 @@ public class Session : SdkModel
   /// <summary>Time when this session will expire (read-only)</summary>
   public string? expires_at { get; set; } = null;
   /// <summary>Link to get this item (read-only)</summary>
-  public Url? url { get; set; } = null;
+  public string? url { get; set; } = null;
 }
 
 public class SessionConfig : SdkModel
@@ -4386,9 +4378,9 @@ public class User : SdkModel
   /// <summary>Operations the current user is able to perform on this object (read-only)</summary>
   public StringDictionary<bool>? can { get; set; } = null;
   /// <summary>URL for the avatar image (may be generic) (read-only)</summary>
-  public Url? avatar_url { get; set; } = null;
+  public string? avatar_url { get; set; } = null;
   /// <summary>URL for the avatar image (may be generic), does not specify size (read-only)</summary>
-  public Url? avatar_url_without_sizing { get; set; } = null;
+  public string? avatar_url_without_sizing { get; set; } = null;
   /// <summary>API 3 credentials (read-only)</summary>
   public CredentialsApi3[]? credentials_api3 { get; set; } = null;
   public CredentialsEmail? credentials_email { get; set; }
@@ -4445,7 +4437,7 @@ public class User : SdkModel
   /// <summary>User can inherit roles from a normal Looker group. (read-only)</summary>
   public bool? allow_roles_from_normal_groups { get; set; } = null;
   /// <summary>Link to get this item (read-only)</summary>
-  public Url? url { get; set; } = null;
+  public string? url { get; set; } = null;
 }
 
 public class UserAttribute : SdkModel
@@ -4455,11 +4447,11 @@ public class UserAttribute : SdkModel
   /// <summary>Unique Id (read-only)</summary>
   public long? id { get; set; } = null;
   /// <summary>Name of user attribute</summary>
-  public string? name { get; set; } = null;
+  public string name { get; set; } = "";
   /// <summary>Human-friendly label for user attribute</summary>
-  public string? label { get; set; } = null;
+  public string label { get; set; } = "";
   /// <summary>Type of user attribute ("string", "number", "datetime", "yesno", "zipcode")</summary>
-  public string? type { get; set; } = null;
+  public string type { get; set; } = "";
   /// <summary>Default value for when no value is set on the user</summary>
   public string? default_value { get; set; } = null;
   /// <summary>Attribute is a system default (read-only)</summary>
@@ -4580,9 +4572,9 @@ public class UserPublic : SdkModel
   /// <summary>Full name for display (available only if both first_name and last_name are set) (read-only)</summary>
   public string? display_name { get; set; } = null;
   /// <summary>URL for the avatar image (may be generic) (read-only)</summary>
-  public Url? avatar_url { get; set; } = null;
+  public string? avatar_url { get; set; } = null;
   /// <summary>Link to get this item (read-only)</summary>
-  public Url? url { get; set; } = null;
+  public string? url { get; set; } = null;
 }
 
 public class ValidationError : SdkModel
@@ -4592,7 +4584,7 @@ public class ValidationError : SdkModel
   /// <summary>Error detail array (read-only)</summary>
   public ValidationErrorDetail[]? errors { get; set; } = null;
   /// <summary>Documentation link (read-only)</summary>
-  public Url documentation_url { get; set; } = "";
+  public string documentation_url { get; set; } = "";
 }
 
 public class ValidationErrorDetail : SdkModel
@@ -4604,7 +4596,7 @@ public class ValidationErrorDetail : SdkModel
   /// <summary>Error info message (read-only)</summary>
   public string? message { get; set; } = null;
   /// <summary>Documentation link (read-only)</summary>
-  public Url documentation_url { get; set; } = "";
+  public string documentation_url { get; set; } = "";
 }
 
 /// The name of the starting day of the week. Valid values are: "monday", "tuesday", "wednesday", "thursday", "friday", "saturday", "sunday".
@@ -5405,7 +5397,7 @@ public class WriteOIDCConfig : SdkModel
   /// <summary>Users will not be allowed to login at all unless a role for them is found in OIDC if set to true</summary>
   public bool? auth_requires_role { get; set; } = null;
   /// <summary>OpenID Provider Authorization Url</summary>
-  public Url? authorization_endpoint { get; set; } = null;
+  public string? authorization_endpoint { get; set; } = null;
   /// <summary>(Write-Only) Array of ids of groups that will be applied to new users the first time they login via OIDC</summary>
   public long[]? default_new_user_group_ids { get; set; } = null;
   /// <summary>(Write-Only) Array of ids of roles that will be applied to new users the first time they login via OIDC</summary>
@@ -5439,7 +5431,7 @@ public class WriteOIDCConfig : SdkModel
   /// <summary>(Read/Write) Array of mappings between OIDC User Attributes and arrays of Looker User Attribute ids</summary>
   public OIDCUserAttributeWrite[]? user_attributes_with_ids { get; set; } = null;
   /// <summary>OpenID Provider User Information Url</summary>
-  public Url? userinfo_endpoint { get; set; } = null;
+  public string? userinfo_endpoint { get; set; } = null;
   /// <summary>Allow OIDC auth'd users to be members of non-reflected Looker groups. If 'false', user will be removed from non-reflected groups on login.</summary>
   public bool? allow_normal_group_membership { get; set; } = null;
   /// <summary>OIDC auth'd users will inherit roles from non-reflected Looker groups.</summary>
@@ -5495,9 +5487,8 @@ public class WriteProject : SdkModel
   public string? git_service_name { get; set; } = null;
   /// <summary>Port that HTTP(S) application server is running on (for PRs, file browsing, etc.)</summary>
   public long? git_application_server_http_port { get; set; } = null;
-  /// <summary>Scheme that is running on application server (for PRs, file browsing, etc.) Valid values are: "http", "https".</summary>
-  [JsonConverter(typeof(StringEnumConverter))]
-  public GitApplicationServerHttpScheme? git_application_server_http_scheme { get; set; }
+  /// <summary>Scheme that is running on application server (for PRs, file browsing, etc.)</summary>
+  public string? git_application_server_http_scheme { get; set; } = null;
   /// <summary>(Write-Only) Optional secret token with which to authenticate requests to the webhook deploy endpoint. If not set, endpoint is unauthenticated.</summary>
   public string? deploy_secret { get; set; } = null;
   /// <summary>(Write-Only) When true, unsets the deploy secret to allow unauthenticated access to the webhook deploy endpoint.</summary>
@@ -5785,11 +5776,11 @@ public class WriteUser : SdkModel
 public class WriteUserAttribute : SdkModel
 {
   /// <summary>Name of user attribute</summary>
-  public string? name { get; set; } = null;
+  public string name { get; set; } = "";
   /// <summary>Human-friendly label for user attribute</summary>
-  public string? label { get; set; } = null;
+  public string label { get; set; } = "";
   /// <summary>Type of user attribute ("string", "number", "datetime", "yesno", "zipcode")</summary>
-  public string? type { get; set; } = null;
+  public string type { get; set; } = "";
   /// <summary>Default value for when no value is set on the user</summary>
   public string? default_value { get; set; } = null;
   /// <summary>If true, users will not be able to view values of this attribute</summary>

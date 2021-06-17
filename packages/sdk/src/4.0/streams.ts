@@ -6832,7 +6832,7 @@ export class Looker40SDKStream extends APIMethods {
   async copy_look(
     callback: (readable: Readable) => Promise<ILookWithQuery>,
     look_id: number,
-    folder_id?: number,
+    folder_id?: string,
     options?: Partial<ITransportSettings>
   ) {
     return this.authStream<ILookWithQuery>(
@@ -6864,7 +6864,7 @@ export class Looker40SDKStream extends APIMethods {
   async move_look(
     callback: (readable: Readable) => Promise<ILookWithQuery>,
     look_id: number,
-    folder_id: number,
+    folder_id: string,
     options?: Partial<ITransportSettings>
   ) {
     return this.authStream<ILookWithQuery>(
@@ -8423,7 +8423,7 @@ export class Looker40SDKStream extends APIMethods {
    * Query Tasks whose results have expired will have a status of 'expired'.
    * If the user making the API request does not have sufficient privileges to view a Query Task result, the result will have a status of 'missing'
    *
-   * GET /query_tasks/multi_results -> IDictionary<string>
+   * GET /query_tasks/multi_results -> IDictionary<any>
    *
    * @param callback streaming output function
    * @param query_task_ids List of Query Task IDs
@@ -8431,11 +8431,11 @@ export class Looker40SDKStream extends APIMethods {
    *
    */
   async query_task_multi_results(
-    callback: (readable: Readable) => Promise<IDictionary<string>>,
+    callback: (readable: Readable) => Promise<IDictionary<any>>,
     query_task_ids: DelimArray<string>,
     options?: Partial<ITransportSettings>
   ) {
-    return this.authStream<IDictionary<string>>(
+    return this.authStream<IDictionary<any>>(
       callback,
       'GET',
       '/query_tasks/multi_results',
