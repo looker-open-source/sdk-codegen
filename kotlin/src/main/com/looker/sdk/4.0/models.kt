@@ -25,7 +25,7 @@
  */
 
 /**
- * 284 API models: 210 Spec, 0 Request, 56 Write, 18 Enum
+ * 283 API models: 210 Spec, 0 Request, 56 Write, 17 Enum
  */
 
 
@@ -93,7 +93,7 @@ data class ApiVersionElement (
     var version: String? = null,
     var full_version: String? = null,
     var status: String? = null,
-    var swagger_url: UriString? = null
+    var swagger_url: String? = null
 ) : Serializable
 
 /**
@@ -112,7 +112,7 @@ data class BackupConfiguration (
     var custom_s3_bucket_region: String? = null,
     var custom_s3_key: String? = null,
     var custom_s3_secret: String? = null,
-    var url: UriString? = null
+    var url: String? = null
 ) : Serializable
 
 /**
@@ -755,7 +755,7 @@ data class CredentialsApi3 (
     @param:JsonProperty("is_disabled")
     var is_disabled: Boolean? = null,
     var type: String? = null,
-    var url: UriString? = null
+    var url: String? = null
 ) : Serializable
 
 /**
@@ -781,8 +781,8 @@ data class CredentialsEmail (
     var logged_in_at: String? = null,
     var password_reset_url: String? = null,
     var type: String? = null,
-    var url: UriString? = null,
-    var user_url: UriString? = null
+    var url: String? = null,
+    var user_url: String? = null
 ) : Serializable
 
 /**
@@ -807,7 +807,7 @@ data class CredentialsEmbed (
     var is_disabled: Boolean? = null,
     var logged_in_at: String? = null,
     var type: String? = null,
-    var url: UriString? = null
+    var url: String? = null
 ) : Serializable
 
 /**
@@ -832,7 +832,7 @@ data class CredentialsGoogle (
     var is_disabled: Boolean? = null,
     var logged_in_at: String? = null,
     var type: String? = null,
-    var url: UriString? = null
+    var url: String? = null
 ) : Serializable
 
 /**
@@ -857,7 +857,7 @@ data class CredentialsLDAP (
     var ldap_id: String? = null,
     var logged_in_at: String? = null,
     var type: String? = null,
-    var url: UriString? = null
+    var url: String? = null
 ) : Serializable
 
 /**
@@ -881,8 +881,8 @@ data class CredentialsLookerOpenid (
     var logged_in_at: String? = null,
     var logged_in_ip: String? = null,
     var type: String? = null,
-    var url: UriString? = null,
-    var user_url: UriString? = null
+    var url: String? = null,
+    var user_url: String? = null
 ) : Serializable
 
 /**
@@ -905,7 +905,7 @@ data class CredentialsOIDC (
     var logged_in_at: String? = null,
     var oidc_user_id: String? = null,
     var type: String? = null,
-    var url: UriString? = null
+    var url: String? = null
 ) : Serializable
 
 /**
@@ -928,7 +928,7 @@ data class CredentialsSaml (
     var logged_in_at: String? = null,
     var saml_user_id: String? = null,
     var type: String? = null,
-    var url: UriString? = null
+    var url: String? = null
 ) : Serializable
 
 /**
@@ -947,7 +947,7 @@ data class CredentialsTotp (
     var is_disabled: Boolean? = null,
     var type: String? = null,
     var verified: Boolean? = null,
-    var url: UriString? = null
+    var url: String? = null
 ) : Serializable
 
 /**
@@ -1033,7 +1033,7 @@ data class Dashboard (
     var deleted: Boolean? = null,
     var deleted_at: Date? = null,
     var deleter_id: Long? = null,
-    var edit_uri: UriString? = null,
+    var edit_uri: String? = null,
     var favorite_count: Long? = null,
     var last_accessed_at: Date? = null,
     var last_viewed_at: Date? = null,
@@ -1150,7 +1150,7 @@ data class DashboardElement (
     var body_text: String? = null,
     var body_text_as_html: String? = null,
     var dashboard_id: String? = null,
-    var edit_uri: UriString? = null,
+    var edit_uri: String? = null,
     var id: String? = null,
     var look: LookWithQuery? = null,
     var look_id: String? = null,
@@ -1663,7 +1663,7 @@ data class DiscretePalette (
  * @property force_logout_login When true, the embed session will purge any residual Looker login state (such as in browser cookies) before creating a new login state with the given embed user info. Defaults to true.
  */
 data class EmbedParams (
-    var target_url: UriString,
+    var target_url: String,
     var session_length: Long? = null,
     var force_logout_login: Boolean? = null
 ) : Serializable
@@ -1684,7 +1684,7 @@ data class EmbedParams (
  * @property secret_id Id of the embed secret to use to sign this SSO url. If specified, the value must be an id of a valid (active) secret defined in the Looker instance. If not specified, the URL will be signed with the newest active embed secret defined in the Looker instance.
  */
 data class EmbedSsoParams (
-    var target_url: UriString,
+    var target_url: String,
     var session_length: Long? = null,
     var force_logout_login: Boolean? = null,
     var external_user_id: String? = null,
@@ -1712,7 +1712,7 @@ data class EmbedUrlResponse (
  */
 data class Error (
     var message: String,
-    var documentation_url: UriString
+    var documentation_url: String
 ) : Serializable
 
 /**
@@ -1854,14 +1854,6 @@ data class FolderBase (
 enum class Format : Serializable {
     topojson,
     vector_tile_region
-}
-
-/**
- * Scheme that is running on application server (for PRs, file browsing, etc.) Valid values are: "http", "https".
- */
-enum class GitApplicationServerHttpScheme : Serializable {
-    http,
-    https
 }
 
 /**
@@ -2367,7 +2359,7 @@ data class LDAPConfig (
     var allow_normal_group_membership: Boolean? = null,
     var allow_roles_from_normal_groups: Boolean? = null,
     var allow_direct_roles: Boolean? = null,
-    var url: UriString? = null
+    var url: String? = null
 ) : Serializable
 
 /**
@@ -2397,7 +2389,7 @@ data class LDAPConfigTestResult (
     var status: String? = null,
     var trace: String? = null,
     var user: LDAPUser? = null,
-    var url: UriString? = null
+    var url: String? = null
 ) : Serializable
 
 /**
@@ -2414,7 +2406,7 @@ data class LDAPGroupRead (
     var looker_group_name: String? = null,
     var name: String? = null,
     var roles: Array<Role>? = null,
-    var url: UriString? = null
+    var url: String? = null
 ) : Serializable
 
 /**
@@ -2431,7 +2423,7 @@ data class LDAPGroupWrite (
     var looker_group_name: String? = null,
     var name: String? = null,
     var role_ids: Array<Long>? = null,
-    var url: UriString? = null
+    var url: String? = null
 ) : Serializable
 
 /**
@@ -2456,7 +2448,7 @@ data class LDAPUser (
     var ldap_dn: String? = null,
     var ldap_id: String? = null,
     var roles: Array<String>? = null,
-    var url: UriString? = null
+    var url: String? = null
 ) : Serializable
 
 /**
@@ -2469,7 +2461,7 @@ data class LDAPUserAttributeRead (
     var name: String? = null,
     var required: Boolean? = null,
     var user_attributes: Array<UserAttribute>? = null,
-    var url: UriString? = null
+    var url: String? = null
 ) : Serializable
 
 /**
@@ -2482,7 +2474,7 @@ data class LDAPUserAttributeWrite (
     var name: String? = null,
     var required: Boolean? = null,
     var user_attribute_ids: Array<Long>? = null,
-    var url: UriString? = null
+    var url: String? = null
 ) : Serializable
 
 /**
@@ -2833,6 +2825,7 @@ data class LookmlModelExploreError (
  * @property dynamic Whether this field was specified in "dynamic_fields" and is not part of the model. (read-only)
  * @property week_start_day The name of the starting day of the week. Valid values are: "monday", "tuesday", "wednesday", "thursday", "friday", "saturday", "sunday". (read-only)
  * @property times_used The number of times this field has been used in queries (read-only)
+ * @property original_view The name of the view this field is defined in. This will be different than "view" when the view has been joined via a different name using the "from" parameter. (read-only)
  */
 data class LookmlModelExploreField (
     var align: Align? = null,
@@ -2895,7 +2888,8 @@ data class LookmlModelExploreField (
     var view_label: String? = null,
     var dynamic: Boolean? = null,
     var week_start_day: WeekStartDay? = null,
-    var times_used: Long? = null
+    var times_used: Long? = null,
+    var original_view: String? = null
 ) : Serializable
 
 /**
@@ -3347,7 +3341,7 @@ data class ModelSet (
     var id: Long? = null,
     var models: Array<String>? = null,
     var name: String? = null,
-    var url: UriString? = null
+    var url: String? = null
 ) : Serializable
 
 /**
@@ -3438,7 +3432,7 @@ data class OIDCConfig (
     var alternate_email_login_allowed: Boolean? = null,
     var audience: String? = null,
     var auth_requires_role: Boolean? = null,
-    var authorization_endpoint: UriString? = null,
+    var authorization_endpoint: String? = null,
     var default_new_user_group_ids: Array<Long>? = null,
     var default_new_user_groups: Array<Group>? = null,
     var default_new_user_role_ids: Array<Long>? = null,
@@ -3466,11 +3460,11 @@ data class OIDCConfig (
     var user_attribute_map_last_name: String? = null,
     var user_attributes: Array<OIDCUserAttributeRead>? = null,
     var user_attributes_with_ids: Array<OIDCUserAttributeWrite>? = null,
-    var userinfo_endpoint: UriString? = null,
+    var userinfo_endpoint: String? = null,
     var allow_normal_group_membership: Boolean? = null,
     var allow_roles_from_normal_groups: Boolean? = null,
     var allow_direct_roles: Boolean? = null,
-    var url: UriString? = null
+    var url: String? = null
 ) : Serializable
 
 /**
@@ -3569,7 +3563,7 @@ data class PermissionSet (
     var id: Long? = null,
     var name: String? = null,
     var permissions: Array<String>? = null,
-    var url: UriString? = null
+    var url: String? = null
 ) : Serializable
 
 /**
@@ -3594,7 +3588,7 @@ enum class PermissionType : Serializable {
  * @property git_password_user_attribute User attribute name for password in per-user HTTPS authentication.
  * @property git_service_name Name of the git service provider
  * @property git_application_server_http_port Port that HTTP(S) application server is running on (for PRs, file browsing, etc.)
- * @property git_application_server_http_scheme Scheme that is running on application server (for PRs, file browsing, etc.) Valid values are: "http", "https".
+ * @property git_application_server_http_scheme Scheme that is running on application server (for PRs, file browsing, etc.)
  * @property deploy_secret (Write-Only) Optional secret token with which to authenticate requests to the webhook deploy endpoint. If not set, endpoint is unauthenticated.
  * @property unset_deploy_secret (Write-Only) When true, unsets the deploy secret to allow unauthenticated access to the webhook deploy endpoint.
  * @property pull_request_mode The git pull request policy for this project. Valid values are: "off", "links", "recommended", "required".
@@ -3618,7 +3612,7 @@ data class Project (
     var git_password_user_attribute: String? = null,
     var git_service_name: String? = null,
     var git_application_server_http_port: Long? = null,
-    var git_application_server_http_scheme: GitApplicationServerHttpScheme? = null,
+    var git_application_server_http_scheme: String? = null,
     var deploy_secret: String? = null,
     var unset_deploy_secret: Boolean? = null,
     var pull_request_mode: PullRequestMode? = null,
@@ -3992,8 +3986,8 @@ data class Role (
     var model_set: ModelSet? = null,
     var model_set_id: Long? = null,
     var user_count: Long? = null,
-    var url: UriString? = null,
-    var users_url: UriString? = null
+    var url: String? = null,
+    var users_url: String? = null
 ) : Serializable
 
 /**
@@ -4113,7 +4107,7 @@ data class SamlConfig (
     var allow_normal_group_membership: Boolean? = null,
     var allow_roles_from_normal_groups: Boolean? = null,
     var allow_direct_roles: Boolean? = null,
-    var url: UriString? = null
+    var url: String? = null
 ) : Serializable
 
 /**
@@ -4130,7 +4124,7 @@ data class SamlGroupRead (
     var looker_group_name: String? = null,
     var name: String? = null,
     var roles: Array<Role>? = null,
-    var url: UriString? = null
+    var url: String? = null
 ) : Serializable
 
 /**
@@ -4147,7 +4141,7 @@ data class SamlGroupWrite (
     var looker_group_name: String? = null,
     var name: String? = null,
     var role_ids: Array<Long>? = null,
-    var url: UriString? = null
+    var url: String? = null
 ) : Serializable
 
 /**
@@ -4173,7 +4167,7 @@ data class SamlUserAttributeRead (
     var name: String? = null,
     var required: Boolean? = null,
     var user_attributes: Array<UserAttribute>? = null,
-    var url: UriString? = null
+    var url: String? = null
 ) : Serializable
 
 /**
@@ -4186,7 +4180,7 @@ data class SamlUserAttributeWrite (
     var name: String? = null,
     var required: Boolean? = null,
     var user_attribute_ids: Array<Long>? = null,
-    var url: UriString? = null
+    var url: String? = null
 ) : Serializable
 
 /**
@@ -4398,7 +4392,7 @@ data class Session (
     var sudo_user_id: Long? = null,
     var created_at: String? = null,
     var expires_at: String? = null,
-    var url: UriString? = null
+    var url: String? = null
 ) : Serializable
 
 /**
@@ -4712,8 +4706,8 @@ data class UpdateFolder (
  */
 data class User (
     var can: Map<String,Boolean>? = null,
-    var avatar_url: UriString? = null,
-    var avatar_url_without_sizing: UriString? = null,
+    var avatar_url: String? = null,
+    var avatar_url_without_sizing: String? = null,
     var credentials_api3: Array<CredentialsApi3>? = null,
     var credentials_email: CredentialsEmail? = null,
     var credentials_embed: Array<CredentialsEmbed>? = null,
@@ -4747,7 +4741,7 @@ data class User (
     var allow_direct_roles: Boolean? = null,
     var allow_normal_group_membership: Boolean? = null,
     var allow_roles_from_normal_groups: Boolean? = null,
-    var url: UriString? = null
+    var url: String? = null
 ) : Serializable
 
 /**
@@ -4767,9 +4761,9 @@ data class User (
 data class UserAttribute (
     var can: Map<String,Boolean>? = null,
     var id: Long? = null,
-    var name: String? = null,
-    var label: String? = null,
-    var type: String? = null,
+    var name: String,
+    var label: String,
+    var type: String,
     var default_value: String? = null,
     @get:JsonProperty("is_system")
     @param:JsonProperty("is_system")
@@ -4884,8 +4878,8 @@ data class UserPublic (
     var first_name: String? = null,
     var last_name: String? = null,
     var display_name: String? = null,
-    var avatar_url: UriString? = null,
-    var url: UriString? = null
+    var avatar_url: String? = null,
+    var url: String? = null
 ) : Serializable
 
 /**
@@ -4896,7 +4890,7 @@ data class UserPublic (
 data class ValidationError (
     var message: String,
     var errors: Array<ValidationErrorDetail>? = null,
-    var documentation_url: UriString
+    var documentation_url: String
 ) : Serializable
 
 /**
@@ -4909,7 +4903,7 @@ data class ValidationErrorDetail (
     var field: String? = null,
     var code: String? = null,
     var message: String? = null,
-    var documentation_url: UriString
+    var documentation_url: String
 ) : Serializable
 
 /**
@@ -5821,7 +5815,7 @@ data class WriteOIDCConfig (
     var alternate_email_login_allowed: Boolean? = null,
     var audience: String? = null,
     var auth_requires_role: Boolean? = null,
-    var authorization_endpoint: UriString? = null,
+    var authorization_endpoint: String? = null,
     var default_new_user_group_ids: Array<Long>? = null,
     var default_new_user_role_ids: Array<Long>? = null,
     var enabled: Boolean? = null,
@@ -5842,7 +5836,7 @@ data class WriteOIDCConfig (
     var user_attribute_map_first_name: String? = null,
     var user_attribute_map_last_name: String? = null,
     var user_attributes_with_ids: Array<OIDCUserAttributeWrite>? = null,
-    var userinfo_endpoint: UriString? = null,
+    var userinfo_endpoint: String? = null,
     var allow_normal_group_membership: Boolean? = null,
     var allow_roles_from_normal_groups: Boolean? = null,
     var allow_direct_roles: Boolean? = null
@@ -5890,7 +5884,7 @@ data class WritePermissionSet (
  * @property git_password_user_attribute User attribute name for password in per-user HTTPS authentication.
  * @property git_service_name Name of the git service provider
  * @property git_application_server_http_port Port that HTTP(S) application server is running on (for PRs, file browsing, etc.)
- * @property git_application_server_http_scheme Scheme that is running on application server (for PRs, file browsing, etc.) Valid values are: "http", "https".
+ * @property git_application_server_http_scheme Scheme that is running on application server (for PRs, file browsing, etc.)
  * @property deploy_secret (Write-Only) Optional secret token with which to authenticate requests to the webhook deploy endpoint. If not set, endpoint is unauthenticated.
  * @property unset_deploy_secret (Write-Only) When true, unsets the deploy secret to allow unauthenticated access to the webhook deploy endpoint.
  * @property pull_request_mode The git pull request policy for this project. Valid values are: "off", "links", "recommended", "required".
@@ -5910,7 +5904,7 @@ data class WriteProject (
     var git_password_user_attribute: String? = null,
     var git_service_name: String? = null,
     var git_application_server_http_port: Long? = null,
-    var git_application_server_http_scheme: GitApplicationServerHttpScheme? = null,
+    var git_application_server_http_scheme: String? = null,
     var deploy_secret: String? = null,
     var unset_deploy_secret: Boolean? = null,
     var pull_request_mode: PullRequestMode? = null,
@@ -6232,9 +6226,9 @@ data class WriteUser (
  * @property hidden_value_domain_whitelist Destinations to which a hidden attribute may be sent. Once set, cannot be edited.
  */
 data class WriteUserAttribute (
-    var name: String? = null,
-    var label: String? = null,
-    var type: String? = null,
+    var name: String,
+    var label: String,
+    var type: String,
     var default_value: String? = null,
     var value_is_hidden: Boolean? = null,
     var user_can_view: Boolean? = null,
