@@ -1,6 +1,6 @@
 {
   "name": "@looker/sdk-codegen",
-  "version": "21.0.16",
+  "version": "21.0.17",
   "description": "Looker SDK Codegen core",
   "main": "lib/index.js",
   "module": "lib/esm/index.js",

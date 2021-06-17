@@ -3514,7 +3514,7 @@ func (l *LookerSDK) RunLook(request RequestRunLook,
 // POST /looks/{look_id}/copy -> LookWithQuery
 func (l *LookerSDK) CopyLook(
     lookId int64,
-    folderId int64,
+    folderId string,
     options *rtl.ApiSettings) (LookWithQuery, error) {
     var result LookWithQuery
     err := l.session.Do(&result, "POST", "/4.0", fmt.Sprintf("/looks/%v/copy", lookId), map[string]interface{}{"folder_id": folderId}, nil, options)
@@ -3532,7 +3532,7 @@ func (l *LookerSDK) CopyLook(
 // PATCH /looks/{look_id}/move -> LookWithQuery
 func (l *LookerSDK) MoveLook(
     lookId int64,
-    folderId int64,
+    folderId string,
     options *rtl.ApiSettings) (LookWithQuery, error) {
     var result LookWithQuery
     err := l.session.Do(&result, "PATCH", "/4.0", fmt.Sprintf("/looks/%v/move", lookId), map[string]interface{}{"folder_id": folderId}, nil, options)
