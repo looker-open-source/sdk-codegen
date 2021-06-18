@@ -29,8 +29,8 @@ import blockTheme from 'prism-react-renderer/themes/vsDark'
 import inlineTheme from 'prism-react-renderer/themes/github'
 
 /**
- * checks whether object is Language
- * @param object any object to be tested
+ * checks whether input is supported syntax highlighting language
+ * @param languageName - string lang name to test
  * @returns boolean
  */
 function instanceOfPrismLanguage(languageName: string): boolean {

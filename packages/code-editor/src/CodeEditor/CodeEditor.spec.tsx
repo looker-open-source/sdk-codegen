@@ -28,8 +28,8 @@ import { renderWithTheme } from '@looker/components-test-utils'
 import userEvent from '@testing-library/user-event'
 import { screen } from '@testing-library/react'
 
+import { pythonTestCode } from '../test-data'
 import { CodeEditor } from './CodeEditor'
-import { pythonTestCode } from './test-data'
 
 describe('CodeEditor', () => {
   const setState = jest.fn()

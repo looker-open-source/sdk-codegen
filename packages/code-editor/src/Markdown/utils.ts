@@ -24,9 +24,6 @@
 
  */
 
-/**
- * TODO: Upgrade build to esnext and use `replaceAll`
- */
 export const regReplaceAll = (
   content: string,
   pattern: string,
@@ -103,7 +100,7 @@ const removeCodeLanguageTags = (content: string) => {
 /**
  * Extracts the syntax highlighting language, if specified
  * @param content - language tagged code blob
- * @returns
+ * @returns - syntax highlighting language
  */
 const getCodeLanguageFromTaggedText = (content: string): string => {
   const searchPattern = /<(.*)\/>$/gm
