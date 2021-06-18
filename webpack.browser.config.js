@@ -33,13 +33,9 @@ module.exports = function () {
     resolve: {
       fallback: {
         buffer: false,
-        path: require.resolve('path-browserify'),
       },
     },
     plugins: [
-      new webpack.ProvidePlugin({
-        process: 'process/browser',
-      }),
       new BundleAnalyzerPlugin({
         analyzerMode: process.env.ANALYZE_MODE || 'disabled',
       }),

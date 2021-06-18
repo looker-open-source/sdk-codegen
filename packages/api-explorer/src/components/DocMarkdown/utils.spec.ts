@@ -23,39 +23,9 @@
  SOFTWARE.
 
  */
-import { highlightMarkdown, remapHashURL, transformURL } from './utils'
+import { remapHashURL, transformURL } from './utils'
 
 describe('DocMarkdown utils', () => {
-  describe('highlighting', () => {
-    const str = 'Get the query for a given query slug'
-    test('it returns original string when there are no matches', () => {
-      const result = highlightMarkdown('dashboard', str)
-      expect(result).toEqual(str)
-    })
-
-    test('it returns original string when no pattern is provided', () => {
-      const result = highlightMarkdown('', str)
-      expect(result).toEqual(str)
-    })
-
-    test('it wraps matches with mark tags', () => {
-      const result = highlightMarkdown('query', str)
-      expect(result).toEqual(
-        'Get the <mark>query</mark> for a given <mark>query</mark> slug'
-      )
-    })
-
-    test('it highlights matches in both the display text and url of an inline-style hashbang link', () => {
-      const result = highlightMarkdown(
-        'query',
-        'Here is some text [Query](#!/methods/Query/create_query)'
-      )
-      expect(result).toEqual(
-        'Here is some text [<mark>Query</mark>](#!/methods/<mark>Query</mark>/create_<mark>query</mark>)'
-      )
-    })
-  })
-
   describe('hashbang url remapping', () => {
     test.each(['#!/methodTag', '#!/3.1/methodTag'])(
       'it correctly maps %s tag urls',
@@ -85,6 +55,17 @@ describe('DocMarkdown utils', () => {
       const url = '#!/<mark>Dashboard</mark>/create_<mark>dashboard</mark>'
       const result = transformURL('3.1', url)
       expect(result).toEqual('/3.1/methods/Dashboard/create_dashboard')
+    })
+    test('removes mark tags and transforms url', () => {
+      const url = 'https://looker.com/docs/r/api/<mark>authorization</mark>'
+      const result = transformURL('3.1', url)
+      expect(result).toEqual('https://looker.com/docs/r/api/authorization')
+    })
+    test('removes escaped mark tags and transforms url', () => {
+      const url =
+        'https://looker.com/docs/r/api/%3Cmark%3Eauthorization%3Cmark%3E'
+      const result = transformURL('3.1', url)
+      expect(result).toEqual('https://looker.com/docs/r/api/authorization')
     })
   })
 })

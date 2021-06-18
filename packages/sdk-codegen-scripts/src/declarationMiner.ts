@@ -56,7 +56,8 @@ const fileFilter = (
  */
 export const rubyMethodProbe = {
   fileNamePattern: /^(?!test).*_controller.rb$/,
-  declarationPattern: /(?<verb>GET|POST|DELETE|PUT|PATCH)\s(?:"|')\/api\/3\.x(?<path>\S+)(?:"|')/i,
+  declarationPattern:
+    /(?<verb>GET|POST|DELETE|PUT|PATCH)\s(?:"|')\/api\/3\.x(?<path>\S+)(?:"|')/i,
   matchToSpecKeyTransform: (match: RegExpExecArray) => {
     const verb = match.groups!.verb.toLocaleUpperCase()
     const path = match

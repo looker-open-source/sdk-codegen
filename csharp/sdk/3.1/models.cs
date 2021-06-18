@@ -19,8 +19,9 @@
 /// LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 /// OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 /// SOFTWARE.
+///
 
-/// 256 API models: 188 Spec, 0 Request, 51 Write, 17 Enum
+/// 255 API models: 188 Spec, 0 Request, 51 Write, 16 Enum
 
 #nullable enable
 using System;
@@ -1489,15 +1490,6 @@ public enum Format
   topojson,
   [EnumMember(Value = "vector_tile_region")]
   vector_tile_region
-}
-
-/// Scheme that is running on application server (for PRs, file browsing, etc.) Valid values are: "http", "https".
-public enum GitApplicationServerHttpScheme
-{
-  [EnumMember(Value = "http")]
-  http,
-  [EnumMember(Value = "https")]
-  https
 }
 
 public class GitBranch : SdkModel
@@ -3058,9 +3050,8 @@ public class Project : SdkModel
   public string? git_service_name { get; set; } = null;
   /// <summary>Port that HTTP(S) application server is running on (for PRs, file browsing, etc.)</summary>
   public long? git_application_server_http_port { get; set; } = null;
-  /// <summary>Scheme that is running on application server (for PRs, file browsing, etc.) Valid values are: "http", "https".</summary>
-  [JsonConverter(typeof(StringEnumConverter))]
-  public GitApplicationServerHttpScheme? git_application_server_http_scheme { get; set; }
+  /// <summary>Scheme that is running on application server (for PRs, file browsing, etc.)</summary>
+  public string? git_application_server_http_scheme { get; set; } = null;
   /// <summary>(Write-Only) Optional secret token with which to authenticate requests to the webhook deploy endpoint. If not set, endpoint is unauthenticated.</summary>
   public string? deploy_secret { get; set; } = null;
   /// <summary>(Write-Only) When true, unsets the deploy secret to allow unauthenticated access to the webhook deploy endpoint.</summary>
@@ -5127,9 +5118,8 @@ public class WriteProject : SdkModel
   public string? git_service_name { get; set; } = null;
   /// <summary>Port that HTTP(S) application server is running on (for PRs, file browsing, etc.)</summary>
   public long? git_application_server_http_port { get; set; } = null;
-  /// <summary>Scheme that is running on application server (for PRs, file browsing, etc.) Valid values are: "http", "https".</summary>
-  [JsonConverter(typeof(StringEnumConverter))]
-  public GitApplicationServerHttpScheme? git_application_server_http_scheme { get; set; }
+  /// <summary>Scheme that is running on application server (for PRs, file browsing, etc.)</summary>
+  public string? git_application_server_http_scheme { get; set; } = null;
   /// <summary>(Write-Only) Optional secret token with which to authenticate requests to the webhook deploy endpoint. If not set, endpoint is unauthenticated.</summary>
   public string? deploy_secret { get; set; } = null;
   /// <summary>(Write-Only) When true, unsets the deploy secret to allow unauthenticated access to the webhook deploy endpoint.</summary>

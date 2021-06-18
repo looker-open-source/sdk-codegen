@@ -36,7 +36,7 @@ jobs:
         with:
           python-version: 3.x
       - run: pip install -e .
-      - run: pip install mypy
+      - run: pip install mypy types-requests
       - run: mypy looker_sdk/
 
   unit:
@@ -99,10 +99,10 @@ jobs:
         os:
           - ubuntu
         looker:
-          - '7_20'
           - '21_0'
           - '21_4'
           - '21_6'
+          - '21_8'
           # TODO uncomment `include:` when either macos or windows works to satisfaction.
           #include:
           # TODO: macos matrix leg is functional but it takes ~20 minutes (compared
@@ -201,6 +201,8 @@ jobs:
       - name: Publish Unit Test Results
         uses: EnricoMi/publish-unit-test-result-action@v1.12
         with:
+          # Cosmetic issue with `check_name` being associated to the wrong
+          # workflow: https://github.com/EnricoMi/publish-unit-test-result-action/issues/12
           check_name: Python Tests
           github_token: ${{ secrets.GITHUB_TOKEN }}
           report_individual_runs: true

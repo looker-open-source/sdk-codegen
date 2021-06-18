@@ -19,6 +19,7 @@
 # LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 # SOFTWARE.
+#
 
 # 412 API methods
 
@@ -5444,7 +5445,7 @@ class Looker40SDK(api_methods.APIMethods):
         # Look id to copy.
         look_id: int,
         # Folder id to copy to.
-        folder_id: Optional[int] = None,
+        folder_id: Optional[str] = None,
         transport_options: Optional[transport.TransportOptions] = None,
     ) -> models.LookWithQuery:
         """Copy Look"""
@@ -5470,7 +5471,7 @@ class Looker40SDK(api_methods.APIMethods):
         # Look id to move.
         look_id: int,
         # Folder id to move to.
-        folder_id: int,
+        folder_id: str,
         transport_options: Optional[transport.TransportOptions] = None,
     ) -> models.LookWithQuery:
         """Move Look"""

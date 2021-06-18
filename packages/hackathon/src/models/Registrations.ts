@@ -87,7 +87,7 @@ export class Registrations extends WhollySheet<
   }
 
   typeRow<Registration>(values?: any) {
-    return (new Registration(values) as unknown) as Registration
+    return new Registration(values) as unknown as Registration
   }
 
   hackRegs(hackathon: Hackathon) {

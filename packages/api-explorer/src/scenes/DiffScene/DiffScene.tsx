@@ -36,7 +36,7 @@ import {
   Select,
   SelectMulti,
 } from '@looker/components'
-import { SyncAlt } from '@styled-icons/material'
+import { SyncAlt } from '@styled-icons/material/SyncAlt'
 import { getDefaultSpecKey } from '../../reducers/spec/utils'
 import { diffPath } from '../../utils'
 import { ApixSection } from '../../components'
@@ -165,7 +165,7 @@ export const DiffScene: FC<DiffSceneProps> = ({ specs, toggleNavigation }) => {
   return (
     <ApixSection>
       <Box>
-        <Flex bg="AliceBlue" padding="large" mb="xlarge" alignItems="center">
+        <Flex bg="AliceBlue" padding="large" mb="large" alignItems="center">
           <FlexItem>
             <Label htmlFor="base">Base</Label>
             <Select

@@ -38,6 +38,7 @@ import {
   IProperty,
   IType,
   mayQuote,
+  strBody,
   Type,
 } from './sdkModels'
 import { SpecItem } from './specConverter'
@@ -47,12 +48,10 @@ export const commentBlock = (
   indent = '',
   commentStr = '// '
 ) => {
-  if (!text) return ''
-  text = text.trim()
-  if (!text) return ''
+  if (!text || !text.trim()) return ''
   const indentation = indent + commentStr
-  const parts = text.split('\n').map((x) => `${indentation}${x}`.trimRight())
-  return parts.join('\n')
+  const lines = text.split('\n').map((x) => `${indentation}${x}`.trimRight())
+  return lines.join('\n')
 }
 
 /** Version and spec references for the generator */
@@ -700,6 +699,13 @@ export interface ICodeGen {
   typeNames(countError: boolean): string[]
 
   /**
+   * Type mapping for a parameter with special handling for body params
+   * @param param to map
+   * @param method containing param
+   */
+  paramMappedType(param: IParameter, method: IMethod): IMappedType
+
+  /**
    * Language-specific type conversion
    * @param {IType} type to potentially convert
    * @returns {IMappedType} converted type
@@ -1049,6 +1055,14 @@ export abstract class CodeGen implements ICodeGen {
       args.push(this.argSet(key, this.hashSetSep, exp))
     })
     return this.argIndent(indent, args, this.hashOpen, this.hashClose)
+  }
+
+  paramMappedType(param: IParameter, method: IMethod) {
+    const type =
+      param.location === strBody
+        ? this.writeableType(param.type, method) || param.type
+        : param.type
+    return this.typeMap(type)
   }
 
   makeTheCall(_method: IMethod, _inputs: ArgValues) {

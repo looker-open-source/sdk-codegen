@@ -35,7 +35,7 @@ interface DocOperationProps {
 }
 
 export const DocOperation: FC<DocOperationProps> = ({ method }) => (
-  <SpaceVertical align="start" mb="xlarge" gap="xsmall">
+  <SpaceVertical align="start" mb="large" gap="xsmall">
     <MethodBadge type={method.httpMethod}>
       <DocPseudo method={method} />
     </MethodBadge>

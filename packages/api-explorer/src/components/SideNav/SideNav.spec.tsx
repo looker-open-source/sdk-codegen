@@ -36,10 +36,10 @@ import { SideNav } from './SideNav'
 import { countMethods } from './searchUtils'
 
 describe('SideNav', () => {
-  const testApi = ({
+  const testApi = {
     tags: pick(api.tags, ['Auth', 'ApiAuth']),
     types: pick(api.types, ['WriteDashboard', 'WriteQuery']),
-  } as unknown) as ApiModel
+  } as unknown as ApiModel
   const allTagsPattern = /^(Auth|ApiAuth)$/
   const allTypesPattern = /^(WriteDashboard|WriteQuery)$/
 

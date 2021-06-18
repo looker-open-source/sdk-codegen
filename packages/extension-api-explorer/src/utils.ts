@@ -57,4 +57,8 @@ export class ExtensionEnvAdaptor implements IApixEnvAdaptor {
   themeOverrides(): ThemeOverrides {
     return this._themeOverrides
   }
+
+  openBrowserWindow(url: string, target?: string) {
+    this.extensionSdk.openBrowserWindow(url, target)
+  }
 }

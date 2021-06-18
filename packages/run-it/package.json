@@ -1,6 +1,6 @@
 {
   "name": "@looker/run-it",
-  "version": "0.9.7",
+  "version": "0.9.9",
   "description": "A dynamic REST request input form and response visualizer",
   "main": "lib/index.js",
   "module": "lib/esm/index.js",
@@ -27,7 +27,7 @@
     "watch": "yarn lerna exec --scope @looker/run-it --stream 'BABEL_ENV=build babel src --root-mode upward --out-dir lib/esm --source-maps --extensions .ts,.tsx --no-comments --watch'"
   },
   "devDependencies": {
-    "@looker/components-test-utils": "^1.1.3",
+    "@looker/components-test-utils": "^1.3.1",
     "@testing-library/jest-dom": "^5.11.6",
     "@testing-library/react": "^11.2.2",
     "@testing-library/user-event": "^12.6.0",
@@ -48,16 +48,16 @@
     "webpack-dev-server": "^3.11.2"
   },
   "dependencies": {
-    "@looker/components": "^1.1.3",
-    "@looker/icons": "^1.1.3",
-    "@looker/design-tokens": "^1.1.3",
+    "@looker/components": "^1.4.1",
+    "@looker/icons": "^1.3.0",
+    "@looker/design-tokens": "^1.3.1",
     "@styled-icons/material": "^10.28.0",
     "@styled-icons/material-outlined": "^10.28.0",
     "@styled-icons/material-rounded": "^10.28.0",
-    "@looker/sdk": "^21.6.0",
-    "@looker/sdk-codegen": "^21.0.16",
+    "@looker/sdk": "^21.8.0",
+    "@looker/sdk-codegen": "^21.0.17",
     "@looker/sdk-codegen-utils": "^21.0.11",
-    "@looker/code-editor": "^0.1.1",
+    "@looker/code-editor": "^0.1.2",
     "@looker/sdk-rtl": "^21.0.13",
     "@types/readable-stream": "^2.3.5",
     "lodash": "^4.17.19",

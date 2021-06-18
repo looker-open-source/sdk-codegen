@@ -31,7 +31,8 @@ import {
   DataTableCell,
   Pagination,
 } from '@looker/components'
-import { Info, Create } from '@styled-icons/material'
+import { Info } from '@styled-icons/material/Info'
+import { Create } from '@styled-icons/material/Create'
 import { useSelector, useDispatch } from 'react-redux'
 import { useHistory } from 'react-router-dom'
 import { MoreInfoDialog } from '../../../components/MoreInfoDialog'

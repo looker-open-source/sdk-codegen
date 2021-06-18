@@ -134,9 +134,8 @@ export const RunIt: FC<RunItProps> = ({
   const [requestContent, setRequestContent] = useState({})
   const [activePathParams, setActivePathParams] = useState({})
   const [loading, setLoading] = useState(false)
-  const [responseContent, setResponseContent] = useState<ResponseContent>(
-    undefined
-  )
+  const [responseContent, setResponseContent] =
+    useState<ResponseContent>(undefined)
   const [isExtension, setIsExtension] = useState<boolean>(false)
   const [hasConfig, setHasConfig] = useState<boolean>(true)
   const [needsAuth, setNeedsAuth] = useState<boolean>(true)

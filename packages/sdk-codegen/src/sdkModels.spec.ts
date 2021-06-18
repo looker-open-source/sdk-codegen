@@ -599,12 +599,12 @@ describe('sdkModels', () => {
 
   describe('rate limit', () => {
     it('x-looker-rate-limited', () => {
-      const yes = ({
+      const yes = {
         'x-looker-rate-limited': true,
-      } as unknown) as OAS.OperationObject
-      const no = ({
+      } as unknown as OAS.OperationObject
+      const no = {
         'x-looker-rate-limited': false,
-      } as unknown) as OAS.OperationObject
+      } as unknown as OAS.OperationObject
       const nada = {} as OAS.OperationObject
 
       expect(Method.isRateLimited(yes)).toBe(true)
@@ -613,12 +613,12 @@ describe('sdkModels', () => {
     })
 
     it('X-RateLimit-Limit', () => {
-      const yes = ({
+      const yes = {
         'X-RateLimit-Limit': 0,
-      } as unknown) as OAS.OperationObject
-      const no = ({
+      } as unknown as OAS.OperationObject
+      const no = {
         'x-ratelimit-limit': 0,
-      } as unknown) as OAS.OperationObject
+      } as unknown as OAS.OperationObject
       const nada = {} as OAS.OperationObject
 
       expect(Method.isRateLimited(yes)).toBe(true)
@@ -627,12 +627,12 @@ describe('sdkModels', () => {
     })
 
     it('X-RateLimit-Remaining', () => {
-      const yes = ({
+      const yes = {
         'X-RateLimit-Remaining': 0,
-      } as unknown) as OAS.OperationObject
-      const no = ({
+      } as unknown as OAS.OperationObject
+      const no = {
         'x-ratelimit-remaining': 0,
-      } as unknown) as OAS.OperationObject
+      } as unknown as OAS.OperationObject
       const nada = {} as OAS.OperationObject
 
       expect(Method.isRateLimited(yes)).toBe(true)
@@ -641,12 +641,12 @@ describe('sdkModels', () => {
     })
 
     it('X-RateLimit-Reset', () => {
-      const yes = ({
+      const yes = {
         'X-RateLimit-Reset': 0,
-      } as unknown) as OAS.OperationObject
-      const no = ({
+      } as unknown as OAS.OperationObject
+      const no = {
         'x-ratelimit-reset': 0,
-      } as unknown) as OAS.OperationObject
+      } as unknown as OAS.OperationObject
       const nada = {} as OAS.OperationObject
 
       expect(Method.isRateLimited(yes)).toBe(true)
@@ -655,12 +655,12 @@ describe('sdkModels', () => {
     })
 
     it('X-Rate-Limit-Limit', () => {
-      const yes = ({
+      const yes = {
         'X-Rate-Limit-Limit': 0,
-      } as unknown) as OAS.OperationObject
-      const no = ({
+      } as unknown as OAS.OperationObject
+      const no = {
         'x-rate-limit-limit': 0,
-      } as unknown) as OAS.OperationObject
+      } as unknown as OAS.OperationObject
       const nada = {} as OAS.OperationObject
 
       expect(Method.isRateLimited(yes)).toBe(true)
@@ -669,12 +669,12 @@ describe('sdkModels', () => {
     })
 
     it('X-Rate-Limit-Remaining', () => {
-      const yes = ({
+      const yes = {
         'X-Rate-Limit-Remaining': 0,
-      } as unknown) as OAS.OperationObject
-      const no = ({
+      } as unknown as OAS.OperationObject
+      const no = {
         'x-rate-limit-remaining': 0,
-      } as unknown) as OAS.OperationObject
+      } as unknown as OAS.OperationObject
       const nada = {} as OAS.OperationObject
 
       expect(Method.isRateLimited(yes)).toBe(true)
@@ -683,12 +683,12 @@ describe('sdkModels', () => {
     })
 
     it('X-Rate-Limit-Reset', () => {
-      const yes = ({
+      const yes = {
         'X-Rate-Limit-Reset': 0,
-      } as unknown) as OAS.OperationObject
-      const no = ({
+      } as unknown as OAS.OperationObject
+      const no = {
         'x-rate-limit-reset': 0,
-      } as unknown) as OAS.OperationObject
+      } as unknown as OAS.OperationObject
       const nada = {} as OAS.OperationObject
 
       expect(Method.isRateLimited(yes)).toBe(true)
@@ -732,6 +732,25 @@ describe('sdkModels', () => {
 
   describe('method and type xrefs', () => {
     describe('custom types', () => {
+      it('determines parent type of array types', () => {
+        const arrayType = apiTestModel.types.DashboardElement
+        const parents = arrayType.parentTypes
+        expect(parents).toEqual(new Set(['DashboardElement[]', 'Dashboard']))
+      })
+
+      it('determines parent type of enum types', () => {
+        const enumType = apiTestModel.types.LinkedContentType
+        const parents = enumType.parentTypes
+        expect(parents).toEqual(new Set(['Command']))
+      })
+
+      it('determines parent type of complex hash types', () => {
+        const hashProp = apiTestModel.types.ComplexHashProp
+        expect(hashProp.parentTypes).toEqual(
+          new Set(['Hash[ComplexHashProp]', 'ComplexHash'])
+        )
+      })
+
       it('intrinsic types have undefined custom types', () => {
         const actual = new IntrinsicType('integer')
         expect(actual.customType).toEqual('')
