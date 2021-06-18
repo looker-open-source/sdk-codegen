@@ -1,13 +1,15 @@
-# API result pagination support
+# API response pagination
 
-Looker is adding support for API result pagination.
+Looker is adding [alpha-level](#alpha-support-level) support for API response pagination in Looker API 4.0.
 
-Any API 4.0 endpoint that accepts `limit` and `offset` parameters may support pagination. Starting with Looker release 21.12, Looker is adding pagination support for API pagination endpoints (until all endpoints that support pagination provide the headers).
+Any endpoint that accepts `limit` and `offset` parameters can support generic pagination. Starting with Looker release 21.12, Looker is adding pagination support for API 4.0 endpoints (until all endpoints that accept `limit` and `offset` provide the headers).
 
-| Parameter | Description                                                                                                                                                            |
-| --------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `limit`   | The number of results to return per "page"                                                                                                                             |
-| `offset`  | The starting position of the results to return. A value of `0` (zero) is used for the first result. `offset` defaults to 0 if `limit` is provided and `offset` is not. |
+| Parameter | Description                                                                                                                                                                            |
+| --------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `limit`   | If provided, this value sets the number of results to return per _page_ and triggers pagination headers to be provided.                                                                |
+| `offset`  | This value sets the starting position of the results to return. A value of `0` (zero) is used for the first result. `offset` defaults to 0 if `limit` is provided and `offset` is not. |
+
+Some endpoints have `page` and `per_page` parameters instead of, or in addition to, `limit` and `offset`. The `page` and `per_page` parameters will be removed for API 4.0 endpoints that accept `limit` and `offset`. Only API calls using `limit` will produce pagination headers.
 
 **NOTE**: Looker does not support cursor-based pagination.
 
@@ -19,15 +21,15 @@ The [`X-Total-Count`](https://stackoverflow.com/a/43968710) and [`Link`](https:/
 
 If the `total count` of items can be known, the value of this header is that count. If `total count` is unknown, this header is not in the endpoint response.
 
-Because many Looker endpoints restrict the user's ability to view individual items of a collection based on complex access constraints, sometimes calculating the total count would degrade performance too much.
+Because many Looker endpoints restrict the user's ability to view individual items of a collection based on complex access constraints, sometimes calculating the total count degrades performance too much to calculate it.
 
 ### Link header
 
 The Looker API adopts the [GitHub Link header values](https://docs.github.com/en/rest/overview/resources-in-the-rest-api#link-header).
 
-The `Link` header is always returned if pagination headers are returned in the response.
+Pagination responses always include `Link` headers. Different **Link Relation Type** (`rel`) values may or may not exist in the Link header.
 
-See the table below for Looker's use of these same `rel` types.
+The table below explains Looker's use of the `rel` values adopted from GitHub.
 
 | Rel     | Description                                                                                                                           |
 | ------- | ------------------------------------------------------------------------------------------------------------------------------------- |
@@ -36,15 +38,25 @@ See the table below for Looker's use of these same `rel` types.
 | `prev`  | The URI to the previous page of results. This link is provided when there **is** a previous page.                                     |
 | `last`  | The URI to the last page of results. This link can only be provided when `total count` is known.                                      |
 
+Here is an example of a "full" Link header's content:
+
+```
+<http://localhost/api/4.0/alerts/search?imit=2&offset=0>; rel="first",
+<http://localhost/api/4.0/alerts/search?limit=2&offset=8>; rel="last",
+<http://localhost/api/4.0/alerts/search?limit=2&offset=7>; rel="next",
+<http://localhost/api/4.0/alerts/search?limit=2&offset=3>; rel="prev"
+```
+
 ## SDK Pagination
 
-Thanks to the adoption of "standard" headers for pagination, the SDKs can implement API result pagination generically.
+Thanks to the adoption of "standard" headers for pagination shown above, the SDKs can implement API result pagination generically.
 
-The SDK-based pagination pattern prototype can be found in TypeScript SDK.
+The current SDK-based pagination pattern prototype is in the `@looker/sdk-rtl` TypeScript/Javascript package.
 
 ### Paginator interface
 
-Below is the pagination interface prototype. It may be out of date with the [current source code](/packages/sdk-rtl/src/paginator.ts).
+Below is the pagination interface prototype. The latest version is in the [current source code](/packages/sdk-rtl/src/paginator.ts).
+
 ```ts
 /**
  * Types of pagination link relative URLs
@@ -127,7 +139,6 @@ export interface IPaginate<TSuccess, TError> {
   /** `true` if the `next` link is defined and the current items count === `limit` */
   more(): boolean
 }
-
 ```
 
 ### Page iteration example
@@ -136,7 +147,7 @@ Results can be retrieved a page at a time with code similar to the following tha
 
 ```ts
 // Get 20 dashboards at a time
-const paged = await paginate(sdk, all_dashboards({limit: 20}))
+const paged = await paginate(sdk, all_dashboards({ limit: 20 }))
 const dashboards = paged.items
 // paged.more() is true if there's a 'next' rel link and the last page request items.length === limit
 while (paged.more()) {
@@ -147,3 +158,12 @@ while (paged.more()) {
 ```
 
 See [paginator.ts](/packages/sdk-rtl/src/paginator.ts) for the current implementation.
+
+## Alpha support level
+
+Support for pagination headers is currently at alpha level. This means that:
+
+- Not all endpoints with `limit` and `offset` parameters provide pagination headers.
+- Pagination performance may vary for large results sets. We recommend making the `limit` size a larger value (half or a quarter of the total count, perhaps) to reduce pagination if performance degradation is experienced.
+- SDK support for pagination is only available in the Typescript SDK prototype.
+- While SDK pagination routines **should** work for API endpoints that provide pagination headers, reliability is not guaranteed, and SDK pagination routines are only "community supported." This means that issues can be filed in this repository and Looker engineering will attempt to address them, but no timeframe or response is guaranteed.
