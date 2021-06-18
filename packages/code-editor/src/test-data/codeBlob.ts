@@ -23,8 +23,7 @@
  SOFTWARE.
 
  */
-export const pythonTestCode = `
-# GET /lookml_models -> Sequence[models.LookmlModel]
+export const pythonTestCode = `# GET /lookml_models -> Sequence[models.LookmlModel]
 def all_lookml_models(
     self,
     # Requested fields.
@@ -39,5 +38,4 @@ def all_lookml_models(
             transport_options=transport_options
     )
     assert isinstance(response, list)
-    return response
-`
+    return response`

@@ -23,26 +23,4 @@
  SOFTWARE.
 
  */
-import { qualifyMarkdownText } from './utils'
-
-describe('DocMarkdown utils', () => {
-  describe('highlighting', () => {
-    const str = 'Get the query for a given query slug'
-    test('it returns original string when there are no matches', () => {
-      const result = qualifyMarkdownText(str, 'dashboard')
-      expect(result).toEqual(str)
-    })
-
-    test('it returns original string when no pattern is provided', () => {
-      const result = qualifyMarkdownText(str, '')
-      expect(result).toEqual(str)
-    })
-
-    test('it wraps matches with mark tags', () => {
-      const result = qualifyMarkdownText(str, 'query')
-      expect(result).toEqual(
-        'Get the <mark>query</mark> for a given <mark>query</mark> slug'
-      )
-    })
-  })
-})
+export { CodeEditor } from './CodeEditor'

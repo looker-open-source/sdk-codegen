@@ -54,11 +54,13 @@ describe('CodeEditor', () => {
     renderWithTheme(
       <CodeEditor onChange={setState} code={pythonTestCode} language="python" />
     )
-    const editPattern = '# This is the new code'
+    const editPattern = '\n# This is the new code'
     const input = screen
       .getByRole('code-editor')
       .getElementsByClassName('npm__react-simple-code-editor__textarea')[0]
-    userEvent.paste(input, editPattern)
+    userEvent.paste(input, editPattern, undefined, {
+      initialSelectionEnd: pythonTestCode.length,
+    })
     expect(setState).toHaveBeenCalledWith(pythonTestCode + editPattern)
   })
 })

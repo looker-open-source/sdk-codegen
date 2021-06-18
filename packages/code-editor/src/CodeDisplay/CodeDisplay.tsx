@@ -27,17 +27,18 @@
 import React, { FC } from 'react'
 import styled from 'styled-components'
 import { Span } from '@looker/components'
-import Highlight, { defaultProps } from 'prism-react-renderer'
-// import { Prism } from "prism-react-renderer"
+import Highlight, { defaultProps, Prism } from 'prism-react-renderer'
+
 import { getPrismLanguage, getOverridenTheme } from '../utils'
-import { CodeWrapper } from '../CodeWrapper'
-// TODO enable kotlin, csharp, swift highlighting
-// (typeof global !== "undefined" ? global : window).Prism = Prism
-// require("prismjs/components/prism-kotlin")
-// require("prismjs/components/prism-csharp")
-// require("prismjs/components/prism-swift")
+import { CodeWrapper } from './CodeWrapper'
 import { LineItem } from './LineItem'
 import { CodeDisplayProps } from './types'
+;(typeof global !== 'undefined' ? (global as any) : (window as any)).Prism =
+  Prism
+require('prismjs/components/prism-kotlin')
+require('prismjs/components/prism-csharp')
+require('prismjs/components/prism-swift')
+require('prismjs/components/prism-ruby')
 
 const Line = styled(Span)`
   display: table-row;
@@ -76,7 +77,7 @@ export const CodeDisplay: FC<CodeDisplayProps> = ({
   return (
     <Highlight
       {...defaultProps}
-      code={code}
+      code={code.trim()}
       language={getPrismLanguage(language)}
       theme={getOverridenTheme(transparent, inline)}
     >

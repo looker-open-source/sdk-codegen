@@ -27,8 +27,8 @@
 import React, { FC } from 'react'
 import Editor from 'react-simple-code-editor'
 
-import { CodeDisplayProps } from './CodeDisplay/types'
-import { CodeDisplay } from './index'
+import { CodeDisplayProps } from '../CodeDisplay/types'
+import { CodeDisplay } from '../index'
 
 interface CodeEditorProps extends CodeDisplayProps {
   /** onChange event handler, for Editor functionality */
@@ -49,7 +49,7 @@ export const CodeEditor: FC<CodeEditorProps> = ({
 }) => {
   return (
     <Editor
-      value={code}
+      value={code.trim()}
       role={'code-editor'}
       onValueChange={onChange}
       highlight={(code: string) => (

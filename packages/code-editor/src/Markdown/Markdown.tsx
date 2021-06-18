@@ -41,6 +41,7 @@ interface MarkdownProps {
   pattern?: string
   transformLinkUri?: (url: string) => string
   linkClickHandler?: (pathname: string, href: string) => void
+  paragraphOverride?: ({ children }: { children: ReactNode }) => JSX.Element
 }
 
 type HeadingLevels = 'h1' | 'h2' | 'h3' | 'h4' | 'h5' | 'h6'
@@ -50,6 +51,7 @@ export const Markdown: FC<MarkdownProps> = ({
   pattern = '',
   transformLinkUri,
   linkClickHandler,
+  paragraphOverride,
 }) => {
   const findAnchor = (ele: HTMLElement): HTMLAnchorElement | undefined => {
     if (ele.tagName === 'A') return ele as HTMLAnchorElement
@@ -107,7 +109,7 @@ export const Markdown: FC<MarkdownProps> = ({
     h4: heading,
     h5: heading,
     h6: heading,
-    p: paragraph,
+    p: paragraphOverride || paragraph,
     code: code,
     a: Link,
     ul: MDList,

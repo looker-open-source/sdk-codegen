@@ -33,8 +33,12 @@ import inlineTheme from 'prism-react-renderer/themes/github'
  * @param object any object to be tested
  * @returns boolean
  */
-function instanceOfPrismLanguage(object: any): boolean {
-  return Object.keys(Prism.languages).includes(object)
+function instanceOfPrismLanguage(languageName: string): boolean {
+  const extraHighlightingEngines = ['kotlin', 'csharp', 'swift', 'ruby']
+  return (
+    Object.keys(Prism.languages).includes(languageName) ||
+    extraHighlightingEngines.includes(languageName)
+  )
 }
 
 /**
@@ -44,12 +48,11 @@ function instanceOfPrismLanguage(object: any): boolean {
  */
 export const getPrismLanguage = (language: string): Language => {
   language = language.toLowerCase()
-  const unstyled = ['kotlin', 'csharp', 'swift']
   // TODO revert back to `go` in generator language definitions instead of using this
   if (language === 'golang') {
     language = 'go'
-  } else if (unstyled.includes(language)) {
-    language = 'clike'
+  } else if (language === 'c#') {
+    language = 'csharp'
   }
   return instanceOfPrismLanguage(language) ? (language as Language) : 'json'
 }

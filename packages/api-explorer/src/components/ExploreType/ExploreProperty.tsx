@@ -24,7 +24,7 @@
 
  */
 
-import React, { FC } from 'react'
+import React, { FC, ReactNode } from 'react'
 import {
   FlexItem,
   IconType,
@@ -33,12 +33,13 @@ import {
   TreeItem,
   Tooltip,
   Space,
+  Paragraph,
 } from '@looker/components'
 import { Done } from '@styled-icons/material/Done'
 import { Lock } from '@styled-icons/material/Lock'
 import { Remove } from '@styled-icons/material/Remove'
 import { IProperty } from '@looker/sdk-codegen'
-import ReactMarkdown from 'react-markdown'
+import { Markdown } from '@looker/code-editor'
 import {
   expandable,
   ExploreTypeLink,
@@ -149,14 +150,18 @@ export const ExplorePropertyReadOnly: FC<ExplorePropertyProps> = ({
  */
 export const ExplorePropertyDescription: FC<ExplorePropertyProps> = ({
   property,
-}) => (
-  <>
-    {property.description && (
-      // TODO: Replace with @looker/code-editor Markdown
-      <ReactMarkdown>{property.description}</ReactMarkdown>
-    )}
-  </>
-)
+}) => {
+  const p = ({ children }: { children: ReactNode }) => (
+    <Paragraph fontSize="small">{children}</Paragraph>
+  )
+  return (
+    <>
+      {property.description && (
+        <Markdown source={property.description} paragraphOverride={p} />
+      )}
+    </>
+  )
+}
 
 /**
  * Show the details of the property

@@ -58,7 +58,7 @@ export const addMarkTags = (content: string, searchPattern: string) => {
  * @param markedText - the markdown text input that contains <mark /> tags
  */
 const removeMarkTags = (markedText: string) => {
-  return markedText.replace(/<mark>/g, '').replace(/<\/mark>/g, '')
+  return markedText.replace(/<\/?mark>/g, '')
 }
 
 /**
@@ -68,11 +68,13 @@ const removeMarkTags = (markedText: string) => {
  * @returns - code blob string with code language tag
  */
 const addCodeLanguageTags = (content: string) => {
-  let languageTaggedContent
+  let languageTaggedContent: string
   try {
-    const replacement = () => '```\n<json/>'
-    const searchPattern = '```json'
-    languageTaggedContent = regReplaceAll(content, searchPattern, replacement)
+    const searchPattern = /```([A-Za-z]+)$/gm
+    const match = searchPattern.exec(content)
+    const language = match && match[1]
+    const replacement = () => `\`\`\`\n<${language}/>`
+    languageTaggedContent = content.replace(searchPattern, replacement)
   } catch (e) {
     languageTaggedContent = content
   }
@@ -88,8 +90,10 @@ const removeCodeLanguageTags = (content: string) => {
   let untaggedContent
   try {
     const replacement = () => ''
-    const searchPattern = '<json/>'
-    untaggedContent = regReplaceAll(content, searchPattern, replacement)
+    const searchPattern = /<(.*)\/>$/gm
+    const match = searchPattern.exec(content)
+    const language = match && match[1]
+    untaggedContent = regReplaceAll(content, '<' + language + '/>', replacement)
   } catch (e) {
     untaggedContent = content
   }
@@ -102,7 +106,9 @@ const removeCodeLanguageTags = (content: string) => {
  * @returns
  */
 const getCodeLanguageFromTaggedText = (content: string): string => {
-  return content.match(/<json\/>/g) ? 'json' : 'markup'
+  const searchPattern = /<(.*)\/>$/gm
+  const match = searchPattern.exec(content)
+  return match ? match[1] : 'markup'
 }
 
 /**
