@@ -1,5 +1,43 @@
 # Changelog
 
+## [21.8.0](https://www.github.com/looker-open-source/sdk-codegen/compare/extension-api-explorer-v21.6.1...extension-api-explorer-v21.8.0) (2021-06-17)
+
+
+### Dependencies
+
+* The following workspace dependencies were updated
+  * dependencies
+    * @looker/api-explorer bumped from ^0.9.8 to ^0.9.9
+    * @looker/extension-sdk bumped from ^21.6.1 to ^21.8.0
+    * @looker/extension-sdk-react bumped from ^21.6.1 to ^21.8.0
+    * @looker/run-it bumped from ^0.9.8 to ^0.9.9
+    * @looker/sdk bumped from ^21.6.1 to ^21.8.0
+
+### [21.6.1](https://www.github.com/looker-open-source/sdk-codegen/compare/extension-api-explorer-v21.6.0...extension-api-explorer-v21.6.1) (2021-06-16)
+
+
+### Features
+
+* reduce size of apix bundle ([#676](https://www.github.com/looker-open-source/sdk-codegen/issues/676)) ([0d74f6a](https://www.github.com/looker-open-source/sdk-codegen/commit/0d74f6a7814b509416a9d2558c16439a4859b543))
+* upgrade react-markdown ([#681](https://www.github.com/looker-open-source/sdk-codegen/issues/681)) ([952ed30](https://www.github.com/looker-open-source/sdk-codegen/commit/952ed305347e591154413171d73cc648d3f597c5))
+
+
+### Bug Fixes
+
+* font download on route change ([#678](https://www.github.com/looker-open-source/sdk-codegen/issues/678)) ([ae62914](https://www.github.com/looker-open-source/sdk-codegen/commit/ae62914faa2e93d5523ddc82973f23df2992ea2f))
+
+
+### Dependencies
+
+* The following workspace dependencies were updated
+  * dependencies
+    * @looker/api-explorer bumped from ^0.9.7 to ^0.9.8
+    * @looker/extension-sdk bumped from ^21.6.0 to ^21.6.1
+    * @looker/extension-sdk-react bumped from ^21.6.0 to ^21.6.1
+    * @looker/run-it bumped from ^0.9.7 to ^0.9.8
+    * @looker/sdk bumped from ^21.6.0 to ^21.6.1
+    * @looker/sdk-codegen bumped from ^21.0.16 to ^21.0.17
+
 ### [21.6.0](https://www.github.com/looker-open-source/sdk-codegen/compare/extension-api-explorer-v21.4.5...extension-api-explorer-v21.6.0) (2021-05-05)
 
 
