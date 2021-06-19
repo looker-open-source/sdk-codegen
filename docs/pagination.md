@@ -55,109 +55,115 @@ The current SDK-based pagination pattern prototype is in the `@looker/sdk-rtl` T
 
 ### Paginator interface
 
-Below is the pagination interface prototype. The latest version is in the [current source code](/packages/sdk-rtl/src/paginator.ts).
+The main routines that implement SDK pagination are below.
+The latest version is in the [current source code](/packages/sdk-rtl/src/paginator.ts).
 
 ```ts
 /**
- * Types of pagination link relative URLs
- * based on https://docs.github.com/en/rest/overview/resources-in-the-rest-api#link-header
+ * Create an API response paginator for an endpoint that returns a Link header
+ * @param sdk implementation of IAPIMethods. Can be full SDK or functional auth session
+ * @param func sdk call that includes a pagination header
+ * @param options transport options override to capture and use in paging requests
+ *
+ * @remarks `TSuccess` must be a collection type that supports `length`
  */
-export type PageLinkRel = 'first' | 'last' | 'next' | 'prev'
-
-/** Pagination function call */
-export type PaginateFunc<TSuccess, TError> = () => Promise<
-  SDKResponse<TSuccess, TError>
->
-
-/** Page link structure */
-export interface IPageLink {
-  /** Name of link */
-  name?: string
-  /** Type of link */
-  rel: PageLinkRel
-  /** Media type for link */
-  mediaType?: string
-  /** URL for retrieving the link results */
-  url: string
+export async function paginate<TSuccess extends ILength, TError>(
+  sdk: IAPIMethods,
+  func: PaginateFunc<TSuccess, TError>,
+  options?: Partial<ITransportSettings>
+): Promise<IPaginate<TSuccess, TError>> {
+  return await new Paginator<TSuccess, TError>(sdk, func, options).init()
 }
 
 /**
- * Collection of page links
+ * Create an API response paginator and collect all pages, returning the result
+ * @param sdk implementation of IAPIMethods. Can be full SDK or functional auth session
+ * @param func sdk call that includes a pagination header
+ * @param onPage observer of the latest page of results. Defaults to noop.
+ * @param options transport options override to capture and use in paging requests
  */
-export type PageLinks = Record<string, IPageLink>
-
-export interface IPaginate<TSuccess, TError> {
-  /** Total number of available items being paginated */
-  total: number
-  /** Offset extracted from paginate request */
-  offset: number
-  /** Limit extracted from paginate request */
-  limit: number
-  /** Links extracted from Pagination link header */
-  links: PageLinks
-  /** Latest items returned from response */
-  items: TSuccess
-  /** Captured from the original pagination request */
+export async function pageAll<TSuccess extends ILength, TError>(
+  sdk: IAPIMethods,
+  func: PaginateFunc<TSuccess, TError>,
+  onPage: PageObserver<TSuccess> = (page: TSuccess) => page,
   options?: Partial<ITransportSettings>
-  /** Total number of pages. -1 if not known. */
-  pages: number
-  /** Current page. -1 if not known. */
-  page: number
-
-  /**
-   * Is the specified link rel defined in the Link header?
-   * @param link to check
-   */
-  hasRel(link: PageLinkRel): boolean
-
-  /** Get the requested relative link
-   * if the requested link is not defined, all calculated values are reset, including
-   * `total`, `items`, `offset`, and `limit`
-   */
-  getRel(link: PageLinkRel): Promise<SDKResponse<TSuccess, TError>>
-  /** Get the first page of items. This is the same as offset=0 */
-  firstPage(): Promise<SDKResponse<TSuccess, TError>>
-  /**
-   * Get the last page of items
-   *
-   * @remarks This link is only provided if `total` is known.
-   */
-  lastPage(): Promise<SDKResponse<TSuccess, TError>>
-  /**
-   * Get the next page of items
-   *
-   * @remarks This link is provided if `total` is known, or if the number of items returned == `limit`. In the latter case, this function may return an empty result set.
-   */
-  nextPage(): Promise<SDKResponse<TSuccess, TError>>
-  /**
-   * Get the previous page of items
-   *
-   * @remarks This link is provided if the last page was not the first page.
-   */
-  prevPage(): Promise<SDKResponse<TSuccess, TError>>
-
-  /** `true` if the `next` link is defined and the current items count === `limit` */
-  more(): boolean
+): Promise<SDKResponse<TSuccess, TError>> {
+  const paged = await paginate(sdk, func, options)
+  let rows: any[] = []
+  rows = rows.concat(onPage(paged.items))
+  let error
+  try {
+    while (paged.more()) {
+      const items = await sdk.ok(paged.nextPage())
+      rows = rows.concat(onPage(items))
+    }
+  } catch (err) {
+    error = err
+  }
+  if (error) {
+    return { ok: false, error }
+  }
+  return { ok: true, value: rows as unknown as TSuccess }
 }
 ```
 
 ### Page iteration example
 
-Results can be retrieved a page at a time with code similar to the following that starts with a call to `paginate()`:
+Results can be retrieved a page at a time with code like this functional test:
 
 ```ts
-// Get 20 dashboards at a time
-const paged = await paginate(sdk, all_dashboards({ limit: 20 }))
-const dashboards = paged.items
-// paged.more() is true if there's a 'next' rel link and the last page request items.length === limit
-while (paged.more()) {
-  await paged.nextPage()
-  // if there are no more pages, paged.items will be empty after nextPage()
-  dashboards.push(paged.items)
-}
+describe('pagination', () => {
+  describe('paginate', () => {
+    test(
+      'getRel can override limit and offset',
+      async () => {
+        const sdk = new LookerSDK(session)
+        const limit = 2
+        const all = await sdk.ok(sdk.search_dashboards({ fields: 'id' }))
+        const paged = await paginate(sdk, () =>
+          sdk.search_dashboards({ fields: 'id', limit })
+        )
+        const full = await sdk.ok(paged.getRel('first', all.length))
+        expect(full).toEqual(all)
+      },
+      testTimeout
+    )
+  })
+  describe('pageAll', () => {
+    test(
+      'search_dashboard',
+      async () => {
+        const sdk = new LookerSDK(session)
+        // Use a small limit to test paging for a small number of dashboards
+        const limit = 2
+        let count = 0
+        const progress = (page: IDashboard[]) => {
+          console.log(`Page ${++count} has ${page.length} items`)
+          return page
+        }
+        const actual = await sdk.ok(
+          pageAll(
+            sdk,
+            () => sdk.search_dashboards({ fields: 'id,title', limit }),
+            progress
+          )
+        )
+        const all = await sdk.ok(sdk.search_dashboards({ fields: 'id, title' }))
+        expect(actual.length).toEqual(all.length)
+        expect(actual).toEqual(all)
+      },
+      testTimeout
+    )
+  })
+})
 ```
 
-See [paginator.ts](/packages/sdk-rtl/src/paginator.ts) for the current implementation.
+This test code verifies:
+
+- correct retrieval of all `search_dashboard` pages
+- that pagination stops when it should
+
+**Note** The above test will only work correctly when a Looker release with pagination headers for the API 4.0 implementation of `search_dashboards` is available.
 
 ## Alpha support level
 

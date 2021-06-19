@@ -212,7 +212,6 @@ describe('pagination', () => {
       expect(paged.total).toEqual(totalCount)
       expect(paged.pages).toEqual(4)
       expect(paged.page).toEqual(3)
-      expect(paged.more()).toEqual(true)
 
       jest
         .spyOn(BrowserTransport.prototype, 'rawRequest')
@@ -225,7 +224,6 @@ describe('pagination', () => {
       expect(paged.total).toEqual(totalCount)
       expect(paged.pages).toEqual(4)
       expect(paged.page).toEqual(3)
-      expect(paged.more()).toEqual(false)
 
       jest
         .spyOn(BrowserTransport.prototype, 'rawRequest')

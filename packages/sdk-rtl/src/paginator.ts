@@ -33,7 +33,7 @@ import {
 import { IAPIMethods } from './apiMethods'
 import { BaseTransport } from './baseTransport'
 
-export const LinkHeader = 'Link'
+export const LinkHeader = 'link'
 export const TotalCountHeader = 'X-Total-Count'
 
 /**
@@ -41,6 +41,11 @@ export const TotalCountHeader = 'X-Total-Count'
  * based on https://docs.github.com/en/rest/overview/resources-in-the-rest-api#link-header
  */
 export type PageLinkRel = 'first' | 'last' | 'next' | 'prev'
+
+/** Constraints for TSuccess type */
+interface ILength {
+  length: number
+}
 
 /** Pagination function call */
 export type PaginateFunc<TSuccess, TError> = () => Promise<
@@ -90,11 +95,22 @@ export interface IPaginate<TSuccess, TError> {
    */
   hasRel(link: PageLinkRel): boolean
 
-  /** Get the requested relative link
-   * if the requested link is not defined, all calculated values are reset, including
+  /**
+   * GET the requested relative link
+   *
+   * if the requested link is not defined, all calculated values are reset to their defaults, including
    * `total`, `items`, `offset`, and `limit`
+   *
+   * @param name of Link Relationship
+   * @param limit optional limit override to replace limit saved in `rel`
+   * @param offset optional offset override to replace offset saved in `rel`
    */
-  getRel(link: PageLinkRel): Promise<SDKResponse<TSuccess, TError>>
+  getRel(
+    name: PageLinkRel,
+    limit?: number,
+    offset?: number
+  ): Promise<SDKResponse<TSuccess, TError>>
+
   /** Get the first page of items. This is the same as offset=0 */
   firstPage(): Promise<SDKResponse<TSuccess, TError>>
   /**
@@ -116,7 +132,7 @@ export interface IPaginate<TSuccess, TError> {
    */
   prevPage(): Promise<SDKResponse<TSuccess, TError>>
 
-  /** `true` if the `next` link is defined and the current items count === `limit` */
+  /** `true` if the `next` link is defined */
   more(): boolean
 }
 
@@ -149,13 +165,14 @@ export const linkHeaderParser = (linkHeader: string): PageLinks => {
   return obj
 }
 
-/** Constraint for generic TSuccess pagination types */
-interface ILength {
-  length: number
-}
+/** Event to observe the pagination call */
+export type PageObserver<TSuccess> = (
+  /** Current retrieved page of results */
+  page: TSuccess
+) => TSuccess
 
 /**
- * Create an API paginator for an endpoint that returns a Link header
+ * Create an API response paginator for an endpoint that returns a Link header
  * @param sdk implementation of IAPIMethods. Can be full SDK or functional auth session
  * @param func sdk call that includes a pagination header
  * @param options transport options override to capture and use in paging requests
@@ -168,6 +185,37 @@ export async function paginate<TSuccess extends ILength, TError>(
   options?: Partial<ITransportSettings>
 ): Promise<IPaginate<TSuccess, TError>> {
   return await new Paginator<TSuccess, TError>(sdk, func, options).init()
+}
+
+/**
+ * Create an API response paginator and collect all pages, returning the result
+ * @param sdk implementation of IAPIMethods. Can be full SDK or functional auth session
+ * @param func sdk call that includes a pagination header
+ * @param onPage observer of the latest page of results. Defaults to noop.
+ * @param options transport options override to capture and use in paging requests
+ */
+export async function pageAll<TSuccess extends ILength, TError>(
+  sdk: IAPIMethods,
+  func: PaginateFunc<TSuccess, TError>,
+  onPage: PageObserver<TSuccess> = (page: TSuccess) => page,
+  options?: Partial<ITransportSettings>
+): Promise<SDKResponse<TSuccess, TError>> {
+  const paged = await paginate(sdk, func, options)
+  let rows: any[] = []
+  rows = rows.concat(onPage(paged.items))
+  let error
+  try {
+    while (paged.more()) {
+      const items = await sdk.ok(paged.nextPage())
+      rows = rows.concat(onPage(items))
+    }
+  } catch (err) {
+    error = err
+  }
+  if (error) {
+    return { ok: false, error }
+  }
+  return { ok: true, value: rows as unknown as TSuccess }
 }
 
 /**
@@ -237,7 +285,7 @@ export class Paginator<TSuccess extends ILength, TError>
   }
 
   more() {
-    return this.hasRel('next') && this.items.length === this.limit
+    return this.hasRel('next')
   }
 
   /**
@@ -262,20 +310,48 @@ export class Paginator<TSuccess extends ILength, TError>
     this.items = [] as unknown as TSuccess
   }
 
-  async getRel(link: PageLinkRel): Promise<SDKResponse<TSuccess, TError>> {
-    const rel = this.links[link]
+  async getRel(
+    name: PageLinkRel,
+    limit?: number,
+    offset?: number
+  ): Promise<SDKResponse<TSuccess, TError>> {
+    const rel = this.links[name]
     let result: SDKResponse<TSuccess, TError>
     this.reset()
     if (!rel) {
       result = { ok: true, value: this.items }
       return result
     }
+    const authenticator = (init: any) => {
+      return this.sdk.authSession.authenticate(init)
+    }
+
+    let link = rel.url
+    if (limit !== undefined) {
+      if (offset === undefined) {
+        offset = 0
+      }
+      if (limit < 1 || offset < 0) {
+        result = {
+          ok: false,
+          error: new Error(
+            'limit must be > 0 and offset must be >= 0'
+          ) as unknown as TError,
+        }
+        return result
+      }
+      const url = new URL(link)
+      const params = url.searchParams
+      params.set('limit', limit.toString())
+      params.set('offset', offset.toString())
+      link = url.toString()
+    }
     const raw = await this.transport.rawRequest(
       'GET',
-      rel.url,
+      link,
       undefined,
       undefined,
-      this.sdk.authSession.authenticate,
+      authenticator,
       this.options
     )
     try {
@@ -291,9 +367,12 @@ export class Paginator<TSuccess extends ILength, TError>
   parse(raw: IRawResponse): IPaginate<TSuccess, TError> {
     const req = new URL(raw.url)
     const params = req.searchParams
-    this.offset = Paginator.paramDefault(params.get('offset'), -1)
     this.limit = Paginator.paramDefault(params.get('limit'), -1)
-    const linkHeader = raw.headers[LinkHeader]
+    this.offset = Paginator.paramDefault(
+      params.get('offset'),
+      this.limit > 0 ? 0 : -1
+    )
+    const linkHeader = raw.headers.link || raw.headers.Link || raw.headers.LINK
     if (linkHeader) {
       this.links = linkHeaderParser(linkHeader)
     } else {
