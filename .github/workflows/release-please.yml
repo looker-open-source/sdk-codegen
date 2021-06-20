@@ -1,13 +1,14 @@
- on:
-   push:
-     branches:
+name: release-please
+on:
+  workflow_dispatch:
+  push:
+    branches:
       - main
- name: release-please
- jobs:
-   release-please:
-     runs-on: ubuntu-latest
-     steps:
-       - uses: google-github-actions/release-please-action@v2
-         with:
-           command: manifest
-           token: ${{ secrets.LOS_AUTO_BOT_RP_TOKEN }}
+jobs:
+  release-please:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: google-github-actions/release-please-action@v2
+        with:
+          command: manifest
+          token: ${{ secrets.LOS_AUTO_BOT_RP_TOKEN }}

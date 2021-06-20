@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.8.0](https://www.github.com/looker-open-source/sdk-codegen/compare/sdk-codegen-all-v1.7.0...sdk-codegen-all-v1.8.0) (2021-06-17)
+
+
+### Features
+
+* Looker 21.8 bindings ([#705](https://www.github.com/looker-open-source/sdk-codegen/issues/705)) ([032d0f8](https://www.github.com/looker-open-source/sdk-codegen/commit/032d0f80e30356aaa9f3b3f987b315203f896a61))
+
 ## [1.7.0](https://www.github.com/looker-open-source/sdk-codegen/compare/sdk-codegen-all-v1.6.0...sdk-codegen-all-v1.7.0) (2021-06-16)
 
 
