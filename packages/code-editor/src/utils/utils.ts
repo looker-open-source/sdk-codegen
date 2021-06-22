@@ -24,7 +24,7 @@
 
  */
 import { theme } from '@looker/components'
-import { Language, Prism, PrismTheme } from 'prism-react-renderer'
+import { Language, Prism } from 'prism-react-renderer'
 import blockTheme from 'prism-react-renderer/themes/vsDark'
 import inlineTheme from 'prism-react-renderer/themes/github'
 
