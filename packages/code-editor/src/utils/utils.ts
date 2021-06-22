@@ -33,7 +33,7 @@ import inlineTheme from 'prism-react-renderer/themes/github'
  * @param languageName - string lang name to test
  * @returns boolean
  */
-function instanceOfPrismLanguage(languageName: string): boolean {
+export function instanceOfPrismLanguage(languageName: string): boolean {
   const extraHighlightingEngines = ['kotlin', 'csharp', 'swift', 'ruby']
   return (
     Object.keys(Prism.languages).includes(languageName) ||
@@ -54,7 +54,7 @@ export const getPrismLanguage = (language: string): Language => {
   } else if (language === 'c#') {
     language = 'csharp'
   }
-  return instanceOfPrismLanguage(language) ? (language as Language) : 'json'
+  return instanceOfPrismLanguage(language) ? (language as Language) : 'markup'
 }
 
 /**

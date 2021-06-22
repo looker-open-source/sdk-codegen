@@ -23,6 +23,7 @@
  SOFTWARE.
 
  */
+import { instanceOfPrismLanguage } from '../utils'
 
 export const regReplaceAll = (
   content: string,
@@ -54,7 +55,7 @@ export const addMarkTags = (content: string, searchPattern: string) => {
  * text as the code renderer cannot differentiate <mark><mark/> from the code text.
  * @param markedText - the markdown text input that contains <mark /> tags
  */
-const removeMarkTags = (markedText: string) => {
+export const removeMarkTags = (markedText: string) => {
   return markedText.replace(/<\/?mark>/g, '')
 }
 
@@ -64,7 +65,7 @@ const removeMarkTags = (markedText: string) => {
  * @param content - the code blob to render
  * @returns - code blob string with code language tag
  */
-const addCodeLanguageTags = (content: string) => {
+export const addCodeLanguageTags = (content: string) => {
   let languageTaggedContent: string
   try {
     const searchPattern = /```([A-Za-z]+)$/gm
@@ -83,14 +84,22 @@ const addCodeLanguageTags = (content: string) => {
  * @param content - code blob text with language tag
  * @returns - code blob text without language tag
  */
-const removeCodeLanguageTags = (content: string) => {
+export const removeCodeLanguageTags = (content: string) => {
   let untaggedContent
   try {
     const replacement = () => ''
     const searchPattern = /<(.*)\/>$/gm
     const match = searchPattern.exec(content)
     const language = match && match[1]
-    untaggedContent = regReplaceAll(content, '<' + language + '/>', replacement)
+    if (language && instanceOfPrismLanguage(language)) {
+      untaggedContent = regReplaceAll(
+        content,
+        '<' + language + '/>\n',
+        replacement
+      )
+    } else {
+      untaggedContent = content
+    }
   } catch (e) {
     untaggedContent = content
   }
@@ -102,7 +111,7 @@ const removeCodeLanguageTags = (content: string) => {
  * @param content - language tagged code blob
  * @returns - syntax highlighting language
  */
-const getCodeLanguageFromTaggedText = (content: string): string => {
+export const getCodeLanguageFromTaggedText = (content: string): string => {
   const searchPattern = /<(.*)\/>$/gm
   const match = searchPattern.exec(content)
   return match ? match[1] : 'markup'
