@@ -77,11 +77,13 @@ describe('Markdown utils', () => {
       const result = qualifyMarkdownText(str, '')
       expect(result).toEqual(str)
     })
+
     test('it returns original string when code block syntax is unspecified', () => {
       const str = toMdString(example)
       const result = qualifyMarkdownText(str, '')
       expect(result).toEqual(str)
     })
+
     test('it returns json syntax tag for json specified syntax', () => {
       const newExample = [...example]
       newExample[3] = '```json'
@@ -104,24 +106,28 @@ describe('Markdown utils', () => {
       const result = getCodeLanguageFromTaggedText(str)
       expect(result).toEqual('markup')
     })
+
     test('it returns `json` for json tagged code text', () => {
       const newCodeText = [codeText[0], '<json/>', ...codeText.slice(1)]
       const str = toMdString(newCodeText)
       const result = getCodeLanguageFromTaggedText(str)
       expect(result).toEqual('json')
     })
+
     test('it removes json tag for code text display', () => {
       const newCodeText = [codeText[0], '<json/>', ...codeText.slice(1)]
       const str = toMdString(newCodeText)
       const result = removeCodeLanguageTags(str)
       expect(result).toEqual(toMdString(codeText))
     })
+
     test('it only removes syntax highlighting tags', () => {
       const newCodeText = [codeText[0], '<foobarlang/>', ...codeText.slice(1)]
       const str = toMdString(newCodeText)
       const result = removeCodeLanguageTags(str)
       expect(result).toEqual(str)
     })
+
     test('it adds syntax highlighting tags', () => {
       const newCodeText = ['```ruby', ...codeText.slice(1)]
       const resultCodeText = [codeText[0], '<ruby/>', ...codeText.slice(1)]

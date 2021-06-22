@@ -36,6 +36,7 @@ describe('CodeDisplay utils', () => {
       expect(getPrismLanguage(sdkLanguage)).toBeTruthy()
     }
   )
+
   test('it highlights as markup for unsupported/undefined language', () => {
     expect(getPrismLanguage('foobar-lang')).toEqual('markup')
   })

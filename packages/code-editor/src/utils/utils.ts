@@ -33,7 +33,7 @@ import inlineTheme from 'prism-react-renderer/themes/github'
  * @param languageName - string lang name to test
  * @returns boolean
  */
-export function instanceOfPrismLanguage(languageName: string): boolean {
+export const instanceOfPrismLanguage = (languageName: string) => {
   const extraHighlightingEngines = ['kotlin', 'csharp', 'swift', 'ruby']
   return (
     Object.keys(Prism.languages).includes(languageName) ||
@@ -61,10 +61,7 @@ export const getPrismLanguage = (language: string): Language => {
  * applies package overrides to the default theme. Inline CodeDisplay uses githubLight theme, else uses vsCodeDark theme.
  * @returns modified prism theme object
  */
-export function getOverridenTheme(
-  transparent: boolean,
-  inline: boolean
-): PrismTheme {
+export const getOverridenTheme = (transparent: boolean, inline: boolean) => {
   if (inline) {
     inlineTheme.plain.backgroundColor = theme.colors.ui1
     inlineTheme.plain.border = `1px solid ${theme.colors.ui2}`
