@@ -26,9 +26,9 @@
 
 import React, { FC } from 'react'
 import { Code, Tree, TreeItem } from '@looker/components'
-import { NavLink } from 'react-router-dom'
 import { IType, TypeOfType, typeOfType } from '@looker/sdk-codegen'
 import { useLocation } from 'react-router'
+import { Link } from '../Link'
 import { buildTypePath } from '../../utils'
 import { getSpecKey } from '../../reducers'
 import {
@@ -58,9 +58,9 @@ export const ExploreTypeLink: FC<ExploreTypeLinkProps> = ({ type }) => {
   return (
     <>
       {prefix}
-      <NavLink key={type.fullName} to={buildTypePath(specKey, name)}>
+      <Link key={type.fullName} to={buildTypePath(specKey, name)}>
         {name}
-      </NavLink>
+      </Link>
       {suffix}
     </>
   )

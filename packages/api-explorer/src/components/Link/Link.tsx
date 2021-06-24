@@ -23,23 +23,18 @@
  SOFTWARE.
 
  */
-export { ApixHeading, ApixSection } from './common'
-export { DocActivityType } from './DocActivityType'
-export { DocCode } from './DocCode'
-export { DocMethodSummary } from './DocMethodSummary'
-export { DocMarkdown } from './DocMarkdown'
-export { DocPseudo } from './DocPseudo'
-export { DocRateLimited } from './DocRateLimited'
-export { DocReferences } from './DocReferences'
-export { DocResponses } from './DocResponses'
-export { DocSDKs } from './DocSDKs'
-export { DocSdkUsage } from './DocSdkUsage'
-export { DocSource } from './DocSource'
-export { DocStatus } from './DocStatus'
-export { DocTitle } from './DocTitle'
-export { Header } from './Header'
-export { SideNav } from './SideNav'
-export { ExploreType, ExploreProperty } from './ExploreType'
-export { CollapserCard } from './Collapser'
-export { DocSchema } from './DocSchema'
-export { Link } from './Link'
+
+import { NavLink } from 'react-router-dom'
+import styled from 'styled-components'
+
+export const Link = styled(NavLink)`
+  text-decoration: none;
+  color: inherit;
+
+  &:hover,
+  &:visited,
+  &:focus,
+  &.active {
+    color: inherit;
+  }
+`
