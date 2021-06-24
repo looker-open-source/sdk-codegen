@@ -41,7 +41,7 @@ interface MarkdownProps {
   pattern?: string
   transformLinkUri?: (url: string) => string
   linkClickHandler?: (pathname: string, href: string) => void
-  paragraphOverride?: ({ children }: { children: ReactNode }) => JSX.Element
+  paragraphOverride?: ({ children }: { children: ReactNode }) => ReactNode
 }
 
 type HeadingLevels = 'h1' | 'h2' | 'h3' | 'h4' | 'h5' | 'h6'

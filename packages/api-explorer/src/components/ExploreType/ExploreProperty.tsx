@@ -24,9 +24,9 @@
 
  */
 
-import React, { FC, ReactNode } from 'react'
+import React, { FC } from 'react'
 import {
-  FlexItem,
+  Box,
   IconType,
   Icon,
   Tree,
@@ -148,20 +148,17 @@ export const ExplorePropertyReadOnly: FC<ExplorePropertyProps> = ({
  * @param property to describe
  * @constructor
  */
-export const ExplorePropertyDescription: FC<ExplorePropertyProps> = ({
-  property,
-}) => {
-  const p = ({ children }: { children: ReactNode }) => (
-    <Paragraph fontSize="small">{children}</Paragraph>
-  )
-  return (
-    <>
-      {property.description && (
-        <Markdown source={property.description} paragraphOverride={p} />
-      )}
-    </>
-  )
-}
+const DescriptionParagraph: FC = (props) => (
+  <Paragraph fontSize="small" m="none" {...props} />
+)
+
+const ExplorePropertyDescription: FC<ExplorePropertyProps> = ({ property }) =>
+  property.description ? (
+    <Markdown
+      source={property.description}
+      paragraphOverride={DescriptionParagraph}
+    />
+  ) : null
 
 /**
  * Show the details of the property
@@ -172,17 +169,17 @@ export const ExplorePropertyDetail: FC<ExplorePropertyProps> = ({
   property,
 }) => (
   <Space style={{ fontSize: 'small', marginLeft: '10rem' }}>
-    <FlexItem width="10rem">
+    <Box width="10rem">
       <ExploreTypeLink type={property.type} />
-    </FlexItem>
-    <FlexItem width="5rem">
+    </Box>
+    <Box width="5rem">
       <ExplorePropertyRequired property={property} />
       <ExplorePropertyReadOnly property={property} />
       <ExplorePropertyDeprecated property={property} />
-    </FlexItem>
-    <FlexItem width="30rem">
+    </Box>
+    <Box width="30rem">
       <ExplorePropertyDescription property={property} />
-    </FlexItem>
+    </Box>
   </Space>
 )
 
