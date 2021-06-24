@@ -6336,7 +6336,7 @@ export const run_look = async (
 export const copy_look = async (
   sdk: IAPIMethods,
   look_id: number,
-  folder_id?: number,
+  folder_id?: string,
   options?: Partial<ITransportSettings>
 ): Promise<SDKResponse<ILookWithQuery, IError | IValidationError>> => {
   return sdk.post<ILookWithQuery, IError | IValidationError>(
@@ -6366,7 +6366,7 @@ export const copy_look = async (
 export const move_look = async (
   sdk: IAPIMethods,
   look_id: number,
-  folder_id: number,
+  folder_id: string,
   options?: Partial<ITransportSettings>
 ): Promise<SDKResponse<ILookWithQuery, IError | IValidationError>> => {
   return sdk.patch<ILookWithQuery, IError | IValidationError>(
@@ -7816,7 +7816,7 @@ export const create_query_task = async (
  * Query Tasks whose results have expired will have a status of 'expired'.
  * If the user making the API request does not have sufficient privileges to view a Query Task result, the result will have a status of 'missing'
  *
- * GET /query_tasks/multi_results -> IDictionary<string>
+ * GET /query_tasks/multi_results -> IDictionary<any>
  *
  * @param sdk IAPIMethods implementation
  * @param query_task_ids List of Query Task IDs
@@ -7827,8 +7827,8 @@ export const query_task_multi_results = async (
   sdk: IAPIMethods,
   query_task_ids: DelimArray<string>,
   options?: Partial<ITransportSettings>
-): Promise<SDKResponse<IDictionary<string>, IError>> => {
-  return sdk.get<IDictionary<string>, IError>(
+): Promise<SDKResponse<IDictionary<any>, IError>> => {
+  return sdk.get<IDictionary<any>, IError>(
     '/query_tasks/multi_results',
     { query_task_ids },
     null,

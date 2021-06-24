@@ -5,6 +5,20 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [21.8.0](https://www.github.com/looker-open-source/sdk-codegen/compare/sdk-v21.6.1...sdk-v21.8.0) (2021-06-17)
+
+
+### Features
+
+* Looker 21.8 bindings ([#705](https://www.github.com/looker-open-source/sdk-codegen/issues/705)) ([032d0f8](https://www.github.com/looker-open-source/sdk-codegen/commit/032d0f80e30356aaa9f3b3f987b315203f896a61))
+
+### [21.6.1](https://www.github.com/looker-open-source/sdk-codegen/compare/sdk-v21.6.0...sdk-v21.6.1) (2021-06-16)
+
+
+### Bug Fixes
+
+* export funcs for TS SDK ([#693](https://www.github.com/looker-open-source/sdk-codegen/issues/693)) ([eec853e](https://www.github.com/looker-open-source/sdk-codegen/commit/eec853e87d35e4908d3416d6f3b1d98209ab22f5))
+
 ## [21.6.0](https://www.github.com/looker-open-source/sdk-codegen/compare/sdk-v21.4.3...sdk-v21.6.0) (2021-05-05)
 
 

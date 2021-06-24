@@ -4212,7 +4212,7 @@ export interface ILooker40SDK {
    */
   copy_look(
     look_id: number,
-    folder_id?: number,
+    folder_id?: string,
     options?: Partial<ITransportSettings>
   ): Promise<SDKResponse<ILookWithQuery, IError | IValidationError>>
 
@@ -4233,7 +4233,7 @@ export interface ILooker40SDK {
    */
   move_look(
     look_id: number,
-    folder_id: number,
+    folder_id: string,
     options?: Partial<ITransportSettings>
   ): Promise<SDKResponse<ILookWithQuery, IError | IValidationError>>
 
@@ -5167,7 +5167,7 @@ export interface ILooker40SDK {
    * Query Tasks whose results have expired will have a status of 'expired'.
    * If the user making the API request does not have sufficient privileges to view a Query Task result, the result will have a status of 'missing'
    *
-   * GET /query_tasks/multi_results -> IDictionary<string>
+   * GET /query_tasks/multi_results -> IDictionary<any>
    *
    * @param query_task_ids List of Query Task IDs
    * @param options one-time API call overrides
@@ -5176,7 +5176,7 @@ export interface ILooker40SDK {
   query_task_multi_results(
     query_task_ids: DelimArray<string>,
     options?: Partial<ITransportSettings>
-  ): Promise<SDKResponse<IDictionary<string>, IError>>
+  ): Promise<SDKResponse<IDictionary<any>, IError>>
 
   /**
    * ### Get Query Task details

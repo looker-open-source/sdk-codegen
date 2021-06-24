@@ -25,7 +25,7 @@
  */
 
 /**
- * 284 API models: 210 Spec, 0 Request, 56 Write, 18 Enum
+ * 283 API models: 210 Spec, 0 Request, 56 Write, 17 Enum
  */
 
 
@@ -130,9 +130,9 @@ public struct ApiVersionElement: SDKModel {
     /**
      * Url for swagger.json for this version (read-only)
      */
-    public var swagger_url: URI?
+    public var swagger_url: String?
 
-    public init(version: String? = nil, full_version: String? = nil, status: String? = nil, swagger_url: URI? = nil) {
+    public init(version: String? = nil, full_version: String? = nil, status: String? = nil, swagger_url: String? = nil) {
         self.version = version
         self.full_version = full_version
         self.status = status
@@ -169,9 +169,9 @@ public struct BackupConfiguration: SDKModel {
     /**
      * Link to get this item (read-only)
      */
-    public var url: URI?
+    public var url: String?
 
-    public init(can: StringDictionary<Bool>? = nil, type: String? = nil, custom_s3_bucket: String? = nil, custom_s3_bucket_region: String? = nil, custom_s3_key: String? = nil, custom_s3_secret: String? = nil, url: URI? = nil) {
+    public init(can: StringDictionary<Bool>? = nil, type: String? = nil, custom_s3_bucket: String? = nil, custom_s3_bucket_region: String? = nil, custom_s3_key: String? = nil, custom_s3_secret: String? = nil, url: String? = nil) {
         self.can = can
         self.type = type
         self.custom_s3_bucket = custom_s3_bucket
@@ -1535,9 +1535,9 @@ public struct CredentialsApi3: SDKModel {
     /**
      * Link to get this item (read-only)
      */
-    public var url: URI?
+    public var url: String?
 
-    public init(can: StringDictionary<Bool>? = nil, id: Int64? = nil, client_id: String? = nil, created_at: String? = nil, is_disabled: Bool? = nil, type: String? = nil, url: URI? = nil) {
+    public init(can: StringDictionary<Bool>? = nil, id: Int64? = nil, client_id: String? = nil, created_at: String? = nil, is_disabled: Bool? = nil, type: String? = nil, url: String? = nil) {
         self.can = can
         self.id = id
         self.client_id = client_id
@@ -1585,13 +1585,13 @@ public struct CredentialsEmail: SDKModel {
     /**
      * Link to get this item (read-only)
      */
-    public var url: URI?
+    public var url: String?
     /**
      * Link to get this user (read-only)
      */
-    public var user_url: URI?
+    public var user_url: String?
 
-    public init(can: StringDictionary<Bool>? = nil, created_at: String? = nil, email: String? = nil, forced_password_reset_at_next_login: Bool? = nil, is_disabled: Bool? = nil, logged_in_at: String? = nil, password_reset_url: String? = nil, type: String? = nil, url: URI? = nil, user_url: URI? = nil) {
+    public init(can: StringDictionary<Bool>? = nil, created_at: String? = nil, email: String? = nil, forced_password_reset_at_next_login: Bool? = nil, is_disabled: Bool? = nil, logged_in_at: String? = nil, password_reset_url: String? = nil, type: String? = nil, url: String? = nil, user_url: String? = nil) {
         self.can = can
         self.created_at = created_at
         self.email = email
@@ -1642,9 +1642,9 @@ public struct CredentialsEmbed: SDKModel {
     /**
      * Link to get this item (read-only)
      */
-    public var url: URI?
+    public var url: String?
 
-    public init(can: StringDictionary<Bool>? = nil, created_at: String? = nil, external_group_id: String? = nil, external_user_id: String? = nil, id: Int64? = nil, is_disabled: Bool? = nil, logged_in_at: String? = nil, type: String? = nil, url: URI? = nil) {
+    public init(can: StringDictionary<Bool>? = nil, created_at: String? = nil, external_group_id: String? = nil, external_user_id: String? = nil, id: Int64? = nil, is_disabled: Bool? = nil, logged_in_at: String? = nil, type: String? = nil, url: String? = nil) {
         self.can = can
         self.created_at = created_at
         self.external_group_id = external_group_id
@@ -1694,9 +1694,9 @@ public struct CredentialsGoogle: SDKModel {
     /**
      * Link to get this item (read-only)
      */
-    public var url: URI?
+    public var url: String?
 
-    public init(can: StringDictionary<Bool>? = nil, created_at: String? = nil, domain: String? = nil, email: String? = nil, google_user_id: String? = nil, is_disabled: Bool? = nil, logged_in_at: String? = nil, type: String? = nil, url: URI? = nil) {
+    public init(can: StringDictionary<Bool>? = nil, created_at: String? = nil, domain: String? = nil, email: String? = nil, google_user_id: String? = nil, is_disabled: Bool? = nil, logged_in_at: String? = nil, type: String? = nil, url: String? = nil) {
         self.can = can
         self.created_at = created_at
         self.domain = domain
@@ -1746,9 +1746,9 @@ public struct CredentialsLDAP: SDKModel {
     /**
      * Link to get this item (read-only)
      */
-    public var url: URI?
+    public var url: String?
 
-    public init(can: StringDictionary<Bool>? = nil, created_at: String? = nil, email: String? = nil, is_disabled: Bool? = nil, ldap_dn: String? = nil, ldap_id: String? = nil, logged_in_at: String? = nil, type: String? = nil, url: URI? = nil) {
+    public init(can: StringDictionary<Bool>? = nil, created_at: String? = nil, email: String? = nil, is_disabled: Bool? = nil, ldap_dn: String? = nil, ldap_id: String? = nil, logged_in_at: String? = nil, type: String? = nil, url: String? = nil) {
         self.can = can
         self.created_at = created_at
         self.email = email
@@ -1794,13 +1794,13 @@ public struct CredentialsLookerOpenid: SDKModel {
     /**
      * Link to get this item (read-only)
      */
-    public var url: URI?
+    public var url: String?
     /**
      * Link to get this user (read-only)
      */
-    public var user_url: URI?
+    public var user_url: String?
 
-    public init(can: StringDictionary<Bool>? = nil, created_at: String? = nil, email: String? = nil, is_disabled: Bool? = nil, logged_in_at: String? = nil, logged_in_ip: String? = nil, type: String? = nil, url: URI? = nil, user_url: URI? = nil) {
+    public init(can: StringDictionary<Bool>? = nil, created_at: String? = nil, email: String? = nil, is_disabled: Bool? = nil, logged_in_at: String? = nil, logged_in_ip: String? = nil, type: String? = nil, url: String? = nil, user_url: String? = nil) {
         self.can = can
         self.created_at = created_at
         self.email = email
@@ -1846,9 +1846,9 @@ public struct CredentialsOIDC: SDKModel {
     /**
      * Link to get this item (read-only)
      */
-    public var url: URI?
+    public var url: String?
 
-    public init(can: StringDictionary<Bool>? = nil, created_at: String? = nil, email: String? = nil, is_disabled: Bool? = nil, logged_in_at: String? = nil, oidc_user_id: String? = nil, type: String? = nil, url: URI? = nil) {
+    public init(can: StringDictionary<Bool>? = nil, created_at: String? = nil, email: String? = nil, is_disabled: Bool? = nil, logged_in_at: String? = nil, oidc_user_id: String? = nil, type: String? = nil, url: String? = nil) {
         self.can = can
         self.created_at = created_at
         self.email = email
@@ -1893,9 +1893,9 @@ public struct CredentialsSaml: SDKModel {
     /**
      * Link to get this item (read-only)
      */
-    public var url: URI?
+    public var url: String?
 
-    public init(can: StringDictionary<Bool>? = nil, created_at: String? = nil, email: String? = nil, is_disabled: Bool? = nil, logged_in_at: String? = nil, saml_user_id: String? = nil, type: String? = nil, url: URI? = nil) {
+    public init(can: StringDictionary<Bool>? = nil, created_at: String? = nil, email: String? = nil, is_disabled: Bool? = nil, logged_in_at: String? = nil, saml_user_id: String? = nil, type: String? = nil, url: String? = nil) {
         self.can = can
         self.created_at = created_at
         self.email = email
@@ -1932,9 +1932,9 @@ public struct CredentialsTotp: SDKModel {
     /**
      * Link to get this item (read-only)
      */
-    public var url: URI?
+    public var url: String?
 
-    public init(can: StringDictionary<Bool>? = nil, created_at: String? = nil, is_disabled: Bool? = nil, type: String? = nil, verified: Bool? = nil, url: URI? = nil) {
+    public init(can: StringDictionary<Bool>? = nil, created_at: String? = nil, is_disabled: Bool? = nil, type: String? = nil, verified: Bool? = nil, url: String? = nil) {
         self.can = can
         self.created_at = created_at
         self.is_disabled = is_disabled
@@ -2075,7 +2075,7 @@ public struct Dashboard: SDKModel {
     /**
      * Relative path of URI of LookML file to edit the dashboard (LookML dashboard only). (read-only)
      */
-    public var edit_uri: URI?
+    public var edit_uri: String?
     /**
      * Number of times favorited (read-only)
      */
@@ -2130,7 +2130,7 @@ public struct Dashboard: SDKModel {
     public var view_count: Int64?
     public var appearance: DashboardAppearance?
 
-    public init(can: StringDictionary<Bool>? = nil, content_favorite_id: Int64? = nil, content_metadata_id: Int64? = nil, description: String? = nil, hidden: Bool? = nil, id: String? = nil, model: LookModel? = nil, query_timezone: String? = nil, readonly: Bool? = nil, refresh_interval: String? = nil, refresh_interval_to_i: Int64? = nil, folder: FolderBase? = nil, title: String? = nil, user_id: Int64? = nil, slug: String? = nil, preferred_viewer: String? = nil, background_color: String? = nil, created_at: Date? = nil, crossfilter_enabled: Bool? = nil, dashboard_elements: [DashboardElement]? = nil, dashboard_filters: [DashboardFilter]? = nil, dashboard_layouts: [DashboardLayout]? = nil, deleted: Bool? = nil, deleted_at: Date? = nil, deleter_id: Int64? = nil, edit_uri: URI? = nil, favorite_count: Int64? = nil, last_accessed_at: Date? = nil, last_viewed_at: Date? = nil, load_configuration: String? = nil, lookml_link_id: String? = nil, show_filters_bar: Bool? = nil, show_title: Bool? = nil, folder_id: String? = nil, text_tile_text_color: String? = nil, tile_background_color: String? = nil, tile_text_color: String? = nil, title_color: String? = nil, view_count: Int64? = nil, appearance: DashboardAppearance? = nil) {
+    public init(can: StringDictionary<Bool>? = nil, content_favorite_id: Int64? = nil, content_metadata_id: Int64? = nil, description: String? = nil, hidden: Bool? = nil, id: String? = nil, model: LookModel? = nil, query_timezone: String? = nil, readonly: Bool? = nil, refresh_interval: String? = nil, refresh_interval_to_i: Int64? = nil, folder: FolderBase? = nil, title: String? = nil, user_id: Int64? = nil, slug: String? = nil, preferred_viewer: String? = nil, background_color: String? = nil, created_at: Date? = nil, crossfilter_enabled: Bool? = nil, dashboard_elements: [DashboardElement]? = nil, dashboard_filters: [DashboardFilter]? = nil, dashboard_layouts: [DashboardLayout]? = nil, deleted: Bool? = nil, deleted_at: Date? = nil, deleter_id: Int64? = nil, edit_uri: String? = nil, favorite_count: Int64? = nil, last_accessed_at: Date? = nil, last_viewed_at: Date? = nil, load_configuration: String? = nil, lookml_link_id: String? = nil, show_filters_bar: Bool? = nil, show_title: Bool? = nil, folder_id: String? = nil, text_tile_text_color: String? = nil, tile_background_color: String? = nil, tile_text_color: String? = nil, title_color: String? = nil, view_count: Int64? = nil, appearance: DashboardAppearance? = nil) {
         self.can = can
         self.content_favorite_id = content_favorite_id
         self.content_metadata_id = content_metadata_id
@@ -2335,7 +2335,7 @@ public struct DashboardElement: SDKModel {
     /**
      * Relative path of URI of LookML file to edit the dashboard element (LookML dashboard only). (read-only)
      */
-    public var edit_uri: URI?
+    public var edit_uri: String?
     /**
      * Unique Id (read-only)
      */
@@ -2420,7 +2420,7 @@ public struct DashboardElement: SDKModel {
      */
     public var subtitle_text_as_html: String?
 
-    public init(can: StringDictionary<Bool>? = nil, body_text: String? = nil, body_text_as_html: String? = nil, dashboard_id: String? = nil, edit_uri: URI? = nil, id: String? = nil, look: LookWithQuery? = nil, look_id: String? = nil, lookml_link_id: String? = nil, merge_result_id: String? = nil, note_display: String? = nil, note_state: String? = nil, note_text: String? = nil, note_text_as_html: String? = nil, query: Query? = nil, query_id: Int64? = nil, refresh_interval: String? = nil, refresh_interval_to_i: Int64? = nil, result_maker: ResultMakerWithIdVisConfigAndDynamicFields? = nil, result_maker_id: Int64? = nil, subtitle_text: String? = nil, title: String? = nil, title_hidden: Bool? = nil, title_text: String? = nil, type: String? = nil, alert_count: Int64? = nil, title_text_as_html: String? = nil, subtitle_text_as_html: String? = nil) {
+    public init(can: StringDictionary<Bool>? = nil, body_text: String? = nil, body_text_as_html: String? = nil, dashboard_id: String? = nil, edit_uri: String? = nil, id: String? = nil, look: LookWithQuery? = nil, look_id: String? = nil, lookml_link_id: String? = nil, merge_result_id: String? = nil, note_display: String? = nil, note_state: String? = nil, note_text: String? = nil, note_text_as_html: String? = nil, query: Query? = nil, query_id: Int64? = nil, refresh_interval: String? = nil, refresh_interval_to_i: Int64? = nil, result_maker: ResultMakerWithIdVisConfigAndDynamicFields? = nil, result_maker_id: Int64? = nil, subtitle_text: String? = nil, title: String? = nil, title_hidden: Bool? = nil, title_text: String? = nil, type: String? = nil, alert_count: Int64? = nil, title_text_as_html: String? = nil, subtitle_text_as_html: String? = nil) {
         self.can = can
         self.body_text = body_text
         self.body_text_as_html = body_text_as_html
@@ -3495,7 +3495,7 @@ public struct EmbedParams: SDKModel {
     /**
      * The complete URL of the Looker UI page to display in the embed context. For example, to display the dashboard with id 34, `target_url` would look like: `https://mycompany.looker.com:9999/dashboards/34`. `target_uri` MUST contain a scheme (HTTPS), domain name, and URL path. Port must be included if it is required to reach the Looker server from browser clients. If the Looker instance is behind a load balancer or other proxy, `target_uri` must be the public-facing domain name and port required to reach the Looker instance, not the actual internal network machine name of the Looker instance.
      */
-    public var target_url: URI
+    public var target_url: String
     /**
      * Number of seconds the SSO embed session will be valid after the embed session is started. Defaults to 300 seconds. Maximum session length accepted is 2592000 seconds (30 days).
      */
@@ -3505,13 +3505,13 @@ public struct EmbedParams: SDKModel {
      */
     public var force_logout_login: Bool?
 
-    public init(target_url: URI, session_length: Int64? = nil, force_logout_login: Bool? = nil) {
+    public init(target_url: String, session_length: Int64? = nil, force_logout_login: Bool? = nil) {
         self.target_url = target_url
         self.session_length = session_length
         self.force_logout_login = force_logout_login
     }
 
-    public init(_ target_url: URI, session_length: Int64? = nil, force_logout_login: Bool? = nil) {
+    public init(_ target_url: String, session_length: Int64? = nil, force_logout_login: Bool? = nil) {
         self.init(target_url: target_url, session_length: session_length, force_logout_login: force_logout_login)
     }
 
@@ -3521,7 +3521,7 @@ public struct EmbedSsoParams: SDKModel {
     /**
      * The complete URL of the Looker UI page to display in the embed context. For example, to display the dashboard with id 34, `target_url` would look like: `https://mycompany.looker.com:9999/dashboards/34`. `target_uri` MUST contain a scheme (HTTPS), domain name, and URL path. Port must be included if it is required to reach the Looker server from browser clients. If the Looker instance is behind a load balancer or other proxy, `target_uri` must be the public-facing domain name and port required to reach the Looker instance, not the actual internal network machine name of the Looker instance.
      */
-    public var target_url: URI
+    public var target_url: String
     /**
      * Number of seconds the SSO embed session will be valid after the embed session is started. Defaults to 300 seconds. Maximum session length accepted is 2592000 seconds (30 days).
      */
@@ -3571,7 +3571,7 @@ public struct EmbedSsoParams: SDKModel {
      */
     public var secret_id: Int64?
 
-    public init(target_url: URI, session_length: Int64? = nil, force_logout_login: Bool? = nil, external_user_id: String? = nil, first_name: String? = nil, last_name: String? = nil, user_timezone: String? = nil, permissions: [String]? = nil, models: [String]? = nil, group_ids: [Int64]? = nil, external_group_id: String? = nil, user_attributes: StringDictionary<AnyCodable>? = nil, secret_id: Int64? = nil) {
+    public init(target_url: String, session_length: Int64? = nil, force_logout_login: Bool? = nil, external_user_id: String? = nil, first_name: String? = nil, last_name: String? = nil, user_timezone: String? = nil, permissions: [String]? = nil, models: [String]? = nil, group_ids: [Int64]? = nil, external_group_id: String? = nil, user_attributes: StringDictionary<AnyCodable>? = nil, secret_id: Int64? = nil) {
         self.target_url = target_url
         self.session_length = session_length
         self.force_logout_login = force_logout_login
@@ -3587,7 +3587,7 @@ public struct EmbedSsoParams: SDKModel {
         self.secret_id = secret_id
     }
 
-    public init(_ target_url: URI, session_length: Int64? = nil, force_logout_login: Bool? = nil, external_user_id: String? = nil, first_name: String? = nil, last_name: String? = nil, user_timezone: String? = nil, permissions: [String]? = nil, models: [String]? = nil, group_ids: [Int64]? = nil, external_group_id: String? = nil, user_attributes: StringDictionary<AnyCodable>? = nil, secret_id: Int64? = nil) {
+    public init(_ target_url: String, session_length: Int64? = nil, force_logout_login: Bool? = nil, external_user_id: String? = nil, first_name: String? = nil, last_name: String? = nil, user_timezone: String? = nil, permissions: [String]? = nil, models: [String]? = nil, group_ids: [Int64]? = nil, external_group_id: String? = nil, user_attributes: StringDictionary<AnyCodable>? = nil, secret_id: Int64? = nil) {
         self.init(target_url: target_url, session_length: session_length, force_logout_login: force_logout_login, external_user_id: external_user_id, first_name: first_name, last_name: last_name, user_timezone: user_timezone, permissions: permissions, models: models, group_ids: group_ids, external_group_id: external_group_id, user_attributes: user_attributes, secret_id: secret_id)
     }
 
@@ -3613,14 +3613,14 @@ public struct LkError: SDKModel {
     /**
      * Documentation link (read-only)
      */
-    public var documentation_url: URI
+    public var documentation_url: String
 
-    public init(message: String, documentation_url: URI) {
+    public init(message: String, documentation_url: String) {
         self.message = message
         self.documentation_url = documentation_url
     }
 
-    public init(_ message: String, _ documentation_url: URI) {
+    public init(_ message: String, _ documentation_url: String) {
         self.init(message: message, documentation_url: documentation_url)
     }
 
@@ -3874,14 +3874,6 @@ public struct FolderBase: SDKModel {
 public enum Format: String, Codable {
     case topojson = "topojson"
     case vector_tile_region = "vector_tile_region"
-}
-
-/**
- * Scheme that is running on application server (for PRs, file browsing, etc.) Valid values are: "http", "https".
- */
-public enum GitApplicationServerHttpScheme: String, Codable {
-    case http = "http"
-    case https = "https"
 }
 
 public struct GitBranch: SDKModel {
@@ -4959,9 +4951,9 @@ public struct LDAPConfig: SDKModel {
     /**
      * Link to get this item (read-only)
      */
-    public var url: URI?
+    public var url: String?
 
-    public init(can: StringDictionary<Bool>? = nil, alternate_email_login_allowed: Bool? = nil, auth_password: String? = nil, auth_requires_role: Bool? = nil, auth_username: String? = nil, connection_host: String? = nil, connection_port: String? = nil, connection_tls: Bool? = nil, connection_tls_no_verify: Bool? = nil, default_new_user_group_ids: [Int64]? = nil, default_new_user_groups: [LkGroup]? = nil, default_new_user_role_ids: [Int64]? = nil, default_new_user_roles: [Role]? = nil, enabled: Bool? = nil, force_no_page: Bool? = nil, groups: [LDAPGroupRead]? = nil, groups_base_dn: String? = nil, groups_finder_type: String? = nil, groups_member_attribute: String? = nil, groups_objectclasses: String? = nil, groups_user_attribute: String? = nil, groups_with_role_ids: [LDAPGroupWrite]? = nil, has_auth_password: Bool? = nil, merge_new_users_by_email: Bool? = nil, modified_at: String? = nil, modified_by: String? = nil, set_roles_from_groups: Bool? = nil, test_ldap_password: String? = nil, test_ldap_user: String? = nil, user_attribute_map_email: String? = nil, user_attribute_map_first_name: String? = nil, user_attribute_map_last_name: String? = nil, user_attribute_map_ldap_id: String? = nil, user_attributes: [LDAPUserAttributeRead]? = nil, user_attributes_with_ids: [LDAPUserAttributeWrite]? = nil, user_bind_base_dn: String? = nil, user_custom_filter: String? = nil, user_id_attribute_names: String? = nil, user_objectclass: String? = nil, allow_normal_group_membership: Bool? = nil, allow_roles_from_normal_groups: Bool? = nil, allow_direct_roles: Bool? = nil, url: URI? = nil) {
+    public init(can: StringDictionary<Bool>? = nil, alternate_email_login_allowed: Bool? = nil, auth_password: String? = nil, auth_requires_role: Bool? = nil, auth_username: String? = nil, connection_host: String? = nil, connection_port: String? = nil, connection_tls: Bool? = nil, connection_tls_no_verify: Bool? = nil, default_new_user_group_ids: [Int64]? = nil, default_new_user_groups: [LkGroup]? = nil, default_new_user_role_ids: [Int64]? = nil, default_new_user_roles: [Role]? = nil, enabled: Bool? = nil, force_no_page: Bool? = nil, groups: [LDAPGroupRead]? = nil, groups_base_dn: String? = nil, groups_finder_type: String? = nil, groups_member_attribute: String? = nil, groups_objectclasses: String? = nil, groups_user_attribute: String? = nil, groups_with_role_ids: [LDAPGroupWrite]? = nil, has_auth_password: Bool? = nil, merge_new_users_by_email: Bool? = nil, modified_at: String? = nil, modified_by: String? = nil, set_roles_from_groups: Bool? = nil, test_ldap_password: String? = nil, test_ldap_user: String? = nil, user_attribute_map_email: String? = nil, user_attribute_map_first_name: String? = nil, user_attribute_map_last_name: String? = nil, user_attribute_map_ldap_id: String? = nil, user_attributes: [LDAPUserAttributeRead]? = nil, user_attributes_with_ids: [LDAPUserAttributeWrite]? = nil, user_bind_base_dn: String? = nil, user_custom_filter: String? = nil, user_id_attribute_names: String? = nil, user_objectclass: String? = nil, allow_normal_group_membership: Bool? = nil, allow_roles_from_normal_groups: Bool? = nil, allow_direct_roles: Bool? = nil, url: String? = nil) {
         self.can = can
         self.alternate_email_login_allowed = alternate_email_login_allowed
         self.auth_password = auth_password
@@ -5051,9 +5043,9 @@ public struct LDAPConfigTestResult: SDKModel {
     /**
      * Link to ldap config (read-only)
      */
-    public var url: URI?
+    public var url: String?
 
-    public init(details: String? = nil, issues: [LDAPConfigTestIssue]? = nil, message: String? = nil, status: String? = nil, trace: String? = nil, user: LDAPUser? = nil, url: URI? = nil) {
+    public init(details: String? = nil, issues: [LDAPConfigTestIssue]? = nil, message: String? = nil, status: String? = nil, trace: String? = nil, user: LDAPUser? = nil, url: String? = nil) {
         self.details = details
         self.issues = issues
         self.message = message
@@ -5089,9 +5081,9 @@ public struct LDAPGroupRead: SDKModel {
     /**
      * Link to ldap config (read-only)
      */
-    public var url: URI?
+    public var url: String?
 
-    public init(id: Int64? = nil, looker_group_id: Int64? = nil, looker_group_name: String? = nil, name: String? = nil, roles: [Role]? = nil, url: URI? = nil) {
+    public init(id: Int64? = nil, looker_group_id: Int64? = nil, looker_group_name: String? = nil, name: String? = nil, roles: [Role]? = nil, url: String? = nil) {
         self.id = id
         self.looker_group_id = looker_group_id
         self.looker_group_name = looker_group_name
@@ -5126,9 +5118,9 @@ public struct LDAPGroupWrite: SDKModel {
     /**
      * Link to ldap config (read-only)
      */
-    public var url: URI?
+    public var url: String?
 
-    public init(id: Int64? = nil, looker_group_id: Int64? = nil, looker_group_name: String? = nil, name: String? = nil, role_ids: [Int64]? = nil, url: URI? = nil) {
+    public init(id: Int64? = nil, looker_group_id: Int64? = nil, looker_group_name: String? = nil, name: String? = nil, role_ids: [Int64]? = nil, url: String? = nil) {
         self.id = id
         self.looker_group_id = looker_group_id
         self.looker_group_name = looker_group_name
@@ -5179,9 +5171,9 @@ public struct LDAPUser: SDKModel {
     /**
      * Link to ldap config (read-only)
      */
-    public var url: URI?
+    public var url: String?
 
-    public init(all_emails: [String]? = nil, attributes: StringDictionary<AnyCodable>? = nil, email: String? = nil, first_name: String? = nil, groups: [String]? = nil, last_name: String? = nil, ldap_dn: String? = nil, ldap_id: String? = nil, roles: [String]? = nil, url: URI? = nil) {
+    public init(all_emails: [String]? = nil, attributes: StringDictionary<AnyCodable>? = nil, email: String? = nil, first_name: String? = nil, groups: [String]? = nil, last_name: String? = nil, ldap_dn: String? = nil, ldap_id: String? = nil, roles: [String]? = nil, url: String? = nil) {
         self.all_emails = all_emails
         self.attributes = attributes
         self.email = email
@@ -5212,9 +5204,9 @@ public struct LDAPUserAttributeRead: SDKModel {
     /**
      * Link to ldap config (read-only)
      */
-    public var url: URI?
+    public var url: String?
 
-    public init(name: String? = nil, required: Bool? = nil, user_attributes: [UserAttribute]? = nil, url: URI? = nil) {
+    public init(name: String? = nil, required: Bool? = nil, user_attributes: [UserAttribute]? = nil, url: String? = nil) {
         self.name = name
         self.required = required
         self.user_attributes = user_attributes
@@ -5239,9 +5231,9 @@ public struct LDAPUserAttributeWrite: SDKModel {
     /**
      * Link to ldap config (read-only)
      */
-    public var url: URI?
+    public var url: String?
 
-    public init(name: String? = nil, required: Bool? = nil, user_attribute_ids: [Int64]? = nil, url: URI? = nil) {
+    public init(name: String? = nil, required: Bool? = nil, user_attribute_ids: [Int64]? = nil, url: String? = nil) {
         self.name = name
         self.required = required
         self.user_attribute_ids = user_attribute_ids
@@ -6095,8 +6087,12 @@ public struct LookmlModelExploreField: SDKModel {
      * The number of times this field has been used in queries (read-only)
      */
     public var times_used: Int64?
+    /**
+     * The name of the view this field is defined in. This will be different than "view" when the view has been joined via a different name using the "from" parameter. (read-only)
+     */
+    public var original_view: String?
 
-    public init(align: Align? = nil, can_filter: Bool? = nil, category: Category? = nil, default_filter_value: String? = nil, description: String? = nil, dimension_group: String? = nil, enumerations: [LookmlModelExploreFieldEnumeration]? = nil, error: String? = nil, field_group_label: String? = nil, field_group_variant: String? = nil, fill_style: FillStyle? = nil, fiscal_month_offset: Int64? = nil, has_allowed_values: Bool? = nil, hidden: Bool? = nil, is_filter: Bool? = nil, is_fiscal: Bool? = nil, is_numeric: Bool? = nil, is_timeframe: Bool? = nil, can_time_filter: Bool? = nil, time_interval: LookmlModelExploreFieldTimeInterval? = nil, label: String? = nil, label_from_parameter: String? = nil, label_short: String? = nil, lookml_link: String? = nil, map_layer: LookmlModelExploreFieldMapLayer? = nil, measure: Bool? = nil, name: String? = nil, strict_value_format: Bool? = nil, parameter: Bool? = nil, permanent: Bool? = nil, primary_key: Bool? = nil, project_name: String? = nil, requires_refresh_on_sort: Bool? = nil, scope: String? = nil, sortable: Bool? = nil, source_file: String? = nil, source_file_path: String? = nil, sql: String? = nil, sql_case: [LookmlModelExploreFieldSqlCase]? = nil, filters: [LookmlModelExploreFieldMeasureFilters]? = nil, suggest_dimension: String? = nil, suggest_explore: String? = nil, suggestable: Bool? = nil, suggestions: [String]? = nil, tags: [String]? = nil, type: String? = nil, user_attribute_filter_types: [UserAttributeFilterTypes]? = nil, value_format: String? = nil, view: String? = nil, view_label: String? = nil, `dynamic`: Bool? = nil, week_start_day: WeekStartDay? = nil, times_used: Int64? = nil) {
+    public init(align: Align? = nil, can_filter: Bool? = nil, category: Category? = nil, default_filter_value: String? = nil, description: String? = nil, dimension_group: String? = nil, enumerations: [LookmlModelExploreFieldEnumeration]? = nil, error: String? = nil, field_group_label: String? = nil, field_group_variant: String? = nil, fill_style: FillStyle? = nil, fiscal_month_offset: Int64? = nil, has_allowed_values: Bool? = nil, hidden: Bool? = nil, is_filter: Bool? = nil, is_fiscal: Bool? = nil, is_numeric: Bool? = nil, is_timeframe: Bool? = nil, can_time_filter: Bool? = nil, time_interval: LookmlModelExploreFieldTimeInterval? = nil, label: String? = nil, label_from_parameter: String? = nil, label_short: String? = nil, lookml_link: String? = nil, map_layer: LookmlModelExploreFieldMapLayer? = nil, measure: Bool? = nil, name: String? = nil, strict_value_format: Bool? = nil, parameter: Bool? = nil, permanent: Bool? = nil, primary_key: Bool? = nil, project_name: String? = nil, requires_refresh_on_sort: Bool? = nil, scope: String? = nil, sortable: Bool? = nil, source_file: String? = nil, source_file_path: String? = nil, sql: String? = nil, sql_case: [LookmlModelExploreFieldSqlCase]? = nil, filters: [LookmlModelExploreFieldMeasureFilters]? = nil, suggest_dimension: String? = nil, suggest_explore: String? = nil, suggestable: Bool? = nil, suggestions: [String]? = nil, tags: [String]? = nil, type: String? = nil, user_attribute_filter_types: [UserAttributeFilterTypes]? = nil, value_format: String? = nil, view: String? = nil, view_label: String? = nil, `dynamic`: Bool? = nil, week_start_day: WeekStartDay? = nil, times_used: Int64? = nil, original_view: String? = nil) {
         self.align = align
         self.can_filter = can_filter
         self.category = category
@@ -6150,6 +6146,7 @@ public struct LookmlModelExploreField: SDKModel {
         self.`dynamic` = `dynamic`
         self.week_start_day = week_start_day
         self.times_used = times_used
+        self.original_view = original_view
     }
 
 }
@@ -7107,9 +7104,9 @@ public struct ModelSet: SDKModel {
     /**
      * Link to get this item (read-only)
      */
-    public var url: URI?
+    public var url: String?
 
-    public init(can: StringDictionary<Bool>? = nil, all_access: Bool? = nil, built_in: Bool? = nil, id: Int64? = nil, models: [String]? = nil, name: String? = nil, url: URI? = nil) {
+    public init(can: StringDictionary<Bool>? = nil, all_access: Bool? = nil, built_in: Bool? = nil, id: Int64? = nil, models: [String]? = nil, name: String? = nil, url: String? = nil) {
         self.can = can
         self.all_access = all_access
         self.built_in = built_in
@@ -7226,7 +7223,7 @@ public struct OIDCConfig: SDKModel {
     /**
      * OpenID Provider Authorization Url
      */
-    public var authorization_endpoint: URI?
+    public var authorization_endpoint: String?
     /**
      * (Write-Only) Array of ids of groups that will be applied to new users the first time they login via OIDC
      */
@@ -7322,7 +7319,7 @@ public struct OIDCConfig: SDKModel {
     /**
      * OpenID Provider User Information Url
      */
-    public var userinfo_endpoint: URI?
+    public var userinfo_endpoint: String?
     /**
      * Allow OIDC auth'd users to be members of non-reflected Looker groups. If 'false', user will be removed from non-reflected groups on login.
      */
@@ -7338,9 +7335,9 @@ public struct OIDCConfig: SDKModel {
     /**
      * Link to get this item (read-only)
      */
-    public var url: URI?
+    public var url: String?
 
-    public init(can: StringDictionary<Bool>? = nil, alternate_email_login_allowed: Bool? = nil, audience: String? = nil, auth_requires_role: Bool? = nil, authorization_endpoint: URI? = nil, default_new_user_group_ids: [Int64]? = nil, default_new_user_groups: [LkGroup]? = nil, default_new_user_role_ids: [Int64]? = nil, default_new_user_roles: [Role]? = nil, enabled: Bool? = nil, groups: [OIDCGroupRead]? = nil, groups_attribute: String? = nil, groups_with_role_ids: [OIDCGroupWrite]? = nil, identifier: String? = nil, issuer: String? = nil, modified_at: Date? = nil, modified_by: Int64? = nil, new_user_migration_types: String? = nil, scopes: [String]? = nil, secret: String? = nil, set_roles_from_groups: Bool? = nil, test_slug: String? = nil, token_endpoint: String? = nil, user_attribute_map_email: String? = nil, user_attribute_map_first_name: String? = nil, user_attribute_map_last_name: String? = nil, user_attributes: [OIDCUserAttributeRead]? = nil, user_attributes_with_ids: [OIDCUserAttributeWrite]? = nil, userinfo_endpoint: URI? = nil, allow_normal_group_membership: Bool? = nil, allow_roles_from_normal_groups: Bool? = nil, allow_direct_roles: Bool? = nil, url: URI? = nil) {
+    public init(can: StringDictionary<Bool>? = nil, alternate_email_login_allowed: Bool? = nil, audience: String? = nil, auth_requires_role: Bool? = nil, authorization_endpoint: String? = nil, default_new_user_group_ids: [Int64]? = nil, default_new_user_groups: [LkGroup]? = nil, default_new_user_role_ids: [Int64]? = nil, default_new_user_roles: [Role]? = nil, enabled: Bool? = nil, groups: [OIDCGroupRead]? = nil, groups_attribute: String? = nil, groups_with_role_ids: [OIDCGroupWrite]? = nil, identifier: String? = nil, issuer: String? = nil, modified_at: Date? = nil, modified_by: Int64? = nil, new_user_migration_types: String? = nil, scopes: [String]? = nil, secret: String? = nil, set_roles_from_groups: Bool? = nil, test_slug: String? = nil, token_endpoint: String? = nil, user_attribute_map_email: String? = nil, user_attribute_map_first_name: String? = nil, user_attribute_map_last_name: String? = nil, user_attributes: [OIDCUserAttributeRead]? = nil, user_attributes_with_ids: [OIDCUserAttributeWrite]? = nil, userinfo_endpoint: String? = nil, allow_normal_group_membership: Bool? = nil, allow_roles_from_normal_groups: Bool? = nil, allow_direct_roles: Bool? = nil, url: String? = nil) {
         self.can = can
         self.alternate_email_login_allowed = alternate_email_login_allowed
         self.audience = audience
@@ -7570,9 +7567,9 @@ public struct PermissionSet: SDKModel {
     /**
      * Link to get this item (read-only)
      */
-    public var url: URI?
+    public var url: String?
 
-    public init(can: StringDictionary<Bool>? = nil, all_access: Bool? = nil, built_in: Bool? = nil, id: Int64? = nil, name: String? = nil, permissions: [String]? = nil, url: URI? = nil) {
+    public init(can: StringDictionary<Bool>? = nil, all_access: Bool? = nil, built_in: Bool? = nil, id: Int64? = nil, name: String? = nil, permissions: [String]? = nil, url: String? = nil) {
         self.can = can
         self.all_access = all_access
         self.built_in = built_in
@@ -7646,9 +7643,9 @@ public struct Project: SDKModel {
      */
     public var git_application_server_http_port: Int64?
     /**
-     * Scheme that is running on application server (for PRs, file browsing, etc.) Valid values are: "http", "https".
+     * Scheme that is running on application server (for PRs, file browsing, etc.)
      */
-    public var git_application_server_http_scheme: GitApplicationServerHttpScheme?
+    public var git_application_server_http_scheme: String?
     /**
      * (Write-Only) Optional secret token with which to authenticate requests to the webhook deploy endpoint. If not set, endpoint is unauthenticated.
      */
@@ -7682,7 +7679,7 @@ public struct Project: SDKModel {
      */
     public var dependency_status: String?
 
-    public init(can: StringDictionary<Bool>? = nil, id: String? = nil, name: String? = nil, uses_git: Bool? = nil, git_remote_url: String? = nil, git_username: String? = nil, git_password: String? = nil, git_production_branch_name: String? = nil, use_git_cookie_auth: Bool? = nil, git_username_user_attribute: String? = nil, git_password_user_attribute: String? = nil, git_service_name: String? = nil, git_application_server_http_port: Int64? = nil, git_application_server_http_scheme: GitApplicationServerHttpScheme? = nil, deploy_secret: String? = nil, unset_deploy_secret: Bool? = nil, pull_request_mode: PullRequestMode? = nil, validation_required: Bool? = nil, git_release_mgmt_enabled: Bool? = nil, allow_warnings: Bool? = nil, is_example: Bool? = nil, dependency_status: String? = nil) {
+    public init(can: StringDictionary<Bool>? = nil, id: String? = nil, name: String? = nil, uses_git: Bool? = nil, git_remote_url: String? = nil, git_username: String? = nil, git_password: String? = nil, git_production_branch_name: String? = nil, use_git_cookie_auth: Bool? = nil, git_username_user_attribute: String? = nil, git_password_user_attribute: String? = nil, git_service_name: String? = nil, git_application_server_http_port: Int64? = nil, git_application_server_http_scheme: String? = nil, deploy_secret: String? = nil, unset_deploy_secret: Bool? = nil, pull_request_mode: PullRequestMode? = nil, validation_required: Bool? = nil, git_release_mgmt_enabled: Bool? = nil, allow_warnings: Bool? = nil, is_example: Bool? = nil, dependency_status: String? = nil) {
         self.can = can
         self.id = id
         self.name = name
@@ -8471,13 +8468,13 @@ public struct Role: SDKModel {
     /**
      * Link to get this item (read-only)
      */
-    public var url: URI?
+    public var url: String?
     /**
      * Link to get list of users with this role (read-only)
      */
-    public var users_url: URI?
+    public var users_url: String?
 
-    public init(can: StringDictionary<Bool>? = nil, id: Int64? = nil, name: String? = nil, permission_set: PermissionSet? = nil, permission_set_id: Int64? = nil, model_set: ModelSet? = nil, model_set_id: Int64? = nil, user_count: Int64? = nil, url: URI? = nil, users_url: URI? = nil) {
+    public init(can: StringDictionary<Bool>? = nil, id: Int64? = nil, name: String? = nil, permission_set: PermissionSet? = nil, permission_set_id: Int64? = nil, model_set: ModelSet? = nil, model_set_id: Int64? = nil, user_count: Int64? = nil, url: String? = nil, users_url: String? = nil) {
         self.can = can
         self.id = id
         self.name = name
@@ -8724,9 +8721,9 @@ public struct SamlConfig: SDKModel {
     /**
      * Link to get this item (read-only)
      */
-    public var url: URI?
+    public var url: String?
 
-    public init(can: StringDictionary<Bool>? = nil, enabled: Bool? = nil, idp_cert: String? = nil, idp_url: String? = nil, idp_issuer: String? = nil, idp_audience: String? = nil, allowed_clock_drift: Int64? = nil, user_attribute_map_email: String? = nil, user_attribute_map_first_name: String? = nil, user_attribute_map_last_name: String? = nil, new_user_migration_types: String? = nil, alternate_email_login_allowed: Bool? = nil, test_slug: String? = nil, modified_at: String? = nil, modified_by: String? = nil, default_new_user_roles: [Role]? = nil, default_new_user_groups: [LkGroup]? = nil, default_new_user_role_ids: [Int64]? = nil, default_new_user_group_ids: [Int64]? = nil, set_roles_from_groups: Bool? = nil, groups_attribute: String? = nil, groups: [SamlGroupRead]? = nil, groups_with_role_ids: [SamlGroupWrite]? = nil, auth_requires_role: Bool? = nil, user_attributes: [SamlUserAttributeRead]? = nil, user_attributes_with_ids: [SamlUserAttributeWrite]? = nil, groups_finder_type: String? = nil, groups_member_value: String? = nil, bypass_login_page: Bool? = nil, allow_normal_group_membership: Bool? = nil, allow_roles_from_normal_groups: Bool? = nil, allow_direct_roles: Bool? = nil, url: URI? = nil) {
+    public init(can: StringDictionary<Bool>? = nil, enabled: Bool? = nil, idp_cert: String? = nil, idp_url: String? = nil, idp_issuer: String? = nil, idp_audience: String? = nil, allowed_clock_drift: Int64? = nil, user_attribute_map_email: String? = nil, user_attribute_map_first_name: String? = nil, user_attribute_map_last_name: String? = nil, new_user_migration_types: String? = nil, alternate_email_login_allowed: Bool? = nil, test_slug: String? = nil, modified_at: String? = nil, modified_by: String? = nil, default_new_user_roles: [Role]? = nil, default_new_user_groups: [LkGroup]? = nil, default_new_user_role_ids: [Int64]? = nil, default_new_user_group_ids: [Int64]? = nil, set_roles_from_groups: Bool? = nil, groups_attribute: String? = nil, groups: [SamlGroupRead]? = nil, groups_with_role_ids: [SamlGroupWrite]? = nil, auth_requires_role: Bool? = nil, user_attributes: [SamlUserAttributeRead]? = nil, user_attributes_with_ids: [SamlUserAttributeWrite]? = nil, groups_finder_type: String? = nil, groups_member_value: String? = nil, bypass_login_page: Bool? = nil, allow_normal_group_membership: Bool? = nil, allow_roles_from_normal_groups: Bool? = nil, allow_direct_roles: Bool? = nil, url: String? = nil) {
         self.can = can
         self.enabled = enabled
         self.idp_cert = idp_cert
@@ -8788,9 +8785,9 @@ public struct SamlGroupRead: SDKModel {
     /**
      * Link to saml config (read-only)
      */
-    public var url: URI?
+    public var url: String?
 
-    public init(id: Int64? = nil, looker_group_id: Int64? = nil, looker_group_name: String? = nil, name: String? = nil, roles: [Role]? = nil, url: URI? = nil) {
+    public init(id: Int64? = nil, looker_group_id: Int64? = nil, looker_group_name: String? = nil, name: String? = nil, roles: [Role]? = nil, url: String? = nil) {
         self.id = id
         self.looker_group_id = looker_group_id
         self.looker_group_name = looker_group_name
@@ -8825,9 +8822,9 @@ public struct SamlGroupWrite: SDKModel {
     /**
      * Link to saml config (read-only)
      */
-    public var url: URI?
+    public var url: String?
 
-    public init(id: Int64? = nil, looker_group_id: Int64? = nil, looker_group_name: String? = nil, name: String? = nil, role_ids: [Int64]? = nil, url: URI? = nil) {
+    public init(id: Int64? = nil, looker_group_id: Int64? = nil, looker_group_name: String? = nil, name: String? = nil, role_ids: [Int64]? = nil, url: String? = nil) {
         self.id = id
         self.looker_group_id = looker_group_id
         self.looker_group_name = looker_group_name
@@ -8881,9 +8878,9 @@ public struct SamlUserAttributeRead: SDKModel {
     /**
      * Link to saml config (read-only)
      */
-    public var url: URI?
+    public var url: String?
 
-    public init(name: String? = nil, required: Bool? = nil, user_attributes: [UserAttribute]? = nil, url: URI? = nil) {
+    public init(name: String? = nil, required: Bool? = nil, user_attributes: [UserAttribute]? = nil, url: String? = nil) {
         self.name = name
         self.required = required
         self.user_attributes = user_attributes
@@ -8908,9 +8905,9 @@ public struct SamlUserAttributeWrite: SDKModel {
     /**
      * Link to saml config (read-only)
      */
-    public var url: URI?
+    public var url: String?
 
-    public init(name: String? = nil, required: Bool? = nil, user_attribute_ids: [Int64]? = nil, url: URI? = nil) {
+    public init(name: String? = nil, required: Bool? = nil, user_attribute_ids: [Int64]? = nil, url: String? = nil) {
         self.name = name
         self.required = required
         self.user_attribute_ids = user_attribute_ids
@@ -9370,9 +9367,9 @@ public struct Session: SDKModel {
     /**
      * Link to get this item (read-only)
      */
-    public var url: URI?
+    public var url: String?
 
-    public init(can: StringDictionary<Bool>? = nil, id: Int64? = nil, ip_address: String? = nil, browser: String? = nil, operating_system: String? = nil, city: String? = nil, state: String? = nil, country: String? = nil, credentials_type: String? = nil, extended_at: String? = nil, extended_count: Int64? = nil, sudo_user_id: Int64? = nil, created_at: String? = nil, expires_at: String? = nil, url: URI? = nil) {
+    public init(can: StringDictionary<Bool>? = nil, id: Int64? = nil, ip_address: String? = nil, browser: String? = nil, operating_system: String? = nil, city: String? = nil, state: String? = nil, country: String? = nil, credentials_type: String? = nil, extended_at: String? = nil, extended_count: Int64? = nil, sudo_user_id: Int64? = nil, created_at: String? = nil, expires_at: String? = nil, url: String? = nil) {
         self.can = can
         self.id = id
         self.ip_address = ip_address
@@ -9922,11 +9919,11 @@ public struct User: SDKModel {
     /**
      * URL for the avatar image (may be generic) (read-only)
      */
-    public var avatar_url: URI?
+    public var avatar_url: String?
     /**
      * URL for the avatar image (may be generic), does not specify size (read-only)
      */
-    public var avatar_url_without_sizing: URI?
+    public var avatar_url_without_sizing: String?
     /**
      * API 3 credentials (read-only)
      */
@@ -10033,9 +10030,9 @@ public struct User: SDKModel {
     /**
      * Link to get this item (read-only)
      */
-    public var url: URI?
+    public var url: String?
 
-    public init(can: StringDictionary<Bool>? = nil, avatar_url: URI? = nil, avatar_url_without_sizing: URI? = nil, credentials_api3: [CredentialsApi3]? = nil, credentials_email: CredentialsEmail? = nil, credentials_embed: [CredentialsEmbed]? = nil, credentials_google: CredentialsGoogle? = nil, credentials_ldap: CredentialsLDAP? = nil, credentials_looker_openid: CredentialsLookerOpenid? = nil, credentials_oidc: CredentialsOIDC? = nil, credentials_saml: CredentialsSaml? = nil, credentials_totp: CredentialsTotp? = nil, display_name: String? = nil, email: String? = nil, embed_group_space_id: Int64? = nil, first_name: String? = nil, group_ids: [Int64]? = nil, home_folder_id: String? = nil, id: Int64? = nil, is_disabled: Bool? = nil, last_name: String? = nil, locale: String? = nil, looker_versions: [String]? = nil, models_dir_validated: Bool? = nil, personal_folder_id: Int64? = nil, presumed_looker_employee: Bool? = nil, role_ids: [Int64]? = nil, sessions: [Session]? = nil, ui_state: StringDictionary<AnyCodable>? = nil, verified_looker_employee: Bool? = nil, roles_externally_managed: Bool? = nil, allow_direct_roles: Bool? = nil, allow_normal_group_membership: Bool? = nil, allow_roles_from_normal_groups: Bool? = nil, url: URI? = nil) {
+    public init(can: StringDictionary<Bool>? = nil, avatar_url: String? = nil, avatar_url_without_sizing: String? = nil, credentials_api3: [CredentialsApi3]? = nil, credentials_email: CredentialsEmail? = nil, credentials_embed: [CredentialsEmbed]? = nil, credentials_google: CredentialsGoogle? = nil, credentials_ldap: CredentialsLDAP? = nil, credentials_looker_openid: CredentialsLookerOpenid? = nil, credentials_oidc: CredentialsOIDC? = nil, credentials_saml: CredentialsSaml? = nil, credentials_totp: CredentialsTotp? = nil, display_name: String? = nil, email: String? = nil, embed_group_space_id: Int64? = nil, first_name: String? = nil, group_ids: [Int64]? = nil, home_folder_id: String? = nil, id: Int64? = nil, is_disabled: Bool? = nil, last_name: String? = nil, locale: String? = nil, looker_versions: [String]? = nil, models_dir_validated: Bool? = nil, personal_folder_id: Int64? = nil, presumed_looker_employee: Bool? = nil, role_ids: [Int64]? = nil, sessions: [Session]? = nil, ui_state: StringDictionary<AnyCodable>? = nil, verified_looker_employee: Bool? = nil, roles_externally_managed: Bool? = nil, allow_direct_roles: Bool? = nil, allow_normal_group_membership: Bool? = nil, allow_roles_from_normal_groups: Bool? = nil, url: String? = nil) {
         self.can = can
         self.avatar_url = avatar_url
         self.avatar_url_without_sizing = avatar_url_without_sizing
@@ -10087,15 +10084,15 @@ public struct UserAttribute: SDKModel {
     /**
      * Name of user attribute
      */
-    public var name: String?
+    public var name: String
     /**
      * Human-friendly label for user attribute
      */
-    public var label: String?
+    public var label: String
     /**
      * Type of user attribute ("string", "number", "datetime", "yesno", "zipcode")
      */
-    public var type: String?
+    public var type: String
     /**
      * Default value for when no value is set on the user
      */
@@ -10125,7 +10122,7 @@ public struct UserAttribute: SDKModel {
      */
     public var hidden_value_domain_whitelist: String?
 
-    public init(can: StringDictionary<Bool>? = nil, id: Int64? = nil, name: String? = nil, label: String? = nil, type: String? = nil, default_value: String? = nil, is_system: Bool? = nil, is_permanent: Bool? = nil, value_is_hidden: Bool? = nil, user_can_view: Bool? = nil, user_can_edit: Bool? = nil, hidden_value_domain_whitelist: String? = nil) {
+    public init(can: StringDictionary<Bool>? = nil, id: Int64? = nil, name: String, label: String, type: String, default_value: String? = nil, is_system: Bool? = nil, is_permanent: Bool? = nil, value_is_hidden: Bool? = nil, user_can_view: Bool? = nil, user_can_edit: Bool? = nil, hidden_value_domain_whitelist: String? = nil) {
         self.can = can
         self.id = id
         self.name = name
@@ -10138,6 +10135,10 @@ public struct UserAttribute: SDKModel {
         self.user_can_view = user_can_view
         self.user_can_edit = user_can_edit
         self.hidden_value_domain_whitelist = hidden_value_domain_whitelist
+    }
+
+    public init(can: StringDictionary<Bool>? = nil, id: Int64? = nil, _ name: String, _ label: String, _ type: String, default_value: String? = nil, is_system: Bool? = nil, is_permanent: Bool? = nil, value_is_hidden: Bool? = nil, user_can_view: Bool? = nil, user_can_edit: Bool? = nil, hidden_value_domain_whitelist: String? = nil) {
+        self.init(can: can, id: id, name: name, label: label, type: type, default_value: default_value, is_system: is_system, is_permanent: is_permanent, value_is_hidden: value_is_hidden, user_can_view: user_can_view, user_can_edit: user_can_edit, hidden_value_domain_whitelist: hidden_value_domain_whitelist)
     }
 
 }
@@ -10342,13 +10343,13 @@ public struct UserPublic: SDKModel {
     /**
      * URL for the avatar image (may be generic) (read-only)
      */
-    public var avatar_url: URI?
+    public var avatar_url: String?
     /**
      * Link to get this item (read-only)
      */
-    public var url: URI?
+    public var url: String?
 
-    public init(can: StringDictionary<Bool>? = nil, id: Int64? = nil, first_name: String? = nil, last_name: String? = nil, display_name: String? = nil, avatar_url: URI? = nil, url: URI? = nil) {
+    public init(can: StringDictionary<Bool>? = nil, id: Int64? = nil, first_name: String? = nil, last_name: String? = nil, display_name: String? = nil, avatar_url: String? = nil, url: String? = nil) {
         self.can = can
         self.id = id
         self.first_name = first_name
@@ -10372,15 +10373,15 @@ public struct ValidationError: SDKModel {
     /**
      * Documentation link (read-only)
      */
-    public var documentation_url: URI
+    public var documentation_url: String
 
-    public init(message: String, errors: [ValidationErrorDetail]? = nil, documentation_url: URI) {
+    public init(message: String, errors: [ValidationErrorDetail]? = nil, documentation_url: String) {
         self.message = message
         self.errors = errors
         self.documentation_url = documentation_url
     }
 
-    public init(_ message: String, errors: [ValidationErrorDetail]? = nil, _ documentation_url: URI) {
+    public init(_ message: String, errors: [ValidationErrorDetail]? = nil, _ documentation_url: String) {
         self.init(message: message, errors: errors, documentation_url: documentation_url)
     }
 
@@ -10402,16 +10403,16 @@ public struct ValidationErrorDetail: SDKModel {
     /**
      * Documentation link (read-only)
      */
-    public var documentation_url: URI
+    public var documentation_url: String
 
-    public init(field: String? = nil, code: String? = nil, message: String? = nil, documentation_url: URI) {
+    public init(field: String? = nil, code: String? = nil, message: String? = nil, documentation_url: String) {
         self.field = field
         self.code = code
         self.message = message
         self.documentation_url = documentation_url
     }
 
-    public init(field: String? = nil, code: String? = nil, message: String? = nil, _ documentation_url: URI) {
+    public init(field: String? = nil, code: String? = nil, message: String? = nil, _ documentation_url: String) {
         self.init(field: field, code: code, message: message, documentation_url: documentation_url)
     }
 
@@ -12210,7 +12211,7 @@ public struct WriteOIDCConfig: SDKModel {
     /**
      * OpenID Provider Authorization Url
      */
-    public var authorization_endpoint: URI?
+    public var authorization_endpoint: String?
     /**
      * (Write-Only) Array of ids of groups that will be applied to new users the first time they login via OIDC
      */
@@ -12278,7 +12279,7 @@ public struct WriteOIDCConfig: SDKModel {
     /**
      * OpenID Provider User Information Url
      */
-    public var userinfo_endpoint: URI?
+    public var userinfo_endpoint: String?
     /**
      * Allow OIDC auth'd users to be members of non-reflected Looker groups. If 'false', user will be removed from non-reflected groups on login.
      */
@@ -12292,7 +12293,7 @@ public struct WriteOIDCConfig: SDKModel {
      */
     public var allow_direct_roles: Bool?
 
-    public init(alternate_email_login_allowed: Bool? = nil, audience: String? = nil, auth_requires_role: Bool? = nil, authorization_endpoint: URI? = nil, default_new_user_group_ids: [Int64]? = nil, default_new_user_role_ids: [Int64]? = nil, enabled: Bool? = nil, groups_attribute: String? = nil, groups_with_role_ids: [OIDCGroupWrite]? = nil, identifier: String? = nil, issuer: String? = nil, new_user_migration_types: String? = nil, scopes: [String]? = nil, secret: String? = nil, set_roles_from_groups: Bool? = nil, token_endpoint: String? = nil, user_attribute_map_email: String? = nil, user_attribute_map_first_name: String? = nil, user_attribute_map_last_name: String? = nil, user_attributes_with_ids: [OIDCUserAttributeWrite]? = nil, userinfo_endpoint: URI? = nil, allow_normal_group_membership: Bool? = nil, allow_roles_from_normal_groups: Bool? = nil, allow_direct_roles: Bool? = nil) {
+    public init(alternate_email_login_allowed: Bool? = nil, audience: String? = nil, auth_requires_role: Bool? = nil, authorization_endpoint: String? = nil, default_new_user_group_ids: [Int64]? = nil, default_new_user_role_ids: [Int64]? = nil, enabled: Bool? = nil, groups_attribute: String? = nil, groups_with_role_ids: [OIDCGroupWrite]? = nil, identifier: String? = nil, issuer: String? = nil, new_user_migration_types: String? = nil, scopes: [String]? = nil, secret: String? = nil, set_roles_from_groups: Bool? = nil, token_endpoint: String? = nil, user_attribute_map_email: String? = nil, user_attribute_map_first_name: String? = nil, user_attribute_map_last_name: String? = nil, user_attributes_with_ids: [OIDCUserAttributeWrite]? = nil, userinfo_endpoint: String? = nil, allow_normal_group_membership: Bool? = nil, allow_roles_from_normal_groups: Bool? = nil, allow_direct_roles: Bool? = nil) {
         self.alternate_email_login_allowed = alternate_email_login_allowed
         self.audience = audience
         self.auth_requires_role = auth_requires_role
@@ -12416,9 +12417,9 @@ public struct WriteProject: SDKModel {
      */
     public var git_application_server_http_port: Int64?
     /**
-     * Scheme that is running on application server (for PRs, file browsing, etc.) Valid values are: "http", "https".
+     * Scheme that is running on application server (for PRs, file browsing, etc.)
      */
-    public var git_application_server_http_scheme: GitApplicationServerHttpScheme?
+    public var git_application_server_http_scheme: String?
     /**
      * (Write-Only) Optional secret token with which to authenticate requests to the webhook deploy endpoint. If not set, endpoint is unauthenticated.
      */
@@ -12448,7 +12449,7 @@ public struct WriteProject: SDKModel {
      */
     public var dependency_status: String?
 
-    public init(name: String? = nil, git_remote_url: String? = nil, git_username: String? = nil, git_password: String? = nil, git_production_branch_name: String? = nil, use_git_cookie_auth: Bool? = nil, git_username_user_attribute: String? = nil, git_password_user_attribute: String? = nil, git_service_name: String? = nil, git_application_server_http_port: Int64? = nil, git_application_server_http_scheme: GitApplicationServerHttpScheme? = nil, deploy_secret: String? = nil, unset_deploy_secret: Bool? = nil, pull_request_mode: PullRequestMode? = nil, validation_required: Bool? = nil, git_release_mgmt_enabled: Bool? = nil, allow_warnings: Bool? = nil, dependency_status: String? = nil) {
+    public init(name: String? = nil, git_remote_url: String? = nil, git_username: String? = nil, git_password: String? = nil, git_production_branch_name: String? = nil, use_git_cookie_auth: Bool? = nil, git_username_user_attribute: String? = nil, git_password_user_attribute: String? = nil, git_service_name: String? = nil, git_application_server_http_port: Int64? = nil, git_application_server_http_scheme: String? = nil, deploy_secret: String? = nil, unset_deploy_secret: Bool? = nil, pull_request_mode: PullRequestMode? = nil, validation_required: Bool? = nil, git_release_mgmt_enabled: Bool? = nil, allow_warnings: Bool? = nil, dependency_status: String? = nil) {
         self.name = name
         self.git_remote_url = git_remote_url
         self.git_username = git_username
@@ -13099,15 +13100,15 @@ public struct WriteUserAttribute: SDKModel {
     /**
      * Name of user attribute
      */
-    public var name: String?
+    public var name: String
     /**
      * Human-friendly label for user attribute
      */
-    public var label: String?
+    public var label: String
     /**
      * Type of user attribute ("string", "number", "datetime", "yesno", "zipcode")
      */
-    public var type: String?
+    public var type: String
     /**
      * Default value for when no value is set on the user
      */
@@ -13129,7 +13130,7 @@ public struct WriteUserAttribute: SDKModel {
      */
     public var hidden_value_domain_whitelist: String?
 
-    public init(name: String? = nil, label: String? = nil, type: String? = nil, default_value: String? = nil, value_is_hidden: Bool? = nil, user_can_view: Bool? = nil, user_can_edit: Bool? = nil, hidden_value_domain_whitelist: String? = nil) {
+    public init(name: String, label: String, type: String, default_value: String? = nil, value_is_hidden: Bool? = nil, user_can_view: Bool? = nil, user_can_edit: Bool? = nil, hidden_value_domain_whitelist: String? = nil) {
         self.name = name
         self.label = label
         self.type = type
@@ -13138,6 +13139,10 @@ public struct WriteUserAttribute: SDKModel {
         self.user_can_view = user_can_view
         self.user_can_edit = user_can_edit
         self.hidden_value_domain_whitelist = hidden_value_domain_whitelist
+    }
+
+    public init(_ name: String, _ label: String, _ type: String, default_value: String? = nil, value_is_hidden: Bool? = nil, user_can_view: Bool? = nil, user_can_edit: Bool? = nil, hidden_value_domain_whitelist: String? = nil) {
+        self.init(name: name, label: label, type: type, default_value: default_value, value_is_hidden: value_is_hidden, user_can_view: user_can_view, user_can_edit: user_can_edit, hidden_value_domain_whitelist: hidden_value_domain_whitelist)
     }
 
 }
