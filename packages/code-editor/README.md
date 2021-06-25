@@ -77,7 +77,7 @@ This component is a wrapper around a `<ReactMarkdown />` component. It uses `@lo
 | paragraphOverride | An override for the default Paragraph renderer. | _optional_ |
 
 #### Using `<CodeDisplay />` inside Markdown
-This component checks for decoratored code blocks. The following `source` would create a Ruby syntax highlighted code block.
+This component checks for decorated code blocks. The following `source` would create a Ruby syntax highlighted code block.
 ````
 When using the Ruby SDK this would be passed as a Ruby hash like:
 ```ruby
