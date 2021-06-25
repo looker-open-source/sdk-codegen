@@ -27,41 +27,20 @@
 import React, { FC } from 'react'
 import styled from 'styled-components'
 import { Span } from '@looker/components'
-import Highlight, { defaultProps } from 'prism-react-renderer'
-// import { Prism } from "prism-react-renderer"
-import { getPrismLanguage, getOverridenTheme } from './utils'
-// TODO enable kotlin, csharp, swift highlighting
-// (typeof global !== "undefined" ? global : window).Prism = Prism
-// require("prismjs/components/prism-kotlin")
-// require("prismjs/components/prism-csharp")
-// require("prismjs/components/prism-swift")
+import Highlight, { defaultProps, Prism } from 'prism-react-renderer'
 
-export interface CodeDisplayProps {
-  /** Code blob to be highlighted */
-  code: string
-  /** SDK programming language to syntax highlight */
-  language?: string
-  /** Search pattern to be marked */
-  pattern?: string
-  /** Flag to provide background or not */
-  transparent?: boolean
-}
+import { getPrismLanguage, getOverridenTheme } from '../utils'
+import { CodeWrapper } from './CodeWrapper'
+import { LineItem } from './LineItem'
+import { CodeDisplayProps } from './types'
+;(typeof global !== 'undefined' ? (global as any) : (window as any)).Prism =
+  Prism
+require('prismjs/components/prism-kotlin')
+require('prismjs/components/prism-csharp')
+require('prismjs/components/prism-swift')
+require('prismjs/components/prism-ruby')
 
-const Pre = styled.pre`
-  white-space: pre-wrap;
-  overflow: auto;
-  // override default margin for Pre
-  // so we can set from parent
-  margin: 0px;
-
-  // selector for search matches
-  .match {
-    border: 1px yellow solid;
-    border-radius: 4px;
-  }
-`
-
-const Line = styled.div`
+const Line = styled(Span)`
   display: table-row;
 `
 
@@ -80,39 +59,49 @@ const LineContent = styled(Span)`
 
 /**
  * Provides a view-only syntax highlighter for all supported SDK languages.
- * TODO: LookML syntax highlighting
+ * @param language - highlighting language
+ * @param code - string content to display
+ * @param pattern - Search pattern to be marked
+ * @param transparent - Flag to provide background styling or not
+ * @param inline - Flag to use block or inline code
+ * @param lineNumbers - flag to toggle line numbers
  */
 export const CodeDisplay: FC<CodeDisplayProps> = ({
   language = 'json',
   code,
   pattern = '',
   transparent = false,
+  inline = false,
+  lineNumbers = true,
 }) => {
   return (
     <Highlight
       {...defaultProps}
-      code={code}
+      code={code.trim()}
       language={getPrismLanguage(language)}
-      theme={getOverridenTheme(transparent)}
+      theme={getOverridenTheme(transparent, inline)}
     >
       {({ className, style, tokens, getLineProps, getTokenProps }) => (
-        <Pre className={className} style={style}>
+        <CodeWrapper className={className} style={style} inline={inline}>
           {tokens.map((line, i) => (
             <Line key={i} {...getLineProps({ line, key: i })}>
-              {language === 'json' || <LineNo>{i + 1}</LineNo>}
+              {lineNumbers && <LineNo>{i + 1}</LineNo>}
               <LineContent>
                 {line.map((token, key) => {
                   const tokenProps = getTokenProps({ token, key })
-                  const text = tokenProps.children
-                  if (pattern !== '' && text.includes(pattern)) {
-                    tokenProps.className += ' match'
-                  }
-                  return <span key={key} {...tokenProps} />
+                  return (
+                    <LineItem
+                      key={key}
+                      index={key}
+                      tokenProps={tokenProps}
+                      pattern={pattern}
+                    />
+                  )
                 })}
               </LineContent>
             </Line>
           ))}
-        </Pre>
+        </CodeWrapper>
       )}
     </Highlight>
   )

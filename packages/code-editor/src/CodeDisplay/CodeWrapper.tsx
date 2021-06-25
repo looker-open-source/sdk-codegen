@@ -23,8 +23,50 @@
  SOFTWARE.
 
  */
-export {
-  getPrismLanguage,
-  getOverridenTheme,
-  instanceOfPrismLanguage,
-} from './utils'
+
+import React, { FC } from 'react'
+import styled from 'styled-components'
+
+interface CodeWrapperProps {
+  className: string
+  style: any
+  inline: boolean
+  children: any
+}
+
+const Pre = styled.pre`
+  white-space: pre-wrap;
+  overflow: auto;
+  // override default margin for Pre
+  // so we can set from parent
+  margin: 0px;
+
+  // selector for search matches
+  .match {
+    border: 1px yellow solid;
+    border-radius: 4px;
+  }
+`
+const Code = styled.code`
+  // selector for search matches
+  .match {
+    background-color: yellow;
+  }
+`
+
+/**
+ * A wrapper for CodeDisplay which applies search highlighting styles on proper container component
+ */
+export const CodeWrapper: FC<CodeWrapperProps> = ({
+  className,
+  style,
+  inline,
+  children,
+}) => {
+  const Wrapper = inline ? Code : Pre
+  return (
+    <Wrapper className={className} style={style}>
+      {children}
+    </Wrapper>
+  )
+}

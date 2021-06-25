@@ -23,8 +23,4 @@
  SOFTWARE.
 
  */
-export {
-  getPrismLanguage,
-  getOverridenTheme,
-  instanceOfPrismLanguage,
-} from './utils'
+export { CodeEditor } from './CodeEditor'

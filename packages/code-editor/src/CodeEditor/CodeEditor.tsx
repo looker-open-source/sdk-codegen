@@ -24,38 +24,51 @@
 
  */
 
-import React, { FC, useContext } from 'react'
-import { useHistory } from 'react-router-dom'
-import { Markdown } from '@looker/code-editor'
-import { EnvAdaptorContext, SearchContext } from '../../context'
-import { transformURL } from './utils'
+import React, { FC } from 'react'
+import Editor from 'react-simple-code-editor'
 
-interface DocMarkdownProps {
-  source: string
-  specKey: string
+import { CodeDisplayProps } from '../CodeDisplay/types'
+import { CodeDisplay } from '../index'
+
+interface CodeEditorProps extends CodeDisplayProps {
+  /** onChange event handler, for Editor functionality */
+  onChange: (text: string) => void
 }
 
-export const DocMarkdown: FC<DocMarkdownProps> = ({ source, specKey }) => {
-  const { envAdaptor } = useContext(EnvAdaptorContext)
-  const {
-    searchSettings: { pattern },
-  } = useContext(SearchContext)
-
-  const history = useHistory()
-
-  const linkClickHandler = (pathname: string, url: string) => {
-    if (pathname.startsWith(`/${specKey}`)) {
-      history.push(pathname)
-    } else if (url.startsWith('https://')) {
-      envAdaptor.openBrowserWindow(url)
-    }
-  }
+/**
+ * Extends CodeDisplay functionality to provide
+ * Editor functionality for syntax highlighted code blocks
+ */
+export const CodeEditor: FC<CodeEditorProps> = ({
+  code,
+  onChange,
+  language = 'json',
+  pattern = '',
+  transparent = false,
+  lineNumbers = true,
+}) => {
   return (
-    <Markdown
-      source={source}
-      pattern={pattern}
-      linkClickHandler={linkClickHandler}
-      transformLinkUri={transformURL.bind(null, specKey)}
+    <Editor
+      value={code.trim()}
+      role={'code-editor'}
+      onValueChange={onChange}
+      highlight={(code: string) => (
+        <CodeDisplay
+          code={code}
+          language={language}
+          pattern={pattern}
+          transparent={transparent}
+          lineNumbers={lineNumbers}
+        />
+      )}
+      padding="1rem"
+      style={{
+        width: '100%',
+        color: '#FFF',
+        whiteSpace: 'pre-wrap',
+        overflow: 'auto',
+        fontFamily: 'monospace',
+      }}
     />
   )
 }

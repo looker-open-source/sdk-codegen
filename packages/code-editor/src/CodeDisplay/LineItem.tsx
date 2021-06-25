@@ -23,9 +23,20 @@
  SOFTWARE.
 
  */
-import React, { FC, PropsWithChildren } from 'react'
-import { MDCodeBlock } from './common'
 
-export const MDCodeBlockWrapper: FC<PropsWithChildren<any>> = (props) => (
-  <MDCodeBlock>{props.value}</MDCodeBlock>
-)
+import React, { FC } from 'react'
+import { LineItemProps } from './types'
+
+/**
+ * Takes a 'line of code' as a list of Tokens and returns syntax highlighting styled spans
+ * @param key - component identifier
+ * @param tokenProps - the style props from prism renderer
+ * @param pattern - search pattern to consider
+ */
+export const LineItem: FC<LineItemProps> = ({ index, tokenProps, pattern }) => {
+  const text = tokenProps.children.toLowerCase()
+  if (pattern !== '' && text.includes(pattern.toLowerCase())) {
+    tokenProps.className += ' match'
+  }
+  return <span key={index} {...tokenProps} />
+}
