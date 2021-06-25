@@ -15,7 +15,7 @@ or
 npm install @looker/code-editor
 ```
 
-### <CodeDisplay />
+### `<CodeDisplay />`
 This component is a specialized `<code />` or `<pre />` that has various search, syntax highlighting and other display options. Use this component for read-only code display use cases. This component is used by this package's CodeEditor and Markdown component for inline and block code sections. 
 
 | Prop      | Description | Default |
@@ -27,7 +27,7 @@ This component is a specialized `<code />` or `<pre />` that has various search,
 | inline   | When true, inline `<code />` is used. `<pre />` is used by default.        | `false` |
 | lineNumbers   | A flag for enabling line numbers.        | `false` |
 
-### <CodeEditor />
+### `<CodeEditor />`
 This component extends the `<CodeDisplay />` component and adds a hidden `<textarea />` that allows for code editting.
 | Prop      | Description | Default |
 | ----------- | ----------- | ----------- |
@@ -36,7 +36,7 @@ This component extends the `<CodeDisplay />` component and adds a hidden `<texta
 
 #### Example
 ```javascript
-export const CodeBlockEditor: React.FC = () => {
+const CodeBlockEditor: React.FC = () => {
   const [codeString, setCodeString] = useState(`
 # GET /lookml_models -> Sequence[models.LookmlModel]
 def all_lookml_models(
@@ -66,7 +66,7 @@ def all_lookml_models(
 }
 ```
 
-### <Markdown />
+### `<Markdown />`
 This component is a wrapper around a `<ReactMarkdown />` component. It uses `@looker/component` renderers for text and `<CodeDisplay />` for inline and block code. It has options for link handling and renderer overrides.
 | Prop      | Description | Default |
 | ----------- | ----------- | ----------- |
