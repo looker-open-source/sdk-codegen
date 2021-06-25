@@ -5438,9 +5438,9 @@ open class LookerSDKStream: APIMethods {
          */
         _ look_id: Int64,
         /**
-         * @param {Int64} folder_id Folder id to copy to.
+         * @param {String} folder_id Folder id to copy to.
          */
-        folder_id: Int64? = nil,
+        folder_id: String? = nil,
         options: ITransportSettings? = nil
     ) -> SDKResponse<Data, SDKError> {
         let path_look_id = encodeParam(look_id)
@@ -5465,9 +5465,9 @@ open class LookerSDKStream: APIMethods {
          */
         _ look_id: Int64,
         /**
-         * @param {Int64} folder_id Folder id to move to.
+         * @param {String} folder_id Folder id to move to.
          */
-        _ folder_id: Int64,
+        _ folder_id: String,
         options: ITransportSettings? = nil
     ) -> SDKResponse<Data, SDKError> {
         let path_look_id = encodeParam(look_id)

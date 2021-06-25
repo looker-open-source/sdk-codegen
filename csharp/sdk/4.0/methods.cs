@@ -4571,7 +4571,7 @@ namespace Looker.SDK.API40
   /// <param name="folder_id">Folder id to copy to.</param>
   public async Task<SdkResponse<LookWithQuery, Exception>> copy_look(
     long look_id,
-    long? folder_id = null,
+    string? folder_id = null,
     ITransportSettings? options = null)
 {  
     return await AuthRequest<LookWithQuery, Exception>(HttpMethod.Post, $"/looks/{look_id}/copy", new Values {
@@ -4593,7 +4593,7 @@ namespace Looker.SDK.API40
   /// <param name="folder_id">Folder id to move to.</param>
   public async Task<SdkResponse<LookWithQuery, Exception>> move_look(
     long look_id,
-    long folder_id,
+    string folder_id,
     ITransportSettings? options = null)
 {  
     return await AuthRequest<LookWithQuery, Exception>(HttpMethod.Patch, $"/looks/{look_id}/move", new Values {
@@ -5742,16 +5742,16 @@ namespace Looker.SDK.API40
   /// Query Tasks whose results have expired will have a status of 'expired'.
   /// If the user making the API request does not have sufficient privileges to view a Query Task result, the result will have a status of 'missing'
   ///
-  /// GET /query_tasks/multi_results -> StringDictionary<string>
+  /// GET /query_tasks/multi_results -> StringDictionary<object>
   ///
-  /// <returns><c>StringDictionary<string></c> Multiple query results (application/json)</returns>
+  /// <returns><c>StringDictionary<object></c> Multiple query results (application/json)</returns>
   ///
   /// <param name="query_task_ids">List of Query Task IDs</param>
-  public async Task<SdkResponse<StringDictionary<string>, Exception>> query_task_multi_results(
+  public async Task<SdkResponse<StringDictionary<object>, Exception>> query_task_multi_results(
     DelimArray<string> query_task_ids,
     ITransportSettings? options = null)
 {  
-    return await AuthRequest<StringDictionary<string>, Exception>(HttpMethod.Get, "/query_tasks/multi_results", new Values {
+    return await AuthRequest<StringDictionary<object>, Exception>(HttpMethod.Get, "/query_tasks/multi_results", new Values {
       { "query_task_ids", query_task_ids }},null,options);
   }
 

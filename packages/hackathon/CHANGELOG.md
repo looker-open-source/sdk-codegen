@@ -1,5 +1,34 @@
 # Changelog
 
+## [21.8.0](https://www.github.com/looker-open-source/sdk-codegen/compare/hackathon-v21.6.1...hackathon-v21.8.0) (2021-06-17)
+
+
+### Dependencies
+
+* The following workspace dependencies were updated
+  * dependencies
+    * @looker/extension-sdk bumped from ^21.6.1 to ^21.8.0
+    * @looker/extension-sdk-react bumped from ^21.6.1 to ^21.8.0
+    * @looker/sdk bumped from ^21.6.1 to ^21.8.0
+    * @looker/wholly-sheet bumped from ^0.5.7 to ^0.5.8
+
+### [21.6.1](https://www.github.com/looker-open-source/sdk-codegen/compare/hackathon-v21.6.0...hackathon-v21.6.1) (2021-06-16)
+
+
+### Features
+
+* reduce size of apix bundle ([#676](https://www.github.com/looker-open-source/sdk-codegen/issues/676)) ([0d74f6a](https://www.github.com/looker-open-source/sdk-codegen/commit/0d74f6a7814b509416a9d2558c16439a4859b543))
+
+
+### Dependencies
+
+* The following workspace dependencies were updated
+  * dependencies
+    * @looker/extension-sdk bumped from ^21.6.0 to ^21.6.1
+    * @looker/extension-sdk-react bumped from ^21.6.0 to ^21.6.1
+    * @looker/sdk bumped from ^21.6.0 to ^21.6.1
+    * @looker/wholly-sheet bumped from ^0.5.6 to ^0.5.7
+
 ## [21.6.0](https://www.github.com/looker-open-source/sdk-codegen/compare/hackathon-v21.4.5...hackathon-v21.6.0) (2021-05-05)
 
 

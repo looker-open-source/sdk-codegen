@@ -21,8 +21,8 @@ jobs:
     env:
       LOOKERSDK_BASE_URL: https://localhost:20000
       LOOKERSDK_VERIFY_SSL: false
-      LOOKERSDK_CLIENT_ID: ${{ secrets.LOOKERSDK_CLIENT_ID__21_4 }}
-      LOOKERSDK_CLIENT_SECRET: ${{ secrets.LOOKERSDK_CLIENT_SECRET__21_4 }}
+      LOOKERSDK_CLIENT_ID: ${{ secrets.LOOKERSDK_CLIENT_ID__21_8 }}
+      LOOKERSDK_CLIENT_SECRET: ${{ secrets.LOOKERSDK_CLIENT_SECRET__21_8 }}
     steps:
       - name: Clone repository
         uses: actions/checkout@v2
@@ -34,8 +34,10 @@ jobs:
           node-version: 15
           registry-url: https://wombat-dressing-room.appspot.com
 
-      - run: npm install --no-save --no-package-lock --legacy-peer-deps --registry=https://registry.npmjs.org/
-      - run: npm run build
+      - name: Install dependencies and build
+        run: |
+          yarn
+          yarn build
 
       # setup test env so prepublishOnly lifecycle script can run
       - name: Mock looker.ini
@@ -67,8 +69,8 @@ jobs:
 
       - name: Pull and run Looker docker image
         run: |
-          docker pull --quiet us-west1-docker.pkg.dev/cloud-looker-sdk-codegen-cicd/looker/21_4
-          docker run --name looker-sdk-codegen-ci -d -p 10000:9999 -p 20000:19999 us-west1-docker.pkg.dev/cloud-looker-sdk-codegen-cicd/looker/21_4
+          docker pull --quiet us-west1-docker.pkg.dev/cloud-looker-sdk-codegen-cicd/looker/21_8
+          docker run --name looker-sdk-codegen-ci -d -p 10000:9999 -p 20000:19999 us-west1-docker.pkg.dev/cloud-looker-sdk-codegen-cicd/looker/21_8
           docker logs -f looker-sdk-codegen-ci --until=30s &
           python ${{ github.workspace }}/.github/scripts/wait_for_looker.py
 
