@@ -72,6 +72,7 @@ const ShowJSON = (response: IRawResponse) => {
   const raw = (
     <CodeDisplay
       code={JSON.stringify(JSON.parse(response.body), null, 2)}
+      lineNumbers={false}
       transparent
     />
   )

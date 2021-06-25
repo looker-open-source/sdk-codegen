@@ -228,6 +228,7 @@ export const createComplexItem = (
           ? requestContent[input.name]
           : JSON.stringify(input.type, null, 2)
       }
+      lineNumbers={false}
       onChange={handleComplexChange.bind(null, input.name)}
       transparent={true}
     />
