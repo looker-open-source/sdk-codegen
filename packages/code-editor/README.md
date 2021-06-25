@@ -75,3 +75,23 @@ This component is a wrapper around a `<ReactMarkdown />` component. It uses `@lo
 | transformLinkUri | A function for pre-processing the link before it is navigated to, used for removing `<mark />` tags or modifying the destination. | _optional_ |
 | linkClickHandler | An override for link click behavior.  | _optional_ |
 | paragraphOverride | An override for the default Paragraph renderer. | _optional_ |
+
+#### Using `<CodeDisplay />` inside Markdown
+This component checks for decoratored code blocks. The following `source` would create a Ruby syntax highlighted code block.
+````
+When using the Ruby SDK this would be passed as a Ruby hash like:
+```ruby
+{
+ :model=>"thelook",
+ :view=>"inventory_items",
+ :fields=>
+  ["category.name",
+   "inventory_items.days_in_inventory_tier",
+   "products.count"],
+ :filters=>{:"category.name"=>"socks"},
+ :sorts=>["products.count desc 0"],
+ :limit=>"500",
+ :query_timezone=>"America/Los_Angeles",
+}
+```
+````
