@@ -9,9 +9,10 @@ Any endpoint that accepts `limit` and `offset` parameters can support generic pa
 | `limit`   | If provided, this value sets the number of results to return per _page_ and triggers pagination headers to be provided.                                                                |
 | `offset`  | This value sets the starting position of the results to return. A value of `0` (zero) is used for the first result. `offset` defaults to 0 if `limit` is provided and `offset` is not. |
 
-Some endpoints have `page` and `per_page` parameters instead of, or in addition to, `limit` and `offset`. The `page` and `per_page` parameters will be removed for API 4.0 endpoints that accept `limit` and `offset`. Only API calls using `limit` will produce pagination headers.
+Some endpoints have `page` and `per_page` parameters instead of, or in addition to, `limit` and `offset`. The `limit` and `offset` parameters take precedence over the `page` and `per_page` parameters for endpoints that support both.
+Only API calls specifying `limit` will produce pagination headers for those endpoints that provide pagination headers.
 
-**NOTE**: Looker does not support cursor-based pagination.
+**NOTE**: The `page` and `per_page` parameters may be removed for API 4.0. Looker does not support cursor-based pagination.
 
 ## Pagination headers
 
@@ -49,14 +50,14 @@ Here is an example of a "full" Link header's content:
 
 ## SDK Pagination
 
-Thanks to the adoption of "standard" headers for pagination shown above, the SDKs can implement API result pagination generically.
+Thanks to the adoption of the "standard" pagination headers shown above, the SDKs can implement API result pagination generically.
 
 The current SDK-based pagination pattern prototype is in the `@looker/sdk-rtl` TypeScript/Javascript package.
 
 ### Paginator interface
 
-The main routines that implement SDK pagination are below.
-The latest version is in the [current source code](/packages/sdk-rtl/src/paginator.ts).
+The main routines that initialize SDK pagination are below.
+The latest implementation is in the [current source code](/packages/sdk-rtl/src/paginator.ts).
 
 ```ts
 /**
