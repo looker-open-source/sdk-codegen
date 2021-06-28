@@ -171,6 +171,6 @@ This test code verifies:
 Support for pagination headers is currently at alpha level. This means that:
 
 - Not all endpoints with `limit` and `offset` parameters provide pagination headers.
-- Pagination performance may vary for large results sets. We recommend making the `limit` size a larger value (half or a quarter of the total count, perhaps) to reduce pagination if performance degradation is experienced.
-- SDK support for pagination is only available in the Typescript SDK prototype.
+- Pagination performance may vary for large results sets. We recommend making the `limit` size a larger value (half or a quarter of the total count, perhaps) to reduce pagination if performance degradation is noticed as the `offset` grows larger.
+- Currently, SDK support for pagination is only available in the Typescript SDK prototype.
 - While SDK pagination routines **should** work for API endpoints that provide pagination headers, reliability is not guaranteed, and SDK pagination routines are only "community supported." This means that issues can be filed in this repository and Looker engineering will attempt to address them, but no timeframe or response is guaranteed.
