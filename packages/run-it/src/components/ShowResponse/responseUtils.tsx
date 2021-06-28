@@ -120,6 +120,10 @@ const ShowHTML = (response: IRawResponse) => (
   <CodeDisplay language="html" code={response.body.toString()} transparent />
 )
 
+const ShowSQL = (response: IRawResponse) => (
+  <CodeDisplay language="sql" code={response.body.toString()} transparent />
+)
+
 /**
  * A handler for unknown response types. It renders the size of the unknown response and its type.
  */
@@ -178,6 +182,11 @@ export const responseHandlers: Responder[] = [
     label: 'pdf',
     isRecognized: (contentType) => /application\/pdf/g.test(contentType),
     component: (response) => ShowPDF(response),
+  },
+  {
+    label: 'sql',
+    isRecognized: (contentType) => /application\/sql/g.test(contentType),
+    component: (response) => ShowSQL(response),
   },
   {
     label: 'text',
