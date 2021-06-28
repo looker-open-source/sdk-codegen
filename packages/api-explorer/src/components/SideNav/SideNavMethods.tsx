@@ -34,7 +34,8 @@ import {
   Heading,
 } from '@looker/components'
 import { MethodList } from '@looker/sdk-codegen'
-import { useHistory, useRouteMatch, NavLink } from 'react-router-dom'
+import { useHistory, useRouteMatch } from 'react-router-dom'
+import { Link } from '../Link'
 import { buildMethodPath, highlightHTML } from '../../utils'
 import { SearchContext } from '../../context'
 
@@ -110,7 +111,7 @@ const AutoHeightList = styled(List)`
   height: auto;
 `
 
-const SideNavLink = styled(NavLink)`
+const SideNavLink = styled(Link)`
   &:hover,
   &:focus,
   &.active {
