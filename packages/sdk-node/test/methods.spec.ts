@@ -39,12 +39,15 @@ import {
   Looker40SDK,
   Looker31SDKStream,
   Looker40SDKStream,
+  IDashboard,
 } from '@looker/sdk'
 import {
   DelimArray,
   boolDefault,
   defaultTimeout,
   ApiConfigMap,
+  pageAll,
+  paginate,
 } from '@looker/sdk-rtl'
 import {
   NodeSettings,
@@ -642,53 +645,52 @@ describe('LookerNodeSDK', () => {
     })
   })
 
-  // TODO uncomment these tests when pagination is available in a public Looker release
-  // describe('pagination', () => {
-  //   describe('paginate', () => {
-  //     test(
-  //       'getRel can override limit and offset',
-  //       async () => {
-  //         const sdk = new LookerSDK(session)
-  //         const limit = 2
-  //         const all = await sdk.ok(sdk.search_dashboards({ fields: 'id' }))
-  //         const paged = await paginate(sdk, () =>
-  //           sdk.search_dashboards({ fields: 'id', limit })
-  //         )
-  //         const full = await sdk.ok(paged.getRel('first', all.length))
-  //         expect(full).toEqual(all)
-  //       },
-  //       testTimeout
-  //     )
-  //   })
-  //   describe('pageAll', () => {
-  //     test(
-  //       'search_dashboard',
-  //       async () => {
-  //         const sdk = new LookerSDK(session)
-  //         // Use a small limit to test paging for a small number of dashboards
-  //         const limit = 2
-  //         let count = 0
-  //         const progress = (page: IDashboard[]) => {
-  //           console.log(`Page ${++count} has ${page.length} items`)
-  //           return page
-  //         }
-  //         const actual = await sdk.ok(
-  //           pageAll(
-  //             sdk,
-  //             () => sdk.search_dashboards({ fields: 'id,title', limit }),
-  //             progress
-  //           )
-  //         )
-  //         const all = await sdk.ok(
-  //           sdk.search_dashboards({ fields: 'id, title' })
-  //         )
-  //         expect(actual.length).toEqual(all.length)
-  //         expect(actual).toEqual(all)
-  //       },
-  //       testTimeout
-  //     )
-  //   })
-  // })
+  describe.skip('pagination alpha support', () => {
+    describe('paginate', () => {
+      test(
+        'getRel can override limit and offset',
+        async () => {
+          const sdk = new LookerSDK(session)
+          const limit = 2
+          const all = await sdk.ok(sdk.search_dashboards({ fields: 'id' }))
+          const paged = await paginate(sdk, () =>
+            sdk.search_dashboards({ fields: 'id', limit })
+          )
+          const full = await sdk.ok(paged.getRel('first', all.length))
+          expect(full).toEqual(all)
+        },
+        testTimeout
+      )
+    })
+    describe('pageAll', () => {
+      test(
+        'search_dashboard',
+        async () => {
+          const sdk = new LookerSDK(session)
+          // Use a small limit to test paging for a small number of dashboards
+          const limit = 2
+          let count = 0
+          const progress = (page: IDashboard[]) => {
+            console.log(`Page ${++count} has ${page.length} items`)
+            return page
+          }
+          const actual = await sdk.ok(
+            pageAll(
+              sdk,
+              () => sdk.search_dashboards({ fields: 'id,title', limit }),
+              progress
+            )
+          )
+          const all = await sdk.ok(
+            sdk.search_dashboards({ fields: 'id, title' })
+          )
+          expect(actual.length).toEqual(all.length)
+          expect(actual).toEqual(all)
+        },
+        testTimeout
+      )
+    })
+  })
 
   describe('Query calls', () => {
     it(
