@@ -27,6 +27,7 @@
 import React from 'react'
 import { BrowserRouter as Router } from 'react-router-dom'
 import ReactDOM from 'react-dom'
+import { createGlobalStyle } from 'styled-components'
 
 import { ApiModel, SpecList } from '@looker/sdk-codegen'
 import { StandaloneApiExplorer } from './StandaloneApiExplorer'
@@ -63,9 +64,16 @@ Object.values(specs).forEach((spec) => {
   spec.specContent = undefined
 })
 
+const BodyReset = createGlobalStyle`
+  body {
+    margin: 0;
+  }
+`
+
 ReactDOM.render(
   <Router>
     <StandaloneApiExplorer specs={specs} />
+    <BodyReset />
   </Router>,
   document.getElementById('container')
 )
