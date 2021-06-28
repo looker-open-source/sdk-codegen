@@ -24,18 +24,17 @@
 
  */
 
-export { ExploreType, ExploreTypeLink } from './ExploreType'
-export {
-  ExploreProperty,
-  ExplorePropertyNode,
-  ExplorePropertyDetail,
-  ExplorePropertyType,
-} from './ExploreProperty'
-export {
-  typeIcon,
-  pickTypeProps,
-  typeLinkPrefix,
-  typeLinkSuffix,
-  pickType,
-  expandable,
-} from './exploreUtils'
+import { NavLink } from 'react-router-dom'
+import styled from 'styled-components'
+
+export const Link = styled(NavLink)`
+  text-decoration: none;
+  color: inherit;
+
+  &:hover,
+  &:visited,
+  &:focus,
+  &.active {
+    color: inherit;
+  }
+`
