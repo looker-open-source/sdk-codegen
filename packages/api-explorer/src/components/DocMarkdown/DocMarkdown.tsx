@@ -26,8 +26,8 @@
 
 import React, { FC, useContext } from 'react'
 import { useHistory } from 'react-router-dom'
-import { Markdown } from '../Markdown'
-import { EnvAdaptorContext } from '../../context'
+import { Markdown } from '@looker/code-editor'
+import { EnvAdaptorContext, SearchContext } from '../../context'
 import { transformURL } from './utils'
 
 interface DocMarkdownProps {
@@ -37,6 +37,9 @@ interface DocMarkdownProps {
 
 export const DocMarkdown: FC<DocMarkdownProps> = ({ source, specKey }) => {
   const { envAdaptor } = useContext(EnvAdaptorContext)
+  const {
+    searchSettings: { pattern },
+  } = useContext(SearchContext)
 
   const history = useHistory()
 
@@ -50,6 +53,7 @@ export const DocMarkdown: FC<DocMarkdownProps> = ({ source, specKey }) => {
   return (
     <Markdown
       source={source}
+      pattern={pattern}
       linkClickHandler={linkClickHandler}
       transformLinkUri={transformURL.bind(null, specKey)}
     />

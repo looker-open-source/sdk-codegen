@@ -24,24 +24,17 @@
 
  */
 
-import React, { FC } from 'react'
-import { Space, ProgressCircular, Text } from '@looker/components'
+import { NavLink } from 'react-router-dom'
+import styled from 'styled-components'
 
-interface LoadingProps {
-  loading: boolean
-  message?: string
-}
+export const Link = styled(NavLink)`
+  text-decoration: none;
+  color: inherit;
 
-export const Loading: FC<LoadingProps> = ({
-  loading,
-  message = 'Loading ...',
-}) => (
-  <>
-    {loading && (
-      <Space gap="small">
-        <ProgressCircular size="small" />
-        <Text color="text">{message}</Text>
-      </Space>
-    )}
-  </>
-)
+  &:hover,
+  &:visited,
+  &:focus,
+  &.active {
+    color: inherit;
+  }
+`

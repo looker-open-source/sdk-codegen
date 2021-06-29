@@ -24,48 +24,25 @@
 
  */
 
-import React, { FC } from 'react'
-import Editor from 'react-simple-code-editor'
-
-import { CodeDisplay, CodeDisplayProps } from './CodeDisplay'
-
-interface CodeEditorProps extends CodeDisplayProps {
-  /** onChange event handler, for Editor functionality */
-  onChange: (text: string) => void
+export interface CodeDisplayProps {
+  code: string
+  language?: string
+  pattern?: string
+  transparent?: boolean
+  inline?: boolean
+  lineNumbers?: boolean
 }
 
-/**
- * Extends CodeDisplay functionality to provide
- * Editor functionality for syntax highlighted code blocks
- */
-export const CodeEditor: FC<CodeEditorProps> = ({
-  code,
-  onChange,
-  language = 'json',
-  pattern = '',
-  transparent = false,
-}) => {
-  return (
-    <Editor
-      value={code}
-      role={'code-editor'}
-      onValueChange={onChange}
-      highlight={(code: string) => (
-        <CodeDisplay
-          code={code}
-          language={language}
-          pattern={pattern}
-          transparent={transparent}
-        />
-      )}
-      padding="1rem"
-      style={{
-        width: '100%',
-        color: '#FFF',
-        whiteSpace: 'pre-wrap',
-        overflow: 'auto',
-        fontFamily: 'monospace',
-      }}
-    />
-  )
+export type TokenOutputProps = {
+  key?: React.Key
+  style?: any
+  className: string
+  children: string
+  [otherProp: string]: any
+}
+
+export interface LineItemProps {
+  index: number
+  tokenProps: TokenOutputProps
+  pattern: string
 }

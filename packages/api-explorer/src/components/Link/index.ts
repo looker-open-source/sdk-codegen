@@ -24,24 +24,4 @@
 
  */
 
-/**
- * Returns a markdown string with matches wrapped with mark tags
- * @param pattern The regex pattern to match
- * @param content The content to search
- * @returns content with highlighted matches
- */
-export const highlightMarkdown = (pattern: string, content: string): string => {
-  let highlightedContent
-  if (!pattern) {
-    highlightedContent = content
-  } else {
-    try {
-      const replacement = (match: string) => `<mark>${match}</mark>`
-      const target = new RegExp(pattern, 'gi')
-      highlightedContent = content.replace(target, replacement)
-    } catch (e) {
-      highlightedContent = content
-    }
-  }
-  return highlightedContent
-}
+export { Link } from './Link'

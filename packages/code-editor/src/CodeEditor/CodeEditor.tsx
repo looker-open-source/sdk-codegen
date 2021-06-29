@@ -25,23 +25,50 @@
  */
 
 import React, { FC } from 'react'
-import { Space, ProgressCircular, Text } from '@looker/components'
+import Editor from 'react-simple-code-editor'
 
-interface LoadingProps {
-  loading: boolean
-  message?: string
+import { CodeDisplayProps } from '../CodeDisplay/types'
+import { CodeDisplay } from '../index'
+
+interface CodeEditorProps extends CodeDisplayProps {
+  /** onChange event handler, for Editor functionality */
+  onChange: (text: string) => void
 }
 
-export const Loading: FC<LoadingProps> = ({
-  loading,
-  message = 'Loading ...',
-}) => (
-  <>
-    {loading && (
-      <Space gap="small">
-        <ProgressCircular size="small" />
-        <Text color="text">{message}</Text>
-      </Space>
-    )}
-  </>
-)
+/**
+ * Extends CodeDisplay functionality to provide
+ * Editor functionality for syntax highlighted code blocks
+ */
+export const CodeEditor: FC<CodeEditorProps> = ({
+  code,
+  onChange,
+  language = 'json',
+  pattern = '',
+  transparent = false,
+  lineNumbers = true,
+}) => {
+  return (
+    <Editor
+      value={code.trim()}
+      role={'code-editor'}
+      onValueChange={onChange}
+      highlight={(code: string) => (
+        <CodeDisplay
+          code={code}
+          language={language}
+          pattern={pattern}
+          transparent={transparent}
+          lineNumbers={lineNumbers}
+        />
+      )}
+      padding="1rem"
+      style={{
+        width: '100%',
+        color: '#FFF',
+        whiteSpace: 'pre-wrap',
+        overflow: 'auto',
+        fontFamily: 'monospace',
+      }}
+    />
+  )
+}

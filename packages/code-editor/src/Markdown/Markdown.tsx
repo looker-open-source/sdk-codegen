@@ -24,37 +24,35 @@
 
  */
 
-import React, { BaseSyntheticEvent, FC, useContext, ReactNode } from 'react'
+import React, { BaseSyntheticEvent, FC, ReactNode } from 'react'
 import styled from 'styled-components'
 import ReactMarkdown from 'react-markdown'
 import rehypeRaw from 'rehype-raw'
 import gfm from 'remark-gfm'
 import { TableHead, TableBody, TableRow, Link } from '@looker/components'
 
-import { SearchContext } from '../../context'
-import { ApixHeading } from '../common'
-import { highlightMarkdown } from './utils'
-import { MDCodeBlockWrapper } from './MDCodeBlockWrapper'
+import { CodeDisplay } from '../CodeDisplay'
+import { qualifyMarkdownText, prepareCodeText } from './utils'
 import { TableCell } from './TableCell'
-import { MDCode, MDList, MDListItem, MDParagraph, MDTable } from './common'
+import { MDHeading, MDList, MDListItem, MDParagraph, MDTable } from './common'
 
 interface MarkdownProps {
   source: string
+  pattern?: string
   transformLinkUri?: (url: string) => string
   linkClickHandler?: (pathname: string, href: string) => void
+  paragraphOverride?: ({ children }: { children: ReactNode }) => ReactNode
 }
 
 type HeadingLevels = 'h1' | 'h2' | 'h3' | 'h4' | 'h5' | 'h6'
 
 export const Markdown: FC<MarkdownProps> = ({
   source,
+  pattern = '',
   transformLinkUri,
   linkClickHandler,
+  paragraphOverride,
 }) => {
-  const {
-    searchSettings: { pattern },
-  } = useContext(SearchContext)
-
   const findAnchor = (ele: HTMLElement): HTMLAnchorElement | undefined => {
     if (ele.tagName === 'A') return ele as HTMLAnchorElement
     if (ele.parentElement) {
@@ -80,7 +78,7 @@ export const Markdown: FC<MarkdownProps> = ({
   }: {
     level: number
     children: ReactNode
-  }) => <ApixHeading as={`h${level}` as HeadingLevels}>{children}</ApixHeading>
+  }) => <MDHeading as={`h${level}` as HeadingLevels}>{children}</MDHeading>
 
   const paragraph = ({ children }: { children: ReactNode }) => (
     <MDParagraph>{children}</MDParagraph>
@@ -93,10 +91,15 @@ export const Markdown: FC<MarkdownProps> = ({
     inline?: boolean
     children: ReactNode
   }) => {
-    if (inline) {
-      return <MDCode>{children}</MDCode>
+    const { text, language } = prepareCodeText(children?.toString() || '')
+    const codeProps = {
+      language: language,
+      code: text,
+      pattern: pattern,
+      lineNumbers: false,
+      inline: inline,
     }
-    return <MDCodeBlockWrapper value={children} />
+    return <CodeDisplay {...codeProps} />
   }
 
   const components = {
@@ -106,7 +109,7 @@ export const Markdown: FC<MarkdownProps> = ({
     h4: heading,
     h5: heading,
     h6: heading,
-    p: paragraph,
+    p: paragraphOverride || paragraph,
     code: code,
     a: Link,
     ul: MDList,
@@ -129,7 +132,7 @@ export const Markdown: FC<MarkdownProps> = ({
         transformLinkUri={transformLinkUri}
         components={components}
       >
-        {highlightMarkdown(pattern, source)}
+        {qualifyMarkdownText(source, pattern)}
       </ReactMarkdown>
     </MarkdownWrapper>
   )

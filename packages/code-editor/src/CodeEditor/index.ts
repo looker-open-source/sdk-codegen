@@ -23,25 +23,4 @@
  SOFTWARE.
 
  */
-
-import React, { FC } from 'react'
-import { Space, ProgressCircular, Text } from '@looker/components'
-
-interface LoadingProps {
-  loading: boolean
-  message?: string
-}
-
-export const Loading: FC<LoadingProps> = ({
-  loading,
-  message = 'Loading ...',
-}) => (
-  <>
-    {loading && (
-      <Space gap="small">
-        <ProgressCircular size="small" />
-        <Text color="text">{message}</Text>
-      </Space>
-    )}
-  </>
-)
+export { CodeEditor } from './CodeEditor'

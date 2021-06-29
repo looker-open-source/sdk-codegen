@@ -25,23 +25,18 @@
  */
 
 import React, { FC } from 'react'
-import { Space, ProgressCircular, Text } from '@looker/components'
+import { LineItemProps } from './types'
 
-interface LoadingProps {
-  loading: boolean
-  message?: string
+/**
+ * Takes a 'line of code' as a list of Tokens and returns syntax highlighting styled spans
+ * @param key - component identifier
+ * @param tokenProps - the style props from prism renderer
+ * @param pattern - search pattern to consider
+ */
+export const LineItem: FC<LineItemProps> = ({ index, tokenProps, pattern }) => {
+  const text = tokenProps.children.toLowerCase()
+  if (pattern !== '' && text.includes(pattern.toLowerCase())) {
+    tokenProps.className += ' match'
+  }
+  return <span key={index} {...tokenProps} />
 }
-
-export const Loading: FC<LoadingProps> = ({
-  loading,
-  message = 'Loading ...',
-}) => (
-  <>
-    {loading && (
-      <Space gap="small">
-        <ProgressCircular size="small" />
-        <Text color="text">{message}</Text>
-      </Space>
-    )}
-  </>
-)

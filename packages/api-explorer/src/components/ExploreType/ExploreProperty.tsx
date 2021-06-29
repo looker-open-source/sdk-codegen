@@ -26,19 +26,20 @@
 
 import React, { FC } from 'react'
 import {
-  FlexItem,
+  Box,
   IconType,
   Icon,
   Tree,
   TreeItem,
   Tooltip,
   Space,
+  Paragraph,
 } from '@looker/components'
 import { Done } from '@styled-icons/material/Done'
 import { Lock } from '@styled-icons/material/Lock'
 import { Remove } from '@styled-icons/material/Remove'
 import { IProperty } from '@looker/sdk-codegen'
-import ReactMarkdown from 'react-markdown'
+import { Markdown } from '@looker/code-editor'
 import {
   expandable,
   ExploreTypeLink,
@@ -147,15 +148,17 @@ export const ExplorePropertyReadOnly: FC<ExplorePropertyProps> = ({
  * @param property to describe
  * @constructor
  */
-export const ExplorePropertyDescription: FC<ExplorePropertyProps> = ({
-  property,
-}) => (
-  <>
-    {property.description && (
-      <ReactMarkdown>{property.description}</ReactMarkdown>
-    )}
-  </>
+const DescriptionParagraph: FC = (props) => (
+  <Paragraph fontSize="small" m="none" {...props} />
 )
+
+const ExplorePropertyDescription: FC<ExplorePropertyProps> = ({ property }) =>
+  property.description ? (
+    <Markdown
+      source={property.description}
+      paragraphOverride={DescriptionParagraph}
+    />
+  ) : null
 
 /**
  * Show the details of the property
@@ -166,17 +169,17 @@ export const ExplorePropertyDetail: FC<ExplorePropertyProps> = ({
   property,
 }) => (
   <Space style={{ fontSize: 'small', marginLeft: '10rem' }}>
-    <FlexItem width="10rem">
+    <Box width="10rem">
       <ExploreTypeLink type={property.type} />
-    </FlexItem>
-    <FlexItem width="5rem">
+    </Box>
+    <Box width="5rem">
       <ExplorePropertyRequired property={property} />
       <ExplorePropertyReadOnly property={property} />
       <ExplorePropertyDeprecated property={property} />
-    </FlexItem>
-    <FlexItem width="30rem">
+    </Box>
+    <Box width="30rem">
       <ExplorePropertyDescription property={property} />
-    </FlexItem>
+    </Box>
   </Space>
 )
 
