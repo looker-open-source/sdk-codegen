@@ -32,7 +32,7 @@ class SDKError(Exception):
 class APIError(SDKError):
     """API error class
     """
-    def __init__(self, sdk_response, *args, **kwargs):
+    def __init__(self, sdk_response: str, *args, **kwargs):
         super(APIError).__init__(*args, **kwargs)
         self._sdk_response = json.loads(sdk_response)
     
