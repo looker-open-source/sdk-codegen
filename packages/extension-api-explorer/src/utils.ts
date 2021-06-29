@@ -58,6 +58,13 @@ export class ExtensionEnvAdaptor implements IApixEnvAdaptor {
     return this._themeOverrides
   }
 
+  runAsEmbed(): boolean {
+    return (
+      (this.extensionSdk.lookerHostData || { hostType: 'standard' })
+        .hostType === 'embed'
+    )
+  }
+
   openBrowserWindow(url: string, target?: string) {
     this.extensionSdk.openBrowserWindow(url, target)
   }

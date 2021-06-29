@@ -113,16 +113,24 @@ const ApiExplorer: FC<ApiExplorerProps> = ({
               value={{ searchSettings, setSearchSettings }}
             >
               <Page style={{ overflow: 'hidden' }}>
-                <Header
-                  specs={specs}
-                  spec={spec}
-                  specDispatch={specDispatch}
-                  toggleNavigation={toggleNavigation}
-                />
+                {envAdaptor.runAsEmbed() || (
+                  <Header
+                    specs={specs}
+                    spec={spec}
+                    specDispatch={specDispatch}
+                    toggleNavigation={toggleNavigation}
+                  />
+                )}
                 <Layout hasAside height="100%">
                   {hasNavigation && (
                     <AsideBorder pt="large" width="20rem">
-                      <SideNav api={spec.api} specKey={spec.key} />
+                      <SideNav
+                        api={spec.api}
+                        specKey={spec.key}
+                        specs={specs}
+                        spec={spec}
+                        specDispatch={specDispatch}
+                      />
                     </AsideBorder>
                   )}
                   <AppRouter

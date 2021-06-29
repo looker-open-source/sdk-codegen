@@ -39,6 +39,7 @@ export interface IApixEnvAdaptor {
   localStorageRemoveItem(key: string): void
   /** Theme settings for extension */
   themeOverrides(): ThemeOverrides
+  runAsEmbed(): boolean
   /** Open a new browser window with the given url and target  */
   openBrowserWindow: (url: string, target?: string) => void
 }
@@ -97,6 +98,10 @@ export class StandaloneEnvAdaptor implements IApixEnvAdaptor {
 
   themeOverrides() {
     return this._themeOverrides
+  }
+
+  runAsEmbed() {
+    return false
   }
 
   openBrowserWindow(url: string, target?: string) {

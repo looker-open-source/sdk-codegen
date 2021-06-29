@@ -24,7 +24,7 @@
 
  */
 
-import React, { FC, useContext, useEffect, useState } from 'react'
+import React, { FC, useContext, useEffect, useState, Dispatch } from 'react'
 import {
   TabList,
   Tab,
@@ -32,21 +32,36 @@ import {
   TabPanels,
   useTabs,
   InputSearch,
-  Flex,
+  Heading,
+  Space,
+  SpaceVertical,
 } from '@looker/components'
 import { useRouteMatch } from 'react-router-dom'
-import { ApiModel, CriteriaToSet, ISearchResult } from '@looker/sdk-codegen'
+import {
+  ApiModel,
+  CriteriaToSet,
+  ISearchResult,
+  SpecList,
+} from '@looker/sdk-codegen'
 
-import { SearchContext } from '../../context'
-import { setPattern } from '../../reducers'
+import { SearchContext, EnvAdaptorContext } from '../../context'
+import { setPattern, SpecState, SpecAction } from '../../reducers'
 import { useWindowSize } from '../../utils'
 import { HEADER_REM } from '../Header'
+import { SdkLanguageSelector } from '../Header/SdkLanguageSelector'
+import { ApiSpecSelector } from '../Header/ApiSpecSelector'
 import { SideNavTags } from './SideNavTags'
 import { SideNavTypes } from './SideNavTypes'
 import { useDebounce, countMethods, countTypes } from './searchUtils'
 import { SearchMessage } from './SearchMessage'
 
 interface SideNavProps {
+  /** Specs to choose from */
+  specs: SpecList
+  /** Current selected spec */
+  spec: SpecState
+  /** Spec state setter */
+  specDispatch: Dispatch<SpecAction>
   api: ApiModel
   diffApi?: ApiModel
   diffKey?: string
@@ -58,7 +73,13 @@ interface SideNavParams {
   sideNavTab: string
 }
 
-export const SideNav: FC<SideNavProps> = ({ api, specKey }) => {
+export const SideNav: FC<SideNavProps> = ({
+  api,
+  specKey,
+  spec,
+  specs,
+  specDispatch,
+}) => {
   const tabNames = ['methods', 'types']
   const match = useRouteMatch<SideNavParams>(`/:specKey/:sideNavTab?`)
   let defaultIndex = tabNames.indexOf('methods')
@@ -66,6 +87,7 @@ export const SideNav: FC<SideNavProps> = ({ api, specKey }) => {
     defaultIndex = tabNames.indexOf(match.params.sideNavTab)
   }
   const tabs = useTabs({ defaultIndex })
+  const { envAdaptor } = useContext(EnvAdaptorContext)
   const { searchSettings, setSearchSettings } = useContext(SearchContext)
   const [pattern, setSearchPattern] = useState(searchSettings.pattern)
   const debouncedPattern = useDebounce(pattern, 250)
@@ -106,7 +128,28 @@ export const SideNav: FC<SideNavProps> = ({ api, specKey }) => {
 
   return (
     <nav>
-      <Flex alignItems="center" pl="large" pr="large" pb="large">
+      <SpaceVertical
+        alignItems="center"
+        pl="large"
+        pr="large"
+        pb="large"
+        gap="xsmall"
+      >
+        {envAdaptor.runAsEmbed() && (
+          <>
+            <Heading as="h5" color="key" fontWeight="semiBold">
+              API Documentation
+            </Heading>
+            <Space width="auto" gap="xsmall">
+              <SdkLanguageSelector />
+              <ApiSpecSelector
+                specs={specs}
+                spec={spec}
+                specDispatch={specDispatch}
+              />
+            </Space>
+          </>
+        )}
         <InputSearch
           aria-label="Search"
           onChange={handleInputChange}
@@ -116,7 +159,7 @@ export const SideNav: FC<SideNavProps> = ({ api, specKey }) => {
           changeOnSelect
         />
         {/* <WordIcon onClick={handleWordToggle}>W</WordIcon> */}
-      </Flex>
+      </SpaceVertical>
       <SearchMessage search={searchResults} />
       <TabList {...tabs} distribute>
         <Tab>Methods ({methodCount})</Tab>

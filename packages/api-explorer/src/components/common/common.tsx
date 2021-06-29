@@ -23,10 +23,11 @@
  SOFTWARE.
 
  */
-import React, { useEffect, FC } from 'react'
+import React, { useEffect, useContext, FC } from 'react'
 import styled from 'styled-components'
 import { Heading, Section, SectionProps } from '@looker/components'
 import { useWindowSize } from '../../utils'
+import { EnvAdaptorContext } from '../../context'
 import { HEADER_REM } from '../Header'
 
 /**
@@ -48,9 +49,11 @@ export const REM_TO_PX = 16
  */
 export const ApixSection: FC<SectionProps> = (props: any) => {
   const size = useWindowSize()
-  const sectionH = size.height - REM_TO_PX * HEADER_REM
+  const { envAdaptor } = useContext(EnvAdaptorContext)
+  const headerHeight = envAdaptor.runAsEmbed() ? 0 : REM_TO_PX * HEADER_REM
+  const sectionH = size.height - headerHeight
   useEffect(() => {
-    document.getElementById('top')?.scrollTo(REM_TO_PX * HEADER_REM, 0)
+    document.getElementById('top')?.scrollTo(headerHeight, 0)
   }, [props])
 
   return (
