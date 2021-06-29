@@ -47,7 +47,7 @@ import {
   defaultTimeout,
   ApiConfigMap,
   pageAll,
-  paginate,
+  pager,
 } from '@looker/sdk-rtl'
 import {
   NodeSettings,
@@ -645,15 +645,15 @@ describe('LookerNodeSDK', () => {
     })
   })
 
-  describe.skip('pagination alpha support', () => {
-    describe('paginate', () => {
+  describe.skip('paging alpha', () => {
+    describe('pager', () => {
       test(
         'getRel can override limit and offset',
         async () => {
           const sdk = new LookerSDK(session)
           const limit = 2
           const all = await sdk.ok(sdk.search_dashboards({ fields: 'id' }))
-          const paged = await paginate(sdk, () =>
+          const paged = await pager(sdk, () =>
             sdk.search_dashboards({ fields: 'id', limit })
           )
           const full = await sdk.ok(paged.getRel('first', all.length))

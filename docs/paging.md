@@ -1,20 +1,20 @@
-# API response pagination
+# API response paging
 
-Looker is adding [alpha-level](#alpha-support-level) support for API response pagination in Looker API 4.0.
+Looker is adding [alpha-level](#alpha-support-level) support for API response paging in Looker API 4.0.
 
-Any endpoint that accepts `limit` and `offset` parameters can support generic pagination. Starting with Looker release 21.12, Looker is adding pagination support for API 4.0 endpoints (until all endpoints that accept `limit` and `offset` provide the headers).
+Any endpoint that accepts `limit` and `offset` parameters can support generic paging. Starting with Looker release 21.12, Looker is adding paging support for API 4.0 endpoints (until all endpoints that accept `limit` and `offset` provide the headers).
 
 | Parameter | Description                                                                                                                                                                            |
 | --------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `limit`   | If provided, this value sets the number of results to return per _page_ and triggers pagination headers to be provided.                                                                |
+| `limit`   | If provided, this value sets the number of results to return per _page_ and triggers paging headers to be provided.                                                                |
 | `offset`  | This value sets the starting position of the results to return. A value of `0` (zero) is used for the first result. `offset` defaults to 0 if `limit` is provided and `offset` is not. |
 
 Some endpoints have `page` and `per_page` parameters instead of, or in addition to, `limit` and `offset`. The `limit` and `offset` parameters take precedence over the `page` and `per_page` parameters for endpoints that support both.
-Only API calls specifying `limit` will produce pagination headers for those endpoints that provide pagination headers.
+Only API calls specifying `limit` will produce paging headers for those endpoints that provide paging headers.
 
-**NOTE**: The `page` and `per_page` parameters may be removed for API 4.0. Looker does not support cursor-based pagination.
+**NOTE**: The `page` and `per_page` parameters may be removed for API 4.0. Looker does not support cursor-based paging.
 
-## Pagination headers
+## Paging headers
 
 The [`X-Total-Count`](https://stackoverflow.com/a/43968710) and [`Link`](https://datatracker.ietf.org/doc/html/rfc5988) headers provide all information required for an SDK to generically paginate API calls that return a collection of items.
 
@@ -28,7 +28,7 @@ Because many Looker endpoints restrict the user's ability to view individual ite
 
 The Looker API adopts the [GitHub Link header values](https://docs.github.com/en/rest/overview/resources-in-the-rest-api#link-header).
 
-Pagination responses always include `Link` headers. Different **Link Relation Type** (`rel`) values may or may not exist in the Link header.
+Paging responses always include `Link` headers. Different **Link Relation Type** (`rel`) values may or may not exist in the Link header.
 
 The table below explains Looker's use of the `rel` values adopted from GitHub.
 
@@ -48,27 +48,27 @@ Here is an example of a "full" Link header's content:
 <http://localhost/api/4.0/alerts/search?limit=2&offset=3>; rel="prev"
 ```
 
-## SDK Pagination
+## SDK Paging
 
-Thanks to the adoption of the "standard" pagination headers shown above, the SDKs can implement API result pagination generically.
+Thanks to the adoption of the "standard" paging headers shown above, the SDKs can implement API result paging generically.
 
-The current SDK-based pagination pattern prototype is in the `@looker/sdk-rtl` TypeScript/Javascript package.
+The current SDK-based paging pattern prototype is in the `@looker/sdk-rtl` TypeScript/Javascript package.
 
 ### Paginator interface
 
-The main routines that initialize SDK pagination are below.
-The latest implementation is in the [current source code](/packages/sdk-rtl/src/paginator.ts).
+The main routines that initialize SDK paging are below.
+The latest implementation is in the [current source code](/packages/sdk-rtl/src/paging.ts).
 
 ```ts
 /**
  * Create an API response paginator for an endpoint that returns a Link header
  * @param sdk implementation of IAPIMethods. Can be full SDK or functional auth session
- * @param func sdk call that includes a pagination header
+ * @param func sdk call that includes a paging header
  * @param options transport options override to capture and use in paging requests
  *
  * @remarks `TSuccess` must be a collection type that supports `length`
  */
-export async function paginate<TSuccess extends ILength, TError>(
+export async function pager<TSuccess extends ILength, TError>(
   sdk: IAPIMethods,
   func: PaginateFunc<TSuccess, TError>,
   options?: Partial<ITransportSettings>
@@ -79,7 +79,7 @@ export async function paginate<TSuccess extends ILength, TError>(
 /**
  * Create an API response paginator and collect all pages, returning the result
  * @param sdk implementation of IAPIMethods. Can be full SDK or functional auth session
- * @param func sdk call that includes a pagination header
+ * @param func sdk call that includes a paging header
  * @param onPage observer of the latest page of results. Defaults to noop.
  * @param options transport options override to capture and use in paging requests
  */
@@ -89,7 +89,7 @@ export async function pageAll<TSuccess extends ILength, TError>(
   onPage: PageObserver<TSuccess> = (page: TSuccess) => page,
   options?: Partial<ITransportSettings>
 ): Promise<SDKResponse<TSuccess, TError>> {
-  const paged = await paginate(sdk, func, options)
+  const paged = await pager(sdk, func, options)
   let rows: any[] = []
   rows = rows.concat(onPage(paged.items))
   let error
@@ -113,15 +113,15 @@ export async function pageAll<TSuccess extends ILength, TError>(
 Results can be retrieved a page at a time with code like this functional test:
 
 ```ts
-describe('pagination', () => {
-  describe('paginate', () => {
+describe('paging', () => {
+  describe('pager', () => {
     test(
       'getRel can override limit and offset',
       async () => {
         const sdk = new LookerSDK(session)
         const limit = 2
         const all = await sdk.ok(sdk.search_dashboards({ fields: 'id' }))
-        const paged = await paginate(sdk, () =>
+        const paged = await pager(sdk, () =>
           sdk.search_dashboards({ fields: 'id', limit })
         )
         const full = await sdk.ok(paged.getRel('first', all.length))
@@ -162,15 +162,15 @@ describe('pagination', () => {
 This test code verifies:
 
 - correct retrieval of all `search_dashboard` pages
-- that pagination stops when it should
+- that paging stops when it should
 
-**Note** The above test will only work correctly when a Looker release with pagination headers for the API 4.0 implementation of `search_dashboards` is available.
+**Note** The above test will only work correctly when a Looker release with paging headers for the API 4.0 implementation of `search_dashboards` is available.
 
 ## Alpha support level
 
-Support for pagination headers is currently at alpha level. This means that:
+Support for paging headers is currently at alpha level. This means that:
 
-- Not all endpoints with `limit` and `offset` parameters provide pagination headers.
-- Pagination performance may vary for large results sets. We recommend making the `limit` size a larger value (half or a quarter of the total count, perhaps) to reduce pagination if performance degradation is noticed as the `offset` grows larger.
-- Currently, SDK support for pagination is only available in the Typescript SDK prototype.
-- While SDK pagination routines **should** work for API endpoints that provide pagination headers, reliability is not guaranteed, and SDK pagination routines are only "community supported." This means that issues can be filed in this repository and Looker engineering will attempt to address them, but no timeframe or response is guaranteed.
+- Not all endpoints with `limit` and `offset` parameters provide paging headers.
+- Paging performance may vary for large results sets. We recommend making the `limit` size a larger value (half or a quarter of the total count, perhaps) to reduce paging if performance degradation is noticed as the `offset` grows larger.
+- Currently, SDK support for paging is only available in the Typescript SDK prototype.
+- While SDK paging routines **should** work for API endpoints that provide paging headers, reliability is not guaranteed, and SDK paging routines are only "community supported." This means that issues can be filed in this repository and Looker engineering will attempt to address them, but no timeframe or response is guaranteed.

@@ -37,7 +37,7 @@ export const LinkHeader = 'link'
 export const TotalCountHeader = 'X-Total-Count'
 
 /**
- * Types of pagination link relative URLs
+ * Types of paging link relative URLs
  * based on https://docs.github.com/en/rest/overview/resources-in-the-rest-api#link-header
  */
 export type PageLinkRel = 'first' | 'last' | 'next' | 'prev'
@@ -47,8 +47,8 @@ interface ILength {
   length: number
 }
 
-/** Pagination function call */
-export type PaginateFunc<TSuccess, TError> = () => Promise<
+/** Result paging function call */
+export type PagingFunc<TSuccess, TError> = () => Promise<
   SDKResponse<TSuccess, TError>
 >
 
@@ -71,18 +71,18 @@ export interface IPageLink {
  */
 export type PageLinks = Record<string, IPageLink>
 
-export interface IPaginate<TSuccess, TError> {
+export interface IPager<TSuccess, TError> {
   /** Total number of available items being paginated */
   total: number
-  /** Offset extracted from paginate request */
+  /** Offset extracted from pager request */
   offset: number
-  /** Limit extracted from paginate request */
+  /** Limit extracted from pager request */
   limit: number
-  /** Links extracted from Pagination link header */
+  /** Paging links extracted from Link header */
   links: PageLinks
   /** Latest items returned from response */
   items: TSuccess
-  /** Captured from the original pagination request */
+  /** Captured from the original paging request */
   options?: Partial<ITransportSettings>
   /** Total number of pages. -1 if not known. */
   pages: number
@@ -165,42 +165,42 @@ export const linkHeaderParser = (linkHeader: string): PageLinks => {
   return obj
 }
 
-/** Event to observe the pagination call */
+/** Event to observe the paging call */
 export type PageObserver<TSuccess> = (
   /** Current retrieved page of results */
   page: TSuccess
 ) => TSuccess
 
 /**
- * Create an API response paginator for an endpoint that returns a Link header
+ * Create an API response pager for an endpoint that returns a Link header
  * @param sdk implementation of IAPIMethods. Can be full SDK or functional auth session
- * @param func sdk call that includes a pagination header
+ * @param func sdk call that includes a paging header
  * @param options transport options override to capture and use in paging requests
  *
  * @remarks `TSuccess` must be a collection type that supports `length`
  */
-export async function paginate<TSuccess extends ILength, TError>(
+export async function pager<TSuccess extends ILength, TError>(
   sdk: IAPIMethods,
-  func: PaginateFunc<TSuccess, TError>,
+  func: PagingFunc<TSuccess, TError>,
   options?: Partial<ITransportSettings>
-): Promise<IPaginate<TSuccess, TError>> {
-  return await new Paginator<TSuccess, TError>(sdk, func, options).init()
+): Promise<IPager<TSuccess, TError>> {
+  return await new Paging<TSuccess, TError>(sdk, func, options).init()
 }
 
 /**
- * Create an API response paginator and collect all pages, returning the result
+ * Create an API response pager and collect all pages, returning the result
  * @param sdk implementation of IAPIMethods. Can be full SDK or functional auth session
- * @param func sdk call that includes a pagination header
+ * @param func sdk call that includes a paging header
  * @param onPage observer of the latest page of results. Defaults to noop.
  * @param options transport options override to capture and use in paging requests
  */
 export async function pageAll<TSuccess extends ILength, TError>(
   sdk: IAPIMethods,
-  func: PaginateFunc<TSuccess, TError>,
+  func: PagingFunc<TSuccess, TError>,
   onPage: PageObserver<TSuccess> = (page: TSuccess) => page,
   options?: Partial<ITransportSettings>
 ): Promise<SDKResponse<TSuccess, TError>> {
-  const paged = await paginate(sdk, func, options)
+  const paged = await pager(sdk, func, options)
   let rows: any[] = []
   rows = rows.concat(onPage(paged.items))
   let error
@@ -219,10 +219,10 @@ export async function pageAll<TSuccess extends ILength, TError>(
 }
 
 /**
- * Pagination support class
+ * Link header pages class
  */
-export class Paginator<TSuccess extends ILength, TError>
-  implements IPaginate<TSuccess, TError>
+export class Paging<TSuccess extends ILength, TError>
+  implements IPager<TSuccess, TError>
 {
   items: TSuccess = [] as unknown as TSuccess
   links: PageLinks = {}
@@ -240,7 +240,7 @@ export class Paginator<TSuccess extends ILength, TError>
    */
   constructor(
     public sdk: IAPIMethods,
-    public func: PaginateFunc<TSuccess, TError>,
+    public func: PagingFunc<TSuccess, TError>,
     public options?: Partial<ITransportSettings>
   ) {
     this.transport = sdk.authSession.transport as BaseTransport
@@ -259,7 +259,7 @@ export class Paginator<TSuccess extends ILength, TError>
       this.transport.observer = saved
     }
     if (Object.keys(raw).length === 0 || Object.keys(raw.headers).length === 0)
-      throw new Error('No headers were retrieved for pagination')
+      throw new Error('No paging headers were found')
     this.parse(raw)
     return this
   }
@@ -364,11 +364,11 @@ export class Paginator<TSuccess extends ILength, TError>
     return result
   }
 
-  parse(raw: IRawResponse): IPaginate<TSuccess, TError> {
+  parse(raw: IRawResponse): IPager<TSuccess, TError> {
     const req = new URL(raw.url)
     const params = req.searchParams
-    this.limit = Paginator.paramDefault(params.get('limit'), -1)
-    this.offset = Paginator.paramDefault(
+    this.limit = Paging.paramDefault(params.get('limit'), -1)
+    this.offset = Paging.paramDefault(
       params.get('offset'),
       this.limit > 0 ? 0 : -1
     )
@@ -384,7 +384,7 @@ export class Paginator<TSuccess extends ILength, TError>
     } else {
       this.total = -1
     }
-    return this as unknown as IPaginate<TSuccess, TError>
+    return this as unknown as IPager<TSuccess, TError>
   }
 
   async firstPage(): Promise<SDKResponse<TSuccess, TError>> {

@@ -24,12 +24,7 @@
 
  */
 
-import {
-  LinkHeader,
-  linkHeaderParser,
-  paginate,
-  TotalCountHeader,
-} from './paginator'
+import { LinkHeader, linkHeaderParser, pager, TotalCountHeader } from './paging'
 import { APIMethods } from './apiMethods'
 import { AuthSession } from './authSession'
 import { ApiSettings, IApiSettings } from './apiSettings'
@@ -123,7 +118,7 @@ async function mockSDKSuccess<T>(value: T) {
 //   return Promise.resolve<SDKResponse<any, T>>({ ok: false, error: value })
 // }
 
-describe('pagination', () => {
+describe('paging', () => {
   describe('linkHeaderParser', () => {
     it('parses all links', () => {
       const actual = linkHeaderParser(allLinks)
@@ -159,7 +154,7 @@ describe('pagination', () => {
     })
   })
 
-  describe('paginate', () => {
+  describe('pager', () => {
     beforeEach(() => {
       jest
         .spyOn(BrowserTransport.prototype, 'rawRequest')
@@ -170,7 +165,7 @@ describe('pagination', () => {
     })
 
     it('initializes', async () => {
-      const actual = await paginate(
+      const actual = await pager(
         sdk,
         () => mockRaw(transport, mockedRows, mockRawResponse(firstUrl)),
         {
@@ -193,7 +188,7 @@ describe('pagination', () => {
     })
 
     it('supports paging', async () => {
-      const paged = await paginate(sdk, () =>
+      const paged = await pager(sdk, () =>
         mockRaw(transport, mockedRows, mockedRawResponse)
       )
       expect(paged).toBeDefined()
