@@ -22,8 +22,20 @@
 
 """API error class
 """
+import json
 
 
 class SDKError(Exception):
+    """SDK error class
+    """
+
+class APIError(SDKError):
     """API error class
     """
+    def __init__(self, sdk_response, *args, **kwargs):
+        super(APIError).__init__(*args, **kwargs)
+        self._sdk_response = json.loads(sdk_response)
+    
+    @property
+    def sdk_response(self) -> dict:
+        return self._sdk_response
