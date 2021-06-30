@@ -692,6 +692,32 @@ describe('LookerNodeSDK', () => {
         },
         testTimeout
       )
+      test(
+        'all_dashboards pageAll returns non-paged results',
+        async () => {
+          const sdk = new LookerSDK(session)
+          // Use a small limit to test paging for a small number of dashboards
+          let count = 0
+          let actual: IDashboard[] = []
+          const aggregate = (page: IDashboard[]) => {
+            console.log(`Page ${++count} has ${page.length} items`)
+            actual = actual.concat(page)
+            return page
+          }
+          const paged = await pageAll(
+            sdk,
+            () => sdk.all_dashboards('id,title'),
+            aggregate
+          )
+          expect(paged.limit).toEqual(-1)
+          expect(paged.more()).toEqual(false)
+
+          const all = await sdk.ok(sdk.all_dashboards('id, title'))
+          expect(actual.length).toEqual(all.length)
+          expect(actual).toEqual(all)
+        },
+        testTimeout
+      )
     })
   })
 

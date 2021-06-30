@@ -47,6 +47,9 @@ const nextUrl =
   'http://localhost/api/4.0/alerts/search?fields=id&limit=3&offset=6'
 
 const firstLink = `<${firstUrl}>; rel="first"`
+// Verify extra whitespace characters still get parsed correctly
+// The Looker API provides a header without extra whitespace but other Link headers
+// may not be formatted that way
 const lastLink = `< ${lastUrl} >; rel="\tlast (end of line!)\t"`
 const prevLink = `<\t${prevUrl}\n>;\nrel="prev"`
 const nextLink = `<${nextUrl}>; rel="next"`
@@ -81,25 +84,31 @@ const session = new MockSession('mocked', settings, transport)
 const sdk = new APIMethods(session, '4.0')
 const mockedRows = ['one', 'two', 'three', 'four', 'five']
 const totalCount = 10
-const mockedRawResponse: IRawResponse = {
-  ok: true,
-  body: JSON.stringify(mockedRows),
-  headers: { [LinkHeader]: allLinks, [TotalCountHeader]: ` ${totalCount}` },
-  statusCode: 200,
-  statusMessage: 'Mocking',
-  contentType: 'application/json',
-  url: 'https://mocked',
-}
 
-const mockRawResponse = (url: string, body?: any): IRawResponse => {
-  const result = { ...mockedRawResponse, ...{ url: url } }
+const mockRawResponse = (url?: string, body?: any): IRawResponse => {
+  const result: IRawResponse = {
+    ok: true,
+    body: JSON.stringify(mockedRows),
+    headers: { [LinkHeader]: allLinks, [TotalCountHeader]: ` ${totalCount}` },
+    statusCode: 200,
+    statusMessage: 'Mocking',
+    contentType: 'application/json',
+    url: 'https://mocked',
+  }
+  if (url) {
+    result.url = url
+  }
   if (body) {
     result.body = body
   }
   return result
 }
 
-const mockRaw = (
+async function mockSDKSuccess<T>(value: T) {
+  return Promise.resolve<SDKResponse<T, any>>({ ok: true, value })
+}
+
+const mockRawResponseSuccess = (
   transport: BrowserTransport,
   value: any,
   rawResponse: IRawResponse
@@ -108,10 +117,6 @@ const mockRaw = (
     transport.observer(rawResponse)
   }
   return mockSDKSuccess(value)
-}
-
-async function mockSDKSuccess<T>(value: T) {
-  return Promise.resolve<SDKResponse<T, any>>({ ok: true, value })
 }
 
 // async function mockSDKError<T>(value: T) {
@@ -158,7 +163,7 @@ describe('paging', () => {
     beforeEach(() => {
       jest
         .spyOn(BrowserTransport.prototype, 'rawRequest')
-        .mockReturnValue(Promise.resolve(mockedRawResponse))
+        .mockReturnValue(Promise.resolve(mockRawResponse()))
     })
     afterAll(() => {
       jest.clearAllMocks()
@@ -167,7 +172,12 @@ describe('paging', () => {
     it('initializes', async () => {
       const actual = await pager(
         sdk,
-        () => mockRaw(transport, mockedRows, mockRawResponse(firstUrl)),
+        () =>
+          mockRawResponseSuccess(
+            transport,
+            mockedRows,
+            mockRawResponse(firstUrl)
+          ),
         {
           timeout: 99,
         }
@@ -189,7 +199,7 @@ describe('paging', () => {
 
     it('supports paging', async () => {
       const paged = await pager(sdk, () =>
-        mockRaw(transport, mockedRows, mockedRawResponse)
+        mockRawResponseSuccess(transport, mockedRows, mockRawResponse())
       )
       expect(paged).toBeDefined()
       expect(paged.items).toEqual(mockedRows)
