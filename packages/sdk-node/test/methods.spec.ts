@@ -645,7 +645,8 @@ describe('LookerNodeSDK', () => {
     })
   })
 
-  describe('paging alpha', () => {
+  // TODO remove skip after Looker 21.12 is available
+  describe.skip('paging alpha', () => {
     describe('pager', () => {
       test(
         'getRel can override limit and offset',
