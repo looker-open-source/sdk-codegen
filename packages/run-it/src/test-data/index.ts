@@ -26,6 +26,7 @@
 export {
   testImageResponse,
   testJsonResponse,
+  testSqlResponse,
   testTextResponse,
   testHtmlResponse,
   testUnknownResponse,

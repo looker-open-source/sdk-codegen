@@ -8,7 +8,7 @@
   "typings": "lib/index.d.ts",
   "license": "MIT",
   "author": "Looker",
-  "private": true,
+  "private": false,
   "repository": {
     "type": "git",
     "url": "git+https://github.com/looker-open-source/sdk-codegen.git",
