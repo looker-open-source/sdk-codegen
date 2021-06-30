@@ -1,5 +1,19 @@
 # Changelog
 
+## [1.9.0](https://www.github.com/looker-open-source/sdk-codegen/compare/sdk-codegen-all-v1.8.0...sdk-codegen-all-v1.9.0) (2021-06-30)
+
+
+### Features
+
+* paging results for the Typescript SDK ([#698](https://www.github.com/looker-open-source/sdk-codegen/issues/698)) ([537eb57](https://www.github.com/looker-open-source/sdk-codegen/commit/537eb579b9c6d95d600f455a187e6d7b9bf700ef))
+* refactor Markdown out to @looker/code-editor ([#699](https://www.github.com/looker-open-source/sdk-codegen/issues/699)) ([f3c16e2](https://www.github.com/looker-open-source/sdk-codegen/commit/f3c16e2a162266545ba3086a0a1dddd0cb79195f))
+* syntax highlight application/sql responses ([#718](https://www.github.com/looker-open-source/sdk-codegen/issues/718)) ([28a1bbe](https://www.github.com/looker-open-source/sdk-codegen/commit/28a1bbedb04f500a12e2c5a0fe304919139e6638))
+
+
+### Bug Fixes
+
+* dependabot security package upgrades ([#725](https://www.github.com/looker-open-source/sdk-codegen/issues/725)) ([15d7cb3](https://www.github.com/looker-open-source/sdk-codegen/commit/15d7cb3f70229424cc1710112683f096ccbc863c))
+
 ## [1.8.0](https://www.github.com/looker-open-source/sdk-codegen/compare/sdk-codegen-all-v1.7.0...sdk-codegen-all-v1.8.0) (2021-06-17)
 
 

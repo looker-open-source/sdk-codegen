@@ -5,6 +5,13 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+### [21.0.14](https://www.github.com/looker-open-source/sdk-codegen/compare/sdk-rtl-v21.0.13...sdk-rtl-v21.0.14) (2021-06-30)
+
+
+### Features
+
+* paging results for the Typescript SDK ([#698](https://www.github.com/looker-open-source/sdk-codegen/issues/698)) ([537eb57](https://www.github.com/looker-open-source/sdk-codegen/commit/537eb579b9c6d95d600f455a187e6d7b9bf700ef))
+
 ### [21.0.13](https://www.github.com/looker-open-source/sdk-codegen/compare/sdk-rtl-v21.0.12...sdk-rtl-v21.0.13) (2021-05-05)
 
 
