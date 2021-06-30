@@ -28,7 +28,7 @@ import React, { FC, useContext } from 'react'
 import { Heading } from '@looker/components'
 import { TypeList, IntrinsicType } from '@looker/sdk-codegen'
 import styled from 'styled-components'
-import { NavLink } from 'react-router-dom'
+import { Link } from '../Link'
 import { buildTypePath, highlightHTML } from '../../utils'
 import { SearchContext } from '../../context'
 
@@ -60,7 +60,7 @@ export const SideNavTypes: FC<TypeProps> = ({ types, specKey }) => {
   )
 }
 
-const SideNavLink = styled(NavLink)`
+const SideNavLink = styled(Link)`
   display: block;
   padding: ${({
     theme: {

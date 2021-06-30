@@ -1,5 +1,32 @@
 # Changelog
 
+## [1.8.0](https://www.github.com/looker-open-source/sdk-codegen/compare/sdk-codegen-all-v1.7.0...sdk-codegen-all-v1.8.0) (2021-06-17)
+
+
+### Features
+
+* Looker 21.8 bindings ([#705](https://www.github.com/looker-open-source/sdk-codegen/issues/705)) ([032d0f8](https://www.github.com/looker-open-source/sdk-codegen/commit/032d0f80e30356aaa9f3b3f987b315203f896a61))
+
+## [1.7.0](https://www.github.com/looker-open-source/sdk-codegen/compare/sdk-codegen-all-v1.6.0...sdk-codegen-all-v1.7.0) (2021-06-16)
+
+
+### Features
+
+* **New Python Examples:** Adding 2 new Python examples ([#701](https://www.github.com/looker-open-source/sdk-codegen/issues/701)) ([c4135eb](https://www.github.com/looker-open-source/sdk-codegen/commit/c4135eb962dbf05c5b1644e2ed437272eec8894d))
+* reduce size of apix bundle ([#676](https://www.github.com/looker-open-source/sdk-codegen/issues/676)) ([0d74f6a](https://www.github.com/looker-open-source/sdk-codegen/commit/0d74f6a7814b509416a9d2558c16439a4859b543))
+* show original spec in API Explorer ([#686](https://www.github.com/looker-open-source/sdk-codegen/issues/686)) ([2bfb014](https://www.github.com/looker-open-source/sdk-codegen/commit/2bfb0147f2947680a784ef3118192b1e7590b296))
+* two-way type references ([#684](https://www.github.com/looker-open-source/sdk-codegen/issues/684)) ([fbc0565](https://www.github.com/looker-open-source/sdk-codegen/commit/fbc0565c4c8fe3d1488bd246e244bed56f1412a9))
+* upgrade react-markdown ([#681](https://www.github.com/looker-open-source/sdk-codegen/issues/681)) ([952ed30](https://www.github.com/looker-open-source/sdk-codegen/commit/952ed305347e591154413171d73cc648d3f597c5))
+
+
+### Bug Fixes
+
+* export funcs for TS SDK ([#693](https://www.github.com/looker-open-source/sdk-codegen/issues/693)) ([eec853e](https://www.github.com/looker-open-source/sdk-codegen/commit/eec853e87d35e4908d3416d6f3b1d98209ab22f5))
+* font download on route change ([#678](https://www.github.com/looker-open-source/sdk-codegen/issues/678)) ([ae62914](https://www.github.com/looker-open-source/sdk-codegen/commit/ae62914faa2e93d5523ddc82973f23df2992ea2f))
+* rendering of markdown tables in APIX explorer ([#687](https://www.github.com/looker-open-source/sdk-codegen/issues/687)) ([40e8640](https://www.github.com/looker-open-source/sdk-codegen/commit/40e8640872db001075c397b5d941dec535867a3d))
+* sync design-tokens/icons dependency constraint ([eb1a427](https://www.github.com/looker-open-source/sdk-codegen/commit/eb1a427d3c90bec44b2aac542783c3cda4810c0e))
+* sync design-tokens/icons dependency constraint ([eb1a427](https://www.github.com/looker-open-source/sdk-codegen/commit/eb1a427d3c90bec44b2aac542783c3cda4810c0e))
+
 ## [1.6.0](https://www.github.com/looker-open-source/sdk-codegen/compare/sdk-codegen-all-v1.5.0...sdk-codegen-all-v1.6.0) (2021-05-05)
 
 

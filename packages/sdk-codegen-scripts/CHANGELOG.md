@@ -1,5 +1,31 @@
 # Changelog
 
+### [21.0.18](https://www.github.com/looker-open-source/sdk-codegen/compare/sdk-codegen-scripts-v21.0.17...sdk-codegen-scripts-v21.0.18) (2021-06-17)
+
+
+### Dependencies
+
+* The following workspace dependencies were updated
+  * dependencies
+    * @looker/sdk bumped from ^21.6.1 to ^21.8.0
+    * @looker/sdk-node bumped from ^21.6.1 to ^21.8.0
+
+### [21.0.17](https://www.github.com/looker-open-source/sdk-codegen/compare/sdk-codegen-scripts-v21.0.16...sdk-codegen-scripts-v21.0.17) (2021-06-16)
+
+
+### Features
+
+* reduce size of apix bundle ([#676](https://www.github.com/looker-open-source/sdk-codegen/issues/676)) ([0d74f6a](https://www.github.com/looker-open-source/sdk-codegen/commit/0d74f6a7814b509416a9d2558c16439a4859b543))
+
+
+### Dependencies
+
+* The following workspace dependencies were updated
+  * dependencies
+    * @looker/sdk bumped from ^21.6.0 to ^21.6.1
+    * @looker/sdk-codegen bumped from ^21.0.16 to ^21.0.17
+    * @looker/sdk-node bumped from ^21.6.0 to ^21.6.1
+
 ### [21.0.16](https://www.github.com/looker-open-source/sdk-codegen/compare/sdk-codegen-scripts-v21.0.15...sdk-codegen-scripts-v21.0.16) (2021-05-05)
 
 

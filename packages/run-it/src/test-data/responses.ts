@@ -58,6 +58,19 @@ export const testHtmlResponse: IRawResponse = {
   ),
 }
 
+export const testSqlResponse: IRawResponse = {
+  url: `https://some/sql`,
+  contentType: 'application/sql',
+  ok: true,
+  statusCode: 200,
+  statusMessage: 'OK',
+  body: Buffer.from(`SELECT
+    COUNT(DISTINCT products.id ) AS \`products.count\`
+FROM demo_db.inventory_items  AS inventory_items
+LEFT JOIN demo_db.products  AS products ON inventory_items.product_id = products.id
+LIMIT 500`),
+}
+
 export const testImageResponse = (contentType = 'image/png'): IRawResponse => ({
   url: `http://${contentType}`,
   contentType,

@@ -28,8 +28,8 @@ import { renderWithTheme } from '@looker/components-test-utils'
 import userEvent from '@testing-library/user-event'
 import { screen } from '@testing-library/react'
 
+import { pythonTestCode } from '../test-data'
 import { CodeEditor } from './CodeEditor'
-import { pythonTestCode } from './test-data'
 
 describe('CodeEditor', () => {
   const setState = jest.fn()
@@ -54,11 +54,13 @@ describe('CodeEditor', () => {
     renderWithTheme(
       <CodeEditor onChange={setState} code={pythonTestCode} language="python" />
     )
-    const editPattern = '# This is the new code'
+    const editPattern = '\n# This is the new code'
     const input = screen
       .getByRole('code-editor')
       .getElementsByClassName('npm__react-simple-code-editor__textarea')[0]
-    userEvent.paste(input, editPattern)
+    userEvent.paste(input, editPattern, undefined, {
+      initialSelectionEnd: pythonTestCode.length,
+    })
     expect(setState).toHaveBeenCalledWith(pythonTestCode + editPattern)
   })
 })

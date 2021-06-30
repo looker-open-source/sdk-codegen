@@ -25,15 +25,20 @@
  */
 import { theme } from '@looker/components'
 import { Language, Prism } from 'prism-react-renderer'
-import prismTheme from 'prism-react-renderer/themes/vsDark'
+import blockTheme from 'prism-react-renderer/themes/vsDark'
+import inlineTheme from 'prism-react-renderer/themes/github'
 
 /**
- * checks whether object is Language
- * @param object any object to be tested
+ * checks whether input is supported syntax highlighting language
+ * @param languageName - string lang name to test
  * @returns boolean
  */
-function instanceOfPrismLanguage(object: any): boolean {
-  return Object.keys(Prism.languages).includes(object)
+export const instanceOfPrismLanguage = (languageName: string) => {
+  const extraHighlightingEngines = ['kotlin', 'csharp', 'swift', 'ruby']
+  return (
+    Object.keys(Prism.languages).includes(languageName) ||
+    extraHighlightingEngines.includes(languageName)
+  )
 }
 
 /**
@@ -43,27 +48,33 @@ function instanceOfPrismLanguage(object: any): boolean {
  */
 export const getPrismLanguage = (language: string): Language => {
   language = language.toLowerCase()
-  const unstyled = ['kotlin', 'csharp', 'swift']
   // TODO revert back to `go` in generator language definitions instead of using this
   if (language === 'golang') {
     language = 'go'
-  } else if (unstyled.includes(language)) {
-    language = 'clike'
+  } else if (language === 'c#') {
+    language = 'csharp'
   }
-  return instanceOfPrismLanguage(language) ? (language as Language) : 'json'
+  return instanceOfPrismLanguage(language) ? (language as Language) : 'markup'
 }
 
 /**
- * applies package overrides to the default vsCode prism theme
+ * applies package overrides to the default theme. Inline CodeDisplay uses githubLight theme, else uses vsCodeDark theme.
  * @returns modified prism theme object
  */
-export function getOverridenTheme(transparent: boolean) {
-  if (transparent) {
-    prismTheme.plain.backgroundColor = 'none'
-    prismTheme.plain.padding = '0px'
+export const getOverridenTheme = (transparent: boolean, inline: boolean) => {
+  if (inline) {
+    inlineTheme.plain.backgroundColor = theme.colors.ui1
+    inlineTheme.plain.border = `1px solid ${theme.colors.ui2}`
+    inlineTheme.plain.borderRadius = '4px'
+    inlineTheme.plain.padding = '4px'
+    inlineTheme.plain.fontSize = theme.fontSizes.small
+    return inlineTheme
+  } else if (transparent) {
+    blockTheme.plain.backgroundColor = 'none'
+    blockTheme.plain.padding = '0px'
   } else {
-    prismTheme.plain.backgroundColor = theme.colors.text
-    prismTheme.plain.padding = '1rem'
+    blockTheme.plain.backgroundColor = theme.colors.text
+    blockTheme.plain.padding = '1rem'
   }
-  return prismTheme
+  return blockTheme
 }

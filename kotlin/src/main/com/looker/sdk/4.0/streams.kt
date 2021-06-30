@@ -4673,13 +4673,13 @@ class LookerSDKStream(authSession: AuthSession) : APIMethods(authSession) {
      * `look_id` and `folder_id` must already exist, and `folder_id` must be different from the current `folder_id` of the dashboard.
      *
      * @param {Long} look_id Look id to copy.
-     * @param {Long} folder_id Folder id to copy to.
+     * @param {String} folder_id Folder id to copy to.
      *
      * POST /looks/{look_id}/copy -> ByteArray
      */
     @JvmOverloads fun copy_look(
         look_id: Long,
-        folder_id: Long? = null
+        folder_id: String? = null
     ) : SDKResponse {
         val path_look_id = encodeParam(look_id)
             return this.post<ByteArray>("/looks/${path_look_id}/copy", 
@@ -4696,13 +4696,13 @@ class LookerSDKStream(authSession: AuthSession) : APIMethods(authSession) {
      * `look_id` and `folder_id` must already exist, and `folder_id` must be different from the current `folder_id` of the dashboard.
      *
      * @param {Long} look_id Look id to move.
-     * @param {Long} folder_id Folder id to move to.
+     * @param {String} folder_id Folder id to move to.
      *
      * PATCH /looks/{look_id}/move -> ByteArray
      */
     fun move_look(
         look_id: Long,
-        folder_id: Long
+        folder_id: String
     ) : SDKResponse {
         val path_look_id = encodeParam(look_id)
             return this.patch<ByteArray>("/looks/${path_look_id}/move", 

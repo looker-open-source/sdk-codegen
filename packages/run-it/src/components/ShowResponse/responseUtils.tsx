@@ -72,6 +72,7 @@ const ShowJSON = (response: IRawResponse) => {
   const raw = (
     <CodeDisplay
       code={JSON.stringify(JSON.parse(response.body), null, 2)}
+      lineNumbers={false}
       transparent
     />
   )
@@ -117,6 +118,10 @@ const ShowImage = (response: IRawResponse) => {
 /** A handler for HTTP type responses */
 const ShowHTML = (response: IRawResponse) => (
   <CodeDisplay language="html" code={response.body.toString()} transparent />
+)
+
+const ShowSQL = (response: IRawResponse) => (
+  <CodeDisplay language="sql" code={response.body.toString()} transparent />
 )
 
 /**
@@ -177,6 +182,11 @@ export const responseHandlers: Responder[] = [
     label: 'pdf',
     isRecognized: (contentType) => /application\/pdf/g.test(contentType),
     component: (response) => ShowPDF(response),
+  },
+  {
+    label: 'sql',
+    isRecognized: (contentType) => /application\/sql/g.test(contentType),
+    component: (response) => ShowSQL(response),
   },
   {
     label: 'text',

@@ -26,6 +26,7 @@
 import {
   testErrorResponse,
   testHtmlResponse,
+  testSqlResponse,
   testImageResponse,
   testJsonResponse,
   testTextResponse,
@@ -176,6 +177,11 @@ describe('responseUtils', () => {
     const actual = pickResponseHandler(testTextResponse)
     expect(actual).toBeDefined()
     expect(actual.label).toEqual('text')
+  })
+  test('it handles sql', () => {
+    const actual = pickResponseHandler(testSqlResponse)
+    expect(actual).toBeDefined()
+    expect(actual.label).toEqual('sql')
   })
   test('it handles html', () => {
     const actual = pickResponseHandler(testHtmlResponse)

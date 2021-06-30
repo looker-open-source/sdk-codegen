@@ -2,38 +2,23 @@
   "plugins": ["node-workspace"],
   "bump-minor-pre-major": true,
   "bump-patch-for-minor-pre-major": true,
-  "release-as": "",
+  "release-as": "21.8.0",
   "packages": {
-    "packages/extension-api-explorer": {},
-    "packages/extension-sdk-react": {},
-    "packages/extension-sdk": {},
-    "packages/hackathon": {},
-    "packages/sdk-node": {},
-    "packages/sdk": {},
-    ".": {
-      "release-as": ""
-    },
-    "packages/api-explorer": {
-      "release-as": ""
-    },
-    "packages/run-it": {
-      "release-as": ""
-    },
-    "packages/code-editor": {},
-    "packages/sdk-codegen-scripts": {
-    },
-    "packages/sdk-codegen-utils": {
-    },
-    "packages/sdk-codegen": {
-    },
-    "packages/sdk-rtl": {
-    },
-    "packages/wholly-sheet": {
-      "release-as": ""
-    },
-    "python": {
-      "release-type": "python",
-      "package-name": "looker_sdk"
-    }
+    ".": { "release-as": "" },
+    "packages/api-explorer": { "release-as": "" },
+    "packages/code-editor": { "release-as": "" },
+    "packages/extension-api-explorer": { },
+    "packages/extension-sdk": { },
+    "packages/extension-sdk-react": { },
+    "packages/hackathon": { },
+    "packages/run-it": { "release-as": "" },
+    "packages/sdk": { },
+    "packages/sdk-codegen": { "release-as": "21.0.18" },
+    "packages/sdk-codegen-scripts": { "release-as": "21.0.18" },
+    "packages/sdk-codegen-utils": { "release-as": "21.0.12"},
+    "packages/sdk-node": { },
+    "packages/sdk-rtl": { "release-as": "21.0.14" },
+    "packages/wholly-sheet": { "release-as": "" },
+    "python": { "release-type": "python", "package-name": "looker_sdk" }
   }
 }
