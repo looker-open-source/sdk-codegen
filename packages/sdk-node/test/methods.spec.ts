@@ -39,21 +39,24 @@ import {
   Looker40SDK,
   Looker31SDKStream,
   Looker40SDKStream,
+  IDashboard,
 } from '@looker/sdk'
 import {
   DelimArray,
   boolDefault,
   defaultTimeout,
   ApiConfigMap,
+  pageAll,
+  pager,
 } from '@looker/sdk-rtl'
 import {
   NodeSettings,
   NodeSettingsIniFile,
   NodeSession,
+  LookerNodeSDK,
   readIniConfig,
 } from '../src'
 import { TestConfig } from '../../sdk-rtl/src/testUtils'
-import { LookerNodeSDK } from '../src/nodeSdk'
 
 const envKey = ApiConfigMap(environmentPrefix)
 const strLookerBaseUrl = envKey.base_url
@@ -641,6 +644,84 @@ describe('LookerNodeSDK', () => {
       expect(actual).toEqual(task)
     })
   })
+
+  // TODO remove skip after Looker 21.12 is available
+  describe.skip('paging alpha', () => {
+    describe('pager', () => {
+      test(
+        'getRel can override limit and offset',
+        async () => {
+          const sdk = new LookerSDK(session)
+          const limit = 2
+          const all = await sdk.ok(sdk.search_dashboards({ fields: 'id' }))
+          const paged = await pager(sdk, () =>
+            sdk.search_dashboards({ fields: 'id', limit })
+          )
+          const full = await sdk.ok(paged.getRel('first', all.length))
+          expect(full).toEqual(all)
+        },
+        testTimeout
+      )
+    })
+    describe('pageAll', () => {
+      test(
+        'search_dashboard',
+        async () => {
+          const sdk = new LookerSDK(session)
+          // Use a small limit to test paging for a small number of dashboards
+          const limit = 2
+          let count = 0
+          let actual: IDashboard[] = []
+          const aggregate = (page: IDashboard[]) => {
+            console.log(`Page ${++count} has ${page.length} items`)
+            actual = actual.concat(page)
+            return page
+          }
+          const paged = await pageAll(
+            sdk,
+            () => sdk.search_dashboards({ fields: 'id,title', limit }),
+            aggregate
+          )
+          expect(paged.limit).toEqual(limit)
+          expect(paged.more()).toEqual(false)
+
+          const all = await sdk.ok(
+            sdk.search_dashboards({ fields: 'id, title' })
+          )
+          expect(actual.length).toEqual(all.length)
+          expect(actual).toEqual(all)
+        },
+        testTimeout
+      )
+      test(
+        'all_dashboards pageAll returns non-paged results',
+        async () => {
+          const sdk = new LookerSDK(session)
+          // Use a small limit to test paging for a small number of dashboards
+          let count = 0
+          let actual: IDashboard[] = []
+          const aggregate = (page: IDashboard[]) => {
+            console.log(`Page ${++count} has ${page.length} items`)
+            actual = actual.concat(page)
+            return page
+          }
+          const paged = await pageAll(
+            sdk,
+            () => sdk.all_dashboards('id,title'),
+            aggregate
+          )
+          expect(paged.limit).toEqual(-1)
+          expect(paged.more()).toEqual(false)
+
+          const all = await sdk.ok(sdk.all_dashboards('id, title'))
+          expect(actual.length).toEqual(all.length)
+          expect(actual).toEqual(all)
+        },
+        testTimeout
+      )
+    })
+  })
+
   describe('Query calls', () => {
     it(
       'create and run query',
