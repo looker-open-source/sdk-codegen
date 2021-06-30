@@ -1,6 +1,6 @@
 {
   "name": "@looker/api-explorer",
-  "version": "0.9.9",
+  "version": "0.9.10",
   "description": "Looker API Explorer",
   "main": "lib/index.js",
   "module": "lib/esm/index.js",
@@ -28,7 +28,7 @@
   },
   "devDependencies": {
     "@looker/components-test-utils": "^1.3.1",
-    "@looker/sdk-codegen-scripts": "^21.0.18",
+    "@looker/sdk-codegen-scripts": "^21.0.19",
     "@looker/sdk-node": "^21.8.0",
     "@styled-icons/styled-icon": "^10.6.3",
     "@testing-library/jest-dom": "^5.11.6",
@@ -54,14 +54,14 @@
     "webpack-merge": "^5.7.3"
   },
   "dependencies": {
-    "@looker/code-editor": "^0.1.2",
+    "@looker/code-editor": "^0.1.3",
     "@looker/components": "^1.4.1",
     "@looker/design-tokens": "^1.3.1",
     "@looker/icons": "^1.3.0",
-    "@looker/run-it": "^0.9.9",
-    "@looker/sdk": "^21.8.0",
-    "@looker/sdk-codegen": "^21.0.17",
-    "@looker/sdk-rtl": "^21.0.13",
+    "@looker/run-it": "^0.9.10",
+    "@looker/sdk": "^21.8.1",
+    "@looker/sdk-codegen": "^21.0.18",
+    "@looker/sdk-rtl": "^21.0.14",
     "@styled-icons/material": "^10.28.0",
     "@styled-icons/material-outlined": "^10.28.0",
     "@styled-icons/material-rounded": "^10.28.0",

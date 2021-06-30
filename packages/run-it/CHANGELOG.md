@@ -1,5 +1,23 @@
 # Changelog
 
+### [0.9.10](https://www.github.com/looker-open-source/sdk-codegen/compare/run-it-v0.9.9...run-it-v0.9.10) (2021-06-30)
+
+
+### Features
+
+* refactor Markdown out to @looker/code-editor ([#699](https://www.github.com/looker-open-source/sdk-codegen/issues/699)) ([f3c16e2](https://www.github.com/looker-open-source/sdk-codegen/commit/f3c16e2a162266545ba3086a0a1dddd0cb79195f))
+* syntax highlight application/sql responses ([#718](https://www.github.com/looker-open-source/sdk-codegen/issues/718)) ([28a1bbe](https://www.github.com/looker-open-source/sdk-codegen/commit/28a1bbedb04f500a12e2c5a0fe304919139e6638))
+
+
+### Dependencies
+
+* The following workspace dependencies were updated
+  * dependencies
+    * @looker/sdk bumped from ^21.8.0 to ^21.8.1
+    * @looker/sdk-codegen bumped from ^21.0.17 to ^21.0.18
+    * @looker/code-editor bumped from ^0.1.2 to ^0.1.3
+    * @looker/sdk-rtl bumped from ^21.0.13 to ^21.0.14
+
 ### [0.9.9](https://www.github.com/looker-open-source/sdk-codegen/compare/run-it-v0.9.8...run-it-v0.9.9) (2021-06-17)
 
 
