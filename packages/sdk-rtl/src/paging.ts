@@ -174,48 +174,44 @@ export type PageObserver<TSuccess> = (
 /**
  * Create an API response pager for an endpoint that returns a Link header
  * @param sdk implementation of IAPIMethods. Can be full SDK or functional auth session
- * @param func sdk call that includes a paging header
+ * @param pageFunc sdk call that includes a paging header
  * @param options transport options override to capture and use in paging requests
  *
  * @remarks `TSuccess` must be a collection type that supports `length`
  */
 export async function pager<TSuccess extends ILength, TError>(
   sdk: IAPIMethods,
-  func: PagingFunc<TSuccess, TError>,
+  pageFunc: PagingFunc<TSuccess, TError>,
   options?: Partial<ITransportSettings>
 ): Promise<IPager<TSuccess, TError>> {
-  return await new Paging<TSuccess, TError>(sdk, func, options).init()
+  return await new Paging<TSuccess, TError>(sdk, pageFunc, options).init()
 }
 
 /**
- * Create an API response pager and collect all pages, returning the result
- * @param sdk implementation of IAPIMethods. Can be full SDK or functional auth session
- * @param func sdk call that includes a paging header
+ * Create an API response pager and iterate through all pages, calling a page event per page
+ * @param sdk implementation of IAPIMethods. Can be full SDK object or a functional auth session
+ * @param pageFunc sdk call that includes a paging header
  * @param onPage observer of the latest page of results. Defaults to noop.
  * @param options transport options override to capture and use in paging requests
  */
 export async function pageAll<TSuccess extends ILength, TError>(
   sdk: IAPIMethods,
-  func: PagingFunc<TSuccess, TError>,
+  pageFunc: PagingFunc<TSuccess, TError>,
   onPage: PageObserver<TSuccess> = (page: TSuccess) => page,
   options?: Partial<ITransportSettings>
-): Promise<SDKResponse<TSuccess, TError>> {
-  const paged = await pager(sdk, func, options)
-  let rows: any[] = []
-  rows = rows.concat(onPage(paged.items))
-  let error
+): Promise<IPager<TSuccess, TError>> {
+  const paged = await pager(sdk, pageFunc, options)
+  // Process the first page
+  onPage(paged.items)
   try {
     while (paged.more()) {
-      const items = await sdk.ok(paged.nextPage())
-      rows = rows.concat(onPage(items))
+      // Pass the page items to the event
+      onPage(await sdk.ok(paged.nextPage()))
     }
   } catch (err) {
-    error = err
+    return Promise.reject(err)
   }
-  if (error) {
-    return { ok: false, error }
-  }
-  return { ok: true, value: rows as unknown as TSuccess }
+  return paged
 }
 
 /**
@@ -250,12 +246,14 @@ export class Paging<TSuccess extends ILength, TError>
     let raw: IRawResponse = {} as IRawResponse
     const saved = this.transport.observer
     try {
+      // Capture the raw request for header parsing
       this.transport.observer = (response: IRawResponse) => {
         raw = response
         return response
       }
       this.items = await sdkOk(func())
     } finally {
+      // Restore the previous observer (if any)
       this.transport.observer = saved
     }
     if (Object.keys(raw).length === 0 || Object.keys(raw.headers).length === 0)

@@ -645,7 +645,7 @@ describe('LookerNodeSDK', () => {
     })
   })
 
-  describe.skip('paging alpha', () => {
+  describe('paging alpha', () => {
     describe('pager', () => {
       test(
         'getRel can override limit and offset',
@@ -670,17 +670,20 @@ describe('LookerNodeSDK', () => {
           // Use a small limit to test paging for a small number of dashboards
           const limit = 2
           let count = 0
-          const progress = (page: IDashboard[]) => {
+          let actual: IDashboard[] = []
+          const aggregate = (page: IDashboard[]) => {
             console.log(`Page ${++count} has ${page.length} items`)
+            actual = actual.concat(page)
             return page
           }
-          const actual = await sdk.ok(
-            pageAll(
-              sdk,
-              () => sdk.search_dashboards({ fields: 'id,title', limit }),
-              progress
-            )
+          const paged = await pageAll(
+            sdk,
+            () => sdk.search_dashboards({ fields: 'id,title', limit }),
+            aggregate
           )
+          expect(paged.limit).toEqual(limit)
+          expect(paged.more()).toEqual(false)
+
           const all = await sdk.ok(
             sdk.search_dashboards({ fields: 'id, title' })
           )
