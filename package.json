@@ -1,7 +1,7 @@
 {
   "license": "MIT",
   "name": "sdk-codegen-all",
-  "version": "1.8.0",
+  "version": "1.9.0",
   "description": "All workspaces for SDK code generation",
   "author": "Looker",
   "private": true,
@@ -213,6 +213,6 @@
     "css-what": ">= 5.0.1",
     "trim-newlines": ">= 3.0.1",
     "glob-parent": ">= 5.1.2",
-    "ws": ">= 7.4.6"    
+    "ws": ">= 7.4.6"
   }
 }
