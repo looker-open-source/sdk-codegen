@@ -34,7 +34,7 @@ import { IAPIMethods } from './apiMethods'
 import { BaseTransport } from './baseTransport'
 
 export const LinkHeader = 'link'
-export const TotalCountHeader = 'X-Total-Count'
+export const TotalCountHeader = 'x-total-count'
 
 /**
  * Types of paging link relative URLs
