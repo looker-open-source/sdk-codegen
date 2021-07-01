@@ -33,7 +33,7 @@ import {
 import { IAPIMethods } from './apiMethods'
 import { BaseTransport } from './baseTransport'
 
-export const LinkHeader = 'link'
+export const LinkHeader = 'Link'
 export const TotalCountHeader = 'X-Total-Count'
 
 /**
@@ -257,7 +257,7 @@ export class Paging<TSuccess extends ILength, TError>
       this.transport.observer = saved
     }
     if (Object.keys(raw).length === 0 || Object.keys(raw.headers).length === 0)
-      throw new Error('No paging headers were found')
+      return Promise.reject(new Error('No paging headers were found'))
     this.parse(raw)
     return this
   }
@@ -362,21 +362,28 @@ export class Paging<TSuccess extends ILength, TError>
     return result
   }
 
+  static findHeader(raw: IRawResponse, name: string) {
+    return (
+      raw.headers[name] ||
+      raw.headers[name.toLowerCase()] ||
+      raw.headers[name.toUpperCase()]
+    )
+  }
+
   parse(raw: IRawResponse): IPager<TSuccess, TError> {
-    const req = new URL(raw.url)
-    const params = req.searchParams
+    const params = new URLSearchParams(raw.url)
     this.limit = Paging.paramDefault(params.get('limit'), -1)
     this.offset = Paging.paramDefault(
       params.get('offset'),
       this.limit > 0 ? 0 : -1
     )
-    const linkHeader = raw.headers.link || raw.headers.Link || raw.headers.LINK
+    const linkHeader = Paging.findHeader(raw, LinkHeader)
     if (linkHeader) {
       this.links = linkHeaderParser(linkHeader)
     } else {
       this.links = {}
     }
-    const totalHeader = raw.headers[TotalCountHeader]
+    const totalHeader = Paging.findHeader(raw, TotalCountHeader)
     if (totalHeader) {
       this.total = parseInt(totalHeader.trim(), 10)
     } else {
