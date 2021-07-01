@@ -1,5 +1,12 @@
 # Changelog
 
+### [1.9.1](https://www.github.com/looker-open-source/sdk-codegen/compare/sdk-codegen-all-v1.9.0...sdk-codegen-all-v1.9.1) (2021-07-01)
+
+
+### Bug Fixes
+
+* paging parsing issues ([#728](https://www.github.com/looker-open-source/sdk-codegen/issues/728)) ([f8eec43](https://www.github.com/looker-open-source/sdk-codegen/commit/f8eec43bdfbe337d41b1da02c127d690c8815ed3))
+
 ## [1.9.0](https://www.github.com/looker-open-source/sdk-codegen/compare/sdk-codegen-all-v1.8.0...sdk-codegen-all-v1.9.0) (2021-06-30)
 
 
