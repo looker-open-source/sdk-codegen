@@ -9,6 +9,9 @@
   "license": "MIT",
   "author": "Looker",
   "private": false,
+  "publishConfig": {
+    "access": "public"
+  },
   "repository": {
     "type": "git",
     "url": "git+https://github.com/looker-open-source/sdk-codegen.git",
