@@ -53,26 +53,6 @@ export abstract class Generator<T extends Models.IModel> {
     this.codeFormatter = formatter
   }
 
-  // // convenience function that calls render for each item in the list
-  // // and collects their output in the buffer
-  // each<K extends Models.IModel>(
-  //   list: Array<K>,
-  //   ctor: IGeneratorCtor<K>,
-  //   indent = '',
-  //   delimiter?: string
-  // ): this {
-  //   const strs = list.map((model) => {
-  //     // eslint-disable-next-line new-cap
-  //     return new ctor(model, this.codeFormatter).render(indent)
-  //   })
-  //   if (delimiter) {
-  //     this.p(strs.join(delimiter))
-  //   } else {
-  //     this.p(strs)
-  //   }
-  //   return this
-  // }
-
   abstract render(indent: string, noStreams: boolean): string
 
   // Add one or more strings to the internal buffer
