@@ -197,6 +197,19 @@ describe('paging', () => {
       expect(actual.options?.timeout).toEqual(99)
     })
 
+    it('works on relative url', async () => {
+      const actual = await pager(sdk, () =>
+        mockRawResponseSuccess(
+          transport,
+          mockedRows,
+          mockRawResponse('/api/4.0/alerts/search?fields=id&limit=3&offset=0')
+        )
+      )
+      expect(actual).toBeDefined()
+      expect(actual.limit).toEqual(3)
+      expect(actual.offset).toEqual(0)
+    })
+
     it('supports paging', async () => {
       const paged = await pager(sdk, () =>
         mockRawResponseSuccess(transport, mockedRows, mockRawResponse())
