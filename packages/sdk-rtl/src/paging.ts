@@ -371,6 +371,7 @@ export class Paging<TSuccess extends ILength, TError>
   }
 
   parse(raw: IRawResponse): IPager<TSuccess, TError> {
+    // Default the base so relative paths are initialized correctly
     const req = new URL(raw.url, 'https://localhost')
     const params = req.searchParams
     this.limit = Paging.paramDefault(params.get('limit'), -1)
