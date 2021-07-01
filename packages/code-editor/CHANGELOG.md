@@ -1,5 +1,14 @@
 # Changelog
 
+### [0.1.4](https://www.github.com/looker-open-source/sdk-codegen/compare/code-editor-v0.1.3...code-editor-v0.1.4) (2021-07-01)
+
+
+### Dependencies
+
+* The following workspace dependencies were updated
+  * devDependencies
+    * @looker/sdk-codegen bumped from ^21.0.18 to ^21.0.19
+
 ### [0.1.3](https://www.github.com/looker-open-source/sdk-codegen/compare/code-editor-v0.1.2...code-editor-v0.1.3) (2021-06-30)
 
 

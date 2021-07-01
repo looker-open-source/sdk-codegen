@@ -1,5 +1,18 @@
 # Changelog
 
+### [21.8.1](https://www.github.com/looker-open-source/sdk-codegen/compare/hackathon-v21.8.0...hackathon-v21.8.1) (2021-07-01)
+
+
+### Dependencies
+
+* The following workspace dependencies were updated
+  * dependencies
+    * @looker/extension-sdk bumped from ^21.8.1 to ^21.8.2
+    * @looker/extension-sdk-react bumped from ^21.8.1 to ^21.8.2
+    * @looker/sdk bumped from ^21.8.1 to ^21.8.2
+    * @looker/sdk-rtl bumped from ^21.0.14 to ^21.0.15
+    * @looker/wholly-sheet bumped from ^0.5.9 to ^0.5.10
+
 ## [21.8.0](https://www.github.com/looker-open-source/sdk-codegen/compare/hackathon-v21.8.0...hackathon-v21.8.0) (2021-06-30)
 
 
