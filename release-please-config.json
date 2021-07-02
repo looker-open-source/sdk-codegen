@@ -12,11 +12,11 @@
     "packages/hackathon": { },
     "packages/run-it": { "release-as": "" },
     "packages/sdk": { },
-    "packages/sdk-codegen": { "release-as": "21.0.19" },
-    "packages/sdk-codegen-scripts": { "release-as": "21.0.20", "changelog-sections": [{"type": "chore", "section": "Bug Fixes"}] },
-    "packages/sdk-codegen-utils": { "release-as": "21.0.12"},
+    "packages/sdk-codegen": { "release-as": "21.0.20" },
+    "packages/sdk-codegen-scripts": { "release-as": "21.0.21" },
+    "packages/sdk-codegen-utils": { "release-as": "21.0.13"},
     "packages/sdk-node": { },
-    "packages/sdk-rtl": { "release-as": "21.0.15" },
+    "packages/sdk-rtl": { "release-as": "21.0.16" },
     "packages/wholly-sheet": { "release-as": "" },
     "python": { "release-type": "python", "package-name": "looker_sdk" }
   }
