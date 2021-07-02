@@ -1,5 +1,14 @@
 # Changelog
 
+### [1.9.2](https://www.github.com/looker-open-source/sdk-codegen/compare/sdk-codegen-all-v1.9.1...sdk-codegen-all-v1.9.2) (2021-07-02)
+
+
+### Bug Fixes
+
+* explain pager and pageAll sdk param better ([#736](https://www.github.com/looker-open-source/sdk-codegen/issues/736)) ([a93a9b1](https://www.github.com/looker-open-source/sdk-codegen/commit/a93a9b1ded0acddeaf051e7a2fed5132c1cb5c0c))
+* python datetime [de]serialization bug ([#734](https://www.github.com/looker-open-source/sdk-codegen/issues/734)) ([c821f2b](https://www.github.com/looker-open-source/sdk-codegen/commit/c821f2b77b99edfa2dd53aa0af82ab48081c3220))
+* python remove runtime asserts ([#703](https://www.github.com/looker-open-source/sdk-codegen/issues/703)) ([9b963c3](https://www.github.com/looker-open-source/sdk-codegen/commit/9b963c3367905f907e7867df1446f56e18284c3b)), closes [#695](https://www.github.com/looker-open-source/sdk-codegen/issues/695)
+
 ### [1.9.1](https://www.github.com/looker-open-source/sdk-codegen/compare/sdk-codegen-all-v1.9.0...sdk-codegen-all-v1.9.1) (2021-07-01)
 
 
