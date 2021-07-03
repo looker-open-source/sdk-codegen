@@ -173,7 +173,7 @@ export type PageObserver<TSuccess> = (
 
 /**
  * Create an API response pager for an endpoint that returns a Link header
- * @param sdk implementation of IAPIMethods. Can be full SDK or functional auth session
+ * @param sdk implementation of IAPIMethods. Can be a full SDK or functional auth session. The active transport object is captured from this parameter, which is why it must be passed separately from the paging function.
  * @param pageFunc sdk call that includes a paging header
  * @param options transport options override to capture and use in paging requests
  *
@@ -189,10 +189,12 @@ export async function pager<TSuccess extends ILength, TError>(
 
 /**
  * Create an API response pager and iterate through all pages, calling a page event per page
- * @param sdk implementation of IAPIMethods. Can be full SDK object or a functional auth session
+ * @param sdk implementation of IAPIMethods. Can be a full SDK or functional auth session. The active transport object is captured from this parameter, which is why it must be passed separately from the paging function.
  * @param pageFunc sdk call that includes a paging header
  * @param onPage observer of the latest page of results. Defaults to noop.
  * @param options transport options override to capture and use in paging requests
+ *
+ * @remarks `TSuccess` must be a collection type that supports `length`
  */
 export async function pageAll<TSuccess extends ILength, TError>(
   sdk: IAPIMethods,
