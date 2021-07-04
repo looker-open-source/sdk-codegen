@@ -5,6 +5,42 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+### [0.9.11](https://www.github.com/looker-open-source/sdk-codegen/compare/api-explorer-v0.9.10...api-explorer-v0.9.11) (2021-07-01)
+
+
+### Dependencies
+
+* The following workspace dependencies were updated
+  * dependencies
+    * @looker/code-editor bumped from ^0.1.3 to ^0.1.4
+    * @looker/run-it bumped from ^0.9.10 to ^0.9.11
+    * @looker/sdk bumped from ^21.8.1 to ^21.8.2
+    * @looker/sdk-codegen bumped from ^21.0.18 to ^21.0.19
+    * @looker/sdk-rtl bumped from ^21.0.14 to ^21.0.15
+  * devDependencies
+    * @looker/sdk-codegen-scripts bumped from ^21.0.19 to ^21.0.20
+    * @looker/sdk-node bumped from ^21.8.0 to ^21.8.1
+
+### [0.9.10](https://www.github.com/looker-open-source/sdk-codegen/compare/api-explorer-v0.9.9...api-explorer-v0.9.10) (2021-06-30)
+
+
+### Features
+
+* refactor Markdown out to @looker/code-editor ([#699](https://www.github.com/looker-open-source/sdk-codegen/issues/699)) ([f3c16e2](https://www.github.com/looker-open-source/sdk-codegen/commit/f3c16e2a162266545ba3086a0a1dddd0cb79195f))
+
+
+### Dependencies
+
+* The following workspace dependencies were updated
+  * dependencies
+    * @looker/code-editor bumped from ^0.1.2 to ^0.1.3
+    * @looker/run-it bumped from ^0.9.9 to ^0.9.10
+    * @looker/sdk bumped from ^21.8.0 to ^21.8.1
+    * @looker/sdk-codegen bumped from ^21.0.17 to ^21.0.18
+    * @looker/sdk-rtl bumped from ^21.0.13 to ^21.0.14
+  * devDependencies
+    * @looker/sdk-codegen-scripts bumped from ^21.0.18 to ^21.0.19
+
 ### [0.9.9](https://www.github.com/looker-open-source/sdk-codegen/compare/api-explorer-v0.9.8...api-explorer-v0.9.9) (2021-06-17)
 
 

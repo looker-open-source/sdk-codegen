@@ -25,16 +25,16 @@
  */
 
 import { Readable } from 'readable-stream'
-import {
-  addQueryParams,
+import { addQueryParams, StatusCode } from './transport'
+import type {
   Authenticator,
   HttpMethod,
   IRawResponse,
   ITransport,
   ITransportSettings,
   SDKResponse,
-  StatusCode,
   Values,
+  RawObserver,
 } from './transport'
 
 export abstract class BaseTransport implements ITransport {
@@ -42,7 +42,13 @@ export abstract class BaseTransport implements ITransport {
     this.options = options
   }
 
-  protected ok(res: IRawResponse) {
+  observer: RawObserver | undefined = undefined
+
+  abstract parseResponse<TSuccess, TError>(
+    raw: IRawResponse
+  ): Promise<SDKResponse<TSuccess, TError>>
+
+  protected ok(res: IRawResponse): boolean {
     return (
       res.statusCode >= StatusCode.OK && res.statusCode <= StatusCode.IMUsed
     )

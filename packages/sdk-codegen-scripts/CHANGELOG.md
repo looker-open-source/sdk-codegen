@@ -1,5 +1,33 @@
 # Changelog
 
+### [21.0.20](https://www.github.com/looker-open-source/sdk-codegen/compare/sdk-codegen-scripts-v21.0.19...sdk-codegen-scripts-v21.0.20) (2021-07-01)
+
+
+### Bug Fixes
+
+* noStreams skips tally headers in generated source ([#727](https://www.github.com/looker-open-source/sdk-codegen/issues/727)) ([113c2c5](https://www.github.com/looker-open-source/sdk-codegen/commit/113c2c50c07c621cf94841af75557704fc3f5df7))
+
+
+### Dependencies
+
+* The following workspace dependencies were updated
+  * dependencies
+    * @looker/sdk bumped from ^21.8.1 to ^21.8.2
+    * @looker/sdk-codegen bumped from ^21.0.18 to ^21.0.19
+    * @looker/sdk-node bumped from ^21.8.0 to ^21.8.1
+    * @looker/sdk-rtl bumped from ^21.0.14 to ^21.0.15
+
+### [21.0.19](https://www.github.com/looker-open-source/sdk-codegen/compare/sdk-codegen-scripts-v21.0.18...sdk-codegen-scripts-v21.0.19) (2021-06-30)
+
+
+### Dependencies
+
+* The following workspace dependencies were updated
+  * dependencies
+    * @looker/sdk bumped from ^21.8.0 to ^21.8.1
+    * @looker/sdk-codegen bumped from ^21.0.17 to ^21.0.18
+    * @looker/sdk-rtl bumped from ^21.0.13 to ^21.0.14
+
 ### [21.0.18](https://www.github.com/looker-open-source/sdk-codegen/compare/sdk-codegen-scripts-v21.0.17...sdk-codegen-scripts-v21.0.18) (2021-06-17)
 
 

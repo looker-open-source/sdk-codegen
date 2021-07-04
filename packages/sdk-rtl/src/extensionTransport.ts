@@ -33,6 +33,7 @@ import {
   ITransportSettings,
   HttpMethod,
   IRawResponse,
+  RawObserver,
 } from './transport'
 
 export interface IHostConnection {
@@ -74,6 +75,8 @@ export class ExtensionTransport implements ITransport {
     this.hostConnection = hostConnection
   }
 
+  observer: RawObserver | undefined
+
   async rawRequest(
     method: HttpMethod,
     path: string,
@@ -82,7 +85,7 @@ export class ExtensionTransport implements ITransport {
     authenticator?: any,
     options?: Partial<ITransportSettings>
   ): Promise<IRawResponse> {
-    return this.hostConnection.rawRequest(
+    const response = await this.hostConnection.rawRequest(
       method,
       path,
       body,
@@ -90,6 +93,7 @@ export class ExtensionTransport implements ITransport {
       authenticator,
       options
     )
+    return this.observer ? this.observer(response) : response
   }
 
   async request<TSuccess, TError>(
@@ -129,5 +133,15 @@ export class ExtensionTransport implements ITransport {
       authenticator,
       options
     )
+  }
+
+  parseResponse<TSuccess, TError>(
+    _raw: IRawResponse
+  ): Promise<SDKResponse<TSuccess, TError>> {
+    const result: SDKResponse<TSuccess, TError> = {
+      ok: false,
+      error: new Error('Should not be called!') as unknown as TError,
+    }
+    return Promise.resolve(result)
   }
 }

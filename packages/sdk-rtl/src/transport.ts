@@ -23,6 +23,7 @@
  SOFTWARE.
 
  */
+
 import { Agent } from 'https'
 import { Headers } from 'request'
 import { Readable } from 'readable-stream'
@@ -31,9 +32,7 @@ import { matchCharsetUtf8, matchModeBinary, matchModeString } from './constants'
 export const agentPrefix = 'TS-SDK'
 export const LookerAppId = 'x-looker-appid'
 
-/**
- * Set to `true` to follow streaming process
- */
+/** Set to `true` to follow streaming process */
 const tracing = false
 
 /**
@@ -52,9 +51,7 @@ export function trace(message: string, info?: any) {
   }
 }
 
-/**
- * ResponseMode for an HTTP request - either binary or "string"
- */
+/** ResponseMode for an HTTP request */
 export enum ResponseMode {
   'binary', // this is a binary response
   'string', // this is a "string" response
@@ -85,9 +82,7 @@ export const charsetUtf8Pattern = new RegExp(matchCharsetUtf8, 'i')
  */
 export const defaultTimeout = 120
 
-/**
- * Recognized HTTP methods
- */
+/** Recognized HTTP methods */
 export type HttpMethod =
   | 'GET'
   | 'POST'
@@ -164,9 +159,7 @@ export enum StatusCode {
   NetworkAuthRequired,
 }
 
-/**
- * Untyped basic HTTP response type for "raw" HTTP requests
- */
+/** Untyped basic HTTP response type for "raw" HTTP requests */
 export interface IRawResponse {
   /** ok is `true` if the response is successful, `false` otherwise */
   ok: boolean
@@ -182,12 +175,18 @@ export interface IRawResponse {
   body: any
   /** Optional performance tracking starting mark name */
   startMark?: string
+  /** Response headers */
+  headers: IRequestHeaders
 }
 
-/**
- * Transport plug-in interface
- */
+/** IRawResponse observer function type */
+export type RawObserver = (raw: IRawResponse) => IRawResponse
+
+/** Transport plug-in interface */
 export interface ITransport {
+  /** Observer lambda to process raw responses */
+  observer: RawObserver | undefined
+
   /**
    * HTTP request function for atomic, fully downloaded raw HTTP responses
    *
@@ -230,6 +229,14 @@ export interface ITransport {
   ): Promise<SDKResponse<TSuccess, TError>>
 
   /**
+   * Processes the raw response, converting it into an SDKResponse
+   * @param raw response result
+   */
+  parseResponse<TSuccess, TError>(
+    raw: IRawResponse
+  ): Promise<SDKResponse<TSuccess, TError>>
+
+  /**
    * HTTP request function for a streamable response
    * @param callback that receives the stream response and pipes it somewhere
    * @param method of HTTP request
@@ -260,7 +267,7 @@ export interface ISDKSuccessResponse<T> {
   value: T
 }
 
-/** An erroring SDK call. */
+/** An errant SDK call. */
 export interface ISDKErrorResponse<T> {
   /** Whether the SDK call was successful. */
   ok: false
@@ -278,9 +285,7 @@ export type SDKResponse<TSuccess, TError> =
   | ISDKSuccessResponse<TSuccess>
   | ISDKErrorResponse<TError | ISDKError>
 
-/**
- * Generic collection
- */
+/** Generic collection */
 export interface IRequestHeaders {
   [key: string]: string
 }
@@ -361,9 +366,7 @@ export function isUtf8(contentType: string) {
   return contentType.match(/;.*\bcharset\b=\butf-8\b/i)
 }
 
-/**
- * Used for name/value pair collections like for QueryParams
- */
+/** Used for name/value pair collections like for QueryParams */
 export type Values = { [key: string]: any } | null | undefined
 
 /**
@@ -428,6 +431,7 @@ export function addQueryParams(path: string, obj?: Values) {
  * @returns a new `Error` object with the failure message
  */
 export function sdkError(response: any) {
+  const utf8 = 'utf-8'
   if (typeof response === 'string') {
     return new Error(response)
   }
@@ -441,11 +445,11 @@ export function sdkError(response: any) {
       return new Error(error.statusMessage)
     }
     if ('error' in error && error.error instanceof Buffer) {
-      const result = Buffer.from(error.error).toString('utf-8')
+      const result = Buffer.from(error.error).toString(utf8)
       return new Error(result)
     }
     if (error instanceof Buffer) {
-      const result = Buffer.from(error).toString('utf-8')
+      const result = Buffer.from(error).toString(utf8)
       return new Error(result)
     }
     if ('message' in error) {
