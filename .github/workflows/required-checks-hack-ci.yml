@@ -46,7 +46,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       # using `sleep 480` as a naive solution to avoiding early approval: 99% of
-      # real CI jobs finish in under 15 minutes. Waiting 15 minutes here should
+      # real CI jobs finish in under 8 minutes. Waiting 8 minutes here should
       # mostly avoid the scenario where these noop jobs meet all required checks
       # on a PR prior to a corresponding real CI job being able to report.
       #
