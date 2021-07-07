@@ -5,6 +5,13 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+### [21.0.16](https://www.github.com/looker-open-source/sdk-codegen/compare/sdk-rtl-v21.0.15...sdk-rtl-v21.0.16) (2021-07-02)
+
+
+### Bug Fixes
+
+* explain pager and pageAll sdk param better ([#736](https://www.github.com/looker-open-source/sdk-codegen/issues/736)) ([a93a9b1](https://www.github.com/looker-open-source/sdk-codegen/commit/a93a9b1ded0acddeaf051e7a2fed5132c1cb5c0c))
+
 ### [21.0.15](https://www.github.com/looker-open-source/sdk-codegen/compare/sdk-rtl-v21.0.14...sdk-rtl-v21.0.15) (2021-07-01)
 
 
