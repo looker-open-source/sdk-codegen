@@ -331,6 +331,8 @@ public class ContentValidationLook : SdkModel
   public long? id { get; set; } = null;
   /// <summary>Look Title</summary>
   public string? title { get; set; } = null;
+  /// <summary>Short Url (read-only)</summary>
+  public string? short_url { get; set; } = null;
   public ContentValidationFolder? folder { get; set; }
   public ContentValidationSpace? space { get; set; }
 }
@@ -738,6 +740,8 @@ public class Dashboard : SdkModel
   /// <summary>The preferred route for viewing this dashboard (ie: dashboards or dashboards-next)</summary>
   public string? preferred_viewer { get; set; } = null;
   public SpaceBase? space { get; set; }
+  /// <summary>Enables alerts to keep in sync with dashboard filter changes - only available in alerts 2.0 (beta)</summary>
+  public bool? alert_sync_with_dashboard_filter_enabled { get; set; } = null;
   /// <summary>Background color</summary>
   public string? background_color { get; set; } = null;
   /// <summary>Time that the Dashboard was created. (read-only)</summary>
@@ -1043,7 +1047,7 @@ public class DataActionFormSelectOption : SdkModel
 public class DataActionRequest : SdkModel
 {
   /// <summary>The JSON describing the data action. This JSON should be considered opaque and should be passed through unmodified from the query result it came from.</summary>
-  public StringDictionary<string>? action { get; set; } = null;
+  public StringDictionary<object>? action { get; set; } = null;
   /// <summary>User input for any form values the data action might use.</summary>
   public StringDictionary<string>? form_values { get; set; } = null;
 }
@@ -4498,6 +4502,8 @@ public class WriteDashboard : SdkModel
   /// <summary>The preferred route for viewing this dashboard (ie: dashboards or dashboards-next)</summary>
   public string? preferred_viewer { get; set; } = null;
   public WriteSpaceBase? space { get; set; }
+  /// <summary>Enables alerts to keep in sync with dashboard filter changes - only available in alerts 2.0 (beta)</summary>
+  public bool? alert_sync_with_dashboard_filter_enabled { get; set; } = null;
   /// <summary>Background color</summary>
   public string? background_color { get; set; } = null;
   /// <summary>Enables crossfiltering in dashboards - only available in dashboards-next (beta)</summary>

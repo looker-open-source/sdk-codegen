@@ -25,7 +25,7 @@
  */
 
 /**
- * 283 API models: 210 Spec, 0 Request, 56 Write, 17 Enum
+ * 284 API models: 211 Spec, 0 Request, 56 Write, 17 Enum
  */
 
 
@@ -842,12 +842,17 @@ public struct ContentValidationDashboard: SDKModel {
      * Dashboard Title
      */
     public var title: String?
+    /**
+     * Relative URL of the dashboard (read-only)
+     */
+    public var url: String?
 
-    public init(description: String? = nil, id: String? = nil, folder: ContentValidationFolder? = nil, title: String? = nil) {
+    public init(description: String? = nil, id: String? = nil, folder: ContentValidationFolder? = nil, title: String? = nil, url: String? = nil) {
         self.description = description
         self.id = id
         self.folder = folder
         self.title = title
+        self.url = url
     }
 
 }
@@ -1043,11 +1048,16 @@ public struct ContentValidationLook: SDKModel {
      * Look Title
      */
     public var title: String?
+    /**
+     * Short Url (read-only)
+     */
+    public var short_url: String?
     public var folder: ContentValidationFolder?
 
-    public init(id: Int64? = nil, title: String? = nil, folder: ContentValidationFolder? = nil) {
+    public init(id: Int64? = nil, title: String? = nil, short_url: String? = nil, folder: ContentValidationFolder? = nil) {
         self.id = id
         self.title = title
+        self.short_url = short_url
         self.folder = folder
     }
 
@@ -2037,6 +2047,10 @@ public struct Dashboard: SDKModel {
      */
     public var preferred_viewer: String?
     /**
+     * Enables alerts to keep in sync with dashboard filter changes - only available in alerts 2.0 (beta)
+     */
+    public var alert_sync_with_dashboard_filter_enabled: Bool?
+    /**
      * Background color
      */
     public var background_color: String?
@@ -2129,8 +2143,12 @@ public struct Dashboard: SDKModel {
      */
     public var view_count: Int64?
     public var appearance: DashboardAppearance?
+    /**
+     * Relative URL of the dashboard (read-only)
+     */
+    public var url: String?
 
-    public init(can: StringDictionary<Bool>? = nil, content_favorite_id: Int64? = nil, content_metadata_id: Int64? = nil, description: String? = nil, hidden: Bool? = nil, id: String? = nil, model: LookModel? = nil, query_timezone: String? = nil, readonly: Bool? = nil, refresh_interval: String? = nil, refresh_interval_to_i: Int64? = nil, folder: FolderBase? = nil, title: String? = nil, user_id: Int64? = nil, slug: String? = nil, preferred_viewer: String? = nil, background_color: String? = nil, created_at: Date? = nil, crossfilter_enabled: Bool? = nil, dashboard_elements: [DashboardElement]? = nil, dashboard_filters: [DashboardFilter]? = nil, dashboard_layouts: [DashboardLayout]? = nil, deleted: Bool? = nil, deleted_at: Date? = nil, deleter_id: Int64? = nil, edit_uri: String? = nil, favorite_count: Int64? = nil, last_accessed_at: Date? = nil, last_viewed_at: Date? = nil, load_configuration: String? = nil, lookml_link_id: String? = nil, show_filters_bar: Bool? = nil, show_title: Bool? = nil, folder_id: String? = nil, text_tile_text_color: String? = nil, tile_background_color: String? = nil, tile_text_color: String? = nil, title_color: String? = nil, view_count: Int64? = nil, appearance: DashboardAppearance? = nil) {
+    public init(can: StringDictionary<Bool>? = nil, content_favorite_id: Int64? = nil, content_metadata_id: Int64? = nil, description: String? = nil, hidden: Bool? = nil, id: String? = nil, model: LookModel? = nil, query_timezone: String? = nil, readonly: Bool? = nil, refresh_interval: String? = nil, refresh_interval_to_i: Int64? = nil, folder: FolderBase? = nil, title: String? = nil, user_id: Int64? = nil, slug: String? = nil, preferred_viewer: String? = nil, alert_sync_with_dashboard_filter_enabled: Bool? = nil, background_color: String? = nil, created_at: Date? = nil, crossfilter_enabled: Bool? = nil, dashboard_elements: [DashboardElement]? = nil, dashboard_filters: [DashboardFilter]? = nil, dashboard_layouts: [DashboardLayout]? = nil, deleted: Bool? = nil, deleted_at: Date? = nil, deleter_id: Int64? = nil, edit_uri: String? = nil, favorite_count: Int64? = nil, last_accessed_at: Date? = nil, last_viewed_at: Date? = nil, load_configuration: String? = nil, lookml_link_id: String? = nil, show_filters_bar: Bool? = nil, show_title: Bool? = nil, folder_id: String? = nil, text_tile_text_color: String? = nil, tile_background_color: String? = nil, tile_text_color: String? = nil, title_color: String? = nil, view_count: Int64? = nil, appearance: DashboardAppearance? = nil, url: String? = nil) {
         self.can = can
         self.content_favorite_id = content_favorite_id
         self.content_metadata_id = content_metadata_id
@@ -2147,6 +2165,7 @@ public struct Dashboard: SDKModel {
         self.user_id = user_id
         self.slug = slug
         self.preferred_viewer = preferred_viewer
+        self.alert_sync_with_dashboard_filter_enabled = alert_sync_with_dashboard_filter_enabled
         self.background_color = background_color
         self.created_at = created_at
         self.crossfilter_enabled = crossfilter_enabled
@@ -2171,6 +2190,7 @@ public struct Dashboard: SDKModel {
         self.title_color = title_color
         self.view_count = view_count
         self.appearance = appearance
+        self.url = url
     }
 
 }
@@ -8462,7 +8482,53 @@ public struct Role: SDKModel {
      */
     public var model_set_id: Int64?
     /**
-     * Count of users with this role, only returned if user_count field is requested (read-only)
+     * Link to get this item (read-only)
+     */
+    public var url: String?
+    /**
+     * Link to get list of users with this role (read-only)
+     */
+    public var users_url: String?
+
+    public init(can: StringDictionary<Bool>? = nil, id: Int64? = nil, name: String? = nil, permission_set: PermissionSet? = nil, permission_set_id: Int64? = nil, model_set: ModelSet? = nil, model_set_id: Int64? = nil, url: String? = nil, users_url: String? = nil) {
+        self.can = can
+        self.id = id
+        self.name = name
+        self.permission_set = permission_set
+        self.permission_set_id = permission_set_id
+        self.model_set = model_set
+        self.model_set_id = model_set_id
+        self.url = url
+        self.users_url = users_url
+    }
+
+}
+
+public struct RoleSearch: SDKModel {
+    /**
+     * Operations the current user is able to perform on this object (read-only)
+     */
+    public var can: StringDictionary<Bool>?
+    /**
+     * Unique Id (read-only)
+     */
+    public var id: Int64?
+    /**
+     * Name of Role
+     */
+    public var name: String?
+    public var permission_set: PermissionSet?
+    /**
+     * (Write-Only) Id of permission set
+     */
+    public var permission_set_id: Int64?
+    public var model_set: ModelSet?
+    /**
+     * (Write-Only) Id of model set
+     */
+    public var model_set_id: Int64?
+    /**
+     * Count of users with this role (read-only)
      */
     public var user_count: Int64?
     /**
@@ -11004,7 +11070,7 @@ public struct WriteCustomWelcomeEmail: SDKModel {
 
 /**
  * Dynamically generated writeable type for Dashboard removes properties:
- * can, content_favorite_id, content_metadata_id, id, model, readonly, refresh_interval_to_i, user_id, created_at, dashboard_elements, dashboard_filters, dashboard_layouts, deleted_at, deleter_id, edit_uri, favorite_count, last_accessed_at, last_viewed_at, view_count
+ * can, content_favorite_id, content_metadata_id, id, model, readonly, refresh_interval_to_i, user_id, created_at, dashboard_elements, dashboard_filters, dashboard_layouts, deleted_at, deleter_id, edit_uri, favorite_count, last_accessed_at, last_viewed_at, view_count, url
  */
 public struct WriteDashboard: SDKModel {
     /**
@@ -11036,6 +11102,10 @@ public struct WriteDashboard: SDKModel {
      * The preferred route for viewing this dashboard (ie: dashboards or dashboards-next)
      */
     public var preferred_viewer: String?
+    /**
+     * Enables alerts to keep in sync with dashboard filter changes - only available in alerts 2.0 (beta)
+     */
+    public var alert_sync_with_dashboard_filter_enabled: Bool?
     /**
      * Background color
      */
@@ -11086,7 +11156,7 @@ public struct WriteDashboard: SDKModel {
     public var title_color: String?
     public var appearance: DashboardAppearance?
 
-    public init(description: String? = nil, hidden: Bool? = nil, query_timezone: String? = nil, refresh_interval: String? = nil, folder: WriteFolderBase? = nil, title: String? = nil, slug: String? = nil, preferred_viewer: String? = nil, background_color: String? = nil, crossfilter_enabled: Bool? = nil, deleted: Bool? = nil, load_configuration: String? = nil, lookml_link_id: String? = nil, show_filters_bar: Bool? = nil, show_title: Bool? = nil, folder_id: String? = nil, text_tile_text_color: String? = nil, tile_background_color: String? = nil, tile_text_color: String? = nil, title_color: String? = nil, appearance: DashboardAppearance? = nil) {
+    public init(description: String? = nil, hidden: Bool? = nil, query_timezone: String? = nil, refresh_interval: String? = nil, folder: WriteFolderBase? = nil, title: String? = nil, slug: String? = nil, preferred_viewer: String? = nil, alert_sync_with_dashboard_filter_enabled: Bool? = nil, background_color: String? = nil, crossfilter_enabled: Bool? = nil, deleted: Bool? = nil, load_configuration: String? = nil, lookml_link_id: String? = nil, show_filters_bar: Bool? = nil, show_title: Bool? = nil, folder_id: String? = nil, text_tile_text_color: String? = nil, tile_background_color: String? = nil, tile_text_color: String? = nil, title_color: String? = nil, appearance: DashboardAppearance? = nil) {
         self.description = description
         self.hidden = hidden
         self.query_timezone = query_timezone
@@ -11095,6 +11165,7 @@ public struct WriteDashboard: SDKModel {
         self.title = title
         self.slug = slug
         self.preferred_viewer = preferred_viewer
+        self.alert_sync_with_dashboard_filter_enabled = alert_sync_with_dashboard_filter_enabled
         self.background_color = background_color
         self.crossfilter_enabled = crossfilter_enabled
         self.deleted = deleted
@@ -12623,7 +12694,7 @@ public struct WriteResultMakerWithIdVisConfigAndDynamicFields: SDKModel {
 
 /**
  * Dynamically generated writeable type for Role removes properties:
- * can, id, user_count, url, users_url
+ * can, id, url, users_url
  */
 public struct WriteRole: SDKModel {
     /**
