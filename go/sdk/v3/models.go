@@ -222,10 +222,11 @@ type ContentValidationFolder struct {
 
 
 type ContentValidationLook struct {
-  Id     *int64                   `json:"id,omitempty"`      // Unique Id
-  Title  *string                  `json:"title,omitempty"`   // Look Title
-  Folder *ContentValidationFolder `json:"folder,omitempty"`
-  Space  *ContentValidationSpace  `json:"space,omitempty"`
+  Id       *int64                   `json:"id,omitempty"`         // Unique Id
+  Title    *string                  `json:"title,omitempty"`      // Look Title
+  ShortUrl *string                  `json:"short_url,omitempty"`  // Short Url
+  Folder   *ContentValidationFolder `json:"folder,omitempty"`
+  Space    *ContentValidationSpace  `json:"space,omitempty"`
 }
 
 
@@ -463,48 +464,49 @@ type CustomWelcomeEmail struct {
 
 
 type Dashboard struct {
-  Can                 *map[string]bool     `json:"can,omitempty"`                    // Operations the current user is able to perform on this object
-  ContentFavoriteId   *int64               `json:"content_favorite_id,omitempty"`    // Content Favorite Id
-  ContentMetadataId   *int64               `json:"content_metadata_id,omitempty"`    // Id of content metadata
-  Description         *string              `json:"description,omitempty"`            // Description
-  Hidden              *bool                `json:"hidden,omitempty"`                 // Is Hidden
-  Id                  *string              `json:"id,omitempty"`                     // Unique Id
-  Model               *LookModel           `json:"model,omitempty"`
-  QueryTimezone       *string              `json:"query_timezone,omitempty"`         // Timezone in which the Dashboard will run by default.
-  Readonly            *bool                `json:"readonly,omitempty"`               // Is Read-only
-  RefreshInterval     *string              `json:"refresh_interval,omitempty"`       // Refresh Interval, as a time duration phrase like "2 hours 30 minutes". A number with no time units will be interpreted as whole seconds.
-  RefreshIntervalToI  *int64               `json:"refresh_interval_to_i,omitempty"`  // Refresh Interval in milliseconds
-  Folder              *FolderBase          `json:"folder,omitempty"`
-  Title               *string              `json:"title,omitempty"`                  // Dashboard Title
-  UserId              *int64               `json:"user_id,omitempty"`                // Id of User
-  Slug                *string              `json:"slug,omitempty"`                   // Content Metadata Slug
-  PreferredViewer     *string              `json:"preferred_viewer,omitempty"`       // The preferred route for viewing this dashboard (ie: dashboards or dashboards-next)
-  Space               *SpaceBase           `json:"space,omitempty"`
-  BackgroundColor     *string              `json:"background_color,omitempty"`       // Background color
-  CreatedAt           *time.Time           `json:"created_at,omitempty"`             // Time that the Dashboard was created.
-  CrossfilterEnabled  *bool                `json:"crossfilter_enabled,omitempty"`    // Enables crossfiltering in dashboards - only available in dashboards-next (beta)
-  DashboardElements   *[]DashboardElement  `json:"dashboard_elements,omitempty"`     // Elements
-  DashboardFilters    *[]DashboardFilter   `json:"dashboard_filters,omitempty"`      // Filters
-  DashboardLayouts    *[]DashboardLayout   `json:"dashboard_layouts,omitempty"`      // Layouts
-  Deleted             *bool                `json:"deleted,omitempty"`                // Whether or not a dashboard is 'soft' deleted.
-  DeletedAt           *time.Time           `json:"deleted_at,omitempty"`             // Time that the Dashboard was 'soft' deleted.
-  DeleterId           *int64               `json:"deleter_id,omitempty"`             // Id of User that 'soft' deleted the dashboard.
-  EditUri             *url.URL             `json:"edit_uri,omitempty"`               // Relative path of URI of LookML file to edit the dashboard (LookML dashboard only).
-  FavoriteCount       *int64               `json:"favorite_count,omitempty"`         // Number of times favorited
-  LastAccessedAt      *time.Time           `json:"last_accessed_at,omitempty"`       // Time the dashboard was last accessed
-  LastViewedAt        *time.Time           `json:"last_viewed_at,omitempty"`         // Time last viewed in the Looker web UI
-  LoadConfiguration   *string              `json:"load_configuration,omitempty"`     // configuration option that governs how dashboard loading will happen.
-  LookmlLinkId        *string              `json:"lookml_link_id,omitempty"`         // Links this dashboard to a particular LookML dashboard such that calling a **sync** operation on that LookML dashboard will update this dashboard to match.
-  ShowFiltersBar      *bool                `json:"show_filters_bar,omitempty"`       // Show filters bar.  **Security Note:** This property only affects the *cosmetic* appearance of the dashboard, not a user's ability to access data. Hiding the filters bar does **NOT** prevent users from changing filters by other means. For information on how to set up secure data access control policies, see [Control User Access to Data](https://looker.com/docs/r/api/control-access)
-  ShowTitle           *bool                `json:"show_title,omitempty"`             // Show title
-  SpaceId             *string              `json:"space_id,omitempty"`               // Id of Space
-  FolderId            *string              `json:"folder_id,omitempty"`              // Id of folder
-  TextTileTextColor   *string              `json:"text_tile_text_color,omitempty"`   // Color of text on text tiles
-  TileBackgroundColor *string              `json:"tile_background_color,omitempty"`  // Tile background color
-  TileTextColor       *string              `json:"tile_text_color,omitempty"`        // Tile text color
-  TitleColor          *string              `json:"title_color,omitempty"`            // Title color
-  ViewCount           *int64               `json:"view_count,omitempty"`             // Number of times viewed in the Looker web UI
-  Appearance          *DashboardAppearance `json:"appearance,omitempty"`
+  Can                                 *map[string]bool     `json:"can,omitempty"`                                       // Operations the current user is able to perform on this object
+  ContentFavoriteId                   *int64               `json:"content_favorite_id,omitempty"`                       // Content Favorite Id
+  ContentMetadataId                   *int64               `json:"content_metadata_id,omitempty"`                       // Id of content metadata
+  Description                         *string              `json:"description,omitempty"`                               // Description
+  Hidden                              *bool                `json:"hidden,omitempty"`                                    // Is Hidden
+  Id                                  *string              `json:"id,omitempty"`                                        // Unique Id
+  Model                               *LookModel           `json:"model,omitempty"`
+  QueryTimezone                       *string              `json:"query_timezone,omitempty"`                            // Timezone in which the Dashboard will run by default.
+  Readonly                            *bool                `json:"readonly,omitempty"`                                  // Is Read-only
+  RefreshInterval                     *string              `json:"refresh_interval,omitempty"`                          // Refresh Interval, as a time duration phrase like "2 hours 30 minutes". A number with no time units will be interpreted as whole seconds.
+  RefreshIntervalToI                  *int64               `json:"refresh_interval_to_i,omitempty"`                     // Refresh Interval in milliseconds
+  Folder                              *FolderBase          `json:"folder,omitempty"`
+  Title                               *string              `json:"title,omitempty"`                                     // Dashboard Title
+  UserId                              *int64               `json:"user_id,omitempty"`                                   // Id of User
+  Slug                                *string              `json:"slug,omitempty"`                                      // Content Metadata Slug
+  PreferredViewer                     *string              `json:"preferred_viewer,omitempty"`                          // The preferred route for viewing this dashboard (ie: dashboards or dashboards-next)
+  Space                               *SpaceBase           `json:"space,omitempty"`
+  AlertSyncWithDashboardFilterEnabled *bool                `json:"alert_sync_with_dashboard_filter_enabled,omitempty"`  // Enables alerts to keep in sync with dashboard filter changes - only available in alerts 2.0 (beta)
+  BackgroundColor                     *string              `json:"background_color,omitempty"`                          // Background color
+  CreatedAt                           *time.Time           `json:"created_at,omitempty"`                                // Time that the Dashboard was created.
+  CrossfilterEnabled                  *bool                `json:"crossfilter_enabled,omitempty"`                       // Enables crossfiltering in dashboards - only available in dashboards-next (beta)
+  DashboardElements                   *[]DashboardElement  `json:"dashboard_elements,omitempty"`                        // Elements
+  DashboardFilters                    *[]DashboardFilter   `json:"dashboard_filters,omitempty"`                         // Filters
+  DashboardLayouts                    *[]DashboardLayout   `json:"dashboard_layouts,omitempty"`                         // Layouts
+  Deleted                             *bool                `json:"deleted,omitempty"`                                   // Whether or not a dashboard is 'soft' deleted.
+  DeletedAt                           *time.Time           `json:"deleted_at,omitempty"`                                // Time that the Dashboard was 'soft' deleted.
+  DeleterId                           *int64               `json:"deleter_id,omitempty"`                                // Id of User that 'soft' deleted the dashboard.
+  EditUri                             *url.URL             `json:"edit_uri,omitempty"`                                  // Relative path of URI of LookML file to edit the dashboard (LookML dashboard only).
+  FavoriteCount                       *int64               `json:"favorite_count,omitempty"`                            // Number of times favorited
+  LastAccessedAt                      *time.Time           `json:"last_accessed_at,omitempty"`                          // Time the dashboard was last accessed
+  LastViewedAt                        *time.Time           `json:"last_viewed_at,omitempty"`                            // Time last viewed in the Looker web UI
+  LoadConfiguration                   *string              `json:"load_configuration,omitempty"`                        // configuration option that governs how dashboard loading will happen.
+  LookmlLinkId                        *string              `json:"lookml_link_id,omitempty"`                            // Links this dashboard to a particular LookML dashboard such that calling a **sync** operation on that LookML dashboard will update this dashboard to match.
+  ShowFiltersBar                      *bool                `json:"show_filters_bar,omitempty"`                          // Show filters bar.  **Security Note:** This property only affects the *cosmetic* appearance of the dashboard, not a user's ability to access data. Hiding the filters bar does **NOT** prevent users from changing filters by other means. For information on how to set up secure data access control policies, see [Control User Access to Data](https://looker.com/docs/r/api/control-access)
+  ShowTitle                           *bool                `json:"show_title,omitempty"`                                // Show title
+  SpaceId                             *string              `json:"space_id,omitempty"`                                  // Id of Space
+  FolderId                            *string              `json:"folder_id,omitempty"`                                 // Id of folder
+  TextTileTextColor                   *string              `json:"text_tile_text_color,omitempty"`                      // Color of text on text tiles
+  TileBackgroundColor                 *string              `json:"tile_background_color,omitempty"`                     // Tile background color
+  TileTextColor                       *string              `json:"tile_text_color,omitempty"`                           // Tile text color
+  TitleColor                          *string              `json:"title_color,omitempty"`                               // Title color
+  ViewCount                           *int64               `json:"view_count,omitempty"`                                // Number of times viewed in the Looker web UI
+  Appearance                          *DashboardAppearance `json:"appearance,omitempty"`
 }
 
 
@@ -3220,29 +3222,30 @@ type WriteCustomWelcomeEmail struct {
 // Dynamically generated writeable type for Dashboard removes properties:
 // can, content_favorite_id, content_metadata_id, id, model, readonly, refresh_interval_to_i, user_id, created_at, dashboard_elements, dashboard_filters, dashboard_layouts, deleted_at, deleter_id, edit_uri, favorite_count, last_accessed_at, last_viewed_at, view_count
 type WriteDashboard struct {
-  Description         *string              `json:"description,omitempty"`            // Description
-  Hidden              *bool                `json:"hidden,omitempty"`                 // Is Hidden
-  QueryTimezone       *string              `json:"query_timezone,omitempty"`         // Timezone in which the Dashboard will run by default.
-  RefreshInterval     *string              `json:"refresh_interval,omitempty"`       // Refresh Interval, as a time duration phrase like "2 hours 30 minutes". A number with no time units will be interpreted as whole seconds.
-  Folder              *WriteFolderBase     `json:"folder,omitempty"`
-  Title               *string              `json:"title,omitempty"`                  // Dashboard Title
-  Slug                *string              `json:"slug,omitempty"`                   // Content Metadata Slug
-  PreferredViewer     *string              `json:"preferred_viewer,omitempty"`       // The preferred route for viewing this dashboard (ie: dashboards or dashboards-next)
-  Space               *WriteSpaceBase      `json:"space,omitempty"`
-  BackgroundColor     *string              `json:"background_color,omitempty"`       // Background color
-  CrossfilterEnabled  *bool                `json:"crossfilter_enabled,omitempty"`    // Enables crossfiltering in dashboards - only available in dashboards-next (beta)
-  Deleted             *bool                `json:"deleted,omitempty"`                // Whether or not a dashboard is 'soft' deleted.
-  LoadConfiguration   *string              `json:"load_configuration,omitempty"`     // configuration option that governs how dashboard loading will happen.
-  LookmlLinkId        *string              `json:"lookml_link_id,omitempty"`         // Links this dashboard to a particular LookML dashboard such that calling a **sync** operation on that LookML dashboard will update this dashboard to match.
-  ShowFiltersBar      *bool                `json:"show_filters_bar,omitempty"`       // Show filters bar.  **Security Note:** This property only affects the *cosmetic* appearance of the dashboard, not a user's ability to access data. Hiding the filters bar does **NOT** prevent users from changing filters by other means. For information on how to set up secure data access control policies, see [Control User Access to Data](https://looker.com/docs/r/api/control-access)
-  ShowTitle           *bool                `json:"show_title,omitempty"`             // Show title
-  SpaceId             *string              `json:"space_id,omitempty"`               // Id of Space
-  FolderId            *string              `json:"folder_id,omitempty"`              // Id of folder
-  TextTileTextColor   *string              `json:"text_tile_text_color,omitempty"`   // Color of text on text tiles
-  TileBackgroundColor *string              `json:"tile_background_color,omitempty"`  // Tile background color
-  TileTextColor       *string              `json:"tile_text_color,omitempty"`        // Tile text color
-  TitleColor          *string              `json:"title_color,omitempty"`            // Title color
-  Appearance          *DashboardAppearance `json:"appearance,omitempty"`
+  Description                         *string              `json:"description,omitempty"`                               // Description
+  Hidden                              *bool                `json:"hidden,omitempty"`                                    // Is Hidden
+  QueryTimezone                       *string              `json:"query_timezone,omitempty"`                            // Timezone in which the Dashboard will run by default.
+  RefreshInterval                     *string              `json:"refresh_interval,omitempty"`                          // Refresh Interval, as a time duration phrase like "2 hours 30 minutes". A number with no time units will be interpreted as whole seconds.
+  Folder                              *WriteFolderBase     `json:"folder,omitempty"`
+  Title                               *string              `json:"title,omitempty"`                                     // Dashboard Title
+  Slug                                *string              `json:"slug,omitempty"`                                      // Content Metadata Slug
+  PreferredViewer                     *string              `json:"preferred_viewer,omitempty"`                          // The preferred route for viewing this dashboard (ie: dashboards or dashboards-next)
+  Space                               *WriteSpaceBase      `json:"space,omitempty"`
+  AlertSyncWithDashboardFilterEnabled *bool                `json:"alert_sync_with_dashboard_filter_enabled,omitempty"`  // Enables alerts to keep in sync with dashboard filter changes - only available in alerts 2.0 (beta)
+  BackgroundColor                     *string              `json:"background_color,omitempty"`                          // Background color
+  CrossfilterEnabled                  *bool                `json:"crossfilter_enabled,omitempty"`                       // Enables crossfiltering in dashboards - only available in dashboards-next (beta)
+  Deleted                             *bool                `json:"deleted,omitempty"`                                   // Whether or not a dashboard is 'soft' deleted.
+  LoadConfiguration                   *string              `json:"load_configuration,omitempty"`                        // configuration option that governs how dashboard loading will happen.
+  LookmlLinkId                        *string              `json:"lookml_link_id,omitempty"`                            // Links this dashboard to a particular LookML dashboard such that calling a **sync** operation on that LookML dashboard will update this dashboard to match.
+  ShowFiltersBar                      *bool                `json:"show_filters_bar,omitempty"`                          // Show filters bar.  **Security Note:** This property only affects the *cosmetic* appearance of the dashboard, not a user's ability to access data. Hiding the filters bar does **NOT** prevent users from changing filters by other means. For information on how to set up secure data access control policies, see [Control User Access to Data](https://looker.com/docs/r/api/control-access)
+  ShowTitle                           *bool                `json:"show_title,omitempty"`                                // Show title
+  SpaceId                             *string              `json:"space_id,omitempty"`                                  // Id of Space
+  FolderId                            *string              `json:"folder_id,omitempty"`                                 // Id of folder
+  TextTileTextColor                   *string              `json:"text_tile_text_color,omitempty"`                      // Color of text on text tiles
+  TileBackgroundColor                 *string              `json:"tile_background_color,omitempty"`                     // Tile background color
+  TileTextColor                       *string              `json:"tile_text_color,omitempty"`                           // Tile text color
+  TitleColor                          *string              `json:"title_color,omitempty"`                               // Title color
+  Appearance                          *DashboardAppearance `json:"appearance,omitempty"`
 }
 
 // Dynamically generated writeable type for DashboardBase removes properties:

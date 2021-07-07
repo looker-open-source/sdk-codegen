@@ -25,7 +25,7 @@
  */
 
 /**
- * 412 API methods
+ * 413 API methods
  */
 
 import type {
@@ -195,6 +195,7 @@ import type {
   IRequestUserAttributeUserValues,
   IRequestUserRoles,
   IRole,
+  IRoleSearch,
   IRunningQueries,
   ISamlConfig,
   ISamlMetadataParseResult,
@@ -2793,6 +2794,8 @@ export class Looker40SDK extends APIMethods implements ILooker40SDK {
   /**
    * ### Get all External OAuth Applications.
    *
+   * This is an OAuth Application which Looker uses to access external systems.
+   *
    * GET /external_oauth_applications -> IExternalOauthApplication[]
    *
    * @param request composed interface "IRequestAllExternalOauthApplications" for complex method parameters
@@ -2813,6 +2816,8 @@ export class Looker40SDK extends APIMethods implements ILooker40SDK {
 
   /**
    * ### Create an OAuth Application using the specified configuration.
+   *
+   * This is an OAuth Application which Looker uses to access external systems.
    *
    * POST /external_oauth_applications -> IExternalOauthApplication
    *
@@ -8520,6 +8525,60 @@ export class Looker40SDK extends APIMethods implements ILooker40SDK {
   ): Promise<SDKResponse<IRole[], IError>> {
     return this.get<IRole[], IError>(
       '/roles/search',
+      {
+        fields: request.fields,
+        limit: request.limit,
+        offset: request.offset,
+        sorts: request.sorts,
+        id: request.id,
+        name: request.name,
+        built_in: request.built_in,
+        filter_or: request.filter_or,
+      },
+      null,
+      options
+    )
+  }
+
+  /**
+   * ### Search roles include user count
+   *
+   * Returns all role records that match the given search criteria, and attaches
+   * associated user counts.
+   *
+   * If multiple search params are given and `filter_or` is FALSE or not specified,
+   * search params are combined in a logical AND operation.
+   * Only rows that match *all* search param criteria will be returned.
+   *
+   * If `filter_or` is TRUE, multiple search params are combined in a logical OR operation.
+   * Results will include rows that match **any** of the search criteria.
+   *
+   * String search params use case-insensitive matching.
+   * String search params can contain `%` and '_' as SQL LIKE pattern match wildcard expressions.
+   * example="dan%" will match "danger" and "Danzig" but not "David"
+   * example="D_m%" will match "Damage" and "dump"
+   *
+   * Integer search params can accept a single value or a comma separated list of values. The multiple
+   * values will be combined under a logical OR operation - results will match at least one of
+   * the given values.
+   *
+   * Most search params can accept "IS NULL" and "NOT NULL" as special expressions to match
+   * or exclude (respectively) rows where the column is null.
+   *
+   * Boolean search params accept only "true" and "false" as values.
+   *
+   * GET /roles/search/with_user_count -> IRoleSearch[]
+   *
+   * @param request composed interface "IRequestSearchRoles" for complex method parameters
+   * @param options one-time API call overrides
+   *
+   */
+  async search_roles_with_user_count(
+    request: IRequestSearchRoles,
+    options?: Partial<ITransportSettings>
+  ): Promise<SDKResponse<IRoleSearch[], IError>> {
+    return this.get<IRoleSearch[], IError>(
+      '/roles/search/with_user_count',
       {
         fields: request.fields,
         limit: request.limit,
