@@ -371,7 +371,7 @@ export class Paging<TSuccess extends ILength, TError>
   }
 
   parse(raw: IRawResponse): IPager<TSuccess, TError> {
-    const params = new URLSearchParams(raw.url)
+    const params = new URL(raw.url, 'http://default').searchParams
     this.limit = Paging.paramDefault(params.get('limit'), -1)
     this.offset = Paging.paramDefault(
       params.get('offset'),
