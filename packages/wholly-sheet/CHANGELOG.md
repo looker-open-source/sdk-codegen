@@ -1,5 +1,17 @@
 # Changelog
 
+### [0.5.11](https://www.github.com/looker-open-source/sdk-codegen/compare/wholly-sheet-v0.5.10...wholly-sheet-v0.5.11) (2021-07-02)
+
+
+### Dependencies
+
+* The following workspace dependencies were updated
+  * dependencies
+    * @looker/sdk bumped from ^21.8.2 to ^21.8.3
+    * @looker/sdk-rtl bumped from ^21.0.15 to ^21.0.16
+  * devDependencies
+    * @looker/sdk-node bumped from ^21.8.1 to ^21.8.2
+
 ### [0.5.10](https://www.github.com/looker-open-source/sdk-codegen/compare/wholly-sheet-v0.5.9...wholly-sheet-v0.5.10) (2021-07-01)
 
 

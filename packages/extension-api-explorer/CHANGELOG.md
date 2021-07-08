@@ -1,5 +1,19 @@
 # Changelog
 
+### [21.8.2](https://www.github.com/looker-open-source/sdk-codegen/compare/extension-api-explorer-v21.8.1...extension-api-explorer-v21.8.2) (2021-07-02)
+
+
+### Dependencies
+
+* The following workspace dependencies were updated
+  * dependencies
+    * @looker/api-explorer bumped from ^0.9.11 to ^0.9.12
+    * @looker/extension-sdk bumped from ^21.8.2 to ^21.8.3
+    * @looker/extension-sdk-react bumped from ^21.8.2 to ^21.8.3
+    * @looker/run-it bumped from ^0.9.11 to ^0.9.12
+    * @looker/sdk bumped from ^21.8.2 to ^21.8.3
+    * @looker/sdk-codegen bumped from ^21.0.19 to ^21.0.20
+
 ### [21.8.1](https://www.github.com/looker-open-source/sdk-codegen/compare/extension-api-explorer-v21.8.0...extension-api-explorer-v21.8.1) (2021-07-01)
 
 

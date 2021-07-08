@@ -1,5 +1,17 @@
 # Changelog
 
+### [21.0.21](https://www.github.com/looker-open-source/sdk-codegen/compare/sdk-codegen-scripts-v21.0.20...sdk-codegen-scripts-v21.0.21) (2021-07-02)
+
+
+### Dependencies
+
+* The following workspace dependencies were updated
+  * dependencies
+    * @looker/sdk bumped from ^21.8.2 to ^21.8.3
+    * @looker/sdk-codegen bumped from ^21.0.19 to ^21.0.20
+    * @looker/sdk-node bumped from ^21.8.1 to ^21.8.2
+    * @looker/sdk-rtl bumped from ^21.0.15 to ^21.0.16
+
 ### [21.0.20](https://www.github.com/looker-open-source/sdk-codegen/compare/sdk-codegen-scripts-v21.0.19...sdk-codegen-scripts-v21.0.20) (2021-07-01)
 
 

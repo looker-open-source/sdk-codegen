@@ -48,7 +48,7 @@ export abstract class BaseTransport implements ITransport {
     raw: IRawResponse
   ): Promise<SDKResponse<TSuccess, TError>>
 
-  protected ok(res: IRawResponse): boolean {
+  ok(res: IRawResponse): boolean {
     return (
       res.statusCode >= StatusCode.OK && res.statusCode <= StatusCode.IMUsed
     )

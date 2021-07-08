@@ -692,12 +692,14 @@ class ContentValidationLook(model.Model):
     Attributes:
         id: Unique Id
         title: Look Title
+        short_url: Short Url
         folder:
         space:
     """
 
     id: Optional[int] = None
     title: Optional[str] = None
+    short_url: Optional[str] = None
     folder: Optional["ContentValidationFolder"] = None
     space: Optional["ContentValidationSpace"] = None
 
@@ -706,11 +708,13 @@ class ContentValidationLook(model.Model):
         *,
         id: Optional[int] = None,
         title: Optional[str] = None,
+        short_url: Optional[str] = None,
         folder: Optional["ContentValidationFolder"] = None,
         space: Optional["ContentValidationSpace"] = None
     ):
         self.id = id
         self.title = title
+        self.short_url = short_url
         self.folder = folder
         self.space = space
 
@@ -1595,6 +1599,7 @@ class Dashboard(model.Model):
         slug: Content Metadata Slug
         preferred_viewer: The preferred route for viewing this dashboard (ie: dashboards or dashboards-next)
         space:
+        alert_sync_with_dashboard_filter_enabled: Enables alerts to keep in sync with dashboard filter changes - only available in alerts 2.0 (beta)
         background_color: Background color
         created_at: Time that the Dashboard was created.
         crossfilter_enabled: Enables crossfiltering in dashboards - only available in dashboards-next (beta)
@@ -1639,6 +1644,7 @@ class Dashboard(model.Model):
     slug: Optional[str] = None
     preferred_viewer: Optional[str] = None
     space: Optional["SpaceBase"] = None
+    alert_sync_with_dashboard_filter_enabled: Optional[bool] = None
     background_color: Optional[str] = None
     created_at: Optional[datetime.datetime] = None
     crossfilter_enabled: Optional[bool] = None
@@ -1685,6 +1691,7 @@ class Dashboard(model.Model):
         slug: Optional[str] = None,
         preferred_viewer: Optional[str] = None,
         space: Optional["SpaceBase"] = None,
+        alert_sync_with_dashboard_filter_enabled: Optional[bool] = None,
         background_color: Optional[str] = None,
         created_at: Optional[datetime.datetime] = None,
         crossfilter_enabled: Optional[bool] = None,
@@ -1728,6 +1735,9 @@ class Dashboard(model.Model):
         self.slug = slug
         self.preferred_viewer = preferred_viewer
         self.space = space
+        self.alert_sync_with_dashboard_filter_enabled = (
+            alert_sync_with_dashboard_filter_enabled
+        )
         self.background_color = background_color
         self.created_at = created_at
         self.crossfilter_enabled = crossfilter_enabled
@@ -9755,6 +9765,7 @@ can, content_favorite_id, content_metadata_id, id, model, readonly, refresh_inte
         slug: Content Metadata Slug
         preferred_viewer: The preferred route for viewing this dashboard (ie: dashboards or dashboards-next)
         space:
+        alert_sync_with_dashboard_filter_enabled: Enables alerts to keep in sync with dashboard filter changes - only available in alerts 2.0 (beta)
         background_color: Background color
         crossfilter_enabled: Enables crossfiltering in dashboards - only available in dashboards-next (beta)
         deleted: Whether or not a dashboard is 'soft' deleted.
@@ -9780,6 +9791,7 @@ can, content_favorite_id, content_metadata_id, id, model, readonly, refresh_inte
     slug: Optional[str] = None
     preferred_viewer: Optional[str] = None
     space: Optional["WriteSpaceBase"] = None
+    alert_sync_with_dashboard_filter_enabled: Optional[bool] = None
     background_color: Optional[str] = None
     crossfilter_enabled: Optional[bool] = None
     deleted: Optional[bool] = None
@@ -9807,6 +9819,7 @@ can, content_favorite_id, content_metadata_id, id, model, readonly, refresh_inte
         slug: Optional[str] = None,
         preferred_viewer: Optional[str] = None,
         space: Optional["WriteSpaceBase"] = None,
+        alert_sync_with_dashboard_filter_enabled: Optional[bool] = None,
         background_color: Optional[str] = None,
         crossfilter_enabled: Optional[bool] = None,
         deleted: Optional[bool] = None,
@@ -9831,6 +9844,9 @@ can, content_favorite_id, content_metadata_id, id, model, readonly, refresh_inte
         self.slug = slug
         self.preferred_viewer = preferred_viewer
         self.space = space
+        self.alert_sync_with_dashboard_filter_enabled = (
+            alert_sync_with_dashboard_filter_enabled
+        )
         self.background_color = background_color
         self.crossfilter_enabled = crossfilter_enabled
         self.deleted = deleted

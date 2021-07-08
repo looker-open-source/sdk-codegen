@@ -115,6 +115,8 @@ export class NodeTransport extends BaseTransport {
         statusMessage: resTyped.statusMessage,
         headers: res.headers,
       }
+      // Update OK with response statusCode check
+      rawResponse.ok = this.ok(rawResponse)
     } catch (e) {
       let statusMessage = `${method} ${path}`
       let statusCode = 404

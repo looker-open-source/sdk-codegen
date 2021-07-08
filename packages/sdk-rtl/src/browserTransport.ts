@@ -211,6 +211,8 @@ export class BrowserTransport extends BaseTransport {
       startMark: started,
       headers,
     }
+    // Update OK with response statusCode check
+    response.ok = this.ok(response)
     return this.observer ? this.observer(response) : response
   }
 
