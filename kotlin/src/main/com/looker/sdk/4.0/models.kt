@@ -25,7 +25,7 @@
  */
 
 /**
- * 283 API models: 210 Spec, 0 Request, 56 Write, 17 Enum
+ * 284 API models: 211 Spec, 0 Request, 56 Write, 17 Enum
  */
 
 
@@ -415,12 +415,14 @@ data class ContentValidationAlert (
  * @property id Unique Id (read-only)
  * @property folder
  * @property title Dashboard Title
+ * @property url Relative URL of the dashboard (read-only)
  */
 data class ContentValidationDashboard (
     var description: String? = null,
     var id: String? = null,
     var folder: ContentValidationFolder? = null,
-    var title: String? = null
+    var title: String? = null,
+    var url: String? = null
 ) : Serializable
 
 /**
@@ -506,11 +508,13 @@ data class ContentValidationFolder (
 /**
  * @property id Unique Id (read-only)
  * @property title Look Title
+ * @property short_url Short Url (read-only)
  * @property folder
  */
 data class ContentValidationLook (
     var id: Long? = null,
     var title: String? = null,
+    var short_url: String? = null,
     var folder: ContentValidationFolder? = null
 ) : Serializable
 
@@ -982,6 +986,7 @@ data class CustomWelcomeEmail (
  * @property user_id Id of User (read-only)
  * @property slug Content Metadata Slug
  * @property preferred_viewer The preferred route for viewing this dashboard (ie: dashboards or dashboards-next)
+ * @property alert_sync_with_dashboard_filter_enabled Enables alerts to keep in sync with dashboard filter changes - only available in alerts 2.0 (beta)
  * @property background_color Background color
  * @property created_at Time that the Dashboard was created. (read-only)
  * @property crossfilter_enabled Enables crossfiltering in dashboards - only available in dashboards-next (beta)
@@ -1006,6 +1011,7 @@ data class CustomWelcomeEmail (
  * @property title_color Title color
  * @property view_count Number of times viewed in the Looker web UI (read-only)
  * @property appearance
+ * @property url Relative URL of the dashboard (read-only)
  */
 data class Dashboard (
     var can: Map<String,Boolean>? = null,
@@ -1024,6 +1030,7 @@ data class Dashboard (
     var user_id: Long? = null,
     var slug: String? = null,
     var preferred_viewer: String? = null,
+    var alert_sync_with_dashboard_filter_enabled: Boolean? = null,
     var background_color: String? = null,
     var created_at: Date? = null,
     var crossfilter_enabled: Boolean? = null,
@@ -1047,7 +1054,8 @@ data class Dashboard (
     var tile_text_color: String? = null,
     var title_color: String? = null,
     var view_count: Long? = null,
-    var appearance: DashboardAppearance? = null
+    var appearance: DashboardAppearance? = null,
+    var url: String? = null
 ) : Serializable
 
 /**
@@ -3973,11 +3981,34 @@ data class ResultMakerWithIdVisConfigAndDynamicFields (
  * @property permission_set_id (Write-Only) Id of permission set
  * @property model_set
  * @property model_set_id (Write-Only) Id of model set
- * @property user_count Count of users with this role, only returned if user_count field is requested (read-only)
  * @property url Link to get this item (read-only)
  * @property users_url Link to get list of users with this role (read-only)
  */
 data class Role (
+    var can: Map<String,Boolean>? = null,
+    var id: Long? = null,
+    var name: String? = null,
+    var permission_set: PermissionSet? = null,
+    var permission_set_id: Long? = null,
+    var model_set: ModelSet? = null,
+    var model_set_id: Long? = null,
+    var url: String? = null,
+    var users_url: String? = null
+) : Serializable
+
+/**
+ * @property can Operations the current user is able to perform on this object (read-only)
+ * @property id Unique Id (read-only)
+ * @property name Name of Role
+ * @property permission_set
+ * @property permission_set_id (Write-Only) Id of permission set
+ * @property model_set
+ * @property model_set_id (Write-Only) Id of model set
+ * @property user_count Count of users with this role (read-only)
+ * @property url Link to get this item (read-only)
+ * @property users_url Link to get list of users with this role (read-only)
+ */
+data class RoleSearch (
     var can: Map<String,Boolean>? = null,
     var id: Long? = null,
     var name: String? = null,
@@ -5204,7 +5235,7 @@ data class WriteCustomWelcomeEmail (
 
 /**
  * Dynamically generated writeable type for Dashboard removes properties:
- * can, content_favorite_id, content_metadata_id, id, model, readonly, refresh_interval_to_i, user_id, created_at, dashboard_elements, dashboard_filters, dashboard_layouts, deleted_at, deleter_id, edit_uri, favorite_count, last_accessed_at, last_viewed_at, view_count
+ * can, content_favorite_id, content_metadata_id, id, model, readonly, refresh_interval_to_i, user_id, created_at, dashboard_elements, dashboard_filters, dashboard_layouts, deleted_at, deleter_id, edit_uri, favorite_count, last_accessed_at, last_viewed_at, view_count, url
  *
  * @property description Description
  * @property hidden Is Hidden
@@ -5214,6 +5245,7 @@ data class WriteCustomWelcomeEmail (
  * @property title Dashboard Title
  * @property slug Content Metadata Slug
  * @property preferred_viewer The preferred route for viewing this dashboard (ie: dashboards or dashboards-next)
+ * @property alert_sync_with_dashboard_filter_enabled Enables alerts to keep in sync with dashboard filter changes - only available in alerts 2.0 (beta)
  * @property background_color Background color
  * @property crossfilter_enabled Enables crossfiltering in dashboards - only available in dashboards-next (beta)
  * @property deleted Whether or not a dashboard is 'soft' deleted.
@@ -5237,6 +5269,7 @@ data class WriteDashboard (
     var title: String? = null,
     var slug: String? = null,
     var preferred_viewer: String? = null,
+    var alert_sync_with_dashboard_filter_enabled: Boolean? = null,
     var background_color: String? = null,
     var crossfilter_enabled: Boolean? = null,
     var deleted: Boolean? = null,
@@ -5986,7 +6019,7 @@ data class WriteResultMakerWithIdVisConfigAndDynamicFields (
 
 /**
  * Dynamically generated writeable type for Role removes properties:
- * can, id, user_count, url, users_url
+ * can, id, url, users_url
  *
  * @property name Name of Role
  * @property permission_set

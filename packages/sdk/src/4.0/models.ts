@@ -25,7 +25,7 @@
  */
 
 /**
- * 334 API models: 210 Spec, 51 Request, 56 Write, 17 Enum
+ * 335 API models: 211 Spec, 51 Request, 56 Write, 17 Enum
  */
 
 import type { IDictionary, DelimArray } from '@looker/sdk-rtl'
@@ -639,6 +639,10 @@ export interface IContentValidationDashboard {
    * Dashboard Title
    */
   title?: string
+  /**
+   * Relative URL of the dashboard (read-only)
+   */
+  url?: string
 }
 
 export interface IContentValidationDashboardElement {
@@ -782,6 +786,10 @@ export interface IContentValidationLook {
    * Look Title
    */
   title?: string
+  /**
+   * Short Url (read-only)
+   */
+  short_url?: string
   folder?: IContentValidationFolder
 }
 
@@ -1491,6 +1499,10 @@ export interface IDashboard {
    */
   preferred_viewer?: string
   /**
+   * Enables alerts to keep in sync with dashboard filter changes - only available in alerts 2.0 (beta)
+   */
+  alert_sync_with_dashboard_filter_enabled?: boolean
+  /**
    * Background color
    */
   background_color?: string
@@ -1583,6 +1595,10 @@ export interface IDashboard {
    */
   view_count?: number
   appearance?: IDashboardAppearance
+  /**
+   * Relative URL of the dashboard (read-only)
+   */
+  url?: string
 }
 
 export interface IDashboardAggregateTableLookml {
@@ -2028,7 +2044,7 @@ export interface IDataActionRequest {
   /**
    * The JSON describing the data action. This JSON should be considered opaque and should be passed through unmodified from the query result it came from.
    */
-  action?: IDictionary<string>
+  action?: IDictionary<any>
   /**
    * User input for any form values the data action might use.
    */
@@ -7995,7 +8011,40 @@ export interface IRole {
    */
   model_set_id?: number
   /**
-   * Count of users with this role, only returned if user_count field is requested (read-only)
+   * Link to get this item (read-only)
+   */
+  url?: string
+  /**
+   * Link to get list of users with this role (read-only)
+   */
+  users_url?: string
+}
+
+export interface IRoleSearch {
+  /**
+   * Operations the current user is able to perform on this object (read-only)
+   */
+  can?: IDictionary<boolean>
+  /**
+   * Unique Id (read-only)
+   */
+  id?: number
+  /**
+   * Name of Role
+   */
+  name?: string
+  permission_set?: IPermissionSet
+  /**
+   * (Write-Only) Id of permission set
+   */
+  permission_set_id?: number
+  model_set?: IModelSet
+  /**
+   * (Write-Only) Id of model set
+   */
+  model_set_id?: number
+  /**
+   * Count of users with this role (read-only)
    */
   user_count?: number
   /**
@@ -9888,7 +9937,7 @@ export interface IWriteCustomWelcomeEmail {
 
 /**
  * Dynamically generated writeable type for Dashboard removes properties:
- * can, content_favorite_id, content_metadata_id, id, model, readonly, refresh_interval_to_i, user_id, created_at, dashboard_elements, dashboard_filters, dashboard_layouts, deleted_at, deleter_id, edit_uri, favorite_count, last_accessed_at, last_viewed_at, view_count
+ * can, content_favorite_id, content_metadata_id, id, model, readonly, refresh_interval_to_i, user_id, created_at, dashboard_elements, dashboard_filters, dashboard_layouts, deleted_at, deleter_id, edit_uri, favorite_count, last_accessed_at, last_viewed_at, view_count, url
  */
 export interface IWriteDashboard {
   /**
@@ -9920,6 +9969,10 @@ export interface IWriteDashboard {
    * The preferred route for viewing this dashboard (ie: dashboards or dashboards-next)
    */
   preferred_viewer?: string
+  /**
+   * Enables alerts to keep in sync with dashboard filter changes - only available in alerts 2.0 (beta)
+   */
+  alert_sync_with_dashboard_filter_enabled?: boolean
   /**
    * Background color
    */
@@ -11112,7 +11165,7 @@ export interface IWriteResultMakerWithIdVisConfigAndDynamicFields {
 
 /**
  * Dynamically generated writeable type for Role removes properties:
- * can, id, user_count, url, users_url
+ * can, id, url, users_url
  */
 export interface IWriteRole {
   /**

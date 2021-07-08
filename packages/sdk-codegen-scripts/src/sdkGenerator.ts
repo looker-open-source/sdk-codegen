@@ -53,27 +53,7 @@ export abstract class Generator<T extends Models.IModel> {
     this.codeFormatter = formatter
   }
 
-  // convenience function that calls render for each item in the list
-  // and collects their output in the buffer
-  each<K extends Models.IModel>(
-    list: Array<K>,
-    ctor: IGeneratorCtor<K>,
-    indent = '',
-    delimiter?: string
-  ): this {
-    const strs = list.map((model) => {
-      // eslint-disable-next-line new-cap
-      return new ctor(model, this.codeFormatter).render(indent)
-    })
-    if (delimiter) {
-      this.p(strs.join(delimiter))
-    } else {
-      this.p(strs)
-    }
-    return this
-  }
-
-  abstract render(indent: string): string
+  abstract render(indent: string, noStreams: boolean): string
 
   // Add one or more strings to the internal buffer
   // if the string is not empty or undefined
@@ -83,13 +63,6 @@ export abstract class Generator<T extends Models.IModel> {
     }
     return this
   }
-
-  // pIf(expr: any, str?: string | string[]): this {
-  //   if (expr) {
-  //     this.p(str)
-  //   }
-  //   return this
-  // }
 
   toString(indent: string): string {
     return indent + this.buf.join('\n' + indent)
@@ -111,7 +84,7 @@ export class MethodGenerator extends Generator<Models.IApiModel> {
     return this.codeFormatter.methodsEpilogue(indent)
   }
 
-  render(indent: string) {
+  render(indent: string, noStreams = false) {
     this.codeFormatter.reset()
     const items: string[] = []
     // reset refcounts for ALL types so dynamic import statement will work
@@ -145,8 +118,12 @@ export class MethodGenerator extends Generator<Models.IApiModel> {
         )
       }
     })
-    const tally = `${items.length - tagCount} API methods`
+    let tally = `${items.length - tagCount} API methods`
     success(tally)
+    if (noStreams) {
+      // Minimize code changes, don't include the tally when not streaming
+      tally = ''
+    }
     return this.p(this.codeFormatter.commentHeader('', licenseText, noComment))
       .p(this.codeFormatter.commentHeader('', tally))
       .p(this.prologue(indent))
@@ -199,7 +176,7 @@ export class FunctionGenerator extends MethodGenerator {
 }
 
 export class TypeGenerator extends Generator<Models.IApiModel> {
-  render(indent: string) {
+  render(indent: string, noStreams = false) {
     this.codeFormatter.reset()
     const items: string[] = []
     Object.values(this.model.types).forEach((type) => {
@@ -214,8 +191,12 @@ export class TypeGenerator extends Generator<Models.IApiModel> {
     })
 
     const counts = this.typeTally(this.model.types)
-    const tally = `${counts.total} API models: ${counts.standard} Spec, ${counts.request} Request, ${counts.write} Write, ${counts.enums} Enum`
+    let tally = `${counts.total} API models: ${counts.standard} Spec, ${counts.request} Request, ${counts.write} Write, ${counts.enums} Enum`
     success(tally)
+    if (noStreams) {
+      // Minimize code changes, don't include the tally when not streaming
+      tally = ''
+    }
     return this.p(this.codeFormatter.commentHeader('', licenseText, noComment))
       .p(this.codeFormatter.commentHeader('', tally))
       .p(this.codeFormatter.modelsPrologue(indent))

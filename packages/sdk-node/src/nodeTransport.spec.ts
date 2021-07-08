@@ -24,7 +24,7 @@
 
  */
 
-import { ITransportSettings } from '@looker/sdk-rtl'
+import { IRawResponse, ITransportSettings, StatusCode } from '@looker/sdk-rtl'
 import { NodeCryptoHash, NodeTransport } from './nodeTransport'
 
 describe('NodeTransport', () => {
@@ -35,7 +35,7 @@ describe('NodeTransport', () => {
   const badPath = fullPath + '_bogus'
   // const queryParams = { a: 'b c', d: false, nil: null, skip: undefined }
 
-  it('raw request retrieves fully qualified url', async () => {
+  test('raw request retrieves fully qualified url', async () => {
     const response = await xp.rawRequest('GET', fullPath)
     expect(response).toBeDefined()
     expect(response.ok).toEqual(true)
@@ -50,21 +50,19 @@ describe('NodeTransport', () => {
   })
 
   describe('transport errors', () => {
-    it('gracefully handles Node-level transport errors', async () => {
+    test('gracefully handles Node-level transport errors', async () => {
       const response = await xp.rawRequest('GET', badPath)
       const errorMessage = `GET ${badPath}`
       expect(response).toBeDefined()
       expect(response.ok).toEqual(false)
       expect(response.statusCode).toEqual(404)
       expect(response.body).toBeDefined()
-      expect(response.body.indexOf(errorMessage)).toEqual(0)
-      expect(response.body.length).toBeGreaterThan(0)
-      expect(response.statusMessage.indexOf('"type":"Buffer":')).toEqual(-1)
+      expect(response.statusMessage.indexOf('"type":"Buffer"')).toEqual(-1)
       expect(response.statusMessage.indexOf(errorMessage)).toEqual(0)
     })
   })
 
-  it('retrieves fully qualified url', async () => {
+  test('retrieves fully qualified url', async () => {
     const response = await xp.request<string, Error>('GET', fullPath)
     expect(response).toBeDefined()
     expect(response.ok).toEqual(true)
@@ -76,8 +74,34 @@ describe('NodeTransport', () => {
     }
   })
 
+  describe('ok check', () => {
+    const raw: IRawResponse = {
+      contentType: 'application/json',
+      headers: {},
+      url: 'bogus',
+      ok: true,
+      statusCode: StatusCode.OK,
+      statusMessage: 'Mocked success',
+      body: 'body',
+    }
+
+    test('ok is ok', () => {
+      expect(xp.ok(raw)).toEqual(true)
+    })
+
+    test('All 2xx responses are ok', () => {
+      raw.statusCode = StatusCode.IMUsed
+      expect(xp.ok(raw)).toEqual(true)
+    })
+
+    test('Non-2xx responses are not ok', () => {
+      raw.statusCode = 422
+      expect(xp.ok(raw)).toEqual(false)
+    })
+  })
+
   describe('NodeCryptoHash', () => {
-    it('secureRandom', () => {
+    test('secureRandom', () => {
       const hasher = new NodeCryptoHash()
       const rand1 = hasher.secureRandom(5)
       expect(rand1.length).toEqual(10)
@@ -85,7 +109,7 @@ describe('NodeTransport', () => {
       expect(rand2.length).toEqual(64)
     })
 
-    it('sha256hash', async () => {
+    test('sha256hash', async () => {
       const hasher = new NodeCryptoHash()
       const message = 'The quick brown fox jumped over the lazy dog.'
       const hash = await hasher.sha256Hash(message)

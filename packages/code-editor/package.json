@@ -1,6 +1,6 @@
 {
   "name": "@looker/code-editor",
-  "version": "0.1.2",
+  "version": "0.1.6",
   "description": "A syntax highlighter Viewer and Editor for Looker SDK supported languages.",
   "main": "lib/index.js",
   "module": "lib/esm/index.js",
@@ -11,7 +11,10 @@
   ],
   "author": "Looker",
   "license": "MIT",
-  "private": true,
+  "private": false,
+  "publishConfig": {
+    "access": "public"
+  },
   "repository": {
     "type": "git",
     "url": "git+https://github.com/looker-open-source/sdk-codegen.git",
@@ -27,7 +30,7 @@
   },
   "devDependencies": {
     "@looker/components-test-utils": "^1.3.1",
-    "@looker/sdk-codegen": "^21.0.17",
+    "@looker/sdk-codegen": "^21.0.21",
     "@testing-library/jest-dom": "^5.11.6",
     "@testing-library/react": "^11.2.2",
     "@testing-library/user-event": "^12.6.0",

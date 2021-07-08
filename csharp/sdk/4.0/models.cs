@@ -21,7 +21,7 @@
 /// SOFTWARE.
 ///
 
-/// 283 API models: 210 Spec, 0 Request, 56 Write, 17 Enum
+/// 284 API models: 211 Spec, 0 Request, 56 Write, 17 Enum
 
 #nullable enable
 using System;
@@ -405,6 +405,8 @@ public class ContentValidationDashboard : SdkModel
   public ContentValidationFolder? folder { get; set; }
   /// <summary>Dashboard Title</summary>
   public string? title { get; set; } = null;
+  /// <summary>Relative URL of the dashboard (read-only)</summary>
+  public string? url { get; set; } = null;
 }
 
 public class ContentValidationDashboardElement : SdkModel
@@ -489,6 +491,8 @@ public class ContentValidationLook : SdkModel
   public long? id { get; set; } = null;
   /// <summary>Look Title</summary>
   public string? title { get; set; } = null;
+  /// <summary>Short Url (read-only)</summary>
+  public string? short_url { get; set; } = null;
   public ContentValidationFolder? folder { get; set; }
 }
 
@@ -918,6 +922,8 @@ public class Dashboard : SdkModel
   public string? slug { get; set; } = null;
   /// <summary>The preferred route for viewing this dashboard (ie: dashboards or dashboards-next)</summary>
   public string? preferred_viewer { get; set; } = null;
+  /// <summary>Enables alerts to keep in sync with dashboard filter changes - only available in alerts 2.0 (beta)</summary>
+  public bool? alert_sync_with_dashboard_filter_enabled { get; set; } = null;
   /// <summary>Background color</summary>
   public string? background_color { get; set; } = null;
   /// <summary>Time that the Dashboard was created. (read-only)</summary>
@@ -965,6 +971,8 @@ public class Dashboard : SdkModel
   /// <summary>Number of times viewed in the Looker web UI (read-only)</summary>
   public long? view_count { get; set; } = null;
   public DashboardAppearance? appearance { get; set; }
+  /// <summary>Relative URL of the dashboard (read-only)</summary>
+  public string? url { get; set; } = null;
 }
 
 public class DashboardAggregateTableLookml : SdkModel
@@ -1220,7 +1228,7 @@ public class DataActionFormSelectOption : SdkModel
 public class DataActionRequest : SdkModel
 {
   /// <summary>The JSON describing the data action. This JSON should be considered opaque and should be passed through unmodified from the query result it came from.</summary>
-  public StringDictionary<string>? action { get; set; } = null;
+  public StringDictionary<object>? action { get; set; } = null;
   /// <summary>User input for any form values the data action might use.</summary>
   public StringDictionary<string>? form_values { get; set; } = null;
 }
@@ -3714,7 +3722,27 @@ public class Role : SdkModel
   public ModelSet? model_set { get; set; }
   /// <summary>(Write-Only) Id of model set</summary>
   public long? model_set_id { get; set; } = null;
-  /// <summary>Count of users with this role, only returned if user_count field is requested (read-only)</summary>
+  /// <summary>Link to get this item (read-only)</summary>
+  public string? url { get; set; } = null;
+  /// <summary>Link to get list of users with this role (read-only)</summary>
+  public string? users_url { get; set; } = null;
+}
+
+public class RoleSearch : SdkModel
+{
+  /// <summary>Operations the current user is able to perform on this object (read-only)</summary>
+  public StringDictionary<bool>? can { get; set; } = null;
+  /// <summary>Unique Id (read-only)</summary>
+  public long? id { get; set; } = null;
+  /// <summary>Name of Role</summary>
+  public string? name { get; set; } = null;
+  public PermissionSet? permission_set { get; set; }
+  /// <summary>(Write-Only) Id of permission set</summary>
+  public long? permission_set_id { get; set; } = null;
+  public ModelSet? model_set { get; set; }
+  /// <summary>(Write-Only) Id of model set</summary>
+  public long? model_set_id { get; set; } = null;
+  /// <summary>Count of users with this role (read-only)</summary>
   public long? user_count { get; set; } = null;
   /// <summary>Link to get this item (read-only)</summary>
   public string? url { get; set; } = null;
@@ -4871,7 +4899,7 @@ public class WriteCustomWelcomeEmail : SdkModel
 }
 
 /// Dynamically generated writeable type for Dashboard removes properties:
-/// can, content_favorite_id, content_metadata_id, id, model, readonly, refresh_interval_to_i, user_id, created_at, dashboard_elements, dashboard_filters, dashboard_layouts, deleted_at, deleter_id, edit_uri, favorite_count, last_accessed_at, last_viewed_at, view_count
+/// can, content_favorite_id, content_metadata_id, id, model, readonly, refresh_interval_to_i, user_id, created_at, dashboard_elements, dashboard_filters, dashboard_layouts, deleted_at, deleter_id, edit_uri, favorite_count, last_accessed_at, last_viewed_at, view_count, url
 public class WriteDashboard : SdkModel
 {
   /// <summary>Description</summary>
@@ -4889,6 +4917,8 @@ public class WriteDashboard : SdkModel
   public string? slug { get; set; } = null;
   /// <summary>The preferred route for viewing this dashboard (ie: dashboards or dashboards-next)</summary>
   public string? preferred_viewer { get; set; } = null;
+  /// <summary>Enables alerts to keep in sync with dashboard filter changes - only available in alerts 2.0 (beta)</summary>
+  public bool? alert_sync_with_dashboard_filter_enabled { get; set; } = null;
   /// <summary>Background color</summary>
   public string? background_color { get; set; } = null;
   /// <summary>Enables crossfiltering in dashboards - only available in dashboards-next (beta)</summary>
@@ -5570,7 +5600,7 @@ public class WriteResultMakerWithIdVisConfigAndDynamicFields : SdkModel
 }
 
 /// Dynamically generated writeable type for Role removes properties:
-/// can, id, user_count, url, users_url
+/// can, id, url, users_url
 public class WriteRole : SdkModel
 {
   /// <summary>Name of Role</summary>
