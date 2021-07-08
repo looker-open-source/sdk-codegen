@@ -1,6 +1,6 @@
 {
   "name": "@looker/sdk-node",
-  "version": "21.8.2",
+  "version": "21.10.0",
   "description": "Looker SDK Runtime for Node Library",
   "main": "lib/index.js",
   "typings": "lib/index.d.ts",
@@ -38,8 +38,8 @@
     "dotenv": "^8.2.0"
   },
   "dependencies": {
-    "@looker/sdk": "^21.8.3",
-    "@looker/sdk-rtl": "^21.0.16",
+    "@looker/sdk": "^21.10.0",
+    "@looker/sdk-rtl": "^21.0.17",
     "ini": "^1.3.8",
     "readable-stream": "^3.4.0",
     "request": "^2.88.0",

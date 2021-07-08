@@ -5,6 +5,14 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+### [21.0.17](https://www.github.com/looker-open-source/sdk-codegen/compare/sdk-rtl-v21.0.16...sdk-rtl-v21.0.17) (2021-07-08)
+
+
+### Bug Fixes
+
+* add a test to additional query param required bug ([#741](https://www.github.com/looker-open-source/sdk-codegen/issues/741)) ([0cbe656](https://www.github.com/looker-open-source/sdk-codegen/commit/0cbe656aaf53f6f92fafcc62eeb573e0ff2d0a19))
+* check HTTP status code for TS SDK "ok" toggle ([#739](https://www.github.com/looker-open-source/sdk-codegen/issues/739)) ([3ed6af7](https://www.github.com/looker-open-source/sdk-codegen/commit/3ed6af78b2cb9610b3386ff851013a93fff40f54))
+
 ### [21.0.16](https://www.github.com/looker-open-source/sdk-codegen/compare/sdk-rtl-v21.0.15...sdk-rtl-v21.0.16) (2021-07-02)
 
 
