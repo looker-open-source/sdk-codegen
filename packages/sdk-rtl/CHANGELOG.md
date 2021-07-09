@@ -5,6 +5,13 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+### [21.0.18](https://www.github.com/looker-open-source/sdk-codegen/compare/sdk-rtl-v21.0.17...sdk-rtl-v21.0.18) (2021-07-09)
+
+
+### Bug Fixes
+
+* browserTransport.ts retains ok: false now ([#745](https://www.github.com/looker-open-source/sdk-codegen/issues/745)) ([451481c](https://www.github.com/looker-open-source/sdk-codegen/commit/451481c62cdc986c860c582e4a77e3e887c6a732))
+
 ### [21.0.17](https://www.github.com/looker-open-source/sdk-codegen/compare/sdk-rtl-v21.0.16...sdk-rtl-v21.0.17) (2021-07-08)
 
 
