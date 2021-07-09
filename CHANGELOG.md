@@ -1,5 +1,12 @@
 # Changelog
 
+### [1.10.1](https://www.github.com/looker-open-source/sdk-codegen/compare/sdk-codegen-all-v1.10.0...sdk-codegen-all-v1.10.1) (2021-07-09)
+
+
+### Bug Fixes
+
+* browserTransport.ts retains ok: false now ([#745](https://www.github.com/looker-open-source/sdk-codegen/issues/745)) ([451481c](https://www.github.com/looker-open-source/sdk-codegen/commit/451481c62cdc986c860c582e4a77e3e887c6a732))
+
 ## [1.10.0](https://www.github.com/looker-open-source/sdk-codegen/compare/sdk-codegen-all-v1.9.2...sdk-codegen-all-v1.10.0) (2021-07-08)
 
 
