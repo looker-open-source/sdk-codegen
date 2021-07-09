@@ -224,6 +224,20 @@ export class BrowserTransport extends BaseTransport {
     res: IRawResponse
   ): Promise<SDKResponse<TSuccess, TError>> {
     const perfMark = res.startMark || ''
+    if (!res.ok) {
+      // Raw request had an error. Make sure it's a string before parsing the result
+      let error = res.body
+      if (typeof error === 'string') {
+        try {
+          error = JSON.parse(error)
+        } catch {
+          error = { message: `Request failed: ${error}` }
+        }
+      }
+      const response: SDKResponse<TSuccess, TError> = { ok: false, error }
+      return response
+    }
+
     let value
     let error
     if (res.contentType.match(/application\/json/g)) {
