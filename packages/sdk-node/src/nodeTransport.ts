@@ -161,7 +161,13 @@ export class NodeTransport extends BaseTransport {
     if (!res.ok) {
       // Raw request had an error. Make sure it's a string before parsing the result
       error = res.body
-      if (typeof error === 'string') error = JSON.parse(error)
+      if (typeof error === 'string') {
+        try {
+          error = JSON.parse(error)
+        } catch {
+          error = { message: `Request failed: ${error}` }
+        }
+      }
       response = { ok: false, error }
       return response
     }
