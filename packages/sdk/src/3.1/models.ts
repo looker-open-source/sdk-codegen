@@ -497,6 +497,10 @@ export interface IContentValidationLook {
    * Look Title
    */
   title?: string
+  /**
+   * Short Url (read-only)
+   */
+  short_url?: string
   folder?: IContentValidationFolder
   space?: IContentValidationSpace
 }
@@ -1181,6 +1185,10 @@ export interface IDashboard {
   preferred_viewer?: string
   space?: ISpaceBase
   /**
+   * Enables alerts to keep in sync with dashboard filter changes - only available in alerts 2.0 (beta)
+   */
+  alert_sync_with_dashboard_filter_enabled?: boolean
+  /**
    * Background color
    */
   background_color?: string
@@ -1723,7 +1731,7 @@ export interface IDataActionRequest {
   /**
    * The JSON describing the data action. This JSON should be considered opaque and should be passed through unmodified from the query result it came from.
    */
-  action?: IDictionary<string>
+  action?: IDictionary<any>
   /**
    * User input for any form values the data action might use.
    */
@@ -9194,6 +9202,10 @@ export interface IWriteDashboard {
    */
   preferred_viewer?: string
   space?: IWriteSpaceBase
+  /**
+   * Enables alerts to keep in sync with dashboard filter changes - only available in alerts 2.0 (beta)
+   */
+  alert_sync_with_dashboard_filter_enabled?: boolean
   /**
    * Background color
    */

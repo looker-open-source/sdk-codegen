@@ -1,5 +1,35 @@
 # Changelog
 
+### [1.10.1](https://www.github.com/looker-open-source/sdk-codegen/compare/sdk-codegen-all-v1.10.0...sdk-codegen-all-v1.10.1) (2021-07-09)
+
+
+### Bug Fixes
+
+* browserTransport.ts retains ok: false now ([#745](https://www.github.com/looker-open-source/sdk-codegen/issues/745)) ([451481c](https://www.github.com/looker-open-source/sdk-codegen/commit/451481c62cdc986c860c582e4a77e3e887c6a732))
+
+## [1.10.0](https://www.github.com/looker-open-source/sdk-codegen/compare/sdk-codegen-all-v1.9.2...sdk-codegen-all-v1.10.0) (2021-07-08)
+
+
+### Features
+
+* Looker 21.10 bindings ([#737](https://www.github.com/looker-open-source/sdk-codegen/issues/737)) ([6b3895d](https://www.github.com/looker-open-source/sdk-codegen/commit/6b3895d35e138df9ff84286b7658434292617aa8))
+
+
+### Bug Fixes
+
+* add a test to additional query param required bug ([#741](https://www.github.com/looker-open-source/sdk-codegen/issues/741)) ([0cbe656](https://www.github.com/looker-open-source/sdk-codegen/commit/0cbe656aaf53f6f92fafcc62eeb573e0ff2d0a19))
+* check HTTP status code for TS SDK "ok" toggle ([#739](https://www.github.com/looker-open-source/sdk-codegen/issues/739)) ([3ed6af7](https://www.github.com/looker-open-source/sdk-codegen/commit/3ed6af78b2cb9610b3386ff851013a93fff40f54))
+* extension-api-explorer build ([#740](https://www.github.com/looker-open-source/sdk-codegen/issues/740)) ([1697883](https://www.github.com/looker-open-source/sdk-codegen/commit/16978836f42d8c755031a3438eeee1e9c1a743e6))
+
+### [1.9.2](https://www.github.com/looker-open-source/sdk-codegen/compare/sdk-codegen-all-v1.9.1...sdk-codegen-all-v1.9.2) (2021-07-02)
+
+
+### Bug Fixes
+
+* explain pager and pageAll sdk param better ([#736](https://www.github.com/looker-open-source/sdk-codegen/issues/736)) ([a93a9b1](https://www.github.com/looker-open-source/sdk-codegen/commit/a93a9b1ded0acddeaf051e7a2fed5132c1cb5c0c))
+* python datetime [de]serialization bug ([#734](https://www.github.com/looker-open-source/sdk-codegen/issues/734)) ([c821f2b](https://www.github.com/looker-open-source/sdk-codegen/commit/c821f2b77b99edfa2dd53aa0af82ab48081c3220))
+* python remove runtime asserts ([#703](https://www.github.com/looker-open-source/sdk-codegen/issues/703)) ([9b963c3](https://www.github.com/looker-open-source/sdk-codegen/commit/9b963c3367905f907e7867df1446f56e18284c3b)), closes [#695](https://www.github.com/looker-open-source/sdk-codegen/issues/695)
+
 ### [1.9.1](https://www.github.com/looker-open-source/sdk-codegen/compare/sdk-codegen-all-v1.9.0...sdk-codegen-all-v1.9.1) (2021-07-01)
 
 

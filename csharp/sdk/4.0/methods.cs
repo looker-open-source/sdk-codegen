@@ -21,7 +21,7 @@
 /// SOFTWARE.
 ///
 
-/// 412 API methods
+/// 413 API methods
 
 #nullable enable
 using System;
@@ -1936,9 +1936,11 @@ namespace Looker.SDK.API40
 
   /// ### Get all External OAuth Applications.
   ///
+  /// This is an OAuth Application which Looker uses to access external systems.
+  ///
   /// GET /external_oauth_applications -> ExternalOauthApplication[]
   ///
-  /// <returns><c>ExternalOauthApplication[]</c> External OAuth Application.  This is an OAuth Application which Looker uses to access external systems. (application/json)</returns>
+  /// <returns><c>ExternalOauthApplication[]</c> External OAuth Application (application/json)</returns>
   ///
   /// <param name="name">Application name</param>
   /// <param name="client_id">Application Client ID</param>
@@ -1954,9 +1956,11 @@ namespace Looker.SDK.API40
 
   /// ### Create an OAuth Application using the specified configuration.
   ///
+  /// This is an OAuth Application which Looker uses to access external systems.
+  ///
   /// POST /external_oauth_applications -> ExternalOauthApplication
   ///
-  /// <returns><c>ExternalOauthApplication</c> External OAuth Application.  This is an OAuth Application which Looker uses to access external systems. (application/json)</returns>
+  /// <returns><c>ExternalOauthApplication</c> External OAuth Application (application/json)</returns>
   ///
   public async Task<SdkResponse<ExternalOauthApplication, Exception>> create_external_oauth_application(
     WriteExternalOauthApplication body,
@@ -6843,6 +6847,66 @@ namespace Looker.SDK.API40
     ITransportSettings? options = null)
 {  
     return await AuthRequest<Role[], Exception>(HttpMethod.Get, "/roles/search", new Values {
+      { "fields", fields },
+      { "limit", limit },
+      { "offset", offset },
+      { "sorts", sorts },
+      { "id", id },
+      { "name", name },
+      { "built_in", built_in },
+      { "filter_or", filter_or }},null,options);
+  }
+
+  /// ### Search roles include user count
+  ///
+  /// Returns all role records that match the given search criteria, and attaches
+  /// associated user counts.
+  ///
+  /// If multiple search params are given and `filter_or` is FALSE or not specified,
+  /// search params are combined in a logical AND operation.
+  /// Only rows that match *all* search param criteria will be returned.
+  ///
+  /// If `filter_or` is TRUE, multiple search params are combined in a logical OR operation.
+  /// Results will include rows that match **any** of the search criteria.
+  ///
+  /// String search params use case-insensitive matching.
+  /// String search params can contain `%` and '_' as SQL LIKE pattern match wildcard expressions.
+  /// example="dan%" will match "danger" and "Danzig" but not "David"
+  /// example="D_m%" will match "Damage" and "dump"
+  ///
+  /// Integer search params can accept a single value or a comma separated list of values. The multiple
+  /// values will be combined under a logical OR operation - results will match at least one of
+  /// the given values.
+  ///
+  /// Most search params can accept "IS NULL" and "NOT NULL" as special expressions to match
+  /// or exclude (respectively) rows where the column is null.
+  ///
+  /// Boolean search params accept only "true" and "false" as values.
+  ///
+  /// GET /roles/search/with_user_count -> RoleSearch[]
+  ///
+  /// <returns><c>RoleSearch[]</c> Role (application/json)</returns>
+  ///
+  /// <param name="fields">Requested fields.</param>
+  /// <param name="limit">Number of results to return (used with `offset`).</param>
+  /// <param name="offset">Number of results to skip before returning any (used with `limit`).</param>
+  /// <param name="sorts">Fields to sort by.</param>
+  /// <param name="id">Match role id.</param>
+  /// <param name="name">Match role name.</param>
+  /// <param name="built_in">Match roles by built_in status.</param>
+  /// <param name="filter_or">Combine given search criteria in a boolean OR expression.</param>
+  public async Task<SdkResponse<RoleSearch[], Exception>> search_roles_with_user_count(
+    string? fields = null,
+    long? limit = null,
+    long? offset = null,
+    string? sorts = null,
+    long? id = null,
+    string? name = null,
+    bool? built_in = null,
+    bool? filter_or = null,
+    ITransportSettings? options = null)
+{  
+    return await AuthRequest<RoleSearch[], Exception>(HttpMethod.Get, "/roles/search/with_user_count", new Values {
       { "fields", fields },
       { "limit", limit },
       { "offset", offset },

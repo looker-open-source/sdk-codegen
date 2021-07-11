@@ -197,6 +197,32 @@ describe('paging', () => {
       expect(actual.options?.timeout).toEqual(99)
     })
 
+    it('do not throw error without other params', async () => {
+      const actual = await pager(sdk, () =>
+        mockRawResponseSuccess(
+          transport,
+          mockedRows,
+          mockRawResponse('/api/4.0/alerts/search')
+        )
+      )
+      expect(actual).toBeDefined()
+      expect(actual.limit).toEqual(-1)
+      expect(actual.offset).toEqual(-1)
+    })
+
+    it('works without other query params', async () => {
+      const actual = await pager(sdk, () =>
+        mockRawResponseSuccess(
+          transport,
+          mockedRows,
+          mockRawResponse('/api/4.0/alerts/search?limit=3&offset=0')
+        )
+      )
+      expect(actual).toBeDefined()
+      expect(actual.limit).toEqual(3)
+      expect(actual.offset).toEqual(0)
+    })
+
     it('works on relative url', async () => {
       const actual = await pager(sdk, () =>
         mockRawResponseSuccess(
