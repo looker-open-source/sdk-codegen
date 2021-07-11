@@ -127,10 +127,6 @@ export const fetchSpec = (key: string, specs: SpecList): SpecState => {
  */
 export const getSpecKey = (location: AbstractLocation, specs?: SpecList) => {
   const pathName = location.pathname
-  // if (pathName.startsWith('/api/docs')) {
-  //     pathName = pathName.replace('/api/docs', '')
-  // }
-  // console.log({locationPathname: location.pathname, pathName, specs})
   const pathNodes = pathName.split('/')
   let specKey = ''
   if (
