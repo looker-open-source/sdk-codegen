@@ -32,7 +32,6 @@ import {
   TabPanels,
   useTabs,
   InputSearch,
-  Flex,
   SpaceVertical,
 } from '@looker/components'
 import { SpecList, CriteriaToSet, ISearchResult } from '@looker/sdk-codegen'
