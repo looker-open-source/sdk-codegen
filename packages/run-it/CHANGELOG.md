@@ -1,5 +1,34 @@
 # Changelog
 
+### [0.9.14](https://www.github.com/looker-open-source/sdk-codegen/compare/run-it-v0.9.13...run-it-v0.9.14) (2021-07-09)
+
+
+### Dependencies
+
+* The following workspace dependencies were updated
+  * dependencies
+    * @looker/sdk bumped from ^21.10.0 to ^21.10.1
+    * @looker/sdk-codegen bumped from ^21.0.21 to ^21.0.22
+    * @looker/code-editor bumped from ^0.1.6 to ^0.1.7
+    * @looker/sdk-rtl bumped from ^21.0.17 to ^21.0.18
+
+### [0.9.13](https://www.github.com/looker-open-source/sdk-codegen/compare/run-it-v0.9.12...run-it-v0.9.13) (2021-07-08)
+
+
+### Bug Fixes
+
+* extension-api-explorer build ([#740](https://www.github.com/looker-open-source/sdk-codegen/issues/740)) ([1697883](https://www.github.com/looker-open-source/sdk-codegen/commit/16978836f42d8c755031a3438eeee1e9c1a743e6))
+
+
+### Dependencies
+
+* The following workspace dependencies were updated
+  * dependencies
+    * @looker/sdk bumped from ^21.8.3 to ^21.10.0
+    * @looker/sdk-codegen bumped from ^21.0.20 to ^21.0.21
+    * @looker/code-editor bumped from ^0.1.5 to ^0.1.6
+    * @looker/sdk-rtl bumped from ^21.0.16 to ^21.0.17
+
 ### [0.9.12](https://www.github.com/looker-open-source/sdk-codegen/compare/run-it-v0.9.11...run-it-v0.9.12) (2021-07-02)
 
 

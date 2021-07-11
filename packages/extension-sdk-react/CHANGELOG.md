@@ -5,6 +5,28 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+### [21.10.1](https://www.github.com/looker-open-source/sdk-codegen/compare/extension-sdk-react-v21.10.0...extension-sdk-react-v21.10.1) (2021-07-09)
+
+
+### Dependencies
+
+* The following workspace dependencies were updated
+  * dependencies
+    * @looker/extension-sdk bumped from ^21.10.0 to ^21.10.1
+    * @looker/sdk bumped from ^21.10.0 to ^21.10.1
+    * @looker/sdk-rtl bumped from ^21.0.17 to ^21.0.18
+
+## [21.10.0](https://www.github.com/looker-open-source/sdk-codegen/compare/extension-sdk-react-v21.8.3...extension-sdk-react-v21.10.0) (2021-07-08)
+
+
+### Dependencies
+
+* The following workspace dependencies were updated
+  * dependencies
+    * @looker/extension-sdk bumped from ^21.8.3 to ^21.10.0
+    * @looker/sdk bumped from ^21.8.3 to ^21.10.0
+    * @looker/sdk-rtl bumped from ^21.0.16 to ^21.0.17
+
 ### [21.8.3](https://www.github.com/looker-open-source/sdk-codegen/compare/extension-sdk-react-v21.8.2...extension-sdk-react-v21.8.3) (2021-07-02)
 
 
