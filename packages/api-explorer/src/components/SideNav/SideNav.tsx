@@ -24,7 +24,7 @@
 
  */
 
-import React, { FC, useContext, useEffect, useState } from 'react'
+import React, { FC, useContext, useEffect, useState, Dispatch } from 'react'
 import {
   TabList,
   Tab,
@@ -33,32 +33,43 @@ import {
   useTabs,
   InputSearch,
   Flex,
+  SpaceVertical,
 } from '@looker/components'
+import { SpecList, CriteriaToSet, ISearchResult } from '@looker/sdk-codegen'
 import { useRouteMatch } from 'react-router-dom'
-import { ApiModel, CriteriaToSet, ISearchResult } from '@looker/sdk-codegen'
 
 import { SearchContext } from '../../context'
-import { setPattern } from '../../reducers'
+import { setPattern, SpecState, SpecAction } from '../../reducers'
 import { useWindowSize } from '../../utils'
 import { HEADER_REM } from '../Header'
+import { SelectorContainer } from '../SelectorContainer'
 import { SideNavTags } from './SideNavTags'
 import { SideNavTypes } from './SideNavTypes'
 import { useDebounce, countMethods, countTypes } from './searchUtils'
 import { SearchMessage } from './SearchMessage'
 
 interface SideNavProps {
-  api: ApiModel
-  diffApi?: ApiModel
-  diffKey?: string
-  specKey: string
-  className?: string
+  headless?: boolean
+  /** Specs to choose from */
+  specs: SpecList
+  /** Current selected spec */
+  spec: SpecState
+  /** Spec state setter */
+  specDispatch: Dispatch<SpecAction>
 }
 
 interface SideNavParams {
   sideNavTab: string
 }
 
-export const SideNav: FC<SideNavProps> = ({ api, specKey }) => {
+export const SideNav: FC<SideNavProps> = ({
+  headless = false,
+  specs,
+  spec,
+  specDispatch,
+}) => {
+  const api = spec.api
+  const specKey = spec.key
   const tabNames = ['methods', 'types']
   const match = useRouteMatch<SideNavParams>(`/:specKey/:sideNavTab?`)
   let defaultIndex = tabNames.indexOf('methods')
@@ -106,7 +117,14 @@ export const SideNav: FC<SideNavProps> = ({ api, specKey }) => {
 
   return (
     <nav>
-      <Flex alignItems="center" pl="large" pr="large" pb="large">
+      <SpaceVertical alignItems="center" p="large" gap="xsmall">
+        {headless && (
+          <SelectorContainer
+            specs={specs}
+            spec={spec}
+            specDispatch={specDispatch}
+          />
+        )}
         <InputSearch
           aria-label="Search"
           onChange={handleInputChange}
@@ -115,8 +133,7 @@ export const SideNav: FC<SideNavProps> = ({ api, specKey }) => {
           isClearable
           changeOnSelect
         />
-        {/* <WordIcon onClick={handleWordToggle}>W</WordIcon> */}
-      </Flex>
+      </SpaceVertical>
       <SearchMessage search={searchResults} />
       <TabList {...tabs} distribute>
         <Tab>Methods ({methodCount})</Tab>

@@ -55,6 +55,7 @@ export interface ApiExplorerProps {
   exampleLodeUrl?: string
   declarationsLodeUrl?: string
   envAdaptor: IApixEnvAdaptor
+  headless?: boolean
 }
 
 export const BodyOverride = createGlobalStyle` html { height: 100%; overflow: hidden; } `
@@ -64,6 +65,7 @@ const ApiExplorer: FC<ApiExplorerProps> = ({
   envAdaptor,
   exampleLodeUrl = 'https://raw.githubusercontent.com/looker-open-source/sdk-codegen/main/examplesIndex.json',
   declarationsLodeUrl = `${apixFilesHost}/declarationsIndex.json`,
+  headless = false,
 }) => {
   const location = useLocation()
   const { setSdkLanguageAction } = useActions()
@@ -113,16 +115,23 @@ const ApiExplorer: FC<ApiExplorerProps> = ({
               value={{ searchSettings, setSearchSettings }}
             >
               <Page style={{ overflow: 'hidden' }}>
-                <Header
-                  specs={specs}
-                  spec={spec}
-                  specDispatch={specDispatch}
-                  toggleNavigation={toggleNavigation}
-                />
+                {!headless && (
+                  <Header
+                    specs={specs}
+                    spec={spec}
+                    specDispatch={specDispatch}
+                    toggleNavigation={toggleNavigation}
+                  />
+                )}
                 <Layout hasAside height="100%">
                   {hasNavigation && (
                     <AsideBorder pt="large" width="20rem">
-                      <SideNav api={spec.api} specKey={spec.key} />
+                      <SideNav
+                        headless={headless}
+                        specs={specs}
+                        spec={spec}
+                        specDispatch={specDispatch}
+                      />
                     </AsideBorder>
                   )}
                   <AppRouter
@@ -137,7 +146,7 @@ const ApiExplorer: FC<ApiExplorerProps> = ({
           </LodeContext.Provider>
         </EnvAdaptorContext.Provider>
       </ComponentsProvider>
-      <BodyOverride />
+      {!headless && <BodyOverride />}
     </>
   )
 }
