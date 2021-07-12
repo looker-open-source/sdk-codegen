@@ -25,76 +25,44 @@
  */
 
 import React, { FC, Dispatch } from 'react'
-import styled from 'styled-components'
-import {
-  Icon,
-  Space,
-  IconButton,
-  Heading,
-  Header as SemanticHeader,
-} from '@looker/components'
-import { LookerLogo } from '@looker/icons'
-import { Menu } from '@styled-icons/material/Menu'
+import { Space, IconButton } from '@looker/components'
+import { ChangeHistory } from '@styled-icons/material/ChangeHistory'
 import { SpecList } from '@looker/sdk-codegen'
-
 import { Link } from '../Link'
 import { SpecState, SpecAction } from '../../reducers'
-import { SelectorContainer } from '../SelectorContainer'
+import { diffPath } from '../../utils'
+import { SdkLanguageSelector } from './SdkLanguageSelector'
+import { ApiSpecSelector } from './ApiSpecSelector'
 
-interface HeaderProps {
+interface SelectorContainerProps {
   /** Specs to choose from */
   specs: SpecList
   /** Current selected spec */
   spec: SpecState
   /** Spec state setter */
   specDispatch: Dispatch<SpecAction>
-  /** Nav state setter */
-  toggleNavigation: (target?: boolean) => void
-  className?: string
 }
 
 export const HEADER_REM = 4
 
 /**
- * Renders the API Explorer header
+ * Renders a container for selectors
  */
-export const HeaderLayout: FC<HeaderProps> = ({
-  className,
+export const SelectorContainer: FC<SelectorContainerProps> = ({
   specs,
   spec,
   specDispatch,
-  toggleNavigation,
 }) => (
-  <SemanticHeader
-    height={`${HEADER_REM}rem`}
-    className={className}
-    pl="small"
-    pr="large"
-  >
-    <Space>
+  <Space width="auto">
+    <SdkLanguageSelector />
+    <ApiSpecSelector specs={specs} spec={spec} specDispatch={specDispatch} />
+    <Link to={`/${diffPath}/${spec.key}/`}>
       <IconButton
+        toggle
+        label="Compare Specifications"
+        icon={<ChangeHistory />}
         size="small"
-        onClick={() => toggleNavigation()}
-        icon={<Menu />}
-        label="Toggle Navigation"
       />
-
-      <Link to={`/${spec.key}`}>
-        <Space gap="small">
-          <Icon
-            icon={<LookerLogo />}
-            alt="Looker"
-            color="text5"
-            style={{ width: '82px' }}
-          />
-          <Heading color="key">API Explorer</Heading>
-        </Space>
-      </Link>
-    </Space>
-    <SelectorContainer specs={specs} spec={spec} specDispatch={specDispatch} />
-  </SemanticHeader>
+    </Link>
+  </Space>
 )
-
-export const Header = styled(HeaderLayout)`
-  border-bottom: 1px solid ${({ theme }) => theme.colors.ui2};
-`
