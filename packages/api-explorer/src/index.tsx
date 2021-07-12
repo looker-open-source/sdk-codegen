@@ -69,12 +69,14 @@ const BodyReset = createGlobalStyle`
     margin: 0;
   }
 `
-const devPortal = window.location.pathname.startsWith('/api/docs')
-const routerBasename = devPortal ? '/api/docs' : ''
+
+const basename = (window as any).LOOKER_DEV_PORTAL
+  ? (window as any).LOOKER_DEV_PORTAL.basename
+  : undefined
 
 ReactDOM.render(
-  <Router basename={routerBasename}>
-    <StandaloneApiExplorer specs={specs} headless={devPortal} />
+  <Router basename={basename}>
+    <StandaloneApiExplorer specs={specs} headless={basename} />
     <BodyReset />
   </Router>,
   document.getElementById('container')
