@@ -24,7 +24,14 @@
 
  */
 
-import React, { FC, useReducer, useState, useEffect } from 'react'
+import React, {
+  FC,
+  useReducer,
+  useState,
+  useEffect,
+  useRef,
+  useCallback,
+} from 'react'
 import { useLocation } from 'react-router'
 import styled, { createGlobalStyle } from 'styled-components'
 import { Aside, ComponentsProvider, Layout, Page } from '@looker/components'
@@ -84,6 +91,31 @@ const ApiExplorer: FC<ApiExplorerProps> = ({
   const [hasNavigation, setHasNavigation] = useState(true)
   const toggleNavigation = (target?: boolean) =>
     setHasNavigation(target || !hasNavigation)
+
+  const hasNavigationRef = useRef<boolean>(hasNavigation)
+  const hasNavigationRefToggle = useCallback((e: MessageEvent<any>) => {
+    if (e.origin === window.origin && e.data.action === 'toggle_sidebar') {
+      // Use the current navigation value stored in the ref
+      // (this function is called outside of the scope of a hook
+      // so cannot see state).
+      setHasNavigation(!hasNavigationRef.current)
+    }
+  }, [])
+  useEffect(() => {
+    if (headless) {
+      window.addEventListener('message', hasNavigationRefToggle)
+    }
+    return () => {
+      if (headless) {
+        window.removeEventListener('message', hasNavigationRefToggle)
+      }
+    }
+  }, [])
+  useEffect(() => {
+    // Store current toggle value in a ref so window message
+    // listener knows what it is.
+    hasNavigationRef.current = hasNavigation
+  }, [hasNavigation])
 
   useEffect(() => {
     getLoded(exampleLodeUrl, declarationsLodeUrl).then((resp) => setLode(resp))
