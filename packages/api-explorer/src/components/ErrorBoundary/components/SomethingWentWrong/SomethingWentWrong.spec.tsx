@@ -23,24 +23,36 @@
  SOFTWARE.
 
  */
-export { ApixHeading, ApixSection } from './common'
-export { DocActivityType } from './DocActivityType'
-export { DocCode } from './DocCode'
-export { DocMethodSummary } from './DocMethodSummary'
-export { DocMarkdown } from './DocMarkdown'
-export { DocPseudo } from './DocPseudo'
-export { DocRateLimited } from './DocRateLimited'
-export { DocReferences } from './DocReferences'
-export { DocResponses } from './DocResponses'
-export { DocSDKs } from './DocSDKs'
-export { DocSdkUsage } from './DocSdkUsage'
-export { DocSource } from './DocSource'
-export { DocStatus } from './DocStatus'
-export { DocTitle } from './DocTitle'
-export { Header } from './Header'
-export { SideNav } from './SideNav'
-export { ExploreType, ExploreProperty } from './ExploreType'
-export { CollapserCard } from './Collapser'
-export { DocSchema } from './DocSchema'
-export { Link } from './Link'
-export { ErrorBoundary } from './ErrorBoundary'
+import { renderWithTheme } from '@looker/components-test-utils'
+import React from 'react'
+import { SomethingWentWrong } from './SomethingWentWrong'
+
+const getMockedComponent = (propOverrides = {}) => {
+  const defaultProps = {
+    header: '',
+    actionMessage: '',
+    altText: '',
+  }
+  const updatedProps = { ...defaultProps, ...propOverrides }
+  return <SomethingWentWrong {...updatedProps} />
+}
+
+describe('SomethingWentWrong', () => {
+  it('Should render proper component with correct texts', () => {
+    const header = 'Uh oh something went wrong'
+    const actionMessage = 'User please do this action. It might help'
+    const altText = '500 error graphic'
+
+    const { getByText, getByAltText } = renderWithTheme(
+      getMockedComponent({
+        header,
+        actionMessage,
+        altText,
+      })
+    )
+
+    expect(getByText(header)).toBeVisible()
+    expect(getByText(actionMessage)).toBeVisible()
+    expect(getByAltText(altText)).toBeVisible()
+  })
+})
