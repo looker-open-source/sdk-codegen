@@ -30,7 +30,6 @@ import styled, { createGlobalStyle } from 'styled-components'
 import { Aside, ComponentsProvider, Layout, Page } from '@looker/components'
 import { Looker40SDK, Looker31SDK } from '@looker/sdk'
 import { SpecList } from '@looker/sdk-codegen'
-
 import {
   SearchContext,
   LodeContext,
@@ -38,7 +37,7 @@ import {
   EnvAdaptorContext,
 } from './context'
 import { EnvAdaptorConstants, getLoded, IApixEnvAdaptor } from './utils'
-import { Header, SideNav } from './components'
+import { Header, SideNav, ErrorBoundary } from './components'
 import {
   specReducer,
   initDefaultSpecState,
@@ -125,42 +124,44 @@ const ApiExplorer: FC<ApiExplorerProps> = ({
         loadGoogleFonts={loadGoogleFonts}
         themeCustomizations={themeCustomizations}
       >
-        <EnvAdaptorContext.Provider value={{ envAdaptor }}>
-          <LodeContext.Provider value={{ ...lode }}>
-            <SearchContext.Provider
-              value={{ searchSettings, setSearchSettings }}
-            >
-              <Page style={{ overflow: 'hidden' }}>
-                {!headless && (
-                  <Header
-                    specs={specs}
-                    spec={spec}
-                    specDispatch={specDispatch}
-                    toggleNavigation={toggleNavigation}
-                  />
-                )}
-                <Layout hasAside height="100%">
-                  {hasNavigation && (
-                    <AsideBorder pt="large" width="20rem">
-                      <SideNav
-                        headless={headless}
-                        specs={specs}
-                        spec={spec}
-                        specDispatch={specDispatch}
-                      />
-                    </AsideBorder>
+        <ErrorBoundary logError={envAdaptor.logError.bind(envAdaptor)}>
+          <EnvAdaptorContext.Provider value={{ envAdaptor }}>
+            <LodeContext.Provider value={{ ...lode }}>
+              <SearchContext.Provider
+                value={{ searchSettings, setSearchSettings }}
+              >
+                <Page style={{ overflow: 'hidden' }}>
+                  {!headless && (
+                    <Header
+                      specs={specs}
+                      spec={spec}
+                      specDispatch={specDispatch}
+                      toggleNavigation={toggleNavigation}
+                    />
                   )}
-                  <AppRouter
-                    api={spec.api}
-                    specKey={spec.key}
-                    specs={specs}
-                    toggleNavigation={toggleNavigation}
-                  />
-                </Layout>
-              </Page>
-            </SearchContext.Provider>
-          </LodeContext.Provider>
-        </EnvAdaptorContext.Provider>
+                  <Layout hasAside height="100%">
+                    {hasNavigation && (
+                      <AsideBorder pt="large" width="20rem">
+                        <SideNav
+                          headless={headless}
+                          specs={specs}
+                          spec={spec}
+                          specDispatch={specDispatch}
+                        />
+                      </AsideBorder>
+                    )}
+                    <AppRouter
+                      api={spec.api}
+                      specKey={spec.key}
+                      specs={specs}
+                      toggleNavigation={toggleNavigation}
+                    />
+                  </Layout>
+                </Page>
+              </SearchContext.Provider>
+            </LodeContext.Provider>
+          </EnvAdaptorContext.Provider>
+        </ErrorBoundary>
       </ComponentsProvider>
       {!headless && <BodyOverride />}
     </>
