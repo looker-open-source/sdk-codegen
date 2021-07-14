@@ -106,3 +106,13 @@ export const testErrorResponse: IRawResponse = {
   statusCode: 404,
   statusMessage: 'some status message',
 }
+
+export const testBogusJsonResponse: IRawResponse = {
+  url: 'https://some/json/data',
+  headers: {},
+  contentType: 'application/json',
+  ok: true,
+  statusCode: 200,
+  statusMessage: 'OK',
+  body: Buffer.from('<html><body>I AM A LYING JSON RESPONSE</body></html>'),
+}
