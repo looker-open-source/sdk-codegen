@@ -5,6 +5,23 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+### [0.9.15](https://www.github.com/looker-open-source/sdk-codegen/compare/api-explorer-v0.9.14...api-explorer-v0.9.15) (2021-07-15)
+
+
+### Features
+
+* API explorer error boundary ([#753](https://www.github.com/looker-open-source/sdk-codegen/issues/753)) ([3321bf1](https://www.github.com/looker-open-source/sdk-codegen/commit/3321bf1c7abf9f5165799970da5c2be40d94463a))
+* apix sidebar toggle for dev portal ([#751](https://www.github.com/looker-open-source/sdk-codegen/issues/751)) ([ac83a57](https://www.github.com/looker-open-source/sdk-codegen/commit/ac83a5708feab996a528520103b3f3dd9314861e))
+* initial api explorer dev portal support ([#748](https://www.github.com/looker-open-source/sdk-codegen/issues/748)) ([a4a7056](https://www.github.com/looker-open-source/sdk-codegen/commit/a4a70567bc114466d7650b9fba4545a16a2f0e37))
+* simplify apix dev portal navigation toggle ([#752](https://www.github.com/looker-open-source/sdk-codegen/issues/752)) ([dcbf642](https://www.github.com/looker-open-source/sdk-codegen/commit/dcbf64264387b611bcf939d7430a2cfb4b4665bd))
+
+
+### Dependencies
+
+* The following workspace dependencies were updated
+  * dependencies
+    * @looker/run-it bumped from ^0.9.14 to ^0.9.15
+
 ### [0.9.14](https://www.github.com/looker-open-source/sdk-codegen/compare/api-explorer-v0.9.13...api-explorer-v0.9.14) (2021-07-09)
 
 
