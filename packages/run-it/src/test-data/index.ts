@@ -31,5 +31,6 @@ export {
   testHtmlResponse,
   testUnknownResponse,
   testErrorResponse,
+  testBogusJsonResponse,
 } from './responses'
 export { api } from './specs'
