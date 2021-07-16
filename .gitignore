@@ -25,7 +25,8 @@ python/.tox/
 .DS_Store
 .env
 .env.*
-/.idea
+.idea/
+.direnv/
 
 # logs
 npm-debug.log*
