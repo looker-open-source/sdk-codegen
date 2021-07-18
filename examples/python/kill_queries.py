@@ -12,6 +12,10 @@ Authors: Lan
 Last modified: July 18, 2021
 """
 
+import looker_sdk
+from looker_sdk import models40
+sdk = looker_sdk.init40(config_file='../looker.ini', section='Looker')
+
 
 def kill_queries(user_id=None, source=None):
 
