@@ -3,8 +3,8 @@ This script demonstrates examples with canceling queries using Python SDK
 
 Example:
     Kill all running queries in a Looker instance, or kill queries selectively with optional arguments ('user_id' and 'source') 
-    	Usecase: Running an excssivee amount queries simultaneously may lead to degraded Looker instance performance, especially queries run 
-    	by an API user to send out schedules or queries that require post-processing features (such as merged results, custom fields, and table calculations).
+    	Usecase:  Running an excessive amount of queries simultaneously may lead to degraded Looker instance performance, especially queries run 
+    	by an API user to send out schedules or queries requiring post-processing features (such as merged results, custom fields, and table calculations).
     	In these situations, the fastest way to bring an instance back to a normal stage is to kill all running qeuries to help with restoring CPU and memory.  
 
 Authors: Lan
