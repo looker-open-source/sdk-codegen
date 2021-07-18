@@ -41,6 +41,7 @@ import { StandaloneEnvAdaptor } from './utils'
 
 export interface StandloneApiExplorerProps {
   specs: SpecList
+  headless?: boolean
 }
 
 const standaloneEnvAdaptor = new StandaloneEnvAdaptor()
@@ -48,6 +49,7 @@ const store = configureStore()
 
 export const StandaloneApiExplorer: FC<StandloneApiExplorerProps> = ({
   specs,
+  headless = false,
 }) => {
   const match = useRouteMatch<{ specKey: string }>(`/:specKey`)
   const specKey = match?.params.specKey || ''
@@ -67,7 +69,11 @@ export const StandaloneApiExplorer: FC<StandloneApiExplorerProps> = ({
         configurator={defaultConfigurator}
         basePath="/api/4.0"
       >
-        <ApiExplorer specs={specs} envAdaptor={standaloneEnvAdaptor} />
+        <ApiExplorer
+          specs={specs}
+          envAdaptor={standaloneEnvAdaptor}
+          headless={headless}
+        />
       </RunItProvider>
     </Provider>
   )

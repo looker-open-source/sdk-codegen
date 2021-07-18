@@ -1,5 +1,20 @@
 # Changelog
 
+## [1.11.0](https://www.github.com/looker-open-source/sdk-codegen/compare/sdk-codegen-all-v1.10.1...sdk-codegen-all-v1.11.0) (2021-07-15)
+
+
+### Features
+
+* API explorer error boundary ([#753](https://www.github.com/looker-open-source/sdk-codegen/issues/753)) ([3321bf1](https://www.github.com/looker-open-source/sdk-codegen/commit/3321bf1c7abf9f5165799970da5c2be40d94463a))
+* apix sidebar toggle for dev portal ([#751](https://www.github.com/looker-open-source/sdk-codegen/issues/751)) ([ac83a57](https://www.github.com/looker-open-source/sdk-codegen/commit/ac83a5708feab996a528520103b3f3dd9314861e))
+* initial api explorer dev portal support ([#748](https://www.github.com/looker-open-source/sdk-codegen/issues/748)) ([a4a7056](https://www.github.com/looker-open-source/sdk-codegen/commit/a4a70567bc114466d7650b9fba4545a16a2f0e37))
+* simplify apix dev portal navigation toggle ([#752](https://www.github.com/looker-open-source/sdk-codegen/issues/752)) ([dcbf642](https://www.github.com/looker-open-source/sdk-codegen/commit/dcbf64264387b611bcf939d7430a2cfb4b4665bd))
+
+
+### Bug Fixes
+
+* bullet proof APIX response handling ([#754](https://www.github.com/looker-open-source/sdk-codegen/issues/754)) ([b2a018a](https://www.github.com/looker-open-source/sdk-codegen/commit/b2a018a62e4a1acd837b6861c3e3d26c7af385bd))
+
 ### [1.10.1](https://www.github.com/looker-open-source/sdk-codegen/compare/sdk-codegen-all-v1.10.0...sdk-codegen-all-v1.10.1) (2021-07-09)
 
 

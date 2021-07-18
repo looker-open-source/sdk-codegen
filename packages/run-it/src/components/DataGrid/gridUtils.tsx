@@ -37,7 +37,7 @@ export const parseCsv = (content: string) => {
   return Papa.parse(content.trim())
 }
 
-export const parseJson = (content: any) => {
+export const json2Csv = (content: any) => {
   const csv = Papa.unparse(content)
   return parseCsv(csv)
 }

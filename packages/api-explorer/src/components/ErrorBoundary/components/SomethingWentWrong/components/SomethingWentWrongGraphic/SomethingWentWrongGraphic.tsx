@@ -23,24 +23,20 @@
  SOFTWARE.
 
  */
-export { ApixHeading, ApixSection } from './common'
-export { DocActivityType } from './DocActivityType'
-export { DocCode } from './DocCode'
-export { DocMethodSummary } from './DocMethodSummary'
-export { DocMarkdown } from './DocMarkdown'
-export { DocPseudo } from './DocPseudo'
-export { DocRateLimited } from './DocRateLimited'
-export { DocReferences } from './DocReferences'
-export { DocResponses } from './DocResponses'
-export { DocSDKs } from './DocSDKs'
-export { DocSdkUsage } from './DocSdkUsage'
-export { DocSource } from './DocSource'
-export { DocStatus } from './DocStatus'
-export { DocTitle } from './DocTitle'
-export { Header } from './Header'
-export { SideNav } from './SideNav'
-export { ExploreType, ExploreProperty } from './ExploreType'
-export { CollapserCard } from './Collapser'
-export { DocSchema } from './DocSchema'
-export { Link } from './Link'
-export { ErrorBoundary } from './ErrorBoundary'
+import React from 'react'
+import { Box } from '@looker/components'
+import somethingWentWrong from './somethingWentWrong.svg'
+
+interface SomethingWentWrongGraphicProps {
+  altText?: string
+}
+
+/**
+ * Graphic to be used when something goes wrong on a page
+ */
+export const SomethingWentWrongGraphic: React.FC<SomethingWentWrongGraphicProps> =
+  ({ altText }) => (
+    <Box>
+      <img src={somethingWentWrong} alt={altText || 'error graphic'} />
+    </Box>
+  )

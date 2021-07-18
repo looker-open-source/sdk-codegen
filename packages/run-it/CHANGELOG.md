@@ -1,5 +1,12 @@
 # Changelog
 
+### [0.9.15](https://www.github.com/looker-open-source/sdk-codegen/compare/run-it-v0.9.14...run-it-v0.9.15) (2021-07-15)
+
+
+### Bug Fixes
+
+* bullet proof APIX response handling ([#754](https://www.github.com/looker-open-source/sdk-codegen/issues/754)) ([b2a018a](https://www.github.com/looker-open-source/sdk-codegen/commit/b2a018a62e4a1acd837b6861c3e3d26c7af385bd))
+
 ### [0.9.14](https://www.github.com/looker-open-source/sdk-codegen/compare/run-it-v0.9.13...run-it-v0.9.14) (2021-07-09)
 
 

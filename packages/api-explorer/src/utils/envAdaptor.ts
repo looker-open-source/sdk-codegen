@@ -41,6 +41,8 @@ export interface IApixEnvAdaptor {
   themeOverrides(): ThemeOverrides
   /** Open a new browser window with the given url and target  */
   openBrowserWindow: (url: string, target?: string) => void
+  /** error logger */
+  logError: (error: Error, componentStack: string) => void
 }
 
 /**
@@ -79,7 +81,12 @@ export class StandaloneEnvAdaptor implements IApixEnvAdaptor {
     this._themeOverrides = getThemeOverrides(
       hostname.endsWith('.looker.com') ||
         hostname.endsWith('.google.com') ||
-        hostname === 'localhost'
+        hostname === 'localhost' ||
+        // Include firebase staging dev portal for now. Can be removed
+        // when dev portal gets its own APIX project. Also includes
+        // PRs.
+        (hostname.startsWith('looker-developer-portal') &&
+          hostname.endsWith('.web.app'))
     )
   }
 
@@ -101,6 +108,10 @@ export class StandaloneEnvAdaptor implements IApixEnvAdaptor {
 
   openBrowserWindow(url: string, target?: string) {
     window.open(url, target)
+  }
+
+  logError(_error: Error, _componentStack: string): void {
+    // noop - error logging for standalone APIX TBD
   }
 }
 

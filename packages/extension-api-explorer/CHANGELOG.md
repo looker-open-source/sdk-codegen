@@ -1,5 +1,20 @@
 # Changelog
 
+## [21.11.0](https://www.github.com/looker-open-source/sdk-codegen/compare/extension-api-explorer-v21.10.1...extension-api-explorer-v21.11.0) (2021-07-15)
+
+
+### Features
+
+* API explorer error boundary ([#753](https://www.github.com/looker-open-source/sdk-codegen/issues/753)) ([3321bf1](https://www.github.com/looker-open-source/sdk-codegen/commit/3321bf1c7abf9f5165799970da5c2be40d94463a))
+
+
+### Dependencies
+
+* The following workspace dependencies were updated
+  * dependencies
+    * @looker/api-explorer bumped from ^0.9.14 to ^0.9.15
+    * @looker/run-it bumped from ^0.9.14 to ^0.9.15
+
 ### [21.10.1](https://www.github.com/looker-open-source/sdk-codegen/compare/extension-api-explorer-v21.10.0...extension-api-explorer-v21.10.1) (2021-07-09)
 
 

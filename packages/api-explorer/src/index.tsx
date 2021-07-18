@@ -70,9 +70,13 @@ const BodyReset = createGlobalStyle`
   }
 `
 
+const basename = (window as any).LOOKER_DEV_PORTAL
+  ? (window as any).LOOKER_DEV_PORTAL.basename
+  : undefined
+
 ReactDOM.render(
-  <Router>
-    <StandaloneApiExplorer specs={specs} />
+  <Router basename={basename}>
+    <StandaloneApiExplorer specs={specs} headless={basename} />
     <BodyReset />
   </Router>,
   document.getElementById('container')
