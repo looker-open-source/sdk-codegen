@@ -91,6 +91,7 @@ def main():
     }
 
     admins have access to all content folders and are not included"""
+
     folders = get_folders()
     print('** gathering shared folders **')
     folder_access = grab_folder_permissions(
