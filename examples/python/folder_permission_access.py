@@ -1,6 +1,10 @@
 """
-This script will construct an array of objects detailing which users/groups 
-have read/write content access to each folder.
+This script will construct and output an object detailing content access metadata for each folder, 
+providing an example of how to recursively traverse the folder tree. For each folder, the object will
+contain a list of Groups and Users who have either been explicitly been granted view/edit access to 
+the folder, or implicitly given via inheritence from a parent folder.
+
+To include personal and/or the embed shared folders, modify the parameters below. 
 """
 
 import looker_sdk

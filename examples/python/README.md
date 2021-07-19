@@ -9,6 +9,7 @@ You can find Python language examples in this folder.
 ## Content Access Management 
 
 - [Add a board or dashboard to Favorites for a list of users](add_contents_to_favorite.py)
+- [Output permission access for folders](folder_permission_access.py)
 
 ## Dashboards Management 
 
