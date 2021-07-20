@@ -141,7 +141,7 @@ const ApiExplorer: FC<ApiExplorerProps> = ({
                   )}
                   <Layout hasAside height="100%">
                     {hasNavigation && (
-                      <AsideBorder pt="large" width="20rem">
+                      <AsideBorder width="20rem">
                         <SideNav
                           headless={headless}
                           specs={specs}
