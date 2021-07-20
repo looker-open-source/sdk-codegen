@@ -121,7 +121,7 @@ export const SideNav: FC<SideNavProps> = ({
       <SpaceVertical alignItems="center" p="large" gap="xsmall">
         {headless && (
           <SpaceVertical>
-            <Heading color="key" as="h3">
+            <Heading as="h5" color="key" fontWeight="bold">
               API Documentation
             </Heading>
             <SelectorContainer
