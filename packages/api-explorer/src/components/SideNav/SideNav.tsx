@@ -26,6 +26,7 @@
 
 import React, { FC, useContext, useEffect, useState, Dispatch } from 'react'
 import {
+  Heading,
   TabList,
   Tab,
   TabPanel,
@@ -112,17 +113,23 @@ export const SideNav: FC<SideNavProps> = ({
   }, [debouncedPattern, specKey])
 
   const size = useWindowSize()
-  const menuH = size.height - 16 * HEADER_REM - 120
+  const headlessOffset = headless ? 200 : 120
+  const menuH = size.height - 16 * HEADER_REM - headlessOffset
 
   return (
     <nav>
       <SpaceVertical alignItems="center" p="large" gap="xsmall">
         {headless && (
-          <SelectorContainer
-            specs={specs}
-            spec={spec}
-            specDispatch={specDispatch}
-          />
+          <SpaceVertical>
+            <Heading as="h5" color="key" fontWeight="bold">
+              API Documentation
+            </Heading>
+            <SelectorContainer
+              specs={specs}
+              spec={spec}
+              specDispatch={specDispatch}
+            />
+          </SpaceVertical>
         )}
         <InputSearch
           aria-label="Search"
