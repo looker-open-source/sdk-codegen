@@ -25,10 +25,10 @@
  */
 import React, { ReactElement } from 'react'
 import { IRawResponse, ResponseMode, responseMode } from '@looker/sdk-rtl'
-import { Paragraph, CodeBlock } from '@looker/components'
+import { Paragraph, CodeBlock, MessageBar } from '@looker/components'
 import { CodeDisplay } from '@looker/code-editor'
 
-import { DataGrid, parseCsv, parseJson } from '../DataGrid'
+import { DataGrid, parseCsv, json2Csv } from '../DataGrid'
 
 /**
  * Are all items this array "simple"
@@ -63,20 +63,17 @@ export const isColumnar = (data: any[]) => {
  *
  * Shows the JSON in a syntax-highlighted fashion
  * If the JSON is parseable as 2D row/column data it will also be shown in grid
+ * If JSON cannot be parsed it will be show as is
  * @param response
  */
 const ShowJSON = (response: IRawResponse) => {
   const content = response.body.toString()
-  const data = parseJson(content)
+  const data = json2Csv(content)
   const showGrid = isColumnar(data.data)
-  const raw = (
-    <CodeDisplay
-      code={JSON.stringify(JSON.parse(response.body), null, 2)}
-      transparent
-    />
-  )
-  if (!showGrid) return raw
-  return <DataGrid data={data.data} raw={raw} />
+  const json = JSON.stringify(JSON.parse(response.body), null, 2)
+  const raw = <CodeDisplay code={json} lineNumbers={false} transparent />
+  if (showGrid) return <DataGrid data={data.data} raw={raw} />
+  return raw
 }
 
 /** A handler for text type responses */
@@ -119,6 +116,10 @@ const ShowHTML = (response: IRawResponse) => (
   <CodeDisplay language="html" code={response.body.toString()} transparent />
 )
 
+const ShowSQL = (response: IRawResponse) => (
+  <CodeDisplay language="sql" code={response.body.toString()} transparent />
+)
+
 /**
  * A handler for unknown response types. It renders the size of the unknown response and its type.
  */
@@ -135,6 +136,21 @@ const ShowPDF = (response: IRawResponse) => {
   // TODO display a PDF, maybe similar to https://github.com/wojtekmaj/react-pdf/blob/master/sample/webpack/Sample.jsx
   return ShowUnknown(response)
 }
+
+/** A handler for responses that cannot be parsed */
+const ShowRaw = (response: IRawResponse) => (
+  <>
+    {ShowUnknown(response)}
+    <MessageBar intent="warn" noActions>
+      The response body could not be parsed. Displaying raw data.
+    </MessageBar>
+    <CodeDisplay
+      language="unknown"
+      code={response.body.toString()}
+      transparent
+    />
+  </>
+)
 
 interface Responder {
   /** A label indicating the supported MIME type(s) */
@@ -179,6 +195,11 @@ export const responseHandlers: Responder[] = [
     component: (response) => ShowPDF(response),
   },
   {
+    label: 'sql',
+    isRecognized: (contentType) => /application\/sql/g.test(contentType),
+    component: (response) => ShowSQL(response),
+  },
+  {
     label: 'text',
     isRecognized: (contentType) =>
       responseMode(contentType) === ResponseMode.string ||
@@ -203,3 +224,9 @@ export const pickResponseHandler = (response: IRawResponse) => {
   }
   return result
 }
+
+export const fallbackResponseHandler = (): Responder => ({
+  label: 'unknown',
+  isRecognized: (contentType: string) => !!contentType,
+  component: (response) => ShowRaw(response),
+})

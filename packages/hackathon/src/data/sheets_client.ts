@@ -23,7 +23,7 @@
  SOFTWARE.
 
  */
-import { omit } from 'lodash'
+import omit from 'lodash/omit'
 import { ValidationMessages } from '@looker/components'
 import { DefaultSettings } from '@looker/sdk-rtl'
 import { ITabTable, SheetSDK } from '@looker/wholly-sheet'
@@ -427,7 +427,9 @@ class SheetsClient {
       return await hackathons.find(hackathonId, '_id')
     } else {
       const data = this.getSheetData()
-      return await (await data).currentHackathon
+      return await (
+        await data
+      ).currentHackathon
     }
   }
 

@@ -73,7 +73,7 @@ jobs:
           echo "timeout=30" >> looker.ini
 
       - name: Run unit tests
-        run: yarn jest "packages/(extension-sdk|extension-sdk-react|sdk-rtl)/src" --reporters=default --reporters=jest-junit
+        run: yarn jest "packages/(extension-sdk|extension-sdk-react|sdk-rtl|sdk)/src" --reporters=default --reporters=jest-junit
 
       - name: Delete looker.ini mock
         run: rm looker.ini
@@ -98,10 +98,10 @@ jobs:
         os:
           - ubuntu
         looker:
-          - '7_18'
-          - '7_20'
-          - '21_0'
           - '21_4'
+          - '21_6'
+          - '21_8'
+          - '21_10'
 
     steps:
       - name: Repo Checkout
@@ -172,31 +172,11 @@ jobs:
       - name: Publish Unit Test Results
         uses: EnricoMi/publish-unit-test-result-action@v1.12
         with:
+          # Cosmetic issue with `check_name` being associated to the wrong
+          # workflow: https://github.com/EnricoMi/publish-unit-test-result-action/issues/12
           check_name: Typescript Tests
           github_token: ${{ secrets.GITHUB_TOKEN }}
           report_individual_runs: true
           hide_comments: orphaned commits
           check_run_annotations_branch: '*'
           files: 'artifacts/tssdk-test-results/*.xml'
-
-  # The following jobs are necessary because they are configured as required
-  # checks on PRs and would not otherwise run in this workflow. If the PR/branch
-  # triggering this workflow file also needs to actually run these tests, the
-  # other workflow files will pick it up and submit the results. In that case
-  # there will be duplicate PR check names but github handles this and requires
-  # both to be passing.
-  noop-codegen-results:
-    name: Codegen Tests
-    needs: [publish-test-results]
-    if: success() || failure()
-    runs-on: ubuntu-latest
-    steps:
-      - run: exit 0
-
-  noop-python-results:
-    name: Python Tests
-    needs: [publish-test-results]
-    if: success() || failure()
-    runs-on: ubuntu-latest
-    steps:
-      - run: exit 0

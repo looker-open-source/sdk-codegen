@@ -79,6 +79,6 @@ export class Users extends WhollySheet<User, IUserProps> {
   }
 
   typeRow<User>(values?: any) {
-    return (new User(values) as unknown) as User
+    return new User(values) as unknown as User
   }
 }

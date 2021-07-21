@@ -23,4 +23,8 @@
  SOFTWARE.
 
  */
-export { getPrismLanguage, getOverridenTheme } from './utils'
+export {
+  getPrismLanguage,
+  getOverridenTheme,
+  instanceOfPrismLanguage,
+} from './utils'

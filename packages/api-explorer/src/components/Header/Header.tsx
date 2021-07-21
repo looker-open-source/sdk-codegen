@@ -26,7 +26,6 @@
 
 import React, { FC, Dispatch } from 'react'
 import styled from 'styled-components'
-import { NavLink } from 'react-router-dom'
 import {
   Icon,
   Space,
@@ -35,13 +34,12 @@ import {
   Header as SemanticHeader,
 } from '@looker/components'
 import { LookerLogo } from '@looker/icons'
-import { ChangeHistory, Menu } from '@styled-icons/material'
-
+import { Menu } from '@styled-icons/material/Menu'
 import { SpecList } from '@looker/sdk-codegen'
+
+import { Link } from '../Link'
 import { SpecState, SpecAction } from '../../reducers'
-import { diffPath } from '../../utils'
-import { SdkLanguageSelector } from './SdkLanguageSelector'
-import { ApiSpecSelector } from './ApiSpecSelector'
+import { SelectorContainer } from '../SelectorContainer'
 
 interface HeaderProps {
   /** Specs to choose from */
@@ -81,7 +79,7 @@ export const HeaderLayout: FC<HeaderProps> = ({
         label="Toggle Navigation"
       />
 
-      <NavLink to={`/${spec.key}`}>
+      <Link to={`/${spec.key}`}>
         <Space gap="small">
           <Icon
             icon={<LookerLogo />}
@@ -91,20 +89,9 @@ export const HeaderLayout: FC<HeaderProps> = ({
           />
           <Heading color="key">API Explorer</Heading>
         </Space>
-      </NavLink>
+      </Link>
     </Space>
-    <Space width="auto">
-      <SdkLanguageSelector />
-      <ApiSpecSelector specs={specs} spec={spec} specDispatch={specDispatch} />
-      <NavLink to={`/${diffPath}/${spec.key}/`}>
-        <IconButton
-          toggle
-          label="Compare Specifications"
-          icon={<ChangeHistory />}
-          size="small"
-        />
-      </NavLink>
-    </Space>
+    <SelectorContainer specs={specs} spec={spec} specDispatch={specDispatch} />
   </SemanticHeader>
 )
 

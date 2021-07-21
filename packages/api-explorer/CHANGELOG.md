@@ -5,6 +5,173 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+### [0.9.15](https://www.github.com/looker-open-source/sdk-codegen/compare/api-explorer-v0.9.14...api-explorer-v0.9.15) (2021-07-15)
+
+
+### Features
+
+* API explorer error boundary ([#753](https://www.github.com/looker-open-source/sdk-codegen/issues/753)) ([3321bf1](https://www.github.com/looker-open-source/sdk-codegen/commit/3321bf1c7abf9f5165799970da5c2be40d94463a))
+* apix sidebar toggle for dev portal ([#751](https://www.github.com/looker-open-source/sdk-codegen/issues/751)) ([ac83a57](https://www.github.com/looker-open-source/sdk-codegen/commit/ac83a5708feab996a528520103b3f3dd9314861e))
+* initial api explorer dev portal support ([#748](https://www.github.com/looker-open-source/sdk-codegen/issues/748)) ([a4a7056](https://www.github.com/looker-open-source/sdk-codegen/commit/a4a70567bc114466d7650b9fba4545a16a2f0e37))
+* simplify apix dev portal navigation toggle ([#752](https://www.github.com/looker-open-source/sdk-codegen/issues/752)) ([dcbf642](https://www.github.com/looker-open-source/sdk-codegen/commit/dcbf64264387b611bcf939d7430a2cfb4b4665bd))
+
+
+### Dependencies
+
+* The following workspace dependencies were updated
+  * dependencies
+    * @looker/run-it bumped from ^0.9.14 to ^0.9.15
+
+### [0.9.14](https://www.github.com/looker-open-source/sdk-codegen/compare/api-explorer-v0.9.13...api-explorer-v0.9.14) (2021-07-09)
+
+
+### Dependencies
+
+* The following workspace dependencies were updated
+  * dependencies
+    * @looker/code-editor bumped from ^0.1.6 to ^0.1.7
+    * @looker/run-it bumped from ^0.9.13 to ^0.9.14
+    * @looker/sdk bumped from ^21.10.0 to ^21.10.1
+    * @looker/sdk-codegen bumped from ^21.0.21 to ^21.0.22
+    * @looker/sdk-rtl bumped from ^21.0.17 to ^21.0.18
+  * devDependencies
+    * @looker/sdk-codegen-scripts bumped from ^21.0.22 to ^21.0.23
+    * @looker/sdk-node bumped from ^21.10.0 to ^21.10.1
+
+### [0.9.13](https://www.github.com/looker-open-source/sdk-codegen/compare/api-explorer-v0.9.12...api-explorer-v0.9.13) (2021-07-08)
+
+
+### Dependencies
+
+* The following workspace dependencies were updated
+  * dependencies
+    * @looker/code-editor bumped from ^0.1.5 to ^0.1.6
+    * @looker/run-it bumped from ^0.9.12 to ^0.9.13
+    * @looker/sdk bumped from ^21.8.3 to ^21.10.0
+    * @looker/sdk-codegen bumped from ^21.0.20 to ^21.0.21
+    * @looker/sdk-rtl bumped from ^21.0.16 to ^21.0.17
+  * devDependencies
+    * @looker/sdk-codegen-scripts bumped from ^21.0.21 to ^21.0.22
+    * @looker/sdk-node bumped from ^21.8.2 to ^21.10.0
+
+### [0.9.12](https://www.github.com/looker-open-source/sdk-codegen/compare/api-explorer-v0.9.11...api-explorer-v0.9.12) (2021-07-02)
+
+
+### Dependencies
+
+* The following workspace dependencies were updated
+  * dependencies
+    * @looker/code-editor bumped from ^0.1.4 to ^0.1.5
+    * @looker/run-it bumped from ^0.9.11 to ^0.9.12
+    * @looker/sdk bumped from ^21.8.2 to ^21.8.3
+    * @looker/sdk-codegen bumped from ^21.0.19 to ^21.0.20
+    * @looker/sdk-rtl bumped from ^21.0.15 to ^21.0.16
+  * devDependencies
+    * @looker/sdk-codegen-scripts bumped from ^21.0.20 to ^21.0.21
+    * @looker/sdk-node bumped from ^21.8.1 to ^21.8.2
+
+### [0.9.11](https://www.github.com/looker-open-source/sdk-codegen/compare/api-explorer-v0.9.10...api-explorer-v0.9.11) (2021-07-01)
+
+
+### Dependencies
+
+* The following workspace dependencies were updated
+  * dependencies
+    * @looker/code-editor bumped from ^0.1.3 to ^0.1.4
+    * @looker/run-it bumped from ^0.9.10 to ^0.9.11
+    * @looker/sdk bumped from ^21.8.1 to ^21.8.2
+    * @looker/sdk-codegen bumped from ^21.0.18 to ^21.0.19
+    * @looker/sdk-rtl bumped from ^21.0.14 to ^21.0.15
+  * devDependencies
+    * @looker/sdk-codegen-scripts bumped from ^21.0.19 to ^21.0.20
+    * @looker/sdk-node bumped from ^21.8.0 to ^21.8.1
+
+### [0.9.10](https://www.github.com/looker-open-source/sdk-codegen/compare/api-explorer-v0.9.9...api-explorer-v0.9.10) (2021-06-30)
+
+
+### Features
+
+* refactor Markdown out to @looker/code-editor ([#699](https://www.github.com/looker-open-source/sdk-codegen/issues/699)) ([f3c16e2](https://www.github.com/looker-open-source/sdk-codegen/commit/f3c16e2a162266545ba3086a0a1dddd0cb79195f))
+
+
+### Dependencies
+
+* The following workspace dependencies were updated
+  * dependencies
+    * @looker/code-editor bumped from ^0.1.2 to ^0.1.3
+    * @looker/run-it bumped from ^0.9.9 to ^0.9.10
+    * @looker/sdk bumped from ^21.8.0 to ^21.8.1
+    * @looker/sdk-codegen bumped from ^21.0.17 to ^21.0.18
+    * @looker/sdk-rtl bumped from ^21.0.13 to ^21.0.14
+  * devDependencies
+    * @looker/sdk-codegen-scripts bumped from ^21.0.18 to ^21.0.19
+
+### [0.9.9](https://www.github.com/looker-open-source/sdk-codegen/compare/api-explorer-v0.9.8...api-explorer-v0.9.9) (2021-06-17)
+
+
+### Dependencies
+
+* The following workspace dependencies were updated
+  * dependencies
+    * @looker/run-it bumped from ^0.9.8 to ^0.9.9
+    * @looker/sdk bumped from ^21.6.1 to ^21.8.0
+  * devDependencies
+    * @looker/sdk-codegen-scripts bumped from ^21.0.17 to ^21.0.18
+    * @looker/sdk-node bumped from ^21.6.1 to ^21.8.0
+
+### [0.9.8](https://www.github.com/looker-open-source/sdk-codegen/compare/api-explorer-v0.9.7...api-explorer-v0.9.8) (2021-06-16)
+
+
+### Features
+
+* reduce size of apix bundle ([#676](https://www.github.com/looker-open-source/sdk-codegen/issues/676)) ([0d74f6a](https://www.github.com/looker-open-source/sdk-codegen/commit/0d74f6a7814b509416a9d2558c16439a4859b543))
+* show original spec in API Explorer ([#686](https://www.github.com/looker-open-source/sdk-codegen/issues/686)) ([2bfb014](https://www.github.com/looker-open-source/sdk-codegen/commit/2bfb0147f2947680a784ef3118192b1e7590b296))
+* two-way type references ([#684](https://www.github.com/looker-open-source/sdk-codegen/issues/684)) ([fbc0565](https://www.github.com/looker-open-source/sdk-codegen/commit/fbc0565c4c8fe3d1488bd246e244bed56f1412a9))
+* upgrade react-markdown ([#681](https://www.github.com/looker-open-source/sdk-codegen/issues/681)) ([952ed30](https://www.github.com/looker-open-source/sdk-codegen/commit/952ed305347e591154413171d73cc648d3f597c5))
+
+
+### Bug Fixes
+
+* font download on route change ([#678](https://www.github.com/looker-open-source/sdk-codegen/issues/678)) ([ae62914](https://www.github.com/looker-open-source/sdk-codegen/commit/ae62914faa2e93d5523ddc82973f23df2992ea2f))
+* rendering of markdown tables in APIX explorer ([#687](https://www.github.com/looker-open-source/sdk-codegen/issues/687)) ([40e8640](https://www.github.com/looker-open-source/sdk-codegen/commit/40e8640872db001075c397b5d941dec535867a3d))
+* sync design-tokens/icons dependency constraint ([eb1a427](https://www.github.com/looker-open-source/sdk-codegen/commit/eb1a427d3c90bec44b2aac542783c3cda4810c0e))
+* sync design-tokens/icons dependency constraint ([eb1a427](https://www.github.com/looker-open-source/sdk-codegen/commit/eb1a427d3c90bec44b2aac542783c3cda4810c0e))
+
+
+### Dependencies
+
+* The following workspace dependencies were updated
+  * dependencies
+    * @looker/code-editor bumped from ^0.1.1 to ^0.1.2
+    * @looker/run-it bumped from ^0.9.7 to ^0.9.8
+    * @looker/sdk bumped from ^21.6.0 to ^21.6.1
+    * @looker/sdk-codegen bumped from ^21.0.16 to ^21.0.17
+  * devDependencies
+    * @looker/sdk-codegen-scripts bumped from ^21.0.16 to ^21.0.17
+    * @looker/sdk-node bumped from ^21.6.0 to ^21.6.1
+
+### [0.9.7](https://www.github.com/looker-open-source/sdk-codegen/compare/api-explorer-v0.9.6...api-explorer-v0.9.7) (2021-05-05)
+
+
+### Bug Fixes
+
+* rerender sdk declarations on type/method change ([#659](https://www.github.com/looker-open-source/sdk-codegen/issues/659)) ([77139f6](https://www.github.com/looker-open-source/sdk-codegen/commit/77139f672200d31518543eb76546e9bb2ccf64c3))
+* use "TypeScript" and "JavaScript" everywhere ([#644](https://www.github.com/looker-open-source/sdk-codegen/issues/644)) ([c15031c](https://www.github.com/looker-open-source/sdk-codegen/commit/c15031cee189556adbd9e18641e7c992e86e3611))
+
+
+### Dependencies
+
+* The following workspace dependencies were updated
+  * dependencies
+    * @looker/code-editor bumped from ^0.1.0 to ^0.1.1
+    * @looker/run-it bumped from ^0.9.6 to ^0.9.7
+    * @looker/sdk bumped from ^21.4.3 to ^21.6.0
+    * @looker/sdk-codegen bumped from ^21.0.15 to ^21.0.16
+    * @looker/sdk-rtl bumped from ^21.0.12 to ^21.0.13
+  * devDependencies
+    * @looker/sdk-codegen-scripts bumped from ^21.0.15 to ^21.0.16
+    * @looker/sdk-node bumped from ^21.4.4 to ^21.6.0
+
 ### [0.9.6](https://www.github.com/looker-open-source/sdk-codegen/compare/api-explorer-v0.9.5...api-explorer-v0.9.6) (2021-04-27)
 
 

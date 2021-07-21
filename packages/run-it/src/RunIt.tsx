@@ -134,9 +134,8 @@ export const RunIt: FC<RunItProps> = ({
   const [requestContent, setRequestContent] = useState({})
   const [activePathParams, setActivePathParams] = useState({})
   const [loading, setLoading] = useState(false)
-  const [responseContent, setResponseContent] = useState<ResponseContent>(
-    undefined
-  )
+  const [responseContent, setResponseContent] =
+    useState<ResponseContent>(undefined)
   const [isExtension, setIsExtension] = useState<boolean>(false)
   const [hasConfig, setHasConfig] = useState<boolean>(true)
   const [needsAuth, setNeedsAuth] = useState<boolean>(true)
@@ -169,8 +168,9 @@ export const RunIt: FC<RunItProps> = ({
     tabs.onSelectTab(1)
     if (sdk) {
       setLoading(true)
-      setResponseContent(
-        await runRequest(
+      let response: ResponseContent
+      try {
+        response = await runRequest(
           sdk,
           basePath,
           httpMethod,
@@ -179,7 +179,18 @@ export const RunIt: FC<RunItProps> = ({
           queryParams,
           body
         )
-      )
+      } catch (err) {
+        // This should not happen but it could. runRequest uses
+        // sdk.ok to login once. sdk.ok throws an error so fake
+        // out the response so that something can be rendered.
+        response = {
+          ok: false,
+          statusMessage: err.message ? err.message : 'Unknown error!',
+          statusCode: -1,
+          body: JSON.stringify(err),
+        } as ResponseContent
+      }
+      setResponseContent(response)
     }
   }
 

@@ -39,6 +39,10 @@ export interface IApixEnvAdaptor {
   localStorageRemoveItem(key: string): void
   /** Theme settings for extension */
   themeOverrides(): ThemeOverrides
+  /** Open a new browser window with the given url and target  */
+  openBrowserWindow: (url: string, target?: string) => void
+  /** error logger */
+  logError: (error: Error, componentStack: string) => void
 }
 
 /**
@@ -70,6 +74,22 @@ export const getThemeOverrides = (useGoogleFonts: boolean): ThemeOverrides =>
  * An adaptor class for interacting with browser APIs when running in standalone mode
  */
 export class StandaloneEnvAdaptor implements IApixEnvAdaptor {
+  private _themeOverrides: ThemeOverrides
+
+  constructor() {
+    const { hostname } = location
+    this._themeOverrides = getThemeOverrides(
+      hostname.endsWith('.looker.com') ||
+        hostname.endsWith('.google.com') ||
+        hostname === 'localhost' ||
+        // Include firebase staging dev portal for now. Can be removed
+        // when dev portal gets its own APIX project. Also includes
+        // PRs.
+        (hostname.startsWith('looker-developer-portal') &&
+          hostname.endsWith('.web.app'))
+    )
+  }
+
   async localStorageGetItem(key: string) {
     return localStorage.getItem(key)
   }
@@ -82,13 +102,16 @@ export class StandaloneEnvAdaptor implements IApixEnvAdaptor {
     await localStorage.removeItem(key)
   }
 
-  themeOverrides(): ThemeOverrides {
-    const { hostname } = location
-    return getThemeOverrides(
-      hostname.endsWith('.looker.com') ||
-        hostname.endsWith('.google.com') ||
-        hostname === 'localhost'
-    )
+  themeOverrides() {
+    return this._themeOverrides
+  }
+
+  openBrowserWindow(url: string, target?: string) {
+    window.open(url, target)
+  }
+
+  logError(_error: Error, _componentStack: string): void {
+    // noop - error logging for standalone APIX TBD
   }
 }
 

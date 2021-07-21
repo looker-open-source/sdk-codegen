@@ -5,6 +5,42 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [21.10.0](https://www.github.com/looker-open-source/sdk-codegen/compare/looker_sdk-v21.8.1...looker_sdk-v21.10.0) (2021-07-08)
+
+
+### Features
+
+* Looker 21.10 bindings ([#737](https://www.github.com/looker-open-source/sdk-codegen/issues/737)) ([6b3895d](https://www.github.com/looker-open-source/sdk-codegen/commit/6b3895d35e138df9ff84286b7658434292617aa8))
+
+### [21.8.1](https://www.github.com/looker-open-source/sdk-codegen/compare/looker_sdk-v21.8.0...looker_sdk-v21.8.1) (2021-07-02)
+
+
+### Bug Fixes
+
+* python datetime [de]serialization bug ([#734](https://www.github.com/looker-open-source/sdk-codegen/issues/734)) ([c821f2b](https://www.github.com/looker-open-source/sdk-codegen/commit/c821f2b77b99edfa2dd53aa0af82ab48081c3220))
+* python remove runtime asserts ([#703](https://www.github.com/looker-open-source/sdk-codegen/issues/703)) ([9b963c3](https://www.github.com/looker-open-source/sdk-codegen/commit/9b963c3367905f907e7867df1446f56e18284c3b)), closes [#695](https://www.github.com/looker-open-source/sdk-codegen/issues/695)
+
+## [21.8.0](https://www.github.com/looker-open-source/sdk-codegen/compare/looker_sdk-v21.6.1...looker_sdk-v21.8.0) (2021-06-17)
+
+
+### Features
+
+* Looker 21.8 bindings ([#705](https://www.github.com/looker-open-source/sdk-codegen/issues/705)) ([032d0f8](https://www.github.com/looker-open-source/sdk-codegen/commit/032d0f80e30356aaa9f3b3f987b315203f896a61))
+
+### [21.6.1](https://www.github.com/looker-open-source/sdk-codegen/compare/looker_sdk-v21.6.0...looker_sdk-v21.6.1) (2021-06-16)
+
+
+### Documentation
+
+* Typescript and Python README updates for GA ([#674](https://www.github.com/looker-open-source/sdk-codegen/issues/674)) ([c0c7ce7](https://www.github.com/looker-open-source/sdk-codegen/commit/c0c7ce721c000564e85d239d7c9059f2f54876f9))
+
+## [21.6.0](https://www.github.com/looker-open-source/sdk-codegen/compare/looker_sdk-v21.4.1...looker_sdk-v21.6.0) (2021-05-05)
+
+
+### Features
+
+* update SDKs to Looker 21.6 ([#666](https://www.github.com/looker-open-source/sdk-codegen/issues/666)) ([b2b6b79](https://www.github.com/looker-open-source/sdk-codegen/commit/b2b6b793e38d05d0fcb6236505fb581778d12094))
+
 ### [21.4.1](https://www.github.com/looker-open-source/sdk-codegen/compare/looker_sdk-v21.4.0...looker_sdk-v21.4.1) (2021-04-15)
 
 

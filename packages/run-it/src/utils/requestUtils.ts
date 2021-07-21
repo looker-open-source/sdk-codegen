@@ -25,7 +25,7 @@
  */
 
 import { IAPIMethods, IRawResponse } from '@looker/sdk-rtl'
-import { cloneDeep } from 'lodash'
+import cloneDeep from 'lodash/cloneDeep'
 
 import { RunItHttpMethod, RunItInput, RunItValues } from '../RunIt'
 import { runItSDK } from './RunItSDK'

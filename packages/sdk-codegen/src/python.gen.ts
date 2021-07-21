@@ -107,7 +107,7 @@ export class PythonGen extends CodeGen {
   methodsPrologue = (_indent: string) => `
 # ${this.warnEditing()}
 import datetime
-from typing import Any, MutableMapping, Optional, Sequence, Union
+from typing import Any, MutableMapping, Optional, Sequence, Union, cast
 import warnings
 
 from . import models
@@ -172,12 +172,6 @@ ${this.hooks.join('\n')}
       hash.push(`"${arg}": ${arg}`)
     }
     return `{${hash.join(this.dataStructureDelimiter)}}`
-  }
-
-  argList(indent: string, args: Arg[]) {
-    return args && args.length !== 0
-      ? `\n${indent}${args.join(this.argDelimiter)}`
-      : this.nullStr
   }
 
   beginRegion(indent: string, description: string): string {
@@ -369,84 +363,73 @@ ${this.hooks.join('\n')}
   }
 
   // this is a builder function to produce arguments with optional null place holders but no extra required optional arguments
-  argFill(current: string, args: string) {
+  argFill(current: string, args: string): string {
     if (!current && args.trim() === this.nullStr) {
       // Don't append trailing optional arguments if none have been set yet
       return ''
     }
-    let delimiter = this.argDelimiter
+    let delimiter = ',\n'
     if (!current) {
       delimiter = ''
       // Caller manually inserted delimiter followed by inline comment
     } else if (args.match(/, {2}#/)) {
-      delimiter = this.argDelimiter.replace(',', '')
+      delimiter = delimiter.replace(',', '')
     }
     return `${args}${delimiter}${current}`
   }
 
-  httpArgs(indent: string, method: IMethod) {
-    let result = this.argFill('', this.argGroup(indent, method.cookieArgs))
-    result = this.argFill(result, this.argGroup(indent, method.headerArgs))
-    result = this.argFill(result, `transport_options=transport_options`)
+  httpArgs(callerIndent: string, method: IMethod): string {
+    const currIndent = this.bumper(callerIndent)
+    let args = ''
+    args = this.argFill(
+      args,
+      `${currIndent}transport_options=transport_options`
+    )
     if (method.bodyArg) {
-      result = this.argFill(result, `body=${method.bodyArg}`)
+      args = this.argFill(args, `${currIndent}body=${method.bodyArg}`)
     }
     if (method.queryArgs.length) {
-      const queryParams = this.argGroup(indent, method.queryArgs)
-      result = this.argFill(result, `query_params=${queryParams}`)
+      const queryParams = this.argGroup('', method.queryArgs)
+      args = this.argFill(args, `${currIndent}query_params=${queryParams}`)
     }
-    const type = this.typeMapMethods(method.type)
     let returnType = this.methodReturnType(method)
-    if (returnType === `Union[${type.name}, bytes]`) {
-      returnType = `${returnType},  # type: ignore`
+    if (method.responseIsBoth()) {
+      // cattrs needs the python object Union[<rt>, bytes] in order
+      // to properly deserialize the response. However, this argument
+      // is passed as a value so we get a mypy error that the argument
+      // has type "object" instead of TStructure. Hence the # type: ignore
+      returnType += ',  # type: ignore'
     }
-    result = this.argFill(result, returnType)
-    result = this.argFill(result, `f"${method.endpoint}"`)
-    return this.bumper(indent) + result
+    args = this.argFill(args, `${currIndent}structure=${returnType}`)
+    let endpoint = `"${method.endpoint}"`
+    if (/\{\w+\}/.test(endpoint)) {
+      // avoid flake8: f-string is missing placeholders
+      endpoint = `f${endpoint}`
+    }
+    args = this.argFill(args, `${currIndent}path=${endpoint}`)
+    return args
   }
 
-  httpCall(indent: string, method: IMethod) {
-    const bump = indent + this.indentStr
-    const args = this.httpArgs(bump, method)
-    let methodCall = `${indent}response = ${this.it(
-      method.httpMethod.toLowerCase()
-    )}`
+  httpCall(callerIndent: string, method: IMethod): string {
+    // callOpener itself is nested inside a cast()
+    const currIndent = this.bumper(callerIndent)
+    let deprecation = ''
     if (method.name === 'login_user') {
-      methodCall =
-        `${indent}warnings.warn("login_user behavior changed significantly ` +
-        `in 21.4.0. See https://git.io/JOtH1")\n${methodCall}`
+      deprecation =
+        `${callerIndent}warnings.warn("login_user behavior changed significantly ` +
+        `in 21.4.0. See https://git.io/JOtH1")\n`
     }
-    let assertTypeName = this.methodReturnType(method)
-    switch (method.type.className) {
-      case 'ArrayType':
-        assertTypeName = 'list'
-        break
-      case 'HashType':
-        assertTypeName = 'dict'
-        break
-      default:
-        if (assertTypeName === 'Union[str, bytes]') {
-          assertTypeName = '(str, bytes)'
-        }
-    }
-    let assertion = `${indent}assert `
-    if (assertTypeName === this.nullStr) {
-      assertion += `response is ${this.nullStr}`
-    } else {
-      assertion += `isinstance(response, ${assertTypeName})`
-    }
-    const returnStmt = `${indent}return response`
-    return (
-      `${methodCall}(\n` +
-      `${this.bumper(indent)}${args}\n` +
-      `${indent})\n` +
-      `${assertion}\n` +
-      `${returnStmt}`
-    )
+    const callOpener =
+      `${callerIndent}response = cast(\n` +
+      `${currIndent}${this.methodReturnType(method)},\n` +
+      `${currIndent}${this.it(method.httpMethod.toLowerCase())}(\n`
+    const callArgs = `${this.httpArgs(currIndent, method)}\n`
+    const callCloser = `${currIndent})\n${callerIndent})\n`
+    const returnStmt = `${callerIndent}return response`
+    return deprecation + callOpener + callArgs + callCloser + returnStmt
   }
 
   encodePathParams(indent: string, method: IMethod) {
-    // const bump = indent + this.indentStr
     let encodings = ''
     const pathParams = method.pathParams
     if (pathParams.length > 0) {

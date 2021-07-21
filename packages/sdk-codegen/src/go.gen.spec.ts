@@ -44,7 +44,6 @@ describe('Go generator', () => {
 
 foo
 bar
-
 */
 `
       expect(gen.commentHeader(indent, 'foo\nbar')).toEqual(expected)

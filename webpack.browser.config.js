@@ -25,21 +25,17 @@
  */
 const webpack = require('webpack')
 
-const BundleAnalyzerPlugin = require('webpack-bundle-analyzer')
-  .BundleAnalyzerPlugin
+const BundleAnalyzerPlugin =
+  require('webpack-bundle-analyzer').BundleAnalyzerPlugin
 
 module.exports = function () {
   return {
     resolve: {
       fallback: {
         buffer: false,
-        path: require.resolve('path-browserify'),
       },
     },
     plugins: [
-      new webpack.ProvidePlugin({
-        process: 'process/browser',
-      }),
       new BundleAnalyzerPlugin({
         analyzerMode: process.env.ANALYZE_MODE || 'disabled',
       }),

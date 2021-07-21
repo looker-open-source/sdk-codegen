@@ -24,4 +24,4 @@
 
  */
 export { DataGrid } from './DataGrid'
-export { parseCsv, parseJson } from './gridUtils'
+export { parseCsv, json2Csv } from './gridUtils'

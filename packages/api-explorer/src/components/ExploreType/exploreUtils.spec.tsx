@@ -26,8 +26,9 @@
 
 import React from 'react'
 import { FieldString, IdeFileManifest } from '@looker/icons'
-import { CalendarToday, Code } from '@styled-icons/material'
-import { Tag } from '@styled-icons/material-rounded'
+import { CalendarToday } from '@styled-icons/material/CalendarToday'
+import { Code } from '@styled-icons/material/Code'
+import { Tag } from '@styled-icons/material-rounded/Tag'
 import { api40 as api } from '../../test-data'
 import { expandable, pickType, pickTypeProps, typeIcon } from './exploreUtils'
 

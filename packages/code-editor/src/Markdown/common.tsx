@@ -25,30 +25,17 @@
  */
 import React from 'react'
 import styled from 'styled-components'
-import { Code, Paragraph, Table, CodeBlock } from '@looker/components'
+import { Paragraph, Table, Heading } from '@looker/components'
 
 /**
  * Common styled components used by DocMarkdown
  */
 
-export const MDCode = styled(Code)`
-  background-color: ${({ theme }) => theme.colors.ui1};
-  border: 1px solid ${({ theme }) => theme.colors.ui2};
-  border-radius: 4px;
-`
-MDCode.defaultProps = {
-  fontSize: 'small',
-  mb: 'large',
-  pl: 'xxsmall',
-  pr: 'xxsmall',
-}
+export const MDHeading = styled(Heading)``
 
-export const MDCodeBlock = styled(CodeBlock)`
-  max-width: 800px;
-`
-MDCodeBlock.defaultProps = {
-  fontSize: 'small',
-  mb: 'large',
+MDHeading.defaultProps = {
+  mb: 'xsmall',
+  pt: 'xsmall',
 }
 
 export const MDParagraph = styled(Paragraph)`

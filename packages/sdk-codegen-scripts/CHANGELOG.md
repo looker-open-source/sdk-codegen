@@ -1,5 +1,112 @@
 # Changelog
 
+### [21.0.23](https://www.github.com/looker-open-source/sdk-codegen/compare/sdk-codegen-scripts-v21.0.22...sdk-codegen-scripts-v21.0.23) (2021-07-09)
+
+
+### Dependencies
+
+* The following workspace dependencies were updated
+  * dependencies
+    * @looker/sdk bumped from ^21.10.0 to ^21.10.1
+    * @looker/sdk-codegen bumped from ^21.0.21 to ^21.0.22
+    * @looker/sdk-node bumped from ^21.10.0 to ^21.10.1
+    * @looker/sdk-rtl bumped from ^21.0.17 to ^21.0.18
+
+### [21.0.22](https://www.github.com/looker-open-source/sdk-codegen/compare/sdk-codegen-scripts-v21.0.21...sdk-codegen-scripts-v21.0.22) (2021-07-08)
+
+
+### Dependencies
+
+* The following workspace dependencies were updated
+  * dependencies
+    * @looker/sdk bumped from ^21.8.3 to ^21.10.0
+    * @looker/sdk-codegen bumped from ^21.0.20 to ^21.0.21
+    * @looker/sdk-node bumped from ^21.8.2 to ^21.10.0
+    * @looker/sdk-rtl bumped from ^21.0.16 to ^21.0.17
+
+### [21.0.21](https://www.github.com/looker-open-source/sdk-codegen/compare/sdk-codegen-scripts-v21.0.20...sdk-codegen-scripts-v21.0.21) (2021-07-02)
+
+
+### Dependencies
+
+* The following workspace dependencies were updated
+  * dependencies
+    * @looker/sdk bumped from ^21.8.2 to ^21.8.3
+    * @looker/sdk-codegen bumped from ^21.0.19 to ^21.0.20
+    * @looker/sdk-node bumped from ^21.8.1 to ^21.8.2
+    * @looker/sdk-rtl bumped from ^21.0.15 to ^21.0.16
+
+### [21.0.20](https://www.github.com/looker-open-source/sdk-codegen/compare/sdk-codegen-scripts-v21.0.19...sdk-codegen-scripts-v21.0.20) (2021-07-01)
+
+
+### Bug Fixes
+
+* noStreams skips tally headers in generated source ([#727](https://www.github.com/looker-open-source/sdk-codegen/issues/727)) ([113c2c5](https://www.github.com/looker-open-source/sdk-codegen/commit/113c2c50c07c621cf94841af75557704fc3f5df7))
+
+
+### Dependencies
+
+* The following workspace dependencies were updated
+  * dependencies
+    * @looker/sdk bumped from ^21.8.1 to ^21.8.2
+    * @looker/sdk-codegen bumped from ^21.0.18 to ^21.0.19
+    * @looker/sdk-node bumped from ^21.8.0 to ^21.8.1
+    * @looker/sdk-rtl bumped from ^21.0.14 to ^21.0.15
+
+### [21.0.19](https://www.github.com/looker-open-source/sdk-codegen/compare/sdk-codegen-scripts-v21.0.18...sdk-codegen-scripts-v21.0.19) (2021-06-30)
+
+
+### Dependencies
+
+* The following workspace dependencies were updated
+  * dependencies
+    * @looker/sdk bumped from ^21.8.0 to ^21.8.1
+    * @looker/sdk-codegen bumped from ^21.0.17 to ^21.0.18
+    * @looker/sdk-rtl bumped from ^21.0.13 to ^21.0.14
+
+### [21.0.18](https://www.github.com/looker-open-source/sdk-codegen/compare/sdk-codegen-scripts-v21.0.17...sdk-codegen-scripts-v21.0.18) (2021-06-17)
+
+
+### Dependencies
+
+* The following workspace dependencies were updated
+  * dependencies
+    * @looker/sdk bumped from ^21.6.1 to ^21.8.0
+    * @looker/sdk-node bumped from ^21.6.1 to ^21.8.0
+
+### [21.0.17](https://www.github.com/looker-open-source/sdk-codegen/compare/sdk-codegen-scripts-v21.0.16...sdk-codegen-scripts-v21.0.17) (2021-06-16)
+
+
+### Features
+
+* reduce size of apix bundle ([#676](https://www.github.com/looker-open-source/sdk-codegen/issues/676)) ([0d74f6a](https://www.github.com/looker-open-source/sdk-codegen/commit/0d74f6a7814b509416a9d2558c16439a4859b543))
+
+
+### Dependencies
+
+* The following workspace dependencies were updated
+  * dependencies
+    * @looker/sdk bumped from ^21.6.0 to ^21.6.1
+    * @looker/sdk-codegen bumped from ^21.0.16 to ^21.0.17
+    * @looker/sdk-node bumped from ^21.6.0 to ^21.6.1
+
+### [21.0.16](https://www.github.com/looker-open-source/sdk-codegen/compare/sdk-codegen-scripts-v21.0.15...sdk-codegen-scripts-v21.0.16) (2021-05-05)
+
+
+### Bug Fixes
+
+* use "TypeScript" and "JavaScript" everywhere ([#644](https://www.github.com/looker-open-source/sdk-codegen/issues/644)) ([c15031c](https://www.github.com/looker-open-source/sdk-codegen/commit/c15031cee189556adbd9e18641e7c992e86e3611))
+
+
+### Dependencies
+
+* The following workspace dependencies were updated
+  * dependencies
+    * @looker/sdk bumped from ^21.4.3 to ^21.6.0
+    * @looker/sdk-codegen bumped from ^21.0.15 to ^21.0.16
+    * @looker/sdk-node bumped from ^21.4.4 to ^21.6.0
+    * @looker/sdk-rtl bumped from ^21.0.12 to ^21.0.13
+
 ### [21.0.15](https://www.github.com/looker-open-source/sdk-codegen/compare/sdk-codegen-scripts-v21.0.14...sdk-codegen-scripts-v21.0.15) (2021-04-27)
 
 

@@ -34,7 +34,13 @@ import { ExtensionSDK } from '@looker/extension-sdk'
  * An adaptor class for interacting with browser APIs when running as an extension
  */
 export class ExtensionEnvAdaptor implements IApixEnvAdaptor {
-  constructor(public extensionSdk: ExtensionSDK) {}
+  _themeOverrides: ThemeOverrides
+  constructor(public extensionSdk: ExtensionSDK) {
+    this._themeOverrides = getThemeOverrides(
+      (this.extensionSdk.lookerHostData || { hostType: 'standard' })
+        .hostType === 'standard'
+    )
+  }
 
   async localStorageGetItem(key: string) {
     return await this.extensionSdk.localStorageGetItem(key)
@@ -49,9 +55,17 @@ export class ExtensionEnvAdaptor implements IApixEnvAdaptor {
   }
 
   themeOverrides(): ThemeOverrides {
-    return getThemeOverrides(
-      (this.extensionSdk.lookerHostData || { hostType: 'standard' })
-        .hostType === 'standard'
-    )
+    return this._themeOverrides
+  }
+
+  openBrowserWindow(url: string, target?: string) {
+    this.extensionSdk.openBrowserWindow(url, target)
+  }
+
+  logError(error: Error, componentStack: string): void {
+    this.extensionSdk.error({
+      error: error,
+      message: componentStack,
+    } as ErrorEvent)
   }
 }

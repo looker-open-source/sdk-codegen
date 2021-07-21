@@ -1286,7 +1286,7 @@ export class Method extends SchemadSymbol implements IMethod {
   }
 
   get errorResponses() {
-    // TODO use lodash or underscore?
+    // TODO use lodash?
     const result = []
     const map = new Map()
     for (const item of this.responses.filter((r) => r.statusCode >= 400)) {
@@ -1541,10 +1541,12 @@ export class Type implements IType {
         // Track the "parent" reference for this type from the property reference
         propType.parentTypes.add(this.name)
         if (
-          propType.instanceOf('ArrayType') &&
-          propType.elementType?.instanceOf('EnumType')
+          propType.instanceOf('ArrayType') ||
+          propType.instanceOf('HashType')
         ) {
-          propType.elementType.parentTypes.add(propType.name)
+          propType.elementType?.parentTypes.add(propType.name)
+          propType.elementType?.parentTypes.add(this.name)
+          propType.parentTypes.add(this.name)
         }
         this.types.add(propType.name)
         const customType = propType.customType

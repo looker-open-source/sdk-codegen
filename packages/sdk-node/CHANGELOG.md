@@ -5,6 +5,104 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+### [21.10.1](https://www.github.com/looker-open-source/sdk-codegen/compare/sdk-node-v21.10.0...sdk-node-v21.10.1) (2021-07-09)
+
+
+### Bug Fixes
+
+* browserTransport.ts retains ok: false now ([#745](https://www.github.com/looker-open-source/sdk-codegen/issues/745)) ([451481c](https://www.github.com/looker-open-source/sdk-codegen/commit/451481c62cdc986c860c582e4a77e3e887c6a732))
+
+
+### Dependencies
+
+* The following workspace dependencies were updated
+  * dependencies
+    * @looker/sdk bumped from ^21.10.0 to ^21.10.1
+    * @looker/sdk-rtl bumped from ^21.0.17 to ^21.0.18
+
+## [21.10.0](https://www.github.com/looker-open-source/sdk-codegen/compare/sdk-node-v21.8.2...sdk-node-v21.10.0) (2021-07-08)
+
+
+### Bug Fixes
+
+* check HTTP status code for TS SDK "ok" toggle ([#739](https://www.github.com/looker-open-source/sdk-codegen/issues/739)) ([3ed6af7](https://www.github.com/looker-open-source/sdk-codegen/commit/3ed6af78b2cb9610b3386ff851013a93fff40f54))
+
+
+### Dependencies
+
+* The following workspace dependencies were updated
+  * dependencies
+    * @looker/sdk bumped from ^21.8.3 to ^21.10.0
+    * @looker/sdk-rtl bumped from ^21.0.16 to ^21.0.17
+
+### [21.8.2](https://www.github.com/looker-open-source/sdk-codegen/compare/sdk-node-v21.8.1...sdk-node-v21.8.2) (2021-07-02)
+
+
+### Dependencies
+
+* The following workspace dependencies were updated
+  * dependencies
+    * @looker/sdk bumped from ^21.8.2 to ^21.8.3
+    * @looker/sdk-rtl bumped from ^21.0.15 to ^21.0.16
+
+### [21.8.1](https://www.github.com/looker-open-source/sdk-codegen/compare/sdk-node-v21.8.0...sdk-node-v21.8.1) (2021-07-01)
+
+
+### Dependencies
+
+* The following workspace dependencies were updated
+  * dependencies
+    * @looker/sdk bumped from ^21.8.1 to ^21.8.2
+    * @looker/sdk-rtl bumped from ^21.0.14 to ^21.0.15
+
+## [21.8.0](https://www.github.com/looker-open-source/sdk-codegen/compare/sdk-node-v21.8.0...sdk-node-v21.8.0) (2021-06-30)
+
+
+### Features
+
+* paging results for the Typescript SDK ([#698](https://www.github.com/looker-open-source/sdk-codegen/issues/698)) ([537eb57](https://www.github.com/looker-open-source/sdk-codegen/commit/537eb579b9c6d95d600f455a187e6d7b9bf700ef))
+
+
+### Dependencies
+
+* The following workspace dependencies were updated
+  * dependencies
+    * @looker/sdk bumped from ^21.8.0 to ^21.8.1
+    * @looker/sdk-rtl bumped from ^21.0.13 to ^21.0.14
+
+## [21.8.0](https://www.github.com/looker-open-source/sdk-codegen/compare/sdk-node-v21.6.1...sdk-node-v21.8.0) (2021-06-17)
+
+
+### Dependencies
+
+* The following workspace dependencies were updated
+  * dependencies
+    * @looker/sdk bumped from ^21.6.1 to ^21.8.0
+
+### [21.6.1](https://www.github.com/looker-open-source/sdk-codegen/compare/sdk-node-v21.6.0...sdk-node-v21.6.1) (2021-06-16)
+
+
+### Dependencies
+
+* The following workspace dependencies were updated
+  * dependencies
+    * @looker/sdk bumped from ^21.6.0 to ^21.6.1
+
+## [21.6.0](https://www.github.com/looker-open-source/sdk-codegen/compare/sdk-node-v21.4.4...sdk-node-v21.6.0) (2021-05-05)
+
+
+### Bug Fixes
+
+* use "TypeScript" and "JavaScript" everywhere ([#644](https://www.github.com/looker-open-source/sdk-codegen/issues/644)) ([c15031c](https://www.github.com/looker-open-source/sdk-codegen/commit/c15031cee189556adbd9e18641e7c992e86e3611))
+
+
+### Dependencies
+
+* The following workspace dependencies were updated
+  * dependencies
+    * @looker/sdk bumped from ^21.4.3 to ^21.6.0
+    * @looker/sdk-rtl bumped from ^21.0.12 to ^21.0.13
+
 ### [21.4.4](https://www.github.com/looker-open-source/sdk-codegen/compare/sdk-node-v21.4.3...sdk-node-v21.4.4) (2021-04-27)
 
 

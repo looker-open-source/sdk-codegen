@@ -23,9 +23,5 @@
  SOFTWARE.
 
  */
-import React, { FC, PropsWithChildren } from 'react'
-import { MDCodeBlock } from './common'
-
-export const MDCodeBlockWrapper: FC<PropsWithChildren<any>> = (props) => (
-  <MDCodeBlock>{props.value}</MDCodeBlock>
-)
+export { CodeDisplay } from './CodeDisplay'
+export type { CodeDisplayProps } from './types'

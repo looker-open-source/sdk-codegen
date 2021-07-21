@@ -32,7 +32,7 @@ import {
   Pagination,
   DataTable,
 } from '@looker/components'
-import { Create } from '@styled-icons/material'
+import { Create } from '@styled-icons/material/Create'
 import { useSelector } from 'react-redux'
 import { getExtensionSDK } from '@looker/extension-sdk'
 import { IHackerProps, sheetCell } from '../../../models'

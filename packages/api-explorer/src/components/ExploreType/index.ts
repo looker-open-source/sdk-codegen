@@ -24,7 +24,7 @@
 
  */
 
-export { ExploreType, ExploreTypeLink, TreeFix } from './ExploreType'
+export { ExploreType, ExploreTypeLink } from './ExploreType'
 export {
   ExploreProperty,
   ExplorePropertyNode,

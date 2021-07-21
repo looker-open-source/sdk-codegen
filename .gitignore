@@ -25,7 +25,8 @@ python/.tox/
 .DS_Store
 .env
 .env.*
-/.idea
+.idea/
+.direnv/
 
 # logs
 npm-debug.log*
@@ -57,6 +58,7 @@ kotlin/.*
 kotlin/bin/*
 kotlin/build/*
 kotlin/out/*
+spec/versions.json
 
 # test output
 junit.xml

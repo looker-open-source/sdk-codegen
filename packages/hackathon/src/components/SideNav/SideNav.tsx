@@ -27,8 +27,11 @@ import React, { FC } from 'react'
 import styled from 'styled-components'
 import { Box, MenuList, MenuItem } from '@looker/components'
 import { Beaker } from '@looker/icons'
-import { Map, Settings } from '@styled-icons/material'
-import { Home, Group, FactCheck } from '@styled-icons/material-outlined'
+import { Map } from '@styled-icons/material/Map'
+import { Settings } from '@styled-icons/material/Settings'
+import { Home } from '@styled-icons/material-outlined/Home'
+import { Group } from '@styled-icons/material-outlined/Group'
+import { FactCheck } from '@styled-icons/material-outlined/FactCheck'
 import { NavLink } from 'react-router-dom'
 import { Routes } from '../../routes/AppRouter'
 
@@ -74,18 +77,17 @@ export const SideNav: FC<SideNavProps> = ({ authorizedRoutes }) => (
 )
 
 const Link = styled(NavLink)`
-  color:${({ theme }) => theme.colors.ui5}
-  cursor: pointer;
-  display: block;
-  padding: ${({
-    theme: {
-      space: { xsmall, large },
-    },
-  }) => `${xsmall} ${large}`};
+  text-decoration: none;
+  color: ${({ theme }) => theme.colors.ui5};
+
   &:hover,
   &:visited,
   &:focus,
   &.active {
-    color: ${({ theme }) => theme.colors.key};
+    color: inherit;
   }
+
+  cursor: pointer;
+  display: block;
+  padding: ${({ theme: { space } }) => `${space.xsmall} ${space.large}`};
 `

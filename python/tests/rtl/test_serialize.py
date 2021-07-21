@@ -21,6 +21,7 @@
 # THE SOFTWARE.
 
 import copy
+import datetime
 import enum
 import functools
 import json
@@ -42,8 +43,7 @@ from looker_sdk.rtl import serialize as sr
 
 
 class Enum1(enum.Enum):
-    """Predifined enum, used as ForwardRef.
-    """
+    """Predifined enum, used as ForwardRef."""
 
     entry1 = "entry1"
     entry2 = "entry2"
@@ -99,6 +99,7 @@ class Model(ml.Model):
     # standard types
     id: Optional[int] = None
     name: Optional[str] = None
+    datetime_field: Optional[datetime.datetime] = None
 
     # testing reserved keyword translations
     class_: Optional[str] = None
@@ -133,6 +134,7 @@ class Model(ml.Model):
         "opt_model_no_refs1": Optional["ModelNoRefs1"],
         "id": Optional[int],
         "name": Optional[str],
+        "datetime_field": Optional[datetime.datetime],
         "class_": Optional[str],
         "finally_": Optional[Sequence[int]],
     }
@@ -154,6 +156,7 @@ class Model(ml.Model):
         opt_model_no_refs1: Optional["ModelNoRefs1"] = None,
         id: Optional[int] = None,
         name: Optional[str] = None,
+        datetime_field: Optional[datetime.datetime] = None,
         class_: Optional[str] = None,
         finally_: Optional[Sequence[int]] = None,
     ):
@@ -175,13 +178,13 @@ class Model(ml.Model):
         self.opt_model_no_refs1 = opt_model_no_refs1
         self.id = id
         self.name = name
+        self.datetime_field = datetime_field
         self.class_ = class_
         self.finally_ = finally_
 
 
 class Enum2(enum.Enum):
-    """Post defined enum, used as ForwardRef.
-    """
+    """Post defined enum, used as ForwardRef."""
 
     entry2 = "entry2"
     invalid_api_enum_value = "invalid_api_enum_value"
@@ -218,8 +221,11 @@ converter.register_structure_hook(ForwardRef("Enum2"), structure_hook)
 converter.register_structure_hook(ForwardRef("ModelNoRefs1"), structure_hook)
 converter.register_structure_hook(ForwardRef("ModelNoRefs2"), structure_hook)
 converter.register_structure_hook(Model, translate_keys_structure_hook)
+converter.register_structure_hook(datetime.datetime, sr.datetime_structure_hook)
 
 
+DATETIME_VALUE = datetime.datetime.fromtimestamp(1625246159, datetime.timezone.utc)
+DATETIME_VALUE_STR = DATETIME_VALUE.strftime("%Y-%m-%dT%H:%M:%S.%f%z")
 MODEL_DATA = {
     "enum1": "entry1",
     "model_no_refs1": {"name1": "model_no_refs1_name"},
@@ -231,6 +237,7 @@ MODEL_DATA = {
     "opt_model_no_refs1": {"name1": "model_no_refs1_name"},
     "id": 1,
     "name": "my-name",
+    "datetime_field": DATETIME_VALUE_STR,
     "class": "model-name",
     "finally": [1, 2, 3],
 }
@@ -249,6 +256,7 @@ def bm():
         opt_model_no_refs1=None,
         id=1,
         name="my-name",
+        datetime_field=DATETIME_VALUE,
         class_="model-name",
         finally_=[1, 2, 3],
     )
@@ -357,6 +365,7 @@ def test_dict_iter(bm):
         "opt_enum1",
         "id",
         "name",
+        "datetime_field",
         "class",
         "finally",
     ]
@@ -383,6 +392,7 @@ def test_dict_keys(bm):
         "opt_enum1",
         "id",
         "name",
+        "datetime_field",
         "class",
         "finally",
     ]
@@ -399,6 +409,7 @@ def test_dict_items(bm):
         ("opt_enum1", "entry1"),
         ("id", 1),
         ("name", "my-name"),
+        ("datetime_field", DATETIME_VALUE_STR),
         ("class", "model-name"),
         ("finally", [1, 2, 3]),
     ]
@@ -415,6 +426,7 @@ def test_dict_values(bm):
         "entry1",
         1,
         "my-name",
+        DATETIME_VALUE_STR,
         "model-name",
         [1, 2, 3],
     ]
@@ -515,6 +527,7 @@ def test_deserialize_single() -> None:
         opt_model_no_refs1=ModelNoRefs1(name1="model_no_refs1_name"),
         id=1,
         name="my-name",
+        datetime_field=DATETIME_VALUE,
         class_="model-name",
         finally_=[1, 2, 3],
     )
@@ -539,6 +552,7 @@ def test_deserialize_list():
             opt_model_no_refs1=ModelNoRefs1(name1="model_no_refs1_name"),
             id=1,
             name="my-name",
+            datetime_field=DATETIME_VALUE,
             class_="model-name",
             finally_=[1, 2, 3],
         ),
@@ -563,6 +577,7 @@ def test_deserialize_partial():
         opt_model_no_refs1=None,
         id=None,
         name="my-name",
+        datetime_field=DATETIME_VALUE,
         class_="model-name",
         finally_=[1, 2, 3],
     )
@@ -588,6 +603,7 @@ def test_deserialize_with_null():
         opt_model_no_refs1=None,
         id=None,
         name="my-name",
+        datetime_field=DATETIME_VALUE,
         class_="model-name",
         finally_=[1, 2, 3],
     )
@@ -620,6 +636,7 @@ def test_serialize_single():
         opt_model_no_refs1=ModelNoRefs1(name1="model_no_refs1_name"),
         id=1,
         name="my-name",
+        datetime_field=DATETIME_VALUE,
         class_="model-name",
         finally_=[1, 2, 3],
     )
@@ -639,6 +656,7 @@ def test_serialize_sequence():
         opt_model_no_refs1=ModelNoRefs1(name1="model_no_refs1_name"),
         id=1,
         name="my-name",
+        datetime_field=DATETIME_VALUE,
         class_="model-name",
         finally_=[1, 2, 3],
     )
@@ -647,8 +665,7 @@ def test_serialize_sequence():
 
 
 def test_serialize_partial():
-    """Do not send json null for model None field values.
-    """
+    """Do not send json null for model None field values."""
     model = Model(
         enum1=Enum1.entry1,
         model_no_refs1=ModelNoRefs1(name1="model_no_refs1_name"),
@@ -671,8 +688,7 @@ def test_serialize_partial():
 
 
 def test_serialize_explict_null():
-    """Send json null for model field EXPLICIT_NULL values.
-    """
+    """Send json null for model field EXPLICIT_NULL values."""
     # pass EXPLICIT_NULL into constructor
     model = Model(
         enum1=Enum1.entry1,
@@ -719,6 +735,7 @@ def test_safe_enum_deserialization():
         opt_model_no_refs1=ModelNoRefs1(name1="model_no_refs1_name"),
         id=1,
         name="my-name",
+        datetime_field=DATETIME_VALUE,
         class_="model-name",
         finally_=[1, 2, 3],
     )

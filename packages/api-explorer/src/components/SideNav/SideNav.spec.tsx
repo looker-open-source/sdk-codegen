@@ -24,39 +24,58 @@
 
  */
 import React from 'react'
-import { ApiModel, CriteriaToSet } from '@looker/sdk-codegen'
-import { pick } from 'lodash'
+import { CriteriaToSet } from '@looker/sdk-codegen'
 import userEvent from '@testing-library/user-event'
 import { act, screen, waitFor } from '@testing-library/react'
 
-import { api } from '../../test-data'
+import { specs, specState } from '../../test-data'
 import { renderWithRouter, renderWithSearchAndRouter } from '../../test-utils'
 import { defaultSearchState } from '../../reducers'
 import { SideNav } from './SideNav'
-import { countMethods } from './searchUtils'
+import { countMethods, countTypes } from './searchUtils'
 
 describe('SideNav', () => {
-  const testApi = ({
-    tags: pick(api.tags, ['Auth', 'ApiAuth']),
-    types: pick(api.types, ['WriteDashboard', 'WriteQuery']),
-  } as unknown) as ApiModel
+  const specDispatch = jest.fn()
   const allTagsPattern = /^(Auth|ApiAuth)$/
   const allTypesPattern = /^(WriteDashboard|WriteQuery)$/
 
+  let saveLocation: Location
+
+  beforeEach(() => {
+    saveLocation = window.location
+    window.location = {
+      ...saveLocation,
+      pathname: '/3.1',
+    }
+  })
+
+  afterEach(() => {
+    window.location = saveLocation
+  })
+
   test('it renders search, methods tab and types tab', () => {
-    renderWithRouter(<SideNav api={testApi} specKey={'3.1'} />)
+    renderWithRouter(
+      <SideNav specs={specs} spec={specState} specDispatch={specDispatch} />
+    )
     const search = screen.getByLabelText('Search')
     expect(search).toHaveProperty('placeholder', 'Search')
     const tabs = screen.getAllByRole('tab', {
       name: /^Methods \(\d+\)|Types \(\d+\)$/,
     })
     expect(tabs).toHaveLength(2)
-    expect(tabs[0]).toHaveTextContent(`Methods (${countMethods(testApi.tags)})`)
-    expect(tabs[1]).toHaveTextContent('Types (2)')
+    expect(tabs[0]).toHaveTextContent(
+      `Methods (${countMethods(specState.api.tags)})`
+    )
+
+    expect(tabs[1]).toHaveTextContent(
+      `Types (${countTypes(specState.api.types)})`
+    )
   })
 
   test('Methods tab is the default active tab', () => {
-    renderWithRouter(<SideNav api={testApi} specKey={'3.1'} />)
+    renderWithRouter(
+      <SideNav specs={specs} spec={specState} specDispatch={specDispatch} />
+    )
     expect(screen.getAllByText(allTagsPattern)).toHaveLength(2)
     expect(
       screen.queryAllByRole('link', { name: allTypesPattern })
@@ -72,7 +91,10 @@ describe('SideNav', () => {
   })
 
   test('url determines active tab', () => {
-    renderWithRouter(<SideNav api={api} specKey={'3.1'} />, ['/3.1/types'])
+    renderWithRouter(
+      <SideNav specs={specs} spec={specState} specDispatch={specDispatch} />,
+      ['/3.1/types']
+    )
     // eslint-disable-next-line jest-dom/prefer-in-document
     expect(screen.queryAllByText(allTagsPattern)).toHaveLength(0)
     expect(screen.getAllByRole('link', { name: allTypesPattern })).toHaveLength(
@@ -82,16 +104,20 @@ describe('SideNav', () => {
 })
 
 describe('Search', () => {
+  const specDispatch = jest.fn()
+
   test('it filters methods and types on input', async () => {
-    renderWithSearchAndRouter(<SideNav api={api} specKey="3.1" />)
+    renderWithSearchAndRouter(
+      <SideNav specs={specs} spec={specState} specDispatch={specDispatch} />
+    )
     const searchPattern = 'embedsso'
     const input = screen.getByLabelText('Search')
-    jest.spyOn(api, 'search')
+    jest.spyOn(specState.api, 'search')
     await act(async () => {
       /** Pasting to avoid triggering search multiple times */
       await userEvent.paste(input, searchPattern)
       await waitFor(() => {
-        expect(api.search).toHaveBeenCalledWith(
+        expect(specState.api.search).toHaveBeenCalledWith(
           searchPattern,
           CriteriaToSet(defaultSearchState.criteria)
         )
@@ -100,13 +126,15 @@ describe('Search', () => {
         userEvent.click(methods)
         expect(
           screen.getByRole('heading', {
-            name: api.tags.Auth.create_sso_embed_url.summary,
+            name: specState.api.tags.Auth.create_sso_embed_url.summary,
           })
         ).toBeInTheDocument()
 
         userEvent.click(types)
         expect(
-          screen.getByRole('heading', { name: api.types.EmbedSsoParams.name })
+          screen.getByRole('heading', {
+            name: specState.api.types.EmbedSsoParams.name,
+          })
         ).toBeInTheDocument()
       })
     })

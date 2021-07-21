@@ -33,7 +33,7 @@ import {
   FieldToggleSwitch,
   Flex,
 } from '@looker/components'
-import { Delete } from '@styled-icons/material'
+import { Delete } from '@styled-icons/material/Delete'
 
 import { RunItConfigKey, RunItConfigurator } from '../ConfigForm'
 import { Loading } from '../Loading'

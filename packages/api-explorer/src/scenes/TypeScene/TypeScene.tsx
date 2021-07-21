@@ -27,7 +27,7 @@
 import React, { FC } from 'react'
 import { typeRefs, methodRefs, ApiModel } from '@looker/sdk-codegen'
 import { useParams } from 'react-router-dom'
-import { Space } from '@looker/components'
+import { Space, Box } from '@looker/components'
 
 import {
   ApixSection,
@@ -36,6 +36,7 @@ import {
   DocSource,
   DocTitle,
   ExploreType,
+  DocSchema,
 } from '../../components'
 
 interface DocTypeProps {
@@ -50,8 +51,9 @@ interface DocTypeParams {
 export const TypeScene: FC<DocTypeProps> = ({ api }) => {
   const { specKey, typeName } = useParams<DocTypeParams>()
   const type = api.types[typeName]
-  const seeTypes = typeRefs(api, type.customTypes)
-  const seeMethods = methodRefs(api, type.methodRefs)
+  const typesUsed = typeRefs(api, type.customTypes)
+  const methodsUsedBy = methodRefs(api, type.methodRefs)
+  const typesUsedBy = typeRefs(api, type.parentTypes)
 
   return (
     <ApixSection>
@@ -59,14 +61,18 @@ export const TypeScene: FC<DocTypeProps> = ({ api }) => {
         <DocTitle>{type.name}</DocTitle>
         <DocSource type={type} />
       </Space>
-      <ExploreType type={type} />
+      <Box pb="xlarge">
+        <ExploreType type={type} />
+      </Box>
       <DocReferences
-        seeTypes={seeTypes}
-        seeMethods={seeMethods}
+        typesUsed={typesUsed}
+        typesUsedBy={typesUsedBy}
+        methodsUsedBy={methodsUsedBy}
         api={api}
         specKey={specKey}
       />
       <DocSDKs type={type} api={api} />
+      <DocSchema object={type.schema} />
     </ApixSection>
   )
 }
