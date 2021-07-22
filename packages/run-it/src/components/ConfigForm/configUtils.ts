@@ -129,19 +129,27 @@ const getUrl = async (url: string) => {
 }
 
 /**
- * Load /versions payload and retrieve all supported specs
- * @param url that has an unauthenticated /versions endpoint
+ * Load versions payload and retrieve all supported specs
+ *
+ * The versions payload should match the structure of Looker's /versions endpoint
+ *
+ * @param url that has an unauthenticated versions payload. For Looker, this is <LookerHostName>/versions
+ * @param content content of versions payload that may already be assigned
  */
 export const loadSpecsFromVersions = async (
-  url: string
+  url: string,
+  content: string | Record<string, unknown> = ''
 ): Promise<ILoadedSpecs> => {
   let fetchError = ''
   let specs: SpecList = {}
   let baseUrl = ''
   try {
-    const endpoint = `${url}/versions`
-    const content = await getUrl(endpoint)
-    const versions = JSON.parse(content) as ILookerVersions
+    if (!content) {
+      content = await getUrl(url)
+    }
+    const versions = (
+      typeof content === 'string' ? JSON.parse(content) : content
+    ) as ILookerVersions
     baseUrl = versions.api_server_url
     const fetchSpec = async (spec: SpecItem) => {
       if (spec.specURL) {

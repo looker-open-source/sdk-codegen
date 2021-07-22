@@ -116,7 +116,7 @@ export const ConfigForm: FC<ConfigFormProps> = ({
   const updateFields = (name: string, value: string) => {
     let newFields = { ...fields }
     newFields[name] = value
-    loadSpecsFromVersions(fields.lookerUrl)
+    loadSpecsFromVersions(`${fields.lookerUrl}/versions`)
       .then((resp) => (newFields = resp))
       .catch((err) => (newFields.fetchError = err.message))
     setFields(newFields)

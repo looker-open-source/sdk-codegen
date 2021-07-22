@@ -30,6 +30,7 @@ import styled, { createGlobalStyle } from 'styled-components'
 import { Aside, ComponentsProvider, Layout, Page } from '@looker/components'
 import { Looker40SDK, Looker31SDK } from '@looker/sdk'
 import { SpecList } from '@looker/sdk-codegen'
+import { loadSpecsFromVersions } from '@looker/run-it'
 import {
   SearchContext,
   LodeContext,
@@ -55,6 +56,7 @@ export interface ApiExplorerProps {
   declarationsLodeUrl?: string
   envAdaptor: IApixEnvAdaptor
   headless?: boolean
+  versionsUrl?: string
 }
 
 export const BodyOverride = createGlobalStyle` html { height: 100%; overflow: hidden; } `
@@ -65,9 +67,19 @@ const ApiExplorer: FC<ApiExplorerProps> = ({
   exampleLodeUrl = 'https://raw.githubusercontent.com/looker-open-source/sdk-codegen/main/examplesIndex.json',
   declarationsLodeUrl = `${apixFilesHost}/declarationsIndex.json`,
   headless = false,
+  versionsUrl = '',
 }) => {
   const location = useLocation()
   const { setSdkLanguageAction } = useActions()
+
+  useEffect(() => {
+    if (versionsUrl) {
+      // Load specifications from the versions url
+      loadSpecsFromVersions(versionsUrl).then(
+        (response) => (specs = response.specs)
+      )
+    }
+  }, [versionsUrl])
 
   const [spec, specDispatch] = useReducer(
     specReducer,

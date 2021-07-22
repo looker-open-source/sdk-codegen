@@ -28,41 +28,39 @@ import React from 'react'
 import { BrowserRouter as Router } from 'react-router-dom'
 import ReactDOM from 'react-dom'
 import { createGlobalStyle } from 'styled-components'
-
-import { ApiModel, SpecList } from '@looker/sdk-codegen'
 import { StandaloneApiExplorer } from './StandaloneApiExplorer'
 
-export const specs: SpecList = {
-  '3.1': {
-    key: '3.1',
-    status: 'current',
-    version: '3.1',
-    specURL: 'https://self-signed.looker.com:19999/api/3.1/swagger.json',
-    specContent: require('../../../spec/Looker.3.1.oas.json'),
-    isDefault: false,
-  },
-  '4.0': {
-    key: '4.0',
-    status: 'experimental',
-    version: '4.0',
-    specURL: 'https://self-signed.looker.com:19999/api/4.0/swagger.json',
-    specContent: require('../../../spec/Looker.4.0.oas.json'),
-    isDefault: true,
-  },
-}
-
-// TODO implement fetching and compiling the spec on demand
-Object.values(specs).forEach((spec) => {
-  if (spec.specContent && !spec.api) {
-    const json =
-      typeof spec.specContent === 'string'
-        ? JSON.parse(spec.specContent)
-        : spec.specContent
-    spec.api = ApiModel.fromJson(json)
-  }
-  // Memory footprint reduction
-  spec.specContent = undefined
-})
+// export const specs: SpecList = {
+//   '3.1': {
+//     key: '3.1',
+//     status: 'current',
+//     version: '3.1',
+//     specURL: 'https://self-signed.looker.com:19999/api/3.1/swagger.json',
+//     specContent: require('../../../spec/Looker.3.1.oas.json'),
+//     isDefault: false,
+//   },
+//   '4.0': {
+//     key: '4.0',
+//     status: 'experimental',
+//     version: '4.0',
+//     specURL: 'https://self-signed.looker.com:19999/api/4.0/swagger.json',
+//     specContent: require('../../../spec/Looker.4.0.oas.json'),
+//     isDefault: true,
+//   },
+// }
+//
+// // TODO implement fetching and compiling the spec on demand
+// Object.values(specs).forEach((spec) => {
+//   if (spec.specContent && !spec.api) {
+//     const json =
+//       typeof spec.specContent === 'string'
+//         ? JSON.parse(spec.specContent)
+//         : spec.specContent
+//     spec.api = ApiModel.fromJson(json)
+//   }
+//   // Memory footprint reduction
+//   spec.specContent = undefined
+// })
 
 const BodyReset = createGlobalStyle`
   body {
@@ -76,7 +74,7 @@ const basename = (window as any).LOOKER_DEV_PORTAL
 
 ReactDOM.render(
   <Router basename={basename}>
-    <StandaloneApiExplorer specs={specs} headless={basename} />
+    <StandaloneApiExplorer versionsUrl="versions.json" headless={basename} />
     <BodyReset />
   </Router>,
   document.getElementById('container')
