@@ -27,6 +27,7 @@
 import { ApiModel, SpecList } from '@looker/sdk-codegen'
 import { Location as HLocation } from 'history'
 
+import { loadSpecApi } from '@looker/run-it'
 import { diffPath, oAuthPath } from '../../utils'
 import { SpecState } from './reducer'
 
@@ -100,17 +101,23 @@ export const fetchSpec = (key: string, specs: SpecList): SpecState => {
   if (selectedSpec.api) {
     spec = { ...selectedSpec, key } as SpecState
   } else if (selectedSpec.specContent) {
-    // TODO: maybe discard specContent if specURL is present?
     spec = {
       ...selectedSpec,
       key,
       api: parseSpec(selectedSpec.specContent),
     }
+    // Discard content because it's no longer needed
+    selectedSpec.specContent = ''
   } else if (selectedSpec.specURL) {
-    // TODO: add fetch
-    // const content = await fetch(spec.specURL)
-    // spec.api = parseSpec(await content.text())
-    // return spec
+    loadSpecApi(selectedSpec).then((api) => {
+      if (api) {
+        spec = {
+          ...selectedSpec,
+          key,
+          api,
+        }
+      }
+    })
   } else {
     throw Error('Could not fetch spec.')
   }

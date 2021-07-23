@@ -24,12 +24,13 @@
 
  */
 
-import React, { FC } from 'react'
+import React, { FC, useEffect, useState } from 'react'
 import { useRouteMatch } from 'react-router-dom'
 import {
   RunItProvider,
   defaultConfigurator,
   initRunItSdk,
+  loadSpecsFromVersions,
 } from '@looker/run-it'
 import { IAPIMethods } from '@looker/sdk-rtl'
 import { SpecList } from '@looker/sdk-codegen'
@@ -38,21 +39,33 @@ import { Provider } from 'react-redux'
 import ApiExplorer from './ApiExplorer'
 import { configureStore } from './state'
 import { StandaloneEnvAdaptor } from './utils'
+import { Loader } from './components'
 
 export interface StandaloneApiExplorerProps {
-  specs?: SpecList
   headless?: boolean
-  versionsUrl?: string
+  versionsUrl: string
 }
 
 const standaloneEnvAdaptor = new StandaloneEnvAdaptor()
 const store = configureStore()
 
 export const StandaloneApiExplorer: FC<StandaloneApiExplorerProps> = ({
-  specs = {} as SpecList,
   headless = false,
   versionsUrl = '',
 }) => {
+  const [specs, setSpecs] = useState<SpecList | undefined>()
+
+  useEffect(() => {
+    if (versionsUrl) {
+      // Load specifications from the versions url
+      loadSpecsFromVersions(versionsUrl).then((response) =>
+        setSpecs(response.specs)
+      )
+    } else {
+      setSpecs(undefined)
+    }
+  }, [versionsUrl])
+
   const match = useRouteMatch<{ specKey: string }>(`/:specKey`)
   const specKey = match?.params.specKey || ''
   // TODO we may not need this restriction any more?
@@ -71,12 +84,17 @@ export const StandaloneApiExplorer: FC<StandaloneApiExplorerProps> = ({
         configurator={defaultConfigurator}
         basePath="/api/4.0"
       >
-        <ApiExplorer
-          specs={specs}
-          versionsUrl={versionsUrl}
-          envAdaptor={standaloneEnvAdaptor}
-          headless={headless}
-        />
+        <>
+          {specs ? (
+            <ApiExplorer
+              specs={specs}
+              envAdaptor={standaloneEnvAdaptor}
+              headless={headless}
+            />
+          ) : (
+            <Loader themeOverrides={standaloneEnvAdaptor.themeOverrides()} />
+          )}
+        </>
       </RunItProvider>
     </Provider>
   )

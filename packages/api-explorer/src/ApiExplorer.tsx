@@ -29,8 +29,7 @@ import { useLocation } from 'react-router'
 import styled, { createGlobalStyle } from 'styled-components'
 import { Aside, ComponentsProvider, Layout, Page } from '@looker/components'
 import { Looker40SDK, Looker31SDK } from '@looker/sdk'
-import { SpecList, ApiModel } from '@looker/sdk-codegen'
-import { loadSpecsFromVersions } from '@looker/run-it'
+import { SpecList } from '@looker/sdk-codegen'
 import {
   SearchContext,
   LodeContext,
@@ -56,65 +55,19 @@ export interface ApiExplorerProps {
   declarationsLodeUrl?: string
   envAdaptor: IApixEnvAdaptor
   headless?: boolean
-  versionsUrl?: string
 }
 
 export const BodyOverride = createGlobalStyle` html { height: 100%; overflow: hidden; } `
 
-export const staticSpecs: SpecList = {
-  '3.1': {
-    key: '3.1',
-    status: 'current',
-    version: '3.1',
-    specURL: 'https://self-signed.looker.com:19999/api/3.1/swagger.json',
-    specContent: require('../../../spec/Looker.3.1.oas.json'),
-    isDefault: false,
-  },
-  '4.0': {
-    key: '4.0',
-    status: 'experimental',
-    version: '4.0',
-    specURL: 'https://self-signed.looker.com:19999/api/4.0/swagger.json',
-    specContent: require('../../../spec/Looker.4.0.oas.json'),
-    isDefault: true,
-  },
-}
-
-// TODO implement fetching and compiling the spec on demand
-Object.values(staticSpecs).forEach((spec) => {
-  if (spec.specContent && !spec.api) {
-    const json =
-      typeof spec.specContent === 'string'
-        ? JSON.parse(spec.specContent)
-        : spec.specContent
-    spec.api = ApiModel.fromJson(json)
-  }
-  // Memory footprint reduction
-  spec.specContent = undefined
-})
-
 const ApiExplorer: FC<ApiExplorerProps> = ({
-  // specs,
+  specs,
   envAdaptor,
   exampleLodeUrl = 'https://raw.githubusercontent.com/looker-open-source/sdk-codegen/main/examplesIndex.json',
   declarationsLodeUrl = `${apixFilesHost}/declarationsIndex.json`,
   headless = false,
-  versionsUrl = '',
 }) => {
   const location = useLocation()
   const { setSdkLanguageAction } = useActions()
-  const [specs, setSpecs] = useState<SpecList>(staticSpecs)
-
-  useEffect(() => {
-    if (versionsUrl) {
-      // Load specifications from the versions url
-      loadSpecsFromVersions(versionsUrl).then((response) =>
-        setSpecs(response.specs)
-      )
-    } else {
-      setSpecs(staticSpecs)
-    }
-  }, [versionsUrl])
 
   const [spec, specDispatch] = useReducer(
     specReducer,
@@ -156,11 +109,9 @@ const ApiExplorer: FC<ApiExplorerProps> = ({
       const resp = await envAdaptor.localStorageGetItem(
         EnvAdaptorConstants.LOCALSTORAGE_SDK_LANGUAGE_KEY
       )
-      if (resp) {
-        setSdkLanguageAction(resp)
-      }
+      return resp || ''
     }
-    getSettings()
+    getSettings().then((r) => setSdkLanguageAction(r))
   }, [envAdaptor, setSdkLanguageAction])
 
   const { loadGoogleFonts, themeCustomizations } = envAdaptor.themeOverrides()
@@ -188,7 +139,7 @@ const ApiExplorer: FC<ApiExplorerProps> = ({
                   )}
                   <Layout hasAside height="100%">
                     {hasNavigation && (
-                      <AsideBorder width="20rem">
+                      <AsideBorder pt="large" width="20rem">
                         <SideNav
                           headless={headless}
                           specs={specs}

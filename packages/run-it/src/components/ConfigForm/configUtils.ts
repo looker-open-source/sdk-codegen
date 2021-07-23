@@ -118,7 +118,11 @@ export interface ILoadedSpecs {
   fetchError: string
 }
 
-const getUrl = async (url: string) => {
+/**
+ * Use the browser transport to GET a url
+ * @param url to fetch
+ */
+export const getUrl = async (url: string) => {
   const settings = {
     ...DefaultSettings(),
     ...{ base_url: url, verify_ssl: false, headers: { mode: 'cors' } },
@@ -129,16 +133,53 @@ const getUrl = async (url: string) => {
 }
 
 /**
+ * Ensure the URI is a full URL
+ * @param uri possible relative path
+ * @param baseUrl base url for qualifying full path
+ */
+export const fullify = (uri: string, baseUrl: string) => {
+  if (uri.match(/^https?:/)) {
+    return uri
+  }
+  const url = new URL(uri, baseUrl)
+  return url.toString()
+}
+
+/**
+ * Loads the API spec, parses, and assigns to API model
+ * @param url for Swagger or OpenAPI specification
+ */
+export const loadApi = async (url: string) => {
+  const source = await getUrl(url)
+  const obj = JSON.parse(source)
+  const upgrade = upgradeSpecObject(obj)
+  return ApiModel.fromJson(upgrade)
+}
+
+/**
+ * Fetches, parses, and loads the spec's API model if it's not already assigned
+ * @param spec to resolve
+ */
+export const loadSpecApi = async (spec: SpecItem) => {
+  if (!spec.api && spec.specURL) {
+    spec.api = await loadApi(spec.specURL)
+  }
+  return spec.api
+}
+
+/**
  * Load versions payload and retrieve all supported specs
  *
  * The versions payload should match the structure of Looker's /versions endpoint
  *
  * @param url that has an unauthenticated versions payload. For Looker, this is <LookerHostName>/versions
  * @param content content of versions payload that may already be assigned
+ * @param defer true to defer fetching and parsing the spec. Defaults to true.
  */
 export const loadSpecsFromVersions = async (
   url: string,
-  content: string | Record<string, unknown> = ''
+  content: string | Record<string, unknown> = '',
+  defer = true
 ): Promise<ILoadedSpecs> => {
   let fetchError = ''
   let specs: SpecList = {}
@@ -150,13 +191,14 @@ export const loadSpecsFromVersions = async (
     const versions = (
       typeof content === 'string' ? JSON.parse(content) : content
     ) as ILookerVersions
+    const origin = (window as any).location.origin
     baseUrl = versions.api_server_url
     const fetchSpec = async (spec: SpecItem) => {
       if (spec.specURL) {
-        const source = await getUrl(spec.specURL!)
-        const obj = JSON.parse(source)
-        const upgrade = upgradeSpecObject(obj)
-        spec.api = ApiModel.fromJson(upgrade)
+        spec.specURL = fullify(spec.specURL, origin)
+        if (!defer) {
+          await loadSpecApi(spec)
+        }
       }
       return spec.api
     }
