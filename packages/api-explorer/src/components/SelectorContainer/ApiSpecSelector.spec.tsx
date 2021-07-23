@@ -40,20 +40,20 @@ describe('ApiSpecSelector', () => {
     renderWithTheme(
       <ApiSpecSelector
         specs={specs}
-        spec={specState}
+        spec={specState.spec}
         specDispatch={specDispatch}
       />
     )
 
     const selector = screen.getByRole('textbox')
-    expect(selector).toHaveValue(`${specState.key}`)
+    expect(selector).toHaveValue(`${specState.spec.key}`)
   })
 
   test('it lists all available specs', async () => {
     renderWithTheme(
       <ApiSpecSelector
         specs={specs}
-        spec={specState}
+        spec={specState.spec}
         specDispatch={specDispatch}
       />
     )
@@ -69,7 +69,7 @@ describe('ApiSpecSelector', () => {
     renderWithRouter(
       <ApiSpecSelector
         specs={specs}
-        spec={specState}
+        spec={specState.spec}
         specDispatch={specDispatch}
       />
     )

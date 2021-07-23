@@ -35,11 +35,17 @@ import {
   InputSearch,
   SpaceVertical,
 } from '@looker/components'
-import { SpecList, CriteriaToSet, ISearchResult } from '@looker/sdk-codegen'
+import {
+  SpecItem,
+  SpecList,
+  CriteriaToSet,
+  ISearchResult,
+  ApiModel,
+} from '@looker/sdk-codegen'
 import { useRouteMatch } from 'react-router-dom'
 
 import { SearchContext } from '../../context'
-import { setPattern, SpecState, SpecAction } from '../../reducers'
+import { setPattern, SpecAction } from '../../reducers'
 import { useWindowSize } from '../../utils'
 import { HEADER_REM } from '../Header'
 import { SelectorContainer } from '../SelectorContainer'
@@ -53,7 +59,7 @@ interface SideNavProps {
   /** Specs to choose from */
   specs: SpecList
   /** Current selected spec */
-  spec: SpecState
+  spec: SpecItem
   /** Spec state setter */
   specDispatch: Dispatch<SpecAction>
 }
@@ -68,7 +74,7 @@ export const SideNav: FC<SideNavProps> = ({
   spec,
   specDispatch,
 }) => {
-  const api = spec.api
+  const api = spec.api || ({} as ApiModel)
   const specKey = spec.key
   const tabNames = ['methods', 'types']
   const match = useRouteMatch<SideNavParams>(`/:specKey/:sideNavTab?`)

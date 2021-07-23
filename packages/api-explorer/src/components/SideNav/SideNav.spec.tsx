@@ -55,7 +55,11 @@ describe('SideNav', () => {
 
   test('it renders search, methods tab and types tab', () => {
     renderWithRouter(
-      <SideNav specs={specs} spec={specState} specDispatch={specDispatch} />
+      <SideNav
+        specs={specs}
+        spec={specState.spec}
+        specDispatch={specDispatch}
+      />
     )
     const search = screen.getByLabelText('Search')
     expect(search).toHaveProperty('placeholder', 'Search')
@@ -64,17 +68,21 @@ describe('SideNav', () => {
     })
     expect(tabs).toHaveLength(2)
     expect(tabs[0]).toHaveTextContent(
-      `Methods (${countMethods(specState.api.tags)})`
+      `Methods (${countMethods(specState.spec.api!.tags)})`
     )
 
     expect(tabs[1]).toHaveTextContent(
-      `Types (${countTypes(specState.api.types)})`
+      `Types (${countTypes(specState.spec.api!.types)})`
     )
   })
 
   test('Methods tab is the default active tab', () => {
     renderWithRouter(
-      <SideNav specs={specs} spec={specState} specDispatch={specDispatch} />
+      <SideNav
+        specs={specs}
+        spec={specState.spec}
+        specDispatch={specDispatch}
+      />
     )
     expect(screen.getAllByText(allTagsPattern)).toHaveLength(2)
     expect(
@@ -92,7 +100,11 @@ describe('SideNav', () => {
 
   test('url determines active tab', () => {
     renderWithRouter(
-      <SideNav specs={specs} spec={specState} specDispatch={specDispatch} />,
+      <SideNav
+        specs={specs}
+        spec={specState.spec}
+        specDispatch={specDispatch}
+      />,
       ['/3.1/types']
     )
     // eslint-disable-next-line jest-dom/prefer-in-document
@@ -108,16 +120,20 @@ describe('Search', () => {
 
   test('it filters methods and types on input', async () => {
     renderWithSearchAndRouter(
-      <SideNav specs={specs} spec={specState} specDispatch={specDispatch} />
+      <SideNav
+        specs={specs}
+        spec={specState.spec}
+        specDispatch={specDispatch}
+      />
     )
     const searchPattern = 'embedsso'
     const input = screen.getByLabelText('Search')
-    jest.spyOn(specState.api, 'search')
+    jest.spyOn(specState.spec.api!, 'search')
     await act(async () => {
       /** Pasting to avoid triggering search multiple times */
       await userEvent.paste(input, searchPattern)
       await waitFor(() => {
-        expect(specState.api.search).toHaveBeenCalledWith(
+        expect(specState.spec.api!.search).toHaveBeenCalledWith(
           searchPattern,
           CriteriaToSet(defaultSearchState.criteria)
         )
@@ -126,14 +142,14 @@ describe('Search', () => {
         userEvent.click(methods)
         expect(
           screen.getByRole('heading', {
-            name: specState.api.tags.Auth.create_sso_embed_url.summary,
+            name: specState.spec.api!.tags.Auth.create_sso_embed_url.summary,
           })
         ).toBeInTheDocument()
 
         userEvent.click(types)
         expect(
           screen.getByRole('heading', {
-            name: specState.api.types.EmbedSsoParams.name,
+            name: specState.spec.api!.types.EmbedSsoParams.name,
           })
         ).toBeInTheDocument()
       })

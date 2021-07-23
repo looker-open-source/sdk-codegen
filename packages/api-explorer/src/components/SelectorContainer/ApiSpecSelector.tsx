@@ -28,12 +28,12 @@ import React, { FC, Dispatch } from 'react'
 import { Select } from '@looker/components'
 import { useHistory } from 'react-router-dom'
 
-import { SpecList } from '@looker/sdk-codegen'
-import { SpecAction, SpecState, selectSpec } from '../../reducers'
+import { SpecList, SpecItem } from '@looker/sdk-codegen'
+import { SpecAction, selectSpec } from '../../reducers'
 
 interface ApiSpecSelectorProps {
   specs: SpecList
-  spec: SpecState
+  spec: SpecItem
   specDispatch: Dispatch<SpecAction>
 }
 
@@ -49,8 +49,8 @@ export const ApiSpecSelector: FC<ApiSpecSelectorProps> = ({
     description: spec.status,
   }))
 
-  const handleChange = (specKey: string) => {
-    specDispatch(selectSpec(specs, specKey))
+  const handleChange = async (specKey: string) => {
+    specDispatch(selectSpec(specKey))
     history.push(`/${specKey}`)
   }
 
