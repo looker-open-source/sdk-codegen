@@ -43,7 +43,7 @@ import ApiExplorer from '@looker/api-explorer/src/ApiExplorer'
 import { getExtensionSDK } from '@looker/extension-sdk'
 import { configureStore } from '@looker/api-explorer/src/state'
 import { Provider } from 'react-redux'
-import { Loader } from '@looker/api-explorer/lib/components'
+import { Loader } from '@looker/api-explorer/src/components'
 import { ExtensionEnvAdaptor } from './utils'
 
 class ExtensionConfigurator implements RunItConfigurator {
