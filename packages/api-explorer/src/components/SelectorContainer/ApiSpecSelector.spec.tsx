@@ -28,9 +28,11 @@ import { act, screen, waitFor } from '@testing-library/react'
 import { renderWithTheme } from '@looker/components-test-utils'
 import userEvent from '@testing-library/user-event'
 
-import { specs, specState } from '../../test-data'
+import { specs, getLoadedSpecState } from '../../test-data'
 import { renderWithRouter } from '../../test-utils'
 import { ApiSpecSelector } from './ApiSpecSelector'
+
+const specState = getLoadedSpecState()
 
 describe('ApiSpecSelector', () => {
   const specDispatch = jest.fn()
@@ -81,8 +83,7 @@ describe('ApiSpecSelector', () => {
         expect(specDispatch).toHaveBeenCalledTimes(1)
         expect(specDispatch).toHaveBeenCalledWith({
           type: 'SELECT_SPEC',
-          key: '3.1',
-          payload: specs,
+          payload: '3.1',
         })
       })
     })

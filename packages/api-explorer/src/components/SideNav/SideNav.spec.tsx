@@ -28,13 +28,14 @@ import { CriteriaToSet } from '@looker/sdk-codegen'
 import userEvent from '@testing-library/user-event'
 import { act, screen, waitFor } from '@testing-library/react'
 
-import { specs, specState } from '../../test-data'
+import { getLoadedSpecs, specState } from '../../test-data'
 import { renderWithRouter, renderWithSearchAndRouter } from '../../test-utils'
 import { defaultSearchState } from '../../reducers'
 import { SideNav } from './SideNav'
 import { countMethods, countTypes } from './searchUtils'
 
 describe('SideNav', () => {
+  const specs = getLoadedSpecs()
   const specDispatch = jest.fn()
   const allTagsPattern = /^(Auth|ApiAuth)$/
   const allTypesPattern = /^(WriteDashboard|WriteQuery)$/
@@ -116,6 +117,7 @@ describe('SideNav', () => {
 })
 
 describe('Search', () => {
+  const specs = getLoadedSpecs()
   const specDispatch = jest.fn()
 
   test('it filters methods and types on input', async () => {

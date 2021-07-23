@@ -38,6 +38,6 @@ describe('Spec Reducer', () => {
     const state = specReducer(initDefaultSpecState(specs, location), action)
     expect(state.spec.api).toBeInstanceOf(ApiModel)
     expect(state.spec.key).toEqual('4.0')
-    expect(state.spec.status).toEqual(action.payload['4.0'].status)
+    expect(state.spec.status).toEqual(specs['4.0'].status)
   })
 })
