@@ -122,13 +122,15 @@ const ApiExplorer: FC<ApiExplorerProps> = ({
   }, [exampleLodeUrl, declarationsLodeUrl])
 
   useEffect(() => {
-    const getSettings = async () => {
+    const initSdkLanguage = async () => {
       const resp = await envAdaptor.localStorageGetItem(
         EnvAdaptorConstants.LOCALSTORAGE_SDK_LANGUAGE_KEY
       )
-      return resp || ''
+      if (resp) {
+        setSdkLanguageAction(resp)
+      }
     }
-    getSettings().then((r) => setSdkLanguageAction(r))
+    initSdkLanguage()
   }, [envAdaptor, setSdkLanguageAction])
 
   const { loadGoogleFonts, themeCustomizations } = envAdaptor.themeOverrides()
