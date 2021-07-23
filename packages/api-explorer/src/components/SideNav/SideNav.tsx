@@ -116,7 +116,7 @@ export const SideNav: FC<SideNavProps> = ({
     setTypeCount(countTypes(newTypes))
     setSearchResults(results)
     setSearchSettings(setPattern(debouncedPattern!))
-  }, [debouncedPattern, specKey])
+  }, [debouncedPattern, specKey, spec])
 
   const size = useWindowSize()
   const headlessOffset = headless ? 200 : 120
