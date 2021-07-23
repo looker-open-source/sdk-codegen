@@ -2271,7 +2271,7 @@ export class ApiModel implements ISymbolTable, IApiModel {
     // })
   }
 
-  private load(): void {
+  load(): void {
     if (this.spec?.components?.schemas) {
       Object.entries(this.spec.components.schemas).forEach(([name, schema]) => {
         const t = new Type(schema, name)

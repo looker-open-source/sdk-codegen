@@ -366,6 +366,49 @@ describe('sdkModels', () => {
       ])
     })
 
+    it('setting test', () => {
+      // const spec = {
+      //   Setting: {
+      //     properties: {
+      //       extension_framework_enabled: {
+      //         type: 'boolean',
+      //         description: 'Toggle extension framework on or off',
+      //         'x-looker-nullable': false,
+      //       },
+      //       marketplace_auto_install_enabled: {
+      //         type: 'boolean',
+      //         description: 'Toggle marketplace auto install on or off',
+      //         'x-looker-nullable': false,
+      //       },
+      //       marketplace_enabled: {
+      //         type: 'boolean',
+      //         description: 'Toggle marketplace on or off',
+      //         'x-looker-nullable': false,
+      //       },
+      //       whitelabel: {
+      //         $ref: '#/definitions/WhitelabelConfiguration',
+      //         readOnly: true,
+      //         description: 'Whitelabel config',
+      //         'x-looker-nullable': false,
+      //       },
+      //     },
+      //     'x-looker-status': 'beta',
+      //   },
+      // }
+      // const type = new Type(spec, 'Setting')
+      // type.load(apiTestModel)
+      // apiTestModel.types[type.name] = type
+      // apiTestModel.load()
+      // const actual = apiTestModel.mayGetWriteableType(type)
+      // console.log(actual)}
+
+      const setting = apiTestModel.types.Setting
+      const whitelabel = apiTestModel.types.WhitelabelConfiguration
+      expect(whitelabel.readOnly).toEqual(false)
+      const type = apiTestModel.mayGetWriteableType(setting)
+      expect(type).toBeDefined()
+    })
+
     it('WriteCreateQueryTask', () => {
       const type = apiTestModel.mayGetWriteableType(
         apiTestModel.types.CreateQueryTask
