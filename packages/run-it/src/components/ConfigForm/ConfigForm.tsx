@@ -66,6 +66,13 @@ interface ConfigFormProps {
   configurator: RunItConfigurator
 }
 
+const defaultFieldValues = {
+  baseUrl: '',
+  lookerUrl: '',
+  specs: {},
+  fetchError: '',
+}
+
 export const ConfigForm: FC<ConfigFormProps> = ({
   title,
   setHasConfig,
@@ -76,60 +83,62 @@ export const ConfigForm: FC<ConfigFormProps> = ({
   // TODO see about useReducer to clean this up a bit more
   title = title || 'RunIt Configuration'
 
-  // get configuration from storage, or default it
-  const storage = configurator.getStorage(RunItConfigKey)
-  let config = { base_url: '', looker_url: '' }
-  if (storage.value) config = JSON.parse(storage.value)
-  const { base_url, looker_url } = config
-  const [fields, setFields] = useState<ILoadedSpecs>({
-    baseUrl: base_url,
-    lookerUrl: looker_url,
-    specs: {},
-    fetchError: '',
-  })
+  const [fields, setFields] = useState<ILoadedSpecs>(defaultFieldValues)
+
+  useEffect(() => {
+    // get configuration from storage, or default it
+    const storage = configurator.getStorage(RunItConfigKey)
+    const config = storage.value
+      ? JSON.parse(storage.value)
+      : { base_url: '', looker_url: '' }
+    const { base_url, looker_url } = config
+    setFields((currentFields) => ({
+      ...currentFields,
+      baseUrl: base_url,
+      lookerUrl: looker_url,
+    }))
+  }, [configurator])
 
   const [validationMessages, setValidationMessages] =
     useState<ValidationMessages>({})
 
-  const handleSubmit = (e: BaseSyntheticEvent) => {
+  const handleSubmit = async (e: BaseSyntheticEvent) => {
     e.preventDefault()
-    configurator.removeStorage(RunItConfigKey)
-    configurator.setStorage(
-      RunItConfigKey,
-      JSON.stringify({
-        base_url: fields.baseUrl,
-        looker_url: fields.lookerUrl,
-      }),
-      // Always store in local storage
-      'local'
-    )
-    if (setHasConfig) setHasConfig(true)
-    closeModal()
+    try {
+      updateFields('fetchError', '')
+      const { baseUrl } = await loadSpecsFromVersions(
+        `${fields.lookerUrl}/versions`
+      )
+      updateFields('baseUrl', baseUrl)
+      await configurator.removeStorage(RunItConfigKey)
+      await configurator.setStorage(
+        RunItConfigKey,
+        JSON.stringify({
+          base_url: baseUrl,
+          looker_url: fields.lookerUrl,
+        }),
+        // Always store in local storage
+        'local'
+      )
+      if (setHasConfig) setHasConfig(true)
+      closeModal()
+    } catch (err) {
+      updateFields('fetchError', err.message)
+    }
   }
 
   const handleRemove = (e: BaseSyntheticEvent) => {
     e.preventDefault()
     configurator.removeStorage(RunItConfigKey)
+    setFields(defaultFieldValues)
     if (setHasConfig) setHasConfig(false)
   }
 
   const updateFields = (name: string, value: string) => {
-    let newFields = { ...fields }
+    console.log('updateFields', { name, value })
+    const newFields = { ...fields }
     newFields[name] = value
-    loadSpecsFromVersions(`${fields.lookerUrl}/versions`)
-      .then((resp) => (newFields = resp))
-      .catch((err) => (newFields.fetchError = err.message))
     setFields(newFields)
-  }
-
-  useEffect(() => {
-    if (looker_url) {
-      updateFields('lookerUrl', looker_url)
-    }
-  }, [looker_url])
-
-  const handleInputChange = (event: FormEvent<HTMLInputElement>) => {
-    updateFields(event.currentTarget.name, event.currentTarget.value)
   }
 
   const handleUrlChange = (event: FormEvent<HTMLInputElement>) => {
@@ -148,10 +157,24 @@ export const ConfigForm: FC<ConfigFormProps> = ({
         type: 'error',
       }
     }
-    handleInputChange(event)
+    updateFields(event.currentTarget.name, event.currentTarget.value)
 
     setValidationMessages(newValidationMessages)
   }
+
+  const saveButtonDisabled =
+    fields.lookerUrl.trim().length === 0 ||
+    Object.keys(validationMessages).length > 0
+
+  const removeButtonDisabled =
+    fields.lookerUrl.trim().length === 0 && fields.baseUrl.trim().length === 0
+
+  console.log({
+    saveButtonDisabled,
+    removeButtonDisabled,
+    fields,
+    validationMessages,
+  })
 
   return (
     <>
@@ -186,14 +209,19 @@ export const ConfigForm: FC<ConfigFormProps> = ({
       <DialogFooter>
         <Button
           iconBefore={<Done />}
-          disabled={Object.keys(validationMessages).length > 0}
+          disabled={saveButtonDisabled}
           // TODO maybe validationMessages is breaking the submit?
           onClick={handleSubmit}
           mr="small"
         >
           Save
         </Button>
-        <Button onClick={handleRemove} iconBefore={<Delete />} color="critical">
+        <Button
+          onClick={handleRemove}
+          iconBefore={<Delete />}
+          color="critical"
+          disabled={removeButtonDisabled}
+        >
           Remove
         </Button>
       </DialogFooter>
