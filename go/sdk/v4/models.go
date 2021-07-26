@@ -226,7 +226,7 @@ type ContentMeta struct {
   Slug         *string          `json:"slug,omitempty"`           // Content Slug
 }
 
-
+// WARNING: no writeable properties found for POST, PUT, or PATCH
 type ContentMetaGroupUser struct {
   Can               *map[string]bool `json:"can,omitempty"`                  // Operations the current user is able to perform on this object
   Id                *string          `json:"id,omitempty"`                   // Unique Id
@@ -385,7 +385,7 @@ type CostEstimate struct {
   Message  *string `json:"message,omitempty"`    // Human-friendly message
 }
 
-
+// WARNING: no writeable properties found for POST, PUT, or PATCH
 type CreateCostEstimate struct {
   Sql *string `json:"sql,omitempty"`  // SQL statement to estimate
 }
@@ -453,7 +453,7 @@ type CreateQueryTask struct {
   DashboardId  *string          `json:"dashboard_id,omitempty"`  // Id of dashboard associated with query.
 }
 
-
+// WARNING: no writeable properties found for POST, PUT, or PATCH
 type CredentialsApi3 struct {
   Can        *map[string]bool `json:"can,omitempty"`          // Operations the current user is able to perform on this object
   Id         *int64           `json:"id,omitempty"`           // Unique Id
@@ -554,7 +554,7 @@ type CredentialsSaml struct {
   Url        *string          `json:"url,omitempty"`           // Link to get this item
 }
 
-
+// WARNING: no writeable properties found for POST, PUT, or PATCH
 type CredentialsTotp struct {
   Can        *map[string]bool `json:"can,omitempty"`          // Operations the current user is able to perform on this object
   CreatedAt  *string          `json:"created_at,omitempty"`   // Timestamp for the creation of this credential
@@ -1134,12 +1134,12 @@ type GroupHierarchy struct {
   RoleIds                 *[]int64         `json:"role_ids,omitempty"`                     // Role IDs assigned to group
 }
 
-
+// WARNING: no writeable properties found for POST, PUT, or PATCH
 type GroupIdForGroupInclusion struct {
   GroupId *int64 `json:"group_id,omitempty"`  // Id of group
 }
 
-
+// WARNING: no writeable properties found for POST, PUT, or PATCH
 type GroupIdForGroupUserInclusion struct {
   UserId *int64 `json:"user_id,omitempty"`  // Id of user
 }
@@ -3277,7 +3277,7 @@ const UserAttributeFilterTypes_Yesno                  UserAttributeFilterTypes =
 const UserAttributeFilterTypes_Zipcode                UserAttributeFilterTypes = "zipcode"
 
 
-
+// WARNING: no writeable properties found for POST, PUT, or PATCH
 type UserAttributeGroupValue struct {
   Can             *map[string]bool `json:"can,omitempty"`                // Operations the current user is able to perform on this object
   Id              *int64           `json:"id,omitempty"`                 // Unique Id of this group-attribute relation
@@ -3388,13 +3388,13 @@ type Workspace struct {
   Projects *[]Project       `json:"projects,omitempty"`  // The local state of each project in the workspace
 }
 
-// Dynamically generated writeable type for ApiSession removes properties:
+// Dynamic writeable type for ApiSession removes:
 // can, sudo_user_id
 type WriteApiSession struct {
   WorkspaceId *string `json:"workspace_id,omitempty"`  // The id of active workspace for this session
 }
 
-// Dynamically generated writeable type for BackupConfiguration removes properties:
+// Dynamic writeable type for BackupConfiguration removes:
 // can, url
 type WriteBackupConfiguration struct {
   Type                 *string `json:"type,omitempty"`                     // Type of backup: looker-s3 or custom-s3
@@ -3404,7 +3404,7 @@ type WriteBackupConfiguration struct {
   CustomS3Secret       *string `json:"custom_s3_secret,omitempty"`         // (Write-Only) AWS S3 secret used for custom-s3 backups
 }
 
-// Dynamically generated writeable type for Board removes properties:
+// Dynamic writeable type for Board removes:
 // can, content_metadata_id, created_at, board_sections, id, updated_at, user_id, primary_homepage
 type WriteBoard struct {
   DeletedAt    *time.Time `json:"deleted_at,omitempty"`     // Date of board deletion
@@ -3413,7 +3413,7 @@ type WriteBoard struct {
   Title        *string    `json:"title,omitempty"`          // Title of the board
 }
 
-// Dynamically generated writeable type for BoardItem removes properties:
+// Dynamic writeable type for BoardItem removes:
 // can, content_created_by, content_favorite_id, content_metadata_id, content_updated_at, description, favorite_count, id, location, title, url, view_count
 type WriteBoardItem struct {
   DashboardId       *int64  `json:"dashboard_id,omitempty"`         // Dashboard to base this item on
@@ -3423,7 +3423,7 @@ type WriteBoardItem struct {
   Order             *int64  `json:"order,omitempty"`                // An arbitrary integer representing the sort order within the section
 }
 
-// Dynamically generated writeable type for BoardSection removes properties:
+// Dynamic writeable type for BoardSection removes:
 // can, created_at, board_items, id, visible_item_order, updated_at
 type WriteBoardSection struct {
   DeletedAt   *time.Time `json:"deleted_at,omitempty"`   // Time at which this section was deleted.
@@ -3433,7 +3433,7 @@ type WriteBoardSection struct {
   Title       *string    `json:"title,omitempty"`        // Name of row
 }
 
-// Dynamically generated writeable type for ColorCollection removes properties:
+// Dynamic writeable type for ColorCollection removes:
 // id
 type WriteColorCollection struct {
   Label               *string              `json:"label,omitempty"`                // Label of color collection
@@ -3442,7 +3442,7 @@ type WriteColorCollection struct {
   DivergingPalettes   *[]ContinuousPalette `json:"divergingPalettes,omitempty"`    // Array of diverging palette definitions
 }
 
-// Dynamically generated writeable type for Command removes properties:
+// Dynamic writeable type for Command removes:
 // id, author_id
 type WriteCommand struct {
   Name              *string            `json:"name,omitempty"`                 // Name of the command
@@ -3451,22 +3451,24 @@ type WriteCommand struct {
   LinkedContentType *LinkedContentType `json:"linked_content_type,omitempty"`  // Name of the command Valid values are: "dashboard", "lookml_dashboard".
 }
 
-// Dynamically generated writeable type for ContentFavorite removes properties:
+// Dynamic writeable type for ContentFavorite removes:
 // id, look_id, dashboard_id, board_id
 type WriteContentFavorite struct {
   UserId            *int64              `json:"user_id,omitempty"`              // User Id which owns this ContentFavorite
   ContentMetadataId *int64              `json:"content_metadata_id,omitempty"`  // Content Metadata Id associated with this ContentFavorite
-  Look              *WriteLookBasic     `json:"look,omitempty"`
-  Dashboard         *WriteDashboardBase `json:"dashboard,omitempty"`
+  Look              *WriteLookBasic     `json:"look,omitempty"`                 // Dynamic writeable type for LookBasic removes:
+ // can, content_metadata_id, id, title
+  Dashboard         *WriteDashboardBase `json:"dashboard,omitempty"`            // Dynamic writeable type for DashboardBase removes:
+ // can, content_favorite_id, content_metadata_id, description, hidden, id, model, query_timezone, readonly, refresh_interval, refresh_interval_to_i, title, user_id, slug, preferred_viewer
 }
 
-// Dynamically generated writeable type for ContentMeta removes properties:
+// Dynamic writeable type for ContentMeta removes:
 // can, id, name, parent_id, dashboard_id, look_id, folder_id, content_type, inheriting_id, slug
 type WriteContentMeta struct {
   Inherits *bool `json:"inherits,omitempty"`  // Whether content inherits its access levels from parent
 }
 
-// Dynamically generated writeable type for CreateDashboardFilter removes properties:
+// Dynamic writeable type for CreateDashboardFilter removes:
 // id, field
 type WriteCreateDashboardFilter struct {
   DashboardId         string                  `json:"dashboard_id"`                     // Id of Dashboard
@@ -3484,7 +3486,7 @@ type WriteCreateDashboardFilter struct {
   UiConfig            *map[string]interface{} `json:"ui_config,omitempty"`              // The visual configuration for this filter. Used to set up how the UI for this filter should appear.
 }
 
-// Dynamically generated writeable type for CreateQueryTask removes properties:
+// Dynamic writeable type for CreateQueryTask removes:
 // can
 type WriteCreateQueryTask struct {
   QueryId      int64        `json:"query_id"`                // Id of query to run
@@ -3495,14 +3497,14 @@ type WriteCreateQueryTask struct {
   DashboardId  *string      `json:"dashboard_id,omitempty"`  // Id of dashboard associated with query.
 }
 
-// Dynamically generated writeable type for CredentialsEmail removes properties:
+// Dynamic writeable type for CredentialsEmail removes:
 // can, created_at, is_disabled, logged_in_at, password_reset_url, type, url, user_url
 type WriteCredentialsEmail struct {
   Email                          *string `json:"email,omitempty"`                                // EMail address used for user login
   ForcedPasswordResetAtNextLogin *bool   `json:"forced_password_reset_at_next_login,omitempty"`  // Force the user to change their password upon their next login
 }
 
-// Dynamically generated writeable type for CustomWelcomeEmail removes properties:
+// Dynamic writeable type for CustomWelcomeEmail removes:
 // can
 type WriteCustomWelcomeEmail struct {
   Enabled *bool   `json:"enabled,omitempty"`  // If true, custom email content will replace the default body of welcome emails
@@ -3511,14 +3513,15 @@ type WriteCustomWelcomeEmail struct {
   Header  *string `json:"header,omitempty"`   // The text to appear in the header line of the email body.
 }
 
-// Dynamically generated writeable type for Dashboard removes properties:
+// Dynamic writeable type for Dashboard removes:
 // can, content_favorite_id, content_metadata_id, id, model, readonly, refresh_interval_to_i, user_id, created_at, dashboard_elements, dashboard_filters, dashboard_layouts, deleted_at, deleter_id, edit_uri, favorite_count, last_accessed_at, last_viewed_at, view_count, url
 type WriteDashboard struct {
   Description                         *string              `json:"description,omitempty"`                               // Description
   Hidden                              *bool                `json:"hidden,omitempty"`                                    // Is Hidden
   QueryTimezone                       *string              `json:"query_timezone,omitempty"`                            // Timezone in which the Dashboard will run by default.
   RefreshInterval                     *string              `json:"refresh_interval,omitempty"`                          // Refresh Interval, as a time duration phrase like "2 hours 30 minutes". A number with no time units will be interpreted as whole seconds.
-  Folder                              *WriteFolderBase     `json:"folder,omitempty"`
+  Folder                              *WriteFolderBase     `json:"folder,omitempty"`                                    // Dynamic writeable type for FolderBase removes:
+ // id, content_metadata_id, created_at, creator_id, child_count, external_id, is_embed, is_embed_shared_root, is_embed_users_root, is_personal, is_personal_descendant, is_shared_root, is_users_root, can
   Title                               *string              `json:"title,omitempty"`                                     // Dashboard Title
   Slug                                *string              `json:"slug,omitempty"`                                      // Content Metadata Slug
   PreferredViewer                     *string              `json:"preferred_viewer,omitempty"`                          // The preferred route for viewing this dashboard (ie: dashboards or dashboards-next)
@@ -3538,27 +3541,31 @@ type WriteDashboard struct {
   Appearance                          *DashboardAppearance `json:"appearance,omitempty"`
 }
 
-// Dynamically generated writeable type for DashboardBase removes properties:
+// Dynamic writeable type for DashboardBase removes:
 // can, content_favorite_id, content_metadata_id, description, hidden, id, model, query_timezone, readonly, refresh_interval, refresh_interval_to_i, title, user_id, slug, preferred_viewer
 type WriteDashboardBase struct {
-  Folder *WriteFolderBase `json:"folder,omitempty"`
+  Folder *WriteFolderBase `json:"folder,omitempty"`  // Dynamic writeable type for FolderBase removes:
+ // id, content_metadata_id, created_at, creator_id, child_count, external_id, is_embed, is_embed_shared_root, is_embed_users_root, is_personal, is_personal_descendant, is_shared_root, is_users_root, can
 }
 
-// Dynamically generated writeable type for DashboardElement removes properties:
+// Dynamic writeable type for DashboardElement removes:
 // can, body_text_as_html, edit_uri, id, lookml_link_id, note_text_as_html, refresh_interval_to_i, alert_count, title_text_as_html, subtitle_text_as_html
 type WriteDashboardElement struct {
   BodyText        *string                                          `json:"body_text,omitempty"`         // Text tile body text
   DashboardId     *string                                          `json:"dashboard_id,omitempty"`      // Id of Dashboard
-  Look            *WriteLookWithQuery                              `json:"look,omitempty"`
+  Look            *WriteLookWithQuery                              `json:"look,omitempty"`              // Dynamic writeable type for LookWithQuery removes:
+ // can, content_metadata_id, id, content_favorite_id, created_at, deleted_at, deleter_id, embed_url, excel_file_url, favorite_count, google_spreadsheet_formula, image_embed_url, last_accessed_at, last_updater_id, last_viewed_at, model, public_slug, public_url, short_url, updated_at, view_count, url
   LookId          *string                                          `json:"look_id,omitempty"`           // Id Of Look
   MergeResultId   *string                                          `json:"merge_result_id,omitempty"`   // ID of merge result
   NoteDisplay     *string                                          `json:"note_display,omitempty"`      // Note Display
   NoteState       *string                                          `json:"note_state,omitempty"`        // Note State
   NoteText        *string                                          `json:"note_text,omitempty"`         // Note Text
-  Query           *WriteQuery                                      `json:"query,omitempty"`
+  Query           *WriteQuery                                      `json:"query,omitempty"`             // Dynamic writeable type for Query removes:
+ // can, id, slug, share_url, expanded_share_url, url, has_table_calculations
   QueryId         *int64                                           `json:"query_id,omitempty"`          // Id Of Query
   RefreshInterval *string                                          `json:"refresh_interval,omitempty"`  // Refresh Interval
-  ResultMaker     *WriteResultMakerWithIdVisConfigAndDynamicFields `json:"result_maker,omitempty"`
+  ResultMaker     *WriteResultMakerWithIdVisConfigAndDynamicFields `json:"result_maker,omitempty"`      // Dynamic writeable type for ResultMakerWithIdVisConfigAndDynamicFields removes:
+ // id, dynamic_fields, filterables, sorts, merge_result_id, total, query_id, sql_query_id, vis_config
   ResultMakerId   *int64                                           `json:"result_maker_id,omitempty"`   // ID of the ResultMakerLookup entry.
   SubtitleText    *string                                          `json:"subtitle_text,omitempty"`     // Text tile subtitle text
   Title           *string                                          `json:"title,omitempty"`             // Title of dashboard element
@@ -3567,7 +3574,7 @@ type WriteDashboardElement struct {
   Type            *string                                          `json:"type,omitempty"`              // Type
 }
 
-// Dynamically generated writeable type for DashboardFilter removes properties:
+// Dynamic writeable type for DashboardFilter removes:
 // can, id, dashboard_id, field
 type WriteDashboardFilter struct {
   Name                *string                 `json:"name,omitempty"`                   // Name of filter
@@ -3584,7 +3591,7 @@ type WriteDashboardFilter struct {
   UiConfig            *map[string]interface{} `json:"ui_config,omitempty"`              // The visual configuration for this filter. Used to set up how the UI for this filter should appear.
 }
 
-// Dynamically generated writeable type for DashboardLayout removes properties:
+// Dynamic writeable type for DashboardLayout removes:
 // can, id, deleted, dashboard_title, dashboard_layout_components
 type WriteDashboardLayout struct {
   DashboardId *string `json:"dashboard_id,omitempty"`  // Id of Dashboard
@@ -3594,7 +3601,7 @@ type WriteDashboardLayout struct {
   Width       *int64  `json:"width,omitempty"`         // Width
 }
 
-// Dynamically generated writeable type for DashboardLayoutComponent removes properties:
+// Dynamic writeable type for DashboardLayoutComponent removes:
 // can, id, deleted, element_title, element_title_hidden, vis_type
 type WriteDashboardLayoutComponent struct {
   DashboardLayoutId  *string `json:"dashboard_layout_id,omitempty"`   // Id of Dashboard Layout
@@ -3605,14 +3612,14 @@ type WriteDashboardLayoutComponent struct {
   Height             *int64  `json:"height,omitempty"`                // Height
 }
 
-// Dynamically generated writeable type for Datagroup removes properties:
+// Dynamic writeable type for Datagroup removes:
 // can, created_at, id, model_name, name, trigger_check_at, trigger_error, trigger_value
 type WriteDatagroup struct {
   StaleBefore *int64 `json:"stale_before,omitempty"`  // UNIX timestamp before which cache entries are considered stale. Cannot be in the future.
   TriggeredAt *int64 `json:"triggered_at,omitempty"`  // UNIX timestamp at which this entry became triggered. Cannot be in the future.
 }
 
-// Dynamically generated writeable type for DBConnection removes properties:
+// Dynamic writeable type for DBConnection removes:
 // can, dialect, snippets, pdts_enabled, uses_oauth, created_at, user_id, example, last_regen_at, last_reap_at, managed
 type WriteDBConnection struct {
   Name                     *string                    `json:"name,omitempty"`                          // Name of the connection. Also used as the unique identifier
@@ -3640,14 +3647,15 @@ type WriteDBConnection struct {
   SqlRunnerPrecacheTables  *bool                      `json:"sql_runner_precache_tables,omitempty"`    // Precache tables in the SQL Runner
   SqlWritingWithInfoSchema *bool                      `json:"sql_writing_with_info_schema,omitempty"`  // Fetch Information Schema For SQL Writing
   AfterConnectStatements   *string                    `json:"after_connect_statements,omitempty"`      // SQL statements (semicolon separated) to issue after connecting to the database. Requires `custom_after_connect_statements` license feature
-  PdtContextOverride       *WriteDBConnectionOverride `json:"pdt_context_override,omitempty"`
+  PdtContextOverride       *WriteDBConnectionOverride `json:"pdt_context_override,omitempty"`          // Dynamic writeable type for DBConnectionOverride removes:
+ // has_password
   TunnelId                 *string                    `json:"tunnel_id,omitempty"`                     // The Id of the ssh tunnel this connection uses
   PdtConcurrency           *int64                     `json:"pdt_concurrency,omitempty"`               // Maximum number of threads to use to build PDTs in parallel
   DisableContextComment    *bool                      `json:"disable_context_comment,omitempty"`       // When disable_context_comment is true comment will not be added to SQL
   OauthApplicationId       *int64                     `json:"oauth_application_id,omitempty"`          // An External OAuth Application to use for authenticating to the database
 }
 
-// Dynamically generated writeable type for DBConnectionOverride removes properties:
+// Dynamic writeable type for DBConnectionOverride removes:
 // has_password
 type WriteDBConnectionOverride struct {
   Context                *string `json:"context,omitempty"`                   // Context in which to override (`pdt` is the only allowed value)
@@ -3663,7 +3671,7 @@ type WriteDBConnectionOverride struct {
   AfterConnectStatements *string `json:"after_connect_statements,omitempty"`  // SQL statements (semicolon separated) to issue after connecting to the database. Requires `custom_after_connect_statements` license feature
 }
 
-// Dynamically generated writeable type for ExternalOauthApplication removes properties:
+// Dynamic writeable type for ExternalOauthApplication removes:
 // can, id, created_at
 type WriteExternalOauthApplication struct {
   Name         *string `json:"name,omitempty"`           // The name of this application.  For Snowflake connections, this should be the name of the host database.
@@ -3672,28 +3680,28 @@ type WriteExternalOauthApplication struct {
   DialectName  *string `json:"dialect_name,omitempty"`   // The database dialect for this application.
 }
 
-// Dynamically generated writeable type for FolderBase removes properties:
+// Dynamic writeable type for FolderBase removes:
 // id, content_metadata_id, created_at, creator_id, child_count, external_id, is_embed, is_embed_shared_root, is_embed_users_root, is_personal, is_personal_descendant, is_shared_root, is_users_root, can
 type WriteFolderBase struct {
   Name     string  `json:"name"`                 // Unique Name
   ParentId *string `json:"parent_id,omitempty"`  // Id of Parent. If the parent id is null, this is a root-level entry
 }
 
-// Dynamically generated writeable type for GitBranch removes properties:
+// Dynamic writeable type for GitBranch removes:
 // can, remote, remote_name, error, message, owner_name, readonly, personal, is_local, is_remote, is_production, ahead_count, behind_count, commit_at, remote_ref
 type WriteGitBranch struct {
   Name *string `json:"name,omitempty"`  // The short name on the local. Updating `name` results in `git checkout <new_name>`
   Ref  *string `json:"ref,omitempty"`   // The resolved ref of this branch. Updating `ref` results in `git reset --hard <new_ref>``.
 }
 
-// Dynamically generated writeable type for Group removes properties:
+// Dynamic writeable type for Group removes:
 // can, contains_current_user, external_group_id, externally_managed, id, include_by_default, user_count
 type WriteGroup struct {
   CanAddToContentMetadata *bool   `json:"can_add_to_content_metadata,omitempty"`  // Group can be used in content access controls
   Name                    *string `json:"name,omitempty"`                         // Name of group
 }
 
-// Dynamically generated writeable type for Integration removes properties:
+// Dynamic writeable type for Integration removes:
 // can, id, integration_hub_id, label, description, supported_formats, supported_action_types, supported_formattings, supported_visualization_formattings, supported_download_settings, icon_url, uses_oauth, required_fields, delegate_oauth
 type WriteIntegration struct {
   Enabled                       *bool               `json:"enabled,omitempty"`                           // Whether the integration is available to users.
@@ -3701,27 +3709,27 @@ type WriteIntegration struct {
   InstalledDelegateOauthTargets *[]int64            `json:"installed_delegate_oauth_targets,omitempty"`  // Whether the integration is available to users.
 }
 
-// Dynamically generated writeable type for IntegrationHub removes properties:
+// Dynamic writeable type for IntegrationHub removes:
 // can, id, label, official, fetch_error_message, has_authorization_token, legal_agreement_signed, legal_agreement_required, legal_agreement_text
 type WriteIntegrationHub struct {
   Url                *string `json:"url,omitempty"`                  // URL of the hub.
   AuthorizationToken *string `json:"authorization_token,omitempty"`  // (Write-Only) An authorization key that will be sent to the integration hub on every request.
 }
 
-// Dynamically generated writeable type for InternalHelpResources removes properties:
+// Dynamic writeable type for InternalHelpResources removes:
 // can
 type WriteInternalHelpResources struct {
   Enabled *bool `json:"enabled,omitempty"`  // If true and internal help resources content is not blank then the link for internal help resources will be shown in the help menu and the content displayed within Looker
 }
 
-// Dynamically generated writeable type for InternalHelpResourcesContent removes properties:
+// Dynamic writeable type for InternalHelpResourcesContent removes:
 // can
 type WriteInternalHelpResourcesContent struct {
   OrganizationName *string `json:"organization_name,omitempty"`  // Text to display in the help menu item which will display the internal help resources
   MarkdownContent  *string `json:"markdown_content,omitempty"`   // Content to be displayed in the internal help resources page/modal
 }
 
-// Dynamically generated writeable type for LDAPConfig removes properties:
+// Dynamic writeable type for LDAPConfig removes:
 // can, default_new_user_groups, default_new_user_roles, groups, has_auth_password, modified_at, modified_by, user_attributes, url
 type WriteLDAPConfig struct {
   AlternateEmailLoginAllowed *bool                     `json:"alternate_email_login_allowed,omitempty"`   // Allow alternate email-based login via '/login/email' for admins and for specified users with the 'login_special_email' permission. This option is useful as a fallback during ldap setup, if ldap config problems occur later, or if you need to support some users who are not in your ldap directory. Looker email/password logins are always disabled for regular users when ldap is enabled.
@@ -3760,19 +3768,19 @@ type WriteLDAPConfig struct {
   AllowDirectRoles           *bool                     `json:"allow_direct_roles,omitempty"`              // Allows roles to be directly assigned to LDAP auth'd users.
 }
 
-// Dynamically generated writeable type for LegacyFeature removes properties:
+// Dynamic writeable type for LegacyFeature removes:
 // can, id, name, description, enabled, disallowed_as_of_version, disable_on_upgrade_to_version, end_of_life_version, documentation_url, approximate_disable_date, approximate_end_of_life_date, has_disabled_on_upgrade
 type WriteLegacyFeature struct {
   EnabledLocally *bool `json:"enabled_locally,omitempty"`  // Whether this feature has been enabled by a user
 }
 
-// Dynamically generated writeable type for LookBasic removes properties:
+// Dynamic writeable type for LookBasic removes:
 // can, content_metadata_id, id, title
 type WriteLookBasic struct {
   UserId *int64 `json:"user_id,omitempty"`  // User Id
 }
 
-// Dynamically generated writeable type for LookmlModel removes properties:
+// Dynamic writeable type for LookmlModel removes:
 // can, explores, has_content, label
 type WriteLookmlModel struct {
   AllowedDbConnectionNames *[]string `json:"allowed_db_connection_names,omitempty"`  // Array of names of connections this model is allowed to use
@@ -3781,7 +3789,7 @@ type WriteLookmlModel struct {
   UnlimitedDbConnections   *bool     `json:"unlimited_db_connections,omitempty"`     // Is this model allowed to use all current and future connections
 }
 
-// Dynamically generated writeable type for LookWithQuery removes properties:
+// Dynamic writeable type for LookWithQuery removes:
 // can, content_metadata_id, id, content_favorite_id, created_at, deleted_at, deleter_id, embed_url, excel_file_url, favorite_count, google_spreadsheet_formula, image_embed_url, last_accessed_at, last_updater_id, last_viewed_at, model, public_slug, public_url, short_url, updated_at, view_count, url
 type WriteLookWithQuery struct {
   Title       *string          `json:"title,omitempty"`           // Look Title
@@ -3791,12 +3799,14 @@ type WriteLookWithQuery struct {
   IsRunOnLoad *bool            `json:"is_run_on_load,omitempty"`  // auto-run query when Look viewed
   Public      *bool            `json:"public,omitempty"`          // Is Public
   QueryId     *int64           `json:"query_id,omitempty"`        // Query Id
-  Folder      *WriteFolderBase `json:"folder,omitempty"`
+  Folder      *WriteFolderBase `json:"folder,omitempty"`          // Dynamic writeable type for FolderBase removes:
+ // id, content_metadata_id, created_at, creator_id, child_count, external_id, is_embed, is_embed_shared_root, is_embed_users_root, is_personal, is_personal_descendant, is_shared_root, is_users_root, can
   FolderId    *string          `json:"folder_id,omitempty"`       // Folder Id
-  Query       *WriteQuery      `json:"query,omitempty"`
+  Query       *WriteQuery      `json:"query,omitempty"`           // Dynamic writeable type for Query removes:
+ // can, id, slug, share_url, expanded_share_url, url, has_table_calculations
 }
 
-// Dynamically generated writeable type for MergeQuery removes properties:
+// Dynamic writeable type for MergeQuery removes:
 // can, id, result_maker_id
 type WriteMergeQuery struct {
   ColumnLimit   *string                  `json:"column_limit,omitempty"`    // Column Limit
@@ -3808,14 +3818,14 @@ type WriteMergeQuery struct {
   VisConfig     *map[string]interface{}  `json:"vis_config,omitempty"`      // Visualization Config
 }
 
-// Dynamically generated writeable type for ModelSet removes properties:
+// Dynamic writeable type for ModelSet removes:
 // can, all_access, built_in, id, url
 type WriteModelSet struct {
   Models *[]string `json:"models,omitempty"`
   Name   *string   `json:"name,omitempty"`    // Name of ModelSet
 }
 
-// Dynamically generated writeable type for OauthClientApp removes properties:
+// Dynamic writeable type for OauthClientApp removes:
 // can, client_guid, tokens_invalid_before, activated_users
 type WriteOauthClientApp struct {
   RedirectUri *string `json:"redirect_uri,omitempty"`  // The uri with which this application will receive an auth code by browser redirect.
@@ -3825,7 +3835,7 @@ type WriteOauthClientApp struct {
   GroupId     *int64  `json:"group_id,omitempty"`      // If set, only Looker users who are members of this group can use this web app with Looker. If group_id is not set, any Looker user may use this app to access this Looker instance
 }
 
-// Dynamically generated writeable type for OIDCConfig removes properties:
+// Dynamic writeable type for OIDCConfig removes:
 // can, default_new_user_groups, default_new_user_roles, groups, modified_at, modified_by, test_slug, user_attributes, url
 type WriteOIDCConfig struct {
   AlternateEmailLoginAllowed *bool                     `json:"alternate_email_login_allowed,omitempty"`   // Allow alternate email-based login via '/login/email' for admins and for specified users with the 'login_special_email' permission. This option is useful as a fallback during ldap setup, if ldap config problems occur later, or if you need to support some users who are not in your ldap directory. Looker email/password logins are always disabled for regular users when ldap is enabled.
@@ -3854,7 +3864,7 @@ type WriteOIDCConfig struct {
   AllowDirectRoles           *bool                     `json:"allow_direct_roles,omitempty"`              // Allows roles to be directly assigned to OIDC auth'd users.
 }
 
-// Dynamically generated writeable type for PasswordConfig removes properties:
+// Dynamic writeable type for PasswordConfig removes:
 // can
 type WritePasswordConfig struct {
   MinLength         *int64 `json:"min_length,omitempty"`          // Minimum number of characters required for a new password.  Must be between 7 and 100
@@ -3863,14 +3873,14 @@ type WritePasswordConfig struct {
   RequireSpecial    *bool  `json:"require_special,omitempty"`     // Require at least one special character
 }
 
-// Dynamically generated writeable type for PermissionSet removes properties:
+// Dynamic writeable type for PermissionSet removes:
 // can, all_access, built_in, id, url
 type WritePermissionSet struct {
   Name        *string   `json:"name,omitempty"`         // Name of PermissionSet
   Permissions *[]string `json:"permissions,omitempty"`
 }
 
-// Dynamically generated writeable type for Project removes properties:
+// Dynamic writeable type for Project removes:
 // can, id, uses_git, is_example
 type WriteProject struct {
   Name                           *string          `json:"name,omitempty"`                                // Project display name
@@ -3893,7 +3903,7 @@ type WriteProject struct {
   DependencyStatus               *string          `json:"dependency_status,omitempty"`                   // Status of dependencies in your manifest & lockfile
 }
 
-// Dynamically generated writeable type for Query removes properties:
+// Dynamic writeable type for Query removes:
 // can, id, slug, share_url, expanded_share_url, url, has_table_calculations
 type WriteQuery struct {
   Model             string                  `json:"model"`                          // Model
@@ -3917,7 +3927,7 @@ type WriteQuery struct {
   QueryTimezone     *string                 `json:"query_timezone,omitempty"`       // Query Timezone
 }
 
-// Dynamically generated writeable type for RepositoryCredential removes properties:
+// Dynamic writeable type for RepositoryCredential removes:
 // can, id, root_project_id, remote_url, is_configured
 type WriteRepositoryCredential struct {
   GitUsername  *string `json:"git_username,omitempty"`    // Git username for HTTPS authentication.
@@ -3925,23 +3935,26 @@ type WriteRepositoryCredential struct {
   SshPublicKey *string `json:"ssh_public_key,omitempty"`  // Public deploy key for SSH authentication.
 }
 
-// Dynamically generated writeable type for ResultMakerWithIdVisConfigAndDynamicFields removes properties:
+// Dynamic writeable type for ResultMakerWithIdVisConfigAndDynamicFields removes:
 // id, dynamic_fields, filterables, sorts, merge_result_id, total, query_id, sql_query_id, vis_config
 type WriteResultMakerWithIdVisConfigAndDynamicFields struct {
-  Query *WriteQuery `json:"query,omitempty"`
+  Query *WriteQuery `json:"query,omitempty"`  // Dynamic writeable type for Query removes:
+ // can, id, slug, share_url, expanded_share_url, url, has_table_calculations
 }
 
-// Dynamically generated writeable type for Role removes properties:
+// Dynamic writeable type for Role removes:
 // can, id, url, users_url
 type WriteRole struct {
   Name            *string             `json:"name,omitempty"`               // Name of Role
-  PermissionSet   *WritePermissionSet `json:"permission_set,omitempty"`
+  PermissionSet   *WritePermissionSet `json:"permission_set,omitempty"`     // Dynamic writeable type for PermissionSet removes:
+ // can, all_access, built_in, id, url
   PermissionSetId *int64              `json:"permission_set_id,omitempty"`  // (Write-Only) Id of permission set
-  ModelSet        *WriteModelSet      `json:"model_set,omitempty"`
+  ModelSet        *WriteModelSet      `json:"model_set,omitempty"`          // Dynamic writeable type for ModelSet removes:
+ // can, all_access, built_in, id, url
   ModelSetId      *int64              `json:"model_set_id,omitempty"`       // (Write-Only) Id of model set
 }
 
-// Dynamically generated writeable type for SamlConfig removes properties:
+// Dynamic writeable type for SamlConfig removes:
 // can, test_slug, modified_at, modified_by, default_new_user_roles, default_new_user_groups, groups, user_attributes, url
 type WriteSamlConfig struct {
   Enabled                    *bool                     `json:"enabled,omitempty"`                         // Enable/Disable Saml authentication for the server
@@ -3970,7 +3983,7 @@ type WriteSamlConfig struct {
   AllowDirectRoles           *bool                     `json:"allow_direct_roles,omitempty"`              // Allows roles to be directly assigned to SAML auth'd users.
 }
 
-// Dynamically generated writeable type for ScheduledPlan removes properties:
+// Dynamic writeable type for ScheduledPlan removes:
 // id, created_at, updated_at, title, user, next_run_at, last_run_at, can
 type WriteScheduledPlan struct {
   Name                     *string                     `json:"name,omitempty"`                        // Name of this scheduled plan
@@ -4001,7 +4014,7 @@ type WriteScheduledPlan struct {
   InlineTableWidth         *int64                      `json:"inline_table_width,omitempty"`          // The pixel width at which we render the inline table visualizations
 }
 
-// Dynamically generated writeable type for SessionConfig removes properties:
+// Dynamic writeable type for SessionConfig removes:
 // can
 type WriteSessionConfig struct {
   AllowPersistentSessions  *bool  `json:"allow_persistent_sessions,omitempty"`    // Allow users to have persistent sessions when they login
@@ -4011,7 +4024,7 @@ type WriteSessionConfig struct {
   TrackSessionLocation     *bool  `json:"track_session_location,omitempty"`       // Track location of session when user logs in.
 }
 
-// Dynamically generated writeable type for SshServer removes properties:
+// Dynamic writeable type for SshServer removes:
 // ssh_server_id, finger_print, sha_finger_print, public_key, status
 type WriteSshServer struct {
   SshServerName *string `json:"ssh_server_name,omitempty"`  // The name to identify this SSH Server
@@ -4020,7 +4033,7 @@ type WriteSshServer struct {
   SshServerUser *string `json:"ssh_server_user,omitempty"`  // The username used to connect to the SSH Server
 }
 
-// Dynamically generated writeable type for SshTunnel removes properties:
+// Dynamic writeable type for SshTunnel removes:
 // tunnel_id, ssh_server_name, ssh_server_host, ssh_server_port, ssh_server_user, last_attempt, local_host_port, status
 type WriteSshTunnel struct {
   SshServerId  *string `json:"ssh_server_id,omitempty"`  // SSH Server ID
@@ -4028,7 +4041,7 @@ type WriteSshTunnel struct {
   DatabasePort *int64  `json:"database_port,omitempty"`  // Port that the Database Server is listening on
 }
 
-// Dynamically generated writeable type for Theme removes properties:
+// Dynamic writeable type for Theme removes:
 // can, id
 type WriteTheme struct {
   BeginAt  *time.Time     `json:"begin_at,omitempty"`  // Timestamp for when this theme becomes active. Null=always
@@ -4037,10 +4050,11 @@ type WriteTheme struct {
   Settings *ThemeSettings `json:"settings,omitempty"`
 }
 
-// Dynamically generated writeable type for User removes properties:
+// Dynamic writeable type for User removes:
 // can, avatar_url, avatar_url_without_sizing, credentials_api3, credentials_embed, credentials_google, credentials_ldap, credentials_looker_openid, credentials_oidc, credentials_saml, credentials_totp, display_name, email, embed_group_space_id, group_ids, id, looker_versions, personal_folder_id, presumed_looker_employee, role_ids, sessions, verified_looker_employee, roles_externally_managed, allow_direct_roles, allow_normal_group_membership, allow_roles_from_normal_groups, url
 type WriteUser struct {
-  CredentialsEmail   *WriteCredentialsEmail  `json:"credentials_email,omitempty"`
+  CredentialsEmail   *WriteCredentialsEmail  `json:"credentials_email,omitempty"`     // Dynamic writeable type for CredentialsEmail removes:
+ // can, created_at, is_disabled, logged_in_at, password_reset_url, type, url, user_url
   FirstName          *string                 `json:"first_name,omitempty"`            // First name
   HomeFolderId       *string                 `json:"home_folder_id,omitempty"`        // ID string for user's home folder
   IsDisabled         *bool                   `json:"is_disabled,omitempty"`           // Account has been disabled
@@ -4050,7 +4064,7 @@ type WriteUser struct {
   UiState            *map[string]interface{} `json:"ui_state,omitempty"`              // Per user dictionary of undocumented state information owned by the Looker UI.
 }
 
-// Dynamically generated writeable type for UserAttribute removes properties:
+// Dynamic writeable type for UserAttribute removes:
 // can, id, is_system, is_permanent
 type WriteUserAttribute struct {
   Name                       string  `json:"name"`                                     // Name of user attribute
@@ -4063,13 +4077,13 @@ type WriteUserAttribute struct {
   HiddenValueDomainWhitelist *string `json:"hidden_value_domain_whitelist,omitempty"`  // Destinations to which a hidden attribute may be sent. Once set, cannot be edited.
 }
 
-// Dynamically generated writeable type for UserAttributeWithValue removes properties:
+// Dynamic writeable type for UserAttributeWithValue removes:
 // can, name, label, rank, user_id, user_can_edit, value_is_hidden, user_attribute_id, source, hidden_value_domain_whitelist
 type WriteUserAttributeWithValue struct {
   Value *string `json:"value,omitempty"`  // Value of attribute for user
 }
 
-// Dynamically generated writeable type for WhitelabelConfiguration removes properties:
+// Dynamic writeable type for WhitelabelConfiguration removes:
 // can, id, logo_url, favicon_url
 type WriteWhitelabelConfiguration struct {
   LogoFile                   *string `json:"logo_file,omitempty"`                      // Customer logo image. Expected base64 encoded data (write-only)

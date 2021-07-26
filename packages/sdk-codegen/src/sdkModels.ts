@@ -1445,6 +1445,7 @@ export class Type implements IType {
   readonly types: KeyList = new Set<string>()
   readonly customTypes: KeyList = new Set<string>()
   readonly parentTypes: KeyList = new Set<string>()
+  private _writeable: IProperty[] = []
   description: string
   customType: string
   jsonName = ''
@@ -1469,11 +1470,29 @@ export class Type implements IType {
   }
 
   get writeable(): IProperty[] {
+    return this._writeable
+  }
+
+  /**
+   * This is intended to be a one-time call per type to determine its writeable properties
+   * @param api ApiModel for type references
+   */
+  setWriteable(api: ApiModel) {
     const result: IProperty[] = []
-    Object.entries(this.properties)
-      .filter(([, prop]) => !(prop.readOnly || prop.type.readOnly))
-      .forEach(([, prop]) => result.push(prop))
-    return result
+    Object.values(this.properties)
+      .filter((prop) => !(prop.readOnly || prop.type.readOnly))
+      .forEach((prop) => {
+        const type = prop.type
+        const w = type.intrinsic ? undefined : api.mayGetWriteableType(type)
+        if (w) {
+          const writeProp = { ...prop, ...{ type: w } }
+          result.push(writeProp)
+        } else {
+          result.push(prop)
+        }
+      })
+    this._writeable = result
+    return this._writeable
   }
 
   get className(): string {
@@ -1815,32 +1834,35 @@ export class WriteType extends Type {
     const name = `${strWrite}${type.name}`
     const roProps = WriteType.readonlyProps(type.properties)
     const description =
-      `Dynamically generated writeable type for ${type.name} removes properties:\n` +
-      roProps.map((p) => p.name).join(', ')
+      `Dynamic writeable type for ${type.name}` +
+      (roProps.length > 0
+        ? ` removes:\n` + roProps.map((p) => p.name).join(', ')
+        : '')
     super({ description }, name)
     // Cross-reference the two types
     this.types.add(type.name)
     this.customTypes.add(type.name)
     type.types.add(this.name)
     type.customTypes.add(this.name)
-    type.writeable
-      .filter((p) => !p.readOnly && !p.type.readOnly)
-      .forEach((p) => {
-        const writeProp = new Property(
-          p.name,
-          p.type,
-          {
-            description: p.description,
-            // nullable/optional if property is nullable or property is complex type
-            nullable: p.nullable || !p.type.intrinsic,
-          },
-          this.name, // owner name
-          type.schema.required
-        )
-        const typeWriter = api.mayGetWriteableType(p.type)
-        if (typeWriter) writeProp.type = typeWriter
-        this.properties[safeName(p.name)] = writeProp
-      })
+    if (type.writeable.length === 0) {
+      // Set the writeable properties for the type only once
+      const obj = type as Type
+      obj.setWriteable(api as ApiModel)
+    }
+    type.writeable.forEach((p) => {
+      const writeProp = new Property(
+        p.name,
+        p.type,
+        {
+          description: p.description || p.type.description,
+          // nullable/optional if property is nullable or property is complex type
+          nullable: p.nullable || !p.type.intrinsic,
+        },
+        this.name, // owner name
+        type.schema.required
+      )
+      this.properties[safeName(p.name)] = writeProp
+    })
   }
 
   private static readonlyProps = (properties: PropertyList): IProperty[] => {
@@ -2218,18 +2240,41 @@ export class ApiModel implements ISymbolTable, IApiModel {
 
   /**
    * a writeable type will need to be found or created if the passed type has read-only properties
-   * @param {IType} type to check for read-only properties
-   * @returns {IType | undefined} either writeable type or undefined
+   * @param type to check for read-only properties
+   * @returns either writeable type or undefined
    */
   mayGetWriteableType(type: IType) {
+    if (type.intrinsic) return undefined
+    if (type.elementType?.intrinsic) return undefined
+    if (type instanceof WriteType) return type
     const props = Object.entries(type.properties).map(([, prop]) => prop)
+    if (props.length === 0) return undefined
+    if (type.writeable.length === 0) {
+      // Determine top level writeable properties once
+      const obj = type as Type
+      obj.setWriteable(this)
+    }
     const writes = type.writeable
-    // do we have any readOnly properties?
-    if (writes.length === 0 || writes.length === props.length) return undefined
+    if (writes.length === 0) {
+      // No writeable properties is an error
+      const immutable =
+        'WARNING: no writeable properties found for POST, PUT, or PATCH'
+      if (type.description.indexOf(immutable) < 0) {
+        type.description += type.description.length > 0 ? '\n' : '' + immutable
+      }
+      return undefined
+    }
+    if (
+      writes.length === props.length &&
+      JSON.stringify(writes) === JSON.stringify(props)
+    )
+      return undefined // type is writeable
     const hash = md5(type.asHashString())
     let result = this.requestTypes[hash]
-    if (!result) result = this.makeWriteableType(hash, type)
+    if (result) return result // writeable already registered for this type
+    result = this.makeWriteableType(hash, type)
     type.types.add(result.name)
+    // Link the writeable type to its source type
     type.customTypes.add(result.name)
     result.parentTypes.add(type.name)
     return result
@@ -2280,7 +2325,27 @@ export class ApiModel implements ISymbolTable, IApiModel {
         this.refs[`#/components/schemas/${name}`] = t
       })
       Object.keys(this.spec.components.schemas).forEach((name) => {
-        ;(this.resolveType(name) as Type).load(this)
+        const resolved = this.resolveType(name) as Type
+        resolved.load(this)
+      })
+      // Ensure all property's nested type references point to the correct full type
+      const complex = Object.values(this.types)
+        .filter((t) => !t.intrinsic)
+        .map((t) => t)
+      complex.forEach((type) => {
+        const nested = Object.values(type.properties).filter(
+          (p) => !p.type.intrinsic
+        )
+        nested.forEach((p) => {
+          const ref = this.types[p.type.name]
+          if (ref) {
+            // Could be a collection of an intrinsic type, so only assign if
+            // there is an explicit type ref
+            p.type = ref
+            // Try to get a good description for the property
+            p.description = p.description || p.type.description
+          }
+        })
       })
     }
 

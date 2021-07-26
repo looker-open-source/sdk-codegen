@@ -3893,7 +3893,7 @@ export class Looker40SDKStream extends APIMethods {
    * POST /content_metadata_access -> IContentMetaGroupUser
    *
    * @param callback streaming output function
-   * @param body Partial<IContentMetaGroupUser>
+   * @param body WARNING: no writeable properties found for POST, PUT, or PATCH
    * @param send_boards_notification_email Optionally sends notification email when granting access to a board.
    * @param options one-time API call overrides
    *
@@ -3921,7 +3921,7 @@ export class Looker40SDKStream extends APIMethods {
    *
    * @param callback streaming output function
    * @param content_metadata_access_id Id of content metadata access
-   * @param body Partial<IContentMetaGroupUser>
+   * @param body WARNING: no writeable properties found for POST, PUT, or PATCH
    * @param options one-time API call overrides
    *
    */
@@ -5988,7 +5988,7 @@ export class Looker40SDKStream extends APIMethods {
    *
    * @param callback streaming output function
    * @param group_id Id of group
-   * @param body Partial<IGroupIdForGroupInclusion>
+   * @param body WARNING: no writeable properties found for POST, PUT, or PATCH
    * @param options one-time API call overrides
    *
    */
@@ -6045,7 +6045,7 @@ export class Looker40SDKStream extends APIMethods {
    *
    * @param callback streaming output function
    * @param group_id Id of group
-   * @param body Partial<IGroupIdForGroupUserInclusion>
+   * @param body WARNING: no writeable properties found for POST, PUT, or PATCH
    * @param options one-time API call overrides
    *
    */
@@ -6129,7 +6129,7 @@ export class Looker40SDKStream extends APIMethods {
    * @param callback streaming output function
    * @param group_id Id of group
    * @param user_attribute_id Id of user attribute
-   * @param body Partial<IUserAttributeGroupValue>
+   * @param body WARNING: no writeable properties found for POST, PUT, or PATCH
    * @param options one-time API call overrides
    *
    */
@@ -7335,7 +7335,7 @@ export class Looker40SDKStream extends APIMethods {
    *
    * @param callback streaming output function
    * @param connection_name Name of connection
-   * @param body Partial<ICreateCostEstimate>
+   * @param body WARNING: no writeable properties found for POST, PUT, or PATCH
    * @param fields Requested fields.
    * @param options one-time API call overrides
    *
@@ -11538,7 +11538,7 @@ export class Looker40SDKStream extends APIMethods {
    *
    * @param callback streaming output function
    * @param user_id id of user
-   * @param body Partial<ICredentialsTotp>
+   * @param body WARNING: no writeable properties found for POST, PUT, or PATCH
    * @param fields Requested fields.
    * @param options one-time API call overrides
    *
@@ -11883,7 +11883,7 @@ export class Looker40SDKStream extends APIMethods {
    *
    * @param callback streaming output function
    * @param user_id id of user
-   * @param body Partial<ICredentialsApi3>
+   * @param body WARNING: no writeable properties found for POST, PUT, or PATCH
    * @param fields Requested fields.
    * @param options one-time API call overrides
    *
