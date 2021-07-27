@@ -393,7 +393,7 @@ describe('sdkModels', () => {
       expect(sq?.type.name).toEqual('MergeQuerySourceQuery[]')
     })
 
-    it('CreateDashboardRenderTask', () => {
+    it('does not generate writeable type if type contains no readonly properties', () => {
       const source = apiTestModel.types.CreateDashboardRenderTask
       const actual = apiTestModel.mayGetWriteableType(source)
       expect(actual).toBeUndefined()
