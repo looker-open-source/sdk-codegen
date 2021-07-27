@@ -36,7 +36,6 @@ package v4
 
 import (
   "github.com/looker-open-source/sdk-codegen/go/rtl"
-  "net/url"
   "time"
 )
 
