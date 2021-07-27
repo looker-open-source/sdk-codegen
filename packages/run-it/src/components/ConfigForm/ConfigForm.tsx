@@ -44,7 +44,10 @@ import {
   Form,
   Text,
   ValidationMessages,
+  Paragraph,
+  Link,
 } from '@looker/components'
+import { CodeDisplay } from '@looker/code-editor/src'
 import { Delete } from '@styled-icons/material/Delete'
 import { Done } from '@styled-icons/material/Done'
 import {
@@ -79,6 +82,15 @@ export const ConfigForm: FC<ConfigFormProps> = ({
   configurator,
 }) => {
   const { closeModal } = useContext(DialogContext)
+  const appConfig = `{
+  "client_guid": "looker.api-explorer",
+  "redirect_uri": "${(window as any).location.origin}/oauth",
+  "display_name": "CORS API Explorer",
+  "description": "Looker API Explorer using CORS",
+  "enabled": true
+}
+`
+
   // See https://codesandbox.io/s/youthful-surf-0g27j?file=/src/index.tsx for a prototype from Luke
   // TODO see about useReducer to clean this up a bit more
   title = title || 'RunIt Configuration'
@@ -205,6 +217,17 @@ export const ConfigForm: FC<ConfigFormProps> = ({
             <Text color="danger">{fields.fetchError}</Text>
           </>
         )}
+        <Paragraph>
+          The following configuration can be used to create a{' '}
+          <Link
+            href="https://github.com/looker-open-source/sdk-codegen/blob/main/docs/cors.md#reference-implementation"
+            target="_blank"
+          >
+            Looker OAuth client
+          </Link>
+          .
+        </Paragraph>
+        <CodeDisplay key="appConfig" language="json" code={appConfig} />
       </DialogContent>
       <DialogFooter>
         <Button
