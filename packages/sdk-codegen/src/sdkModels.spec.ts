@@ -384,7 +384,7 @@ describe('sdkModels', () => {
       }
     })
 
-    it('WriteMergeQuery', () => {
+    it('generates and annotates a writeable type collection ', () => {
       const source = apiTestModel.types.MergeQuery
       const actual = apiTestModel.mayGetWriteableType(source)
       const props = actual?.properties
