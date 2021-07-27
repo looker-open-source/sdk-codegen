@@ -42,7 +42,7 @@ export const ConfigDialog: FC<ConfigDialogProps> = ({
   configurator,
 }) => (
   <Dialog
-    width="small"
+    width="medium"
     content={
       <ConfigForm setHasConfig={setHasConfig} configurator={configurator} />
     }
