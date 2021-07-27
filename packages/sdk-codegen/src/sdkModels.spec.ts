@@ -399,7 +399,7 @@ describe('sdkModels', () => {
       expect(actual).toBeUndefined()
     })
 
-    it('ContentMetaGroupUser', () => {
+    it('does not generate writeable type if type contains only writeable properties', () => {
       const source = apiTestModel.types.ContentMetaGroupUser
       const actual = apiTestModel.mayGetWriteableType(source)
       expect(actual).toBeUndefined()
