@@ -1495,6 +1495,17 @@ export class Type implements IType {
     return this._writeable
   }
 
+  /**
+   * Sets writeable property collection if it's not already set
+   * @param api to use for type lookup
+   */
+  maySetWriteable(api: ApiModel) {
+    if (this._writeable.length === 0) {
+      this.setWriteable(api)
+    }
+    return this._writeable
+  }
+
   get className(): string {
     return this.name
   }
@@ -1844,12 +1855,9 @@ export class WriteType extends Type {
     this.customTypes.add(type.name)
     type.types.add(this.name)
     type.customTypes.add(this.name)
-    if (type.writeable.length === 0) {
-      // Set the writeable properties for the type only once
-      const obj = type as Type
-      obj.setWriteable(api as ApiModel)
-    }
-    type.writeable.forEach((p) => {
+    const obj = type as Type
+    const writes = obj.maySetWriteable(api as ApiModel)
+    writes.forEach((p) => {
       const writeProp = new Property(
         p.name,
         p.type,
@@ -2249,12 +2257,8 @@ export class ApiModel implements ISymbolTable, IApiModel {
     if (type instanceof WriteType) return type
     const props = Object.entries(type.properties).map(([, prop]) => prop)
     if (props.length === 0) return undefined
-    if (type.writeable.length === 0) {
-      // Determine top level writeable properties once
-      const obj = type as Type
-      obj.setWriteable(this)
-    }
-    const writes = type.writeable
+    const obj = type as Type
+    const writes = obj.maySetWriteable(this)
     if (writes.length === 0) {
       // No writeable properties is an error
       const immutable =

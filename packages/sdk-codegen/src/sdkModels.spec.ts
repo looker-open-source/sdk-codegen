@@ -376,12 +376,19 @@ describe('sdkModels', () => {
       const type = apiTestModel.mayGetWriteableType(setting)
       expect(type).toBeDefined()
       // Code concession for linting that doesn't understand "toBeDefined()" test
-      if (type) {
-        expect(type.name).toEqual('WriteSetting')
-        const writeWhite = type.properties.whitelabel
-        expect(writeWhite).toBeDefined()
-        expect(writeWhite.type.name).toEqual('WriteWhitelabelConfiguration')
-      }
+      expect(type?.name).toEqual('WriteSetting')
+      // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+      const writeWhite = type!.properties.whitelabel
+      expect(writeWhite).toBeDefined()
+      expect(writeWhite.type.name).toEqual('WriteWhitelabelConfiguration')
+      const whiteProps = writeWhite.type.properties
+      expect(whiteProps.can).toBeUndefined()
+      expect(whiteProps.id).toBeUndefined()
+      expect(whiteProps.logo_file).toBeDefined()
+      expect(whiteProps.logo_url).toBeUndefined()
+      expect(whiteProps.favicon_file).toBeDefined()
+      expect(whiteProps.favicon_url).toBeUndefined()
+      expect(whiteProps.default_title).toBeDefined()
     })
 
     it('generates and annotates a writeable type collection ', () => {
