@@ -366,7 +366,7 @@ describe('sdkModels', () => {
       ])
     })
 
-    it('Setting', () => {
+    it('generates writeable type for nested types with some readonly properties', () => {
       const setting = apiTestModel.types.Setting
       const whitelabel = apiTestModel.types.WhitelabelConfiguration
       const prop = setting.properties.whitelabel
