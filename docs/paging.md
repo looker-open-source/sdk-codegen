@@ -10,9 +10,9 @@ Any endpoint that accepts `limit` and `offset` parameters can support generic pa
 | `offset`  | This value sets the starting position of the results to return. A value of `0` (zero) is used for the first result. `offset` defaults to 0 if `limit` is provided and `offset` is not. |
 
 Some endpoints have `page` and `per_page` parameters instead of, or in addition to, `limit` and `offset`. The `limit` and `offset` parameters take precedence over the `page` and `per_page` parameters for endpoints that support both.
-Only API calls specifying `limit` will produce paging headers for those endpoints that provide paging headers.
+Only API calls specifying `limit` or `per_page` will produce paging headers for those endpoints that provide paging headers. The response paging headers use `limit` and `offset` parameters even if the original API request uses `page` and `per_page`.
 
-**NOTE**: The `page` and `per_page` parameters may be removed for API 4.0. Also, the Looker API does not support cursor-based paging.
+**NOTE**: The `page` and `per_page` parameters are deprecated for API 4.0 and may be removed before API 4.0 is released as _stable_. Also, the Looker API does not support cursor-based paging.
 
 ## Paging headers
 
