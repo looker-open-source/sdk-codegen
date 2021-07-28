@@ -338,7 +338,7 @@ describe('sdkModels', () => {
     it('ok responses are unique', () => {
       const method = apiTestModel.methods.run_sql_query
       const actual = method.okResponses
-      expect(actual.length).toEqual(4)
+      expect(actual).toHaveLength(4)
     })
   })
 
@@ -366,6 +366,55 @@ describe('sdkModels', () => {
       ])
     })
 
+    it('generates writeable type for nested types with some readonly properties', () => {
+      const setting = apiTestModel.types.Setting
+      const whitelabel = apiTestModel.types.WhitelabelConfiguration
+      const prop = setting.properties.whitelabel
+      expect(prop.type).toEqual(whitelabel)
+      expect(prop.readOnly).toEqual(false)
+      expect(whitelabel.readOnly).toEqual(false)
+      const type = apiTestModel.mayGetWriteableType(setting)
+      expect(type).toBeDefined()
+      // Code concession for linting that doesn't understand "toBeDefined()" test
+      expect(type?.name).toEqual('WriteSetting')
+      // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+      const writeWhite = type!.properties.whitelabel
+      expect(writeWhite).toBeDefined()
+      expect(writeWhite.type.name).toEqual('WriteWhitelabelConfiguration')
+      const whiteProps = writeWhite.type.properties
+      expect(whiteProps.can).toBeUndefined()
+      expect(whiteProps.id).toBeUndefined()
+      expect(whiteProps.logo_file).toBeDefined()
+      expect(whiteProps.logo_url).toBeUndefined()
+      expect(whiteProps.favicon_file).toBeDefined()
+      expect(whiteProps.favicon_url).toBeUndefined()
+      expect(whiteProps.default_title).toBeDefined()
+    })
+
+    it('generates and annotates a writeable type collection ', () => {
+      const source = apiTestModel.types.MergeQuery
+      const actual = apiTestModel.mayGetWriteableType(source)
+      const props = actual?.properties
+      const sq = props?.source_queries
+      expect(sq).toBeDefined()
+      expect(sq?.type.name).toEqual('MergeQuerySourceQuery[]')
+    })
+
+    it('does not generate writeable type if type contains no readonly properties', () => {
+      const source = apiTestModel.types.CreateDashboardRenderTask
+      const actual = apiTestModel.mayGetWriteableType(source)
+      expect(actual).toBeUndefined()
+    })
+
+    it('does not generate writeable type if type contains only writeable properties', () => {
+      const source = apiTestModel.types.ContentMetaGroupUser
+      const actual = apiTestModel.mayGetWriteableType(source)
+      expect(actual).toBeUndefined()
+      expect(source.description).toMatch(
+        /WARNING: no writeable properties found for POST, PUT, or PATCH/
+      )
+    })
+
     it('WriteCreateQueryTask', () => {
       const type = apiTestModel.mayGetWriteableType(
         apiTestModel.types.CreateQueryTask
@@ -383,7 +432,7 @@ describe('sdkModels', () => {
       expect(type).toBeDefined()
       const writeable = type.writeable
       expect(type.readOnly).toEqual(true)
-      expect(writeable.length).toEqual(0)
+      expect(writeable).toHaveLength(0)
     })
 
     describe('DashboardElement', () => {
@@ -392,7 +441,7 @@ describe('sdkModels', () => {
         expect(type).toBeDefined()
         const writeable = type.writeable
         expect(type.readOnly).toEqual(false)
-        expect(writeable.length).toEqual(18)
+        expect(writeable).toHaveLength(18)
       })
 
       it('writeableType', () => {
@@ -593,7 +642,7 @@ describe('sdkModels', () => {
       const orphans = Object.values(apiTestModel.types).filter(
         (t) => t instanceof EnumType && t.parentTypes.size === 0
       )
-      expect(orphans.length).toEqual(0)
+      expect(orphans).toHaveLength(0)
     })
   })
 
@@ -819,11 +868,11 @@ describe('sdkModels', () => {
       const types = typeRefs(apiTestModel, actual.customTypes)
       const methodKeys = keyValues(actual.methodRefs)
       const methods = methodRefs(apiTestModel, actual.methodRefs)
-      expect(types.length).toEqual(customTypes.length)
+      expect(types).toHaveLength(customTypes.length)
       expect(customTypes.join(' ')).toEqual(
         'DashboardAppearance DashboardElement DashboardFilter DashboardLayout FolderBase LookModel WriteDashboard'
       )
-      expect(methods.length).toEqual(methodKeys.length)
+      expect(methods).toHaveLength(methodKeys.length)
       expect(methodKeys.join(' ')).toEqual(
         'create_dashboard dashboard folder_dashboards import_lookml_dashboard search_dashboards sync_lookml_dashboard update_dashboard'
       )
@@ -832,13 +881,13 @@ describe('sdkModels', () => {
     it('missing method references are silently skipped', () => {
       const keys = new Set(['login', 'logout', 'Bogosity'])
       const actual = methodRefs(apiTestModel, keys)
-      expect(actual.length).toEqual(2)
+      expect(actual).toHaveLength(2)
     })
 
     it('missing type references are silently skipped', () => {
       const keys = new Set(['Dashboard', 'User', 'Bogosity'])
       const actual = typeRefs(apiTestModel, keys)
-      expect(actual.length).toEqual(2)
+      expect(actual).toHaveLength(2)
     })
 
     it('method references custom types from parameters and responses', () => {
@@ -894,8 +943,8 @@ describe('sdkModels', () => {
         )
         expect(actual).toBeDefined()
         const methods = allMethods(actual.tags)
-        expect(Object.entries(methods).length).toEqual(0)
-        expect(Object.entries(actual.types).length).toEqual(0)
+        expect(Object.entries(methods)).toHaveLength(0)
+        expect(Object.entries(actual.types)).toHaveLength(0)
       })
 
       it('finds rate limited followed somewhere by db_query', () => {
@@ -906,15 +955,16 @@ describe('sdkModels', () => {
         const actual = apiTestModel.search('rate limited((.|\\n)*)db_query')
         expect(actual).toBeDefined()
         const methods = allMethods(actual.tags)
-        expect(Object.entries(methods).length).toEqual(2)
-        expect(Object.entries(actual.types).length).toEqual(0)
+        expect(Object.entries(methods)).toHaveLength(2)
+        expect(Object.entries(actual.types)).toHaveLength(0)
       })
 
       it('search anywhere', () => {
         const actual = apiTestModel.search('dashboard', modelAndTypeNames)
         const methods = allMethods(actual.tags)
-        expect(Object.entries(methods).length).toEqual(33)
-        expect(Object.entries(actual.types).length).toEqual(29)
+        expect(Object.entries(methods)).toHaveLength(33)
+        const types = Object.entries(actual.types)
+        expect(types).toHaveLength(29)
       })
 
       it('search special names', () => {
@@ -925,37 +975,37 @@ describe('sdkModels', () => {
         expect(search).toContain('project-digest')
         let actual = apiTestModel.search('computation time', standardSet)
         let methods = allMethods(actual.tags)
-        expect(Object.entries(methods).length).toEqual(0)
-        expect(Object.entries(actual.types).length).toEqual(1)
+        expect(Object.entries(methods)).toHaveLength(0)
+        expect(Object.entries(actual.types)).toHaveLength(1)
         actual = apiTestModel.search('project-digest', standardSet)
         methods = allMethods(actual.tags)
-        expect(Object.entries(methods).length).toEqual(0)
-        expect(Object.entries(actual.types).length).toEqual(1)
+        expect(Object.entries(methods)).toHaveLength(0)
+        expect(Object.entries(actual.types)).toHaveLength(1)
       })
 
       it('search for word', () => {
         let actual = apiTestModel.search('\\bdashboard\\b', modelAndTypeNames)
         let methods = allMethods(actual.tags)
-        expect(Object.entries(methods).length).toEqual(18)
-        expect(Object.entries(actual.types).length).toEqual(1)
+        expect(Object.entries(methods)).toHaveLength(18)
+        expect(Object.entries(actual.types)).toHaveLength(1)
         actual = apiTestModel.search('\\bdashboardbase\\b', modelAndTypeNames)
         methods = allMethods(actual.tags)
-        expect(Object.entries(methods).length).toEqual(1)
-        expect(Object.entries(actual.types).length).toEqual(1)
+        expect(Object.entries(methods)).toHaveLength(1)
+        expect(Object.entries(actual.types)).toHaveLength(1)
       })
 
       it('search for slug', () => {
         const actual = apiTestModel.search('\\bslug\\b', standardSet)
         const methods = allMethods(actual.tags)
-        expect(Object.entries(methods).length).toEqual(33)
-        expect(Object.entries(actual.types).length).toEqual(21)
+        expect(Object.entries(methods)).toHaveLength(33)
+        expect(Object.entries(actual.types)).toHaveLength(21)
       })
 
       it('find rate_limited endpoints', () => {
         const actual = apiTestModel.search('rate_limited', SearchAll)
         const methods = allMethods(actual.tags)
-        expect(Object.entries(methods).length).toEqual(11)
-        expect(Object.entries(actual.types).length).toEqual(0)
+        expect(Object.entries(methods)).toHaveLength(11)
+        expect(Object.entries(actual.types)).toHaveLength(0)
       })
 
       it('finds rate_limited followed somewhere by db_query', () => {
@@ -966,47 +1016,48 @@ describe('sdkModels', () => {
         const actual = apiTestModel.search('rate_limited.*db_query')
         expect(actual).toBeDefined()
         const methods = allMethods(actual.tags)
-        expect(Object.entries(methods).length).toEqual(2)
-        expect(Object.entries(actual.types).length).toEqual(0)
+        expect(Object.entries(methods)).toHaveLength(2)
+        expect(Object.entries(actual.types)).toHaveLength(0)
       })
 
       it('just model names', () => {
         const actual = apiTestModel.search('\\bdashboard\\b', modelNames)
         const methods = allMethods(actual.tags)
-        expect(Object.entries(methods).length).toEqual(16)
-        expect(Object.entries(actual.types).length).toEqual(0)
+        expect(Object.entries(methods)).toHaveLength(16)
+        expect(Object.entries(actual.types)).toHaveLength(0)
       })
 
       it('deprecated items', () => {
         const actual = apiTestModel.search('deprecated', statusCriteria)
-        expect(Object.entries(allMethods(actual.tags)).length).toEqual(7)
-        expect(Object.entries(actual.types).length).toEqual(3)
+        expect(Object.entries(allMethods(actual.tags))).toHaveLength(7)
+        expect(Object.entries(actual.types)).toHaveLength(3)
       })
 
       it('beta items', () => {
         const actual = apiTestModel.search('beta', statusCriteria)
-        expect(Object.entries(allMethods(actual.tags)).length).toEqual(238)
-        expect(Object.entries(actual.types).length).toEqual(126)
+        expect(Object.entries(allMethods(actual.tags))).toHaveLength(238)
+        const types = Object.entries(actual.types)
+        expect(types).toHaveLength(127)
       })
 
       it('stable items', () => {
         const actual = apiTestModel.search('stable', statusCriteria)
-        expect(Object.entries(allMethods(actual.tags)).length).toEqual(154)
-        expect(Object.entries(actual.types).length).toEqual(90)
+        expect(Object.entries(allMethods(actual.tags))).toHaveLength(154)
+        expect(Object.entries(actual.types)).toHaveLength(90)
       })
 
       it('db queries', () => {
         const actual = apiTestModel.search('db_query', activityCriteria)
-        expect(Object.entries(allMethods(actual.tags)).length).toEqual(37)
-        expect(Object.entries(actual.types).length).toEqual(0)
+        expect(Object.entries(allMethods(actual.tags))).toHaveLength(37)
+        expect(Object.entries(actual.types)).toHaveLength(0)
       })
     })
 
     describe('response search', () => {
       it('find binary responses', () => {
         const actual = apiTestModel.search('binary', responseCriteria)
-        expect(Object.entries(allMethods(actual.tags)).length).toEqual(7)
-        expect(Object.entries(actual.types).length).toEqual(0)
+        expect(Object.entries(allMethods(actual.tags))).toHaveLength(7)
+        expect(Object.entries(actual.types)).toHaveLength(0)
       })
     })
 
@@ -1070,12 +1121,12 @@ describe('sdkModels', () => {
   describe('tagging', () => {
     it('methods are tagged', () => {
       const actual = apiTestModel.tags
-      expect(Object.entries(actual).length).toEqual(28)
+      expect(Object.entries(actual)).toHaveLength(28)
     })
 
     it('methods are in the right tag', () => {
       const actual = apiTestModel.tags.Theme
-      expect(Object.entries(actual).length).toEqual(11)
+      expect(Object.entries(actual)).toHaveLength(11)
     })
   })
 

@@ -258,6 +258,9 @@ export interface IContentMeta {
   space_id?: string
 }
 
+/**
+ * WARNING: no writeable properties found for POST, PUT, or PATCH
+ */
 export interface IContentMetaGroupUser {
   /**
    * Operations the current user is able to perform on this object (read-only)
@@ -774,6 +777,9 @@ export interface ICreateSpace {
   parent_id: string
 }
 
+/**
+ * WARNING: no writeable properties found for POST, PUT, or PATCH
+ */
 export interface ICredentialsApi3 {
   /**
    * Operations the current user is able to perform on this object (read-only)
@@ -1074,6 +1080,9 @@ export interface ICredentialsSaml {
   url?: Url
 }
 
+/**
+ * WARNING: no writeable properties found for POST, PUT, or PATCH
+ */
 export interface ICredentialsTotp {
   /**
    * Operations the current user is able to perform on this object (read-only)
@@ -2652,6 +2661,9 @@ export interface IGroup {
   user_count?: number
 }
 
+/**
+ * WARNING: no writeable properties found for POST, PUT, or PATCH
+ */
 export interface IGroupIdForGroupInclusion {
   /**
    * Id of group (read-only)
@@ -2659,6 +2671,9 @@ export interface IGroupIdForGroupInclusion {
   group_id?: number
 }
 
+/**
+ * WARNING: no writeable properties found for POST, PUT, or PATCH
+ */
 export interface IGroupIdForGroupUserInclusion {
   /**
    * Id of user (read-only)
@@ -8644,6 +8659,9 @@ export enum UserAttributeFilterTypes {
   zipcode = 'zipcode',
 }
 
+/**
+ * WARNING: no writeable properties found for POST, PUT, or PATCH
+ */
 export interface IUserAttributeGroupValue {
   /**
    * Operations the current user is able to perform on this object (read-only)
@@ -8952,7 +8970,7 @@ export interface IWorkspace {
 }
 
 /**
- * Dynamically generated writeable type for ApiSession removes properties:
+ * Dynamic writeable type for ApiSession removes:
  * can, sudo_user_id
  */
 export interface IWriteApiSession {
@@ -8963,7 +8981,7 @@ export interface IWriteApiSession {
 }
 
 /**
- * Dynamically generated writeable type for BackupConfiguration removes properties:
+ * Dynamic writeable type for BackupConfiguration removes:
  * can, url
  */
 export interface IWriteBackupConfiguration {
@@ -8990,7 +9008,7 @@ export interface IWriteBackupConfiguration {
 }
 
 /**
- * Dynamically generated writeable type for ColorCollection removes properties:
+ * Dynamic writeable type for ColorCollection removes:
  * id
  */
 export interface IWriteColorCollection {
@@ -9013,7 +9031,7 @@ export interface IWriteColorCollection {
 }
 
 /**
- * Dynamically generated writeable type for ContentFavorite removes properties:
+ * Dynamic writeable type for ContentFavorite removes:
  * id, look_id, dashboard_id, look
  */
 export interface IWriteContentFavorite {
@@ -9025,11 +9043,15 @@ export interface IWriteContentFavorite {
    * Content Metadata Id associated with this ContentFavorite
    */
   content_metadata_id?: number
+  /**
+   * Dynamic writeable type for DashboardBase removes:
+   * can, content_favorite_id, content_metadata_id, description, hidden, id, model, query_timezone, readonly, refresh_interval, refresh_interval_to_i, title, user_id, slug, preferred_viewer
+   */
   dashboard?: IWriteDashboardBase
 }
 
 /**
- * Dynamically generated writeable type for ContentMeta removes properties:
+ * Dynamic writeable type for ContentMeta removes:
  * can, id, name, parent_id, dashboard_id, look_id, folder_id, content_type, inheriting_id, slug, space_id
  */
 export interface IWriteContentMeta {
@@ -9040,7 +9062,7 @@ export interface IWriteContentMeta {
 }
 
 /**
- * Dynamically generated writeable type for CreateDashboardFilter removes properties:
+ * Dynamic writeable type for CreateDashboardFilter removes:
  * id, field
  */
 export interface IWriteCreateDashboardFilter {
@@ -9099,7 +9121,7 @@ export interface IWriteCreateDashboardFilter {
 }
 
 /**
- * Dynamically generated writeable type for CreateQueryTask removes properties:
+ * Dynamic writeable type for CreateQueryTask removes:
  * can
  */
 export interface IWriteCreateQueryTask {
@@ -9130,7 +9152,7 @@ export interface IWriteCreateQueryTask {
 }
 
 /**
- * Dynamically generated writeable type for CredentialsEmail removes properties:
+ * Dynamic writeable type for CredentialsEmail removes:
  * can, created_at, is_disabled, logged_in_at, password_reset_url, type, url, user_url
  */
 export interface IWriteCredentialsEmail {
@@ -9145,7 +9167,7 @@ export interface IWriteCredentialsEmail {
 }
 
 /**
- * Dynamically generated writeable type for CustomWelcomeEmail removes properties:
+ * Dynamic writeable type for CustomWelcomeEmail removes:
  * can
  */
 export interface IWriteCustomWelcomeEmail {
@@ -9168,7 +9190,7 @@ export interface IWriteCustomWelcomeEmail {
 }
 
 /**
- * Dynamically generated writeable type for Dashboard removes properties:
+ * Dynamic writeable type for Dashboard removes:
  * can, content_favorite_id, content_metadata_id, id, model, readonly, refresh_interval_to_i, user_id, created_at, dashboard_elements, dashboard_filters, dashboard_layouts, deleted_at, deleter_id, edit_uri, favorite_count, last_accessed_at, last_viewed_at, view_count
  */
 export interface IWriteDashboard {
@@ -9188,6 +9210,10 @@ export interface IWriteDashboard {
    * Refresh Interval, as a time duration phrase like "2 hours 30 minutes". A number with no time units will be interpreted as whole seconds.
    */
   refresh_interval?: string
+  /**
+   * Dynamic writeable type for FolderBase removes:
+   * id, content_metadata_id, created_at, creator_id, child_count, external_id, is_embed, is_embed_shared_root, is_embed_users_root, is_personal, is_personal_descendant, is_shared_root, is_users_root, can
+   */
   folder?: IWriteFolderBase
   /**
    * Dashboard Title
@@ -9201,6 +9227,10 @@ export interface IWriteDashboard {
    * The preferred route for viewing this dashboard (ie: dashboards or dashboards-next)
    */
   preferred_viewer?: string
+  /**
+   * Dynamic writeable type for SpaceBase removes:
+   * id, content_metadata_id, created_at, creator_id, child_count, external_id, is_embed, is_embed_shared_root, is_embed_users_root, is_personal, is_personal_descendant, is_shared_root, is_users_root, can
+   */
   space?: IWriteSpaceBase
   /**
    * Enables alerts to keep in sync with dashboard filter changes - only available in alerts 2.0 (beta)
@@ -9262,16 +9292,24 @@ export interface IWriteDashboard {
 }
 
 /**
- * Dynamically generated writeable type for DashboardBase removes properties:
+ * Dynamic writeable type for DashboardBase removes:
  * can, content_favorite_id, content_metadata_id, description, hidden, id, model, query_timezone, readonly, refresh_interval, refresh_interval_to_i, title, user_id, slug, preferred_viewer
  */
 export interface IWriteDashboardBase {
+  /**
+   * Dynamic writeable type for FolderBase removes:
+   * id, content_metadata_id, created_at, creator_id, child_count, external_id, is_embed, is_embed_shared_root, is_embed_users_root, is_personal, is_personal_descendant, is_shared_root, is_users_root, can
+   */
   folder?: IWriteFolderBase
+  /**
+   * Dynamic writeable type for SpaceBase removes:
+   * id, content_metadata_id, created_at, creator_id, child_count, external_id, is_embed, is_embed_shared_root, is_embed_users_root, is_personal, is_personal_descendant, is_shared_root, is_users_root, can
+   */
   space?: IWriteSpaceBase
 }
 
 /**
- * Dynamically generated writeable type for DashboardElement removes properties:
+ * Dynamic writeable type for DashboardElement removes:
  * can, body_text_as_html, edit_uri, id, lookml_link_id, note_text_as_html, refresh_interval_to_i, alert_count, title_text_as_html, subtitle_text_as_html
  */
 export interface IWriteDashboardElement {
@@ -9283,6 +9321,10 @@ export interface IWriteDashboardElement {
    * Id of Dashboard
    */
   dashboard_id?: string
+  /**
+   * Dynamic writeable type for LookWithQuery removes:
+   * can, content_metadata_id, id, content_favorite_id, created_at, deleted_at, deleter_id, embed_url, excel_file_url, favorite_count, google_spreadsheet_formula, image_embed_url, last_accessed_at, last_updater_id, last_viewed_at, model, public_slug, public_url, short_url, updated_at, view_count, user, url
+   */
   look?: IWriteLookWithQuery
   /**
    * Id Of Look
@@ -9304,6 +9346,10 @@ export interface IWriteDashboardElement {
    * Note Text
    */
   note_text?: string
+  /**
+   * Dynamic writeable type for Query removes:
+   * can, id, slug, share_url, expanded_share_url, url, has_table_calculations
+   */
   query?: IWriteQuery
   /**
    * Id Of Query
@@ -9313,6 +9359,10 @@ export interface IWriteDashboardElement {
    * Refresh Interval
    */
   refresh_interval?: string
+  /**
+   * Dynamic writeable type for ResultMakerWithIdVisConfigAndDynamicFields removes:
+   * id, dynamic_fields, filterables, sorts, merge_result_id, total, query_id, sql_query_id, vis_config
+   */
   result_maker?: IWriteResultMakerWithIdVisConfigAndDynamicFields
   /**
    * ID of the ResultMakerLookup entry.
@@ -9341,7 +9391,7 @@ export interface IWriteDashboardElement {
 }
 
 /**
- * Dynamically generated writeable type for DashboardFilter removes properties:
+ * Dynamic writeable type for DashboardFilter removes:
  * can, id, dashboard_id, field
  */
 export interface IWriteDashboardFilter {
@@ -9396,7 +9446,7 @@ export interface IWriteDashboardFilter {
 }
 
 /**
- * Dynamically generated writeable type for DashboardLayout removes properties:
+ * Dynamic writeable type for DashboardLayout removes:
  * can, id, deleted, dashboard_title, dashboard_layout_components
  */
 export interface IWriteDashboardLayout {
@@ -9423,7 +9473,7 @@ export interface IWriteDashboardLayout {
 }
 
 /**
- * Dynamically generated writeable type for DashboardLayoutComponent removes properties:
+ * Dynamic writeable type for DashboardLayoutComponent removes:
  * can, id, deleted, element_title, element_title_hidden, vis_type
  */
 export interface IWriteDashboardLayoutComponent {
@@ -9454,7 +9504,7 @@ export interface IWriteDashboardLayoutComponent {
 }
 
 /**
- * Dynamically generated writeable type for Datagroup removes properties:
+ * Dynamic writeable type for Datagroup removes:
  * can, created_at, id, model_name, name, trigger_check_at, trigger_error, trigger_value
  */
 export interface IWriteDatagroup {
@@ -9469,7 +9519,7 @@ export interface IWriteDatagroup {
 }
 
 /**
- * Dynamically generated writeable type for DBConnection removes properties:
+ * Dynamic writeable type for DBConnection removes:
  * can, dialect, snippets, pdts_enabled, uses_oauth, created_at, user_id, example, last_regen_at, last_reap_at, managed
  */
 export interface IWriteDBConnection {
@@ -9573,11 +9623,15 @@ export interface IWriteDBConnection {
    * SQL statements (semicolon separated) to issue after connecting to the database. Requires `custom_after_connect_statements` license feature
    */
   after_connect_statements?: string
+  /**
+   * Dynamic writeable type for DBConnectionOverride removes:
+   * has_password
+   */
   pdt_context_override?: IWriteDBConnectionOverride
 }
 
 /**
- * Dynamically generated writeable type for DBConnectionOverride removes properties:
+ * Dynamic writeable type for DBConnectionOverride removes:
  * has_password
  */
 export interface IWriteDBConnectionOverride {
@@ -9628,7 +9682,7 @@ export interface IWriteDBConnectionOverride {
 }
 
 /**
- * Dynamically generated writeable type for FolderBase removes properties:
+ * Dynamic writeable type for FolderBase removes:
  * id, content_metadata_id, created_at, creator_id, child_count, external_id, is_embed, is_embed_shared_root, is_embed_users_root, is_personal, is_personal_descendant, is_shared_root, is_users_root, can
  */
 export interface IWriteFolderBase {
@@ -9643,7 +9697,7 @@ export interface IWriteFolderBase {
 }
 
 /**
- * Dynamically generated writeable type for GitBranch removes properties:
+ * Dynamic writeable type for GitBranch removes:
  * can, remote, remote_name, error, message, owner_name, readonly, personal, is_local, is_remote, is_production, ahead_count, behind_count, commit_at, remote_ref
  */
 export interface IWriteGitBranch {
@@ -9658,7 +9712,7 @@ export interface IWriteGitBranch {
 }
 
 /**
- * Dynamically generated writeable type for Group removes properties:
+ * Dynamic writeable type for Group removes:
  * can, contains_current_user, external_group_id, externally_managed, id, include_by_default, user_count
  */
 export interface IWriteGroup {
@@ -9673,7 +9727,7 @@ export interface IWriteGroup {
 }
 
 /**
- * Dynamically generated writeable type for Homepage removes properties:
+ * Dynamic writeable type for Homepage removes:
  * can, content_metadata_id, created_at, homepage_sections, id, updated_at, user_id, primary_homepage
  */
 export interface IWriteHomepage {
@@ -9696,7 +9750,7 @@ export interface IWriteHomepage {
 }
 
 /**
- * Dynamically generated writeable type for HomepageItem removes properties:
+ * Dynamic writeable type for HomepageItem removes:
  * can, content_created_by, content_favorite_id, content_metadata_id, content_updated_at, custom_image_url, description, favorite_count, id, image_url, location, section_fetch_time, title, url, view_count
  */
 export interface IWriteHomepageItem {
@@ -9755,7 +9809,7 @@ export interface IWriteHomepageItem {
 }
 
 /**
- * Dynamically generated writeable type for HomepageSection removes properties:
+ * Dynamic writeable type for HomepageSection removes:
  * can, created_at, detail_url, homepage_items, id, is_header, updated_at, visible_item_order
  */
 export interface IWriteHomepageSection {
@@ -9782,7 +9836,7 @@ export interface IWriteHomepageSection {
 }
 
 /**
- * Dynamically generated writeable type for Integration removes properties:
+ * Dynamic writeable type for Integration removes:
  * can, id, integration_hub_id, label, description, supported_formats, supported_action_types, supported_formattings, supported_visualization_formattings, supported_download_settings, icon_url, uses_oauth, required_fields, delegate_oauth
  */
 export interface IWriteIntegration {
@@ -9801,7 +9855,7 @@ export interface IWriteIntegration {
 }
 
 /**
- * Dynamically generated writeable type for IntegrationHub removes properties:
+ * Dynamic writeable type for IntegrationHub removes:
  * can, id, label, official, fetch_error_message, has_authorization_token, legal_agreement_signed, legal_agreement_required, legal_agreement_text
  */
 export interface IWriteIntegrationHub {
@@ -9816,7 +9870,7 @@ export interface IWriteIntegrationHub {
 }
 
 /**
- * Dynamically generated writeable type for InternalHelpResources removes properties:
+ * Dynamic writeable type for InternalHelpResources removes:
  * can
  */
 export interface IWriteInternalHelpResources {
@@ -9827,7 +9881,7 @@ export interface IWriteInternalHelpResources {
 }
 
 /**
- * Dynamically generated writeable type for InternalHelpResourcesContent removes properties:
+ * Dynamic writeable type for InternalHelpResourcesContent removes:
  * can
  */
 export interface IWriteInternalHelpResourcesContent {
@@ -9842,7 +9896,7 @@ export interface IWriteInternalHelpResourcesContent {
 }
 
 /**
- * Dynamically generated writeable type for LDAPConfig removes properties:
+ * Dynamic writeable type for LDAPConfig removes:
  * can, default_new_user_groups, default_new_user_roles, groups, has_auth_password, modified_at, modified_by, user_attributes, url
  */
 export interface IWriteLDAPConfig {
@@ -9985,7 +10039,7 @@ export interface IWriteLDAPConfig {
 }
 
 /**
- * Dynamically generated writeable type for LegacyFeature removes properties:
+ * Dynamic writeable type for LegacyFeature removes:
  * can, id, name, description, enabled, disallowed_as_of_version, disable_on_upgrade_to_version, end_of_life_version, documentation_url, approximate_disable_date, approximate_end_of_life_date, has_disabled_on_upgrade
  */
 export interface IWriteLegacyFeature {
@@ -9996,7 +10050,7 @@ export interface IWriteLegacyFeature {
 }
 
 /**
- * Dynamically generated writeable type for LookmlModel removes properties:
+ * Dynamic writeable type for LookmlModel removes:
  * can, explores, has_content, label
  */
 export interface IWriteLookmlModel {
@@ -10019,7 +10073,7 @@ export interface IWriteLookmlModel {
 }
 
 /**
- * Dynamically generated writeable type for LookWithQuery removes properties:
+ * Dynamic writeable type for LookWithQuery removes:
  * can, content_metadata_id, id, content_favorite_id, created_at, deleted_at, deleter_id, embed_url, excel_file_url, favorite_count, google_spreadsheet_formula, image_embed_url, last_accessed_at, last_updater_id, last_viewed_at, model, public_slug, public_url, short_url, updated_at, view_count, user, url
  */
 export interface IWriteLookWithQuery {
@@ -10047,6 +10101,10 @@ export interface IWriteLookWithQuery {
    * Query Id
    */
   query_id?: number
+  /**
+   * Dynamic writeable type for FolderBase removes:
+   * id, content_metadata_id, created_at, creator_id, child_count, external_id, is_embed, is_embed_shared_root, is_embed_users_root, is_personal, is_personal_descendant, is_shared_root, is_users_root, can
+   */
   folder?: IWriteFolderBase
   /**
    * Folder Id
@@ -10060,12 +10118,20 @@ export interface IWriteLookWithQuery {
    * Space Id
    */
   space_id?: string
+  /**
+   * Dynamic writeable type for SpaceBase removes:
+   * id, content_metadata_id, created_at, creator_id, child_count, external_id, is_embed, is_embed_shared_root, is_embed_users_root, is_personal, is_personal_descendant, is_shared_root, is_users_root, can
+   */
   space?: IWriteSpaceBase
+  /**
+   * Dynamic writeable type for Query removes:
+   * can, id, slug, share_url, expanded_share_url, url, has_table_calculations
+   */
   query?: IWriteQuery
 }
 
 /**
- * Dynamically generated writeable type for MergeQuery removes properties:
+ * Dynamic writeable type for MergeQuery removes:
  * can, id, result_maker_id
  */
 export interface IWriteMergeQuery {
@@ -10100,7 +10166,7 @@ export interface IWriteMergeQuery {
 }
 
 /**
- * Dynamically generated writeable type for ModelSet removes properties:
+ * Dynamic writeable type for ModelSet removes:
  * can, all_access, built_in, id, url
  */
 export interface IWriteModelSet {
@@ -10112,7 +10178,7 @@ export interface IWriteModelSet {
 }
 
 /**
- * Dynamically generated writeable type for OIDCConfig removes properties:
+ * Dynamic writeable type for OIDCConfig removes:
  * can, default_new_user_groups, default_new_user_roles, groups, modified_at, modified_by, test_slug, user_attributes, url
  */
 export interface IWriteOIDCConfig {
@@ -10215,7 +10281,7 @@ export interface IWriteOIDCConfig {
 }
 
 /**
- * Dynamically generated writeable type for PasswordConfig removes properties:
+ * Dynamic writeable type for PasswordConfig removes:
  * can
  */
 export interface IWritePasswordConfig {
@@ -10238,7 +10304,7 @@ export interface IWritePasswordConfig {
 }
 
 /**
- * Dynamically generated writeable type for PermissionSet removes properties:
+ * Dynamic writeable type for PermissionSet removes:
  * can, all_access, built_in, id, url
  */
 export interface IWritePermissionSet {
@@ -10250,7 +10316,7 @@ export interface IWritePermissionSet {
 }
 
 /**
- * Dynamically generated writeable type for Project removes properties:
+ * Dynamic writeable type for Project removes:
  * can, id, uses_git, is_example
  */
 export interface IWriteProject {
@@ -10325,7 +10391,7 @@ export interface IWriteProject {
 }
 
 /**
- * Dynamically generated writeable type for Query removes properties:
+ * Dynamic writeable type for Query removes:
  * can, id, slug, share_url, expanded_share_url, url, has_table_calculations
  */
 export interface IWriteQuery {
@@ -10412,7 +10478,7 @@ export interface IWriteQuery {
 }
 
 /**
- * Dynamically generated writeable type for RepositoryCredential removes properties:
+ * Dynamic writeable type for RepositoryCredential removes:
  * can, id, root_project_id, remote_url, is_configured
  */
 export interface IWriteRepositoryCredential {
@@ -10431,15 +10497,19 @@ export interface IWriteRepositoryCredential {
 }
 
 /**
- * Dynamically generated writeable type for ResultMakerWithIdVisConfigAndDynamicFields removes properties:
+ * Dynamic writeable type for ResultMakerWithIdVisConfigAndDynamicFields removes:
  * id, dynamic_fields, filterables, sorts, merge_result_id, total, query_id, sql_query_id, vis_config
  */
 export interface IWriteResultMakerWithIdVisConfigAndDynamicFields {
+  /**
+   * Dynamic writeable type for Query removes:
+   * can, id, slug, share_url, expanded_share_url, url, has_table_calculations
+   */
   query?: IWriteQuery
 }
 
 /**
- * Dynamically generated writeable type for Role removes properties:
+ * Dynamic writeable type for Role removes:
  * can, id, url, users_url
  */
 export interface IWriteRole {
@@ -10447,11 +10517,19 @@ export interface IWriteRole {
    * Name of Role
    */
   name?: string
+  /**
+   * Dynamic writeable type for PermissionSet removes:
+   * can, all_access, built_in, id, url
+   */
   permission_set?: IWritePermissionSet
   /**
    * (Write-Only) Id of permission set
    */
   permission_set_id?: number
+  /**
+   * Dynamic writeable type for ModelSet removes:
+   * can, all_access, built_in, id, url
+   */
   model_set?: IWriteModelSet
   /**
    * (Write-Only) Id of model set
@@ -10460,7 +10538,7 @@ export interface IWriteRole {
 }
 
 /**
- * Dynamically generated writeable type for SamlConfig removes properties:
+ * Dynamic writeable type for SamlConfig removes:
  * can, test_slug, modified_at, modified_by, default_new_user_roles, default_new_user_groups, groups, user_attributes, url
  */
 export interface IWriteSamlConfig {
@@ -10563,7 +10641,7 @@ export interface IWriteSamlConfig {
 }
 
 /**
- * Dynamically generated writeable type for ScheduledPlan removes properties:
+ * Dynamic writeable type for ScheduledPlan removes:
  * id, created_at, updated_at, title, user, next_run_at, last_run_at, can
  */
 export interface IWriteScheduledPlan {
@@ -10674,7 +10752,7 @@ export interface IWriteScheduledPlan {
 }
 
 /**
- * Dynamically generated writeable type for SessionConfig removes properties:
+ * Dynamic writeable type for SessionConfig removes:
  * can
  */
 export interface IWriteSessionConfig {
@@ -10701,7 +10779,7 @@ export interface IWriteSessionConfig {
 }
 
 /**
- * Dynamically generated writeable type for SpaceBase removes properties:
+ * Dynamic writeable type for SpaceBase removes:
  * id, content_metadata_id, created_at, creator_id, child_count, external_id, is_embed, is_embed_shared_root, is_embed_users_root, is_personal, is_personal_descendant, is_shared_root, is_users_root, can
  */
 export interface IWriteSpaceBase {
@@ -10716,7 +10794,7 @@ export interface IWriteSpaceBase {
 }
 
 /**
- * Dynamically generated writeable type for Theme removes properties:
+ * Dynamic writeable type for Theme removes:
  * can, id
  */
 export interface IWriteTheme {
@@ -10736,10 +10814,14 @@ export interface IWriteTheme {
 }
 
 /**
- * Dynamically generated writeable type for User removes properties:
+ * Dynamic writeable type for User removes:
  * can, avatar_url, avatar_url_without_sizing, credentials_api3, credentials_embed, credentials_google, credentials_ldap, credentials_looker_openid, credentials_oidc, credentials_saml, credentials_totp, display_name, email, embed_group_space_id, group_ids, id, looker_versions, personal_space_id, personal_folder_id, presumed_looker_employee, role_ids, sessions, verified_looker_employee, roles_externally_managed, allow_direct_roles, allow_normal_group_membership, allow_roles_from_normal_groups, url
  */
 export interface IWriteUser {
+  /**
+   * Dynamic writeable type for CredentialsEmail removes:
+   * can, created_at, is_disabled, logged_in_at, password_reset_url, type, url, user_url
+   */
   credentials_email?: IWriteCredentialsEmail
   /**
    * First name
@@ -10776,7 +10858,7 @@ export interface IWriteUser {
 }
 
 /**
- * Dynamically generated writeable type for UserAttribute removes properties:
+ * Dynamic writeable type for UserAttribute removes:
  * can, id, is_system, is_permanent
  */
 export interface IWriteUserAttribute {
@@ -10815,7 +10897,7 @@ export interface IWriteUserAttribute {
 }
 
 /**
- * Dynamically generated writeable type for UserAttributeWithValue removes properties:
+ * Dynamic writeable type for UserAttributeWithValue removes:
  * can, name, label, rank, user_id, user_can_edit, value_is_hidden, user_attribute_id, source, hidden_value_domain_whitelist
  */
 export interface IWriteUserAttributeWithValue {
@@ -10826,7 +10908,7 @@ export interface IWriteUserAttributeWithValue {
 }
 
 /**
- * Dynamically generated writeable type for WhitelabelConfiguration removes properties:
+ * Dynamic writeable type for WhitelabelConfiguration removes:
  * can, id, logo_url, favicon_url
  */
 export interface IWriteWhitelabelConfiguration {
