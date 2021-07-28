@@ -25,7 +25,6 @@
  */
 
 import React, { FC, useEffect, useState } from 'react'
-import { useRouteMatch } from 'react-router-dom'
 import {
   RunItProvider,
   defaultConfigurator,
@@ -66,16 +65,7 @@ export const StandaloneApiExplorer: FC<StandaloneApiExplorerProps> = ({
     }
   }, [versionsUrl])
 
-  const match = useRouteMatch<{ specKey: string }>(`/:specKey`)
-  const specKey = match?.params.specKey || ''
-  // TODO we may not need this restriction any more?
-  // Check explicitly for specs 3.0 and 3.1 as run it is not supported.
-  // This is done as the return from OAUTH does not provide a spec key
-  // but an SDK is needed.
-  const chosenSdk: IAPIMethods | undefined =
-    specKey === '3.0' || specKey === '3.1'
-      ? undefined
-      : initRunItSdk(defaultConfigurator)
+  const chosenSdk: IAPIMethods = initRunItSdk(defaultConfigurator)
 
   return (
     <Provider store={store}>

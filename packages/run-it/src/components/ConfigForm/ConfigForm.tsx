@@ -147,7 +147,7 @@ export const ConfigForm: FC<ConfigFormProps> = ({
   }
 
   const updateFields = (name: string, value: string) => {
-    console.log('updateFields', { name, value })
+    // console.log('updateFields', { name, value })
     const newFields = { ...fields }
     newFields[name] = value
     setFields(newFields)
@@ -181,12 +181,12 @@ export const ConfigForm: FC<ConfigFormProps> = ({
   const removeButtonDisabled =
     fields.lookerUrl.trim().length === 0 && fields.baseUrl.trim().length === 0
 
-  console.log({
-    saveButtonDisabled,
-    removeButtonDisabled,
-    fields,
-    validationMessages,
-  })
+  // console.log({
+  //   saveButtonDisabled,
+  //   removeButtonDisabled,
+  //   fields,
+  //   validationMessages,
+  // })
 
   return (
     <>
