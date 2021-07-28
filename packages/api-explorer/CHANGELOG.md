@@ -5,25 +5,6 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-### [0.9.16](https://www.github.com/looker-open-source/sdk-codegen/compare/api-explorer-v0.9.15...api-explorer-v0.9.16) (2021-07-28)
-
-
-### Bug Fixes
-
-* dev portal apix tweaks ([#760](https://www.github.com/looker-open-source/sdk-codegen/issues/760)) ([6e937f4](https://www.github.com/looker-open-source/sdk-codegen/commit/6e937f4778457021dd739e849e209ad4de7bb450))
-* uses consistent heading text ([#761](https://www.github.com/looker-open-source/sdk-codegen/issues/761)) ([2e308ec](https://www.github.com/looker-open-source/sdk-codegen/commit/2e308ec1c6b4f181be12dda806955f8913336234))
-
-
-### Dependencies
-
-* The following workspace dependencies were updated
-  * dependencies
-    * @looker/code-editor bumped from ^0.1.7 to ^0.1.8
-    * @looker/run-it bumped from ^0.9.15 to ^0.9.16
-    * @looker/sdk bumped from ^21.10.1 to ^21.10.2
-  * devDependencies
-    * @looker/sdk-node bumped from ^21.10.1 to ^21.10.2
-
 ### [0.9.15](https://www.github.com/looker-open-source/sdk-codegen/compare/api-explorer-v0.9.14...api-explorer-v0.9.15) (2021-07-15)
 
 

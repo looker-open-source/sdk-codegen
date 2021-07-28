@@ -5,13 +5,6 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-### [21.0.18](https://www.github.com/looker-open-source/sdk-codegen/compare/sdk-rtl-v21.0.18...sdk-rtl-v21.0.18) (2021-07-28)
-
-
-### Bug Fixes
-
-* support response observer chaining ([025618c](https://www.github.com/looker-open-source/sdk-codegen/commit/025618c806efc1664b4f573248ad5a64d6cee3e3))
-
 ### [21.0.18](https://www.github.com/looker-open-source/sdk-codegen/compare/sdk-rtl-v21.0.17...sdk-rtl-v21.0.18) (2021-07-09)
 
 

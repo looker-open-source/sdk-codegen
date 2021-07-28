@@ -5,14 +5,6 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-### [21.0.22](https://www.github.com/looker-open-source/sdk-codegen/compare/sdk-codegen-v21.0.22...sdk-codegen-v21.0.22) (2021-07-28)
-
-
-### Bug Fixes
-
-* improved writeable type support ([#766](https://www.github.com/looker-open-source/sdk-codegen/issues/766)) ([be91bd8](https://www.github.com/looker-open-source/sdk-codegen/commit/be91bd8e772f9a64c47486b317f1ac1f6ef14327))
-* remove unused net/url import from go ([#767](https://www.github.com/looker-open-source/sdk-codegen/issues/767)) ([35d912c](https://www.github.com/looker-open-source/sdk-codegen/commit/35d912c1e31e5817a2b6a81084753a66a4860338)), closes [#765](https://www.github.com/looker-open-source/sdk-codegen/issues/765)
-
 ### [21.0.22](https://www.github.com/looker-open-source/sdk-codegen/compare/sdk-codegen-v21.0.21...sdk-codegen-v21.0.22) (2021-07-09)
 
 
