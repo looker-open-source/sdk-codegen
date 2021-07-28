@@ -30,6 +30,7 @@ The full details of all Looker API endpoints are listed in Looker Docs: [Version
 
 - [Transfer all schedules of a user to another user](transfer_all_schedules.py)
 - [Pause/Resume or Copy Schedules](manage_schedules.py)
+- [Create a Simple Schedule Plan](simple_schedule_plan.py)
 
 
 ## User : Manage Users
