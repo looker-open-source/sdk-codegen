@@ -3368,7 +3368,7 @@ export class Looker40SDK extends APIMethods implements ILooker40SDK {
    *
    * POST /content_metadata_access -> IContentMetaGroupUser
    *
-   * @param body Partial<IContentMetaGroupUser>
+   * @param body WARNING: no writeable properties found for POST, PUT, or PATCH
    * @param send_boards_notification_email Optionally sends notification email when granting access to a board.
    * @param options one-time API call overrides
    *
@@ -3392,7 +3392,7 @@ export class Looker40SDK extends APIMethods implements ILooker40SDK {
    * PUT /content_metadata_access/{content_metadata_access_id} -> IContentMetaGroupUser
    *
    * @param content_metadata_access_id Id of content metadata access
-   * @param body Partial<IContentMetaGroupUser>
+   * @param body WARNING: no writeable properties found for POST, PUT, or PATCH
    * @param options one-time API call overrides
    *
    */
@@ -5199,7 +5199,7 @@ export class Looker40SDK extends APIMethods implements ILooker40SDK {
    * POST /groups/{group_id}/groups -> IGroup
    *
    * @param group_id Id of group
-   * @param body Partial<IGroupIdForGroupInclusion>
+   * @param body WARNING: no writeable properties found for POST, PUT, or PATCH
    * @param options one-time API call overrides
    *
    */
@@ -5248,7 +5248,7 @@ export class Looker40SDK extends APIMethods implements ILooker40SDK {
    * POST /groups/{group_id}/users -> IUser
    *
    * @param group_id Id of group
-   * @param body Partial<IGroupIdForGroupUserInclusion>
+   * @param body WARNING: no writeable properties found for POST, PUT, or PATCH
    * @param options one-time API call overrides
    *
    */
@@ -5320,7 +5320,7 @@ export class Looker40SDK extends APIMethods implements ILooker40SDK {
    *
    * @param group_id Id of group
    * @param user_attribute_id Id of user attribute
-   * @param body Partial<IUserAttributeGroupValue>
+   * @param body WARNING: no writeable properties found for POST, PUT, or PATCH
    * @param options one-time API call overrides
    *
    */
@@ -6364,7 +6364,7 @@ export class Looker40SDK extends APIMethods implements ILooker40SDK {
    * POST /connections/{connection_name}/cost_estimate -> ICostEstimate
    *
    * @param connection_name Name of connection
-   * @param body Partial<ICreateCostEstimate>
+   * @param body WARNING: no writeable properties found for POST, PUT, or PATCH
    * @param fields Requested fields.
    * @param options one-time API call overrides
    *
@@ -10058,7 +10058,7 @@ export class Looker40SDK extends APIMethods implements ILooker40SDK {
    * POST /users/{user_id}/credentials_totp -> ICredentialsTotp
    *
    * @param user_id id of user
-   * @param body Partial<ICredentialsTotp>
+   * @param body WARNING: no writeable properties found for POST, PUT, or PATCH
    * @param fields Requested fields.
    * @param options one-time API call overrides
    *
@@ -10351,7 +10351,7 @@ export class Looker40SDK extends APIMethods implements ILooker40SDK {
    * POST /users/{user_id}/credentials_api3 -> ICredentialsApi3
    *
    * @param user_id id of user
-   * @param body Partial<ICredentialsApi3>
+   * @param body WARNING: no writeable properties found for POST, PUT, or PATCH
    * @param fields Requested fields.
    * @param options one-time API call overrides
    *
