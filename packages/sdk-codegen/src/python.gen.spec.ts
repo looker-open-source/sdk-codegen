@@ -794,7 +794,7 @@ class RequiredResponseWithEnums(model.Model):
 @attr.s(auto_attribs=True, init=False)
 class WriteMergeQuery(model.Model):
     """
-    Dynamically generated writeable type for MergeQuery removes properties:
+    Dynamic writeable type for MergeQuery removes:
 can, id, result_maker_id
 
     Attributes:

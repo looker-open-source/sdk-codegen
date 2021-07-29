@@ -188,6 +188,7 @@ public class ContentMeta : SdkModel
   public string? space_id { get; set; } = null;
 }
 
+/// WARNING: no writeable properties found for POST, PUT, or PATCH
 public class ContentMetaGroupUser : SdkModel
 {
   /// <summary>Operations the current user is able to perform on this object (read-only)</summary>
@@ -507,6 +508,7 @@ public class CreateSpace : SdkModel
   public string parent_id { get; set; } = "";
 }
 
+/// WARNING: no writeable properties found for POST, PUT, or PATCH
 public class CredentialsApi3 : SdkModel
 {
   /// <summary>Operations the current user is able to perform on this object (read-only)</summary>
@@ -677,6 +679,7 @@ public class CredentialsSaml : SdkModel
   public Url? url { get; set; } = null;
 }
 
+/// WARNING: no writeable properties found for POST, PUT, or PATCH
 public class CredentialsTotp : SdkModel
 {
   /// <summary>Operations the current user is able to perform on this object (read-only)</summary>
@@ -1592,12 +1595,14 @@ public class Group : SdkModel
   public long? user_count { get; set; } = null;
 }
 
+/// WARNING: no writeable properties found for POST, PUT, or PATCH
 public class GroupIdForGroupInclusion : SdkModel
 {
   /// <summary>Id of group (read-only)</summary>
   public long? group_id { get; set; } = null;
 }
 
+/// WARNING: no writeable properties found for POST, PUT, or PATCH
 public class GroupIdForGroupUserInclusion : SdkModel
 {
   /// <summary>Id of user (read-only)</summary>
@@ -4159,6 +4164,7 @@ public enum UserAttributeFilterTypes
   zipcode
 }
 
+/// WARNING: no writeable properties found for POST, PUT, or PATCH
 public class UserAttributeGroupValue : SdkModel
 {
   /// <summary>Operations the current user is able to perform on this object (read-only)</summary>
@@ -4350,7 +4356,7 @@ public class Workspace : SdkModel
   public Project[]? projects { get; set; } = null;
 }
 
-/// Dynamically generated writeable type for ApiSession removes properties:
+/// Dynamic writeable type for ApiSession removes:
 /// can, sudo_user_id
 public class WriteApiSession : SdkModel
 {
@@ -4358,7 +4364,7 @@ public class WriteApiSession : SdkModel
   public string? workspace_id { get; set; } = null;
 }
 
-/// Dynamically generated writeable type for BackupConfiguration removes properties:
+/// Dynamic writeable type for BackupConfiguration removes:
 /// can, url
 public class WriteBackupConfiguration : SdkModel
 {
@@ -4374,7 +4380,7 @@ public class WriteBackupConfiguration : SdkModel
   public string? custom_s3_secret { get; set; } = null;
 }
 
-/// Dynamically generated writeable type for ColorCollection removes properties:
+/// Dynamic writeable type for ColorCollection removes:
 /// id
 public class WriteColorCollection : SdkModel
 {
@@ -4388,7 +4394,7 @@ public class WriteColorCollection : SdkModel
   public ContinuousPalette[]? divergingPalettes { get; set; } = null;
 }
 
-/// Dynamically generated writeable type for ContentFavorite removes properties:
+/// Dynamic writeable type for ContentFavorite removes:
 /// id, look_id, dashboard_id, look
 public class WriteContentFavorite : SdkModel
 {
@@ -4396,10 +4402,14 @@ public class WriteContentFavorite : SdkModel
   public long? user_id { get; set; } = null;
   /// <summary>Content Metadata Id associated with this ContentFavorite</summary>
   public long? content_metadata_id { get; set; } = null;
+  /// <summary>
+  /// Dynamic writeable type for DashboardBase removes:
+  /// can, content_favorite_id, content_metadata_id, description, hidden, id, model, query_timezone, readonly, refresh_interval, refresh_interval_to_i, title, user_id, slug, preferred_viewer
+  /// </summary>
   public WriteDashboardBase? dashboard { get; set; }
 }
 
-/// Dynamically generated writeable type for ContentMeta removes properties:
+/// Dynamic writeable type for ContentMeta removes:
 /// can, id, name, parent_id, dashboard_id, look_id, folder_id, content_type, inheriting_id, slug, space_id
 public class WriteContentMeta : SdkModel
 {
@@ -4407,7 +4417,7 @@ public class WriteContentMeta : SdkModel
   public bool? inherits { get; set; } = null;
 }
 
-/// Dynamically generated writeable type for CreateDashboardFilter removes properties:
+/// Dynamic writeable type for CreateDashboardFilter removes:
 /// id, field
 public class WriteCreateDashboardFilter : SdkModel
 {
@@ -4439,7 +4449,7 @@ public class WriteCreateDashboardFilter : SdkModel
   public StringDictionary<object>? ui_config { get; set; } = null;
 }
 
-/// Dynamically generated writeable type for CreateQueryTask removes properties:
+/// Dynamic writeable type for CreateQueryTask removes:
 /// can
 public class WriteCreateQueryTask : SdkModel
 {
@@ -4458,7 +4468,7 @@ public class WriteCreateQueryTask : SdkModel
   public string? dashboard_id { get; set; } = null;
 }
 
-/// Dynamically generated writeable type for CredentialsEmail removes properties:
+/// Dynamic writeable type for CredentialsEmail removes:
 /// can, created_at, is_disabled, logged_in_at, password_reset_url, type, url, user_url
 public class WriteCredentialsEmail : SdkModel
 {
@@ -4468,7 +4478,7 @@ public class WriteCredentialsEmail : SdkModel
   public bool? forced_password_reset_at_next_login { get; set; } = null;
 }
 
-/// Dynamically generated writeable type for CustomWelcomeEmail removes properties:
+/// Dynamic writeable type for CustomWelcomeEmail removes:
 /// can
 public class WriteCustomWelcomeEmail : SdkModel
 {
@@ -4482,7 +4492,7 @@ public class WriteCustomWelcomeEmail : SdkModel
   public string? header { get; set; } = null;
 }
 
-/// Dynamically generated writeable type for Dashboard removes properties:
+/// Dynamic writeable type for Dashboard removes:
 /// can, content_favorite_id, content_metadata_id, id, model, readonly, refresh_interval_to_i, user_id, created_at, dashboard_elements, dashboard_filters, dashboard_layouts, deleted_at, deleter_id, edit_uri, favorite_count, last_accessed_at, last_viewed_at, view_count
 public class WriteDashboard : SdkModel
 {
@@ -4494,6 +4504,10 @@ public class WriteDashboard : SdkModel
   public string? query_timezone { get; set; } = null;
   /// <summary>Refresh Interval, as a time duration phrase like "2 hours 30 minutes". A number with no time units will be interpreted as whole seconds.</summary>
   public string? refresh_interval { get; set; } = null;
+  /// <summary>
+  /// Dynamic writeable type for FolderBase removes:
+  /// id, content_metadata_id, created_at, creator_id, child_count, external_id, is_embed, is_embed_shared_root, is_embed_users_root, is_personal, is_personal_descendant, is_shared_root, is_users_root, can
+  /// </summary>
   public WriteFolderBase? folder { get; set; }
   /// <summary>Dashboard Title</summary>
   public string? title { get; set; } = null;
@@ -4501,6 +4515,10 @@ public class WriteDashboard : SdkModel
   public string? slug { get; set; } = null;
   /// <summary>The preferred route for viewing this dashboard (ie: dashboards or dashboards-next)</summary>
   public string? preferred_viewer { get; set; } = null;
+  /// <summary>
+  /// Dynamic writeable type for SpaceBase removes:
+  /// id, content_metadata_id, created_at, creator_id, child_count, external_id, is_embed, is_embed_shared_root, is_embed_users_root, is_personal, is_personal_descendant, is_shared_root, is_users_root, can
+  /// </summary>
   public WriteSpaceBase? space { get; set; }
   /// <summary>Enables alerts to keep in sync with dashboard filter changes - only available in alerts 2.0 (beta)</summary>
   public bool? alert_sync_with_dashboard_filter_enabled { get; set; } = null;
@@ -4533,15 +4551,23 @@ public class WriteDashboard : SdkModel
   public DashboardAppearance? appearance { get; set; }
 }
 
-/// Dynamically generated writeable type for DashboardBase removes properties:
+/// Dynamic writeable type for DashboardBase removes:
 /// can, content_favorite_id, content_metadata_id, description, hidden, id, model, query_timezone, readonly, refresh_interval, refresh_interval_to_i, title, user_id, slug, preferred_viewer
 public class WriteDashboardBase : SdkModel
 {
+  /// <summary>
+  /// Dynamic writeable type for FolderBase removes:
+  /// id, content_metadata_id, created_at, creator_id, child_count, external_id, is_embed, is_embed_shared_root, is_embed_users_root, is_personal, is_personal_descendant, is_shared_root, is_users_root, can
+  /// </summary>
   public WriteFolderBase? folder { get; set; }
+  /// <summary>
+  /// Dynamic writeable type for SpaceBase removes:
+  /// id, content_metadata_id, created_at, creator_id, child_count, external_id, is_embed, is_embed_shared_root, is_embed_users_root, is_personal, is_personal_descendant, is_shared_root, is_users_root, can
+  /// </summary>
   public WriteSpaceBase? space { get; set; }
 }
 
-/// Dynamically generated writeable type for DashboardElement removes properties:
+/// Dynamic writeable type for DashboardElement removes:
 /// can, body_text_as_html, edit_uri, id, lookml_link_id, note_text_as_html, refresh_interval_to_i, alert_count, title_text_as_html, subtitle_text_as_html
 public class WriteDashboardElement : SdkModel
 {
@@ -4549,6 +4575,10 @@ public class WriteDashboardElement : SdkModel
   public string? body_text { get; set; } = null;
   /// <summary>Id of Dashboard</summary>
   public string? dashboard_id { get; set; } = null;
+  /// <summary>
+  /// Dynamic writeable type for LookWithQuery removes:
+  /// can, content_metadata_id, id, content_favorite_id, created_at, deleted_at, deleter_id, embed_url, excel_file_url, favorite_count, google_spreadsheet_formula, image_embed_url, last_accessed_at, last_updater_id, last_viewed_at, model, public_slug, public_url, short_url, updated_at, view_count, user, url
+  /// </summary>
   public WriteLookWithQuery? look { get; set; }
   /// <summary>Id Of Look</summary>
   public string? look_id { get; set; } = null;
@@ -4560,11 +4590,19 @@ public class WriteDashboardElement : SdkModel
   public string? note_state { get; set; } = null;
   /// <summary>Note Text</summary>
   public string? note_text { get; set; } = null;
+  /// <summary>
+  /// Dynamic writeable type for Query removes:
+  /// can, id, slug, share_url, expanded_share_url, url, has_table_calculations
+  /// </summary>
   public WriteQuery? query { get; set; }
   /// <summary>Id Of Query</summary>
   public long? query_id { get; set; } = null;
   /// <summary>Refresh Interval</summary>
   public string? refresh_interval { get; set; } = null;
+  /// <summary>
+  /// Dynamic writeable type for ResultMakerWithIdVisConfigAndDynamicFields removes:
+  /// id, dynamic_fields, filterables, sorts, merge_result_id, total, query_id, sql_query_id, vis_config
+  /// </summary>
   public WriteResultMakerWithIdVisConfigAndDynamicFields? result_maker { get; set; }
   /// <summary>ID of the ResultMakerLookup entry.</summary>
   public long? result_maker_id { get; set; } = null;
@@ -4580,7 +4618,7 @@ public class WriteDashboardElement : SdkModel
   public string? type { get; set; } = null;
 }
 
-/// Dynamically generated writeable type for DashboardFilter removes properties:
+/// Dynamic writeable type for DashboardFilter removes:
 /// can, id, dashboard_id, field
 public class WriteDashboardFilter : SdkModel
 {
@@ -4610,7 +4648,7 @@ public class WriteDashboardFilter : SdkModel
   public StringDictionary<object>? ui_config { get; set; } = null;
 }
 
-/// Dynamically generated writeable type for DashboardLayout removes properties:
+/// Dynamic writeable type for DashboardLayout removes:
 /// can, id, deleted, dashboard_title, dashboard_layout_components
 public class WriteDashboardLayout : SdkModel
 {
@@ -4626,7 +4664,7 @@ public class WriteDashboardLayout : SdkModel
   public long? width { get; set; } = null;
 }
 
-/// Dynamically generated writeable type for DashboardLayoutComponent removes properties:
+/// Dynamic writeable type for DashboardLayoutComponent removes:
 /// can, id, deleted, element_title, element_title_hidden, vis_type
 public class WriteDashboardLayoutComponent : SdkModel
 {
@@ -4644,7 +4682,7 @@ public class WriteDashboardLayoutComponent : SdkModel
   public long? height { get; set; } = null;
 }
 
-/// Dynamically generated writeable type for Datagroup removes properties:
+/// Dynamic writeable type for Datagroup removes:
 /// can, created_at, id, model_name, name, trigger_check_at, trigger_error, trigger_value
 public class WriteDatagroup : SdkModel
 {
@@ -4654,7 +4692,7 @@ public class WriteDatagroup : SdkModel
   public long? triggered_at { get; set; } = null;
 }
 
-/// Dynamically generated writeable type for DBConnection removes properties:
+/// Dynamic writeable type for DBConnection removes:
 /// can, dialect, snippets, pdts_enabled, uses_oauth, created_at, user_id, example, last_regen_at, last_reap_at, managed
 public class WriteDBConnection : SdkModel
 {
@@ -4708,10 +4746,14 @@ public class WriteDBConnection : SdkModel
   public bool? sql_writing_with_info_schema { get; set; } = null;
   /// <summary>SQL statements (semicolon separated) to issue after connecting to the database. Requires `custom_after_connect_statements` license feature</summary>
   public string? after_connect_statements { get; set; } = null;
+  /// <summary>
+  /// Dynamic writeable type for DBConnectionOverride removes:
+  /// has_password
+  /// </summary>
   public WriteDBConnectionOverride? pdt_context_override { get; set; }
 }
 
-/// Dynamically generated writeable type for DBConnectionOverride removes properties:
+/// Dynamic writeable type for DBConnectionOverride removes:
 /// has_password
 public class WriteDBConnectionOverride : SdkModel
 {
@@ -4739,7 +4781,7 @@ public class WriteDBConnectionOverride : SdkModel
   public string? after_connect_statements { get; set; } = null;
 }
 
-/// Dynamically generated writeable type for FolderBase removes properties:
+/// Dynamic writeable type for FolderBase removes:
 /// id, content_metadata_id, created_at, creator_id, child_count, external_id, is_embed, is_embed_shared_root, is_embed_users_root, is_personal, is_personal_descendant, is_shared_root, is_users_root, can
 public class WriteFolderBase : SdkModel
 {
@@ -4749,7 +4791,7 @@ public class WriteFolderBase : SdkModel
   public string? parent_id { get; set; } = null;
 }
 
-/// Dynamically generated writeable type for GitBranch removes properties:
+/// Dynamic writeable type for GitBranch removes:
 /// can, remote, remote_name, error, message, owner_name, readonly, personal, is_local, is_remote, is_production, ahead_count, behind_count, commit_at, remote_ref
 public class WriteGitBranch : SdkModel
 {
@@ -4759,7 +4801,7 @@ public class WriteGitBranch : SdkModel
   public string? @ref { get; set; } = null;
 }
 
-/// Dynamically generated writeable type for Group removes properties:
+/// Dynamic writeable type for Group removes:
 /// can, contains_current_user, external_group_id, externally_managed, id, include_by_default, user_count
 public class WriteGroup : SdkModel
 {
@@ -4769,7 +4811,7 @@ public class WriteGroup : SdkModel
   public string? name { get; set; } = null;
 }
 
-/// Dynamically generated writeable type for Homepage removes properties:
+/// Dynamic writeable type for Homepage removes:
 /// can, content_metadata_id, created_at, homepage_sections, id, updated_at, user_id, primary_homepage
 public class WriteHomepage : SdkModel
 {
@@ -4783,7 +4825,7 @@ public class WriteHomepage : SdkModel
   public string? title { get; set; } = null;
 }
 
-/// Dynamically generated writeable type for HomepageItem removes properties:
+/// Dynamic writeable type for HomepageItem removes:
 /// can, content_created_by, content_favorite_id, content_metadata_id, content_updated_at, custom_image_url, description, favorite_count, id, image_url, location, section_fetch_time, title, url, view_count
 public class WriteHomepageItem : SdkModel
 {
@@ -4815,7 +4857,7 @@ public class WriteHomepageItem : SdkModel
   public bool? use_custom_url { get; set; } = null;
 }
 
-/// Dynamically generated writeable type for HomepageSection removes properties:
+/// Dynamic writeable type for HomepageSection removes:
 /// can, created_at, detail_url, homepage_items, id, is_header, updated_at, visible_item_order
 public class WriteHomepageSection : SdkModel
 {
@@ -4831,7 +4873,7 @@ public class WriteHomepageSection : SdkModel
   public string? description { get; set; } = null;
 }
 
-/// Dynamically generated writeable type for Integration removes properties:
+/// Dynamic writeable type for Integration removes:
 /// can, id, integration_hub_id, label, description, supported_formats, supported_action_types, supported_formattings, supported_visualization_formattings, supported_download_settings, icon_url, uses_oauth, required_fields, delegate_oauth
 public class WriteIntegration : SdkModel
 {
@@ -4843,7 +4885,7 @@ public class WriteIntegration : SdkModel
   public long[]? installed_delegate_oauth_targets { get; set; } = null;
 }
 
-/// Dynamically generated writeable type for IntegrationHub removes properties:
+/// Dynamic writeable type for IntegrationHub removes:
 /// can, id, label, official, fetch_error_message, has_authorization_token, legal_agreement_signed, legal_agreement_required, legal_agreement_text
 public class WriteIntegrationHub : SdkModel
 {
@@ -4853,7 +4895,7 @@ public class WriteIntegrationHub : SdkModel
   public string? authorization_token { get; set; } = null;
 }
 
-/// Dynamically generated writeable type for InternalHelpResources removes properties:
+/// Dynamic writeable type for InternalHelpResources removes:
 /// can
 public class WriteInternalHelpResources : SdkModel
 {
@@ -4861,7 +4903,7 @@ public class WriteInternalHelpResources : SdkModel
   public bool? enabled { get; set; } = null;
 }
 
-/// Dynamically generated writeable type for InternalHelpResourcesContent removes properties:
+/// Dynamic writeable type for InternalHelpResourcesContent removes:
 /// can
 public class WriteInternalHelpResourcesContent : SdkModel
 {
@@ -4871,7 +4913,7 @@ public class WriteInternalHelpResourcesContent : SdkModel
   public string? markdown_content { get; set; } = null;
 }
 
-/// Dynamically generated writeable type for LDAPConfig removes properties:
+/// Dynamic writeable type for LDAPConfig removes:
 /// can, default_new_user_groups, default_new_user_roles, groups, has_auth_password, modified_at, modified_by, user_attributes, url
 public class WriteLDAPConfig : SdkModel
 {
@@ -4945,7 +4987,7 @@ public class WriteLDAPConfig : SdkModel
   public bool? allow_direct_roles { get; set; } = null;
 }
 
-/// Dynamically generated writeable type for LegacyFeature removes properties:
+/// Dynamic writeable type for LegacyFeature removes:
 /// can, id, name, description, enabled, disallowed_as_of_version, disable_on_upgrade_to_version, end_of_life_version, documentation_url, approximate_disable_date, approximate_end_of_life_date, has_disabled_on_upgrade
 public class WriteLegacyFeature : SdkModel
 {
@@ -4953,7 +4995,7 @@ public class WriteLegacyFeature : SdkModel
   public bool? enabled_locally { get; set; } = null;
 }
 
-/// Dynamically generated writeable type for LookmlModel removes properties:
+/// Dynamic writeable type for LookmlModel removes:
 /// can, explores, has_content, label
 public class WriteLookmlModel : SdkModel
 {
@@ -4967,7 +5009,7 @@ public class WriteLookmlModel : SdkModel
   public bool? unlimited_db_connections { get; set; } = null;
 }
 
-/// Dynamically generated writeable type for LookWithQuery removes properties:
+/// Dynamic writeable type for LookWithQuery removes:
 /// can, content_metadata_id, id, content_favorite_id, created_at, deleted_at, deleter_id, embed_url, excel_file_url, favorite_count, google_spreadsheet_formula, image_embed_url, last_accessed_at, last_updater_id, last_viewed_at, model, public_slug, public_url, short_url, updated_at, view_count, user, url
 public class WriteLookWithQuery : SdkModel
 {
@@ -4983,6 +5025,10 @@ public class WriteLookWithQuery : SdkModel
   public bool? @public { get; set; } = null;
   /// <summary>Query Id</summary>
   public long? query_id { get; set; } = null;
+  /// <summary>
+  /// Dynamic writeable type for FolderBase removes:
+  /// id, content_metadata_id, created_at, creator_id, child_count, external_id, is_embed, is_embed_shared_root, is_embed_users_root, is_personal, is_personal_descendant, is_shared_root, is_users_root, can
+  /// </summary>
   public WriteFolderBase? folder { get; set; }
   /// <summary>Folder Id</summary>
   public string? folder_id { get; set; } = null;
@@ -4990,11 +5036,19 @@ public class WriteLookWithQuery : SdkModel
   public long? user_id { get; set; } = null;
   /// <summary>Space Id</summary>
   public string? space_id { get; set; } = null;
+  /// <summary>
+  /// Dynamic writeable type for SpaceBase removes:
+  /// id, content_metadata_id, created_at, creator_id, child_count, external_id, is_embed, is_embed_shared_root, is_embed_users_root, is_personal, is_personal_descendant, is_shared_root, is_users_root, can
+  /// </summary>
   public WriteSpaceBase? space { get; set; }
+  /// <summary>
+  /// Dynamic writeable type for Query removes:
+  /// can, id, slug, share_url, expanded_share_url, url, has_table_calculations
+  /// </summary>
   public WriteQuery? query { get; set; }
 }
 
-/// Dynamically generated writeable type for MergeQuery removes properties:
+/// Dynamic writeable type for MergeQuery removes:
 /// can, id, result_maker_id
 public class WriteMergeQuery : SdkModel
 {
@@ -5014,7 +5068,7 @@ public class WriteMergeQuery : SdkModel
   public StringDictionary<string>? vis_config { get; set; } = null;
 }
 
-/// Dynamically generated writeable type for ModelSet removes properties:
+/// Dynamic writeable type for ModelSet removes:
 /// can, all_access, built_in, id, url
 public class WriteModelSet : SdkModel
 {
@@ -5023,7 +5077,7 @@ public class WriteModelSet : SdkModel
   public string? name { get; set; } = null;
 }
 
-/// Dynamically generated writeable type for OIDCConfig removes properties:
+/// Dynamic writeable type for OIDCConfig removes:
 /// can, default_new_user_groups, default_new_user_roles, groups, modified_at, modified_by, test_slug, user_attributes, url
 public class WriteOIDCConfig : SdkModel
 {
@@ -5077,7 +5131,7 @@ public class WriteOIDCConfig : SdkModel
   public bool? allow_direct_roles { get; set; } = null;
 }
 
-/// Dynamically generated writeable type for PasswordConfig removes properties:
+/// Dynamic writeable type for PasswordConfig removes:
 /// can
 public class WritePasswordConfig : SdkModel
 {
@@ -5091,7 +5145,7 @@ public class WritePasswordConfig : SdkModel
   public bool? require_special { get; set; } = null;
 }
 
-/// Dynamically generated writeable type for PermissionSet removes properties:
+/// Dynamic writeable type for PermissionSet removes:
 /// can, all_access, built_in, id, url
 public class WritePermissionSet : SdkModel
 {
@@ -5100,7 +5154,7 @@ public class WritePermissionSet : SdkModel
   public string[]? permissions { get; set; } = null;
 }
 
-/// Dynamically generated writeable type for Project removes properties:
+/// Dynamic writeable type for Project removes:
 /// can, id, uses_git, is_example
 public class WriteProject : SdkModel
 {
@@ -5141,7 +5195,7 @@ public class WriteProject : SdkModel
   public bool? allow_warnings { get; set; } = null;
 }
 
-/// Dynamically generated writeable type for Query removes properties:
+/// Dynamic writeable type for Query removes:
 /// can, id, slug, share_url, expanded_share_url, url, has_table_calculations
 public class WriteQuery : SdkModel
 {
@@ -5187,7 +5241,7 @@ public class WriteQuery : SdkModel
   public double? runtime { get; set; } = null;
 }
 
-/// Dynamically generated writeable type for RepositoryCredential removes properties:
+/// Dynamic writeable type for RepositoryCredential removes:
 /// can, id, root_project_id, remote_url, is_configured
 public class WriteRepositoryCredential : SdkModel
 {
@@ -5199,28 +5253,40 @@ public class WriteRepositoryCredential : SdkModel
   public string? ssh_public_key { get; set; } = null;
 }
 
-/// Dynamically generated writeable type for ResultMakerWithIdVisConfigAndDynamicFields removes properties:
+/// Dynamic writeable type for ResultMakerWithIdVisConfigAndDynamicFields removes:
 /// id, dynamic_fields, filterables, sorts, merge_result_id, total, query_id, sql_query_id, vis_config
 public class WriteResultMakerWithIdVisConfigAndDynamicFields : SdkModel
 {
+  /// <summary>
+  /// Dynamic writeable type for Query removes:
+  /// can, id, slug, share_url, expanded_share_url, url, has_table_calculations
+  /// </summary>
   public WriteQuery? query { get; set; }
 }
 
-/// Dynamically generated writeable type for Role removes properties:
+/// Dynamic writeable type for Role removes:
 /// can, id, url, users_url
 public class WriteRole : SdkModel
 {
   /// <summary>Name of Role</summary>
   public string? name { get; set; } = null;
+  /// <summary>
+  /// Dynamic writeable type for PermissionSet removes:
+  /// can, all_access, built_in, id, url
+  /// </summary>
   public WritePermissionSet? permission_set { get; set; }
   /// <summary>(Write-Only) Id of permission set</summary>
   public long? permission_set_id { get; set; } = null;
+  /// <summary>
+  /// Dynamic writeable type for ModelSet removes:
+  /// can, all_access, built_in, id, url
+  /// </summary>
   public WriteModelSet? model_set { get; set; }
   /// <summary>(Write-Only) Id of model set</summary>
   public long? model_set_id { get; set; } = null;
 }
 
-/// Dynamically generated writeable type for SamlConfig removes properties:
+/// Dynamic writeable type for SamlConfig removes:
 /// can, test_slug, modified_at, modified_by, default_new_user_roles, default_new_user_groups, groups, user_attributes, url
 public class WriteSamlConfig : SdkModel
 {
@@ -5274,7 +5340,7 @@ public class WriteSamlConfig : SdkModel
   public bool? allow_direct_roles { get; set; } = null;
 }
 
-/// Dynamically generated writeable type for ScheduledPlan removes properties:
+/// Dynamic writeable type for ScheduledPlan removes:
 /// id, created_at, updated_at, title, user, next_run_at, last_run_at, can
 public class WriteScheduledPlan : SdkModel
 {
@@ -5332,7 +5398,7 @@ public class WriteScheduledPlan : SdkModel
   public long? inline_table_width { get; set; } = null;
 }
 
-/// Dynamically generated writeable type for SessionConfig removes properties:
+/// Dynamic writeable type for SessionConfig removes:
 /// can
 public class WriteSessionConfig : SdkModel
 {
@@ -5348,7 +5414,7 @@ public class WriteSessionConfig : SdkModel
   public bool? track_session_location { get; set; } = null;
 }
 
-/// Dynamically generated writeable type for SpaceBase removes properties:
+/// Dynamic writeable type for SpaceBase removes:
 /// id, content_metadata_id, created_at, creator_id, child_count, external_id, is_embed, is_embed_shared_root, is_embed_users_root, is_personal, is_personal_descendant, is_shared_root, is_users_root, can
 public class WriteSpaceBase : SdkModel
 {
@@ -5358,7 +5424,7 @@ public class WriteSpaceBase : SdkModel
   public string? parent_id { get; set; } = null;
 }
 
-/// Dynamically generated writeable type for Theme removes properties:
+/// Dynamic writeable type for Theme removes:
 /// can, id
 public class WriteTheme : SdkModel
 {
@@ -5371,10 +5437,14 @@ public class WriteTheme : SdkModel
   public ThemeSettings? settings { get; set; }
 }
 
-/// Dynamically generated writeable type for User removes properties:
+/// Dynamic writeable type for User removes:
 /// can, avatar_url, avatar_url_without_sizing, credentials_api3, credentials_embed, credentials_google, credentials_ldap, credentials_looker_openid, credentials_oidc, credentials_saml, credentials_totp, display_name, email, embed_group_space_id, group_ids, id, looker_versions, personal_space_id, personal_folder_id, presumed_looker_employee, role_ids, sessions, verified_looker_employee, roles_externally_managed, allow_direct_roles, allow_normal_group_membership, allow_roles_from_normal_groups, url
 public class WriteUser : SdkModel
 {
+  /// <summary>
+  /// Dynamic writeable type for CredentialsEmail removes:
+  /// can, created_at, is_disabled, logged_in_at, password_reset_url, type, url, user_url
+  /// </summary>
   public WriteCredentialsEmail? credentials_email { get; set; }
   /// <summary>First name</summary>
   public string? first_name { get; set; } = null;
@@ -5394,7 +5464,7 @@ public class WriteUser : SdkModel
   public StringDictionary<string>? ui_state { get; set; } = null;
 }
 
-/// Dynamically generated writeable type for UserAttribute removes properties:
+/// Dynamic writeable type for UserAttribute removes:
 /// can, id, is_system, is_permanent
 public class WriteUserAttribute : SdkModel
 {
@@ -5416,7 +5486,7 @@ public class WriteUserAttribute : SdkModel
   public string? hidden_value_domain_whitelist { get; set; } = null;
 }
 
-/// Dynamically generated writeable type for UserAttributeWithValue removes properties:
+/// Dynamic writeable type for UserAttributeWithValue removes:
 /// can, name, label, rank, user_id, user_can_edit, value_is_hidden, user_attribute_id, source, hidden_value_domain_whitelist
 public class WriteUserAttributeWithValue : SdkModel
 {
@@ -5424,7 +5494,7 @@ public class WriteUserAttributeWithValue : SdkModel
   public string? value { get; set; } = null;
 }
 
-/// Dynamically generated writeable type for WhitelabelConfiguration removes properties:
+/// Dynamic writeable type for WhitelabelConfiguration removes:
 /// can, id, logo_url, favicon_url
 public class WriteWhitelabelConfiguration : SdkModel
 {
