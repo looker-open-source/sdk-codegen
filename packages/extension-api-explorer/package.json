@@ -1,6 +1,6 @@
 {
   "name": "@looker/extension-api-explorer",
-  "version": "21.11.1",
+  "version": "21.11.2",
   "description": "Looker API Explorer extension version  ",
   "main": "dist/bundle.js",
   "sideEffects": false,
@@ -17,10 +17,10 @@
   "dependencies": {
     "@looker/api-explorer": "^0.9.16",
     "@looker/components": "^1.4.1",
-    "@looker/extension-sdk": "^21.10.2",
-    "@looker/extension-sdk-react": "^21.10.2",
+    "@looker/extension-sdk": "^21.10.3",
+    "@looker/extension-sdk-react": "^21.10.3",
     "@looker/icons": "1.3.0",
-    "@looker/run-it": "^0.9.16",
+    "@looker/run-it": "^0.9.17",
     "@looker/sdk": "^21.10.2",
     "@looker/sdk-codegen": "^21.0.23",
     "@styled-icons/material": "^10.28.0",

@@ -32,7 +32,7 @@
   },
   "devDependencies": {
     "@looker/components-test-utils": "^1.3.1",
-    "@looker/sdk-codegen-scripts": "^21.0.24",
+    "@looker/sdk-codegen-scripts": "^21.0.25",
     "@looker/sdk-node": "^21.10.2",
     "@styled-icons/styled-icon": "^10.6.3",
     "@testing-library/jest-dom": "^5.11.6",
@@ -58,11 +58,11 @@
     "webpack-merge": "^5.7.3"
   },
   "dependencies": {
-    "@looker/code-editor": "^0.1.8",
+    "@looker/code-editor": "^0.1.9",
     "@looker/components": "^1.4.1",
     "@looker/design-tokens": "^1.3.1",
     "@looker/icons": "^1.3.0",
-    "@looker/run-it": "^0.9.16",
+    "@looker/run-it": "^0.9.17",
     "@looker/sdk": "^21.10.2",
     "@looker/sdk-codegen": "^21.0.23",
     "@looker/sdk-rtl": "^21.0.19",

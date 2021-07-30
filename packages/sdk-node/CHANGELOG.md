@@ -13,6 +13,14 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 * improved writeable type support ([#766](https://www.github.com/looker-open-source/sdk-codegen/issues/766)) ([be91bd8](https://www.github.com/looker-open-source/sdk-codegen/commit/be91bd8e772f9a64c47486b317f1ac1f6ef14327))
 * support response observer chaining ([025618c](https://www.github.com/looker-open-source/sdk-codegen/commit/025618c806efc1664b4f573248ad5a64d6cee3e3))
 
+### [21.10.2](https://www.github.com/looker-open-source/sdk-codegen/compare/sdk-node-v21.10.1...sdk-node-v21.10.2) (2021-07-30)
+
+
+### Bug Fixes
+
+* improved writeable type support ([#766](https://www.github.com/looker-open-source/sdk-codegen/issues/766)) ([be91bd8](https://www.github.com/looker-open-source/sdk-codegen/commit/be91bd8e772f9a64c47486b317f1ac1f6ef14327))
+* support response observer chaining ([025618c](https://www.github.com/looker-open-source/sdk-codegen/commit/025618c806efc1664b4f573248ad5a64d6cee3e3))
+
 
 ### Dependencies
 
