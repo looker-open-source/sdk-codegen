@@ -2,6 +2,7 @@
   "plugins": ["node-workspace"],
   "bump-minor-pre-major": true,
   "bump-patch-for-minor-pre-major": true,
+  "last-release-sha": "e4c24ed0af4c70ce02eb910a367a306acb9578e7",
   "packages": {
     ".": { "release-as": "" },
     "packages/api-explorer": { "release-as": "" },
