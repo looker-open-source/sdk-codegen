@@ -72,6 +72,8 @@ interface ConfigFormProps {
 const defaultFieldValues = {
   baseUrl: '',
   lookerUrl: '',
+  webUrl: '',
+  headless: false,
   specs: {},
   fetchError: '',
 }
@@ -119,15 +121,15 @@ export const ConfigForm: FC<ConfigFormProps> = ({
     try {
       updateFields('fetchError', '')
       const { webUrl, baseUrl } = await loadSpecsFromVersions(
-        `${fields.lookerUrl}/api/4.0/versions`
+        `${fields.baseUrl}/api/4.0/versions`
       )
       updateFields('baseUrl', baseUrl)
       await configurator.removeStorage(RunItConfigKey)
-      await configurator.setStorage(
+      configurator.setStorage(
         RunItConfigKey,
         JSON.stringify({
           base_url: baseUrl,
-          looker_url: fields.lookerUrl,
+          looker_url: webUrl,
         }),
         // Always store in local storage
         'local'
@@ -175,18 +177,11 @@ export const ConfigForm: FC<ConfigFormProps> = ({
   }
 
   const saveButtonDisabled =
-    fields.lookerUrl.trim().length === 0 ||
+    fields.baseUrl.trim().length === 0 ||
     Object.keys(validationMessages).length > 0
 
   const removeButtonDisabled =
-    fields.lookerUrl.trim().length === 0 && fields.baseUrl.trim().length === 0
-
-  // console.log({
-  //   saveButtonDisabled,
-  //   removeButtonDisabled,
-  //   fields,
-  //   validationMessages,
-  // })
+    fields.webUrl.trim().length === 0 && fields.baseUrl.trim().length === 0
 
   return (
     <>
@@ -196,18 +191,18 @@ export const ConfigForm: FC<ConfigFormProps> = ({
           <Fieldset legend="Server locations">
             <FieldText
               required
-              label="Looker server url"
-              placeholder="typically https://myserver.looker.com:9999"
-              name="lookerUrl"
-              defaultValue={fields.lookerUrl}
+              label="Looker API server url"
+              placeholder="typically https://myserver.looker.com:19999"
+              name="baseUrl"
+              defaultValue={fields.baseUrl}
               onChange={handleUrlChange}
             />
             <FieldText
               required
-              label="API server url"
-              placeholder="typically https://myserver.looker.com:19999"
-              name="baseUrl"
-              defaultValue={fields.baseUrl}
+              label="Looker Web server url"
+              placeholder="typically https://myserver.looker.com:9999"
+              name="lookerUrl"
+              defaultValue={fields.webUrl}
               disabled={true}
             />
           </Fieldset>

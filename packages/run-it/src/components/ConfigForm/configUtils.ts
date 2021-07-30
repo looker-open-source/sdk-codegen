@@ -110,10 +110,8 @@ export const validateUrl = (url: string) => {
 export interface ILoadedSpecs {
   /** API server url */
   baseUrl: string
-  /** web server url */
+  /** Web server url */
   webUrl: string
-  /** /versions server url */
-  lookerUrl: string
   /** should APIX run headless? */
   headless: boolean
   /** loaded specifications */
@@ -225,7 +223,6 @@ export const loadSpecsFromVersions = async (
     baseUrl,
     webUrl,
     specs,
-    lookerUrl: url,
     headless,
     fetchError,
   }
