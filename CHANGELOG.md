@@ -1,5 +1,23 @@
 # Changelog
 
+## [1.12.0](https://www.github.com/looker-open-source/sdk-codegen/compare/sdk-codegen-all-v1.11.0...sdk-codegen-all-v1.12.0) (2021-07-30)
+
+
+### Features
+
+* add 2 Python examples (pause/copy schedules, kill queries) ([#757](https://www.github.com/looker-open-source/sdk-codegen/issues/757)) ([787eeeb](https://www.github.com/looker-open-source/sdk-codegen/commit/787eeeb16d34dc27af01deef40fd69e175186f65))
+* adding python example for folder permission access ([#758](https://www.github.com/looker-open-source/sdk-codegen/issues/758)) ([21e52df](https://www.github.com/looker-open-source/sdk-codegen/commit/21e52df573fcedab65449b3554d4f35ddee503d3))
+* python barebones schedule plan example ([#763](https://www.github.com/looker-open-source/sdk-codegen/issues/763)) ([57cd05b](https://www.github.com/looker-open-source/sdk-codegen/commit/57cd05b2bc6b0427bb72eca57d91a0435de3785c))
+
+
+### Bug Fixes
+
+* dev portal apix tweaks ([#760](https://www.github.com/looker-open-source/sdk-codegen/issues/760)) ([6e937f4](https://www.github.com/looker-open-source/sdk-codegen/commit/6e937f4778457021dd739e849e209ad4de7bb450))
+* improved writeable type support ([#766](https://www.github.com/looker-open-source/sdk-codegen/issues/766)) ([be91bd8](https://www.github.com/looker-open-source/sdk-codegen/commit/be91bd8e772f9a64c47486b317f1ac1f6ef14327))
+* remove unused net/url import from go ([#767](https://www.github.com/looker-open-source/sdk-codegen/issues/767)) ([35d912c](https://www.github.com/looker-open-source/sdk-codegen/commit/35d912c1e31e5817a2b6a81084753a66a4860338)), closes [#765](https://www.github.com/looker-open-source/sdk-codegen/issues/765)
+* support response observer chaining ([025618c](https://www.github.com/looker-open-source/sdk-codegen/commit/025618c806efc1664b4f573248ad5a64d6cee3e3))
+* uses consistent heading text ([#761](https://www.github.com/looker-open-source/sdk-codegen/issues/761)) ([2e308ec](https://www.github.com/looker-open-source/sdk-codegen/commit/2e308ec1c6b4f181be12dda806955f8913336234))
+
 ## [1.11.0](https://www.github.com/looker-open-source/sdk-codegen/compare/sdk-codegen-all-v1.10.1...sdk-codegen-all-v1.11.0) (2021-07-15)
 
 
