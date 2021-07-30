@@ -127,7 +127,7 @@ export interface ILoadedSpecs {
 export const getUrl = async (url: string) => {
   const settings = {
     ...DefaultSettings(),
-    ...{ base_url: url, verify_ssl: false, headers: { mode: 'cors' } },
+    ...{ base_url: url, verify_ssl: false },
   }
   const xp = new BrowserTransport(settings)
   const response = await xp.rawRequest('GET', url)
