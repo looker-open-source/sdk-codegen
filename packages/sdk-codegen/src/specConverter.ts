@@ -195,6 +195,8 @@ export interface ILookerVersions {
   supported_versions: ISpecItem[]
   /** API server url */
   api_server_url: string
+  /** Web server url */
+  web_server_url: string
 }
 
 // TODO this work was duplicated in API Explorer. Need to merge and use one version.

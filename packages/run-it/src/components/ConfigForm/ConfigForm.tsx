@@ -118,8 +118,8 @@ export const ConfigForm: FC<ConfigFormProps> = ({
     e.preventDefault()
     try {
       updateFields('fetchError', '')
-      const { baseUrl } = await loadSpecsFromVersions(
-        `${fields.lookerUrl}/versions`
+      const { webUrl, baseUrl } = await loadSpecsFromVersions(
+        `${fields.lookerUrl}/api/4.0/versions`
       )
       updateFields('baseUrl', baseUrl)
       await configurator.removeStorage(RunItConfigKey)

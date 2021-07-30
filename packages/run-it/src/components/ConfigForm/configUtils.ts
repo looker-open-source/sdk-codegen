@@ -108,10 +108,14 @@ export const validateUrl = (url: string) => {
 }
 
 export interface ILoadedSpecs {
-  /** apiServerUrl */
+  /** API server url */
   baseUrl: string
+  /** web server url */
+  webUrl: string
   /** /versions server url */
   lookerUrl: string
+  /** should APIX run headless? */
+  headless: boolean
   /** loaded specifications */
   specs: SpecList
   /** communication errors */
@@ -167,6 +171,10 @@ export const loadSpecApi = async (spec: SpecItem) => {
   return spec.api
 }
 
+export interface IAPIXConfig extends ILookerVersions {
+  headless?: boolean
+}
+
 /**
  * Load versions payload and retrieve all supported specs
  *
@@ -184,15 +192,21 @@ export const loadSpecsFromVersions = async (
   let fetchError = ''
   let specs: SpecList = {}
   let baseUrl = ''
+  let webUrl = ''
+  let headless = false
   try {
     if (!content) {
       content = await getUrl(url)
     }
     const versions = (
       typeof content === 'string' ? JSON.parse(content) : content
-    ) as ILookerVersions
+    ) as IAPIXConfig
     const origin = (window as any).location.origin
     baseUrl = versions.api_server_url
+    webUrl = versions.web_server_url
+    if (versions.headless !== undefined) {
+      headless = versions.headless
+    }
     const fetchSpec = async (spec: SpecItem) => {
       if (spec.specURL) {
         spec.specURL = fullify(spec.specURL, origin)
@@ -209,8 +223,10 @@ export const loadSpecsFromVersions = async (
 
   return {
     baseUrl,
+    webUrl,
     specs,
     lookerUrl: url,
+    headless,
     fetchError,
   }
 }

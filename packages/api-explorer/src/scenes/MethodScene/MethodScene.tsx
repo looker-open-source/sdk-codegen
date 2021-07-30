@@ -92,7 +92,6 @@ export const MethodScene: FC<DocMethodProps> = ({ api }) => {
     </RunItButton>
   )
 
-  console.log({ sdk, value })
   return (
     <>
       <ApixSection>
