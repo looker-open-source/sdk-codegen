@@ -48,6 +48,7 @@ import {
   ApiConfigMap,
   pageAll,
   pager,
+  IRawResponse,
 } from '@looker/sdk-rtl'
 import {
   NodeSettings,
@@ -645,7 +646,7 @@ describe('LookerNodeSDK', () => {
     })
   })
 
-  // TODO remove skip after Looker 21.12 is available
+  // TODO remove skip when 21.12 is available
   describe.skip('paging alpha', () => {
     describe('pager', () => {
       test(
@@ -659,6 +660,23 @@ describe('LookerNodeSDK', () => {
           )
           const full = await sdk.ok(paged.getRel('first', all.length))
           expect(full).toEqual(all)
+        },
+        testTimeout
+      )
+      test(
+        'observers can be chained',
+        async () => {
+          const sdk = new LookerSDK(session)
+          const limit = 2
+          let hooked = false
+          const hook = (response: IRawResponse) => {
+            hooked = true
+            return response
+          }
+          sdk.authSession.transport.observer = hook
+          await pager(sdk, () => sdk.search_dashboards({ fields: 'id', limit }))
+          sdk.authSession.transport.observer = undefined
+          expect(hooked).toEqual(true)
         },
         testTimeout
       )

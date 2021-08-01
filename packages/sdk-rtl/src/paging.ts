@@ -250,6 +250,10 @@ export class Paging<TSuccess extends ILength, TError>
     try {
       // Capture the raw request for header parsing
       this.transport.observer = (response: IRawResponse) => {
+        if (saved) {
+          // Chain the observer
+          response = saved(response)
+        }
         raw = response
         return response
       }

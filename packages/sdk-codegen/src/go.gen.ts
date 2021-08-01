@@ -375,16 +375,26 @@ func NewLookerSDK(session *rtl.AuthSession) *LookerSDK {
   }
 
   modelsPrologue(_indent: string) {
-    return `
-// ${this.warnEditing()}
+    let goImport = `
+import (
+  "github.com/looker-open-source/sdk-codegen/go/rtl"
+  "time"
+)`
 
-package ${this.packageName}
-
+    // v3 still uses url.URL
+    if (this.packageName === 'v3') {
+      goImport = `
 import (
   "github.com/looker-open-source/sdk-codegen/go/rtl"
   "net/url"
   "time"
-)
+)`
+    }
+    return `
+// ${this.warnEditing()}
+
+package ${this.packageName}
+${goImport}
 `
   }
 
