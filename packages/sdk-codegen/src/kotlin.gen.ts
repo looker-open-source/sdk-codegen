@@ -117,7 +117,6 @@ class ${this.sdkClassName()}Stream(authSession: AuthSession) : APIMethods(authSe
 
 package com.looker.sdk${this.apiNamespace()}
 
-import com.fasterxml.jackson.annotation.JsonProperty
 import com.looker.rtl.*
 import java.io.Serializable
 import java.util.*
@@ -156,15 +155,7 @@ import java.util.*
   declareProperty(indent: string, property: IProperty) {
     const optional = !property.required ? '? = null' : ''
     const type = this.typeMap(property.type)
-    // Bypass jackson serialization bug https://stackoverflow.com/questions/32270422/jackson-renames-primitive-boolean-field-by-removing-is
-    const attr =
-      property.hasSpecialNeeds ||
-      property.jsonName.startsWith('is') ||
-      property.jsonName.startsWith('get') ||
-      property.jsonName.startsWith('set')
-        ? `${indent}@get:JsonProperty("${property.jsonName}")\n${indent}@param:JsonProperty("${property.jsonName}")\n`
-        : ''
-    const result = `${attr}${indent}var ${property.name}: ${type.name}${optional}`
+    const result = `${indent}var ${property.name}: ${type.name}${optional}`
     return result
   }
 

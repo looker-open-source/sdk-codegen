@@ -25,7 +25,7 @@
  */
 
 /**
- * 413 API methods
+ * 415 API methods
  */
 
 
@@ -1738,6 +1738,25 @@ class LookerSDKStream(authSession: AuthSession) : APIMethods(authSession) {
 
     ) : SDKResponse {
             return this.get<ByteArray>("/mobile/settings", mapOf())
+    }
+
+
+    /**
+     * ### Configure Looker Settings
+     *
+     * Available settings are:
+     *  - extension_framework_enabled
+     *  - marketplace_auto_install_enabled
+     *  - marketplace_enabled
+     *
+     * @param {Setting} body
+     *
+     * PATCH /setting -> ByteArray
+     */
+    fun set_setting(
+        body: Setting
+    ) : SDKResponse {
+            return this.patch<ByteArray>("/setting", mapOf(), body)
     }
 
 
@@ -4743,14 +4762,20 @@ class LookerSDKStream(authSession: AuthSession) : APIMethods(authSession) {
      * ### Get information about all lookml models.
      *
      * @param {String} fields Requested fields.
+     * @param {Long} limit Number of results to return. (can be used with offset)
+     * @param {Long} offset Number of results to skip before returning any. (Defaults to 0 if not set when limit is used)
      *
      * GET /lookml_models -> ByteArray
      */
     @JvmOverloads fun all_lookml_models(
-        fields: String? = null
+        fields: String? = null,
+        limit: Long? = null,
+        offset: Long? = null
     ) : SDKResponse {
             return this.get<ByteArray>("/lookml_models", 
-                mapOf("fields" to fields))
+                mapOf("fields" to fields,
+                     "limit" to limit,
+                     "offset" to offset))
     }
 
 
@@ -7932,6 +7957,65 @@ class LookerSDKStream(authSession: AuthSession) : APIMethods(authSession) {
 
 
     /**
+     * ### Search email credentials
+     *
+     * Returns all credentials_email records that match the given search criteria.
+     *
+     * If multiple search params are given and `filter_or` is FALSE or not specified,
+     * search params are combined in a logical AND operation.
+     * Only rows that match *all* search param criteria will be returned.
+     *
+     * If `filter_or` is TRUE, multiple search params are combined in a logical OR operation.
+     * Results will include rows that match **any** of the search criteria.
+     *
+     * String search params use case-insensitive matching.
+     * String search params can contain `%` and '_' as SQL LIKE pattern match wildcard expressions.
+     * example="dan%" will match "danger" and "Danzig" but not "David"
+     * example="D_m%" will match "Damage" and "dump"
+     *
+     * Integer search params can accept a single value or a comma separated list of values. The multiple
+     * values will be combined under a logical OR operation - results will match at least one of
+     * the given values.
+     *
+     * Most search params can accept "IS NULL" and "NOT NULL" as special expressions to match
+     * or exclude (respectively) rows where the column is null.
+     *
+     * Boolean search params accept only "true" and "false" as values.
+     *
+     * @param {String} fields Requested fields.
+     * @param {Long} limit Number of results to return (used with `offset`).
+     * @param {Long} offset Number of results to skip before returning any (used with `limit`).
+     * @param {String} sorts Fields to sort by.
+     * @param {Long} id Match credentials_email id.
+     * @param {String} email Match credentials_email email.
+     * @param {String} emails Find credentials_email that match given emails.
+     * @param {Boolean} filter_or Combine given search criteria in a boolean OR expression.
+     *
+     * GET /credentials_email/search -> ByteArray
+     */
+    @JvmOverloads fun search_credentials_email(
+        fields: String? = null,
+        limit: Long? = null,
+        offset: Long? = null,
+        sorts: String? = null,
+        id: Long? = null,
+        email: String? = null,
+        emails: String? = null,
+        filter_or: Boolean? = null
+    ) : SDKResponse {
+            return this.get<ByteArray>("/credentials_email/search", 
+                mapOf("fields" to fields,
+                     "limit" to limit,
+                     "offset" to offset,
+                     "sorts" to sorts,
+                     "id" to id,
+                     "email" to email,
+                     "emails" to emails,
+                     "filter_or" to filter_or))
+    }
+
+
+    /**
      * ### Get information about the current user; i.e. the user account currently calling the API.
      *
      * @param {String} fields Requested fields.
@@ -7950,8 +8034,10 @@ class LookerSDKStream(authSession: AuthSession) : APIMethods(authSession) {
      * ### Get information about all users.
      *
      * @param {String} fields Requested fields.
-     * @param {Long} page Requested page.
-     * @param {Long} per_page Results per page.
+     * @param {Long} page DEPRECATED. Use limit and offset instead. Return only page N of paginated results
+     * @param {Long} per_page DEPRECATED. Use limit and offset instead. Return N rows of data per page
+     * @param {Long} limit Number of results to return. (used with offset and takes priority over page and per_page)
+     * @param {Long} offset Number of results to skip before returning any. (used with limit and takes priority over page and per_page)
      * @param {String} sorts Fields to sort by.
      * @param {DelimArray<Long>} ids Optional list of ids to get specific users.
      *
@@ -7961,6 +8047,8 @@ class LookerSDKStream(authSession: AuthSession) : APIMethods(authSession) {
         fields: String? = null,
         page: Long? = null,
         per_page: Long? = null,
+        limit: Long? = null,
+        offset: Long? = null,
         sorts: String? = null,
         ids: DelimArray<Long>? = null
     ) : SDKResponse {
@@ -7968,6 +8056,8 @@ class LookerSDKStream(authSession: AuthSession) : APIMethods(authSession) {
                 mapOf("fields" to fields,
                      "page" to page,
                      "per_page" to per_page,
+                     "limit" to limit,
+                     "offset" to offset,
                      "sorts" to sorts,
                      "ids" to ids))
     }
@@ -8023,8 +8113,10 @@ class LookerSDKStream(authSession: AuthSession) : APIMethods(authSession) {
      * names of other users who are members of the same group as the user.
      *
      * @param {String} fields Include only these fields in the response
-     * @param {Long} page Return only page N of paginated results
-     * @param {Long} per_page Return N rows of data per page
+     * @param {Long} page DEPRECATED. Use limit and offset instead. Return only page N of paginated results
+     * @param {Long} per_page DEPRECATED. Use limit and offset instead. Return N rows of data per page
+     * @param {Long} limit Number of results to return. (used with offset and takes priority over page and per_page)
+     * @param {Long} offset Number of results to skip before returning any. (used with limit and takes priority over page and per_page)
      * @param {String} sorts Fields to sort by.
      * @param {String} id Match User Id.
      * @param {String} first_name Match First name.
@@ -8043,6 +8135,8 @@ class LookerSDKStream(authSession: AuthSession) : APIMethods(authSession) {
         fields: String? = null,
         page: Long? = null,
         per_page: Long? = null,
+        limit: Long? = null,
+        offset: Long? = null,
         sorts: String? = null,
         id: String? = null,
         first_name: String? = null,
@@ -8059,6 +8153,8 @@ class LookerSDKStream(authSession: AuthSession) : APIMethods(authSession) {
                 mapOf("fields" to fields,
                      "page" to page,
                      "per_page" to per_page,
+                     "limit" to limit,
+                     "offset" to offset,
                      "sorts" to sorts,
                      "id" to id,
                      "first_name" to first_name,
@@ -8083,8 +8179,10 @@ class LookerSDKStream(authSession: AuthSession) : APIMethods(authSession) {
      *
      * @param {String} pattern Pattern to match
      * @param {String} fields Include only these fields in the response
-     * @param {Long} page Return only page N of paginated results
-     * @param {Long} per_page Return N rows of data per page
+     * @param {Long} page DEPRECATED. Use limit and offset instead. Return only page N of paginated results
+     * @param {Long} per_page DEPRECATED. Use limit and offset instead. Return N rows of data per page
+     * @param {Long} limit Number of results to return. (used with offset and takes priority over page and per_page)
+     * @param {Long} offset Number of results to skip before returning any. (used with limit and takes priority over page and per_page)
      * @param {String} sorts Fields to sort by
      * @param {Long} id Match User Id
      * @param {String} first_name Match First name
@@ -8100,6 +8198,8 @@ class LookerSDKStream(authSession: AuthSession) : APIMethods(authSession) {
         fields: String? = null,
         page: Long? = null,
         per_page: Long? = null,
+        limit: Long? = null,
+        offset: Long? = null,
         sorts: String? = null,
         id: Long? = null,
         first_name: String? = null,
@@ -8113,6 +8213,8 @@ class LookerSDKStream(authSession: AuthSession) : APIMethods(authSession) {
                 mapOf("fields" to fields,
                      "page" to page,
                      "per_page" to per_page,
+                     "limit" to limit,
+                     "offset" to offset,
                      "sorts" to sorts,
                      "id" to id,
                      "first_name" to first_name,

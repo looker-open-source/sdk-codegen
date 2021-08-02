@@ -25,7 +25,7 @@
  */
 
 /**
- * 284 API models: 211 Spec, 0 Request, 56 Write, 17 Enum
+ * 286 API models: 213 Spec, 0 Request, 56 Write, 17 Enum
  */
 
 
@@ -33,7 +33,6 @@
 
 package com.looker.sdk
 
-import com.fasterxml.jackson.annotation.JsonProperty
 import com.looker.rtl.*
 import java.io.Serializable
 import java.util.*
@@ -761,8 +760,6 @@ data class CredentialsApi3 (
     var id: Long? = null,
     var client_id: String? = null,
     var created_at: String? = null,
-    @get:JsonProperty("is_disabled")
-    @param:JsonProperty("is_disabled")
     var is_disabled: Boolean? = null,
     var type: String? = null,
     var url: String? = null
@@ -785,8 +782,31 @@ data class CredentialsEmail (
     var created_at: String? = null,
     var email: String? = null,
     var forced_password_reset_at_next_login: Boolean? = null,
-    @get:JsonProperty("is_disabled")
-    @param:JsonProperty("is_disabled")
+    var is_disabled: Boolean? = null,
+    var logged_in_at: String? = null,
+    var password_reset_url: String? = null,
+    var type: String? = null,
+    var url: String? = null,
+    var user_url: String? = null
+) : Serializable
+
+/**
+ * @property can Operations the current user is able to perform on this object (read-only)
+ * @property created_at Timestamp for the creation of this credential (read-only)
+ * @property email EMail address used for user login
+ * @property forced_password_reset_at_next_login Force the user to change their password upon their next login
+ * @property is_disabled Has this credential been disabled? (read-only)
+ * @property logged_in_at Timestamp for most recent login using credential (read-only)
+ * @property password_reset_url Url with one-time use secret token that the user can use to reset password (read-only)
+ * @property type Short name for the type of this kind of credential (read-only)
+ * @property url Link to get this item (read-only)
+ * @property user_url Link to get this user (read-only)
+ */
+data class CredentialsEmailSearch (
+    var can: Map<String,Boolean>? = null,
+    var created_at: String? = null,
+    var email: String? = null,
+    var forced_password_reset_at_next_login: Boolean? = null,
     var is_disabled: Boolean? = null,
     var logged_in_at: String? = null,
     var password_reset_url: String? = null,
@@ -812,8 +832,6 @@ data class CredentialsEmbed (
     var external_group_id: String? = null,
     var external_user_id: String? = null,
     var id: Long? = null,
-    @get:JsonProperty("is_disabled")
-    @param:JsonProperty("is_disabled")
     var is_disabled: Boolean? = null,
     var logged_in_at: String? = null,
     var type: String? = null,
@@ -837,8 +855,6 @@ data class CredentialsGoogle (
     var domain: String? = null,
     var email: String? = null,
     var google_user_id: String? = null,
-    @get:JsonProperty("is_disabled")
-    @param:JsonProperty("is_disabled")
     var is_disabled: Boolean? = null,
     var logged_in_at: String? = null,
     var type: String? = null,
@@ -860,8 +876,6 @@ data class CredentialsLDAP (
     var can: Map<String,Boolean>? = null,
     var created_at: String? = null,
     var email: String? = null,
-    @get:JsonProperty("is_disabled")
-    @param:JsonProperty("is_disabled")
     var is_disabled: Boolean? = null,
     var ldap_dn: String? = null,
     var ldap_id: String? = null,
@@ -885,8 +899,6 @@ data class CredentialsLookerOpenid (
     var can: Map<String,Boolean>? = null,
     var created_at: String? = null,
     var email: String? = null,
-    @get:JsonProperty("is_disabled")
-    @param:JsonProperty("is_disabled")
     var is_disabled: Boolean? = null,
     var logged_in_at: String? = null,
     var logged_in_ip: String? = null,
@@ -909,8 +921,6 @@ data class CredentialsOIDC (
     var can: Map<String,Boolean>? = null,
     var created_at: String? = null,
     var email: String? = null,
-    @get:JsonProperty("is_disabled")
-    @param:JsonProperty("is_disabled")
     var is_disabled: Boolean? = null,
     var logged_in_at: String? = null,
     var oidc_user_id: String? = null,
@@ -932,8 +942,6 @@ data class CredentialsSaml (
     var can: Map<String,Boolean>? = null,
     var created_at: String? = null,
     var email: String? = null,
-    @get:JsonProperty("is_disabled")
-    @param:JsonProperty("is_disabled")
     var is_disabled: Boolean? = null,
     var logged_in_at: String? = null,
     var saml_user_id: String? = null,
@@ -954,8 +962,6 @@ data class CredentialsSaml (
 data class CredentialsTotp (
     var can: Map<String,Boolean>? = null,
     var created_at: String? = null,
-    @get:JsonProperty("is_disabled")
-    @param:JsonProperty("is_disabled")
     var is_disabled: Boolean? = null,
     var type: String? = null,
     var verified: Boolean? = null,
@@ -1648,8 +1654,6 @@ data class DialectInfoOptions (
  * @property is_enabled Whether or not digest emails are enabled
  */
 data class DigestEmails (
-    @get:JsonProperty("is_enabled")
-    @param:JsonProperty("is_enabled")
     var is_enabled: Boolean? = null
 ) : Serializable
 
@@ -1787,26 +1791,12 @@ data class Folder (
     var creator_id: Long? = null,
     var child_count: Long? = null,
     var external_id: String? = null,
-    @get:JsonProperty("is_embed")
-    @param:JsonProperty("is_embed")
     var is_embed: Boolean? = null,
-    @get:JsonProperty("is_embed_shared_root")
-    @param:JsonProperty("is_embed_shared_root")
     var is_embed_shared_root: Boolean? = null,
-    @get:JsonProperty("is_embed_users_root")
-    @param:JsonProperty("is_embed_users_root")
     var is_embed_users_root: Boolean? = null,
-    @get:JsonProperty("is_personal")
-    @param:JsonProperty("is_personal")
     var is_personal: Boolean? = null,
-    @get:JsonProperty("is_personal_descendant")
-    @param:JsonProperty("is_personal_descendant")
     var is_personal_descendant: Boolean? = null,
-    @get:JsonProperty("is_shared_root")
-    @param:JsonProperty("is_shared_root")
     var is_shared_root: Boolean? = null,
-    @get:JsonProperty("is_users_root")
-    @param:JsonProperty("is_users_root")
     var is_users_root: Boolean? = null,
     var can: Map<String,Boolean>? = null,
     var dashboards: Array<DashboardBase>? = null,
@@ -1840,26 +1830,12 @@ data class FolderBase (
     var creator_id: Long? = null,
     var child_count: Long? = null,
     var external_id: String? = null,
-    @get:JsonProperty("is_embed")
-    @param:JsonProperty("is_embed")
     var is_embed: Boolean? = null,
-    @get:JsonProperty("is_embed_shared_root")
-    @param:JsonProperty("is_embed_shared_root")
     var is_embed_shared_root: Boolean? = null,
-    @get:JsonProperty("is_embed_users_root")
-    @param:JsonProperty("is_embed_users_root")
     var is_embed_users_root: Boolean? = null,
-    @get:JsonProperty("is_personal")
-    @param:JsonProperty("is_personal")
     var is_personal: Boolean? = null,
-    @get:JsonProperty("is_personal_descendant")
-    @param:JsonProperty("is_personal_descendant")
     var is_personal_descendant: Boolean? = null,
-    @get:JsonProperty("is_shared_root")
-    @param:JsonProperty("is_shared_root")
     var is_shared_root: Boolean? = null,
-    @get:JsonProperty("is_users_root")
-    @param:JsonProperty("is_users_root")
     var is_users_root: Boolean? = null,
     var can: Map<String,Boolean>? = null
 ) : Serializable
@@ -1901,14 +1877,8 @@ data class GitBranch (
     var owner_name: String? = null,
     var readonly: Boolean? = null,
     var personal: Boolean? = null,
-    @get:JsonProperty("is_local")
-    @param:JsonProperty("is_local")
     var is_local: Boolean? = null,
-    @get:JsonProperty("is_remote")
-    @param:JsonProperty("is_remote")
     var is_remote: Boolean? = null,
-    @get:JsonProperty("is_production")
-    @param:JsonProperty("is_production")
     var is_production: Boolean? = null,
     var ahead_count: Long? = null,
     var behind_count: Long? = null,
@@ -2131,8 +2101,6 @@ data class HomepageSection (
     var homepage_id: Long? = null,
     var homepage_items: Array<HomepageItem>? = null,
     var id: Long? = null,
-    @get:JsonProperty("is_header")
-    @param:JsonProperty("is_header")
     var is_header: Boolean? = null,
     var item_order: Array<Long>? = null,
     var title: String? = null,
@@ -2151,8 +2119,6 @@ data class ImportedProject (
     var name: String? = null,
     var url: String? = null,
     var ref: String? = null,
-    @get:JsonProperty("is_remote")
-    @param:JsonProperty("is_remote")
     var is_remote: Boolean? = null
 ) : Serializable
 
@@ -2361,8 +2327,6 @@ data class LDAPConfig (
     var merge_new_users_by_email: Boolean? = null,
     var modified_at: String? = null,
     var modified_by: String? = null,
-    @get:JsonProperty("set_roles_from_groups")
-    @param:JsonProperty("set_roles_from_groups")
     var set_roles_from_groups: Boolean? = null,
     var test_ldap_password: String? = null,
     var test_ldap_user: String? = null,
@@ -2402,8 +2366,6 @@ data class LDAPConfigTestIssue (
  */
 data class LDAPConfigTestResult (
     var details: String? = null,
-    @get:JsonProperty("issues")
-    @param:JsonProperty("issues")
     var issues: Array<LDAPConfigTestIssue>? = null,
     var message: String? = null,
     var status: String? = null,
@@ -2605,8 +2567,6 @@ data class Look (
     var favorite_count: Long? = null,
     var google_spreadsheet_formula: String? = null,
     var image_embed_url: String? = null,
-    @get:JsonProperty("is_run_on_load")
-    @param:JsonProperty("is_run_on_load")
     var is_run_on_load: Boolean? = null,
     var last_accessed_at: Date? = null,
     var last_updater_id: Long? = null,
@@ -2731,8 +2691,6 @@ data class LookmlModelExplore (
     var always_filter: Array<LookmlModelExploreAlwaysFilter>? = null,
     var conditionally_filter: Array<LookmlModelExploreConditionallyFilter>? = null,
     var index_fields: Array<String>? = null,
-    @get:JsonProperty("sets")
-    @param:JsonProperty("sets")
     var sets: Array<LookmlModelExploreSet>? = null,
     var tags: Array<String>? = null,
     var errors: Array<LookmlModelExploreError>? = null,
@@ -2862,17 +2820,9 @@ data class LookmlModelExploreField (
     var fiscal_month_offset: Long? = null,
     var has_allowed_values: Boolean? = null,
     var hidden: Boolean? = null,
-    @get:JsonProperty("is_filter")
-    @param:JsonProperty("is_filter")
     var is_filter: Boolean? = null,
-    @get:JsonProperty("is_fiscal")
-    @param:JsonProperty("is_fiscal")
     var is_fiscal: Boolean? = null,
-    @get:JsonProperty("is_numeric")
-    @param:JsonProperty("is_numeric")
     var is_numeric: Boolean? = null,
-    @get:JsonProperty("is_timeframe")
-    @param:JsonProperty("is_timeframe")
     var is_timeframe: Boolean? = null,
     var can_time_filter: Boolean? = null,
     var time_interval: LookmlModelExploreFieldTimeInterval? = null,
@@ -3149,8 +3099,6 @@ data class LookWithDashboards (
     var favorite_count: Long? = null,
     var google_spreadsheet_formula: String? = null,
     var image_embed_url: String? = null,
-    @get:JsonProperty("is_run_on_load")
-    @param:JsonProperty("is_run_on_load")
     var is_run_on_load: Boolean? = null,
     var last_accessed_at: Date? = null,
     var last_updater_id: Long? = null,
@@ -3219,8 +3167,6 @@ data class LookWithQuery (
     var favorite_count: Long? = null,
     var google_spreadsheet_formula: String? = null,
     var image_embed_url: String? = null,
-    @get:JsonProperty("is_run_on_load")
-    @param:JsonProperty("is_run_on_load")
     var is_run_on_load: Boolean? = null,
     var last_accessed_at: Date? = null,
     var last_updater_id: Long? = null,
@@ -3462,16 +3408,12 @@ data class OIDCConfig (
     var groups_attribute: String? = null,
     var groups_with_role_ids: Array<OIDCGroupWrite>? = null,
     var identifier: String? = null,
-    @get:JsonProperty("issuer")
-    @param:JsonProperty("issuer")
     var issuer: String? = null,
     var modified_at: Date? = null,
     var modified_by: Long? = null,
     var new_user_migration_types: String? = null,
     var scopes: Array<String>? = null,
     var secret: String? = null,
-    @get:JsonProperty("set_roles_from_groups")
-    @param:JsonProperty("set_roles_from_groups")
     var set_roles_from_groups: Boolean? = null,
     var test_slug: String? = null,
     var token_endpoint: String? = null,
@@ -3639,8 +3581,6 @@ data class Project (
     var validation_required: Boolean? = null,
     var git_release_mgmt_enabled: Boolean? = null,
     var allow_warnings: Boolean? = null,
-    @get:JsonProperty("is_example")
-    @param:JsonProperty("is_example")
     var is_example: Boolean? = null,
     var dependency_status: String? = null
 ) : Serializable
@@ -3917,8 +3857,6 @@ data class RepositoryCredential (
     var git_username: String? = null,
     var git_password: String? = null,
     var ssh_public_key: String? = null,
-    @get:JsonProperty("is_configured")
-    @param:JsonProperty("is_configured")
     var is_configured: Boolean? = null
 ) : Serializable
 
@@ -4135,8 +4073,6 @@ data class SamlConfig (
     var default_new_user_groups: Array<Group>? = null,
     var default_new_user_role_ids: Array<Long>? = null,
     var default_new_user_group_ids: Array<Long>? = null,
-    @get:JsonProperty("set_roles_from_groups")
-    @param:JsonProperty("set_roles_from_groups")
     var set_roles_from_groups: Boolean? = null,
     var groups_attribute: String? = null,
     var groups: Array<SamlGroupRead>? = null,
@@ -4332,8 +4268,6 @@ data class ScheduledPlanDestination (
  */
 data class Schema (
     var name: String? = null,
-    @get:JsonProperty("is_default")
-    @param:JsonProperty("is_default")
     var is_default: Boolean? = null
 ) : Serializable
 
@@ -4397,8 +4331,6 @@ data class SchemaTable (
  */
 data class SchemaTables (
     var name: String? = null,
-    @get:JsonProperty("is_default")
-    @param:JsonProperty("is_default")
     var is_default: Boolean? = null,
     var tables: Array<SchemaTable>? = null
 ) : Serializable
@@ -4453,6 +4385,19 @@ data class SessionConfig (
     var unlimited_sessions_per_user: Boolean? = null,
     var use_inactivity_based_logout: Boolean? = null,
     var track_session_location: Boolean? = null
+) : Serializable
+
+/**
+ * WARNING: no writeable properties found for POST, PUT, or PATCH
+ *
+ * @property extension_framework_enabled Toggle extension framework on or off (read-only)
+ * @property marketplace_auto_install_enabled Toggle marketplace auto install on or off (read-only)
+ * @property marketplace_enabled Toggle marketplace on or off (read-only)
+ */
+data class Setting (
+    var extension_framework_enabled: Boolean? = null,
+    var marketplace_auto_install_enabled: Boolean? = null,
+    var marketplace_enabled: Boolean? = null
 ) : Serializable
 
 /**
@@ -4637,8 +4582,6 @@ data class Theme (
     var end_at: Date? = null,
     var id: Long? = null,
     var name: String? = null,
-    @get:JsonProperty("settings")
-    @param:JsonProperty("settings")
     var settings: ThemeSettings? = null
 ) : Serializable
 
@@ -4767,8 +4710,6 @@ data class User (
     var group_ids: Array<Long>? = null,
     var home_folder_id: String? = null,
     var id: Long? = null,
-    @get:JsonProperty("is_disabled")
-    @param:JsonProperty("is_disabled")
     var is_disabled: Boolean? = null,
     var last_name: String? = null,
     var locale: String? = null,
@@ -4808,11 +4749,7 @@ data class UserAttribute (
     var label: String,
     var type: String,
     var default_value: String? = null,
-    @get:JsonProperty("is_system")
-    @param:JsonProperty("is_system")
     var is_system: Boolean? = null,
-    @get:JsonProperty("is_permanent")
-    @param:JsonProperty("is_permanent")
     var is_permanent: Boolean? = null,
     var value_is_hidden: Boolean? = null,
     var user_can_view: Boolean? = null,
@@ -5008,8 +4945,6 @@ data class WhitelabelConfiguration (
     var allow_looker_mentions: Boolean? = null,
     var allow_looker_links: Boolean? = null,
     var custom_welcome_email_advanced: Boolean? = null,
-    @get:JsonProperty("setup_mentions")
-    @param:JsonProperty("setup_mentions")
     var setup_mentions: Boolean? = null,
     var alerts_logo: Boolean? = null,
     var alerts_links: Boolean? = null,
@@ -5700,8 +5635,6 @@ data class WriteLDAPConfig (
     var groups_user_attribute: String? = null,
     var groups_with_role_ids: Array<LDAPGroupWrite>? = null,
     var merge_new_users_by_email: Boolean? = null,
-    @get:JsonProperty("set_roles_from_groups")
-    @param:JsonProperty("set_roles_from_groups")
     var set_roles_from_groups: Boolean? = null,
     var test_ldap_password: String? = null,
     var test_ldap_user: String? = null,
@@ -5777,8 +5710,6 @@ data class WriteLookWithQuery (
     var user_id: Long? = null,
     var deleted: Boolean? = null,
     var description: String? = null,
-    @get:JsonProperty("is_run_on_load")
-    @param:JsonProperty("is_run_on_load")
     var is_run_on_load: Boolean? = null,
     var public: Boolean? = null,
     var query_id: Long? = null,
@@ -5879,14 +5810,10 @@ data class WriteOIDCConfig (
     var groups_attribute: String? = null,
     var groups_with_role_ids: Array<OIDCGroupWrite>? = null,
     var identifier: String? = null,
-    @get:JsonProperty("issuer")
-    @param:JsonProperty("issuer")
     var issuer: String? = null,
     var new_user_migration_types: String? = null,
     var scopes: Array<String>? = null,
     var secret: String? = null,
-    @get:JsonProperty("set_roles_from_groups")
-    @param:JsonProperty("set_roles_from_groups")
     var set_roles_from_groups: Boolean? = null,
     var token_endpoint: String? = null,
     var user_attribute_map_email: String? = null,
@@ -6105,8 +6032,6 @@ data class WriteSamlConfig (
     var alternate_email_login_allowed: Boolean? = null,
     var default_new_user_role_ids: Array<Long>? = null,
     var default_new_user_group_ids: Array<Long>? = null,
-    @get:JsonProperty("set_roles_from_groups")
-    @param:JsonProperty("set_roles_from_groups")
     var set_roles_from_groups: Boolean? = null,
     var groups_attribute: String? = null,
     var groups_with_role_ids: Array<SamlGroupWrite>? = null,
@@ -6241,8 +6166,6 @@ data class WriteTheme (
     var begin_at: Date? = null,
     var end_at: Date? = null,
     var name: String? = null,
-    @get:JsonProperty("settings")
-    @param:JsonProperty("settings")
     var settings: ThemeSettings? = null
 ) : Serializable
 
@@ -6264,8 +6187,6 @@ data class WriteUser (
     var credentials_email: WriteCredentialsEmail? = null,
     var first_name: String? = null,
     var home_folder_id: String? = null,
-    @get:JsonProperty("is_disabled")
-    @param:JsonProperty("is_disabled")
     var is_disabled: Boolean? = null,
     var last_name: String? = null,
     var locale: String? = null,
@@ -6335,8 +6256,6 @@ data class WriteWhitelabelConfiguration (
     var allow_looker_mentions: Boolean? = null,
     var allow_looker_links: Boolean? = null,
     var custom_welcome_email_advanced: Boolean? = null,
-    @get:JsonProperty("setup_mentions")
-    @param:JsonProperty("setup_mentions")
     var setup_mentions: Boolean? = null,
     var alerts_logo: Boolean? = null,
     var alerts_links: Boolean? = null,

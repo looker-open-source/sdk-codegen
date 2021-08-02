@@ -24,18 +24,18 @@
 
 package com.looker.rtl
 
-import com.fasterxml.jackson.annotation.JsonProperty
+import com.google.gson.annotations.SerializedName
 import com.looker.sdk.AccessToken
 import java.time.LocalDateTime
 
 data class AuthToken(
-    @JsonProperty("access_token")
+    @SerializedName("access_token")
     var accessToken: String = "", // TODO: Consider making this/these vals and using new objects instead of mutating
-    @JsonProperty("token_type")
+    @SerializedName("token_type")
     var tokenType: String = "",
-    @JsonProperty("expires_in")
+    @SerializedName("expires_in")
     var expiresIn: Long = 0L,
-    @JsonProperty("refresh_token")
+    @SerializedName("refresh_token")
     var refreshToken: String? = null
 ) {
 

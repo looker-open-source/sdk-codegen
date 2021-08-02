@@ -28,7 +28,8 @@ import com.google.gson.Gson
 import io.ktor.client.HttpClient
 import io.ktor.client.call.receive
 import io.ktor.client.engine.okhttp.OkHttp
-import io.ktor.client.features.json.JacksonSerializer
+import io.ktor.client.features.json.GsonSerializer
+import io.ktor.client.features.json.defaultSerializer
 import io.ktor.client.features.json.JsonFeature
 import io.ktor.client.request.HttpRequestBuilder
 import io.ktor.client.request.forms.FormDataContent
@@ -179,7 +180,7 @@ fun customClient(options: TransportOptions): HttpClient {
     // This construction loosely adapted from https://ktor.io/clients/http-client/engines.html#artifact-7
     return HttpClient(OkHttp) {
         install(JsonFeature) {
-            serializer = JacksonSerializer()
+            serializer = GsonSerializer()
         }
         engine {
             config {
@@ -336,12 +337,11 @@ class Transport(val options: TransportOptions) {
                 }
                 else -> {
                     // Request body
-//                    val gson = GsonBuilder().setDateFormat("yyyy-MM-dd'T'HH:mm:ssX").create()
-                    val gson = Gson()
-                    val jsonBody = gson.toJson(body)
+                    val json = defaultSerializer()
+                    val jsonBody = json.write(body)
 
                     builder.body = jsonBody
-                    headers["Content-Length"] = jsonBody.length.toString()
+                    headers["Content-Length"] = jsonBody.contentLength.toString()
                 }
             }
         }
