@@ -97,12 +97,7 @@ export const ExtensionApiExplorer: FC = () => {
     const sdk = extensionContext.core40SDK
     const [version, name] = spec.specURL.split('/').slice(-2)
     const content = await sdk.ok(sdk.api_spec(version, name))
-    // TODO switch this to just call const api = ApiModel.fromString(content) now
-    let json = JSON.parse(content)
-    // // TODO I think we can remove this this crazy step now that the api_spec endpoint is cleaner
-    // if (typeof json === 'string') {
-    //   json = JSON.parse(json)
-    // }
+    let json = typeof content === 'string' ? JSON.parse(content) : content
     json = upgradeSpecObject(json)
     const api = ApiModel.fromJson(json)
     return api
