@@ -25,7 +25,7 @@
  */
 
 /**
- * 335 API models: 211 Spec, 51 Request, 56 Write, 17 Enum
+ * 339 API models: 213 Spec, 53 Request, 56 Write, 17 Enum
  */
 
 import type { IDictionary, DelimArray } from '@looker/sdk-rtl'
@@ -1130,6 +1130,49 @@ export interface ICredentialsApi3 {
 }
 
 export interface ICredentialsEmail {
+  /**
+   * Operations the current user is able to perform on this object (read-only)
+   */
+  can?: IDictionary<boolean>
+  /**
+   * Timestamp for the creation of this credential (read-only)
+   */
+  created_at?: string
+  /**
+   * EMail address used for user login
+   */
+  email?: string
+  /**
+   * Force the user to change their password upon their next login
+   */
+  forced_password_reset_at_next_login?: boolean
+  /**
+   * Has this credential been disabled? (read-only)
+   */
+  is_disabled?: boolean
+  /**
+   * Timestamp for most recent login using credential (read-only)
+   */
+  logged_in_at?: string
+  /**
+   * Url with one-time use secret token that the user can use to reset password (read-only)
+   */
+  password_reset_url?: string
+  /**
+   * Short name for the type of this kind of credential (read-only)
+   */
+  type?: string
+  /**
+   * Link to get this item (read-only)
+   */
+  url?: string
+  /**
+   * Link to get this user (read-only)
+   */
+  user_url?: string
+}
+
+export interface ICredentialsEmailSearch {
   /**
    * Operations the current user is able to perform on this object (read-only)
    */
@@ -6348,6 +6391,24 @@ export interface IRequestAllIntegrations {
 }
 
 /**
+ * Dynamically generated request type for all_lookml_models
+ */
+export interface IRequestAllLookmlModels {
+  /**
+   * Requested fields.
+   */
+  fields?: string
+  /**
+   * Number of results to return. (can be used with offset)
+   */
+  limit?: number
+  /**
+   * Number of results to skip before returning any. (Defaults to 0 if not set when limit is used)
+   */
+  offset?: number
+}
+
+/**
  * Dynamically generated request type for all_roles
  */
 export interface IRequestAllRoles {
@@ -7275,6 +7336,44 @@ export interface IRequestSearchContentViews {
   sorts?: string
   /**
    * Combine given search criteria in a boolean OR expression
+   */
+  filter_or?: boolean
+}
+
+/**
+ * Dynamically generated request type for search_credentials_email
+ */
+export interface IRequestSearchCredentialsEmail {
+  /**
+   * Requested fields.
+   */
+  fields?: string
+  /**
+   * Number of results to return (used with `offset`).
+   */
+  limit?: number
+  /**
+   * Number of results to skip before returning any (used with `limit`).
+   */
+  offset?: number
+  /**
+   * Fields to sort by.
+   */
+  sorts?: string
+  /**
+   * Match credentials_email id.
+   */
+  id?: number
+  /**
+   * Match credentials_email email.
+   */
+  email?: string
+  /**
+   * Find credentials_email that match given emails.
+   */
+  emails?: string
+  /**
+   * Combine given search criteria in a boolean OR expression.
    */
   filter_or?: boolean
 }
@@ -8778,6 +8877,24 @@ export interface ISessionConfig {
    * Track location of session when user logs in.
    */
   track_session_location?: boolean
+}
+
+/**
+ * WARNING: no writeable properties found for POST, PUT, or PATCH
+ */
+export interface ISetting {
+  /**
+   * Toggle extension framework on or off (read-only)
+   */
+  extension_framework_enabled?: boolean
+  /**
+   * Toggle marketplace auto install on or off (read-only)
+   */
+  marketplace_auto_install_enabled?: boolean
+  /**
+   * Toggle marketplace on or off (read-only)
+   */
+  marketplace_enabled?: boolean
 }
 
 export interface ISnippet {

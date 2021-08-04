@@ -25,7 +25,7 @@
  */
 
 /**
- * 284 API models: 211 Spec, 0 Request, 56 Write, 17 Enum
+ * 286 API models: 213 Spec, 0 Request, 56 Write, 17 Enum
  */
 
 
@@ -781,6 +781,33 @@ data class CredentialsApi3 (
  * @property user_url Link to get this user (read-only)
  */
 data class CredentialsEmail (
+    var can: Map<String,Boolean>? = null,
+    var created_at: String? = null,
+    var email: String? = null,
+    var forced_password_reset_at_next_login: Boolean? = null,
+    @get:JsonProperty("is_disabled")
+    @param:JsonProperty("is_disabled")
+    var is_disabled: Boolean? = null,
+    var logged_in_at: String? = null,
+    var password_reset_url: String? = null,
+    var type: String? = null,
+    var url: String? = null,
+    var user_url: String? = null
+) : Serializable
+
+/**
+ * @property can Operations the current user is able to perform on this object (read-only)
+ * @property created_at Timestamp for the creation of this credential (read-only)
+ * @property email EMail address used for user login
+ * @property forced_password_reset_at_next_login Force the user to change their password upon their next login
+ * @property is_disabled Has this credential been disabled? (read-only)
+ * @property logged_in_at Timestamp for most recent login using credential (read-only)
+ * @property password_reset_url Url with one-time use secret token that the user can use to reset password (read-only)
+ * @property type Short name for the type of this kind of credential (read-only)
+ * @property url Link to get this item (read-only)
+ * @property user_url Link to get this user (read-only)
+ */
+data class CredentialsEmailSearch (
     var can: Map<String,Boolean>? = null,
     var created_at: String? = null,
     var email: String? = null,
@@ -4453,6 +4480,19 @@ data class SessionConfig (
     var unlimited_sessions_per_user: Boolean? = null,
     var use_inactivity_based_logout: Boolean? = null,
     var track_session_location: Boolean? = null
+) : Serializable
+
+/**
+ * WARNING: no writeable properties found for POST, PUT, or PATCH
+ *
+ * @property extension_framework_enabled Toggle extension framework on or off (read-only)
+ * @property marketplace_auto_install_enabled Toggle marketplace auto install on or off (read-only)
+ * @property marketplace_enabled Toggle marketplace on or off (read-only)
+ */
+data class Setting (
+    var extension_framework_enabled: Boolean? = null,
+    var marketplace_auto_install_enabled: Boolean? = null,
+    var marketplace_enabled: Boolean? = null
 ) : Serializable
 
 /**

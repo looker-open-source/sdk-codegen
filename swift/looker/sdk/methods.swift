@@ -25,7 +25,7 @@
  */
 
 /**
- * 413 API methods
+ * 415 API methods
  */
 
 
@@ -1953,6 +1953,27 @@ open class LookerSDK: APIMethods {
         options: ITransportSettings? = nil
     ) -> SDKResponse<MobileSettings, SDKError> {
         let result: SDKResponse<MobileSettings, SDKError> = self.get("/mobile/settings", nil, nil, options)
+        return result
+    }
+
+    /**
+     * ### Configure Looker Settings
+     *
+     * Available settings are:
+     *  - extension_framework_enabled
+     *  - marketplace_auto_install_enabled
+     *  - marketplace_enabled
+     *
+     * PATCH /setting -> Setting
+     */
+    public func set_setting(
+        /**
+         * @param {Setting} body
+         */
+        _ body: Setting,
+        options: ITransportSettings? = nil
+    ) -> SDKResponse<Setting, SDKError> {
+        let result: SDKResponse<Setting, SDKError> = self.patch("/setting", nil, try! self.encode(body), options)
         return result
     }
 
@@ -5522,10 +5543,18 @@ open class LookerSDK: APIMethods {
          * @param {String} fields Requested fields.
          */
         fields: String? = nil,
+        /**
+         * @param {Int64} limit Number of results to return. (can be used with offset)
+         */
+        limit: Int64? = nil,
+        /**
+         * @param {Int64} offset Number of results to skip before returning any. (Defaults to 0 if not set when limit is used)
+         */
+        offset: Int64? = nil,
         options: ITransportSettings? = nil
     ) -> SDKResponse<[LookmlModel], SDKError> {
         let result: SDKResponse<[LookmlModel], SDKError> = self.get("/lookml_models", 
-            ["fields": fields], nil, options)
+            ["fields": fields, "limit": limit, "offset": offset], nil, options)
         return result
     }
 
@@ -9201,6 +9230,74 @@ open class LookerSDK: APIMethods {
 
 
     // MARK User: Manage Users
+
+    /**
+     * ### Search email credentials
+     *
+     * Returns all credentials_email records that match the given search criteria.
+     *
+     * If multiple search params are given and `filter_or` is FALSE or not specified,
+     * search params are combined in a logical AND operation.
+     * Only rows that match *all* search param criteria will be returned.
+     *
+     * If `filter_or` is TRUE, multiple search params are combined in a logical OR operation.
+     * Results will include rows that match **any** of the search criteria.
+     *
+     * String search params use case-insensitive matching.
+     * String search params can contain `%` and '_' as SQL LIKE pattern match wildcard expressions.
+     * example="dan%" will match "danger" and "Danzig" but not "David"
+     * example="D_m%" will match "Damage" and "dump"
+     *
+     * Integer search params can accept a single value or a comma separated list of values. The multiple
+     * values will be combined under a logical OR operation - results will match at least one of
+     * the given values.
+     *
+     * Most search params can accept "IS NULL" and "NOT NULL" as special expressions to match
+     * or exclude (respectively) rows where the column is null.
+     *
+     * Boolean search params accept only "true" and "false" as values.
+     *
+     * GET /credentials_email/search -> [CredentialsEmailSearch]
+     */
+    public func search_credentials_email(
+        /**
+         * @param {String} fields Requested fields.
+         */
+        fields: String? = nil,
+        /**
+         * @param {Int64} limit Number of results to return (used with `offset`).
+         */
+        limit: Int64? = nil,
+        /**
+         * @param {Int64} offset Number of results to skip before returning any (used with `limit`).
+         */
+        offset: Int64? = nil,
+        /**
+         * @param {String} sorts Fields to sort by.
+         */
+        sorts: String? = nil,
+        /**
+         * @param {Int64} id Match credentials_email id.
+         */
+        id: Int64? = nil,
+        /**
+         * @param {String} email Match credentials_email email.
+         */
+        email: String? = nil,
+        /**
+         * @param {String} emails Find credentials_email that match given emails.
+         */
+        emails: String? = nil,
+        /**
+         * @param {Bool} filter_or Combine given search criteria in a boolean OR expression.
+         */
+        filter_or: Bool? = nil,
+        options: ITransportSettings? = nil
+    ) -> SDKResponse<[CredentialsEmailSearch], SDKError> {
+        let result: SDKResponse<[CredentialsEmailSearch], SDKError> = self.get("/credentials_email/search", 
+            ["fields": fields, "limit": limit, "offset": offset, "sorts": sorts, "id": id, "email": email, "emails": emails, "filter_or": filter_or as Any?], nil, options)
+        return result
+    }
 
     /**
      * ### Get information about the current user; i.e. the user account currently calling the API.
