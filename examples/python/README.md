@@ -4,6 +4,11 @@ You can find Python language examples in this folder.
 
 The full details of all Looker API endpoints are listed in Looker Docs: [Version 3.1](https://docs.looker.com/reference/api-and-integration/api-reference/v3.1), [Version 4.0](https://docs.looker.com/reference/api-and-integration/api-reference/v4.0)
 
+## Notes
+- Many example scripts include the following statement `import sdk_exceptions`, which refers to this file [sdk_exceptions.py](sdk_exceptions.py). You could either uncomment the statement or download `sdk_exceptions.py` and put it in the same folder with your current script. 
+
+
+
 ## Connection : Manage Database Connections
 
 - [Test a specified connection](test_connection.py)
