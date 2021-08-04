@@ -46,19 +46,19 @@ The Looker TypeScript SDK has different packages to prevent node dependencies be
 
 ### Authenticate your API calls
 
-All requests to the Looker API server require an access token. For browser implementations, authentication is typically achieved via OAuth as [described in `cors.md`](/docs/cors.md) or a [Proxy Server](#using-a-proxy-for-authentication).
+All requests to the Looker API server require an access token. For browser implementations, authentication is typically achieved via OAuth as [described in `cors.md`](../../docs/cors.md) or a [Proxy Server](#using-a-proxy-for-authentication).
 
 ### Use the SDK in your browser application
 
 Authenticating for the browser takes more setup than authenticating for use with a Node application.
 
-The stand-alone version of the [Looker API Explorer](../../packages/api-explorer) uses OAuth and the `BrowserSDK` to get an authentication token for Looker API requests.
+The stand-alone version of the [Looker API Explorer](../api-explorer) uses OAuth and the `BrowserSDK` to get an authentication token for Looker API requests.
 
-- [RunItSDK](../../packages/run-it/src/utils/RunItSDK.ts) shows how to override `readConfig()` to get SDK configuration values.
+- [RunItSDK](../run-it/src/utils/RunItSDK.ts) shows how to override `readConfig()` to get SDK configuration values.
 
-- [RunItSDK tests](../../packages/run-it/src/utils/RunItSDK.spec.ts) support debugging the flow of `RunItSDK`.
+- [RunItSDK tests](../run-it/src/utils/RunItSDK.spec.ts) support debugging the flow of `RunItSDK`.
 
-- The [OAuthScene](../../packages/run-it/src/scenes/OAuthScene/OAuthScene.tsx) React component receives the OAuth response from the Looker server and logs the user in to retrieve the API authentication token.
+- The [OAuthScene](../run-it/src/scenes/OAuthScene/OAuthScene.tsx) React component receives the OAuth response from the Looker server and logs the user in to retrieve the API authentication token.
 
 Looker's OAuth support makes it possible to build a Looker SDK application that only requires the browser. If a browser application can use a proxy server instead, or already uses an existing backend server, it may be simpler to [use a proxy for authentication](#using-a-proxy-for-authentication)/
 

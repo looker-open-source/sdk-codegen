@@ -26,6 +26,12 @@ These examples assume that a `looker.ini` has been created in the root of the re
    - `yarn run-tile` - runs download dashboard tile example.
    - `yarn run-dashboard` - runs download dashboard example.
 
+Some other dependencies may be required for the projects to build and run correctly on your local clone.
+
+```bash
+yarn install @types/readable-stream @types/request @types/request-promise-native -D
+```
+
 ## TypeScript SDK packages
 
 The Looker TypeScript SDK has different packages to prevent node dependencies being linked into browser usage of the SDK (the node dependencies are not available in the browser and can cause compilation errors). There are three packages for the Typescript SDK available on npm:
@@ -33,12 +39,6 @@ The Looker TypeScript SDK has different packages to prevent node dependencies be
 1. `@looker/sdk-rtl` - contains a run time library needed to invoke the Looker API methods. Referencing the `@looker/sdk` as a dependency should automatically pull this package in.
 2. `@looker/sdk` - contains the Looker API methods.
 3. `@looker/sdk-node` - contains the dependencies needed to run the Looker SDK in a node environment. Do NOT include this package if you are using the Looker SDK in a browser. You MUST include this package if you are using `node` or `ts-node`.
-
-Some other dependencies may be required for the projects to build and run correctly.
-
-```bash
-yarn install @types/readable-stream @types/request @types/request-promise-native -D
-```
 
 ## Example list
 
