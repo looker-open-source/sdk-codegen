@@ -26,7 +26,7 @@ SOFTWARE.
 
 /*
 
-413 API methods
+415 API methods
 */
 
 
@@ -1440,6 +1440,23 @@ func (l *LookerSDK) MobileSettings(
     options *rtl.ApiSettings) (MobileSettings, error) {
     var result MobileSettings
     err := l.session.Do(&result, "GET", "/4.0", "/mobile/settings", nil, nil, options)
+    return result, err
+
+}
+
+// ### Configure Looker Settings
+//
+// Available settings are:
+//  - extension_framework_enabled
+//  - marketplace_auto_install_enabled
+//  - marketplace_enabled
+//
+// PATCH /setting -> Setting
+func (l *LookerSDK) SetSetting(
+    body Setting,
+    options *rtl.ApiSettings) (Setting, error) {
+    var result Setting
+    err := l.session.Do(&result, "PATCH", "/4.0", "/setting", nil, body, options)
     return result, err
 
 }
@@ -3563,11 +3580,10 @@ func (l *LookerSDK) GraphDerivedTablesForModel(request RequestGraphDerivedTables
 // ### Get information about all lookml models.
 //
 // GET /lookml_models -> []LookmlModel
-func (l *LookerSDK) AllLookmlModels(
-    fields string,
+func (l *LookerSDK) AllLookmlModels(request RequestAllLookmlModels,
     options *rtl.ApiSettings) ([]LookmlModel, error) {
     var result []LookmlModel
-    err := l.session.Do(&result, "GET", "/4.0", "/lookml_models", map[string]interface{}{"fields": fields}, nil, options)
+    err := l.session.Do(&result, "GET", "/4.0", "/lookml_models", map[string]interface{}{"fields": request.Fields, "limit": request.Limit, "offset": request.Offset}, nil, options)
     return result, err
 
 }
@@ -5971,6 +5987,40 @@ func (l *LookerSDK) DeleteTheme(
   // endregion Theme: Manage Themes
 
   // region User: Manage Users
+
+// ### Search email credentials
+//
+// Returns all credentials_email records that match the given search criteria.
+//
+// If multiple search params are given and `filter_or` is FALSE or not specified,
+// search params are combined in a logical AND operation.
+// Only rows that match *all* search param criteria will be returned.
+//
+// If `filter_or` is TRUE, multiple search params are combined in a logical OR operation.
+// Results will include rows that match **any** of the search criteria.
+//
+// String search params use case-insensitive matching.
+// String search params can contain `%` and '_' as SQL LIKE pattern match wildcard expressions.
+// example="dan%" will match "danger" and "Danzig" but not "David"
+// example="D_m%" will match "Damage" and "dump"
+//
+// Integer search params can accept a single value or a comma separated list of values. The multiple
+// values will be combined under a logical OR operation - results will match at least one of
+// the given values.
+//
+// Most search params can accept "IS NULL" and "NOT NULL" as special expressions to match
+// or exclude (respectively) rows where the column is null.
+//
+// Boolean search params accept only "true" and "false" as values.
+//
+// GET /credentials_email/search -> []CredentialsEmailSearch
+func (l *LookerSDK) SearchCredentialsEmail(request RequestSearchCredentialsEmail,
+    options *rtl.ApiSettings) ([]CredentialsEmailSearch, error) {
+    var result []CredentialsEmailSearch
+    err := l.session.Do(&result, "GET", "/4.0", "/credentials_email/search", map[string]interface{}{"fields": request.Fields, "limit": request.Limit, "offset": request.Offset, "sorts": request.Sorts, "id": request.Id, "email": request.Email, "emails": request.Emails, "filter_or": request.FilterOr}, nil, options)
+    return result, err
+
+}
 
 // ### Get information about the current user; i.e. the user account currently calling the API.
 //
