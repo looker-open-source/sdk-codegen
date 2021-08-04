@@ -32,9 +32,15 @@ An important note on dependencies. The Looker typescript SDK consists of the fol
 2. `@looker/sdk-rtl` - contains a run time library needed to invoke the Looker API methods. Referencing the `@looker/sdk` as a dependency should automatically pull this package in.
 3. `@looker/sdk-node` - contains dependencies needed to run the Looker SDK in a node environment. Do NOT include this package if you are using the Looker SDK in a browser.
 
+Some other dependencies may be required for the projects to build and run correctly.
+
+```bash
+yarn install @types/readable-stream @types/request @types/request-promise-native -D
+```
+
 ## Example list
 
-Very brief descriptions of the examples, and the link to the main example/project file are provided here. For more information on an example, look at the source file.
+A very brief descriptions of the examples, and the link to the main example/project file are provided here. For more information on an example, look at the source file.
 
 ### General examples
 

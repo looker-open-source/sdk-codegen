@@ -30,6 +30,20 @@ Using `npm`:
 npm install @looker/sdk @looker/sdk-rtl
 ```
 
+Some other dependencies may be required for your project to build and run correctly.
+
+```bash
+yarn install @types/readable-stream @types/request @types/request-promise-native -D
+```
+
+## TypeScript SDK packages
+
+The Looker TypeScript SDK has different packages to prevent node dependencies being linked into browser usage of the SDK (the node dependencies are not available in the browser and can cause compilation errors). There are three packages for the Typescript SDK available on npm:
+
+1. `@looker/sdk-rtl` - contains a run time library needed to invoke the Looker API methods. Referencing the `@looker/sdk` as a dependency should automatically pull this package in.
+2. `@looker/sdk` - contains the Looker API methods.
+3. `@looker/sdk-node` - contains the dependencies needed to run the Looker SDK in a node environment. Do NOT include this package if you are using the Looker SDK in a browser. You MUST include this package if you are using `node` or `ts-node`.
+
 ### Authenticate your API calls
 
 All requests to the Looker API server require an access token. For browser implementations, authentication is typically achieved via OAuth as [described in `cors.md`](/docs/cors.md) or a [Proxy Server](#using-a-proxy-for-authentication).
@@ -38,13 +52,13 @@ All requests to the Looker API server require an access token. For browser imple
 
 Authenticating for the browser takes more setup than authenticating for use with a Node application.
 
-The stand-alone version of the [Looker API Explorer](/packages/api-explorer) uses OAuth and the `BrowserSDK` to get an authentication token for Looker API requests.
+The stand-alone version of the [Looker API Explorer](../../packages/api-explorer) uses OAuth and the `BrowserSDK` to get an authentication token for Looker API requests.
 
-- [RunItSDK](/packages/run-it/src/utils/RunItSDK.ts) shows how to override `readConfig()` to get SDK configuration values.
+- [RunItSDK](../../packages/run-it/src/utils/RunItSDK.ts) shows how to override `readConfig()` to get SDK configuration values.
 
-- [RunItSDK tests](/packages/run-it/src/utils/RunItSDK.spec.ts) support debugging the flow of `RunItSDK`.
+- [RunItSDK tests](../../packages/run-it/src/utils/RunItSDK.spec.ts) support debugging the flow of `RunItSDK`.
 
-- The [OAuthScene](/packages/run-it/src/scenes/OAuthScene/OAuthScene.tsx) React component receives the OAuth response from the Looker server and logs the user in to retrieve the API authentication token.
+- The [OAuthScene](../../packages/run-it/src/scenes/OAuthScene/OAuthScene.tsx) React component receives the OAuth response from the Looker server and logs the user in to retrieve the API authentication token.
 
 Looker's OAuth support makes it possible to build a Looker SDK application that only requires the browser. If a browser application can use a proxy server instead, or already uses an existing backend server, it may be simpler to [use a proxy for authentication](#using-a-proxy-for-authentication)/
 

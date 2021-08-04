@@ -332,4 +332,4 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Response types now have nested types correctly documented
 - The response type processing functions now have arguments for the number of levels to expand nested types
 - API explorer's default expansion depth is one level deep
-- Added [`ExploreType`](/packages/api-explorer/src/components/ExploreType/ExploreType.tsx) and [`ExploreProperty`](/packages/api-explorer/src/components/ExploreType/ExploreProperty.tsx) components used to display responses and explore the type on the type page
+- Added [`ExploreType`](../../packages/api-explorer/src/components/ExploreType/ExploreType.tsx) and [`ExploreProperty`](../../packages/api-explorer/src/components/ExploreType/ExploreProperty.tsx) components used to display responses and explore the type on the type page

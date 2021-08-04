@@ -9,19 +9,19 @@ The high-level steps for building a new Language SDK include:
 1. Create the language/platform [run-time library](#run-time-library) (RTL)
 
 1. Create the Language SDK [code generator](#code-generator) by descending from
-   [codeGen.ts](/packages/sdk-codegen/src/codeGen.ts) or perhaps the
-   [TypeScript generator](/packages/sdk-codegen/src/typescript.gen.ts) or [Python generator](/packages/sdk-codegen/src/python.gen.ts)
+   [codeGen.ts](../packages/sdk-codegen/src/codeGen.ts) or perhaps the
+   [TypeScript generator](../packages/sdk-codegen/src/typescript.gen.ts) or [Python generator](../packages/sdk-codegen/src/python.gen.ts)
 
 1. Create [unit](#unit-tests) and [functional](#functional-or-integration-tests) tests
 
 1. Complete the configuration of items for [CI/CD](#cicd) (where applicable)
 
 When implementing the syntax and features for the new language SDK, keep in mind the principles described in the
-[Codegen rationale](/docs/rationale.md) documentation:
+[Codegen rationale](rationale.md) documentation:
 
-- [consistency](/docs/rationale.md#consistency),
-- [discoverability](/docs/rationale.md#discoverability), and
-- [correctness](/docs/rationale.md#correctness).
+- [consistency](rationale.md#consistency),
+- [discoverability](rationale.md#discoverability), and
+- [correctness](rationale.md#correctness).
 
 Most examples in this document will use the TypeScript SDK, which is typically our lead language SDK the other SDKs
 follow. The other language SDK implementations found in this repository will have similarly named or designed classes.
@@ -41,21 +41,21 @@ all generated files must use exactly the same RTL code.
 
 Any method of secure retrieval of API credentials and server locations can be supported by adopting the configuration
 provider pattern used by the reference SDKs. To support quickly getting started with an SDK, the existing SDKs support
-`.ini` file style configuration both for [configuring the code generator](/README.md#configuring-lookerini) and as a
+`.ini` file style configuration both for [configuring the code generator](../README.md#configuring-lookerini) and as a
 default configuration file.
 
 All SDKs implement something like a `readConfig() -> [String: String]` method that can be overridden to customize how
-to determine configuration values. See [securing your SDK credentials](/README.md#securing-your-sdk-credentials) for more information
+to determine configuration values. See [securing your SDK credentials](../README.md#securing-your-sdk-credentials) for more information
 on this topic, including links to `readConfig()` examples.
 
-The TypeScript SDK configuration support is in [`apiSettings.ts`](/packages/sdk-rtl/src/apiSettings.ts).
+The TypeScript SDK configuration support is in [`apiSettings.ts`](../packages/sdk-rtl/src/apiSettings.ts).
 
 Once the RTL can read the configuration values for `base_url` and API credentials, the HTTP request processor and
 `AuthSession` implementation work can begin.
 
 If the Language SDK supports environment variable, configuration values can also be set via
-[environment variables](/README.md#environment-variable-configuration).
-[Precedence rules](/README.md#configuration-variable-precedence) should also be implemented.
+[environment variables](../README.md#environment-variable-configuration).
+[Precedence rules](../README.md#configuration-variable-precedence) should also be implemented.
 
 **Note**: By design, SDKs never retain API credentials in runtime memory, but only use them when required to authenticate.
 
@@ -178,7 +178,7 @@ export interface ITransport {
 }
 ```
 
-**Note**: The latest version of these interfaces can always be found in [transport.ts](/packages/sdk-rtl/src/transport.ts)
+**Note**: The latest version of these interfaces can always be found in [transport.ts](../packages/sdk-rtl/src/transport.ts)
 
 The `ITransportSettings` interface shows the default properties for all HTTP requests and can also be used to override
 request settings for an individual HTTP request.
@@ -314,7 +314,7 @@ This section discusses how parameters should be processed by the run-time **befo
 When the codegen project began, there was one method of authenticating for Looker API requests, which was providing the
 API credentials `client_id` and `client_secret` to the API. `AuthSession` is commonly the name of this class.
 Due to the complexities of Node vs. Browser implementations and authentication methods, the reference
-implementation for the TypeScript SDK is called [`NodeSession`](/packages/sdk-rtl/src/nodeSession.ts) but for this
+implementation for the TypeScript SDK is called [`NodeSession`](../packages/sdk-rtl/src/nodeSession.ts) but for this
 document we'll pretend it's called `AuthSession`.
 
 Recent (Looker 7.6 and above) API implementations additionally offer an OAuth authentication flow for API calls. Both
@@ -355,18 +355,18 @@ extension, the run-time environment can provide API authentication support witho
 When an SDK supports significantly different runtime behavior, use a different `AuthSession` implementation.
 For example, the TypeScript SDK has:
 
-- [`CSRFSession`](/packages/sdk-rtl/src/CSRFSession.ts) for browser-based same-origin usage
-- [`BrowserSession`](/packages/sdk-rtl/src/browserSession.ts) for browser-based CORS usage
-- [`NodeSession`](/packages/sdk-rtl/src/nodeSession.ts) for node-based usage
-- [`OAuthSession`](/packages/sdk-rtl/src/oauthSession.ts) for OAuth2-based usage
-- [`ProxySession`](/packages/sdk-rtl/src/proxySession.ts) for proxy-based usage
+- [`CSRFSession`](../packages/sdk-rtl/src/CSRFSession.ts) for browser-based same-origin usage
+- [`BrowserSession`](../packages/sdk-rtl/src/browserSession.ts) for browser-based CORS usage
+- [`NodeSession`](../packages/sdk-rtl/src/nodeSession.ts) for node-based usage
+- [`OAuthSession`](../packages/sdk-rtl/src/oauthSession.ts) for OAuth2-based usage
+- [`ProxySession`](../packages/sdk-rtl/src/proxySession.ts) for proxy-based usage
 
 ## Code generator
 
-The code generator "template" is written in TypeScript. The `ICodegen` interface (currently found at the bottom of [`sdkModels.ts`](/packages/sdk-codegen/src/sdkModels.ts))
+The code generator "template" is written in TypeScript. The `ICodegen` interface (currently found at the bottom of [`sdkModels.ts`](../packages/sdk-codegen/src/sdkModels.ts))
 describes the properties and methods used to generate an API language binding for an SDK.
 
-[`codeGen.ts`](/packages/sdk-codegen/src/codeGen.ts) is the base implementation of all code generators, and is partially
+[`codeGen.ts`](../packages/sdk-codegen/src/codeGen.ts) is the base implementation of all code generators, and is partially
 abstract. Specific generators must override these abstract methods.
 
 ### Prologues and Epilogues
@@ -378,14 +378,14 @@ The various **Prologue** properties are for the standard SDK methods, streaming,
 
 ### Strong typing
 
-We strongly prefer strong typing for language SDKs, as mentioned in [correctness](/docs/rationale.md#correctness).
+We strongly prefer strong typing for language SDKs, as mentioned in [correctness](rationale.md#correctness).
 
 Some languages may not support strong typing or generics. In that case, we recommend using name/value pairs and
 verifying the names against the endpoint's specification at run-time before submitting the HTTP request to the endpoint.
 
 ### Methods
 
-The `IMethod` interface in [`sdkModels.ts`](/packages/sdk-codegen/src/sdkModels.ts) describes the properties and methods
+The `IMethod` interface in [`sdkModels.ts`](../packages/sdk-codegen/src/sdkModels.ts) describes the properties and methods
 to use for generating a method declaration.
 
 REST API endpoints return responses that vary in type. There is always at least one _success_ and one _error_ response type.
@@ -405,24 +405,24 @@ request processor **must not** convert the response to `UTF8`.
 by optional parameters.
 
 If the language doesn't have "named parameter" support the generator supports generation of
-[request structures](/docs/rationale.md#request-structures). TypeScript is a language without named parameter support, so a
+[request structures](rationale.md#request-structures). TypeScript is a language without named parameter support, so a
 request interface is created for methods with complex arguments. The code generator's `needRequestTypes` property should
-be set to `true` in this circumstance. In the [TypeScript generator](/packages/sdk-codegen/src/typescript.gen.ts),
+be set to `true` in this circumstance. In the [TypeScript generator](../packages/sdk-codegen/src/typescript.gen.ts),
 the `methodHeaderDeclaration` function has this line:
 
 ```ts
 const requestType = this.requestTypeName(method)
 ```
 
-If the method requires a request type and `needRequestTypes` is `true`, the [`codeGen.ts`](/packages/sdk-codegen/src/codeGen.ts)
+If the method requires a request type and `needRequestTypes` is `true`, the [`codeGen.ts`](../packages/sdk-codegen/src/codeGen.ts)
 implementation of `requestTypeName()` will get or create the existing request type and return its name as the result of
 the function. Refer to the TypeScript generator for more information if your language needs a request type.
 
-See the TypeScript SDK [`methods.ts`](/packages/sdk/src/sdk/4.0/methods.ts) for method declaration examples.
+See the TypeScript SDK [`methods.ts`](../packages/sdk/src/sdk/4.0/methods.ts) for method declaration examples.
 
 ### Models
 
-The `IType` interface in [`sdkModels.ts`](/packages/sdk-codegen/src/sdkModels.ts) describes the properties and methods
+The `IType` interface in [`sdkModels.ts`](../packages/sdk-codegen/src/sdkModels.ts) describes the properties and methods
 to use for generating a type declaration.
 
 Type declarations are less complex than model declarations. Once the general template for type declarations is defined,
@@ -480,23 +480,23 @@ Here's an example `typeMap` for Kotlin:
   }
 ```
 
-See the TypeScript SDK [`models.ts`](/packages/sdk/src/sdk/4.0/models.ts) for type/structure declaration examples.
+See the TypeScript SDK [`models.ts`](../packages/sdk/src/sdk/4.0/models.ts) for type/structure declaration examples.
 
 ### Streams
 
 Streaming declarations are basically the same as [Methods](#methods), but with a parameter for a streaming callback.
 
-See the TypeScript SDK [`streams.ts`](/packages/sdk/src/sdk/4.0/streams.ts) for streaming method examples.
+See the TypeScript SDK [`streams.ts`](../packages/sdk/src/sdk/4.0/streams.ts) for streaming method examples.
 
 ### API version tracking
 
-The `constants` file (e.g. [`constants.ts`](/packages/sdk-rtl/src/constants.ts)) for an SDK has the Looker API version and Looker release version as variables. The update mechanism
-for these variables is in [`reformatter.ts`](/packages/sdk-codegen-scripts/src/reformatter.ts).
+The `constants` file (e.g. [`constants.ts`](../packages/sdk-rtl/src/constants.ts)) for an SDK has the Looker API version and Looker release version as variables. The update mechanism
+for these variables is in [`reformatter.ts`](../packages/sdk-codegen-scripts/src/reformatter.ts).
 
 #### Code reformatting
 
 Some languages have command-line code reformatters readily available. If your SDK language has a code reformatter,
-define it in [`reformatter.ts`](/packages/sdk-codegen-scripts/src/reformatter.ts) and the generated source code will automatically
+define it in [`reformatter.ts`](../packages/sdk-codegen-scripts/src/reformatter.ts) and the generated source code will automatically
 be reformatted when the code generation is finishing up.
 
 ## Tests
@@ -504,12 +504,12 @@ be reformatted when the code generation is finishing up.
 A minimum testing threshold must be met before a Language SDK can be accepted. This section describes the tests to
 implement for a Language SDK.
 
-Files that support testing scenarios can be found in the [`test`](/test) folder.
+Files that support testing scenarios can be found in the [`test`](../test) folder.
 
-- [`data.yml`](/test/data.yml) contains test data that can be used to create functional tests.
-- [`data.yml.json`](/test/data.yml) is automatically translated from `data.yml`.
-- [`openApiRef.json`](/test/openApiRef.json) is a sample OpenAPI 3.x json-formatted Looker API specification
-- [`swaggerRef.json`](/test/swaggerRef.json) is a sample OpenAPI 2.x (Swagger) json-formatted Looker API specification
+- [`data.yml`](../test/data.yml) contains test data that can be used to create functional tests.
+- [`data.yml.json`](../test/data.yml) is automatically translated from `data.yml`.
+- [`openApiRef.json`](../test/openApiRef.json) is a sample OpenAPI 3.x json-formatted Looker API specification
+- [`swaggerRef.json`](../test/swaggerRef.json) is a sample OpenAPI 2.x (Swagger) json-formatted Looker API specification
 
 ### Unit tests
 
@@ -573,8 +573,8 @@ fun asBoolean(value: String?): Boolean? {
 
 - optional parameters
 
-See [`sdkModels.spec.ts`](/packages/sdk-codegen/src/sdkModels.spec.ts) and
-[`python.gen.spec.ts`](/packages/sdk-codegen/src/python.gen.spec.ts) for examples.
+See [`sdkModels.spec.ts`](../packages/sdk-codegen/src/sdkModels.spec.ts) and
+[`python.gen.spec.ts`](../packages/sdk-codegen/src/python.gen.spec.ts) for examples.
 
 ### Functional or integration tests
 
@@ -597,7 +597,7 @@ the root of the repository, configured for a running Looker server.
 
 - streaming (if applicable)
 
-See [`methods.spec.ts`](/packages/sdk/src/test/methods.spec.ts) and
+See [`methods.spec.ts`](../packages/sdk/src/test/methods.spec.ts) and
 [`test_methods.py`](/python/tests/integration/api40/test_methods.py) examples.
 
 ## CI/CD
@@ -619,7 +619,7 @@ publishing to their respective package managers.
 
 ### Smoke testing
 
-When the Language SDK test suite is complete, add all or some parts of the tests to the [`smoke`](/bin/smoke) test script.
+When the Language SDK test suite is complete, add all or some parts of the tests to the [`smoke`](../bin/smoke) test script.
 This way, tests for the Language SDK will be part of the entire SDK Codegen test suite.
 
 The smoke tests require the test/reference instance of Looker configured in `looker.ini` to be up and running.
