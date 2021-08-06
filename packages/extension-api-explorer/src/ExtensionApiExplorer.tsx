@@ -99,9 +99,11 @@ export const ExtensionApiExplorer: FC = () => {
     const content = await sdk.ok(sdk.api_spec(version, name))
     // TODO switch this to just call const api = ApiModel.fromString(content) now
     // TODO I think we can remove this this crazy step now that the api_spec endpoint is cleaner
-    let json = JSON.parse(content)
-    if (typeof json === 'string') {
-      json = JSON.parse(json)
+    let json
+    if (typeof content === 'string') {
+      json = JSON.parse(content)
+    } else {
+      json = content
     }
     json = upgradeSpecObject(json)
     const api = ApiModel.fromJson(json)
