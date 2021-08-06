@@ -43,8 +43,8 @@ import ApiExplorer from '@looker/api-explorer/src/ApiExplorer'
 import { getExtensionSDK } from '@looker/extension-sdk'
 import { configureStore } from '@looker/api-explorer/src/state'
 import { Provider } from 'react-redux'
-import { Loader } from '@looker/api-explorer/src/components'
 import { ExtensionEnvAdaptor } from './utils'
+import { Loader } from './Loader'
 
 class ExtensionConfigurator implements RunItConfigurator {
   storage: Record<string, string> = {}
@@ -97,7 +97,12 @@ export const ExtensionApiExplorer: FC = () => {
     const sdk = extensionContext.core40SDK
     const [version, name] = spec.specURL.split('/').slice(-2)
     const content = await sdk.ok(sdk.api_spec(version, name))
-    let json = typeof content === 'string' ? JSON.parse(content) : content
+    let json
+    if (typeof content === 'string') {
+      json = JSON.parse(content)
+    } else {
+      json = content
+    }
     json = upgradeSpecObject(json)
     const api = ApiModel.fromJson(json)
     return api

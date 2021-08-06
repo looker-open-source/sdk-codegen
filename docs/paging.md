@@ -56,8 +56,7 @@ The current SDK-based paging pattern prototype is in the `@looker/sdk-rtl` TypeS
 
 ### Paging interface
 
-The main routines that initialize SDK paging are the functions `pager` and `pageAll`, and the class `Paging` defined in [paging.ts](/packages/sdk-rtl/src/paging.ts).
-
+The main routines that initialize SDK paging are the functions `pager` and `pageAll`, and the class `Paging` defined in [paging.ts](../packages/sdk-rtl/src/paging.ts).
 
 ### Page iteration example
 

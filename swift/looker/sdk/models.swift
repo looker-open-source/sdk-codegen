@@ -25,7 +25,7 @@
  */
 
 /**
- * 284 API models: 211 Spec, 0 Request, 56 Write, 17 Enum
+ * 286 API models: 213 Spec, 0 Request, 56 Write, 17 Enum
  */
 
 
@@ -1569,6 +1569,63 @@ public struct CredentialsApi3: SDKModel {
 }
 
 public struct CredentialsEmail: SDKModel {
+    /**
+     * Operations the current user is able to perform on this object (read-only)
+     */
+    public var can: StringDictionary<Bool>?
+    /**
+     * Timestamp for the creation of this credential (read-only)
+     */
+    public var created_at: String?
+    /**
+     * EMail address used for user login
+     */
+    public var email: String?
+    /**
+     * Force the user to change their password upon their next login
+     */
+    public var forced_password_reset_at_next_login: Bool?
+    /**
+     * Has this credential been disabled? (read-only)
+     */
+    public var is_disabled: Bool?
+    /**
+     * Timestamp for most recent login using credential (read-only)
+     */
+    public var logged_in_at: String?
+    /**
+     * Url with one-time use secret token that the user can use to reset password (read-only)
+     */
+    public var password_reset_url: String?
+    /**
+     * Short name for the type of this kind of credential (read-only)
+     */
+    public var type: String?
+    /**
+     * Link to get this item (read-only)
+     */
+    public var url: String?
+    /**
+     * Link to get this user (read-only)
+     */
+    public var user_url: String?
+
+    public init(can: StringDictionary<Bool>? = nil, created_at: String? = nil, email: String? = nil, forced_password_reset_at_next_login: Bool? = nil, is_disabled: Bool? = nil, logged_in_at: String? = nil, password_reset_url: String? = nil, type: String? = nil, url: String? = nil, user_url: String? = nil) {
+        self.can = can
+        self.created_at = created_at
+        self.email = email
+        self.forced_password_reset_at_next_login = forced_password_reset_at_next_login
+        self.is_disabled = is_disabled
+        self.logged_in_at = logged_in_at
+        self.password_reset_url = password_reset_url
+        self.type = type
+        self.url = url
+        self.user_url = user_url
+    }
+
+}
+
+public struct CredentialsEmailSearch: SDKModel {
     /**
      * Operations the current user is able to perform on this object (read-only)
      */
@@ -9506,6 +9563,31 @@ public struct SessionConfig: SDKModel {
         self.unlimited_sessions_per_user = unlimited_sessions_per_user
         self.use_inactivity_based_logout = use_inactivity_based_logout
         self.track_session_location = track_session_location
+    }
+
+}
+
+/**
+ * WARNING: no writeable properties found for POST, PUT, or PATCH
+ */
+public struct Setting: SDKModel {
+    /**
+     * Toggle extension framework on or off (read-only)
+     */
+    public var extension_framework_enabled: Bool?
+    /**
+     * Toggle marketplace auto install on or off (read-only)
+     */
+    public var marketplace_auto_install_enabled: Bool?
+    /**
+     * Toggle marketplace on or off (read-only)
+     */
+    public var marketplace_enabled: Bool?
+
+    public init(extension_framework_enabled: Bool? = nil, marketplace_auto_install_enabled: Bool? = nil, marketplace_enabled: Bool? = nil) {
+        self.extension_framework_enabled = extension_framework_enabled
+        self.marketplace_auto_install_enabled = marketplace_auto_install_enabled
+        self.marketplace_enabled = marketplace_enabled
     }
 
 }

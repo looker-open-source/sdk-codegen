@@ -1,5 +1,19 @@
 # Changelog
 
+## [1.13.0](https://www.github.com/looker-open-source/sdk-codegen/compare/sdk-codegen-all-v1.12.0...sdk-codegen-all-v1.13.0) (2021-08-06)
+
+
+### Features
+
+* Another simple example add users to a Looker group based on a csv.  ([#776](https://www.github.com/looker-open-source/sdk-codegen/issues/776)) ([83cde03](https://www.github.com/looker-open-source/sdk-codegen/commit/83cde032a17aa6cf1d9f8ab598c8b5484336496c))
+* Looker 21.12 bindings ([#782](https://www.github.com/looker-open-source/sdk-codegen/issues/782)) ([a00b908](https://www.github.com/looker-open-source/sdk-codegen/commit/a00b908e6fee79250c4c1ffb1b1e8915d58dd633))
+
+
+### Bug Fixes
+
+* apix fix ([#785](https://www.github.com/looker-open-source/sdk-codegen/issues/785)) ([5ecea27](https://www.github.com/looker-open-source/sdk-codegen/commit/5ecea27fa5cc124ec1d823484cd67b0d22132624))
+* documentation refs and notes for Typescript SDK and more ([#783](https://www.github.com/looker-open-source/sdk-codegen/issues/783)) ([b2487ea](https://www.github.com/looker-open-source/sdk-codegen/commit/b2487ea4a113ce17a080ccab9b4c4139813e8810))
+
 ## [1.12.0](https://www.github.com/looker-open-source/sdk-codegen/compare/sdk-codegen-all-v1.11.0...sdk-codegen-all-v1.12.0) (2021-07-30)
 
 
