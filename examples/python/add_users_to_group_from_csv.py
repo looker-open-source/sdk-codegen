@@ -1,6 +1,5 @@
 import looker_sdk
 import csv
-import exceptions
 
 ####Initialize API/SDK for more info go here: https://pypi.org/project/looker-sdk/
 from looker_sdk import methods, models40
