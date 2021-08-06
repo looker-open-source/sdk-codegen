@@ -6,9 +6,7 @@ This package contains routines for treating a GSheet (Google Sheet) as a databas
 
 [**WhollySheet**](src/WhollySheet.ts) is the base component for data table-like operations on GSheet tabs.
 
-The original version of WhollySheet is the Python [sheets.py](/examples/python/hackathon_app/sheets.py) created for the initial Looker Hackathon registration application in 2019.
-
-WhollySheet was ported to TypeScript for the new Looker-based [Hackathon application](/packages/hackathon) using the [Looker Extension Framework](https://docs.looker.com/data-modeling/extension-framework/extension-framework-intro).
+WhollySheet was ported from Python to TypeScript for the new Looker-based [Hackathon application](../../packages/hackathon) using the [Looker Extension Framework](https://docs.looker.com/data-modeling/extension-framework/extension-framework-intro).
 
 ## SheetSDK
 

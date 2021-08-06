@@ -132,6 +132,8 @@ func (s *AuthSession) Do(result interface{}, method, ver, path string, reqPars m
 	if err != nil {
 		return err
 	}
+	defer res.Body.Close()
+	
 
 	if res.StatusCode < 200 || res.StatusCode > 226 {
 		return fmt.Errorf("response error: %s", res.Status)

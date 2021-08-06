@@ -45,7 +45,7 @@ REQUIRES = [
 
 setup(
     author="Looker Data Sciences, Inc.",
-    author_email="support@looker.com",
+    author_email="Looker Team <https://help.looker.com>",
     description="Looker API 3.1",
     install_requires=REQUIRES,
     license="MIT",
