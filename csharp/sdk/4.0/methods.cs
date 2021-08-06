@@ -21,7 +21,7 @@
 /// SOFTWARE.
 ///
 
-/// 413 API methods
+/// 415 API methods
 
 #nullable enable
 using System;
@@ -1694,6 +1694,24 @@ namespace Looker.SDK.API40
     ITransportSettings? options = null)
 {  
     return await AuthRequest<MobileSettings, Exception>(HttpMethod.Get, "/mobile/settings", null,null,options);
+  }
+
+  /// ### Configure Looker Settings
+  ///
+  /// Available settings are:
+  ///  - extension_framework_enabled
+  ///  - marketplace_auto_install_enabled
+  ///  - marketplace_enabled
+  ///
+  /// PATCH /setting -> Setting
+  ///
+  /// <returns><c>Setting</c> Looker Settings (application/json)</returns>
+  ///
+  public async Task<SdkResponse<Setting, Exception>> set_setting(
+    Setting body,
+    ITransportSettings? options = null)
+{  
+    return await AuthRequest<Setting, Exception>(HttpMethod.Patch, "/setting", null,body,options);
   }
 
   /// ### Get a list of timezones that Looker supports (e.g. useful for scheduling tasks).
@@ -4636,12 +4654,18 @@ namespace Looker.SDK.API40
   /// <returns><c>LookmlModel[]</c> LookML Model (application/json)</returns>
   ///
   /// <param name="fields">Requested fields.</param>
+  /// <param name="limit">Number of results to return. (can be used with offset)</param>
+  /// <param name="offset">Number of results to skip before returning any. (Defaults to 0 if not set when limit is used)</param>
   public async Task<SdkResponse<LookmlModel[], Exception>> all_lookml_models(
     string? fields = null,
+    long? limit = null,
+    long? offset = null,
     ITransportSettings? options = null)
 {  
     return await AuthRequest<LookmlModel[], Exception>(HttpMethod.Get, "/lookml_models", new Values {
-      { "fields", fields }},null,options);
+      { "fields", fields },
+      { "limit", limit },
+      { "offset", offset }},null,options);
   }
 
   /// ### Create a lookml model using the specified configuration.
@@ -7816,6 +7840,65 @@ namespace Looker.SDK.API40
   #endregion Theme: Manage Themes
 
   #region User: Manage Users
+
+  /// ### Search email credentials
+  ///
+  /// Returns all credentials_email records that match the given search criteria.
+  ///
+  /// If multiple search params are given and `filter_or` is FALSE or not specified,
+  /// search params are combined in a logical AND operation.
+  /// Only rows that match *all* search param criteria will be returned.
+  ///
+  /// If `filter_or` is TRUE, multiple search params are combined in a logical OR operation.
+  /// Results will include rows that match **any** of the search criteria.
+  ///
+  /// String search params use case-insensitive matching.
+  /// String search params can contain `%` and '_' as SQL LIKE pattern match wildcard expressions.
+  /// example="dan%" will match "danger" and "Danzig" but not "David"
+  /// example="D_m%" will match "Damage" and "dump"
+  ///
+  /// Integer search params can accept a single value or a comma separated list of values. The multiple
+  /// values will be combined under a logical OR operation - results will match at least one of
+  /// the given values.
+  ///
+  /// Most search params can accept "IS NULL" and "NOT NULL" as special expressions to match
+  /// or exclude (respectively) rows where the column is null.
+  ///
+  /// Boolean search params accept only "true" and "false" as values.
+  ///
+  /// GET /credentials_email/search -> CredentialsEmailSearch[]
+  ///
+  /// <returns><c>CredentialsEmailSearch[]</c> Credentials Email (application/json)</returns>
+  ///
+  /// <param name="fields">Requested fields.</param>
+  /// <param name="limit">Number of results to return (used with `offset`).</param>
+  /// <param name="offset">Number of results to skip before returning any (used with `limit`).</param>
+  /// <param name="sorts">Fields to sort by.</param>
+  /// <param name="id">Match credentials_email id.</param>
+  /// <param name="email">Match credentials_email email.</param>
+  /// <param name="emails">Find credentials_email that match given emails.</param>
+  /// <param name="filter_or">Combine given search criteria in a boolean OR expression.</param>
+  public async Task<SdkResponse<CredentialsEmailSearch[], Exception>> search_credentials_email(
+    string? fields = null,
+    long? limit = null,
+    long? offset = null,
+    string? sorts = null,
+    long? id = null,
+    string? email = null,
+    string? emails = null,
+    bool? filter_or = null,
+    ITransportSettings? options = null)
+{  
+    return await AuthRequest<CredentialsEmailSearch[], Exception>(HttpMethod.Get, "/credentials_email/search", new Values {
+      { "fields", fields },
+      { "limit", limit },
+      { "offset", offset },
+      { "sorts", sorts },
+      { "id", id },
+      { "email", email },
+      { "emails", emails },
+      { "filter_or", filter_or }},null,options);
+  }
 
   /// ### Get information about the current user; i.e. the user account currently calling the API.
   ///
