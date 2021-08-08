@@ -26,7 +26,7 @@ SOFTWARE.
 
 /*
 
-335 API models: 211 Spec, 51 Request, 56 Write, 17 Enum
+339 API models: 213 Spec, 53 Request, 56 Write, 17 Enum
 */
 
 
@@ -465,6 +465,20 @@ type CredentialsApi3 struct {
 
 
 type CredentialsEmail struct {
+  Can                            *map[string]bool `json:"can,omitempty"`                                  // Operations the current user is able to perform on this object
+  CreatedAt                      *string          `json:"created_at,omitempty"`                           // Timestamp for the creation of this credential
+  Email                          *string          `json:"email,omitempty"`                                // EMail address used for user login
+  ForcedPasswordResetAtNextLogin *bool            `json:"forced_password_reset_at_next_login,omitempty"`  // Force the user to change their password upon their next login
+  IsDisabled                     *bool            `json:"is_disabled,omitempty"`                          // Has this credential been disabled?
+  LoggedInAt                     *string          `json:"logged_in_at,omitempty"`                         // Timestamp for most recent login using credential
+  PasswordResetUrl               *string          `json:"password_reset_url,omitempty"`                   // Url with one-time use secret token that the user can use to reset password
+  Type                           *string          `json:"type,omitempty"`                                 // Short name for the type of this kind of credential
+  Url                            *string          `json:"url,omitempty"`                                  // Link to get this item
+  UserUrl                        *string          `json:"user_url,omitempty"`                             // Link to get this user
+}
+
+
+type CredentialsEmailSearch struct {
   Can                            *map[string]bool `json:"can,omitempty"`                                  // Operations the current user is able to perform on this object
   CreatedAt                      *string          `json:"created_at,omitempty"`                           // Timestamp for the creation of this credential
   Email                          *string          `json:"email,omitempty"`                                // EMail address used for user login
@@ -2252,6 +2266,13 @@ type RequestAllIntegrations struct {
   IntegrationHubId *string `json:"integration_hub_id,omitempty"`  // Filter to a specific provider
 }
 
+// Dynamically generated request type for all_lookml_models
+type RequestAllLookmlModels struct {
+  Fields *string `json:"fields,omitempty"`  // Requested fields.
+  Limit  *int64  `json:"limit,omitempty"`   // Number of results to return. (can be used with offset)
+  Offset *int64  `json:"offset,omitempty"`  // Number of results to skip before returning any. (Defaults to 0 if not set when limit is used)
+}
+
 // Dynamically generated request type for all_roles
 type RequestAllRoles struct {
   Fields *string         `json:"fields,omitempty"`  // Requested fields.
@@ -2558,6 +2579,18 @@ type RequestSearchContentViews struct {
   Offset            *int64  `json:"offset,omitempty"`               // Number of results to skip before returning data
   Sorts             *string `json:"sorts,omitempty"`                // Fields to sort by
   FilterOr          *bool   `json:"filter_or,omitempty"`            // Combine given search criteria in a boolean OR expression
+}
+
+// Dynamically generated request type for search_credentials_email
+type RequestSearchCredentialsEmail struct {
+  Fields   *string `json:"fields,omitempty"`     // Requested fields.
+  Limit    *int64  `json:"limit,omitempty"`      // Number of results to return (used with `offset`).
+  Offset   *int64  `json:"offset,omitempty"`     // Number of results to skip before returning any (used with `limit`).
+  Sorts    *string `json:"sorts,omitempty"`      // Fields to sort by.
+  Id       *int64  `json:"id,omitempty"`         // Match credentials_email id.
+  Email    *string `json:"email,omitempty"`      // Match credentials_email email.
+  Emails   *string `json:"emails,omitempty"`     // Find credentials_email that match given emails.
+  FilterOr *bool   `json:"filter_or,omitempty"`  // Combine given search criteria in a boolean OR expression.
 }
 
 // Dynamically generated request type for search_dashboard_elements
@@ -3053,6 +3086,13 @@ type SessionConfig struct {
   UnlimitedSessionsPerUser *bool            `json:"unlimited_sessions_per_user,omitempty"`  // Allow users to have an unbounded number of concurrent sessions (otherwise, users will be limited to only one session at a time).
   UseInactivityBasedLogout *bool            `json:"use_inactivity_based_logout,omitempty"`  // Enforce session logout for sessions that are inactive for 15 minutes.
   TrackSessionLocation     *bool            `json:"track_session_location,omitempty"`       // Track location of session when user logs in.
+}
+
+// WARNING: no writeable properties found for POST, PUT, or PATCH
+type Setting struct {
+  ExtensionFrameworkEnabled     *bool `json:"extension_framework_enabled,omitempty"`       // Toggle extension framework on or off
+  MarketplaceAutoInstallEnabled *bool `json:"marketplace_auto_install_enabled,omitempty"`  // Toggle marketplace auto install on or off
+  MarketplaceEnabled            *bool `json:"marketplace_enabled,omitempty"`               // Toggle marketplace on or off
 }
 
 

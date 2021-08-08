@@ -21,7 +21,7 @@
 /// SOFTWARE.
 ///
 
-/// 284 API models: 211 Spec, 0 Request, 56 Write, 17 Enum
+/// 286 API models: 213 Spec, 0 Request, 56 Write, 17 Enum
 
 #nullable enable
 using System;
@@ -712,6 +712,30 @@ public class CredentialsApi3 : SdkModel
 }
 
 public class CredentialsEmail : SdkModel
+{
+  /// <summary>Operations the current user is able to perform on this object (read-only)</summary>
+  public StringDictionary<bool>? can { get; set; } = null;
+  /// <summary>Timestamp for the creation of this credential (read-only)</summary>
+  public string? created_at { get; set; } = null;
+  /// <summary>EMail address used for user login</summary>
+  public string? email { get; set; } = null;
+  /// <summary>Force the user to change their password upon their next login</summary>
+  public bool? forced_password_reset_at_next_login { get; set; } = null;
+  /// <summary>Has this credential been disabled? (read-only)</summary>
+  public bool? is_disabled { get; set; } = null;
+  /// <summary>Timestamp for most recent login using credential (read-only)</summary>
+  public string? logged_in_at { get; set; } = null;
+  /// <summary>Url with one-time use secret token that the user can use to reset password (read-only)</summary>
+  public string? password_reset_url { get; set; } = null;
+  /// <summary>Short name for the type of this kind of credential (read-only)</summary>
+  public string? type { get; set; } = null;
+  /// <summary>Link to get this item (read-only)</summary>
+  public string? url { get; set; } = null;
+  /// <summary>Link to get this user (read-only)</summary>
+  public string? user_url { get; set; } = null;
+}
+
+public class CredentialsEmailSearch : SdkModel
 {
   /// <summary>Operations the current user is able to perform on this object (read-only)</summary>
   public StringDictionary<bool>? can { get; set; } = null;
@@ -4149,6 +4173,17 @@ public class SessionConfig : SdkModel
   public bool? use_inactivity_based_logout { get; set; } = null;
   /// <summary>Track location of session when user logs in.</summary>
   public bool? track_session_location { get; set; } = null;
+}
+
+/// WARNING: no writeable properties found for POST, PUT, or PATCH
+public class Setting : SdkModel
+{
+  /// <summary>Toggle extension framework on or off (read-only)</summary>
+  public bool? extension_framework_enabled { get; set; } = null;
+  /// <summary>Toggle marketplace auto install on or off (read-only)</summary>
+  public bool? marketplace_auto_install_enabled { get; set; } = null;
+  /// <summary>Toggle marketplace on or off (read-only)</summary>
+  public bool? marketplace_enabled { get; set; } = null;
 }
 
 public class Snippet : SdkModel
