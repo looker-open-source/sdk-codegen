@@ -47,7 +47,7 @@ import {
   Paragraph,
   Link,
 } from '@looker/components'
-import { CodeDisplay } from '@looker/code-editor/src'
+import { CodeDisplay } from '@looker/code-editor'
 import { CheckProgress } from '@looker/icons'
 import { Delete } from '@styled-icons/material/Delete'
 import { Done } from '@styled-icons/material/Done'
@@ -72,7 +72,6 @@ interface ConfigFormProps {
 
 const defaultFieldValues = {
   baseUrl: '',
-  lookerUrl: '',
   webUrl: '',
   /** not currently used but declared for property compatibility for ILoadedSpecs */
   headless: false,
@@ -111,7 +110,7 @@ export const ConfigForm: FC<ConfigFormProps> = ({
     setFields((currentFields) => ({
       ...currentFields,
       baseUrl: base_url,
-      lookerUrl: looker_url,
+      webUrl: looker_url,
     }))
   }, [configurator])
 
@@ -201,14 +200,14 @@ export const ConfigForm: FC<ConfigFormProps> = ({
           <Fieldset legend="Server locations">
             <FieldText
               required
-              label="API server url"
+              label="API server URL"
               placeholder="typically https://myserver.looker.com:19999"
               name="baseUrl"
               defaultValue={fields.baseUrl}
               onChange={handleUrlChange}
             />
             <FieldText
-              label="Web server url"
+              label="Auth server URL"
               placeholder="Click 'Verify' to retrieve"
               name="webUrl"
               defaultValue={fields.webUrl}
@@ -237,7 +236,6 @@ export const ConfigForm: FC<ConfigFormProps> = ({
         <Button
           iconBefore={<Done />}
           disabled={saveButtonDisabled}
-          // TODO maybe validationMessages is breaking the submit?
           onClick={handleSubmit}
           mr="small"
         >
@@ -251,7 +249,6 @@ export const ConfigForm: FC<ConfigFormProps> = ({
         >
           Verify
         </Button>
-
         <Button
           onClick={handleRemove}
           iconBefore={<Delete />}
