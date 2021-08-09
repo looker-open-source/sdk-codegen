@@ -202,16 +202,9 @@ export const ConfigForm: FC<ConfigFormProps> = ({
       <DialogContent>
         <Form onSubmit={handleSubmit} validationMessages={validationMessages}>
           <Fieldset legend="Server locations">
-            {fields.fetchError && (
-              <>
-                <MessageBar
-                  intent="critical"
-                  visible={fields.fetchError !== ''}
-                >
-                  {fields.fetchError}
-                </MessageBar>
-              </>
-            )}
+            <MessageBar intent="critical" visible={fields.fetchError !== ''}>
+              {fields.fetchError}
+            </MessageBar>
             <FieldText
               required
               label="API server URL"
