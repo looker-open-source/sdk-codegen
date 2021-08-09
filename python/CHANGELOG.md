@@ -5,6 +5,13 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+### [21.12.1](https://www.github.com/looker-open-source/sdk-codegen/compare/looker_sdk-v21.12.0...looker_sdk-v21.12.1) (2021-08-09)
+
+
+### Bug Fixes
+
+* remove python setup.py author_email ([#787](https://www.github.com/looker-open-source/sdk-codegen/issues/787)) ([7939a73](https://www.github.com/looker-open-source/sdk-codegen/commit/7939a7397c44864e1f48cea7a408ce1bfdef9782))
+
 ## [21.12.0](https://www.github.com/looker-open-source/sdk-codegen/compare/looker_sdk-v21.10.1...looker_sdk-v21.12.0) (2021-08-06)
 
 

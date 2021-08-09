@@ -1,5 +1,5 @@
 {
-  ".": "1.13.0",
+  ".": "1.13.1",
   "packages/api-explorer": "0.9.17",
   "packages/code-editor": "0.1.8",
   "packages/extension-api-explorer": "21.12.0",
@@ -14,5 +14,5 @@
   "packages/sdk-node": "21.12.0",
   "packages/sdk-rtl": "21.0.19",
   "packages/wholly-sheet": "0.5.15",
-  "python": "21.12.0"
+  "python": "21.12.1"
 }
