@@ -48,6 +48,7 @@ import {
   Link,
 } from '@looker/components'
 import { CodeDisplay } from '@looker/code-editor/src'
+import { CheckProgress } from '@looker/icons'
 import { Delete } from '@styled-icons/material/Delete'
 import { Done } from '@styled-icons/material/Done'
 import {
@@ -73,6 +74,7 @@ const defaultFieldValues = {
   baseUrl: '',
   lookerUrl: '',
   webUrl: '',
+  /** not currently used but declared for property compatibility for ILoadedSpecs */
   headless: false,
   specs: {},
   fetchError: '',
@@ -116,7 +118,7 @@ export const ConfigForm: FC<ConfigFormProps> = ({
   const [validationMessages, setValidationMessages] =
     useState<ValidationMessages>({})
 
-  const handleSubmit = async (e: BaseSyntheticEvent) => {
+  const updateForm = async (e: BaseSyntheticEvent, close: boolean) => {
     e.preventDefault()
     try {
       updateFields('fetchError', '')
@@ -124,6 +126,7 @@ export const ConfigForm: FC<ConfigFormProps> = ({
         `${fields.baseUrl}/versions`
       )
       updateFields('baseUrl', baseUrl)
+      updateFields('webUrl', webUrl)
       await configurator.removeStorage(RunItConfigKey)
       configurator.setStorage(
         RunItConfigKey,
@@ -135,10 +138,18 @@ export const ConfigForm: FC<ConfigFormProps> = ({
         'local'
       )
       if (setHasConfig) setHasConfig(true)
-      closeModal()
+      if (close) closeModal()
     } catch (err) {
       updateFields('fetchError', err.message)
     }
+  }
+
+  const handleSubmit = async (e: BaseSyntheticEvent) => {
+    await updateForm(e, true)
+  }
+
+  const handleValidate = async (e: BaseSyntheticEvent) => {
+    await updateForm(e, false)
   }
 
   const handleRemove = (e: BaseSyntheticEvent) => {
@@ -149,7 +160,6 @@ export const ConfigForm: FC<ConfigFormProps> = ({
   }
 
   const updateFields = (name: string, value: string) => {
-    // console.log('updateFields', { name, value })
     const newFields = { ...fields }
     newFields[name] = value
     setFields(newFields)
@@ -191,17 +201,16 @@ export const ConfigForm: FC<ConfigFormProps> = ({
           <Fieldset legend="Server locations">
             <FieldText
               required
-              label="Looker API server url"
+              label="API server url"
               placeholder="typically https://myserver.looker.com:19999"
               name="baseUrl"
               defaultValue={fields.baseUrl}
               onChange={handleUrlChange}
             />
             <FieldText
-              required
-              label="Looker Web server url"
-              placeholder="typically https://myserver.looker.com:9999"
-              name="lookerUrl"
+              label="Web server url"
+              placeholder="Click 'Verify' to retrieve"
+              name="webUrl"
               defaultValue={fields.webUrl}
               disabled={true}
             />
@@ -234,6 +243,15 @@ export const ConfigForm: FC<ConfigFormProps> = ({
         >
           Save
         </Button>
+        <Button
+          iconBefore={<CheckProgress />}
+          disabled={saveButtonDisabled}
+          onClick={handleValidate}
+          mr="small"
+        >
+          Verify
+        </Button>
+
         <Button
           onClick={handleRemove}
           iconBefore={<Delete />}

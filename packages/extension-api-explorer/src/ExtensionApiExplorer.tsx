@@ -40,11 +40,11 @@ import {
 } from '@looker/sdk-codegen'
 import { Looker31SDK, Looker40SDK } from '@looker/sdk'
 import ApiExplorer from '@looker/api-explorer/src/ApiExplorer'
+import { Loader } from '@looker/api-explorer/src/components'
 import { getExtensionSDK } from '@looker/extension-sdk'
 import { configureStore } from '@looker/api-explorer/src/state'
 import { Provider } from 'react-redux'
 import { ExtensionEnvAdaptor } from './utils'
-import { Loader } from './Loader'
 
 class ExtensionConfigurator implements RunItConfigurator {
   storage: Record<string, string> = {}

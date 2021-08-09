@@ -25,7 +25,7 @@
  */
 
 import React, { BaseSyntheticEvent, Dispatch, FC } from 'react'
-import { Button, Heading, Text, Paragraph, Space } from '@looker/components'
+import { Button, Tooltip, Space } from '@looker/components'
 import { IAPIMethods } from '@looker/sdk-rtl'
 import { runItSDK } from '../../utils'
 import { ConfigDialog, RunItConfigurator } from '../ConfigForm'
@@ -51,15 +51,10 @@ export const LoginForm: FC<LoginFormProps> = ({
 
   return (
     <>
-      <Heading>
-        <Text>OAuth Login</Text>
-      </Heading>
-      <Paragraph>
-        OAuth authentication is already configured, but the browser session is
-        not authenticated. Please click <strong>Login</strong> to authenticate.
-      </Paragraph>
       <Space>
-        <Button onClick={handleSubmit}>Login</Button>
+        <Tooltip content="OAuth authentication is already configured, but the browser session is not authenticated. Please click Login to authenticate.">
+          <Button onClick={handleSubmit}>Login</Button>
+        </Tooltip>
         {setHasConfig && (
           <ConfigDialog
             setHasConfig={setHasConfig}
