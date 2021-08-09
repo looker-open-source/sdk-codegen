@@ -42,7 +42,7 @@ import {
   Fieldset,
   FieldText,
   Form,
-  Text,
+  MessageBar,
   ValidationMessages,
   Paragraph,
   Link,
@@ -117,27 +117,32 @@ export const ConfigForm: FC<ConfigFormProps> = ({
   const [validationMessages, setValidationMessages] =
     useState<ValidationMessages>({})
 
-  const updateForm = async (e: BaseSyntheticEvent, close: boolean) => {
+  const updateForm = async (e: BaseSyntheticEvent, save: boolean) => {
     e.preventDefault()
     try {
       updateFields('fetchError', '')
       const { webUrl, baseUrl } = await loadSpecsFromVersions(
         `${fields.baseUrl}/versions`
       )
+      if (!baseUrl || !webUrl) {
+        throw new Error('Could not retrieve /versions payload for server URLs')
+      }
       updateFields('baseUrl', baseUrl)
       updateFields('webUrl', webUrl)
       await configurator.removeStorage(RunItConfigKey)
-      configurator.setStorage(
-        RunItConfigKey,
-        JSON.stringify({
-          base_url: baseUrl,
-          looker_url: webUrl,
-        }),
-        // Always store in local storage
-        'local'
-      )
-      if (setHasConfig) setHasConfig(true)
-      if (close) closeModal()
+      if (save) {
+        configurator.setStorage(
+          RunItConfigKey,
+          JSON.stringify({
+            base_url: baseUrl,
+            looker_url: webUrl,
+          }),
+          // Always store in local storage
+          'local'
+        )
+        if (setHasConfig) setHasConfig(true)
+        closeModal()
+      }
     } catch (err) {
       updateFields('fetchError', err.message)
     }
@@ -147,7 +152,7 @@ export const ConfigForm: FC<ConfigFormProps> = ({
     await updateForm(e, true)
   }
 
-  const handleValidate = async (e: BaseSyntheticEvent) => {
+  const handleVerify = async (e: BaseSyntheticEvent) => {
     await updateForm(e, false)
   }
 
@@ -159,8 +164,7 @@ export const ConfigForm: FC<ConfigFormProps> = ({
   }
 
   const updateFields = (name: string, value: string) => {
-    const newFields = { ...fields }
-    newFields[name] = value
+    const newFields = { ...fields, ...{ [name]: value } }
     setFields(newFields)
   }
 
@@ -198,6 +202,16 @@ export const ConfigForm: FC<ConfigFormProps> = ({
       <DialogContent>
         <Form onSubmit={handleSubmit} validationMessages={validationMessages}>
           <Fieldset legend="Server locations">
+            {fields.fetchError && (
+              <>
+                <MessageBar
+                  intent="critical"
+                  visible={fields.fetchError !== ''}
+                >
+                  {fields.fetchError}
+                </MessageBar>
+              </>
+            )}
             <FieldText
               required
               label="API server URL"
@@ -215,11 +229,6 @@ export const ConfigForm: FC<ConfigFormProps> = ({
             />
           </Fieldset>
         </Form>
-        {fields.fetchError && (
-          <>
-            <Text color="danger">{fields.fetchError}</Text>
-          </>
-        )}
         <Paragraph>
           The following configuration can be used to create a{' '}
           <Link
@@ -244,7 +253,7 @@ export const ConfigForm: FC<ConfigFormProps> = ({
         <Button
           iconBefore={<CheckProgress />}
           disabled={saveButtonDisabled}
-          onClick={handleValidate}
+          onClick={handleVerify}
           mr="small"
         >
           Verify
