@@ -45,13 +45,12 @@ REQUIRES = [
 
 setup(
     author="Looker Data Sciences, Inc.",
-    author_email="Looker Team <https://help.looker.com>",
-    description="Looker API 3.1",
+    description="Looker REST API",
     install_requires=REQUIRES,
     license="MIT",
     long_description=open("README.rst").read(),
     long_description_content_type="text/x-rst",
-    keywords=["Looker", "Looker API", "looker_sdk", "Looker API 3.1"],
+    keywords=["Looker", "Looker API", "looker_sdk", "Looker API 3.1", "Looker API 4.0"],
     name=NAME,
     package_data={"looker_sdk": ["py.typed", "looker_sdk/looker-sample.ini"]},
     packages=find_packages(),
