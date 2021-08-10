@@ -46,6 +46,7 @@ import {
   ValidationMessages,
   Paragraph,
   Link,
+  MessageBarIntent,
 } from '@looker/components'
 import { CodeDisplay } from '@looker/code-editor'
 import { CheckProgress } from '@looker/icons'
@@ -58,6 +59,20 @@ import {
   loadSpecsFromVersions,
   ILoadedSpecs,
 } from './configUtils'
+
+interface FetchMessageProps {
+  message: string
+  intent: MessageBarIntent
+}
+
+const FetchMessage: FC<FetchMessageProps> = ({ message, intent }) => {
+  if (!message) return <></>
+  return (
+    <MessageBar intent={intent} visible={message !== ''}>
+      {message}
+    </MessageBar>
+  )
+}
 
 interface ConfigFormProps {
   /** Title for the config form */
@@ -76,7 +91,8 @@ const defaultFieldValues = {
   /** not currently used but declared for property compatibility for ILoadedSpecs */
   headless: false,
   specs: {},
-  fetchError: '',
+  fetchResult: '',
+  fetchIntent: 'positive',
 }
 
 export const ConfigForm: FC<ConfigFormProps> = ({
@@ -84,6 +100,8 @@ export const ConfigForm: FC<ConfigFormProps> = ({
   setHasConfig,
   configurator,
 }) => {
+  const fetchIntent = 'fetchIntent'
+  const fetchResult = 'fetchResult'
   const { closeModal } = useContext(DialogContext)
   const appConfig = `{
   "client_guid": "looker.api-explorer",
@@ -111,6 +129,8 @@ export const ConfigForm: FC<ConfigFormProps> = ({
       ...currentFields,
       baseUrl: base_url,
       webUrl: looker_url,
+      [fetchIntent]:
+        base_url !== '' && looker_url !== '' ? 'positive' : 'critical',
     }))
   }, [configurator])
 
@@ -120,7 +140,7 @@ export const ConfigForm: FC<ConfigFormProps> = ({
   const updateForm = async (e: BaseSyntheticEvent, save: boolean) => {
     e.preventDefault()
     try {
-      updateFields('fetchError', '')
+      updateFields(fetchResult, '')
       const { webUrl, baseUrl } = await loadSpecsFromVersions(
         `${fields.baseUrl}/versions`
       )
@@ -129,6 +149,8 @@ export const ConfigForm: FC<ConfigFormProps> = ({
       }
       updateFields('baseUrl', baseUrl)
       updateFields('webUrl', webUrl)
+      updateFields(fetchIntent, 'positive')
+      updateFields(fetchResult, '/versions configuration retrieved')
       await configurator.removeStorage(RunItConfigKey)
       if (save) {
         configurator.setStorage(
@@ -144,7 +166,8 @@ export const ConfigForm: FC<ConfigFormProps> = ({
         closeModal()
       }
     } catch (err) {
-      updateFields('fetchError', err.message)
+      updateFields(fetchResult, err.message)
+      updateFields(fetchIntent, 'critical')
     }
   }
 
@@ -164,8 +187,10 @@ export const ConfigForm: FC<ConfigFormProps> = ({
   }
 
   const updateFields = (name: string, value: string) => {
-    const newFields = { ...fields, ...{ [name]: value } }
-    setFields(newFields)
+    setFields((previousFields) => {
+      const newFields = { ...previousFields, ...{ [name]: value } }
+      return newFields
+    })
   }
 
   const handleUrlChange = (event: FormEvent<HTMLInputElement>) => {
@@ -189,9 +214,12 @@ export const ConfigForm: FC<ConfigFormProps> = ({
     setValidationMessages(newValidationMessages)
   }
 
-  const saveButtonDisabled =
+  const verifyButtonDisabled =
     fields.baseUrl.trim().length === 0 ||
     Object.keys(validationMessages).length > 0
+
+  const saveButtonDisabled =
+    verifyButtonDisabled || fields[fetchIntent] !== 'positive'
 
   const removeButtonDisabled =
     fields.webUrl.trim().length === 0 && fields.baseUrl.trim().length === 0
@@ -202,9 +230,10 @@ export const ConfigForm: FC<ConfigFormProps> = ({
       <DialogContent>
         <Form onSubmit={handleSubmit} validationMessages={validationMessages}>
           <Fieldset legend="Server locations">
-            <MessageBar intent="critical" visible={fields.fetchError !== ''}>
-              {fields.fetchError}
-            </MessageBar>
+            <FetchMessage
+              intent={fields[fetchIntent]}
+              message={fields[fetchResult]}
+            />
             <FieldText
               required
               label="API server URL"
@@ -245,7 +274,7 @@ export const ConfigForm: FC<ConfigFormProps> = ({
         </Button>
         <Button
           iconBefore={<CheckProgress />}
-          disabled={saveButtonDisabled}
+          disabled={verifyButtonDisabled}
           onClick={handleVerify}
           mr="small"
         >

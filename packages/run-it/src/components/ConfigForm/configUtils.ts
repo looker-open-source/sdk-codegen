@@ -117,7 +117,7 @@ export interface ILoadedSpecs {
   /** loaded specifications */
   specs: SpecList
   /** communication errors */
-  fetchError: string
+  fetchResult: string
 }
 
 /**
@@ -187,7 +187,7 @@ export const loadSpecsFromVersions = async (
   content: string | Record<string, unknown> = '',
   defer = true
 ): Promise<ILoadedSpecs> => {
-  let fetchError = ''
+  let fetchResult = ''
   let specs: SpecList = {}
   let baseUrl = ''
   let webUrl = ''
@@ -216,7 +216,7 @@ export const loadSpecsFromVersions = async (
     }
     specs = await getSpecsFromVersions(versions, fetchSpec)
   } catch (e) {
-    fetchError = e.message
+    fetchResult = e.message
   }
 
   return {
@@ -224,7 +224,7 @@ export const loadSpecsFromVersions = async (
     webUrl,
     specs,
     headless,
-    fetchError,
+    fetchResult: fetchResult,
   }
 }
 
