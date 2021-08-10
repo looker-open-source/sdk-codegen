@@ -77,7 +77,7 @@ describe('ConfigForm', () => {
     ).toBeInTheDocument()
   })
 
-  test('it disables and enable save for bad and good urls', async () => {
+  test('it disables and enable verify for bad and good urls', async () => {
     renderWithTheme(<ConfigForm configurator={defaultConfigurator} />)
     const apiUrl = screen.getByRole('textbox', {
       name: apiLabel,
@@ -88,7 +88,7 @@ describe('ConfigForm', () => {
     await userEvent.type(apiUrl, 'bad')
     await waitFor(() => {
       const button = screen.getByRole('button', {
-        name: 'Save',
+        name: 'Verify',
       }) as HTMLButtonElement
       expect(button).toBeInTheDocument()
       expect(button).toBeDisabled()
@@ -100,7 +100,7 @@ describe('ConfigForm', () => {
     await waitFor(() => {
       expect(apiUrl).toHaveValue('https://good')
       const button = screen.getByRole('button', {
-        name: 'Save',
+        name: 'Verify',
       }) as HTMLButtonElement
       expect(button).toBeInTheDocument()
       expect(button).toBeEnabled()

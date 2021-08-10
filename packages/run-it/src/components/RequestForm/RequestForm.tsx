@@ -134,19 +134,24 @@ export const RequestForm: FC<RequestFormProps> = ({
         <ButtonTransparent type="button" onClick={handleClear}>
           Clear
         </ButtonTransparent>
-        {hasConfig && !needsAuth && <Button type="submit">Run</Button>}
-        {hasConfig && needsAuth && (
-          <LoginForm
-            sdk={sdk}
-            setHasConfig={setHasConfig}
-            configurator={configurator}
-          />
-        )}
-        {!isExtension && setHasConfig && !hasConfig && (
-          <ConfigDialog
-            setHasConfig={setHasConfig}
-            configurator={configurator}
-          />
+        {hasConfig ? (
+          needsAuth ? (
+            <LoginForm
+              sdk={sdk}
+              setHasConfig={setHasConfig}
+              configurator={configurator}
+            />
+          ) : (
+            <Button type="submit">Run</Button>
+          )
+        ) : (
+          !isExtension &&
+          setHasConfig && (
+            <ConfigDialog
+              setHasConfig={setHasConfig}
+              configurator={configurator}
+            />
+          )
         )}
       </Space>
     </Form>
