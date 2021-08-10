@@ -25,26 +25,42 @@
  */
 
 import { ApiModel, SpecItem, SpecList } from '@looker/sdk-codegen'
-import { fetchSpec } from './utils'
+import { ApiUpdatePayload } from './actions'
+import { SpecAction, Actions } from '.'
 
-export interface SpecState extends SpecItem {
-  key: string
-  api: ApiModel
-}
-
-export interface SpecAction {
-  type: string
-  key: string
-  payload: SpecList
+export interface SpecState {
+  specList: SpecList
+  spec: SpecItem
 }
 
 export const specReducer = (
   state: SpecState,
   action: SpecAction
 ): SpecState => {
-  switch (action.type) {
-    case 'SELECT_SPEC':
-      return fetchSpec(action.key, action.payload)
+  const { type, payload } = action
+  switch (type) {
+    case Actions.UPDATE_SPEC_API: {
+      const specList = { ...state.specList }
+      const { specKey, api } = payload as ApiUpdatePayload
+      let spec = specList[specKey]
+      if (spec) {
+        spec = { ...spec, api }
+        specList[specKey] = spec
+      }
+      return { specList, spec }
+    }
+    case 'SELECT_SPEC': {
+      const newState = { ...state }
+      const spec = newState.specList[payload as string]
+      // Does extension API Explorer needs this?
+      if (spec) {
+        if (!spec.api && spec.specContent) {
+          spec.api = ApiModel.fromJson(spec.specContent)
+        }
+        return { ...state, spec }
+      }
+      return state
+    }
     default:
       return state
   }

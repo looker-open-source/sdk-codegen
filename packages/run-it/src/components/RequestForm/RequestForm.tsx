@@ -26,9 +26,10 @@
 
 import React, { BaseSyntheticEvent, FC, Dispatch } from 'react'
 import { Button, Form, Space, ButtonTransparent } from '@looker/components'
-
+import type { IAPIMethods } from '@looker/sdk-rtl'
 import { RunItHttpMethod, RunItInput, RunItValues } from '../../RunIt'
 import { ConfigDialog, RunItConfigurator } from '../ConfigForm'
+import { LoginForm } from '../LoginForm'
 import {
   createSimpleItem,
   createComplexItem,
@@ -40,6 +41,9 @@ import {
  * Properties required by RequestForm
  */
 interface RequestFormProps {
+  /** Established SDK instance */
+  sdk: IAPIMethods
+  /** Request inputs to the endpoint */
   inputs: RunItInput[]
   /** A callback for submitting the form */
   handleSubmit: (e: BaseSyntheticEvent) => void
@@ -49,6 +53,10 @@ interface RequestFormProps {
   requestContent: RunItValues
   /** A set state callback fn for populating requestContent on interaction with the request form */
   setRequestContent: Dispatch<{ [key: string]: any }>
+  /** Is authentication required? */
+  needsAuth: boolean
+  /** Does RunIt have the configuration values it needs? */
+  hasConfig: boolean
   /** A set state callback which if present allows for editing, setting or clearing OAuth configuration parameters */
   setHasConfig?: Dispatch<boolean>
   /** Configuration plug-in for stand-alone or extension */
@@ -62,11 +70,14 @@ interface RequestFormProps {
  * inputs
  */
 export const RequestForm: FC<RequestFormProps> = ({
+  sdk,
   inputs,
   httpMethod,
   handleSubmit,
   requestContent,
   setRequestContent,
+  needsAuth,
+  hasConfig,
   setHasConfig,
   configurator,
   isExtension = false,
@@ -123,12 +134,24 @@ export const RequestForm: FC<RequestFormProps> = ({
         <ButtonTransparent type="button" onClick={handleClear}>
           Clear
         </ButtonTransparent>
-        <Button type="submit">Run</Button>
-        {!isExtension && setHasConfig && (
-          <ConfigDialog
-            setHasConfig={setHasConfig}
-            configurator={configurator}
-          />
+        {hasConfig ? (
+          needsAuth ? (
+            <LoginForm
+              sdk={sdk}
+              setHasConfig={setHasConfig}
+              configurator={configurator}
+            />
+          ) : (
+            <Button type="submit">Run</Button>
+          )
+        ) : (
+          !isExtension &&
+          setHasConfig && (
+            <ConfigDialog
+              setHasConfig={setHasConfig}
+              configurator={configurator}
+            />
+          )
         )}
       </Space>
     </Form>

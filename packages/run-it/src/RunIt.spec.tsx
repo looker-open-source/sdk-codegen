@@ -156,9 +156,11 @@ describe('RunIt', () => {
       })
     })
 
-    test('it renders ConfigForm', () => {
+    test('it has Configure button', () => {
       renderRunIt()
-      expect(screen.getByRole('button', { name: 'Remove' })).toBeInTheDocument()
+      expect(
+        screen.getByRole('button', { name: 'Configure' })
+      ).toBeInTheDocument()
       expect(
         screen.queryByRole('button', { name: run })
       ).not.toBeInTheDocument()
@@ -177,7 +179,7 @@ describe('RunIt', () => {
       })
     })
 
-    test('it renders LoginForm', () => {
+    test('it has Login button', () => {
       renderRunIt()
       expect(screen.getByRole('button', { name: 'Login' })).toBeInTheDocument()
       expect(

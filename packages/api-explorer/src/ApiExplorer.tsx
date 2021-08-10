@@ -30,6 +30,7 @@ import styled, { createGlobalStyle } from 'styled-components'
 import { Aside, ComponentsProvider, Layout, Page } from '@looker/components'
 import { Looker40SDK, Looker31SDK } from '@looker/sdk'
 import { SpecList } from '@looker/sdk-codegen'
+import { loadSpecApi } from '@looker/run-it'
 import {
   SearchContext,
   LodeContext,
@@ -43,6 +44,7 @@ import {
   initDefaultSpecState,
   searchReducer,
   defaultSearchState,
+  updateSpecApi,
 } from './reducers'
 import { AppRouter } from './routes'
 import { apixFilesHost } from './utils/lodeUtils'
@@ -69,10 +71,11 @@ const ApiExplorer: FC<ApiExplorerProps> = ({
   const location = useLocation()
   const { setSdkLanguageAction } = useActions()
 
-  const [spec, specDispatch] = useReducer(
+  const [specState, specDispatch] = useReducer(
     specReducer,
     initDefaultSpecState(specs, location)
   )
+  const { spec } = specState
   const [searchSettings, setSearchSettings] = useReducer(
     searchReducer,
     defaultSearchState
@@ -89,6 +92,7 @@ const ApiExplorer: FC<ApiExplorerProps> = ({
       setHasNavigation((currentHasNavigation) => !currentHasNavigation)
     }
   }, [])
+
   useEffect(() => {
     if (headless) {
       window.addEventListener('message', hasNavigationToggle)
@@ -101,11 +105,24 @@ const ApiExplorer: FC<ApiExplorerProps> = ({
   }, [])
 
   useEffect(() => {
+    const loadSpec = async () => {
+      if (!spec.api) {
+        const newSpec = { ...spec }
+        const api = await loadSpecApi(newSpec)
+        if (api) {
+          specDispatch(updateSpecApi(spec.key, api))
+        }
+      }
+    }
+    loadSpec()
+  }, [spec])
+
+  useEffect(() => {
     getLoded(exampleLodeUrl, declarationsLodeUrl).then((resp) => setLode(resp))
   }, [exampleLodeUrl, declarationsLodeUrl])
 
   useEffect(() => {
-    const getSettings = async () => {
+    const initSdkLanguage = async () => {
       const resp = await envAdaptor.localStorageGetItem(
         EnvAdaptorConstants.LOCALSTORAGE_SDK_LANGUAGE_KEY
       )
@@ -113,7 +130,7 @@ const ApiExplorer: FC<ApiExplorerProps> = ({
         setSdkLanguageAction(resp)
       }
     }
-    getSettings()
+    initSdkLanguage()
   }, [envAdaptor, setSdkLanguageAction])
 
   const { loadGoogleFonts, themeCustomizations } = envAdaptor.themeOverrides()
@@ -141,7 +158,7 @@ const ApiExplorer: FC<ApiExplorerProps> = ({
                   )}
                   <Layout hasAside height="100%">
                     {hasNavigation && (
-                      <AsideBorder width="20rem">
+                      <AsideBorder pt="large" width="20rem">
                         <SideNav
                           headless={headless}
                           specs={specs}
@@ -150,12 +167,14 @@ const ApiExplorer: FC<ApiExplorerProps> = ({
                         />
                       </AsideBorder>
                     )}
-                    <AppRouter
-                      api={spec.api}
-                      specKey={spec.key}
-                      specs={specs}
-                      toggleNavigation={toggleNavigation}
-                    />
+                    {spec.api && (
+                      <AppRouter
+                        api={spec.api}
+                        specKey={spec.key}
+                        specs={specs}
+                        toggleNavigation={toggleNavigation}
+                      />
+                    )}
                   </Layout>
                 </Page>
               </SearchContext.Provider>

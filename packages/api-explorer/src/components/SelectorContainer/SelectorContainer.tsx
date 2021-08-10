@@ -27,9 +27,9 @@
 import React, { FC, Dispatch } from 'react'
 import { Space, IconButton } from '@looker/components'
 import { ChangeHistory } from '@styled-icons/material/ChangeHistory'
-import { SpecList } from '@looker/sdk-codegen'
+import { SpecList, SpecItem } from '@looker/sdk-codegen'
 import { Link } from '../Link'
-import { SpecState, SpecAction } from '../../reducers'
+import { SpecAction } from '../../reducers'
 import { diffPath } from '../../utils'
 import { SdkLanguageSelector } from './SdkLanguageSelector'
 import { ApiSpecSelector } from './ApiSpecSelector'
@@ -38,7 +38,7 @@ interface SelectorContainerProps {
   /** Specs to choose from */
   specs: SpecList
   /** Current selected spec */
-  spec: SpecState
+  spec: SpecItem
   /** Spec state setter */
   specDispatch: Dispatch<SpecAction>
 }
