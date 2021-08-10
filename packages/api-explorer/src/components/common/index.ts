@@ -24,3 +24,4 @@
 
  */
 export { ApixHeading, ApixSection } from './common'
+export { Loader } from './Loader'

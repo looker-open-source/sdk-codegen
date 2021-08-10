@@ -23,20 +23,13 @@
  SOFTWARE.
 
  */
-import { ApiModel, SpecList } from '@looker/sdk-codegen'
+import { SpecList } from '@looker/sdk-codegen'
 import omit from 'lodash/omit'
 
 import { specs } from '../../test-data'
-import {
-  getDefaultSpecKey,
-  parseSpec,
-  fetchSpec,
-  initDefaultSpecState,
-  getSpecKey,
-} from './utils'
+import { getDefaultSpecKey, initDefaultSpecState, getSpecKey } from './utils'
 
 describe('Spec reducer utils', () => {
-  const spec = specs['3.1']
   const specList: SpecList = {
     defaultKey: {
       key: 'defaultKey',
@@ -63,20 +56,6 @@ describe('Spec reducer utils', () => {
       isDefault: false,
     },
   }
-
-  describe('parseSpec', () => {
-    test('given a spec it returns an ApiModel with both readonly and writeable types', () => {
-      expect(spec.specContent).toBeDefined()
-      if (spec.specContent) {
-        const api = parseSpec(spec.specContent)
-        expect(api).toBeDefined()
-        const types = Object.keys(api.types)
-        expect(types).toEqual(
-          expect.arrayContaining(['Dashboard', 'WriteDashboard'])
-        )
-      }
-    })
-  })
 
   describe('getSpecKey', () => {
     const saveLocation = window.location
@@ -135,53 +114,6 @@ describe('Spec reducer utils', () => {
     })
   })
 
-  describe('fetchSpec', () => {
-    const specList: SpecList = {
-      fromModel: {
-        key: 'fromModel',
-        status: 'experimental',
-        isDefault: false,
-        api: ApiModel.fromJson(specs['3.1'].specContent),
-        version: 'model',
-      },
-      fromSpecContent: {
-        key: 'fromSpecContent',
-        status: 'current',
-        isDefault: true,
-        specContent: specs['3.1'].specContent,
-        version: 'spec',
-      },
-      emptySpecItem: {
-        key: 'emptySpecItem',
-        status: 'deprecated',
-        isDefault: false,
-        version: 'empty',
-      },
-    }
-
-    test('it uses api model if found ', () => {
-      const fetchedSpec = fetchSpec('fromModel', specList)
-      expect(fetchedSpec.api).toBeInstanceOf(ApiModel)
-    })
-
-    test('it uses spec content to create model if model is not available', () => {
-      const fetchedSpec = fetchSpec('fromSpecContent', specList)
-      expect(fetchedSpec.api).toBeInstanceOf(ApiModel)
-    })
-
-    test('it throws for invalid key', () => {
-      expect(() => fetchSpec('Bad Key', specList)).toThrow(
-        'Spec not found: "Bad Key"'
-      )
-    })
-
-    test('it throws if no model, content or url are found', () => {
-      expect(() => fetchSpec('emptySpecItem', specList)).toThrow(
-        'Could not fetch spec.'
-      )
-    })
-  })
-
   describe('initDefaultSpecState', () => {
     const saveLocation = window.location
 
@@ -191,16 +123,16 @@ describe('Spec reducer utils', () => {
 
     test('it fetches spec using key defined in url', () => {
       window.history.pushState({}, '', '/4.0/')
-      const fetchedSpec = initDefaultSpecState(specs, window.location)
-      expect(fetchedSpec).toBeDefined()
-      expect(fetchedSpec.key).toEqual('4.0')
+      const specState = initDefaultSpecState(specs, window.location)
+      expect(specState).toBeDefined()
+      expect(specState.spec.key).toEqual('4.0')
     })
 
     test('it gets default spec if url does not specify a key', () => {
       window.history.pushState({}, '', '/')
-      const fetchedSpec = initDefaultSpecState(specs, window.location)
-      expect(fetchedSpec).toBeDefined()
-      expect(fetchedSpec.key).toEqual('4.0')
+      const specState = initDefaultSpecState(specs, window.location)
+      expect(specState).toBeDefined()
+      expect(specState.spec.key).toEqual('4.0')
     })
   })
 })
