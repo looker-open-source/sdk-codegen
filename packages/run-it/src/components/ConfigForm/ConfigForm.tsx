@@ -145,12 +145,12 @@ export const ConfigForm: FC<ConfigFormProps> = ({
         `${fields.baseUrl}/versions`
       )
       if (!baseUrl || !webUrl) {
-        throw new Error('Could not retrieve /versions payload for server URLs')
+        throw new Error('Invalid server configuration')
       }
       updateFields('baseUrl', baseUrl)
       updateFields('webUrl', webUrl)
       updateFields(fetchIntent, 'positive')
-      updateFields(fetchResult, '/versions configuration retrieved')
+      updateFields(fetchResult, 'Configuration is valid')
       await configurator.removeStorage(RunItConfigKey)
       if (save) {
         configurator.setStorage(

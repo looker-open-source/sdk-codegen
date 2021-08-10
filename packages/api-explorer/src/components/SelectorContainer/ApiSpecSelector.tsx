@@ -49,7 +49,7 @@ export const ApiSpecSelector: FC<ApiSpecSelectorProps> = ({
     description: spec.status,
   }))
 
-  const handleChange = async (specKey: string) => {
+  const handleChange = (specKey: string) => {
     specDispatch(selectSpec(specKey))
     history.push(`/${specKey}`)
   }
