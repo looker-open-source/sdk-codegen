@@ -200,17 +200,8 @@ export class BrowserTransport extends BaseTransport {
       BrowserTransport.markEnd(requestPath, started)
     }
     const headers = {}
-    // Hack trying to get the actual header values according to https://developer.mozilla.org/en-US/docs/Web/API/Headers/entries
-    // sadly, it isn't working
-    // for (const pair of (res.headers as any).entries()) {
-    //   console.log(pair[0] + ': ' + pair[1])
-    //   headers[pair[0]] = pair[1]
-    // }
-    for (const key of (res.headers as any).keys()) {
-      headers[key] = res.headers.get(key)
-    }
+    res.headers.forEach((value, key) => (headers[key] = value))
     console.log({ headers })
-    // res.headers.forEach((value, key) => (headers[key] = value))
     const response: IRawResponse = {
       url: requestPath,
       body: responseBody,
