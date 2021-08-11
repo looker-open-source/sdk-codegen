@@ -25,21 +25,27 @@
  */
 
 import React, { FC, useEffect, useState } from 'react'
-import { CodeDisplay } from '@looker/code-editor'
-import { Heading } from '@looker/components'
+import {
+  Table,
+  TableBody,
+  TableRow,
+  TableDataCell,
+  Heading,
+  Span,
+  TableHead,
+  TableHeaderCell,
+} from '@looker/components'
+import styled from 'styled-components'
 import type { ResponseContent } from '../..'
 import { ShowResponse, Collapser } from '../..'
 
-interface ResponseExplorerProps {
-  response: ResponseContent
-  verb: string
-  path: string
-}
-
-const getHeaders = (response: ResponseContent): string[][] => {
-  const result: string[][] = response?.headers
-    ? Object.entries(response?.headers).map(([key, val]) => [key, val])
-    : []
+type HeaderTable = string[][]
+const getHeaders = (response: ResponseContent): HeaderTable => {
+  if (!response?.headers) return []
+  const result: HeaderTable = [['Name', 'Value']]
+  Object.entries(response.headers).forEach(([key, val]) =>
+    result.push([key, val])
+  )
   return result
 }
 
@@ -51,15 +57,68 @@ const getBodySize = (response: ResponseContent): string => {
   } bytes`
   return result
 }
+
+export const NoWrap = styled(Span)`
+  display: inline-block;
+  direction: rtl;
+  white-space: nowrap;
+  overflow: hidden;
+`
+
+interface ShowHeadersProps {
+  response: ResponseContent
+}
+
+const ShowHeaders: FC<ShowHeadersProps> = ({ response }) => {
+  const data = getHeaders(response)
+  if (data.length === 0) return <></>
+  const rows = data.slice(1)
+  return (
+    <Collapser
+      key="headers"
+      heading={`Headers (${rows.length})`}
+      id="headers"
+      defaultOpen={false}
+    >
+      <Table>
+        <TableHead>
+          <TableRow>
+            <TableHeaderCell p="xsmall">Name</TableHeaderCell>
+            <TableHeaderCell p="xsmall">Value</TableHeaderCell>
+          </TableRow>
+        </TableHead>
+        <TableBody>
+          {rows.map(([key, value]) => (
+            <TableRow key={key}>
+              <TableDataCell p="xsmall">
+                <NoWrap>
+                  <strong>{key}</strong>
+                </NoWrap>
+              </TableDataCell>
+              <TableDataCell p="xsmall">
+                <Span>{value}</Span>
+              </TableDataCell>
+            </TableRow>
+          ))}
+        </TableBody>
+      </Table>
+    </Collapser>
+  )
+}
+
+interface ResponseExplorerProps {
+  response: ResponseContent
+  verb: string
+  path: string
+}
+
 export const ResponseExplorer: FC<ResponseExplorerProps> = ({
   response,
   verb,
   path,
 }) => {
-  const [headers, setHeaders] = useState(getHeaders(response))
   const [bodySize, setBodySize] = useState(getBodySize(response))
   useEffect(() => {
-    setHeaders(getHeaders(response))
     setBodySize(getBodySize(response))
   }, [response])
   if (!response) {
@@ -70,18 +129,13 @@ export const ResponseExplorer: FC<ResponseExplorerProps> = ({
 
   return (
     <>
-      <Heading as="h4">{`${verb || ''} ${path || ''} ${response.statusCode}: ${
-        response.contentType
-      }`}</Heading>
-
-      {headers.length > 0 && (
-        <Collapser key="headers" heading="Headers" id="headers">
-          <CodeDisplay language="json" code={JSON.stringify(headers)} />
-        </Collapser>
-      )}
+      <Heading as="h4">{`${verb || ''} ${path || ''} (${response.statusCode}: ${
+        response.statusMessage
+      })`}</Heading>
       <Collapser heading={`Body (${bodySize})`} id="body">
         <ShowResponse response={response} />
       </Collapser>
+      <ShowHeaders response={response} />
     </>
   )
 }

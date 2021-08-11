@@ -63,7 +63,7 @@ export const Collapser: FC<CollapserProps> = ({
         indicatorIcons={{ close: <ArrowRight />, open: <ArrowDropDown /> }}
       >
         <AccordionDisclosure>
-          <Heading as="h3">{heading}</Heading>
+          <Heading as="h4">{heading}</Heading>
         </AccordionDisclosure>
         <AccordionContent>
           <Box pb="xlarge">{children}</Box>

@@ -130,7 +130,6 @@ const ShowImage = (response: IRawResponse) => {
   } else {
     content = `data:${response.contentType};base64,${btoa(response.body)}`
   }
-
   return (
     <img
       src={content}
