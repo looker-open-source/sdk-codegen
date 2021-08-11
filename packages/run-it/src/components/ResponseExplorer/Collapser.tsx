@@ -23,29 +23,52 @@
  SOFTWARE.
 
  */
+import React, { FC, ReactElement } from 'react'
+import {
+  useToggle,
+  Accordion,
+  AccordionDisclosure,
+  AccordionContent,
+  Box,
+  Heading,
+} from '@looker/components'
+import { ArrowRight } from '@styled-icons/material/ArrowRight'
+import { ArrowDropDown } from '@styled-icons/material/ArrowDropDown'
 
-import React, { FC } from 'react'
-import { IRawResponse } from '@looker/sdk-rtl'
-
-import { pickResponseHandler, fallbackResponseHandler } from './responseUtils'
-
-interface ShowResponseProps {
-  /** A basic HTTP response for "raw" HTTP requests */
-  response: IRawResponse
+interface CollapserProps {
+  id?: string
+  heading: string
+  children: ReactElement
+  defaultOpen?: boolean
 }
 
 /**
- * Given an HTTP response it picks a response handler based on the content type and renders the body
+ * Render a collapsable header and children
  */
-export const ShowResponse: FC<ShowResponseProps> = ({ response }) => {
-  // Bullet proof the rendered response. If for some reason we get a bad response or bad data in the
-  // response, render something
-  let renderedResponse
-  try {
-    renderedResponse = pickResponseHandler(response).component(response)
-  } catch (err) {
-    renderedResponse = fallbackResponseHandler().component(response)
-  }
+export const Collapser: FC<CollapserProps> = ({
+  id,
+  heading,
+  children,
+  defaultOpen = true,
+}) => {
+  const { value, toggle } = useToggle(defaultOpen)
 
-  return <>{renderedResponse}</>
+  return (
+    <>
+      <Accordion
+        id={id}
+        indicatorPosition="left"
+        isOpen={value}
+        toggleOpen={toggle}
+        indicatorIcons={{ close: <ArrowRight />, open: <ArrowDropDown /> }}
+      >
+        <AccordionDisclosure>
+          <Heading as="h3">{heading}</Heading>
+        </AccordionDisclosure>
+        <AccordionContent>
+          <Box pb="xlarge">{children}</Box>
+        </AccordionContent>
+      </Accordion>
+    </>
+  )
 }

@@ -128,11 +128,12 @@ export const runRequest = async (
     await sdk.ok(runItSDK.authSession.login())
   }
   const url = `${basePath}${pathify(endpoint, pathParams)}`
-  return await sdk.authSession.transport.rawRequest(
+  const raw = await sdk.authSession.transport.rawRequest(
     httpMethod,
     url,
     queryParams,
     body,
     (props) => runItSDK.authSession.authenticate(props)
   )
+  return raw
 }

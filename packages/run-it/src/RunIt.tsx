@@ -41,7 +41,12 @@ import {
 } from '@looker/components'
 import { IRawResponse } from '@looker/sdk-rtl'
 import { ApiModel, IMethod } from '@looker/sdk-codegen'
-import { RequestForm, ShowResponse, Loading, DocSdkCalls } from './components'
+import {
+  RequestForm,
+  ResponseExplorer,
+  Loading,
+  DocSdkCalls,
+} from './components'
 import {
   createRequestParams,
   runRequest,
@@ -54,6 +59,7 @@ import { prepareInputs } from './utils/requestUtils'
 import { RunItContext } from '.'
 
 export type RunItHttpMethod = 'GET' | 'PUT' | 'POST' | 'PATCH' | 'DELETE'
+export type ResponseContent = IRawResponse | undefined
 
 /**
  * Generic collection
@@ -107,8 +113,6 @@ interface RunItProps {
   /** Sdk language to use for generating call syntax */
   sdkLanguage?: string
 }
-
-type ResponseContent = IRawResponse | undefined
 
 /**
  * Given an array of inputs, a method, and an api model it renders a REST request form
@@ -175,21 +179,24 @@ export const RunIt: FC<RunItProps> = ({
       } catch (err) {
         // This should not happen but it could. runRequest uses
         // sdk.ok to login once. sdk.ok throws an error so fake
-        // out the response so that something can be rendered.
+        // out the response so something can be rendered.
         response = {
           ok: false,
           statusMessage: err.message ? err.message : 'Unknown error!',
           statusCode: -1,
+          contentType: 'application/json',
           body: JSON.stringify(err),
+          headers: {},
         } as ResponseContent
       }
       setResponseContent(response)
+      setLoading(false)
     }
   }
 
-  useEffect(() => {
-    setLoading(!responseContent)
-  }, [responseContent])
+  // useEffect(() => {
+  //   setLoading(!responseContent)
+  // }, [responseContent])
 
   // No SDK, no RunIt for you!
   if (!sdk) return <></>
@@ -223,13 +230,11 @@ export const RunIt: FC<RunItProps> = ({
             loading={loading}
             message={`${httpMethod} ${pathify(endpoint, activePathParams)}`}
           />
-          {responseContent && (
-            <ShowResponse
-              response={responseContent}
-              verb={httpMethod}
-              path={pathify(endpoint, activePathParams)}
-            />
-          )}
+          <ResponseExplorer
+            response={responseContent}
+            verb={httpMethod}
+            path={pathify(endpoint, activePathParams)}
+          />
         </TabPanel>
         <TabPanel key="makeTheCall">
           <DocSdkCalls
