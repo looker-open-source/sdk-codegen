@@ -25,7 +25,7 @@
  */
 
 /**
- * 412 API methods
+ * 415 API methods
  */
 
 
@@ -1742,6 +1742,25 @@ class LookerSDKStream(authSession: AuthSession) : APIMethods(authSession) {
 
 
     /**
+     * ### Configure Looker Settings
+     *
+     * Available settings are:
+     *  - extension_framework_enabled
+     *  - marketplace_auto_install_enabled
+     *  - marketplace_enabled
+     *
+     * @param {Setting} body
+     *
+     * PATCH /setting -> ByteArray
+     */
+    fun set_setting(
+        body: Setting
+    ) : SDKResponse {
+            return this.patch<ByteArray>("/setting", mapOf(), body)
+    }
+
+
+    /**
      * ### Get a list of timezones that Looker supports (e.g. useful for scheduling tasks).
      *
      * GET /timezones -> ByteArray
@@ -1986,6 +2005,8 @@ class LookerSDKStream(authSession: AuthSession) : APIMethods(authSession) {
     /**
      * ### Get all External OAuth Applications.
      *
+     * This is an OAuth Application which Looker uses to access external systems.
+     *
      * @param {String} name Application name
      * @param {String} client_id Application Client ID
      *
@@ -2003,6 +2024,8 @@ class LookerSDKStream(authSession: AuthSession) : APIMethods(authSession) {
 
     /**
      * ### Create an OAuth Application using the specified configuration.
+     *
+     * This is an OAuth Application which Looker uses to access external systems.
      *
      * @param {WriteExternalOauthApplication} body
      *
@@ -4739,14 +4762,20 @@ class LookerSDKStream(authSession: AuthSession) : APIMethods(authSession) {
      * ### Get information about all lookml models.
      *
      * @param {String} fields Requested fields.
+     * @param {Long} limit Number of results to return. (can be used with offset)
+     * @param {Long} offset Number of results to skip before returning any. (Defaults to 0 if not set when limit is used)
      *
      * GET /lookml_models -> ByteArray
      */
     @JvmOverloads fun all_lookml_models(
-        fields: String? = null
+        fields: String? = null,
+        limit: Long? = null,
+        offset: Long? = null
     ) : SDKResponse {
             return this.get<ByteArray>("/lookml_models", 
-                mapOf("fields" to fields))
+                mapOf("fields" to fields,
+                     "limit" to limit,
+                     "offset" to offset))
     }
 
 
@@ -6944,6 +6973,66 @@ class LookerSDKStream(authSession: AuthSession) : APIMethods(authSession) {
 
 
     /**
+     * ### Search roles include user count
+     *
+     * Returns all role records that match the given search criteria, and attaches
+     * associated user counts.
+     *
+     * If multiple search params are given and `filter_or` is FALSE or not specified,
+     * search params are combined in a logical AND operation.
+     * Only rows that match *all* search param criteria will be returned.
+     *
+     * If `filter_or` is TRUE, multiple search params are combined in a logical OR operation.
+     * Results will include rows that match **any** of the search criteria.
+     *
+     * String search params use case-insensitive matching.
+     * String search params can contain `%` and '_' as SQL LIKE pattern match wildcard expressions.
+     * example="dan%" will match "danger" and "Danzig" but not "David"
+     * example="D_m%" will match "Damage" and "dump"
+     *
+     * Integer search params can accept a single value or a comma separated list of values. The multiple
+     * values will be combined under a logical OR operation - results will match at least one of
+     * the given values.
+     *
+     * Most search params can accept "IS NULL" and "NOT NULL" as special expressions to match
+     * or exclude (respectively) rows where the column is null.
+     *
+     * Boolean search params accept only "true" and "false" as values.
+     *
+     * @param {String} fields Requested fields.
+     * @param {Long} limit Number of results to return (used with `offset`).
+     * @param {Long} offset Number of results to skip before returning any (used with `limit`).
+     * @param {String} sorts Fields to sort by.
+     * @param {Long} id Match role id.
+     * @param {String} name Match role name.
+     * @param {Boolean} built_in Match roles by built_in status.
+     * @param {Boolean} filter_or Combine given search criteria in a boolean OR expression.
+     *
+     * GET /roles/search/with_user_count -> ByteArray
+     */
+    @JvmOverloads fun search_roles_with_user_count(
+        fields: String? = null,
+        limit: Long? = null,
+        offset: Long? = null,
+        sorts: String? = null,
+        id: Long? = null,
+        name: String? = null,
+        built_in: Boolean? = null,
+        filter_or: Boolean? = null
+    ) : SDKResponse {
+            return this.get<ByteArray>("/roles/search/with_user_count", 
+                mapOf("fields" to fields,
+                     "limit" to limit,
+                     "offset" to offset,
+                     "sorts" to sorts,
+                     "id" to id,
+                     "name" to name,
+                     "built_in" to built_in,
+                     "filter_or" to filter_or))
+    }
+
+
+    /**
      * ### Get information about the role with a specific id.
      *
      * @param {Long} role_id id of role
@@ -7865,6 +7954,65 @@ class LookerSDKStream(authSession: AuthSession) : APIMethods(authSession) {
     //endregion Theme: Manage Themes
 
     //region User: Manage Users
+
+
+    /**
+     * ### Search email credentials
+     *
+     * Returns all credentials_email records that match the given search criteria.
+     *
+     * If multiple search params are given and `filter_or` is FALSE or not specified,
+     * search params are combined in a logical AND operation.
+     * Only rows that match *all* search param criteria will be returned.
+     *
+     * If `filter_or` is TRUE, multiple search params are combined in a logical OR operation.
+     * Results will include rows that match **any** of the search criteria.
+     *
+     * String search params use case-insensitive matching.
+     * String search params can contain `%` and '_' as SQL LIKE pattern match wildcard expressions.
+     * example="dan%" will match "danger" and "Danzig" but not "David"
+     * example="D_m%" will match "Damage" and "dump"
+     *
+     * Integer search params can accept a single value or a comma separated list of values. The multiple
+     * values will be combined under a logical OR operation - results will match at least one of
+     * the given values.
+     *
+     * Most search params can accept "IS NULL" and "NOT NULL" as special expressions to match
+     * or exclude (respectively) rows where the column is null.
+     *
+     * Boolean search params accept only "true" and "false" as values.
+     *
+     * @param {String} fields Requested fields.
+     * @param {Long} limit Number of results to return (used with `offset`).
+     * @param {Long} offset Number of results to skip before returning any (used with `limit`).
+     * @param {String} sorts Fields to sort by.
+     * @param {Long} id Match credentials_email id.
+     * @param {String} email Match credentials_email email.
+     * @param {String} emails Find credentials_email that match given emails.
+     * @param {Boolean} filter_or Combine given search criteria in a boolean OR expression.
+     *
+     * GET /credentials_email/search -> ByteArray
+     */
+    @JvmOverloads fun search_credentials_email(
+        fields: String? = null,
+        limit: Long? = null,
+        offset: Long? = null,
+        sorts: String? = null,
+        id: Long? = null,
+        email: String? = null,
+        emails: String? = null,
+        filter_or: Boolean? = null
+    ) : SDKResponse {
+            return this.get<ByteArray>("/credentials_email/search", 
+                mapOf("fields" to fields,
+                     "limit" to limit,
+                     "offset" to offset,
+                     "sorts" to sorts,
+                     "id" to id,
+                     "email" to email,
+                     "emails" to emails,
+                     "filter_or" to filter_or))
+    }
 
 
     /**

@@ -35,6 +35,7 @@ import {
   testJsonResponse,
   testTextResponse,
   testUnknownResponse,
+  testBogusJsonResponse,
 } from '../../test-data'
 import { ShowResponse } from './ShowResponse'
 
@@ -96,5 +97,16 @@ describe('ShowResponse', () => {
     expect(
       screen.getByText(testErrorResponse.body.toString(), { exact: false })
     ).toBeInTheDocument()
+  })
+
+  test('it renders bogus json responses', () => {
+    renderWithTheme(<ShowResponse response={testBogusJsonResponse} />)
+    expect(screen.getByText('200: application/json')).toBeInTheDocument()
+    expect(
+      screen.getByText(
+        'The response body could not be parsed. Displaying raw data.'
+      )
+    ).toBeInTheDocument()
+    expect(screen.getByText('I AM A LYING JSON RESPONSE')).toBeInTheDocument()
   })
 })

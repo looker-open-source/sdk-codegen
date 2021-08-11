@@ -25,7 +25,7 @@
  */
 
 import React, { Dispatch, FC } from 'react'
-import { Dialog, IconButton } from '@looker/components'
+import { Dialog, Button, Tooltip } from '@looker/components'
 import { Settings } from '@styled-icons/material-outlined'
 import { ConfigForm, RunItConfigurator } from '.'
 
@@ -42,11 +42,15 @@ export const ConfigDialog: FC<ConfigDialogProps> = ({
   configurator,
 }) => (
   <Dialog
-    width="small"
+    width="medium"
     content={
       <ConfigForm setHasConfig={setHasConfig} configurator={configurator} />
     }
   >
-    <IconButton label="Settings" icon={<Settings />} />
+    <Tooltip content="Configure API Explorer settings">
+      <Button aria-label="Configure" type="button" iconBefore={<Settings />}>
+        Configure
+      </Button>
+    </Tooltip>
   </Dialog>
 )

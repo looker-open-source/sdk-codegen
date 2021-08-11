@@ -378,6 +378,8 @@ class ContentMeta(model.Model):
 @attr.s(auto_attribs=True, init=False)
 class ContentMetaGroupUser(model.Model):
     """
+    WARNING: no writeable properties found for POST, PUT, or PATCH
+
     Attributes:
         can: Operations the current user is able to perform on this object
         id: Unique Id
@@ -692,12 +694,14 @@ class ContentValidationLook(model.Model):
     Attributes:
         id: Unique Id
         title: Look Title
+        short_url: Short Url
         folder:
         space:
     """
 
     id: Optional[int] = None
     title: Optional[str] = None
+    short_url: Optional[str] = None
     folder: Optional["ContentValidationFolder"] = None
     space: Optional["ContentValidationSpace"] = None
 
@@ -706,11 +710,13 @@ class ContentValidationLook(model.Model):
         *,
         id: Optional[int] = None,
         title: Optional[str] = None,
+        short_url: Optional[str] = None,
         folder: Optional["ContentValidationFolder"] = None,
         space: Optional["ContentValidationSpace"] = None
     ):
         self.id = id
         self.title = title
+        self.short_url = short_url
         self.folder = folder
         self.space = space
 
@@ -1127,6 +1133,8 @@ class CreateSpace(model.Model):
 @attr.s(auto_attribs=True, init=False)
 class CredentialsApi3(model.Model):
     """
+    WARNING: no writeable properties found for POST, PUT, or PATCH
+
     Attributes:
         can: Operations the current user is able to perform on this object
         id: Unique Id
@@ -1507,6 +1515,8 @@ class CredentialsSaml(model.Model):
 @attr.s(auto_attribs=True, init=False)
 class CredentialsTotp(model.Model):
     """
+    WARNING: no writeable properties found for POST, PUT, or PATCH
+
     Attributes:
         can: Operations the current user is able to perform on this object
         created_at: Timestamp for the creation of this credential
@@ -1595,6 +1605,7 @@ class Dashboard(model.Model):
         slug: Content Metadata Slug
         preferred_viewer: The preferred route for viewing this dashboard (ie: dashboards or dashboards-next)
         space:
+        alert_sync_with_dashboard_filter_enabled: Enables alerts to keep in sync with dashboard filter changes - only available in alerts 2.0 (beta)
         background_color: Background color
         created_at: Time that the Dashboard was created.
         crossfilter_enabled: Enables crossfiltering in dashboards - only available in dashboards-next (beta)
@@ -1639,6 +1650,7 @@ class Dashboard(model.Model):
     slug: Optional[str] = None
     preferred_viewer: Optional[str] = None
     space: Optional["SpaceBase"] = None
+    alert_sync_with_dashboard_filter_enabled: Optional[bool] = None
     background_color: Optional[str] = None
     created_at: Optional[datetime.datetime] = None
     crossfilter_enabled: Optional[bool] = None
@@ -1685,6 +1697,7 @@ class Dashboard(model.Model):
         slug: Optional[str] = None,
         preferred_viewer: Optional[str] = None,
         space: Optional["SpaceBase"] = None,
+        alert_sync_with_dashboard_filter_enabled: Optional[bool] = None,
         background_color: Optional[str] = None,
         created_at: Optional[datetime.datetime] = None,
         crossfilter_enabled: Optional[bool] = None,
@@ -1728,6 +1741,9 @@ class Dashboard(model.Model):
         self.slug = slug
         self.preferred_viewer = preferred_viewer
         self.space = space
+        self.alert_sync_with_dashboard_filter_enabled = (
+            alert_sync_with_dashboard_filter_enabled
+        )
         self.background_color = background_color
         self.created_at = created_at
         self.crossfilter_enabled = crossfilter_enabled
@@ -3522,6 +3538,8 @@ class Group(model.Model):
 @attr.s(auto_attribs=True, init=False)
 class GroupIdForGroupInclusion(model.Model):
     """
+    WARNING: no writeable properties found for POST, PUT, or PATCH
+
     Attributes:
         group_id: Id of group
     """
@@ -3535,6 +3553,8 @@ class GroupIdForGroupInclusion(model.Model):
 @attr.s(auto_attribs=True, init=False)
 class GroupIdForGroupUserInclusion(model.Model):
     """
+    WARNING: no writeable properties found for POST, PUT, or PATCH
+
     Attributes:
         user_id: Id of user
     """
@@ -9032,6 +9052,8 @@ UserAttributeFilterTypes.__new__ = model.safe_enum__new__  # type: ignore
 @attr.s(auto_attribs=True, init=False)
 class UserAttributeGroupValue(model.Model):
     """
+    WARNING: no writeable properties found for POST, PUT, or PATCH
+
     Attributes:
         can: Operations the current user is able to perform on this object
         id: Unique Id of this group-attribute relation
@@ -9442,7 +9464,7 @@ class Workspace(model.Model):
 @attr.s(auto_attribs=True, init=False)
 class WriteApiSession(model.Model):
     """
-    Dynamically generated writeable type for ApiSession removes properties:
+    Dynamic writeable type for ApiSession removes:
 can, sudo_user_id
 
     Attributes:
@@ -9458,7 +9480,7 @@ can, sudo_user_id
 @attr.s(auto_attribs=True, init=False)
 class WriteBackupConfiguration(model.Model):
     """
-    Dynamically generated writeable type for BackupConfiguration removes properties:
+    Dynamic writeable type for BackupConfiguration removes:
 can, url
 
     Attributes:
@@ -9494,7 +9516,7 @@ can, url
 @attr.s(auto_attribs=True, init=False)
 class WriteColorCollection(model.Model):
     """
-    Dynamically generated writeable type for ColorCollection removes properties:
+    Dynamic writeable type for ColorCollection removes:
 id
 
     Attributes:
@@ -9526,13 +9548,14 @@ id
 @attr.s(auto_attribs=True, init=False)
 class WriteContentFavorite(model.Model):
     """
-    Dynamically generated writeable type for ContentFavorite removes properties:
+    Dynamic writeable type for ContentFavorite removes:
 id, look_id, dashboard_id, look
 
     Attributes:
         user_id: User Id which owns this ContentFavorite
         content_metadata_id: Content Metadata Id associated with this ContentFavorite
-        dashboard:
+        dashboard: Dynamic writeable type for DashboardBase removes:
+can, content_favorite_id, content_metadata_id, description, hidden, id, model, query_timezone, readonly, refresh_interval, refresh_interval_to_i, title, user_id, slug, preferred_viewer
     """
 
     user_id: Optional[int] = None
@@ -9554,7 +9577,7 @@ id, look_id, dashboard_id, look
 @attr.s(auto_attribs=True, init=False)
 class WriteContentMeta(model.Model):
     """
-    Dynamically generated writeable type for ContentMeta removes properties:
+    Dynamic writeable type for ContentMeta removes:
 can, id, name, parent_id, dashboard_id, look_id, folder_id, content_type, inheriting_id, slug, space_id
 
     Attributes:
@@ -9570,7 +9593,7 @@ can, id, name, parent_id, dashboard_id, look_id, folder_id, content_type, inheri
 @attr.s(auto_attribs=True, init=False)
 class WriteCreateDashboardFilter(model.Model):
     """
-    Dynamically generated writeable type for CreateDashboardFilter removes properties:
+    Dynamic writeable type for CreateDashboardFilter removes:
 id, field
 
     Attributes:
@@ -9638,7 +9661,7 @@ id, field
 @attr.s(auto_attribs=True, init=False)
 class WriteCreateQueryTask(model.Model):
     """
-    Dynamically generated writeable type for CreateQueryTask removes properties:
+    Dynamic writeable type for CreateQueryTask removes:
 can
 
     Attributes:
@@ -9686,7 +9709,7 @@ can
 @attr.s(auto_attribs=True, init=False)
 class WriteCredentialsEmail(model.Model):
     """
-    Dynamically generated writeable type for CredentialsEmail removes properties:
+    Dynamic writeable type for CredentialsEmail removes:
 can, created_at, is_disabled, logged_in_at, password_reset_url, type, url, user_url
 
     Attributes:
@@ -9710,7 +9733,7 @@ can, created_at, is_disabled, logged_in_at, password_reset_url, type, url, user_
 @attr.s(auto_attribs=True, init=False)
 class WriteCustomWelcomeEmail(model.Model):
     """
-    Dynamically generated writeable type for CustomWelcomeEmail removes properties:
+    Dynamic writeable type for CustomWelcomeEmail removes:
 can
 
     Attributes:
@@ -9742,7 +9765,7 @@ can
 @attr.s(auto_attribs=True, init=False)
 class WriteDashboard(model.Model):
     """
-    Dynamically generated writeable type for Dashboard removes properties:
+    Dynamic writeable type for Dashboard removes:
 can, content_favorite_id, content_metadata_id, id, model, readonly, refresh_interval_to_i, user_id, created_at, dashboard_elements, dashboard_filters, dashboard_layouts, deleted_at, deleter_id, edit_uri, favorite_count, last_accessed_at, last_viewed_at, view_count
 
     Attributes:
@@ -9750,11 +9773,14 @@ can, content_favorite_id, content_metadata_id, id, model, readonly, refresh_inte
         hidden: Is Hidden
         query_timezone: Timezone in which the Dashboard will run by default.
         refresh_interval: Refresh Interval, as a time duration phrase like "2 hours 30 minutes". A number with no time units will be interpreted as whole seconds.
-        folder:
+        folder: Dynamic writeable type for FolderBase removes:
+id, content_metadata_id, created_at, creator_id, child_count, external_id, is_embed, is_embed_shared_root, is_embed_users_root, is_personal, is_personal_descendant, is_shared_root, is_users_root, can
         title: Dashboard Title
         slug: Content Metadata Slug
         preferred_viewer: The preferred route for viewing this dashboard (ie: dashboards or dashboards-next)
-        space:
+        space: Dynamic writeable type for SpaceBase removes:
+id, content_metadata_id, created_at, creator_id, child_count, external_id, is_embed, is_embed_shared_root, is_embed_users_root, is_personal, is_personal_descendant, is_shared_root, is_users_root, can
+        alert_sync_with_dashboard_filter_enabled: Enables alerts to keep in sync with dashboard filter changes - only available in alerts 2.0 (beta)
         background_color: Background color
         crossfilter_enabled: Enables crossfiltering in dashboards - only available in dashboards-next (beta)
         deleted: Whether or not a dashboard is 'soft' deleted.
@@ -9780,6 +9806,7 @@ can, content_favorite_id, content_metadata_id, id, model, readonly, refresh_inte
     slug: Optional[str] = None
     preferred_viewer: Optional[str] = None
     space: Optional["WriteSpaceBase"] = None
+    alert_sync_with_dashboard_filter_enabled: Optional[bool] = None
     background_color: Optional[str] = None
     crossfilter_enabled: Optional[bool] = None
     deleted: Optional[bool] = None
@@ -9807,6 +9834,7 @@ can, content_favorite_id, content_metadata_id, id, model, readonly, refresh_inte
         slug: Optional[str] = None,
         preferred_viewer: Optional[str] = None,
         space: Optional["WriteSpaceBase"] = None,
+        alert_sync_with_dashboard_filter_enabled: Optional[bool] = None,
         background_color: Optional[str] = None,
         crossfilter_enabled: Optional[bool] = None,
         deleted: Optional[bool] = None,
@@ -9831,6 +9859,9 @@ can, content_favorite_id, content_metadata_id, id, model, readonly, refresh_inte
         self.slug = slug
         self.preferred_viewer = preferred_viewer
         self.space = space
+        self.alert_sync_with_dashboard_filter_enabled = (
+            alert_sync_with_dashboard_filter_enabled
+        )
         self.background_color = background_color
         self.crossfilter_enabled = crossfilter_enabled
         self.deleted = deleted
@@ -9850,12 +9881,14 @@ can, content_favorite_id, content_metadata_id, id, model, readonly, refresh_inte
 @attr.s(auto_attribs=True, init=False)
 class WriteDashboardBase(model.Model):
     """
-    Dynamically generated writeable type for DashboardBase removes properties:
+    Dynamic writeable type for DashboardBase removes:
 can, content_favorite_id, content_metadata_id, description, hidden, id, model, query_timezone, readonly, refresh_interval, refresh_interval_to_i, title, user_id, slug, preferred_viewer
 
     Attributes:
-        folder:
-        space:
+        folder: Dynamic writeable type for FolderBase removes:
+id, content_metadata_id, created_at, creator_id, child_count, external_id, is_embed, is_embed_shared_root, is_embed_users_root, is_personal, is_personal_descendant, is_shared_root, is_users_root, can
+        space: Dynamic writeable type for SpaceBase removes:
+id, content_metadata_id, created_at, creator_id, child_count, external_id, is_embed, is_embed_shared_root, is_embed_users_root, is_personal, is_personal_descendant, is_shared_root, is_users_root, can
     """
 
     folder: Optional["WriteFolderBase"] = None
@@ -9874,22 +9907,25 @@ can, content_favorite_id, content_metadata_id, description, hidden, id, model, q
 @attr.s(auto_attribs=True, init=False)
 class WriteDashboardElement(model.Model):
     """
-    Dynamically generated writeable type for DashboardElement removes properties:
+    Dynamic writeable type for DashboardElement removes:
 can, body_text_as_html, edit_uri, id, lookml_link_id, note_text_as_html, refresh_interval_to_i, alert_count, title_text_as_html, subtitle_text_as_html
 
     Attributes:
         body_text: Text tile body text
         dashboard_id: Id of Dashboard
-        look:
+        look: Dynamic writeable type for LookWithQuery removes:
+can, content_metadata_id, id, content_favorite_id, created_at, deleted_at, deleter_id, embed_url, excel_file_url, favorite_count, google_spreadsheet_formula, image_embed_url, last_accessed_at, last_updater_id, last_viewed_at, model, public_slug, public_url, short_url, updated_at, view_count, user, url
         look_id: Id Of Look
         merge_result_id: ID of merge result
         note_display: Note Display
         note_state: Note State
         note_text: Note Text
-        query:
+        query: Dynamic writeable type for Query removes:
+can, id, slug, share_url, expanded_share_url, url, has_table_calculations
         query_id: Id Of Query
         refresh_interval: Refresh Interval
-        result_maker:
+        result_maker: Dynamic writeable type for ResultMakerWithIdVisConfigAndDynamicFields removes:
+id, dynamic_fields, filterables, sorts, merge_result_id, total, query_id, sql_query_id, vis_config
         result_maker_id: ID of the ResultMakerLookup entry.
         subtitle_text: Text tile subtitle text
         title: Title of dashboard element
@@ -9964,7 +10000,7 @@ can, body_text_as_html, edit_uri, id, lookml_link_id, note_text_as_html, refresh
 @attr.s(auto_attribs=True, init=False)
 class WriteDashboardFilter(model.Model):
     """
-    Dynamically generated writeable type for DashboardFilter removes properties:
+    Dynamic writeable type for DashboardFilter removes:
 can, id, dashboard_id, field
 
     Attributes:
@@ -10028,7 +10064,7 @@ can, id, dashboard_id, field
 @attr.s(auto_attribs=True, init=False)
 class WriteDashboardLayout(model.Model):
     """
-    Dynamically generated writeable type for DashboardLayout removes properties:
+    Dynamic writeable type for DashboardLayout removes:
 can, id, deleted, dashboard_title, dashboard_layout_components
 
     Attributes:
@@ -10064,7 +10100,7 @@ can, id, deleted, dashboard_title, dashboard_layout_components
 @attr.s(auto_attribs=True, init=False)
 class WriteDashboardLayoutComponent(model.Model):
     """
-    Dynamically generated writeable type for DashboardLayoutComponent removes properties:
+    Dynamic writeable type for DashboardLayoutComponent removes:
 can, id, deleted, element_title, element_title_hidden, vis_type
 
     Attributes:
@@ -10104,7 +10140,7 @@ can, id, deleted, element_title, element_title_hidden, vis_type
 @attr.s(auto_attribs=True, init=False)
 class WriteDatagroup(model.Model):
     """
-    Dynamically generated writeable type for Datagroup removes properties:
+    Dynamic writeable type for Datagroup removes:
 can, created_at, id, model_name, name, trigger_check_at, trigger_error, trigger_value
 
     Attributes:
@@ -10125,7 +10161,7 @@ can, created_at, id, model_name, name, trigger_check_at, trigger_error, trigger_
 @attr.s(auto_attribs=True, init=False)
 class WriteDBConnection(model.Model):
     """
-    Dynamically generated writeable type for DBConnection removes properties:
+    Dynamic writeable type for DBConnection removes:
 can, dialect, snippets, pdts_enabled, uses_oauth, created_at, user_id, example, last_regen_at, last_reap_at, managed
 
     Attributes:
@@ -10154,7 +10190,8 @@ can, dialect, snippets, pdts_enabled, uses_oauth, created_at, user_id, example, 
         sql_runner_precache_tables: Precache tables in the SQL Runner
         sql_writing_with_info_schema: Fetch Information Schema For SQL Writing
         after_connect_statements: SQL statements (semicolon separated) to issue after connecting to the database. Requires `custom_after_connect_statements` license feature
-        pdt_context_override:
+        pdt_context_override: Dynamic writeable type for DBConnectionOverride removes:
+has_password
     """
 
     name: Optional[str] = None
@@ -10245,7 +10282,7 @@ can, dialect, snippets, pdts_enabled, uses_oauth, created_at, user_id, example, 
 @attr.s(auto_attribs=True, init=False)
 class WriteDBConnectionOverride(model.Model):
     """
-    Dynamically generated writeable type for DBConnectionOverride removes properties:
+    Dynamic writeable type for DBConnectionOverride removes:
 has_password
 
     Attributes:
@@ -10305,7 +10342,7 @@ has_password
 @attr.s(auto_attribs=True, init=False)
 class WriteFolderBase(model.Model):
     """
-    Dynamically generated writeable type for FolderBase removes properties:
+    Dynamic writeable type for FolderBase removes:
 id, content_metadata_id, created_at, creator_id, child_count, external_id, is_embed, is_embed_shared_root, is_embed_users_root, is_personal, is_personal_descendant, is_shared_root, is_users_root, can
 
     Attributes:
@@ -10324,7 +10361,7 @@ id, content_metadata_id, created_at, creator_id, child_count, external_id, is_em
 @attr.s(auto_attribs=True, init=False)
 class WriteGitBranch(model.Model):
     """
-    Dynamically generated writeable type for GitBranch removes properties:
+    Dynamic writeable type for GitBranch removes:
 can, remote, remote_name, error, message, owner_name, readonly, personal, is_local, is_remote, is_production, ahead_count, behind_count, commit_at, remote_ref
 
     Attributes:
@@ -10343,7 +10380,7 @@ can, remote, remote_name, error, message, owner_name, readonly, personal, is_loc
 @attr.s(auto_attribs=True, init=False)
 class WriteGroup(model.Model):
     """
-    Dynamically generated writeable type for Group removes properties:
+    Dynamic writeable type for Group removes:
 can, contains_current_user, external_group_id, externally_managed, id, include_by_default, user_count
 
     Attributes:
@@ -10367,7 +10404,7 @@ can, contains_current_user, external_group_id, externally_managed, id, include_b
 @attr.s(auto_attribs=True, init=False)
 class WriteHomepage(model.Model):
     """
-    Dynamically generated writeable type for Homepage removes properties:
+    Dynamic writeable type for Homepage removes:
 can, content_metadata_id, created_at, homepage_sections, id, updated_at, user_id, primary_homepage
 
     Attributes:
@@ -10399,7 +10436,7 @@ can, content_metadata_id, created_at, homepage_sections, id, updated_at, user_id
 @attr.s(auto_attribs=True, init=False)
 class WriteHomepageItem(model.Model):
     """
-    Dynamically generated writeable type for HomepageItem removes properties:
+    Dynamic writeable type for HomepageItem removes:
 can, content_created_by, content_favorite_id, content_metadata_id, content_updated_at, custom_image_url, description, favorite_count, id, image_url, location, section_fetch_time, title, url, view_count
 
     Attributes:
@@ -10467,7 +10504,7 @@ can, content_created_by, content_favorite_id, content_metadata_id, content_updat
 @attr.s(auto_attribs=True, init=False)
 class WriteHomepageSection(model.Model):
     """
-    Dynamically generated writeable type for HomepageSection removes properties:
+    Dynamic writeable type for HomepageSection removes:
 can, created_at, detail_url, homepage_items, id, is_header, updated_at, visible_item_order
 
     Attributes:
@@ -10503,7 +10540,7 @@ can, created_at, detail_url, homepage_items, id, is_header, updated_at, visible_
 @attr.s(auto_attribs=True, init=False)
 class WriteIntegration(model.Model):
     """
-    Dynamically generated writeable type for Integration removes properties:
+    Dynamic writeable type for Integration removes:
 can, id, integration_hub_id, label, description, supported_formats, supported_action_types, supported_formattings, supported_visualization_formattings, supported_download_settings, icon_url, uses_oauth, required_fields, delegate_oauth
 
     Attributes:
@@ -10531,7 +10568,7 @@ can, id, integration_hub_id, label, description, supported_formats, supported_ac
 @attr.s(auto_attribs=True, init=False)
 class WriteIntegrationHub(model.Model):
     """
-    Dynamically generated writeable type for IntegrationHub removes properties:
+    Dynamic writeable type for IntegrationHub removes:
 can, id, label, official, fetch_error_message, has_authorization_token, legal_agreement_signed, legal_agreement_required, legal_agreement_text
 
     Attributes:
@@ -10552,7 +10589,7 @@ can, id, label, official, fetch_error_message, has_authorization_token, legal_ag
 @attr.s(auto_attribs=True, init=False)
 class WriteInternalHelpResources(model.Model):
     """
-    Dynamically generated writeable type for InternalHelpResources removes properties:
+    Dynamic writeable type for InternalHelpResources removes:
 can
 
     Attributes:
@@ -10568,7 +10605,7 @@ can
 @attr.s(auto_attribs=True, init=False)
 class WriteInternalHelpResourcesContent(model.Model):
     """
-    Dynamically generated writeable type for InternalHelpResourcesContent removes properties:
+    Dynamic writeable type for InternalHelpResourcesContent removes:
 can
 
     Attributes:
@@ -10592,7 +10629,7 @@ can
 @attr.s(auto_attribs=True, init=False)
 class WriteLDAPConfig(model.Model):
     """
-    Dynamically generated writeable type for LDAPConfig removes properties:
+    Dynamic writeable type for LDAPConfig removes:
 can, default_new_user_groups, default_new_user_roles, groups, has_auth_password, modified_at, modified_by, user_attributes, url
 
     Attributes:
@@ -10744,7 +10781,7 @@ can, default_new_user_groups, default_new_user_roles, groups, has_auth_password,
 @attr.s(auto_attribs=True, init=False)
 class WriteLegacyFeature(model.Model):
     """
-    Dynamically generated writeable type for LegacyFeature removes properties:
+    Dynamic writeable type for LegacyFeature removes:
 can, id, name, description, enabled, disallowed_as_of_version, disable_on_upgrade_to_version, end_of_life_version, documentation_url, approximate_disable_date, approximate_end_of_life_date, has_disabled_on_upgrade
 
     Attributes:
@@ -10760,7 +10797,7 @@ can, id, name, description, enabled, disallowed_as_of_version, disable_on_upgrad
 @attr.s(auto_attribs=True, init=False)
 class WriteLookmlModel(model.Model):
     """
-    Dynamically generated writeable type for LookmlModel removes properties:
+    Dynamic writeable type for LookmlModel removes:
 can, explores, has_content, label
 
     Attributes:
@@ -10792,7 +10829,7 @@ can, explores, has_content, label
 @attr.s(auto_attribs=True, init=False)
 class WriteLookWithQuery(model.Model):
     """
-    Dynamically generated writeable type for LookWithQuery removes properties:
+    Dynamic writeable type for LookWithQuery removes:
 can, content_metadata_id, id, content_favorite_id, created_at, deleted_at, deleter_id, embed_url, excel_file_url, favorite_count, google_spreadsheet_formula, image_embed_url, last_accessed_at, last_updater_id, last_viewed_at, model, public_slug, public_url, short_url, updated_at, view_count, user, url
 
     Attributes:
@@ -10802,12 +10839,15 @@ can, content_metadata_id, id, content_favorite_id, created_at, deleted_at, delet
         is_run_on_load: auto-run query when Look viewed
         public: Is Public
         query_id: Query Id
-        folder:
+        folder: Dynamic writeable type for FolderBase removes:
+id, content_metadata_id, created_at, creator_id, child_count, external_id, is_embed, is_embed_shared_root, is_embed_users_root, is_personal, is_personal_descendant, is_shared_root, is_users_root, can
         folder_id: Folder Id
         user_id: User Id
         space_id: Space Id
-        space:
-        query:
+        space: Dynamic writeable type for SpaceBase removes:
+id, content_metadata_id, created_at, creator_id, child_count, external_id, is_embed, is_embed_shared_root, is_embed_users_root, is_personal, is_personal_descendant, is_shared_root, is_users_root, can
+        query: Dynamic writeable type for Query removes:
+can, id, slug, share_url, expanded_share_url, url, has_table_calculations
     """
 
     title: Optional[str] = None
@@ -10856,7 +10896,7 @@ can, content_metadata_id, id, content_favorite_id, created_at, deleted_at, delet
 @attr.s(auto_attribs=True, init=False)
 class WriteMergeQuery(model.Model):
     """
-    Dynamically generated writeable type for MergeQuery removes properties:
+    Dynamic writeable type for MergeQuery removes:
 can, id, result_maker_id
 
     Attributes:
@@ -10900,7 +10940,7 @@ can, id, result_maker_id
 @attr.s(auto_attribs=True, init=False)
 class WriteModelSet(model.Model):
     """
-    Dynamically generated writeable type for ModelSet removes properties:
+    Dynamic writeable type for ModelSet removes:
 can, all_access, built_in, id, url
 
     Attributes:
@@ -10921,7 +10961,7 @@ can, all_access, built_in, id, url
 @attr.s(auto_attribs=True, init=False)
 class WriteOIDCConfig(model.Model):
     """
-    Dynamically generated writeable type for OIDCConfig removes properties:
+    Dynamic writeable type for OIDCConfig removes:
 can, default_new_user_groups, default_new_user_roles, groups, modified_at, modified_by, test_slug, user_attributes, url
 
     Attributes:
@@ -11033,7 +11073,7 @@ can, default_new_user_groups, default_new_user_roles, groups, modified_at, modif
 @attr.s(auto_attribs=True, init=False)
 class WritePasswordConfig(model.Model):
     """
-    Dynamically generated writeable type for PasswordConfig removes properties:
+    Dynamic writeable type for PasswordConfig removes:
 can
 
     Attributes:
@@ -11065,7 +11105,7 @@ can
 @attr.s(auto_attribs=True, init=False)
 class WritePermissionSet(model.Model):
     """
-    Dynamically generated writeable type for PermissionSet removes properties:
+    Dynamic writeable type for PermissionSet removes:
 can, all_access, built_in, id, url
 
     Attributes:
@@ -11086,7 +11126,7 @@ can, all_access, built_in, id, url
 @attr.s(auto_attribs=True, init=False)
 class WriteProject(model.Model):
     """
-    Dynamically generated writeable type for Project removes properties:
+    Dynamic writeable type for Project removes:
 can, id, uses_git, is_example
 
     Attributes:
@@ -11170,7 +11210,7 @@ can, id, uses_git, is_example
 @attr.s(auto_attribs=True, init=False)
 class WriteQuery(model.Model):
     """
-    Dynamically generated writeable type for Query removes properties:
+    Dynamic writeable type for Query removes:
 can, id, slug, share_url, expanded_share_url, url, has_table_calculations
 
     Attributes:
@@ -11266,7 +11306,7 @@ can, id, slug, share_url, expanded_share_url, url, has_table_calculations
 @attr.s(auto_attribs=True, init=False)
 class WriteRepositoryCredential(model.Model):
     """
-    Dynamically generated writeable type for RepositoryCredential removes properties:
+    Dynamic writeable type for RepositoryCredential removes:
 can, id, root_project_id, remote_url, is_configured
 
     Attributes:
@@ -11294,11 +11334,12 @@ can, id, root_project_id, remote_url, is_configured
 @attr.s(auto_attribs=True, init=False)
 class WriteResultMakerWithIdVisConfigAndDynamicFields(model.Model):
     """
-    Dynamically generated writeable type for ResultMakerWithIdVisConfigAndDynamicFields removes properties:
+    Dynamic writeable type for ResultMakerWithIdVisConfigAndDynamicFields removes:
 id, dynamic_fields, filterables, sorts, merge_result_id, total, query_id, sql_query_id, vis_config
 
     Attributes:
-        query:
+        query: Dynamic writeable type for Query removes:
+can, id, slug, share_url, expanded_share_url, url, has_table_calculations
     """
 
     query: Optional["WriteQuery"] = None
@@ -11310,14 +11351,16 @@ id, dynamic_fields, filterables, sorts, merge_result_id, total, query_id, sql_qu
 @attr.s(auto_attribs=True, init=False)
 class WriteRole(model.Model):
     """
-    Dynamically generated writeable type for Role removes properties:
+    Dynamic writeable type for Role removes:
 can, id, url, users_url
 
     Attributes:
         name: Name of Role
-        permission_set:
+        permission_set: Dynamic writeable type for PermissionSet removes:
+can, all_access, built_in, id, url
         permission_set_id: (Write-Only) Id of permission set
-        model_set:
+        model_set: Dynamic writeable type for ModelSet removes:
+can, all_access, built_in, id, url
         model_set_id: (Write-Only) Id of model set
     """
 
@@ -11346,7 +11389,7 @@ can, id, url, users_url
 @attr.s(auto_attribs=True, init=False)
 class WriteSamlConfig(model.Model):
     """
-    Dynamically generated writeable type for SamlConfig removes properties:
+    Dynamic writeable type for SamlConfig removes:
 can, test_slug, modified_at, modified_by, default_new_user_roles, default_new_user_groups, groups, user_attributes, url
 
     Attributes:
@@ -11458,7 +11501,7 @@ can, test_slug, modified_at, modified_by, default_new_user_roles, default_new_us
 @attr.s(auto_attribs=True, init=False)
 class WriteScheduledPlan(model.Model):
     """
-    Dynamically generated writeable type for ScheduledPlan removes properties:
+    Dynamic writeable type for ScheduledPlan removes:
 id, created_at, updated_at, title, user, next_run_at, last_run_at, can
 
     Attributes:
@@ -11580,7 +11623,7 @@ id, created_at, updated_at, title, user, next_run_at, last_run_at, can
 @attr.s(auto_attribs=True, init=False)
 class WriteSessionConfig(model.Model):
     """
-    Dynamically generated writeable type for SessionConfig removes properties:
+    Dynamic writeable type for SessionConfig removes:
 can
 
     Attributes:
@@ -11616,7 +11659,7 @@ can
 @attr.s(auto_attribs=True, init=False)
 class WriteSpaceBase(model.Model):
     """
-    Dynamically generated writeable type for SpaceBase removes properties:
+    Dynamic writeable type for SpaceBase removes:
 id, content_metadata_id, created_at, creator_id, child_count, external_id, is_embed, is_embed_shared_root, is_embed_users_root, is_personal, is_personal_descendant, is_shared_root, is_users_root, can
 
     Attributes:
@@ -11635,7 +11678,7 @@ id, content_metadata_id, created_at, creator_id, child_count, external_id, is_em
 @attr.s(auto_attribs=True, init=False)
 class WriteTheme(model.Model):
     """
-    Dynamically generated writeable type for Theme removes properties:
+    Dynamic writeable type for Theme removes:
 can, id
 
     Attributes:
@@ -11667,11 +11710,12 @@ can, id
 @attr.s(auto_attribs=True, init=False)
 class WriteUser(model.Model):
     """
-    Dynamically generated writeable type for User removes properties:
+    Dynamic writeable type for User removes:
 can, avatar_url, avatar_url_without_sizing, credentials_api3, credentials_embed, credentials_google, credentials_ldap, credentials_looker_openid, credentials_oidc, credentials_saml, credentials_totp, display_name, email, embed_group_space_id, group_ids, id, looker_versions, personal_space_id, personal_folder_id, presumed_looker_employee, role_ids, sessions, verified_looker_employee, roles_externally_managed, allow_direct_roles, allow_normal_group_membership, allow_roles_from_normal_groups, url
 
     Attributes:
-        credentials_email:
+        credentials_email: Dynamic writeable type for CredentialsEmail removes:
+can, created_at, is_disabled, logged_in_at, password_reset_url, type, url, user_url
         first_name: First name
         home_space_id: ID string for user's home space
         home_folder_id: ID string for user's home folder
@@ -11719,7 +11763,7 @@ can, avatar_url, avatar_url_without_sizing, credentials_api3, credentials_embed,
 @attr.s(auto_attribs=True, init=False)
 class WriteUserAttribute(model.Model):
     """
-    Dynamically generated writeable type for UserAttribute removes properties:
+    Dynamic writeable type for UserAttribute removes:
 can, id, is_system, is_permanent
 
     Attributes:
@@ -11767,7 +11811,7 @@ can, id, is_system, is_permanent
 @attr.s(auto_attribs=True, init=False)
 class WriteUserAttributeWithValue(model.Model):
     """
-    Dynamically generated writeable type for UserAttributeWithValue removes properties:
+    Dynamic writeable type for UserAttributeWithValue removes:
 can, name, label, rank, user_id, user_can_edit, value_is_hidden, user_attribute_id, source, hidden_value_domain_whitelist
 
     Attributes:
@@ -11783,7 +11827,7 @@ can, name, label, rank, user_id, user_can_edit, value_is_hidden, user_attribute_
 @attr.s(auto_attribs=True, init=False)
 class WriteWhitelabelConfiguration(model.Model):
     """
-    Dynamically generated writeable type for WhitelabelConfiguration removes properties:
+    Dynamic writeable type for WhitelabelConfiguration removes:
 can, id, logo_url, favicon_url
 
     Attributes:

@@ -28,6 +28,7 @@ import { IRawResponse } from '@looker/sdk-rtl'
 
 export const testJsonResponse: IRawResponse = {
   url: 'https://some/json/data',
+  headers: {},
   contentType: 'application/json',
   ok: true,
   statusCode: 200,
@@ -37,6 +38,7 @@ export const testJsonResponse: IRawResponse = {
 
 export const testTextResponse: IRawResponse = {
   url: 'https://some/text/data',
+  headers: {},
   contentType: 'text/plain;charset=utf-8',
   ok: true,
   statusCode: 200,
@@ -46,6 +48,7 @@ export const testTextResponse: IRawResponse = {
 
 export const testHtmlResponse: IRawResponse = {
   url: `https://some/html`,
+  headers: {},
   contentType: 'text/html;charset=utf-8',
   ok: true,
   statusCode: 200,
@@ -60,6 +63,7 @@ export const testHtmlResponse: IRawResponse = {
 
 export const testSqlResponse: IRawResponse = {
   url: `https://some/sql`,
+  headers: {},
   contentType: 'application/sql',
   ok: true,
   statusCode: 200,
@@ -73,6 +77,7 @@ LIMIT 500`),
 
 export const testImageResponse = (contentType = 'image/png'): IRawResponse => ({
   url: `http://${contentType}`,
+  headers: {},
   contentType,
   ok: true,
   statusCode: 200,
@@ -82,6 +87,7 @@ export const testImageResponse = (contentType = 'image/png'): IRawResponse => ({
 
 export const testUnknownResponse: IRawResponse = {
   url: 'http://bogus',
+  headers: {},
   contentType: 'bogus',
   ok: true,
   statusCode: 200,
@@ -91,6 +97,7 @@ export const testUnknownResponse: IRawResponse = {
 
 export const testErrorResponse: IRawResponse = {
   url: 'http://error',
+  headers: {},
   body: Buffer.from(
     '{"message": "Not found", "documentation_url": "http://docs.looker.com"}'
   ),
@@ -98,4 +105,14 @@ export const testErrorResponse: IRawResponse = {
   ok: false,
   statusCode: 404,
   statusMessage: 'some status message',
+}
+
+export const testBogusJsonResponse: IRawResponse = {
+  url: 'https://some/json/data',
+  headers: {},
+  contentType: 'application/json',
+  ok: true,
+  statusCode: 200,
+  statusMessage: 'OK',
+  body: Buffer.from('<html><body>I AM A LYING JSON RESPONSE</body></html>'),
 }

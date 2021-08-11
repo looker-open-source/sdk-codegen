@@ -25,7 +25,7 @@
  */
 
 /**
- * 283 API models: 210 Spec, 0 Request, 56 Write, 17 Enum
+ * 286 API models: 213 Spec, 0 Request, 56 Write, 17 Enum
  */
 
 
@@ -717,6 +717,9 @@ public struct ContentMeta: SDKModel {
 
 }
 
+/**
+ * WARNING: no writeable properties found for POST, PUT, or PATCH
+ */
 public struct ContentMetaGroupUser: SDKModel {
     /**
      * Operations the current user is able to perform on this object (read-only)
@@ -842,12 +845,17 @@ public struct ContentValidationDashboard: SDKModel {
      * Dashboard Title
      */
     public var title: String?
+    /**
+     * Relative URL of the dashboard (read-only)
+     */
+    public var url: String?
 
-    public init(description: String? = nil, id: String? = nil, folder: ContentValidationFolder? = nil, title: String? = nil) {
+    public init(description: String? = nil, id: String? = nil, folder: ContentValidationFolder? = nil, title: String? = nil, url: String? = nil) {
         self.description = description
         self.id = id
         self.folder = folder
         self.title = title
+        self.url = url
     }
 
 }
@@ -1043,11 +1051,16 @@ public struct ContentValidationLook: SDKModel {
      * Look Title
      */
     public var title: String?
+    /**
+     * Short Url (read-only)
+     */
+    public var short_url: String?
     public var folder: ContentValidationFolder?
 
-    public init(id: Int64? = nil, title: String? = nil, folder: ContentValidationFolder? = nil) {
+    public init(id: Int64? = nil, title: String? = nil, short_url: String? = nil, folder: ContentValidationFolder? = nil) {
         self.id = id
         self.title = title
+        self.short_url = short_url
         self.folder = folder
     }
 
@@ -1268,6 +1281,9 @@ public struct CostEstimate: SDKModel {
 
 }
 
+/**
+ * WARNING: no writeable properties found for POST, PUT, or PATCH
+ */
 public struct CreateCostEstimate: SDKModel {
     /**
      * SQL statement to estimate (read-only)
@@ -1507,6 +1523,9 @@ public struct CreateQueryTask: SDKModel {
 
 }
 
+/**
+ * WARNING: no writeable properties found for POST, PUT, or PATCH
+ */
 public struct CredentialsApi3: SDKModel {
     /**
      * Operations the current user is able to perform on this object (read-only)
@@ -1550,6 +1569,63 @@ public struct CredentialsApi3: SDKModel {
 }
 
 public struct CredentialsEmail: SDKModel {
+    /**
+     * Operations the current user is able to perform on this object (read-only)
+     */
+    public var can: StringDictionary<Bool>?
+    /**
+     * Timestamp for the creation of this credential (read-only)
+     */
+    public var created_at: String?
+    /**
+     * EMail address used for user login
+     */
+    public var email: String?
+    /**
+     * Force the user to change their password upon their next login
+     */
+    public var forced_password_reset_at_next_login: Bool?
+    /**
+     * Has this credential been disabled? (read-only)
+     */
+    public var is_disabled: Bool?
+    /**
+     * Timestamp for most recent login using credential (read-only)
+     */
+    public var logged_in_at: String?
+    /**
+     * Url with one-time use secret token that the user can use to reset password (read-only)
+     */
+    public var password_reset_url: String?
+    /**
+     * Short name for the type of this kind of credential (read-only)
+     */
+    public var type: String?
+    /**
+     * Link to get this item (read-only)
+     */
+    public var url: String?
+    /**
+     * Link to get this user (read-only)
+     */
+    public var user_url: String?
+
+    public init(can: StringDictionary<Bool>? = nil, created_at: String? = nil, email: String? = nil, forced_password_reset_at_next_login: Bool? = nil, is_disabled: Bool? = nil, logged_in_at: String? = nil, password_reset_url: String? = nil, type: String? = nil, url: String? = nil, user_url: String? = nil) {
+        self.can = can
+        self.created_at = created_at
+        self.email = email
+        self.forced_password_reset_at_next_login = forced_password_reset_at_next_login
+        self.is_disabled = is_disabled
+        self.logged_in_at = logged_in_at
+        self.password_reset_url = password_reset_url
+        self.type = type
+        self.url = url
+        self.user_url = user_url
+    }
+
+}
+
+public struct CredentialsEmailSearch: SDKModel {
     /**
      * Operations the current user is able to perform on this object (read-only)
      */
@@ -1908,6 +1984,9 @@ public struct CredentialsSaml: SDKModel {
 
 }
 
+/**
+ * WARNING: no writeable properties found for POST, PUT, or PATCH
+ */
 public struct CredentialsTotp: SDKModel {
     /**
      * Operations the current user is able to perform on this object (read-only)
@@ -2037,6 +2116,10 @@ public struct Dashboard: SDKModel {
      */
     public var preferred_viewer: String?
     /**
+     * Enables alerts to keep in sync with dashboard filter changes - only available in alerts 2.0 (beta)
+     */
+    public var alert_sync_with_dashboard_filter_enabled: Bool?
+    /**
      * Background color
      */
     public var background_color: String?
@@ -2129,8 +2212,12 @@ public struct Dashboard: SDKModel {
      */
     public var view_count: Int64?
     public var appearance: DashboardAppearance?
+    /**
+     * Relative URL of the dashboard (read-only)
+     */
+    public var url: String?
 
-    public init(can: StringDictionary<Bool>? = nil, content_favorite_id: Int64? = nil, content_metadata_id: Int64? = nil, description: String? = nil, hidden: Bool? = nil, id: String? = nil, model: LookModel? = nil, query_timezone: String? = nil, readonly: Bool? = nil, refresh_interval: String? = nil, refresh_interval_to_i: Int64? = nil, folder: FolderBase? = nil, title: String? = nil, user_id: Int64? = nil, slug: String? = nil, preferred_viewer: String? = nil, background_color: String? = nil, created_at: Date? = nil, crossfilter_enabled: Bool? = nil, dashboard_elements: [DashboardElement]? = nil, dashboard_filters: [DashboardFilter]? = nil, dashboard_layouts: [DashboardLayout]? = nil, deleted: Bool? = nil, deleted_at: Date? = nil, deleter_id: Int64? = nil, edit_uri: String? = nil, favorite_count: Int64? = nil, last_accessed_at: Date? = nil, last_viewed_at: Date? = nil, load_configuration: String? = nil, lookml_link_id: String? = nil, show_filters_bar: Bool? = nil, show_title: Bool? = nil, folder_id: String? = nil, text_tile_text_color: String? = nil, tile_background_color: String? = nil, tile_text_color: String? = nil, title_color: String? = nil, view_count: Int64? = nil, appearance: DashboardAppearance? = nil) {
+    public init(can: StringDictionary<Bool>? = nil, content_favorite_id: Int64? = nil, content_metadata_id: Int64? = nil, description: String? = nil, hidden: Bool? = nil, id: String? = nil, model: LookModel? = nil, query_timezone: String? = nil, readonly: Bool? = nil, refresh_interval: String? = nil, refresh_interval_to_i: Int64? = nil, folder: FolderBase? = nil, title: String? = nil, user_id: Int64? = nil, slug: String? = nil, preferred_viewer: String? = nil, alert_sync_with_dashboard_filter_enabled: Bool? = nil, background_color: String? = nil, created_at: Date? = nil, crossfilter_enabled: Bool? = nil, dashboard_elements: [DashboardElement]? = nil, dashboard_filters: [DashboardFilter]? = nil, dashboard_layouts: [DashboardLayout]? = nil, deleted: Bool? = nil, deleted_at: Date? = nil, deleter_id: Int64? = nil, edit_uri: String? = nil, favorite_count: Int64? = nil, last_accessed_at: Date? = nil, last_viewed_at: Date? = nil, load_configuration: String? = nil, lookml_link_id: String? = nil, show_filters_bar: Bool? = nil, show_title: Bool? = nil, folder_id: String? = nil, text_tile_text_color: String? = nil, tile_background_color: String? = nil, tile_text_color: String? = nil, title_color: String? = nil, view_count: Int64? = nil, appearance: DashboardAppearance? = nil, url: String? = nil) {
         self.can = can
         self.content_favorite_id = content_favorite_id
         self.content_metadata_id = content_metadata_id
@@ -2147,6 +2234,7 @@ public struct Dashboard: SDKModel {
         self.user_id = user_id
         self.slug = slug
         self.preferred_viewer = preferred_viewer
+        self.alert_sync_with_dashboard_filter_enabled = alert_sync_with_dashboard_filter_enabled
         self.background_color = background_color
         self.created_at = created_at
         self.crossfilter_enabled = crossfilter_enabled
@@ -2171,6 +2259,7 @@ public struct Dashboard: SDKModel {
         self.title_color = title_color
         self.view_count = view_count
         self.appearance = appearance
+        self.url = url
     }
 
 }
@@ -4158,6 +4247,9 @@ public struct GroupHierarchy: SDKModel {
 
 }
 
+/**
+ * WARNING: no writeable properties found for POST, PUT, or PATCH
+ */
 public struct GroupIdForGroupInclusion: SDKModel {
     /**
      * Id of group (read-only)
@@ -4170,6 +4262,9 @@ public struct GroupIdForGroupInclusion: SDKModel {
 
 }
 
+/**
+ * WARNING: no writeable properties found for POST, PUT, or PATCH
+ */
 public struct GroupIdForGroupUserInclusion: SDKModel {
     /**
      * Id of user (read-only)
@@ -8462,7 +8557,53 @@ public struct Role: SDKModel {
      */
     public var model_set_id: Int64?
     /**
-     * Count of users with this role, only returned if user_count field is requested (read-only)
+     * Link to get this item (read-only)
+     */
+    public var url: String?
+    /**
+     * Link to get list of users with this role (read-only)
+     */
+    public var users_url: String?
+
+    public init(can: StringDictionary<Bool>? = nil, id: Int64? = nil, name: String? = nil, permission_set: PermissionSet? = nil, permission_set_id: Int64? = nil, model_set: ModelSet? = nil, model_set_id: Int64? = nil, url: String? = nil, users_url: String? = nil) {
+        self.can = can
+        self.id = id
+        self.name = name
+        self.permission_set = permission_set
+        self.permission_set_id = permission_set_id
+        self.model_set = model_set
+        self.model_set_id = model_set_id
+        self.url = url
+        self.users_url = users_url
+    }
+
+}
+
+public struct RoleSearch: SDKModel {
+    /**
+     * Operations the current user is able to perform on this object (read-only)
+     */
+    public var can: StringDictionary<Bool>?
+    /**
+     * Unique Id (read-only)
+     */
+    public var id: Int64?
+    /**
+     * Name of Role
+     */
+    public var name: String?
+    public var permission_set: PermissionSet?
+    /**
+     * (Write-Only) Id of permission set
+     */
+    public var permission_set_id: Int64?
+    public var model_set: ModelSet?
+    /**
+     * (Write-Only) Id of model set
+     */
+    public var model_set_id: Int64?
+    /**
+     * Count of users with this role (read-only)
      */
     public var user_count: Int64?
     /**
@@ -9426,6 +9567,31 @@ public struct SessionConfig: SDKModel {
 
 }
 
+/**
+ * WARNING: no writeable properties found for POST, PUT, or PATCH
+ */
+public struct Setting: SDKModel {
+    /**
+     * Toggle extension framework on or off (read-only)
+     */
+    public var extension_framework_enabled: Bool?
+    /**
+     * Toggle marketplace auto install on or off (read-only)
+     */
+    public var marketplace_auto_install_enabled: Bool?
+    /**
+     * Toggle marketplace on or off (read-only)
+     */
+    public var marketplace_enabled: Bool?
+
+    public init(extension_framework_enabled: Bool? = nil, marketplace_auto_install_enabled: Bool? = nil, marketplace_enabled: Bool? = nil) {
+        self.extension_framework_enabled = extension_framework_enabled
+        self.marketplace_auto_install_enabled = marketplace_auto_install_enabled
+        self.marketplace_enabled = marketplace_enabled
+    }
+
+}
+
 public struct Snippet: SDKModel {
     /**
      * Name of the snippet (read-only)
@@ -10158,6 +10324,9 @@ public enum UserAttributeFilterTypes: String, Codable {
     case zipcode = "zipcode"
 }
 
+/**
+ * WARNING: no writeable properties found for POST, PUT, or PATCH
+ */
 public struct UserAttributeGroupValue: SDKModel {
     /**
      * Operations the current user is able to perform on this object (read-only)
@@ -10568,7 +10737,7 @@ public struct Workspace: SDKModel {
 }
 
 /**
- * Dynamically generated writeable type for ApiSession removes properties:
+ * Dynamic writeable type for ApiSession removes:
  * can, sudo_user_id
  */
 public struct WriteApiSession: SDKModel {
@@ -10584,7 +10753,7 @@ public struct WriteApiSession: SDKModel {
 }
 
 /**
- * Dynamically generated writeable type for BackupConfiguration removes properties:
+ * Dynamic writeable type for BackupConfiguration removes:
  * can, url
  */
 public struct WriteBackupConfiguration: SDKModel {
@@ -10620,7 +10789,7 @@ public struct WriteBackupConfiguration: SDKModel {
 }
 
 /**
- * Dynamically generated writeable type for Board removes properties:
+ * Dynamic writeable type for Board removes:
  * can, content_metadata_id, created_at, board_sections, id, updated_at, user_id, primary_homepage
  */
 public struct WriteBoard: SDKModel {
@@ -10651,7 +10820,7 @@ public struct WriteBoard: SDKModel {
 }
 
 /**
- * Dynamically generated writeable type for BoardItem removes properties:
+ * Dynamic writeable type for BoardItem removes:
  * can, content_created_by, content_favorite_id, content_metadata_id, content_updated_at, description, favorite_count, id, location, title, url, view_count
  */
 public struct WriteBoardItem: SDKModel {
@@ -10687,7 +10856,7 @@ public struct WriteBoardItem: SDKModel {
 }
 
 /**
- * Dynamically generated writeable type for BoardSection removes properties:
+ * Dynamic writeable type for BoardSection removes:
  * can, created_at, board_items, id, visible_item_order, updated_at
  */
 public struct WriteBoardSection: SDKModel {
@@ -10723,7 +10892,7 @@ public struct WriteBoardSection: SDKModel {
 }
 
 /**
- * Dynamically generated writeable type for ColorCollection removes properties:
+ * Dynamic writeable type for ColorCollection removes:
  * id
  */
 public struct WriteColorCollection: SDKModel {
@@ -10754,7 +10923,7 @@ public struct WriteColorCollection: SDKModel {
 }
 
 /**
- * Dynamically generated writeable type for Command removes properties:
+ * Dynamic writeable type for Command removes:
  * id, author_id
  */
 public struct WriteCommand: SDKModel {
@@ -10785,7 +10954,7 @@ public struct WriteCommand: SDKModel {
 }
 
 /**
- * Dynamically generated writeable type for ContentFavorite removes properties:
+ * Dynamic writeable type for ContentFavorite removes:
  * id, look_id, dashboard_id, board_id
  */
 public struct WriteContentFavorite: SDKModel {
@@ -10797,7 +10966,15 @@ public struct WriteContentFavorite: SDKModel {
      * Content Metadata Id associated with this ContentFavorite
      */
     public var content_metadata_id: Int64?
+    /**
+     * Dynamic writeable type for LookBasic removes:
+     * can, content_metadata_id, id, title
+     */
     public var look: WriteLookBasic?
+    /**
+     * Dynamic writeable type for DashboardBase removes:
+     * can, content_favorite_id, content_metadata_id, description, hidden, id, model, query_timezone, readonly, refresh_interval, refresh_interval_to_i, title, user_id, slug, preferred_viewer
+     */
     public var dashboard: WriteDashboardBase?
 
     public init(user_id: Int64? = nil, content_metadata_id: Int64? = nil, look: WriteLookBasic? = nil, dashboard: WriteDashboardBase? = nil) {
@@ -10810,7 +10987,7 @@ public struct WriteContentFavorite: SDKModel {
 }
 
 /**
- * Dynamically generated writeable type for ContentMeta removes properties:
+ * Dynamic writeable type for ContentMeta removes:
  * can, id, name, parent_id, dashboard_id, look_id, folder_id, content_type, inheriting_id, slug
  */
 public struct WriteContentMeta: SDKModel {
@@ -10826,7 +11003,7 @@ public struct WriteContentMeta: SDKModel {
 }
 
 /**
- * Dynamically generated writeable type for CreateDashboardFilter removes properties:
+ * Dynamic writeable type for CreateDashboardFilter removes:
  * id, field
  */
 public struct WriteCreateDashboardFilter: SDKModel {
@@ -10906,7 +11083,7 @@ public struct WriteCreateDashboardFilter: SDKModel {
 }
 
 /**
- * Dynamically generated writeable type for CreateQueryTask removes properties:
+ * Dynamic writeable type for CreateQueryTask removes:
  * can
  */
 public struct WriteCreateQueryTask: SDKModel {
@@ -10951,7 +11128,7 @@ public struct WriteCreateQueryTask: SDKModel {
 }
 
 /**
- * Dynamically generated writeable type for CredentialsEmail removes properties:
+ * Dynamic writeable type for CredentialsEmail removes:
  * can, created_at, is_disabled, logged_in_at, password_reset_url, type, url, user_url
  */
 public struct WriteCredentialsEmail: SDKModel {
@@ -10972,7 +11149,7 @@ public struct WriteCredentialsEmail: SDKModel {
 }
 
 /**
- * Dynamically generated writeable type for CustomWelcomeEmail removes properties:
+ * Dynamic writeable type for CustomWelcomeEmail removes:
  * can
  */
 public struct WriteCustomWelcomeEmail: SDKModel {
@@ -11003,8 +11180,8 @@ public struct WriteCustomWelcomeEmail: SDKModel {
 }
 
 /**
- * Dynamically generated writeable type for Dashboard removes properties:
- * can, content_favorite_id, content_metadata_id, id, model, readonly, refresh_interval_to_i, user_id, created_at, dashboard_elements, dashboard_filters, dashboard_layouts, deleted_at, deleter_id, edit_uri, favorite_count, last_accessed_at, last_viewed_at, view_count
+ * Dynamic writeable type for Dashboard removes:
+ * can, content_favorite_id, content_metadata_id, id, model, readonly, refresh_interval_to_i, user_id, created_at, dashboard_elements, dashboard_filters, dashboard_layouts, deleted_at, deleter_id, edit_uri, favorite_count, last_accessed_at, last_viewed_at, view_count, url
  */
 public struct WriteDashboard: SDKModel {
     /**
@@ -11023,6 +11200,10 @@ public struct WriteDashboard: SDKModel {
      * Refresh Interval, as a time duration phrase like "2 hours 30 minutes". A number with no time units will be interpreted as whole seconds.
      */
     public var refresh_interval: String?
+    /**
+     * Dynamic writeable type for FolderBase removes:
+     * id, content_metadata_id, created_at, creator_id, child_count, external_id, is_embed, is_embed_shared_root, is_embed_users_root, is_personal, is_personal_descendant, is_shared_root, is_users_root, can
+     */
     public var folder: WriteFolderBase?
     /**
      * Dashboard Title
@@ -11036,6 +11217,10 @@ public struct WriteDashboard: SDKModel {
      * The preferred route for viewing this dashboard (ie: dashboards or dashboards-next)
      */
     public var preferred_viewer: String?
+    /**
+     * Enables alerts to keep in sync with dashboard filter changes - only available in alerts 2.0 (beta)
+     */
+    public var alert_sync_with_dashboard_filter_enabled: Bool?
     /**
      * Background color
      */
@@ -11086,7 +11271,7 @@ public struct WriteDashboard: SDKModel {
     public var title_color: String?
     public var appearance: DashboardAppearance?
 
-    public init(description: String? = nil, hidden: Bool? = nil, query_timezone: String? = nil, refresh_interval: String? = nil, folder: WriteFolderBase? = nil, title: String? = nil, slug: String? = nil, preferred_viewer: String? = nil, background_color: String? = nil, crossfilter_enabled: Bool? = nil, deleted: Bool? = nil, load_configuration: String? = nil, lookml_link_id: String? = nil, show_filters_bar: Bool? = nil, show_title: Bool? = nil, folder_id: String? = nil, text_tile_text_color: String? = nil, tile_background_color: String? = nil, tile_text_color: String? = nil, title_color: String? = nil, appearance: DashboardAppearance? = nil) {
+    public init(description: String? = nil, hidden: Bool? = nil, query_timezone: String? = nil, refresh_interval: String? = nil, folder: WriteFolderBase? = nil, title: String? = nil, slug: String? = nil, preferred_viewer: String? = nil, alert_sync_with_dashboard_filter_enabled: Bool? = nil, background_color: String? = nil, crossfilter_enabled: Bool? = nil, deleted: Bool? = nil, load_configuration: String? = nil, lookml_link_id: String? = nil, show_filters_bar: Bool? = nil, show_title: Bool? = nil, folder_id: String? = nil, text_tile_text_color: String? = nil, tile_background_color: String? = nil, tile_text_color: String? = nil, title_color: String? = nil, appearance: DashboardAppearance? = nil) {
         self.description = description
         self.hidden = hidden
         self.query_timezone = query_timezone
@@ -11095,6 +11280,7 @@ public struct WriteDashboard: SDKModel {
         self.title = title
         self.slug = slug
         self.preferred_viewer = preferred_viewer
+        self.alert_sync_with_dashboard_filter_enabled = alert_sync_with_dashboard_filter_enabled
         self.background_color = background_color
         self.crossfilter_enabled = crossfilter_enabled
         self.deleted = deleted
@@ -11113,10 +11299,14 @@ public struct WriteDashboard: SDKModel {
 }
 
 /**
- * Dynamically generated writeable type for DashboardBase removes properties:
+ * Dynamic writeable type for DashboardBase removes:
  * can, content_favorite_id, content_metadata_id, description, hidden, id, model, query_timezone, readonly, refresh_interval, refresh_interval_to_i, title, user_id, slug, preferred_viewer
  */
 public struct WriteDashboardBase: SDKModel {
+    /**
+     * Dynamic writeable type for FolderBase removes:
+     * id, content_metadata_id, created_at, creator_id, child_count, external_id, is_embed, is_embed_shared_root, is_embed_users_root, is_personal, is_personal_descendant, is_shared_root, is_users_root, can
+     */
     public var folder: WriteFolderBase?
 
     public init(folder: WriteFolderBase? = nil) {
@@ -11126,7 +11316,7 @@ public struct WriteDashboardBase: SDKModel {
 }
 
 /**
- * Dynamically generated writeable type for DashboardElement removes properties:
+ * Dynamic writeable type for DashboardElement removes:
  * can, body_text_as_html, edit_uri, id, lookml_link_id, note_text_as_html, refresh_interval_to_i, alert_count, title_text_as_html, subtitle_text_as_html
  */
 public struct WriteDashboardElement: SDKModel {
@@ -11138,6 +11328,10 @@ public struct WriteDashboardElement: SDKModel {
      * Id of Dashboard
      */
     public var dashboard_id: String?
+    /**
+     * Dynamic writeable type for LookWithQuery removes:
+     * can, content_metadata_id, id, content_favorite_id, created_at, deleted_at, deleter_id, embed_url, excel_file_url, favorite_count, google_spreadsheet_formula, image_embed_url, last_accessed_at, last_updater_id, last_viewed_at, model, public_slug, public_url, short_url, updated_at, view_count, url
+     */
     public var look: WriteLookWithQuery?
     /**
      * Id Of Look
@@ -11159,6 +11353,10 @@ public struct WriteDashboardElement: SDKModel {
      * Note Text
      */
     public var note_text: String?
+    /**
+     * Dynamic writeable type for Query removes:
+     * can, id, slug, share_url, expanded_share_url, url, has_table_calculations
+     */
     public var query: WriteQuery?
     /**
      * Id Of Query
@@ -11168,6 +11366,10 @@ public struct WriteDashboardElement: SDKModel {
      * Refresh Interval
      */
     public var refresh_interval: String?
+    /**
+     * Dynamic writeable type for ResultMakerWithIdVisConfigAndDynamicFields removes:
+     * id, dynamic_fields, filterables, sorts, merge_result_id, total, query_id, sql_query_id, vis_config
+     */
     public var result_maker: WriteResultMakerWithIdVisConfigAndDynamicFields?
     /**
      * ID of the ResultMakerLookup entry.
@@ -11218,7 +11420,7 @@ public struct WriteDashboardElement: SDKModel {
 }
 
 /**
- * Dynamically generated writeable type for DashboardFilter removes properties:
+ * Dynamic writeable type for DashboardFilter removes:
  * can, id, dashboard_id, field
  */
 public struct WriteDashboardFilter: SDKModel {
@@ -11289,7 +11491,7 @@ public struct WriteDashboardFilter: SDKModel {
 }
 
 /**
- * Dynamically generated writeable type for DashboardLayout removes properties:
+ * Dynamic writeable type for DashboardLayout removes:
  * can, id, deleted, dashboard_title, dashboard_layout_components
  */
 public struct WriteDashboardLayout: SDKModel {
@@ -11325,7 +11527,7 @@ public struct WriteDashboardLayout: SDKModel {
 }
 
 /**
- * Dynamically generated writeable type for DashboardLayoutComponent removes properties:
+ * Dynamic writeable type for DashboardLayoutComponent removes:
  * can, id, deleted, element_title, element_title_hidden, vis_type
  */
 public struct WriteDashboardLayoutComponent: SDKModel {
@@ -11366,7 +11568,7 @@ public struct WriteDashboardLayoutComponent: SDKModel {
 }
 
 /**
- * Dynamically generated writeable type for Datagroup removes properties:
+ * Dynamic writeable type for Datagroup removes:
  * can, created_at, id, model_name, name, trigger_check_at, trigger_error, trigger_value
  */
 public struct WriteDatagroup: SDKModel {
@@ -11387,7 +11589,7 @@ public struct WriteDatagroup: SDKModel {
 }
 
 /**
- * Dynamically generated writeable type for DBConnection removes properties:
+ * Dynamic writeable type for DBConnection removes:
  * can, dialect, snippets, pdts_enabled, uses_oauth, created_at, user_id, example, last_regen_at, last_reap_at, managed
  */
 public struct WriteDBConnection: SDKModel {
@@ -11491,6 +11693,10 @@ public struct WriteDBConnection: SDKModel {
      * SQL statements (semicolon separated) to issue after connecting to the database. Requires `custom_after_connect_statements` license feature
      */
     public var after_connect_statements: String?
+    /**
+     * Dynamic writeable type for DBConnectionOverride removes:
+     * has_password
+     */
     public var pdt_context_override: WriteDBConnectionOverride?
     /**
      * The Id of the ssh tunnel this connection uses
@@ -11545,7 +11751,7 @@ public struct WriteDBConnection: SDKModel {
 }
 
 /**
- * Dynamically generated writeable type for DBConnectionOverride removes properties:
+ * Dynamic writeable type for DBConnectionOverride removes:
  * has_password
  */
 public struct WriteDBConnectionOverride: SDKModel {
@@ -11611,7 +11817,7 @@ public struct WriteDBConnectionOverride: SDKModel {
 }
 
 /**
- * Dynamically generated writeable type for ExternalOauthApplication removes properties:
+ * Dynamic writeable type for ExternalOauthApplication removes:
  * can, id, created_at
  */
 public struct WriteExternalOauthApplication: SDKModel {
@@ -11642,7 +11848,7 @@ public struct WriteExternalOauthApplication: SDKModel {
 }
 
 /**
- * Dynamically generated writeable type for FolderBase removes properties:
+ * Dynamic writeable type for FolderBase removes:
  * id, content_metadata_id, created_at, creator_id, child_count, external_id, is_embed, is_embed_shared_root, is_embed_users_root, is_personal, is_personal_descendant, is_shared_root, is_users_root, can
  */
 public struct WriteFolderBase: SDKModel {
@@ -11667,7 +11873,7 @@ public struct WriteFolderBase: SDKModel {
 }
 
 /**
- * Dynamically generated writeable type for GitBranch removes properties:
+ * Dynamic writeable type for GitBranch removes:
  * can, remote, remote_name, error, message, owner_name, readonly, personal, is_local, is_remote, is_production, ahead_count, behind_count, commit_at, remote_ref
  */
 public struct WriteGitBranch: SDKModel {
@@ -11688,7 +11894,7 @@ public struct WriteGitBranch: SDKModel {
 }
 
 /**
- * Dynamically generated writeable type for Group removes properties:
+ * Dynamic writeable type for Group removes:
  * can, contains_current_user, external_group_id, externally_managed, id, include_by_default, user_count
  */
 public struct WriteGroup: SDKModel {
@@ -11709,7 +11915,7 @@ public struct WriteGroup: SDKModel {
 }
 
 /**
- * Dynamically generated writeable type for Integration removes properties:
+ * Dynamic writeable type for Integration removes:
  * can, id, integration_hub_id, label, description, supported_formats, supported_action_types, supported_formattings, supported_visualization_formattings, supported_download_settings, icon_url, uses_oauth, required_fields, delegate_oauth
  */
 public struct WriteIntegration: SDKModel {
@@ -11735,7 +11941,7 @@ public struct WriteIntegration: SDKModel {
 }
 
 /**
- * Dynamically generated writeable type for IntegrationHub removes properties:
+ * Dynamic writeable type for IntegrationHub removes:
  * can, id, label, official, fetch_error_message, has_authorization_token, legal_agreement_signed, legal_agreement_required, legal_agreement_text
  */
 public struct WriteIntegrationHub: SDKModel {
@@ -11756,7 +11962,7 @@ public struct WriteIntegrationHub: SDKModel {
 }
 
 /**
- * Dynamically generated writeable type for InternalHelpResources removes properties:
+ * Dynamic writeable type for InternalHelpResources removes:
  * can
  */
 public struct WriteInternalHelpResources: SDKModel {
@@ -11772,7 +11978,7 @@ public struct WriteInternalHelpResources: SDKModel {
 }
 
 /**
- * Dynamically generated writeable type for InternalHelpResourcesContent removes properties:
+ * Dynamic writeable type for InternalHelpResourcesContent removes:
  * can
  */
 public struct WriteInternalHelpResourcesContent: SDKModel {
@@ -11793,7 +11999,7 @@ public struct WriteInternalHelpResourcesContent: SDKModel {
 }
 
 /**
- * Dynamically generated writeable type for LDAPConfig removes properties:
+ * Dynamic writeable type for LDAPConfig removes:
  * can, default_new_user_groups, default_new_user_roles, groups, has_auth_password, modified_at, modified_by, user_attributes, url
  */
 public struct WriteLDAPConfig: SDKModel {
@@ -11974,7 +12180,7 @@ public struct WriteLDAPConfig: SDKModel {
 }
 
 /**
- * Dynamically generated writeable type for LegacyFeature removes properties:
+ * Dynamic writeable type for LegacyFeature removes:
  * can, id, name, description, enabled, disallowed_as_of_version, disable_on_upgrade_to_version, end_of_life_version, documentation_url, approximate_disable_date, approximate_end_of_life_date, has_disabled_on_upgrade
  */
 public struct WriteLegacyFeature: SDKModel {
@@ -11990,7 +12196,7 @@ public struct WriteLegacyFeature: SDKModel {
 }
 
 /**
- * Dynamically generated writeable type for LookBasic removes properties:
+ * Dynamic writeable type for LookBasic removes:
  * can, content_metadata_id, id, title
  */
 public struct WriteLookBasic: SDKModel {
@@ -12006,7 +12212,7 @@ public struct WriteLookBasic: SDKModel {
 }
 
 /**
- * Dynamically generated writeable type for LookmlModel removes properties:
+ * Dynamic writeable type for LookmlModel removes:
  * can, explores, has_content, label
  */
 public struct WriteLookmlModel: SDKModel {
@@ -12037,7 +12243,7 @@ public struct WriteLookmlModel: SDKModel {
 }
 
 /**
- * Dynamically generated writeable type for LookWithQuery removes properties:
+ * Dynamic writeable type for LookWithQuery removes:
  * can, content_metadata_id, id, content_favorite_id, created_at, deleted_at, deleter_id, embed_url, excel_file_url, favorite_count, google_spreadsheet_formula, image_embed_url, last_accessed_at, last_updater_id, last_viewed_at, model, public_slug, public_url, short_url, updated_at, view_count, url
  */
 public struct WriteLookWithQuery: SDKModel {
@@ -12069,11 +12275,19 @@ public struct WriteLookWithQuery: SDKModel {
      * Query Id
      */
     public var query_id: Int64?
+    /**
+     * Dynamic writeable type for FolderBase removes:
+     * id, content_metadata_id, created_at, creator_id, child_count, external_id, is_embed, is_embed_shared_root, is_embed_users_root, is_personal, is_personal_descendant, is_shared_root, is_users_root, can
+     */
     public var folder: WriteFolderBase?
     /**
      * Folder Id
      */
     public var folder_id: String?
+    /**
+     * Dynamic writeable type for Query removes:
+     * can, id, slug, share_url, expanded_share_url, url, has_table_calculations
+     */
     public var query: WriteQuery?
 
     public init(title: String? = nil, user_id: Int64? = nil, deleted: Bool? = nil, description: String? = nil, is_run_on_load: Bool? = nil, `public`: Bool? = nil, query_id: Int64? = nil, folder: WriteFolderBase? = nil, folder_id: String? = nil, query: WriteQuery? = nil) {
@@ -12092,7 +12306,7 @@ public struct WriteLookWithQuery: SDKModel {
 }
 
 /**
- * Dynamically generated writeable type for MergeQuery removes properties:
+ * Dynamic writeable type for MergeQuery removes:
  * can, id, result_maker_id
  */
 public struct WriteMergeQuery: SDKModel {
@@ -12138,7 +12352,7 @@ public struct WriteMergeQuery: SDKModel {
 }
 
 /**
- * Dynamically generated writeable type for ModelSet removes properties:
+ * Dynamic writeable type for ModelSet removes:
  * can, all_access, built_in, id, url
  */
 public struct WriteModelSet: SDKModel {
@@ -12156,7 +12370,7 @@ public struct WriteModelSet: SDKModel {
 }
 
 /**
- * Dynamically generated writeable type for OauthClientApp removes properties:
+ * Dynamic writeable type for OauthClientApp removes:
  * can, client_guid, tokens_invalid_before, activated_users
  */
 public struct WriteOauthClientApp: SDKModel {
@@ -12192,7 +12406,7 @@ public struct WriteOauthClientApp: SDKModel {
 }
 
 /**
- * Dynamically generated writeable type for OIDCConfig removes properties:
+ * Dynamic writeable type for OIDCConfig removes:
  * can, default_new_user_groups, default_new_user_roles, groups, modified_at, modified_by, test_slug, user_attributes, url
  */
 public struct WriteOIDCConfig: SDKModel {
@@ -12323,7 +12537,7 @@ public struct WriteOIDCConfig: SDKModel {
 }
 
 /**
- * Dynamically generated writeable type for PasswordConfig removes properties:
+ * Dynamic writeable type for PasswordConfig removes:
  * can
  */
 public struct WritePasswordConfig: SDKModel {
@@ -12354,7 +12568,7 @@ public struct WritePasswordConfig: SDKModel {
 }
 
 /**
- * Dynamically generated writeable type for PermissionSet removes properties:
+ * Dynamic writeable type for PermissionSet removes:
  * can, all_access, built_in, id, url
  */
 public struct WritePermissionSet: SDKModel {
@@ -12372,7 +12586,7 @@ public struct WritePermissionSet: SDKModel {
 }
 
 /**
- * Dynamically generated writeable type for Project removes properties:
+ * Dynamic writeable type for Project removes:
  * can, id, uses_git, is_example
  */
 public struct WriteProject: SDKModel {
@@ -12473,7 +12687,7 @@ public struct WriteProject: SDKModel {
 }
 
 /**
- * Dynamically generated writeable type for Query removes properties:
+ * Dynamic writeable type for Query removes:
  * can, id, slug, share_url, expanded_share_url, url, has_table_calculations
  */
 public struct WriteQuery: SDKModel {
@@ -12583,7 +12797,7 @@ public struct WriteQuery: SDKModel {
 }
 
 /**
- * Dynamically generated writeable type for RepositoryCredential removes properties:
+ * Dynamic writeable type for RepositoryCredential removes:
  * can, id, root_project_id, remote_url, is_configured
  */
 public struct WriteRepositoryCredential: SDKModel {
@@ -12609,10 +12823,14 @@ public struct WriteRepositoryCredential: SDKModel {
 }
 
 /**
- * Dynamically generated writeable type for ResultMakerWithIdVisConfigAndDynamicFields removes properties:
+ * Dynamic writeable type for ResultMakerWithIdVisConfigAndDynamicFields removes:
  * id, dynamic_fields, filterables, sorts, merge_result_id, total, query_id, sql_query_id, vis_config
  */
 public struct WriteResultMakerWithIdVisConfigAndDynamicFields: SDKModel {
+    /**
+     * Dynamic writeable type for Query removes:
+     * can, id, slug, share_url, expanded_share_url, url, has_table_calculations
+     */
     public var query: WriteQuery?
 
     public init(query: WriteQuery? = nil) {
@@ -12622,19 +12840,27 @@ public struct WriteResultMakerWithIdVisConfigAndDynamicFields: SDKModel {
 }
 
 /**
- * Dynamically generated writeable type for Role removes properties:
- * can, id, user_count, url, users_url
+ * Dynamic writeable type for Role removes:
+ * can, id, url, users_url
  */
 public struct WriteRole: SDKModel {
     /**
      * Name of Role
      */
     public var name: String?
+    /**
+     * Dynamic writeable type for PermissionSet removes:
+     * can, all_access, built_in, id, url
+     */
     public var permission_set: WritePermissionSet?
     /**
      * (Write-Only) Id of permission set
      */
     public var permission_set_id: Int64?
+    /**
+     * Dynamic writeable type for ModelSet removes:
+     * can, all_access, built_in, id, url
+     */
     public var model_set: WriteModelSet?
     /**
      * (Write-Only) Id of model set
@@ -12652,7 +12878,7 @@ public struct WriteRole: SDKModel {
 }
 
 /**
- * Dynamically generated writeable type for SamlConfig removes properties:
+ * Dynamic writeable type for SamlConfig removes:
  * can, test_slug, modified_at, modified_by, default_new_user_roles, default_new_user_groups, groups, user_attributes, url
  */
 public struct WriteSamlConfig: SDKModel {
@@ -12783,7 +13009,7 @@ public struct WriteSamlConfig: SDKModel {
 }
 
 /**
- * Dynamically generated writeable type for ScheduledPlan removes properties:
+ * Dynamic writeable type for ScheduledPlan removes:
  * id, created_at, updated_at, title, user, next_run_at, last_run_at, can
  */
 public struct WriteScheduledPlan: SDKModel {
@@ -12924,7 +13150,7 @@ public struct WriteScheduledPlan: SDKModel {
 }
 
 /**
- * Dynamically generated writeable type for SessionConfig removes properties:
+ * Dynamic writeable type for SessionConfig removes:
  * can
  */
 public struct WriteSessionConfig: SDKModel {
@@ -12960,7 +13186,7 @@ public struct WriteSessionConfig: SDKModel {
 }
 
 /**
- * Dynamically generated writeable type for SshServer removes properties:
+ * Dynamic writeable type for SshServer removes:
  * ssh_server_id, finger_print, sha_finger_print, public_key, status
  */
 public struct WriteSshServer: SDKModel {
@@ -12991,7 +13217,7 @@ public struct WriteSshServer: SDKModel {
 }
 
 /**
- * Dynamically generated writeable type for SshTunnel removes properties:
+ * Dynamic writeable type for SshTunnel removes:
  * tunnel_id, ssh_server_name, ssh_server_host, ssh_server_port, ssh_server_user, last_attempt, local_host_port, status
  */
 public struct WriteSshTunnel: SDKModel {
@@ -13017,7 +13243,7 @@ public struct WriteSshTunnel: SDKModel {
 }
 
 /**
- * Dynamically generated writeable type for Theme removes properties:
+ * Dynamic writeable type for Theme removes:
  * can, id
  */
 public struct WriteTheme: SDKModel {
@@ -13045,10 +13271,14 @@ public struct WriteTheme: SDKModel {
 }
 
 /**
- * Dynamically generated writeable type for User removes properties:
+ * Dynamic writeable type for User removes:
  * can, avatar_url, avatar_url_without_sizing, credentials_api3, credentials_embed, credentials_google, credentials_ldap, credentials_looker_openid, credentials_oidc, credentials_saml, credentials_totp, display_name, email, embed_group_space_id, group_ids, id, looker_versions, personal_folder_id, presumed_looker_employee, role_ids, sessions, verified_looker_employee, roles_externally_managed, allow_direct_roles, allow_normal_group_membership, allow_roles_from_normal_groups, url
  */
 public struct WriteUser: SDKModel {
+    /**
+     * Dynamic writeable type for CredentialsEmail removes:
+     * can, created_at, is_disabled, logged_in_at, password_reset_url, type, url, user_url
+     */
     public var credentials_email: WriteCredentialsEmail?
     /**
      * First name
@@ -13093,7 +13323,7 @@ public struct WriteUser: SDKModel {
 }
 
 /**
- * Dynamically generated writeable type for UserAttribute removes properties:
+ * Dynamic writeable type for UserAttribute removes:
  * can, id, is_system, is_permanent
  */
 public struct WriteUserAttribute: SDKModel {
@@ -13148,7 +13378,7 @@ public struct WriteUserAttribute: SDKModel {
 }
 
 /**
- * Dynamically generated writeable type for UserAttributeWithValue removes properties:
+ * Dynamic writeable type for UserAttributeWithValue removes:
  * can, name, label, rank, user_id, user_can_edit, value_is_hidden, user_attribute_id, source, hidden_value_domain_whitelist
  */
 public struct WriteUserAttributeWithValue: SDKModel {
@@ -13164,7 +13394,7 @@ public struct WriteUserAttributeWithValue: SDKModel {
 }
 
 /**
- * Dynamically generated writeable type for WhitelabelConfiguration removes properties:
+ * Dynamic writeable type for WhitelabelConfiguration removes:
  * can, id, logo_url, favicon_url
  */
 public struct WriteWhitelabelConfiguration: SDKModel {

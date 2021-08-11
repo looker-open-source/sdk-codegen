@@ -5,6 +5,82 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [21.12.0](https://www.github.com/looker-open-source/sdk-codegen/compare/sdk-v21.10.2...sdk-v21.12.0) (2021-08-06)
+
+
+### Features
+
+* Looker 21.12 bindings ([#782](https://www.github.com/looker-open-source/sdk-codegen/issues/782)) ([a00b908](https://www.github.com/looker-open-source/sdk-codegen/commit/a00b908e6fee79250c4c1ffb1b1e8915d58dd633))
+
+
+### Bug Fixes
+
+* documentation refs and notes for Typescript SDK and more ([#783](https://www.github.com/looker-open-source/sdk-codegen/issues/783)) ([b2487ea](https://www.github.com/looker-open-source/sdk-codegen/commit/b2487ea4a113ce17a080ccab9b4c4139813e8810))
+
+### [21.10.2](https://www.github.com/looker-open-source/sdk-codegen/compare/sdk-v21.10.1...sdk-v21.10.2) (2021-07-30)
+
+
+### Bug Fixes
+
+* improved writeable type support ([#766](https://www.github.com/looker-open-source/sdk-codegen/issues/766)) ([be91bd8](https://www.github.com/looker-open-source/sdk-codegen/commit/be91bd8e772f9a64c47486b317f1ac1f6ef14327))
+
+
+### Dependencies
+
+* The following workspace dependencies were updated
+  * dependencies
+    * @looker/sdk-rtl bumped from ^21.0.18 to ^21.0.19
+
+### [21.10.1](https://www.github.com/looker-open-source/sdk-codegen/compare/sdk-v21.10.0...sdk-v21.10.1) (2021-07-09)
+
+
+### Dependencies
+
+* The following workspace dependencies were updated
+  * dependencies
+    * @looker/sdk-rtl bumped from ^21.0.17 to ^21.0.18
+
+## [21.10.0](https://www.github.com/looker-open-source/sdk-codegen/compare/sdk-v21.8.3...sdk-v21.10.0) (2021-07-08)
+
+
+### Features
+
+* Looker 21.10 bindings ([#737](https://www.github.com/looker-open-source/sdk-codegen/issues/737)) ([6b3895d](https://www.github.com/looker-open-source/sdk-codegen/commit/6b3895d35e138df9ff84286b7658434292617aa8))
+
+
+### Dependencies
+
+* The following workspace dependencies were updated
+  * dependencies
+    * @looker/sdk-rtl bumped from ^21.0.16 to ^21.0.17
+
+### [21.8.3](https://www.github.com/looker-open-source/sdk-codegen/compare/sdk-v21.8.2...sdk-v21.8.3) (2021-07-02)
+
+
+### Dependencies
+
+* The following workspace dependencies were updated
+  * dependencies
+    * @looker/sdk-rtl bumped from ^21.0.15 to ^21.0.16
+
+### [21.8.2](https://www.github.com/looker-open-source/sdk-codegen/compare/sdk-v21.8.1...sdk-v21.8.2) (2021-07-01)
+
+
+### Dependencies
+
+* The following workspace dependencies were updated
+  * dependencies
+    * @looker/sdk-rtl bumped from ^21.0.14 to ^21.0.15
+
+### [21.8.1](https://www.github.com/looker-open-source/sdk-codegen/compare/sdk-v21.8.0...sdk-v21.8.1) (2021-06-30)
+
+
+### Dependencies
+
+* The following workspace dependencies were updated
+  * dependencies
+    * @looker/sdk-rtl bumped from ^21.0.13 to ^21.0.14
+
 ## [21.8.0](https://www.github.com/looker-open-source/sdk-codegen/compare/sdk-v21.6.1...sdk-v21.8.0) (2021-06-17)
 
 

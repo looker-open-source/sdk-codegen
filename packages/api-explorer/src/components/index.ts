@@ -23,7 +23,7 @@
  SOFTWARE.
 
  */
-export { ApixHeading, ApixSection } from './common'
+export { ApixHeading, ApixSection, Loader } from './common'
 export { DocActivityType } from './DocActivityType'
 export { DocCode } from './DocCode'
 export { DocMethodSummary } from './DocMethodSummary'
@@ -43,3 +43,4 @@ export { ExploreType, ExploreProperty } from './ExploreType'
 export { CollapserCard } from './Collapser'
 export { DocSchema } from './DocSchema'
 export { Link } from './Link'
+export { ErrorBoundary } from './ErrorBoundary'

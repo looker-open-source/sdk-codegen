@@ -34,21 +34,18 @@ import {
   Header as SemanticHeader,
 } from '@looker/components'
 import { LookerLogo } from '@looker/icons'
-import { ChangeHistory } from '@styled-icons/material/ChangeHistory'
 import { Menu } from '@styled-icons/material/Menu'
-import { SpecList } from '@looker/sdk-codegen'
+import { SpecList, SpecItem } from '@looker/sdk-codegen'
 
 import { Link } from '../Link'
-import { SpecState, SpecAction } from '../../reducers'
-import { diffPath } from '../../utils'
-import { SdkLanguageSelector } from './SdkLanguageSelector'
-import { ApiSpecSelector } from './ApiSpecSelector'
+import { SpecAction } from '../../reducers'
+import { SelectorContainer } from '../SelectorContainer'
 
 interface HeaderProps {
   /** Specs to choose from */
   specs: SpecList
   /** Current selected spec */
-  spec: SpecState
+  spec: SpecItem
   /** Spec state setter */
   specDispatch: Dispatch<SpecAction>
   /** Nav state setter */
@@ -94,18 +91,7 @@ export const HeaderLayout: FC<HeaderProps> = ({
         </Space>
       </Link>
     </Space>
-    <Space width="auto">
-      <SdkLanguageSelector />
-      <ApiSpecSelector specs={specs} spec={spec} specDispatch={specDispatch} />
-      <Link to={`/${diffPath}/${spec.key}/`}>
-        <IconButton
-          toggle
-          label="Compare Specifications"
-          icon={<ChangeHistory />}
-          size="small"
-        />
-      </Link>
-    </Space>
+    <SelectorContainer specs={specs} spec={spec} specDispatch={specDispatch} />
   </SemanticHeader>
 )
 

@@ -7,9 +7,9 @@ sdk = LookerSDK::Client.new(
   :api_endpoint => ENV['LOOKERSDK_BASE_URL']
 )
 ​
-# NOTE: Custom themes needs to be enabled by Looker. 
-# Unless custom themes are enabled, only the automatically generated default theme can be used. 
-# Please contact your Account Manager or support@looker.com to update your license for this feature.
+# NOTE: Custom themes needs to be enabled by Looker.
+# Unless custom themes are enabled, only the automatically generated default theme can be used.
+# Please contact your Account Manager or https://help.looker.com to update your license for this feature.
 
 # Example formatting for the theme details to be created
 #  example_custom_theme = {

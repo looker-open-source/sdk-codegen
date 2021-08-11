@@ -41,14 +41,7 @@ import {
 } from '@looker/components'
 import { IRawResponse } from '@looker/sdk-rtl'
 import { ApiModel, IMethod } from '@looker/sdk-codegen'
-import {
-  RequestForm,
-  ShowResponse,
-  ConfigForm,
-  LoginForm,
-  Loading,
-  DocSdkCalls,
-} from './components'
+import { RequestForm, ShowResponse, Loading, DocSdkCalls } from './components'
 import {
   createRequestParams,
   runRequest,
@@ -155,7 +148,7 @@ export const RunIt: FC<RunItProps> = ({
       setHasConfig(true)
       setNeedsAuth(false)
     }
-  }, [sdk])
+  }, [hasConfig, isExtension, needsAuth, sdk])
 
   const handleSubmit = async (e: BaseSyntheticEvent) => {
     e.preventDefault()
@@ -168,8 +161,9 @@ export const RunIt: FC<RunItProps> = ({
     tabs.onSelectTab(1)
     if (sdk) {
       setLoading(true)
-      setResponseContent(
-        await runRequest(
+      let response: ResponseContent
+      try {
+        response = await runRequest(
           sdk,
           basePath,
           httpMethod,
@@ -178,7 +172,18 @@ export const RunIt: FC<RunItProps> = ({
           queryParams,
           body
         )
-      )
+      } catch (err) {
+        // This should not happen but it could. runRequest uses
+        // sdk.ok to login once. sdk.ok throws an error so fake
+        // out the response so that something can be rendered.
+        response = {
+          ok: false,
+          statusMessage: err.message ? err.message : 'Unknown error!',
+          statusCode: -1,
+          body: JSON.stringify(err),
+        } as ResponseContent
+      }
+      setResponseContent(response)
     }
   }
 
@@ -194,36 +199,24 @@ export const RunIt: FC<RunItProps> = ({
       <TabList distribute {...tabs}>
         <Tab key="request">Request</Tab>
         <Tab key="response">Response</Tab>
+        <Tab key="makeTheCall">SDK Call</Tab>
         {isExtension ? <></> : <Tab key="performance">Performance</Tab>}
-        <Tab key="makeTheCall">Code</Tab>
       </TabList>
       <TabPanels px="xxlarge" {...tabs} overflow="auto" height="87vh">
         <TabPanel key="request">
-          {!needsAuth && hasConfig && (
-            <RequestForm
-              httpMethod={httpMethod}
-              inputs={inputs}
-              requestContent={requestContent}
-              setRequestContent={setRequestContent}
-              handleSubmit={handleSubmit}
-              setHasConfig={setHasConfig}
-              configurator={configurator}
-              isExtension={isExtension}
-            />
-          )}
-          {!hasConfig && (
-            <ConfigForm
-              setHasConfig={setHasConfig}
-              configurator={configurator}
-            />
-          )}
-          {hasConfig && needsAuth && (
-            <LoginForm
-              sdk={sdk}
-              setHasConfig={setHasConfig}
-              configurator={configurator}
-            />
-          )}
+          <RequestForm
+            sdk={sdk}
+            httpMethod={httpMethod}
+            inputs={inputs}
+            requestContent={requestContent}
+            setRequestContent={setRequestContent}
+            handleSubmit={handleSubmit}
+            needsAuth={needsAuth}
+            hasConfig={hasConfig}
+            setHasConfig={setHasConfig}
+            configurator={configurator}
+            isExtension={isExtension}
+          />
         </TabPanel>
         <TabPanel key="response">
           <Loading
@@ -238,13 +231,6 @@ export const RunIt: FC<RunItProps> = ({
             />
           )}
         </TabPanel>
-        {isExtension ? (
-          <></>
-        ) : (
-          <TabPanel key="performance">
-            <PerfTracker perf={perf} configurator={configurator} />
-          </TabPanel>
-        )}
         <TabPanel key="makeTheCall">
           <DocSdkCalls
             sdkLanguage={sdkLanguage}
@@ -253,6 +239,13 @@ export const RunIt: FC<RunItProps> = ({
             inputs={prepareInputs(inputs, requestContent)}
           />
         </TabPanel>
+        {isExtension ? (
+          <></>
+        ) : (
+          <TabPanel key="performance">
+            <PerfTracker perf={perf} configurator={configurator} />
+          </TabPanel>
+        )}
       </TabPanels>
     </Box>
   )

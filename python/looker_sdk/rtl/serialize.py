@@ -144,6 +144,7 @@ def unstructure_hook(api_model):
     return data
 
 
+DATETIME_FMT = "%Y-%m-%dT%H:%M:%S.%f%z"
 if sys.version_info < (3, 7):
     from dateutil import parser
 
@@ -158,9 +159,10 @@ else:
     def datetime_structure_hook(
         d: str, t: Type[datetime.datetime]
     ) -> datetime.datetime:
-        return datetime.datetime.strptime(d, "%Y-%m-%dT%H:%M:%S.%f%z")
+        return datetime.datetime.strptime(d, DATETIME_FMT)
 
 
 converter31.register_structure_hook(datetime.datetime, datetime_structure_hook)
 converter40.register_structure_hook(datetime.datetime, datetime_structure_hook)
 cattr.register_unstructure_hook(model.Model, unstructure_hook)  # type: ignore
+cattr.register_unstructure_hook(datetime.datetime, lambda dt: dt.strftime(DATETIME_FMT))

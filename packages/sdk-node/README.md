@@ -32,6 +32,20 @@ npm install @looker/sdk @looker/sdk-rtl @looker/sdk-node
 
 **Note**: If you are only intending to use the SDK in a browser, omit `@looker/sdk-node`.
 
+Some other dependencies may be required for your project to build and run correctly.
+
+```bash
+yarn install @types/readable-stream @types/request @types/request-promise-native -D
+```
+
+### TypeScript SDK packages
+
+The Looker TypeScript SDK has different packages to prevent node dependencies being linked into browser usage of the SDK (the node dependencies are not available in the browser and can cause compilation errors). There are three packages for the Typescript SDK available on npm:
+
+1. `@looker/sdk-rtl` - contains a run time library needed to invoke the Looker API methods. Referencing the `@looker/sdk` as a dependency should automatically pull this package in.
+2. `@looker/sdk` - contains the Looker API methods.
+3. `@looker/sdk-node` - contains the dependencies needed to run the Looker SDK in a node environment. Do NOT include this package if you are using the Looker SDK in a browser. You MUST include this package if you are using `node` or `ts-node`.
+
 ### Configure the SDK for your Looker server
 
 **Note**: The `.ini` configuration for the Looker SDK is a sample implementation intended to speed up the initial development of Node applications using the Looker API. [Environment variables](#environment-variable-configuration) can also be used to configure the SDK.

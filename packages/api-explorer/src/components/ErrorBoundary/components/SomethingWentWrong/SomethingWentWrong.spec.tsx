@@ -23,44 +23,36 @@
  SOFTWARE.
 
  */
+import { renderWithTheme } from '@looker/components-test-utils'
+import React from 'react'
+import { SomethingWentWrong } from './SomethingWentWrong'
 
-import React, { FC, Dispatch } from 'react'
-import { Select } from '@looker/components'
-import { useHistory } from 'react-router-dom'
-
-import { SpecList } from '@looker/sdk-codegen'
-import { SpecAction, SpecState, selectSpec } from '../../reducers'
-
-interface ApiSpecSelectorProps {
-  specs: SpecList
-  spec: SpecState
-  specDispatch: Dispatch<SpecAction>
-}
-
-export const ApiSpecSelector: FC<ApiSpecSelectorProps> = ({
-  specs,
-  spec,
-  specDispatch,
-}) => {
-  const history = useHistory()
-  const options = Object.entries(specs).map(([key, spec]) => ({
-    value: key,
-    label: key,
-    description: spec.status,
-  }))
-
-  const handleChange = (specKey: string) => {
-    specDispatch(selectSpec(specs, specKey))
-    history.push(`/${specKey}`)
+const getMockedComponent = (propOverrides = {}) => {
+  const defaultProps = {
+    header: '',
+    actionMessage: '',
+    altText: '',
   }
-
-  return (
-    <Select
-      width="10rem"
-      aria-label="spec selector"
-      defaultValue={spec.key}
-      options={options}
-      onChange={handleChange}
-    />
-  )
+  const updatedProps = { ...defaultProps, ...propOverrides }
+  return <SomethingWentWrong {...updatedProps} />
 }
+
+describe('SomethingWentWrong', () => {
+  it('Should render proper component with correct texts', () => {
+    const header = 'Uh oh something went wrong'
+    const actionMessage = 'User please do this action. It might help'
+    const altText = '500 error graphic'
+
+    const { getByText, getByAltText } = renderWithTheme(
+      getMockedComponent({
+        header,
+        actionMessage,
+        altText,
+      })
+    )
+
+    expect(getByText(header)).toBeVisible()
+    expect(getByText(actionMessage)).toBeVisible()
+    expect(getByAltText(altText)).toBeVisible()
+  })
+})

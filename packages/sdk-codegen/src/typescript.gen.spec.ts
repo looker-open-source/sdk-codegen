@@ -439,8 +439,8 @@ describe('typescript generator', () => {
             ],
           },
         ]
-        const type =
-          apiTestModel.types.WriteMergeQuery.properties.source_queries.type
+        const props = apiTestModel.types.WriteMergeQuery.properties
+        const type = props.source_queries.type
         expect(type).toBeDefined()
         const actual = gen.arrayValue('', type, sourceQueries)
         const expected = `[

@@ -25,7 +25,7 @@
  */
 
 /**
- * 412 API methods
+ * 415 API methods
  */
 
 import type {
@@ -67,6 +67,7 @@ import type {
   ICreateOAuthApplicationUserStateResponse,
   ICredentialsApi3,
   ICredentialsEmail,
+  ICredentialsEmailSearch,
   ICredentialsEmbed,
   ICredentialsGoogle,
   ICredentialsLDAP,
@@ -150,6 +151,7 @@ import type {
   IRequestAllGroups,
   IRequestAllGroupUsers,
   IRequestAllIntegrations,
+  IRequestAllLookmlModels,
   IRequestAllRoles,
   IRequestAllScheduledPlans,
   IRequestAllUsers,
@@ -180,6 +182,7 @@ import type {
   IRequestSearchBoards,
   IRequestSearchContentFavorites,
   IRequestSearchContentViews,
+  IRequestSearchCredentialsEmail,
   IRequestSearchDashboardElements,
   IRequestSearchDashboards,
   IRequestSearchFolders,
@@ -195,6 +198,7 @@ import type {
   IRequestUserAttributeUserValues,
   IRequestUserRoles,
   IRole,
+  IRoleSearch,
   IRunningQueries,
   ISamlConfig,
   ISamlMetadataParseResult,
@@ -204,6 +208,7 @@ import type {
   ISchemaTables,
   ISession,
   ISessionConfig,
+  ISetting,
   ISqlQuery,
   ISqlQueryCreate,
   ISshPublicKey,
@@ -2466,6 +2471,32 @@ export class Looker40SDK extends APIMethods implements ILooker40SDK {
   }
 
   /**
+   * ### Configure Looker Settings
+   *
+   * Available settings are:
+   *  - extension_framework_enabled
+   *  - marketplace_auto_install_enabled
+   *  - marketplace_enabled
+   *
+   * PATCH /setting -> ISetting
+   *
+   * @param body WARNING: no writeable properties found for POST, PUT, or PATCH
+   * @param options one-time API call overrides
+   *
+   */
+  async set_setting(
+    body: Partial<ISetting>,
+    options?: Partial<ITransportSettings>
+  ): Promise<SDKResponse<ISetting, IError | IValidationError>> {
+    return this.patch<ISetting, IError | IValidationError>(
+      '/setting',
+      null,
+      body,
+      options
+    )
+  }
+
+  /**
    * ### Get a list of timezones that Looker supports (e.g. useful for scheduling tasks).
    *
    * GET /timezones -> ITimezone[]
@@ -2793,6 +2824,8 @@ export class Looker40SDK extends APIMethods implements ILooker40SDK {
   /**
    * ### Get all External OAuth Applications.
    *
+   * This is an OAuth Application which Looker uses to access external systems.
+   *
    * GET /external_oauth_applications -> IExternalOauthApplication[]
    *
    * @param request composed interface "IRequestAllExternalOauthApplications" for complex method parameters
@@ -2813,6 +2846,8 @@ export class Looker40SDK extends APIMethods implements ILooker40SDK {
 
   /**
    * ### Create an OAuth Application using the specified configuration.
+   *
+   * This is an OAuth Application which Looker uses to access external systems.
    *
    * POST /external_oauth_applications -> IExternalOauthApplication
    *
@@ -3363,7 +3398,7 @@ export class Looker40SDK extends APIMethods implements ILooker40SDK {
    *
    * POST /content_metadata_access -> IContentMetaGroupUser
    *
-   * @param body Partial<IContentMetaGroupUser>
+   * @param body WARNING: no writeable properties found for POST, PUT, or PATCH
    * @param send_boards_notification_email Optionally sends notification email when granting access to a board.
    * @param options one-time API call overrides
    *
@@ -3387,7 +3422,7 @@ export class Looker40SDK extends APIMethods implements ILooker40SDK {
    * PUT /content_metadata_access/{content_metadata_access_id} -> IContentMetaGroupUser
    *
    * @param content_metadata_access_id Id of content metadata access
-   * @param body Partial<IContentMetaGroupUser>
+   * @param body WARNING: no writeable properties found for POST, PUT, or PATCH
    * @param options one-time API call overrides
    *
    */
@@ -5194,7 +5229,7 @@ export class Looker40SDK extends APIMethods implements ILooker40SDK {
    * POST /groups/{group_id}/groups -> IGroup
    *
    * @param group_id Id of group
-   * @param body Partial<IGroupIdForGroupInclusion>
+   * @param body WARNING: no writeable properties found for POST, PUT, or PATCH
    * @param options one-time API call overrides
    *
    */
@@ -5243,7 +5278,7 @@ export class Looker40SDK extends APIMethods implements ILooker40SDK {
    * POST /groups/{group_id}/users -> IUser
    *
    * @param group_id Id of group
-   * @param body Partial<IGroupIdForGroupUserInclusion>
+   * @param body WARNING: no writeable properties found for POST, PUT, or PATCH
    * @param options one-time API call overrides
    *
    */
@@ -5315,7 +5350,7 @@ export class Looker40SDK extends APIMethods implements ILooker40SDK {
    *
    * @param group_id Id of group
    * @param user_attribute_id Id of user attribute
-   * @param body Partial<IUserAttributeGroupValue>
+   * @param body WARNING: no writeable properties found for POST, PUT, or PATCH
    * @param options one-time API call overrides
    *
    */
@@ -5998,17 +6033,17 @@ export class Looker40SDK extends APIMethods implements ILooker40SDK {
    *
    * GET /lookml_models -> ILookmlModel[]
    *
-   * @param fields Requested fields.
+   * @param request composed interface "IRequestAllLookmlModels" for complex method parameters
    * @param options one-time API call overrides
    *
    */
   async all_lookml_models(
-    fields?: string,
+    request: IRequestAllLookmlModels,
     options?: Partial<ITransportSettings>
   ): Promise<SDKResponse<ILookmlModel[], IError>> {
     return this.get<ILookmlModel[], IError>(
       '/lookml_models',
-      { fields },
+      { fields: request.fields, limit: request.limit, offset: request.offset },
       null,
       options
     )
@@ -6359,7 +6394,7 @@ export class Looker40SDK extends APIMethods implements ILooker40SDK {
    * POST /connections/{connection_name}/cost_estimate -> ICostEstimate
    *
    * @param connection_name Name of connection
-   * @param body Partial<ICreateCostEstimate>
+   * @param body WARNING: no writeable properties found for POST, PUT, or PATCH
    * @param fields Requested fields.
    * @param options one-time API call overrides
    *
@@ -8536,6 +8571,60 @@ export class Looker40SDK extends APIMethods implements ILooker40SDK {
   }
 
   /**
+   * ### Search roles include user count
+   *
+   * Returns all role records that match the given search criteria, and attaches
+   * associated user counts.
+   *
+   * If multiple search params are given and `filter_or` is FALSE or not specified,
+   * search params are combined in a logical AND operation.
+   * Only rows that match *all* search param criteria will be returned.
+   *
+   * If `filter_or` is TRUE, multiple search params are combined in a logical OR operation.
+   * Results will include rows that match **any** of the search criteria.
+   *
+   * String search params use case-insensitive matching.
+   * String search params can contain `%` and '_' as SQL LIKE pattern match wildcard expressions.
+   * example="dan%" will match "danger" and "Danzig" but not "David"
+   * example="D_m%" will match "Damage" and "dump"
+   *
+   * Integer search params can accept a single value or a comma separated list of values. The multiple
+   * values will be combined under a logical OR operation - results will match at least one of
+   * the given values.
+   *
+   * Most search params can accept "IS NULL" and "NOT NULL" as special expressions to match
+   * or exclude (respectively) rows where the column is null.
+   *
+   * Boolean search params accept only "true" and "false" as values.
+   *
+   * GET /roles/search/with_user_count -> IRoleSearch[]
+   *
+   * @param request composed interface "IRequestSearchRoles" for complex method parameters
+   * @param options one-time API call overrides
+   *
+   */
+  async search_roles_with_user_count(
+    request: IRequestSearchRoles,
+    options?: Partial<ITransportSettings>
+  ): Promise<SDKResponse<IRoleSearch[], IError>> {
+    return this.get<IRoleSearch[], IError>(
+      '/roles/search/with_user_count',
+      {
+        fields: request.fields,
+        limit: request.limit,
+        offset: request.offset,
+        sorts: request.sorts,
+        id: request.id,
+        name: request.name,
+        built_in: request.built_in,
+        filter_or: request.filter_or,
+      },
+      null,
+      options
+    )
+  }
+
+  /**
    * ### Get information about the role with a specific id.
    *
    * GET /roles/{role_id} -> IRole
@@ -9584,6 +9673,59 @@ export class Looker40SDK extends APIMethods implements ILooker40SDK {
   //#region User: Manage Users
 
   /**
+   * ### Search email credentials
+   *
+   * Returns all credentials_email records that match the given search criteria.
+   *
+   * If multiple search params are given and `filter_or` is FALSE or not specified,
+   * search params are combined in a logical AND operation.
+   * Only rows that match *all* search param criteria will be returned.
+   *
+   * If `filter_or` is TRUE, multiple search params are combined in a logical OR operation.
+   * Results will include rows that match **any** of the search criteria.
+   *
+   * String search params use case-insensitive matching.
+   * String search params can contain `%` and '_' as SQL LIKE pattern match wildcard expressions.
+   * example="dan%" will match "danger" and "Danzig" but not "David"
+   * example="D_m%" will match "Damage" and "dump"
+   *
+   * Integer search params can accept a single value or a comma separated list of values. The multiple
+   * values will be combined under a logical OR operation - results will match at least one of
+   * the given values.
+   *
+   * Most search params can accept "IS NULL" and "NOT NULL" as special expressions to match
+   * or exclude (respectively) rows where the column is null.
+   *
+   * Boolean search params accept only "true" and "false" as values.
+   *
+   * GET /credentials_email/search -> ICredentialsEmailSearch[]
+   *
+   * @param request composed interface "IRequestSearchCredentialsEmail" for complex method parameters
+   * @param options one-time API call overrides
+   *
+   */
+  async search_credentials_email(
+    request: IRequestSearchCredentialsEmail,
+    options?: Partial<ITransportSettings>
+  ): Promise<SDKResponse<ICredentialsEmailSearch[], IError>> {
+    return this.get<ICredentialsEmailSearch[], IError>(
+      '/credentials_email/search',
+      {
+        fields: request.fields,
+        limit: request.limit,
+        offset: request.offset,
+        sorts: request.sorts,
+        id: request.id,
+        email: request.email,
+        emails: request.emails,
+        filter_or: request.filter_or,
+      },
+      null,
+      options
+    )
+  }
+
+  /**
    * ### Get information about the current user; i.e. the user account currently calling the API.
    *
    * GET /user -> IUser
@@ -9999,7 +10141,7 @@ export class Looker40SDK extends APIMethods implements ILooker40SDK {
    * POST /users/{user_id}/credentials_totp -> ICredentialsTotp
    *
    * @param user_id id of user
-   * @param body Partial<ICredentialsTotp>
+   * @param body WARNING: no writeable properties found for POST, PUT, or PATCH
    * @param fields Requested fields.
    * @param options one-time API call overrides
    *
@@ -10292,7 +10434,7 @@ export class Looker40SDK extends APIMethods implements ILooker40SDK {
    * POST /users/{user_id}/credentials_api3 -> ICredentialsApi3
    *
    * @param user_id id of user
-   * @param body Partial<ICredentialsApi3>
+   * @param body WARNING: no writeable properties found for POST, PUT, or PATCH
    * @param fields Requested fields.
    * @param options one-time API call overrides
    *

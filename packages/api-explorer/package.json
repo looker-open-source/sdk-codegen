@@ -1,6 +1,6 @@
 {
   "name": "@looker/api-explorer",
-  "version": "0.9.9",
+  "version": "0.9.17",
   "description": "Looker API Explorer",
   "main": "lib/index.js",
   "module": "lib/esm/index.js",
@@ -9,6 +9,9 @@
   "license": "MIT",
   "author": "Looker",
   "private": false,
+  "publishConfig": {
+    "access": "public"
+  },
   "repository": {
     "type": "git",
     "url": "git+https://github.com/looker-open-source/sdk-codegen.git",
@@ -24,12 +27,13 @@
     "build": "tsc && webpack --config webpack.prod.config.js",
     "develop": "webpack serve --host=0.0.0.0 --https --disable-host-check --config webpack.dev.config.js",
     "docs": "typedoc --mode file --out docs",
-    "watch": "yarn lerna exec --scope @looker/api-explorer --stream 'BABEL_ENV=build babel src --root-mode upward --out-dir lib/esm --source-maps --extensions .ts,.tsx --no-comments --watch'"
+    "watch": "yarn lerna exec --scope @looker/api-explorer --stream 'BABEL_ENV=build babel src --root-mode upward --out-dir lib/esm --source-maps --extensions .ts,.tsx --no-comments --watch'",
+    "deploy-dev-portal": "rm -f ../../../developer-portal/static/apix/dist/*.js* && cp -R ./dist/*.js* ../../../developer-portal/static/apix/dist"
   },
   "devDependencies": {
     "@looker/components-test-utils": "^1.3.1",
-    "@looker/sdk-codegen-scripts": "^21.0.18",
-    "@looker/sdk-node": "^21.8.0",
+    "@looker/sdk-codegen-scripts": "^21.0.25",
+    "@looker/sdk-node": "^21.12.0",
     "@styled-icons/styled-icon": "^10.6.3",
     "@testing-library/jest-dom": "^5.11.6",
     "@testing-library/react": "^11.2.2",
@@ -54,14 +58,14 @@
     "webpack-merge": "^5.7.3"
   },
   "dependencies": {
-    "@looker/code-editor": "^0.1.2",
+    "@looker/code-editor": "^0.1.8",
     "@looker/components": "^1.4.1",
     "@looker/design-tokens": "^1.3.1",
     "@looker/icons": "^1.3.0",
-    "@looker/run-it": "^0.9.9",
-    "@looker/sdk": "^21.8.0",
-    "@looker/sdk-codegen": "^21.0.17",
-    "@looker/sdk-rtl": "^21.0.13",
+    "@looker/run-it": "^0.9.17",
+    "@looker/sdk": "^21.12.0",
+    "@looker/sdk-codegen": "^21.0.23",
+    "@looker/sdk-rtl": "^21.0.19",
     "@styled-icons/material": "^10.28.0",
     "@styled-icons/material-outlined": "^10.28.0",
     "@styled-icons/material-rounded": "^10.28.0",

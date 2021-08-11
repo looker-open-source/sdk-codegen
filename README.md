@@ -4,7 +4,7 @@ This Looker Open Source repository is released under the MIT license. By using t
 
 While Looker has developed and tested this code internally, we cannot guarantee that the open-source tools used by the scripts in this repository have not been modified with malicious code.
 
-**Important** - If you are using the typescript Looker SDK, please see the [note at the bottom](#very-important-note-regarding-the-looker-typescript-sdk) of this file explaining changes to dependencies and packaging.
+**Important** - If you are using the Looker TypeScript SDK, please see the [note at the bottom](#very-important-note-regarding-the-looker-typescript-sdk) of this file explaining changes to dependencies and packaging.
 
 ## Overview
 
@@ -269,11 +269,3 @@ Configuration variables should be processed as follows:
 - if an environment variable exists, apply the value
 - if a configuration value is explicitly in code, apply that value
 - if a command-line switch is supported, apply that value
-
-## Very important note regarding the Looker TypeScript SDK
-
-The Looker TypeScript SDK has been refactored so that node dependencies do not pollute browser usage of the SDK (the node dependencies are not available in the browser and can cause compile errors). There are now three packages available on npm:
-
-1. `@looker/sdk` - contains the Looker API methods.
-2. `@looker/sdk-rtl` - contains a run time library needed to invoke the Looker API methods. Referencing the `@looker/sdk` as a dependency should automatically pull this package in.
-3. `@looker/sdk-node` - contains the dependendencies needed to run the Looker SDK in a node environment. Do NOT include this package if you are using the Looker SDK in a browser. You MUST include this package if you are using `node` or `ts-node`.
