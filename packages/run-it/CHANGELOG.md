@@ -1,5 +1,20 @@
 # Changelog
 
+### [0.9.18](https://www.github.com/looker-open-source/sdk-codegen/compare/run-it-v0.9.17...run-it-v0.9.18) (2021-08-11)
+
+
+### Features
+
+* fetch API specifications for stand-alone API Explorer ([#789](https://www.github.com/looker-open-source/sdk-codegen/issues/789)) ([f7be1fb](https://www.github.com/looker-open-source/sdk-codegen/commit/f7be1fb589570137c5ab39304910c57f721de8fb))
+
+
+### Dependencies
+
+* The following workspace dependencies were updated
+  * dependencies
+    * @looker/sdk-codegen bumped from ^21.0.23 to ^21.0.24
+    * @looker/code-editor bumped from ^0.1.8 to ^0.1.9
+
 ### [0.9.17](https://www.github.com/looker-open-source/sdk-codegen/compare/run-it-v0.9.16...run-it-v0.9.17) (2021-08-06)
 
 

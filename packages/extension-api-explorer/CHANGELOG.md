@@ -1,5 +1,21 @@
 # Changelog
 
+### [21.12.1](https://www.github.com/looker-open-source/sdk-codegen/compare/extension-api-explorer-v21.12.0...extension-api-explorer-v21.12.1) (2021-08-11)
+
+
+### Features
+
+* fetch API specifications for stand-alone API Explorer ([#789](https://www.github.com/looker-open-source/sdk-codegen/issues/789)) ([f7be1fb](https://www.github.com/looker-open-source/sdk-codegen/commit/f7be1fb589570137c5ab39304910c57f721de8fb))
+
+
+### Dependencies
+
+* The following workspace dependencies were updated
+  * dependencies
+    * @looker/api-explorer bumped from ^0.9.17 to ^0.9.18
+    * @looker/run-it bumped from ^0.9.17 to ^0.9.18
+    * @looker/sdk-codegen bumped from ^21.0.23 to ^21.0.24
+
 ## [21.12.0](https://www.github.com/looker-open-source/sdk-codegen/compare/extension-api-explorer-v21.11.1...extension-api-explorer-v21.12.0) (2021-08-06)
 
 
