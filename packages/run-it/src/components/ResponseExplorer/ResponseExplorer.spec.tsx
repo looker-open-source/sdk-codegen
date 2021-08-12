@@ -68,8 +68,7 @@ describe('ResponseExplorer', () => {
       <ResponseExplorer verb="GET" path="/test/path" response={response} />
     )
     expect(screen.getByRole('heading', { name: 'Body (10 bytes)' })).toBeInTheDocument()
-    const code = screen.getByText(response.body.toString())
-    expect(code).toBeInTheDocument()
+    expect(screen.getByText(response.body.toString())).toBeInTheDocument()
     await userEvent.click(header)
     await waitFor(() => {
       expect(
