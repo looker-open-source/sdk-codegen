@@ -67,8 +67,7 @@ describe('ResponseExplorer', () => {
     renderWithTheme(
       <ResponseExplorer verb="GET" path="/test/path" response={response} />
     )
-    const header = screen.getByRole('heading', { name: 'Body (10 bytes)' })
-    expect(header).toBeInTheDocument()
+    expect(screen.getByRole('heading', { name: 'Body (10 bytes)' })).toBeInTheDocument()
     const code = screen.getByText(response.body.toString())
     expect(code).toBeInTheDocument()
     await userEvent.click(header)
