@@ -201,7 +201,6 @@ export class BrowserTransport extends BaseTransport {
     }
     const headers = {}
     res.headers.forEach((value, key) => (headers[key] = value))
-    console.log({ headers })
     const response: IRawResponse = {
       url: requestPath,
       body: responseBody,
