@@ -24,4 +24,3 @@
 
  */
 export * from './ResponseExplorer'
-export * from './Collapser'

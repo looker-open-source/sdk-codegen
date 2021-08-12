@@ -28,7 +28,7 @@ import React, { FC } from 'react'
 import { Tab, TabList, TabPanel, TabPanels, useTabs } from '@looker/components'
 import { IMethodResponse } from '@looker/sdk-codegen'
 
-import { CollapserCard } from '../Collapser'
+import { CollapserCard } from '@looker/run-it'
 import { DocResponseTypes } from './DocResponseTypes'
 import { buildResponseTree } from './utils'
 

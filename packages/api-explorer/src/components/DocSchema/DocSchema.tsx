@@ -27,7 +27,7 @@
 import React, { FC } from 'react'
 
 import { CodeDisplay } from '@looker/code-editor'
-import { CollapserCard } from '../Collapser'
+import { CollapserCard } from '@looker/run-it'
 
 interface DocSchemaProps {
   object: any
