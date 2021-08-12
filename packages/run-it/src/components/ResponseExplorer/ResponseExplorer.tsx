@@ -124,25 +124,33 @@ export const ResponseExplorer: FC<ResponseExplorerProps> = ({
   useEffect(() => {
     setBodySize(getBodySize(response))
   }, [response])
-  if (!response) {
-    return (
-      <>
-        <Span>No response was received</Span>
-      </>
-    )
-  }
   // TODO make a badge for the verb.
   // Once we are satisfied with the badge in the api-explorer package it should be moved here
 
   return (
     <>
-      <Heading as="h4">{`${verb || ''} ${path || ''} (${response.statusCode}: ${
-        response.statusMessage
-      })`}</Heading>
-      <CollapserCard divider={false} heading={`Body (${bodySize})`} id="body">
-        <ShowResponse response={response} />
-      </CollapserCard>
-      <ResponseHeaders response={response} />
+      {response && (
+        <>
+          <Heading as="h4">
+            {`${verb || ''} ${path || ''} (${response.statusCode}: ${
+              response.statusMessage
+            })`}
+          </Heading>
+          <CollapserCard
+            divider={false}
+            heading={`Body (${bodySize})`}
+            id="body"
+          >
+            <ShowResponse response={response} />
+          </CollapserCard>
+          <ResponseHeaders response={response} />
+        </>
+      )}
+      {!response && (
+        <>
+          <Span>No response was received</Span>
+        </>
+      )}
     </>
   )
 }

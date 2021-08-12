@@ -134,7 +134,9 @@ describe('RunIt', () => {
         .spyOn(sdk.authSession.transport, 'rawRequest')
         .mockResolvedValueOnce(testTextResponse)
       renderRunIt()
-      userEvent.click(screen.getByRole('button', { name: run }))
+      const button = screen.getByRole('button', { name: run })
+      expect(button).toBeInTheDocument()
+      userEvent.click(button)
       await waitFor(() => {
         expect(defaultRequestCallback).toHaveBeenCalled()
         expect(
