@@ -1,18 +1,18 @@
 {
-  ".": "1.13.1",
-  "packages/api-explorer": "0.9.17",
-  "packages/code-editor": "0.1.8",
-  "packages/extension-api-explorer": "21.12.0",
+  ".": "1.14.0",
+  "packages/api-explorer": "0.9.18",
+  "packages/code-editor": "0.1.9",
+  "packages/extension-api-explorer": "21.12.1",
   "packages/extension-sdk": "21.12.0",
   "packages/extension-sdk-react": "21.12.0",
   "packages/hackathon": "21.12.0",
-  "packages/run-it": "0.9.17",
+  "packages/run-it": "0.9.18",
   "packages/sdk": "21.12.0",
-  "packages/sdk-codegen": "21.0.23",
-  "packages/sdk-codegen-scripts": "21.0.25",
+  "packages/sdk-codegen": "21.0.24",
+  "packages/sdk-codegen-scripts": "21.0.26",
   "packages/sdk-codegen-utils": "21.0.11",
   "packages/sdk-node": "21.12.0",
   "packages/sdk-rtl": "21.0.19",
   "packages/wholly-sheet": "0.5.15",
-  "python": "21.12.1"
+  "python": "21.12.2"
 }
