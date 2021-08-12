@@ -76,4 +76,11 @@ describe('ResponseExplorer', () => {
       ).not.toBeInTheDocument()
     })
   })
+
+  test('no response content', async () => {
+    renderWithTheme(
+      <ResponseExplorer verb="GET" path="/test/path" response={undefined} />
+    )
+    expect(screen.getByText('No response was received')).toBeInTheDocument()
+  })
 })

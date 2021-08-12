@@ -49,12 +49,14 @@ const getHeaders = (response: ResponseContent): HeaderTable => {
 }
 
 const getBodySize = (response: ResponseContent): string => {
-  const result = `${
-    response?.body instanceof Blob
+  const size =
+    !response || !response.body
+      ? 0
+      : response?.body instanceof Blob
       ? response?.body.size
       : response?.body.toString().length
-  } bytes`
-  return result
+
+  return `${size} bytes`
 }
 
 export const NoWrap = styled(Span)`
@@ -123,7 +125,11 @@ export const ResponseExplorer: FC<ResponseExplorerProps> = ({
     setBodySize(getBodySize(response))
   }, [response])
   if (!response) {
-    return <></>
+    return (
+      <>
+        <Span>No response was received</Span>
+      </>
+    )
   }
   // TODO make a badge for the verb.
   // Once we are satisfied with the badge in the api-explorer package it should be moved here

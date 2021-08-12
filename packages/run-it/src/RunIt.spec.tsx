@@ -33,10 +33,7 @@ import { ApiModel, IMethod } from '@looker/sdk-codegen'
 import { RunIt, RunItInput } from './RunIt'
 import { api, testTextResponse } from './test-data'
 import { initRunItSdk, RunItSettings } from './utils'
-import {
-  defaultConfigurator,
-  StandaloneConfigurator,
-} from './components/ConfigForm/configUtils'
+import { defaultConfigurator, StandaloneConfigurator } from './components'
 import { RunItProvider } from './RunItProvider'
 
 const sdk = initRunItSdk(new StandaloneConfigurator())
