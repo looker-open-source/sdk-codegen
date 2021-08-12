@@ -173,7 +173,7 @@ const ShowRaw = (response: IRawResponse) => (
     </MessageBar>
     <CodeDisplay
       language="unknown"
-      code={response.body.toString()}
+      code={response?.body?.toString() || ''}
       transparent
     />
   </>

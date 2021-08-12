@@ -39,13 +39,13 @@ import {
   TabPanel,
   useTabs,
 } from '@looker/components'
-import { IRawResponse } from '@looker/sdk-rtl'
 import { ApiModel, IMethod } from '@looker/sdk-codegen'
 import {
   RequestForm,
   ResponseExplorer,
   Loading,
   DocSdkCalls,
+  ResponseContent,
 } from './components'
 import {
   createRequestParams,
@@ -59,7 +59,6 @@ import { prepareInputs } from './utils/requestUtils'
 import { RunItContext } from '.'
 
 export type RunItHttpMethod = 'GET' | 'PUT' | 'POST' | 'PATCH' | 'DELETE'
-export type ResponseContent = IRawResponse | undefined
 
 /**
  * Generic collection

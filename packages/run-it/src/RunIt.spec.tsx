@@ -130,10 +130,10 @@ describe('RunIt', () => {
     })
 
     test('the form submit handler invokes the request callback on submit', async () => {
+      renderRunIt()
       const defaultRequestCallback = jest
         .spyOn(sdk.authSession.transport, 'rawRequest')
         .mockResolvedValueOnce(testTextResponse)
-      renderRunIt()
       const button = screen.getByRole('button', { name: run })
       expect(button).toBeInTheDocument()
       userEvent.click(button)

@@ -27,6 +27,7 @@
 import React from 'react'
 import { render, screen } from '@testing-library/react'
 import { renderWithTheme } from '@looker/components-test-utils'
+import { IRawResponse } from '@looker/sdk-rtl'
 
 import {
   testErrorResponse,
@@ -40,6 +41,15 @@ import {
 import { ShowResponse } from './ShowResponse'
 
 describe('ShowResponse', () => {
+  test('undefined response', () => {
+    renderWithTheme(<ShowResponse response={{} as IRawResponse} />)
+    expect(
+      screen.getByText(
+        'The response body could not be parsed. Displaying raw data.'
+      )
+    ).toBeInTheDocument()
+  })
+
   test('it renders json responses', () => {
     renderWithTheme(<ShowResponse response={testJsonResponse} />)
     const tab = screen.getByRole('tabpanel')

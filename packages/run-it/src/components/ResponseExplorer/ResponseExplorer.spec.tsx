@@ -63,7 +63,7 @@ describe('ResponseExplorer', () => {
     })
   })
 
-  test('Shows body', async () => {
+  test('shows body', async () => {
     renderWithTheme(
       <ResponseExplorer verb="GET" path="/test/path" response={response} />
     )

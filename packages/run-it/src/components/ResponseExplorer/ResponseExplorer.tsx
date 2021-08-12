@@ -24,21 +24,25 @@
 
  */
 
-import React, { FC, useEffect, useState } from 'react'
+import React, { FC } from 'react'
 import {
   Table,
   TableBody,
   TableRow,
   TableDataCell,
-  Heading,
   Span,
   TableHead,
   TableHeaderCell,
 } from '@looker/components'
 import styled from 'styled-components'
-import { CollapserCard, ResponseContent, ShowResponse } from '../..'
+import { IRawResponse } from '@looker/sdk-rtl'
+import { ShowResponse } from '../ShowResponse'
+import { CollapserCard } from '../Collapser'
+import { RunItHeading } from '../common'
 
 type HeaderTable = string[][]
+export type ResponseContent = IRawResponse | undefined
+
 const getHeaders = (response: ResponseContent): HeaderTable => {
   if (!response?.headers) return []
   const result: HeaderTable = []
@@ -120,35 +124,31 @@ export const ResponseExplorer: FC<ResponseExplorerProps> = ({
   verb,
   path,
 }) => {
-  const [bodySize, setBodySize] = useState(getBodySize(response))
-  useEffect(() => {
-    setBodySize(getBodySize(response))
-  }, [response])
   // TODO make a badge for the verb.
   // Once we are satisfied with the badge in the api-explorer package it should be moved here
 
   return (
     <>
+      {!response && (
+        <>
+          <Span>No response was received</Span>
+        </>
+      )}
       {response && (
         <>
-          <Heading as="h4">
+          <RunItHeading as="h4">
             {`${verb || ''} ${path || ''} (${response.statusCode}: ${
               response.statusMessage
             })`}
-          </Heading>
+          </RunItHeading>
           <CollapserCard
             divider={false}
-            heading={`Body (${bodySize})`}
+            heading={`Body (${getBodySize(response)})`}
             id="body"
           >
             <ShowResponse response={response} />
           </CollapserCard>
           <ResponseHeaders response={response} />
-        </>
-      )}
-      {!response && (
-        <>
-          <Span>No response was received</Span>
         </>
       )}
     </>
