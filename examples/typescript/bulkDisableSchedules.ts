@@ -7,15 +7,10 @@ const sdk = LookerNodeSDK.init40()
 
 const getSchedules = async (allUsers: boolean, userID?: number): Promise<IScheduledPlan[]> => {
     let schedules: IScheduledPlan[];
-    if (allUsers) {
-        schedules = await sdk.ok(sdk.all_scheduled_plans({all_users:true}))
+    if(userID) {
+        schedules = await sdk.ok(sdk.all_scheduled_plans({user_id: userID, all_users:false}))
     } else {
-        if (!userID) {
-            schedules = undefined
-            throw new Error(`Please specify a userID for this function.`)
-        } else {
-            schedules = await sdk.ok(sdk.all_scheduled_plans({user_id: userID, all_users:false}))
-        }
+        schedules = await sdk.ok(sdk.all_scheduled_plans({all_users:true}))
     }
     return schedules
 }
