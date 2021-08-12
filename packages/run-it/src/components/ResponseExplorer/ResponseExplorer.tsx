@@ -36,8 +36,8 @@ import {
   TableHeaderCell,
 } from '@looker/components'
 import styled from 'styled-components'
-import type { ResponseContent } from '../..'
-import { ShowResponse, Collapser } from '../..'
+import { ResponseContent, ShowResponse } from '../..'
+import { Collapser } from '.'
 
 type HeaderTable = string[][]
 const getHeaders = (response: ResponseContent): HeaderTable => {
@@ -69,40 +69,44 @@ interface ShowHeadersProps {
   response: ResponseContent
 }
 
-const ShowHeaders: FC<ShowHeadersProps> = ({ response }) => {
+export const ResponseHeaders: FC<ShowHeadersProps> = ({ response }) => {
   const data = getHeaders(response)
   if (data.length === 0) return <></>
   const rows = data.slice(1)
   return (
-    <Collapser
-      key="headers"
-      heading={`Headers (${rows.length})`}
-      id="headers"
-      defaultOpen={false}
-    >
-      <Table>
-        <TableHead>
-          <TableRow>
-            <TableHeaderCell p="xsmall">Name</TableHeaderCell>
-            <TableHeaderCell p="xsmall">Value</TableHeaderCell>
-          </TableRow>
-        </TableHead>
-        <TableBody>
-          {rows.map(([key, value]) => (
-            <TableRow key={key}>
-              <TableDataCell p="xsmall">
-                <NoWrap>
-                  <strong>{key}</strong>
-                </NoWrap>
-              </TableDataCell>
-              <TableDataCell p="xsmall">
-                <Span>{value}</Span>
-              </TableDataCell>
-            </TableRow>
-          ))}
-        </TableBody>
-      </Table>
-    </Collapser>
+    <>
+      <Collapser
+        key="headers"
+        heading={`Headers (${rows.length})`}
+        id="headers"
+        defaultOpen={false}
+      >
+        <>
+          <Table>
+            <TableHead>
+              <TableRow>
+                <TableHeaderCell p="xsmall">Name</TableHeaderCell>
+                <TableHeaderCell p="xsmall">Value</TableHeaderCell>
+              </TableRow>
+            </TableHead>
+            <TableBody>
+              {rows.map(([key, value]) => (
+                <TableRow key={key}>
+                  <TableDataCell p="xsmall">
+                    <NoWrap>
+                      <strong>{key}</strong>
+                    </NoWrap>
+                  </TableDataCell>
+                  <TableDataCell p="xsmall">
+                    <Span>{value}</Span>
+                  </TableDataCell>
+                </TableRow>
+              ))}
+            </TableBody>
+          </Table>
+        </>
+      </Collapser>
+    </>
   )
 }
 
@@ -135,7 +139,7 @@ export const ResponseExplorer: FC<ResponseExplorerProps> = ({
       <Collapser heading={`Body (${bodySize})`} id="body">
         <ShowResponse response={response} />
       </Collapser>
-      <ShowHeaders response={response} />
+      <ResponseHeaders response={response} />
     </>
   )
 }

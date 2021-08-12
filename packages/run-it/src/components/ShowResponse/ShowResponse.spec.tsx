@@ -42,15 +42,13 @@ import { ShowResponse } from './ShowResponse'
 describe('ShowResponse', () => {
   test('it renders json responses', () => {
     renderWithTheme(<ShowResponse response={testJsonResponse} />)
-    expect(screen.getByText('200: application/json')).toBeInTheDocument()
-    expect(screen.getByText('key1')).toBeInTheDocument()
+    const tab = screen.getByRole('tabpanel')
+    expect(tab).toHaveTextContent('"key1"')
+    expect(tab).toHaveTextContent('"value1"')
   })
 
   test('it renders text responses', () => {
     renderWithTheme(<ShowResponse response={testTextResponse} />)
-    expect(
-      screen.getByText('200: text/plain;charset=utf-8')
-    ).toBeInTheDocument()
     expect(
       screen.getByText(testTextResponse.body.toString())
     ).toBeInTheDocument()
@@ -58,25 +56,23 @@ describe('ShowResponse', () => {
 
   test('it renders html responses', () => {
     renderWithTheme(<ShowResponse response={testHtmlResponse} />)
-    expect(screen.getByText('200: text/html;charset=utf-8')).toBeInTheDocument()
     expect(screen.getByText('Orders Created Date')).toBeInTheDocument()
   })
 
   test('it renders png responses', () => {
     render(<ShowResponse response={testImageResponse()} />)
-    expect(screen.getByText('200: image/png')).toBeInTheDocument()
-    expect(screen.getByRole('img')).toBeInTheDocument()
+    const img = screen.getByRole('img')
+    expect(img).toBeInTheDocument()
   })
 
   test('it renders jpg responses', () => {
     render(<ShowResponse response={testImageResponse('image/jpeg')} />)
-    expect(screen.getByText('200: image/jpeg')).toBeInTheDocument()
-    expect(screen.getByRole('img')).toBeInTheDocument()
+    const img = screen.getByRole('img')
+    expect(img).toBeInTheDocument()
   })
 
   test('it renders svg responses', () => {
     render(<ShowResponse response={testImageResponse('image/svg+xml')} />)
-    expect(screen.getByText('200: image/svg+xml')).toBeInTheDocument()
     expect(screen.getByRole('img')).toBeInTheDocument()
   })
 
@@ -101,7 +97,6 @@ describe('ShowResponse', () => {
 
   test('it renders bogus json responses', () => {
     renderWithTheme(<ShowResponse response={testBogusJsonResponse} />)
-    expect(screen.getByText('200: application/json')).toBeInTheDocument()
     expect(
       screen.getByText(
         'The response body could not be parsed. Displaying raw data.'
