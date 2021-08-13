@@ -37,8 +37,6 @@ import { IStorageValue } from '../../index'
 
 export const RunItConfigKey = 'RunItConfig'
 
-export const RunItValuesKey = 'RunItValues'
-
 export interface RunItConfigurator {
   getStorage: (key: string, defaultValue?: string) => IStorageValue
   setStorage(key: string, value: string, location: 'local' | 'session'): string

@@ -26,9 +26,9 @@
 import React, { FC } from 'react'
 import { Tab, TabList, TabPanel, TabPanels, useTabs } from '@looker/components'
 
-import { CodeDisplay } from '@looker/code-editor'
 import { getGenerators } from './callUtils'
 import { DocSdkCallsProps } from './DocSdkCalls'
+import { CodeCopy } from './CodeCopy'
 
 /**
  * Generates the SDK call syntax for all supported languages
@@ -52,7 +52,7 @@ export const DocMultiCall: FC<Omit<DocSdkCallsProps, 'sdkLanguage'>> = ({
           const code = gen.makeTheCall(method, inputs)
           return (
             <TabPanel key={language}>
-              <CodeDisplay code={code} language={language} />
+              <CodeCopy code={code} language={language} />
             </TabPanel>
           )
         })}

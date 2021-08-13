@@ -24,15 +24,19 @@
 
  */
 
-export * from './common'
-export * from './Collapser'
-export * from './ConfigForm'
-export * from './CopyClipboardIconButton'
-export * from './DocSdkCalls'
-export * from './DataGrid'
-export * from './LoginForm'
-export * from './MethodBadge'
-export * from './Loading'
-export * from './RequestForm'
-export * from './ResponseExplorer'
-export * from './ShowResponse'
+import React from 'react'
+import { screen } from '@testing-library/react'
+import { renderWithTheme } from '@looker/components-test-utils'
+import { CodeCopy } from './CodeCopy'
+
+describe('CodeCopy', () => {
+  test('displays code and clipboard UI', async () => {
+    const code = 'Some text. Supposed to be good for you.'
+    const caption = 'Copy this!'
+    renderWithTheme(<CodeCopy code={code} caption={caption} language="text" />)
+    const copy = screen.getByRole('button', { name: caption })
+    expect(copy).toBeInTheDocument()
+    const pre = screen.getByText(code)
+    expect(pre).toHaveTextContent(code)
+  })
+})

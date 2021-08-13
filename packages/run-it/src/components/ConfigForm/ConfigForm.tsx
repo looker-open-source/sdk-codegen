@@ -151,7 +151,6 @@ export const ConfigForm: FC<ConfigFormProps> = ({
       updateFields('webUrl', webUrl)
       updateFields(fetchIntent, 'positive')
       updateFields(fetchResult, 'Configuration is valid')
-      await configurator.removeStorage(RunItConfigKey)
       if (save) {
         configurator.setStorage(
           RunItConfigKey,

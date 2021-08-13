@@ -24,15 +24,44 @@
 
  */
 
-export * from './common'
-export * from './Collapser'
-export * from './ConfigForm'
-export * from './CopyClipboardIconButton'
-export * from './DocSdkCalls'
-export * from './DataGrid'
-export * from './LoginForm'
-export * from './MethodBadge'
-export * from './Loading'
-export * from './RequestForm'
-export * from './ResponseExplorer'
-export * from './ShowResponse'
+import React, { FC, useRef, useState } from 'react'
+import { IconButton } from '@looker/components'
+import { Done } from '@styled-icons/material/Done'
+import { Assignment } from '@styled-icons/material/Assignment'
+
+export interface CopyClipboardIconButtonProps {
+  content: string
+  tooltip?: string
+  success?: string
+}
+
+export const CopyClipboardIconButton: FC<CopyClipboardIconButtonProps> = ({
+  content,
+  tooltip = 'Copy to clipboard',
+  success = 'Copied',
+}) => {
+  const [copied, setCopied] = useState(false)
+  const buttonRef = useRef<HTMLButtonElement>(null)
+
+  const clickCopyButton = () => {
+    const textField = document.createElement('textarea')
+    textField.value = content
+
+    if (buttonRef.current) {
+      buttonRef.current.appendChild(textField)
+      textField.select()
+      document.execCommand('copy')
+      textField.remove()
+      setCopied(true)
+      setTimeout(() => setCopied(false), 2500)
+    }
+  }
+
+  return (
+    <IconButton
+      label={copied ? success : tooltip}
+      icon={copied ? <Done /> : <Assignment />}
+      onClick={clickCopyButton}
+    />
+  )
+}

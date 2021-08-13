@@ -23,16 +23,36 @@
  SOFTWARE.
 
  */
+import React, { FC } from 'react'
+import { CodeDisplay, CodeDisplayProps } from '@looker/code-editor'
+import { Space, CopyToClipboard } from '@looker/components'
 
-export * from './common'
-export * from './Collapser'
-export * from './ConfigForm'
-export * from './CopyClipboardIconButton'
-export * from './DocSdkCalls'
-export * from './DataGrid'
-export * from './LoginForm'
-export * from './MethodBadge'
-export * from './Loading'
-export * from './RequestForm'
-export * from './ResponseExplorer'
-export * from './ShowResponse'
+interface CodeCopyProps extends CodeDisplayProps {
+  caption?: string
+}
+/**
+ * Shows code with clipboard copying support
+ */
+export const CodeCopy: FC<CodeCopyProps> = ({
+  language = 'json',
+  code,
+  caption = 'Copy',
+  pattern = '',
+  transparent = false,
+  inline = false,
+  lineNumbers = true,
+}) => {
+  return (
+    <Space between align="start">
+      <CodeDisplay
+        code={code}
+        language={language}
+        pattern={pattern}
+        transparent={transparent}
+        inline={inline}
+        lineNumbers={lineNumbers}
+      />
+      <CopyToClipboard content={code}>{caption}</CopyToClipboard>
+    </Space>
+  )
+}
