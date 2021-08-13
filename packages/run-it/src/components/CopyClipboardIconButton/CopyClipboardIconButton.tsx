@@ -44,10 +44,9 @@ export const CopyClipboardIconButton: FC<CopyClipboardIconButtonProps> = ({
   const buttonRef = useRef<HTMLButtonElement>(null)
 
   const clickCopyButton = () => {
-    const textField = document.createElement('textarea')
-    textField.value = content
-
     if (buttonRef.current) {
+      const textField = document.createElement('textarea')
+      textField.value = content
       buttonRef.current.appendChild(textField)
       textField.select()
       document.execCommand('copy')
