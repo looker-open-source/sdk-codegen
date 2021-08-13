@@ -128,7 +128,11 @@ export const ExtensionApiExplorer: FC = () => {
       <RunItProvider sdk={sdk} configurator={configurator} basePath="">
         <>
           {specs ? (
-            <ApiExplorer specs={specs} envAdaptor={extensionEnvAdaptor} />
+            <ApiExplorer
+              specs={specs}
+              envAdaptor={extensionEnvAdaptor}
+              headless={true}
+            />
           ) : (
             <Loader themeOverrides={extensionEnvAdaptor.themeOverrides()} />
           )}
