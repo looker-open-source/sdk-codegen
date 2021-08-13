@@ -33,10 +33,7 @@ import { ApiModel, IMethod } from '@looker/sdk-codegen'
 import { RunIt, RunItInput } from './RunIt'
 import { api, testTextResponse } from './test-data'
 import { initRunItSdk, RunItSettings } from './utils'
-import {
-  defaultConfigurator,
-  StandaloneConfigurator,
-} from './components/ConfigForm/configUtils'
+import { defaultConfigurator, StandaloneConfigurator } from './components'
 import { RunItProvider } from './RunItProvider'
 
 const sdk = initRunItSdk(new StandaloneConfigurator())
@@ -133,11 +130,13 @@ describe('RunIt', () => {
     })
 
     test('the form submit handler invokes the request callback on submit', async () => {
+      renderRunIt()
       const defaultRequestCallback = jest
         .spyOn(sdk.authSession.transport, 'rawRequest')
         .mockResolvedValueOnce(testTextResponse)
-      renderRunIt()
-      userEvent.click(screen.getByRole('button', { name: run }))
+      const button = screen.getByRole('button', { name: run })
+      expect(button).toBeInTheDocument()
+      userEvent.click(button)
       await waitFor(() => {
         expect(defaultRequestCallback).toHaveBeenCalled()
         expect(
