@@ -36,7 +36,7 @@ import {
 import { Beaker } from '@looker/icons'
 import { ThemeContext } from 'styled-components'
 import { useParams } from 'react-router-dom'
-import { RunIt, RunItContext } from '@looker/run-it'
+import { RunIt, RunItContext, RunItFormKey } from '@looker/run-it'
 import { ApiModel, typeRefs } from '@looker/sdk-codegen'
 import { useSelector } from 'react-redux'
 
@@ -55,33 +55,39 @@ import {
   DocSchema,
 } from '../../components'
 import { getSelectedSdkLanguage } from '../../state'
+import { IApixEnvAdaptor } from '../../utils'
 import { DocOperation, DocRequestBody } from './components'
 import { createInputs } from './utils'
 
-interface DocMethodProps {
+interface MethodSceneProps {
   api: ApiModel
+  envAdaptor: IApixEnvAdaptor
 }
 
-interface DocMethodParams {
+interface MethodSceneParams {
   methodName: string
   specKey: string
 }
 
-export const MethodScene: FC<DocMethodProps> = ({ api }) => {
+const showRunIt = (envAdaptor: IApixEnvAdaptor) => {
+  return !!envAdaptor.localStorageGetItem(RunItFormKey)
+}
+
+export const MethodScene: FC<MethodSceneProps> = ({ api, envAdaptor }) => {
   const { sdk } = useContext(RunItContext)
   const sdkLanguage = useSelector(getSelectedSdkLanguage)
-  const { methodName, specKey } = useParams<DocMethodParams>()
-  const { value, toggle } = useToggle()
+  const { methodName, specKey } = useParams<MethodSceneParams>()
+  const { value, toggle } = useToggle(showRunIt(envAdaptor))
   const [method, setMethod] = useState(api.methods[methodName])
   const seeTypes = typeRefs(api, method.customTypes)
+  const { colors } = useContext(ThemeContext)
+
+  const RunItButton = value ? Button : ButtonOutline
 
   useEffect(() => {
     setMethod(api.methods[methodName])
   }, [api, methodName])
 
-  const { colors } = useContext(ThemeContext)
-
-  const RunItButton = value ? Button : ButtonOutline
   const runItToggle = (
     <RunItButton
       color={value ? 'key' : 'neutral'}

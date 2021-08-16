@@ -23,44 +23,50 @@
  SOFTWARE.
 
  */
+import { IStorageValue, RunItConfigurator, StorageLocation } from '..'
 
-import React, { FC, useRef, useState } from 'react'
-import { IconButton } from '@looker/components'
-import { Done } from '@styled-icons/material/Done'
-import { Assignment } from '@styled-icons/material/Assignment'
-
-export interface CopyClipboardIconButtonProps {
-  content: string
-  tooltip?: string
-  success?: string
-}
-
-export const CopyClipboardIconButton: FC<CopyClipboardIconButtonProps> = ({
-  content,
-  tooltip = 'Copy to clipboard',
-  success = 'Copied',
-}) => {
-  const [copied, setCopied] = useState(false)
-  const buttonRef = useRef<HTMLButtonElement>(null)
-
-  const clickCopyButton = () => {
-    if (buttonRef.current) {
-      const textField = document.createElement('textarea')
-      textField.value = content
-      buttonRef.current.appendChild(textField)
-      textField.select()
-      document.execCommand('copy')
-      textField.remove()
-      setCopied(true)
-      setTimeout(() => setCopied(false), 2500)
+export class StandaloneConfigurator implements RunItConfigurator {
+  getStorage(key: string, defaultValue = ''): IStorageValue {
+    let value = sessionStorage.getItem(key)
+    if (value) {
+      return {
+        location: 'session',
+        value,
+      }
+    }
+    value = localStorage.getItem(key)
+    if (value) {
+      return {
+        location: 'local',
+        value,
+      }
+    }
+    return {
+      location: 'session',
+      value: defaultValue,
     }
   }
 
-  return (
-    <IconButton
-      label={copied ? success : tooltip}
-      icon={copied ? <Done /> : <Assignment />}
-      onClick={clickCopyButton}
-    />
-  )
+  setStorage(
+    key: string,
+    value: string,
+    location: StorageLocation = 'session'
+  ): string {
+    switch (location.toLocaleLowerCase()) {
+      case 'local':
+        localStorage.setItem(key, value)
+        break
+      case 'session':
+        sessionStorage.setItem(key, value)
+        break
+    }
+    return value
+  }
+
+  removeStorage(key: string) {
+    localStorage.removeItem(key)
+    sessionStorage.removeItem(key)
+  }
 }
+
+export const defaultConfigurator = new StandaloneConfigurator()

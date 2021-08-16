@@ -173,6 +173,7 @@ const ApiExplorer: FC<ApiExplorerProps> = ({
                         specKey={spec.key}
                         specs={specs}
                         toggleNavigation={toggleNavigation}
+                        envAdaptor={envAdaptor}
                       />
                     )}
                   </Layout>

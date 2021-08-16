@@ -43,7 +43,7 @@ export const CodeCopy: FC<CodeCopyProps> = ({
   lineNumbers = true,
 }) => {
   return (
-    <Space between align="start">
+    <Space between align="start" pt="xsmall">
       <CodeDisplay
         code={code}
         language={language}

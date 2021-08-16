@@ -37,9 +37,7 @@ import {
   updateNullableProp,
 } from './formUtils'
 
-/**
- * Properties required by RequestForm
- */
+/** Properties required by RequestForm */
 interface RequestFormProps {
   /** Established SDK instance */
   sdk: IAPIMethods
@@ -52,7 +50,7 @@ interface RequestFormProps {
   /** A collection type react state to store path, query and body parameters as entered by the user  */
   requestContent: RunItValues
   /** A set state callback fn for populating requestContent on interaction with the request form */
-  setRequestContent: Dispatch<{ [key: string]: any }>
+  setRequestContent: Dispatch<RunItValues>
   /** Is authentication required? */
   needsAuth: boolean
   /** Does RunIt have the configuration values it needs? */
@@ -140,6 +138,7 @@ export const RequestForm: FC<RequestFormProps> = ({
               sdk={sdk}
               setHasConfig={setHasConfig}
               configurator={configurator}
+              requestContent={requestContent}
             />
           ) : (
             <Button type="submit">Run</Button>

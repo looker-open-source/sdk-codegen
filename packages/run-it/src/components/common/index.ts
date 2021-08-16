@@ -24,3 +24,4 @@
 
  */
 export { RunItHeading } from './common'
+export * from './StandaloneConfigurator'

@@ -35,7 +35,9 @@ describe('LoginForm', () => {
   // https://testing-library.com/docs/guide-which-query
 
   test('it creates a login form without config button by default', async () => {
-    renderWithTheme(<LoginForm configurator={defaultConfigurator} />)
+    renderWithTheme(
+      <LoginForm configurator={defaultConfigurator} requestContent={{}} />
+    )
     const login = screen.getByRole('button', {
       name: 'Login',
     })
@@ -55,7 +57,11 @@ describe('LoginForm', () => {
 
   test('it includes a Config button if config setting is passed', async () => {
     renderWithTheme(
-      <LoginForm configurator={defaultConfigurator} setHasConfig={() => true} />
+      <LoginForm
+        configurator={defaultConfigurator}
+        requestContent={{}}
+        setHasConfig={() => true}
+      />
     )
     const button = screen.getByRole('button', {
       name: 'Configure',

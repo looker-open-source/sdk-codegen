@@ -28,12 +28,8 @@ import React from 'react'
 import { fireEvent, screen, waitFor } from '@testing-library/react'
 import { renderWithTheme } from '@looker/components-test-utils'
 import userEvent from '@testing-library/user-event'
-import {
-  ConfigForm,
-  defaultConfigurator,
-  loadSpecsFromVersions,
-  RunItConfigKey,
-} from '.'
+import { defaultConfigurator } from '..'
+import { ConfigForm, loadSpecsFromVersions, RunItConfigKey } from '.'
 
 // jest.mock('./configUtils', () => ({
 //   loadSpecsFromVersions: jest.fn(),

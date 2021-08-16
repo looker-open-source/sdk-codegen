@@ -46,6 +46,8 @@ import {
   Loading,
   DocSdkCalls,
   ResponseContent,
+  RunItConfigurator,
+  RunItFormKey,
 } from './components'
 import {
   createRequestParams,
@@ -63,7 +65,7 @@ export type RunItHttpMethod = 'GET' | 'PUT' | 'POST' | 'PATCH' | 'DELETE'
 /**
  * Generic collection
  */
-export type RunItValues = { [key: string]: any }
+export type RunItValues = Record<string, any>
 
 type RunItInputType =
   | 'boolean'
@@ -95,13 +97,6 @@ export interface RunItInput {
   description: string
 }
 
-export type StorageLocation = 'session' | 'local'
-
-export interface IStorageValue {
-  location: StorageLocation
-  value: string
-}
-
 interface RunItProps {
   /** spec model to use for sdk call generation */
   api: ApiModel
@@ -111,6 +106,17 @@ interface RunItProps {
   method: IMethod
   /** Sdk language to use for generating call syntax */
   sdkLanguage?: string
+}
+
+/**
+ * Load and clear any saved form values from the session
+ * @param configurator storage service
+ */
+const formValues = (configurator: RunItConfigurator) => {
+  const storage = configurator.getStorage(RunItFormKey)
+  const result = storage.value ? JSON.parse(storage.value) : {}
+  configurator.removeStorage(RunItFormKey)
+  return result
 }
 
 /**
@@ -127,7 +133,7 @@ export const RunIt: FC<RunItProps> = ({
   const endpoint = method.endpoint
   const { sdk, configurator, basePath } = useContext(RunItContext)
 
-  const [requestContent, setRequestContent] = useState({})
+  const [requestContent, setRequestContent] = useState(formValues(configurator))
   const [activePathParams, setActivePathParams] = useState({})
   const [loading, setLoading] = useState(false)
   const [responseContent, setResponseContent] =
