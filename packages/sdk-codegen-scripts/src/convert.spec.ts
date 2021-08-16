@@ -515,6 +515,11 @@ describe('spec conversion', () => {
       const left = ApiModel.fromString(apiSource)
       const right = ApiModel.fromString(spec)
       const diff = compareSpecs(left, right)
+      // const deletes = Object.entries(left.methods)
+      //   .filter(([_, m]) => m.httpMethod === 'DELETE')
+      //   .map(([_, m]) => m.endpoint)
+      // const result = JSON.stringify(deletes, null, 2)
+      // console.log(result)
       expect(diff).toHaveLength(0)
     })
 

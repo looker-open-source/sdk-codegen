@@ -49,6 +49,8 @@ export interface IApiVersion {
    * API server base url (read-only)
    */
   api_server_url?: string
+  /** Web server url */
+  web_server_url?: string
 }
 
 /** This declaration is duplicated DIRECTLY from @looker/sdk to detach dependency */
