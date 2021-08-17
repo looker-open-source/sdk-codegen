@@ -28,7 +28,6 @@ import React, { FC, useReducer, useState, useEffect, useCallback } from 'react'
 import { useLocation } from 'react-router'
 import styled, { createGlobalStyle } from 'styled-components'
 import { Aside, ComponentsProvider, Layout, Page } from '@looker/components'
-// import { Looker40SDK, Looker31SDK } from '@looker/sdk'
 import { SpecList } from '@looker/sdk-codegen'
 import { loadSpecApi, RunItSetter } from '@looker/run-it'
 import {
