@@ -28,7 +28,7 @@ import React, { FC, useReducer, useState, useEffect, useCallback } from 'react'
 import { useLocation } from 'react-router'
 import styled, { createGlobalStyle } from 'styled-components'
 import { Aside, ComponentsProvider, Layout, Page } from '@looker/components'
-import { Looker40SDK, Looker31SDK } from '@looker/sdk'
+// import { Looker40SDK, Looker31SDK } from '@looker/sdk'
 import { SpecList } from '@looker/sdk-codegen'
 import { loadSpecApi, RunItSetter } from '@looker/run-it'
 import {
@@ -55,7 +55,7 @@ export interface ApiExplorerProps {
   envAdaptor: IApixEnvAdaptor
   setVersionsUrl: RunItSetter
   // TODO remove sdk?
-  sdk?: Looker31SDK | Looker40SDK
+  // sdk?: Looker31SDK | Looker40SDK
   exampleLodeUrl?: string
   declarationsLodeUrl?: string
   headless?: boolean
@@ -109,15 +109,18 @@ const ApiExplorer: FC<ApiExplorerProps> = ({
 
   useEffect(() => {
     const loadSpec = async () => {
+      let api
       if (!spec.api) {
         const newSpec = { ...spec }
-        const api = await loadSpecApi(newSpec)
-        if (api) {
-          specDispatch(updateSpecApi(spec.key, api))
-        }
+        api = await loadSpecApi(newSpec)
       }
+      return api
     }
-    loadSpec()
+    loadSpec().then((api) => {
+      if (api) {
+        specDispatch(updateSpecApi(spec.key, api))
+      }
+    })
   }, [spec])
 
   useEffect(() => {
@@ -126,14 +129,15 @@ const ApiExplorer: FC<ApiExplorerProps> = ({
 
   useEffect(() => {
     const initSdkLanguage = async () => {
-      const resp = await envAdaptor.localStorageGetItem(
+      return await envAdaptor.localStorageGetItem(
         EnvAdaptorConstants.LOCALSTORAGE_SDK_LANGUAGE_KEY
       )
+    }
+    initSdkLanguage().then((resp) => {
       if (resp) {
         setSdkLanguageAction(resp)
       }
-    }
-    initSdkLanguage()
+    })
   }, [envAdaptor, setSdkLanguageAction])
 
   const { loadGoogleFonts, themeCustomizations } = envAdaptor.themeOverrides()
