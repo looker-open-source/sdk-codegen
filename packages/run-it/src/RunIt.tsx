@@ -54,11 +54,11 @@ import {
   runRequest,
   pathify,
   sdkNeedsConfig,
+  prepareInputs,
   RunItSettings,
 } from './utils'
 import { PerfTracker, PerfTimings } from './components/PerfTracker'
-import { prepareInputs } from './utils/requestUtils'
-import { RunItContext } from '.'
+import { RunItSetter, runItNoSet, RunItContext } from '.'
 
 export type RunItHttpMethod = 'GET' | 'PUT' | 'POST' | 'PATCH' | 'DELETE'
 
@@ -97,17 +97,6 @@ export interface RunItInput {
   description: string
 }
 
-interface RunItProps {
-  /** spec model to use for sdk call generation */
-  api: ApiModel
-  /** An array of parameters associated with a given endpoint */
-  inputs: RunItInput[]
-  /** Method to test */
-  method: IMethod
-  /** Sdk language to use for generating call syntax */
-  sdkLanguage?: string
-}
-
 /**
  * Load and clear any saved form values from the session
  * @param configurator storage service
@@ -119,6 +108,19 @@ const formValues = (configurator: RunItConfigurator) => {
   return result
 }
 
+interface RunItProps {
+  /** spec model to use for sdk call generation */
+  api: ApiModel
+  /** An array of parameters associated with a given endpoint */
+  inputs: RunItInput[]
+  /** Method to test */
+  method: IMethod
+  /** Set versions Url callback */
+  setVersionsUrl: RunItSetter
+  /** Sdk language to use for generating call syntax */
+  sdkLanguage?: string
+}
+
 /**
  * Given an array of inputs, a method, and an api model it renders a REST request form
  * which on submit performs a REST request and renders the response with the appropriate MIME type handler
@@ -127,6 +129,7 @@ export const RunIt: FC<RunItProps> = ({
   api,
   inputs,
   method,
+  setVersionsUrl = runItNoSet,
   sdkLanguage = 'All',
 }) => {
   const httpMethod = method.httpMethod as RunItHttpMethod
@@ -228,6 +231,7 @@ export const RunIt: FC<RunItProps> = ({
             setHasConfig={setHasConfig}
             configurator={configurator}
             isExtension={isExtension}
+            setVersionsUrl={setVersionsUrl}
           />
         </TabPanel>
         <TabPanel key="response">

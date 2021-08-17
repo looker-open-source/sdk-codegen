@@ -129,7 +129,7 @@ export const ResponseExplorer: FC<ResponseExplorerProps> = ({
 
   return (
     <>
-      {!response && <Span>No response was received</Span>}
+      {!response && <Span color="text3">No response was received</Span>}
       {response && (
         <>
           <RunItHeading as="h4">

@@ -52,6 +52,7 @@ import { CodeDisplay } from '@looker/code-editor'
 import { CheckProgress } from '@looker/icons'
 import { Delete } from '@styled-icons/material/Delete'
 import { Done } from '@styled-icons/material/Done'
+import { RunItSetter } from '../..'
 import {
   RunItConfigKey,
   validateUrl,
@@ -74,17 +75,6 @@ const FetchMessage: FC<FetchMessageProps> = ({ message, intent }) => {
   )
 }
 
-interface ConfigFormProps {
-  /** Title for the config form */
-  title?: string
-  dialogue?: boolean
-  /** A set state callback which if present allows for editing, setting or clearing OAuth configuration parameters */
-  setHasConfig?: Dispatch<boolean>
-  /** A callback for closing the parent dialog for when the form is rendered within dialog */
-  handleClose?: () => void
-  configurator: RunItConfigurator
-}
-
 const defaultFieldValues = {
   baseUrl: '',
   webUrl: '',
@@ -95,10 +85,20 @@ const defaultFieldValues = {
   fetchIntent: 'positive',
 }
 
+interface ConfigFormProps {
+  configurator: RunItConfigurator
+  setVersionsUrl: RunItSetter
+  /** Title for the config form */
+  title?: string
+  /** A set state callback which if present allows for editing, setting or clearing OAuth configuration parameters */
+  setHasConfig?: Dispatch<boolean>
+}
+
 export const ConfigForm: FC<ConfigFormProps> = ({
+  configurator,
+  setVersionsUrl,
   title,
   setHasConfig,
-  configurator,
 }) => {
   const fetchIntent = 'fetchIntent'
   const fetchResult = 'fetchResult'
@@ -141,9 +141,8 @@ export const ConfigForm: FC<ConfigFormProps> = ({
     e.preventDefault()
     try {
       updateFields(fetchResult, '')
-      const { webUrl, baseUrl } = await loadSpecsFromVersions(
-        `${fields.baseUrl}/versions`
-      )
+      const versionsUrl = `${fields.baseUrl}/versions`
+      const { webUrl, baseUrl } = await loadSpecsFromVersions(versionsUrl)
       if (!baseUrl || !webUrl) {
         throw new Error('Invalid server configuration')
       }
@@ -162,6 +161,7 @@ export const ConfigForm: FC<ConfigFormProps> = ({
           'local'
         )
         if (setHasConfig) setHasConfig(true)
+        setVersionsUrl(versionsUrl)
         closeModal()
       }
     } catch (err) {

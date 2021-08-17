@@ -25,7 +25,12 @@
  */
 
 import React, { FC, useContext, useEffect, useState } from 'react'
-import { IStorageValue, RunItProvider, RunItConfigurator } from '@looker/run-it'
+import {
+  IStorageValue,
+  RunItProvider,
+  RunItConfigurator,
+  runItNoSet,
+} from '@looker/run-it'
 import { useRouteMatch } from 'react-router-dom'
 import {
   ExtensionContext,
@@ -131,6 +136,7 @@ export const ExtensionApiExplorer: FC = () => {
             <ApiExplorer
               specs={specs}
               envAdaptor={extensionEnvAdaptor}
+              setVersionsUrl={runItNoSet}
               // TODO We need expand/collapse side nav for the headless extension before we enabled this
               headless={false}
             />

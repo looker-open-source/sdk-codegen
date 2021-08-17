@@ -29,6 +29,7 @@ import { screen, waitFor } from '@testing-library/react'
 import { renderWithTheme } from '@looker/components-test-utils'
 import userEvent from '@testing-library/user-event'
 import { defaultConfigurator } from '..'
+import { runItNoSet } from '../..'
 import { LoginForm } from './LoginForm'
 
 describe('LoginForm', () => {
@@ -36,7 +37,11 @@ describe('LoginForm', () => {
 
   test('it creates a login form without config button by default', async () => {
     renderWithTheme(
-      <LoginForm configurator={defaultConfigurator} requestContent={{}} />
+      <LoginForm
+        configurator={defaultConfigurator}
+        requestContent={{}}
+        setVersionsUrl={runItNoSet}
+      />
     )
     const login = screen.getByRole('button', {
       name: 'Login',
@@ -61,6 +66,7 @@ describe('LoginForm', () => {
         configurator={defaultConfigurator}
         requestContent={{}}
         setHasConfig={() => true}
+        setVersionsUrl={runItNoSet}
       />
     )
     const button = screen.getByRole('button', {

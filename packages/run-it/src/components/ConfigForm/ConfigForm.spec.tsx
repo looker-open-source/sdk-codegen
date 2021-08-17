@@ -29,6 +29,7 @@ import { fireEvent, screen, waitFor } from '@testing-library/react'
 import { renderWithTheme } from '@looker/components-test-utils'
 import userEvent from '@testing-library/user-event'
 import { defaultConfigurator } from '..'
+import { runItNoSet } from '../..'
 import { ConfigForm, loadSpecsFromVersions, RunItConfigKey } from '.'
 
 // jest.mock('./configUtils', () => ({
@@ -45,7 +46,12 @@ describe('ConfigForm', () => {
   })
 
   test('it creates an empty config form without stored config', async () => {
-    renderWithTheme(<ConfigForm configurator={defaultConfigurator} />)
+    renderWithTheme(
+      <ConfigForm
+        configurator={defaultConfigurator}
+        setVersionsUrl={runItNoSet}
+      />
+    )
     const title = screen.getByRole('heading') as HTMLHeadingElement
     expect(title).toHaveTextContent('RunIt Configuration')
 
@@ -74,7 +80,12 @@ describe('ConfigForm', () => {
   })
 
   test('it disables and enable verify for bad and good urls', async () => {
-    renderWithTheme(<ConfigForm configurator={defaultConfigurator} />)
+    renderWithTheme(
+      <ConfigForm
+        configurator={defaultConfigurator}
+        setVersionsUrl={runItNoSet}
+      />
+    )
     const apiUrl = screen.getByRole('textbox', {
       name: apiLabel,
     }) as HTMLInputElement
@@ -103,9 +114,13 @@ describe('ConfigForm', () => {
     })
   })
 
-  test('it can have a custom tile', () => {
+  test('it can have a custom title', () => {
     renderWithTheme(
-      <ConfigForm title="New title" configurator={defaultConfigurator} />
+      <ConfigForm
+        configurator={defaultConfigurator}
+        setVersionsUrl={runItNoSet}
+        title="New title"
+      />
     )
     const title = screen.getByRole('heading') as HTMLHeadingElement
     expect(title).toHaveTextContent('New title')
@@ -120,7 +135,12 @@ describe('ConfigForm', () => {
           web_server_url: 'http://local',
         })
       )
-      renderWithTheme(<ConfigForm configurator={defaultConfigurator} />)
+      renderWithTheme(
+        <ConfigForm
+          configurator={defaultConfigurator}
+          setVersionsUrl={runItNoSet}
+        />
+      )
       const apiUrl = screen.getByRole('textbox', {
         name: apiLabel,
       }) as HTMLInputElement
@@ -172,7 +192,12 @@ describe('ConfigForm', () => {
         'local'
       )
 
-      renderWithTheme(<ConfigForm configurator={defaultConfigurator} />)
+      renderWithTheme(
+        <ConfigForm
+          configurator={defaultConfigurator}
+          setVersionsUrl={runItNoSet}
+        />
+      )
       const title = screen.getByRole('heading') as HTMLHeadingElement
       expect(title).toHaveTextContent('RunIt Configuration')
 

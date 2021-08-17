@@ -30,7 +30,8 @@ import { screen, waitFor } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 
 import { IAPIMethods } from '@looker/sdk-rtl'
-import { defaultConfigurator } from '../ConfigForm'
+import { defaultConfigurator } from '..'
+import { runItNoSet } from '../..'
 import { RequestForm } from './RequestForm'
 
 describe('RequestForm', () => {
@@ -50,6 +51,7 @@ describe('RequestForm', () => {
     renderWithTheme(
       <RequestForm
         configurator={defaultConfigurator}
+        setVersionsUrl={runItNoSet}
         inputs={[
           {
             name: 'user_id',
@@ -83,6 +85,7 @@ describe('RequestForm', () => {
     renderWithTheme(
       <RequestForm
         configurator={defaultConfigurator}
+        setVersionsUrl={runItNoSet}
         inputs={[
           {
             name: 'user_id',
@@ -119,6 +122,7 @@ describe('RequestForm', () => {
     renderWithTheme(
       <RequestForm
         configurator={defaultConfigurator}
+        setVersionsUrl={runItNoSet}
         inputs={[
           {
             name,
@@ -150,6 +154,7 @@ describe('RequestForm', () => {
     renderWithTheme(
       <RequestForm
         configurator={defaultConfigurator}
+        setVersionsUrl={runItNoSet}
         inputs={[
           {
             name,
@@ -180,6 +185,7 @@ describe('RequestForm', () => {
     renderWithTheme(
       <RequestForm
         configurator={defaultConfigurator}
+        setVersionsUrl={runItNoSet}
         inputs={[
           {
             name: 'text_item',
@@ -213,6 +219,7 @@ describe('RequestForm', () => {
     renderWithTheme(
       <RequestForm
         configurator={defaultConfigurator}
+        setVersionsUrl={runItNoSet}
         inputs={[
           {
             name: 'body',
@@ -250,6 +257,7 @@ describe('RequestForm', () => {
     renderWithTheme(
       <RequestForm
         configurator={defaultConfigurator}
+        setVersionsUrl={runItNoSet}
         inputs={[
           {
             name: 'id',

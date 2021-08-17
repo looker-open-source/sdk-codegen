@@ -29,22 +29,24 @@ import { Button, Tooltip, Space } from '@looker/components'
 import { IAPIMethods } from '@looker/sdk-rtl'
 import { runItSDK } from '../../utils'
 import { ConfigDialog, RunItFormKey, RunItConfigurator } from '../ConfigForm'
-import { RunItValues } from '../..'
+import { RunItValues, RunItSetter } from '../..'
 
 interface LoginFormProps {
+  configurator: RunItConfigurator
+  requestContent: RunItValues
+  setVersionsUrl: RunItSetter
   /** A set state callback which if present allows for editing, setting or clearing OAuth configuration parameters */
   setHasConfig?: Dispatch<boolean>
   /** SDK to use for login. Defaults to the `runItSDK` */
   sdk?: IAPIMethods
-  configurator: RunItConfigurator
-  requestContent: RunItValues
 }
 
 export const LoginForm: FC<LoginFormProps> = ({
-  sdk = runItSDK,
-  setHasConfig,
   configurator,
   requestContent,
+  setVersionsUrl,
+  sdk = runItSDK,
+  setHasConfig,
 }) => {
   const handleSubmit = async (e: BaseSyntheticEvent) => {
     e.preventDefault()
@@ -69,6 +71,7 @@ export const LoginForm: FC<LoginFormProps> = ({
           <ConfigDialog
             setHasConfig={setHasConfig}
             configurator={configurator}
+            setVersionsUrl={setVersionsUrl}
           />
         )}
       </Space>

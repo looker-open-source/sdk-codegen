@@ -30,6 +30,15 @@ import cloneDeep from 'lodash/cloneDeep'
 import { RunItHttpMethod, RunItInput, RunItValues } from '../RunIt'
 import { runItSDK } from './RunItSDK'
 
+/** Hook to set a URL somewhere else in APIX */
+export type RunItSetter = (value: any) => any
+
+/**
+ * A "no-op" function
+ * @param value passed through
+ */
+export const runItNoSet: RunItSetter = (value: any) => value
+
 /**
  * Replaces {foo} with vars[foo] in provided path
  * @param path with templatized param names

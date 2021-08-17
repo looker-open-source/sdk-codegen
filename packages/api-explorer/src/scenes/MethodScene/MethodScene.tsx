@@ -36,7 +36,7 @@ import {
 import { Beaker } from '@looker/icons'
 import { ThemeContext } from 'styled-components'
 import { useParams } from 'react-router-dom'
-import { RunIt, RunItContext, RunItFormKey } from '@looker/run-it'
+import { RunIt, RunItSetter, RunItContext, RunItFormKey } from '@looker/run-it'
 import { ApiModel, typeRefs } from '@looker/sdk-codegen'
 import { useSelector } from 'react-redux'
 
@@ -62,6 +62,7 @@ import { createInputs } from './utils'
 interface MethodSceneProps {
   api: ApiModel
   envAdaptor: IApixEnvAdaptor
+  setVersionsUrl: RunItSetter
 }
 
 interface MethodSceneParams {
@@ -73,7 +74,11 @@ const showRunIt = (envAdaptor: IApixEnvAdaptor) => {
   return !!envAdaptor.localStorageGetItem(RunItFormKey)
 }
 
-export const MethodScene: FC<MethodSceneProps> = ({ api, envAdaptor }) => {
+export const MethodScene: FC<MethodSceneProps> = ({
+  api,
+  envAdaptor,
+  setVersionsUrl,
+}) => {
   const { sdk } = useContext(RunItContext)
   const sdkLanguage = useSelector(getSelectedSdkLanguage)
   const { methodName, specKey } = useParams<MethodSceneParams>()
@@ -137,6 +142,7 @@ export const MethodScene: FC<MethodSceneProps> = ({ api, envAdaptor }) => {
               api={api}
               inputs={createInputs(api, method)}
               method={method}
+              setVersionsUrl={setVersionsUrl}
             />
           </ExtendComponentsThemeProvider>
         </Aside>

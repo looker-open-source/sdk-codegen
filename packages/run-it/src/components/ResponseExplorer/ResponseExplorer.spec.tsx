@@ -45,7 +45,7 @@ const response: IRawResponse = {
 }
 
 describe('ResponseExplorer', () => {
-  test('ShowHeaders', async () => {
+  test('renders response headers', async () => {
     renderWithTheme(<ResponseHeaders response={response} />)
     const heading = 'Headers (3)'
     const header = screen.getByText(heading)
@@ -63,7 +63,7 @@ describe('ResponseExplorer', () => {
     })
   })
 
-  test('shows body', async () => {
+  test('renders response body', async () => {
     renderWithTheme(
       <ResponseExplorer verb="GET" path="/test/path" response={response} />
     )
@@ -77,7 +77,7 @@ describe('ResponseExplorer', () => {
     })
   })
 
-  test('no response content', async () => {
+  test('renders a message when no response is received', async () => {
     renderWithTheme(
       <ResponseExplorer verb="GET" path="/test/path" response={undefined} />
     )

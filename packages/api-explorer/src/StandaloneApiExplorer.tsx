@@ -54,11 +54,13 @@ export const StandaloneApiExplorer: FC<StandaloneApiExplorerProps> = ({
 }) => {
   const [specs, setSpecs] = useState<SpecList | undefined>()
   const [embedded, setEmbedded] = useState<boolean>(headless)
+  const [currentVersionsUrl, setCurrentVersionsUrl] =
+    useState<string>(versionsUrl)
 
   useEffect(() => {
-    if (versionsUrl) {
+    if (currentVersionsUrl) {
       // Load specifications from the versions url
-      loadSpecsFromVersions(versionsUrl).then((response) => {
+      loadSpecsFromVersions(currentVersionsUrl).then((response) => {
         setSpecs(response.specs)
         if ('headless' in response) {
           // headless will default to false if it's not explicitly set
@@ -68,7 +70,7 @@ export const StandaloneApiExplorer: FC<StandaloneApiExplorerProps> = ({
     } else {
       setSpecs(undefined)
     }
-  }, [versionsUrl])
+  }, [currentVersionsUrl])
 
   const chosenSdk: IAPIMethods = initRunItSdk(defaultConfigurator)
 
@@ -85,6 +87,7 @@ export const StandaloneApiExplorer: FC<StandaloneApiExplorerProps> = ({
               specs={specs}
               envAdaptor={standaloneEnvAdaptor}
               headless={embedded}
+              setVersionsUrl={setCurrentVersionsUrl}
             />
           ) : (
             <Loader themeOverrides={standaloneEnvAdaptor.themeOverrides()} />
