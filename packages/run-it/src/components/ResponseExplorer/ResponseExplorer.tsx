@@ -63,7 +63,7 @@ const getBodySize = (response: ResponseContent): string => {
   return `${size} bytes`
 }
 
-export const NoWrap = styled(Span)`
+const NoWrap = styled(Span)`
   display: inline-block;
   direction: rtl;
   white-space: nowrap;
@@ -74,6 +74,11 @@ interface ShowHeadersProps {
   response: ResponseContent
 }
 
+/**
+ * Display response headers in a table
+ * @param response to display
+ * @constructor
+ */
 export const ResponseHeaders: FC<ShowHeadersProps> = ({ response }) => {
   const rows = getHeaders(response)
   if (rows.length === 0) return <></>
@@ -119,6 +124,13 @@ interface ResponseExplorerProps {
   path: string
 }
 
+/**
+ * Explore the raw response from an HTTP request
+ * @param response IRawResponse values
+ * @param verb HTTP method
+ * @param path Path of request
+ * @constructor
+ */
 export const ResponseExplorer: FC<ResponseExplorerProps> = ({
   response,
   verb,
