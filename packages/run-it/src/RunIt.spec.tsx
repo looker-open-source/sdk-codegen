@@ -32,7 +32,7 @@ import { ApiModel, IMethod } from '@looker/sdk-codegen'
 
 import { RunIt, RunItInput } from './RunIt'
 import { api, testTextResponse } from './test-data'
-import { initRunItSdk, RunItSettings } from './utils'
+import { initRunItSdk, runItNoSet, RunItSettings } from './utils'
 import { defaultConfigurator, StandaloneConfigurator } from './components'
 import { RunItProvider } from './RunItProvider'
 
@@ -87,7 +87,12 @@ describe('RunIt', () => {
         configurator={defaultConfigurator}
         basePath="/api/4.0"
       >
-        <RunIt api={_api} inputs={inputs} method={method} />
+        <RunIt
+          api={_api}
+          inputs={inputs}
+          method={method}
+          setVersionsUrl={runItNoSet}
+        />
       </RunItProvider>
     )
   }
