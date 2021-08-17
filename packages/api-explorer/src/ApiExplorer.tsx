@@ -54,8 +54,6 @@ export interface ApiExplorerProps {
   specs: SpecList
   envAdaptor: IApixEnvAdaptor
   setVersionsUrl: RunItSetter
-  // TODO remove sdk?
-  // sdk?: Looker31SDK | Looker40SDK
   exampleLodeUrl?: string
   declarationsLodeUrl?: string
   headless?: boolean
