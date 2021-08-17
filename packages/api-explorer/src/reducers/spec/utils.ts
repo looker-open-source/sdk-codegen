@@ -26,6 +26,7 @@
 
 import { SpecList } from '@looker/sdk-codegen'
 import { Location as HLocation } from 'history'
+import { OAuthSession } from '@looker/sdk-rtl'
 import { diffPath, oAuthPath } from '../../utils'
 import { SpecState } from './reducer'
 
@@ -76,7 +77,13 @@ export const getDefaultSpecKey = (specs: SpecList): string => {
  * @param specs to use to find the default spec key
  */
 export const getSpecKey = (location: AbstractLocation, specs?: SpecList) => {
-  const pathName = location.pathname
+  let pathName = location.pathname
+  if (pathName === '/oauth') {
+    const returnUrl = sessionStorage.getItem(OAuthSession.returnUrlKey)
+    if (returnUrl) {
+      pathName = returnUrl
+    }
+  }
   const pathNodes = pathName.split('/')
   let specKey = ''
   if (
