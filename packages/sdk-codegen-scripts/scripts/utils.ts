@@ -42,17 +42,6 @@ const homeToRoost = '../../../'
 const getRootPath = () => path.join(__dirname, homeToRoost)
 const rootFile = (fileName = '') => path.join(getRootPath(), fileName)
 
-// export const apixSpecFileName = (fileName: string) => {
-//   const p = path.parse(fileName)
-//   return rootFile(`spec/${p.base}`)
-// }
-
-// const copySpec = (fileName: string) => {
-//   const dest = apixSpecFileName(fileName)
-//   fs.copyFileSync(fileName, dest)
-//   console.info(`Copied ${fileName} to ${dest}`)
-// }
-
 export const updateSpecs = async (apiVersions = supportedApiVersions) => {
   const iniFile = rootFile('looker.ini')
   const config = SDKConfig(iniFile)
