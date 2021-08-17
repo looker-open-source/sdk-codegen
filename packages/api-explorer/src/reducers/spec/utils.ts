@@ -89,13 +89,14 @@ export const getSpecKey = (location: AbstractLocation, specs?: SpecList) => {
   } else if (specs) {
     specKey = getDefaultSpecKey(specs)
   }
+  console.log({ pathName, specKey })
   return specKey
 }
 
 /**
  * Creates a default state object with the spec matching the specKey defined
  * in the url or the default criteria in getDefaultSpecKey
- * @param specs A collection of specs
+ * @param specList A collection of specs
  * @param location Standalone or extension location
  * @returns An object to be used as default state
  */
