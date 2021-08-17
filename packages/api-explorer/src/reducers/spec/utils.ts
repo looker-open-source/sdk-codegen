@@ -78,7 +78,7 @@ export const getDefaultSpecKey = (specs: SpecList): string => {
  */
 export const getSpecKey = (location: AbstractLocation, specs?: SpecList) => {
   let pathName = location.pathname
-  if (pathName === '/oauth') {
+  if (pathName === `/${oAuthPath}`) {
     const returnUrl = sessionStorage.getItem(OAuthSession.returnUrlKey)
     if (returnUrl) {
       pathName = returnUrl
@@ -96,7 +96,6 @@ export const getSpecKey = (location: AbstractLocation, specs?: SpecList) => {
   } else if (specs) {
     specKey = getDefaultSpecKey(specs)
   }
-  console.log({ pathName, specKey })
   return specKey
 }
 
