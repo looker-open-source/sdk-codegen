@@ -30,6 +30,7 @@ import type { IAPIMethods } from '@looker/sdk-rtl'
 import { RunItHttpMethod, RunItInput, RunItValues } from '../../RunIt'
 import { ConfigDialog, RunItConfigurator } from '../ConfigForm'
 import { LoginForm } from '../LoginForm'
+import { RunItSetter } from '../..'
 import {
   createSimpleItem,
   createComplexItem,
@@ -37,9 +38,7 @@ import {
   updateNullableProp,
 } from './formUtils'
 
-/**
- * Properties required by RequestForm
- */
+/** Properties required by RequestForm */
 interface RequestFormProps {
   /** Established SDK instance */
   sdk: IAPIMethods
@@ -52,11 +51,13 @@ interface RequestFormProps {
   /** A collection type react state to store path, query and body parameters as entered by the user  */
   requestContent: RunItValues
   /** A set state callback fn for populating requestContent on interaction with the request form */
-  setRequestContent: Dispatch<{ [key: string]: any }>
+  setRequestContent: Dispatch<RunItValues>
   /** Is authentication required? */
   needsAuth: boolean
   /** Does RunIt have the configuration values it needs? */
   hasConfig: boolean
+  /** Hook to refresh specifications */
+  setVersionsUrl: RunItSetter
   /** A set state callback which if present allows for editing, setting or clearing OAuth configuration parameters */
   setHasConfig?: Dispatch<boolean>
   /** Configuration plug-in for stand-alone or extension */
@@ -78,6 +79,7 @@ export const RequestForm: FC<RequestFormProps> = ({
   setRequestContent,
   needsAuth,
   hasConfig,
+  setVersionsUrl,
   setHasConfig,
   configurator,
   isExtension = false,
@@ -138,8 +140,10 @@ export const RequestForm: FC<RequestFormProps> = ({
           needsAuth ? (
             <LoginForm
               sdk={sdk}
+              setVersionsUrl={setVersionsUrl}
               setHasConfig={setHasConfig}
               configurator={configurator}
+              requestContent={requestContent}
             />
           ) : (
             <Button type="submit">Run</Button>
@@ -150,6 +154,7 @@ export const RequestForm: FC<RequestFormProps> = ({
             <ConfigDialog
               setHasConfig={setHasConfig}
               configurator={configurator}
+              setVersionsUrl={setVersionsUrl}
             />
           )
         )}

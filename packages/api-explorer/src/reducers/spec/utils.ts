@@ -26,6 +26,7 @@
 
 import { SpecList } from '@looker/sdk-codegen'
 import { Location as HLocation } from 'history'
+import { OAuthSession } from '@looker/sdk-rtl'
 import { diffPath, oAuthPath } from '../../utils'
 import { SpecState } from './reducer'
 
@@ -76,7 +77,13 @@ export const getDefaultSpecKey = (specs: SpecList): string => {
  * @param specs to use to find the default spec key
  */
 export const getSpecKey = (location: AbstractLocation, specs?: SpecList) => {
-  const pathName = location.pathname
+  let pathName = location.pathname
+  if (pathName === `/${oAuthPath}`) {
+    const returnUrl = sessionStorage.getItem(OAuthSession.returnUrlKey)
+    if (returnUrl) {
+      pathName = returnUrl
+    }
+  }
   const pathNodes = pathName.split('/')
   let specKey = ''
   if (
@@ -95,7 +102,7 @@ export const getSpecKey = (location: AbstractLocation, specs?: SpecList) => {
 /**
  * Creates a default state object with the spec matching the specKey defined
  * in the url or the default criteria in getDefaultSpecKey
- * @param specs A collection of specs
+ * @param specList A collection of specs
  * @param location Standalone or extension location
  * @returns An object to be used as default state
  */

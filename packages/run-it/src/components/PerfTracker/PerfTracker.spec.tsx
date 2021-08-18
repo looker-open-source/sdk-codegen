@@ -27,7 +27,7 @@
 import { screen } from '@testing-library/react'
 import { renderWithTheme } from '@looker/components-test-utils'
 import React from 'react'
-import { defaultConfigurator } from '../ConfigForm'
+import { defaultConfigurator } from '..'
 import { PerfTracker } from './PerfTracker'
 import { LoadTimes, PerfTimings } from './perfUtils'
 

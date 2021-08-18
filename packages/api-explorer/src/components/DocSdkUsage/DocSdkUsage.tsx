@@ -35,11 +35,11 @@ import {
   Pagination,
 } from '@looker/components'
 import { findExampleLanguages, IMethod } from '@looker/sdk-codegen'
+import { CollapserCard } from '@looker/run-it'
 import { InsertDriveFile } from '@styled-icons/material-outlined/InsertDriveFile'
 import { useSelector } from 'react-redux'
 
 import { getSelectedSdkLanguage } from '../../state'
-import { CollapserCard } from '../Collapser'
 import { LodeContext } from '../../context'
 import {
   exampleColumns,

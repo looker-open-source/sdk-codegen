@@ -76,6 +76,7 @@ export const HeaderLayout: FC<HeaderProps> = ({
         size="small"
         onClick={() => toggleNavigation()}
         icon={<Menu />}
+        aria-label="nav toggle"
         label="Toggle Navigation"
       />
 

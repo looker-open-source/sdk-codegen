@@ -33,64 +33,22 @@ import {
   upgradeSpecObject,
 } from '@looker/sdk-codegen'
 import { BrowserTransport, DefaultSettings } from '@looker/sdk-rtl'
-import { IStorageValue } from '../../index'
+
+export type StorageLocation = 'session' | 'local'
+
+export interface IStorageValue {
+  location: StorageLocation
+  value: string
+}
 
 export const RunItConfigKey = 'RunItConfig'
-
-export const RunItValuesKey = 'RunItValues'
+export const RunItFormKey = 'RunItForm'
 
 export interface RunItConfigurator {
   getStorage: (key: string, defaultValue?: string) => IStorageValue
   setStorage(key: string, value: string, location: 'local' | 'session'): string
   removeStorage(key: string): void
 }
-
-// TODO move into its own file and probably completely refactor. This is just an example
-export class StandaloneConfigurator implements RunItConfigurator {
-  getStorage(key: string, defaultValue = ''): IStorageValue {
-    let value = sessionStorage.getItem(key)
-    if (value) {
-      return {
-        location: 'session',
-        value,
-      }
-    }
-    value = localStorage.getItem(key)
-    if (value) {
-      return {
-        location: 'local',
-        value,
-      }
-    }
-    return {
-      location: 'session',
-      value: defaultValue,
-    }
-  }
-
-  setStorage(
-    key: string,
-    value: string,
-    location: 'local' | 'session' = 'session'
-  ): string {
-    switch (location.toLocaleLowerCase()) {
-      case 'local':
-        localStorage.setItem(key, value)
-        break
-      case 'session':
-        sessionStorage.setItem(key, value)
-        break
-    }
-    return value
-  }
-
-  removeStorage(key: string) {
-    localStorage.removeItem(key)
-    sessionStorage.removeItem(key)
-  }
-}
-
-export const defaultConfigurator = new StandaloneConfigurator()
 
 /**
  * Validates URL and standardizes it

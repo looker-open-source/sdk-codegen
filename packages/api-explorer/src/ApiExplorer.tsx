@@ -28,9 +28,8 @@ import React, { FC, useReducer, useState, useEffect, useCallback } from 'react'
 import { useLocation } from 'react-router'
 import styled, { createGlobalStyle } from 'styled-components'
 import { Aside, ComponentsProvider, Layout, Page } from '@looker/components'
-import { Looker40SDK, Looker31SDK } from '@looker/sdk'
 import { SpecList } from '@looker/sdk-codegen'
-import { loadSpecApi } from '@looker/run-it'
+import { loadSpecApi, RunItSetter } from '@looker/run-it'
 import {
   SearchContext,
   LodeContext,
@@ -52,10 +51,10 @@ import { useActions } from './hooks'
 
 export interface ApiExplorerProps {
   specs: SpecList
-  sdk?: Looker31SDK | Looker40SDK
+  envAdaptor: IApixEnvAdaptor
+  setVersionsUrl: RunItSetter
   exampleLodeUrl?: string
   declarationsLodeUrl?: string
-  envAdaptor: IApixEnvAdaptor
   headless?: boolean
 }
 
@@ -64,6 +63,7 @@ export const BodyOverride = createGlobalStyle` html { height: 100%; overflow: hi
 const ApiExplorer: FC<ApiExplorerProps> = ({
   specs,
   envAdaptor,
+  setVersionsUrl,
   exampleLodeUrl = 'https://raw.githubusercontent.com/looker-open-source/sdk-codegen/main/examplesIndex.json',
   declarationsLodeUrl = `${apixFilesHost}/declarationsIndex.json`,
   headless = false,
@@ -173,6 +173,8 @@ const ApiExplorer: FC<ApiExplorerProps> = ({
                         specKey={spec.key}
                         specs={specs}
                         toggleNavigation={toggleNavigation}
+                        envAdaptor={envAdaptor}
+                        setVersionsUrl={setVersionsUrl}
                       />
                     )}
                   </Layout>

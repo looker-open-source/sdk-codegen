@@ -23,29 +23,50 @@
  SOFTWARE.
 
  */
+import { IStorageValue, RunItConfigurator, StorageLocation } from '..'
 
-import React, { FC } from 'react'
-import { IRawResponse } from '@looker/sdk-rtl'
-
-import { pickResponseHandler, fallbackResponseHandler } from './responseUtils'
-
-interface ShowResponseProps {
-  /** A basic HTTP response for "raw" HTTP requests */
-  response: IRawResponse
-}
-
-/**
- * Given an HTTP response it picks a response handler based on the content type and renders the body
- */
-export const ShowResponse: FC<ShowResponseProps> = ({ response }) => {
-  // Bullet proof the rendered response. If for some reason we get a bad response or bad data in the
-  // response, render something
-  let renderedResponse
-  try {
-    renderedResponse = pickResponseHandler(response).component(response)
-  } catch (err) {
-    renderedResponse = fallbackResponseHandler().component(response)
+export class StandaloneConfigurator implements RunItConfigurator {
+  getStorage(key: string, defaultValue = ''): IStorageValue {
+    let value = sessionStorage.getItem(key)
+    if (value) {
+      return {
+        location: 'session',
+        value,
+      }
+    }
+    value = localStorage.getItem(key)
+    if (value) {
+      return {
+        location: 'local',
+        value,
+      }
+    }
+    return {
+      location: 'session',
+      value: defaultValue,
+    }
   }
 
-  return <>{renderedResponse}</>
+  setStorage(
+    key: string,
+    value: string,
+    location: StorageLocation = 'session'
+  ): string {
+    switch (location.toLocaleLowerCase()) {
+      case 'local':
+        localStorage.setItem(key, value)
+        break
+      case 'session':
+        sessionStorage.setItem(key, value)
+        break
+    }
+    return value
+  }
+
+  removeStorage(key: string) {
+    localStorage.removeItem(key)
+    sessionStorage.removeItem(key)
+  }
 }
+
+export const defaultConfigurator = new StandaloneConfigurator()

@@ -24,28 +24,19 @@
 
  */
 
-import React, { FC } from 'react'
-import { IRawResponse } from '@looker/sdk-rtl'
+import React from 'react'
+import { screen } from '@testing-library/react'
+import { renderWithTheme } from '@looker/components-test-utils'
+import { CodeCopy } from './CodeCopy'
 
-import { pickResponseHandler, fallbackResponseHandler } from './responseUtils'
-
-interface ShowResponseProps {
-  /** A basic HTTP response for "raw" HTTP requests */
-  response: IRawResponse
-}
-
-/**
- * Given an HTTP response it picks a response handler based on the content type and renders the body
- */
-export const ShowResponse: FC<ShowResponseProps> = ({ response }) => {
-  // Bullet proof the rendered response. If for some reason we get a bad response or bad data in the
-  // response, render something
-  let renderedResponse
-  try {
-    renderedResponse = pickResponseHandler(response).component(response)
-  } catch (err) {
-    renderedResponse = fallbackResponseHandler().component(response)
-  }
-
-  return <>{renderedResponse}</>
-}
+describe('CodeCopy', () => {
+  test('displays code and clipboard UI', async () => {
+    const code = 'Some text. Supposed to be good for you.'
+    const caption = 'Copy this!'
+    renderWithTheme(<CodeCopy code={code} caption={caption} language="text" />)
+    const copy = screen.getByRole('button', { name: caption })
+    expect(copy).toBeInTheDocument()
+    const pre = screen.getByText(code)
+    expect(pre).toHaveTextContent(code)
+  })
+})
