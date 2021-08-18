@@ -27,8 +27,8 @@
 import React, { FC, useContext } from 'react'
 import { ApiModel, IMethod, IType } from '@looker/sdk-codegen'
 
+import { CollapserCard } from '@looker/run-it'
 import { SearchContext } from '../../context'
-import { CollapserCard } from '../Collapser'
 import { DocReferenceItems } from './utils'
 
 interface DocReferencesProps {

@@ -35,6 +35,8 @@
     "build:cjs": "lerna exec --stream 'BABEL_ENV=build_cjs babel src --root-mode upward --out-dir lib --source-maps --extensions .ts,.tsx --no-comments'",
     "build:es": "lerna exec --stream 'BABEL_ENV=build babel src --root-mode upward --out-dir lib/esm --source-maps --extensions .ts,.tsx --no-comments'",
     "build:ts": "lerna exec --stream --sort 'tsc -b tsconfig.build.json'",
+    "dev:apix": "yarn workspace @looker/api-explorer develop",
+    "dev:xapix": "yarn workspace @looker/extension-api-explorer develop",
     "clean": "rm -Rf packages/*/lib",
     "prepublishOnly": "jest packages/sdk-rtl packages/sdk-node/test",
     "fix": "yarn lint:es --fix",

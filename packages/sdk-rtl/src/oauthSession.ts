@@ -49,7 +49,7 @@ export class OAuthSession extends AuthSession {
   activeToken = new AuthToken()
   crypto: ICryptoHash
   private static readonly codeVerifierKey = 'looker_oauth_code_verifier'
-  private static readonly returnUrlKey = 'looker_oauth_return_url'
+  public static readonly returnUrlKey = 'looker_oauth_return_url'
 
   constructor(services: IPlatformServices) {
     super(services.settings, services.transport)

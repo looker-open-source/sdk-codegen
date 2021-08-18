@@ -23,29 +23,36 @@
  SOFTWARE.
 
  */
-
 import React, { FC } from 'react'
-import { IRawResponse } from '@looker/sdk-rtl'
+import { CodeDisplay, CodeDisplayProps } from '@looker/code-editor'
+import { Space, CopyToClipboard } from '@looker/components'
 
-import { pickResponseHandler, fallbackResponseHandler } from './responseUtils'
-
-interface ShowResponseProps {
-  /** A basic HTTP response for "raw" HTTP requests */
-  response: IRawResponse
+interface CodeCopyProps extends CodeDisplayProps {
+  caption?: string
 }
-
 /**
- * Given an HTTP response it picks a response handler based on the content type and renders the body
+ * Shows code with clipboard copying support
  */
-export const ShowResponse: FC<ShowResponseProps> = ({ response }) => {
-  // Bullet proof the rendered response. If for some reason we get a bad response or bad data in the
-  // response, render something
-  let renderedResponse
-  try {
-    renderedResponse = pickResponseHandler(response).component(response)
-  } catch (err) {
-    renderedResponse = fallbackResponseHandler().component(response)
-  }
-
-  return <>{renderedResponse}</>
+export const CodeCopy: FC<CodeCopyProps> = ({
+  language = 'json',
+  code,
+  caption = 'Copy',
+  pattern = '',
+  transparent = false,
+  inline = false,
+  lineNumbers = true,
+}) => {
+  return (
+    <Space between align="start" pt="xsmall">
+      <CodeDisplay
+        code={code}
+        language={language}
+        pattern={pattern}
+        transparent={transparent}
+        inline={inline}
+        lineNumbers={lineNumbers}
+      />
+      <CopyToClipboard content={code}>{caption}</CopyToClipboard>
+    </Space>
+  )
 }

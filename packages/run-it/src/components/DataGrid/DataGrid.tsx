@@ -24,7 +24,7 @@
 
  */
 
-import React, { FC, ReactElement, useState } from 'react'
+import React, { FC, ReactElement, useEffect, useState } from 'react'
 import {
   DataTable,
   Pagination,
@@ -57,7 +57,12 @@ export const DataGrid: FC<DataGridProps> = ({ data, raw, pageSize = 15 }) => {
     page * pageSize + 1
   )
   const pageItems = gridRows(pageItemData)
-
+  useEffect(() => {
+    if (data.length === 2) {
+      // Show raw tab by default for 1 data row
+      tabs.onSelectTab(1)
+    }
+  }, [data])
   return (
     <>
       <TabList {...tabs}>

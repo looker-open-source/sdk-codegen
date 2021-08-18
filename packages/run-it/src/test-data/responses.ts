@@ -28,7 +28,7 @@ import { IRawResponse } from '@looker/sdk-rtl'
 
 export const testJsonResponse: IRawResponse = {
   url: 'https://some/json/data',
-  headers: {},
+  headers: { 'content-type': 'application/json' },
   contentType: 'application/json',
   ok: true,
   statusCode: 200,
@@ -38,7 +38,7 @@ export const testJsonResponse: IRawResponse = {
 
 export const testTextResponse: IRawResponse = {
   url: 'https://some/text/data',
-  headers: {},
+  headers: { 'content-type': 'text/plain;charset=utf-8' },
   contentType: 'text/plain;charset=utf-8',
   ok: true,
   statusCode: 200,
@@ -48,7 +48,7 @@ export const testTextResponse: IRawResponse = {
 
 export const testHtmlResponse: IRawResponse = {
   url: `https://some/html`,
-  headers: {},
+  headers: { 'content-type': 'text/html;charset=utf-8' },
   contentType: 'text/html;charset=utf-8',
   ok: true,
   statusCode: 200,
@@ -63,7 +63,7 @@ export const testHtmlResponse: IRawResponse = {
 
 export const testSqlResponse: IRawResponse = {
   url: `https://some/sql`,
-  headers: {},
+  headers: { 'content-type': 'application/sql' },
   contentType: 'application/sql',
   ok: true,
   statusCode: 200,
@@ -77,7 +77,7 @@ LIMIT 500`),
 
 export const testImageResponse = (contentType = 'image/png'): IRawResponse => ({
   url: `http://${contentType}`,
-  headers: {},
+  headers: { 'content-type': contentType },
   contentType,
   ok: true,
   statusCode: 200,
