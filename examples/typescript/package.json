@@ -21,9 +21,10 @@
   },
   "dependencies": {
     "@looker/sdk": "*",
-    "@looker/sdk-rtl": "*",
     "@looker/sdk-node": "*",
-    "ts-node": "^9.0.0"
+    "@looker/sdk-rtl": "*",
+    "ts-node": "^9.0.0",
+    "typescript": "^4.3.5"
   },
   "devDependencies": {
     "@types/node": "^14.11.2"
