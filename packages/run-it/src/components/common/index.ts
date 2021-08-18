@@ -23,31 +23,5 @@
  SOFTWARE.
 
  */
-import React, { FC } from 'react'
-import {
-  ComponentsProvider,
-  Flex,
-  FlexItem,
-  Heading,
-  ProgressCircular,
-} from '@looker/components'
-import { ThemeOverrides } from '@looker/api-explorer/src/utils'
-
-export interface LoaderProps {
-  themeOverrides: ThemeOverrides
-}
-
-export const Loader: FC<LoaderProps> = ({ themeOverrides }) => (
-  <ComponentsProvider {...themeOverrides}>
-    <Flex flexDirection="column" justifyContent="center" mt="25%">
-      <FlexItem alignSelf="center">
-        <ProgressCircular size="large" />
-      </FlexItem>
-      <FlexItem mt="large" alignSelf="center">
-        <Heading color="key" as="h2">
-          Loading API Specifications
-        </Heading>
-      </FlexItem>
-    </Flex>
-  </ComponentsProvider>
-)
+export { RunItHeading } from './common'
+export * from './StandaloneConfigurator'

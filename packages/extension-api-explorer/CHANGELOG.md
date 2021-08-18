@@ -1,5 +1,39 @@
 # Changelog
 
+### [21.12.1](https://www.github.com/looker-open-source/sdk-codegen/compare/extension-api-explorer-v21.12.0...extension-api-explorer-v21.12.1) (2021-08-11)
+
+
+### Features
+
+* fetch API specifications for stand-alone API Explorer ([#789](https://www.github.com/looker-open-source/sdk-codegen/issues/789)) ([f7be1fb](https://www.github.com/looker-open-source/sdk-codegen/commit/f7be1fb589570137c5ab39304910c57f721de8fb))
+
+
+### Dependencies
+
+* The following workspace dependencies were updated
+  * dependencies
+    * @looker/api-explorer bumped from ^0.9.17 to ^0.9.18
+    * @looker/run-it bumped from ^0.9.17 to ^0.9.18
+    * @looker/sdk-codegen bumped from ^21.0.23 to ^21.0.24
+
+## [21.12.0](https://www.github.com/looker-open-source/sdk-codegen/compare/extension-api-explorer-v21.11.1...extension-api-explorer-v21.12.0) (2021-08-06)
+
+
+### Bug Fixes
+
+* apix fix ([#785](https://www.github.com/looker-open-source/sdk-codegen/issues/785)) ([5ecea27](https://www.github.com/looker-open-source/sdk-codegen/commit/5ecea27fa5cc124ec1d823484cd67b0d22132624))
+
+
+### Dependencies
+
+* The following workspace dependencies were updated
+  * dependencies
+    * @looker/api-explorer bumped from ^0.9.16 to ^0.9.17
+    * @looker/extension-sdk bumped from ^21.10.2 to ^21.12.0
+    * @looker/extension-sdk-react bumped from ^21.10.2 to ^21.12.0
+    * @looker/run-it bumped from ^0.9.16 to ^0.9.17
+    * @looker/sdk bumped from ^21.10.2 to ^21.12.0
+
 ### [21.11.1](https://www.github.com/looker-open-source/sdk-codegen/compare/extension-api-explorer-v21.11.0...extension-api-explorer-v21.11.1) (2021-07-30)
 
 

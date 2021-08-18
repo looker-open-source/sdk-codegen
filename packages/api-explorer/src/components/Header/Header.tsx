@@ -35,17 +35,17 @@ import {
 } from '@looker/components'
 import { LookerLogo } from '@looker/icons'
 import { Menu } from '@styled-icons/material/Menu'
-import { SpecList } from '@looker/sdk-codegen'
+import { SpecList, SpecItem } from '@looker/sdk-codegen'
 
 import { Link } from '../Link'
-import { SpecState, SpecAction } from '../../reducers'
+import { SpecAction } from '../../reducers'
 import { SelectorContainer } from '../SelectorContainer'
 
 interface HeaderProps {
   /** Specs to choose from */
   specs: SpecList
   /** Current selected spec */
-  spec: SpecState
+  spec: SpecItem
   /** Spec state setter */
   specDispatch: Dispatch<SpecAction>
   /** Nav state setter */
