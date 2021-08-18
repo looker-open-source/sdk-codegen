@@ -1,10 +1,11 @@
 import {LookerNodeSDK} from '@looker/sdk-node'
 import {IScheduledPlan} from '@looker/sdk'
+import { user } from '@looker/sdk/lib/3.1/funcs';
 
 const sdk = LookerNodeSDK.init40()
 
 // schedules will either return for all users or for a specific user id if passed
-const getSchedules = async (allUsers: boolean, userID?: number): Promise<IScheduledPlan[]> => {
+const getSchedules = async (userID?: number): Promise<IScheduledPlan[]> => {
     let schedules: IScheduledPlan[];
     if(userID) {
         schedules = await sdk.ok(sdk.all_scheduled_plans({user_id: userID, all_users:false}))
@@ -14,22 +15,26 @@ const getSchedules = async (allUsers: boolean, userID?: number): Promise<ISchedu
     return schedules
 }
 
-const bulkReAssignSchedules = async (allUsers: boolean, newOwner: number, userID?: number): Promise<boolean | Error> => {
-    if((userID && newOwner) || (allUsers && newOwner)) {
-        const schedules = await getSchedules(allUsers=allUsers, userID=userID)
+const bulkReAssignSchedules = async (newOwner: number, userID?: number): Promise<boolean | Error> => {
+    if(newOwner) {
+        const schedules = await getSchedules(userID)
         try {
-            schedules.forEach(async (s) => await sdk.ok(sdk.update_scheduled_plan(s.id, {user_id:newOwner})))
-            // depending on whether allUsers is set to true or not we will change what we log to the console
-            console.log(`Successfully reassinged all schedules ${allUsers? 'for all users' : `for user ${userID}`} to ${newOwner}`)
+            schedules.forEach(async (s) => {
+                if (s.id) {
+                    await sdk.ok(sdk.update_scheduled_plan(s.id, {user_id:newOwner}))
+                }
+            })
+            // depending on whether userID is included or not we will change what we log to the console
+            console.log(`Successfully reassigned all schedules ${userID ? `for user ${userID}` : 'for all users'} to ${newOwner}`)
             return true
         } catch (e) {
             throw new Error(`There was an error trying to disable schedules. Full error message: ${e}`)
         }
     } else {
-        throw new Error('Please specify either allUsers and a newOwner or a userID and a newOwner to fetch schedules.')
+        throw new Error('Please specify at least the id of the new owner for schedules.')
     }
 }
 
 // Examples
-// bulkDisableSchedules(false, 200, 300)
-// bulkDisableSchedules(true, 200)
+// bulkDisableSchedules(200)
+// bulkDisableSchedules(200, 300)
