@@ -106,18 +106,15 @@ const ApiExplorer: FC<ApiExplorerProps> = ({
 
   useEffect(() => {
     const loadSpec = async () => {
-      let api
       if (!spec.api) {
         const newSpec = { ...spec }
-        api = await loadSpecApi(newSpec)
+        const api = await loadSpecApi(newSpec)
+        if (api) {
+          specDispatch(updateSpecApi(spec.key, api))
+        }
       }
-      return api
     }
-    loadSpec().then((api) => {
-      if (api) {
-        specDispatch(updateSpecApi(spec.key, api))
-      }
-    })
+    loadSpec()
   }, [spec])
 
   useEffect(() => {
@@ -126,15 +123,14 @@ const ApiExplorer: FC<ApiExplorerProps> = ({
 
   useEffect(() => {
     const initSdkLanguage = async () => {
-      return await envAdaptor.localStorageGetItem(
+      const resp = await envAdaptor.localStorageGetItem(
         EnvAdaptorConstants.LOCALSTORAGE_SDK_LANGUAGE_KEY
       )
-    }
-    initSdkLanguage().then((resp) => {
       if (resp) {
         setSdkLanguageAction(resp)
       }
-    })
+    }
+    initSdkLanguage()
   }, [envAdaptor, setSdkLanguageAction])
 
   const { loadGoogleFonts, themeCustomizations } = envAdaptor.themeOverrides()
