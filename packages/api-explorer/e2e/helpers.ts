@@ -27,7 +27,7 @@
  * Reloads the page, waiting for for the DomContentLoaded event before resolving
  */
 export const pageReload = async (): Promise<void> => {
-  await page.reload({ waitUntil: ['domcontentloaded'] })
+  await page.reload({ waitUntil: ['domcontentloaded', 'networkidle0'] })
 }
 
 /**

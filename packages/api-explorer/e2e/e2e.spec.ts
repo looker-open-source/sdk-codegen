@@ -25,7 +25,7 @@
  */
 import '@testing-library/jest-dom'
 
-import { getSpecKey, goToPage, pageReload } from './helpers'
+import { goToPage, pageReload } from './helpers'
 
 // https://github.com/smooth-code/jest-puppeteer/tree/master/packages/expect-puppeteer
 // https://github.com/puppeteer/puppeteer/blob/main/docs/api.md
@@ -33,6 +33,8 @@ import { getSpecKey, goToPage, pageReload } from './helpers'
 jest.setTimeout(120000)
 
 const BASE_URL = 'https://localhost:8080'
+const v31 = `${BASE_URL}/3.1`
+const v40 = `${BASE_URL}/4.0`
 
 describe('API Explorer', () => {
   beforeEach(async () => {
@@ -41,15 +43,17 @@ describe('API Explorer', () => {
 
   describe('general', () => {
     beforeEach(async () => {
-      await goToPage(BASE_URL)
+      await goToPage(v31)
     })
 
     it('renders a method page', async () => {
       await expect(page).toClick('h5', { text: 'Dashboard' })
-      await expect(page).toClick('a', { text: 'Get All Dashboards' })
-      const specKey = await getSpecKey()
+      await Promise.all([
+        page.waitForNavigation(),
+        expect(page).toClick('a', { text: 'Get All Dashboards' }),
+      ])
       await expect(page.url()).toEqual(
-        `${BASE_URL}/${specKey}/methods/Dashboard/all_dashboards`
+        `${v31}/methods/Dashboard/all_dashboards`
       )
 
       // title
@@ -110,8 +114,7 @@ describe('API Explorer', () => {
       await expect(page).toMatchElement('h2', {
         text: 'ApiAuth: API Authentication',
       })
-      const specKey = await getSpecKey()
-      await expect(page.url()).toMatch(`${BASE_URL}/${specKey}/methods/ApiAuth`)
+      await expect(page.url()).toMatch(`${v31}/methods/ApiAuth`)
 
       await expect(page).toMatchElement(
         'button[value="ALL"][aria-pressed=true]'
@@ -152,31 +155,31 @@ describe('API Explorer', () => {
       await languageHandle?.click()
       await expect(page).toClick('li', { text: 'Kotlin' })
       await pageReload()
-
       languageHandle = await page.$(`${selector}[value="Kotlin"]`)
       expect(languageHandle).not.toBeNull()
       expect(await page.evaluate((x) => x.value, languageHandle)).toEqual(
         'Kotlin'
       )
-      await page.waitForTimeout(250)
       await expect(page).toMatchElement('h3', { text: 'Kotlin Declaration' })
     })
 
     it('changes specs', async () => {
       await expect(page).toMatchElement('h2', {
-        text: 'Looker API 4.0 Reference',
-      })
-      await expect(page).toClick('input[value="4.0"]')
-      await expect(page).toClick('ul[aria-label="spec selector"] > li')
-      await expect(page).toMatchElement('h2', {
         text: 'Looker API 3.1 Reference',
+      })
+      await expect(page).toClick('input[value="3.1"]')
+      await expect(page).toClick(
+        'ul[aria-label="spec selector"] > li:last-child'
+      )
+      await expect(page).toMatchElement('h2', {
+        text: 'Looker API 4.0 (Experimental) Reference',
       })
     })
   })
 
   describe('navigation', () => {
     it('should be able to navigate directly to a spec home', async () => {
-      await goToPage(`${BASE_URL}/3.1`)
+      await goToPage(v31)
       await expect(page).toMatchElement('h2', {
         text: 'Looker API 3.1 Reference',
       })
@@ -184,14 +187,14 @@ describe('API Explorer', () => {
     })
 
     it('should be able to navigate directly to a tag scene', async () => {
-      await goToPage(`${BASE_URL}/3.1/methods/Dashboard`)
+      await goToPage(`${v31}/methods/Dashboard`)
       await expect(page).toMatchElement('h2', {
         text: 'Dashboard: Manage Dashboards',
       })
     })
 
     it('should be able to navigate directly to a method', async () => {
-      await goToPage(`${BASE_URL}/3.1/methods/Dashboard/all_dashboards`)
+      await goToPage(`${v40}/methods/Dashboard/all_dashboards`)
       await expect(page).toMatchElement('h2', { text: 'Get All Dashboards' })
       await expect(page).toMatchElement('div', {
         text: 'Get information about all active dashboards',
@@ -199,7 +202,7 @@ describe('API Explorer', () => {
     })
 
     it('should be able to navigate directly to a type', async () => {
-      await goToPage(`${BASE_URL}/3.1/types/Query`)
+      await goToPage(`${v31}/types/Query`)
       await expect(page).toMatchElement('h2', { text: 'Query' })
       await expect(page).toMatchElement('button', { text: 'Query' })
     })
@@ -207,7 +210,7 @@ describe('API Explorer', () => {
 
   describe('search', () => {
     beforeEach(async () => {
-      await goToPage(BASE_URL)
+      await goToPage(v31)
     })
 
     it('searches methods', async () => {
@@ -220,9 +223,7 @@ describe('API Explorer', () => {
       await expect(page).toMatchElement('button', { text: 'Types (0)' })
       await expect(page).toClick('a', { text: 'Get Workspace' })
       await expect(page).toMatchElement('h2', { text: 'Get Workspace' })
-      await expect(page.url()).toEqual(
-        `${BASE_URL}/4.0/methods/Workspace/workspace`
-      )
+      await expect(page.url()).toEqual(`${v31}/methods/Workspace/workspace`)
     })
 
     it('searches types', async () => {
@@ -234,7 +235,7 @@ describe('API Explorer', () => {
       await expect(page).toClick('button', { text: 'Types (1)' })
       await expect(page).toClick('a', { text: 'WriteTheme' })
       await expect(page).toMatchElement('h2', { text: 'WriteTheme' })
-      await expect(page.url()).toEqual(`${BASE_URL}/4.0/types/WriteTheme`)
+      await expect(page.url()).toEqual(`${v31}/types/WriteTheme`)
     })
   })
 })
