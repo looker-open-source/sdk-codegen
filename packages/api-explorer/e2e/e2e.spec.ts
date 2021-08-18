@@ -41,7 +41,7 @@ describe('API Explorer', () => {
 
   describe('general', () => {
     beforeEach(async () => {
-      await page.goto(BASE_URL)
+      await goToPage(BASE_URL)
     })
 
     it('renders a method page', async () => {
@@ -149,7 +149,7 @@ describe('API Explorer', () => {
       await expect(page).toClick('a', { text: 'Get All Dashboards' })
       await expect(page).toMatchElement('h3', { text: 'Python Declaration' })
 
-      await languageHandle!.click()
+      await languageHandle?.click()
       await expect(page).toClick('li', { text: 'Kotlin' })
       await pageReload()
 
@@ -158,6 +158,7 @@ describe('API Explorer', () => {
       expect(await page.evaluate((x) => x.value, languageHandle)).toEqual(
         'Kotlin'
       )
+      await page.waitForTimeout(250)
       await expect(page).toMatchElement('h3', { text: 'Kotlin Declaration' })
     })
 
@@ -198,21 +199,21 @@ describe('API Explorer', () => {
     })
 
     it('should be able to navigate directly to a type', async () => {
-      await goToPage(`${BASE_URL}/4.0/types/WriteLookBasic`)
-      await expect(page).toMatchElement('h2', { text: 'WriteLookBasic' })
-      await expect(page).toMatchElement('button', {
-        text: 'Dynamic writeable type for LookBasic removes: can, content_metadata_id, id, title',
-      })
+      await goToPage(`${BASE_URL}/3.1/types/Query`)
+      await expect(page).toMatchElement('h2', { text: 'Query' })
+      await expect(page).toMatchElement('button', { text: 'Query' })
     })
   })
 
   describe('search', () => {
     beforeEach(async () => {
-      await page.goto(BASE_URL)
+      await goToPage(BASE_URL)
     })
 
     it('searches methods', async () => {
       await expect(page).toFill('input[aria-label="Search"]', 'get workspace')
+      // TODO: find a better way to avoid the scenario where L215 executes before search returns
+      await page.waitForTimeout(250)
       await expect(page).toMatchElement('button', {
         text: 'Methods (1)',
       })
@@ -226,6 +227,7 @@ describe('API Explorer', () => {
 
     it('searches types', async () => {
       await expect(page).toFill('input[aria-label="Search"]', 'writetheme')
+      await page.waitForTimeout(250)
       await expect(page).toMatchElement('button', {
         text: 'Methods (0)',
       })

@@ -27,7 +27,7 @@
  * Reloads the page, waiting for for the DomContentLoaded event before resolving
  */
 export const pageReload = async (): Promise<void> => {
-  await page.reload({ waitUntil: ['networkidle0'] })
+  await page.reload({ waitUntil: ['domcontentloaded'] })
 }
 
 /**
@@ -35,7 +35,10 @@ export const pageReload = async (): Promise<void> => {
  * @param url url to navigate to
  */
 export const goToPage = async (url: string): Promise<void> => {
-  await page.goto(url, { waitUntil: ['networkidle0'] })
+  await page.goto(url, {
+    waitUntil: ['domcontentloaded', 'networkidle0'],
+    timeout: 60000,
+  })
 }
 
 /**
