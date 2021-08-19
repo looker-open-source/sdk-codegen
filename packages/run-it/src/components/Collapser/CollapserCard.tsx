@@ -24,14 +24,7 @@
 
  */
 import React, { FC, ReactElement } from 'react'
-import {
-  useToggle,
-  Accordion,
-  AccordionDisclosure,
-  AccordionContent,
-  Divider,
-  Box,
-} from '@looker/components'
+import { useToggle, Accordion2, Divider, Box } from '@looker/components'
 import { ArrowRight } from '@styled-icons/material/ArrowRight'
 import { ArrowDropDown } from '@styled-icons/material/ArrowDropDown'
 import { RunItHeading } from '../common'
@@ -60,20 +53,16 @@ export const CollapserCard: FC<CollapserCardProps> = ({
   return (
     <>
       {divider && <Divider appearance="light" />}
-      <Accordion
+      <Accordion2
         id={id}
         indicatorPosition="left"
         isOpen={value}
         toggleOpen={toggle}
         indicatorIcons={{ close: <ArrowRight />, open: <ArrowDropDown /> }}
+        label={<RunItHeading as={level}>{heading}</RunItHeading>}
       >
-        <AccordionDisclosure>
-          <RunItHeading as={level}>{heading}</RunItHeading>
-        </AccordionDisclosure>
-        <AccordionContent>
-          <Box pb="xlarge">{children}</Box>
-        </AccordionContent>
-      </Accordion>
+        <Box pb="xlarge">{children}</Box>
+      </Accordion2>
     </>
   )
 }

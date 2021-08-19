@@ -28,14 +28,14 @@ import React from 'react'
 import { screen, waitFor } from '@testing-library/react'
 import { renderWithTheme } from '@looker/components-test-utils'
 import userEvent from '@testing-library/user-event'
-import { defaultConfigurator } from '..'
+import { defaultConfigurator, readyToLogin } from '..'
 import { runItNoSet } from '../..'
 import { LoginForm } from './LoginForm'
 
 describe('LoginForm', () => {
   // https://testing-library.com/docs/guide-which-query
 
-  test('it creates a login form without config button by default', async () => {
+  test('it creates a login form', async () => {
     renderWithTheme(
       <LoginForm
         configurator={defaultConfigurator}
@@ -47,31 +47,9 @@ describe('LoginForm', () => {
       name: 'Login',
     })
     expect(login).toBeInTheDocument()
-    const config = screen.queryByRole('button', {
-      name: 'Configure',
-    })
-    expect(config).not.toBeInTheDocument()
-
     await waitFor(() => {
       userEvent.hover(login)
-      expect(screen.getByRole('tooltip')).toHaveTextContent(
-        `OAuth authentication is already configured, but the browser session is not authenticated. Please click Login to authenticate.`
-      )
+      expect(screen.getByRole('tooltip')).toHaveTextContent(readyToLogin)
     })
-  })
-
-  test('it includes a Config button if config setting is passed', async () => {
-    renderWithTheme(
-      <LoginForm
-        configurator={defaultConfigurator}
-        requestContent={{}}
-        setHasConfig={() => true}
-        setVersionsUrl={runItNoSet}
-      />
-    )
-    const button = screen.getByRole('button', {
-      name: 'Configure',
-    })
-    expect(button).toBeInTheDocument()
   })
 })

@@ -23,5 +23,5 @@
  SOFTWARE.
 
  */
-export { RunItHeading, ApixSection } from './common'
-export { Loader } from './Loader'
+export * from './common'
+export * from './Loader'

@@ -26,7 +26,7 @@
 import React, { FC } from 'react'
 import { getCodeGenerator } from '@looker/sdk-codegen'
 
-import { CodeCopy } from './CodeCopy'
+import { CodeCopy } from '@looker/code-editor'
 import { DocSdkCallsProps } from './DocSdkCalls'
 
 /**

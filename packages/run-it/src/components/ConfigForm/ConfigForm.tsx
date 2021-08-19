@@ -30,15 +30,11 @@ import React, {
   FC,
   FormEvent,
   useState,
-  useContext,
   useEffect,
 } from 'react'
 import {
   Button,
-  DialogHeader,
-  DialogContent,
-  DialogContext,
-  DialogFooter,
+  ButtonTransparent,
   Fieldset,
   FieldText,
   Form,
@@ -47,12 +43,21 @@ import {
   Paragraph,
   Link,
   MessageBarIntent,
+  Space,
+  SpaceVertical,
 } from '@looker/components'
-import { CodeDisplay } from '@looker/code-editor'
-import { CheckProgress } from '@looker/icons'
-import { Delete } from '@styled-icons/material/Delete'
-import { Done } from '@styled-icons/material/Done'
-import { RunItSetter } from '../..'
+import { CodeCopy } from '@looker/code-editor'
+import { IAPIMethods } from '@looker/sdk-rtl'
+import {
+  CollapserCard,
+  RunItFormKey,
+  RunItHeading,
+  DarkSpan,
+  runItSDK,
+  RunItSetter,
+  RunItValues,
+  readyToLogin,
+} from '../..'
 import {
   RunItConfigKey,
   validateUrl,
@@ -61,19 +66,7 @@ import {
   ILoadedSpecs,
 } from './configUtils'
 
-interface FetchMessageProps {
-  message: string
-  intent: MessageBarIntent
-}
-
-const FetchMessage: FC<FetchMessageProps> = ({ message, intent }) => {
-  if (!message) return <></>
-  return (
-    <MessageBar intent={intent} visible={message !== ''}>
-      {message}
-    </MessageBar>
-  )
-}
+const positive: MessageBarIntent = 'positive'
 
 const defaultFieldValues = {
   baseUrl: '',
@@ -82,27 +75,32 @@ const defaultFieldValues = {
   headless: false,
   specs: {},
   fetchResult: '',
-  fetchIntent: 'positive',
+  fetchIntent: positive,
 }
 
 interface ConfigFormProps {
   configurator: RunItConfigurator
   setVersionsUrl: RunItSetter
+  /** A collection type react state to store path, query and body parameters as entered by the user  */
+  requestContent: RunItValues
   /** Title for the config form */
   title?: string
   /** A set state callback which if present allows for editing, setting or clearing OAuth configuration parameters */
   setHasConfig?: Dispatch<boolean>
+  /** SDK to use for login. Defaults to the `runItSDK` */
+  sdk?: IAPIMethods
 }
 
 export const ConfigForm: FC<ConfigFormProps> = ({
   configurator,
   setVersionsUrl,
   title,
+  requestContent,
+  sdk = runItSDK,
   setHasConfig,
 }) => {
   const fetchIntent = 'fetchIntent'
   const fetchResult = 'fetchResult'
-  const { closeModal } = useContext(DialogContext)
   const appConfig = `{
   "client_guid": "looker.api-explorer",
   "redirect_uri": "${(window as any).location.origin}/oauth",
@@ -130,43 +128,51 @@ export const ConfigForm: FC<ConfigFormProps> = ({
       baseUrl: base_url,
       webUrl: looker_url,
       [fetchIntent]:
-        base_url !== '' && looker_url !== '' ? 'positive' : 'critical',
+        base_url !== '' && looker_url !== '' ? positive : 'critical',
     }))
   }, [configurator])
 
   const [validationMessages, setValidationMessages] =
     useState<ValidationMessages>({})
 
+  const updateFetch = (intent: MessageBarIntent, message: string) => {
+    updateFields(fetchResult, message)
+    updateFields(fetchIntent, intent)
+  }
+
+  const fetchError = (message: string) => {
+    updateFetch('critical', message)
+  }
+
   const updateForm = async (e: BaseSyntheticEvent, save: boolean) => {
     e.preventDefault()
     try {
-      updateFields(fetchResult, '')
+      updateFetch('inform', '')
       const versionsUrl = `${fields.baseUrl}/versions`
       const { webUrl, baseUrl } = await loadSpecsFromVersions(versionsUrl)
       if (!baseUrl || !webUrl) {
-        throw new Error('Invalid server configuration')
-      }
-      updateFields('baseUrl', baseUrl)
-      updateFields('webUrl', webUrl)
-      updateFields(fetchIntent, 'positive')
-      updateFields(fetchResult, 'Configuration is valid')
-      if (save) {
-        configurator.setStorage(
-          RunItConfigKey,
-          JSON.stringify({
-            base_url: baseUrl,
-            looker_url: webUrl,
-          }),
-          // Always store in local storage
-          'local'
-        )
-        if (setHasConfig) setHasConfig(true)
-        setVersionsUrl(versionsUrl)
-        closeModal()
+        fetchError('Invalid server configuration')
+      } else {
+        updateFields('baseUrl', baseUrl)
+        updateFields('webUrl', webUrl)
+        updateFields(fetchIntent, positive)
+        updateFields(fetchResult, 'Configuration is valid')
+        if (save) {
+          configurator.setStorage(
+            RunItConfigKey,
+            JSON.stringify({
+              base_url: baseUrl,
+              looker_url: webUrl,
+            }),
+            // Always store in local storage
+            'local'
+          )
+          if (setHasConfig) setHasConfig(true)
+          setVersionsUrl(versionsUrl)
+        }
       }
     } catch (err) {
-      updateFields(fetchResult, err.message)
-      updateFields(fetchIntent, 'critical')
+      fetchError(err.message)
     }
   }
 
@@ -178,7 +184,7 @@ export const ConfigForm: FC<ConfigFormProps> = ({
     await updateForm(e, false)
   }
 
-  const handleRemove = (e: BaseSyntheticEvent) => {
+  const handleClear = (e: BaseSyntheticEvent) => {
     e.preventDefault()
     configurator.removeStorage(RunItConfigKey)
     setFields(defaultFieldValues)
@@ -218,76 +224,126 @@ export const ConfigForm: FC<ConfigFormProps> = ({
     Object.keys(validationMessages).length > 0
 
   const saveButtonDisabled =
-    verifyButtonDisabled || fields[fetchIntent] !== 'positive'
+    verifyButtonDisabled || fields[fetchIntent] !== positive
 
-  const removeButtonDisabled =
+  const clearButtonDisabled =
     fields.webUrl.trim().length === 0 && fields.baseUrl.trim().length === 0
+
+  const handleLogin = async (e: BaseSyntheticEvent) => {
+    e.preventDefault()
+    if (requestContent) {
+      configurator.setStorage(
+        RunItFormKey,
+        JSON.stringify(requestContent),
+        'local'
+      )
+    }
+    // This will set storage variables and return to OAuthScene when successful
+    await sdk?.authSession.login()
+  }
 
   return (
     <>
-      <DialogHeader hideClose>{title}</DialogHeader>
-      <DialogContent>
-        <Form onSubmit={handleSubmit} validationMessages={validationMessages}>
-          <Fieldset legend="Server locations">
-            <FetchMessage
-              intent={fields[fetchIntent]}
-              message={fields[fetchResult]}
-            />
-            <FieldText
-              required
-              label="API server URL"
-              placeholder="typically https://myserver.looker.com:19999"
-              name="baseUrl"
-              defaultValue={fields.baseUrl}
-              onChange={handleUrlChange}
-            />
-            <FieldText
-              label="Auth server URL"
-              placeholder="Click 'Verify' to retrieve"
-              name="webUrl"
-              defaultValue={fields.webUrl}
-              disabled={true}
-            />
-          </Fieldset>
-        </Form>
-        <Paragraph>
-          The following configuration can be used to create a{' '}
-          <Link
-            href="https://github.com/looker-open-source/sdk-codegen/blob/main/docs/cors.md#reference-implementation"
-            target="_blank"
-          >
-            Looker OAuth client
-          </Link>
-          .
-        </Paragraph>
-        <CodeDisplay key="appConfig" language="json" code={appConfig} />
-      </DialogContent>
-      <DialogFooter>
-        <Button
-          iconBefore={<Done />}
-          disabled={saveButtonDisabled}
-          onClick={handleSubmit}
-          mr="small"
-        >
-          Save
-        </Button>
-        <Button
-          iconBefore={<CheckProgress />}
-          disabled={verifyButtonDisabled}
-          onClick={handleVerify}
-          mr="small"
-        >
-          Verify
-        </Button>
-        <Button
-          onClick={handleRemove}
-          iconBefore={<Delete />}
-          color="critical"
-          disabled={removeButtonDisabled}
-        >
-          Remove
-        </Button>
-      </DialogFooter>
+      <RunItHeading>{title}</RunItHeading>
+      <DarkSpan>
+        To configure RunIt mode, you need to supply your API server URL, then
+        authenticate into your Looker Instance
+      </DarkSpan>
+      <CollapserCard
+        heading="1. Supply API Server URL"
+        id="server_config"
+        divider={false}
+        defaultOpen={saveButtonDisabled}
+      >
+        <>
+          <Form onSubmit={handleSubmit} validationMessages={validationMessages}>
+            <Fieldset legend="Server locations">
+              <MessageBar
+                intent={fields[fetchIntent]}
+                onPrimaryClick={() => updateFetch(fields[fetchIntent], '')}
+                visible={fields[fetchResult] !== ''}
+              >
+                {fields[fetchResult]}
+              </MessageBar>
+
+              <FieldText
+                required
+                label="API server URL"
+                placeholder="typically https://myserver.looker.com:19999"
+                name="baseUrl"
+                defaultValue={fields.baseUrl}
+                onChange={handleUrlChange}
+              />
+              <DarkSpan>
+                This is typically https://myserver.looker.com:19999
+              </DarkSpan>
+              <FieldText
+                label="Auth server URL"
+                placeholder="Click 'Verify' to retrieve"
+                name="webUrl"
+                defaultValue={fields.webUrl}
+                disabled={true}
+              />
+            </Fieldset>
+          </Form>
+          <Paragraph>
+            The following configuration can be used to create a{' '}
+            <Link
+              href="https://github.com/looker-open-source/sdk-codegen/blob/main/docs/cors.md#reference-implementation"
+              target="_blank"
+            >
+              Looker OAuth client
+            </Link>
+            .
+          </Paragraph>
+          <CodeCopy key="appConfig" language="json" code={appConfig} />
+          <Space>
+            <ButtonTransparent
+              onClick={handleClear}
+              disabled={clearButtonDisabled}
+            >
+              Clear
+            </ButtonTransparent>
+            <ButtonTransparent
+              disabled={verifyButtonDisabled}
+              onClick={handleVerify}
+              mr="small"
+            >
+              Verify
+            </ButtonTransparent>
+            <Button
+              disabled={saveButtonDisabled}
+              onClick={handleSubmit}
+              mr="small"
+            >
+              Save
+            </Button>
+          </Space>
+        </>
+      </CollapserCard>
+      <CollapserCard
+        heading="2. Login to instance"
+        divider={false}
+        id="login_section"
+        defaultOpen={!saveButtonDisabled}
+      >
+        <SpaceVertical>
+          {sdk?.authSession.isAuthenticated() ? (
+            <DarkSpan>
+              You are already logged in. Reload the page to log out.
+            </DarkSpan>
+          ) : saveButtonDisabled ? (
+            <DarkSpan>
+              You will be able to login after you Verify your API Server URL
+            </DarkSpan>
+          ) : (
+            <>
+              <DarkSpan>{readyToLogin}</DarkSpan>
+              <Button onClick={handleLogin}>Login</Button>
+            </>
+          )}
+        </SpaceVertical>
+      </CollapserCard>
     </>
   )
 }

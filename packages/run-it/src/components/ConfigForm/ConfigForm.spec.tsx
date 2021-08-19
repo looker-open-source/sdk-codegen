@@ -50,10 +50,12 @@ describe('ConfigForm', () => {
       <ConfigForm
         configurator={defaultConfigurator}
         setVersionsUrl={runItNoSet}
+        requestContent={{}}
       />
     )
-    const title = screen.getByRole('heading') as HTMLHeadingElement
-    expect(title).toHaveTextContent('RunIt Configuration')
+    expect(
+      screen.getByRole('heading', { name: 'RunIt Configuration' })
+    ).toBeInTheDocument()
 
     const apiUrl = screen.getByRole('textbox', {
       name: apiLabel,
@@ -69,12 +71,17 @@ describe('ConfigForm', () => {
 
     expect(
       screen.getByRole('button', {
-        name: 'Save',
+        name: 'Clear',
       })
     ).toBeInTheDocument()
     expect(
       screen.getByRole('button', {
-        name: 'Remove',
+        name: 'Verify',
+      })
+    ).toBeInTheDocument()
+    expect(
+      screen.getByRole('button', {
+        name: 'Save',
       })
     ).toBeInTheDocument()
   })
@@ -84,6 +91,7 @@ describe('ConfigForm', () => {
       <ConfigForm
         configurator={defaultConfigurator}
         setVersionsUrl={runItNoSet}
+        requestContent={{}}
       />
     )
     const apiUrl = screen.getByRole('textbox', {
@@ -115,15 +123,16 @@ describe('ConfigForm', () => {
   })
 
   test('it can have a custom title', () => {
+    const title = 'New title'
     renderWithTheme(
       <ConfigForm
         configurator={defaultConfigurator}
         setVersionsUrl={runItNoSet}
-        title="New title"
+        title={title}
+        requestContent={{}}
       />
     )
-    const title = screen.getByRole('heading') as HTMLHeadingElement
-    expect(title).toHaveTextContent('New title')
+    expect(screen.getByRole('heading', { name: title })).toBeInTheDocument()
   })
 
   describe('storage', () => {
@@ -139,6 +148,7 @@ describe('ConfigForm', () => {
         <ConfigForm
           configurator={defaultConfigurator}
           setVersionsUrl={runItNoSet}
+          requestContent={{}}
         />
       )
       const apiUrl = screen.getByRole('textbox', {
@@ -182,7 +192,7 @@ describe('ConfigForm', () => {
       })
     })
 
-    test('it gets config from local storage', async () => {
+    test('it shows login section when configured', async () => {
       defaultConfigurator.setStorage(
         RunItConfigKey,
         JSON.stringify({
@@ -196,30 +206,18 @@ describe('ConfigForm', () => {
         <ConfigForm
           configurator={defaultConfigurator}
           setVersionsUrl={runItNoSet}
+          requestContent={{}}
         />
       )
-      const title = screen.getByRole('heading') as HTMLHeadingElement
-      expect(title).toHaveTextContent('RunIt Configuration')
+      expect(
+        screen.getByRole('heading', { name: 'RunIt Configuration' })
+      ).toBeInTheDocument()
 
-      const apiUrl = screen.getByRole('textbox', {
-        name: apiLabel,
-      }) as HTMLInputElement
-      expect(apiUrl).toBeInTheDocument()
-      expect(apiUrl).toHaveValue('http://locb')
-
-      const authUrl = screen.getByRole('textbox', {
-        name: authLabel,
-      }) as HTMLInputElement
-      expect(authUrl).toBeInTheDocument()
-      expect(authUrl).toHaveValue('http://local')
-
-      fireEvent.change(apiUrl, { target: { value: apiUrl.value } })
-      await waitFor(() => {
-        const button = screen.getByRole('button', {
-          name: 'Save',
-        }) as HTMLButtonElement
-        expect(button).toBeInTheDocument()
-      })
+      expect(
+        screen.getByRole('button', {
+          name: 'Login',
+        })
+      ).toBeInTheDocument()
     })
   })
 })

@@ -28,7 +28,7 @@ import React, { BaseSyntheticEvent, FC, Dispatch } from 'react'
 import { Button, Form, Space, ButtonTransparent } from '@looker/components'
 import type { IAPIMethods } from '@looker/sdk-rtl'
 import { RunItHttpMethod, RunItInput, RunItValues } from '../../RunIt'
-import { ConfigDialog, RunItConfigurator } from '../ConfigForm'
+import { RunItConfigurator } from '../ConfigForm'
 import { LoginForm } from '../LoginForm'
 import { RunItSetter } from '../..'
 import {
@@ -56,6 +56,8 @@ interface RequestFormProps {
   needsAuth: boolean
   /** Does RunIt have the configuration values it needs? */
   hasConfig: boolean
+  /** Handle config button click */
+  handleConfig: (e: BaseSyntheticEvent) => void
   /** Hook to refresh specifications */
   setVersionsUrl: RunItSetter
   /** A set state callback which if present allows for editing, setting or clearing OAuth configuration parameters */
@@ -79,6 +81,7 @@ export const RequestForm: FC<RequestFormProps> = ({
   setRequestContent,
   needsAuth,
   hasConfig,
+  handleConfig,
   setVersionsUrl,
   setHasConfig,
   configurator,
@@ -150,13 +153,7 @@ export const RequestForm: FC<RequestFormProps> = ({
           )
         ) : (
           !isExtension &&
-          setHasConfig && (
-            <ConfigDialog
-              setHasConfig={setHasConfig}
-              configurator={configurator}
-              setVersionsUrl={setVersionsUrl}
-            />
-          )
+          setHasConfig && <Button onClick={handleConfig}>Configure</Button>
         )}
       </Space>
     </Form>

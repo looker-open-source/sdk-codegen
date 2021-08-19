@@ -24,8 +24,8 @@
 
  */
 import React, { FC } from 'react'
-import { CodeDisplay, CodeDisplayProps } from '@looker/code-editor'
 import { Space, CopyToClipboard } from '@looker/components'
+import { CodeDisplay, CodeDisplayProps } from '..'
 
 interface CodeCopyProps extends CodeDisplayProps {
   caption?: string

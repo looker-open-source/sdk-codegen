@@ -26,8 +26,7 @@
 import React, { FC } from 'react'
 import { Card, CardContent, Flex, Space, Text } from '@looker/components'
 import { IMethod } from '@looker/sdk-codegen'
-import { MethodBadge } from '@looker/run-it'
-import { RunItHeading } from '../common'
+import { MethodBadge, RunItHeading } from '@looker/run-it'
 import { DocActivityType, DocRateLimited } from '../../components'
 import { DocSummaryStatus } from './DocSummaryStatus'
 
@@ -36,7 +35,7 @@ interface DocMethodSummaryProps {
 }
 
 export const DocMethodSummary: FC<DocMethodSummaryProps> = ({ method }) => (
-  <Card maxWidth="50rem" border="1px solid" borderColor="ui2">
+  <Card maxWidth="50rem" border="1px solid">
     <CardContent>
       <Space align="start" between>
         <MethodBadge

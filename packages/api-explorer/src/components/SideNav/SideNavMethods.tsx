@@ -76,6 +76,7 @@ const SideNavMethodsLayout: FC<MethodsProps> = ({
     setIsOpen(status)
   }, [defaultOpen])
 
+  // TODO upgrade to Accordion2
   return (
     <Accordion
       defaultOpen={defaultOpen}
