@@ -45,6 +45,7 @@ import {
   MessageBarIntent,
   Space,
   SpaceVertical,
+  Tooltip,
 } from '@looker/components'
 import { CodeCopy } from '@looker/code-editor'
 import { IAPIMethods } from '@looker/sdk-rtl'
@@ -66,7 +67,7 @@ import {
   ILoadedSpecs,
 } from './configUtils'
 
-const positive: MessageBarIntent = 'positive'
+const POSITIVE: MessageBarIntent = 'positive'
 
 const defaultFieldValues = {
   baseUrl: '',
@@ -75,7 +76,7 @@ const defaultFieldValues = {
   headless: false,
   specs: {},
   fetchResult: '',
-  fetchIntent: positive,
+  fetchIntent: POSITIVE,
 }
 
 interface ConfigFormProps {
@@ -99,8 +100,11 @@ export const ConfigForm: FC<ConfigFormProps> = ({
   sdk = runItSDK,
   setHasConfig,
 }) => {
-  const fetchIntent = 'fetchIntent'
-  const fetchResult = 'fetchResult'
+  const BASE_URL = 'baseUrl'
+  const WEB_URL = 'webUrl'
+  const FETCH_INTENT = 'fetchIntent'
+  const FETCH_RESULT = 'fetchResult'
+  const CRITICAL: MessageBarIntent = 'critical'
   const appConfig = `{
   "client_guid": "looker.api-explorer",
   "redirect_uri": "${(window as any).location.origin}/oauth",
@@ -114,39 +118,57 @@ export const ConfigForm: FC<ConfigFormProps> = ({
   // TODO see about useReducer to clean this up a bit more
   title = title || 'RunIt Configuration'
 
-  const [fields, setFields] = useState<ILoadedSpecs>(defaultFieldValues)
-
-  useEffect(() => {
+  const getConfig = () => {
     // get configuration from storage, or default it
     const storage = configurator.getStorage(RunItConfigKey)
-    const config = storage.value
+    return storage.value
       ? JSON.parse(storage.value)
       : { base_url: '', looker_url: '' }
-    const { base_url, looker_url } = config
-    setFields((currentFields) => ({
-      ...currentFields,
-      baseUrl: base_url,
-      webUrl: looker_url,
-      [fetchIntent]:
-        base_url !== '' && looker_url !== '' ? positive : 'critical',
-    }))
+  }
+
+  const config = getConfig()
+  const [fields, setFields] = useState<ILoadedSpecs>(defaultFieldValues)
+  const [saved, setSaved] = useState<boolean>(
+    config.base_url !== '' && config.looker_url !== ''
+  )
+
+  const updateFields = (nameOrValues: string | RunItValues, value = '') => {
+    if (typeof nameOrValues === 'string') {
+      setFields((previousFields) => {
+        return { ...previousFields, ...{ [nameOrValues]: value } }
+      })
+    } else {
+      setFields((previousFields) => {
+        return { ...previousFields, ...nameOrValues }
+      })
+    }
+  }
+
+  useEffect(() => {
+    const { base_url, looker_url } = getConfig()
+    setSaved(base_url !== '' && looker_url !== '')
+    updateFields({
+      [BASE_URL]: base_url,
+      [WEB_URL]: looker_url,
+      [FETCH_INTENT]:
+        base_url !== '' && looker_url !== '' ? POSITIVE : CRITICAL,
+    })
   }, [configurator])
 
   const [validationMessages, setValidationMessages] =
     useState<ValidationMessages>({})
 
   const updateMessage = (intent: MessageBarIntent, message: string) => {
-    updateFields(fetchResult, message)
-    updateFields(fetchIntent, intent)
+    updateFields({ [FETCH_RESULT]: message, [FETCH_INTENT]: intent })
   }
 
   const fetchError = (message: string) => {
-    updateFields('webUrl', '')
-    updateMessage('critical', message)
+    updateFields(WEB_URL, '')
+    updateMessage(CRITICAL, message)
   }
 
-  const updateForm = async (e: BaseSyntheticEvent, save: boolean) => {
-    e.preventDefault()
+  const updateForm = async (_e: BaseSyntheticEvent, save: boolean) => {
+    // e.preventDefault()
     try {
       updateMessage('inform', '')
       const versionsUrl = `${fields.baseUrl}/versions`
@@ -154,9 +176,8 @@ export const ConfigForm: FC<ConfigFormProps> = ({
       if (!baseUrl || !webUrl) {
         fetchError('Invalid server configuration')
       } else {
-        updateFields('baseUrl', baseUrl)
-        updateFields('webUrl', webUrl)
-        updateMessage(positive, 'Configuration is valid')
+        updateFields({ [BASE_URL]: baseUrl, [WEB_URL]: webUrl })
+        updateMessage(POSITIVE, 'Configuration is valid')
         if (save) {
           configurator.setStorage(
             RunItConfigKey,
@@ -168,7 +189,9 @@ export const ConfigForm: FC<ConfigFormProps> = ({
             'local'
           )
           if (setHasConfig) setHasConfig(true)
+          setSaved(true)
           setVersionsUrl(versionsUrl)
+          updateMessage(POSITIVE, `Saved ${webUrl} as OAuth server`)
         }
       }
     } catch (err) {
@@ -176,7 +199,7 @@ export const ConfigForm: FC<ConfigFormProps> = ({
     }
   }
 
-  const handleSubmit = async (e: BaseSyntheticEvent) => {
+  const handleSave = async (e: BaseSyntheticEvent) => {
     await updateForm(e, true)
   }
 
@@ -184,18 +207,20 @@ export const ConfigForm: FC<ConfigFormProps> = ({
     await updateForm(e, false)
   }
 
-  const handleClear = (e: BaseSyntheticEvent) => {
-    e.preventDefault()
+  const handleClear = async (_e: BaseSyntheticEvent) => {
+    // e.preventDefault()
     configurator.removeStorage(RunItConfigKey)
-    setFields(defaultFieldValues)
-    if (setHasConfig) setHasConfig(false)
-  }
-
-  const updateFields = (name: string, value: string) => {
-    setFields((previousFields) => {
-      const newFields = { ...previousFields, ...{ [name]: value } }
-      return newFields
+    updateFields({
+      [BASE_URL]: '',
+      [WEB_URL]: '',
+      [FETCH_INTENT]: CRITICAL,
+      [FETCH_RESULT]: '',
     })
+    setSaved(false)
+    if (setHasConfig) setHasConfig(false)
+    if (sdk?.authSession.isAuthenticated()) {
+      updateMessage('warn', 'Please reload the browser page to log out')
+    }
   }
 
   const handleUrlChange = (event: FormEvent<HTMLInputElement>) => {
@@ -214,7 +239,10 @@ export const ConfigForm: FC<ConfigFormProps> = ({
         type: 'error',
       }
     }
-    updateFields(event.currentTarget.name, event.currentTarget.value)
+    updateFields({
+      [event.currentTarget.name]: event.currentTarget.value,
+      [WEB_URL]: '',
+    })
 
     setValidationMessages(newValidationMessages)
   }
@@ -224,7 +252,7 @@ export const ConfigForm: FC<ConfigFormProps> = ({
     Object.keys(validationMessages).length > 0
 
   const saveButtonDisabled =
-    verifyButtonDisabled || fields.webUrl.trim().length > 0
+    verifyButtonDisabled || fields.webUrl.trim().length === 0
 
   const clearButtonDisabled = fields.baseUrl.trim().length === 0
 
@@ -248,28 +276,27 @@ export const ConfigForm: FC<ConfigFormProps> = ({
         To configure RunIt mode, you need to supply your API server URL, then
         authenticate into your Looker Instance
       </DarkSpan>
+      <MessageBar
+        intent={fields[FETCH_INTENT]}
+        onPrimaryClick={() => updateMessage(fields[FETCH_INTENT], '')}
+        visible={fields[FETCH_RESULT] !== ''}
+      >
+        {fields[FETCH_RESULT]}
+      </MessageBar>
       <CollapserCard
         heading="1. Supply API Server URL"
         id="server_config"
         divider={false}
-        defaultOpen={saveButtonDisabled}
+        defaultOpen={!saved}
       >
         <>
-          <Form onSubmit={handleSubmit} validationMessages={validationMessages}>
+          <Form validationMessages={validationMessages}>
             <Fieldset legend="Server locations">
-              <MessageBar
-                intent={fields[fetchIntent]}
-                onPrimaryClick={() => updateMessage(fields[fetchIntent], '')}
-                visible={fields[fetchResult] !== ''}
-              >
-                {fields[fetchResult]}
-              </MessageBar>
-
               <FieldText
                 required
                 label="API server URL"
                 placeholder="typically https://myserver.looker.com:19999"
-                name="baseUrl"
+                name={BASE_URL}
                 defaultValue={fields.baseUrl}
                 onChange={handleUrlChange}
               />
@@ -279,7 +306,7 @@ export const ConfigForm: FC<ConfigFormProps> = ({
               <FieldText
                 label="Auth server URL"
                 placeholder="Click 'Verify' to retrieve"
-                name="webUrl"
+                name={WEB_URL}
                 defaultValue={fields.webUrl}
                 disabled={true}
               />
@@ -297,26 +324,32 @@ export const ConfigForm: FC<ConfigFormProps> = ({
           </Paragraph>
           <CodeCopy key="appConfig" language="json" code={appConfig} />
           <Space>
-            <ButtonTransparent
-              onClick={handleClear}
-              disabled={clearButtonDisabled}
-            >
-              Clear
-            </ButtonTransparent>
-            <ButtonTransparent
-              disabled={verifyButtonDisabled}
-              onClick={handleVerify}
-              mr="small"
-            >
-              Verify
-            </ButtonTransparent>
-            <Button
-              disabled={saveButtonDisabled}
-              onClick={handleSubmit}
-              mr="small"
-            >
-              Save
-            </Button>
+            <Tooltip content="Clear the configuration values">
+              <ButtonTransparent
+                onClick={handleClear}
+                disabled={clearButtonDisabled}
+              >
+                Clear
+              </ButtonTransparent>
+            </Tooltip>
+            <Tooltip content={`Verify the configuration of ${fields.baseUrl}`}>
+              <ButtonTransparent
+                disabled={verifyButtonDisabled}
+                onClick={handleVerify}
+                mr="small"
+              >
+                Verify
+              </ButtonTransparent>
+            </Tooltip>
+            <Tooltip content="Save the configuration for this browser">
+              <Button
+                disabled={saveButtonDisabled}
+                onClick={handleSave}
+                mr="small"
+              >
+                Save
+              </Button>
+            </Tooltip>
           </Space>
         </>
       </CollapserCard>
@@ -324,22 +357,22 @@ export const ConfigForm: FC<ConfigFormProps> = ({
         heading="2. Login to instance"
         divider={false}
         id="login_section"
-        defaultOpen={!saveButtonDisabled}
+        defaultOpen={saved}
       >
         <SpaceVertical>
           {sdk?.authSession.isAuthenticated() ? (
             <DarkSpan>
               You are already logged in. Reload the page to log out.
             </DarkSpan>
-          ) : saveButtonDisabled ? (
-            <DarkSpan>
-              You will be able to login after you Verify your API Server URL
-            </DarkSpan>
-          ) : (
+          ) : saved ? (
             <>
               <DarkSpan>{readyToLogin}</DarkSpan>
               <Button onClick={handleLogin}>Login</Button>
             </>
+          ) : (
+            <DarkSpan>
+              You will be able to login after you Verify your API Server URL
+            </DarkSpan>
           )}
         </SpaceVertical>
       </CollapserCard>
