@@ -27,9 +27,9 @@
 import React, { FC, useContext, useEffect, useState } from 'react'
 import styled from 'styled-components'
 import {
-  Accordion,
-  AccordionDisclosure,
+  Accordion2,
   AccordionContent,
+  AccordionDisclosure,
   List,
   Heading,
 } from '@looker/components'
@@ -78,33 +78,32 @@ const SideNavMethodsLayout: FC<MethodsProps> = ({
 
   // TODO upgrade to Accordion2
   return (
-    <Accordion
-      defaultOpen={defaultOpen}
+    <Accordion2
       isOpen={isOpen}
       toggleOpen={handleOpen}
       className={className}
+      label={
+        <>
+          {/* TODO: Fix highlighting. It is applied but it is somehow being overridden */}
+          <Heading as="h5">{highlightHTML(pattern, tag)}</Heading>
+        </>
+      }
     >
-      <AccordionDisclosure>
-        {/* TODO: Fix highlighting. It is applied but it is somehow being overridden */}
-        <Heading as="h5">{highlightHTML(pattern, tag)}</Heading>
-      </AccordionDisclosure>
-      <AccordionContent>
-        <AutoHeightList>
-          {Object.values(methods).map((method) => (
-            <SideNavLink
-              key={method.name}
-              to={`${buildMethodPath(specKey, tag, method.name)}`}
-            >
-              <li>
-                <Heading as="h5" truncate>
-                  {highlightHTML(pattern, method.summary)}
-                </Heading>
-              </li>
-            </SideNavLink>
-          ))}
-        </AutoHeightList>
-      </AccordionContent>
-    </Accordion>
+      <AutoHeightList>
+        {Object.values(methods).map((method) => (
+          <SideNavLink
+            key={method.name}
+            to={`${buildMethodPath(specKey, tag, method.name)}`}
+          >
+            <li>
+              <Heading as="h5" truncate>
+                {highlightHTML(pattern, method.summary)}
+              </Heading>
+            </li>
+          </SideNavLink>
+        ))}
+      </AutoHeightList>
+    </Accordion2>
   )
 }
 

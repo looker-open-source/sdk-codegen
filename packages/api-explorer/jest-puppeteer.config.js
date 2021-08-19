@@ -25,7 +25,8 @@
  */
 module.exports = {
   launch: {
-    headless: true,
+    headless: false,
+    slowMo: 250,
     args: ['--ignore-certificate-errors'],
     product: 'chrome',
     devtools: true,
@@ -36,9 +37,9 @@ module.exports = {
     },
   },
   browserContext: 'default',
-  server: {
-    command: 'yarn develop',
-    port: 8080,
-    launchTimeout: 50000,
-  },
+  // server: {
+  //   command: 'yarn develop',
+  //   port: 8080,
+  //   launchTimeout: 50000,
+  // },
 }

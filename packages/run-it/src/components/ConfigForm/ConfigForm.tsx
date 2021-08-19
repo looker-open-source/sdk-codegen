@@ -135,19 +135,20 @@ export const ConfigForm: FC<ConfigFormProps> = ({
   const [validationMessages, setValidationMessages] =
     useState<ValidationMessages>({})
 
-  const updateFetch = (intent: MessageBarIntent, message: string) => {
+  const updateMessage = (intent: MessageBarIntent, message: string) => {
     updateFields(fetchResult, message)
     updateFields(fetchIntent, intent)
   }
 
   const fetchError = (message: string) => {
-    updateFetch('critical', message)
+    updateFields('webUrl', '')
+    updateMessage('critical', message)
   }
 
   const updateForm = async (e: BaseSyntheticEvent, save: boolean) => {
     e.preventDefault()
     try {
-      updateFetch('inform', '')
+      updateMessage('inform', '')
       const versionsUrl = `${fields.baseUrl}/versions`
       const { webUrl, baseUrl } = await loadSpecsFromVersions(versionsUrl)
       if (!baseUrl || !webUrl) {
@@ -155,8 +156,7 @@ export const ConfigForm: FC<ConfigFormProps> = ({
       } else {
         updateFields('baseUrl', baseUrl)
         updateFields('webUrl', webUrl)
-        updateFields(fetchIntent, positive)
-        updateFields(fetchResult, 'Configuration is valid')
+        updateMessage(positive, 'Configuration is valid')
         if (save) {
           configurator.setStorage(
             RunItConfigKey,
@@ -224,10 +224,9 @@ export const ConfigForm: FC<ConfigFormProps> = ({
     Object.keys(validationMessages).length > 0
 
   const saveButtonDisabled =
-    verifyButtonDisabled || fields[fetchIntent] !== positive
+    verifyButtonDisabled || fields.webUrl.trim().length > 0
 
-  const clearButtonDisabled =
-    fields.webUrl.trim().length === 0 && fields.baseUrl.trim().length === 0
+  const clearButtonDisabled = fields.baseUrl.trim().length === 0
 
   const handleLogin = async (e: BaseSyntheticEvent) => {
     e.preventDefault()
@@ -260,7 +259,7 @@ export const ConfigForm: FC<ConfigFormProps> = ({
             <Fieldset legend="Server locations">
               <MessageBar
                 intent={fields[fetchIntent]}
-                onPrimaryClick={() => updateFetch(fields[fetchIntent], '')}
+                onPrimaryClick={() => updateMessage(fields[fetchIntent], '')}
                 visible={fields[fetchResult] !== ''}
               >
                 {fields[fetchResult]}
