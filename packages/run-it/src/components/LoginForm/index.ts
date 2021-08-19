@@ -24,4 +24,4 @@
 
  */
 
-export { LoginForm } from './LoginForm'
+export { LoginForm, readyToLogin } from './LoginForm'
