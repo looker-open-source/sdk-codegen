@@ -1,6 +1,5 @@
 import {LookerNodeSDK} from '@looker/sdk-node'
 import {IScheduledPlan} from '@looker/sdk'
-import { user } from '@looker/sdk/lib/3.1/funcs';
 
 const sdk = LookerNodeSDK.init40()
 
