@@ -23,55 +23,47 @@
  SOFTWARE.
 
  */
-
 import React from 'react'
-import { screen, waitFor } from '@testing-library/react'
 import { renderWithTheme } from '@looker/components-test-utils'
+import { Text } from '@looker/components'
+import { screen, waitFor } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
-import { defaultConfigurator } from '..'
-import { runItNoSet } from '../..'
-import { LoginForm } from './LoginForm'
 
-describe('LoginForm', () => {
-  // https://testing-library.com/docs/guide-which-query
+import { CollapserCard } from './CollapserCard'
 
-  test('it creates a login form without config button by default', async () => {
+describe('CollapserCard', () => {
+  test('it renders heading, children and collapses', async () => {
+    const heading = 'Foo'
+    const childText = 'Bar'
     renderWithTheme(
-      <LoginForm
-        configurator={defaultConfigurator}
-        requestContent={{}}
-        setVersionsUrl={runItNoSet}
-      />
+      <CollapserCard heading={heading}>
+        <Text>{childText}</Text>
+      </CollapserCard>
     )
-    const login = screen.getByRole('button', {
-      name: 'Login',
-    })
-    expect(login).toBeInTheDocument()
-    const config = screen.queryByRole('button', {
-      name: 'Configure',
-    })
-    expect(config).not.toBeInTheDocument()
-
+    expect(screen.getByRole('separator')).toBeInTheDocument()
+    expect(screen.getByRole('heading', { level: 3 })).toBeInTheDocument()
+    expect(screen.getByText(childText)).toBeInTheDocument()
+    const header = screen.getByText(heading)
+    await userEvent.click(header)
     await waitFor(() => {
-      userEvent.hover(login)
-      expect(screen.getByRole('tooltip')).toHaveTextContent(
-        `OAuth authentication is already configured, but the browser session is not authenticated. Please click Login to authenticate.`
-      )
+      expect(screen.queryByText(childText)).not.toBeInTheDocument()
     })
   })
-
-  test('it includes a Config button if config setting is passed', async () => {
+  test('it renders heading, children but no divider', async () => {
+    const heading = 'Foo'
+    const childText = 'Bar'
     renderWithTheme(
-      <LoginForm
-        configurator={defaultConfigurator}
-        requestContent={{}}
-        setHasConfig={() => true}
-        setVersionsUrl={runItNoSet}
-      />
+      <CollapserCard heading={heading} divider={false}>
+        <Text>{childText}</Text>
+      </CollapserCard>
     )
-    const button = screen.getByRole('button', {
-      name: 'Configure',
+    expect(screen.queryByRole('separator')).not.toBeInTheDocument()
+    expect(screen.getByRole('heading', { level: 4 })).toBeInTheDocument()
+    expect(screen.getByText(childText)).toBeInTheDocument()
+    const header = screen.getByText(heading)
+    await userEvent.click(header)
+    await waitFor(() => {
+      expect(screen.queryByText(childText)).not.toBeInTheDocument()
     })
-    expect(button).toBeInTheDocument()
   })
 })

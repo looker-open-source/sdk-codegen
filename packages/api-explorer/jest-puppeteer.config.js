@@ -23,29 +23,22 @@
  SOFTWARE.
 
  */
-
-import React, { FC } from 'react'
-import { IRawResponse } from '@looker/sdk-rtl'
-
-import { pickResponseHandler, fallbackResponseHandler } from './responseUtils'
-
-interface ShowResponseProps {
-  /** A basic HTTP response for "raw" HTTP requests */
-  response: IRawResponse
-}
-
-/**
- * Given an HTTP response it picks a response handler based on the content type and renders the body
- */
-export const ShowResponse: FC<ShowResponseProps> = ({ response }) => {
-  // Bullet proof the rendered response. If for some reason we get a bad response or bad data in the
-  // response, render something
-  let renderedResponse
-  try {
-    renderedResponse = pickResponseHandler(response).component(response)
-  } catch (err) {
-    renderedResponse = fallbackResponseHandler().component(response)
-  }
-
-  return <>{renderedResponse}</>
+module.exports = {
+  launch: {
+    headless: true,
+    args: ['--ignore-certificate-errors'],
+    product: 'chrome',
+    devtools: true,
+    defaultViewport: {
+      // override default 800x600 pixel browser setting
+      width: 1024,
+      height: 768,
+    },
+  },
+  browserContext: 'default',
+  server: {
+    command: 'yarn develop',
+    port: 8080,
+    launchTimeout: 50000,
+  },
 }

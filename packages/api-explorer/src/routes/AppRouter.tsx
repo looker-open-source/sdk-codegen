@@ -26,17 +26,19 @@
 import React, { FC, useContext } from 'react'
 import { Redirect, Route, Switch } from 'react-router-dom'
 import { ApiModel, SpecList } from '@looker/sdk-codegen'
-import { OAuthScene, RunItContext } from '@looker/run-it'
+import { OAuthScene, RunItSetter, RunItContext } from '@looker/run-it'
 
 import { HomeScene, MethodScene, TagScene, TypeScene } from '../scenes'
 import { DiffScene } from '../scenes/DiffScene'
-import { diffPath, oAuthPath } from '../utils'
+import { diffPath, IApixEnvAdaptor, oAuthPath } from '../utils'
 
 interface AppRouterProps {
   api: ApiModel
   specKey: string
   specs: SpecList
   toggleNavigation: (target?: boolean) => void
+  envAdaptor: IApixEnvAdaptor
+  setVersionsUrl: RunItSetter
 }
 
 export const AppRouter: FC<AppRouterProps> = ({
@@ -44,6 +46,8 @@ export const AppRouter: FC<AppRouterProps> = ({
   api,
   specs,
   toggleNavigation,
+  envAdaptor,
+  setVersionsUrl,
 }) => {
   const { sdk } = useContext(RunItContext)
   const maybeOauth = sdk && sdk.apiVersion === '4.0'
@@ -65,7 +69,11 @@ export const AppRouter: FC<AppRouterProps> = ({
         <TagScene api={api} />
       </Route>
       <Route path="/:specKey/methods/:methodTag/:methodName">
-        <MethodScene api={api} />
+        <MethodScene
+          api={api}
+          envAdaptor={envAdaptor}
+          setVersionsUrl={setVersionsUrl}
+        />
       </Route>
       <Route path="/:specKey/types/:typeName">
         <TypeScene api={api} />

@@ -23,29 +23,16 @@
  SOFTWARE.
 
  */
-
-import React, { FC } from 'react'
-import { IRawResponse } from '@looker/sdk-rtl'
-
-import { pickResponseHandler, fallbackResponseHandler } from './responseUtils'
-
-interface ShowResponseProps {
-  /** A basic HTTP response for "raw" HTTP requests */
-  response: IRawResponse
-}
+import styled from 'styled-components'
+import { Heading } from '@looker/components'
 
 /**
- * Given an HTTP response it picks a response handler based on the content type and renders the body
+ * Common styled components to be used across the whole library
  */
-export const ShowResponse: FC<ShowResponseProps> = ({ response }) => {
-  // Bullet proof the rendered response. If for some reason we get a bad response or bad data in the
-  // response, render something
-  let renderedResponse
-  try {
-    renderedResponse = pickResponseHandler(response).component(response)
-  } catch (err) {
-    renderedResponse = fallbackResponseHandler().component(response)
-  }
 
-  return <>{renderedResponse}</>
+export const RunItHeading = styled(Heading)``
+
+RunItHeading.defaultProps = {
+  mb: 'xsmall',
+  pt: 'xsmall',
 }

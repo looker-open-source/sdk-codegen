@@ -33,9 +33,9 @@ import { HEADER_REM } from '../Header'
  * Common styled components to be used across the whole library
  */
 
-export const ApixHeading = styled(Heading)``
+export const RunItHeading = styled(Heading)``
 
-ApixHeading.defaultProps = {
+RunItHeading.defaultProps = {
   mb: 'xsmall',
   pt: 'xsmall',
 }

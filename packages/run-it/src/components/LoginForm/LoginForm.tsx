@@ -28,23 +28,35 @@ import React, { BaseSyntheticEvent, Dispatch, FC } from 'react'
 import { Button, Tooltip, Space } from '@looker/components'
 import { IAPIMethods } from '@looker/sdk-rtl'
 import { runItSDK } from '../../utils'
-import { ConfigDialog, RunItConfigurator } from '../ConfigForm'
+import { ConfigDialog, RunItFormKey, RunItConfigurator } from '../ConfigForm'
+import { RunItValues, RunItSetter } from '../..'
 
 interface LoginFormProps {
+  configurator: RunItConfigurator
+  requestContent: RunItValues
+  setVersionsUrl: RunItSetter
   /** A set state callback which if present allows for editing, setting or clearing OAuth configuration parameters */
   setHasConfig?: Dispatch<boolean>
   /** SDK to use for login. Defaults to the `runItSDK` */
   sdk?: IAPIMethods
-  configurator: RunItConfigurator
 }
 
 export const LoginForm: FC<LoginFormProps> = ({
+  configurator,
+  requestContent,
+  setVersionsUrl,
   sdk = runItSDK,
   setHasConfig,
-  configurator,
 }) => {
   const handleSubmit = async (e: BaseSyntheticEvent) => {
     e.preventDefault()
+    if (requestContent) {
+      configurator.setStorage(
+        RunItFormKey,
+        JSON.stringify(requestContent),
+        'local'
+      )
+    }
     // This will set storage variables and return to OAuthScene when successful
     await sdk?.authSession.login()
   }
@@ -59,6 +71,7 @@ export const LoginForm: FC<LoginFormProps> = ({
           <ConfigDialog
             setHasConfig={setHasConfig}
             configurator={configurator}
+            setVersionsUrl={setVersionsUrl}
           />
         )}
       </Space>
