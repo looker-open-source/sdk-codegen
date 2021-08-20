@@ -70,8 +70,9 @@ interface MethodSceneParams {
   specKey: string
 }
 
-const showRunIt = (envAdaptor: IApixEnvAdaptor) => {
-  return !!envAdaptor.localStorageGetItem(RunItFormKey)
+const showRunIt = async (envAdaptor: IApixEnvAdaptor) => {
+  const data = await envAdaptor.localStorageGetItem(RunItFormKey)
+  return !!data
 }
 
 export const MethodScene: FC<MethodSceneProps> = ({
@@ -82,7 +83,7 @@ export const MethodScene: FC<MethodSceneProps> = ({
   const { sdk } = useContext(RunItContext)
   const sdkLanguage = useSelector(getSelectedSdkLanguage)
   const { methodName, specKey } = useParams<MethodSceneParams>()
-  const { value, toggle } = useToggle(showRunIt(envAdaptor))
+  const { value, toggle } = useToggle()
   const [method, setMethod] = useState(api.methods[methodName])
   const seeTypes = typeRefs(api, method.customTypes)
   const { colors } = useContext(ThemeContext)
@@ -92,6 +93,16 @@ export const MethodScene: FC<MethodSceneProps> = ({
   useEffect(() => {
     setMethod(api.methods[methodName])
   }, [api, methodName])
+
+  useEffect(() => {
+    const checkRunIt = async () => {
+      const show = await showRunIt(envAdaptor)
+      if (show && !value) {
+        toggle()
+      }
+    }
+    checkRunIt()
+  }, [envAdaptor])
 
   const runItToggle = (
     <RunItButton

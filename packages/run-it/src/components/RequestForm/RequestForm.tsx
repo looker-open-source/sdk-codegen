@@ -163,7 +163,11 @@ export const RequestForm: FC<RequestFormProps> = ({
           )
         ) : (
           !isExtension &&
-          setHasConfig && <Button onClick={handleConfig}>Configure</Button>
+          setHasConfig && (
+            <Tooltip content="Configure your OAuth server to Run requests">
+              <Button onClick={handleConfig}>Configure</Button>
+            </Tooltip>
+          )
         )}
       </Space>
     </Form>
