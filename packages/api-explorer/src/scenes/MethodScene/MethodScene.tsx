@@ -83,7 +83,7 @@ export const MethodScene: FC<MethodSceneProps> = ({
   const { sdk } = useContext(RunItContext)
   const sdkLanguage = useSelector(getSelectedSdkLanguage)
   const { methodName, specKey } = useParams<MethodSceneParams>()
-  const { value, toggle } = useToggle()
+  const { value, toggle, setOn } = useToggle()
   const [method, setMethod] = useState(api.methods[methodName])
   const seeTypes = typeRefs(api, method.customTypes)
   const { colors } = useContext(ThemeContext)
@@ -97,9 +97,7 @@ export const MethodScene: FC<MethodSceneProps> = ({
   useEffect(() => {
     const checkRunIt = async () => {
       const show = await showRunIt(envAdaptor)
-      if (show && !value) {
-        toggle()
-      }
+      if (show) setOn()
     }
     checkRunIt()
   }, [envAdaptor])
