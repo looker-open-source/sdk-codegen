@@ -25,7 +25,13 @@
  */
 
 import React, { BaseSyntheticEvent, FC, Dispatch } from 'react'
-import { Button, Form, Space, ButtonTransparent } from '@looker/components'
+import {
+  Button,
+  Form,
+  Space,
+  ButtonTransparent,
+  Tooltip,
+} from '@looker/components'
 import type { IAPIMethods } from '@looker/sdk-rtl'
 import { RunItHttpMethod, RunItInput, RunItValues } from '../../RunIt'
 import { RunItConfigurator } from '../ConfigForm'
@@ -136,9 +142,11 @@ export const RequestForm: FC<RequestFormProps> = ({
       )}
       {httpMethod !== 'GET' && showDataChangeWarning()}
       <Space>
-        <ButtonTransparent type="button" onClick={handleClear}>
-          Clear
-        </ButtonTransparent>
+        <Tooltip content="Clear entered values">
+          <ButtonTransparent type="button" onClick={handleClear}>
+            Clear
+          </ButtonTransparent>
+        </Tooltip>
         {hasConfig ? (
           needsAuth ? (
             <LoginForm
@@ -149,7 +157,9 @@ export const RequestForm: FC<RequestFormProps> = ({
               requestContent={requestContent}
             />
           ) : (
-            <Button type="submit">Run</Button>
+            <Tooltip content="Run the API request">
+              <Button type="submit">Run</Button>
+            </Tooltip>
           )
         ) : (
           !isExtension &&
