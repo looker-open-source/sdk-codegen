@@ -71,7 +71,11 @@ import {
 
 const POSITIVE: MessageBarIntent = 'positive'
 
-const defaultFieldValues = {
+interface IFieldValues extends ILoadedSpecs {
+  fetchIntent: MessageBarIntent
+}
+
+const defaultFieldValues: IFieldValues = {
   baseUrl: '',
   webUrl: '',
   /** not currently used but declared for property compatibility for ILoadedSpecs */
@@ -130,10 +134,13 @@ export const ConfigForm: FC<ConfigFormProps> = ({
   }
 
   const config = getConfig()
-  const [fields, setFields] = useState<ILoadedSpecs>(defaultFieldValues)
+  const [fields, setFields] = useState<IFieldValues>(defaultFieldValues)
   const [saved, setSaved] = useState<RunItValues>(config)
 
-  const updateFields = (nameOrValues: string | RunItValues, value = '') => {
+  const updateFields = (
+    nameOrValues: string | Partial<IFieldValues>,
+    value = ''
+  ) => {
     if (typeof nameOrValues === 'string') {
       setFields((previousFields) => {
         return { ...previousFields, ...{ [nameOrValues]: value } }
