@@ -42,14 +42,10 @@ interface DiffMethodLinkProps {
 }
 
 const DiffLink = styled(Heading)`
-  color:${({ theme }) => theme.colors.ui5}
+  color: ${({ theme }) => theme.colors.ui5};
   cursor: pointer;
   display: block;
-  padding: ${({
-    theme: {
-      space: { xsmall, large },
-    },
-  }) => `${xsmall} ${large}`};
+  padding: ${({ theme }) => `${theme.space.xsmall} ${theme.space.large}`};
   &:hover,
   &:visited,
   &:focus,
@@ -124,7 +120,7 @@ export const DiffItem: FC<DiffItemProps> = ({
   }
 
   return (
-    <Card border="1px solid" width="100%">
+    <Card border width="100%">
       <Accordion2
         indicatorPosition="left"
         isOpen={isOpen}

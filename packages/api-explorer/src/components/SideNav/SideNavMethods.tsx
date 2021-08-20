@@ -24,15 +24,9 @@
 
  */
 
-import React, { FC, useContext, useEffect, useState } from 'react'
+import React, { useContext, useEffect, useState } from 'react'
 import styled from 'styled-components'
-import {
-  Accordion2,
-  AccordionContent,
-  AccordionDisclosure,
-  List,
-  Heading,
-} from '@looker/components'
+import { Accordion2, Heading } from '@looker/components'
 import { MethodList } from '@looker/sdk-codegen'
 import { useHistory, useRouteMatch } from 'react-router-dom'
 import { Link } from '../Link'
@@ -47,137 +41,95 @@ interface MethodsProps {
   specKey: string
 }
 
-const SideNavMethodsLayout: FC<MethodsProps> = ({
-  className,
-  defaultOpen = false,
-  methods,
-  tag,
-  specKey,
-}) => {
-  const {
-    searchSettings: { pattern },
-  } = useContext(SearchContext)
-  const match = useRouteMatch<{ methodTag: string }>(
-    `/:specKey/methods/:methodTag/:methodName?`
-  )
-  const [isOpen, setIsOpen] = useState(defaultOpen)
-  const history = useHistory()
+export const SideNavMethods = styled(
+  ({ className, defaultOpen = false, methods, tag, specKey }: MethodsProps) => {
+    const {
+      searchSettings: { pattern },
+    } = useContext(SearchContext)
+    const match = useRouteMatch<{ methodTag: string }>(
+      `/:specKey/methods/:methodTag/:methodName?`
+    )
+    const [isOpen, setIsOpen] = useState(defaultOpen)
+    const history = useHistory()
 
-  const handleOpen = () => {
-    const _isOpen = !isOpen
-    setIsOpen(_isOpen)
-    if (_isOpen) history.push(`/${specKey}/methods/${tag}`)
-  }
+    const handleOpen = () => {
+      const _isOpen = !isOpen
+      setIsOpen(_isOpen)
+      if (_isOpen) history.push(`/${specKey}/methods/${tag}`)
+    }
 
-  useEffect(() => {
-    const status = match
-      ? defaultOpen || match.params.methodTag === tag
-      : defaultOpen
-    setIsOpen(status)
-  }, [defaultOpen])
+    useEffect(() => {
+      const status = match
+        ? defaultOpen || match.params.methodTag === tag
+        : defaultOpen
+      setIsOpen(status)
+    }, [defaultOpen])
 
-  // TODO upgrade to Accordion2
-  return (
-    <Accordion2
-      isOpen={isOpen}
-      toggleOpen={handleOpen}
-      className={className}
-      label={
-        <>
-          {/* TODO: Fix highlighting. It is applied but it is somehow being overridden */}
-          <Heading as="h5">{highlightHTML(pattern, tag)}</Heading>
-        </>
-      }
-    >
-      <AutoHeightList>
-        {Object.values(methods).map((method) => (
-          <SideNavLink
-            key={method.name}
-            to={`${buildMethodPath(specKey, tag, method.name)}`}
-          >
-            <li>
-              <Heading as="h5" truncate>
+    /* TODO: Fix highlighting. It is applied but it is somehow being overridden */
+    return (
+      <Accordion2
+        isOpen={isOpen}
+        toggleOpen={handleOpen}
+        className={className}
+        label={
+          <Heading as="h4" fontSize="small" py="xsmall">
+            {highlightHTML(pattern, tag)}
+          </Heading>
+        }
+      >
+        <ul>
+          {Object.values(methods).map((method) => (
+            <li key={method.name}>
+              <Link to={`${buildMethodPath(specKey, tag, method.name)}`}>
                 {highlightHTML(pattern, method.summary)}
-              </Heading>
+              </Link>
             </li>
-          </SideNavLink>
-        ))}
-      </AutoHeightList>
-    </Accordion2>
-  )
-}
-
-const AutoHeightList = styled(List)`
-  height: auto;
-`
-
-const SideNavLink = styled(Link)`
-  &:hover,
-  &:focus,
-  &.active {
-    li {
-      background-color: ${({ theme }) => theme.colors.ui1};
-    }
+          ))}
+        </ul>
+      </Accordion2>
+    )
   }
+)`
+  font-family: ${({ theme }) => theme.fonts.brand};
 
-  li {
-    display: flex;
-    border-radius: ${({ theme: { radii } }) => radii.medium};
-    padding: ${({ theme }) => theme.space.xsmall};
-  }
-`
-
-export const SideNavMethods = styled(SideNavMethodsLayout)`
-  ${AccordionDisclosure} {
-    padding-left: ${({ theme }) => theme.space.large};
-    padding-right: ${({ theme }) => theme.space.large};
-
-    &:hover {
+  [aria-controls]:hover,
+  [aria-expanded='true'] {
+    h4,
+    svg {
       color: ${({ theme }) => theme.colors.key};
-      ${Heading} {
-        color: ${({ theme }) => theme.colors.key};
-      }
-    }
-
-    &[aria-expanded='true'] {
-      color: ${({ theme }) => theme.colors.key};
-      ${Heading} {
-        color: ${({ theme }) => theme.colors.key};
-        font-weight: ${({ theme }) => theme.fontWeights.semiBold};
-      }
     }
   }
 
-  ${AccordionContent} {
-    padding: ${({
-      theme: {
-        space: { xxsmall, large },
-      },
-    }) => `${xxsmall} ${large}`};
+  [aria-expanded='true'] h4 {
+    font-weight: ${({ theme }) => theme.fontWeights.semiBold};
   }
 
-  ${List} {
+  ul {
     border-left: dashed 1px ${({ theme }) => theme.colors.ui2};
-    padding: ${({ theme }) => theme.space.xxsmall};
-    padding-right: 0;
-  }
-
-  li {
-    display: flex;
-    border-radius: ${({ theme: { radii } }) => radii.medium};
-    padding: ${({ theme }) => theme.space.xsmall};
-
-    &:hover,
-    &:focus {
-      background-color: ${({ theme }) => theme.colors.ui1};
-    }
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    padding-left: ${({ theme }) => theme.space.xxsmall};
+    padding-top: ${({ theme }) => theme.space.xxsmall};
   }
 
   [aria-current] {
-    background-color: ${({ theme }) => theme.colors.ui1};
+    background: ${({ theme }) => theme.colors.ui1};
+    font-weight: ${({ theme }) => theme.fontWeights.semiBold};
+  }
 
-    ${Heading} {
-      font-weight: ${({ theme }) => theme.fontWeights.semiBold};
+  ${Link} {
+    border-radius: ${({ theme }) => theme.radii.medium};
+    display: block;
+    overflow: hidden;
+    padding: ${({ theme }) => theme.space.xsmall};
+    text-overflow: ellipsis;
+    white-space: nowrap;
+
+    &:hover,
+    &:focus,
+    &.active {
+      background: ${({ theme }) => theme.colors.ui1};
     }
   }
 `

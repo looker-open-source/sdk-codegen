@@ -35,7 +35,7 @@ interface DocMethodSummaryProps {
 }
 
 export const DocMethodSummary: FC<DocMethodSummaryProps> = ({ method }) => (
-  <Card maxWidth="50rem" border="1px solid">
+  <Card maxWidth="50rem" border>
     <CardContent>
       <Space align="start" between>
         <MethodBadge
