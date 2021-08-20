@@ -34,7 +34,6 @@ import {
   ExtendComponentsThemeProvider,
 } from '@looker/components'
 import { Beaker } from '@looker/icons'
-import { ThemeContext } from 'styled-components'
 import { useParams } from 'react-router-dom'
 import { RunIt, RunItSetter, RunItContext, RunItFormKey } from '@looker/run-it'
 import { ApiModel, typeRefs } from '@looker/sdk-codegen'
@@ -86,7 +85,6 @@ export const MethodScene: FC<MethodSceneProps> = ({
   const { value, toggle, setOn } = useToggle()
   const [method, setMethod] = useState(api.methods[methodName])
   const seeTypes = typeRefs(api, method.customTypes)
-  const { colors } = useContext(ThemeContext)
 
   const RunItButton = value ? Button : ButtonOutline
 
@@ -141,8 +139,11 @@ export const MethodScene: FC<MethodSceneProps> = ({
           <ExtendComponentsThemeProvider
             themeCustomizations={{
               colors: {
-                background: colors.text,
-                text: colors.background,
+                background: '#262D33',
+                key: '#8AB4F8',
+                text: '#fff',
+                link: '#8AB4F8',
+                critical: '#FF877C',
               },
             }}
           >
