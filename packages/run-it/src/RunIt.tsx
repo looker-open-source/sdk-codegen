@@ -163,8 +163,7 @@ export const RunIt: FC<RunItProps> = ({
     }
   }, [hasConfig, isExtension, needsAuth, sdk])
 
-  const handleConfig = (e: BaseSyntheticEvent) => {
-    e.preventDefault()
+  const handleConfig = (_e: BaseSyntheticEvent) => {
     tabs.onSelectTab(4)
   }
 
@@ -207,10 +206,6 @@ export const RunIt: FC<RunItProps> = ({
       setLoading(false)
     }
   }
-
-  // useEffect(() => {
-  //   setLoading(!responseContent)
-  // }, [responseContent])
 
   // No SDK, no RunIt for you!
   if (!sdk) return <></>
