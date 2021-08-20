@@ -35,6 +35,7 @@ import React, {
 import {
   Button,
   ButtonTransparent,
+  Divider,
   Fieldset,
   FieldText,
   Form,
@@ -279,9 +280,9 @@ export const ConfigForm: FC<ConfigFormProps> = ({
   }
 
   return (
-    <>
+    <SpaceVertical gap="u2">
       <RunItHeading>{title}</RunItHeading>
-      <DarkSpan>
+      <DarkSpan fontSize="small">
         To configure RunIt mode, you need to supply your API server URL, then
         authenticate into your Looker Instance
       </DarkSpan>
@@ -298,7 +299,7 @@ export const ConfigForm: FC<ConfigFormProps> = ({
         divider={false}
         defaultOpen={!isAuthenticated()}
       >
-        <>
+        <SpaceVertical gap="u2" pt="u3" px="u6">
           <Form validationMessages={validationMessages}>
             <Fieldset legend="Server locations">
               <FieldText
@@ -309,9 +310,6 @@ export const ConfigForm: FC<ConfigFormProps> = ({
                 value={fields[BASE_URL]}
                 onChange={handleUrlChange}
               />
-              <DarkSpan>
-                This is typically https://myserver.looker.com:19999
-              </DarkSpan>
               <FieldText
                 label="OAuth server URL"
                 placeholder="Click 'Verify' to retrieve"
@@ -321,7 +319,7 @@ export const ConfigForm: FC<ConfigFormProps> = ({
               />
             </Fieldset>
           </Form>
-          <Paragraph>
+          <Paragraph fontSize="small">
             The following configuration can be used to create a{' '}
             <Link
               href="https://github.com/looker-open-source/sdk-codegen/blob/main/docs/cors.md#reference-implementation"
@@ -360,15 +358,16 @@ export const ConfigForm: FC<ConfigFormProps> = ({
               </Button>
             </Tooltip>
           </Space>
-        </>
+        </SpaceVertical>
       </CollapserCard>
+      <Divider appearance="light" />
       <CollapserCard
         heading="2. Login to instance"
         divider={false}
         id="login_section"
         defaultOpen={!isAuthenticated()}
       >
-        <SpaceVertical>
+        <SpaceVertical pt="u3" px="u6">
           {isAuthenticated() ? (
             <DarkSpan>
               You are already logged in. Reload the page to log out.
@@ -391,6 +390,6 @@ export const ConfigForm: FC<ConfigFormProps> = ({
           </Tooltip>
         </SpaceVertical>
       </CollapserCard>
-    </>
+    </SpaceVertical>
   )
 }

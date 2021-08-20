@@ -141,8 +141,11 @@ export const MethodScene: FC<MethodSceneProps> = ({
           <ExtendComponentsThemeProvider
             themeCustomizations={{
               colors: {
-                background: colors.text,
-                text: colors.background,
+                background: '#262D33',
+                key: '#8AB4F8',
+                text: '#fff',
+                link: '#8AB4F8',
+                critical: '#FF877C',
               },
             }}
           >
