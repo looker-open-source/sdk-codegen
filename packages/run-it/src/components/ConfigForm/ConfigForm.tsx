@@ -222,7 +222,7 @@ export const ConfigForm: FC<ConfigFormProps> = ({
     })
     setSaved(noConfig)
     if (setHasConfig) setHasConfig(false)
-    if (sdk?.authSession.isAuthenticated()) {
+    if (isAuthenticated()) {
       updateMessage('warn', 'Please reload the browser page to log out')
     }
   }
@@ -251,6 +251,8 @@ export const ConfigForm: FC<ConfigFormProps> = ({
     setValidationMessages(newValidationMessages)
   }
 
+  const isAuthenticated = () => sdk?.authSession.isAuthenticated()
+
   const verifyButtonDisabled =
     fields.baseUrl.trim().length === 0 ||
     Object.keys(validationMessages).length > 0
@@ -261,7 +263,7 @@ export const ConfigForm: FC<ConfigFormProps> = ({
   const clearButtonDisabled = fields.baseUrl.trim().length === 0
 
   const loginButtonDisabled =
-    !isConfigured() || sdk?.authSession.isAuthenticated()
+    verifyButtonDisabled || !isConfigured() || isAuthenticated()
 
   const handleLogin = async (e: BaseSyntheticEvent) => {
     e.preventDefault()
@@ -294,7 +296,7 @@ export const ConfigForm: FC<ConfigFormProps> = ({
         heading="1. Supply API Server URL"
         id="server_config"
         divider={false}
-        defaultOpen={!saved}
+        defaultOpen={!isAuthenticated()}
       >
         <>
           <Form validationMessages={validationMessages}>
@@ -364,14 +366,14 @@ export const ConfigForm: FC<ConfigFormProps> = ({
         heading="2. Login to instance"
         divider={false}
         id="login_section"
-        defaultOpen={isConfigured()}
+        defaultOpen={!isAuthenticated()}
       >
         <SpaceVertical>
-          {sdk?.authSession.isAuthenticated() ? (
+          {isAuthenticated() ? (
             <DarkSpan>
               You are already logged in. Reload the page to log out.
             </DarkSpan>
-          ) : saved ? (
+          ) : isConfigured() ? (
             <>
               <DarkSpan>{readyToLogin}</DarkSpan>
             </>
