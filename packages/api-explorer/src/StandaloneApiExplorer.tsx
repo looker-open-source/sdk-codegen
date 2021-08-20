@@ -53,9 +53,16 @@ const store = configureStore()
 const loadVersions = async (current: string) => {
   const data = await standaloneEnvAdaptor.localStorageGetItem(RunItConfigKey)
   const config = data ? JSON.parse(data) : RunItNoConfig
-  const url = config.base_url ? `${config.base_url}/versions` : current
-  const response = await loadSpecsFromVersions(url)
-
+  let url = config.base_url ? `${config.base_url}/versions` : current
+  let response = await loadSpecsFromVersions(url)
+  if (response.fetchResult) {
+    console.error(
+      `Reverting to ${current} due to ${url} error: ${response.fetchResult}`
+    )
+    // The stored server location has an error so default to current
+    url = current
+    response = await loadSpecsFromVersions(url)
+  }
   return { url, response }
 }
 
