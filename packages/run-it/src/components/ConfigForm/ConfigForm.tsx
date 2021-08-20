@@ -122,8 +122,9 @@ export const ConfigForm: FC<ConfigFormProps> = ({
   const getConfig = () => {
     // get configuration from storage, or default it
     const data = configurator.getStorage(RunItConfigKey)
-    const result = data.value ? JSON.parse(data.value) : RunItNoConfig
-    console.log({ data, result, RunItConfigKey, RunItNoConfig })
+    const result = data.value
+      ? JSON.parse(data.value)
+      : { base_url: '', looker_url: '' } // TODO why is RunItNoConfig undefined here?
     return result
   }
 
