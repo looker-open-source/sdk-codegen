@@ -59,6 +59,7 @@ import {
   RunItSetter,
   RunItValues,
   readyToLogin,
+  RunItNoConfig,
 } from '../..'
 import {
   RunItConfigKey,
@@ -119,11 +120,12 @@ export const ConfigForm: FC<ConfigFormProps> = ({
   // TODO see about useReducer to clean this up a bit more
   title = title || 'RunIt Configuration'
 
-  const noConfig = { base_url: '', looker_url: '' }
   const getConfig = () => {
     // get configuration from storage, or default it
-    const storage = configurator.getStorage(RunItConfigKey)
-    return storage.value ? JSON.parse(storage.value) : noConfig
+    const data = configurator.getStorage(RunItConfigKey)
+    const result = data.value ? JSON.parse(data.value) : RunItNoConfig
+    console.log({ data, result, RunItConfigKey, RunItNoConfig })
+    return result
   }
 
   const config = getConfig()
@@ -163,7 +165,7 @@ export const ConfigForm: FC<ConfigFormProps> = ({
 
   const isConfigured = () => {
     return (
-      saved !== noConfig &&
+      saved !== RunItNoConfig &&
       fields[BASE_URL] === saved.base_url &&
       fields[WEB_URL] === saved.looker_url
     )
@@ -221,7 +223,7 @@ export const ConfigForm: FC<ConfigFormProps> = ({
       [FETCH_INTENT]: CRITICAL,
       [FETCH_RESULT]: '',
     })
-    setSaved(noConfig)
+    setSaved(RunItNoConfig)
     if (setHasConfig) setHasConfig(false)
     if (isAuthenticated()) {
       updateMessage('warn', 'Please reload the browser page to log out')

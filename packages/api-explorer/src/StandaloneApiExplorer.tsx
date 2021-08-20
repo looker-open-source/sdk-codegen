@@ -30,6 +30,8 @@ import {
   defaultConfigurator,
   initRunItSdk,
   loadSpecsFromVersions,
+  RunItConfigKey,
+  RunItNoConfig,
 } from '@looker/run-it'
 import { IAPIMethods } from '@looker/sdk-rtl'
 import { SpecList } from '@looker/sdk-codegen'
@@ -48,6 +50,15 @@ export interface StandaloneApiExplorerProps {
 const standaloneEnvAdaptor = new StandaloneEnvAdaptor()
 const store = configureStore()
 
+const loadVersions = async (current: string) => {
+  const data = await standaloneEnvAdaptor.localStorageGetItem(RunItConfigKey)
+  const config = data ? JSON.parse(data) : RunItNoConfig
+  const url = config.base_url ? `${config.base_url}/versions` : current
+  const response = await loadSpecsFromVersions(url)
+
+  return { url, response }
+}
+
 export const StandaloneApiExplorer: FC<StandaloneApiExplorerProps> = ({
   headless = false,
   versionsUrl = '',
@@ -59,18 +70,18 @@ export const StandaloneApiExplorer: FC<StandaloneApiExplorerProps> = ({
 
   useEffect(() => {
     if (currentVersionsUrl) {
-      // Load specifications from the versions url
-      loadSpecsFromVersions(currentVersionsUrl).then((response) => {
+      loadVersions(currentVersionsUrl).then((result) => {
+        setCurrentVersionsUrl(result.url)
+        const response = result.response
         setSpecs(response.specs)
         if ('headless' in response) {
-          // headless will default to false if it's not explicitly set
           setEmbedded(response.headless)
         }
       })
     } else {
       setSpecs(undefined)
     }
-  }, [currentVersionsUrl])
+  }, [versionsUrl, currentVersionsUrl])
 
   const chosenSdk: IAPIMethods = initRunItSdk(defaultConfigurator)
 
