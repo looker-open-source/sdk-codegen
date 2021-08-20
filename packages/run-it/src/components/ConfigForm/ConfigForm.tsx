@@ -297,7 +297,7 @@ export const ConfigForm: FC<ConfigFormProps> = ({
                 label="API server URL"
                 placeholder="typically https://myserver.looker.com:19999"
                 name={BASE_URL}
-                defaultValue={fields.baseUrl}
+                value={fields.baseUrl}
                 onChange={handleUrlChange}
               />
               <DarkSpan>
@@ -307,7 +307,7 @@ export const ConfigForm: FC<ConfigFormProps> = ({
                 label="Auth server URL"
                 placeholder="Click 'Verify' to retrieve"
                 name={WEB_URL}
-                defaultValue={fields.webUrl}
+                value={fields.webUrl}
                 disabled={true}
               />
             </Fieldset>
