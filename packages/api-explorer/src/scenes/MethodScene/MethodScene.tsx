@@ -98,7 +98,7 @@ export const MethodScene: FC<MethodSceneProps> = ({
       if (show) setOn()
     }
     checkRunIt()
-  }, [envAdaptor])
+  }, [envAdaptor, setOn])
 
   const runItToggle = (
     <RunItButton
