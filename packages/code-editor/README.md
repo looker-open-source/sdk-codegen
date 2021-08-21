@@ -27,6 +27,15 @@ This component is a specialized `<code />` or `<pre />` that has various search,
 | inline   | When true, inline `<code />` is used. `<pre />` is used by default.        | `false` |
 | lineNumbers   | A flag for enabling line numbers.        | `false` |
 
+
+### `<CodeCopy />`
+
+This component extends the `<CodeDisplay />` component and adds a "copy to Clipboard" button
+| Prop      | Description | Default |
+| ----------- | ----------- | ----------- |
+| ...      | All `<CodeDisplay />` props are accepted       |  |
+| caption | An override for the Copy button text, which is "Copy" | _optional_ |
+
 ### `<CodeEditor />`
 This component extends the `<CodeDisplay />` component and adds a hidden `<textarea />` that allows for code editing.
 | Prop      | Description | Default |
@@ -64,15 +73,7 @@ def all_lookml_models(
     />
   )
 }
-```
 
-### `<CodeDisplay /`
-
-This component extends the `<CodeDisplay />` component and adds a "copy to Clipboard" button
-| Prop      | Description | Default |
-| ----------- | ----------- | ----------- |
-| ...      | All `<CodeDisplay />` props are accepted       |  |
-| caption | An override for the Copy button text, which is "Copy" | _optional_ |
 
 ### `<Markdown />`
 This component is a wrapper around a `<ReactMarkdown />` component. It uses `@looker/component` renderers for text and `<CodeDisplay />` for inline and block code. It has options for link handling and renderer overrides.
@@ -84,6 +85,7 @@ This component is a wrapper around a `<ReactMarkdown />` component. It uses `@lo
 | linkClickHandler | An override for link click behavior.  | _optional_ |
 | paragraphOverride | An override for the default Paragraph renderer. | _optional_ |
 
+```
 #### Using `<CodeDisplay />` inside Markdown
 This component checks for decorated code blocks. The following `source` would create a Ruby syntax highlighted code block.
 ````
