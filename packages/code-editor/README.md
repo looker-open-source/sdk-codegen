@@ -40,7 +40,7 @@ This component wraps the `<CodeDisplay />` component and adds a "copy to Clipboa
 
 ### `<CodeEditor />`
 
-This component extends the `<CodeDisplay />` component and adds a hidden `<textarea />` that allows for code editing.
+This component wraps the `<CodeDisplay />` component and adds a hidden `<textarea />` that allows for code editing.
 
 | Prop | Description | Default |
 | ----------- | ----------- | ----------- |
