@@ -25,45 +25,53 @@
  */
 
 import React, { BaseSyntheticEvent, Dispatch, FC } from 'react'
-import { Button, Heading, Text, Paragraph, Space } from '@looker/components'
+import { Button, Tooltip, Space } from '@looker/components'
 import { IAPIMethods } from '@looker/sdk-rtl'
 import { runItSDK } from '../../utils'
-import { ConfigDialog, RunItConfigurator } from '../ConfigForm'
+import { ConfigDialog, RunItFormKey, RunItConfigurator } from '../ConfigForm'
+import { RunItValues, RunItSetter } from '../..'
 
 interface LoginFormProps {
+  configurator: RunItConfigurator
+  requestContent: RunItValues
+  setVersionsUrl: RunItSetter
   /** A set state callback which if present allows for editing, setting or clearing OAuth configuration parameters */
   setHasConfig?: Dispatch<boolean>
   /** SDK to use for login. Defaults to the `runItSDK` */
   sdk?: IAPIMethods
-  configurator: RunItConfigurator
 }
 
 export const LoginForm: FC<LoginFormProps> = ({
+  configurator,
+  requestContent,
+  setVersionsUrl,
   sdk = runItSDK,
   setHasConfig,
-  configurator,
 }) => {
   const handleSubmit = async (e: BaseSyntheticEvent) => {
     e.preventDefault()
+    if (requestContent) {
+      configurator.setStorage(
+        RunItFormKey,
+        JSON.stringify(requestContent),
+        'local'
+      )
+    }
     // This will set storage variables and return to OAuthScene when successful
     await sdk?.authSession.login()
   }
 
   return (
     <>
-      <Heading>
-        <Text>OAuth Login</Text>
-      </Heading>
-      <Paragraph>
-        OAuth authentication is already configured, but the browser session is
-        not authenticated. Please click <strong>Login</strong> to authenticate.
-      </Paragraph>
       <Space>
-        <Button onClick={handleSubmit}>Login</Button>
+        <Tooltip content="OAuth authentication is already configured, but the browser session is not authenticated. Please click Login to authenticate.">
+          <Button onClick={handleSubmit}>Login</Button>
+        </Tooltip>
         {setHasConfig && (
           <ConfigDialog
             setHasConfig={setHasConfig}
             configurator={configurator}
+            setVersionsUrl={setVersionsUrl}
           />
         )}
       </Space>

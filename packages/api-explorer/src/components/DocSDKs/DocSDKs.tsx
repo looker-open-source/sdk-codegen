@@ -34,11 +34,10 @@ import {
   CodeGen,
   Method,
 } from '@looker/sdk-codegen'
-import { getGenerators } from '@looker/run-it'
+import { CollapserCard, getGenerators } from '@looker/run-it'
 
 import { DocCode } from '../DocCode'
 import { getSelectedSdkLanguage } from '../../state'
-import { CollapserCard } from '../Collapser'
 import { noComment } from './utils'
 import { DocDeclarations } from './DocDeclarations'
 

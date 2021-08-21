@@ -25,28 +25,39 @@
  */
 
 import React, { Dispatch, FC } from 'react'
-import { Dialog, IconButton } from '@looker/components'
+import { Dialog, Button, Tooltip } from '@looker/components'
 import { Settings } from '@styled-icons/material-outlined'
+import { RunItSetter } from '../..'
 import { ConfigForm, RunItConfigurator } from '.'
 
 interface ConfigDialogProps {
+  configurator: RunItConfigurator
+  setVersionsUrl: RunItSetter
   /**
    * A set state callback fn used to set a hasConfig flag indicating whether OAuth config details are present
    * */
   setHasConfig?: Dispatch<boolean>
-  configurator: RunItConfigurator
 }
 
 export const ConfigDialog: FC<ConfigDialogProps> = ({
-  setHasConfig,
   configurator,
+  setVersionsUrl,
+  setHasConfig,
 }) => (
   <Dialog
-    width="small"
+    width="medium"
     content={
-      <ConfigForm setHasConfig={setHasConfig} configurator={configurator} />
+      <ConfigForm
+        setHasConfig={setHasConfig}
+        configurator={configurator}
+        setVersionsUrl={setVersionsUrl}
+      />
     }
   >
-    <IconButton label="Settings" icon={<Settings />} />
+    <Tooltip content="Configure API Explorer settings">
+      <Button aria-label="Configure" type="button" iconBefore={<Settings />}>
+        Configure
+      </Button>
+    </Tooltip>
   </Dialog>
 )

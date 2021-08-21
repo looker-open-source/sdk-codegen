@@ -31,6 +31,7 @@ import React, {
   FormEvent,
   useState,
   useContext,
+  useEffect,
 } from 'react'
 import {
   Button,
@@ -41,73 +42,154 @@ import {
   Fieldset,
   FieldText,
   Form,
+  MessageBar,
   ValidationMessages,
+  Paragraph,
+  Link,
+  MessageBarIntent,
 } from '@looker/components'
+import { CodeDisplay } from '@looker/code-editor'
+import { CheckProgress } from '@looker/icons'
 import { Delete } from '@styled-icons/material/Delete'
 import { Done } from '@styled-icons/material/Done'
-import { RunItConfigKey, validateUrl, RunItConfigurator } from './configUtils'
+import { RunItSetter } from '../..'
+import {
+  RunItConfigKey,
+  validateUrl,
+  RunItConfigurator,
+  loadSpecsFromVersions,
+  ILoadedSpecs,
+} from './configUtils'
+
+interface FetchMessageProps {
+  message: string
+  intent: MessageBarIntent
+}
+
+const FetchMessage: FC<FetchMessageProps> = ({ message, intent }) => {
+  if (!message) return <></>
+  return (
+    <MessageBar intent={intent} visible={message !== ''}>
+      {message}
+    </MessageBar>
+  )
+}
+
+const defaultFieldValues = {
+  baseUrl: '',
+  webUrl: '',
+  /** not currently used but declared for property compatibility for ILoadedSpecs */
+  headless: false,
+  specs: {},
+  fetchResult: '',
+  fetchIntent: 'positive',
+}
 
 interface ConfigFormProps {
+  configurator: RunItConfigurator
+  setVersionsUrl: RunItSetter
   /** Title for the config form */
   title?: string
-  dialogue?: boolean
   /** A set state callback which if present allows for editing, setting or clearing OAuth configuration parameters */
   setHasConfig?: Dispatch<boolean>
-  /** A callback for closing the parent dialog for when the form is rendered within dialog */
-  handleClose?: () => void
-  configurator: RunItConfigurator
 }
 
 export const ConfigForm: FC<ConfigFormProps> = ({
+  configurator,
+  setVersionsUrl,
   title,
   setHasConfig,
-  configurator,
 }) => {
+  const fetchIntent = 'fetchIntent'
+  const fetchResult = 'fetchResult'
   const { closeModal } = useContext(DialogContext)
+  const appConfig = `{
+  "client_guid": "looker.api-explorer",
+  "redirect_uri": "${(window as any).location.origin}/oauth",
+  "display_name": "CORS API Explorer",
+  "description": "Looker API Explorer using CORS",
+  "enabled": true
+}
+`
+
   // See https://codesandbox.io/s/youthful-surf-0g27j?file=/src/index.tsx for a prototype from Luke
   // TODO see about useReducer to clean this up a bit more
   title = title || 'RunIt Configuration'
 
-  // get configuration from storage, or default it
-  const storage = configurator.getStorage(RunItConfigKey)
-  let config = { base_url: '', looker_url: '' }
-  if (storage.value) config = JSON.parse(storage.value)
-  const { base_url, looker_url } = config
+  const [fields, setFields] = useState<ILoadedSpecs>(defaultFieldValues)
 
-  const [fields, setFields] = useState({
-    baseUrl: base_url,
-    lookerUrl: looker_url,
-  })
+  useEffect(() => {
+    // get configuration from storage, or default it
+    const storage = configurator.getStorage(RunItConfigKey)
+    const config = storage.value
+      ? JSON.parse(storage.value)
+      : { base_url: '', looker_url: '' }
+    const { base_url, looker_url } = config
+    setFields((currentFields) => ({
+      ...currentFields,
+      baseUrl: base_url,
+      webUrl: looker_url,
+      [fetchIntent]:
+        base_url !== '' && looker_url !== '' ? 'positive' : 'critical',
+    }))
+  }, [configurator])
 
   const [validationMessages, setValidationMessages] =
     useState<ValidationMessages>({})
 
-  const handleSubmit = (e: BaseSyntheticEvent) => {
+  const updateForm = async (e: BaseSyntheticEvent, save: boolean) => {
     e.preventDefault()
-    configurator.removeStorage(RunItConfigKey)
-    configurator.setStorage(
-      RunItConfigKey,
-      JSON.stringify({
-        base_url: fields.baseUrl,
-        looker_url: fields.lookerUrl,
-      }),
-      // Always store in local storage
-      'local'
-    )
-    if (setHasConfig) setHasConfig(true)
-    closeModal()
+    try {
+      updateFields(fetchResult, '')
+      const versionsUrl = `${fields.baseUrl}/versions`
+      const { webUrl, baseUrl } = await loadSpecsFromVersions(versionsUrl)
+      if (!baseUrl || !webUrl) {
+        throw new Error('Invalid server configuration')
+      }
+      updateFields('baseUrl', baseUrl)
+      updateFields('webUrl', webUrl)
+      updateFields(fetchIntent, 'positive')
+      updateFields(fetchResult, 'Configuration is valid')
+      if (save) {
+        configurator.setStorage(
+          RunItConfigKey,
+          JSON.stringify({
+            base_url: baseUrl,
+            looker_url: webUrl,
+          }),
+          // Always store in local storage
+          'local'
+        )
+        if (setHasConfig) setHasConfig(true)
+        setVersionsUrl(versionsUrl)
+        closeModal()
+      }
+    } catch (err) {
+      updateFields(fetchResult, err.message)
+      updateFields(fetchIntent, 'critical')
+    }
+  }
+
+  const handleSubmit = async (e: BaseSyntheticEvent) => {
+    await updateForm(e, true)
+  }
+
+  const handleVerify = async (e: BaseSyntheticEvent) => {
+    await updateForm(e, false)
   }
 
   const handleRemove = (e: BaseSyntheticEvent) => {
     e.preventDefault()
     configurator.removeStorage(RunItConfigKey)
+    setFields(defaultFieldValues)
     if (setHasConfig) setHasConfig(false)
   }
 
-  const handleInputChange = (event: FormEvent<HTMLInputElement>) => {
-    const newFields = { ...fields }
-    newFields[event.currentTarget.name] = event.currentTarget.value
-    setFields(newFields)
+  const updateFields = (name: string, value: string) => {
+    setFields((previousFields) => {
+      const newFields = { ...previousFields, ...{ [name]: value } }
+      return newFields
+    })
   }
 
   const handleUrlChange = (event: FormEvent<HTMLInputElement>) => {
@@ -126,10 +208,20 @@ export const ConfigForm: FC<ConfigFormProps> = ({
         type: 'error',
       }
     }
-    handleInputChange(event)
+    updateFields(event.currentTarget.name, event.currentTarget.value)
 
     setValidationMessages(newValidationMessages)
   }
+
+  const verifyButtonDisabled =
+    fields.baseUrl.trim().length === 0 ||
+    Object.keys(validationMessages).length > 0
+
+  const saveButtonDisabled =
+    verifyButtonDisabled || fields[fetchIntent] !== 'positive'
+
+  const removeButtonDisabled =
+    fields.webUrl.trim().length === 0 && fields.baseUrl.trim().length === 0
 
   return (
     <>
@@ -137,36 +229,62 @@ export const ConfigForm: FC<ConfigFormProps> = ({
       <DialogContent>
         <Form onSubmit={handleSubmit} validationMessages={validationMessages}>
           <Fieldset legend="Server locations">
+            <FetchMessage
+              intent={fields[fetchIntent]}
+              message={fields[fetchResult]}
+            />
             <FieldText
               required
-              label="API server url"
+              label="API server URL"
               placeholder="typically https://myserver.looker.com:19999"
               name="baseUrl"
               defaultValue={fields.baseUrl}
               onChange={handleUrlChange}
             />
             <FieldText
-              required
-              label="Auth server url"
-              placeholder="typically https://myserver.looker.com:9999"
-              name="lookerUrl"
-              defaultValue={fields.lookerUrl}
-              onChange={handleUrlChange}
+              label="Auth server URL"
+              placeholder="Click 'Verify' to retrieve"
+              name="webUrl"
+              defaultValue={fields.webUrl}
+              disabled={true}
             />
           </Fieldset>
         </Form>
+        <Paragraph>
+          The following configuration can be used to create a{' '}
+          <Link
+            href="https://github.com/looker-open-source/sdk-codegen/blob/main/docs/cors.md#reference-implementation"
+            target="_blank"
+          >
+            Looker OAuth client
+          </Link>
+          .
+        </Paragraph>
+        <CodeDisplay key="appConfig" language="json" code={appConfig} />
       </DialogContent>
       <DialogFooter>
         <Button
           iconBefore={<Done />}
-          disabled={Object.keys(validationMessages).length > 0}
-          // TODO maybe validationMessages is breaking the submit?
+          disabled={saveButtonDisabled}
           onClick={handleSubmit}
           mr="small"
         >
           Save
         </Button>
-        <Button onClick={handleRemove} iconBefore={<Delete />} color="critical">
+        <Button
+          iconBefore={<CheckProgress />}
+          disabled={verifyButtonDisabled}
+          onClick={handleVerify}
+          mr="small"
+        >
+          Verify
+        </Button>
+        <Button
+          onClick={handleRemove}
+          iconBefore={<Delete />}
+          color="critical"
+          disabled={removeButtonDisabled}
+        >
           Remove
         </Button>
       </DialogFooter>

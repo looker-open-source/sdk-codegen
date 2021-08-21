@@ -39,33 +39,33 @@ import {
   TabPanel,
   useTabs,
 } from '@looker/components'
-import { IRawResponse } from '@looker/sdk-rtl'
 import { ApiModel, IMethod } from '@looker/sdk-codegen'
 import {
   RequestForm,
-  ShowResponse,
-  ConfigForm,
-  LoginForm,
+  ResponseExplorer,
   Loading,
   DocSdkCalls,
+  ResponseContent,
+  RunItConfigurator,
+  RunItFormKey,
 } from './components'
 import {
   createRequestParams,
   runRequest,
   pathify,
   sdkNeedsConfig,
+  prepareInputs,
   RunItSettings,
 } from './utils'
 import { PerfTracker, PerfTimings } from './components/PerfTracker'
-import { prepareInputs } from './utils/requestUtils'
-import { RunItContext } from '.'
+import { RunItSetter, runItNoSet, RunItContext } from '.'
 
 export type RunItHttpMethod = 'GET' | 'PUT' | 'POST' | 'PATCH' | 'DELETE'
 
 /**
  * Generic collection
  */
-export type RunItValues = { [key: string]: any }
+export type RunItValues = Record<string, any>
 
 type RunItInputType =
   | 'boolean'
@@ -97,11 +97,15 @@ export interface RunItInput {
   description: string
 }
 
-export type StorageLocation = 'session' | 'local'
-
-export interface IStorageValue {
-  location: StorageLocation
-  value: string
+/**
+ * Load and clear any saved form values from the session
+ * @param configurator storage service
+ */
+const formValues = (configurator: RunItConfigurator) => {
+  const storage = configurator.getStorage(RunItFormKey)
+  const result = storage.value ? JSON.parse(storage.value) : {}
+  configurator.removeStorage(RunItFormKey)
+  return result
 }
 
 interface RunItProps {
@@ -111,11 +115,11 @@ interface RunItProps {
   inputs: RunItInput[]
   /** Method to test */
   method: IMethod
+  /** Set versions Url callback */
+  setVersionsUrl: RunItSetter
   /** Sdk language to use for generating call syntax */
   sdkLanguage?: string
 }
-
-type ResponseContent = IRawResponse | undefined
 
 /**
  * Given an array of inputs, a method, and an api model it renders a REST request form
@@ -125,13 +129,14 @@ export const RunIt: FC<RunItProps> = ({
   api,
   inputs,
   method,
+  setVersionsUrl = runItNoSet,
   sdkLanguage = 'All',
 }) => {
   const httpMethod = method.httpMethod as RunItHttpMethod
   const endpoint = method.endpoint
   const { sdk, configurator, basePath } = useContext(RunItContext)
 
-  const [requestContent, setRequestContent] = useState({})
+  const [requestContent, setRequestContent] = useState(formValues(configurator))
   const [activePathParams, setActivePathParams] = useState({})
   const [loading, setLoading] = useState(false)
   const [responseContent, setResponseContent] =
@@ -155,7 +160,7 @@ export const RunIt: FC<RunItProps> = ({
       setHasConfig(true)
       setNeedsAuth(false)
     }
-  }, [sdk])
+  }, [hasConfig, isExtension, needsAuth, sdk])
 
   const handleSubmit = async (e: BaseSyntheticEvent) => {
     e.preventDefault()
@@ -182,21 +187,24 @@ export const RunIt: FC<RunItProps> = ({
       } catch (err) {
         // This should not happen but it could. runRequest uses
         // sdk.ok to login once. sdk.ok throws an error so fake
-        // out the response so that something can be rendered.
+        // out the response so something can be rendered.
         response = {
           ok: false,
           statusMessage: err.message ? err.message : 'Unknown error!',
           statusCode: -1,
+          contentType: 'application/json',
           body: JSON.stringify(err),
+          headers: {},
         } as ResponseContent
       }
       setResponseContent(response)
+      setLoading(false)
     }
   }
 
-  useEffect(() => {
-    setLoading(!responseContent)
-  }, [responseContent])
+  // useEffect(() => {
+  //   setLoading(!responseContent)
+  // }, [responseContent])
 
   // No SDK, no RunIt for you!
   if (!sdk) return <></>
@@ -206,57 +214,37 @@ export const RunIt: FC<RunItProps> = ({
       <TabList distribute {...tabs}>
         <Tab key="request">Request</Tab>
         <Tab key="response">Response</Tab>
+        <Tab key="makeTheCall">SDK Call</Tab>
         {isExtension ? <></> : <Tab key="performance">Performance</Tab>}
-        <Tab key="makeTheCall">Code</Tab>
       </TabList>
       <TabPanels px="xxlarge" {...tabs} overflow="auto" height="87vh">
         <TabPanel key="request">
-          {!needsAuth && hasConfig && (
-            <RequestForm
-              httpMethod={httpMethod}
-              inputs={inputs}
-              requestContent={requestContent}
-              setRequestContent={setRequestContent}
-              handleSubmit={handleSubmit}
-              setHasConfig={setHasConfig}
-              configurator={configurator}
-              isExtension={isExtension}
-            />
-          )}
-          {!hasConfig && (
-            <ConfigForm
-              setHasConfig={setHasConfig}
-              configurator={configurator}
-            />
-          )}
-          {hasConfig && needsAuth && (
-            <LoginForm
-              sdk={sdk}
-              setHasConfig={setHasConfig}
-              configurator={configurator}
-            />
-          )}
+          <RequestForm
+            sdk={sdk}
+            httpMethod={httpMethod}
+            inputs={inputs}
+            requestContent={requestContent}
+            setRequestContent={setRequestContent}
+            handleSubmit={handleSubmit}
+            needsAuth={needsAuth}
+            hasConfig={hasConfig}
+            setHasConfig={setHasConfig}
+            configurator={configurator}
+            isExtension={isExtension}
+            setVersionsUrl={setVersionsUrl}
+          />
         </TabPanel>
         <TabPanel key="response">
           <Loading
             loading={loading}
             message={`${httpMethod} ${pathify(endpoint, activePathParams)}`}
           />
-          {responseContent && (
-            <ShowResponse
-              response={responseContent}
-              verb={httpMethod}
-              path={pathify(endpoint, activePathParams)}
-            />
-          )}
+          <ResponseExplorer
+            response={responseContent}
+            verb={httpMethod}
+            path={pathify(endpoint, activePathParams)}
+          />
         </TabPanel>
-        {isExtension ? (
-          <></>
-        ) : (
-          <TabPanel key="performance">
-            <PerfTracker perf={perf} configurator={configurator} />
-          </TabPanel>
-        )}
         <TabPanel key="makeTheCall">
           <DocSdkCalls
             sdkLanguage={sdkLanguage}
@@ -265,6 +253,13 @@ export const RunIt: FC<RunItProps> = ({
             inputs={prepareInputs(inputs, requestContent)}
           />
         </TabPanel>
+        {isExtension ? (
+          <></>
+        ) : (
+          <TabPanel key="performance">
+            <PerfTracker perf={perf} configurator={configurator} />
+          </TabPanel>
+        )}
       </TabPanels>
     </Box>
   )

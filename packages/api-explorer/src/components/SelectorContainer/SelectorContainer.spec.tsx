@@ -45,13 +45,13 @@ describe('SelectorContainer', () => {
       withReduxProvider(
         <SelectorContainer
           specs={specs}
-          spec={specState}
+          spec={specState.spec}
           specDispatch={specDispatch}
         />
       )
     )
     const selector = screen.getByLabelText('spec selector')
-    expect(selector).toHaveValue(`${specState.key}`)
+    expect(selector).toHaveValue(`${specState.spec.key}`)
     await act(async () => {
       await userEvent.click(selector)
       await waitFor(() => {
@@ -67,7 +67,7 @@ describe('SelectorContainer', () => {
       withReduxProvider(
         <SelectorContainer
           specs={specs}
-          spec={specState}
+          spec={specState.spec}
           specDispatch={specDispatch}
         />
       )
@@ -89,7 +89,7 @@ describe('SelectorContainer', () => {
       withReduxProvider(
         <SelectorContainer
           specs={specs}
-          spec={specState}
+          spec={specState.spec}
           specDispatch={specDispatch}
         />
       )
@@ -100,6 +100,6 @@ describe('SelectorContainer', () => {
           name: 'Compare Specifications',
         })
         .closest('a')
-    ).toHaveAttribute('href', `/diff/${specState.key}/`)
+    ).toHaveAttribute('href', `/diff/${specState.spec.key}/`)
   })
 })

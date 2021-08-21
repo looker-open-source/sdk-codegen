@@ -25,7 +25,12 @@
  */
 
 import React, { FC, useContext, useEffect, useState } from 'react'
-import { IStorageValue, RunItProvider, RunItConfigurator } from '@looker/run-it'
+import {
+  IStorageValue,
+  RunItProvider,
+  RunItConfigurator,
+  runItNoSet,
+} from '@looker/run-it'
 import { useRouteMatch } from 'react-router-dom'
 import {
   ExtensionContext,
@@ -40,11 +45,11 @@ import {
 } from '@looker/sdk-codegen'
 import { Looker31SDK, Looker40SDK } from '@looker/sdk'
 import ApiExplorer from '@looker/api-explorer/src/ApiExplorer'
+import { Loader } from '@looker/api-explorer/src/components'
 import { getExtensionSDK } from '@looker/extension-sdk'
 import { configureStore } from '@looker/api-explorer/src/state'
 import { Provider } from 'react-redux'
 import { ExtensionEnvAdaptor } from './utils'
-import { Loader } from './Loader'
 
 class ExtensionConfigurator implements RunItConfigurator {
   storage: Record<string, string> = {}
@@ -97,8 +102,6 @@ export const ExtensionApiExplorer: FC = () => {
     const sdk = extensionContext.core40SDK
     const [version, name] = spec.specURL.split('/').slice(-2)
     const content = await sdk.ok(sdk.api_spec(version, name))
-    // TODO switch this to just call const api = ApiModel.fromString(content) now
-    // TODO I think we can remove this this crazy step now that the api_spec endpoint is cleaner
     let json
     if (typeof content === 'string') {
       json = JSON.parse(content)
@@ -130,7 +133,13 @@ export const ExtensionApiExplorer: FC = () => {
       <RunItProvider sdk={sdk} configurator={configurator} basePath="">
         <>
           {specs ? (
-            <ApiExplorer specs={specs} envAdaptor={extensionEnvAdaptor} />
+            <ApiExplorer
+              specs={specs}
+              envAdaptor={extensionEnvAdaptor}
+              setVersionsUrl={runItNoSet}
+              // TODO We need expand/collapse side nav for the headless extension before we enabled this
+              headless={false}
+            />
           ) : (
             <Loader themeOverrides={extensionEnvAdaptor.themeOverrides()} />
           )}

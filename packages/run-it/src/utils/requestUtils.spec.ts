@@ -25,7 +25,7 @@
  */
 import { RunItInput } from '../RunIt'
 import { testJsonResponse } from '../test-data'
-import { StandaloneConfigurator } from '../components/ConfigForm/configUtils'
+import { StandaloneConfigurator } from '../components'
 import { createRequestParams, pathify, runRequest } from './requestUtils'
 import { initRunItSdk } from './RunItSDK'
 

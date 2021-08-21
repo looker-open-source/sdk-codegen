@@ -1,5 +1,24 @@
 # Changelog
 
+## [1.14.0](https://www.github.com/looker-open-source/sdk-codegen/compare/sdk-codegen-all-v1.13.1...sdk-codegen-all-v1.14.0) (2021-08-11)
+
+
+### Features
+
+* fetch API specifications for stand-alone API Explorer ([#789](https://www.github.com/looker-open-source/sdk-codegen/issues/789)) ([f7be1fb](https://www.github.com/looker-open-source/sdk-codegen/commit/f7be1fb589570137c5ab39304910c57f721de8fb))
+
+
+### Bug Fixes
+
+* relax python dict key access ([#791](https://www.github.com/looker-open-source/sdk-codegen/issues/791)) ([d923c2f](https://www.github.com/looker-open-source/sdk-codegen/commit/d923c2faf3bde822307fa3d4f3367f270f47b49e)), closes [#778](https://www.github.com/looker-open-source/sdk-codegen/issues/778)
+
+### [1.13.1](https://www.github.com/looker-open-source/sdk-codegen/compare/sdk-codegen-all-v1.13.0...sdk-codegen-all-v1.13.1) (2021-08-09)
+
+
+### Bug Fixes
+
+* remove python setup.py author_email ([#787](https://www.github.com/looker-open-source/sdk-codegen/issues/787)) ([7939a73](https://www.github.com/looker-open-source/sdk-codegen/commit/7939a7397c44864e1f48cea7a408ce1bfdef9782))
+
 ## [1.13.0](https://www.github.com/looker-open-source/sdk-codegen/compare/sdk-codegen-all-v1.12.0...sdk-codegen-all-v1.13.0) (2021-08-06)
 
 

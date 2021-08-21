@@ -24,7 +24,8 @@
 
  */
 
-import { defaultConfigurator, RunItConfigKey, validateUrl } from './configUtils'
+import { defaultConfigurator } from '..'
+import { RunItConfigKey, validateUrl } from './configUtils'
 
 describe('configUtils', () => {
   describe('storage', () => {

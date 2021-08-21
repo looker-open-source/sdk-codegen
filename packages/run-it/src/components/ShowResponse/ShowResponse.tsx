@@ -25,7 +25,6 @@
  */
 
 import React, { FC } from 'react'
-import { Heading } from '@looker/components'
 import { IRawResponse } from '@looker/sdk-rtl'
 
 import { pickResponseHandler, fallbackResponseHandler } from './responseUtils'
@@ -33,20 +32,12 @@ import { pickResponseHandler, fallbackResponseHandler } from './responseUtils'
 interface ShowResponseProps {
   /** A basic HTTP response for "raw" HTTP requests */
   response: IRawResponse
-  /** HTTP Method */
-  verb?: string
-  /** HTTP request path */
-  path?: string
 }
 
 /**
  * Given an HTTP response it picks a response handler based on the content type and renders the body
  */
-export const ShowResponse: FC<ShowResponseProps> = ({
-  response,
-  verb,
-  path,
-}) => {
+export const ShowResponse: FC<ShowResponseProps> = ({ response }) => {
   // Bullet proof the rendered response. If for some reason we get a bad response or bad data in the
   // response, render something
   let renderedResponse
@@ -56,14 +47,5 @@ export const ShowResponse: FC<ShowResponseProps> = ({
     renderedResponse = fallbackResponseHandler().component(response)
   }
 
-  // TODO make a badge for the verb.
-  // Once we are satisfied with the badge in the api-explorer package it should be moved here
-  return (
-    <>
-      <Heading as="h4">{`${verb || ''} ${path || ''} ${response.statusCode}: ${
-        response.contentType
-      }`}</Heading>
-      {renderedResponse}
-    </>
-  )
+  return <>{renderedResponse}</>
 }
