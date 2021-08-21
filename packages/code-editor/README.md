@@ -31,7 +31,7 @@ This component is a specialized `<code />` or `<pre />` that has various search,
 
 ### `<CodeCopy />`
 
-This component extends the `<CodeDisplay />` component and adds a "copy to Clipboard" button
+This component wraps the `<CodeDisplay />` component and adds a "copy to Clipboard" button
 
 | Prop | Description | Default |
 | ----------- | ----------- | ----------- |
