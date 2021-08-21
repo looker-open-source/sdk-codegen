@@ -31,6 +31,7 @@ export interface CodeDisplayProps {
   transparent?: boolean
   inline?: boolean
   lineNumbers?: boolean
+  clipboard?: boolean
 }
 
 export type TokenOutputProps = {

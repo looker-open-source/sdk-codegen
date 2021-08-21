@@ -1,5 +1,5 @@
 ## @looker/code-editor
-This package contains code display and editor components that are used in Looker extensions such as the API Explorer and LookML Diagram. 
+This package contains code display and editor components that are used in Looker extensions such as the API Explorer and LookML Diagram.
 
 ### Installation
 
@@ -16,7 +16,7 @@ npm install @looker/code-editor
 ```
 
 ### `<CodeDisplay />`
-This component is a specialized `<code />` or `<pre />` that has various search, syntax highlighting and other display options. Use this component for read-only code display use cases. This component is used by this package's CodeEditor and Markdown component for inline and block code sections. 
+This component is a specialized `<code />` or `<pre />` that has various search, syntax highlighting and other display options. Use this component for read-only code display use cases. This component is used by this package's CodeEditor and Markdown component for inline and block code sections.
 
 | Prop      | Description | Default |
 | ----------- | ----------- | ----------- |
@@ -28,7 +28,7 @@ This component is a specialized `<code />` or `<pre />` that has various search,
 | lineNumbers   | A flag for enabling line numbers.        | `false` |
 
 ### `<CodeEditor />`
-This component extends the `<CodeDisplay />` component and adds a hidden `<textarea />` that allows for code editting.
+This component extends the `<CodeDisplay />` component and adds a hidden `<textarea />` that allows for code editing.
 | Prop      | Description | Default |
 | ----------- | ----------- | ----------- |
 | ...      | All `<CodeDisplay />` props are accepted       |  |
@@ -65,6 +65,14 @@ def all_lookml_models(
   )
 }
 ```
+
+### `<CodeDisplay /`
+
+This component extends the `<CodeDisplay />` component and adds a "copy to Clipboard" button
+| Prop      | Description | Default |
+| ----------- | ----------- | ----------- |
+| ...      | All `<CodeDisplay />` props are accepted       |  |
+| caption | An override for the Copy button text, which is "Copy" | _optional_ |
 
 ### `<Markdown />`
 This component is a wrapper around a `<ReactMarkdown />` component. It uses `@looker/component` renderers for text and `<CodeDisplay />` for inline and block code. It has options for link handling and renderer overrides.
