@@ -73,7 +73,7 @@ def all_lookml_models(
     />
   )
 }
-
+```
 
 ### `<Markdown />`
 This component is a wrapper around a `<ReactMarkdown />` component. It uses `@looker/component` renderers for text and `<CodeDisplay />` for inline and block code. It has options for link handling and renderer overrides.
@@ -85,7 +85,6 @@ This component is a wrapper around a `<ReactMarkdown />` component. It uses `@lo
 | linkClickHandler | An override for link click behavior.  | _optional_ |
 | paragraphOverride | An override for the default Paragraph renderer. | _optional_ |
 
-```
 #### Using `<CodeDisplay />` inside Markdown
 This component checks for decorated code blocks. The following `source` would create a Ruby syntax highlighted code block.
 ````
