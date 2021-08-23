@@ -29,7 +29,7 @@ import { useLocation } from 'react-router'
 import styled, { createGlobalStyle } from 'styled-components'
 import { Aside, ComponentsProvider, Layout, Page } from '@looker/components'
 import { SpecList } from '@looker/sdk-codegen'
-import { loadSpecApi, RunItSetter } from '@looker/run-it'
+import { RunItSetter, funFetch, fallbackFetch } from '@looker/run-it'
 import {
   SearchContext,
   LodeContext,
@@ -102,14 +102,15 @@ const ApiExplorer: FC<ApiExplorerProps> = ({
         window.removeEventListener('message', hasNavigationToggle)
       }
     }
-  }, [])
+  }, [headless, hasNavigationToggle])
 
   useEffect(() => {
     const loadSpec = async () => {
       if (!spec.api) {
         const newSpec = { ...spec }
-        const api = await loadSpecApi(newSpec)
+        const api = await fallbackFetch(newSpec, funFetch)
         if (api) {
+          spec.api = api
           specDispatch(updateSpecApi(spec.key, api))
         }
       }

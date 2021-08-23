@@ -31,6 +31,7 @@ import { RunItContext } from '../..'
 import { Loading } from '../../components'
 
 export const OAuthScene: FC = () => {
+  const origin = (window as any).location.origin
   const [loading, setLoading] = useState(true)
   const [auth, setAuth] = useState<BrowserSession>()
   const [oldUrl, setOldUrl] = useState<string>()
@@ -41,7 +42,8 @@ export const OAuthScene: FC = () => {
     if (sdk) {
       setAuth(sdk.authSession as BrowserSession)
       /** capture the stored return URL before `OAuthSession.login()` clears it */
-      setOldUrl((sdk.authSession as BrowserSession).returnUrl || `/`)
+      const old = (sdk.authSession as BrowserSession).returnUrl || `/`
+      setOldUrl(old)
     } else {
       setAuth(undefined)
       setOldUrl(undefined)
@@ -83,7 +85,7 @@ export const OAuthScene: FC = () => {
   return (
     <Loading
       loading={loading}
-      message={`Returning to ${oldUrl} after OAuth login ...`}
+      message={`Returning to ${oldUrl || origin} after OAuth login ...`}
     />
   )
 }

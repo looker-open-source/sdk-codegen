@@ -425,13 +425,17 @@ export function addQueryParams(path: string, obj?: Values) {
   return `${path}${qp ? '?' + qp : ''}`
 }
 
+function bufferString(val: any) {
+  const decoder = new TextDecoder('utf-8')
+  return decoder.decode(val)
+}
+
 /**
  * SDK error handler
  * @param response any kind of error
  * @returns a new `Error` object with the failure message
  */
 export function sdkError(response: any) {
-  const utf8 = 'utf-8'
   if (typeof response === 'string') {
     return new Error(response)
   }
@@ -441,20 +445,18 @@ export function sdkError(response: any) {
       return new Error(error)
     }
     // Try to get most specific error first
-    if ('statusMessage' in error) {
-      return new Error(error.statusMessage)
-    }
-    if ('error' in error && error.error instanceof Buffer) {
-      const result = Buffer.from(error.error).toString(utf8)
-      return new Error(result)
-    }
-    if (error instanceof Buffer) {
-      const result = Buffer.from(error).toString(utf8)
+    if ('error' in error) {
+      const result = bufferString(error.error)
       return new Error(result)
     }
     if ('message' in error) {
       return new Error(response.error.message.toString())
     }
+    if ('statusMessage' in error) {
+      return new Error(error.statusMessage)
+    }
+    const result = bufferString(error)
+    return new Error(result)
   }
   if ('message' in response) {
     return new Error(response.message)
