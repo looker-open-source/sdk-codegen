@@ -34,7 +34,6 @@ import {
   ExtendComponentsThemeProvider,
 } from '@looker/components'
 import { Beaker } from '@looker/icons'
-import { ThemeContext } from 'styled-components'
 import { useParams } from 'react-router-dom'
 import { RunIt, RunItSetter, RunItContext, RunItFormKey } from '@looker/run-it'
 import { ApiModel, typeRefs } from '@looker/sdk-codegen'
@@ -70,8 +69,9 @@ interface MethodSceneParams {
   specKey: string
 }
 
-const showRunIt = (envAdaptor: IApixEnvAdaptor) => {
-  return !!envAdaptor.localStorageGetItem(RunItFormKey)
+const showRunIt = async (envAdaptor: IApixEnvAdaptor) => {
+  const data = await envAdaptor.localStorageGetItem(RunItFormKey)
+  return !!data
 }
 
 export const MethodScene: FC<MethodSceneProps> = ({
@@ -82,16 +82,23 @@ export const MethodScene: FC<MethodSceneProps> = ({
   const { sdk } = useContext(RunItContext)
   const sdkLanguage = useSelector(getSelectedSdkLanguage)
   const { methodName, specKey } = useParams<MethodSceneParams>()
-  const { value, toggle } = useToggle(showRunIt(envAdaptor))
+  const { value, toggle, setOn } = useToggle()
   const [method, setMethod] = useState(api.methods[methodName])
   const seeTypes = typeRefs(api, method.customTypes)
-  const { colors } = useContext(ThemeContext)
 
   const RunItButton = value ? Button : ButtonOutline
 
   useEffect(() => {
     setMethod(api.methods[methodName])
   }, [api, methodName])
+
+  useEffect(() => {
+    const checkRunIt = async () => {
+      const show = await showRunIt(envAdaptor)
+      if (show) setOn()
+    }
+    checkRunIt()
+  }, [envAdaptor, setOn])
 
   const runItToggle = (
     <RunItButton
@@ -132,8 +139,11 @@ export const MethodScene: FC<MethodSceneProps> = ({
           <ExtendComponentsThemeProvider
             themeCustomizations={{
               colors: {
-                background: colors.text,
-                text: colors.background,
+                background: '#262D33',
+                key: '#8AB4F8',
+                text: '#fff',
+                link: '#8AB4F8',
+                critical: '#FF877C',
               },
             }}
           >

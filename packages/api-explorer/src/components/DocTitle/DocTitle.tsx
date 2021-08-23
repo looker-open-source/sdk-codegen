@@ -25,7 +25,7 @@
  */
 
 import React, { FC } from 'react'
-import { RunItHeading } from '../common'
+import { RunItHeading } from '@looker/run-it'
 
 export const DocTitle: FC = (props) => (
   <RunItHeading fontSize="xxxlarge" {...props} />

@@ -24,6 +24,5 @@
 
  */
 
-export * from './ConfigDialog'
 export * from './ConfigForm'
 export * from './configUtils'

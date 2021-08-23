@@ -26,7 +26,7 @@
 
 import React from 'react'
 import { renderWithTheme } from '@looker/components-test-utils'
-import { screen, waitFor } from '@testing-library/react'
+import { act, screen, waitFor } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 
 import { IAPIMethods } from '@looker/sdk-rtl'
@@ -70,6 +70,7 @@ describe('RequestForm', () => {
         sdk={mockSdk}
         setHasConfig={() => true}
         isExtension={false}
+        handleConfig={runItNoSet}
       />
     )
 
@@ -103,6 +104,7 @@ describe('RequestForm', () => {
         needsAuth={false}
         hasConfig={true}
         sdk={mockSdk}
+        handleConfig={runItNoSet}
       />
     )
 
@@ -139,6 +141,7 @@ describe('RequestForm', () => {
         needsAuth={false}
         hasConfig={true}
         sdk={mockSdk}
+        handleConfig={runItNoSet}
       />
     )
 
@@ -170,6 +173,7 @@ describe('RequestForm', () => {
         setRequestContent={setRequestContent}
         needsAuth={false}
         hasConfig={true}
+        handleConfig={runItNoSet}
         sdk={mockSdk}
       />
     )
@@ -201,6 +205,7 @@ describe('RequestForm', () => {
         setRequestContent={setRequestContent}
         needsAuth={false}
         hasConfig={true}
+        handleConfig={runItNoSet}
         sdk={mockSdk}
       />
     )
@@ -214,7 +219,7 @@ describe('RequestForm', () => {
     })
   })
 
-  test('interacting with a complex item changes the request content', () => {
+  test('interacting with a complex item changes the request content', async () => {
     const handleSubmit = jest.fn((e) => e.preventDefault())
     renderWithTheme(
       <RequestForm
@@ -240,16 +245,18 @@ describe('RequestForm', () => {
         needsAuth={false}
         hasConfig={true}
         sdk={mockSdk}
+        handleConfig={runItNoSet}
       />
     )
-
     expect(screen.getByRole('checkbox')).toBeInTheDocument()
     const input = screen.getByRole('textbox')
-    // TODO: make complex items requirable. i.e. expect(input).toBeRequired() should pass
-    userEvent.paste(input, 'content')
-    expect(setRequestContent).toHaveBeenCalled()
-    userEvent.click(screen.getByRole('button', { name: run }))
-    expect(handleSubmit).toHaveBeenCalledTimes(1)
+    await act(async () => {
+      // TODO: make complex items requirable. i.e. expect(input).toBeRequired() should pass
+      await userEvent.paste(input, 'content')
+      expect(setRequestContent).toHaveBeenCalled()
+      await userEvent.click(screen.getByRole('button', { name: run }))
+      expect(handleSubmit).toHaveBeenCalledTimes(1)
+    })
   })
 
   test('pressing enter submits the request form', async () => {
@@ -274,13 +281,14 @@ describe('RequestForm', () => {
         needsAuth={false}
         hasConfig={true}
         sdk={mockSdk}
+        handleConfig={runItNoSet}
       />
     )
 
     expect(screen.getByRole('textbox')).toBeInTheDocument()
     const input = screen.getByRole('textbox')
-    await userEvent.paste(input, 'foo')
-    await userEvent.type(input, '{enter}')
+    userEvent.paste(input, 'foo')
+    userEvent.type(input, '{enter}')
     await waitFor(() => {
       expect(setRequestContent).toHaveBeenLastCalledWith({
         id: 'foo',

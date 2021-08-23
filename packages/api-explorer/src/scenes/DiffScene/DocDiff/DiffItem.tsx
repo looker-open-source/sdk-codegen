@@ -27,15 +27,7 @@ import React, { FC, useState, useEffect, BaseSyntheticEvent } from 'react'
 import ReactDiffViewer, { DiffMethod } from 'react-diff-viewer'
 import { useHistory } from 'react-router'
 import styled from 'styled-components'
-import {
-  Accordion,
-  AccordionContent,
-  AccordionDisclosure,
-  Box,
-  Card,
-  Grid,
-  Heading,
-} from '@looker/components'
+import { Accordion2, Box, Card, Grid, Heading } from '@looker/components'
 import { DiffRow } from '@looker/sdk-codegen/src'
 import { ApiModel, IMethod } from '@looker/sdk-codegen'
 import { useSelector } from 'react-redux'
@@ -50,14 +42,10 @@ interface DiffMethodLinkProps {
 }
 
 const DiffLink = styled(Heading)`
-  color:${({ theme }) => theme.colors.ui5}
+  color: ${({ theme }) => theme.colors.ui5};
   cursor: pointer;
   display: block;
-  padding: ${({
-    theme: {
-      space: { xsmall, large },
-    },
-  }) => `${xsmall} ${large}`};
+  padding: ${({ theme }) => `${theme.space.xsmall} ${theme.space.large}`};
   &:hover,
   &:visited,
   &:focus,
@@ -132,35 +120,29 @@ export const DiffItem: FC<DiffItemProps> = ({
   }
 
   return (
-    <Card border="1px solid" borderColor="ui2" width="100%">
-      <Box>
-        <Accordion
-          indicatorPosition="left"
-          isOpen={isOpen}
-          toggleOpen={handleOpen}
-        >
-          <AccordionDisclosure px="small">
-            <DiffBanner item={item} method={method} />
-          </AccordionDisclosure>
-          <AccordionContent>
-            <Grid columns={2}>
-              <Box>
-                <DiffMethodLink method={leftMethod} specKey={leftKey} />
-              </Box>
-              <Box>
-                <DiffMethodLink method={rightMethod} specKey={rightKey} />
-              </Box>
-            </Grid>
-            <ReactDiffViewer
-              oldValue={leftSide}
-              newValue={rightSide}
-              splitView={true}
-              compareMethod={DiffMethod.LINES}
-              showDiffOnly={true}
-            />
-          </AccordionContent>
-        </Accordion>
-      </Box>
+    <Card border width="100%">
+      <Accordion2
+        indicatorPosition="left"
+        isOpen={isOpen}
+        toggleOpen={handleOpen}
+        label={<DiffBanner item={item} method={method} />}
+      >
+        <Grid columns={2}>
+          <Box>
+            <DiffMethodLink method={leftMethod} specKey={leftKey} />
+          </Box>
+          <Box>
+            <DiffMethodLink method={rightMethod} specKey={rightKey} />
+          </Box>
+        </Grid>
+        <ReactDiffViewer
+          oldValue={leftSide}
+          newValue={rightSide}
+          splitView={true}
+          compareMethod={DiffMethod.LINES}
+          showDiffOnly={true}
+        />
+      </Accordion2>
     </Card>
   )
 }

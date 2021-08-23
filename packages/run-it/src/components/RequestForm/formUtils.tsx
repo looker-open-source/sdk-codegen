@@ -30,7 +30,7 @@ import {
   Label,
   FieldCheckbox,
 } from '@looker/components'
-import { InputDate } from '@looker/components/lib/date'
+import { InputDate } from '@looker/components-date'
 import { CodeEditor } from '@looker/code-editor'
 
 import { RunItInput, RunItValues } from '../../RunIt'

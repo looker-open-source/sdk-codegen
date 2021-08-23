@@ -23,5 +23,5 @@
  SOFTWARE.
 
  */
-export { RunItHeading } from './common'
+export { DarkSpan, RunItHeading } from './common'
 export * from './StandaloneConfigurator'

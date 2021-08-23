@@ -23,7 +23,7 @@
  SOFTWARE.
 
  */
-export { RunItHeading, ApixSection, Loader } from './common'
+export { ApixSection, Loader } from './common'
 export { DocActivityType } from './DocActivityType'
 export { DocCode } from './DocCode'
 export { DocMethodSummary } from './DocMethodSummary'
