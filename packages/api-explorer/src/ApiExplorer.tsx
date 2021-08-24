@@ -36,7 +36,12 @@ import {
   defaultLodeContextValue,
   EnvAdaptorContext,
 } from './context'
-import { EnvAdaptorConstants, getLoded, IApixEnvAdaptor } from './utils'
+import {
+  EnvAdaptorConstants,
+  getLoded,
+  IApixEnvAdaptor,
+  oAuthPath,
+} from './utils'
 import { Header, SideNav, ErrorBoundary } from './components'
 import {
   specReducer,
@@ -115,8 +120,10 @@ const ApiExplorer: FC<ApiExplorerProps> = ({
         }
       }
     }
-    loadSpec()
-  }, [spec])
+    if (location.pathname !== oAuthPath) {
+      loadSpec().catch((error) => console.error(error))
+    }
+  }, [spec, location])
 
   useEffect(() => {
     getLoded(exampleLodeUrl, declarationsLodeUrl).then((resp) => setLode(resp))
