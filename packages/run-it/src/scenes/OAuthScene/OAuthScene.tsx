@@ -43,7 +43,6 @@ export const OAuthScene: FC = () => {
       setAuth(sdk.authSession as BrowserSession)
       /** capture the stored return URL before `OAuthSession.login()` clears it */
       const old = (sdk.authSession as BrowserSession).returnUrl || `/`
-      console.log({ old })
       setOldUrl(old)
     } else {
       setAuth(undefined)

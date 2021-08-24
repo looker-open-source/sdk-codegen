@@ -120,7 +120,7 @@ const ApiExplorer: FC<ApiExplorerProps> = ({
         }
       }
     }
-    if (location.pathname !== oAuthPath) {
+    if (location.pathname !== `/${oAuthPath}`) {
       loadSpec().catch((error) => console.error(error))
     }
   }, [spec, location])
