@@ -25,10 +25,10 @@
  */
 
 import React, { BaseSyntheticEvent, Dispatch, FC } from 'react'
-import { Button, Tooltip, Space } from '@looker/components'
+import { Button, Tooltip } from '@looker/components'
 import { IAPIMethods } from '@looker/sdk-rtl'
 import { runItSDK } from '../../utils'
-import { ConfigDialog, RunItFormKey, RunItConfigurator } from '../ConfigForm'
+import { RunItFormKey, RunItConfigurator } from '../ConfigForm'
 import { RunItValues, RunItSetter } from '../..'
 
 interface LoginFormProps {
@@ -41,14 +41,15 @@ interface LoginFormProps {
   sdk?: IAPIMethods
 }
 
+export const readyToLogin =
+  'OAuth is configured but your browser session is not authenticated. Click Login to enable RunIt.'
+
 export const LoginForm: FC<LoginFormProps> = ({
   configurator,
   requestContent,
-  setVersionsUrl,
   sdk = runItSDK,
-  setHasConfig,
 }) => {
-  const handleSubmit = async (e: BaseSyntheticEvent) => {
+  const handleLogin = async (e: BaseSyntheticEvent) => {
     e.preventDefault()
     if (requestContent) {
       configurator.setStorage(
@@ -62,19 +63,8 @@ export const LoginForm: FC<LoginFormProps> = ({
   }
 
   return (
-    <>
-      <Space>
-        <Tooltip content="OAuth authentication is already configured, but the browser session is not authenticated. Please click Login to authenticate.">
-          <Button onClick={handleSubmit}>Login</Button>
-        </Tooltip>
-        {setHasConfig && (
-          <ConfigDialog
-            setHasConfig={setHasConfig}
-            configurator={configurator}
-            setVersionsUrl={setVersionsUrl}
-          />
-        )}
-      </Space>
-    </>
+    <Tooltip content={readyToLogin}>
+      <Button onClick={handleLogin}>Login</Button>
+    </Tooltip>
   )
 }

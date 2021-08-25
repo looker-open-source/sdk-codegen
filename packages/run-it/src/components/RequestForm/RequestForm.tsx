@@ -25,10 +25,16 @@
  */
 
 import React, { BaseSyntheticEvent, FC, Dispatch } from 'react'
-import { Button, Form, Space, ButtonTransparent } from '@looker/components'
+import {
+  Button,
+  Form,
+  Space,
+  ButtonTransparent,
+  Tooltip,
+} from '@looker/components'
 import type { IAPIMethods } from '@looker/sdk-rtl'
 import { RunItHttpMethod, RunItInput, RunItValues } from '../../RunIt'
-import { ConfigDialog, RunItConfigurator } from '../ConfigForm'
+import { RunItConfigurator } from '../ConfigForm'
 import { LoginForm } from '../LoginForm'
 import { RunItSetter } from '../..'
 import {
@@ -56,6 +62,8 @@ interface RequestFormProps {
   needsAuth: boolean
   /** Does RunIt have the configuration values it needs? */
   hasConfig: boolean
+  /** Handle config button click */
+  handleConfig: (e: BaseSyntheticEvent) => void
   /** Hook to refresh specifications */
   setVersionsUrl: RunItSetter
   /** A set state callback which if present allows for editing, setting or clearing OAuth configuration parameters */
@@ -79,6 +87,7 @@ export const RequestForm: FC<RequestFormProps> = ({
   setRequestContent,
   needsAuth,
   hasConfig,
+  handleConfig,
   setVersionsUrl,
   setHasConfig,
   configurator,
@@ -133,9 +142,11 @@ export const RequestForm: FC<RequestFormProps> = ({
       )}
       {httpMethod !== 'GET' && showDataChangeWarning()}
       <Space>
-        <ButtonTransparent type="button" onClick={handleClear}>
-          Clear
-        </ButtonTransparent>
+        <Tooltip content="Clear entered values">
+          <ButtonTransparent type="button" onClick={handleClear}>
+            Clear
+          </ButtonTransparent>
+        </Tooltip>
         {hasConfig ? (
           needsAuth ? (
             <LoginForm
@@ -146,16 +157,16 @@ export const RequestForm: FC<RequestFormProps> = ({
               requestContent={requestContent}
             />
           ) : (
-            <Button type="submit">Run</Button>
+            <Tooltip content="Run the API request">
+              <Button type="submit">Run</Button>
+            </Tooltip>
           )
         ) : (
           !isExtension &&
           setHasConfig && (
-            <ConfigDialog
-              setHasConfig={setHasConfig}
-              configurator={configurator}
-              setVersionsUrl={setVersionsUrl}
-            />
+            <Tooltip content="Configure your OAuth server to Run requests">
+              <Button onClick={handleConfig}>Configure</Button>
+            </Tooltip>
           )
         )}
       </Space>

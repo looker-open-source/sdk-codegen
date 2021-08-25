@@ -143,16 +143,14 @@ describe('Search', () => {
         const types = screen.getByRole('tab', { name: 'Types (1)' })
         userEvent.click(methods)
         expect(
-          screen.getByRole('heading', {
-            name: specState.spec.api!.tags.Auth.create_sso_embed_url.summary,
-          })
+          screen.getByText(
+            specState.spec.api!.tags.Auth.create_sso_embed_url.summary
+          )
         ).toBeInTheDocument()
 
         userEvent.click(types)
         expect(
-          screen.getByRole('heading', {
-            name: specState.spec.api!.types.EmbedSsoParams.name,
-          })
+          screen.getByText(specState.spec.api!.types.EmbedSsoParams.name)
         ).toBeInTheDocument()
       })
     })

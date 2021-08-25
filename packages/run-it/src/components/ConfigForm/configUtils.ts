@@ -43,6 +43,7 @@ export interface IStorageValue {
 
 export const RunItConfigKey = 'RunItConfig'
 export const RunItFormKey = 'RunItForm'
+export const RunItNoConfig = { base_url: '', looker_url: '' }
 
 export interface RunItConfigurator {
   getStorage: (key: string, defaultValue?: string) => IStorageValue

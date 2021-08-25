@@ -30,15 +30,12 @@ import React, {
   FC,
   FormEvent,
   useState,
-  useContext,
   useEffect,
 } from 'react'
 import {
   Button,
-  DialogHeader,
-  DialogContent,
-  DialogContext,
-  DialogFooter,
+  ButtonTransparent,
+  Divider,
   Fieldset,
   FieldText,
   Form,
@@ -47,12 +44,23 @@ import {
   Paragraph,
   Link,
   MessageBarIntent,
+  Space,
+  SpaceVertical,
+  Tooltip,
 } from '@looker/components'
-import { CodeDisplay } from '@looker/code-editor'
-import { CheckProgress } from '@looker/icons'
-import { Delete } from '@styled-icons/material/Delete'
-import { Done } from '@styled-icons/material/Done'
-import { RunItSetter } from '../..'
+import { CodeCopy } from '@looker/code-editor'
+import { IAPIMethods } from '@looker/sdk-rtl'
+import {
+  CollapserCard,
+  RunItFormKey,
+  RunItHeading,
+  DarkSpan,
+  runItSDK,
+  RunItSetter,
+  RunItValues,
+  readyToLogin,
+  RunItNoConfig,
+} from '../..'
 import {
   RunItConfigKey,
   validateUrl,
@@ -61,48 +69,48 @@ import {
   ILoadedSpecs,
 } from './configUtils'
 
-interface FetchMessageProps {
-  message: string
-  intent: MessageBarIntent
+const POSITIVE: MessageBarIntent = 'positive'
+
+interface IFieldValues extends ILoadedSpecs {
+  fetchIntent: MessageBarIntent
 }
 
-const FetchMessage: FC<FetchMessageProps> = ({ message, intent }) => {
-  if (!message) return <></>
-  return (
-    <MessageBar intent={intent} visible={message !== ''}>
-      {message}
-    </MessageBar>
-  )
-}
-
-const defaultFieldValues = {
+const defaultFieldValues: IFieldValues = {
   baseUrl: '',
   webUrl: '',
   /** not currently used but declared for property compatibility for ILoadedSpecs */
   headless: false,
   specs: {},
   fetchResult: '',
-  fetchIntent: 'positive',
+  fetchIntent: POSITIVE,
 }
 
 interface ConfigFormProps {
   configurator: RunItConfigurator
   setVersionsUrl: RunItSetter
+  /** A collection type react state to store path, query and body parameters as entered by the user  */
+  requestContent: RunItValues
   /** Title for the config form */
   title?: string
   /** A set state callback which if present allows for editing, setting or clearing OAuth configuration parameters */
   setHasConfig?: Dispatch<boolean>
+  /** SDK to use for login. Defaults to the `runItSDK` */
+  sdk?: IAPIMethods
 }
 
 export const ConfigForm: FC<ConfigFormProps> = ({
   configurator,
   setVersionsUrl,
   title,
+  requestContent,
+  sdk = runItSDK,
   setHasConfig,
 }) => {
-  const fetchIntent = 'fetchIntent'
-  const fetchResult = 'fetchResult'
-  const { closeModal } = useContext(DialogContext)
+  const BASE_URL = 'baseUrl'
+  const WEB_URL = 'webUrl'
+  const FETCH_INTENT = 'fetchIntent'
+  const FETCH_RESULT = 'fetchResult'
+  const CRITICAL: MessageBarIntent = 'critical'
   const appConfig = `{
   "client_guid": "looker.api-explorer",
   "redirect_uri": "${(window as any).location.origin}/oauth",
@@ -116,61 +124,97 @@ export const ConfigForm: FC<ConfigFormProps> = ({
   // TODO see about useReducer to clean this up a bit more
   title = title || 'RunIt Configuration'
 
-  const [fields, setFields] = useState<ILoadedSpecs>(defaultFieldValues)
+  const getConfig = () => {
+    // get configuration from storage, or default it
+    const data = configurator.getStorage(RunItConfigKey)
+    const result = data.value
+      ? JSON.parse(data.value)
+      : { base_url: '', looker_url: '' } // TODO why is RunItNoConfig undefined here?
+    return result
+  }
+
+  const config = getConfig()
+  const [fields, setFields] = useState<IFieldValues>(defaultFieldValues)
+  const [saved, setSaved] = useState<RunItValues>(config)
+
+  const updateFields = (
+    nameOrValues: string | Partial<IFieldValues>,
+    value = ''
+  ) => {
+    if (typeof nameOrValues === 'string') {
+      setFields((previousFields) => {
+        return { ...previousFields, ...{ [nameOrValues]: value } }
+      })
+    } else {
+      setFields((previousFields) => {
+        return { ...previousFields, ...nameOrValues }
+      })
+    }
+  }
 
   useEffect(() => {
-    // get configuration from storage, or default it
-    const storage = configurator.getStorage(RunItConfigKey)
-    const config = storage.value
-      ? JSON.parse(storage.value)
-      : { base_url: '', looker_url: '' }
-    const { base_url, looker_url } = config
-    setFields((currentFields) => ({
-      ...currentFields,
-      baseUrl: base_url,
-      webUrl: looker_url,
-      [fetchIntent]:
-        base_url !== '' && looker_url !== '' ? 'positive' : 'critical',
-    }))
+    const data = getConfig()
+    const { base_url, looker_url } = getConfig()
+    setSaved(data)
+    updateFields({
+      [BASE_URL]: base_url,
+      [WEB_URL]: looker_url,
+      [FETCH_INTENT]:
+        base_url !== '' && looker_url !== '' ? POSITIVE : CRITICAL,
+    })
   }, [configurator])
 
   const [validationMessages, setValidationMessages] =
     useState<ValidationMessages>({})
 
-  const updateForm = async (e: BaseSyntheticEvent, save: boolean) => {
-    e.preventDefault()
+  const updateMessage = (intent: MessageBarIntent, message: string) => {
+    updateFields({ [FETCH_RESULT]: message, [FETCH_INTENT]: intent })
+  }
+
+  const isConfigured = () => {
+    return (
+      saved !== RunItNoConfig &&
+      fields[BASE_URL] === saved.base_url &&
+      fields[WEB_URL] === saved.looker_url
+    )
+  }
+
+  const fetchError = (message: string) => {
+    updateFields(WEB_URL, '')
+    updateMessage(CRITICAL, message)
+  }
+
+  const updateForm = async (_e: BaseSyntheticEvent, save: boolean) => {
+    // e.preventDefault()
     try {
-      updateFields(fetchResult, '')
+      updateMessage('inform', '')
       const versionsUrl = `${fields.baseUrl}/versions`
       const { webUrl, baseUrl } = await loadSpecsFromVersions(versionsUrl)
       if (!baseUrl || !webUrl) {
-        throw new Error('Invalid server configuration')
-      }
-      updateFields('baseUrl', baseUrl)
-      updateFields('webUrl', webUrl)
-      updateFields(fetchIntent, 'positive')
-      updateFields(fetchResult, 'Configuration is valid')
-      if (save) {
-        configurator.setStorage(
-          RunItConfigKey,
-          JSON.stringify({
-            base_url: baseUrl,
-            looker_url: webUrl,
-          }),
-          // Always store in local storage
-          'local'
-        )
-        if (setHasConfig) setHasConfig(true)
-        setVersionsUrl(versionsUrl)
-        closeModal()
+        fetchError('Invalid server configuration')
+      } else {
+        updateFields({ [BASE_URL]: baseUrl, [WEB_URL]: webUrl })
+        updateMessage(POSITIVE, 'Configuration is valid')
+        if (save) {
+          const data = { base_url: baseUrl, looker_url: webUrl }
+          configurator.setStorage(
+            RunItConfigKey,
+            JSON.stringify(data),
+            // Always store in local storage
+            'local'
+          )
+          if (setHasConfig) setHasConfig(true)
+          setSaved(data)
+          setVersionsUrl(versionsUrl)
+          updateMessage(POSITIVE, `Saved ${webUrl} as OAuth server`)
+        }
       }
     } catch (err) {
-      updateFields(fetchResult, err.message)
-      updateFields(fetchIntent, 'critical')
+      fetchError(err.message)
     }
   }
 
-  const handleSubmit = async (e: BaseSyntheticEvent) => {
+  const handleSave = async (e: BaseSyntheticEvent) => {
     await updateForm(e, true)
   }
 
@@ -178,18 +222,20 @@ export const ConfigForm: FC<ConfigFormProps> = ({
     await updateForm(e, false)
   }
 
-  const handleRemove = (e: BaseSyntheticEvent) => {
-    e.preventDefault()
+  const handleClear = async (_e: BaseSyntheticEvent) => {
+    // e.preventDefault()
     configurator.removeStorage(RunItConfigKey)
-    setFields(defaultFieldValues)
-    if (setHasConfig) setHasConfig(false)
-  }
-
-  const updateFields = (name: string, value: string) => {
-    setFields((previousFields) => {
-      const newFields = { ...previousFields, ...{ [name]: value } }
-      return newFields
+    updateFields({
+      [BASE_URL]: '',
+      [WEB_URL]: '',
+      [FETCH_INTENT]: CRITICAL,
+      [FETCH_RESULT]: '',
     })
+    setSaved(RunItNoConfig)
+    if (setHasConfig) setHasConfig(false)
+    if (isAuthenticated()) {
+      updateMessage('warn', 'Please reload the browser page to log out')
+    }
   }
 
   const handleUrlChange = (event: FormEvent<HTMLInputElement>) => {
@@ -208,86 +254,152 @@ export const ConfigForm: FC<ConfigFormProps> = ({
         type: 'error',
       }
     }
-    updateFields(event.currentTarget.name, event.currentTarget.value)
+    updateFields({
+      [event.currentTarget.name]: event.currentTarget.value,
+      [WEB_URL]: '',
+    })
 
     setValidationMessages(newValidationMessages)
   }
+
+  const isAuthenticated = () => sdk?.authSession.isAuthenticated()
 
   const verifyButtonDisabled =
     fields.baseUrl.trim().length === 0 ||
     Object.keys(validationMessages).length > 0
 
   const saveButtonDisabled =
-    verifyButtonDisabled || fields[fetchIntent] !== 'positive'
+    verifyButtonDisabled || fields.webUrl.trim().length === 0 || isConfigured()
 
-  const removeButtonDisabled =
-    fields.webUrl.trim().length === 0 && fields.baseUrl.trim().length === 0
+  const clearButtonDisabled = fields.baseUrl.trim().length === 0
+
+  const loginButtonDisabled =
+    verifyButtonDisabled || !isConfigured() || isAuthenticated()
+
+  const handleLogin = async (e: BaseSyntheticEvent) => {
+    e.preventDefault()
+    if (requestContent) {
+      configurator.setStorage(
+        RunItFormKey,
+        JSON.stringify(requestContent),
+        'local'
+      )
+    }
+    // This will set storage variables and return to OAuthScene when successful
+    await sdk?.authSession.login()
+  }
 
   return (
-    <>
-      <DialogHeader hideClose>{title}</DialogHeader>
-      <DialogContent>
-        <Form onSubmit={handleSubmit} validationMessages={validationMessages}>
-          <Fieldset legend="Server locations">
-            <FetchMessage
-              intent={fields[fetchIntent]}
-              message={fields[fetchResult]}
-            />
-            <FieldText
-              required
-              label="API server URL"
-              placeholder="typically https://myserver.looker.com:19999"
-              name="baseUrl"
-              defaultValue={fields.baseUrl}
-              onChange={handleUrlChange}
-            />
-            <FieldText
-              label="Auth server URL"
-              placeholder="Click 'Verify' to retrieve"
-              name="webUrl"
-              defaultValue={fields.webUrl}
-              disabled={true}
-            />
-          </Fieldset>
-        </Form>
-        <Paragraph>
-          The following configuration can be used to create a{' '}
-          <Link
-            href="https://github.com/looker-open-source/sdk-codegen/blob/main/docs/cors.md#reference-implementation"
-            target="_blank"
+    <SpaceVertical gap="u2">
+      <RunItHeading>{title}</RunItHeading>
+      <DarkSpan fontSize="small">
+        To configure RunIt mode, you need to supply your API server URL, then
+        authenticate into your Looker Instance
+      </DarkSpan>
+      <MessageBar
+        intent={fields[FETCH_INTENT]}
+        onPrimaryClick={() => updateMessage(fields[FETCH_INTENT], '')}
+        visible={fields[FETCH_RESULT] !== ''}
+      >
+        {fields[FETCH_RESULT]}
+      </MessageBar>
+      <CollapserCard
+        heading="1. Supply API Server URL"
+        id="server_config"
+        divider={false}
+        defaultOpen={!isAuthenticated()}
+      >
+        <SpaceVertical gap="u2" pt="u3" px="u6">
+          <Form validationMessages={validationMessages}>
+            <Fieldset legend="Server locations">
+              <FieldText
+                required
+                label="API server URL"
+                placeholder="typically https://myserver.looker.com:19999"
+                name={BASE_URL}
+                value={fields[BASE_URL]}
+                onChange={handleUrlChange}
+              />
+              <FieldText
+                label="OAuth server URL"
+                placeholder="Click 'Verify' to retrieve"
+                name={WEB_URL}
+                value={fields[WEB_URL]}
+                disabled={true}
+              />
+            </Fieldset>
+          </Form>
+          <Paragraph fontSize="small">
+            The following configuration can be used to create a{' '}
+            <Link
+              href="https://github.com/looker-open-source/sdk-codegen/blob/main/docs/cors.md#reference-implementation"
+              target="_blank"
+            >
+              Looker OAuth client
+            </Link>
+            .
+          </Paragraph>
+          <CodeCopy key="appConfig" language="json" code={appConfig} />
+          <Space>
+            <Tooltip content="Clear the configuration values">
+              <ButtonTransparent
+                onClick={handleClear}
+                disabled={clearButtonDisabled}
+              >
+                Clear
+              </ButtonTransparent>
+            </Tooltip>
+            <Tooltip content={`Verify ${fields[BASE_URL]}`}>
+              <ButtonTransparent
+                disabled={verifyButtonDisabled}
+                onClick={handleVerify}
+                mr="small"
+              >
+                Verify
+              </ButtonTransparent>
+            </Tooltip>
+            <Tooltip content="Save the configuration for this browser">
+              <Button
+                disabled={saveButtonDisabled}
+                onClick={handleSave}
+                mr="small"
+              >
+                Save
+              </Button>
+            </Tooltip>
+          </Space>
+        </SpaceVertical>
+      </CollapserCard>
+      <Divider appearance="light" />
+      <CollapserCard
+        heading="2. Login to instance"
+        divider={false}
+        id="login_section"
+        defaultOpen={!isAuthenticated()}
+      >
+        <SpaceVertical pt="u3" px="u6">
+          {isAuthenticated() ? (
+            <DarkSpan>
+              You are already logged in. Reload the page to log out.
+            </DarkSpan>
+          ) : isConfigured() ? (
+            <>
+              <DarkSpan>{readyToLogin}</DarkSpan>
+            </>
+          ) : (
+            <DarkSpan>
+              You will be able to login after you Verify your API Server URL
+            </DarkSpan>
+          )}
+          <Tooltip
+            content={`Login to ${fields[WEB_URL]} using OAuth to enable RunIt`}
           >
-            Looker OAuth client
-          </Link>
-          .
-        </Paragraph>
-        <CodeDisplay key="appConfig" language="json" code={appConfig} />
-      </DialogContent>
-      <DialogFooter>
-        <Button
-          iconBefore={<Done />}
-          disabled={saveButtonDisabled}
-          onClick={handleSubmit}
-          mr="small"
-        >
-          Save
-        </Button>
-        <Button
-          iconBefore={<CheckProgress />}
-          disabled={verifyButtonDisabled}
-          onClick={handleVerify}
-          mr="small"
-        >
-          Verify
-        </Button>
-        <Button
-          onClick={handleRemove}
-          iconBefore={<Delete />}
-          color="critical"
-          disabled={removeButtonDisabled}
-        >
-          Remove
-        </Button>
-      </DialogFooter>
-    </>
+            <Button onClick={handleLogin} disabled={loginButtonDisabled}>
+              Login
+            </Button>
+          </Tooltip>
+        </SpaceVertical>
+      </CollapserCard>
+    </SpaceVertical>
   )
 }

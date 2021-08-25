@@ -48,6 +48,7 @@ import {
   ResponseContent,
   RunItConfigurator,
   RunItFormKey,
+  ConfigForm,
 } from './components'
 import {
   createRequestParams,
@@ -162,6 +163,10 @@ export const RunIt: FC<RunItProps> = ({
     }
   }, [hasConfig, isExtension, needsAuth, sdk])
 
+  const handleConfig = (_e: BaseSyntheticEvent) => {
+    tabs.onSelectTab(4)
+  }
+
   const handleSubmit = async (e: BaseSyntheticEvent) => {
     e.preventDefault()
 
@@ -202,10 +207,6 @@ export const RunIt: FC<RunItProps> = ({
     }
   }
 
-  // useEffect(() => {
-  //   setLoading(!responseContent)
-  // }, [responseContent])
-
   // No SDK, no RunIt for you!
   if (!sdk) return <></>
 
@@ -216,6 +217,7 @@ export const RunIt: FC<RunItProps> = ({
         <Tab key="response">Response</Tab>
         <Tab key="makeTheCall">SDK Call</Tab>
         {isExtension ? <></> : <Tab key="performance">Performance</Tab>}
+        {isExtension ? <></> : <Tab key="configuration">Configure</Tab>}
       </TabList>
       <TabPanels px="xxlarge" {...tabs} overflow="auto" height="87vh">
         <TabPanel key="request">
@@ -228,6 +230,7 @@ export const RunIt: FC<RunItProps> = ({
             handleSubmit={handleSubmit}
             needsAuth={needsAuth}
             hasConfig={hasConfig}
+            handleConfig={handleConfig}
             setHasConfig={setHasConfig}
             configurator={configurator}
             isExtension={isExtension}
@@ -258,6 +261,18 @@ export const RunIt: FC<RunItProps> = ({
         ) : (
           <TabPanel key="performance">
             <PerfTracker perf={perf} configurator={configurator} />
+          </TabPanel>
+        )}
+        {isExtension ? (
+          <></>
+        ) : (
+          <TabPanel key="config">
+            <ConfigForm
+              setHasConfig={setHasConfig}
+              configurator={configurator}
+              setVersionsUrl={setVersionsUrl}
+              requestContent={requestContent}
+            />
           </TabPanel>
         )}
       </TabPanels>
