@@ -1,3 +1,15 @@
+""" Given a connection name, obtain all supported tests, and run these test
+    
+    $ python test_connection.py <connection_name>  
+
+Example:
+    $ python test_connection.py thelook 
+    
+Notes: Connections to Looker's internal database cannot be tested. 
+
+Last modified: August 25, 2021
+"""
+
 from functools import reduce
 import sys
 from typing import cast, MutableSequence, Sequence
@@ -5,22 +17,15 @@ from typing import cast, MutableSequence, Sequence
 import looker_sdk
 from looker_sdk import models
 
-import sdk_exceptions
-
-sdk = looker_sdk.init31("../../looker.ini")
-
+sdk = looker_sdk.init40(config_file='../../../looker.ini', section='Looker')
 
 def main():
-    """Given a connection, obtain its supported tests and run them. Example:
-
-    $ python test_connection.py thelook
-    """
     connection_name = sys.argv[1] if len(sys.argv) > 1 else ""
 
     if not connection_name:
-        raise sdk_exceptions.ArgumentError("Please provide a connection name")
+        raise Exception("Please provide a connection name")
     elif connection_name in ["looker", "looker__internal__analytics"]:
-        raise sdk_exceptions.ArgumentError(
+        raise Exception(
             f"Connection '{connection_name}' is internal and cannot be tested."
         )
 

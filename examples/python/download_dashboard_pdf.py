@@ -1,3 +1,16 @@
+"""Given a dashboard title, search all dashboards to retrieve its id, render and export the dashboard to pdf.
+
+    $ python download_dashboard_pdf.py <title> <dashboard_filters> <dashboard_style> <pdf_width> <pdf_height>
+    Note: dashboard_style defaults to "tiled", pdf_width defaults to 545, pdf_height defaults to 842
+
+Examples:     
+    $ python download_dashboard_pdf.py "A Test Dashboard"
+    $ python download_dashboard_pdf.py "A Test Dashboard" '{"filter1": "value1, value2", "filter2": "value3"}'
+    $ python download_dashboard_pdf.py "A Test Dashboard" {} "single_column"
+
+Last modified: August 25, 2021
+"""
+
 import json
 import urllib
 import sys
@@ -8,20 +21,10 @@ from typing import cast, Dict, Optional
 import looker_sdk
 from looker_sdk import models
 
-import sdk_exceptions
-
-sdk = looker_sdk.init31("../../looker.ini")
+sdk = looker_sdk.init40(config_file='../../../looker.ini', section='Looker')
 
 
 def main():
-    """Given a dashboard title, search all dashboards to retrieve its id and use
-    it to render the dashboard's pdf.
-
-    Examples of how to use this:
-    $ python download_dashboard_pdf.py "A Test Dashboard"
-    $ python download_dashboard_pdf.py "A Test Dashboard" '{"filter1": "value1, value2", "filter2": "value3"}'
-    $ python download_dashboard_pdf.py "A Test Dashboard" {} "single_column"
-    """
     dashboard_title = sys.argv[1] if len(sys.argv) > 1 else ""
     filters = json.loads(sys.argv[2]) if len(sys.argv) > 2 else None
     pdf_style = sys.argv[3] if len(sys.argv) > 3 else "tiled"
@@ -29,7 +32,7 @@ def main():
     pdf_height = int(sys.argv[5]) if len(sys.argv) > 5 else 842
 
     if not dashboard_title:
-        raise sdk_exceptions.ArgumentError(
+        raise Exception(
             textwrap.dedent(
                 """
                 Please provide: <dashboard_title> [<dashboard_filters>] [<dashboard_style>] [<pdf_width>] [<pdf_height>]
@@ -48,8 +51,7 @@ def get_dashboard(title: str) -> Optional[models.Dashboard]:
     title = title.lower()
     dashboard = next(iter(sdk.search_dashboards(title=title)), None)
     if not dashboard:
-        raise sdk_exceptions.NotFoundError(f'dashboard "{title}" not found')
-    assert isinstance(dashboard, models.Dashboard)
+        raise Exception(f'dashboard "{title}" not found')
     return dashboard
 
 
@@ -59,10 +61,10 @@ def download_dashboard(
     width: int = 545,
     height: int = 842,
     filters: Optional[Dict[str, str]] = None,
-):
+    ):
+
     """Download specified dashboard as PDF"""
-    assert dashboard.id
-    id = int(dashboard.id)
+    id = dashboard.id
     task = sdk.create_dashboard_render_task(
         id,
         "pdf",
@@ -75,7 +77,7 @@ def download_dashboard(
     )
 
     if not (task and task.id):
-        raise sdk_exceptions.RenderTaskError(
+        raise Exception(
             f'Could not create a render task for "{dashboard.title}"'
         )
 
@@ -86,7 +88,7 @@ def download_dashboard(
         poll = sdk.render_task(task.id)
         if poll.status == "failure":
             print(poll)
-            raise sdk_exceptions.RenderTaskError(
+            raise Exception(
                 f'Render failed for "{dashboard.title}"'
             )
         elif poll.status == "success":
