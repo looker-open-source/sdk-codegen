@@ -17,7 +17,7 @@ from typing import cast, MutableSequence, Sequence
 import looker_sdk
 from looker_sdk import models
 
-sdk = looker_sdk.init40("../looker.ini")
+sdk = looker_sdk.init40("../../looker.ini")
 
 def main():
     connection_name = sys.argv[1] if len(sys.argv) > 1 else ""
