@@ -17,7 +17,7 @@ import time
 import looker_sdk
 from looker_sdk import models
 
-sdk = looker_sdk.init40(config_file='../../../looker.ini', section='Looker')
+sdk = looker_sdk.init40("../looker.ini")
 
 def main():
     look_title = sys.argv[1] if len(sys.argv) > 1 else ""

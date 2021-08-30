@@ -18,7 +18,7 @@ from typing import cast, Dict, List, Union
 import looker_sdk
 from looker_sdk import models, error
 
-sdk = looker_sdk.init40(config_file='../../../looker.ini', section='Looker')
+sdk = looker_sdk.init40("../looker.ini")
 
 
 def main() -> None:

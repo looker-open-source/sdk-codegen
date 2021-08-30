@@ -16,7 +16,7 @@ from typing import List
 import looker_sdk
 from looker_sdk import models40 as models
 
-sdk = looker_sdk.init40(config_file='../../../looker.ini', section='Looker')
+sdk = looker_sdk.init40("../looker.ini")
 
 
 def main_models(model: str, view: str, fields: List[str]) -> str:
