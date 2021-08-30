@@ -1,3 +1,16 @@
+""" Given a look id, get the query behind the look, run the query with the desire filter values.
+
+    $ python run_look_with_filters.py <look_id> <filter_1> <filter_value_1> <filter_2> <filter_value_2>
+
+Examples: 
+    $ python run_look_with_filters.py 1 category.name socks users.gender m
+
+Notes: See examples of how filters are defined in the posted body at
+https://docs.looker.com/reference/api-and-integration/api-reference/v4.0/query#implementation_notes_9
+
+Last modified: August 25, 2021
+"""
+
 import json
 import sys
 from typing import cast, Dict, List, Union
@@ -5,27 +18,16 @@ from typing import cast, Dict, List, Union
 import looker_sdk
 from looker_sdk import models, error
 
-import sdk_exceptions
-
-sdk = looker_sdk.init31("../../looker.ini")
+sdk = looker_sdk.init40("../../looker.ini")
 
 
 def main() -> None:
-    """Given a look id, obtain the query behind it and run it with the desired
-     filter values.
-
-    https://docs.looker.com/reference/api-and-integration/api-reference/v3.1/query#implementation_notes_9  # noqa: B950
-    shows an example of how filters are defined in the posted body. To set the
-    same filter in this example, the script needs to be run as follows:
-
-    $ python run_look_with_filters.py 5 category.name socks
-    """
     look_id = sys.argv[1] if len(sys.argv) > 1 else ""
     filter_args = iter(sys.argv[2:])
     filters: Dict[str, str] = {}
 
     if not (look_id and len(sys.argv[2:]) > 0 and len(sys.argv[2:]) % 2 == 0):
-        raise sdk_exceptions.ArgumentError(
+        raise Exception(
             "Please provide: <lookId> <filter_1> <filter_value_1> "
             "<filter_2> <filter_value_2> ..."
         )
@@ -44,10 +46,9 @@ def get_look_query(id: int) -> models.Query:
     try:
         look = sdk.look(id)
     except error.SDKError:
-        raise sdk_exceptions.NotFoundError(f"Error getting Look {id}")
+        raise Exception(f"Error getting Look {id}")
     else:
         query = look.query
-        assert isinstance(query, models.Query)
     return query
 
 
@@ -60,7 +61,7 @@ def run_query_with_filter(query: models.Query, filters: Dict[str, str]) -> TJson
     try:
         json_ = sdk.run_inline_query("json", request, cache=False)
     except error.SDKError:
-        raise sdk_exceptions.RunInlineQueryError("Error running query")
+        raise Exception("Error running query")
     else:
         json_resp = cast(TJson, json.loads(json_))
     return json_resp
