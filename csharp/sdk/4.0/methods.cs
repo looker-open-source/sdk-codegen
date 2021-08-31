@@ -21,7 +21,7 @@
 /// SOFTWARE.
 ///
 
-/// 415 API methods
+/// 423 API methods
 
 #nullable enable
 using System;
@@ -38,6 +38,158 @@ namespace Looker.SDK.API40
   public class Looker40SDK: ApiMethods
   {
     public Looker40SDK(IAuthSession authSession): base(authSession, "4.0") { }
+
+  #region Alert: Alert
+
+  /// ### Search Alerts
+  ///
+  /// GET /alerts/search -> Alert[]
+  ///
+  /// <returns><c>Alert[]</c> Alert. (application/json)</returns>
+  ///
+  /// <param name="limit">(Optional) Number of results to return (used with `offset`).</param>
+  /// <param name="offset">(Optional) Number of results to skip before returning any (used with `limit`).</param>
+  /// <param name="fields">(Optional) Requested fields.</param>
+  /// <param name="disabled">(Optional) Filter on returning only enabled or disabled alerts.</param>
+  /// <param name="frequency">(Optional) Filter on alert frequency, such as: monthly, weekly, daily, hourly, minutes</param>
+  /// <param name="condition_met">(Optional) Filter on whether the alert has met its condition when it last executed</param>
+  /// <param name="last_run_start">(Optional) Filter on the start range of the last time the alerts were run. Example: 2021-01-01T01:01:01-08:00.</param>
+  /// <param name="last_run_end">(Optional) Filter on the start range of the last time the alerts were run. Example: 2021-01-01T01:01:01-08:00.</param>
+  /// <param name="all_owners">(Admin only) (Optional) Filter for all owners.</param>
+  public async Task<SdkResponse<Alert[], Exception>> search_alerts(
+    long? limit = null,
+    long? offset = null,
+    string? fields = null,
+    bool? disabled = null,
+    string? frequency = null,
+    bool? condition_met = null,
+    string? last_run_start = null,
+    string? last_run_end = null,
+    bool? all_owners = null,
+    ITransportSettings? options = null)
+{  
+    return await AuthRequest<Alert[], Exception>(HttpMethod.Get, "/alerts/search", new Values {
+      { "limit", limit },
+      { "offset", offset },
+      { "fields", fields },
+      { "disabled", disabled },
+      { "frequency", frequency },
+      { "condition_met", condition_met },
+      { "last_run_start", last_run_start },
+      { "last_run_end", last_run_end },
+      { "all_owners", all_owners }},null,options);
+  }
+
+  /// ### Get an alert by a given alert ID
+  ///
+  /// GET /alerts/{alert_id} -> Alert
+  ///
+  /// <returns><c>Alert</c> Alert (application/json)</returns>
+  ///
+  /// <param name="alert_id">ID of an alert</param>
+  public async Task<SdkResponse<Alert, Exception>> get_alert(
+    long alert_id,
+    ITransportSettings? options = null)
+{  
+    return await AuthRequest<Alert, Exception>(HttpMethod.Get, $"/alerts/{alert_id}", null,null,options);
+  }
+
+  /// ### Update an alert
+  /// # Required fields: `owner_id`, `field`, `destinations`, `comparison_type`, `threshold`, `cron`
+  /// #
+  ///
+  /// PUT /alerts/{alert_id} -> Alert
+  ///
+  /// <returns><c>Alert</c> The alert is saved. (application/json)</returns>
+  ///
+  /// <param name="alert_id">ID of an alert</param>
+  public async Task<SdkResponse<Alert, Exception>> update_alert(
+    long alert_id,
+    WriteAlert body,
+    ITransportSettings? options = null)
+{  
+    return await AuthRequest<Alert, Exception>(HttpMethod.Put, $"/alerts/{alert_id}", null,body,options);
+  }
+
+  /// ### Update select alert fields
+  /// # Available fields: `owner_id`, `is_disabled`, `is_public`, `threshold`
+  /// #
+  ///
+  /// PATCH /alerts/{alert_id} -> Alert
+  ///
+  /// <returns><c>Alert</c> The alert is saved. (application/json)</returns>
+  ///
+  /// <param name="alert_id">ID of an alert</param>
+  public async Task<SdkResponse<Alert, Exception>> update_alert_field(
+    long alert_id,
+    WriteAlert body,
+    ITransportSettings? options = null)
+{  
+    return await AuthRequest<Alert, Exception>(HttpMethod.Patch, $"/alerts/{alert_id}", null,body,options);
+  }
+
+  /// ### Delete an alert by a given alert ID
+  ///
+  /// DELETE /alerts/{alert_id} -> void
+  ///
+  /// <returns><c>void</c> Alert successfully deleted. ()</returns>
+  ///
+  /// <param name="alert_id">ID of an alert</param>
+  public async Task<SdkResponse<string, Exception>> delete_alert(
+    long alert_id,
+    ITransportSettings? options = null)
+{  
+    return await AuthRequest<string, Exception>(HttpMethod.Delete, $"/alerts/{alert_id}", null,null,options);
+  }
+
+  /// ### Create a new alert and return details of the newly created object
+  ///
+  /// Required fields: `field`, `destinations`, `comparison_type`, `threshold`, `cron`
+  ///
+  /// Example Request:
+  /// Run alert on dashboard element '103' at 5am every day. Send an email to 'test@test.com' if inventory for Los Angeles (using dashboard filter `Warehouse Name`) is lower than 1,000
+  /// ```
+  /// {
+  ///   "cron": "0 5 * * *",
+  ///   "custom_title": "Alert when LA inventory is low",
+  ///   "dashboard_element_id": 103,
+  ///   "applied_dashboard_filters": [
+  ///     {
+  ///       "filter_title": "Warehouse Name",
+  ///       "field_name": "distribution_centers.name",
+  ///       "filter_value": "Los Angeles CA",
+  ///       "filter_description": "is Los Angeles CA"
+  ///     }
+  ///   ],
+  ///   "comparison_type": "LESS_THAN",
+  ///   "destinations": [
+  ///     {
+  ///       "destination_type": "EMAIL",
+  ///       "email_address": "test@test.com"
+  ///     }
+  ///   ],
+  ///   "field": {
+  ///     "title": "Number on Hand",
+  ///     "name": "inventory_items.number_on_hand"
+  ///   },
+  ///   "is_disabled": false,
+  ///   "is_public": true,
+  ///   "threshold": 1000
+  /// }
+  /// ```
+  ///
+  /// POST /alerts -> Alert
+  ///
+  /// <returns><c>Alert</c> The alert is saved. (application/json)</returns>
+  ///
+  public async Task<SdkResponse<Alert, Exception>> create_alert(
+    WriteAlert body,
+    ITransportSettings? options = null)
+{  
+    return await AuthRequest<Alert, Exception>(HttpMethod.Post, "/alerts", null,body,options);
+  }
+
+  #endregion Alert: Alert
 
   #region ApiAuth: API Authentication
 
@@ -1696,22 +1848,49 @@ namespace Looker.SDK.API40
     return await AuthRequest<MobileSettings, Exception>(HttpMethod.Get, "/mobile/settings", null,null,options);
   }
 
+  /// ### Get Looker Settings
+  ///
+  /// Available settings are:
+  ///  - extension_framework_enabled
+  ///  - marketplace_auto_install_enabled
+  ///  - marketplace_enabled
+  ///  - whitelabel_configuration
+  ///
+  /// GET /setting -> Setting
+  ///
+  /// <returns><c>Setting</c> Looker Settings (application/json)</returns>
+  ///
+  /// <param name="fields">Requested fields</param>
+  public async Task<SdkResponse<Setting, Exception>> get_setting(
+    string? fields = null,
+    ITransportSettings? options = null)
+{  
+    return await AuthRequest<Setting, Exception>(HttpMethod.Get, "/setting", new Values {
+      { "fields", fields }},null,options);
+  }
+
   /// ### Configure Looker Settings
   ///
   /// Available settings are:
   ///  - extension_framework_enabled
   ///  - marketplace_auto_install_enabled
   ///  - marketplace_enabled
+  ///  - whitelabel_configuration
+  ///
+  /// See the `Setting` type for more information on the specific values that can be configured.
   ///
   /// PATCH /setting -> Setting
   ///
   /// <returns><c>Setting</c> Looker Settings (application/json)</returns>
   ///
+  /// <param name="fields">Requested fields</param>
   public async Task<SdkResponse<Setting, Exception>> set_setting(
-    Setting body,
+    WriteSetting body,
+    string? fields = null,
     ITransportSettings? options = null)
 {  
-    return await AuthRequest<Setting, Exception>(HttpMethod.Patch, "/setting", null,body,options);
+    return await AuthRequest<Setting, Exception>(HttpMethod.Patch, "/setting", new Values {
+      { "fields", fields }},body,options);
   }
 
   /// ### Get a list of timezones that Looker supports (e.g. useful for scheduling tasks).
@@ -1743,22 +1922,22 @@ namespace Looker.SDK.API40
 
   /// ### Get an API specification for this Looker instance.
   ///
-  /// **Note**: Although the API specification is in JSON format, the return type is temporarily `text/plain`, so the response should be treated as standard JSON to consume it.
+  /// The specification is returned as a JSON document in Swagger 2.x format
   ///
-  /// GET /api_spec/{api_version}/{specification} -> string
+  /// GET /api_spec/{api_version}/{specification} -> object
   ///
-  /// <returns><c>string</c> API specification (application/json)</returns>
+  /// <returns><c>object</c> API specification (application/json)</returns>
   ///
   /// <param name="api_version">API version</param>
   /// <param name="specification">Specification name. Typically, this is "swagger.json"</param>
-  public async Task<SdkResponse<string, Exception>> api_spec(
+  public async Task<SdkResponse<object, Exception>> api_spec(
     string api_version,
     string specification,
     ITransportSettings? options = null)
 {  
       api_version = SdkUtils.EncodeParam(api_version);
       specification = SdkUtils.EncodeParam(specification);
-    return await AuthRequest<string, Exception>(HttpMethod.Get, $"/api_spec/{api_version}/{specification}", null,null,options);
+    return await AuthRequest<object, Exception>(HttpMethod.Get, $"/api_spec/{api_version}/{specification}", null,null,options);
   }
 
   /// ### This feature is enabled only by special license.
@@ -7922,14 +8101,18 @@ namespace Looker.SDK.API40
   /// <returns><c>User[]</c> All users. (application/json)</returns>
   ///
   /// <param name="fields">Requested fields.</param>
-  /// <param name="page">Requested page.</param>
-  /// <param name="per_page">Results per page.</param>
+  /// <param name="page">DEPRECATED. Use limit and offset instead. Return only page N of paginated results</param>
+  /// <param name="per_page">DEPRECATED. Use limit and offset instead. Return N rows of data per page</param>
+  /// <param name="limit">Number of results to return. (used with offset and takes priority over page and per_page)</param>
+  /// <param name="offset">Number of results to skip before returning any. (used with limit and takes priority over page and per_page)</param>
   /// <param name="sorts">Fields to sort by.</param>
   /// <param name="ids">Optional list of ids to get specific users.</param>
   public async Task<SdkResponse<User[], Exception>> all_users(
     string? fields = null,
     long? page = null,
     long? per_page = null,
+    long? limit = null,
+    long? offset = null,
     string? sorts = null,
     DelimArray<long>? ids = null,
     ITransportSettings? options = null)
@@ -7938,6 +8121,8 @@ namespace Looker.SDK.API40
       { "fields", fields },
       { "page", page },
       { "per_page", per_page },
+      { "limit", limit },
+      { "offset", offset },
       { "sorts", sorts },
       { "ids", ids }},null,options);
   }
@@ -7994,8 +8179,10 @@ namespace Looker.SDK.API40
   /// <returns><c>User[]</c> Matching users. (application/json)</returns>
   ///
   /// <param name="fields">Include only these fields in the response</param>
-  /// <param name="page">Return only page N of paginated results</param>
-  /// <param name="per_page">Return N rows of data per page</param>
+  /// <param name="page">DEPRECATED. Use limit and offset instead. Return only page N of paginated results</param>
+  /// <param name="per_page">DEPRECATED. Use limit and offset instead. Return N rows of data per page</param>
+  /// <param name="limit">Number of results to return. (used with offset and takes priority over page and per_page)</param>
+  /// <param name="offset">Number of results to skip before returning any. (used with limit and takes priority over page and per_page)</param>
   /// <param name="sorts">Fields to sort by.</param>
   /// <param name="id">Match User Id.</param>
   /// <param name="first_name">Match First name.</param>
@@ -8011,6 +8198,8 @@ namespace Looker.SDK.API40
     string? fields = null,
     long? page = null,
     long? per_page = null,
+    long? limit = null,
+    long? offset = null,
     string? sorts = null,
     string? id = null,
     string? first_name = null,
@@ -8028,6 +8217,8 @@ namespace Looker.SDK.API40
       { "fields", fields },
       { "page", page },
       { "per_page", per_page },
+      { "limit", limit },
+      { "offset", offset },
       { "sorts", sorts },
       { "id", id },
       { "first_name", first_name },
@@ -8054,8 +8245,10 @@ namespace Looker.SDK.API40
   ///
   /// <param name="pattern">Pattern to match</param>
   /// <param name="fields">Include only these fields in the response</param>
-  /// <param name="page">Return only page N of paginated results</param>
-  /// <param name="per_page">Return N rows of data per page</param>
+  /// <param name="page">DEPRECATED. Use limit and offset instead. Return only page N of paginated results</param>
+  /// <param name="per_page">DEPRECATED. Use limit and offset instead. Return N rows of data per page</param>
+  /// <param name="limit">Number of results to return. (used with offset and takes priority over page and per_page)</param>
+  /// <param name="offset">Number of results to skip before returning any. (used with limit and takes priority over page and per_page)</param>
   /// <param name="sorts">Fields to sort by</param>
   /// <param name="id">Match User Id</param>
   /// <param name="first_name">Match First name</param>
@@ -8068,6 +8261,8 @@ namespace Looker.SDK.API40
     string? fields = null,
     long? page = null,
     long? per_page = null,
+    long? limit = null,
+    long? offset = null,
     string? sorts = null,
     long? id = null,
     string? first_name = null,
@@ -8082,6 +8277,8 @@ namespace Looker.SDK.API40
       { "fields", fields },
       { "page", page },
       { "per_page", per_page },
+      { "limit", limit },
+      { "offset", offset },
       { "sorts", sorts },
       { "id", id },
       { "first_name", first_name },

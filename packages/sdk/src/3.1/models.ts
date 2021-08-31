@@ -86,6 +86,10 @@ export interface IApiVersion {
    * API server base url (read-only)
    */
   api_server_url?: string
+  /**
+   * Web server base url (read-only)
+   */
+  web_server_url?: string
 }
 
 export interface IApiVersionElement {
@@ -1194,7 +1198,7 @@ export interface IDashboard {
   preferred_viewer?: string
   space?: ISpaceBase
   /**
-   * Enables alerts to keep in sync with dashboard filter changes - only available in alerts 2.0 (beta)
+   * Enables alerts to keep in sync with dashboard filter changes - only available in Enhanced Alerts (beta)
    */
   alert_sync_with_dashboard_filter_enabled?: boolean
   /**
@@ -5868,11 +5872,11 @@ export interface IRequestAllUsers {
    */
   fields?: string
   /**
-   * Requested page.
+   * Return only page N of paginated results
    */
   page?: number
   /**
-   * Results per page.
+   * Return N rows of data per page
    */
   per_page?: number
   /**
@@ -8885,10 +8889,6 @@ export interface IWelcomeEmailTest {
 
 export interface IWhitelabelConfiguration {
   /**
-   * Operations the current user is able to perform on this object (read-only)
-   */
-  can?: IDictionary<boolean>
-  /**
    * Unique Id (read-only)
    */
   id?: number
@@ -9233,7 +9233,7 @@ export interface IWriteDashboard {
    */
   space?: IWriteSpaceBase
   /**
-   * Enables alerts to keep in sync with dashboard filter changes - only available in alerts 2.0 (beta)
+   * Enables alerts to keep in sync with dashboard filter changes - only available in Enhanced Alerts (beta)
    */
   alert_sync_with_dashboard_filter_enabled?: boolean
   /**
@@ -10909,7 +10909,7 @@ export interface IWriteUserAttributeWithValue {
 
 /**
  * Dynamic writeable type for WhitelabelConfiguration removes:
- * can, id, logo_url, favicon_url
+ * id, logo_url, favicon_url
  */
 export interface IWriteWhitelabelConfiguration {
   /**

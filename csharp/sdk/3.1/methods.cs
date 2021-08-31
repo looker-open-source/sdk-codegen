@@ -7081,8 +7081,8 @@ namespace Looker.SDK.API31
   /// <returns><c>User[]</c> All users. (application/json)</returns>
   ///
   /// <param name="fields">Requested fields.</param>
-  /// <param name="page">Requested page.</param>
-  /// <param name="per_page">Results per page.</param>
+  /// <param name="page">Return only page N of paginated results</param>
+  /// <param name="per_page">Return N rows of data per page</param>
   /// <param name="sorts">Fields to sort by.</param>
   /// <param name="ids">Optional list of ids to get specific users.</param>
   public async Task<SdkResponse<User[], Exception>> all_users(

@@ -25,7 +25,7 @@
  */
 
 /**
- * 286 API models: 213 Spec, 0 Request, 56 Write, 17 Enum
+ * 296 API models: 219 Spec, 0 Request, 58 Write, 19 Enum
  */
 
 
@@ -56,6 +56,201 @@ public struct AccessToken: SDKModel {
         self.token_type = token_type
         self.expires_in = expires_in
         self.refresh_token = refresh_token
+    }
+
+}
+
+public struct Alert: SDKModel {
+    /**
+     * Filters coming from the dashboard that are applied. Example `[{ "filter_title": "Name", "field_name": "distribution_centers.name", "filter_value": "Los Angeles CA" }]`
+     */
+    public var applied_dashboard_filters: [AlertAppliedDashboardFilter]?
+    /**
+     * This property informs the check what kind of comparison we are performing. Only certain condition types are valid for time series alerts. For details, refer to [Setting Alert Conditions](https://docs.looker.com/sharing-and-publishing/creating-alerts#setting_alert_conditions) Valid values are: "EQUAL_TO", "GREATER_THAN", "GREATER_THAN_OR_EQUAL_TO", "LESS_THAN", "LESS_THAN_OR_EQUAL_TO", "INCREASES_BY", "DECREASES_BY", "CHANGES_BY".
+     */
+    public var comparison_type: ComparisonType?
+    /**
+     * Vixie-Style crontab specification when to run. At minumum, it has to be longer than 15 minute intervals
+     */
+    public var cron: String?
+    /**
+     * An optional, user-defined title for the alert
+     */
+    public var custom_title: String?
+    /**
+     * ID of the dashboard element associated with the alert. Refer to [dashboard_element()](#!/Dashboard/DashboardElement)
+     */
+    public var dashboard_element_id: Int64?
+    /**
+     * Array of destinations to send alerts to. Must be the same type of destination. Example `[{ "destination_type": "EMAIL", "email_address": "test@test.com" }]`
+     */
+    public var destinations: [AlertDestination]?
+    public var field: AlertField?
+    /**
+     * ID of the alert (read-only)
+     */
+    public var id: Int64?
+    /**
+     * Whether or not the alert is disabled
+     */
+    public var is_disabled: Bool?
+    /**
+     * Whether or not the alert is public
+     */
+    public var is_public: Bool?
+    /**
+     * ID of the LookML dashboard associated with the alert
+     */
+    public var lookml_dashboard_id: String?
+    /**
+     * ID of the LookML dashboard element associated with the alert
+     */
+    public var lookml_link_id: String?
+    /**
+     * User id of alert owner
+     */
+    public var owner_id: Int64?
+    /**
+     * Value of the alert threshold
+     */
+    public var threshold: Double?
+    public var time_series_condition_state: AlertConditionState?
+
+    public init(applied_dashboard_filters: [AlertAppliedDashboardFilter]? = nil, comparison_type: ComparisonType? = nil, cron: String? = nil, custom_title: String? = nil, dashboard_element_id: Int64? = nil, destinations: [AlertDestination]? = nil, field: AlertField? = nil, id: Int64? = nil, is_disabled: Bool? = nil, is_public: Bool? = nil, lookml_dashboard_id: String? = nil, lookml_link_id: String? = nil, owner_id: Int64? = nil, threshold: Double? = nil, time_series_condition_state: AlertConditionState? = nil) {
+        self.applied_dashboard_filters = applied_dashboard_filters
+        self.comparison_type = comparison_type
+        self.cron = cron
+        self.custom_title = custom_title
+        self.dashboard_element_id = dashboard_element_id
+        self.destinations = destinations
+        self.field = field
+        self.id = id
+        self.is_disabled = is_disabled
+        self.is_public = is_public
+        self.lookml_dashboard_id = lookml_dashboard_id
+        self.lookml_link_id = lookml_link_id
+        self.owner_id = owner_id
+        self.threshold = threshold
+        self.time_series_condition_state = time_series_condition_state
+    }
+
+}
+
+public struct AlertAppliedDashboardFilter: SDKModel {
+    /**
+     * Field Title. Refer to `DashboardFilter.title` in [DashboardFilter](#!/types/DashboardFilter). Example `Name`
+     */
+    public var filter_title: String?
+    /**
+     * Field Name. Refer to `DashboardFilter.dimension` in [DashboardFilter](#!/types/DashboardFilter). Example `distribution_centers.name`
+     */
+    public var field_name: String?
+    /**
+     * Field Value. [Filter Expressions](https://docs.looker.com/reference/filter-expressions). Example `Los Angeles CA`
+     */
+    public var filter_value: String?
+    /**
+     * Human Readable Filter Description. This may be null or auto-generated. Example `is Los Angeles CA` (read-only)
+     */
+    public var filter_description: String?
+
+    public init(filter_title: String? = nil, field_name: String? = nil, filter_value: String? = nil, filter_description: String? = nil) {
+        self.filter_title = filter_title
+        self.field_name = field_name
+        self.filter_value = filter_value
+        self.filter_description = filter_description
+    }
+
+}
+
+public struct AlertConditionState: SDKModel {
+    /**
+     * (Write-Only) The second latest time string the alert has seen.
+     */
+    public var previous_time_series_id: String?
+    /**
+     * (Write-Only) Latest time string the alert has seen.
+     */
+    public var latest_time_series_id: String?
+
+    public init(previous_time_series_id: String? = nil, latest_time_series_id: String? = nil) {
+        self.previous_time_series_id = previous_time_series_id
+        self.latest_time_series_id = latest_time_series_id
+    }
+
+}
+
+public struct AlertDestination: SDKModel {
+    /**
+     * Type of destination that the alert will be sent to Valid values are: "EMAIL", "ACTION_HUB".
+     */
+    public var destination_type: DestinationType
+    /**
+     * Email address for the 'email' type
+     */
+    public var email_address: String?
+    /**
+     * Action hub integration id for the 'action_hub' type. [Integration](#!/types/Integration)
+     */
+    public var action_hub_integration_id: String?
+    /**
+     * Action hub form params json for the 'action_hub' type [IntegrationParam](#!/types/IntegrationParam)
+     */
+    public var action_hub_form_params_json: String?
+
+    public init(destination_type: DestinationType, email_address: String? = nil, action_hub_integration_id: String? = nil, action_hub_form_params_json: String? = nil) {
+        self.destination_type = destination_type
+        self.email_address = email_address
+        self.action_hub_integration_id = action_hub_integration_id
+        self.action_hub_form_params_json = action_hub_form_params_json
+    }
+
+    public init(_ destination_type: DestinationType, email_address: String? = nil, action_hub_integration_id: String? = nil, action_hub_form_params_json: String? = nil) {
+        self.init(destination_type: destination_type, email_address: email_address, action_hub_integration_id: action_hub_integration_id, action_hub_form_params_json: action_hub_form_params_json)
+    }
+
+}
+
+public struct AlertField: SDKModel {
+    /**
+     * Field's title. Usually auto-generated to reflect field name and its filters
+     */
+    public var title: String?
+    /**
+     * Field's name. Has the format `<view>.<field>` Refer to [docs](https://docs.looker.com/sharing-and-publishing/creating-alerts) for more details
+     */
+    public var name: String?
+    /**
+     * (Optional / Advance Use) List of fields filter. This further restricts the alert to certain dashboard element's field values. This can be used on top of dashboard filters `applied_dashboard_filters`. To keep thing simple, it's suggested to just use dashboard filters. Example: `{ 'title': '12 Number on Hand', 'name': 'inventory_items.number_on_hand', 'filter': [{ 'field_name': 'inventory_items.id', 'field_value': 12, 'filter_value': null }] }`
+     */
+    public var filter: [AlertFieldFilter]?
+
+    public init(title: String? = nil, name: String? = nil, filter: [AlertFieldFilter]? = nil) {
+        self.title = title
+        self.name = name
+        self.filter = filter
+    }
+
+}
+
+public struct AlertFieldFilter: SDKModel {
+    /**
+     * Field Name. Has format `<view>.<field>`
+     */
+    public var field_name: String?
+    /**
+     * Field Value. Depends on the type of field - numeric or string. For [location](https://docs.looker.com/reference/field-reference/dimension-type-reference#location) type, it's a list of floats. Example `[1.0, 56.0]`
+     */
+    public var field_value: AnyCodable?
+    /**
+     * Filter Value. Usually null except for [location](https://docs.looker.com/reference/field-reference/dimension-type-reference#location) type. It'll be a string of lat,long ie `'1.0,56.0'`
+     */
+    public var filter_value: String?
+
+    public init(field_name: String? = nil, field_value: AnyCodable? = nil, filter_value: String? = nil) {
+        self.field_name = field_name
+        self.field_value = field_value
+        self.filter_value = filter_value
     }
 
 }
@@ -104,12 +299,17 @@ public struct ApiVersion: SDKModel {
      * API server base url (read-only)
      */
     public var api_server_url: String?
+    /**
+     * Web server base url (read-only)
+     */
+    public var web_server_url: String?
 
-    public init(looker_release_version: String? = nil, current_version: ApiVersionElement? = nil, supported_versions: [ApiVersionElement]? = nil, api_server_url: String? = nil) {
+    public init(looker_release_version: String? = nil, current_version: ApiVersionElement? = nil, supported_versions: [ApiVersionElement]? = nil, api_server_url: String? = nil, web_server_url: String? = nil) {
         self.looker_release_version = looker_release_version
         self.current_version = current_version
         self.supported_versions = supported_versions
         self.api_server_url = api_server_url
+        self.web_server_url = web_server_url
     }
 
 }
@@ -272,6 +472,22 @@ public struct BoardItem: SDKModel {
      */
     public var content_updated_at: String?
     /**
+     * (Write-Only) base64 encoded image data
+     */
+    public var custom_image_data_base64: String?
+    /**
+     * Custom image_url entered by the user, if present (read-only)
+     */
+    public var custom_image_url: String?
+    /**
+     * Custom title entered by the user, if present
+     */
+    public var custom_title: String?
+    /**
+     * Custom url entered by the user, if present
+     */
+    public var custom_url: String?
+    /**
      * Dashboard to base this item on
      */
     public var dashboard_id: Int64?
@@ -291,6 +507,10 @@ public struct BoardItem: SDKModel {
      * Unique Id (read-only)
      */
     public var id: Int64?
+    /**
+     * The actual image_url for display (read-only)
+     */
+    public var image_url: String?
     /**
      * The container folder name of the content (read-only)
      */
@@ -320,17 +540,22 @@ public struct BoardItem: SDKModel {
      */
     public var view_count: Int64?
 
-    public init(can: StringDictionary<Bool>? = nil, content_created_by: String? = nil, content_favorite_id: Int64? = nil, content_metadata_id: Int64? = nil, content_updated_at: String? = nil, dashboard_id: Int64? = nil, description: String? = nil, favorite_count: Int64? = nil, board_section_id: Int64? = nil, id: Int64? = nil, location: String? = nil, look_id: Int64? = nil, lookml_dashboard_id: String? = nil, order: Int64? = nil, title: String? = nil, url: String? = nil, view_count: Int64? = nil) {
+    public init(can: StringDictionary<Bool>? = nil, content_created_by: String? = nil, content_favorite_id: Int64? = nil, content_metadata_id: Int64? = nil, content_updated_at: String? = nil, custom_image_data_base64: String? = nil, custom_image_url: String? = nil, custom_title: String? = nil, custom_url: String? = nil, dashboard_id: Int64? = nil, description: String? = nil, favorite_count: Int64? = nil, board_section_id: Int64? = nil, id: Int64? = nil, image_url: String? = nil, location: String? = nil, look_id: Int64? = nil, lookml_dashboard_id: String? = nil, order: Int64? = nil, title: String? = nil, url: String? = nil, view_count: Int64? = nil) {
         self.can = can
         self.content_created_by = content_created_by
         self.content_favorite_id = content_favorite_id
         self.content_metadata_id = content_metadata_id
         self.content_updated_at = content_updated_at
+        self.custom_image_data_base64 = custom_image_data_base64
+        self.custom_image_url = custom_image_url
+        self.custom_title = custom_title
+        self.custom_url = custom_url
         self.dashboard_id = dashboard_id
         self.description = description
         self.favorite_count = favorite_count
         self.board_section_id = board_section_id
         self.id = id
+        self.image_url = image_url
         self.location = location
         self.look_id = look_id
         self.lookml_dashboard_id = lookml_dashboard_id
@@ -525,6 +750,20 @@ public struct Command: SDKModel {
         self.linked_content_type = linked_content_type
     }
 
+}
+
+/**
+ * This property informs the check what kind of comparison we are performing. Only certain condition types are valid for time series alerts. For details, refer to [Setting Alert Conditions](https://docs.looker.com/sharing-and-publishing/creating-alerts#setting_alert_conditions) Valid values are: "EQUAL_TO", "GREATER_THAN", "GREATER_THAN_OR_EQUAL_TO", "LESS_THAN", "LESS_THAN_OR_EQUAL_TO", "INCREASES_BY", "DECREASES_BY", "CHANGES_BY".
+ */
+public enum ComparisonType: String, Codable {
+    case EQUAL_TO = "EQUAL_TO"
+    case GREATER_THAN = "GREATER_THAN"
+    case GREATER_THAN_OR_EQUAL_TO = "GREATER_THAN_OR_EQUAL_TO"
+    case LESS_THAN = "LESS_THAN"
+    case LESS_THAN_OR_EQUAL_TO = "LESS_THAN_OR_EQUAL_TO"
+    case INCREASES_BY = "INCREASES_BY"
+    case DECREASES_BY = "DECREASES_BY"
+    case CHANGES_BY = "CHANGES_BY"
 }
 
 public struct ConnectionFeatures: SDKModel {
@@ -2116,7 +2355,7 @@ public struct Dashboard: SDKModel {
      */
     public var preferred_viewer: String?
     /**
-     * Enables alerts to keep in sync with dashboard filter changes - only available in alerts 2.0 (beta)
+     * Enables alerts to keep in sync with dashboard filter changes - only available in Enhanced Alerts (beta)
      */
     public var alert_sync_with_dashboard_filter_enabled: Bool?
     /**
@@ -3354,6 +3593,14 @@ public enum DependencyStatus: String, Codable {
     case lock_required = "lock_required"
     case lock_error = "lock_error"
     case install_none = "install_none"
+}
+
+/**
+ * Type of destination that the alert will be sent to Valid values are: "EMAIL", "ACTION_HUB".
+ */
+public enum DestinationType: String, Codable {
+    case EMAIL = "EMAIL"
+    case ACTION_HUB = "ACTION_HUB"
 }
 
 public struct Dialect: SDKModel {
@@ -9567,27 +9814,26 @@ public struct SessionConfig: SDKModel {
 
 }
 
-/**
- * WARNING: no writeable properties found for POST, PUT, or PATCH
- */
 public struct Setting: SDKModel {
     /**
-     * Toggle extension framework on or off (read-only)
+     * Toggle extension framework on or off
      */
     public var extension_framework_enabled: Bool?
     /**
-     * Toggle marketplace auto install on or off (read-only)
+     * Toggle marketplace auto install on or off. Note that auto install only runs if marketplace is enabled.
      */
     public var marketplace_auto_install_enabled: Bool?
     /**
-     * Toggle marketplace on or off (read-only)
+     * Toggle marketplace on or off
      */
     public var marketplace_enabled: Bool?
+    public var whitelabel_configuration: WhitelabelConfiguration?
 
-    public init(extension_framework_enabled: Bool? = nil, marketplace_auto_install_enabled: Bool? = nil, marketplace_enabled: Bool? = nil) {
+    public init(extension_framework_enabled: Bool? = nil, marketplace_auto_install_enabled: Bool? = nil, marketplace_enabled: Bool? = nil, whitelabel_configuration: WhitelabelConfiguration? = nil) {
         self.extension_framework_enabled = extension_framework_enabled
         self.marketplace_auto_install_enabled = marketplace_auto_install_enabled
         self.marketplace_enabled = marketplace_enabled
+        self.whitelabel_configuration = whitelabel_configuration
     }
 
 }
@@ -10624,10 +10870,6 @@ public struct WelcomeEmailTest: SDKModel {
 
 public struct WhitelabelConfiguration: SDKModel {
     /**
-     * Operations the current user is able to perform on this object (read-only)
-     */
-    public var can: StringDictionary<Bool>?
-    /**
      * Unique Id (read-only)
      */
     public var id: Int64?
@@ -10692,8 +10934,7 @@ public struct WhitelabelConfiguration: SDKModel {
      */
     public var folders_mentions: Bool?
 
-    public init(can: StringDictionary<Bool>? = nil, id: Int64? = nil, logo_file: String? = nil, logo_url: String? = nil, favicon_file: String? = nil, favicon_url: String? = nil, default_title: String? = nil, show_help_menu: Bool? = nil, show_docs: Bool? = nil, show_email_sub_options: Bool? = nil, allow_looker_mentions: Bool? = nil, allow_looker_links: Bool? = nil, custom_welcome_email_advanced: Bool? = nil, setup_mentions: Bool? = nil, alerts_logo: Bool? = nil, alerts_links: Bool? = nil, folders_mentions: Bool? = nil) {
-        self.can = can
+    public init(id: Int64? = nil, logo_file: String? = nil, logo_url: String? = nil, favicon_file: String? = nil, favicon_url: String? = nil, default_title: String? = nil, show_help_menu: Bool? = nil, show_docs: Bool? = nil, show_email_sub_options: Bool? = nil, allow_looker_mentions: Bool? = nil, allow_looker_links: Bool? = nil, custom_welcome_email_advanced: Bool? = nil, setup_mentions: Bool? = nil, alerts_logo: Bool? = nil, alerts_links: Bool? = nil, folders_mentions: Bool? = nil) {
         self.id = id
         self.logo_file = logo_file
         self.logo_url = logo_url
@@ -10732,6 +10973,81 @@ public struct Workspace: SDKModel {
         self.can = can
         self.id = id
         self.projects = projects
+    }
+
+}
+
+/**
+ * Dynamic writeable type for Alert removes:
+ * id
+ */
+public struct WriteAlert: SDKModel {
+    /**
+     * Filters coming from the dashboard that are applied. Example `[{ "filter_title": "Name", "field_name": "distribution_centers.name", "filter_value": "Los Angeles CA" }]`
+     */
+    public var applied_dashboard_filters: [AlertAppliedDashboardFilter]?
+    /**
+     * This property informs the check what kind of comparison we are performing. Only certain condition types are valid for time series alerts. For details, refer to [Setting Alert Conditions](https://docs.looker.com/sharing-and-publishing/creating-alerts#setting_alert_conditions) Valid values are: "EQUAL_TO", "GREATER_THAN", "GREATER_THAN_OR_EQUAL_TO", "LESS_THAN", "LESS_THAN_OR_EQUAL_TO", "INCREASES_BY", "DECREASES_BY", "CHANGES_BY".
+     */
+    public var comparison_type: ComparisonType?
+    /**
+     * Vixie-Style crontab specification when to run. At minumum, it has to be longer than 15 minute intervals
+     */
+    public var cron: String?
+    /**
+     * An optional, user-defined title for the alert
+     */
+    public var custom_title: String?
+    /**
+     * ID of the dashboard element associated with the alert. Refer to [dashboard_element()](#!/Dashboard/DashboardElement)
+     */
+    public var dashboard_element_id: Int64?
+    /**
+     * Array of destinations to send alerts to. Must be the same type of destination. Example `[{ "destination_type": "EMAIL", "email_address": "test@test.com" }]`
+     */
+    public var destinations: [AlertDestination]?
+    public var field: AlertField?
+    /**
+     * Whether or not the alert is disabled
+     */
+    public var is_disabled: Bool?
+    /**
+     * Whether or not the alert is public
+     */
+    public var is_public: Bool?
+    /**
+     * ID of the LookML dashboard associated with the alert
+     */
+    public var lookml_dashboard_id: String?
+    /**
+     * ID of the LookML dashboard element associated with the alert
+     */
+    public var lookml_link_id: String?
+    /**
+     * User id of alert owner
+     */
+    public var owner_id: Int64?
+    /**
+     * Value of the alert threshold
+     */
+    public var threshold: Double?
+    public var time_series_condition_state: AlertConditionState?
+
+    public init(applied_dashboard_filters: [AlertAppliedDashboardFilter]? = nil, comparison_type: ComparisonType? = nil, cron: String? = nil, custom_title: String? = nil, dashboard_element_id: Int64? = nil, destinations: [AlertDestination]? = nil, field: AlertField? = nil, is_disabled: Bool? = nil, is_public: Bool? = nil, lookml_dashboard_id: String? = nil, lookml_link_id: String? = nil, owner_id: Int64? = nil, threshold: Double? = nil, time_series_condition_state: AlertConditionState? = nil) {
+        self.applied_dashboard_filters = applied_dashboard_filters
+        self.comparison_type = comparison_type
+        self.cron = cron
+        self.custom_title = custom_title
+        self.dashboard_element_id = dashboard_element_id
+        self.destinations = destinations
+        self.field = field
+        self.is_disabled = is_disabled
+        self.is_public = is_public
+        self.lookml_dashboard_id = lookml_dashboard_id
+        self.lookml_link_id = lookml_link_id
+        self.owner_id = owner_id
+        self.threshold = threshold
+        self.time_series_condition_state = time_series_condition_state
     }
 
 }
@@ -10821,9 +11137,21 @@ public struct WriteBoard: SDKModel {
 
 /**
  * Dynamic writeable type for BoardItem removes:
- * can, content_created_by, content_favorite_id, content_metadata_id, content_updated_at, description, favorite_count, id, location, title, url, view_count
+ * can, content_created_by, content_favorite_id, content_metadata_id, content_updated_at, custom_image_url, description, favorite_count, id, image_url, location, title, url, view_count
  */
 public struct WriteBoardItem: SDKModel {
+    /**
+     * (Write-Only) base64 encoded image data
+     */
+    public var custom_image_data_base64: String?
+    /**
+     * Custom title entered by the user, if present
+     */
+    public var custom_title: String?
+    /**
+     * Custom url entered by the user, if present
+     */
+    public var custom_url: String?
     /**
      * Dashboard to base this item on
      */
@@ -10845,7 +11173,10 @@ public struct WriteBoardItem: SDKModel {
      */
     public var order: Int64?
 
-    public init(dashboard_id: Int64? = nil, board_section_id: Int64? = nil, look_id: Int64? = nil, lookml_dashboard_id: String? = nil, order: Int64? = nil) {
+    public init(custom_image_data_base64: String? = nil, custom_title: String? = nil, custom_url: String? = nil, dashboard_id: Int64? = nil, board_section_id: Int64? = nil, look_id: Int64? = nil, lookml_dashboard_id: String? = nil, order: Int64? = nil) {
+        self.custom_image_data_base64 = custom_image_data_base64
+        self.custom_title = custom_title
+        self.custom_url = custom_url
         self.dashboard_id = dashboard_id
         self.board_section_id = board_section_id
         self.look_id = look_id
@@ -11218,7 +11549,7 @@ public struct WriteDashboard: SDKModel {
      */
     public var preferred_viewer: String?
     /**
-     * Enables alerts to keep in sync with dashboard filter changes - only available in alerts 2.0 (beta)
+     * Enables alerts to keep in sync with dashboard filter changes - only available in Enhanced Alerts (beta)
      */
     public var alert_sync_with_dashboard_filter_enabled: Bool?
     /**
@@ -13186,6 +13517,37 @@ public struct WriteSessionConfig: SDKModel {
 }
 
 /**
+ * Dynamic writeable type for Setting
+ */
+public struct WriteSetting: SDKModel {
+    /**
+     * Toggle extension framework on or off
+     */
+    public var extension_framework_enabled: Bool?
+    /**
+     * Toggle marketplace auto install on or off. Note that auto install only runs if marketplace is enabled.
+     */
+    public var marketplace_auto_install_enabled: Bool?
+    /**
+     * Toggle marketplace on or off
+     */
+    public var marketplace_enabled: Bool?
+    /**
+     * Dynamic writeable type for WhitelabelConfiguration removes:
+     * id, logo_url, favicon_url
+     */
+    public var whitelabel_configuration: WriteWhitelabelConfiguration?
+
+    public init(extension_framework_enabled: Bool? = nil, marketplace_auto_install_enabled: Bool? = nil, marketplace_enabled: Bool? = nil, whitelabel_configuration: WriteWhitelabelConfiguration? = nil) {
+        self.extension_framework_enabled = extension_framework_enabled
+        self.marketplace_auto_install_enabled = marketplace_auto_install_enabled
+        self.marketplace_enabled = marketplace_enabled
+        self.whitelabel_configuration = whitelabel_configuration
+    }
+
+}
+
+/**
  * Dynamic writeable type for SshServer removes:
  * ssh_server_id, finger_print, sha_finger_print, public_key, status
  */
@@ -13395,7 +13757,7 @@ public struct WriteUserAttributeWithValue: SDKModel {
 
 /**
  * Dynamic writeable type for WhitelabelConfiguration removes:
- * can, id, logo_url, favicon_url
+ * id, logo_url, favicon_url
  */
 public struct WriteWhitelabelConfiguration: SDKModel {
     /**
