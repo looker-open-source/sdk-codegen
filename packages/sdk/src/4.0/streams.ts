@@ -25,7 +25,7 @@
  */
 
 /**
- * 415 API methods
+ * 423 API methods
  */
 
 import { Readable } from 'readable-stream'
@@ -44,6 +44,7 @@ import { APIMethods, encodeParam } from '@looker/sdk-rtl'
 import { sdkVersion } from '../constants'
 import type {
   IAccessToken,
+  IAlert,
   IApiSession,
   IApiVersion,
   IBackupConfiguration,
@@ -178,6 +179,7 @@ import type {
   IRequestScheduledPlansForDashboard,
   IRequestScheduledPlansForLook,
   IRequestScheduledPlansForLookmlDashboard,
+  IRequestSearchAlerts,
   IRequestSearchBoards,
   IRequestSearchContentFavorites,
   IRequestSearchContentViews,
@@ -227,6 +229,7 @@ import type {
   IWelcomeEmailTest,
   IWhitelabelConfiguration,
   IWorkspace,
+  IWriteAlert,
   IWriteApiSession,
   IWriteBackupConfiguration,
   IWriteBoard,
@@ -270,6 +273,7 @@ import type {
   IWriteSamlConfig,
   IWriteScheduledPlan,
   IWriteSessionConfig,
+  IWriteSetting,
   IWriteSshServer,
   IWriteSshTunnel,
   IWriteTheme,
@@ -289,6 +293,212 @@ export class Looker40SDKStream extends APIMethods {
         ? ''
         : authSession.settings.base_url + '/api/' + this.apiVersion
   }
+
+  //#region Alert: Alert
+
+  /**
+   * ### Search Alerts
+   *
+   * GET /alerts/search -> IAlert[]
+   *
+   * @param callback streaming output function
+   * @param request composed interface "IRequestSearchAlerts" for complex method parameters
+   * @param options one-time API call overrides
+   *
+   */
+  async search_alerts(
+    callback: (readable: Readable) => Promise<IAlert[]>,
+    request: IRequestSearchAlerts,
+    options?: Partial<ITransportSettings>
+  ) {
+    return this.authStream<IAlert[]>(
+      callback,
+      'GET',
+      '/alerts/search',
+      {
+        limit: request.limit,
+        offset: request.offset,
+        fields: request.fields,
+        disabled: request.disabled,
+        frequency: request.frequency,
+        condition_met: request.condition_met,
+        last_run_start: request.last_run_start,
+        last_run_end: request.last_run_end,
+        all_owners: request.all_owners,
+      },
+      null,
+      options
+    )
+  }
+
+  /**
+   * ### Get an alert by a given alert ID
+   *
+   * GET /alerts/{alert_id} -> IAlert
+   *
+   * @param callback streaming output function
+   * @param alert_id ID of an alert
+   * @param options one-time API call overrides
+   *
+   */
+  async get_alert(
+    callback: (readable: Readable) => Promise<IAlert>,
+    alert_id: number,
+    options?: Partial<ITransportSettings>
+  ) {
+    return this.authStream<IAlert>(
+      callback,
+      'GET',
+      `/alerts/${alert_id}`,
+      null,
+      null,
+      options
+    )
+  }
+
+  /**
+   * ### Update an alert
+   * # Required fields: `owner_id`, `field`, `destinations`, `comparison_type`, `threshold`, `cron`
+   * #
+   *
+   * PUT /alerts/{alert_id} -> IAlert
+   *
+   * @param callback streaming output function
+   * @param alert_id ID of an alert
+   * @param body Partial<IWriteAlert>
+   * @param options one-time API call overrides
+   *
+   */
+  async update_alert(
+    callback: (readable: Readable) => Promise<IAlert>,
+    alert_id: number,
+    body: Partial<IWriteAlert>,
+    options?: Partial<ITransportSettings>
+  ) {
+    return this.authStream<IAlert>(
+      callback,
+      'PUT',
+      `/alerts/${alert_id}`,
+      null,
+      body,
+      options
+    )
+  }
+
+  /**
+   * ### Update select alert fields
+   * # Available fields: `owner_id`, `is_disabled`, `is_public`, `threshold`
+   * #
+   *
+   * PATCH /alerts/{alert_id} -> IAlert
+   *
+   * @param callback streaming output function
+   * @param alert_id ID of an alert
+   * @param body Partial<IWriteAlert>
+   * @param options one-time API call overrides
+   *
+   */
+  async update_alert_field(
+    callback: (readable: Readable) => Promise<IAlert>,
+    alert_id: number,
+    body: Partial<IWriteAlert>,
+    options?: Partial<ITransportSettings>
+  ) {
+    return this.authStream<IAlert>(
+      callback,
+      'PATCH',
+      `/alerts/${alert_id}`,
+      null,
+      body,
+      options
+    )
+  }
+
+  /**
+   * ### Delete an alert by a given alert ID
+   *
+   * DELETE /alerts/{alert_id} -> void
+   *
+   * @param callback streaming output function
+   * @param alert_id ID of an alert
+   * @param options one-time API call overrides
+   *
+   */
+  async delete_alert(
+    callback: (readable: Readable) => Promise<void>,
+    alert_id: number,
+    options?: Partial<ITransportSettings>
+  ) {
+    return this.authStream<void>(
+      callback,
+      'DELETE',
+      `/alerts/${alert_id}`,
+      null,
+      null,
+      options
+    )
+  }
+
+  /**
+   * ### Create a new alert and return details of the newly created object
+   *
+   * Required fields: `field`, `destinations`, `comparison_type`, `threshold`, `cron`
+   *
+   * Example Request:
+   * Run alert on dashboard element '103' at 5am every day. Send an email to 'test@test.com' if inventory for Los Angeles (using dashboard filter `Warehouse Name`) is lower than 1,000
+   * ```
+   * {
+   *   "cron": "0 5 * * *",
+   *   "custom_title": "Alert when LA inventory is low",
+   *   "dashboard_element_id": 103,
+   *   "applied_dashboard_filters": [
+   *     {
+   *       "filter_title": "Warehouse Name",
+   *       "field_name": "distribution_centers.name",
+   *       "filter_value": "Los Angeles CA",
+   *       "filter_description": "is Los Angeles CA"
+   *     }
+   *   ],
+   *   "comparison_type": "LESS_THAN",
+   *   "destinations": [
+   *     {
+   *       "destination_type": "EMAIL",
+   *       "email_address": "test@test.com"
+   *     }
+   *   ],
+   *   "field": {
+   *     "title": "Number on Hand",
+   *     "name": "inventory_items.number_on_hand"
+   *   },
+   *   "is_disabled": false,
+   *   "is_public": true,
+   *   "threshold": 1000
+   * }
+   * ```
+   *
+   * POST /alerts -> IAlert
+   *
+   * @param callback streaming output function
+   * @param body Partial<IWriteAlert>
+   * @param options one-time API call overrides
+   *
+   */
+  async create_alert(
+    callback: (readable: Readable) => Promise<IAlert>,
+    body: Partial<IWriteAlert>,
+    options?: Partial<ITransportSettings>
+  ) {
+    return this.authStream<IAlert>(
+      callback,
+      'POST',
+      '/alerts',
+      null,
+      body,
+      options
+    )
+  }
+
+  //#endregion Alert: Alert
 
   //#region ApiAuth: API Authentication
 
@@ -2838,30 +3048,66 @@ export class Looker40SDKStream extends APIMethods {
   }
 
   /**
+   * ### Get Looker Settings
+   *
+   * Available settings are:
+   *  - extension_framework_enabled
+   *  - marketplace_auto_install_enabled
+   *  - marketplace_enabled
+   *  - whitelabel_configuration
+   *
+   * GET /setting -> ISetting
+   *
+   * @param callback streaming output function
+   * @param fields Requested fields
+   * @param options one-time API call overrides
+   *
+   */
+  async get_setting(
+    callback: (readable: Readable) => Promise<ISetting>,
+    fields?: string,
+    options?: Partial<ITransportSettings>
+  ) {
+    return this.authStream<ISetting>(
+      callback,
+      'GET',
+      '/setting',
+      { fields },
+      null,
+      options
+    )
+  }
+
+  /**
    * ### Configure Looker Settings
    *
    * Available settings are:
    *  - extension_framework_enabled
    *  - marketplace_auto_install_enabled
    *  - marketplace_enabled
+   *  - whitelabel_configuration
+   *
+   * See the `Setting` type for more information on the specific values that can be configured.
    *
    * PATCH /setting -> ISetting
    *
    * @param callback streaming output function
-   * @param body WARNING: no writeable properties found for POST, PUT, or PATCH
+   * @param body Partial<IWriteSetting>
+   * @param fields Requested fields
    * @param options one-time API call overrides
    *
    */
   async set_setting(
     callback: (readable: Readable) => Promise<ISetting>,
-    body: Partial<ISetting>,
+    body: Partial<IWriteSetting>,
+    fields?: string,
     options?: Partial<ITransportSettings>
   ) {
     return this.authStream<ISetting>(
       callback,
       'PATCH',
       '/setting',
-      null,
+      { fields },
       body,
       options
     )
@@ -2918,9 +3164,9 @@ export class Looker40SDKStream extends APIMethods {
   /**
    * ### Get an API specification for this Looker instance.
    *
-   * **Note**: Although the API specification is in JSON format, the return type is temporarily `text/plain`, so the response should be treated as standard JSON to consume it.
+   * The specification is returned as a JSON document in Swagger 2.x format
    *
-   * GET /api_spec/{api_version}/{specification} -> string
+   * GET /api_spec/{api_version}/{specification} -> any
    *
    * @param callback streaming output function
    * @param api_version API version
@@ -2929,14 +3175,14 @@ export class Looker40SDKStream extends APIMethods {
    *
    */
   async api_spec(
-    callback: (readable: Readable) => Promise<string>,
+    callback: (readable: Readable) => Promise<any>,
     api_version: string,
     specification: string,
     options?: Partial<ITransportSettings>
   ) {
     api_version = encodeParam(api_version)
     specification = encodeParam(specification)
-    return this.authStream<string>(
+    return this.authStream<any>(
       callback,
       'GET',
       `/api_spec/${api_version}/${specification}`,
@@ -2951,6 +3197,8 @@ export class Looker40SDKStream extends APIMethods {
    * ### Gets the whitelabel configuration, which includes hiding documentation links, custom favicon uploading, etc.
    *
    * GET /whitelabel_configuration -> IWhitelabelConfiguration
+   *
+   * @deprecated
    *
    * @param callback streaming output function
    * @param fields Requested fields.
@@ -2976,6 +3224,8 @@ export class Looker40SDKStream extends APIMethods {
    * ### Update the whitelabel configuration
    *
    * PUT /whitelabel_configuration -> IWhitelabelConfiguration
+   *
+   * @deprecated
    *
    * @param callback streaming output function
    * @param body Partial<IWriteWhitelabelConfiguration>
@@ -11194,6 +11444,8 @@ export class Looker40SDKStream extends APIMethods {
         fields: request.fields,
         page: request.page,
         per_page: request.per_page,
+        limit: request.limit,
+        offset: request.offset,
         sorts: request.sorts,
         ids: request.ids,
       },
@@ -11281,6 +11533,8 @@ export class Looker40SDKStream extends APIMethods {
         fields: request.fields,
         page: request.page,
         per_page: request.per_page,
+        limit: request.limit,
+        offset: request.offset,
         sorts: request.sorts,
         id: request.id,
         first_name: request.first_name,
@@ -11327,6 +11581,8 @@ export class Looker40SDKStream extends APIMethods {
         fields: request.fields,
         page: request.page,
         per_page: request.per_page,
+        limit: request.limit,
+        offset: request.offset,
         sorts: request.sorts,
         id: request.id,
         first_name: request.first_name,

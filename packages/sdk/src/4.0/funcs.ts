@@ -25,7 +25,7 @@
  */
 
 /**
- * 415 API methods
+ * 423 API methods
  */
 
 import type {
@@ -46,6 +46,7 @@ import { encodeParam, functionalSdk } from '@looker/sdk-rtl'
 import { sdkVersion } from '../constants'
 import type {
   IAccessToken,
+  IAlert,
   IApiSession,
   IApiVersion,
   IBackupConfiguration,
@@ -181,6 +182,7 @@ import type {
   IRequestScheduledPlansForDashboard,
   IRequestScheduledPlansForLook,
   IRequestScheduledPlansForLookmlDashboard,
+  IRequestSearchAlerts,
   IRequestSearchBoards,
   IRequestSearchContentFavorites,
   IRequestSearchContentViews,
@@ -230,6 +232,7 @@ import type {
   IWelcomeEmailTest,
   IWhitelabelConfiguration,
   IWorkspace,
+  IWriteAlert,
   IWriteApiSession,
   IWriteBackupConfiguration,
   IWriteBoard,
@@ -273,6 +276,7 @@ import type {
   IWriteSamlConfig,
   IWriteScheduledPlan,
   IWriteSessionConfig,
+  IWriteSetting,
   IWriteSshServer,
   IWriteSshTunnel,
   IWriteTheme,
@@ -289,6 +293,190 @@ import type {
 export const functionalSdk40 = (authSession: IAuthSession) => {
   return functionalSdk(authSession, '4.0', sdkVersion)
 }
+
+//#region Alert: Alert
+
+/**
+ * ### Search Alerts
+ *
+ * GET /alerts/search -> IAlert[]
+ *
+ * @param sdk IAPIMethods implementation
+ * @param request composed interface "IRequestSearchAlerts" for complex method parameters
+ * @param options one-time API call overrides
+ *
+ */
+export const search_alerts = async (
+  sdk: IAPIMethods,
+  request: IRequestSearchAlerts,
+  options?: Partial<ITransportSettings>
+): Promise<SDKResponse<IAlert[], IError>> => {
+  return sdk.get<IAlert[], IError>(
+    '/alerts/search',
+    {
+      limit: request.limit,
+      offset: request.offset,
+      fields: request.fields,
+      disabled: request.disabled,
+      frequency: request.frequency,
+      condition_met: request.condition_met,
+      last_run_start: request.last_run_start,
+      last_run_end: request.last_run_end,
+      all_owners: request.all_owners,
+    },
+    null,
+    options
+  )
+}
+
+/**
+ * ### Get an alert by a given alert ID
+ *
+ * GET /alerts/{alert_id} -> IAlert
+ *
+ * @param sdk IAPIMethods implementation
+ * @param alert_id ID of an alert
+ * @param options one-time API call overrides
+ *
+ */
+export const get_alert = async (
+  sdk: IAPIMethods,
+  alert_id: number,
+  options?: Partial<ITransportSettings>
+): Promise<SDKResponse<IAlert, IError>> => {
+  return sdk.get<IAlert, IError>(`/alerts/${alert_id}`, null, null, options)
+}
+
+/**
+ * ### Update an alert
+ * # Required fields: `owner_id`, `field`, `destinations`, `comparison_type`, `threshold`, `cron`
+ * #
+ *
+ * PUT /alerts/{alert_id} -> IAlert
+ *
+ * @param sdk IAPIMethods implementation
+ * @param alert_id ID of an alert
+ * @param body Partial<IWriteAlert>
+ * @param options one-time API call overrides
+ *
+ */
+export const update_alert = async (
+  sdk: IAPIMethods,
+  alert_id: number,
+  body: Partial<IWriteAlert>,
+  options?: Partial<ITransportSettings>
+): Promise<SDKResponse<IAlert, IError | IValidationError>> => {
+  return sdk.put<IAlert, IError | IValidationError>(
+    `/alerts/${alert_id}`,
+    null,
+    body,
+    options
+  )
+}
+
+/**
+ * ### Update select alert fields
+ * # Available fields: `owner_id`, `is_disabled`, `is_public`, `threshold`
+ * #
+ *
+ * PATCH /alerts/{alert_id} -> IAlert
+ *
+ * @param sdk IAPIMethods implementation
+ * @param alert_id ID of an alert
+ * @param body Partial<IWriteAlert>
+ * @param options one-time API call overrides
+ *
+ */
+export const update_alert_field = async (
+  sdk: IAPIMethods,
+  alert_id: number,
+  body: Partial<IWriteAlert>,
+  options?: Partial<ITransportSettings>
+): Promise<SDKResponse<IAlert, IError | IValidationError>> => {
+  return sdk.patch<IAlert, IError | IValidationError>(
+    `/alerts/${alert_id}`,
+    null,
+    body,
+    options
+  )
+}
+
+/**
+ * ### Delete an alert by a given alert ID
+ *
+ * DELETE /alerts/{alert_id} -> void
+ *
+ * @param sdk IAPIMethods implementation
+ * @param alert_id ID of an alert
+ * @param options one-time API call overrides
+ *
+ */
+export const delete_alert = async (
+  sdk: IAPIMethods,
+  alert_id: number,
+  options?: Partial<ITransportSettings>
+): Promise<SDKResponse<void, IError>> => {
+  return sdk.delete<void, IError>(`/alerts/${alert_id}`, null, null, options)
+}
+
+/**
+ * ### Create a new alert and return details of the newly created object
+ *
+ * Required fields: `field`, `destinations`, `comparison_type`, `threshold`, `cron`
+ *
+ * Example Request:
+ * Run alert on dashboard element '103' at 5am every day. Send an email to 'test@test.com' if inventory for Los Angeles (using dashboard filter `Warehouse Name`) is lower than 1,000
+ * ```
+ * {
+ *   "cron": "0 5 * * *",
+ *   "custom_title": "Alert when LA inventory is low",
+ *   "dashboard_element_id": 103,
+ *   "applied_dashboard_filters": [
+ *     {
+ *       "filter_title": "Warehouse Name",
+ *       "field_name": "distribution_centers.name",
+ *       "filter_value": "Los Angeles CA",
+ *       "filter_description": "is Los Angeles CA"
+ *     }
+ *   ],
+ *   "comparison_type": "LESS_THAN",
+ *   "destinations": [
+ *     {
+ *       "destination_type": "EMAIL",
+ *       "email_address": "test@test.com"
+ *     }
+ *   ],
+ *   "field": {
+ *     "title": "Number on Hand",
+ *     "name": "inventory_items.number_on_hand"
+ *   },
+ *   "is_disabled": false,
+ *   "is_public": true,
+ *   "threshold": 1000
+ * }
+ * ```
+ *
+ * POST /alerts -> IAlert
+ *
+ * @param sdk IAPIMethods implementation
+ * @param body Partial<IWriteAlert>
+ * @param options one-time API call overrides
+ *
+ */
+export const create_alert = async (
+  sdk: IAPIMethods,
+  body: Partial<IWriteAlert>,
+  options?: Partial<ITransportSettings>
+): Promise<SDKResponse<IAlert, IError | IValidationError>> => {
+  return sdk.post<IAlert, IError | IValidationError>(
+    '/alerts',
+    null,
+    body,
+    options
+  )
+}
+
+//#endregion Alert: Alert
 
 //#region ApiAuth: API Authentication
 
@@ -2630,28 +2818,62 @@ export const mobile_settings = async (
 }
 
 /**
+ * ### Get Looker Settings
+ *
+ * Available settings are:
+ *  - extension_framework_enabled
+ *  - marketplace_auto_install_enabled
+ *  - marketplace_enabled
+ *  - whitelabel_configuration
+ *
+ * GET /setting -> ISetting
+ *
+ * @param sdk IAPIMethods implementation
+ * @param fields Requested fields
+ * @param options one-time API call overrides
+ *
+ */
+export const get_setting = async (
+  sdk: IAPIMethods,
+  fields?: string,
+  options?: Partial<ITransportSettings>
+): Promise<SDKResponse<ISetting, IError | IValidationError>> => {
+  return sdk.get<ISetting, IError | IValidationError>(
+    '/setting',
+    { fields },
+    null,
+    options
+  )
+}
+
+/**
  * ### Configure Looker Settings
  *
  * Available settings are:
  *  - extension_framework_enabled
  *  - marketplace_auto_install_enabled
  *  - marketplace_enabled
+ *  - whitelabel_configuration
+ *
+ * See the `Setting` type for more information on the specific values that can be configured.
  *
  * PATCH /setting -> ISetting
  *
  * @param sdk IAPIMethods implementation
- * @param body WARNING: no writeable properties found for POST, PUT, or PATCH
+ * @param body Partial<IWriteSetting>
+ * @param fields Requested fields
  * @param options one-time API call overrides
  *
  */
 export const set_setting = async (
   sdk: IAPIMethods,
-  body: Partial<ISetting>,
+  body: Partial<IWriteSetting>,
+  fields?: string,
   options?: Partial<ITransportSettings>
 ): Promise<SDKResponse<ISetting, IError | IValidationError>> => {
   return sdk.patch<ISetting, IError | IValidationError>(
     '/setting',
-    null,
+    { fields },
     body,
     options
   )
@@ -2694,9 +2916,9 @@ export const versions = async (
 /**
  * ### Get an API specification for this Looker instance.
  *
- * **Note**: Although the API specification is in JSON format, the return type is temporarily `text/plain`, so the response should be treated as standard JSON to consume it.
+ * The specification is returned as a JSON document in Swagger 2.x format
  *
- * GET /api_spec/{api_version}/{specification} -> string
+ * GET /api_spec/{api_version}/{specification} -> any
  *
  * @param sdk IAPIMethods implementation
  * @param api_version API version
@@ -2709,10 +2931,10 @@ export const api_spec = async (
   api_version: string,
   specification: string,
   options?: Partial<ITransportSettings>
-): Promise<SDKResponse<string, IError>> => {
+): Promise<SDKResponse<any, IError>> => {
   api_version = encodeParam(api_version)
   specification = encodeParam(specification)
-  return sdk.get<string, IError>(
+  return sdk.get<any, IError>(
     `/api_spec/${api_version}/${specification}`,
     null,
     null,
@@ -2725,6 +2947,8 @@ export const api_spec = async (
  * ### Gets the whitelabel configuration, which includes hiding documentation links, custom favicon uploading, etc.
  *
  * GET /whitelabel_configuration -> IWhitelabelConfiguration
+ *
+ * @deprecated
  *
  * @param sdk IAPIMethods implementation
  * @param fields Requested fields.
@@ -2748,6 +2972,8 @@ export const whitelabel_configuration = async (
  * ### Update the whitelabel configuration
  *
  * PUT /whitelabel_configuration -> IWhitelabelConfiguration
+ *
+ * @deprecated
  *
  * @param sdk IAPIMethods implementation
  * @param body Partial<IWriteWhitelabelConfiguration>
@@ -10391,6 +10617,8 @@ export const all_users = async (
       fields: request.fields,
       page: request.page,
       per_page: request.per_page,
+      limit: request.limit,
+      offset: request.offset,
       sorts: request.sorts,
       ids: request.ids,
     },
@@ -10474,6 +10702,8 @@ export const search_users = async (
       fields: request.fields,
       page: request.page,
       per_page: request.per_page,
+      limit: request.limit,
+      offset: request.offset,
       sorts: request.sorts,
       id: request.id,
       first_name: request.first_name,
@@ -10518,6 +10748,8 @@ export const search_users_names = async (
       fields: request.fields,
       page: request.page,
       per_page: request.per_page,
+      limit: request.limit,
+      offset: request.offset,
       sorts: request.sorts,
       id: request.id,
       first_name: request.first_name,
