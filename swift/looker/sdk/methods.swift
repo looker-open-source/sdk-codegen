@@ -25,7 +25,7 @@
  */
 
 /**
- * 415 API methods
+ * 423 API methods
  */
 
 
@@ -37,6 +37,189 @@ import Foundation
 open class LookerSDK: APIMethods {
 
     public lazy var stream = LookerSDKStream(authSession)
+
+    // MARK Alert: Alert
+
+    /**
+     * ### Search Alerts
+     *
+     * GET /alerts/search -> [Alert]
+     */
+    public func search_alerts(
+        /**
+         * @param {Int64} limit (Optional) Number of results to return (used with `offset`).
+         */
+        limit: Int64? = nil,
+        /**
+         * @param {Int64} offset (Optional) Number of results to skip before returning any (used with `limit`).
+         */
+        offset: Int64? = nil,
+        /**
+         * @param {String} fields (Optional) Requested fields.
+         */
+        fields: String? = nil,
+        /**
+         * @param {Bool} disabled (Optional) Filter on returning only enabled or disabled alerts.
+         */
+        disabled: Bool? = nil,
+        /**
+         * @param {String} frequency (Optional) Filter on alert frequency, such as: monthly, weekly, daily, hourly, minutes
+         */
+        frequency: String? = nil,
+        /**
+         * @param {Bool} condition_met (Optional) Filter on whether the alert has met its condition when it last executed
+         */
+        condition_met: Bool? = nil,
+        /**
+         * @param {String} last_run_start (Optional) Filter on the start range of the last time the alerts were run. Example: 2021-01-01T01:01:01-08:00.
+         */
+        last_run_start: String? = nil,
+        /**
+         * @param {String} last_run_end (Optional) Filter on the start range of the last time the alerts were run. Example: 2021-01-01T01:01:01-08:00.
+         */
+        last_run_end: String? = nil,
+        /**
+         * @param {Bool} all_owners (Admin only) (Optional) Filter for all owners.
+         */
+        all_owners: Bool? = nil,
+        options: ITransportSettings? = nil
+    ) -> SDKResponse<[Alert], SDKError> {
+        let result: SDKResponse<[Alert], SDKError> = self.get("/alerts/search", 
+            ["limit": limit, "offset": offset, "fields": fields, "disabled": disabled as Any?, "frequency": frequency, "condition_met": condition_met as Any?, "last_run_start": last_run_start, "last_run_end": last_run_end, "all_owners": all_owners as Any?], nil, options)
+        return result
+    }
+
+    /**
+     * ### Get an alert by a given alert ID
+     *
+     * GET /alerts/{alert_id} -> Alert
+     */
+    public func get_alert(
+        /**
+         * @param {Int64} alert_id ID of an alert
+         */
+        _ alert_id: Int64,
+        options: ITransportSettings? = nil
+    ) -> SDKResponse<Alert, SDKError> {
+        let path_alert_id = encodeParam(alert_id)
+        let result: SDKResponse<Alert, SDKError> = self.get("/alerts/\(path_alert_id)", nil, nil, options)
+        return result
+    }
+
+    /**
+     * ### Update an alert
+     * # Required fields: `owner_id`, `field`, `destinations`, `comparison_type`, `threshold`, `cron`
+     * #
+     *
+     * PUT /alerts/{alert_id} -> Alert
+     */
+    public func update_alert(
+        /**
+         * @param {Int64} alert_id ID of an alert
+         */
+        _ alert_id: Int64,
+        /**
+         * @param {WriteAlert} body
+         */
+        _ body: WriteAlert,
+        options: ITransportSettings? = nil
+    ) -> SDKResponse<Alert, SDKError> {
+        let path_alert_id = encodeParam(alert_id)
+        let result: SDKResponse<Alert, SDKError> = self.put("/alerts/\(path_alert_id)", nil, try! self.encode(body), options)
+        return result
+    }
+
+    /**
+     * ### Update select alert fields
+     * # Available fields: `owner_id`, `is_disabled`, `is_public`, `threshold`
+     * #
+     *
+     * PATCH /alerts/{alert_id} -> Alert
+     */
+    public func update_alert_field(
+        /**
+         * @param {Int64} alert_id ID of an alert
+         */
+        _ alert_id: Int64,
+        /**
+         * @param {WriteAlert} body
+         */
+        _ body: WriteAlert,
+        options: ITransportSettings? = nil
+    ) -> SDKResponse<Alert, SDKError> {
+        let path_alert_id = encodeParam(alert_id)
+        let result: SDKResponse<Alert, SDKError> = self.patch("/alerts/\(path_alert_id)", nil, try! self.encode(body), options)
+        return result
+    }
+
+    /**
+     * ### Delete an alert by a given alert ID
+     *
+     * DELETE /alerts/{alert_id} -> Voidable
+     */
+    public func delete_alert(
+        /**
+         * @param {Int64} alert_id ID of an alert
+         */
+        _ alert_id: Int64,
+        options: ITransportSettings? = nil
+    ) -> SDKResponse<Voidable, SDKError> {
+        let path_alert_id = encodeParam(alert_id)
+        let result: SDKResponse<Voidable, SDKError> = self.delete("/alerts/\(path_alert_id)", nil, nil, options)
+        return result
+    }
+
+    /**
+     * ### Create a new alert and return details of the newly created object
+     *
+     * Required fields: `field`, `destinations`, `comparison_type`, `threshold`, `cron`
+     *
+     * Example Request:
+     * Run alert on dashboard element '103' at 5am every day. Send an email to 'test@test.com' if inventory for Los Angeles (using dashboard filter `Warehouse Name`) is lower than 1,000
+     * ```
+     * {
+     *   "cron": "0 5 * * *",
+     *   "custom_title": "Alert when LA inventory is low",
+     *   "dashboard_element_id": 103,
+     *   "applied_dashboard_filters": [
+     *     {
+     *       "filter_title": "Warehouse Name",
+     *       "field_name": "distribution_centers.name",
+     *       "filter_value": "Los Angeles CA",
+     *       "filter_description": "is Los Angeles CA"
+     *     }
+     *   ],
+     *   "comparison_type": "LESS_THAN",
+     *   "destinations": [
+     *     {
+     *       "destination_type": "EMAIL",
+     *       "email_address": "test@test.com"
+     *     }
+     *   ],
+     *   "field": {
+     *     "title": "Number on Hand",
+     *     "name": "inventory_items.number_on_hand"
+     *   },
+     *   "is_disabled": false,
+     *   "is_public": true,
+     *   "threshold": 1000
+     * }
+     * ```
+     *
+     * POST /alerts -> Alert
+     */
+    public func create_alert(
+        /**
+         * @param {WriteAlert} body
+         */
+        _ body: WriteAlert,
+        options: ITransportSettings? = nil
+    ) -> SDKResponse<Alert, SDKError> {
+        let result: SDKResponse<Alert, SDKError> = self.post("/alerts", nil, try! self.encode(body), options)
+        return result
+    }
+
+
 
     // MARK ApiAuth: API Authentication
 
@@ -1957,23 +2140,54 @@ open class LookerSDK: APIMethods {
     }
 
     /**
+     * ### Get Looker Settings
+     *
+     * Available settings are:
+     *  - extension_framework_enabled
+     *  - marketplace_auto_install_enabled
+     *  - marketplace_enabled
+     *  - whitelabel_configuration
+     *
+     * GET /setting -> Setting
+     */
+    public func get_setting(
+        /**
+         * @param {String} fields Requested fields
+         */
+        fields: String? = nil,
+        options: ITransportSettings? = nil
+    ) -> SDKResponse<Setting, SDKError> {
+        let result: SDKResponse<Setting, SDKError> = self.get("/setting", 
+            ["fields": fields], nil, options)
+        return result
+    }
+
+    /**
      * ### Configure Looker Settings
      *
      * Available settings are:
      *  - extension_framework_enabled
      *  - marketplace_auto_install_enabled
      *  - marketplace_enabled
+     *  - whitelabel_configuration
+     *
+     * See the `Setting` type for more information on the specific values that can be configured.
      *
      * PATCH /setting -> Setting
      */
     public func set_setting(
         /**
-         * @param {Setting} body
+         * @param {WriteSetting} body
          */
-        _ body: Setting,
+        _ body: WriteSetting,
+        /**
+         * @param {String} fields Requested fields
+         */
+        fields: String? = nil,
         options: ITransportSettings? = nil
     ) -> SDKResponse<Setting, SDKError> {
-        let result: SDKResponse<Setting, SDKError> = self.patch("/setting", nil, try! self.encode(body), options)
+        let result: SDKResponse<Setting, SDKError> = self.patch("/setting", 
+            ["fields": fields], try! self.encode(body), options)
         return result
     }
 
@@ -2009,9 +2223,9 @@ open class LookerSDK: APIMethods {
     /**
      * ### Get an API specification for this Looker instance.
      *
-     * **Note**: Although the API specification is in JSON format, the return type is temporarily `text/plain`, so the response should be treated as standard JSON to consume it.
+     * The specification is returned as a JSON document in Swagger 2.x format
      *
-     * GET /api_spec/{api_version}/{specification} -> String
+     * GET /api_spec/{api_version}/{specification} -> AnyCodable
      */
     public func api_spec(
         /**
@@ -2023,10 +2237,10 @@ open class LookerSDK: APIMethods {
          */
         _ specification: String,
         options: ITransportSettings? = nil
-    ) -> SDKResponse<String, SDKError> {
+    ) -> SDKResponse<AnyCodable, SDKError> {
         let path_api_version = encodeParam(api_version)
         let path_specification = encodeParam(specification)
-        let result: SDKResponse<String, SDKError> = self.get("/api_spec/\(path_api_version)/\(path_specification)", nil, nil, options)
+        let result: SDKResponse<AnyCodable, SDKError> = self.get("/api_spec/\(path_api_version)/\(path_specification)", nil, nil, options)
         return result
     }
 
@@ -9327,13 +9541,21 @@ open class LookerSDK: APIMethods {
          */
         fields: String? = nil,
         /**
-         * @param {Int64} page Requested page.
+         * @param {Int64} page DEPRECATED. Use limit and offset instead. Return only page N of paginated results
          */
         page: Int64? = nil,
         /**
-         * @param {Int64} per_page Results per page.
+         * @param {Int64} per_page DEPRECATED. Use limit and offset instead. Return N rows of data per page
          */
         per_page: Int64? = nil,
+        /**
+         * @param {Int64} limit Number of results to return. (used with offset and takes priority over page and per_page)
+         */
+        limit: Int64? = nil,
+        /**
+         * @param {Int64} offset Number of results to skip before returning any. (used with limit and takes priority over page and per_page)
+         */
+        offset: Int64? = nil,
         /**
          * @param {String} sorts Fields to sort by.
          */
@@ -9345,7 +9567,7 @@ open class LookerSDK: APIMethods {
         options: ITransportSettings? = nil
     ) -> SDKResponse<[User], SDKError> {
         let result: SDKResponse<[User], SDKError> = self.get("/users", 
-            ["fields": fields, "page": page, "per_page": per_page, "sorts": sorts, "ids": ids as Any?], nil, options)
+            ["fields": fields, "page": page, "per_page": per_page, "limit": limit, "offset": offset, "sorts": sorts, "ids": ids as Any?], nil, options)
         return result
     }
 
@@ -9410,13 +9632,21 @@ open class LookerSDK: APIMethods {
          */
         fields: String? = nil,
         /**
-         * @param {Int64} page Return only page N of paginated results
+         * @param {Int64} page DEPRECATED. Use limit and offset instead. Return only page N of paginated results
          */
         page: Int64? = nil,
         /**
-         * @param {Int64} per_page Return N rows of data per page
+         * @param {Int64} per_page DEPRECATED. Use limit and offset instead. Return N rows of data per page
          */
         per_page: Int64? = nil,
+        /**
+         * @param {Int64} limit Number of results to return. (used with offset and takes priority over page and per_page)
+         */
+        limit: Int64? = nil,
+        /**
+         * @param {Int64} offset Number of results to skip before returning any. (used with limit and takes priority over page and per_page)
+         */
+        offset: Int64? = nil,
         /**
          * @param {String} sorts Fields to sort by.
          */
@@ -9464,7 +9694,7 @@ open class LookerSDK: APIMethods {
         options: ITransportSettings? = nil
     ) -> SDKResponse<[User], SDKError> {
         let result: SDKResponse<[User], SDKError> = self.get("/users/search", 
-            ["fields": fields, "page": page, "per_page": per_page, "sorts": sorts, "id": id, "first_name": first_name, "last_name": last_name, "verified_looker_employee": verified_looker_employee as Any?, "embed_user": embed_user as Any?, "email": email, "is_disabled": is_disabled as Any?, "filter_or": filter_or as Any?, "content_metadata_id": content_metadata_id, "group_id": group_id], nil, options)
+            ["fields": fields, "page": page, "per_page": per_page, "limit": limit, "offset": offset, "sorts": sorts, "id": id, "first_name": first_name, "last_name": last_name, "verified_looker_employee": verified_looker_employee as Any?, "embed_user": embed_user as Any?, "email": email, "is_disabled": is_disabled as Any?, "filter_or": filter_or as Any?, "content_metadata_id": content_metadata_id, "group_id": group_id], nil, options)
         return result
     }
 
@@ -9488,13 +9718,21 @@ open class LookerSDK: APIMethods {
          */
         fields: String? = nil,
         /**
-         * @param {Int64} page Return only page N of paginated results
+         * @param {Int64} page DEPRECATED. Use limit and offset instead. Return only page N of paginated results
          */
         page: Int64? = nil,
         /**
-         * @param {Int64} per_page Return N rows of data per page
+         * @param {Int64} per_page DEPRECATED. Use limit and offset instead. Return N rows of data per page
          */
         per_page: Int64? = nil,
+        /**
+         * @param {Int64} limit Number of results to return. (used with offset and takes priority over page and per_page)
+         */
+        limit: Int64? = nil,
+        /**
+         * @param {Int64} offset Number of results to skip before returning any. (used with limit and takes priority over page and per_page)
+         */
+        offset: Int64? = nil,
         /**
          * @param {String} sorts Fields to sort by
          */
@@ -9527,7 +9765,7 @@ open class LookerSDK: APIMethods {
     ) -> SDKResponse<[User], SDKError> {
         let path_pattern = encodeParam(pattern)
         let result: SDKResponse<[User], SDKError> = self.get("/users/search/names/\(path_pattern)", 
-            ["fields": fields, "page": page, "per_page": per_page, "sorts": sorts, "id": id, "first_name": first_name, "last_name": last_name, "verified_looker_employee": verified_looker_employee as Any?, "email": email, "is_disabled": is_disabled as Any?], nil, options)
+            ["fields": fields, "page": page, "per_page": per_page, "limit": limit, "offset": offset, "sorts": sorts, "id": id, "first_name": first_name, "last_name": last_name, "verified_looker_employee": verified_looker_employee as Any?, "email": email, "is_disabled": is_disabled as Any?], nil, options)
         return result
     }
 

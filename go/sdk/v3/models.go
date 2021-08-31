@@ -65,6 +65,7 @@ type ApiVersion struct {
   CurrentVersion       *ApiVersionElement   `json:"current_version,omitempty"`
   SupportedVersions    *[]ApiVersionElement `json:"supported_versions,omitempty"`      // Array of versions supported by this Looker instance
   ApiServerUrl         *string              `json:"api_server_url,omitempty"`          // API server base url
+  WebServerUrl         *string              `json:"web_server_url,omitempty"`          // Web server base url
 }
 
 
@@ -481,7 +482,7 @@ type Dashboard struct {
   Slug                                *string              `json:"slug,omitempty"`                                      // Content Metadata Slug
   PreferredViewer                     *string              `json:"preferred_viewer,omitempty"`                          // The preferred route for viewing this dashboard (ie: dashboards or dashboards-next)
   Space                               *SpaceBase           `json:"space,omitempty"`
-  AlertSyncWithDashboardFilterEnabled *bool                `json:"alert_sync_with_dashboard_filter_enabled,omitempty"`  // Enables alerts to keep in sync with dashboard filter changes - only available in alerts 2.0 (beta)
+  AlertSyncWithDashboardFilterEnabled *bool                `json:"alert_sync_with_dashboard_filter_enabled,omitempty"`  // Enables alerts to keep in sync with dashboard filter changes - only available in Enhanced Alerts (beta)
   BackgroundColor                     *string              `json:"background_color,omitempty"`                          // Background color
   CreatedAt                           *time.Time           `json:"created_at,omitempty"`                                // Time that the Dashboard was created.
   CrossfilterEnabled                  *bool                `json:"crossfilter_enabled,omitempty"`                       // Enables crossfiltering in dashboards - only available in dashboards-next (beta)
@@ -2082,8 +2083,8 @@ type RequestAllScheduledPlans struct {
 // Dynamically generated request type for all_users
 type RequestAllUsers struct {
   Fields  *string         `json:"fields,omitempty"`    // Requested fields.
-  Page    *int64          `json:"page,omitempty"`      // Requested page.
-  PerPage *int64          `json:"per_page,omitempty"`  // Results per page.
+  Page    *int64          `json:"page,omitempty"`      // Return only page N of paginated results
+  PerPage *int64          `json:"per_page,omitempty"`  // Return N rows of data per page
   Sorts   *string         `json:"sorts,omitempty"`     // Fields to sort by.
   Ids     *rtl.DelimInt64 `json:"ids,omitempty"`       // Optional list of ids to get specific users.
 }
@@ -3109,23 +3110,22 @@ type WelcomeEmailTest struct {
 
 
 type WhitelabelConfiguration struct {
-  Can                        *map[string]bool `json:"can,omitempty"`                            // Operations the current user is able to perform on this object
-  Id                         *int64           `json:"id,omitempty"`                             // Unique Id
-  LogoFile                   *string          `json:"logo_file,omitempty"`                      // Customer logo image. Expected base64 encoded data (write-only)
-  LogoUrl                    *string          `json:"logo_url,omitempty"`                       // Logo image url (read-only)
-  FaviconFile                *string          `json:"favicon_file,omitempty"`                   // Custom favicon image. Expected base64 encoded data (write-only)
-  FaviconUrl                 *string          `json:"favicon_url,omitempty"`                    // Favicon image url (read-only)
-  DefaultTitle               *string          `json:"default_title,omitempty"`                  // Default page title
-  ShowHelpMenu               *bool            `json:"show_help_menu,omitempty"`                 // Boolean to toggle showing help menus
-  ShowDocs                   *bool            `json:"show_docs,omitempty"`                      // Boolean to toggle showing docs
-  ShowEmailSubOptions        *bool            `json:"show_email_sub_options,omitempty"`         // Boolean to toggle showing email subscription options.
-  AllowLookerMentions        *bool            `json:"allow_looker_mentions,omitempty"`          // Boolean to toggle mentions of Looker in emails
-  AllowLookerLinks           *bool            `json:"allow_looker_links,omitempty"`             // Boolean to toggle links to Looker in emails
-  CustomWelcomeEmailAdvanced *bool            `json:"custom_welcome_email_advanced,omitempty"`  // Allow subject line and email heading customization in customized emails”
-  SetupMentions              *bool            `json:"setup_mentions,omitempty"`                 // Remove the word Looker from appearing in the account setup page
-  AlertsLogo                 *bool            `json:"alerts_logo,omitempty"`                    // Remove Looker logo from Alerts
-  AlertsLinks                *bool            `json:"alerts_links,omitempty"`                   // Remove Looker links from Alerts
-  FoldersMentions            *bool            `json:"folders_mentions,omitempty"`               // Remove Looker mentions in home folder page when you don’t have any items saved
+  Id                         *int64  `json:"id,omitempty"`                             // Unique Id
+  LogoFile                   *string `json:"logo_file,omitempty"`                      // Customer logo image. Expected base64 encoded data (write-only)
+  LogoUrl                    *string `json:"logo_url,omitempty"`                       // Logo image url (read-only)
+  FaviconFile                *string `json:"favicon_file,omitempty"`                   // Custom favicon image. Expected base64 encoded data (write-only)
+  FaviconUrl                 *string `json:"favicon_url,omitempty"`                    // Favicon image url (read-only)
+  DefaultTitle               *string `json:"default_title,omitempty"`                  // Default page title
+  ShowHelpMenu               *bool   `json:"show_help_menu,omitempty"`                 // Boolean to toggle showing help menus
+  ShowDocs                   *bool   `json:"show_docs,omitempty"`                      // Boolean to toggle showing docs
+  ShowEmailSubOptions        *bool   `json:"show_email_sub_options,omitempty"`         // Boolean to toggle showing email subscription options.
+  AllowLookerMentions        *bool   `json:"allow_looker_mentions,omitempty"`          // Boolean to toggle mentions of Looker in emails
+  AllowLookerLinks           *bool   `json:"allow_looker_links,omitempty"`             // Boolean to toggle links to Looker in emails
+  CustomWelcomeEmailAdvanced *bool   `json:"custom_welcome_email_advanced,omitempty"`  // Allow subject line and email heading customization in customized emails”
+  SetupMentions              *bool   `json:"setup_mentions,omitempty"`                 // Remove the word Looker from appearing in the account setup page
+  AlertsLogo                 *bool   `json:"alerts_logo,omitempty"`                    // Remove Looker logo from Alerts
+  AlertsLinks                *bool   `json:"alerts_links,omitempty"`                   // Remove Looker links from Alerts
+  FoldersMentions            *bool   `json:"folders_mentions,omitempty"`               // Remove Looker mentions in home folder page when you don’t have any items saved
 }
 
 
@@ -3234,7 +3234,7 @@ type WriteDashboard struct {
   PreferredViewer                     *string              `json:"preferred_viewer,omitempty"`                          // The preferred route for viewing this dashboard (ie: dashboards or dashboards-next)
   Space                               *WriteSpaceBase      `json:"space,omitempty"`                                     // Dynamic writeable type for SpaceBase removes:
  // id, content_metadata_id, created_at, creator_id, child_count, external_id, is_embed, is_embed_shared_root, is_embed_users_root, is_personal, is_personal_descendant, is_shared_root, is_users_root, can
-  AlertSyncWithDashboardFilterEnabled *bool                `json:"alert_sync_with_dashboard_filter_enabled,omitempty"`  // Enables alerts to keep in sync with dashboard filter changes - only available in alerts 2.0 (beta)
+  AlertSyncWithDashboardFilterEnabled *bool                `json:"alert_sync_with_dashboard_filter_enabled,omitempty"`  // Enables alerts to keep in sync with dashboard filter changes - only available in Enhanced Alerts (beta)
   BackgroundColor                     *string              `json:"background_color,omitempty"`                          // Background color
   CrossfilterEnabled                  *bool                `json:"crossfilter_enabled,omitempty"`                       // Enables crossfiltering in dashboards - only available in dashboards-next (beta)
   Deleted                             *bool                `json:"deleted,omitempty"`                                   // Whether or not a dashboard is 'soft' deleted.
@@ -3798,7 +3798,7 @@ type WriteUserAttributeWithValue struct {
 }
 
 // Dynamic writeable type for WhitelabelConfiguration removes:
-// can, id, logo_url, favicon_url
+// id, logo_url, favicon_url
 type WriteWhitelabelConfiguration struct {
   LogoFile                   *string `json:"logo_file,omitempty"`                      // Customer logo image. Expected base64 encoded data (write-only)
   FaviconFile                *string `json:"favicon_file,omitempty"`                   // Custom favicon image. Expected base64 encoded data (write-only)
