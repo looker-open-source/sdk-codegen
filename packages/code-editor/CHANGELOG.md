@@ -1,5 +1,19 @@
 # Changelog
 
+### [0.1.10](https://www.github.com/looker-open-source/sdk-codegen/compare/code-editor-v0.1.9...code-editor-v0.1.10) (2021-09-01)
+
+
+### Features
+
+* new configuration UI for API Explorer ([#803](https://www.github.com/looker-open-source/sdk-codegen/issues/803)) ([e6c67d1](https://www.github.com/looker-open-source/sdk-codegen/commit/e6c67d1211b412d4ce83127c9f7a8f091e3cf27f))
+
+
+### Dependencies
+
+* The following workspace dependencies were updated
+  * devDependencies
+    * @looker/sdk-codegen bumped from ^21.0.24 to ^21.0.25
+
 ### [0.1.9](https://www.github.com/looker-open-source/sdk-codegen/compare/code-editor-v0.1.8...code-editor-v0.1.9) (2021-08-11)
 
 
