@@ -1,5 +1,23 @@
 # Changelog
 
+## [21.14.0](https://www.github.com/looker-open-source/sdk-codegen/compare/hackathon-v21.12.0...hackathon-v21.14.0) (2021-09-01)
+
+
+### Features
+
+* new configuration UI for API Explorer ([#803](https://www.github.com/looker-open-source/sdk-codegen/issues/803)) ([e6c67d1](https://www.github.com/looker-open-source/sdk-codegen/commit/e6c67d1211b412d4ce83127c9f7a8f091e3cf27f))
+
+
+### Dependencies
+
+* The following workspace dependencies were updated
+  * dependencies
+    * @looker/extension-sdk bumped from ^21.12.0 to ^21.14.0
+    * @looker/extension-sdk-react bumped from ^21.12.0 to ^21.14.0
+    * @looker/sdk bumped from ^21.12.0 to ^21.14.0
+    * @looker/sdk-rtl bumped from ^21.0.19 to ^21.0.20
+    * @looker/wholly-sheet bumped from ^0.5.15 to ^0.5.16
+
 ## [21.12.0](https://www.github.com/looker-open-source/sdk-codegen/compare/hackathon-v21.10.2...hackathon-v21.12.0) (2021-08-06)
 
 

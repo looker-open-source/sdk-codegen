@@ -41,6 +41,7 @@ import {
   responseMode,
   ResponseMode,
   safeBase64,
+  isErrorLike,
 } from './transport'
 import { BaseTransport } from './baseTransport'
 import { ICryptoHash } from './cryptoHash'
@@ -297,7 +298,8 @@ export class BrowserTransport extends BaseTransport {
         res
       )
       return result
-    } catch (e) {
+    } catch (e: unknown) {
+      if (!isErrorLike(e)) throw e
       const error: ISDKError = {
         message:
           typeof e.message === 'string'

@@ -1,5 +1,23 @@
 # Changelog
 
+### [0.9.19](https://www.github.com/looker-open-source/sdk-codegen/compare/run-it-v0.9.18...run-it-v0.9.19) (2021-09-01)
+
+
+### Features
+
+* http response explorer for RunIt ([#800](https://www.github.com/looker-open-source/sdk-codegen/issues/800)) ([3f273ea](https://www.github.com/looker-open-source/sdk-codegen/commit/3f273ea7f849dafece8f4f5f60558021ecd41705))
+* new configuration UI for API Explorer ([#803](https://www.github.com/looker-open-source/sdk-codegen/issues/803)) ([e6c67d1](https://www.github.com/looker-open-source/sdk-codegen/commit/e6c67d1211b412d4ce83127c9f7a8f091e3cf27f))
+
+
+### Dependencies
+
+* The following workspace dependencies were updated
+  * dependencies
+    * @looker/sdk bumped from ^21.12.0 to ^21.14.0
+    * @looker/sdk-codegen bumped from ^21.0.24 to ^21.0.25
+    * @looker/code-editor bumped from ^0.1.9 to ^0.1.10
+    * @looker/sdk-rtl bumped from ^21.0.19 to ^21.0.20
+
 ### [0.9.18](https://www.github.com/looker-open-source/sdk-codegen/compare/run-it-v0.9.17...run-it-v0.9.18) (2021-08-11)
 
 
