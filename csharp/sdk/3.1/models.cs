@@ -77,6 +77,8 @@ public class ApiVersion : SdkModel
   public ApiVersionElement[]? supported_versions { get; set; } = null;
   /// <summary>API server base url (read-only)</summary>
   public string? api_server_url { get; set; } = null;
+  /// <summary>Web server base url (read-only)</summary>
+  public string? web_server_url { get; set; } = null;
 }
 
 public class ApiVersionElement : SdkModel
@@ -743,7 +745,7 @@ public class Dashboard : SdkModel
   /// <summary>The preferred route for viewing this dashboard (ie: dashboards or dashboards-next)</summary>
   public string? preferred_viewer { get; set; } = null;
   public SpaceBase? space { get; set; }
-  /// <summary>Enables alerts to keep in sync with dashboard filter changes - only available in alerts 2.0 (beta)</summary>
+  /// <summary>Enables alerts to keep in sync with dashboard filter changes - only available in Enhanced Alerts (beta)</summary>
   public bool? alert_sync_with_dashboard_filter_enabled { get; set; } = null;
   /// <summary>Background color</summary>
   public string? background_color { get; set; } = null;
@@ -4310,8 +4312,6 @@ public class WelcomeEmailTest : SdkModel
 
 public class WhitelabelConfiguration : SdkModel
 {
-  /// <summary>Operations the current user is able to perform on this object (read-only)</summary>
-  public StringDictionary<bool>? can { get; set; } = null;
   /// <summary>Unique Id (read-only)</summary>
   public long? id { get; set; } = null;
   /// <summary>Customer logo image. Expected base64 encoded data (write-only)</summary>
@@ -4520,7 +4520,7 @@ public class WriteDashboard : SdkModel
   /// id, content_metadata_id, created_at, creator_id, child_count, external_id, is_embed, is_embed_shared_root, is_embed_users_root, is_personal, is_personal_descendant, is_shared_root, is_users_root, can
   /// </summary>
   public WriteSpaceBase? space { get; set; }
-  /// <summary>Enables alerts to keep in sync with dashboard filter changes - only available in alerts 2.0 (beta)</summary>
+  /// <summary>Enables alerts to keep in sync with dashboard filter changes - only available in Enhanced Alerts (beta)</summary>
   public bool? alert_sync_with_dashboard_filter_enabled { get; set; } = null;
   /// <summary>Background color</summary>
   public string? background_color { get; set; } = null;
@@ -5495,7 +5495,7 @@ public class WriteUserAttributeWithValue : SdkModel
 }
 
 /// Dynamic writeable type for WhitelabelConfiguration removes:
-/// can, id, logo_url, favicon_url
+/// id, logo_url, favicon_url
 public class WriteWhitelabelConfiguration : SdkModel
 {
   /// <summary>Customer logo image. Expected base64 encoded data (write-only)</summary>
