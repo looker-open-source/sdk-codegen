@@ -23,28 +23,4 @@
  SOFTWARE.
 
  */
-import React from 'react'
-import { renderWithTheme } from '@looker/components-test-utils'
-import { Text } from '@looker/components'
-import { screen, waitFor } from '@testing-library/react'
-import userEvent from '@testing-library/user-event'
-
-import { CollapserCard } from './CollapserCard'
-
-describe('CollapserCard', () => {
-  test('it renders heading, children and collapses', async () => {
-    const heading = 'Foo'
-    const childText = 'Bar'
-    renderWithTheme(
-      <CollapserCard heading={heading}>
-        <Text>{childText}</Text>
-      </CollapserCard>
-    )
-    const header = screen.getByText(heading)
-    expect(screen.getByText(childText)).toBeInTheDocument()
-    await userEvent.click(header)
-    await waitFor(() => {
-      expect(screen.queryByText(childText)).not.toBeInTheDocument()
-    })
-  })
-})
+export * from './CodeCopy'

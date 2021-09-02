@@ -5,6 +5,64 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+### [0.9.19](https://www.github.com/looker-open-source/sdk-codegen/compare/api-explorer-v0.9.18...api-explorer-v0.9.19) (2021-09-01)
+
+
+### Features
+
+* http response explorer for RunIt ([#800](https://www.github.com/looker-open-source/sdk-codegen/issues/800)) ([3f273ea](https://www.github.com/looker-open-source/sdk-codegen/commit/3f273ea7f849dafece8f4f5f60558021ecd41705))
+* new configuration UI for API Explorer ([#803](https://www.github.com/looker-open-source/sdk-codegen/issues/803)) ([e6c67d1](https://www.github.com/looker-open-source/sdk-codegen/commit/e6c67d1211b412d4ce83127c9f7a8f091e3cf27f))
+
+
+### Dependencies
+
+* The following workspace dependencies were updated
+  * dependencies
+    * @looker/code-editor bumped from ^0.1.9 to ^0.1.10
+    * @looker/run-it bumped from ^0.9.18 to ^0.9.19
+    * @looker/sdk bumped from ^21.12.0 to ^21.14.0
+    * @looker/sdk-codegen bumped from ^21.0.24 to ^21.0.25
+    * @looker/sdk-rtl bumped from ^21.0.19 to ^21.0.20
+  * devDependencies
+    * @looker/sdk-codegen-scripts bumped from ^21.0.26 to ^21.0.27
+    * @looker/sdk-node bumped from ^21.12.0 to ^21.14.0
+
+### [0.9.18](https://www.github.com/looker-open-source/sdk-codegen/compare/api-explorer-v0.9.17...api-explorer-v0.9.18) (2021-08-11)
+
+
+### Features
+
+* fetch API specifications for stand-alone API Explorer ([#789](https://www.github.com/looker-open-source/sdk-codegen/issues/789)) ([f7be1fb](https://www.github.com/looker-open-source/sdk-codegen/commit/f7be1fb589570137c5ab39304910c57f721de8fb))
+
+
+### Dependencies
+
+* The following workspace dependencies were updated
+  * dependencies
+    * @looker/code-editor bumped from ^0.1.8 to ^0.1.9
+    * @looker/run-it bumped from ^0.9.17 to ^0.9.18
+    * @looker/sdk-codegen bumped from ^21.0.23 to ^21.0.24
+  * devDependencies
+    * @looker/sdk-codegen-scripts bumped from ^21.0.25 to ^21.0.26
+
+### [0.9.17](https://www.github.com/looker-open-source/sdk-codegen/compare/api-explorer-v0.9.16...api-explorer-v0.9.17) (2021-08-06)
+
+
+### Bug Fixes
+
+* documentation refs and notes for Typescript SDK and more ([#783](https://www.github.com/looker-open-source/sdk-codegen/issues/783)) ([b2487ea](https://www.github.com/looker-open-source/sdk-codegen/commit/b2487ea4a113ce17a080ccab9b4c4139813e8810))
+
+
+### Dependencies
+
+* The following workspace dependencies were updated
+  * dependencies
+    * @looker/run-it bumped from ^0.9.16 to ^0.9.17
+    * @looker/sdk bumped from ^21.10.2 to ^21.12.0
+  * devDependencies
+    * @looker/sdk-codegen-scripts bumped from ^21.0.24 to ^21.0.25
+    * @looker/sdk-node bumped from ^21.10.2 to ^21.12.0
+
 ### [0.9.16](https://www.github.com/looker-open-source/sdk-codegen/compare/api-explorer-v0.9.15...api-explorer-v0.9.16) (2021-07-30)
 
 
@@ -332,4 +390,4 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Response types now have nested types correctly documented
 - The response type processing functions now have arguments for the number of levels to expand nested types
 - API explorer's default expansion depth is one level deep
-- Added [`ExploreType`](/packages/api-explorer/src/components/ExploreType/ExploreType.tsx) and [`ExploreProperty`](/packages/api-explorer/src/components/ExploreType/ExploreProperty.tsx) components used to display responses and explore the type on the type page
+- Added [`ExploreType`](src/components/ExploreType/ExploreType.tsx) and [`ExploreProperty`](src/components/ExploreType/ExploreProperty.tsx) components used to display responses and explore the type on the type page

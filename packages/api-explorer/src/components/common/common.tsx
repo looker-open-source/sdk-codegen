@@ -24,21 +24,9 @@
 
  */
 import React, { useEffect, FC } from 'react'
-import styled from 'styled-components'
-import { Heading, Section, SectionProps } from '@looker/components'
+import { Section, SectionProps } from '@looker/components'
 import { useWindowSize } from '../../utils'
 import { HEADER_REM } from '../Header'
-
-/**
- * Common styled components to be used across the whole library
- */
-
-export const ApixHeading = styled(Heading)``
-
-ApixHeading.defaultProps = {
-  mb: 'xsmall',
-  pt: 'xsmall',
-}
 
 export const REM_TO_PX = 16
 

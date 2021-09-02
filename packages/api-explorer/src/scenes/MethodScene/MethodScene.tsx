@@ -34,9 +34,8 @@ import {
   ExtendComponentsThemeProvider,
 } from '@looker/components'
 import { Beaker } from '@looker/icons'
-import { ThemeContext } from 'styled-components'
 import { useParams } from 'react-router-dom'
-import { RunIt, RunItContext } from '@looker/run-it'
+import { RunIt, RunItSetter, RunItContext, RunItFormKey } from '@looker/run-it'
 import { ApiModel, typeRefs } from '@looker/sdk-codegen'
 import { useSelector } from 'react-redux'
 
@@ -55,33 +54,52 @@ import {
   DocSchema,
 } from '../../components'
 import { getSelectedSdkLanguage } from '../../state'
+import { IApixEnvAdaptor } from '../../utils'
 import { DocOperation, DocRequestBody } from './components'
 import { createInputs } from './utils'
 
-interface DocMethodProps {
+interface MethodSceneProps {
   api: ApiModel
+  envAdaptor: IApixEnvAdaptor
+  setVersionsUrl: RunItSetter
 }
 
-interface DocMethodParams {
+interface MethodSceneParams {
   methodName: string
   specKey: string
 }
 
-export const MethodScene: FC<DocMethodProps> = ({ api }) => {
+const showRunIt = async (envAdaptor: IApixEnvAdaptor) => {
+  const data = await envAdaptor.localStorageGetItem(RunItFormKey)
+  return !!data
+}
+
+export const MethodScene: FC<MethodSceneProps> = ({
+  api,
+  envAdaptor,
+  setVersionsUrl,
+}) => {
   const { sdk } = useContext(RunItContext)
   const sdkLanguage = useSelector(getSelectedSdkLanguage)
-  const { methodName, specKey } = useParams<DocMethodParams>()
-  const { value, toggle } = useToggle()
+  const { methodName, specKey } = useParams<MethodSceneParams>()
+  const { value, toggle, setOn } = useToggle()
   const [method, setMethod] = useState(api.methods[methodName])
   const seeTypes = typeRefs(api, method.customTypes)
+
+  const RunItButton = value ? Button : ButtonOutline
 
   useEffect(() => {
     setMethod(api.methods[methodName])
   }, [api, methodName])
 
-  const { colors } = useContext(ThemeContext)
+  useEffect(() => {
+    const checkRunIt = async () => {
+      const show = await showRunIt(envAdaptor)
+      if (show) setOn()
+    }
+    checkRunIt()
+  }, [envAdaptor, setOn])
 
-  const RunItButton = value ? Button : ButtonOutline
   const runItToggle = (
     <RunItButton
       color={value ? 'key' : 'neutral'}
@@ -121,8 +139,11 @@ export const MethodScene: FC<DocMethodProps> = ({ api }) => {
           <ExtendComponentsThemeProvider
             themeCustomizations={{
               colors: {
-                background: colors.text,
-                text: colors.background,
+                background: '#262D33',
+                key: '#8AB4F8',
+                text: '#fff',
+                link: '#8AB4F8',
+                critical: '#FF877C',
               },
             }}
           >
@@ -131,6 +152,7 @@ export const MethodScene: FC<DocMethodProps> = ({ api }) => {
               api={api}
               inputs={createInputs(api, method)}
               method={method}
+              setVersionsUrl={setVersionsUrl}
             />
           </ExtendComponentsThemeProvider>
         </Aside>

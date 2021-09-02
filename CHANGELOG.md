@@ -1,5 +1,54 @@
 # Changelog
 
+## [1.15.0](https://www.github.com/looker-open-source/sdk-codegen/compare/sdk-codegen-all-v1.14.0...sdk-codegen-all-v1.15.0) (2021-09-01)
+
+
+### Features
+
+* http response explorer for RunIt ([#800](https://www.github.com/looker-open-source/sdk-codegen/issues/800)) ([3f273ea](https://www.github.com/looker-open-source/sdk-codegen/commit/3f273ea7f849dafece8f4f5f60558021ecd41705))
+* Looker 21.14 release ([#807](https://www.github.com/looker-open-source/sdk-codegen/issues/807)) ([99db26d](https://www.github.com/looker-open-source/sdk-codegen/commit/99db26dcd812135d775e61e495c98a66057c6f54))
+* new configuration UI for API Explorer ([#803](https://www.github.com/looker-open-source/sdk-codegen/issues/803)) ([e6c67d1](https://www.github.com/looker-open-source/sdk-codegen/commit/e6c67d1211b412d4ce83127c9f7a8f091e3cf27f))
+
+
+### Bug Fixes
+
+* placate TypeScript 4.4 ([#809](https://www.github.com/looker-open-source/sdk-codegen/issues/809)) ([6509c17](https://www.github.com/looker-open-source/sdk-codegen/commit/6509c17da655be1fb7d51d0275b9e198aa6ae929))
+* remove custom Exceptions and `assert` to make scripts executable at the simplest possible setup.  ([#780](https://www.github.com/looker-open-source/sdk-codegen/issues/780)) ([0126ad9](https://www.github.com/looker-open-source/sdk-codegen/commit/0126ad978cd0b7df3daab3932d93bae307260bf4))
+* spec refresh ([#801](https://www.github.com/looker-open-source/sdk-codegen/issues/801)) ([a10245a](https://www.github.com/looker-open-source/sdk-codegen/commit/a10245aa7ea180670d9d8219810aab88eb50854d))
+
+## [1.14.0](https://www.github.com/looker-open-source/sdk-codegen/compare/sdk-codegen-all-v1.13.1...sdk-codegen-all-v1.14.0) (2021-08-11)
+
+
+### Features
+
+* fetch API specifications for stand-alone API Explorer ([#789](https://www.github.com/looker-open-source/sdk-codegen/issues/789)) ([f7be1fb](https://www.github.com/looker-open-source/sdk-codegen/commit/f7be1fb589570137c5ab39304910c57f721de8fb))
+
+
+### Bug Fixes
+
+* relax python dict key access ([#791](https://www.github.com/looker-open-source/sdk-codegen/issues/791)) ([d923c2f](https://www.github.com/looker-open-source/sdk-codegen/commit/d923c2faf3bde822307fa3d4f3367f270f47b49e)), closes [#778](https://www.github.com/looker-open-source/sdk-codegen/issues/778)
+
+### [1.13.1](https://www.github.com/looker-open-source/sdk-codegen/compare/sdk-codegen-all-v1.13.0...sdk-codegen-all-v1.13.1) (2021-08-09)
+
+
+### Bug Fixes
+
+* remove python setup.py author_email ([#787](https://www.github.com/looker-open-source/sdk-codegen/issues/787)) ([7939a73](https://www.github.com/looker-open-source/sdk-codegen/commit/7939a7397c44864e1f48cea7a408ce1bfdef9782))
+
+## [1.13.0](https://www.github.com/looker-open-source/sdk-codegen/compare/sdk-codegen-all-v1.12.0...sdk-codegen-all-v1.13.0) (2021-08-06)
+
+
+### Features
+
+* Another simple example add users to a Looker group based on a csv.  ([#776](https://www.github.com/looker-open-source/sdk-codegen/issues/776)) ([83cde03](https://www.github.com/looker-open-source/sdk-codegen/commit/83cde032a17aa6cf1d9f8ab598c8b5484336496c))
+* Looker 21.12 bindings ([#782](https://www.github.com/looker-open-source/sdk-codegen/issues/782)) ([a00b908](https://www.github.com/looker-open-source/sdk-codegen/commit/a00b908e6fee79250c4c1ffb1b1e8915d58dd633))
+
+
+### Bug Fixes
+
+* apix fix ([#785](https://www.github.com/looker-open-source/sdk-codegen/issues/785)) ([5ecea27](https://www.github.com/looker-open-source/sdk-codegen/commit/5ecea27fa5cc124ec1d823484cd67b0d22132624))
+* documentation refs and notes for Typescript SDK and more ([#783](https://www.github.com/looker-open-source/sdk-codegen/issues/783)) ([b2487ea](https://www.github.com/looker-open-source/sdk-codegen/commit/b2487ea4a113ce17a080ccab9b4c4139813e8810))
+
 ## [1.12.0](https://www.github.com/looker-open-source/sdk-codegen/compare/sdk-codegen-all-v1.11.0...sdk-codegen-all-v1.12.0) (2021-07-30)
 
 

@@ -5,6 +5,18 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+### [21.0.20](https://www.github.com/looker-open-source/sdk-codegen/compare/sdk-rtl-v21.0.19...sdk-rtl-v21.0.20) (2021-09-01)
+
+
+### Features
+
+* http response explorer for RunIt ([#800](https://www.github.com/looker-open-source/sdk-codegen/issues/800)) ([3f273ea](https://www.github.com/looker-open-source/sdk-codegen/commit/3f273ea7f849dafece8f4f5f60558021ecd41705))
+
+
+### Bug Fixes
+
+* placate TypeScript 4.4 ([#809](https://www.github.com/looker-open-source/sdk-codegen/issues/809)) ([6509c17](https://www.github.com/looker-open-source/sdk-codegen/commit/6509c17da655be1fb7d51d0275b9e198aa6ae929))
+
 ### [21.0.19](https://www.github.com/looker-open-source/sdk-codegen/compare/sdk-rtl-v21.0.18...sdk-rtl-v21.0.19) (2021-07-30)
 
 

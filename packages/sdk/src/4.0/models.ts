@@ -25,7 +25,7 @@
  */
 
 /**
- * 335 API models: 211 Spec, 51 Request, 56 Write, 17 Enum
+ * 350 API models: 219 Spec, 54 Request, 58 Write, 19 Enum
  */
 
 import type { IDictionary, DelimArray } from '@looker/sdk-rtl'
@@ -51,6 +51,142 @@ export interface IAccessToken {
    * Refresh token which can be used to obtain a new access token (read-only)
    */
   refresh_token?: string
+}
+
+export interface IAlert {
+  /**
+   * Filters coming from the dashboard that are applied. Example `[{ "filter_title": "Name", "field_name": "distribution_centers.name", "filter_value": "Los Angeles CA" }]`
+   */
+  applied_dashboard_filters?: IAlertAppliedDashboardFilter[]
+  /**
+   * This property informs the check what kind of comparison we are performing. Only certain condition types are valid for time series alerts. For details, refer to [Setting Alert Conditions](https://docs.looker.com/sharing-and-publishing/creating-alerts#setting_alert_conditions) Valid values are: "EQUAL_TO", "GREATER_THAN", "GREATER_THAN_OR_EQUAL_TO", "LESS_THAN", "LESS_THAN_OR_EQUAL_TO", "INCREASES_BY", "DECREASES_BY", "CHANGES_BY".
+   */
+  comparison_type?: ComparisonType
+  /**
+   * Vixie-Style crontab specification when to run. At minumum, it has to be longer than 15 minute intervals
+   */
+  cron?: string
+  /**
+   * An optional, user-defined title for the alert
+   */
+  custom_title?: string
+  /**
+   * ID of the dashboard element associated with the alert. Refer to [dashboard_element()](#!/Dashboard/DashboardElement)
+   */
+  dashboard_element_id?: number
+  /**
+   * Array of destinations to send alerts to. Must be the same type of destination. Example `[{ "destination_type": "EMAIL", "email_address": "test@test.com" }]`
+   */
+  destinations?: IAlertDestination[]
+  field?: IAlertField
+  /**
+   * ID of the alert (read-only)
+   */
+  id?: number
+  /**
+   * Whether or not the alert is disabled
+   */
+  is_disabled?: boolean
+  /**
+   * Whether or not the alert is public
+   */
+  is_public?: boolean
+  /**
+   * ID of the LookML dashboard associated with the alert
+   */
+  lookml_dashboard_id?: string
+  /**
+   * ID of the LookML dashboard element associated with the alert
+   */
+  lookml_link_id?: string
+  /**
+   * User id of alert owner
+   */
+  owner_id?: number
+  /**
+   * Value of the alert threshold
+   */
+  threshold?: number
+  time_series_condition_state?: IAlertConditionState
+}
+
+export interface IAlertAppliedDashboardFilter {
+  /**
+   * Field Title. Refer to `DashboardFilter.title` in [DashboardFilter](#!/types/DashboardFilter). Example `Name`
+   */
+  filter_title?: string
+  /**
+   * Field Name. Refer to `DashboardFilter.dimension` in [DashboardFilter](#!/types/DashboardFilter). Example `distribution_centers.name`
+   */
+  field_name?: string
+  /**
+   * Field Value. [Filter Expressions](https://docs.looker.com/reference/filter-expressions). Example `Los Angeles CA`
+   */
+  filter_value?: string
+  /**
+   * Human Readable Filter Description. This may be null or auto-generated. Example `is Los Angeles CA` (read-only)
+   */
+  filter_description?: string
+}
+
+export interface IAlertConditionState {
+  /**
+   * (Write-Only) The second latest time string the alert has seen.
+   */
+  previous_time_series_id?: string
+  /**
+   * (Write-Only) Latest time string the alert has seen.
+   */
+  latest_time_series_id?: string
+}
+
+export interface IAlertDestination {
+  /**
+   * Type of destination that the alert will be sent to Valid values are: "EMAIL", "ACTION_HUB".
+   */
+  destination_type: DestinationType
+  /**
+   * Email address for the 'email' type
+   */
+  email_address?: string
+  /**
+   * Action hub integration id for the 'action_hub' type. [Integration](#!/types/Integration)
+   */
+  action_hub_integration_id?: string
+  /**
+   * Action hub form params json for the 'action_hub' type [IntegrationParam](#!/types/IntegrationParam)
+   */
+  action_hub_form_params_json?: string
+}
+
+export interface IAlertField {
+  /**
+   * Field's title. Usually auto-generated to reflect field name and its filters
+   */
+  title?: string
+  /**
+   * Field's name. Has the format `<view>.<field>` Refer to [docs](https://docs.looker.com/sharing-and-publishing/creating-alerts) for more details
+   */
+  name?: string
+  /**
+   * (Optional / Advance Use) List of fields filter. This further restricts the alert to certain dashboard element's field values. This can be used on top of dashboard filters `applied_dashboard_filters`. To keep thing simple, it's suggested to just use dashboard filters. Example: `{ 'title': '12 Number on Hand', 'name': 'inventory_items.number_on_hand', 'filter': [{ 'field_name': 'inventory_items.id', 'field_value': 12, 'filter_value': null }] }`
+   */
+  filter?: IAlertFieldFilter[]
+}
+
+export interface IAlertFieldFilter {
+  /**
+   * Field Name. Has format `<view>.<field>`
+   */
+  field_name?: string
+  /**
+   * Field Value. Depends on the type of field - numeric or string. For [location](https://docs.looker.com/reference/field-reference/dimension-type-reference#location) type, it's a list of floats. Example `[1.0, 56.0]`
+   */
+  field_value?: any
+  /**
+   * Filter Value. Usually null except for [location](https://docs.looker.com/reference/field-reference/dimension-type-reference#location) type. It'll be a string of lat,long ie `'1.0,56.0'`
+   */
+  filter_value?: string
 }
 
 /**
@@ -90,6 +226,10 @@ export interface IApiVersion {
    * API server base url (read-only)
    */
   api_server_url?: string
+  /**
+   * Web server base url (read-only)
+   */
+  web_server_url?: string
 }
 
 export interface IApiVersionElement {
@@ -215,6 +355,22 @@ export interface IBoardItem {
    */
   content_updated_at?: string
   /**
+   * (Write-Only) base64 encoded image data
+   */
+  custom_image_data_base64?: string
+  /**
+   * Custom image_url entered by the user, if present (read-only)
+   */
+  custom_image_url?: string
+  /**
+   * Custom title entered by the user, if present
+   */
+  custom_title?: string
+  /**
+   * Custom url entered by the user, if present
+   */
+  custom_url?: string
+  /**
    * Dashboard to base this item on
    */
   dashboard_id?: number
@@ -234,6 +390,10 @@ export interface IBoardItem {
    * Unique Id (read-only)
    */
   id?: number
+  /**
+   * The actual image_url for display (read-only)
+   */
+  image_url?: string
   /**
    * The container folder name of the content (read-only)
    */
@@ -399,6 +559,20 @@ export interface ICommand {
    * Name of the command Valid values are: "dashboard", "lookml_dashboard".
    */
   linked_content_type?: LinkedContentType
+}
+
+/**
+ * This property informs the check what kind of comparison we are performing. Only certain condition types are valid for time series alerts. For details, refer to [Setting Alert Conditions](https://docs.looker.com/sharing-and-publishing/creating-alerts#setting_alert_conditions) Valid values are: "EQUAL_TO", "GREATER_THAN", "GREATER_THAN_OR_EQUAL_TO", "LESS_THAN", "LESS_THAN_OR_EQUAL_TO", "INCREASES_BY", "DECREASES_BY", "CHANGES_BY".
+ */
+export enum ComparisonType {
+  EQUAL_TO = 'EQUAL_TO',
+  GREATER_THAN = 'GREATER_THAN',
+  GREATER_THAN_OR_EQUAL_TO = 'GREATER_THAN_OR_EQUAL_TO',
+  LESS_THAN = 'LESS_THAN',
+  LESS_THAN_OR_EQUAL_TO = 'LESS_THAN_OR_EQUAL_TO',
+  INCREASES_BY = 'INCREASES_BY',
+  DECREASES_BY = 'DECREASES_BY',
+  CHANGES_BY = 'CHANGES_BY',
 }
 
 export interface IConnectionFeatures {
@@ -1172,6 +1346,49 @@ export interface ICredentialsEmail {
   user_url?: string
 }
 
+export interface ICredentialsEmailSearch {
+  /**
+   * Operations the current user is able to perform on this object (read-only)
+   */
+  can?: IDictionary<boolean>
+  /**
+   * Timestamp for the creation of this credential (read-only)
+   */
+  created_at?: string
+  /**
+   * EMail address used for user login
+   */
+  email?: string
+  /**
+   * Force the user to change their password upon their next login
+   */
+  forced_password_reset_at_next_login?: boolean
+  /**
+   * Has this credential been disabled? (read-only)
+   */
+  is_disabled?: boolean
+  /**
+   * Timestamp for most recent login using credential (read-only)
+   */
+  logged_in_at?: string
+  /**
+   * Url with one-time use secret token that the user can use to reset password (read-only)
+   */
+  password_reset_url?: string
+  /**
+   * Short name for the type of this kind of credential (read-only)
+   */
+  type?: string
+  /**
+   * Link to get this item (read-only)
+   */
+  url?: string
+  /**
+   * Link to get this user (read-only)
+   */
+  user_url?: string
+}
+
 export interface ICredentialsEmbed {
   /**
    * Operations the current user is able to perform on this object (read-only)
@@ -1511,7 +1728,7 @@ export interface IDashboard {
    */
   preferred_viewer?: string
   /**
-   * Enables alerts to keep in sync with dashboard filter changes - only available in alerts 2.0 (beta)
+   * Enables alerts to keep in sync with dashboard filter changes - only available in Enhanced Alerts (beta)
    */
   alert_sync_with_dashboard_filter_enabled?: boolean
   /**
@@ -2426,6 +2643,14 @@ export enum DependencyStatus {
   lock_required = 'lock_required',
   lock_error = 'lock_error',
   install_none = 'install_none',
+}
+
+/**
+ * Type of destination that the alert will be sent to Valid values are: "EMAIL", "ACTION_HUB".
+ */
+export enum DestinationType {
+  EMAIL = 'EMAIL',
+  ACTION_HUB = 'ACTION_HUB',
 }
 
 export interface IDialect {
@@ -6348,6 +6573,24 @@ export interface IRequestAllIntegrations {
 }
 
 /**
+ * Dynamically generated request type for all_lookml_models
+ */
+export interface IRequestAllLookmlModels {
+  /**
+   * Requested fields.
+   */
+  fields?: string
+  /**
+   * Number of results to return. (can be used with offset)
+   */
+  limit?: number
+  /**
+   * Number of results to skip before returning any. (Defaults to 0 if not set when limit is used)
+   */
+  offset?: number
+}
+
+/**
  * Dynamically generated request type for all_roles
  */
 export interface IRequestAllRoles {
@@ -6388,13 +6631,21 @@ export interface IRequestAllUsers {
    */
   fields?: string
   /**
-   * Requested page.
+   * DEPRECATED. Use limit and offset instead. Return only page N of paginated results
    */
   page?: number
   /**
-   * Results per page.
+   * DEPRECATED. Use limit and offset instead. Return N rows of data per page
    */
   per_page?: number
+  /**
+   * Number of results to return. (used with offset and takes priority over page and per_page)
+   */
+  limit?: number
+  /**
+   * Number of results to skip before returning any. (used with limit and takes priority over page and per_page)
+   */
+  offset?: number
   /**
    * Fields to sort by.
    */
@@ -7114,6 +7365,48 @@ export interface IRequestScheduledPlansForLookmlDashboard {
 }
 
 /**
+ * Dynamically generated request type for search_alerts
+ */
+export interface IRequestSearchAlerts {
+  /**
+   * (Optional) Number of results to return (used with `offset`).
+   */
+  limit?: number
+  /**
+   * (Optional) Number of results to skip before returning any (used with `limit`).
+   */
+  offset?: number
+  /**
+   * (Optional) Requested fields.
+   */
+  fields?: string
+  /**
+   * (Optional) Filter on returning only enabled or disabled alerts.
+   */
+  disabled?: boolean
+  /**
+   * (Optional) Filter on alert frequency, such as: monthly, weekly, daily, hourly, minutes
+   */
+  frequency?: string
+  /**
+   * (Optional) Filter on whether the alert has met its condition when it last executed
+   */
+  condition_met?: boolean
+  /**
+   * (Optional) Filter on the start range of the last time the alerts were run. Example: 2021-01-01T01:01:01-08:00.
+   */
+  last_run_start?: string
+  /**
+   * (Optional) Filter on the start range of the last time the alerts were run. Example: 2021-01-01T01:01:01-08:00.
+   */
+  last_run_end?: string
+  /**
+   * (Admin only) (Optional) Filter for all owners.
+   */
+  all_owners?: boolean
+}
+
+/**
  * Dynamically generated request type for search_boards
  */
 export interface IRequestSearchBoards {
@@ -7275,6 +7568,44 @@ export interface IRequestSearchContentViews {
   sorts?: string
   /**
    * Combine given search criteria in a boolean OR expression
+   */
+  filter_or?: boolean
+}
+
+/**
+ * Dynamically generated request type for search_credentials_email
+ */
+export interface IRequestSearchCredentialsEmail {
+  /**
+   * Requested fields.
+   */
+  fields?: string
+  /**
+   * Number of results to return (used with `offset`).
+   */
+  limit?: number
+  /**
+   * Number of results to skip before returning any (used with `limit`).
+   */
+  offset?: number
+  /**
+   * Fields to sort by.
+   */
+  sorts?: string
+  /**
+   * Match credentials_email id.
+   */
+  id?: number
+  /**
+   * Match credentials_email email.
+   */
+  email?: string
+  /**
+   * Find credentials_email that match given emails.
+   */
+  emails?: string
+  /**
+   * Combine given search criteria in a boolean OR expression.
    */
   filter_or?: boolean
 }
@@ -7746,13 +8077,21 @@ export interface IRequestSearchUsers {
    */
   fields?: string
   /**
-   * Return only page N of paginated results
+   * DEPRECATED. Use limit and offset instead. Return only page N of paginated results
    */
   page?: number
   /**
-   * Return N rows of data per page
+   * DEPRECATED. Use limit and offset instead. Return N rows of data per page
    */
   per_page?: number
+  /**
+   * Number of results to return. (used with offset and takes priority over page and per_page)
+   */
+  limit?: number
+  /**
+   * Number of results to skip before returning any. (used with limit and takes priority over page and per_page)
+   */
+  offset?: number
   /**
    * Fields to sort by.
    */
@@ -7812,13 +8151,21 @@ export interface IRequestSearchUsersNames {
    */
   fields?: string
   /**
-   * Return only page N of paginated results
+   * DEPRECATED. Use limit and offset instead. Return only page N of paginated results
    */
   page?: number
   /**
-   * Return N rows of data per page
+   * DEPRECATED. Use limit and offset instead. Return N rows of data per page
    */
   per_page?: number
+  /**
+   * Number of results to return. (used with offset and takes priority over page and per_page)
+   */
+  limit?: number
+  /**
+   * Number of results to skip before returning any. (used with limit and takes priority over page and per_page)
+   */
+  offset?: number
   /**
    * Fields to sort by
    */
@@ -8780,6 +9127,22 @@ export interface ISessionConfig {
   track_session_location?: boolean
 }
 
+export interface ISetting {
+  /**
+   * Toggle extension framework on or off
+   */
+  extension_framework_enabled?: boolean
+  /**
+   * Toggle marketplace auto install on or off. Note that auto install only runs if marketplace is enabled.
+   */
+  marketplace_auto_install_enabled?: boolean
+  /**
+   * Toggle marketplace on or off
+   */
+  marketplace_enabled?: boolean
+  whitelabel_configuration?: IWhitelabelConfiguration
+}
+
 export interface ISnippet {
   /**
    * Name of the snippet (read-only)
@@ -9555,10 +9918,6 @@ export interface IWelcomeEmailTest {
 
 export interface IWhitelabelConfiguration {
   /**
-   * Operations the current user is able to perform on this object (read-only)
-   */
-  can?: IDictionary<boolean>
-  /**
    * Unique Id (read-only)
    */
   id?: number
@@ -9640,6 +9999,63 @@ export interface IWorkspace {
 }
 
 /**
+ * Dynamic writeable type for Alert removes:
+ * id
+ */
+export interface IWriteAlert {
+  /**
+   * Filters coming from the dashboard that are applied. Example `[{ "filter_title": "Name", "field_name": "distribution_centers.name", "filter_value": "Los Angeles CA" }]`
+   */
+  applied_dashboard_filters?: IAlertAppliedDashboardFilter[]
+  /**
+   * This property informs the check what kind of comparison we are performing. Only certain condition types are valid for time series alerts. For details, refer to [Setting Alert Conditions](https://docs.looker.com/sharing-and-publishing/creating-alerts#setting_alert_conditions) Valid values are: "EQUAL_TO", "GREATER_THAN", "GREATER_THAN_OR_EQUAL_TO", "LESS_THAN", "LESS_THAN_OR_EQUAL_TO", "INCREASES_BY", "DECREASES_BY", "CHANGES_BY".
+   */
+  comparison_type?: ComparisonType
+  /**
+   * Vixie-Style crontab specification when to run. At minumum, it has to be longer than 15 minute intervals
+   */
+  cron?: string
+  /**
+   * An optional, user-defined title for the alert
+   */
+  custom_title?: string
+  /**
+   * ID of the dashboard element associated with the alert. Refer to [dashboard_element()](#!/Dashboard/DashboardElement)
+   */
+  dashboard_element_id?: number
+  /**
+   * Array of destinations to send alerts to. Must be the same type of destination. Example `[{ "destination_type": "EMAIL", "email_address": "test@test.com" }]`
+   */
+  destinations?: IAlertDestination[]
+  field?: IAlertField
+  /**
+   * Whether or not the alert is disabled
+   */
+  is_disabled?: boolean
+  /**
+   * Whether or not the alert is public
+   */
+  is_public?: boolean
+  /**
+   * ID of the LookML dashboard associated with the alert
+   */
+  lookml_dashboard_id?: string
+  /**
+   * ID of the LookML dashboard element associated with the alert
+   */
+  lookml_link_id?: string
+  /**
+   * User id of alert owner
+   */
+  owner_id?: number
+  /**
+   * Value of the alert threshold
+   */
+  threshold?: number
+  time_series_condition_state?: IAlertConditionState
+}
+
+/**
  * Dynamic writeable type for ApiSession removes:
  * can, sudo_user_id
  */
@@ -9702,9 +10118,21 @@ export interface IWriteBoard {
 
 /**
  * Dynamic writeable type for BoardItem removes:
- * can, content_created_by, content_favorite_id, content_metadata_id, content_updated_at, description, favorite_count, id, location, title, url, view_count
+ * can, content_created_by, content_favorite_id, content_metadata_id, content_updated_at, custom_image_url, description, favorite_count, id, image_url, location, title, url, view_count
  */
 export interface IWriteBoardItem {
+  /**
+   * (Write-Only) base64 encoded image data
+   */
+  custom_image_data_base64?: string
+  /**
+   * Custom title entered by the user, if present
+   */
+  custom_title?: string
+  /**
+   * Custom url entered by the user, if present
+   */
+  custom_url?: string
   /**
    * Dashboard to base this item on
    */
@@ -10003,7 +10431,7 @@ export interface IWriteDashboard {
    */
   preferred_viewer?: string
   /**
-   * Enables alerts to keep in sync with dashboard filter changes - only available in alerts 2.0 (beta)
+   * Enables alerts to keep in sync with dashboard filter changes - only available in Enhanced Alerts (beta)
    */
   alert_sync_with_dashboard_filter_enabled?: boolean
   /**
@@ -11499,6 +11927,29 @@ export interface IWriteSessionConfig {
 }
 
 /**
+ * Dynamic writeable type for Setting
+ */
+export interface IWriteSetting {
+  /**
+   * Toggle extension framework on or off
+   */
+  extension_framework_enabled?: boolean
+  /**
+   * Toggle marketplace auto install on or off. Note that auto install only runs if marketplace is enabled.
+   */
+  marketplace_auto_install_enabled?: boolean
+  /**
+   * Toggle marketplace on or off
+   */
+  marketplace_enabled?: boolean
+  /**
+   * Dynamic writeable type for WhitelabelConfiguration removes:
+   * id, logo_url, favicon_url
+   */
+  whitelabel_configuration?: IWriteWhitelabelConfiguration
+}
+
+/**
  * Dynamic writeable type for SshServer removes:
  * ssh_server_id, finger_print, sha_finger_print, public_key, status
  */
@@ -11652,7 +12103,7 @@ export interface IWriteUserAttributeWithValue {
 
 /**
  * Dynamic writeable type for WhitelabelConfiguration removes:
- * can, id, logo_url, favicon_url
+ * id, logo_url, favicon_url
  */
 export interface IWriteWhitelabelConfiguration {
   /**

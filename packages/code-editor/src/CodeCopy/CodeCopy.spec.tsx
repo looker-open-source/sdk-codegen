@@ -24,29 +24,19 @@
 
  */
 
-import React, { Dispatch, FC } from 'react'
-import { Dialog, IconButton } from '@looker/components'
-import { Settings } from '@styled-icons/material-outlined'
-import { ConfigForm, RunItConfigurator } from '.'
+import React from 'react'
+import { screen } from '@testing-library/react'
+import { renderWithTheme } from '@looker/components-test-utils'
+import { CodeCopy } from './CodeCopy'
 
-interface ConfigDialogProps {
-  /**
-   * A set state callback fn used to set a hasConfig flag indicating whether OAuth config details are present
-   * */
-  setHasConfig?: Dispatch<boolean>
-  configurator: RunItConfigurator
-}
-
-export const ConfigDialog: FC<ConfigDialogProps> = ({
-  setHasConfig,
-  configurator,
-}) => (
-  <Dialog
-    width="small"
-    content={
-      <ConfigForm setHasConfig={setHasConfig} configurator={configurator} />
-    }
-  >
-    <IconButton label="Settings" icon={<Settings />} />
-  </Dialog>
-)
+describe('CodeCopy', () => {
+  test('displays code and clipboard UI', async () => {
+    const code = 'Some text. Supposed to be good for you.'
+    const caption = 'Copy this!'
+    renderWithTheme(<CodeCopy code={code} caption={caption} language="text" />)
+    const copy = screen.getByRole('button', { name: caption })
+    expect(copy).toBeInTheDocument()
+    const pre = screen.getByText(code)
+    expect(pre).toHaveTextContent(code)
+  })
+})

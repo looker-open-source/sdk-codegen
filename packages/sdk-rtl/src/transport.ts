@@ -505,3 +505,18 @@ export function safeBase64(u8: Uint8Array) {
   const rawBase64 = btoa(String.fromCharCode(...u8))
   return rawBase64.replace(/\+/g, '-').replace(/\//g, '_')
 }
+
+/**
+ * Type predicate. Asserts that a given object is error-like.
+ * @param error a value of unknown type
+ * @return boolean true if the error has a `message` key of type string.
+ */
+export function isErrorLike<T extends unknown>(
+  error: T
+): error is T & { message: string } {
+  if (typeof error !== 'object') return false
+  if (!error) return false
+  if (!Object.prototype.hasOwnProperty.call(error, 'message')) return false
+  if (typeof (error as { message: unknown }).message !== 'string') return false
+  return true
+}

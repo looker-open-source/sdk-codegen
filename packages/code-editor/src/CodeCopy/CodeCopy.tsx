@@ -24,30 +24,35 @@
 
  */
 import React, { FC } from 'react'
-import {
-  ComponentsProvider,
-  Flex,
-  FlexItem,
-  Heading,
-  ProgressCircular,
-} from '@looker/components'
-import { ThemeOverrides } from '@looker/api-explorer/src/utils'
+import { Space, CopyToClipboard } from '@looker/components'
+import { CodeDisplay, CodeDisplayProps } from '..'
 
-export interface LoaderProps {
-  themeOverrides: ThemeOverrides
+interface CodeCopyProps extends CodeDisplayProps {
+  caption?: string
 }
-
-export const Loader: FC<LoaderProps> = ({ themeOverrides }) => (
-  <ComponentsProvider {...themeOverrides}>
-    <Flex flexDirection="column" justifyContent="center" mt="25%">
-      <FlexItem alignSelf="center">
-        <ProgressCircular size="large" />
-      </FlexItem>
-      <FlexItem mt="large" alignSelf="center">
-        <Heading color="key" as="h2">
-          Loading API Specifications
-        </Heading>
-      </FlexItem>
-    </Flex>
-  </ComponentsProvider>
-)
+/**
+ * Shows code with clipboard copying support
+ */
+export const CodeCopy: FC<CodeCopyProps> = ({
+  language = 'json',
+  code,
+  caption = 'Copy',
+  pattern = '',
+  transparent = false,
+  inline = false,
+  lineNumbers = true,
+}) => {
+  return (
+    <Space between align="start" pt="xsmall">
+      <CodeDisplay
+        code={code}
+        language={language}
+        pattern={pattern}
+        transparent={transparent}
+        inline={inline}
+        lineNumbers={lineNumbers}
+      />
+      <CopyToClipboard content={code}>{caption}</CopyToClipboard>
+    </Space>
+  )
+}

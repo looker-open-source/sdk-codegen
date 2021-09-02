@@ -21,7 +21,7 @@
 /// SOFTWARE.
 ///
 
-/// 284 API models: 211 Spec, 0 Request, 56 Write, 17 Enum
+/// 296 API models: 219 Spec, 0 Request, 58 Write, 19 Enum
 
 #nullable enable
 using System;
@@ -49,6 +49,92 @@ public class AccessToken : SdkModel
   public long? expires_in { get; set; } = null;
   /// <summary>Refresh token which can be used to obtain a new access token (read-only)</summary>
   public string? refresh_token { get; set; } = null;
+}
+
+public class Alert : SdkModel
+{
+  /// <summary>Filters coming from the dashboard that are applied. Example `[{ "filter_title": "Name", "field_name": "distribution_centers.name", "filter_value": "Los Angeles CA" }]`</summary>
+  public AlertAppliedDashboardFilter[]? applied_dashboard_filters { get; set; } = null;
+  /// <summary>This property informs the check what kind of comparison we are performing. Only certain condition types are valid for time series alerts. For details, refer to [Setting Alert Conditions](https://docs.looker.com/sharing-and-publishing/creating-alerts#setting_alert_conditions) Valid values are: "EQUAL_TO", "GREATER_THAN", "GREATER_THAN_OR_EQUAL_TO", "LESS_THAN", "LESS_THAN_OR_EQUAL_TO", "INCREASES_BY", "DECREASES_BY", "CHANGES_BY".</summary>
+  [JsonConverter(typeof(StringEnumConverter))]
+  public ComparisonType? comparison_type { get; set; }
+  /// <summary>Vixie-Style crontab specification when to run. At minumum, it has to be longer than 15 minute intervals</summary>
+  public string? cron { get; set; } = null;
+  /// <summary>An optional, user-defined title for the alert</summary>
+  public string? custom_title { get; set; } = null;
+  /// <summary>ID of the dashboard element associated with the alert. Refer to [dashboard_element()](#!/Dashboard/DashboardElement)</summary>
+  public long? dashboard_element_id { get; set; } = null;
+  /// <summary>Array of destinations to send alerts to. Must be the same type of destination. Example `[{ "destination_type": "EMAIL", "email_address": "test@test.com" }]`</summary>
+  public AlertDestination[]? destinations { get; set; } = null;
+  public AlertField? field { get; set; }
+  /// <summary>ID of the alert (read-only)</summary>
+  public long? id { get; set; } = null;
+  /// <summary>Whether or not the alert is disabled</summary>
+  public bool? is_disabled { get; set; } = null;
+  /// <summary>Whether or not the alert is public</summary>
+  public bool? is_public { get; set; } = null;
+  /// <summary>ID of the LookML dashboard associated with the alert</summary>
+  public string? lookml_dashboard_id { get; set; } = null;
+  /// <summary>ID of the LookML dashboard element associated with the alert</summary>
+  public string? lookml_link_id { get; set; } = null;
+  /// <summary>User id of alert owner</summary>
+  public long? owner_id { get; set; } = null;
+  /// <summary>Value of the alert threshold</summary>
+  public double? threshold { get; set; } = null;
+  public AlertConditionState? time_series_condition_state { get; set; }
+}
+
+public class AlertAppliedDashboardFilter : SdkModel
+{
+  /// <summary>Field Title. Refer to `DashboardFilter.title` in [DashboardFilter](#!/types/DashboardFilter). Example `Name`</summary>
+  public string? filter_title { get; set; } = null;
+  /// <summary>Field Name. Refer to `DashboardFilter.dimension` in [DashboardFilter](#!/types/DashboardFilter). Example `distribution_centers.name`</summary>
+  public string? field_name { get; set; } = null;
+  /// <summary>Field Value. [Filter Expressions](https://docs.looker.com/reference/filter-expressions). Example `Los Angeles CA`</summary>
+  public string? filter_value { get; set; } = null;
+  /// <summary>Human Readable Filter Description. This may be null or auto-generated. Example `is Los Angeles CA` (read-only)</summary>
+  public string? filter_description { get; set; } = null;
+}
+
+public class AlertConditionState : SdkModel
+{
+  /// <summary>(Write-Only) The second latest time string the alert has seen.</summary>
+  public string? previous_time_series_id { get; set; } = null;
+  /// <summary>(Write-Only) Latest time string the alert has seen.</summary>
+  public string? latest_time_series_id { get; set; } = null;
+}
+
+public class AlertDestination : SdkModel
+{
+  /// <summary>Type of destination that the alert will be sent to Valid values are: "EMAIL", "ACTION_HUB".</summary>
+  [JsonConverter(typeof(StringEnumConverter))]
+  public DestinationType destination_type { get; set; }
+  /// <summary>Email address for the 'email' type</summary>
+  public string? email_address { get; set; } = null;
+  /// <summary>Action hub integration id for the 'action_hub' type. [Integration](#!/types/Integration)</summary>
+  public string? action_hub_integration_id { get; set; } = null;
+  /// <summary>Action hub form params json for the 'action_hub' type [IntegrationParam](#!/types/IntegrationParam)</summary>
+  public string? action_hub_form_params_json { get; set; } = null;
+}
+
+public class AlertField : SdkModel
+{
+  /// <summary>Field's title. Usually auto-generated to reflect field name and its filters</summary>
+  public string? title { get; set; } = null;
+  /// <summary>Field's name. Has the format `<view>.<field>` Refer to [docs](https://docs.looker.com/sharing-and-publishing/creating-alerts) for more details</summary>
+  public string? name { get; set; } = null;
+  /// <summary>(Optional / Advance Use) List of fields filter. This further restricts the alert to certain dashboard element's field values. This can be used on top of dashboard filters `applied_dashboard_filters`. To keep thing simple, it's suggested to just use dashboard filters. Example: `{ 'title': '12 Number on Hand', 'name': 'inventory_items.number_on_hand', 'filter': [{ 'field_name': 'inventory_items.id', 'field_value': 12, 'filter_value': null }] }`</summary>
+  public AlertFieldFilter[]? filter { get; set; } = null;
+}
+
+public class AlertFieldFilter : SdkModel
+{
+  /// <summary>Field Name. Has format `<view>.<field>`</summary>
+  public string? field_name { get; set; } = null;
+  /// <summary>Field Value. Depends on the type of field - numeric or string. For [location](https://docs.looker.com/reference/field-reference/dimension-type-reference#location) type, it's a list of floats. Example `[1.0, 56.0]`</summary>
+  public object? field_value { get; set; } = null;
+  /// <summary>Filter Value. Usually null except for [location](https://docs.looker.com/reference/field-reference/dimension-type-reference#location) type. It'll be a string of lat,long ie `'1.0,56.0'`</summary>
+  public string? filter_value { get; set; } = null;
 }
 
 /// The appropriate horizontal text alignment the values of this field should be displayed in. Valid values are: "left", "right".
@@ -79,6 +165,8 @@ public class ApiVersion : SdkModel
   public ApiVersionElement[]? supported_versions { get; set; } = null;
   /// <summary>API server base url (read-only)</summary>
   public string? api_server_url { get; set; } = null;
+  /// <summary>Web server base url (read-only)</summary>
+  public string? web_server_url { get; set; } = null;
 }
 
 public class ApiVersionElement : SdkModel
@@ -151,6 +239,14 @@ public class BoardItem : SdkModel
   public long? content_metadata_id { get; set; } = null;
   /// <summary>Last time the content that this item is based on was updated (read-only)</summary>
   public string? content_updated_at { get; set; } = null;
+  /// <summary>(Write-Only) base64 encoded image data</summary>
+  public string? custom_image_data_base64 { get; set; } = null;
+  /// <summary>Custom image_url entered by the user, if present (read-only)</summary>
+  public string? custom_image_url { get; set; } = null;
+  /// <summary>Custom title entered by the user, if present</summary>
+  public string? custom_title { get; set; } = null;
+  /// <summary>Custom url entered by the user, if present</summary>
+  public string? custom_url { get; set; } = null;
   /// <summary>Dashboard to base this item on</summary>
   public long? dashboard_id { get; set; } = null;
   /// <summary>The actual description for display (read-only)</summary>
@@ -161,6 +257,8 @@ public class BoardItem : SdkModel
   public long? board_section_id { get; set; } = null;
   /// <summary>Unique Id (read-only)</summary>
   public long? id { get; set; } = null;
+  /// <summary>The actual image_url for display (read-only)</summary>
+  public string? image_url { get; set; } = null;
   /// <summary>The container folder name of the content (read-only)</summary>
   public string? location { get; set; } = null;
   /// <summary>Look to base this item on</summary>
@@ -265,6 +363,27 @@ public class Command : SdkModel
   /// <summary>Name of the command Valid values are: "dashboard", "lookml_dashboard".</summary>
   [JsonConverter(typeof(StringEnumConverter))]
   public LinkedContentType? linked_content_type { get; set; }
+}
+
+/// This property informs the check what kind of comparison we are performing. Only certain condition types are valid for time series alerts. For details, refer to [Setting Alert Conditions](https://docs.looker.com/sharing-and-publishing/creating-alerts#setting_alert_conditions) Valid values are: "EQUAL_TO", "GREATER_THAN", "GREATER_THAN_OR_EQUAL_TO", "LESS_THAN", "LESS_THAN_OR_EQUAL_TO", "INCREASES_BY", "DECREASES_BY", "CHANGES_BY".
+public enum ComparisonType
+{
+  [EnumMember(Value = "EQUAL_TO")]
+  EQUAL_TO,
+  [EnumMember(Value = "GREATER_THAN")]
+  GREATER_THAN,
+  [EnumMember(Value = "GREATER_THAN_OR_EQUAL_TO")]
+  GREATER_THAN_OR_EQUAL_TO,
+  [EnumMember(Value = "LESS_THAN")]
+  LESS_THAN,
+  [EnumMember(Value = "LESS_THAN_OR_EQUAL_TO")]
+  LESS_THAN_OR_EQUAL_TO,
+  [EnumMember(Value = "INCREASES_BY")]
+  INCREASES_BY,
+  [EnumMember(Value = "DECREASES_BY")]
+  DECREASES_BY,
+  [EnumMember(Value = "CHANGES_BY")]
+  CHANGES_BY
 }
 
 public class ConnectionFeatures : SdkModel
@@ -735,6 +854,30 @@ public class CredentialsEmail : SdkModel
   public string? user_url { get; set; } = null;
 }
 
+public class CredentialsEmailSearch : SdkModel
+{
+  /// <summary>Operations the current user is able to perform on this object (read-only)</summary>
+  public StringDictionary<bool>? can { get; set; } = null;
+  /// <summary>Timestamp for the creation of this credential (read-only)</summary>
+  public string? created_at { get; set; } = null;
+  /// <summary>EMail address used for user login</summary>
+  public string? email { get; set; } = null;
+  /// <summary>Force the user to change their password upon their next login</summary>
+  public bool? forced_password_reset_at_next_login { get; set; } = null;
+  /// <summary>Has this credential been disabled? (read-only)</summary>
+  public bool? is_disabled { get; set; } = null;
+  /// <summary>Timestamp for most recent login using credential (read-only)</summary>
+  public string? logged_in_at { get; set; } = null;
+  /// <summary>Url with one-time use secret token that the user can use to reset password (read-only)</summary>
+  public string? password_reset_url { get; set; } = null;
+  /// <summary>Short name for the type of this kind of credential (read-only)</summary>
+  public string? type { get; set; } = null;
+  /// <summary>Link to get this item (read-only)</summary>
+  public string? url { get; set; } = null;
+  /// <summary>Link to get this user (read-only)</summary>
+  public string? user_url { get; set; } = null;
+}
+
 public class CredentialsEmbed : SdkModel
 {
   /// <summary>Operations the current user is able to perform on this object (read-only)</summary>
@@ -926,7 +1069,7 @@ public class Dashboard : SdkModel
   public string? slug { get; set; } = null;
   /// <summary>The preferred route for viewing this dashboard (ie: dashboards or dashboards-next)</summary>
   public string? preferred_viewer { get; set; } = null;
-  /// <summary>Enables alerts to keep in sync with dashboard filter changes - only available in alerts 2.0 (beta)</summary>
+  /// <summary>Enables alerts to keep in sync with dashboard filter changes - only available in Enhanced Alerts (beta)</summary>
   public bool? alert_sync_with_dashboard_filter_enabled { get; set; } = null;
   /// <summary>Background color</summary>
   public string? background_color { get; set; } = null;
@@ -1450,6 +1593,15 @@ public enum DependencyStatus
   lock_error,
   [EnumMember(Value = "install_none")]
   install_none
+}
+
+/// Type of destination that the alert will be sent to Valid values are: "EMAIL", "ACTION_HUB".
+public enum DestinationType
+{
+  [EnumMember(Value = "EMAIL")]
+  EMAIL,
+  [EnumMember(Value = "ACTION_HUB")]
+  ACTION_HUB
 }
 
 public class Dialect : SdkModel
@@ -4151,6 +4303,17 @@ public class SessionConfig : SdkModel
   public bool? track_session_location { get; set; } = null;
 }
 
+public class Setting : SdkModel
+{
+  /// <summary>Toggle extension framework on or off</summary>
+  public bool? extension_framework_enabled { get; set; } = null;
+  /// <summary>Toggle marketplace auto install on or off. Note that auto install only runs if marketplace is enabled.</summary>
+  public bool? marketplace_auto_install_enabled { get; set; } = null;
+  /// <summary>Toggle marketplace on or off</summary>
+  public bool? marketplace_enabled { get; set; } = null;
+  public WhitelabelConfiguration? whitelabel_configuration { get; set; }
+}
+
 public class Snippet : SdkModel
 {
   /// <summary>Name of the snippet (read-only)</summary>
@@ -4665,8 +4828,6 @@ public class WelcomeEmailTest : SdkModel
 
 public class WhitelabelConfiguration : SdkModel
 {
-  /// <summary>Operations the current user is able to perform on this object (read-only)</summary>
-  public StringDictionary<bool>? can { get; set; } = null;
   /// <summary>Unique Id (read-only)</summary>
   public long? id { get; set; } = null;
   /// <summary>Customer logo image. Expected base64 encoded data (write-only)</summary>
@@ -4711,6 +4872,39 @@ public class Workspace : SdkModel
   public Project[]? projects { get; set; } = null;
 }
 
+/// Dynamic writeable type for Alert removes:
+/// id
+public class WriteAlert : SdkModel
+{
+  /// <summary>Filters coming from the dashboard that are applied. Example `[{ "filter_title": "Name", "field_name": "distribution_centers.name", "filter_value": "Los Angeles CA" }]`</summary>
+  public AlertAppliedDashboardFilter[]? applied_dashboard_filters { get; set; } = null;
+  /// <summary>This property informs the check what kind of comparison we are performing. Only certain condition types are valid for time series alerts. For details, refer to [Setting Alert Conditions](https://docs.looker.com/sharing-and-publishing/creating-alerts#setting_alert_conditions) Valid values are: "EQUAL_TO", "GREATER_THAN", "GREATER_THAN_OR_EQUAL_TO", "LESS_THAN", "LESS_THAN_OR_EQUAL_TO", "INCREASES_BY", "DECREASES_BY", "CHANGES_BY".</summary>
+  [JsonConverter(typeof(StringEnumConverter))]
+  public ComparisonType? comparison_type { get; set; }
+  /// <summary>Vixie-Style crontab specification when to run. At minumum, it has to be longer than 15 minute intervals</summary>
+  public string? cron { get; set; } = null;
+  /// <summary>An optional, user-defined title for the alert</summary>
+  public string? custom_title { get; set; } = null;
+  /// <summary>ID of the dashboard element associated with the alert. Refer to [dashboard_element()](#!/Dashboard/DashboardElement)</summary>
+  public long? dashboard_element_id { get; set; } = null;
+  /// <summary>Array of destinations to send alerts to. Must be the same type of destination. Example `[{ "destination_type": "EMAIL", "email_address": "test@test.com" }]`</summary>
+  public AlertDestination[]? destinations { get; set; } = null;
+  public AlertField? field { get; set; }
+  /// <summary>Whether or not the alert is disabled</summary>
+  public bool? is_disabled { get; set; } = null;
+  /// <summary>Whether or not the alert is public</summary>
+  public bool? is_public { get; set; } = null;
+  /// <summary>ID of the LookML dashboard associated with the alert</summary>
+  public string? lookml_dashboard_id { get; set; } = null;
+  /// <summary>ID of the LookML dashboard element associated with the alert</summary>
+  public string? lookml_link_id { get; set; } = null;
+  /// <summary>User id of alert owner</summary>
+  public long? owner_id { get; set; } = null;
+  /// <summary>Value of the alert threshold</summary>
+  public double? threshold { get; set; } = null;
+  public AlertConditionState? time_series_condition_state { get; set; }
+}
+
 /// Dynamic writeable type for ApiSession removes:
 /// can, sudo_user_id
 public class WriteApiSession : SdkModel
@@ -4750,9 +4944,15 @@ public class WriteBoard : SdkModel
 }
 
 /// Dynamic writeable type for BoardItem removes:
-/// can, content_created_by, content_favorite_id, content_metadata_id, content_updated_at, description, favorite_count, id, location, title, url, view_count
+/// can, content_created_by, content_favorite_id, content_metadata_id, content_updated_at, custom_image_url, description, favorite_count, id, image_url, location, title, url, view_count
 public class WriteBoardItem : SdkModel
 {
+  /// <summary>(Write-Only) base64 encoded image data</summary>
+  public string? custom_image_data_base64 { get; set; } = null;
+  /// <summary>Custom title entered by the user, if present</summary>
+  public string? custom_title { get; set; } = null;
+  /// <summary>Custom url entered by the user, if present</summary>
+  public string? custom_url { get; set; } = null;
   /// <summary>Dashboard to base this item on</summary>
   public long? dashboard_id { get; set; } = null;
   /// <summary>Associated Board Section</summary>
@@ -4936,7 +5136,7 @@ public class WriteDashboard : SdkModel
   public string? slug { get; set; } = null;
   /// <summary>The preferred route for viewing this dashboard (ie: dashboards or dashboards-next)</summary>
   public string? preferred_viewer { get; set; } = null;
-  /// <summary>Enables alerts to keep in sync with dashboard filter changes - only available in alerts 2.0 (beta)</summary>
+  /// <summary>Enables alerts to keep in sync with dashboard filter changes - only available in Enhanced Alerts (beta)</summary>
   public bool? alert_sync_with_dashboard_filter_enabled { get; set; } = null;
   /// <summary>Background color</summary>
   public string? background_color { get; set; } = null;
@@ -5800,6 +6000,22 @@ public class WriteSessionConfig : SdkModel
   public bool? track_session_location { get; set; } = null;
 }
 
+/// Dynamic writeable type for Setting
+public class WriteSetting : SdkModel
+{
+  /// <summary>Toggle extension framework on or off</summary>
+  public bool? extension_framework_enabled { get; set; } = null;
+  /// <summary>Toggle marketplace auto install on or off. Note that auto install only runs if marketplace is enabled.</summary>
+  public bool? marketplace_auto_install_enabled { get; set; } = null;
+  /// <summary>Toggle marketplace on or off</summary>
+  public bool? marketplace_enabled { get; set; } = null;
+  /// <summary>
+  /// Dynamic writeable type for WhitelabelConfiguration removes:
+  /// id, logo_url, favicon_url
+  /// </summary>
+  public WriteWhitelabelConfiguration? whitelabel_configuration { get; set; }
+}
+
 /// Dynamic writeable type for SshServer removes:
 /// ssh_server_id, finger_print, sha_finger_print, public_key, status
 public class WriteSshServer : SdkModel
@@ -5895,7 +6111,7 @@ public class WriteUserAttributeWithValue : SdkModel
 }
 
 /// Dynamic writeable type for WhitelabelConfiguration removes:
-/// can, id, logo_url, favicon_url
+/// id, logo_url, favicon_url
 public class WriteWhitelabelConfiguration : SdkModel
 {
   /// <summary>Customer logo image. Expected base64 encoded data (write-only)</summary>

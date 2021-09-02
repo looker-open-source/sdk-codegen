@@ -25,9 +25,17 @@
  */
 import React, { ReactElement } from 'react'
 import { IRawResponse, ResponseMode, responseMode } from '@looker/sdk-rtl'
-import { Paragraph, CodeBlock, MessageBar } from '@looker/components'
-import { CodeDisplay } from '@looker/code-editor'
-
+import {
+  Paragraph,
+  CodeBlock,
+  MessageBar,
+  TabList,
+  Tab,
+  TabPanels,
+  TabPanel,
+  useTabs,
+} from '@looker/components'
+import { CodeDisplay, Markdown } from '@looker/code-editor'
 import { DataGrid, parseCsv, json2Csv } from '../DataGrid'
 
 /**
@@ -94,6 +102,26 @@ const ShowCSV = (response: IRawResponse) => {
   return <DataGrid data={data.data} raw={raw} />
 }
 
+const ShowMD = (response: IRawResponse) => {
+  const tabs = useTabs()
+  const raw = <CodeBlock>{response.body.toString()}</CodeBlock>
+  const data = response.body.toString()
+  return (
+    <>
+      <TabList {...tabs}>
+        <Tab key="md">Markdown</Tab>
+        <Tab key="raw">Raw</Tab>
+      </TabList>
+      <TabPanels {...tabs} pt="0">
+        <TabPanel key="doc">
+          <Markdown source={data} />
+        </TabPanel>
+        <TabPanel key="text">{raw}</TabPanel>
+      </TabPanels>
+    </>
+  )
+}
+
 /** A handler for image type responses */
 const ShowImage = (response: IRawResponse) => {
   let content: string
@@ -102,7 +130,6 @@ const ShowImage = (response: IRawResponse) => {
   } else {
     content = `data:${response.contentType};base64,${btoa(response.body)}`
   }
-
   return (
     <img
       src={content}
@@ -146,7 +173,7 @@ const ShowRaw = (response: IRawResponse) => (
     </MessageBar>
     <CodeDisplay
       language="unknown"
-      code={response.body.toString()}
+      code={response?.body?.toString() || ''}
       transparent
     />
   </>
@@ -180,6 +207,11 @@ export const responseHandlers: Responder[] = [
     label: 'csv',
     isRecognized: (contentType) => /text\/csv/g.test(contentType),
     component: (response) => ShowCSV(response),
+  },
+  {
+    label: 'md',
+    isRecognized: (contentType) => /text\/markdown/g.test(contentType),
+    component: (response) => ShowMD(response),
   },
   // SVG would normally be considered a "string" because of the xml tag, so it must be checked before text
   {

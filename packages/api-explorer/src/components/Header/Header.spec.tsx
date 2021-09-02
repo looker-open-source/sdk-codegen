@@ -47,7 +47,7 @@ describe('Header', () => {
       withReduxProvider(
         <Header
           specs={specs}
-          spec={specState}
+          spec={specState.spec}
           specDispatch={specDispatch}
           toggleNavigation={toggleNavigation}
         />
@@ -55,7 +55,7 @@ describe('Header', () => {
     )
     expect(screen.getByText('API Explorer').closest('a')).toHaveAttribute(
       'href',
-      `/${specState.key}`
+      `/${specState.spec.key}`
     )
   })
 
@@ -64,14 +64,14 @@ describe('Header', () => {
       withReduxProvider(
         <Header
           specs={specs}
-          spec={specState}
+          spec={specState.spec}
           specDispatch={specDispatch}
           toggleNavigation={toggleNavigation}
         />
       )
     )
     const selector = screen.getByLabelText('spec selector')
-    expect(selector).toHaveValue(`${specState.key}`)
+    expect(selector).toHaveValue(`${specState.spec.key}`)
     await act(async () => {
       await userEvent.click(selector)
       await waitFor(() => {
@@ -87,7 +87,7 @@ describe('Header', () => {
       withReduxProvider(
         <Header
           specs={specs}
-          spec={specState}
+          spec={specState.spec}
           specDispatch={specDispatch}
           toggleNavigation={toggleNavigation}
         />
@@ -110,7 +110,7 @@ describe('Header', () => {
       withReduxProvider(
         <Header
           specs={specs}
-          spec={specState}
+          spec={specState.spec}
           specDispatch={specDispatch}
           toggleNavigation={toggleNavigation}
         />
@@ -122,6 +122,6 @@ describe('Header', () => {
           name: 'Compare Specifications',
         })
         .closest('a')
-    ).toHaveAttribute('href', `/diff/${specState.key}/`)
+    ).toHaveAttribute('href', `/diff/${specState.spec.key}/`)
   })
 })

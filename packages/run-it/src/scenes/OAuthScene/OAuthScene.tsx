@@ -77,7 +77,7 @@ export const OAuthScene: FC = () => {
     }
   }, [auth, history])
 
-  // No LookerSDK40 no OAuth for you
+  // No sdk no OAuth for you
   if (!sdk) return <></>
 
   return (

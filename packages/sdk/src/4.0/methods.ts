@@ -25,7 +25,7 @@
  */
 
 /**
- * 413 API methods
+ * 423 API methods
  */
 
 import type {
@@ -44,6 +44,7 @@ import { sdkVersion } from '../constants'
 import type { ILooker40SDK } from './methodsInterface'
 import type {
   IAccessToken,
+  IAlert,
   IApiSession,
   IApiVersion,
   IBackupConfiguration,
@@ -67,6 +68,7 @@ import type {
   ICreateOAuthApplicationUserStateResponse,
   ICredentialsApi3,
   ICredentialsEmail,
+  ICredentialsEmailSearch,
   ICredentialsEmbed,
   ICredentialsGoogle,
   ICredentialsLDAP,
@@ -150,6 +152,7 @@ import type {
   IRequestAllGroups,
   IRequestAllGroupUsers,
   IRequestAllIntegrations,
+  IRequestAllLookmlModels,
   IRequestAllRoles,
   IRequestAllScheduledPlans,
   IRequestAllUsers,
@@ -177,9 +180,11 @@ import type {
   IRequestScheduledPlansForDashboard,
   IRequestScheduledPlansForLook,
   IRequestScheduledPlansForLookmlDashboard,
+  IRequestSearchAlerts,
   IRequestSearchBoards,
   IRequestSearchContentFavorites,
   IRequestSearchContentViews,
+  IRequestSearchCredentialsEmail,
   IRequestSearchDashboardElements,
   IRequestSearchDashboards,
   IRequestSearchFolders,
@@ -205,6 +210,7 @@ import type {
   ISchemaTables,
   ISession,
   ISessionConfig,
+  ISetting,
   ISqlQuery,
   ISqlQueryCreate,
   ISshPublicKey,
@@ -224,6 +230,7 @@ import type {
   IWelcomeEmailTest,
   IWhitelabelConfiguration,
   IWorkspace,
+  IWriteAlert,
   IWriteApiSession,
   IWriteBackupConfiguration,
   IWriteBoard,
@@ -267,6 +274,7 @@ import type {
   IWriteSamlConfig,
   IWriteScheduledPlan,
   IWriteSessionConfig,
+  IWriteSetting,
   IWriteSshServer,
   IWriteSshTunnel,
   IWriteTheme,
@@ -286,6 +294,178 @@ export class Looker40SDK extends APIMethods implements ILooker40SDK {
         ? ''
         : authSession.settings.base_url + '/api/' + this.apiVersion
   }
+
+  //#region Alert: Alert
+
+  /**
+   * ### Search Alerts
+   *
+   * GET /alerts/search -> IAlert[]
+   *
+   * @param request composed interface "IRequestSearchAlerts" for complex method parameters
+   * @param options one-time API call overrides
+   *
+   */
+  async search_alerts(
+    request: IRequestSearchAlerts,
+    options?: Partial<ITransportSettings>
+  ): Promise<SDKResponse<IAlert[], IError>> {
+    return this.get<IAlert[], IError>(
+      '/alerts/search',
+      {
+        limit: request.limit,
+        offset: request.offset,
+        fields: request.fields,
+        disabled: request.disabled,
+        frequency: request.frequency,
+        condition_met: request.condition_met,
+        last_run_start: request.last_run_start,
+        last_run_end: request.last_run_end,
+        all_owners: request.all_owners,
+      },
+      null,
+      options
+    )
+  }
+
+  /**
+   * ### Get an alert by a given alert ID
+   *
+   * GET /alerts/{alert_id} -> IAlert
+   *
+   * @param alert_id ID of an alert
+   * @param options one-time API call overrides
+   *
+   */
+  async get_alert(
+    alert_id: number,
+    options?: Partial<ITransportSettings>
+  ): Promise<SDKResponse<IAlert, IError>> {
+    return this.get<IAlert, IError>(`/alerts/${alert_id}`, null, null, options)
+  }
+
+  /**
+   * ### Update an alert
+   * # Required fields: `owner_id`, `field`, `destinations`, `comparison_type`, `threshold`, `cron`
+   * #
+   *
+   * PUT /alerts/{alert_id} -> IAlert
+   *
+   * @param alert_id ID of an alert
+   * @param body Partial<IWriteAlert>
+   * @param options one-time API call overrides
+   *
+   */
+  async update_alert(
+    alert_id: number,
+    body: Partial<IWriteAlert>,
+    options?: Partial<ITransportSettings>
+  ): Promise<SDKResponse<IAlert, IError | IValidationError>> {
+    return this.put<IAlert, IError | IValidationError>(
+      `/alerts/${alert_id}`,
+      null,
+      body,
+      options
+    )
+  }
+
+  /**
+   * ### Update select alert fields
+   * # Available fields: `owner_id`, `is_disabled`, `is_public`, `threshold`
+   * #
+   *
+   * PATCH /alerts/{alert_id} -> IAlert
+   *
+   * @param alert_id ID of an alert
+   * @param body Partial<IWriteAlert>
+   * @param options one-time API call overrides
+   *
+   */
+  async update_alert_field(
+    alert_id: number,
+    body: Partial<IWriteAlert>,
+    options?: Partial<ITransportSettings>
+  ): Promise<SDKResponse<IAlert, IError | IValidationError>> {
+    return this.patch<IAlert, IError | IValidationError>(
+      `/alerts/${alert_id}`,
+      null,
+      body,
+      options
+    )
+  }
+
+  /**
+   * ### Delete an alert by a given alert ID
+   *
+   * DELETE /alerts/{alert_id} -> void
+   *
+   * @param alert_id ID of an alert
+   * @param options one-time API call overrides
+   *
+   */
+  async delete_alert(
+    alert_id: number,
+    options?: Partial<ITransportSettings>
+  ): Promise<SDKResponse<void, IError>> {
+    return this.delete<void, IError>(`/alerts/${alert_id}`, null, null, options)
+  }
+
+  /**
+   * ### Create a new alert and return details of the newly created object
+   *
+   * Required fields: `field`, `destinations`, `comparison_type`, `threshold`, `cron`
+   *
+   * Example Request:
+   * Run alert on dashboard element '103' at 5am every day. Send an email to 'test@test.com' if inventory for Los Angeles (using dashboard filter `Warehouse Name`) is lower than 1,000
+   * ```
+   * {
+   *   "cron": "0 5 * * *",
+   *   "custom_title": "Alert when LA inventory is low",
+   *   "dashboard_element_id": 103,
+   *   "applied_dashboard_filters": [
+   *     {
+   *       "filter_title": "Warehouse Name",
+   *       "field_name": "distribution_centers.name",
+   *       "filter_value": "Los Angeles CA",
+   *       "filter_description": "is Los Angeles CA"
+   *     }
+   *   ],
+   *   "comparison_type": "LESS_THAN",
+   *   "destinations": [
+   *     {
+   *       "destination_type": "EMAIL",
+   *       "email_address": "test@test.com"
+   *     }
+   *   ],
+   *   "field": {
+   *     "title": "Number on Hand",
+   *     "name": "inventory_items.number_on_hand"
+   *   },
+   *   "is_disabled": false,
+   *   "is_public": true,
+   *   "threshold": 1000
+   * }
+   * ```
+   *
+   * POST /alerts -> IAlert
+   *
+   * @param body Partial<IWriteAlert>
+   * @param options one-time API call overrides
+   *
+   */
+  async create_alert(
+    body: Partial<IWriteAlert>,
+    options?: Partial<ITransportSettings>
+  ): Promise<SDKResponse<IAlert, IError | IValidationError>> {
+    return this.post<IAlert, IError | IValidationError>(
+      '/alerts',
+      null,
+      body,
+      options
+    )
+  }
+
+  //#endregion Alert: Alert
 
   //#region ApiAuth: API Authentication
 
@@ -2467,6 +2647,64 @@ export class Looker40SDK extends APIMethods implements ILooker40SDK {
   }
 
   /**
+   * ### Get Looker Settings
+   *
+   * Available settings are:
+   *  - extension_framework_enabled
+   *  - marketplace_auto_install_enabled
+   *  - marketplace_enabled
+   *  - whitelabel_configuration
+   *
+   * GET /setting -> ISetting
+   *
+   * @param fields Requested fields
+   * @param options one-time API call overrides
+   *
+   */
+  async get_setting(
+    fields?: string,
+    options?: Partial<ITransportSettings>
+  ): Promise<SDKResponse<ISetting, IError | IValidationError>> {
+    return this.get<ISetting, IError | IValidationError>(
+      '/setting',
+      { fields },
+      null,
+      options
+    )
+  }
+
+  /**
+   * ### Configure Looker Settings
+   *
+   * Available settings are:
+   *  - extension_framework_enabled
+   *  - marketplace_auto_install_enabled
+   *  - marketplace_enabled
+   *  - whitelabel_configuration
+   *
+   * See the `Setting` type for more information on the specific values that can be configured.
+   *
+   * PATCH /setting -> ISetting
+   *
+   * @param body Partial<IWriteSetting>
+   * @param fields Requested fields
+   * @param options one-time API call overrides
+   *
+   */
+  async set_setting(
+    body: Partial<IWriteSetting>,
+    fields?: string,
+    options?: Partial<ITransportSettings>
+  ): Promise<SDKResponse<ISetting, IError | IValidationError>> {
+    return this.patch<ISetting, IError | IValidationError>(
+      '/setting',
+      { fields },
+      body,
+      options
+    )
+  }
+
+  /**
    * ### Get a list of timezones that Looker supports (e.g. useful for scheduling tasks).
    *
    * GET /timezones -> ITimezone[]
@@ -2499,9 +2737,9 @@ export class Looker40SDK extends APIMethods implements ILooker40SDK {
   /**
    * ### Get an API specification for this Looker instance.
    *
-   * **Note**: Although the API specification is in JSON format, the return type is temporarily `text/plain`, so the response should be treated as standard JSON to consume it.
+   * The specification is returned as a JSON document in Swagger 2.x format
    *
-   * GET /api_spec/{api_version}/{specification} -> string
+   * GET /api_spec/{api_version}/{specification} -> any
    *
    * @param api_version API version
    * @param specification Specification name. Typically, this is "swagger.json"
@@ -2512,10 +2750,10 @@ export class Looker40SDK extends APIMethods implements ILooker40SDK {
     api_version: string,
     specification: string,
     options?: Partial<ITransportSettings>
-  ): Promise<SDKResponse<string, IError>> {
+  ): Promise<SDKResponse<any, IError>> {
     api_version = encodeParam(api_version)
     specification = encodeParam(specification)
-    return this.get<string, IError>(
+    return this.get<any, IError>(
       `/api_spec/${api_version}/${specification}`,
       null,
       null,
@@ -2528,6 +2766,8 @@ export class Looker40SDK extends APIMethods implements ILooker40SDK {
    * ### Gets the whitelabel configuration, which includes hiding documentation links, custom favicon uploading, etc.
    *
    * GET /whitelabel_configuration -> IWhitelabelConfiguration
+   *
+   * @deprecated
    *
    * @param fields Requested fields.
    * @param options one-time API call overrides
@@ -2549,6 +2789,8 @@ export class Looker40SDK extends APIMethods implements ILooker40SDK {
    * ### Update the whitelabel configuration
    *
    * PUT /whitelabel_configuration -> IWhitelabelConfiguration
+   *
+   * @deprecated
    *
    * @param body Partial<IWriteWhitelabelConfiguration>
    * @param options one-time API call overrides
@@ -6003,17 +6245,17 @@ export class Looker40SDK extends APIMethods implements ILooker40SDK {
    *
    * GET /lookml_models -> ILookmlModel[]
    *
-   * @param fields Requested fields.
+   * @param request composed interface "IRequestAllLookmlModels" for complex method parameters
    * @param options one-time API call overrides
    *
    */
   async all_lookml_models(
-    fields?: string,
+    request: IRequestAllLookmlModels,
     options?: Partial<ITransportSettings>
   ): Promise<SDKResponse<ILookmlModel[], IError>> {
     return this.get<ILookmlModel[], IError>(
       '/lookml_models',
-      { fields },
+      { fields: request.fields, limit: request.limit, offset: request.offset },
       null,
       options
     )
@@ -9643,6 +9885,59 @@ export class Looker40SDK extends APIMethods implements ILooker40SDK {
   //#region User: Manage Users
 
   /**
+   * ### Search email credentials
+   *
+   * Returns all credentials_email records that match the given search criteria.
+   *
+   * If multiple search params are given and `filter_or` is FALSE or not specified,
+   * search params are combined in a logical AND operation.
+   * Only rows that match *all* search param criteria will be returned.
+   *
+   * If `filter_or` is TRUE, multiple search params are combined in a logical OR operation.
+   * Results will include rows that match **any** of the search criteria.
+   *
+   * String search params use case-insensitive matching.
+   * String search params can contain `%` and '_' as SQL LIKE pattern match wildcard expressions.
+   * example="dan%" will match "danger" and "Danzig" but not "David"
+   * example="D_m%" will match "Damage" and "dump"
+   *
+   * Integer search params can accept a single value or a comma separated list of values. The multiple
+   * values will be combined under a logical OR operation - results will match at least one of
+   * the given values.
+   *
+   * Most search params can accept "IS NULL" and "NOT NULL" as special expressions to match
+   * or exclude (respectively) rows where the column is null.
+   *
+   * Boolean search params accept only "true" and "false" as values.
+   *
+   * GET /credentials_email/search -> ICredentialsEmailSearch[]
+   *
+   * @param request composed interface "IRequestSearchCredentialsEmail" for complex method parameters
+   * @param options one-time API call overrides
+   *
+   */
+  async search_credentials_email(
+    request: IRequestSearchCredentialsEmail,
+    options?: Partial<ITransportSettings>
+  ): Promise<SDKResponse<ICredentialsEmailSearch[], IError>> {
+    return this.get<ICredentialsEmailSearch[], IError>(
+      '/credentials_email/search',
+      {
+        fields: request.fields,
+        limit: request.limit,
+        offset: request.offset,
+        sorts: request.sorts,
+        id: request.id,
+        email: request.email,
+        emails: request.emails,
+        filter_or: request.filter_or,
+      },
+      null,
+      options
+    )
+  }
+
+  /**
    * ### Get information about the current user; i.e. the user account currently calling the API.
    *
    * GET /user -> IUser
@@ -9677,6 +9972,8 @@ export class Looker40SDK extends APIMethods implements ILooker40SDK {
         fields: request.fields,
         page: request.page,
         per_page: request.per_page,
+        limit: request.limit,
+        offset: request.offset,
         sorts: request.sorts,
         ids: request.ids,
       },
@@ -9756,6 +10053,8 @@ export class Looker40SDK extends APIMethods implements ILooker40SDK {
         fields: request.fields,
         page: request.page,
         per_page: request.per_page,
+        limit: request.limit,
+        offset: request.offset,
         sorts: request.sorts,
         id: request.id,
         first_name: request.first_name,
@@ -9798,6 +10097,8 @@ export class Looker40SDK extends APIMethods implements ILooker40SDK {
         fields: request.fields,
         page: request.page,
         per_page: request.per_page,
+        limit: request.limit,
+        offset: request.offset,
         sorts: request.sorts,
         id: request.id,
         first_name: request.first_name,

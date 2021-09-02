@@ -116,12 +116,14 @@ class ApiVersion(model.Model):
         current_version:
         supported_versions: Array of versions supported by this Looker instance
         api_server_url: API server base url
+        web_server_url: Web server base url
     """
 
     looker_release_version: Optional[str] = None
     current_version: Optional["ApiVersionElement"] = None
     supported_versions: Optional[Sequence["ApiVersionElement"]] = None
     api_server_url: Optional[str] = None
+    web_server_url: Optional[str] = None
 
     def __init__(
         self,
@@ -129,12 +131,14 @@ class ApiVersion(model.Model):
         looker_release_version: Optional[str] = None,
         current_version: Optional["ApiVersionElement"] = None,
         supported_versions: Optional[Sequence["ApiVersionElement"]] = None,
-        api_server_url: Optional[str] = None
+        api_server_url: Optional[str] = None,
+        web_server_url: Optional[str] = None
     ):
         self.looker_release_version = looker_release_version
         self.current_version = current_version
         self.supported_versions = supported_versions
         self.api_server_url = api_server_url
+        self.web_server_url = web_server_url
 
 
 @attr.s(auto_attribs=True, init=False)
@@ -1605,7 +1609,7 @@ class Dashboard(model.Model):
         slug: Content Metadata Slug
         preferred_viewer: The preferred route for viewing this dashboard (ie: dashboards or dashboards-next)
         space:
-        alert_sync_with_dashboard_filter_enabled: Enables alerts to keep in sync with dashboard filter changes - only available in alerts 2.0 (beta)
+        alert_sync_with_dashboard_filter_enabled: Enables alerts to keep in sync with dashboard filter changes - only available in Enhanced Alerts (beta)
         background_color: Background color
         created_at: Time that the Dashboard was created.
         crossfilter_enabled: Enables crossfiltering in dashboards - only available in dashboards-next (beta)
@@ -9359,7 +9363,6 @@ class WelcomeEmailTest(model.Model):
 class WhitelabelConfiguration(model.Model):
     """
     Attributes:
-        can: Operations the current user is able to perform on this object
         id: Unique Id
         logo_file: Customer logo image. Expected base64 encoded data (write-only)
         logo_url: Logo image url (read-only)
@@ -9378,7 +9381,6 @@ class WhitelabelConfiguration(model.Model):
         folders_mentions: Remove Looker mentions in home folder page when you don’t have any items saved
     """
 
-    can: Optional[MutableMapping[str, bool]] = None
     id: Optional[int] = None
     logo_file: Optional[str] = None
     logo_url: Optional[str] = None
@@ -9399,7 +9401,6 @@ class WhitelabelConfiguration(model.Model):
     def __init__(
         self,
         *,
-        can: Optional[MutableMapping[str, bool]] = None,
         id: Optional[int] = None,
         logo_file: Optional[str] = None,
         logo_url: Optional[str] = None,
@@ -9417,7 +9418,6 @@ class WhitelabelConfiguration(model.Model):
         alerts_links: Optional[bool] = None,
         folders_mentions: Optional[bool] = None
     ):
-        self.can = can
         self.id = id
         self.logo_file = logo_file
         self.logo_url = logo_url
@@ -9780,7 +9780,7 @@ id, content_metadata_id, created_at, creator_id, child_count, external_id, is_em
         preferred_viewer: The preferred route for viewing this dashboard (ie: dashboards or dashboards-next)
         space: Dynamic writeable type for SpaceBase removes:
 id, content_metadata_id, created_at, creator_id, child_count, external_id, is_embed, is_embed_shared_root, is_embed_users_root, is_personal, is_personal_descendant, is_shared_root, is_users_root, can
-        alert_sync_with_dashboard_filter_enabled: Enables alerts to keep in sync with dashboard filter changes - only available in alerts 2.0 (beta)
+        alert_sync_with_dashboard_filter_enabled: Enables alerts to keep in sync with dashboard filter changes - only available in Enhanced Alerts (beta)
         background_color: Background color
         crossfilter_enabled: Enables crossfiltering in dashboards - only available in dashboards-next (beta)
         deleted: Whether or not a dashboard is 'soft' deleted.
@@ -11828,7 +11828,7 @@ can, name, label, rank, user_id, user_can_edit, value_is_hidden, user_attribute_
 class WriteWhitelabelConfiguration(model.Model):
     """
     Dynamic writeable type for WhitelabelConfiguration removes:
-can, id, logo_url, favicon_url
+id, logo_url, favicon_url
 
     Attributes:
         logo_file: Customer logo image. Expected base64 encoded data (write-only)

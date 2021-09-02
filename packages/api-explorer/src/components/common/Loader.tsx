@@ -23,54 +23,35 @@
  SOFTWARE.
 
  */
-import React, { FC, ReactElement } from 'react'
+import React, { FC } from 'react'
 import {
-  useToggle,
-  Accordion,
-  AccordionDisclosure,
-  AccordionContent,
-  Divider,
-  Box,
+  ComponentsProvider,
+  Flex,
+  FlexItem,
+  Heading,
+  ProgressCircular,
 } from '@looker/components'
-import { ArrowRight } from '@styled-icons/material/ArrowRight'
-import { ArrowDropDown } from '@styled-icons/material/ArrowDropDown'
-import { ApixHeading } from '../common'
+import { ThemeOverrides } from '../../utils'
 
-interface CollapserCardProps {
-  id?: string
-  heading: string
-  children: ReactElement
-  defaultOpen?: boolean
+export interface LoaderProps {
+  themeOverrides: ThemeOverrides
+  message?: string
 }
 
-/**
- * Render a collapsable header and children
- */
-export const CollapserCard: FC<CollapserCardProps> = ({
-  id,
-  heading,
-  children,
-  defaultOpen = true,
-}) => {
-  const { value, toggle } = useToggle(defaultOpen)
-
-  return (
-    <>
-      <Divider appearance="light" />
-      <Accordion
-        id={id}
-        indicatorPosition="left"
-        isOpen={value}
-        toggleOpen={toggle}
-        indicatorIcons={{ close: <ArrowRight />, open: <ArrowDropDown /> }}
-      >
-        <AccordionDisclosure>
-          <ApixHeading as="h3">{heading}</ApixHeading>
-        </AccordionDisclosure>
-        <AccordionContent>
-          <Box pb="xlarge">{children}</Box>
-        </AccordionContent>
-      </Accordion>
-    </>
-  )
-}
+export const Loader: FC<LoaderProps> = ({
+  themeOverrides,
+  message = 'Loading API Specifications',
+}) => (
+  <ComponentsProvider {...themeOverrides}>
+    <Flex flexDirection="column" justifyContent="center" mt="25%">
+      <FlexItem alignSelf="center">
+        <ProgressCircular size="large" />
+      </FlexItem>
+      <FlexItem mt="large" alignSelf="center">
+        <Heading color="key" as="h2">
+          {message}
+        </Heading>
+      </FlexItem>
+    </Flex>
+  </ComponentsProvider>
+)

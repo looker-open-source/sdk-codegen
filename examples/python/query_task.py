@@ -1,3 +1,13 @@
+"""Given a model, view, and fields, create a query, and then a query task to asynchronously execute.
+
+    $ python query_task.py <model_name> <view_name> <field_1> <field_2> ...
+
+Examples:
+    $ python query_task.py thelook users users.first_name users.last_name ...
+    
+Last modified: August 25
+"""
+
 import sys
 import textwrap
 import time
@@ -5,8 +15,6 @@ from typing import List
 
 import looker_sdk
 from looker_sdk import models40 as models
-
-import sdk_exceptions
 
 sdk = looker_sdk.init40("../../looker.ini")
 
@@ -19,7 +27,6 @@ def main_models(model: str, view: str, fields: List[str]) -> str:
         body=models.WriteQuery(model=model, view=view, fields=fields)
     )
     # WriteCreateQueryTask.result_format is an enum
-    assert query.id
     create_query_task = models.WriteCreateQueryTask(
         query_id=query.id, result_format=models.ResultFormat.csv
     )
@@ -30,11 +37,10 @@ def main_models(model: str, view: str, fields: List[str]) -> str:
     elapsed = 0.0
     delay = 0.5  # wait .5 seconds
     while True:
-        assert task.id
         poll = sdk.query_task(query_task_id=task.id)
         if poll.status == "failure" or poll.status == "error":
             print(poll)
-            raise sdk_exceptions.RenderTaskError("Query failed")
+            raise Exception("Query failed")
         elif poll.status == "complete":
             break
         time.sleep(delay)
@@ -71,7 +77,7 @@ def main_dictionaries(model, view, fields):
         poll = sdk.query_task(query_task_id=task["id"])
         if poll["status"] == "error":
             print(poll)
-            raise sdk_exceptions.RenderTaskError("Query failed")
+            raise Exception("Query failed")
         elif poll["status"] == "complete":
             break
         time.sleep(delay)
@@ -82,17 +88,12 @@ def main_dictionaries(model, view, fields):
 
 
 def main():
-    """Given a model, view, and fields create a query, and then a query task
-    to asynchronously execute.
-
-    $ python query_task.py thelook users users.first_name [users.last_name users.email ...]
-    """
     model = sys.argv[1] if len(sys.argv) > 1 else ""
     view = sys.argv[1] if len(sys.argv) > 1 else ""
     try:
         model, view, *fields = sys.argv[1:]
     except ValueError:
-        raise sdk_exceptions.ArgumentError(
+        raise Exception(
             textwrap.dedent(
                 """
                 Please provide: <model> <view> <field1> [<field2> ...]
