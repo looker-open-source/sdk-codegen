@@ -31,6 +31,7 @@ import {
   Space,
   ButtonTransparent,
   Tooltip,
+  SpaceVertical,
 } from '@looker/components'
 import type { IAPIMethods } from '@looker/sdk-rtl'
 import { RunItHttpMethod, RunItInput, RunItValues } from '../../RunIt'
@@ -128,18 +129,20 @@ export const RequestForm: FC<RequestFormProps> = ({
 
   return (
     <Form onSubmit={handleSubmit}>
-      {inputs.map((input) =>
-        typeof input.type === 'string'
-          ? createSimpleItem(
-              input,
-              handleChange,
-              handleNumberChange,
-              handleBoolChange,
-              handleDateChange,
-              requestContent
-            )
-          : createComplexItem(input, handleComplexChange, requestContent)
-      )}
+      <SpaceVertical align="start" alignContent="left">
+        {inputs.map((input) =>
+          typeof input.type === 'string'
+            ? createSimpleItem(
+                input,
+                handleChange,
+                handleNumberChange,
+                handleBoolChange,
+                handleDateChange,
+                requestContent
+              )
+            : createComplexItem(input, handleComplexChange, requestContent)
+        )}
+      </SpaceVertical>
       {httpMethod !== 'GET' && showDataChangeWarning()}
       <Space>
         <Tooltip content="Clear entered values">

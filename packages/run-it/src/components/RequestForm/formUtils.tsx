@@ -29,6 +29,7 @@ import {
   FieldToggleSwitch,
   Label,
   FieldCheckbox,
+  Space,
 } from '@looker/components'
 import { InputDate } from '@looker/components-date'
 import { CodeEditor } from '@looker/code-editor'
@@ -61,13 +62,13 @@ const createDateItem = (
   handleChange: (name: string, date?: Date) => void,
   requestContent: RunItValues
 ) => (
-  <div key={name}>
+  <Space align="start" alignContent="top">
     <Label>{name}</Label>
     <InputDate
       defaultValue={name in requestContent ? requestContent[name] : undefined}
       onChange={handleChange.bind(null, name)}
     />
-  </div>
+  </Space>
 )
 
 /**
@@ -84,19 +85,19 @@ const createBoolItem = (
   handleChange: (e: BaseSyntheticEvent) => void,
   requestContent: RunItValues
 ) => (
-  <div key={name}>
-    {description && <Label>{description}</Label>}
+  <Space>
     <FieldToggleSwitch
       name={name}
       label={name}
       onChange={handleChange}
       on={name in requestContent ? requestContent[name] : false}
     />
-  </div>
+    {description && <Label>{description}</Label>}
+  </Space>
 )
 
 /**
- *
+ * Create a field text input item based on definitions
  * @param name Form item's name
  * @param description Form item's description
  * @param required Form item's required flag
@@ -115,19 +116,17 @@ const createItem = (
   handleChange: (e: BaseSyntheticEvent) => void,
   requestContent: RunItValues
 ) => (
-  <div key={name}>
-    <FieldText
-      key={name}
-      name={name}
-      label={name}
-      required={required}
-      placeholder={`${placeholder} ${description || name}`}
-      type={inputTextType(type)}
-      value={name in requestContent ? requestContent[name] : ''}
-      onChange={handleChange}
-      width="100%"
-    />
-  </div>
+  <FieldText
+    key={name}
+    name={name}
+    label={name}
+    required={required}
+    placeholder={`${placeholder} ${description || name}`}
+    type={inputTextType(type)}
+    value={name in requestContent ? requestContent[name] : ''}
+    onChange={handleChange}
+    inline
+  />
 )
 
 /**
