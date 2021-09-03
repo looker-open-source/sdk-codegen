@@ -26,7 +26,7 @@
 
 import React, { FC, Dispatch } from 'react'
 import { Select } from '@looker/components'
-import { useHistory } from 'react-router-dom'
+import { useHistory, useLocation } from 'react-router-dom'
 
 import { SpecList, SpecItem } from '@looker/sdk-codegen'
 import { SpecAction, selectSpec } from '../../reducers'
@@ -43,6 +43,7 @@ export const ApiSpecSelector: FC<ApiSpecSelectorProps> = ({
   specDispatch,
 }) => {
   const history = useHistory()
+  const location = useLocation()
   const options = Object.entries(specs).map(([key, spec]) => ({
     value: key,
     label: key,
@@ -51,7 +52,8 @@ export const ApiSpecSelector: FC<ApiSpecSelectorProps> = ({
 
   const handleChange = (specKey: string) => {
     specDispatch(selectSpec(specKey))
-    history.push(`/${specKey}`)
+    const matchPath = location.pathname.replace(`/${spec.key}`, `/${specKey}`)
+    history.push(matchPath)
   }
 
   return (
