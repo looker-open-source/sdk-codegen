@@ -185,7 +185,7 @@ const ApiExplorer: FC<ApiExplorerProps> = ({
                         />
                       </AsideBorder>
                     )}
-                    {oauthReturn && <OAuthScene />}(
+                    {oauthReturn && <OAuthScene />}
                     {!oauthReturn && spec.api && (
                       <AppRouter
                         api={spec.api}
