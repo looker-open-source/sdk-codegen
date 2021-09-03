@@ -34,6 +34,16 @@ import { ApiSpecSelector } from './ApiSpecSelector'
 
 const specState = getLoadedSpecState()
 
+jest.mock('react-router-dom', () => {
+  const ReactRouterDOM = jest.requireActual('react-router-dom')
+  return {
+    ...ReactRouterDOM,
+    useLocation: () => ({
+      pathname: '/4.0/methods/Dashboard/dashboard',
+    }),
+  }
+})
+
 describe('ApiSpecSelector', () => {
   const specDispatch = jest.fn()
   Element.prototype.scrollIntoView = jest.fn()

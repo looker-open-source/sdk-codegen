@@ -149,12 +149,13 @@ export class OAuthSession extends AuthSession {
           'cors_api',
           agentPrefix
         )
-        this.returnUrl = window.location.pathname + window.location.search
+        const returnTo = window.location.pathname + window.location.search
+        this.returnUrl = returnTo
         // Save the current URL so redirected successful OAuth login can restore it
         window.location.href = authUrl
       } else {
         // If return URL is stored, we must be coming back from an OAuth request
-        // so catch and release the stored return url at the start of the redemption
+        // so release the stored return url at the start of the redemption
         this.returnUrl = null
         if (!this.code_verifier) {
           return Promise.reject(
