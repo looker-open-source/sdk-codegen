@@ -40,9 +40,10 @@ export const OAuthScene: FC = () => {
 
   useEffect(() => {
     if (sdk) {
-      setAuth(sdk.authSession as BrowserSession)
+      const authSession = sdk.authSession as BrowserSession
+      setAuth(authSession)
       /** capture the stored return URL before `OAuthSession.login()` clears it */
-      const old = auth?.returnUrl || `/`
+      const old = authSession.returnUrl || `/`
       setOldUrl(old)
     } else {
       setAuth(undefined)
@@ -50,33 +51,24 @@ export const OAuthScene: FC = () => {
     }
   }, [sdk])
 
-  async function mayLogin() {
-    if (auth) {
-      if (!auth.isAuthenticated()) {
-        await auth.login()
-      }
-      setLoading(false)
-    }
-  }
-
   useEffect(() => {
-    if (auth) {
-      mayLogin()
-        .then((res) => {
+    const maybeLogin = async () => {
+      if (auth) {
+        try {
+          const res = await auth.login()
           if (!auth.isAuthenticated()) {
             console.error(`Authentication failed ${res}`)
           }
-          if (oldUrl) {
-            history.push(oldUrl)
-          }
-        })
-        .catch((err) => {
-          console.error(err)
-          if (oldUrl) {
-            history.push(oldUrl)
-          }
-        })
+        } catch (error) {
+          console.error(error)
+        }
+        setLoading(false)
+        if (oldUrl) {
+          history.push(oldUrl)
+        }
+      }
     }
+    maybeLogin()
   }, [auth, history])
 
   // No sdk no OAuth for you

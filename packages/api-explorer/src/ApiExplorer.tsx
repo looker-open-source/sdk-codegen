@@ -29,7 +29,12 @@ import { useLocation } from 'react-router'
 import styled, { createGlobalStyle } from 'styled-components'
 import { Aside, ComponentsProvider, Layout, Page } from '@looker/components'
 import { SpecList } from '@looker/sdk-codegen'
-import { RunItSetter, funFetch, fallbackFetch } from '@looker/run-it'
+import {
+  RunItSetter,
+  funFetch,
+  fallbackFetch,
+  OAuthScene,
+} from '@looker/run-it'
 import {
   SearchContext,
   LodeContext,
@@ -75,6 +80,7 @@ const ApiExplorer: FC<ApiExplorerProps> = ({
 }) => {
   const location = useLocation()
   const { setSdkLanguageAction } = useActions()
+  const oauthReturn = location.pathname === `/${oAuthPath}`
 
   const [specState, specDispatch] = useReducer(
     specReducer,
@@ -112,16 +118,20 @@ const ApiExplorer: FC<ApiExplorerProps> = ({
   useEffect(() => {
     const loadSpec = async () => {
       if (!spec.api) {
-        const newSpec = { ...spec }
-        const api = await fallbackFetch(newSpec, funFetch)
-        if (api) {
-          spec.api = api
-          specDispatch(updateSpecApi(spec.key, api))
+        try {
+          const newSpec = { ...spec }
+          const api = await fallbackFetch(newSpec, funFetch)
+          if (api) {
+            spec.api = api
+            specDispatch(updateSpecApi(spec.key, api))
+          }
+        } catch (error) {
+          console.error(error)
         }
       }
     }
-    if (location.pathname !== `/${oAuthPath}`) {
-      loadSpec().catch((error) => console.error(error))
+    if (!oauthReturn) {
+      loadSpec()
     }
   }, [spec, location])
 
@@ -175,7 +185,8 @@ const ApiExplorer: FC<ApiExplorerProps> = ({
                         />
                       </AsideBorder>
                     )}
-                    {spec.api && (
+                    {oauthReturn && <OAuthScene />}(
+                    {!oauthReturn && spec.api && (
                       <AppRouter
                         api={spec.api}
                         specKey={spec.key}
