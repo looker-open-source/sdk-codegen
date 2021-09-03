@@ -107,10 +107,14 @@ export const MethodScene: FC<MethodSceneProps> = ({
 
   useEffect(() => {
     const checkRunIt = async () => {
-      const show = await showRunIt(envAdaptor)
-      if (show) setOn()
+      try {
+        const show = await showRunIt(envAdaptor)
+        if (show) setOn()
+      } catch (error) {
+        console.error(error)
+      }
     }
-    checkRunIt().catch((error) => console.error(error))
+    checkRunIt()
   }, [envAdaptor, setOn])
 
   const runItToggle = (
