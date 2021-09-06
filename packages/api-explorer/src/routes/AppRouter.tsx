@@ -23,14 +23,14 @@
  SOFTWARE.
 
  */
-import React, { FC, useContext } from 'react'
+import React, { FC } from 'react'
 import { Redirect, Route, Switch } from 'react-router-dom'
 import { ApiModel, SpecList } from '@looker/sdk-codegen'
-import { OAuthScene, RunItSetter, RunItContext } from '@looker/run-it'
+import { RunItSetter } from '@looker/run-it'
 
 import { HomeScene, MethodScene, TagScene, TypeScene } from '../scenes'
 import { DiffScene } from '../scenes/DiffScene'
-import { diffPath, IApixEnvAdaptor, oAuthPath } from '../utils'
+import { diffPath, IApixEnvAdaptor } from '../utils'
 
 interface AppRouterProps {
   api: ApiModel
@@ -49,16 +49,9 @@ export const AppRouter: FC<AppRouterProps> = ({
   envAdaptor,
   setVersionsUrl,
 }) => {
-  const { sdk } = useContext(RunItContext)
-  const maybeOauth = sdk && sdk.apiVersion === '4.0'
   return (
     <Switch>
       <Redirect from="/" to={`/${specKey}/`} exact />
-      {maybeOauth && (
-        <Route path={`/${oAuthPath}`}>
-          <OAuthScene />
-        </Route>
-      )}
       <Route path={`/${diffPath}/:l?/:r?`}>
         <DiffScene specs={specs} toggleNavigation={toggleNavigation} />
       </Route>

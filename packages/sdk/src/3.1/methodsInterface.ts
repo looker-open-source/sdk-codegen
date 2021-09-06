@@ -30,6 +30,7 @@
 
 import type {
   DelimArray,
+  IAPIMethods,
   IDictionary,
   ITransportSettings,
   SDKResponse,
@@ -241,7 +242,7 @@ import type {
   IWriteWhitelabelConfiguration,
 } from './models'
 
-export interface ILooker31SDK {
+export interface ILooker31SDK extends IAPIMethods {
   //#region ApiAuth: API Authentication
 
   /**

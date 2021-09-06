@@ -29,14 +29,24 @@ import { useLocation } from 'react-router'
 import styled, { createGlobalStyle } from 'styled-components'
 import { Aside, ComponentsProvider, Layout, Page } from '@looker/components'
 import { SpecList } from '@looker/sdk-codegen'
-import { loadSpecApi, RunItSetter } from '@looker/run-it'
+import {
+  RunItSetter,
+  funFetch,
+  fallbackFetch,
+  OAuthScene,
+} from '@looker/run-it'
 import {
   SearchContext,
   LodeContext,
   defaultLodeContextValue,
   EnvAdaptorContext,
 } from './context'
-import { EnvAdaptorConstants, getLoded, IApixEnvAdaptor } from './utils'
+import {
+  EnvAdaptorConstants,
+  getLoded,
+  IApixEnvAdaptor,
+  oAuthPath,
+} from './utils'
 import { Header, SideNav, ErrorBoundary } from './components'
 import {
   specReducer,
@@ -70,6 +80,7 @@ const ApiExplorer: FC<ApiExplorerProps> = ({
 }) => {
   const location = useLocation()
   const { setSdkLanguageAction } = useActions()
+  const oauthReturn = location.pathname === `/${oAuthPath}`
 
   const [specState, specDispatch] = useReducer(
     specReducer,
@@ -102,20 +113,27 @@ const ApiExplorer: FC<ApiExplorerProps> = ({
         window.removeEventListener('message', hasNavigationToggle)
       }
     }
-  }, [])
+  }, [headless, hasNavigationToggle])
 
   useEffect(() => {
     const loadSpec = async () => {
       if (!spec.api) {
-        const newSpec = { ...spec }
-        const api = await loadSpecApi(newSpec)
-        if (api) {
-          specDispatch(updateSpecApi(spec.key, api))
+        try {
+          const newSpec = { ...spec }
+          const api = await fallbackFetch(newSpec, funFetch)
+          if (api) {
+            spec.api = api
+            specDispatch(updateSpecApi(spec.key, api))
+          }
+        } catch (error) {
+          console.error(error)
         }
       }
     }
-    loadSpec()
-  }, [spec])
+    if (!oauthReturn) {
+      loadSpec()
+    }
+  }, [spec, location])
 
   useEffect(() => {
     getLoded(exampleLodeUrl, declarationsLodeUrl).then((resp) => setLode(resp))
@@ -167,7 +185,8 @@ const ApiExplorer: FC<ApiExplorerProps> = ({
                         />
                       </AsideBorder>
                     )}
-                    {spec.api && (
+                    {oauthReturn && <OAuthScene />}
+                    {!oauthReturn && spec.api && (
                       <AppRouter
                         api={spec.api}
                         specKey={spec.key}
