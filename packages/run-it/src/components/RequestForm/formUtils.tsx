@@ -107,7 +107,7 @@ const createBoolItem = (
   handleChange: (e: BaseSyntheticEvent) => void,
   requestContent: RunItValues
 ) => (
-  <Space>
+  <Space key={`bool${name}`}>
     <FieldToggleSwitch
       name={name}
       label={name}
