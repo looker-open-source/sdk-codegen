@@ -30,8 +30,11 @@ import {
   Label,
   FieldCheckbox,
   Space,
+  Button,
+  Box,
+  Popover,
 } from '@looker/components'
-import { InputDate } from '@looker/components-date'
+import { DateFormat, InputDate } from '@looker/components-date'
 import { CodeEditor } from '@looker/code-editor'
 
 import { RunItInput, RunItValues } from '../../RunIt'
@@ -62,12 +65,31 @@ const createDateItem = (
   handleChange: (name: string, date?: Date) => void,
   requestContent: RunItValues
 ) => (
-  <Space align="start" alignContent="top">
+  <Space align="start" alignContent="top" key={`date_${name}`}>
     <Label>{name}</Label>
-    <InputDate
-      defaultValue={name in requestContent ? requestContent[name] : undefined}
-      onChange={handleChange.bind(null, name)}
-    />
+    <Popover
+      content={
+        <Box p="u3">
+          <InputDate
+            key={`datepick_${name}`}
+            defaultValue={
+              name in requestContent ? requestContent[name] : undefined
+            }
+            onChange={handleChange.bind(null, name)}
+          />
+        </Box>
+      }
+    >
+      <Button>
+        {name in requestContent ? (
+          <DateFormat>
+            {name in requestContent ? requestContent[name] : undefined}
+          </DateFormat>
+        ) : (
+          'Choose'
+        )}
+      </Button>
+    </Popover>
   </Space>
 )
 

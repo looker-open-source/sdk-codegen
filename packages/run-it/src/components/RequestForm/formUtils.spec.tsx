@@ -23,6 +23,7 @@
  SOFTWARE.
 
  */
+
 import { screen, fireEvent, waitFor } from '@testing-library/react'
 import { renderWithTheme } from '@looker/components-test-utils'
 import userEvent from '@testing-library/user-event'
