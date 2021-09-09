@@ -54,8 +54,9 @@ const createDateItem = (
 ) => (
   <FormItem id={name} label={name}>
     <Popover
+      key={`${name}_pop`}
       content={
-        <Box p="u3">
+        <Box key={`${name}_popbox`} p="u3">
           <InputDate
             key={`datepick_${name}`}
             defaultValue={
@@ -66,9 +67,9 @@ const createDateItem = (
         </Box>
       }
     >
-      <ButtonOutline>
+      <ButtonOutline key={`${name}_pop_button`}>
         {name in requestContent ? (
-          <DateFormat>
+          <DateFormat key={`${name}_dateformat`}>
             {name in requestContent ? requestContent[name] : undefined}
           </DateFormat>
         ) : (
@@ -96,6 +97,8 @@ const createBoolItem = (
   <FormItem id={name} label={name}>
     <>
       <ToggleSwitch
+        key={name}
+        id={name}
         name={name}
         onChange={handleChange}
         on={name in requestContent ? requestContent[name] : false}
@@ -140,7 +143,9 @@ const createItem = (
 ) => (
   <FormItem id={name} label={name}>
     <InputText
+      key={name}
       id={name}
+      name={name}
       required={required}
       placeholder={`${placeholder} ${description || name}`}
       type={inputTextType(type)}
@@ -241,6 +246,7 @@ export const createComplexItem = (
 ) => (
   <FormItem id={input.name} label={input.name}>
     <CodeEditor
+      key={`code_${input.name}`}
       language="json"
       code={
         input.name in requestContent
@@ -258,8 +264,9 @@ export const createComplexItem = (
  * Creates a required checkbox form item
  */
 export const showDataChangeWarning = () => (
-  <FormItem id="warning">
+  <FormItem id="change_warning">
     <FieldCheckbox
+      name="warning"
       key="warning"
       required
       label="I understand that this API endpoint will change data."

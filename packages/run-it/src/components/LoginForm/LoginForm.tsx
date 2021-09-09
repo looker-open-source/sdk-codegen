@@ -64,7 +64,9 @@ export const LoginForm: FC<LoginFormProps> = ({
 
   return (
     <Tooltip content={readyToLogin}>
-      <Button onClick={handleLogin}>Login</Button>
+      <Button key="loginButton" onClick={handleLogin}>
+        Login
+      </Button>
     </Tooltip>
   )
 }

@@ -42,10 +42,13 @@ interface FormItemProps {
  * @param label optional label
  */
 export const FormItem: FC<FormItemProps> = ({ id, children, label = ' ' }) => {
+  const key = `space_${id}`
   return (
-    <Space id={`space_${id}`}>
-      <Box width="120px" flexShrink={0}>
-        <Label htmlFor={id}>{label}</Label>
+    <Space id={key} key={key}>
+      <Box key={`${key}_box`} width="120px" flexShrink={0}>
+        <Label key={`${key}_label_for`} htmlFor={id}>
+          {label}
+        </Label>
       </Box>
       {children}
     </Space>
