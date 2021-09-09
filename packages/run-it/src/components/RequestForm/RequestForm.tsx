@@ -28,10 +28,9 @@ import React, { BaseSyntheticEvent, FC, Dispatch } from 'react'
 import {
   Button,
   Form,
-  Space,
   ButtonTransparent,
   Tooltip,
-  SpaceVertical,
+  Fieldset,
 } from '@looker/components'
 import type { IAPIMethods } from '@looker/sdk-rtl'
 import { RunItHttpMethod, RunItInput, RunItValues } from '../../RunIt'
@@ -44,6 +43,7 @@ import {
   showDataChangeWarning,
   updateNullableProp,
 } from './formUtils'
+import { FormItem } from './FormItem'
 
 /** Properties required by RequestForm */
 interface RequestFormProps {
@@ -129,7 +129,7 @@ export const RequestForm: FC<RequestFormProps> = ({
 
   return (
     <Form onSubmit={handleSubmit}>
-      <SpaceVertical align="start" alignContent="left">
+      <Fieldset>
         {inputs.map((input) =>
           typeof input.type === 'string'
             ? createSimpleItem(
@@ -142,37 +142,39 @@ export const RequestForm: FC<RequestFormProps> = ({
               )
             : createComplexItem(input, handleComplexChange, requestContent)
         )}
-      </SpaceVertical>
-      {httpMethod !== 'GET' && showDataChangeWarning()}
-      <Space>
-        <Tooltip content="Clear entered values">
-          <ButtonTransparent type="button" onClick={handleClear}>
-            Clear
-          </ButtonTransparent>
-        </Tooltip>
-        {hasConfig ? (
-          needsAuth ? (
-            <LoginForm
-              sdk={sdk}
-              setVersionsUrl={setVersionsUrl}
-              setHasConfig={setHasConfig}
-              configurator={configurator}
-              requestContent={requestContent}
-            />
-          ) : (
-            <Tooltip content="Run the API request">
-              <Button type="submit">Run</Button>
+        {httpMethod !== 'GET' && showDataChangeWarning()}
+        <FormItem id="buttonbar">
+          <>
+            {hasConfig ? (
+              needsAuth ? (
+                <LoginForm
+                  sdk={sdk}
+                  setVersionsUrl={setVersionsUrl}
+                  setHasConfig={setHasConfig}
+                  configurator={configurator}
+                  requestContent={requestContent}
+                />
+              ) : (
+                <Tooltip content="Run the API request">
+                  <Button type="submit">Run</Button>
+                </Tooltip>
+              )
+            ) : (
+              !isExtension &&
+              setHasConfig && (
+                <Tooltip content="Configure your OAuth server to Run requests">
+                  <Button onClick={handleConfig}>Configure</Button>
+                </Tooltip>
+              )
+            )}
+            <Tooltip content="Clear entered values">
+              <ButtonTransparent type="button" onClick={handleClear}>
+                Clear
+              </ButtonTransparent>
             </Tooltip>
-          )
-        ) : (
-          !isExtension &&
-          setHasConfig && (
-            <Tooltip content="Configure your OAuth server to Run requests">
-              <Button onClick={handleConfig}>Configure</Button>
-            </Tooltip>
-          )
-        )}
-      </Space>
+          </>
+        </FormItem>
+      </Fieldset>
     </Form>
   )
 }

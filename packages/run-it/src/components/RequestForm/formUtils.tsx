@@ -25,32 +25,19 @@
  */
 import React, { BaseSyntheticEvent, Fragment } from 'react'
 import {
-  FieldText,
-  FieldToggleSwitch,
+  ToggleSwitch,
   Label,
   FieldCheckbox,
-  Space,
-  Button,
+  ButtonOutline,
   Box,
   Popover,
+  InputText,
 } from '@looker/components'
 import { DateFormat, InputDate } from '@looker/components-date'
 import { CodeEditor } from '@looker/code-editor'
 
 import { RunItInput, RunItValues } from '../../RunIt'
-
-const inputTextType = (type: string) => {
-  switch (type) {
-    case 'number':
-      return 'number'
-    case 'email':
-      return 'email'
-    case 'password':
-      return 'password'
-    default:
-      return 'text'
-  }
-}
+import { FormItem } from './FormItem'
 
 /**
  * Creates a datetime form item
@@ -65,8 +52,7 @@ const createDateItem = (
   handleChange: (name: string, date?: Date) => void,
   requestContent: RunItValues
 ) => (
-  <Space align="start" alignContent="top" key={`date_${name}`}>
-    <Label>{name}</Label>
+  <FormItem id={name} label={name}>
     <Popover
       content={
         <Box p="u3">
@@ -80,7 +66,7 @@ const createDateItem = (
         </Box>
       }
     >
-      <Button>
+      <ButtonOutline>
         {name in requestContent ? (
           <DateFormat>
             {name in requestContent ? requestContent[name] : undefined}
@@ -88,9 +74,9 @@ const createDateItem = (
         ) : (
           'Choose'
         )}
-      </Button>
+      </ButtonOutline>
     </Popover>
-  </Space>
+  </FormItem>
 )
 
 /**
@@ -107,16 +93,30 @@ const createBoolItem = (
   handleChange: (e: BaseSyntheticEvent) => void,
   requestContent: RunItValues
 ) => (
-  <Space key={`bool${name}`}>
-    <FieldToggleSwitch
-      name={name}
-      label={name}
-      onChange={handleChange}
-      on={name in requestContent ? requestContent[name] : false}
-    />
-    {description && <Label>{description}</Label>}
-  </Space>
+  <FormItem id={name} label={name}>
+    <>
+      <ToggleSwitch
+        name={name}
+        onChange={handleChange}
+        on={name in requestContent ? requestContent[name] : false}
+      />
+      {description && <Label>{description}</Label>}
+    </>
+  </FormItem>
 )
+
+const inputTextType = (type: string) => {
+  switch (type) {
+    case 'number':
+      return 'number'
+    case 'email':
+      return 'email'
+    case 'password':
+      return 'password'
+    default:
+      return 'text'
+  }
+}
 
 /**
  * Create a field text input item based on definitions
@@ -138,17 +138,16 @@ const createItem = (
   handleChange: (e: BaseSyntheticEvent) => void,
   requestContent: RunItValues
 ) => (
-  <FieldText
-    key={name}
-    name={name}
-    label={name}
-    required={required}
-    placeholder={`${placeholder} ${description || name}`}
-    type={inputTextType(type)}
-    value={name in requestContent ? requestContent[name] : ''}
-    onChange={handleChange}
-    inline
-  />
+  <FormItem id={name} label={name}>
+    <InputText
+      id={name}
+      required={required}
+      placeholder={`${placeholder} ${description || name}`}
+      type={inputTextType(type)}
+      value={name in requestContent ? requestContent[name] : ''}
+      onChange={handleChange}
+    />
+  </FormItem>
 )
 
 /**
@@ -240,8 +239,7 @@ export const createComplexItem = (
   handleComplexChange: (value: string, name: string) => void,
   requestContent: RunItValues
 ) => (
-  <div key={input.name}>
-    <Label>{input.name}</Label>
+  <FormItem id={input.name} label={input.name}>
     <CodeEditor
       language="json"
       code={
@@ -253,18 +251,20 @@ export const createComplexItem = (
       onChange={handleComplexChange.bind(null, input.name)}
       transparent={true}
     />
-  </div>
+  </FormItem>
 )
 
 /**
  * Creates a required checkbox form item
  */
 export const showDataChangeWarning = () => (
-  <FieldCheckbox
-    key="warning"
-    required
-    label="I understand that this API endpoint will change data."
-  />
+  <FormItem id="warning">
+    <FieldCheckbox
+      key="warning"
+      required
+      label="I understand that this API endpoint will change data."
+    />
+  </FormItem>
 )
 
 /**
