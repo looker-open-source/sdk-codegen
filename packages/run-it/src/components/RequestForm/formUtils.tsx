@@ -52,7 +52,7 @@ const createDateItem = (
   handleChange: (name: string, date?: Date) => void,
   requestContent: RunItValues
 ) => (
-  <FormItem id={name} label={name}>
+  <FormItem key={`${name}_fid`} id={name} label={name}>
     <Popover
       key={`${name}_pop`}
       content={
@@ -94,7 +94,7 @@ const createBoolItem = (
   handleChange: (e: BaseSyntheticEvent) => void,
   requestContent: RunItValues
 ) => (
-  <FormItem id={name} label={name}>
+  <FormItem key={`${name}_fib`} id={name} label={name}>
     <>
       <ToggleSwitch
         key={name}
@@ -141,7 +141,7 @@ const createItem = (
   handleChange: (e: BaseSyntheticEvent) => void,
   requestContent: RunItValues
 ) => (
-  <FormItem id={name} label={name}>
+  <FormItem key={`${name}_fi`} id={name} label={name}>
     <InputText
       key={name}
       id={name}
@@ -244,7 +244,7 @@ export const createComplexItem = (
   handleComplexChange: (value: string, name: string) => void,
   requestContent: RunItValues
 ) => (
-  <FormItem id={input.name} label={input.name}>
+  <FormItem key={`${input.name}_fic`} id={input.name} label={input.name}>
     <CodeEditor
       key={`code_${input.name}`}
       language="json"
@@ -264,7 +264,7 @@ export const createComplexItem = (
  * Creates a required checkbox form item
  */
 export const showDataChangeWarning = () => (
-  <FormItem id="change_warning">
+  <FormItem key="warningfi" id="change_warning">
     <FieldCheckbox
       name="warning"
       key="warning"

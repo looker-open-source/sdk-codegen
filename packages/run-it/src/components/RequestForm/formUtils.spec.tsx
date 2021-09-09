@@ -208,9 +208,13 @@ describe('Simple Items', () => {
       description: 'A simple item of type datetime',
     })
 
-    test('it creates a datetime item', () => {
+    test('it creates a datetime item', async () => {
       renderWithTheme(DateItem)
-      expect(screen.getByTestId('text-input')).toBeInTheDocument()
+      const button = screen.getByRole('button', { name: 'Choose' })
+      userEvent.click(button)
+      await waitFor(() => {
+        expect(screen.getByTestId('text-input')).toBeInTheDocument()
+      })
     })
   })
 
