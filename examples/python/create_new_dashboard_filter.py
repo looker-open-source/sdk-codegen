@@ -1,0 +1,92 @@
+
+# Initialize API/SDK for more info go here: https://pypi.org/project/looker-sdk/
+import looker_sdk
+from looker_sdk import models
+from looker_sdk.sdk.api40.models import DashboardElement, DashboardFilter
+
+sdk = looker_sdk.init40("looker.ini", section="DCL")
+
+def main():
+    """Creates a new dashboard filter and updates all dashboard elements to listen to to it.
+    Dashboard elements listen on the same field that the dashboard filter is created from.
+    """
+    dash_id = '1039'
+    filter_name = 'Status'
+    filter_model = 'kd_snowflake'
+    filter_explore = 'order_items'
+    filter_dimension = 'order_items.status' # Requires a fully-scoped dimension
+
+    filter = create_filter(dash_id, filter_name, filter_model, filter_explore, filter_dimension)
+    elements = sdk.dashboard_dashboard_elements(dash_id)
+    for element in elements:
+        # Skip elements that are text tiles
+        # Easily add other restrictions here to skip updating individual tiles
+        if element.type != 'text':
+            update_elements_filters(element, filter)
+
+
+def create_filter(dash_id: str, filter_name: str, filter_model: str, filter_explore: str , filter_dimension: str ) -> DashboardFilter:
+    """Creates a dashboard filter object on the specified dashboard. Filters must be tied to a specific LookML Dimension.
+
+    Args:
+        dash_id (str): ID of the dashboard to create the filter on
+        name (str): Name/Title of the filter
+        model (str): Model of the dimension
+        explore (str): Explore of the dimension
+        dimension (str): Name of the dimension. Must be in the format 'view_name.field_name'
+    """
+
+    return sdk.create_dashboard_filter(
+        body=models.WriteCreateDashboardFilter(
+            dashboard_id=dash_id
+            , name=filter_name
+            , title=filter_name
+            , type='field_filter' # New dashboards are only compatible with field filters
+            , model=filter_model
+            , explore=filter_explore
+            , dimension=filter_dimension
+            # Add additional parameters as necessary for allowing multiple values, ui configuration, etc.
+            )
+        )
+
+def update_elements_filters(element: DashboardElement, filter: DashboardFilter) -> None:
+    """Updates a dashboard element's result maker to include a listener on the new dashboard filter.
+
+
+    Args:
+        element (DashboardElement): Dashboard element to update with the new filter
+        filter (DashboardFilter): Dashboard filter the element will listen to
+    """
+    # Keep track of the current result_maker and add to it, otherwise listeners for other filters would be removed
+    current_filterables = element.result_maker.filterables
+    for filterable in current_filterables:
+        new_listens = []
+        for each in filterable.listen:
+            new_listens.append(each)
+        # Add listener for new filter
+        new_listens.append(
+            models.ResultMakerFilterablesListen(
+                dashboard_filter_name=filter.name
+                , field=filter.dimension
+                )
+            )
+        filterable.listen = new_listens
+    
+    # Append the new filterables to a result maker
+    element.result_maker.filterables = []
+    for filterable in current_filterables:
+        element.result_maker.filterables.append(
+                models.ResultMakerFilterables(
+                model=filterable.model
+                , view=filterable.view
+                , listen=new_listens
+                )
+            )
+    
+    # Update element with the new result maker that listens to new filter
+    sdk.update_dashboard_element(
+        dashboard_element_id = element.id
+        , body = models.WriteDashboardElement(result_maker = element.result_maker)
+    )
+
+main()
