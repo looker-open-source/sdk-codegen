@@ -41,7 +41,7 @@ data class AuthToken(
 
     /** Lag time of 10 seconds */
     val lagTime: Long = 10
-    private val expiresAt: LocalDateTime
+    val expiresAt: LocalDateTime
         get() = LocalDateTime.now().plusSeconds(if (expiresIn > 0) expiresIn - lagTime else -lagTime)
 
 //    constructor(token: AuthToken) : this(token.accessToken, token.tokenType, token.expiresIn, token.expiresAt, token.refreshToken)
