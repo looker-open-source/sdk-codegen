@@ -129,7 +129,7 @@ export const RequestForm: FC<RequestFormProps> = ({
 
   return (
     <Form onSubmit={handleSubmit}>
-      <Fieldset key="inputs">
+      <Fieldset>
         {inputs.map((input) =>
           typeof input.type === 'string'
             ? createSimpleItem(
@@ -155,31 +155,20 @@ export const RequestForm: FC<RequestFormProps> = ({
                   requestContent={requestContent}
                 />
               ) : (
-                <Tooltip key="runTip" content="Run the API request">
-                  <Button key="runButton" type="submit">
-                    Run
-                  </Button>
+                <Tooltip content="Run the API request">
+                  <Button type="submit">Run</Button>
                 </Tooltip>
               )
             ) : (
               !isExtension &&
               setHasConfig && (
-                <Tooltip
-                  key="configTip"
-                  content="Configure your OAuth server to Run requests"
-                >
-                  <Button key="configureButton" onClick={handleConfig}>
-                    Configure
-                  </Button>
+                <Tooltip content="Configure your OAuth server to Run requests">
+                  <Button onClick={handleConfig}>Configure</Button>
                 </Tooltip>
               )
             )}
-            <Tooltip key="clearTip" content="Clear entered values">
-              <ButtonTransparent
-                key="clearButton"
-                type="button"
-                onClick={handleClear}
-              >
+            <Tooltip content="Clear entered values">
+              <ButtonTransparent type="button" onClick={handleClear}>
                 Clear
               </ButtonTransparent>
             </Tooltip>

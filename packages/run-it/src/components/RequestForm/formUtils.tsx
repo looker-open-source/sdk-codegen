@@ -55,6 +55,7 @@ const createDateItem = (
   <FormItem key={`${name}_fid`} id={name} label={name}>
     <Popover
       key={`${name}_pop`}
+      placement="bottom-start"
       content={
         <Box key={`${name}_popbox`} p="u3">
           <InputDate
