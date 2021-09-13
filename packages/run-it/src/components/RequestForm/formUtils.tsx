@@ -68,7 +68,7 @@ const createDateItem = (
         </Box>
       }
     >
-      <ButtonOutline key={`${name}_pop_button`}>
+      <ButtonOutline type="button" key={`${name}_pop_button`}>
         {name in requestContent ? (
           <DateFormat key={`${name}_dateformat`}>
             {name in requestContent ? requestContent[name] : undefined}
