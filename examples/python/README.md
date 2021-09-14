@@ -22,6 +22,7 @@ The full details of all Looker API endpoints are listed in Looker Docs: [Version
 ## Dashboard : Manage Dashboards
 
 - [Soft delete dashboard](soft_delete_dashboard.py)
+- [Create dashboard filter](create_dashboard_filter.py)
 
 ## Query : Run and Manage Queries
 - [Kill all running queries](kill_queries.py)
