@@ -86,3 +86,4 @@ def update_elements_filters(element: DashboardElement, filter: DashboardFilter) 
 
 if __name__ == "__main__":
     main()
+    
