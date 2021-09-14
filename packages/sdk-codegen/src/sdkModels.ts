@@ -233,11 +233,12 @@ export type EnumValueType = string | number
 
 /**
  * Returns sorted string array for IKeylist type
- * @param {KeyList} keys Set of values
+ * @param list Set of values
  * @returns {string[]} sorted string array of keys
  */
-export const keyValues = (keys: KeyList): string[] => {
-  return Array.from(keys.values()).sort()
+export const keyValues = (list: KeyList): string[] => {
+  if (!list) return []
+  return Array.from(list.values()).sort()
 }
 
 /**

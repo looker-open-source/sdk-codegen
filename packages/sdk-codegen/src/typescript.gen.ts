@@ -154,14 +154,14 @@ export const functionalSdk${this.apiRef} = (
 
   interfacesPrologue(_indent: string) {
     return `
-import type { ${this.rtlImports()} ITransportSettings, SDKResponse } from '@looker/sdk-rtl'
+import type { ${this.rtlImports()} IAPIMethods, ITransportSettings, SDKResponse } from '@looker/sdk-rtl'
 /**
  * ${this.warnEditing()}
  *
  */
 import type { ${this.typeNames().join(', ')} } from './models'
 
-export interface I${this.packageName} {
+export interface I${this.packageName} extends IAPIMethods {
 
 `
   }

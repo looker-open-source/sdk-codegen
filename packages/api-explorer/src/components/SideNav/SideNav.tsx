@@ -101,7 +101,7 @@ export const SideNav: FC<SideNavProps> = ({
     let results
     let newTags
     let newTypes
-    if (debouncedPattern) {
+    if (debouncedPattern && api.search) {
       results = api.search(pattern, searchCriteria)
       newTags = results.tags
       newTypes = results.types

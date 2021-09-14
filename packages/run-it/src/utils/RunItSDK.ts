@@ -103,7 +103,7 @@ export class RunItSettings extends ApiSettings {
 const perfSDK = (
   settings: Partial<IApiSettings>,
   configurator: RunItConfigurator
-) => {
+): IAPIMethods => {
   const options = new RunItSettings(settings, configurator)
   const transport = new BrowserTransport(options)
   const session = new BrowserSession(options, transport)
@@ -112,8 +112,6 @@ const perfSDK = (
   return sdk
 }
 
-// TODO the runItSdk should be created by the StandaloneApiExplorer and the ExtensionApiExplorer
-// and passed into runit. Once that is done this goes away
 /** stand-alone API test runner */
 export let runItSDK: IAPIMethods
 // And this which sucks
@@ -124,6 +122,9 @@ export const initRunItSdk = (configurator: RunItConfigurator) => {
   return runItSDK
 }
 
-/** Is this a stand-alone version of Run-It that needs server and auth configuration? */
+/**
+ * Is this a stand-alone version of Run-It that needs server and auth configuration?
+ * @param sdk to check
+ */
 export const sdkNeedsConfig = (sdk: IAPIMethods | undefined) =>
   sdk?.authSession.settings instanceof RunItSettings

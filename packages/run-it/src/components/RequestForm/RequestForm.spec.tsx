@@ -152,6 +152,57 @@ describe('RequestForm', () => {
     })
   })
 
+  /** Return time that matches day picker in calendar */
+  const noon = () => {
+    const now = new Date()
+    return new Date(
+      now.getFullYear(),
+      now.getMonth(),
+      now.getDate(),
+      12,
+      0,
+      0,
+      0
+    )
+  }
+
+  test('interacting with a date picker changes the request content', async () => {
+    const name = 'date_item'
+    renderWithTheme(
+      <RequestForm
+        configurator={defaultConfigurator}
+        setVersionsUrl={runItNoSet}
+        inputs={[
+          {
+            name,
+            location: 'query',
+            required: true,
+            type: 'datetime',
+            description: 'some datetime item description',
+          },
+        ]}
+        handleSubmit={handleSubmit}
+        httpMethod={'POST'}
+        requestContent={requestContent}
+        setRequestContent={setRequestContent}
+        needsAuth={false}
+        hasConfig={true}
+        sdk={mockSdk}
+        handleConfig={runItNoSet}
+      />
+    )
+
+    const button = screen.getByRole('button', { name: 'Choose' })
+    userEvent.click(button)
+    await waitFor(() => {
+      const today = noon()
+      const pickName = today.toDateString()
+      const cell = screen.getByRole('gridcell', { name: pickName })
+      userEvent.click(cell)
+      expect(setRequestContent).toHaveBeenLastCalledWith({ [name]: today })
+    })
+  })
+
   test('interactive with a number simple item changes the request content', async () => {
     const name = 'number_item'
     renderWithTheme(

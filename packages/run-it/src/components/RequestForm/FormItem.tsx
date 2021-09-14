@@ -23,46 +23,34 @@
  SOFTWARE.
 
  */
+import React, { FC, ReactElement } from 'react'
+import { Space, Box, Label } from '@looker/components'
 
-import React, { FC, Dispatch } from 'react'
-import { Select } from '@looker/components'
-import { useHistory, useLocation } from 'react-router-dom'
-
-import { SpecList, SpecItem } from '@looker/sdk-codegen'
-import { SpecAction, selectSpec } from '../../reducers'
-
-interface ApiSpecSelectorProps {
-  specs: SpecList
-  spec: SpecItem
-  specDispatch: Dispatch<SpecAction>
+interface FormItemProps {
+  /** ID of input item for label */
+  id: string
+  /** Optional label. Defaults to an empty string so spacing is preserved */
+  label?: string
+  /** Nested react elements */
+  children: ReactElement
 }
 
-export const ApiSpecSelector: FC<ApiSpecSelectorProps> = ({
-  specs,
-  spec,
-  specDispatch,
-}) => {
-  const history = useHistory()
-  const location = useLocation()
-  const options = Object.entries(specs).map(([key, spec]) => ({
-    value: key,
-    label: key,
-    description: spec.status,
-  }))
-
-  const handleChange = (specKey: string) => {
-    specDispatch(selectSpec(specKey))
-    const matchPath = location.pathname.replace(`/${spec.key}`, `/${specKey}`)
-    history.push(matchPath)
-  }
-
+/**
+ * basic input form layout component
+ * @param id of input item
+ * @param children embedded react elements
+ * @param label optional label
+ */
+export const FormItem: FC<FormItemProps> = ({ id, children, label = ' ' }) => {
+  const key = `space_${id}`
   return (
-    <Select
-      width="10rem"
-      aria-label="spec selector"
-      defaultValue={spec.key}
-      options={options}
-      onChange={handleChange}
-    />
+    <Space id={key} key={key}>
+      <Box key={`${key}_box`} width="120px" flexShrink={0}>
+        <Label key={`${key}_label_for`} htmlFor={id}>
+          {label}
+        </Label>
+      </Box>
+      {children}
+    </Space>
   )
 }

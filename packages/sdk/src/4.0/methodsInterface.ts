@@ -31,6 +31,7 @@
 import type {
   DelimArray,
   IDictionary,
+  IAPIMethods,
   ITransportSettings,
   SDKResponse,
 } from '@looker/sdk-rtl'
@@ -280,7 +281,7 @@ import type {
   IWriteWhitelabelConfiguration,
 } from './models'
 
-export interface ILooker40SDK {
+export interface ILooker40SDK extends IAPIMethods {
   //#region Alert: Alert
 
   /**
@@ -410,7 +411,6 @@ export interface ILooker40SDK {
   ): Promise<SDKResponse<IAlert, IError | IValidationError>>
 
   //#endregion Alert: Alert
-
   //#region ApiAuth: API Authentication
 
   /**
