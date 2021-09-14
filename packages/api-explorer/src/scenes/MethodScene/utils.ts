@@ -106,6 +106,11 @@ const createSampleBody = (spec: IApiModel, type: IType) => {
   return recurse(type)
 }
 
+/**
+ * Convert model type to an editable type
+ * @param spec API model for building input editor
+ * @param type to convert
+ */
 const editType = (spec: IApiModel, type: IType) => {
   if (type instanceof IntrinsicType) return type.name
   // TODO create a DelimArray editing component as part of the complex type editor
