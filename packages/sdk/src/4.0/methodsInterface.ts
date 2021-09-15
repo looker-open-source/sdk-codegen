@@ -411,6 +411,7 @@ export interface ILooker40SDK extends IAPIMethods {
   ): Promise<SDKResponse<IAlert, IError | IValidationError>>
 
   //#endregion Alert: Alert
+
   //#region ApiAuth: API Authentication
 
   /**
@@ -1130,12 +1131,12 @@ export interface ILooker40SDK extends IAPIMethods {
    *
    * POST /parse_saml_idp_metadata -> ISamlMetadataParseResult
    *
-   * @param body Partial<string>
+   * @param body string
    * @param options one-time API call overrides
    *
    */
   parse_saml_idp_metadata(
-    body: Partial<string>,
+    body: string,
     options?: Partial<ITransportSettings>
   ): Promise<SDKResponse<ISamlMetadataParseResult, IError>>
 
@@ -1146,12 +1147,12 @@ export interface ILooker40SDK extends IAPIMethods {
    *
    * POST /fetch_and_parse_saml_idp_metadata -> ISamlMetadataParseResult
    *
-   * @param body Partial<string>
+   * @param body string
    * @param options one-time API call overrides
    *
    */
   fetch_and_parse_saml_idp_metadata(
-    body: Partial<string>,
+    body: string,
     options?: Partial<ITransportSettings>
   ): Promise<SDKResponse<ISamlMetadataParseResult, IError>>
 

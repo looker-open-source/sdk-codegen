@@ -1477,13 +1477,13 @@ export const create_saml_test_config = async (
  * POST /parse_saml_idp_metadata -> ISamlMetadataParseResult
  *
  * @param sdk IAPIMethods implementation
- * @param body Partial<string>
+ * @param body string
  * @param options one-time API call overrides
  *
  */
 export const parse_saml_idp_metadata = async (
   sdk: IAPIMethods,
-  body: Partial<string>,
+  body: string,
   options?: Partial<ITransportSettings>
 ): Promise<SDKResponse<ISamlMetadataParseResult, IError>> => {
   return sdk.post<ISamlMetadataParseResult, IError>(
@@ -1502,13 +1502,13 @@ export const parse_saml_idp_metadata = async (
  * POST /fetch_and_parse_saml_idp_metadata -> ISamlMetadataParseResult
  *
  * @param sdk IAPIMethods implementation
- * @param body Partial<string>
+ * @param body string
  * @param options one-time API call overrides
  *
  */
 export const fetch_and_parse_saml_idp_metadata = async (
   sdk: IAPIMethods,
-  body: Partial<string>,
+  body: string,
   options?: Partial<ITransportSettings>
 ): Promise<SDKResponse<ISamlMetadataParseResult, IError>> => {
   return sdk.post<ISamlMetadataParseResult, IError>(
