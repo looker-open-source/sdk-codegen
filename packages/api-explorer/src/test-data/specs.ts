@@ -50,3 +50,13 @@ export const specState = initDefaultSpecState(specs, window.location)
 
 export const api = ApiModel.fromJson(specs['3.1'].specContent)
 export const api40 = ApiModel.fromJson(specs['4.0'].specContent)
+
+export const getLoadedSpecs = () => {
+  const loadedSpecs = { ...specs }
+  loadedSpecs['3.1'].api = api
+  loadedSpecs['4.0'].api = api40
+  return loadedSpecs
+}
+
+export const getLoadedSpecState = () =>
+  initDefaultSpecState(getLoadedSpecs(), window.location)

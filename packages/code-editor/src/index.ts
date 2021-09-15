@@ -23,5 +23,7 @@
  SOFTWARE.
 
  */
-export { CodeDisplay } from './CodeDisplay'
-export { CodeEditor } from './CodeEditor'
+export * from './CodeCopy'
+export * from './CodeDisplay'
+export * from './CodeEditor'
+export * from './Markdown'

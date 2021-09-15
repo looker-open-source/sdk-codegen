@@ -45,8 +45,8 @@ jobs:
     name: Codegen Tests
     runs-on: ubuntu-latest
     steps:
-      # using `sleep 900` as a naive solution to avoiding early approval: 99% of
-      # real CI jobs finish in under 15 minutes. Waiting 15 minutes here should
+      # using `sleep 480` as a naive solution to avoiding early approval: 99% of
+      # real CI jobs finish in under 8 minutes. Waiting 8 minutes here should
       # mostly avoid the scenario where these noop jobs meet all required checks
       # on a PR prior to a corresponding real CI job being able to report.
       #
@@ -54,22 +54,22 @@ jobs:
       # might be to run a script with https://github.com/octokit/action.js/
       # that uses either the REST or GraphQL API to figure out when all
       # outstanding workflows for this PR have finished and only then `exit 0`
-      - run: sleep 900 && exit 0
+      - run: sleep 480 && exit 0
 
   noop-typescript-results:
     name: Typescript Tests
     runs-on: ubuntu-latest
     steps:
-      - run: sleep 900 && exit 0
+      - run: sleep 480 && exit 0
 
   noop-python-results:
     name: Python Tests
     runs-on: ubuntu-latest
     steps:
-      - run: sleep 900 && exit 0
+      - run: sleep 480 && exit 0
 
   noop-apix-results:
     name: APIX Tests
     runs-on: ubuntu-latest
     steps:
-      - run: sleep 900 && exit 0
+      - run: sleep 480 && exit 0

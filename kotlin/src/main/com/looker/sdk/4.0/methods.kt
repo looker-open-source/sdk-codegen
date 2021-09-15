@@ -25,7 +25,7 @@
  */
 
 /**
- * 412 API methods
+ * 423 API methods
  */
 
 
@@ -38,6 +38,165 @@ import java.util.*
 class LookerSDK(authSession: AuthSession) : APIMethods(authSession) {
 
   val stream by lazy { LookerSDKStream(this.authSession) }
+
+    //region Alert: Alert
+
+
+    /**
+     * ### Search Alerts
+     *
+     * @param {Long} limit (Optional) Number of results to return (used with `offset`).
+     * @param {Long} offset (Optional) Number of results to skip before returning any (used with `limit`).
+     * @param {String} fields (Optional) Requested fields.
+     * @param {Boolean} disabled (Optional) Filter on returning only enabled or disabled alerts.
+     * @param {String} frequency (Optional) Filter on alert frequency, such as: monthly, weekly, daily, hourly, minutes
+     * @param {Boolean} condition_met (Optional) Filter on whether the alert has met its condition when it last executed
+     * @param {String} last_run_start (Optional) Filter on the start range of the last time the alerts were run. Example: 2021-01-01T01:01:01-08:00.
+     * @param {String} last_run_end (Optional) Filter on the start range of the last time the alerts were run. Example: 2021-01-01T01:01:01-08:00.
+     * @param {Boolean} all_owners (Admin only) (Optional) Filter for all owners.
+     *
+     * GET /alerts/search -> Array<Alert>
+     */
+    @JvmOverloads fun search_alerts(
+        limit: Long? = null,
+        offset: Long? = null,
+        fields: String? = null,
+        disabled: Boolean? = null,
+        frequency: String? = null,
+        condition_met: Boolean? = null,
+        last_run_start: String? = null,
+        last_run_end: String? = null,
+        all_owners: Boolean? = null
+    ) : SDKResponse {
+        return this.get<Array<Alert>>("/alerts/search", 
+            mapOf("limit" to limit,
+                 "offset" to offset,
+                 "fields" to fields,
+                 "disabled" to disabled,
+                 "frequency" to frequency,
+                 "condition_met" to condition_met,
+                 "last_run_start" to last_run_start,
+                 "last_run_end" to last_run_end,
+                 "all_owners" to all_owners))
+    }
+
+
+    /**
+     * ### Get an alert by a given alert ID
+     *
+     * @param {Long} alert_id ID of an alert
+     *
+     * GET /alerts/{alert_id} -> Alert
+     */
+    fun get_alert(
+        alert_id: Long
+    ) : SDKResponse {
+        val path_alert_id = encodeParam(alert_id)
+        return this.get<Alert>("/alerts/${path_alert_id}", mapOf())
+    }
+
+
+    /**
+     * ### Update an alert
+     * # Required fields: `owner_id`, `field`, `destinations`, `comparison_type`, `threshold`, `cron`
+     * #
+     *
+     * @param {Long} alert_id ID of an alert
+     * @param {WriteAlert} body
+     *
+     * PUT /alerts/{alert_id} -> Alert
+     */
+    fun update_alert(
+        alert_id: Long,
+        body: WriteAlert
+    ) : SDKResponse {
+        val path_alert_id = encodeParam(alert_id)
+        return this.put<Alert>("/alerts/${path_alert_id}", mapOf(), body)
+    }
+
+
+    /**
+     * ### Update select alert fields
+     * # Available fields: `owner_id`, `is_disabled`, `is_public`, `threshold`
+     * #
+     *
+     * @param {Long} alert_id ID of an alert
+     * @param {WriteAlert} body
+     *
+     * PATCH /alerts/{alert_id} -> Alert
+     */
+    fun update_alert_field(
+        alert_id: Long,
+        body: WriteAlert
+    ) : SDKResponse {
+        val path_alert_id = encodeParam(alert_id)
+        return this.patch<Alert>("/alerts/${path_alert_id}", mapOf(), body)
+    }
+
+
+    /**
+     * ### Delete an alert by a given alert ID
+     *
+     * @param {Long} alert_id ID of an alert
+     *
+     * DELETE /alerts/{alert_id} -> Void
+     */
+    fun delete_alert(
+        alert_id: Long
+    ) : SDKResponse {
+        val path_alert_id = encodeParam(alert_id)
+        return this.delete<Void>("/alerts/${path_alert_id}", mapOf())
+    }
+
+
+    /**
+     * ### Create a new alert and return details of the newly created object
+     *
+     * Required fields: `field`, `destinations`, `comparison_type`, `threshold`, `cron`
+     *
+     * Example Request:
+     * Run alert on dashboard element '103' at 5am every day. Send an email to 'test@test.com' if inventory for Los Angeles (using dashboard filter `Warehouse Name`) is lower than 1,000
+     * ```
+     * {
+     *   "cron": "0 5 * * *",
+     *   "custom_title": "Alert when LA inventory is low",
+     *   "dashboard_element_id": 103,
+     *   "applied_dashboard_filters": [
+     *     {
+     *       "filter_title": "Warehouse Name",
+     *       "field_name": "distribution_centers.name",
+     *       "filter_value": "Los Angeles CA",
+     *       "filter_description": "is Los Angeles CA"
+     *     }
+     *   ],
+     *   "comparison_type": "LESS_THAN",
+     *   "destinations": [
+     *     {
+     *       "destination_type": "EMAIL",
+     *       "email_address": "test@test.com"
+     *     }
+     *   ],
+     *   "field": {
+     *     "title": "Number on Hand",
+     *     "name": "inventory_items.number_on_hand"
+     *   },
+     *   "is_disabled": false,
+     *   "is_public": true,
+     *   "threshold": 1000
+     * }
+     * ```
+     *
+     * @param {WriteAlert} body
+     *
+     * POST /alerts -> Alert
+     */
+    fun create_alert(
+        body: WriteAlert
+    ) : SDKResponse {
+        return this.post<Alert>("/alerts", mapOf(), body)
+    }
+
+    //endregion Alert: Alert
 
     //region ApiAuth: API Authentication
 
@@ -1743,6 +1902,52 @@ class LookerSDK(authSession: AuthSession) : APIMethods(authSession) {
 
 
     /**
+     * ### Get Looker Settings
+     *
+     * Available settings are:
+     *  - extension_framework_enabled
+     *  - marketplace_auto_install_enabled
+     *  - marketplace_enabled
+     *  - whitelabel_configuration
+     *
+     * @param {String} fields Requested fields
+     *
+     * GET /setting -> Setting
+     */
+    @JvmOverloads fun get_setting(
+        fields: String? = null
+    ) : SDKResponse {
+        return this.get<Setting>("/setting", 
+            mapOf("fields" to fields))
+    }
+
+
+    /**
+     * ### Configure Looker Settings
+     *
+     * Available settings are:
+     *  - extension_framework_enabled
+     *  - marketplace_auto_install_enabled
+     *  - marketplace_enabled
+     *  - whitelabel_configuration
+     *
+     * See the `Setting` type for more information on the specific values that can be configured.
+     *
+     * @param {WriteSetting} body
+     * @param {String} fields Requested fields
+     *
+     * PATCH /setting -> Setting
+     */
+    @JvmOverloads fun set_setting(
+        body: WriteSetting,
+        fields: String? = null
+    ) : SDKResponse {
+        return this.patch<Setting>("/setting", 
+            mapOf("fields" to fields), body)
+    }
+
+
+    /**
      * ### Get a list of timezones that Looker supports (e.g. useful for scheduling tasks).
      *
      * GET /timezones -> Array<Timezone>
@@ -1772,12 +1977,12 @@ class LookerSDK(authSession: AuthSession) : APIMethods(authSession) {
     /**
      * ### Get an API specification for this Looker instance.
      *
-     * **Note**: Although the API specification is in JSON format, the return type is temporarily `text/plain`, so the response should be treated as standard JSON to consume it.
+     * The specification is returned as a JSON document in Swagger 2.x format
      *
      * @param {String} api_version API version
      * @param {String} specification Specification name. Typically, this is "swagger.json"
      *
-     * GET /api_spec/{api_version}/{specification} -> String
+     * GET /api_spec/{api_version}/{specification} -> Any
      */
     fun api_spec(
         api_version: String,
@@ -1785,7 +1990,7 @@ class LookerSDK(authSession: AuthSession) : APIMethods(authSession) {
     ) : SDKResponse {
         val path_api_version = encodeParam(api_version)
         val path_specification = encodeParam(specification)
-        return this.get<String>("/api_spec/${path_api_version}/${path_specification}", mapOf())
+        return this.get<Any>("/api_spec/${path_api_version}/${path_specification}", mapOf())
     }
 
 
@@ -1987,6 +2192,8 @@ class LookerSDK(authSession: AuthSession) : APIMethods(authSession) {
     /**
      * ### Get all External OAuth Applications.
      *
+     * This is an OAuth Application which Looker uses to access external systems.
+     *
      * @param {String} name Application name
      * @param {String} client_id Application Client ID
      *
@@ -2004,6 +2211,8 @@ class LookerSDK(authSession: AuthSession) : APIMethods(authSession) {
 
     /**
      * ### Create an OAuth Application using the specified configuration.
+     *
+     * This is an OAuth Application which Looker uses to access external systems.
      *
      * @param {WriteExternalOauthApplication} body
      *
@@ -4740,14 +4949,20 @@ class LookerSDK(authSession: AuthSession) : APIMethods(authSession) {
      * ### Get information about all lookml models.
      *
      * @param {String} fields Requested fields.
+     * @param {Long} limit Number of results to return. (can be used with offset)
+     * @param {Long} offset Number of results to skip before returning any. (Defaults to 0 if not set when limit is used)
      *
      * GET /lookml_models -> Array<LookmlModel>
      */
     @JvmOverloads fun all_lookml_models(
-        fields: String? = null
+        fields: String? = null,
+        limit: Long? = null,
+        offset: Long? = null
     ) : SDKResponse {
         return this.get<Array<LookmlModel>>("/lookml_models", 
-            mapOf("fields" to fields))
+            mapOf("fields" to fields,
+                 "limit" to limit,
+                 "offset" to offset))
     }
 
 
@@ -6945,6 +7160,66 @@ class LookerSDK(authSession: AuthSession) : APIMethods(authSession) {
 
 
     /**
+     * ### Search roles include user count
+     *
+     * Returns all role records that match the given search criteria, and attaches
+     * associated user counts.
+     *
+     * If multiple search params are given and `filter_or` is FALSE or not specified,
+     * search params are combined in a logical AND operation.
+     * Only rows that match *all* search param criteria will be returned.
+     *
+     * If `filter_or` is TRUE, multiple search params are combined in a logical OR operation.
+     * Results will include rows that match **any** of the search criteria.
+     *
+     * String search params use case-insensitive matching.
+     * String search params can contain `%` and '_' as SQL LIKE pattern match wildcard expressions.
+     * example="dan%" will match "danger" and "Danzig" but not "David"
+     * example="D_m%" will match "Damage" and "dump"
+     *
+     * Integer search params can accept a single value or a comma separated list of values. The multiple
+     * values will be combined under a logical OR operation - results will match at least one of
+     * the given values.
+     *
+     * Most search params can accept "IS NULL" and "NOT NULL" as special expressions to match
+     * or exclude (respectively) rows where the column is null.
+     *
+     * Boolean search params accept only "true" and "false" as values.
+     *
+     * @param {String} fields Requested fields.
+     * @param {Long} limit Number of results to return (used with `offset`).
+     * @param {Long} offset Number of results to skip before returning any (used with `limit`).
+     * @param {String} sorts Fields to sort by.
+     * @param {Long} id Match role id.
+     * @param {String} name Match role name.
+     * @param {Boolean} built_in Match roles by built_in status.
+     * @param {Boolean} filter_or Combine given search criteria in a boolean OR expression.
+     *
+     * GET /roles/search/with_user_count -> Array<RoleSearch>
+     */
+    @JvmOverloads fun search_roles_with_user_count(
+        fields: String? = null,
+        limit: Long? = null,
+        offset: Long? = null,
+        sorts: String? = null,
+        id: Long? = null,
+        name: String? = null,
+        built_in: Boolean? = null,
+        filter_or: Boolean? = null
+    ) : SDKResponse {
+        return this.get<Array<RoleSearch>>("/roles/search/with_user_count", 
+            mapOf("fields" to fields,
+                 "limit" to limit,
+                 "offset" to offset,
+                 "sorts" to sorts,
+                 "id" to id,
+                 "name" to name,
+                 "built_in" to built_in,
+                 "filter_or" to filter_or))
+    }
+
+
+    /**
      * ### Get information about the role with a specific id.
      *
      * @param {Long} role_id id of role
@@ -7869,6 +8144,65 @@ class LookerSDK(authSession: AuthSession) : APIMethods(authSession) {
 
 
     /**
+     * ### Search email credentials
+     *
+     * Returns all credentials_email records that match the given search criteria.
+     *
+     * If multiple search params are given and `filter_or` is FALSE or not specified,
+     * search params are combined in a logical AND operation.
+     * Only rows that match *all* search param criteria will be returned.
+     *
+     * If `filter_or` is TRUE, multiple search params are combined in a logical OR operation.
+     * Results will include rows that match **any** of the search criteria.
+     *
+     * String search params use case-insensitive matching.
+     * String search params can contain `%` and '_' as SQL LIKE pattern match wildcard expressions.
+     * example="dan%" will match "danger" and "Danzig" but not "David"
+     * example="D_m%" will match "Damage" and "dump"
+     *
+     * Integer search params can accept a single value or a comma separated list of values. The multiple
+     * values will be combined under a logical OR operation - results will match at least one of
+     * the given values.
+     *
+     * Most search params can accept "IS NULL" and "NOT NULL" as special expressions to match
+     * or exclude (respectively) rows where the column is null.
+     *
+     * Boolean search params accept only "true" and "false" as values.
+     *
+     * @param {String} fields Requested fields.
+     * @param {Long} limit Number of results to return (used with `offset`).
+     * @param {Long} offset Number of results to skip before returning any (used with `limit`).
+     * @param {String} sorts Fields to sort by.
+     * @param {Long} id Match credentials_email id.
+     * @param {String} email Match credentials_email email.
+     * @param {String} emails Find credentials_email that match given emails.
+     * @param {Boolean} filter_or Combine given search criteria in a boolean OR expression.
+     *
+     * GET /credentials_email/search -> Array<CredentialsEmailSearch>
+     */
+    @JvmOverloads fun search_credentials_email(
+        fields: String? = null,
+        limit: Long? = null,
+        offset: Long? = null,
+        sorts: String? = null,
+        id: Long? = null,
+        email: String? = null,
+        emails: String? = null,
+        filter_or: Boolean? = null
+    ) : SDKResponse {
+        return this.get<Array<CredentialsEmailSearch>>("/credentials_email/search", 
+            mapOf("fields" to fields,
+                 "limit" to limit,
+                 "offset" to offset,
+                 "sorts" to sorts,
+                 "id" to id,
+                 "email" to email,
+                 "emails" to emails,
+                 "filter_or" to filter_or))
+    }
+
+
+    /**
      * ### Get information about the current user; i.e. the user account currently calling the API.
      *
      * @param {String} fields Requested fields.
@@ -7887,8 +8221,10 @@ class LookerSDK(authSession: AuthSession) : APIMethods(authSession) {
      * ### Get information about all users.
      *
      * @param {String} fields Requested fields.
-     * @param {Long} page Requested page.
-     * @param {Long} per_page Results per page.
+     * @param {Long} page DEPRECATED. Use limit and offset instead. Return only page N of paginated results
+     * @param {Long} per_page DEPRECATED. Use limit and offset instead. Return N rows of data per page
+     * @param {Long} limit Number of results to return. (used with offset and takes priority over page and per_page)
+     * @param {Long} offset Number of results to skip before returning any. (used with limit and takes priority over page and per_page)
      * @param {String} sorts Fields to sort by.
      * @param {DelimArray<Long>} ids Optional list of ids to get specific users.
      *
@@ -7898,6 +8234,8 @@ class LookerSDK(authSession: AuthSession) : APIMethods(authSession) {
         fields: String? = null,
         page: Long? = null,
         per_page: Long? = null,
+        limit: Long? = null,
+        offset: Long? = null,
         sorts: String? = null,
         ids: DelimArray<Long>? = null
     ) : SDKResponse {
@@ -7905,6 +8243,8 @@ class LookerSDK(authSession: AuthSession) : APIMethods(authSession) {
             mapOf("fields" to fields,
                  "page" to page,
                  "per_page" to per_page,
+                 "limit" to limit,
+                 "offset" to offset,
                  "sorts" to sorts,
                  "ids" to ids))
     }
@@ -7960,8 +8300,10 @@ class LookerSDK(authSession: AuthSession) : APIMethods(authSession) {
      * names of other users who are members of the same group as the user.
      *
      * @param {String} fields Include only these fields in the response
-     * @param {Long} page Return only page N of paginated results
-     * @param {Long} per_page Return N rows of data per page
+     * @param {Long} page DEPRECATED. Use limit and offset instead. Return only page N of paginated results
+     * @param {Long} per_page DEPRECATED. Use limit and offset instead. Return N rows of data per page
+     * @param {Long} limit Number of results to return. (used with offset and takes priority over page and per_page)
+     * @param {Long} offset Number of results to skip before returning any. (used with limit and takes priority over page and per_page)
      * @param {String} sorts Fields to sort by.
      * @param {String} id Match User Id.
      * @param {String} first_name Match First name.
@@ -7980,6 +8322,8 @@ class LookerSDK(authSession: AuthSession) : APIMethods(authSession) {
         fields: String? = null,
         page: Long? = null,
         per_page: Long? = null,
+        limit: Long? = null,
+        offset: Long? = null,
         sorts: String? = null,
         id: String? = null,
         first_name: String? = null,
@@ -7996,6 +8340,8 @@ class LookerSDK(authSession: AuthSession) : APIMethods(authSession) {
             mapOf("fields" to fields,
                  "page" to page,
                  "per_page" to per_page,
+                 "limit" to limit,
+                 "offset" to offset,
                  "sorts" to sorts,
                  "id" to id,
                  "first_name" to first_name,
@@ -8020,8 +8366,10 @@ class LookerSDK(authSession: AuthSession) : APIMethods(authSession) {
      *
      * @param {String} pattern Pattern to match
      * @param {String} fields Include only these fields in the response
-     * @param {Long} page Return only page N of paginated results
-     * @param {Long} per_page Return N rows of data per page
+     * @param {Long} page DEPRECATED. Use limit and offset instead. Return only page N of paginated results
+     * @param {Long} per_page DEPRECATED. Use limit and offset instead. Return N rows of data per page
+     * @param {Long} limit Number of results to return. (used with offset and takes priority over page and per_page)
+     * @param {Long} offset Number of results to skip before returning any. (used with limit and takes priority over page and per_page)
      * @param {String} sorts Fields to sort by
      * @param {Long} id Match User Id
      * @param {String} first_name Match First name
@@ -8037,6 +8385,8 @@ class LookerSDK(authSession: AuthSession) : APIMethods(authSession) {
         fields: String? = null,
         page: Long? = null,
         per_page: Long? = null,
+        limit: Long? = null,
+        offset: Long? = null,
         sorts: String? = null,
         id: Long? = null,
         first_name: String? = null,
@@ -8050,6 +8400,8 @@ class LookerSDK(authSession: AuthSession) : APIMethods(authSession) {
             mapOf("fields" to fields,
                  "page" to page,
                  "per_page" to per_page,
+                 "limit" to limit,
+                 "offset" to offset,
                  "sorts" to sorts,
                  "id" to id,
                  "first_name" to first_name,

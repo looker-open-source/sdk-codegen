@@ -103,20 +103,20 @@ export const writeCodeFile = (fileName: string, content: string): string => {
         if (gen.useFunctions) {
           log(`generating ${api} functions ...`)
           const s = new FunctionGenerator(apiModel, gen)
-          const output = s.render(gen.indentStr)
+          const output = s.render(gen.indentStr, noStreams)
           writeCodeFile(gen.sdkFileName(`funcs`), output)
         }
 
         if (gen.useInterfaces) {
           log(`generating ${api} interfaces ...`)
           const s = new InterfaceGenerator(apiModel, gen)
-          const output = s.render(gen.indentStr)
+          const output = s.render(gen.indentStr, noStreams)
           writeCodeFile(gen.sdkFileName(`methodsInterface`), output)
         }
 
         // Generate standard method declarations
         const sdk = new MethodGenerator(apiModel, gen)
-        let output = sdk.render(gen.indentStr)
+        let output = sdk.render(gen.indentStr, noStreams)
         writeCodeFile(gen.sdkFileName(`methods`), output)
 
         if (gen.willItStream) {
@@ -126,14 +126,14 @@ export const writeCodeFile = (fileName: string, content: string): string => {
             // Generate streaming method declarations
             log(`generating ${api} streaming methods ...`)
             const s = new StreamGenerator(apiModel, gen)
-            const output = s.render(gen.indentStr)
+            const output = s.render(gen.indentStr, noStreams)
             writeCodeFile(gen.sdkFileName(`streams`), output)
           }
         }
 
         log(`generating ${api} models ...`)
         const types = new TypeGenerator(apiModel, gen)
-        output = types.render('')
+        output = types.render('', noStreams)
         writeCodeFile(gen.sdkFileName(`models`), output)
         if (api === lastApi) {
           formatter.versionStamp(gen)

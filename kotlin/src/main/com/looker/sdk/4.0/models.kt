@@ -25,7 +25,7 @@
  */
 
 /**
- * 283 API models: 210 Spec, 0 Request, 56 Write, 17 Enum
+ * 296 API models: 219 Spec, 0 Request, 58 Write, 19 Enum
  */
 
 
@@ -52,6 +52,102 @@ data class AccessToken (
 ) : Serializable
 
 /**
+ * @property applied_dashboard_filters Filters coming from the dashboard that are applied. Example `[{ "filter_title": "Name", "field_name": "distribution_centers.name", "filter_value": "Los Angeles CA" }]`
+ * @property comparison_type This property informs the check what kind of comparison we are performing. Only certain condition types are valid for time series alerts. For details, refer to [Setting Alert Conditions](https://docs.looker.com/sharing-and-publishing/creating-alerts#setting_alert_conditions) Valid values are: "EQUAL_TO", "GREATER_THAN", "GREATER_THAN_OR_EQUAL_TO", "LESS_THAN", "LESS_THAN_OR_EQUAL_TO", "INCREASES_BY", "DECREASES_BY", "CHANGES_BY".
+ * @property cron Vixie-Style crontab specification when to run. At minumum, it has to be longer than 15 minute intervals
+ * @property custom_title An optional, user-defined title for the alert
+ * @property dashboard_element_id ID of the dashboard element associated with the alert. Refer to [dashboard_element()](#!/Dashboard/DashboardElement)
+ * @property destinations Array of destinations to send alerts to. Must be the same type of destination. Example `[{ "destination_type": "EMAIL", "email_address": "test@test.com" }]`
+ * @property field
+ * @property id ID of the alert (read-only)
+ * @property is_disabled Whether or not the alert is disabled
+ * @property is_public Whether or not the alert is public
+ * @property lookml_dashboard_id ID of the LookML dashboard associated with the alert
+ * @property lookml_link_id ID of the LookML dashboard element associated with the alert
+ * @property owner_id User id of alert owner
+ * @property threshold Value of the alert threshold
+ * @property time_series_condition_state
+ */
+data class Alert (
+    var applied_dashboard_filters: Array<AlertAppliedDashboardFilter>? = null,
+    var comparison_type: ComparisonType? = null,
+    var cron: String? = null,
+    var custom_title: String? = null,
+    var dashboard_element_id: Long? = null,
+    var destinations: Array<AlertDestination>? = null,
+    var field: AlertField? = null,
+    var id: Long? = null,
+    @get:JsonProperty("is_disabled")
+    @param:JsonProperty("is_disabled")
+    var is_disabled: Boolean? = null,
+    @get:JsonProperty("is_public")
+    @param:JsonProperty("is_public")
+    var is_public: Boolean? = null,
+    var lookml_dashboard_id: String? = null,
+    var lookml_link_id: String? = null,
+    var owner_id: Long? = null,
+    var threshold: Double? = null,
+    var time_series_condition_state: AlertConditionState? = null
+) : Serializable
+
+/**
+ * @property filter_title Field Title. Refer to `DashboardFilter.title` in [DashboardFilter](#!/types/DashboardFilter). Example `Name`
+ * @property field_name Field Name. Refer to `DashboardFilter.dimension` in [DashboardFilter](#!/types/DashboardFilter). Example `distribution_centers.name`
+ * @property filter_value Field Value. [Filter Expressions](https://docs.looker.com/reference/filter-expressions). Example `Los Angeles CA`
+ * @property filter_description Human Readable Filter Description. This may be null or auto-generated. Example `is Los Angeles CA` (read-only)
+ */
+data class AlertAppliedDashboardFilter (
+    var filter_title: String? = null,
+    var field_name: String? = null,
+    var filter_value: String? = null,
+    var filter_description: String? = null
+) : Serializable
+
+/**
+ * @property previous_time_series_id (Write-Only) The second latest time string the alert has seen.
+ * @property latest_time_series_id (Write-Only) Latest time string the alert has seen.
+ */
+data class AlertConditionState (
+    var previous_time_series_id: String? = null,
+    var latest_time_series_id: String? = null
+) : Serializable
+
+/**
+ * @property destination_type Type of destination that the alert will be sent to Valid values are: "EMAIL", "ACTION_HUB".
+ * @property email_address Email address for the 'email' type
+ * @property action_hub_integration_id Action hub integration id for the 'action_hub' type. [Integration](#!/types/Integration)
+ * @property action_hub_form_params_json Action hub form params json for the 'action_hub' type [IntegrationParam](#!/types/IntegrationParam)
+ */
+data class AlertDestination (
+    var destination_type: DestinationType,
+    var email_address: String? = null,
+    var action_hub_integration_id: String? = null,
+    var action_hub_form_params_json: String? = null
+) : Serializable
+
+/**
+ * @property title Field's title. Usually auto-generated to reflect field name and its filters
+ * @property name Field's name. Has the format `<view>.<field>` Refer to [docs](https://docs.looker.com/sharing-and-publishing/creating-alerts) for more details
+ * @property filter (Optional / Advance Use) List of fields filter. This further restricts the alert to certain dashboard element's field values. This can be used on top of dashboard filters `applied_dashboard_filters`. To keep thing simple, it's suggested to just use dashboard filters. Example: `{ 'title': '12 Number on Hand', 'name': 'inventory_items.number_on_hand', 'filter': [{ 'field_name': 'inventory_items.id', 'field_value': 12, 'filter_value': null }] }`
+ */
+data class AlertField (
+    var title: String? = null,
+    var name: String? = null,
+    var filter: Array<AlertFieldFilter>? = null
+) : Serializable
+
+/**
+ * @property field_name Field Name. Has format `<view>.<field>`
+ * @property field_value Field Value. Depends on the type of field - numeric or string. For [location](https://docs.looker.com/reference/field-reference/dimension-type-reference#location) type, it's a list of floats. Example `[1.0, 56.0]`
+ * @property filter_value Filter Value. Usually null except for [location](https://docs.looker.com/reference/field-reference/dimension-type-reference#location) type. It'll be a string of lat,long ie `'1.0,56.0'`
+ */
+data class AlertFieldFilter (
+    var field_name: String? = null,
+    var field_value: Any? = null,
+    var filter_value: String? = null
+) : Serializable
+
+/**
  * The appropriate horizontal text alignment the values of this field should be displayed in. Valid values are: "left", "right".
  */
 enum class Align : Serializable {
@@ -75,12 +171,14 @@ data class ApiSession (
  * @property current_version
  * @property supported_versions Array of versions supported by this Looker instance (read-only)
  * @property api_server_url API server base url (read-only)
+ * @property web_server_url Web server base url (read-only)
  */
 data class ApiVersion (
     var looker_release_version: String? = null,
     var current_version: ApiVersionElement? = null,
     var supported_versions: Array<ApiVersionElement>? = null,
-    var api_server_url: String? = null
+    var api_server_url: String? = null,
+    var web_server_url: String? = null
 ) : Serializable
 
 /**
@@ -150,11 +248,16 @@ data class Board (
  * @property content_favorite_id Content favorite id associated with the item this content is based on (read-only)
  * @property content_metadata_id Content metadata id associated with the item this content is based on (read-only)
  * @property content_updated_at Last time the content that this item is based on was updated (read-only)
+ * @property custom_image_data_base64 (Write-Only) base64 encoded image data
+ * @property custom_image_url Custom image_url entered by the user, if present (read-only)
+ * @property custom_title Custom title entered by the user, if present
+ * @property custom_url Custom url entered by the user, if present
  * @property dashboard_id Dashboard to base this item on
  * @property description The actual description for display (read-only)
  * @property favorite_count Number of times content has been favorited, if present (read-only)
  * @property board_section_id Associated Board Section
  * @property id Unique Id (read-only)
+ * @property image_url The actual image_url for display (read-only)
  * @property location The container folder name of the content (read-only)
  * @property look_id Look to base this item on
  * @property lookml_dashboard_id LookML Dashboard to base this item on
@@ -169,11 +272,16 @@ data class BoardItem (
     var content_favorite_id: Long? = null,
     var content_metadata_id: Long? = null,
     var content_updated_at: String? = null,
+    var custom_image_data_base64: String? = null,
+    var custom_image_url: String? = null,
+    var custom_title: String? = null,
+    var custom_url: String? = null,
     var dashboard_id: Long? = null,
     var description: String? = null,
     var favorite_count: Long? = null,
     var board_section_id: Long? = null,
     var id: Long? = null,
+    var image_url: String? = null,
     var location: String? = null,
     var look_id: Long? = null,
     var lookml_dashboard_id: String? = null,
@@ -275,6 +383,20 @@ data class Command (
 ) : Serializable
 
 /**
+ * This property informs the check what kind of comparison we are performing. Only certain condition types are valid for time series alerts. For details, refer to [Setting Alert Conditions](https://docs.looker.com/sharing-and-publishing/creating-alerts#setting_alert_conditions) Valid values are: "EQUAL_TO", "GREATER_THAN", "GREATER_THAN_OR_EQUAL_TO", "LESS_THAN", "LESS_THAN_OR_EQUAL_TO", "INCREASES_BY", "DECREASES_BY", "CHANGES_BY".
+ */
+enum class ComparisonType : Serializable {
+    EQUAL_TO,
+    GREATER_THAN,
+    GREATER_THAN_OR_EQUAL_TO,
+    LESS_THAN,
+    LESS_THAN_OR_EQUAL_TO,
+    INCREASES_BY,
+    DECREASES_BY,
+    CHANGES_BY
+}
+
+/**
  * @property dialect_name Name of the dialect for this connection (read-only)
  * @property cost_estimate True for cost estimating support (read-only)
  * @property multiple_databases True for multiple database support (read-only)
@@ -360,6 +482,8 @@ data class ContentMeta (
 ) : Serializable
 
 /**
+ * WARNING: no writeable properties found for POST, PUT, or PATCH
+ *
  * @property can Operations the current user is able to perform on this object (read-only)
  * @property id Unique Id (read-only)
  * @property content_metadata_id Id of associated Content Metadata (read-only)
@@ -415,12 +539,14 @@ data class ContentValidationAlert (
  * @property id Unique Id (read-only)
  * @property folder
  * @property title Dashboard Title
+ * @property url Relative URL of the dashboard (read-only)
  */
 data class ContentValidationDashboard (
     var description: String? = null,
     var id: String? = null,
     var folder: ContentValidationFolder? = null,
-    var title: String? = null
+    var title: String? = null,
+    var url: String? = null
 ) : Serializable
 
 /**
@@ -506,11 +632,13 @@ data class ContentValidationFolder (
 /**
  * @property id Unique Id (read-only)
  * @property title Look Title
+ * @property short_url Short Url (read-only)
  * @property folder
  */
 data class ContentValidationLook (
     var id: Long? = null,
     var title: String? = null,
+    var short_url: String? = null,
     var folder: ContentValidationFolder? = null
 ) : Serializable
 
@@ -626,6 +754,8 @@ data class CostEstimate (
 ) : Serializable
 
 /**
+ * WARNING: no writeable properties found for POST, PUT, or PATCH
+ *
  * @property sql SQL statement to estimate (read-only)
  */
 data class CreateCostEstimate (
@@ -738,6 +868,8 @@ data class CreateQueryTask (
 ) : Serializable
 
 /**
+ * WARNING: no writeable properties found for POST, PUT, or PATCH
+ *
  * @property can Operations the current user is able to perform on this object (read-only)
  * @property id Unique Id (read-only)
  * @property client_id API key client_id (read-only)
@@ -771,6 +903,33 @@ data class CredentialsApi3 (
  * @property user_url Link to get this user (read-only)
  */
 data class CredentialsEmail (
+    var can: Map<String,Boolean>? = null,
+    var created_at: String? = null,
+    var email: String? = null,
+    var forced_password_reset_at_next_login: Boolean? = null,
+    @get:JsonProperty("is_disabled")
+    @param:JsonProperty("is_disabled")
+    var is_disabled: Boolean? = null,
+    var logged_in_at: String? = null,
+    var password_reset_url: String? = null,
+    var type: String? = null,
+    var url: String? = null,
+    var user_url: String? = null
+) : Serializable
+
+/**
+ * @property can Operations the current user is able to perform on this object (read-only)
+ * @property created_at Timestamp for the creation of this credential (read-only)
+ * @property email EMail address used for user login
+ * @property forced_password_reset_at_next_login Force the user to change their password upon their next login
+ * @property is_disabled Has this credential been disabled? (read-only)
+ * @property logged_in_at Timestamp for most recent login using credential (read-only)
+ * @property password_reset_url Url with one-time use secret token that the user can use to reset password (read-only)
+ * @property type Short name for the type of this kind of credential (read-only)
+ * @property url Link to get this item (read-only)
+ * @property user_url Link to get this user (read-only)
+ */
+data class CredentialsEmailSearch (
     var can: Map<String,Boolean>? = null,
     var created_at: String? = null,
     var email: String? = null,
@@ -932,6 +1091,8 @@ data class CredentialsSaml (
 ) : Serializable
 
 /**
+ * WARNING: no writeable properties found for POST, PUT, or PATCH
+ *
  * @property can Operations the current user is able to perform on this object (read-only)
  * @property created_at Timestamp for the creation of this credential (read-only)
  * @property is_disabled Has this credential been disabled? (read-only)
@@ -982,6 +1143,7 @@ data class CustomWelcomeEmail (
  * @property user_id Id of User (read-only)
  * @property slug Content Metadata Slug
  * @property preferred_viewer The preferred route for viewing this dashboard (ie: dashboards or dashboards-next)
+ * @property alert_sync_with_dashboard_filter_enabled Enables alerts to keep in sync with dashboard filter changes - only available in Enhanced Alerts (beta)
  * @property background_color Background color
  * @property created_at Time that the Dashboard was created. (read-only)
  * @property crossfilter_enabled Enables crossfiltering in dashboards - only available in dashboards-next (beta)
@@ -1006,6 +1168,7 @@ data class CustomWelcomeEmail (
  * @property title_color Title color
  * @property view_count Number of times viewed in the Looker web UI (read-only)
  * @property appearance
+ * @property url Relative URL of the dashboard (read-only)
  */
 data class Dashboard (
     var can: Map<String,Boolean>? = null,
@@ -1024,6 +1187,7 @@ data class Dashboard (
     var user_id: Long? = null,
     var slug: String? = null,
     var preferred_viewer: String? = null,
+    var alert_sync_with_dashboard_filter_enabled: Boolean? = null,
     var background_color: String? = null,
     var created_at: Date? = null,
     var crossfilter_enabled: Boolean? = null,
@@ -1047,7 +1211,8 @@ data class Dashboard (
     var tile_text_color: String? = null,
     var title_color: String? = null,
     var view_count: Long? = null,
-    var appearance: DashboardAppearance? = null
+    var appearance: DashboardAppearance? = null,
+    var url: String? = null
 ) : Serializable
 
 /**
@@ -1552,6 +1717,14 @@ enum class DependencyStatus : Serializable {
 }
 
 /**
+ * Type of destination that the alert will be sent to Valid values are: "EMAIL", "ACTION_HUB".
+ */
+enum class DestinationType : Serializable {
+    EMAIL,
+    ACTION_HUB
+}
+
+/**
  * @property name The name of the dialect (read-only)
  * @property label The human-readable label of the connection (read-only)
  * @property supports_cost_estimate Whether the dialect supports query cost estimates (read-only)
@@ -1989,6 +2162,8 @@ data class GroupHierarchy (
 ) : Serializable
 
 /**
+ * WARNING: no writeable properties found for POST, PUT, or PATCH
+ *
  * @property group_id Id of group (read-only)
  */
 data class GroupIdForGroupInclusion (
@@ -1996,6 +2171,8 @@ data class GroupIdForGroupInclusion (
 ) : Serializable
 
 /**
+ * WARNING: no writeable properties found for POST, PUT, or PATCH
+ *
  * @property user_id Id of user (read-only)
  */
 data class GroupIdForGroupUserInclusion (
@@ -3973,11 +4150,34 @@ data class ResultMakerWithIdVisConfigAndDynamicFields (
  * @property permission_set_id (Write-Only) Id of permission set
  * @property model_set
  * @property model_set_id (Write-Only) Id of model set
- * @property user_count Count of users with this role, only returned if user_count field is requested (read-only)
  * @property url Link to get this item (read-only)
  * @property users_url Link to get list of users with this role (read-only)
  */
 data class Role (
+    var can: Map<String,Boolean>? = null,
+    var id: Long? = null,
+    var name: String? = null,
+    var permission_set: PermissionSet? = null,
+    var permission_set_id: Long? = null,
+    var model_set: ModelSet? = null,
+    var model_set_id: Long? = null,
+    var url: String? = null,
+    var users_url: String? = null
+) : Serializable
+
+/**
+ * @property can Operations the current user is able to perform on this object (read-only)
+ * @property id Unique Id (read-only)
+ * @property name Name of Role
+ * @property permission_set
+ * @property permission_set_id (Write-Only) Id of permission set
+ * @property model_set
+ * @property model_set_id (Write-Only) Id of model set
+ * @property user_count Count of users with this role (read-only)
+ * @property url Link to get this item (read-only)
+ * @property users_url Link to get list of users with this role (read-only)
+ */
+data class RoleSearch (
     var can: Map<String,Boolean>? = null,
     var id: Long? = null,
     var name: String? = null,
@@ -4413,6 +4613,19 @@ data class SessionConfig (
 ) : Serializable
 
 /**
+ * @property extension_framework_enabled Toggle extension framework on or off
+ * @property marketplace_auto_install_enabled Toggle marketplace auto install on or off. Note that auto install only runs if marketplace is enabled.
+ * @property marketplace_enabled Toggle marketplace on or off
+ * @property whitelabel_configuration
+ */
+data class Setting (
+    var extension_framework_enabled: Boolean? = null,
+    var marketplace_auto_install_enabled: Boolean? = null,
+    var marketplace_enabled: Boolean? = null,
+    var whitelabel_configuration: WhitelabelConfiguration? = null
+) : Serializable
+
+/**
  * @property name Name of the snippet (read-only)
  * @property label Label of the snippet (read-only)
  * @property sql SQL text of the snippet (read-only)
@@ -4793,6 +5006,8 @@ enum class UserAttributeFilterTypes : Serializable {
 }
 
 /**
+ * WARNING: no writeable properties found for POST, PUT, or PATCH
+ *
  * @property can Operations the current user is able to perform on this object (read-only)
  * @property id Unique Id of this group-attribute relation (read-only)
  * @property group_id Id of group (read-only)
@@ -4931,7 +5146,6 @@ data class WelcomeEmailTest (
 ) : Serializable
 
 /**
- * @property can Operations the current user is able to perform on this object (read-only)
  * @property id Unique Id (read-only)
  * @property logo_file Customer logo image. Expected base64 encoded data (write-only)
  * @property logo_url Logo image url (read-only) (read-only)
@@ -4950,7 +5164,6 @@ data class WelcomeEmailTest (
  * @property folders_mentions Remove Looker mentions in home folder page when you don’t have any items saved
  */
 data class WhitelabelConfiguration (
-    var can: Map<String,Boolean>? = null,
     var id: Long? = null,
     var logo_file: String? = null,
     var logo_url: String? = null,
@@ -4983,7 +5196,47 @@ data class Workspace (
 ) : Serializable
 
 /**
- * Dynamically generated writeable type for ApiSession removes properties:
+ * Dynamic writeable type for Alert removes:
+ * id
+ *
+ * @property applied_dashboard_filters Filters coming from the dashboard that are applied. Example `[{ "filter_title": "Name", "field_name": "distribution_centers.name", "filter_value": "Los Angeles CA" }]`
+ * @property comparison_type This property informs the check what kind of comparison we are performing. Only certain condition types are valid for time series alerts. For details, refer to [Setting Alert Conditions](https://docs.looker.com/sharing-and-publishing/creating-alerts#setting_alert_conditions) Valid values are: "EQUAL_TO", "GREATER_THAN", "GREATER_THAN_OR_EQUAL_TO", "LESS_THAN", "LESS_THAN_OR_EQUAL_TO", "INCREASES_BY", "DECREASES_BY", "CHANGES_BY".
+ * @property cron Vixie-Style crontab specification when to run. At minumum, it has to be longer than 15 minute intervals
+ * @property custom_title An optional, user-defined title for the alert
+ * @property dashboard_element_id ID of the dashboard element associated with the alert. Refer to [dashboard_element()](#!/Dashboard/DashboardElement)
+ * @property destinations Array of destinations to send alerts to. Must be the same type of destination. Example `[{ "destination_type": "EMAIL", "email_address": "test@test.com" }]`
+ * @property field
+ * @property is_disabled Whether or not the alert is disabled
+ * @property is_public Whether or not the alert is public
+ * @property lookml_dashboard_id ID of the LookML dashboard associated with the alert
+ * @property lookml_link_id ID of the LookML dashboard element associated with the alert
+ * @property owner_id User id of alert owner
+ * @property threshold Value of the alert threshold
+ * @property time_series_condition_state
+ */
+data class WriteAlert (
+    var applied_dashboard_filters: Array<AlertAppliedDashboardFilter>? = null,
+    var comparison_type: ComparisonType? = null,
+    var cron: String? = null,
+    var custom_title: String? = null,
+    var dashboard_element_id: Long? = null,
+    var destinations: Array<AlertDestination>? = null,
+    var field: AlertField? = null,
+    @get:JsonProperty("is_disabled")
+    @param:JsonProperty("is_disabled")
+    var is_disabled: Boolean? = null,
+    @get:JsonProperty("is_public")
+    @param:JsonProperty("is_public")
+    var is_public: Boolean? = null,
+    var lookml_dashboard_id: String? = null,
+    var lookml_link_id: String? = null,
+    var owner_id: Long? = null,
+    var threshold: Double? = null,
+    var time_series_condition_state: AlertConditionState? = null
+) : Serializable
+
+/**
+ * Dynamic writeable type for ApiSession removes:
  * can, sudo_user_id
  *
  * @property workspace_id The id of active workspace for this session
@@ -4993,7 +5246,7 @@ data class WriteApiSession (
 ) : Serializable
 
 /**
- * Dynamically generated writeable type for BackupConfiguration removes properties:
+ * Dynamic writeable type for BackupConfiguration removes:
  * can, url
  *
  * @property type Type of backup: looker-s3 or custom-s3
@@ -5011,7 +5264,7 @@ data class WriteBackupConfiguration (
 ) : Serializable
 
 /**
- * Dynamically generated writeable type for Board removes properties:
+ * Dynamic writeable type for Board removes:
  * can, content_metadata_id, created_at, board_sections, id, updated_at, user_id, primary_homepage
  *
  * @property deleted_at Date of board deletion
@@ -5027,9 +5280,12 @@ data class WriteBoard (
 ) : Serializable
 
 /**
- * Dynamically generated writeable type for BoardItem removes properties:
- * can, content_created_by, content_favorite_id, content_metadata_id, content_updated_at, description, favorite_count, id, location, title, url, view_count
+ * Dynamic writeable type for BoardItem removes:
+ * can, content_created_by, content_favorite_id, content_metadata_id, content_updated_at, custom_image_url, description, favorite_count, id, image_url, location, title, url, view_count
  *
+ * @property custom_image_data_base64 (Write-Only) base64 encoded image data
+ * @property custom_title Custom title entered by the user, if present
+ * @property custom_url Custom url entered by the user, if present
  * @property dashboard_id Dashboard to base this item on
  * @property board_section_id Associated Board Section
  * @property look_id Look to base this item on
@@ -5037,6 +5293,9 @@ data class WriteBoard (
  * @property order An arbitrary integer representing the sort order within the section
  */
 data class WriteBoardItem (
+    var custom_image_data_base64: String? = null,
+    var custom_title: String? = null,
+    var custom_url: String? = null,
     var dashboard_id: Long? = null,
     var board_section_id: Long? = null,
     var look_id: Long? = null,
@@ -5045,7 +5304,7 @@ data class WriteBoardItem (
 ) : Serializable
 
 /**
- * Dynamically generated writeable type for BoardSection removes properties:
+ * Dynamic writeable type for BoardSection removes:
  * can, created_at, board_items, id, visible_item_order, updated_at
  *
  * @property deleted_at Time at which this section was deleted.
@@ -5063,7 +5322,7 @@ data class WriteBoardSection (
 ) : Serializable
 
 /**
- * Dynamically generated writeable type for ColorCollection removes properties:
+ * Dynamic writeable type for ColorCollection removes:
  * id
  *
  * @property label Label of color collection
@@ -5079,7 +5338,7 @@ data class WriteColorCollection (
 ) : Serializable
 
 /**
- * Dynamically generated writeable type for Command removes properties:
+ * Dynamic writeable type for Command removes:
  * id, author_id
  *
  * @property name Name of the command
@@ -5095,13 +5354,15 @@ data class WriteCommand (
 ) : Serializable
 
 /**
- * Dynamically generated writeable type for ContentFavorite removes properties:
+ * Dynamic writeable type for ContentFavorite removes:
  * id, look_id, dashboard_id, board_id
  *
  * @property user_id User Id which owns this ContentFavorite
  * @property content_metadata_id Content Metadata Id associated with this ContentFavorite
- * @property look
- * @property dashboard
+ * @property look Dynamic writeable type for LookBasic removes:
+ * can, content_metadata_id, id, title
+ * @property dashboard Dynamic writeable type for DashboardBase removes:
+ * can, content_favorite_id, content_metadata_id, description, hidden, id, model, query_timezone, readonly, refresh_interval, refresh_interval_to_i, title, user_id, slug, preferred_viewer
  */
 data class WriteContentFavorite (
     var user_id: Long? = null,
@@ -5111,7 +5372,7 @@ data class WriteContentFavorite (
 ) : Serializable
 
 /**
- * Dynamically generated writeable type for ContentMeta removes properties:
+ * Dynamic writeable type for ContentMeta removes:
  * can, id, name, parent_id, dashboard_id, look_id, folder_id, content_type, inheriting_id, slug
  *
  * @property inherits Whether content inherits its access levels from parent
@@ -5121,7 +5382,7 @@ data class WriteContentMeta (
 ) : Serializable
 
 /**
- * Dynamically generated writeable type for CreateDashboardFilter removes properties:
+ * Dynamic writeable type for CreateDashboardFilter removes:
  * id, field
  *
  * @property dashboard_id Id of Dashboard
@@ -5155,7 +5416,7 @@ data class WriteCreateDashboardFilter (
 ) : Serializable
 
 /**
- * Dynamically generated writeable type for CreateQueryTask removes properties:
+ * Dynamic writeable type for CreateQueryTask removes:
  * can
  *
  * @property query_id Id of query to run
@@ -5175,7 +5436,7 @@ data class WriteCreateQueryTask (
 ) : Serializable
 
 /**
- * Dynamically generated writeable type for CredentialsEmail removes properties:
+ * Dynamic writeable type for CredentialsEmail removes:
  * can, created_at, is_disabled, logged_in_at, password_reset_url, type, url, user_url
  *
  * @property email EMail address used for user login
@@ -5187,7 +5448,7 @@ data class WriteCredentialsEmail (
 ) : Serializable
 
 /**
- * Dynamically generated writeable type for CustomWelcomeEmail removes properties:
+ * Dynamic writeable type for CustomWelcomeEmail removes:
  * can
  *
  * @property enabled If true, custom email content will replace the default body of welcome emails
@@ -5203,17 +5464,19 @@ data class WriteCustomWelcomeEmail (
 ) : Serializable
 
 /**
- * Dynamically generated writeable type for Dashboard removes properties:
- * can, content_favorite_id, content_metadata_id, id, model, readonly, refresh_interval_to_i, user_id, created_at, dashboard_elements, dashboard_filters, dashboard_layouts, deleted_at, deleter_id, edit_uri, favorite_count, last_accessed_at, last_viewed_at, view_count
+ * Dynamic writeable type for Dashboard removes:
+ * can, content_favorite_id, content_metadata_id, id, model, readonly, refresh_interval_to_i, user_id, created_at, dashboard_elements, dashboard_filters, dashboard_layouts, deleted_at, deleter_id, edit_uri, favorite_count, last_accessed_at, last_viewed_at, view_count, url
  *
  * @property description Description
  * @property hidden Is Hidden
  * @property query_timezone Timezone in which the Dashboard will run by default.
  * @property refresh_interval Refresh Interval, as a time duration phrase like "2 hours 30 minutes". A number with no time units will be interpreted as whole seconds.
- * @property folder
+ * @property folder Dynamic writeable type for FolderBase removes:
+ * id, content_metadata_id, created_at, creator_id, child_count, external_id, is_embed, is_embed_shared_root, is_embed_users_root, is_personal, is_personal_descendant, is_shared_root, is_users_root, can
  * @property title Dashboard Title
  * @property slug Content Metadata Slug
  * @property preferred_viewer The preferred route for viewing this dashboard (ie: dashboards or dashboards-next)
+ * @property alert_sync_with_dashboard_filter_enabled Enables alerts to keep in sync with dashboard filter changes - only available in Enhanced Alerts (beta)
  * @property background_color Background color
  * @property crossfilter_enabled Enables crossfiltering in dashboards - only available in dashboards-next (beta)
  * @property deleted Whether or not a dashboard is 'soft' deleted.
@@ -5237,6 +5500,7 @@ data class WriteDashboard (
     var title: String? = null,
     var slug: String? = null,
     var preferred_viewer: String? = null,
+    var alert_sync_with_dashboard_filter_enabled: Boolean? = null,
     var background_color: String? = null,
     var crossfilter_enabled: Boolean? = null,
     var deleted: Boolean? = null,
@@ -5253,31 +5517,35 @@ data class WriteDashboard (
 ) : Serializable
 
 /**
- * Dynamically generated writeable type for DashboardBase removes properties:
+ * Dynamic writeable type for DashboardBase removes:
  * can, content_favorite_id, content_metadata_id, description, hidden, id, model, query_timezone, readonly, refresh_interval, refresh_interval_to_i, title, user_id, slug, preferred_viewer
  *
- * @property folder
+ * @property folder Dynamic writeable type for FolderBase removes:
+ * id, content_metadata_id, created_at, creator_id, child_count, external_id, is_embed, is_embed_shared_root, is_embed_users_root, is_personal, is_personal_descendant, is_shared_root, is_users_root, can
  */
 data class WriteDashboardBase (
     var folder: WriteFolderBase? = null
 ) : Serializable
 
 /**
- * Dynamically generated writeable type for DashboardElement removes properties:
+ * Dynamic writeable type for DashboardElement removes:
  * can, body_text_as_html, edit_uri, id, lookml_link_id, note_text_as_html, refresh_interval_to_i, alert_count, title_text_as_html, subtitle_text_as_html
  *
  * @property body_text Text tile body text
  * @property dashboard_id Id of Dashboard
- * @property look
+ * @property look Dynamic writeable type for LookWithQuery removes:
+ * can, content_metadata_id, id, content_favorite_id, created_at, deleted_at, deleter_id, embed_url, excel_file_url, favorite_count, google_spreadsheet_formula, image_embed_url, last_accessed_at, last_updater_id, last_viewed_at, model, public_slug, public_url, short_url, updated_at, view_count, url
  * @property look_id Id Of Look
  * @property merge_result_id ID of merge result
  * @property note_display Note Display
  * @property note_state Note State
  * @property note_text Note Text
- * @property query
+ * @property query Dynamic writeable type for Query removes:
+ * can, id, slug, share_url, expanded_share_url, url, has_table_calculations
  * @property query_id Id Of Query
  * @property refresh_interval Refresh Interval
- * @property result_maker
+ * @property result_maker Dynamic writeable type for ResultMakerWithIdVisConfigAndDynamicFields removes:
+ * id, dynamic_fields, filterables, sorts, merge_result_id, total, query_id, sql_query_id, vis_config
  * @property result_maker_id ID of the ResultMakerLookup entry.
  * @property subtitle_text Text tile subtitle text
  * @property title Title of dashboard element
@@ -5307,7 +5575,7 @@ data class WriteDashboardElement (
 ) : Serializable
 
 /**
- * Dynamically generated writeable type for DashboardFilter removes properties:
+ * Dynamic writeable type for DashboardFilter removes:
  * can, id, dashboard_id, field
  *
  * @property name Name of filter
@@ -5339,7 +5607,7 @@ data class WriteDashboardFilter (
 ) : Serializable
 
 /**
- * Dynamically generated writeable type for DashboardLayout removes properties:
+ * Dynamic writeable type for DashboardLayout removes:
  * can, id, deleted, dashboard_title, dashboard_layout_components
  *
  * @property dashboard_id Id of Dashboard
@@ -5357,7 +5625,7 @@ data class WriteDashboardLayout (
 ) : Serializable
 
 /**
- * Dynamically generated writeable type for DashboardLayoutComponent removes properties:
+ * Dynamic writeable type for DashboardLayoutComponent removes:
  * can, id, deleted, element_title, element_title_hidden, vis_type
  *
  * @property dashboard_layout_id Id of Dashboard Layout
@@ -5377,7 +5645,7 @@ data class WriteDashboardLayoutComponent (
 ) : Serializable
 
 /**
- * Dynamically generated writeable type for Datagroup removes properties:
+ * Dynamic writeable type for Datagroup removes:
  * can, created_at, id, model_name, name, trigger_check_at, trigger_error, trigger_value
  *
  * @property stale_before UNIX timestamp before which cache entries are considered stale. Cannot be in the future.
@@ -5389,7 +5657,7 @@ data class WriteDatagroup (
 ) : Serializable
 
 /**
- * Dynamically generated writeable type for DBConnection removes properties:
+ * Dynamic writeable type for DBConnection removes:
  * can, dialect, snippets, pdts_enabled, uses_oauth, created_at, user_id, example, last_regen_at, last_reap_at, managed
  *
  * @property name Name of the connection. Also used as the unique identifier
@@ -5417,7 +5685,8 @@ data class WriteDatagroup (
  * @property sql_runner_precache_tables Precache tables in the SQL Runner
  * @property sql_writing_with_info_schema Fetch Information Schema For SQL Writing
  * @property after_connect_statements SQL statements (semicolon separated) to issue after connecting to the database. Requires `custom_after_connect_statements` license feature
- * @property pdt_context_override
+ * @property pdt_context_override Dynamic writeable type for DBConnectionOverride removes:
+ * has_password
  * @property tunnel_id The Id of the ssh tunnel this connection uses
  * @property pdt_concurrency Maximum number of threads to use to build PDTs in parallel
  * @property disable_context_comment When disable_context_comment is true comment will not be added to SQL
@@ -5457,7 +5726,7 @@ data class WriteDBConnection (
 ) : Serializable
 
 /**
- * Dynamically generated writeable type for DBConnectionOverride removes properties:
+ * Dynamic writeable type for DBConnectionOverride removes:
  * has_password
  *
  * @property context Context in which to override (`pdt` is the only allowed value)
@@ -5487,7 +5756,7 @@ data class WriteDBConnectionOverride (
 ) : Serializable
 
 /**
- * Dynamically generated writeable type for ExternalOauthApplication removes properties:
+ * Dynamic writeable type for ExternalOauthApplication removes:
  * can, id, created_at
  *
  * @property name The name of this application.  For Snowflake connections, this should be the name of the host database.
@@ -5503,7 +5772,7 @@ data class WriteExternalOauthApplication (
 ) : Serializable
 
 /**
- * Dynamically generated writeable type for FolderBase removes properties:
+ * Dynamic writeable type for FolderBase removes:
  * id, content_metadata_id, created_at, creator_id, child_count, external_id, is_embed, is_embed_shared_root, is_embed_users_root, is_personal, is_personal_descendant, is_shared_root, is_users_root, can
  *
  * @property name Unique Name
@@ -5515,7 +5784,7 @@ data class WriteFolderBase (
 ) : Serializable
 
 /**
- * Dynamically generated writeable type for GitBranch removes properties:
+ * Dynamic writeable type for GitBranch removes:
  * can, remote, remote_name, error, message, owner_name, readonly, personal, is_local, is_remote, is_production, ahead_count, behind_count, commit_at, remote_ref
  *
  * @property name The short name on the local. Updating `name` results in `git checkout <new_name>`
@@ -5527,7 +5796,7 @@ data class WriteGitBranch (
 ) : Serializable
 
 /**
- * Dynamically generated writeable type for Group removes properties:
+ * Dynamic writeable type for Group removes:
  * can, contains_current_user, external_group_id, externally_managed, id, include_by_default, user_count
  *
  * @property can_add_to_content_metadata Group can be used in content access controls
@@ -5539,7 +5808,7 @@ data class WriteGroup (
 ) : Serializable
 
 /**
- * Dynamically generated writeable type for Integration removes properties:
+ * Dynamic writeable type for Integration removes:
  * can, id, integration_hub_id, label, description, supported_formats, supported_action_types, supported_formattings, supported_visualization_formattings, supported_download_settings, icon_url, uses_oauth, required_fields, delegate_oauth
  *
  * @property enabled Whether the integration is available to users.
@@ -5553,7 +5822,7 @@ data class WriteIntegration (
 ) : Serializable
 
 /**
- * Dynamically generated writeable type for IntegrationHub removes properties:
+ * Dynamic writeable type for IntegrationHub removes:
  * can, id, label, official, fetch_error_message, has_authorization_token, legal_agreement_signed, legal_agreement_required, legal_agreement_text
  *
  * @property url URL of the hub.
@@ -5565,7 +5834,7 @@ data class WriteIntegrationHub (
 ) : Serializable
 
 /**
- * Dynamically generated writeable type for InternalHelpResources removes properties:
+ * Dynamic writeable type for InternalHelpResources removes:
  * can
  *
  * @property enabled If true and internal help resources content is not blank then the link for internal help resources will be shown in the help menu and the content displayed within Looker
@@ -5575,7 +5844,7 @@ data class WriteInternalHelpResources (
 ) : Serializable
 
 /**
- * Dynamically generated writeable type for InternalHelpResourcesContent removes properties:
+ * Dynamic writeable type for InternalHelpResourcesContent removes:
  * can
  *
  * @property organization_name Text to display in the help menu item which will display the internal help resources
@@ -5587,7 +5856,7 @@ data class WriteInternalHelpResourcesContent (
 ) : Serializable
 
 /**
- * Dynamically generated writeable type for LDAPConfig removes properties:
+ * Dynamic writeable type for LDAPConfig removes:
  * can, default_new_user_groups, default_new_user_roles, groups, has_auth_password, modified_at, modified_by, user_attributes, url
  *
  * @property alternate_email_login_allowed Allow alternate email-based login via '/login/email' for admins and for specified users with the 'login_special_email' permission. This option is useful as a fallback during ldap setup, if ldap config problems occur later, or if you need to support some users who are not in your ldap directory. Looker email/password logins are always disabled for regular users when ldap is enabled.
@@ -5665,7 +5934,7 @@ data class WriteLDAPConfig (
 ) : Serializable
 
 /**
- * Dynamically generated writeable type for LegacyFeature removes properties:
+ * Dynamic writeable type for LegacyFeature removes:
  * can, id, name, description, enabled, disallowed_as_of_version, disable_on_upgrade_to_version, end_of_life_version, documentation_url, approximate_disable_date, approximate_end_of_life_date, has_disabled_on_upgrade
  *
  * @property enabled_locally Whether this feature has been enabled by a user
@@ -5675,7 +5944,7 @@ data class WriteLegacyFeature (
 ) : Serializable
 
 /**
- * Dynamically generated writeable type for LookBasic removes properties:
+ * Dynamic writeable type for LookBasic removes:
  * can, content_metadata_id, id, title
  *
  * @property user_id User Id
@@ -5685,7 +5954,7 @@ data class WriteLookBasic (
 ) : Serializable
 
 /**
- * Dynamically generated writeable type for LookmlModel removes properties:
+ * Dynamic writeable type for LookmlModel removes:
  * can, explores, has_content, label
  *
  * @property allowed_db_connection_names Array of names of connections this model is allowed to use
@@ -5701,7 +5970,7 @@ data class WriteLookmlModel (
 ) : Serializable
 
 /**
- * Dynamically generated writeable type for LookWithQuery removes properties:
+ * Dynamic writeable type for LookWithQuery removes:
  * can, content_metadata_id, id, content_favorite_id, created_at, deleted_at, deleter_id, embed_url, excel_file_url, favorite_count, google_spreadsheet_formula, image_embed_url, last_accessed_at, last_updater_id, last_viewed_at, model, public_slug, public_url, short_url, updated_at, view_count, url
  *
  * @property title Look Title
@@ -5711,9 +5980,11 @@ data class WriteLookmlModel (
  * @property is_run_on_load auto-run query when Look viewed
  * @property public Is Public
  * @property query_id Query Id
- * @property folder
+ * @property folder Dynamic writeable type for FolderBase removes:
+ * id, content_metadata_id, created_at, creator_id, child_count, external_id, is_embed, is_embed_shared_root, is_embed_users_root, is_personal, is_personal_descendant, is_shared_root, is_users_root, can
  * @property folder_id Folder Id
- * @property query
+ * @property query Dynamic writeable type for Query removes:
+ * can, id, slug, share_url, expanded_share_url, url, has_table_calculations
  */
 data class WriteLookWithQuery (
     var title: String? = null,
@@ -5731,7 +6002,7 @@ data class WriteLookWithQuery (
 ) : Serializable
 
 /**
- * Dynamically generated writeable type for MergeQuery removes properties:
+ * Dynamic writeable type for MergeQuery removes:
  * can, id, result_maker_id
  *
  * @property column_limit Column Limit
@@ -5753,7 +6024,7 @@ data class WriteMergeQuery (
 ) : Serializable
 
 /**
- * Dynamically generated writeable type for ModelSet removes properties:
+ * Dynamic writeable type for ModelSet removes:
  * can, all_access, built_in, id, url
  *
  * @property models
@@ -5765,7 +6036,7 @@ data class WriteModelSet (
 ) : Serializable
 
 /**
- * Dynamically generated writeable type for OauthClientApp removes properties:
+ * Dynamic writeable type for OauthClientApp removes:
  * can, client_guid, tokens_invalid_before, activated_users
  *
  * @property redirect_uri The uri with which this application will receive an auth code by browser redirect.
@@ -5783,7 +6054,7 @@ data class WriteOauthClientApp (
 ) : Serializable
 
 /**
- * Dynamically generated writeable type for OIDCConfig removes properties:
+ * Dynamic writeable type for OIDCConfig removes:
  * can, default_new_user_groups, default_new_user_roles, groups, modified_at, modified_by, test_slug, user_attributes, url
  *
  * @property alternate_email_login_allowed Allow alternate email-based login via '/login/email' for admins and for specified users with the 'login_special_email' permission. This option is useful as a fallback during ldap setup, if ldap config problems occur later, or if you need to support some users who are not in your ldap directory. Looker email/password logins are always disabled for regular users when ldap is enabled.
@@ -5843,7 +6114,7 @@ data class WriteOIDCConfig (
 ) : Serializable
 
 /**
- * Dynamically generated writeable type for PasswordConfig removes properties:
+ * Dynamic writeable type for PasswordConfig removes:
  * can
  *
  * @property min_length Minimum number of characters required for a new password.  Must be between 7 and 100
@@ -5859,7 +6130,7 @@ data class WritePasswordConfig (
 ) : Serializable
 
 /**
- * Dynamically generated writeable type for PermissionSet removes properties:
+ * Dynamic writeable type for PermissionSet removes:
  * can, all_access, built_in, id, url
  *
  * @property name Name of PermissionSet
@@ -5871,7 +6142,7 @@ data class WritePermissionSet (
 ) : Serializable
 
 /**
- * Dynamically generated writeable type for Project removes properties:
+ * Dynamic writeable type for Project removes:
  * can, id, uses_git, is_example
  *
  * @property name Project display name
@@ -5915,7 +6186,7 @@ data class WriteProject (
 ) : Serializable
 
 /**
- * Dynamically generated writeable type for Query removes properties:
+ * Dynamic writeable type for Query removes:
  * can, id, slug, share_url, expanded_share_url, url, has_table_calculations
  *
  * @property model Model
@@ -5961,7 +6232,7 @@ data class WriteQuery (
 ) : Serializable
 
 /**
- * Dynamically generated writeable type for RepositoryCredential removes properties:
+ * Dynamic writeable type for RepositoryCredential removes:
  * can, id, root_project_id, remote_url, is_configured
  *
  * @property git_username Git username for HTTPS authentication.
@@ -5975,23 +6246,26 @@ data class WriteRepositoryCredential (
 ) : Serializable
 
 /**
- * Dynamically generated writeable type for ResultMakerWithIdVisConfigAndDynamicFields removes properties:
+ * Dynamic writeable type for ResultMakerWithIdVisConfigAndDynamicFields removes:
  * id, dynamic_fields, filterables, sorts, merge_result_id, total, query_id, sql_query_id, vis_config
  *
- * @property query
+ * @property query Dynamic writeable type for Query removes:
+ * can, id, slug, share_url, expanded_share_url, url, has_table_calculations
  */
 data class WriteResultMakerWithIdVisConfigAndDynamicFields (
     var query: WriteQuery? = null
 ) : Serializable
 
 /**
- * Dynamically generated writeable type for Role removes properties:
- * can, id, user_count, url, users_url
+ * Dynamic writeable type for Role removes:
+ * can, id, url, users_url
  *
  * @property name Name of Role
- * @property permission_set
+ * @property permission_set Dynamic writeable type for PermissionSet removes:
+ * can, all_access, built_in, id, url
  * @property permission_set_id (Write-Only) Id of permission set
- * @property model_set
+ * @property model_set Dynamic writeable type for ModelSet removes:
+ * can, all_access, built_in, id, url
  * @property model_set_id (Write-Only) Id of model set
  */
 data class WriteRole (
@@ -6003,7 +6277,7 @@ data class WriteRole (
 ) : Serializable
 
 /**
- * Dynamically generated writeable type for SamlConfig removes properties:
+ * Dynamic writeable type for SamlConfig removes:
  * can, test_slug, modified_at, modified_by, default_new_user_roles, default_new_user_groups, groups, user_attributes, url
  *
  * @property enabled Enable/Disable Saml authentication for the server
@@ -6061,7 +6335,7 @@ data class WriteSamlConfig (
 ) : Serializable
 
 /**
- * Dynamically generated writeable type for ScheduledPlan removes properties:
+ * Dynamic writeable type for ScheduledPlan removes:
  * id, created_at, updated_at, title, user, next_run_at, last_run_at, can
  *
  * @property name Name of this scheduled plan
@@ -6121,7 +6395,7 @@ data class WriteScheduledPlan (
 ) : Serializable
 
 /**
- * Dynamically generated writeable type for SessionConfig removes properties:
+ * Dynamic writeable type for SessionConfig removes:
  * can
  *
  * @property allow_persistent_sessions Allow users to have persistent sessions when they login
@@ -6139,7 +6413,23 @@ data class WriteSessionConfig (
 ) : Serializable
 
 /**
- * Dynamically generated writeable type for SshServer removes properties:
+ * Dynamic writeable type for Setting
+ *
+ * @property extension_framework_enabled Toggle extension framework on or off
+ * @property marketplace_auto_install_enabled Toggle marketplace auto install on or off. Note that auto install only runs if marketplace is enabled.
+ * @property marketplace_enabled Toggle marketplace on or off
+ * @property whitelabel_configuration Dynamic writeable type for WhitelabelConfiguration removes:
+ * id, logo_url, favicon_url
+ */
+data class WriteSetting (
+    var extension_framework_enabled: Boolean? = null,
+    var marketplace_auto_install_enabled: Boolean? = null,
+    var marketplace_enabled: Boolean? = null,
+    var whitelabel_configuration: WriteWhitelabelConfiguration? = null
+) : Serializable
+
+/**
+ * Dynamic writeable type for SshServer removes:
  * ssh_server_id, finger_print, sha_finger_print, public_key, status
  *
  * @property ssh_server_name The name to identify this SSH Server
@@ -6155,7 +6445,7 @@ data class WriteSshServer (
 ) : Serializable
 
 /**
- * Dynamically generated writeable type for SshTunnel removes properties:
+ * Dynamic writeable type for SshTunnel removes:
  * tunnel_id, ssh_server_name, ssh_server_host, ssh_server_port, ssh_server_user, last_attempt, local_host_port, status
  *
  * @property ssh_server_id SSH Server ID
@@ -6169,7 +6459,7 @@ data class WriteSshTunnel (
 ) : Serializable
 
 /**
- * Dynamically generated writeable type for Theme removes properties:
+ * Dynamic writeable type for Theme removes:
  * can, id
  *
  * @property begin_at Timestamp for when this theme becomes active. Null=always
@@ -6187,10 +6477,11 @@ data class WriteTheme (
 ) : Serializable
 
 /**
- * Dynamically generated writeable type for User removes properties:
+ * Dynamic writeable type for User removes:
  * can, avatar_url, avatar_url_without_sizing, credentials_api3, credentials_embed, credentials_google, credentials_ldap, credentials_looker_openid, credentials_oidc, credentials_saml, credentials_totp, display_name, email, embed_group_space_id, group_ids, id, looker_versions, personal_folder_id, presumed_looker_employee, role_ids, sessions, verified_looker_employee, roles_externally_managed, allow_direct_roles, allow_normal_group_membership, allow_roles_from_normal_groups, url
  *
- * @property credentials_email
+ * @property credentials_email Dynamic writeable type for CredentialsEmail removes:
+ * can, created_at, is_disabled, logged_in_at, password_reset_url, type, url, user_url
  * @property first_name First name
  * @property home_folder_id ID string for user's home folder
  * @property is_disabled Account has been disabled
@@ -6213,7 +6504,7 @@ data class WriteUser (
 ) : Serializable
 
 /**
- * Dynamically generated writeable type for UserAttribute removes properties:
+ * Dynamic writeable type for UserAttribute removes:
  * can, id, is_system, is_permanent
  *
  * @property name Name of user attribute
@@ -6237,7 +6528,7 @@ data class WriteUserAttribute (
 ) : Serializable
 
 /**
- * Dynamically generated writeable type for UserAttributeWithValue removes properties:
+ * Dynamic writeable type for UserAttributeWithValue removes:
  * can, name, label, rank, user_id, user_can_edit, value_is_hidden, user_attribute_id, source, hidden_value_domain_whitelist
  *
  * @property value Value of attribute for user
@@ -6247,8 +6538,8 @@ data class WriteUserAttributeWithValue (
 ) : Serializable
 
 /**
- * Dynamically generated writeable type for WhitelabelConfiguration removes properties:
- * can, id, logo_url, favicon_url
+ * Dynamic writeable type for WhitelabelConfiguration removes:
+ * id, logo_url, favicon_url
  *
  * @property logo_file Customer logo image. Expected base64 encoded data (write-only)
  * @property favicon_file Custom favicon image. Expected base64 encoded data (write-only)

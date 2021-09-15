@@ -1,5 +1,138 @@
 # Changelog
 
+## [1.15.0](https://www.github.com/looker-open-source/sdk-codegen/compare/sdk-codegen-all-v1.14.0...sdk-codegen-all-v1.15.0) (2021-09-01)
+
+
+### Features
+
+* http response explorer for RunIt ([#800](https://www.github.com/looker-open-source/sdk-codegen/issues/800)) ([3f273ea](https://www.github.com/looker-open-source/sdk-codegen/commit/3f273ea7f849dafece8f4f5f60558021ecd41705))
+* Looker 21.14 release ([#807](https://www.github.com/looker-open-source/sdk-codegen/issues/807)) ([99db26d](https://www.github.com/looker-open-source/sdk-codegen/commit/99db26dcd812135d775e61e495c98a66057c6f54))
+* new configuration UI for API Explorer ([#803](https://www.github.com/looker-open-source/sdk-codegen/issues/803)) ([e6c67d1](https://www.github.com/looker-open-source/sdk-codegen/commit/e6c67d1211b412d4ce83127c9f7a8f091e3cf27f))
+
+
+### Bug Fixes
+
+* placate TypeScript 4.4 ([#809](https://www.github.com/looker-open-source/sdk-codegen/issues/809)) ([6509c17](https://www.github.com/looker-open-source/sdk-codegen/commit/6509c17da655be1fb7d51d0275b9e198aa6ae929))
+* remove custom Exceptions and `assert` to make scripts executable at the simplest possible setup.  ([#780](https://www.github.com/looker-open-source/sdk-codegen/issues/780)) ([0126ad9](https://www.github.com/looker-open-source/sdk-codegen/commit/0126ad978cd0b7df3daab3932d93bae307260bf4))
+* spec refresh ([#801](https://www.github.com/looker-open-source/sdk-codegen/issues/801)) ([a10245a](https://www.github.com/looker-open-source/sdk-codegen/commit/a10245aa7ea180670d9d8219810aab88eb50854d))
+
+## [1.14.0](https://www.github.com/looker-open-source/sdk-codegen/compare/sdk-codegen-all-v1.13.1...sdk-codegen-all-v1.14.0) (2021-08-11)
+
+
+### Features
+
+* fetch API specifications for stand-alone API Explorer ([#789](https://www.github.com/looker-open-source/sdk-codegen/issues/789)) ([f7be1fb](https://www.github.com/looker-open-source/sdk-codegen/commit/f7be1fb589570137c5ab39304910c57f721de8fb))
+
+
+### Bug Fixes
+
+* relax python dict key access ([#791](https://www.github.com/looker-open-source/sdk-codegen/issues/791)) ([d923c2f](https://www.github.com/looker-open-source/sdk-codegen/commit/d923c2faf3bde822307fa3d4f3367f270f47b49e)), closes [#778](https://www.github.com/looker-open-source/sdk-codegen/issues/778)
+
+### [1.13.1](https://www.github.com/looker-open-source/sdk-codegen/compare/sdk-codegen-all-v1.13.0...sdk-codegen-all-v1.13.1) (2021-08-09)
+
+
+### Bug Fixes
+
+* remove python setup.py author_email ([#787](https://www.github.com/looker-open-source/sdk-codegen/issues/787)) ([7939a73](https://www.github.com/looker-open-source/sdk-codegen/commit/7939a7397c44864e1f48cea7a408ce1bfdef9782))
+
+## [1.13.0](https://www.github.com/looker-open-source/sdk-codegen/compare/sdk-codegen-all-v1.12.0...sdk-codegen-all-v1.13.0) (2021-08-06)
+
+
+### Features
+
+* Another simple example add users to a Looker group based on a csv.  ([#776](https://www.github.com/looker-open-source/sdk-codegen/issues/776)) ([83cde03](https://www.github.com/looker-open-source/sdk-codegen/commit/83cde032a17aa6cf1d9f8ab598c8b5484336496c))
+* Looker 21.12 bindings ([#782](https://www.github.com/looker-open-source/sdk-codegen/issues/782)) ([a00b908](https://www.github.com/looker-open-source/sdk-codegen/commit/a00b908e6fee79250c4c1ffb1b1e8915d58dd633))
+
+
+### Bug Fixes
+
+* apix fix ([#785](https://www.github.com/looker-open-source/sdk-codegen/issues/785)) ([5ecea27](https://www.github.com/looker-open-source/sdk-codegen/commit/5ecea27fa5cc124ec1d823484cd67b0d22132624))
+* documentation refs and notes for Typescript SDK and more ([#783](https://www.github.com/looker-open-source/sdk-codegen/issues/783)) ([b2487ea](https://www.github.com/looker-open-source/sdk-codegen/commit/b2487ea4a113ce17a080ccab9b4c4139813e8810))
+
+## [1.12.0](https://www.github.com/looker-open-source/sdk-codegen/compare/sdk-codegen-all-v1.11.0...sdk-codegen-all-v1.12.0) (2021-07-30)
+
+
+### Features
+
+* add 2 Python examples (pause/copy schedules, kill queries) ([#757](https://www.github.com/looker-open-source/sdk-codegen/issues/757)) ([787eeeb](https://www.github.com/looker-open-source/sdk-codegen/commit/787eeeb16d34dc27af01deef40fd69e175186f65))
+* adding python example for folder permission access ([#758](https://www.github.com/looker-open-source/sdk-codegen/issues/758)) ([21e52df](https://www.github.com/looker-open-source/sdk-codegen/commit/21e52df573fcedab65449b3554d4f35ddee503d3))
+* python barebones schedule plan example ([#763](https://www.github.com/looker-open-source/sdk-codegen/issues/763)) ([57cd05b](https://www.github.com/looker-open-source/sdk-codegen/commit/57cd05b2bc6b0427bb72eca57d91a0435de3785c))
+
+
+### Bug Fixes
+
+* dev portal apix tweaks ([#760](https://www.github.com/looker-open-source/sdk-codegen/issues/760)) ([6e937f4](https://www.github.com/looker-open-source/sdk-codegen/commit/6e937f4778457021dd739e849e209ad4de7bb450))
+* improved writeable type support ([#766](https://www.github.com/looker-open-source/sdk-codegen/issues/766)) ([be91bd8](https://www.github.com/looker-open-source/sdk-codegen/commit/be91bd8e772f9a64c47486b317f1ac1f6ef14327))
+* remove unused net/url import from go ([#767](https://www.github.com/looker-open-source/sdk-codegen/issues/767)) ([35d912c](https://www.github.com/looker-open-source/sdk-codegen/commit/35d912c1e31e5817a2b6a81084753a66a4860338)), closes [#765](https://www.github.com/looker-open-source/sdk-codegen/issues/765)
+* support response observer chaining ([025618c](https://www.github.com/looker-open-source/sdk-codegen/commit/025618c806efc1664b4f573248ad5a64d6cee3e3))
+* uses consistent heading text ([#761](https://www.github.com/looker-open-source/sdk-codegen/issues/761)) ([2e308ec](https://www.github.com/looker-open-source/sdk-codegen/commit/2e308ec1c6b4f181be12dda806955f8913336234))
+
+## [1.11.0](https://www.github.com/looker-open-source/sdk-codegen/compare/sdk-codegen-all-v1.10.1...sdk-codegen-all-v1.11.0) (2021-07-15)
+
+
+### Features
+
+* API explorer error boundary ([#753](https://www.github.com/looker-open-source/sdk-codegen/issues/753)) ([3321bf1](https://www.github.com/looker-open-source/sdk-codegen/commit/3321bf1c7abf9f5165799970da5c2be40d94463a))
+* apix sidebar toggle for dev portal ([#751](https://www.github.com/looker-open-source/sdk-codegen/issues/751)) ([ac83a57](https://www.github.com/looker-open-source/sdk-codegen/commit/ac83a5708feab996a528520103b3f3dd9314861e))
+* initial api explorer dev portal support ([#748](https://www.github.com/looker-open-source/sdk-codegen/issues/748)) ([a4a7056](https://www.github.com/looker-open-source/sdk-codegen/commit/a4a70567bc114466d7650b9fba4545a16a2f0e37))
+* simplify apix dev portal navigation toggle ([#752](https://www.github.com/looker-open-source/sdk-codegen/issues/752)) ([dcbf642](https://www.github.com/looker-open-source/sdk-codegen/commit/dcbf64264387b611bcf939d7430a2cfb4b4665bd))
+
+
+### Bug Fixes
+
+* bullet proof APIX response handling ([#754](https://www.github.com/looker-open-source/sdk-codegen/issues/754)) ([b2a018a](https://www.github.com/looker-open-source/sdk-codegen/commit/b2a018a62e4a1acd837b6861c3e3d26c7af385bd))
+
+### [1.10.1](https://www.github.com/looker-open-source/sdk-codegen/compare/sdk-codegen-all-v1.10.0...sdk-codegen-all-v1.10.1) (2021-07-09)
+
+
+### Bug Fixes
+
+* browserTransport.ts retains ok: false now ([#745](https://www.github.com/looker-open-source/sdk-codegen/issues/745)) ([451481c](https://www.github.com/looker-open-source/sdk-codegen/commit/451481c62cdc986c860c582e4a77e3e887c6a732))
+
+## [1.10.0](https://www.github.com/looker-open-source/sdk-codegen/compare/sdk-codegen-all-v1.9.2...sdk-codegen-all-v1.10.0) (2021-07-08)
+
+
+### Features
+
+* Looker 21.10 bindings ([#737](https://www.github.com/looker-open-source/sdk-codegen/issues/737)) ([6b3895d](https://www.github.com/looker-open-source/sdk-codegen/commit/6b3895d35e138df9ff84286b7658434292617aa8))
+
+
+### Bug Fixes
+
+* add a test to additional query param required bug ([#741](https://www.github.com/looker-open-source/sdk-codegen/issues/741)) ([0cbe656](https://www.github.com/looker-open-source/sdk-codegen/commit/0cbe656aaf53f6f92fafcc62eeb573e0ff2d0a19))
+* check HTTP status code for TS SDK "ok" toggle ([#739](https://www.github.com/looker-open-source/sdk-codegen/issues/739)) ([3ed6af7](https://www.github.com/looker-open-source/sdk-codegen/commit/3ed6af78b2cb9610b3386ff851013a93fff40f54))
+* extension-api-explorer build ([#740](https://www.github.com/looker-open-source/sdk-codegen/issues/740)) ([1697883](https://www.github.com/looker-open-source/sdk-codegen/commit/16978836f42d8c755031a3438eeee1e9c1a743e6))
+
+### [1.9.2](https://www.github.com/looker-open-source/sdk-codegen/compare/sdk-codegen-all-v1.9.1...sdk-codegen-all-v1.9.2) (2021-07-02)
+
+
+### Bug Fixes
+
+* explain pager and pageAll sdk param better ([#736](https://www.github.com/looker-open-source/sdk-codegen/issues/736)) ([a93a9b1](https://www.github.com/looker-open-source/sdk-codegen/commit/a93a9b1ded0acddeaf051e7a2fed5132c1cb5c0c))
+* python datetime [de]serialization bug ([#734](https://www.github.com/looker-open-source/sdk-codegen/issues/734)) ([c821f2b](https://www.github.com/looker-open-source/sdk-codegen/commit/c821f2b77b99edfa2dd53aa0af82ab48081c3220))
+* python remove runtime asserts ([#703](https://www.github.com/looker-open-source/sdk-codegen/issues/703)) ([9b963c3](https://www.github.com/looker-open-source/sdk-codegen/commit/9b963c3367905f907e7867df1446f56e18284c3b)), closes [#695](https://www.github.com/looker-open-source/sdk-codegen/issues/695)
+
+### [1.9.1](https://www.github.com/looker-open-source/sdk-codegen/compare/sdk-codegen-all-v1.9.0...sdk-codegen-all-v1.9.1) (2021-07-01)
+
+
+### Bug Fixes
+
+* paging parsing issues ([#728](https://www.github.com/looker-open-source/sdk-codegen/issues/728)) ([f8eec43](https://www.github.com/looker-open-source/sdk-codegen/commit/f8eec43bdfbe337d41b1da02c127d690c8815ed3))
+
+## [1.9.0](https://www.github.com/looker-open-source/sdk-codegen/compare/sdk-codegen-all-v1.8.0...sdk-codegen-all-v1.9.0) (2021-06-30)
+
+
+### Features
+
+* paging results for the Typescript SDK ([#698](https://www.github.com/looker-open-source/sdk-codegen/issues/698)) ([537eb57](https://www.github.com/looker-open-source/sdk-codegen/commit/537eb579b9c6d95d600f455a187e6d7b9bf700ef))
+* refactor Markdown out to @looker/code-editor ([#699](https://www.github.com/looker-open-source/sdk-codegen/issues/699)) ([f3c16e2](https://www.github.com/looker-open-source/sdk-codegen/commit/f3c16e2a162266545ba3086a0a1dddd0cb79195f))
+* syntax highlight application/sql responses ([#718](https://www.github.com/looker-open-source/sdk-codegen/issues/718)) ([28a1bbe](https://www.github.com/looker-open-source/sdk-codegen/commit/28a1bbedb04f500a12e2c5a0fe304919139e6638))
+
+
+### Bug Fixes
+
+* dependabot security package upgrades ([#725](https://www.github.com/looker-open-source/sdk-codegen/issues/725)) ([15d7cb3](https://www.github.com/looker-open-source/sdk-codegen/commit/15d7cb3f70229424cc1710112683f096ccbc863c))
+
 ## [1.8.0](https://www.github.com/looker-open-source/sdk-codegen/compare/sdk-codegen-all-v1.7.0...sdk-codegen-all-v1.8.0) (2021-06-17)
 
 

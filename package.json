@@ -1,7 +1,7 @@
 {
   "license": "MIT",
   "name": "sdk-codegen-all",
-  "version": "1.8.0",
+  "version": "1.15.0",
   "description": "All workspaces for SDK code generation",
   "author": "Looker",
   "private": true,
@@ -35,6 +35,8 @@
     "build:cjs": "lerna exec --stream 'BABEL_ENV=build_cjs babel src --root-mode upward --out-dir lib --source-maps --extensions .ts,.tsx --no-comments'",
     "build:es": "lerna exec --stream 'BABEL_ENV=build babel src --root-mode upward --out-dir lib/esm --source-maps --extensions .ts,.tsx --no-comments'",
     "build:ts": "lerna exec --stream --sort 'tsc -b tsconfig.build.json'",
+    "dev:apix": "yarn workspace @looker/api-explorer develop",
+    "dev:xapix": "yarn workspace @looker/extension-api-explorer develop",
     "clean": "rm -Rf packages/*/lib",
     "prepublishOnly": "jest packages/sdk-rtl packages/sdk-node/test",
     "fix": "yarn lint:es --fix",
@@ -43,14 +45,15 @@
     "lint-quiet:es": "eslint 'packages/**/*.ts{,x}' --cache --quiet",
     "lint:ts": "tsc",
     "lint-staged": "yarn exec lint-staged",
-    "lint-changed": "eslint $(git diff --name-only --diff-filter=ACMRTUXB main | grep  -E \"(.js$|.ts$|.tsx$)\") --quiet",
-    "lint-changed-fix": "eslint $(git diff --name-only --diff-filter=ACMRTUXB main | grep  -E \"(.js$|.ts$|.tsx$)\") --quiet --fix",
+    "lint-changed": "eslint $(git diff --name-only --diff-filter=ACMRTUXB origin/main | grep  -E \"(.js$|.ts$|.tsx$)\") --quiet",
+    "lint-changed-fix": "eslint $(git diff --name-only --diff-filter=ACMRTUXB origin/main | grep  -E \"(.js$|.ts$|.tsx$)\") --quiet --fix",
     "lint:spec": "SUPPRESS_NO_CONFIG_WARNING=1 ts-node -O '{ \"module\": \"commonjs\", \"target\": \"es2019\" }' packages/sdk-codegen-scripts/scripts/specLinter.ts",
     "refresh": "SUPPRESS_NO_CONFIG_WARNING=1 ts-node -O '{ \"module\": \"commonjs\", \"target\": \"es2019\" }' packages/sdk-codegen-scripts/scripts/refresh_specs.ts",
     "register": "SUPPRESS_NO_CONFIG_WARNING=1 ts-node -O '{ \"module\": \"commonjs\", \"target\": \"es2019\" }' packages/sdk-codegen-scripts/scripts/register.ts",
     "test": "yarn jest",
     "test:ts": "yarn jest --reporters=default --reporters=jest-junit",
-    "test:apix": "yarn jest packages/api-explorer packages/run-it packages/code-editor  packages/extension-api-explorer",
+    "test:apix": "yarn jest packages/api-explorer/src packages/run-it packages/code-editor  packages/extension-api-explorer",
+    "test:apix-e2e": "yarn workspace @looker/api-explorer run test:e2e",
     "test:iphone": "xcodebuild test -project swift/looker/looker.xcodeproj -scheme looker-Package -sdk iphonesimulator -destination 'platform=iOS Simulator,name=iPhone 11,OS=13.4.1' | xcpretty --test --color",
     "test:gen": "yarn jest packages/sdk-codegen",
     "test:sdk": "yarn jest packages/sdk",
@@ -120,6 +123,7 @@
     "ts-jest": "^26.4.4",
     "ts-node": "^9.1.1",
     "typescript": "^4.1.3",
+    "url-loader": "^4.1.1",
     "webpack": "^5.10.0",
     "webpack-bundle-analyzer": "^4.4.1",
     "webpack-merge": "^5.7.3"
@@ -209,6 +213,10 @@
   "keywords": [],
   "resolutions": {
     "set-value": "^2.0.1",
-    "trim": ">= 0.0.3"
+    "trim": ">= 0.0.3",
+    "css-what": ">= 5.0.1",
+    "trim-newlines": ">= 3.0.1",
+    "glob-parent": ">= 5.1.2",
+    "ws": ">= 7.4.6"
   }
 }

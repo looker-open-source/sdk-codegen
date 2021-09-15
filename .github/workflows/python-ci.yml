@@ -76,11 +76,6 @@ jobs:
           pip install tox
       - name: Run Unit Tests
         run: tox -e unit
-      - name: Twine upload check
-        run: |
-          pip install wheel twine
-          python setup.py sdist bdist_wheel
-          twine check dist/*
       - name: Upload pytest test results
         if: ${{ always() }}
         uses: actions/upload-artifact@v2
@@ -99,10 +94,9 @@ jobs:
         os:
           - ubuntu
         looker:
-          - '21_0'
-          - '21_4'
-          - '21_6'
-          - '21_8'
+          - '21_10'
+          - '21_12'
+          - '21_14'
           # TODO uncomment `include:` when either macos or windows works to satisfaction.
           #include:
           # TODO: macos matrix leg is functional but it takes ~20 minutes (compared
@@ -187,8 +181,22 @@ jobs:
           name: python-test-results
           path: python/results/
 
+  twine:
+    needs: integration
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - uses: actions/setup-python@v2
+        with:
+          python-version: 3.x
+      - name: Twine upload check
+        run: |
+          pip install wheel twine
+          python setup.py sdist bdist_wheel
+          twine check dist/*
+
   publish-test-results:
-    needs: [unit, integration]
+    needs: [unit, integration, twine]
     if: success() || failure()
     runs-on: ubuntu-latest
 

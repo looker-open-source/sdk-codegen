@@ -24,8 +24,6 @@
 
  */
 
-/* Version 21.0.5 */
-
 export * from './apiMethods'
 export * from './apiSettings'
 export * from './authSession'
@@ -41,6 +39,7 @@ export * from './delimArray'
 export * from './extensionSession'
 export * from './extensionTransport'
 export * from './oauthSession'
-export * from './proxySession'
+export * from './paging'
 export * from './platformServices'
+export * from './proxySession'
 export * from './transport'

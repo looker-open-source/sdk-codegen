@@ -26,8 +26,7 @@
 import React, { FC } from 'react'
 import { Card, CardContent, Flex, Space, Text } from '@looker/components'
 import { IMethod } from '@looker/sdk-codegen'
-import { MethodBadge } from '@looker/run-it'
-import { ApixHeading } from '../common'
+import { MethodBadge, RunItHeading } from '@looker/run-it'
 import { DocActivityType, DocRateLimited } from '../../components'
 import { DocSummaryStatus } from './DocSummaryStatus'
 
@@ -36,7 +35,7 @@ interface DocMethodSummaryProps {
 }
 
 export const DocMethodSummary: FC<DocMethodSummaryProps> = ({ method }) => (
-  <Card maxWidth="50rem" border="1px solid" borderColor="ui2">
+  <Card maxWidth="50rem" border>
     <CardContent>
       <Space align="start" between>
         <MethodBadge
@@ -47,9 +46,9 @@ export const DocMethodSummary: FC<DocMethodSummaryProps> = ({ method }) => (
           {method.httpMethod.toUpperCase()}
         </MethodBadge>
         <Flex alignItems="start" flexDirection="column" flex="1" mx="small">
-          <ApixHeading as="h3" mb="0" pt="0">
+          <RunItHeading as="h3" mb="0" pt="0">
             {method.summary}
-          </ApixHeading>
+          </RunItHeading>
           <Space>
             <DocRateLimited method={method} />
             <DocActivityType method={method} />

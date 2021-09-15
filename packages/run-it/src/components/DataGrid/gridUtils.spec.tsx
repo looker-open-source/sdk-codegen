@@ -24,7 +24,7 @@
 
  */
 
-import { gridHeaders, gridRows, parseCsv, parseJson } from './gridUtils'
+import { gridHeaders, gridRows, parseCsv, json2Csv } from './gridUtils'
 
 const dataRowsLength = 2
 const allRowsLength = dataRowsLength + 1
@@ -59,7 +59,7 @@ describe('gridUtils', () => {
   })
 
   test('parses json data', () => {
-    const actual = parseJson(testJsonData)
+    const actual = json2Csv(testJsonData)
     expect(actual).toBeDefined()
     expect(actual.data).toBeDefined()
     expect(actual.data).toHaveLength(allRowsLength)
@@ -80,7 +80,7 @@ describe('gridUtils', () => {
   })
 
   test('creates grid rows from json', () => {
-    const data = parseJson(testJsonData)
+    const data = json2Csv(testJsonData)
     const actual = gridRows(data.data)
     expect(actual).toHaveLength(allRowsLength)
   })

@@ -24,7 +24,7 @@
 """
 import datetime
 import json
-from typing import MutableMapping, Optional, Sequence, Type, Union
+from typing import Any, MutableMapping, Optional, Sequence, Type, Union
 import urllib.parse
 
 from looker_sdk import error
@@ -44,7 +44,7 @@ TBody = Optional[
         Sequence[model.Model],
     ]
 ]
-TStructure = Optional[Union[Type[str], serialize.TStructure]]
+TStructure = Optional[Union[Any, Type[str], serialize.TStructure]]
 TReturn = Optional[Union[str, bytes, serialize.TDeserializeReturn]]
 TQueryParams = MutableMapping[
     str, Union[None, bool, str, int, Sequence[int], Sequence[str], datetime.datetime]

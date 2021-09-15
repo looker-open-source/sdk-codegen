@@ -25,7 +25,7 @@
  */
 
 /**
- * 334 API models: 210 Spec, 51 Request, 56 Write, 17 Enum
+ * 350 API models: 219 Spec, 54 Request, 58 Write, 19 Enum
  */
 
 import type { IDictionary, DelimArray } from '@looker/sdk-rtl'
@@ -51,6 +51,142 @@ export interface IAccessToken {
    * Refresh token which can be used to obtain a new access token (read-only)
    */
   refresh_token?: string
+}
+
+export interface IAlert {
+  /**
+   * Filters coming from the dashboard that are applied. Example `[{ "filter_title": "Name", "field_name": "distribution_centers.name", "filter_value": "Los Angeles CA" }]`
+   */
+  applied_dashboard_filters?: IAlertAppliedDashboardFilter[]
+  /**
+   * This property informs the check what kind of comparison we are performing. Only certain condition types are valid for time series alerts. For details, refer to [Setting Alert Conditions](https://docs.looker.com/sharing-and-publishing/creating-alerts#setting_alert_conditions) Valid values are: "EQUAL_TO", "GREATER_THAN", "GREATER_THAN_OR_EQUAL_TO", "LESS_THAN", "LESS_THAN_OR_EQUAL_TO", "INCREASES_BY", "DECREASES_BY", "CHANGES_BY".
+   */
+  comparison_type?: ComparisonType
+  /**
+   * Vixie-Style crontab specification when to run. At minumum, it has to be longer than 15 minute intervals
+   */
+  cron?: string
+  /**
+   * An optional, user-defined title for the alert
+   */
+  custom_title?: string
+  /**
+   * ID of the dashboard element associated with the alert. Refer to [dashboard_element()](#!/Dashboard/DashboardElement)
+   */
+  dashboard_element_id?: number
+  /**
+   * Array of destinations to send alerts to. Must be the same type of destination. Example `[{ "destination_type": "EMAIL", "email_address": "test@test.com" }]`
+   */
+  destinations?: IAlertDestination[]
+  field?: IAlertField
+  /**
+   * ID of the alert (read-only)
+   */
+  id?: number
+  /**
+   * Whether or not the alert is disabled
+   */
+  is_disabled?: boolean
+  /**
+   * Whether or not the alert is public
+   */
+  is_public?: boolean
+  /**
+   * ID of the LookML dashboard associated with the alert
+   */
+  lookml_dashboard_id?: string
+  /**
+   * ID of the LookML dashboard element associated with the alert
+   */
+  lookml_link_id?: string
+  /**
+   * User id of alert owner
+   */
+  owner_id?: number
+  /**
+   * Value of the alert threshold
+   */
+  threshold?: number
+  time_series_condition_state?: IAlertConditionState
+}
+
+export interface IAlertAppliedDashboardFilter {
+  /**
+   * Field Title. Refer to `DashboardFilter.title` in [DashboardFilter](#!/types/DashboardFilter). Example `Name`
+   */
+  filter_title?: string
+  /**
+   * Field Name. Refer to `DashboardFilter.dimension` in [DashboardFilter](#!/types/DashboardFilter). Example `distribution_centers.name`
+   */
+  field_name?: string
+  /**
+   * Field Value. [Filter Expressions](https://docs.looker.com/reference/filter-expressions). Example `Los Angeles CA`
+   */
+  filter_value?: string
+  /**
+   * Human Readable Filter Description. This may be null or auto-generated. Example `is Los Angeles CA` (read-only)
+   */
+  filter_description?: string
+}
+
+export interface IAlertConditionState {
+  /**
+   * (Write-Only) The second latest time string the alert has seen.
+   */
+  previous_time_series_id?: string
+  /**
+   * (Write-Only) Latest time string the alert has seen.
+   */
+  latest_time_series_id?: string
+}
+
+export interface IAlertDestination {
+  /**
+   * Type of destination that the alert will be sent to Valid values are: "EMAIL", "ACTION_HUB".
+   */
+  destination_type: DestinationType
+  /**
+   * Email address for the 'email' type
+   */
+  email_address?: string
+  /**
+   * Action hub integration id for the 'action_hub' type. [Integration](#!/types/Integration)
+   */
+  action_hub_integration_id?: string
+  /**
+   * Action hub form params json for the 'action_hub' type [IntegrationParam](#!/types/IntegrationParam)
+   */
+  action_hub_form_params_json?: string
+}
+
+export interface IAlertField {
+  /**
+   * Field's title. Usually auto-generated to reflect field name and its filters
+   */
+  title?: string
+  /**
+   * Field's name. Has the format `<view>.<field>` Refer to [docs](https://docs.looker.com/sharing-and-publishing/creating-alerts) for more details
+   */
+  name?: string
+  /**
+   * (Optional / Advance Use) List of fields filter. This further restricts the alert to certain dashboard element's field values. This can be used on top of dashboard filters `applied_dashboard_filters`. To keep thing simple, it's suggested to just use dashboard filters. Example: `{ 'title': '12 Number on Hand', 'name': 'inventory_items.number_on_hand', 'filter': [{ 'field_name': 'inventory_items.id', 'field_value': 12, 'filter_value': null }] }`
+   */
+  filter?: IAlertFieldFilter[]
+}
+
+export interface IAlertFieldFilter {
+  /**
+   * Field Name. Has format `<view>.<field>`
+   */
+  field_name?: string
+  /**
+   * Field Value. Depends on the type of field - numeric or string. For [location](https://docs.looker.com/reference/field-reference/dimension-type-reference#location) type, it's a list of floats. Example `[1.0, 56.0]`
+   */
+  field_value?: any
+  /**
+   * Filter Value. Usually null except for [location](https://docs.looker.com/reference/field-reference/dimension-type-reference#location) type. It'll be a string of lat,long ie `'1.0,56.0'`
+   */
+  filter_value?: string
 }
 
 /**
@@ -90,6 +226,10 @@ export interface IApiVersion {
    * API server base url (read-only)
    */
   api_server_url?: string
+  /**
+   * Web server base url (read-only)
+   */
+  web_server_url?: string
 }
 
 export interface IApiVersionElement {
@@ -215,6 +355,22 @@ export interface IBoardItem {
    */
   content_updated_at?: string
   /**
+   * (Write-Only) base64 encoded image data
+   */
+  custom_image_data_base64?: string
+  /**
+   * Custom image_url entered by the user, if present (read-only)
+   */
+  custom_image_url?: string
+  /**
+   * Custom title entered by the user, if present
+   */
+  custom_title?: string
+  /**
+   * Custom url entered by the user, if present
+   */
+  custom_url?: string
+  /**
    * Dashboard to base this item on
    */
   dashboard_id?: number
@@ -234,6 +390,10 @@ export interface IBoardItem {
    * Unique Id (read-only)
    */
   id?: number
+  /**
+   * The actual image_url for display (read-only)
+   */
+  image_url?: string
   /**
    * The container folder name of the content (read-only)
    */
@@ -401,6 +561,20 @@ export interface ICommand {
   linked_content_type?: LinkedContentType
 }
 
+/**
+ * This property informs the check what kind of comparison we are performing. Only certain condition types are valid for time series alerts. For details, refer to [Setting Alert Conditions](https://docs.looker.com/sharing-and-publishing/creating-alerts#setting_alert_conditions) Valid values are: "EQUAL_TO", "GREATER_THAN", "GREATER_THAN_OR_EQUAL_TO", "LESS_THAN", "LESS_THAN_OR_EQUAL_TO", "INCREASES_BY", "DECREASES_BY", "CHANGES_BY".
+ */
+export enum ComparisonType {
+  EQUAL_TO = 'EQUAL_TO',
+  GREATER_THAN = 'GREATER_THAN',
+  GREATER_THAN_OR_EQUAL_TO = 'GREATER_THAN_OR_EQUAL_TO',
+  LESS_THAN = 'LESS_THAN',
+  LESS_THAN_OR_EQUAL_TO = 'LESS_THAN_OR_EQUAL_TO',
+  INCREASES_BY = 'INCREASES_BY',
+  DECREASES_BY = 'DECREASES_BY',
+  CHANGES_BY = 'CHANGES_BY',
+}
+
 export interface IConnectionFeatures {
   /**
    * Name of the dialect for this connection (read-only)
@@ -544,6 +718,9 @@ export interface IContentMeta {
   slug?: string
 }
 
+/**
+ * WARNING: no writeable properties found for POST, PUT, or PATCH
+ */
 export interface IContentMetaGroupUser {
   /**
    * Operations the current user is able to perform on this object (read-only)
@@ -639,6 +816,10 @@ export interface IContentValidationDashboard {
    * Dashboard Title
    */
   title?: string
+  /**
+   * Relative URL of the dashboard (read-only)
+   */
+  url?: string
 }
 
 export interface IContentValidationDashboardElement {
@@ -782,6 +963,10 @@ export interface IContentValidationLook {
    * Look Title
    */
   title?: string
+  /**
+   * Short Url (read-only)
+   */
+  short_url?: string
   folder?: IContentValidationFolder
 }
 
@@ -934,6 +1119,9 @@ export interface ICostEstimate {
   message?: string
 }
 
+/**
+ * WARNING: no writeable properties found for POST, PUT, or PATCH
+ */
 export interface ICreateCostEstimate {
   /**
    * SQL statement to estimate (read-only)
@@ -1081,6 +1269,9 @@ export interface ICreateQueryTask {
   dashboard_id?: string
 }
 
+/**
+ * WARNING: no writeable properties found for POST, PUT, or PATCH
+ */
 export interface ICredentialsApi3 {
   /**
    * Operations the current user is able to perform on this object (read-only)
@@ -1113,6 +1304,49 @@ export interface ICredentialsApi3 {
 }
 
 export interface ICredentialsEmail {
+  /**
+   * Operations the current user is able to perform on this object (read-only)
+   */
+  can?: IDictionary<boolean>
+  /**
+   * Timestamp for the creation of this credential (read-only)
+   */
+  created_at?: string
+  /**
+   * EMail address used for user login
+   */
+  email?: string
+  /**
+   * Force the user to change their password upon their next login
+   */
+  forced_password_reset_at_next_login?: boolean
+  /**
+   * Has this credential been disabled? (read-only)
+   */
+  is_disabled?: boolean
+  /**
+   * Timestamp for most recent login using credential (read-only)
+   */
+  logged_in_at?: string
+  /**
+   * Url with one-time use secret token that the user can use to reset password (read-only)
+   */
+  password_reset_url?: string
+  /**
+   * Short name for the type of this kind of credential (read-only)
+   */
+  type?: string
+  /**
+   * Link to get this item (read-only)
+   */
+  url?: string
+  /**
+   * Link to get this user (read-only)
+   */
+  user_url?: string
+}
+
+export interface ICredentialsEmailSearch {
   /**
    * Operations the current user is able to perform on this object (read-only)
    */
@@ -1381,6 +1615,9 @@ export interface ICredentialsSaml {
   url?: string
 }
 
+/**
+ * WARNING: no writeable properties found for POST, PUT, or PATCH
+ */
 export interface ICredentialsTotp {
   /**
    * Operations the current user is able to perform on this object (read-only)
@@ -1491,6 +1728,10 @@ export interface IDashboard {
    */
   preferred_viewer?: string
   /**
+   * Enables alerts to keep in sync with dashboard filter changes - only available in Enhanced Alerts (beta)
+   */
+  alert_sync_with_dashboard_filter_enabled?: boolean
+  /**
    * Background color
    */
   background_color?: string
@@ -1583,6 +1824,10 @@ export interface IDashboard {
    */
   view_count?: number
   appearance?: IDashboardAppearance
+  /**
+   * Relative URL of the dashboard (read-only)
+   */
+  url?: string
 }
 
 export interface IDashboardAggregateTableLookml {
@@ -2028,7 +2273,7 @@ export interface IDataActionRequest {
   /**
    * The JSON describing the data action. This JSON should be considered opaque and should be passed through unmodified from the query result it came from.
    */
-  action?: IDictionary<string>
+  action?: IDictionary<any>
   /**
    * User input for any form values the data action might use.
    */
@@ -2398,6 +2643,14 @@ export enum DependencyStatus {
   lock_required = 'lock_required',
   lock_error = 'lock_error',
   install_none = 'install_none',
+}
+
+/**
+ * Type of destination that the alert will be sent to Valid values are: "EMAIL", "ACTION_HUB".
+ */
+export enum DestinationType {
+  EMAIL = 'EMAIL',
+  ACTION_HUB = 'ACTION_HUB',
 }
 
 export interface IDialect {
@@ -3050,6 +3303,9 @@ export interface IGroupHierarchy {
   role_ids?: number[]
 }
 
+/**
+ * WARNING: no writeable properties found for POST, PUT, or PATCH
+ */
 export interface IGroupIdForGroupInclusion {
   /**
    * Id of group (read-only)
@@ -3057,6 +3313,9 @@ export interface IGroupIdForGroupInclusion {
   group_id?: number
 }
 
+/**
+ * WARNING: no writeable properties found for POST, PUT, or PATCH
+ */
 export interface IGroupIdForGroupUserInclusion {
   /**
    * Id of user (read-only)
@@ -6314,6 +6573,24 @@ export interface IRequestAllIntegrations {
 }
 
 /**
+ * Dynamically generated request type for all_lookml_models
+ */
+export interface IRequestAllLookmlModels {
+  /**
+   * Requested fields.
+   */
+  fields?: string
+  /**
+   * Number of results to return. (can be used with offset)
+   */
+  limit?: number
+  /**
+   * Number of results to skip before returning any. (Defaults to 0 if not set when limit is used)
+   */
+  offset?: number
+}
+
+/**
  * Dynamically generated request type for all_roles
  */
 export interface IRequestAllRoles {
@@ -6354,13 +6631,21 @@ export interface IRequestAllUsers {
    */
   fields?: string
   /**
-   * Requested page.
+   * DEPRECATED. Use limit and offset instead. Return only page N of paginated results
    */
   page?: number
   /**
-   * Results per page.
+   * DEPRECATED. Use limit and offset instead. Return N rows of data per page
    */
   per_page?: number
+  /**
+   * Number of results to return. (used with offset and takes priority over page and per_page)
+   */
+  limit?: number
+  /**
+   * Number of results to skip before returning any. (used with limit and takes priority over page and per_page)
+   */
+  offset?: number
   /**
    * Fields to sort by.
    */
@@ -7080,6 +7365,48 @@ export interface IRequestScheduledPlansForLookmlDashboard {
 }
 
 /**
+ * Dynamically generated request type for search_alerts
+ */
+export interface IRequestSearchAlerts {
+  /**
+   * (Optional) Number of results to return (used with `offset`).
+   */
+  limit?: number
+  /**
+   * (Optional) Number of results to skip before returning any (used with `limit`).
+   */
+  offset?: number
+  /**
+   * (Optional) Requested fields.
+   */
+  fields?: string
+  /**
+   * (Optional) Filter on returning only enabled or disabled alerts.
+   */
+  disabled?: boolean
+  /**
+   * (Optional) Filter on alert frequency, such as: monthly, weekly, daily, hourly, minutes
+   */
+  frequency?: string
+  /**
+   * (Optional) Filter on whether the alert has met its condition when it last executed
+   */
+  condition_met?: boolean
+  /**
+   * (Optional) Filter on the start range of the last time the alerts were run. Example: 2021-01-01T01:01:01-08:00.
+   */
+  last_run_start?: string
+  /**
+   * (Optional) Filter on the start range of the last time the alerts were run. Example: 2021-01-01T01:01:01-08:00.
+   */
+  last_run_end?: string
+  /**
+   * (Admin only) (Optional) Filter for all owners.
+   */
+  all_owners?: boolean
+}
+
+/**
  * Dynamically generated request type for search_boards
  */
 export interface IRequestSearchBoards {
@@ -7241,6 +7568,44 @@ export interface IRequestSearchContentViews {
   sorts?: string
   /**
    * Combine given search criteria in a boolean OR expression
+   */
+  filter_or?: boolean
+}
+
+/**
+ * Dynamically generated request type for search_credentials_email
+ */
+export interface IRequestSearchCredentialsEmail {
+  /**
+   * Requested fields.
+   */
+  fields?: string
+  /**
+   * Number of results to return (used with `offset`).
+   */
+  limit?: number
+  /**
+   * Number of results to skip before returning any (used with `limit`).
+   */
+  offset?: number
+  /**
+   * Fields to sort by.
+   */
+  sorts?: string
+  /**
+   * Match credentials_email id.
+   */
+  id?: number
+  /**
+   * Match credentials_email email.
+   */
+  email?: string
+  /**
+   * Find credentials_email that match given emails.
+   */
+  emails?: string
+  /**
+   * Combine given search criteria in a boolean OR expression.
    */
   filter_or?: boolean
 }
@@ -7712,13 +8077,21 @@ export interface IRequestSearchUsers {
    */
   fields?: string
   /**
-   * Return only page N of paginated results
+   * DEPRECATED. Use limit and offset instead. Return only page N of paginated results
    */
   page?: number
   /**
-   * Return N rows of data per page
+   * DEPRECATED. Use limit and offset instead. Return N rows of data per page
    */
   per_page?: number
+  /**
+   * Number of results to return. (used with offset and takes priority over page and per_page)
+   */
+  limit?: number
+  /**
+   * Number of results to skip before returning any. (used with limit and takes priority over page and per_page)
+   */
+  offset?: number
   /**
    * Fields to sort by.
    */
@@ -7778,13 +8151,21 @@ export interface IRequestSearchUsersNames {
    */
   fields?: string
   /**
-   * Return only page N of paginated results
+   * DEPRECATED. Use limit and offset instead. Return only page N of paginated results
    */
   page?: number
   /**
-   * Return N rows of data per page
+   * DEPRECATED. Use limit and offset instead. Return N rows of data per page
    */
   per_page?: number
+  /**
+   * Number of results to return. (used with offset and takes priority over page and per_page)
+   */
+  limit?: number
+  /**
+   * Number of results to skip before returning any. (used with limit and takes priority over page and per_page)
+   */
+  offset?: number
   /**
    * Fields to sort by
    */
@@ -7995,7 +8376,40 @@ export interface IRole {
    */
   model_set_id?: number
   /**
-   * Count of users with this role, only returned if user_count field is requested (read-only)
+   * Link to get this item (read-only)
+   */
+  url?: string
+  /**
+   * Link to get list of users with this role (read-only)
+   */
+  users_url?: string
+}
+
+export interface IRoleSearch {
+  /**
+   * Operations the current user is able to perform on this object (read-only)
+   */
+  can?: IDictionary<boolean>
+  /**
+   * Unique Id (read-only)
+   */
+  id?: number
+  /**
+   * Name of Role
+   */
+  name?: string
+  permission_set?: IPermissionSet
+  /**
+   * (Write-Only) Id of permission set
+   */
+  permission_set_id?: number
+  model_set?: IModelSet
+  /**
+   * (Write-Only) Id of model set
+   */
+  model_set_id?: number
+  /**
+   * Count of users with this role (read-only)
    */
   user_count?: number
   /**
@@ -8713,6 +9127,22 @@ export interface ISessionConfig {
   track_session_location?: boolean
 }
 
+export interface ISetting {
+  /**
+   * Toggle extension framework on or off
+   */
+  extension_framework_enabled?: boolean
+  /**
+   * Toggle marketplace auto install on or off. Note that auto install only runs if marketplace is enabled.
+   */
+  marketplace_auto_install_enabled?: boolean
+  /**
+   * Toggle marketplace on or off
+   */
+  marketplace_enabled?: boolean
+  whitelabel_configuration?: IWhitelabelConfiguration
+}
+
 export interface ISnippet {
   /**
    * Name of the snippet (read-only)
@@ -9269,6 +9699,9 @@ export enum UserAttributeFilterTypes {
   zipcode = 'zipcode',
 }
 
+/**
+ * WARNING: no writeable properties found for POST, PUT, or PATCH
+ */
 export interface IUserAttributeGroupValue {
   /**
    * Operations the current user is able to perform on this object (read-only)
@@ -9485,10 +9918,6 @@ export interface IWelcomeEmailTest {
 
 export interface IWhitelabelConfiguration {
   /**
-   * Operations the current user is able to perform on this object (read-only)
-   */
-  can?: IDictionary<boolean>
-  /**
    * Unique Id (read-only)
    */
   id?: number
@@ -9570,7 +9999,64 @@ export interface IWorkspace {
 }
 
 /**
- * Dynamically generated writeable type for ApiSession removes properties:
+ * Dynamic writeable type for Alert removes:
+ * id
+ */
+export interface IWriteAlert {
+  /**
+   * Filters coming from the dashboard that are applied. Example `[{ "filter_title": "Name", "field_name": "distribution_centers.name", "filter_value": "Los Angeles CA" }]`
+   */
+  applied_dashboard_filters?: IAlertAppliedDashboardFilter[]
+  /**
+   * This property informs the check what kind of comparison we are performing. Only certain condition types are valid for time series alerts. For details, refer to [Setting Alert Conditions](https://docs.looker.com/sharing-and-publishing/creating-alerts#setting_alert_conditions) Valid values are: "EQUAL_TO", "GREATER_THAN", "GREATER_THAN_OR_EQUAL_TO", "LESS_THAN", "LESS_THAN_OR_EQUAL_TO", "INCREASES_BY", "DECREASES_BY", "CHANGES_BY".
+   */
+  comparison_type?: ComparisonType
+  /**
+   * Vixie-Style crontab specification when to run. At minumum, it has to be longer than 15 minute intervals
+   */
+  cron?: string
+  /**
+   * An optional, user-defined title for the alert
+   */
+  custom_title?: string
+  /**
+   * ID of the dashboard element associated with the alert. Refer to [dashboard_element()](#!/Dashboard/DashboardElement)
+   */
+  dashboard_element_id?: number
+  /**
+   * Array of destinations to send alerts to. Must be the same type of destination. Example `[{ "destination_type": "EMAIL", "email_address": "test@test.com" }]`
+   */
+  destinations?: IAlertDestination[]
+  field?: IAlertField
+  /**
+   * Whether or not the alert is disabled
+   */
+  is_disabled?: boolean
+  /**
+   * Whether or not the alert is public
+   */
+  is_public?: boolean
+  /**
+   * ID of the LookML dashboard associated with the alert
+   */
+  lookml_dashboard_id?: string
+  /**
+   * ID of the LookML dashboard element associated with the alert
+   */
+  lookml_link_id?: string
+  /**
+   * User id of alert owner
+   */
+  owner_id?: number
+  /**
+   * Value of the alert threshold
+   */
+  threshold?: number
+  time_series_condition_state?: IAlertConditionState
+}
+
+/**
+ * Dynamic writeable type for ApiSession removes:
  * can, sudo_user_id
  */
 export interface IWriteApiSession {
@@ -9581,7 +10067,7 @@ export interface IWriteApiSession {
 }
 
 /**
- * Dynamically generated writeable type for BackupConfiguration removes properties:
+ * Dynamic writeable type for BackupConfiguration removes:
  * can, url
  */
 export interface IWriteBackupConfiguration {
@@ -9608,7 +10094,7 @@ export interface IWriteBackupConfiguration {
 }
 
 /**
- * Dynamically generated writeable type for Board removes properties:
+ * Dynamic writeable type for Board removes:
  * can, content_metadata_id, created_at, board_sections, id, updated_at, user_id, primary_homepage
  */
 export interface IWriteBoard {
@@ -9631,10 +10117,22 @@ export interface IWriteBoard {
 }
 
 /**
- * Dynamically generated writeable type for BoardItem removes properties:
- * can, content_created_by, content_favorite_id, content_metadata_id, content_updated_at, description, favorite_count, id, location, title, url, view_count
+ * Dynamic writeable type for BoardItem removes:
+ * can, content_created_by, content_favorite_id, content_metadata_id, content_updated_at, custom_image_url, description, favorite_count, id, image_url, location, title, url, view_count
  */
 export interface IWriteBoardItem {
+  /**
+   * (Write-Only) base64 encoded image data
+   */
+  custom_image_data_base64?: string
+  /**
+   * Custom title entered by the user, if present
+   */
+  custom_title?: string
+  /**
+   * Custom url entered by the user, if present
+   */
+  custom_url?: string
   /**
    * Dashboard to base this item on
    */
@@ -9658,7 +10156,7 @@ export interface IWriteBoardItem {
 }
 
 /**
- * Dynamically generated writeable type for BoardSection removes properties:
+ * Dynamic writeable type for BoardSection removes:
  * can, created_at, board_items, id, visible_item_order, updated_at
  */
 export interface IWriteBoardSection {
@@ -9685,7 +10183,7 @@ export interface IWriteBoardSection {
 }
 
 /**
- * Dynamically generated writeable type for ColorCollection removes properties:
+ * Dynamic writeable type for ColorCollection removes:
  * id
  */
 export interface IWriteColorCollection {
@@ -9708,7 +10206,7 @@ export interface IWriteColorCollection {
 }
 
 /**
- * Dynamically generated writeable type for Command removes properties:
+ * Dynamic writeable type for Command removes:
  * id, author_id
  */
 export interface IWriteCommand {
@@ -9731,7 +10229,7 @@ export interface IWriteCommand {
 }
 
 /**
- * Dynamically generated writeable type for ContentFavorite removes properties:
+ * Dynamic writeable type for ContentFavorite removes:
  * id, look_id, dashboard_id, board_id
  */
 export interface IWriteContentFavorite {
@@ -9743,12 +10241,20 @@ export interface IWriteContentFavorite {
    * Content Metadata Id associated with this ContentFavorite
    */
   content_metadata_id?: number
+  /**
+   * Dynamic writeable type for LookBasic removes:
+   * can, content_metadata_id, id, title
+   */
   look?: IWriteLookBasic
+  /**
+   * Dynamic writeable type for DashboardBase removes:
+   * can, content_favorite_id, content_metadata_id, description, hidden, id, model, query_timezone, readonly, refresh_interval, refresh_interval_to_i, title, user_id, slug, preferred_viewer
+   */
   dashboard?: IWriteDashboardBase
 }
 
 /**
- * Dynamically generated writeable type for ContentMeta removes properties:
+ * Dynamic writeable type for ContentMeta removes:
  * can, id, name, parent_id, dashboard_id, look_id, folder_id, content_type, inheriting_id, slug
  */
 export interface IWriteContentMeta {
@@ -9759,7 +10265,7 @@ export interface IWriteContentMeta {
 }
 
 /**
- * Dynamically generated writeable type for CreateDashboardFilter removes properties:
+ * Dynamic writeable type for CreateDashboardFilter removes:
  * id, field
  */
 export interface IWriteCreateDashboardFilter {
@@ -9818,7 +10324,7 @@ export interface IWriteCreateDashboardFilter {
 }
 
 /**
- * Dynamically generated writeable type for CreateQueryTask removes properties:
+ * Dynamic writeable type for CreateQueryTask removes:
  * can
  */
 export interface IWriteCreateQueryTask {
@@ -9849,7 +10355,7 @@ export interface IWriteCreateQueryTask {
 }
 
 /**
- * Dynamically generated writeable type for CredentialsEmail removes properties:
+ * Dynamic writeable type for CredentialsEmail removes:
  * can, created_at, is_disabled, logged_in_at, password_reset_url, type, url, user_url
  */
 export interface IWriteCredentialsEmail {
@@ -9864,7 +10370,7 @@ export interface IWriteCredentialsEmail {
 }
 
 /**
- * Dynamically generated writeable type for CustomWelcomeEmail removes properties:
+ * Dynamic writeable type for CustomWelcomeEmail removes:
  * can
  */
 export interface IWriteCustomWelcomeEmail {
@@ -9887,8 +10393,8 @@ export interface IWriteCustomWelcomeEmail {
 }
 
 /**
- * Dynamically generated writeable type for Dashboard removes properties:
- * can, content_favorite_id, content_metadata_id, id, model, readonly, refresh_interval_to_i, user_id, created_at, dashboard_elements, dashboard_filters, dashboard_layouts, deleted_at, deleter_id, edit_uri, favorite_count, last_accessed_at, last_viewed_at, view_count
+ * Dynamic writeable type for Dashboard removes:
+ * can, content_favorite_id, content_metadata_id, id, model, readonly, refresh_interval_to_i, user_id, created_at, dashboard_elements, dashboard_filters, dashboard_layouts, deleted_at, deleter_id, edit_uri, favorite_count, last_accessed_at, last_viewed_at, view_count, url
  */
 export interface IWriteDashboard {
   /**
@@ -9907,6 +10413,10 @@ export interface IWriteDashboard {
    * Refresh Interval, as a time duration phrase like "2 hours 30 minutes". A number with no time units will be interpreted as whole seconds.
    */
   refresh_interval?: string
+  /**
+   * Dynamic writeable type for FolderBase removes:
+   * id, content_metadata_id, created_at, creator_id, child_count, external_id, is_embed, is_embed_shared_root, is_embed_users_root, is_personal, is_personal_descendant, is_shared_root, is_users_root, can
+   */
   folder?: IWriteFolderBase
   /**
    * Dashboard Title
@@ -9920,6 +10430,10 @@ export interface IWriteDashboard {
    * The preferred route for viewing this dashboard (ie: dashboards or dashboards-next)
    */
   preferred_viewer?: string
+  /**
+   * Enables alerts to keep in sync with dashboard filter changes - only available in Enhanced Alerts (beta)
+   */
+  alert_sync_with_dashboard_filter_enabled?: boolean
   /**
    * Background color
    */
@@ -9972,15 +10486,19 @@ export interface IWriteDashboard {
 }
 
 /**
- * Dynamically generated writeable type for DashboardBase removes properties:
+ * Dynamic writeable type for DashboardBase removes:
  * can, content_favorite_id, content_metadata_id, description, hidden, id, model, query_timezone, readonly, refresh_interval, refresh_interval_to_i, title, user_id, slug, preferred_viewer
  */
 export interface IWriteDashboardBase {
+  /**
+   * Dynamic writeable type for FolderBase removes:
+   * id, content_metadata_id, created_at, creator_id, child_count, external_id, is_embed, is_embed_shared_root, is_embed_users_root, is_personal, is_personal_descendant, is_shared_root, is_users_root, can
+   */
   folder?: IWriteFolderBase
 }
 
 /**
- * Dynamically generated writeable type for DashboardElement removes properties:
+ * Dynamic writeable type for DashboardElement removes:
  * can, body_text_as_html, edit_uri, id, lookml_link_id, note_text_as_html, refresh_interval_to_i, alert_count, title_text_as_html, subtitle_text_as_html
  */
 export interface IWriteDashboardElement {
@@ -9992,6 +10510,10 @@ export interface IWriteDashboardElement {
    * Id of Dashboard
    */
   dashboard_id?: string
+  /**
+   * Dynamic writeable type for LookWithQuery removes:
+   * can, content_metadata_id, id, content_favorite_id, created_at, deleted_at, deleter_id, embed_url, excel_file_url, favorite_count, google_spreadsheet_formula, image_embed_url, last_accessed_at, last_updater_id, last_viewed_at, model, public_slug, public_url, short_url, updated_at, view_count, url
+   */
   look?: IWriteLookWithQuery
   /**
    * Id Of Look
@@ -10013,6 +10535,10 @@ export interface IWriteDashboardElement {
    * Note Text
    */
   note_text?: string
+  /**
+   * Dynamic writeable type for Query removes:
+   * can, id, slug, share_url, expanded_share_url, url, has_table_calculations
+   */
   query?: IWriteQuery
   /**
    * Id Of Query
@@ -10022,6 +10548,10 @@ export interface IWriteDashboardElement {
    * Refresh Interval
    */
   refresh_interval?: string
+  /**
+   * Dynamic writeable type for ResultMakerWithIdVisConfigAndDynamicFields removes:
+   * id, dynamic_fields, filterables, sorts, merge_result_id, total, query_id, sql_query_id, vis_config
+   */
   result_maker?: IWriteResultMakerWithIdVisConfigAndDynamicFields
   /**
    * ID of the ResultMakerLookup entry.
@@ -10050,7 +10580,7 @@ export interface IWriteDashboardElement {
 }
 
 /**
- * Dynamically generated writeable type for DashboardFilter removes properties:
+ * Dynamic writeable type for DashboardFilter removes:
  * can, id, dashboard_id, field
  */
 export interface IWriteDashboardFilter {
@@ -10105,7 +10635,7 @@ export interface IWriteDashboardFilter {
 }
 
 /**
- * Dynamically generated writeable type for DashboardLayout removes properties:
+ * Dynamic writeable type for DashboardLayout removes:
  * can, id, deleted, dashboard_title, dashboard_layout_components
  */
 export interface IWriteDashboardLayout {
@@ -10132,7 +10662,7 @@ export interface IWriteDashboardLayout {
 }
 
 /**
- * Dynamically generated writeable type for DashboardLayoutComponent removes properties:
+ * Dynamic writeable type for DashboardLayoutComponent removes:
  * can, id, deleted, element_title, element_title_hidden, vis_type
  */
 export interface IWriteDashboardLayoutComponent {
@@ -10163,7 +10693,7 @@ export interface IWriteDashboardLayoutComponent {
 }
 
 /**
- * Dynamically generated writeable type for Datagroup removes properties:
+ * Dynamic writeable type for Datagroup removes:
  * can, created_at, id, model_name, name, trigger_check_at, trigger_error, trigger_value
  */
 export interface IWriteDatagroup {
@@ -10178,7 +10708,7 @@ export interface IWriteDatagroup {
 }
 
 /**
- * Dynamically generated writeable type for DBConnection removes properties:
+ * Dynamic writeable type for DBConnection removes:
  * can, dialect, snippets, pdts_enabled, uses_oauth, created_at, user_id, example, last_regen_at, last_reap_at, managed
  */
 export interface IWriteDBConnection {
@@ -10282,6 +10812,10 @@ export interface IWriteDBConnection {
    * SQL statements (semicolon separated) to issue after connecting to the database. Requires `custom_after_connect_statements` license feature
    */
   after_connect_statements?: string
+  /**
+   * Dynamic writeable type for DBConnectionOverride removes:
+   * has_password
+   */
   pdt_context_override?: IWriteDBConnectionOverride
   /**
    * The Id of the ssh tunnel this connection uses
@@ -10302,7 +10836,7 @@ export interface IWriteDBConnection {
 }
 
 /**
- * Dynamically generated writeable type for DBConnectionOverride removes properties:
+ * Dynamic writeable type for DBConnectionOverride removes:
  * has_password
  */
 export interface IWriteDBConnectionOverride {
@@ -10353,7 +10887,7 @@ export interface IWriteDBConnectionOverride {
 }
 
 /**
- * Dynamically generated writeable type for ExternalOauthApplication removes properties:
+ * Dynamic writeable type for ExternalOauthApplication removes:
  * can, id, created_at
  */
 export interface IWriteExternalOauthApplication {
@@ -10376,7 +10910,7 @@ export interface IWriteExternalOauthApplication {
 }
 
 /**
- * Dynamically generated writeable type for FolderBase removes properties:
+ * Dynamic writeable type for FolderBase removes:
  * id, content_metadata_id, created_at, creator_id, child_count, external_id, is_embed, is_embed_shared_root, is_embed_users_root, is_personal, is_personal_descendant, is_shared_root, is_users_root, can
  */
 export interface IWriteFolderBase {
@@ -10391,7 +10925,7 @@ export interface IWriteFolderBase {
 }
 
 /**
- * Dynamically generated writeable type for GitBranch removes properties:
+ * Dynamic writeable type for GitBranch removes:
  * can, remote, remote_name, error, message, owner_name, readonly, personal, is_local, is_remote, is_production, ahead_count, behind_count, commit_at, remote_ref
  */
 export interface IWriteGitBranch {
@@ -10406,7 +10940,7 @@ export interface IWriteGitBranch {
 }
 
 /**
- * Dynamically generated writeable type for Group removes properties:
+ * Dynamic writeable type for Group removes:
  * can, contains_current_user, external_group_id, externally_managed, id, include_by_default, user_count
  */
 export interface IWriteGroup {
@@ -10421,7 +10955,7 @@ export interface IWriteGroup {
 }
 
 /**
- * Dynamically generated writeable type for Integration removes properties:
+ * Dynamic writeable type for Integration removes:
  * can, id, integration_hub_id, label, description, supported_formats, supported_action_types, supported_formattings, supported_visualization_formattings, supported_download_settings, icon_url, uses_oauth, required_fields, delegate_oauth
  */
 export interface IWriteIntegration {
@@ -10440,7 +10974,7 @@ export interface IWriteIntegration {
 }
 
 /**
- * Dynamically generated writeable type for IntegrationHub removes properties:
+ * Dynamic writeable type for IntegrationHub removes:
  * can, id, label, official, fetch_error_message, has_authorization_token, legal_agreement_signed, legal_agreement_required, legal_agreement_text
  */
 export interface IWriteIntegrationHub {
@@ -10455,7 +10989,7 @@ export interface IWriteIntegrationHub {
 }
 
 /**
- * Dynamically generated writeable type for InternalHelpResources removes properties:
+ * Dynamic writeable type for InternalHelpResources removes:
  * can
  */
 export interface IWriteInternalHelpResources {
@@ -10466,7 +11000,7 @@ export interface IWriteInternalHelpResources {
 }
 
 /**
- * Dynamically generated writeable type for InternalHelpResourcesContent removes properties:
+ * Dynamic writeable type for InternalHelpResourcesContent removes:
  * can
  */
 export interface IWriteInternalHelpResourcesContent {
@@ -10481,7 +11015,7 @@ export interface IWriteInternalHelpResourcesContent {
 }
 
 /**
- * Dynamically generated writeable type for LDAPConfig removes properties:
+ * Dynamic writeable type for LDAPConfig removes:
  * can, default_new_user_groups, default_new_user_roles, groups, has_auth_password, modified_at, modified_by, user_attributes, url
  */
 export interface IWriteLDAPConfig {
@@ -10624,7 +11158,7 @@ export interface IWriteLDAPConfig {
 }
 
 /**
- * Dynamically generated writeable type for LegacyFeature removes properties:
+ * Dynamic writeable type for LegacyFeature removes:
  * can, id, name, description, enabled, disallowed_as_of_version, disable_on_upgrade_to_version, end_of_life_version, documentation_url, approximate_disable_date, approximate_end_of_life_date, has_disabled_on_upgrade
  */
 export interface IWriteLegacyFeature {
@@ -10635,7 +11169,7 @@ export interface IWriteLegacyFeature {
 }
 
 /**
- * Dynamically generated writeable type for LookBasic removes properties:
+ * Dynamic writeable type for LookBasic removes:
  * can, content_metadata_id, id, title
  */
 export interface IWriteLookBasic {
@@ -10646,7 +11180,7 @@ export interface IWriteLookBasic {
 }
 
 /**
- * Dynamically generated writeable type for LookmlModel removes properties:
+ * Dynamic writeable type for LookmlModel removes:
  * can, explores, has_content, label
  */
 export interface IWriteLookmlModel {
@@ -10669,7 +11203,7 @@ export interface IWriteLookmlModel {
 }
 
 /**
- * Dynamically generated writeable type for LookWithQuery removes properties:
+ * Dynamic writeable type for LookWithQuery removes:
  * can, content_metadata_id, id, content_favorite_id, created_at, deleted_at, deleter_id, embed_url, excel_file_url, favorite_count, google_spreadsheet_formula, image_embed_url, last_accessed_at, last_updater_id, last_viewed_at, model, public_slug, public_url, short_url, updated_at, view_count, url
  */
 export interface IWriteLookWithQuery {
@@ -10701,16 +11235,24 @@ export interface IWriteLookWithQuery {
    * Query Id
    */
   query_id?: number
+  /**
+   * Dynamic writeable type for FolderBase removes:
+   * id, content_metadata_id, created_at, creator_id, child_count, external_id, is_embed, is_embed_shared_root, is_embed_users_root, is_personal, is_personal_descendant, is_shared_root, is_users_root, can
+   */
   folder?: IWriteFolderBase
   /**
    * Folder Id
    */
   folder_id?: string
+  /**
+   * Dynamic writeable type for Query removes:
+   * can, id, slug, share_url, expanded_share_url, url, has_table_calculations
+   */
   query?: IWriteQuery
 }
 
 /**
- * Dynamically generated writeable type for MergeQuery removes properties:
+ * Dynamic writeable type for MergeQuery removes:
  * can, id, result_maker_id
  */
 export interface IWriteMergeQuery {
@@ -10745,7 +11287,7 @@ export interface IWriteMergeQuery {
 }
 
 /**
- * Dynamically generated writeable type for ModelSet removes properties:
+ * Dynamic writeable type for ModelSet removes:
  * can, all_access, built_in, id, url
  */
 export interface IWriteModelSet {
@@ -10757,7 +11299,7 @@ export interface IWriteModelSet {
 }
 
 /**
- * Dynamically generated writeable type for OauthClientApp removes properties:
+ * Dynamic writeable type for OauthClientApp removes:
  * can, client_guid, tokens_invalid_before, activated_users
  */
 export interface IWriteOauthClientApp {
@@ -10784,7 +11326,7 @@ export interface IWriteOauthClientApp {
 }
 
 /**
- * Dynamically generated writeable type for OIDCConfig removes properties:
+ * Dynamic writeable type for OIDCConfig removes:
  * can, default_new_user_groups, default_new_user_roles, groups, modified_at, modified_by, test_slug, user_attributes, url
  */
 export interface IWriteOIDCConfig {
@@ -10887,7 +11429,7 @@ export interface IWriteOIDCConfig {
 }
 
 /**
- * Dynamically generated writeable type for PasswordConfig removes properties:
+ * Dynamic writeable type for PasswordConfig removes:
  * can
  */
 export interface IWritePasswordConfig {
@@ -10910,7 +11452,7 @@ export interface IWritePasswordConfig {
 }
 
 /**
- * Dynamically generated writeable type for PermissionSet removes properties:
+ * Dynamic writeable type for PermissionSet removes:
  * can, all_access, built_in, id, url
  */
 export interface IWritePermissionSet {
@@ -10922,7 +11464,7 @@ export interface IWritePermissionSet {
 }
 
 /**
- * Dynamically generated writeable type for Project removes properties:
+ * Dynamic writeable type for Project removes:
  * can, id, uses_git, is_example
  */
 export interface IWriteProject {
@@ -11001,7 +11543,7 @@ export interface IWriteProject {
 }
 
 /**
- * Dynamically generated writeable type for Query removes properties:
+ * Dynamic writeable type for Query removes:
  * can, id, slug, share_url, expanded_share_url, url, has_table_calculations
  */
 export interface IWriteQuery {
@@ -11084,7 +11626,7 @@ export interface IWriteQuery {
 }
 
 /**
- * Dynamically generated writeable type for RepositoryCredential removes properties:
+ * Dynamic writeable type for RepositoryCredential removes:
  * can, id, root_project_id, remote_url, is_configured
  */
 export interface IWriteRepositoryCredential {
@@ -11103,27 +11645,39 @@ export interface IWriteRepositoryCredential {
 }
 
 /**
- * Dynamically generated writeable type for ResultMakerWithIdVisConfigAndDynamicFields removes properties:
+ * Dynamic writeable type for ResultMakerWithIdVisConfigAndDynamicFields removes:
  * id, dynamic_fields, filterables, sorts, merge_result_id, total, query_id, sql_query_id, vis_config
  */
 export interface IWriteResultMakerWithIdVisConfigAndDynamicFields {
+  /**
+   * Dynamic writeable type for Query removes:
+   * can, id, slug, share_url, expanded_share_url, url, has_table_calculations
+   */
   query?: IWriteQuery
 }
 
 /**
- * Dynamically generated writeable type for Role removes properties:
- * can, id, user_count, url, users_url
+ * Dynamic writeable type for Role removes:
+ * can, id, url, users_url
  */
 export interface IWriteRole {
   /**
    * Name of Role
    */
   name?: string
+  /**
+   * Dynamic writeable type for PermissionSet removes:
+   * can, all_access, built_in, id, url
+   */
   permission_set?: IWritePermissionSet
   /**
    * (Write-Only) Id of permission set
    */
   permission_set_id?: number
+  /**
+   * Dynamic writeable type for ModelSet removes:
+   * can, all_access, built_in, id, url
+   */
   model_set?: IWriteModelSet
   /**
    * (Write-Only) Id of model set
@@ -11132,7 +11686,7 @@ export interface IWriteRole {
 }
 
 /**
- * Dynamically generated writeable type for SamlConfig removes properties:
+ * Dynamic writeable type for SamlConfig removes:
  * can, test_slug, modified_at, modified_by, default_new_user_roles, default_new_user_groups, groups, user_attributes, url
  */
 export interface IWriteSamlConfig {
@@ -11235,7 +11789,7 @@ export interface IWriteSamlConfig {
 }
 
 /**
- * Dynamically generated writeable type for ScheduledPlan removes properties:
+ * Dynamic writeable type for ScheduledPlan removes:
  * id, created_at, updated_at, title, user, next_run_at, last_run_at, can
  */
 export interface IWriteScheduledPlan {
@@ -11346,7 +11900,7 @@ export interface IWriteScheduledPlan {
 }
 
 /**
- * Dynamically generated writeable type for SessionConfig removes properties:
+ * Dynamic writeable type for SessionConfig removes:
  * can
  */
 export interface IWriteSessionConfig {
@@ -11373,7 +11927,30 @@ export interface IWriteSessionConfig {
 }
 
 /**
- * Dynamically generated writeable type for SshServer removes properties:
+ * Dynamic writeable type for Setting
+ */
+export interface IWriteSetting {
+  /**
+   * Toggle extension framework on or off
+   */
+  extension_framework_enabled?: boolean
+  /**
+   * Toggle marketplace auto install on or off. Note that auto install only runs if marketplace is enabled.
+   */
+  marketplace_auto_install_enabled?: boolean
+  /**
+   * Toggle marketplace on or off
+   */
+  marketplace_enabled?: boolean
+  /**
+   * Dynamic writeable type for WhitelabelConfiguration removes:
+   * id, logo_url, favicon_url
+   */
+  whitelabel_configuration?: IWriteWhitelabelConfiguration
+}
+
+/**
+ * Dynamic writeable type for SshServer removes:
  * ssh_server_id, finger_print, sha_finger_print, public_key, status
  */
 export interface IWriteSshServer {
@@ -11396,7 +11973,7 @@ export interface IWriteSshServer {
 }
 
 /**
- * Dynamically generated writeable type for SshTunnel removes properties:
+ * Dynamic writeable type for SshTunnel removes:
  * tunnel_id, ssh_server_name, ssh_server_host, ssh_server_port, ssh_server_user, last_attempt, local_host_port, status
  */
 export interface IWriteSshTunnel {
@@ -11415,7 +11992,7 @@ export interface IWriteSshTunnel {
 }
 
 /**
- * Dynamically generated writeable type for Theme removes properties:
+ * Dynamic writeable type for Theme removes:
  * can, id
  */
 export interface IWriteTheme {
@@ -11435,10 +12012,14 @@ export interface IWriteTheme {
 }
 
 /**
- * Dynamically generated writeable type for User removes properties:
+ * Dynamic writeable type for User removes:
  * can, avatar_url, avatar_url_without_sizing, credentials_api3, credentials_embed, credentials_google, credentials_ldap, credentials_looker_openid, credentials_oidc, credentials_saml, credentials_totp, display_name, email, embed_group_space_id, group_ids, id, looker_versions, personal_folder_id, presumed_looker_employee, role_ids, sessions, verified_looker_employee, roles_externally_managed, allow_direct_roles, allow_normal_group_membership, allow_roles_from_normal_groups, url
  */
 export interface IWriteUser {
+  /**
+   * Dynamic writeable type for CredentialsEmail removes:
+   * can, created_at, is_disabled, logged_in_at, password_reset_url, type, url, user_url
+   */
   credentials_email?: IWriteCredentialsEmail
   /**
    * First name
@@ -11471,7 +12052,7 @@ export interface IWriteUser {
 }
 
 /**
- * Dynamically generated writeable type for UserAttribute removes properties:
+ * Dynamic writeable type for UserAttribute removes:
  * can, id, is_system, is_permanent
  */
 export interface IWriteUserAttribute {
@@ -11510,7 +12091,7 @@ export interface IWriteUserAttribute {
 }
 
 /**
- * Dynamically generated writeable type for UserAttributeWithValue removes properties:
+ * Dynamic writeable type for UserAttributeWithValue removes:
  * can, name, label, rank, user_id, user_can_edit, value_is_hidden, user_attribute_id, source, hidden_value_domain_whitelist
  */
 export interface IWriteUserAttributeWithValue {
@@ -11521,8 +12102,8 @@ export interface IWriteUserAttributeWithValue {
 }
 
 /**
- * Dynamically generated writeable type for WhitelabelConfiguration removes properties:
- * can, id, logo_url, favicon_url
+ * Dynamic writeable type for WhitelabelConfiguration removes:
+ * id, logo_url, favicon_url
  */
 export interface IWriteWhitelabelConfiguration {
   /**

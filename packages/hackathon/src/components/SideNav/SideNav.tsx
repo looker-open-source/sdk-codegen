@@ -77,18 +77,17 @@ export const SideNav: FC<SideNavProps> = ({ authorizedRoutes }) => (
 )
 
 const Link = styled(NavLink)`
-  color:${({ theme }) => theme.colors.ui5}
-  cursor: pointer;
-  display: block;
-  padding: ${({
-    theme: {
-      space: { xsmall, large },
-    },
-  }) => `${xsmall} ${large}`};
+  text-decoration: none;
+  color: ${({ theme }) => theme.colors.ui5};
+
   &:hover,
   &:visited,
   &:focus,
   &.active {
-    color: ${({ theme }) => theme.colors.key};
+    color: inherit;
   }
+
+  cursor: pointer;
+  display: block;
+  padding: ${({ theme: { space } }) => `${space.xsmall} ${space.large}`};
 `

@@ -61,4 +61,11 @@ export class ExtensionEnvAdaptor implements IApixEnvAdaptor {
   openBrowserWindow(url: string, target?: string) {
     this.extensionSdk.openBrowserWindow(url, target)
   }
+
+  logError(error: Error, componentStack: string): void {
+    this.extensionSdk.error({
+      error: error,
+      message: componentStack,
+    } as ErrorEvent)
+  }
 }

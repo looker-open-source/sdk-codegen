@@ -24,26 +24,36 @@
 
  */
 
-import React, { FC, useReducer, useState, useEffect } from 'react'
+import React, { FC, useReducer, useState, useEffect, useCallback } from 'react'
 import { useLocation } from 'react-router'
 import styled, { createGlobalStyle } from 'styled-components'
 import { Aside, ComponentsProvider, Layout, Page } from '@looker/components'
-import { Looker40SDK, Looker31SDK } from '@looker/sdk'
 import { SpecList } from '@looker/sdk-codegen'
-
+import {
+  RunItSetter,
+  funFetch,
+  fallbackFetch,
+  OAuthScene,
+} from '@looker/run-it'
 import {
   SearchContext,
   LodeContext,
   defaultLodeContextValue,
   EnvAdaptorContext,
 } from './context'
-import { EnvAdaptorConstants, getLoded, IApixEnvAdaptor } from './utils'
-import { Header, SideNav } from './components'
+import {
+  EnvAdaptorConstants,
+  getLoded,
+  IApixEnvAdaptor,
+  oAuthPath,
+} from './utils'
+import { Header, SideNav, ErrorBoundary } from './components'
 import {
   specReducer,
   initDefaultSpecState,
   searchReducer,
   defaultSearchState,
+  updateSpecApi,
 } from './reducers'
 import { AppRouter } from './routes'
 import { apixFilesHost } from './utils/lodeUtils'
@@ -51,10 +61,11 @@ import { useActions } from './hooks'
 
 export interface ApiExplorerProps {
   specs: SpecList
-  sdk?: Looker31SDK | Looker40SDK
+  envAdaptor: IApixEnvAdaptor
+  setVersionsUrl: RunItSetter
   exampleLodeUrl?: string
   declarationsLodeUrl?: string
-  envAdaptor: IApixEnvAdaptor
+  headless?: boolean
 }
 
 export const BodyOverride = createGlobalStyle` html { height: 100%; overflow: hidden; } `
@@ -62,16 +73,20 @@ export const BodyOverride = createGlobalStyle` html { height: 100%; overflow: hi
 const ApiExplorer: FC<ApiExplorerProps> = ({
   specs,
   envAdaptor,
+  setVersionsUrl,
   exampleLodeUrl = 'https://raw.githubusercontent.com/looker-open-source/sdk-codegen/main/examplesIndex.json',
   declarationsLodeUrl = `${apixFilesHost}/declarationsIndex.json`,
+  headless = false,
 }) => {
   const location = useLocation()
   const { setSdkLanguageAction } = useActions()
+  const oauthReturn = location.pathname === `/${oAuthPath}`
 
-  const [spec, specDispatch] = useReducer(
+  const [specState, specDispatch] = useReducer(
     specReducer,
     initDefaultSpecState(specs, location)
   )
+  const { spec } = specState
   const [searchSettings, setSearchSettings] = useReducer(
     searchReducer,
     defaultSearchState
@@ -83,12 +98,49 @@ const ApiExplorer: FC<ApiExplorerProps> = ({
   const toggleNavigation = (target?: boolean) =>
     setHasNavigation(target || !hasNavigation)
 
+  const hasNavigationToggle = useCallback((e: MessageEvent<any>) => {
+    if (e.origin === window.origin && e.data.action === 'toggle_sidebar') {
+      setHasNavigation((currentHasNavigation) => !currentHasNavigation)
+    }
+  }, [])
+
+  useEffect(() => {
+    if (headless) {
+      window.addEventListener('message', hasNavigationToggle)
+    }
+    return () => {
+      if (headless) {
+        window.removeEventListener('message', hasNavigationToggle)
+      }
+    }
+  }, [headless, hasNavigationToggle])
+
+  useEffect(() => {
+    const loadSpec = async () => {
+      if (!spec.api) {
+        try {
+          const newSpec = { ...spec }
+          const api = await fallbackFetch(newSpec, funFetch)
+          if (api) {
+            spec.api = api
+            specDispatch(updateSpecApi(spec.key, api))
+          }
+        } catch (error) {
+          console.error(error)
+        }
+      }
+    }
+    if (!oauthReturn) {
+      loadSpec()
+    }
+  }, [spec, location])
+
   useEffect(() => {
     getLoded(exampleLodeUrl, declarationsLodeUrl).then((resp) => setLode(resp))
   }, [exampleLodeUrl, declarationsLodeUrl])
 
   useEffect(() => {
-    const getSettings = async () => {
+    const initSdkLanguage = async () => {
       const resp = await envAdaptor.localStorageGetItem(
         EnvAdaptorConstants.LOCALSTORAGE_SDK_LANGUAGE_KEY
       )
@@ -96,7 +148,7 @@ const ApiExplorer: FC<ApiExplorerProps> = ({
         setSdkLanguageAction(resp)
       }
     }
-    getSettings()
+    initSdkLanguage()
   }, [envAdaptor, setSdkLanguageAction])
 
   const { loadGoogleFonts, themeCustomizations } = envAdaptor.themeOverrides()
@@ -107,37 +159,51 @@ const ApiExplorer: FC<ApiExplorerProps> = ({
         loadGoogleFonts={loadGoogleFonts}
         themeCustomizations={themeCustomizations}
       >
-        <EnvAdaptorContext.Provider value={{ envAdaptor }}>
-          <LodeContext.Provider value={{ ...lode }}>
-            <SearchContext.Provider
-              value={{ searchSettings, setSearchSettings }}
-            >
-              <Page style={{ overflow: 'hidden' }}>
-                <Header
-                  specs={specs}
-                  spec={spec}
-                  specDispatch={specDispatch}
-                  toggleNavigation={toggleNavigation}
-                />
-                <Layout hasAside height="100%">
-                  {hasNavigation && (
-                    <AsideBorder pt="large" width="20rem">
-                      <SideNav api={spec.api} specKey={spec.key} />
-                    </AsideBorder>
+        <ErrorBoundary logError={envAdaptor.logError.bind(envAdaptor)}>
+          <EnvAdaptorContext.Provider value={{ envAdaptor }}>
+            <LodeContext.Provider value={{ ...lode }}>
+              <SearchContext.Provider
+                value={{ searchSettings, setSearchSettings }}
+              >
+                <Page style={{ overflow: 'hidden' }}>
+                  {!headless && (
+                    <Header
+                      specs={specs}
+                      spec={spec}
+                      specDispatch={specDispatch}
+                      toggleNavigation={toggleNavigation}
+                    />
                   )}
-                  <AppRouter
-                    api={spec.api}
-                    specKey={spec.key}
-                    specs={specs}
-                    toggleNavigation={toggleNavigation}
-                  />
-                </Layout>
-              </Page>
-            </SearchContext.Provider>
-          </LodeContext.Provider>
-        </EnvAdaptorContext.Provider>
+                  <Layout hasAside height="100%">
+                    {hasNavigation && (
+                      <AsideBorder pt="large" width="20rem">
+                        <SideNav
+                          headless={headless}
+                          specs={specs}
+                          spec={spec}
+                          specDispatch={specDispatch}
+                        />
+                      </AsideBorder>
+                    )}
+                    {oauthReturn && <OAuthScene />}
+                    {!oauthReturn && spec.api && (
+                      <AppRouter
+                        api={spec.api}
+                        specKey={spec.key}
+                        specs={specs}
+                        toggleNavigation={toggleNavigation}
+                        envAdaptor={envAdaptor}
+                        setVersionsUrl={setVersionsUrl}
+                      />
+                    )}
+                  </Layout>
+                </Page>
+              </SearchContext.Provider>
+            </LodeContext.Provider>
+          </EnvAdaptorContext.Provider>
+        </ErrorBoundary>
       </ComponentsProvider>
-      <BodyOverride />
+      {!headless && <BodyOverride />}
     </>
   )
 }

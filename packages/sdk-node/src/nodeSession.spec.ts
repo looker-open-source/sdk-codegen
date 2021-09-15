@@ -35,6 +35,7 @@ const config = TestConfig()
 const envPrefix = 'LOOKERSDK'
 const localIni = config.localIni
 
+// TODO These tests are skipped for CI. Can we make them work for CI?
 describe.skip('NodeSession', () => {
   const settings = new NodeSettingsIniFile(envPrefix, localIni, 'Looker')
   const transport = new NodeTransport(settings)

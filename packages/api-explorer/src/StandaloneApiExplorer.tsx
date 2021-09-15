@@ -24,12 +24,14 @@
 
  */
 
-import React, { FC } from 'react'
-import { useRouteMatch } from 'react-router-dom'
+import React, { FC, useEffect, useState } from 'react'
 import {
   RunItProvider,
   defaultConfigurator,
   initRunItSdk,
+  loadSpecsFromVersions,
+  RunItConfigKey,
+  RunItNoConfig,
 } from '@looker/run-it'
 import { IAPIMethods } from '@looker/sdk-rtl'
 import { SpecList } from '@looker/sdk-codegen'
@@ -38,27 +40,57 @@ import { Provider } from 'react-redux'
 import ApiExplorer from './ApiExplorer'
 import { configureStore } from './state'
 import { StandaloneEnvAdaptor } from './utils'
+import { Loader } from './components'
 
-export interface StandloneApiExplorerProps {
-  specs: SpecList
+export interface StandaloneApiExplorerProps {
+  headless?: boolean
+  versionsUrl: string
 }
 
 const standaloneEnvAdaptor = new StandaloneEnvAdaptor()
 const store = configureStore()
 
-export const StandaloneApiExplorer: FC<StandloneApiExplorerProps> = ({
-  specs,
+const loadVersions = async (current: string) => {
+  const data = await standaloneEnvAdaptor.localStorageGetItem(RunItConfigKey)
+  const config = data ? JSON.parse(data) : RunItNoConfig
+  let url = config.base_url ? `${config.base_url}/versions` : current
+  let response = await loadSpecsFromVersions(url)
+  if (response.fetchResult) {
+    console.error(
+      `Reverting to ${current} due to ${url} error: ${response.fetchResult}`
+    )
+    // The stored server location has an error so default to current
+    url = current
+    response = await loadSpecsFromVersions(url)
+  }
+  return { url, response }
+}
+
+export const StandaloneApiExplorer: FC<StandaloneApiExplorerProps> = ({
+  headless = false,
+  versionsUrl = '',
 }) => {
-  const match = useRouteMatch<{ specKey: string }>(`/:specKey`)
-  const specKey = match?.params.specKey || ''
-  // TODO we may not need this restriction any more?
-  // Check explicitly for specs 3.0 and 3.1 as run it is not supported.
-  // This is done as the return from OAUTH does not provide a spec key
-  // but an SDK is needed.
-  const chosenSdk: IAPIMethods | undefined =
-    specKey === '3.0' || specKey === '3.1'
-      ? undefined
-      : initRunItSdk(defaultConfigurator)
+  const [specs, setSpecs] = useState<SpecList | undefined>()
+  const [embedded, setEmbedded] = useState<boolean>(headless)
+  const [currentVersionsUrl, setCurrentVersionsUrl] =
+    useState<string>(versionsUrl)
+
+  useEffect(() => {
+    if (currentVersionsUrl) {
+      loadVersions(currentVersionsUrl).then((result) => {
+        setCurrentVersionsUrl(result.url)
+        const response = result.response
+        setSpecs(response.specs)
+        if ('headless' in response) {
+          setEmbedded(response.headless)
+        }
+      })
+    } else {
+      setSpecs(undefined)
+    }
+  }, [versionsUrl, currentVersionsUrl])
+
+  const chosenSdk: IAPIMethods = initRunItSdk(defaultConfigurator)
 
   return (
     <Provider store={store}>
@@ -67,7 +99,18 @@ export const StandaloneApiExplorer: FC<StandloneApiExplorerProps> = ({
         configurator={defaultConfigurator}
         basePath="/api/4.0"
       >
-        <ApiExplorer specs={specs} envAdaptor={standaloneEnvAdaptor} />
+        <>
+          {specs ? (
+            <ApiExplorer
+              specs={specs}
+              envAdaptor={standaloneEnvAdaptor}
+              headless={embedded}
+              setVersionsUrl={setCurrentVersionsUrl}
+            />
+          ) : (
+            <Loader themeOverrides={standaloneEnvAdaptor.themeOverrides()} />
+          )}
+        </>
       </RunItProvider>
     </Provider>
   )

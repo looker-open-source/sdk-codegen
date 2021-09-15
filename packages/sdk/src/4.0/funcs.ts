@@ -25,7 +25,7 @@
  */
 
 /**
- * 412 API methods
+ * 423 API methods
  */
 
 import type {
@@ -46,6 +46,7 @@ import { encodeParam, functionalSdk } from '@looker/sdk-rtl'
 import { sdkVersion } from '../constants'
 import type {
   IAccessToken,
+  IAlert,
   IApiSession,
   IApiVersion,
   IBackupConfiguration,
@@ -69,6 +70,7 @@ import type {
   ICreateOAuthApplicationUserStateResponse,
   ICredentialsApi3,
   ICredentialsEmail,
+  ICredentialsEmailSearch,
   ICredentialsEmbed,
   ICredentialsGoogle,
   ICredentialsLDAP,
@@ -152,6 +154,7 @@ import type {
   IRequestAllGroups,
   IRequestAllGroupUsers,
   IRequestAllIntegrations,
+  IRequestAllLookmlModels,
   IRequestAllRoles,
   IRequestAllScheduledPlans,
   IRequestAllUsers,
@@ -179,9 +182,11 @@ import type {
   IRequestScheduledPlansForDashboard,
   IRequestScheduledPlansForLook,
   IRequestScheduledPlansForLookmlDashboard,
+  IRequestSearchAlerts,
   IRequestSearchBoards,
   IRequestSearchContentFavorites,
   IRequestSearchContentViews,
+  IRequestSearchCredentialsEmail,
   IRequestSearchDashboardElements,
   IRequestSearchDashboards,
   IRequestSearchFolders,
@@ -197,6 +202,7 @@ import type {
   IRequestUserAttributeUserValues,
   IRequestUserRoles,
   IRole,
+  IRoleSearch,
   IRunningQueries,
   ISamlConfig,
   ISamlMetadataParseResult,
@@ -206,6 +212,7 @@ import type {
   ISchemaTables,
   ISession,
   ISessionConfig,
+  ISetting,
   ISqlQuery,
   ISqlQueryCreate,
   ISshPublicKey,
@@ -225,6 +232,7 @@ import type {
   IWelcomeEmailTest,
   IWhitelabelConfiguration,
   IWorkspace,
+  IWriteAlert,
   IWriteApiSession,
   IWriteBackupConfiguration,
   IWriteBoard,
@@ -268,6 +276,7 @@ import type {
   IWriteSamlConfig,
   IWriteScheduledPlan,
   IWriteSessionConfig,
+  IWriteSetting,
   IWriteSshServer,
   IWriteSshTunnel,
   IWriteTheme,
@@ -284,6 +293,190 @@ import type {
 export const functionalSdk40 = (authSession: IAuthSession) => {
   return functionalSdk(authSession, '4.0', sdkVersion)
 }
+
+//#region Alert: Alert
+
+/**
+ * ### Search Alerts
+ *
+ * GET /alerts/search -> IAlert[]
+ *
+ * @param sdk IAPIMethods implementation
+ * @param request composed interface "IRequestSearchAlerts" for complex method parameters
+ * @param options one-time API call overrides
+ *
+ */
+export const search_alerts = async (
+  sdk: IAPIMethods,
+  request: IRequestSearchAlerts,
+  options?: Partial<ITransportSettings>
+): Promise<SDKResponse<IAlert[], IError>> => {
+  return sdk.get<IAlert[], IError>(
+    '/alerts/search',
+    {
+      limit: request.limit,
+      offset: request.offset,
+      fields: request.fields,
+      disabled: request.disabled,
+      frequency: request.frequency,
+      condition_met: request.condition_met,
+      last_run_start: request.last_run_start,
+      last_run_end: request.last_run_end,
+      all_owners: request.all_owners,
+    },
+    null,
+    options
+  )
+}
+
+/**
+ * ### Get an alert by a given alert ID
+ *
+ * GET /alerts/{alert_id} -> IAlert
+ *
+ * @param sdk IAPIMethods implementation
+ * @param alert_id ID of an alert
+ * @param options one-time API call overrides
+ *
+ */
+export const get_alert = async (
+  sdk: IAPIMethods,
+  alert_id: number,
+  options?: Partial<ITransportSettings>
+): Promise<SDKResponse<IAlert, IError>> => {
+  return sdk.get<IAlert, IError>(`/alerts/${alert_id}`, null, null, options)
+}
+
+/**
+ * ### Update an alert
+ * # Required fields: `owner_id`, `field`, `destinations`, `comparison_type`, `threshold`, `cron`
+ * #
+ *
+ * PUT /alerts/{alert_id} -> IAlert
+ *
+ * @param sdk IAPIMethods implementation
+ * @param alert_id ID of an alert
+ * @param body Partial<IWriteAlert>
+ * @param options one-time API call overrides
+ *
+ */
+export const update_alert = async (
+  sdk: IAPIMethods,
+  alert_id: number,
+  body: Partial<IWriteAlert>,
+  options?: Partial<ITransportSettings>
+): Promise<SDKResponse<IAlert, IError | IValidationError>> => {
+  return sdk.put<IAlert, IError | IValidationError>(
+    `/alerts/${alert_id}`,
+    null,
+    body,
+    options
+  )
+}
+
+/**
+ * ### Update select alert fields
+ * # Available fields: `owner_id`, `is_disabled`, `is_public`, `threshold`
+ * #
+ *
+ * PATCH /alerts/{alert_id} -> IAlert
+ *
+ * @param sdk IAPIMethods implementation
+ * @param alert_id ID of an alert
+ * @param body Partial<IWriteAlert>
+ * @param options one-time API call overrides
+ *
+ */
+export const update_alert_field = async (
+  sdk: IAPIMethods,
+  alert_id: number,
+  body: Partial<IWriteAlert>,
+  options?: Partial<ITransportSettings>
+): Promise<SDKResponse<IAlert, IError | IValidationError>> => {
+  return sdk.patch<IAlert, IError | IValidationError>(
+    `/alerts/${alert_id}`,
+    null,
+    body,
+    options
+  )
+}
+
+/**
+ * ### Delete an alert by a given alert ID
+ *
+ * DELETE /alerts/{alert_id} -> void
+ *
+ * @param sdk IAPIMethods implementation
+ * @param alert_id ID of an alert
+ * @param options one-time API call overrides
+ *
+ */
+export const delete_alert = async (
+  sdk: IAPIMethods,
+  alert_id: number,
+  options?: Partial<ITransportSettings>
+): Promise<SDKResponse<void, IError>> => {
+  return sdk.delete<void, IError>(`/alerts/${alert_id}`, null, null, options)
+}
+
+/**
+ * ### Create a new alert and return details of the newly created object
+ *
+ * Required fields: `field`, `destinations`, `comparison_type`, `threshold`, `cron`
+ *
+ * Example Request:
+ * Run alert on dashboard element '103' at 5am every day. Send an email to 'test@test.com' if inventory for Los Angeles (using dashboard filter `Warehouse Name`) is lower than 1,000
+ * ```
+ * {
+ *   "cron": "0 5 * * *",
+ *   "custom_title": "Alert when LA inventory is low",
+ *   "dashboard_element_id": 103,
+ *   "applied_dashboard_filters": [
+ *     {
+ *       "filter_title": "Warehouse Name",
+ *       "field_name": "distribution_centers.name",
+ *       "filter_value": "Los Angeles CA",
+ *       "filter_description": "is Los Angeles CA"
+ *     }
+ *   ],
+ *   "comparison_type": "LESS_THAN",
+ *   "destinations": [
+ *     {
+ *       "destination_type": "EMAIL",
+ *       "email_address": "test@test.com"
+ *     }
+ *   ],
+ *   "field": {
+ *     "title": "Number on Hand",
+ *     "name": "inventory_items.number_on_hand"
+ *   },
+ *   "is_disabled": false,
+ *   "is_public": true,
+ *   "threshold": 1000
+ * }
+ * ```
+ *
+ * POST /alerts -> IAlert
+ *
+ * @param sdk IAPIMethods implementation
+ * @param body Partial<IWriteAlert>
+ * @param options one-time API call overrides
+ *
+ */
+export const create_alert = async (
+  sdk: IAPIMethods,
+  body: Partial<IWriteAlert>,
+  options?: Partial<ITransportSettings>
+): Promise<SDKResponse<IAlert, IError | IValidationError>> => {
+  return sdk.post<IAlert, IError | IValidationError>(
+    '/alerts',
+    null,
+    body,
+    options
+  )
+}
+
+//#endregion Alert: Alert
 
 //#region ApiAuth: API Authentication
 
@@ -2625,6 +2818,68 @@ export const mobile_settings = async (
 }
 
 /**
+ * ### Get Looker Settings
+ *
+ * Available settings are:
+ *  - extension_framework_enabled
+ *  - marketplace_auto_install_enabled
+ *  - marketplace_enabled
+ *  - whitelabel_configuration
+ *
+ * GET /setting -> ISetting
+ *
+ * @param sdk IAPIMethods implementation
+ * @param fields Requested fields
+ * @param options one-time API call overrides
+ *
+ */
+export const get_setting = async (
+  sdk: IAPIMethods,
+  fields?: string,
+  options?: Partial<ITransportSettings>
+): Promise<SDKResponse<ISetting, IError | IValidationError>> => {
+  return sdk.get<ISetting, IError | IValidationError>(
+    '/setting',
+    { fields },
+    null,
+    options
+  )
+}
+
+/**
+ * ### Configure Looker Settings
+ *
+ * Available settings are:
+ *  - extension_framework_enabled
+ *  - marketplace_auto_install_enabled
+ *  - marketplace_enabled
+ *  - whitelabel_configuration
+ *
+ * See the `Setting` type for more information on the specific values that can be configured.
+ *
+ * PATCH /setting -> ISetting
+ *
+ * @param sdk IAPIMethods implementation
+ * @param body Partial<IWriteSetting>
+ * @param fields Requested fields
+ * @param options one-time API call overrides
+ *
+ */
+export const set_setting = async (
+  sdk: IAPIMethods,
+  body: Partial<IWriteSetting>,
+  fields?: string,
+  options?: Partial<ITransportSettings>
+): Promise<SDKResponse<ISetting, IError | IValidationError>> => {
+  return sdk.patch<ISetting, IError | IValidationError>(
+    '/setting',
+    { fields },
+    body,
+    options
+  )
+}
+
+/**
  * ### Get a list of timezones that Looker supports (e.g. useful for scheduling tasks).
  *
  * GET /timezones -> ITimezone[]
@@ -2661,9 +2916,9 @@ export const versions = async (
 /**
  * ### Get an API specification for this Looker instance.
  *
- * **Note**: Although the API specification is in JSON format, the return type is temporarily `text/plain`, so the response should be treated as standard JSON to consume it.
+ * The specification is returned as a JSON document in Swagger 2.x format
  *
- * GET /api_spec/{api_version}/{specification} -> string
+ * GET /api_spec/{api_version}/{specification} -> any
  *
  * @param sdk IAPIMethods implementation
  * @param api_version API version
@@ -2676,10 +2931,10 @@ export const api_spec = async (
   api_version: string,
   specification: string,
   options?: Partial<ITransportSettings>
-): Promise<SDKResponse<string, IError>> => {
+): Promise<SDKResponse<any, IError>> => {
   api_version = encodeParam(api_version)
   specification = encodeParam(specification)
-  return sdk.get<string, IError>(
+  return sdk.get<any, IError>(
     `/api_spec/${api_version}/${specification}`,
     null,
     null,
@@ -2692,6 +2947,8 @@ export const api_spec = async (
  * ### Gets the whitelabel configuration, which includes hiding documentation links, custom favicon uploading, etc.
  *
  * GET /whitelabel_configuration -> IWhitelabelConfiguration
+ *
+ * @deprecated
  *
  * @param sdk IAPIMethods implementation
  * @param fields Requested fields.
@@ -2715,6 +2972,8 @@ export const whitelabel_configuration = async (
  * ### Update the whitelabel configuration
  *
  * PUT /whitelabel_configuration -> IWhitelabelConfiguration
+ *
+ * @deprecated
  *
  * @param sdk IAPIMethods implementation
  * @param body Partial<IWriteWhitelabelConfiguration>
@@ -2982,6 +3241,8 @@ export const all_dialect_infos = async (
 /**
  * ### Get all External OAuth Applications.
  *
+ * This is an OAuth Application which Looker uses to access external systems.
+ *
  * GET /external_oauth_applications -> IExternalOauthApplication[]
  *
  * @param sdk IAPIMethods implementation
@@ -3004,6 +3265,8 @@ export const all_external_oauth_applications = async (
 
 /**
  * ### Create an OAuth Application using the specified configuration.
+ *
+ * This is an OAuth Application which Looker uses to access external systems.
  *
  * POST /external_oauth_applications -> IExternalOauthApplication
  *
@@ -3596,7 +3859,7 @@ export const all_content_metadata_accesses = async (
  * POST /content_metadata_access -> IContentMetaGroupUser
  *
  * @param sdk IAPIMethods implementation
- * @param body Partial<IContentMetaGroupUser>
+ * @param body WARNING: no writeable properties found for POST, PUT, or PATCH
  * @param send_boards_notification_email Optionally sends notification email when granting access to a board.
  * @param options one-time API call overrides
  *
@@ -3622,7 +3885,7 @@ export const create_content_metadata_access = async (
  *
  * @param sdk IAPIMethods implementation
  * @param content_metadata_access_id Id of content metadata access
- * @param body Partial<IContentMetaGroupUser>
+ * @param body WARNING: no writeable properties found for POST, PUT, or PATCH
  * @param options one-time API call overrides
  *
  */
@@ -5550,7 +5813,7 @@ export const all_group_groups = async (
  *
  * @param sdk IAPIMethods implementation
  * @param group_id Id of group
- * @param body Partial<IGroupIdForGroupInclusion>
+ * @param body WARNING: no writeable properties found for POST, PUT, or PATCH
  * @param options one-time API call overrides
  *
  */
@@ -5603,7 +5866,7 @@ export const all_group_users = async (
  *
  * @param sdk IAPIMethods implementation
  * @param group_id Id of group
- * @param body Partial<IGroupIdForGroupUserInclusion>
+ * @param body WARNING: no writeable properties found for POST, PUT, or PATCH
  * @param options one-time API call overrides
  *
  */
@@ -5681,7 +5944,7 @@ export const delete_group_from_group = async (
  * @param sdk IAPIMethods implementation
  * @param group_id Id of group
  * @param user_attribute_id Id of user attribute
- * @param body Partial<IUserAttributeGroupValue>
+ * @param body WARNING: no writeable properties found for POST, PUT, or PATCH
  * @param options one-time API call overrides
  *
  */
@@ -6411,18 +6674,18 @@ export const graph_derived_tables_for_model = async (
  * GET /lookml_models -> ILookmlModel[]
  *
  * @param sdk IAPIMethods implementation
- * @param fields Requested fields.
+ * @param request composed interface "IRequestAllLookmlModels" for complex method parameters
  * @param options one-time API call overrides
  *
  */
 export const all_lookml_models = async (
   sdk: IAPIMethods,
-  fields?: string,
+  request: IRequestAllLookmlModels,
   options?: Partial<ITransportSettings>
 ): Promise<SDKResponse<ILookmlModel[], IError>> => {
   return sdk.get<ILookmlModel[], IError>(
     '/lookml_models',
-    { fields },
+    { fields: request.fields, limit: request.limit, offset: request.offset },
     null,
     options
   )
@@ -6795,7 +7058,7 @@ export const connection_search_columns = async (
  *
  * @param sdk IAPIMethods implementation
  * @param connection_name Name of connection
- * @param body Partial<ICreateCostEstimate>
+ * @param body WARNING: no writeable properties found for POST, PUT, or PATCH
  * @param fields Requested fields.
  * @param options one-time API call overrides
  *
@@ -9100,6 +9363,62 @@ export const search_roles = async (
 }
 
 /**
+ * ### Search roles include user count
+ *
+ * Returns all role records that match the given search criteria, and attaches
+ * associated user counts.
+ *
+ * If multiple search params are given and `filter_or` is FALSE or not specified,
+ * search params are combined in a logical AND operation.
+ * Only rows that match *all* search param criteria will be returned.
+ *
+ * If `filter_or` is TRUE, multiple search params are combined in a logical OR operation.
+ * Results will include rows that match **any** of the search criteria.
+ *
+ * String search params use case-insensitive matching.
+ * String search params can contain `%` and '_' as SQL LIKE pattern match wildcard expressions.
+ * example="dan%" will match "danger" and "Danzig" but not "David"
+ * example="D_m%" will match "Damage" and "dump"
+ *
+ * Integer search params can accept a single value or a comma separated list of values. The multiple
+ * values will be combined under a logical OR operation - results will match at least one of
+ * the given values.
+ *
+ * Most search params can accept "IS NULL" and "NOT NULL" as special expressions to match
+ * or exclude (respectively) rows where the column is null.
+ *
+ * Boolean search params accept only "true" and "false" as values.
+ *
+ * GET /roles/search/with_user_count -> IRoleSearch[]
+ *
+ * @param sdk IAPIMethods implementation
+ * @param request composed interface "IRequestSearchRoles" for complex method parameters
+ * @param options one-time API call overrides
+ *
+ */
+export const search_roles_with_user_count = async (
+  sdk: IAPIMethods,
+  request: IRequestSearchRoles,
+  options?: Partial<ITransportSettings>
+): Promise<SDKResponse<IRoleSearch[], IError>> => {
+  return sdk.get<IRoleSearch[], IError>(
+    '/roles/search/with_user_count',
+    {
+      fields: request.fields,
+      limit: request.limit,
+      offset: request.offset,
+      sorts: request.sorts,
+      id: request.id,
+      name: request.name,
+      built_in: request.built_in,
+      filter_or: request.filter_or,
+    },
+    null,
+    options
+  )
+}
+
+/**
  * ### Get information about the role with a specific id.
  *
  * GET /roles/{role_id} -> IRole
@@ -10205,6 +10524,61 @@ export const delete_theme = async (
 //#region User: Manage Users
 
 /**
+ * ### Search email credentials
+ *
+ * Returns all credentials_email records that match the given search criteria.
+ *
+ * If multiple search params are given and `filter_or` is FALSE or not specified,
+ * search params are combined in a logical AND operation.
+ * Only rows that match *all* search param criteria will be returned.
+ *
+ * If `filter_or` is TRUE, multiple search params are combined in a logical OR operation.
+ * Results will include rows that match **any** of the search criteria.
+ *
+ * String search params use case-insensitive matching.
+ * String search params can contain `%` and '_' as SQL LIKE pattern match wildcard expressions.
+ * example="dan%" will match "danger" and "Danzig" but not "David"
+ * example="D_m%" will match "Damage" and "dump"
+ *
+ * Integer search params can accept a single value or a comma separated list of values. The multiple
+ * values will be combined under a logical OR operation - results will match at least one of
+ * the given values.
+ *
+ * Most search params can accept "IS NULL" and "NOT NULL" as special expressions to match
+ * or exclude (respectively) rows where the column is null.
+ *
+ * Boolean search params accept only "true" and "false" as values.
+ *
+ * GET /credentials_email/search -> ICredentialsEmailSearch[]
+ *
+ * @param sdk IAPIMethods implementation
+ * @param request composed interface "IRequestSearchCredentialsEmail" for complex method parameters
+ * @param options one-time API call overrides
+ *
+ */
+export const search_credentials_email = async (
+  sdk: IAPIMethods,
+  request: IRequestSearchCredentialsEmail,
+  options?: Partial<ITransportSettings>
+): Promise<SDKResponse<ICredentialsEmailSearch[], IError>> => {
+  return sdk.get<ICredentialsEmailSearch[], IError>(
+    '/credentials_email/search',
+    {
+      fields: request.fields,
+      limit: request.limit,
+      offset: request.offset,
+      sorts: request.sorts,
+      id: request.id,
+      email: request.email,
+      emails: request.emails,
+      filter_or: request.filter_or,
+    },
+    null,
+    options
+  )
+}
+
+/**
  * ### Get information about the current user; i.e. the user account currently calling the API.
  *
  * GET /user -> IUser
@@ -10243,6 +10617,8 @@ export const all_users = async (
       fields: request.fields,
       page: request.page,
       per_page: request.per_page,
+      limit: request.limit,
+      offset: request.offset,
       sorts: request.sorts,
       ids: request.ids,
     },
@@ -10326,6 +10702,8 @@ export const search_users = async (
       fields: request.fields,
       page: request.page,
       per_page: request.per_page,
+      limit: request.limit,
+      offset: request.offset,
       sorts: request.sorts,
       id: request.id,
       first_name: request.first_name,
@@ -10370,6 +10748,8 @@ export const search_users_names = async (
       fields: request.fields,
       page: request.page,
       per_page: request.per_page,
+      limit: request.limit,
+      offset: request.offset,
       sorts: request.sorts,
       id: request.id,
       first_name: request.first_name,
@@ -10644,7 +11024,7 @@ export const user_credentials_totp = async (
  *
  * @param sdk IAPIMethods implementation
  * @param user_id id of user
- * @param body Partial<ICredentialsTotp>
+ * @param body WARNING: no writeable properties found for POST, PUT, or PATCH
  * @param fields Requested fields.
  * @param options one-time API call overrides
  *
@@ -10963,7 +11343,7 @@ export const all_user_credentials_api3s = async (
  *
  * @param sdk IAPIMethods implementation
  * @param user_id id of user
- * @param body Partial<ICredentialsApi3>
+ * @param body WARNING: no writeable properties found for POST, PUT, or PATCH
  * @param fields Requested fields.
  * @param options one-time API call overrides
  *

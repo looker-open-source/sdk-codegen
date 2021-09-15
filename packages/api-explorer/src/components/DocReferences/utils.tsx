@@ -26,9 +26,8 @@
 import React from 'react'
 import { ApiModel, IMethod, IType, Method } from '@looker/sdk-codegen'
 import { Link } from 'react-router-dom'
-
+import { RunItHeading } from '@looker/run-it'
 import { buildMethodPath, buildTypePath, highlightHTML } from '../../utils'
-import { ApixHeading } from '../common'
 
 /**
  * Returns the tag for a given method name
@@ -78,7 +77,7 @@ export const DocReferenceItems = (
 
   return (
     <>
-      <ApixHeading as="h4">{heading}</ApixHeading>
+      <RunItHeading as="h4">{heading}</RunItHeading>
       {items.map((item, index) => (
         <span className="doc-link" key={item.name}>
           {index ? ', ' : ''}

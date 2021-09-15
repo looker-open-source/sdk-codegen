@@ -26,7 +26,7 @@ SOFTWARE.
 
 /*
 
-412 API methods
+423 API methods
 */
 
 
@@ -50,6 +50,120 @@ func NewLookerSDK(session *rtl.AuthSession) *LookerSDK {
     session: session,
   }
 }
+
+  // region Alert: Alert
+
+// ### Search Alerts
+//
+// GET /alerts/search -> []Alert
+func (l *LookerSDK) SearchAlerts(request RequestSearchAlerts,
+    options *rtl.ApiSettings) ([]Alert, error) {
+    var result []Alert
+    err := l.session.Do(&result, "GET", "/4.0", "/alerts/search", map[string]interface{}{"limit": request.Limit, "offset": request.Offset, "fields": request.Fields, "disabled": request.Disabled, "frequency": request.Frequency, "condition_met": request.ConditionMet, "last_run_start": request.LastRunStart, "last_run_end": request.LastRunEnd, "all_owners": request.AllOwners}, nil, options)
+    return result, err
+
+}
+
+// ### Get an alert by a given alert ID
+//
+// GET /alerts/{alert_id} -> Alert
+func (l *LookerSDK) GetAlert(
+    alertId int64,
+    options *rtl.ApiSettings) (Alert, error) {
+    var result Alert
+    err := l.session.Do(&result, "GET", "/4.0", fmt.Sprintf("/alerts/%v", alertId), nil, nil, options)
+    return result, err
+
+}
+
+// ### Update an alert
+// # Required fields: `owner_id`, `field`, `destinations`, `comparison_type`, `threshold`, `cron`
+// #
+//
+// PUT /alerts/{alert_id} -> Alert
+func (l *LookerSDK) UpdateAlert(
+    alertId int64,
+    body WriteAlert,
+    options *rtl.ApiSettings) (Alert, error) {
+    var result Alert
+    err := l.session.Do(&result, "PUT", "/4.0", fmt.Sprintf("/alerts/%v", alertId), nil, body, options)
+    return result, err
+
+}
+
+// ### Update select alert fields
+// # Available fields: `owner_id`, `is_disabled`, `is_public`, `threshold`
+// #
+//
+// PATCH /alerts/{alert_id} -> Alert
+func (l *LookerSDK) UpdateAlertField(
+    alertId int64,
+    body WriteAlert,
+    options *rtl.ApiSettings) (Alert, error) {
+    var result Alert
+    err := l.session.Do(&result, "PATCH", "/4.0", fmt.Sprintf("/alerts/%v", alertId), nil, body, options)
+    return result, err
+
+}
+
+// ### Delete an alert by a given alert ID
+//
+// DELETE /alerts/{alert_id} -> Void
+func (l *LookerSDK) DeleteAlert(
+    alertId int64,
+    options *rtl.ApiSettings) (error) {
+    err := l.session.Do(nil, "DELETE", "/4.0", fmt.Sprintf("/alerts/%v", alertId), nil, nil, options)
+    return err
+
+}
+
+// ### Create a new alert and return details of the newly created object
+//
+// Required fields: `field`, `destinations`, `comparison_type`, `threshold`, `cron`
+//
+// Example Request:
+// Run alert on dashboard element '103' at 5am every day. Send an email to 'test@test.com' if inventory for Los Angeles (using dashboard filter `Warehouse Name`) is lower than 1,000
+// ```
+// {
+//   "cron": "0 5 * * *",
+//   "custom_title": "Alert when LA inventory is low",
+//   "dashboard_element_id": 103,
+//   "applied_dashboard_filters": [
+//     {
+//       "filter_title": "Warehouse Name",
+//       "field_name": "distribution_centers.name",
+//       "filter_value": "Los Angeles CA",
+//       "filter_description": "is Los Angeles CA"
+//     }
+//   ],
+//   "comparison_type": "LESS_THAN",
+//   "destinations": [
+//     {
+//       "destination_type": "EMAIL",
+//       "email_address": "test@test.com"
+//     }
+//   ],
+//   "field": {
+//     "title": "Number on Hand",
+//     "name": "inventory_items.number_on_hand"
+//   },
+//   "is_disabled": false,
+//   "is_public": true,
+//   "threshold": 1000
+// }
+// ```
+//
+// POST /alerts -> Alert
+func (l *LookerSDK) CreateAlert(
+    body WriteAlert,
+    options *rtl.ApiSettings) (Alert, error) {
+    var result Alert
+    err := l.session.Do(&result, "POST", "/4.0", "/alerts", nil, body, options)
+    return result, err
+
+}
+
+  // endregion Alert: Alert
 
   // region ApiAuth: API Authentication
 
@@ -1444,6 +1558,45 @@ func (l *LookerSDK) MobileSettings(
 
 }
 
+// ### Get Looker Settings
+//
+// Available settings are:
+//  - extension_framework_enabled
+//  - marketplace_auto_install_enabled
+//  - marketplace_enabled
+//  - whitelabel_configuration
+//
+// GET /setting -> Setting
+func (l *LookerSDK) GetSetting(
+    fields string,
+    options *rtl.ApiSettings) (Setting, error) {
+    var result Setting
+    err := l.session.Do(&result, "GET", "/4.0", "/setting", map[string]interface{}{"fields": fields}, nil, options)
+    return result, err
+
+}
+
+// ### Configure Looker Settings
+//
+// Available settings are:
+//  - extension_framework_enabled
+//  - marketplace_auto_install_enabled
+//  - marketplace_enabled
+//  - whitelabel_configuration
+//
+// See the `Setting` type for more information on the specific values that can be configured.
+//
+// PATCH /setting -> Setting
+func (l *LookerSDK) SetSetting(
+    body WriteSetting,
+    fields string,
+    options *rtl.ApiSettings) (Setting, error) {
+    var result Setting
+    err := l.session.Do(&result, "PATCH", "/4.0", "/setting", map[string]interface{}{"fields": fields}, body, options)
+    return result, err
+
+}
+
 // ### Get a list of timezones that Looker supports (e.g. useful for scheduling tasks).
 //
 // GET /timezones -> []Timezone
@@ -1469,16 +1622,16 @@ func (l *LookerSDK) Versions(
 
 // ### Get an API specification for this Looker instance.
 //
-// **Note**: Although the API specification is in JSON format, the return type is temporarily `text/plain`, so the response should be treated as standard JSON to consume it.
+// The specification is returned as a JSON document in Swagger 2.x format
 //
-// GET /api_spec/{api_version}/{specification} -> string
+// GET /api_spec/{api_version}/{specification} -> interface{}
 func (l *LookerSDK) ApiSpec(
     apiVersion string,
     specification string,
-    options *rtl.ApiSettings) (string, error) {
+    options *rtl.ApiSettings) (interface{}, error) {
     apiVersion = url.PathEscape(apiVersion)
     specification = url.PathEscape(specification)
-    var result string
+    var result interface{}
     err := l.session.Do(&result, "GET", "/4.0", fmt.Sprintf("/api_spec/%v/%v", apiVersion, specification), nil, nil, options)
     return result, err
 
@@ -1648,6 +1801,8 @@ func (l *LookerSDK) AllDialectInfos(
 
 // ### Get all External OAuth Applications.
 //
+// This is an OAuth Application which Looker uses to access external systems.
+//
 // GET /external_oauth_applications -> []ExternalOauthApplication
 func (l *LookerSDK) AllExternalOauthApplications(request RequestAllExternalOauthApplications,
     options *rtl.ApiSettings) ([]ExternalOauthApplication, error) {
@@ -1658,6 +1813,8 @@ func (l *LookerSDK) AllExternalOauthApplications(request RequestAllExternalOauth
 }
 
 // ### Create an OAuth Application using the specified configuration.
+//
+// This is an OAuth Application which Looker uses to access external systems.
 //
 // POST /external_oauth_applications -> ExternalOauthApplication
 func (l *LookerSDK) CreateExternalOauthApplication(
@@ -3559,11 +3716,10 @@ func (l *LookerSDK) GraphDerivedTablesForModel(request RequestGraphDerivedTables
 // ### Get information about all lookml models.
 //
 // GET /lookml_models -> []LookmlModel
-func (l *LookerSDK) AllLookmlModels(
-    fields string,
+func (l *LookerSDK) AllLookmlModels(request RequestAllLookmlModels,
     options *rtl.ApiSettings) ([]LookmlModel, error) {
     var result []LookmlModel
-    err := l.session.Do(&result, "GET", "/4.0", "/lookml_models", map[string]interface{}{"fields": fields}, nil, options)
+    err := l.session.Do(&result, "GET", "/4.0", "/lookml_models", map[string]interface{}{"fields": request.Fields, "limit": request.Limit, "offset": request.Offset}, nil, options)
     return result, err
 
 }
@@ -5185,6 +5341,41 @@ func (l *LookerSDK) SearchRoles(request RequestSearchRoles,
 
 }
 
+// ### Search roles include user count
+//
+// Returns all role records that match the given search criteria, and attaches
+// associated user counts.
+//
+// If multiple search params are given and `filter_or` is FALSE or not specified,
+// search params are combined in a logical AND operation.
+// Only rows that match *all* search param criteria will be returned.
+//
+// If `filter_or` is TRUE, multiple search params are combined in a logical OR operation.
+// Results will include rows that match **any** of the search criteria.
+//
+// String search params use case-insensitive matching.
+// String search params can contain `%` and '_' as SQL LIKE pattern match wildcard expressions.
+// example="dan%" will match "danger" and "Danzig" but not "David"
+// example="D_m%" will match "Damage" and "dump"
+//
+// Integer search params can accept a single value or a comma separated list of values. The multiple
+// values will be combined under a logical OR operation - results will match at least one of
+// the given values.
+//
+// Most search params can accept "IS NULL" and "NOT NULL" as special expressions to match
+// or exclude (respectively) rows where the column is null.
+//
+// Boolean search params accept only "true" and "false" as values.
+//
+// GET /roles/search/with_user_count -> []RoleSearch
+func (l *LookerSDK) SearchRolesWithUserCount(request RequestSearchRoles,
+    options *rtl.ApiSettings) ([]RoleSearch, error) {
+    var result []RoleSearch
+    err := l.session.Do(&result, "GET", "/4.0", "/roles/search/with_user_count", map[string]interface{}{"fields": request.Fields, "limit": request.Limit, "offset": request.Offset, "sorts": request.Sorts, "id": request.Id, "name": request.Name, "built_in": request.BuiltIn, "filter_or": request.FilterOr}, nil, options)
+    return result, err
+
+}
+
 // ### Get information about the role with a specific id.
 //
 // GET /roles/{role_id} -> Role
@@ -5933,6 +6124,40 @@ func (l *LookerSDK) DeleteTheme(
 
   // region User: Manage Users
 
+// ### Search email credentials
+//
+// Returns all credentials_email records that match the given search criteria.
+//
+// If multiple search params are given and `filter_or` is FALSE or not specified,
+// search params are combined in a logical AND operation.
+// Only rows that match *all* search param criteria will be returned.
+//
+// If `filter_or` is TRUE, multiple search params are combined in a logical OR operation.
+// Results will include rows that match **any** of the search criteria.
+//
+// String search params use case-insensitive matching.
+// String search params can contain `%` and '_' as SQL LIKE pattern match wildcard expressions.
+// example="dan%" will match "danger" and "Danzig" but not "David"
+// example="D_m%" will match "Damage" and "dump"
+//
+// Integer search params can accept a single value or a comma separated list of values. The multiple
+// values will be combined under a logical OR operation - results will match at least one of
+// the given values.
+//
+// Most search params can accept "IS NULL" and "NOT NULL" as special expressions to match
+// or exclude (respectively) rows where the column is null.
+//
+// Boolean search params accept only "true" and "false" as values.
+//
+// GET /credentials_email/search -> []CredentialsEmailSearch
+func (l *LookerSDK) SearchCredentialsEmail(request RequestSearchCredentialsEmail,
+    options *rtl.ApiSettings) ([]CredentialsEmailSearch, error) {
+    var result []CredentialsEmailSearch
+    err := l.session.Do(&result, "GET", "/4.0", "/credentials_email/search", map[string]interface{}{"fields": request.Fields, "limit": request.Limit, "offset": request.Offset, "sorts": request.Sorts, "id": request.Id, "email": request.Email, "emails": request.Emails, "filter_or": request.FilterOr}, nil, options)
+    return result, err
+
+}
+
 // ### Get information about the current user; i.e. the user account currently calling the API.
 //
 // GET /user -> User
@@ -5951,7 +6176,7 @@ func (l *LookerSDK) Me(
 func (l *LookerSDK) AllUsers(request RequestAllUsers,
     options *rtl.ApiSettings) ([]User, error) {
     var result []User
-    err := l.session.Do(&result, "GET", "/4.0", "/users", map[string]interface{}{"fields": request.Fields, "page": request.Page, "per_page": request.PerPage, "sorts": request.Sorts, "ids": request.Ids}, nil, options)
+    err := l.session.Do(&result, "GET", "/4.0", "/users", map[string]interface{}{"fields": request.Fields, "page": request.Page, "per_page": request.PerPage, "limit": request.Limit, "offset": request.Offset, "sorts": request.Sorts, "ids": request.Ids}, nil, options)
     return result, err
 
 }
@@ -6004,7 +6229,7 @@ func (l *LookerSDK) CreateUser(
 func (l *LookerSDK) SearchUsers(request RequestSearchUsers,
     options *rtl.ApiSettings) ([]User, error) {
     var result []User
-    err := l.session.Do(&result, "GET", "/4.0", "/users/search", map[string]interface{}{"fields": request.Fields, "page": request.Page, "per_page": request.PerPage, "sorts": request.Sorts, "id": request.Id, "first_name": request.FirstName, "last_name": request.LastName, "verified_looker_employee": request.VerifiedLookerEmployee, "embed_user": request.EmbedUser, "email": request.Email, "is_disabled": request.IsDisabled, "filter_or": request.FilterOr, "content_metadata_id": request.ContentMetadataId, "group_id": request.GroupId}, nil, options)
+    err := l.session.Do(&result, "GET", "/4.0", "/users/search", map[string]interface{}{"fields": request.Fields, "page": request.Page, "per_page": request.PerPage, "limit": request.Limit, "offset": request.Offset, "sorts": request.Sorts, "id": request.Id, "first_name": request.FirstName, "last_name": request.LastName, "verified_looker_employee": request.VerifiedLookerEmployee, "embed_user": request.EmbedUser, "email": request.Email, "is_disabled": request.IsDisabled, "filter_or": request.FilterOr, "content_metadata_id": request.ContentMetadataId, "group_id": request.GroupId}, nil, options)
     return result, err
 
 }
@@ -6021,7 +6246,7 @@ func (l *LookerSDK) SearchUsersNames(request RequestSearchUsersNames,
     options *rtl.ApiSettings) ([]User, error) {
     request.Pattern = url.PathEscape(request.Pattern)
     var result []User
-    err := l.session.Do(&result, "GET", "/4.0", fmt.Sprintf("/users/search/names/%v", request.Pattern), map[string]interface{}{"fields": request.Fields, "page": request.Page, "per_page": request.PerPage, "sorts": request.Sorts, "id": request.Id, "first_name": request.FirstName, "last_name": request.LastName, "verified_looker_employee": request.VerifiedLookerEmployee, "email": request.Email, "is_disabled": request.IsDisabled}, nil, options)
+    err := l.session.Do(&result, "GET", "/4.0", fmt.Sprintf("/users/search/names/%v", request.Pattern), map[string]interface{}{"fields": request.Fields, "page": request.Page, "per_page": request.PerPage, "limit": request.Limit, "offset": request.Offset, "sorts": request.Sorts, "id": request.Id, "first_name": request.FirstName, "last_name": request.LastName, "verified_looker_employee": request.VerifiedLookerEmployee, "email": request.Email, "is_disabled": request.IsDisabled}, nil, options)
     return result, err
 
 }

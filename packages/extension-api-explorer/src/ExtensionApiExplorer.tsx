@@ -25,26 +25,24 @@
  */
 
 import React, { FC, useContext, useEffect, useState } from 'react'
-import { IStorageValue, RunItProvider, RunItConfigurator } from '@looker/run-it'
-import { useRouteMatch } from 'react-router-dom'
+import {
+  IStorageValue,
+  RunItProvider,
+  RunItConfigurator,
+  runItNoSet,
+  sdkSpecFetch,
+} from '@looker/run-it'
 import {
   ExtensionContext,
   ExtensionContextData,
 } from '@looker/extension-sdk-react'
-import {
-  ApiModel,
-  getSpecsFromVersions,
-  SpecItem,
-  SpecList,
-  upgradeSpecObject,
-} from '@looker/sdk-codegen'
-import { Looker31SDK, Looker40SDK } from '@looker/sdk'
+import { getSpecsFromVersions, SpecItem, SpecList } from '@looker/sdk-codegen'
 import ApiExplorer from '@looker/api-explorer/src/ApiExplorer'
+import { Loader } from '@looker/api-explorer/src/components'
 import { getExtensionSDK } from '@looker/extension-sdk'
 import { configureStore } from '@looker/api-explorer/src/state'
 import { Provider } from 'react-redux'
 import { ExtensionEnvAdaptor } from './utils'
-import { Loader } from './Loader'
 
 class ExtensionConfigurator implements RunItConfigurator {
   storage: Record<string, string> = {}
@@ -76,45 +74,22 @@ const configurator = new ExtensionConfigurator()
 const store = configureStore()
 
 export const ExtensionApiExplorer: FC = () => {
-  const match = useRouteMatch<{ specKey: string }>(`/:specKey`)
+  // const match = useRouteMatch<{ specKey: string }>(`/:specKey`)
   const extensionContext = useContext<ExtensionContextData>(ExtensionContext)
   const [specs, setSpecs] = useState<SpecList>()
 
-  let sdk: Looker31SDK | Looker40SDK
-  if (match?.params.specKey === '3.1') {
-    sdk = extensionContext.core31SDK
-  } else {
-    sdk = extensionContext.core40SDK
-  }
-
-  /**
-   * fetch and compile an API specification to an ApiModel
-   *
-   * @param spec to fetch and compile
-   */
-  async function extFetch(spec: SpecItem) {
-    if (!spec.specURL) return undefined
-    const sdk = extensionContext.core40SDK
-    const [version, name] = spec.specURL.split('/').slice(-2)
-    const content = await sdk.ok(sdk.api_spec(version, name))
-    // TODO switch this to just call const api = ApiModel.fromString(content) now
-    // TODO I think we can remove this this crazy step now that the api_spec endpoint is cleaner
-    let json = JSON.parse(content)
-    if (typeof json === 'string') {
-      json = JSON.parse(json)
-    }
-    json = upgradeSpecObject(json)
-    const api = ApiModel.fromJson(json)
-    return api
-  }
+  const sdk = extensionContext.core40SDK
 
   useEffect(() => {
     /** Load Looker /versions information and retrieve all supported specs */
     async function loadSpecs() {
       const versions = await sdk.ok(sdk.versions())
       const result = await getSpecsFromVersions(versions, (spec: SpecItem) =>
-        extFetch(spec)
+        sdkSpecFetch(spec, (version, name) =>
+          sdk.ok(sdk.api_spec(version, name))
+        )
       )
+
       setSpecs(result)
     }
 
@@ -128,7 +103,13 @@ export const ExtensionApiExplorer: FC = () => {
       <RunItProvider sdk={sdk} configurator={configurator} basePath="">
         <>
           {specs ? (
-            <ApiExplorer specs={specs} envAdaptor={extensionEnvAdaptor} />
+            <ApiExplorer
+              specs={specs}
+              envAdaptor={extensionEnvAdaptor}
+              setVersionsUrl={runItNoSet}
+              // TODO We need expand/collapse side nav for the headless extension before we enabled this
+              headless={false}
+            />
           ) : (
             <Loader themeOverrides={extensionEnvAdaptor.themeOverrides()} />
           )}

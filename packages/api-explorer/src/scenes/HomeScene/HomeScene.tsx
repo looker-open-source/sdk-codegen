@@ -41,7 +41,7 @@ export const HomeScene: FC<DocHomeProps> = ({ api }) => {
 
   return (
     <ApixSection>
-      <DocTitle>{`Looker API ${specKey} Reference`}</DocTitle>
+      <DocTitle>{api.spec.info.title}</DocTitle>
       {api.spec.info.description && (
         <DocMarkdown source={api.spec.info.description} specKey={specKey} />
       )}

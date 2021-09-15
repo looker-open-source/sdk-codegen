@@ -25,8 +25,8 @@
  */
 import React, { FC } from 'react'
 import { IMethod } from '@looker/sdk-codegen'
-
-import { ExploreType, CollapserCard } from '../../../components'
+import { CollapserCard } from '@looker/run-it'
+import { ExploreType } from '../../../components'
 
 interface DocRequestBodyProps {
   method: IMethod

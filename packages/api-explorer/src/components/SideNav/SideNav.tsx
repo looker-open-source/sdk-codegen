@@ -24,41 +24,58 @@
 
  */
 
-import React, { FC, useContext, useEffect, useState } from 'react'
+import React, { FC, useContext, useEffect, useState, Dispatch } from 'react'
 import {
+  Heading,
   TabList,
   Tab,
   TabPanel,
   TabPanels,
   useTabs,
   InputSearch,
-  Flex,
+  SpaceVertical,
 } from '@looker/components'
+import {
+  SpecItem,
+  SpecList,
+  CriteriaToSet,
+  ISearchResult,
+  ApiModel,
+} from '@looker/sdk-codegen'
 import { useRouteMatch } from 'react-router-dom'
-import { ApiModel, CriteriaToSet, ISearchResult } from '@looker/sdk-codegen'
 
 import { SearchContext } from '../../context'
-import { setPattern } from '../../reducers'
+import { setPattern, SpecAction } from '../../reducers'
 import { useWindowSize } from '../../utils'
 import { HEADER_REM } from '../Header'
+import { SelectorContainer } from '../SelectorContainer'
 import { SideNavTags } from './SideNavTags'
 import { SideNavTypes } from './SideNavTypes'
 import { useDebounce, countMethods, countTypes } from './searchUtils'
 import { SearchMessage } from './SearchMessage'
 
 interface SideNavProps {
-  api: ApiModel
-  diffApi?: ApiModel
-  diffKey?: string
-  specKey: string
-  className?: string
+  headless?: boolean
+  /** Specs to choose from */
+  specs: SpecList
+  /** Current selected spec */
+  spec: SpecItem
+  /** Spec state setter */
+  specDispatch: Dispatch<SpecAction>
 }
 
 interface SideNavParams {
   sideNavTab: string
 }
 
-export const SideNav: FC<SideNavProps> = ({ api, specKey }) => {
+export const SideNav: FC<SideNavProps> = ({
+  headless = false,
+  specs,
+  spec,
+  specDispatch,
+}) => {
+  const api = spec.api || ({} as ApiModel)
+  const specKey = spec.key
   const tabNames = ['methods', 'types']
   const match = useRouteMatch<SideNavParams>(`/:specKey/:sideNavTab?`)
   let defaultIndex = tabNames.indexOf('methods')
@@ -84,7 +101,7 @@ export const SideNav: FC<SideNavProps> = ({ api, specKey }) => {
     let results
     let newTags
     let newTypes
-    if (debouncedPattern) {
+    if (debouncedPattern && api.search) {
       results = api.search(pattern, searchCriteria)
       newTags = results.tags
       newTypes = results.types
@@ -99,14 +116,27 @@ export const SideNav: FC<SideNavProps> = ({ api, specKey }) => {
     setTypeCount(countTypes(newTypes))
     setSearchResults(results)
     setSearchSettings(setPattern(debouncedPattern!))
-  }, [debouncedPattern, specKey])
+  }, [debouncedPattern, specKey, spec])
 
   const size = useWindowSize()
-  const menuH = size.height - 16 * HEADER_REM - 120
+  const headlessOffset = headless ? 200 : 120
+  const menuH = size.height - 16 * HEADER_REM - headlessOffset
 
   return (
     <nav>
-      <Flex alignItems="center" pl="large" pr="large" pb="large">
+      <SpaceVertical alignItems="center" p="large" gap="xsmall">
+        {headless && (
+          <SpaceVertical>
+            <Heading as="h5" color="key" fontWeight="bold">
+              API Documentation
+            </Heading>
+            <SelectorContainer
+              specs={specs}
+              spec={spec}
+              specDispatch={specDispatch}
+            />
+          </SpaceVertical>
+        )}
         <InputSearch
           aria-label="Search"
           onChange={handleInputChange}
@@ -115,8 +145,7 @@ export const SideNav: FC<SideNavProps> = ({ api, specKey }) => {
           isClearable
           changeOnSelect
         />
-        {/* <WordIcon onClick={handleWordToggle}>W</WordIcon> */}
-      </Flex>
+      </SpaceVertical>
       <SearchMessage search={searchResults} />
       <TabList {...tabs} distribute>
         <Tab>Methods ({methodCount})</Tab>

@@ -5,6 +5,92 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+### [21.0.25](https://www.github.com/looker-open-source/sdk-codegen/compare/sdk-codegen-v21.0.24...sdk-codegen-v21.0.25) (2021-09-01)
+
+
+### Bug Fixes
+
+* spec refresh ([#801](https://www.github.com/looker-open-source/sdk-codegen/issues/801)) ([a10245a](https://www.github.com/looker-open-source/sdk-codegen/commit/a10245aa7ea180670d9d8219810aab88eb50854d))
+
+
+### Dependencies
+
+* The following workspace dependencies were updated
+  * dependencies
+    * @looker/sdk-rtl bumped from ^21.0.19 to ^21.0.20
+
+### [21.0.24](https://www.github.com/looker-open-source/sdk-codegen/compare/sdk-codegen-v21.0.23...sdk-codegen-v21.0.24) (2021-08-11)
+
+
+### Features
+
+* fetch API specifications for stand-alone API Explorer ([#789](https://www.github.com/looker-open-source/sdk-codegen/issues/789)) ([f7be1fb](https://www.github.com/looker-open-source/sdk-codegen/commit/f7be1fb589570137c5ab39304910c57f721de8fb))
+
+### [21.0.23](https://www.github.com/looker-open-source/sdk-codegen/compare/sdk-codegen-v21.0.22...sdk-codegen-v21.0.23) (2021-07-30)
+
+
+### Bug Fixes
+
+* improved writeable type support ([#766](https://www.github.com/looker-open-source/sdk-codegen/issues/766)) ([be91bd8](https://www.github.com/looker-open-source/sdk-codegen/commit/be91bd8e772f9a64c47486b317f1ac1f6ef14327))
+* remove unused net/url import from go ([#767](https://www.github.com/looker-open-source/sdk-codegen/issues/767)) ([35d912c](https://www.github.com/looker-open-source/sdk-codegen/commit/35d912c1e31e5817a2b6a81084753a66a4860338)), closes [#765](https://www.github.com/looker-open-source/sdk-codegen/issues/765)
+
+
+### Dependencies
+
+* The following workspace dependencies were updated
+  * dependencies
+    * @looker/sdk-rtl bumped from ^21.0.18 to ^21.0.19
+
+### [21.0.22](https://www.github.com/looker-open-source/sdk-codegen/compare/sdk-codegen-v21.0.21...sdk-codegen-v21.0.22) (2021-07-09)
+
+
+### Dependencies
+
+* The following workspace dependencies were updated
+  * dependencies
+    * @looker/sdk-rtl bumped from ^21.0.17 to ^21.0.18
+
+### [21.0.21](https://www.github.com/looker-open-source/sdk-codegen/compare/sdk-codegen-v21.0.20...sdk-codegen-v21.0.21) (2021-07-08)
+
+
+### Dependencies
+
+* The following workspace dependencies were updated
+  * dependencies
+    * @looker/sdk-rtl bumped from ^21.0.16 to ^21.0.17
+
+### [21.0.20](https://www.github.com/looker-open-source/sdk-codegen/compare/sdk-codegen-v21.0.19...sdk-codegen-v21.0.20) (2021-07-02)
+
+
+### Bug Fixes
+
+* python remove runtime asserts ([#703](https://www.github.com/looker-open-source/sdk-codegen/issues/703)) ([9b963c3](https://www.github.com/looker-open-source/sdk-codegen/commit/9b963c3367905f907e7867df1446f56e18284c3b)), closes [#695](https://www.github.com/looker-open-source/sdk-codegen/issues/695)
+
+
+### Dependencies
+
+* The following workspace dependencies were updated
+  * dependencies
+    * @looker/sdk-rtl bumped from ^21.0.15 to ^21.0.16
+
+### [21.0.19](https://www.github.com/looker-open-source/sdk-codegen/compare/sdk-codegen-v21.0.18...sdk-codegen-v21.0.19) (2021-07-01)
+
+
+### Dependencies
+
+* The following workspace dependencies were updated
+  * dependencies
+    * @looker/sdk-rtl bumped from ^21.0.14 to ^21.0.15
+
+### [21.0.18](https://www.github.com/looker-open-source/sdk-codegen/compare/sdk-codegen-v21.0.17...sdk-codegen-v21.0.18) (2021-06-30)
+
+
+### Dependencies
+
+* The following workspace dependencies were updated
+  * dependencies
+    * @looker/sdk-rtl bumped from ^21.0.13 to ^21.0.14
+
 ### [21.0.17](https://www.github.com/looker-open-source/sdk-codegen/compare/sdk-codegen-v21.0.16...sdk-codegen-v21.0.17) (2021-06-16)
 
 
