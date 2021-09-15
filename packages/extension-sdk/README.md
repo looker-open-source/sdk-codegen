@@ -63,8 +63,13 @@ The following create methods are also available
 
 Looker host data is made available once the host connection has been established
 
+- `extensionId` - id of the extension.
 - `lookerVersion` - host Looker version. Test this value if the extension depends on a particular version of Looker.
 - `route` - if routes are tracked, route is the last active route tracked by the host. On initialization the extension may set its route to this value.
+- `routeState`- if routes are tracked, [push state](https://developer.mozilla.org/en-US/docs/Web/API/History/state) associated with the route
+- `hostOrigin` - [origin](https://developer.mozilla.org/en-US/docs/Web/API/Location/origin) of the Looker host. **Looker >=21.8**.
+- `hostType` - Looker host type. `standard`|`embed`|`spartan`. **Looker >=21.8**.
+- `mountType` - Extension mount type. `fullscreen`. **Looker >=21.8**.
 
 #### Context data
 
@@ -160,6 +165,15 @@ const myDataObj = JSON.parse(value)
 
 // Remove from localstorage
 await extensionSDK.localStorageRemoveItem('data')
+```
+
+### Clipboard
+
+** Looker >=21.8 **. Extensions may write to the system clipboard. For security reasons, the extension
+is not given read access to the clipboard.
+
+```ts
+extensionSDK.clipboardWrite('Hello Clipboard')
 ```
 
 ### User Attributes

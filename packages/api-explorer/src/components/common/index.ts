@@ -23,4 +23,5 @@
  SOFTWARE.
 
  */
-export { ApixHeading } from './common'
+export * from './common'
+export * from './Loader'

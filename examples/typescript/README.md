@@ -1,4 +1,4 @@
-# Typescript Examples for the Looker API
+# TypeScript Examples for the Looker API
 
 The examples in this folder use `yarn`. If you don't have `yarn` installed already, you'll need to [install](https://yarnpkg.com/en/docs/install) it.
 
@@ -10,7 +10,7 @@ Use
 yarn {command} [other command-line options]
 ```
 
-to run a Typescript SDK example file.
+to run a TypeScript SDK example file.
 
 ## Setup and run the typescript examples
 
@@ -20,20 +20,29 @@ These examples assume that a `looker.ini` has been created in the root of the re
 2. Run `yarn` to install the dependencies.
 3. Run the examples - `yarn {command} [other command-line options]`
    - `yarn run-dual` - runs multiple apis example.
+   - `yarn run-tiny-dual` - runs the compact multiple apis example
    - `yarn run-config` - runs custom config reader example.
    - `yarn run-sudo` - runs sudo as user example.
    - `yarn run-tile` - runs download dashboard tile example.
    - `yarn run-dashboard` - runs download dashboard example.
 
-An important note on dependencies. The Looker typescript SDK consists of the following packages:
+Some other dependencies may be required for the projects to build and run correctly on your local clone.
 
-1. `@looker/sdk` - contains the Looker API methods.
-2. `@looker/sdk-rtl` - contains a run time library needed to invoke the Looker API methods. Referencing the `@looker/sdk` as a dependency should automatically pull this package in.
-3. `@looker/sdk-node` - contains dependendencies needed to run the Looker SDK in a node environment. Do NOT include this package if you are using the Looker SDK in a browser.
+```bash
+yarn install @types/readable-stream @types/request @types/request-promise-native -D
+```
+
+## TypeScript SDK packages
+
+The Looker TypeScript SDK has different packages to prevent node dependencies being linked into browser usage of the SDK (the node dependencies are not available in the browser and can cause compilation errors). There are three packages for the Typescript SDK available on npm:
+
+1. `@looker/sdk-rtl` - contains a run time library needed to invoke the Looker API methods. Referencing the `@looker/sdk` as a dependency should automatically pull this package in.
+2. `@looker/sdk` - contains the Looker API methods.
+3. `@looker/sdk-node` - contains the dependencies needed to run the Looker SDK in a node environment. Do NOT include this package if you are using the Looker SDK in a browser. You MUST include this package if you are using `node` or `ts-node`.
 
 ## Example list
 
-Very brief descriptions of the examples and the link to the main example/project file are provided here. For more information on an example, look at the source file.
+A very brief descriptions of the examples, and the link to the main example/project file are provided here. For more information on an example, look at the source file.
 
 ### General examples
 

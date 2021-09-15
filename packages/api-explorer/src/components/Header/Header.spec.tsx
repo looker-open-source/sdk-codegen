@@ -24,45 +24,104 @@
 
  */
 import React from 'react'
-import { screen } from '@testing-library/react'
+import { act, screen, waitFor } from '@testing-library/react'
+import { codeGenerators } from '@looker/sdk-codegen'
+import userEvent from '@testing-library/user-event'
 
 import { specs, specState } from '../../test-data'
-import { renderWithRouter } from '../../test-utils'
+import { renderWithRouter, withReduxProvider } from '../../test-utils'
+import { defaultSettingsState } from '../../state'
 import { Header } from './Header'
 
 describe('Header', () => {
   const specDispatch = jest.fn()
+  const hasNavigation = true
+  const toggleNavigation = () => !hasNavigation
+
+  beforeAll(() => {
+    window.HTMLElement.prototype.scrollIntoView = jest.fn()
+  })
 
   test('it renders a title', () => {
-    const hasNavigation = true
-    const toggleNavigation = () => !hasNavigation
     renderWithRouter(
-      <Header
-        specs={specs}
-        spec={specState}
-        specDispatch={specDispatch}
-        toggleNavigation={toggleNavigation}
-      />
+      withReduxProvider(
+        <Header
+          specs={specs}
+          spec={specState.spec}
+          specDispatch={specDispatch}
+          toggleNavigation={toggleNavigation}
+        />
+      )
     )
     expect(screen.getByText('API Explorer').closest('a')).toHaveAttribute(
       'href',
-      `/${specState.key}`
+      `/${specState.spec.key}`
     )
   })
 
-  test.skip('it renders a spec selector with the correct value', () => {
-    const hasNavigation = true
-    const toggleNavigation = () => !hasNavigation
+  test('it renders a spec selector with the correct default value and options', async () => {
     renderWithRouter(
-      <Header
-        specs={specs}
-        spec={specState}
-        specDispatch={specDispatch}
-        toggleNavigation={toggleNavigation}
-      />
+      withReduxProvider(
+        <Header
+          specs={specs}
+          spec={specState.spec}
+          specDispatch={specDispatch}
+          toggleNavigation={toggleNavigation}
+        />
+      )
     )
-    expect(screen).toHaveTextContent('4.0 (experimental)')
-    // const selector = screen.getByRole('textbox', { name: 'Version' })
-    // expect(selector).toHaveValue(`${specState.key} (${specState.status})`)
+    const selector = screen.getByLabelText('spec selector')
+    expect(selector).toHaveValue(`${specState.spec.key}`)
+    await act(async () => {
+      await userEvent.click(selector)
+      await waitFor(() => {
+        expect(screen.getAllByRole('option')).toHaveLength(
+          Object.keys(specs).length
+        )
+      })
+    })
+  })
+
+  test('it renders an sdk language selector with the correct value and options', async () => {
+    renderWithRouter(
+      withReduxProvider(
+        <Header
+          specs={specs}
+          spec={specState.spec}
+          specDispatch={specDispatch}
+          toggleNavigation={toggleNavigation}
+        />
+      )
+    )
+    const selector = screen.getByLabelText('sdk language selector')
+    expect(selector).toHaveValue(defaultSettingsState.sdkLanguage)
+    await act(async () => {
+      await userEvent.click(selector)
+      await waitFor(() => {
+        expect(screen.getAllByRole('option')).toHaveLength(
+          codeGenerators.length + 1
+        )
+      })
+    })
+  })
+
+  test('it renders an icon button for the differ', () => {
+    renderWithRouter(
+      withReduxProvider(
+        <Header
+          specs={specs}
+          spec={specState.spec}
+          specDispatch={specDispatch}
+          toggleNavigation={toggleNavigation}
+        />
+      )
+    )
+    expect(
+      screen
+        .getByRole('button', {
+          name: 'Compare Specifications',
+        })
+        .closest('a')
+    ).toHaveAttribute('href', `/diff/${specState.spec.key}/`)
   })
 })

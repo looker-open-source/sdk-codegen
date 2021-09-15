@@ -96,6 +96,9 @@ describe('connect_extension_host tests', () => {
       payload: {
         lookerVersion: '7.14.0',
         hostUrl: 'https://self-signed.looker.com:9999',
+        hostOrigin: 'https://self-signed.looker.com:9999',
+        hostType: 'standard',
+        mountType: 'fullscreen',
         extensionId: 'a::b',
       },
     })
@@ -125,6 +128,9 @@ describe('connect_extension_host tests', () => {
         routeState: { hello: 'world' },
         lookerVersion: '7.14.0',
         hostUrl: 'https://self-signed.looker.com:9999',
+        hostOrigin: 'https://self-signed.looker.com:9999',
+        hostType: 'standard',
+        mountType: 'fullscreen',
         extensionId: 'a::b',
       },
     })
@@ -151,6 +157,9 @@ describe('connect_extension_host tests', () => {
         routeState: { hello: 'world' },
         lookerVersion: '7.14.0',
         hostUrl: 'https://self-signed.looker.com:9999',
+        hostOrigin: 'https://self-signed.looker.com:9999',
+        hostType: 'standard',
+        mountType: 'fullscreen',
         extensionId: 'a::b',
       },
     })

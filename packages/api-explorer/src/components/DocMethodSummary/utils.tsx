@@ -26,6 +26,8 @@
 import React from 'react'
 import styled from 'styled-components'
 import { Icon, Status } from '@looker/components'
+import { Beaker } from '@looker/icons'
+import { VisibilityOff } from '@styled-icons/material/VisibilityOff'
 
 /**
  * Return a Status react element based on an endpoint's status
@@ -37,11 +39,11 @@ export const pickStatus = (status: string) => {
       return <StatusBeta aria-label="beta endpoint">&beta;</StatusBeta>
     case 'experimental': {
       const title = 'experimental endpoint'
-      return <Icon title={title} aria-label={title} name="Beaker" />
+      return <Icon title={title} aria-label={title} icon={<Beaker />} />
     }
     case 'undocumented': {
       const title = 'undocumented endpoint'
-      return <Icon title={title} aria-label={title} name="VisibilityOff" />
+      return <Icon title={title} aria-label={title} icon={<VisibilityOff />} />
     }
     case 'deprecated':
       return (

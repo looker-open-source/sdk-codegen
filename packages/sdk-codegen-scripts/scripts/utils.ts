@@ -28,6 +28,7 @@ import path from 'path'
 import fs from 'fs'
 import { IOauthClientApp } from '@looker/sdk'
 import { LookerNodeSDK, NodeSettingsIniFile } from '@looker/sdk-node'
+import { getSpecsFromVersions } from '@looker/sdk-codegen'
 import { SDKConfig } from '../../sdk-codegen-scripts/src/sdkConfig'
 import {
   fetchLookerVersions,
@@ -41,17 +42,6 @@ const homeToRoost = '../../../'
 const getRootPath = () => path.join(__dirname, homeToRoost)
 const rootFile = (fileName = '') => path.join(getRootPath(), fileName)
 
-export const apixSpecFileName = (fileName: string) => {
-  const p = path.parse(fileName)
-  return rootFile(`spec/${p.base}`)
-}
-
-// const copySpec = (fileName: string) => {
-//   const dest = apixSpecFileName(fileName)
-//   fs.copyFileSync(fileName, dest)
-//   console.info(`Copied ${fileName} to ${dest}`)
-// }
-
 export const updateSpecs = async (apiVersions = supportedApiVersions) => {
   const iniFile = rootFile('looker.ini')
   const config = SDKConfig(iniFile)
@@ -62,13 +52,10 @@ export const updateSpecs = async (apiVersions = supportedApiVersions) => {
     } in ${iniFile} ...`
   )
   const lookerVersions = await fetchLookerVersions(props)
+  const specs = await getSpecsFromVersions(lookerVersions)
   for (const v of apiVersions) {
     try {
-      const specFile = await logConvertSpec(
-        name,
-        { ...props, ...{ api_version: v } },
-        lookerVersions
-      )
+      const specFile = await logConvertSpec(name, specs[v], lookerVersions)
       if (!specFile) {
         console.error(
           `Could not fetch spec for API ${v} from ${props.base_url}`

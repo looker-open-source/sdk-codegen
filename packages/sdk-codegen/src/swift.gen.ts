@@ -24,7 +24,6 @@
 
  */
 
-import { commentBlock } from '@looker/sdk-codegen-utils'
 import {
   Arg,
   EnumType,
@@ -36,7 +35,7 @@ import {
   mayQuote,
   strBody,
 } from './sdkModels'
-import { IMappedType, CodeGen } from './codeGen'
+import { IMappedType, CodeGen, commentBlock } from './codeGen'
 
 export class SwiftGen extends CodeGen {
   codePath = './swift/'
@@ -211,13 +210,13 @@ import Foundation
   }
 
   commentHeader(indent: string, text: string | undefined, commentStr = ' * ') {
-    if (!text) return ''
+    if (this.noComment || !text) return ''
     if (commentStr === ' ') {
       return `${indent}/**\n\n${commentBlock(
         text,
         indent,
         commentStr
-      )}\n\n${indent} */\n`
+      )}\n${indent} */\n`
     }
     return `${indent}/**\n${commentBlock(
       text,

@@ -29,8 +29,7 @@ export const resources = [
     content: 'The API Explorer lets you learn + interact with the Looker API.',
     type: 'Resource',
     tag: 'api',
-    link:
-      'https://hack.looker.com/extensions/marketplace_git_github_com_looker_open_source_extension_api_explorer_git::api-explorer',
+    link: 'https://hack.looker.com/extensions/marketplace_git_github_com_looker_open_source_extension_api_explorer_git::api-explorer',
     title: 'API Explorer',
   },
   {
@@ -61,11 +60,10 @@ export const resources = [
   {
     id: 5,
     content:
-      'These are all the examples we catalog for our SDKs. Currently: C#, Java, Kotlin, Python, R, Ruby, Swift, and Typescript.',
+      'These are all the examples we catalog for our SDKs. Currently: C#, Java, Kotlin, Python, R, Ruby, Swift, and TypeScript.',
     type: 'Resource',
     tag: 'api',
-    link:
-      'https://github.com/looker-open-source/sdk-codegen/tree/main/examples',
+    link: 'https://github.com/looker-open-source/sdk-codegen/tree/main/examples',
     title: 'SDK Examples',
   },
   {
@@ -137,8 +135,7 @@ export const resources = [
       "This repository demonstrates all the functionality that is available to the Extension SDK. It's a great starting point for developing your own extensions.",
     type: 'example',
     tag: 'extension',
-    link:
-      'https://github.com/looker-open-source/extension-template-kitchensink',
+    link: 'https://github.com/looker-open-source/extension-template-kitchensink',
     title: 'Extension Template: KitchenSink',
   },
   {
@@ -254,8 +251,7 @@ export const resources = [
       'Write an action that exports the Results of a Looker Query to BigQuery',
     type: 'tutorial',
     tag: 'action',
-    link:
-      'https://discourse.looker.com/t/export-the-results-of-a-looker-query-to-bigquery/9720',
+    link: 'https://discourse.looker.com/t/export-the-results-of-a-looker-query-to-bigquery/9720',
     title: 'Bigquery writeback action',
   },
   {
@@ -273,8 +269,7 @@ export const resources = [
       'Direct link to the examples repo for Looker Custom Visualizations',
     type: 'example',
     tag: 'viz',
-    link:
-      'https://github.com/looker/custom_visualizations_v2/tree/master/src/examples',
+    link: 'https://github.com/looker/custom_visualizations_v2/tree/master/src/examples',
     title: 'Custom Viz Examples',
   },
   {
@@ -291,8 +286,7 @@ export const resources = [
       'Very thorough tutorial to build a custom viz development environment',
     type: 'tutorial',
     tag: 'viz',
-    link:
-      'https://discourse.looker.com/t/creating-a-development-environment-for-custom-visualizations/8470',
+    link: 'https://discourse.looker.com/t/creating-a-development-environment-for-custom-visualizations/8470',
     title: 'Creating a Development Environment for Custom Visualizations',
   },
   {
@@ -378,8 +372,7 @@ export const resources = [
       'Basic instructions on how to deploy an AWS Lambda function and set up your Looker instance to poll an initiate changes to your LookML model through the Lambda function.',
     type: 'tutorial',
     tag: 'devtool',
-    link:
-      'https://discourse.looker.com/t/automating-frequently-changing-schemas-with-aws-lambda/10196',
+    link: 'https://discourse.looker.com/t/automating-frequently-changing-schemas-with-aws-lambda/10196',
     title: 'Automating schemas w/ Lambda',
   },
   {

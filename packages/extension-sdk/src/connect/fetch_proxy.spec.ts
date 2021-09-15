@@ -32,11 +32,11 @@ describe('extension_host_api tests', () => {
   let extensionFetchProxySpy: Required<any>
 
   beforeEach(() => {
-    mockExtensionSdk = ({
+    mockExtensionSdk = {
       fetchProxy: () => {
         // noop
       },
-    } as unknown) as ExtensionHostApiImpl
+    } as unknown as ExtensionHostApiImpl
     extensionFetchProxySpy = jest.spyOn(mockExtensionSdk, 'fetchProxy')
   })
 

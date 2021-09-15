@@ -32,8 +32,7 @@ from looker_sdk.rtl import transport
 
 
 class RequestsTransport(transport.Transport):
-    """RequestsTransport implementation of Transport.
-    """
+    """RequestsTransport implementation of Transport."""
 
     def __init__(
         self, settings: transport.PTransportSettings, session: requests.Session
@@ -57,14 +56,14 @@ class RequestsTransport(transport.Transport):
         path: str,
         query_params: Optional[MutableMapping[str, str]] = None,
         body: Optional[bytes] = None,
-        authenticator: Optional[Callable[[], Dict[str, str]]] = None,
+        authenticator: transport.TAuthenticator = None,
         transport_options: Optional[transport.TransportOptions] = None,
     ) -> transport.Response:
 
-        headers: Dict[str, str] = {}
+        headers = {}
         timeout = self.settings.timeout
         if authenticator:
-            headers.update(authenticator())
+            headers.update(authenticator(transport_options or {}))
         if transport_options:
             if transport_options.get("headers"):
                 headers.update(transport_options["headers"])
@@ -83,7 +82,9 @@ class RequestsTransport(transport.Transport):
             )
         except IOError as exc:
             ret = transport.Response(
-                False, bytes(str(exc), encoding="utf-8"), transport.ResponseMode.STRING,
+                False,
+                bytes(str(exc), encoding="utf-8"),
+                transport.ResponseMode.STRING,
             )
         else:
             ret = transport.Response(

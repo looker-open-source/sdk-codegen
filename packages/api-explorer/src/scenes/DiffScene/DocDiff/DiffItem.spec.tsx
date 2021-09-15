@@ -1,0 +1,75 @@
+/*
+
+ MIT License
+
+ Copyright (c) 2021 Looker Data Sciences, Inc.
+
+ Permission is hereby granted, free of charge, to any person obtaining a copy
+ of this software and associated documentation files (the "Software"), to deal
+ in the Software without restriction, including without limitation the rights
+ to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+ copies of the Software, and to permit persons to whom the Software is
+ furnished to do so, subject to the following conditions:
+
+ The above copyright notice and this permission notice shall be included in all
+ copies or substantial portions of the Software.
+
+ THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+ FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+ AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+ LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+ SOFTWARE.
+
+ */
+import React from 'react'
+import { Router } from 'react-router'
+import { createMemoryHistory, MemoryHistory } from 'history'
+import { renderWithTheme } from '@looker/components-test-utils'
+import userEvent from '@testing-library/user-event'
+import { act, screen } from '@testing-library/react'
+import { api } from '../../../test-data'
+import { DiffMethodLink } from './DiffItem'
+
+describe('DiffMethodLink', () => {
+  const method = api.methods.create_dashboard
+  const specKey = '4.0'
+  let history: MemoryHistory
+  let pushSpy: jasmine.Spy
+
+  beforeEach(() => {
+    history = createMemoryHistory()
+    pushSpy = spyOn(history, 'push')
+  })
+
+  test('it renders method and navigates on click', () => {
+    renderWithTheme(
+      <Router history={history}>
+        <DiffMethodLink method={method} specKey={specKey} />
+      </Router>
+    )
+    const s = `${method.name} for ${specKey}`
+    expect(screen.getByText(s)).toBeInTheDocument()
+    userEvent.click(screen.getByText(s))
+    act(() => {
+      expect(pushSpy).toHaveBeenCalledWith(
+        `/${specKey}/methods/${method.schema.tags[0]}/${method.name}`
+      )
+    })
+  })
+
+  test('it renders missing method and does not navigate on click', () => {
+    renderWithTheme(
+      <Router history={history}>
+        <DiffMethodLink method={undefined} specKey={specKey} />
+      </Router>
+    )
+    const s = `Missing in ${specKey}`
+    expect(screen.getByText(s)).toBeInTheDocument()
+    userEvent.click(screen.getByText(s))
+    act(() => {
+      expect(pushSpy).not.toHaveBeenCalled()
+    })
+  })
+})

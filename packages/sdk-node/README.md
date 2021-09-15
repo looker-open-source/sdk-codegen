@@ -1,12 +1,12 @@
 # Looker SDK for Node
 
-The Looker SDK for Typescript/Javascript works with Node and browser run-times. The SDK provides a convenient way to communicate with a Looker server's APIs.
+The Looker SDK for TypeScript/JavaScript works with Node and browser run-times. The SDK provides a convenient way to communicate with a Looker server's APIs.
 
-This package is specifically for using the Looker Typescript SDK with Node. It depends on the [@looker/sdk](https://www.npmjs.com/package/@looker/sdk) package and [@looker/sdk-rtl](https://www.npmjs.com/package/@looker/sdk-rtl).
+This package is specifically for using the Looker TypeScript SDK with Node. It depends on the [@looker/sdk](https://www.npmjs.com/package/@looker/sdk) package and [@looker/sdk-rtl](https://www.npmjs.com/package/@looker/sdk-rtl).
 
 The SDK uses a plug-in architecture (also known as dependency injection) for initializing that supports run-time specific transports (like `NodeTransport` and `BrowserTransport`) and different approaches for managing API authentication (like `NodeSession`, `BrowserSession`, `ProxySession`, and `OauthSession`).
 
-**DISCLAIMER**: This is a _beta_ version of the Looker SDK. Implementations are still subject to change, but SDK method calls are expected to work correctly. Please [report any issues](https://github.com/looker-open-source/sdk-codegen/issues) encountered, and indicate the SDK language in the report.
+Please [report any issues](https://github.com/looker-open-source/sdk-codegen/issues) encountered, and indicate the SDK language in the report.
 
 ## Getting started
 
@@ -31,6 +31,20 @@ npm install @looker/sdk @looker/sdk-rtl @looker/sdk-node
 ```
 
 **Note**: If you are only intending to use the SDK in a browser, omit `@looker/sdk-node`.
+
+Some other dependencies may be required for your project to build and run correctly.
+
+```bash
+yarn install @types/readable-stream @types/request @types/request-promise-native -D
+```
+
+### TypeScript SDK packages
+
+The Looker TypeScript SDK has different packages to prevent node dependencies being linked into browser usage of the SDK (the node dependencies are not available in the browser and can cause compilation errors). There are three packages for the Typescript SDK available on npm:
+
+1. `@looker/sdk-rtl` - contains a run time library needed to invoke the Looker API methods. Referencing the `@looker/sdk` as a dependency should automatically pull this package in.
+2. `@looker/sdk` - contains the Looker API methods.
+3. `@looker/sdk-node` - contains the dependencies needed to run the Looker SDK in a node environment. Do NOT include this package if you are using the Looker SDK in a browser. You MUST include this package if you are using `node` or `ts-node`.
 
 ### Configure the SDK for your Looker server
 
@@ -251,7 +265,7 @@ const downloadTileAs = async (
 
 ### More examples
 
-See the [SDK Examples](/examples/typescript) folder for additional Typescript SDK examples.
+See the [SDK Examples](/examples/typescript) folder for additional TypeScript SDK examples.
 
 ## A note about security
 

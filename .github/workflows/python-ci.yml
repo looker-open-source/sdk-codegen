@@ -1,13 +1,6 @@
 name: Python CI
 on:
   pull_request:
-    types:
-      - opened
-      - synchronize
-      - reopened
-      # first three are default, adding labeled for "CI:TEST" support
-      # (see jobs.unit.if below)
-      - labeled
     paths:
       - python/**
 
@@ -16,6 +9,8 @@ on:
       - main
     paths:
       - python/**
+
+  workflow_dispatch:
 
 env:
   LOOKERSDK_BASE_URL: https://localhost:20000
@@ -28,23 +23,24 @@ defaults:
     working-directory: python/
 
 jobs:
-  unit:
-    # 1st condition: push event (restricted to main above)
-    # 2nd condition: PR opened/synchronized/reopened (types filter above)
-    #                except Release PRs, those need a manual CI:TEST
-    # 3rd condition: PR labeled with "CI:TEST"
-    if: >
-      github.event_name == 'push' ||
-      (
-        github.event_name == 'pull_request' &&
-        github.event.action != 'labeled'
-      ) ||
-      (
-        github.event_name == 'pull_request' &&
-        github.event.action == 'labeled' &&
-        github.event.label.name == 'CI:TEST'
-      )
+  typecheck:
+    name: Mypy
+    runs-on: ubuntu-latest
+    steps:
+      - name: Cancel Previous Runs
+        uses: styfle/cancel-workflow-action@0.6.0
+        with:
+          access_token: ${{ secrets.GITHUB_TOKEN }}
+      - uses: actions/checkout@v2
+      - uses: actions/setup-python@v2
+        with:
+          python-version: 3.x
+      - run: pip install -e .
+      - run: pip install mypy types-requests
+      - run: mypy looker_sdk/
 
+  unit:
+    needs: typecheck
     name: Unit - ${{ matrix.os }} / py${{ matrix.python-version }}
     env:
       TOX_JUNIT_OUTPUT_NAME: ${{ matrix.os }}.py${{ matrix.python-version }}
@@ -68,10 +64,6 @@ jobs:
             os: ubuntu
 
     steps:
-      - name: Cancel Previous Runs
-        uses: styfle/cancel-workflow-action@0.6.0
-        with:
-          access_token: ${{ secrets.GITHUB_TOKEN }}
       - name: Repo Checkout
         uses: actions/checkout@v2
       - name: Set up Python ${{ matrix.python-version }}
@@ -84,11 +76,6 @@ jobs:
           pip install tox
       - name: Run Unit Tests
         run: tox -e unit
-      - name: Twine upload check
-        run: |
-          pip install wheel twine
-          python setup.py sdist bdist_wheel
-          twine check dist/*
       - name: Upload pytest test results
         if: ${{ always() }}
         uses: actions/upload-artifact@v2
@@ -100,16 +87,16 @@ jobs:
     needs: unit
     name: Integration - ${{ matrix.os }} / Looker.${{ matrix.looker }}
     env:
-      TOX_JUNIT_OUTPUT_NAME: ${{ matrix.os }}.Looker-${{ matrix.looker }}
+      TOX_JUNIT_OUTPUT_NAME: ${{ matrix.os }}.Looker-${{ matrix.looker }}.py3.x
     runs-on: ${{ matrix.os }}-latest
     strategy:
       matrix:
         os:
           - ubuntu
         looker:
-          - '7_18'
-          - '7_20'
-          - '21_0'
+          - '21_10'
+          - '21_12'
+          - '21_14'
           # TODO uncomment `include:` when either macos or windows works to satisfaction.
           #include:
           # TODO: macos matrix leg is functional but it takes ~20 minutes (compared
@@ -194,9 +181,22 @@ jobs:
           name: python-test-results
           path: python/results/
 
+  twine:
+    needs: integration
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - uses: actions/setup-python@v2
+        with:
+          python-version: 3.x
+      - name: Twine upload check
+        run: |
+          pip install wheel twine
+          python setup.py sdist bdist_wheel
+          twine check dist/*
+
   publish-test-results:
-    name: Publish Test Results
-    needs: [unit, integration]
+    needs: [unit, integration, twine]
     if: success() || failure()
     runs-on: ubuntu-latest
 
@@ -207,31 +207,13 @@ jobs:
           path: artifacts
 
       - name: Publish Unit Test Results
-        uses: EnricoMi/publish-unit-test-result-action@v1.6
+        uses: EnricoMi/publish-unit-test-result-action@v1.12
         with:
-          check_name: Test Results
+          # Cosmetic issue with `check_name` being associated to the wrong
+          # workflow: https://github.com/EnricoMi/publish-unit-test-result-action/issues/12
+          check_name: Python Tests
           github_token: ${{ secrets.GITHUB_TOKEN }}
           report_individual_runs: true
+          hide_comments: orphaned commits
+          check_run_annotations_branch: '*'
           files: 'artifacts/python-test-results/*.xml'
-
-  remove-CI-TEST-label:
-    name: Remove CI:TEST Label
-    if: >
-      (
-        github.event_name == 'pull_request' &&
-        github.event.action == 'labeled' &&
-        github.event.label.name == 'CI:TEST'
-      )
-    runs-on: ubuntu-latest
-    steps:
-      - name: Remove CI:TEST Label
-        uses: actions/github-script@v3
-        with:
-          github-token: ${{secrets.GITHUB_TOKEN}}
-          script: |
-            github.issues.removeLabel({
-              owner: context.repo.owner,
-              repo: context.repo.repo,
-              issue_number: context.issue.number,
-              name: 'CI:TEST'
-            })

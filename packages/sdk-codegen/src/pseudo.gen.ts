@@ -33,18 +33,17 @@ import { ArrayType, IMethod, IParameter, IProperty, IType } from './sdkModels'
  * Pseudocde generator
  */
 export class PseudoGen extends CodeGen {
+  commentStr = '"'
   endTypeStr = '}'
   /**
    * Generic prototype-style method signature generator
    *
    * NOTE: Every language generator should override this methodSignature function
    *
-   * @param {string} indent indentation for code
-   * @param {IMethod} method for signature
-   * @returns {string} prototype declaration of method
+   * @param indent indentation for code
+   * @param method for signature
    */
   methodSignature(indent: string, method: IMethod): string {
-    indent = ''
     const params = method.allParams
     const args = params.map((p) => this.declareParameter(indent, method, p))
     const bump = this.bumper(indent)
@@ -52,7 +51,21 @@ export class PseudoGen extends CodeGen {
       args.length === 0
         ? ''
         : `\n${bump}${args.join(',\n' + bump).trim()}${indent}\n`
-    return `${indent}${method.operationId}(${fragment}): ${method.primaryResponse.type.name}`
+    return (
+      this.commentHeader(indent, method.description.trimRight()) +
+      `${indent}${method.operationId}(${fragment}): ${method.primaryResponse.type.name}`
+    )
+  }
+
+  commentHeader(
+    indent: string,
+    text: string | undefined,
+    _commentStr?: string
+  ): string | string {
+    if (this.noComment) return ''
+    const comment = super.commentHeader(indent, text, _commentStr).trimRight()
+    if (!comment) return ''
+    return `${comment}${this.commentStr}\n`
   }
 
   construct(_indent: string, _type: IType): string {
@@ -68,15 +81,18 @@ export class PseudoGen extends CodeGen {
     _method: IMethod,
     param: IParameter
   ): string {
-    const result = `${indent}${param.name}: ${param.type.name}`
-    if (param.required) return result
-    return `[${result}]`
+    let result = `${indent}${param.name}: ${param.type.name}`
+    if (!param.required) result = `[${result}]`
+    return this.commentHeader(indent, param.description) + result
   }
 
   declareProperty(indent: string, property: IProperty): string {
     const lb = property.required ? '' : '['
     const rb = property.required ? '' : ']'
-    return `${indent}${lb}${property.name}: ${property.type.name}${rb}`
+    return (
+      this.commentHeader(indent, property.description) +
+      `${indent}${lb}${property.name}: ${property.type.name}${rb}`
+    )
   }
 
   encodePathParams(_indent: string, _method: IMethod): string {
@@ -104,7 +120,10 @@ export class PseudoGen extends CodeGen {
   }
 
   typeSignature(indent: string, type: IType): string {
-    return `${indent}${type.name} ${this.typeOpen}\n`
+    return (
+      this.commentHeader(indent, type.description) +
+      `${indent}${type.name} ${this.typeOpen}\n`
+    )
   }
 
   declareType(indent: string, type: IType): string {

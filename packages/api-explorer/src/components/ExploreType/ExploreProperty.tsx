@@ -26,16 +26,20 @@
 
 import React, { FC } from 'react'
 import {
-  FlexItem,
-  IconNames,
+  Box,
+  IconType,
   Icon,
   Tree,
   TreeItem,
   Tooltip,
   Space,
+  Paragraph,
 } from '@looker/components'
+import { Done } from '@styled-icons/material/Done'
+import { Lock } from '@styled-icons/material/Lock'
+import { Remove } from '@styled-icons/material/Remove'
 import { IProperty } from '@looker/sdk-codegen'
-import ReactMarkdown from 'react-markdown'
+import { Markdown } from '@looker/code-editor'
 import {
   expandable,
   ExploreTypeLink,
@@ -47,7 +51,7 @@ import {
 interface TipIconProps {
   show: boolean
   tip: string
-  icon: IconNames
+  icon: IconType
   title: string
 }
 
@@ -63,7 +67,7 @@ export const TipIcon: FC<TipIconProps> = ({ show, tip, icon, title }) => {
   if (!show) return <></>
   return (
     <Tooltip content={tip}>
-      <Icon name={icon} size="xsmall" content={tip} title={title} />
+      <Icon icon={icon} size="xsmall" content={tip} title={title} />
     </Tooltip>
   )
 }
@@ -94,7 +98,7 @@ export const ExplorePropertyRequired: FC<ExplorePropertyProps> = ({
   return (
     <TipIcon
       show={property.required}
-      icon="Check"
+      icon={<Done />}
       tip={tip}
       title="required property"
     />
@@ -113,7 +117,7 @@ export const ExplorePropertyDeprecated: FC<ExplorePropertyProps> = ({
   return (
     <TipIcon
       show={property.deprecated}
-      icon="Minus"
+      icon={<Remove />}
       tip={tip}
       title="deprecated property"
     />
@@ -132,7 +136,7 @@ export const ExplorePropertyReadOnly: FC<ExplorePropertyProps> = ({
   return (
     <TipIcon
       show={property.readOnly}
-      icon="LockClosed"
+      icon={<Lock />}
       tip={tip}
       title="read-only property"
     />
@@ -144,11 +148,17 @@ export const ExplorePropertyReadOnly: FC<ExplorePropertyProps> = ({
  * @param property to describe
  * @constructor
  */
-export const ExplorePropertyDescription: FC<ExplorePropertyProps> = ({
-  property,
-}) => (
-  <>{property.description && <ReactMarkdown source={property.description} />}</>
+const DescriptionParagraph: FC = (props) => (
+  <Paragraph fontSize="small" m="none" {...props} />
 )
+
+const ExplorePropertyDescription: FC<ExplorePropertyProps> = ({ property }) =>
+  property.description ? (
+    <Markdown
+      source={property.description}
+      paragraphOverride={DescriptionParagraph}
+    />
+  ) : null
 
 /**
  * Show the details of the property
@@ -158,18 +168,18 @@ export const ExplorePropertyDescription: FC<ExplorePropertyProps> = ({
 export const ExplorePropertyDetail: FC<ExplorePropertyProps> = ({
   property,
 }) => (
-  <Space>
-    <FlexItem width="10rem">
+  <Space style={{ fontSize: 'small', marginLeft: '10rem' }}>
+    <Box width="10rem">
       <ExploreTypeLink type={property.type} />
-    </FlexItem>
-    <FlexItem width="5rem">
+    </Box>
+    <Box width="5rem">
       <ExplorePropertyRequired property={property} />
       <ExplorePropertyReadOnly property={property} />
       <ExplorePropertyDeprecated property={property} />
-    </FlexItem>
-    <FlexItem width="30rem">
+    </Box>
+    <Box width="30rem">
       <ExplorePropertyDescription property={property} />
-    </FlexItem>
+    </Box>
   </Space>
 )
 
@@ -244,6 +254,7 @@ export const ExplorePropertyType: FC<ExplorePropertyTypeProps> = ({
       label={`${property.jsonName}`}
       icon={legend.icon}
       defaultOpen={open || openAll}
+      density={-3}
       detail={<ExplorePropertyDetail property={property} />}
     >
       {Object.values(props).map((property) => (

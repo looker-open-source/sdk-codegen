@@ -26,6 +26,7 @@
 import React, { FC } from 'react'
 import { ISearchResult } from '@looker/sdk-codegen'
 import { Heading, Icon, Flex } from '@looker/components'
+import { Error } from '@styled-icons/material/Error'
 
 interface SearchMessageProps {
   search?: ISearchResult
@@ -41,7 +42,12 @@ export const SearchMessage: FC<SearchMessageProps> = ({ search }) => (
     {search && !search.ok && (
       <Flex pl="large" pr="large" alignItems="center">
         <Heading as="h4" color="critical">
-          <Icon key="resultIcon" name="Error" size="xxsmall" color="critical" />
+          <Icon
+            key="resultIcon"
+            icon={<Error />}
+            size="xxsmall"
+            color="critical"
+          />
           {search.message}
         </Heading>
       </Flex>

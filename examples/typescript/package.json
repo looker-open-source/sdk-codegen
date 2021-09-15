@@ -1,7 +1,7 @@
 {
   "name": "sdkexamples",
   "version": "1.0.0",
-  "description": "Looker SDK examples in Typescript/Javascript",
+  "description": "Looker SDK examples in TypeScript/JavaScript",
   "main": "index.ts",
   "author": "Looker",
   "license": "MIT",
@@ -10,12 +10,13 @@
     "run-dashboard": "ts-node ./downloadDashboard",
     "run-tile": "ts-node ./downloadTile",
     "run-dual": "ts-node ./dual",
+    "run-tiny-dual": "ts-node ./tinyDual",
     "run-sudo": "ts-node ./sudoAsUser"
   },
   "dependencies": {
-    "@looker/sdk": "^21.0.4",
-    "@looker/sdk-rtl": "^21.0.4",
-    "@looker/sdk-node": "^21.0.4",
+    "@looker/sdk": "*",
+    "@looker/sdk-rtl": "*",
+    "@looker/sdk-node": "*",
     "ts-node": "^9.0.0"
   },
   "devDependencies": {

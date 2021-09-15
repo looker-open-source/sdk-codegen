@@ -29,5 +29,7 @@ module.exports = {
   displayName: packageName,
   name: packageName,
   rootDir: '../..',
+  preset: 'jest-puppeteer',
+  setupFilesAfterEnv: ['expect-puppeteer'],
   testMatch: [`<rootDir>/packages/${packageName}/**/*.(spec|test).(ts|js)?(x)`],
 }

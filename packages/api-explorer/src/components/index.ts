@@ -23,7 +23,7 @@
  SOFTWARE.
 
  */
-export { ApixHeading } from './common'
+export { ApixSection, Loader } from './common'
 export { DocActivityType } from './DocActivityType'
 export { DocCode } from './DocCode'
 export { DocMethodSummary } from './DocMethodSummary'
@@ -34,8 +34,12 @@ export { DocReferences } from './DocReferences'
 export { DocResponses } from './DocResponses'
 export { DocSDKs } from './DocSDKs'
 export { DocSdkUsage } from './DocSdkUsage'
+export { DocSource } from './DocSource'
 export { DocStatus } from './DocStatus'
 export { DocTitle } from './DocTitle'
 export { Header } from './Header'
 export { SideNav } from './SideNav'
 export { ExploreType, ExploreProperty } from './ExploreType'
+export { DocSchema } from './DocSchema'
+export { Link } from './Link'
+export { ErrorBoundary } from './ErrorBoundary'

@@ -33,6 +33,7 @@ import {
   FieldToggleSwitch,
   Flex,
 } from '@looker/components'
+import { Delete } from '@styled-icons/material/Delete'
 
 import { RunItConfigKey, RunItConfigurator } from '../ConfigForm'
 import { Loading } from '../Loading'
@@ -95,7 +96,7 @@ export const PerfTracker: FC<PerfTrackerProps> = ({
       <Flex>
         <FlexItem>
           <IconButton
-            icon="Trash"
+            icon={<Delete />}
             onClick={handleClear}
             label="Clear the performance queue"
           />

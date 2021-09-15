@@ -25,48 +25,46 @@
  */
 
 import React, { BaseSyntheticEvent, Dispatch, FC } from 'react'
-import { Looker40SDK } from '@looker/sdk'
-import { Button, Heading, Text, Paragraph, Space } from '@looker/components'
+import { Button, Tooltip } from '@looker/components'
+import { IAPIMethods } from '@looker/sdk-rtl'
 import { runItSDK } from '../../utils'
-import { ConfigDialog, RunItConfigurator } from '../ConfigForm'
+import { RunItFormKey, RunItConfigurator } from '../ConfigForm'
+import { RunItValues, RunItSetter } from '../..'
 
 interface LoginFormProps {
+  configurator: RunItConfigurator
+  requestContent: RunItValues
+  setVersionsUrl: RunItSetter
   /** A set state callback which if present allows for editing, setting or clearing OAuth configuration parameters */
   setHasConfig?: Dispatch<boolean>
   /** SDK to use for login. Defaults to the `runItSDK` */
-  sdk?: Looker40SDK
-  configurator: RunItConfigurator
+  sdk?: IAPIMethods
 }
 
+export const readyToLogin =
+  'OAuth is configured but your browser session is not authenticated. Click Login to enable RunIt.'
+
 export const LoginForm: FC<LoginFormProps> = ({
-  sdk = runItSDK,
-  setHasConfig,
   configurator,
+  requestContent,
+  sdk = runItSDK,
 }) => {
-  const handleSubmit = async (e: BaseSyntheticEvent) => {
+  const handleLogin = async (e: BaseSyntheticEvent) => {
     e.preventDefault()
+    if (requestContent) {
+      configurator.setStorage(
+        RunItFormKey,
+        JSON.stringify(requestContent),
+        'local'
+      )
+    }
     // This will set storage variables and return to OAuthScene when successful
     await sdk?.authSession.login()
   }
 
   return (
-    <>
-      <Heading>
-        <Text>OAuth Login</Text>
-      </Heading>
-      <Paragraph>
-        OAuth authentication is already configured, but the browser session is
-        not authenticated. Please click <strong>Login</strong> to authenticate.
-      </Paragraph>
-      <Space>
-        <Button onClick={handleSubmit}>Login</Button>
-        {setHasConfig && (
-          <ConfigDialog
-            setHasConfig={setHasConfig}
-            configurator={configurator}
-          />
-        )}
-      </Space>
-    </>
+    <Tooltip content={readyToLogin}>
+      <Button onClick={handleLogin}>Login</Button>
+    </Tooltip>
   )
 }

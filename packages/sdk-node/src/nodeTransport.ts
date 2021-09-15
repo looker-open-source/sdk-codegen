@@ -31,24 +31,38 @@ import rp from 'request-promise-native'
 import { PassThrough, Readable } from 'readable-stream'
 import { StatusCodeError } from 'request-promise-native/errors'
 import {
-  Authenticator,
+  BaseTransport,
+  ResponseMode,
   defaultTimeout,
+  responseMode,
+  trace,
+  LookerAppId,
+  agentPrefix,
+  safeBase64,
+} from '@looker/sdk-rtl'
+import type {
+  Authenticator,
   HttpMethod,
   ISDKError,
   ITransportSettings,
-  responseMode,
-  ResponseMode,
   SDKResponse,
-  trace,
   Values,
   IRequestHeaders,
-  LookerAppId,
   IRawResponse,
-  agentPrefix,
-  safeBase64,
-  BaseTransport,
   ICryptoHash,
 } from '@looker/sdk-rtl'
+
+const utf8 = 'utf8'
+
+const asString = (value: any): string => {
+  if (value instanceof Buffer) {
+    return Buffer.from(value).toString(utf8)
+  }
+  if (value instanceof Object) {
+    return JSON.stringify(value)
+  }
+  return value.toString()
+}
 
 export class NodeCryptoHash implements ICryptoHash {
   secureRandom(byteCount: number): string {
@@ -62,38 +76,9 @@ export class NodeCryptoHash implements ICryptoHash {
   }
 }
 
-export type RequestOptions = rq.RequiredUriUrl & rp.RequestPromiseOptions
-
-async function parseResponse(res: IRawResponse) {
-  const mode = responseMode(res.contentType)
-  const utf8 = 'utf8'
-  let result = await res.body
-  if (mode === ResponseMode.string) {
-    if (res.contentType.match(/^application\/.*\bjson\b/g)) {
-      try {
-        if (result instanceof Buffer) {
-          result = (result as Buffer).toString(utf8)
-        }
-        if (result instanceof Object) {
-          return result
-        }
-        return JSON.parse(result.toString())
-      } catch (error) {
-        return Promise.reject(error)
-      }
-    }
-    if (result instanceof Buffer) {
-      result = (result as Buffer).toString(utf8)
-    }
-    return result.toString()
-  } else {
-    try {
-      return (result as Buffer).toString('binary')
-    } catch (error) {
-      return Promise.reject(error)
-    }
-  }
-}
+export type RequestOptions = rq.RequiredUriUrl &
+  rp.RequestPromiseOptions &
+  rq.OptionsWithUrl
 
 export class NodeTransport extends BaseTransport {
   constructor(protected readonly options: ITransportSettings) {
@@ -108,7 +93,7 @@ export class NodeTransport extends BaseTransport {
     authenticator?: Authenticator,
     options?: Partial<ITransportSettings>
   ): Promise<IRawResponse> {
-    const init = await this.initRequest(
+    const init: RequestOptions = await this.initRequest(
       method,
       path,
       queryParams,
@@ -117,50 +102,105 @@ export class NodeTransport extends BaseTransport {
       options
     )
     const req = rp(init).promise()
+    let rawResponse: IRawResponse
     try {
       const res = await req
       const resTyped = res as rq.Response
-      return {
-        url: resTyped.url || '',
+      rawResponse = {
+        url: resTyped.url || init.url.toString() || '',
         body: await resTyped.body,
         contentType: String(resTyped.headers['content-type']),
         ok: true,
         statusCode: resTyped.statusCode,
         statusMessage: resTyped.statusMessage,
+        headers: res.headers,
       }
+      // Update OK with response statusCode check
+      rawResponse.ok = this.ok(rawResponse)
     } catch (e) {
-      const statusMessage = `${method} ${path}`
+      let statusMessage = `${method} ${path}`
       let statusCode = 404
       let contentType = 'text'
-      let body: string
+      let body
       if (e instanceof StatusCodeError) {
         statusCode = e.statusCode
-        const text = e.message
-        // Need to re-parse the error message
-        const matches = /^\d+\s*-\s*({.*})/gim.exec(text)
-        if (matches && matches.length > 1) {
-          const json = matches[1]
-          const obj = JSON.parse(json)
-          body = Buffer.from(obj.data).toString('utf8')
-        } else {
-          body = e.message
+        if (e.error instanceof Buffer) {
+          body = asString(e.error)
+          statusMessage += `: ${statusCode}`
+        } else if (e.error instanceof Object) {
+          // Capture error object as body
+          body = e.error
+          statusMessage += `: ${e.message}`
+          // Clarify the error message
+          body.message = statusMessage
+          contentType = 'application/json'
         }
-        body = `${statusMessage} ${body}`
       } else if (e.error instanceof Buffer) {
-        body = Buffer.from(e.error).toString('utf8')
+        body = asString(e.error)
       } else {
         body = JSON.stringify(e)
         contentType = 'application/json'
       }
-      return {
-        url: this.makeUrl(path, { ...this.options, ...options }, queryParams),
+      rawResponse = {
+        url: init.url.toString(),
         body,
         contentType,
         ok: false,
         statusCode,
         statusMessage,
+        headers: {},
       }
     }
+    return this.observer ? this.observer(rawResponse) : rawResponse
+  }
+
+  async parseResponse<TSuccess, TError>(res: IRawResponse) {
+    const mode = responseMode(res.contentType)
+    let response: SDKResponse<TSuccess, TError>
+    let error
+    if (!res.ok) {
+      // Raw request had an error. Make sure it's a string before parsing the result
+      error = res.body
+      if (typeof error === 'string') {
+        try {
+          error = JSON.parse(error)
+        } catch {
+          error = { message: `Request failed: ${error}` }
+        }
+      }
+      response = { ok: false, error }
+      return response
+    }
+    let result = await res.body
+    if (mode === ResponseMode.string) {
+      if (res.contentType.match(/^application\/.*\bjson\b/g)) {
+        try {
+          if (result instanceof Buffer) {
+            result = Buffer.from(result).toString(utf8)
+          }
+          if (!(result instanceof Object)) {
+            result = JSON.parse(result.toString())
+          }
+        } catch (err) {
+          error = err
+        }
+      } else if (!error) {
+        // Convert to string otherwise
+        result = asString(result)
+      }
+    } else {
+      try {
+        result = Buffer.from(result).toString('binary')
+      } catch (err) {
+        error = err
+      }
+    }
+    if (!error) {
+      response = { ok: true, value: result }
+    } else {
+      response = { ok: false, error }
+    }
+    return response
   }
 
   async request<TSuccess, TError>(
@@ -180,12 +220,7 @@ export class NodeTransport extends BaseTransport {
         authenticator,
         options
       )
-      const parsed = await parseResponse(res)
-      if (this.ok(res)) {
-        return { ok: true, value: parsed }
-      } else {
-        return { error: parsed, ok: false }
-      }
+      return await this.parseResponse<TSuccess, TError>(res)
     } catch (e) {
       const error: ISDKError = {
         message:

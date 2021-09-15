@@ -39,21 +39,25 @@ import {
   Looker40SDK,
   Looker31SDKStream,
   Looker40SDKStream,
+  IDashboard,
 } from '@looker/sdk'
 import {
   DelimArray,
   boolDefault,
   defaultTimeout,
   ApiConfigMap,
+  pageAll,
+  pager,
+  IRawResponse,
 } from '@looker/sdk-rtl'
 import {
   NodeSettings,
   NodeSettingsIniFile,
   NodeSession,
+  LookerNodeSDK,
   readIniConfig,
 } from '../src'
 import { TestConfig } from '../../sdk-rtl/src/testUtils'
-import { LookerNodeSDK } from '../src/nodeSdk'
 
 const envKey = ApiConfigMap(environmentPrefix)
 const strLookerBaseUrl = envKey.base_url
@@ -166,7 +170,8 @@ describe('LookerNodeSDK', () => {
       }
       if (!user.credentials_email) {
         // Ensure email credentials are created
-        const email = `${u.first_name}.${u.last_name}${emailDomain}`.toLocaleLowerCase()
+        const email =
+          `${u.first_name}.${u.last_name}${emailDomain}`.toLocaleLowerCase()
         await sdk.ok(sdk.create_user_credentials_email(user.id!, { email }))
         user = await sdk.ok(sdk.user(user.id!))
       }
@@ -218,6 +223,35 @@ describe('LookerNodeSDK', () => {
     expect(Looker31SDKStream.ApiVersion).toEqual('3.1')
     expect(Looker40SDK.ApiVersion).toEqual('4.0')
     expect(Looker40SDKStream.ApiVersion).toEqual('4.0')
+  })
+
+  describe('issue-related tests', () => {
+    it('create_user_attribute options', async () => {
+      // Reported in #544
+      // WriteUserAttribute(name=git_username, label=Git Username, type=string, default_value=, value_is_hidden=false, user_can_view=true, user_can_edit=true, hidden_value_domain_whitelist=null)
+      const sdk = new LookerSDK(session)
+      try {
+        const attrib = await sdk.ok(
+          sdk.create_user_attribute({
+            name: 'git_username',
+            label: 'Git Username',
+            type: 'string',
+            default_value: undefined,
+            value_is_hidden: false,
+            user_can_edit: true,
+            user_can_view: true,
+            hidden_value_domain_whitelist: '',
+          })
+        )
+        // We shouldn't get here but if we do, delete the test attribute
+        await sdk.ok(sdk.delete_user_attribute(attrib.id!))
+      } catch (e) {
+        // Using this instead of `rejects.toThrowError` because that pattern fails to match valid RegEx condition
+        expect(e.message).toMatch(
+          /hidden_value_domain_whitelist must be a comma-separated list of urls with optional wildcards/gim
+        )
+      }
+    })
   })
 
   describe('downloads', () => {
@@ -467,7 +501,8 @@ describe('LookerNodeSDK', () => {
             })
           )
           expect(user.is_disabled).toEqual(false)
-          const email = `${u.first_name}.${u.last_name}${emailDomain}`.toLocaleLowerCase()
+          const email =
+            `${u.first_name}.${u.last_name}${emailDomain}`.toLocaleLowerCase()
           const creds = await sdk.ok(
             sdk.create_user_credentials_email(user.id!, { email: email })
           )
@@ -610,6 +645,101 @@ describe('LookerNodeSDK', () => {
       expect(actual).toEqual(task)
     })
   })
+
+  // TODO remove skip when 21.12 is available
+  describe.skip('paging alpha', () => {
+    describe('pager', () => {
+      test(
+        'getRel can override limit and offset',
+        async () => {
+          const sdk = new LookerSDK(session)
+          const limit = 2
+          const all = await sdk.ok(sdk.search_dashboards({ fields: 'id' }))
+          const paged = await pager(sdk, () =>
+            sdk.search_dashboards({ fields: 'id', limit })
+          )
+          const full = await sdk.ok(paged.getRel('first', all.length))
+          expect(full).toEqual(all)
+        },
+        testTimeout
+      )
+      test(
+        'observers can be chained',
+        async () => {
+          const sdk = new LookerSDK(session)
+          const limit = 2
+          let hooked = false
+          const hook = (response: IRawResponse) => {
+            hooked = true
+            return response
+          }
+          sdk.authSession.transport.observer = hook
+          await pager(sdk, () => sdk.search_dashboards({ fields: 'id', limit }))
+          sdk.authSession.transport.observer = undefined
+          expect(hooked).toEqual(true)
+        },
+        testTimeout
+      )
+    })
+    describe('pageAll', () => {
+      test(
+        'search_dashboard',
+        async () => {
+          const sdk = new LookerSDK(session)
+          // Use a small limit to test paging for a small number of dashboards
+          const limit = 2
+          let count = 0
+          let actual: IDashboard[] = []
+          const aggregate = (page: IDashboard[]) => {
+            console.log(`Page ${++count} has ${page.length} items`)
+            actual = actual.concat(page)
+            return page
+          }
+          const paged = await pageAll(
+            sdk,
+            () => sdk.search_dashboards({ fields: 'id,title', limit }),
+            aggregate
+          )
+          expect(paged.limit).toEqual(limit)
+          expect(paged.more()).toEqual(false)
+
+          const all = await sdk.ok(
+            sdk.search_dashboards({ fields: 'id, title' })
+          )
+          expect(actual.length).toEqual(all.length)
+          expect(actual).toEqual(all)
+        },
+        testTimeout
+      )
+      test(
+        'all_dashboards pageAll returns non-paged results',
+        async () => {
+          const sdk = new LookerSDK(session)
+          // Use a small limit to test paging for a small number of dashboards
+          let count = 0
+          let actual: IDashboard[] = []
+          const aggregate = (page: IDashboard[]) => {
+            console.log(`Page ${++count} has ${page.length} items`)
+            actual = actual.concat(page)
+            return page
+          }
+          const paged = await pageAll(
+            sdk,
+            () => sdk.all_dashboards('id,title'),
+            aggregate
+          )
+          expect(paged.limit).toEqual(-1)
+          expect(paged.more()).toEqual(false)
+
+          const all = await sdk.ok(sdk.all_dashboards('id, title'))
+          expect(actual.length).toEqual(all.length)
+          expect(actual).toEqual(all)
+        },
+        testTimeout
+      )
+    })
+  })
+
   describe('Query calls', () => {
     it(
       'create and run query',

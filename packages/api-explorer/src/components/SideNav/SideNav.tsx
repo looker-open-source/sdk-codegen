@@ -24,41 +24,58 @@
 
  */
 
-import React, { FC, useContext, useEffect, useState } from 'react'
+import React, { FC, useContext, useEffect, useState, Dispatch } from 'react'
 import {
+  Heading,
   TabList,
   Tab,
   TabPanel,
   TabPanels,
   useTabs,
   InputSearch,
-  Flex,
+  SpaceVertical,
 } from '@looker/components'
-import styled from 'styled-components'
+import {
+  SpecItem,
+  SpecList,
+  CriteriaToSet,
+  ISearchResult,
+  ApiModel,
+} from '@looker/sdk-codegen'
 import { useRouteMatch } from 'react-router-dom'
-import { ApiModel, CriteriaToSet, ISearchResult } from '@looker/sdk-codegen'
 
 import { SearchContext } from '../../context'
-import { setPattern } from '../../reducers'
+import { setPattern, SpecAction } from '../../reducers'
+import { useWindowSize } from '../../utils'
+import { HEADER_REM } from '../Header'
+import { SelectorContainer } from '../SelectorContainer'
 import { SideNavTags } from './SideNavTags'
 import { SideNavTypes } from './SideNavTypes'
 import { useDebounce, countMethods, countTypes } from './searchUtils'
-import { SearchCriteriaSelector } from './SearchCriteriaSelector'
 import { SearchMessage } from './SearchMessage'
 
 interface SideNavProps {
-  api: ApiModel
-  diffApi?: ApiModel
-  diffKey?: string
-  specKey: string
-  className?: string
+  headless?: boolean
+  /** Specs to choose from */
+  specs: SpecList
+  /** Current selected spec */
+  spec: SpecItem
+  /** Spec state setter */
+  specDispatch: Dispatch<SpecAction>
 }
 
 interface SideNavParams {
   sideNavTab: string
 }
 
-const SideNavLayout: FC<SideNavProps> = ({ api, specKey, className }) => {
+export const SideNav: FC<SideNavProps> = ({
+  headless = false,
+  specs,
+  spec,
+  specDispatch,
+}) => {
+  const api = spec.api || ({} as ApiModel)
+  const specKey = spec.key
   const tabNames = ['methods', 'types']
   const match = useRouteMatch<SideNavParams>(`/:specKey/:sideNavTab?`)
   let defaultIndex = tabNames.indexOf('methods')
@@ -84,7 +101,7 @@ const SideNavLayout: FC<SideNavProps> = ({ api, specKey, className }) => {
     let results
     let newTags
     let newTypes
-    if (debouncedPattern) {
+    if (debouncedPattern && api.search) {
       results = api.search(pattern, searchCriteria)
       newTags = results.tags
       newTypes = results.types
@@ -99,29 +116,48 @@ const SideNavLayout: FC<SideNavProps> = ({ api, specKey, className }) => {
     setTypeCount(countTypes(newTypes))
     setSearchResults(results)
     setSearchSettings(setPattern(debouncedPattern!))
-  }, [debouncedPattern, specKey])
+  }, [debouncedPattern, specKey, spec])
+
+  const size = useWindowSize()
+  const headlessOffset = headless ? 200 : 120
+  const menuH = size.height - 16 * HEADER_REM - headlessOffset
 
   return (
-    <nav className={className}>
-      <Flex alignItems="center" pl="large" pr="large" pb="large">
-        <SearchCriteriaSelector />
+    <nav>
+      <SpaceVertical alignItems="center" p="large" gap="xsmall">
+        {headless && (
+          <SpaceVertical>
+            <Heading as="h5" color="key" fontWeight="bold">
+              API Documentation
+            </Heading>
+            <SelectorContainer
+              specs={specs}
+              spec={spec}
+              specDispatch={specDispatch}
+            />
+          </SpaceVertical>
+        )}
         <InputSearch
+          aria-label="Search"
           onChange={handleInputChange}
           placeholder="Search"
           value={pattern}
           isClearable
           changeOnSelect
         />
-        {/* <WordIcon onClick={handleWordToggle}>W</WordIcon> */}
-      </Flex>
+      </SpaceVertical>
       <SearchMessage search={searchResults} />
       <TabList {...tabs} distribute>
         <Tab>Methods ({methodCount})</Tab>
         <Tab>Types ({typeCount})</Tab>
       </TabList>
-      <TabPanels {...tabs} pt="xsmall">
+      <TabPanels {...tabs} pt="xsmall" height={`${menuH}px`} overflow="auto">
         <TabPanel>
-          <SideNavTags tags={tags} specKey={specKey} />
+          <SideNavTags
+            tags={tags}
+            specKey={specKey}
+            defaultOpen={!!searchResults}
+          />
         </TabPanel>
         <TabPanel>
           <SideNavTypes types={types} specKey={specKey} />
@@ -130,13 +166,3 @@ const SideNavLayout: FC<SideNavProps> = ({ api, specKey, className }) => {
     </nav>
   )
 }
-
-export const SideNav = styled(SideNavLayout)`
-  padding: ${({ theme }) => theme.space.large} 0;
-  border-right: 1px solid ${({ theme }) => theme.colors.ui2};
-`
-
-// const WordIcon = styled(Text)`
-//   cursor: pointer;
-//   padding-left: ${({ theme }) => theme.space.xxsmall};
-// `

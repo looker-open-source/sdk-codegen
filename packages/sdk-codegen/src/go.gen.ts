@@ -24,8 +24,7 @@
 
  */
 
-import { commentBlock } from '@looker/sdk-codegen-utils'
-import { CodeGen, IMappedType, IVersionInfo } from './codeGen'
+import { CodeGen, IMappedType, IVersionInfo, commentBlock } from './codeGen'
 import {
   ApiModel,
   Arg,
@@ -65,7 +64,7 @@ class AlignColumnWriter {
         result +=
           rowSize - 1 === colIndex ? col : align(col, this.sizes[colIndex])
       })
-      result += '\n'
+      result = result.trimRight() + '\n'
     })
     return result
   }
@@ -134,12 +133,14 @@ export class GoGen extends CodeGen {
   }
 
   commentHeader(indent: string, text: string | undefined) {
+    if (this.noComment) return ''
     return text
-      ? `${indent}/*\n\n${commentBlock(text, indent, '')}\n\n${indent}*/\n`
+      ? `${indent}/*\n\n${commentBlock(text, indent, '')}\n${indent}*/\n`
       : ''
   }
 
   comment(indent: string, description: string) {
+    if (this.noComment) return ''
     return commentBlock(description, indent, this.commentStr)
   }
 
@@ -374,16 +375,26 @@ func NewLookerSDK(session *rtl.AuthSession) *LookerSDK {
   }
 
   modelsPrologue(_indent: string) {
-    return `
-// ${this.warnEditing()}
+    let goImport = `
+import (
+  "github.com/looker-open-source/sdk-codegen/go/rtl"
+  "time"
+)`
 
-package ${this.packageName}
-
+    // v3 still uses url.URL
+    if (this.packageName === 'v3') {
+      goImport = `
 import (
   "github.com/looker-open-source/sdk-codegen/go/rtl"
   "net/url"
   "time"
-)
+)`
+    }
+    return `
+// ${this.warnEditing()}
+
+package ${this.packageName}
+${goImport}
 `
   }
 
@@ -443,7 +454,7 @@ import (
         case 'HashType': {
           const mapName =
             type.elementType.name === 'string' ? 'interface{}' : map.name // TODO fix bad API spec, like MergeQuery vis_config
-          // TODO figure out this bizarre string template error either in IntelliJ or Typescript
+          // TODO figure out this bizarre string template error either in IntelliJ or TypeScript
           // return {name: `Map<String,${map.name}>`, default: '{}'}
           return {
             default: this.nullStr,
@@ -482,7 +493,7 @@ import (
         let propertyValues = ''
         const num = type as EnumType
         const typeName = this.capitalize(type.name)
-        props.push(`type ${typeName} string`) // todo: handle other types then string
+        props.push(`type ${typeName} string`) // todo: handle other types than string
         num.values.forEach((value) => {
           // props.push(this.declareEnumValue(bump, value, typeName))
           this.declareEnumValue(bump, value, typeName, writer)

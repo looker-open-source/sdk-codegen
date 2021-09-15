@@ -24,11 +24,9 @@
 
  */
 
-import { ApiModel } from '@looker/sdk-codegen'
+import { SpecList } from '@looker/sdk-codegen'
 import { Location as HLocation } from 'history'
-
-import { IApiVersion } from '@looker/sdk'
-import { SpecItem, SpecItems } from '../../ApiExplorer'
+import { OAuthSession } from '@looker/sdk-rtl'
 import { diffPath, oAuthPath } from '../../utils'
 import { SpecState } from './reducer'
 
@@ -40,7 +38,7 @@ export type AbstractLocation = HLocation | Location
  * @param specs A collection of specs
  * @returns A spec
  */
-export const getDefaultSpecKey = (specs: SpecItems): string => {
+export const getDefaultSpecKey = (specs: SpecList): string => {
   const items = Object.entries(specs)
 
   if (items.length === 0) {
@@ -74,61 +72,19 @@ export const getDefaultSpecKey = (specs: SpecItems): string => {
 }
 
 /**
- * Load the spec
- * @param spec Spec content
- * @returns ApiModel Parsed api with dynamic types loaded
- */
-export const parseSpec = (spec: string) => ApiModel.fromJson(spec)
-
-/**
- * Fetches and loads the API specification
- *
- * Generates dynamic types after loading
- *
- * TODO change default based on /versions
- * TODO use URL instead of version and derive version from reading the specification
- *
- * @param key API version
- * @param specs A collection of specs
- * @returns SpecItem Parsed api with dynamic types loaded
- */
-export const fetchSpec = (key: string, specs: SpecItems): SpecState => {
-  const selectedSpec = specs[key]
-  if (!selectedSpec) {
-    throw Error(`Spec not found: "${key}"`)
-  }
-
-  let spec: SpecState
-  if (selectedSpec.api) {
-    spec = { ...selectedSpec, key } as SpecState
-  } else if (selectedSpec.specContent) {
-    // TODO: maybe discard specContent if specURL is present?
-    spec = {
-      ...selectedSpec,
-      key,
-      api: parseSpec(selectedSpec.specContent),
-    }
-  } else if (selectedSpec.specURL) {
-    // TODO: add fetch
-    // const content = await fetch(spec.specURL)
-    // spec.api = parseSpec(await content.text())
-    // return spec
-  } else {
-    throw Error('Could not fetch spec.')
-  }
-
-  // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-  // @ts-ignore
-  return spec
-}
-
-/**
  * Determine the API specification key from URL pattern or default spec
  * @param location service to examine
  * @param specs to use to find the default spec key
  */
-export const getSpecKey = (location: AbstractLocation, specs?: SpecItems) => {
-  const pathNodes = location.pathname.split('/')
+export const getSpecKey = (location: AbstractLocation, specs?: SpecList) => {
+  let pathName = location.pathname
+  if (pathName === `/${oAuthPath}`) {
+    const returnUrl = sessionStorage.getItem(OAuthSession.returnUrlKey)
+    if (returnUrl) {
+      pathName = returnUrl
+    }
+  }
+  const pathNodes = pathName.split('/')
   let specKey = ''
   if (
     pathNodes.length > 1 &&
@@ -146,59 +102,17 @@ export const getSpecKey = (location: AbstractLocation, specs?: SpecItems) => {
 /**
  * Creates a default state object with the spec matching the specKey defined
  * in the url or the default criteria in getDefaultSpecKey
- * @param specs A collection of specs
+ * @param specList A collection of specs
  * @param location Standalone or extension location
  * @returns An object to be used as default state
  */
 export const initDefaultSpecState = (
-  specs: SpecItems,
+  specList: SpecList,
   location: AbstractLocation
 ): SpecState => {
-  const specKey = getSpecKey(location, specs)
-  return fetchSpec(specKey, specs)
-}
-
-/**
- * Callback for fetching and compiling specification to ApiModel
- */
-export type SpecFetcher = (spec: SpecItem) => Promise<ApiModel | undefined>
-
-/**
- * Return all public API specifications from an ApiVersion payload
- * @param versions payload from a Looker server
- * @param fetcher fetches and compiles spec to ApiModel
- */
-export const getSpecsFromVersions = async (
-  versions: IApiVersion,
-  fetcher: SpecFetcher | undefined = undefined
-): Promise<SpecItems> => {
-  const items = {}
-  if (versions.supported_versions) {
-    for (const v of versions.supported_versions) {
-      // Tell Typescript these are all defined because IApiVersion definition is lax
-      if (v.status && v.version && v.swagger_url) {
-        if (
-          v.status !== 'internal_test' &&
-          v.status !== 'deprecated' &&
-          v.status !== 'legacy'
-        ) {
-          const spec: SpecItem = {
-            status: v.status,
-            isDefault: v.status === 'current',
-            specURL: v.swagger_url,
-          }
-          if (fetcher) {
-            spec.api = await fetcher(spec)
-          }
-          let specKey = v.version
-          if (items[specKey]) {
-            // More than one spec for this version
-            specKey = `${specKey}_${v.status}`
-          }
-          items[specKey] = spec
-        }
-      }
-    }
+  const specKey = getSpecKey(location, specList)
+  return {
+    specList,
+    spec: specList[specKey],
   }
-  return items
 }

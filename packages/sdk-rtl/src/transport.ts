@@ -23,6 +23,7 @@
  SOFTWARE.
 
  */
+
 import { Agent } from 'https'
 import { Headers } from 'request'
 import { Readable } from 'readable-stream'
@@ -31,9 +32,7 @@ import { matchCharsetUtf8, matchModeBinary, matchModeString } from './constants'
 export const agentPrefix = 'TS-SDK'
 export const LookerAppId = 'x-looker-appid'
 
-/**
- * Set to `true` to follow streaming process
- */
+/** Set to `true` to follow streaming process */
 const tracing = false
 
 /**
@@ -52,9 +51,7 @@ export function trace(message: string, info?: any) {
   }
 }
 
-/**
- * ResponseMode for an HTTP request - either binary or "string"
- */
+/** ResponseMode for an HTTP request */
 export enum ResponseMode {
   'binary', // this is a binary response
   'string', // this is a "string" response
@@ -85,9 +82,7 @@ export const charsetUtf8Pattern = new RegExp(matchCharsetUtf8, 'i')
  */
 export const defaultTimeout = 120
 
-/**
- * Recognized HTTP methods
- */
+/** Recognized HTTP methods */
 export type HttpMethod =
   | 'GET'
   | 'POST'
@@ -164,9 +159,7 @@ export enum StatusCode {
   NetworkAuthRequired,
 }
 
-/**
- * Untyped basic HTTP response type for "raw" HTTP requests
- */
+/** Untyped basic HTTP response type for "raw" HTTP requests */
 export interface IRawResponse {
   /** ok is `true` if the response is successful, `false` otherwise */
   ok: boolean
@@ -182,12 +175,18 @@ export interface IRawResponse {
   body: any
   /** Optional performance tracking starting mark name */
   startMark?: string
+  /** Response headers */
+  headers: IRequestHeaders
 }
 
-/**
- * Transport plug-in interface
- */
+/** IRawResponse observer function type */
+export type RawObserver = (raw: IRawResponse) => IRawResponse
+
+/** Transport plug-in interface */
 export interface ITransport {
+  /** Observer lambda to process raw responses */
+  observer: RawObserver | undefined
+
   /**
    * HTTP request function for atomic, fully downloaded raw HTTP responses
    *
@@ -230,6 +229,14 @@ export interface ITransport {
   ): Promise<SDKResponse<TSuccess, TError>>
 
   /**
+   * Processes the raw response, converting it into an SDKResponse
+   * @param raw response result
+   */
+  parseResponse<TSuccess, TError>(
+    raw: IRawResponse
+  ): Promise<SDKResponse<TSuccess, TError>>
+
+  /**
    * HTTP request function for a streamable response
    * @param callback that receives the stream response and pipes it somewhere
    * @param method of HTTP request
@@ -260,7 +267,7 @@ export interface ISDKSuccessResponse<T> {
   value: T
 }
 
-/** An erroring SDK call. */
+/** An errant SDK call. */
 export interface ISDKErrorResponse<T> {
   /** Whether the SDK call was successful. */
   ok: false
@@ -278,9 +285,7 @@ export type SDKResponse<TSuccess, TError> =
   | ISDKSuccessResponse<TSuccess>
   | ISDKErrorResponse<TError | ISDKError>
 
-/**
- * Generic collection
- */
+/** Generic collection */
 export interface IRequestHeaders {
   [key: string]: string
 }
@@ -361,9 +366,7 @@ export function isUtf8(contentType: string) {
   return contentType.match(/;.*\bcharset\b=\butf-8\b/i)
 }
 
-/**
- * Used for name/value pair collections like for QueryParams
- */
+/** Used for name/value pair collections like for QueryParams */
 export type Values = { [key: string]: any } | null | undefined
 
 /**
@@ -422,32 +425,38 @@ export function addQueryParams(path: string, obj?: Values) {
   return `${path}${qp ? '?' + qp : ''}`
 }
 
+function bufferString(val: any) {
+  const decoder = new TextDecoder('utf-8')
+  return decoder.decode(val)
+}
+
 /**
  * SDK error handler
  * @param response any kind of error
  * @returns a new `Error` object with the failure message
  */
 export function sdkError(response: any) {
+  if (typeof response === 'string') {
+    return new Error(response)
+  }
   if ('error' in response) {
     const error = response.error
     if (typeof error === 'string') {
       return new Error(error)
     }
     // Try to get most specific error first
-    if ('statusMessage' in error) {
-      return new Error(error.statusMessage)
-    }
-    if ('error' in error && error.error instanceof Buffer) {
-      const result = Buffer.from(error.error).toString('utf-8')
-      return new Error(result)
-    }
-    if (error instanceof Buffer) {
-      const result = Buffer.from(error).toString('utf-8')
+    if ('error' in error) {
+      const result = bufferString(error.error)
       return new Error(result)
     }
     if ('message' in error) {
       return new Error(response.error.message.toString())
     }
+    if ('statusMessage' in error) {
+      return new Error(error.statusMessage)
+    }
+    const result = bufferString(error)
+    return new Error(result)
   }
   if ('message' in response) {
     return new Error(response.message)
@@ -497,4 +506,19 @@ export async function sdkOk<TSuccess, TError>(
 export function safeBase64(u8: Uint8Array) {
   const rawBase64 = btoa(String.fromCharCode(...u8))
   return rawBase64.replace(/\+/g, '-').replace(/\//g, '_')
+}
+
+/**
+ * Type predicate. Asserts that a given object is error-like.
+ * @param error a value of unknown type
+ * @return boolean true if the error has a `message` key of type string.
+ */
+export function isErrorLike<T extends unknown>(
+  error: T
+): error is T & { message: string } {
+  if (typeof error !== 'object') return false
+  if (!error) return false
+  if (!Object.prototype.hasOwnProperty.call(error, 'message')) return false
+  if (typeof (error as { message: unknown }).message !== 'string') return false
+  return true
 }

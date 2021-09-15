@@ -24,10 +24,10 @@
 
  */
 import React, { FC, useEffect, useState } from 'react'
-import { Grid, ButtonToggle, ButtonItem, Section } from '@looker/components'
+import { Grid, ButtonToggle, ButtonItem } from '@looker/components'
 import { ApiModel } from '@looker/sdk-codegen'
-import { useParams, NavLink, useHistory } from 'react-router-dom'
-import { DocTitle, DocMethodSummary } from '../../components'
+import { useParams, useHistory } from 'react-router-dom'
+import { ApixSection, DocTitle, DocMethodSummary, Link } from '../../components'
 import { buildMethodPath } from '../../utils'
 import { getOperations } from './utils'
 
@@ -59,7 +59,7 @@ export const TagScene: FC<TagSceneProps> = ({ api }) => {
   }, [methodTag])
 
   return (
-    <Section p="xxlarge">
+    <ApixSection>
       <DocTitle>{`${tag.name}: ${tag.description}`}</DocTitle>
       <ButtonToggle mb="small" mt="xlarge" value={value} onChange={setValue}>
         <ButtonItem key="ALL" px="large" py="xsmall">
@@ -74,16 +74,16 @@ export const TagScene: FC<TagSceneProps> = ({ api }) => {
       {Object.values(methods).map(
         (method, index) =>
           (value === method.httpMethod || value === 'ALL') && (
-            <NavLink
+            <Link
               key={index}
               to={buildMethodPath(specKey, tag.name, method.name)}
             >
               <Grid columns={1} py="xsmall">
                 <DocMethodSummary key={index} method={method} />
               </Grid>
-            </NavLink>
+            </Link>
           )
       )}
-    </Section>
+    </ApixSection>
   )
 }

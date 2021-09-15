@@ -27,41 +27,28 @@
 import React from 'react'
 import { BrowserRouter as Router } from 'react-router-dom'
 import ReactDOM from 'react-dom'
-
-import { ApiModel } from '@looker/sdk-codegen'
-import { SpecItems } from './ApiExplorer'
+import { createGlobalStyle } from 'styled-components'
 import { StandaloneApiExplorer } from './StandaloneApiExplorer'
 
-export const specs: SpecItems = {
-  '3.1': {
-    status: 'current',
-    specURL: 'https://self-signed.looker.com:19999/api/3.1/swagger.json',
-    specContent: require('../../../spec/Looker.3.1.oas.json'),
-  },
-  '4.0': {
-    status: 'experimental',
-    isDefault: true,
-    specURL: 'https://self-signed.looker.com:19999/api/4.0/swagger.json',
-    specContent: require('../../../spec/Looker.4.0.oas.json'),
-  },
-}
-
-// TODO implement fetching and compiling the spec on demand
-Object.values(specs).forEach((spec) => {
-  if (spec.specContent && !spec.api) {
-    const json =
-      typeof spec.specContent === 'string'
-        ? JSON.parse(spec.specContent)
-        : spec.specContent
-    spec.api = ApiModel.fromJson(json)
+const BodyReset = createGlobalStyle`
+  body {
+    margin: 0;
   }
-  // Memory footprint reduction
-  spec.specContent = undefined
-})
+`
+
+const basename = (window as any).LOOKER_DEV_PORTAL
+  ? (window as any).LOOKER_DEV_PORTAL.basename
+  : undefined
+
+const versionsUrl = new URL(
+  'versions.json',
+  (window as any).location.origin
+).toString()
 
 ReactDOM.render(
-  <Router>
-    <StandaloneApiExplorer specs={specs} />
+  <Router basename={basename}>
+    <StandaloneApiExplorer versionsUrl={versionsUrl} headless={basename} />
+    <BodyReset />
   </Router>,
   document.getElementById('container')
 )

@@ -6,12 +6,14 @@ The Looker SDK for Python provides a convenient way to communicate with the
 Looker API available on your Looker server. The library requires python3.6+
 and is annotated using the typing module.
 
-**DISCLAIMER**: This is a *beta* version of the Looker SDK, using a completely
-new code generator developed by Looker. Implementations are still subject to
-change, but we expect most SDK method calls to work correctly. If you run into
-problems with the SDK, please feel free to
-`report an issue <https://github.com/looker-open-source/sdk-codegen/issues>`_,
-and please indicate which language SDK you're using in the report.
+The SDK uses a plug-in architecture (also known as dependency injection) for
+initializing that supports run-time specific transports (currently only
+`RequestsTransport`) and different approaches for managing API authentication
+(`AuthSession` and `OAuthSession`). The methods and models are generated from
+the Looker API spec by a new code generator developed at Looker.
+
+Please [report any issues](https://github.com/looker-open-source/sdk-codegen/issues)
+encountered, and indicate the SDK language in the report.
 
 Basic Usage
 ===========
@@ -20,7 +22,7 @@ Basic Usage
     import looker_sdk
 
     # For this to work you must either have set environment variables or created a looker.ini as described below in "Configuring the SDK"
-    sdk = looker_sdk.init31()  # or init40() for v4.0 API
+    sdk = looker_sdk.init40()  # or init31() for the older v3.1 API
     my_user = sdk.me()
 
     # output can be treated like a dictionary
@@ -33,7 +35,7 @@ Basic Usage
         body=looker_sdk.models.WriteUser(first_name="Jane", last_name="Doe")
     )
     # or plain dictionaries
-    sdk.create_user(body={"first_name": "Jane", last_name: "Doe"})
+    sdk.create_user(body={"first_name": "Jane", "last_name": "Doe"})
 
 Full tutorial
 =============
@@ -98,7 +100,7 @@ Configuring the SDK
 ===================
 
 The SDK supports configuration through a ``.ini`` file on disk as well
-as setting environment variables <https://github.com/looker-open-source/sdk-codegen#environment-variable-configuration> (the latter override the former).
+as `setting environment variables <https://github.com/looker-open-source/sdk-codegen#environment-variable-configuration>`_ (the latter override the former).
 
 **Note**: The ``.ini`` configuration for the Looker SDK is a sample
 implementation intended to speed up the initial development of python

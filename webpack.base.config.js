@@ -2,7 +2,7 @@
 
  MIT License
 
- Copyright (c) 2020 Looker Data Sciences, Inc.
+ Copyright (c) 2021 Looker Data Sciences, Inc.
 
  Permission is hereby granted, free of charge, to any person obtaining a copy
  of this software and associated documentation files (the "Software"), to deal
@@ -25,7 +25,7 @@
  */
 const path = require('path')
 
-module.exports = function(packagePath = __dirname) {
+module.exports = function (packagePath = __dirname) {
   return {
     entry: {
       app: path.join(packagePath, 'src/index.tsx'),
@@ -46,6 +46,15 @@ module.exports = function(packagePath = __dirname) {
         {
           test: /\.css$/i,
           use: ['style-loader', 'css-loader'],
+        },
+        {
+          test: /\.(png|woff(2)?|eot|ttf|svg)$/,
+          loader: 'url-loader',
+          options: {
+            limit: 4 * 1024 * 1024, // 4Mb
+            fallback: 'file-loader',
+            name: '[name]-[md5:hash:hex:20].webpack.[ext]',
+          },
         },
       ],
     },

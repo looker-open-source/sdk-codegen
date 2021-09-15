@@ -26,7 +26,7 @@
 
 import * as fs from 'fs'
 import path from 'path'
-import { ApiConfig } from '@looker/sdk-node'
+import { ApiConfig } from '../../../sdk-node/src/nodeSettings'
 import { ApiModel } from '../sdkModels'
 
 interface IKeyAny {
@@ -62,8 +62,9 @@ export interface ITestConfig {
 
 const homeToRoost = '../../../../'
 
-export const getRootPath = () => path.join(__dirname, homeToRoost)
-export const rootFile = (fileName = '') => path.join(getRootPath(), fileName)
+export const getRootPath = (): string => path.join(__dirname, homeToRoost)
+export const rootFile = (fileName = ''): string =>
+  path.join(getRootPath(), fileName)
 
 /**
  * Reads configuration information, returning various test values

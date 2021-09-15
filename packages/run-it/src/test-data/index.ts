@@ -26,9 +26,11 @@
 export {
   testImageResponse,
   testJsonResponse,
+  testSqlResponse,
   testTextResponse,
   testHtmlResponse,
   testUnknownResponse,
   testErrorResponse,
+  testBogusJsonResponse,
 } from './responses'
 export { api } from './specs'

@@ -33,7 +33,12 @@ import {
   Tooltip,
   Icon,
 } from '@looker/components'
-
+import { ModelFile } from '@looker/icons'
+import { Lock } from '@styled-icons/material/Lock'
+import { Info } from '@styled-icons/material/Info'
+import { Create } from '@styled-icons/material/Create'
+import { Delete } from '@styled-icons/material/Delete'
+import { FactCheck } from '@styled-icons/material-outlined/FactCheck'
 import { useSelector, useDispatch } from 'react-redux'
 import { useHistory } from 'react-router-dom'
 import { MoreInfoDialog } from '../../../components/MoreInfoDialog'
@@ -78,9 +83,9 @@ export const ProjectList: FC<ProjectListProps> = () => {
   const lockCol = columns[0]
   lockCol.canSort = false
   lockCol.size = 'auto'
-  lockCol.titleIcon = 'LockClosed'
+  lockCol.titleIcon = <Lock />
   columns[1].size = 'auto'
-  columns[1].titleIcon = 'FactCheck'
+  columns[1].titleIcon = <FactCheck />
   columns[2].size = 'medium' // title
   columns[3].size = 'large' // description
   columns[4].size = 'auto' // project type
@@ -106,7 +111,7 @@ export const ProjectList: FC<ProjectListProps> = () => {
         {project.more_info && project.more_info !== '\0' && (
           <DataTableAction
             onClick={openMoreInfo.bind(null, project)}
-            icon="CircleInfo"
+            icon={<Info />}
           >
             More Information
           </DataTableAction>
@@ -114,7 +119,7 @@ export const ProjectList: FC<ProjectListProps> = () => {
         {canDoProjectAction(hacker, project, 'update') ? (
           <DataTableAction
             onClick={handleEdit.bind(null, project._id)}
-            icon={isLocked ? 'LockClosed' : 'Edit'}
+            icon={isLocked ? <Lock /> : <Create />}
             itemRole="link"
           >
             Update project
@@ -122,7 +127,7 @@ export const ProjectList: FC<ProjectListProps> = () => {
         ) : (
           <DataTableAction
             onClick={handleEdit.bind(null, project._id)}
-            icon={isLocked ? 'LockClosed' : 'ModelFile'}
+            icon={isLocked ? <Lock /> : <ModelFile />}
             itemRole="link"
           >
             View project
@@ -131,7 +136,7 @@ export const ProjectList: FC<ProjectListProps> = () => {
         {canDoProjectAction(hacker, project, 'delete') && (
           <DataTableAction
             onClick={handleDelete.bind(null, project)}
-            icon="Trash"
+            icon={<Delete />}
           >
             Delete project
           </DataTableAction>
@@ -167,7 +172,7 @@ export const ProjectList: FC<ProjectListProps> = () => {
     if (project.locked) {
       return (
         <Tooltip content={<>This project is locked.</>}>
-          <Icon size="small" name="LockClosed" />
+          <Icon size="small" icon={<Lock />} />
         </Tooltip>
       )
     }
@@ -191,7 +196,9 @@ export const ProjectList: FC<ProjectListProps> = () => {
 
   return (
     <>
-      <DataTable columns={columns}>{rows}</DataTable>
+      <DataTable columns={columns} caption="List of hackathon projects">
+        {rows}
+      </DataTable>
       <Pagination
         current={currentPage}
         pages={totalPages}
