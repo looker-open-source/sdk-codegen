@@ -914,12 +914,12 @@ export class Looker31SDK extends APIMethods implements ILooker31SDK {
    *
    * POST /parse_saml_idp_metadata -> ISamlMetadataParseResult
    *
-   * @param body Partial<string>
+   * @param body string
    * @param options one-time API call overrides
    *
    */
   async parse_saml_idp_metadata(
-    body: Partial<string>,
+    body: string,
     options?: Partial<ITransportSettings>
   ): Promise<SDKResponse<ISamlMetadataParseResult, IError>> {
     return this.post<ISamlMetadataParseResult, IError>(
@@ -937,12 +937,12 @@ export class Looker31SDK extends APIMethods implements ILooker31SDK {
    *
    * POST /fetch_and_parse_saml_idp_metadata -> ISamlMetadataParseResult
    *
-   * @param body Partial<string>
+   * @param body string
    * @param options one-time API call overrides
    *
    */
   async fetch_and_parse_saml_idp_metadata(
-    body: Partial<string>,
+    body: string,
     options?: Partial<ITransportSettings>
   ): Promise<SDKResponse<ISamlMetadataParseResult, IError>> {
     return this.post<ISamlMetadataParseResult, IError>(
