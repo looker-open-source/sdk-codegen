@@ -147,4 +147,8 @@ const MarkdownWrapper = styled.div`
     padding-left: 20px;
     list-style: decimal outside;
   }
+  & mark {
+    background-color: #c2deff;
+    font-weight: bold;
+  }
 `
