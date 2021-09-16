@@ -23,8 +23,10 @@
  SOFTWARE.
 
  */
-import React, { useEffect, FC } from 'react'
-import { Section, SectionProps } from '@looker/components'
+import type { FC } from 'react'
+import React, { useEffect } from 'react'
+import type { SectionProps } from '@looker/components'
+import { Section } from '@looker/components'
 import { useWindowSize } from '../../utils'
 import { HEADER_REM } from '../Header'
 

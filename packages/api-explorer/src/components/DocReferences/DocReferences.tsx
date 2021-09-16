@@ -24,8 +24,9 @@
 
  */
 
-import React, { FC, useContext } from 'react'
-import { ApiModel, IMethod, IType } from '@looker/sdk-codegen'
+import type { FC } from 'react'
+import React, { useContext } from 'react'
+import type { ApiModel, IMethod, IType } from '@looker/sdk-codegen'
 
 import { CollapserCard } from '@looker/run-it'
 import { SearchContext } from '../../context'

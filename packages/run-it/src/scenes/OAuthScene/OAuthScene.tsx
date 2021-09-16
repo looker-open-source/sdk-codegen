@@ -24,9 +24,10 @@
 
  */
 
-import React, { FC, useContext, useEffect, useState } from 'react'
+import type { FC } from 'react'
+import React, { useContext, useEffect, useState } from 'react'
 import { useHistory } from 'react-router-dom'
-import { BrowserSession } from '@looker/sdk-rtl'
+import type { BrowserSession } from '@looker/sdk-rtl'
 import { RunItContext } from '../..'
 import { Loading } from '../../components'
 

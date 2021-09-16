@@ -24,8 +24,9 @@
 
  */
 
-import { ValidationMessages } from '@looker/components'
-import { AdminAction, Actions, AdminUserAttributes } from './actions'
+import type { ValidationMessages } from '@looker/components'
+import type { AdminAction, AdminUserAttributes } from './actions'
+import { Actions } from './actions'
 
 export interface AdminState {
   adminUserAttributes: AdminUserAttributes

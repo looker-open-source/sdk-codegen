@@ -24,11 +24,14 @@
 
  */
 
-import { IAuthSession } from '@looker/sdk-rtl'
-import { addMinutes, IRowModel, noDate, stringer } from './RowModel'
+import type { IAuthSession } from '@looker/sdk-rtl'
+import type { IRowModel } from './RowModel'
+import { addMinutes, noDate, stringer } from './RowModel'
 import { WhollySheet } from './WhollySheet'
-import { ITestRowProps, TestRow, testRowObject } from './RowModel.spec'
-import { ITabTable, SheetSDK } from './SheetSDK'
+import type { ITestRowProps } from './RowModel.spec'
+import { TestRow, testRowObject } from './RowModel.spec'
+import type { ITabTable } from './SheetSDK'
+import { SheetSDK } from './SheetSDK'
 import { initSheetSDK } from './testUtils/testUtils'
 
 export class TestSheet extends WhollySheet<TestRow, ITestRowProps> {

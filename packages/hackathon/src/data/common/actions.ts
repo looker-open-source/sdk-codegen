@@ -24,7 +24,7 @@
 
  */
 
-import { MessageDetail } from './reducer'
+import type { MessageDetail } from './reducer'
 
 export enum Actions {
   ERROR = 'ERROR',

@@ -24,22 +24,24 @@
 
  */
 
-import { ChattyHostConnection } from '@looker/chatty'
+import type { ChattyHostConnection } from '@looker/chatty'
 import intersects from 'semver/ranges/intersects'
 import { FetchProxyImpl } from './fetch_proxy'
-import {
-  ExtensionEvent,
+import type {
   ExtensionInitializationResponse,
   ExtensionHostApi,
   ExtensionHostApiConfiguration,
   ExtensionNotification,
-  ExtensionNotificationType,
-  ExtensionRequestType,
   FetchCustomParameters,
   FetchResponseBodyType,
   LookerHostData,
   ApiVersion,
   RouteChangeData,
+} from './types'
+import {
+  ExtensionEvent,
+  ExtensionNotificationType,
+  ExtensionRequestType,
 } from './types'
 
 export const EXTENSION_SDK_VERSION = '0.10.5'

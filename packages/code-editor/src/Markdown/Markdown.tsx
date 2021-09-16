@@ -24,7 +24,8 @@
 
  */
 
-import React, { BaseSyntheticEvent, FC, ReactNode } from 'react'
+import type { BaseSyntheticEvent, FC, ReactNode } from 'react'
+import React from 'react'
 import styled from 'styled-components'
 import ReactMarkdown from 'react-markdown'
 import rehypeRaw from 'rehype-raw'

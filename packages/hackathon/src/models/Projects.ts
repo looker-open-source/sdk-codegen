@@ -24,23 +24,25 @@
 
  */
 
-import {
+import type {
   IRowModel,
   IRowModelProps,
   ITabTable,
-  noDate,
   RowValidationErrors,
-  SheetError,
   SheetSDK,
-  WhollySheet,
 } from '@looker/wholly-sheet'
+import { noDate, SheetError, WhollySheet } from '@looker/wholly-sheet'
 
-import { ISheetRow, SheetRow } from './SheetRow'
-import { Hacker, IHacker } from './Hacker'
-import { Hackathon, IHackathonProps } from './Hackathons'
-import { getActiveSheet, SheetData } from './SheetData'
-import { ITeamMemberProps, TeamMember } from './TeamMembers'
-import { IJudgingProps, Judging } from './Judgings'
+import type { ISheetRow } from './SheetRow'
+import { SheetRow } from './SheetRow'
+import type { Hacker, IHacker } from './Hacker'
+import type { Hackathon, IHackathonProps } from './Hackathons'
+import type { SheetData } from './SheetData'
+import { getActiveSheet } from './SheetData'
+import type { ITeamMemberProps } from './TeamMembers'
+import { TeamMember } from './TeamMembers'
+import type { IJudgingProps } from './Judgings'
+import { Judging } from './Judgings'
 
 /** IMPORTANT: properties must be declared in the tab sheet's columnar order, not sorted order */
 export interface IProjectProps extends IRowModelProps {

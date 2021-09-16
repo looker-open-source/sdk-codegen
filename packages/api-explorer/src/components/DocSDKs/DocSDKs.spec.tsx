@@ -26,11 +26,12 @@
 import React from 'react'
 import { screen } from '@testing-library/react'
 import { codeGenerators } from '@looker/sdk-codegen'
-import { Store } from 'redux'
+import type { Store } from 'redux'
 
 import { api } from '../../test-data'
 import { renderWithReduxProvider } from '../../test-utils'
-import { configureStore, RootState } from '../../state'
+import type { RootState } from '../../state'
+import { configureStore } from '../../state'
 import { DocSDKs } from './DocSDKs'
 
 describe('DocSDKs', () => {

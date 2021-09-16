@@ -24,16 +24,17 @@
 
  */
 
-import React, { FC, useState, useEffect } from 'react'
+import type { FC } from 'react'
+import React, { useState, useEffect } from 'react'
 import { useSelector } from 'react-redux'
-import {
+import type {
   IMethod,
   IType,
   ApiModel,
   KeyedCollection,
   CodeGen,
-  Method,
 } from '@looker/sdk-codegen'
+import { Method } from '@looker/sdk-codegen'
 import { CollapserCard, getGenerators } from '@looker/run-it'
 
 import { DocCode } from '../DocCode'

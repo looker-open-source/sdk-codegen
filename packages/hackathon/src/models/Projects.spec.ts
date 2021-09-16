@@ -33,7 +33,7 @@ import {
   mockUsers,
 } from '../test-data'
 import { Project } from './Projects'
-import { Hackathon } from './Hackathons'
+import type { Hackathon } from './Hackathons'
 
 const hackathons = mockHackathons()
 const users = mockUsers()

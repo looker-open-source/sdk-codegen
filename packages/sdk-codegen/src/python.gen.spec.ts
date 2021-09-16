@@ -27,8 +27,8 @@
 import { DelimArray } from '@looker/sdk-rtl'
 import { TestConfig } from './testUtils'
 import { PythonGen } from './python.gen'
-import { IEnumType, IType } from './sdkModels'
-import { IMappedType } from './codeGen'
+import type { IEnumType, IType } from './sdkModels'
+import type { IMappedType } from './codeGen'
 
 const config = TestConfig()
 const apiTestModel = config.apiTestModel

@@ -35,7 +35,8 @@
  * the saga.
  */
 
-import React, { BaseSyntheticEvent, FC, FormEvent, useEffect } from 'react'
+import type { BaseSyntheticEvent, FC, FormEvent } from 'react'
+import React, { useEffect } from 'react'
 import {
   Form,
   Fieldset,

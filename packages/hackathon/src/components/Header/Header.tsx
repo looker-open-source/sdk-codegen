@@ -23,7 +23,8 @@
  SOFTWARE.
 
  */
-import React, { FC } from 'react'
+import type { FC } from 'react'
+import React from 'react'
 import { Heading } from '@looker/components'
 
 export interface HeaderProps {

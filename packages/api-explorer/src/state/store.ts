@@ -24,7 +24,8 @@
 
  */
 
-import { createStore, Store } from 'redux'
+import type { Store } from 'redux'
+import { createStore } from 'redux'
 import { reducers } from './reducers'
 
 export type RootState = ReturnType<typeof reducers>

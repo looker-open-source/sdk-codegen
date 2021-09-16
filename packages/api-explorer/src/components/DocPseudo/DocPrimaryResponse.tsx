@@ -23,8 +23,9 @@
  SOFTWARE.
 
  */
-import { IMethodResponse } from '@looker/sdk-codegen'
-import React, { FC } from 'react'
+import type { IMethodResponse } from '@looker/sdk-codegen'
+import type { FC } from 'react'
+import React from 'react'
 import { Tooltip } from '@looker/components'
 
 export interface DocPrimaryResponseProps {

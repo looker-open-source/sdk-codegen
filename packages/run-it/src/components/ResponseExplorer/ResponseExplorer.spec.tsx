@@ -26,7 +26,7 @@
 import React from 'react'
 import { renderWithTheme } from '@looker/components-test-utils'
 import { screen, waitFor } from '@testing-library/react'
-import { IRawResponse } from '@looker/sdk-rtl'
+import type { IRawResponse } from '@looker/sdk-rtl'
 import userEvent from '@testing-library/user-event'
 import { ResponseExplorer, ResponseHeaders } from '.'
 

@@ -24,13 +24,8 @@
 
  */
 
-import React, {
-  BaseSyntheticEvent,
-  FC,
-  useContext,
-  useState,
-  useEffect,
-} from 'react'
+import type { BaseSyntheticEvent, FC } from 'react'
+import React, { useContext, useState, useEffect } from 'react'
 import {
   Box,
   Tab,
@@ -39,27 +34,27 @@ import {
   TabPanel,
   useTabs,
 } from '@looker/components'
-import { ApiModel, IMethod } from '@looker/sdk-codegen'
+import type { ApiModel, IMethod } from '@looker/sdk-codegen'
+import type { ResponseContent, RunItConfigurator } from './components'
 import {
   RequestForm,
   ResponseExplorer,
   Loading,
   DocSdkCalls,
-  ResponseContent,
-  RunItConfigurator,
   RunItFormKey,
   ConfigForm,
 } from './components'
+import type { RunItSettings } from './utils'
 import {
   createRequestParams,
   runRequest,
   pathify,
   sdkNeedsConfig,
   prepareInputs,
-  RunItSettings,
 } from './utils'
 import { PerfTracker, PerfTimings } from './components/PerfTracker'
-import { RunItSetter, runItNoSet, RunItContext } from '.'
+import type { RunItSetter } from '.'
+import { runItNoSet, RunItContext } from '.'
 
 export type RunItHttpMethod = 'GET' | 'PUT' | 'POST' | 'PATCH' | 'DELETE'
 

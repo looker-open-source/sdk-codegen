@@ -24,7 +24,7 @@
 
  */
 
-import { IHackerProps } from '../../models'
+import type { IHackerProps } from '../../models'
 
 export enum Actions {
   ALL_HACKERS_REQUEST = 'ALL_HACKERS_REQUEST',

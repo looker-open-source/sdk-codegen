@@ -24,27 +24,30 @@
 
  */
 
-import { PassThrough, Readable } from 'readable-stream'
-import {
+import type { Readable } from 'readable-stream'
+import { PassThrough } from 'readable-stream'
+import type {
   ISDKError,
   SDKResponse,
   ITransportSettings,
   HttpMethod,
   Authenticator,
-  trace,
   IRequestProps,
   IRequestHeaders,
-  LookerAppId,
-  agentPrefix,
   Values,
   IRawResponse,
+} from './transport'
+import {
+  trace,
+  LookerAppId,
+  agentPrefix,
   responseMode,
   ResponseMode,
   safeBase64,
   isErrorLike,
 } from './transport'
 import { BaseTransport } from './baseTransport'
-import { ICryptoHash } from './cryptoHash'
+import type { ICryptoHash } from './cryptoHash'
 
 export class BrowserCryptoHash implements ICryptoHash {
   arrayToHex(array: Uint8Array): string {

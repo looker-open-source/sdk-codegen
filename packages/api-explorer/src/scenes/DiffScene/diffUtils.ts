@@ -25,8 +25,7 @@
  */
 
 import cloneDeep from 'lodash/cloneDeep'
-import {
-  compareSpecs,
+import type {
   DiffFilter,
   DiffRow,
   IApiModel,
@@ -34,6 +33,7 @@ import {
   MethodList,
   TagList,
 } from '@looker/sdk-codegen'
+import { compareSpecs } from '@looker/sdk-codegen'
 
 export const allDiffToggles = [
   'missing',

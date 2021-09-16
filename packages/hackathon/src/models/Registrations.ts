@@ -24,16 +24,12 @@
 
  */
 
-import {
-  IRowModelProps,
-  ITabTable,
-  noDate,
-  SheetSDK,
-  WhollySheet,
-} from '@looker/wholly-sheet'
-import { ISheetRow, SheetRow } from './SheetRow'
-import { Hackathon } from './Hackathons'
-import { SheetData } from './SheetData'
+import type { IRowModelProps, ITabTable, SheetSDK } from '@looker/wholly-sheet'
+import { noDate, WhollySheet } from '@looker/wholly-sheet'
+import type { ISheetRow } from './SheetRow'
+import { SheetRow } from './SheetRow'
+import type { Hackathon } from './Hackathons'
+import type { SheetData } from './SheetData'
 
 /** IMPORTANT: properties must be declared in the tab sheet's columnar order, not sorted order */
 export interface IRegistrationProps extends IRowModelProps {

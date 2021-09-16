@@ -24,14 +24,8 @@
 
  */
 
-import {
-  IMethod,
-  IType,
-  KeyedCollection,
-  IApiModel,
-  EnumType,
-  ArrayType,
-} from './sdkModels'
+import type { IMethod, IType, KeyedCollection, IApiModel } from './sdkModels'
+import { EnumType, ArrayType } from './sdkModels'
 
 interface ITypeDelta {
   lhs: string

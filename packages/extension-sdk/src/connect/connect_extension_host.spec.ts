@@ -26,7 +26,8 @@
 
 import { connectExtensionHost } from './connect_extension_host'
 import * as globalListener from './global_listener'
-import { ExtensionNotification, ExtensionNotificationType } from './types'
+import type { ExtensionNotification } from './types'
+import { ExtensionNotificationType } from './types'
 
 let channel: any
 class MockMessageChannel {

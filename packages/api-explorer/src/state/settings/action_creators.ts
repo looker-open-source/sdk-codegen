@@ -23,7 +23,8 @@
  SOFTWARE.
 
  */
-import { SetSdkLanguageAction, SettingsActionTypes } from './actions'
+import type { SetSdkLanguageAction } from './actions'
+import { SettingsActionTypes } from './actions'
 
 export const setSdkLanguageAction = (
   sdkLanguage: string

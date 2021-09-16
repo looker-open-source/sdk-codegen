@@ -23,7 +23,8 @@
  SOFTWARE.
 
  */
-import React, { FC, useContext, useState, useEffect } from 'react'
+import type { FC } from 'react'
+import React, { useContext, useState, useEffect } from 'react'
 import {
   Box,
   Card,
@@ -34,7 +35,8 @@ import {
   Space,
   Pagination,
 } from '@looker/components'
-import { findExampleLanguages, IMethod } from '@looker/sdk-codegen'
+import type { IMethod } from '@looker/sdk-codegen'
+import { findExampleLanguages } from '@looker/sdk-codegen'
 import { CollapserCard } from '@looker/run-it'
 import { InsertDriveFile } from '@styled-icons/material-outlined/InsertDriveFile'
 import { useSelector } from 'react-redux'

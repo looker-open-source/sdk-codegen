@@ -24,9 +24,11 @@
 
  */
 
-import { ApiModel, SpecItem, SpecList } from '@looker/sdk-codegen'
-import { ApiUpdatePayload } from './actions'
-import { SpecAction, Actions } from '.'
+import type { SpecItem, SpecList } from '@looker/sdk-codegen'
+import { ApiModel } from '@looker/sdk-codegen'
+import type { ApiUpdatePayload } from './actions'
+import type { SpecAction } from '.'
+import { Actions } from '.'
 
 export interface SpecState {
   specList: SpecList

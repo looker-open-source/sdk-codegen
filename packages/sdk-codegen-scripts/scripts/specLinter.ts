@@ -25,12 +25,8 @@
  */
 import * as path from 'path'
 import { writeFileSync } from 'fs'
-import {
-  ApiModel,
-  csvHeaderRow,
-  csvDiffRow,
-  IMethod,
-} from '@looker/sdk-codegen'
+import type { IMethod } from '@looker/sdk-codegen'
+import { ApiModel, csvHeaderRow, csvDiffRow } from '@looker/sdk-codegen'
 import { compareSpecs } from '@looker/sdk-codegen/src/specDiff'
 import { readFileSync } from '../src'
 

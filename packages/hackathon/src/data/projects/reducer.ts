@@ -23,9 +23,10 @@
  SOFTWARE.
 
  */
-import { ValidationMessages } from '@looker/components'
-import { IProjectProps } from '../../models'
-import { ProjectAction, Actions } from './actions'
+import type { ValidationMessages } from '@looker/components'
+import type { IProjectProps } from '../../models'
+import type { ProjectAction } from './actions'
+import { Actions } from './actions'
 
 export interface ProjectsState {
   currentPageNum: number
