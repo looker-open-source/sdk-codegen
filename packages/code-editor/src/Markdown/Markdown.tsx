@@ -149,7 +149,7 @@ const MarkdownWrapper = styled.div`
     list-style: decimal outside;
   }
   & mark {
-    background-color: #c2deff;
-    font-weight: bold;
+    background-color: #fff2c2;
+    font-weight: 500;
   }
 `
