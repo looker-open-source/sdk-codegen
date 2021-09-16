@@ -24,9 +24,9 @@
 
  */
 
-import { IApiSettings } from './apiSettings'
-import { ITransport, IRequestProps } from './transport'
-import { IAuthSession } from './authSession'
+import type { IApiSettings } from './apiSettings'
+import type { ITransport, IRequestProps } from './transport'
+import type { IAuthSession } from './authSession'
 
 export class ExtensionSession implements IAuthSession {
   sudoId = ''

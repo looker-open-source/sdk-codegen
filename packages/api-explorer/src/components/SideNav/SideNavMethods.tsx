@@ -27,7 +27,7 @@
 import React, { useContext, useEffect, useState } from 'react'
 import styled from 'styled-components'
 import { Accordion2, Heading } from '@looker/components'
-import { MethodList } from '@looker/sdk-codegen'
+import type { MethodList } from '@looker/sdk-codegen'
 import { useHistory, useRouteMatch } from 'react-router-dom'
 import { Link } from '../Link'
 import { buildMethodPath, highlightHTML } from '../../utils'

@@ -23,7 +23,8 @@
  SOFTWARE.
 
  */
-import React, { BaseSyntheticEvent, Fragment } from 'react'
+import type { BaseSyntheticEvent } from 'react'
+import React, { Fragment } from 'react'
 import {
   ToggleSwitch,
   Label,
@@ -36,7 +37,7 @@ import {
 import { DateFormat, InputDate } from '@looker/components-date'
 import { CodeEditor } from '@looker/code-editor'
 
-import { RunItInput, RunItValues } from '../../RunIt'
+import type { RunItInput, RunItValues } from '../../RunIt'
 import { FormItem } from './FormItem'
 
 /**

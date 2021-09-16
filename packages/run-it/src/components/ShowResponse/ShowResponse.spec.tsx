@@ -27,7 +27,7 @@
 import React from 'react'
 import { render, screen } from '@testing-library/react'
 import { renderWithTheme } from '@looker/components-test-utils'
-import { IRawResponse } from '@looker/sdk-rtl'
+import type { IRawResponse } from '@looker/sdk-rtl'
 
 import {
   testErrorResponse,

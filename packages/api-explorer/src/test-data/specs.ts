@@ -23,7 +23,8 @@
  SOFTWARE.
 
  */
-import { ApiModel, SpecList } from '@looker/sdk-codegen'
+import type { SpecList } from '@looker/sdk-codegen'
+import { ApiModel } from '@looker/sdk-codegen'
 
 import { initDefaultSpecState } from '../reducers'
 

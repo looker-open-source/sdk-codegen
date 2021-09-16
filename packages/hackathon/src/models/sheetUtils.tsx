@@ -23,8 +23,9 @@
  SOFTWARE.
 
  */
-import { SheetValues } from '@looker/wholly-sheet'
-import { DataTableColumn, DataTableColumns, Icon } from '@looker/components'
+import type { SheetValues } from '@looker/wholly-sheet'
+import type { DataTableColumn, DataTableColumns } from '@looker/components'
+import { Icon } from '@looker/components'
 import { Done } from '@styled-icons/material/Done'
 import React from 'react'
 

@@ -24,7 +24,8 @@
 
  */
 import { createContext } from 'react'
-import { IApixEnvAdaptor, StandaloneEnvAdaptor } from '../../utils'
+import type { IApixEnvAdaptor } from '../../utils'
+import { StandaloneEnvAdaptor } from '../../utils'
 
 export interface EnvAdaptorContextProps {
   envAdaptor: IApixEnvAdaptor

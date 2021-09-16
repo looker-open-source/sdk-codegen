@@ -23,9 +23,10 @@
  SOFTWARE.
 
  */
-import React, { FC, useEffect, useState } from 'react'
+import type { FC } from 'react'
+import React, { useEffect, useState } from 'react'
 import { Grid, ButtonToggle, ButtonItem } from '@looker/components'
-import { ApiModel } from '@looker/sdk-codegen'
+import type { ApiModel } from '@looker/sdk-codegen'
 import { useParams, useHistory } from 'react-router-dom'
 import { ApixSection, DocTitle, DocMethodSummary, Link } from '../../components'
 import { buildMethodPath } from '../../utils'

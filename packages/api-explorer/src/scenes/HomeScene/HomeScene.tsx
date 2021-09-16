@@ -23,8 +23,9 @@
  SOFTWARE.
 
  */
-import { ApiModel } from '@looker/sdk-codegen'
-import React, { FC } from 'react'
+import type { ApiModel } from '@looker/sdk-codegen'
+import type { FC } from 'react'
+import React from 'react'
 import { useParams } from 'react-router-dom'
 import { ApixSection, DocMarkdown, DocTitle } from '../../components'
 

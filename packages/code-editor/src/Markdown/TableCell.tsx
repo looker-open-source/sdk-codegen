@@ -23,7 +23,8 @@
  SOFTWARE.
 
  */
-import React, { FC, PropsWithChildren } from 'react'
+import type { FC, PropsWithChildren } from 'react'
+import React from 'react'
 import { TableDataCell, TableHeaderCell } from '@looker/components'
 
 export const TableCell: FC<PropsWithChildren<any>> = ({ isHeader, ...rest }) =>

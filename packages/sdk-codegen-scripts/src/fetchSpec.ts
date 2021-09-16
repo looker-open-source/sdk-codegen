@@ -25,8 +25,9 @@
  */
 
 import { danger, log, warn } from '@looker/sdk-codegen-utils'
-import { IVersionInfo, SpecItem } from '@looker/sdk-codegen'
-import { defaultTimeout, ITransportSettings, sdkOk } from '@looker/sdk-rtl'
+import type { IVersionInfo, SpecItem } from '@looker/sdk-codegen'
+import type { ITransportSettings } from '@looker/sdk-rtl'
+import { defaultTimeout, sdkOk } from '@looker/sdk-rtl'
 import { NodeTransport } from '@looker/sdk-node'
 import {
   fail,
@@ -35,7 +36,7 @@ import {
   readFileSync,
   createJsonFile,
 } from './nodeUtils'
-import { ISDKConfigProps } from './sdkConfig'
+import type { ISDKConfigProps } from './sdkConfig'
 import { convertSpec } from './convert'
 
 let transport: NodeTransport

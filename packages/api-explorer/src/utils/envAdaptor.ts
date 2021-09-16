@@ -24,7 +24,7 @@
 
  */
 
-import { ThemeCustomizations } from '@looker/design-tokens'
+import type { ThemeCustomizations } from '@looker/design-tokens'
 
 /**
  * NOTE: This interface should describe all methods that require an adaptor when running in standalone vs extension mode

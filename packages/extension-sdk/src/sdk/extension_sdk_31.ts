@@ -28,7 +28,8 @@ import {
   LookerExtensionSDK as _LookerExtensionSDK,
   Looker31SDK,
 } from '@looker/sdk'
-import { ExtensionHostApi, ApiVersion } from '../connect'
+import type { ExtensionHostApi } from '../connect'
+import { ApiVersion } from '../connect'
 
 import { SdkConnection } from './sdk_connection'
 

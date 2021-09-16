@@ -25,8 +25,9 @@
  */
 
 import isEmpty from 'lodash/isEmpty'
-import { APIMethods, Url } from '@looker/sdk-rtl'
-import { ApiModel, ArgValues, IApiModel, KeyedCollection } from './sdkModels'
+import type { APIMethods, Url } from '@looker/sdk-rtl'
+import type { ArgValues, IApiModel, KeyedCollection } from './sdkModels'
+import { ApiModel } from './sdkModels'
 
 const warn = (warning: string) => {
   throw new Error(warning)

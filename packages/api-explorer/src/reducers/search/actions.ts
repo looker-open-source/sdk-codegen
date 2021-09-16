@@ -24,8 +24,8 @@
 
  */
 
-import { SearchCriterionTerm } from '@looker/sdk-codegen'
-import { SearchAction } from './reducer'
+import type { SearchCriterionTerm } from '@looker/sdk-codegen'
+import type { SearchAction } from './reducer'
 
 export const setPattern = (pattern: string): SearchAction => ({
   type: 'SET_PATTERN',

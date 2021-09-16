@@ -24,7 +24,7 @@
 
  */
 
-import {
+import type {
   IHackerProps,
   IJudgingProps,
   IProjectProps,

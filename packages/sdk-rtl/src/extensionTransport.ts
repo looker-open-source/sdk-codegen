@@ -24,8 +24,8 @@
 
  */
 
-import { Readable } from 'readable-stream'
-import {
+import type { Readable } from 'readable-stream'
+import type {
   Authenticator,
   Values,
   SDKResponse,

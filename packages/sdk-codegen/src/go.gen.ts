@@ -24,18 +24,18 @@
 
  */
 
-import { CodeGen, IMappedType, IVersionInfo, commentBlock } from './codeGen'
-import {
+import type { IMappedType, IVersionInfo } from './codeGen'
+import { CodeGen, commentBlock } from './codeGen'
+import type {
   ApiModel,
   Arg,
-  EnumType,
   EnumValueType,
   IMethod,
   IParameter,
   IProperty,
   IType,
-  strBody,
 } from './sdkModels'
+import { EnumType, strBody } from './sdkModels'
 
 const align = (str: string, size: number): string => {
   const num = size - str.length + 1

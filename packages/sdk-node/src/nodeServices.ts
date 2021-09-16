@@ -24,13 +24,13 @@
 
  */
 
-import {
+import type {
   ICryptoHash,
   IApiSettings,
   ITransport,
-  sdkError,
   IPlatformServices,
 } from '@looker/sdk-rtl'
+import { sdkError } from '@looker/sdk-rtl'
 import { NodeCryptoHash, NodeTransport } from './nodeTransport'
 
 export class NodeServices implements IPlatformServices {

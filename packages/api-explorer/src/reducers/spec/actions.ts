@@ -24,7 +24,7 @@
 
  */
 
-import { ApiModel } from '@looker/sdk-codegen'
+import type { ApiModel } from '@looker/sdk-codegen'
 
 export enum Actions {
   SELECT_SPEC = 'SELECT_SPEC',

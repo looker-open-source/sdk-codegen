@@ -25,22 +25,25 @@
  */
 
 import * as fs from 'fs'
-import { Readable } from 'readable-stream'
-import {
-  Looker40SDK as LookerSDK,
+import type { Readable } from 'readable-stream'
+import type {
   ICreateQueryTask,
   IQuery,
   IRequestRunInlineQuery,
   IUser,
   IWriteQuery,
+  IDashboard,
+} from '@looker/sdk'
+import {
+  Looker40SDK as LookerSDK,
   ResultFormat,
   environmentPrefix,
   Looker31SDK,
   Looker40SDK,
   Looker31SDKStream,
   Looker40SDKStream,
-  IDashboard,
 } from '@looker/sdk'
+import type { IRawResponse } from '@looker/sdk-rtl'
 import {
   DelimArray,
   boolDefault,
@@ -48,7 +51,6 @@ import {
   ApiConfigMap,
   pageAll,
   pager,
-  IRawResponse,
 } from '@looker/sdk-rtl'
 import {
   NodeSettings,

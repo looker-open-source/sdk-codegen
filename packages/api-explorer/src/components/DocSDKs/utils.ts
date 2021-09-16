@@ -23,7 +23,7 @@
  SOFTWARE.
 
  */
-import { IMethod } from '@looker/sdk-codegen'
+import type { IMethod } from '@looker/sdk-codegen'
 import clone from 'lodash/clone'
 
 /**

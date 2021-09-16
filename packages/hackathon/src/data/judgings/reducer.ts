@@ -23,8 +23,9 @@
  SOFTWARE.
 
  */
-import { IJudgingProps } from '../../models'
-import { Actions, JudgingAction } from './actions'
+import type { IJudgingProps } from '../../models'
+import type { JudgingAction } from './actions'
+import { Actions } from './actions'
 
 export interface JudgingsState {
   currentPageNum: number

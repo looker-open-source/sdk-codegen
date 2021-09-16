@@ -25,7 +25,8 @@
  */
 import * as fs from 'fs'
 import path from 'path'
-import { IExampleMine, findExamples, findExampleLanguages } from './exampleInfo'
+import type { IExampleMine } from './exampleInfo'
+import { findExamples, findExampleLanguages } from './exampleInfo'
 
 const fileName = path.join(__dirname, '../../../examplesIndex.json')
 const file = fs.readFileSync(fileName, { encoding: 'utf-8' })

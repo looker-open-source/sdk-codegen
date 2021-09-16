@@ -23,9 +23,11 @@
  SOFTWARE.
 
  */
-import React, { FC } from 'react'
+import type { FC } from 'react'
+import React from 'react'
 import { Space, CopyToClipboard } from '@looker/components'
-import { CodeDisplay, CodeDisplayProps } from '..'
+import type { CodeDisplayProps } from '..'
+import { CodeDisplay } from '..'
 
 interface CodeCopyProps extends CodeDisplayProps {
   caption?: string

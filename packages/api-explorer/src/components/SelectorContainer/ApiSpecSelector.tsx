@@ -24,12 +24,14 @@
 
  */
 
-import React, { FC, Dispatch } from 'react'
+import type { FC, Dispatch } from 'react'
+import React from 'react'
 import { Select } from '@looker/components'
 import { useHistory, useLocation } from 'react-router-dom'
 
-import { SpecList, SpecItem } from '@looker/sdk-codegen'
-import { SpecAction, selectSpec } from '../../reducers'
+import type { SpecList, SpecItem } from '@looker/sdk-codegen'
+import type { SpecAction } from '../../reducers'
+import { selectSpec } from '../../reducers'
 
 interface ApiSpecSelectorProps {
   specs: SpecList

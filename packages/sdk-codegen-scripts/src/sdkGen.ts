@@ -27,7 +27,7 @@
 import * as fs from 'fs'
 import path from 'path'
 import { danger, log, warn } from '@looker/sdk-codegen-utils'
-import { IVersionInfo } from '@looker/sdk-codegen'
+import type { IVersionInfo } from '@looker/sdk-codegen'
 import {
   FunctionGenerator,
   InterfaceGenerator,

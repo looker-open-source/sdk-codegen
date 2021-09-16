@@ -24,11 +24,13 @@
 
  */
 
-import { AuthSession, IAccessToken, IError } from './authSession'
-import { agentPrefix, IRequestProps, sdkError } from './transport'
+import type { IAccessToken, IError } from './authSession'
+import { AuthSession } from './authSession'
+import type { IRequestProps } from './transport'
+import { agentPrefix, sdkError } from './transport'
 import { AuthToken } from './authToken'
-import { ICryptoHash } from './cryptoHash'
-import { IPlatformServices } from './platformServices'
+import type { ICryptoHash } from './cryptoHash'
+import type { IPlatformServices } from './platformServices'
 
 interface IAuthCodeGrantTypeParams {
   grant_type: 'authorization_code'

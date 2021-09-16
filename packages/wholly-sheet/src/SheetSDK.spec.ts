@@ -27,7 +27,8 @@
 import * as fs from 'fs'
 import * as path from 'path'
 import { cred, initSheetSDK, sheetTimeout } from './testUtils/testUtils'
-import { SheetSDK, tabName } from './SheetSDK'
+import type { SheetSDK } from './SheetSDK'
+import { tabName } from './SheetSDK'
 let sheets: SheetSDK
 
 describe('SheetSDK', () => {

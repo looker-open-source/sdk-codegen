@@ -23,7 +23,8 @@
  SOFTWARE.
 
  */
-import React, { FC, useEffect } from 'react'
+import type { FC } from 'react'
+import React, { useEffect } from 'react'
 import { TabList, Tab, TabPanels, TabPanel } from '@looker/components'
 import { useHistory, useRouteMatch } from 'react-router-dom'
 import { Routes } from '../../routes/AppRouter'

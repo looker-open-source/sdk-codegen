@@ -24,7 +24,8 @@
 
  */
 
-import React, { FC, Dispatch } from 'react'
+import type { FC, Dispatch } from 'react'
+import React from 'react'
 import styled from 'styled-components'
 import {
   Icon,
@@ -35,10 +36,10 @@ import {
 } from '@looker/components'
 import { LookerLogo } from '@looker/icons'
 import { Menu } from '@styled-icons/material/Menu'
-import { SpecList, SpecItem } from '@looker/sdk-codegen'
+import type { SpecList, SpecItem } from '@looker/sdk-codegen'
 
 import { Link } from '../Link'
-import { SpecAction } from '../../reducers'
+import type { SpecAction } from '../../reducers'
 import { SelectorContainer } from '../SelectorContainer'
 
 interface HeaderProps {

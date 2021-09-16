@@ -28,7 +28,7 @@
  * 423 API methods
  */
 
-import { Readable } from 'readable-stream'
+import type { Readable } from 'readable-stream'
 import type {
   DelimArray,
   IDictionary,

@@ -23,11 +23,8 @@
  SOFTWARE.
 
  */
-import {
-  StandaloneEnvAdaptor,
-  ThemeOverrides,
-  getThemeOverrides,
-} from './envAdaptor'
+import type { ThemeOverrides } from './envAdaptor'
+import { StandaloneEnvAdaptor, getThemeOverrides } from './envAdaptor'
 
 describe('StandaloneEnvAdaptor', () => {
   test.each([

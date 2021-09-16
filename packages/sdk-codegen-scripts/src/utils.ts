@@ -24,18 +24,18 @@
 
  */
 
+import type { ILookerVersions, SpecItem } from '@looker/sdk-codegen'
 import {
   ApiModel,
   codeGenerators,
   findGenerator,
   getSpecsFromVersions,
-  ILookerVersions,
-  SpecItem,
   upgradeSpecObject,
 } from '@looker/sdk-codegen'
 import { log } from '@looker/sdk-codegen-utils'
 import { createJsonFile, readFileSync } from './nodeUtils'
-import { ISDKConfigProps, SDKConfig } from './sdkConfig'
+import type { ISDKConfigProps } from './sdkConfig'
+import { SDKConfig } from './sdkConfig'
 import {
   authGetUrl,
   fetchLookerVersion,

@@ -24,8 +24,8 @@
 
  */
 
-import { IApiSettings } from './apiSettings'
-import { IRequestProps, ITransport } from './transport'
+import type { IApiSettings } from './apiSettings'
+import type { IRequestProps, ITransport } from './transport'
 import { BrowserTransport } from './browserTransport'
 import { AuthSession } from './authSession'
 
