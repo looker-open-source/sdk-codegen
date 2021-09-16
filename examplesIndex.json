@@ -1,6 +1,6 @@
 {
-  "commitHash": "8ba94e4c304a2d77df81f952d3413011b79acf35",
-  "remoteOrigin": "https://github.com/looker-open-source/sdk-codegen",
+  "commitHash": "29b030285c0f214a8c14ee320a47f599fae91d01",
+  "remoteOrigin": "https://github.com/LukaFontanilla/sdk-codegen",
   "summaries": {
     "packages/sdk-codegen/src/codeGenerators.ts": {
       "summary": "`codeGenerators.ts`",
@@ -119,7 +119,7 @@
       "sourceFile": "examples/python/soft_delete_dashboard.py"
     },
     "examples/python/kill_queries.py": {
-      "summary": "Killing all running queries",
+      "summary": "Kill all running queries",
       "sourceFile": "examples/python/kill_queries.py"
     },
     "examples/python/download_tile.py": {
@@ -246,6 +246,30 @@
       "summary": "sudo as user",
       "sourceFile": "examples/typescript/sudoAsUser.ts"
     },
+    "examples/typescript/generateApiCredentials.ts": {
+      "summary": "bulk generate api credentials",
+      "sourceFile": "examples/typescript/generateApiCredentials.ts"
+    },
+    "examples/typescript/bulkDisableSchedules.ts": {
+      "summary": "bulk disable schedules",
+      "sourceFile": "examples/typescript/bulkDisableSchedules.ts"
+    },
+    "examples/typescript/bulkReassignSchedules.ts": {
+      "summary": "bulk reassign schedules",
+      "sourceFile": "examples/typescript/bulkReassignSchedules.ts"
+    },
+    "examples/typescript/validateBranch.ts": {
+      "summary": "validate branch",
+      "sourceFile": "examples/typescript/validateBranch.ts"
+    },
+    "examples/typescript/testDBConnections.ts": {
+      "summary": "test connections",
+      "sourceFile": "examples/typescript/testDBConnections.ts"
+    },
+    "examples/typescript/dependencyGraph.ts": {
+      "summary": "pdt mapping",
+      "sourceFile": "examples/typescript/dependencyGraph.ts"
+    },
     "examples/typescript/downloadTile.ts": {
       "summary": "downloadTile.ts example",
       "sourceFile": "examples/typescript/downloadTile.ts"
@@ -261,6 +285,10 @@
     "packages/api-explorer/src/components/ExploreType/ExploreProperty.tsx": {
       "summary": "`ExploreProperty`",
       "sourceFile": "packages/api-explorer/src/components/ExploreType/ExploreProperty.tsx"
+    },
+    "packages/run-it/src/RunIt.tsx": {
+      "summary": "RunIt",
+      "sourceFile": "packages/run-it/src/RunIt.tsx"
     },
     "packages/run-it/src/utils/RunItSDK.spec.ts": {
       "summary": "RunItSDK tests",
@@ -393,25 +421,15 @@
           {
             "sourceFile": "packages/sdk-node/test/methods.spec.ts",
             "column": 18,
-            "line": 728
+            "line": 730
           },
           {
             "sourceFile": "packages/sdk-node/test/methods.spec.ts",
             "column": 35,
-            "line": 734
+            "line": 736
           }
         ],
         ".kt": [
-          {
-            "sourceFile": "kotlin/build/spotless/spotlessKotlin/src/test/TestMethods.kt",
-            "column": 49,
-            "line": 104
-          },
-          {
-            "sourceFile": "kotlin/build/spotless/spotlessKotlin/src/test/TestMethods.kt",
-            "column": 14,
-            "line": 296
-          },
           {
             "sourceFile": "kotlin/src/test/TestAsync.kt",
             "column": 53,
@@ -563,60 +581,55 @@
           {
             "sourceFile": "packages/sdk-node/test/methods.spec.ts",
             "column": 34,
-            "line": 323
+            "line": 325
           },
           {
             "sourceFile": "packages/sdk-node/test/methods.spec.ts",
             "column": 34,
-            "line": 333
+            "line": 335
           },
           {
             "sourceFile": "packages/sdk-node/test/methods.spec.ts",
             "column": 37,
-            "line": 356
+            "line": 358
           },
           {
             "sourceFile": "packages/sdk-node/test/methods.spec.ts",
             "column": 34,
-            "line": 371
+            "line": 373
           },
           {
             "sourceFile": "packages/sdk-node/test/methods.spec.ts",
             "column": 30,
-            "line": 376
+            "line": 378
           },
           {
             "sourceFile": "packages/sdk-node/test/methods.spec.ts",
             "column": 34,
-            "line": 381
+            "line": 383
           },
           {
             "sourceFile": "packages/sdk-node/test/methods.spec.ts",
             "column": 30,
-            "line": 387
+            "line": 389
           },
           {
             "sourceFile": "packages/sdk-node/test/methods.spec.ts",
             "column": 30,
-            "line": 392
+            "line": 394
           },
           {
             "sourceFile": "packages/sdk-node/test/methods.spec.ts",
             "column": 32,
-            "line": 900
+            "line": 902
           },
           {
             "sourceFile": "packages/sdk-node/test/methods.spec.ts",
             "column": 30,
-            "line": 1081
+            "line": 1083
           }
         ],
         ".kt": [
-          {
-            "sourceFile": "kotlin/build/spotless/spotlessKotlin/src/test/TestMethods.kt",
-            "column": 30,
-            "line": 233
-          },
           {
             "sourceFile": "kotlin/src/test/TestMethods.kt",
             "column": 30,
@@ -649,7 +662,7 @@
           {
             "sourceFile": "csharp/sdk/4.0/methods.cs",
             "column": 17,
-            "line": 6161
+            "line": 6340
           }
         ],
         ".go": [
@@ -661,29 +674,19 @@
           {
             "sourceFile": "go/sdk/v4/methods.go",
             "column": 14,
-            "line": 4682
+            "line": 4818
           }
         ],
         ".kt": [
           {
-            "sourceFile": "kotlin/build/spotless/spotlessKotlin/src/main/com/looker/sdk/4.0/methods.kt",
-            "column": 18,
-            "line": 6083
-          },
-          {
-            "sourceFile": "kotlin/build/spotless/spotlessKotlin/src/main/com/looker/sdk/4.0/streams.kt",
-            "column": 18,
-            "line": 6081
-          },
-          {
             "sourceFile": "kotlin/src/main/com/looker/sdk/4.0/methods.kt",
             "column": 18,
-            "line": 6252
+            "line": 6438
           },
           {
             "sourceFile": "kotlin/src/main/com/looker/sdk/4.0/streams.kt",
             "column": 18,
-            "line": 6251
+            "line": 6437
           }
         ],
         ".ts": [
@@ -700,7 +703,7 @@
           {
             "sourceFile": "packages/sdk/src/3.1/methodsInterface.ts",
             "column": 16,
-            "line": 4611
+            "line": 4612
           },
           {
             "sourceFile": "packages/sdk/src/3.1/streams.ts",
@@ -710,22 +713,22 @@
           {
             "sourceFile": "packages/sdk/src/4.0/funcs.ts",
             "column": 14,
-            "line": 8250
+            "line": 8476
           },
           {
             "sourceFile": "packages/sdk/src/4.0/methods.ts",
             "column": 16,
-            "line": 7732
+            "line": 7944
           },
           {
             "sourceFile": "packages/sdk/src/4.0/methodsInterface.ts",
             "column": 16,
-            "line": 5489
+            "line": 5653
           },
           {
             "sourceFile": "packages/sdk/src/4.0/streams.ts",
             "column": 16,
-            "line": 8875
+            "line": 9125
           },
           {
             "sourceFile": "packages/sdk-codegen/src/python.gen.spec.ts",
@@ -742,19 +745,19 @@
           {
             "sourceFile": "python/looker_sdk/sdk/api40/methods.py",
             "column": 17,
-            "line": 7843
+            "line": 8069
           }
         ],
         ".swift": [
           {
             "sourceFile": "swift/looker/sdk/methods.swift",
             "column": 18,
-            "line": 7285
+            "line": 7499
           },
           {
             "sourceFile": "swift/looker/sdk/streams.swift",
             "column": 18,
-            "line": 7283
+            "line": 7497
           }
         ]
       }
@@ -771,7 +774,7 @@
           {
             "sourceFile": "csharp/sdk/4.0/methods.cs",
             "column": 7,
-            "line": 8158
+            "line": 8355
           }
         ],
         ".go": [
@@ -783,29 +786,19 @@
           {
             "sourceFile": "go/sdk/v4/methods.go",
             "column": 4,
-            "line": 6172
+            "line": 6308
           }
         ],
         ".kt": [
           {
-            "sourceFile": "kotlin/build/spotless/spotlessKotlin/src/main/com/looker/sdk/4.0/methods.kt",
-            "column": 8,
-            "line": 8026
-          },
-          {
-            "sourceFile": "kotlin/build/spotless/spotlessKotlin/src/main/com/looker/sdk/4.0/streams.kt",
-            "column": 8,
-            "line": 8024
-          },
-          {
             "sourceFile": "kotlin/src/main/com/looker/sdk/4.0/methods.kt",
             "column": 8,
-            "line": 8280
+            "line": 8484
           },
           {
             "sourceFile": "kotlin/src/main/com/looker/sdk/4.0/streams.kt",
             "column": 8,
-            "line": 8279
+            "line": 8483
           }
         ],
         ".ts": [
@@ -822,7 +815,7 @@
           {
             "sourceFile": "packages/sdk/src/3.1/methodsInterface.ts",
             "column": 6,
-            "line": 6466
+            "line": 6467
           },
           {
             "sourceFile": "packages/sdk/src/3.1/streams.ts",
@@ -832,22 +825,22 @@
           {
             "sourceFile": "packages/sdk/src/4.0/funcs.ts",
             "column": 4,
-            "line": 10615
+            "line": 10847
           },
           {
             "sourceFile": "packages/sdk/src/4.0/methods.ts",
             "column": 6,
-            "line": 9977
+            "line": 10195
           },
           {
             "sourceFile": "packages/sdk/src/4.0/methodsInterface.ts",
             "column": 6,
-            "line": 7152
+            "line": 7316
           },
           {
             "sourceFile": "packages/sdk/src/4.0/streams.ts",
             "column": 6,
-            "line": 11440
+            "line": 11696
           }
         ],
         ".py": [
@@ -859,19 +852,19 @@
           {
             "sourceFile": "python/looker_sdk/sdk/api40/methods.py",
             "column": 7,
-            "line": 10277
+            "line": 10521
           }
         ],
         ".swift": [
           {
             "sourceFile": "swift/looker/sdk/methods.swift",
             "column": 8,
-            "line": 9615
+            "line": 9853
           },
           {
             "sourceFile": "swift/looker/sdk/streams.swift",
             "column": 8,
-            "line": 9613
+            "line": 9851
           }
         ]
       }
@@ -936,11 +929,6 @@
         ],
         ".kt": [
           {
-            "sourceFile": "kotlin/build/spotless/spotlessKotlin/src/test/TestMethods.kt",
-            "column": 28,
-            "line": 349
-          },
-          {
             "sourceFile": "kotlin/src/test/TestMethods.kt",
             "column": 28,
             "line": 349
@@ -981,16 +969,6 @@
           }
         ],
         ".kt": [
-          {
-            "sourceFile": "kotlin/build/spotless/spotlessKotlin/src/test/TestMethods.kt",
-            "column": 26,
-            "line": 107
-          },
-          {
-            "sourceFile": "kotlin/build/spotless/spotlessKotlin/src/test/TestMethods.kt",
-            "column": 28,
-            "line": 298
-          },
           {
             "sourceFile": "kotlin/src/test/TestMethods.kt",
             "column": 26,
@@ -1069,27 +1047,27 @@
           {
             "sourceFile": "packages/sdk-node/test/methods.spec.ts",
             "column": 8,
-            "line": 142
+            "line": 144
           },
           {
             "sourceFile": "packages/sdk-node/test/methods.spec.ts",
             "column": 10,
-            "line": 147
+            "line": 149
           },
           {
             "sourceFile": "packages/sdk-node/test/methods.spec.ts",
             "column": 8,
-            "line": 187
+            "line": 189
           },
           {
             "sourceFile": "packages/sdk-node/test/methods.spec.ts",
             "column": 10,
-            "line": 191
+            "line": 193
           },
           {
             "sourceFile": "packages/sdk-node/test/methods.spec.ts",
             "column": 8,
-            "line": 529
+            "line": 531
           }
         ],
         ".kt": [
@@ -1182,6 +1160,13 @@
             "column": 0,
             "line": 32
           }
+        ],
+        ".ts": [
+          {
+            "sourceFile": "examples/typescript/validateBranch.ts",
+            "column": 6,
+            "line": 16
+          }
         ]
       }
     },
@@ -1255,17 +1240,17 @@
           {
             "sourceFile": "packages/sdk-node/test/methods.spec.ts",
             "column": 23,
-            "line": 155
+            "line": 157
           },
           {
             "sourceFile": "packages/sdk-node/test/methods.spec.ts",
             "column": 12,
-            "line": 487
+            "line": 489
           },
           {
             "sourceFile": "packages/sdk-node/test/methods.spec.ts",
             "column": 12,
-            "line": 498
+            "line": 500
           }
         ],
         ".swift": [
@@ -1289,7 +1274,7 @@
           {
             "sourceFile": "examples/python/download_dashboard_pdf.py",
             "column": 26,
-            "line": 49
+            "line": 52
           },
           {
             "sourceFile": "examples/python/download_tile.py",
@@ -1316,55 +1301,50 @@
           {
             "sourceFile": "packages/sdk-node/test/methods.spec.ts",
             "column": 36,
-            "line": 211
+            "line": 213
           },
           {
             "sourceFile": "packages/sdk-node/test/methods.spec.ts",
             "column": 42,
-            "line": 270
+            "line": 272
           },
           {
             "sourceFile": "packages/sdk-node/test/methods.spec.ts",
             "column": 35,
-            "line": 657
-          },
-          {
-            "sourceFile": "packages/sdk-node/test/methods.spec.ts",
-            "column": 12,
             "line": 659
           },
           {
             "sourceFile": "packages/sdk-node/test/methods.spec.ts",
+            "column": 12,
+            "line": 661
+          },
+          {
+            "sourceFile": "packages/sdk-node/test/methods.spec.ts",
             "column": 33,
-            "line": 677
+            "line": 679
           },
           {
             "sourceFile": "packages/sdk-node/test/methods.spec.ts",
             "column": 18,
-            "line": 700
+            "line": 702
           },
           {
             "sourceFile": "packages/sdk-node/test/methods.spec.ts",
             "column": 12,
-            "line": 707
+            "line": 709
           },
           {
             "sourceFile": "packages/sdk-node/test/methods.spec.ts",
             "column": 32,
-            "line": 890
+            "line": 892
           },
           {
             "sourceFile": "packages/sdk-node/test/methods.spec.ts",
             "column": 38,
-            "line": 915
+            "line": 917
           }
         ],
         ".kt": [
-          {
-            "sourceFile": "kotlin/build/spotless/spotlessKotlin/src/test/TestMethods.kt",
-            "column": 46,
-            "line": 253
-          },
           {
             "sourceFile": "kotlin/src/test/KotlinExample.kt",
             "column": 50,
@@ -1412,7 +1392,7 @@
           {
             "sourceFile": "examples/python/download_dashboard_pdf.py",
             "column": 11,
-            "line": 66
+            "line": 68
           }
         ],
         ".ts": [
@@ -1431,12 +1411,12 @@
           {
             "sourceFile": "examples/python/download_dashboard_pdf.py",
             "column": 15,
-            "line": 86
+            "line": 88
           },
           {
             "sourceFile": "examples/python/download_look.py",
             "column": 15,
-            "line": 63
+            "line": 65
           },
           {
             "sourceFile": "examples/python/download_tile.py",
@@ -1474,12 +1454,12 @@
           {
             "sourceFile": "examples/python/download_dashboard_pdf.py",
             "column": 13,
-            "line": 99
+            "line": 101
           },
           {
             "sourceFile": "examples/python/download_look.py",
             "column": 13,
-            "line": 73
+            "line": 75
           },
           {
             "sourceFile": "examples/python/download_tile.py",
@@ -1517,7 +1497,7 @@
           {
             "sourceFile": "examples/python/download_look.py",
             "column": 21,
-            "line": 41
+            "line": 45
           },
           {
             "sourceFile": "python/tests/integration/test_methods.py",
@@ -1566,22 +1546,22 @@
           {
             "sourceFile": "packages/sdk-node/test/methods.spec.ts",
             "column": 35,
-            "line": 262
+            "line": 264
           },
           {
             "sourceFile": "packages/sdk-node/test/methods.spec.ts",
             "column": 34,
-            "line": 406
+            "line": 408
           },
           {
             "sourceFile": "packages/sdk-node/test/methods.spec.ts",
             "column": 8,
-            "line": 418
+            "line": 420
           },
           {
             "sourceFile": "packages/sdk-node/test/methods.spec.ts",
             "column": 10,
-            "line": 439
+            "line": 441
           }
         ],
         ".swift": [
@@ -1600,7 +1580,7 @@
           {
             "sourceFile": "examples/python/download_look.py",
             "column": 11,
-            "line": 52
+            "line": 54
           }
         ],
         ".rb": [
@@ -1649,11 +1629,6 @@
           }
         ],
         ".kt": [
-          {
-            "sourceFile": "kotlin/build/spotless/spotlessKotlin/src/test/TestMethods.kt",
-            "column": 14,
-            "line": 311
-          },
           {
             "sourceFile": "kotlin/src/test/TestMethods.kt",
             "column": 14,
@@ -1716,11 +1691,6 @@
           }
         ],
         ".kt": [
-          {
-            "sourceFile": "kotlin/build/spotless/spotlessKotlin/src/test/TestMethods.kt",
-            "column": 28,
-            "line": 470
-          },
           {
             "sourceFile": "kotlin/src/test/TestMethods.kt",
             "column": 28,
@@ -1790,12 +1760,39 @@
             "line": 11
           }
         ],
-        ".kt": [
+        ".ts": [
           {
-            "sourceFile": "kotlin/build/spotless/spotlessKotlin/src/test/TestMethods.kt",
-            "column": 14,
-            "line": 523
+            "sourceFile": "examples/typescript/generateApiCredentials.ts",
+            "column": 4,
+            "line": 15
           },
+          {
+            "sourceFile": "packages/sdk-codegen/src/python.gen.spec.ts",
+            "column": 35,
+            "line": 956
+          },
+          {
+            "sourceFile": "packages/sdk-codegen/src/python.gen.spec.ts",
+            "column": 35,
+            "line": 967
+          },
+          {
+            "sourceFile": "packages/sdk-codegen/src/typescript.gen.spec.ts",
+            "column": 52,
+            "line": 261
+          },
+          {
+            "sourceFile": "packages/sdk-node/test/methods.spec.ts",
+            "column": 10,
+            "line": 354
+          },
+          {
+            "sourceFile": "packages/sdk-node/test/methods.spec.ts",
+            "column": 33,
+            "line": 565
+          }
+        ],
+        ".kt": [
           {
             "sourceFile": "kotlin/src/test/TestMethods.kt",
             "column": 14,
@@ -1810,33 +1807,6 @@
             "sourceFile": "kotlin/src/test/TestSmoke.kt",
             "column": 40,
             "line": 163
-          }
-        ],
-        ".ts": [
-          {
-            "sourceFile": "packages/sdk-codegen/src/python.gen.spec.ts",
-            "column": 35,
-            "line": 956
-          },
-          {
-            "sourceFile": "packages/sdk-codegen/src/python.gen.spec.ts",
-            "column": 35,
-            "line": 967
-          },
-          {
-            "sourceFile": "packages/sdk-codegen/src/typescript.gen.spec.ts",
-            "column": 52,
-            "line": 254
-          },
-          {
-            "sourceFile": "packages/sdk-node/test/methods.spec.ts",
-            "column": 10,
-            "line": 352
-          },
-          {
-            "sourceFile": "packages/sdk-node/test/methods.spec.ts",
-            "column": 33,
-            "line": 563
           }
         ],
         ".swift": [
@@ -1901,16 +1871,6 @@
         ],
         ".kt": [
           {
-            "sourceFile": "kotlin/build/spotless/spotlessKotlin/src/test/TestMethods.kt",
-            "column": 40,
-            "line": 87
-          },
-          {
-            "sourceFile": "kotlin/build/spotless/spotlessKotlin/src/test/TestMethods.kt",
-            "column": 14,
-            "line": 409
-          },
-          {
             "sourceFile": "kotlin/src/test/TestAsync.kt",
             "column": 45,
             "line": 21
@@ -1930,7 +1890,7 @@
           {
             "sourceFile": "packages/sdk-node/test/methods.spec.ts",
             "column": 35,
-            "line": 435
+            "line": 437
           }
         ],
         ".swift": [
@@ -2008,12 +1968,12 @@
           {
             "sourceFile": "packages/sdk-codegen/src/typescript.gen.spec.ts",
             "column": 52,
-            "line": 170
+            "line": 177
           },
           {
             "sourceFile": "packages/sdk-codegen/src/typescript.gen.spec.ts",
             "column": 52,
-            "line": 221
+            "line": 228
           }
         ]
       }
@@ -2080,6 +2040,18 @@
             "column": 8,
             "line": 72
           }
+        ],
+        ".ts": [
+          {
+            "sourceFile": "examples/typescript/bulkDisableSchedules.ts",
+            "column": 21,
+            "line": 27
+          },
+          {
+            "sourceFile": "examples/typescript/bulkReassignSchedules.ts",
+            "column": 23,
+            "line": 28
+          }
         ]
       }
     },
@@ -2100,11 +2072,6 @@
         ],
         ".kt": [
           {
-            "sourceFile": "kotlin/build/spotless/spotlessKotlin/src/test/TestMethods.kt",
-            "column": 12,
-            "line": 176
-          },
-          {
             "sourceFile": "kotlin/src/test/TestMethods.kt",
             "column": 12,
             "line": 176
@@ -2119,12 +2086,12 @@
           {
             "sourceFile": "examples/python/query_task.py",
             "column": 12,
-            "line": 18
+            "line": 26
           },
           {
             "sourceFile": "examples/python/query_task.py",
             "column": 12,
-            "line": 60
+            "line": 66
           },
           {
             "sourceFile": "python/tests/integration/test_methods.py",
@@ -2156,16 +2123,6 @@
         ],
         ".kt": [
           {
-            "sourceFile": "kotlin/build/spotless/spotlessKotlin/src/test/TestMethods.kt",
-            "column": 34,
-            "line": 210
-          },
-          {
-            "sourceFile": "kotlin/build/spotless/spotlessKotlin/src/test/TestMethods.kt",
-            "column": 34,
-            "line": 244
-          },
-          {
             "sourceFile": "kotlin/src/test/TestMethods.kt",
             "column": 34,
             "line": 210
@@ -2185,12 +2142,12 @@
           {
             "sourceFile": "packages/sdk-node/test/methods.spec.ts",
             "column": 37,
-            "line": 752
+            "line": 754
           },
           {
             "sourceFile": "packages/sdk-node/test/methods.spec.ts",
             "column": 12,
-            "line": 909
+            "line": 911
           }
         ],
         ".swift": [
@@ -2214,12 +2171,12 @@
           {
             "sourceFile": "examples/python/query_task.py",
             "column": 11,
-            "line": 26
+            "line": 33
           },
           {
             "sourceFile": "examples/python/query_task.py",
             "column": 11,
-            "line": 64
+            "line": 70
           },
           {
             "sourceFile": "python/tests/integration/test_methods.py",
@@ -2243,7 +2200,7 @@
           {
             "sourceFile": "packages/sdk-codegen/src/typescript.gen.spec.ts",
             "column": 52,
-            "line": 238
+            "line": 245
           }
         ]
       }
@@ -2255,12 +2212,12 @@
           {
             "sourceFile": "examples/python/query_task.py",
             "column": 15,
-            "line": 34
+            "line": 40
           },
           {
             "sourceFile": "examples/python/query_task.py",
             "column": 15,
-            "line": 71
+            "line": 77
           }
         ],
         ".rb": [
@@ -2284,12 +2241,12 @@
           {
             "sourceFile": "examples/python/query_task.py",
             "column": 11,
-            "line": 44
+            "line": 50
           },
           {
             "sourceFile": "examples/python/query_task.py",
             "column": 11,
-            "line": 81
+            "line": 87
           }
         ]
       }
@@ -2301,7 +2258,7 @@
           {
             "sourceFile": "examples/python/run_look_with_filters.py",
             "column": 15,
-            "line": 45
+            "line": 47
           }
         ],
         ".rb": [
@@ -2322,16 +2279,6 @@
           }
         ],
         ".kt": [
-          {
-            "sourceFile": "kotlin/build/spotless/spotlessKotlin/src/test/TestMethods.kt",
-            "column": 28,
-            "line": 411
-          },
-          {
-            "sourceFile": "kotlin/build/spotless/spotlessKotlin/src/test/TestMethods.kt",
-            "column": 32,
-            "line": 532
-          },
           {
             "sourceFile": "kotlin/src/test/TestMethods.kt",
             "column": 28,
@@ -2357,12 +2304,12 @@
           {
             "sourceFile": "packages/sdk-codegen/src/typescript.gen.spec.ts",
             "column": 52,
-            "line": 178
+            "line": 185
           },
           {
             "sourceFile": "packages/sdk-codegen/src/typescript.gen.spec.ts",
             "column": 52,
-            "line": 186
+            "line": 193
           }
         ],
         ".swift": [
@@ -2381,7 +2328,7 @@
           {
             "sourceFile": "examples/python/run_look_with_filters.py",
             "column": 16,
-            "line": 61
+            "line": 62
           },
           {
             "sourceFile": "python/tests/integration/test_methods.py",
@@ -2395,16 +2342,6 @@
           }
         ],
         ".kt": [
-          {
-            "sourceFile": "kotlin/build/spotless/spotlessKotlin/src/test/TestMethods.kt",
-            "column": 12,
-            "line": 260
-          },
-          {
-            "sourceFile": "kotlin/build/spotless/spotlessKotlin/src/test/TestMethods.kt",
-            "column": 40,
-            "line": 462
-          },
           {
             "sourceFile": "kotlin/src/test/TestMethods.kt",
             "column": 12,
@@ -2420,12 +2357,12 @@
           {
             "sourceFile": "packages/sdk-node/test/methods.spec.ts",
             "column": 36,
-            "line": 826
+            "line": 828
           },
           {
             "sourceFile": "packages/sdk-node/test/methods.spec.ts",
             "column": 35,
-            "line": 837
+            "line": 839
           }
         ]
       }
@@ -2454,12 +2391,12 @@
           {
             "sourceFile": "packages/sdk-node/test/methods.spec.ts",
             "column": 12,
-            "line": 974
+            "line": 976
           },
           {
             "sourceFile": "packages/sdk-node/test/methods.spec.ts",
             "column": 12,
-            "line": 982
+            "line": 984
           }
         ]
       }
@@ -2471,15 +2408,10 @@
           {
             "sourceFile": "examples/python/test_connection.py",
             "column": 17,
-            "line": 35
+            "line": 40
           }
         ],
         ".kt": [
-          {
-            "sourceFile": "kotlin/build/spotless/spotlessKotlin/src/test/TestMethods.kt",
-            "column": 28,
-            "line": 279
-          },
           {
             "sourceFile": "kotlin/src/test/TestMethods.kt",
             "column": 28,
@@ -2495,7 +2427,14 @@
           {
             "sourceFile": "examples/python/test_connection.py",
             "column": 19,
-            "line": 46
+            "line": 51
+          }
+        ],
+        ".ts": [
+          {
+            "sourceFile": "examples/typescript/testDBConnections.ts",
+            "column": 10,
+            "line": 28
           }
         ]
       }
@@ -2510,22 +2449,29 @@
             "line": 40
           }
         ],
+        ".ts": [
+          {
+            "sourceFile": "examples/typescript/bulkDisableSchedules.ts",
+            "column": 6,
+            "line": 12
+          },
+          {
+            "sourceFile": "examples/typescript/bulkDisableSchedules.ts",
+            "column": 29,
+            "line": 15
+          },
+          {
+            "sourceFile": "examples/typescript/bulkReassignSchedules.ts",
+            "column": 6,
+            "line": 11
+          },
+          {
+            "sourceFile": "examples/typescript/bulkReassignSchedules.ts",
+            "column": 29,
+            "line": 14
+          }
+        ],
         ".kt": [
-          {
-            "sourceFile": "kotlin/build/spotless/spotlessKotlin/src/test/TestMethods.kt",
-            "column": 49,
-            "line": 160
-          },
-          {
-            "sourceFile": "kotlin/build/spotless/spotlessKotlin/src/test/TestMethods.kt",
-            "column": 49,
-            "line": 195
-          },
-          {
-            "sourceFile": "kotlin/build/spotless/spotlessKotlin/src/test/TestMethods.kt",
-            "column": 14,
-            "line": 481
-          },
           {
             "sourceFile": "kotlin/src/test/TestMethods.kt",
             "column": 49,
@@ -2566,11 +2512,6 @@
         ],
         ".kt": [
           {
-            "sourceFile": "kotlin/build/spotless/spotlessKotlin/src/test/TestMethods.kt",
-            "column": 14,
-            "line": 442
-          },
-          {
             "sourceFile": "kotlin/src/test/TestMethods.kt",
             "column": 14,
             "line": 442
@@ -2601,11 +2542,6 @@
           }
         ],
         ".kt": [
-          {
-            "sourceFile": "kotlin/build/spotless/spotlessKotlin/src/test/TestMethods.kt",
-            "column": 14,
-            "line": 320
-          },
           {
             "sourceFile": "kotlin/src/test/TestMethods.kt",
             "column": 14,
@@ -2655,11 +2591,6 @@
         ],
         ".kt": [
           {
-            "sourceFile": "kotlin/build/spotless/spotlessKotlin/src/test/TestMethods.kt",
-            "column": 28,
-            "line": 525
-          },
-          {
             "sourceFile": "kotlin/src/test/TestMethods.kt",
             "column": 28,
             "line": 525
@@ -2669,7 +2600,7 @@
           {
             "sourceFile": "packages/sdk-node/test/methods.spec.ts",
             "column": 28,
-            "line": 176
+            "line": 178
           }
         ],
         ".py": [
@@ -2737,11 +2668,6 @@
         ],
         ".kt": [
           {
-            "sourceFile": "kotlin/build/spotless/spotlessKotlin/src/test/TestMethods.kt",
-            "column": 28,
-            "line": 483
-          },
-          {
             "sourceFile": "kotlin/src/test/TestMethods.kt",
             "column": 28,
             "line": 483
@@ -2782,11 +2708,6 @@
           }
         ],
         ".kt": [
-          {
-            "sourceFile": "kotlin/build/spotless/spotlessKotlin/src/test/TestMethods.kt",
-            "column": 14,
-            "line": 375
-          },
           {
             "sourceFile": "kotlin/src/test/TestMethods.kt",
             "column": 14,
@@ -2838,7 +2759,7 @@
           {
             "sourceFile": "packages/sdk-codegen/src/typescript.gen.spec.ts",
             "column": 52,
-            "line": 204
+            "line": 211
           }
         ],
         ".py": [
@@ -2863,6 +2784,129 @@
             "sourceFile": "examples/ruby/validate_projects.rb",
             "column": 25,
             "line": 22
+          }
+        ],
+        ".ts": [
+          {
+            "sourceFile": "examples/typescript/validateBranch.ts",
+            "column": 43,
+            "line": 24
+          },
+          {
+            "sourceFile": "examples/typescript/validateBranch.ts",
+            "column": 41,
+            "line": 52
+          }
+        ]
+      }
+    },
+    "graph_derived_tables_for_model": {
+      "operationId": "graph_derived_tables_for_model",
+      "calls": {
+        ".ts": [
+          {
+            "sourceFile": "examples/typescript/dependencyGraph.ts",
+            "column": 6,
+            "line": 11
+          }
+        ]
+      }
+    },
+    "create_user_credentials_api3": {
+      "operationId": "create_user_credentials_api3",
+      "calls": {
+        ".ts": [
+          {
+            "sourceFile": "examples/typescript/generateApiCredentials.ts",
+            "column": 19,
+            "line": 30
+          }
+        ]
+      }
+    },
+    "all_connections": {
+      "operationId": "all_connections",
+      "calls": {
+        ".ts": [
+          {
+            "sourceFile": "examples/typescript/testDBConnections.ts",
+            "column": 35,
+            "line": 17
+          },
+          {
+            "sourceFile": "packages/extension-sdk/src/sdk/extension_sdk.spec.ts",
+            "column": 4,
+            "line": 123
+          },
+          {
+            "sourceFile": "packages/extension-sdk/src/sdk/extension_sdk.spec.ts",
+            "column": 4,
+            "line": 135
+          },
+          {
+            "sourceFile": "packages/extension-sdk/src/sdk/extension_sdk.spec.ts",
+            "column": 4,
+            "line": 147
+          },
+          {
+            "sourceFile": "packages/extension-sdk/src/sdk/extension_sdk.spec.ts",
+            "column": 4,
+            "line": 159
+          }
+        ],
+        ".kt": [
+          {
+            "sourceFile": "kotlin/src/test/TestMethods.kt",
+            "column": 14,
+            "line": 277
+          }
+        ]
+      }
+    },
+    "session": {
+      "operationId": "session",
+      "calls": {
+        ".ts": [
+          {
+            "sourceFile": "examples/typescript/validateBranch.ts",
+            "column": 33,
+            "line": 12
+          }
+        ],
+        ".py": [
+          {
+            "sourceFile": "python/tests/integration/test_methods.py",
+            "column": 22,
+            "line": 270
+          },
+          {
+            "sourceFile": "python/tests/integration/test_methods.py",
+            "column": 22,
+            "line": 278
+          }
+        ]
+      }
+    },
+    "git_branch": {
+      "operationId": "git_branch",
+      "calls": {
+        ".ts": [
+          {
+            "sourceFile": "examples/typescript/validateBranch.ts",
+            "column": 37,
+            "line": 20
+          }
+        ]
+      }
+    },
+    "update_git_branch": {
+      "operationId": "update_git_branch",
+      "calls": {
+        ".ts": [
+          {
+            "sourceFile": "examples/typescript/validateBranch.ts",
+            "column": 8,
+            "line": 43
           }
         ]
       }
@@ -2920,11 +2964,6 @@
       "calls": {
         ".kt": [
           {
-            "sourceFile": "kotlin/build/spotless/spotlessKotlin/src/test/TestMethods.kt",
-            "column": 12,
-            "line": 92
-          },
-          {
             "sourceFile": "kotlin/src/test/TestMethods.kt",
             "column": 12,
             "line": 92
@@ -2939,17 +2978,17 @@
           {
             "sourceFile": "packages/sdk-rtl/src/apiMethods.ts",
             "column": 28,
-            "line": 80
+            "line": 79
           },
           {
             "sourceFile": "packages/sdk-rtl/src/apiMethods.ts",
             "column": 28,
-            "line": 267
+            "line": 266
           },
           {
             "sourceFile": "packages/sdk-rtl/src/transport.ts",
             "column": 25,
-            "line": 481
+            "line": 483
           }
         ],
         ".py": [
@@ -2966,11 +3005,6 @@
       "calls": {
         ".kt": [
           {
-            "sourceFile": "kotlin/build/spotless/spotlessKotlin/src/test/TestMethods.kt",
-            "column": 12,
-            "line": 110
-          },
-          {
             "sourceFile": "kotlin/src/test/TestMethods.kt",
             "column": 12,
             "line": 110
@@ -2980,7 +3014,7 @@
           {
             "sourceFile": "packages/sdk-node/test/methods.spec.ts",
             "column": 12,
-            "line": 918
+            "line": 920
           }
         ],
         ".py": [
@@ -2996,16 +3030,6 @@
       "operationId": "all_boards",
       "calls": {
         ".kt": [
-          {
-            "sourceFile": "kotlin/build/spotless/spotlessKotlin/src/test/TestMethods.kt",
-            "column": 41,
-            "line": 123
-          },
-          {
-            "sourceFile": "kotlin/build/spotless/spotlessKotlin/src/test/TestMethods.kt",
-            "column": 14,
-            "line": 347
-          },
           {
             "sourceFile": "kotlin/src/test/TestMethods.kt",
             "column": 41,
@@ -3024,11 +3048,6 @@
       "calls": {
         ".kt": [
           {
-            "sourceFile": "kotlin/build/spotless/spotlessKotlin/src/test/TestMethods.kt",
-            "column": 12,
-            "line": 129
-          },
-          {
             "sourceFile": "kotlin/src/test/TestMethods.kt",
             "column": 12,
             "line": 129
@@ -3040,11 +3059,6 @@
       "operationId": "create_board_section",
       "calls": {
         ".kt": [
-          {
-            "sourceFile": "kotlin/build/spotless/spotlessKotlin/src/test/TestMethods.kt",
-            "column": 12,
-            "line": 138
-          },
           {
             "sourceFile": "kotlin/src/test/TestMethods.kt",
             "column": 12,
@@ -3058,11 +3072,6 @@
       "calls": {
         ".kt": [
           {
-            "sourceFile": "kotlin/build/spotless/spotlessKotlin/src/test/TestMethods.kt",
-            "column": 12,
-            "line": 146
-          },
-          {
             "sourceFile": "kotlin/src/test/TestMethods.kt",
             "column": 12,
             "line": 146
@@ -3075,11 +3084,6 @@
       "calls": {
         ".kt": [
           {
-            "sourceFile": "kotlin/build/spotless/spotlessKotlin/src/test/TestMethods.kt",
-            "column": 32,
-            "line": 199
-          },
-          {
             "sourceFile": "kotlin/src/test/TestMethods.kt",
             "column": 32,
             "line": 199
@@ -3091,16 +3095,6 @@
       "operationId": "run_query",
       "calls": {
         ".kt": [
-          {
-            "sourceFile": "kotlin/build/spotless/spotlessKotlin/src/test/TestMethods.kt",
-            "column": 37,
-            "line": 213
-          },
-          {
-            "sourceFile": "kotlin/build/spotless/spotlessKotlin/src/test/TestMethods.kt",
-            "column": 40,
-            "line": 246
-          },
           {
             "sourceFile": "kotlin/src/test/TestMethods.kt",
             "column": 37,
@@ -3116,17 +3110,17 @@
           {
             "sourceFile": "packages/sdk-node/test/methods.spec.ts",
             "column": 14,
-            "line": 758
+            "line": 760
           },
           {
             "sourceFile": "packages/sdk-node/test/methods.spec.ts",
             "column": 14,
-            "line": 768
+            "line": 770
           },
           {
             "sourceFile": "packages/sdk-node/test/methods.spec.ts",
             "column": 14,
-            "line": 771
+            "line": 773
           }
         ],
         ".py": [
@@ -3175,11 +3169,6 @@
       "calls": {
         ".kt": [
           {
-            "sourceFile": "kotlin/build/spotless/spotlessKotlin/src/test/TestMethods.kt",
-            "column": 14,
-            "line": 268
-          },
-          {
             "sourceFile": "kotlin/src/test/TestMethods.kt",
             "column": 14,
             "line": 268
@@ -3194,7 +3183,7 @@
           {
             "sourceFile": "packages/sdk-node/test/methods.spec.ts",
             "column": 34,
-            "line": 301
+            "line": 303
           }
         ],
         ".py": [
@@ -3218,53 +3207,9 @@
       "calls": {
         ".kt": [
           {
-            "sourceFile": "kotlin/build/spotless/spotlessKotlin/src/test/TestMethods.kt",
-            "column": 28,
-            "line": 270
-          },
-          {
             "sourceFile": "kotlin/src/test/TestMethods.kt",
             "column": 28,
             "line": 270
-          }
-        ]
-      }
-    },
-    "all_connections": {
-      "operationId": "all_connections",
-      "calls": {
-        ".kt": [
-          {
-            "sourceFile": "kotlin/build/spotless/spotlessKotlin/src/test/TestMethods.kt",
-            "column": 14,
-            "line": 277
-          },
-          {
-            "sourceFile": "kotlin/src/test/TestMethods.kt",
-            "column": 14,
-            "line": 277
-          }
-        ],
-        ".ts": [
-          {
-            "sourceFile": "packages/extension-sdk/src/sdk/extension_sdk.spec.ts",
-            "column": 4,
-            "line": 123
-          },
-          {
-            "sourceFile": "packages/extension-sdk/src/sdk/extension_sdk.spec.ts",
-            "column": 4,
-            "line": 135
-          },
-          {
-            "sourceFile": "packages/extension-sdk/src/sdk/extension_sdk.spec.ts",
-            "column": 4,
-            "line": 147
-          },
-          {
-            "sourceFile": "packages/extension-sdk/src/sdk/extension_sdk.spec.ts",
-            "column": 4,
-            "line": 159
           }
         ]
       }
@@ -3273,11 +3218,6 @@
       "operationId": "all_datagroups",
       "calls": {
         ".kt": [
-          {
-            "sourceFile": "kotlin/build/spotless/spotlessKotlin/src/test/TestMethods.kt",
-            "column": 14,
-            "line": 286
-          },
           {
             "sourceFile": "kotlin/src/test/TestMethods.kt",
             "column": 14,
@@ -3288,7 +3228,7 @@
           {
             "sourceFile": "packages/sdk-node/test/methods.spec.ts",
             "column": 40,
-            "line": 618
+            "line": 620
           }
         ]
       }
@@ -3297,11 +3237,6 @@
       "operationId": "datagroup",
       "calls": {
         ".kt": [
-          {
-            "sourceFile": "kotlin/build/spotless/spotlessKotlin/src/test/TestMethods.kt",
-            "column": 23,
-            "line": 288
-          },
           {
             "sourceFile": "kotlin/src/test/TestMethods.kt",
             "column": 23,
@@ -3315,11 +3250,6 @@
       "calls": {
         ".kt": [
           {
-            "sourceFile": "kotlin/build/spotless/spotlessKotlin/src/test/TestMethods.kt",
-            "column": 46,
-            "line": 304
-          },
-          {
             "sourceFile": "kotlin/src/test/TestMethods.kt",
             "column": 46,
             "line": 304
@@ -3331,11 +3261,6 @@
       "operationId": "folder",
       "calls": {
         ".kt": [
-          {
-            "sourceFile": "kotlin/build/spotless/spotlessKotlin/src/test/TestMethods.kt",
-            "column": 28,
-            "line": 313
-          },
           {
             "sourceFile": "kotlin/src/test/TestMethods.kt",
             "column": 28,
@@ -3366,11 +3291,6 @@
       "calls": {
         ".kt": [
           {
-            "sourceFile": "kotlin/build/spotless/spotlessKotlin/src/test/TestMethods.kt",
-            "column": 28,
-            "line": 322
-          },
-          {
             "sourceFile": "kotlin/src/test/TestMethods.kt",
             "column": 28,
             "line": 322
@@ -3382,11 +3302,6 @@
       "operationId": "all_board_items",
       "calls": {
         ".kt": [
-          {
-            "sourceFile": "kotlin/build/spotless/spotlessKotlin/src/test/TestMethods.kt",
-            "column": 14,
-            "line": 330
-          },
           {
             "sourceFile": "kotlin/src/test/TestMethods.kt",
             "column": 14,
@@ -3400,11 +3315,6 @@
       "calls": {
         ".kt": [
           {
-            "sourceFile": "kotlin/build/spotless/spotlessKotlin/src/test/TestMethods.kt",
-            "column": 28,
-            "line": 332
-          },
-          {
             "sourceFile": "kotlin/src/test/TestMethods.kt",
             "column": 28,
             "line": 332
@@ -3416,11 +3326,6 @@
       "operationId": "search_boards",
       "calls": {
         ".kt": [
-          {
-            "sourceFile": "kotlin/build/spotless/spotlessKotlin/src/test/TestMethods.kt",
-            "column": 44,
-            "line": 338
-          },
           {
             "sourceFile": "kotlin/src/test/TestMethods.kt",
             "column": 44,
@@ -3434,11 +3339,6 @@
       "calls": {
         ".kt": [
           {
-            "sourceFile": "kotlin/build/spotless/spotlessKotlin/src/test/TestMethods.kt",
-            "column": 14,
-            "line": 357
-          },
-          {
             "sourceFile": "kotlin/src/test/TestMethods.kt",
             "column": 14,
             "line": 357
@@ -3450,11 +3350,6 @@
       "operationId": "board_section",
       "calls": {
         ".kt": [
-          {
-            "sourceFile": "kotlin/build/spotless/spotlessKotlin/src/test/TestMethods.kt",
-            "column": 28,
-            "line": 359
-          },
           {
             "sourceFile": "kotlin/src/test/TestMethods.kt",
             "column": 28,
@@ -3468,11 +3363,6 @@
       "calls": {
         ".kt": [
           {
-            "sourceFile": "kotlin/build/spotless/spotlessKotlin/src/test/TestMethods.kt",
-            "column": 14,
-            "line": 366
-          },
-          {
             "sourceFile": "kotlin/src/test/TestMethods.kt",
             "column": 14,
             "line": 366
@@ -3484,11 +3374,6 @@
       "operationId": "integration_hub",
       "calls": {
         ".kt": [
-          {
-            "sourceFile": "kotlin/build/spotless/spotlessKotlin/src/test/TestMethods.kt",
-            "column": 28,
-            "line": 368
-          },
           {
             "sourceFile": "kotlin/src/test/TestMethods.kt",
             "column": 28,
@@ -3502,11 +3387,6 @@
       "calls": {
         ".kt": [
           {
-            "sourceFile": "kotlin/build/spotless/spotlessKotlin/src/test/TestMethods.kt",
-            "column": 28,
-            "line": 377
-          },
-          {
             "sourceFile": "kotlin/src/test/TestMethods.kt",
             "column": 28,
             "line": 377
@@ -3518,11 +3398,6 @@
       "operationId": "all_legacy_features",
       "calls": {
         ".kt": [
-          {
-            "sourceFile": "kotlin/build/spotless/spotlessKotlin/src/test/TestMethods.kt",
-            "column": 14,
-            "line": 384
-          },
           {
             "sourceFile": "kotlin/src/test/TestMethods.kt",
             "column": 14,
@@ -3536,11 +3411,6 @@
       "calls": {
         ".kt": [
           {
-            "sourceFile": "kotlin/build/spotless/spotlessKotlin/src/test/TestMethods.kt",
-            "column": 23,
-            "line": 386
-          },
-          {
             "sourceFile": "kotlin/src/test/TestMethods.kt",
             "column": 23,
             "line": 386
@@ -3552,11 +3422,6 @@
       "operationId": "all_locales",
       "calls": {
         ".kt": [
-          {
-            "sourceFile": "kotlin/build/spotless/spotlessKotlin/src/test/TestMethods.kt",
-            "column": 41,
-            "line": 392
-          },
           {
             "sourceFile": "kotlin/src/test/TestMethods.kt",
             "column": 41,
@@ -3570,11 +3435,6 @@
       "calls": {
         ".kt": [
           {
-            "sourceFile": "kotlin/build/spotless/spotlessKotlin/src/test/TestMethods.kt",
-            "column": 14,
-            "line": 399
-          },
-          {
             "sourceFile": "kotlin/src/test/TestMethods.kt",
             "column": 14,
             "line": 399
@@ -3586,11 +3446,6 @@
       "operationId": "lookml_model",
       "calls": {
         ".kt": [
-          {
-            "sourceFile": "kotlin/build/spotless/spotlessKotlin/src/test/TestMethods.kt",
-            "column": 28,
-            "line": 401
-          },
           {
             "sourceFile": "kotlin/src/test/TestMethods.kt",
             "column": 28,
@@ -3604,11 +3459,6 @@
       "calls": {
         ".kt": [
           {
-            "sourceFile": "kotlin/build/spotless/spotlessKotlin/src/test/TestMethods.kt",
-            "column": 14,
-            "line": 418
-          },
-          {
             "sourceFile": "kotlin/src/test/TestMethods.kt",
             "column": 14,
             "line": 418
@@ -3620,11 +3470,6 @@
       "operationId": "model_set",
       "calls": {
         ".kt": [
-          {
-            "sourceFile": "kotlin/build/spotless/spotlessKotlin/src/test/TestMethods.kt",
-            "column": 28,
-            "line": 420
-          },
           {
             "sourceFile": "kotlin/src/test/TestMethods.kt",
             "column": 28,
@@ -3638,11 +3483,6 @@
       "calls": {
         ".kt": [
           {
-            "sourceFile": "kotlin/build/spotless/spotlessKotlin/src/test/TestMethods.kt",
-            "column": 14,
-            "line": 427
-          },
-          {
             "sourceFile": "kotlin/src/test/TestMethods.kt",
             "column": 14,
             "line": 427
@@ -3654,11 +3494,6 @@
       "operationId": "permission_set",
       "calls": {
         ".kt": [
-          {
-            "sourceFile": "kotlin/build/spotless/spotlessKotlin/src/test/TestMethods.kt",
-            "column": 28,
-            "line": 429
-          },
           {
             "sourceFile": "kotlin/src/test/TestMethods.kt",
             "column": 28,
@@ -3672,11 +3507,6 @@
       "calls": {
         ".kt": [
           {
-            "sourceFile": "kotlin/build/spotless/spotlessKotlin/src/test/TestMethods.kt",
-            "column": 45,
-            "line": 435
-          },
-          {
             "sourceFile": "kotlin/src/test/TestMethods.kt",
             "column": 45,
             "line": 435
@@ -3689,11 +3519,6 @@
       "calls": {
         ".kt": [
           {
-            "sourceFile": "kotlin/build/spotless/spotlessKotlin/src/test/TestMethods.kt",
-            "column": 28,
-            "line": 444
-          },
-          {
             "sourceFile": "kotlin/src/test/TestMethods.kt",
             "column": 28,
             "line": 444
@@ -3705,11 +3530,6 @@
       "operationId": "all_roles",
       "calls": {
         ".kt": [
-          {
-            "sourceFile": "kotlin/build/spotless/spotlessKotlin/src/test/TestMethods.kt",
-            "column": 14,
-            "line": 451
-          },
           {
             "sourceFile": "kotlin/src/test/TestMethods.kt",
             "column": 14,
@@ -3730,11 +3550,6 @@
       "calls": {
         ".kt": [
           {
-            "sourceFile": "kotlin/build/spotless/spotlessKotlin/src/test/TestMethods.kt",
-            "column": 23,
-            "line": 453
-          },
-          {
             "sourceFile": "kotlin/src/test/TestMethods.kt",
             "column": 23,
             "line": 453
@@ -3746,11 +3561,6 @@
       "operationId": "all_themes",
       "calls": {
         ".kt": [
-          {
-            "sourceFile": "kotlin/build/spotless/spotlessKotlin/src/test/TestMethods.kt",
-            "column": 14,
-            "line": 491
-          },
           {
             "sourceFile": "kotlin/src/test/TestMethods.kt",
             "column": 14,
@@ -3764,11 +3574,6 @@
       "calls": {
         ".kt": [
           {
-            "sourceFile": "kotlin/build/spotless/spotlessKotlin/src/test/TestMethods.kt",
-            "column": 28,
-            "line": 493
-          },
-          {
             "sourceFile": "kotlin/src/test/TestMethods.kt",
             "column": 28,
             "line": 493
@@ -3780,11 +3585,6 @@
       "operationId": "all_timezones",
       "calls": {
         ".kt": [
-          {
-            "sourceFile": "kotlin/build/spotless/spotlessKotlin/src/test/TestMethods.kt",
-            "column": 43,
-            "line": 499
-          },
           {
             "sourceFile": "kotlin/src/test/TestMethods.kt",
             "column": 43,
@@ -3798,11 +3598,6 @@
       "calls": {
         ".kt": [
           {
-            "sourceFile": "kotlin/build/spotless/spotlessKotlin/src/test/TestMethods.kt",
-            "column": 14,
-            "line": 506
-          },
-          {
             "sourceFile": "kotlin/src/test/TestMethods.kt",
             "column": 14,
             "line": 506
@@ -3814,11 +3609,6 @@
       "operationId": "user_attribute",
       "calls": {
         ".kt": [
-          {
-            "sourceFile": "kotlin/build/spotless/spotlessKotlin/src/test/TestMethods.kt",
-            "column": 28,
-            "line": 508
-          },
           {
             "sourceFile": "kotlin/src/test/TestMethods.kt",
             "column": 28,
@@ -3832,48 +3622,9 @@
       "calls": {
         ".kt": [
           {
-            "sourceFile": "kotlin/build/spotless/spotlessKotlin/src/test/TestMethods.kt",
-            "column": 51,
-            "line": 514
-          },
-          {
             "sourceFile": "kotlin/src/test/TestMethods.kt",
             "column": 51,
             "line": 514
-          }
-        ]
-      }
-    },
-    "all_workspaces": {
-      "operationId": "all_workspaces",
-      "calls": {
-        ".kt": [
-          {
-            "sourceFile": "kotlin/build/spotless/spotlessKotlin/src/test/TestMethods.kt",
-            "column": 14,
-            "line": 542
-          },
-          {
-            "sourceFile": "kotlin/src/test/TestMethods.kt",
-            "column": 14,
-            "line": 565
-          }
-        ]
-      }
-    },
-    "workspace": {
-      "operationId": "workspace",
-      "calls": {
-        ".kt": [
-          {
-            "sourceFile": "kotlin/build/spotless/spotlessKotlin/src/test/TestMethods.kt",
-            "column": 23,
-            "line": 544
-          },
-          {
-            "sourceFile": "kotlin/src/test/TestMethods.kt",
-            "column": 23,
-            "line": 567
           }
         ]
       }
@@ -3892,7 +3643,7 @@
           {
             "sourceFile": "packages/sdk-node/test/methods.spec.ts",
             "column": 10,
-            "line": 235
+            "line": 237
           }
         ]
       }
@@ -3911,7 +3662,31 @@
           {
             "sourceFile": "packages/sdk-node/test/methods.spec.ts",
             "column": 21,
-            "line": 247
+            "line": 249
+          }
+        ]
+      }
+    },
+    "all_workspaces": {
+      "operationId": "all_workspaces",
+      "calls": {
+        ".kt": [
+          {
+            "sourceFile": "kotlin/src/test/TestMethods.kt",
+            "column": 14,
+            "line": 565
+          }
+        ]
+      }
+    },
+    "workspace": {
+      "operationId": "workspace",
+      "calls": {
+        ".kt": [
+          {
+            "sourceFile": "kotlin/src/test/TestMethods.kt",
+            "column": 23,
+            "line": 567
           }
         ]
       }
@@ -3930,12 +3705,12 @@
           {
             "sourceFile": "packages/sdk-node/test/methods.spec.ts",
             "column": 10,
-            "line": 161
+            "line": 163
           },
           {
             "sourceFile": "packages/sdk-node/test/methods.spec.ts",
             "column": 12,
-            "line": 474
+            "line": 476
           }
         ],
         ".py": [
@@ -3978,12 +3753,12 @@
           {
             "sourceFile": "packages/sdk-node/test/methods.spec.ts",
             "column": 10,
-            "line": 280
+            "line": 282
           },
           {
             "sourceFile": "packages/sdk-node/test/methods.spec.ts",
             "column": 10,
-            "line": 285
+            "line": 287
           }
         ],
         ".py": [
@@ -4021,12 +3796,12 @@
           {
             "sourceFile": "packages/sdk-node/test/methods.spec.ts",
             "column": 23,
-            "line": 200
+            "line": 202
           },
           {
             "sourceFile": "packages/sdk-node/test/methods.spec.ts",
             "column": 38,
-            "line": 510
+            "line": 512
           }
         ],
         ".py": [
@@ -4074,12 +3849,12 @@
           {
             "sourceFile": "packages/sdk-node/test/methods.spec.ts",
             "column": 37,
-            "line": 299
+            "line": 301
           },
           {
             "sourceFile": "packages/sdk-node/test/methods.spec.ts",
             "column": 39,
-            "line": 311
+            "line": 313
           }
         ],
         ".py": [
@@ -4122,12 +3897,12 @@
           {
             "sourceFile": "packages/sdk-node/test/methods.spec.ts",
             "column": 12,
-            "line": 307
+            "line": 309
           },
           {
             "sourceFile": "packages/sdk-node/test/methods.spec.ts",
             "column": 23,
-            "line": 313
+            "line": 315
           }
         ],
         ".py": [
@@ -4156,18 +3931,6 @@
         ]
       }
     },
-    "api_spec": {
-      "operationId": "api_spec",
-      "calls": {
-        ".tsx": [
-          {
-            "sourceFile": "packages/extension-api-explorer/src/ExtensionApiExplorer.tsx",
-            "column": 33,
-            "line": 104
-          }
-        ]
-      }
-    },
     "versions": {
       "operationId": "versions",
       "calls": {
@@ -4175,7 +3938,19 @@
           {
             "sourceFile": "packages/extension-api-explorer/src/ExtensionApiExplorer.tsx",
             "column": 36,
-            "line": 119
+            "line": 81
+          }
+        ]
+      }
+    },
+    "api_spec": {
+      "operationId": "api_spec",
+      "calls": {
+        ".tsx": [
+          {
+            "sourceFile": "packages/extension-api-explorer/src/ExtensionApiExplorer.tsx",
+            "column": 17,
+            "line": 84
           }
         ]
       }
@@ -4252,22 +4027,22 @@
           {
             "sourceFile": "packages/extension-sdk/src/sdk/extension_sdk.ts",
             "column": 11,
-            "line": 42
+            "line": 43
           },
           {
             "sourceFile": "packages/extension-sdk/src/sdk/extension_sdk.ts",
             "column": 11,
-            "line": 53
+            "line": 54
           },
           {
             "sourceFile": "packages/extension-sdk/src/sdk/extension_sdk_31.ts",
             "column": 11,
-            "line": 41
+            "line": 42
           },
           {
             "sourceFile": "packages/extension-sdk/src/sdk/extension_sdk_40.ts",
             "column": 11,
-            "line": 41
+            "line": 42
           },
           {
             "sourceFile": "packages/sdk/src/extensionSdk.ts",
@@ -4284,7 +4059,7 @@
           {
             "sourceFile": "packages/extension-sdk-react/src/components/ExtensionProvider2/ExtensionProvider2.tsx",
             "column": 16,
-            "line": 69
+            "line": 71
           }
         ]
       }
@@ -4301,14 +4076,14 @@
           {
             "sourceFile": "packages/extension-sdk/src/sdk/extension_sdk.ts",
             "column": 11,
-            "line": 63
+            "line": 64
           }
         ],
         ".tsx": [
           {
             "sourceFile": "packages/extension-sdk-react/src/components/ExtensionProvider/ExtensionProvider.tsx",
             "column": 6,
-            "line": 59
+            "line": 60
           }
         ]
       }
@@ -4327,7 +4102,7 @@
           {
             "sourceFile": "packages/extension-sdk-react/src/components/ExtensionProvider/ExtensionProvider.tsx",
             "column": 6,
-            "line": 61
+            "line": 62
           }
         ]
       }
@@ -4351,12 +4126,12 @@
           {
             "sourceFile": "packages/hackathon/src/authToken/extensionProxyTransport.ts",
             "column": 24,
-            "line": 120
+            "line": 118
           },
           {
             "sourceFile": "packages/hackathon/src/authToken/extensionProxyTransport.ts",
             "column": 21,
-            "line": 129
+            "line": 127
           }
         ]
       }
@@ -4368,12 +4143,12 @@
           {
             "sourceFile": "packages/hackathon/src/authToken/gAuthSession.ts",
             "column": 22,
-            "line": 94
+            "line": 92
           },
           {
             "sourceFile": "packages/hackathon/src/authToken/gAuthSession.ts",
             "column": 26,
-            "line": 95
+            "line": 93
           }
         ]
       }
@@ -4385,7 +4160,7 @@
           {
             "sourceFile": "packages/hackathon/src/authToken/gAuthSession.ts",
             "column": 34,
-            "line": 101
+            "line": 99
           }
         ]
       }
@@ -4397,12 +4172,12 @@
           {
             "sourceFile": "packages/hackathon/src/data/sheets_client.ts",
             "column": 13,
-            "line": 452
+            "line": 460
           },
           {
             "sourceFile": "packages/hackathon/src/data/sheets_client.ts",
             "column": 27,
-            "line": 453
+            "line": 461
           }
         ]
       }
@@ -4414,22 +4189,22 @@
           {
             "sourceFile": "packages/hackathon/src/data/sheets_client.ts",
             "column": 22,
-            "line": 463
+            "line": 471
           },
           {
             "sourceFile": "packages/hackathon/src/models/Judgings.spec.ts",
             "column": 16,
-            "line": 45
+            "line": 46
           },
           {
             "sourceFile": "packages/hackathon/src/models/SheetData.spec.ts",
             "column": 18,
-            "line": 46
+            "line": 47
           },
           {
             "sourceFile": "packages/hackathon/src/models/SheetData.ts",
             "column": 28,
-            "line": 136
+            "line": 135
           }
         ]
       }
@@ -4810,247 +4585,227 @@
           {
             "sourceFile": "packages/sdk/src/4.0/funcs.ts",
             "column": 9,
-            "line": 337
+            "line": 471
           },
           {
             "sourceFile": "packages/sdk/src/4.0/funcs.ts",
             "column": 9,
-            "line": 377
+            "line": 525
           },
           {
             "sourceFile": "packages/sdk/src/4.0/funcs.ts",
             "column": 9,
-            "line": 453
+            "line": 565
           },
           {
             "sourceFile": "packages/sdk/src/4.0/funcs.ts",
             "column": 9,
-            "line": 500
+            "line": 641
           },
           {
             "sourceFile": "packages/sdk/src/4.0/funcs.ts",
             "column": 9,
-            "line": 798
+            "line": 688
           },
           {
             "sourceFile": "packages/sdk/src/4.0/funcs.ts",
             "column": 9,
-            "line": 918
+            "line": 986
           },
           {
             "sourceFile": "packages/sdk/src/4.0/funcs.ts",
             "column": 9,
-            "line": 1084
+            "line": 1106
           },
           {
             "sourceFile": "packages/sdk/src/4.0/funcs.ts",
             "column": 9,
-            "line": 1278
+            "line": 1272
           },
           {
             "sourceFile": "packages/sdk/src/4.0/funcs.ts",
             "column": 9,
-            "line": 1301
+            "line": 1466
           },
           {
             "sourceFile": "packages/sdk/src/4.0/funcs.ts",
             "column": 9,
-            "line": 1326
+            "line": 1489
           },
           {
             "sourceFile": "packages/sdk/src/4.0/funcs.ts",
             "column": 9,
-            "line": 1492
+            "line": 1514
           },
           {
             "sourceFile": "packages/sdk/src/4.0/funcs.ts",
             "column": 9,
-            "line": 1672
+            "line": 1680
           },
           {
             "sourceFile": "packages/sdk/src/4.0/funcs.ts",
             "column": 9,
-            "line": 1795
+            "line": 1860
           },
           {
             "sourceFile": "packages/sdk/src/4.0/funcs.ts",
             "column": 9,
-            "line": 1935
+            "line": 1983
           },
           {
             "sourceFile": "packages/sdk/src/4.0/funcs.ts",
             "column": 9,
-            "line": 2192
+            "line": 2123
           },
           {
             "sourceFile": "packages/sdk/src/4.0/funcs.ts",
             "column": 9,
-            "line": 2426
+            "line": 2380
           },
           {
             "sourceFile": "packages/sdk/src/4.0/funcs.ts",
             "column": 9,
-            "line": 2814
+            "line": 2614
           },
           {
             "sourceFile": "packages/sdk/src/4.0/funcs.ts",
             "column": 9,
-            "line": 3059
+            "line": 3040
           },
           {
             "sourceFile": "packages/sdk/src/4.0/funcs.ts",
             "column": 9,
-            "line": 3087
+            "line": 3285
           },
           {
             "sourceFile": "packages/sdk/src/4.0/funcs.ts",
             "column": 9,
-            "line": 3131
+            "line": 3313
           },
           {
             "sourceFile": "packages/sdk/src/4.0/funcs.ts",
             "column": 9,
-            "line": 3275
+            "line": 3357
           },
           {
             "sourceFile": "packages/sdk/src/4.0/funcs.ts",
             "column": 9,
-            "line": 3522
+            "line": 3501
           },
           {
             "sourceFile": "packages/sdk/src/4.0/funcs.ts",
             "column": 9,
-            "line": 3647
+            "line": 3748
           },
           {
             "sourceFile": "packages/sdk/src/4.0/funcs.ts",
             "column": 9,
-            "line": 3921
+            "line": 3873
           },
           {
             "sourceFile": "packages/sdk/src/4.0/funcs.ts",
             "column": 9,
-            "line": 4034
+            "line": 4147
           },
           {
             "sourceFile": "packages/sdk/src/4.0/funcs.ts",
             "column": 9,
-            "line": 4253
+            "line": 4260
           },
           {
             "sourceFile": "packages/sdk/src/4.0/funcs.ts",
             "column": 9,
-            "line": 4467
+            "line": 4479
           },
           {
             "sourceFile": "packages/sdk/src/4.0/funcs.ts",
             "column": 9,
-            "line": 4596
+            "line": 4693
           },
           {
             "sourceFile": "packages/sdk/src/4.0/funcs.ts",
             "column": 9,
-            "line": 4807
+            "line": 4822
           },
           {
             "sourceFile": "packages/sdk/src/4.0/funcs.ts",
             "column": 9,
-            "line": 4834
+            "line": 5033
           },
           {
             "sourceFile": "packages/sdk/src/4.0/funcs.ts",
             "column": 9,
-            "line": 4857
+            "line": 5060
           },
           {
             "sourceFile": "packages/sdk/src/4.0/funcs.ts",
             "column": 9,
-            "line": 5089
+            "line": 5083
           },
           {
             "sourceFile": "packages/sdk/src/4.0/funcs.ts",
             "column": 9,
-            "line": 5308
+            "line": 5315
           },
           {
             "sourceFile": "packages/sdk/src/4.0/funcs.ts",
             "column": 9,
-            "line": 5600
+            "line": 5534
           },
           {
             "sourceFile": "packages/sdk/src/4.0/funcs.ts",
             "column": 9,
-            "line": 5653
+            "line": 5826
           },
           {
             "sourceFile": "packages/sdk/src/4.0/funcs.ts",
             "column": 9,
-            "line": 5840
+            "line": 5879
           },
           {
             "sourceFile": "packages/sdk/src/4.0/funcs.ts",
             "column": 9,
-            "line": 5940
+            "line": 6066
           },
           {
             "sourceFile": "packages/sdk/src/4.0/funcs.ts",
             "column": 9,
-            "line": 6043
+            "line": 6166
           },
           {
             "sourceFile": "packages/sdk/src/4.0/funcs.ts",
             "column": 9,
-            "line": 6067
+            "line": 6269
           },
           {
             "sourceFile": "packages/sdk/src/4.0/funcs.ts",
             "column": 9,
-            "line": 6126
+            "line": 6293
           },
           {
             "sourceFile": "packages/sdk/src/4.0/funcs.ts",
             "column": 9,
-            "line": 6379
+            "line": 6352
           },
           {
             "sourceFile": "packages/sdk/src/4.0/funcs.ts",
             "column": 9,
-            "line": 6483
+            "line": 6605
           },
           {
             "sourceFile": "packages/sdk/src/4.0/funcs.ts",
             "column": 9,
-            "line": 6848
+            "line": 6709
           },
           {
             "sourceFile": "packages/sdk/src/4.0/funcs.ts",
             "column": 9,
-            "line": 6884
+            "line": 7074
           },
           {
             "sourceFile": "packages/sdk/src/4.0/funcs.ts",
             "column": 9,
-            "line": 7003
-          },
-          {
-            "sourceFile": "packages/sdk/src/4.0/funcs.ts",
-            "column": 9,
-            "line": 7093
-          },
-          {
-            "sourceFile": "packages/sdk/src/4.0/funcs.ts",
-            "column": 9,
-            "line": 7128
-          },
-          {
-            "sourceFile": "packages/sdk/src/4.0/funcs.ts",
-            "column": 9,
-            "line": 7154
-          },
-          {
-            "sourceFile": "packages/sdk/src/4.0/funcs.ts",
-            "column": 9,
-            "line": 7180
+            "line": 7110
           },
           {
             "sourceFile": "packages/sdk/src/4.0/funcs.ts",
@@ -5060,57 +4815,57 @@
           {
             "sourceFile": "packages/sdk/src/4.0/funcs.ts",
             "column": 9,
-            "line": 7390
+            "line": 7319
           },
           {
             "sourceFile": "packages/sdk/src/4.0/funcs.ts",
             "column": 9,
-            "line": 7461
+            "line": 7354
           },
           {
             "sourceFile": "packages/sdk/src/4.0/funcs.ts",
             "column": 9,
-            "line": 7697
+            "line": 7380
           },
           {
             "sourceFile": "packages/sdk/src/4.0/funcs.ts",
             "column": 9,
-            "line": 7825
+            "line": 7406
           },
           {
             "sourceFile": "packages/sdk/src/4.0/funcs.ts",
             "column": 9,
-            "line": 8061
+            "line": 7455
           },
           {
             "sourceFile": "packages/sdk/src/4.0/funcs.ts",
             "column": 9,
-            "line": 8197
+            "line": 7616
           },
           {
             "sourceFile": "packages/sdk/src/4.0/funcs.ts",
             "column": 9,
-            "line": 8363
+            "line": 7687
           },
           {
             "sourceFile": "packages/sdk/src/4.0/funcs.ts",
             "column": 9,
-            "line": 8452
+            "line": 7923
           },
           {
             "sourceFile": "packages/sdk/src/4.0/funcs.ts",
             "column": 9,
-            "line": 8484
+            "line": 8051
           },
           {
             "sourceFile": "packages/sdk/src/4.0/funcs.ts",
             "column": 9,
-            "line": 8524
+            "line": 8287
           },
           {
             "sourceFile": "packages/sdk/src/4.0/funcs.ts",
             "column": 9,
-            "line": 8560
+            "line": 8423
           },
           {
             "sourceFile": "packages/sdk/src/4.0/funcs.ts",
@@ -5120,92 +4875,117 @@
           {
             "sourceFile": "packages/sdk/src/4.0/funcs.ts",
             "column": 9,
-            "line": 8841
+            "line": 8678
           },
           {
             "sourceFile": "packages/sdk/src/4.0/funcs.ts",
             "column": 9,
-            "line": 9030
+            "line": 8710
           },
           {
             "sourceFile": "packages/sdk/src/4.0/funcs.ts",
             "column": 9,
-            "line": 9076
+            "line": 8750
           },
           {
             "sourceFile": "packages/sdk/src/4.0/funcs.ts",
             "column": 9,
-            "line": 9617
+            "line": 8786
           },
           {
             "sourceFile": "packages/sdk/src/4.0/funcs.ts",
             "column": 9,
-            "line": 9676
+            "line": 8815
           },
           {
             "sourceFile": "packages/sdk/src/4.0/funcs.ts",
             "column": 9,
-            "line": 9859
+            "line": 9067
           },
           {
             "sourceFile": "packages/sdk/src/4.0/funcs.ts",
             "column": 9,
-            "line": 9988
+            "line": 9256
           },
           {
             "sourceFile": "packages/sdk/src/4.0/funcs.ts",
             "column": 9,
-            "line": 10205
+            "line": 9302
           },
           {
             "sourceFile": "packages/sdk/src/4.0/funcs.ts",
             "column": 9,
-            "line": 10419
+            "line": 9843
           },
           {
             "sourceFile": "packages/sdk/src/4.0/funcs.ts",
             "column": 9,
-            "line": 10705
+            "line": 9902
           },
           {
             "sourceFile": "packages/sdk/src/4.0/funcs.ts",
             "column": 9,
-            "line": 10807
+            "line": 10085
           },
           {
             "sourceFile": "packages/sdk/src/4.0/funcs.ts",
             "column": 9,
-            "line": 11126
+            "line": 10214
           },
           {
             "sourceFile": "packages/sdk/src/4.0/funcs.ts",
             "column": 9,
-            "line": 11359
+            "line": 10431
           },
           {
             "sourceFile": "packages/sdk/src/4.0/funcs.ts",
             "column": 9,
-            "line": 11545
+            "line": 10647
           },
           {
             "sourceFile": "packages/sdk/src/4.0/funcs.ts",
             "column": 9,
-            "line": 11568
+            "line": 10937
           },
           {
             "sourceFile": "packages/sdk/src/4.0/funcs.ts",
             "column": 9,
-            "line": 11624
+            "line": 11039
           },
           {
             "sourceFile": "packages/sdk/src/4.0/funcs.ts",
             "column": 9,
-            "line": 11776
+            "line": 11358
+          },
+          {
+            "sourceFile": "packages/sdk/src/4.0/funcs.ts",
+            "column": 9,
+            "line": 11591
+          },
+          {
+            "sourceFile": "packages/sdk/src/4.0/funcs.ts",
+            "column": 9,
+            "line": 11777
+          },
+          {
+            "sourceFile": "packages/sdk/src/4.0/funcs.ts",
+            "column": 9,
+            "line": 11800
+          },
+          {
+            "sourceFile": "packages/sdk/src/4.0/funcs.ts",
+            "column": 9,
+            "line": 11856
+          },
+          {
+            "sourceFile": "packages/sdk/src/4.0/funcs.ts",
+            "column": 9,
+            "line": 12008
           },
           {
             "sourceFile": "packages/sdk-codegen/src/typescript.gen.spec.ts",
             "column": 9,
-            "line": 715
+            "line": 722
           }
         ]
       }
@@ -5447,257 +5227,262 @@
           {
             "sourceFile": "packages/sdk/src/4.0/funcs.ts",
             "column": 9,
-            "line": 398
+            "line": 419
           },
           {
             "sourceFile": "packages/sdk/src/4.0/funcs.ts",
             "column": 9,
-            "line": 857
+            "line": 586
           },
           {
             "sourceFile": "packages/sdk/src/4.0/funcs.ts",
             "column": 9,
-            "line": 884
+            "line": 1045
           },
           {
             "sourceFile": "packages/sdk/src/4.0/funcs.ts",
             "column": 9,
-            "line": 955
+            "line": 1072
           },
           {
             "sourceFile": "packages/sdk/src/4.0/funcs.ts",
             "column": 9,
-            "line": 1061
+            "line": 1143
           },
           {
             "sourceFile": "packages/sdk/src/4.0/funcs.ts",
             "column": 9,
-            "line": 1255
+            "line": 1249
           },
           {
             "sourceFile": "packages/sdk/src/4.0/funcs.ts",
             "column": 9,
-            "line": 1445
+            "line": 1443
           },
           {
             "sourceFile": "packages/sdk/src/4.0/funcs.ts",
             "column": 9,
-            "line": 1625
+            "line": 1633
           },
           {
             "sourceFile": "packages/sdk/src/4.0/funcs.ts",
             "column": 9,
-            "line": 1747
+            "line": 1813
           },
           {
             "sourceFile": "packages/sdk/src/4.0/funcs.ts",
             "column": 9,
-            "line": 1870
+            "line": 1935
           },
           {
             "sourceFile": "packages/sdk/src/4.0/funcs.ts",
             "column": 9,
-            "line": 2135
+            "line": 2058
           },
           {
             "sourceFile": "packages/sdk/src/4.0/funcs.ts",
             "column": 9,
-            "line": 2242
+            "line": 2323
           },
           {
             "sourceFile": "packages/sdk/src/4.0/funcs.ts",
             "column": 9,
-            "line": 2890
+            "line": 2430
           },
           {
             "sourceFile": "packages/sdk/src/4.0/funcs.ts",
             "column": 9,
-            "line": 2917
+            "line": 3116
           },
           {
             "sourceFile": "packages/sdk/src/4.0/funcs.ts",
             "column": 9,
-            "line": 3205
+            "line": 3143
           },
           {
             "sourceFile": "packages/sdk/src/4.0/funcs.ts",
             "column": 9,
-            "line": 3349
+            "line": 3431
           },
           {
             "sourceFile": "packages/sdk/src/4.0/funcs.ts",
             "column": 9,
-            "line": 3499
+            "line": 3575
           },
           {
             "sourceFile": "packages/sdk/src/4.0/funcs.ts",
             "column": 9,
-            "line": 3696
+            "line": 3725
           },
           {
             "sourceFile": "packages/sdk/src/4.0/funcs.ts",
             "column": 9,
-            "line": 4167
+            "line": 3922
           },
           {
             "sourceFile": "packages/sdk/src/4.0/funcs.ts",
             "column": 9,
-            "line": 4416
+            "line": 4393
           },
           {
             "sourceFile": "packages/sdk/src/4.0/funcs.ts",
             "column": 9,
-            "line": 4545
+            "line": 4642
           },
           {
             "sourceFile": "packages/sdk/src/4.0/funcs.ts",
             "column": 9,
-            "line": 4756
+            "line": 4771
           },
           {
             "sourceFile": "packages/sdk/src/4.0/funcs.ts",
             "column": 9,
-            "line": 5042
+            "line": 4982
           },
           {
             "sourceFile": "packages/sdk/src/4.0/funcs.ts",
             "column": 9,
-            "line": 5555
+            "line": 5268
           },
           {
             "sourceFile": "packages/sdk/src/4.0/funcs.ts",
             "column": 9,
-            "line": 5678
+            "line": 5781
           },
           {
             "sourceFile": "packages/sdk/src/4.0/funcs.ts",
             "column": 9,
-            "line": 5703
+            "line": 5904
           },
           {
             "sourceFile": "packages/sdk/src/4.0/funcs.ts",
             "column": 9,
-            "line": 5759
+            "line": 5929
           },
           {
             "sourceFile": "packages/sdk/src/4.0/funcs.ts",
             "column": 9,
-            "line": 5917
+            "line": 5985
           },
           {
             "sourceFile": "packages/sdk/src/4.0/funcs.ts",
             "column": 9,
-            "line": 6296
+            "line": 6143
           },
           {
             "sourceFile": "packages/sdk/src/4.0/funcs.ts",
             "column": 9,
-            "line": 6559
+            "line": 6522
           },
           {
             "sourceFile": "packages/sdk/src/4.0/funcs.ts",
             "column": 9,
-            "line": 7061
+            "line": 6785
           },
           {
             "sourceFile": "packages/sdk/src/4.0/funcs.ts",
             "column": 9,
-            "line": 7767
+            "line": 7287
           },
           {
             "sourceFile": "packages/sdk/src/4.0/funcs.ts",
             "column": 9,
-            "line": 8408
+            "line": 7993
           },
           {
             "sourceFile": "packages/sdk/src/4.0/funcs.ts",
             "column": 9,
-            "line": 8800
+            "line": 8634
           },
           {
             "sourceFile": "packages/sdk/src/4.0/funcs.ts",
             "column": 9,
-            "line": 8984
+            "line": 9026
           },
           {
             "sourceFile": "packages/sdk/src/4.0/funcs.ts",
             "column": 9,
-            "line": 9253
+            "line": 9210
           },
           {
             "sourceFile": "packages/sdk/src/4.0/funcs.ts",
             "column": 9,
-            "line": 9500
+            "line": 9479
           },
           {
             "sourceFile": "packages/sdk/src/4.0/funcs.ts",
             "column": 9,
-            "line": 10293
+            "line": 9726
           },
           {
             "sourceFile": "packages/sdk/src/4.0/funcs.ts",
             "column": 9,
-            "line": 10602
+            "line": 10519
           },
           {
             "sourceFile": "packages/sdk/src/4.0/funcs.ts",
             "column": 9,
-            "line": 10755
+            "line": 10834
           },
           {
             "sourceFile": "packages/sdk/src/4.0/funcs.ts",
             "column": 9,
-            "line": 10830
+            "line": 10987
           },
           {
             "sourceFile": "packages/sdk/src/4.0/funcs.ts",
             "column": 9,
-            "line": 10878
+            "line": 11062
           },
           {
             "sourceFile": "packages/sdk/src/4.0/funcs.ts",
             "column": 9,
-            "line": 10926
+            "line": 11110
           },
           {
             "sourceFile": "packages/sdk/src/4.0/funcs.ts",
             "column": 9,
-            "line": 10974
+            "line": 11158
           },
           {
             "sourceFile": "packages/sdk/src/4.0/funcs.ts",
             "column": 9,
-            "line": 11022
+            "line": 11206
           },
           {
             "sourceFile": "packages/sdk/src/4.0/funcs.ts",
             "column": 9,
-            "line": 11074
+            "line": 11254
           },
           {
             "sourceFile": "packages/sdk/src/4.0/funcs.ts",
             "column": 9,
-            "line": 11178
+            "line": 11306
           },
           {
             "sourceFile": "packages/sdk/src/4.0/funcs.ts",
             "column": 9,
-            "line": 11251
+            "line": 11410
           },
           {
             "sourceFile": "packages/sdk/src/4.0/funcs.ts",
             "column": 9,
-            "line": 11303
+            "line": 11483
           },
           {
             "sourceFile": "packages/sdk/src/4.0/funcs.ts",
             "column": 9,
-            "line": 11514
+            "line": 11535
           },
           {
             "sourceFile": "packages/sdk/src/4.0/funcs.ts",
             "column": 9,
-            "line": 11699
+            "line": 11746
+          },
+          {
+            "sourceFile": "packages/sdk/src/4.0/funcs.ts",
+            "column": 9,
+            "line": 11931
           }
         ]
       }
@@ -6589,262 +6374,252 @@
           {
             "sourceFile": "packages/sdk/src/4.0/funcs.ts",
             "column": 9,
-            "line": 536
+            "line": 314
           },
           {
             "sourceFile": "packages/sdk/src/4.0/funcs.ts",
             "column": 9,
-            "line": 737
+            "line": 347
           },
           {
             "sourceFile": "packages/sdk/src/4.0/funcs.ts",
             "column": 9,
-            "line": 765
+            "line": 724
           },
           {
             "sourceFile": "packages/sdk/src/4.0/funcs.ts",
             "column": 9,
-            "line": 987
+            "line": 925
           },
           {
             "sourceFile": "packages/sdk/src/4.0/funcs.ts",
             "column": 9,
-            "line": 1037
+            "line": 953
           },
           {
             "sourceFile": "packages/sdk/src/4.0/funcs.ts",
             "column": 9,
-            "line": 1105
+            "line": 1175
           },
           {
             "sourceFile": "packages/sdk/src/4.0/funcs.ts",
             "column": 9,
-            "line": 1181
+            "line": 1225
           },
           {
             "sourceFile": "packages/sdk/src/4.0/funcs.ts",
             "column": 9,
-            "line": 1231
+            "line": 1293
           },
           {
             "sourceFile": "packages/sdk/src/4.0/funcs.ts",
             "column": 9,
-            "line": 1347
+            "line": 1369
           },
           {
             "sourceFile": "packages/sdk/src/4.0/funcs.ts",
             "column": 9,
-            "line": 1388
+            "line": 1419
           },
           {
             "sourceFile": "packages/sdk/src/4.0/funcs.ts",
             "column": 9,
-            "line": 1411
+            "line": 1535
           },
           {
             "sourceFile": "packages/sdk/src/4.0/funcs.ts",
             "column": 9,
-            "line": 1472
+            "line": 1576
           },
           {
             "sourceFile": "packages/sdk/src/4.0/funcs.ts",
             "column": 9,
-            "line": 1536
+            "line": 1599
           },
           {
             "sourceFile": "packages/sdk/src/4.0/funcs.ts",
             "column": 9,
-            "line": 1575
+            "line": 1660
           },
           {
             "sourceFile": "packages/sdk/src/4.0/funcs.ts",
             "column": 9,
-            "line": 1643
+            "line": 1724
           },
           {
             "sourceFile": "packages/sdk/src/4.0/funcs.ts",
             "column": 9,
-            "line": 1697
+            "line": 1763
           },
           {
             "sourceFile": "packages/sdk/src/4.0/funcs.ts",
             "column": 9,
-            "line": 1770
+            "line": 1831
           },
           {
             "sourceFile": "packages/sdk/src/4.0/funcs.ts",
             "column": 9,
-            "line": 1820
+            "line": 1885
           },
           {
             "sourceFile": "packages/sdk/src/4.0/funcs.ts",
             "column": 9,
-            "line": 1904
+            "line": 1958
           },
           {
             "sourceFile": "packages/sdk/src/4.0/funcs.ts",
             "column": 9,
-            "line": 1963
+            "line": 2008
           },
           {
             "sourceFile": "packages/sdk/src/4.0/funcs.ts",
             "column": 9,
-            "line": 1991
+            "line": 2092
           },
           {
             "sourceFile": "packages/sdk/src/4.0/funcs.ts",
             "column": 9,
-            "line": 2016
+            "line": 2151
           },
           {
             "sourceFile": "packages/sdk/src/4.0/funcs.ts",
             "column": 9,
-            "line": 2077
+            "line": 2179
           },
           {
             "sourceFile": "packages/sdk/src/4.0/funcs.ts",
             "column": 9,
-            "line": 2162
+            "line": 2204
           },
           {
             "sourceFile": "packages/sdk/src/4.0/funcs.ts",
             "column": 9,
-            "line": 2267
+            "line": 2265
           },
           {
             "sourceFile": "packages/sdk/src/4.0/funcs.ts",
             "column": 9,
-            "line": 2311
+            "line": 2350
           },
           {
             "sourceFile": "packages/sdk/src/4.0/funcs.ts",
             "column": 9,
-            "line": 2380
+            "line": 2455
           },
           {
             "sourceFile": "packages/sdk/src/4.0/funcs.ts",
             "column": 9,
-            "line": 2447
+            "line": 2499
           },
           {
             "sourceFile": "packages/sdk/src/4.0/funcs.ts",
             "column": 9,
-            "line": 2493
+            "line": 2568
           },
           {
             "sourceFile": "packages/sdk/src/4.0/funcs.ts",
             "column": 9,
-            "line": 2537
+            "line": 2635
           },
           {
             "sourceFile": "packages/sdk/src/4.0/funcs.ts",
             "column": 9,
-            "line": 2561
+            "line": 2681
           },
           {
             "sourceFile": "packages/sdk/src/4.0/funcs.ts",
             "column": 9,
-            "line": 2608
+            "line": 2725
           },
           {
             "sourceFile": "packages/sdk/src/4.0/funcs.ts",
             "column": 9,
-            "line": 2624
+            "line": 2749
           },
           {
             "sourceFile": "packages/sdk/src/4.0/funcs.ts",
             "column": 9,
-            "line": 2673
+            "line": 2796
           },
           {
             "sourceFile": "packages/sdk/src/4.0/funcs.ts",
             "column": 9,
-            "line": 2691
+            "line": 2812
           },
           {
             "sourceFile": "packages/sdk/src/4.0/funcs.ts",
             "column": 9,
-            "line": 2715
+            "line": 2841
           },
           {
             "sourceFile": "packages/sdk/src/4.0/funcs.ts",
             "column": 9,
-            "line": 2739
+            "line": 2895
           },
           {
             "sourceFile": "packages/sdk/src/4.0/funcs.ts",
             "column": 9,
-            "line": 2791
+            "line": 2913
           },
           {
             "sourceFile": "packages/sdk/src/4.0/funcs.ts",
             "column": 9,
-            "line": 2840
+            "line": 2937
           },
           {
             "sourceFile": "packages/sdk/src/4.0/funcs.ts",
             "column": 9,
-            "line": 3007
+            "line": 2963
           },
           {
             "sourceFile": "packages/sdk/src/4.0/funcs.ts",
             "column": 9,
-            "line": 3032
+            "line": 3017
           },
           {
             "sourceFile": "packages/sdk/src/4.0/funcs.ts",
             "column": 9,
-            "line": 3108
+            "line": 3066
           },
           {
             "sourceFile": "packages/sdk/src/4.0/funcs.ts",
             "column": 9,
-            "line": 3155
+            "line": 3233
           },
           {
             "sourceFile": "packages/sdk/src/4.0/funcs.ts",
             "column": 9,
-            "line": 3229
+            "line": 3258
           },
           {
             "sourceFile": "packages/sdk/src/4.0/funcs.ts",
             "column": 9,
-            "line": 3252
+            "line": 3334
           },
           {
             "sourceFile": "packages/sdk/src/4.0/funcs.ts",
             "column": 9,
-            "line": 3299
+            "line": 3381
           },
           {
             "sourceFile": "packages/sdk/src/4.0/funcs.ts",
             "column": 9,
-            "line": 3373
+            "line": 3455
           },
           {
             "sourceFile": "packages/sdk/src/4.0/funcs.ts",
             "column": 9,
-            "line": 3396
+            "line": 3478
           },
           {
             "sourceFile": "packages/sdk/src/4.0/funcs.ts",
             "column": 9,
-            "line": 3439
+            "line": 3525
           },
           {
             "sourceFile": "packages/sdk/src/4.0/funcs.ts",
             "column": 9,
-            "line": 3476
-          },
-          {
-            "sourceFile": "packages/sdk/src/4.0/funcs.ts",
-            "column": 9,
-            "line": 3547
-          },
-          {
-            "sourceFile": "packages/sdk/src/4.0/funcs.ts",
-            "column": 9,
-            "line": 3572
+            "line": 3599
           },
           {
             "sourceFile": "packages/sdk/src/4.0/funcs.ts",
@@ -6854,712 +6629,737 @@
           {
             "sourceFile": "packages/sdk/src/4.0/funcs.ts",
             "column": 9,
-            "line": 3727
+            "line": 3665
           },
           {
             "sourceFile": "packages/sdk/src/4.0/funcs.ts",
             "column": 9,
-            "line": 3758
+            "line": 3702
           },
           {
             "sourceFile": "packages/sdk/src/4.0/funcs.ts",
             "column": 9,
-            "line": 3802
+            "line": 3773
           },
           {
             "sourceFile": "packages/sdk/src/4.0/funcs.ts",
             "column": 9,
-            "line": 3852
+            "line": 3798
           },
           {
             "sourceFile": "packages/sdk/src/4.0/funcs.ts",
             "column": 9,
-            "line": 3885
+            "line": 3848
           },
           {
             "sourceFile": "packages/sdk/src/4.0/funcs.ts",
             "column": 9,
-            "line": 3972
+            "line": 3953
           },
           {
             "sourceFile": "packages/sdk/src/4.0/funcs.ts",
             "column": 9,
-            "line": 4102
+            "line": 3984
           },
           {
             "sourceFile": "packages/sdk/src/4.0/funcs.ts",
             "column": 9,
-            "line": 4193
+            "line": 4028
           },
           {
             "sourceFile": "packages/sdk/src/4.0/funcs.ts",
             "column": 9,
-            "line": 4219
+            "line": 4078
           },
           {
             "sourceFile": "packages/sdk/src/4.0/funcs.ts",
             "column": 9,
-            "line": 4330
+            "line": 4111
           },
           {
             "sourceFile": "packages/sdk/src/4.0/funcs.ts",
             "column": 9,
-            "line": 4364
+            "line": 4198
           },
           {
             "sourceFile": "packages/sdk/src/4.0/funcs.ts",
             "column": 9,
-            "line": 4442
+            "line": 4328
           },
           {
             "sourceFile": "packages/sdk/src/4.0/funcs.ts",
             "column": 9,
-            "line": 4493
+            "line": 4419
           },
           {
             "sourceFile": "packages/sdk/src/4.0/funcs.ts",
             "column": 9,
-            "line": 4571
+            "line": 4445
           },
           {
             "sourceFile": "packages/sdk/src/4.0/funcs.ts",
             "column": 9,
-            "line": 4622
+            "line": 4556
           },
           {
             "sourceFile": "packages/sdk/src/4.0/funcs.ts",
             "column": 9,
-            "line": 4678
+            "line": 4590
           },
           {
             "sourceFile": "packages/sdk/src/4.0/funcs.ts",
             "column": 9,
-            "line": 4704
+            "line": 4668
           },
           {
             "sourceFile": "packages/sdk/src/4.0/funcs.ts",
             "column": 9,
-            "line": 4782
+            "line": 4719
           },
           {
             "sourceFile": "packages/sdk/src/4.0/funcs.ts",
             "column": 9,
-            "line": 4882
+            "line": 4797
           },
           {
             "sourceFile": "packages/sdk/src/4.0/funcs.ts",
             "column": 9,
-            "line": 4900
+            "line": 4848
           },
           {
             "sourceFile": "packages/sdk/src/4.0/funcs.ts",
             "column": 9,
-            "line": 4952
+            "line": 4904
           },
           {
             "sourceFile": "packages/sdk/src/4.0/funcs.ts",
             "column": 9,
-            "line": 4991
+            "line": 4930
           },
           {
             "sourceFile": "packages/sdk/src/4.0/funcs.ts",
             "column": 9,
-            "line": 5068
+            "line": 5008
           },
           {
             "sourceFile": "packages/sdk/src/4.0/funcs.ts",
             "column": 9,
-            "line": 5113
+            "line": 5108
           },
           {
             "sourceFile": "packages/sdk/src/4.0/funcs.ts",
             "column": 9,
-            "line": 5142
+            "line": 5126
           },
           {
             "sourceFile": "packages/sdk/src/4.0/funcs.ts",
             "column": 9,
-            "line": 5168
+            "line": 5178
           },
           {
             "sourceFile": "packages/sdk/src/4.0/funcs.ts",
             "column": 9,
-            "line": 5194
+            "line": 5217
           },
           {
             "sourceFile": "packages/sdk/src/4.0/funcs.ts",
             "column": 9,
-            "line": 5222
+            "line": 5294
           },
           {
             "sourceFile": "packages/sdk/src/4.0/funcs.ts",
             "column": 9,
-            "line": 5248
+            "line": 5339
           },
           {
             "sourceFile": "packages/sdk/src/4.0/funcs.ts",
             "column": 9,
-            "line": 5275
+            "line": 5368
           },
           {
             "sourceFile": "packages/sdk/src/4.0/funcs.ts",
             "column": 9,
-            "line": 5354
+            "line": 5394
           },
           {
             "sourceFile": "packages/sdk/src/4.0/funcs.ts",
             "column": 9,
-            "line": 5411
+            "line": 5420
           },
           {
             "sourceFile": "packages/sdk/src/4.0/funcs.ts",
             "column": 9,
-            "line": 5469
+            "line": 5448
           },
           {
             "sourceFile": "packages/sdk/src/4.0/funcs.ts",
             "column": 9,
-            "line": 5505
+            "line": 5474
           },
           {
             "sourceFile": "packages/sdk/src/4.0/funcs.ts",
             "column": 9,
-            "line": 5575
+            "line": 5501
           },
           {
             "sourceFile": "packages/sdk/src/4.0/funcs.ts",
             "column": 9,
-            "line": 5623
+            "line": 5580
           },
           {
             "sourceFile": "packages/sdk/src/4.0/funcs.ts",
             "column": 9,
-            "line": 5786
+            "line": 5637
           },
           {
             "sourceFile": "packages/sdk/src/4.0/funcs.ts",
             "column": 9,
-            "line": 5813
+            "line": 5695
           },
           {
             "sourceFile": "packages/sdk/src/4.0/funcs.ts",
             "column": 9,
-            "line": 5865
+            "line": 5731
           },
           {
             "sourceFile": "packages/sdk/src/4.0/funcs.ts",
             "column": 9,
-            "line": 5963
+            "line": 5801
           },
           {
             "sourceFile": "packages/sdk/src/4.0/funcs.ts",
             "column": 9,
-            "line": 5989
+            "line": 5849
           },
           {
             "sourceFile": "packages/sdk/src/4.0/funcs.ts",
             "column": 9,
-            "line": 6100
+            "line": 6012
           },
           {
             "sourceFile": "packages/sdk/src/4.0/funcs.ts",
             "column": 9,
-            "line": 6175
+            "line": 6039
           },
           {
             "sourceFile": "packages/sdk/src/4.0/funcs.ts",
             "column": 9,
-            "line": 6221
+            "line": 6091
           },
           {
             "sourceFile": "packages/sdk/src/4.0/funcs.ts",
             "column": 9,
-            "line": 6335
+            "line": 6189
           },
           {
             "sourceFile": "packages/sdk/src/4.0/funcs.ts",
             "column": 9,
-            "line": 6437
+            "line": 6215
           },
           {
             "sourceFile": "packages/sdk/src/4.0/funcs.ts",
             "column": 9,
-            "line": 6460
+            "line": 6326
           },
           {
             "sourceFile": "packages/sdk/src/4.0/funcs.ts",
             "column": 9,
-            "line": 6509
+            "line": 6401
           },
           {
             "sourceFile": "packages/sdk/src/4.0/funcs.ts",
             "column": 9,
-            "line": 6588
+            "line": 6447
           },
           {
             "sourceFile": "packages/sdk/src/4.0/funcs.ts",
             "column": 9,
-            "line": 6618
+            "line": 6561
           },
           {
             "sourceFile": "packages/sdk/src/4.0/funcs.ts",
             "column": 9,
-            "line": 6642
+            "line": 6663
           },
           {
             "sourceFile": "packages/sdk/src/4.0/funcs.ts",
             "column": 9,
-            "line": 6669
+            "line": 6686
           },
           {
             "sourceFile": "packages/sdk/src/4.0/funcs.ts",
             "column": 9,
-            "line": 6697
+            "line": 6735
           },
           {
             "sourceFile": "packages/sdk/src/4.0/funcs.ts",
             "column": 9,
-            "line": 6721
+            "line": 6814
           },
           {
             "sourceFile": "packages/sdk/src/4.0/funcs.ts",
             "column": 9,
-            "line": 6754
+            "line": 6844
           },
           {
             "sourceFile": "packages/sdk/src/4.0/funcs.ts",
             "column": 9,
-            "line": 6783
+            "line": 6868
           },
           {
             "sourceFile": "packages/sdk/src/4.0/funcs.ts",
             "column": 9,
-            "line": 6816
+            "line": 6895
           },
           {
             "sourceFile": "packages/sdk/src/4.0/funcs.ts",
             "column": 9,
-            "line": 6910
+            "line": 6923
           },
           {
             "sourceFile": "packages/sdk/src/4.0/funcs.ts",
             "column": 9,
-            "line": 6936
+            "line": 6947
           },
           {
             "sourceFile": "packages/sdk/src/4.0/funcs.ts",
             "column": 9,
-            "line": 7032
+            "line": 6980
           },
           {
             "sourceFile": "packages/sdk/src/4.0/funcs.ts",
             "column": 9,
-            "line": 7205
+            "line": 7009
           },
           {
             "sourceFile": "packages/sdk/src/4.0/funcs.ts",
             "column": 9,
-            "line": 7257
+            "line": 7042
           },
           {
             "sourceFile": "packages/sdk/src/4.0/funcs.ts",
             "column": 9,
-            "line": 7332
+            "line": 7136
           },
           {
             "sourceFile": "packages/sdk/src/4.0/funcs.ts",
             "column": 9,
-            "line": 7358
+            "line": 7162
           },
           {
             "sourceFile": "packages/sdk/src/4.0/funcs.ts",
             "column": 9,
-            "line": 7427
+            "line": 7258
           },
           {
             "sourceFile": "packages/sdk/src/4.0/funcs.ts",
             "column": 9,
-            "line": 7489
+            "line": 7431
           },
           {
             "sourceFile": "packages/sdk/src/4.0/funcs.ts",
             "column": 9,
-            "line": 7517
+            "line": 7483
           },
           {
             "sourceFile": "packages/sdk/src/4.0/funcs.ts",
             "column": 9,
-            "line": 7547
+            "line": 7558
           },
           {
             "sourceFile": "packages/sdk/src/4.0/funcs.ts",
             "column": 9,
-            "line": 7582
+            "line": 7584
           },
           {
             "sourceFile": "packages/sdk/src/4.0/funcs.ts",
             "column": 9,
-            "line": 7615
+            "line": 7653
           },
           {
             "sourceFile": "packages/sdk/src/4.0/funcs.ts",
             "column": 9,
-            "line": 7645
+            "line": 7715
           },
           {
             "sourceFile": "packages/sdk/src/4.0/funcs.ts",
             "column": 9,
-            "line": 7671
+            "line": 7743
           },
           {
             "sourceFile": "packages/sdk/src/4.0/funcs.ts",
             "column": 9,
-            "line": 7793
+            "line": 7773
           },
           {
             "sourceFile": "packages/sdk/src/4.0/funcs.ts",
             "column": 9,
-            "line": 7868
+            "line": 7808
           },
           {
             "sourceFile": "packages/sdk/src/4.0/funcs.ts",
             "column": 9,
-            "line": 7900
+            "line": 7841
           },
           {
             "sourceFile": "packages/sdk/src/4.0/funcs.ts",
             "column": 9,
-            "line": 7946
+            "line": 7871
           },
           {
             "sourceFile": "packages/sdk/src/4.0/funcs.ts",
             "column": 9,
-            "line": 7987
+            "line": 7897
           },
           {
             "sourceFile": "packages/sdk/src/4.0/funcs.ts",
             "column": 9,
-            "line": 8029
+            "line": 8019
           },
           {
             "sourceFile": "packages/sdk/src/4.0/funcs.ts",
             "column": 9,
-            "line": 8108
+            "line": 8094
           },
           {
             "sourceFile": "packages/sdk/src/4.0/funcs.ts",
             "column": 9,
-            "line": 8294
+            "line": 8126
           },
           {
             "sourceFile": "packages/sdk/src/4.0/funcs.ts",
             "column": 9,
-            "line": 8322
+            "line": 8172
           },
           {
             "sourceFile": "packages/sdk/src/4.0/funcs.ts",
             "column": 9,
-            "line": 8384
+            "line": 8213
           },
           {
             "sourceFile": "packages/sdk/src/4.0/funcs.ts",
             "column": 9,
-            "line": 8432
+            "line": 8255
           },
           {
             "sourceFile": "packages/sdk/src/4.0/funcs.ts",
             "column": 9,
-            "line": 8626
+            "line": 8334
           },
           {
             "sourceFile": "packages/sdk/src/4.0/funcs.ts",
             "column": 9,
-            "line": 8669
+            "line": 8520
           },
           {
             "sourceFile": "packages/sdk/src/4.0/funcs.ts",
             "column": 9,
-            "line": 8717
+            "line": 8548
           },
           {
             "sourceFile": "packages/sdk/src/4.0/funcs.ts",
             "column": 9,
-            "line": 8752
+            "line": 8610
           },
           {
             "sourceFile": "packages/sdk/src/4.0/funcs.ts",
             "column": 9,
-            "line": 8823
+            "line": 8658
           },
           {
             "sourceFile": "packages/sdk/src/4.0/funcs.ts",
             "column": 9,
-            "line": 8862
+            "line": 8852
           },
           {
             "sourceFile": "packages/sdk/src/4.0/funcs.ts",
             "column": 9,
-            "line": 8901
+            "line": 8895
           },
           {
             "sourceFile": "packages/sdk/src/4.0/funcs.ts",
             "column": 9,
-            "line": 8936
+            "line": 8943
           },
           {
             "sourceFile": "packages/sdk/src/4.0/funcs.ts",
             "column": 9,
-            "line": 9007
+            "line": 8978
           },
           {
             "sourceFile": "packages/sdk/src/4.0/funcs.ts",
             "column": 9,
-            "line": 9053
+            "line": 9049
           },
           {
             "sourceFile": "packages/sdk/src/4.0/funcs.ts",
             "column": 9,
-            "line": 9122
+            "line": 9088
           },
           {
             "sourceFile": "packages/sdk/src/4.0/funcs.ts",
             "column": 9,
-            "line": 9178
+            "line": 9127
           },
           {
             "sourceFile": "packages/sdk/src/4.0/funcs.ts",
             "column": 9,
-            "line": 9210
+            "line": 9162
           },
           {
             "sourceFile": "packages/sdk/src/4.0/funcs.ts",
             "column": 9,
-            "line": 9273
+            "line": 9233
           },
           {
             "sourceFile": "packages/sdk/src/4.0/funcs.ts",
             "column": 9,
-            "line": 9321
+            "line": 9279
           },
           {
             "sourceFile": "packages/sdk/src/4.0/funcs.ts",
             "column": 9,
-            "line": 9380
+            "line": 9348
           },
           {
             "sourceFile": "packages/sdk/src/4.0/funcs.ts",
             "column": 9,
-            "line": 9407
+            "line": 9404
           },
           {
             "sourceFile": "packages/sdk/src/4.0/funcs.ts",
             "column": 9,
-            "line": 9533
+            "line": 9436
           },
           {
             "sourceFile": "packages/sdk/src/4.0/funcs.ts",
             "column": 9,
-            "line": 9709
+            "line": 9499
           },
           {
             "sourceFile": "packages/sdk/src/4.0/funcs.ts",
             "column": 9,
-            "line": 9746
+            "line": 9547
           },
           {
             "sourceFile": "packages/sdk/src/4.0/funcs.ts",
             "column": 9,
-            "line": 9784
+            "line": 9606
           },
           {
             "sourceFile": "packages/sdk/src/4.0/funcs.ts",
             "column": 9,
-            "line": 9886
+            "line": 9633
           },
           {
             "sourceFile": "packages/sdk/src/4.0/funcs.ts",
             "column": 9,
-            "line": 9956
+            "line": 9759
           },
           {
             "sourceFile": "packages/sdk/src/4.0/funcs.ts",
             "column": 9,
-            "line": 10048
+            "line": 9935
           },
           {
             "sourceFile": "packages/sdk/src/4.0/funcs.ts",
             "column": 9,
-            "line": 10087
+            "line": 9972
           },
           {
             "sourceFile": "packages/sdk/src/4.0/funcs.ts",
             "column": 9,
-            "line": 10146
+            "line": 10010
           },
           {
             "sourceFile": "packages/sdk/src/4.0/funcs.ts",
             "column": 9,
-            "line": 10176
+            "line": 10112
           },
           {
             "sourceFile": "packages/sdk/src/4.0/funcs.ts",
             "column": 9,
-            "line": 10234
+            "line": 10182
           },
           {
             "sourceFile": "packages/sdk/src/4.0/funcs.ts",
             "column": 9,
-            "line": 10338
+            "line": 10274
           },
           {
             "sourceFile": "packages/sdk/src/4.0/funcs.ts",
             "column": 9,
-            "line": 10370
+            "line": 10313
           },
           {
             "sourceFile": "packages/sdk/src/4.0/funcs.ts",
             "column": 9,
-            "line": 10388
+            "line": 10372
           },
           {
             "sourceFile": "packages/sdk/src/4.0/funcs.ts",
             "column": 9,
-            "line": 10471
+            "line": 10402
           },
           {
             "sourceFile": "packages/sdk/src/4.0/funcs.ts",
             "column": 9,
-            "line": 10515
+            "line": 10460
           },
           {
             "sourceFile": "packages/sdk/src/4.0/funcs.ts",
             "column": 9,
-            "line": 10555
+            "line": 10564
           },
           {
             "sourceFile": "packages/sdk/src/4.0/funcs.ts",
             "column": 9,
-            "line": 10653
+            "line": 10596
           },
           {
             "sourceFile": "packages/sdk/src/4.0/funcs.ts",
             "column": 9,
-            "line": 10678
+            "line": 10614
           },
           {
             "sourceFile": "packages/sdk/src/4.0/funcs.ts",
             "column": 9,
-            "line": 10780
+            "line": 10699
           },
           {
             "sourceFile": "packages/sdk/src/4.0/funcs.ts",
             "column": 9,
-            "line": 10855
+            "line": 10745
           },
           {
             "sourceFile": "packages/sdk/src/4.0/funcs.ts",
             "column": 9,
-            "line": 10903
+            "line": 10787
           },
           {
             "sourceFile": "packages/sdk/src/4.0/funcs.ts",
             "column": 9,
-            "line": 10951
+            "line": 10885
           },
           {
             "sourceFile": "packages/sdk/src/4.0/funcs.ts",
             "column": 9,
-            "line": 10999
+            "line": 10910
           },
           {
             "sourceFile": "packages/sdk/src/4.0/funcs.ts",
             "column": 9,
-            "line": 11049
+            "line": 11012
           },
           {
             "sourceFile": "packages/sdk/src/4.0/funcs.ts",
             "column": 9,
-            "line": 11099
+            "line": 11087
           },
           {
             "sourceFile": "packages/sdk/src/4.0/funcs.ts",
             "column": 9,
-            "line": 11153
+            "line": 11135
           },
           {
             "sourceFile": "packages/sdk/src/4.0/funcs.ts",
             "column": 9,
-            "line": 11203
+            "line": 11183
           },
           {
             "sourceFile": "packages/sdk/src/4.0/funcs.ts",
             "column": 9,
-            "line": 11228
+            "line": 11231
           },
           {
             "sourceFile": "packages/sdk/src/4.0/funcs.ts",
             "column": 9,
-            "line": 11278
+            "line": 11281
           },
           {
             "sourceFile": "packages/sdk/src/4.0/funcs.ts",
             "column": 9,
-            "line": 11328
+            "line": 11331
           },
           {
             "sourceFile": "packages/sdk/src/4.0/funcs.ts",
             "column": 9,
-            "line": 11382
+            "line": 11385
           },
           {
             "sourceFile": "packages/sdk/src/4.0/funcs.ts",
             "column": 9,
-            "line": 11450
+            "line": 11435
           },
           {
             "sourceFile": "packages/sdk/src/4.0/funcs.ts",
             "column": 9,
-            "line": 11590
+            "line": 11460
           },
           {
             "sourceFile": "packages/sdk/src/4.0/funcs.ts",
             "column": 9,
-            "line": 11649
+            "line": 11510
           },
           {
             "sourceFile": "packages/sdk/src/4.0/funcs.ts",
             "column": 9,
-            "line": 11730
+            "line": 11560
           },
           {
             "sourceFile": "packages/sdk/src/4.0/funcs.ts",
             "column": 9,
-            "line": 11803
+            "line": 11614
           },
           {
             "sourceFile": "packages/sdk/src/4.0/funcs.ts",
             "column": 9,
-            "line": 11850
+            "line": 11682
+          },
+          {
+            "sourceFile": "packages/sdk/src/4.0/funcs.ts",
+            "column": 9,
+            "line": 11822
+          },
+          {
+            "sourceFile": "packages/sdk/src/4.0/funcs.ts",
+            "column": 9,
+            "line": 11881
+          },
+          {
+            "sourceFile": "packages/sdk/src/4.0/funcs.ts",
+            "column": 9,
+            "line": 11962
+          },
+          {
+            "sourceFile": "packages/sdk/src/4.0/funcs.ts",
+            "column": 9,
+            "line": 12035
+          },
+          {
+            "sourceFile": "packages/sdk/src/4.0/funcs.ts",
+            "column": 9,
+            "line": 12082
           },
           {
             "sourceFile": "packages/sdk-codegen/src/specConverter.ts",
             "column": 32,
-            "line": 643
+            "line": 646
           },
           {
             "sourceFile": "packages/sdk-codegen/src/specConverter.ts",
             "column": 50,
-            "line": 686
+            "line": 689
           },
           {
             "sourceFile": "packages/sdk-codegen/src/typescript.gen.spec.ts",
             "column": 9,
-            "line": 788
+            "line": 795
           },
           {
             "sourceFile": "packages/sdk-codegen/src/typescript.gen.spec.ts",
             "column": 9,
-            "line": 822
+            "line": 829
           }
         ]
       }
@@ -7791,247 +7591,252 @@
           {
             "sourceFile": "packages/sdk/src/4.0/funcs.ts",
             "column": 9,
-            "line": 564
+            "line": 396
           },
           {
             "sourceFile": "packages/sdk/src/4.0/funcs.ts",
             "column": 9,
-            "line": 828
+            "line": 752
           },
           {
             "sourceFile": "packages/sdk/src/4.0/funcs.ts",
             "column": 9,
-            "line": 1013
+            "line": 1016
           },
           {
             "sourceFile": "packages/sdk/src/4.0/funcs.ts",
             "column": 9,
-            "line": 1128
+            "line": 1201
           },
           {
             "sourceFile": "packages/sdk/src/4.0/funcs.ts",
             "column": 9,
-            "line": 1207
+            "line": 1316
           },
           {
             "sourceFile": "packages/sdk/src/4.0/funcs.ts",
             "column": 9,
-            "line": 1365
+            "line": 1395
           },
           {
             "sourceFile": "packages/sdk/src/4.0/funcs.ts",
             "column": 9,
-            "line": 1602
+            "line": 1553
           },
           {
             "sourceFile": "packages/sdk/src/4.0/funcs.ts",
             "column": 9,
-            "line": 1724
+            "line": 1790
           },
           {
             "sourceFile": "packages/sdk/src/4.0/funcs.ts",
             "column": 9,
-            "line": 1847
+            "line": 1912
           },
           {
             "sourceFile": "packages/sdk/src/4.0/funcs.ts",
             "column": 9,
-            "line": 2104
+            "line": 2035
           },
           {
             "sourceFile": "packages/sdk/src/4.0/funcs.ts",
             "column": 9,
-            "line": 2219
+            "line": 2292
           },
           {
             "sourceFile": "packages/sdk/src/4.0/funcs.ts",
             "column": 9,
-            "line": 2290
+            "line": 2407
           },
           {
             "sourceFile": "packages/sdk/src/4.0/funcs.ts",
             "column": 9,
-            "line": 2336
+            "line": 2478
           },
           {
             "sourceFile": "packages/sdk/src/4.0/funcs.ts",
             "column": 9,
-            "line": 2403
+            "line": 2524
           },
           {
             "sourceFile": "packages/sdk/src/4.0/funcs.ts",
             "column": 9,
-            "line": 2472
+            "line": 2591
           },
           {
             "sourceFile": "packages/sdk/src/4.0/funcs.ts",
             "column": 9,
-            "line": 2516
+            "line": 2660
           },
           {
             "sourceFile": "packages/sdk/src/4.0/funcs.ts",
             "column": 9,
-            "line": 2587
+            "line": 2704
           },
           {
             "sourceFile": "packages/sdk/src/4.0/funcs.ts",
             "column": 9,
-            "line": 2652
+            "line": 2775
           },
           {
             "sourceFile": "packages/sdk/src/4.0/funcs.ts",
             "column": 9,
-            "line": 2866
+            "line": 2874
           },
           {
             "sourceFile": "packages/sdk/src/4.0/funcs.ts",
             "column": 9,
-            "line": 3181
+            "line": 3092
           },
           {
             "sourceFile": "packages/sdk/src/4.0/funcs.ts",
             "column": 9,
-            "line": 3325
+            "line": 3407
           },
           {
             "sourceFile": "packages/sdk/src/4.0/funcs.ts",
             "column": 9,
-            "line": 3597
+            "line": 3551
           },
           {
             "sourceFile": "packages/sdk/src/4.0/funcs.ts",
             "column": 9,
-            "line": 4070
+            "line": 3823
           },
           {
             "sourceFile": "packages/sdk/src/4.0/funcs.ts",
             "column": 9,
-            "line": 4137
+            "line": 4296
           },
           {
             "sourceFile": "packages/sdk/src/4.0/funcs.ts",
             "column": 9,
-            "line": 4284
+            "line": 4363
           },
           {
             "sourceFile": "packages/sdk/src/4.0/funcs.ts",
             "column": 9,
-            "line": 4392
+            "line": 4510
           },
           {
             "sourceFile": "packages/sdk/src/4.0/funcs.ts",
             "column": 9,
-            "line": 4521
+            "line": 4618
           },
           {
             "sourceFile": "packages/sdk/src/4.0/funcs.ts",
             "column": 9,
-            "line": 4652
+            "line": 4747
           },
           {
             "sourceFile": "packages/sdk/src/4.0/funcs.ts",
             "column": 9,
-            "line": 4732
+            "line": 4878
           },
           {
             "sourceFile": "packages/sdk/src/4.0/funcs.ts",
             "column": 9,
-            "line": 4925
+            "line": 4958
           },
           {
             "sourceFile": "packages/sdk/src/4.0/funcs.ts",
             "column": 9,
-            "line": 5017
+            "line": 5151
           },
           {
             "sourceFile": "packages/sdk/src/4.0/funcs.ts",
             "column": 9,
-            "line": 5532
+            "line": 5243
           },
           {
             "sourceFile": "packages/sdk/src/4.0/funcs.ts",
             "column": 9,
-            "line": 5734
+            "line": 5758
           },
           {
             "sourceFile": "packages/sdk/src/4.0/funcs.ts",
             "column": 9,
-            "line": 5894
+            "line": 5960
           },
           {
             "sourceFile": "packages/sdk/src/4.0/funcs.ts",
             "column": 9,
-            "line": 6017
+            "line": 6120
           },
           {
             "sourceFile": "packages/sdk/src/4.0/funcs.ts",
             "column": 9,
-            "line": 6267
+            "line": 6243
           },
           {
             "sourceFile": "packages/sdk/src/4.0/funcs.ts",
             "column": 9,
-            "line": 6409
+            "line": 6493
           },
           {
             "sourceFile": "packages/sdk/src/4.0/funcs.ts",
             "column": 9,
-            "line": 6535
+            "line": 6635
           },
           {
             "sourceFile": "packages/sdk/src/4.0/funcs.ts",
             "column": 9,
-            "line": 7306
+            "line": 6761
           },
           {
             "sourceFile": "packages/sdk/src/4.0/funcs.ts",
             "column": 9,
-            "line": 8777
+            "line": 7532
           },
           {
             "sourceFile": "packages/sdk/src/4.0/funcs.ts",
             "column": 9,
-            "line": 8961
+            "line": 9003
           },
           {
             "sourceFile": "packages/sdk/src/4.0/funcs.ts",
             "column": 9,
-            "line": 9230
+            "line": 9187
           },
           {
             "sourceFile": "packages/sdk/src/4.0/funcs.ts",
             "column": 9,
-            "line": 9473
+            "line": 9456
           },
           {
             "sourceFile": "packages/sdk/src/4.0/funcs.ts",
             "column": 9,
-            "line": 9923
+            "line": 9699
           },
           {
             "sourceFile": "packages/sdk/src/4.0/funcs.ts",
             "column": 9,
-            "line": 10261
+            "line": 10149
           },
           {
             "sourceFile": "packages/sdk/src/4.0/funcs.ts",
             "column": 9,
-            "line": 10577
+            "line": 10487
           },
           {
             "sourceFile": "packages/sdk/src/4.0/funcs.ts",
             "column": 9,
-            "line": 10732
+            "line": 10809
           },
           {
             "sourceFile": "packages/sdk/src/4.0/funcs.ts",
             "column": 9,
-            "line": 11484
+            "line": 10964
           },
           {
             "sourceFile": "packages/sdk/src/4.0/funcs.ts",
             "column": 9,
-            "line": 11676
+            "line": 11716
+          },
+          {
+            "sourceFile": "packages/sdk/src/4.0/funcs.ts",
+            "column": 9,
+            "line": 11908
           }
         ]
       }
@@ -8128,87 +7933,92 @@
           {
             "sourceFile": "packages/sdk/src/4.0/funcs.ts",
             "column": 9,
-            "line": 604
+            "line": 369
           },
           {
             "sourceFile": "packages/sdk/src/4.0/funcs.ts",
             "column": 9,
-            "line": 646
+            "line": 792
           },
           {
             "sourceFile": "packages/sdk/src/4.0/funcs.ts",
             "column": 9,
-            "line": 677
+            "line": 834
           },
           {
             "sourceFile": "packages/sdk/src/4.0/funcs.ts",
             "column": 9,
-            "line": 708
+            "line": 865
           },
           {
             "sourceFile": "packages/sdk/src/4.0/funcs.ts",
             "column": 9,
-            "line": 1149
+            "line": 896
           },
           {
             "sourceFile": "packages/sdk/src/4.0/funcs.ts",
             "column": 9,
-            "line": 2042
+            "line": 1337
           },
           {
             "sourceFile": "packages/sdk/src/4.0/funcs.ts",
             "column": 9,
-            "line": 2359
+            "line": 2230
           },
           {
             "sourceFile": "packages/sdk/src/4.0/funcs.ts",
             "column": 9,
-            "line": 2764
+            "line": 2547
           },
           {
             "sourceFile": "packages/sdk/src/4.0/funcs.ts",
             "column": 9,
-            "line": 2952
+            "line": 2990
           },
           {
             "sourceFile": "packages/sdk/src/4.0/funcs.ts",
             "column": 9,
-            "line": 2984
+            "line": 3178
           },
           {
             "sourceFile": "packages/sdk/src/4.0/funcs.ts",
             "column": 9,
-            "line": 3673
+            "line": 3210
           },
           {
             "sourceFile": "packages/sdk/src/4.0/funcs.ts",
             "column": 9,
-            "line": 6970
+            "line": 3899
           },
           {
             "sourceFile": "packages/sdk/src/4.0/funcs.ts",
             "column": 9,
-            "line": 7735
+            "line": 7196
           },
           {
             "sourceFile": "packages/sdk/src/4.0/funcs.ts",
             "column": 9,
-            "line": 9298
+            "line": 7961
           },
           {
             "sourceFile": "packages/sdk/src/4.0/funcs.ts",
             "column": 9,
-            "line": 9349
+            "line": 9524
           },
           {
             "sourceFile": "packages/sdk/src/4.0/funcs.ts",
             "column": 9,
-            "line": 10115
+            "line": 9575
           },
           {
             "sourceFile": "packages/sdk/src/4.0/funcs.ts",
             "column": 9,
-            "line": 11412
+            "line": 10341
+          },
+          {
+            "sourceFile": "packages/sdk/src/4.0/funcs.ts",
+            "column": 9,
+            "line": 11644
           }
         ]
       }
@@ -8225,7 +8035,7 @@
           {
             "sourceFile": "packages/sdk-codegen/src/typescript.gen.spec.ts",
             "column": 52,
-            "line": 291
+            "line": 298
           }
         ]
       }
@@ -8242,7 +8052,7 @@
           {
             "sourceFile": "packages/sdk-codegen/src/typescript.gen.spec.ts",
             "column": 52,
-            "line": 336
+            "line": 343
           }
         ]
       }
@@ -8254,7 +8064,7 @@
           {
             "sourceFile": "packages/sdk-codegen-scripts/scripts/utils.ts",
             "column": 27,
-            "line": 97
+            "line": 86
           }
         ]
       }
@@ -8266,7 +8076,7 @@
           {
             "sourceFile": "packages/sdk-codegen-scripts/scripts/utils.ts",
             "column": 23,
-            "line": 99
+            "line": 88
           }
         ]
       }
@@ -8278,7 +8088,7 @@
           {
             "sourceFile": "packages/sdk-codegen-scripts/scripts/utils.ts",
             "column": 31,
-            "line": 104
+            "line": 93
           }
         ]
       }
@@ -8314,12 +8124,12 @@
           {
             "sourceFile": "packages/sdk-node/test/methods.spec.ts",
             "column": 21,
-            "line": 175
+            "line": 177
           },
           {
             "sourceFile": "packages/sdk-node/test/methods.spec.ts",
             "column": 12,
-            "line": 507
+            "line": 509
           }
         ],
         ".py": [
@@ -8343,7 +8153,7 @@
           {
             "sourceFile": "packages/sdk-node/test/methods.spec.ts",
             "column": 23,
-            "line": 214
+            "line": 216
           }
         ]
       }
@@ -8355,22 +8165,22 @@
           {
             "sourceFile": "packages/sdk-node/test/methods.spec.ts",
             "column": 10,
-            "line": 540
+            "line": 542
           },
           {
             "sourceFile": "packages/sdk-node/test/methods.spec.ts",
             "column": 10,
-            "line": 555
+            "line": 557
           },
           {
             "sourceFile": "packages/sdk-node/test/methods.spec.ts",
             "column": 10,
-            "line": 585
+            "line": 587
           },
           {
             "sourceFile": "packages/sdk-node/test/methods.spec.ts",
             "column": 10,
-            "line": 596
+            "line": 598
           }
         ],
         ".py": [
@@ -8409,7 +8219,7 @@
           {
             "sourceFile": "packages/sdk-node/test/methods.spec.ts",
             "column": 14,
-            "line": 989
+            "line": 991
           }
         ],
         ".py": [
@@ -8428,7 +8238,7 @@
           {
             "sourceFile": "packages/sdk-node/test/methods.spec.ts",
             "column": 14,
-            "line": 1018
+            "line": 1020
           }
         ],
         ".py": [
@@ -8447,12 +8257,12 @@
           {
             "sourceFile": "packages/wholly-sheet/src/SheetSDK.ts",
             "column": 17,
-            "line": 392
+            "line": 394
           },
           {
             "sourceFile": "packages/wholly-sheet/src/SheetSDK.ts",
             "column": 17,
-            "line": 423
+            "line": 425
           }
         ]
       }
@@ -8465,23 +8275,6 @@
             "sourceFile": "python/tests/integration/test_methods.py",
             "column": 16,
             "line": 45
-          }
-        ]
-      }
-    },
-    "session": {
-      "operationId": "session",
-      "calls": {
-        ".py": [
-          {
-            "sourceFile": "python/tests/integration/test_methods.py",
-            "column": 22,
-            "line": 270
-          },
-          {
-            "sourceFile": "python/tests/integration/test_methods.py",
-            "column": 22,
-            "line": 278
           }
         ]
       }
