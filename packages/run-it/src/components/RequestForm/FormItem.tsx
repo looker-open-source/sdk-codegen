@@ -23,51 +23,34 @@
  SOFTWARE.
 
  */
+import React, { FC, ReactElement } from 'react'
+import { Space, Box, Label } from '@looker/components'
 
-import React, { FC } from 'react'
-import styled from 'styled-components'
-
-interface CodeWrapperProps {
-  className: string
-  style: any
-  inline: boolean
-  children: any
+interface FormItemProps {
+  /** ID of input item for label */
+  id: string
+  /** Optional label. Defaults to an empty string so spacing is preserved */
+  label?: string
+  /** Nested react elements */
+  children: ReactElement
 }
 
-const Pre = styled.pre`
-  white-space: pre-wrap;
-  overflow: auto;
-  // override default margin for Pre
-  // so we can set from parent
-  margin: 0px;
-
-  // selector for search matches
-  .match {
-    border: 1px #949ff9 solid;
-    background-color: #484c6f;
-    border-radius: 4px;
-  }
-`
-const Code = styled.code`
-  // selector for search matches
-  .match {
-    background-color: yellow;
-  }
-`
-
 /**
- * A wrapper for CodeDisplay which applies search highlighting styles on proper container component
+ * basic input form layout component
+ * @param id of input item
+ * @param children embedded react elements
+ * @param label optional label
  */
-export const CodeWrapper: FC<CodeWrapperProps> = ({
-  className,
-  style,
-  inline,
-  children,
-}) => {
-  const Wrapper = inline ? Code : Pre
+export const FormItem: FC<FormItemProps> = ({ id, children, label = ' ' }) => {
+  const key = `space_${id}`
   return (
-    <Wrapper className={className} style={style}>
+    <Space id={key} key={key}>
+      <Box key={`${key}_box`} width="120px" flexShrink={0}>
+        <Label key={`${key}_label_for`} htmlFor={id}>
+          {label}
+        </Label>
+      </Box>
       {children}
-    </Wrapper>
+    </Space>
   )
 }

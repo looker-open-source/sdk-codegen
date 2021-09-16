@@ -139,6 +139,13 @@ describe('typescript generator', () => {
       expect(actual).toEqual(`query_id: number`)
     })
 
+    it('intrinsic body', () => {
+      const method = apiTestModel.methods.parse_saml_idp_metadata
+      const param = method.params[0]
+      const actual = gen.declareParameter(indent, method, param)
+      expect(actual).toEqual(`body: string`)
+    })
+
     it('optional parameter', () => {
       const method = apiTestModel.methods.run_query
       const param = method.params[2]

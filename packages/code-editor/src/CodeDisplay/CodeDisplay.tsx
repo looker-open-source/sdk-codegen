@@ -39,6 +39,7 @@ require('prismjs/components/prism-kotlin')
 require('prismjs/components/prism-csharp')
 require('prismjs/components/prism-swift')
 require('prismjs/components/prism-ruby')
+require('prismjs/components/prism-markdown')
 
 const Line = styled(Span)`
   display: table-row;
