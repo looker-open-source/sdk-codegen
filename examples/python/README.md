@@ -18,7 +18,7 @@ The full details of all Looker API endpoints are listed in Looker Docs: [Version
 - [Soft delete dashboard](soft_delete_dashboard.py)
 
 ## Query : Run and Manage Queries
-- [Killing all running queries](kill_queries.py)
+- [Kill all running queries](kill_queries.py)
 
 ## RenderTask : Manage Render Tasks
 
@@ -36,8 +36,3 @@ The full details of all Looker API endpoints are listed in Looker Docs: [Version
 ## User : Manage Users
 
 - [Disable all active user sessions](logout_all_users.py)
-
-
-
-
-

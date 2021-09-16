@@ -25,10 +25,16 @@
  */
 
 import React, { BaseSyntheticEvent, FC, Dispatch } from 'react'
-import { Button, Form, Space, ButtonTransparent } from '@looker/components'
+import {
+  Button,
+  Form,
+  ButtonTransparent,
+  Tooltip,
+  Fieldset,
+} from '@looker/components'
 import type { IAPIMethods } from '@looker/sdk-rtl'
 import { RunItHttpMethod, RunItInput, RunItValues } from '../../RunIt'
-import { ConfigDialog, RunItConfigurator } from '../ConfigForm'
+import { RunItConfigurator } from '../ConfigForm'
 import { LoginForm } from '../LoginForm'
 import { RunItSetter } from '../..'
 import {
@@ -37,6 +43,7 @@ import {
   showDataChangeWarning,
   updateNullableProp,
 } from './formUtils'
+import { FormItem } from './FormItem'
 
 /** Properties required by RequestForm */
 interface RequestFormProps {
@@ -56,6 +63,8 @@ interface RequestFormProps {
   needsAuth: boolean
   /** Does RunIt have the configuration values it needs? */
   hasConfig: boolean
+  /** Handle config button click */
+  handleConfig: (e: BaseSyntheticEvent) => void
   /** Hook to refresh specifications */
   setVersionsUrl: RunItSetter
   /** A set state callback which if present allows for editing, setting or clearing OAuth configuration parameters */
@@ -79,6 +88,7 @@ export const RequestForm: FC<RequestFormProps> = ({
   setRequestContent,
   needsAuth,
   hasConfig,
+  handleConfig,
   setVersionsUrl,
   setHasConfig,
   configurator,
@@ -119,46 +129,52 @@ export const RequestForm: FC<RequestFormProps> = ({
 
   return (
     <Form onSubmit={handleSubmit}>
-      {inputs.map((input) =>
-        typeof input.type === 'string'
-          ? createSimpleItem(
-              input,
-              handleChange,
-              handleNumberChange,
-              handleBoolChange,
-              handleDateChange,
-              requestContent
-            )
-          : createComplexItem(input, handleComplexChange, requestContent)
-      )}
-      {httpMethod !== 'GET' && showDataChangeWarning()}
-      <Space>
-        <ButtonTransparent type="button" onClick={handleClear}>
-          Clear
-        </ButtonTransparent>
-        {hasConfig ? (
-          needsAuth ? (
-            <LoginForm
-              sdk={sdk}
-              setVersionsUrl={setVersionsUrl}
-              setHasConfig={setHasConfig}
-              configurator={configurator}
-              requestContent={requestContent}
-            />
-          ) : (
-            <Button type="submit">Run</Button>
-          )
-        ) : (
-          !isExtension &&
-          setHasConfig && (
-            <ConfigDialog
-              setHasConfig={setHasConfig}
-              configurator={configurator}
-              setVersionsUrl={setVersionsUrl}
-            />
-          )
+      <Fieldset>
+        {inputs.map((input) =>
+          typeof input.type === 'string'
+            ? createSimpleItem(
+                input,
+                handleChange,
+                handleNumberChange,
+                handleBoolChange,
+                handleDateChange,
+                requestContent
+              )
+            : createComplexItem(input, handleComplexChange, requestContent)
         )}
-      </Space>
+        {httpMethod !== 'GET' && showDataChangeWarning()}
+        <FormItem id="buttonbar">
+          <>
+            {hasConfig ? (
+              needsAuth ? (
+                <LoginForm
+                  sdk={sdk}
+                  setVersionsUrl={setVersionsUrl}
+                  setHasConfig={setHasConfig}
+                  configurator={configurator}
+                  requestContent={requestContent}
+                />
+              ) : (
+                <Tooltip content="Run the API request">
+                  <Button type="submit">Run</Button>
+                </Tooltip>
+              )
+            ) : (
+              !isExtension &&
+              setHasConfig && (
+                <Tooltip content="Configure your OAuth server to Run requests">
+                  <Button onClick={handleConfig}>Configure</Button>
+                </Tooltip>
+              )
+            )}
+            <Tooltip content="Clear entered values">
+              <ButtonTransparent type="button" onClick={handleClear}>
+                Clear
+              </ButtonTransparent>
+            </Tooltip>
+          </>
+        </FormItem>
+      </Fieldset>
     </Form>
   )
 }

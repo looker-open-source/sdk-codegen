@@ -154,14 +154,14 @@ export const functionalSdk${this.apiRef} = (
 
   interfacesPrologue(_indent: string) {
     return `
-import type { ${this.rtlImports()} ITransportSettings, SDKResponse } from '@looker/sdk-rtl'
+import type { ${this.rtlImports()} IAPIMethods, ITransportSettings, SDKResponse } from '@looker/sdk-rtl'
 /**
  * ${this.warnEditing()}
  *
  */
 import type { ${this.typeNames().join(', ')} } from './models'
 
-export interface I${this.packageName} {
+export interface I${this.packageName} extends IAPIMethods {
 
 `
   }
@@ -256,13 +256,21 @@ export class ${this.packageName}Stream extends APIMethods {
     )
   }
 
+  /**
+   * Detect need for Partial<T> vs T for a parameter type
+   * @param param to cast (or not)
+   * @param mapped type to cast
+   */
+  impartial(param: IParameter, mapped: IMappedType) {
+    if (param.type.intrinsic || param.location !== strBody) return mapped.name
+    return `Partial<${mapped.name}>`
+  }
+
   paramComment(param: IParameter, mapped: IMappedType) {
     // Don't include mapped type name for Typescript param comments in headers
     let desc = param.description || param.type.description
     if (!desc) {
-      if (param.location === strBody) {
-        desc = `Partial<${mapped.name}>`
-      }
+      desc = this.impartial(param, mapped)
     }
     return `@param ${param.name} ${desc}`
   }
@@ -274,9 +282,7 @@ export class ${this.packageName}Stream extends APIMethods {
         : param.type
     const mapped = this.typeMap(type)
     let pOpt = ''
-    if (param.location === strBody) {
-      mapped.name = `Partial<${mapped.name}>`
-    }
+    mapped.name = this.impartial(param, mapped)
     if (!param.required) {
       pOpt = mapped.default ? '' : '?'
     }

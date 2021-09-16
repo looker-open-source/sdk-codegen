@@ -38,7 +38,7 @@ import styled from 'styled-components'
 import { IRawResponse } from '@looker/sdk-rtl'
 import { ShowResponse } from '../ShowResponse'
 import { CollapserCard } from '../Collapser'
-import { RunItHeading } from '../common'
+import { DarkSpan, RunItHeading } from '../common'
 
 type HeaderTable = string[][]
 export type ResponseContent = IRawResponse | undefined
@@ -141,7 +141,7 @@ export const ResponseExplorer: FC<ResponseExplorerProps> = ({
 
   return (
     <>
-      {!response && <Span color="text3">No response was received</Span>}
+      {!response && <DarkSpan>No response was received</DarkSpan>}
       {response && (
         <>
           <RunItHeading as="h4">

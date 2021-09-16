@@ -23,5 +23,34 @@
  SOFTWARE.
 
  */
+import React, { FC, ReactElement } from 'react'
+import { Space, Box, Label } from '@looker/components'
 
-export { LoginForm, readyToLogin } from './LoginForm'
+interface FormItemProps {
+  /** ID of input item for label */
+  id: string
+  /** Optional label. Defaults to an empty string so spacing is preserved */
+  label?: string
+  /** Nested react elements */
+  children: ReactElement
+}
+
+/**
+ * basic input form layout component
+ * @param id of input item
+ * @param children embedded react elements
+ * @param label optional label
+ */
+export const FormItem: FC<FormItemProps> = ({ id, children, label = ' ' }) => {
+  const key = `space_${id}`
+  return (
+    <Space id={key} key={key}>
+      <Box key={`${key}_box`} width="120px" flexShrink={0}>
+        <Label key={`${key}_label_for`} htmlFor={id}>
+          {label}
+        </Label>
+      </Box>
+      {children}
+    </Space>
+  )
+}

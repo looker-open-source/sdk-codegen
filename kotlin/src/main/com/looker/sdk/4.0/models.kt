@@ -25,7 +25,7 @@
  */
 
 /**
- * 286 API models: 213 Spec, 0 Request, 56 Write, 17 Enum
+ * 296 API models: 219 Spec, 0 Request, 58 Write, 19 Enum
  */
 
 
@@ -52,6 +52,102 @@ data class AccessToken (
 ) : Serializable
 
 /**
+ * @property applied_dashboard_filters Filters coming from the dashboard that are applied. Example `[{ "filter_title": "Name", "field_name": "distribution_centers.name", "filter_value": "Los Angeles CA" }]`
+ * @property comparison_type This property informs the check what kind of comparison we are performing. Only certain condition types are valid for time series alerts. For details, refer to [Setting Alert Conditions](https://docs.looker.com/sharing-and-publishing/creating-alerts#setting_alert_conditions) Valid values are: "EQUAL_TO", "GREATER_THAN", "GREATER_THAN_OR_EQUAL_TO", "LESS_THAN", "LESS_THAN_OR_EQUAL_TO", "INCREASES_BY", "DECREASES_BY", "CHANGES_BY".
+ * @property cron Vixie-Style crontab specification when to run. At minumum, it has to be longer than 15 minute intervals
+ * @property custom_title An optional, user-defined title for the alert
+ * @property dashboard_element_id ID of the dashboard element associated with the alert. Refer to [dashboard_element()](#!/Dashboard/DashboardElement)
+ * @property destinations Array of destinations to send alerts to. Must be the same type of destination. Example `[{ "destination_type": "EMAIL", "email_address": "test@test.com" }]`
+ * @property field
+ * @property id ID of the alert (read-only)
+ * @property is_disabled Whether or not the alert is disabled
+ * @property is_public Whether or not the alert is public
+ * @property lookml_dashboard_id ID of the LookML dashboard associated with the alert
+ * @property lookml_link_id ID of the LookML dashboard element associated with the alert
+ * @property owner_id User id of alert owner
+ * @property threshold Value of the alert threshold
+ * @property time_series_condition_state
+ */
+data class Alert (
+    var applied_dashboard_filters: Array<AlertAppliedDashboardFilter>? = null,
+    var comparison_type: ComparisonType? = null,
+    var cron: String? = null,
+    var custom_title: String? = null,
+    var dashboard_element_id: Long? = null,
+    var destinations: Array<AlertDestination>? = null,
+    var field: AlertField? = null,
+    var id: Long? = null,
+    @get:JsonProperty("is_disabled")
+    @param:JsonProperty("is_disabled")
+    var is_disabled: Boolean? = null,
+    @get:JsonProperty("is_public")
+    @param:JsonProperty("is_public")
+    var is_public: Boolean? = null,
+    var lookml_dashboard_id: String? = null,
+    var lookml_link_id: String? = null,
+    var owner_id: Long? = null,
+    var threshold: Double? = null,
+    var time_series_condition_state: AlertConditionState? = null
+) : Serializable
+
+/**
+ * @property filter_title Field Title. Refer to `DashboardFilter.title` in [DashboardFilter](#!/types/DashboardFilter). Example `Name`
+ * @property field_name Field Name. Refer to `DashboardFilter.dimension` in [DashboardFilter](#!/types/DashboardFilter). Example `distribution_centers.name`
+ * @property filter_value Field Value. [Filter Expressions](https://docs.looker.com/reference/filter-expressions). Example `Los Angeles CA`
+ * @property filter_description Human Readable Filter Description. This may be null or auto-generated. Example `is Los Angeles CA` (read-only)
+ */
+data class AlertAppliedDashboardFilter (
+    var filter_title: String? = null,
+    var field_name: String? = null,
+    var filter_value: String? = null,
+    var filter_description: String? = null
+) : Serializable
+
+/**
+ * @property previous_time_series_id (Write-Only) The second latest time string the alert has seen.
+ * @property latest_time_series_id (Write-Only) Latest time string the alert has seen.
+ */
+data class AlertConditionState (
+    var previous_time_series_id: String? = null,
+    var latest_time_series_id: String? = null
+) : Serializable
+
+/**
+ * @property destination_type Type of destination that the alert will be sent to Valid values are: "EMAIL", "ACTION_HUB".
+ * @property email_address Email address for the 'email' type
+ * @property action_hub_integration_id Action hub integration id for the 'action_hub' type. [Integration](#!/types/Integration)
+ * @property action_hub_form_params_json Action hub form params json for the 'action_hub' type [IntegrationParam](#!/types/IntegrationParam)
+ */
+data class AlertDestination (
+    var destination_type: DestinationType,
+    var email_address: String? = null,
+    var action_hub_integration_id: String? = null,
+    var action_hub_form_params_json: String? = null
+) : Serializable
+
+/**
+ * @property title Field's title. Usually auto-generated to reflect field name and its filters
+ * @property name Field's name. Has the format `<view>.<field>` Refer to [docs](https://docs.looker.com/sharing-and-publishing/creating-alerts) for more details
+ * @property filter (Optional / Advance Use) List of fields filter. This further restricts the alert to certain dashboard element's field values. This can be used on top of dashboard filters `applied_dashboard_filters`. To keep thing simple, it's suggested to just use dashboard filters. Example: `{ 'title': '12 Number on Hand', 'name': 'inventory_items.number_on_hand', 'filter': [{ 'field_name': 'inventory_items.id', 'field_value': 12, 'filter_value': null }] }`
+ */
+data class AlertField (
+    var title: String? = null,
+    var name: String? = null,
+    var filter: Array<AlertFieldFilter>? = null
+) : Serializable
+
+/**
+ * @property field_name Field Name. Has format `<view>.<field>`
+ * @property field_value Field Value. Depends on the type of field - numeric or string. For [location](https://docs.looker.com/reference/field-reference/dimension-type-reference#location) type, it's a list of floats. Example `[1.0, 56.0]`
+ * @property filter_value Filter Value. Usually null except for [location](https://docs.looker.com/reference/field-reference/dimension-type-reference#location) type. It'll be a string of lat,long ie `'1.0,56.0'`
+ */
+data class AlertFieldFilter (
+    var field_name: String? = null,
+    var field_value: Any? = null,
+    var filter_value: String? = null
+) : Serializable
+
+/**
  * The appropriate horizontal text alignment the values of this field should be displayed in. Valid values are: "left", "right".
  */
 enum class Align : Serializable {
@@ -75,12 +171,14 @@ data class ApiSession (
  * @property current_version
  * @property supported_versions Array of versions supported by this Looker instance (read-only)
  * @property api_server_url API server base url (read-only)
+ * @property web_server_url Web server base url (read-only)
  */
 data class ApiVersion (
     var looker_release_version: String? = null,
     var current_version: ApiVersionElement? = null,
     var supported_versions: Array<ApiVersionElement>? = null,
-    var api_server_url: String? = null
+    var api_server_url: String? = null,
+    var web_server_url: String? = null
 ) : Serializable
 
 /**
@@ -150,11 +248,16 @@ data class Board (
  * @property content_favorite_id Content favorite id associated with the item this content is based on (read-only)
  * @property content_metadata_id Content metadata id associated with the item this content is based on (read-only)
  * @property content_updated_at Last time the content that this item is based on was updated (read-only)
+ * @property custom_image_data_base64 (Write-Only) base64 encoded image data
+ * @property custom_image_url Custom image_url entered by the user, if present (read-only)
+ * @property custom_title Custom title entered by the user, if present
+ * @property custom_url Custom url entered by the user, if present
  * @property dashboard_id Dashboard to base this item on
  * @property description The actual description for display (read-only)
  * @property favorite_count Number of times content has been favorited, if present (read-only)
  * @property board_section_id Associated Board Section
  * @property id Unique Id (read-only)
+ * @property image_url The actual image_url for display (read-only)
  * @property location The container folder name of the content (read-only)
  * @property look_id Look to base this item on
  * @property lookml_dashboard_id LookML Dashboard to base this item on
@@ -169,11 +272,16 @@ data class BoardItem (
     var content_favorite_id: Long? = null,
     var content_metadata_id: Long? = null,
     var content_updated_at: String? = null,
+    var custom_image_data_base64: String? = null,
+    var custom_image_url: String? = null,
+    var custom_title: String? = null,
+    var custom_url: String? = null,
     var dashboard_id: Long? = null,
     var description: String? = null,
     var favorite_count: Long? = null,
     var board_section_id: Long? = null,
     var id: Long? = null,
+    var image_url: String? = null,
     var location: String? = null,
     var look_id: Long? = null,
     var lookml_dashboard_id: String? = null,
@@ -273,6 +381,20 @@ data class Command (
     var linked_content_id: String? = null,
     var linked_content_type: LinkedContentType? = null
 ) : Serializable
+
+/**
+ * This property informs the check what kind of comparison we are performing. Only certain condition types are valid for time series alerts. For details, refer to [Setting Alert Conditions](https://docs.looker.com/sharing-and-publishing/creating-alerts#setting_alert_conditions) Valid values are: "EQUAL_TO", "GREATER_THAN", "GREATER_THAN_OR_EQUAL_TO", "LESS_THAN", "LESS_THAN_OR_EQUAL_TO", "INCREASES_BY", "DECREASES_BY", "CHANGES_BY".
+ */
+enum class ComparisonType : Serializable {
+    EQUAL_TO,
+    GREATER_THAN,
+    GREATER_THAN_OR_EQUAL_TO,
+    LESS_THAN,
+    LESS_THAN_OR_EQUAL_TO,
+    INCREASES_BY,
+    DECREASES_BY,
+    CHANGES_BY
+}
 
 /**
  * @property dialect_name Name of the dialect for this connection (read-only)
@@ -1021,7 +1143,7 @@ data class CustomWelcomeEmail (
  * @property user_id Id of User (read-only)
  * @property slug Content Metadata Slug
  * @property preferred_viewer The preferred route for viewing this dashboard (ie: dashboards or dashboards-next)
- * @property alert_sync_with_dashboard_filter_enabled Enables alerts to keep in sync with dashboard filter changes - only available in alerts 2.0 (beta)
+ * @property alert_sync_with_dashboard_filter_enabled Enables alerts to keep in sync with dashboard filter changes - only available in Enhanced Alerts (beta)
  * @property background_color Background color
  * @property created_at Time that the Dashboard was created. (read-only)
  * @property crossfilter_enabled Enables crossfiltering in dashboards - only available in dashboards-next (beta)
@@ -1592,6 +1714,14 @@ enum class DependencyStatus : Serializable {
     lock_required,
     lock_error,
     install_none
+}
+
+/**
+ * Type of destination that the alert will be sent to Valid values are: "EMAIL", "ACTION_HUB".
+ */
+enum class DestinationType : Serializable {
+    EMAIL,
+    ACTION_HUB
 }
 
 /**
@@ -4483,16 +4613,16 @@ data class SessionConfig (
 ) : Serializable
 
 /**
- * WARNING: no writeable properties found for POST, PUT, or PATCH
- *
- * @property extension_framework_enabled Toggle extension framework on or off (read-only)
- * @property marketplace_auto_install_enabled Toggle marketplace auto install on or off (read-only)
- * @property marketplace_enabled Toggle marketplace on or off (read-only)
+ * @property extension_framework_enabled Toggle extension framework on or off
+ * @property marketplace_auto_install_enabled Toggle marketplace auto install on or off. Note that auto install only runs if marketplace is enabled.
+ * @property marketplace_enabled Toggle marketplace on or off
+ * @property whitelabel_configuration
  */
 data class Setting (
     var extension_framework_enabled: Boolean? = null,
     var marketplace_auto_install_enabled: Boolean? = null,
-    var marketplace_enabled: Boolean? = null
+    var marketplace_enabled: Boolean? = null,
+    var whitelabel_configuration: WhitelabelConfiguration? = null
 ) : Serializable
 
 /**
@@ -5016,7 +5146,6 @@ data class WelcomeEmailTest (
 ) : Serializable
 
 /**
- * @property can Operations the current user is able to perform on this object (read-only)
  * @property id Unique Id (read-only)
  * @property logo_file Customer logo image. Expected base64 encoded data (write-only)
  * @property logo_url Logo image url (read-only) (read-only)
@@ -5035,7 +5164,6 @@ data class WelcomeEmailTest (
  * @property folders_mentions Remove Looker mentions in home folder page when you don’t have any items saved
  */
 data class WhitelabelConfiguration (
-    var can: Map<String,Boolean>? = null,
     var id: Long? = null,
     var logo_file: String? = null,
     var logo_url: String? = null,
@@ -5065,6 +5193,46 @@ data class Workspace (
     var can: Map<String,Boolean>? = null,
     var id: String? = null,
     var projects: Array<Project>? = null
+) : Serializable
+
+/**
+ * Dynamic writeable type for Alert removes:
+ * id
+ *
+ * @property applied_dashboard_filters Filters coming from the dashboard that are applied. Example `[{ "filter_title": "Name", "field_name": "distribution_centers.name", "filter_value": "Los Angeles CA" }]`
+ * @property comparison_type This property informs the check what kind of comparison we are performing. Only certain condition types are valid for time series alerts. For details, refer to [Setting Alert Conditions](https://docs.looker.com/sharing-and-publishing/creating-alerts#setting_alert_conditions) Valid values are: "EQUAL_TO", "GREATER_THAN", "GREATER_THAN_OR_EQUAL_TO", "LESS_THAN", "LESS_THAN_OR_EQUAL_TO", "INCREASES_BY", "DECREASES_BY", "CHANGES_BY".
+ * @property cron Vixie-Style crontab specification when to run. At minumum, it has to be longer than 15 minute intervals
+ * @property custom_title An optional, user-defined title for the alert
+ * @property dashboard_element_id ID of the dashboard element associated with the alert. Refer to [dashboard_element()](#!/Dashboard/DashboardElement)
+ * @property destinations Array of destinations to send alerts to. Must be the same type of destination. Example `[{ "destination_type": "EMAIL", "email_address": "test@test.com" }]`
+ * @property field
+ * @property is_disabled Whether or not the alert is disabled
+ * @property is_public Whether or not the alert is public
+ * @property lookml_dashboard_id ID of the LookML dashboard associated with the alert
+ * @property lookml_link_id ID of the LookML dashboard element associated with the alert
+ * @property owner_id User id of alert owner
+ * @property threshold Value of the alert threshold
+ * @property time_series_condition_state
+ */
+data class WriteAlert (
+    var applied_dashboard_filters: Array<AlertAppliedDashboardFilter>? = null,
+    var comparison_type: ComparisonType? = null,
+    var cron: String? = null,
+    var custom_title: String? = null,
+    var dashboard_element_id: Long? = null,
+    var destinations: Array<AlertDestination>? = null,
+    var field: AlertField? = null,
+    @get:JsonProperty("is_disabled")
+    @param:JsonProperty("is_disabled")
+    var is_disabled: Boolean? = null,
+    @get:JsonProperty("is_public")
+    @param:JsonProperty("is_public")
+    var is_public: Boolean? = null,
+    var lookml_dashboard_id: String? = null,
+    var lookml_link_id: String? = null,
+    var owner_id: Long? = null,
+    var threshold: Double? = null,
+    var time_series_condition_state: AlertConditionState? = null
 ) : Serializable
 
 /**
@@ -5113,8 +5281,11 @@ data class WriteBoard (
 
 /**
  * Dynamic writeable type for BoardItem removes:
- * can, content_created_by, content_favorite_id, content_metadata_id, content_updated_at, description, favorite_count, id, location, title, url, view_count
+ * can, content_created_by, content_favorite_id, content_metadata_id, content_updated_at, custom_image_url, description, favorite_count, id, image_url, location, title, url, view_count
  *
+ * @property custom_image_data_base64 (Write-Only) base64 encoded image data
+ * @property custom_title Custom title entered by the user, if present
+ * @property custom_url Custom url entered by the user, if present
  * @property dashboard_id Dashboard to base this item on
  * @property board_section_id Associated Board Section
  * @property look_id Look to base this item on
@@ -5122,6 +5293,9 @@ data class WriteBoard (
  * @property order An arbitrary integer representing the sort order within the section
  */
 data class WriteBoardItem (
+    var custom_image_data_base64: String? = null,
+    var custom_title: String? = null,
+    var custom_url: String? = null,
     var dashboard_id: Long? = null,
     var board_section_id: Long? = null,
     var look_id: Long? = null,
@@ -5302,7 +5476,7 @@ data class WriteCustomWelcomeEmail (
  * @property title Dashboard Title
  * @property slug Content Metadata Slug
  * @property preferred_viewer The preferred route for viewing this dashboard (ie: dashboards or dashboards-next)
- * @property alert_sync_with_dashboard_filter_enabled Enables alerts to keep in sync with dashboard filter changes - only available in alerts 2.0 (beta)
+ * @property alert_sync_with_dashboard_filter_enabled Enables alerts to keep in sync with dashboard filter changes - only available in Enhanced Alerts (beta)
  * @property background_color Background color
  * @property crossfilter_enabled Enables crossfiltering in dashboards - only available in dashboards-next (beta)
  * @property deleted Whether or not a dashboard is 'soft' deleted.
@@ -6239,6 +6413,22 @@ data class WriteSessionConfig (
 ) : Serializable
 
 /**
+ * Dynamic writeable type for Setting
+ *
+ * @property extension_framework_enabled Toggle extension framework on or off
+ * @property marketplace_auto_install_enabled Toggle marketplace auto install on or off. Note that auto install only runs if marketplace is enabled.
+ * @property marketplace_enabled Toggle marketplace on or off
+ * @property whitelabel_configuration Dynamic writeable type for WhitelabelConfiguration removes:
+ * id, logo_url, favicon_url
+ */
+data class WriteSetting (
+    var extension_framework_enabled: Boolean? = null,
+    var marketplace_auto_install_enabled: Boolean? = null,
+    var marketplace_enabled: Boolean? = null,
+    var whitelabel_configuration: WriteWhitelabelConfiguration? = null
+) : Serializable
+
+/**
  * Dynamic writeable type for SshServer removes:
  * ssh_server_id, finger_print, sha_finger_print, public_key, status
  *
@@ -6349,7 +6539,7 @@ data class WriteUserAttributeWithValue (
 
 /**
  * Dynamic writeable type for WhitelabelConfiguration removes:
- * can, id, logo_url, favicon_url
+ * id, logo_url, favicon_url
  *
  * @property logo_file Customer logo image. Expected base64 encoded data (write-only)
  * @property favicon_file Custom favicon image. Expected base64 encoded data (write-only)

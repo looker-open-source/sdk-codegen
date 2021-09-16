@@ -26,9 +26,9 @@
 import React, { FC } from 'react'
 import { Tab, TabList, TabPanel, TabPanels, useTabs } from '@looker/components'
 
+import { CodeCopy } from '@looker/code-editor'
 import { getGenerators } from './callUtils'
 import { DocSdkCallsProps } from './DocSdkCalls'
-import { CodeCopy } from './CodeCopy'
 
 /**
  * Generates the SDK call syntax for all supported languages

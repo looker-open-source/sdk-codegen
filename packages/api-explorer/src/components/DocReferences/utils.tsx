@@ -26,9 +26,8 @@
 import React from 'react'
 import { ApiModel, IMethod, IType, Method } from '@looker/sdk-codegen'
 import { Link } from 'react-router-dom'
-
+import { RunItHeading } from '@looker/run-it'
 import { buildMethodPath, buildTypePath, highlightHTML } from '../../utils'
-import { RunItHeading } from '../common'
 
 /**
  * Returns the tag for a given method name

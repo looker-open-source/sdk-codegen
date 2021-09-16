@@ -8935,9 +8935,9 @@ class Looker31SDK(api_methods.APIMethods):
         self,
         # Requested fields.
         fields: Optional[str] = None,
-        # Requested page.
+        # Return only page N of paginated results
         page: Optional[int] = None,
-        # Results per page.
+        # Return N rows of data per page
         per_page: Optional[int] = None,
         # Fields to sort by.
         sorts: Optional[str] = None,

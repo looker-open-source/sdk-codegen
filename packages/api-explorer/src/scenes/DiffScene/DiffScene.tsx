@@ -25,7 +25,7 @@
  */
 
 import React, { FC, useState, useEffect } from 'react'
-import { ApiModel, DiffRow, SpecList } from '@looker/sdk-codegen'
+import { ApiModel, DiffRow, SpecList, SpecItem } from '@looker/sdk-codegen'
 import { useHistory, useRouteMatch } from 'react-router-dom'
 import {
   Box,
@@ -37,16 +37,12 @@ import {
   SelectMulti,
 } from '@looker/components'
 import { SyncAlt } from '@styled-icons/material/SyncAlt'
+import { fallbackFetch, funFetch } from '@looker/run-it'
 import { getDefaultSpecKey } from '../../reducers/spec/utils'
 import { diffPath } from '../../utils'
 import { ApixSection } from '../../components'
 import { diffSpecs, standardDiffToggles } from './diffUtils'
 import { DocDiff } from './DocDiff'
-
-export interface DiffSceneProps {
-  specs: SpecList
-  toggleNavigation: (target?: boolean) => void
-}
 
 /**
  * Pick the left key, or default spec
@@ -97,6 +93,11 @@ const diffToggles = [
   },
 ]
 
+export interface DiffSceneProps {
+  specs: SpecList
+  toggleNavigation: (target?: boolean) => void
+}
+
 export const DiffScene: FC<DiffSceneProps> = ({ specs, toggleNavigation }) => {
   const history = useHistory()
   const match = useRouteMatch<{ l: string; r: string }>(`/${diffPath}/:l?/:r?`)
@@ -120,7 +121,7 @@ export const DiffScene: FC<DiffSceneProps> = ({ specs, toggleNavigation }) => {
   }, [])
 
   const computeDelta = (left: string, right: string, toggles: string[]) => {
-    if (left && right) {
+    if (left && right && specs[left].api && specs[right].api) {
       return diffSpecs(specs[left].api!, specs[right].api!, toggles)
     }
     return []
@@ -129,12 +130,36 @@ export const DiffScene: FC<DiffSceneProps> = ({ specs, toggleNavigation }) => {
     computeDelta(leftKey, rightKey, toggles)
   )
 
-  const compareKeys = (left: string, right: string) => {
+  const loadSpec = async (
+    specs: SpecList,
+    key: string,
+    setter: (spec: SpecItem) => void
+  ) => {
+    const spec = specs[key]
+    if (!spec.api) {
+      try {
+        const newSpec = { ...spec }
+        const api = await fallbackFetch(newSpec, funFetch)
+        if (api) {
+          spec.api = api
+          setter(spec)
+        }
+      } catch (error) {
+        console.error(error)
+      }
+    }
+  }
+
+  const compareKeys = async (left: string, right: string) => {
     if (left !== leftKey || right !== rightKey) {
       history.push(`/${diffPath}/${left}/${right}`)
     }
-    setLeftApi(specs[left].api!)
-    setRightApi(specs[right].api!)
+    if (!specs[left].api) {
+      await loadSpec(specs, leftKey, (spec) => setLeftApi(spec.api!))
+    }
+    if (!specs[right].api) {
+      await loadSpec(specs, rightKey, (spec) => setRightApi(spec.api!))
+    }
     setDelta([...computeDelta(left, right, toggles)])
   }
 

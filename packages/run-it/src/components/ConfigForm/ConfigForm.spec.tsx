@@ -38,7 +38,7 @@ import { ConfigForm, loadSpecsFromVersions, RunItConfigKey } from '.'
 
 describe('ConfigForm', () => {
   const apiLabel = /API server URL/i
-  const authLabel = /Auth server URL/i
+  const authLabel = /OAuth server URL/i
   // https://testing-library.com/docs/guide-which-query
 
   beforeEach(() => {
@@ -50,10 +50,12 @@ describe('ConfigForm', () => {
       <ConfigForm
         configurator={defaultConfigurator}
         setVersionsUrl={runItNoSet}
+        requestContent={{}}
       />
     )
-    const title = screen.getByRole('heading') as HTMLHeadingElement
-    expect(title).toHaveTextContent('RunIt Configuration')
+    expect(
+      screen.getByRole('heading', { name: 'RunIt Configuration' })
+    ).toBeInTheDocument()
 
     const apiUrl = screen.getByRole('textbox', {
       name: apiLabel,
@@ -69,21 +71,27 @@ describe('ConfigForm', () => {
 
     expect(
       screen.getByRole('button', {
-        name: 'Save',
+        name: 'Clear',
       })
     ).toBeInTheDocument()
     expect(
       screen.getByRole('button', {
-        name: 'Remove',
+        name: 'Verify',
+      })
+    ).toBeInTheDocument()
+    expect(
+      screen.getByRole('button', {
+        name: 'Save',
       })
     ).toBeInTheDocument()
   })
 
-  test('it disables and enable verify for bad and good urls', async () => {
+  test('it disables and enables verify for bad and good urls', async () => {
     renderWithTheme(
       <ConfigForm
         configurator={defaultConfigurator}
         setVersionsUrl={runItNoSet}
+        requestContent={{}}
       />
     )
     const apiUrl = screen.getByRole('textbox', {
@@ -92,7 +100,7 @@ describe('ConfigForm', () => {
     expect(apiUrl).toBeInTheDocument()
     expect(apiUrl).toHaveValue('')
 
-    await userEvent.type(apiUrl, 'bad')
+    userEvent.type(apiUrl, 'bad')
     await waitFor(() => {
       const button = screen.getByRole('button', {
         name: 'Verify',
@@ -103,7 +111,7 @@ describe('ConfigForm', () => {
     })
 
     fireEvent.change(apiUrl, { target: { value: '' } })
-    await userEvent.type(apiUrl, 'https:good')
+    userEvent.type(apiUrl, 'https:good')
     await waitFor(() => {
       expect(apiUrl).toHaveValue('https://good')
       const button = screen.getByRole('button', {
@@ -115,15 +123,16 @@ describe('ConfigForm', () => {
   })
 
   test('it can have a custom title', () => {
+    const title = 'New title'
     renderWithTheme(
       <ConfigForm
         configurator={defaultConfigurator}
         setVersionsUrl={runItNoSet}
-        title="New title"
+        title={title}
+        requestContent={{}}
       />
     )
-    const title = screen.getByRole('heading') as HTMLHeadingElement
-    expect(title).toHaveTextContent('New title')
+    expect(screen.getByRole('heading', { name: title })).toBeInTheDocument()
   })
 
   describe('storage', () => {
@@ -139,6 +148,7 @@ describe('ConfigForm', () => {
         <ConfigForm
           configurator={defaultConfigurator}
           setVersionsUrl={runItNoSet}
+          requestContent={{}}
         />
       )
       const apiUrl = screen.getByRole('textbox', {
@@ -163,8 +173,8 @@ describe('ConfigForm', () => {
       }) as HTMLButtonElement
       expect(remove).toBeInTheDocument()
 
-      await userEvent.type(apiUrl, 'https://foo:199')
-      await userEvent.click(save)
+      userEvent.type(apiUrl, 'https://foo:199')
+      userEvent.click(save)
       await waitFor(() => {
         const storage = defaultConfigurator.getStorage(RunItConfigKey)
         expect(storage.location).toEqual('local')
@@ -182,7 +192,7 @@ describe('ConfigForm', () => {
       })
     })
 
-    test('it gets config from local storage', async () => {
+    test('it shows login section when configured', async () => {
       defaultConfigurator.setStorage(
         RunItConfigKey,
         JSON.stringify({
@@ -196,30 +206,18 @@ describe('ConfigForm', () => {
         <ConfigForm
           configurator={defaultConfigurator}
           setVersionsUrl={runItNoSet}
+          requestContent={{}}
         />
       )
-      const title = screen.getByRole('heading') as HTMLHeadingElement
-      expect(title).toHaveTextContent('RunIt Configuration')
+      expect(
+        screen.getByRole('heading', { name: 'RunIt Configuration' })
+      ).toBeInTheDocument()
 
-      const apiUrl = screen.getByRole('textbox', {
-        name: apiLabel,
-      }) as HTMLInputElement
-      expect(apiUrl).toBeInTheDocument()
-      expect(apiUrl).toHaveValue('http://locb')
-
-      const authUrl = screen.getByRole('textbox', {
-        name: authLabel,
-      }) as HTMLInputElement
-      expect(authUrl).toBeInTheDocument()
-      expect(authUrl).toHaveValue('http://local')
-
-      fireEvent.change(apiUrl, { target: { value: apiUrl.value } })
-      await waitFor(() => {
-        const button = screen.getByRole('button', {
-          name: 'Save',
-        }) as HTMLButtonElement
-        expect(button).toBeInTheDocument()
-      })
+      expect(
+        screen.getByRole('button', {
+          name: 'Login',
+        })
+      ).toBeInTheDocument()
     })
   })
 })

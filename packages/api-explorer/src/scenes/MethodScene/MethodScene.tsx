@@ -34,8 +34,7 @@ import {
   ExtendComponentsThemeProvider,
 } from '@looker/components'
 import { Beaker } from '@looker/icons'
-import { ThemeContext } from 'styled-components'
-import { useParams } from 'react-router-dom'
+import { useHistory, useParams } from 'react-router-dom'
 import { RunIt, RunItSetter, RunItContext, RunItFormKey } from '@looker/run-it'
 import { ApiModel, typeRefs } from '@looker/sdk-codegen'
 import { useSelector } from 'react-redux'
@@ -67,11 +66,13 @@ interface MethodSceneProps {
 
 interface MethodSceneParams {
   methodName: string
+  methodTag: string
   specKey: string
 }
 
-const showRunIt = (envAdaptor: IApixEnvAdaptor) => {
-  return !!envAdaptor.localStorageGetItem(RunItFormKey)
+const showRunIt = async (envAdaptor: IApixEnvAdaptor) => {
+  const data = await envAdaptor.localStorageGetItem(RunItFormKey)
+  return !!data
 }
 
 export const MethodScene: FC<MethodSceneProps> = ({
@@ -79,19 +80,42 @@ export const MethodScene: FC<MethodSceneProps> = ({
   envAdaptor,
   setVersionsUrl,
 }) => {
+  const history = useHistory()
   const { sdk } = useContext(RunItContext)
   const sdkLanguage = useSelector(getSelectedSdkLanguage)
-  const { methodName, specKey } = useParams<MethodSceneParams>()
-  const { value, toggle } = useToggle(showRunIt(envAdaptor))
+  const { specKey, methodTag, methodName } = useParams<MethodSceneParams>()
+  const { value, toggle, setOn } = useToggle()
   const [method, setMethod] = useState(api.methods[methodName])
-  const seeTypes = typeRefs(api, method.customTypes)
-  const { colors } = useContext(ThemeContext)
+  const seeTypes = typeRefs(api, method?.customTypes)
 
   const RunItButton = value ? Button : ButtonOutline
 
   useEffect(() => {
-    setMethod(api.methods[methodName])
-  }, [api, methodName])
+    const foundMethod = api.methods[methodName]
+    if (foundMethod) {
+      setMethod(api.methods[methodName])
+    } else {
+      // Invalid method
+      if (api.tags[methodTag]) {
+        // Found tag though
+        history.push(`/${specKey}/methods/${methodTag}`)
+      } else {
+        history.push(`/${specKey}/methods`)
+      }
+    }
+  }, [api, history, methodName, specKey])
+
+  useEffect(() => {
+    const checkRunIt = async () => {
+      try {
+        const show = await showRunIt(envAdaptor)
+        if (show) setOn()
+      } catch (error) {
+        console.error(error)
+      }
+    }
+    checkRunIt()
+  }, [envAdaptor, setOn])
 
   const runItToggle = (
     <RunItButton
@@ -105,35 +129,40 @@ export const MethodScene: FC<MethodSceneProps> = ({
 
   return (
     <>
-      <ApixSection>
-        <Space between>
-          <Space>
-            <DocTitle>{method.summary}</DocTitle>
-            <DocSource method={method} />
+      {method && (
+        <ApixSection>
+          <Space between>
+            <Space>
+              <DocTitle>{method.summary}</DocTitle>
+              <DocSource method={method} />
+            </Space>
+            {runItToggle}
           </Space>
-          {runItToggle}
-        </Space>
-        <Space mb="large" gap="small">
-          <DocStatus method={method} />
-          <DocActivityType method={method} />
-          <DocRateLimited method={method} />
-        </Space>
-        <DocOperation method={method} />
-        <DocMarkdown source={method.description} specKey={specKey} />
-        <DocSDKs api={api} method={method} />
-        <DocRequestBody method={method} />
-        <DocSdkUsage method={method} />
-        <DocReferences typesUsed={seeTypes} api={api} specKey={specKey} />
-        <DocResponses responses={method.responses} />
-        <DocSchema object={method.schema} />
-      </ApixSection>
+          <Space mb="large" gap="small">
+            <DocStatus method={method} />
+            <DocActivityType method={method} />
+            <DocRateLimited method={method} />
+          </Space>
+          <DocOperation method={method} />
+          <DocMarkdown source={method.description} specKey={specKey} />
+          <DocSDKs api={api} method={method} />
+          <DocRequestBody method={method} />
+          <DocSdkUsage method={method} />
+          <DocReferences typesUsed={seeTypes} api={api} specKey={specKey} />
+          <DocResponses responses={method.responses} />
+          <DocSchema object={method.schema} />
+        </ApixSection>
+      )}
       {sdk && value && (
         <Aside width="50rem">
           <ExtendComponentsThemeProvider
             themeCustomizations={{
               colors: {
-                background: colors.text,
-                text: colors.background,
+                background: '#262D33',
+                key: '#8AB4F8',
+                text: '#fff',
+                link: '#8AB4F8',
+                critical: '#FF877C',
               },
             }}
           >

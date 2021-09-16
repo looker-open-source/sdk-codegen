@@ -31,6 +31,7 @@
 import type {
   DelimArray,
   IDictionary,
+  IAPIMethods,
   ITransportSettings,
   SDKResponse,
 } from '@looker/sdk-rtl'
@@ -241,7 +242,7 @@ import type {
   IWriteWhitelabelConfiguration,
 } from './models'
 
-export interface ILooker31SDK {
+export interface ILooker31SDK extends IAPIMethods {
   //#region ApiAuth: API Authentication
 
   /**
@@ -755,12 +756,12 @@ export interface ILooker31SDK {
    *
    * POST /parse_saml_idp_metadata -> ISamlMetadataParseResult
    *
-   * @param body Partial<string>
+   * @param body string
    * @param options one-time API call overrides
    *
    */
   parse_saml_idp_metadata(
-    body: Partial<string>,
+    body: string,
     options?: Partial<ITransportSettings>
   ): Promise<SDKResponse<ISamlMetadataParseResult, IError>>
 
@@ -771,12 +772,12 @@ export interface ILooker31SDK {
    *
    * POST /fetch_and_parse_saml_idp_metadata -> ISamlMetadataParseResult
    *
-   * @param body Partial<string>
+   * @param body string
    * @param options one-time API call overrides
    *
    */
   fetch_and_parse_saml_idp_metadata(
-    body: Partial<string>,
+    body: string,
     options?: Partial<ITransportSettings>
   ): Promise<SDKResponse<ISamlMetadataParseResult, IError>>
 
