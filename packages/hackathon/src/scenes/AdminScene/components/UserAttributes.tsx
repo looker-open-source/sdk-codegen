@@ -24,7 +24,8 @@
 
  */
 
-import React, { FC, useEffect } from 'react'
+import type { FC } from 'react'
+import React, { useEffect } from 'react'
 import { useSelector, useDispatch } from 'react-redux'
 import { Form, Fieldset, FieldText, Button, Space } from '@looker/components'
 import {

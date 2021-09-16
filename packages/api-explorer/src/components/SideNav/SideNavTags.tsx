@@ -26,7 +26,7 @@
 
 import React from 'react'
 import styled from 'styled-components'
-import { TagList } from '@looker/sdk-codegen'
+import type { TagList } from '@looker/sdk-codegen'
 import { SideNavMethods } from './SideNavMethods'
 
 interface TagsProps {

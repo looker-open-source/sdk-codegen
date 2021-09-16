@@ -26,12 +26,11 @@
 
 import * as fs from 'fs'
 import * as ini from 'ini'
+import type { IApiSettings, IApiSection } from '@looker/sdk-rtl'
 import {
   ApiConfigMap,
   ApiSettings,
   DefaultSettings,
-  IApiSettings,
-  IApiSection,
   ValueSettings,
   sdkError,
   unquote,

@@ -24,7 +24,8 @@
 
  */
 
-import React, { BaseSyntheticEvent, FC, Dispatch } from 'react'
+import type { BaseSyntheticEvent, FC, Dispatch } from 'react'
+import React from 'react'
 import {
   Button,
   Form,
@@ -33,10 +34,10 @@ import {
   Fieldset,
 } from '@looker/components'
 import type { IAPIMethods } from '@looker/sdk-rtl'
-import { RunItHttpMethod, RunItInput, RunItValues } from '../../RunIt'
-import { RunItConfigurator } from '../ConfigForm'
+import type { RunItHttpMethod, RunItInput, RunItValues } from '../../RunIt'
+import type { RunItConfigurator } from '../ConfigForm'
 import { LoginForm } from '../LoginForm'
-import { RunItSetter } from '../..'
+import type { RunItSetter } from '../..'
 import {
   createSimpleItem,
   createComplexItem,

@@ -24,10 +24,11 @@
 
  */
 
-import React, { FC } from 'react'
+import type { FC } from 'react'
+import React from 'react'
+import type { IconType } from '@looker/components'
 import {
   Box,
-  IconType,
   Icon,
   Tree,
   TreeItem,
@@ -38,7 +39,7 @@ import {
 import { Done } from '@styled-icons/material/Done'
 import { Lock } from '@styled-icons/material/Lock'
 import { Remove } from '@styled-icons/material/Remove'
-import { IProperty } from '@looker/sdk-codegen'
+import type { IProperty } from '@looker/sdk-codegen'
 import { Markdown } from '@looker/code-editor'
 import {
   expandable,

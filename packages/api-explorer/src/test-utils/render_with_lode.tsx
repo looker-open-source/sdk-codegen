@@ -24,15 +24,16 @@
 
  */
 
-import React, { ReactElement } from 'react'
-import { RenderOptions } from '@testing-library/react'
-import { Store } from 'redux'
+import type { ReactElement } from 'react'
+import React from 'react'
+import type { RenderOptions } from '@testing-library/react'
+import type { Store } from 'redux'
 
 import { renderWithTheme } from '@looker/components-test-utils'
-import { IDeclarationMine, IExampleMine } from '@looker/sdk-codegen'
+import type { IDeclarationMine, IExampleMine } from '@looker/sdk-codegen'
 import { LodeContext } from '../context'
-import { RootState } from '../state'
-import { IApixEnvAdaptor } from '../utils'
+import type { RootState } from '../state'
+import type { IApixEnvAdaptor } from '../utils'
 import { withReduxProvider } from './redux'
 
 const withLode = (

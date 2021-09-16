@@ -32,7 +32,7 @@ import { ErrorMessage } from '../ErrorMessage'
 import { RouteChangeListener } from '../RouteChangeListener'
 import { getInitialRouteEntries } from '../utils/get_initial_route_entries'
 import { setupClosePopoversListener } from '../utils/setup_close_popovers'
-import { ExtensionConnectorProps, RouteData } from './types'
+import type { ExtensionConnectorProps, RouteData } from './types'
 
 /**
  * ExtensionConnector component. Provides access to the extension API and SDK (use

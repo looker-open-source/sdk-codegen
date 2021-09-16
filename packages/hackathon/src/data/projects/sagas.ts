@@ -24,23 +24,25 @@
 
  */
 import { all, call, put, takeEvery, select } from 'redux-saga/effects'
-import { SagaIterator } from 'redux-saga'
-import { IProjectProps } from '../../models'
+import type { SagaIterator } from 'redux-saga'
+import type { IProjectProps } from '../../models'
 import { actionMessage, beginLoading, endLoading } from '../common/actions'
 import { sheetsClient } from '../sheets_client'
-import {
-  Actions,
-  currentProjectsRequest,
-  allProjectsResponse,
-  currentProjectsResponse,
+import type {
   UpdateProjectAction,
   DeleteProjectAction,
   LockProjectsAction,
   LockProjectAction,
   CreateProjectAction,
   ChangeMembershipAction,
-  saveProjectResponse,
   GetProjectRequestAction,
+} from './actions'
+import {
+  Actions,
+  currentProjectsRequest,
+  allProjectsResponse,
+  currentProjectsResponse,
+  saveProjectResponse,
   getProjectResponse,
 } from './actions'
 import { getCurrentProjectsState, getIsProjectMemberState } from './selectors'

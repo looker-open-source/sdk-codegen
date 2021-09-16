@@ -23,7 +23,7 @@
  SOFTWARE.
 
  */
-import { SpecList } from '@looker/sdk-codegen'
+import type { SpecList } from '@looker/sdk-codegen'
 import omit from 'lodash/omit'
 
 import { specs } from '../../test-data'

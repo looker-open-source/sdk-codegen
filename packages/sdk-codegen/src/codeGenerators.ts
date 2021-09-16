@@ -24,8 +24,8 @@
 
  */
 
-import { ApiModel } from './sdkModels'
-import { ICodeGen, IVersionInfo } from './codeGen'
+import type { ApiModel } from './sdkModels'
+import type { ICodeGen, IVersionInfo } from './codeGen'
 import { CSharpGen } from './csharp.gen'
 import { KotlinGen } from './kotlin.gen'
 import { SwiftGen } from './swift.gen'

@@ -24,8 +24,9 @@
 
  */
 
-import React, { FC } from 'react'
-import { IRawResponse } from '@looker/sdk-rtl'
+import type { FC } from 'react'
+import React from 'react'
+import type { IRawResponse } from '@looker/sdk-rtl'
 
 import { pickResponseHandler, fallbackResponseHandler } from './responseUtils'
 

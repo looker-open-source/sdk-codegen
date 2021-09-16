@@ -24,9 +24,9 @@
 
  */
 
-import { ValidationMessages } from '@looker/components'
-import { RootState } from '../root_reducer'
-import { IProjectProps } from '../../models'
+import type { ValidationMessages } from '@looker/components'
+import type { RootState } from '../root_reducer'
+import type { IProjectProps } from '../../models'
 
 export const getProjectsState = (state: RootState): IProjectProps[] =>
   state.projectsState.projects

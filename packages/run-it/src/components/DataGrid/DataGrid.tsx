@@ -24,7 +24,8 @@
 
  */
 
-import React, { FC, ReactElement, useEffect, useState } from 'react'
+import type { FC, ReactElement } from 'react'
+import React, { useEffect, useState } from 'react'
 import {
   DataTable,
   Pagination,

@@ -28,7 +28,7 @@
  * 423 API methods
  */
 
-import { Readable } from 'readable-stream'
+import type { Readable } from 'readable-stream'
 import type {
   DelimArray,
   IDictionary,
@@ -1583,13 +1583,13 @@ export class Looker40SDKStream extends APIMethods {
    * POST /parse_saml_idp_metadata -> ISamlMetadataParseResult
    *
    * @param callback streaming output function
-   * @param body Partial<string>
+   * @param body string
    * @param options one-time API call overrides
    *
    */
   async parse_saml_idp_metadata(
     callback: (readable: Readable) => Promise<ISamlMetadataParseResult>,
-    body: Partial<string>,
+    body: string,
     options?: Partial<ITransportSettings>
   ) {
     return this.authStream<ISamlMetadataParseResult>(
@@ -1610,13 +1610,13 @@ export class Looker40SDKStream extends APIMethods {
    * POST /fetch_and_parse_saml_idp_metadata -> ISamlMetadataParseResult
    *
    * @param callback streaming output function
-   * @param body Partial<string>
+   * @param body string
    * @param options one-time API call overrides
    *
    */
   async fetch_and_parse_saml_idp_metadata(
     callback: (readable: Readable) => Promise<ISamlMetadataParseResult>,
-    body: Partial<string>,
+    body: string,
     options?: Partial<ITransportSettings>
   ) {
     return this.authStream<ISamlMetadataParseResult>(

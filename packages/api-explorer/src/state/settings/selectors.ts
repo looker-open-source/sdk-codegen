@@ -23,7 +23,7 @@
  SOFTWARE.
 
  */
-import { RootState } from '../store'
+import type { RootState } from '../store'
 
 export const getSelectedSdkLanguage = (state: RootState) =>
   state.settings!.sdkLanguage

@@ -24,7 +24,7 @@
 
  */
 
-import { DataTableColumns } from '@looker/components'
+import type { DataTableColumns } from '@looker/components'
 
 export interface ProjectsHeadings extends DataTableColumns {}
 

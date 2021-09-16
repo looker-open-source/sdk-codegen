@@ -23,8 +23,9 @@
  SOFTWARE.
 
  */
-import React, { FC } from 'react'
-import { ISearchResult } from '@looker/sdk-codegen'
+import type { FC } from 'react'
+import React from 'react'
+import type { ISearchResult } from '@looker/sdk-codegen'
 import { Heading, Icon, Flex } from '@looker/components'
 import { Error } from '@styled-icons/material/Error'
 

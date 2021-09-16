@@ -24,7 +24,8 @@
 
  */
 
-import { DiffRow, startCount } from '@looker/sdk-codegen'
+import type { DiffRow } from '@looker/sdk-codegen'
+import { startCount } from '@looker/sdk-codegen'
 import { api, api40 } from '../../test-data'
 import { diffToSpec } from './diffUtils'
 

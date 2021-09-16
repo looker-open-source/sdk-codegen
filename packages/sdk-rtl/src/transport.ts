@@ -24,9 +24,9 @@
 
  */
 
-import { Agent } from 'https'
-import { Headers } from 'request'
-import { Readable } from 'readable-stream'
+import type { Agent } from 'https'
+import type { Headers } from 'request'
+import type { Readable } from 'readable-stream'
 import { matchCharsetUtf8, matchModeBinary, matchModeString } from './constants'
 
 export const agentPrefix = 'TS-SDK'

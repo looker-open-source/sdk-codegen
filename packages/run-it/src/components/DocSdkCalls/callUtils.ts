@@ -23,12 +23,8 @@
  SOFTWARE.
 
  */
-import {
-  ApiModel,
-  CodeGen,
-  codeGenerators,
-  KeyedCollection,
-} from '@looker/sdk-codegen'
+import type { ApiModel, CodeGen, KeyedCollection } from '@looker/sdk-codegen'
+import { codeGenerators } from '@looker/sdk-codegen'
 
 /**
  * Returns a collection of generators for all supported (non legacy) languages

@@ -24,8 +24,17 @@
 
  */
 
-import * as OAS from 'openapi3-ts'
+import type * as OAS from 'openapi3-ts'
 import { TestConfig } from './testUtils'
+import type {
+  IEnumType,
+  IMethod,
+  IMethodResponse,
+  IType,
+  KeyedCollection,
+  SearchCriterionTerm,
+  TagList,
+} from './sdkModels'
 import {
   ApiModel,
   ArrayType,
@@ -34,13 +43,8 @@ import {
   DelimArrayType,
   EnumType,
   firstCase,
-  IEnumType,
-  IMethod,
-  IMethodResponse,
   IntrinsicType,
   isSpecialName,
-  IType,
-  KeyedCollection,
   keyValues,
   mayQuote,
   Method,
@@ -48,9 +52,7 @@ import {
   safeName,
   SearchAll,
   SearchCriterion,
-  SearchCriterionTerm,
   SetToCriteria,
-  TagList,
   titleCase,
   typeRefs,
 } from './sdkModels'

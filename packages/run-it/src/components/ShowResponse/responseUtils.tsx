@@ -23,8 +23,10 @@
  SOFTWARE.
 
  */
-import React, { ReactElement } from 'react'
-import { IRawResponse, ResponseMode, responseMode } from '@looker/sdk-rtl'
+import type { ReactElement } from 'react'
+import React from 'react'
+import type { IRawResponse } from '@looker/sdk-rtl'
+import { ResponseMode, responseMode } from '@looker/sdk-rtl'
 import {
   Paragraph,
   MessageBar,

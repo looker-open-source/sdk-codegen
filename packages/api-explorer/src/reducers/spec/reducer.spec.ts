@@ -26,7 +26,8 @@
 import { ApiModel } from '@looker/sdk-codegen'
 
 import { specs } from '../../test-data'
-import { specReducer, initDefaultSpecState, Actions, SelectSpecAction } from '.'
+import type { SelectSpecAction } from '.'
+import { specReducer, initDefaultSpecState, Actions } from '.'
 
 describe('Spec Reducer', () => {
   test('it selects a spec', () => {

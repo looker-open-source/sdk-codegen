@@ -25,7 +25,7 @@
  */
 
 import { TestConfig } from './testUtils'
-import { IEnumType } from './sdkModels'
+import type { IEnumType } from './sdkModels'
 import { GoGen } from './go.gen'
 
 const config = TestConfig()

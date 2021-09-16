@@ -25,10 +25,12 @@
  */
 
 import nodeCrypto from 'crypto'
-import rq, { Request } from 'request'
+import type { Request } from 'request'
+import rq from 'request'
 
 import rp from 'request-promise-native'
-import { PassThrough, Readable } from 'readable-stream'
+import type { Readable } from 'readable-stream'
+import { PassThrough } from 'readable-stream'
 import { StatusCodeError } from 'request-promise-native/errors'
 import {
   BaseTransport,

@@ -23,8 +23,9 @@
  SOFTWARE.
 
  */
-import { IHackerProps } from '../../models'
-import { Actions, HackerAction } from './actions'
+import type { IHackerProps } from '../../models'
+import type { HackerAction } from './actions'
+import { Actions } from './actions'
 
 export interface HackersState {
   currentPageNum: number

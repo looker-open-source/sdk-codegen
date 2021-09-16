@@ -24,11 +24,8 @@
 
  */
 
-import {
-  SearchCriterionTerm,
-  SearchAll,
-  SetToCriteria,
-} from '@looker/sdk-codegen'
+import type { SearchCriterionTerm } from '@looker/sdk-codegen'
+import { SearchAll, SetToCriteria } from '@looker/sdk-codegen'
 
 export interface SearchState {
   pattern: string

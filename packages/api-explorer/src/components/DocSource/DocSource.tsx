@@ -23,8 +23,10 @@
  SOFTWARE.
 
  */
-import React, { FC, useContext } from 'react'
-import { findDeclaration, IMethod, IType } from '@looker/sdk-codegen'
+import type { FC } from 'react'
+import React, { useContext } from 'react'
+import type { IMethod, IType } from '@looker/sdk-codegen'
+import { findDeclaration } from '@looker/sdk-codegen'
 import { Icon, Link, Tooltip } from '@looker/components'
 import { IdeFileDocument } from '@looker/icons'
 

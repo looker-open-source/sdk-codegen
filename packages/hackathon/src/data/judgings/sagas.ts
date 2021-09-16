@@ -24,16 +24,18 @@
 
  */
 import { all, call, put, takeEvery, select } from 'redux-saga/effects'
-import { SagaIterator } from 'redux-saga'
+import type { SagaIterator } from 'redux-saga'
 import { actionMessage, beginLoading, endLoading } from '../common/actions'
-import { IJudgingProps } from '../../models'
+import type { IJudgingProps } from '../../models'
 import { sheetsClient } from '../sheets_client'
+import type {
+  GetJudgingRequestAction,
+  SaveJudgingRequestAction,
+} from './actions'
 import {
   Actions,
-  GetJudgingRequestAction,
   getJudgingsResponse,
   getJudgingResponse,
-  SaveJudgingRequestAction,
   saveJudgingResponse,
 } from './actions'
 import { getJudgingsState } from './selectors'
