@@ -24,8 +24,8 @@
 
  */
 
-import { RootState } from '../root_reducer'
-import { IJudgingProps } from '../../models'
+import type { RootState } from '../root_reducer'
+import type { IJudgingProps } from '../../models'
 
 export const getJudgingsState = (state: RootState): IJudgingProps[] =>
   state.judgingsState.judgings

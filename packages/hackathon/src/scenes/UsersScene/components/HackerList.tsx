@@ -24,7 +24,8 @@
 
  */
 
-import React, { FC } from 'react'
+import type { FC } from 'react'
+import React from 'react'
 import {
   DataTableItem,
   DataTableCell,
@@ -35,7 +36,8 @@ import {
 import { Create } from '@styled-icons/material/Create'
 import { useSelector } from 'react-redux'
 import { getExtensionSDK } from '@looker/extension-sdk'
-import { IHackerProps, sheetCell } from '../../../models'
+import type { IHackerProps } from '../../../models'
+import { sheetCell } from '../../../models'
 import { getHackersHeadings } from '../../../data/hack_session/selectors'
 import { PAGE_SIZE } from '../../../constants'
 

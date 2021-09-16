@@ -26,13 +26,9 @@
 
 import { AuthSession } from './authSession'
 import { BrowserTransport } from './browserTransport'
-import {
-  ITransport,
-  IRequestProps,
-  LookerAppId,
-  agentPrefix,
-} from './transport'
-import { IApiSettings } from './apiSettings'
+import type { ITransport, IRequestProps } from './transport'
+import { LookerAppId, agentPrefix } from './transport'
+import type { IApiSettings } from './apiSettings'
 
 /**
  * An AuthSession class intended for use with proxied requests

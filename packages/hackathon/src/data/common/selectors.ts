@@ -23,8 +23,8 @@
  SOFTWARE.
 
  */
-import { RootState } from '../root_reducer'
-import { MessageDetail } from './reducer'
+import type { RootState } from '../root_reducer'
+import type { MessageDetail } from './reducer'
 
 export const isLoadingState = (state: RootState): boolean =>
   state.commonState.loading

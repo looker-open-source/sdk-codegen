@@ -24,7 +24,7 @@
 
  */
 
-import { KeyedCollection } from './sdkModels'
+import type { KeyedCollection } from './sdkModels'
 
 export interface ISDKCall {
   /** SDK variable name for the call found */

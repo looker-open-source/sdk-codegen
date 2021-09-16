@@ -25,7 +25,8 @@
  */
 
 import { DefaultSettings } from './apiSettings'
-import { ExtensionTransport, IHostConnection } from './extensionTransport'
+import type { IHostConnection } from './extensionTransport'
+import { ExtensionTransport } from './extensionTransport'
 
 describe('ExtensionTransport', () => {
   const queryParams = { a: 'b c', d: false, nil: null, skip: undefined }

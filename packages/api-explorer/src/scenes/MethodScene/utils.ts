@@ -24,17 +24,15 @@
 
  */
 
+import type { IApiModel, IType, IMethod } from '@looker/sdk-codegen'
 import {
   ArrayType,
   DelimArrayType,
   HashType,
-  IApiModel,
   IntrinsicType,
-  IType,
-  IMethod,
   EnumType,
 } from '@looker/sdk-codegen'
-import { RunItInput, RunItValues } from '@looker/run-it'
+import type { RunItInput, RunItValues } from '@looker/run-it'
 
 /**
  * Return a default value for a given type name

@@ -24,7 +24,8 @@
 
  */
 
-import { Actions, CommonAction } from './actions'
+import type { CommonAction } from './actions'
+import { Actions } from './actions'
 
 export interface MessageDetail {
   messageText: string

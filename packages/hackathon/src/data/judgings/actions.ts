@@ -24,7 +24,7 @@
 
  */
 
-import { IJudgingProps } from '../../models'
+import type { IJudgingProps } from '../../models'
 
 export enum Actions {
   GET_JUDGINGS_REQUEST = 'GET_JUDGINGS_REQUEST',

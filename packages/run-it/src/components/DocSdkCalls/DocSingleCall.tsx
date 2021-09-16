@@ -23,11 +23,12 @@
  SOFTWARE.
 
  */
-import React, { FC } from 'react'
+import type { FC } from 'react'
+import React from 'react'
 import { getCodeGenerator } from '@looker/sdk-codegen'
 
 import { CodeCopy } from '@looker/code-editor'
-import { DocSdkCallsProps } from './DocSdkCalls'
+import type { DocSdkCallsProps } from './DocSdkCalls'
 
 /**
  * Generates the SDK call syntax for a given language

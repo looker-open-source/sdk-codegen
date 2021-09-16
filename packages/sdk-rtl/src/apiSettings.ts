@@ -24,7 +24,8 @@
 
  */
 
-import { agentPrefix, defaultTimeout, ITransportSettings } from './transport'
+import type { ITransportSettings } from './transport'
+import { agentPrefix, defaultTimeout } from './transport'
 import { boolDefault, isTrue, unquote } from './constants'
 
 /** Used for reading configuration name/value pairs */

@@ -23,16 +23,13 @@
  SOFTWARE.
 
  */
-import React, { FC } from 'react'
-import {
-  DataTableItem,
-  Tooltip,
-  Text,
-  DataTableColumns,
-  DataTableCell,
-} from '@looker/components'
+import type { FC } from 'react'
+import React from 'react'
+import type { DataTableColumns } from '@looker/components'
+import { DataTableItem, Tooltip, Text, DataTableCell } from '@looker/components'
 import styled from 'styled-components'
-import { LoadTimes, perfRound } from './perfUtils'
+import type { LoadTimes } from './perfUtils'
+import { perfRound } from './perfUtils'
 
 /**
  * An array of columns defining the PerfTable

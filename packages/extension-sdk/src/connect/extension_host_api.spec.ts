@@ -24,7 +24,7 @@
 
  */
 
-import { ChattyHostConnection } from '@looker/chatty'
+import type { ChattyHostConnection } from '@looker/chatty'
 import {
   ExtensionHostApiImpl,
   EXTENSION_SDK_VERSION,

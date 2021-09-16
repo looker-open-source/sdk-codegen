@@ -24,8 +24,9 @@
 
  */
 
-import React, { FC, useState, useEffect } from 'react'
-import { ApiModel, DiffRow, SpecList, SpecItem } from '@looker/sdk-codegen'
+import type { FC } from 'react'
+import React, { useState, useEffect } from 'react'
+import type { ApiModel, DiffRow, SpecList, SpecItem } from '@looker/sdk-codegen'
 import { useHistory, useRouteMatch } from 'react-router-dom'
 import {
   Box,

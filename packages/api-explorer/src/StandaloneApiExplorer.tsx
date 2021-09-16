@@ -24,7 +24,8 @@
 
  */
 
-import React, { FC, useEffect, useState } from 'react'
+import type { FC } from 'react'
+import React, { useEffect, useState } from 'react'
 import {
   RunItProvider,
   defaultConfigurator,
@@ -33,8 +34,8 @@ import {
   RunItConfigKey,
   RunItNoConfig,
 } from '@looker/run-it'
-import { IAPIMethods } from '@looker/sdk-rtl'
-import { SpecList } from '@looker/sdk-codegen'
+import type { IAPIMethods } from '@looker/sdk-rtl'
+import type { SpecList } from '@looker/sdk-codegen'
 import { Provider } from 'react-redux'
 
 import ApiExplorer from './ApiExplorer'

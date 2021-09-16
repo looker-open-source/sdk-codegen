@@ -23,7 +23,8 @@
  SOFTWARE.
 
  */
-import React, { FC, ReactElement } from 'react'
+import type { FC, ReactElement } from 'react'
+import React from 'react'
 import { useToggle, Accordion2, Divider, Box } from '@looker/components'
 import { ArrowRight } from '@styled-icons/material/ArrowRight'
 import { ArrowDropDown } from '@styled-icons/material/ArrowDropDown'

@@ -24,7 +24,8 @@
 
  */
 
-import React, { FC } from 'react'
+import type { FC } from 'react'
+import React from 'react'
 import { RunItHeading } from '@looker/run-it'
 
 export const DocTitle: FC = (props) => (

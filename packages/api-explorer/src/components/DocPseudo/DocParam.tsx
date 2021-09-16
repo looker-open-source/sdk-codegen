@@ -23,8 +23,9 @@
  SOFTWARE.
 
  */
-import React, { FC } from 'react'
-import { IParameter } from '@looker/sdk-codegen'
+import type { FC } from 'react'
+import React from 'react'
+import type { IParameter } from '@looker/sdk-codegen'
 import { Tooltip } from '@looker/components'
 
 export interface DocArgProps {

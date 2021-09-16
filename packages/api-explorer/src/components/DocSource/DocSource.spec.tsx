@@ -25,7 +25,8 @@
  */
 import React from 'react'
 import { screen, waitFor } from '@testing-library/react'
-import { IDeclarationMine, permaLink } from '@looker/sdk-codegen'
+import type { IDeclarationMine } from '@looker/sdk-codegen'
+import { permaLink } from '@looker/sdk-codegen'
 import userEvent from '@testing-library/user-event'
 import { api } from '../../test-data'
 import { renderWithLode } from '../../test-utils'

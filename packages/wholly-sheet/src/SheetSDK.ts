@@ -24,8 +24,10 @@
 
  */
 
-import { HttpMethod, APIMethods, IAuthSession } from '@looker/sdk-rtl'
-import { ColumnHeaders, IRowModel, rowPosition } from './RowModel'
+import type { HttpMethod, IAuthSession } from '@looker/sdk-rtl'
+import { APIMethods } from '@looker/sdk-rtl'
+import type { ColumnHeaders, IRowModel } from './RowModel'
+import { rowPosition } from './RowModel'
 
 /** Keyed data for a tab, and the tab's header row */
 export interface ITabTable {

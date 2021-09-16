@@ -24,7 +24,7 @@
 
  */
 
-import { IMethodResponse, KeyedCollection } from '@looker/sdk-codegen'
+import type { IMethodResponse, KeyedCollection } from '@looker/sdk-codegen'
 
 /**
  * Given an array of method responses, group them by statusCode. The value of each status code is a collection of
