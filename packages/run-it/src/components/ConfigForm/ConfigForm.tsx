@@ -24,14 +24,9 @@
 
  */
 
-import React, {
-  BaseSyntheticEvent,
-  Dispatch,
-  FC,
-  FormEvent,
-  useState,
-  useEffect,
-} from 'react'
+import type { BaseSyntheticEvent, Dispatch, FC, FormEvent } from 'react'
+import React, { useState, useEffect } from 'react'
+import type { ValidationMessages, MessageBarIntent } from '@looker/components'
 import {
   Button,
   ButtonTransparent,
@@ -40,33 +35,29 @@ import {
   FieldText,
   Form,
   MessageBar,
-  ValidationMessages,
   Paragraph,
   Link,
-  MessageBarIntent,
   Space,
   SpaceVertical,
   Tooltip,
 } from '@looker/components'
 import { CodeCopy } from '@looker/code-editor'
-import { IAPIMethods } from '@looker/sdk-rtl'
+import type { IAPIMethods } from '@looker/sdk-rtl'
+import type { RunItSetter, RunItValues } from '../..'
 import {
   CollapserCard,
   RunItFormKey,
   RunItHeading,
   DarkSpan,
   runItSDK,
-  RunItSetter,
-  RunItValues,
   readyToLogin,
   RunItNoConfig,
 } from '../..'
+import type { RunItConfigurator, ILoadedSpecs } from './configUtils'
 import {
   RunItConfigKey,
   validateUrl,
-  RunItConfigurator,
   loadSpecsFromVersions,
-  ILoadedSpecs,
 } from './configUtils'
 
 const POSITIVE: MessageBarIntent = 'positive'

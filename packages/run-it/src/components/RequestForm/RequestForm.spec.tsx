@@ -29,7 +29,7 @@ import { renderWithTheme } from '@looker/components-test-utils'
 import { act, screen, waitFor } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 
-import { IAPIMethods } from '@looker/sdk-rtl'
+import type { IAPIMethods } from '@looker/sdk-rtl'
 import { defaultConfigurator } from '..'
 import { runItNoSet } from '../..'
 import { RequestForm } from './RequestForm'

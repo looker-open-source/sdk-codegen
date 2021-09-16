@@ -24,7 +24,7 @@
 
  */
 import { createContext } from 'react'
-import { IDeclarationMine, IExampleMine } from '@looker/sdk-codegen'
+import type { IDeclarationMine, IExampleMine } from '@looker/sdk-codegen'
 
 interface LodeContextProps {
   examples: IExampleMine

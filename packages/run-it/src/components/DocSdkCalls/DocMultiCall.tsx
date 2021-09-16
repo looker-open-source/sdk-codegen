@@ -23,12 +23,13 @@
  SOFTWARE.
 
  */
-import React, { FC } from 'react'
+import type { FC } from 'react'
+import React from 'react'
 import { Tab, TabList, TabPanel, TabPanels, useTabs } from '@looker/components'
 
 import { CodeCopy } from '@looker/code-editor'
 import { getGenerators } from './callUtils'
-import { DocSdkCallsProps } from './DocSdkCalls'
+import type { DocSdkCallsProps } from './DocSdkCalls'
 
 /**
  * Generates the SDK call syntax for all supported languages

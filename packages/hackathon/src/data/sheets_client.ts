@@ -24,29 +24,37 @@
 
  */
 import omit from 'lodash/omit'
-import { ValidationMessages } from '@looker/components'
+import type { ValidationMessages } from '@looker/components'
 import { DefaultSettings } from '@looker/sdk-rtl'
-import { ITabTable, SheetSDK } from '@looker/wholly-sheet'
+import type { ITabTable } from '@looker/wholly-sheet'
+import { SheetSDK } from '@looker/wholly-sheet'
 import { getExtensionSDK } from '@looker/extension-sdk'
 import { getCore40SDK } from '@looker/extension-sdk-react'
-import { initActiveSheet, SheetData } from '../models/SheetData'
+import type { SheetData } from '../models/SheetData'
+import { initActiveSheet } from '../models/SheetData'
 import { GAuthSession } from '../authToken/gAuthSession'
-import {
-  Hacker,
-  Project,
-  Projects,
-  Hackers,
+import type {
   IProjectProps,
   IHackerProps,
   IHackathonProps,
   IJudgingProps,
   IRegistrationProps,
   ITechnologyProps,
+} from '../models'
+import {
+  Hacker,
+  Project,
+  Projects,
+  Hackers,
   sheetHeader,
   Judging,
 } from '../models'
 import { ExtensionProxyTransport } from '../authToken/extensionProxyTransport'
-import { ProjectsHeadings, HackersHeadings, JudgingsHeadings } from './types'
+import type {
+  ProjectsHeadings,
+  HackersHeadings,
+  JudgingsHeadings,
+} from './types'
 
 /**
  * Client to wholly sheets data.

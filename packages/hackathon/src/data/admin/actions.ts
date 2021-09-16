@@ -24,7 +24,7 @@
 
  */
 
-import { ValidationMessages } from '@looker/components'
+import type { ValidationMessages } from '@looker/components'
 
 export enum Actions {
   LOAD_USER_ATTRIBUTES_REQUEST = 'LOAD_USER_ATTRIBUTES_REQUEST',

@@ -24,17 +24,16 @@
 
  */
 
-import { Readable } from 'readable-stream'
-import {
-  agentPrefix,
+import type { Readable } from 'readable-stream'
+import type {
   Authenticator,
   HttpMethod,
   ITransportSettings,
-  sdkOk,
   SDKResponse,
   Values,
 } from './transport'
-import { IAuthSession } from './authSession'
+import { agentPrefix, sdkOk } from './transport'
+import type { IAuthSession } from './authSession'
 
 /**
  * Creates an "sdk" to be used with the TypeScript SDK's funcs.ts file

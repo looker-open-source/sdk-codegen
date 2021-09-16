@@ -24,29 +24,22 @@
 
  */
 
-import React, { FC, useReducer, useState, useEffect, useCallback } from 'react'
+import type { FC } from 'react'
+import React, { useReducer, useState, useEffect, useCallback } from 'react'
 import { useLocation } from 'react-router'
 import styled, { createGlobalStyle } from 'styled-components'
 import { Aside, ComponentsProvider, Layout, Page } from '@looker/components'
-import { SpecList } from '@looker/sdk-codegen'
-import {
-  RunItSetter,
-  funFetch,
-  fallbackFetch,
-  OAuthScene,
-} from '@looker/run-it'
+import type { SpecList } from '@looker/sdk-codegen'
+import type { RunItSetter } from '@looker/run-it'
+import { funFetch, fallbackFetch, OAuthScene } from '@looker/run-it'
 import {
   SearchContext,
   LodeContext,
   defaultLodeContextValue,
   EnvAdaptorContext,
 } from './context'
-import {
-  EnvAdaptorConstants,
-  getLoded,
-  IApixEnvAdaptor,
-  oAuthPath,
-} from './utils'
+import type { IApixEnvAdaptor } from './utils'
+import { EnvAdaptorConstants, getLoded, oAuthPath } from './utils'
 import { Header, SideNav, ErrorBoundary } from './components'
 import {
   specReducer,

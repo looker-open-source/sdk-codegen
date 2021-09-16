@@ -34,7 +34,7 @@ import {
   logConvertSpec,
   fetchLookerVersion,
 } from './fetchSpec'
-import { ISDKConfigProps } from './sdkConfig'
+import type { ISDKConfigProps } from './sdkConfig'
 
 const config = TestConfig()
 const props = config.section as unknown as ISDKConfigProps

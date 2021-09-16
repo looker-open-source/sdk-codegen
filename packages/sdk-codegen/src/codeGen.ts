@@ -25,23 +25,25 @@
  */
 
 import { DelimArray } from '@looker/sdk-rtl'
-import {
+import type {
   ApiModel,
   Arg,
   ArgValues,
-  ArrayType,
-  EnumType,
   EnumValueType,
-  HashType,
   IMethod,
   IParameter,
   IProperty,
   IType,
+} from './sdkModels'
+import {
+  ArrayType,
+  EnumType,
+  HashType,
   mayQuote,
   strBody,
   Type,
 } from './sdkModels'
-import { SpecItem } from './specConverter'
+import type { SpecItem } from './specConverter'
 
 export const commentBlock = (
   text: string | undefined,

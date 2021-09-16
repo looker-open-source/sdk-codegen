@@ -25,7 +25,7 @@
  */
 
 import React from 'react'
-import { IconType } from '@looker/components'
+import type { IconType } from '@looker/components'
 import { FieldString, IdeFileManifest, IdeParameter } from '@looker/icons'
 import { CalendarToday } from '@styled-icons/material/CalendarToday'
 import { Check } from '@styled-icons/material/Check'
@@ -35,7 +35,8 @@ import { Toc } from '@styled-icons/material/Toc'
 import { VpnKey } from '@styled-icons/material/VpnKey'
 import { Tag } from '@styled-icons/material-rounded'
 import { Email } from '@styled-icons/material-outlined'
-import { IType, TypeOfType, typeOfType } from '@looker/sdk-codegen'
+import type { IType } from '@looker/sdk-codegen'
+import { TypeOfType, typeOfType } from '@looker/sdk-codegen'
 
 /**
  * Get the type or element type if this type is a collection

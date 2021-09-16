@@ -23,8 +23,9 @@
  SOFTWARE.
 
  */
-import { IParameter } from '@looker/sdk-codegen'
-import React, { FC, Fragment } from 'react'
+import type { IParameter } from '@looker/sdk-codegen'
+import type { FC } from 'react'
+import React, { Fragment } from 'react'
 
 import { DocParam } from './DocParam'
 

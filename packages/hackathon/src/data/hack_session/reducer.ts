@@ -23,10 +23,19 @@
  SOFTWARE.
 
  */
-import { IUser as ILookerUser } from '@looker/sdk'
-import { IHackathonProps, ITechnologyProps, IHackerProps } from '../../models'
-import { ProjectsHeadings, HackersHeadings, JudgingsHeadings } from '../types'
-import { HackSessionAction, Actions } from './actions'
+import type { IUser as ILookerUser } from '@looker/sdk'
+import type {
+  IHackathonProps,
+  ITechnologyProps,
+  IHackerProps,
+} from '../../models'
+import type {
+  ProjectsHeadings,
+  HackersHeadings,
+  JudgingsHeadings,
+} from '../types'
+import type { HackSessionAction } from './actions'
+import { Actions } from './actions'
 
 export interface Metadata {
   projectsHeadings: ProjectsHeadings

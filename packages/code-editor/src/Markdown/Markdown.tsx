@@ -24,7 +24,8 @@
 
  */
 
-import React, { BaseSyntheticEvent, FC, ReactNode } from 'react'
+import type { BaseSyntheticEvent, FC, ReactNode } from 'react'
+import React from 'react'
 import styled from 'styled-components'
 import ReactMarkdown from 'react-markdown'
 import rehypeRaw from 'rehype-raw'
@@ -148,7 +149,7 @@ const MarkdownWrapper = styled.div`
     list-style: decimal outside;
   }
   & mark {
-    background-color: #c2deff;
-    font-weight: bold;
+    background-color: #fff2c2;
+    font-weight: 500;
   }
 `

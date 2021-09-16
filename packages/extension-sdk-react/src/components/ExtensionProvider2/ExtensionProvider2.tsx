@@ -24,14 +24,16 @@
 
  */
 
-import React, { useState, ReactNode } from 'react'
-import { ExtensionHostApi, SdkConnection } from '@looker/extension-sdk'
+import type { ReactNode } from 'react'
+import React, { useState } from 'react'
+import type { ExtensionHostApi } from '@looker/extension-sdk'
+import { SdkConnection } from '@looker/extension-sdk'
 import { LookerExtensionSDK } from '@looker/sdk'
-import {
+import type {
   BaseExtensionContextData,
-  ExtensionConnector,
   ExtensionProviderProps,
 } from '../ExtensionConnector'
+import { ExtensionConnector } from '../ExtensionConnector'
 import { registerCoreSDK2, unregisterCoreSDK2 } from '../../sdk/core_sdk2'
 
 export interface ExtensionContextData2<T> extends BaseExtensionContextData {

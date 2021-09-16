@@ -25,13 +25,10 @@
  */
 
 import { log } from '@looker/sdk-codegen-utils'
-import {
-  getSpecsFromVersions,
-  IGeneratorSpec,
-  legacyLanguages,
-} from '@looker/sdk-codegen'
-import { IApiVersion } from '@looker/sdk'
-import { ISDKConfigProps } from './sdkConfig'
+import type { IGeneratorSpec } from '@looker/sdk-codegen'
+import { getSpecsFromVersions, legacyLanguages } from '@looker/sdk-codegen'
+import type { IApiVersion } from '@looker/sdk'
+import type { ISDKConfigProps } from './sdkConfig'
 import { run } from './nodeUtils'
 import { fetchLookerVersions, logConvertSpec } from './fetchSpec'
 

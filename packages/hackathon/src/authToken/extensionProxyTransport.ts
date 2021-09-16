@@ -24,21 +24,19 @@
 
  */
 
-import {
+import type {
   Authenticator,
   HttpMethod,
   IRawResponse,
-  BaseTransport,
   ITransportSettings,
   SDKResponse,
   Values,
-  agentPrefix,
   IRequestHeaders,
   IRequestProps,
   ISDKError,
-  LookerAppId,
 } from '@looker/sdk-rtl'
-import {
+import { BaseTransport, agentPrefix, LookerAppId } from '@looker/sdk-rtl'
+import type {
   ExtensionSDK,
   FetchCustomParameters,
   FetchProxyDataResponse,

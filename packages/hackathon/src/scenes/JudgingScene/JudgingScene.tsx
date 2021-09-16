@@ -23,7 +23,8 @@
  SOFTWARE.
 
  */
-import React, { FC } from 'react'
+import type { FC } from 'react'
+import React from 'react'
 import { useSelector } from 'react-redux'
 import { isLoadingState } from '../../data/common/selectors'
 import { Loading } from '../../components/Loading'

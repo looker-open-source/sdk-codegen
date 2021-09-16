@@ -24,7 +24,8 @@
 
  */
 
-import React, { FC, useContext, useEffect, useState, Dispatch } from 'react'
+import type { FC, Dispatch } from 'react'
+import React, { useContext, useEffect, useState } from 'react'
 import {
   Heading,
   TabList,
@@ -35,17 +36,18 @@ import {
   InputSearch,
   SpaceVertical,
 } from '@looker/components'
-import {
+import type {
   SpecItem,
   SpecList,
-  CriteriaToSet,
   ISearchResult,
   ApiModel,
 } from '@looker/sdk-codegen'
+import { CriteriaToSet } from '@looker/sdk-codegen'
 import { useRouteMatch } from 'react-router-dom'
 
 import { SearchContext } from '../../context'
-import { setPattern, SpecAction } from '../../reducers'
+import type { SpecAction } from '../../reducers'
+import { setPattern } from '../../reducers'
 import { useWindowSize } from '../../utils'
 import { HEADER_REM } from '../Header'
 import { SelectorContainer } from '../SelectorContainer'

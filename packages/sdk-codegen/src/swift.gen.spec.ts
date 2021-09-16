@@ -25,7 +25,7 @@
  */
 
 import { TestConfig } from './testUtils'
-import { IEnumType } from './sdkModels'
+import type { IEnumType } from './sdkModels'
 import { SwiftGen } from './swift.gen'
 
 const config = TestConfig()

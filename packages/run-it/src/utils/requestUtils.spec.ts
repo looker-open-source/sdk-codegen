@@ -23,7 +23,7 @@
  SOFTWARE.
 
  */
-import { RunItInput } from '../RunIt'
+import type { RunItInput } from '../RunIt'
 import { testJsonResponse } from '../test-data'
 import { StandaloneConfigurator } from '../components'
 import { createRequestParams, pathify, runRequest } from './requestUtils'

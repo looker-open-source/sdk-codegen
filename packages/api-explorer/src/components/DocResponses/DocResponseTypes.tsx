@@ -23,9 +23,10 @@
  SOFTWARE.
 
  */
-import React, { FC, useState, useEffect } from 'react'
+import type { FC } from 'react'
+import React, { useState, useEffect } from 'react'
 import { ButtonToggle, ButtonItem } from '@looker/components'
-import { KeyedCollection, IMethodResponse } from '@looker/sdk-codegen'
+import type { KeyedCollection, IMethodResponse } from '@looker/sdk-codegen'
 
 import { ExploreType } from '..'
 

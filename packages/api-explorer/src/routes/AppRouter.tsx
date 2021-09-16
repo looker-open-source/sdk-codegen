@@ -23,14 +23,16 @@
  SOFTWARE.
 
  */
-import React, { FC } from 'react'
+import type { FC } from 'react'
+import React from 'react'
 import { Redirect, Route, Switch } from 'react-router-dom'
-import { ApiModel, SpecList } from '@looker/sdk-codegen'
-import { RunItSetter } from '@looker/run-it'
+import type { ApiModel, SpecList } from '@looker/sdk-codegen'
+import type { RunItSetter } from '@looker/run-it'
 
 import { HomeScene, MethodScene, TagScene, TypeScene } from '../scenes'
 import { DiffScene } from '../scenes/DiffScene'
-import { diffPath, IApixEnvAdaptor } from '../utils'
+import type { IApixEnvAdaptor } from '../utils'
+import { diffPath } from '../utils'
 
 interface AppRouterProps {
   api: ApiModel

@@ -24,8 +24,10 @@
 
  */
 
-import React, { FC, useEffect } from 'react'
-import { typeRefs, methodRefs, ApiModel } from '@looker/sdk-codegen'
+import type { FC } from 'react'
+import React, { useEffect } from 'react'
+import type { ApiModel } from '@looker/sdk-codegen'
+import { typeRefs, methodRefs } from '@looker/sdk-codegen'
 import { useHistory, useParams } from 'react-router-dom'
 import { Space, Box } from '@looker/components'
 

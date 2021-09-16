@@ -24,19 +24,14 @@
 
  */
 
-import React, { FC, useContext, useEffect, useState } from 'react'
-import {
-  IStorageValue,
-  RunItProvider,
-  RunItConfigurator,
-  runItNoSet,
-  sdkSpecFetch,
-} from '@looker/run-it'
-import {
-  ExtensionContext,
-  ExtensionContextData,
-} from '@looker/extension-sdk-react'
-import { getSpecsFromVersions, SpecItem, SpecList } from '@looker/sdk-codegen'
+import type { FC } from 'react'
+import React, { useContext, useEffect, useState } from 'react'
+import type { IStorageValue, RunItConfigurator } from '@looker/run-it'
+import { RunItProvider, runItNoSet, sdkSpecFetch } from '@looker/run-it'
+import type { ExtensionContextData } from '@looker/extension-sdk-react'
+import { ExtensionContext } from '@looker/extension-sdk-react'
+import type { SpecItem, SpecList } from '@looker/sdk-codegen'
+import { getSpecsFromVersions } from '@looker/sdk-codegen'
 import ApiExplorer from '@looker/api-explorer/src/ApiExplorer'
 import { Loader } from '@looker/api-explorer/src/components'
 import { getExtensionSDK } from '@looker/extension-sdk'

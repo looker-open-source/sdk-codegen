@@ -24,13 +24,13 @@
 
  */
 import deepmerge from 'deepmerge'
-import {
+import type {
   FetchProxy,
   FetchCustomParameters,
   FetchResponseBodyType,
   FetchProxyDataResponse,
 } from './types'
-import { ExtensionHostApiImpl } from './extension_host_api'
+import type { ExtensionHostApiImpl } from './extension_host_api'
 
 export class FetchProxyImpl implements FetchProxy {
   constructor(

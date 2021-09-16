@@ -24,7 +24,8 @@
 
  */
 
-import React, { FC, useContext } from 'react'
+import type { FC } from 'react'
+import React, { useContext } from 'react'
 import { useHistory } from 'react-router-dom'
 import { Markdown } from '@looker/code-editor'
 import { EnvAdaptorContext, SearchContext } from '../../context'

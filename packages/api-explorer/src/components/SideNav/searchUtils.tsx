@@ -25,7 +25,7 @@
  */
 
 import { useState, useEffect } from 'react'
-import { TagList, TypeList } from '@looker/sdk-codegen'
+import type { TagList, TypeList } from '@looker/sdk-codegen'
 
 export const useDebounce = (value: any, delay: number) => {
   const [debouncedValue, setDebouncedValue] = useState()

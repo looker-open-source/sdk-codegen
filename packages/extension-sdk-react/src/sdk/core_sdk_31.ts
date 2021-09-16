@@ -24,7 +24,7 @@
 
  */
 
-import { Looker31SDK } from '@looker/sdk'
+import type { Looker31SDK } from '@looker/sdk'
 
 let _core31SDK: Looker31SDK | undefined
 

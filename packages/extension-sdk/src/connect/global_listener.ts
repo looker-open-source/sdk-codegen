@@ -24,7 +24,7 @@
 
  */
 
-import { ExtensionHostApi, ExtensionSDK } from './types'
+import type { ExtensionHostApi, ExtensionSDK } from './types'
 
 let _hostApi: ExtensionHostApi | undefined
 

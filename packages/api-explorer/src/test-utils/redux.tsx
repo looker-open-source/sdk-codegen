@@ -23,14 +23,17 @@
  SOFTWARE.
 
  */
-import React, { ReactElement } from 'react'
+import type { ReactElement } from 'react'
+import React from 'react'
 import { Provider } from 'react-redux'
-import { Store } from 'redux'
+import type { Store } from 'redux'
 import { renderWithTheme } from '@looker/components-test-utils'
-import { RenderOptions } from '@testing-library/react'
+import type { RenderOptions } from '@testing-library/react'
 
-import { configureStore, RootState } from '../state'
-import { IApixEnvAdaptor, StandaloneEnvAdaptor } from '../utils'
+import type { RootState } from '../state'
+import { configureStore } from '../state'
+import type { IApixEnvAdaptor } from '../utils'
+import { StandaloneEnvAdaptor } from '../utils'
 import { EnvAdaptorContext } from '../context'
 import { renderWithRouter } from '.'
 

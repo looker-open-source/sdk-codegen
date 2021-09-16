@@ -25,13 +25,8 @@
  */
 
 import config from 'config'
-import {
-  ApiModel,
-  codeGenerators,
-  getCodeGenerator,
-  ICodeGen,
-  IVersionInfo,
-} from '@looker/sdk-codegen'
+import type { ApiModel, ICodeGen, IVersionInfo } from '@looker/sdk-codegen'
+import { codeGenerators, getCodeGenerator } from '@looker/sdk-codegen'
 import { quit } from './nodeUtils'
 
 /**

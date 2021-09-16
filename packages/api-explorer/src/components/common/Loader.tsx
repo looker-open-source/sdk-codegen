@@ -23,7 +23,8 @@
  SOFTWARE.
 
  */
-import React, { FC } from 'react'
+import type { FC } from 'react'
+import React from 'react'
 import {
   ComponentsProvider,
   Flex,
@@ -31,7 +32,7 @@ import {
   Heading,
   ProgressCircular,
 } from '@looker/components'
-import { ThemeOverrides } from '../../utils'
+import type { ThemeOverrides } from '../../utils'
 
 export interface LoaderProps {
   themeOverrides: ThemeOverrides

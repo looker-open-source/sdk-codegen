@@ -23,7 +23,8 @@
  SOFTWARE.
 
  */
-import React, { FC, useEffect } from 'react'
+import type { FC } from 'react'
+import React, { useEffect } from 'react'
 import {
   DataTable,
   DataTableItem,
@@ -36,7 +37,8 @@ import { Create } from '@styled-icons/material/Create'
 import { useSelector, useDispatch } from 'react-redux'
 import { useHistory } from 'react-router-dom'
 import { MoreInfoDialog } from '../../../components/MoreInfoDialog'
-import { IJudgingProps, sheetCell } from '../../../models'
+import type { IJudgingProps } from '../../../models'
+import { sheetCell } from '../../../models'
 import {
   getHackerState,
   getJudgingsHeadings,

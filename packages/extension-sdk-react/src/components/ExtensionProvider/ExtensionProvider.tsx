@@ -25,16 +25,17 @@
  */
 
 import React, { useState } from 'react'
-import { ExtensionHostApi, LookerExtensionSDK } from '@looker/extension-sdk'
-import { Looker31SDK, Looker40SDK } from '@looker/sdk'
-import {
+import type { ExtensionHostApi } from '@looker/extension-sdk'
+import { LookerExtensionSDK } from '@looker/extension-sdk'
+import type { Looker31SDK, Looker40SDK } from '@looker/sdk'
+import type {
   BaseExtensionContextData,
   ExtensionProviderProps,
-  ExtensionConnector,
 } from '../ExtensionConnector'
+import { ExtensionConnector } from '../ExtensionConnector'
 import { registerCore31SDK, unregisterCore31SDK } from '../../sdk/core_sdk_31'
 import { registerCore40SDK, unregisterCore40SDK } from '../../sdk/core_sdk_40'
-import { ExtensionContextData } from './types'
+import type { ExtensionContextData } from './types'
 
 /**
  * React context provider for extension API and SDK

@@ -24,7 +24,8 @@
 
  */
 
-import React, { FC } from 'react'
+import type { FC } from 'react'
+import React from 'react'
 import {
   Table,
   TableBody,
@@ -35,7 +36,7 @@ import {
   TableHeaderCell,
 } from '@looker/components'
 import styled from 'styled-components'
-import { IRawResponse } from '@looker/sdk-rtl'
+import type { IRawResponse } from '@looker/sdk-rtl'
 import { ShowResponse } from '../ShowResponse'
 import { CollapserCard } from '../Collapser'
 import { DarkSpan, RunItHeading } from '../common'

@@ -24,18 +24,16 @@
 
  */
 
-import {
-  IRowModelProps,
-  ITabTable,
-  SheetSDK,
-  WhollySheet,
-} from '@looker/wholly-sheet'
-import { ISheetRow, SheetRow } from './SheetRow'
-import { Project } from './Projects'
-import { User } from './Users'
-import { getActiveSheet, SheetData } from './SheetData'
-import { Hacker, IHacker } from './Hacker'
-import { Hackathon } from './Hackathons'
+import type { IRowModelProps, ITabTable, SheetSDK } from '@looker/wholly-sheet'
+import { WhollySheet } from '@looker/wholly-sheet'
+import type { ISheetRow } from './SheetRow'
+import { SheetRow } from './SheetRow'
+import type { Project } from './Projects'
+import type { User } from './Users'
+import type { SheetData } from './SheetData'
+import { getActiveSheet } from './SheetData'
+import type { Hacker, IHacker } from './Hacker'
+import type { Hackathon } from './Hackathons'
 
 /** IMPORTANT: properties must be declared in the tab sheet's columnar order, not sorted order */
 export interface IJudgingProps extends IRowModelProps {

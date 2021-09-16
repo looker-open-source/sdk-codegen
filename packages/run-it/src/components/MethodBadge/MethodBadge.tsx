@@ -24,14 +24,16 @@
 
  */
 
+import type {
+  CompatibleHTMLProps,
+  TypographyProps,
+} from '@looker/design-tokens'
 import {
   generatePressed,
   intentUIBlend,
-  CompatibleHTMLProps,
   typography,
-  TypographyProps,
 } from '@looker/design-tokens'
-import { HttpMethod } from '@looker/sdk-rtl'
+import type { HttpMethod } from '@looker/sdk-rtl'
 import styled, { css } from 'styled-components'
 
 /**
