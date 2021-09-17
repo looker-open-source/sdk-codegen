@@ -23,7 +23,7 @@
  SOFTWARE.
 
  */
-import { IStorageValue, RunItConfigurator, StorageLocation } from '..'
+import type { IStorageValue, RunItConfigurator, StorageLocation } from '..'
 
 export class StandaloneConfigurator implements RunItConfigurator {
   getStorage(key: string, defaultValue = ''): IStorageValue {

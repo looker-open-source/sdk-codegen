@@ -27,9 +27,9 @@
 import { screen, fireEvent, waitFor } from '@testing-library/react'
 import { renderWithTheme } from '@looker/components-test-utils'
 import userEvent from '@testing-library/user-event'
-import { BaseSyntheticEvent } from 'react'
+import type { BaseSyntheticEvent } from 'react'
 
-import { RunItInput } from '../../RunIt'
+import type { RunItInput } from '../../RunIt'
 import {
   createComplexItem,
   createSimpleItem,

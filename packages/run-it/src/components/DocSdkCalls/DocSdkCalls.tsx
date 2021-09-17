@@ -24,11 +24,13 @@
 
  */
 
-import React, { FC, useEffect, useState } from 'react'
-import { ApiModel, IMethod, trimInputs } from '@looker/sdk-codegen'
+import type { FC } from 'react'
+import React, { useEffect, useState } from 'react'
+import type { ApiModel, IMethod } from '@looker/sdk-codegen'
+import { trimInputs } from '@looker/sdk-codegen'
 import { Heading } from '@looker/components'
 
-import { RunItValues } from '../../RunIt'
+import type { RunItValues } from '../../RunIt'
 import { DocSingleCall } from './DocSingleCall'
 import { DocMultiCall } from './DocMultiCall'
 

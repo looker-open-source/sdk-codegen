@@ -24,7 +24,7 @@
 
  */
 
-import { IDeclarationMine, IExampleMine } from '@looker/sdk-codegen'
+import type { IDeclarationMine, IExampleMine } from '@looker/sdk-codegen'
 
 export const apixFilesHost = 'http://localhost:30000'
 

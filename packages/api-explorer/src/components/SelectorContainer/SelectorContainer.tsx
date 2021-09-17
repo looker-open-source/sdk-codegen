@@ -24,12 +24,13 @@
 
  */
 
-import React, { FC, Dispatch } from 'react'
+import type { FC, Dispatch } from 'react'
+import React from 'react'
 import { Space, IconButton } from '@looker/components'
 import { ChangeHistory } from '@styled-icons/material/ChangeHistory'
-import { SpecList, SpecItem } from '@looker/sdk-codegen'
+import type { SpecList, SpecItem } from '@looker/sdk-codegen'
 import { Link } from '../Link'
-import { SpecAction } from '../../reducers'
+import type { SpecAction } from '../../reducers'
 import { diffPath } from '../../utils'
 import { SdkLanguageSelector } from './SdkLanguageSelector'
 import { ApiSpecSelector } from './ApiSpecSelector'

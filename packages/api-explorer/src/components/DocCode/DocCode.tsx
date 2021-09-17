@@ -24,7 +24,8 @@
 
  */
 
-import React, { FC, useContext } from 'react'
+import type { FC } from 'react'
+import React, { useContext } from 'react'
 import { findGenerator } from '@looker/sdk-codegen'
 import { CodeDisplay } from '@looker/code-editor'
 import { SearchContext } from '../../context/search'

@@ -24,16 +24,14 @@
 
  */
 
-import {
-  AuthSession,
-  AuthToken,
+import type {
   IAccessToken,
   IApiSettings,
   IRequestProps,
   ITransport,
-  sdkError,
 } from '@looker/sdk-rtl'
-import { ExtensionSDK } from '@looker/extension-sdk'
+import { AuthSession, AuthToken, sdkError } from '@looker/sdk-rtl'
+import type { ExtensionSDK } from '@looker/extension-sdk'
 import { defaultScopes } from '@looker/wholly-sheet'
 
 export class GAuthToken extends AuthToken {

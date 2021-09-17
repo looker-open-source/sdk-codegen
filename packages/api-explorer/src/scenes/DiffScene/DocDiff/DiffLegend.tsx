@@ -23,8 +23,9 @@
  SOFTWARE.
 
  */
-import React, { FC } from 'react'
-import { DiffCount } from '@looker/sdk-codegen'
+import type { FC } from 'react'
+import React from 'react'
+import type { DiffCount } from '@looker/sdk-codegen'
 import { Code, Flex, Icon, Space } from '@looker/components'
 import { Add } from '@styled-icons/material/Add'
 import { ChangeHistory } from '@styled-icons/material/ChangeHistory'

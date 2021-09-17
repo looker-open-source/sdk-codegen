@@ -24,10 +24,11 @@
 
  */
 
-import React, { FC } from 'react'
+import type { FC } from 'react'
+import React from 'react'
 import Editor from 'react-simple-code-editor'
 
-import { CodeDisplayProps } from '../CodeDisplay/types'
+import type { CodeDisplayProps } from '../CodeDisplay/types'
 import { CodeDisplay } from '../index'
 
 interface CodeEditorProps extends CodeDisplayProps {

@@ -24,11 +24,11 @@
 
  */
 
-import { SpecList } from '@looker/sdk-codegen'
-import { Location as HLocation } from 'history'
+import type { SpecList } from '@looker/sdk-codegen'
+import type { Location as HLocation } from 'history'
 import { OAuthSession } from '@looker/sdk-rtl'
 import { diffPath, oAuthPath } from '../../utils'
-import { SpecState } from './reducer'
+import type { SpecState } from './reducer'
 
 export type AbstractLocation = HLocation | Location
 

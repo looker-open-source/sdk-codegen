@@ -23,7 +23,8 @@
  SOFTWARE.
 
  */
-import React, { FC, ReactElement } from 'react'
+import type { FC, ReactElement } from 'react'
+import React from 'react'
 import { Space, Box, Label } from '@looker/components'
 
 interface FormItemProps {

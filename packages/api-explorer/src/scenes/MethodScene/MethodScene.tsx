@@ -24,7 +24,8 @@
 
  */
 
-import React, { FC, useContext, useState, useEffect } from 'react'
+import type { FC } from 'react'
+import React, { useContext, useState, useEffect } from 'react'
 import {
   Aside,
   Button,
@@ -35,8 +36,10 @@ import {
 } from '@looker/components'
 import { Beaker } from '@looker/icons'
 import { useHistory, useParams } from 'react-router-dom'
-import { RunIt, RunItSetter, RunItContext, RunItFormKey } from '@looker/run-it'
-import { ApiModel, typeRefs } from '@looker/sdk-codegen'
+import type { RunItSetter } from '@looker/run-it'
+import { RunIt, RunItContext, RunItFormKey } from '@looker/run-it'
+import type { ApiModel } from '@looker/sdk-codegen'
+import { typeRefs } from '@looker/sdk-codegen'
 import { useSelector } from 'react-redux'
 
 import {
@@ -54,7 +57,7 @@ import {
   DocSchema,
 } from '../../components'
 import { getSelectedSdkLanguage } from '../../state'
-import { IApixEnvAdaptor } from '../../utils'
+import type { IApixEnvAdaptor } from '../../utils'
 import { DocOperation, DocRequestBody } from './components'
 import { createInputs } from './utils'
 

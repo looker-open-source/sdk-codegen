@@ -24,18 +24,17 @@
 
  */
 
-import {
+import type {
   Arg,
-  EnumType,
   EnumValueType,
   IMethod,
   IParameter,
   IProperty,
   IType,
-  mayQuote,
-  strBody,
 } from './sdkModels'
-import { IMappedType, CodeGen, commentBlock } from './codeGen'
+import { EnumType, mayQuote, strBody } from './sdkModels'
+import type { IMappedType } from './codeGen'
+import { CodeGen, commentBlock } from './codeGen'
 
 export class SwiftGen extends CodeGen {
   codePath = './swift/'

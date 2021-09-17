@@ -24,17 +24,14 @@
 
  */
 
-import { ICryptoHash } from './cryptoHash'
+import type { ICryptoHash } from './cryptoHash'
 import { OAuthSession } from './oauthSession'
-import {
-  ApiSettings,
-  DefaultSettings,
-  IApiSection,
-  IApiSettings,
-} from './apiSettings'
+import type { IApiSection, IApiSettings } from './apiSettings'
+import { ApiSettings, DefaultSettings } from './apiSettings'
 import { BrowserCryptoHash, BrowserTransport } from './browserTransport'
 // import { NodeCryptoHash, NodeTransport } from './nodeTransport'
-import { ExtensionTransport, IHostConnection } from './extensionTransport'
+import type { IHostConnection } from './extensionTransport'
+import { ExtensionTransport } from './extensionTransport'
 import { BrowserServices } from './browserServices'
 
 const allSettings = {

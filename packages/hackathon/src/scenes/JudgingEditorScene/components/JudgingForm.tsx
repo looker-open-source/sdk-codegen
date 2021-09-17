@@ -23,7 +23,8 @@
  SOFTWARE.
 
  */
-import React, { BaseSyntheticEvent, FC } from 'react'
+import type { BaseSyntheticEvent, FC } from 'react'
+import React from 'react'
 import { useSelector, useDispatch } from 'react-redux'
 import { useHistory } from 'react-router-dom'
 import {
@@ -42,7 +43,7 @@ import {
   updateJudgingData,
 } from '../../../data/judgings/actions'
 import { getHackerState } from '../../../data/hack_session/selectors'
-import { IJudgingProps } from '../../../models'
+import type { IJudgingProps } from '../../../models'
 import { Routes } from '../../../routes/AppRouter'
 
 interface JudgingFormProps {

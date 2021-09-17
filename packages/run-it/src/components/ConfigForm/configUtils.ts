@@ -24,17 +24,16 @@
 
  */
 
+import type { ILookerVersions, SpecItem, SpecList } from '@looker/sdk-codegen'
 import {
   ApiModel,
   getSpecsFromVersions,
-  ILookerVersions,
-  SpecItem,
-  SpecList,
   upgradeSpecObject,
 } from '@looker/sdk-codegen'
 import { BrowserTransport, DefaultSettings } from '@looker/sdk-rtl'
 import { api_spec } from '@looker/sdk'
-import { runItSDK, RunItValues } from '../..'
+import type { RunItValues } from '../..'
+import { runItSDK } from '../..'
 
 export type StorageLocation = 'session' | 'local'
 export const RunItConfigKey = 'RunItConfig'

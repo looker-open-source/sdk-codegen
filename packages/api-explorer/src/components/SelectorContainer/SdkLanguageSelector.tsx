@@ -23,11 +23,12 @@
  SOFTWARE.
 
  */
-import React, { FC, useContext } from 'react'
+import type { FC } from 'react'
+import React, { useContext } from 'react'
 import { codeGenerators } from '@looker/sdk-codegen'
 import { Select } from '@looker/components'
 import { useSelector } from 'react-redux'
-import { SelectOptionProps } from '@looker/components/lib/Form/Inputs/Select'
+import type { SelectOptionProps } from '@looker/components/lib/Form/Inputs/Select'
 
 import { useActions } from '../../hooks'
 import { getSelectedSdkLanguage } from '../../state'

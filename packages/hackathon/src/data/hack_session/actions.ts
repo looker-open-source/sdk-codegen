@@ -23,8 +23,16 @@
  SOFTWARE.
 
  */
-import { IHackathonProps, ITechnologyProps, IHackerProps } from '../../models'
-import { ProjectsHeadings, HackersHeadings, JudgingsHeadings } from '../types'
+import type {
+  IHackathonProps,
+  ITechnologyProps,
+  IHackerProps,
+} from '../../models'
+import type {
+  ProjectsHeadings,
+  HackersHeadings,
+  JudgingsHeadings,
+} from '../types'
 
 export enum Actions {
   INIT_HACK_SESSION_REQUEST = 'INIT_HACK_SESSION_REQUEST',

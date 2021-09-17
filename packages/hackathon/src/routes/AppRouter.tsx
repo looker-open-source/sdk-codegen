@@ -23,9 +23,10 @@
  SOFTWARE.
 
  */
-import React, { FC } from 'react'
+import type { FC } from 'react'
+import React from 'react'
 import { Redirect, Route, Switch } from 'react-router-dom'
-import { IHackerProps, IHackathonProps } from '../models'
+import type { IHackerProps, IHackathonProps } from '../models'
 import {
   HomeScene,
   UsersScene,

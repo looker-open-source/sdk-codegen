@@ -24,7 +24,7 @@
 
  */
 
-import { Readable } from 'readable-stream'
+import type { Readable } from 'readable-stream'
 import { addQueryParams, StatusCode } from './transport'
 import type {
   Authenticator,

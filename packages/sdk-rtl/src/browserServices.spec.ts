@@ -28,7 +28,8 @@ import { MockCrypto } from './oauthSession.spec'
 import { BrowserServices } from './browserServices'
 import { DefaultSettings } from './apiSettings'
 import { BrowserCryptoHash, BrowserTransport } from './browserTransport'
-import { ExtensionTransport, IHostConnection } from './extensionTransport'
+import type { IHostConnection } from './extensionTransport'
+import { ExtensionTransport } from './extensionTransport'
 
 describe('BrowserServices', () => {
   it('fails if settings are not provided', () => {

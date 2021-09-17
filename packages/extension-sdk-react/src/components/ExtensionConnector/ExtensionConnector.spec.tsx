@@ -24,12 +24,14 @@
 
  */
 
-import { shallow, mount, ReactWrapper } from 'enzyme'
+import type { ReactWrapper } from 'enzyme'
+import { shallow, mount } from 'enzyme'
 import { act } from 'react-dom/test-utils'
 import * as React from 'react'
 import { unregisterCore31SDK } from '../../sdk/core_sdk_31'
 import { unregisterCore40SDK } from '../../sdk/core_sdk_40'
-import { ExtensionConnector, BaseExtensionContextData } from '.'
+import type { BaseExtensionContextData } from '.'
+import { ExtensionConnector } from '.'
 
 let failConnection = false
 const mockHost: any = {

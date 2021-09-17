@@ -24,24 +24,17 @@
 
  */
 
-import {
+import type {
   Arg,
   ArgValues,
-  EnumType,
   IMethod,
   IParameter,
   IProperty,
-  isSpecialName,
   IType,
-  strBody,
 } from './sdkModels'
-import {
-  CodeAssignment,
-  CodeGen,
-  IMappedType,
-  trimInputs,
-  commentBlock,
-} from './codeGen'
+import { EnumType, isSpecialName, strBody } from './sdkModels'
+import type { CodeAssignment, IMappedType } from './codeGen'
+import { CodeGen, trimInputs, commentBlock } from './codeGen'
 
 /**
  * TypeScript code generator

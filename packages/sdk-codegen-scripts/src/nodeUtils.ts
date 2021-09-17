@@ -25,7 +25,8 @@
  */
 
 import * as fs from 'fs'
-import { execSync, ExecSyncOptionsWithStringEncoding } from 'child_process'
+import type { ExecSyncOptionsWithStringEncoding } from 'child_process'
+import { execSync } from 'child_process'
 import path from 'path'
 import { warn } from '@looker/sdk-codegen-utils'
 

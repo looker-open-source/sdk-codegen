@@ -24,8 +24,10 @@
 
  */
 
-import { Looker40SDK } from '@looker/sdk'
-import { addMinutes, ISheet, ITabTable, SheetSDK } from '@looker/wholly-sheet'
+import type { Looker40SDK } from '@looker/sdk'
+import type { ISheet, ITabTable, SheetSDK } from '@looker/wholly-sheet'
+import { addMinutes } from '@looker/wholly-sheet'
+import type { SheetData } from '../models'
 import {
   Hackathon,
   Hackathons,
@@ -33,7 +35,6 @@ import {
   Judging,
   Project,
   Projects,
-  SheetData,
   User,
   Users,
 } from '../models'

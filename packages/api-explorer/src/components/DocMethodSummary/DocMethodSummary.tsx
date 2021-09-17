@@ -23,9 +23,10 @@
  SOFTWARE.
 
  */
-import React, { FC } from 'react'
+import type { FC } from 'react'
+import React from 'react'
 import { Card, CardContent, Flex, Space, Text } from '@looker/components'
-import { IMethod } from '@looker/sdk-codegen'
+import type { IMethod } from '@looker/sdk-codegen'
 import { MethodBadge, RunItHeading } from '@looker/run-it'
 import { DocActivityType, DocRateLimited } from '../../components'
 import { DocSummaryStatus } from './DocSummaryStatus'

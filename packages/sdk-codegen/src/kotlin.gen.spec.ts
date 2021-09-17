@@ -25,7 +25,7 @@
  */
 
 import { TestConfig } from './testUtils'
-import { IEnumType } from './sdkModels'
+import type { IEnumType } from './sdkModels'
 import { KotlinGen } from './kotlin.gen'
 
 const config = TestConfig()

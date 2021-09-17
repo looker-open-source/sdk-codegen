@@ -25,16 +25,15 @@
  */
 
 import { functionalSdk40 } from '@looker/sdk'
+import type { IAPIMethods, IApiSection, IApiSettings } from '@looker/sdk-rtl'
 import {
   ApiSettings,
   BrowserSession,
   BrowserTransport,
   DefaultSettings,
-  IAPIMethods,
-  IApiSection,
-  IApiSettings,
 } from '@looker/sdk-rtl'
-import { RunItConfigKey, RunItConfigurator } from '../components'
+import type { RunItConfigurator } from '../components'
+import { RunItConfigKey } from '../components'
 
 // https://docs.looker.com/reference/api-and-integration/api-cors
 const settings = {

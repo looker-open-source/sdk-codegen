@@ -23,7 +23,8 @@
  SOFTWARE.
 
  */
-import { SettingsAction, SettingsActionTypes } from './actions'
+import type { SettingsAction } from './actions'
+import { SettingsActionTypes } from './actions'
 
 export interface SettingsState {
   sdkLanguage: string

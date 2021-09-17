@@ -24,8 +24,8 @@
 
  */
 
-import { Readable } from 'readable-stream'
-import {
+import type { Readable } from 'readable-stream'
+import type {
   HttpMethod,
   Values,
   Authenticator,
@@ -33,7 +33,7 @@ import {
   IHostConnection,
 } from '@looker/sdk-rtl'
 
-import { ExtensionHostApi, ApiVersion } from '../connect'
+import type { ExtensionHostApi, ApiVersion } from '../connect'
 
 export class SdkConnection implements IHostConnection {
   constructor(

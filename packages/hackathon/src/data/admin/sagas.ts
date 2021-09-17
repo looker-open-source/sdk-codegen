@@ -24,17 +24,16 @@
 
  */
 import { all, call, put, takeEvery } from 'redux-saga/effects'
-import { SagaIterator } from 'redux-saga'
-import { ValidationMessages } from '@looker/components'
+import type { SagaIterator } from 'redux-saga'
+import type { ValidationMessages } from '@looker/components'
 import { getCore40SDK } from '@looker/extension-sdk-react'
 import { getExtensionSDK } from '@looker/extension-sdk'
-import { IUserAttribute } from '@looker/sdk'
+import type { IUserAttribute } from '@looker/sdk'
 import { actionMessage, beginLoading, endLoading } from '../common/actions'
+import type { AdminUserAttributes, saveUserAttributesRequest } from './actions'
 import {
   Actions,
   loadUserAttributesResponse,
-  AdminUserAttributes,
-  saveUserAttributesRequest,
   saveUserAttributesResponse,
 } from './actions'
 
