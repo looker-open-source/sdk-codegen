@@ -24,37 +24,28 @@
 
  */
 import React from 'react'
-import { screen, waitFor } from '@testing-library/react'
-import userEvent from '@testing-library/user-event'
+import { renderWithTheme } from '@looker/components-test-utils'
+import { screen, fireEvent, waitFor } from '@testing-library/react'
 
 import { api } from '../../test-data'
-import { renderWithRouter } from '../../test-utils'
-import { DocResponses } from './DocResponses'
-import { buildResponseTree } from './utils'
+import { DocTypeSummary } from './DocTypeSummary'
 
-describe('DocResponses', () => {
-  test('it renders all response statuses and their types', async () => {
-    const responses = api.methods.run_look.responses
-    renderWithRouter(<DocResponses api={api} responses={responses} />)
-
-    expect(screen.getByText('Response Models')).toBeInTheDocument()
-
-    const responseTree = buildResponseTree(responses)
-    const expectedRespStatuses = Object.keys(responseTree)
+describe('DocMethodSummary', () => {
+  test('it renders a method summary', async () => {
+    const method = api.methods.run_inline_query
+    renderWithTheme(<DocTypeSummary type={method} />)
     expect(
-      screen.getAllByRole('tab', {
-        name: new RegExp(`${expectedRespStatuses.join('|')}`),
-      })
-    ).toHaveLength(expectedRespStatuses.length)
-
-    userEvent.click(screen.getByRole('tab', { name: '200: Look' }))
-    const successRespTypes = Object.keys(responseTree['200: Look'])
+      screen.getByText(method.httpMethod.toLocaleUpperCase())
+    ).toBeInTheDocument()
+    expect(screen.getByText(method.summary)).toBeInTheDocument()
+    expect(screen.getByText(method.endpoint)).toBeInTheDocument()
     await waitFor(() => {
-      expect(
-        screen.getAllByRole('button', {
-          name: new RegExp(`${successRespTypes.join('|')}`),
-        })
-      ).toHaveLength(successRespTypes.length)
+      const statusIcon = screen.getByLabelText('stable endpoint')
+      fireEvent.mouseOver(statusIcon)
+      expect(screen.getByRole('tooltip')).toHaveTextContent(
+        'This endpoint is considered stable for this API version.'
+      )
     })
+    expect(screen.getByText('db_query')).toBeInTheDocument()
   })
 })

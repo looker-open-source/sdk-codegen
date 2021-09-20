@@ -56,7 +56,7 @@ export const DocMethodSummary: FC<DocMethodSummaryProps> = ({ method }) => (
           </Space>
           <Text color="subdued">{method.endpoint}</Text>
         </Flex>
-        <DocSummaryStatus method={method} />
+        <DocSummaryStatus status={method.status} />
       </Space>
     </CardContent>
   </Card>

@@ -23,16 +23,17 @@
  SOFTWARE.
 
  */
-import type { FC } from 'react'
-import React from 'react'
-import { Tooltip } from '@looker/components'
 
-import { pickStatus, pickTooltipContent } from './utils'
+import type { TypeList } from '@looker/sdk-codegen'
 
-interface DocSummaryStatusProps {
-  status: string
+/**
+ * Given a list of types it returns a list of distinct types
+ * @param types A list of types
+ */
+export const getOperations = (types: TypeList) => {
+  const typeSet = new Set<string>()
+  Object.values(types).forEach((type) => {
+    typeSet.add(type.metaType.toString())
+  })
+  return Array.from(typeSet.values())
 }
-
-export const DocSummaryStatus: FC<DocSummaryStatusProps> = ({ status }) => (
-  <Tooltip content={pickTooltipContent(status)}>{pickStatus(status)}</Tooltip>
-)

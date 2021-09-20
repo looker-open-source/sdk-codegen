@@ -36,11 +36,21 @@ import { buildMethodPath, buildTypePath, highlightHTML } from '../../utils'
  * @param methodName SDK method name
  * @returns Corresponding tag
  */
-const getTag = (api: ApiModel, methodName: string) => {
+const getMethodTag = (api: ApiModel, methodName: string) => {
   // Find tag containing methodName
   return Object.entries(api.tags)
     .filter(([, methods]) => methodName in methods)
     .map(([methodTag]) => methodTag)[0]
+}
+
+/**
+ * Return the tag for a give type
+ * @param api Parsed api
+ * @param type to tag
+ */
+const getTypeTag = (api: ApiModel, type: IType) => {
+  const method = Object.keys(type.methodRefs)[0]
+  return getMethodTag(api, method)
 }
 
 /**
@@ -57,9 +67,11 @@ export const buildPath = (
 ) => {
   let path
   if (item instanceof Method) {
-    path = buildMethodPath(specKey, getTag(api, item.name), item.name)
+    const tag = getMethodTag(api, item.name)
+    path = buildMethodPath(specKey, tag, item.name)
   } else {
-    path = buildTypePath(specKey, item.name)
+    const tag = getTypeTag(api, item as IType)
+    path = buildTypePath(specKey, tag, item.name)
   }
   return path
 }

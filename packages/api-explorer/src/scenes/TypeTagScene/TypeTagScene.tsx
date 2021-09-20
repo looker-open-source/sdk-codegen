@@ -28,36 +28,34 @@ import React, { useEffect, useState } from 'react'
 import { Grid, ButtonToggle, ButtonItem } from '@looker/components'
 import type { ApiModel } from '@looker/sdk-codegen'
 import { useParams, useHistory } from 'react-router-dom'
-import { ApixSection, DocTitle, DocMethodSummary, Link } from '../../components'
-import { buildMethodPath } from '../../utils'
+import { ApixSection, DocTitle, DocTypeSummary, Link } from '../../components'
+import { buildTypePath } from '../../utils'
 import { getOperations } from './utils'
 
-interface TagSceneProps {
+interface TypeTagSceneProps {
   api: ApiModel
 }
 
-interface TagSceneParams {
+interface TypeTagSceneParams {
   specKey: string
-  methodTag: string
+  typeTag: string
 }
 
-export const TagScene: FC<TagSceneProps> = ({ api }) => {
-  const { specKey, methodTag } = useParams<TagSceneParams>()
+export const TypeTagScene: FC<TypeTagSceneProps> = ({ api }) => {
+  const { specKey, typeTag } = useParams<TypeTagSceneParams>()
   const history = useHistory()
-  if (!(methodTag in api.tags)) {
+  if (!(typeTag in api.tags)) {
     history.push('/methods')
   }
-  const methods = api.tags[methodTag]
-  const tag = Object.values(api.spec.tags!).find(
-    (tag) => tag.name === methodTag
-  )!
-  const operations = getOperations(methods)
+  const types = api.typeTags[typeTag]
+  const tag = Object.values(api.spec.tags!).find((tag) => tag.name === typeTag)!
+  const operations = getOperations(types)
   const [value, setValue] = useState('ALL')
 
   useEffect(() => {
     /** Reset ButtonToggle value on route change */
     setValue('ALL')
-  }, [methodTag])
+  }, [typeTag])
 
   return (
     <ApixSection>
@@ -72,15 +70,12 @@ export const TagScene: FC<TagSceneProps> = ({ api }) => {
           </ButtonItem>
         ))}
       </ButtonToggle>
-      {Object.values(methods).map(
-        (method, index) =>
-          (value === method.httpMethod || value === 'ALL') && (
-            <Link
-              key={index}
-              to={buildMethodPath(specKey, tag.name, method.name)}
-            >
+      {Object.values(types).map(
+        (type, index) =>
+          (value === type.metaType.toString() || value === 'ALL') && (
+            <Link key={index} to={buildTypePath(specKey, tag.name, type.name)}>
               <Grid columns={1} py="xsmall">
-                <DocMethodSummary key={index} method={method} />
+                <DocTypeSummary key={index} type={type} />
               </Grid>
             </Link>
           )

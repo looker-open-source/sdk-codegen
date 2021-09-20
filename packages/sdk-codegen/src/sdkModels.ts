@@ -223,6 +223,7 @@ export type KeyedCollection<T> = Record<string, T>
 export type MethodList = KeyedCollection<IMethod>
 export type TypeList = KeyedCollection<IType>
 export type TagList = KeyedCollection<MethodList>
+export type TypeTagList = KeyedCollection<TypeList>
 export type PropertyList = KeyedCollection<IProperty>
 export type KeyList = Set<string>
 export type EnumValueType = string | number
@@ -345,6 +346,20 @@ export interface ISymbolTable extends ISymbolList {
   resolveType(schema: OAS.SchemaObject): IType
 }
 
+/** Type of type */
+export enum MetaType {
+  /** scalar type */
+  Intrinsic = 'Intrinsic',
+  /** from API specification */
+  Specification = 'Specification',
+  /** writeable type */
+  Write = 'Write',
+  /** Request type for API methods */
+  Request = 'Request',
+  /** enumerated type */
+  Enumerated = 'Enumerated',
+}
+
 export interface IType extends ISymbol {
   /**
    * key/value collection of properties for this type
@@ -451,6 +466,11 @@ export interface IType extends ISymbol {
   intrinsic: boolean
 
   /**
+   * type classification
+   */
+  metaType: MetaType
+
+  /**
    * Hacky workaround for inexplicable instanceof failures
    * @param {string} className name of class to check
    * @returns {boolean} true if class name matches this.className
@@ -499,6 +519,33 @@ export interface IMethodResponse {
   search(rx: RegExp, criteria: SearchCriteria): boolean
 
   searchString(criteria: SearchCriteria): string
+}
+
+/**
+ * categorize all types using their method refs
+ *
+ * @param api parsed Api specification
+ * @param types to categorize
+ */
+export const tagTypes = (api: ApiModel, types: TypeList) => {
+  const typeTags = {}
+  Object.entries(types)
+    .filter(([_, type]) => !type.intrinsic)
+    .forEach(([name, type]) => {
+      type.methodRefs.forEach((methodName) => {
+        // The type is tagged for each method's tags
+        const method = api.methods[methodName]
+        for (const tag of method.schema.tags) {
+          let list: TypeList = typeTags[tag]
+          if (!list) {
+            list = {}
+            typeTags[tag] = list
+          }
+          list[name] = type
+        }
+      })
+    })
+  return typeTags
 }
 
 class MethodResponse implements IMethodResponse {
@@ -1458,6 +1505,14 @@ export class Type implements IType {
     this.description = this.schema.description || ''
   }
 
+  get metaType(): MetaType {
+    if (this.intrinsic) return MetaType.Intrinsic
+    if (this instanceof RequestType) return MetaType.Request
+    if (this instanceof WriteType) return MetaType.Write
+    if (this instanceof EnumType) return MetaType.Enumerated
+    return MetaType.Specification
+  }
+
   get fullName(): string {
     return this.name
   }
@@ -1907,6 +1962,7 @@ export class ApiModel implements ISymbolTable, IApiModel {
   methods: MethodList = {}
   types: TypeList = {}
   tags: TagList = {}
+  typeTags: TypeTagList = {}
 
   constructor(public readonly spec: OAS.OpenAPIObject) {
     ;[
@@ -2310,6 +2366,11 @@ export class ApiModel implements ISymbolTable, IApiModel {
     // this.requestTypes = this.sortList(this.requestTypes)
     // this.refs = this.sortList(this.refs)
     this.tags = this.sortList(this.tags)
+    this.typeTags = this.sortList(this.typeTags)
+    const typeKeys = Object.keys(this.typeTags)
+    typeKeys.forEach((key) => {
+      this.typeTags[key] = this.sortList(this.typeTags[key])
+    })
     // commented out to leave methods in natural order within the tag
     // const keys = Object.keys(this.tags).sort(localeSort)
     // keys.forEach((key) => {
@@ -2359,6 +2420,7 @@ export class ApiModel implements ISymbolTable, IApiModel {
       })
     }
     this.loadDynamicTypes()
+    this.typeTags = tagTypes(this, this.types)
     this.sortLists()
   }
 

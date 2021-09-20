@@ -30,17 +30,17 @@ import userEvent from '@testing-library/user-event'
 
 import { api } from '../../test-data'
 import { renderWithRouter } from '../../test-utils'
-import { TagScene } from './TagScene'
+import { MethodTagScene } from './MethodTagScene'
 
 const opBtnNames = /ALL|GET|POST|PUT|PATCH|DELETE/
 
-describe('TagScene', () => {
+describe('MethodTagScene', () => {
   Element.prototype.scrollTo = jest.fn()
 
   test('it renders operation buttons and all methods for a given method tag', () => {
     renderWithRouter(
       <Route path="/:specKey/methods/:methodTag">
-        <TagScene api={api} />
+        <MethodTagScene api={api} />
       </Route>,
       ['/3.1/methods/ColorCollection']
     )
@@ -64,7 +64,7 @@ describe('TagScene', () => {
     /** ApiAuth contains two POST methods and a DELETE method */
     renderWithRouter(
       <Route path="/:specKey/methods/:methodTag">
-        <TagScene api={api} />
+        <MethodTagScene api={api} />
       </Route>,
       ['/3.1/methods/ApiAuth']
     )
@@ -78,7 +78,7 @@ describe('TagScene', () => {
   test('it filters methods by operation type', async () => {
     renderWithRouter(
       <Route path="/:specKey/methods/:methodTag">
-        <TagScene api={api} />
+        <MethodTagScene api={api} />
       </Route>,
       ['/3.1/methods/Look']
     )
