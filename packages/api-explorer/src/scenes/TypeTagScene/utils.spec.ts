@@ -24,11 +24,11 @@
 
  */
 import { api } from '../../test-data'
-import { getOperations } from './utils'
+import { getMetaTypes } from './utils'
 
-describe('MethodTagScene utils', () => {
-  test('getOperations returns a unique list of operations', () => {
-    const actual = getOperations(api.tags.Query)
-    expect(actual).toHaveLength(new Set(actual).size)
+describe('TypeTagScene utils', () => {
+  test('getMetaTypes returns a unique list of MetaTypes', () => {
+    const actual = getMetaTypes(api.typeTags.Query)
+    expect(actual).toHaveLength(4)
   })
 })

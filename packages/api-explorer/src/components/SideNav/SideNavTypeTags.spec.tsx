@@ -23,6 +23,7 @@
  SOFTWARE.
 
  */
+
 import React from 'react'
 import pick from 'lodash/pick'
 import { screen } from '@testing-library/react'
@@ -30,14 +31,14 @@ import userEvent from '@testing-library/user-event'
 
 import { api } from '../../test-data'
 import { renderWithSearchAndRouter } from '../../test-utils'
-import { SideNavMethodTags } from './SideNavMethodTags'
+import { SideNavTypeTags } from './SideNavTypeTags'
 
-describe('SideNavTags', () => {
-  const tags = pick(api.tags, ['ApiAuth', 'Dashboard'])
+describe('SideNavTypeTags', () => {
+  const tags = pick(api.typeTags, ['ApiAuth', 'Dashboard'])
   test('it renders a provided tag and its methods', () => {
-    renderWithSearchAndRouter(<SideNavMethodTags tags={tags} specKey={'3.1'} />)
+    renderWithSearchAndRouter(<SideNavTypeTags tags={tags} specKey={'3.1'} />)
     const tag = screen.getByText('Dashboard')
-    const tagContent = 'Create Dashboard'
+    const tagContent = 'CreateDashboardFilter'
     expect(screen.queryByText(tagContent)).not.toBeInTheDocument()
     userEvent.click(tag)
     expect(screen.getByText(tagContent)).toBeInTheDocument()
@@ -46,30 +47,31 @@ describe('SideNavTags', () => {
   })
 
   test('tags are rendered initially collapsed and expand when clicked', () => {
-    renderWithSearchAndRouter(<SideNavMethodTags tags={tags} specKey={'3.1'} />)
+    renderWithSearchAndRouter(<SideNavTypeTags tags={tags} specKey={'3.1'} />)
 
     const allTags = screen.getAllByText(/ApiAuth|Dashboard/)
     expect(allTags).toHaveLength(2)
-    expect(screen.queryByText('Login')).not.toBeInTheDocument()
-    expect(screen.queryByText('Create Dashboard')).not.toBeInTheDocument()
+    expect(screen.queryByText('AccessToken')).not.toBeInTheDocument()
+    expect(screen.queryByText('CreateDashboardFilter')).not.toBeInTheDocument()
     userEvent.click(allTags[0])
-    expect(screen.getByText('Login')).toBeInTheDocument()
-    expect(screen.queryByText('Create Dashboard')).not.toBeInTheDocument()
+    expect(screen.getByText('AccessToken')).toBeInTheDocument()
+    expect(screen.queryByText('CreateDashboardFilter')).not.toBeInTheDocument()
   })
 
   test('tag is expanded if specified in route', () => {
+    const tags = pick(api.typeTags, ['ApiAuth', 'DataAction'])
     renderWithSearchAndRouter(
-      <SideNavMethodTags tags={tags} specKey={'3.1'} />,
+      <SideNavTypeTags tags={tags} specKey={'3.1'} />,
       undefined,
       undefined,
-      ['/3.1/methods/Dashboard']
+      ['/3.1/types/DataAction']
     )
 
-    const allTags = screen.getAllByText(/^(ApiAuth|Dashboard)$/)
+    const allTags = screen.getAllByText(/^(ApiAuth|DataAction)$/)
     expect(allTags).toHaveLength(2)
-    expect(screen.queryByText('Login')).not.toBeInTheDocument()
+    expect(screen.queryByText('AccessToken')).not.toBeInTheDocument()
     expect(screen.getAllByRole('link')).toHaveLength(
-      Object.keys(tags.Dashboard).length
+      Object.keys(tags.DataAction).length
     )
   })
 })

@@ -369,6 +369,13 @@ describe('sdkModels', () => {
       ])
     })
 
+    it('WhitelabelConfiguration has no writer', () => {
+      const type = apiTestModel.types.WhitelabelConfiguration
+      expect(type).toBeDefined()
+      const actual = apiTestModel.mayGetWriteableType(type)
+      expect(actual).toBeDefined()
+    })
+
     it('generates writeable type for nested types with some readonly properties', () => {
       const setting = apiTestModel.types.Setting
       const whitelabel = apiTestModel.types.WhitelabelConfiguration

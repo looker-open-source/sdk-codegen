@@ -26,13 +26,18 @@
 
 import type { FC } from 'react'
 import React from 'react'
-import { Card, CardContent, Flex, Space, Text } from '@looker/components'
+import { Card, CardContent, Flex, Space } from '@looker/components'
 import type { IType } from '@looker/sdk-codegen'
 import { MethodBadge, RunItHeading } from '@looker/run-it'
 import { DocSummaryStatus } from '../../components'
 
 interface DocTypeSummaryProps {
   type: IType
+}
+
+const typeDescription = (type: IType) => {
+  if (type.description) return type.description
+  return `${Object.entries(type.properties).length} properties`
 }
 
 export const DocTypeSummary: FC<DocTypeSummaryProps> = ({ type }) => (
@@ -48,13 +53,9 @@ export const DocTypeSummary: FC<DocTypeSummaryProps> = ({ type }) => (
         </MethodBadge>
         <Flex alignItems="start" flexDirection="column" flex="1" mx="small">
           <RunItHeading as="h3" mb="0" pt="0">
-            {type.description}
+            {type.title || type.jsonName}
           </RunItHeading>
-          <Space>
-            <Space>Title:{type.title}</Space>
-            <Space>ElementType:{type.elementType?.name}</Space>
-          </Space>
-          <Text color="subdued">{type.name}</Text>
+          <Space>{typeDescription(type)}</Space>
         </Flex>
         <DocSummaryStatus status={type.status} />
       </Space>

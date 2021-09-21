@@ -35,7 +35,7 @@ describe('DocReferences utils', () => {
 
     test('given a type it creates a type path', () => {
       const path = buildPath(api, api.types.Dashboard, '3.1')
-      expect(path).toEqual('/3.1/types/Dashboard')
+      expect(path).toEqual('/3.1/types/Dashboard/Dashboard')
     })
   })
 })

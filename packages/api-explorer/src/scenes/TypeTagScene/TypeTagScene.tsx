@@ -30,7 +30,7 @@ import type { ApiModel } from '@looker/sdk-codegen'
 import { useParams, useHistory } from 'react-router-dom'
 import { ApixSection, DocTitle, DocTypeSummary, Link } from '../../components'
 import { buildTypePath } from '../../utils'
-import { getOperations } from './utils'
+import { getMetaTypes } from './utils'
 
 interface TypeTagSceneProps {
   api: ApiModel
@@ -49,7 +49,7 @@ export const TypeTagScene: FC<TypeTagSceneProps> = ({ api }) => {
   }
   const types = api.typeTags[typeTag]
   const tag = Object.values(api.spec.tags!).find((tag) => tag.name === typeTag)!
-  const operations = getOperations(types)
+  const operations = getMetaTypes(types)
   const [value, setValue] = useState('ALL')
 
   useEffect(() => {
@@ -72,7 +72,8 @@ export const TypeTagScene: FC<TypeTagSceneProps> = ({ api }) => {
       </ButtonToggle>
       {Object.values(types).map(
         (type, index) =>
-          (value === type.metaType.toString() || value === 'ALL') && (
+          (value === 'ALL' ||
+            value === type.metaType.toString().toUpperCase()) && (
             <Link key={index} to={buildTypePath(specKey, tag.name, type.name)}>
               <Grid columns={1} py="xsmall">
                 <DocTypeSummary key={index} type={type} />

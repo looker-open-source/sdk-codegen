@@ -34,7 +34,7 @@ describe('path utils', () => {
   })
 
   describe('buildTypePath', () => {
-    const path = buildTypePath('3.1', 'WriteDashboard')
-    expect(path).toEqual('/3.1/types/WriteDashboard')
+    const path = buildTypePath('3.1', 'Dashboard', 'WriteDashboard')
+    expect(path).toEqual('/3.1/types/Dashboard/WriteDashboard')
   })
 })

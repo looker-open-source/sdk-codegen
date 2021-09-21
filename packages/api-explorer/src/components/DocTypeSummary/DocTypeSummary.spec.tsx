@@ -25,27 +25,18 @@
  */
 import React from 'react'
 import { renderWithTheme } from '@looker/components-test-utils'
-import { screen, fireEvent, waitFor } from '@testing-library/react'
+import { screen } from '@testing-library/react'
 
 import { api } from '../../test-data'
 import { DocTypeSummary } from './DocTypeSummary'
 
-describe('DocMethodSummary', () => {
-  test('it renders a method summary', async () => {
-    const method = api.methods.run_inline_query
-    renderWithTheme(<DocTypeSummary type={method} />)
+describe('DocTypeSummary', () => {
+  test('it renders a type summary', async () => {
+    const type = api.types.Dashboard
+    renderWithTheme(<DocTypeSummary type={type} />)
     expect(
-      screen.getByText(method.httpMethod.toLocaleUpperCase())
+      screen.getByText(type.metaType.toString().toLocaleUpperCase())
     ).toBeInTheDocument()
-    expect(screen.getByText(method.summary)).toBeInTheDocument()
-    expect(screen.getByText(method.endpoint)).toBeInTheDocument()
-    await waitFor(() => {
-      const statusIcon = screen.getByLabelText('stable endpoint')
-      fireEvent.mouseOver(statusIcon)
-      expect(screen.getByRole('tooltip')).toHaveTextContent(
-        'This endpoint is considered stable for this API version.'
-      )
-    })
-    expect(screen.getByText('db_query')).toBeInTheDocument()
+    expect(screen.getByText(type.jsonName)).toBeInTheDocument()
   })
 })

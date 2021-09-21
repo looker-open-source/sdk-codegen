@@ -74,7 +74,7 @@ export const MethodTagScene: FC<MethodTagSceneProps> = ({ api }) => {
       </ButtonToggle>
       {Object.values(methods).map(
         (method, index) =>
-          (value === method.httpMethod || value === 'ALL') && (
+          (value === 'ALL' || value === method.httpMethod) && (
             <Link
               key={index}
               to={buildMethodPath(specKey, tag.name, method.name)}

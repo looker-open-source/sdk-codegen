@@ -25,7 +25,7 @@
  */
 import React from 'react'
 import type { ApiModel, IMethod, IType } from '@looker/sdk-codegen'
-import { Method } from '@looker/sdk-codegen'
+import { Method, firstMethodRef } from '@looker/sdk-codegen'
 import { Link } from 'react-router-dom'
 import { RunItHeading } from '@looker/run-it'
 import { buildMethodPath, buildTypePath, highlightHTML } from '../../utils'
@@ -49,13 +49,13 @@ const getMethodTag = (api: ApiModel, methodName: string) => {
  * @param type to tag
  */
 const getTypeTag = (api: ApiModel, type: IType) => {
-  const method = Object.keys(type.methodRefs)[0]
-  return getMethodTag(api, method)
+  const method = firstMethodRef(api, type)
+  return getMethodTag(api, method.name)
 }
 
 /**
  * Builds a path matching MethodScene or TypeScene route
- * @param api
+ * @param api parsed api
  * @param item A method or type item
  * @param specKey A string to identify the spec in the url
  * @returns a method or type path
