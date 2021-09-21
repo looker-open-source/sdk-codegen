@@ -123,7 +123,7 @@ data class HyphenType (
       const method = apiTestModel.methods.look
       const actual = gen.makeTheCall(method, inputs)
       const expected = `val response = await sdk.ok<LookWithQuery>(sdk.look(
-    17, "${fields}"))`
+    17, fields = "${fields}"))`
       expect(actual).toEqual(expected)
     })
 
@@ -149,20 +149,16 @@ data class HyphenType (
             view = "users",
             total = true
         )
-    ), "id,user_id,title,description"))`
+    ), fields = "id,user_id,title,description"))`
       expect(actual).toEqual(expected)
     })
 
     it('treats void response type as String', () => {
-      const inputs = { look_id: 17, result_format: 'png' }
+      const inputs = { look_id: 17, result_format: 'png', limit: 10 }
       const method = apiTestModel.methods.run_look
       const actual = gen.makeTheCall(method, inputs)
-      const expected = `val response = await sdk.ok<String>(
-  sdk.run_look(
-    17,
-    "png",
-  )
-)`
+      const expected = `val response = await sdk.ok<String>(sdk.run_look(
+    17, "png", limit = 10))`
       expect(actual).toEqual(expected)
     })
 
@@ -175,14 +171,11 @@ data class HyphenType (
       }
       const method = apiTestModel.methods.create_query_task
       const actual = gen.makeTheCall(method, inputs)
-      const expected = `val response = await sdk.ok(
-  sdk.create_query_task({
-    body: {
-      query_id: 1,
-      result_format: ResultFormat.csv,
-    },
-  })
-)`
+      const expected = `val response = await sdk.ok<QueryTask>(sdk.create_query_task(
+    WriteCreateQueryTask(
+        query_id = 1,
+        result_format = ResultFormat.csv
+    )))`
       expect(actual).toEqual(expected)
     })
 

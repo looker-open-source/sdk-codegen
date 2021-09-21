@@ -213,8 +213,9 @@ import java.util.*
         method.allParams.forEach((p) => {
           const v = this.argValue(this.indentStr, p, inputs)
           if (v !== '') {
-            // const arg = this.useNamedArguments ? `${p.name}=${v}` : v
-            args.push(v)
+            // const arg = this.useNamedArguments ? `${p.name}${this.argSetSep}${v}` : v
+            const arg = !p.required ? `${p.name}${this.argSetSep}${v}` : v
+            args.push(arg)
             if (!p.type.intrinsic) {
               hasComplexArg = true
             }
@@ -234,7 +235,7 @@ import java.util.*
     inputs = trimInputs(inputs)
     const typeName = method.returnType?.type
       ? this.typeMap(method.returnType.type).name
-      : 'void'
+      : 'String'
     const resp = `val response = await sdk.ok<${typeName}>(sdk.${method.name}(`
     const args = this.assignParams(method, inputs)
     return `${resp}${args}))`
@@ -546,7 +547,11 @@ ${props.join(this.propDelimiter)}
         case 'DelimArrayType':
           return { default: this.nullStr, name: `DelimArray<${map.name}>` }
         case 'EnumType':
-          return { default: '', name: type.name }
+          return {
+            default: '',
+            name: type.name,
+            asVal: (_, v) => `${type.name}.${v}`,
+          }
       }
       throw new Error(`Don't know how to handle: ${JSON.stringify(type)}`)
     }
