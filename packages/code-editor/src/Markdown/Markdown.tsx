@@ -68,7 +68,10 @@ export const Markdown: FC<MarkdownProps> = ({
       // Could be a <mark> tag wrapped by an anchor
       const a = findAnchor(e.target)
       if (a) {
-        linkClickHandler(a.pathname, a.href)
+        linkClickHandler(
+          a.getAttribute('pathname') || '',
+          a.getAttribute('href') || ''
+        )
       }
     }
   }
