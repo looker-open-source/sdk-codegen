@@ -581,7 +581,10 @@ export const tagTypes = (api: ApiModel, types: TypeList) => {
     .forEach(([name, type]) => {
       let methods = methodRefs(api, type.methodRefs)
       // If no method is found, look up parents until you get a method
-      if (methods.length === 0) methods = [firstMethodRef(api, type)]
+      if (methods.length === 0) {
+        const first = firstMethodRef(api, type)
+        if (first) methods = [first]
+      }
       methods.forEach((method) => {
         // The type is tagged for each method's tags
         for (const tag of method.schema.tags) {
