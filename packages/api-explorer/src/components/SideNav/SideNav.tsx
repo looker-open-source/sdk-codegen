@@ -26,6 +26,7 @@
 
 import type { FC, Dispatch } from 'react'
 import React, { useContext, useEffect, useState } from 'react'
+import { useHistory } from 'react-router'
 import {
   Heading,
   TabList,
@@ -84,7 +85,15 @@ export const SideNav: FC<SideNavProps> = ({
   if (match && match.params.sideNavTab) {
     defaultIndex = tabNames.indexOf(match.params.sideNavTab)
   }
-  const tabs = useTabs({ defaultIndex })
+  const history = useHistory()
+  const onTabChange = (index: number) => {
+    const pathParts = history.location.pathname.split('/')
+    if (pathParts[2] !== tabNames[index]) {
+      pathParts[2] = tabNames[index]
+      history.push(pathParts.join('/'))
+    }
+  }
+  const tabs = useTabs({ defaultIndex, onChange: onTabChange })
   const { searchSettings, setSearchSettings } = useContext(SearchContext)
   const [pattern, setSearchPattern] = useState(searchSettings.pattern)
   const debouncedPattern = useDebounce(pattern, 250)
@@ -119,6 +128,13 @@ export const SideNav: FC<SideNavProps> = ({
     setSearchResults(results)
     setSearchSettings(setPattern(debouncedPattern!))
   }, [debouncedPattern, specKey, spec])
+
+  useEffect(() => {
+    const { selectedIndex, onSelectTab } = tabs
+    if (defaultIndex !== selectedIndex) {
+      onSelectTab(defaultIndex)
+    }
+  }, [defaultIndex, tabs])
 
   const size = useWindowSize()
   const headlessOffset = headless ? 200 : 120
