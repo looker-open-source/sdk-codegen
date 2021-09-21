@@ -725,8 +725,6 @@ export abstract class CodeGen implements ICodeGen {
   itself = ''
   fileExtension = '.code'
   argDelimiter = ', '
-  argSetSep = ': '
-  hashSetSep = ': '
   paramDelimiter = ',\n'
   propDelimiter = '\n'
   enumDelimiter = ',\n'
@@ -735,6 +733,10 @@ export abstract class CodeGen implements ICodeGen {
   useNamedArguments = true
   useFunctions = false
   useInterfaces = false
+
+  // makeTheCall definitions
+  argSetSep = ': '
+  hashSetSep = ': '
   arrayOpen = '['
   arrayClose = ']'
   hashOpen = '{'
