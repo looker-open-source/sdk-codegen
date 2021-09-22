@@ -24,41 +24,27 @@
 
  */
 
-import type { FC } from 'react'
-import React, { useContext } from 'react'
-import { useHistory } from 'react-router-dom'
-import { Markdown } from '@looker/code-editor'
-import { EnvAdaptorContext, SearchContext } from '../../context'
-import { transformURL } from './utils'
+import * as prettier from 'prettier'
 
-interface DocMarkdownProps {
-  source: string
-  specKey: string
+const prettierTs: prettier.Options = {
+  bracketSpacing: true,
+  endOfLine: 'auto',
+  parser: 'typescript',
+  proseWrap: 'preserve',
+  quoteProps: 'as-needed',
+  semi: false,
+  singleQuote: true,
+  trailingComma: 'es5',
+  arrowParens: 'always',
 }
 
-export const DocMarkdown: FC<DocMarkdownProps> = ({ source, specKey }) => {
-  const { envAdaptor } = useContext(EnvAdaptorContext)
-  const {
-    searchSettings: { pattern },
-  } = useContext(SearchContext)
-
-  const history = useHistory()
-
-  const linkClickHandler = (pathname: string, url: string) => {
-    if (pathname.startsWith(`/${specKey}`)) {
-      history.push(pathname)
-    } else if (url.startsWith(`/${specKey}`)) {
-      history.push(url)
-    } else if (url.startsWith('https://')) {
-      envAdaptor.openBrowserWindow(url)
-    }
-  }
-  return (
-    <Markdown
-      source={source}
-      pattern={pattern}
-      linkClickHandler={linkClickHandler}
-      transformLinkUri={transformURL.bind(null, specKey)}
-    />
-  )
+/**
+ * Format code with Prettier
+ * @param code to format
+ * @param options prettier.Options to override the default processing. Typescript options are the default
+ */
+export const prettify = (code: string, options: prettier.Options = {}) => {
+  const merged: prettier.Options = { ...prettierTs, ...{ options } }
+  const source = prettier.format(code, merged)
+  return source.trimRight()
 }

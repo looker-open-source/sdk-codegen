@@ -111,8 +111,13 @@ export const initDefaultSpecState = (
   location: AbstractLocation
 ): SpecState => {
   const specKey = getSpecKey(location, specList)
+  // Handle bad spec in the URL. Fall back to 4.0
+  let spec = specList[specKey]
+  if (!spec) {
+    spec = specList['4.0']
+  }
   return {
     specList,
-    spec: specList[specKey],
+    spec,
   }
 }
