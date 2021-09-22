@@ -35,7 +35,6 @@ import type {
 import { EnumType, isSpecialName, strBody } from './sdkModels'
 import type { CodeAssignment, IMappedType } from './codeGen'
 import { CodeGen, trimInputs, commentBlock } from './codeGen'
-import { prettify } from './prettify'
 
 /**
  * TypeScript code generator
@@ -290,7 +289,7 @@ export class ${this.packageName}Stream extends APIMethods {
     inputs = trimInputs(inputs)
     const resp = `let response = await sdk.ok(sdk.${method.name}(`
     const args = this.assignParams(method, inputs)
-    return prettify(`${resp}${args}))`)
+    return `${resp}${args}))`
   }
 
   methodHeaderComment(method: IMethod, params: string[] = []) {
