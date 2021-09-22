@@ -26,7 +26,7 @@
 
 import type { FC, Dispatch } from 'react'
 import React, { useContext, useEffect, useState } from 'react'
-import { useHistory } from 'react-router'
+import { useHistory, useLocation } from 'react-router-dom'
 import {
   Heading,
   TabList,
@@ -44,7 +44,6 @@ import type {
   ApiModel,
 } from '@looker/sdk-codegen'
 import { CriteriaToSet } from '@looker/sdk-codegen'
-import { useRouteMatch } from 'react-router-dom'
 
 import { SearchContext } from '../../context'
 import type { SpecAction } from '../../reducers'
@@ -67,30 +66,35 @@ interface SideNavProps {
   specDispatch: Dispatch<SpecAction>
 }
 
-interface SideNavParams {
-  sideNavTab: string
-}
-
 export const SideNav: FC<SideNavProps> = ({
   headless = false,
   specs,
   spec,
   specDispatch,
 }) => {
+  const history = useHistory()
+  const location = useLocation()
   const api = spec.api || ({} as ApiModel)
   const specKey = spec.key
   const tabNames = ['methods', 'types']
-  const match = useRouteMatch<SideNavParams>(`/:specKey/:sideNavTab?`)
-  let defaultIndex = tabNames.indexOf('methods')
-  if (match && match.params.sideNavTab) {
-    defaultIndex = tabNames.indexOf(match.params.sideNavTab)
+  const pathParts = location.pathname.split('/')
+  const sideNavTab = pathParts[1] === 'diff' ? pathParts[3] : pathParts[2]
+  let defaultIndex = tabNames.indexOf(sideNavTab)
+  if (defaultIndex < 0) {
+    defaultIndex = tabNames.indexOf('methods')
   }
-  const history = useHistory()
   const onTabChange = (index: number) => {
-    const pathParts = history.location.pathname.split('/')
-    if (pathParts[2] !== tabNames[index]) {
-      pathParts[2] = tabNames[index]
-      history.push(pathParts.join('/'))
+    const parts = location.pathname.split('/')
+    if (parts[1] === 'diff') {
+      if (parts[3] !== tabNames[index]) {
+        parts[3] = tabNames[index]
+        history.push(parts.join('/'))
+      }
+    } else {
+      if (parts[2] !== tabNames[index]) {
+        parts[2] = tabNames[index]
+        history.push(parts.join('/'))
+      }
     }
   }
   const tabs = useTabs({ defaultIndex, onChange: onTabChange })
