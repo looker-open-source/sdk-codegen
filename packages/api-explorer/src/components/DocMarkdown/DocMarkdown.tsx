@@ -47,6 +47,8 @@ export const DocMarkdown: FC<DocMarkdownProps> = ({ source, specKey }) => {
   const linkClickHandler = (pathname: string, url: string) => {
     if (pathname.startsWith(`/${specKey}`)) {
       history.push(pathname)
+    } else if (url.startsWith(`/${specKey}`)) {
+      history.push(url)
     } else if (url.startsWith('https://')) {
       envAdaptor.openBrowserWindow(url)
     }
