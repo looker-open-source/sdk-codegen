@@ -62,6 +62,7 @@ def update_elements_filters(element: DashboardElement, filter: DashboardFilter) 
     """
     # Keep track of the current result_maker and add to it, otherwise listeners for other filters would be removed
     current_filterables = element.result_maker.filterables
+    element.result_maker.filterables = []
     for filterable in current_filterables:
         new_listens = []
         for each in filterable.listen:
@@ -69,10 +70,7 @@ def update_elements_filters(element: DashboardElement, filter: DashboardFilter) 
         # Add listener for new filter
         new_listens.append(models.ResultMakerFilterablesListen(dashboard_filter_name=filter.name, field=filter.dimension))
         filterable.listen = new_listens
-    
-    # Append the new filterables to a result maker
-    element.result_maker.filterables = []
-    for filterable in current_filterables:
+        # Append the new filterables to a result maker that we can use for the dashboard element
         element.result_maker.filterables.append(
                 models.ResultMakerFilterables(
                 model=filterable.model,
