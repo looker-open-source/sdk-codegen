@@ -226,37 +226,37 @@ data class HyphenType (
       const inputs = { body, fields }
       const method = apiTestModel.methods.create_merge_query
       const actual = gen.makeTheCall(method, inputs)
-      const expected = `val response = await sdk.ok(
-  sdk.create_merge_query({
-    body: {
-      pivots: ['one', 'two', 'three'],
-      sorts: ['a'],
-      source_queries: [
-        {
-          merge_fields: [
-            {
-              field_name: 'merge_1',
-              source_field_name: 'source_1',
-            },
-          ],
-          name: 'first query',
-          query_id: 1,
-        },
-        {
-          merge_fields: [
-            {
-              field_name: 'merge_2',
-              source_field_name: 'source_2',
-            },
-          ],
-          name: 'second query',
-          query_id: 2,
-        },
-      ],
-    },
-    fields: 'id,user_id,title,description',
-  })
-)`
+      const expected = `val response = await sdk.ok<MergeQuery>(sdk.create_merge_query(
+    body = WriteMergeQuery(
+        pivots = arrayOf(
+            "one",
+            "two",
+            "three"
+        ),
+        sorts = arrayOf("a"),
+        source_queries = arrayOf(
+            MergeQuerySourceQuery(
+                merge_fields = arrayOf(
+                    MergeFields(
+                        field_name = "merge_1",
+                        source_field_name = "source_1"
+                    )
+                ),
+                name = "first query",
+                query_id = 1
+            ),
+            MergeQuerySourceQuery(
+                merge_fields = arrayOf(
+                    MergeFields(
+                        field_name = "merge_2",
+                        source_field_name = "source_2"
+                    )
+                ),
+                name = "second query",
+                query_id = 2
+            )
+        )
+    ), fields = "id,user_id,title,description"))`
       expect(actual).toEqual(expected)
     })
 
@@ -268,16 +268,15 @@ data class HyphenType (
       }
       const inputs = { body: query }
       const method = apiTestModel.methods.create_sql_query
-      const expected = `val response = await sdk.ok(
-  sdk.create_sql_query({
-    connection_name: 'looker',
-    model_name: 'the_look',
-    vis_config: {
-      first: 1,
-      second: 'two',
-    },
-  })
-)`
+      const expected = `val response = await sdk.ok<SqlQuery>(sdk.create_sql_query(
+    SqlQueryCreate(
+        connection_name = "looker",
+        model_name = "the_look",
+        vis_config = mapOf(
+            "first" to 1,
+            "second" to "two"
+        )
+    )))`
       const actual = gen.makeTheCall(method, inputs)
       expect(actual).toEqual(expected)
     })
@@ -299,26 +298,26 @@ data class HyphenType (
           third: false,
           token,
         }
-        const expected = `{
-  item: [1],
-  items: [
-    'Abe',
-    'Zeb',
-    {
-      access_token: 'backstage',
-      token_type: 'test',
-      expires_in: 10
-    }
-  ],
-  first: 1,
-  second: 'two',
-  third: false,
-  token: {
-    access_token: 'backstage',
-    token_type: 'test',
-    expires_in: 10
-  }
-}`
+        const expected = `mapOf(
+    "item" to arrayOf(1),
+    "items" to arrayOf(
+        "Abe",
+        "Zeb",
+        mapOf(
+            "access_token" to "backstage",
+            "token_type" to "test",
+            "expires_in" to 10
+        )
+    ),
+    "first" to 1,
+    "second" to "two",
+    "third" to false,
+    "token" to mapOf(
+        "access_token" to "backstage",
+        "token_type" to "test",
+        "expires_in" to 10
+    )
+)`
         const actual = gen.hashValue('', inputs)
         expect(actual).toEqual(expected)
       })
@@ -337,16 +336,16 @@ data class HyphenType (
         }
         const type = apiTestModel.types.MergeQuerySourceQuery
         expect(type).toBeDefined()
-        const expected = `{
-    merge_fields: [
-      {
-        field_name: 'merge_1',
-        source_field_name: 'source_1'
-      }
-    ],
-    name: 'first query',
-    query_id: 1
-  }`
+        const expected = `MergeQuerySourceQuery(
+        merge_fields = arrayOf(
+            MergeFields(
+                field_name = "merge_1",
+                source_field_name = "source_1"
+            )
+        ),
+        name = "first query",
+        query_id = 1
+    )`
         const actual = gen.assignType(gen.indentStr, type, inputs)
         expect(actual).toEqual(expected)
       })
@@ -379,28 +378,28 @@ data class HyphenType (
         const type = props.source_queries.type
         expect(type).toBeDefined()
         const actual = gen.arrayValue('', type, sourceQueries)
-        const expected = `[
-  {
-    merge_fields: [
-      {
-        field_name: 'merge_1',
-        source_field_name: 'source_1'
-      }
-    ],
-    name: 'first query',
-    query_id: 1
-  },
-  {
-    merge_fields: [
-      {
-        field_name: 'merge_2',
-        source_field_name: 'source_2'
-      }
-    ],
-    name: 'second query',
-    query_id: 2
-  }
-]`
+        const expected = `arrayOf(
+    MergeQuerySourceQuery(
+        merge_fields = arrayOf(
+            MergeFields(
+                field_name = "merge_1",
+                source_field_name = "source_1"
+            )
+        ),
+        name = "first query",
+        query_id = 1
+    ),
+    MergeQuerySourceQuery(
+        merge_fields = arrayOf(
+            MergeFields(
+                field_name = "merge_2",
+                source_field_name = "source_2"
+            )
+        ),
+        name = "second query",
+        query_id = 2
+    )
+)`
         expect(actual).toEqual(expected)
       })
     })

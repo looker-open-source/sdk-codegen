@@ -49,12 +49,12 @@ export class KotlinGen extends CodeGen {
   argDelimiter = ', '
   // makeTheCall definitions
   argSetSep = ' = '
-  hashSetSep = '= '
+  hashSetSep = ' to '
   arrayOpen = 'arrayOf('
   arrayClose = ')'
   hashOpen = 'mapOf('
   hashClose = ')'
-  hashKeyQuote = ''
+  hashKeyQuote = '"'
   typeOpen = '('
   typeClose = ')'
   useModelClassForTypes = true
@@ -210,10 +210,6 @@ import java.util.*
     const args: string[] = []
     // child properties are indented one level
     const bump = this.bumper(indent)
-    const value = inputs[type.name]
-    if (!value) {
-      console.log('sad')
-    }
     const v = this.arrayValue(bump, type, inputs)
     args.push(v)
     const open = this.useModelClassForTypes

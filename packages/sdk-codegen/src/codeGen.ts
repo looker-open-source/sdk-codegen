@@ -37,7 +37,6 @@ import type {
 } from './sdkModels'
 import {
   ArrayType,
-  DelimArrayType,
   EnumType,
   HashType,
   mayQuote,
