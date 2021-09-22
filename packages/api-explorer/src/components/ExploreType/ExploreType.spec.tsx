@@ -41,7 +41,9 @@ describe('ExploreType', () => {
   const offsetExpected = 2
 
   test('expands all when openAll is true and expand defaults', () => {
-    renderWithSearchAndRouter(<ExploreType type={targetType} openAll={true} />)
+    renderWithSearchAndRouter(
+      <ExploreType api={api} type={targetType} openAll={true} />
+    )
 
     expect(screen.getByText(targetType.jsonName)).toBeInTheDocument()
     expect(screen.queryAllByText(colors)).toHaveLength(colorsExpected)
@@ -51,7 +53,7 @@ describe('ExploreType', () => {
 
   test('expands nothing if maxDepth is 0', () => {
     renderWithSearchAndRouter(
-      <ExploreType type={targetType} openAll={true} maxDepth={0} />
+      <ExploreType api={api} type={targetType} openAll={true} maxDepth={0} />
     )
 
     expect(screen.getByText(targetType.jsonName)).toBeInTheDocument()
@@ -65,7 +67,7 @@ describe('ExploreType', () => {
 
   test('expands 2 levels only', () => {
     renderWithSearchAndRouter(
-      <ExploreType type={targetType} maxDepth={2} openAll={true} />
+      <ExploreType api={api} type={targetType} maxDepth={2} openAll={true} />
     )
 
     expect(screen.getByText(targetType.jsonName)).toBeInTheDocument()
@@ -81,7 +83,7 @@ describe('ExploreType', () => {
       const path = `/${specKey}/methods/foo`
       renderWithRouter(
         <MemoryRouter initialEntries={[path]}>
-          <ExploreTypeLink type={targetType} />
+          <ExploreTypeLink api={api} type={targetType} />
         </MemoryRouter>
       )
 
@@ -89,7 +91,7 @@ describe('ExploreType', () => {
       expect(actual).toBeInTheDocument()
       expect(actual).toHaveProperty(
         'href',
-        `http://localhost/${specKey}/types/${targetType.jsonName}`
+        `http://localhost/${specKey}/types/ColorCollection/${targetType.jsonName}`
       )
     })
     test('recognizes 4.0', () => {
@@ -97,7 +99,7 @@ describe('ExploreType', () => {
       const path = `/${specKey}/methods/foo`
       renderWithRouter(
         <MemoryRouter initialEntries={[path]}>
-          <ExploreTypeLink type={targetType} />
+          <ExploreTypeLink api={api} type={targetType} />
         </MemoryRouter>
       )
 
@@ -105,7 +107,7 @@ describe('ExploreType', () => {
       expect(actual).toBeInTheDocument()
       expect(actual).toHaveProperty(
         'href',
-        `http://localhost/${specKey}/types/${targetType.jsonName}`
+        `http://localhost/${specKey}/types/ColorCollection/${targetType.jsonName}`
       )
     })
     test('recognizes anything', () => {
@@ -113,7 +115,7 @@ describe('ExploreType', () => {
       const path = `/${specKey}/methods/foo`
       renderWithRouter(
         <MemoryRouter initialEntries={[path]}>
-          <ExploreTypeLink type={targetType} />
+          <ExploreTypeLink api={api} type={targetType} />
         </MemoryRouter>
       )
 
@@ -121,7 +123,7 @@ describe('ExploreType', () => {
       expect(actual).toBeInTheDocument()
       expect(actual).toHaveProperty(
         'href',
-        `http://localhost/${specKey}/types/${targetType.jsonName}`
+        `http://localhost/${specKey}/types/ColorCollection/${targetType.jsonName}`
       )
     })
     test('ignores oauth path', () => {
@@ -129,14 +131,14 @@ describe('ExploreType', () => {
       const path = `/${specKey}/methods/foo`
       renderWithRouter(
         <MemoryRouter initialEntries={[path]}>
-          <ExploreTypeLink type={targetType} />
+          <ExploreTypeLink api={api} type={targetType} />
         </MemoryRouter>
       )
       const actual = screen.getByText(targetType.jsonName)
       expect(actual).toBeInTheDocument()
       expect(actual).toHaveProperty(
         'href',
-        `http://types/${targetType.jsonName}`
+        `http://types/ColorCollection/${targetType.jsonName}`
       )
     })
   })

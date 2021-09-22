@@ -27,7 +27,7 @@
 import type { FC } from 'react'
 import React from 'react'
 import { Tab, TabList, TabPanel, TabPanels, useTabs } from '@looker/components'
-import type { IMethodResponse } from '@looker/sdk-codegen'
+import type { IMethodResponse, ApiModel } from '@looker/sdk-codegen'
 
 import { CollapserCard } from '@looker/run-it'
 import { DocResponseTypes } from './DocResponseTypes'
@@ -35,12 +35,13 @@ import { buildResponseTree } from './utils'
 
 interface DocResponsesProps {
   responses: IMethodResponse[]
+  api: ApiModel
 }
 
 /**
  * Renders a tab list and tab panels for different method response types
  */
-export const DocResponses: FC<DocResponsesProps> = ({ responses }) => {
+export const DocResponses: FC<DocResponsesProps> = ({ api, responses }) => {
   const tabs = useTabs()
 
   if (responses.length === 0) return <></>
@@ -58,7 +59,7 @@ export const DocResponses: FC<DocResponsesProps> = ({ responses }) => {
         <TabPanels {...tabs} pt="0">
           {Object.values(responseTree).map((responses, index) => (
             <TabPanel key={index}>
-              <DocResponseTypes responses={responses} />
+              <DocResponseTypes api={api} responses={responses} />
             </TabPanel>
           ))}
         </TabPanels>

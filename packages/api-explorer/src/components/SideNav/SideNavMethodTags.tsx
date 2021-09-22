@@ -23,18 +23,33 @@
  SOFTWARE.
 
  */
-import { buildMethodPath, buildTypePath } from './path'
 
-describe('path utils', () => {
-  describe('buildMethodPath', () => {
-    test('it builds a method path', () => {
-      const path = buildMethodPath('3.1', 'Dashboard', 'create_dashboard')
-      expect(path).toEqual('/3.1/methods/Dashboard/create_dashboard')
-    })
-  })
+import React from 'react'
+import styled from 'styled-components'
+import type { TagList } from '@looker/sdk-codegen'
+import { SideNavMethods } from './SideNavMethods'
 
-  describe('buildTypePath', () => {
-    const path = buildTypePath('3.1', 'Dashboard', 'WriteDashboard')
-    expect(path).toEqual('/3.1/types/Dashboard/WriteDashboard')
-  })
-})
+interface TagsProps {
+  tags: TagList
+  specKey: string
+  defaultOpen?: boolean
+  className?: string
+}
+
+export const SideNavMethodTags = styled(
+  ({ tags, specKey, className, defaultOpen }: TagsProps) => (
+    <div className={className}>
+      {Object.keys(tags).map((tag) => (
+        <SideNavMethods
+          key={tag}
+          defaultOpen={defaultOpen}
+          tag={tag}
+          methods={tags[tag]}
+          specKey={specKey}
+        />
+      ))}
+    </div>
+  )
+)`
+  padding: 0 ${({ theme }) => theme.space.large};
+`

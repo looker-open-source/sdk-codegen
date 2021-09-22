@@ -25,19 +25,20 @@
  */
 import type { FC } from 'react'
 import React from 'react'
-import type { IMethod } from '@looker/sdk-codegen'
+import type { ApiModel, IMethod } from '@looker/sdk-codegen'
 import { CollapserCard } from '@looker/run-it'
 import { ExploreType } from '../../../components'
 
 interface DocRequestBodyProps {
   method: IMethod
+  api: ApiModel
 }
 
 /**
  * If a method has request body parameters, display them
  * @param method to document
  */
-export const DocRequestBody: FC<DocRequestBodyProps> = ({ method }) => {
+export const DocRequestBody: FC<DocRequestBodyProps> = ({ method, api }) => {
   const bodies = method.bodyParams
   if (bodies.length === 0) return <></>
   const header = bodies.length > 1 ? 'Request bodies' : 'Request body'
@@ -47,6 +48,7 @@ export const DocRequestBody: FC<DocRequestBodyProps> = ({ method }) => {
       <>
         {bodies.map((body) => (
           <ExploreType
+            api={api}
             type={body.type}
             open={false}
             key={`body.${body.name}`}
