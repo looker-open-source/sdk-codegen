@@ -37,6 +37,7 @@ const v31 = `${BASE_URL}/3.1`
 const v40 = `${BASE_URL}/4.0`
 
 describe('API Explorer', () => {
+  const tagHeader = 'h4'
   beforeEach(async () => {
     await jestPuppeteer.resetBrowser()
   })
@@ -47,7 +48,7 @@ describe('API Explorer', () => {
     })
 
     it('renders a method page', async () => {
-      await expect(page).toClick('h5', { text: 'Dashboard' })
+      await expect(page).toClick(tagHeader, { text: 'Dashboard' })
       await Promise.all([
         page.waitForNavigation(),
         expect(page).toClick('a', { text: 'Get All Dashboards' }),
@@ -109,8 +110,8 @@ describe('API Explorer', () => {
       await expect(page).toMatchElement('h3', { text: 'Original Schema' })
     })
 
-    it('renders a tag scene and filters by operation', async () => {
-      await expect(page).toClick('h5', { text: 'ApiAuth' })
+    it('renders a method tag scene and filters by operation', async () => {
+      await expect(page).toClick(tagHeader, { text: 'ApiAuth' })
       await expect(page).toMatchElement('h2', {
         text: 'ApiAuth: API Authentication',
       })
@@ -148,7 +149,7 @@ describe('API Explorer', () => {
       expect(await page.evaluate((x) => x.value, languageHandle)).toEqual(
         'Python'
       )
-      await expect(page).toClick('h5', { text: 'Dashboard' })
+      await expect(page).toClick(tagHeader, { text: 'Dashboard' })
       await expect(page).toClick('a', { text: 'Get All Dashboards' })
       await expect(page).toMatchElement('h3', { text: 'Python Declaration' })
 
