@@ -44,12 +44,6 @@ interface TypeTagSceneParams {
 export const TypeTagScene: FC<TypeTagSceneProps> = ({ api }) => {
   const { specKey, typeTag } = useParams<TypeTagSceneParams>()
   const history = useHistory()
-  if (!(typeTag in api.tags)) {
-    history.push('/methods')
-  }
-  const types = api.typeTags[typeTag]
-  const tag = Object.values(api.spec.tags!).find((tag) => tag.name === typeTag)!
-  const operations = getMetaTypes(types)
   const [value, setValue] = useState('ALL')
 
   useEffect(() => {
@@ -57,6 +51,19 @@ export const TypeTagScene: FC<TypeTagSceneProps> = ({ api }) => {
     setValue('ALL')
   }, [typeTag])
 
+  const types = api.typeTags[typeTag]
+  useEffect(() => {
+    if (!types) {
+      history.push(`/${specKey}/types`)
+    }
+  }, [history, types])
+
+  if (!types) {
+    return <></>
+  }
+
+  const tag = Object.values(api.spec.tags!).find((tag) => tag.name === typeTag)!
+  const metaTypes = getMetaTypes(types)
   return (
     <ApixSection>
       <DocTitle>{`${tag.name}: ${tag.description}`}</DocTitle>
@@ -64,7 +71,7 @@ export const TypeTagScene: FC<TypeTagSceneProps> = ({ api }) => {
         <ButtonItem key="ALL" px="large" py="xsmall">
           ALL
         </ButtonItem>
-        {operations.map((op) => (
+        {metaTypes.map((op) => (
           <ButtonItem key={op} px="large" py="xsmall">
             {op}
           </ButtonItem>
