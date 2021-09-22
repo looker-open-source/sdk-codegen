@@ -24,17 +24,27 @@
 
  */
 
-export * from './codeGen'
-export * from './sdkModels'
-export * from './kotlin.gen'
-export * from './pseudo.gen'
-export * from './python.gen'
-export * from './swift.gen'
-export * from './typescript.gen'
-export * from './csharp.gen'
-export * from './codeGenerators'
-export * from './exampleInfo'
-export * from './declarationInfo'
-export * from './specDiff'
-export * from './specConverter'
-export * from './prettify'
+import * as prettier from 'prettier'
+
+const prettierTs: prettier.Options = {
+  bracketSpacing: true,
+  endOfLine: 'auto',
+  parser: 'typescript',
+  proseWrap: 'preserve',
+  quoteProps: 'as-needed',
+  semi: false,
+  singleQuote: true,
+  trailingComma: 'es5',
+  arrowParens: 'always',
+}
+
+/**
+ * Format code with Prettier
+ * @param code to format
+ * @param options prettier.Options to override the default processing. Typescript options are the default
+ */
+export const prettify = (code: string, options: prettier.Options = {}) => {
+  const merged: prettier.Options = { ...prettierTs, ...{ options } }
+  const source = prettier.format(code, merged)
+  return source.trimRight()
+}
