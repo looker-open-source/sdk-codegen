@@ -1,4 +1,3 @@
-
 import com.looker.rtl.SDKResponse
 import com.looker.sdk.*
 import kotlin.test.assertEquals
@@ -474,7 +473,7 @@ class TestMethods {
 //        assertNotEquals(list.count(), 0, "List should have at least one query")
 //    }
 
-//    @Test
+    //    @Test
     fun testAllSchedulePlans() {
         prepScheduledPlan()
         testAll<ScheduledPlan, Long, ScheduledPlan>(
@@ -540,14 +539,14 @@ class TestMethods {
     fun testCreateAttribute() {
         try {
             val body = WriteUserAttribute(
-                name="git_username",
-                label="Git Username",
-                type="string",
-                value_is_hidden=false,
-                user_can_view=true,
-                user_can_edit=true,
+                name = "git_username",
+                label = "Git Username",
+                type = "string",
+                value_is_hidden = false,
+                user_can_view = true,
+                user_can_edit = true,
                 // Now that Transport.kt uses GSon, this null property will be stripped from the request payload
-                hidden_value_domain_whitelist=null
+                hidden_value_domain_whitelist = null
             )
             val actual = sdk.ok<UserAttribute>(sdk.create_user_attribute(body))
             // We won't get here when there's an error

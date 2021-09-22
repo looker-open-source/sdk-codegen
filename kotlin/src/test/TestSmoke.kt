@@ -159,7 +159,7 @@ class TestSmoke {
             .map { u -> u.id!! }
             .take(2)
             .toTypedArray()
-        val ids: DelimArray<Long> = DelimArray<Long>(userIds)
+        val ids = DelimArray<Long>(userIds)
         val users = sdk.ok<Array<User>>(sdk.all_users(ids = ids))
         assertEquals(2, users.size, "Should retrieve 2 users.")
         assertEquals(userIds[0], users[0].id)

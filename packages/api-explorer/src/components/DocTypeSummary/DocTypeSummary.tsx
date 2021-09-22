@@ -23,16 +23,42 @@
  SOFTWARE.
 
  */
+
 import type { FC } from 'react'
 import React from 'react'
-import { Tooltip } from '@looker/components'
+import { Card, CardContent, Flex, Space } from '@looker/components'
+import type { IType } from '@looker/sdk-codegen'
+import { MethodBadge, RunItHeading } from '@looker/run-it'
+import { DocSummaryStatus } from '../../components'
 
-import { pickStatus, pickTooltipContent } from './utils'
-
-interface DocSummaryStatusProps {
-  status: string
+interface DocTypeSummaryProps {
+  type: IType
 }
 
-export const DocSummaryStatus: FC<DocSummaryStatusProps> = ({ status }) => (
-  <Tooltip content={pickTooltipContent(status)}>{pickStatus(status)}</Tooltip>
+const typeDescription = (type: IType) => {
+  if (type.description) return type.description
+  return `${Object.entries(type.properties).length} properties`
+}
+
+export const DocTypeSummary: FC<DocTypeSummaryProps> = ({ type }) => (
+  <Card maxWidth="50rem" border>
+    <CardContent>
+      <Space align="start" between>
+        <MethodBadge
+          type={type.metaType.toString()}
+          textAlign="center"
+          minWidth="3.7625rem"
+        >
+          {type.metaType.toString().toUpperCase()}
+        </MethodBadge>
+        <Flex alignItems="start" flexDirection="column" flex="1" mx="small">
+          <RunItHeading as="h3" mb="0" pt="0">
+            {type.title || type.jsonName}
+          </RunItHeading>
+          <Space>{typeDescription(type)}</Space>
+        </Flex>
+        <DocSummaryStatus status={type.status} />
+      </Space>
+    </CardContent>
+  </Card>
 )

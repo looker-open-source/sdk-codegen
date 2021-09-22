@@ -83,7 +83,8 @@ describe('SideNav', () => {
         specs={specs}
         spec={specState.spec}
         specDispatch={specDispatch}
-      />
+      />,
+      ['/3.1/methods']
     )
     expect(screen.getAllByText(allTagsPattern)).toHaveLength(2)
     expect(
@@ -92,11 +93,7 @@ describe('SideNav', () => {
 
     userEvent.click(screen.getByRole('tab', { name: /^Types \(\d+\)$/ }))
 
-    // eslint-disable-next-line jest-dom/prefer-in-document
-    expect(screen.queryAllByText(allTagsPattern)).toHaveLength(0)
-    expect(screen.getAllByRole('link', { name: allTypesPattern })).toHaveLength(
-      2
-    )
+    expect(screen.queryAllByText(allTagsPattern)).toHaveLength(2)
   })
 
   test('url determines active tab', () => {
@@ -109,10 +106,7 @@ describe('SideNav', () => {
       ['/3.1/types']
     )
     // eslint-disable-next-line jest-dom/prefer-in-document
-    expect(screen.queryAllByText(allTagsPattern)).toHaveLength(0)
-    expect(screen.getAllByRole('link', { name: allTypesPattern })).toHaveLength(
-      2
-    )
+    expect(screen.queryAllByText(allTagsPattern)).toHaveLength(2)
   })
 })
 

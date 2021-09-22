@@ -23,18 +23,28 @@
  SOFTWARE.
 
  */
-import { buildMethodPath, buildTypePath } from './path'
 
-describe('path utils', () => {
-  describe('buildMethodPath', () => {
-    test('it builds a method path', () => {
-      const path = buildMethodPath('3.1', 'Dashboard', 'create_dashboard')
-      expect(path).toEqual('/3.1/methods/Dashboard/create_dashboard')
-    })
-  })
+import * as prettier from 'prettier'
 
-  describe('buildTypePath', () => {
-    const path = buildTypePath('3.1', 'Dashboard', 'WriteDashboard')
-    expect(path).toEqual('/3.1/types/Dashboard/WriteDashboard')
-  })
-})
+const prettierTs: prettier.Options = {
+  bracketSpacing: true,
+  endOfLine: 'auto',
+  parser: 'typescript',
+  proseWrap: 'preserve',
+  quoteProps: 'as-needed',
+  semi: false,
+  singleQuote: true,
+  trailingComma: 'es5',
+  arrowParens: 'always',
+}
+
+/**
+ * Format code with Prettier
+ * @param code to format
+ * @param options prettier.Options to override the default processing. Typescript options are the default
+ */
+export const prettify = (code: string, options: prettier.Options = {}) => {
+  const merged: prettier.Options = { ...prettierTs, ...{ options } }
+  const source = prettier.format(code, merged)
+  return source.trimRight()
+}

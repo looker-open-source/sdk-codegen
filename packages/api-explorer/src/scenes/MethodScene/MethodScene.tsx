@@ -107,7 +107,7 @@ export const MethodScene: FC<MethodSceneProps> = ({
         history.push(`/${specKey}/methods`)
       }
     }
-  }, [api, history, methodName, specKey])
+  }, [api, history, methodName, methodTag, specKey])
 
   useEffect(() => {
     setInputs(createInputs(api, method))
@@ -156,10 +156,10 @@ export const MethodScene: FC<MethodSceneProps> = ({
           <DocOperation method={method} />
           <DocMarkdown source={method.description} specKey={specKey} />
           <DocSDKs api={api} method={method} />
-          <DocRequestBody method={method} />
+          <DocRequestBody api={api} method={method} />
           <DocSdkUsage method={method} />
           <DocReferences typesUsed={seeTypes} api={api} specKey={specKey} />
-          <DocResponses responses={method.responses} />
+          <DocResponses api={api} responses={method.responses} />
           <DocSchema object={method.schema} />
         </ApixSection>
       )}

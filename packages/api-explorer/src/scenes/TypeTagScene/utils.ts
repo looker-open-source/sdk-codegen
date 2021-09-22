@@ -23,18 +23,17 @@
  SOFTWARE.
 
  */
-import { buildMethodPath, buildTypePath } from './path'
 
-describe('path utils', () => {
-  describe('buildMethodPath', () => {
-    test('it builds a method path', () => {
-      const path = buildMethodPath('3.1', 'Dashboard', 'create_dashboard')
-      expect(path).toEqual('/3.1/methods/Dashboard/create_dashboard')
-    })
-  })
+import type { TypeList } from '@looker/sdk-codegen'
 
-  describe('buildTypePath', () => {
-    const path = buildTypePath('3.1', 'Dashboard', 'WriteDashboard')
-    expect(path).toEqual('/3.1/types/Dashboard/WriteDashboard')
+/**
+ * Given a list of types it returns a list of distinct types
+ * @param types A list of types
+ */
+export const getMetaTypes = (types: TypeList) => {
+  const typeSet = new Set<string>()
+  Object.values(types).forEach((type) => {
+    typeSet.add(type.metaType.toString().toUpperCase())
   })
-})
+  return Array.from(typeSet.values())
+}

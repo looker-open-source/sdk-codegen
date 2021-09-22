@@ -34,15 +34,15 @@ import { buildMethodPath, highlightHTML } from '../../utils'
 import { SearchContext } from '../../context'
 
 interface MethodsProps {
-  className?: string
-  defaultOpen?: boolean
   methods: MethodList
   tag: string
   specKey: string
+  className?: string
+  defaultOpen?: boolean
 }
 
 export const SideNavMethods = styled(
-  ({ className, defaultOpen = false, methods, tag, specKey }: MethodsProps) => {
+  ({ className, methods, tag, specKey, defaultOpen = false }: MethodsProps) => {
     const {
       searchSettings: { pattern },
     } = useContext(SearchContext)
@@ -63,7 +63,7 @@ export const SideNavMethods = styled(
         ? defaultOpen || match.params.methodTag === tag
         : defaultOpen
       setIsOpen(status)
-    }, [defaultOpen])
+    }, [defaultOpen, match])
 
     /* TODO: Fix highlighting. It is applied but it is somehow being overridden */
     return (

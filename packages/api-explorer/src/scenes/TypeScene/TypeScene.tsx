@@ -72,7 +72,7 @@ export const TypeScene: FC<DocTypeProps> = ({ api }) => {
             <DocSource type={type} />
           </Space>
           <Box pb="xlarge">
-            <ExploreType type={type} />
+            <ExploreType api={api} type={type} />
           </Box>
           <DocReferences
             typesUsed={typesUsed}
