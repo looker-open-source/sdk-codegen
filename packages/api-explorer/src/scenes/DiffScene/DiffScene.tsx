@@ -99,11 +99,16 @@ export interface DiffSceneProps {
   toggleNavigation: (target?: boolean) => void
 }
 
+const validateParam = (specs: SpecList, specKey = '') => {
+  return specs[specKey] ? specKey : ''
+}
+
 export const DiffScene: FC<DiffSceneProps> = ({ specs, toggleNavigation }) => {
   const history = useHistory()
   const match = useRouteMatch<{ l: string; r: string }>(`/${diffPath}/:l?/:r?`)
-  const l = match?.params.l || ''
-  const r = match?.params.r || ''
+  const l = validateParam(specs, match?.params.l)
+  const r = validateParam(specs, match?.params.r)
+
   const options = Object.entries(specs).map(([key, spec]) => ({
     value: key,
     label: `${key} (${spec.status})`,
