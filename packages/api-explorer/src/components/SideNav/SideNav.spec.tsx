@@ -83,7 +83,8 @@ describe('SideNav', () => {
         specs={specs}
         spec={specState.spec}
         specDispatch={specDispatch}
-      />
+      />,
+      ['/3.1/methods']
     )
     expect(screen.getAllByText(allTagsPattern)).toHaveLength(2)
     expect(
