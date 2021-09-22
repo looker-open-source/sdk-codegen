@@ -37,6 +37,7 @@ import type {
 } from './sdkModels'
 import {
   ArrayType,
+  DelimArrayType,
   EnumType,
   HashType,
   mayQuote,
@@ -901,6 +902,8 @@ export abstract class CodeGen implements ICodeGen {
       argVal = mt.asVal(indent, val)
     } else if (argType instanceof ArrayType) {
       argVal = this.arrayValue(indent, argType, val)
+      // } else if (argType instanceof DelimArrayType) {
+      //   argVal = this.delimArrayValue(indent, argType, val)
     } else if (argType instanceof HashType) {
       argVal = this.hashValue(indent, val)
     } else if (!argType.intrinsic) {
@@ -992,9 +995,9 @@ export abstract class CodeGen implements ICodeGen {
     let open = this.arrayOpen
     let close = this.arrayClose
     let arrayValDelimiter = this.argDelimiter
-    // multiple intrisinc element or 1 or more non-intrinsic element array
+    // multiple intrinsic elements or 1 or more non-intrinsic element array
     // renders multiple lines
-    if (Object.values(val).length > 1 || !et.intrinsic) {
+    if (val.length > 1 || !et.intrinsic) {
       // the opener uses bump to account for the first argument
       // not getting the proper bump from args.join()
       open = `${open}\n${bump}`
@@ -1013,7 +1016,7 @@ export abstract class CodeGen implements ICodeGen {
     // passing `bump` to `asVal` - typically intrinsic asVal ignores
     // indentation but certainly for the assignType case we want the
     // nested object to be indented a level further
-    Object.values(val).forEach((v) => args.push(asVal(bump, v)))
+    val.forEach((v: any) => args.push(asVal(bump, v)))
     return open + args.join(arrayValDelimiter) + close
   }
 

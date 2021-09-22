@@ -181,15 +181,18 @@ data class HyphenType (
 
     it('assigns a DelimArray', () => {
       const inputs = {
-        ids: new DelimArray<number>([1, 2, 3]),
+        tests: new DelimArray<string>(['1', '2', '3']),
       }
-      const method = apiTestModel.methods.all_users
+      const method = apiTestModel.methods.test_connection
       const actual = gen.makeTheCall(method, inputs)
-      const expected = `val response = await sdk.ok(
-  sdk.all_users({
-    ids: new DelimArray<number>([1, 2, 3]),
-  })
-)`
+      const expected = `val response = await sdk.ok<Array<DBConnectionTestResult>>(sdk.test_connection(
+    tests = DelimArray<String>(
+        arrayOf(
+            "1",
+            "2",
+            "3"
+        )
+    )))`
       expect(actual).toEqual(expected)
     })
 

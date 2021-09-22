@@ -50,7 +50,7 @@ export class KotlinGen extends CodeGen {
   // makeTheCall definitions
   argSetSep = ' = '
   hashSetSep = '= '
-  arrayOpen = 'Array('
+  arrayOpen = 'arrayOf('
   arrayClose = ')'
   hashOpen = 'mapOf('
   hashClose = ')'
@@ -197,31 +197,50 @@ import java.util.*
     )
   }
 
+  /**
+   * Maps input values into type
+   * @param indent starting indent level
+   * @param type that receives assignments
+   * @param inputs to assign to type
+   */
+  assignType(indent: string, type: IType, inputs: ArgValues): string {
+    const result = super.assignType(indent, type, inputs)
+    if (result || type.className !== 'DelimArrayType') return result
+    const mt = this.typeMap(type)
+    const args: string[] = []
+    // child properties are indented one level
+    const bump = this.bumper(indent)
+    const value = inputs[type.name]
+    if (!value) {
+      console.log('sad')
+    }
+    const v = this.arrayValue(bump, type, inputs)
+    args.push(v)
+    const open = this.useModelClassForTypes
+      ? `${mt.name}${this.typeOpen}`
+      : this.typeOpen
+    const nl = `,\n${bump}`
+    // need a bump after `open` to account for the first argument
+    // not getting the proper bump from args.join()
+    return `${open}\n${bump}${args.join(nl)}\n${indent}${this.typeClose}`
+  }
+
   // overridden from CodeGen
   assignParams(method: IMethod, inputs: ArgValues): string {
     const args: string[] = []
     let hasComplexArg = false
     if (Object.keys(inputs).length > 0) {
-      let requestType: IType | undefined
-      if (
-        !this.useNamedArguments &&
-        (requestType = this.api.getRequestType(method))
-      ) {
-        args.push(this.assignType(this.indentStr, requestType, inputs))
-        hasComplexArg = true
-      } else {
-        method.allParams.forEach((p) => {
-          const v = this.argValue(this.indentStr, p, inputs)
-          if (v !== '') {
-            // const arg = this.useNamedArguments ? `${p.name}${this.argSetSep}${v}` : v
-            const arg = !p.required ? `${p.name}${this.argSetSep}${v}` : v
-            args.push(arg)
-            if (!p.type.intrinsic) {
-              hasComplexArg = true
-            }
+      method.allParams.forEach((p) => {
+        const v = this.argValue(this.indentStr, p, inputs)
+        if (v !== '') {
+          // const arg = this.useNamedArguments ? `${p.name}${this.argSetSep}${v}` : v
+          const arg = !p.required ? `${p.name}${this.argSetSep}${v}` : v
+          args.push(arg)
+          if (!p.type.intrinsic) {
+            hasComplexArg = true
           }
-        })
-      }
+        }
+      })
     }
     let open = ''
     if (args.length > 1 || hasComplexArg) {
