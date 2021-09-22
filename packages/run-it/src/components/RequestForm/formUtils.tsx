@@ -23,6 +23,7 @@
  SOFTWARE.
 
  */
+
 import type { BaseSyntheticEvent } from 'react'
 import React, { Fragment } from 'react'
 import {
@@ -295,4 +296,26 @@ export const updateNullableProp = (
     updatedState[key] = newValue
   }
   return updatedState
+}
+
+/**
+ * Returns an error message if the body is not JSON or application/x-www-form-urlencoded
+ * @param body string to validate
+ */
+export const validateBody = (body: string) => {
+  let result = ''
+  if (body) {
+    if (/[{}"[\]]/g.test(body)) {
+      // most likely JSON
+      try {
+        JSON.parse(body)
+      } catch (e) {
+        result = e.message
+      }
+    }
+  }
+  if (result) {
+    result = `Syntax error in the body: ${result}`
+  }
+  return result
 }

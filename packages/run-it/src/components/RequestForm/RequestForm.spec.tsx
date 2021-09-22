@@ -47,6 +47,48 @@ describe('RequestForm', () => {
     jest.resetAllMocks()
   })
 
+  describe('validation messages', () => {
+    test('validation errors are displayed', () => {
+      const message = 'Invalid message'
+      renderWithTheme(
+        <RequestForm
+          configurator={defaultConfigurator}
+          setVersionsUrl={runItNoSet}
+          inputs={[
+            {
+              name: 'user_id',
+              location: 'path',
+              type: 'string',
+              required: true,
+              description: 'A unique identifier for a user',
+            },
+          ]}
+          handleSubmit={handleSubmit}
+          httpMethod={'GET'}
+          requestContent={requestContent}
+          setRequestContent={setRequestContent}
+          needsAuth={false}
+          hasConfig={true}
+          sdk={mockSdk}
+          setHasConfig={() => true}
+          isExtension={false}
+          validationMessage={message}
+          handleConfig={runItNoSet}
+        />
+      )
+
+      expect(screen.getByRole('img', { name: 'Error' })).toBeInTheDocument()
+      expect(screen.getByText(message)).toBeInTheDocument()
+    })
+
+    test.skip('clear removes validation messages', () => {
+      // TODO implement the clear hook
+    })
+
+    test.skip('clicking run with an invalid body shows a messagebar', () => {
+      // TODO implement the run hook
+    })
+  })
   test('it creates a form with a simple item, submit button, and config button if not an extension', () => {
     renderWithTheme(
       <RequestForm
