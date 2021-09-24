@@ -358,7 +358,7 @@ export class Paging<TSuccess extends ILength, TError>
       this.parse(raw)
       this.items = await sdkOk(this.transport.parseResponse(raw))
       result = { ok: true, value: this.items }
-    } catch (e) {
+    } catch (e: any) {
       result = { ok: false, error: e }
     }
     return result

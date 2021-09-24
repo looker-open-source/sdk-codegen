@@ -188,7 +188,7 @@ describe('WhollySheet', () => {
       try {
         await sheet.update(row)
         expect('whoops').toEqual('We should never get here')
-      } catch (e) {
+      } catch (e: any) {
         expect(e.message).toMatch(/Row 2 is outdated:/i)
       }
     })
@@ -202,7 +202,7 @@ describe('WhollySheet', () => {
         try {
           await sheet.update(row)
           expect('whoops').toEqual('We should never get here')
-        } catch (e) {
+        } catch (e: any) {
           expect(e.message).toMatch(/row must be > 0 to update/i)
         }
       })

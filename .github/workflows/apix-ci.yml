@@ -56,7 +56,7 @@ jobs:
           yarn build
 
       - name: Run unit tests
-        run: yarn jest "packages/(code-editor|run-it|api-explorer|extension-api-explorer)/src" --reporters=default --reporters=jest-junit
+        run: yarn test:apix --reporters=default --reporters=jest-junit
 
       - name: Upload ts unit test results
         if: ${{ always() }}

@@ -145,7 +145,7 @@ export class Hacker implements IHacker {
         if (this.staffRole) this.roles.add('staff')
         if (this.judgeRole) this.roles.add('judge')
         if (this.adminRole) this.roles.add('admin')
-      } catch (err) {
+      } catch (err: any) {
         if (err.message !== 'Not found') {
           throw err
         }
@@ -298,6 +298,7 @@ export class Hackers extends TypedRows<Hacker> {
       const adminRole = roles.find((r: IRole) => r.name?.match(/admin/i))
       if (adminRole) {
         const users = await this.sdk.ok(
+          // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
           this.sdk.role_users({ fields: 'id', role_id: adminRole.id! })
         )
         admins = users.map((user) => user.id?.toString() || 'no id')
@@ -307,6 +308,7 @@ export class Hackers extends TypedRows<Hacker> {
       )
       if (judgeRole) {
         const users = await this.sdk.ok(
+          // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
           this.sdk.role_users({ fields: 'id', role_id: judgeRole.id! })
         )
         judges = users.map((user) => user.id?.toString() || 'no id')
@@ -316,6 +318,7 @@ export class Hackers extends TypedRows<Hacker> {
       )
       if (staffRole) {
         const users = await this.sdk.ok(
+          // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
           this.sdk.role_users({ fields: 'id', role_id: staffRole.id! })
         )
         staff = users.map((user) => user.id?.toString() || 'no id')

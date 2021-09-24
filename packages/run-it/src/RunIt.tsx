@@ -184,7 +184,7 @@ export const RunIt: FC<RunItProps> = ({
           queryParams,
           body
         )
-      } catch (err) {
+      } catch (err: any) {
         // This should not happen but it could. runRequest uses
         // sdk.ok to login once. sdk.ok throws an error so fake
         // out the response so something can be rendered.

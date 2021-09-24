@@ -247,7 +247,7 @@ describe('LookerNodeSDK', () => {
         )
         // We shouldn't get here but if we do, delete the test attribute
         await sdk.ok(sdk.delete_user_attribute(attrib.id!))
-      } catch (e) {
+      } catch (e: any) {
         // Using this instead of `rejects.toThrowError` because that pattern fails to match valid RegEx condition
         expect(e.message).toMatch(
           /hidden_value_domain_whitelist must be a comma-separated list of urls with optional wildcards/gim
