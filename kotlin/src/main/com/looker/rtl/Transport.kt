@@ -24,7 +24,8 @@
 
 package com.looker.rtl
 
-import com.google.gson.Gson
+import com.google.gson.GsonBuilder
+import com.google.gson.JsonDeserializer
 import io.ktor.client.HttpClient
 import io.ktor.client.call.receive
 import io.ktor.client.engine.okhttp.OkHttp
@@ -180,7 +181,9 @@ fun customClient(options: TransportOptions): HttpClient {
     // This construction loosely adapted from https://ktor.io/clients/http-client/engines.html#artifact-7
     return HttpClient(OkHttp) {
         install(JsonFeature) {
-            serializer = GsonSerializer()
+            serializer = GsonSerializer {
+                registerTypeAdapter(AuthToken::class.java, AuthTokenAdapter())
+            }
         }
         engine {
             config {
