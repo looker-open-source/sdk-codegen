@@ -153,7 +153,7 @@ export const ConfigForm: FC<ConfigFormProps> = ({
       [FETCH_INTENT]:
         base_url !== '' && looker_url !== '' ? POSITIVE : CRITICAL,
     })
-  }, [configurator, getConfig])
+  }, [configurator])
 
   const [validationMessages, setValidationMessages] =
     useState<ValidationMessages>({})
