@@ -166,7 +166,7 @@ export class ExtensionProxyTransport extends BaseTransport {
       } else {
         return { error: res.body, ok: false }
       }
-    } catch (e) {
+    } catch (e: any) {
       const error: ISDKError = {
         message:
           typeof e.message === 'string'

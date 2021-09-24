@@ -210,7 +210,7 @@ export const loadSpecsFromVersions = async (
       return spec.api
     }
     specs = await getSpecsFromVersions(versions, fetchSpec)
-  } catch (e) {
+  } catch (e: any) {
     fetchResult = e.message
   }
 

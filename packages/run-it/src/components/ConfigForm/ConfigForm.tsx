@@ -153,7 +153,7 @@ export const ConfigForm: FC<ConfigFormProps> = ({
       [FETCH_INTENT]:
         base_url !== '' && looker_url !== '' ? POSITIVE : CRITICAL,
     })
-  }, [configurator])
+  }, [configurator, getConfig])
 
   const [validationMessages, setValidationMessages] =
     useState<ValidationMessages>({})
@@ -200,7 +200,7 @@ export const ConfigForm: FC<ConfigFormProps> = ({
           updateMessage(POSITIVE, `Saved ${webUrl} as OAuth server`)
         }
       }
-    } catch (err) {
+    } catch (err: any) {
       fetchError(err.message)
     }
   }

@@ -25,7 +25,6 @@
  */
 
 import type { Readable } from 'readable-stream'
-import { PassThrough } from 'readable-stream'
 import type {
   ISDKError,
   SDKResponse,
@@ -269,7 +268,7 @@ export class BrowserTransport extends BaseTransport {
     }
     let result: SDKResponse<TSuccess, TError>
     if (error) {
-      result = { ok: false, error }
+      result = { ok: false, error: error as TError }
     } else {
       result = { ok: true, value }
     }
@@ -357,7 +356,7 @@ export class BrowserTransport extends BaseTransport {
 
   // TODO finish this method
   async stream<TSuccess>(
-    callback: (readable: Readable) => Promise<TSuccess>,
+    _callback: (readable: Readable) => Promise<TSuccess>,
     method: HttpMethod,
     path: string,
     queryParams?: any,
@@ -366,8 +365,8 @@ export class BrowserTransport extends BaseTransport {
     options?: Partial<ITransportSettings>
   ): Promise<TSuccess> {
     options = options ? { ...this.options, ...options } : this.options
-    const stream = new PassThrough()
-    const returnPromise = callback(stream)
+    // const stream = new PassThrough()
+    // const returnPromise = callback(stream)
     const requestPath = this.makeUrl(path, options, queryParams)
     const props = await this.initRequest(
       method,
@@ -380,10 +379,10 @@ export class BrowserTransport extends BaseTransport {
 
     return Promise.reject<TSuccess>(
       // Silly error message to prevent linter from complaining about unused variables
+      // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+      // @ts-ignore
       Error(
-        `Streaming for${returnPromise ? 'callback' : ''} ${props.method} ${
-          props.requestPath
-        } is not implemented`
+        `Streaming for callback ${props.method} ${props.requestPath} is not implemented`
       )
     )
 
