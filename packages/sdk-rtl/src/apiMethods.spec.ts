@@ -24,10 +24,11 @@
 
  */
 
-import { Authenticator } from './transport'
+import type { Authenticator } from './transport'
 import { APIMethods } from './apiMethods'
-import { IAuthSession } from './authSession'
-import { DefaultSettings, IApiSettings } from './apiSettings'
+import type { IAuthSession } from './authSession'
+import type { IApiSettings } from './apiSettings'
+import { DefaultSettings } from './apiSettings'
 
 describe('ApiMethods', () => {
   const hostname = 'https://looker.sdk'

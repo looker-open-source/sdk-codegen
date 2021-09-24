@@ -23,9 +23,10 @@
  SOFTWARE.
 
  */
-import React, { FC } from 'react'
+import type { FC } from 'react'
+import React from 'react'
 import { Grid, Flex, FlexItem, Code, Heading } from '@looker/components'
-import { DiffRow, IMethod } from '@looker/sdk-codegen'
+import type { DiffRow, IMethod } from '@looker/sdk-codegen'
 import { DiffLegend } from './DiffLegend'
 
 interface DiffBannerProps {

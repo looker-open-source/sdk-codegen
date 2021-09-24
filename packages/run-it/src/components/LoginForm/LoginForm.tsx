@@ -24,12 +24,14 @@
 
  */
 
-import React, { BaseSyntheticEvent, Dispatch, FC } from 'react'
+import type { BaseSyntheticEvent, Dispatch, FC } from 'react'
+import React from 'react'
 import { Button, Tooltip } from '@looker/components'
-import { IAPIMethods } from '@looker/sdk-rtl'
+import type { IAPIMethods } from '@looker/sdk-rtl'
 import { runItSDK } from '../../utils'
-import { RunItFormKey, RunItConfigurator } from '../ConfigForm'
-import { RunItValues, RunItSetter } from '../..'
+import type { RunItConfigurator } from '../ConfigForm'
+import { RunItFormKey } from '../ConfigForm'
+import type { RunItValues, RunItSetter } from '../..'
 
 interface LoginFormProps {
   configurator: RunItConfigurator

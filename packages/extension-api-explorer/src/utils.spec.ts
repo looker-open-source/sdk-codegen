@@ -23,11 +23,9 @@
  SOFTWARE.
 
  */
-import {
-  getThemeOverrides,
-  ThemeOverrides,
-} from '@looker/api-explorer/src/utils'
-import { ExtensionSDK, LookerHostData } from '@looker/extension-sdk'
+import type { ThemeOverrides } from '@looker/api-explorer/src/utils'
+import { getThemeOverrides } from '@looker/api-explorer/src/utils'
+import type { ExtensionSDK, LookerHostData } from '@looker/extension-sdk'
 import { ExtensionEnvAdaptor } from './utils'
 
 describe('ExtensionEnvAdaptor', () => {

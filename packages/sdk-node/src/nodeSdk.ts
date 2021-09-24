@@ -24,7 +24,7 @@
 
  */
 
-import { ITransport, IApiSettings, IAuthSession } from '@looker/sdk-rtl'
+import type { ITransport, IApiSettings, IAuthSession } from '@looker/sdk-rtl'
 import { Looker31SDK, Looker40SDK, environmentPrefix } from '@looker/sdk'
 import { NodeSettingsIniFile, NodeSession, NodeTransport } from '.'
 

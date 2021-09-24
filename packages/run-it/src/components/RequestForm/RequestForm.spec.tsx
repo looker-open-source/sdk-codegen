@@ -29,7 +29,7 @@ import { renderWithTheme } from '@looker/components-test-utils'
 import { act, screen, waitFor } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 
-import { IAPIMethods } from '@looker/sdk-rtl'
+import type { IAPIMethods } from '@looker/sdk-rtl'
 import { defaultConfigurator } from '..'
 import { runItNoSet } from '../..'
 import { RequestForm } from './RequestForm'
@@ -149,6 +149,57 @@ describe('RequestForm', () => {
     userEvent.click(item)
     await waitFor(() => {
       expect(setRequestContent).toHaveBeenLastCalledWith({ [name]: true })
+    })
+  })
+
+  /** Return time that matches day picker in calendar */
+  const noon = () => {
+    const now = new Date()
+    return new Date(
+      now.getFullYear(),
+      now.getMonth(),
+      now.getDate(),
+      12,
+      0,
+      0,
+      0
+    )
+  }
+
+  test('interacting with a date picker changes the request content', async () => {
+    const name = 'date_item'
+    renderWithTheme(
+      <RequestForm
+        configurator={defaultConfigurator}
+        setVersionsUrl={runItNoSet}
+        inputs={[
+          {
+            name,
+            location: 'query',
+            required: true,
+            type: 'datetime',
+            description: 'some datetime item description',
+          },
+        ]}
+        handleSubmit={handleSubmit}
+        httpMethod={'POST'}
+        requestContent={requestContent}
+        setRequestContent={setRequestContent}
+        needsAuth={false}
+        hasConfig={true}
+        sdk={mockSdk}
+        handleConfig={runItNoSet}
+      />
+    )
+
+    const button = screen.getByRole('button', { name: 'Choose' })
+    userEvent.click(button)
+    await waitFor(() => {
+      const today = noon()
+      const pickName = today.toDateString()
+      const cell = screen.getByRole('gridcell', { name: pickName })
+      userEvent.click(cell)
+      expect(setRequestContent).toHaveBeenLastCalledWith({ [name]: today })
     })
   })
 

@@ -23,7 +23,7 @@
  SOFTWARE.
 
  */
-import { ISheet, SheetSDK } from '@looker/wholly-sheet'
+import type { ISheet, SheetSDK } from '@looker/wholly-sheet'
 import { initSheetSDK } from '../../../wholly-sheet/src/testUtils/testUtils'
 import {
   mockAdmin,
@@ -33,7 +33,8 @@ import {
   mockUser,
   wait2Mins,
 } from '../test-data'
-import { initActiveSheet, SheetData } from './SheetData'
+import type { SheetData } from './SheetData'
+import { initActiveSheet } from './SheetData'
 
 let sheetSDK: SheetSDK
 let doc: ISheet

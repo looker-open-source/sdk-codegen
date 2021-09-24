@@ -24,11 +24,11 @@
 
  */
 
-import { SpecList } from '@looker/sdk-codegen'
-import { Location as HLocation } from 'history'
+import type { SpecList } from '@looker/sdk-codegen'
+import type { Location as HLocation } from 'history'
 import { OAuthSession } from '@looker/sdk-rtl'
 import { diffPath, oAuthPath } from '../../utils'
-import { SpecState } from './reducer'
+import type { SpecState } from './reducer'
 
 export type AbstractLocation = HLocation | Location
 
@@ -111,8 +111,13 @@ export const initDefaultSpecState = (
   location: AbstractLocation
 ): SpecState => {
   const specKey = getSpecKey(location, specList)
+  // Handle bad spec in the URL. Fall back to 4.0
+  let spec = specList[specKey]
+  if (!spec) {
+    spec = specList['4.0']
+  }
   return {
     specList,
-    spec: specList[specKey],
+    spec,
   }
 }

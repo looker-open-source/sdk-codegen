@@ -23,30 +23,22 @@
  SOFTWARE.
 
  */
-import React, { BaseSyntheticEvent, Fragment } from 'react'
+import type { BaseSyntheticEvent } from 'react'
+import React, { Fragment } from 'react'
 import {
-  FieldText,
-  FieldToggleSwitch,
+  ToggleSwitch,
   Label,
   FieldCheckbox,
+  ButtonOutline,
+  Box,
+  Popover,
+  InputText,
 } from '@looker/components'
-import { InputDate } from '@looker/components-date'
+import { DateFormat, InputDate } from '@looker/components-date'
 import { CodeEditor } from '@looker/code-editor'
 
-import { RunItInput, RunItValues } from '../../RunIt'
-
-const inputTextType = (type: string) => {
-  switch (type) {
-    case 'number':
-      return 'number'
-    case 'email':
-      return 'email'
-    case 'password':
-      return 'password'
-    default:
-      return 'text'
-  }
-}
+import type { RunItInput, RunItValues } from '../../RunIt'
+import { FormItem } from './FormItem'
 
 /**
  * Creates a datetime form item
@@ -61,13 +53,33 @@ const createDateItem = (
   handleChange: (name: string, date?: Date) => void,
   requestContent: RunItValues
 ) => (
-  <div key={name}>
-    <Label>{name}</Label>
-    <InputDate
-      defaultValue={name in requestContent ? requestContent[name] : undefined}
-      onChange={handleChange.bind(null, name)}
-    />
-  </div>
+  <FormItem key={`${name}_fid`} id={name} label={name}>
+    <Popover
+      key={`${name}_pop`}
+      placement="bottom-start"
+      content={
+        <Box key={`${name}_popbox`} p="u3">
+          <InputDate
+            key={`datepick_${name}`}
+            defaultValue={
+              name in requestContent ? requestContent[name] : undefined
+            }
+            onChange={handleChange.bind(null, name)}
+          />
+        </Box>
+      }
+    >
+      <ButtonOutline type="button" key={`${name}_pop_button`}>
+        {name in requestContent ? (
+          <DateFormat key={`${name}_dateformat`}>
+            {name in requestContent ? requestContent[name] : undefined}
+          </DateFormat>
+        ) : (
+          'Choose'
+        )}
+      </ButtonOutline>
+    </Popover>
+  </FormItem>
 )
 
 /**
@@ -84,19 +96,35 @@ const createBoolItem = (
   handleChange: (e: BaseSyntheticEvent) => void,
   requestContent: RunItValues
 ) => (
-  <div key={name}>
-    {description && <Label>{description}</Label>}
-    <FieldToggleSwitch
-      name={name}
-      label={name}
-      onChange={handleChange}
-      on={name in requestContent ? requestContent[name] : false}
-    />
-  </div>
+  <FormItem key={`${name}_fib`} id={name} label={name}>
+    <>
+      <ToggleSwitch
+        key={name}
+        id={name}
+        name={name}
+        onChange={handleChange}
+        on={name in requestContent ? requestContent[name] : false}
+      />
+      {description && <Label>{description}</Label>}
+    </>
+  </FormItem>
 )
 
+const inputTextType = (type: string) => {
+  switch (type) {
+    case 'number':
+      return 'number'
+    case 'email':
+      return 'email'
+    case 'password':
+      return 'password'
+    default:
+      return 'text'
+  }
+}
+
 /**
- *
+ * Create a field text input item based on definitions
  * @param name Form item's name
  * @param description Form item's description
  * @param required Form item's required flag
@@ -115,19 +143,18 @@ const createItem = (
   handleChange: (e: BaseSyntheticEvent) => void,
   requestContent: RunItValues
 ) => (
-  <div key={name}>
-    <FieldText
+  <FormItem key={`${name}_fi`} id={name} label={name}>
+    <InputText
       key={name}
+      id={name}
       name={name}
-      label={name}
       required={required}
       placeholder={`${placeholder} ${description || name}`}
       type={inputTextType(type)}
       value={name in requestContent ? requestContent[name] : ''}
       onChange={handleChange}
-      width="100%"
     />
-  </div>
+  </FormItem>
 )
 
 /**
@@ -219,9 +246,9 @@ export const createComplexItem = (
   handleComplexChange: (value: string, name: string) => void,
   requestContent: RunItValues
 ) => (
-  <div key={input.name}>
-    <Label>{input.name}</Label>
+  <FormItem key={`${input.name}_fic`} id={input.name} label={input.name}>
     <CodeEditor
+      key={`code_${input.name}`}
       language="json"
       code={
         input.name in requestContent
@@ -232,18 +259,21 @@ export const createComplexItem = (
       onChange={handleComplexChange.bind(null, input.name)}
       transparent={true}
     />
-  </div>
+  </FormItem>
 )
 
 /**
  * Creates a required checkbox form item
  */
 export const showDataChangeWarning = () => (
-  <FieldCheckbox
-    key="warning"
-    required
-    label="I understand that this API endpoint will change data."
-  />
+  <FormItem key="warningfi" id="change_warning">
+    <FieldCheckbox
+      name="warning"
+      key="warning"
+      required
+      label="I understand that this API endpoint will change data."
+    />
+  </FormItem>
 )
 
 /**

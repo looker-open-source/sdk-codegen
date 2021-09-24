@@ -24,9 +24,11 @@
 
  */
 
-import React, { FC, useContext } from 'react'
+import type { FC } from 'react'
+import React, { useContext } from 'react'
 import { Heading } from '@looker/components'
-import { TypeList, IntrinsicType } from '@looker/sdk-codegen'
+import type { TypeList } from '@looker/sdk-codegen'
+import { IntrinsicType } from '@looker/sdk-codegen'
 import styled from 'styled-components'
 import { Link } from '../Link'
 import { buildTypePath, highlightHTML } from '../../utils'

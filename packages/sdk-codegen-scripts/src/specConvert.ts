@@ -25,9 +25,10 @@
  */
 import * as path from 'path'
 import { log } from '@looker/sdk-codegen-utils'
-import { IApiVersion } from '@looker/sdk'
+import type { IApiVersion } from '@looker/sdk'
 import { getSpecsFromVersions } from '@looker/sdk-codegen'
-import { ISDKConfigProps, SDKConfig } from './sdkConfig'
+import type { ISDKConfigProps } from './sdkConfig'
+import { SDKConfig } from './sdkConfig'
 import { convertSpec } from './convert'
 import { quit } from './nodeUtils'
 import { fetchLookerVersions, logConvertSpec } from './fetchSpec'

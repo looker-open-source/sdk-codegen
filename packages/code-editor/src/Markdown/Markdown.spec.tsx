@@ -125,9 +125,11 @@ Before.
 After.
     `
     const { container } = renderWithTheme(<Markdown source={markdown} />)
+    // eslint-disable-next-line testing-library/no-container
     expect(container.querySelector('th')?.innerHTML).toContain(
       'Search Parameters'
     )
+    // eslint-disable-next-line testing-library/no-container
     expect(container.querySelector('td')?.innerHTML).toContain('begin_at')
   })
 })

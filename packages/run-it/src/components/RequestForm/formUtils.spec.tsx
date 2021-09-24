@@ -23,12 +23,13 @@
  SOFTWARE.
 
  */
+
 import { screen, fireEvent, waitFor } from '@testing-library/react'
 import { renderWithTheme } from '@looker/components-test-utils'
 import userEvent from '@testing-library/user-event'
-import { BaseSyntheticEvent } from 'react'
+import type { BaseSyntheticEvent } from 'react'
 
-import { RunItInput } from '../../RunIt'
+import type { RunItInput } from '../../RunIt'
 import {
   createComplexItem,
   createSimpleItem,
@@ -207,9 +208,13 @@ describe('Simple Items', () => {
       description: 'A simple item of type datetime',
     })
 
-    test('it creates a datetime item', () => {
+    test('it creates a datetime item', async () => {
       renderWithTheme(DateItem)
-      expect(screen.getByTestId('text-input')).toBeInTheDocument()
+      const button = screen.getByRole('button', { name: 'Choose' })
+      userEvent.click(button)
+      await waitFor(() => {
+        expect(screen.getByTestId('text-input')).toBeInTheDocument()
+      })
     })
   })
 

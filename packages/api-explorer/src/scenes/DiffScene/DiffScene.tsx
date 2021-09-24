@@ -24,8 +24,9 @@
 
  */
 
-import React, { FC, useState, useEffect } from 'react'
-import { ApiModel, DiffRow, SpecList, SpecItem } from '@looker/sdk-codegen'
+import type { FC } from 'react'
+import React, { useState, useEffect } from 'react'
+import type { ApiModel, DiffRow, SpecList, SpecItem } from '@looker/sdk-codegen'
 import { useHistory, useRouteMatch } from 'react-router-dom'
 import {
   Box,
@@ -98,11 +99,16 @@ export interface DiffSceneProps {
   toggleNavigation: (target?: boolean) => void
 }
 
+const validateParam = (specs: SpecList, specKey = '') => {
+  return specs[specKey] ? specKey : ''
+}
+
 export const DiffScene: FC<DiffSceneProps> = ({ specs, toggleNavigation }) => {
   const history = useHistory()
   const match = useRouteMatch<{ l: string; r: string }>(`/${diffPath}/:l?/:r?`)
-  const l = match?.params.l || ''
-  const r = match?.params.r || ''
+  const l = validateParam(specs, match?.params.l)
+  const r = validateParam(specs, match?.params.r)
+
   const options = Object.entries(specs).map(([key, spec]) => ({
     value: key,
     label: `${key} (${spec.status})`,

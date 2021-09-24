@@ -25,9 +25,9 @@
  */
 
 import { AuthToken } from './authToken'
-import { IApiSettings } from './apiSettings'
-import { ITransport, IRequestProps } from './transport'
-import { IAccessToken } from './authSession'
+import type { IApiSettings } from './apiSettings'
+import type { ITransport, IRequestProps } from './transport'
+import type { IAccessToken } from './authSession'
 import { MockOauthSettings } from './oauthSession.spec'
 import { BrowserSession } from './browserSession'
 

@@ -24,7 +24,7 @@
 
  */
 import path from 'path'
-import { DeclarationNuggets, IDeclarationMine } from '@looker/sdk-codegen'
+import type { DeclarationNuggets, IDeclarationMine } from '@looker/sdk-codegen'
 
 import {
   filterCodeFiles,

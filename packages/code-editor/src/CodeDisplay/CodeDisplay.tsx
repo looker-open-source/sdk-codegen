@@ -24,7 +24,8 @@
 
  */
 
-import React, { FC } from 'react'
+import type { FC } from 'react'
+import React from 'react'
 import styled from 'styled-components'
 import { Span } from '@looker/components'
 import Highlight, { defaultProps, Prism } from 'prism-react-renderer'
@@ -32,13 +33,14 @@ import Highlight, { defaultProps, Prism } from 'prism-react-renderer'
 import { getPrismLanguage, getOverriddenTheme } from '../utils'
 import { CodeWrapper } from './CodeWrapper'
 import { LineItem } from './LineItem'
-import { CodeDisplayProps } from './types'
+import type { CodeDisplayProps } from './types'
 ;(typeof global !== 'undefined' ? (global as any) : (window as any)).Prism =
   Prism
 require('prismjs/components/prism-kotlin')
 require('prismjs/components/prism-csharp')
 require('prismjs/components/prism-swift')
 require('prismjs/components/prism-ruby')
+require('prismjs/components/prism-markdown')
 
 const Line = styled(Span)`
   display: table-row;

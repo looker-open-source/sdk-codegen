@@ -23,8 +23,9 @@
  SOFTWARE.
 
  */
-import React, { FC } from 'react'
-import { IMethod } from '@looker/sdk-codegen'
+import type { FC } from 'react'
+import React from 'react'
+import type { IMethod } from '@looker/sdk-codegen'
 import { CollapserCard } from '@looker/run-it'
 import { ExploreType } from '../../../components'
 

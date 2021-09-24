@@ -28,6 +28,7 @@ import { readFileSync } from 'fs'
 import cloneDeep from 'lodash/cloneDeep'
 import isEmpty from 'lodash/isEmpty'
 import { NodeSettingsIniFile, LookerNodeSDK } from '@looker/sdk-node'
+import type { ISpecItem } from '@looker/sdk-codegen'
 import {
   fixConversion,
   openApiStyle,
@@ -38,7 +39,6 @@ import {
   getLookerSpecs,
   getSpecLinks,
   loadSpecs,
-  ISpecItem,
   getSpecsFromVersions,
   compareSpecs,
   ApiModel,

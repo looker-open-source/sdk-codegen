@@ -24,18 +24,17 @@
 
  */
 
-import { CodeGen, IMappedType, commentBlock } from './codeGen'
-import {
+import type { IMappedType } from './codeGen'
+import { CodeGen, commentBlock } from './codeGen'
+import type {
   IMethod,
   IParameter,
   IType,
   IProperty,
-  strBody,
-  firstCase,
   Arg,
-  EnumType,
   EnumValueType,
 } from './sdkModels'
+import { strBody, firstCase, EnumType } from './sdkModels'
 
 // https://docs.microsoft.com/en-us/dotnet/csharp/language-reference/keywords/
 const reservedWords = new Set<string>([

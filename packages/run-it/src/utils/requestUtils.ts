@@ -24,10 +24,10 @@
 
  */
 
-import { IAPIMethods, IRawResponse } from '@looker/sdk-rtl'
+import type { IAPIMethods, IRawResponse } from '@looker/sdk-rtl'
 import cloneDeep from 'lodash/cloneDeep'
 
-import { RunItHttpMethod, RunItInput, RunItValues } from '../RunIt'
+import type { RunItHttpMethod, RunItInput, RunItValues } from '../RunIt'
 import { runItSDK } from './RunItSDK'
 
 /** Hook to set a URL somewhere else in APIX */

@@ -23,7 +23,8 @@
  SOFTWARE.
 
  */
-import React, { FC, useEffect } from 'react'
+import type { FC } from 'react'
+import React, { useEffect } from 'react'
 import styled from 'styled-components'
 import { Page, Layout, Aside, Section, MessageBar } from '@looker/components'
 import { useSelector, useDispatch } from 'react-redux'
@@ -38,7 +39,7 @@ import {
   getCurrentHackathonState,
   getHackerState,
 } from './data/hack_session/selectors'
-import { IHackerProps } from './models'
+import type { IHackerProps } from './models'
 
 interface HackathonProps {}
 

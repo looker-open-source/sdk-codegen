@@ -23,9 +23,10 @@
  SOFTWARE.
 
  */
-import React, { FC } from 'react'
+import type { FC } from 'react'
+import React from 'react'
 import { Tooltip } from '@looker/components'
-import { IMethod } from '@looker/sdk-codegen'
+import type { IMethod } from '@looker/sdk-codegen'
 
 import { pickStatus, pickTooltipContent } from './utils'
 

@@ -25,7 +25,8 @@
  */
 import React from 'react'
 import { Router } from 'react-router'
-import { createMemoryHistory, MemoryHistory } from 'history'
+import type { MemoryHistory } from 'history'
+import { createMemoryHistory } from 'history'
 import { renderWithTheme } from '@looker/components-test-utils'
 import userEvent from '@testing-library/user-event'
 import { act, screen } from '@testing-library/react'

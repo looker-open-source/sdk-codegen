@@ -25,7 +25,7 @@
  */
 
 import React from 'react'
-import { ErrorMessageProps } from './types'
+import type { ErrorMessageProps } from './types'
 
 export const ErrorMessage: React.FC<ErrorMessageProps> = ({ errorMessage }) => (
   <div

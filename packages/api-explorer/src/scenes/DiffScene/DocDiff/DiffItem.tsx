@@ -23,13 +23,14 @@
  SOFTWARE.
 
  */
-import React, { FC, useState, useEffect, BaseSyntheticEvent } from 'react'
+import type { FC, BaseSyntheticEvent } from 'react'
+import React, { useState, useEffect } from 'react'
 import ReactDiffViewer, { DiffMethod } from 'react-diff-viewer'
 import { useHistory } from 'react-router'
 import styled from 'styled-components'
 import { Accordion2, Box, Card, Grid, Heading } from '@looker/components'
-import { DiffRow } from '@looker/sdk-codegen/src'
-import { ApiModel, IMethod } from '@looker/sdk-codegen'
+import type { DiffRow } from '@looker/sdk-codegen/src'
+import type { ApiModel, IMethod } from '@looker/sdk-codegen'
 import { useSelector } from 'react-redux'
 import { getSelectedSdkLanguage } from '../../../state'
 import { buildMethodPath } from '../../../utils'

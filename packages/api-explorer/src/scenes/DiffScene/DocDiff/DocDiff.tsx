@@ -23,7 +23,7 @@
  SOFTWARE.
 
  */
-import { ApiModel, DiffRow } from '@looker/sdk-codegen'
+import type { ApiModel, DiffRow } from '@looker/sdk-codegen'
 import {
   Flex,
   Heading,
@@ -32,7 +32,8 @@ import {
   SpaceVertical,
   Text,
 } from '@looker/components'
-import React, { FC, useState } from 'react'
+import type { FC } from 'react'
+import React, { useState } from 'react'
 import { DiffItem } from './DiffItem'
 
 export interface DocDiffProps {

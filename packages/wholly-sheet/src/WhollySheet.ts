@@ -24,15 +24,11 @@
 
  */
 
-import { ITabTable, SheetError, SheetSDK, SheetValues } from './SheetSDK'
+import type { ITabTable, SheetSDK, SheetValues } from './SheetSDK'
+import { SheetError } from './SheetSDK'
 
-import {
-  ColumnHeaders,
-  IRowModel,
-  RowAction,
-  rowPosition,
-  stringer,
-} from './RowModel'
+import type { ColumnHeaders, IRowModel } from './RowModel'
+import { RowAction, rowPosition, stringer } from './RowModel'
 
 /**
  * Compare dates without running into numeric comparison problems

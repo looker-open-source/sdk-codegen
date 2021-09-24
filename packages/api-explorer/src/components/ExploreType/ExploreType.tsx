@@ -24,9 +24,11 @@
 
  */
 
-import React, { FC } from 'react'
+import type { FC } from 'react'
+import React from 'react'
 import { Code, Tree, TreeItem } from '@looker/components'
-import { IType, TypeOfType, typeOfType } from '@looker/sdk-codegen'
+import type { IType } from '@looker/sdk-codegen'
+import { TypeOfType, typeOfType } from '@looker/sdk-codegen'
 import { useLocation } from 'react-router'
 import { Link } from '../Link'
 import { buildTypePath } from '../../utils'

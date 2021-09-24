@@ -24,7 +24,8 @@
 
  */
 
-import React, { FC, useContext } from 'react'
+import type { FC } from 'react'
+import React, { useContext } from 'react'
 import { useHistory } from 'react-router-dom'
 import { Markdown } from '@looker/code-editor'
 import { EnvAdaptorContext, SearchContext } from '../../context'
@@ -46,6 +47,8 @@ export const DocMarkdown: FC<DocMarkdownProps> = ({ source, specKey }) => {
   const linkClickHandler = (pathname: string, url: string) => {
     if (pathname.startsWith(`/${specKey}`)) {
       history.push(pathname)
+    } else if (url.startsWith(`/${specKey}`)) {
+      history.push(url)
     } else if (url.startsWith('https://')) {
       envAdaptor.openBrowserWindow(url)
     }

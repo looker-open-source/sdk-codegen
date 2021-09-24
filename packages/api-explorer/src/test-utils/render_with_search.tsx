@@ -24,12 +24,14 @@
 
  */
 
-import React, { ReactElement } from 'react'
-import { RenderOptions } from '@testing-library/react'
+import type { ReactElement } from 'react'
+import React from 'react'
+import type { RenderOptions } from '@testing-library/react'
 
 import { renderWithTheme } from '@looker/components-test-utils'
 import { SearchContext, defaultSearchContextValue } from '../context'
-import { defaultSearchState, SearchState } from '../reducers'
+import type { SearchState } from '../reducers'
+import { defaultSearchState } from '../reducers'
 import { withRouter } from './router'
 
 const withSearchProvider = (

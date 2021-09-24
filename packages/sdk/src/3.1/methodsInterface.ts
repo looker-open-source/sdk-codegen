@@ -30,8 +30,8 @@
 
 import type {
   DelimArray,
-  IAPIMethods,
   IDictionary,
+  IAPIMethods,
   ITransportSettings,
   SDKResponse,
 } from '@looker/sdk-rtl'
@@ -756,12 +756,12 @@ export interface ILooker31SDK extends IAPIMethods {
    *
    * POST /parse_saml_idp_metadata -> ISamlMetadataParseResult
    *
-   * @param body Partial<string>
+   * @param body string
    * @param options one-time API call overrides
    *
    */
   parse_saml_idp_metadata(
-    body: Partial<string>,
+    body: string,
     options?: Partial<ITransportSettings>
   ): Promise<SDKResponse<ISamlMetadataParseResult, IError>>
 
@@ -772,12 +772,12 @@ export interface ILooker31SDK extends IAPIMethods {
    *
    * POST /fetch_and_parse_saml_idp_metadata -> ISamlMetadataParseResult
    *
-   * @param body Partial<string>
+   * @param body string
    * @param options one-time API call overrides
    *
    */
   fetch_and_parse_saml_idp_metadata(
-    body: Partial<string>,
+    body: string,
     options?: Partial<ITransportSettings>
   ): Promise<SDKResponse<ISamlMetadataParseResult, IError>>
 

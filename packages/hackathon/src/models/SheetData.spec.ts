@@ -24,7 +24,8 @@
 
  */
 
-import { ISheet, noDate, SheetSDK } from '@looker/wholly-sheet'
+import type { ISheet, SheetSDK } from '@looker/wholly-sheet'
+import { noDate } from '@looker/wholly-sheet'
 import { initSheetSDK } from '../../../wholly-sheet/src/testUtils/testUtils'
 import {
   mockAHacker,
@@ -33,7 +34,7 @@ import {
   wait2Mins,
 } from '../test-data/mocks'
 import { initActiveSheet } from './SheetData'
-import { SheetData, ITeamMemberProps } from '.'
+import type { SheetData, ITeamMemberProps } from '.'
 
 let sheetSDK: SheetSDK
 let doc: ISheet

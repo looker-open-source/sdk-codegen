@@ -23,11 +23,12 @@
  SOFTWARE.
 
  */
-import React, { ReactElement } from 'react'
-import { IRawResponse, ResponseMode, responseMode } from '@looker/sdk-rtl'
+import type { ReactElement } from 'react'
+import React from 'react'
+import type { IRawResponse } from '@looker/sdk-rtl'
+import { ResponseMode, responseMode } from '@looker/sdk-rtl'
 import {
   Paragraph,
-  CodeBlock,
   MessageBar,
   TabList,
   Tab,
@@ -35,7 +36,7 @@ import {
   TabPanel,
   useTabs,
 } from '@looker/components'
-import { CodeDisplay, Markdown } from '@looker/code-editor'
+import { CodeCopy, Markdown } from '@looker/code-editor'
 import { DataGrid, parseCsv, json2Csv } from '../DataGrid'
 
 /**
@@ -53,6 +54,12 @@ export const allSimple = (data: any[]) => {
     }
   }
   return true
+}
+
+const copyRaw = (code: string, language = 'unknown') => {
+  return (
+    <CodeCopy language={language} code={code} lineNumbers={false} transparent />
+  )
 }
 
 /**
@@ -79,7 +86,7 @@ const ShowJSON = (response: IRawResponse) => {
   const data = json2Csv(content)
   const showGrid = isColumnar(data.data)
   const json = JSON.stringify(JSON.parse(response.body), null, 2)
-  const raw = <CodeDisplay code={json} lineNumbers={false} transparent />
+  const raw = copyRaw(json, 'json')
   if (showGrid) return <DataGrid data={data.data} raw={raw} />
   return raw
 }
@@ -88,7 +95,7 @@ const ShowJSON = (response: IRawResponse) => {
 const ShowText = (response: IRawResponse) => (
   <>
     {response.statusMessage !== 'OK' && response.statusMessage}
-    <CodeBlock>{response.body.toString()}</CodeBlock>
+    {copyRaw(response.body.toString())}
   </>
 )
 
@@ -97,14 +104,14 @@ const ShowText = (response: IRawResponse) => (
  * @param response HTTP response to parse and display
  */
 const ShowCSV = (response: IRawResponse) => {
-  const raw = <CodeBlock>{response.body.toString()}</CodeBlock>
+  const raw = copyRaw(response.body.toString())
   const data = parseCsv(response.body.toString())
   return <DataGrid data={data.data} raw={raw} />
 }
 
 const ShowMD = (response: IRawResponse) => {
   const tabs = useTabs()
-  const raw = <CodeBlock>{response.body.toString()}</CodeBlock>
+  const raw = copyRaw(response.body.toString(), 'markup')
   const data = response.body.toString()
   return (
     <>
@@ -139,13 +146,11 @@ const ShowImage = (response: IRawResponse) => {
 }
 
 /** A handler for HTTP type responses */
-const ShowHTML = (response: IRawResponse) => (
-  <CodeDisplay language="html" code={response.body.toString()} transparent />
-)
+const ShowHTML = (response: IRawResponse) =>
+  copyRaw(response.body.toString(), 'html')
 
-const ShowSQL = (response: IRawResponse) => (
-  <CodeDisplay language="sql" code={response.body.toString()} transparent />
-)
+const ShowSQL = (response: IRawResponse) =>
+  copyRaw(response.body.toString(), 'sql')
 
 /**
  * A handler for unknown response types. It renders the size of the unknown response and its type.
@@ -171,11 +176,7 @@ const ShowRaw = (response: IRawResponse) => (
     <MessageBar intent="warn" noActions>
       The response body could not be parsed. Displaying raw data.
     </MessageBar>
-    <CodeDisplay
-      language="unknown"
-      code={response?.body?.toString() || ''}
-      transparent
-    />
+    {copyRaw(response?.body?.toString() || '')}
   </>
 )
 

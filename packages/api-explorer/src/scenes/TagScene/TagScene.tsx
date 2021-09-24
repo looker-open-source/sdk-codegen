@@ -23,10 +23,11 @@
  SOFTWARE.
 
  */
-import React, { FC, useEffect, useState } from 'react'
+import type { FC } from 'react'
+import React, { useEffect, useState } from 'react'
+import { useHistory, useParams } from 'react-router-dom'
 import { Grid, ButtonToggle, ButtonItem } from '@looker/components'
-import { ApiModel } from '@looker/sdk-codegen'
-import { useParams, useHistory } from 'react-router-dom'
+import type { ApiModel } from '@looker/sdk-codegen'
 import { ApixSection, DocTitle, DocMethodSummary, Link } from '../../components'
 import { buildMethodPath } from '../../utils'
 import { getOperations } from './utils'
@@ -43,20 +44,26 @@ interface TagSceneParams {
 export const TagScene: FC<TagSceneProps> = ({ api }) => {
   const { specKey, methodTag } = useParams<TagSceneParams>()
   const history = useHistory()
-  if (!(methodTag in api.tags)) {
-    history.push('/methods')
-  }
-  const methods = api.tags[methodTag]
-  const tag = Object.values(api.spec.tags!).find(
-    (tag) => tag.name === methodTag
-  )!
-  const operations = getOperations(methods)
   const [value, setValue] = useState('ALL')
 
   useEffect(() => {
     /** Reset ButtonToggle value on route change */
     setValue('ALL')
   }, [methodTag])
+
+  const methods = api.tags[methodTag]
+  useEffect(() => {
+    if (!methods) {
+      history.push(`/${specKey}/methods`)
+    }
+  }, [history, methods])
+  if (!methods) {
+    return <></>
+  }
+  const tag = Object.values(api.spec.tags!).find(
+    (tag) => tag.name === methodTag
+  )!
+  const operations = getOperations(methods)
 
   return (
     <ApixSection>
