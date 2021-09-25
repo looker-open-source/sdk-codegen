@@ -75,7 +75,7 @@ const fetchAndConvert = async () => {
       )
       await fetchAndConvert()
     }
-  } catch (e) {
+  } catch (e: any) {
     quit(e)
   }
 })()

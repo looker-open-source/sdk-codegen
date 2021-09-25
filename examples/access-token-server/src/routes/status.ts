@@ -2,7 +2,7 @@
 
  MIT License
 
- Copyright (c) 2020 Looker Data Sciences, Inc.
+ Copyright (c) 2021 Looker Data Sciences, Inc.
 
  Permission is hereby granted, free of charge, to any person obtaining a copy
  of this software and associated documentation files (the "Software"), to deal
@@ -35,7 +35,7 @@ const router = Router()
  * status endpoint. Returns a status json file provided by devops. Doesnt do
  * anything else as it does not have enough information.
  */
-router.get('/status', async (req, res) => {
+router.get('/status', async (_req, res) => {
   let statusCode = 200
   let status: any = {
     errors: [],
@@ -43,7 +43,8 @@ router.get('/status', async (req, res) => {
   try {
     const statusString = readFileSync(`${cwd()}/status.json`, 'utf8')
     status = { ...JSON.parse(statusString), ...status }
-  } catch (err) {
+  } catch (err: any) {
+    // eslint-disable-next-line no-console
     console.error(err)
     statusCode = 542
     status.errors.push('failed to read or parse status.json file')

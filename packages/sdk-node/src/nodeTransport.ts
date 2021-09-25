@@ -119,7 +119,7 @@ export class NodeTransport extends BaseTransport {
       }
       // Update OK with response statusCode check
       rawResponse.ok = this.ok(rawResponse)
-    } catch (e) {
+    } catch (e: any) {
       let statusMessage = `${method} ${path}`
       let statusCode = 404
       let contentType = 'text'
@@ -200,7 +200,7 @@ export class NodeTransport extends BaseTransport {
     if (!error) {
       response = { ok: true, value: result }
     } else {
-      response = { ok: false, error }
+      response = { ok: false, error: error as TError }
     }
     return response
   }
@@ -223,7 +223,7 @@ export class NodeTransport extends BaseTransport {
         options
       )
       return await this.parseResponse<TSuccess, TError>(res)
-    } catch (e) {
+    } catch (e: any) {
       const error: ISDKError = {
         message:
           typeof e.message === 'string'

@@ -175,7 +175,7 @@ export const authGetUrl = async (
   try {
     // Try first without login. Most Looker instances don't require auth for spec retrieval
     content = await getUrl(props, url, options)
-  } catch (err) {
+  } catch (err: any) {
     if (err.message.indexOf('ETIMEDOUT') > 0) {
       throw err
     }
@@ -214,7 +214,7 @@ export const fetchLookerVersion = async (
   if (!versions) {
     try {
       versions = await fetchLookerVersions(props, options)
-    } catch (e) {
+    } catch (e: any) {
       warn(
         `Could not retrieve looker release version from "${props.base_url}/versions": ${e.message}`
       )
@@ -241,7 +241,7 @@ export const fetchSpec = async (
     createJsonFile(fileName, content)
 
     return fileName
-  } catch (err) {
+  } catch (err: any) {
     checkCertError(err)
     return quit(err)
   }
@@ -273,7 +273,7 @@ export const getVersionInfo = async (
       },
       lookerVersion,
     }
-  } catch (e) {
+  } catch (e: any) {
     warn(
       `Could not retrieve version information. Is ${props.base_url} running?`
     )
