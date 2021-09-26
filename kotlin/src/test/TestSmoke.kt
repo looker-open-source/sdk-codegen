@@ -1,10 +1,12 @@
 import com.looker.rtl.DelimArray
+import com.looker.rtl.SDKResponse
 import com.looker.sdk.*
 import org.junit.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertNotEquals
 import kotlin.test.assertNotNull
 import kotlin.test.assertTrue
+import java.io.Serializable
 
 class TestSmoke {
     private val sdk by lazy { TestConfig().sdk }
@@ -186,4 +188,39 @@ class TestSmoke {
         assertEquals(other.id, actual.id)
         sdk.ok<ColorCollection>(sdk.set_default_color_collection(current.id!!))
     }
+
+    /**
+     * Smoke: ignore unknown json fields
+     *
+     * Call '/users' but deserialize it to [DummyUser] and test that unknown fields are ignored
+     * during deserialization.
+     */
+
+    private fun get_dummy_users(): SDKResponse {
+        return sdk.get<Array<DummyUser>>("/users")
+    }
+
+    @Test
+    fun testIgnoreUnknownFields() {
+        prepUsers()
+        var received = false
+        try {
+            val users = sdk.ok<Array<DummyUser>>(get_dummy_users())
+            assertNotNull(users[0].id)
+            received = true
+        } catch (e: java.lang.Error) {
+            assertTrue(false, "$e.message")
+        }
+        assertEquals(true, received)
+    }
 }
+
+/**
+ * Dummy user data class based on [User] but with a subset of its properties.
+ */
+data class DummyUser (
+    var id: Long? = null,
+    var credentials_api3: Array<CredentialsApi3>? = null,
+    var display_name: String? = null,
+    var email: String? = null
+) : Serializable
