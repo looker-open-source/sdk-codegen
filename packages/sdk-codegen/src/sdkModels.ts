@@ -285,12 +285,37 @@ export const firstMethodRef = (api: ApiModel, type: IType): IMethod => {
 }
 
 /**
+ * Resolve a list of method keys into an IType[] in alphabetical order by name
+ * @param {IApiModel} api model to use
+ * @param {KeyList} refs references to models
+ * @returns {IMethod[]} Populated method list. Anything not matched is skipped
+ */
+export const typeRefs = (api: IApiModel, refs: KeyList): IType[] => {
+  const keys = keyValues(refs)
+  const result: IType[] = []
+  keys.forEach((k) => {
+    const ref = api.types[k]
+    if (ref) {
+      result.push(ref)
+    }
+  })
+  return result
+}
+
+/**
  * Returns the first method (if any) that uses the reference type for updating
  * @param api parsed spec
  * @param type to check for writing
+ * @param stack call stack to prevent infinite recursion
  */
-const anyWriter = (api: ApiModel, type: IType): IMethod | undefined => {
+const anyWriter = (
+  api: ApiModel,
+  type: IType,
+  stack: KeyList = new Set<string>()
+): IMethod | undefined => {
   let result: IMethod | undefined
+  if (stack.has(type.name)) return undefined
+  stack.add(type.name)
   const methods = methodRefs(api, type.methodRefs)
   for (const method of methods) {
     if (
@@ -303,31 +328,17 @@ const anyWriter = (api: ApiModel, type: IType): IMethod | undefined => {
     }
   }
   if (!result) {
-    const parents = typeRefs(api, type.parentTypes)
-    for (const parent of parents) {
-      result = anyWriter(api, parent)
+    const allTypes = new Set([...type.parentTypes, ...type.customTypes])
+    allTypes.delete(type.name)
+    const refs = typeRefs(api, allTypes)
+
+    for (const ref of refs) {
+      result = anyWriter(api, ref, stack)
       if (result) {
         break
       }
     }
   }
-  return result
-}
-
-/**
- * Resolve a list of method keys into an IType[] in alphabetical order by name
- * @param {IApiModel} api model to use
- * @param {KeyList} refs references to models
- * @returns {IMethod[]} Populated method list. Anything not matched is skipped
- */
-export const typeRefs = (api: IApiModel, refs: KeyList): IType[] => {
-  const keys = keyValues(refs)
-  const result: IType[] = []
-  keys.forEach((k) => {
-    if (k in api.types) {
-      result.push(api.types[k])
-    }
-  })
   return result
 }
 

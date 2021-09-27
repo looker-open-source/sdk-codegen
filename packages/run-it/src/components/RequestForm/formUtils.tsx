@@ -309,7 +309,7 @@ export const validateBody = (body: string) => {
       // most likely JSON
       try {
         JSON.parse(body)
-      } catch (e) {
+      } catch (e: any) {
         result = e.message
       }
     }

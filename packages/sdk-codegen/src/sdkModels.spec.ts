@@ -1149,7 +1149,7 @@ describe('sdkModels', () => {
 
       it('types are in the right tag', () => {
         const actual = apiTestModel.typeTags.Theme
-        expect(Object.entries(actual)).toHaveLength(5)
+        expect(Object.entries(actual)).toHaveLength(7)
       })
 
       it('specification metaType is MetaType.Specification', () => {
