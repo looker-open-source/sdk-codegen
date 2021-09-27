@@ -88,7 +88,8 @@ export const ExtensionConnector: React.FC<ExtensionConnectorProps> = ({
         })
         connectedCallback(extensionHost)
         setInitializing(false)
-      } catch (error) {
+      } catch (error: any) {
+        // eslint-disable-next-line no-console
         console.error(error)
         setInitializeError(error.message || 'Extension failed to initialize.')
         setInitializing(false)

@@ -135,7 +135,7 @@ describe('SheetData', () => {
                 try {
                   project = await project.join(hacker)
                   expect('we').toEqual('should not be here')
-                } catch (e) {
+                } catch (e: any) {
                   expect(e.message).toMatch(/team members per project/)
                 }
               }
@@ -254,7 +254,7 @@ describe('SheetData', () => {
         try {
           await project.addJudge(hacker)
           expect('we').toEqual('should not be here')
-        } catch (e) {
+        } catch (e: any) {
           expect(e.message).toMatch(/is not a judge/)
         }
       })
