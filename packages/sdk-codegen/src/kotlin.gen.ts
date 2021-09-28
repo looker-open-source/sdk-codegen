@@ -156,7 +156,9 @@ import java.util.*
     const optional = !property.required ? '? = null' : ''
     const type = this.typeMap(property.type)
     // handle property names with special characters
-    const attr = property.hasSpecialNeeds ? `${indent}@SerializedName("${property.jsonName}")\n` : ''
+    const attr = property.hasSpecialNeeds
+      ? `${indent}@SerializedName("${property.jsonName}")\n`
+      : ''
     const result = `${attr}${indent}var ${property.name}: ${type.name}${optional}`
     return result
   }
