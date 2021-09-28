@@ -18,7 +18,7 @@ def main():
     filter_model = '<model_name>'
     filter_explore = '<explore_name>'
     filter_dimension = '<view_name.field_name>' # Requires a fully-scoped dimension
-
+ 
     filter = create_filter(dash_id, filter_name, filter_model, filter_explore, filter_dimension)
     elements = sdk.dashboard_dashboard_elements(dash_id)
     for element in elements:
@@ -26,7 +26,6 @@ def main():
         # Add other restrictions here to skip updating individual tiles
         if element.type != 'text':
             update_elements_filters(element, filter)
-
 
 def create_filter(dash_id: str, filter_name: str, filter_model: str, filter_explore: str , filter_dimension: str ) -> DashboardFilter:
     """Creates a dashboard filter object on the specified dashboard. Filters must be tied to a specific LookML Dimension.
@@ -67,9 +66,13 @@ def update_elements_filters(element: DashboardElement, filter: DashboardFilter) 
         new_listens = []
         for each in filterable.listen:
             new_listens.append(each)
-        # Add listener for new filter
-        new_listens.append(models.ResultMakerFilterablesListen(dashboard_filter_name=filter.name, field=filter.dimension))
-        filterable.listen = new_listens
+
+        # Add listener for new filter, if model and explore is the same
+        # You can easily add further restrictions to what tiles or queries within merged results will listen to the new tile
+        # If you don't want to restrict what tiles or queries this listen to this filter, just remove this if
+        if filter.model == filterable.model and filter.explore == filterable.view:
+            new_listens.append(models.ResultMakerFilterablesListen(dashboard_filter_name=filter.name, field=filter.dimension))
+            filterable.listen = new_listens
         # Append the new filterables to a result maker that we can use for the dashboard element
         element.result_maker.filterables.append(
                 models.ResultMakerFilterables(
