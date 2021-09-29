@@ -75,7 +75,7 @@ interface RequestFormProps {
   configurator: RunItConfigurator
   /** Validation message to display */
   validationMessage?: string
-  /** validation message setter */
+  /** Validation message setter */
   setValidationMessage?: Dispatch<string>
   /** Is RunIt being used in a Looker extension? */
   isExtension?: boolean

@@ -263,15 +263,16 @@ describe('Complex Item', () => {
 
   describe('validateBody', () => {
     test.each`
-      value      | error
-      ${'{'}     | ${'Unexpected end of JSON input'}
-      ${'}'}     | ${'Unexpected token } in JSON at position 0'}
-      ${'['}     | ${'Unexpected end of JSON input'}
-      ${']'}     | ${'Unexpected token ] in JSON at position 0'}
-      ${'"'}     | ${'Unexpected end of JSON input'}
-      ${'"foo"'} | ${''}
-      ${''}      | ${''}
-      ${'{}'}    | ${''}
+      value                                                   | error
+      ${'name=Vapor&age=3&luckyNumbers[]=5&luckyNumbers[]=7'} | ${''}
+      ${'name=Vapor&age=3&luckyNumbers[]=5&luckyNumbers[]7'}  | ${'luckyNumbers[]7'}
+      ${'{'}                                                  | ${'Unexpected end of JSON input'}
+      ${'}'}                                                  | ${'Unexpected token } in JSON at position 0'}
+      ${'['}                                                  | ${'Unexpected end of JSON input'}
+      ${'"'}                                                  | ${'Unexpected end of JSON input'}
+      ${'"foo"'}                                              | ${''}
+      ${''}                                                   | ${''}
+      ${'{}'}                                                 | ${''}
     `('it validates a body value of "$value"', ({ value, error }) => {
       const actual = validateBody(value)
       const expected = error ? `Syntax error in the body: ${error}` : error

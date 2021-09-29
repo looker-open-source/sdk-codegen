@@ -299,19 +299,44 @@ export const updateNullableProp = (
 }
 
 /**
- * Returns an error message if the body is not JSON or application/x-www-form-urlencoded
+ * If the body isn't empty, it must be valid form encoded syntax
+ *
+ * This may not be perfect validation but it should be good enough to tolerate variances
+ *
+ * @param body to validate
+ */
+export const validateEncodedValues = (body: string) => {
+  let result = ''
+  if (!body) return result
+  const args = body.split('&')
+  args.forEach((arg) => {
+    const formArg = /[\w_]+(\[])?=.*/i
+    if (!formArg.test(arg)) {
+      result += ` ${arg}`
+    }
+  })
+  return result.trim()
+}
+
+/**
+ * Returns an error message if the body is not JSON
+ *
+ * TODO also validate application/x-www-form-urlencoded
+ *
  * @param body string to validate
  */
 export const validateBody = (body: string) => {
   let result = ''
   if (body) {
-    if (/[{}"[\]]/g.test(body)) {
+    if (/^[[{}"]/.test(body)) {
       // most likely JSON
       try {
         JSON.parse(body)
       } catch (e: any) {
         result = e.message
       }
+    } else {
+      result = validateEncodedValues(body)
     }
   }
   if (result) {

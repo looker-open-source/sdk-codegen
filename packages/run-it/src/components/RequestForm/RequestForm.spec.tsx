@@ -81,14 +81,10 @@ describe('RequestForm', () => {
       expect(screen.getByText(message)).toBeInTheDocument()
     })
 
-    test.skip('clear removes validation messages', () => {
-      // TODO implement the clear hook
-    })
-
-    test.skip('clicking run with an invalid body shows a messagebar', () => {
-      // TODO implement the run hook
-    })
+    test.todo('clear removes validation messages')
+    test.todo('clicking run with an invalid body shows a messagebar')
   })
+
   test('it creates a form with a simple item, submit button, and config button if not an extension', () => {
     renderWithTheme(
       <RequestForm
