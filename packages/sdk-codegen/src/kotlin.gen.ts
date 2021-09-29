@@ -168,7 +168,11 @@ import java.util.*
   declareProperty(indent: string, property: IProperty) {
     const optional = !property.required ? '? = null' : ''
     const type = this.typeMap(property.type)
-    const result = `${indent}var ${property.name}: ${type.name}${optional}`
+    // handle property names with special characters
+    const attr = property.hasSpecialNeeds
+      ? `${indent}@SerializedName("${property.jsonName}")\n`
+      : ''
+    const result = `${attr}${indent}var ${property.name}: ${type.name}${optional}`
     return result
   }
 
