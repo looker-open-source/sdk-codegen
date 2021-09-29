@@ -63,9 +63,7 @@ def update_elements_filters(element: DashboardElement, filter: DashboardFilter) 
     current_filterables = element.result_maker.filterables
     element.result_maker.filterables = []
     for filterable in current_filterables:
-        new_listens = []
-        for each in filterable.listen:
-            new_listens.append(each)
+        new_listens = filterable.listen
 
         # Add listener for new filter, if model and explore is the same
         # You can easily add further restrictions to what tiles or queries within merged results will listen to the new tile
