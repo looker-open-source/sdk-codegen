@@ -73,19 +73,73 @@ export const isColumnar = (data: any[]) => {
   return !complex
 }
 
+type ItemType = 'a' | 'o' | 'v' | 'u'
+
+/**
+ * Is this an array, an object, a value, or undefined
+ * @param value to check
+ */
+const itemType = (value: any): ItemType => {
+  if (!value) return 'u'
+  if (Array.isArray(value)) return 'a'
+  if (value instanceof Object) return 'o'
+  return 'v'
+}
+
+/**
+ * Get the 2D type mapping for the object
+ * @param json to analyze
+ */
+const getTypes = (json: any) => {
+  const types = [new Set<ItemType>(), new Set<ItemType>()]
+  if (!json) {
+    types[0].add('u')
+    return types
+  }
+  for (const key of Object.keys(json)) {
+    const value = json[key]
+    const type = itemType(value)
+    types[0].add(type)
+    switch (type) {
+      case 'a':
+      case 'o':
+        Object.keys(value).forEach((k) => {
+          const v = value[k]
+          types[1].add(itemType(v))
+        })
+        break
+    }
+  }
+  return types
+}
+
+/**
+ * Is this a uniform object that can be converted into a table?
+ * @param json to analyze
+ */
+export const canTabulate = (json: any) => {
+  const types = getTypes(json)
+  return (
+    types[0].size === 1 &&
+    (types[0].has('a') || types[0].has('o')) &&
+    types[1].size <= 1
+  )
+}
+
 /**
  * Show JSON responses
  *
  * Shows the JSON in a syntax-highlighted fashion
  * If the JSON is parseable as 2D row/column data it will also be shown in grid
- * If JSON cannot be parsed it will be show as is
+ * If JSON cannot be parsed it will be shown as is
  * @param response
  */
 const ShowJSON = (response: IRawResponse) => {
   const content = response.body.toString()
-  const data = json2Csv(content)
-  const showGrid = isColumnar(data.data)
-  const json = JSON.stringify(JSON.parse(response.body), null, 2)
+  const parsed = JSON.parse(response.body)
+  const data = canTabulate(parsed) ? json2Csv(content) : undefined
+  const showGrid = data && isColumnar(data.data)
+  const json = JSON.stringify(parsed, null, 2)
   const raw = copyRaw(json, 'json')
   if (showGrid) return <DataGrid data={data.data} raw={raw} />
   return raw
