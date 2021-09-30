@@ -35,6 +35,7 @@ import {
   useTabs,
 } from '@looker/components'
 import type { ApiModel, IMethod } from '@looker/sdk-codegen'
+import type { IAPIMethods } from '@looker/sdk-rtl'
 import type { ResponseContent, RunItConfigurator } from './components'
 import {
   RequestForm,
@@ -43,6 +44,7 @@ import {
   DocSdkCalls,
   RunItFormKey,
   ConfigForm,
+  validateBody,
 } from './components'
 import type { RunItSettings } from './utils'
 import {
@@ -104,6 +106,12 @@ const formValues = (configurator: RunItConfigurator) => {
   return result
 }
 
+const sdkNeedsAuth = (sdk: IAPIMethods | undefined) => {
+  if (!sdk) return false
+  const configIsNeeded = sdkNeedsConfig(sdk)
+  return configIsNeeded && !sdk.authSession.isAuthenticated()
+}
+
 interface RunItProps {
   /** spec model to use for sdk call generation */
   api: ApiModel
@@ -139,7 +147,8 @@ export const RunIt: FC<RunItProps> = ({
     useState<ResponseContent>(undefined)
   const [isExtension, setIsExtension] = useState<boolean>(false)
   const [hasConfig, setHasConfig] = useState<boolean>(true)
-  const [needsAuth, setNeedsAuth] = useState<boolean>(true)
+  const [needsAuth, setNeedsAuth] = useState<boolean>(sdkNeedsAuth(sdk))
+  const [validationMessage, setValidationMessage] = useState<string>('')
   const tabs = useTabs()
 
   const perf = new PerfTimings()
@@ -156,7 +165,7 @@ export const RunIt: FC<RunItProps> = ({
       setHasConfig(true)
       setNeedsAuth(false)
     }
-  }, [hasConfig, isExtension, needsAuth, sdk])
+  }, [sdk])
 
   const handleConfig = (_e: BaseSyntheticEvent) => {
     tabs.onSelectTab(4)
@@ -169,6 +178,14 @@ export const RunIt: FC<RunItProps> = ({
       inputs,
       requestContent
     )
+    if (body) {
+      const message = validateBody(body)
+      setValidationMessage(message)
+      if (message) {
+        // syntax error, don't run
+        return
+      }
+    }
     setActivePathParams(pathParams)
     tabs.onSelectTab(1)
     if (sdk) {
@@ -184,7 +201,7 @@ export const RunIt: FC<RunItProps> = ({
           queryParams,
           body
         )
-      } catch (err) {
+      } catch (err: any) {
         // This should not happen but it could. runRequest uses
         // sdk.ok to login once. sdk.ok throws an error so fake
         // out the response so something can be rendered.
@@ -229,6 +246,8 @@ export const RunIt: FC<RunItProps> = ({
             setHasConfig={setHasConfig}
             configurator={configurator}
             isExtension={isExtension}
+            validationMessage={validationMessage}
+            setValidationMessage={setValidationMessage}
             setVersionsUrl={setVersionsUrl}
           />
         </TabPanel>

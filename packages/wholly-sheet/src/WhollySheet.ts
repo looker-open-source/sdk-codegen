@@ -579,7 +579,7 @@ export abstract class WhollySheet<T extends IRowModel, P>
         delta.deletes.forEach((d) =>
           this.checkOutdated(d, this.typeRow(values[d._row - 1]))
         )
-      } catch (e) {
+      } catch (e: any) {
         errors.push(e.message)
       }
       if (errors.length > 0) throw new SheetError(errors.join('\n'))

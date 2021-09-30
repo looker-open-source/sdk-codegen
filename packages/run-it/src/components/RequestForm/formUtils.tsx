@@ -23,6 +23,7 @@
  SOFTWARE.
 
  */
+
 import type { BaseSyntheticEvent } from 'react'
 import React, { Fragment } from 'react'
 import {
@@ -295,4 +296,51 @@ export const updateNullableProp = (
     updatedState[key] = newValue
   }
   return updatedState
+}
+
+/**
+ * If the body isn't empty, it must be valid form encoded syntax
+ *
+ * This may not be perfect validation but it should be good enough to tolerate variances
+ *
+ * @param body to validate
+ */
+export const validateEncodedValues = (body: string) => {
+  let result = ''
+  if (!body) return result
+  const args = body.split('&')
+  args.forEach((arg) => {
+    const formArg = /[\w-_.]+(\[])?=.*/i
+    if (!formArg.test(arg)) {
+      result += ` ${arg}`
+    }
+  })
+  return result.trim()
+}
+
+/**
+ * Returns an error message if the body is not JSON
+ *
+ * TODO also validate application/x-www-form-urlencoded
+ *
+ * @param body string to validate
+ */
+export const validateBody = (body: string) => {
+  let result = ''
+  if (body) {
+    if (/^[[{}"]/.test(body)) {
+      // most likely JSON
+      try {
+        JSON.parse(body)
+      } catch (e: any) {
+        result = e.message
+      }
+    } else {
+      result = validateEncodedValues(body)
+    }
+  }
+  if (result) {
+    result = `Syntax error in the body: ${result}`
+  }
+  return result
 }

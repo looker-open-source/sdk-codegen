@@ -200,7 +200,7 @@ export const ConfigForm: FC<ConfigFormProps> = ({
           updateMessage(POSITIVE, `Saved ${webUrl} as OAuth server`)
         }
       }
-    } catch (err) {
+    } catch (err: any) {
       fetchError(err.message)
     }
   }

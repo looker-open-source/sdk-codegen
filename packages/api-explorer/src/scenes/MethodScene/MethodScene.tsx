@@ -90,6 +90,7 @@ export const MethodScene: FC<MethodSceneProps> = ({
   const { value, toggle, setOn } = useToggle()
   const [method, setMethod] = useState(api.methods[methodName])
   const seeTypes = typeRefs(api, method?.customTypes)
+  const [inputs, setInputs] = useState(createInputs(api, method))
 
   const RunItButton = value ? Button : ButtonOutline
 
@@ -109,10 +110,16 @@ export const MethodScene: FC<MethodSceneProps> = ({
   }, [api, history, methodName, methodTag, specKey])
 
   useEffect(() => {
+    setInputs(createInputs(api, method))
+  }, [api, method])
+
+  useEffect(() => {
     const checkRunIt = async () => {
       try {
         const show = await showRunIt(envAdaptor)
-        if (show) setOn()
+        if (show) {
+          setOn()
+        }
       } catch (error) {
         console.error(error)
       }
@@ -172,7 +179,7 @@ export const MethodScene: FC<MethodSceneProps> = ({
             <RunIt
               sdkLanguage={sdkLanguage}
               api={api}
-              inputs={createInputs(api, method)}
+              inputs={inputs}
               method={method}
               setVersionsUrl={setVersionsUrl}
             />

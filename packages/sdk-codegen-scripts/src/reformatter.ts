@@ -28,8 +28,8 @@ import * as path from 'path'
 import * as fs from 'fs'
 import { danger, success, warn } from '@looker/sdk-codegen-utils'
 import type { ICodeGen } from '@looker/sdk-codegen'
-import { prettify } from '@looker/sdk-codegen'
 import { isFileSync, readFileSync, run, utf8Encoding } from './nodeUtils'
+import { prettify } from './prettify'
 
 export interface IReformat {
   fileSep: string

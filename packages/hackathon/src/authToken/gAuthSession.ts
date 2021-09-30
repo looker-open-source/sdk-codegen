@@ -108,7 +108,7 @@ export class GAuthSession extends AuthSession {
       )
       const { access_token, expiry_date } = response.body
       this.activeToken = new GAuthToken(access_token, expiry_date)
-    } catch (error) {
+    } catch (error: any) {
       throw sdkError({ message: error.message })
     }
   }
