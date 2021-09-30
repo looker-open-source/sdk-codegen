@@ -310,7 +310,7 @@ export const validateEncodedValues = (body: string) => {
   if (!body) return result
   const args = body.split('&')
   args.forEach((arg) => {
-    const formArg = /[\w_]+(\[])?=.*/i
+    const formArg = /[\w-_.]+(\[])?=.*/i
     if (!formArg.test(arg)) {
       result += ` ${arg}`
     }
