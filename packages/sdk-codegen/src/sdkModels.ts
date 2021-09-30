@@ -223,6 +223,7 @@ export type KeyedCollection<T> = Record<string, T>
 export type MethodList = KeyedCollection<IMethod>
 export type TypeList = KeyedCollection<IType>
 export type TagList = KeyedCollection<MethodList>
+export type TypeTagList = KeyedCollection<TypeList>
 export type PropertyList = KeyedCollection<IProperty>
 export type KeyList = Set<string>
 export type EnumValueType = string | number
@@ -267,6 +268,23 @@ export const methodRefs = (api: IApiModel, refs: KeyList): IMethod[] => {
 }
 
 /**
+ * Resolves first method ref it can find
+ * @param api parsed spec
+ * @param type tree to walk
+ */
+export const firstMethodRef = (api: ApiModel, type: IType): IMethod => {
+  let method = methodRefs(api, type.methodRefs)[0]
+  if (!method) {
+    const parents = typeRefs(api, type.parentTypes)
+    for (const parent of parents) {
+      method = firstMethodRef(api, parent)
+      if (method) break
+    }
+  }
+  return method
+}
+
+/**
  * Resolve a list of method keys into an IType[] in alphabetical order by name
  * @param {IApiModel} api model to use
  * @param {KeyList} refs references to models
@@ -276,10 +294,51 @@ export const typeRefs = (api: IApiModel, refs: KeyList): IType[] => {
   const keys = keyValues(refs)
   const result: IType[] = []
   keys.forEach((k) => {
-    if (k in api.types) {
-      result.push(api.types[k])
+    const ref = api.types[k]
+    if (ref) {
+      result.push(ref)
     }
   })
+  return result
+}
+
+/**
+ * Returns the first method (if any) that uses the reference type for updating
+ * @param api parsed spec
+ * @param type to check for writing
+ * @param stack call stack to prevent infinite recursion
+ */
+const anyWriter = (
+  api: ApiModel,
+  type: IType,
+  stack: KeyList = new Set<string>()
+): IMethod | undefined => {
+  let result: IMethod | undefined
+  if (stack.has(type.name)) return undefined
+  stack.add(type.name)
+  const methods = methodRefs(api, type.methodRefs)
+  for (const method of methods) {
+    if (
+      method.httpMethod === 'POST' ||
+      method.httpMethod === 'PUT' ||
+      method.httpMethod === 'PATCH'
+    ) {
+      result = method
+      break
+    }
+  }
+  if (!result) {
+    const allTypes = new Set([...type.parentTypes, ...type.customTypes])
+    allTypes.delete(type.name)
+    const refs = typeRefs(api, allTypes)
+
+    for (const ref of refs) {
+      result = anyWriter(api, ref, stack)
+      if (result) {
+        break
+      }
+    }
+  }
   return result
 }
 
@@ -343,6 +402,20 @@ export interface ISearchResult {
 
 export interface ISymbolTable extends ISymbolList {
   resolveType(schema: OAS.SchemaObject): IType
+}
+
+/** Type of type */
+export enum MetaType {
+  /** scalar type */
+  Intrinsic = 'Intrinsic',
+  /** from API specification */
+  Specification = 'Specification',
+  /** writeable type */
+  Write = 'Write',
+  /** Request type for API methods */
+  Request = 'Request',
+  /** enumerated type */
+  Enumerated = 'Enumerated',
 }
 
 export interface IType extends ISymbol {
@@ -451,6 +524,11 @@ export interface IType extends ISymbol {
   intrinsic: boolean
 
   /**
+   * type classification
+   */
+  metaType: MetaType
+
+  /**
    * Hacky workaround for inexplicable instanceof failures
    * @param {string} className name of class to check
    * @returns {boolean} true if class name matches this.className
@@ -499,6 +577,38 @@ export interface IMethodResponse {
   search(rx: RegExp, criteria: SearchCriteria): boolean
 
   searchString(criteria: SearchCriteria): string
+}
+
+/**
+ * categorize all types using their method refs
+ *
+ * @param api parsed Api specification
+ * @param types to categorize
+ */
+export const tagTypes = (api: ApiModel, types: TypeList) => {
+  const typeTags = {}
+  Object.entries(types)
+    .filter(([_, type]) => !type.intrinsic)
+    .forEach(([name, type]) => {
+      let methods = methodRefs(api, type.methodRefs)
+      // If no method is found, look up parents until you get a method
+      if (methods.length === 0) {
+        const first = firstMethodRef(api, type)
+        if (first) methods = [first]
+      }
+      methods.forEach((method) => {
+        // The type is tagged for each method's tags
+        for (const tag of method.schema.tags) {
+          let list: TypeList = typeTags[tag]
+          if (!list) {
+            list = {}
+            typeTags[tag] = list
+          }
+          list[name] = type
+        }
+      })
+    })
+  return typeTags
 }
 
 class MethodResponse implements IMethodResponse {
@@ -1458,6 +1568,14 @@ export class Type implements IType {
     this.description = this.schema.description || ''
   }
 
+  get metaType(): MetaType {
+    if (this.intrinsic) return MetaType.Intrinsic
+    if (this instanceof RequestType) return MetaType.Request
+    if (this instanceof WriteType) return MetaType.Write
+    if (this instanceof EnumType) return MetaType.Enumerated
+    return MetaType.Specification
+  }
+
   get fullName(): string {
     return this.name
   }
@@ -1907,6 +2025,7 @@ export class ApiModel implements ISymbolTable, IApiModel {
   methods: MethodList = {}
   types: TypeList = {}
   tags: TagList = {}
+  typeTags: TypeTagList = {}
 
   constructor(public readonly spec: OAS.OpenAPIObject) {
     ;[
@@ -2245,6 +2364,7 @@ export class ApiModel implements ISymbolTable, IApiModel {
 
   /**
    * a writeable type will need to be found or created if the passed type has read-only properties
+   * and is used by any method that updates the structure
    * @param type to check for read-only properties
    * @returns either writeable type or undefined
    */
@@ -2252,6 +2372,7 @@ export class ApiModel implements ISymbolTable, IApiModel {
     if (type.intrinsic) return undefined
     if (type.elementType?.intrinsic) return undefined
     if (type instanceof WriteType) return type
+    if (!anyWriter(this, type)) return undefined
     const props = Object.entries(type.properties).map(([, prop]) => prop)
     if (props.length === 0) return undefined
     const obj = type as Type
@@ -2310,6 +2431,11 @@ export class ApiModel implements ISymbolTable, IApiModel {
     // this.requestTypes = this.sortList(this.requestTypes)
     // this.refs = this.sortList(this.refs)
     this.tags = this.sortList(this.tags)
+    this.typeTags = this.sortList(this.typeTags)
+    const typeKeys = Object.keys(this.typeTags)
+    typeKeys.forEach((key) => {
+      this.typeTags[key] = this.sortList(this.typeTags[key])
+    })
     // commented out to leave methods in natural order within the tag
     // const keys = Object.keys(this.tags).sort(localeSort)
     // keys.forEach((key) => {
@@ -2359,6 +2485,7 @@ export class ApiModel implements ISymbolTable, IApiModel {
       })
     }
     this.loadDynamicTypes()
+    this.typeTags = tagTypes(this, this.types)
     this.sortLists()
   }
 

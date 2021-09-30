@@ -38,10 +38,11 @@ describe('SideNavTypes', () => {
         types={{
           Dashboard: api.types.Dashboard,
         }}
+        tag="Dashboard"
       />
     )
-    const dashboardType = screen.getByRole('link')
-    expect(dashboardType).toHaveAttribute('href', '/3.1/types/Dashboard')
+    const h4 = screen.getByRole('heading', { level: 4 })
+    expect(h4).toHaveTextContent('Dashboard')
   })
 
   test('it highlights text matching search pattern', () => {
@@ -51,6 +52,7 @@ describe('SideNavTypes', () => {
         types={{
           Dashboard: api.types.Dashboard,
         }}
+        tag="Dashboard"
       />,
       'dash'
     )

@@ -25,7 +25,7 @@
  */
 import React from 'react'
 import type { ApiModel, IMethod, IType } from '@looker/sdk-codegen'
-import { Method } from '@looker/sdk-codegen'
+import { Method, firstMethodRef } from '@looker/sdk-codegen'
 import { Link } from 'react-router-dom'
 import { RunItHeading } from '@looker/run-it'
 import { buildMethodPath, buildTypePath, highlightHTML } from '../../utils'
@@ -36,7 +36,7 @@ import { buildMethodPath, buildTypePath, highlightHTML } from '../../utils'
  * @param methodName SDK method name
  * @returns Corresponding tag
  */
-const getTag = (api: ApiModel, methodName: string) => {
+const getMethodTag = (api: ApiModel, methodName: string) => {
   // Find tag containing methodName
   return Object.entries(api.tags)
     .filter(([, methods]) => methodName in methods)
@@ -44,8 +44,18 @@ const getTag = (api: ApiModel, methodName: string) => {
 }
 
 /**
+ * Return the tag for a give type
+ * @param api Parsed api
+ * @param type to tag
+ */
+const getTypeTag = (api: ApiModel, type: IType) => {
+  const method = firstMethodRef(api, type)
+  return getMethodTag(api, method.name)
+}
+
+/**
  * Builds a path matching MethodScene or TypeScene route
- * @param api
+ * @param api parsed api
  * @param item A method or type item
  * @param specKey A string to identify the spec in the url
  * @returns a method or type path
@@ -57,9 +67,11 @@ export const buildPath = (
 ) => {
   let path
   if (item instanceof Method) {
-    path = buildMethodPath(specKey, getTag(api, item.name), item.name)
+    const tag = getMethodTag(api, item.name)
+    path = buildMethodPath(specKey, tag, item.name)
   } else {
-    path = buildTypePath(specKey, item.name)
+    const tag = getTypeTag(api, item as IType)
+    path = buildTypePath(specKey, tag, item.name)
   }
   return path
 }

@@ -26,9 +26,9 @@
 
 /**
  * Builds a path matching the route used by MethodScene
- * @param methodName A method name
  * @param specKey A string to identify the spec in the URL
  * @param tag Corresponding method tag
+ * @param methodName A method name
  * @returns a Method path
  */
 export const buildMethodPath = (
@@ -39,12 +39,13 @@ export const buildMethodPath = (
 
 /**
  * Builds a path matching the route used by TypeScene
- * @param typeName A type name
  * @param specKey A string to identify the spec in the URL
+ * @param tag Corresponding type tag
+ * @param typeName A type name
  * @returns a Type path
  */
-export const buildTypePath = (specKey: string, typeName: string) =>
-  `/${specKey}/types/${typeName}`
+export const buildTypePath = (specKey: string, tag: string, typeName: string) =>
+  `/${specKey}/types/${tag}/${typeName}`
 
 export const diffPath = 'diff'
 export const oAuthPath = 'oauth'

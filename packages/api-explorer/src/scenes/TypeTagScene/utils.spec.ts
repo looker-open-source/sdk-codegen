@@ -23,18 +23,12 @@
  SOFTWARE.
 
  */
-import { buildMethodPath, buildTypePath } from './path'
+import { api } from '../../test-data'
+import { getMetaTypes } from './utils'
 
-describe('path utils', () => {
-  describe('buildMethodPath', () => {
-    test('it builds a method path', () => {
-      const path = buildMethodPath('3.1', 'Dashboard', 'create_dashboard')
-      expect(path).toEqual('/3.1/methods/Dashboard/create_dashboard')
-    })
-  })
-
-  describe('buildTypePath', () => {
-    const path = buildTypePath('3.1', 'Dashboard', 'WriteDashboard')
-    expect(path).toEqual('/3.1/types/Dashboard/WriteDashboard')
+describe('TypeTagScene utils', () => {
+  test('getMetaTypes returns a unique list of MetaTypes', () => {
+    const actual = getMetaTypes(api.typeTags.Query)
+    expect(actual).toHaveLength(4)
   })
 })

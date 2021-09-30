@@ -37,7 +37,7 @@ describe('DocStatus', () => {
     fireEvent.mouseOver(badge)
     await waitFor(() => {
       expect(screen.getByRole('tooltip')).toHaveTextContent(
-        'This beta endpoint is under development and subject to change.'
+        'This beta item is under development and subject to change.'
       )
     })
   })
