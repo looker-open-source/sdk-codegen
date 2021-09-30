@@ -43,7 +43,7 @@
     "@looker/sdk": "^21.14.0",
     "@looker/sdk-rtl": "^21.0.20",
     "deepmerge": "^4.2.2",
-    "readable-stream": "^3.4.0",
+    "readable-stream": "^3.6.0",
     "request": "^2.88.0",
     "request-promise-native": "^1.0.8",
     "semver": "^7.3.4"
