@@ -58,6 +58,7 @@ jobs:
           yarn
           yarn lint:es --quiet
           yarn build
+          yarn dedupe:ci
 
       - name: Mock looker.ini
         run: |
