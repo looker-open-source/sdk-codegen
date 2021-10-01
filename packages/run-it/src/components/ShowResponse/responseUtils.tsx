@@ -73,17 +73,22 @@ export const isColumnar = (data: any[]) => {
   return !complex
 }
 
-type ItemType = 'a' | 'o' | 'v' | 'u'
+enum ItemType {
+  Array = 'a',
+  Object = 'o',
+  Simple = 's',
+  Undefined = 'u',
+}
 
 /**
  * Is this an array, an object, a value, or undefined
  * @param value to check
  */
 const itemType = (value: any): ItemType => {
-  if (!value) return 'u'
-  if (Array.isArray(value)) return 'a'
-  if (value instanceof Object) return 'o'
-  return 'v'
+  if (!value) return ItemType.Undefined
+  if (Array.isArray(value)) return ItemType.Array
+  if (value instanceof Object) return ItemType.Object
+  return ItemType.Simple
 }
 
 /**
@@ -93,7 +98,7 @@ const itemType = (value: any): ItemType => {
 const getTypes = (json: any) => {
   const types = [new Set<ItemType>(), new Set<ItemType>()]
   if (!json) {
-    types[0].add('u')
+    types[0].add(ItemType.Undefined)
     return types
   }
   for (const key of Object.keys(json)) {
@@ -101,8 +106,8 @@ const getTypes = (json: any) => {
     const type = itemType(value)
     types[0].add(type)
     switch (type) {
-      case 'a':
-      case 'o':
+      case ItemType.Array:
+      case ItemType.Object:
         Object.keys(value).forEach((k) => {
           const v = value[k]
           types[1].add(itemType(v))
@@ -121,7 +126,7 @@ export const canTabulate = (json: any) => {
   const types = getTypes(json)
   return (
     types[0].size === 1 &&
-    (types[0].has('a') || types[0].has('o')) &&
+    (types[0].has(ItemType.Array) || types[0].has(ItemType.Object)) &&
     types[1].size <= 1
   )
 }
