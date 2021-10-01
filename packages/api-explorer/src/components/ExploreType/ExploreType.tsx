@@ -32,7 +32,7 @@ import { TypeOfType, typeOfType } from '@looker/sdk-codegen'
 import { useLocation } from 'react-router'
 import { Link } from '../Link'
 import { getSpecKey } from '../../reducers'
-import { buildPath } from '../DocReferences/utils'
+import { buildPath } from '../../utils'
 import {
   ExploreProperty,
   pickType,

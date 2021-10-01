@@ -29,8 +29,8 @@ import { screen } from '@testing-library/react'
 
 import { renderWithSearchAndRouter } from '../../test-utils'
 import { api } from '../../test-data'
+import { buildPath } from '../../utils'
 import { DocReferences } from './DocReferences'
-import { buildPath } from './utils'
 
 describe('DocReferences', () => {
   test('it renders method and type references', () => {

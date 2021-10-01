@@ -319,9 +319,7 @@ export const validateEncodedValues = (body: string) => {
 }
 
 /**
- * Returns an error message if the body is not JSON
- *
- * TODO also validate application/x-www-form-urlencoded
+ * Returns an error message if the body is not JSON or valid form url encoding
  *
  * @param body string to validate
  */

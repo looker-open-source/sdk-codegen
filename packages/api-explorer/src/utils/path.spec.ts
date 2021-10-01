@@ -23,7 +23,9 @@
  SOFTWARE.
 
  */
-import { buildMethodPath, buildTypePath } from './path'
+
+import { api } from '../test-data'
+import { buildMethodPath, buildPath, buildTypePath } from './path'
 
 describe('path utils', () => {
   describe('buildMethodPath', () => {
@@ -36,5 +38,17 @@ describe('path utils', () => {
   describe('buildTypePath', () => {
     const path = buildTypePath('3.1', 'Dashboard', 'WriteDashboard')
     expect(path).toEqual('/3.1/types/Dashboard/WriteDashboard')
+  })
+
+  describe('buildPath', () => {
+    test('given a method it builds a method path', () => {
+      const path = buildPath(api, api.methods.create_dashboard, '3.1')
+      expect(path).toEqual('/3.1/methods/Dashboard/create_dashboard')
+    })
+
+    test('given a type it creates a type path', () => {
+      const path = buildPath(api, api.types.Dashboard, '3.1')
+      expect(path).toEqual('/3.1/types/Dashboard/Dashboard')
+    })
   })
 })
