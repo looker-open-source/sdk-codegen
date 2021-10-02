@@ -25,98 +25,88 @@
  */
 
 import type { FC } from 'react'
-import React from 'react'
-import styled from 'styled-components'
+import moment from 'moment-timezone'
+import React, { useEffect, useState } from 'react'
+import { Markdown } from '@looker/code-editor'
+
 import {
-  Card,
-  Text,
-  Heading,
-  Divider,
-  Link,
-  Badge,
-  Box,
-  SpaceVertical,
-  ButtonTransparent,
+  Select,
+  Space,
+  Table,
+  TableBody,
+  TableRow,
+  TableDataCell,
 } from '@looker/components'
-import { Scroller } from '../../components/Scroller'
+import type { Agenda } from './agenda'
+import { agendaEn, agendaJa } from './agenda'
+const English = 'English'
+const Japanese = '日本'
 
-export const HomeScene: FC = () => (
-  <>
-    <Box height="40px" />
-    <Card width="50vw" height="75vh" raised>
-      <Scroller>
-        <SpaceVertical p="medium">
-          <Heading color="secondary">Agenda — Oct 15</Heading>
-          <Box>
-            <Time width="100px">9:00am</Time>
-            <Text> Welcome and Kickoff</Text>
-          </Box>
-          <Box>
-            <Time>9:30am</Time>
-            <Text> Supported Hacking Hours Begin</Text>
-          </Box>
-          <Box>
-            <Time>10:30am</Time>
-            <Text> Jumpstart sessions broadcast</Text>
-            <Link
-              href="https://looker.com/events/join-2020#agenda"
-              target="_blank"
-            >
-              <Badge mx="10px" intent="inform">
-                Re-watch
-              </Badge>
-            </Link>
-          </Box>
-          <Box>
-            <Time>1:00pm</Time>
-            <Text> HandStandup & Stretch</Text>
-            {/* <Badge mx="10px" intent="critical">Now</Badge> */}
-          </Box>
-          <Box>
-            <Time>2:00pm</Time>
-            <Text> Live feedback lounge</Text>
-          </Box>
-          <Box>
-            <Time>3:00pm</Time>
-            <Text> Supported Hacking Hours Close</Text>
-          </Box>
-          <Box>
-            <Time>12:00am</Time>
-            <Text> Midnight Hack Party (optional)</Text>
-          </Box>
-          <Divider appearance="dark" />
-          <Heading color="secondary">Agenda — Oct 16</Heading>
-          <Box>
-            <Time>9:00am</Time>
-            <Text> Day 2 Kickoff</Text>
-          </Box>
-          <Box>
-            <Time>10:30am</Time>
-            <Text> Live feedback lounge</Text>
-          </Box>
-          <Box>
-            <Time>12:00pm PT</Time>
-            <Text> Final submissions due</Text>
-          </Box>
-          <Box>
-            <Time>12:05pm PT</Time>
-            <Text> Final HandStandup & Stretch</Text>
-          </Box>
-          <Box>
-            <Time>2:00pm PT</Time>
-            <Text> Winner Announcements & Demos</Text>
-          </Box>
-          <Box>
-            <Time>2:30pm PT</Time>
-            <Text> Hacky Hour</Text>
-          </Box>
-        </SpaceVertical>
-      </Scroller>
-    </Card>
-  </>
-)
+const dateString = (value: number, language: string) => {
+  const zone = language === English ? 'America/Los_Angeles' : 'Asia/Tokyo'
+  return moment(value).tz(zone).format('LLL')
+}
 
-const Time = styled(ButtonTransparent)`
-  width: 100px;
-  margin-right: 20px;
-`
+const calcAgenda = (swap: Agenda) => {
+  swap = swap.sort((a, b) => a.start - b.start)
+  swap.forEach((i, index) => {
+    // Fill in any missing stop values with the next item's start value
+    if (!i.stop) {
+      if (index <= swap.length + 1) {
+        i.stop = swap[index + 1].start
+      }
+    }
+  })
+  return swap
+}
+
+export const HomeScene: FC = () => {
+  const [value, setValue] = useState<string>(English)
+  const [agenda, setAgenda] = useState<Agenda>(calcAgenda(agendaEn))
+  const options = [
+    { value: English, label: English },
+    { value: Japanese, label: Japanese },
+  ]
+
+  useEffect(() => {
+    switch (value) {
+      case English:
+        setAgenda(calcAgenda(agendaEn))
+        break
+      case Japanese:
+        setAgenda(calcAgenda(agendaJa))
+        break
+    }
+  }, [value])
+
+  return (
+    <>
+      <Space align="start">
+        <Space>
+          <Table verticalAlign={'top'}>
+            <TableBody>
+              {agenda.map((i, index) => (
+                <TableRow key={`row${index}`}>
+                  <TableDataCell>{dateString(i.start, value)}</TableDataCell>
+                  <TableDataCell>{dateString(i.stop!, value)}</TableDataCell>
+                  <TableDataCell>
+                    <Markdown source={i.description} />
+                  </TableDataCell>
+                </TableRow>
+              ))}
+            </TableBody>
+          </Table>
+        </Space>
+        <Space>
+          <Select
+            maxWidth={150}
+            listLayout={{ width: 'auto' }}
+            options={options}
+            value={value}
+            onChange={setValue}
+          />
+        </Space>
+      </Space>
+    </>
+  )
+}
