@@ -39,7 +39,7 @@ import { RunItConfigKey } from '../components'
 const settings = {
   ...DefaultSettings(),
   base_url: 'https://self-signed.looker.com:19999',
-  agentTag: 'RunIt 0.5',
+  agentTag: 'RunIt 0.8',
 } as IApiSettings
 
 /**
