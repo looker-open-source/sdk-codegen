@@ -71,7 +71,15 @@ export const prepareInputs = (
     const name = input.name
     if (input.location === 'body') {
       try {
-        result[name] = JSON.parse(result[name])
+        const parsed = JSON.parse(result[name])
+        // Keys call works for both objects and arrays if there are any values
+        const keys = Object.keys(parsed)
+        if (keys.length > 0) {
+          result[name] = parsed
+        } else {
+          // Remove body arg
+          delete result[name]
+        }
       } catch (e) {
         /** Treat as x-www-form-urlencoded */
         result[name] = requestContent[name]
