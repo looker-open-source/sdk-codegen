@@ -97,15 +97,13 @@ export const HomeScene: FC = () => {
             </TableBody>
           </Table>
         </Space>
-        <Space>
-          <Select
-            maxWidth={150}
-            listLayout={{ width: 'auto' }}
-            options={options}
-            value={value}
-            onChange={setValue}
-          />
-        </Space>
+        <Select
+          maxWidth={150}
+          listLayout={{ width: 'auto' }}
+          options={options}
+          value={value}
+          onChange={setValue}
+        />
       </Space>
     </>
   )
