@@ -231,7 +231,7 @@ export type EnumValueType = string | number
 /**
  * Returns sorted string array for IKeylist type
  * @param list Set of values
- * @returns {string[]} sorted string array of keys
+ * @returns sorted string array of keys
  */
 export const keyValues = (list: KeyList): string[] => {
   if (!list) return []
@@ -241,8 +241,8 @@ export const keyValues = (list: KeyList): string[] => {
 /**
  * Optionally quote a string if quotes are required
  * @param value to convert to string and optionally quote
- * @param {string} quoteChar defaults to "'"
- * @returns {string} the quoted or unquoted value
+ * @param quoteChar defaults to "'"
+ * @returns the quoted or unquoted value
  */
 export const mayQuote = (value: any, quoteChar = `'`): string => {
   const str = value.toString()
@@ -252,9 +252,9 @@ export const mayQuote = (value: any, quoteChar = `'`): string => {
 
 /**
  * Resolve a list of method keys into an IMethod[] in alphabetical order by name
- * @param {IApiModel} api model to use
- * @param {KeyList} refs references to models
- * @returns {IMethod[]} Populated method list. Anything not matched is skipped
+ * @param api model to use
+ * @param refs references to models
+ * @returns Populated method list. Anything not matched is skipped
  */
 export const methodRefs = (api: IApiModel, refs: KeyList): IMethod[] => {
   const keys = keyValues(refs)
@@ -268,27 +268,10 @@ export const methodRefs = (api: IApiModel, refs: KeyList): IMethod[] => {
 }
 
 /**
- * Resolves first method ref it can find
- * @param api parsed spec
- * @param type tree to walk
- */
-export const firstMethodRef = (api: ApiModel, type: IType): IMethod => {
-  let method = methodRefs(api, type.methodRefs)[0]
-  if (!method) {
-    const parents = typeRefs(api, type.parentTypes)
-    for (const parent of parents) {
-      method = firstMethodRef(api, parent)
-      if (method) break
-    }
-  }
-  return method
-}
-
-/**
  * Resolve a list of method keys into an IType[] in alphabetical order by name
- * @param {IApiModel} api model to use
- * @param {KeyList} refs references to models
- * @returns {IMethod[]} Populated method list. Anything not matched is skipped
+ * @param api model to use
+ * @param refs references to models
+ * @returns Populated method list. Anything not matched is skipped
  */
 export const typeRefs = (api: IApiModel, refs: KeyList): IType[] => {
   const keys = keyValues(refs)
@@ -300,6 +283,32 @@ export const typeRefs = (api: IApiModel, refs: KeyList): IType[] => {
     }
   })
   return result
+}
+
+/**
+ * Resolves first method ref it can find
+ * @param api parsed spec
+ * @param type tree to walk
+ * @param stack call stack to prevent infinite recursion
+ */
+export const firstMethodRef = (
+  api: ApiModel,
+  type: IType,
+  stack: KeyList = new Set<string>()
+): IMethod => {
+  stack.add(type.name)
+
+  let method = methodRefs(api, type.methodRefs)[0]
+  if (!method) {
+    const parents = typeRefs(api, type.parentTypes)
+    for (const parent of parents) {
+      if (!stack.has(parent.name)) {
+        method = firstMethodRef(api, parent, stack)
+      }
+      if (method) break
+    }
+  }
+  return method
 }
 
 /**
