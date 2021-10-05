@@ -37,6 +37,7 @@ import {
   testTextResponse,
   testUnknownResponse,
   testBogusJsonResponse,
+  testOneRowComplexJson,
 } from '../../test-data'
 import { ShowResponse } from './ShowResponse'
 
@@ -50,11 +51,18 @@ describe('ShowResponse', () => {
     ).toBeInTheDocument()
   })
 
-  test('it renders json responses', () => {
+  test('it renders 2D json responses', () => {
     renderWithTheme(<ShowResponse response={testJsonResponse} />)
     const tab = screen.getByRole('tabpanel')
     expect(tab).toHaveTextContent('"key1"')
     expect(tab).toHaveTextContent('"value1"')
+  })
+
+  test('it renders no grid for one-row complex json', () => {
+    renderWithTheme(<ShowResponse response={testOneRowComplexJson} />)
+    expect(screen.queryByRole('tabpanel')).not.toBeInTheDocument()
+    expect(screen.getByText('"fields"')).toBeInTheDocument()
+    expect(screen.getByText('"orders.id"')).toBeInTheDocument()
   })
 
   test('it renders text responses', () => {

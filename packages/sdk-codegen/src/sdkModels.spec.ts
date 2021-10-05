@@ -24,8 +24,9 @@
 
  */
 
+import { readFileSync } from 'fs'
 import type * as OAS from 'openapi3-ts'
-import { TestConfig } from './testUtils'
+import { rootFile, TestConfig } from './testUtils'
 import type {
   IEnumType,
   IMethod,
@@ -47,6 +48,7 @@ import {
   isSpecialName,
   keyValues,
   mayQuote,
+  MetaType,
   Method,
   methodRefs,
   safeName,
@@ -66,6 +68,13 @@ describe('sdkModels', () => {
     const expected = actual.sort((a, b) => a.localeCompare(b))
     expect(actual).toEqual(expected)
   }
+
+  it('API 4 models', () => {
+    const api4 = readFileSync(rootFile('spec/Looker.4.0.oas.json'), 'utf-8')
+    const api = ApiModel.fromString(api4)
+    const actual = Object.keys(api.typeTags)
+    expect(actual).toHaveLength(29)
+  })
 
   describe('ordering', () => {
     it('has types in sorted order', () => {
@@ -366,6 +375,13 @@ describe('sdkModels', () => {
         'look_id',
         'dashboard_id',
       ])
+    })
+
+    it('WhitelabelConfiguration has no writer', () => {
+      const type = apiTestModel.types.WhitelabelConfiguration
+      expect(type).toBeDefined()
+      const actual = apiTestModel.mayGetWriteableType(type)
+      expect(actual).toBeDefined()
     })
 
     it('generates writeable type for nested types with some readonly properties', () => {
@@ -1121,14 +1137,58 @@ describe('sdkModels', () => {
   })
 
   describe('tagging', () => {
-    it('methods are tagged', () => {
-      const actual = apiTestModel.tags
-      expect(Object.entries(actual)).toHaveLength(28)
+    describe('method tagging', () => {
+      it('methods are tagged', () => {
+        const actual = apiTestModel.tags
+        expect(Object.entries(actual)).toHaveLength(28)
+      })
+
+      it('methods are in the right tag', () => {
+        const actual = apiTestModel.tags.Theme
+        expect(Object.entries(actual)).toHaveLength(11)
+      })
     })
 
-    it('methods are in the right tag', () => {
-      const actual = apiTestModel.tags.Theme
-      expect(Object.entries(actual)).toHaveLength(11)
+    describe('type tagging', () => {
+      it('types are tagged', () => {
+        const actual = apiTestModel.typeTags
+        expect(Object.entries(actual)).toHaveLength(28)
+      })
+
+      it('types are in the right tag', () => {
+        const actual = apiTestModel.typeTags.Theme
+        expect(Object.entries(actual)).toHaveLength(7)
+      })
+
+      it('specification metaType is MetaType.Specification', () => {
+        const actual = apiTestModel.types.Error
+        expect(actual.metaType).toEqual(MetaType.Specification)
+        expect(actual.metaType.toString()).toEqual('Specification')
+      })
+
+      it('request metaType is MetaType.Request', () => {
+        const actual = apiTestModel.types.RequestActiveThemes
+        expect(actual.metaType).toEqual(MetaType.Request)
+        expect(actual.metaType.toString()).toEqual('Request')
+      })
+
+      it('write metaType is MetaType.Request', () => {
+        const actual = apiTestModel.types.WriteQuery
+        expect(actual.metaType).toEqual(MetaType.Write)
+        expect(actual.metaType.toString()).toEqual('Write')
+      })
+
+      it('enum metaType is MetaType.Enumerated', () => {
+        const actual = apiTestModel.types.ResultFormat
+        expect(actual.metaType).toEqual(MetaType.Enumerated)
+        expect(actual.metaType.toString()).toEqual('Enumerated')
+      })
+
+      it('intrinsic metaType is MetaType.Intrinsic', () => {
+        const actual = apiTestModel.types.datetime
+        expect(actual.metaType).toEqual(MetaType.Intrinsic)
+        expect(actual.metaType.toString()).toEqual('Intrinsic')
+      })
     })
   })
 

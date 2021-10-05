@@ -35,6 +35,7 @@ import {
   createSimpleItem,
   showDataChangeWarning,
   updateNullableProp,
+  validateBody,
 } from './formUtils'
 
 describe('Simple Items', () => {
@@ -258,6 +259,25 @@ describe('Complex Item', () => {
     )
     renderWithTheme(ComplexItem)
     expect(screen.getByText('A complex item')).toBeInTheDocument()
+  })
+
+  describe('validateBody', () => {
+    test.each`
+      value                                                      | error
+      ${'na.-_me=Vapor&age=3&luckyNumbers[]=5&luckyNumbers[]=7'} | ${''}
+      ${'name=Vapor&age=3&luckyNumbers[]=5&luckyNumbers[]7'}     | ${'luckyNumbers[]7'}
+      ${'{'}                                                     | ${'Unexpected end of JSON input'}
+      ${'}'}                                                     | ${'Unexpected token } in JSON at position 0'}
+      ${'['}                                                     | ${'Unexpected end of JSON input'}
+      ${'"'}                                                     | ${'Unexpected end of JSON input'}
+      ${'"foo"'}                                                 | ${''}
+      ${''}                                                      | ${''}
+      ${'{}'}                                                    | ${''}
+    `('it validates a body value of "$value"', ({ value, error }) => {
+      const actual = validateBody(value)
+      const expected = error ? `Syntax error in the body: ${error}` : error
+      expect(actual).toEqual(expected)
+    })
   })
 })
 

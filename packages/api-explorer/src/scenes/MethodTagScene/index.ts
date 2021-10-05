@@ -23,4 +23,4 @@
  SOFTWARE.
 
  */
-export { TagScene } from './TagScene'
+export { MethodTagScene } from './MethodTagScene'

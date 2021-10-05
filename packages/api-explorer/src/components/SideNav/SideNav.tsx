@@ -43,7 +43,7 @@ import type {
   ISearchResult,
   ApiModel,
 } from '@looker/sdk-codegen'
-import { CriteriaToSet } from '@looker/sdk-codegen'
+import { CriteriaToSet, tagTypes } from '@looker/sdk-codegen'
 
 import { SearchContext } from '../../context'
 import type { SpecAction } from '../../reducers'
@@ -51,8 +51,8 @@ import { setPattern } from '../../reducers'
 import { useWindowSize } from '../../utils'
 import { HEADER_REM } from '../Header'
 import { SelectorContainer } from '../SelectorContainer'
-import { SideNavTags } from './SideNavTags'
-import { SideNavTypes } from './SideNavTypes'
+import { SideNavMethodTags } from './SideNavMethodTags'
+import { SideNavTypeTags } from './SideNavTypeTags'
 import { useDebounce, countMethods, countTypes } from './searchUtils'
 import { SearchMessage } from './SearchMessage'
 
@@ -104,6 +104,7 @@ export const SideNav: FC<SideNavProps> = ({
   const [searchResults, setSearchResults] = useState<ISearchResult>()
   const searchCriteria = CriteriaToSet(searchSettings.criteria)
   const [tags, setTags] = useState(api.tags || {})
+  const [typeTags, setTypeTags] = useState(api.typeTags || {})
   const [types, setTypes] = useState(api.types || {})
   const [methodCount, setMethodCount] = useState(countMethods(tags))
   const [typeCount, setTypeCount] = useState(countTypes(types))
@@ -116,17 +117,21 @@ export const SideNav: FC<SideNavProps> = ({
     let results
     let newTags
     let newTypes
+    let newTypeTags
     if (debouncedPattern && api.search) {
       results = api.search(pattern, searchCriteria)
       newTags = results.tags
       newTypes = results.types
+      newTypeTags = tagTypes(api, results.types)
     } else {
       newTags = api.tags || {}
       newTypes = api.types || {}
+      newTypeTags = api.typeTags || {}
     }
 
     setTags(newTags)
     setTypes(newTypes)
+    setTypeTags(newTypeTags)
     setMethodCount(countMethods(newTags))
     setTypeCount(countTypes(newTypes))
     setSearchResults(results)
@@ -175,14 +180,18 @@ export const SideNav: FC<SideNavProps> = ({
       </TabList>
       <TabPanels {...tabs} pt="xsmall" height={`${menuH}px`} overflow="auto">
         <TabPanel>
-          <SideNavTags
+          <SideNavMethodTags
             tags={tags}
             specKey={specKey}
             defaultOpen={!!searchResults}
           />
         </TabPanel>
         <TabPanel>
-          <SideNavTypes types={types} specKey={specKey} />
+          <SideNavTypeTags
+            tags={typeTags}
+            specKey={specKey}
+            defaultOpen={!!searchResults}
+          />
         </TabPanel>
       </TabPanels>
     </nav>

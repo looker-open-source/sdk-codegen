@@ -23,7 +23,12 @@
  SOFTWARE.
 
  */
+import { api } from '../../test-data'
+import { getMetaTypes } from './utils'
 
-describe('DocReferences utils', () => {
-  test.todo('<DocReferenceItems />')
+describe('TypeTagScene utils', () => {
+  test('getMetaTypes returns a unique list of MetaTypes', () => {
+    const actual = getMetaTypes(api.typeTags.Query)
+    expect(actual).toHaveLength(4)
+  })
 })

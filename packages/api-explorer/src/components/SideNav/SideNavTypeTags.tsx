@@ -24,6 +24,32 @@
 
  */
 
-describe('DocReferences utils', () => {
-  test.todo('<DocReferenceItems />')
-})
+import React from 'react'
+import styled from 'styled-components'
+import type { TypeTagList } from '@looker/sdk-codegen'
+import { SideNavTypes } from './SideNavTypes'
+
+interface TypeTagsProps {
+  tags: TypeTagList
+  specKey: string
+  defaultOpen?: boolean
+  className?: string
+}
+
+export const SideNavTypeTags = styled(
+  ({ tags, specKey, className, defaultOpen }: TypeTagsProps) => (
+    <div className={className}>
+      {Object.keys(tags).map((tag) => (
+        <SideNavTypes
+          key={tag}
+          defaultOpen={defaultOpen}
+          types={tags[tag]}
+          tag={tag}
+          specKey={specKey}
+        />
+      ))}
+    </div>
+  )
+)`
+  padding: 0 ${({ theme }) => theme.space.large};
+`

@@ -32,6 +32,7 @@ import {
   ButtonTransparent,
   Tooltip,
   Fieldset,
+  MessageBar,
 } from '@looker/components'
 import type { IAPIMethods } from '@looker/sdk-rtl'
 import type { RunItHttpMethod, RunItInput, RunItValues } from '../../RunIt'
@@ -72,6 +73,10 @@ interface RequestFormProps {
   setHasConfig?: Dispatch<boolean>
   /** Configuration plug-in for stand-alone or extension */
   configurator: RunItConfigurator
+  /** Validation message to display */
+  validationMessage?: string
+  /** Validation message setter */
+  setValidationMessage?: Dispatch<string>
   /** Is RunIt being used in a Looker extension? */
   isExtension?: boolean
 }
@@ -93,6 +98,8 @@ export const RequestForm: FC<RequestFormProps> = ({
   setVersionsUrl,
   setHasConfig,
   configurator,
+  validationMessage,
+  setValidationMessage,
   isExtension = false,
 }) => {
   const handleBoolChange = (e: BaseSyntheticEvent) => {
@@ -123,13 +130,26 @@ export const RequestForm: FC<RequestFormProps> = ({
     setRequestContent({ ...requestContent, [name]: value })
   }
 
+  const safeSetMessage = (value: string) =>
+    setValidationMessage && setValidationMessage(value)
+
   const handleClear = (e: BaseSyntheticEvent) => {
     e.preventDefault()
     setRequestContent({})
+    safeSetMessage('')
   }
 
   return (
     <Form onSubmit={handleSubmit}>
+      {validationMessage && (
+        <MessageBar
+          intent={'critical'}
+          onPrimaryClick={() => safeSetMessage('')}
+          visible={validationMessage !== ''}
+        >
+          {validationMessage}
+        </MessageBar>
+      )}
       <Fieldset>
         {inputs.map((input) =>
           typeof input.type === 'string'
