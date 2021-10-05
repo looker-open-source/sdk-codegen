@@ -27,12 +27,12 @@
 import type { FC } from 'react'
 import React from 'react'
 import { Code, Tree, TreeItem } from '@looker/components'
-import type { IType } from '@looker/sdk-codegen'
+import type { IType, ApiModel } from '@looker/sdk-codegen'
 import { TypeOfType, typeOfType } from '@looker/sdk-codegen'
 import { useLocation } from 'react-router'
 import { Link } from '../Link'
-import { buildTypePath } from '../../utils'
 import { getSpecKey } from '../../reducers'
+import { buildPath } from '../../utils'
 import {
   ExploreProperty,
   pickType,
@@ -44,9 +44,10 @@ import {
 
 interface ExploreTypeLinkProps {
   type: IType
+  api: ApiModel
 }
 
-export const ExploreTypeLink: FC<ExploreTypeLinkProps> = ({ type }) => {
+export const ExploreTypeLink: FC<ExploreTypeLinkProps> = ({ type, api }) => {
   const location = useLocation()
   const picked = pickType(type)
   const name = picked.name
@@ -60,7 +61,7 @@ export const ExploreTypeLink: FC<ExploreTypeLinkProps> = ({ type }) => {
   return (
     <>
       {prefix}
-      <Link key={type.fullName} to={buildTypePath(specKey, name)}>
+      <Link key={type.fullName} to={buildPath(api, type, specKey)}>
         {name}
       </Link>
       {suffix}
@@ -71,6 +72,8 @@ export const ExploreTypeLink: FC<ExploreTypeLinkProps> = ({ type }) => {
 interface ExploreTypeProps {
   /** Type to explore */
   type: IType
+  /** parsed specification */
+  api: ApiModel
   /** Open the node display immediately */
   open?: boolean
   /** Create a link to the type? */
@@ -85,6 +88,7 @@ interface ExploreTypeProps {
 
 export const ExploreType: FC<ExploreTypeProps> = ({
   type,
+  api,
   open = true,
   link = false,
   level = 0,
@@ -106,13 +110,14 @@ export const ExploreType: FC<ExploreTypeProps> = ({
           {!!type.description && (
             <TreeItem key={type.name}>{type.description}</TreeItem>
           )}
-          {link && <ExploreTypeLink type={type} />}
+          {link && <ExploreTypeLink type={type} api={api} />}
         </>
       }
     >
       {nest &&
         Object.values(props).map((property) => (
           <ExploreProperty
+            api={api}
             key={property.fullName}
             property={property}
             level={level + 1}

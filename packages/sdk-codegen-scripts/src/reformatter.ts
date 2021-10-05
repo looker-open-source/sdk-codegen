@@ -27,9 +27,9 @@
 import * as path from 'path'
 import * as fs from 'fs'
 import { danger, success, warn } from '@looker/sdk-codegen-utils'
-import * as prettier from 'prettier'
 import type { ICodeGen } from '@looker/sdk-codegen'
 import { isFileSync, readFileSync, run, utf8Encoding } from './nodeUtils'
+import { prettify } from './prettify'
 
 export interface IReformat {
   fileSep: string
@@ -129,18 +129,6 @@ class PythonFormatter extends BaseFormatter {
   }
 }
 
-const prettierOptions: prettier.Options = {
-  bracketSpacing: true,
-  endOfLine: 'auto',
-  parser: 'typescript',
-  proseWrap: 'preserve',
-  quoteProps: 'as-needed',
-  semi: false,
-  singleQuote: true,
-  trailingComma: 'es5',
-  arrowParens: 'always',
-}
-
 class TypescriptFormatter extends BaseFormatter {
   constructor() {
     super('TypeScript')
@@ -154,7 +142,7 @@ class TypescriptFormatter extends BaseFormatter {
   }
 
   reformatFile(fileName: string) {
-    const source = prettier.format(readFileSync(fileName), prettierOptions)
+    const source = prettify(readFileSync(fileName))
     if (source) {
       writeFile(fileName, source)
     }

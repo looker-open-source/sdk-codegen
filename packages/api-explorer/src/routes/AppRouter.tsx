@@ -29,7 +29,13 @@ import { Redirect, Route, Switch } from 'react-router-dom'
 import type { ApiModel, SpecList } from '@looker/sdk-codegen'
 import type { RunItSetter } from '@looker/run-it'
 
-import { HomeScene, MethodScene, TagScene, TypeScene } from '../scenes'
+import {
+  HomeScene,
+  MethodScene,
+  MethodTagScene,
+  TypeScene,
+  TypeTagScene,
+} from '../scenes'
 import { DiffScene } from '../scenes/DiffScene'
 import type { IApixEnvAdaptor } from '../utils'
 import { diffPath } from '../utils'
@@ -61,7 +67,7 @@ export const AppRouter: FC<AppRouterProps> = ({
         <HomeScene api={api} />
       </Route>
       <Route path="/:specKey/methods/:methodTag" exact>
-        <TagScene api={api} />
+        <MethodTagScene api={api} />
       </Route>
       <Route path="/:specKey/methods/:methodTag/:methodName">
         <MethodScene
@@ -70,7 +76,10 @@ export const AppRouter: FC<AppRouterProps> = ({
           setVersionsUrl={setVersionsUrl}
         />
       </Route>
-      <Route path="/:specKey/types/:typeName">
+      <Route path="/:specKey/types/:typeTag" exact>
+        <TypeTagScene api={api} />
+      </Route>
+      <Route path="/:specKey/types/:typeTag/:typeName">
         <TypeScene api={api} />
       </Route>
     </Switch>

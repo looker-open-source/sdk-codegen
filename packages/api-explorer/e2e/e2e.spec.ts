@@ -47,7 +47,7 @@ describe('API Explorer', () => {
     })
 
     it('renders a method page', async () => {
-      await expect(page).toClick('h5', { text: 'Dashboard' })
+      await expect(page).toClick('h4', { text: 'Dashboard' })
       await Promise.all([
         page.waitForNavigation(),
         expect(page).toClick('a', { text: 'Get All Dashboards' }),
@@ -92,6 +92,7 @@ describe('API Explorer', () => {
 
     it('renders a type page', async () => {
       await expect(page).toClick('button', { text: /^Types/ })
+      await expect(page).toClick('h4', { text: 'ApiAuth' })
       await expect(page).toClick('a', { text: 'AccessToken' })
 
       // title
@@ -110,7 +111,7 @@ describe('API Explorer', () => {
     })
 
     it('renders a tag scene and filters by operation', async () => {
-      await expect(page).toClick('h5', { text: 'ApiAuth' })
+      await expect(page).toClick('h4', { text: 'ApiAuth' })
       await expect(page).toMatchElement('h2', {
         text: 'ApiAuth: API Authentication',
       })
@@ -148,7 +149,7 @@ describe('API Explorer', () => {
       expect(await page.evaluate((x) => x.value, languageHandle)).toEqual(
         'Python'
       )
-      await expect(page).toClick('h5', { text: 'Dashboard' })
+      await expect(page).toClick('h4', { text: 'Dashboard' })
       await expect(page).toClick('a', { text: 'Get All Dashboards' })
       await expect(page).toMatchElement('h3', { text: 'Python Declaration' })
 
@@ -202,7 +203,7 @@ describe('API Explorer', () => {
     })
 
     it('should be able to navigate directly to a type', async () => {
-      await goToPage(`${v31}/types/Query`)
+      await goToPage(`${v31}/types/Query/Query`)
       await expect(page).toMatchElement('h2', { text: 'Query' })
       await expect(page).toMatchElement('button', { text: 'Query' })
     })
@@ -235,7 +236,7 @@ describe('API Explorer', () => {
       await expect(page).toClick('button', { text: 'Types (1)' })
       await expect(page).toClick('a', { text: 'WriteTheme' })
       await expect(page).toMatchElement('h2', { text: 'WriteTheme' })
-      await expect(page.url()).toEqual(`${v31}/types/WriteTheme`)
+      await expect(page.url()).toEqual(`${v31}/types/Theme/WriteTheme`)
     })
   })
 })

@@ -26,4 +26,5 @@
 export { HomeScene } from './HomeScene'
 export { MethodScene } from './MethodScene'
 export { TypeScene } from './TypeScene'
-export { TagScene } from './TagScene'
+export { MethodTagScene } from './MethodTagScene'
+export { TypeTagScene } from './TypeTagScene'
