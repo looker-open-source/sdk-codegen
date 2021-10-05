@@ -32,7 +32,7 @@
     "deploy-dev-portal": "rm -f ../../../developer-portal/static/apix/dist/*.js* && cp -R ./dist/*.js* ../../../developer-portal/static/apix/dist"
   },
   "devDependencies": {
-    "@looker/components-test-utils": "^1.4.2",
+    "@looker/components-test-utils": "^1.5.5",
     "@looker/sdk-codegen-scripts": "^21.0.27",
     "@looker/sdk-node": "^21.14.0",
     "@styled-icons/styled-icon": "^10.6.3",
@@ -66,10 +66,10 @@
   },
   "dependencies": {
     "@looker/code-editor": "^0.1.10",
-    "@looker/components": "^2.2.1",
-    "@looker/components-date": "^2.1.1",
-    "@looker/design-tokens": "^2.2.0",
-    "@looker/icons": "^1.4.1",
+    "@looker/components": "^2.8.1",
+    "@looker/components-date": "^2.4.1",
+    "@looker/design-tokens": "^2.7.1",
+    "@looker/icons": "^1.5.3",
     "@looker/run-it": "^0.9.19",
     "@looker/sdk": "^21.14.0",
     "@looker/sdk-codegen": "^21.0.25",

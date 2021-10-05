@@ -24,71 +24,56 @@
 
  */
 
-export interface IAgendaItem {
-  /** Start datetime of agenda item */
-  start: number
-  /** End of agenda item. If not specified, the next chronological event will be its end time */
-  stop?: number
-  /** Markdown describing item */
-  description: string
-}
+import type { AgendaItems } from './components'
 
-export type Agenda = Array<IAgendaItem>
-/*
-| Start Time      | End Time        | Description                         |
-| --------------- | --------------- | ----------------------------------- |
-| Nov 10 9:00 am  | Nov 10 9:15 am  | Kick off                            |
-| Nov 10 9:15 am  | Nov 10 10:10 am | Start hacking, and don't stop!      |
-| Nov 10 10:00 am | Nov 10 11:00 am | Looker staff office hour            |
-| Nov 11 4:00 pm  | Nov 11 6:00 pm  | Hackathon judging (projects locked) |
-| Nov 11 6:00 pm  | Nov 11 7:00 pm  | Hackathon award ceremony            |
-
- */
-
-export const agendaEn: Agenda = [
+export const agendaEn: AgendaItems = [
   {
-    start: Date.parse('10 Nov 2021 08:00:00 GMT'),
-    description: 'Hack@Home 20201 kick-off',
+    start: new Date('10 Nov 2021 08:00:00 GMT'),
+    title: 'Hack@Home 2021 kick-off',
   },
   {
-    start: Date.parse('10 Nov 2021 08:30:00 GMT'),
-    description: `Start hacking, and don't stop until judging begins!`,
+    start: new Date('10 Nov 2021 08:30:00 GMT'),
+    title: 'Start hacking',
+    description: `and don't stop until judging begins!`,
   },
   {
-    start: Date.parse('10 Nov 2021 09:00:00 GMT'),
-    description: `Looker staff office Hour`,
+    start: new Date('10 Nov 2021 09:00:00 GMT'),
+    title: `Looker staff office hour`,
   },
   {
-    start: Date.parse('11 Nov 2021 10:00:00 GMT'),
-    description: `Judging begins (projects locked)`,
+    start: new Date('11 Nov 2021 10:00:00 GMT'),
+    title: `Judging begins`,
+    description: 'projects locked',
   },
   {
-    start: Date.parse('11 Nov 2021 20:00:00 GMT'),
-    stop: Date.parse('11 Nov 2021 21:30:00 GMT'),
-    description: `Awards ceremony and closing`,
+    start: new Date('11 Nov 2021 20:00:00 GMT'),
+    stop: new Date('11 Nov 2021 21:30:00 GMT'),
+    title: `Awards ceremony`,
   },
 ]
 
-export const agendaJa: Agenda = [
+export const agendaJa: AgendaItems = [
   {
-    start: Date.parse('10 Nov 2021 08:00:00 GMT'),
-    description: '日本 Hack@Home 20201 kick-off',
+    start: new Date('10 Nov 2021 08:00:00 GMT'),
+    title: '日本 Hack@Home 2021 kick-off',
   },
   {
-    start: Date.parse('10 Nov 2021 08:30:00 GMT'),
-    description: `日本 hacking, and don't stop until judging begins!`,
+    start: new Date('10 Nov 2021 08:30:00 GMT'),
+    title: '日本 Start hacking',
+    description: `and don't stop until judging begins!`,
   },
   {
-    start: Date.parse('10 Nov 2021 09:00:00 GMT'),
-    description: `日本 Looker staff office Hour`,
+    start: new Date('10 Nov 2021 09:00:00 GMT'),
+    title: `日本 Looker staff office hour`,
   },
   {
-    start: Date.parse('11 Nov 2021 10:00:00 GMT'),
-    description: `日本 Judging begins (projects locked)`,
+    start: new Date('11 Nov 2021 10:00:00 GMT'),
+    title: `日本 Judging begins`,
+    description: 'projects locked',
   },
   {
-    start: Date.parse('11 Nov 2021 20:00:00 GMT'),
-    stop: Date.parse('11 Nov 2021 21:30:00 GMT'),
-    description: `日本 Awards ceremony and closing`,
+    start: new Date('11 Nov 2021 20:00:00 GMT'),
+    stop: new Date('11 Nov 2021 21:30:00 GMT'),
+    title: `日本 Awards ceremony`,
   },
 ]

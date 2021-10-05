@@ -25,44 +25,16 @@
  */
 
 import type { FC } from 'react'
-import moment from 'moment-timezone'
 import React, { useEffect, useState } from 'react'
-import { Markdown } from '@looker/code-editor'
 
-import {
-  Select,
-  Space,
-  Table,
-  TableBody,
-  TableRow,
-  TableDataCell,
-} from '@looker/components'
-import type { Agenda } from './agenda'
+import { Select, Space, Heading, SpaceVertical } from '@looker/components'
 import { agendaEn, agendaJa } from './agenda'
-const English = 'English'
-const Japanese = '日本'
-
-const dateString = (value: number, language: string) => {
-  const zone = language === English ? 'America/Los_Angeles' : 'Asia/Tokyo'
-  return moment(value).tz(zone).format('LLL')
-}
-
-const calcAgenda = (swap: Agenda) => {
-  swap = swap.sort((a, b) => a.start - b.start)
-  swap.forEach((i, index) => {
-    // Fill in any missing stop values with the next item's start value
-    if (!i.stop) {
-      if (index <= swap.length + 1) {
-        i.stop = swap[index + 1].start
-      }
-    }
-  })
-  return swap
-}
+import type { AgendaItems } from './components'
+import { Agenda, English, Japanese } from './components'
 
 export const HomeScene: FC = () => {
   const [value, setValue] = useState<string>(English)
-  const [agenda, setAgenda] = useState<Agenda>(calcAgenda(agendaEn))
+  const [agenda, setAgenda] = useState<AgendaItems>(agendaEn)
   const options = [
     { value: English, label: English },
     { value: Japanese, label: Japanese },
@@ -71,40 +43,34 @@ export const HomeScene: FC = () => {
   useEffect(() => {
     switch (value) {
       case English:
-        setAgenda(calcAgenda(agendaEn))
+        setAgenda(agendaEn)
         break
       case Japanese:
-        setAgenda(calcAgenda(agendaJa))
+        setAgenda(agendaJa)
         break
     }
   }, [value])
 
   return (
     <>
-      <Space align="start">
-        <Space>
-          <Table verticalAlign={'top'}>
-            <TableBody>
-              {agenda.map((i, index) => (
-                <TableRow key={`row${index}`}>
-                  <TableDataCell>{dateString(i.start, value)}</TableDataCell>
-                  <TableDataCell>{dateString(i.stop!, value)}</TableDataCell>
-                  <TableDataCell>
-                    <Markdown source={i.description} />
-                  </TableDataCell>
-                </TableRow>
-              ))}
-            </TableBody>
-          </Table>
+      <SpaceVertical gap="u5">
+        <Space between>
+          <Heading as="h2" fontSize="xxxlarge" fontWeight="medium">
+            Agenda
+          </Heading>
+          <Select
+            maxWidth={150}
+            listLayout={{ width: 'auto' }}
+            options={options}
+            value={value}
+            onChange={setValue}
+          />
         </Space>
-        <Select
-          maxWidth={150}
-          listLayout={{ width: 'auto' }}
-          options={options}
-          value={value}
-          onChange={setValue}
-        />
-      </Space>
+
+        <SpaceVertical>
+          <Agenda schedule={agenda} language={value} />
+        </SpaceVertical>
+      </SpaceVertical>
     </>
   )
 }

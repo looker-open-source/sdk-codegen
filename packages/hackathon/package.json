@@ -38,8 +38,8 @@
     "@looker/sdk-rtl": "*",
     "@looker/code-editor": "*",
     "@looker/wholly-sheet": "*",
-    "@looker/components": "^2.2.1",
-    "@looker/icons": "1.3.0",
+    "@looker/components": "^2.8.1",
+    "@looker/icons": "^1.5.3",
     "@looker/extension-sdk": "*",
     "@looker/extension-sdk-react": "*",
     "@styled-icons/material": "^10.28.0",
@@ -59,7 +59,7 @@
     "moment-timezone": "^0.5.33"
   },
   "devDependencies": {
-    "@looker/components-test-utils": "^1.4.2",
+    "@looker/components-test-utils": "^1.5.5",
     "@types/react-redux": "^7.1.9",
     "@types/styled-components": "^5.1.7",
     "@types/styled-system": "^5.1.10",
