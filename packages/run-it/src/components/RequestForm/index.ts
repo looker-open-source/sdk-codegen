@@ -23,4 +23,6 @@
  SOFTWARE.
 
  */
+
 export { RequestForm } from './RequestForm'
+export { validateBody } from './formUtils'

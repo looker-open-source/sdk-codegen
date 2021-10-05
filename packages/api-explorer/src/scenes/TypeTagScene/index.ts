@@ -23,7 +23,4 @@
  SOFTWARE.
 
  */
-
-describe('DocReferences utils', () => {
-  test.todo('<DocReferenceItems />')
-})
+export { TypeTagScene } from './TypeTagScene'

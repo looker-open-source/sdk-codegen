@@ -23,12 +23,4 @@
  SOFTWARE.
 
  */
-import { api } from '../../test-data'
-import { getOperations } from './utils'
-
-describe('TagScene utils', () => {
-  test('getOperations returns a unique list of operations', () => {
-    const actual = getOperations(api.tags.Query)
-    expect(actual).toHaveLength(new Set(actual).size)
-  })
-})
+export { DocTypeSummary } from './DocTypeSummary'

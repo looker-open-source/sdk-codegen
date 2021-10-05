@@ -90,6 +90,7 @@ export const MethodScene: FC<MethodSceneProps> = ({
   const { value, toggle, setOn } = useToggle()
   const [method, setMethod] = useState(api.methods[methodName])
   const seeTypes = typeRefs(api, method?.customTypes)
+  const [inputs, setInputs] = useState(createInputs(api, method))
 
   const RunItButton = value ? Button : ButtonOutline
 
@@ -106,13 +107,19 @@ export const MethodScene: FC<MethodSceneProps> = ({
         history.push(`/${specKey}/methods`)
       }
     }
-  }, [api, history, methodName, specKey])
+  }, [api, history, methodName, methodTag, specKey])
+
+  useEffect(() => {
+    setInputs(createInputs(api, method))
+  }, [api, method])
 
   useEffect(() => {
     const checkRunIt = async () => {
       try {
         const show = await showRunIt(envAdaptor)
-        if (show) setOn()
+        if (show) {
+          setOn()
+        }
       } catch (error) {
         console.error(error)
       }
@@ -149,10 +156,10 @@ export const MethodScene: FC<MethodSceneProps> = ({
           <DocOperation method={method} />
           <DocMarkdown source={method.description} specKey={specKey} />
           <DocSDKs api={api} method={method} />
-          <DocRequestBody method={method} />
+          <DocRequestBody api={api} method={method} />
           <DocSdkUsage method={method} />
           <DocReferences typesUsed={seeTypes} api={api} specKey={specKey} />
-          <DocResponses responses={method.responses} />
+          <DocResponses api={api} responses={method.responses} />
           <DocSchema object={method.schema} />
         </ApixSection>
       )}
@@ -172,7 +179,7 @@ export const MethodScene: FC<MethodSceneProps> = ({
             <RunIt
               sdkLanguage={sdkLanguage}
               api={api}
-              inputs={createInputs(api, method)}
+              inputs={inputs}
               method={method}
               setVersionsUrl={setVersionsUrl}
             />

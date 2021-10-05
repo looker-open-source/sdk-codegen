@@ -24,6 +24,27 @@
 
  */
 
-describe('DocReferences utils', () => {
-  test.todo('<DocReferenceItems />')
-})
+import * as prettier from 'prettier'
+
+const prettierTs: prettier.Options = {
+  bracketSpacing: true,
+  endOfLine: 'auto',
+  parser: 'typescript',
+  proseWrap: 'preserve',
+  quoteProps: 'as-needed',
+  semi: false,
+  singleQuote: true,
+  trailingComma: 'es5',
+  arrowParens: 'always',
+}
+
+/**
+ * Format code with Prettier
+ * @param code to format
+ * @param options prettier.Options to override the default processing. Typescript options are the default
+ */
+export const prettify = (code: string, options: prettier.Options = {}) => {
+  const merged: prettier.Options = { ...prettierTs, ...{ options } }
+  const source = prettier.format(code, merged)
+  return source.trimRight()
+}

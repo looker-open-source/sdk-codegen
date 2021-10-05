@@ -23,33 +23,12 @@
  SOFTWARE.
 
  */
+import { api } from '../../test-data'
+import { getOperations } from './utils'
 
-import React from 'react'
-import styled from 'styled-components'
-import type { TagList } from '@looker/sdk-codegen'
-import { SideNavMethods } from './SideNavMethods'
-
-interface TagsProps {
-  tags: TagList
-  specKey: string
-  defaultOpen?: boolean
-  className?: string
-}
-
-export const SideNavTags = styled(
-  ({ tags, specKey, className, defaultOpen }: TagsProps) => (
-    <div className={className}>
-      {Object.keys(tags).map((tag) => (
-        <SideNavMethods
-          key={tag}
-          defaultOpen={defaultOpen}
-          tag={tag}
-          methods={tags[tag]}
-          specKey={specKey}
-        />
-      ))}
-    </div>
-  )
-)`
-  padding: 0 ${({ theme }) => theme.space.large};
-`
+describe('MethodTagScene utils', () => {
+  test('getOperations returns a unique list of operations', () => {
+    const actual = getOperations(api.tags.Query)
+    expect(actual).toHaveLength(new Set(actual).size)
+  })
+})

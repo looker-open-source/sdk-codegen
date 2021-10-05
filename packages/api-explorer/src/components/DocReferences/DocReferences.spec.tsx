@@ -29,6 +29,7 @@ import { screen } from '@testing-library/react'
 
 import { renderWithSearchAndRouter } from '../../test-utils'
 import { api } from '../../test-data'
+import { buildPath } from '../../utils'
 import { DocReferences } from './DocReferences'
 
 describe('DocReferences', () => {
@@ -50,18 +51,18 @@ describe('DocReferences', () => {
     )
     expect(screen.getByText(typesUsed[0].name).closest('a')).toHaveAttribute(
       'href',
-      `/3.1/types/${typesUsed[0].name}`
+      buildPath(api, typesUsed[0], '3.1')
     )
 
     expect(typesUsedBy).toHaveLength(1)
     expect(typesUsedBy[0].name).toEqual('Dashboard')
     expect(screen.getByText(typesUsedBy[0].name).closest('a')).toHaveAttribute(
       'href',
-      `/3.1/types/${typesUsedBy[0].name}`
+      buildPath(api, typesUsedBy[0], '3.1')
     )
     expect(
       screen.getByText(methodsUsedBy[0].name).closest('a')
-    ).toHaveAttribute('href', `/3.1/methods/Dashboard/${methodsUsedBy[0].name}`)
+    ).toHaveAttribute('href', buildPath(api, methodsUsedBy[0], '3.1'))
   })
 
   test('it highlights text matching search pattern', () => {
@@ -76,6 +77,9 @@ describe('DocReferences', () => {
     )
     const foundRef = screen.getByRole('link')
     expect(foundRef).toContainHTML('<span class="hi">Dash</span>board')
-    expect(foundRef).toHaveAttribute('href', '/3.1/types/Dashboard')
+    expect(foundRef).toHaveAttribute(
+      'href',
+      buildPath(api, api.types.Dashboard, '3.1')
+    )
   })
 })

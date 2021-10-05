@@ -30,75 +30,74 @@ import userEvent from '@testing-library/user-event'
 
 import { api } from '../../test-data'
 import { renderWithRouter } from '../../test-utils'
-import { TagScene } from './TagScene'
+import { TypeTagScene } from './TypeTagScene'
 
-const opBtnNames = /ALL|GET|POST|PUT|PATCH|DELETE/
+const opBtnNames = /ALL|SPECIFICATION|WRITE|REQUEST|ENUMERATED/
 
-describe('TagScene', () => {
+const path = '/:specKey/types/:typeTag'
+
+describe('TypeTagScene', () => {
   Element.prototype.scrollTo = jest.fn()
 
-  test('it renders operation buttons and all methods for a given method tag', () => {
+  test('it renders type buttons and all methods for a given type tag', () => {
     renderWithRouter(
-      <Route path="/:specKey/methods/:methodTag">
-        <TagScene api={api} />
+      <Route path={path}>
+        <TypeTagScene api={api} />
       </Route>,
-      ['/3.1/methods/ColorCollection']
+      ['/3.1/types/Dashboard']
     )
     expect(
       screen.getAllByRole('button', {
         name: opBtnNames,
       })
-    ).toHaveLength(6)
-    expect(screen.getAllByText(/^\/color_collections.*/)).toHaveLength(
-      Object.keys(api.tags.ColorCollection).length
+    ).toHaveLength(4)
+    expect(screen.getAllByRole('heading', { level: 3 })).toHaveLength(
+      Object.keys(api.typeTags.Dashboard).length
     )
-    expect(
-      screen.getByText('/color_collections/standard').closest('a')
-    ).toHaveAttribute(
+    expect(screen.getByText('DashboardBase').closest('a')).toHaveAttribute(
       'href',
-      '/3.1/methods/ColorCollection/color_collections_standard'
+      '/3.1/types/Dashboard/DashboardBase'
     )
   })
 
   test('it only renders operation buttons for operations that exist under that tag', () => {
-    /** ApiAuth contains two POST methods and a DELETE method */
     renderWithRouter(
-      <Route path="/:specKey/methods/:methodTag">
-        <TagScene api={api} />
+      <Route path={path}>
+        <TypeTagScene api={api} />
       </Route>,
-      ['/3.1/methods/ApiAuth']
+      ['/3.1/types/DataAction']
     )
     expect(
       screen.getAllByRole('button', {
         name: opBtnNames,
       })
-    ).toHaveLength(3)
+    ).toHaveLength(2)
   })
 
   test('it filters methods by operation type', async () => {
     renderWithRouter(
-      <Route path="/:specKey/methods/:methodTag">
-        <TagScene api={api} />
+      <Route path={path}>
+        <TypeTagScene api={api} />
       </Route>,
-      ['/3.1/methods/Look']
+      ['/3.1/types/Look']
     )
-    const allLookMethods = /^\/look.*/
-    expect(screen.getAllByText(allLookMethods)).toHaveLength(7)
-    /** Filter by GET operation */
-    userEvent.click(screen.getByRole('button', { name: 'GET' }))
+    expect(screen.getAllByRole('heading', { level: 3 })).toHaveLength(
+      Object.keys(api.typeTags.Look).length
+    )
+
+    expect(screen.getAllByRole('heading', { level: 3 })).toHaveLength(
+      Object.keys(api.typeTags.Look).length
+    )
+
+    /** Filter by SPECIFICATION */
+    userEvent.click(screen.getByRole('button', { name: 'SPECIFICATION' }))
     await waitFor(() => {
-      expect(screen.getAllByText(allLookMethods)).toHaveLength(4)
+      expect(screen.getAllByRole('heading', { level: 3 })).toHaveLength(5)
     })
-    /** Filter by DELETE operation */
-    userEvent.click(screen.getByRole('button', { name: 'DELETE' }))
+    /** Filter by REQUEST */
+    userEvent.click(screen.getByRole('button', { name: 'REQUEST' }))
     await waitFor(() => {
-      // eslint-disable-next-line jest-dom/prefer-in-document
-      expect(screen.getAllByText(allLookMethods)).toHaveLength(1)
-    })
-    /** Restore original state */
-    userEvent.click(screen.getByRole('button', { name: 'ALL' }))
-    await waitFor(() => {
-      expect(screen.getAllByText(allLookMethods)).toHaveLength(7)
+      expect(screen.getAllByRole('heading', { level: 3 })).toHaveLength(2)
     })
   })
 })
