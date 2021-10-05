@@ -190,6 +190,14 @@
         }
       },
       {
+        "files":  ["packages/redux/**/*.ts?(x)", "packages/redux/**/*.spec.ts?(x)"],
+        "rules": {
+          "testing-library/render-result-naming-convention": "off",
+          "@typescript-eslint/no-empty-function": "off",
+          "@typescript-eslint/ban-ts-comment": "off"
+        }
+      },
+      {
         "files": [  "packages/sdk-codegen-scripts/**/*.ts"],
         "rules": {
           "no-console": "off"
