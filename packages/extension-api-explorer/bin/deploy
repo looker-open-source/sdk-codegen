@@ -1,4 +1,10 @@
 #!/bin/bash
+set -e
+
+# keep track of the last executed command
+trap 'last_command=$current_command; current_command=$BASH_COMMAND' DEBUG
+# echo an error message before exiting
+trap 'echo "\"${last_command}\" command filed with exit code $?."' EXIT
 
 if [ $# -eq 0 ]
 then
@@ -12,8 +18,12 @@ cd ../.. && yarn
 echo "Rebuilding all packages"
 yarn build
 
+
+cd packages/extension-api-explorer
+echo "Removing existing bundle"
+rm -rf dist/
 echo "Creating extension-api-explorer production bundle"
-cd packages/extension-api-explorer && yarn bundle
+yarn bundle
 path_to_bundle=$(pwd)"/dist/bundle.js"
 
 cd ../../..
