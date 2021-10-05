@@ -24,8 +24,9 @@
 
  */
 
+import { readFileSync } from 'fs'
 import type * as OAS from 'openapi3-ts'
-import { TestConfig } from './testUtils'
+import { rootFile, TestConfig } from './testUtils'
 import type {
   IEnumType,
   IMethod,
@@ -67,6 +68,13 @@ describe('sdkModels', () => {
     const expected = actual.sort((a, b) => a.localeCompare(b))
     expect(actual).toEqual(expected)
   }
+
+  it('API 4 models', () => {
+    const api4 = readFileSync(rootFile('spec/Looker.4.0.oas.json'), 'utf-8')
+    const api = ApiModel.fromString(api4)
+    const actual = Object.keys(api.typeTags)
+    expect(actual).toHaveLength(29)
+  })
 
   describe('ordering', () => {
     it('has types in sorted order', () => {
