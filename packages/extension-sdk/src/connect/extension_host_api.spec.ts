@@ -420,7 +420,7 @@ describe('extension_host_api tests', () => {
         }),
       })
       throw new Error('Unexpected success')
-    } catch (error) {
+    } catch (error: any) {
       expect(error.message).toEqual(
         'Extension requires Looker version >=7.9, got 6.25.0'
       )
@@ -511,7 +511,7 @@ describe('extension_host_api tests', () => {
         }),
       })
       throw new Error('Unexpected success')
-    } catch (error) {
+    } catch (error: any) {
       expect(error.message).toEqual(
         'Extension requires Looker version >=7.11, got 6.25.0'
       )
@@ -562,7 +562,7 @@ describe('extension_host_api tests', () => {
       }
       await hostApi.oauth2Authenticate(authEndpoint, authParameters)
       throw new Error('Unexpected success')
-    } catch (error) {
+    } catch (error: any) {
       expect(error.message).toEqual(
         'Extension requires Looker version >=7.9, got 6.25.0'
       )
@@ -626,7 +626,7 @@ describe('extension_host_api tests', () => {
         exchangeParameters
       )
       throw new Error('Unexpected success')
-    } catch (error) {
+    } catch (error: any) {
       expect(error.message).toEqual(
         'Extension requires Looker version >=7.11, got 7.9'
       )
@@ -660,7 +660,7 @@ describe('extension_host_api tests', () => {
     try {
       hostApi.createSecretKeyTag('SECRET_KEY_NAME')
       throw new Error('Unexpected success')
-    } catch (error) {
+    } catch (error: any) {
       expect(error.message).toEqual(
         'Extension requires Looker version >=7.11, got 7.9'
       )
@@ -682,7 +682,7 @@ describe('extension_host_api tests', () => {
     try {
       hostApi.createSecretKeyTag('SECRET_KEY_NAME_@@')
       throw new Error('Unexpected success')
-    } catch (error) {
+    } catch (error: any) {
       expect(error.message).toEqual('Unsupported characters in key name')
     }
   })
