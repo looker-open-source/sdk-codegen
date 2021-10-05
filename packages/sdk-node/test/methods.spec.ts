@@ -871,12 +871,6 @@ describe('LookerNodeSDK', () => {
       async () => {
         const sdk = new LookerSDK(session)
         const query = await sdk.ok(
-          // sdk.create_query({
-          //   model: 'thelook',
-          //   view: 'users',
-          //   fields: ['users.id', 'users.first_name'],
-          //   // filters: { 'users.id': '-1' },
-          // })
           sdk.create_query({
             model: 'system__activity',
             view: 'dashboard',
