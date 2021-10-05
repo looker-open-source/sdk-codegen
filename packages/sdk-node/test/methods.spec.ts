@@ -865,6 +865,52 @@ describe('LookerNodeSDK', () => {
       },
       testTimeout
     )
+
+    it(
+      'parses a query with no results',
+      async () => {
+        const sdk = new LookerSDK(session)
+        const query = await sdk.ok(
+          // sdk.create_query({
+          //   model: 'thelook',
+          //   view: 'users',
+          //   fields: ['users.id', 'users.first_name'],
+          //   // filters: { 'users.id': '-1' },
+          // })
+          sdk.create_query({
+            model: 'system__activity',
+            view: 'dashboard',
+            limit: '2',
+            fields: ['dashboard.id', 'dashboard.title'],
+            filters: { 'dashboard.id': '-1' },
+          })
+        )
+        expect(query).toBeDefined()
+        expect(query.id).toBeDefined()
+        for (const format of ['csv', 'json', 'json_detail', 'txt', 'md']) {
+          let failed = ''
+          try {
+            const live = await sdk.ok(
+              sdk.run_query({ query_id: query.id!, result_format: format })
+            )
+            const cached = await sdk.ok(
+              sdk.run_query({
+                query_id: query.id!,
+                result_format: format,
+                cache: true,
+              })
+            )
+            expect(live).not.toEqual('{}')
+            expect(cached).not.toEqual('{}')
+          } catch (e: any) {
+            failed = e.message
+          }
+          expect(failed).toEqual('')
+        }
+        await sdk.authSession.logout()
+      },
+      testTimeout
+    )
   })
 
   describe('Dashboard endpoints', () => {
