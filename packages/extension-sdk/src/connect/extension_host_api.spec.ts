@@ -593,6 +593,49 @@ describe('extension_host_api tests', () => {
     done()
   })
 
+  it('sends oauth2 authenticate request with response_type id_token', async (done) => {
+    const hostApi = createHostApi({ lookerVersion: '7.9' })
+    const authEndpoint = 'https://accounts.google.com/o/oauth2/v2/auth'
+    const authParameters = {
+      client_id: 'CLIENT_ID',
+      scope: 'SCOPE',
+      response_type: 'id_token',
+    }
+    await hostApi.oauth2Authenticate(authEndpoint, authParameters)
+    expect(sendAndReceiveSpy).toHaveBeenCalledWith('EXTENSION_API_REQUEST', {
+      payload: {
+        payload: {
+          authEndpoint,
+          authParameters,
+          httpMethod: 'POST',
+        },
+        type: 'oauth2_authenticate',
+      },
+      type: 'INVOKE_EXTERNAL_API',
+    })
+    done()
+  })
+
+  it('rejects oauth2 authenticate request with invalid response_type', async (done) => {
+    const hostApi = createHostApi({ lookerVersion: '7.9' })
+    const authEndpoint = 'https://accounts.google.com/o/oauth2/v2/auth'
+    const authParameters = {
+      client_id: 'CLIENT_ID',
+      scope: 'SCOPE',
+      response_type: 'unknown_response_type',
+    }
+    try {
+      await hostApi.oauth2Authenticate(authEndpoint, authParameters)
+      throw new Error('How did I get here')
+    } catch (err: any) {
+      expect(err.message).toEqual(
+        'invalid response_type, must be token, id_token or code, unknown_response_type'
+      )
+    }
+    expect(sendAndReceiveSpy).not.toHaveBeenCalled()
+    done()
+  })
+
   it('overrides http method for oauth2Authenticate', async (done) => {
     const hostApi = createHostApi({ lookerVersion: '7.9' })
     const authEndpoint = 'https://accounts.google.com/o/oauth2/v2/auth'
