@@ -24,7 +24,9 @@
 
  */
 
+import { Span } from '@looker/components'
 import moment from 'moment-timezone'
+import React from 'react'
 
 export type AgendaTime = Date
 
@@ -83,6 +85,36 @@ export const spanDate = (
     result += ` - ${localStop.format('Do')}`
   }
   return result
+}
+
+export const spanEta = (
+  current: AgendaTime,
+  start: AgendaTime,
+  stop: AgendaTime,
+  language: string
+) => {
+  const zone = languageZone(language)
+  const localStart = zoneDate(start, zone)
+  const localStop = zoneDate(stop, zone)
+  const now = moment(current)
+  let color = 'warn'
+  let phrase = ''
+  // TODO replace deprecated moment js with https://www.npmjs.com/package/spacetime and use .since() here
+  if (now.diff(localStart) < 0) {
+    color = 'warn'
+    phrase = `starts in ${Math.abs(now.diff(localStart, 'days'))} days`
+  } else if (now.diff(localStop) < 0) {
+    color = 'positive'
+    phrase = `ends in ${Math.abs(now.diff(localStop, 'hours'))} hours`
+  } else {
+    color = 'critical'
+    phrase = `ended ${Math.abs(now.diff(localStart, 'hours'))} hours ago`
+  }
+  return (
+    <Span fontSize="small" color={color}>
+      {phrase}
+    </Span>
+  )
 }
 
 export const spanTime = (

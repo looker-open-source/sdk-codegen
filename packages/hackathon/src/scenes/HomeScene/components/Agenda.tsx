@@ -35,8 +35,8 @@ import {
   Span,
 } from '@looker/components'
 import { Markdown } from '@looker/code-editor'
-import type { AgendaItems, IAgendaItem } from './agendaUtils'
-import { calcAgenda, spanDate, spanTime } from './agendaUtils'
+import type { AgendaItems, AgendaTime, IAgendaItem } from './agendaUtils'
+import { calcAgenda, spanDate, spanEta, spanTime } from './agendaUtils'
 
 interface AgendaItemProps {
   item: IAgendaItem
@@ -44,6 +44,7 @@ interface AgendaItemProps {
 }
 
 export const AgendaItem: FC<AgendaItemProps> = ({ item, language }) => {
+  const current: AgendaTime = new Date()
   return (
     <Card width="100%">
       <CardContent>
@@ -63,9 +64,7 @@ export const AgendaItem: FC<AgendaItemProps> = ({ item, language }) => {
             {item.description && <Markdown source={item.description} />}
           </SpaceVertical>
           <SpaceVertical gap="u1" align="end">
-            <Span fontSize="small" color="warn">
-              Ends in 25 minutes
-            </Span>
+            {spanEta(current, item.start, item.stop!, language)}
           </SpaceVertical>
         </Space>
       </CardContent>
