@@ -30,6 +30,7 @@ import { act, screen, waitFor } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 
 import type { IAPIMethods } from '@looker/sdk-rtl'
+import { formatDateString } from '@looker/components-date'
 import { defaultConfigurator } from '..'
 import { runItNoSet } from '../..'
 import { RequestForm } from './RequestForm'
@@ -204,17 +205,6 @@ describe('RequestForm', () => {
     )
   }
 
-  const dayName = (date: Date) => {
-    const dow = date.toLocaleString('default', {
-      weekday: 'short',
-    })
-    const monthDay = date.toLocaleString('default', {
-      month: 'short',
-      day: 'numeric',
-    })
-    return `${dow} ${monthDay}, ${date.getFullYear()}`
-  }
-
   test('interacting with a date picker changes the request content', async () => {
     const name = 'date_item'
     renderWithTheme(
@@ -246,7 +236,7 @@ describe('RequestForm', () => {
     userEvent.click(button)
     await waitFor(() => {
       const today = noon()
-      const pickName = dayName(today)
+      const pickName = formatDateString(today, undefined, 'iii PP')
       const cell = screen.getByRole('gridcell', {
         name: pickName,
       })
