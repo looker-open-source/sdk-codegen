@@ -190,7 +190,8 @@ describe('typescript generator', () => {
       const inputs = { look_id: 17, fields }
       const method = apiTestModel.methods.look
       const actual = gen.makeTheCall(method, inputs)
-      const expected = `let response = await sdk.ok(sdk.look(17, '${fields}'))`
+      const expected = `let response = await sdk.ok(sdk.look(
+  17, '${fields}'))`
       expect(actual).toEqual(expected)
     })
 
@@ -207,21 +208,16 @@ describe('typescript generator', () => {
       const inputs = { look_id: 17, body, fields }
       const method = apiTestModel.methods.update_look
       const actual = gen.makeTheCall(method, inputs)
-      const expected = `let response = await sdk.ok(
-  sdk.update_look(
-    17,
-    {
-      title: 'test title',
-      description: 'gen test',
-      query: {
-        model: 'the_look',
-        view: 'users',
-        total: true,
-      },
-    },
-    'id,user_id,title,description'
-  )
-)`
+      const expected = `let response = await sdk.ok(sdk.update_look(
+  17, {
+    title: 'test title',
+    description: 'gen test',
+    query: {
+      model: 'the_look',
+      view: 'users',
+      total: true
+    }
+  }, 'id,user_id,title,description'))`
       expect(actual).toEqual(expected)
     })
 
@@ -229,12 +225,11 @@ describe('typescript generator', () => {
       const inputs = { look_id: 17, result_format: 'png' }
       const method = apiTestModel.methods.run_look
       const actual = gen.makeTheCall(method, inputs)
-      const expected = `let response = await sdk.ok(
-  sdk.run_look({
+      const expected = `let response = await sdk.ok(sdk.run_look(
+  {
     look_id: 17,
-    result_format: 'png',
-  })
-)`
+    result_format: 'png'
+  }))`
       expect(actual).toEqual(expected)
     })
 
@@ -247,14 +242,13 @@ describe('typescript generator', () => {
       }
       const method = apiTestModel.methods.create_query_task
       const actual = gen.makeTheCall(method, inputs)
-      const expected = `let response = await sdk.ok(
-  sdk.create_query_task({
+      const expected = `let response = await sdk.ok(sdk.create_query_task(
+  {
     body: {
       query_id: 1,
-      result_format: ResultFormat.csv,
-    },
-  })
-)`
+      result_format: ResultFormat.csv
+    }
+  }))`
       expect(actual).toEqual(expected)
     })
 
@@ -264,11 +258,10 @@ describe('typescript generator', () => {
       }
       const method = apiTestModel.methods.all_users
       const actual = gen.makeTheCall(method, inputs)
-      const expected = `let response = await sdk.ok(
-  sdk.all_users({
-    ids: new DelimArray<number>([1, 2, 3]),
-  })
-)`
+      const expected = `let response = await sdk.ok(sdk.all_users(
+  {
+    ids: new DelimArray<number>([1,2,3])
+  }))`
       expect(actual).toEqual(expected)
     })
 
@@ -302,37 +295,40 @@ describe('typescript generator', () => {
       const inputs = { body, fields }
       const method = apiTestModel.methods.create_merge_query
       const actual = gen.makeTheCall(method, inputs)
-      const expected = `let response = await sdk.ok(
-  sdk.create_merge_query({
+      const expected = `let response = await sdk.ok(sdk.create_merge_query(
+  {
     body: {
-      pivots: ['one', 'two', 'three'],
+      pivots: [
+        'one',
+        'two',
+        'three'
+      ],
       sorts: ['a'],
       source_queries: [
         {
           merge_fields: [
             {
               field_name: 'merge_1',
-              source_field_name: 'source_1',
-            },
+              source_field_name: 'source_1'
+            }
           ],
           name: 'first query',
-          query_id: 1,
+          query_id: 1
         },
         {
           merge_fields: [
             {
               field_name: 'merge_2',
-              source_field_name: 'source_2',
-            },
+              source_field_name: 'source_2'
+            }
           ],
           name: 'second query',
-          query_id: 2,
-        },
-      ],
+          query_id: 2
+        }
+      ]
     },
-    fields: 'id,user_id,title,description',
-  })
-)`
+    fields: 'id,user_id,title,description'
+  }))`
       expect(actual).toEqual(expected)
     })
 
@@ -344,16 +340,15 @@ describe('typescript generator', () => {
       }
       const inputs = { body: query }
       const method = apiTestModel.methods.create_sql_query
-      const expected = `let response = await sdk.ok(
-  sdk.create_sql_query({
+      const expected = `let response = await sdk.ok(sdk.create_sql_query(
+  {
     connection_name: 'looker',
     model_name: 'the_look',
     vis_config: {
       first: 1,
-      second: 'two',
-    },
-  })
-)`
+      second: 'two'
+    }
+  }))`
       const actual = gen.makeTheCall(method, inputs)
       expect(actual).toEqual(expected)
     })
