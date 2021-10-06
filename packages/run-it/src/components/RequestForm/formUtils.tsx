@@ -323,9 +323,9 @@ export const validateEncodedValues = (body: string) => {
  *
  * @param body string to validate
  */
-export const validateBody = (body: string) => {
+export const validateBody = (body: string | Record<string, any>) => {
   let result = ''
-  if (body) {
+  if (body && typeof body === 'string') {
     if (/^[[{}"]/.test(body)) {
       // most likely JSON
       try {
