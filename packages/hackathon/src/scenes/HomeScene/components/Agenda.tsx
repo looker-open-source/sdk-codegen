@@ -26,51 +26,9 @@
 
 import React, { useState, useEffect } from 'react'
 import type { FC } from 'react'
-import {
-  Card,
-  CardContent,
-  Heading,
-  Space,
-  SpaceVertical,
-  Span,
-} from '@looker/components'
-import { Markdown } from '@looker/code-editor'
-import type { AgendaItems, AgendaTime, IAgendaItem } from './agendaUtils'
-import { calcAgenda, spanDate, spanEta, spanTime } from './agendaUtils'
-
-interface AgendaItemProps {
-  item: IAgendaItem
-  language: string
-}
-
-export const AgendaItem: FC<AgendaItemProps> = ({ item, language }) => {
-  const current: AgendaTime = new Date()
-  return (
-    <Card width="100%">
-      <CardContent>
-        <Space gap="u10">
-          <SpaceVertical gap="u1">
-            <Heading fontSize="small" color="text2" fontWeight="bold" as="h4">
-              {spanDate(item.start, item.stop!, language)}
-            </Heading>
-            <Span fontSize="small" color="text2">
-              {spanTime(item.start, item.stop!, language)}
-            </Span>
-          </SpaceVertical>
-          <SpaceVertical gap="u1">
-            <Heading as="h3" fontSize="xlarge">
-              {item.title}
-            </Heading>
-            {item.description && <Markdown source={item.description} />}
-          </SpaceVertical>
-          <SpaceVertical gap="u1" align="end">
-            {spanEta(current, item.start, item.stop!, language)}
-          </SpaceVertical>
-        </Space>
-      </CardContent>
-    </Card>
-  )
-}
+import { SpaceVertical } from '@looker/components'
+import type { AgendaItems } from '.'
+import { calcAgenda, AgendaCard } from '.'
 
 interface AgendaProps {
   schedule: AgendaItems
@@ -86,7 +44,7 @@ export const Agenda: FC<AgendaProps> = ({ schedule, language }) => {
     <SpaceVertical>
       {agenda &&
         agenda.map((item, index) => (
-          <AgendaItem key={`agenda${index}`} item={item} language={language} />
+          <AgendaCard key={`agenda${index}`} item={item} language={language} />
         ))}
     </SpaceVertical>
   )

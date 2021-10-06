@@ -24,14 +24,17 @@
 
  */
 
-export { Agenda, AgendaItem } from './Agenda'
+export { Agenda } from './Agenda'
+export { AgendaCard } from './AgendaCard'
 export {
   English,
   Japanese,
+  AgendaTime,
   AgendaItems,
   IAgendaItem,
   dateString,
   calcAgenda,
   spanDate,
   spanTime,
+  spanEta,
 } from './agendaUtils'
