@@ -264,6 +264,11 @@ describe('Complex Item', () => {
   describe('validateBody', () => {
     test.each`
       value                                                      | error
+      ${{
+  model: 'thelook',
+  view: 'users',
+  fields: ['users.id', 'users.first_name'],
+}} | ${''}
       ${'na.-_me=Vapor&age=3&luckyNumbers[]=5&luckyNumbers[]=7'} | ${''}
       ${'name=Vapor&age=3&luckyNumbers[]=5&luckyNumbers[]7'}     | ${'luckyNumbers[]7'}
       ${'{'}                                                     | ${'Unexpected end of JSON input'}
