@@ -24,7 +24,7 @@
 
  */
 
-import React, { useState, useEffect } from 'react'
+import React from 'react'
 import type { FC } from 'react'
 import { SpaceVertical } from '@looker/components'
 import type { AgendaItems } from '.'
@@ -36,10 +36,7 @@ interface AgendaProps {
 }
 
 export const Agenda: FC<AgendaProps> = ({ schedule, language }) => {
-  const [agenda, setAgenda] = useState<AgendaItems>(calcAgenda(schedule))
-  useEffect(() => {
-    setAgenda(calcAgenda(schedule))
-  }, [schedule])
+  const agenda = calcAgenda(schedule)
   return (
     <SpaceVertical>
       {agenda &&
