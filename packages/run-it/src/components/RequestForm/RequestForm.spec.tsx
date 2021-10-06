@@ -204,6 +204,17 @@ describe('RequestForm', () => {
     )
   }
 
+  const dayName = (date: Date) => {
+    const dow = date.toLocaleString('default', {
+      weekday: 'short',
+    })
+    const monthDay = date.toLocaleString('default', {
+      month: 'short',
+      day: 'numeric',
+    })
+    return `${dow} ${monthDay}, ${date.getFullYear()}`
+  }
+
   test('interacting with a date picker changes the request content', async () => {
     const name = 'date_item'
     renderWithTheme(
@@ -231,11 +242,14 @@ describe('RequestForm', () => {
     )
 
     const button = screen.getByRole('button', { name: 'Choose' })
+    expect(button).toBeInTheDocument()
     userEvent.click(button)
     await waitFor(() => {
       const today = noon()
-      const pickName = today.toDateString()
-      const cell = screen.getByRole('gridcell', { name: pickName })
+      const pickName = dayName(today)
+      const cell = screen.getByRole('gridcell', {
+        name: pickName,
+      })
       userEvent.click(cell)
       expect(setRequestContent).toHaveBeenLastCalledWith({ [name]: today })
     })
