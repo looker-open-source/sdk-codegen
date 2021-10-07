@@ -60,6 +60,7 @@
     "test:apix-e2e": "yarn workspace @looker/api-explorer run test:e2e",
     "test:iphone": "xcodebuild test -project swift/looker/looker.xcodeproj -scheme looker-Package -sdk iphonesimulator -destination 'platform=iOS Simulator,name=iPhone 11,OS=13.4.1' | xcpretty --test --color",
     "test:gen": "yarn jest packages/sdk-codegen",
+    "test:redux": "yarn jest packages/redux",
     "test:sdk": "yarn jest packages/sdk",
     "test:jest": "DOT_ENV_FILE=.env.test jest",
     "test:ext": "yarn jest packages/extension-sdk packages/extension-sdk-react",
@@ -187,6 +188,14 @@
         "files": [ "packages/sdk-codegen/**/*.ts",  "packages/sdk-codegen-scripts/**/*.ts"],
         "rules": {
           "testing-library/render-result-naming-convention": "off"
+        }
+      },
+      {
+        "files":  ["packages/redux/**/*.ts?(x)", "packages/redux/**/*.spec.ts?(x)"],
+        "rules": {
+          "testing-library/render-result-naming-convention": "off",
+          "@typescript-eslint/no-empty-function": "off",
+          "@typescript-eslint/ban-ts-comment": "off"
         }
       },
       {
