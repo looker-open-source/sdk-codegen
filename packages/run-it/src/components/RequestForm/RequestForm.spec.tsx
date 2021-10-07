@@ -30,6 +30,7 @@ import { act, screen, waitFor } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 
 import type { IAPIMethods } from '@looker/sdk-rtl'
+import { formatDateString } from '@looker/components-date'
 import { defaultConfigurator } from '..'
 import { runItNoSet } from '../..'
 import { RequestForm } from './RequestForm'
@@ -231,11 +232,14 @@ describe('RequestForm', () => {
     )
 
     const button = screen.getByRole('button', { name: 'Choose' })
+    expect(button).toBeInTheDocument()
     userEvent.click(button)
     await waitFor(() => {
       const today = noon()
-      const pickName = today.toDateString()
-      const cell = screen.getByRole('gridcell', { name: pickName })
+      const pickName = formatDateString(today, undefined, 'iii PP')
+      const cell = screen.getByRole('gridcell', {
+        name: pickName,
+      })
       userEvent.click(cell)
       expect(setRequestContent).toHaveBeenLastCalledWith({ [name]: today })
     })
