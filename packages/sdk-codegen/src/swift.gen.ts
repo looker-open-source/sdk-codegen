@@ -432,9 +432,11 @@ import Foundation
     const keys = Object.values(type.properties).map(
       (p) => p.name + (p.hasSpecialNeeds ? ` = "${p.jsonName}"` : '')
     )
+    const cases = keys.join(`n${bump2}case `)
+
     return (
       `\n${bump}private enum CodingKeys : String, CodingKey {` +
-      `\n${bump2}case ${keys.join(', ')}` +
+      `\n${bump2}${cases}` +
       `\n${bump}}\n`
     )
   }

@@ -82,7 +82,7 @@ struct FreshLook : SDKModel {
     }
     
     private enum CodingKeys: String, CodingKey {
-        case title = "title"
+        case title // = "title"
         case _id = "id"
         case _query_id = "query_id"
     }

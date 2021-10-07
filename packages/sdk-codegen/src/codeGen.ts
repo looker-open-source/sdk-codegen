@@ -142,6 +142,9 @@ export interface ICodeGen {
    */
   sdkPath: string
 
+  /** use special handling for a JSON value that can be a string or a number. Introduced for Swift. */
+  anyString: boolean
+
   /** current version of the Api being generated */
   apiVersion: string
 
@@ -717,6 +720,7 @@ export interface ICodeGen {
 
 export abstract class CodeGen implements ICodeGen {
   willItStream = false
+  anyString = false
   codePath = './'
   packagePath = 'looker'
   sdkPath = 'sdk'
