@@ -1868,7 +1868,7 @@ public struct CreateDashboardFilter: SDKModel {
      */
     public var dashboard_id: String {
         get { _dashboard_id.value }
-        set { _dashboard_id = newValue.map(AnyString.init) }
+        set { _dashboard_id = AnyString.init(newValue) }
     }
 
     /**
@@ -1938,7 +1938,7 @@ public struct CreateDashboardFilter: SDKModel {
 
     public init(id: String? = nil, dashboard_id: String, name: String, title: String, type: String, default_value: String? = nil, model: String? = nil, explore: String? = nil, dimension: String? = nil, field: StringDictionary<AnyCodable>? = nil, row: Int64? = nil, listens_to_filters: [String]? = nil, allow_multiple_values: Bool? = nil, required: Bool? = nil, ui_config: StringDictionary<AnyCodable>? = nil) {
         self._id = id.map(AnyString.init)
-        self._dashboard_id = dashboard_id.map(AnyString.init)
+        self._dashboard_id = AnyString.init(dashboard_id)
         self.name = name
         self.title = title
         self.type = type
@@ -1982,11 +1982,11 @@ public struct CreateEmbedUserRequest: SDKModel {
     private var _external_user_id: AnyString
     public var external_user_id: String {
         get { _external_user_id.value }
-        set { _external_user_id = newValue.map(AnyString.init) }
+        set { _external_user_id = AnyString.init(newValue) }
     }
 
     public init(external_user_id: String) {
-        self._external_user_id = external_user_id.map(AnyString.init)
+        self._external_user_id = AnyString.init(external_user_id)
     }
 
     public init(_ external_user_id: String) {
@@ -2007,12 +2007,12 @@ public struct CreateFolder: SDKModel {
      */
     public var parent_id: String {
         get { _parent_id.value }
-        set { _parent_id = newValue.map(AnyString.init) }
+        set { _parent_id = AnyString.init(newValue) }
     }
 
     public init(name: String, parent_id: String) {
         self.name = name
-        self._parent_id = parent_id.map(AnyString.init)
+        self._parent_id = AnyString.init(parent_id)
     }
 
     public init(_ name: String, _ parent_id: String) {
@@ -2025,13 +2025,13 @@ public struct CreateOAuthApplicationUserStateRequest: SDKModel {
     private var _user_id: AnyString
     public var user_id: String {
         get { _user_id.value }
-        set { _user_id = newValue.map(AnyString.init) }
+        set { _user_id = AnyString.init(newValue) }
     }
 
     private var _oauth_application_id: AnyString
     public var oauth_application_id: String {
         get { _oauth_application_id.value }
-        set { _oauth_application_id = newValue.map(AnyString.init) }
+        set { _oauth_application_id = AnyString.init(newValue) }
     }
 
     public var access_token: String
@@ -2043,8 +2043,8 @@ public struct CreateOAuthApplicationUserStateRequest: SDKModel {
     public var refresh_token_expires_at: Date?
 
     public init(user_id: String, oauth_application_id: String, access_token: String, access_token_expires_at: Date, refresh_token: String? = nil, refresh_token_expires_at: Date? = nil) {
-        self._user_id = user_id.map(AnyString.init)
-        self._oauth_application_id = oauth_application_id.map(AnyString.init)
+        self._user_id = AnyString.init(user_id)
+        self._oauth_application_id = AnyString.init(oauth_application_id)
         self.access_token = access_token
         self.access_token_expires_at = access_token_expires_at
         self.refresh_token = refresh_token
@@ -13533,7 +13533,7 @@ public struct WriteCreateDashboardFilter: SDKModel {
      */
     public var dashboard_id: String {
         get { _dashboard_id.value }
-        set { _dashboard_id = newValue.map(AnyString.init) }
+        set { _dashboard_id = AnyString.init(newValue) }
     }
 
     /**
@@ -13597,7 +13597,7 @@ public struct WriteCreateDashboardFilter: SDKModel {
     public var ui_config: StringDictionary<AnyCodable>?
 
     public init(dashboard_id: String, name: String, title: String, type: String, default_value: String? = nil, model: String? = nil, explore: String? = nil, dimension: String? = nil, row: Int64? = nil, listens_to_filters: [String]? = nil, allow_multiple_values: Bool? = nil, required: Bool? = nil, ui_config: StringDictionary<AnyCodable>? = nil) {
-        self._dashboard_id = dashboard_id.map(AnyString.init)
+        self._dashboard_id = AnyString.init(dashboard_id)
         self.name = name
         self.title = title
         self.type = type

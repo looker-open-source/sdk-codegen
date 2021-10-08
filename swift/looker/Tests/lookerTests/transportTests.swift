@@ -81,16 +81,23 @@ struct FreshLook : SDKModel {
         set { _query_id = newValue.map(AnyString.init) }
     }
     
+    private var _dashboard_id: AnyString
+    var dashboard_id: String {
+        get { _dashboard_id.value }
+        set { _dashboard_id = AnyString.init(newValue) }
+    }
     private enum CodingKeys: String, CodingKey {
         case title // = "title"
         case _id = "id"
         case _query_id = "query_id"
+        case _dashboard_id = "dashboard_id"
     }
     
-    init(id: String? = nil, title: String? = nil, query_id: String? = nil) {
+    init(id: String? = nil, title: String? = nil, query_id: String? = nil, dashboard_id: String) {
         self._id = id.map(AnyString.init)
         self.title = title
         self._query_id = query_id.map(AnyString.init)
+        self._dashboard_id = AnyString.init(dashboard_id)
     }
 }
 
@@ -120,7 +127,8 @@ class transportTests: XCTestCase {
         {
             "id": 1,
             "title": "Llookicorn",
-            "query_id": 1
+            "query_id": 1,
+            "dashboard_id": 1
         }
         """
         var look: FreshLook = try! deserialize(jsonString)
@@ -128,18 +136,21 @@ class transportTests: XCTestCase {
         XCTAssertEqual(look.id, "1")
         XCTAssertEqual(look.title, "Llookicorn")
         XCTAssertEqual(look.query_id, "1")
+        XCTAssertEqual(look.dashboard_id, "1")
         look = try! deserialize("""
         {
             "id": "2",
             "title": "Zzeebra",
             "email": "zz@foo.bar",
-            "query_id": "2"
+            "query_id": "2",
+            "dashboard_id": "2"
         }
         """)
         XCTAssertNotNil(look, "Look 2 is assigned")
         XCTAssertEqual(look.id, "2")
         XCTAssertEqual(look.title, "Zzeebra")
         XCTAssertEqual(look.query_id, "2")
+        XCTAssertEqual(look.dashboard_id, "2")
     }
         
     func testRegexExtension() {
