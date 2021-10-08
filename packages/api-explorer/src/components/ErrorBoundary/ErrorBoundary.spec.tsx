@@ -25,6 +25,8 @@
  */
 import { renderWithTheme } from '@looker/components-test-utils'
 import React from 'react'
+import { screen } from '@testing-library/react'
+
 import { ErrorBoundary } from './ErrorBoundary'
 
 const ErrorComp = ({ text }: { text: string }) => {
@@ -37,7 +39,7 @@ const ErrorComp = ({ text }: { text: string }) => {
 
 describe('ErrorBoundary', () => {
   const header = 'Uh oh! Something went wrong!'
-  const actionMessage = 'Try refreshing the page the correct the problem.'
+  const actionMessage = 'Try refreshing the page to correct the problem.'
   const childText = 'Sweet Child'
 
   beforeEach(() => {
@@ -46,27 +48,27 @@ describe('ErrorBoundary', () => {
 
   it('should render child component', () => {
     const logError = jest.fn()
-    const { getByText, queryByText } = renderWithTheme(
+    renderWithTheme(
       <ErrorBoundary logError={logError}>
         <div>{childText}</div>
       </ErrorBoundary>
     )
-    expect(queryByText(header)).not.toBeInTheDocument()
-    expect(queryByText(actionMessage)).not.toBeInTheDocument()
-    expect(getByText(childText)).toBeVisible()
+    expect(screen.queryByText(header)).not.toBeInTheDocument()
+    expect(screen.queryByText(actionMessage)).not.toBeInTheDocument()
+    expect(screen.getByText(childText)).toBeVisible()
     expect(logError).not.toHaveBeenCalled()
   })
 
   it('should render error detail on error', () => {
     const logError = jest.fn()
-    const { getByText, queryByText } = renderWithTheme(
+    renderWithTheme(
       <ErrorBoundary logError={logError}>
         <ErrorComp text={childText} />
       </ErrorBoundary>
     )
-    expect(queryByText(childText)).not.toBeInTheDocument()
-    expect(getByText(header)).toBeVisible()
-    expect(getByText(actionMessage)).toBeVisible()
+    expect(screen.queryByText(childText)).not.toBeInTheDocument()
+    expect(screen.getByText(header)).toBeVisible()
+    expect(screen.getByText(actionMessage)).toBeVisible()
     expect(logError).toHaveBeenCalled()
   })
 })
