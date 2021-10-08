@@ -24,9 +24,8 @@
 
  */
 import type { RunItInput } from '../RunIt'
-import { testJsonResponse } from '../test-data'
+import { testJsonResponse, api } from '../test-data'
 import { StandaloneConfigurator } from '../components'
-import { api } from '../test-data/specs'
 import {
   createRequestParams,
   pathify,
@@ -107,7 +106,7 @@ describe('requestUtils', () => {
       body: '{}',
     }
 
-    test('empty json body is removed', () => {
+    test('empty json body is not removed', () => {
       const [pathParams, queryParams, body] = createRequestParams(
         inputs,
         noBody
@@ -118,7 +117,7 @@ describe('requestUtils', () => {
       expect(queryParams).toEqual({
         cache: noBody.cache,
       })
-      expect(body).not.toBeDefined()
+      expect(body).toEqual({})
     })
 
     test('it correctly identifies requestContent params location', () => {

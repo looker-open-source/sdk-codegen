@@ -246,22 +246,24 @@ export const createComplexItem = (
   input: RunItInput,
   handleComplexChange: (value: string, name: string) => void,
   requestContent: RunItValues
-) => (
-  <FormItem key={`${input.name}_fic`} id={input.name} label={input.name}>
-    <CodeEditor
-      key={`code_${input.name}`}
-      language="json"
-      code={
-        input.name in requestContent
-          ? requestContent[input.name]
-          : JSON.stringify(input.type, null, 2)
-      }
-      lineNumbers={false}
-      onChange={handleComplexChange.bind(null, input.name)}
-      transparent={true}
-    />
-  </FormItem>
-)
+) => {
+  const content = requestContent[input.name]
+  const code =
+    typeof content === 'string' ? content : JSON.stringify(content, null, 2)
+
+  return (
+    <FormItem key={`${input.name}_fic`} id={input.name} label={input.name}>
+      <CodeEditor
+        key={`code_${input.name}`}
+        language="json"
+        code={code}
+        lineNumbers={false}
+        onChange={handleComplexChange.bind(null, input.name)}
+        transparent={true}
+      />
+    </FormItem>
+  )
+}
 
 /**
  * Creates a required checkbox form item

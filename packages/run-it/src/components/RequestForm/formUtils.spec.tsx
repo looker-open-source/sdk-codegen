@@ -238,7 +238,6 @@ describe('Simple Items', () => {
 
 describe('Complex Item', () => {
   const handleComplexChange = jest.fn()
-  const requestContent = {}
 
   test('it creates a complex item', () => {
     const body = {
@@ -246,9 +245,10 @@ describe('Complex Item', () => {
       fields: 'string[]',
       limit: 1,
     }
+    const requestContent = { body: {} }
     const ComplexItem = createComplexItem(
       {
-        name: 'A complex item',
+        name: 'body',
         location: 'body',
         type: body,
         required: true,
@@ -258,7 +258,7 @@ describe('Complex Item', () => {
       requestContent
     )
     renderWithTheme(ComplexItem)
-    expect(screen.getByText('A complex item')).toBeInTheDocument()
+    expect(screen.getByText('body')).toBeInTheDocument()
   })
 
   describe('validateBody', () => {
