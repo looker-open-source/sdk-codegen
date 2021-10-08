@@ -64,6 +64,24 @@ public struct AccessToken: SDKModel {
 }
 
 public struct Alert: SDKModel {
+
+    private enum CodingKeys : String, CodingKey {
+        case applied_dashboard_filters
+        case comparison_type
+        case cron
+        case custom_title
+        case dashboard_element_id
+        case destinations
+        case field
+        case id
+        case is_disabled
+        case is_public
+        case _lookml_dashboard_id = "lookml_dashboard_id"
+        case _lookml_link_id = "lookml_link_id"
+        case owner_id
+        case threshold
+        case time_series_condition_state
+    }
     /**
      * Filters coming from the dashboard that are applied. Example `[{ "filter_title": "Name", "field_name": "distribution_centers.name", "filter_value": "Los Angeles CA" }]`
      */
@@ -192,6 +210,11 @@ public struct AlertAppliedDashboardFilter: SDKModel {
 }
 
 public struct AlertConditionState: SDKModel {
+
+    private enum CodingKeys : String, CodingKey {
+        case _previous_time_series_id = "previous_time_series_id"
+        case _latest_time_series_id = "latest_time_series_id"
+    }
     private var _previous_time_series_id: AnyString?
     /**
      * (Write-Only) The second latest time string the alert has seen.
@@ -218,6 +241,13 @@ public struct AlertConditionState: SDKModel {
 }
 
 public struct AlertDestination: SDKModel {
+
+    private enum CodingKeys : String, CodingKey {
+        case destination_type
+        case email_address
+        case _action_hub_integration_id = "action_hub_integration_id"
+        case action_hub_form_params_json
+    }
     /**
      * Type of destination that the alert will be sent to Valid values are: "EMAIL", "ACTION_HUB".
      */
@@ -312,6 +342,12 @@ public enum Align: String, Codable {
 }
 
 public struct ApiSession: SDKModel {
+
+    private enum CodingKeys : String, CodingKey {
+        case can
+        case _workspace_id = "workspace_id"
+        case sudo_user_id
+    }
     /**
      * Operations the current user is able to perform on this object (read-only)
      */
@@ -529,6 +565,31 @@ public struct Board: SDKModel {
 }
 
 public struct BoardItem: SDKModel {
+
+    private enum CodingKeys : String, CodingKey {
+        case can
+        case content_created_by
+        case content_favorite_id
+        case content_metadata_id
+        case content_updated_at
+        case custom_image_data_base64
+        case custom_image_url
+        case custom_title
+        case custom_url
+        case dashboard_id
+        case description
+        case favorite_count
+        case board_section_id
+        case id
+        case image_url
+        case location
+        case look_id
+        case _lookml_dashboard_id = "lookml_dashboard_id"
+        case order
+        case title
+        case url
+        case view_count
+    }
     /**
      * Operations the current user is able to perform on this object (read-only)
      */
@@ -753,6 +814,14 @@ public enum Category: String, Codable {
 }
 
 public struct ColorCollection: SDKModel {
+
+    private enum CodingKeys : String, CodingKey {
+        case _id = "id"
+        case label
+        case categoricalPalettes
+        case sequentialPalettes
+        case divergingPalettes
+    }
     private var _id: AnyString?
     /**
      * Unique Id (read-only)
@@ -841,6 +910,15 @@ public struct ColumnSearch: SDKModel {
 }
 
 public struct Command: SDKModel {
+
+    private enum CodingKeys : String, CodingKey {
+        case id
+        case author_id
+        case name
+        case description
+        case _linked_content_id = "linked_content_id"
+        case linked_content_type
+    }
     /**
      * Id of the command record (read-only)
      */
@@ -1051,6 +1129,20 @@ public struct ContentFavorite: SDKModel {
 }
 
 public struct ContentMeta: SDKModel {
+
+    private enum CodingKeys : String, CodingKey {
+        case can
+        case id
+        case name
+        case parent_id
+        case _dashboard_id = "dashboard_id"
+        case look_id
+        case _folder_id = "folder_id"
+        case content_type
+        case inherits
+        case inheriting_id
+        case slug
+    }
     /**
      * Operations the current user is able to perform on this object (read-only)
      */
@@ -1134,6 +1226,15 @@ public struct ContentMeta: SDKModel {
  * WARNING: no writeable properties found for POST, PUT, or PATCH
  */
 public struct ContentMetaGroupUser: SDKModel {
+
+    private enum CodingKeys : String, CodingKey {
+        case can
+        case _id = "id"
+        case _content_metadata_id = "content_metadata_id"
+        case permission_type
+        case group_id
+        case user_id
+    }
     /**
      * Operations the current user is able to perform on this object (read-only)
      */
@@ -1238,6 +1339,13 @@ public struct ContentValidation: SDKModel {
 }
 
 public struct ContentValidationAlert: SDKModel {
+
+    private enum CodingKeys : String, CodingKey {
+        case id
+        case _lookml_dashboard_id = "lookml_dashboard_id"
+        case _lookml_link_id = "lookml_link_id"
+        case custom_title
+    }
     /**
      * ID of the alert
      */
@@ -1276,6 +1384,14 @@ public struct ContentValidationAlert: SDKModel {
 }
 
 public struct ContentValidationDashboard: SDKModel {
+
+    private enum CodingKeys : String, CodingKey {
+        case description
+        case _id = "id"
+        case folder
+        case title
+        case url
+    }
     /**
      * Description
      */
@@ -1313,6 +1429,23 @@ public struct ContentValidationDashboard: SDKModel {
 }
 
 public struct ContentValidationDashboardElement: SDKModel {
+
+    private enum CodingKeys : String, CodingKey {
+        case body_text
+        case _dashboard_id = "dashboard_id"
+        case _id = "id"
+        case _look_id = "look_id"
+        case note_display
+        case note_state
+        case note_text
+        case note_text_as_html
+        case query_id
+        case subtitle_text
+        case title
+        case title_hidden
+        case title_text
+        case type
+    }
     /**
      * Text tile body text
      */
@@ -1415,6 +1548,18 @@ public struct ContentValidationDashboardElement: SDKModel {
 }
 
 public struct ContentValidationDashboardFilter: SDKModel {
+
+    private enum CodingKeys : String, CodingKey {
+        case _id = "id"
+        case _dashboard_id = "dashboard_id"
+        case name
+        case title
+        case type
+        case default_value
+        case model
+        case explore
+        case dimension
+    }
     private var _id: AnyString?
     /**
      * Unique Id (read-only)
@@ -1519,6 +1664,11 @@ public struct ContentValidationError: SDKModel {
 }
 
 public struct ContentValidationFolder: SDKModel {
+
+    private enum CodingKeys : String, CodingKey {
+        case name
+        case _id = "id"
+    }
     /**
      * Unique Name
      */
@@ -1572,6 +1722,12 @@ public struct ContentValidationLook: SDKModel {
 }
 
 public struct ContentValidationLookMLDashboard: SDKModel {
+
+    private enum CodingKeys : String, CodingKey {
+        case _id = "id"
+        case title
+        case _space_id = "space_id"
+    }
     private var _id: AnyString?
     /**
      * ID of the LookML Dashboard (read-only)
@@ -1604,6 +1760,11 @@ public struct ContentValidationLookMLDashboard: SDKModel {
 }
 
 public struct ContentValidationLookMLDashboardElement: SDKModel {
+
+    private enum CodingKeys : String, CodingKey {
+        case _lookml_link_id = "lookml_link_id"
+        case title
+    }
     private var _lookml_link_id: AnyString?
     /**
      * Link ID of the LookML Dashboard Element (read-only)
@@ -1650,6 +1811,19 @@ public struct ContentValidationScheduledPlan: SDKModel {
 }
 
 public struct ContentValidatorError: SDKModel {
+
+    private enum CodingKeys : String, CodingKey {
+        case look
+        case dashboard
+        case dashboard_element
+        case dashboard_filter
+        case scheduled_plan
+        case alert
+        case lookml_dashboard
+        case lookml_dashboard_element
+        case errors
+        case _id = "id"
+    }
     public var look: ContentValidationLook?
 
     public var dashboard: ContentValidationDashboard?
@@ -1774,6 +1948,13 @@ public struct ContentView: SDKModel {
 }
 
 public struct ContinuousPalette: SDKModel {
+
+    private enum CodingKeys : String, CodingKey {
+        case _id = "id"
+        case label
+        case type
+        case stops
+    }
     private var _id: AnyString?
     /**
      * Unique identity string (read-only)
@@ -1853,6 +2034,24 @@ public struct CreateCostEstimate: SDKModel {
 }
 
 public struct CreateDashboardFilter: SDKModel {
+
+    private enum CodingKeys : String, CodingKey {
+        case _id = "id"
+        case _dashboard_id = "dashboard_id"
+        case name
+        case title
+        case type
+        case default_value
+        case model
+        case explore
+        case dimension
+        case field
+        case row
+        case listens_to_filters
+        case allow_multiple_values
+        case required
+        case ui_config
+    }
     private var _id: AnyString?
     /**
      * Unique Id (read-only)
@@ -1979,6 +2178,10 @@ public struct CreateDashboardRenderTask: SDKModel {
 }
 
 public struct CreateEmbedUserRequest: SDKModel {
+
+    private enum CodingKeys : String, CodingKey {
+        case _external_user_id = "external_user_id"
+    }
     private var _external_user_id: AnyString
     public var external_user_id: String {
         get { _external_user_id.value }
@@ -1996,6 +2199,11 @@ public struct CreateEmbedUserRequest: SDKModel {
 }
 
 public struct CreateFolder: SDKModel {
+
+    private enum CodingKeys : String, CodingKey {
+        case name
+        case _parent_id = "parent_id"
+    }
     /**
      * Unique Name
      */
@@ -2022,6 +2230,15 @@ public struct CreateFolder: SDKModel {
 }
 
 public struct CreateOAuthApplicationUserStateRequest: SDKModel {
+
+    private enum CodingKeys : String, CodingKey {
+        case _user_id = "user_id"
+        case _oauth_application_id = "oauth_application_id"
+        case access_token
+        case access_token_expires_at
+        case refresh_token
+        case refresh_token_expires_at
+    }
     private var _user_id: AnyString
     public var user_id: String {
         get { _user_id.value }
@@ -2080,6 +2297,16 @@ public struct CreateOAuthApplicationUserStateResponse: SDKModel {
 }
 
 public struct CreateQueryTask: SDKModel {
+
+    private enum CodingKeys : String, CodingKey {
+        case can
+        case query_id
+        case result_format
+        case source
+        case deferred
+        case look_id
+        case _dashboard_id = "dashboard_id"
+    }
     /**
      * Operations the current user is able to perform on this object (read-only)
      */
@@ -2139,6 +2366,16 @@ public struct CreateQueryTask: SDKModel {
  * WARNING: no writeable properties found for POST, PUT, or PATCH
  */
 public struct CredentialsApi3: SDKModel {
+
+    private enum CodingKeys : String, CodingKey {
+        case can
+        case id
+        case _client_id = "client_id"
+        case created_at
+        case is_disabled
+        case type
+        case url
+    }
     /**
      * Operations the current user is able to perform on this object (read-only)
      */
@@ -2323,6 +2560,18 @@ public struct CredentialsEmailSearch: SDKModel {
 }
 
 public struct CredentialsEmbed: SDKModel {
+
+    private enum CodingKeys : String, CodingKey {
+        case can
+        case created_at
+        case _external_group_id = "external_group_id"
+        case _external_user_id = "external_user_id"
+        case id
+        case is_disabled
+        case logged_in_at
+        case type
+        case url
+    }
     /**
      * Operations the current user is able to perform on this object (read-only)
      */
@@ -2391,6 +2640,18 @@ public struct CredentialsEmbed: SDKModel {
 }
 
 public struct CredentialsGoogle: SDKModel {
+
+    private enum CodingKeys : String, CodingKey {
+        case can
+        case created_at
+        case domain
+        case email
+        case _google_user_id = "google_user_id"
+        case is_disabled
+        case logged_in_at
+        case type
+        case url
+    }
     /**
      * Operations the current user is able to perform on this object (read-only)
      */
@@ -2455,6 +2716,18 @@ public struct CredentialsGoogle: SDKModel {
 }
 
 public struct CredentialsLDAP: SDKModel {
+
+    private enum CodingKeys : String, CodingKey {
+        case can
+        case created_at
+        case email
+        case is_disabled
+        case ldap_dn
+        case _ldap_id = "ldap_id"
+        case logged_in_at
+        case type
+        case url
+    }
     /**
      * Operations the current user is able to perform on this object (read-only)
      */
@@ -2579,6 +2852,17 @@ public struct CredentialsLookerOpenid: SDKModel {
 }
 
 public struct CredentialsOIDC: SDKModel {
+
+    private enum CodingKeys : String, CodingKey {
+        case can
+        case created_at
+        case email
+        case is_disabled
+        case logged_in_at
+        case _oidc_user_id = "oidc_user_id"
+        case type
+        case url
+    }
     /**
      * Operations the current user is able to perform on this object (read-only)
      */
@@ -2637,6 +2921,17 @@ public struct CredentialsOIDC: SDKModel {
 }
 
 public struct CredentialsSaml: SDKModel {
+
+    private enum CodingKeys : String, CodingKey {
+        case can
+        case created_at
+        case email
+        case is_disabled
+        case logged_in_at
+        case _saml_user_id = "saml_user_id"
+        case type
+        case url
+    }
     /**
      * Operations the current user is able to perform on this object (read-only)
      */
@@ -2776,6 +3071,51 @@ public struct CustomWelcomeEmail: SDKModel {
 }
 
 public struct Dashboard: SDKModel {
+
+    private enum CodingKeys : String, CodingKey {
+        case can
+        case content_favorite_id
+        case content_metadata_id
+        case description
+        case hidden
+        case _id = "id"
+        case model
+        case query_timezone
+        case readonly
+        case refresh_interval
+        case refresh_interval_to_i
+        case folder
+        case title
+        case user_id
+        case slug
+        case preferred_viewer
+        case alert_sync_with_dashboard_filter_enabled
+        case background_color
+        case created_at
+        case crossfilter_enabled
+        case dashboard_elements
+        case dashboard_filters
+        case dashboard_layouts
+        case deleted
+        case deleted_at
+        case deleter_id
+        case edit_uri
+        case favorite_count
+        case last_accessed_at
+        case last_viewed_at
+        case load_configuration
+        case _lookml_link_id = "lookml_link_id"
+        case show_filters_bar
+        case show_title
+        case _folder_id = "folder_id"
+        case text_tile_text_color
+        case tile_background_color
+        case tile_text_color
+        case title_color
+        case view_count
+        case appearance
+        case url
+    }
     /**
      * Operations the current user is able to perform on this object (read-only)
      */
@@ -3037,6 +3377,11 @@ public struct Dashboard: SDKModel {
 }
 
 public struct DashboardAggregateTableLookml: SDKModel {
+
+    private enum CodingKeys : String, CodingKey {
+        case _dashboard_id = "dashboard_id"
+        case aggregate_table_lookml
+    }
     private var _dashboard_id: AnyString?
     /**
      * Dashboard Id (read-only)
@@ -3107,6 +3452,25 @@ public struct DashboardAppearance: SDKModel {
 }
 
 public struct DashboardBase: SDKModel {
+
+    private enum CodingKeys : String, CodingKey {
+        case can
+        case content_favorite_id
+        case content_metadata_id
+        case description
+        case hidden
+        case _id = "id"
+        case model
+        case query_timezone
+        case readonly
+        case refresh_interval
+        case refresh_interval_to_i
+        case folder
+        case title
+        case user_id
+        case slug
+        case preferred_viewer
+    }
     /**
      * Operations the current user is able to perform on this object (read-only)
      */
@@ -3207,6 +3571,37 @@ public struct DashboardBase: SDKModel {
 }
 
 public struct DashboardElement: SDKModel {
+
+    private enum CodingKeys : String, CodingKey {
+        case can
+        case body_text
+        case body_text_as_html
+        case _dashboard_id = "dashboard_id"
+        case edit_uri
+        case _id = "id"
+        case look
+        case _look_id = "look_id"
+        case _lookml_link_id = "lookml_link_id"
+        case _merge_result_id = "merge_result_id"
+        case note_display
+        case note_state
+        case note_text
+        case note_text_as_html
+        case query
+        case query_id
+        case refresh_interval
+        case refresh_interval_to_i
+        case result_maker
+        case result_maker_id
+        case subtitle_text
+        case title
+        case title_hidden
+        case title_text
+        case type
+        case alert_count
+        case title_text_as_html
+        case subtitle_text_as_html
+    }
     /**
      * Operations the current user is able to perform on this object (read-only)
      */
@@ -3392,6 +3787,25 @@ public struct DashboardElement: SDKModel {
 }
 
 public struct DashboardFilter: SDKModel {
+
+    private enum CodingKeys : String, CodingKey {
+        case can
+        case _id = "id"
+        case _dashboard_id = "dashboard_id"
+        case name
+        case title
+        case type
+        case default_value
+        case model
+        case explore
+        case dimension
+        case field
+        case row
+        case listens_to_filters
+        case allow_multiple_values
+        case required
+        case ui_config
+    }
     /**
      * Operations the current user is able to perform on this object (read-only)
      */
@@ -3502,6 +3916,19 @@ public struct DashboardFilter: SDKModel {
 }
 
 public struct DashboardLayout: SDKModel {
+
+    private enum CodingKeys : String, CodingKey {
+        case can
+        case _id = "id"
+        case _dashboard_id = "dashboard_id"
+        case type
+        case active
+        case column_width
+        case width
+        case deleted
+        case dashboard_title
+        case dashboard_layout_components
+    }
     /**
      * Operations the current user is able to perform on this object (read-only)
      */
@@ -3576,6 +4003,21 @@ public struct DashboardLayout: SDKModel {
 }
 
 public struct DashboardLayoutComponent: SDKModel {
+
+    private enum CodingKeys : String, CodingKey {
+        case can
+        case _id = "id"
+        case _dashboard_layout_id = "dashboard_layout_id"
+        case _dashboard_element_id = "dashboard_element_id"
+        case row
+        case column
+        case width
+        case height
+        case deleted
+        case element_title
+        case element_title_hidden
+        case vis_type
+    }
     /**
      * Operations the current user is able to perform on this object (read-only)
      */
@@ -3666,6 +4108,11 @@ public struct DashboardLayoutComponent: SDKModel {
 }
 
 public struct DashboardLookml: SDKModel {
+
+    private enum CodingKeys : String, CodingKey {
+        case _dashboard_id = "dashboard_id"
+        case lookml
+    }
     private var _dashboard_id: AnyString?
     /**
      * Id of Dashboard (read-only)
@@ -3799,6 +4246,14 @@ public struct DataActionRequest: SDKModel {
 }
 
 public struct DataActionResponse: SDKModel {
+
+    private enum CodingKeys : String, CodingKey {
+        case _webhook_id = "webhook_id"
+        case success
+        case refresh_query
+        case validation_errors
+        case message
+    }
     private var _webhook_id: AnyString?
     /**
      * ID of the webhook event that sent this data action. In some error conditions, this may be null. (read-only)
@@ -3920,6 +4375,50 @@ public struct Datagroup: SDKModel {
 }
 
 public struct DBConnection: SDKModel {
+
+    private enum CodingKeys : String, CodingKey {
+        case can
+        case name
+        case dialect
+        case snippets
+        case pdts_enabled
+        case host
+        case port
+        case username
+        case password
+        case uses_oauth
+        case certificate
+        case file_type
+        case database
+        case db_timezone
+        case query_timezone
+        case schema
+        case max_connections
+        case max_billing_gigabytes
+        case ssl
+        case verify_ssl
+        case tmp_db_name
+        case jdbc_additional_params
+        case pool_timeout
+        case dialect_name
+        case created_at
+        case _user_id = "user_id"
+        case example
+        case user_db_credentials
+        case user_attribute_fields
+        case maintenance_cron
+        case last_regen_at
+        case last_reap_at
+        case sql_runner_precache_tables
+        case sql_writing_with_info_schema
+        case after_connect_statements
+        case pdt_context_override
+        case managed
+        case _tunnel_id = "tunnel_id"
+        case pdt_concurrency
+        case disable_context_comment
+        case oauth_application_id
+    }
     /**
      * Operations the current user is able to perform on this object (read-only)
      */
@@ -4321,6 +4820,13 @@ public struct DBConnectionTestResult: SDKModel {
 }
 
 public struct DelegateOauthTest: SDKModel {
+
+    private enum CodingKeys : String, CodingKey {
+        case name
+        case _installation_target_id = "installation_target_id"
+        case installation_id
+        case success
+    }
     /**
      * Delegate Oauth Connection Name (read-only)
      */
@@ -4610,6 +5116,13 @@ public struct DigestEmailSend: SDKModel {
 }
 
 public struct DiscretePalette: SDKModel {
+
+    private enum CodingKeys : String, CodingKey {
+        case _id = "id"
+        case label
+        case type
+        case colors
+    }
     private var _id: AnyString?
     /**
      * Unique identity string (read-only)
@@ -4672,6 +5185,22 @@ public struct EmbedParams: SDKModel {
 }
 
 public struct EmbedSsoParams: SDKModel {
+
+    private enum CodingKeys : String, CodingKey {
+        case target_url
+        case session_length
+        case force_logout_login
+        case _external_user_id = "external_user_id"
+        case first_name
+        case last_name
+        case user_timezone
+        case permissions
+        case models
+        case group_ids
+        case _external_group_id = "external_group_id"
+        case user_attributes
+        case secret_id
+    }
     /**
      * The complete URL of the Looker UI page to display in the embed context. For example, to display the dashboard with id 34, `target_url` would look like: `https://mycompany.looker.com:9999/dashboards/34`. `target_uri` MUST contain a scheme (HTTPS), domain name, and URL path. Port must be included if it is required to reach the Looker server from browser clients. If the Looker instance is behind a load balancer or other proxy, `target_uri` must be the public-facing domain name and port required to reach the Looker instance, not the actual internal network machine name of the Looker instance.
      */
@@ -4802,6 +5331,16 @@ public struct LkError: SDKModel {
 }
 
 public struct ExternalOauthApplication: SDKModel {
+
+    private enum CodingKeys : String, CodingKey {
+        case can
+        case id
+        case name
+        case _client_id = "client_id"
+        case client_secret
+        case dialect_name
+        case created_at
+    }
     /**
      * Operations the current user is able to perform on this object (read-only)
      */
@@ -4862,6 +5401,27 @@ public enum FillStyle: String, Codable {
 }
 
 public struct Folder: SDKModel {
+
+    private enum CodingKeys : String, CodingKey {
+        case name
+        case _parent_id = "parent_id"
+        case _id = "id"
+        case content_metadata_id
+        case created_at
+        case creator_id
+        case child_count
+        case _external_id = "external_id"
+        case is_embed
+        case is_embed_shared_root
+        case is_embed_users_root
+        case is_personal
+        case is_personal_descendant
+        case is_shared_root
+        case is_users_root
+        case can
+        case dashboards
+        case looks
+    }
     /**
      * Unique Name
      */
@@ -4992,6 +5552,25 @@ public struct Folder: SDKModel {
 }
 
 public struct FolderBase: SDKModel {
+
+    private enum CodingKeys : String, CodingKey {
+        case name
+        case _parent_id = "parent_id"
+        case _id = "id"
+        case content_metadata_id
+        case created_at
+        case creator_id
+        case child_count
+        case _external_id = "external_id"
+        case is_embed
+        case is_embed_shared_root
+        case is_embed_users_root
+        case is_personal
+        case is_personal_descendant
+        case is_shared_root
+        case is_users_root
+        case can
+    }
     /**
      * Unique Name
      */
@@ -5226,6 +5805,12 @@ public struct GitBranch: SDKModel {
 }
 
 public struct GitConnectionTest: SDKModel {
+
+    private enum CodingKeys : String, CodingKey {
+        case can
+        case description
+        case _id = "id"
+    }
     /**
      * Operations the current user is able to perform on this object (read-only)
      */
@@ -5254,6 +5839,13 @@ public struct GitConnectionTest: SDKModel {
 }
 
 public struct GitConnectionTestResult: SDKModel {
+
+    private enum CodingKeys : String, CodingKey {
+        case can
+        case _id = "id"
+        case message
+        case status
+    }
     /**
      * Operations the current user is able to perform on this object (read-only)
      */
@@ -5318,6 +5910,18 @@ public struct GitStatus: SDKModel {
 }
 
 public struct LkGroup: SDKModel {
+
+    private enum CodingKeys : String, CodingKey {
+        case can
+        case can_add_to_content_metadata
+        case contains_current_user
+        case _external_group_id = "external_group_id"
+        case externally_managed
+        case id
+        case include_by_default
+        case name
+        case user_count
+    }
     /**
      * Operations the current user is able to perform on this object (read-only)
      */
@@ -5382,6 +5986,20 @@ public struct LkGroup: SDKModel {
 }
 
 public struct GroupHierarchy: SDKModel {
+
+    private enum CodingKeys : String, CodingKey {
+        case can
+        case can_add_to_content_metadata
+        case contains_current_user
+        case _external_group_id = "external_group_id"
+        case externally_managed
+        case id
+        case include_by_default
+        case name
+        case user_count
+        case parent_group_ids
+        case role_ids
+    }
     /**
      * Operations the current user is able to perform on this object (read-only)
      */
@@ -5488,6 +6106,19 @@ public struct GroupIdForGroupUserInclusion: SDKModel {
 }
 
 public struct GroupSearch: SDKModel {
+
+    private enum CodingKeys : String, CodingKey {
+        case can
+        case can_add_to_content_metadata
+        case contains_current_user
+        case _external_group_id = "external_group_id"
+        case externally_managed
+        case id
+        case include_by_default
+        case name
+        case user_count
+        case roles
+    }
     /**
      * Operations the current user is able to perform on this object (read-only)
      */
@@ -5558,6 +6189,37 @@ public struct GroupSearch: SDKModel {
 }
 
 public struct HomepageItem: SDKModel {
+
+    private enum CodingKeys : String, CodingKey {
+        case can
+        case content_created_by
+        case content_favorite_id
+        case content_metadata_id
+        case content_updated_at
+        case custom_description
+        case custom_image_data_base64
+        case custom_image_url
+        case custom_title
+        case custom_url
+        case dashboard_id
+        case description
+        case favorite_count
+        case homepage_section_id
+        case id
+        case image_url
+        case location
+        case look_id
+        case _lookml_dashboard_id = "lookml_dashboard_id"
+        case order
+        case section_fetch_time
+        case title
+        case url
+        case use_custom_description
+        case use_custom_image
+        case use_custom_title
+        case use_custom_url
+        case view_count
+    }
     /**
      * Operations the current user is able to perform on this object (read-only)
      */
@@ -5850,6 +6512,26 @@ public struct ImportedProject: SDKModel {
 }
 
 public struct Integration: SDKModel {
+
+    private enum CodingKeys : String, CodingKey {
+        case can
+        case _id = "id"
+        case integration_hub_id
+        case label
+        case description
+        case enabled
+        case params
+        case supported_formats
+        case supported_action_types
+        case supported_formattings
+        case supported_visualization_formattings
+        case supported_download_settings
+        case icon_url
+        case uses_oauth
+        case required_fields
+        case delegate_oauth
+        case installed_delegate_oauth_targets
+    }
     /**
      * Operations the current user is able to perform on this object (read-only)
      */
@@ -6190,6 +6872,52 @@ public struct InternalHelpResourcesContent: SDKModel {
 }
 
 public struct LDAPConfig: SDKModel {
+
+    private enum CodingKeys : String, CodingKey {
+        case can
+        case alternate_email_login_allowed
+        case auth_password
+        case auth_requires_role
+        case auth_username
+        case connection_host
+        case connection_port
+        case connection_tls
+        case connection_tls_no_verify
+        case default_new_user_group_ids
+        case default_new_user_groups
+        case default_new_user_role_ids
+        case default_new_user_roles
+        case enabled
+        case force_no_page
+        case groups
+        case groups_base_dn
+        case groups_finder_type
+        case groups_member_attribute
+        case groups_objectclasses
+        case groups_user_attribute
+        case groups_with_role_ids
+        case has_auth_password
+        case merge_new_users_by_email
+        case modified_at
+        case modified_by
+        case set_roles_from_groups
+        case test_ldap_password
+        case test_ldap_user
+        case user_attribute_map_email
+        case user_attribute_map_first_name
+        case user_attribute_map_last_name
+        case _user_attribute_map_ldap_id = "user_attribute_map_ldap_id"
+        case user_attributes
+        case user_attributes_with_ids
+        case user_bind_base_dn
+        case user_custom_filter
+        case user_id_attribute_names
+        case user_objectclass
+        case allow_normal_group_membership
+        case allow_roles_from_normal_groups
+        case allow_direct_roles
+        case url
+    }
     /**
      * Operations the current user is able to perform on this object (read-only)
      */
@@ -6605,6 +7333,19 @@ public struct LDAPGroupWrite: SDKModel {
 }
 
 public struct LDAPUser: SDKModel {
+
+    private enum CodingKeys : String, CodingKey {
+        case all_emails
+        case attributes
+        case email
+        case first_name
+        case groups
+        case last_name
+        case ldap_dn
+        case _ldap_id = "ldap_id"
+        case roles
+        case url
+    }
     /**
      * Array of user's email addresses and aliases for use in migration (read-only)
      */
@@ -6735,6 +7476,22 @@ public struct LDAPUserAttributeWrite: SDKModel {
 }
 
 public struct LegacyFeature: SDKModel {
+
+    private enum CodingKeys : String, CodingKey {
+        case can
+        case _id = "id"
+        case name
+        case description
+        case enabled_locally
+        case enabled
+        case disallowed_as_of_version
+        case disable_on_upgrade_to_version
+        case end_of_life_version
+        case documentation_url
+        case approximate_disable_date
+        case approximate_end_of_life_date
+        case has_disabled_on_upgrade
+    }
     /**
      * Operations the current user is able to perform on this object (read-only)
      */
@@ -6873,6 +7630,39 @@ public struct LocalizationSettings: SDKModel {
 }
 
 public struct Look: SDKModel {
+
+    private enum CodingKeys : String, CodingKey {
+        case can
+        case content_metadata_id
+        case id
+        case title
+        case user_id
+        case content_favorite_id
+        case created_at
+        case deleted
+        case deleted_at
+        case deleter_id
+        case description
+        case embed_url
+        case excel_file_url
+        case favorite_count
+        case google_spreadsheet_formula
+        case image_embed_url
+        case is_run_on_load
+        case last_accessed_at
+        case last_updater_id
+        case last_viewed_at
+        case model
+        case public
+        case public_slug
+        case public_url
+        case query_id
+        case short_url
+        case folder
+        case _folder_id = "folder_id"
+        case updated_at
+        case view_count
+    }
     /**
      * Operations the current user is able to perform on this object (read-only)
      */
@@ -7147,6 +7937,47 @@ public struct LookmlModel: SDKModel {
 }
 
 public struct LookmlModelExplore: SDKModel {
+
+    private enum CodingKeys : String, CodingKey {
+        case _id = "id"
+        case name
+        case description
+        case label
+        case title
+        case scopes
+        case can_total
+        case can_develop
+        case can_see_lookml
+        case lookml_link
+        case can_save
+        case can_explain
+        case can_pivot_in_db
+        case can_subtotal
+        case has_timezone_support
+        case supports_cost_estimate
+        case connection_name
+        case null_sort_treatment
+        case files
+        case source_file
+        case project_name
+        case model_name
+        case view_name
+        case hidden
+        case sql_table_name
+        case access_filter_fields
+        case access_filters
+        case aliases
+        case always_filter
+        case conditionally_filter
+        case index_fields
+        case sets
+        case tags
+        case errors
+        case fields
+        case joins
+        case group_label
+        case supported_measure_types
+    }
     private var _id: AnyString?
     /**
      * Fully qualified explore name (model name plus explore name) (read-only)
@@ -8234,6 +9065,11 @@ public struct LookmlTestResult: SDKModel {
 }
 
 public struct LookModel: SDKModel {
+
+    private enum CodingKeys : String, CodingKey {
+        case _id = "id"
+        case label
+    }
     private var _id: AnyString?
     /**
      * Model Id (read-only)
@@ -8256,6 +9092,40 @@ public struct LookModel: SDKModel {
 }
 
 public struct LookWithDashboards: SDKModel {
+
+    private enum CodingKeys : String, CodingKey {
+        case can
+        case content_metadata_id
+        case id
+        case title
+        case user_id
+        case content_favorite_id
+        case created_at
+        case deleted
+        case deleted_at
+        case deleter_id
+        case description
+        case embed_url
+        case excel_file_url
+        case favorite_count
+        case google_spreadsheet_formula
+        case image_embed_url
+        case is_run_on_load
+        case last_accessed_at
+        case last_updater_id
+        case last_viewed_at
+        case model
+        case public
+        case public_slug
+        case public_url
+        case query_id
+        case short_url
+        case folder
+        case _folder_id = "folder_id"
+        case updated_at
+        case view_count
+        case dashboards
+    }
     /**
      * Operations the current user is able to perform on this object (read-only)
      */
@@ -8446,6 +9316,41 @@ public struct LookWithDashboards: SDKModel {
 }
 
 public struct LookWithQuery: SDKModel {
+
+    private enum CodingKeys : String, CodingKey {
+        case can
+        case content_metadata_id
+        case id
+        case title
+        case user_id
+        case content_favorite_id
+        case created_at
+        case deleted
+        case deleted_at
+        case deleter_id
+        case description
+        case embed_url
+        case excel_file_url
+        case favorite_count
+        case google_spreadsheet_formula
+        case image_embed_url
+        case is_run_on_load
+        case last_accessed_at
+        case last_updater_id
+        case last_viewed_at
+        case model
+        case public
+        case public_slug
+        case public_url
+        case query_id
+        case short_url
+        case folder
+        case _folder_id = "folder_id"
+        case updated_at
+        case view_count
+        case query
+        case url
+    }
     /**
      * Operations the current user is able to perform on this object (read-only)
      */
@@ -8684,6 +9589,19 @@ public struct MergeFields: SDKModel {
 }
 
 public struct MergeQuery: SDKModel {
+
+    private enum CodingKeys : String, CodingKey {
+        case can
+        case column_limit
+        case dynamic_fields
+        case _id = "id"
+        case pivots
+        case result_maker_id
+        case sorts
+        case source_queries
+        case total
+        case vis_config
+    }
     /**
      * Operations the current user is able to perform on this object (read-only)
      */
@@ -8931,6 +9849,11 @@ public struct ModelSet: SDKModel {
 }
 
 public struct ModelsNotValidated: SDKModel {
+
+    private enum CodingKeys : String, CodingKey {
+        case name
+        case _project_file_id = "project_file_id"
+    }
     /**
      * Model name (read-only)
      */
@@ -8969,6 +9892,18 @@ public enum Name: String, Codable {
 }
 
 public struct OauthClientApp: SDKModel {
+
+    private enum CodingKeys : String, CodingKey {
+        case can
+        case _client_guid = "client_guid"
+        case redirect_uri
+        case display_name
+        case description
+        case enabled
+        case group_id
+        case tokens_invalid_before
+        case activated_users
+    }
     /**
      * Operations the current user is able to perform on this object (read-only)
      */
@@ -9476,6 +10411,31 @@ public enum PermissionType: String, Codable {
 }
 
 public struct Project: SDKModel {
+
+    private enum CodingKeys : String, CodingKey {
+        case can
+        case _id = "id"
+        case name
+        case uses_git
+        case git_remote_url
+        case git_username
+        case git_password
+        case git_production_branch_name
+        case use_git_cookie_auth
+        case git_username_user_attribute
+        case git_password_user_attribute
+        case git_service_name
+        case git_application_server_http_port
+        case git_application_server_http_scheme
+        case deploy_secret
+        case unset_deploy_secret
+        case pull_request_mode
+        case validation_required
+        case git_release_mgmt_enabled
+        case allow_warnings
+        case is_example
+        case dependency_status
+    }
     /**
      * Operations the current user is able to perform on this object (read-only)
      */
@@ -9618,6 +10578,21 @@ public struct Project: SDKModel {
 }
 
 public struct ProjectError: SDKModel {
+
+    private enum CodingKeys : String, CodingKey {
+        case code
+        case severity
+        case kind
+        case message
+        case field_name
+        case file_path
+        case line_number
+        case _model_id = "model_id"
+        case explore
+        case help_url
+        case params
+        case sanitized_message
+    }
     /**
      * A stable token that uniquely identifies this class of error, ignoring parameter values. Error message text may vary due to parameters or localization, but error codes do not. For example, a "File not found" error will have the same error code regardless of the filename in question or the user's display language (read-only)
      */
@@ -9700,6 +10675,18 @@ public struct ProjectError: SDKModel {
 }
 
 public struct ProjectFile: SDKModel {
+
+    private enum CodingKeys : String, CodingKey {
+        case can
+        case _id = "id"
+        case path
+        case title
+        case type
+        case extension
+        case mime_type
+        case editable
+        case git_status
+    }
     /**
      * Operations the current user is able to perform on this object (read-only)
      */
@@ -9827,6 +10814,17 @@ public struct ProjectValidationCache: SDKModel {
 }
 
 public struct ProjectWorkspace: SDKModel {
+
+    private enum CodingKeys : String, CodingKey {
+        case can
+        case _project_id = "project_id"
+        case _workspace_id = "workspace_id"
+        case git_status
+        case git_head
+        case dependency_status
+        case git_branch
+        case lookml_type
+    }
     /**
      * Operations the current user is able to perform on this object (read-only)
      */
@@ -9896,6 +10894,35 @@ public enum PullRequestMode: String, Codable {
 }
 
 public struct Query: SDKModel {
+
+    private enum CodingKeys : String, CodingKey {
+        case can
+        case id
+        case model
+        case view
+        case fields
+        case pivots
+        case fill_fields
+        case filters
+        case filter_expression
+        case sorts
+        case limit
+        case column_limit
+        case total
+        case row_total
+        case subtotals
+        case vis_config
+        case filter_config
+        case visible_ui_sections
+        case slug
+        case dynamic_fields
+        case _client_id = "client_id"
+        case share_url
+        case expanded_share_url
+        case url
+        case query_timezone
+        case has_table_calculations
+    }
     /**
      * Operations the current user is able to perform on this object (read-only)
      */
@@ -10066,6 +11093,28 @@ public struct Query: SDKModel {
 }
 
 public struct QueryTask: SDKModel {
+
+    private enum CodingKeys : String, CodingKey {
+        case can
+        case _id = "id"
+        case query_id
+        case query
+        case generate_links
+        case force_production
+        case path_prefix
+        case cache
+        case server_table_calcs
+        case cache_only
+        case cache_key
+        case status
+        case source
+        case runtime
+        case rebuild_pdts
+        case result_source
+        case look_id
+        case _dashboard_id = "dashboard_id"
+        case result_format
+    }
     /**
      * Operations the current user is able to perform on this object (read-only)
      */
@@ -10191,6 +11240,28 @@ public struct QueryTask: SDKModel {
 }
 
 public struct RenderTask: SDKModel {
+
+    private enum CodingKeys : String, CodingKey {
+        case can
+        case created_at
+        case dashboard_filters
+        case dashboard_id
+        case dashboard_style
+        case finalized_at
+        case height
+        case _id = "id"
+        case look_id
+        case _lookml_dashboard_id = "lookml_dashboard_id"
+        case query_id
+        case query_runtime
+        case render_runtime
+        case result_format
+        case runtime
+        case status
+        case status_detail
+        case user_id
+        case width
+    }
     /**
      * Operations the current user is able to perform on this object (read-only)
      */
@@ -10319,6 +11390,17 @@ public struct RenderTask: SDKModel {
 }
 
 public struct RepositoryCredential: SDKModel {
+
+    private enum CodingKeys : String, CodingKey {
+        case can
+        case _id = "id"
+        case _root_project_id = "root_project_id"
+        case remote_url
+        case git_username
+        case git_password
+        case ssh_public_key
+        case is_configured
+    }
     /**
      * Operations the current user is able to perform on this object (read-only)
      */
@@ -10445,6 +11527,19 @@ public struct ResultMakerFilterablesListen: SDKModel {
 }
 
 public struct ResultMakerWithIdVisConfigAndDynamicFields: SDKModel {
+
+    private enum CodingKeys : String, CodingKey {
+        case id
+        case dynamic_fields
+        case filterables
+        case sorts
+        case _merge_result_id = "merge_result_id"
+        case total
+        case query_id
+        case _sql_query_id = "sql_query_id"
+        case query
+        case vis_config
+    }
     /**
      * Unique Id. (read-only)
      */
@@ -10630,6 +11725,30 @@ public struct RoleSearch: SDKModel {
 }
 
 public struct RunningQueries: SDKModel {
+
+    private enum CodingKeys : String, CodingKey {
+        case can
+        case id
+        case user
+        case query
+        case sql_query
+        case look
+        case created_at
+        case completed_at
+        case _query_id = "query_id"
+        case source
+        case _node_id = "node_id"
+        case slug
+        case _query_task_id = "query_task_id"
+        case cache_key
+        case connection_name
+        case dialect
+        case _connection_id = "connection_id"
+        case message
+        case status
+        case runtime
+        case sql
+    }
     /**
      * Operations the current user is able to perform on this object (read-only)
      */
@@ -11144,6 +12263,43 @@ public struct SamlUserAttributeWrite: SDKModel {
 }
 
 public struct ScheduledPlan: SDKModel {
+
+    private enum CodingKeys : String, CodingKey {
+        case name
+        case user_id
+        case run_as_recipient
+        case enabled
+        case look_id
+        case dashboard_id
+        case _lookml_dashboard_id = "lookml_dashboard_id"
+        case filters_string
+        case dashboard_filters
+        case require_results
+        case require_no_results
+        case require_change
+        case send_all_results
+        case crontab
+        case datagroup
+        case timezone
+        case _query_id = "query_id"
+        case scheduled_plan_destination
+        case run_once
+        case include_links
+        case pdf_paper_size
+        case pdf_landscape
+        case embed
+        case color_theme
+        case long_tables
+        case inline_table_width
+        case id
+        case created_at
+        case updated_at
+        case title
+        case user
+        case next_run_at
+        case last_run_at
+        case can
+    }
     /**
      * Name of this scheduled plan
      */
@@ -11878,6 +13034,14 @@ public struct SqlQuery: SDKModel {
 }
 
 public struct SqlQueryCreate: SDKModel {
+
+    private enum CodingKeys : String, CodingKey {
+        case connection_name
+        case _connection_id = "connection_id"
+        case model_name
+        case sql
+        case vis_config
+    }
     /**
      * Name of the db connection on which to run this query
      */
@@ -11930,6 +13094,18 @@ public struct SshPublicKey: SDKModel {
 }
 
 public struct SshServer: SDKModel {
+
+    private enum CodingKeys : String, CodingKey {
+        case _ssh_server_id = "ssh_server_id"
+        case ssh_server_name
+        case ssh_server_host
+        case ssh_server_port
+        case ssh_server_user
+        case finger_print
+        case sha_finger_print
+        case public_key
+        case status
+    }
     private var _ssh_server_id: AnyString?
     /**
      * A unique id used to identify this SSH Server (read-only)
@@ -11994,6 +13170,20 @@ public struct SshServer: SDKModel {
 }
 
 public struct SshTunnel: SDKModel {
+
+    private enum CodingKeys : String, CodingKey {
+        case _tunnel_id = "tunnel_id"
+        case _ssh_server_id = "ssh_server_id"
+        case ssh_server_name
+        case ssh_server_host
+        case ssh_server_port
+        case ssh_server_user
+        case last_attempt
+        case local_host_port
+        case database_host
+        case database_port
+        case status
+    }
     private var _tunnel_id: AnyString?
     /**
      * Unique ID for the tunnel (read-only)
@@ -12165,6 +13355,26 @@ public struct Theme: SDKModel {
 }
 
 public struct ThemeSettings: SDKModel {
+
+    private enum CodingKeys : String, CodingKey {
+        case background_color
+        case base_font_size
+        case _color_collection_id = "color_collection_id"
+        case font_color
+        case font_family
+        case font_source
+        case info_button_color
+        case primary_button_color
+        case show_filters_bar
+        case show_title
+        case text_tile_text_color
+        case tile_background_color
+        case tile_text_color
+        case title_color
+        case warn_button_color
+        case tile_title_alignment
+        case tile_shadow
+    }
     /**
      * Default background color
      */
@@ -12319,6 +13529,11 @@ public struct UpdateCommand: SDKModel {
 }
 
 public struct UpdateFolder: SDKModel {
+
+    private enum CodingKeys : String, CodingKey {
+        case name
+        case _parent_id = "parent_id"
+    }
     /**
      * Unique Name
      */
@@ -12341,6 +13556,44 @@ public struct UpdateFolder: SDKModel {
 }
 
 public struct User: SDKModel {
+
+    private enum CodingKeys : String, CodingKey {
+        case can
+        case avatar_url
+        case avatar_url_without_sizing
+        case credentials_api3
+        case credentials_email
+        case credentials_embed
+        case credentials_google
+        case credentials_ldap
+        case credentials_looker_openid
+        case credentials_oidc
+        case credentials_saml
+        case credentials_totp
+        case display_name
+        case email
+        case embed_group_space_id
+        case first_name
+        case group_ids
+        case _home_folder_id = "home_folder_id"
+        case id
+        case is_disabled
+        case last_name
+        case locale
+        case looker_versions
+        case models_dir_validated
+        case personal_folder_id
+        case presumed_looker_employee
+        case role_ids
+        case sessions
+        case ui_state
+        case verified_looker_employee
+        case roles_externally_managed
+        case allow_direct_roles
+        case allow_normal_group_membership
+        case allow_roles_from_normal_groups
+        case url
+    }
     /**
      * Operations the current user is able to perform on this object (read-only)
      */
@@ -12760,6 +14013,19 @@ public struct UserAttributeWithValue: SDKModel {
 }
 
 public struct UserLoginLockout: SDKModel {
+
+    private enum CodingKeys : String, CodingKey {
+        case can
+        case key
+        case auth_type
+        case ip
+        case user_id
+        case _remote_id = "remote_id"
+        case full_name
+        case email
+        case fail_count
+        case lockout_at
+    }
     /**
      * Operations the current user is able to perform on this object (read-only)
      */
@@ -13079,6 +14345,12 @@ public struct WhitelabelConfiguration: SDKModel {
 }
 
 public struct Workspace: SDKModel {
+
+    private enum CodingKeys : String, CodingKey {
+        case can
+        case _id = "id"
+        case projects
+    }
     /**
      * Operations the current user is able to perform on this object (read-only)
      */
@@ -13111,6 +14383,23 @@ public struct Workspace: SDKModel {
  * id
  */
 public struct WriteAlert: SDKModel {
+
+    private enum CodingKeys : String, CodingKey {
+        case applied_dashboard_filters
+        case comparison_type
+        case cron
+        case custom_title
+        case dashboard_element_id
+        case destinations
+        case field
+        case is_disabled
+        case is_public
+        case _lookml_dashboard_id = "lookml_dashboard_id"
+        case _lookml_link_id = "lookml_link_id"
+        case owner_id
+        case threshold
+        case time_series_condition_state
+    }
     /**
      * Filters coming from the dashboard that are applied. Example `[{ "filter_title": "Name", "field_name": "distribution_centers.name", "filter_value": "Los Angeles CA" }]`
      */
@@ -13207,6 +14496,10 @@ public struct WriteAlert: SDKModel {
  * can, sudo_user_id
  */
 public struct WriteApiSession: SDKModel {
+
+    private enum CodingKeys : String, CodingKey {
+        case _workspace_id = "workspace_id"
+    }
     private var _workspace_id: AnyString?
     /**
      * The id of active workspace for this session
@@ -13301,6 +14594,17 @@ public struct WriteBoard: SDKModel {
  * can, content_created_by, content_favorite_id, content_metadata_id, content_updated_at, custom_image_url, description, favorite_count, id, image_url, location, title, url, view_count
  */
 public struct WriteBoardItem: SDKModel {
+
+    private enum CodingKeys : String, CodingKey {
+        case custom_image_data_base64
+        case custom_title
+        case custom_url
+        case dashboard_id
+        case board_section_id
+        case look_id
+        case _lookml_dashboard_id = "lookml_dashboard_id"
+        case order
+    }
     /**
      * (Write-Only) base64 encoded image data
      */
@@ -13437,6 +14741,13 @@ public struct WriteColorCollection: SDKModel {
  * id, author_id
  */
 public struct WriteCommand: SDKModel {
+
+    private enum CodingKeys : String, CodingKey {
+        case name
+        case description
+        case _linked_content_id = "linked_content_id"
+        case linked_content_type
+    }
     /**
      * Name of the command
      */
@@ -13527,6 +14838,22 @@ public struct WriteContentMeta: SDKModel {
  * id, field
  */
 public struct WriteCreateDashboardFilter: SDKModel {
+
+    private enum CodingKeys : String, CodingKey {
+        case _dashboard_id = "dashboard_id"
+        case name
+        case title
+        case type
+        case default_value
+        case model
+        case explore
+        case dimension
+        case row
+        case listens_to_filters
+        case allow_multiple_values
+        case required
+        case ui_config
+    }
     private var _dashboard_id: AnyString
     /**
      * Id of Dashboard
@@ -13623,6 +14950,15 @@ public struct WriteCreateDashboardFilter: SDKModel {
  * can
  */
 public struct WriteCreateQueryTask: SDKModel {
+
+    private enum CodingKeys : String, CodingKey {
+        case query_id
+        case result_format
+        case source
+        case deferred
+        case look_id
+        case _dashboard_id = "dashboard_id"
+    }
     /**
      * Id of query to run
      */
@@ -13733,6 +15069,31 @@ public struct WriteCustomWelcomeEmail: SDKModel {
  * can, content_favorite_id, content_metadata_id, id, model, readonly, refresh_interval_to_i, user_id, created_at, dashboard_elements, dashboard_filters, dashboard_layouts, deleted_at, deleter_id, edit_uri, favorite_count, last_accessed_at, last_viewed_at, view_count, url
  */
 public struct WriteDashboard: SDKModel {
+
+    private enum CodingKeys : String, CodingKey {
+        case description
+        case hidden
+        case query_timezone
+        case refresh_interval
+        case folder
+        case title
+        case slug
+        case preferred_viewer
+        case alert_sync_with_dashboard_filter_enabled
+        case background_color
+        case crossfilter_enabled
+        case deleted
+        case load_configuration
+        case _lookml_link_id = "lookml_link_id"
+        case show_filters_bar
+        case show_title
+        case _folder_id = "folder_id"
+        case text_tile_text_color
+        case tile_background_color
+        case tile_text_color
+        case title_color
+        case appearance
+    }
     /**
      * Description
      */
@@ -13898,6 +15259,27 @@ public struct WriteDashboardBase: SDKModel {
  * can, body_text_as_html, edit_uri, id, lookml_link_id, note_text_as_html, refresh_interval_to_i, alert_count, title_text_as_html, subtitle_text_as_html
  */
 public struct WriteDashboardElement: SDKModel {
+
+    private enum CodingKeys : String, CodingKey {
+        case body_text
+        case _dashboard_id = "dashboard_id"
+        case look
+        case _look_id = "look_id"
+        case _merge_result_id = "merge_result_id"
+        case note_display
+        case note_state
+        case note_text
+        case query
+        case query_id
+        case refresh_interval
+        case result_maker
+        case result_maker_id
+        case subtitle_text
+        case title
+        case title_hidden
+        case title_text
+        case type
+    }
     /**
      * Text tile body text
      */
@@ -14113,6 +15495,14 @@ public struct WriteDashboardFilter: SDKModel {
  * can, id, deleted, dashboard_title, dashboard_layout_components
  */
 public struct WriteDashboardLayout: SDKModel {
+
+    private enum CodingKeys : String, CodingKey {
+        case _dashboard_id = "dashboard_id"
+        case type
+        case active
+        case column_width
+        case width
+    }
     private var _dashboard_id: AnyString?
     /**
      * Id of Dashboard
@@ -14157,6 +15547,15 @@ public struct WriteDashboardLayout: SDKModel {
  * can, id, deleted, element_title, element_title_hidden, vis_type
  */
 public struct WriteDashboardLayoutComponent: SDKModel {
+
+    private enum CodingKeys : String, CodingKey {
+        case _dashboard_layout_id = "dashboard_layout_id"
+        case _dashboard_element_id = "dashboard_element_id"
+        case row
+        case column
+        case width
+        case height
+    }
     private var _dashboard_layout_id: AnyString?
     /**
      * Id of Dashboard Layout
@@ -14233,6 +15632,39 @@ public struct WriteDatagroup: SDKModel {
  * can, dialect, snippets, pdts_enabled, uses_oauth, created_at, user_id, example, last_regen_at, last_reap_at, managed
  */
 public struct WriteDBConnection: SDKModel {
+
+    private enum CodingKeys : String, CodingKey {
+        case name
+        case host
+        case port
+        case username
+        case password
+        case certificate
+        case file_type
+        case database
+        case db_timezone
+        case query_timezone
+        case schema
+        case max_connections
+        case max_billing_gigabytes
+        case ssl
+        case verify_ssl
+        case tmp_db_name
+        case jdbc_additional_params
+        case pool_timeout
+        case dialect_name
+        case user_db_credentials
+        case user_attribute_fields
+        case maintenance_cron
+        case sql_runner_precache_tables
+        case sql_writing_with_info_schema
+        case after_connect_statements
+        case pdt_context_override
+        case _tunnel_id = "tunnel_id"
+        case pdt_concurrency
+        case disable_context_comment
+        case oauth_application_id
+    }
     /**
      * Name of the connection. Also used as the unique identifier
      */
@@ -14504,6 +15936,13 @@ public struct WriteDBConnectionOverride: SDKModel {
  * can, id, created_at
  */
 public struct WriteExternalOauthApplication: SDKModel {
+
+    private enum CodingKeys : String, CodingKey {
+        case name
+        case _client_id = "client_id"
+        case client_secret
+        case dialect_name
+    }
     /**
      * The name of this application.  For Snowflake connections, this should be the name of the host database.
      */
@@ -14542,6 +15981,11 @@ public struct WriteExternalOauthApplication: SDKModel {
  * id, content_metadata_id, created_at, creator_id, child_count, external_id, is_embed, is_embed_shared_root, is_embed_users_root, is_personal, is_personal_descendant, is_shared_root, is_users_root, can
  */
 public struct WriteFolderBase: SDKModel {
+
+    private enum CodingKeys : String, CodingKey {
+        case name
+        case _parent_id = "parent_id"
+    }
     /**
      * Unique Name
      */
@@ -14704,6 +16148,43 @@ public struct WriteInternalHelpResourcesContent: SDKModel {
  * can, default_new_user_groups, default_new_user_roles, groups, has_auth_password, modified_at, modified_by, user_attributes, url
  */
 public struct WriteLDAPConfig: SDKModel {
+
+    private enum CodingKeys : String, CodingKey {
+        case alternate_email_login_allowed
+        case auth_password
+        case auth_requires_role
+        case auth_username
+        case connection_host
+        case connection_port
+        case connection_tls
+        case connection_tls_no_verify
+        case default_new_user_group_ids
+        case default_new_user_role_ids
+        case enabled
+        case force_no_page
+        case groups_base_dn
+        case groups_finder_type
+        case groups_member_attribute
+        case groups_objectclasses
+        case groups_user_attribute
+        case groups_with_role_ids
+        case merge_new_users_by_email
+        case set_roles_from_groups
+        case test_ldap_password
+        case test_ldap_user
+        case user_attribute_map_email
+        case user_attribute_map_first_name
+        case user_attribute_map_last_name
+        case _user_attribute_map_ldap_id = "user_attribute_map_ldap_id"
+        case user_attributes_with_ids
+        case user_bind_base_dn
+        case user_custom_filter
+        case user_id_attribute_names
+        case user_objectclass
+        case allow_normal_group_membership
+        case allow_roles_from_normal_groups
+        case allow_direct_roles
+    }
     /**
      * Allow alternate email-based login via '/login/email' for admins and for specified users with the 'login_special_email' permission. This option is useful as a fallback during ldap setup, if ldap config problems occur later, or if you need to support some users who are not in your ldap directory. Looker email/password logins are always disabled for regular users when ldap is enabled.
      */
@@ -14988,6 +16469,19 @@ public struct WriteLookmlModel: SDKModel {
  * can, content_metadata_id, id, content_favorite_id, created_at, deleted_at, deleter_id, embed_url, excel_file_url, favorite_count, google_spreadsheet_formula, image_embed_url, last_accessed_at, last_updater_id, last_viewed_at, model, public_slug, public_url, short_url, updated_at, view_count, url
  */
 public struct WriteLookWithQuery: SDKModel {
+
+    private enum CodingKeys : String, CodingKey {
+        case title
+        case user_id
+        case deleted
+        case description
+        case is_run_on_load
+        case public
+        case query_id
+        case folder
+        case _folder_id = "folder_id"
+        case query
+    }
     /**
      * Look Title
      */
@@ -15500,6 +16994,28 @@ public struct WriteProject: SDKModel {
  * can, id, slug, share_url, expanded_share_url, url, has_table_calculations
  */
 public struct WriteQuery: SDKModel {
+
+    private enum CodingKeys : String, CodingKey {
+        case model
+        case view
+        case fields
+        case pivots
+        case fill_fields
+        case filters
+        case filter_expression
+        case sorts
+        case limit
+        case column_limit
+        case total
+        case row_total
+        case subtotals
+        case vis_config
+        case filter_config
+        case visible_ui_sections
+        case dynamic_fields
+        case _client_id = "client_id"
+        case query_timezone
+    }
     /**
      * Model
      */
@@ -15873,6 +17389,35 @@ public struct WriteSamlConfig: SDKModel {
  * id, created_at, updated_at, title, user, next_run_at, last_run_at, can
  */
 public struct WriteScheduledPlan: SDKModel {
+
+    private enum CodingKeys : String, CodingKey {
+        case name
+        case user_id
+        case run_as_recipient
+        case enabled
+        case look_id
+        case dashboard_id
+        case _lookml_dashboard_id = "lookml_dashboard_id"
+        case filters_string
+        case dashboard_filters
+        case require_results
+        case require_no_results
+        case require_change
+        case send_all_results
+        case crontab
+        case datagroup
+        case timezone
+        case _query_id = "query_id"
+        case scheduled_plan_destination
+        case run_once
+        case include_links
+        case pdf_paper_size
+        case pdf_landscape
+        case embed
+        case color_theme
+        case long_tables
+        case inline_table_width
+    }
     /**
      * Name of this scheduled plan
      */
@@ -16155,6 +17700,12 @@ public struct WriteSshServer: SDKModel {
  * tunnel_id, ssh_server_name, ssh_server_host, ssh_server_port, ssh_server_user, last_attempt, local_host_port, status
  */
 public struct WriteSshTunnel: SDKModel {
+
+    private enum CodingKeys : String, CodingKey {
+        case _ssh_server_id = "ssh_server_id"
+        case database_host
+        case database_port
+    }
     private var _ssh_server_id: AnyString?
     /**
      * SSH Server ID
@@ -16218,6 +17769,17 @@ public struct WriteTheme: SDKModel {
  * can, avatar_url, avatar_url_without_sizing, credentials_api3, credentials_embed, credentials_google, credentials_ldap, credentials_looker_openid, credentials_oidc, credentials_saml, credentials_totp, display_name, email, embed_group_space_id, group_ids, id, looker_versions, personal_folder_id, presumed_looker_employee, role_ids, sessions, verified_looker_employee, roles_externally_managed, allow_direct_roles, allow_normal_group_membership, allow_roles_from_normal_groups, url
  */
 public struct WriteUser: SDKModel {
+
+    private enum CodingKeys : String, CodingKey {
+        case credentials_email
+        case first_name
+        case _home_folder_id = "home_folder_id"
+        case is_disabled
+        case last_name
+        case locale
+        case models_dir_validated
+        case ui_state
+    }
     /**
      * Dynamic writeable type for CredentialsEmail removes:
      * can, created_at, is_disabled, logged_in_at, password_reset_url, type, url, user_url

@@ -476,13 +476,26 @@ ${indent}}\n`
   }
 
   codingKeys(indent: string, type: IType) {
-    if (!type.hasSpecialNeeds) return ''
+    let special = false
 
+    const keys = Object.values(type.properties).map((p) => {
+      let name = p.name
+      let alias = ''
+      const useIt = this.useAnyString(p)
+      if (useIt) {
+        name = this.privy(name)
+        special = true
+        alias = p.jsonName
+      } else if (p.hasSpecialNeeds) {
+        special = true
+        alias = p.jsonName
+      }
+      return name + (alias ? ` = "${alias}"` : '')
+    })
+
+    if (!special) return ''
     const bump = this.bumper(indent)
     const bump2 = this.bumper(bump)
-    const keys = Object.values(type.properties).map(
-      (p) => p.name + (p.hasSpecialNeeds ? ` = "${p.jsonName}"` : '')
-    )
     const cases = keys.join(`\n${bump2}case `)
 
     return (

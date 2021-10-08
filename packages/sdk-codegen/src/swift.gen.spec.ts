@@ -119,6 +119,13 @@ public enum PermissionType: String, Codable {
       const type = apiTestModel.types.GitConnectionTestResult
       const actual = gen.declareType(indent, type)
       const expected = `public struct GitConnectionTestResult: SDKModel {
+
+    private enum CodingKeys : String, CodingKey {
+        case can
+        case _id = "id"
+        case message
+        case status
+    }
     /**
      * Operations the current user is able to perform on this object (read-only)
      */
@@ -158,6 +165,11 @@ public enum PermissionType: String, Codable {
       const type = apiTestModel.types.CreateFolder
       const actual = gen.declareType(indent, type)
       const expected = `public struct CreateFolder: SDKModel {
+
+    private enum CodingKeys : String, CodingKey {
+        case name
+        case _parent_id = "parent_id"
+    }
     /**
      * Unique Name
      */
