@@ -79,23 +79,27 @@ public enum PermissionType: String, Codable {
     })
   })
 
-  describe('special symbols', () => {
-    it('generates coding keys', () => {
+  describe('special handling', () => {
+    it('generates coding keys for special property names', () => {
       const type = apiTestModel.types.HyphenType
       const actual = gen.declareType(indent, type)
       const expected = `public struct HyphenType: SDKModel {
 
     private enum CodingKeys : String, CodingKey {
-        case project_name, project_digest = "project-digest", computation_time = "computation time"
+        case project_name
+        case project_digest = "project-digest"
+        case computation_time = "computation time"
     }
     /**
      * A normal variable name (read-only)
      */
     public var project_name: String?
+
     /**
      * A hyphenated property name (read-only)
      */
     public var project_digest: String?
+
     /**
      * A spaced out property name (read-only)
      */
@@ -105,6 +109,45 @@ public enum PermissionType: String, Codable {
         self.project_name = project_name
         self.project_digest = project_digest
         self.computation_time = computation_time
+    }
+
+}`
+      expect(actual).toEqual(expected)
+    })
+
+    it('string ID properties use AnyString', () => {
+      const type = apiTestModel.types.GitConnectionTestResult
+      const actual = gen.declareType(indent, type)
+      const expected = `public struct GitConnectionTestResult: SDKModel {
+    /**
+     * Operations the current user is able to perform on this object (read-only)
+     */
+    public var can: StringDictionary<Bool>?
+
+    private var _id: AnyString?
+    /**
+     * A short string, uniquely naming this test (read-only)
+     */
+    public var id: String? {
+        get { _id?.value }
+        set { _id = newValue.map(AnyString.init) }
+    }
+
+    /**
+     * Additional data from the test (read-only)
+     */
+    public var message: String?
+
+    /**
+     * Either 'pass' or 'fail' (read-only)
+     */
+    public var status: String?
+
+    public init(can: StringDictionary<Bool>? = nil, id: String? = nil, message: String? = nil, status: String? = nil) {
+        self.can = can
+        self._id = id.map(AnyString.init)
+        self.message = message
+        self.status = status
     }
 
 }`
@@ -121,10 +164,12 @@ public enum PermissionType: String, Codable {
      * The complete URL of the Looker UI page to display in the embed context. For example, to display the dashboard with id 34, \`target_url\` would look like: \`https://mycompany.looker.com:9999/dashboards/34\`. \`target_uri\` MUST contain a scheme (HTTPS), domain name, and URL path. Port must be included if it is required to reach the Looker server from browser clients. If the Looker instance is behind a load balancer or other proxy, \`target_uri\` must be the public-facing domain name and port required to reach the Looker instance, not the actual internal network machine name of the Looker instance.
      */
     public var target_url: URI
+
     /**
      * Number of seconds the SSO embed session will be valid after the embed session is started. Defaults to 300 seconds. Maximum session length accepted is 2592000 seconds (30 days).
      */
     public var session_length: Int64?
+
     /**
      * When true, the embed session will purge any residual Looker login state (such as in browser cookies) before creating a new login state with the given embed user info. Defaults to true.
      */
@@ -151,6 +196,7 @@ public enum PermissionType: String, Codable {
      * CSS color string
      */
     public var color: String?
+
     /**
      * Offset in continuous palette (0 to 100)
      */

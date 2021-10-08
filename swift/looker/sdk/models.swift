@@ -38,14 +38,17 @@ public struct AccessToken: SDKModel {
      * Access Token used for API calls (read-only)
      */
     public var access_token: String?
+
     /**
      * Type of Token (read-only)
      */
     public var token_type: String?
+
     /**
      * Number of seconds before the token expires (read-only)
      */
     public var expires_in: Int64?
+
     /**
      * Refresh token which can be used to obtain a new access token (read-only)
      */
@@ -65,55 +68,77 @@ public struct Alert: SDKModel {
      * Filters coming from the dashboard that are applied. Example `[{ "filter_title": "Name", "field_name": "distribution_centers.name", "filter_value": "Los Angeles CA" }]`
      */
     public var applied_dashboard_filters: [AlertAppliedDashboardFilter]?
+
     /**
      * This property informs the check what kind of comparison we are performing. Only certain condition types are valid for time series alerts. For details, refer to [Setting Alert Conditions](https://docs.looker.com/sharing-and-publishing/creating-alerts#setting_alert_conditions) Valid values are: "EQUAL_TO", "GREATER_THAN", "GREATER_THAN_OR_EQUAL_TO", "LESS_THAN", "LESS_THAN_OR_EQUAL_TO", "INCREASES_BY", "DECREASES_BY", "CHANGES_BY".
      */
     public var comparison_type: ComparisonType?
+
     /**
      * Vixie-Style crontab specification when to run. At minumum, it has to be longer than 15 minute intervals
      */
     public var cron: String?
+
     /**
      * An optional, user-defined title for the alert
      */
     public var custom_title: String?
+
     /**
      * ID of the dashboard element associated with the alert. Refer to [dashboard_element()](#!/Dashboard/DashboardElement)
      */
     public var dashboard_element_id: Int64?
+
     /**
      * Array of destinations to send alerts to. Must be the same type of destination. Example `[{ "destination_type": "EMAIL", "email_address": "test@test.com" }]`
      */
     public var destinations: [AlertDestination]?
+
     public var field: AlertField?
+
     /**
      * ID of the alert (read-only)
      */
     public var id: Int64?
+
     /**
      * Whether or not the alert is disabled
      */
     public var is_disabled: Bool?
+
     /**
      * Whether or not the alert is public
      */
     public var is_public: Bool?
+
+    private var _lookml_dashboard_id: AnyString?
     /**
      * ID of the LookML dashboard associated with the alert
      */
-    public var lookml_dashboard_id: String?
+    public var lookml_dashboard_id: String? {
+        get { _lookml_dashboard_id?.value }
+        set { _lookml_dashboard_id = newValue.map(AnyString.init) }
+    }
+
+    private var _lookml_link_id: AnyString?
     /**
      * ID of the LookML dashboard element associated with the alert
      */
-    public var lookml_link_id: String?
+    public var lookml_link_id: String? {
+        get { _lookml_link_id?.value }
+        set { _lookml_link_id = newValue.map(AnyString.init) }
+    }
+
     /**
      * User id of alert owner
      */
     public var owner_id: Int64?
+
     /**
      * Value of the alert threshold
      */
     public var threshold: Double?
+
     public var time_series_condition_state: AlertConditionState?
 
     public init(applied_dashboard_filters: [AlertAppliedDashboardFilter]? = nil, comparison_type: ComparisonType? = nil, cron: String? = nil, custom_title: String? = nil, dashboard_element_id: Int64? = nil, destinations: [AlertDestination]? = nil, field: AlertField? = nil, id: Int64? = nil, is_disabled: Bool? = nil, is_public: Bool? = nil, lookml_dashboard_id: String? = nil, lookml_link_id: String? = nil, owner_id: Int64? = nil, threshold: Double? = nil, time_series_condition_state: AlertConditionState? = nil) {
@@ -127,8 +152,8 @@ public struct Alert: SDKModel {
         self.id = id
         self.is_disabled = is_disabled
         self.is_public = is_public
-        self.lookml_dashboard_id = lookml_dashboard_id
-        self.lookml_link_id = lookml_link_id
+        self._lookml_dashboard_id = lookml_dashboard_id.map(AnyString.init)
+        self._lookml_link_id = lookml_link_id.map(AnyString.init)
         self.owner_id = owner_id
         self.threshold = threshold
         self.time_series_condition_state = time_series_condition_state
@@ -141,14 +166,17 @@ public struct AlertAppliedDashboardFilter: SDKModel {
      * Field Title. Refer to `DashboardFilter.title` in [DashboardFilter](#!/types/DashboardFilter). Example `Name`
      */
     public var filter_title: String?
+
     /**
      * Field Name. Refer to `DashboardFilter.dimension` in [DashboardFilter](#!/types/DashboardFilter). Example `distribution_centers.name`
      */
     public var field_name: String?
+
     /**
      * Field Value. [Filter Expressions](https://docs.looker.com/reference/filter-expressions). Example `Los Angeles CA`
      */
     public var filter_value: String?
+
     /**
      * Human Readable Filter Description. This may be null or auto-generated. Example `is Los Angeles CA` (read-only)
      */
@@ -164,18 +192,27 @@ public struct AlertAppliedDashboardFilter: SDKModel {
 }
 
 public struct AlertConditionState: SDKModel {
+    private var _previous_time_series_id: AnyString?
     /**
      * (Write-Only) The second latest time string the alert has seen.
      */
-    public var previous_time_series_id: String?
+    public var previous_time_series_id: String? {
+        get { _previous_time_series_id?.value }
+        set { _previous_time_series_id = newValue.map(AnyString.init) }
+    }
+
+    private var _latest_time_series_id: AnyString?
     /**
      * (Write-Only) Latest time string the alert has seen.
      */
-    public var latest_time_series_id: String?
+    public var latest_time_series_id: String? {
+        get { _latest_time_series_id?.value }
+        set { _latest_time_series_id = newValue.map(AnyString.init) }
+    }
 
     public init(previous_time_series_id: String? = nil, latest_time_series_id: String? = nil) {
-        self.previous_time_series_id = previous_time_series_id
-        self.latest_time_series_id = latest_time_series_id
+        self._previous_time_series_id = previous_time_series_id.map(AnyString.init)
+        self._latest_time_series_id = latest_time_series_id.map(AnyString.init)
     }
 
 }
@@ -185,14 +222,21 @@ public struct AlertDestination: SDKModel {
      * Type of destination that the alert will be sent to Valid values are: "EMAIL", "ACTION_HUB".
      */
     public var destination_type: DestinationType
+
     /**
      * Email address for the 'email' type
      */
     public var email_address: String?
+
+    private var _action_hub_integration_id: AnyString?
     /**
      * Action hub integration id for the 'action_hub' type. [Integration](#!/types/Integration)
      */
-    public var action_hub_integration_id: String?
+    public var action_hub_integration_id: String? {
+        get { _action_hub_integration_id?.value }
+        set { _action_hub_integration_id = newValue.map(AnyString.init) }
+    }
+
     /**
      * Action hub form params json for the 'action_hub' type [IntegrationParam](#!/types/IntegrationParam)
      */
@@ -201,7 +245,7 @@ public struct AlertDestination: SDKModel {
     public init(destination_type: DestinationType, email_address: String? = nil, action_hub_integration_id: String? = nil, action_hub_form_params_json: String? = nil) {
         self.destination_type = destination_type
         self.email_address = email_address
-        self.action_hub_integration_id = action_hub_integration_id
+        self._action_hub_integration_id = action_hub_integration_id.map(AnyString.init)
         self.action_hub_form_params_json = action_hub_form_params_json
     }
 
@@ -216,10 +260,12 @@ public struct AlertField: SDKModel {
      * Field's title. Usually auto-generated to reflect field name and its filters
      */
     public var title: String?
+
     /**
      * Field's name. Has the format `<view>.<field>` Refer to [docs](https://docs.looker.com/sharing-and-publishing/creating-alerts) for more details
      */
     public var name: String?
+
     /**
      * (Optional / Advance Use) List of fields filter. This further restricts the alert to certain dashboard element's field values. This can be used on top of dashboard filters `applied_dashboard_filters`. To keep thing simple, it's suggested to just use dashboard filters. Example: `{ 'title': '12 Number on Hand', 'name': 'inventory_items.number_on_hand', 'filter': [{ 'field_name': 'inventory_items.id', 'field_value': 12, 'filter_value': null }] }`
      */
@@ -238,10 +284,12 @@ public struct AlertFieldFilter: SDKModel {
      * Field Name. Has format `<view>.<field>`
      */
     public var field_name: String?
+
     /**
      * Field Value. Depends on the type of field - numeric or string. For [location](https://docs.looker.com/reference/field-reference/dimension-type-reference#location) type, it's a list of floats. Example `[1.0, 56.0]`
      */
     public var field_value: AnyCodable?
+
     /**
      * Filter Value. Usually null except for [location](https://docs.looker.com/reference/field-reference/dimension-type-reference#location) type. It'll be a string of lat,long ie `'1.0,56.0'`
      */
@@ -268,10 +316,16 @@ public struct ApiSession: SDKModel {
      * Operations the current user is able to perform on this object (read-only)
      */
     public var can: StringDictionary<Bool>?
+
+    private var _workspace_id: AnyString?
     /**
      * The id of active workspace for this session
      */
-    public var workspace_id: String?
+    public var workspace_id: String? {
+        get { _workspace_id?.value }
+        set { _workspace_id = newValue.map(AnyString.init) }
+    }
+
     /**
      * The id of the actual user in the case when this session represents one user sudo'ing as another (read-only)
      */
@@ -279,7 +333,7 @@ public struct ApiSession: SDKModel {
 
     public init(can: StringDictionary<Bool>? = nil, workspace_id: String? = nil, sudo_user_id: Int64? = nil) {
         self.can = can
-        self.workspace_id = workspace_id
+        self._workspace_id = workspace_id.map(AnyString.init)
         self.sudo_user_id = sudo_user_id
     }
 
@@ -290,15 +344,19 @@ public struct ApiVersion: SDKModel {
      * Current Looker release version number (read-only)
      */
     public var looker_release_version: String?
+
     public var current_version: ApiVersionElement?
+
     /**
      * Array of versions supported by this Looker instance (read-only)
      */
     public var supported_versions: [ApiVersionElement]?
+
     /**
      * API server base url (read-only)
      */
     public var api_server_url: String?
+
     /**
      * Web server base url (read-only)
      */
@@ -319,14 +377,17 @@ public struct ApiVersionElement: SDKModel {
      * Version number as it appears in '/api/xxx/' urls (read-only)
      */
     public var version: String?
+
     /**
      * Full version number including minor version (read-only)
      */
     public var full_version: String?
+
     /**
      * Status of this version (read-only)
      */
     public var status: String?
+
     /**
      * Url for swagger.json for this version (read-only)
      */
@@ -346,26 +407,32 @@ public struct BackupConfiguration: SDKModel {
      * Operations the current user is able to perform on this object (read-only)
      */
     public var can: StringDictionary<Bool>?
+
     /**
      * Type of backup: looker-s3 or custom-s3
      */
     public var type: String?
+
     /**
      * Name of bucket for custom-s3 backups
      */
     public var custom_s3_bucket: String?
+
     /**
      * Name of region where the bucket is located
      */
     public var custom_s3_bucket_region: String?
+
     /**
      * (Write-Only) AWS S3 key used for custom-s3 backups
      */
     public var custom_s3_key: String?
+
     /**
      * (Write-Only) AWS S3 secret used for custom-s3 backups
      */
     public var custom_s3_secret: String?
+
     /**
      * Link to get this item (read-only)
      */
@@ -388,46 +455,57 @@ public struct Board: SDKModel {
      * Operations the current user is able to perform on this object (read-only)
      */
     public var can: StringDictionary<Bool>?
+
     /**
      * Id of associated content_metadata record (read-only)
      */
     public var content_metadata_id: Int64?
+
     /**
      * Date of board creation (read-only)
      */
     public var created_at: Date?
+
     /**
      * Date of board deletion
      */
     public var deleted_at: Date?
+
     /**
      * Description of the board
      */
     public var description: String?
+
     /**
      * Sections of the board (read-only)
      */
     public var board_sections: [BoardSection]?
+
     /**
      * Unique Id (read-only)
      */
     public var id: Int64?
+
     /**
      * ids of the board sections in the order they should be displayed
      */
     public var section_order: [Int64]?
+
     /**
      * Title of the board
      */
     public var title: String?
+
     /**
      * Date of last board update (read-only)
      */
     public var updated_at: Date?
+
     /**
      * User id of board creator (read-only)
      */
     public var user_id: Int64?
+
     /**
      * Whether the board is the primary homepage or not (read-only)
      */
@@ -455,86 +533,111 @@ public struct BoardItem: SDKModel {
      * Operations the current user is able to perform on this object (read-only)
      */
     public var can: StringDictionary<Bool>?
+
     /**
      * Name of user who created the content this item is based on (read-only)
      */
     public var content_created_by: String?
+
     /**
      * Content favorite id associated with the item this content is based on (read-only)
      */
     public var content_favorite_id: Int64?
+
     /**
      * Content metadata id associated with the item this content is based on (read-only)
      */
     public var content_metadata_id: Int64?
+
     /**
      * Last time the content that this item is based on was updated (read-only)
      */
     public var content_updated_at: String?
+
     /**
      * (Write-Only) base64 encoded image data
      */
     public var custom_image_data_base64: String?
+
     /**
      * Custom image_url entered by the user, if present (read-only)
      */
     public var custom_image_url: String?
+
     /**
      * Custom title entered by the user, if present
      */
     public var custom_title: String?
+
     /**
      * Custom url entered by the user, if present
      */
     public var custom_url: String?
+
     /**
      * Dashboard to base this item on
      */
     public var dashboard_id: Int64?
+
     /**
      * The actual description for display (read-only)
      */
     public var description: String?
+
     /**
      * Number of times content has been favorited, if present (read-only)
      */
     public var favorite_count: Int64?
+
     /**
      * Associated Board Section
      */
     public var board_section_id: Int64?
+
     /**
      * Unique Id (read-only)
      */
     public var id: Int64?
+
     /**
      * The actual image_url for display (read-only)
      */
     public var image_url: String?
+
     /**
      * The container folder name of the content (read-only)
      */
     public var location: String?
+
     /**
      * Look to base this item on
      */
     public var look_id: Int64?
+
+    private var _lookml_dashboard_id: AnyString?
     /**
      * LookML Dashboard to base this item on
      */
-    public var lookml_dashboard_id: String?
+    public var lookml_dashboard_id: String? {
+        get { _lookml_dashboard_id?.value }
+        set { _lookml_dashboard_id = newValue.map(AnyString.init) }
+    }
+
     /**
      * An arbitrary integer representing the sort order within the section
      */
     public var order: Int64?
+
     /**
      * The actual title for display (read-only)
      */
     public var title: String?
+
     /**
      * Relative url for the associated content (read-only)
      */
     public var url: String?
+
     /**
      * Number of times content has been viewed, if present (read-only)
      */
@@ -558,7 +661,7 @@ public struct BoardItem: SDKModel {
         self.image_url = image_url
         self.location = location
         self.look_id = look_id
-        self.lookml_dashboard_id = lookml_dashboard_id
+        self._lookml_dashboard_id = lookml_dashboard_id.map(AnyString.init)
         self.order = order
         self.title = title
         self.url = url
@@ -572,42 +675,52 @@ public struct BoardSection: SDKModel {
      * Operations the current user is able to perform on this object (read-only)
      */
     public var can: StringDictionary<Bool>?
+
     /**
      * Time at which this section was created. (read-only)
      */
     public var created_at: Date?
+
     /**
      * Time at which this section was deleted.
      */
     public var deleted_at: Date?
+
     /**
      * Description of the content found in this section.
      */
     public var description: String?
+
     /**
      * Id reference to parent board
      */
     public var board_id: Int64?
+
     /**
      * Items in the board section (read-only)
      */
     public var board_items: [BoardItem]?
+
     /**
      * Unique Id (read-only)
      */
     public var id: Int64?
+
     /**
      * ids of the board items in the order they should be displayed
      */
     public var item_order: [Int64]?
+
     /**
      * ids of the homepage items the user can see in the order they should be displayed (read-only)
      */
     public var visible_item_order: [Int64]?
+
     /**
      * Name of row
      */
     public var title: String?
+
     /**
      * Time at which this section was last updated. (read-only)
      */
@@ -640,29 +753,37 @@ public enum Category: String, Codable {
 }
 
 public struct ColorCollection: SDKModel {
+    private var _id: AnyString?
     /**
      * Unique Id (read-only)
      */
-    public var id: String?
+    public var id: String? {
+        get { _id?.value }
+        set { _id = newValue.map(AnyString.init) }
+    }
+
     /**
      * Label of color collection
      */
     public var label: String?
+
     /**
      * Array of categorical palette definitions
      */
     public var categoricalPalettes: [DiscretePalette]?
+
     /**
      * Array of discrete palette definitions
      */
     public var sequentialPalettes: [ContinuousPalette]?
+
     /**
      * Array of diverging palette definitions
      */
     public var divergingPalettes: [ContinuousPalette]?
 
     public init(id: String? = nil, label: String? = nil, categoricalPalettes: [DiscretePalette]? = nil, sequentialPalettes: [ContinuousPalette]? = nil, divergingPalettes: [ContinuousPalette]? = nil) {
-        self.id = id
+        self._id = id.map(AnyString.init)
         self.label = label
         self.categoricalPalettes = categoricalPalettes
         self.sequentialPalettes = sequentialPalettes
@@ -676,6 +797,7 @@ public struct ColorStop: SDKModel {
      * CSS color string
      */
     public var color: String?
+
     /**
      * Offset in continuous palette (0 to 100)
      */
@@ -693,14 +815,17 @@ public struct ColumnSearch: SDKModel {
      * Name of schema containing the table (read-only)
      */
     public var schema_name: String?
+
     /**
      * Name of table containing the column (read-only)
      */
     public var table_name: String?
+
     /**
      * Name of column (read-only)
      */
     public var column_name: String?
+
     /**
      * Column data type (read-only)
      */
@@ -720,22 +845,31 @@ public struct Command: SDKModel {
      * Id of the command record (read-only)
      */
     public var id: Int64?
+
     /**
      * Id of the command author (read-only)
      */
     public var author_id: Int64?
+
     /**
      * Name of the command
      */
     public var name: String?
+
     /**
      * Description of the command
      */
     public var description: String?
+
+    private var _linked_content_id: AnyString?
     /**
      * Id of the content associated with the command
      */
-    public var linked_content_id: String?
+    public var linked_content_id: String? {
+        get { _linked_content_id?.value }
+        set { _linked_content_id = newValue.map(AnyString.init) }
+    }
+
     /**
      * Name of the command Valid values are: "dashboard", "lookml_dashboard".
      */
@@ -746,7 +880,7 @@ public struct Command: SDKModel {
         self.author_id = author_id
         self.name = name
         self.description = description
-        self.linked_content_id = linked_content_id
+        self._linked_content_id = linked_content_id.map(AnyString.init)
         self.linked_content_type = linked_content_type
     }
 
@@ -771,62 +905,77 @@ public struct ConnectionFeatures: SDKModel {
      * Name of the dialect for this connection (read-only)
      */
     public var dialect_name: String?
+
     /**
      * True for cost estimating support (read-only)
      */
     public var cost_estimate: Bool?
+
     /**
      * True for multiple database support (read-only)
      */
     public var multiple_databases: Bool?
+
     /**
      * True for cost estimating support (read-only)
      */
     public var column_search: Bool?
+
     /**
      * True for secondary index support (read-only)
      */
     public var persistent_table_indexes: Bool?
+
     /**
      * True for persistent derived table support (read-only)
      */
     public var persistent_derived_tables: Bool?
+
     /**
      * True for turtles support (read-only)
      */
     public var turtles: Bool?
+
     /**
      * True for percentile support (read-only)
      */
     public var percentile: Bool?
+
     /**
      * True for distinct percentile support (read-only)
      */
     public var distinct_percentile: Bool?
+
     /**
      * True for stable views support (read-only)
      */
     public var stable_views: Bool?
+
     /**
      * True for millisecond support (read-only)
      */
     public var milliseconds: Bool?
+
     /**
      * True for microsecond support (read-only)
      */
     public var microseconds: Bool?
+
     /**
      * True for subtotal support (read-only)
      */
     public var subtotals: Bool?
+
     /**
      * True for geographic location support (read-only)
      */
     public var location: Bool?
+
     /**
      * True for timezone conversion in query support (read-only)
      */
     public var timezone: Bool?
+
     /**
      * True for connection pooling support (read-only)
      */
@@ -858,24 +1007,31 @@ public struct ContentFavorite: SDKModel {
      * Unique Id (read-only)
      */
     public var id: Int64?
+
     /**
      * User Id which owns this ContentFavorite
      */
     public var user_id: Int64?
+
     /**
      * Content Metadata Id associated with this ContentFavorite
      */
     public var content_metadata_id: Int64?
+
     /**
      * Id of a look (read-only)
      */
     public var look_id: Int64?
+
     /**
      * Id of a dashboard (read-only)
      */
     public var dashboard_id: Int64?
+
     public var look: LookBasic?
+
     public var dashboard: DashboardBase?
+
     /**
      * Id of a board (read-only)
      */
@@ -899,42 +1055,60 @@ public struct ContentMeta: SDKModel {
      * Operations the current user is able to perform on this object (read-only)
      */
     public var can: StringDictionary<Bool>?
+
     /**
      * Unique Id (read-only)
      */
     public var id: Int64?
+
     /**
      * Name or title of underlying content (read-only)
      */
     public var name: String?
+
     /**
      * Id of Parent Content (read-only)
      */
     public var parent_id: Int64?
+
+    private var _dashboard_id: AnyString?
     /**
      * Id of associated dashboard when content_type is "dashboard" (read-only)
      */
-    public var dashboard_id: String?
+    public var dashboard_id: String? {
+        get { _dashboard_id?.value }
+        set { _dashboard_id = newValue.map(AnyString.init) }
+    }
+
     /**
      * Id of associated look when content_type is "look" (read-only)
      */
     public var look_id: Int64?
+
+    private var _folder_id: AnyString?
     /**
      * Id of associated folder when content_type is "space" (read-only)
      */
-    public var folder_id: String?
+    public var folder_id: String? {
+        get { _folder_id?.value }
+        set { _folder_id = newValue.map(AnyString.init) }
+    }
+
     /**
      * Content Type ("dashboard", "look", or "folder") (read-only)
      */
     public var content_type: String?
+
     /**
      * Whether content inherits its access levels from parent
      */
     public var inherits: Bool?
+
     /**
      * Id of Inherited Content (read-only)
      */
     public var inheriting_id: Int64?
+
     /**
      * Content Slug (read-only)
      */
@@ -945,9 +1119,9 @@ public struct ContentMeta: SDKModel {
         self.id = id
         self.name = name
         self.parent_id = parent_id
-        self.dashboard_id = dashboard_id
+        self._dashboard_id = dashboard_id.map(AnyString.init)
         self.look_id = look_id
-        self.folder_id = folder_id
+        self._folder_id = folder_id.map(AnyString.init)
         self.content_type = content_type
         self.inherits = inherits
         self.inheriting_id = inheriting_id
@@ -964,22 +1138,35 @@ public struct ContentMetaGroupUser: SDKModel {
      * Operations the current user is able to perform on this object (read-only)
      */
     public var can: StringDictionary<Bool>?
+
+    private var _id: AnyString?
     /**
      * Unique Id (read-only)
      */
-    public var id: String?
+    public var id: String? {
+        get { _id?.value }
+        set { _id = newValue.map(AnyString.init) }
+    }
+
+    private var _content_metadata_id: AnyString?
     /**
      * Id of associated Content Metadata (read-only)
      */
-    public var content_metadata_id: String?
+    public var content_metadata_id: String? {
+        get { _content_metadata_id?.value }
+        set { _content_metadata_id = newValue.map(AnyString.init) }
+    }
+
     /**
      * Type of permission: "view" or "edit" Valid values are: "view", "edit". (read-only)
      */
     public var permission_type: PermissionType?
+
     /**
      * ID of associated group (read-only)
      */
     public var group_id: Int64?
+
     /**
      * ID of associated user (read-only)
      */
@@ -987,8 +1174,8 @@ public struct ContentMetaGroupUser: SDKModel {
 
     public init(can: StringDictionary<Bool>? = nil, id: String? = nil, content_metadata_id: String? = nil, permission_type: PermissionType? = nil, group_id: Int64? = nil, user_id: Int64? = nil) {
         self.can = can
-        self.id = id
-        self.content_metadata_id = content_metadata_id
+        self._id = id.map(AnyString.init)
+        self._content_metadata_id = content_metadata_id.map(AnyString.init)
         self.permission_type = permission_type
         self.group_id = group_id
         self.user_id = user_id
@@ -1001,30 +1188,37 @@ public struct ContentValidation: SDKModel {
      * A list of content errors (read-only)
      */
     public var content_with_errors: [ContentValidatorError]?
+
     /**
      * Duration of content validation in seconds (read-only)
      */
     public var computation_time: Float?
+
     /**
      * The number of looks validated (read-only)
      */
     public var total_looks_validated: Int64?
+
     /**
      * The number of dashboard elements validated (read-only)
      */
     public var total_dashboard_elements_validated: Int64?
+
     /**
      * The number of dashboard filters validated (read-only)
      */
     public var total_dashboard_filters_validated: Int64?
+
     /**
      * The number of scheduled plans validated (read-only)
      */
     public var total_scheduled_plans_validated: Int64?
+
     /**
      * The number of alerts validated (read-only)
      */
     public var total_alerts_validated: Int64?
+
     /**
      * The number of explores used across all content validated (read-only)
      */
@@ -1048,14 +1242,25 @@ public struct ContentValidationAlert: SDKModel {
      * ID of the alert
      */
     public var id: Int64?
+
+    private var _lookml_dashboard_id: AnyString?
     /**
      * ID of the LookML dashboard associated with the alert
      */
-    public var lookml_dashboard_id: String?
+    public var lookml_dashboard_id: String? {
+        get { _lookml_dashboard_id?.value }
+        set { _lookml_dashboard_id = newValue.map(AnyString.init) }
+    }
+
+    private var _lookml_link_id: AnyString?
     /**
      * ID of the LookML dashboard element associated with the alert
      */
-    public var lookml_link_id: String?
+    public var lookml_link_id: String? {
+        get { _lookml_link_id?.value }
+        set { _lookml_link_id = newValue.map(AnyString.init) }
+    }
+
     /**
      * An optional, user-defined title for the alert
      */
@@ -1063,8 +1268,8 @@ public struct ContentValidationAlert: SDKModel {
 
     public init(id: Int64? = nil, lookml_dashboard_id: String? = nil, lookml_link_id: String? = nil, custom_title: String? = nil) {
         self.id = id
-        self.lookml_dashboard_id = lookml_dashboard_id
-        self.lookml_link_id = lookml_link_id
+        self._lookml_dashboard_id = lookml_dashboard_id.map(AnyString.init)
+        self._lookml_link_id = lookml_link_id.map(AnyString.init)
         self.custom_title = custom_title
     }
 
@@ -1075,15 +1280,23 @@ public struct ContentValidationDashboard: SDKModel {
      * Description
      */
     public var description: String?
+
+    private var _id: AnyString?
     /**
      * Unique Id (read-only)
      */
-    public var id: String?
+    public var id: String? {
+        get { _id?.value }
+        set { _id = newValue.map(AnyString.init) }
+    }
+
     public var folder: ContentValidationFolder?
+
     /**
      * Dashboard Title
      */
     public var title: String?
+
     /**
      * Relative URL of the dashboard (read-only)
      */
@@ -1091,7 +1304,7 @@ public struct ContentValidationDashboard: SDKModel {
 
     public init(description: String? = nil, id: String? = nil, folder: ContentValidationFolder? = nil, title: String? = nil, url: String? = nil) {
         self.description = description
-        self.id = id
+        self._id = id.map(AnyString.init)
         self.folder = folder
         self.title = title
         self.url = url
@@ -1104,54 +1317,79 @@ public struct ContentValidationDashboardElement: SDKModel {
      * Text tile body text
      */
     public var body_text: String?
+
+    private var _dashboard_id: AnyString?
     /**
      * Id of Dashboard
      */
-    public var dashboard_id: String?
+    public var dashboard_id: String? {
+        get { _dashboard_id?.value }
+        set { _dashboard_id = newValue.map(AnyString.init) }
+    }
+
+    private var _id: AnyString?
     /**
      * Unique Id (read-only)
      */
-    public var id: String?
+    public var id: String? {
+        get { _id?.value }
+        set { _id = newValue.map(AnyString.init) }
+    }
+
+    private var _look_id: AnyString?
     /**
      * Id Of Look
      */
-    public var look_id: String?
+    public var look_id: String? {
+        get { _look_id?.value }
+        set { _look_id = newValue.map(AnyString.init) }
+    }
+
     /**
      * Note Display
      */
     public var note_display: String?
+
     /**
      * Note State
      */
     public var note_state: String?
+
     /**
      * Note Text
      */
     public var note_text: String?
+
     /**
      * Note Text as Html (read-only)
      */
     public var note_text_as_html: String?
+
     /**
      * Id Of Query
      */
     public var query_id: Int64?
+
     /**
      * Text tile subtitle text
      */
     public var subtitle_text: String?
+
     /**
      * Title of dashboard element
      */
     public var title: String?
+
     /**
      * Whether title is hidden
      */
     public var title_hidden: Bool?
+
     /**
      * Text tile title
      */
     public var title_text: String?
+
     /**
      * Type
      */
@@ -1159,9 +1397,9 @@ public struct ContentValidationDashboardElement: SDKModel {
 
     public init(body_text: String? = nil, dashboard_id: String? = nil, id: String? = nil, look_id: String? = nil, note_display: String? = nil, note_state: String? = nil, note_text: String? = nil, note_text_as_html: String? = nil, query_id: Int64? = nil, subtitle_text: String? = nil, title: String? = nil, title_hidden: Bool? = nil, title_text: String? = nil, type: String? = nil) {
         self.body_text = body_text
-        self.dashboard_id = dashboard_id
-        self.id = id
-        self.look_id = look_id
+        self._dashboard_id = dashboard_id.map(AnyString.init)
+        self._id = id.map(AnyString.init)
+        self._look_id = look_id.map(AnyString.init)
         self.note_display = note_display
         self.note_state = note_state
         self.note_text = note_text
@@ -1177,46 +1415,62 @@ public struct ContentValidationDashboardElement: SDKModel {
 }
 
 public struct ContentValidationDashboardFilter: SDKModel {
+    private var _id: AnyString?
     /**
      * Unique Id (read-only)
      */
-    public var id: String?
+    public var id: String? {
+        get { _id?.value }
+        set { _id = newValue.map(AnyString.init) }
+    }
+
+    private var _dashboard_id: AnyString?
     /**
      * Id of Dashboard (read-only)
      */
-    public var dashboard_id: String?
+    public var dashboard_id: String? {
+        get { _dashboard_id?.value }
+        set { _dashboard_id = newValue.map(AnyString.init) }
+    }
+
     /**
      * Name of filter
      */
     public var name: String?
+
     /**
      * Title of filter
      */
     public var title: String?
+
     /**
      * Type of filter: one of date, number, string, or field
      */
     public var type: String?
+
     /**
      * Default value of filter
      */
     public var default_value: String?
+
     /**
      * Model of filter (required if type = field)
      */
     public var model: String?
+
     /**
      * Explore of filter (required if type = field)
      */
     public var explore: String?
+
     /**
      * Dimension of filter (required if type = field)
      */
     public var dimension: String?
 
     public init(id: String? = nil, dashboard_id: String? = nil, name: String? = nil, title: String? = nil, type: String? = nil, default_value: String? = nil, model: String? = nil, explore: String? = nil, dimension: String? = nil) {
-        self.id = id
-        self.dashboard_id = dashboard_id
+        self._id = id.map(AnyString.init)
+        self._dashboard_id = dashboard_id.map(AnyString.init)
         self.name = name
         self.title = title
         self.type = type
@@ -1233,18 +1487,22 @@ public struct ContentValidationError: SDKModel {
      * Error message (read-only)
      */
     public var message: String?
+
     /**
      * Name of the field involved in the error (read-only)
      */
     public var field_name: String?
+
     /**
      * Name of the model involved in the error (read-only)
      */
     public var model_name: String?
+
     /**
      * Name of the explore involved in the error (read-only)
      */
     public var explore_name: String?
+
     /**
      * Whether this validation error is removable (read-only)
      */
@@ -1265,14 +1523,19 @@ public struct ContentValidationFolder: SDKModel {
      * Unique Name
      */
     public var name: String
+
+    private var _id: AnyString?
     /**
      * Unique Id (read-only)
      */
-    public var id: String?
+    public var id: String? {
+        get { _id?.value }
+        set { _id = newValue.map(AnyString.init) }
+    }
 
     public init(name: String, id: String? = nil) {
         self.name = name
-        self.id = id
+        self._id = id.map(AnyString.init)
     }
 
     public init(_ name: String, id: String? = nil) {
@@ -1286,14 +1549,17 @@ public struct ContentValidationLook: SDKModel {
      * Unique Id (read-only)
      */
     public var id: Int64?
+
     /**
      * Look Title
      */
     public var title: String?
+
     /**
      * Short Url (read-only)
      */
     public var short_url: String?
+
     public var folder: ContentValidationFolder?
 
     public init(id: Int64? = nil, title: String? = nil, short_url: String? = nil, folder: ContentValidationFolder? = nil) {
@@ -1306,39 +1572,54 @@ public struct ContentValidationLook: SDKModel {
 }
 
 public struct ContentValidationLookMLDashboard: SDKModel {
+    private var _id: AnyString?
     /**
      * ID of the LookML Dashboard (read-only)
      */
-    public var id: String?
+    public var id: String? {
+        get { _id?.value }
+        set { _id = newValue.map(AnyString.init) }
+    }
+
     /**
      * Title of the LookML Dashboard (read-only)
      */
     public var title: String?
+
+    private var _space_id: AnyString?
     /**
      * ID of Space (read-only)
      */
-    public var space_id: String?
+    public var space_id: String? {
+        get { _space_id?.value }
+        set { _space_id = newValue.map(AnyString.init) }
+    }
 
     public init(id: String? = nil, title: String? = nil, space_id: String? = nil) {
-        self.id = id
+        self._id = id.map(AnyString.init)
         self.title = title
-        self.space_id = space_id
+        self._space_id = space_id.map(AnyString.init)
     }
 
 }
 
 public struct ContentValidationLookMLDashboardElement: SDKModel {
+    private var _lookml_link_id: AnyString?
     /**
      * Link ID of the LookML Dashboard Element (read-only)
      */
-    public var lookml_link_id: String?
+    public var lookml_link_id: String? {
+        get { _lookml_link_id?.value }
+        set { _lookml_link_id = newValue.map(AnyString.init) }
+    }
+
     /**
      * Title of the LookML Dashboard Element (read-only)
      */
     public var title: String?
 
     public init(lookml_link_id: String? = nil, title: String? = nil) {
-        self.lookml_link_id = lookml_link_id
+        self._lookml_link_id = lookml_link_id.map(AnyString.init)
         self.title = title
     }
 
@@ -1349,10 +1630,12 @@ public struct ContentValidationScheduledPlan: SDKModel {
      * Name of this scheduled plan
      */
     public var name: String?
+
     /**
      * Id of a look
      */
     public var look_id: Int64?
+
     /**
      * Unique Id (read-only)
      */
@@ -1368,21 +1651,34 @@ public struct ContentValidationScheduledPlan: SDKModel {
 
 public struct ContentValidatorError: SDKModel {
     public var look: ContentValidationLook?
+
     public var dashboard: ContentValidationDashboard?
+
     public var dashboard_element: ContentValidationDashboardElement?
+
     public var dashboard_filter: ContentValidationDashboardFilter?
+
     public var scheduled_plan: ContentValidationScheduledPlan?
+
     public var alert: ContentValidationAlert?
+
     public var lookml_dashboard: ContentValidationLookMLDashboard?
+
     public var lookml_dashboard_element: ContentValidationLookMLDashboardElement?
+
     /**
      * A list of errors found for this piece of content (read-only)
      */
     public var errors: [ContentValidationError]?
+
+    private var _id: AnyString?
     /**
      * An id unique to this piece of content for this validation run (read-only)
      */
-    public var id: String?
+    public var id: String? {
+        get { _id?.value }
+        set { _id = newValue.map(AnyString.init) }
+    }
 
     public init(look: ContentValidationLook? = nil, dashboard: ContentValidationDashboard? = nil, dashboard_element: ContentValidationDashboardElement? = nil, dashboard_filter: ContentValidationDashboardFilter? = nil, scheduled_plan: ContentValidationScheduledPlan? = nil, alert: ContentValidationAlert? = nil, lookml_dashboard: ContentValidationLookMLDashboard? = nil, lookml_dashboard_element: ContentValidationLookMLDashboardElement? = nil, errors: [ContentValidationError]? = nil, id: String? = nil) {
         self.look = look
@@ -1394,7 +1690,7 @@ public struct ContentValidatorError: SDKModel {
         self.lookml_dashboard = lookml_dashboard
         self.lookml_dashboard_element = lookml_dashboard_element
         self.errors = errors
-        self.id = id
+        self._id = id.map(AnyString.init)
     }
 
 }
@@ -1404,46 +1700,57 @@ public struct ContentView: SDKModel {
      * Operations the current user is able to perform on this object (read-only)
      */
     public var can: StringDictionary<Bool>?
+
     /**
      * Unique Id (read-only)
      */
     public var id: Int64?
+
     /**
      * Id of viewed Look (read-only)
      */
     public var look_id: Int64?
+
     /**
      * Id of the viewed Dashboard (read-only)
      */
     public var dashboard_id: Int64?
+
     /**
      * Name or title of underlying content (read-only)
      */
     public var title: String?
+
     /**
      * Content metadata id of the Look or Dashboard (read-only)
      */
     public var content_metadata_id: Int64?
+
     /**
      * Id of user content was viewed by (read-only)
      */
     public var user_id: Int64?
+
     /**
      * Id of group content was viewed by (read-only)
      */
     public var group_id: Int64?
+
     /**
      * Number of times piece of content was viewed (read-only)
      */
     public var view_count: Int64?
+
     /**
      * Number of times piece of content was favorited (read-only)
      */
     public var favorite_count: Int64?
+
     /**
      * Date the piece of content was last viewed (read-only)
      */
     public var last_viewed_at: String?
+
     /**
      * Week start date for the view and favorite count during that given week (read-only)
      */
@@ -1467,25 +1774,32 @@ public struct ContentView: SDKModel {
 }
 
 public struct ContinuousPalette: SDKModel {
+    private var _id: AnyString?
     /**
      * Unique identity string (read-only)
      */
-    public var id: String?
+    public var id: String? {
+        get { _id?.value }
+        set { _id = newValue.map(AnyString.init) }
+    }
+
     /**
      * Label for palette
      */
     public var label: String?
+
     /**
      * Type of palette
      */
     public var type: String?
+
     /**
      * Array of ColorStops in the palette
      */
     public var stops: [ColorStop]?
 
     public init(id: String? = nil, label: String? = nil, type: String? = nil, stops: [ColorStop]? = nil) {
-        self.id = id
+        self._id = id.map(AnyString.init)
         self.label = label
         self.type = type
         self.stops = stops
@@ -1498,14 +1812,17 @@ public struct CostEstimate: SDKModel {
      * Cost of SQL statement (read-only)
      */
     public var cost: Int64?
+
     /**
      * Does the result come from the cache? (read-only)
      */
     public var cache_hit: Bool?
+
     /**
      * Cost measurement size (read-only)
      */
     public var cost_unit: String?
+
     /**
      * Human-friendly message (read-only)
      */
@@ -1536,70 +1853,92 @@ public struct CreateCostEstimate: SDKModel {
 }
 
 public struct CreateDashboardFilter: SDKModel {
+    private var _id: AnyString?
     /**
      * Unique Id (read-only)
      */
-    public var id: String?
+    public var id: String? {
+        get { _id?.value }
+        set { _id = newValue.map(AnyString.init) }
+    }
+
+    private var _dashboard_id: AnyString
     /**
      * Id of Dashboard
      */
-    public var dashboard_id: String
+    public var dashboard_id: String {
+        get { _dashboard_id.value }
+        set { _dashboard_id = newValue.map(AnyString.init) }
+    }
+
     /**
      * Name of filter
      */
     public var name: String
+
     /**
      * Title of filter
      */
     public var title: String
+
     /**
      * Type of filter: one of date, number, string, or field
      */
     public var type: String
+
     /**
      * Default value of filter
      */
     public var default_value: String?
+
     /**
      * Model of filter (required if type = field)
      */
     public var model: String?
+
     /**
      * Explore of filter (required if type = field)
      */
     public var explore: String?
+
     /**
      * Dimension of filter (required if type = field)
      */
     public var dimension: String?
+
     /**
      * Field information (read-only)
      */
     public var field: StringDictionary<AnyCodable>?
+
     /**
      * Display order of this filter relative to other filters
      */
     public var row: Int64?
+
     /**
      * Array of listeners for faceted filters
      */
     public var listens_to_filters: [String]?
+
     /**
      * Whether the filter allows multiple filter values (deprecated in the latest version of dashboards)
      */
     public var allow_multiple_values: Bool?
+
     /**
      * Whether the filter requires a value to run the dashboard
      */
     public var required: Bool?
+
     /**
      * The visual configuration for this filter. Used to set up how the UI for this filter should appear.
      */
     public var ui_config: StringDictionary<AnyCodable>?
 
     public init(id: String? = nil, dashboard_id: String, name: String, title: String, type: String, default_value: String? = nil, model: String? = nil, explore: String? = nil, dimension: String? = nil, field: StringDictionary<AnyCodable>? = nil, row: Int64? = nil, listens_to_filters: [String]? = nil, allow_multiple_values: Bool? = nil, required: Bool? = nil, ui_config: StringDictionary<AnyCodable>? = nil) {
-        self.id = id
-        self.dashboard_id = dashboard_id
+        self._id = id.map(AnyString.init)
+        self._dashboard_id = dashboard_id.map(AnyString.init)
         self.name = name
         self.title = title
         self.type = type
@@ -1626,6 +1965,7 @@ public struct CreateDashboardRenderTask: SDKModel {
      * Filter values to apply to the dashboard queries, in URL query format
      */
     public var dashboard_filters: String?
+
     /**
      * Dashboard layout style: single_column or tiled
      */
@@ -1639,10 +1979,14 @@ public struct CreateDashboardRenderTask: SDKModel {
 }
 
 public struct CreateEmbedUserRequest: SDKModel {
-    public var external_user_id: String
+    private var _external_user_id: AnyString
+    public var external_user_id: String {
+        get { _external_user_id.value }
+        set { _external_user_id = newValue.map(AnyString.init) }
+    }
 
     public init(external_user_id: String) {
-        self.external_user_id = external_user_id
+        self._external_user_id = external_user_id.map(AnyString.init)
     }
 
     public init(_ external_user_id: String) {
@@ -1656,14 +2000,19 @@ public struct CreateFolder: SDKModel {
      * Unique Name
      */
     public var name: String
+
+    private var _parent_id: AnyString
     /**
      * Id of Parent. If the parent id is null, this is a root-level entry
      */
-    public var parent_id: String
+    public var parent_id: String {
+        get { _parent_id.value }
+        set { _parent_id = newValue.map(AnyString.init) }
+    }
 
     public init(name: String, parent_id: String) {
         self.name = name
-        self.parent_id = parent_id
+        self._parent_id = parent_id.map(AnyString.init)
     }
 
     public init(_ name: String, _ parent_id: String) {
@@ -1673,16 +2022,29 @@ public struct CreateFolder: SDKModel {
 }
 
 public struct CreateOAuthApplicationUserStateRequest: SDKModel {
-    public var user_id: String
-    public var oauth_application_id: String
+    private var _user_id: AnyString
+    public var user_id: String {
+        get { _user_id.value }
+        set { _user_id = newValue.map(AnyString.init) }
+    }
+
+    private var _oauth_application_id: AnyString
+    public var oauth_application_id: String {
+        get { _oauth_application_id.value }
+        set { _oauth_application_id = newValue.map(AnyString.init) }
+    }
+
     public var access_token: String
+
     public var access_token_expires_at: Date
+
     public var refresh_token: String?
+
     public var refresh_token_expires_at: Date?
 
     public init(user_id: String, oauth_application_id: String, access_token: String, access_token_expires_at: Date, refresh_token: String? = nil, refresh_token_expires_at: Date? = nil) {
-        self.user_id = user_id
-        self.oauth_application_id = oauth_application_id
+        self._user_id = user_id.map(AnyString.init)
+        self._oauth_application_id = oauth_application_id.map(AnyString.init)
         self.access_token = access_token
         self.access_token_expires_at = access_token_expires_at
         self.refresh_token = refresh_token
@@ -1700,6 +2062,7 @@ public struct CreateOAuthApplicationUserStateResponse: SDKModel {
      * User Id (read-only)
      */
     public var user_id: Int64
+
     /**
      * OAuth Application ID (read-only)
      */
@@ -1721,30 +2084,40 @@ public struct CreateQueryTask: SDKModel {
      * Operations the current user is able to perform on this object (read-only)
      */
     public var can: StringDictionary<Bool>?
+
     /**
      * Id of query to run
      */
     public var query_id: Int64
+
     /**
      * Desired async query result format. Valid values are: "inline_json", "json", "json_detail", "json_fe", "csv", "html", "md", "txt", "xlsx", "gsxml".
      */
     public var result_format: ResultFormat
+
     /**
      * Source of query task
      */
     public var source: String?
+
     /**
      * Create the task but defer execution
      */
     public var deferred: Bool?
+
     /**
      * Id of look associated with query.
      */
     public var look_id: Int64?
+
+    private var _dashboard_id: AnyString?
     /**
      * Id of dashboard associated with query.
      */
-    public var dashboard_id: String?
+    public var dashboard_id: String? {
+        get { _dashboard_id?.value }
+        set { _dashboard_id = newValue.map(AnyString.init) }
+    }
 
     public init(can: StringDictionary<Bool>? = nil, query_id: Int64, result_format: ResultFormat, source: String? = nil, deferred: Bool? = nil, look_id: Int64? = nil, dashboard_id: String? = nil) {
         self.can = can
@@ -1753,7 +2126,7 @@ public struct CreateQueryTask: SDKModel {
         self.source = source
         self.deferred = deferred
         self.look_id = look_id
-        self.dashboard_id = dashboard_id
+        self._dashboard_id = dashboard_id.map(AnyString.init)
     }
 
     public init(can: StringDictionary<Bool>? = nil, _ query_id: Int64, _ result_format: ResultFormat, source: String? = nil, deferred: Bool? = nil, look_id: Int64? = nil, dashboard_id: String? = nil) {
@@ -1770,26 +2143,36 @@ public struct CredentialsApi3: SDKModel {
      * Operations the current user is able to perform on this object (read-only)
      */
     public var can: StringDictionary<Bool>?
+
     /**
      * Unique Id (read-only)
      */
     public var id: Int64?
+
+    private var _client_id: AnyString?
     /**
      * API key client_id (read-only)
      */
-    public var client_id: String?
+    public var client_id: String? {
+        get { _client_id?.value }
+        set { _client_id = newValue.map(AnyString.init) }
+    }
+
     /**
      * Timestamp for the creation of this credential (read-only)
      */
     public var created_at: String?
+
     /**
      * Has this credential been disabled? (read-only)
      */
     public var is_disabled: Bool?
+
     /**
      * Short name for the type of this kind of credential (read-only)
      */
     public var type: String?
+
     /**
      * Link to get this item (read-only)
      */
@@ -1798,7 +2181,7 @@ public struct CredentialsApi3: SDKModel {
     public init(can: StringDictionary<Bool>? = nil, id: Int64? = nil, client_id: String? = nil, created_at: String? = nil, is_disabled: Bool? = nil, type: String? = nil, url: String? = nil) {
         self.can = can
         self.id = id
-        self.client_id = client_id
+        self._client_id = client_id.map(AnyString.init)
         self.created_at = created_at
         self.is_disabled = is_disabled
         self.type = type
@@ -1812,38 +2195,47 @@ public struct CredentialsEmail: SDKModel {
      * Operations the current user is able to perform on this object (read-only)
      */
     public var can: StringDictionary<Bool>?
+
     /**
      * Timestamp for the creation of this credential (read-only)
      */
     public var created_at: String?
+
     /**
      * EMail address used for user login
      */
     public var email: String?
+
     /**
      * Force the user to change their password upon their next login
      */
     public var forced_password_reset_at_next_login: Bool?
+
     /**
      * Has this credential been disabled? (read-only)
      */
     public var is_disabled: Bool?
+
     /**
      * Timestamp for most recent login using credential (read-only)
      */
     public var logged_in_at: String?
+
     /**
      * Url with one-time use secret token that the user can use to reset password (read-only)
      */
     public var password_reset_url: String?
+
     /**
      * Short name for the type of this kind of credential (read-only)
      */
     public var type: String?
+
     /**
      * Link to get this item (read-only)
      */
     public var url: String?
+
     /**
      * Link to get this user (read-only)
      */
@@ -1869,38 +2261,47 @@ public struct CredentialsEmailSearch: SDKModel {
      * Operations the current user is able to perform on this object (read-only)
      */
     public var can: StringDictionary<Bool>?
+
     /**
      * Timestamp for the creation of this credential (read-only)
      */
     public var created_at: String?
+
     /**
      * EMail address used for user login
      */
     public var email: String?
+
     /**
      * Force the user to change their password upon their next login
      */
     public var forced_password_reset_at_next_login: Bool?
+
     /**
      * Has this credential been disabled? (read-only)
      */
     public var is_disabled: Bool?
+
     /**
      * Timestamp for most recent login using credential (read-only)
      */
     public var logged_in_at: String?
+
     /**
      * Url with one-time use secret token that the user can use to reset password (read-only)
      */
     public var password_reset_url: String?
+
     /**
      * Short name for the type of this kind of credential (read-only)
      */
     public var type: String?
+
     /**
      * Link to get this item (read-only)
      */
     public var url: String?
+
     /**
      * Link to get this user (read-only)
      */
@@ -1926,34 +2327,50 @@ public struct CredentialsEmbed: SDKModel {
      * Operations the current user is able to perform on this object (read-only)
      */
     public var can: StringDictionary<Bool>?
+
     /**
      * Timestamp for the creation of this credential (read-only)
      */
     public var created_at: String?
+
+    private var _external_group_id: AnyString?
     /**
      * Embedder's id for a group to which this user was added during the most recent login (read-only)
      */
-    public var external_group_id: String?
+    public var external_group_id: String? {
+        get { _external_group_id?.value }
+        set { _external_group_id = newValue.map(AnyString.init) }
+    }
+
+    private var _external_user_id: AnyString?
     /**
      * Embedder's unique id for the user (read-only)
      */
-    public var external_user_id: String?
+    public var external_user_id: String? {
+        get { _external_user_id?.value }
+        set { _external_user_id = newValue.map(AnyString.init) }
+    }
+
     /**
      * Unique Id (read-only)
      */
     public var id: Int64?
+
     /**
      * Has this credential been disabled? (read-only)
      */
     public var is_disabled: Bool?
+
     /**
      * Timestamp for most recent login using credential (read-only)
      */
     public var logged_in_at: String?
+
     /**
      * Short name for the type of this kind of credential (read-only)
      */
     public var type: String?
+
     /**
      * Link to get this item (read-only)
      */
@@ -1962,8 +2379,8 @@ public struct CredentialsEmbed: SDKModel {
     public init(can: StringDictionary<Bool>? = nil, created_at: String? = nil, external_group_id: String? = nil, external_user_id: String? = nil, id: Int64? = nil, is_disabled: Bool? = nil, logged_in_at: String? = nil, type: String? = nil, url: String? = nil) {
         self.can = can
         self.created_at = created_at
-        self.external_group_id = external_group_id
-        self.external_user_id = external_user_id
+        self._external_group_id = external_group_id.map(AnyString.init)
+        self._external_user_id = external_user_id.map(AnyString.init)
         self.id = id
         self.is_disabled = is_disabled
         self.logged_in_at = logged_in_at
@@ -1978,34 +2395,46 @@ public struct CredentialsGoogle: SDKModel {
      * Operations the current user is able to perform on this object (read-only)
      */
     public var can: StringDictionary<Bool>?
+
     /**
      * Timestamp for the creation of this credential (read-only)
      */
     public var created_at: String?
+
     /**
      * Google domain (read-only)
      */
     public var domain: String?
+
     /**
      * EMail address (read-only)
      */
     public var email: String?
+
+    private var _google_user_id: AnyString?
     /**
      * Google's Unique ID for this user (read-only)
      */
-    public var google_user_id: String?
+    public var google_user_id: String? {
+        get { _google_user_id?.value }
+        set { _google_user_id = newValue.map(AnyString.init) }
+    }
+
     /**
      * Has this credential been disabled? (read-only)
      */
     public var is_disabled: Bool?
+
     /**
      * Timestamp for most recent login using credential (read-only)
      */
     public var logged_in_at: String?
+
     /**
      * Short name for the type of this kind of credential (read-only)
      */
     public var type: String?
+
     /**
      * Link to get this item (read-only)
      */
@@ -2016,7 +2445,7 @@ public struct CredentialsGoogle: SDKModel {
         self.created_at = created_at
         self.domain = domain
         self.email = email
-        self.google_user_id = google_user_id
+        self._google_user_id = google_user_id.map(AnyString.init)
         self.is_disabled = is_disabled
         self.logged_in_at = logged_in_at
         self.type = type
@@ -2030,34 +2459,46 @@ public struct CredentialsLDAP: SDKModel {
      * Operations the current user is able to perform on this object (read-only)
      */
     public var can: StringDictionary<Bool>?
+
     /**
      * Timestamp for the creation of this credential (read-only)
      */
     public var created_at: String?
+
     /**
      * EMail address (read-only)
      */
     public var email: String?
+
     /**
      * Has this credential been disabled? (read-only)
      */
     public var is_disabled: Bool?
+
     /**
      * LDAP Distinguished name for this user (as-of the last login) (read-only)
      */
     public var ldap_dn: String?
+
+    private var _ldap_id: AnyString?
     /**
      * LDAP Unique ID for this user (read-only)
      */
-    public var ldap_id: String?
+    public var ldap_id: String? {
+        get { _ldap_id?.value }
+        set { _ldap_id = newValue.map(AnyString.init) }
+    }
+
     /**
      * Timestamp for most recent login using credential (read-only)
      */
     public var logged_in_at: String?
+
     /**
      * Short name for the type of this kind of credential (read-only)
      */
     public var type: String?
+
     /**
      * Link to get this item (read-only)
      */
@@ -2069,7 +2510,7 @@ public struct CredentialsLDAP: SDKModel {
         self.email = email
         self.is_disabled = is_disabled
         self.ldap_dn = ldap_dn
-        self.ldap_id = ldap_id
+        self._ldap_id = ldap_id.map(AnyString.init)
         self.logged_in_at = logged_in_at
         self.type = type
         self.url = url
@@ -2082,34 +2523,42 @@ public struct CredentialsLookerOpenid: SDKModel {
      * Operations the current user is able to perform on this object (read-only)
      */
     public var can: StringDictionary<Bool>?
+
     /**
      * Timestamp for the creation of this credential (read-only)
      */
     public var created_at: String?
+
     /**
      * EMail address used for user login (read-only)
      */
     public var email: String?
+
     /**
      * Has this credential been disabled? (read-only)
      */
     public var is_disabled: Bool?
+
     /**
      * Timestamp for most recent login using credential (read-only)
      */
     public var logged_in_at: String?
+
     /**
      * IP address of client for most recent login using credential (read-only)
      */
     public var logged_in_ip: String?
+
     /**
      * Short name for the type of this kind of credential (read-only)
      */
     public var type: String?
+
     /**
      * Link to get this item (read-only)
      */
     public var url: String?
+
     /**
      * Link to get this user (read-only)
      */
@@ -2134,30 +2583,41 @@ public struct CredentialsOIDC: SDKModel {
      * Operations the current user is able to perform on this object (read-only)
      */
     public var can: StringDictionary<Bool>?
+
     /**
      * Timestamp for the creation of this credential (read-only)
      */
     public var created_at: String?
+
     /**
      * EMail address (read-only)
      */
     public var email: String?
+
     /**
      * Has this credential been disabled? (read-only)
      */
     public var is_disabled: Bool?
+
     /**
      * Timestamp for most recent login using credential (read-only)
      */
     public var logged_in_at: String?
+
+    private var _oidc_user_id: AnyString?
     /**
      * OIDC OP's Unique ID for this user (read-only)
      */
-    public var oidc_user_id: String?
+    public var oidc_user_id: String? {
+        get { _oidc_user_id?.value }
+        set { _oidc_user_id = newValue.map(AnyString.init) }
+    }
+
     /**
      * Short name for the type of this kind of credential (read-only)
      */
     public var type: String?
+
     /**
      * Link to get this item (read-only)
      */
@@ -2169,7 +2629,7 @@ public struct CredentialsOIDC: SDKModel {
         self.email = email
         self.is_disabled = is_disabled
         self.logged_in_at = logged_in_at
-        self.oidc_user_id = oidc_user_id
+        self._oidc_user_id = oidc_user_id.map(AnyString.init)
         self.type = type
         self.url = url
     }
@@ -2181,30 +2641,41 @@ public struct CredentialsSaml: SDKModel {
      * Operations the current user is able to perform on this object (read-only)
      */
     public var can: StringDictionary<Bool>?
+
     /**
      * Timestamp for the creation of this credential (read-only)
      */
     public var created_at: String?
+
     /**
      * EMail address (read-only)
      */
     public var email: String?
+
     /**
      * Has this credential been disabled? (read-only)
      */
     public var is_disabled: Bool?
+
     /**
      * Timestamp for most recent login using credential (read-only)
      */
     public var logged_in_at: String?
+
+    private var _saml_user_id: AnyString?
     /**
      * Saml IdP's Unique ID for this user (read-only)
      */
-    public var saml_user_id: String?
+    public var saml_user_id: String? {
+        get { _saml_user_id?.value }
+        set { _saml_user_id = newValue.map(AnyString.init) }
+    }
+
     /**
      * Short name for the type of this kind of credential (read-only)
      */
     public var type: String?
+
     /**
      * Link to get this item (read-only)
      */
@@ -2216,7 +2687,7 @@ public struct CredentialsSaml: SDKModel {
         self.email = email
         self.is_disabled = is_disabled
         self.logged_in_at = logged_in_at
-        self.saml_user_id = saml_user_id
+        self._saml_user_id = saml_user_id.map(AnyString.init)
         self.type = type
         self.url = url
     }
@@ -2231,22 +2702,27 @@ public struct CredentialsTotp: SDKModel {
      * Operations the current user is able to perform on this object (read-only)
      */
     public var can: StringDictionary<Bool>?
+
     /**
      * Timestamp for the creation of this credential (read-only)
      */
     public var created_at: String?
+
     /**
      * Has this credential been disabled? (read-only)
      */
     public var is_disabled: Bool?
+
     /**
      * Short name for the type of this kind of credential (read-only)
      */
     public var type: String?
+
     /**
      * User has verified (read-only)
      */
     public var verified: Bool?
+
     /**
      * Link to get this item (read-only)
      */
@@ -2268,18 +2744,22 @@ public struct CustomWelcomeEmail: SDKModel {
      * Operations the current user is able to perform on this object (read-only)
      */
     public var can: StringDictionary<Bool>?
+
     /**
      * If true, custom email content will replace the default body of welcome emails
      */
     public var enabled: Bool?
+
     /**
      * The HTML to use as custom content for welcome emails. Script elements and other potentially dangerous markup will be removed.
      */
     public var content: String?
+
     /**
      * The text to appear in the email subject line.
      */
     public var subject: String?
+
     /**
      * The text to appear in the header line of the email body.
      */
@@ -2300,157 +2780,210 @@ public struct Dashboard: SDKModel {
      * Operations the current user is able to perform on this object (read-only)
      */
     public var can: StringDictionary<Bool>?
+
     /**
      * Content Favorite Id (read-only)
      */
     public var content_favorite_id: Int64?
+
     /**
      * Id of content metadata (read-only)
      */
     public var content_metadata_id: Int64?
+
     /**
      * Description
      */
     public var description: String?
+
     /**
      * Is Hidden
      */
     public var hidden: Bool?
+
+    private var _id: AnyString?
     /**
      * Unique Id (read-only)
      */
-    public var id: String?
+    public var id: String? {
+        get { _id?.value }
+        set { _id = newValue.map(AnyString.init) }
+    }
+
     public var model: LookModel?
+
     /**
      * Timezone in which the Dashboard will run by default.
      */
     public var query_timezone: String?
+
     /**
      * Is Read-only (read-only)
      */
     public var readonly: Bool?
+
     /**
      * Refresh Interval, as a time duration phrase like "2 hours 30 minutes". A number with no time units will be interpreted as whole seconds.
      */
     public var refresh_interval: String?
+
     /**
      * Refresh Interval in milliseconds (read-only)
      */
     public var refresh_interval_to_i: Int64?
+
     public var folder: FolderBase?
+
     /**
      * Dashboard Title
      */
     public var title: String?
+
     /**
      * Id of User (read-only)
      */
     public var user_id: Int64?
+
     /**
      * Content Metadata Slug
      */
     public var slug: String?
+
     /**
      * The preferred route for viewing this dashboard (ie: dashboards or dashboards-next)
      */
     public var preferred_viewer: String?
+
     /**
      * Enables alerts to keep in sync with dashboard filter changes - only available in Enhanced Alerts (beta)
      */
     public var alert_sync_with_dashboard_filter_enabled: Bool?
+
     /**
      * Background color
      */
     public var background_color: String?
+
     /**
      * Time that the Dashboard was created. (read-only)
      */
     public var created_at: Date?
+
     /**
      * Enables crossfiltering in dashboards - only available in dashboards-next (beta)
      */
     public var crossfilter_enabled: Bool?
+
     /**
      * Elements (read-only)
      */
     public var dashboard_elements: [DashboardElement]?
+
     /**
      * Filters (read-only)
      */
     public var dashboard_filters: [DashboardFilter]?
+
     /**
      * Layouts (read-only)
      */
     public var dashboard_layouts: [DashboardLayout]?
+
     /**
      * Whether or not a dashboard is 'soft' deleted.
      */
     public var deleted: Bool?
+
     /**
      * Time that the Dashboard was 'soft' deleted. (read-only)
      */
     public var deleted_at: Date?
+
     /**
      * Id of User that 'soft' deleted the dashboard. (read-only)
      */
     public var deleter_id: Int64?
+
     /**
      * Relative path of URI of LookML file to edit the dashboard (LookML dashboard only). (read-only)
      */
     public var edit_uri: String?
+
     /**
      * Number of times favorited (read-only)
      */
     public var favorite_count: Int64?
+
     /**
      * Time the dashboard was last accessed (read-only)
      */
     public var last_accessed_at: Date?
+
     /**
      * Time last viewed in the Looker web UI (read-only)
      */
     public var last_viewed_at: Date?
+
     /**
      * configuration option that governs how dashboard loading will happen.
      */
     public var load_configuration: String?
+
+    private var _lookml_link_id: AnyString?
     /**
      * Links this dashboard to a particular LookML dashboard such that calling a **sync** operation on that LookML dashboard will update this dashboard to match.
      */
-    public var lookml_link_id: String?
+    public var lookml_link_id: String? {
+        get { _lookml_link_id?.value }
+        set { _lookml_link_id = newValue.map(AnyString.init) }
+    }
+
     /**
      * Show filters bar.  **Security Note:** This property only affects the *cosmetic* appearance of the dashboard, not a user's ability to access data. Hiding the filters bar does **NOT** prevent users from changing filters by other means. For information on how to set up secure data access control policies, see [Control User Access to Data](https://looker.com/docs/r/api/control-access)
      */
     public var show_filters_bar: Bool?
+
     /**
      * Show title
      */
     public var show_title: Bool?
+
+    private var _folder_id: AnyString?
     /**
      * Id of folder
      */
-    public var folder_id: String?
+    public var folder_id: String? {
+        get { _folder_id?.value }
+        set { _folder_id = newValue.map(AnyString.init) }
+    }
+
     /**
      * Color of text on text tiles
      */
     public var text_tile_text_color: String?
+
     /**
      * Tile background color
      */
     public var tile_background_color: String?
+
     /**
      * Tile text color
      */
     public var tile_text_color: String?
+
     /**
      * Title color
      */
     public var title_color: String?
+
     /**
      * Number of times viewed in the Looker web UI (read-only)
      */
     public var view_count: Int64?
+
     public var appearance: DashboardAppearance?
+
     /**
      * Relative URL of the dashboard (read-only)
      */
@@ -2462,7 +2995,7 @@ public struct Dashboard: SDKModel {
         self.content_metadata_id = content_metadata_id
         self.description = description
         self.hidden = hidden
-        self.id = id
+        self._id = id.map(AnyString.init)
         self.model = model
         self.query_timezone = query_timezone
         self.readonly = readonly
@@ -2488,10 +3021,10 @@ public struct Dashboard: SDKModel {
         self.last_accessed_at = last_accessed_at
         self.last_viewed_at = last_viewed_at
         self.load_configuration = load_configuration
-        self.lookml_link_id = lookml_link_id
+        self._lookml_link_id = lookml_link_id.map(AnyString.init)
         self.show_filters_bar = show_filters_bar
         self.show_title = show_title
-        self.folder_id = folder_id
+        self._folder_id = folder_id.map(AnyString.init)
         self.text_tile_text_color = text_tile_text_color
         self.tile_background_color = tile_background_color
         self.tile_text_color = tile_text_color
@@ -2504,17 +3037,22 @@ public struct Dashboard: SDKModel {
 }
 
 public struct DashboardAggregateTableLookml: SDKModel {
+    private var _dashboard_id: AnyString?
     /**
      * Dashboard Id (read-only)
      */
-    public var dashboard_id: String?
+    public var dashboard_id: String? {
+        get { _dashboard_id?.value }
+        set { _dashboard_id = newValue.map(AnyString.init) }
+    }
+
     /**
      * Aggregate Table LookML (read-only)
      */
     public var aggregate_table_lookml: String?
 
     public init(dashboard_id: String? = nil, aggregate_table_lookml: String? = nil) {
-        self.dashboard_id = dashboard_id
+        self._dashboard_id = dashboard_id.map(AnyString.init)
         self.aggregate_table_lookml = aggregate_table_lookml
     }
 
@@ -2525,26 +3063,32 @@ public struct DashboardAppearance: SDKModel {
      * Page margin (side) width
      */
     public var page_side_margins: Int64?
+
     /**
      * Background color for the dashboard
      */
     public var page_background_color: String?
+
     /**
      * Title alignment on dashboard tiles
      */
     public var tile_title_alignment: String?
+
     /**
      * Space between tiles
      */
     public var tile_space_between: Int64?
+
     /**
      * Background color for tiles
      */
     public var tile_background_color: String?
+
     /**
      * Tile shadow on/off
      */
     public var tile_shadow: Bool?
+
     /**
      * Key color
      */
@@ -2567,56 +3111,75 @@ public struct DashboardBase: SDKModel {
      * Operations the current user is able to perform on this object (read-only)
      */
     public var can: StringDictionary<Bool>?
+
     /**
      * Content Favorite Id (read-only)
      */
     public var content_favorite_id: Int64?
+
     /**
      * Id of content metadata (read-only)
      */
     public var content_metadata_id: Int64?
+
     /**
      * Description (read-only)
      */
     public var description: String?
+
     /**
      * Is Hidden (read-only)
      */
     public var hidden: Bool?
+
+    private var _id: AnyString?
     /**
      * Unique Id (read-only)
      */
-    public var id: String?
+    public var id: String? {
+        get { _id?.value }
+        set { _id = newValue.map(AnyString.init) }
+    }
+
     public var model: LookModel?
+
     /**
      * Timezone in which the Dashboard will run by default. (read-only)
      */
     public var query_timezone: String?
+
     /**
      * Is Read-only (read-only)
      */
     public var readonly: Bool?
+
     /**
      * Refresh Interval, as a time duration phrase like "2 hours 30 minutes". A number with no time units will be interpreted as whole seconds. (read-only)
      */
     public var refresh_interval: String?
+
     /**
      * Refresh Interval in milliseconds (read-only)
      */
     public var refresh_interval_to_i: Int64?
+
     public var folder: FolderBase?
+
     /**
      * Dashboard Title (read-only)
      */
     public var title: String?
+
     /**
      * Id of User (read-only)
      */
     public var user_id: Int64?
+
     /**
      * Content Metadata Slug (read-only)
      */
     public var slug: String?
+
     /**
      * The preferred route for viewing this dashboard (ie: dashboards or dashboards-next) (read-only)
      */
@@ -2628,7 +3191,7 @@ public struct DashboardBase: SDKModel {
         self.content_metadata_id = content_metadata_id
         self.description = description
         self.hidden = hidden
-        self.id = id
+        self._id = id.map(AnyString.init)
         self.model = model
         self.query_timezone = query_timezone
         self.readonly = readonly
@@ -2648,101 +3211,148 @@ public struct DashboardElement: SDKModel {
      * Operations the current user is able to perform on this object (read-only)
      */
     public var can: StringDictionary<Bool>?
+
     /**
      * Text tile body text
      */
     public var body_text: String?
+
     /**
      * Text tile body text as Html (read-only)
      */
     public var body_text_as_html: String?
+
+    private var _dashboard_id: AnyString?
     /**
      * Id of Dashboard
      */
-    public var dashboard_id: String?
+    public var dashboard_id: String? {
+        get { _dashboard_id?.value }
+        set { _dashboard_id = newValue.map(AnyString.init) }
+    }
+
     /**
      * Relative path of URI of LookML file to edit the dashboard element (LookML dashboard only). (read-only)
      */
     public var edit_uri: String?
+
+    private var _id: AnyString?
     /**
      * Unique Id (read-only)
      */
-    public var id: String?
+    public var id: String? {
+        get { _id?.value }
+        set { _id = newValue.map(AnyString.init) }
+    }
+
     public var look: LookWithQuery?
+
+    private var _look_id: AnyString?
     /**
      * Id Of Look
      */
-    public var look_id: String?
+    public var look_id: String? {
+        get { _look_id?.value }
+        set { _look_id = newValue.map(AnyString.init) }
+    }
+
+    private var _lookml_link_id: AnyString?
     /**
      * LookML link ID (read-only)
      */
-    public var lookml_link_id: String?
+    public var lookml_link_id: String? {
+        get { _lookml_link_id?.value }
+        set { _lookml_link_id = newValue.map(AnyString.init) }
+    }
+
+    private var _merge_result_id: AnyString?
     /**
      * ID of merge result
      */
-    public var merge_result_id: String?
+    public var merge_result_id: String? {
+        get { _merge_result_id?.value }
+        set { _merge_result_id = newValue.map(AnyString.init) }
+    }
+
     /**
      * Note Display
      */
     public var note_display: String?
+
     /**
      * Note State
      */
     public var note_state: String?
+
     /**
      * Note Text
      */
     public var note_text: String?
+
     /**
      * Note Text as Html (read-only)
      */
     public var note_text_as_html: String?
+
     public var query: Query?
+
     /**
      * Id Of Query
      */
     public var query_id: Int64?
+
     /**
      * Refresh Interval
      */
     public var refresh_interval: String?
+
     /**
      * Refresh Interval as integer (read-only)
      */
     public var refresh_interval_to_i: Int64?
+
     public var result_maker: ResultMakerWithIdVisConfigAndDynamicFields?
+
     /**
      * ID of the ResultMakerLookup entry.
      */
     public var result_maker_id: Int64?
+
     /**
      * Text tile subtitle text
      */
     public var subtitle_text: String?
+
     /**
      * Title of dashboard element
      */
     public var title: String?
+
     /**
      * Whether title is hidden
      */
     public var title_hidden: Bool?
+
     /**
      * Text tile title
      */
     public var title_text: String?
+
     /**
      * Type
      */
     public var type: String?
+
     /**
      * Count of Alerts associated to a dashboard element (read-only)
      */
     public var alert_count: Int64?
+
     /**
      * Text tile title text as Html (read-only)
      */
     public var title_text_as_html: String?
+
     /**
      * Text tile subtitle text as Html (read-only)
      */
@@ -2752,13 +3362,13 @@ public struct DashboardElement: SDKModel {
         self.can = can
         self.body_text = body_text
         self.body_text_as_html = body_text_as_html
-        self.dashboard_id = dashboard_id
+        self._dashboard_id = dashboard_id.map(AnyString.init)
         self.edit_uri = edit_uri
-        self.id = id
+        self._id = id.map(AnyString.init)
         self.look = look
-        self.look_id = look_id
-        self.lookml_link_id = lookml_link_id
-        self.merge_result_id = merge_result_id
+        self._look_id = look_id.map(AnyString.init)
+        self._lookml_link_id = lookml_link_id.map(AnyString.init)
+        self._merge_result_id = merge_result_id.map(AnyString.init)
         self.note_display = note_display
         self.note_state = note_state
         self.note_text = note_text
@@ -2786,62 +3396,85 @@ public struct DashboardFilter: SDKModel {
      * Operations the current user is able to perform on this object (read-only)
      */
     public var can: StringDictionary<Bool>?
+
+    private var _id: AnyString?
     /**
      * Unique Id (read-only)
      */
-    public var id: String?
+    public var id: String? {
+        get { _id?.value }
+        set { _id = newValue.map(AnyString.init) }
+    }
+
+    private var _dashboard_id: AnyString?
     /**
      * Id of Dashboard (read-only)
      */
-    public var dashboard_id: String?
+    public var dashboard_id: String? {
+        get { _dashboard_id?.value }
+        set { _dashboard_id = newValue.map(AnyString.init) }
+    }
+
     /**
      * Name of filter
      */
     public var name: String?
+
     /**
      * Title of filter
      */
     public var title: String?
+
     /**
      * Type of filter: one of date, number, string, or field
      */
     public var type: String?
+
     /**
      * Default value of filter
      */
     public var default_value: String?
+
     /**
      * Model of filter (required if type = field)
      */
     public var model: String?
+
     /**
      * Explore of filter (required if type = field)
      */
     public var explore: String?
+
     /**
      * Dimension of filter (required if type = field)
      */
     public var dimension: String?
+
     /**
      * Field information (read-only)
      */
     public var field: StringDictionary<AnyCodable>?
+
     /**
      * Display order of this filter relative to other filters
      */
     public var row: Int64?
+
     /**
      * Array of listeners for faceted filters
      */
     public var listens_to_filters: [String]?
+
     /**
      * Whether the filter allows multiple filter values (deprecated in the latest version of dashboards)
      */
     public var allow_multiple_values: Bool?
+
     /**
      * Whether the filter requires a value to run the dashboard
      */
     public var required: Bool?
+
     /**
      * The visual configuration for this filter. Used to set up how the UI for this filter should appear.
      */
@@ -2849,8 +3482,8 @@ public struct DashboardFilter: SDKModel {
 
     public init(can: StringDictionary<Bool>? = nil, id: String? = nil, dashboard_id: String? = nil, name: String? = nil, title: String? = nil, type: String? = nil, default_value: String? = nil, model: String? = nil, explore: String? = nil, dimension: String? = nil, field: StringDictionary<AnyCodable>? = nil, row: Int64? = nil, listens_to_filters: [String]? = nil, allow_multiple_values: Bool? = nil, required: Bool? = nil, ui_config: StringDictionary<AnyCodable>? = nil) {
         self.can = can
-        self.id = id
-        self.dashboard_id = dashboard_id
+        self._id = id.map(AnyString.init)
+        self._dashboard_id = dashboard_id.map(AnyString.init)
         self.name = name
         self.title = title
         self.type = type
@@ -2873,38 +3506,55 @@ public struct DashboardLayout: SDKModel {
      * Operations the current user is able to perform on this object (read-only)
      */
     public var can: StringDictionary<Bool>?
+
+    private var _id: AnyString?
     /**
      * Unique Id (read-only)
      */
-    public var id: String?
+    public var id: String? {
+        get { _id?.value }
+        set { _id = newValue.map(AnyString.init) }
+    }
+
+    private var _dashboard_id: AnyString?
     /**
      * Id of Dashboard
      */
-    public var dashboard_id: String?
+    public var dashboard_id: String? {
+        get { _dashboard_id?.value }
+        set { _dashboard_id = newValue.map(AnyString.init) }
+    }
+
     /**
      * Type
      */
     public var type: String?
+
     /**
      * Is Active
      */
     public var active: Bool?
+
     /**
      * Column Width
      */
     public var column_width: Int64?
+
     /**
      * Width
      */
     public var width: Int64?
+
     /**
      * Whether or not the dashboard layout is deleted. (read-only)
      */
     public var deleted: Bool?
+
     /**
      * Title extracted from the dashboard this layout represents. (read-only)
      */
     public var dashboard_title: String?
+
     /**
      * Components (read-only)
      */
@@ -2912,8 +3562,8 @@ public struct DashboardLayout: SDKModel {
 
     public init(can: StringDictionary<Bool>? = nil, id: String? = nil, dashboard_id: String? = nil, type: String? = nil, active: Bool? = nil, column_width: Int64? = nil, width: Int64? = nil, deleted: Bool? = nil, dashboard_title: String? = nil, dashboard_layout_components: [DashboardLayoutComponent]? = nil) {
         self.can = can
-        self.id = id
-        self.dashboard_id = dashboard_id
+        self._id = id.map(AnyString.init)
+        self._dashboard_id = dashboard_id.map(AnyString.init)
         self.type = type
         self.active = active
         self.column_width = column_width
@@ -2930,46 +3580,69 @@ public struct DashboardLayoutComponent: SDKModel {
      * Operations the current user is able to perform on this object (read-only)
      */
     public var can: StringDictionary<Bool>?
+
+    private var _id: AnyString?
     /**
      * Unique Id (read-only)
      */
-    public var id: String?
+    public var id: String? {
+        get { _id?.value }
+        set { _id = newValue.map(AnyString.init) }
+    }
+
+    private var _dashboard_layout_id: AnyString?
     /**
      * Id of Dashboard Layout
      */
-    public var dashboard_layout_id: String?
+    public var dashboard_layout_id: String? {
+        get { _dashboard_layout_id?.value }
+        set { _dashboard_layout_id = newValue.map(AnyString.init) }
+    }
+
+    private var _dashboard_element_id: AnyString?
     /**
      * Id Of Dashboard Element
      */
-    public var dashboard_element_id: String?
+    public var dashboard_element_id: String? {
+        get { _dashboard_element_id?.value }
+        set { _dashboard_element_id = newValue.map(AnyString.init) }
+    }
+
     /**
      * Row
      */
     public var row: Int64?
+
     /**
      * Column
      */
     public var column: Int64?
+
     /**
      * Width
      */
     public var width: Int64?
+
     /**
      * Height
      */
     public var height: Int64?
+
     /**
      * Whether or not the dashboard layout component is deleted (read-only)
      */
     public var deleted: Bool?
+
     /**
      * Dashboard element title, extracted from the Dashboard Element. (read-only)
      */
     public var element_title: String?
+
     /**
      * Whether or not the dashboard element title is displayed. (read-only)
      */
     public var element_title_hidden: Bool?
+
     /**
      * Visualization type, extracted from a query's vis_config (read-only)
      */
@@ -2977,9 +3650,9 @@ public struct DashboardLayoutComponent: SDKModel {
 
     public init(can: StringDictionary<Bool>? = nil, id: String? = nil, dashboard_layout_id: String? = nil, dashboard_element_id: String? = nil, row: Int64? = nil, column: Int64? = nil, width: Int64? = nil, height: Int64? = nil, deleted: Bool? = nil, element_title: String? = nil, element_title_hidden: Bool? = nil, vis_type: String? = nil) {
         self.can = can
-        self.id = id
-        self.dashboard_layout_id = dashboard_layout_id
-        self.dashboard_element_id = dashboard_element_id
+        self._id = id.map(AnyString.init)
+        self._dashboard_layout_id = dashboard_layout_id.map(AnyString.init)
+        self._dashboard_element_id = dashboard_element_id.map(AnyString.init)
         self.row = row
         self.column = column
         self.width = width
@@ -2993,17 +3666,22 @@ public struct DashboardLayoutComponent: SDKModel {
 }
 
 public struct DashboardLookml: SDKModel {
+    private var _dashboard_id: AnyString?
     /**
      * Id of Dashboard (read-only)
      */
-    public var dashboard_id: String?
+    public var dashboard_id: String? {
+        get { _dashboard_id?.value }
+        set { _dashboard_id = newValue.map(AnyString.init) }
+    }
+
     /**
      * lookml of UDD (read-only)
      */
     public var lookml: String?
 
     public init(dashboard_id: String? = nil, lookml: String? = nil) {
-        self.dashboard_id = dashboard_id
+        self._dashboard_id = dashboard_id.map(AnyString.init)
         self.lookml = lookml
     }
 
@@ -3011,6 +3689,7 @@ public struct DashboardLookml: SDKModel {
 
 public struct DataActionForm: SDKModel {
     public var state: DataActionUserState?
+
     /**
      * Array of form fields. (read-only)
      */
@@ -3028,34 +3707,42 @@ public struct DataActionFormField: SDKModel {
      * Name (read-only)
      */
     public var name: String?
+
     /**
      * Human-readable label (read-only)
      */
     public var label: String?
+
     /**
      * Description of field (read-only)
      */
     public var description: String?
+
     /**
      * Type of field. (read-only)
      */
     public var type: String?
+
     /**
      * Default value of the field. (read-only)
      */
     public var `default`: String?
+
     /**
      * The URL for an oauth link, if type is 'oauth_link'. (read-only)
      */
     public var oauth_url: String?
+
     /**
      * Whether or not a field supports interactive forms. (read-only)
      */
     public var interactive: Bool?
+
     /**
      * Whether or not the field is required. This is a user-interface hint. A user interface displaying this form should not submit it without a value for this field. The action server must also perform this validation. (read-only)
      */
     public var required: Bool?
+
     /**
      * If the form type is 'select', a list of options to be selected from. (read-only)
      */
@@ -3080,6 +3767,7 @@ public struct DataActionFormSelectOption: SDKModel {
      * Name (read-only)
      */
     public var name: String?
+
     /**
      * Human-readable label (read-only)
      */
@@ -3097,6 +3785,7 @@ public struct DataActionRequest: SDKModel {
      * The JSON describing the data action. This JSON should be considered opaque and should be passed through unmodified from the query result it came from.
      */
     public var action: StringDictionary<AnyCodable>?
+
     /**
      * User input for any form values the data action might use.
      */
@@ -3110,26 +3799,34 @@ public struct DataActionRequest: SDKModel {
 }
 
 public struct DataActionResponse: SDKModel {
+    private var _webhook_id: AnyString?
     /**
      * ID of the webhook event that sent this data action. In some error conditions, this may be null. (read-only)
      */
-    public var webhook_id: String?
+    public var webhook_id: String? {
+        get { _webhook_id?.value }
+        set { _webhook_id = newValue.map(AnyString.init) }
+    }
+
     /**
      * Whether the data action was successful. (read-only)
      */
     public var success: Bool?
+
     /**
      * When true, indicates that the client should refresh (rerun) the source query because the data may have been changed by the action. (read-only)
      */
     public var refresh_query: Bool?
+
     public var validation_errors: ValidationError?
+
     /**
      * Optional message returned by the data action server describing the state of the action that took place. This can be used to implement custom failure messages. If a failure is related to a particular form field, the server should send back a validation error instead. The Looker web UI does not currently display any message if the action indicates 'success', but may do so in the future. (read-only)
      */
     public var message: String?
 
     public init(webhook_id: String? = nil, success: Bool? = nil, refresh_query: Bool? = nil, validation_errors: ValidationError? = nil, message: String? = nil) {
-        self.webhook_id = webhook_id
+        self._webhook_id = webhook_id.map(AnyString.init)
         self.success = success
         self.refresh_query = refresh_query
         self.validation_errors = validation_errors
@@ -3143,6 +3840,7 @@ public struct DataActionUserState: SDKModel {
      * User state data (read-only)
      */
     public var data: String?
+
     /**
      * Time in seconds until the state needs to be refreshed (read-only)
      */
@@ -3160,38 +3858,47 @@ public struct Datagroup: SDKModel {
      * Operations the current user is able to perform on this object (read-only)
      */
     public var can: StringDictionary<Bool>?
+
     /**
      * UNIX timestamp at which this entry was created. (read-only)
      */
     public var created_at: Int64?
+
     /**
      * Unique ID of the datagroup (read-only)
      */
     public var id: Int64?
+
     /**
      * Name of the model containing the datagroup. Unique when combined with name. (read-only)
      */
     public var model_name: String?
+
     /**
      * Name of the datagroup. Unique when combined with model_name. (read-only)
      */
     public var name: String?
+
     /**
      * UNIX timestamp before which cache entries are considered stale. Cannot be in the future.
      */
     public var stale_before: Int64?
+
     /**
      * UNIX timestamp at which this entry trigger was last checked. (read-only)
      */
     public var trigger_check_at: Int64?
+
     /**
      * The message returned with the error of the last trigger check. (read-only)
      */
     public var trigger_error: String?
+
     /**
      * The value of the trigger when last checked. (read-only)
      */
     public var trigger_value: String?
+
     /**
      * UNIX timestamp at which this entry became triggered. Cannot be in the future.
      */
@@ -3217,156 +3924,204 @@ public struct DBConnection: SDKModel {
      * Operations the current user is able to perform on this object (read-only)
      */
     public var can: StringDictionary<Bool>?
+
     /**
      * Name of the connection. Also used as the unique identifier
      */
     public var name: String?
+
     public var dialect: Dialect?
+
     /**
      * SQL Runner snippets for this connection (read-only)
      */
     public var snippets: [Snippet]?
+
     /**
      * True if PDTs are enabled on this connection (read-only)
      */
     public var pdts_enabled: Bool?
+
     /**
      * Host name/address of server
      */
     public var host: String?
+
     /**
      * Port number on server
      */
     public var port: Int64?
+
     /**
      * Username for server authentication
      */
     public var username: String?
+
     /**
      * (Write-Only) Password for server authentication
      */
     public var password: String?
+
     /**
      * Whether the connection uses OAuth for authentication. (read-only)
      */
     public var uses_oauth: Bool?
+
     /**
      * (Write-Only) Base64 encoded Certificate body for server authentication (when appropriate for dialect).
      */
     public var certificate: String?
+
     /**
      * (Write-Only) Certificate keyfile type - .json or .p12
      */
     public var file_type: String?
+
     /**
      * Database name
      */
     public var database: String?
+
     /**
      * Time zone of database
      */
     public var db_timezone: String?
+
     /**
      * Timezone to use in queries
      */
     public var query_timezone: String?
+
     /**
      * Scheme name
      */
     public var schema: String?
+
     /**
      * Maximum number of concurrent connection to use
      */
     public var max_connections: Int64?
+
     /**
      * Maximum size of query in GBs (BigQuery only, can be a user_attribute name)
      */
     public var max_billing_gigabytes: String?
+
     /**
      * Use SSL/TLS when connecting to server
      */
     public var ssl: Bool?
+
     /**
      * Verify the SSL
      */
     public var verify_ssl: Bool?
+
     /**
      * Name of temporary database (if used)
      */
     public var tmp_db_name: String?
+
     /**
      * Additional params to add to JDBC connection string
      */
     public var jdbc_additional_params: String?
+
     /**
      * Connection Pool Timeout, in seconds
      */
     public var pool_timeout: Int64?
+
     /**
      * (Read/Write) SQL Dialect name
      */
     public var dialect_name: String?
+
     /**
      * Creation date for this connection (read-only)
      */
     public var created_at: String?
+
+    private var _user_id: AnyString?
     /**
      * Id of user who last modified this connection configuration (read-only)
      */
-    public var user_id: String?
+    public var user_id: String? {
+        get { _user_id?.value }
+        set { _user_id = newValue.map(AnyString.init) }
+    }
+
     /**
      * Is this an example connection? (read-only)
      */
     public var example: Bool?
+
     /**
      * (Limited access feature) Are per user db credentials enabled. Enabling will remove previously set username and password
      */
     public var user_db_credentials: Bool?
+
     /**
      * Fields whose values map to user attribute names
      */
     public var user_attribute_fields: [String]?
+
     /**
      * Cron string specifying when maintenance such as PDT trigger checks and drops should be performed
      */
     public var maintenance_cron: String?
+
     /**
      * Unix timestamp at start of last completed PDT trigger check process (read-only)
      */
     public var last_regen_at: String?
+
     /**
      * Unix timestamp at start of last completed PDT reap process (read-only)
      */
     public var last_reap_at: String?
+
     /**
      * Precache tables in the SQL Runner
      */
     public var sql_runner_precache_tables: Bool?
+
     /**
      * Fetch Information Schema For SQL Writing
      */
     public var sql_writing_with_info_schema: Bool?
+
     /**
      * SQL statements (semicolon separated) to issue after connecting to the database. Requires `custom_after_connect_statements` license feature
      */
     public var after_connect_statements: String?
+
     public var pdt_context_override: DBConnectionOverride?
+
     /**
      * Is this connection created and managed by Looker (read-only)
      */
     public var managed: Bool?
+
+    private var _tunnel_id: AnyString?
     /**
      * The Id of the ssh tunnel this connection uses
      */
-    public var tunnel_id: String?
+    public var tunnel_id: String? {
+        get { _tunnel_id?.value }
+        set { _tunnel_id = newValue.map(AnyString.init) }
+    }
+
     /**
      * Maximum number of threads to use to build PDTs in parallel
      */
     public var pdt_concurrency: Int64?
+
     /**
      * When disable_context_comment is true comment will not be added to SQL
      */
     public var disable_context_comment: Bool?
+
     /**
      * An External OAuth Application to use for authenticating to the database
      */
@@ -3398,7 +4153,7 @@ public struct DBConnection: SDKModel {
         self.pool_timeout = pool_timeout
         self.dialect_name = dialect_name
         self.created_at = created_at
-        self.user_id = user_id
+        self._user_id = user_id.map(AnyString.init)
         self.example = example
         self.user_db_credentials = user_db_credentials
         self.user_attribute_fields = user_attribute_fields
@@ -3410,7 +4165,7 @@ public struct DBConnection: SDKModel {
         self.after_connect_statements = after_connect_statements
         self.pdt_context_override = pdt_context_override
         self.managed = managed
-        self.tunnel_id = tunnel_id
+        self._tunnel_id = tunnel_id.map(AnyString.init)
         self.pdt_concurrency = pdt_concurrency
         self.disable_context_comment = disable_context_comment
         self.oauth_application_id = oauth_application_id
@@ -3423,15 +4178,19 @@ public struct DBConnectionBase: SDKModel {
      * Operations the current user is able to perform on this object (read-only)
      */
     public var can: StringDictionary<Bool>?
+
     /**
      * Name of the connection. Also used as the unique identifier (read-only)
      */
     public var name: String?
+
     public var dialect: Dialect?
+
     /**
      * SQL Runner snippets for this connection (read-only)
      */
     public var snippets: [Snippet]?
+
     /**
      * True if PDTs are enabled on this connection (read-only)
      */
@@ -3452,46 +4211,57 @@ public struct DBConnectionOverride: SDKModel {
      * Context in which to override (`pdt` is the only allowed value)
      */
     public var context: String?
+
     /**
      * Host name/address of server
      */
     public var host: String?
+
     /**
      * Port number on server
      */
     public var port: String?
+
     /**
      * Username for server authentication
      */
     public var username: String?
+
     /**
      * (Write-Only) Password for server authentication
      */
     public var password: String?
+
     /**
      * Whether or not the password is overridden in this context (read-only)
      */
     public var has_password: Bool?
+
     /**
      * (Write-Only) Base64 encoded Certificate body for server authentication (when appropriate for dialect).
      */
     public var certificate: String?
+
     /**
      * (Write-Only) Certificate keyfile type - .json or .p12
      */
     public var file_type: String?
+
     /**
      * Database name
      */
     public var database: String?
+
     /**
      * Scheme name
      */
     public var schema: String?
+
     /**
      * Additional params to add to JDBC connection string
      */
     public var jdbc_additional_params: String?
+
     /**
      * SQL statements (semicolon separated) to issue after connecting to the database. Requires `custom_after_connect_statements` license feature
      */
@@ -3519,18 +4289,22 @@ public struct DBConnectionTestResult: SDKModel {
      * Operations the current user is able to perform on this object (read-only)
      */
     public var can: StringDictionary<Bool>?
+
     /**
      * JDBC connection string. (only populated in the 'connect' test) (read-only)
      */
     public var connection_string: String?
+
     /**
      * Result message of test (read-only)
      */
     public var message: String?
+
     /**
      * Name of test (read-only)
      */
     public var name: String?
+
     /**
      * Result code of test (read-only)
      */
@@ -3551,14 +4325,21 @@ public struct DelegateOauthTest: SDKModel {
      * Delegate Oauth Connection Name (read-only)
      */
     public var name: String?
+
+    private var _installation_target_id: AnyString?
     /**
      * The ID of the installation target. For Slack, this would be workspace id. (read-only)
      */
-    public var installation_target_id: String?
+    public var installation_target_id: String? {
+        get { _installation_target_id?.value }
+        set { _installation_target_id = newValue.map(AnyString.init) }
+    }
+
     /**
      * Installation ID (read-only)
      */
     public var installation_id: Int64?
+
     /**
      * Whether or not the test was successful (read-only)
      */
@@ -3566,7 +4347,7 @@ public struct DelegateOauthTest: SDKModel {
 
     public init(name: String? = nil, installation_target_id: String? = nil, installation_id: Int64? = nil, success: Bool? = nil) {
         self.name = name
-        self.installation_target_id = installation_target_id
+        self._installation_target_id = installation_target_id.map(AnyString.init)
         self.installation_id = installation_id
         self.success = success
     }
@@ -3608,50 +4389,62 @@ public struct Dialect: SDKModel {
      * The name of the dialect (read-only)
      */
     public var name: String?
+
     /**
      * The human-readable label of the connection (read-only)
      */
     public var label: String?
+
     /**
      * Whether the dialect supports query cost estimates (read-only)
      */
     public var supports_cost_estimate: Bool?
+
     /**
      * PDT index columns (read-only)
      */
     public var persistent_table_indexes: String?
+
     /**
      * PDT sortkey columns (read-only)
      */
     public var persistent_table_sortkeys: String?
+
     /**
      * PDT distkey column (read-only)
      */
     public var persistent_table_distkey: String?
+
     /**
      * Suports streaming results (read-only)
      */
     public var supports_streaming: Bool?
+
     /**
      * Should SQL Runner snippets automatically be run (read-only)
      */
     public var automatically_run_sql_runner_snippets: Bool?
+
     /**
      * Array of names of the tests that can be run on a connection using this dialect (read-only)
      */
     public var connection_tests: [String]?
+
     /**
      * Is supported with the inducer (i.e. generate from sql) (read-only)
      */
     public var supports_inducer: Bool?
+
     /**
      * Can multiple databases be accessed from a connection using this dialect (read-only)
      */
     public var supports_multiple_databases: Bool?
+
     /**
      * Whether the dialect supports allowing Looker to build persistent derived tables (read-only)
      */
     public var supports_persistent_derived_tables: Bool?
+
     /**
      * Does the database have client SSL support settable through the JDBC string explicitly? (read-only)
      */
@@ -3680,30 +4473,37 @@ public struct DialectInfo: SDKModel {
      * Operations the current user is able to perform on this object (read-only)
      */
     public var can: StringDictionary<Bool>?
+
     /**
      * Default number max connections (read-only)
      */
     public var default_max_connections: String?
+
     /**
      * Default port number (read-only)
      */
     public var default_port: String?
+
     /**
      * Is the supporting driver installed (read-only)
      */
     public var installed: Bool?
+
     /**
      * The human-readable label of the connection (read-only)
      */
     public var label: String?
+
     /**
      * What the dialect calls the equivalent of a normal SQL table (read-only)
      */
     public var label_for_database_equivalent: String?
+
     /**
      * The name of the dialect (read-only)
      */
     public var name: String?
+
     public var supported_options: DialectInfoOptions?
 
     public init(can: StringDictionary<Bool>? = nil, default_max_connections: String? = nil, default_port: String? = nil, installed: Bool? = nil, label: String? = nil, label_for_database_equivalent: String? = nil, name: String? = nil, supported_options: DialectInfoOptions? = nil) {
@@ -3724,38 +4524,47 @@ public struct DialectInfoOptions: SDKModel {
      * Has additional params support (read-only)
      */
     public var additional_params: Bool?
+
     /**
      * Has auth support (read-only)
      */
     public var auth: Bool?
+
     /**
      * Has host support (read-only)
      */
     public var host: Bool?
+
     /**
      * Has support for a service account (read-only)
      */
     public var oauth_credentials: Bool?
+
     /**
      * Has project name support (read-only)
      */
     public var project_name: Bool?
+
     /**
      * Has schema support (read-only)
      */
     public var schema: Bool?
+
     /**
      * Has SSL support (read-only)
      */
     public var ssl: Bool?
+
     /**
      * Has timezone support (read-only)
      */
     public var timezone: Bool?
+
     /**
      * Has tmp table support (read-only)
      */
     public var tmp_table: Bool?
+
     /**
      * Username is required (read-only)
      */
@@ -3801,25 +4610,32 @@ public struct DigestEmailSend: SDKModel {
 }
 
 public struct DiscretePalette: SDKModel {
+    private var _id: AnyString?
     /**
      * Unique identity string (read-only)
      */
-    public var id: String?
+    public var id: String? {
+        get { _id?.value }
+        set { _id = newValue.map(AnyString.init) }
+    }
+
     /**
      * Label for palette
      */
     public var label: String?
+
     /**
      * Type of palette
      */
     public var type: String?
+
     /**
      * Array of colors in the palette
      */
     public var colors: [String]?
 
     public init(id: String? = nil, label: String? = nil, type: String? = nil, colors: [String]? = nil) {
-        self.id = id
+        self._id = id.map(AnyString.init)
         self.label = label
         self.type = type
         self.colors = colors
@@ -3832,10 +4648,12 @@ public struct EmbedParams: SDKModel {
      * The complete URL of the Looker UI page to display in the embed context. For example, to display the dashboard with id 34, `target_url` would look like: `https://mycompany.looker.com:9999/dashboards/34`. `target_uri` MUST contain a scheme (HTTPS), domain name, and URL path. Port must be included if it is required to reach the Looker server from browser clients. If the Looker instance is behind a load balancer or other proxy, `target_uri` must be the public-facing domain name and port required to reach the Looker instance, not the actual internal network machine name of the Looker instance.
      */
     public var target_url: String
+
     /**
      * Number of seconds the SSO embed session will be valid after the embed session is started. Defaults to 300 seconds. Maximum session length accepted is 2592000 seconds (30 days).
      */
     public var session_length: Int64?
+
     /**
      * When true, the embed session will purge any residual Looker login state (such as in browser cookies) before creating a new login state with the given embed user info. Defaults to true.
      */
@@ -3858,50 +4676,70 @@ public struct EmbedSsoParams: SDKModel {
      * The complete URL of the Looker UI page to display in the embed context. For example, to display the dashboard with id 34, `target_url` would look like: `https://mycompany.looker.com:9999/dashboards/34`. `target_uri` MUST contain a scheme (HTTPS), domain name, and URL path. Port must be included if it is required to reach the Looker server from browser clients. If the Looker instance is behind a load balancer or other proxy, `target_uri` must be the public-facing domain name and port required to reach the Looker instance, not the actual internal network machine name of the Looker instance.
      */
     public var target_url: String
+
     /**
      * Number of seconds the SSO embed session will be valid after the embed session is started. Defaults to 300 seconds. Maximum session length accepted is 2592000 seconds (30 days).
      */
     public var session_length: Int64?
+
     /**
      * When true, the embed session will purge any residual Looker login state (such as in browser cookies) before creating a new login state with the given embed user info. Defaults to true.
      */
     public var force_logout_login: Bool?
+
+    private var _external_user_id: AnyString?
     /**
      * A value from an external system that uniquely identifies the embed user. Since the user_ids of Looker embed users may change with every embed session, external_user_id provides a way to assign a known, stable user identifier across multiple embed sessions.
      */
-    public var external_user_id: String?
+    public var external_user_id: String? {
+        get { _external_user_id?.value }
+        set { _external_user_id = newValue.map(AnyString.init) }
+    }
+
     /**
      * First name of the embed user. Defaults to 'Embed' if not specified
      */
     public var first_name: String?
+
     /**
      * Last name of the embed user. Defaults to 'User' if not specified
      */
     public var last_name: String?
+
     /**
      * Sets the user timezone for the embed user session, if the User Specific Timezones setting is enabled in the Looker admin settings. A value of `null` forces the embed user to use the Looker Application Default Timezone. You MUST omit this property from the request if the User Specific Timezones setting is disabled. Timezone values are validated against the IANA Timezone standard and can be seen in the Application Time Zone dropdown list on the Looker General Settings admin page.
      */
     public var user_timezone: String?
+
     /**
      * List of Looker permission names to grant to the embed user. Requested permissions will be filtered to permissions allowed for embed sessions.
      */
     public var permissions: [String]?
+
     /**
      * List of model names that the embed user may access
      */
     public var models: [String]?
+
     /**
      * List of Looker group ids in which to enroll the embed user
      */
     public var group_ids: [Int64]?
+
+    private var _external_group_id: AnyString?
     /**
      * A unique value identifying an embed-exclusive group. Multiple embed users using the same `external_group_id` value will be able to share Looker content with each other. Content and embed users associated with the `external_group_id` will not be accessible to normal Looker users or embed users not associated with this `external_group_id`.
      */
-    public var external_group_id: String?
+    public var external_group_id: String? {
+        get { _external_group_id?.value }
+        set { _external_group_id = newValue.map(AnyString.init) }
+    }
+
     /**
      * A dictionary of name-value pairs associating a Looker user attribute name with a value.
      */
     public var user_attributes: StringDictionary<AnyCodable>?
+
     /**
      * Id of the embed secret to use to sign this SSO url. If specified, the value must be an id of a valid (active) secret defined in the Looker instance. If not specified, the URL will be signed with the newest active embed secret defined in the Looker instance.
      */
@@ -3911,14 +4749,14 @@ public struct EmbedSsoParams: SDKModel {
         self.target_url = target_url
         self.session_length = session_length
         self.force_logout_login = force_logout_login
-        self.external_user_id = external_user_id
+        self._external_user_id = external_user_id.map(AnyString.init)
         self.first_name = first_name
         self.last_name = last_name
         self.user_timezone = user_timezone
         self.permissions = permissions
         self.models = models
         self.group_ids = group_ids
-        self.external_group_id = external_group_id
+        self._external_group_id = external_group_id.map(AnyString.init)
         self.user_attributes = user_attributes
         self.secret_id = secret_id
     }
@@ -3946,6 +4784,7 @@ public struct LkError: SDKModel {
      * Error details (read-only)
      */
     public var message: String
+
     /**
      * Documentation link (read-only)
      */
@@ -3967,26 +4806,36 @@ public struct ExternalOauthApplication: SDKModel {
      * Operations the current user is able to perform on this object (read-only)
      */
     public var can: StringDictionary<Bool>?
+
     /**
      * ID of this OAuth Application (read-only)
      */
     public var id: Int64?
+
     /**
      * The name of this application.  For Snowflake connections, this should be the name of the host database.
      */
     public var name: String?
+
+    private var _client_id: AnyString?
     /**
      * The OAuth Client ID for this application
      */
-    public var client_id: String?
+    public var client_id: String? {
+        get { _client_id?.value }
+        set { _client_id = newValue.map(AnyString.init) }
+    }
+
     /**
      * (Write-Only) The OAuth Client Secret for this application
      */
     public var client_secret: String?
+
     /**
      * The database dialect for this application.
      */
     public var dialect_name: String?
+
     /**
      * Creation time for this application (read-only)
      */
@@ -3996,7 +4845,7 @@ public struct ExternalOauthApplication: SDKModel {
         self.can = can
         self.id = id
         self.name = name
-        self.client_id = client_id
+        self._client_id = client_id.map(AnyString.init)
         self.client_secret = client_secret
         self.dialect_name = dialect_name
         self.created_at = created_at
@@ -4017,70 +4866,99 @@ public struct Folder: SDKModel {
      * Unique Name
      */
     public var name: String
+
+    private var _parent_id: AnyString?
     /**
      * Id of Parent. If the parent id is null, this is a root-level entry
      */
-    public var parent_id: String?
+    public var parent_id: String? {
+        get { _parent_id?.value }
+        set { _parent_id = newValue.map(AnyString.init) }
+    }
+
+    private var _id: AnyString?
     /**
      * Unique Id (read-only)
      */
-    public var id: String?
+    public var id: String? {
+        get { _id?.value }
+        set { _id = newValue.map(AnyString.init) }
+    }
+
     /**
      * Id of content metadata (read-only)
      */
     public var content_metadata_id: Int64?
+
     /**
      * Time the space was created (read-only)
      */
     public var created_at: Date?
+
     /**
      * User Id of Creator (read-only)
      */
     public var creator_id: Int64?
+
     /**
      * Children Count (read-only)
      */
     public var child_count: Int64?
+
+    private var _external_id: AnyString?
     /**
      * Embedder's Id if this folder was autogenerated as an embedding shared folder via 'external_group_id' in an SSO embed login (read-only)
      */
-    public var external_id: String?
+    public var external_id: String? {
+        get { _external_id?.value }
+        set { _external_id = newValue.map(AnyString.init) }
+    }
+
     /**
      * Folder is an embed folder (read-only)
      */
     public var is_embed: Bool?
+
     /**
      * Folder is the root embed shared folder (read-only)
      */
     public var is_embed_shared_root: Bool?
+
     /**
      * Folder is the root embed users folder (read-only)
      */
     public var is_embed_users_root: Bool?
+
     /**
      * Folder is a user's personal folder (read-only)
      */
     public var is_personal: Bool?
+
     /**
      * Folder is descendant of a user's personal folder (read-only)
      */
     public var is_personal_descendant: Bool?
+
     /**
      * Folder is the root shared folder (read-only)
      */
     public var is_shared_root: Bool?
+
     /**
      * Folder is the root user folder (read-only)
      */
     public var is_users_root: Bool?
+
     /**
      * Operations the current user is able to perform on this object (read-only)
      */
     public var can: StringDictionary<Bool>?
+
     /**
      * Dashboards (read-only)
      */
     public var dashboards: [DashboardBase]?
+
     /**
      * Looks (read-only)
      */
@@ -4088,13 +4966,13 @@ public struct Folder: SDKModel {
 
     public init(name: String, parent_id: String? = nil, id: String? = nil, content_metadata_id: Int64? = nil, created_at: Date? = nil, creator_id: Int64? = nil, child_count: Int64? = nil, external_id: String? = nil, is_embed: Bool? = nil, is_embed_shared_root: Bool? = nil, is_embed_users_root: Bool? = nil, is_personal: Bool? = nil, is_personal_descendant: Bool? = nil, is_shared_root: Bool? = nil, is_users_root: Bool? = nil, can: StringDictionary<Bool>? = nil, dashboards: [DashboardBase]? = nil, looks: [LookWithDashboards]? = nil) {
         self.name = name
-        self.parent_id = parent_id
-        self.id = id
+        self._parent_id = parent_id.map(AnyString.init)
+        self._id = id.map(AnyString.init)
         self.content_metadata_id = content_metadata_id
         self.created_at = created_at
         self.creator_id = creator_id
         self.child_count = child_count
-        self.external_id = external_id
+        self._external_id = external_id.map(AnyString.init)
         self.is_embed = is_embed
         self.is_embed_shared_root = is_embed_shared_root
         self.is_embed_users_root = is_embed_users_root
@@ -4118,62 +4996,89 @@ public struct FolderBase: SDKModel {
      * Unique Name
      */
     public var name: String
+
+    private var _parent_id: AnyString?
     /**
      * Id of Parent. If the parent id is null, this is a root-level entry
      */
-    public var parent_id: String?
+    public var parent_id: String? {
+        get { _parent_id?.value }
+        set { _parent_id = newValue.map(AnyString.init) }
+    }
+
+    private var _id: AnyString?
     /**
      * Unique Id (read-only)
      */
-    public var id: String?
+    public var id: String? {
+        get { _id?.value }
+        set { _id = newValue.map(AnyString.init) }
+    }
+
     /**
      * Id of content metadata (read-only)
      */
     public var content_metadata_id: Int64?
+
     /**
      * Time the folder was created (read-only)
      */
     public var created_at: Date?
+
     /**
      * User Id of Creator (read-only)
      */
     public var creator_id: Int64?
+
     /**
      * Children Count (read-only)
      */
     public var child_count: Int64?
+
+    private var _external_id: AnyString?
     /**
      * Embedder's Id if this folder was autogenerated as an embedding shared folder via 'external_group_id' in an SSO embed login (read-only)
      */
-    public var external_id: String?
+    public var external_id: String? {
+        get { _external_id?.value }
+        set { _external_id = newValue.map(AnyString.init) }
+    }
+
     /**
      * Folder is an embed folder (read-only)
      */
     public var is_embed: Bool?
+
     /**
      * Folder is the root embed shared folder (read-only)
      */
     public var is_embed_shared_root: Bool?
+
     /**
      * Folder is the root embed users folder (read-only)
      */
     public var is_embed_users_root: Bool?
+
     /**
      * Folder is a user's personal folder (read-only)
      */
     public var is_personal: Bool?
+
     /**
      * Folder is descendant of a user's personal folder (read-only)
      */
     public var is_personal_descendant: Bool?
+
     /**
      * Folder is the root shared folder (read-only)
      */
     public var is_shared_root: Bool?
+
     /**
      * Folder is the root user folder (read-only)
      */
     public var is_users_root: Bool?
+
     /**
      * Operations the current user is able to perform on this object (read-only)
      */
@@ -4181,13 +5086,13 @@ public struct FolderBase: SDKModel {
 
     public init(name: String, parent_id: String? = nil, id: String? = nil, content_metadata_id: Int64? = nil, created_at: Date? = nil, creator_id: Int64? = nil, child_count: Int64? = nil, external_id: String? = nil, is_embed: Bool? = nil, is_embed_shared_root: Bool? = nil, is_embed_users_root: Bool? = nil, is_personal: Bool? = nil, is_personal_descendant: Bool? = nil, is_shared_root: Bool? = nil, is_users_root: Bool? = nil, can: StringDictionary<Bool>? = nil) {
         self.name = name
-        self.parent_id = parent_id
-        self.id = id
+        self._parent_id = parent_id.map(AnyString.init)
+        self._id = id.map(AnyString.init)
         self.content_metadata_id = content_metadata_id
         self.created_at = created_at
         self.creator_id = creator_id
         self.child_count = child_count
-        self.external_id = external_id
+        self._external_id = external_id.map(AnyString.init)
         self.is_embed = is_embed
         self.is_embed_shared_root = is_embed_shared_root
         self.is_embed_users_root = is_embed_users_root
@@ -4217,66 +5122,82 @@ public struct GitBranch: SDKModel {
      * Operations the current user is able to perform on this object (read-only)
      */
     public var can: StringDictionary<Bool>?
+
     /**
      * The short name on the local. Updating `name` results in `git checkout <new_name>`
      */
     public var name: String?
+
     /**
      * The name of the remote (read-only)
      */
     public var remote: String?
+
     /**
      * The short name on the remote (read-only)
      */
     public var remote_name: String?
+
     /**
      * Name of error (read-only)
      */
     public var error: String?
+
     /**
      * Message describing an error if present (read-only)
      */
     public var message: String?
+
     /**
      * Name of the owner of a personal branch (read-only)
      */
     public var owner_name: String?
+
     /**
      * Whether or not this branch is readonly (read-only)
      */
     public var readonly: Bool?
+
     /**
      * Whether or not this branch is a personal branch - readonly for all developers except the owner (read-only)
      */
     public var personal: Bool?
+
     /**
      * Whether or not a local ref exists for the branch (read-only)
      */
     public var is_local: Bool?
+
     /**
      * Whether or not a remote ref exists for the branch (read-only)
      */
     public var is_remote: Bool?
+
     /**
      * Whether or not this is the production branch (read-only)
      */
     public var is_production: Bool?
+
     /**
      * Number of commits the local branch is ahead of the remote (read-only)
      */
     public var ahead_count: Int64?
+
     /**
      * Number of commits the local branch is behind the remote (read-only)
      */
     public var behind_count: Int64?
+
     /**
      * UNIX timestamp at which this branch was last committed. (read-only)
      */
     public var commit_at: Int64?
+
     /**
      * The resolved ref of this branch. Updating `ref` results in `git reset --hard <new_ref>``.
      */
     public var ref: String?
+
     /**
      * The resolved ref of this branch remote. (read-only)
      */
@@ -4309,19 +5230,25 @@ public struct GitConnectionTest: SDKModel {
      * Operations the current user is able to perform on this object (read-only)
      */
     public var can: StringDictionary<Bool>?
+
     /**
      * Human readable string describing the test (read-only)
      */
     public var description: String?
+
+    private var _id: AnyString?
     /**
      * A short string, uniquely naming this test (read-only)
      */
-    public var id: String?
+    public var id: String? {
+        get { _id?.value }
+        set { _id = newValue.map(AnyString.init) }
+    }
 
     public init(can: StringDictionary<Bool>? = nil, description: String? = nil, id: String? = nil) {
         self.can = can
         self.description = description
-        self.id = id
+        self._id = id.map(AnyString.init)
     }
 
 }
@@ -4331,14 +5258,21 @@ public struct GitConnectionTestResult: SDKModel {
      * Operations the current user is able to perform on this object (read-only)
      */
     public var can: StringDictionary<Bool>?
+
+    private var _id: AnyString?
     /**
      * A short string, uniquely naming this test (read-only)
      */
-    public var id: String?
+    public var id: String? {
+        get { _id?.value }
+        set { _id = newValue.map(AnyString.init) }
+    }
+
     /**
      * Additional data from the test (read-only)
      */
     public var message: String?
+
     /**
      * Either 'pass' or 'fail' (read-only)
      */
@@ -4346,7 +5280,7 @@ public struct GitConnectionTestResult: SDKModel {
 
     public init(can: StringDictionary<Bool>? = nil, id: String? = nil, message: String? = nil, status: String? = nil) {
         self.can = can
-        self.id = id
+        self._id = id.map(AnyString.init)
         self.message = message
         self.status = status
     }
@@ -4358,14 +5292,17 @@ public struct GitStatus: SDKModel {
      * Git action: add, delete, etc (read-only)
      */
     public var action: String?
+
     /**
      * When true, changes to the local file conflict with the remote repository (read-only)
      */
     public var conflict: Bool?
+
     /**
      * When true, the file can be reverted to an earlier state (read-only)
      */
     public var revertable: Bool?
+
     /**
      * Git description of the action (read-only)
      */
@@ -4385,34 +5322,46 @@ public struct LkGroup: SDKModel {
      * Operations the current user is able to perform on this object (read-only)
      */
     public var can: StringDictionary<Bool>?
+
     /**
      * Group can be used in content access controls
      */
     public var can_add_to_content_metadata: Bool?
+
     /**
      * Currently logged in user is group member (read-only)
      */
     public var contains_current_user: Bool?
+
+    private var _external_group_id: AnyString?
     /**
      * External Id group if embed group (read-only)
      */
-    public var external_group_id: String?
+    public var external_group_id: String? {
+        get { _external_group_id?.value }
+        set { _external_group_id = newValue.map(AnyString.init) }
+    }
+
     /**
      * Group membership controlled outside of Looker (read-only)
      */
     public var externally_managed: Bool?
+
     /**
      * Unique Id (read-only)
      */
     public var id: Int64?
+
     /**
      * New users are added to this group by default (read-only)
      */
     public var include_by_default: Bool?
+
     /**
      * Name of group
      */
     public var name: String?
+
     /**
      * Number of users included in this group (read-only)
      */
@@ -4422,7 +5371,7 @@ public struct LkGroup: SDKModel {
         self.can = can
         self.can_add_to_content_metadata = can_add_to_content_metadata
         self.contains_current_user = contains_current_user
-        self.external_group_id = external_group_id
+        self._external_group_id = external_group_id.map(AnyString.init)
         self.externally_managed = externally_managed
         self.id = id
         self.include_by_default = include_by_default
@@ -4437,42 +5386,56 @@ public struct GroupHierarchy: SDKModel {
      * Operations the current user is able to perform on this object (read-only)
      */
     public var can: StringDictionary<Bool>?
+
     /**
      * Group can be used in content access controls
      */
     public var can_add_to_content_metadata: Bool?
+
     /**
      * Currently logged in user is group member (read-only)
      */
     public var contains_current_user: Bool?
+
+    private var _external_group_id: AnyString?
     /**
      * External Id group if embed group (read-only)
      */
-    public var external_group_id: String?
+    public var external_group_id: String? {
+        get { _external_group_id?.value }
+        set { _external_group_id = newValue.map(AnyString.init) }
+    }
+
     /**
      * Group membership controlled outside of Looker (read-only)
      */
     public var externally_managed: Bool?
+
     /**
      * Unique Id (read-only)
      */
     public var id: Int64?
+
     /**
      * New users are added to this group by default (read-only)
      */
     public var include_by_default: Bool?
+
     /**
      * Name of group
      */
     public var name: String?
+
     /**
      * Number of users included in this group (read-only)
      */
     public var user_count: Int64?
+
     /**
      * IDs of parents of this group (read-only)
      */
     public var parent_group_ids: [Int64]?
+
     /**
      * Role IDs assigned to group (read-only)
      */
@@ -4482,7 +5445,7 @@ public struct GroupHierarchy: SDKModel {
         self.can = can
         self.can_add_to_content_metadata = can_add_to_content_metadata
         self.contains_current_user = contains_current_user
-        self.external_group_id = external_group_id
+        self._external_group_id = external_group_id.map(AnyString.init)
         self.externally_managed = externally_managed
         self.id = id
         self.include_by_default = include_by_default
@@ -4529,38 +5492,51 @@ public struct GroupSearch: SDKModel {
      * Operations the current user is able to perform on this object (read-only)
      */
     public var can: StringDictionary<Bool>?
+
     /**
      * Group can be used in content access controls
      */
     public var can_add_to_content_metadata: Bool?
+
     /**
      * Currently logged in user is group member (read-only)
      */
     public var contains_current_user: Bool?
+
+    private var _external_group_id: AnyString?
     /**
      * External Id group if embed group (read-only)
      */
-    public var external_group_id: String?
+    public var external_group_id: String? {
+        get { _external_group_id?.value }
+        set { _external_group_id = newValue.map(AnyString.init) }
+    }
+
     /**
      * Group membership controlled outside of Looker (read-only)
      */
     public var externally_managed: Bool?
+
     /**
      * Unique Id (read-only)
      */
     public var id: Int64?
+
     /**
      * New users are added to this group by default (read-only)
      */
     public var include_by_default: Bool?
+
     /**
      * Name of group
      */
     public var name: String?
+
     /**
      * Number of users included in this group (read-only)
      */
     public var user_count: Int64?
+
     /**
      * Roles assigned to group (read-only)
      */
@@ -4570,7 +5546,7 @@ public struct GroupSearch: SDKModel {
         self.can = can
         self.can_add_to_content_metadata = can_add_to_content_metadata
         self.contains_current_user = contains_current_user
-        self.external_group_id = external_group_id
+        self._external_group_id = external_group_id.map(AnyString.init)
         self.externally_managed = externally_managed
         self.id = id
         self.include_by_default = include_by_default
@@ -4586,110 +5562,141 @@ public struct HomepageItem: SDKModel {
      * Operations the current user is able to perform on this object (read-only)
      */
     public var can: StringDictionary<Bool>?
+
     /**
      * Name of user who created the content this item is based on (read-only)
      */
     public var content_created_by: String?
+
     /**
      * Content favorite id associated with the item this content is based on (read-only)
      */
     public var content_favorite_id: Int64?
+
     /**
      * Content metadata id associated with the item this content is based on (read-only)
      */
     public var content_metadata_id: Int64?
+
     /**
      * Last time the content that this item is based on was updated (read-only)
      */
     public var content_updated_at: String?
+
     /**
      * Custom description entered by the user, if present
      */
     public var custom_description: String?
+
     /**
      * (Write-Only) base64 encoded image data
      */
     public var custom_image_data_base64: String?
+
     /**
      * Custom image_url entered by the user, if present (read-only)
      */
     public var custom_image_url: String?
+
     /**
      * Custom title entered by the user, if present
      */
     public var custom_title: String?
+
     /**
      * Custom url entered by the user, if present
      */
     public var custom_url: String?
+
     /**
      * Dashboard to base this item on
      */
     public var dashboard_id: Int64?
+
     /**
      * The actual description for display (read-only)
      */
     public var description: String?
+
     /**
      * Number of times content has been favorited, if present (read-only)
      */
     public var favorite_count: Int64?
+
     /**
      * Associated Homepage Section
      */
     public var homepage_section_id: Int64?
+
     /**
      * Unique Id (read-only)
      */
     public var id: Int64?
+
     /**
      * The actual image_url for display (read-only)
      */
     public var image_url: String?
+
     /**
      * The container folder name of the content (read-only)
      */
     public var location: String?
+
     /**
      * Look to base this item on
      */
     public var look_id: Int64?
+
+    private var _lookml_dashboard_id: AnyString?
     /**
      * LookML Dashboard to base this item on
      */
-    public var lookml_dashboard_id: String?
+    public var lookml_dashboard_id: String? {
+        get { _lookml_dashboard_id?.value }
+        set { _lookml_dashboard_id = newValue.map(AnyString.init) }
+    }
+
     /**
      * An arbitrary integer representing the sort order within the section
      */
     public var order: Int64?
+
     /**
      * Number of seconds it took to fetch the section this item is in (read-only)
      */
     public var section_fetch_time: Float?
+
     /**
      * The actual title for display (read-only)
      */
     public var title: String?
+
     /**
      * The actual url for display (read-only)
      */
     public var url: String?
+
     /**
      * Whether the custom description should be used instead of the content description, if the item is associated with content
      */
     public var use_custom_description: Bool?
+
     /**
      * Whether the custom image should be used instead of the content image, if the item is associated with content
      */
     public var use_custom_image: Bool?
+
     /**
      * Whether the custom title should be used instead of the content title, if the item is associated with content
      */
     public var use_custom_title: Bool?
+
     /**
      * Whether the custom url should be used instead of the content url, if the item is associated with content
      */
     public var use_custom_url: Bool?
+
     /**
      * Number of times content has been viewed, if present (read-only)
      */
@@ -4714,7 +5721,7 @@ public struct HomepageItem: SDKModel {
         self.image_url = image_url
         self.location = location
         self.look_id = look_id
-        self.lookml_dashboard_id = lookml_dashboard_id
+        self._lookml_dashboard_id = lookml_dashboard_id.map(AnyString.init)
         self.order = order
         self.section_fetch_time = section_fetch_time
         self.title = title
@@ -4733,50 +5740,62 @@ public struct HomepageSection: SDKModel {
      * Operations the current user is able to perform on this object (read-only)
      */
     public var can: StringDictionary<Bool>?
+
     /**
      * Time at which this section was created. (read-only)
      */
     public var created_at: Date?
+
     /**
      * Time at which this section was deleted.
      */
     public var deleted_at: Date?
+
     /**
      * A URL pointing to a page showing further information about the content in the section. (read-only)
      */
     public var detail_url: String?
+
     /**
      * Id reference to parent homepage
      */
     public var homepage_id: Int64?
+
     /**
      * Items in the homepage section (read-only)
      */
     public var homepage_items: [HomepageItem]?
+
     /**
      * Unique Id (read-only)
      */
     public var id: Int64?
+
     /**
      * Is this a header section (has no items) (read-only)
      */
     public var is_header: Bool?
+
     /**
      * ids of the homepage items in the order they should be displayed
      */
     public var item_order: [Int64]?
+
     /**
      * Name of row
      */
     public var title: String?
+
     /**
      * Time at which this section was last updated. (read-only)
      */
     public var updated_at: Date?
+
     /**
      * Description of the content found in this section.
      */
     public var description: String?
+
     /**
      * ids of the homepage items the user can see in the order they should be displayed (read-only)
      */
@@ -4805,14 +5824,17 @@ public struct ImportedProject: SDKModel {
      * Dependency name (read-only)
      */
     public var name: String?
+
     /**
      * Url for a remote dependency (read-only)
      */
     public var url: String?
+
     /**
      * Ref for a remote dependency (read-only)
      */
     public var ref: String?
+
     /**
      * Flag signifying if a dependency is remote or local (read-only)
      */
@@ -4832,66 +5854,86 @@ public struct Integration: SDKModel {
      * Operations the current user is able to perform on this object (read-only)
      */
     public var can: StringDictionary<Bool>?
+
+    private var _id: AnyString?
     /**
      * ID of the integration. (read-only)
      */
-    public var id: String?
+    public var id: String? {
+        get { _id?.value }
+        set { _id = newValue.map(AnyString.init) }
+    }
+
     /**
      * ID of the integration hub. (read-only)
      */
     public var integration_hub_id: Int64?
+
     /**
      * Label for the integration. (read-only)
      */
     public var label: String?
+
     /**
      * Description of the integration. (read-only)
      */
     public var description: String?
+
     /**
      * Whether the integration is available to users.
      */
     public var enabled: Bool?
+
     /**
      * Array of params for the integration.
      */
     public var params: [IntegrationParam]?
+
     /**
      * A list of data formats the integration supports. If unspecified, the default is all data formats. Valid values are: "txt", "csv", "inline_json", "json", "json_label", "json_detail", "json_detail_lite_stream", "xlsx", "html", "wysiwyg_pdf", "assembled_pdf", "wysiwyg_png", "csv_zip". (read-only)
      */
     public var supported_formats: [SupportedFormats]?
+
     /**
      * A list of action types the integration supports. Valid values are: "cell", "query", "dashboard". (read-only)
      */
     public var supported_action_types: [SupportedActionTypes]?
+
     /**
      * A list of formatting options the integration supports. If unspecified, defaults to all formats. Valid values are: "formatted", "unformatted". (read-only)
      */
     public var supported_formattings: [SupportedFormattings]?
+
     /**
      * A list of visualization formatting options the integration supports. If unspecified, defaults to all formats. Valid values are: "apply", "noapply". (read-only)
      */
     public var supported_visualization_formattings: [SupportedVisualizationFormattings]?
+
     /**
      * A list of all the download mechanisms the integration supports. The order of values is not significant: Looker will select the most appropriate supported download mechanism for a given query. The integration must ensure it can handle any of the mechanisms it claims to support. If unspecified, this defaults to all download setting values. Valid values are: "push", "url". (read-only)
      */
     public var supported_download_settings: [SupportedDownloadSettings]?
+
     /**
      * URL to an icon for the integration. (read-only)
      */
     public var icon_url: String?
+
     /**
      * Whether the integration uses oauth. (read-only)
      */
     public var uses_oauth: Bool?
+
     /**
      * A list of descriptions of required fields that this integration is compatible with. If there are multiple entries in this list, the integration requires more than one field. If unspecified, no fields will be required. (read-only)
      */
     public var required_fields: [IntegrationRequiredField]?
+
     /**
      * Whether the integration uses delegate oauth, which allows federation between an integration installation scope specific entity (like org, group, and team, etc.) and Looker. (read-only)
      */
     public var delegate_oauth: Bool?
+
     /**
      * Whether the integration is available to users.
      */
@@ -4899,7 +5941,7 @@ public struct Integration: SDKModel {
 
     public init(can: StringDictionary<Bool>? = nil, id: String? = nil, integration_hub_id: Int64? = nil, label: String? = nil, description: String? = nil, enabled: Bool? = nil, params: [IntegrationParam]? = nil, supported_formats: [SupportedFormats]? = nil, supported_action_types: [SupportedActionTypes]? = nil, supported_formattings: [SupportedFormattings]? = nil, supported_visualization_formattings: [SupportedVisualizationFormattings]? = nil, supported_download_settings: [SupportedDownloadSettings]? = nil, icon_url: String? = nil, uses_oauth: Bool? = nil, required_fields: [IntegrationRequiredField]? = nil, delegate_oauth: Bool? = nil, installed_delegate_oauth_targets: [Int64]? = nil) {
         self.can = can
-        self.id = id
+        self._id = id.map(AnyString.init)
         self.integration_hub_id = integration_hub_id
         self.label = label
         self.description = description
@@ -4924,42 +5966,52 @@ public struct IntegrationHub: SDKModel {
      * Operations the current user is able to perform on this object (read-only)
      */
     public var can: StringDictionary<Bool>?
+
     /**
      * ID of the hub. (read-only)
      */
     public var id: Int64?
+
     /**
      * URL of the hub.
      */
     public var url: String?
+
     /**
      * Label of the hub. (read-only)
      */
     public var label: String?
+
     /**
      * Whether this hub is a first-party integration hub operated by Looker. (read-only)
      */
     public var official: Bool?
+
     /**
      * An error message, present if the integration hub metadata could not be fetched. If this is present, the integration hub is unusable. (read-only)
      */
     public var fetch_error_message: String?
+
     /**
      * (Write-Only) An authorization key that will be sent to the integration hub on every request.
      */
     public var authorization_token: String?
+
     /**
      * Whether the authorization_token is set for the hub. (read-only)
      */
     public var has_authorization_token: Bool?
+
     /**
      * Whether the legal agreement message has been signed by the user. This only matters if legal_agreement_required is true. (read-only)
      */
     public var legal_agreement_signed: Bool?
+
     /**
      * Whether the legal terms for the integration hub are required before use. (read-only)
      */
     public var legal_agreement_required: Bool?
+
     /**
      * The legal agreement text for this integration hub. (read-only)
      */
@@ -4986,38 +6038,47 @@ public struct IntegrationParam: SDKModel {
      * Name of the parameter.
      */
     public var name: String?
+
     /**
      * Label of the parameter. (read-only)
      */
     public var label: String?
+
     /**
      * Short description of the parameter. (read-only)
      */
     public var description: String?
+
     /**
      * Whether the parameter is required to be set to use the destination. If unspecified, this defaults to false. (read-only)
      */
     public var required: Bool?
+
     /**
      * Whether the parameter has a value set. (read-only)
      */
     public var has_value: Bool?
+
     /**
      * The current value of the parameter. Always null if the value is sensitive. When writing, null values will be ignored. Set the value to an empty string to clear it.
      */
     public var value: String?
+
     /**
      * When present, the param's value comes from this user attribute instead of the 'value' parameter. Set to null to use the 'value'.
      */
     public var user_attribute_name: String?
+
     /**
      * Whether the parameter contains sensitive data like API credentials. If unspecified, this defaults to true. (read-only)
      */
     public var sensitive: Bool?
+
     /**
      * When true, this parameter must be assigned to a user attribute in the admin panel (instead of a constant value), and that value may be updated by the user as part of the integration flow. (read-only)
      */
     public var per_user: Bool?
+
     /**
      * When present, the param represents the oauth url the user will be taken to. (read-only)
      */
@@ -5043,10 +6104,12 @@ public struct IntegrationRequiredField: SDKModel {
      * Matches a field that has this tag. (read-only)
      */
     public var tag: String?
+
     /**
      * If present, supercedes 'tag' and matches a field that has any of the provided tags. (read-only)
      */
     public var any_tag: [String]?
+
     /**
      * If present, supercedes 'tag' and matches a field that has all of the provided tags. (read-only)
      */
@@ -5065,10 +6128,12 @@ public struct IntegrationTestResult: SDKModel {
      * Whether or not the test was successful (read-only)
      */
     public var success: Bool?
+
     /**
      * A message representing the results of the test. (read-only)
      */
     public var message: String?
+
     /**
      * An array of connection test result for delegate oauth actions. (read-only)
      */
@@ -5087,6 +6152,7 @@ public struct InternalHelpResources: SDKModel {
      * Operations the current user is able to perform on this object (read-only)
      */
     public var can: StringDictionary<Bool>?
+
     /**
      * If true and internal help resources content is not blank then the link for internal help resources will be shown in the help menu and the content displayed within Looker
      */
@@ -5104,10 +6170,12 @@ public struct InternalHelpResourcesContent: SDKModel {
      * Operations the current user is able to perform on this object (read-only)
      */
     public var can: StringDictionary<Bool>?
+
     /**
      * Text to display in the help menu item which will display the internal help resources
      */
     public var organization_name: String?
+
     /**
      * Content to be displayed in the internal help resources page/modal
      */
@@ -5126,170 +6194,216 @@ public struct LDAPConfig: SDKModel {
      * Operations the current user is able to perform on this object (read-only)
      */
     public var can: StringDictionary<Bool>?
+
     /**
      * Allow alternate email-based login via '/login/email' for admins and for specified users with the 'login_special_email' permission. This option is useful as a fallback during ldap setup, if ldap config problems occur later, or if you need to support some users who are not in your ldap directory. Looker email/password logins are always disabled for regular users when ldap is enabled.
      */
     public var alternate_email_login_allowed: Bool?
+
     /**
      * (Write-Only)  Password for the LDAP account used to access the LDAP server
      */
     public var auth_password: String?
+
     /**
      * Users will not be allowed to login at all unless a role for them is found in LDAP if set to true
      */
     public var auth_requires_role: Bool?
+
     /**
      * Distinguished name of LDAP account used to access the LDAP server
      */
     public var auth_username: String?
+
     /**
      * LDAP server hostname
      */
     public var connection_host: String?
+
     /**
      * LDAP host port
      */
     public var connection_port: String?
+
     /**
      * Use Transport Layer Security
      */
     public var connection_tls: Bool?
+
     /**
      * Do not verify peer when using TLS
      */
     public var connection_tls_no_verify: Bool?
+
     /**
      * (Write-Only)  Array of ids of groups that will be applied to new users the first time they login via LDAP
      */
     public var default_new_user_group_ids: [Int64]?
+
     /**
      * (Read-only) Groups that will be applied to new users the first time they login via LDAP (read-only)
      */
     public var default_new_user_groups: [LkGroup]?
+
     /**
      * (Write-Only)  Array of ids of roles that will be applied to new users the first time they login via LDAP
      */
     public var default_new_user_role_ids: [Int64]?
+
     /**
      * (Read-only) Roles that will be applied to new users the first time they login via LDAP (read-only)
      */
     public var default_new_user_roles: [Role]?
+
     /**
      * Enable/Disable LDAP authentication for the server
      */
     public var enabled: Bool?
+
     /**
      * Don't attempt to do LDAP search result paging (RFC 2696) even if the LDAP server claims to support it.
      */
     public var force_no_page: Bool?
+
     /**
      * (Read-only) Array of mappings between LDAP Groups and Looker Roles (read-only)
      */
     public var groups: [LDAPGroupRead]?
+
     /**
      * Base dn for finding groups in LDAP searches
      */
     public var groups_base_dn: String?
+
     /**
      * Identifier for a strategy for how Looker will search for groups in the LDAP server
      */
     public var groups_finder_type: String?
+
     /**
      * LDAP Group attribute that signifies the members of the groups. Most commonly 'member'
      */
     public var groups_member_attribute: String?
+
     /**
      * Optional comma-separated list of supported LDAP objectclass for groups when doing groups searches
      */
     public var groups_objectclasses: String?
+
     /**
      * LDAP Group attribute that signifies the user in a group. Most commonly 'dn'
      */
     public var groups_user_attribute: String?
+
     /**
      * (Read/Write) Array of mappings between LDAP Groups and arrays of Looker Role ids
      */
     public var groups_with_role_ids: [LDAPGroupWrite]?
+
     /**
      * (Read-only) Has the password been set for the LDAP account used to access the LDAP server (read-only)
      */
     public var has_auth_password: Bool?
+
     /**
      * Merge first-time ldap login to existing user account by email addresses. When a user logs in for the first time via ldap this option will connect this user into their existing account by finding the account with a matching email address. Otherwise a new user account will be created for the user.
      */
     public var merge_new_users_by_email: Bool?
+
     /**
      * When this config was last modified (read-only)
      */
     public var modified_at: String?
+
     /**
      * User id of user who last modified this config (read-only)
      */
     public var modified_by: String?
+
     /**
      * Set user roles in Looker based on groups from LDAP
      */
     public var set_roles_from_groups: Bool?
+
     /**
      * (Write-Only)  Test LDAP user password. For ldap tests only.
      */
     public var test_ldap_password: String?
+
     /**
      * (Write-Only)  Test LDAP user login id. For ldap tests only.
      */
     public var test_ldap_user: String?
+
     /**
      * Name of user record attributes used to indicate email address field
      */
     public var user_attribute_map_email: String?
+
     /**
      * Name of user record attributes used to indicate first name
      */
     public var user_attribute_map_first_name: String?
+
     /**
      * Name of user record attributes used to indicate last name
      */
     public var user_attribute_map_last_name: String?
+
+    private var _user_attribute_map_ldap_id: AnyString?
     /**
      * Name of user record attributes used to indicate unique record id
      */
-    public var user_attribute_map_ldap_id: String?
+    public var user_attribute_map_ldap_id: String? {
+        get { _user_attribute_map_ldap_id?.value }
+        set { _user_attribute_map_ldap_id = newValue.map(AnyString.init) }
+    }
+
     /**
      * (Read-only) Array of mappings between LDAP User Attributes and Looker User Attributes (read-only)
      */
     public var user_attributes: [LDAPUserAttributeRead]?
+
     /**
      * (Read/Write) Array of mappings between LDAP User Attributes and arrays of Looker User Attribute ids
      */
     public var user_attributes_with_ids: [LDAPUserAttributeWrite]?
+
     /**
      * Distinguished name of LDAP node used as the base for user searches
      */
     public var user_bind_base_dn: String?
+
     /**
      * (Optional) Custom RFC-2254 filter clause for use in finding user during login. Combined via 'and' with the other generated filter clauses.
      */
     public var user_custom_filter: String?
+
     /**
      * Name(s) of user record attributes used for matching user login id (comma separated list)
      */
     public var user_id_attribute_names: String?
+
     /**
      * (Optional) Name of user record objectclass used for finding user during login id
      */
     public var user_objectclass: String?
+
     /**
      * Allow LDAP auth'd users to be members of non-reflected Looker groups. If 'false', user will be removed from non-reflected groups on login.
      */
     public var allow_normal_group_membership: Bool?
+
     /**
      * LDAP auth'd users will be able to inherit roles from non-reflected Looker groups.
      */
     public var allow_roles_from_normal_groups: Bool?
+
     /**
      * Allows roles to be directly assigned to LDAP auth'd users.
      */
     public var allow_direct_roles: Bool?
+
     /**
      * Link to get this item (read-only)
      */
@@ -5328,7 +6442,7 @@ public struct LDAPConfig: SDKModel {
         self.user_attribute_map_email = user_attribute_map_email
         self.user_attribute_map_first_name = user_attribute_map_first_name
         self.user_attribute_map_last_name = user_attribute_map_last_name
-        self.user_attribute_map_ldap_id = user_attribute_map_ldap_id
+        self._user_attribute_map_ldap_id = user_attribute_map_ldap_id.map(AnyString.init)
         self.user_attributes = user_attributes
         self.user_attributes_with_ids = user_attributes_with_ids
         self.user_bind_base_dn = user_bind_base_dn
@@ -5348,6 +6462,7 @@ public struct LDAPConfigTestIssue: SDKModel {
      * Severity of the issue. Error or Warning (read-only)
      */
     public var severity: String?
+
     /**
      * Message describing the issue (read-only)
      */
@@ -5365,23 +6480,29 @@ public struct LDAPConfigTestResult: SDKModel {
      * Additional details for error cases (read-only)
      */
     public var details: String?
+
     /**
      * Array of issues/considerations about the result (read-only)
      */
     public var issues: [LDAPConfigTestIssue]?
+
     /**
      * Short human readable test about the result (read-only)
      */
     public var message: String?
+
     /**
      * Test status code: always 'success' or 'error' (read-only)
      */
     public var status: String?
+
     /**
      * A more detailed trace of incremental results during auth tests (read-only)
      */
     public var trace: String?
+
     public var user: LDAPUser?
+
     /**
      * Link to ldap config (read-only)
      */
@@ -5404,22 +6525,27 @@ public struct LDAPGroupRead: SDKModel {
      * Unique Id (read-only)
      */
     public var id: Int64?
+
     /**
      * Unique Id of group in Looker (read-only)
      */
     public var looker_group_id: Int64?
+
     /**
      * Name of group in Looker (read-only)
      */
     public var looker_group_name: String?
+
     /**
      * Name of group in LDAP (read-only)
      */
     public var name: String?
+
     /**
      * Looker Roles (read-only)
      */
     public var roles: [Role]?
+
     /**
      * Link to ldap config (read-only)
      */
@@ -5441,22 +6567,27 @@ public struct LDAPGroupWrite: SDKModel {
      * Unique Id
      */
     public var id: Int64?
+
     /**
      * Unique Id of group in Looker (read-only)
      */
     public var looker_group_id: Int64?
+
     /**
      * Name of group in Looker
      */
     public var looker_group_name: String?
+
     /**
      * Name of group in LDAP
      */
     public var name: String?
+
     /**
      * Looker Role Ids
      */
     public var role_ids: [Int64]?
+
     /**
      * Link to ldap config (read-only)
      */
@@ -5478,38 +6609,51 @@ public struct LDAPUser: SDKModel {
      * Array of user's email addresses and aliases for use in migration (read-only)
      */
     public var all_emails: [String]?
+
     /**
      * Dictionary of user's attributes (name/value) (read-only)
      */
     public var attributes: StringDictionary<AnyCodable>?
+
     /**
      * Primary email address (read-only)
      */
     public var email: String?
+
     /**
      * First name (read-only)
      */
     public var first_name: String?
+
     /**
      * Array of user's groups (group names only) (read-only)
      */
     public var groups: [String]?
+
     /**
      * Last Name (read-only)
      */
     public var last_name: String?
+
     /**
      * LDAP's distinguished name for the user record (read-only)
      */
     public var ldap_dn: String?
+
+    private var _ldap_id: AnyString?
     /**
      * LDAP's Unique ID for the user (read-only)
      */
-    public var ldap_id: String?
+    public var ldap_id: String? {
+        get { _ldap_id?.value }
+        set { _ldap_id = newValue.map(AnyString.init) }
+    }
+
     /**
      * Array of user's roles (role names only) (read-only)
      */
     public var roles: [String]?
+
     /**
      * Link to ldap config (read-only)
      */
@@ -5523,7 +6667,7 @@ public struct LDAPUser: SDKModel {
         self.groups = groups
         self.last_name = last_name
         self.ldap_dn = ldap_dn
-        self.ldap_id = ldap_id
+        self._ldap_id = ldap_id.map(AnyString.init)
         self.roles = roles
         self.url = url
     }
@@ -5535,14 +6679,17 @@ public struct LDAPUserAttributeRead: SDKModel {
      * Name of User Attribute in LDAP (read-only)
      */
     public var name: String?
+
     /**
      * Required to be in LDAP assertion for login to be allowed to succeed (read-only)
      */
     public var required: Bool?
+
     /**
      * Looker User Attributes (read-only)
      */
     public var user_attributes: [UserAttribute]?
+
     /**
      * Link to ldap config (read-only)
      */
@@ -5562,14 +6709,17 @@ public struct LDAPUserAttributeWrite: SDKModel {
      * Name of User Attribute in LDAP
      */
     public var name: String?
+
     /**
      * Required to be in LDAP assertion for login to be allowed to succeed
      */
     public var required: Bool?
+
     /**
      * Looker User Attribute Ids
      */
     public var user_attribute_ids: [Int64]?
+
     /**
      * Link to ldap config (read-only)
      */
@@ -5589,50 +6739,66 @@ public struct LegacyFeature: SDKModel {
      * Operations the current user is able to perform on this object (read-only)
      */
     public var can: StringDictionary<Bool>?
+
+    private var _id: AnyString?
     /**
      * Unique Id (read-only)
      */
-    public var id: String?
+    public var id: String? {
+        get { _id?.value }
+        set { _id = newValue.map(AnyString.init) }
+    }
+
     /**
      * Name (read-only)
      */
     public var name: String?
+
     /**
      * Description (read-only)
      */
     public var description: String?
+
     /**
      * Whether this feature has been enabled by a user
      */
     public var enabled_locally: Bool?
+
     /**
      * Whether this feature is currently enabled (read-only)
      */
     public var enabled: Bool?
+
     /**
      * Looker version where this feature became a legacy feature (read-only)
      */
     public var disallowed_as_of_version: String?
+
     /**
      * Looker version where this feature will be automatically disabled (read-only)
      */
     public var disable_on_upgrade_to_version: String?
+
     /**
      * Future Looker version where this feature will be removed (read-only)
      */
     public var end_of_life_version: String?
+
     /**
      * URL for documentation about this feature (read-only)
      */
     public var documentation_url: String?
+
     /**
      * Approximate date that this feature will be automatically disabled. (read-only)
      */
     public var approximate_disable_date: Date?
+
     /**
      * Approximate date that this feature will be removed. (read-only)
      */
     public var approximate_end_of_life_date: Date?
+
     /**
      * Whether this legacy feature may have been automatically disabled when upgrading to the current version. (read-only)
      */
@@ -5640,7 +6806,7 @@ public struct LegacyFeature: SDKModel {
 
     public init(can: StringDictionary<Bool>? = nil, id: String? = nil, name: String? = nil, description: String? = nil, enabled_locally: Bool? = nil, enabled: Bool? = nil, disallowed_as_of_version: String? = nil, disable_on_upgrade_to_version: String? = nil, end_of_life_version: String? = nil, documentation_url: String? = nil, approximate_disable_date: Date? = nil, approximate_end_of_life_date: Date? = nil, has_disabled_on_upgrade: Bool? = nil) {
         self.can = can
-        self.id = id
+        self._id = id.map(AnyString.init)
         self.name = name
         self.description = description
         self.enabled_locally = enabled_locally
@@ -5669,10 +6835,12 @@ public struct LkLocale: SDKModel {
      * Code for Locale (read-only)
      */
     public var code: String?
+
     /**
      * Name of Locale in its own language (read-only)
      */
     public var native_name: String?
+
     /**
      * Name of Locale in English (read-only)
      */
@@ -5691,6 +6859,7 @@ public struct LocalizationSettings: SDKModel {
      * Default locale for localization (read-only)
      */
     public var default_locale: String?
+
     /**
      * Localization level - strict or permissive (read-only)
      */
@@ -5708,112 +6877,145 @@ public struct Look: SDKModel {
      * Operations the current user is able to perform on this object (read-only)
      */
     public var can: StringDictionary<Bool>?
+
     /**
      * Id of content metadata (read-only)
      */
     public var content_metadata_id: Int64?
+
     /**
      * Unique Id (read-only)
      */
     public var id: Int64?
+
     /**
      * Look Title
      */
     public var title: String?
+
     /**
      * User Id
      */
     public var user_id: Int64?
+
     /**
      * Content Favorite Id (read-only)
      */
     public var content_favorite_id: Int64?
+
     /**
      * Time that the Look was created. (read-only)
      */
     public var created_at: Date?
+
     /**
      * Whether or not a look is 'soft' deleted.
      */
     public var deleted: Bool?
+
     /**
      * Time that the Look was deleted. (read-only)
      */
     public var deleted_at: Date?
+
     /**
      * Id of User that deleted the look. (read-only)
      */
     public var deleter_id: Int64?
+
     /**
      * Description
      */
     public var description: String?
+
     /**
      * Embed Url (read-only)
      */
     public var embed_url: String?
+
     /**
      * Excel File Url (read-only)
      */
     public var excel_file_url: String?
+
     /**
      * Number of times favorited (read-only)
      */
     public var favorite_count: Int64?
+
     /**
      * Google Spreadsheet Formula (read-only)
      */
     public var google_spreadsheet_formula: String?
+
     /**
      * Image Embed Url (read-only)
      */
     public var image_embed_url: String?
+
     /**
      * auto-run query when Look viewed
      */
     public var is_run_on_load: Bool?
+
     /**
      * Time that the Look was last accessed by any user (read-only)
      */
     public var last_accessed_at: Date?
+
     /**
      * Id of User that last updated the look. (read-only)
      */
     public var last_updater_id: Int64?
+
     /**
      * Time last viewed in the Looker web UI (read-only)
      */
     public var last_viewed_at: Date?
+
     public var model: LookModel?
+
     /**
      * Is Public
      */
     public var `public`: Bool?
+
     /**
      * Public Slug (read-only)
      */
     public var public_slug: String?
+
     /**
      * Public Url (read-only)
      */
     public var public_url: String?
+
     /**
      * Query Id
      */
     public var query_id: Int64?
+
     /**
      * Short Url (read-only)
      */
     public var short_url: String?
+
     public var folder: FolderBase?
+
+    private var _folder_id: AnyString?
     /**
      * Folder Id
      */
-    public var folder_id: String?
+    public var folder_id: String? {
+        get { _folder_id?.value }
+        set { _folder_id = newValue.map(AnyString.init) }
+    }
+
     /**
      * Time that the Look was updated. (read-only)
      */
     public var updated_at: Date?
+
     /**
      * Number of times viewed in the Looker web UI (read-only)
      */
@@ -5847,7 +7049,7 @@ public struct Look: SDKModel {
         self.query_id = query_id
         self.short_url = short_url
         self.folder = folder
-        self.folder_id = folder_id
+        self._folder_id = folder_id.map(AnyString.init)
         self.updated_at = updated_at
         self.view_count = view_count
     }
@@ -5859,18 +7061,22 @@ public struct LookBasic: SDKModel {
      * Operations the current user is able to perform on this object (read-only)
      */
     public var can: StringDictionary<Bool>?
+
     /**
      * Id of content metadata (read-only)
      */
     public var content_metadata_id: Int64?
+
     /**
      * Unique Id (read-only)
      */
     public var id: Int64?
+
     /**
      * Look Title (read-only)
      */
     public var title: String?
+
     /**
      * User Id
      */
@@ -5891,30 +7097,37 @@ public struct LookmlModel: SDKModel {
      * Operations the current user is able to perform on this object (read-only)
      */
     public var can: StringDictionary<Bool>?
+
     /**
      * Array of names of connections this model is allowed to use
      */
     public var allowed_db_connection_names: [String]?
+
     /**
      * Array of explores (if has_content) (read-only)
      */
     public var explores: [LookmlModelNavExplore]?
+
     /**
      * Does this model declaration have have lookml content? (read-only)
      */
     public var has_content: Bool?
+
     /**
      * UI-friendly name for this model (read-only)
      */
     public var label: String?
+
     /**
      * Name of the model. Also used as the unique identifier
      */
     public var name: String?
+
     /**
      * Name of project containing the model
      */
     public var project_name: String?
+
     /**
      * Is this model allowed to use all current and future connections
      */
@@ -5934,158 +7147,199 @@ public struct LookmlModel: SDKModel {
 }
 
 public struct LookmlModelExplore: SDKModel {
+    private var _id: AnyString?
     /**
      * Fully qualified explore name (model name plus explore name) (read-only)
      */
-    public var id: String?
+    public var id: String? {
+        get { _id?.value }
+        set { _id = newValue.map(AnyString.init) }
+    }
+
     /**
      * Explore name (read-only)
      */
     public var name: String?
+
     /**
      * Description (read-only)
      */
     public var description: String?
+
     /**
      * Label (read-only)
      */
     public var label: String?
+
     /**
      * Explore title (read-only)
      */
     public var title: String?
+
     /**
      * Scopes (read-only)
      */
     public var scopes: [String]?
+
     /**
      * Can Total (read-only)
      */
     public var can_total: Bool?
+
     /**
      * Can Develop LookML (read-only)
      */
     public var can_develop: Bool?
+
     /**
      * Can See LookML (read-only)
      */
     public var can_see_lookml: Bool?
+
     /**
      * A URL linking to the definition of this explore in the LookML IDE. (read-only)
      */
     public var lookml_link: String?
+
     /**
      * Can Save (read-only)
      */
     public var can_save: Bool?
+
     /**
      * Can Explain (read-only)
      */
     public var can_explain: Bool?
+
     /**
      * Can pivot in the DB (read-only)
      */
     public var can_pivot_in_db: Bool?
+
     /**
      * Can use subtotals (read-only)
      */
     public var can_subtotal: Bool?
+
     /**
      * Has timezone support (read-only)
      */
     public var has_timezone_support: Bool?
+
     /**
      * Cost estimates supported (read-only)
      */
     public var supports_cost_estimate: Bool?
+
     /**
      * Connection name (read-only)
      */
     public var connection_name: String?
+
     /**
      * How nulls are sorted, possible values are "low", "high", "first" and "last" (read-only)
      */
     public var null_sort_treatment: String?
+
     /**
      * List of model source files (read-only)
      */
     public var files: [String]?
+
     /**
      * Primary source_file file (read-only)
      */
     public var source_file: String?
+
     /**
      * Name of project (read-only)
      */
     public var project_name: String?
+
     /**
      * Name of model (read-only)
      */
     public var model_name: String?
+
     /**
      * Name of view (read-only)
      */
     public var view_name: String?
+
     /**
      * Is hidden (read-only)
      */
     public var hidden: Bool?
+
     /**
      * A sql_table_name expression that defines what sql table the view/explore maps onto. Example: "prod_orders2 AS orders" in a view named orders. (read-only)
      */
     public var sql_table_name: String?
+
     /**
      * (DEPRECATED) Array of access filter field names (read-only)
      */
     public var access_filter_fields: [String]?
+
     /**
      * Access filters (read-only)
      */
     public var access_filters: [LookmlModelExploreAccessFilter]?
+
     /**
      * Aliases (read-only)
      */
     public var aliases: [LookmlModelExploreAlias]?
+
     /**
      * Always filter (read-only)
      */
     public var always_filter: [LookmlModelExploreAlwaysFilter]?
+
     /**
      * Conditionally filter (read-only)
      */
     public var conditionally_filter: [LookmlModelExploreConditionallyFilter]?
+
     /**
      * Array of index fields (read-only)
      */
     public var index_fields: [String]?
+
     /**
      * Sets (read-only)
      */
     public var sets: [LookmlModelExploreSet]?
+
     /**
      * An array of arbitrary string tags provided in the model for this explore. (read-only)
      */
     public var tags: [String]?
+
     /**
      * Errors (read-only)
      */
     public var errors: [LookmlModelExploreError]?
+
     public var fields: LookmlModelExploreFieldset?
+
     /**
      * Views joined into this explore (read-only)
      */
     public var joins: [LookmlModelExploreJoins]?
+
     /**
      * Label used to group explores in the navigation menus (read-only)
      */
     public var group_label: String?
+
     /**
      * An array of items describing which custom measure types are supported for creating a custom measure 'based_on' each possible dimension type. (read-only)
      */
     public var supported_measure_types: [LookmlModelExploreSupportedMeasureType]?
 
     public init(id: String? = nil, name: String? = nil, description: String? = nil, label: String? = nil, title: String? = nil, scopes: [String]? = nil, can_total: Bool? = nil, can_develop: Bool? = nil, can_see_lookml: Bool? = nil, lookml_link: String? = nil, can_save: Bool? = nil, can_explain: Bool? = nil, can_pivot_in_db: Bool? = nil, can_subtotal: Bool? = nil, has_timezone_support: Bool? = nil, supports_cost_estimate: Bool? = nil, connection_name: String? = nil, null_sort_treatment: String? = nil, files: [String]? = nil, source_file: String? = nil, project_name: String? = nil, model_name: String? = nil, view_name: String? = nil, hidden: Bool? = nil, sql_table_name: String? = nil, access_filter_fields: [String]? = nil, access_filters: [LookmlModelExploreAccessFilter]? = nil, aliases: [LookmlModelExploreAlias]? = nil, always_filter: [LookmlModelExploreAlwaysFilter]? = nil, conditionally_filter: [LookmlModelExploreConditionallyFilter]? = nil, index_fields: [String]? = nil, sets: [LookmlModelExploreSet]? = nil, tags: [String]? = nil, errors: [LookmlModelExploreError]? = nil, fields: LookmlModelExploreFieldset? = nil, joins: [LookmlModelExploreJoins]? = nil, group_label: String? = nil, supported_measure_types: [LookmlModelExploreSupportedMeasureType]? = nil) {
-        self.id = id
+        self._id = id.map(AnyString.init)
         self.name = name
         self.description = description
         self.label = label
@@ -6132,6 +7386,7 @@ public struct LookmlModelExploreAccessFilter: SDKModel {
      * Field to be filtered (read-only)
      */
     public var field: String?
+
     /**
      * User attribute name (read-only)
      */
@@ -6149,6 +7404,7 @@ public struct LookmlModelExploreAlias: SDKModel {
      * Name (read-only)
      */
     public var name: String?
+
     /**
      * Value (read-only)
      */
@@ -6166,6 +7422,7 @@ public struct LookmlModelExploreAlwaysFilter: SDKModel {
      * Name (read-only)
      */
     public var name: String?
+
     /**
      * Value (read-only)
      */
@@ -6183,6 +7440,7 @@ public struct LookmlModelExploreConditionallyFilter: SDKModel {
      * Name (read-only)
      */
     public var name: String?
+
     /**
      * Value (read-only)
      */
@@ -6200,14 +7458,17 @@ public struct LookmlModelExploreError: SDKModel {
      * Error Message (read-only)
      */
     public var message: String?
+
     /**
      * Details (read-only)
      */
     public var details: AnyCodable?
+
     /**
      * Error source location (read-only)
      */
     public var error_pos: String?
+
     /**
      * Is this a field error (read-only)
      */
@@ -6227,208 +7488,261 @@ public struct LookmlModelExploreField: SDKModel {
      * The appropriate horizontal text alignment the values of this field should be displayed in. Valid values are: "left", "right". (read-only)
      */
     public var align: Align?
+
     /**
      * Whether it's possible to filter on this field. (read-only)
      */
     public var can_filter: Bool?
+
     /**
      * Field category Valid values are: "parameter", "filter", "measure", "dimension". (read-only)
      */
     public var category: Category?
+
     /**
      * The default value that this field uses when filtering. Null if there is no default value. (read-only)
      */
     public var default_filter_value: String?
+
     /**
      * Description (read-only)
      */
     public var description: String?
+
     /**
      * Dimension group if this field is part of a dimension group. If not, this will be null. (read-only)
      */
     public var dimension_group: String?
+
     /**
      * An array enumerating all the possible values that this field can contain. When null, there is no limit to the set of possible values this field can contain. (read-only)
      */
     public var enumerations: [LookmlModelExploreFieldEnumeration]?
+
     /**
      * An error message indicating a problem with the definition of this field. If there are no errors, this will be null. (read-only)
      */
     public var error: String?
+
     /**
      * A label creating a grouping of fields. All fields with this label should be presented together when displayed in a UI. (read-only)
      */
     public var field_group_label: String?
+
     /**
      * When presented in a field group via field_group_label, a shorter name of the field to be displayed in that context. (read-only)
      */
     public var field_group_variant: String?
+
     /**
      * The style of dimension fill that is possible for this field. Null if no dimension fill is possible. Valid values are: "enumeration", "range". (read-only)
      */
     public var fill_style: FillStyle?
+
     /**
      * An offset (in months) from the calendar start month to the fiscal start month defined in the LookML model this field belongs to. (read-only)
      */
     public var fiscal_month_offset: Int64?
+
     /**
      * Whether this field has a set of allowed_values specified in LookML. (read-only)
      */
     public var has_allowed_values: Bool?
+
     /**
      * Whether this field should be hidden from the user interface. (read-only)
      */
     public var hidden: Bool?
+
     /**
      * Whether this field is a filter. (read-only)
      */
     public var is_filter: Bool?
+
     /**
      * Whether this field represents a fiscal time value. (read-only)
      */
     public var is_fiscal: Bool?
+
     /**
      * Whether this field is of a type that represents a numeric value. (read-only)
      */
     public var is_numeric: Bool?
+
     /**
      * Whether this field is of a type that represents a time value. (read-only)
      */
     public var is_timeframe: Bool?
+
     /**
      * Whether this field can be time filtered. (read-only)
      */
     public var can_time_filter: Bool?
+
     public var time_interval: LookmlModelExploreFieldTimeInterval?
+
     /**
      * Fully-qualified human-readable label of the field. (read-only)
      */
     public var label: String?
+
     /**
      * The name of the parameter that will provide a parameterized label for this field, if available in the current context. (read-only)
      */
     public var label_from_parameter: String?
+
     /**
      * The human-readable label of the field, without the view label. (read-only)
      */
     public var label_short: String?
+
     /**
      * A URL linking to the definition of this field in the LookML IDE. (read-only)
      */
     public var lookml_link: String?
+
     public var map_layer: LookmlModelExploreFieldMapLayer?
+
     /**
      * Whether this field is a measure. (read-only)
      */
     public var measure: Bool?
+
     /**
      * Fully-qualified name of the field. (read-only)
      */
     public var name: String?
+
     /**
      * If yes, the field will not be localized with the user attribute number_format. Defaults to no (read-only)
      */
     public var strict_value_format: Bool?
+
     /**
      * Whether this field is a parameter. (read-only)
      */
     public var parameter: Bool?
+
     /**
      * Whether this field can be removed from a query. (read-only)
      */
     public var permanent: Bool?
+
     /**
      * Whether or not the field represents a primary key. (read-only)
      */
     public var primary_key: Bool?
+
     /**
      * The name of the project this field is defined in. (read-only)
      */
     public var project_name: String?
+
     /**
      * When true, it's not possible to re-sort this field's values without re-running the SQL query, due to database logic that affects the sort. (read-only)
      */
     public var requires_refresh_on_sort: Bool?
+
     /**
      * The LookML scope this field belongs to. The scope is typically the field's view. (read-only)
      */
     public var scope: String?
+
     /**
      * Whether this field can be sorted. (read-only)
      */
     public var sortable: Bool?
+
     /**
      * The path portion of source_file_path. (read-only)
      */
     public var source_file: String?
+
     /**
      * The fully-qualified path of the project file this field is defined in. (read-only)
      */
     public var source_file_path: String?
+
     /**
      * SQL expression as defined in the LookML model. The SQL syntax shown here is a representation intended for auditability, and is not neccessarily an exact match for what will ultimately be run in the database. It may contain special LookML syntax or annotations that are not valid SQL. This will be null if the current user does not have the see_lookml permission for the field's model. (read-only)
      */
     public var sql: String?
+
     /**
      * An array of conditions and values that make up a SQL Case expression, as defined in the LookML model. The SQL syntax shown here is a representation intended for auditability, and is not neccessarily an exact match for what will ultimately be run in the database. It may contain special LookML syntax or annotations that are not valid SQL. This will be null if the current user does not have the see_lookml permission for the field's model. (read-only)
      */
     public var sql_case: [LookmlModelExploreFieldSqlCase]?
+
     /**
      * Array of filter conditions defined for the measure in LookML. (read-only)
      */
     public var filters: [LookmlModelExploreFieldMeasureFilters]?
+
     /**
      * The name of the dimension to base suggest queries from. (read-only)
      */
     public var suggest_dimension: String?
+
     /**
      * The name of the explore to base suggest queries from. (read-only)
      */
     public var suggest_explore: String?
+
     /**
      * Whether or not suggestions are possible for this field. (read-only)
      */
     public var suggestable: Bool?
+
     /**
      * If available, a list of suggestions for this field. For most fields, a suggest query is a more appropriate way to get an up-to-date list of suggestions. Or use enumerations to list all the possible values. (read-only)
      */
     public var suggestions: [String]?
+
     /**
      * An array of arbitrary string tags provided in the model for this field. (read-only)
      */
     public var tags: [String]?
+
     /**
      * The LookML type of the field. (read-only)
      */
     public var type: String?
+
     /**
      * An array of user attribute types that are allowed to be used in filters on this field. Valid values are: "advanced_filter_string", "advanced_filter_number", "advanced_filter_datetime", "string", "number", "datetime", "relative_url", "yesno", "zipcode". (read-only)
      */
     public var user_attribute_filter_types: [UserAttributeFilterTypes]?
+
     /**
      * If specified, the LookML value format string for formatting values of this field. (read-only)
      */
     public var value_format: String?
+
     /**
      * The name of the view this field belongs to. (read-only)
      */
     public var view: String?
+
     /**
      * The human-readable label of the view the field belongs to. (read-only)
      */
     public var view_label: String?
+
     /**
      * Whether this field was specified in "dynamic_fields" and is not part of the model. (read-only)
      */
     public var `dynamic`: Bool?
+
     /**
      * The name of the starting day of the week. Valid values are: "monday", "tuesday", "wednesday", "thursday", "friday", "saturday", "sunday". (read-only)
      */
     public var week_start_day: WeekStartDay?
+
     /**
      * The number of times this field has been used in queries (read-only)
      */
     public var times_used: Int64?
+
     /**
      * The name of the view this field is defined in. This will be different than "view" when the view has been joined via a different name using the "from" parameter. (read-only)
      */
@@ -6498,6 +7812,7 @@ public struct LookmlModelExploreFieldEnumeration: SDKModel {
      * Label (read-only)
      */
     public var label: String?
+
     /**
      * Value (read-only)
      */
@@ -6515,38 +7830,47 @@ public struct LookmlModelExploreFieldMapLayer: SDKModel {
      * URL to the map layer resource. (read-only)
      */
     public var url: String?
+
     /**
      * Name of the map layer, as defined in LookML. (read-only)
      */
     public var name: String?
+
     /**
      * Specifies the name of the TopoJSON object that the map layer references. If not specified, use the first object.. (read-only)
      */
     public var feature_key: String?
+
     /**
      * Selects which property from the TopoJSON data to plot against. TopoJSON supports arbitrary metadata for each region. When null, the first matching property should be used. (read-only)
      */
     public var property_key: String?
+
     /**
      * Which property from the TopoJSON data to use to label the region. When null, property_key should be used. (read-only)
      */
     public var property_label_key: String?
+
     /**
      * The preferred geographic projection of the map layer when displayed in a visualization that supports multiple geographic projections. (read-only)
      */
     public var projection: String?
+
     /**
      * Specifies the data format of the region information. Valid values are: "topojson", "vector_tile_region". (read-only)
      */
     public var format: Format?
+
     /**
      * Specifies the URL to a JSON file that defines the geographic extents of each region available in the map layer. This data is used to automatically center the map on the available data for visualization purposes. The JSON file must be a JSON object where the keys are the mapping value of the feature (as specified by property_key) and the values are arrays of four numbers representing the west longitude, south latitude, east longitude, and north latitude extents of the region. The object must include a key for every possible value of property_key. (read-only)
      */
     public var extents_json_url: String?
+
     /**
      * The minimum zoom level that the map layer may be displayed at, for visualizations that support zooming. (read-only)
      */
     public var max_zoom_level: Int64?
+
     /**
      * The maximum zoom level that the map layer may be displayed at, for visualizations that support zooming. (read-only)
      */
@@ -6572,6 +7896,7 @@ public struct LookmlModelExploreFieldMeasureFilters: SDKModel {
      * Filter field name (read-only)
      */
     public var field: String?
+
     /**
      * Filter condition value (read-only)
      */
@@ -6589,14 +7914,17 @@ public struct LookmlModelExploreFieldset: SDKModel {
      * Array of dimensions (read-only)
      */
     public var dimensions: [LookmlModelExploreField]?
+
     /**
      * Array of measures (read-only)
      */
     public var measures: [LookmlModelExploreField]?
+
     /**
      * Array of filters (read-only)
      */
     public var filters: [LookmlModelExploreField]?
+
     /**
      * Array of parameters (read-only)
      */
@@ -6616,6 +7944,7 @@ public struct LookmlModelExploreFieldSqlCase: SDKModel {
      * SQL Case label value (read-only)
      */
     public var value: String?
+
     /**
      * SQL Case condition expression (read-only)
      */
@@ -6633,6 +7962,7 @@ public struct LookmlModelExploreFieldTimeInterval: SDKModel {
      * The type of time interval this field represents a grouping of. Valid values are: "day", "hour", "minute", "second", "millisecond", "microsecond", "week", "month", "quarter", "year". (read-only)
      */
     public var name: Name?
+
     /**
      * The number of intervals this field represents a grouping of. (read-only)
      */
@@ -6650,50 +7980,62 @@ public struct LookmlModelExploreJoins: SDKModel {
      * Name of this join (and name of the view to join) (read-only)
      */
     public var name: String?
+
     /**
      * Fields referenced by the join (read-only)
      */
     public var dependent_fields: [String]?
+
     /**
      * Fields of the joined view to pull into this explore (read-only)
      */
     public var fields: [String]?
+
     /**
      * Name of the dimension in this explore whose value is in the primary key of the joined view (read-only)
      */
     public var foreign_key: String?
+
     /**
      * Name of view to join (read-only)
      */
     public var from: String?
+
     /**
      * Specifies whether all queries must use an outer join (read-only)
      */
     public var outer_only: Bool?
+
     /**
      * many_to_one, one_to_one, one_to_many, many_to_many (read-only)
      */
     public var relationship: String?
+
     /**
      * Names of joins that must always be included in SQL queries (read-only)
      */
     public var required_joins: [String]?
+
     /**
      * SQL expression that produces a foreign key (read-only)
      */
     public var sql_foreign_key: String?
+
     /**
      * SQL ON expression describing the join condition (read-only)
      */
     public var sql_on: String?
+
     /**
      * SQL table name to join (read-only)
      */
     public var sql_table_name: String?
+
     /**
      * The join type: left_outer, full_outer, inner, or cross (read-only)
      */
     public var type: String?
+
     /**
      * Label to display in UI selectors (read-only)
      */
@@ -6722,6 +8064,7 @@ public struct LookmlModelExploreSet: SDKModel {
      * Name (read-only)
      */
     public var name: String?
+
     /**
      * Value set (read-only)
      */
@@ -6739,6 +8082,7 @@ public struct LookmlModelExploreSupportedMeasureType: SDKModel {
      *  (read-only)
      */
     public var dimension_type: String?
+
     /**
      *  (read-only)
      */
@@ -6756,18 +8100,22 @@ public struct LookmlModelNavExplore: SDKModel {
      * Name of the explore (read-only)
      */
     public var name: String?
+
     /**
      * Description for the explore (read-only)
      */
     public var description: String?
+
     /**
      * Label for the explore (read-only)
      */
     public var label: String?
+
     /**
      * Is this explore marked as hidden (read-only)
      */
     public var hidden: Bool?
+
     /**
      * Label used to group explores in the navigation menus (read-only)
      */
@@ -6788,26 +8136,32 @@ public struct LookmlTest: SDKModel {
      * Operations the current user is able to perform on this object (read-only)
      */
     public var can: StringDictionary<Bool>?
+
     /**
      * Name of model containing this test. (read-only)
      */
     public var model_name: String?
+
     /**
      * Name of this test. (read-only)
      */
     public var name: String?
+
     /**
      * Name of the explore this test runs a query against (read-only)
      */
     public var explore_name: String?
+
     /**
      * The url parameters that can be used to reproduce this test's query on an explore. (read-only)
      */
     public var query_url_params: String?
+
     /**
      * Name of the LookML file containing this test. (read-only)
      */
     public var file: String?
+
     /**
      * Line number of this test in LookML. (read-only)
      */
@@ -6830,30 +8184,37 @@ public struct LookmlTestResult: SDKModel {
      * Operations the current user is able to perform on this object (read-only)
      */
     public var can: StringDictionary<Bool>?
+
     /**
      * Name of model containing this test. (read-only)
      */
     public var model_name: String?
+
     /**
      * Name of this test. (read-only)
      */
     public var test_name: String?
+
     /**
      * Number of assertions in this test (read-only)
      */
     public var assertions_count: Int64?
+
     /**
      * Number of assertions passed in this test (read-only)
      */
     public var assertions_failed: Int64?
+
     /**
      * A list of any errors encountered by the test. (read-only)
      */
     public var errors: [ProjectError]?
+
     /**
      * A list of any warnings encountered by the test. (read-only)
      */
     public var warnings: [ProjectError]?
+
     /**
      * True if this test passsed without errors. (read-only)
      */
@@ -6873,17 +8234,22 @@ public struct LookmlTestResult: SDKModel {
 }
 
 public struct LookModel: SDKModel {
+    private var _id: AnyString?
     /**
      * Model Id (read-only)
      */
-    public var id: String?
+    public var id: String? {
+        get { _id?.value }
+        set { _id = newValue.map(AnyString.init) }
+    }
+
     /**
      * Model Label (read-only)
      */
     public var label: String?
 
     public init(id: String? = nil, label: String? = nil) {
-        self.id = id
+        self._id = id.map(AnyString.init)
         self.label = label
     }
 
@@ -6894,116 +8260,150 @@ public struct LookWithDashboards: SDKModel {
      * Operations the current user is able to perform on this object (read-only)
      */
     public var can: StringDictionary<Bool>?
+
     /**
      * Id of content metadata (read-only)
      */
     public var content_metadata_id: Int64?
+
     /**
      * Unique Id (read-only)
      */
     public var id: Int64?
+
     /**
      * Look Title
      */
     public var title: String?
+
     /**
      * User Id
      */
     public var user_id: Int64?
+
     /**
      * Content Favorite Id (read-only)
      */
     public var content_favorite_id: Int64?
+
     /**
      * Time that the Look was created. (read-only)
      */
     public var created_at: Date?
+
     /**
      * Whether or not a look is 'soft' deleted.
      */
     public var deleted: Bool?
+
     /**
      * Time that the Look was deleted. (read-only)
      */
     public var deleted_at: Date?
+
     /**
      * Id of User that deleted the look. (read-only)
      */
     public var deleter_id: Int64?
+
     /**
      * Description
      */
     public var description: String?
+
     /**
      * Embed Url (read-only)
      */
     public var embed_url: String?
+
     /**
      * Excel File Url (read-only)
      */
     public var excel_file_url: String?
+
     /**
      * Number of times favorited (read-only)
      */
     public var favorite_count: Int64?
+
     /**
      * Google Spreadsheet Formula (read-only)
      */
     public var google_spreadsheet_formula: String?
+
     /**
      * Image Embed Url (read-only)
      */
     public var image_embed_url: String?
+
     /**
      * auto-run query when Look viewed
      */
     public var is_run_on_load: Bool?
+
     /**
      * Time that the Look was last accessed by any user (read-only)
      */
     public var last_accessed_at: Date?
+
     /**
      * Id of User that last updated the look. (read-only)
      */
     public var last_updater_id: Int64?
+
     /**
      * Time last viewed in the Looker web UI (read-only)
      */
     public var last_viewed_at: Date?
+
     public var model: LookModel?
+
     /**
      * Is Public
      */
     public var `public`: Bool?
+
     /**
      * Public Slug (read-only)
      */
     public var public_slug: String?
+
     /**
      * Public Url (read-only)
      */
     public var public_url: String?
+
     /**
      * Query Id
      */
     public var query_id: Int64?
+
     /**
      * Short Url (read-only)
      */
     public var short_url: String?
+
     public var folder: FolderBase?
+
+    private var _folder_id: AnyString?
     /**
      * Folder Id
      */
-    public var folder_id: String?
+    public var folder_id: String? {
+        get { _folder_id?.value }
+        set { _folder_id = newValue.map(AnyString.init) }
+    }
+
     /**
      * Time that the Look was updated. (read-only)
      */
     public var updated_at: Date?
+
     /**
      * Number of times viewed in the Looker web UI (read-only)
      */
     public var view_count: Int64?
+
     /**
      * Dashboards (read-only)
      */
@@ -7037,7 +8437,7 @@ public struct LookWithDashboards: SDKModel {
         self.query_id = query_id
         self.short_url = short_url
         self.folder = folder
-        self.folder_id = folder_id
+        self._folder_id = folder_id.map(AnyString.init)
         self.updated_at = updated_at
         self.view_count = view_count
         self.dashboards = dashboards
@@ -7050,117 +8450,152 @@ public struct LookWithQuery: SDKModel {
      * Operations the current user is able to perform on this object (read-only)
      */
     public var can: StringDictionary<Bool>?
+
     /**
      * Id of content metadata (read-only)
      */
     public var content_metadata_id: Int64?
+
     /**
      * Unique Id (read-only)
      */
     public var id: Int64?
+
     /**
      * Look Title
      */
     public var title: String?
+
     /**
      * User Id
      */
     public var user_id: Int64?
+
     /**
      * Content Favorite Id (read-only)
      */
     public var content_favorite_id: Int64?
+
     /**
      * Time that the Look was created. (read-only)
      */
     public var created_at: Date?
+
     /**
      * Whether or not a look is 'soft' deleted.
      */
     public var deleted: Bool?
+
     /**
      * Time that the Look was deleted. (read-only)
      */
     public var deleted_at: Date?
+
     /**
      * Id of User that deleted the look. (read-only)
      */
     public var deleter_id: Int64?
+
     /**
      * Description
      */
     public var description: String?
+
     /**
      * Embed Url (read-only)
      */
     public var embed_url: String?
+
     /**
      * Excel File Url (read-only)
      */
     public var excel_file_url: String?
+
     /**
      * Number of times favorited (read-only)
      */
     public var favorite_count: Int64?
+
     /**
      * Google Spreadsheet Formula (read-only)
      */
     public var google_spreadsheet_formula: String?
+
     /**
      * Image Embed Url (read-only)
      */
     public var image_embed_url: String?
+
     /**
      * auto-run query when Look viewed
      */
     public var is_run_on_load: Bool?
+
     /**
      * Time that the Look was last accessed by any user (read-only)
      */
     public var last_accessed_at: Date?
+
     /**
      * Id of User that last updated the look. (read-only)
      */
     public var last_updater_id: Int64?
+
     /**
      * Time last viewed in the Looker web UI (read-only)
      */
     public var last_viewed_at: Date?
+
     public var model: LookModel?
+
     /**
      * Is Public
      */
     public var `public`: Bool?
+
     /**
      * Public Slug (read-only)
      */
     public var public_slug: String?
+
     /**
      * Public Url (read-only)
      */
     public var public_url: String?
+
     /**
      * Query Id
      */
     public var query_id: Int64?
+
     /**
      * Short Url (read-only)
      */
     public var short_url: String?
+
     public var folder: FolderBase?
+
+    private var _folder_id: AnyString?
     /**
      * Folder Id
      */
-    public var folder_id: String?
+    public var folder_id: String? {
+        get { _folder_id?.value }
+        set { _folder_id = newValue.map(AnyString.init) }
+    }
+
     /**
      * Time that the Look was updated. (read-only)
      */
     public var updated_at: Date?
+
     /**
      * Number of times viewed in the Looker web UI (read-only)
      */
     public var view_count: Int64?
+
     public var query: Query?
+
     /**
      * Url (read-only)
      */
@@ -7194,7 +8629,7 @@ public struct LookWithQuery: SDKModel {
         self.query_id = query_id
         self.short_url = short_url
         self.folder = folder
-        self.folder_id = folder_id
+        self._folder_id = folder_id.map(AnyString.init)
         self.updated_at = updated_at
         self.view_count = view_count
         self.query = query
@@ -7208,14 +8643,17 @@ public struct Manifest: SDKModel {
      * Operations the current user is able to perform on this object (read-only)
      */
     public var can: StringDictionary<Bool>?
+
     /**
      * Manifest project name (read-only)
      */
     public var name: String?
+
     /**
      * Imports for a project (read-only)
      */
     public var imports: [ImportedProject]?
+
     public var localization_settings: LocalizationSettings?
 
     public init(can: StringDictionary<Bool>? = nil, name: String? = nil, imports: [ImportedProject]? = nil, localization_settings: LocalizationSettings? = nil) {
@@ -7232,6 +8670,7 @@ public struct MergeFields: SDKModel {
      * Field name to map onto in the merged results
      */
     public var field_name: String?
+
     /**
      * Field name from the source query
      */
@@ -7249,38 +8688,51 @@ public struct MergeQuery: SDKModel {
      * Operations the current user is able to perform on this object (read-only)
      */
     public var can: StringDictionary<Bool>?
+
     /**
      * Column Limit
      */
     public var column_limit: String?
+
     /**
      * Dynamic Fields
      */
     public var dynamic_fields: String?
+
+    private var _id: AnyString?
     /**
      * Unique Id (read-only)
      */
-    public var id: String?
+    public var id: String? {
+        get { _id?.value }
+        set { _id = newValue.map(AnyString.init) }
+    }
+
     /**
      * Pivots
      */
     public var pivots: [String]?
+
     /**
      * Unique to get results (read-only)
      */
     public var result_maker_id: Int64?
+
     /**
      * Sorts
      */
     public var sorts: [String]?
+
     /**
      * Source Queries defining the results to be merged.
      */
     public var source_queries: [MergeQuerySourceQuery]?
+
     /**
      * Total
      */
     public var total: Bool?
+
     /**
      * Visualization Config
      */
@@ -7290,7 +8742,7 @@ public struct MergeQuery: SDKModel {
         self.can = can
         self.column_limit = column_limit
         self.dynamic_fields = dynamic_fields
-        self.id = id
+        self._id = id.map(AnyString.init)
         self.pivots = pivots
         self.result_maker_id = result_maker_id
         self.sorts = sorts
@@ -7306,10 +8758,12 @@ public struct MergeQuerySourceQuery: SDKModel {
      * An array defining which fields of the source query are mapped onto fields of the merge query
      */
     public var merge_fields: [MergeFields]?
+
     /**
      * Display name
      */
     public var name: String?
+
     /**
      * Id of the query to merge
      */
@@ -7328,6 +8782,7 @@ public struct MobileSettings: SDKModel {
      * Specifies whether the force authentication option is enabled for mobile (read-only)
      */
     public var mobile_force_authentication: Bool?
+
     /**
      * Specifies whether mobile access for this instance is enabled. (read-only)
      */
@@ -7345,10 +8800,12 @@ public struct Model: SDKModel {
      *  (read-only)
      */
     public var connection: String?
+
     /**
      *  (read-only)
      */
     public var name: String?
+
     /**
      * Array of named value formats (read-only)
      */
@@ -7367,18 +8824,22 @@ public struct ModelFieldSuggestions: SDKModel {
      * List of suggestions (read-only)
      */
     public var suggestions: [String]?
+
     /**
      * Error message (read-only)
      */
     public var error: String?
+
     /**
      * True if result came from the cache (read-only)
      */
     public var from_cache: Bool?
+
     /**
      * True if this was a hit limit (read-only)
      */
     public var hit_limit: Bool?
+
     /**
      * True if calcite was used (read-only)
      */
@@ -7399,14 +8860,17 @@ public struct ModelNamedValueFormats: SDKModel {
      *  (read-only)
      */
     public var format_string: String?
+
     /**
      *  (read-only)
      */
     public var label: String?
+
     /**
      *  (read-only)
      */
     public var name: String?
+
     /**
      *  (read-only)
      */
@@ -7426,23 +8890,29 @@ public struct ModelSet: SDKModel {
      * Operations the current user is able to perform on this object (read-only)
      */
     public var can: StringDictionary<Bool>?
+
     /**
      *  (read-only)
      */
     public var all_access: Bool?
+
     /**
      *  (read-only)
      */
     public var built_in: Bool?
+
     /**
      * Unique Id (read-only)
      */
     public var id: Int64?
+
     public var models: [String]?
+
     /**
      * Name of ModelSet
      */
     public var name: String?
+
     /**
      * Link to get this item (read-only)
      */
@@ -7465,14 +8935,19 @@ public struct ModelsNotValidated: SDKModel {
      * Model name (read-only)
      */
     public var name: String?
+
+    private var _project_file_id: AnyString?
     /**
      * Project file (read-only)
      */
-    public var project_file_id: String?
+    public var project_file_id: String? {
+        get { _project_file_id?.value }
+        set { _project_file_id = newValue.map(AnyString.init) }
+    }
 
     public init(name: String? = nil, project_file_id: String? = nil) {
         self.name = name
-        self.project_file_id = project_file_id
+        self._project_file_id = project_file_id.map(AnyString.init)
     }
 
 }
@@ -7498,34 +8973,46 @@ public struct OauthClientApp: SDKModel {
      * Operations the current user is able to perform on this object (read-only)
      */
     public var can: StringDictionary<Bool>?
+
+    private var _client_guid: AnyString?
     /**
      * The globally unique id of this application (read-only)
      */
-    public var client_guid: String?
+    public var client_guid: String? {
+        get { _client_guid?.value }
+        set { _client_guid = newValue.map(AnyString.init) }
+    }
+
     /**
      * The uri with which this application will receive an auth code by browser redirect.
      */
     public var redirect_uri: String?
+
     /**
      * The application's display name
      */
     public var display_name: String?
+
     /**
      * A description of the application that will be displayed to users
      */
     public var description: String?
+
     /**
      * When enabled is true, OAuth2 and API requests will be accepted from this app. When false, all requests from this app will be refused.
      */
     public var enabled: Bool?
+
     /**
      * If set, only Looker users who are members of this group can use this web app with Looker. If group_id is not set, any Looker user may use this app to access this Looker instance
      */
     public var group_id: Int64?
+
     /**
      * All auth codes, access tokens, and refresh tokens issued for this application prior to this date-time for ALL USERS will be invalid. (read-only)
      */
     public var tokens_invalid_before: Date?
+
     /**
      * All users who have been activated to use this app (read-only)
      */
@@ -7533,7 +9020,7 @@ public struct OauthClientApp: SDKModel {
 
     public init(can: StringDictionary<Bool>? = nil, client_guid: String? = nil, redirect_uri: String? = nil, display_name: String? = nil, description: String? = nil, enabled: Bool? = nil, group_id: Int64? = nil, tokens_invalid_before: Date? = nil, activated_users: [UserPublic]? = nil) {
         self.can = can
-        self.client_guid = client_guid
+        self._client_guid = client_guid.map(AnyString.init)
         self.redirect_uri = redirect_uri
         self.display_name = display_name
         self.description = description
@@ -7550,130 +9037,162 @@ public struct OIDCConfig: SDKModel {
      * Operations the current user is able to perform on this object (read-only)
      */
     public var can: StringDictionary<Bool>?
+
     /**
      * Allow alternate email-based login via '/login/email' for admins and for specified users with the 'login_special_email' permission. This option is useful as a fallback during ldap setup, if ldap config problems occur later, or if you need to support some users who are not in your ldap directory. Looker email/password logins are always disabled for regular users when ldap is enabled.
      */
     public var alternate_email_login_allowed: Bool?
+
     /**
      * OpenID Provider Audience
      */
     public var audience: String?
+
     /**
      * Users will not be allowed to login at all unless a role for them is found in OIDC if set to true
      */
     public var auth_requires_role: Bool?
+
     /**
      * OpenID Provider Authorization Url
      */
     public var authorization_endpoint: String?
+
     /**
      * (Write-Only) Array of ids of groups that will be applied to new users the first time they login via OIDC
      */
     public var default_new_user_group_ids: [Int64]?
+
     /**
      * (Read-only) Groups that will be applied to new users the first time they login via OIDC (read-only)
      */
     public var default_new_user_groups: [LkGroup]?
+
     /**
      * (Write-Only) Array of ids of roles that will be applied to new users the first time they login via OIDC
      */
     public var default_new_user_role_ids: [Int64]?
+
     /**
      * (Read-only) Roles that will be applied to new users the first time they login via OIDC (read-only)
      */
     public var default_new_user_roles: [Role]?
+
     /**
      * Enable/Disable OIDC authentication for the server
      */
     public var enabled: Bool?
+
     /**
      * (Read-only) Array of mappings between OIDC Groups and Looker Roles (read-only)
      */
     public var groups: [OIDCGroupRead]?
+
     /**
      * Name of user record attributes used to indicate groups. Used when 'groups_finder_type' is set to 'grouped_attribute_values'
      */
     public var groups_attribute: String?
+
     /**
      * (Read/Write) Array of mappings between OIDC Groups and arrays of Looker Role ids
      */
     public var groups_with_role_ids: [OIDCGroupWrite]?
+
     /**
      * Relying Party Identifier (provided by OpenID Provider)
      */
     public var identifier: String?
+
     /**
      * OpenID Provider Issuer
      */
     public var issuer: String?
+
     /**
      * When this config was last modified (read-only)
      */
     public var modified_at: Date?
+
     /**
      * User id of user who last modified this config (read-only)
      */
     public var modified_by: Int64?
+
     /**
      * Merge first-time oidc login to existing user account by email addresses. When a user logs in for the first time via oidc this option will connect this user into their existing account by finding the account with a matching email address by testing the given types of credentials for existing users. Otherwise a new user account will be created for the user. This list (if provided) must be a comma separated list of string like 'email,ldap,google'
      */
     public var new_user_migration_types: String?
+
     /**
      * Array of scopes to request.
      */
     public var scopes: [String]?
+
     /**
      * (Write-Only) Relying Party Secret (provided by OpenID Provider)
      */
     public var secret: String?
+
     /**
      * Set user roles in Looker based on groups from OIDC
      */
     public var set_roles_from_groups: Bool?
+
     /**
      * Slug to identify configurations that are created in order to run a OIDC config test (read-only)
      */
     public var test_slug: String?
+
     /**
      * OpenID Provider Token Url
      */
     public var token_endpoint: String?
+
     /**
      * Name of user record attributes used to indicate email address field
      */
     public var user_attribute_map_email: String?
+
     /**
      * Name of user record attributes used to indicate first name
      */
     public var user_attribute_map_first_name: String?
+
     /**
      * Name of user record attributes used to indicate last name
      */
     public var user_attribute_map_last_name: String?
+
     /**
      * (Read-only) Array of mappings between OIDC User Attributes and Looker User Attributes (read-only)
      */
     public var user_attributes: [OIDCUserAttributeRead]?
+
     /**
      * (Read/Write) Array of mappings between OIDC User Attributes and arrays of Looker User Attribute ids
      */
     public var user_attributes_with_ids: [OIDCUserAttributeWrite]?
+
     /**
      * OpenID Provider User Information Url
      */
     public var userinfo_endpoint: String?
+
     /**
      * Allow OIDC auth'd users to be members of non-reflected Looker groups. If 'false', user will be removed from non-reflected groups on login.
      */
     public var allow_normal_group_membership: Bool?
+
     /**
      * OIDC auth'd users will inherit roles from non-reflected Looker groups.
      */
     public var allow_roles_from_normal_groups: Bool?
+
     /**
      * Allows roles to be directly assigned to OIDC auth'd users.
      */
     public var allow_direct_roles: Bool?
+
     /**
      * Link to get this item (read-only)
      */
@@ -7722,18 +9241,22 @@ public struct OIDCGroupRead: SDKModel {
      * Unique Id (read-only)
      */
     public var id: Int64?
+
     /**
      * Unique Id of group in Looker (read-only)
      */
     public var looker_group_id: Int64?
+
     /**
      * Name of group in Looker (read-only)
      */
     public var looker_group_name: String?
+
     /**
      * Name of group in OIDC (read-only)
      */
     public var name: String?
+
     /**
      * Looker Roles (read-only)
      */
@@ -7754,18 +9277,22 @@ public struct OIDCGroupWrite: SDKModel {
      * Unique Id
      */
     public var id: Int64?
+
     /**
      * Unique Id of group in Looker (read-only)
      */
     public var looker_group_id: Int64?
+
     /**
      * Name of group in Looker
      */
     public var looker_group_name: String?
+
     /**
      * Name of group in OIDC
      */
     public var name: String?
+
     /**
      * Looker Role Ids
      */
@@ -7786,10 +9313,12 @@ public struct OIDCUserAttributeRead: SDKModel {
      * Name of User Attribute in OIDC (read-only)
      */
     public var name: String?
+
     /**
      * Required to be in OIDC assertion for login to be allowed to succeed (read-only)
      */
     public var required: Bool?
+
     /**
      * Looker User Attributes (read-only)
      */
@@ -7808,10 +9337,12 @@ public struct OIDCUserAttributeWrite: SDKModel {
      * Name of User Attribute in OIDC
      */
     public var name: String?
+
     /**
      * Required to be in OIDC assertion for login to be allowed to succeed
      */
     public var required: Bool?
+
     /**
      * Looker User Attribute Ids
      */
@@ -7830,18 +9361,22 @@ public struct PasswordConfig: SDKModel {
      * Operations the current user is able to perform on this object (read-only)
      */
     public var can: StringDictionary<Bool>?
+
     /**
      * Minimum number of characters required for a new password.  Must be between 7 and 100
      */
     public var min_length: Int64?
+
     /**
      * Require at least one numeric character
      */
     public var require_numeric: Bool?
+
     /**
      * Require at least one uppercase and one lowercase letter
      */
     public var require_upperlower: Bool?
+
     /**
      * Require at least one special character
      */
@@ -7862,14 +9397,17 @@ public struct Permission: SDKModel {
      * Operations the current user is able to perform on this object (read-only)
      */
     public var can: StringDictionary<Bool>?
+
     /**
      * Permission symbol (read-only)
      */
     public var permission: String?
+
     /**
      * Dependency parent symbol (read-only)
      */
     public var parent: String?
+
     /**
      * Description (read-only)
      */
@@ -7889,23 +9427,29 @@ public struct PermissionSet: SDKModel {
      * Operations the current user is able to perform on this object (read-only)
      */
     public var can: StringDictionary<Bool>?
+
     /**
      *  (read-only)
      */
     public var all_access: Bool?
+
     /**
      *  (read-only)
      */
     public var built_in: Bool?
+
     /**
      * Unique Id (read-only)
      */
     public var id: Int64?
+
     /**
      * Name of PermissionSet
      */
     public var name: String?
+
     public var permissions: [String]?
+
     /**
      * Link to get this item (read-only)
      */
@@ -7936,86 +9480,111 @@ public struct Project: SDKModel {
      * Operations the current user is able to perform on this object (read-only)
      */
     public var can: StringDictionary<Bool>?
+
+    private var _id: AnyString?
     /**
      * Project Id (read-only)
      */
-    public var id: String?
+    public var id: String? {
+        get { _id?.value }
+        set { _id = newValue.map(AnyString.init) }
+    }
+
     /**
      * Project display name
      */
     public var name: String?
+
     /**
      * If true the project is configured with a git repository (read-only)
      */
     public var uses_git: Bool?
+
     /**
      * Git remote repository url
      */
     public var git_remote_url: String?
+
     /**
      * Git username for HTTPS authentication. (For production only, if using user attributes.)
      */
     public var git_username: String?
+
     /**
      * (Write-Only) Git password for HTTPS authentication. (For production only, if using user attributes.)
      */
     public var git_password: String?
+
     /**
      * Git production branch name. Defaults to master. Supported only in Looker 21.0 and higher.
      */
     public var git_production_branch_name: String?
+
     /**
      * If true, the project uses a git cookie for authentication.
      */
     public var use_git_cookie_auth: Bool?
+
     /**
      * User attribute name for username in per-user HTTPS authentication.
      */
     public var git_username_user_attribute: String?
+
     /**
      * User attribute name for password in per-user HTTPS authentication.
      */
     public var git_password_user_attribute: String?
+
     /**
      * Name of the git service provider
      */
     public var git_service_name: String?
+
     /**
      * Port that HTTP(S) application server is running on (for PRs, file browsing, etc.)
      */
     public var git_application_server_http_port: Int64?
+
     /**
      * Scheme that is running on application server (for PRs, file browsing, etc.)
      */
     public var git_application_server_http_scheme: String?
+
     /**
      * (Write-Only) Optional secret token with which to authenticate requests to the webhook deploy endpoint. If not set, endpoint is unauthenticated.
      */
     public var deploy_secret: String?
+
     /**
      * (Write-Only) When true, unsets the deploy secret to allow unauthenticated access to the webhook deploy endpoint.
      */
     public var unset_deploy_secret: Bool?
+
     /**
      * The git pull request policy for this project. Valid values are: "off", "links", "recommended", "required".
      */
     public var pull_request_mode: PullRequestMode?
+
     /**
      * Validation policy: If true, the project must pass validation checks before project changes can be committed to the git repository
      */
     public var validation_required: Bool?
+
     /**
      * If true, advanced git release management is enabled for this project
      */
     public var git_release_mgmt_enabled: Bool?
+
     /**
      * Validation policy: If true, the project can be committed with warnings when `validation_required` is true. (`allow_warnings` does nothing if `validation_required` is false).
      */
     public var allow_warnings: Bool?
+
     /**
      * If true the project is an example project and cannot be modified (read-only)
      */
     public var is_example: Bool?
+
     /**
      * Status of dependencies in your manifest & lockfile
      */
@@ -8023,7 +9592,7 @@ public struct Project: SDKModel {
 
     public init(can: StringDictionary<Bool>? = nil, id: String? = nil, name: String? = nil, uses_git: Bool? = nil, git_remote_url: String? = nil, git_username: String? = nil, git_password: String? = nil, git_production_branch_name: String? = nil, use_git_cookie_auth: Bool? = nil, git_username_user_attribute: String? = nil, git_password_user_attribute: String? = nil, git_service_name: String? = nil, git_application_server_http_port: Int64? = nil, git_application_server_http_scheme: String? = nil, deploy_secret: String? = nil, unset_deploy_secret: Bool? = nil, pull_request_mode: PullRequestMode? = nil, validation_required: Bool? = nil, git_release_mgmt_enabled: Bool? = nil, allow_warnings: Bool? = nil, is_example: Bool? = nil, dependency_status: String? = nil) {
         self.can = can
-        self.id = id
+        self._id = id.map(AnyString.init)
         self.name = name
         self.uses_git = uses_git
         self.git_remote_url = git_remote_url
@@ -8053,46 +9622,61 @@ public struct ProjectError: SDKModel {
      * A stable token that uniquely identifies this class of error, ignoring parameter values. Error message text may vary due to parameters or localization, but error codes do not. For example, a "File not found" error will have the same error code regardless of the filename in question or the user's display language (read-only)
      */
     public var code: String?
+
     /**
      * Severity: fatal, error, warning, info, success (read-only)
      */
     public var severity: String?
+
     /**
      * Error classification: syntax, deprecation, model_configuration, etc (read-only)
      */
     public var kind: String?
+
     /**
      * Error message which may contain information such as dashboard or model names that may be considered sensitive in some use cases. Avoid storing or sending this message outside of Looker (read-only)
      */
     public var message: String?
+
     /**
      * The field associated with this error (read-only)
      */
     public var field_name: String?
+
     /**
      * Name of the file containing this error (read-only)
      */
     public var file_path: String?
+
     /**
      * Line number in the file of this error (read-only)
      */
     public var line_number: Int64?
+
+    private var _model_id: AnyString?
     /**
      * The model associated with this error (read-only)
      */
-    public var model_id: String?
+    public var model_id: String? {
+        get { _model_id?.value }
+        set { _model_id = newValue.map(AnyString.init) }
+    }
+
     /**
      * The explore associated with this error (read-only)
      */
     public var explore: String?
+
     /**
      * A link to Looker documentation about this error (read-only)
      */
     public var help_url: String?
+
     /**
      * Error parameters (read-only)
      */
     public var params: StringDictionary<AnyCodable>?
+
     /**
      * A version of the error message that does not contain potentially sensitive information. Suitable for situations in which messages are stored or sent to consumers outside of Looker, such as external logs. Sanitized messages will display "(?)" where sensitive information would appear in the corresponding non-sanitized message (read-only)
      */
@@ -8106,7 +9690,7 @@ public struct ProjectError: SDKModel {
         self.field_name = field_name
         self.file_path = file_path
         self.line_number = line_number
-        self.model_id = model_id
+        self._model_id = model_id.map(AnyString.init)
         self.explore = explore
         self.help_url = help_url
         self.params = params
@@ -8120,39 +9704,51 @@ public struct ProjectFile: SDKModel {
      * Operations the current user is able to perform on this object (read-only)
      */
     public var can: StringDictionary<Bool>?
+
+    private var _id: AnyString?
     /**
      * An opaque token uniquely identifying a file within a project. Avoid parsing or decomposing the text of this token. This token is stable within a Looker release but may change between Looker releases (read-only)
      */
-    public var id: String?
+    public var id: String? {
+        get { _id?.value }
+        set { _id = newValue.map(AnyString.init) }
+    }
+
     /**
      * Path, file name, and extension of the file relative to the project root directory (read-only)
      */
     public var path: String?
+
     /**
      * Display name (read-only)
      */
     public var title: String?
+
     /**
      * File type: model, view, etc (read-only)
      */
     public var type: String?
+
     /**
      * The extension of the file: .view.lkml, .model.lkml, etc (read-only)
      */
     public var `extension`: String?
+
     /**
      * File mime type (read-only)
      */
     public var mime_type: String?
+
     /**
      * State of editability for the file. (read-only)
      */
     public var editable: Bool?
+
     public var git_status: GitStatus?
 
     public init(can: StringDictionary<Bool>? = nil, id: String? = nil, path: String? = nil, title: String? = nil, type: String? = nil, `extension`: String? = nil, mime_type: String? = nil, editable: Bool? = nil, git_status: GitStatus? = nil) {
         self.can = can
-        self.id = id
+        self._id = id.map(AnyString.init)
         self.path = path
         self.title = title
         self.type = type
@@ -8169,14 +9765,17 @@ public struct ProjectValidation: SDKModel {
      * A list of project errors (read-only)
      */
     public var errors: [ProjectError]?
+
     /**
      * A hash value computed from the project's current state (read-only)
      */
     public var project_digest: String?
+
     /**
      * A list of models which were not fully validated (read-only)
      */
     public var models_not_validated: [ModelsNotValidated]?
+
     /**
      * Duration of project validation in seconds (read-only)
      */
@@ -8196,18 +9795,22 @@ public struct ProjectValidationCache: SDKModel {
      * A list of project errors (read-only)
      */
     public var errors: [ProjectError]?
+
     /**
      * A hash value computed from the project's current state (read-only)
      */
     public var project_digest: String?
+
     /**
      * A list of models which were not fully validated (read-only)
      */
     public var models_not_validated: [ModelsNotValidated]?
+
     /**
      * Duration of project validation in seconds (read-only)
      */
     public var computation_time: Float?
+
     /**
      * If true, the cached project validation results are no longer accurate because the project has changed since the cached results were calculated (read-only)
      */
@@ -8228,27 +9831,42 @@ public struct ProjectWorkspace: SDKModel {
      * Operations the current user is able to perform on this object (read-only)
      */
     public var can: StringDictionary<Bool>?
+
+    private var _project_id: AnyString?
     /**
      * The id of the project (read-only)
      */
-    public var project_id: String?
+    public var project_id: String? {
+        get { _project_id?.value }
+        set { _project_id = newValue.map(AnyString.init) }
+    }
+
+    private var _workspace_id: AnyString?
     /**
      * The id of the local workspace containing the project files (read-only)
      */
-    public var workspace_id: String?
+    public var workspace_id: String? {
+        get { _workspace_id?.value }
+        set { _workspace_id = newValue.map(AnyString.init) }
+    }
+
     /**
      * The status of the local git directory (read-only)
      */
     public var git_status: String?
+
     /**
      * Git head revision name (read-only)
      */
     public var git_head: String?
+
     /**
      * Status of the dependencies in your project. Valid values are: "lock_optional", "lock_required", "lock_error", "install_none". (read-only)
      */
     public var dependency_status: DependencyStatus?
+
     public var git_branch: GitBranch?
+
     /**
      * The lookml syntax used by all files in this project (read-only)
      */
@@ -8256,8 +9874,8 @@ public struct ProjectWorkspace: SDKModel {
 
     public init(can: StringDictionary<Bool>? = nil, project_id: String? = nil, workspace_id: String? = nil, git_status: String? = nil, git_head: String? = nil, dependency_status: DependencyStatus? = nil, git_branch: GitBranch? = nil, lookml_type: String? = nil) {
         self.can = can
-        self.project_id = project_id
-        self.workspace_id = workspace_id
+        self._project_id = project_id.map(AnyString.init)
+        self._workspace_id = workspace_id.map(AnyString.init)
         self.git_status = git_status
         self.git_head = git_head
         self.dependency_status = dependency_status
@@ -8282,102 +9900,131 @@ public struct Query: SDKModel {
      * Operations the current user is able to perform on this object (read-only)
      */
     public var can: StringDictionary<Bool>?
+
     /**
      * Unique Id (read-only)
      */
     public var id: Int64?
+
     /**
      * Model
      */
     public var model: String
+
     /**
      * Explore Name
      */
     public var view: String
+
     /**
      * Fields
      */
     public var fields: [String]?
+
     /**
      * Pivots
      */
     public var pivots: [String]?
+
     /**
      * Fill Fields
      */
     public var fill_fields: [String]?
+
     /**
      * Filters
      */
     public var filters: StringDictionary<AnyCodable>?
+
     /**
      * Filter Expression
      */
     public var filter_expression: String?
+
     /**
      * Sorting for the query results. Use the format `["view.field", ...]` to sort on fields in ascending order. Use the format `["view.field desc", ...]` to sort on fields in descending order. Use `["__UNSORTED__"]` (2 underscores before and after) to disable sorting entirely. Empty sorts `[]` will trigger a default sort.
      */
     public var sorts: [String]?
+
     /**
      * Limit
      */
     public var limit: String?
+
     /**
      * Column Limit
      */
     public var column_limit: String?
+
     /**
      * Total
      */
     public var total: Bool?
+
     /**
      * Raw Total
      */
     public var row_total: String?
+
     /**
      * Fields on which to run subtotals
      */
     public var subtotals: [String]?
+
     /**
      * Visualization configuration properties. These properties are typically opaque and differ based on the type of visualization used. There is no specified set of allowed keys. The values can be any type supported by JSON. A "type" key with a string value is often present, and is used by Looker to determine which visualization to present. Visualizations ignore unknown vis_config properties.
      */
     public var vis_config: StringDictionary<AnyCodable>?
+
     /**
      * The filter_config represents the state of the filter UI on the explore page for a given query. When running a query via the Looker UI, this parameter takes precedence over "filters". When creating a query or modifying an existing query, "filter_config" should be set to null. Setting it to any other value could cause unexpected filtering behavior. The format should be considered opaque.
      */
     public var filter_config: StringDictionary<AnyCodable>?
+
     /**
      * Visible UI Sections
      */
     public var visible_ui_sections: String?
+
     /**
      * Slug (read-only)
      */
     public var slug: String?
+
     /**
      * Dynamic Fields
      */
     public var dynamic_fields: String?
+
+    private var _client_id: AnyString?
     /**
      * Client Id: used to generate shortened explore URLs. If set by client, must be a unique 22 character alphanumeric string. Otherwise one will be generated.
      */
-    public var client_id: String?
+    public var client_id: String? {
+        get { _client_id?.value }
+        set { _client_id = newValue.map(AnyString.init) }
+    }
+
     /**
      * Share Url (read-only)
      */
     public var share_url: String?
+
     /**
      * Expanded Share Url (read-only)
      */
     public var expanded_share_url: String?
+
     /**
      * Expanded Url (read-only)
      */
     public var url: String?
+
     /**
      * Query Timezone
      */
     public var query_timezone: String?
+
     /**
      * Has Table Calculations (read-only)
      */
@@ -8404,7 +10051,7 @@ public struct Query: SDKModel {
         self.visible_ui_sections = visible_ui_sections
         self.slug = slug
         self.dynamic_fields = dynamic_fields
-        self.client_id = client_id
+        self._client_id = client_id.map(AnyString.init)
         self.share_url = share_url
         self.expanded_share_url = expanded_share_url
         self.url = url
@@ -8423,71 +10070,97 @@ public struct QueryTask: SDKModel {
      * Operations the current user is able to perform on this object (read-only)
      */
     public var can: StringDictionary<Bool>?
+
+    private var _id: AnyString?
     /**
      * Unique Id (read-only)
      */
-    public var id: String?
+    public var id: String? {
+        get { _id?.value }
+        set { _id = newValue.map(AnyString.init) }
+    }
+
     /**
      * Id of query
      */
     public var query_id: Int64?
+
     public var query: Query?
+
     /**
      * whether or not to generate links in the query response.
      */
     public var generate_links: Bool?
+
     /**
      * Use production models to run query (even is user is in dev mode).
      */
     public var force_production: Bool?
+
     /**
      * Prefix to use for drill links.
      */
     public var path_prefix: String?
+
     /**
      * Whether or not to use the cache
      */
     public var cache: Bool?
+
     /**
      * Whether or not to run table calculations on the server
      */
     public var server_table_calcs: Bool?
+
     /**
      * Retrieve any results from cache even if the results have expired.
      */
     public var cache_only: Bool?
+
     /**
      * cache key used to cache query. (read-only)
      */
     public var cache_key: String?
+
     /**
      * Status of query task.
      */
     public var status: String?
+
     /**
      * Source of query task.
      */
     public var source: String?
+
     /**
      * Runtime of prior queries. (read-only)
      */
     public var runtime: Float?
+
     /**
      * Rebuild PDTS used in query.
      */
     public var rebuild_pdts: Bool?
+
     /**
      * Source of the results of the query. (read-only)
      */
     public var result_source: String?
+
     /**
      * Id of look associated with query.
      */
     public var look_id: Int64?
+
+    private var _dashboard_id: AnyString?
     /**
      * Id of dashboard associated with query.
      */
-    public var dashboard_id: String?
+    public var dashboard_id: String? {
+        get { _dashboard_id?.value }
+        set { _dashboard_id = newValue.map(AnyString.init) }
+    }
+
     /**
      * The data format of the query results. (read-only)
      */
@@ -8495,7 +10168,7 @@ public struct QueryTask: SDKModel {
 
     public init(can: StringDictionary<Bool>? = nil, id: String? = nil, query_id: Int64? = nil, query: Query? = nil, generate_links: Bool? = nil, force_production: Bool? = nil, path_prefix: String? = nil, cache: Bool? = nil, server_table_calcs: Bool? = nil, cache_only: Bool? = nil, cache_key: String? = nil, status: String? = nil, source: String? = nil, runtime: Float? = nil, rebuild_pdts: Bool? = nil, result_source: String? = nil, look_id: Int64? = nil, dashboard_id: String? = nil, result_format: String? = nil) {
         self.can = can
-        self.id = id
+        self._id = id.map(AnyString.init)
         self.query_id = query_id
         self.query = query
         self.generate_links = generate_links
@@ -8511,7 +10184,7 @@ public struct QueryTask: SDKModel {
         self.rebuild_pdts = rebuild_pdts
         self.result_source = result_source
         self.look_id = look_id
-        self.dashboard_id = dashboard_id
+        self._dashboard_id = dashboard_id.map(AnyString.init)
         self.result_format = result_format
     }
 
@@ -8522,74 +10195,100 @@ public struct RenderTask: SDKModel {
      * Operations the current user is able to perform on this object (read-only)
      */
     public var can: StringDictionary<Bool>?
+
     /**
      * Date/Time render task was created (read-only)
      */
     public var created_at: String?
+
     /**
      * Filter values to apply to the dashboard queries, in URL query format (read-only)
      */
     public var dashboard_filters: String?
+
     /**
      * Id of dashboard to render (read-only)
      */
     public var dashboard_id: Int64?
+
     /**
      * Dashboard layout style: single_column or tiled (read-only)
      */
     public var dashboard_style: String?
+
     /**
      * Date/Time render task was completed (read-only)
      */
     public var finalized_at: String?
+
     /**
      * Output height in pixels. Flowed layouts may ignore this value. (read-only)
      */
     public var height: Int64?
+
+    private var _id: AnyString?
     /**
      * Id of this render task (read-only)
      */
-    public var id: String?
+    public var id: String? {
+        get { _id?.value }
+        set { _id = newValue.map(AnyString.init) }
+    }
+
     /**
      * Id of look to render (read-only)
      */
     public var look_id: Int64?
+
+    private var _lookml_dashboard_id: AnyString?
     /**
      * Id of lookml dashboard to render (read-only)
      */
-    public var lookml_dashboard_id: String?
+    public var lookml_dashboard_id: String? {
+        get { _lookml_dashboard_id?.value }
+        set { _lookml_dashboard_id = newValue.map(AnyString.init) }
+    }
+
     /**
      * Id of query to render (read-only)
      */
     public var query_id: Int64?
+
     /**
      * Number of seconds elapsed running queries (read-only)
      */
     public var query_runtime: Double?
+
     /**
      * Number of seconds elapsed rendering data (read-only)
      */
     public var render_runtime: Double?
+
     /**
      * Output format: pdf, png, or jpg (read-only)
      */
     public var result_format: String?
+
     /**
      * Total seconds elapsed for render task (read-only)
      */
     public var runtime: Double?
+
     /**
      * Render task status: enqueued_for_query, querying, enqueued_for_render, rendering, success, failure (read-only)
      */
     public var status: String?
+
     /**
      * Additional information about the current status (read-only)
      */
     public var status_detail: String?
+
     /**
      * The user account permissions in which the render task will execute (read-only)
      */
     public var user_id: Int64?
+
     /**
      * Output width in pixels (read-only)
      */
@@ -8603,9 +10302,9 @@ public struct RenderTask: SDKModel {
         self.dashboard_style = dashboard_style
         self.finalized_at = finalized_at
         self.height = height
-        self.id = id
+        self._id = id.map(AnyString.init)
         self.look_id = look_id
-        self.lookml_dashboard_id = lookml_dashboard_id
+        self._lookml_dashboard_id = lookml_dashboard_id.map(AnyString.init)
         self.query_id = query_id
         self.query_runtime = query_runtime
         self.render_runtime = render_runtime
@@ -8624,30 +10323,45 @@ public struct RepositoryCredential: SDKModel {
      * Operations the current user is able to perform on this object (read-only)
      */
     public var can: StringDictionary<Bool>?
+
+    private var _id: AnyString?
     /**
      * Unique Id (read-only)
      */
-    public var id: String?
+    public var id: String? {
+        get { _id?.value }
+        set { _id = newValue.map(AnyString.init) }
+    }
+
+    private var _root_project_id: AnyString?
     /**
      * Root project Id (read-only)
      */
-    public var root_project_id: String?
+    public var root_project_id: String? {
+        get { _root_project_id?.value }
+        set { _root_project_id = newValue.map(AnyString.init) }
+    }
+
     /**
      * Git remote repository url (read-only)
      */
     public var remote_url: String?
+
     /**
      * Git username for HTTPS authentication.
      */
     public var git_username: String?
+
     /**
      * (Write-Only) Git password for HTTPS authentication.
      */
     public var git_password: String?
+
     /**
      * Public deploy key for SSH authentication.
      */
     public var ssh_public_key: String?
+
     /**
      * Whether the credentials have been configured for the Git Repository. (read-only)
      */
@@ -8655,8 +10369,8 @@ public struct RepositoryCredential: SDKModel {
 
     public init(can: StringDictionary<Bool>? = nil, id: String? = nil, root_project_id: String? = nil, remote_url: String? = nil, git_username: String? = nil, git_password: String? = nil, ssh_public_key: String? = nil, is_configured: Bool? = nil) {
         self.can = can
-        self.id = id
-        self.root_project_id = root_project_id
+        self._id = id.map(AnyString.init)
+        self._root_project_id = root_project_id.map(AnyString.init)
         self.remote_url = remote_url
         self.git_username = git_username
         self.git_password = git_password
@@ -8687,14 +10401,17 @@ public struct ResultMakerFilterables: SDKModel {
      * The model this filterable comes from (used for field suggestions). (read-only)
      */
     public var model: String?
+
     /**
      * The view this filterable comes from (used for field suggestions). (read-only)
      */
     public var view: String?
+
     /**
      * The name of the filterable thing (Query or Merged Results). (read-only)
      */
     public var name: String?
+
     /**
      * array of dashboard_filter_name: and field: objects. (read-only)
      */
@@ -8714,6 +10431,7 @@ public struct ResultMakerFilterablesListen: SDKModel {
      * The name of a dashboard filter to listen to.
      */
     public var dashboard_filter_name: String?
+
     /**
      * The name of the field in the filterable to filter with the value of the dashboard filter.
      */
@@ -8731,35 +10449,52 @@ public struct ResultMakerWithIdVisConfigAndDynamicFields: SDKModel {
      * Unique Id. (read-only)
      */
     public var id: Int64?
+
     /**
      * JSON string of dynamic field information. (read-only)
      */
     public var dynamic_fields: String?
+
     /**
      * array of items that can be filtered and information about them. (read-only)
      */
     public var filterables: [ResultMakerFilterables]?
+
     /**
      * Sorts of the constituent Look, Query, or Merge Query (read-only)
      */
     public var sorts: [String]?
+
+    private var _merge_result_id: AnyString?
     /**
      * ID of merge result if this is a merge_result. (read-only)
      */
-    public var merge_result_id: String?
+    public var merge_result_id: String? {
+        get { _merge_result_id?.value }
+        set { _merge_result_id = newValue.map(AnyString.init) }
+    }
+
     /**
      * Total of the constituent Look, Query, or Merge Query (read-only)
      */
     public var total: Bool?
+
     /**
      * ID of query if this is a query. (read-only)
      */
     public var query_id: Int64?
+
+    private var _sql_query_id: AnyString?
     /**
      * ID of SQL Query if this is a SQL Runner Query (read-only)
      */
-    public var sql_query_id: String?
+    public var sql_query_id: String? {
+        get { _sql_query_id?.value }
+        set { _sql_query_id = newValue.map(AnyString.init) }
+    }
+
     public var query: Query?
+
     /**
      * Vis config of the constituent Query, or Merge Query. (read-only)
      */
@@ -8770,10 +10505,10 @@ public struct ResultMakerWithIdVisConfigAndDynamicFields: SDKModel {
         self.dynamic_fields = dynamic_fields
         self.filterables = filterables
         self.sorts = sorts
-        self.merge_result_id = merge_result_id
+        self._merge_result_id = merge_result_id.map(AnyString.init)
         self.total = total
         self.query_id = query_id
-        self.sql_query_id = sql_query_id
+        self._sql_query_id = sql_query_id.map(AnyString.init)
         self.query = query
         self.vis_config = vis_config
     }
@@ -8785,28 +10520,36 @@ public struct Role: SDKModel {
      * Operations the current user is able to perform on this object (read-only)
      */
     public var can: StringDictionary<Bool>?
+
     /**
      * Unique Id (read-only)
      */
     public var id: Int64?
+
     /**
      * Name of Role
      */
     public var name: String?
+
     public var permission_set: PermissionSet?
+
     /**
      * (Write-Only) Id of permission set
      */
     public var permission_set_id: Int64?
+
     public var model_set: ModelSet?
+
     /**
      * (Write-Only) Id of model set
      */
     public var model_set_id: Int64?
+
     /**
      * Link to get this item (read-only)
      */
     public var url: String?
+
     /**
      * Link to get list of users with this role (read-only)
      */
@@ -8831,32 +10574,41 @@ public struct RoleSearch: SDKModel {
      * Operations the current user is able to perform on this object (read-only)
      */
     public var can: StringDictionary<Bool>?
+
     /**
      * Unique Id (read-only)
      */
     public var id: Int64?
+
     /**
      * Name of Role
      */
     public var name: String?
+
     public var permission_set: PermissionSet?
+
     /**
      * (Write-Only) Id of permission set
      */
     public var permission_set_id: Int64?
+
     public var model_set: ModelSet?
+
     /**
      * (Write-Only) Id of model set
      */
     public var model_set_id: Int64?
+
     /**
      * Count of users with this role (read-only)
      */
     public var user_count: Int64?
+
     /**
      * Link to get this item (read-only)
      */
     public var url: String?
+
     /**
      * Link to get list of users with this role (read-only)
      */
@@ -8882,70 +10634,106 @@ public struct RunningQueries: SDKModel {
      * Operations the current user is able to perform on this object (read-only)
      */
     public var can: StringDictionary<Bool>?
+
     /**
      * Unique Id (read-only)
      */
     public var id: Int64?
+
     public var user: UserPublic?
+
     public var query: Query?
+
     public var sql_query: SqlQuery?
+
     public var look: LookBasic?
+
     /**
      * Date/Time Query was initiated (read-only)
      */
     public var created_at: String?
+
     /**
      * Date/Time Query was completed (read-only)
      */
     public var completed_at: String?
+
+    private var _query_id: AnyString?
     /**
      * Query Id (read-only)
      */
-    public var query_id: String?
+    public var query_id: String? {
+        get { _query_id?.value }
+        set { _query_id = newValue.map(AnyString.init) }
+    }
+
     /**
      * Source (look, dashboard, queryrunner, explore, etc.) (read-only)
      */
     public var source: String?
+
+    private var _node_id: AnyString?
     /**
      * Node Id (read-only)
      */
-    public var node_id: String?
+    public var node_id: String? {
+        get { _node_id?.value }
+        set { _node_id = newValue.map(AnyString.init) }
+    }
+
     /**
      * Slug (read-only)
      */
     public var slug: String?
+
+    private var _query_task_id: AnyString?
     /**
      * ID of a Query Task (read-only)
      */
-    public var query_task_id: String?
+    public var query_task_id: String? {
+        get { _query_task_id?.value }
+        set { _query_task_id = newValue.map(AnyString.init) }
+    }
+
     /**
      * Cache Key (read-only)
      */
     public var cache_key: String?
+
     /**
      * Connection (read-only)
      */
     public var connection_name: String?
+
     /**
      * Dialect (read-only)
      */
     public var dialect: String?
+
+    private var _connection_id: AnyString?
     /**
      * Connection ID (read-only)
      */
-    public var connection_id: String?
+    public var connection_id: String? {
+        get { _connection_id?.value }
+        set { _connection_id = newValue.map(AnyString.init) }
+    }
+
     /**
      * Additional Information(Error message or verbose status) (read-only)
      */
     public var message: String?
+
     /**
      * Status description (read-only)
      */
     public var status: String?
+
     /**
      * Number of seconds elapsed running the Query (read-only)
      */
     public var runtime: Double?
+
     /**
      * SQL text of the query as run (read-only)
      */
@@ -8960,15 +10748,15 @@ public struct RunningQueries: SDKModel {
         self.look = look
         self.created_at = created_at
         self.completed_at = completed_at
-        self.query_id = query_id
+        self._query_id = query_id.map(AnyString.init)
         self.source = source
-        self.node_id = node_id
+        self._node_id = node_id.map(AnyString.init)
         self.slug = slug
-        self.query_task_id = query_task_id
+        self._query_task_id = query_task_id.map(AnyString.init)
         self.cache_key = cache_key
         self.connection_name = connection_name
         self.dialect = dialect
-        self.connection_id = connection_id
+        self._connection_id = connection_id.map(AnyString.init)
         self.message = message
         self.status = status
         self.runtime = runtime
@@ -8982,130 +10770,162 @@ public struct SamlConfig: SDKModel {
      * Operations the current user is able to perform on this object (read-only)
      */
     public var can: StringDictionary<Bool>?
+
     /**
      * Enable/Disable Saml authentication for the server
      */
     public var enabled: Bool?
+
     /**
      * Identity Provider Certificate (provided by IdP)
      */
     public var idp_cert: String?
+
     /**
      * Identity Provider Url (provided by IdP)
      */
     public var idp_url: String?
+
     /**
      * Identity Provider Issuer (provided by IdP)
      */
     public var idp_issuer: String?
+
     /**
      * Identity Provider Audience (set in IdP config). Optional in Looker. Set this only if you want Looker to validate the audience value returned by the IdP.
      */
     public var idp_audience: String?
+
     /**
      * Count of seconds of clock drift to allow when validating timestamps of assertions.
      */
     public var allowed_clock_drift: Int64?
+
     /**
      * Name of user record attributes used to indicate email address field
      */
     public var user_attribute_map_email: String?
+
     /**
      * Name of user record attributes used to indicate first name
      */
     public var user_attribute_map_first_name: String?
+
     /**
      * Name of user record attributes used to indicate last name
      */
     public var user_attribute_map_last_name: String?
+
     /**
      * Merge first-time saml login to existing user account by email addresses. When a user logs in for the first time via saml this option will connect this user into their existing account by finding the account with a matching email address by testing the given types of credentials for existing users. Otherwise a new user account will be created for the user. This list (if provided) must be a comma separated list of string like 'email,ldap,google'
      */
     public var new_user_migration_types: String?
+
     /**
      * Allow alternate email-based login via '/login/email' for admins and for specified users with the 'login_special_email' permission. This option is useful as a fallback during ldap setup, if ldap config problems occur later, or if you need to support some users who are not in your ldap directory. Looker email/password logins are always disabled for regular users when ldap is enabled.
      */
     public var alternate_email_login_allowed: Bool?
+
     /**
      * Slug to identify configurations that are created in order to run a Saml config test (read-only)
      */
     public var test_slug: String?
+
     /**
      * When this config was last modified (read-only)
      */
     public var modified_at: String?
+
     /**
      * User id of user who last modified this config (read-only)
      */
     public var modified_by: String?
+
     /**
      * (Read-only) Roles that will be applied to new users the first time they login via Saml (read-only)
      */
     public var default_new_user_roles: [Role]?
+
     /**
      * (Read-only) Groups that will be applied to new users the first time they login via Saml (read-only)
      */
     public var default_new_user_groups: [LkGroup]?
+
     /**
      * (Write-Only) Array of ids of roles that will be applied to new users the first time they login via Saml
      */
     public var default_new_user_role_ids: [Int64]?
+
     /**
      * (Write-Only) Array of ids of groups that will be applied to new users the first time they login via Saml
      */
     public var default_new_user_group_ids: [Int64]?
+
     /**
      * Set user roles in Looker based on groups from Saml
      */
     public var set_roles_from_groups: Bool?
+
     /**
      * Name of user record attributes used to indicate groups. Used when 'groups_finder_type' is set to 'grouped_attribute_values'
      */
     public var groups_attribute: String?
+
     /**
      * (Read-only) Array of mappings between Saml Groups and Looker Roles (read-only)
      */
     public var groups: [SamlGroupRead]?
+
     /**
      * (Read/Write) Array of mappings between Saml Groups and arrays of Looker Role ids
      */
     public var groups_with_role_ids: [SamlGroupWrite]?
+
     /**
      * Users will not be allowed to login at all unless a role for them is found in Saml if set to true
      */
     public var auth_requires_role: Bool?
+
     /**
      * (Read-only) Array of mappings between Saml User Attributes and Looker User Attributes (read-only)
      */
     public var user_attributes: [SamlUserAttributeRead]?
+
     /**
      * (Read/Write) Array of mappings between Saml User Attributes and arrays of Looker User Attribute ids
      */
     public var user_attributes_with_ids: [SamlUserAttributeWrite]?
+
     /**
      * Identifier for a strategy for how Looker will find groups in the SAML response. One of ['grouped_attribute_values', 'individual_attributes']
      */
     public var groups_finder_type: String?
+
     /**
      * Value for group attribute used to indicate membership. Used when 'groups_finder_type' is set to 'individual_attributes'
      */
     public var groups_member_value: String?
+
     /**
      * Bypass the login page when user authentication is required. Redirect to IdP immediately instead.
      */
     public var bypass_login_page: Bool?
+
     /**
      * Allow SAML auth'd users to be members of non-reflected Looker groups. If 'false', user will be removed from non-reflected groups on login.
      */
     public var allow_normal_group_membership: Bool?
+
     /**
      * SAML auth'd users will inherit roles from non-reflected Looker groups.
      */
     public var allow_roles_from_normal_groups: Bool?
+
     /**
      * Allows roles to be directly assigned to SAML auth'd users.
      */
     public var allow_direct_roles: Bool?
+
     /**
      * Link to get this item (read-only)
      */
@@ -9154,22 +10974,27 @@ public struct SamlGroupRead: SDKModel {
      * Unique Id (read-only)
      */
     public var id: Int64?
+
     /**
      * Unique Id of group in Looker (read-only)
      */
     public var looker_group_id: Int64?
+
     /**
      * Name of group in Looker (read-only)
      */
     public var looker_group_name: String?
+
     /**
      * Name of group in Saml (read-only)
      */
     public var name: String?
+
     /**
      * Looker Roles (read-only)
      */
     public var roles: [Role]?
+
     /**
      * Link to saml config (read-only)
      */
@@ -9191,22 +11016,27 @@ public struct SamlGroupWrite: SDKModel {
      * Unique Id
      */
     public var id: Int64?
+
     /**
      * Unique Id of group in Looker (read-only)
      */
     public var looker_group_id: Int64?
+
     /**
      * Name of group in Looker
      */
     public var looker_group_name: String?
+
     /**
      * Name of group in Saml
      */
     public var name: String?
+
     /**
      * Looker Role Ids
      */
     public var role_ids: [Int64]?
+
     /**
      * Link to saml config (read-only)
      */
@@ -9228,14 +11058,17 @@ public struct SamlMetadataParseResult: SDKModel {
      * Operations the current user is able to perform on this object (read-only)
      */
     public var can: StringDictionary<Bool>?
+
     /**
      * Identify Provider Issuer (read-only)
      */
     public var idp_issuer: String?
+
     /**
      * Identify Provider Url (read-only)
      */
     public var idp_url: String?
+
     /**
      * Identify Provider Certificate (read-only)
      */
@@ -9255,14 +11088,17 @@ public struct SamlUserAttributeRead: SDKModel {
      * Name of User Attribute in Saml (read-only)
      */
     public var name: String?
+
     /**
      * Required to be in Saml assertion for login to be allowed to succeed (read-only)
      */
     public var required: Bool?
+
     /**
      * Looker User Attributes (read-only)
      */
     public var user_attributes: [UserAttribute]?
+
     /**
      * Link to saml config (read-only)
      */
@@ -9282,14 +11118,17 @@ public struct SamlUserAttributeWrite: SDKModel {
      * Name of User Attribute in Saml
      */
     public var name: String?
+
     /**
      * Required to be in Saml assertion for login to be allowed to succeed
      */
     public var required: Bool?
+
     /**
      * Looker User Attribute Ids
      */
     public var user_attribute_ids: [Int64]?
+
     /**
      * Link to saml config (read-only)
      */
@@ -9309,131 +11148,172 @@ public struct ScheduledPlan: SDKModel {
      * Name of this scheduled plan
      */
     public var name: String?
+
     /**
      * User Id which owns this scheduled plan
      */
     public var user_id: Int64?
+
     /**
      * Whether schedule is run as recipient (only applicable for email recipients)
      */
     public var run_as_recipient: Bool?
+
     /**
      * Whether the ScheduledPlan is enabled
      */
     public var enabled: Bool?
+
     /**
      * Id of a look
      */
     public var look_id: Int64?
+
     /**
      * Id of a dashboard
      */
     public var dashboard_id: Int64?
+
+    private var _lookml_dashboard_id: AnyString?
     /**
      * Id of a LookML dashboard
      */
-    public var lookml_dashboard_id: String?
+    public var lookml_dashboard_id: String? {
+        get { _lookml_dashboard_id?.value }
+        set { _lookml_dashboard_id = newValue.map(AnyString.init) }
+    }
+
     /**
      * Query string to run look or dashboard with
      */
     public var filters_string: String?
+
     /**
      * (DEPRECATED) Alias for filters_string field
      */
     public var dashboard_filters: String?
+
     /**
      * Delivery should occur if running the dashboard or look returns results
      */
     public var require_results: Bool?
+
     /**
      * Delivery should occur if the dashboard look does not return results
      */
     public var require_no_results: Bool?
+
     /**
      * Delivery should occur if data have changed since the last run
      */
     public var require_change: Bool?
+
     /**
      * Will run an unlimited query and send all results.
      */
     public var send_all_results: Bool?
+
     /**
      * Vixie-Style crontab specification when to run
      */
     public var crontab: String?
+
     /**
      * Name of a datagroup; if specified will run when datagroup triggered (can't be used with cron string)
      */
     public var datagroup: String?
+
     /**
      * Timezone for interpreting the specified crontab (default is Looker instance timezone)
      */
     public var timezone: String?
+
+    private var _query_id: AnyString?
     /**
      * Query id
      */
-    public var query_id: String?
+    public var query_id: String? {
+        get { _query_id?.value }
+        set { _query_id = newValue.map(AnyString.init) }
+    }
+
     /**
      * Scheduled plan destinations
      */
     public var scheduled_plan_destination: [ScheduledPlanDestination]?
+
     /**
      * Whether the plan in question should only be run once (usually for testing)
      */
     public var run_once: Bool?
+
     /**
      * Whether links back to Looker should be included in this ScheduledPlan
      */
     public var include_links: Bool?
+
     /**
      * The size of paper the PDF should be formatted to fit. Valid values are: "letter", "legal", "tabloid", "a0", "a1", "a2", "a3", "a4", "a5".
      */
     public var pdf_paper_size: String?
+
     /**
      * Whether the PDF should be formatted for landscape orientation
      */
     public var pdf_landscape: Bool?
+
     /**
      * Whether this schedule is in an embed context or not
      */
     public var embed: Bool?
+
     /**
      * Color scheme of the dashboard if applicable
      */
     public var color_theme: String?
+
     /**
      * Whether or not to expand table vis to full length
      */
     public var long_tables: Bool?
+
     /**
      * The pixel width at which we render the inline table visualizations
      */
     public var inline_table_width: Int64?
+
     /**
      * Unique Id (read-only)
      */
     public var id: Int64?
+
     /**
      * Date and time when ScheduledPlan was created (read-only)
      */
     public var created_at: Date?
+
     /**
      * Date and time when ScheduledPlan was last updated (read-only)
      */
     public var updated_at: Date?
+
     /**
      * Title (read-only)
      */
     public var title: String?
+
     public var user: UserPublic?
+
     /**
      * When the ScheduledPlan will next run (null if running once) (read-only)
      */
     public var next_run_at: Date?
+
     /**
      * When the ScheduledPlan was last run (read-only)
      */
     public var last_run_at: Date?
+
     /**
      * Operations the current user is able to perform on this object (read-only)
      */
@@ -9446,7 +11326,7 @@ public struct ScheduledPlan: SDKModel {
         self.enabled = enabled
         self.look_id = look_id
         self.dashboard_id = dashboard_id
-        self.lookml_dashboard_id = lookml_dashboard_id
+        self._lookml_dashboard_id = lookml_dashboard_id.map(AnyString.init)
         self.filters_string = filters_string
         self.dashboard_filters = dashboard_filters
         self.require_results = require_results
@@ -9456,7 +11336,7 @@ public struct ScheduledPlan: SDKModel {
         self.crontab = crontab
         self.datagroup = datagroup
         self.timezone = timezone
-        self.query_id = query_id
+        self._query_id = query_id.map(AnyString.init)
         self.scheduled_plan_destination = scheduled_plan_destination
         self.run_once = run_once
         self.include_links = include_links
@@ -9483,42 +11363,52 @@ public struct ScheduledPlanDestination: SDKModel {
      * Unique Id (read-only)
      */
     public var id: Int64?
+
     /**
      * Id of a scheduled plan you own
      */
     public var scheduled_plan_id: Int64?
+
     /**
      * The data format to send to the given destination. Supported formats vary by destination, but include: "txt", "csv", "inline_json", "json", "json_detail", "xlsx", "html", "wysiwyg_pdf", "assembled_pdf", "wysiwyg_png"
      */
     public var format: String?
+
     /**
      * Are values formatted? (containing currency symbols, digit separators, etc.
      */
     public var apply_formatting: Bool?
+
     /**
      * Whether visualization options are applied to the results.
      */
     public var apply_vis: Bool?
+
     /**
      * Address for recipient. For email e.g. 'user@example.com'. For webhooks e.g. 'https://domain/path'. For Amazon S3 e.g. 's3://bucket-name/path/'. For SFTP e.g. 'sftp://host-name/path/'.
      */
     public var address: String?
+
     /**
      * Whether the recipient is a Looker user on the current instance (only applicable for email recipients) (read-only)
      */
     public var looker_recipient: Bool?
+
     /**
      * Type of the address ('email', 'webhook', 's3', or 'sftp')
      */
     public var type: String?
+
     /**
      * JSON object containing parameters for external scheduling. For Amazon S3, this requires keys and values for access_key_id and region. For SFTP, this requires a key and value for username.
      */
     public var parameters: String?
+
     /**
      * (Write-Only) JSON object containing secret parameters for external scheduling. For Amazon S3, this requires a key and value for secret_access_key. For SFTP, this requires a key and value for password.
      */
     public var secret_parameters: String?
+
     /**
      * Optional message to be included in scheduled emails
      */
@@ -9545,6 +11435,7 @@ public struct Schema: SDKModel {
      * Schema name (read-only)
      */
     public var name: String?
+
     /**
      * True if this is the default schema (read-only)
      */
@@ -9562,34 +11453,42 @@ public struct SchemaColumn: SDKModel {
      * Schema item name (read-only)
      */
     public var name: String?
+
     /**
      * Full name of item (read-only)
      */
     public var sql_escaped_name: String?
+
     /**
      * Name of schema (read-only)
      */
     public var schema_name: String?
+
     /**
      * SQL dialect data type (read-only)
      */
     public var data_type_database: String?
+
     /**
      * Data type (read-only)
      */
     public var data_type: String?
+
     /**
      * Looker data type (read-only)
      */
     public var data_type_looker: String?
+
     /**
      * SQL data type (read-only)
      */
     public var description: String?
+
     /**
      * Column data size (read-only)
      */
     public var column_size: Int64?
+
     /**
      * SQL Runner snippets for this connection (read-only)
      */
@@ -9614,14 +11513,17 @@ public struct SchemaColumns: SDKModel {
      * Schema item name (read-only)
      */
     public var name: String?
+
     /**
      * Full name of item (read-only)
      */
     public var sql_escaped_name: String?
+
     /**
      * Name of schema (read-only)
      */
     public var schema_name: String?
+
     /**
      * Columns for this schema (read-only)
      */
@@ -9641,22 +11543,27 @@ public struct SchemaTable: SDKModel {
      * Schema item name (read-only)
      */
     public var name: String?
+
     /**
      * Full name of item (read-only)
      */
     public var sql_escaped_name: String?
+
     /**
      * Name of schema (read-only)
      */
     public var schema_name: String?
+
     /**
      * Number of data rows (read-only)
      */
     public var rows: Int64?
+
     /**
      * External reference??? (read-only)
      */
     public var external: String?
+
     /**
      * SQL Runner snippets for connection (read-only)
      */
@@ -9678,10 +11585,12 @@ public struct SchemaTables: SDKModel {
      * Schema name (read-only)
      */
     public var name: String?
+
     /**
      * True if this is the default schema (read-only)
      */
     public var is_default: Bool?
+
     /**
      * Tables for this schema (read-only)
      */
@@ -9700,58 +11609,72 @@ public struct Session: SDKModel {
      * Operations the current user is able to perform on this object (read-only)
      */
     public var can: StringDictionary<Bool>?
+
     /**
      * Unique Id (read-only)
      */
     public var id: Int64?
+
     /**
      * IP address of user when this session was initiated (read-only)
      */
     public var ip_address: String?
+
     /**
      * User's browser type (read-only)
      */
     public var browser: String?
+
     /**
      * User's Operating System (read-only)
      */
     public var operating_system: String?
+
     /**
      * City component of user location (derived from IP address) (read-only)
      */
     public var city: String?
+
     /**
      * State component of user location (derived from IP address) (read-only)
      */
     public var state: String?
+
     /**
      * Country component of user location (derived from IP address) (read-only)
      */
     public var country: String?
+
     /**
      * Type of credentials used for logging in this session (read-only)
      */
     public var credentials_type: String?
+
     /**
      * Time when this session was last extended by the user (read-only)
      */
     public var extended_at: String?
+
     /**
      * Number of times this session was extended (read-only)
      */
     public var extended_count: Int64?
+
     /**
      * Actual user in the case when this session represents one user sudo'ing as another (read-only)
      */
     public var sudo_user_id: Int64?
+
     /**
      * Time when this session was initiated (read-only)
      */
     public var created_at: String?
+
     /**
      * Time when this session will expire (read-only)
      */
     public var expires_at: String?
+
     /**
      * Link to get this item (read-only)
      */
@@ -9782,22 +11705,27 @@ public struct SessionConfig: SDKModel {
      * Operations the current user is able to perform on this object (read-only)
      */
     public var can: StringDictionary<Bool>?
+
     /**
      * Allow users to have persistent sessions when they login
      */
     public var allow_persistent_sessions: Bool?
+
     /**
      * Number of minutes for user sessions.  Must be between 5 and 43200
      */
     public var session_minutes: Int64?
+
     /**
      * Allow users to have an unbounded number of concurrent sessions (otherwise, users will be limited to only one session at a time).
      */
     public var unlimited_sessions_per_user: Bool?
+
     /**
      * Enforce session logout for sessions that are inactive for 15 minutes.
      */
     public var use_inactivity_based_logout: Bool?
+
     /**
      * Track location of session when user logs in.
      */
@@ -9819,14 +11747,17 @@ public struct Setting: SDKModel {
      * Toggle extension framework on or off
      */
     public var extension_framework_enabled: Bool?
+
     /**
      * Toggle marketplace auto install on or off. Note that auto install only runs if marketplace is enabled.
      */
     public var marketplace_auto_install_enabled: Bool?
+
     /**
      * Toggle marketplace on or off
      */
     public var marketplace_enabled: Bool?
+
     public var whitelabel_configuration: WhitelabelConfiguration?
 
     public init(extension_framework_enabled: Bool? = nil, marketplace_auto_install_enabled: Bool? = nil, marketplace_enabled: Bool? = nil, whitelabel_configuration: WhitelabelConfiguration? = nil) {
@@ -9843,10 +11774,12 @@ public struct Snippet: SDKModel {
      * Name of the snippet (read-only)
      */
     public var name: String?
+
     /**
      * Label of the snippet (read-only)
      */
     public var label: String?
+
     /**
      * SQL text of the snippet (read-only)
      */
@@ -9865,48 +11798,61 @@ public struct SqlQuery: SDKModel {
      * Operations the current user is able to perform on this object (read-only)
      */
     public var can: StringDictionary<Bool>?
+
     /**
      * The identifier of the SQL query (read-only)
      */
     public var slug: String?
+
     /**
      * Number of seconds this query took to run the most recent time it was run (read-only)
      */
     public var last_runtime: Float?
+
     /**
      * Number of times this query has been run (read-only)
      */
     public var run_count: Int64?
+
     /**
      * Maximum number of rows this query will display on the SQL Runner page (read-only)
      */
     public var browser_limit: Int64?
+
     /**
      * SQL query text (read-only)
      */
     public var sql: String?
+
     /**
      * The most recent time this query was run (read-only)
      */
     public var last_run_at: String?
+
     public var connection: DBConnectionBase?
+
     /**
      * Model name this query uses (read-only)
      */
     public var model_name: String?
+
     public var creator: UserPublic?
+
     /**
      * Explore page URL for this SQL query (read-only)
      */
     public var explore_url: String?
+
     /**
      * Should this query be rendered as plain text (read-only)
      */
     public var plaintext: Bool?
+
     /**
      * Visualization configuration properties. These properties are typically opaque and differ based on the type of visualization used. There is no specified set of allowed keys. The values can be any type supported by JSON. A "type" key with a string value is often present, and is used by Looker to determine which visualization to present. Visualizations ignore unknown vis_config properties.
      */
     public var vis_config: StringDictionary<AnyCodable>?
+
     /**
      * ID of the ResultMakerLookup entry.
      */
@@ -9936,18 +11882,26 @@ public struct SqlQueryCreate: SDKModel {
      * Name of the db connection on which to run this query
      */
     public var connection_name: String?
+
+    private var _connection_id: AnyString?
     /**
      * (DEPRECATED) Use `connection_name` instead
      */
-    public var connection_id: String?
+    public var connection_id: String? {
+        get { _connection_id?.value }
+        set { _connection_id = newValue.map(AnyString.init) }
+    }
+
     /**
      * Name of LookML Model (this or `connection_id` required)
      */
     public var model_name: String?
+
     /**
      * SQL query
      */
     public var sql: String?
+
     /**
      * Visualization configuration properties. These properties are typically opaque and differ based on the type of visualization used. There is no specified set of allowed keys. The values can be any type supported by JSON. A "type" key with a string value is often present, and is used by Looker to determine which visualization to present. Visualizations ignore unknown vis_config properties.
      */
@@ -9955,7 +11909,7 @@ public struct SqlQueryCreate: SDKModel {
 
     public init(connection_name: String? = nil, connection_id: String? = nil, model_name: String? = nil, sql: String? = nil, vis_config: StringDictionary<AnyCodable>? = nil) {
         self.connection_name = connection_name
-        self.connection_id = connection_id
+        self._connection_id = connection_id.map(AnyString.init)
         self.model_name = model_name
         self.sql = sql
         self.vis_config = vis_config
@@ -9976,45 +11930,57 @@ public struct SshPublicKey: SDKModel {
 }
 
 public struct SshServer: SDKModel {
+    private var _ssh_server_id: AnyString?
     /**
      * A unique id used to identify this SSH Server (read-only)
      */
-    public var ssh_server_id: String?
+    public var ssh_server_id: String? {
+        get { _ssh_server_id?.value }
+        set { _ssh_server_id = newValue.map(AnyString.init) }
+    }
+
     /**
      * The name to identify this SSH Server
      */
     public var ssh_server_name: String?
+
     /**
      * The hostname or ip address of the SSH Server
      */
     public var ssh_server_host: String?
+
     /**
      * The port to connect to on the SSH Server
      */
     public var ssh_server_port: Int64?
+
     /**
      * The username used to connect to the SSH Server
      */
     public var ssh_server_user: String?
+
     /**
      * The md5 fingerprint used to identify the SSH Server (read-only)
      */
     public var finger_print: String?
+
     /**
      * The SHA fingerprint used to identify the SSH Server (read-only)
      */
     public var sha_finger_print: String?
+
     /**
      * The SSH public key created for this instance (read-only)
      */
     public var public_key: String?
+
     /**
      * The current connection status to this SSH Server (read-only)
      */
     public var status: String?
 
     public init(ssh_server_id: String? = nil, ssh_server_name: String? = nil, ssh_server_host: String? = nil, ssh_server_port: Int64? = nil, ssh_server_user: String? = nil, finger_print: String? = nil, sha_finger_print: String? = nil, public_key: String? = nil, status: String? = nil) {
-        self.ssh_server_id = ssh_server_id
+        self._ssh_server_id = ssh_server_id.map(AnyString.init)
         self.ssh_server_name = ssh_server_name
         self.ssh_server_host = ssh_server_host
         self.ssh_server_port = ssh_server_port
@@ -10028,54 +11994,72 @@ public struct SshServer: SDKModel {
 }
 
 public struct SshTunnel: SDKModel {
+    private var _tunnel_id: AnyString?
     /**
      * Unique ID for the tunnel (read-only)
      */
-    public var tunnel_id: String?
+    public var tunnel_id: String? {
+        get { _tunnel_id?.value }
+        set { _tunnel_id = newValue.map(AnyString.init) }
+    }
+
+    private var _ssh_server_id: AnyString?
     /**
      * SSH Server ID
      */
-    public var ssh_server_id: String?
+    public var ssh_server_id: String? {
+        get { _ssh_server_id?.value }
+        set { _ssh_server_id = newValue.map(AnyString.init) }
+    }
+
     /**
      * SSH Server name (read-only)
      */
     public var ssh_server_name: String?
+
     /**
      * SSH Server Hostname or IP Address (read-only)
      */
     public var ssh_server_host: String?
+
     /**
      * SSH Server port (read-only)
      */
     public var ssh_server_port: Int64?
+
     /**
      * Username used to connect to the SSH Server (read-only)
      */
     public var ssh_server_user: String?
+
     /**
      * Time of last connect attempt (read-only)
      */
     public var last_attempt: String?
+
     /**
      * Localhost Port used by the Looker instance to connect to the remote DB (read-only)
      */
     public var local_host_port: Int64?
+
     /**
      * Hostname or IP Address of the Database Server
      */
     public var database_host: String?
+
     /**
      * Port that the Database Server is listening on
      */
     public var database_port: Int64?
+
     /**
      * Current connection status for this Tunnel (read-only)
      */
     public var status: String?
 
     public init(tunnel_id: String? = nil, ssh_server_id: String? = nil, ssh_server_name: String? = nil, ssh_server_host: String? = nil, ssh_server_port: Int64? = nil, ssh_server_user: String? = nil, last_attempt: String? = nil, local_host_port: Int64? = nil, database_host: String? = nil, database_port: Int64? = nil, status: String? = nil) {
-        self.tunnel_id = tunnel_id
-        self.ssh_server_id = ssh_server_id
+        self._tunnel_id = tunnel_id.map(AnyString.init)
+        self._ssh_server_id = ssh_server_id.map(AnyString.init)
         self.ssh_server_name = ssh_server_name
         self.ssh_server_host = ssh_server_host
         self.ssh_server_port = ssh_server_port
@@ -10146,22 +12130,27 @@ public struct Theme: SDKModel {
      * Operations the current user is able to perform on this object (read-only)
      */
     public var can: StringDictionary<Bool>?
+
     /**
      * Timestamp for when this theme becomes active. Null=always
      */
     public var begin_at: Date?
+
     /**
      * Timestamp for when this theme expires. Null=never
      */
     public var end_at: Date?
+
     /**
      * Unique Id (read-only)
      */
     public var id: Int64?
+
     /**
      * Name of theme. Can only be alphanumeric and underscores.
      */
     public var name: String?
+
     public var settings: ThemeSettings?
 
     public init(can: StringDictionary<Bool>? = nil, begin_at: Date? = nil, end_at: Date? = nil, id: Int64? = nil, name: String? = nil, settings: ThemeSettings? = nil) {
@@ -10180,66 +12169,86 @@ public struct ThemeSettings: SDKModel {
      * Default background color
      */
     public var background_color: String?
+
     /**
      * Base font size for scaling fonts
      */
     public var base_font_size: String?
+
+    private var _color_collection_id: AnyString?
     /**
      * Optional. ID of color collection to use with the theme. Use an empty string for none.
      */
-    public var color_collection_id: String?
+    public var color_collection_id: String? {
+        get { _color_collection_id?.value }
+        set { _color_collection_id = newValue.map(AnyString.init) }
+    }
+
     /**
      * Default font color
      */
     public var font_color: String?
+
     /**
      * Primary font family
      */
     public var font_family: String?
+
     /**
      * Source specification for font
      */
     public var font_source: String?
+
     /**
      * Info button color
      */
     public var info_button_color: String?
+
     /**
      * Primary button color
      */
     public var primary_button_color: String?
+
     /**
      * Toggle to show filters. Defaults to true.
      */
     public var show_filters_bar: Bool?
+
     /**
      * Toggle to show the title. Defaults to true.
      */
     public var show_title: Bool?
+
     /**
      * Text color for text tiles
      */
     public var text_tile_text_color: String?
+
     /**
      * Background color for tiles
      */
     public var tile_background_color: String?
+
     /**
      * Text color for tiles
      */
     public var tile_text_color: String?
+
     /**
      * Color for titles
      */
     public var title_color: String?
+
     /**
      * Warning button color
      */
     public var warn_button_color: String?
+
     /**
      * The text alignment of tile titles (New Dashboards)
      */
     public var tile_title_alignment: String?
+
     /**
      * Toggles the tile shadow (New Dashboards)
      */
@@ -10248,7 +12257,7 @@ public struct ThemeSettings: SDKModel {
     public init(background_color: String? = nil, base_font_size: String? = nil, color_collection_id: String? = nil, font_color: String? = nil, font_family: String? = nil, font_source: String? = nil, info_button_color: String? = nil, primary_button_color: String? = nil, show_filters_bar: Bool? = nil, show_title: Bool? = nil, text_tile_text_color: String? = nil, tile_background_color: String? = nil, tile_text_color: String? = nil, title_color: String? = nil, warn_button_color: String? = nil, tile_title_alignment: String? = nil, tile_shadow: Bool? = nil) {
         self.background_color = background_color
         self.base_font_size = base_font_size
-        self.color_collection_id = color_collection_id
+        self._color_collection_id = color_collection_id.map(AnyString.init)
         self.font_color = font_color
         self.font_family = font_family
         self.font_source = font_source
@@ -10272,10 +12281,12 @@ public struct Timezone: SDKModel {
      * Timezone (read-only)
      */
     public var value: String?
+
     /**
      * Description of timezone (read-only)
      */
     public var label: String?
+
     /**
      * Timezone group (e.g Common, Other, etc.) (read-only)
      */
@@ -10294,6 +12305,7 @@ public struct UpdateCommand: SDKModel {
      * Name of the command
      */
     public var name: String?
+
     /**
      * Description of the command
      */
@@ -10311,14 +12323,19 @@ public struct UpdateFolder: SDKModel {
      * Unique Name
      */
     public var name: String?
+
+    private var _parent_id: AnyString?
     /**
      * Id of Parent. If the parent id is null, this is a root-level entry
      */
-    public var parent_id: String?
+    public var parent_id: String? {
+        get { _parent_id?.value }
+        set { _parent_id = newValue.map(AnyString.init) }
+    }
 
     public init(name: String? = nil, parent_id: String? = nil) {
         self.name = name
-        self.parent_id = parent_id
+        self._parent_id = parent_id.map(AnyString.init)
     }
 
 }
@@ -10328,117 +12345,155 @@ public struct User: SDKModel {
      * Operations the current user is able to perform on this object (read-only)
      */
     public var can: StringDictionary<Bool>?
+
     /**
      * URL for the avatar image (may be generic) (read-only)
      */
     public var avatar_url: String?
+
     /**
      * URL for the avatar image (may be generic), does not specify size (read-only)
      */
     public var avatar_url_without_sizing: String?
+
     /**
      * API 3 credentials (read-only)
      */
     public var credentials_api3: [CredentialsApi3]?
+
     public var credentials_email: CredentialsEmail?
+
     /**
      * Embed credentials (read-only)
      */
     public var credentials_embed: [CredentialsEmbed]?
+
     public var credentials_google: CredentialsGoogle?
+
     public var credentials_ldap: CredentialsLDAP?
+
     public var credentials_looker_openid: CredentialsLookerOpenid?
+
     public var credentials_oidc: CredentialsOIDC?
+
     public var credentials_saml: CredentialsSaml?
+
     public var credentials_totp: CredentialsTotp?
+
     /**
      * Full name for display (available only if both first_name and last_name are set) (read-only)
      */
     public var display_name: String?
+
     /**
      * EMail address (read-only)
      */
     public var email: String?
+
     /**
      * (Embed only) ID of user's group space based on the external_group_id optionally specified during embed user login (read-only)
      */
     public var embed_group_space_id: Int64?
+
     /**
      * First name
      */
     public var first_name: String?
+
     /**
      * Array of ids of the groups for this user (read-only)
      */
     public var group_ids: [Int64]?
+
+    private var _home_folder_id: AnyString?
     /**
      * ID string for user's home folder
      */
-    public var home_folder_id: String?
+    public var home_folder_id: String? {
+        get { _home_folder_id?.value }
+        set { _home_folder_id = newValue.map(AnyString.init) }
+    }
+
     /**
      * Unique Id (read-only)
      */
     public var id: Int64?
+
     /**
      * Account has been disabled
      */
     public var is_disabled: Bool?
+
     /**
      * Last name
      */
     public var last_name: String?
+
     /**
      * User's preferred locale. User locale takes precedence over Looker's system-wide default locale. Locale determines language of display strings and date and numeric formatting in API responses. Locale string must be a 2 letter language code or a combination of language code and region code: 'en' or 'en-US', for example.
      */
     public var locale: String?
+
     /**
      * Array of strings representing the Looker versions that this user has used (this only goes back as far as '3.54.0') (read-only)
      */
     public var looker_versions: [String]?
+
     /**
      * User's dev workspace has been checked for presence of applicable production projects
      */
     public var models_dir_validated: Bool?
+
     /**
      * ID of user's personal folder (read-only)
      */
     public var personal_folder_id: Int64?
+
     /**
      * User is identified as an employee of Looker (read-only)
      */
     public var presumed_looker_employee: Bool?
+
     /**
      * Array of ids of the roles for this user (read-only)
      */
     public var role_ids: [Int64]?
+
     /**
      * Active sessions (read-only)
      */
     public var sessions: [Session]?
+
     /**
      * Per user dictionary of undocumented state information owned by the Looker UI.
      */
     public var ui_state: StringDictionary<AnyCodable>?
+
     /**
      * User is identified as an employee of Looker who has been verified via Looker corporate authentication (read-only)
      */
     public var verified_looker_employee: Bool?
+
     /**
      * User's roles are managed by an external directory like SAML or LDAP and can not be changed directly. (read-only)
      */
     public var roles_externally_managed: Bool?
+
     /**
      * User can be directly assigned a role. (read-only)
      */
     public var allow_direct_roles: Bool?
+
     /**
      * User can be a direct member of a normal Looker group. (read-only)
      */
     public var allow_normal_group_membership: Bool?
+
     /**
      * User can inherit roles from a normal Looker group. (read-only)
      */
     public var allow_roles_from_normal_groups: Bool?
+
     /**
      * Link to get this item (read-only)
      */
@@ -10462,7 +12517,7 @@ public struct User: SDKModel {
         self.embed_group_space_id = embed_group_space_id
         self.first_name = first_name
         self.group_ids = group_ids
-        self.home_folder_id = home_folder_id
+        self._home_folder_id = home_folder_id.map(AnyString.init)
         self.id = id
         self.is_disabled = is_disabled
         self.last_name = last_name
@@ -10489,46 +12544,57 @@ public struct UserAttribute: SDKModel {
      * Operations the current user is able to perform on this object (read-only)
      */
     public var can: StringDictionary<Bool>?
+
     /**
      * Unique Id (read-only)
      */
     public var id: Int64?
+
     /**
      * Name of user attribute
      */
     public var name: String
+
     /**
      * Human-friendly label for user attribute
      */
     public var label: String
+
     /**
      * Type of user attribute ("string", "number", "datetime", "yesno", "zipcode")
      */
     public var type: String
+
     /**
      * Default value for when no value is set on the user
      */
     public var default_value: String?
+
     /**
      * Attribute is a system default (read-only)
      */
     public var is_system: Bool?
+
     /**
      * Attribute is permanent and cannot be deleted (read-only)
      */
     public var is_permanent: Bool?
+
     /**
      * If true, users will not be able to view values of this attribute
      */
     public var value_is_hidden: Bool?
+
     /**
      * Non-admin users can see the values of their attributes and use them in filters
      */
     public var user_can_view: Bool?
+
     /**
      * Users can change the value of this attribute for themselves
      */
     public var user_can_edit: Bool?
+
     /**
      * Destinations to which a hidden attribute may be sent. Once set, cannot be edited.
      */
@@ -10578,26 +12644,32 @@ public struct UserAttributeGroupValue: SDKModel {
      * Operations the current user is able to perform on this object (read-only)
      */
     public var can: StringDictionary<Bool>?
+
     /**
      * Unique Id of this group-attribute relation (read-only)
      */
     public var id: Int64?
+
     /**
      * Id of group (read-only)
      */
     public var group_id: Int64?
+
     /**
      * Id of user attribute (read-only)
      */
     public var user_attribute_id: Int64?
+
     /**
      * If true, the "value" field will be null, because the attribute settings block access to this value (read-only)
      */
     public var value_is_hidden: Bool?
+
     /**
      * Precedence for resolving value for user (read-only)
      */
     public var rank: Int64?
+
     /**
      * Value of user attribute for group (read-only)
      */
@@ -10620,42 +12692,52 @@ public struct UserAttributeWithValue: SDKModel {
      * Operations the current user is able to perform on this object (read-only)
      */
     public var can: StringDictionary<Bool>?
+
     /**
      * Name of user attribute (read-only)
      */
     public var name: String?
+
     /**
      * Human-friendly label for user attribute (read-only)
      */
     public var label: String?
+
     /**
      * Precedence for setting value on user (lowest wins) (read-only)
      */
     public var rank: Int64?
+
     /**
      * Value of attribute for user
      */
     public var value: String?
+
     /**
      * Id of User (read-only)
      */
     public var user_id: Int64?
+
     /**
      * Can the user set this value (read-only)
      */
     public var user_can_edit: Bool?
+
     /**
      * If true, the "value" field will be null, because the attribute settings block access to this value (read-only)
      */
     public var value_is_hidden: Bool?
+
     /**
      * Id of User Attribute (read-only)
      */
     public var user_attribute_id: Int64?
+
     /**
      * How user got this value for this attribute (read-only)
      */
     public var source: String?
+
     /**
      * If this user attribute is hidden, whitelist of destinations to which it may be sent. (read-only)
      */
@@ -10682,38 +12764,51 @@ public struct UserLoginLockout: SDKModel {
      * Operations the current user is able to perform on this object (read-only)
      */
     public var can: StringDictionary<Bool>?
+
     /**
      * Hash of user's client id (read-only)
      */
     public var key: String?
+
     /**
      * Authentication method for login failures (read-only)
      */
     public var auth_type: String?
+
     /**
      * IP address of most recent failed attempt (read-only)
      */
     public var ip: String?
+
     /**
      * User ID (read-only)
      */
     public var user_id: Int64?
+
+    private var _remote_id: AnyString?
     /**
      * Remote ID of user if using LDAP (read-only)
      */
-    public var remote_id: String?
+    public var remote_id: String? {
+        get { _remote_id?.value }
+        set { _remote_id = newValue.map(AnyString.init) }
+    }
+
     /**
      * User's name (read-only)
      */
     public var full_name: String?
+
     /**
      * Email address associated with the user's account (read-only)
      */
     public var email: String?
+
     /**
      * Number of failures that triggered the lockout (read-only)
      */
     public var fail_count: Int64?
+
     /**
      * Time when lockout was triggered (read-only)
      */
@@ -10725,7 +12820,7 @@ public struct UserLoginLockout: SDKModel {
         self.auth_type = auth_type
         self.ip = ip
         self.user_id = user_id
-        self.remote_id = remote_id
+        self._remote_id = remote_id.map(AnyString.init)
         self.full_name = full_name
         self.email = email
         self.fail_count = fail_count
@@ -10739,26 +12834,32 @@ public struct UserPublic: SDKModel {
      * Operations the current user is able to perform on this object (read-only)
      */
     public var can: StringDictionary<Bool>?
+
     /**
      * Unique Id (read-only)
      */
     public var id: Int64?
+
     /**
      * First Name (read-only)
      */
     public var first_name: String?
+
     /**
      * Last Name (read-only)
      */
     public var last_name: String?
+
     /**
      * Full name for display (available only if both first_name and last_name are set) (read-only)
      */
     public var display_name: String?
+
     /**
      * URL for the avatar image (may be generic) (read-only)
      */
     public var avatar_url: String?
+
     /**
      * Link to get this item (read-only)
      */
@@ -10781,10 +12882,12 @@ public struct ValidationError: SDKModel {
      * Error details (read-only)
      */
     public var message: String
+
     /**
      * Error detail array (read-only)
      */
     public var errors: [ValidationErrorDetail]?
+
     /**
      * Documentation link (read-only)
      */
@@ -10807,14 +12910,17 @@ public struct ValidationErrorDetail: SDKModel {
      * Field with error (read-only)
      */
     public var field: String?
+
     /**
      * Error code (read-only)
      */
     public var code: String?
+
     /**
      * Error info message (read-only)
      */
     public var message: String?
+
     /**
      * Documentation link (read-only)
      */
@@ -10851,10 +12957,12 @@ public struct WelcomeEmailTest: SDKModel {
      * The content that would be sent in the body of a custom welcome email
      */
     public var content: String?
+
     /**
      * The subject that would be sent for the custom welcome email
      */
     public var subject: String?
+
     /**
      * The header that would be sent in the body of a custom welcome email
      */
@@ -10873,62 +12981,77 @@ public struct WhitelabelConfiguration: SDKModel {
      * Unique Id (read-only)
      */
     public var id: Int64?
+
     /**
      * Customer logo image. Expected base64 encoded data (write-only)
      */
     public var logo_file: String?
+
     /**
      * Logo image url (read-only) (read-only)
      */
     public var logo_url: String?
+
     /**
      * Custom favicon image. Expected base64 encoded data (write-only)
      */
     public var favicon_file: String?
+
     /**
      * Favicon image url (read-only) (read-only)
      */
     public var favicon_url: String?
+
     /**
      * Default page title
      */
     public var default_title: String?
+
     /**
      * Boolean to toggle showing help menus
      */
     public var show_help_menu: Bool?
+
     /**
      * Boolean to toggle showing docs
      */
     public var show_docs: Bool?
+
     /**
      * Boolean to toggle showing email subscription options.
      */
     public var show_email_sub_options: Bool?
+
     /**
      * Boolean to toggle mentions of Looker in emails
      */
     public var allow_looker_mentions: Bool?
+
     /**
      * Boolean to toggle links to Looker in emails
      */
     public var allow_looker_links: Bool?
+
     /**
      * Allow subject line and email heading customization in customized emails”
      */
     public var custom_welcome_email_advanced: Bool?
+
     /**
      * Remove the word Looker from appearing in the account setup page
      */
     public var setup_mentions: Bool?
+
     /**
      * Remove Looker logo from Alerts
      */
     public var alerts_logo: Bool?
+
     /**
      * Remove Looker links from Alerts
      */
     public var alerts_links: Bool?
+
     /**
      * Remove Looker mentions in home folder page when you don’t have any items saved
      */
@@ -10960,10 +13083,16 @@ public struct Workspace: SDKModel {
      * Operations the current user is able to perform on this object (read-only)
      */
     public var can: StringDictionary<Bool>?
+
+    private var _id: AnyString?
     /**
      * The unique id of this user workspace. Predefined workspace ids include "production" and "dev" (read-only)
      */
-    public var id: String?
+    public var id: String? {
+        get { _id?.value }
+        set { _id = newValue.map(AnyString.init) }
+    }
+
     /**
      * The local state of each project in the workspace (read-only)
      */
@@ -10971,7 +13100,7 @@ public struct Workspace: SDKModel {
 
     public init(can: StringDictionary<Bool>? = nil, id: String? = nil, projects: [Project]? = nil) {
         self.can = can
-        self.id = id
+        self._id = id.map(AnyString.init)
         self.projects = projects
     }
 
@@ -10986,51 +13115,72 @@ public struct WriteAlert: SDKModel {
      * Filters coming from the dashboard that are applied. Example `[{ "filter_title": "Name", "field_name": "distribution_centers.name", "filter_value": "Los Angeles CA" }]`
      */
     public var applied_dashboard_filters: [AlertAppliedDashboardFilter]?
+
     /**
      * This property informs the check what kind of comparison we are performing. Only certain condition types are valid for time series alerts. For details, refer to [Setting Alert Conditions](https://docs.looker.com/sharing-and-publishing/creating-alerts#setting_alert_conditions) Valid values are: "EQUAL_TO", "GREATER_THAN", "GREATER_THAN_OR_EQUAL_TO", "LESS_THAN", "LESS_THAN_OR_EQUAL_TO", "INCREASES_BY", "DECREASES_BY", "CHANGES_BY".
      */
     public var comparison_type: ComparisonType?
+
     /**
      * Vixie-Style crontab specification when to run. At minumum, it has to be longer than 15 minute intervals
      */
     public var cron: String?
+
     /**
      * An optional, user-defined title for the alert
      */
     public var custom_title: String?
+
     /**
      * ID of the dashboard element associated with the alert. Refer to [dashboard_element()](#!/Dashboard/DashboardElement)
      */
     public var dashboard_element_id: Int64?
+
     /**
      * Array of destinations to send alerts to. Must be the same type of destination. Example `[{ "destination_type": "EMAIL", "email_address": "test@test.com" }]`
      */
     public var destinations: [AlertDestination]?
+
     public var field: AlertField?
+
     /**
      * Whether or not the alert is disabled
      */
     public var is_disabled: Bool?
+
     /**
      * Whether or not the alert is public
      */
     public var is_public: Bool?
+
+    private var _lookml_dashboard_id: AnyString?
     /**
      * ID of the LookML dashboard associated with the alert
      */
-    public var lookml_dashboard_id: String?
+    public var lookml_dashboard_id: String? {
+        get { _lookml_dashboard_id?.value }
+        set { _lookml_dashboard_id = newValue.map(AnyString.init) }
+    }
+
+    private var _lookml_link_id: AnyString?
     /**
      * ID of the LookML dashboard element associated with the alert
      */
-    public var lookml_link_id: String?
+    public var lookml_link_id: String? {
+        get { _lookml_link_id?.value }
+        set { _lookml_link_id = newValue.map(AnyString.init) }
+    }
+
     /**
      * User id of alert owner
      */
     public var owner_id: Int64?
+
     /**
      * Value of the alert threshold
      */
     public var threshold: Double?
+
     public var time_series_condition_state: AlertConditionState?
 
     public init(applied_dashboard_filters: [AlertAppliedDashboardFilter]? = nil, comparison_type: ComparisonType? = nil, cron: String? = nil, custom_title: String? = nil, dashboard_element_id: Int64? = nil, destinations: [AlertDestination]? = nil, field: AlertField? = nil, is_disabled: Bool? = nil, is_public: Bool? = nil, lookml_dashboard_id: String? = nil, lookml_link_id: String? = nil, owner_id: Int64? = nil, threshold: Double? = nil, time_series_condition_state: AlertConditionState? = nil) {
@@ -11043,8 +13193,8 @@ public struct WriteAlert: SDKModel {
         self.field = field
         self.is_disabled = is_disabled
         self.is_public = is_public
-        self.lookml_dashboard_id = lookml_dashboard_id
-        self.lookml_link_id = lookml_link_id
+        self._lookml_dashboard_id = lookml_dashboard_id.map(AnyString.init)
+        self._lookml_link_id = lookml_link_id.map(AnyString.init)
         self.owner_id = owner_id
         self.threshold = threshold
         self.time_series_condition_state = time_series_condition_state
@@ -11057,13 +13207,17 @@ public struct WriteAlert: SDKModel {
  * can, sudo_user_id
  */
 public struct WriteApiSession: SDKModel {
+    private var _workspace_id: AnyString?
     /**
      * The id of active workspace for this session
      */
-    public var workspace_id: String?
+    public var workspace_id: String? {
+        get { _workspace_id?.value }
+        set { _workspace_id = newValue.map(AnyString.init) }
+    }
 
     public init(workspace_id: String? = nil) {
-        self.workspace_id = workspace_id
+        self._workspace_id = workspace_id.map(AnyString.init)
     }
 
 }
@@ -11077,18 +13231,22 @@ public struct WriteBackupConfiguration: SDKModel {
      * Type of backup: looker-s3 or custom-s3
      */
     public var type: String?
+
     /**
      * Name of bucket for custom-s3 backups
      */
     public var custom_s3_bucket: String?
+
     /**
      * Name of region where the bucket is located
      */
     public var custom_s3_bucket_region: String?
+
     /**
      * (Write-Only) AWS S3 key used for custom-s3 backups
      */
     public var custom_s3_key: String?
+
     /**
      * (Write-Only) AWS S3 secret used for custom-s3 backups
      */
@@ -11113,14 +13271,17 @@ public struct WriteBoard: SDKModel {
      * Date of board deletion
      */
     public var deleted_at: Date?
+
     /**
      * Description of the board
      */
     public var description: String?
+
     /**
      * ids of the board sections in the order they should be displayed
      */
     public var section_order: [Int64]?
+
     /**
      * Title of the board
      */
@@ -11144,30 +13305,41 @@ public struct WriteBoardItem: SDKModel {
      * (Write-Only) base64 encoded image data
      */
     public var custom_image_data_base64: String?
+
     /**
      * Custom title entered by the user, if present
      */
     public var custom_title: String?
+
     /**
      * Custom url entered by the user, if present
      */
     public var custom_url: String?
+
     /**
      * Dashboard to base this item on
      */
     public var dashboard_id: Int64?
+
     /**
      * Associated Board Section
      */
     public var board_section_id: Int64?
+
     /**
      * Look to base this item on
      */
     public var look_id: Int64?
+
+    private var _lookml_dashboard_id: AnyString?
     /**
      * LookML Dashboard to base this item on
      */
-    public var lookml_dashboard_id: String?
+    public var lookml_dashboard_id: String? {
+        get { _lookml_dashboard_id?.value }
+        set { _lookml_dashboard_id = newValue.map(AnyString.init) }
+    }
+
     /**
      * An arbitrary integer representing the sort order within the section
      */
@@ -11180,7 +13352,7 @@ public struct WriteBoardItem: SDKModel {
         self.dashboard_id = dashboard_id
         self.board_section_id = board_section_id
         self.look_id = look_id
-        self.lookml_dashboard_id = lookml_dashboard_id
+        self._lookml_dashboard_id = lookml_dashboard_id.map(AnyString.init)
         self.order = order
     }
 
@@ -11195,18 +13367,22 @@ public struct WriteBoardSection: SDKModel {
      * Time at which this section was deleted.
      */
     public var deleted_at: Date?
+
     /**
      * Description of the content found in this section.
      */
     public var description: String?
+
     /**
      * Id reference to parent board
      */
     public var board_id: Int64?
+
     /**
      * ids of the board items in the order they should be displayed
      */
     public var item_order: [Int64]?
+
     /**
      * Name of row
      */
@@ -11231,14 +13407,17 @@ public struct WriteColorCollection: SDKModel {
      * Label of color collection
      */
     public var label: String?
+
     /**
      * Array of categorical palette definitions
      */
     public var categoricalPalettes: [DiscretePalette]?
+
     /**
      * Array of discrete palette definitions
      */
     public var sequentialPalettes: [ContinuousPalette]?
+
     /**
      * Array of diverging palette definitions
      */
@@ -11262,14 +13441,21 @@ public struct WriteCommand: SDKModel {
      * Name of the command
      */
     public var name: String?
+
     /**
      * Description of the command
      */
     public var description: String?
+
+    private var _linked_content_id: AnyString?
     /**
      * Id of the content associated with the command
      */
-    public var linked_content_id: String?
+    public var linked_content_id: String? {
+        get { _linked_content_id?.value }
+        set { _linked_content_id = newValue.map(AnyString.init) }
+    }
+
     /**
      * Name of the command Valid values are: "dashboard", "lookml_dashboard".
      */
@@ -11278,7 +13464,7 @@ public struct WriteCommand: SDKModel {
     public init(name: String? = nil, description: String? = nil, linked_content_id: String? = nil, linked_content_type: LinkedContentType? = nil) {
         self.name = name
         self.description = description
-        self.linked_content_id = linked_content_id
+        self._linked_content_id = linked_content_id.map(AnyString.init)
         self.linked_content_type = linked_content_type
     }
 
@@ -11293,15 +13479,18 @@ public struct WriteContentFavorite: SDKModel {
      * User Id which owns this ContentFavorite
      */
     public var user_id: Int64?
+
     /**
      * Content Metadata Id associated with this ContentFavorite
      */
     public var content_metadata_id: Int64?
+
     /**
      * Dynamic writeable type for LookBasic removes:
      * can, content_metadata_id, id, title
      */
     public var look: WriteLookBasic?
+
     /**
      * Dynamic writeable type for DashboardBase removes:
      * can, content_favorite_id, content_metadata_id, description, hidden, id, model, query_timezone, readonly, refresh_interval, refresh_interval_to_i, title, user_id, slug, preferred_viewer
@@ -11338,61 +13527,77 @@ public struct WriteContentMeta: SDKModel {
  * id, field
  */
 public struct WriteCreateDashboardFilter: SDKModel {
+    private var _dashboard_id: AnyString
     /**
      * Id of Dashboard
      */
-    public var dashboard_id: String
+    public var dashboard_id: String {
+        get { _dashboard_id.value }
+        set { _dashboard_id = newValue.map(AnyString.init) }
+    }
+
     /**
      * Name of filter
      */
     public var name: String
+
     /**
      * Title of filter
      */
     public var title: String
+
     /**
      * Type of filter: one of date, number, string, or field
      */
     public var type: String
+
     /**
      * Default value of filter
      */
     public var default_value: String?
+
     /**
      * Model of filter (required if type = field)
      */
     public var model: String?
+
     /**
      * Explore of filter (required if type = field)
      */
     public var explore: String?
+
     /**
      * Dimension of filter (required if type = field)
      */
     public var dimension: String?
+
     /**
      * Display order of this filter relative to other filters
      */
     public var row: Int64?
+
     /**
      * Array of listeners for faceted filters
      */
     public var listens_to_filters: [String]?
+
     /**
      * Whether the filter allows multiple filter values (deprecated in the latest version of dashboards)
      */
     public var allow_multiple_values: Bool?
+
     /**
      * Whether the filter requires a value to run the dashboard
      */
     public var required: Bool?
+
     /**
      * The visual configuration for this filter. Used to set up how the UI for this filter should appear.
      */
     public var ui_config: StringDictionary<AnyCodable>?
 
     public init(dashboard_id: String, name: String, title: String, type: String, default_value: String? = nil, model: String? = nil, explore: String? = nil, dimension: String? = nil, row: Int64? = nil, listens_to_filters: [String]? = nil, allow_multiple_values: Bool? = nil, required: Bool? = nil, ui_config: StringDictionary<AnyCodable>? = nil) {
-        self.dashboard_id = dashboard_id
+        self._dashboard_id = dashboard_id.map(AnyString.init)
         self.name = name
         self.title = title
         self.type = type
@@ -11422,26 +13627,35 @@ public struct WriteCreateQueryTask: SDKModel {
      * Id of query to run
      */
     public var query_id: Int64
+
     /**
      * Desired async query result format. Valid values are: "inline_json", "json", "json_detail", "json_fe", "csv", "html", "md", "txt", "xlsx", "gsxml".
      */
     public var result_format: ResultFormat
+
     /**
      * Source of query task
      */
     public var source: String?
+
     /**
      * Create the task but defer execution
      */
     public var deferred: Bool?
+
     /**
      * Id of look associated with query.
      */
     public var look_id: Int64?
+
+    private var _dashboard_id: AnyString?
     /**
      * Id of dashboard associated with query.
      */
-    public var dashboard_id: String?
+    public var dashboard_id: String? {
+        get { _dashboard_id?.value }
+        set { _dashboard_id = newValue.map(AnyString.init) }
+    }
 
     public init(query_id: Int64, result_format: ResultFormat, source: String? = nil, deferred: Bool? = nil, look_id: Int64? = nil, dashboard_id: String? = nil) {
         self.query_id = query_id
@@ -11449,7 +13663,7 @@ public struct WriteCreateQueryTask: SDKModel {
         self.source = source
         self.deferred = deferred
         self.look_id = look_id
-        self.dashboard_id = dashboard_id
+        self._dashboard_id = dashboard_id.map(AnyString.init)
     }
 
     public init(_ query_id: Int64, _ result_format: ResultFormat, source: String? = nil, deferred: Bool? = nil, look_id: Int64? = nil, dashboard_id: String? = nil) {
@@ -11467,6 +13681,7 @@ public struct WriteCredentialsEmail: SDKModel {
      * EMail address used for user login
      */
     public var email: String?
+
     /**
      * Force the user to change their password upon their next login
      */
@@ -11488,14 +13703,17 @@ public struct WriteCustomWelcomeEmail: SDKModel {
      * If true, custom email content will replace the default body of welcome emails
      */
     public var enabled: Bool?
+
     /**
      * The HTML to use as custom content for welcome emails. Script elements and other potentially dangerous markup will be removed.
      */
     public var content: String?
+
     /**
      * The text to appear in the email subject line.
      */
     public var subject: String?
+
     /**
      * The text to appear in the header line of the email body.
      */
@@ -11519,87 +13737,116 @@ public struct WriteDashboard: SDKModel {
      * Description
      */
     public var description: String?
+
     /**
      * Is Hidden
      */
     public var hidden: Bool?
+
     /**
      * Timezone in which the Dashboard will run by default.
      */
     public var query_timezone: String?
+
     /**
      * Refresh Interval, as a time duration phrase like "2 hours 30 minutes". A number with no time units will be interpreted as whole seconds.
      */
     public var refresh_interval: String?
+
     /**
      * Dynamic writeable type for FolderBase removes:
      * id, content_metadata_id, created_at, creator_id, child_count, external_id, is_embed, is_embed_shared_root, is_embed_users_root, is_personal, is_personal_descendant, is_shared_root, is_users_root, can
      */
     public var folder: WriteFolderBase?
+
     /**
      * Dashboard Title
      */
     public var title: String?
+
     /**
      * Content Metadata Slug
      */
     public var slug: String?
+
     /**
      * The preferred route for viewing this dashboard (ie: dashboards or dashboards-next)
      */
     public var preferred_viewer: String?
+
     /**
      * Enables alerts to keep in sync with dashboard filter changes - only available in Enhanced Alerts (beta)
      */
     public var alert_sync_with_dashboard_filter_enabled: Bool?
+
     /**
      * Background color
      */
     public var background_color: String?
+
     /**
      * Enables crossfiltering in dashboards - only available in dashboards-next (beta)
      */
     public var crossfilter_enabled: Bool?
+
     /**
      * Whether or not a dashboard is 'soft' deleted.
      */
     public var deleted: Bool?
+
     /**
      * configuration option that governs how dashboard loading will happen.
      */
     public var load_configuration: String?
+
+    private var _lookml_link_id: AnyString?
     /**
      * Links this dashboard to a particular LookML dashboard such that calling a **sync** operation on that LookML dashboard will update this dashboard to match.
      */
-    public var lookml_link_id: String?
+    public var lookml_link_id: String? {
+        get { _lookml_link_id?.value }
+        set { _lookml_link_id = newValue.map(AnyString.init) }
+    }
+
     /**
      * Show filters bar.  **Security Note:** This property only affects the *cosmetic* appearance of the dashboard, not a user's ability to access data. Hiding the filters bar does **NOT** prevent users from changing filters by other means. For information on how to set up secure data access control policies, see [Control User Access to Data](https://looker.com/docs/r/api/control-access)
      */
     public var show_filters_bar: Bool?
+
     /**
      * Show title
      */
     public var show_title: Bool?
+
+    private var _folder_id: AnyString?
     /**
      * Id of folder
      */
-    public var folder_id: String?
+    public var folder_id: String? {
+        get { _folder_id?.value }
+        set { _folder_id = newValue.map(AnyString.init) }
+    }
+
     /**
      * Color of text on text tiles
      */
     public var text_tile_text_color: String?
+
     /**
      * Tile background color
      */
     public var tile_background_color: String?
+
     /**
      * Tile text color
      */
     public var tile_text_color: String?
+
     /**
      * Title color
      */
     public var title_color: String?
+
     public var appearance: DashboardAppearance?
 
     public init(description: String? = nil, hidden: Bool? = nil, query_timezone: String? = nil, refresh_interval: String? = nil, folder: WriteFolderBase? = nil, title: String? = nil, slug: String? = nil, preferred_viewer: String? = nil, alert_sync_with_dashboard_filter_enabled: Bool? = nil, background_color: String? = nil, crossfilter_enabled: Bool? = nil, deleted: Bool? = nil, load_configuration: String? = nil, lookml_link_id: String? = nil, show_filters_bar: Bool? = nil, show_title: Bool? = nil, folder_id: String? = nil, text_tile_text_color: String? = nil, tile_background_color: String? = nil, tile_text_color: String? = nil, title_color: String? = nil, appearance: DashboardAppearance? = nil) {
@@ -11616,10 +13863,10 @@ public struct WriteDashboard: SDKModel {
         self.crossfilter_enabled = crossfilter_enabled
         self.deleted = deleted
         self.load_configuration = load_configuration
-        self.lookml_link_id = lookml_link_id
+        self._lookml_link_id = lookml_link_id.map(AnyString.init)
         self.show_filters_bar = show_filters_bar
         self.show_title = show_title
-        self.folder_id = folder_id
+        self._folder_id = folder_id.map(AnyString.init)
         self.text_tile_text_color = text_tile_text_color
         self.tile_background_color = tile_background_color
         self.tile_text_color = tile_text_color
@@ -11655,73 +13902,102 @@ public struct WriteDashboardElement: SDKModel {
      * Text tile body text
      */
     public var body_text: String?
+
+    private var _dashboard_id: AnyString?
     /**
      * Id of Dashboard
      */
-    public var dashboard_id: String?
+    public var dashboard_id: String? {
+        get { _dashboard_id?.value }
+        set { _dashboard_id = newValue.map(AnyString.init) }
+    }
+
     /**
      * Dynamic writeable type for LookWithQuery removes:
      * can, content_metadata_id, id, content_favorite_id, created_at, deleted_at, deleter_id, embed_url, excel_file_url, favorite_count, google_spreadsheet_formula, image_embed_url, last_accessed_at, last_updater_id, last_viewed_at, model, public_slug, public_url, short_url, updated_at, view_count, url
      */
     public var look: WriteLookWithQuery?
+
+    private var _look_id: AnyString?
     /**
      * Id Of Look
      */
-    public var look_id: String?
+    public var look_id: String? {
+        get { _look_id?.value }
+        set { _look_id = newValue.map(AnyString.init) }
+    }
+
+    private var _merge_result_id: AnyString?
     /**
      * ID of merge result
      */
-    public var merge_result_id: String?
+    public var merge_result_id: String? {
+        get { _merge_result_id?.value }
+        set { _merge_result_id = newValue.map(AnyString.init) }
+    }
+
     /**
      * Note Display
      */
     public var note_display: String?
+
     /**
      * Note State
      */
     public var note_state: String?
+
     /**
      * Note Text
      */
     public var note_text: String?
+
     /**
      * Dynamic writeable type for Query removes:
      * can, id, slug, share_url, expanded_share_url, url, has_table_calculations
      */
     public var query: WriteQuery?
+
     /**
      * Id Of Query
      */
     public var query_id: Int64?
+
     /**
      * Refresh Interval
      */
     public var refresh_interval: String?
+
     /**
      * Dynamic writeable type for ResultMakerWithIdVisConfigAndDynamicFields removes:
      * id, dynamic_fields, filterables, sorts, merge_result_id, total, query_id, sql_query_id, vis_config
      */
     public var result_maker: WriteResultMakerWithIdVisConfigAndDynamicFields?
+
     /**
      * ID of the ResultMakerLookup entry.
      */
     public var result_maker_id: Int64?
+
     /**
      * Text tile subtitle text
      */
     public var subtitle_text: String?
+
     /**
      * Title of dashboard element
      */
     public var title: String?
+
     /**
      * Whether title is hidden
      */
     public var title_hidden: Bool?
+
     /**
      * Text tile title
      */
     public var title_text: String?
+
     /**
      * Type
      */
@@ -11729,10 +14005,10 @@ public struct WriteDashboardElement: SDKModel {
 
     public init(body_text: String? = nil, dashboard_id: String? = nil, look: WriteLookWithQuery? = nil, look_id: String? = nil, merge_result_id: String? = nil, note_display: String? = nil, note_state: String? = nil, note_text: String? = nil, query: WriteQuery? = nil, query_id: Int64? = nil, refresh_interval: String? = nil, result_maker: WriteResultMakerWithIdVisConfigAndDynamicFields? = nil, result_maker_id: Int64? = nil, subtitle_text: String? = nil, title: String? = nil, title_hidden: Bool? = nil, title_text: String? = nil, type: String? = nil) {
         self.body_text = body_text
-        self.dashboard_id = dashboard_id
+        self._dashboard_id = dashboard_id.map(AnyString.init)
         self.look = look
-        self.look_id = look_id
-        self.merge_result_id = merge_result_id
+        self._look_id = look_id.map(AnyString.init)
+        self._merge_result_id = merge_result_id.map(AnyString.init)
         self.note_display = note_display
         self.note_state = note_state
         self.note_text = note_text
@@ -11759,46 +14035,57 @@ public struct WriteDashboardFilter: SDKModel {
      * Name of filter
      */
     public var name: String?
+
     /**
      * Title of filter
      */
     public var title: String?
+
     /**
      * Type of filter: one of date, number, string, or field
      */
     public var type: String?
+
     /**
      * Default value of filter
      */
     public var default_value: String?
+
     /**
      * Model of filter (required if type = field)
      */
     public var model: String?
+
     /**
      * Explore of filter (required if type = field)
      */
     public var explore: String?
+
     /**
      * Dimension of filter (required if type = field)
      */
     public var dimension: String?
+
     /**
      * Display order of this filter relative to other filters
      */
     public var row: Int64?
+
     /**
      * Array of listeners for faceted filters
      */
     public var listens_to_filters: [String]?
+
     /**
      * Whether the filter allows multiple filter values (deprecated in the latest version of dashboards)
      */
     public var allow_multiple_values: Bool?
+
     /**
      * Whether the filter requires a value to run the dashboard
      */
     public var required: Bool?
+
     /**
      * The visual configuration for this filter. Used to set up how the UI for this filter should appear.
      */
@@ -11826,29 +14113,37 @@ public struct WriteDashboardFilter: SDKModel {
  * can, id, deleted, dashboard_title, dashboard_layout_components
  */
 public struct WriteDashboardLayout: SDKModel {
+    private var _dashboard_id: AnyString?
     /**
      * Id of Dashboard
      */
-    public var dashboard_id: String?
+    public var dashboard_id: String? {
+        get { _dashboard_id?.value }
+        set { _dashboard_id = newValue.map(AnyString.init) }
+    }
+
     /**
      * Type
      */
     public var type: String?
+
     /**
      * Is Active
      */
     public var active: Bool?
+
     /**
      * Column Width
      */
     public var column_width: Int64?
+
     /**
      * Width
      */
     public var width: Int64?
 
     public init(dashboard_id: String? = nil, type: String? = nil, active: Bool? = nil, column_width: Int64? = nil, width: Int64? = nil) {
-        self.dashboard_id = dashboard_id
+        self._dashboard_id = dashboard_id.map(AnyString.init)
         self.type = type
         self.active = active
         self.column_width = column_width
@@ -11862,34 +14157,47 @@ public struct WriteDashboardLayout: SDKModel {
  * can, id, deleted, element_title, element_title_hidden, vis_type
  */
 public struct WriteDashboardLayoutComponent: SDKModel {
+    private var _dashboard_layout_id: AnyString?
     /**
      * Id of Dashboard Layout
      */
-    public var dashboard_layout_id: String?
+    public var dashboard_layout_id: String? {
+        get { _dashboard_layout_id?.value }
+        set { _dashboard_layout_id = newValue.map(AnyString.init) }
+    }
+
+    private var _dashboard_element_id: AnyString?
     /**
      * Id Of Dashboard Element
      */
-    public var dashboard_element_id: String?
+    public var dashboard_element_id: String? {
+        get { _dashboard_element_id?.value }
+        set { _dashboard_element_id = newValue.map(AnyString.init) }
+    }
+
     /**
      * Row
      */
     public var row: Int64?
+
     /**
      * Column
      */
     public var column: Int64?
+
     /**
      * Width
      */
     public var width: Int64?
+
     /**
      * Height
      */
     public var height: Int64?
 
     public init(dashboard_layout_id: String? = nil, dashboard_element_id: String? = nil, row: Int64? = nil, column: Int64? = nil, width: Int64? = nil, height: Int64? = nil) {
-        self.dashboard_layout_id = dashboard_layout_id
-        self.dashboard_element_id = dashboard_element_id
+        self._dashboard_layout_id = dashboard_layout_id.map(AnyString.init)
+        self._dashboard_element_id = dashboard_element_id.map(AnyString.init)
         self.row = row
         self.column = column
         self.width = width
@@ -11907,6 +14215,7 @@ public struct WriteDatagroup: SDKModel {
      * UNIX timestamp before which cache entries are considered stale. Cannot be in the future.
      */
     public var stale_before: Int64?
+
     /**
      * UNIX timestamp at which this entry became triggered. Cannot be in the future.
      */
@@ -11928,119 +14237,152 @@ public struct WriteDBConnection: SDKModel {
      * Name of the connection. Also used as the unique identifier
      */
     public var name: String?
+
     /**
      * Host name/address of server
      */
     public var host: String?
+
     /**
      * Port number on server
      */
     public var port: Int64?
+
     /**
      * Username for server authentication
      */
     public var username: String?
+
     /**
      * (Write-Only) Password for server authentication
      */
     public var password: String?
+
     /**
      * (Write-Only) Base64 encoded Certificate body for server authentication (when appropriate for dialect).
      */
     public var certificate: String?
+
     /**
      * (Write-Only) Certificate keyfile type - .json or .p12
      */
     public var file_type: String?
+
     /**
      * Database name
      */
     public var database: String?
+
     /**
      * Time zone of database
      */
     public var db_timezone: String?
+
     /**
      * Timezone to use in queries
      */
     public var query_timezone: String?
+
     /**
      * Scheme name
      */
     public var schema: String?
+
     /**
      * Maximum number of concurrent connection to use
      */
     public var max_connections: Int64?
+
     /**
      * Maximum size of query in GBs (BigQuery only, can be a user_attribute name)
      */
     public var max_billing_gigabytes: String?
+
     /**
      * Use SSL/TLS when connecting to server
      */
     public var ssl: Bool?
+
     /**
      * Verify the SSL
      */
     public var verify_ssl: Bool?
+
     /**
      * Name of temporary database (if used)
      */
     public var tmp_db_name: String?
+
     /**
      * Additional params to add to JDBC connection string
      */
     public var jdbc_additional_params: String?
+
     /**
      * Connection Pool Timeout, in seconds
      */
     public var pool_timeout: Int64?
+
     /**
      * (Read/Write) SQL Dialect name
      */
     public var dialect_name: String?
+
     /**
      * (Limited access feature) Are per user db credentials enabled. Enabling will remove previously set username and password
      */
     public var user_db_credentials: Bool?
+
     /**
      * Fields whose values map to user attribute names
      */
     public var user_attribute_fields: [String]?
+
     /**
      * Cron string specifying when maintenance such as PDT trigger checks and drops should be performed
      */
     public var maintenance_cron: String?
+
     /**
      * Precache tables in the SQL Runner
      */
     public var sql_runner_precache_tables: Bool?
+
     /**
      * Fetch Information Schema For SQL Writing
      */
     public var sql_writing_with_info_schema: Bool?
+
     /**
      * SQL statements (semicolon separated) to issue after connecting to the database. Requires `custom_after_connect_statements` license feature
      */
     public var after_connect_statements: String?
+
     /**
      * Dynamic writeable type for DBConnectionOverride removes:
      * has_password
      */
     public var pdt_context_override: WriteDBConnectionOverride?
+
+    private var _tunnel_id: AnyString?
     /**
      * The Id of the ssh tunnel this connection uses
      */
-    public var tunnel_id: String?
+    public var tunnel_id: String? {
+        get { _tunnel_id?.value }
+        set { _tunnel_id = newValue.map(AnyString.init) }
+    }
+
     /**
      * Maximum number of threads to use to build PDTs in parallel
      */
     public var pdt_concurrency: Int64?
+
     /**
      * When disable_context_comment is true comment will not be added to SQL
      */
     public var disable_context_comment: Bool?
+
     /**
      * An External OAuth Application to use for authenticating to the database
      */
@@ -12073,7 +14415,7 @@ public struct WriteDBConnection: SDKModel {
         self.sql_writing_with_info_schema = sql_writing_with_info_schema
         self.after_connect_statements = after_connect_statements
         self.pdt_context_override = pdt_context_override
-        self.tunnel_id = tunnel_id
+        self._tunnel_id = tunnel_id.map(AnyString.init)
         self.pdt_concurrency = pdt_concurrency
         self.disable_context_comment = disable_context_comment
         self.oauth_application_id = oauth_application_id
@@ -12090,42 +14432,52 @@ public struct WriteDBConnectionOverride: SDKModel {
      * Context in which to override (`pdt` is the only allowed value)
      */
     public var context: String?
+
     /**
      * Host name/address of server
      */
     public var host: String?
+
     /**
      * Port number on server
      */
     public var port: String?
+
     /**
      * Username for server authentication
      */
     public var username: String?
+
     /**
      * (Write-Only) Password for server authentication
      */
     public var password: String?
+
     /**
      * (Write-Only) Base64 encoded Certificate body for server authentication (when appropriate for dialect).
      */
     public var certificate: String?
+
     /**
      * (Write-Only) Certificate keyfile type - .json or .p12
      */
     public var file_type: String?
+
     /**
      * Database name
      */
     public var database: String?
+
     /**
      * Scheme name
      */
     public var schema: String?
+
     /**
      * Additional params to add to JDBC connection string
      */
     public var jdbc_additional_params: String?
+
     /**
      * SQL statements (semicolon separated) to issue after connecting to the database. Requires `custom_after_connect_statements` license feature
      */
@@ -12156,14 +14508,21 @@ public struct WriteExternalOauthApplication: SDKModel {
      * The name of this application.  For Snowflake connections, this should be the name of the host database.
      */
     public var name: String?
+
+    private var _client_id: AnyString?
     /**
      * The OAuth Client ID for this application
      */
-    public var client_id: String?
+    public var client_id: String? {
+        get { _client_id?.value }
+        set { _client_id = newValue.map(AnyString.init) }
+    }
+
     /**
      * (Write-Only) The OAuth Client Secret for this application
      */
     public var client_secret: String?
+
     /**
      * The database dialect for this application.
      */
@@ -12171,7 +14530,7 @@ public struct WriteExternalOauthApplication: SDKModel {
 
     public init(name: String? = nil, client_id: String? = nil, client_secret: String? = nil, dialect_name: String? = nil) {
         self.name = name
-        self.client_id = client_id
+        self._client_id = client_id.map(AnyString.init)
         self.client_secret = client_secret
         self.dialect_name = dialect_name
     }
@@ -12187,14 +14546,19 @@ public struct WriteFolderBase: SDKModel {
      * Unique Name
      */
     public var name: String
+
+    private var _parent_id: AnyString?
     /**
      * Id of Parent. If the parent id is null, this is a root-level entry
      */
-    public var parent_id: String?
+    public var parent_id: String? {
+        get { _parent_id?.value }
+        set { _parent_id = newValue.map(AnyString.init) }
+    }
 
     public init(name: String, parent_id: String? = nil) {
         self.name = name
-        self.parent_id = parent_id
+        self._parent_id = parent_id.map(AnyString.init)
     }
 
     public init(_ name: String, parent_id: String? = nil) {
@@ -12212,6 +14576,7 @@ public struct WriteGitBranch: SDKModel {
      * The short name on the local. Updating `name` results in `git checkout <new_name>`
      */
     public var name: String?
+
     /**
      * The resolved ref of this branch. Updating `ref` results in `git reset --hard <new_ref>``.
      */
@@ -12233,6 +14598,7 @@ public struct WriteGroup: SDKModel {
      * Group can be used in content access controls
      */
     public var can_add_to_content_metadata: Bool?
+
     /**
      * Name of group
      */
@@ -12254,10 +14620,12 @@ public struct WriteIntegration: SDKModel {
      * Whether the integration is available to users.
      */
     public var enabled: Bool?
+
     /**
      * Array of params for the integration.
      */
     public var params: [IntegrationParam]?
+
     /**
      * Whether the integration is available to users.
      */
@@ -12280,6 +14648,7 @@ public struct WriteIntegrationHub: SDKModel {
      * URL of the hub.
      */
     public var url: String?
+
     /**
      * (Write-Only) An authorization key that will be sent to the integration hub on every request.
      */
@@ -12317,6 +14686,7 @@ public struct WriteInternalHelpResourcesContent: SDKModel {
      * Text to display in the help menu item which will display the internal help resources
      */
     public var organization_name: String?
+
     /**
      * Content to be displayed in the internal help resources page/modal
      */
@@ -12338,134 +14708,171 @@ public struct WriteLDAPConfig: SDKModel {
      * Allow alternate email-based login via '/login/email' for admins and for specified users with the 'login_special_email' permission. This option is useful as a fallback during ldap setup, if ldap config problems occur later, or if you need to support some users who are not in your ldap directory. Looker email/password logins are always disabled for regular users when ldap is enabled.
      */
     public var alternate_email_login_allowed: Bool?
+
     /**
      * (Write-Only)  Password for the LDAP account used to access the LDAP server
      */
     public var auth_password: String?
+
     /**
      * Users will not be allowed to login at all unless a role for them is found in LDAP if set to true
      */
     public var auth_requires_role: Bool?
+
     /**
      * Distinguished name of LDAP account used to access the LDAP server
      */
     public var auth_username: String?
+
     /**
      * LDAP server hostname
      */
     public var connection_host: String?
+
     /**
      * LDAP host port
      */
     public var connection_port: String?
+
     /**
      * Use Transport Layer Security
      */
     public var connection_tls: Bool?
+
     /**
      * Do not verify peer when using TLS
      */
     public var connection_tls_no_verify: Bool?
+
     /**
      * (Write-Only)  Array of ids of groups that will be applied to new users the first time they login via LDAP
      */
     public var default_new_user_group_ids: [Int64]?
+
     /**
      * (Write-Only)  Array of ids of roles that will be applied to new users the first time they login via LDAP
      */
     public var default_new_user_role_ids: [Int64]?
+
     /**
      * Enable/Disable LDAP authentication for the server
      */
     public var enabled: Bool?
+
     /**
      * Don't attempt to do LDAP search result paging (RFC 2696) even if the LDAP server claims to support it.
      */
     public var force_no_page: Bool?
+
     /**
      * Base dn for finding groups in LDAP searches
      */
     public var groups_base_dn: String?
+
     /**
      * Identifier for a strategy for how Looker will search for groups in the LDAP server
      */
     public var groups_finder_type: String?
+
     /**
      * LDAP Group attribute that signifies the members of the groups. Most commonly 'member'
      */
     public var groups_member_attribute: String?
+
     /**
      * Optional comma-separated list of supported LDAP objectclass for groups when doing groups searches
      */
     public var groups_objectclasses: String?
+
     /**
      * LDAP Group attribute that signifies the user in a group. Most commonly 'dn'
      */
     public var groups_user_attribute: String?
+
     /**
      * (Read/Write) Array of mappings between LDAP Groups and arrays of Looker Role ids
      */
     public var groups_with_role_ids: [LDAPGroupWrite]?
+
     /**
      * Merge first-time ldap login to existing user account by email addresses. When a user logs in for the first time via ldap this option will connect this user into their existing account by finding the account with a matching email address. Otherwise a new user account will be created for the user.
      */
     public var merge_new_users_by_email: Bool?
+
     /**
      * Set user roles in Looker based on groups from LDAP
      */
     public var set_roles_from_groups: Bool?
+
     /**
      * (Write-Only)  Test LDAP user password. For ldap tests only.
      */
     public var test_ldap_password: String?
+
     /**
      * (Write-Only)  Test LDAP user login id. For ldap tests only.
      */
     public var test_ldap_user: String?
+
     /**
      * Name of user record attributes used to indicate email address field
      */
     public var user_attribute_map_email: String?
+
     /**
      * Name of user record attributes used to indicate first name
      */
     public var user_attribute_map_first_name: String?
+
     /**
      * Name of user record attributes used to indicate last name
      */
     public var user_attribute_map_last_name: String?
+
+    private var _user_attribute_map_ldap_id: AnyString?
     /**
      * Name of user record attributes used to indicate unique record id
      */
-    public var user_attribute_map_ldap_id: String?
+    public var user_attribute_map_ldap_id: String? {
+        get { _user_attribute_map_ldap_id?.value }
+        set { _user_attribute_map_ldap_id = newValue.map(AnyString.init) }
+    }
+
     /**
      * (Read/Write) Array of mappings between LDAP User Attributes and arrays of Looker User Attribute ids
      */
     public var user_attributes_with_ids: [LDAPUserAttributeWrite]?
+
     /**
      * Distinguished name of LDAP node used as the base for user searches
      */
     public var user_bind_base_dn: String?
+
     /**
      * (Optional) Custom RFC-2254 filter clause for use in finding user during login. Combined via 'and' with the other generated filter clauses.
      */
     public var user_custom_filter: String?
+
     /**
      * Name(s) of user record attributes used for matching user login id (comma separated list)
      */
     public var user_id_attribute_names: String?
+
     /**
      * (Optional) Name of user record objectclass used for finding user during login id
      */
     public var user_objectclass: String?
+
     /**
      * Allow LDAP auth'd users to be members of non-reflected Looker groups. If 'false', user will be removed from non-reflected groups on login.
      */
     public var allow_normal_group_membership: Bool?
+
     /**
      * LDAP auth'd users will be able to inherit roles from non-reflected Looker groups.
      */
     public var allow_roles_from_normal_groups: Bool?
+
     /**
      * Allows roles to be directly assigned to LDAP auth'd users.
      */
@@ -12497,7 +14904,7 @@ public struct WriteLDAPConfig: SDKModel {
         self.user_attribute_map_email = user_attribute_map_email
         self.user_attribute_map_first_name = user_attribute_map_first_name
         self.user_attribute_map_last_name = user_attribute_map_last_name
-        self.user_attribute_map_ldap_id = user_attribute_map_ldap_id
+        self._user_attribute_map_ldap_id = user_attribute_map_ldap_id.map(AnyString.init)
         self.user_attributes_with_ids = user_attributes_with_ids
         self.user_bind_base_dn = user_bind_base_dn
         self.user_custom_filter = user_custom_filter
@@ -12551,14 +14958,17 @@ public struct WriteLookmlModel: SDKModel {
      * Array of names of connections this model is allowed to use
      */
     public var allowed_db_connection_names: [String]?
+
     /**
      * Name of the model. Also used as the unique identifier
      */
     public var name: String?
+
     /**
      * Name of project containing the model
      */
     public var project_name: String?
+
     /**
      * Is this model allowed to use all current and future connections
      */
@@ -12582,39 +14992,52 @@ public struct WriteLookWithQuery: SDKModel {
      * Look Title
      */
     public var title: String?
+
     /**
      * User Id
      */
     public var user_id: Int64?
+
     /**
      * Whether or not a look is 'soft' deleted.
      */
     public var deleted: Bool?
+
     /**
      * Description
      */
     public var description: String?
+
     /**
      * auto-run query when Look viewed
      */
     public var is_run_on_load: Bool?
+
     /**
      * Is Public
      */
     public var `public`: Bool?
+
     /**
      * Query Id
      */
     public var query_id: Int64?
+
     /**
      * Dynamic writeable type for FolderBase removes:
      * id, content_metadata_id, created_at, creator_id, child_count, external_id, is_embed, is_embed_shared_root, is_embed_users_root, is_personal, is_personal_descendant, is_shared_root, is_users_root, can
      */
     public var folder: WriteFolderBase?
+
+    private var _folder_id: AnyString?
     /**
      * Folder Id
      */
-    public var folder_id: String?
+    public var folder_id: String? {
+        get { _folder_id?.value }
+        set { _folder_id = newValue.map(AnyString.init) }
+    }
+
     /**
      * Dynamic writeable type for Query removes:
      * can, id, slug, share_url, expanded_share_url, url, has_table_calculations
@@ -12630,7 +15053,7 @@ public struct WriteLookWithQuery: SDKModel {
         self.`public` = `public`
         self.query_id = query_id
         self.folder = folder
-        self.folder_id = folder_id
+        self._folder_id = folder_id.map(AnyString.init)
         self.query = query
     }
 
@@ -12645,26 +15068,32 @@ public struct WriteMergeQuery: SDKModel {
      * Column Limit
      */
     public var column_limit: String?
+
     /**
      * Dynamic Fields
      */
     public var dynamic_fields: String?
+
     /**
      * Pivots
      */
     public var pivots: [String]?
+
     /**
      * Sorts
      */
     public var sorts: [String]?
+
     /**
      * Source Queries defining the results to be merged.
      */
     public var source_queries: [MergeQuerySourceQuery]?
+
     /**
      * Total
      */
     public var total: Bool?
+
     /**
      * Visualization Config
      */
@@ -12688,6 +15117,7 @@ public struct WriteMergeQuery: SDKModel {
  */
 public struct WriteModelSet: SDKModel {
     public var models: [String]?
+
     /**
      * Name of ModelSet
      */
@@ -12709,18 +15139,22 @@ public struct WriteOauthClientApp: SDKModel {
      * The uri with which this application will receive an auth code by browser redirect.
      */
     public var redirect_uri: String?
+
     /**
      * The application's display name
      */
     public var display_name: String?
+
     /**
      * A description of the application that will be displayed to users
      */
     public var description: String?
+
     /**
      * When enabled is true, OAuth2 and API requests will be accepted from this app. When false, all requests from this app will be refused.
      */
     public var enabled: Bool?
+
     /**
      * If set, only Looker users who are members of this group can use this web app with Looker. If group_id is not set, any Looker user may use this app to access this Looker instance
      */
@@ -12745,94 +15179,117 @@ public struct WriteOIDCConfig: SDKModel {
      * Allow alternate email-based login via '/login/email' for admins and for specified users with the 'login_special_email' permission. This option is useful as a fallback during ldap setup, if ldap config problems occur later, or if you need to support some users who are not in your ldap directory. Looker email/password logins are always disabled for regular users when ldap is enabled.
      */
     public var alternate_email_login_allowed: Bool?
+
     /**
      * OpenID Provider Audience
      */
     public var audience: String?
+
     /**
      * Users will not be allowed to login at all unless a role for them is found in OIDC if set to true
      */
     public var auth_requires_role: Bool?
+
     /**
      * OpenID Provider Authorization Url
      */
     public var authorization_endpoint: String?
+
     /**
      * (Write-Only) Array of ids of groups that will be applied to new users the first time they login via OIDC
      */
     public var default_new_user_group_ids: [Int64]?
+
     /**
      * (Write-Only) Array of ids of roles that will be applied to new users the first time they login via OIDC
      */
     public var default_new_user_role_ids: [Int64]?
+
     /**
      * Enable/Disable OIDC authentication for the server
      */
     public var enabled: Bool?
+
     /**
      * Name of user record attributes used to indicate groups. Used when 'groups_finder_type' is set to 'grouped_attribute_values'
      */
     public var groups_attribute: String?
+
     /**
      * (Read/Write) Array of mappings between OIDC Groups and arrays of Looker Role ids
      */
     public var groups_with_role_ids: [OIDCGroupWrite]?
+
     /**
      * Relying Party Identifier (provided by OpenID Provider)
      */
     public var identifier: String?
+
     /**
      * OpenID Provider Issuer
      */
     public var issuer: String?
+
     /**
      * Merge first-time oidc login to existing user account by email addresses. When a user logs in for the first time via oidc this option will connect this user into their existing account by finding the account with a matching email address by testing the given types of credentials for existing users. Otherwise a new user account will be created for the user. This list (if provided) must be a comma separated list of string like 'email,ldap,google'
      */
     public var new_user_migration_types: String?
+
     /**
      * Array of scopes to request.
      */
     public var scopes: [String]?
+
     /**
      * (Write-Only) Relying Party Secret (provided by OpenID Provider)
      */
     public var secret: String?
+
     /**
      * Set user roles in Looker based on groups from OIDC
      */
     public var set_roles_from_groups: Bool?
+
     /**
      * OpenID Provider Token Url
      */
     public var token_endpoint: String?
+
     /**
      * Name of user record attributes used to indicate email address field
      */
     public var user_attribute_map_email: String?
+
     /**
      * Name of user record attributes used to indicate first name
      */
     public var user_attribute_map_first_name: String?
+
     /**
      * Name of user record attributes used to indicate last name
      */
     public var user_attribute_map_last_name: String?
+
     /**
      * (Read/Write) Array of mappings between OIDC User Attributes and arrays of Looker User Attribute ids
      */
     public var user_attributes_with_ids: [OIDCUserAttributeWrite]?
+
     /**
      * OpenID Provider User Information Url
      */
     public var userinfo_endpoint: String?
+
     /**
      * Allow OIDC auth'd users to be members of non-reflected Looker groups. If 'false', user will be removed from non-reflected groups on login.
      */
     public var allow_normal_group_membership: Bool?
+
     /**
      * OIDC auth'd users will inherit roles from non-reflected Looker groups.
      */
     public var allow_roles_from_normal_groups: Bool?
+
     /**
      * Allows roles to be directly assigned to OIDC auth'd users.
      */
@@ -12876,14 +15333,17 @@ public struct WritePasswordConfig: SDKModel {
      * Minimum number of characters required for a new password.  Must be between 7 and 100
      */
     public var min_length: Int64?
+
     /**
      * Require at least one numeric character
      */
     public var require_numeric: Bool?
+
     /**
      * Require at least one uppercase and one lowercase letter
      */
     public var require_upperlower: Bool?
+
     /**
      * Require at least one special character
      */
@@ -12907,6 +15367,7 @@ public struct WritePermissionSet: SDKModel {
      * Name of PermissionSet
      */
     public var name: String?
+
     public var permissions: [String]?
 
     public init(name: String? = nil, permissions: [String]? = nil) {
@@ -12925,70 +15386,87 @@ public struct WriteProject: SDKModel {
      * Project display name
      */
     public var name: String?
+
     /**
      * Git remote repository url
      */
     public var git_remote_url: String?
+
     /**
      * Git username for HTTPS authentication. (For production only, if using user attributes.)
      */
     public var git_username: String?
+
     /**
      * (Write-Only) Git password for HTTPS authentication. (For production only, if using user attributes.)
      */
     public var git_password: String?
+
     /**
      * Git production branch name. Defaults to master. Supported only in Looker 21.0 and higher.
      */
     public var git_production_branch_name: String?
+
     /**
      * If true, the project uses a git cookie for authentication.
      */
     public var use_git_cookie_auth: Bool?
+
     /**
      * User attribute name for username in per-user HTTPS authentication.
      */
     public var git_username_user_attribute: String?
+
     /**
      * User attribute name for password in per-user HTTPS authentication.
      */
     public var git_password_user_attribute: String?
+
     /**
      * Name of the git service provider
      */
     public var git_service_name: String?
+
     /**
      * Port that HTTP(S) application server is running on (for PRs, file browsing, etc.)
      */
     public var git_application_server_http_port: Int64?
+
     /**
      * Scheme that is running on application server (for PRs, file browsing, etc.)
      */
     public var git_application_server_http_scheme: String?
+
     /**
      * (Write-Only) Optional secret token with which to authenticate requests to the webhook deploy endpoint. If not set, endpoint is unauthenticated.
      */
     public var deploy_secret: String?
+
     /**
      * (Write-Only) When true, unsets the deploy secret to allow unauthenticated access to the webhook deploy endpoint.
      */
     public var unset_deploy_secret: Bool?
+
     /**
      * The git pull request policy for this project. Valid values are: "off", "links", "recommended", "required".
      */
     public var pull_request_mode: PullRequestMode?
+
     /**
      * Validation policy: If true, the project must pass validation checks before project changes can be committed to the git repository
      */
     public var validation_required: Bool?
+
     /**
      * If true, advanced git release management is enabled for this project
      */
     public var git_release_mgmt_enabled: Bool?
+
     /**
      * Validation policy: If true, the project can be committed with warnings when `validation_required` is true. (`allow_warnings` does nothing if `validation_required` is false).
      */
     public var allow_warnings: Bool?
+
     /**
      * Status of dependencies in your manifest & lockfile
      */
@@ -13026,74 +15504,96 @@ public struct WriteQuery: SDKModel {
      * Model
      */
     public var model: String
+
     /**
      * Explore Name
      */
     public var view: String
+
     /**
      * Fields
      */
     public var fields: [String]?
+
     /**
      * Pivots
      */
     public var pivots: [String]?
+
     /**
      * Fill Fields
      */
     public var fill_fields: [String]?
+
     /**
      * Filters
      */
     public var filters: StringDictionary<AnyCodable>?
+
     /**
      * Filter Expression
      */
     public var filter_expression: String?
+
     /**
      * Sorting for the query results. Use the format `["view.field", ...]` to sort on fields in ascending order. Use the format `["view.field desc", ...]` to sort on fields in descending order. Use `["__UNSORTED__"]` (2 underscores before and after) to disable sorting entirely. Empty sorts `[]` will trigger a default sort.
      */
     public var sorts: [String]?
+
     /**
      * Limit
      */
     public var limit: String?
+
     /**
      * Column Limit
      */
     public var column_limit: String?
+
     /**
      * Total
      */
     public var total: Bool?
+
     /**
      * Raw Total
      */
     public var row_total: String?
+
     /**
      * Fields on which to run subtotals
      */
     public var subtotals: [String]?
+
     /**
      * Visualization configuration properties. These properties are typically opaque and differ based on the type of visualization used. There is no specified set of allowed keys. The values can be any type supported by JSON. A "type" key with a string value is often present, and is used by Looker to determine which visualization to present. Visualizations ignore unknown vis_config properties.
      */
     public var vis_config: StringDictionary<AnyCodable>?
+
     /**
      * The filter_config represents the state of the filter UI on the explore page for a given query. When running a query via the Looker UI, this parameter takes precedence over "filters". When creating a query or modifying an existing query, "filter_config" should be set to null. Setting it to any other value could cause unexpected filtering behavior. The format should be considered opaque.
      */
     public var filter_config: StringDictionary<AnyCodable>?
+
     /**
      * Visible UI Sections
      */
     public var visible_ui_sections: String?
+
     /**
      * Dynamic Fields
      */
     public var dynamic_fields: String?
+
+    private var _client_id: AnyString?
     /**
      * Client Id: used to generate shortened explore URLs. If set by client, must be a unique 22 character alphanumeric string. Otherwise one will be generated.
      */
-    public var client_id: String?
+    public var client_id: String? {
+        get { _client_id?.value }
+        set { _client_id = newValue.map(AnyString.init) }
+    }
+
     /**
      * Query Timezone
      */
@@ -13117,7 +15617,7 @@ public struct WriteQuery: SDKModel {
         self.filter_config = filter_config
         self.visible_ui_sections = visible_ui_sections
         self.dynamic_fields = dynamic_fields
-        self.client_id = client_id
+        self._client_id = client_id.map(AnyString.init)
         self.query_timezone = query_timezone
     }
 
@@ -13136,10 +15636,12 @@ public struct WriteRepositoryCredential: SDKModel {
      * Git username for HTTPS authentication.
      */
     public var git_username: String?
+
     /**
      * (Write-Only) Git password for HTTPS authentication.
      */
     public var git_password: String?
+
     /**
      * Public deploy key for SSH authentication.
      */
@@ -13179,20 +15681,24 @@ public struct WriteRole: SDKModel {
      * Name of Role
      */
     public var name: String?
+
     /**
      * Dynamic writeable type for PermissionSet removes:
      * can, all_access, built_in, id, url
      */
     public var permission_set: WritePermissionSet?
+
     /**
      * (Write-Only) Id of permission set
      */
     public var permission_set_id: Int64?
+
     /**
      * Dynamic writeable type for ModelSet removes:
      * can, all_access, built_in, id, url
      */
     public var model_set: WriteModelSet?
+
     /**
      * (Write-Only) Id of model set
      */
@@ -13217,94 +15723,117 @@ public struct WriteSamlConfig: SDKModel {
      * Enable/Disable Saml authentication for the server
      */
     public var enabled: Bool?
+
     /**
      * Identity Provider Certificate (provided by IdP)
      */
     public var idp_cert: String?
+
     /**
      * Identity Provider Url (provided by IdP)
      */
     public var idp_url: String?
+
     /**
      * Identity Provider Issuer (provided by IdP)
      */
     public var idp_issuer: String?
+
     /**
      * Identity Provider Audience (set in IdP config). Optional in Looker. Set this only if you want Looker to validate the audience value returned by the IdP.
      */
     public var idp_audience: String?
+
     /**
      * Count of seconds of clock drift to allow when validating timestamps of assertions.
      */
     public var allowed_clock_drift: Int64?
+
     /**
      * Name of user record attributes used to indicate email address field
      */
     public var user_attribute_map_email: String?
+
     /**
      * Name of user record attributes used to indicate first name
      */
     public var user_attribute_map_first_name: String?
+
     /**
      * Name of user record attributes used to indicate last name
      */
     public var user_attribute_map_last_name: String?
+
     /**
      * Merge first-time saml login to existing user account by email addresses. When a user logs in for the first time via saml this option will connect this user into their existing account by finding the account with a matching email address by testing the given types of credentials for existing users. Otherwise a new user account will be created for the user. This list (if provided) must be a comma separated list of string like 'email,ldap,google'
      */
     public var new_user_migration_types: String?
+
     /**
      * Allow alternate email-based login via '/login/email' for admins and for specified users with the 'login_special_email' permission. This option is useful as a fallback during ldap setup, if ldap config problems occur later, or if you need to support some users who are not in your ldap directory. Looker email/password logins are always disabled for regular users when ldap is enabled.
      */
     public var alternate_email_login_allowed: Bool?
+
     /**
      * (Write-Only) Array of ids of roles that will be applied to new users the first time they login via Saml
      */
     public var default_new_user_role_ids: [Int64]?
+
     /**
      * (Write-Only) Array of ids of groups that will be applied to new users the first time they login via Saml
      */
     public var default_new_user_group_ids: [Int64]?
+
     /**
      * Set user roles in Looker based on groups from Saml
      */
     public var set_roles_from_groups: Bool?
+
     /**
      * Name of user record attributes used to indicate groups. Used when 'groups_finder_type' is set to 'grouped_attribute_values'
      */
     public var groups_attribute: String?
+
     /**
      * (Read/Write) Array of mappings between Saml Groups and arrays of Looker Role ids
      */
     public var groups_with_role_ids: [SamlGroupWrite]?
+
     /**
      * Users will not be allowed to login at all unless a role for them is found in Saml if set to true
      */
     public var auth_requires_role: Bool?
+
     /**
      * (Read/Write) Array of mappings between Saml User Attributes and arrays of Looker User Attribute ids
      */
     public var user_attributes_with_ids: [SamlUserAttributeWrite]?
+
     /**
      * Identifier for a strategy for how Looker will find groups in the SAML response. One of ['grouped_attribute_values', 'individual_attributes']
      */
     public var groups_finder_type: String?
+
     /**
      * Value for group attribute used to indicate membership. Used when 'groups_finder_type' is set to 'individual_attributes'
      */
     public var groups_member_value: String?
+
     /**
      * Bypass the login page when user authentication is required. Redirect to IdP immediately instead.
      */
     public var bypass_login_page: Bool?
+
     /**
      * Allow SAML auth'd users to be members of non-reflected Looker groups. If 'false', user will be removed from non-reflected groups on login.
      */
     public var allow_normal_group_membership: Bool?
+
     /**
      * SAML auth'd users will inherit roles from non-reflected Looker groups.
      */
     public var allow_roles_from_normal_groups: Bool?
+
     /**
      * Allows roles to be directly assigned to SAML auth'd users.
      */
@@ -13348,102 +15877,135 @@ public struct WriteScheduledPlan: SDKModel {
      * Name of this scheduled plan
      */
     public var name: String?
+
     /**
      * User Id which owns this scheduled plan
      */
     public var user_id: Int64?
+
     /**
      * Whether schedule is run as recipient (only applicable for email recipients)
      */
     public var run_as_recipient: Bool?
+
     /**
      * Whether the ScheduledPlan is enabled
      */
     public var enabled: Bool?
+
     /**
      * Id of a look
      */
     public var look_id: Int64?
+
     /**
      * Id of a dashboard
      */
     public var dashboard_id: Int64?
+
+    private var _lookml_dashboard_id: AnyString?
     /**
      * Id of a LookML dashboard
      */
-    public var lookml_dashboard_id: String?
+    public var lookml_dashboard_id: String? {
+        get { _lookml_dashboard_id?.value }
+        set { _lookml_dashboard_id = newValue.map(AnyString.init) }
+    }
+
     /**
      * Query string to run look or dashboard with
      */
     public var filters_string: String?
+
     /**
      * (DEPRECATED) Alias for filters_string field
      */
     public var dashboard_filters: String?
+
     /**
      * Delivery should occur if running the dashboard or look returns results
      */
     public var require_results: Bool?
+
     /**
      * Delivery should occur if the dashboard look does not return results
      */
     public var require_no_results: Bool?
+
     /**
      * Delivery should occur if data have changed since the last run
      */
     public var require_change: Bool?
+
     /**
      * Will run an unlimited query and send all results.
      */
     public var send_all_results: Bool?
+
     /**
      * Vixie-Style crontab specification when to run
      */
     public var crontab: String?
+
     /**
      * Name of a datagroup; if specified will run when datagroup triggered (can't be used with cron string)
      */
     public var datagroup: String?
+
     /**
      * Timezone for interpreting the specified crontab (default is Looker instance timezone)
      */
     public var timezone: String?
+
+    private var _query_id: AnyString?
     /**
      * Query id
      */
-    public var query_id: String?
+    public var query_id: String? {
+        get { _query_id?.value }
+        set { _query_id = newValue.map(AnyString.init) }
+    }
+
     /**
      * Scheduled plan destinations
      */
     public var scheduled_plan_destination: [ScheduledPlanDestination]?
+
     /**
      * Whether the plan in question should only be run once (usually for testing)
      */
     public var run_once: Bool?
+
     /**
      * Whether links back to Looker should be included in this ScheduledPlan
      */
     public var include_links: Bool?
+
     /**
      * The size of paper the PDF should be formatted to fit. Valid values are: "letter", "legal", "tabloid", "a0", "a1", "a2", "a3", "a4", "a5".
      */
     public var pdf_paper_size: String?
+
     /**
      * Whether the PDF should be formatted for landscape orientation
      */
     public var pdf_landscape: Bool?
+
     /**
      * Whether this schedule is in an embed context or not
      */
     public var embed: Bool?
+
     /**
      * Color scheme of the dashboard if applicable
      */
     public var color_theme: String?
+
     /**
      * Whether or not to expand table vis to full length
      */
     public var long_tables: Bool?
+
     /**
      * The pixel width at which we render the inline table visualizations
      */
@@ -13456,7 +16018,7 @@ public struct WriteScheduledPlan: SDKModel {
         self.enabled = enabled
         self.look_id = look_id
         self.dashboard_id = dashboard_id
-        self.lookml_dashboard_id = lookml_dashboard_id
+        self._lookml_dashboard_id = lookml_dashboard_id.map(AnyString.init)
         self.filters_string = filters_string
         self.dashboard_filters = dashboard_filters
         self.require_results = require_results
@@ -13466,7 +16028,7 @@ public struct WriteScheduledPlan: SDKModel {
         self.crontab = crontab
         self.datagroup = datagroup
         self.timezone = timezone
-        self.query_id = query_id
+        self._query_id = query_id.map(AnyString.init)
         self.scheduled_plan_destination = scheduled_plan_destination
         self.run_once = run_once
         self.include_links = include_links
@@ -13489,18 +16051,22 @@ public struct WriteSessionConfig: SDKModel {
      * Allow users to have persistent sessions when they login
      */
     public var allow_persistent_sessions: Bool?
+
     /**
      * Number of minutes for user sessions.  Must be between 5 and 43200
      */
     public var session_minutes: Int64?
+
     /**
      * Allow users to have an unbounded number of concurrent sessions (otherwise, users will be limited to only one session at a time).
      */
     public var unlimited_sessions_per_user: Bool?
+
     /**
      * Enforce session logout for sessions that are inactive for 15 minutes.
      */
     public var use_inactivity_based_logout: Bool?
+
     /**
      * Track location of session when user logs in.
      */
@@ -13524,14 +16090,17 @@ public struct WriteSetting: SDKModel {
      * Toggle extension framework on or off
      */
     public var extension_framework_enabled: Bool?
+
     /**
      * Toggle marketplace auto install on or off. Note that auto install only runs if marketplace is enabled.
      */
     public var marketplace_auto_install_enabled: Bool?
+
     /**
      * Toggle marketplace on or off
      */
     public var marketplace_enabled: Bool?
+
     /**
      * Dynamic writeable type for WhitelabelConfiguration removes:
      * id, logo_url, favicon_url
@@ -13556,14 +16125,17 @@ public struct WriteSshServer: SDKModel {
      * The name to identify this SSH Server
      */
     public var ssh_server_name: String?
+
     /**
      * The hostname or ip address of the SSH Server
      */
     public var ssh_server_host: String?
+
     /**
      * The port to connect to on the SSH Server
      */
     public var ssh_server_port: Int64?
+
     /**
      * The username used to connect to the SSH Server
      */
@@ -13583,21 +16155,27 @@ public struct WriteSshServer: SDKModel {
  * tunnel_id, ssh_server_name, ssh_server_host, ssh_server_port, ssh_server_user, last_attempt, local_host_port, status
  */
 public struct WriteSshTunnel: SDKModel {
+    private var _ssh_server_id: AnyString?
     /**
      * SSH Server ID
      */
-    public var ssh_server_id: String?
+    public var ssh_server_id: String? {
+        get { _ssh_server_id?.value }
+        set { _ssh_server_id = newValue.map(AnyString.init) }
+    }
+
     /**
      * Hostname or IP Address of the Database Server
      */
     public var database_host: String?
+
     /**
      * Port that the Database Server is listening on
      */
     public var database_port: Int64?
 
     public init(ssh_server_id: String? = nil, database_host: String? = nil, database_port: Int64? = nil) {
-        self.ssh_server_id = ssh_server_id
+        self._ssh_server_id = ssh_server_id.map(AnyString.init)
         self.database_host = database_host
         self.database_port = database_port
     }
@@ -13613,14 +16191,17 @@ public struct WriteTheme: SDKModel {
      * Timestamp for when this theme becomes active. Null=always
      */
     public var begin_at: Date?
+
     /**
      * Timestamp for when this theme expires. Null=never
      */
     public var end_at: Date?
+
     /**
      * Name of theme. Can only be alphanumeric and underscores.
      */
     public var name: String?
+
     public var settings: ThemeSettings?
 
     public init(begin_at: Date? = nil, end_at: Date? = nil, name: String? = nil, settings: ThemeSettings? = nil) {
@@ -13642,30 +16223,41 @@ public struct WriteUser: SDKModel {
      * can, created_at, is_disabled, logged_in_at, password_reset_url, type, url, user_url
      */
     public var credentials_email: WriteCredentialsEmail?
+
     /**
      * First name
      */
     public var first_name: String?
+
+    private var _home_folder_id: AnyString?
     /**
      * ID string for user's home folder
      */
-    public var home_folder_id: String?
+    public var home_folder_id: String? {
+        get { _home_folder_id?.value }
+        set { _home_folder_id = newValue.map(AnyString.init) }
+    }
+
     /**
      * Account has been disabled
      */
     public var is_disabled: Bool?
+
     /**
      * Last name
      */
     public var last_name: String?
+
     /**
      * User's preferred locale. User locale takes precedence over Looker's system-wide default locale. Locale determines language of display strings and date and numeric formatting in API responses. Locale string must be a 2 letter language code or a combination of language code and region code: 'en' or 'en-US', for example.
      */
     public var locale: String?
+
     /**
      * User's dev workspace has been checked for presence of applicable production projects
      */
     public var models_dir_validated: Bool?
+
     /**
      * Per user dictionary of undocumented state information owned by the Looker UI.
      */
@@ -13674,7 +16266,7 @@ public struct WriteUser: SDKModel {
     public init(credentials_email: WriteCredentialsEmail? = nil, first_name: String? = nil, home_folder_id: String? = nil, is_disabled: Bool? = nil, last_name: String? = nil, locale: String? = nil, models_dir_validated: Bool? = nil, ui_state: StringDictionary<AnyCodable>? = nil) {
         self.credentials_email = credentials_email
         self.first_name = first_name
-        self.home_folder_id = home_folder_id
+        self._home_folder_id = home_folder_id.map(AnyString.init)
         self.is_disabled = is_disabled
         self.last_name = last_name
         self.locale = locale
@@ -13693,30 +16285,37 @@ public struct WriteUserAttribute: SDKModel {
      * Name of user attribute
      */
     public var name: String
+
     /**
      * Human-friendly label for user attribute
      */
     public var label: String
+
     /**
      * Type of user attribute ("string", "number", "datetime", "yesno", "zipcode")
      */
     public var type: String
+
     /**
      * Default value for when no value is set on the user
      */
     public var default_value: String?
+
     /**
      * If true, users will not be able to view values of this attribute
      */
     public var value_is_hidden: Bool?
+
     /**
      * Non-admin users can see the values of their attributes and use them in filters
      */
     public var user_can_view: Bool?
+
     /**
      * Users can change the value of this attribute for themselves
      */
     public var user_can_edit: Bool?
+
     /**
      * Destinations to which a hidden attribute may be sent. Once set, cannot be edited.
      */
@@ -13764,50 +16363,62 @@ public struct WriteWhitelabelConfiguration: SDKModel {
      * Customer logo image. Expected base64 encoded data (write-only)
      */
     public var logo_file: String?
+
     /**
      * Custom favicon image. Expected base64 encoded data (write-only)
      */
     public var favicon_file: String?
+
     /**
      * Default page title
      */
     public var default_title: String?
+
     /**
      * Boolean to toggle showing help menus
      */
     public var show_help_menu: Bool?
+
     /**
      * Boolean to toggle showing docs
      */
     public var show_docs: Bool?
+
     /**
      * Boolean to toggle showing email subscription options.
      */
     public var show_email_sub_options: Bool?
+
     /**
      * Boolean to toggle mentions of Looker in emails
      */
     public var allow_looker_mentions: Bool?
+
     /**
      * Boolean to toggle links to Looker in emails
      */
     public var allow_looker_links: Bool?
+
     /**
      * Allow subject line and email heading customization in customized emails”
      */
     public var custom_welcome_email_advanced: Bool?
+
     /**
      * Remove the word Looker from appearing in the account setup page
      */
     public var setup_mentions: Bool?
+
     /**
      * Remove Looker logo from Alerts
      */
     public var alerts_logo: Bool?
+
     /**
      * Remove Looker links from Alerts
      */
     public var alerts_links: Bool?
+
     /**
      * Remove Looker mentions in home folder page when you don’t have any items saved
      */

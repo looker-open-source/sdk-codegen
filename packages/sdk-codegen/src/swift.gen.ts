@@ -37,6 +37,8 @@ import type { IMappedType } from './codeGen'
 import { CodeGen, commentBlock } from './codeGen'
 
 export class SwiftGen extends CodeGen {
+  // Use AnyString JSON parser for number or string ids
+  anyString = true
   codePath = './swift/'
   packagePath = 'looker'
   itself = 'self'
@@ -232,6 +234,26 @@ import Foundation
     return '' // No end MARK in Swift, and XCode appears to no longer process MARKs anyway
   }
 
+  /**
+   * true if this property should use AnyString
+   * @param property to check
+   */
+  useAnyString(property: IProperty) {
+    return (
+      this.anyString &&
+      property.type.name.toLowerCase() === 'string' &&
+      property.name.toLowerCase().endsWith('id')
+    )
+  }
+
+  /**
+   * Private version of the name (_ prefix)
+   * @param name to privatize
+   */
+  privy(name: string) {
+    return this.reserve('_' + name)
+  }
+
   declareProperty(indent: string, property: IProperty) {
     // const optional = (property.nullable || !property.required) ? '?' : ''
     const optional = property.required ? '' : '?'
@@ -250,11 +272,26 @@ import Foundation
       )
     }
     const type = this.typeMap(property.type)
-    return (
-      this.commentHeader(indent, this.describeProperty(property)) +
-      `${indent}public var ${this.reserve(property.name)}: ${
+    const useIt = this.useAnyString(property)
+    let munge = ''
+    let declaration = `${indent}public var ${this.reserve(property.name)}: ${
+      type.name
+    }${optional}\n`
+    if (useIt) {
+      const privy = this.reserve('_' + property.name)
+      const bump = this.bumper(indent)
+      munge = `${indent}private var ${privy}: AnyString${optional}\n`
+      declaration = `${indent}public var ${this.reserve(property.name)}: ${
         type.name
-      }${optional}`
+      }${optional} {
+${bump}get { ${privy}${optional}.value }
+${bump}set { ${privy} = newValue.map(AnyString.init) }
+${indent}}\n`
+    }
+    return (
+      munge +
+      this.commentHeader(indent, this.describeProperty(property)) +
+      declaration
     )
   }
 
@@ -298,7 +335,14 @@ import Foundation
       const propName = this.reserve(prop.name)
       args.push(this.declareConstructorArg('', prop))
       posArgs.push(this.declarePositionalArg('', prop))
-      inits.push(`${bump}${this.it(propName)} = ${propName}`)
+      if (this.useAnyString(prop)) {
+        const varName = this.privy(propName)
+        inits.push(
+          `${bump}${this.it(varName)} = ${propName}.map(AnyString.init)`
+        )
+      } else {
+        inits.push(`${bump}${this.it(propName)} = ${propName}`)
+      }
       posInits.push(`${propName}: ${propName}`)
     })
     const namedInit =
@@ -314,7 +358,7 @@ import Foundation
         `${bump}${this.it('init')}(${posInits.join(', ')})` +
         `\n${indent}}\n`
     }
-    return `\n\n${namedInit}\n${posInit}`
+    return `\n${namedInit}\n${posInit}`
   }
 
   declarePositionalArg(indent: string, property: IProperty) {
@@ -432,11 +476,11 @@ import Foundation
     const keys = Object.values(type.properties).map(
       (p) => p.name + (p.hasSpecialNeeds ? ` = "${p.jsonName}"` : '')
     )
-    const cases = keys.join(`n${bump2}case `)
+    const cases = keys.join(`\n${bump2}case `)
 
     return (
       `\n${bump}private enum CodingKeys : String, CodingKey {` +
-      `\n${bump2}${cases}` +
+      `\n${bump2}case ${cases}` +
       `\n${bump}}\n`
     )
   }
