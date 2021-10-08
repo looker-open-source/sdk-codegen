@@ -55,6 +55,7 @@ import {
   sdkNeedsConfig,
   prepareInputs,
   sdkNeedsAuth,
+  createInputs,
 } from './utils'
 import type { RunItSetter } from '.'
 import { runItNoSet, RunItContext } from '.'
@@ -99,8 +100,6 @@ export interface RunItInput {
 interface RunItProps {
   /** spec model to use for sdk call generation */
   api: ApiModel
-  /** An array of parameters associated with a given endpoint */
-  inputs: RunItInput[]
   /** Method to test */
   method: IMethod
   /** Set versions Url callback */
@@ -115,7 +114,6 @@ interface RunItProps {
  */
 export const RunIt: FC<RunItProps> = ({
   api,
-  inputs,
   method,
   setVersionsUrl = runItNoSet,
   sdkLanguage = 'All',
@@ -134,6 +132,7 @@ export const RunIt: FC<RunItProps> = ({
   const [needsAuth, setNeedsAuth] = useState<boolean>(sdkNeedsAuth(sdk))
   const [validationMessage, setValidationMessage] = useState<string>('')
   const tabs = useTabs()
+  const inputs = createInputs(api, method)
 
   const perf = new PerfTimings()
 

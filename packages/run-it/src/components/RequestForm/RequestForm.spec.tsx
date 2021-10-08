@@ -30,7 +30,6 @@ import { act, screen, waitFor } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 
 import type { IAPIMethods } from '@looker/sdk-rtl'
-import { formatDateString } from '@looker/components-date'
 import { defaultConfigurator } from '..'
 import { runItNoSet } from '../..'
 import { RequestForm } from './RequestForm'
@@ -234,18 +233,16 @@ describe('RequestForm', () => {
     const button = screen.getByRole('button', { name: 'Choose' })
     expect(button).toBeInTheDocument()
     userEvent.click(button)
+    const today = noon()
+    const pickName = today.getDate()
     await waitFor(() => {
-      const today = noon()
-      const pickName = formatDateString(today, undefined, 'iii PP')
-      const cell = screen.getByRole('gridcell', {
-        name: pickName,
-      })
+      const cell = screen.getAllByText(pickName)[0]
       userEvent.click(cell)
-      expect(setRequestContent).toHaveBeenLastCalledWith({ [name]: today })
     })
+    expect(setRequestContent).toHaveBeenLastCalledWith({ [name]: today })
   })
 
-  test('interactive with a number simple item changes the request content', async () => {
+  test('interacting with a number simple item changes the request content', async () => {
     const name = 'number_item'
     renderWithTheme(
       <RequestForm
