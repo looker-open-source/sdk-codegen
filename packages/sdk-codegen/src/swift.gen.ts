@@ -337,8 +337,11 @@ ${indent}}\n`
       posArgs.push(this.declarePositionalArg('', prop))
       if (this.useAnyString(prop)) {
         const varName = this.privy(propName)
+        const optional = prop.required ? '' : '?'
         inits.push(
-          `${bump}${this.it(varName)} = ${propName}.map(AnyString.init)`
+          `${bump}${this.it(
+            varName
+          )} = ${propName}.map(AnyString${optional}.init)`
         )
       } else {
         inits.push(`${bump}${this.it(propName)} = ${propName}`)
