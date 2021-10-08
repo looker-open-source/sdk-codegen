@@ -27,21 +27,22 @@
 import React from 'react'
 import type { FC } from 'react'
 import { SpaceVertical } from '@looker/components'
+import type { IHackerProps } from '../../../models'
 import type { AgendaItems } from '.'
 import { calcAgenda, AgendaCard } from '.'
 
 interface AgendaProps {
   schedule: AgendaItems
-  language: string
+  hacker: IHackerProps
 }
 
-export const Agenda: FC<AgendaProps> = ({ schedule, language }) => {
-  const agenda = calcAgenda(schedule)
+export const Agenda: FC<AgendaProps> = ({ schedule, hacker }) => {
+  const agenda = calcAgenda(schedule, hacker.timezone)
   return (
     <SpaceVertical>
       {agenda &&
         agenda.map((item, index) => (
-          <AgendaCard key={`agenda${index}`} item={item} language={language} />
+          <AgendaCard key={`agenda${index}`} item={item} hacker={hacker} />
         ))}
     </SpaceVertical>
   )

@@ -62,10 +62,14 @@ export interface IHackerProps {
   canJudge: boolean
   /** is this user an admin? */
   canAdmin: boolean
-  /** assign the current user their roles and permissions from Looker user lookup */
+  /** locale user attribute value */
+  locale: string
+  /** timezone user attribute value */
+  timezone: string
 }
 
 export interface IHacker extends IHackerProps {
+  /** assign the current user their roles and permissions from Looker user lookup */
   getMe(): Promise<IHacker>
 }
 
@@ -80,6 +84,8 @@ export class Hacker implements IHacker {
   user: ILookerUser = { id: 0, first_name: 'Unknown', last_name: 'user!' }
   roles = new Set<UserRole>(['user'])
   permissions = new Set<UserPermission>()
+  locale = ''
+  timezone = ''
   api3 = false
   registration!: Registration
   canAdmin = false
@@ -133,6 +139,17 @@ export class Hacker implements IHacker {
   async getMe() {
     if (this.sdk) {
       this.user = await this.sdk.ok(this.sdk.me())
+      // not limiting user_attribute_ids because I'd rather resolve them by name since id could change
+      const attribs = await this.sdk.ok(
+        this.sdk.user_attribute_user_values({
+          user_id: this.user.id!,
+          fields: 'name,value',
+        })
+      )
+      this.locale = attribs.find((a) => a.name === 'locale')?.value || 'en'
+      this.timezone =
+        attribs.find((a) => a.name === 'timezone')?.value ||
+        'America/Los_Angeles'
       return await this.assignRoles()
     }
     return this

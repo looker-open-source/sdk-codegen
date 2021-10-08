@@ -25,7 +25,7 @@ project_name: "hackathon_app"
 application: hackathon_app {
   label: "Hackathon"
   url: "https://localhost:8080/dist/bundle.js"
-   # file: "bundle.js"
+  # file: "bundle.js"
   entitlements: {
     local_storage: no
     navigation: yes
@@ -36,8 +36,7 @@ application: hackathon_app {
     use_iframes: no
     use_clipboard: no
     external_api_urls: ["http://localhost:8081/*", "https://sheets.googleapis.com/*"]
-    core_api_methods: ["me", "all_roles", "all_user_attributes", "delete_user_attribute", "create_user_attribute", "search_groups", "search_users", "user_roles", "role_users"]
-    core_api_methods: ["me", "user_roles", "all_user_attributes", "delete_user_attribute", "create_user_attribute", "search_groups", "search_users", "all_roles"]
+    core_api_methods: ["me", "all_roles", "all_user_attributes", "delete_user_attribute", "create_user_attribute", "search_groups", "search_users", "user_roles", "role_users", "user_attribute_user_values"]
     oauth2_urls: []
     scoped_user_attributes: ["sheet_id", "token_server_url"]
   }

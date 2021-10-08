@@ -25,8 +25,13 @@
  */
 
 import { Span } from '@looker/components'
-import moment from 'moment-timezone'
 import React from 'react'
+// eslint-disable-next-line import/no-duplicates
+import { format, formatDistance } from 'date-fns'
+// eslint-disable-next-line import/no-duplicates
+import { enUS, ja } from 'date-fns/locale'
+import { utcToZonedTime } from 'date-fns-tz'
+import cloneDeep from 'lodash/cloneDeep'
 
 export type AgendaTime = Date
 
@@ -46,69 +51,69 @@ export type AgendaItems = Array<IAgendaItem>
 export const English = 'English'
 export const Japanese = '日本'
 
-export const languageZone = (language: string) => {
-  const zone = language === English ? 'America/Los_Angeles' : 'Asia/Tokyo'
-  return zone
-}
-
 export const zoneDate = (time: AgendaTime, zone: string) => {
-  return moment(time).tz(zone)
+  return utcToZonedTime(time, zone)
 }
 
-export const languageLocale = (language: string) => {
-  return language === English ? 'en' : 'ja'
+export const dateLocale = (locale: string) => (locale === 'ja_JP' ? ja : enUS)
+
+/**
+ * Format a date using locale and string template
+ *
+ * Template values are documented at https://date-fns.org/v2.25.0/docs/format
+ *
+ * @param value to format
+ * @param locale to localize
+ * @param template for formatting
+ */
+export const dateString = (
+  value: AgendaTime,
+  locale: string,
+  template = 'LLL'
+) => {
+  return format(value, template, { locale: dateLocale(locale) })
 }
 
-export const localeDate = (value: AgendaTime, language: string) => {
-  const local = zoneDate(value, languageZone(language))
-  return local.locale(languageLocale(language))
-}
-
-export const dateString = (value: AgendaTime, language: string) => {
-  const local = localeDate(value, languageZone(language))
-  return local.format('LLL')
-}
-
-export const monthDay = (value: moment.Moment) => {
-  return value.format('MMM Do')
+export const monthDay = (value: AgendaTime, locale: string) => {
+  return dateString(value, locale, 'MMM do')
 }
 
 export const spanDate = (
   start: AgendaTime,
   stop: AgendaTime,
-  language: string
+  locale: string
 ) => {
-  const localStart = localeDate(start, language)
-  const localStop = localeDate(stop, language)
-  let result = monthDay(localStart)
-  if (localStart.day() !== localStop.day()) {
-    result += ` - ${localStop.format('Do')}`
+  let result = monthDay(start, locale)
+  if (start.getDate() !== stop.getDate()) {
+    result += ` - ${dateString(stop, locale, 'do')}`
   }
   return result
 }
 
+export const diff = (first: AgendaTime, second: AgendaTime, locale: string) => {
+  return formatDistance(second, first, {
+    addSuffix: true,
+    locale: dateLocale(locale),
+  })
+}
+
 export const spanEta = (
-  current: AgendaTime,
+  now: AgendaTime,
   start: AgendaTime,
   stop: AgendaTime,
-  language: string
+  locale: string
 ) => {
-  const zone = languageZone(language)
-  const localStart = zoneDate(start, zone)
-  const localStop = zoneDate(stop, zone)
-  const now = moment(current)
   let color = 'warn'
   let phrase = ''
-  // TODO replace deprecated moment js with https://www.npmjs.com/package/spacetime and use .since() here
-  if (now.diff(localStart) < 0) {
+  if (now < start) {
     color = 'warn'
-    phrase = `starts in ${Math.abs(now.diff(localStart, 'days'))} days`
-  } else if (now.diff(localStop) < 0) {
+    phrase = diff(now, start, locale)
+  } else if (now < stop) {
     color = 'positive'
-    phrase = `ends in ${Math.abs(now.diff(localStop, 'hours'))} hours`
+    phrase = diff(now, stop, locale)
   } else {
     color = 'critical'
-    phrase = `ended ${Math.abs(now.diff(localStart, 'hours'))} hours ago`
+    phrase = diff(now, stop, locale)
   }
   return (
     <Span fontSize="small" color={color}>
@@ -120,27 +125,29 @@ export const spanEta = (
 export const spanTime = (
   start: AgendaTime,
   stop: AgendaTime,
-  language: string
+  locale: string
 ) => {
-  const zone = languageZone(language)
-  const localStart = zoneDate(start, zone)
-  const localStop = zoneDate(stop, zone)
-  let result = localStart.format('LT')
-  if (Math.abs(localStart.diff(localStop, 'seconds')) >= 1) {
-    result += ` - ${localStop.format('LT')}`
-  }
-  return result
+  const template = 'K:mm b'
+  return `${dateString(start, locale, template)} - ${dateString(
+    stop,
+    locale,
+    template
+  )}`
 }
 
-export const calcAgenda = (swap: AgendaItems) => {
-  swap = swap.sort((a, b) => a.start.getTime() - b.start.getTime())
-  swap.forEach((i, index) => {
+export const calcAgenda = (swap: AgendaItems, timezone: string) => {
+  const agenda = cloneDeep(swap).sort(
+    (a, b) => a.start.getTime() - b.start.getTime()
+  )
+  agenda.forEach((i, index) => {
+    i.start = zoneDate(i.start, timezone)
     // Fill in any missing stop values with the next item's start value
     if (!i.stop) {
-      if (index <= swap.length + 1) {
-        i.stop = swap[index + 1].start
+      if (index <= agenda.length + 1) {
+        i.stop = agenda[index + 1].start
       }
     }
+    i.stop = zoneDate(i.stop!, timezone)
   })
-  return swap
+  return agenda
 }

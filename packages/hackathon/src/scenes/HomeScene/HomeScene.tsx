@@ -25,51 +25,30 @@
  */
 
 import type { FC } from 'react'
-import React, { useEffect, useState } from 'react'
+import React from 'react'
 
-import { Select, Space, Heading, SpaceVertical } from '@looker/components'
+import { Heading, SpaceVertical, Span } from '@looker/components'
+import type { IHackerProps } from '../../models'
 import { agendaEn, agendaJa } from './agenda'
-import type { AgendaItems } from './components'
-import { Agenda, English, Japanese } from './components'
+import { Agenda } from './components'
 
-export const HomeScene: FC = () => {
-  const [value, setValue] = useState<string>(English)
-  const [agenda, setAgenda] = useState<AgendaItems>(agendaEn)
-  const options = [
-    { value: English, label: English },
-    { value: Japanese, label: Japanese },
-  ]
+interface HomeSceneProps {
+  hacker: IHackerProps
+}
 
-  useEffect(() => {
-    switch (value) {
-      case English:
-        setAgenda(agendaEn)
-        break
-      case Japanese:
-        setAgenda(agendaJa)
-        break
-    }
-  }, [value])
+export const HomeScene: FC<HomeSceneProps> = ({ hacker }) => {
+  const agenda = hacker.locale === 'ja_JP' ? agendaJa : agendaEn
 
   return (
     <>
       <SpaceVertical gap="u5">
-        <Space between>
-          <Heading as="h2" fontSize="xxxlarge" fontWeight="medium">
-            Agenda
-          </Heading>
-          <Select
-            maxWidth={150}
-            listLayout={{ width: 'auto' }}
-            options={options}
-            value={value}
-            onChange={setValue}
-          />
-        </Space>
-
-        <SpaceVertical>
-          <Agenda schedule={agenda} language={value} />
-        </SpaceVertical>
+        <Heading as="h2" fontSize="xxxlarge" fontWeight="medium">
+          Agenda
+        </Heading>
+        <Agenda schedule={agenda} hacker={hacker} />
+        <Span>
+          timezone: {hacker.timezone} locale:{hacker.locale}
+        </Span>
       </SpaceVertical>
     </>
   )
