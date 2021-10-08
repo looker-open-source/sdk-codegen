@@ -479,7 +479,7 @@ ${indent}}\n`
     let special = false
 
     const keys = Object.values(type.properties).map((p) => {
-      let name = p.name
+      let name = this.reserve(p.name)
       let alias = ''
       const useIt = this.useAnyString(p)
       if (useIt) {

@@ -7653,7 +7653,7 @@ public struct Look: SDKModel {
         case last_updater_id
         case last_viewed_at
         case model
-        case public
+        case `public`
         case public_slug
         case public_url
         case query_id
@@ -9115,7 +9115,7 @@ public struct LookWithDashboards: SDKModel {
         case last_updater_id
         case last_viewed_at
         case model
-        case public
+        case `public`
         case public_slug
         case public_url
         case query_id
@@ -9339,7 +9339,7 @@ public struct LookWithQuery: SDKModel {
         case last_updater_id
         case last_viewed_at
         case model
-        case public
+        case `public`
         case public_slug
         case public_url
         case query_id
@@ -10682,7 +10682,7 @@ public struct ProjectFile: SDKModel {
         case path
         case title
         case type
-        case extension
+        case `extension`
         case mime_type
         case editable
         case git_status
@@ -16476,7 +16476,7 @@ public struct WriteLookWithQuery: SDKModel {
         case deleted
         case description
         case is_run_on_load
-        case public
+        case `public`
         case query_id
         case folder
         case _folder_id = "folder_id"
