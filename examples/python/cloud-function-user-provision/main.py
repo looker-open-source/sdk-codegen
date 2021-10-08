@@ -57,3 +57,4 @@ def create_users(email):
    
   # Send a welcome/setup email
   sdk.send_user_credentials_email_password_reset(user_id=new_user["id"])
+  
