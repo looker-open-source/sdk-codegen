@@ -152,8 +152,8 @@ public struct Alert: SDKModel {
         self.id = id
         self.is_disabled = is_disabled
         self.is_public = is_public
-        self._lookml_dashboard_id = lookml_dashboard_id.map(AnyString?.init)
-        self._lookml_link_id = lookml_link_id.map(AnyString?.init)
+        self._lookml_dashboard_id = lookml_dashboard_id.map(AnyString.init)
+        self._lookml_link_id = lookml_link_id.map(AnyString.init)
         self.owner_id = owner_id
         self.threshold = threshold
         self.time_series_condition_state = time_series_condition_state
@@ -211,8 +211,8 @@ public struct AlertConditionState: SDKModel {
     }
 
     public init(previous_time_series_id: String? = nil, latest_time_series_id: String? = nil) {
-        self._previous_time_series_id = previous_time_series_id.map(AnyString?.init)
-        self._latest_time_series_id = latest_time_series_id.map(AnyString?.init)
+        self._previous_time_series_id = previous_time_series_id.map(AnyString.init)
+        self._latest_time_series_id = latest_time_series_id.map(AnyString.init)
     }
 
 }
@@ -245,7 +245,7 @@ public struct AlertDestination: SDKModel {
     public init(destination_type: DestinationType, email_address: String? = nil, action_hub_integration_id: String? = nil, action_hub_form_params_json: String? = nil) {
         self.destination_type = destination_type
         self.email_address = email_address
-        self._action_hub_integration_id = action_hub_integration_id.map(AnyString?.init)
+        self._action_hub_integration_id = action_hub_integration_id.map(AnyString.init)
         self.action_hub_form_params_json = action_hub_form_params_json
     }
 
@@ -333,7 +333,7 @@ public struct ApiSession: SDKModel {
 
     public init(can: StringDictionary<Bool>? = nil, workspace_id: String? = nil, sudo_user_id: Int64? = nil) {
         self.can = can
-        self._workspace_id = workspace_id.map(AnyString?.init)
+        self._workspace_id = workspace_id.map(AnyString.init)
         self.sudo_user_id = sudo_user_id
     }
 
@@ -661,7 +661,7 @@ public struct BoardItem: SDKModel {
         self.image_url = image_url
         self.location = location
         self.look_id = look_id
-        self._lookml_dashboard_id = lookml_dashboard_id.map(AnyString?.init)
+        self._lookml_dashboard_id = lookml_dashboard_id.map(AnyString.init)
         self.order = order
         self.title = title
         self.url = url
@@ -783,7 +783,7 @@ public struct ColorCollection: SDKModel {
     public var divergingPalettes: [ContinuousPalette]?
 
     public init(id: String? = nil, label: String? = nil, categoricalPalettes: [DiscretePalette]? = nil, sequentialPalettes: [ContinuousPalette]? = nil, divergingPalettes: [ContinuousPalette]? = nil) {
-        self._id = id.map(AnyString?.init)
+        self._id = id.map(AnyString.init)
         self.label = label
         self.categoricalPalettes = categoricalPalettes
         self.sequentialPalettes = sequentialPalettes
@@ -880,7 +880,7 @@ public struct Command: SDKModel {
         self.author_id = author_id
         self.name = name
         self.description = description
-        self._linked_content_id = linked_content_id.map(AnyString?.init)
+        self._linked_content_id = linked_content_id.map(AnyString.init)
         self.linked_content_type = linked_content_type
     }
 
@@ -1119,9 +1119,9 @@ public struct ContentMeta: SDKModel {
         self.id = id
         self.name = name
         self.parent_id = parent_id
-        self._dashboard_id = dashboard_id.map(AnyString?.init)
+        self._dashboard_id = dashboard_id.map(AnyString.init)
         self.look_id = look_id
-        self._folder_id = folder_id.map(AnyString?.init)
+        self._folder_id = folder_id.map(AnyString.init)
         self.content_type = content_type
         self.inherits = inherits
         self.inheriting_id = inheriting_id
@@ -1174,8 +1174,8 @@ public struct ContentMetaGroupUser: SDKModel {
 
     public init(can: StringDictionary<Bool>? = nil, id: String? = nil, content_metadata_id: String? = nil, permission_type: PermissionType? = nil, group_id: Int64? = nil, user_id: Int64? = nil) {
         self.can = can
-        self._id = id.map(AnyString?.init)
-        self._content_metadata_id = content_metadata_id.map(AnyString?.init)
+        self._id = id.map(AnyString.init)
+        self._content_metadata_id = content_metadata_id.map(AnyString.init)
         self.permission_type = permission_type
         self.group_id = group_id
         self.user_id = user_id
@@ -1268,8 +1268,8 @@ public struct ContentValidationAlert: SDKModel {
 
     public init(id: Int64? = nil, lookml_dashboard_id: String? = nil, lookml_link_id: String? = nil, custom_title: String? = nil) {
         self.id = id
-        self._lookml_dashboard_id = lookml_dashboard_id.map(AnyString?.init)
-        self._lookml_link_id = lookml_link_id.map(AnyString?.init)
+        self._lookml_dashboard_id = lookml_dashboard_id.map(AnyString.init)
+        self._lookml_link_id = lookml_link_id.map(AnyString.init)
         self.custom_title = custom_title
     }
 
@@ -1304,7 +1304,7 @@ public struct ContentValidationDashboard: SDKModel {
 
     public init(description: String? = nil, id: String? = nil, folder: ContentValidationFolder? = nil, title: String? = nil, url: String? = nil) {
         self.description = description
-        self._id = id.map(AnyString?.init)
+        self._id = id.map(AnyString.init)
         self.folder = folder
         self.title = title
         self.url = url
@@ -1397,9 +1397,9 @@ public struct ContentValidationDashboardElement: SDKModel {
 
     public init(body_text: String? = nil, dashboard_id: String? = nil, id: String? = nil, look_id: String? = nil, note_display: String? = nil, note_state: String? = nil, note_text: String? = nil, note_text_as_html: String? = nil, query_id: Int64? = nil, subtitle_text: String? = nil, title: String? = nil, title_hidden: Bool? = nil, title_text: String? = nil, type: String? = nil) {
         self.body_text = body_text
-        self._dashboard_id = dashboard_id.map(AnyString?.init)
-        self._id = id.map(AnyString?.init)
-        self._look_id = look_id.map(AnyString?.init)
+        self._dashboard_id = dashboard_id.map(AnyString.init)
+        self._id = id.map(AnyString.init)
+        self._look_id = look_id.map(AnyString.init)
         self.note_display = note_display
         self.note_state = note_state
         self.note_text = note_text
@@ -1469,8 +1469,8 @@ public struct ContentValidationDashboardFilter: SDKModel {
     public var dimension: String?
 
     public init(id: String? = nil, dashboard_id: String? = nil, name: String? = nil, title: String? = nil, type: String? = nil, default_value: String? = nil, model: String? = nil, explore: String? = nil, dimension: String? = nil) {
-        self._id = id.map(AnyString?.init)
-        self._dashboard_id = dashboard_id.map(AnyString?.init)
+        self._id = id.map(AnyString.init)
+        self._dashboard_id = dashboard_id.map(AnyString.init)
         self.name = name
         self.title = title
         self.type = type
@@ -1535,7 +1535,7 @@ public struct ContentValidationFolder: SDKModel {
 
     public init(name: String, id: String? = nil) {
         self.name = name
-        self._id = id.map(AnyString?.init)
+        self._id = id.map(AnyString.init)
     }
 
     public init(_ name: String, id: String? = nil) {
@@ -1596,9 +1596,9 @@ public struct ContentValidationLookMLDashboard: SDKModel {
     }
 
     public init(id: String? = nil, title: String? = nil, space_id: String? = nil) {
-        self._id = id.map(AnyString?.init)
+        self._id = id.map(AnyString.init)
         self.title = title
-        self._space_id = space_id.map(AnyString?.init)
+        self._space_id = space_id.map(AnyString.init)
     }
 
 }
@@ -1619,7 +1619,7 @@ public struct ContentValidationLookMLDashboardElement: SDKModel {
     public var title: String?
 
     public init(lookml_link_id: String? = nil, title: String? = nil) {
-        self._lookml_link_id = lookml_link_id.map(AnyString?.init)
+        self._lookml_link_id = lookml_link_id.map(AnyString.init)
         self.title = title
     }
 
@@ -1690,7 +1690,7 @@ public struct ContentValidatorError: SDKModel {
         self.lookml_dashboard = lookml_dashboard
         self.lookml_dashboard_element = lookml_dashboard_element
         self.errors = errors
-        self._id = id.map(AnyString?.init)
+        self._id = id.map(AnyString.init)
     }
 
 }
@@ -1799,7 +1799,7 @@ public struct ContinuousPalette: SDKModel {
     public var stops: [ColorStop]?
 
     public init(id: String? = nil, label: String? = nil, type: String? = nil, stops: [ColorStop]? = nil) {
-        self._id = id.map(AnyString?.init)
+        self._id = id.map(AnyString.init)
         self.label = label
         self.type = type
         self.stops = stops
@@ -1937,7 +1937,7 @@ public struct CreateDashboardFilter: SDKModel {
     public var ui_config: StringDictionary<AnyCodable>?
 
     public init(id: String? = nil, dashboard_id: String, name: String, title: String, type: String, default_value: String? = nil, model: String? = nil, explore: String? = nil, dimension: String? = nil, field: StringDictionary<AnyCodable>? = nil, row: Int64? = nil, listens_to_filters: [String]? = nil, allow_multiple_values: Bool? = nil, required: Bool? = nil, ui_config: StringDictionary<AnyCodable>? = nil) {
-        self._id = id.map(AnyString?.init)
+        self._id = id.map(AnyString.init)
         self._dashboard_id = dashboard_id.map(AnyString.init)
         self.name = name
         self.title = title
@@ -2126,7 +2126,7 @@ public struct CreateQueryTask: SDKModel {
         self.source = source
         self.deferred = deferred
         self.look_id = look_id
-        self._dashboard_id = dashboard_id.map(AnyString?.init)
+        self._dashboard_id = dashboard_id.map(AnyString.init)
     }
 
     public init(can: StringDictionary<Bool>? = nil, _ query_id: Int64, _ result_format: ResultFormat, source: String? = nil, deferred: Bool? = nil, look_id: Int64? = nil, dashboard_id: String? = nil) {
@@ -2181,7 +2181,7 @@ public struct CredentialsApi3: SDKModel {
     public init(can: StringDictionary<Bool>? = nil, id: Int64? = nil, client_id: String? = nil, created_at: String? = nil, is_disabled: Bool? = nil, type: String? = nil, url: String? = nil) {
         self.can = can
         self.id = id
-        self._client_id = client_id.map(AnyString?.init)
+        self._client_id = client_id.map(AnyString.init)
         self.created_at = created_at
         self.is_disabled = is_disabled
         self.type = type
@@ -2379,8 +2379,8 @@ public struct CredentialsEmbed: SDKModel {
     public init(can: StringDictionary<Bool>? = nil, created_at: String? = nil, external_group_id: String? = nil, external_user_id: String? = nil, id: Int64? = nil, is_disabled: Bool? = nil, logged_in_at: String? = nil, type: String? = nil, url: String? = nil) {
         self.can = can
         self.created_at = created_at
-        self._external_group_id = external_group_id.map(AnyString?.init)
-        self._external_user_id = external_user_id.map(AnyString?.init)
+        self._external_group_id = external_group_id.map(AnyString.init)
+        self._external_user_id = external_user_id.map(AnyString.init)
         self.id = id
         self.is_disabled = is_disabled
         self.logged_in_at = logged_in_at
@@ -2445,7 +2445,7 @@ public struct CredentialsGoogle: SDKModel {
         self.created_at = created_at
         self.domain = domain
         self.email = email
-        self._google_user_id = google_user_id.map(AnyString?.init)
+        self._google_user_id = google_user_id.map(AnyString.init)
         self.is_disabled = is_disabled
         self.logged_in_at = logged_in_at
         self.type = type
@@ -2510,7 +2510,7 @@ public struct CredentialsLDAP: SDKModel {
         self.email = email
         self.is_disabled = is_disabled
         self.ldap_dn = ldap_dn
-        self._ldap_id = ldap_id.map(AnyString?.init)
+        self._ldap_id = ldap_id.map(AnyString.init)
         self.logged_in_at = logged_in_at
         self.type = type
         self.url = url
@@ -2629,7 +2629,7 @@ public struct CredentialsOIDC: SDKModel {
         self.email = email
         self.is_disabled = is_disabled
         self.logged_in_at = logged_in_at
-        self._oidc_user_id = oidc_user_id.map(AnyString?.init)
+        self._oidc_user_id = oidc_user_id.map(AnyString.init)
         self.type = type
         self.url = url
     }
@@ -2687,7 +2687,7 @@ public struct CredentialsSaml: SDKModel {
         self.email = email
         self.is_disabled = is_disabled
         self.logged_in_at = logged_in_at
-        self._saml_user_id = saml_user_id.map(AnyString?.init)
+        self._saml_user_id = saml_user_id.map(AnyString.init)
         self.type = type
         self.url = url
     }
@@ -2995,7 +2995,7 @@ public struct Dashboard: SDKModel {
         self.content_metadata_id = content_metadata_id
         self.description = description
         self.hidden = hidden
-        self._id = id.map(AnyString?.init)
+        self._id = id.map(AnyString.init)
         self.model = model
         self.query_timezone = query_timezone
         self.readonly = readonly
@@ -3021,10 +3021,10 @@ public struct Dashboard: SDKModel {
         self.last_accessed_at = last_accessed_at
         self.last_viewed_at = last_viewed_at
         self.load_configuration = load_configuration
-        self._lookml_link_id = lookml_link_id.map(AnyString?.init)
+        self._lookml_link_id = lookml_link_id.map(AnyString.init)
         self.show_filters_bar = show_filters_bar
         self.show_title = show_title
-        self._folder_id = folder_id.map(AnyString?.init)
+        self._folder_id = folder_id.map(AnyString.init)
         self.text_tile_text_color = text_tile_text_color
         self.tile_background_color = tile_background_color
         self.tile_text_color = tile_text_color
@@ -3052,7 +3052,7 @@ public struct DashboardAggregateTableLookml: SDKModel {
     public var aggregate_table_lookml: String?
 
     public init(dashboard_id: String? = nil, aggregate_table_lookml: String? = nil) {
-        self._dashboard_id = dashboard_id.map(AnyString?.init)
+        self._dashboard_id = dashboard_id.map(AnyString.init)
         self.aggregate_table_lookml = aggregate_table_lookml
     }
 
@@ -3191,7 +3191,7 @@ public struct DashboardBase: SDKModel {
         self.content_metadata_id = content_metadata_id
         self.description = description
         self.hidden = hidden
-        self._id = id.map(AnyString?.init)
+        self._id = id.map(AnyString.init)
         self.model = model
         self.query_timezone = query_timezone
         self.readonly = readonly
@@ -3362,13 +3362,13 @@ public struct DashboardElement: SDKModel {
         self.can = can
         self.body_text = body_text
         self.body_text_as_html = body_text_as_html
-        self._dashboard_id = dashboard_id.map(AnyString?.init)
+        self._dashboard_id = dashboard_id.map(AnyString.init)
         self.edit_uri = edit_uri
-        self._id = id.map(AnyString?.init)
+        self._id = id.map(AnyString.init)
         self.look = look
-        self._look_id = look_id.map(AnyString?.init)
-        self._lookml_link_id = lookml_link_id.map(AnyString?.init)
-        self._merge_result_id = merge_result_id.map(AnyString?.init)
+        self._look_id = look_id.map(AnyString.init)
+        self._lookml_link_id = lookml_link_id.map(AnyString.init)
+        self._merge_result_id = merge_result_id.map(AnyString.init)
         self.note_display = note_display
         self.note_state = note_state
         self.note_text = note_text
@@ -3482,8 +3482,8 @@ public struct DashboardFilter: SDKModel {
 
     public init(can: StringDictionary<Bool>? = nil, id: String? = nil, dashboard_id: String? = nil, name: String? = nil, title: String? = nil, type: String? = nil, default_value: String? = nil, model: String? = nil, explore: String? = nil, dimension: String? = nil, field: StringDictionary<AnyCodable>? = nil, row: Int64? = nil, listens_to_filters: [String]? = nil, allow_multiple_values: Bool? = nil, required: Bool? = nil, ui_config: StringDictionary<AnyCodable>? = nil) {
         self.can = can
-        self._id = id.map(AnyString?.init)
-        self._dashboard_id = dashboard_id.map(AnyString?.init)
+        self._id = id.map(AnyString.init)
+        self._dashboard_id = dashboard_id.map(AnyString.init)
         self.name = name
         self.title = title
         self.type = type
@@ -3562,8 +3562,8 @@ public struct DashboardLayout: SDKModel {
 
     public init(can: StringDictionary<Bool>? = nil, id: String? = nil, dashboard_id: String? = nil, type: String? = nil, active: Bool? = nil, column_width: Int64? = nil, width: Int64? = nil, deleted: Bool? = nil, dashboard_title: String? = nil, dashboard_layout_components: [DashboardLayoutComponent]? = nil) {
         self.can = can
-        self._id = id.map(AnyString?.init)
-        self._dashboard_id = dashboard_id.map(AnyString?.init)
+        self._id = id.map(AnyString.init)
+        self._dashboard_id = dashboard_id.map(AnyString.init)
         self.type = type
         self.active = active
         self.column_width = column_width
@@ -3650,9 +3650,9 @@ public struct DashboardLayoutComponent: SDKModel {
 
     public init(can: StringDictionary<Bool>? = nil, id: String? = nil, dashboard_layout_id: String? = nil, dashboard_element_id: String? = nil, row: Int64? = nil, column: Int64? = nil, width: Int64? = nil, height: Int64? = nil, deleted: Bool? = nil, element_title: String? = nil, element_title_hidden: Bool? = nil, vis_type: String? = nil) {
         self.can = can
-        self._id = id.map(AnyString?.init)
-        self._dashboard_layout_id = dashboard_layout_id.map(AnyString?.init)
-        self._dashboard_element_id = dashboard_element_id.map(AnyString?.init)
+        self._id = id.map(AnyString.init)
+        self._dashboard_layout_id = dashboard_layout_id.map(AnyString.init)
+        self._dashboard_element_id = dashboard_element_id.map(AnyString.init)
         self.row = row
         self.column = column
         self.width = width
@@ -3681,7 +3681,7 @@ public struct DashboardLookml: SDKModel {
     public var lookml: String?
 
     public init(dashboard_id: String? = nil, lookml: String? = nil) {
-        self._dashboard_id = dashboard_id.map(AnyString?.init)
+        self._dashboard_id = dashboard_id.map(AnyString.init)
         self.lookml = lookml
     }
 
@@ -3826,7 +3826,7 @@ public struct DataActionResponse: SDKModel {
     public var message: String?
 
     public init(webhook_id: String? = nil, success: Bool? = nil, refresh_query: Bool? = nil, validation_errors: ValidationError? = nil, message: String? = nil) {
-        self._webhook_id = webhook_id.map(AnyString?.init)
+        self._webhook_id = webhook_id.map(AnyString.init)
         self.success = success
         self.refresh_query = refresh_query
         self.validation_errors = validation_errors
@@ -4153,7 +4153,7 @@ public struct DBConnection: SDKModel {
         self.pool_timeout = pool_timeout
         self.dialect_name = dialect_name
         self.created_at = created_at
-        self._user_id = user_id.map(AnyString?.init)
+        self._user_id = user_id.map(AnyString.init)
         self.example = example
         self.user_db_credentials = user_db_credentials
         self.user_attribute_fields = user_attribute_fields
@@ -4165,7 +4165,7 @@ public struct DBConnection: SDKModel {
         self.after_connect_statements = after_connect_statements
         self.pdt_context_override = pdt_context_override
         self.managed = managed
-        self._tunnel_id = tunnel_id.map(AnyString?.init)
+        self._tunnel_id = tunnel_id.map(AnyString.init)
         self.pdt_concurrency = pdt_concurrency
         self.disable_context_comment = disable_context_comment
         self.oauth_application_id = oauth_application_id
@@ -4347,7 +4347,7 @@ public struct DelegateOauthTest: SDKModel {
 
     public init(name: String? = nil, installation_target_id: String? = nil, installation_id: Int64? = nil, success: Bool? = nil) {
         self.name = name
-        self._installation_target_id = installation_target_id.map(AnyString?.init)
+        self._installation_target_id = installation_target_id.map(AnyString.init)
         self.installation_id = installation_id
         self.success = success
     }
@@ -4635,7 +4635,7 @@ public struct DiscretePalette: SDKModel {
     public var colors: [String]?
 
     public init(id: String? = nil, label: String? = nil, type: String? = nil, colors: [String]? = nil) {
-        self._id = id.map(AnyString?.init)
+        self._id = id.map(AnyString.init)
         self.label = label
         self.type = type
         self.colors = colors
@@ -4749,14 +4749,14 @@ public struct EmbedSsoParams: SDKModel {
         self.target_url = target_url
         self.session_length = session_length
         self.force_logout_login = force_logout_login
-        self._external_user_id = external_user_id.map(AnyString?.init)
+        self._external_user_id = external_user_id.map(AnyString.init)
         self.first_name = first_name
         self.last_name = last_name
         self.user_timezone = user_timezone
         self.permissions = permissions
         self.models = models
         self.group_ids = group_ids
-        self._external_group_id = external_group_id.map(AnyString?.init)
+        self._external_group_id = external_group_id.map(AnyString.init)
         self.user_attributes = user_attributes
         self.secret_id = secret_id
     }
@@ -4845,7 +4845,7 @@ public struct ExternalOauthApplication: SDKModel {
         self.can = can
         self.id = id
         self.name = name
-        self._client_id = client_id.map(AnyString?.init)
+        self._client_id = client_id.map(AnyString.init)
         self.client_secret = client_secret
         self.dialect_name = dialect_name
         self.created_at = created_at
@@ -4966,13 +4966,13 @@ public struct Folder: SDKModel {
 
     public init(name: String, parent_id: String? = nil, id: String? = nil, content_metadata_id: Int64? = nil, created_at: Date? = nil, creator_id: Int64? = nil, child_count: Int64? = nil, external_id: String? = nil, is_embed: Bool? = nil, is_embed_shared_root: Bool? = nil, is_embed_users_root: Bool? = nil, is_personal: Bool? = nil, is_personal_descendant: Bool? = nil, is_shared_root: Bool? = nil, is_users_root: Bool? = nil, can: StringDictionary<Bool>? = nil, dashboards: [DashboardBase]? = nil, looks: [LookWithDashboards]? = nil) {
         self.name = name
-        self._parent_id = parent_id.map(AnyString?.init)
-        self._id = id.map(AnyString?.init)
+        self._parent_id = parent_id.map(AnyString.init)
+        self._id = id.map(AnyString.init)
         self.content_metadata_id = content_metadata_id
         self.created_at = created_at
         self.creator_id = creator_id
         self.child_count = child_count
-        self._external_id = external_id.map(AnyString?.init)
+        self._external_id = external_id.map(AnyString.init)
         self.is_embed = is_embed
         self.is_embed_shared_root = is_embed_shared_root
         self.is_embed_users_root = is_embed_users_root
@@ -5086,13 +5086,13 @@ public struct FolderBase: SDKModel {
 
     public init(name: String, parent_id: String? = nil, id: String? = nil, content_metadata_id: Int64? = nil, created_at: Date? = nil, creator_id: Int64? = nil, child_count: Int64? = nil, external_id: String? = nil, is_embed: Bool? = nil, is_embed_shared_root: Bool? = nil, is_embed_users_root: Bool? = nil, is_personal: Bool? = nil, is_personal_descendant: Bool? = nil, is_shared_root: Bool? = nil, is_users_root: Bool? = nil, can: StringDictionary<Bool>? = nil) {
         self.name = name
-        self._parent_id = parent_id.map(AnyString?.init)
-        self._id = id.map(AnyString?.init)
+        self._parent_id = parent_id.map(AnyString.init)
+        self._id = id.map(AnyString.init)
         self.content_metadata_id = content_metadata_id
         self.created_at = created_at
         self.creator_id = creator_id
         self.child_count = child_count
-        self._external_id = external_id.map(AnyString?.init)
+        self._external_id = external_id.map(AnyString.init)
         self.is_embed = is_embed
         self.is_embed_shared_root = is_embed_shared_root
         self.is_embed_users_root = is_embed_users_root
@@ -5248,7 +5248,7 @@ public struct GitConnectionTest: SDKModel {
     public init(can: StringDictionary<Bool>? = nil, description: String? = nil, id: String? = nil) {
         self.can = can
         self.description = description
-        self._id = id.map(AnyString?.init)
+        self._id = id.map(AnyString.init)
     }
 
 }
@@ -5280,7 +5280,7 @@ public struct GitConnectionTestResult: SDKModel {
 
     public init(can: StringDictionary<Bool>? = nil, id: String? = nil, message: String? = nil, status: String? = nil) {
         self.can = can
-        self._id = id.map(AnyString?.init)
+        self._id = id.map(AnyString.init)
         self.message = message
         self.status = status
     }
@@ -5371,7 +5371,7 @@ public struct LkGroup: SDKModel {
         self.can = can
         self.can_add_to_content_metadata = can_add_to_content_metadata
         self.contains_current_user = contains_current_user
-        self._external_group_id = external_group_id.map(AnyString?.init)
+        self._external_group_id = external_group_id.map(AnyString.init)
         self.externally_managed = externally_managed
         self.id = id
         self.include_by_default = include_by_default
@@ -5445,7 +5445,7 @@ public struct GroupHierarchy: SDKModel {
         self.can = can
         self.can_add_to_content_metadata = can_add_to_content_metadata
         self.contains_current_user = contains_current_user
-        self._external_group_id = external_group_id.map(AnyString?.init)
+        self._external_group_id = external_group_id.map(AnyString.init)
         self.externally_managed = externally_managed
         self.id = id
         self.include_by_default = include_by_default
@@ -5546,7 +5546,7 @@ public struct GroupSearch: SDKModel {
         self.can = can
         self.can_add_to_content_metadata = can_add_to_content_metadata
         self.contains_current_user = contains_current_user
-        self._external_group_id = external_group_id.map(AnyString?.init)
+        self._external_group_id = external_group_id.map(AnyString.init)
         self.externally_managed = externally_managed
         self.id = id
         self.include_by_default = include_by_default
@@ -5721,7 +5721,7 @@ public struct HomepageItem: SDKModel {
         self.image_url = image_url
         self.location = location
         self.look_id = look_id
-        self._lookml_dashboard_id = lookml_dashboard_id.map(AnyString?.init)
+        self._lookml_dashboard_id = lookml_dashboard_id.map(AnyString.init)
         self.order = order
         self.section_fetch_time = section_fetch_time
         self.title = title
@@ -5941,7 +5941,7 @@ public struct Integration: SDKModel {
 
     public init(can: StringDictionary<Bool>? = nil, id: String? = nil, integration_hub_id: Int64? = nil, label: String? = nil, description: String? = nil, enabled: Bool? = nil, params: [IntegrationParam]? = nil, supported_formats: [SupportedFormats]? = nil, supported_action_types: [SupportedActionTypes]? = nil, supported_formattings: [SupportedFormattings]? = nil, supported_visualization_formattings: [SupportedVisualizationFormattings]? = nil, supported_download_settings: [SupportedDownloadSettings]? = nil, icon_url: String? = nil, uses_oauth: Bool? = nil, required_fields: [IntegrationRequiredField]? = nil, delegate_oauth: Bool? = nil, installed_delegate_oauth_targets: [Int64]? = nil) {
         self.can = can
-        self._id = id.map(AnyString?.init)
+        self._id = id.map(AnyString.init)
         self.integration_hub_id = integration_hub_id
         self.label = label
         self.description = description
@@ -6442,7 +6442,7 @@ public struct LDAPConfig: SDKModel {
         self.user_attribute_map_email = user_attribute_map_email
         self.user_attribute_map_first_name = user_attribute_map_first_name
         self.user_attribute_map_last_name = user_attribute_map_last_name
-        self._user_attribute_map_ldap_id = user_attribute_map_ldap_id.map(AnyString?.init)
+        self._user_attribute_map_ldap_id = user_attribute_map_ldap_id.map(AnyString.init)
         self.user_attributes = user_attributes
         self.user_attributes_with_ids = user_attributes_with_ids
         self.user_bind_base_dn = user_bind_base_dn
@@ -6667,7 +6667,7 @@ public struct LDAPUser: SDKModel {
         self.groups = groups
         self.last_name = last_name
         self.ldap_dn = ldap_dn
-        self._ldap_id = ldap_id.map(AnyString?.init)
+        self._ldap_id = ldap_id.map(AnyString.init)
         self.roles = roles
         self.url = url
     }
@@ -6806,7 +6806,7 @@ public struct LegacyFeature: SDKModel {
 
     public init(can: StringDictionary<Bool>? = nil, id: String? = nil, name: String? = nil, description: String? = nil, enabled_locally: Bool? = nil, enabled: Bool? = nil, disallowed_as_of_version: String? = nil, disable_on_upgrade_to_version: String? = nil, end_of_life_version: String? = nil, documentation_url: String? = nil, approximate_disable_date: Date? = nil, approximate_end_of_life_date: Date? = nil, has_disabled_on_upgrade: Bool? = nil) {
         self.can = can
-        self._id = id.map(AnyString?.init)
+        self._id = id.map(AnyString.init)
         self.name = name
         self.description = description
         self.enabled_locally = enabled_locally
@@ -7049,7 +7049,7 @@ public struct Look: SDKModel {
         self.query_id = query_id
         self.short_url = short_url
         self.folder = folder
-        self._folder_id = folder_id.map(AnyString?.init)
+        self._folder_id = folder_id.map(AnyString.init)
         self.updated_at = updated_at
         self.view_count = view_count
     }
@@ -7339,7 +7339,7 @@ public struct LookmlModelExplore: SDKModel {
     public var supported_measure_types: [LookmlModelExploreSupportedMeasureType]?
 
     public init(id: String? = nil, name: String? = nil, description: String? = nil, label: String? = nil, title: String? = nil, scopes: [String]? = nil, can_total: Bool? = nil, can_develop: Bool? = nil, can_see_lookml: Bool? = nil, lookml_link: String? = nil, can_save: Bool? = nil, can_explain: Bool? = nil, can_pivot_in_db: Bool? = nil, can_subtotal: Bool? = nil, has_timezone_support: Bool? = nil, supports_cost_estimate: Bool? = nil, connection_name: String? = nil, null_sort_treatment: String? = nil, files: [String]? = nil, source_file: String? = nil, project_name: String? = nil, model_name: String? = nil, view_name: String? = nil, hidden: Bool? = nil, sql_table_name: String? = nil, access_filter_fields: [String]? = nil, access_filters: [LookmlModelExploreAccessFilter]? = nil, aliases: [LookmlModelExploreAlias]? = nil, always_filter: [LookmlModelExploreAlwaysFilter]? = nil, conditionally_filter: [LookmlModelExploreConditionallyFilter]? = nil, index_fields: [String]? = nil, sets: [LookmlModelExploreSet]? = nil, tags: [String]? = nil, errors: [LookmlModelExploreError]? = nil, fields: LookmlModelExploreFieldset? = nil, joins: [LookmlModelExploreJoins]? = nil, group_label: String? = nil, supported_measure_types: [LookmlModelExploreSupportedMeasureType]? = nil) {
-        self._id = id.map(AnyString?.init)
+        self._id = id.map(AnyString.init)
         self.name = name
         self.description = description
         self.label = label
@@ -8249,7 +8249,7 @@ public struct LookModel: SDKModel {
     public var label: String?
 
     public init(id: String? = nil, label: String? = nil) {
-        self._id = id.map(AnyString?.init)
+        self._id = id.map(AnyString.init)
         self.label = label
     }
 
@@ -8437,7 +8437,7 @@ public struct LookWithDashboards: SDKModel {
         self.query_id = query_id
         self.short_url = short_url
         self.folder = folder
-        self._folder_id = folder_id.map(AnyString?.init)
+        self._folder_id = folder_id.map(AnyString.init)
         self.updated_at = updated_at
         self.view_count = view_count
         self.dashboards = dashboards
@@ -8629,7 +8629,7 @@ public struct LookWithQuery: SDKModel {
         self.query_id = query_id
         self.short_url = short_url
         self.folder = folder
-        self._folder_id = folder_id.map(AnyString?.init)
+        self._folder_id = folder_id.map(AnyString.init)
         self.updated_at = updated_at
         self.view_count = view_count
         self.query = query
@@ -8742,7 +8742,7 @@ public struct MergeQuery: SDKModel {
         self.can = can
         self.column_limit = column_limit
         self.dynamic_fields = dynamic_fields
-        self._id = id.map(AnyString?.init)
+        self._id = id.map(AnyString.init)
         self.pivots = pivots
         self.result_maker_id = result_maker_id
         self.sorts = sorts
@@ -8947,7 +8947,7 @@ public struct ModelsNotValidated: SDKModel {
 
     public init(name: String? = nil, project_file_id: String? = nil) {
         self.name = name
-        self._project_file_id = project_file_id.map(AnyString?.init)
+        self._project_file_id = project_file_id.map(AnyString.init)
     }
 
 }
@@ -9020,7 +9020,7 @@ public struct OauthClientApp: SDKModel {
 
     public init(can: StringDictionary<Bool>? = nil, client_guid: String? = nil, redirect_uri: String? = nil, display_name: String? = nil, description: String? = nil, enabled: Bool? = nil, group_id: Int64? = nil, tokens_invalid_before: Date? = nil, activated_users: [UserPublic]? = nil) {
         self.can = can
-        self._client_guid = client_guid.map(AnyString?.init)
+        self._client_guid = client_guid.map(AnyString.init)
         self.redirect_uri = redirect_uri
         self.display_name = display_name
         self.description = description
@@ -9592,7 +9592,7 @@ public struct Project: SDKModel {
 
     public init(can: StringDictionary<Bool>? = nil, id: String? = nil, name: String? = nil, uses_git: Bool? = nil, git_remote_url: String? = nil, git_username: String? = nil, git_password: String? = nil, git_production_branch_name: String? = nil, use_git_cookie_auth: Bool? = nil, git_username_user_attribute: String? = nil, git_password_user_attribute: String? = nil, git_service_name: String? = nil, git_application_server_http_port: Int64? = nil, git_application_server_http_scheme: String? = nil, deploy_secret: String? = nil, unset_deploy_secret: Bool? = nil, pull_request_mode: PullRequestMode? = nil, validation_required: Bool? = nil, git_release_mgmt_enabled: Bool? = nil, allow_warnings: Bool? = nil, is_example: Bool? = nil, dependency_status: String? = nil) {
         self.can = can
-        self._id = id.map(AnyString?.init)
+        self._id = id.map(AnyString.init)
         self.name = name
         self.uses_git = uses_git
         self.git_remote_url = git_remote_url
@@ -9690,7 +9690,7 @@ public struct ProjectError: SDKModel {
         self.field_name = field_name
         self.file_path = file_path
         self.line_number = line_number
-        self._model_id = model_id.map(AnyString?.init)
+        self._model_id = model_id.map(AnyString.init)
         self.explore = explore
         self.help_url = help_url
         self.params = params
@@ -9748,7 +9748,7 @@ public struct ProjectFile: SDKModel {
 
     public init(can: StringDictionary<Bool>? = nil, id: String? = nil, path: String? = nil, title: String? = nil, type: String? = nil, `extension`: String? = nil, mime_type: String? = nil, editable: Bool? = nil, git_status: GitStatus? = nil) {
         self.can = can
-        self._id = id.map(AnyString?.init)
+        self._id = id.map(AnyString.init)
         self.path = path
         self.title = title
         self.type = type
@@ -9874,8 +9874,8 @@ public struct ProjectWorkspace: SDKModel {
 
     public init(can: StringDictionary<Bool>? = nil, project_id: String? = nil, workspace_id: String? = nil, git_status: String? = nil, git_head: String? = nil, dependency_status: DependencyStatus? = nil, git_branch: GitBranch? = nil, lookml_type: String? = nil) {
         self.can = can
-        self._project_id = project_id.map(AnyString?.init)
-        self._workspace_id = workspace_id.map(AnyString?.init)
+        self._project_id = project_id.map(AnyString.init)
+        self._workspace_id = workspace_id.map(AnyString.init)
         self.git_status = git_status
         self.git_head = git_head
         self.dependency_status = dependency_status
@@ -10051,7 +10051,7 @@ public struct Query: SDKModel {
         self.visible_ui_sections = visible_ui_sections
         self.slug = slug
         self.dynamic_fields = dynamic_fields
-        self._client_id = client_id.map(AnyString?.init)
+        self._client_id = client_id.map(AnyString.init)
         self.share_url = share_url
         self.expanded_share_url = expanded_share_url
         self.url = url
@@ -10168,7 +10168,7 @@ public struct QueryTask: SDKModel {
 
     public init(can: StringDictionary<Bool>? = nil, id: String? = nil, query_id: Int64? = nil, query: Query? = nil, generate_links: Bool? = nil, force_production: Bool? = nil, path_prefix: String? = nil, cache: Bool? = nil, server_table_calcs: Bool? = nil, cache_only: Bool? = nil, cache_key: String? = nil, status: String? = nil, source: String? = nil, runtime: Float? = nil, rebuild_pdts: Bool? = nil, result_source: String? = nil, look_id: Int64? = nil, dashboard_id: String? = nil, result_format: String? = nil) {
         self.can = can
-        self._id = id.map(AnyString?.init)
+        self._id = id.map(AnyString.init)
         self.query_id = query_id
         self.query = query
         self.generate_links = generate_links
@@ -10184,7 +10184,7 @@ public struct QueryTask: SDKModel {
         self.rebuild_pdts = rebuild_pdts
         self.result_source = result_source
         self.look_id = look_id
-        self._dashboard_id = dashboard_id.map(AnyString?.init)
+        self._dashboard_id = dashboard_id.map(AnyString.init)
         self.result_format = result_format
     }
 
@@ -10302,9 +10302,9 @@ public struct RenderTask: SDKModel {
         self.dashboard_style = dashboard_style
         self.finalized_at = finalized_at
         self.height = height
-        self._id = id.map(AnyString?.init)
+        self._id = id.map(AnyString.init)
         self.look_id = look_id
-        self._lookml_dashboard_id = lookml_dashboard_id.map(AnyString?.init)
+        self._lookml_dashboard_id = lookml_dashboard_id.map(AnyString.init)
         self.query_id = query_id
         self.query_runtime = query_runtime
         self.render_runtime = render_runtime
@@ -10369,8 +10369,8 @@ public struct RepositoryCredential: SDKModel {
 
     public init(can: StringDictionary<Bool>? = nil, id: String? = nil, root_project_id: String? = nil, remote_url: String? = nil, git_username: String? = nil, git_password: String? = nil, ssh_public_key: String? = nil, is_configured: Bool? = nil) {
         self.can = can
-        self._id = id.map(AnyString?.init)
-        self._root_project_id = root_project_id.map(AnyString?.init)
+        self._id = id.map(AnyString.init)
+        self._root_project_id = root_project_id.map(AnyString.init)
         self.remote_url = remote_url
         self.git_username = git_username
         self.git_password = git_password
@@ -10505,10 +10505,10 @@ public struct ResultMakerWithIdVisConfigAndDynamicFields: SDKModel {
         self.dynamic_fields = dynamic_fields
         self.filterables = filterables
         self.sorts = sorts
-        self._merge_result_id = merge_result_id.map(AnyString?.init)
+        self._merge_result_id = merge_result_id.map(AnyString.init)
         self.total = total
         self.query_id = query_id
-        self._sql_query_id = sql_query_id.map(AnyString?.init)
+        self._sql_query_id = sql_query_id.map(AnyString.init)
         self.query = query
         self.vis_config = vis_config
     }
@@ -10748,15 +10748,15 @@ public struct RunningQueries: SDKModel {
         self.look = look
         self.created_at = created_at
         self.completed_at = completed_at
-        self._query_id = query_id.map(AnyString?.init)
+        self._query_id = query_id.map(AnyString.init)
         self.source = source
-        self._node_id = node_id.map(AnyString?.init)
+        self._node_id = node_id.map(AnyString.init)
         self.slug = slug
-        self._query_task_id = query_task_id.map(AnyString?.init)
+        self._query_task_id = query_task_id.map(AnyString.init)
         self.cache_key = cache_key
         self.connection_name = connection_name
         self.dialect = dialect
-        self._connection_id = connection_id.map(AnyString?.init)
+        self._connection_id = connection_id.map(AnyString.init)
         self.message = message
         self.status = status
         self.runtime = runtime
@@ -11326,7 +11326,7 @@ public struct ScheduledPlan: SDKModel {
         self.enabled = enabled
         self.look_id = look_id
         self.dashboard_id = dashboard_id
-        self._lookml_dashboard_id = lookml_dashboard_id.map(AnyString?.init)
+        self._lookml_dashboard_id = lookml_dashboard_id.map(AnyString.init)
         self.filters_string = filters_string
         self.dashboard_filters = dashboard_filters
         self.require_results = require_results
@@ -11336,7 +11336,7 @@ public struct ScheduledPlan: SDKModel {
         self.crontab = crontab
         self.datagroup = datagroup
         self.timezone = timezone
-        self._query_id = query_id.map(AnyString?.init)
+        self._query_id = query_id.map(AnyString.init)
         self.scheduled_plan_destination = scheduled_plan_destination
         self.run_once = run_once
         self.include_links = include_links
@@ -11909,7 +11909,7 @@ public struct SqlQueryCreate: SDKModel {
 
     public init(connection_name: String? = nil, connection_id: String? = nil, model_name: String? = nil, sql: String? = nil, vis_config: StringDictionary<AnyCodable>? = nil) {
         self.connection_name = connection_name
-        self._connection_id = connection_id.map(AnyString?.init)
+        self._connection_id = connection_id.map(AnyString.init)
         self.model_name = model_name
         self.sql = sql
         self.vis_config = vis_config
@@ -11980,7 +11980,7 @@ public struct SshServer: SDKModel {
     public var status: String?
 
     public init(ssh_server_id: String? = nil, ssh_server_name: String? = nil, ssh_server_host: String? = nil, ssh_server_port: Int64? = nil, ssh_server_user: String? = nil, finger_print: String? = nil, sha_finger_print: String? = nil, public_key: String? = nil, status: String? = nil) {
-        self._ssh_server_id = ssh_server_id.map(AnyString?.init)
+        self._ssh_server_id = ssh_server_id.map(AnyString.init)
         self.ssh_server_name = ssh_server_name
         self.ssh_server_host = ssh_server_host
         self.ssh_server_port = ssh_server_port
@@ -12058,8 +12058,8 @@ public struct SshTunnel: SDKModel {
     public var status: String?
 
     public init(tunnel_id: String? = nil, ssh_server_id: String? = nil, ssh_server_name: String? = nil, ssh_server_host: String? = nil, ssh_server_port: Int64? = nil, ssh_server_user: String? = nil, last_attempt: String? = nil, local_host_port: Int64? = nil, database_host: String? = nil, database_port: Int64? = nil, status: String? = nil) {
-        self._tunnel_id = tunnel_id.map(AnyString?.init)
-        self._ssh_server_id = ssh_server_id.map(AnyString?.init)
+        self._tunnel_id = tunnel_id.map(AnyString.init)
+        self._ssh_server_id = ssh_server_id.map(AnyString.init)
         self.ssh_server_name = ssh_server_name
         self.ssh_server_host = ssh_server_host
         self.ssh_server_port = ssh_server_port
@@ -12257,7 +12257,7 @@ public struct ThemeSettings: SDKModel {
     public init(background_color: String? = nil, base_font_size: String? = nil, color_collection_id: String? = nil, font_color: String? = nil, font_family: String? = nil, font_source: String? = nil, info_button_color: String? = nil, primary_button_color: String? = nil, show_filters_bar: Bool? = nil, show_title: Bool? = nil, text_tile_text_color: String? = nil, tile_background_color: String? = nil, tile_text_color: String? = nil, title_color: String? = nil, warn_button_color: String? = nil, tile_title_alignment: String? = nil, tile_shadow: Bool? = nil) {
         self.background_color = background_color
         self.base_font_size = base_font_size
-        self._color_collection_id = color_collection_id.map(AnyString?.init)
+        self._color_collection_id = color_collection_id.map(AnyString.init)
         self.font_color = font_color
         self.font_family = font_family
         self.font_source = font_source
@@ -12335,7 +12335,7 @@ public struct UpdateFolder: SDKModel {
 
     public init(name: String? = nil, parent_id: String? = nil) {
         self.name = name
-        self._parent_id = parent_id.map(AnyString?.init)
+        self._parent_id = parent_id.map(AnyString.init)
     }
 
 }
@@ -12517,7 +12517,7 @@ public struct User: SDKModel {
         self.embed_group_space_id = embed_group_space_id
         self.first_name = first_name
         self.group_ids = group_ids
-        self._home_folder_id = home_folder_id.map(AnyString?.init)
+        self._home_folder_id = home_folder_id.map(AnyString.init)
         self.id = id
         self.is_disabled = is_disabled
         self.last_name = last_name
@@ -12820,7 +12820,7 @@ public struct UserLoginLockout: SDKModel {
         self.auth_type = auth_type
         self.ip = ip
         self.user_id = user_id
-        self._remote_id = remote_id.map(AnyString?.init)
+        self._remote_id = remote_id.map(AnyString.init)
         self.full_name = full_name
         self.email = email
         self.fail_count = fail_count
@@ -13100,7 +13100,7 @@ public struct Workspace: SDKModel {
 
     public init(can: StringDictionary<Bool>? = nil, id: String? = nil, projects: [Project]? = nil) {
         self.can = can
-        self._id = id.map(AnyString?.init)
+        self._id = id.map(AnyString.init)
         self.projects = projects
     }
 
@@ -13193,8 +13193,8 @@ public struct WriteAlert: SDKModel {
         self.field = field
         self.is_disabled = is_disabled
         self.is_public = is_public
-        self._lookml_dashboard_id = lookml_dashboard_id.map(AnyString?.init)
-        self._lookml_link_id = lookml_link_id.map(AnyString?.init)
+        self._lookml_dashboard_id = lookml_dashboard_id.map(AnyString.init)
+        self._lookml_link_id = lookml_link_id.map(AnyString.init)
         self.owner_id = owner_id
         self.threshold = threshold
         self.time_series_condition_state = time_series_condition_state
@@ -13217,7 +13217,7 @@ public struct WriteApiSession: SDKModel {
     }
 
     public init(workspace_id: String? = nil) {
-        self._workspace_id = workspace_id.map(AnyString?.init)
+        self._workspace_id = workspace_id.map(AnyString.init)
     }
 
 }
@@ -13352,7 +13352,7 @@ public struct WriteBoardItem: SDKModel {
         self.dashboard_id = dashboard_id
         self.board_section_id = board_section_id
         self.look_id = look_id
-        self._lookml_dashboard_id = lookml_dashboard_id.map(AnyString?.init)
+        self._lookml_dashboard_id = lookml_dashboard_id.map(AnyString.init)
         self.order = order
     }
 
@@ -13464,7 +13464,7 @@ public struct WriteCommand: SDKModel {
     public init(name: String? = nil, description: String? = nil, linked_content_id: String? = nil, linked_content_type: LinkedContentType? = nil) {
         self.name = name
         self.description = description
-        self._linked_content_id = linked_content_id.map(AnyString?.init)
+        self._linked_content_id = linked_content_id.map(AnyString.init)
         self.linked_content_type = linked_content_type
     }
 
@@ -13663,7 +13663,7 @@ public struct WriteCreateQueryTask: SDKModel {
         self.source = source
         self.deferred = deferred
         self.look_id = look_id
-        self._dashboard_id = dashboard_id.map(AnyString?.init)
+        self._dashboard_id = dashboard_id.map(AnyString.init)
     }
 
     public init(_ query_id: Int64, _ result_format: ResultFormat, source: String? = nil, deferred: Bool? = nil, look_id: Int64? = nil, dashboard_id: String? = nil) {
@@ -13863,10 +13863,10 @@ public struct WriteDashboard: SDKModel {
         self.crossfilter_enabled = crossfilter_enabled
         self.deleted = deleted
         self.load_configuration = load_configuration
-        self._lookml_link_id = lookml_link_id.map(AnyString?.init)
+        self._lookml_link_id = lookml_link_id.map(AnyString.init)
         self.show_filters_bar = show_filters_bar
         self.show_title = show_title
-        self._folder_id = folder_id.map(AnyString?.init)
+        self._folder_id = folder_id.map(AnyString.init)
         self.text_tile_text_color = text_tile_text_color
         self.tile_background_color = tile_background_color
         self.tile_text_color = tile_text_color
@@ -14005,10 +14005,10 @@ public struct WriteDashboardElement: SDKModel {
 
     public init(body_text: String? = nil, dashboard_id: String? = nil, look: WriteLookWithQuery? = nil, look_id: String? = nil, merge_result_id: String? = nil, note_display: String? = nil, note_state: String? = nil, note_text: String? = nil, query: WriteQuery? = nil, query_id: Int64? = nil, refresh_interval: String? = nil, result_maker: WriteResultMakerWithIdVisConfigAndDynamicFields? = nil, result_maker_id: Int64? = nil, subtitle_text: String? = nil, title: String? = nil, title_hidden: Bool? = nil, title_text: String? = nil, type: String? = nil) {
         self.body_text = body_text
-        self._dashboard_id = dashboard_id.map(AnyString?.init)
+        self._dashboard_id = dashboard_id.map(AnyString.init)
         self.look = look
-        self._look_id = look_id.map(AnyString?.init)
-        self._merge_result_id = merge_result_id.map(AnyString?.init)
+        self._look_id = look_id.map(AnyString.init)
+        self._merge_result_id = merge_result_id.map(AnyString.init)
         self.note_display = note_display
         self.note_state = note_state
         self.note_text = note_text
@@ -14143,7 +14143,7 @@ public struct WriteDashboardLayout: SDKModel {
     public var width: Int64?
 
     public init(dashboard_id: String? = nil, type: String? = nil, active: Bool? = nil, column_width: Int64? = nil, width: Int64? = nil) {
-        self._dashboard_id = dashboard_id.map(AnyString?.init)
+        self._dashboard_id = dashboard_id.map(AnyString.init)
         self.type = type
         self.active = active
         self.column_width = column_width
@@ -14196,8 +14196,8 @@ public struct WriteDashboardLayoutComponent: SDKModel {
     public var height: Int64?
 
     public init(dashboard_layout_id: String? = nil, dashboard_element_id: String? = nil, row: Int64? = nil, column: Int64? = nil, width: Int64? = nil, height: Int64? = nil) {
-        self._dashboard_layout_id = dashboard_layout_id.map(AnyString?.init)
-        self._dashboard_element_id = dashboard_element_id.map(AnyString?.init)
+        self._dashboard_layout_id = dashboard_layout_id.map(AnyString.init)
+        self._dashboard_element_id = dashboard_element_id.map(AnyString.init)
         self.row = row
         self.column = column
         self.width = width
@@ -14415,7 +14415,7 @@ public struct WriteDBConnection: SDKModel {
         self.sql_writing_with_info_schema = sql_writing_with_info_schema
         self.after_connect_statements = after_connect_statements
         self.pdt_context_override = pdt_context_override
-        self._tunnel_id = tunnel_id.map(AnyString?.init)
+        self._tunnel_id = tunnel_id.map(AnyString.init)
         self.pdt_concurrency = pdt_concurrency
         self.disable_context_comment = disable_context_comment
         self.oauth_application_id = oauth_application_id
@@ -14530,7 +14530,7 @@ public struct WriteExternalOauthApplication: SDKModel {
 
     public init(name: String? = nil, client_id: String? = nil, client_secret: String? = nil, dialect_name: String? = nil) {
         self.name = name
-        self._client_id = client_id.map(AnyString?.init)
+        self._client_id = client_id.map(AnyString.init)
         self.client_secret = client_secret
         self.dialect_name = dialect_name
     }
@@ -14558,7 +14558,7 @@ public struct WriteFolderBase: SDKModel {
 
     public init(name: String, parent_id: String? = nil) {
         self.name = name
-        self._parent_id = parent_id.map(AnyString?.init)
+        self._parent_id = parent_id.map(AnyString.init)
     }
 
     public init(_ name: String, parent_id: String? = nil) {
@@ -14904,7 +14904,7 @@ public struct WriteLDAPConfig: SDKModel {
         self.user_attribute_map_email = user_attribute_map_email
         self.user_attribute_map_first_name = user_attribute_map_first_name
         self.user_attribute_map_last_name = user_attribute_map_last_name
-        self._user_attribute_map_ldap_id = user_attribute_map_ldap_id.map(AnyString?.init)
+        self._user_attribute_map_ldap_id = user_attribute_map_ldap_id.map(AnyString.init)
         self.user_attributes_with_ids = user_attributes_with_ids
         self.user_bind_base_dn = user_bind_base_dn
         self.user_custom_filter = user_custom_filter
@@ -15053,7 +15053,7 @@ public struct WriteLookWithQuery: SDKModel {
         self.`public` = `public`
         self.query_id = query_id
         self.folder = folder
-        self._folder_id = folder_id.map(AnyString?.init)
+        self._folder_id = folder_id.map(AnyString.init)
         self.query = query
     }
 
@@ -15617,7 +15617,7 @@ public struct WriteQuery: SDKModel {
         self.filter_config = filter_config
         self.visible_ui_sections = visible_ui_sections
         self.dynamic_fields = dynamic_fields
-        self._client_id = client_id.map(AnyString?.init)
+        self._client_id = client_id.map(AnyString.init)
         self.query_timezone = query_timezone
     }
 
@@ -16018,7 +16018,7 @@ public struct WriteScheduledPlan: SDKModel {
         self.enabled = enabled
         self.look_id = look_id
         self.dashboard_id = dashboard_id
-        self._lookml_dashboard_id = lookml_dashboard_id.map(AnyString?.init)
+        self._lookml_dashboard_id = lookml_dashboard_id.map(AnyString.init)
         self.filters_string = filters_string
         self.dashboard_filters = dashboard_filters
         self.require_results = require_results
@@ -16028,7 +16028,7 @@ public struct WriteScheduledPlan: SDKModel {
         self.crontab = crontab
         self.datagroup = datagroup
         self.timezone = timezone
-        self._query_id = query_id.map(AnyString?.init)
+        self._query_id = query_id.map(AnyString.init)
         self.scheduled_plan_destination = scheduled_plan_destination
         self.run_once = run_once
         self.include_links = include_links
@@ -16175,7 +16175,7 @@ public struct WriteSshTunnel: SDKModel {
     public var database_port: Int64?
 
     public init(ssh_server_id: String? = nil, database_host: String? = nil, database_port: Int64? = nil) {
-        self._ssh_server_id = ssh_server_id.map(AnyString?.init)
+        self._ssh_server_id = ssh_server_id.map(AnyString.init)
         self.database_host = database_host
         self.database_port = database_port
     }
@@ -16266,7 +16266,7 @@ public struct WriteUser: SDKModel {
     public init(credentials_email: WriteCredentialsEmail? = nil, first_name: String? = nil, home_folder_id: String? = nil, is_disabled: Bool? = nil, last_name: String? = nil, locale: String? = nil, models_dir_validated: Bool? = nil, ui_state: StringDictionary<AnyCodable>? = nil) {
         self.credentials_email = credentials_email
         self.first_name = first_name
-        self._home_folder_id = home_folder_id.map(AnyString?.init)
+        self._home_folder_id = home_folder_id.map(AnyString.init)
         self.is_disabled = is_disabled
         self.last_name = last_name
         self.locale = locale

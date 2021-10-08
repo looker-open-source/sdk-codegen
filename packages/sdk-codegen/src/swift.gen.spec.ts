@@ -145,7 +145,7 @@ public enum PermissionType: String, Codable {
 
     public init(can: StringDictionary<Bool>? = nil, id: String? = nil, message: String? = nil, status: String? = nil) {
         self.can = can
-        self._id = id.map(AnyString?.init)
+        self._id = id.map(AnyString.init)
         self.message = message
         self.status = status
     }
