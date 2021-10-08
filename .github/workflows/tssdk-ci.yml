@@ -1,13 +1,6 @@
-name: Typescript SDK CI
+name: TypeScript SDK CI
 on:
   pull_request:
-    types:
-      - opened
-      - synchronize
-      - reopened
-      # first three are default, adding labeled for "CI:TEST" support
-      # (see jobs.unit.if below)
-      - labeled
     paths:
       - packages/sdk/**
       - packages/sdk-rtl/**
@@ -25,6 +18,8 @@ on:
       - packages/extension-sdk/**
       - packages/extension-sdk-react/**
 
+  workflow_dispatch:
+
 env:
   LOOKERSDK_BASE_URL: https://localhost:20000
   LOOKERSDK_VERIFY_SSL: false
@@ -32,22 +27,6 @@ env:
 
 jobs:
   unit:
-    # 1st condition: push event (restricted to main above)
-    # 2nd condition: PR opened/synchronized/reopened (types filter above)
-    #                except Release PRs, those need a manual CI:TEST
-    # 3rd condition: PR labeled with "CI:TEST"
-    if: >
-      github.event_name == 'push' ||
-      (
-        github.event_name == 'pull_request' &&
-        github.event.action != 'labeled'
-      ) ||
-      (
-        github.event_name == 'pull_request' &&
-        github.event.action == 'labeled' &&
-        github.event.label.name == 'CI:TEST'
-      )
-
     name: Unit - ${{ matrix.os }} / Node ${{ matrix.node-version }}
     env:
       JEST_JUNIT_OUTPUT_DIR: results/tssdk
@@ -79,6 +58,7 @@ jobs:
           yarn
           yarn lint:es --quiet
           yarn build
+          yarn dedupe:ci
 
       - name: Mock looker.ini
         run: |
@@ -94,7 +74,7 @@ jobs:
           echo "timeout=30" >> looker.ini
 
       - name: Run unit tests
-        run: yarn jest "packages/(extension-sdk|extension-sdk-react|sdk-rtl)/src" --reporters=default --reporters=jest-junit
+        run: yarn jest "packages/(extension-sdk|extension-sdk-react|sdk-rtl|sdk)/src" --reporters=default --reporters=jest-junit
 
       - name: Delete looker.ini mock
         run: rm looker.ini
@@ -119,16 +99,16 @@ jobs:
         os:
           - ubuntu
         looker:
-          - '7_18'
-          - '7_20'
-          - '21_0'
+          - '21_10'
+          - '21_12'
+          - '21_14'
 
     steps:
       - name: Repo Checkout
         uses: actions/checkout@v2
 
       - name: Install Node ${{ matrix.node-version }}
-        uses: actions/setup-node@v1
+        uses: actions/setup-node@v2
         with:
           node-version: ${{ matrix.node-version }}
 
@@ -179,7 +159,6 @@ jobs:
           path: results/tssdk
 
   publish-test-results:
-    name: Publish Test Results
     needs: [unit, integration]
     if: success() || failure()
     runs-on: ubuntu-latest
@@ -191,31 +170,13 @@ jobs:
           path: artifacts
 
       - name: Publish Unit Test Results
-        uses: EnricoMi/publish-unit-test-result-action@v1.6
+        uses: EnricoMi/publish-unit-test-result-action@v1.12
         with:
-          check_name: Test Results
+          # Cosmetic issue with `check_name` being associated to the wrong
+          # workflow: https://github.com/EnricoMi/publish-unit-test-result-action/issues/12
+          check_name: Typescript Tests
           github_token: ${{ secrets.GITHUB_TOKEN }}
           report_individual_runs: true
+          hide_comments: orphaned commits
+          check_run_annotations_branch: '*'
           files: 'artifacts/tssdk-test-results/*.xml'
-
-  remove-CI-TEST-label:
-    name: Remove CI:TEST Label
-    if: >
-      (
-        github.event_name == 'pull_request' &&
-        github.event.action == 'labeled' &&
-        github.event.label.name == 'CI:TEST'
-      )
-    runs-on: ubuntu-latest
-    steps:
-      - name: Remove CI:TEST Label
-        uses: actions/github-script@v3
-        with:
-          github-token: ${{secrets.GITHUB_TOKEN}}
-          script: |
-            github.issues.removeLabel({
-              owner: context.repo.owner,
-              repo: context.repo.repo,
-              issue_number: context.issue.number,
-              name: 'CI:TEST'
-            })

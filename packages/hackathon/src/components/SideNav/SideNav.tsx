@@ -23,9 +23,16 @@
  SOFTWARE.
 
  */
-import React, { FC } from 'react'
+import type { FC } from 'react'
+import React from 'react'
 import styled from 'styled-components'
 import { Box, MenuList, MenuItem } from '@looker/components'
+import { Beaker } from '@looker/icons'
+import { Map } from '@styled-icons/material/Map'
+import { Settings } from '@styled-icons/material/Settings'
+import { Home } from '@styled-icons/material-outlined/Home'
+import { Group } from '@styled-icons/material-outlined/Group'
+import { FactCheck } from '@styled-icons/material-outlined/FactCheck'
 import { NavLink } from 'react-router-dom'
 import { Routes } from '../../routes/AppRouter'
 
@@ -37,32 +44,32 @@ export const SideNav: FC<SideNavProps> = ({ authorizedRoutes }) => (
   <Box fontSize="xxlarge" mt="40px">
     <MenuList type="none">
       {authorizedRoutes.includes(Routes.HOME) && (
-        <MenuItem icon="Home">
+        <MenuItem icon={<Home />}>
           <Link to={Routes.HOME}>Home</Link>
         </MenuItem>
       )}
       {authorizedRoutes.includes(Routes.RESOURCES) && (
-        <MenuItem icon="ChartMap">
+        <MenuItem icon={<Map />}>
           <Link to={Routes.RESOURCES}>Resources</Link>
         </MenuItem>
       )}
       {authorizedRoutes.includes(Routes.USERS) && (
-        <MenuItem icon="Group">
+        <MenuItem icon={<Group />}>
           <Link to={Routes.USERS}>Users</Link>
         </MenuItem>
       )}
       {authorizedRoutes.includes(Routes.PROJECTS) && (
-        <MenuItem icon="Beaker">
+        <MenuItem icon={<Beaker />}>
           <Link to={Routes.PROJECTS}>Projects</Link>
         </MenuItem>
       )}
       {authorizedRoutes.includes(Routes.JUDGING) && (
-        <MenuItem icon="FactCheck">
+        <MenuItem icon={<FactCheck />}>
           <Link to={Routes.JUDGING}>Judging</Link>
         </MenuItem>
       )}
       {authorizedRoutes.includes(Routes.ADMIN) && (
-        <MenuItem icon="Gear">
+        <MenuItem icon={<Settings />}>
           <Link to={Routes.ADMIN}>Admin</Link>
         </MenuItem>
       )}
@@ -71,18 +78,17 @@ export const SideNav: FC<SideNavProps> = ({ authorizedRoutes }) => (
 )
 
 const Link = styled(NavLink)`
-  color:${({ theme }) => theme.colors.ui5}
-  cursor: pointer;
-  display: block;
-  padding: ${({
-    theme: {
-      space: { xsmall, large },
-    },
-  }) => `${xsmall} ${large}`};
+  text-decoration: none;
+  color: ${({ theme }) => theme.colors.ui5};
+
   &:hover,
   &:visited,
   &:focus,
   &.active {
-    color: ${({ theme }) => theme.colors.key};
+    color: inherit;
   }
+
+  cursor: pointer;
+  display: block;
+  padding: ${({ theme: { space } }) => `${space.xsmall} ${space.large}`};
 `

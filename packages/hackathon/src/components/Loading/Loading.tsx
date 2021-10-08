@@ -24,8 +24,9 @@
 
  */
 
-import React, { FC } from 'react'
-import { Flex, Spinner, Text } from '@looker/components'
+import type { FC } from 'react'
+import React from 'react'
+import { Flex, ProgressCircular, Text } from '@looker/components'
 
 interface LoadingProps {
   loading: boolean
@@ -39,7 +40,7 @@ export const Loading: FC<LoadingProps> = ({
   <Flex height="40px" alignItems="center">
     {loading && (
       <>
-        <Spinner />
+        <ProgressCircular />
         <Text ml="large">{message}</Text>
       </>
     )}

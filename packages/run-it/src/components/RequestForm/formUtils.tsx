@@ -23,30 +23,23 @@
  SOFTWARE.
 
  */
-import React, { BaseSyntheticEvent, Fragment } from 'react'
+
+import type { BaseSyntheticEvent } from 'react'
+import React, { Fragment } from 'react'
 import {
-  FieldText,
-  FieldToggleSwitch,
+  ToggleSwitch,
   Label,
   FieldCheckbox,
+  ButtonOutline,
+  Box,
+  Popover,
+  InputText,
 } from '@looker/components'
+import { DateFormat, InputDate } from '@looker/components-date'
+import { CodeEditor } from '@looker/code-editor'
 
-import { InputDate } from '@looker/components/lib/InputDate'
-import { CodeStructure } from '../CodeStructure'
-import { RunItInput, RunItValues } from '../../RunIt'
-
-const inputTextType = (type: string) => {
-  switch (type) {
-    case 'number':
-      return 'number'
-    case 'email':
-      return 'email'
-    case 'password':
-      return 'password'
-    default:
-      return 'text'
-  }
-}
+import type { RunItInput, RunItValues } from '../../RunIt'
+import { FormItem } from './FormItem'
 
 /**
  * Creates a datetime form item
@@ -61,13 +54,33 @@ const createDateItem = (
   handleChange: (name: string, date?: Date) => void,
   requestContent: RunItValues
 ) => (
-  <div key={name}>
-    <Label>{name}</Label>
-    <InputDate
-      defaultValue={name in requestContent ? requestContent[name] : undefined}
-      onChange={handleChange.bind(null, name)}
-    />
-  </div>
+  <FormItem key={`${name}_fid`} id={name} label={name}>
+    <Popover
+      key={`${name}_pop`}
+      placement="bottom-start"
+      content={
+        <Box key={`${name}_popbox`} p="u3">
+          <InputDate
+            key={`datepick_${name}`}
+            defaultValue={
+              name in requestContent ? requestContent[name] : undefined
+            }
+            onChange={handleChange.bind(null, name)}
+          />
+        </Box>
+      }
+    >
+      <ButtonOutline type="button" key={`${name}_pop_button`}>
+        {name in requestContent ? (
+          <DateFormat key={`${name}_dateformat`}>
+            {name in requestContent ? requestContent[name] : undefined}
+          </DateFormat>
+        ) : (
+          'Choose'
+        )}
+      </ButtonOutline>
+    </Popover>
+  </FormItem>
 )
 
 /**
@@ -84,19 +97,35 @@ const createBoolItem = (
   handleChange: (e: BaseSyntheticEvent) => void,
   requestContent: RunItValues
 ) => (
-  <div key={name}>
-    {description && <Label>{description}</Label>}
-    <FieldToggleSwitch
-      name={name}
-      label={name}
-      onChange={handleChange}
-      on={name in requestContent ? requestContent[name] : false}
-    />
-  </div>
+  <FormItem key={`${name}_fib`} id={name} label={name}>
+    <>
+      <ToggleSwitch
+        key={name}
+        id={name}
+        name={name}
+        onChange={handleChange}
+        on={name in requestContent ? requestContent[name] : false}
+      />
+      {description && <Label>{description}</Label>}
+    </>
+  </FormItem>
 )
 
+const inputTextType = (type: string) => {
+  switch (type) {
+    case 'number':
+      return 'number'
+    case 'email':
+      return 'email'
+    case 'password':
+      return 'password'
+    default:
+      return 'text'
+  }
+}
+
 /**
- *
+ * Create a field text input item based on definitions
  * @param name Form item's name
  * @param description Form item's description
  * @param required Form item's required flag
@@ -115,19 +144,18 @@ const createItem = (
   handleChange: (e: BaseSyntheticEvent) => void,
   requestContent: RunItValues
 ) => (
-  <div key={name}>
-    <FieldText
+  <FormItem key={`${name}_fi`} id={name} label={name}>
+    <InputText
       key={name}
+      id={name}
       name={name}
-      label={name}
       required={required}
       placeholder={`${placeholder} ${description || name}`}
       type={inputTextType(type)}
       value={name in requestContent ? requestContent[name] : ''}
       onChange={handleChange}
-      width="100%"
     />
-  </div>
+  </FormItem>
 )
 
 /**
@@ -219,31 +247,34 @@ export const createComplexItem = (
   handleComplexChange: (value: string, name: string) => void,
   requestContent: RunItValues
 ) => (
-  <div key={input.name}>
-    <Label>{input.name}</Label>
-    <CodeStructure
+  <FormItem key={`${input.name}_fic`} id={input.name} label={input.name}>
+    <CodeEditor
+      key={`code_${input.name}`}
       language="json"
       code={
         input.name in requestContent
           ? requestContent[input.name]
           : JSON.stringify(input.type, null, 2)
       }
-      fontSize={14}
-      width={'810px'}
+      lineNumbers={false}
       onChange={handleComplexChange.bind(null, input.name)}
+      transparent={true}
     />
-  </div>
+  </FormItem>
 )
 
 /**
  * Creates a required checkbox form item
  */
 export const showDataChangeWarning = () => (
-  <FieldCheckbox
-    key="warning"
-    required
-    label="I understand that this API endpoint will change data."
-  />
+  <FormItem key="warningfi" id="change_warning">
+    <FieldCheckbox
+      name="warning"
+      key="warning"
+      required
+      label="I understand that this API endpoint will change data."
+    />
+  </FormItem>
 )
 
 /**
@@ -265,4 +296,49 @@ export const updateNullableProp = (
     updatedState[key] = newValue
   }
   return updatedState
+}
+
+/**
+ * If the body isn't empty, it must be valid form encoded syntax
+ *
+ * This may not be perfect validation but it should be good enough to tolerate variances
+ *
+ * @param body to validate
+ */
+export const validateEncodedValues = (body: string) => {
+  let result = ''
+  if (!body) return result
+  const args = body.split('&')
+  args.forEach((arg) => {
+    const formArg = /[\w-_.]+(\[])?=.*/i
+    if (!formArg.test(arg)) {
+      result += ` ${arg}`
+    }
+  })
+  return result.trim()
+}
+
+/**
+ * Returns an error message if the body is not JSON or valid form url encoding
+ *
+ * @param body string to validate
+ */
+export const validateBody = (body: string | Record<string, any>) => {
+  let result = ''
+  if (body && typeof body === 'string') {
+    if (/^[[{}"]/.test(body)) {
+      // most likely JSON
+      try {
+        JSON.parse(body)
+      } catch (e: any) {
+        result = e.message
+      }
+    } else {
+      result = validateEncodedValues(body)
+    }
+  }
+  if (result) {
+    result = `Syntax error in the body: ${result}`
+  }
+  return result
 }

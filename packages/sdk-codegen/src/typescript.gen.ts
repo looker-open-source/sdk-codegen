@@ -24,31 +24,31 @@
 
  */
 
-import { commentBlock } from '@looker/sdk-codegen-utils'
-import {
+import type {
   Arg,
   ArgValues,
-  EnumType,
   IMethod,
   IParameter,
   IProperty,
-  isSpecialName,
   IType,
-  strBody,
 } from './sdkModels'
-import { CodeAssignment, CodeGen, IMappedType, trimInputs } from './codeGen'
+import { EnumType, isSpecialName, strBody } from './sdkModels'
+import type { CodeAssignment, IMappedType } from './codeGen'
+import { CodeGen, trimInputs, commentBlock } from './codeGen'
 
 /**
  * TypeScript code generator
  */
 export class TypescriptGen extends CodeGen {
   /**
-   * special case for Typescript output path due to mono repository
+   * special case for TypeScript output path due to mono repository
    */
   codePath = './packages/'
   /**
-   * special case for Typescript output path due to mono repository
+   * special case for TypeScript output path due to mono repository
    */
+  useFunctions = true
+  useInterfaces = true
   packagePath = 'sdk/src'
   itself = 'this'
   fileExtension = '.ts'
@@ -65,22 +65,47 @@ export class TypescriptGen extends CodeGen {
   willItStream = true
   useNamedParameters = false
   useNamedArguments = false
+  /** Track special imports of sdk-rtl */
+  rtlNeeds = new Set<string>()
+
+  reset() {
+    this.rtlNeeds = new Set<string>()
+  }
 
   sdkFileName(baseFileName: string) {
-    return this.fileName(`${this.apiVersion}/${baseFileName}`)
+    return this.fileName(`${this.versions?.spec.key}/${baseFileName}`)
+  }
+
+  /** lists all special sdk-rtl import types encountered */
+  rtlImports() {
+    let rtl = Array.from(this.rtlNeeds).join(', ')
+    if (rtl) {
+      rtl += ', '
+    }
+    return rtl
+  }
+
+  /** creates a full @looker/sdk-rtl import statement if one is required */
+  rtlImportStatement() {
+    const rtl = this.rtlImports()
+    return rtl ? `\nimport type { ${rtl} } from '@looker/sdk-rtl'\n` : ''
   }
 
   methodsPrologue(_indent: string) {
     return `
-import { APIMethods, DelimArray, IAuthSession, ITransportSettings, encodeParam } from '@looker/sdk-rtl'
+import type { ${this.rtlImports()}IAuthSession, ITransportSettings, SDKResponse } from '@looker/sdk-rtl'
+import { APIMethods, encodeParam } from '@looker/sdk-rtl'
 /**
  * ${this.warnEditing()}
  *
  */
 import { sdkVersion } from '../constants'
-import { IDictionary, ${this.typeNames().join(', ')} } from './models'
+import type { I${this.packageName} } from './methodsInterface'
+import type { ${this.typeNames().join(', ')} } from './models'
 
-export class ${this.packageName} extends APIMethods {
+export class ${this.packageName} extends APIMethods implements I${
+      this.packageName
+    } {
   static readonly ApiVersion = '${this.apiVersion}'
   constructor(authSession: IAuthSession) {
     super(authSession, sdkVersion)
@@ -94,16 +119,58 @@ export class ${this.packageName} extends APIMethods {
 `
   }
 
+  functionsPrologue(_indent: string) {
+    return `
+import type { ${this.rtlImports()}IAPIMethods, IAuthSession, ITransportSettings, SDKResponse } from '@looker/sdk-rtl'
+import { encodeParam, functionalSdk } from '@looker/sdk-rtl'
+
+/**
+ * ${this.warnEditing()}
+ *
+ */
+
+import { sdkVersion } from '../constants'
+import type { ${this.typeNames().join(', ')} } from './models'
+
+/**
+ * Creates a "functional sdk" that knows the API and Looker release version
+ * @param authSession authentication session
+ */
+export const functionalSdk${this.apiRef} = (
+  authSession: IAuthSession,
+) => {
+  return functionalSdk(authSession, '${this.apiVersion}', sdkVersion)
+}
+
+`
+  }
+
+  interfacesPrologue(_indent: string) {
+    return `
+import type { ${this.rtlImports()} IAPIMethods, ITransportSettings, SDKResponse } from '@looker/sdk-rtl'
+/**
+ * ${this.warnEditing()}
+ *
+ */
+import type { ${this.typeNames().join(', ')} } from './models'
+
+export interface I${this.packageName} extends IAPIMethods {
+
+`
+  }
+
   streamsPrologue(_indent: string): string {
     return `
 import { Readable } from 'readable-stream'
-import { APIMethods, IAuthSession, DelimArray, ITransportSettings, encodeParam } from '@looker/sdk-rtl'
+import type { ${this.rtlImports()}IAuthSession, ITransportSettings } from '@looker/sdk-rtl'
+import { APIMethods, encodeParam } from '@looker/sdk-rtl'
+
 /**
  * ${this.warnEditing()}
  *
  */
 import { sdkVersion } from '../constants'
-import { IDictionary, ${this.typeNames(false).join(', ')} } from './models'
+import type { ${this.typeNames().join(', ')} } from './models'
 
 export class ${this.packageName}Stream extends APIMethods {
   static readonly ApiVersion = '${this.apiVersion}'
@@ -123,16 +190,10 @@ export class ${this.packageName}Stream extends APIMethods {
   }
 
   modelsPrologue(_indent: string) {
-    return `
-import { DelimArray, Url } from '@looker/sdk-rtl'
-
+    return `${this.rtlImportStatement()}
 /*
  * ${this.warnEditing()}
  */
-
-export interface IDictionary<T> {
-  [key: string]: T
-}
 
 `
   }
@@ -142,7 +203,7 @@ export interface IDictionary<T> {
   }
 
   commentHeader(indent: string, text: string | undefined, commentStr = ' * ') {
-    if (!text) return ''
+    if (this.noComment || !text) return ''
     const commentPrefix =
       text.includes(' License') && text.includes('Copyright (c)') ? '/*' : '/**'
     if (commentStr === ' ') {
@@ -150,7 +211,7 @@ export interface IDictionary<T> {
         text,
         indent,
         commentStr
-      )}\n\n${indent} */\n`
+      )}\n${indent} */\n`
     }
     return `${indent}${commentPrefix}\n${commentBlock(
       text,
@@ -188,9 +249,23 @@ export interface IDictionary<T> {
     )
   }
 
+  /**
+   * Detect need for Partial<T> vs T for a parameter type
+   * @param param to cast (or not)
+   * @param mapped type to cast
+   */
+  impartial(param: IParameter, mapped: IMappedType) {
+    if (param.type.intrinsic || param.location !== strBody) return mapped.name
+    return `Partial<${mapped.name}>`
+  }
+
   paramComment(param: IParameter, mapped: IMappedType) {
-    // TODO remove mapped name type signature?
-    return `@param {${mapped.name}} ${param.name} ${param.description}`
+    // Don't include mapped type name for Typescript param comments in headers
+    let desc = param.description || param.type.description
+    if (!desc) {
+      desc = this.impartial(param, mapped)
+    }
+    return `@param ${param.name} ${desc}`
   }
 
   declareParameter(indent: string, method: IMethod, param: IParameter) {
@@ -200,14 +275,11 @@ export interface IDictionary<T> {
         : param.type
     const mapped = this.typeMap(type)
     let pOpt = ''
-    if (param.location === strBody) {
-      mapped.name = `Partial<${mapped.name}>`
-    }
+    mapped.name = this.impartial(param, mapped)
     if (!param.required) {
       pOpt = mapped.default ? '' : '?'
     }
     return (
-      this.commentHeader(indent, this.paramComment(param, mapped)) +
       `${indent}${this.reserve(param.name)}${pOpt}: ${mapped.name}` +
       (param.required ? '' : mapped.default ? ` = ${mapped.default}` : '')
     )
@@ -220,16 +292,74 @@ export interface IDictionary<T> {
     return `${resp}${args}))`
   }
 
-  methodHeaderDeclaration(indent: string, method: IMethod, streamer = false) {
+  methodHeaderComment(method: IMethod, params: string[] = []) {
+    if (this.noComment) return ''
+    const lines: string[] = []
+
+    const desc = method.description?.trim()
+    if (desc) {
+      lines.push(desc)
+      lines.push('')
+    }
+
+    const resultType = this.typeMap(method.type).name
+    lines.push(`${method.httpMethod} ${method.endpoint} -> ${resultType}`)
+    lines.push('')
+
+    if (method.deprecated) {
+      lines.push('@deprecated')
+      lines.push('')
+    }
+
+    if (method.responseIsBoth()) {
+      lines.push('@remarks')
+      lines.push('**NOTE**: Binary content may be returned by this function.')
+      lines.push('')
+    } else if (method.responseIsBinary()) {
+      lines.push('@remarks')
+      lines.push('**NOTE**: Binary content is returned by this function.')
+      lines.push('')
+    }
+
+    params.forEach((p) => lines.push(`@param ${p}`))
+
+    const args = method.allParams
+    if (args.length) {
+      let requestType = this.requestTypeName(method)
+
+      if (requestType) {
+        requestType =
+          method.httpMethod === 'PATCH'
+            ? `Partial<I${requestType}>`
+            : `I${requestType}`
+        lines.push(
+          `@param request composed interface "${requestType}" for complex method parameters`
+        )
+      } else {
+        args.forEach((p) =>
+          lines.push(this.paramComment(p, this.paramMappedType(p, method)))
+        )
+      }
+    }
+    lines.push('@param options one-time API call overrides')
+    lines.push('')
+
+    return lines.join('\n')
+  }
+
+  methodHeaderDeclaration(
+    indent: string,
+    method: IMethod,
+    streamer = false,
+    params: string[] = []
+  ) {
     const mapped = this.typeMap(method.type)
-    const head = method.description?.trim()
-    let headComment =
-      (head ? `${head}\n\n` : '') +
-      `${method.httpMethod} ${method.endpoint} -> ${mapped.name}`
     let fragment: string
     const requestType = this.requestTypeName(method)
     const bump = this.bumper(indent)
-
+    const headComment = streamer
+      ? this.methodHeaderComment(method, ['callback streaming output function'])
+      : this.methodHeaderComment(method, params)
     if (requestType) {
       // use the request type that will be generated in models.ts
       // No longer using Partial<T> by default here because required and optional are supposed to be accurate
@@ -238,30 +368,27 @@ export interface IDictionary<T> {
         method.httpMethod === 'PATCH'
           ? `request: Partial<I${requestType}>`
           : `request: I${requestType}`
+      params.push(fragment)
+      fragment = params.join(', ')
     } else {
-      const params: string[] = []
       const args = method.allParams // get the params in signature order
       if (args && args.length > 0)
         args.forEach((p) => params.push(this.declareParameter(bump, method, p)))
       fragment =
         params.length > 0 ? `\n${params.join(this.paramDelimiter)}` : ''
     }
-    if (method.responseIsBoth()) {
-      headComment += `\n\n**Note**: Binary content may be returned by this method.`
-    } else if (method.responseIsBinary()) {
-      headComment += `\n\n**Note**: Binary content is returned by this method.\n`
-    }
     const callback = `callback: (readable: Readable) => Promise<${mapped.name}>,`
     const header =
       this.commentHeader(indent, headComment) +
       `${indent}async ${method.name}(` +
       (streamer ? `\n${bump}${callback}` : '')
+    const returns = streamer ? '' : `: ${this.returnType(indent, method)}`
 
     return (
       header +
       fragment +
       (fragment ? ', ' : '') +
-      'options?: Partial<ITransportSettings>) {\n'
+      `options?: Partial<ITransportSettings>)${returns} {\n`
     )
   }
 
@@ -294,6 +421,76 @@ export interface IDictionary<T> {
     )
   }
 
+  /**
+   * Return type declaration for the method
+   * @param indent
+   * @param method
+   */
+  returnType(indent: string, method: IMethod): string {
+    const mapped = this.typeMap(method.type)
+    const errors = this.errorResponses(indent, method)
+    return `Promise<SDKResponse<${mapped.name}, ${errors}>>`
+  }
+
+  functionSignature(indent: string, method: IMethod): string {
+    let fragment: string
+    const requestType = this.requestTypeName(method)
+    const bump = this.bumper(indent)
+    const params = ['sdk: IAPIMethods']
+
+    const headComment = this.methodHeaderComment(method, [
+      'sdk IAPIMethods implementation',
+    ])
+    if (requestType) {
+      // use the request type that will be generated in models.ts
+      // No longer using Partial<T> by default here because required and optional are supposed to be accurate
+      // However, for update methods (iow, patch) Partial<T> is still necessary since only the delta gets set
+      fragment =
+        method.httpMethod === 'PATCH'
+          ? `request: Partial<I${requestType}>`
+          : `request: I${requestType}`
+      params.push(fragment)
+      fragment = params.join(', ')
+    } else {
+      const args = method.allParams // get the params in signature order
+      if (args && args.length > 0)
+        args.forEach((p) => params.push(this.declareParameter(bump, method, p)))
+      fragment =
+        params.length > 0 ? `\n${params.join(this.paramDelimiter)}` : ''
+    }
+    const header =
+      this.commentHeader(indent, headComment) +
+      `${indent}export const ${method.name} = async (`
+    const returns = this.returnType(indent, method)
+
+    return (
+      header +
+      fragment +
+      (fragment ? ', ' : '') +
+      `options?: Partial<ITransportSettings>): ${returns} => {\n`
+    )
+  }
+
+  declareFunction(indent: string, method: IMethod): string {
+    const bump = this.bumper(indent)
+    // horribly hacky tweak to httpCall
+    this.itself = 'sdk'
+    const result =
+      this.functionSignature(indent, method) +
+      this.encodePathParams(indent, method) +
+      this.httpCall(bump, method) +
+      `\n${indent}}`
+    this.itself = 'this'
+    return result
+  }
+
+  declareInterface(indent: string, method: IMethod): string {
+    let sig = this.methodSignature(indent, method).trimRight()
+    sig = sig.replace(/^\s*async /gm, '')
+    sig = sig.substr(0, sig.length - 2)
+    return `${sig}\n`
+  }
+
   streamerSignature(indent: string, method: IMethod) {
     return this.methodHeaderDeclaration(indent, method, true)
   }
@@ -313,7 +510,16 @@ export interface IDictionary<T> {
     return `'${name}'`
   }
 
+  /**
+   * Get the language's type name for generation
+   *
+   * Also refcounts the type
+   *
+   * @param type to name
+   * @private
+   */
   private typeName(type: IType) {
+    type.refCount++
     if (type.customType && !(type instanceof EnumType)) {
       return this.reserve(`I${type.name}`)
     }
@@ -454,14 +660,9 @@ export interface IDictionary<T> {
   }
 
   // TODO avoid duplicate code
-  typeNames(countError = true) {
+  typeNames() {
     const names: string[] = []
     if (!this.api) return names
-    if (countError) {
-      this.api.types.Error.refCount++
-    } else {
-      this.api.types.Error.refCount = 0
-    }
     const types = this.api.types
     Object.values(types)
       .filter((type) => type.refCount > 0 && !type.intrinsic)
@@ -505,11 +706,13 @@ export interface IDictionary<T> {
             name: `${map.name}[]`,
           }
         case 'HashType':
+          this.rtlNeeds.add('IDictionary')
           return {
-            default: '{}',
+            default: '',
             name: `IDictionary<${map.name}>`,
           }
         case 'DelimArrayType':
+          this.rtlNeeds.add('DelimArray')
           return {
             default: '',
             name: `DelimArray<${map.name}>`,
@@ -526,7 +729,9 @@ export interface IDictionary<T> {
     }
 
     if (type.name) {
-      return tsTypes[type.name] || { default: '', name: this.typeName(type) } // No null default for complex types
+      const mapped = tsTypes[type.name]
+      if (mapped && mapped.name === 'Url') this.rtlNeeds.add(mapped.name)
+      return mapped || { default: '', name: this.typeName(type) } // No null default for complex types
     } else {
       throw new Error('Cannot output a nameless type.')
     }

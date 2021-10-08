@@ -23,7 +23,8 @@
  SOFTWARE.
 
  */
-import createSagaMiddleware, { SagaMiddleware } from 'redux-saga'
+import type { SagaMiddleware } from 'redux-saga'
+import createSagaMiddleware from 'redux-saga'
 
 import { applyMiddleware, createStore } from 'redux'
 import { registerProjectsSagas } from './projects/sagas'

@@ -24,11 +24,12 @@
 
  */
 
-import { ITransport, IRequestProps, LookerAppId } from './transport'
+import type { ITransport, IRequestProps } from './transport'
+import { LookerAppId } from './transport'
 import { BrowserTransport } from './browserTransport'
 import { OAuthSession } from './oauthSession'
 import { BrowserServices } from './browserServices'
-import { IApiSettings } from './apiSettings'
+import type { IApiSettings } from './apiSettings'
 
 /**
  * An AuthSession class intended for use with CORS requests
@@ -77,15 +78,20 @@ export class BrowserSession extends OAuthSession {
        */
       delete props.credentials
 
-      /**
-       * replace the headers argument with required values
-       * Note: using new Headers() to construct the headers breaks CORS for the Looker API. Don't know why yet
-       */
-      props.headers = {
+      const headers = {
         /** Provide the authentication information */
         Authorization: `Bearer ${this.activeToken.access_token}`,
         /** Identify the SDK */
         [LookerAppId]: this.settings.agentTag,
+      }
+      /**
+       * replace the headers argument with required values
+       * Note: using new Headers() to construct the headers breaks CORS for the Looker API. Don't know why yet
+       */
+      if (props.headers) {
+        props.headers = { ...props.headers, ...headers }
+      } else {
+        props.headers = headers
       }
     }
 

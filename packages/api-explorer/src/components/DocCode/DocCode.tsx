@@ -24,68 +24,23 @@
 
  */
 
-import React, { FC, useContext } from 'react'
-import AceEditor from 'react-ace'
-
+import type { FC } from 'react'
+import React, { useContext } from 'react'
 import { findGenerator } from '@looker/sdk-codegen'
+import { CodeDisplay } from '@looker/code-editor'
 import { SearchContext } from '../../context/search'
-import { highlightSourceCode } from './utils'
-
-// TODO Use webpack resolver instead.
-/* eslint-disable  @typescript-eslint/ban-ts-comment,@typescript-eslint/no-unused-vars,@typescript-eslint/no-var-requires,import/no-extraneous-dependencies */
-// @ts-ignore
-const python = require('ace-builds/src-noconflict/mode-python')
-// @ts-ignore
-const typescript = require('ace-builds/src-noconflict/mode-typescript')
-// @ts-ignore
-const kotlin = require('ace-builds/src-noconflict/mode-kotlin')
-// @ts-ignore
-const swift = require('ace-builds/src-noconflict/mode-swift')
-// @ts-ignore
-const csharp = require('ace-builds/src-noconflict/mode-csharp')
-// @ts-ignore
-const json = require('ace-builds/src-noconflict/mode-json')
-// @ts-ignore
-const theme = require('ace-builds/src-noconflict/theme-dracula')
-/* eslint-enable  @typescript-eslint/ban-ts-comment,@typescript-eslint/no-unused-vars,@typescript-eslint/no-var-requires,import/no-extraneous-dependencies */
 
 interface DocCodeProps {
   code: string
   language?: string
-  fontSize?: number
-  width?: string
 }
 
-export const DocCode: FC<DocCodeProps> = ({
-  code,
-  language = 'json',
-  fontSize = 16,
-  width = 'auto',
-}) => {
+export const DocCode: FC<DocCodeProps> = ({ code, language = 'json' }) => {
   const gen = findGenerator(language)
   if (gen) language = gen.language.toLocaleLowerCase()
   const {
     searchSettings: { pattern },
   } = useContext(SearchContext)
-  const markers = highlightSourceCode(pattern, code)
 
-  return (
-    <AceEditor
-      mode={language}
-      name={language}
-      fontSize={fontSize}
-      readOnly={true}
-      showPrintMargin={false}
-      showGutter={false}
-      tabSize={2}
-      width={width}
-      theme={'dracula'}
-      value={code}
-      wrapEnabled={true}
-      markers={markers}
-      setOptions={{
-        useWorker: false,
-      }}
-    />
-  )
+  return <CodeDisplay language={language} code={code} pattern={pattern} />
 }

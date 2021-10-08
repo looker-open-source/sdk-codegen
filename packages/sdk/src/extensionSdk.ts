@@ -24,12 +24,14 @@
 
  */
 
-import {
-  DefaultSettings,
+import type {
   IApiSettings,
   APIMethods,
   IAuthSession,
   IHostConnection,
+} from '@looker/sdk-rtl'
+import {
+  DefaultSettings,
   ExtensionSession,
   ExtensionTransport,
 } from '@looker/sdk-rtl'

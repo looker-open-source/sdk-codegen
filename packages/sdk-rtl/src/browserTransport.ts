@@ -24,26 +24,29 @@
 
  */
 
-import { PassThrough, Readable } from 'readable-stream'
-import {
+import type { Readable } from 'readable-stream'
+import type {
   ISDKError,
   SDKResponse,
   ITransportSettings,
   HttpMethod,
   Authenticator,
-  trace,
   IRequestProps,
   IRequestHeaders,
-  LookerAppId,
-  agentPrefix,
   Values,
   IRawResponse,
+} from './transport'
+import {
+  trace,
+  LookerAppId,
+  agentPrefix,
   responseMode,
   ResponseMode,
   safeBase64,
+  isErrorLike,
 } from './transport'
 import { BaseTransport } from './baseTransport'
-import { ICryptoHash } from './cryptoHash'
+import type { ICryptoHash } from './cryptoHash'
 
 export class BrowserCryptoHash implements ICryptoHash {
   arrayToHex(array: Uint8Array): string {
@@ -199,7 +202,9 @@ export class BrowserTransport extends BaseTransport {
       // Request will markEnd, so don't mark the end here
       BrowserTransport.markEnd(requestPath, started)
     }
-    return {
+    const headers = {}
+    res.headers.forEach((value, key) => (headers[key] = value))
+    const response: IRawResponse = {
       url: requestPath,
       body: responseBody,
       contentType,
@@ -207,7 +212,67 @@ export class BrowserTransport extends BaseTransport {
       statusCode: res.status,
       statusMessage: res.statusText,
       startMark: started,
+      headers,
     }
+    // Update OK with response statusCode check
+    response.ok = this.ok(response)
+    return this.observer ? this.observer(response) : response
+  }
+
+  /**
+   * Process the response based on content type
+   * @param res response to process
+   */
+  async parseResponse<TSuccess, TError>(
+    res: IRawResponse
+  ): Promise<SDKResponse<TSuccess, TError>> {
+    const perfMark = res.startMark || ''
+    if (!res.ok) {
+      // Raw request had an error. Make sure it's a string before parsing the result
+      let error = res.body
+      if (typeof error === 'string') {
+        try {
+          error = JSON.parse(error)
+        } catch {
+          error = { message: `Request failed: ${error}` }
+        }
+      }
+      const response: SDKResponse<TSuccess, TError> = { ok: false, error }
+      return response
+    }
+
+    let value
+    let error
+    if (res.contentType.match(/application\/json/g)) {
+      try {
+        value = JSON.parse(await res.body)
+        BrowserTransport.markEnd(res.url, perfMark)
+      } catch (err) {
+        error = err
+        BrowserTransport.markEnd(res.url, perfMark)
+      }
+    } else if (
+      res.contentType === 'text' ||
+      res.contentType.startsWith('text/')
+    ) {
+      value = res.body.toString()
+      BrowserTransport.markEnd(res.url, perfMark)
+    } else {
+      try {
+        BrowserTransport.markEnd(res.url, perfMark)
+        value = res.body
+      } catch (err) {
+        BrowserTransport.markEnd(res.url, perfMark)
+        error = err
+      }
+    }
+    let result: SDKResponse<TSuccess, TError>
+    if (error) {
+      result = { ok: false, error: error as TError }
+    } else {
+      result = { ok: true, value }
+    }
+    return result
   }
 
   async request<TSuccess, TError>(
@@ -231,13 +296,12 @@ export class BrowserTransport extends BaseTransport {
         options
       )
       // eslint-disable-next-line @typescript-eslint/no-use-before-define
-      const parsed = await parseResponse(res)
-      if (this.ok(res)) {
-        return { ok: true, value: parsed }
-      } else {
-        return { error: parsed, ok: false }
-      }
-    } catch (e) {
+      const result: SDKResponse<TSuccess, TError> = await this.parseResponse(
+        res
+      )
+      return result
+    } catch (e: unknown) {
+      if (!isErrorLike(e)) throw e
       const error: ISDKError = {
         message:
           typeof e.message === 'string'
@@ -292,7 +356,7 @@ export class BrowserTransport extends BaseTransport {
 
   // TODO finish this method
   async stream<TSuccess>(
-    callback: (readable: Readable) => Promise<TSuccess>,
+    _callback: (readable: Readable) => Promise<TSuccess>,
     method: HttpMethod,
     path: string,
     queryParams?: any,
@@ -301,8 +365,8 @@ export class BrowserTransport extends BaseTransport {
     options?: Partial<ITransportSettings>
   ): Promise<TSuccess> {
     options = options ? { ...this.options, ...options } : this.options
-    const stream = new PassThrough()
-    const returnPromise = callback(stream)
+    // const stream = new PassThrough()
+    // const returnPromise = callback(stream)
     const requestPath = this.makeUrl(path, options, queryParams)
     const props = await this.initRequest(
       method,
@@ -315,10 +379,10 @@ export class BrowserTransport extends BaseTransport {
 
     return Promise.reject<TSuccess>(
       // Silly error message to prevent linter from complaining about unused variables
+      // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+      // @ts-ignore
       Error(
-        `Streaming for${returnPromise ? 'callback' : ''} ${props.method} ${
-          props.requestPath
-        } is not implemented`
+        `Streaming for callback ${props.method} ${props.requestPath} is not implemented`
       )
     )
 
@@ -373,38 +437,5 @@ export class BrowserTransport extends BaseTransport {
     const results = await Promise.all([returnPromise, streamPromise])
     return results[0]
     */
-  }
-}
-
-/**
- * Process the response based on content type
- * @param res response to process
- */
-export const parseResponse = async (res: IRawResponse) => {
-  const perfMark = res.startMark || ''
-  if (res.contentType.match(/application\/json/g)) {
-    try {
-      const result = JSON.parse(await res.body)
-      BrowserTransport.markEnd(res.url, perfMark)
-      return result
-    } catch (error) {
-      BrowserTransport.markEnd(res.url, perfMark)
-      return Promise.reject(error)
-    }
-  } else if (
-    res.contentType === 'text' ||
-    res.contentType.startsWith('text/')
-  ) {
-    const result = res.body.toString()
-    BrowserTransport.markEnd(res.url, perfMark)
-    return result
-  } else {
-    try {
-      BrowserTransport.markEnd(res.url, perfMark)
-      return res.body
-    } catch (error) {
-      BrowserTransport.markEnd(res.url, perfMark)
-      return Promise.reject(error)
-    }
   }
 }

@@ -24,7 +24,8 @@
 
  */
 
-import React, { FC } from 'react'
+import type { FC } from 'react'
+import React from 'react'
 import { useHistory, useLocation } from 'react-router-dom'
 import {
   Card,
@@ -45,9 +46,10 @@ export const ResourceScene: FC<ResourceSceneProps> = () => {
   const history = useHistory()
   const location = useLocation()
 
-  const filterValues = (location.search
-    ? new URLSearchParams(location.search.slice(1)).get('fv') || ''
-    : ''
+  const filterValues = (
+    location.search
+      ? new URLSearchParams(location.search.slice(1)).get('fv') || ''
+      : ''
   )
     .split(',')
     .filter((fv) => fv !== '')

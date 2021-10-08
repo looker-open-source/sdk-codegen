@@ -23,21 +23,5 @@
  SOFTWARE.
 
  */
-export {
-  AbstractLocation,
-  specReducer,
-  selectSpec,
-  initDefaultSpecState,
-  SpecState,
-  SpecAction,
-  getSpecKey,
-  getSpecsFromVersions,
-} from './spec'
-export {
-  searchReducer,
-  setCriteria,
-  setPattern,
-  defaultSearchState,
-  SearchState,
-  SearchAction,
-} from './search'
+export * from './spec'
+export * from './search'

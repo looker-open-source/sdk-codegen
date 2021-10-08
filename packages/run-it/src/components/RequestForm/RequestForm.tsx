@@ -24,22 +24,34 @@
 
  */
 
-import React, { BaseSyntheticEvent, FC, Dispatch } from 'react'
-import { Button, Form, Space, ButtonTransparent } from '@looker/components'
-
-import { RunItHttpMethod, RunItInput, RunItValues } from '../../RunIt'
-import { ConfigDialog, RunItConfigurator } from '../ConfigForm'
+import type { BaseSyntheticEvent, FC, Dispatch } from 'react'
+import React from 'react'
+import {
+  Button,
+  Form,
+  ButtonTransparent,
+  Tooltip,
+  Fieldset,
+  MessageBar,
+} from '@looker/components'
+import type { IAPIMethods } from '@looker/sdk-rtl'
+import type { RunItHttpMethod, RunItInput, RunItValues } from '../../RunIt'
+import type { RunItConfigurator } from '../ConfigForm'
+import { LoginForm } from '../LoginForm'
+import type { RunItSetter } from '../..'
 import {
   createSimpleItem,
   createComplexItem,
   showDataChangeWarning,
   updateNullableProp,
 } from './formUtils'
+import { FormItem } from './FormItem'
 
-/**
- * Properties required by RequestForm
- */
+/** Properties required by RequestForm */
 interface RequestFormProps {
+  /** Established SDK instance */
+  sdk: IAPIMethods
+  /** Request inputs to the endpoint */
   inputs: RunItInput[]
   /** A callback for submitting the form */
   handleSubmit: (e: BaseSyntheticEvent) => void
@@ -48,11 +60,23 @@ interface RequestFormProps {
   /** A collection type react state to store path, query and body parameters as entered by the user  */
   requestContent: RunItValues
   /** A set state callback fn for populating requestContent on interaction with the request form */
-  setRequestContent: Dispatch<{ [key: string]: any }>
+  setRequestContent: Dispatch<RunItValues>
+  /** Is authentication required? */
+  needsAuth: boolean
+  /** Does RunIt have the configuration values it needs? */
+  hasConfig: boolean
+  /** Handle config button click */
+  handleConfig: (e: BaseSyntheticEvent) => void
+  /** Hook to refresh specifications */
+  setVersionsUrl: RunItSetter
   /** A set state callback which if present allows for editing, setting or clearing OAuth configuration parameters */
   setHasConfig?: Dispatch<boolean>
   /** Configuration plug-in for stand-alone or extension */
   configurator: RunItConfigurator
+  /** Validation message to display */
+  validationMessage?: string
+  /** Validation message setter */
+  setValidationMessage?: Dispatch<string>
   /** Is RunIt being used in a Looker extension? */
   isExtension?: boolean
 }
@@ -62,13 +86,20 @@ interface RequestFormProps {
  * inputs
  */
 export const RequestForm: FC<RequestFormProps> = ({
+  sdk,
   inputs,
   httpMethod,
   handleSubmit,
   requestContent,
   setRequestContent,
+  needsAuth,
+  hasConfig,
+  handleConfig,
+  setVersionsUrl,
   setHasConfig,
   configurator,
+  validationMessage,
+  setValidationMessage,
   isExtension = false,
 }) => {
   const handleBoolChange = (e: BaseSyntheticEvent) => {
@@ -99,38 +130,72 @@ export const RequestForm: FC<RequestFormProps> = ({
     setRequestContent({ ...requestContent, [name]: value })
   }
 
+  const safeSetMessage = (value: string) =>
+    setValidationMessage && setValidationMessage(value)
+
   const handleClear = (e: BaseSyntheticEvent) => {
     e.preventDefault()
     setRequestContent({})
+    safeSetMessage('')
   }
 
   return (
     <Form onSubmit={handleSubmit}>
-      {inputs.map((input) =>
-        typeof input.type === 'string'
-          ? createSimpleItem(
-              input,
-              handleChange,
-              handleNumberChange,
-              handleBoolChange,
-              handleDateChange,
-              requestContent
-            )
-          : createComplexItem(input, handleComplexChange, requestContent)
+      {validationMessage && (
+        <MessageBar
+          intent={'critical'}
+          onPrimaryClick={() => safeSetMessage('')}
+          visible={validationMessage !== ''}
+        >
+          {validationMessage}
+        </MessageBar>
       )}
-      {httpMethod !== 'GET' && showDataChangeWarning()}
-      <Space>
-        <ButtonTransparent type="button" onClick={handleClear}>
-          Clear
-        </ButtonTransparent>
-        <Button type="submit">Run</Button>
-        {!isExtension && setHasConfig && (
-          <ConfigDialog
-            setHasConfig={setHasConfig}
-            configurator={configurator}
-          />
+      <Fieldset>
+        {inputs.map((input) =>
+          typeof input.type === 'string'
+            ? createSimpleItem(
+                input,
+                handleChange,
+                handleNumberChange,
+                handleBoolChange,
+                handleDateChange,
+                requestContent
+              )
+            : createComplexItem(input, handleComplexChange, requestContent)
         )}
-      </Space>
+        {httpMethod !== 'GET' && showDataChangeWarning()}
+        <FormItem id="buttonbar">
+          <>
+            {hasConfig ? (
+              needsAuth ? (
+                <LoginForm
+                  sdk={sdk}
+                  setVersionsUrl={setVersionsUrl}
+                  setHasConfig={setHasConfig}
+                  configurator={configurator}
+                  requestContent={requestContent}
+                />
+              ) : (
+                <Tooltip content="Run the API request">
+                  <Button type="submit">Run</Button>
+                </Tooltip>
+              )
+            ) : (
+              !isExtension &&
+              setHasConfig && (
+                <Tooltip content="Configure your OAuth server to Run requests">
+                  <Button onClick={handleConfig}>Configure</Button>
+                </Tooltip>
+              )
+            )}
+            <Tooltip content="Clear entered values">
+              <ButtonTransparent type="button" onClick={handleClear}>
+                Clear
+              </ButtonTransparent>
+            </Tooltip>
+          </>
+        </FormItem>
+      </Fieldset>
     </Form>
   )
 }

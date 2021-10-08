@@ -44,8 +44,7 @@ LOOKER_API_ID = "x-looker-appid"
 
 
 class HttpMethod(enum.Enum):
-    """Supported HTTP verbs.
-    """
+    """Supported HTTP verbs."""
 
     GET = 1
     POST = 2
@@ -63,7 +62,7 @@ class PTransportSettings(Protocol):
     agent_tag: str
     headers: Optional[MutableMapping[str, str]]
 
-    def is_configured(self) -> bool:
+    def is_configured(self):
         if not self.base_url:
             raise error.SDKError("Missing required configuration value: base_url")
 
@@ -76,15 +75,14 @@ class TransportOptions(TypedDict, total=False):
     """
 
     timeout: int
-    headers: Optional[MutableMapping[str, str]]
+    headers: MutableMapping[str, str]
 
 
-TAuthenticator = Optional[Callable[[], Dict[str, str]]]
+TAuthenticator = Optional[Callable[[TransportOptions], Dict[str, str]]]
 
 
 class ResponseMode(enum.Enum):
-    """ResponseMode for an HTTP request - either binary or "string"
-    """
+    """ResponseMode for an HTTP request - either binary or "string" """
 
     BINARY = 1
     STRING = 2
@@ -93,8 +91,7 @@ class ResponseMode(enum.Enum):
 
 @attr.s(auto_attribs=True)
 class Response:
-    """Success Response object.
-    """
+    """Success Response object."""
 
     ok: bool
     value: bytes
@@ -107,8 +104,7 @@ _BINARY_MODE = re.compile(constants.RESPONSE_BINARY_MODE, re.IGNORECASE)
 
 
 def response_mode(content_type: Optional[str] = None) -> ResponseMode:
-    """Determine ResponseMode from http Content-Type header
-    """
+    """Determine ResponseMode from http Content-Type header"""
     response = ResponseMode.UNKNOWN
     if not content_type:
         return response
@@ -121,14 +117,12 @@ def response_mode(content_type: Optional[str] = None) -> ResponseMode:
 
 
 class Transport(abc.ABC):
-    """Transport base class.
-    """
+    """Transport base class."""
 
     @classmethod
     @abc.abstractmethod
     def configure(cls, settings: PTransportSettings) -> "Transport":
-        """Configure and return an instance of Transport
-        """
+        """Configure and return an instance of Transport"""
 
     @abc.abstractmethod
     def request(
@@ -140,5 +134,4 @@ class Transport(abc.ABC):
         authenticator: TAuthenticator = None,
         transport_options: Optional[TransportOptions] = None,
     ) -> Response:
-        """Send API request.
-        """
+        """Send API request."""

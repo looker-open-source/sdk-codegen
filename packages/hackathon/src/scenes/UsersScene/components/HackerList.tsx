@@ -24,7 +24,8 @@
 
  */
 
-import React, { FC } from 'react'
+import type { FC } from 'react'
+import React from 'react'
 import {
   DataTableItem,
   DataTableCell,
@@ -32,9 +33,11 @@ import {
   Pagination,
   DataTable,
 } from '@looker/components'
+import { Create } from '@styled-icons/material/Create'
 import { useSelector } from 'react-redux'
 import { getExtensionSDK } from '@looker/extension-sdk'
-import { IHackerProps, sheetCell } from '../../../models'
+import type { IHackerProps } from '../../../models'
+import { sheetCell } from '../../../models'
 import { getHackersHeadings } from '../../../data/hack_session/selectors'
 import { PAGE_SIZE } from '../../../constants'
 
@@ -78,7 +81,7 @@ export const HackerList: FC<HackerListProps> = ({
           <DataTableAction
             key={`${idx.toString() + '.click'}`}
             onClick={hackHacker.bind(null, hacker)}
-            icon="Edit"
+            icon={<Create />}
           >
             Manage {hacker.name}
           </DataTableAction>
@@ -90,7 +93,9 @@ export const HackerList: FC<HackerListProps> = ({
 
   return (
     <>
-      <DataTable columns={columns}>{rows}</DataTable>
+      <DataTable columns={columns} caption="List of hackerthon participants">
+        {rows}
+      </DataTable>
       <Pagination
         current={pageNum}
         pages={totalPages}

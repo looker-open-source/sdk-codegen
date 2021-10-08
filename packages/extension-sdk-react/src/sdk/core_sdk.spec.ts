@@ -24,7 +24,7 @@
 
  */
 
-import { Looker31SDK, Looker40SDK } from '@looker/sdk'
+import type { Looker31SDK, Looker40SDK } from '@looker/sdk'
 import {
   registerCore31SDK,
   getCore31SDK,

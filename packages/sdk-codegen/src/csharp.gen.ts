@@ -24,19 +24,17 @@
 
  */
 
-import { commentBlock } from '@looker/sdk-codegen-utils'
-import { CodeGen, IMappedType } from './codeGen'
-import {
+import type { IMappedType } from './codeGen'
+import { CodeGen, commentBlock } from './codeGen'
+import type {
   IMethod,
   IParameter,
   IType,
   IProperty,
-  strBody,
-  firstCase,
   Arg,
-  EnumType,
   EnumValueType,
 } from './sdkModels'
+import { strBody, firstCase, EnumType } from './sdkModels'
 
 // https://docs.microsoft.com/en-us/dotnet/csharp/language-reference/keywords/
 const reservedWords = new Set<string>([
@@ -142,6 +140,7 @@ export class CSharpGen extends CodeGen {
   codeQuote = '"'
 
   commentHeader(indent: string, text: string | undefined) {
+    if (this.noComment) return ''
     return text ? `${commentBlock(text, indent, '/// ')}\n` : ''
   }
 
@@ -157,7 +156,7 @@ using Password = System.String;
 // ReSharper disable InconsistentNaming
 
 ${this.commentHeader('', this.warnEditing())}
-namespace Looker.SDK.API${this.apiRef} 
+namespace Looker.SDK.API${this.apiRef}
 {
 
 `
@@ -382,7 +381,7 @@ namespace Looker.SDK.API${this.apiRef}
   }
 
   summary(indent: string, summary: string) {
-    if (!summary) return ''
+    if (this.noComment || !summary) return ''
     const nl = summary.indexOf('\n') >= 0 ? '\n' : ''
     return this.commentHeader(indent, `<summary>${nl}${summary}${nl}</summary>`)
   }

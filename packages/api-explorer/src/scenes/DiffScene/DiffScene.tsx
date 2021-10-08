@@ -24,8 +24,9 @@
 
  */
 
-import React, { FC, useState, useEffect } from 'react'
-import { ApiModel, DiffRow } from '@looker/sdk-codegen'
+import type { FC } from 'react'
+import React, { useState, useEffect } from 'react'
+import type { ApiModel, DiffRow, SpecList, SpecItem } from '@looker/sdk-codegen'
 import { useHistory, useRouteMatch } from 'react-router-dom'
 import {
   Box,
@@ -33,27 +34,23 @@ import {
   FlexItem,
   IconButton,
   Label,
-  Section,
   Select,
   SelectMulti,
 } from '@looker/components'
-import { SpecItems } from '../../ApiExplorer'
+import { SyncAlt } from '@styled-icons/material/SyncAlt'
+import { fallbackFetch, funFetch } from '@looker/run-it'
 import { getDefaultSpecKey } from '../../reducers/spec/utils'
 import { diffPath } from '../../utils'
+import { ApixSection } from '../../components'
 import { diffSpecs, standardDiffToggles } from './diffUtils'
 import { DocDiff } from './DocDiff'
-
-export interface DiffSceneProps {
-  specs: SpecItems
-  toggleNavigation: (target?: boolean) => void
-}
 
 /**
  * Pick the left key, or default spec
  * @param specs to pick from
  * @param leftKey spec key that may or may not have a value
  */
-const pickLeft = (specs: SpecItems, leftKey: string) => {
+const pickLeft = (specs: SpecList, leftKey: string) => {
   if (leftKey) return leftKey
   return getDefaultSpecKey(specs)
 }
@@ -64,7 +61,7 @@ const pickLeft = (specs: SpecItems, leftKey: string) => {
  * @param rightKey spec key from url path
  * @param leftKey spec key from url path
  */
-const pickRight = (specs: SpecItems, rightKey: string, leftKey: string) => {
+const pickRight = (specs: SpecList, rightKey: string, leftKey: string) => {
   if (rightKey) return rightKey
   if (!leftKey) leftKey = getDefaultSpecKey(specs)
   return Object.keys(specs).find((k) => k !== leftKey) || ''
@@ -97,11 +94,21 @@ const diffToggles = [
   },
 ]
 
+export interface DiffSceneProps {
+  specs: SpecList
+  toggleNavigation: (target?: boolean) => void
+}
+
+const validateParam = (specs: SpecList, specKey = '') => {
+  return specs[specKey] ? specKey : ''
+}
+
 export const DiffScene: FC<DiffSceneProps> = ({ specs, toggleNavigation }) => {
   const history = useHistory()
   const match = useRouteMatch<{ l: string; r: string }>(`/${diffPath}/:l?/:r?`)
-  const l = match?.params.l || ''
-  const r = match?.params.r || ''
+  const l = validateParam(specs, match?.params.l)
+  const r = validateParam(specs, match?.params.r)
+
   const options = Object.entries(specs).map(([key, spec]) => ({
     value: key,
     label: `${key} (${spec.status})`,
@@ -120,7 +127,7 @@ export const DiffScene: FC<DiffSceneProps> = ({ specs, toggleNavigation }) => {
   }, [])
 
   const computeDelta = (left: string, right: string, toggles: string[]) => {
-    if (left && right) {
+    if (left && right && specs[left].api && specs[right].api) {
       return diffSpecs(specs[left].api!, specs[right].api!, toggles)
     }
     return []
@@ -129,12 +136,36 @@ export const DiffScene: FC<DiffSceneProps> = ({ specs, toggleNavigation }) => {
     computeDelta(leftKey, rightKey, toggles)
   )
 
-  const compareKeys = (left: string, right: string) => {
+  const loadSpec = async (
+    specs: SpecList,
+    key: string,
+    setter: (spec: SpecItem) => void
+  ) => {
+    const spec = specs[key]
+    if (!spec.api) {
+      try {
+        const newSpec = { ...spec }
+        const api = await fallbackFetch(newSpec, funFetch)
+        if (api) {
+          spec.api = api
+          setter(spec)
+        }
+      } catch (error) {
+        console.error(error)
+      }
+    }
+  }
+
+  const compareKeys = async (left: string, right: string) => {
     if (left !== leftKey || right !== rightKey) {
       history.push(`/${diffPath}/${left}/${right}`)
     }
-    setLeftApi(specs[left].api!)
-    setRightApi(specs[right].api!)
+    if (!specs[left].api) {
+      await loadSpec(specs, leftKey, (spec) => setLeftApi(spec.api!))
+    }
+    if (!specs[right].api) {
+      await loadSpec(specs, rightKey, (spec) => setRightApi(spec.api!))
+    }
     setDelta([...computeDelta(left, right, toggles)])
   }
 
@@ -163,9 +194,9 @@ export const DiffScene: FC<DiffSceneProps> = ({ specs, toggleNavigation }) => {
   }
 
   return (
-    <Section p="xxlarge">
+    <ApixSection>
       <Box>
-        <Flex bg="AliceBlue" padding="large" mb="xlarge" alignItems="center">
+        <Flex bg="AliceBlue" padding="large" mb="large" alignItems="center">
           <FlexItem>
             <Label htmlFor="base">Base</Label>
             <Select
@@ -180,7 +211,7 @@ export const DiffScene: FC<DiffSceneProps> = ({ specs, toggleNavigation }) => {
           <IconButton
             label="switch"
             size="small"
-            icon="Sync"
+            icon={<SyncAlt />}
             mt="medium"
             onClick={handleSwitch}
           />
@@ -216,6 +247,6 @@ export const DiffScene: FC<DiffSceneProps> = ({ specs, toggleNavigation }) => {
         rightKey={rightKey}
         rightSpec={rightApi}
       />
-    </Section>
+    </ApixSection>
   )
 }

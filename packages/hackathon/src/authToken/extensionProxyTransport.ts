@@ -24,21 +24,19 @@
 
  */
 
-import {
+import type {
   Authenticator,
   HttpMethod,
   IRawResponse,
-  BaseTransport,
   ITransportSettings,
   SDKResponse,
   Values,
-  agentPrefix,
   IRequestHeaders,
   IRequestProps,
   ISDKError,
-  LookerAppId,
 } from '@looker/sdk-rtl'
-import {
+import { BaseTransport, agentPrefix, LookerAppId } from '@looker/sdk-rtl'
+import type {
   ExtensionSDK,
   FetchCustomParameters,
   FetchProxyDataResponse,
@@ -90,6 +88,16 @@ export class ExtensionProxyTransport extends BaseTransport {
     return props
   }
 
+  parseResponse<TSuccess, TError>(
+    _raw: IRawResponse
+  ): Promise<SDKResponse<TSuccess, TError>> {
+    const result: SDKResponse<TSuccess, TError> = {
+      ok: false,
+      error: new Error('Should not be called!') as unknown as TError,
+    }
+    return Promise.resolve(result)
+  }
+
   async rawRequest(
     method: HttpMethod,
     path: string,
@@ -131,6 +139,7 @@ export class ExtensionProxyTransport extends BaseTransport {
       ok: true,
       statusCode: res.status,
       statusMessage: `${res.status} fetched`,
+      headers: res.headers,
     }
   }
 
@@ -157,7 +166,7 @@ export class ExtensionProxyTransport extends BaseTransport {
       } else {
         return { error: res.body, ok: false }
       }
-    } catch (e) {
+    } catch (e: any) {
       const error: ISDKError = {
         message:
           typeof e.message === 'string'

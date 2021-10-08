@@ -5,6 +5,111 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [21.14.0](https://www.github.com/looker-open-source/sdk-codegen/compare/looker_sdk-v21.12.2...looker_sdk-v21.14.0) (2021-09-01)
+
+
+### Features
+
+* Looker 21.14 release ([#807](https://www.github.com/looker-open-source/sdk-codegen/issues/807)) ([99db26d](https://www.github.com/looker-open-source/sdk-codegen/commit/99db26dcd812135d775e61e495c98a66057c6f54))
+
+### [21.12.2](https://www.github.com/looker-open-source/sdk-codegen/compare/looker_sdk-v21.12.1...looker_sdk-v21.12.2) (2021-08-11)
+
+
+### Bug Fixes
+
+* relax python dict key access ([#791](https://www.github.com/looker-open-source/sdk-codegen/issues/791)) ([d923c2f](https://www.github.com/looker-open-source/sdk-codegen/commit/d923c2faf3bde822307fa3d4f3367f270f47b49e)), closes [#778](https://www.github.com/looker-open-source/sdk-codegen/issues/778)
+
+### [21.12.1](https://www.github.com/looker-open-source/sdk-codegen/compare/looker_sdk-v21.12.0...looker_sdk-v21.12.1) (2021-08-09)
+
+
+### Bug Fixes
+
+* remove python setup.py author_email ([#787](https://www.github.com/looker-open-source/sdk-codegen/issues/787)) ([7939a73](https://www.github.com/looker-open-source/sdk-codegen/commit/7939a7397c44864e1f48cea7a408ce1bfdef9782))
+
+## [21.12.0](https://www.github.com/looker-open-source/sdk-codegen/compare/looker_sdk-v21.10.1...looker_sdk-v21.12.0) (2021-08-06)
+
+
+### Features
+
+* Looker 21.12 bindings ([#782](https://www.github.com/looker-open-source/sdk-codegen/issues/782)) ([a00b908](https://www.github.com/looker-open-source/sdk-codegen/commit/a00b908e6fee79250c4c1ffb1b1e8915d58dd633))
+
+
+### Bug Fixes
+
+* documentation refs and notes for Typescript SDK and more ([#783](https://www.github.com/looker-open-source/sdk-codegen/issues/783)) ([b2487ea](https://www.github.com/looker-open-source/sdk-codegen/commit/b2487ea4a113ce17a080ccab9b4c4139813e8810))
+
+### [21.10.1](https://www.github.com/looker-open-source/sdk-codegen/compare/looker_sdk-v21.10.0...looker_sdk-v21.10.1) (2021-07-30)
+
+
+### Bug Fixes
+
+* improved writeable type support ([#766](https://www.github.com/looker-open-source/sdk-codegen/issues/766)) ([be91bd8](https://www.github.com/looker-open-source/sdk-codegen/commit/be91bd8e772f9a64c47486b317f1ac1f6ef14327))
+
+## [21.10.0](https://www.github.com/looker-open-source/sdk-codegen/compare/looker_sdk-v21.8.1...looker_sdk-v21.10.0) (2021-07-08)
+
+
+### Features
+
+* Looker 21.10 bindings ([#737](https://www.github.com/looker-open-source/sdk-codegen/issues/737)) ([6b3895d](https://www.github.com/looker-open-source/sdk-codegen/commit/6b3895d35e138df9ff84286b7658434292617aa8))
+
+### [21.8.1](https://www.github.com/looker-open-source/sdk-codegen/compare/looker_sdk-v21.8.0...looker_sdk-v21.8.1) (2021-07-02)
+
+
+### Bug Fixes
+
+* python datetime [de]serialization bug ([#734](https://www.github.com/looker-open-source/sdk-codegen/issues/734)) ([c821f2b](https://www.github.com/looker-open-source/sdk-codegen/commit/c821f2b77b99edfa2dd53aa0af82ab48081c3220))
+* python remove runtime asserts ([#703](https://www.github.com/looker-open-source/sdk-codegen/issues/703)) ([9b963c3](https://www.github.com/looker-open-source/sdk-codegen/commit/9b963c3367905f907e7867df1446f56e18284c3b)), closes [#695](https://www.github.com/looker-open-source/sdk-codegen/issues/695)
+
+## [21.8.0](https://www.github.com/looker-open-source/sdk-codegen/compare/looker_sdk-v21.6.1...looker_sdk-v21.8.0) (2021-06-17)
+
+
+### Features
+
+* Looker 21.8 bindings ([#705](https://www.github.com/looker-open-source/sdk-codegen/issues/705)) ([032d0f8](https://www.github.com/looker-open-source/sdk-codegen/commit/032d0f80e30356aaa9f3b3f987b315203f896a61))
+
+### [21.6.1](https://www.github.com/looker-open-source/sdk-codegen/compare/looker_sdk-v21.6.0...looker_sdk-v21.6.1) (2021-06-16)
+
+
+### Documentation
+
+* Typescript and Python README updates for GA ([#674](https://www.github.com/looker-open-source/sdk-codegen/issues/674)) ([c0c7ce7](https://www.github.com/looker-open-source/sdk-codegen/commit/c0c7ce721c000564e85d239d7c9059f2f54876f9))
+
+## [21.6.0](https://www.github.com/looker-open-source/sdk-codegen/compare/looker_sdk-v21.4.1...looker_sdk-v21.6.0) (2021-05-05)
+
+
+### Features
+
+* update SDKs to Looker 21.6 ([#666](https://www.github.com/looker-open-source/sdk-codegen/issues/666)) ([b2b6b79](https://www.github.com/looker-open-source/sdk-codegen/commit/b2b6b793e38d05d0fcb6236505fb581778d12094))
+
+### [21.4.1](https://www.github.com/looker-open-source/sdk-codegen/compare/looker_sdk-v21.4.0...looker_sdk-v21.4.1) (2021-04-15)
+
+
+### Bug Fixes
+
+* add warning about python sdk login_user breaking change in 21.4.0 ([#579](https://www.github.com/looker-open-source/sdk-codegen/issues/579)) ([c74d447](https://www.github.com/looker-open-source/sdk-codegen/commit/c74d447e53d81c84d2182960f00ad2d3191b9cef))
+
+
+### Documentation
+
+* Missing quote in Python SDK Readme ([#560](https://www.github.com/looker-open-source/sdk-codegen/issues/560)) ([3429f85](https://www.github.com/looker-open-source/sdk-codegen/commit/3429f858fcb2db437b00c00bb7a3fc13f58c9178))
+
+## [21.4.0](https://www.github.com/looker-open-source/sdk-codegen/compare/looker_sdk-v21.0.0...looker_sdk-v21.4.0) (2021-04-02)
+
+
+### ⚠ BREAKING CHANGES
+
+* sdk.login, sdk.logout, and sdk.login_user will now behave exactly as the Looker API spec describes. The previous behavior can still be accessed via sdk.auth.login, sdk.auth.logout, and sdk.auth.login_user
+
+### Features
+
+* Looker 21.4 bindings ([#529](https://www.github.com/looker-open-source/sdk-codegen/issues/529)) ([4ecaec9](https://www.github.com/looker-open-source/sdk-codegen/commit/4ecaec93d991b9d82fd3a9ce584ee6ae8810341f))
+
+
+### Bug Fixes
+
+* auth_session uses transport_options ([#550](https://www.github.com/looker-open-source/sdk-codegen/issues/550)) ([94d6047](https://www.github.com/looker-open-source/sdk-codegen/commit/94d6047a0d52912ac082eb91616c1e7c379ab262))
+* python sdk login, login_user, logout methods ([#545](https://www.github.com/looker-open-source/sdk-codegen/issues/545)) ([e55086c](https://www.github.com/looker-open-source/sdk-codegen/commit/e55086c81401092e8dbd93e273ba101e2e3efe95))
+
 ## [21.0.0]
 
 ### Added

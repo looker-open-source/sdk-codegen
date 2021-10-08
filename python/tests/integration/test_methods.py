@@ -42,11 +42,14 @@ def test_crud_user(sdk: mtds.Looker40SDK):
 
     # sudo checks
     user_id = user.id
-    sdk.login_user(user_id)
+    sudo_auth = sdk.login_user(user_id)
+    assert isinstance(sudo_auth.access_token, str)
+    assert sudo_auth.access_token != ""
+    sdk.auth.login_user(user_id)
     user = sdk.me()
     assert user.first_name == TEST_FIRST_NAME
     assert user.last_name == TEST_LAST_NAME
-    sdk.logout()
+    sdk.auth.logout()
     user = sdk.me()
     assert user.first_name != TEST_FIRST_NAME
     assert user.last_name != TEST_LAST_NAME
@@ -102,11 +105,11 @@ def test_crud_user_dict(sdk):  # no typing
 
     # sudo checks
     user_id = new_user["id"]
-    sdk.login_user(user_id)
+    sdk.auth.login_user(user_id)
     sudo_user = sdk.me()
     assert sudo_user["first_name"] == TEST_FIRST_NAME
     assert sudo_user["last_name"] == TEST_LAST_NAME
-    sdk.logout()
+    sdk.auth.logout()
     me_user = sdk.me()
     assert me_user["first_name"] != TEST_FIRST_NAME
     assert me_user["last_name"] != TEST_LAST_NAME
@@ -511,8 +514,7 @@ def create_query_request(q, limit: Optional[str] = None) -> ml.WriteQuery:
 
 @pytest.mark.usefixtures("remove_test_dashboards")
 def test_crud_dashboard(sdk: mtds.Looker40SDK, queries_system_activity, dashboards):
-    """Test creating, retrieving, updating and deleting a dashboard.
-    """
+    """Test creating, retrieving, updating and deleting a dashboard."""
     qhash: Dict[Union[str, int], ml.Query] = {}
     for idx, q in enumerate(queries_system_activity):
         limit = "10"

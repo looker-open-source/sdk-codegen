@@ -24,5 +24,13 @@
 
  */
 export { highlightHTML } from './highlight'
-export { buildMethodPath, buildTypePath, diffPath, oAuthPath } from './path'
+export {
+  buildPath,
+  buildMethodPath,
+  buildTypePath,
+  diffPath,
+  oAuthPath,
+} from './path'
 export { getLoded } from './lodeUtils'
+export { useWindowSize } from './useWindowSize'
+export * from './envAdaptor'

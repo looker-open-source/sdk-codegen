@@ -23,7 +23,8 @@
  SOFTWARE.
 
  */
-import React, { FC, useEffect } from 'react'
+import type { FC } from 'react'
+import React, { useEffect } from 'react'
 import {
   DataTable,
   DataTableItem,
@@ -31,10 +32,13 @@ import {
   DataTableCell,
   Pagination,
 } from '@looker/components'
+import { Info } from '@styled-icons/material/Info'
+import { Create } from '@styled-icons/material/Create'
 import { useSelector, useDispatch } from 'react-redux'
 import { useHistory } from 'react-router-dom'
 import { MoreInfoDialog } from '../../../components/MoreInfoDialog'
-import { IJudgingProps, sheetCell } from '../../../models'
+import type { IJudgingProps } from '../../../models'
+import { sheetCell } from '../../../models'
 import {
   getHackerState,
   getJudgingsHeadings,
@@ -85,14 +89,14 @@ export const JudgingList: FC<JudgingListProps> = () => {
         {judging.$more_info && judging.$more_info !== '\0' && (
           <DataTableAction
             onClick={openMoreInfo.bind(null, judging)}
-            icon="CircleInfo"
+            icon={<Info />}
           >
             More Information
           </DataTableAction>
         )}
         <DataTableAction
           onClick={showJudging.bind(null, judging._id)}
-          icon="Edit"
+          icon={<Create />}
           itemRole="link"
         >
           {canDoJudgingAction(hacker, judging)
@@ -120,7 +124,9 @@ export const JudgingList: FC<JudgingListProps> = () => {
 
   return (
     <>
-      <DataTable columns={columns}>{rows}</DataTable>
+      <DataTable columns={columns} caption="List of hackathon judges">
+        {rows}
+      </DataTable>
       <Pagination
         current={currentPage}
         pages={totalPages}

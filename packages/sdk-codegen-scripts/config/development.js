@@ -2,7 +2,7 @@
 
  MIT License
 
- Copyright (c) 2020 Looker Data Sciences, Inc.
+ Copyright (c) 2021 Looker Data Sciences, Inc.
 
  Permission is hereby granted, free of charge, to any person obtaining a copy
  of this software and associated documentation files (the "Software"), to deal
@@ -54,16 +54,16 @@ module.exports = {
   */
   typescript: {
     /**
-     * special case for Typescript output path due to mono repository
+     * special case for TypeScript output path due to mono repository
      */
     codePath: './packages/',
     /**
-     * special case for Typescript output path due to mono repository
+     * special case for TypeScript output path due to mono repository
      */
     packagePath: 'sdk/src',
     /**
-     * yes, another `sdk` folder is underneath the src folder in the package path
+     * use this to customize the sdk subfolder
+       sdkPath: `sdk`,
      */
-    sdkPath: `sdk`,
   },
 }

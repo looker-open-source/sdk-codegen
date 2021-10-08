@@ -23,8 +23,9 @@
  SOFTWARE.
 
  */
-import React, { FC } from 'react'
-import { IMethod } from '@looker/sdk-codegen'
+import type { FC } from 'react'
+import React from 'react'
+import type { IMethod } from '@looker/sdk-codegen'
 import { Code, Flex, SpaceVertical, Text } from '@looker/components'
 import { MethodBadge } from '@looker/run-it'
 
@@ -35,7 +36,7 @@ interface DocOperationProps {
 }
 
 export const DocOperation: FC<DocOperationProps> = ({ method }) => (
-  <SpaceVertical align="start" mb="xlarge" gap="xsmall">
+  <SpaceVertical align="start" mb="large" gap="xsmall">
     <MethodBadge type={method.httpMethod}>
       <DocPseudo method={method} />
     </MethodBadge>

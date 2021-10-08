@@ -27,6 +27,7 @@
 import React from 'react'
 import { render, screen } from '@testing-library/react'
 import { renderWithTheme } from '@looker/components-test-utils'
+import type { IRawResponse } from '@looker/sdk-rtl'
 
 import {
   testErrorResponse,
@@ -35,52 +36,66 @@ import {
   testJsonResponse,
   testTextResponse,
   testUnknownResponse,
+  testBogusJsonResponse,
+  testOneRowComplexJson,
 } from '../../test-data'
 import { ShowResponse } from './ShowResponse'
 
 describe('ShowResponse', () => {
-  test('it renders json responses', () => {
+  test('undefined response', () => {
+    renderWithTheme(<ShowResponse response={{} as IRawResponse} />)
+    expect(
+      screen.getByText(
+        'The response body could not be parsed. Displaying raw data.'
+      )
+    ).toBeInTheDocument()
+  })
+
+  test('it renders 2D json responses', () => {
     renderWithTheme(<ShowResponse response={testJsonResponse} />)
-    expect(screen.getByText('200: application/json')).toBeInTheDocument()
-    expect(screen.getByText('key1')).toBeInTheDocument()
+    const tab = screen.getByRole('tabpanel')
+    expect(tab).toHaveTextContent('"key1"')
+    expect(tab).toHaveTextContent('"value1"')
+  })
+
+  test('it renders no grid for one-row complex json', () => {
+    renderWithTheme(<ShowResponse response={testOneRowComplexJson} />)
+    expect(screen.queryByRole('tabpanel')).not.toBeInTheDocument()
+    expect(screen.getByText('"fields"')).toBeInTheDocument()
+    expect(screen.getByText('"orders.id"')).toBeInTheDocument()
   })
 
   test('it renders text responses', () => {
     renderWithTheme(<ShowResponse response={testTextResponse} />)
-    expect(
-      screen.getByText('200: text/plain;charset=utf-8')
-    ).toBeInTheDocument()
     expect(
       screen.getByText(testTextResponse.body.toString())
     ).toBeInTheDocument()
   })
 
   test('it renders html responses', () => {
-    render(<ShowResponse response={testHtmlResponse} />)
-    expect(screen.getByText('200: text/html;charset=utf-8')).toBeInTheDocument()
-    expect(screen.getByRole('textbox', { name: '' })).toBeInTheDocument()
+    renderWithTheme(<ShowResponse response={testHtmlResponse} />)
+    expect(screen.getByText('Orders Created Date')).toBeInTheDocument()
   })
 
   test('it renders png responses', () => {
     render(<ShowResponse response={testImageResponse()} />)
-    expect(screen.getByText('200: image/png')).toBeInTheDocument()
-    expect(screen.getByRole('img')).toBeInTheDocument()
+    const img = screen.getByRole('img')
+    expect(img).toBeInTheDocument()
   })
 
   test('it renders jpg responses', () => {
     render(<ShowResponse response={testImageResponse('image/jpeg')} />)
-    expect(screen.getByText('200: image/jpeg')).toBeInTheDocument()
-    expect(screen.getByRole('img')).toBeInTheDocument()
+    const img = screen.getByRole('img')
+    expect(img).toBeInTheDocument()
   })
 
   test('it renders svg responses', () => {
     render(<ShowResponse response={testImageResponse('image/svg+xml')} />)
-    expect(screen.getByText('200: image/svg+xml')).toBeInTheDocument()
     expect(screen.getByRole('img')).toBeInTheDocument()
   })
 
-  test.skip('it renders a message for unknown response types', () => {
-    render(<ShowResponse response={testUnknownResponse} />)
+  test('it renders a message for unknown response types', () => {
+    renderWithTheme(<ShowResponse response={testUnknownResponse} />)
     expect(
       screen.getByText(
         `Received ${testUnknownResponse.body.length} bytes of ${testUnknownResponse.contentType} data.`
@@ -96,5 +111,15 @@ describe('ShowResponse', () => {
     expect(
       screen.getByText(testErrorResponse.body.toString(), { exact: false })
     ).toBeInTheDocument()
+  })
+
+  test('it renders bogus json responses', () => {
+    renderWithTheme(<ShowResponse response={testBogusJsonResponse} />)
+    expect(
+      screen.getByText(
+        'The response body could not be parsed. Displaying raw data.'
+      )
+    ).toBeInTheDocument()
+    expect(screen.getByText('I AM A LYING JSON RESPONSE')).toBeInTheDocument()
   })
 })

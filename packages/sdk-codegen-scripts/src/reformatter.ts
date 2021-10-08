@@ -27,9 +27,9 @@
 import * as path from 'path'
 import * as fs from 'fs'
 import { danger, success, warn } from '@looker/sdk-codegen-utils'
-import * as prettier from 'prettier'
-import { ICodeGen } from '@looker/sdk-codegen'
+import type { ICodeGen } from '@looker/sdk-codegen'
 import { isFileSync, readFileSync, run, utf8Encoding } from './nodeUtils'
+import { prettify } from './prettify'
 
 export interface IReformat {
   fileSep: string
@@ -55,6 +55,8 @@ const noFormatter = (language: string, files: string[]) => {
     `There is no ${language} formatter. Skipped reformatting of:\n  ${list}`
   )
 }
+
+const fullPath = (weirdPath: string) => path.resolve(weirdPath)
 
 abstract class BaseFormatter implements IReformat {
   constructor(public language: string, public fileSep = `  \n`) {}
@@ -104,7 +106,7 @@ class PythonFormatter extends BaseFormatter {
 
   versionStamp(gen: ICodeGen) {
     if (gen.versions && gen.versions.lookerVersion) {
-      const stampFile = gen.fileName('sdk/constants')
+      const stampFile = fullPath(gen.fileName('sdk/constants'))
       if (!isFileSync(stampFile)) {
         warn(`${stampFile} was not found. Skipping version update.`)
       }
@@ -127,21 +129,9 @@ class PythonFormatter extends BaseFormatter {
   }
 }
 
-const prettierOptions: prettier.Options = {
-  bracketSpacing: true,
-  endOfLine: 'auto',
-  parser: 'typescript',
-  proseWrap: 'preserve',
-  quoteProps: 'as-needed',
-  semi: false,
-  singleQuote: true,
-  trailingComma: 'es5',
-  arrowParens: 'always',
-}
-
 class TypescriptFormatter extends BaseFormatter {
   constructor() {
-    super('Typescript')
+    super('TypeScript')
   }
 
   reformat(files: string[]): string {
@@ -152,7 +142,7 @@ class TypescriptFormatter extends BaseFormatter {
   }
 
   reformatFile(fileName: string) {
-    const source = prettier.format(readFileSync(fileName), prettierOptions)
+    const source = prettify(readFileSync(fileName))
     if (source) {
       writeFile(fileName, source)
     }
@@ -161,7 +151,7 @@ class TypescriptFormatter extends BaseFormatter {
 
   versionStamp(gen: ICodeGen) {
     if (gen.versions && gen.versions.lookerVersion) {
-      const stampFile = gen.fileName('../../sdk/src/constants')
+      const stampFile = fullPath(gen.fileName('../../sdk/src/constants'))
       if (!isFileSync(stampFile)) {
         warn(`${stampFile} was not found. Skipping version update.`)
       }
@@ -191,7 +181,7 @@ class KotlinFormatter extends BaseFormatter {
 
   versionStamp(gen: ICodeGen) {
     if (gen.versions && gen.versions.lookerVersion) {
-      const stampFile = gen.fileName('sdk/Constants')
+      const stampFile = fullPath(gen.fileName('sdk/Constants'))
       if (!isFileSync(stampFile)) {
         warn(`${stampFile} was not found. Skipping version update.`)
       }
@@ -205,7 +195,7 @@ class KotlinFormatter extends BaseFormatter {
       )
       content = content.replace(
         apiPattern,
-        `API_VERSION = "${gen.versions.apiVersion}"`
+        `API_VERSION = "${gen.versions.spec.version}"`
       )
       content = content.replace(
         envPattern,
@@ -213,7 +203,7 @@ class KotlinFormatter extends BaseFormatter {
       )
       writeFile(stampFile, content)
       return success(
-        `updated ${stampFile} to ${gen.versions.apiVersion}.${gen.versions.lookerVersion}`
+        `updated ${stampFile} to ${gen.versions.spec.version}.${gen.versions.lookerVersion}`
       )
     }
     return this.skipping()
@@ -228,7 +218,7 @@ class SwiftFormatter extends BaseFormatter {
 
   versionStamp(gen: ICodeGen) {
     if (gen.versions && gen.versions.lookerVersion) {
-      const stampFile = gen.fileName('rtl/constants')
+      const stampFile = fullPath(gen.fileName('rtl/constants'))
       if (!isFileSync(stampFile)) {
         warn(`${stampFile} was not found. Skipping version update.`)
       }
@@ -242,7 +232,7 @@ class SwiftFormatter extends BaseFormatter {
       )
       content = content.replace(
         apiPattern,
-        `apiVersion = "${gen.versions.apiVersion}"`
+        `apiVersion = "${gen.versions.spec.version}"`
       )
       content = content.replace(
         envPattern,
@@ -250,7 +240,7 @@ class SwiftFormatter extends BaseFormatter {
       )
       writeFile(stampFile, content)
       return success(
-        `updated ${stampFile} to ${gen.versions.apiVersion}.${gen.versions.lookerVersion}`
+        `updated ${stampFile} to ${gen.versions.spec.version}.${gen.versions.lookerVersion}`
       )
     }
     return this.skipping()
@@ -265,7 +255,7 @@ class CsharpFormatter extends BaseFormatter {
 
   versionStamp(gen: ICodeGen) {
     if (gen.versions && gen.versions.lookerVersion) {
-      const stampFile = gen.fileName('rtl/Constants')
+      const stampFile = fullPath(gen.fileName('rtl/Constants'))
       if (!isFileSync(stampFile)) {
         warn(`${stampFile} was not found. Skipping version update.`)
       }
@@ -279,7 +269,7 @@ class CsharpFormatter extends BaseFormatter {
       )
       content = content.replace(
         apiPattern,
-        `ApiVersion = "${gen.versions.apiVersion}"`
+        `ApiVersion = "${gen.versions.spec.version}"`
       )
       content = content.replace(
         envPattern,
@@ -287,7 +277,7 @@ class CsharpFormatter extends BaseFormatter {
       )
       writeFile(stampFile, content)
       return success(
-        `updated ${stampFile} to ${gen.versions.apiVersion}.${gen.versions.lookerVersion}`
+        `updated ${stampFile} to ${gen.versions.spec.version}.${gen.versions.lookerVersion}`
       )
     }
     return this.skipping()

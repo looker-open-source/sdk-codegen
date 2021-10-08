@@ -24,22 +24,24 @@
 
  */
 
-import { ChattyHostConnection } from '@looker/chatty'
+import type { ChattyHostConnection } from '@looker/chatty'
 import intersects from 'semver/ranges/intersects'
 import { FetchProxyImpl } from './fetch_proxy'
-import {
-  ExtensionEvent,
+import type {
   ExtensionInitializationResponse,
   ExtensionHostApi,
   ExtensionHostApiConfiguration,
   ExtensionNotification,
-  ExtensionNotificationType,
-  ExtensionRequestType,
   FetchCustomParameters,
   FetchResponseBodyType,
   LookerHostData,
   ApiVersion,
   RouteChangeData,
+} from './types'
+import {
+  ExtensionEvent,
+  ExtensionNotificationType,
+  ExtensionRequestType,
 } from './types'
 
 export const EXTENSION_SDK_VERSION = '0.10.5'
@@ -54,11 +56,8 @@ export class ExtensionHostApiImpl implements ExtensionHostApi {
 
   constructor(configuration: ExtensionHostApiConfiguration) {
     this._configuration = configuration
-    const {
-      chattyHost,
-      setInitialRoute,
-      hostChangedRoute,
-    } = this._configuration
+    const { chattyHost, setInitialRoute, hostChangedRoute } =
+      this._configuration
     this.chattyHost = chattyHost
     this.setInitialRoute = setInitialRoute
     this.hostChangedRoute = hostChangedRoute
@@ -241,6 +240,17 @@ export class ExtensionHostApiImpl implements ExtensionHostApi {
     return this.sendAndReceive(ExtensionRequestType.LOCAL_STORAGE, {
       type: 'remove',
       name,
+    })
+  }
+
+  async clipboardWrite(value: string): Promise<void> {
+    const errorMessage = this.verifyLookerVersion('>=21.7')
+    if (errorMessage) {
+      return Promise.reject(new Error(errorMessage))
+    }
+    return this.sendAndReceive(ExtensionRequestType.CLIPBOARD, {
+      type: 'write',
+      value,
     })
   }
 
@@ -492,9 +502,10 @@ export class ExtensionHostApiImpl implements ExtensionHostApi {
     }
     if (
       authParameters.response_type !== 'token' &&
+      authParameters.response_type !== 'id_token' &&
       authParameters.response_type !== 'code'
     ) {
-      return `invalid response_type, must be token or code, ${authParameters.response_type}`
+      return `invalid response_type, must be token, id_token or code, ${authParameters.response_type}`
     }
     return undefined
   }

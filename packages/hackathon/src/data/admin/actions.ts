@@ -24,7 +24,7 @@
 
  */
 
-import { ValidationMessages } from '@looker/components'
+import type { ValidationMessages } from '@looker/components'
 
 export enum Actions {
   LOAD_USER_ATTRIBUTES_REQUEST = 'LOAD_USER_ATTRIBUTES_REQUEST',
@@ -75,9 +75,10 @@ export type AdminAction =
   | SaveUserAttributesRequestAction
   | SaveUserAttributesResponseAction
 
-export const loadUserAttributesRequest = (): LoadUserAttributesRequestAction => ({
-  type: Actions.LOAD_USER_ATTRIBUTES_REQUEST,
-})
+export const loadUserAttributesRequest =
+  (): LoadUserAttributesRequestAction => ({
+    type: Actions.LOAD_USER_ATTRIBUTES_REQUEST,
+  })
 
 export const loadUserAttributesResponse = (
   adminUserAttributes: AdminUserAttributes

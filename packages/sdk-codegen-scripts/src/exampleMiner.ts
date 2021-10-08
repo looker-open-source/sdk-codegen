@@ -28,7 +28,7 @@ import * as fs from 'fs'
 import path from 'path'
 import { execSync } from 'child_process'
 import { warn } from '@looker/sdk-codegen-utils'
-import {
+import type {
   IFileCall,
   INugget,
   ISDKCall,
@@ -87,19 +87,26 @@ const skipFolder = (name: string, excludeList: string[] = ['node_modules']) =>
  * Finds all file recursively
  * @param searchPath starting directory for file search
  * @param listOfFiles list of current files already found
- * @param filter lambda for file inclusion in results. truthy includes the file
+ * @param filter lambda for file inclusion in results. truthy analyzes the file
+ * @param ignorePaths paths to ignore
  */
 export const getAllFiles = (
   searchPath: string,
   listOfFiles: string[] = [],
-  filter: FileFilter = filterAllFiles
+  filter: FileFilter = filterAllFiles,
+  ignorePaths: string[] = []
 ) => {
   const files = fs.readdirSync(searchPath)
 
   files.forEach((file) => {
     if (fs.statSync(searchPath + '/' + file).isDirectory()) {
-      if (!skipFolder(file, ['node_modules', 'lib']))
-        listOfFiles = getAllFiles(searchPath + '/' + file, listOfFiles, filter)
+      if (!skipFolder(file, ignorePaths))
+        listOfFiles = getAllFiles(
+          searchPath + '/' + file,
+          listOfFiles,
+          filter,
+          ignorePaths
+        )
     } else {
       if (filter(file)) {
         const fileName = path.join(searchPath, '/', file)
@@ -115,13 +122,16 @@ export const getAllFiles = (
  * Find all source code files recursively
  * @param searchPath starting directory for file search
  * @param listOfFiles list of source code files that can be mined
+ * @param filter function to determine whether a file should be analyzed
+ * @param ignorePaths paths to ignore
  */
 export const getCodeFiles = (
   searchPath: string,
   listOfFiles: string[] = [],
-  filter: FileFilter = filterCodeFiles
+  filter: FileFilter = filterCodeFiles,
+  ignorePaths: string[] = ['node_modules', 'lib', 'dist']
 ) => {
-  return getAllFiles(searchPath, listOfFiles, filter)
+  return getAllFiles(searchPath, listOfFiles, filter, ignorePaths)
 }
 
 /** get the trimmed output of the command as a UTF-8 string */
@@ -142,9 +152,17 @@ export const getRemoteOrigin = () => {
  */
 export const getRemoteHttpOrigin = () => {
   const origin = getRemoteOrigin()
-  const extractor = /git@github\.com:(.*)\.git/gi
-  const match = extractor.exec(origin)
-  if (!match) return ''
+  const gitExtractor = /git@github\.com:(.*)\.git/gi
+  let match = gitExtractor.exec(origin)
+  if (!match) {
+    // git origin on CI: https://github.com/looker-open-source/sdk-codegen
+    const httpExtractor = /(https:\/\/github.com.*)(|.git)/
+    match = httpExtractor.exec(origin)
+    if (!match) {
+      return ''
+    }
+    return match[1]
+  }
   return `https://github.com/${match[1]}`
 }
 
@@ -283,7 +301,8 @@ const fileMiners: IMiners = {
   '.rb': new CodeMiner(),
   '.md': new MarkdownMiner(),
   '.dart': new CodeMiner(),
-  // '.go': new CodeMiner(),
+  '.go': new CodeMiner(),
+  '.java': new CodeMiner(),
   // '.rst': new MarkdownMiner(), // TODO .rst miner? Probably not needed
 }
 
@@ -297,7 +316,7 @@ export class ExampleMiner {
     this.execute(sourcePath)
   }
 
-  get motherLode(): IExampleMine {
+  get lode(): IExampleMine {
     return {
       commitHash: this.commitHash,
       remoteOrigin: this.remoteOrigin,
@@ -374,6 +393,6 @@ export class ExampleMiner {
     const dirPath = sourcePath ?? this.sourcePath
     const files = getCodeFiles(dirPath)
     files.forEach((f) => this.processFile(f))
-    return this.motherLode
+    return this.lode
   }
 }

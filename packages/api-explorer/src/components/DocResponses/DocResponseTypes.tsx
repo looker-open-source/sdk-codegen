@@ -23,13 +23,20 @@
  SOFTWARE.
 
  */
-import React, { FC, useState, useEffect } from 'react'
+
+import type { FC } from 'react'
+import React, { useState, useEffect } from 'react'
 import { ButtonToggle, ButtonItem } from '@looker/components'
-import { KeyedCollection, IMethodResponse } from '@looker/sdk-codegen'
+import type {
+  ApiModel,
+  KeyedCollection,
+  IMethodResponse,
+} from '@looker/sdk-codegen'
 
 import { ExploreType } from '..'
 
 interface DocResponseTypesProps {
+  api: ApiModel
   responses: KeyedCollection<IMethodResponse>
 }
 
@@ -38,7 +45,10 @@ interface DocResponseTypesProps {
  * toggling media type and render the response
  * @param response
  */
-export const DocResponseTypes: FC<DocResponseTypesProps> = ({ responses }) => {
+export const DocResponseTypes: FC<DocResponseTypesProps> = ({
+  api,
+  responses,
+}) => {
   const mediaTypes = Object.keys(responses)
   const [selectedMediaType, setSelectedMediaType] = useState(mediaTypes[0])
   const [resps, setResps] = useState(responses)
@@ -47,7 +57,7 @@ export const DocResponseTypes: FC<DocResponseTypesProps> = ({ responses }) => {
     /** When new responses are passed, update the default selected media type */
     setSelectedMediaType(mediaTypes[0])
     setResps(responses)
-  }, [responses])
+  }, [responses, mediaTypes])
 
   // TODO: Account for endpoints with no responses (e.g. delete a custom cmd)
   return (
@@ -62,12 +72,15 @@ export const DocResponseTypes: FC<DocResponseTypesProps> = ({ responses }) => {
           <ButtonItem key={mediaType}>{mediaType}</ButtonItem>
         ))}
       </ButtonToggle>
-      <ExploreType
-        key={selectedMediaType}
-        type={resps[selectedMediaType].type}
-        link={true}
-        maxDepth={2}
-      />
+      <div style={{ overflow: 'auto' }}>
+        <ExploreType
+          api={api}
+          key={selectedMediaType}
+          type={resps[selectedMediaType].type}
+          link={true}
+          maxDepth={2}
+        />
+      </div>
     </>
   )
 }

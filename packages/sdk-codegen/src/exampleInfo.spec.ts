@@ -25,9 +25,10 @@
  */
 import * as fs from 'fs'
 import path from 'path'
-import { IExampleMine, findExamples, findExampleLanguages } from './exampleInfo'
+import type { IExampleMine } from './exampleInfo'
+import { findExamples, findExampleLanguages } from './exampleInfo'
 
-const fileName = path.join(__dirname, '../../../motherlode.json')
+const fileName = path.join(__dirname, '../../../examplesIndex.json')
 const file = fs.readFileSync(fileName, { encoding: 'utf-8' })
 const lode: IExampleMine = JSON.parse(file)
 const op = 'render_task'
@@ -36,7 +37,7 @@ describe('exampleInfo', () => {
   it('finds language examples for "render_task"', () => {
     const actual = findExampleLanguages(lode, op)
     expect(actual).toBeDefined()
-    expect(actual).toEqual(['Python', 'Typescript', 'Kotlin', 'Ruby'])
+    expect(actual).toEqual(['Python', 'TypeScript', 'Kotlin', 'Ruby'])
     actual.forEach((language) => {
       const ex = findExamples(lode, language, op)
       expect(ex).toBeDefined()

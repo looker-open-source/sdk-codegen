@@ -24,9 +24,9 @@
 
  */
 
-import React, { FC, Dispatch } from 'react'
+import type { FC, Dispatch } from 'react'
+import React from 'react'
 import styled from 'styled-components'
-import { NavLink } from 'react-router-dom'
 import {
   Icon,
   Space,
@@ -34,20 +34,31 @@ import {
   Heading,
   Header as SemanticHeader,
 } from '@looker/components'
+import { LookerLogo } from '@looker/icons'
+import { Menu } from '@styled-icons/material/Menu'
+import type { SpecList, SpecItem } from '@looker/sdk-codegen'
 
-import { SpecItems } from '../../ApiExplorer'
-import { SpecState, SpecAction } from '../../reducers'
-import { diffPath } from '../../utils'
-import { ApiSpecSelector } from './ApiSpecSelector'
+import { Link } from '../Link'
+import type { SpecAction } from '../../reducers'
+import { SelectorContainer } from '../SelectorContainer'
 
 interface HeaderProps {
-  specs: SpecItems
-  spec: SpecState
+  /** Specs to choose from */
+  specs: SpecList
+  /** Current selected spec */
+  spec: SpecItem
+  /** Spec state setter */
   specDispatch: Dispatch<SpecAction>
+  /** Nav state setter */
   toggleNavigation: (target?: boolean) => void
   className?: string
 }
 
+export const HEADER_REM = 4
+
+/**
+ * Renders the API Explorer header
+ */
 export const HeaderLayout: FC<HeaderProps> = ({
   className,
   specs,
@@ -55,38 +66,34 @@ export const HeaderLayout: FC<HeaderProps> = ({
   specDispatch,
   toggleNavigation,
 }) => (
-  <SemanticHeader height="4rem" className={className} pl="small" pr="large">
+  <SemanticHeader
+    height={`${HEADER_REM}rem`}
+    className={className}
+    pl="small"
+    pr="large"
+  >
     <Space>
       <IconButton
         size="small"
         onClick={() => toggleNavigation()}
-        icon="Hamburger"
+        icon={<Menu />}
+        aria-label="nav toggle"
         label="Toggle Navigation"
       />
 
-      <NavLink to={`/${spec.key}`}>
+      <Link to={`/${spec.key}`}>
         <Space gap="small">
           <Icon
-            name="LookerLogo"
+            icon={<LookerLogo />}
             alt="Looker"
             color="text5"
             style={{ width: '82px' }}
           />
           <Heading color="key">API Explorer</Heading>
         </Space>
-      </NavLink>
+      </Link>
     </Space>
-    <Space width="auto">
-      <ApiSpecSelector specs={specs} spec={spec} specDispatch={specDispatch} />
-      <NavLink to={`/${diffPath}/${spec.key}/`}>
-        <IconButton
-          toggle
-          label="Compare Specifications"
-          icon="ChangeHistory"
-          size="small"
-        />
-      </NavLink>
-    </Space>
+    <SelectorContainer specs={specs} spec={spec} specDispatch={specDispatch} />
   </SemanticHeader>
 )
 

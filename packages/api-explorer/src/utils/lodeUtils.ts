@@ -24,12 +24,47 @@
 
  */
 
-const fetchLode = async (lodeUrl: string) => fetch(lodeUrl, { mode: 'cors' })
+import type { IDeclarationMine, IExampleMine } from '@looker/sdk-codegen'
 
-export const getLoded = async (lodeUrl: string) => {
-  const resp = await fetchLode(lodeUrl)
-  const body = await resp.text()
-  if (body) {
-    return JSON.parse(body)
+export const apixFilesHost = 'http://localhost:30000'
+
+const fetchLode = async (lodeUrl: string) => {
+  try {
+    const result = await fetch(lodeUrl, { mode: 'cors' })
+    return result.text()
+  } catch (error) {
+    return ''
   }
+}
+
+interface FullLode {
+  examples: IExampleMine
+  declarations?: IDeclarationMine
+}
+
+export const getLoded = async (
+  examplesLodeUrl: string,
+  declarationsLodeUrl?: string
+): Promise<FullLode> => {
+  // First try to load from the apix-files server
+  let examples = await fetchLode(`${apixFilesHost}/examplesIndex.json`)
+  if (!examples) {
+    examples = await fetchLode(examplesLodeUrl)
+  }
+
+  let declarations
+  if (declarationsLodeUrl) {
+    declarations = await fetchLode(declarationsLodeUrl)
+  }
+
+  const lode: FullLode = {
+    examples: { commitHash: '', nuggets: {}, remoteOrigin: '', summaries: {} },
+  }
+  if (examples) {
+    lode.examples = JSON.parse(examples)
+  }
+  if (declarations) {
+    lode.declarations = JSON.parse(declarations)
+  }
+  return lode
 }

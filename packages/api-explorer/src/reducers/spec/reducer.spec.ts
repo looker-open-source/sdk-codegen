@@ -26,19 +26,19 @@
 import { ApiModel } from '@looker/sdk-codegen'
 
 import { specs } from '../../test-data'
-import { specReducer } from './reducer'
-import { fetchSpec } from './utils'
+import type { SelectSpecAction } from '.'
+import { specReducer, initDefaultSpecState, Actions } from '.'
 
 describe('Spec Reducer', () => {
   test('it selects a spec', () => {
-    const action = {
-      type: 'SELECT_SPEC',
-      key: '4.0',
-      payload: specs,
+    const action: SelectSpecAction = {
+      type: Actions.SELECT_SPEC,
+      payload: '4.0',
     }
-    const state = specReducer(fetchSpec('3.1', specs), action)
-    expect(state.api).toBeInstanceOf(ApiModel)
-    expect(state.key).toEqual('4.0')
-    expect(state.status).toEqual(action.payload['4.0'].status)
+
+    const state = specReducer(initDefaultSpecState(specs, location), action)
+    expect(state.spec.api).toBeInstanceOf(ApiModel)
+    expect(state.spec.key).toEqual('4.0')
+    expect(state.spec.status).toEqual(specs['4.0'].status)
   })
 })

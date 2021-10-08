@@ -23,13 +23,34 @@
  SOFTWARE.
 
  */
-import React, { FC, useContext } from 'react'
-import { TabList, Tab, TabPanels, TabPanel, useTabs } from '@looker/components'
-import { findExampleLanguages, IMethod } from '@looker/sdk-codegen'
+import type { FC } from 'react'
+import React, { useContext, useState, useEffect } from 'react'
+import {
+  Box,
+  Card,
+  DataTable,
+  DataTableItem,
+  Icon,
+  Link,
+  Space,
+  Pagination,
+} from '@looker/components'
+import type { IMethod } from '@looker/sdk-codegen'
+import { findExampleLanguages } from '@looker/sdk-codegen'
+import { CollapserCard } from '@looker/run-it'
+import { InsertDriveFile } from '@styled-icons/material-outlined/InsertDriveFile'
+import { useSelector } from 'react-redux'
 
-import { CollapserCard } from '../Collapser'
-import { LodeContext } from '../../context/examples'
-import { DocExamples } from './DocExamples'
+import { getSelectedSdkLanguage } from '../../state'
+import { LodeContext } from '../../context'
+import {
+  exampleColumns,
+  EMPTY_STRING,
+  prepareExampleDataTable,
+  PER_PAGE_COUNT,
+  sortLanguagesByPreference,
+} from './utils'
+import { DocSdkExampleCell } from './DocSdkExampleCell'
 
 interface DocSdkUsageProps {
   method: IMethod
@@ -40,31 +61,86 @@ interface DocSdkUsageProps {
  *  links to the source files
  */
 export const DocSdkUsage: FC<DocSdkUsageProps> = ({ method }) => {
-  const tabs = useTabs()
-  const lode = useContext(LodeContext)
-  const languages = findExampleLanguages(lode, method.name)
+  const { examples } = useContext(LodeContext)
+  const sdkLanguage = useSelector(getSelectedSdkLanguage)
+  let languages = findExampleLanguages(examples, method.name)
+  const [page, setPage] = useState(1)
+
+  useEffect(() => {
+    setPage(1)
+  }, [method])
+
   if (languages.length === 0) return <></>
+
+  languages = sortLanguagesByPreference(languages, sdkLanguage)
+
+  const { pageExamples, pageLimit, paginate } = prepareExampleDataTable(
+    languages,
+    examples,
+    method.operationId,
+    page
+  )
+
+  if (pageExamples.length === 0) return <></>
 
   return (
     <CollapserCard id="examples" heading="SDK Examples">
-      <>
-        <TabList {...tabs}>
-          {languages.map((language) => (
-            <Tab key={language}>{language}</Tab>
-          ))}
-        </TabList>
-        <TabPanels {...tabs} pt="0">
-          {languages.map((language) => (
-            <TabPanel key={language}>
-              <DocExamples
-                lode={lode}
-                language={language}
-                operationId={method.operationId}
-              />
-            </TabPanel>
-          ))}
-        </TabPanels>
-      </>
+      <Card height="auto" px="small" py="xsmall" mt="small">
+        <DataTable caption="SDK Examples" columns={exampleColumns}>
+          {pageExamples.map((exampleRow, i) => {
+            const isEmptyItem = exampleRow.filename === EMPTY_STRING
+            const isLastItem =
+              (i + 1) % PER_PAGE_COUNT === 0 || i + 1 === pageExamples.length
+            const nextItemEmpty = pageExamples[i + 1]?.filename === EMPTY_STRING
+            const hidden = isEmptyItem || isLastItem || nextItemEmpty
+            return (
+              <DataTableItem
+                id={exampleRow.permalink}
+                key={exampleRow.permalink}
+              >
+                <DocSdkExampleCell hideBorderBottom={hidden}>
+                  <Space gap="xsmall">
+                    {!isEmptyItem && (
+                      <Icon
+                        icon={<InsertDriveFile />}
+                        color="text1"
+                        size="small"
+                      />
+                    )}
+                    <Link
+                      href={exampleRow.permalink}
+                      target={'_blank'}
+                      role="link"
+                    >
+                      {exampleRow.filename}
+                    </Link>
+                  </Space>
+                </DocSdkExampleCell>
+                <DocSdkExampleCell hideBorderBottom={hidden}>
+                  {exampleRow.language}
+                </DocSdkExampleCell>
+                <DocSdkExampleCell hideBorderBottom={hidden}>
+                  {exampleRow.description}
+                </DocSdkExampleCell>
+                <DocSdkExampleCell hideBorderBottom={hidden}>
+                  {exampleRow.line}
+                </DocSdkExampleCell>
+              </DataTableItem>
+            )
+          })}
+        </DataTable>
+        {paginate && (
+          <Box alignSelf="center">
+            <Pagination
+              current={page}
+              pages={pageLimit}
+              onChange={(nextPage) => {
+                setPage(nextPage)
+              }}
+            />
+          </Box>
+        )}
+      </Card>
     </CollapserCard>
   )
 }

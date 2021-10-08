@@ -25,7 +25,9 @@
  */
 
 import * as fs from 'fs'
-import { execSync, ExecSyncOptionsWithStringEncoding } from 'child_process'
+import type { ExecSyncOptionsWithStringEncoding } from 'child_process'
+import { execSync } from 'child_process'
+import path from 'path'
 import { warn } from '@looker/sdk-codegen-utils'
 
 const utf8: BufferEncoding = 'utf-8'
@@ -51,7 +53,7 @@ export const writeFileSync = (
 export const isDirSync = (filePath: string) => {
   try {
     return fs.statSync(filePath).isDirectory()
-  } catch (e) {
+  } catch (e: any) {
     if (e.code === 'ENOENT') {
       return false
     } else {
@@ -60,10 +62,34 @@ export const isDirSync = (filePath: string) => {
   }
 }
 
+const homeToRoost = '../../../'
+
+export const getRootPath = () => path.join(__dirname, homeToRoost)
+export const rootFile = (fileName = '') => path.join(getRootPath(), fileName)
+
+/**
+ * Creates the directory if needed, converts content to JSON string, writes file
+ *
+ * @param fileName to write that may include a relative path
+ * @param {object | string} content to convert to a JSON string
+ * @returns name of file written
+ */
+export const createJsonFile = (
+  fileName: string,
+  content: Record<string, unknown> | string
+) => {
+  const fullName = rootFile(fileName)
+  const dir = path.dirname(fullName)
+  const data = typeof content === 'string' ? content : JSON.stringify(content)
+  if (!isDirSync(dir)) fs.mkdirSync(dir, { recursive: true })
+  fs.writeFileSync(fullName, data, utf8Encoding)
+  return fullName
+}
+
 export const isFileSync = (filePath: string) => {
   try {
     return fs.statSync(filePath).isFile()
-  } catch (e) {
+  } catch (e: any) {
     if (e.code === 'ENOENT') {
       return false
     } else {
@@ -111,7 +137,7 @@ export const run = (
     // const result = await spawnSync(command, args, options)
     command += ' ' + args.join(' ')
     return execSync(command, options)
-  } catch (e) {
+  } catch (e: any) {
     if (warning) {
       warn(errMsg)
       return ''

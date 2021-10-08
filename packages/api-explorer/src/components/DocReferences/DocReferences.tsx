@@ -24,17 +24,18 @@
 
  */
 
-import React, { FC, useContext } from 'react'
-import { Box } from '@looker/components'
-import { ApiModel, IMethod, IType } from '@looker/sdk-codegen'
+import type { FC } from 'react'
+import React, { useContext } from 'react'
+import type { ApiModel, IMethod, IType } from '@looker/sdk-codegen'
 
+import { CollapserCard } from '@looker/run-it'
 import { SearchContext } from '../../context'
-import { CollapserCard } from '../Collapser'
 import { DocReferenceItems } from './utils'
 
 interface DocReferencesProps {
-  seeTypes: IType[]
-  seeMethods?: IMethod[]
+  typesUsed: IType[]
+  methodsUsedBy?: IMethod[]
+  typesUsedBy?: IType[]
   specKey: string
   api: ApiModel
 }
@@ -43,37 +44,48 @@ interface DocReferencesProps {
  * It renders links to the given types and/or methods references
  */
 export const DocReferences: FC<DocReferencesProps> = ({
-  seeTypes,
+  typesUsed,
   specKey,
   api,
-  seeMethods = [],
+  methodsUsedBy = [],
+  typesUsedBy = [],
 }) => {
   const {
     searchSettings: { pattern },
   } = useContext(SearchContext)
 
-  if (seeTypes.length === 0 && seeMethods.length === 0) return <></>
+  if (
+    typesUsed.length === 0 &&
+    methodsUsedBy.length === 0 &&
+    typesUsedBy.length === 0
+  )
+    return <></>
 
   return (
-    <Box id="references" mb="xlarge">
-      <CollapserCard heading="References">
-        <>
-          {DocReferenceItems(
-            'Referenced Types:',
-            seeTypes,
-            api,
-            specKey,
-            pattern
-          )}
-          {DocReferenceItems(
-            'Used by methods:',
-            seeMethods,
-            api,
-            specKey,
-            pattern
-          )}
-        </>
-      </CollapserCard>
-    </Box>
+    <CollapserCard heading="References" id="references">
+      <>
+        {DocReferenceItems(
+          'Referenced Types:',
+          typesUsed,
+          api,
+          specKey,
+          pattern
+        )}
+        {DocReferenceItems(
+          'Used by types:',
+          typesUsedBy,
+          api,
+          specKey,
+          pattern
+        )}
+        {DocReferenceItems(
+          'Used by methods:',
+          methodsUsedBy,
+          api,
+          specKey,
+          pattern
+        )}
+      </>
+    </CollapserCard>
   )
 }

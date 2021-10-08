@@ -29,38 +29,47 @@ import { screen } from '@testing-library/react'
 
 import { renderWithSearchAndRouter } from '../../test-utils'
 import { api } from '../../test-data'
+import { buildPath } from '../../utils'
 import { DocReferences } from './DocReferences'
 
 describe('DocReferences', () => {
   test('it renders method and type references', () => {
-    const seeTypes = typeRefs(api, api.types.Dashboard.customTypes)
-    const seeMethods = methodRefs(api, api.types.Dashboard.methodRefs)
+    const typesUsed = typeRefs(api, api.types.DashboardElement.customTypes)
+    const typesUsedBy = typeRefs(api, api.types.DashboardElement.parentTypes)
+    const methodsUsedBy = methodRefs(api, api.types.DashboardElement.methodRefs)
     renderWithSearchAndRouter(
       <DocReferences
-        seeTypes={seeTypes}
-        seeMethods={seeMethods}
+        typesUsed={typesUsed}
+        typesUsedBy={typesUsedBy}
+        methodsUsedBy={methodsUsedBy}
         specKey={'3.1'}
         api={api}
       />
     )
     expect(screen.getAllByRole('link')).toHaveLength(
-      seeTypes.length + seeMethods.length
+      typesUsed.length + typesUsedBy.length + methodsUsedBy.length
     )
-    expect(screen.getByText(seeTypes[0].name).closest('a')).toHaveAttribute(
+    expect(screen.getByText(typesUsed[0].name).closest('a')).toHaveAttribute(
       'href',
-      `/3.1/types/${seeTypes[0].name}`
+      buildPath(api, typesUsed[0], '3.1')
     )
-    expect(screen.getByText(seeMethods[0].name).closest('a')).toHaveAttribute(
+
+    expect(typesUsedBy).toHaveLength(1)
+    expect(typesUsedBy[0].name).toEqual('Dashboard')
+    expect(screen.getByText(typesUsedBy[0].name).closest('a')).toHaveAttribute(
       'href',
-      `/3.1/methods/Dashboard/${seeMethods[0].name}`
+      buildPath(api, typesUsedBy[0], '3.1')
     )
+    expect(
+      screen.getByText(methodsUsedBy[0].name).closest('a')
+    ).toHaveAttribute('href', buildPath(api, methodsUsedBy[0], '3.1'))
   })
 
   test('it highlights text matching search pattern', () => {
     const highlightPattern = 'dash'
     renderWithSearchAndRouter(
       <DocReferences
-        seeTypes={[api.types.Dashboard]}
+        typesUsed={[api.types.Dashboard]}
         specKey={'3.1'}
         api={api}
       />,
@@ -68,6 +77,9 @@ describe('DocReferences', () => {
     )
     const foundRef = screen.getByRole('link')
     expect(foundRef).toContainHTML('<span class="hi">Dash</span>board')
-    expect(foundRef).toHaveAttribute('href', '/3.1/types/Dashboard')
+    expect(foundRef).toHaveAttribute(
+      'href',
+      buildPath(api, api.types.Dashboard, '3.1')
+    )
   })
 })

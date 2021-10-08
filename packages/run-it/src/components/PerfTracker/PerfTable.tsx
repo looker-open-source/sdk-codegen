@@ -24,10 +24,11 @@
 
  */
 
-import React, { FC, useEffect, useState } from 'react'
+import type { FC } from 'react'
+import React, { useEffect, useState } from 'react'
 import { DataTable, doDataTableSort } from '@looker/components'
 
-import { LoadTimes } from './perfUtils'
+import type { LoadTimes } from './perfUtils'
 import { createTableRows, perfTableColumns } from './perfTableUtils'
 
 interface PerfTableProps {
@@ -72,7 +73,11 @@ export const PerfTable: FC<PerfTableProps> = ({
     setRows(createTableRows(data, onSelect, showAllColumns))
   }, [data, onSelect, showAllColumns])
   return (
-    <DataTable onSort={handleSort} columns={columns}>
+    <DataTable
+      onSort={handleSort}
+      columns={columns}
+      caption="Performance load times"
+    >
       {rows}
     </DataTable>
   )

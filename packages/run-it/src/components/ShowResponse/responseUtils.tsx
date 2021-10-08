@@ -23,12 +23,21 @@
  SOFTWARE.
 
  */
-import React, { ReactElement } from 'react'
-import { IRawResponse, ResponseMode, responseMode } from '@looker/sdk-rtl'
-import { Paragraph, CodeBlock } from '@looker/components'
-
-import { CodeStructure } from '../CodeStructure'
-import { DataGrid, parseCsv, parseJson } from '../DataGrid'
+import type { ReactElement } from 'react'
+import React from 'react'
+import type { IRawResponse } from '@looker/sdk-rtl'
+import { ResponseMode, responseMode } from '@looker/sdk-rtl'
+import {
+  Paragraph,
+  MessageBar,
+  TabList,
+  Tab,
+  TabPanels,
+  TabPanel,
+  useTabs,
+} from '@looker/components'
+import { CodeCopy, Markdown } from '@looker/code-editor'
+import { DataGrid, parseCsv, json2Csv } from '../DataGrid'
 
 /**
  * Are all items this array "simple"
@@ -47,6 +56,12 @@ export const allSimple = (data: any[]) => {
   return true
 }
 
+const copyRaw = (code: string, language = 'unknown') => {
+  return (
+    <CodeCopy language={language} code={code} lineNumbers={false} transparent />
+  )
+}
+
 /**
  * Is every array in this array a "simple" data row?
  * @param data to check for columnarity
@@ -58,32 +73,88 @@ export const isColumnar = (data: any[]) => {
   return !complex
 }
 
+enum ItemType {
+  Array = 'a',
+  Object = 'o',
+  Simple = 's',
+  Undefined = 'u',
+}
+
+/**
+ * Is this an array, an object, a value, or undefined
+ * @param value to check
+ */
+const itemType = (value: any): ItemType => {
+  if (!value) return ItemType.Undefined
+  if (Array.isArray(value)) return ItemType.Array
+  if (value instanceof Object) return ItemType.Object
+  return ItemType.Simple
+}
+
+/**
+ * Get the 2D type mapping for the object
+ * @param json to analyze
+ */
+const getTypes = (json: any) => {
+  const types = [new Set<ItemType>(), new Set<ItemType>()]
+  if (!json) {
+    types[0].add(ItemType.Undefined)
+    return types
+  }
+  for (const key of Object.keys(json)) {
+    const value = json[key]
+    const type = itemType(value)
+    types[0].add(type)
+    switch (type) {
+      case ItemType.Array:
+      case ItemType.Object:
+        Object.keys(value).forEach((k) => {
+          const v = value[k]
+          types[1].add(itemType(v))
+        })
+        break
+    }
+  }
+  return types
+}
+
+/**
+ * Is this a uniform object that can be converted into a table?
+ * @param json to analyze
+ */
+export const canTabulate = (json: any) => {
+  const types = getTypes(json)
+  return (
+    types[0].size === 1 &&
+    (types[0].has(ItemType.Array) || types[0].has(ItemType.Object)) &&
+    types[1].size <= 1
+  )
+}
+
 /**
  * Show JSON responses
  *
  * Shows the JSON in a syntax-highlighted fashion
  * If the JSON is parseable as 2D row/column data it will also be shown in grid
+ * If JSON cannot be parsed it will be shown as is
  * @param response
  */
 const ShowJSON = (response: IRawResponse) => {
   const content = response.body.toString()
-  const data = parseJson(content)
-  const showGrid = isColumnar(data.data)
-  const raw = (
-    <CodeStructure
-      code={JSON.stringify(JSON.parse(response.body), null, 2)}
-      language={'json'}
-    />
-  )
-  if (!showGrid) return raw
-  return <DataGrid data={data.data} raw={raw} />
+  const parsed = JSON.parse(response.body)
+  const data = canTabulate(parsed) ? json2Csv(content) : undefined
+  const showGrid = data && isColumnar(data.data)
+  const json = JSON.stringify(parsed, null, 2)
+  const raw = copyRaw(json, 'json')
+  if (showGrid) return <DataGrid data={data.data} raw={raw} />
+  return raw
 }
 
 /** A handler for text type responses */
 const ShowText = (response: IRawResponse) => (
   <>
     {response.statusMessage !== 'OK' && response.statusMessage}
-    <CodeBlock>{response.body.toString()}</CodeBlock>
+    {copyRaw(response.body.toString())}
   </>
 )
 
@@ -92,9 +163,29 @@ const ShowText = (response: IRawResponse) => (
  * @param response HTTP response to parse and display
  */
 const ShowCSV = (response: IRawResponse) => {
-  const raw = <CodeBlock>{response.body.toString()}</CodeBlock>
+  const raw = copyRaw(response.body.toString())
   const data = parseCsv(response.body.toString())
   return <DataGrid data={data.data} raw={raw} />
+}
+
+const ShowMD = (response: IRawResponse) => {
+  const tabs = useTabs()
+  const raw = copyRaw(response.body.toString(), 'markup')
+  const data = response.body.toString()
+  return (
+    <>
+      <TabList {...tabs}>
+        <Tab key="md">Markdown</Tab>
+        <Tab key="raw">Raw</Tab>
+      </TabList>
+      <TabPanels {...tabs} pt="0">
+        <TabPanel key="doc">
+          <Markdown source={data} />
+        </TabPanel>
+        <TabPanel key="text">{raw}</TabPanel>
+      </TabPanels>
+    </>
+  )
 }
 
 /** A handler for image type responses */
@@ -105,7 +196,6 @@ const ShowImage = (response: IRawResponse) => {
   } else {
     content = `data:${response.contentType};base64,${btoa(response.body)}`
   }
-
   return (
     <img
       src={content}
@@ -115,9 +205,11 @@ const ShowImage = (response: IRawResponse) => {
 }
 
 /** A handler for HTTP type responses */
-const ShowHTML = (response: IRawResponse) => (
-  <CodeStructure language={'html'} code={response.body.toString()} />
-)
+const ShowHTML = (response: IRawResponse) =>
+  copyRaw(response.body.toString(), 'html')
+
+const ShowSQL = (response: IRawResponse) =>
+  copyRaw(response.body.toString(), 'sql')
 
 /**
  * A handler for unknown response types. It renders the size of the unknown response and its type.
@@ -135,6 +227,17 @@ const ShowPDF = (response: IRawResponse) => {
   // TODO display a PDF, maybe similar to https://github.com/wojtekmaj/react-pdf/blob/master/sample/webpack/Sample.jsx
   return ShowUnknown(response)
 }
+
+/** A handler for responses that cannot be parsed */
+const ShowRaw = (response: IRawResponse) => (
+  <>
+    {ShowUnknown(response)}
+    <MessageBar intent="warn" noActions>
+      The response body could not be parsed. Displaying raw data.
+    </MessageBar>
+    {copyRaw(response?.body?.toString() || '')}
+  </>
+)
 
 interface Responder {
   /** A label indicating the supported MIME type(s) */
@@ -165,6 +268,11 @@ export const responseHandlers: Responder[] = [
     isRecognized: (contentType) => /text\/csv/g.test(contentType),
     component: (response) => ShowCSV(response),
   },
+  {
+    label: 'md',
+    isRecognized: (contentType) => /text\/markdown/g.test(contentType),
+    component: (response) => ShowMD(response),
+  },
   // SVG would normally be considered a "string" because of the xml tag, so it must be checked before text
   {
     label: 'img',
@@ -177,6 +285,11 @@ export const responseHandlers: Responder[] = [
     label: 'pdf',
     isRecognized: (contentType) => /application\/pdf/g.test(contentType),
     component: (response) => ShowPDF(response),
+  },
+  {
+    label: 'sql',
+    isRecognized: (contentType) => /application\/sql/g.test(contentType),
+    component: (response) => ShowSQL(response),
   },
   {
     label: 'text',
@@ -203,3 +316,9 @@ export const pickResponseHandler = (response: IRawResponse) => {
   }
   return result
 }
+
+export const fallbackResponseHandler = (): Responder => ({
+  label: 'unknown',
+  isRecognized: (contentType: string) => !!contentType,
+  component: (response) => ShowRaw(response),
+})

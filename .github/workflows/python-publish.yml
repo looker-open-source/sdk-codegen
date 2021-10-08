@@ -1,0 +1,43 @@
+name: Python Publish to PYPI
+on:
+  release:
+    types: published
+
+  workflow_dispatch:
+    inputs:
+      ref:
+        description: 'commit/tag/branch to release from'
+        required: true
+
+defaults:
+  run:
+    shell: bash
+    working-directory: python/
+
+jobs:
+  publish:
+    if: >
+      (github.event.inputs) ||
+      (startsWith(github.event.release.tag_name, 'looker_sdk') &&
+      !github.event.release.draft &&
+      !github.event.release.prerelease)
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+        with:
+          ref: ${{ github.event.release.tag_name || github.event.inputs.ref }}
+
+      - uses: actions/setup-python@v2
+        with:
+          python-version: '3.x'
+
+      - name: Package release artifacts
+        run: |
+          pip install wheel
+          python setup.py sdist bdist_wheel
+
+      - uses: pypa/gh-action-pypi-publish@v1.4.1
+        with:
+          user: __token__
+          password: ${{ secrets.PYPI_API_TOKEN }}
+          packages_dir: python/dist/

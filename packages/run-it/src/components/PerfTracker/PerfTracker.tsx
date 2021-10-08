@@ -24,7 +24,8 @@
 
  */
 
-import React, { BaseSyntheticEvent, FC, useEffect, useState } from 'react'
+import type { BaseSyntheticEvent, FC } from 'react'
+import React, { useEffect, useState } from 'react'
 import {
   Heading,
   FlexItem,
@@ -33,10 +34,13 @@ import {
   FieldToggleSwitch,
   Flex,
 } from '@looker/components'
+import { Delete } from '@styled-icons/material/Delete'
 
-import { RunItConfigKey, RunItConfigurator } from '../ConfigForm'
+import type { RunItConfigurator } from '../ConfigForm'
+import { RunItConfigKey } from '../ConfigForm'
 import { Loading } from '../Loading'
-import { PerfTimings, LoadTimes } from './perfUtils'
+import type { LoadTimes } from './perfUtils'
+import { PerfTimings } from './perfUtils'
 import { PerfChart } from './PerfChart'
 import { PerfTable } from './PerfTable'
 
@@ -95,7 +99,7 @@ export const PerfTracker: FC<PerfTrackerProps> = ({
       <Flex>
         <FlexItem>
           <IconButton
-            icon="Trash"
+            icon={<Delete />}
             onClick={handleClear}
             label="Clear the performance queue"
           />

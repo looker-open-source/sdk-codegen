@@ -24,13 +24,9 @@
 
  */
 
-import { IApiSettings } from './apiSettings'
-import {
-  agentPrefix,
-  IRequestProps,
-  ITransport,
-  LookerAppId,
-} from './transport'
+import type { IApiSettings } from './apiSettings'
+import type { IRequestProps, ITransport } from './transport'
+import { agentPrefix, LookerAppId } from './transport'
 import { ProxySession } from './proxySession'
 import { AuthSession } from './authSession'
 

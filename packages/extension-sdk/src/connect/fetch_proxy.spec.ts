@@ -23,7 +23,7 @@
  SOFTWARE.
 
  */
-import { ExtensionHostApiImpl } from './extension_host_api'
+import type { ExtensionHostApiImpl } from './extension_host_api'
 import { FetchProxyImpl } from './fetch_proxy'
 import { FetchResponseBodyType } from './types'
 
@@ -32,11 +32,11 @@ describe('extension_host_api tests', () => {
   let extensionFetchProxySpy: Required<any>
 
   beforeEach(() => {
-    mockExtensionSdk = ({
+    mockExtensionSdk = {
       fetchProxy: () => {
         // noop
       },
-    } as unknown) as ExtensionHostApiImpl
+    } as unknown as ExtensionHostApiImpl
     extensionFetchProxySpy = jest.spyOn(mockExtensionSdk, 'fetchProxy')
   })
 

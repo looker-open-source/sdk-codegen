@@ -4,7 +4,7 @@ This Looker Open Source repository is released under the MIT license. By using t
 
 While Looker has developed and tested this code internally, we cannot guarantee that the open-source tools used by the scripts in this repository have not been modified with malicious code.
 
-**Important** - If you are using the typescript Looker SDK, please see the [note at the bottom](#very-important-note-regarding-the-looker-typescript-sdk) of this file explaining changes to dependencies and packaging.
+**Important** - If you are using the Looker TypeScript SDK, please see the [note at the bottom](#very-important-note-regarding-the-looker-typescript-sdk) of this file explaining changes to dependencies and packaging.
 
 ## Overview
 
@@ -52,7 +52,7 @@ Please review the following table for a breakdown of the options to initialize t
 | SDK                        | API 3.1                                                                   | API 4.0                                                                  | Notes                                                                                                                                                                                                                                          |
 | -------------------------- | ------------------------------------------------------------------------- | ------------------------------------------------------------------------ | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | [Python](python)           | `looker_sdk.init31()`                                                     | `looker_sdk.init40()`                                                    | Both API 3.1 and 4.0 are supported, and can be initialized with the functions shown                                                                                                                                                            |
-| [Typescript](packages/sdk) | `Looker31SDK()`, `LookerNodeSDK.init31()`, or `LookerBrowserSDK.init31()` | `Looker40SDK()`, `LookerNodeSDK.init40()` or `LookerBrowserSDK.init40()` | Both API 3.1 and 4.0 are supported and can be initialized with the functions shown. **Important** - See information on the [typescript SDK dependencies](#very-important-note-regarding-the-looker-typescript-sdk) at the bottom of this file. |
+| [TypeScript](packages/sdk) | `Looker31SDK()`, `LookerNodeSDK.init31()`, or `LookerBrowserSDK.init31()` | `Looker40SDK()`, `LookerNodeSDK.init40()` or `LookerBrowserSDK.init40()` | Both API 3.1 and 4.0 are supported and can be initialized with the functions shown. **Important** - See information on the [typescript SDK dependencies](#very-important-note-regarding-the-looker-typescript-sdk) at the bottom of this file. |
 | [Kotlin](kotlin)           | Do not use                                                                | `LookerSDK()`                                                            | API 4.0 was specifically created to correct the endpoint payloads for strongly-typed languages like Kotlin and Swift. Because Kotlin really requires API 4.0, API 4.0 is the default namespace for it                                          |
 | [Swift](swift/looker)      | Not applicable                                                            | `Looker40SDK()`                                                          | Swift only has SDK definitions for API 4.0                                                                                                                                                                                                     |  |
 | [Look#](csharp)            | `Looker31SDK()`                                                           | `Looker40SDK()`                                                          | Community-supported C# SDK for Looker                                                                                                                                                                                                          |  |
@@ -87,7 +87,7 @@ All SDKs URL encode (also known as [percent encoding](https://en.wikipedia.org/w
 
 ## Using existing, pre-generated SDKs
 
-When a specific language SDK has been developed, Looker makes that SDK available using the standard package manager for by that platform. Currently, the [Python SDK](python) and the [Typescript SDK](packages/sdk) can be installed from their respective package managers by following the instructions in their readmes.
+When a specific language SDK has been developed, Looker makes that SDK available using the standard package manager for by that platform. Currently, the [Python SDK](python) and the [TypeScript SDK](packages/sdk) can be installed from their respective package managers by following the instructions in their readmes.
 
 For the other SDKs in this repository, you can copy and paste the source code into a module for your own project. Every SDK will eventually have a deployed package version.
 
@@ -210,7 +210,7 @@ Each Looker SDK has existing `readConfig()` examples that read from `.ini` files
 
 Typically, `client_id` and `client_secret` are the only key values that will need to be dynamically retrieved from the `readConfig()` override method because the other configuration values are saved in memory by the initialized SDK client. In the near future, there will be additional authentication flows (such as OAuth) supported by Looker SDKs. The dynamic result that is returned by `readConfig()` can also be useful in those additional scenarios.
 
-A short [Typescript SDK example](https://github.com/looker-open-source/sdk-examples/blob/6f7b42891923a7430e0bb8341c7b5c567a2e1269/typescript/customConfigReader.ts#L15:L28) that customizes `readConfig()` is available in the SDK Examples repository.
+A short [TypeScript SDK example](https://github.com/looker-open-source/sdk-examples/blob/6f7b42891923a7430e0bb8341c7b5c567a2e1269/typescript/customConfigReader.ts#L15:L28) that customizes `readConfig()` is available in the SDK Examples repository.
 
 There is also a Kotlin SDK unit test in this repository with a short example:
 
@@ -245,7 +245,7 @@ If the host environment for a Looker SDK supports environment variables, the SDK
 
 Environment variables can be used for any SDK runtime that supports reading environment variables. Environment variables can be used in the:
 
-- **Node** version of the Typescript/Javascript Looker SDK
+- **Node** version of the TypeScript/JavaScript Looker SDK
 - Python SDK
 - Swift SDK
 - Kotlin SDK
@@ -269,11 +269,3 @@ Configuration variables should be processed as follows:
 - if an environment variable exists, apply the value
 - if a configuration value is explicitly in code, apply that value
 - if a command-line switch is supported, apply that value
-
-## Very important note regarding the Looker Typescript SDK
-
-The Looker Typescript SDK has been refactored so that node dependencies do not pollute browser usage of the SDK (the node dependencies are not available in the browser and can cause compile errors). There are now three packages available on npm:
-
-1. `@looker/sdk` - contains the Looker API methods.
-2. `@looker/sdk-rtl` - contains a run time library needed to invoke the Looker API methods. Referencing the `@looker/sdk` as a dependency should automatically pull this package in.
-3. `@looker/sdk-node` - contains the dependendencies needed to run the Looker SDK in a node environment. Do NOT include this package if you are using the Looker SDK in a browser. You MUST include this package if you are using `node` or `ts-node`.

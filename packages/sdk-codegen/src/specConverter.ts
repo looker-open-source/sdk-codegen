@@ -24,15 +24,55 @@
 
  */
 
-import { isEmpty } from 'lodash'
-import { APIMethods } from '@looker/sdk-rtl'
-import { ApiModel, ArgValues, IApiModel } from './sdkModels'
+import isEmpty from 'lodash/isEmpty'
+import type { APIMethods, Url } from '@looker/sdk-rtl'
+import type { ArgValues, IApiModel, KeyedCollection } from './sdkModels'
+import { ApiModel } from './sdkModels'
 
 const warn = (warning: string) => {
   throw new Error(warning)
 }
 
 const appJson = 'application/json'
+
+/** This declaration is duplicated DIRECTLY from @looker/sdk to detach dependency */
+export interface IApiVersion {
+  /**
+   * Current Looker release version number (read-only)
+   */
+  looker_release_version?: string
+  current_version?: IApiVersionElement
+  /**
+   * Array of versions supported by this Looker instance (read-only)
+   */
+  supported_versions?: IApiVersionElement[]
+  /**
+   * API server base url (read-only)
+   */
+  api_server_url?: string
+  /** Web server url */
+  web_server_url?: string
+}
+
+/** This declaration is duplicated DIRECTLY from @looker/sdk to detach dependency */
+export interface IApiVersionElement {
+  /**
+   * Version number as it appears in '/api/xxx/' urls (read-only)
+   */
+  version?: string
+  /**
+   * Full version number including minor version (read-only)
+   */
+  full_version?: string
+  /**
+   * Status of this version (read-only)
+   */
+  status?: string
+  /**
+   * Url for swagger.json for this version (read-only)
+   */
+  swagger_url?: Url
+}
 
 /**
  * Describes the mime types supported by an operation
@@ -48,8 +88,29 @@ export interface MimeFormats {
   consumes: string[]
 }
 
+/** codegen specification item */
+export interface SpecItem {
+  /** Key for specification in collection. Duplicated for atomic passing */
+  key: string
+  /** API version status */
+  status: string // 'current' | 'deprecated' | 'experimental' | 'stable'
+  /** API version of spec */
+  version: string
+  /** true if this is the default spec */
+  isDefault: boolean
+  /** Compiled version of spec */
+  api?: ApiModel
+  /** URL for retrieving spec */
+  specURL?: string
+  /** string content of spec */
+  specContent?: string
+}
+
+/** Keyed collection of specification items */
+export type SpecList = KeyedCollection<SpecItem>
+
 /**
- * Looker spec version item
+ * Looker specification version item from versions payload
  */
 export interface ISpecItem {
   /** Abbreviated version of the API */
@@ -63,6 +124,69 @@ export interface ISpecItem {
 }
 
 /**
+ * Callback for fetching and compiling specification to ApiModel
+ */
+export type SpecFetcher = (spec: SpecItem) => Promise<ApiModel | undefined>
+
+/**
+ * Return all public API specifications from an ApiVersion payload
+ * @param versions payload from a Looker server
+ * @param fetcher fetches and compiles spec to ApiModel
+ */
+export const getSpecsFromVersions = async (
+  versions: IApiVersion,
+  fetcher: SpecFetcher | undefined = undefined
+): Promise<SpecList> => {
+  const items = {}
+
+  /**
+   * Create a unique spec key for this version
+   * @param v version to identify
+   */
+  const uniqueId = (v: IApiVersionElement) => {
+    let specKey = v.version || 'api'
+    const max = v.status?.length || 0
+    let frag = 1
+    while (items[specKey]) {
+      if (frag <= max) {
+        // More than one spec for this version
+        specKey = `${v.version}${v.status?.substr(0, frag)}`
+      } else {
+        specKey = `${v.version}${v.status}${frag}`
+      }
+      frag++
+    }
+    return specKey
+  }
+
+  if (versions.supported_versions) {
+    for (const v of versions.supported_versions) {
+      // Tell TypeScript these are all defined because IApiVersion definition is lax
+      if (v.status && v.version && v.swagger_url) {
+        if (
+          v.status !== 'internal_test' &&
+          v.status !== 'deprecated' &&
+          v.status !== 'legacy'
+        ) {
+          const spec: SpecItem = {
+            key: uniqueId(v),
+            status: v.status,
+            version: v.version,
+            isDefault: v.status === 'current',
+            specURL: v.swagger_url,
+          }
+          if (fetcher) {
+            spec.api = await fetcher(spec)
+          }
+          items[spec.key] = spec
+        }
+      }
+    }
+  }
+  return items
+}
+
+/**
  * Payload returned by the Looker /versions endpoint
  */
 export interface ILookerVersions {
@@ -72,7 +196,13 @@ export interface ILookerVersions {
   current_version: ISpecItem
   /** All API versions */
   supported_versions: ISpecItem[]
+  /** API server url */
+  api_server_url: string
+  /** Web server url */
+  web_server_url: string
 }
+
+// TODO this work was duplicated in API Explorer. Need to merge and use one version.
 
 /**
  * Api Specification with on-demand determination of values
@@ -90,6 +220,7 @@ export interface IApiSpecLink {
   api: IApiModel
 }
 
+// TODO this work was duplicated in API Explorer. Need to merge and use one version.
 export type SpecLinks = IApiSpecLink[]
 
 /**
@@ -448,7 +579,7 @@ export const convertPathsAndBodies = (
  * Convert structure definitions
  * @param defs to convert
  */
-export const convertDefs = (defs: ArgValues) => {
+export const convertDefs = (defs: ArgValues): ArgValues => {
   Object.entries(defs).forEach(([_, struct]) => {
     Object.entries(struct.properties as ArgValues).forEach(([name, prop]) => {
       if (prop.$ref) {
@@ -478,8 +609,8 @@ export const upgradeSpecObject = (spec: any) => {
   const produces = spec.produces || [appJson]
   const formats = { produces, consumes }
   const { paths, requestBodies } = convertPathsAndBodies(spec.paths, formats)
-  // TODO create a requestBodies entry for every struct used > 1x
-  // TODO reassign op.requestBody for all requestBodies entries
+  // TODO create a requestBodies entry for every struct used > 1x?
+  // TODO reassign op.requestBody for all requestBodies entries?
   const schemas = convertDefs(spec.definitions)
   const api = {
     openapi: '3.0.0',
@@ -506,16 +637,17 @@ export const upgradeSpec = (spec: string | Record<string, unknown>) => {
 }
 
 /**
- * Fetches Looker specs from the API server url
+ * Fetches specs via /versions payload from the API server url
  * @param sdk APIMethods implementation that supports authenticating a request
- * @param apiServerUrl base url of the API server. Typically something like https://my.looker.com:19999
+ * @param serverUrl base url of the /versions server. Typically something like https://my.looker.com:19999 or https://my.looker.com
  */
-export const getLookerSpecs = async (sdk: APIMethods, apiServerUrl: string) => {
-  const versionUrl = `${apiServerUrl}/versions`
+export const getLookerSpecs = async (sdk: APIMethods, serverUrl: string) => {
+  const versionUrl = `${serverUrl}/versions`
   const versions = await sdk.ok(sdk.get<ILookerVersions, Error>(versionUrl))
   return versions
 }
 
+// TODO this work was duplicated in API Explorer. Need to merge and use one version.
 /**
  * Convert a Looker versions payload into API specification links
  * @param versions
@@ -554,8 +686,9 @@ export const loadSpecs = async (sdk: APIMethods, links: SpecLinks) => {
   for (const spec of links) {
     if (isEmpty(spec.api)) {
       // Not parsed yet
-      const content = upgradeSpec(await sdk.ok(sdk.get(spec.url)))
-      spec.api = ApiModel.fromString(content)
+      const content = await sdk.ok<string, Error>(sdk.get(spec.url))
+      const json = typeof content === 'string' ? JSON.parse(content) : content
+      spec.api = ApiModel.fromJson(upgradeSpecObject(json))
     }
   }
   return links

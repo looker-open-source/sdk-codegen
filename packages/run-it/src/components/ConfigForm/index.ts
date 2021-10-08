@@ -24,13 +24,5 @@
 
  */
 
-export { ConfigDialog } from './ConfigDialog'
-export { ConfigForm } from './ConfigForm'
-export {
-  RunItConfigurator,
-  defaultConfigurator,
-  validateUrl,
-  validLocation,
-  RunItConfigKey,
-  RunItValuesKey,
-} from './configUtils'
+export * from './ConfigForm'
+export * from './configUtils'

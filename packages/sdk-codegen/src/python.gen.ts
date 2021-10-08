@@ -24,17 +24,17 @@
 
  */
 
-import {
+import type {
   Arg,
   ArgValues,
-  EnumType,
   IMethod,
   IParameter,
   IProperty,
   IType,
-  strBody,
 } from './sdkModels'
-import { CodeGen, IMappedType, CodeAssignment, trimInputs } from './codeGen'
+import { EnumType, strBody } from './sdkModels'
+import type { IMappedType, CodeAssignment } from './codeGen'
+import { CodeGen, trimInputs } from './codeGen'
 
 export class PythonGen extends CodeGen {
   codePath = './python/'
@@ -107,7 +107,8 @@ export class PythonGen extends CodeGen {
   methodsPrologue = (_indent: string) => `
 # ${this.warnEditing()}
 import datetime
-from typing import Any, MutableMapping, Optional, Sequence, Union
+from typing import Any, MutableMapping, Optional, Sequence, Union, cast
+import warnings
 
 from . import models
 from ${this.packagePath}.rtl import api_methods
@@ -173,12 +174,6 @@ ${this.hooks.join('\n')}
     return `{${hash.join(this.dataStructureDelimiter)}}`
   }
 
-  argList(indent: string, args: Arg[]) {
-    return args && args.length !== 0
-      ? `\n${indent}${args.join(this.argDelimiter)}`
-      : this.nullStr
-  }
-
   beginRegion(indent: string, description: string): string {
     // Sadly, Black reformats this to "# region" and IntelliJ doesn't recognize it either way
     return `${indent}#region ${description}`
@@ -228,7 +223,7 @@ ${this.hooks.join('\n')}
   }
 
   // because Python has named default parameters, Request types are not required like
-  // they are for Typescript
+  // they are for TypeScript
   methodSignature(indent: string, method: IMethod) {
     const returnType = this.methodReturnType(method)
     const bump = this.bumper(indent)
@@ -244,7 +239,7 @@ ${this.hooks.join('\n')}
       (head ? `${head}\n\n` : '') +
       `${method.httpMethod} ${method.endpoint} -> ${returnType}`
     params.push(
-      `${bump}transport_options: Optional[transport.PTransportSettings] = None,`
+      `${bump}transport_options: Optional[transport.TransportOptions] = None,`
     )
     return (
       this.commentHeader(indent, head) +
@@ -294,7 +289,8 @@ ${this.hooks.join('\n')}
     if (type instanceof EnumType) {
       const invalid =
         'invalid_api_enum_value = "invalid_api_enum_value"' +
-        `\n\n\n${type.name}.__new__ = model.safe_enum__new__`
+        '\n\n\n# https://github.com/python/mypy/issues/2427' +
+        `\n${type.name}.__new__ = model.safe_enum__new__  # type: ignore`
       decl += `\n${this.bumper(indent)}${invalid}`
     }
     return decl
@@ -367,79 +363,73 @@ ${this.hooks.join('\n')}
   }
 
   // this is a builder function to produce arguments with optional null place holders but no extra required optional arguments
-  argFill(current: string, args: string) {
+  argFill(current: string, args: string): string {
     if (!current && args.trim() === this.nullStr) {
       // Don't append trailing optional arguments if none have been set yet
       return ''
     }
-    let delimiter = this.argDelimiter
+    let delimiter = ',\n'
     if (!current) {
       delimiter = ''
       // Caller manually inserted delimiter followed by inline comment
     } else if (args.match(/, {2}#/)) {
-      delimiter = this.argDelimiter.replace(',', '')
+      delimiter = delimiter.replace(',', '')
     }
     return `${args}${delimiter}${current}`
   }
 
-  httpArgs(indent: string, method: IMethod) {
-    let result = this.argFill('', this.argGroup(indent, method.cookieArgs))
-    result = this.argFill(result, this.argGroup(indent, method.headerArgs))
-    result = this.argFill(result, `transport_options=transport_options`)
+  httpArgs(callerIndent: string, method: IMethod): string {
+    const currIndent = this.bumper(callerIndent)
+    let args = ''
+    args = this.argFill(
+      args,
+      `${currIndent}transport_options=transport_options`
+    )
     if (method.bodyArg) {
-      result = this.argFill(result, `body=${method.bodyArg}`)
+      args = this.argFill(args, `${currIndent}body=${method.bodyArg}`)
     }
     if (method.queryArgs.length) {
-      const queryParams = this.argGroup(indent, method.queryArgs)
-      result = this.argFill(result, `query_params=${queryParams}`)
+      const queryParams = this.argGroup('', method.queryArgs)
+      args = this.argFill(args, `${currIndent}query_params=${queryParams}`)
     }
-    const type = this.typeMapMethods(method.type)
     let returnType = this.methodReturnType(method)
-    if (returnType === `Union[${type.name}, bytes]`) {
-      returnType = `${returnType},  # type: ignore`
+    if (method.responseIsBoth()) {
+      // cattrs needs the python object Union[<rt>, bytes] in order
+      // to properly deserialize the response. However, this argument
+      // is passed as a value so we get a mypy error that the argument
+      // has type "object" instead of TStructure. Hence the # type: ignore
+      returnType += ',  # type: ignore'
     }
-    result = this.argFill(result, returnType)
-    result = this.argFill(result, `f"${method.endpoint}"`)
-    return result
+    args = this.argFill(args, `${currIndent}structure=${returnType}`)
+    let endpoint = `"${method.endpoint}"`
+    if (/\{\w+\}/.test(endpoint)) {
+      // avoid flake8: f-string is missing placeholders
+      endpoint = `f${endpoint}`
+    }
+    args = this.argFill(args, `${currIndent}path=${endpoint}`)
+    return args
   }
 
-  httpCall(indent: string, method: IMethod) {
-    const bump = indent + this.indentStr
-    const args = this.httpArgs(bump, method)
-    const methodCall = `${indent}response = ${this.it(
-      method.httpMethod.toLowerCase()
-    )}`
-    let assertTypeName = this.methodReturnType(method)
-    switch (method.type.className) {
-      case 'ArrayType':
-        assertTypeName = 'list'
-        break
-      case 'HashType':
-        assertTypeName = 'dict'
-        break
-      default:
-        if (assertTypeName === 'Union[str, bytes]') {
-          assertTypeName = '(str, bytes)'
-        }
+  httpCall(callerIndent: string, method: IMethod): string {
+    // callOpener itself is nested inside a cast()
+    const currIndent = this.bumper(callerIndent)
+    let deprecation = ''
+    if (method.name === 'login_user') {
+      deprecation =
+        `${callerIndent}warnings.warn("login_user behavior changed significantly ` +
+        `in 21.4.0. See https://git.io/JOtH1")\n`
     }
-    let assertion = `${indent}assert `
-    if (assertTypeName === this.nullStr) {
-      assertion += `response is ${this.nullStr}`
-    } else {
-      assertion += `isinstance(response, ${assertTypeName})`
-    }
-    const returnStmt = `${indent}return response`
-    return (
-      `${methodCall}(\n` +
-      `${bump.repeat(3)}${args}\n` +
-      `${indent})\n` +
-      `${assertion}\n` +
-      `${returnStmt}`
-    )
+    const callOpener =
+      `${callerIndent}response = cast(\n` +
+      `${currIndent}${this.methodReturnType(method)},\n` +
+      `${currIndent}${this.it(method.httpMethod.toLowerCase())}(\n`
+    const callArgs = `${this.httpArgs(currIndent, method)}\n`
+    const callCloser = `${currIndent})\n${callerIndent})\n`
+    const returnStmt = `${callerIndent}return response`
+    return deprecation + callOpener + callArgs + callCloser + returnStmt
   }
 
   encodePathParams(indent: string, method: IMethod) {
-    // const bump = indent + this.indentStr
     let encodings = ''
     const pathParams = method.pathParams
     if (pathParams.length > 0) {
@@ -454,15 +444,6 @@ ${this.hooks.join('\n')}
 
   declareMethod(indent: string, method: IMethod) {
     const bump = this.bumper(indent)
-
-    // APIMethods/AuthSession handle auth
-    if (method.name === 'login') {
-      return `${indent}# login() using api3credentials is automated in the client`
-    } else if (method.name === 'login_user') {
-      return `${indent}def login_user(self, user_id: int) -> api_methods.APIMethods:\n${bump}return super().login_user(user_id)`
-    } else if (method.name === 'logout') {
-      return `${indent}def logout(self) -> None:\n${bump}super().logout()`
-    }
 
     return (
       this.methodSignature(indent, method) +

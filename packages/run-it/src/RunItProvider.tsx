@@ -24,13 +24,14 @@
 
  */
 
-import React, { createContext, FC, ReactElement } from 'react'
-import { Looker40SDK, Looker31SDK } from '@looker/sdk'
-import { RunItConfigurator } from './components'
+import type { FC, ReactElement } from 'react'
+import React, { createContext } from 'react'
+import type { IAPIMethods } from '@looker/sdk-rtl'
+import type { RunItConfigurator } from './components'
 
 export interface RunItContextProps {
   basePath: string
-  sdk?: Looker40SDK | Looker31SDK | undefined
+  sdk?: IAPIMethods | undefined
   configurator: RunItConfigurator
 }
 

@@ -25,12 +25,8 @@
  */
 import * as path from 'path'
 import { writeFileSync } from 'fs'
-import {
-  ApiModel,
-  csvHeaderRow,
-  csvDiffRow,
-  IMethod,
-} from '@looker/sdk-codegen'
+import type { DiffFilter, DiffRow, IMethod } from '@looker/sdk-codegen'
+import { ApiModel, csvHeaderRow, csvDiffRow } from '@looker/sdk-codegen'
 import { compareSpecs } from '@looker/sdk-codegen/src/specDiff'
 import { readFileSync } from '../src'
 
@@ -46,7 +42,11 @@ import { readFileSync } from '../src'
   const spec31 = ApiModel.fromString(readFileSync(spec31Path))
   const spec40 = ApiModel.fromString(readFileSync(spec40Path))
 
-  const filter = (lMethod?: IMethod, _?: IMethod) => lMethod?.status === 'beta'
+  const filter: DiffFilter = (
+    _delta: DiffRow,
+    lMethod?: IMethod,
+    _?: IMethod
+  ) => lMethod?.status === 'beta'
 
   const diff = compareSpecs(spec31, spec40, filter)
 

@@ -24,7 +24,7 @@
 
  */
 import { all, call, put, takeEvery } from 'redux-saga/effects'
-import { SagaIterator } from 'redux-saga'
+import type { SagaIterator } from 'redux-saga'
 import { actionMessage, beginLoading, endLoading } from '../common/actions'
 import { sheetsClient } from '../sheets_client'
 import {

@@ -23,7 +23,8 @@
  SOFTWARE.
 
  */
-import React, { FC, useEffect } from 'react'
+import type { FC } from 'react'
+import React, { useEffect } from 'react'
 import { useHistory, useRouteMatch } from 'react-router-dom'
 import { useDispatch, useSelector } from 'react-redux'
 import { Tab, TabList, TabPanels, TabPanel } from '@looker/components'
@@ -50,9 +51,8 @@ const tabnames = ['hackers', 'staff', 'judges', 'admins']
 
 export const UsersScene: FC<UsersSceneProps> = () => {
   const history = useHistory()
-  const match = useRouteMatch<{ func: string; tabname: string }>(
-    '/:func/:tabname'
-  )
+  const match =
+    useRouteMatch<{ func: string; tabname: string }>('/:func/:tabname')
   const dispatch = useDispatch()
   useEffect(() => {
     dispatch(allHackersRequest())

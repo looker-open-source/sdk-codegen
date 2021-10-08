@@ -24,16 +24,11 @@
 
  */
 
-import {
-  compareDates,
-  IRowModelProps,
-  ITabTable,
-  noDate,
-  SheetSDK,
-  WhollySheet,
-} from '@looker/wholly-sheet'
-import { ISheetRow, SheetRow } from './SheetRow'
-import { SheetData } from './SheetData'
+import type { IRowModelProps, ITabTable, SheetSDK } from '@looker/wholly-sheet'
+import { compareDates, noDate, WhollySheet } from '@looker/wholly-sheet'
+import type { ISheetRow } from './SheetRow'
+import { SheetRow } from './SheetRow'
+import type { SheetData } from './SheetData'
 
 /** IMPORTANT: properties must be declared in the tab sheet's columnar order, not sorted order */
 export interface IHackathonProps extends IRowModelProps {
@@ -91,7 +86,7 @@ export class Hackathons extends WhollySheet<Hackathon, IHackathonProps> {
   }
 
   typeRow<Hackathon>(values?: any) {
-    return (new Hackathon(values) as unknown) as Hackathon
+    return new Hackathon(values) as unknown as Hackathon
   }
 
   getCurrentHackathon(): Hackathon | undefined {

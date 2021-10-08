@@ -23,8 +23,10 @@
  SOFTWARE.
 
  */
-import { SheetValues } from '@looker/wholly-sheet'
-import { DataTableColumn, DataTableColumns, Icon } from '@looker/components'
+import type { SheetValues } from '@looker/wholly-sheet'
+import type { DataTableColumn, DataTableColumns } from '@looker/components'
+import { Icon } from '@looker/components'
+import { Done } from '@styled-icons/material/Done'
 import React from 'react'
 
 /**
@@ -87,7 +89,7 @@ export const sheetCell = (value: any) => {
   if (typeof value === 'undefined') return ''
 
   if (typeof value === 'boolean') {
-    return value ? <Icon size="small" name="Check" /> : ''
+    return value ? <Icon size="small" icon={<Done />} /> : ''
   }
 
   if (value instanceof Set) {

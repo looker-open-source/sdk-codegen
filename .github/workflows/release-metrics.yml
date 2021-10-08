@@ -1,0 +1,28 @@
+name: Send publish metrics to bigquery
+on:
+  release:
+    types: published
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Set up Cloud SDK
+        uses: google-github-actions/setup-gcloud@v0.2.0
+        with:
+          project_id: ${{ secrets.GCP_PROJECT_ID }}
+          service_account_key: ${{ secrets.GCP_BQ_METRICS_KEY }}
+          export_default_credentials: true
+      - run: 'jq -c ''.release |
+             {
+               package_name: .name | split(" ")[0],
+               name,
+               tag_name,
+               version: .tag_name | split("-v")[1],
+               html_url,
+               target_commitish,
+               created_at,
+               published_at,
+               draft,
+               prerelease
+             }'' $GITHUB_EVENT_PATH > releases.json'
+      - run: bq load --source_format=NEWLINE_DELIMITED_JSON metrics.releases releases.json

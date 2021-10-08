@@ -24,7 +24,7 @@
 
  */
 
-import { ChattyHostConnection } from '@looker/chatty'
+import type { ChattyHostConnection } from '@looker/chatty'
 
 /**
  * Extension event used for chatty communication
@@ -78,6 +78,10 @@ export enum ExtensionRequestType {
    * Close popovers in the looker host
    */
   CLOSE_HOST_POPOVERS = 'CLOSE_HOST_POPOVERS',
+  /**
+   * Clipboard request
+   */
+  CLIPBOARD = 'CLIPBOARD',
   /**
    * Local storage request
    */
@@ -185,6 +189,11 @@ export interface RouteChangeRequest {
   route: string
 }
 
+export interface ClipboardRequest {
+  type: 'write'
+  value: string
+}
+
 export interface LocalStorageRequest {
   type: 'get' | 'set' | 'remove'
   name: string
@@ -243,6 +252,20 @@ export interface RouteChangeData {
 }
 
 /**
+ * Looker host type.
+ * standard - Standard Looker host with the navigation bar.
+ * embed - Embedded Looker host.
+ * spartan - Spartan Looker host.
+ */
+export type HostType = 'standard' | 'embed' | 'spartan'
+
+/**
+ * Extension mount type.
+ * Fullscreen mount.
+ */
+export type MountType = 'fullscreen'
+
+/**
  * Initialization data. Looker host data.
  */
 export interface LookerHostData {
@@ -263,9 +286,25 @@ export interface LookerHostData {
    */
   routeState?: any
   /**
-   * hostUrl url of Looker host
+   * Origin of Looker host
+   * @deprecated
    */
   hostUrl?: string
+  /**
+   * Origin of Looker host
+   * <code>Looker >=21.8</code>
+   */
+  hostOrigin?: string
+  /**
+   * Looker host type (standard, embed, spartan)
+   * <code>Looker >=21.8</code>
+   */
+  hostType?: HostType
+  /**
+   * Extension mount type.
+   * <code>Looker >=21.8</code>
+   */
+  mountType?: MountType
   /**
    * Extension context data
    */
@@ -480,6 +519,12 @@ export interface ExtensionSDK {
    * @param name of item
    */
   localStorageGetItem(name: string): Promise<string | null>
+
+  /**
+   * Write string to clipboard.
+   * @param value to write to clipboard.
+   */
+  clipboardWrite(value: string): Promise<void>
 
   /**
    * Set a user attribute value.

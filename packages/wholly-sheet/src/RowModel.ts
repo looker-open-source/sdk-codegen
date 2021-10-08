@@ -26,8 +26,8 @@
 
 import { v4 as uuidv4 } from 'uuid'
 import { boolDefault } from '@looker/sdk-rtl'
-import { omit } from 'lodash'
-import { SheetValues } from './SheetSDK'
+import omit from 'lodash/omit'
+import type { SheetValues } from './SheetSDK'
 
 export const noDate = new Date(-8640000000000000)
 
@@ -208,7 +208,7 @@ export class RowModel<T extends IRowModel> implements IRowModel {
     }
     /** Always update the "updated" value before saving */
     this._updated = new Date()
-    return (this as unknown) as T
+    return this as unknown as T
   }
 
   values() {
@@ -267,7 +267,7 @@ export class RowModel<T extends IRowModel> implements IRowModel {
         })
       }
     }
-    return (this as unknown) as T
+    return this as unknown as T
   }
 
   /** default to no errors */
@@ -284,7 +284,7 @@ export class RowModel<T extends IRowModel> implements IRowModel {
   }
 }
 
-// TODO figure out the Typescript magic for this to work
+// TODO figure out the TypeScript magic for this to work
 export type RowModelFactory<T extends IRowModel> = { new (values?: any): T }
 
 // export const RowModelCreator: RowModelFactory<IRowModel> = (values?: any) =>

@@ -30,8 +30,10 @@ import {
   PopoverContent,
   FieldCheckbox,
 } from '@looker/components'
+import { FilterList } from '@styled-icons/material/FilterList'
 import { SearchCriterion } from '@looker/sdk-codegen'
-import React, { useContext, FC, BaseSyntheticEvent } from 'react'
+import type { FC, BaseSyntheticEvent } from 'react'
+import React, { useContext } from 'react'
 
 import { setCriteria } from '../../reducers'
 import { SearchContext } from '../../context'
@@ -68,7 +70,7 @@ export const SearchCriteriaSelector: FC = () => {
         </PopoverContent>
       }
     >
-      <Icon name="Filter" size="small" />
+      <Icon icon={<FilterList />} size="small" />
     </Popover>
   )
 }

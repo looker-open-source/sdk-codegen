@@ -24,3 +24,4 @@
 
  */
 export { DocOperation } from './DocOperation'
+export { DocRequestBody } from './DocRequestBody'

@@ -26,28 +26,29 @@
 import {
   testErrorResponse,
   testHtmlResponse,
+  testSqlResponse,
   testImageResponse,
   testJsonResponse,
   testTextResponse,
   testUnknownResponse,
 } from '../../test-data'
-import { isColumnar, pickResponseHandler } from './responseUtils'
+import { isColumnar, pickResponseHandler, canTabulate } from './responseUtils'
 
 describe('responseUtils', () => {
   describe('isColumnar', () => {
     test('detects simple 2D data', () => {
-      const inputs = [[1, 'two', false, new Date(), undefined, null]]
-      const actual = isColumnar(inputs)
+      const data = [[1, 'two', false, new Date(), undefined, null]]
+      const actual = isColumnar(data)
       expect(actual).toEqual(true)
     })
     test('considers any non-Date object complex', () => {
-      const inputs = [[{ a: 'A', b: 'B' }, 'two', false, new Date()]]
-      const actual = isColumnar(inputs)
+      const data = [[{ a: 'A', b: 'B' }, 'two', false, new Date()]]
+      const actual = isColumnar(data)
       expect(actual).toEqual(false)
     })
     test('considers empty object complex', () => {
-      const inputs = [[{}, 'two', false, new Date()]]
-      const actual = isColumnar(inputs)
+      const data = [[{}, 'two', false, new Date()]]
+      const actual = isColumnar(data)
       expect(actual).toEqual(false)
     })
     test('considers any array complex', () => {
@@ -56,17 +57,79 @@ describe('responseUtils', () => {
       expect(actual).toEqual(false)
     })
     test('considers a 1D array as non-columnar', () => {
-      const inputs = [[], 'two', false, new Date()]
-      const actual = isColumnar(inputs)
+      const data = [[], 'two', false, new Date()]
+      const actual = isColumnar(data)
       expect(actual).toEqual(false)
     })
     test('considers an empty array as non-columnar', () => {
-      const inputs = [[]]
-      const actual = isColumnar(inputs)
+      const data = [[]]
+      const actual = isColumnar(data)
+      expect(actual).toEqual(false)
+    })
+    test('considers a uniform array of objects a table', () => {
+      const json = [{ key1: 'value1' }]
+      const actual = canTabulate(json)
+      expect(actual).toEqual(true)
+    })
+    test('considers create_query json as complex', () => {
+      const json = JSON.parse(`
+{
+  "id": 520,
+  "view": "orders",
+  "fields": [
+    "orders.id",
+    "users.age",
+    "users.city"
+  ],
+  "pivots": [],
+  "fill_fields": [],
+  "filters": null,
+  "filter_expression": "",
+  "sorts": [],
+  "limit": "",
+  "column_limit": "",
+  "total": null,
+  "row_total": "",
+  "subtotals": [],
+  "vis_config": null,
+  "filter_config": null,
+  "visible_ui_sections": "",
+  "slug": "64zJjJw",
+  "client_id": "zfn3SwIaaHbJTbsXSJ0JO7",
+  "share_url": "https://localhost:9999/x/zfn3SwIaaHbJTbsXSJ0JO7",
+  "expanded_share_url": "https://localhost:9999/explore/thelook/orders?fields=orders.id,users.age,users.city&origin=share-expanded",
+  "url": "/explore/thelook/orders?fields=orders.id,users.age,users.city",
+  "has_table_calculations": false,
+  "model": "thelook",
+  "dynamic_fields": "",
+  "query_timezone": "",
+  "quick_calcs": null,
+  "analysis_config": null,
+  "can": {
+    "run": true,
+    "see_results": true,
+    "explore": true,
+    "create": true,
+    "show": true,
+    "cost_estimate": true,
+    "index": true,
+    "see_lookml": true,
+    "see_aggregate_table_lookml": true,
+    "see_derived_table_lookml": true,
+    "see_sql": true,
+    "save": true,
+    "generate_drill_links": true,
+    "download": true,
+    "download_unlimited": true,
+    "use_custom_fields": true,
+    "schedule": true
+  }
+}      `)
+      const actual = canTabulate(json)
       expect(actual).toEqual(false)
     })
     test('considers connection json as complex', () => {
-      const inputs = JSON.parse(`
+      const json = JSON.parse(`
 [
   {
     "name": "looker_external",
@@ -148,7 +211,7 @@ describe('responseUtils', () => {
     }
   }]
 `)
-      const actual = isColumnar(inputs)
+      const actual = canTabulate(json)
       expect(actual).toEqual(false)
     })
   })
@@ -176,6 +239,11 @@ describe('responseUtils', () => {
     const actual = pickResponseHandler(testTextResponse)
     expect(actual).toBeDefined()
     expect(actual.label).toEqual('text')
+  })
+  test('it handles sql', () => {
+    const actual = pickResponseHandler(testSqlResponse)
+    expect(actual).toBeDefined()
+    expect(actual.label).toEqual('sql')
   })
   test('it handles html', () => {
     const actual = pickResponseHandler(testHtmlResponse)

@@ -26,35 +26,31 @@
 import React from 'react'
 import styled from 'styled-components'
 import { Icon, Status } from '@looker/components'
+import { Beaker } from '@looker/icons'
+import { VisibilityOff } from '@styled-icons/material/VisibilityOff'
 
 /**
  * Return a Status react element based on an endpoint's status
  * @param status Endpoint status
  */
 export const pickStatus = (status: string) => {
-  switch (status.toLocaleLowerCase()) {
+  const title = `${status.toLowerCase()} item`
+  switch (status.toLowerCase()) {
     case 'beta':
-      return <StatusBeta aria-label="beta endpoint">&beta;</StatusBeta>
+      return <StatusBeta aria-label={title}>&beta;</StatusBeta>
     case 'experimental': {
-      const title = 'experimental endpoint'
-      return <Icon title={title} aria-label={title} name="Beaker" />
+      return <Icon title={title} aria-label={title} icon={<Beaker />} />
+    }
+    case 'alpha': {
+      return <Icon title={title} aria-label={title} icon={<Beaker />} />
     }
     case 'undocumented': {
-      const title = 'undocumented endpoint'
-      return <Icon title={title} aria-label={title} name="VisibilityOff" />
+      return <Icon title={title} aria-label={title} icon={<VisibilityOff />} />
     }
     case 'deprecated':
-      return (
-        <Status
-          aria-label="deprecated endpoint"
-          intent="critical"
-          size="small"
-        />
-      )
+      return <Status aria-label={title} intent="critical" size="small" />
     case 'stable':
-      return (
-        <Status aria-label="stable endpoint" intent="positive" size="small" />
-      )
+      return <Status aria-label={title} intent="positive" size="small" />
     default:
       return (
         <Status
@@ -67,23 +63,23 @@ export const pickStatus = (status: string) => {
 }
 
 /**
- * Returns tooltip content based on an endpoint's status
- * @param status Endpoint status
+ * Returns tooltip content based on status
+ * @param status item status
  */
 export const pickTooltipContent = (status: string) => {
-  switch (status.toLocaleLowerCase()) {
+  switch (status.toLowerCase()) {
     case 'beta':
-      return 'This beta endpoint is under development and subject to change.'
+      return 'This beta item is under development and subject to change.'
     case 'experimental':
-      return 'This experimental endpoint is not fully developed and may be significantly changed or completely removed in future releases.'
+      return 'This experimental item is not fully developed and may be significantly changed or completely removed in future releases.'
     case 'deprecated':
-      return 'This endpoint has been deprecated and will be removed in the future.'
+      return 'This item has been deprecated and will be removed in the future.'
     case 'stable':
-      return 'This endpoint is considered stable for this API version.'
+      return 'This item is considered stable for this API version.'
     case 'undocumented':
-      return 'This is an internal-only endpoint.'
+      return 'This is an internal-only item.'
     default:
-      return 'This endpoint has no status associated with it.'
+      return 'This item has no status associated with it.'
   }
 }
 

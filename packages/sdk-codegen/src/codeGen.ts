@@ -24,27 +24,44 @@
 
  */
 
-import { commentBlock } from '@looker/sdk-codegen-utils'
 import { DelimArray } from '@looker/sdk-rtl'
-import {
+import type {
   ApiModel,
   Arg,
   ArgValues,
-  ArrayType,
-  EnumType,
   EnumValueType,
-  HashType,
   IMethod,
   IParameter,
   IProperty,
   IType,
+} from './sdkModels'
+import {
+  ArrayType,
+  EnumType,
+  HashType,
   mayQuote,
+  strBody,
   Type,
 } from './sdkModels'
+import type { SpecItem } from './specConverter'
 
+export const commentBlock = (
+  text: string | undefined,
+  indent = '',
+  commentStr = '// '
+) => {
+  if (!text || !text.trim()) return ''
+  const indentation = indent + commentStr
+  const lines = text.split('\n').map((x) => `${indentation}${x}`.trimRight())
+  return lines.join('\n')
+}
+
+/** Version and spec references for the generator */
 export interface IVersionInfo {
+  /** Server release version (Not the API version) */
   lookerVersion: string
-  apiVersion: string
+  /** API specification for generating the SDK */
+  spec: SpecItem
 }
 
 /**
@@ -152,6 +169,9 @@ export interface ICodeGen {
    */
   commentStr: string
 
+  /** Generate comments in source code? */
+  noComment: boolean
+
   /**
    * string representation of null value
    * e.g. Python None, C# null, Delphi nil
@@ -167,13 +187,13 @@ export interface ICodeGen {
   /** argument separator string. Typically ', ' */
   argDelimiter: string
 
-  /** type properties/args expression separator. E.g ': ' for Typescript */
+  /** type properties/args expression separator. E.g ': ' for TypeScript */
   argSetSep: string
 
-  /** hash type properties/args expression separator. E.g ': ' for Typescript */
+  /** hash type properties/args expression separator. E.g ': ' for TypeScript */
   hashSetSep: string
 
-  /** hash key quotes E.g '' for Typescript and '"' for Python */
+  /** hash key quotes E.g '' for TypeScript and '"' for Python */
   hashKeyQuote: string
 
   /** parameter delimiter. Typically ",\n" */
@@ -197,6 +217,12 @@ export interface ICodeGen {
 
   /** Use named/keyword arguments in calling syntax */
   useNamedArguments: boolean
+
+  /** Mainly for TypeScript SDK tree-shaking support. True produces funcs.ext */
+  useFunctions: boolean
+
+  /** Does this language implement interfaces? True produces methodInterfaces.ext */
+  useInterfaces: boolean
 
   /** Does this language have streaming methods? */
   willItStream: boolean
@@ -224,6 +250,11 @@ export interface ICodeGen {
 
   /** Do type declarations use a class definition */
   useModelClassForTypes: boolean
+
+  /**
+   * Resets the generator for a new emission
+   */
+  reset(): void
 
   /**
    * Quote a string value for the language
@@ -292,7 +323,7 @@ export interface ICodeGen {
    * @param sep spacing to separate value. Could be newline or single space or something else
    * @param exp expression (as valid code fragment) to assign
    *
-   * @example `foo: bar` for Typescript where `name` is "foo", `sep` is ": " and `exp` is "bar"
+   * @example `foo: bar` for TypeScript where `name` is "foo", `sep` is ": " and `exp` is "bar"
    */
   argSet(name: string, sep: string, exp: string): string
 
@@ -310,6 +341,9 @@ export interface ICodeGen {
    * @param val value(s) to convert to a code assignment
    */
   anyValue(indent: string, val: any): string
+
+  /** Increase indent */
+  bumper(indent: string): string
 
   /**
    * Converts val to a dictionary/hash code expression
@@ -337,22 +371,37 @@ export interface ICodeGen {
 
   /**
    * standard code to insert at the top of the generated "methods" file(s)
-   * @param {string} indent code indentation
-   * @returns {string}
+   * @param indent code indentation
    */
   methodsPrologue(indent: string): string
 
   /**
+   * standard code to insert at the top of the generated "funcs" file(s)
+   * @param indent code indentation
+   */
+  functionsPrologue(indent: string): string
+
+  /**
+   * standard code to insert at the top of the generated "methodsInterface" file(s)
+   * @param indent code indentation
+   */
+  interfacesPrologue(indent: string): string
+
+  /**
    * standard code to append to the bottom of the generated "methods" file(s)
-   * @param {string} indent code indentation
-   * @returns {string} generated code
+   * @param indent code indentation
    */
   methodsEpilogue(indent: string): string
 
   /**
+   * standard code to append to the bottom of the generated "funcs" file(s)
+   * @param indent code indentation
+   */
+  functionsEpilogue(indent: string): string
+
+  /**
    * standard code to insert at the top of the generated "streams" file(s)
-   * @param {string} indent code indentation
-   * @returns {string} generated code
+   * @param indent code indentation
    */
   streamsPrologue(indent: string): string
 
@@ -455,11 +504,17 @@ export interface ICodeGen {
 
   /**
    * generates the method signature including parameter list and return type.
-   * @param {string} indent code indentation
-   * @param {IMethod} method to declare
-   * @returns {string} source code
+   * @param indent code indentation
+   * @param method to declare
    */
   methodSignature(indent: string, method: IMethod): string
+
+  /**
+   * generates the function signature including parameter list and return type.
+   * @param indent code indentation
+   * @param method to declare
+   */
+  functionSignature(indent: string, method: IMethod): string
 
   /**
    * convert endpoint pattern to platform-specific string template
@@ -533,11 +588,27 @@ export interface ICodeGen {
 
   /**
    * generates the entire method
-   * @param {string} indent code indentation
-   * @param {IMethod} method structure of method to declare
-   * @returns {string} the resolved API endpoint path
+   * @param indent code indentation
+   * @param method structure of method to declare
+   * @returns the declaration code for the method
    */
   declareMethod(indent: string, method: IMethod): string
+
+  /**
+   * generates the entire function
+   * @param indent code indentation
+   * @param method structure of method to declare
+   * @returns the declaration code for the function
+   */
+  declareFunction(indent: string, method: IMethod): string
+
+  /**
+   * generates the method's interface declaration
+   * @param indent code indentation
+   * @param method structure of method to declare
+   * @returns the declaration code for the method's interface
+   */
+  declareInterface(indent: string, method: IMethod): string
 
   /**
    * generates the streaming method signature including parameter list and return type.
@@ -630,6 +701,13 @@ export interface ICodeGen {
   typeNames(countError: boolean): string[]
 
   /**
+   * Type mapping for a parameter with special handling for body params
+   * @param param to map
+   * @param method containing param
+   */
+  paramMappedType(param: IParameter, method: IMethod): IMappedType
+
+  /**
    * Language-specific type conversion
    * @param {IType} type to potentially convert
    * @returns {IMappedType} converted type
@@ -647,14 +725,18 @@ export abstract class CodeGen implements ICodeGen {
   itself = ''
   fileExtension = '.code'
   argDelimiter = ', '
-  argSetSep = ': '
-  hashSetSep = ': '
   paramDelimiter = ',\n'
   propDelimiter = '\n'
   enumDelimiter = ',\n'
   codeQuote = `'`
   useNamedParameters = true
   useNamedArguments = true
+  useFunctions = false
+  useInterfaces = false
+
+  // makeTheCall definitions
+  argSetSep = ': '
+  hashSetSep = ': '
   arrayOpen = '['
   arrayClose = ']'
   hashOpen = '{'
@@ -666,6 +748,7 @@ export abstract class CodeGen implements ICodeGen {
 
   indentStr = '  '
   commentStr = '// '
+  noComment = false
   nullStr = 'null'
   endTypeStr = ''
   transport = 'rtl'
@@ -675,15 +758,20 @@ export abstract class CodeGen implements ICodeGen {
   apiPath = ''
 
   constructor(public api: ApiModel, public versions?: IVersionInfo) {
-    if (versions && versions.apiVersion) {
-      this.apiVersion = versions.apiVersion
-      this.apiRef = this.apiVersion.replace('.', '')
-      this.apiPath = `/${this.apiVersion}`
+    if (versions && versions.spec) {
+      this.apiVersion = versions.spec.version
+      this.apiPath = `/${versions.spec.key}`
+      this.apiRef = versions.spec.key.replace('.', '')
       this.packageName = this.supportsMultiApi()
         ? `Looker${this.apiRef}SDK`
         : `LookerSDK`
       this.packagePath += this.apiPath
     }
+  }
+
+  /** base level reset does nothing */
+  reset() {
+    // eslint-disable-next-line @typescript-eslint/no-empty-function
   }
 
   /**
@@ -701,6 +789,19 @@ export abstract class CodeGen implements ICodeGen {
    * @returns {string}
    */
   abstract methodsPrologue(indent: string): string
+
+  functionsPrologue(_indent: string): string {
+    // usually, nothing to "close" atomic function declarations
+    return ''
+  }
+
+  functionsEpilogue(_indent: string): string {
+    return ''
+  }
+
+  interfacesPrologue(_indent: string): string {
+    return ''
+  }
 
   /**
    * ending of the "methods" file for a language
@@ -756,7 +857,19 @@ export abstract class CodeGen implements ICodeGen {
 
   abstract methodSignature(indent: string, method: IMethod): string
 
+  functionSignature(_indent: string, _method: IMethod): string {
+    return ''
+  }
+
   abstract declareMethod(indent: string, method: IMethod): string
+
+  declareFunction(_indent: string, _method: IMethod): string {
+    return ''
+  }
+
+  declareInterface(_indent: string, _method: IMethod): string {
+    return ''
+  }
 
   argIndent(indent: string, args: string[], opener: string, closer: string) {
     const bump = this.bumper(indent)
@@ -788,6 +901,8 @@ export abstract class CodeGen implements ICodeGen {
       argVal = mt.asVal(indent, val)
     } else if (argType instanceof ArrayType) {
       argVal = this.arrayValue(indent, argType, val)
+      // } else if (argType instanceof DelimArrayType) {
+      //   argVal = this.delimArrayValue(indent, argType, val)
     } else if (argType instanceof HashType) {
       argVal = this.hashValue(indent, val)
     } else if (!argType.intrinsic) {
@@ -879,9 +994,9 @@ export abstract class CodeGen implements ICodeGen {
     let open = this.arrayOpen
     let close = this.arrayClose
     let arrayValDelimiter = this.argDelimiter
-    // multiple intrisinc element or 1 or more non-intrinsic element array
+    // multiple intrinsic elements or 1 or more non-intrinsic element array
     // renders multiple lines
-    if (Object.values(val).length > 1 || !et.intrinsic) {
+    if (val.length > 1 || !et.intrinsic) {
       // the opener uses bump to account for the first argument
       // not getting the proper bump from args.join()
       open = `${open}\n${bump}`
@@ -900,7 +1015,7 @@ export abstract class CodeGen implements ICodeGen {
     // passing `bump` to `asVal` - typically intrinsic asVal ignores
     // indentation but certainly for the assignType case we want the
     // nested object to be indented a level further
-    Object.values(val).forEach((v) => args.push(asVal(bump, v)))
+    val.forEach((v: any) => args.push(asVal(bump, v)))
     return open + args.join(arrayValDelimiter) + close
   }
 
@@ -948,6 +1063,14 @@ export abstract class CodeGen implements ICodeGen {
     return this.argIndent(indent, args, this.hashOpen, this.hashClose)
   }
 
+  paramMappedType(param: IParameter, method: IMethod) {
+    const type =
+      param.location === strBody
+        ? this.writeableType(param.type, method) || param.type
+        : param.type
+    return this.typeMap(type)
+  }
+
   makeTheCall(_method: IMethod, _inputs: ArgValues) {
     return this.commentHeader('', `Not yet available`)
   }
@@ -965,9 +1088,7 @@ export abstract class CodeGen implements ICodeGen {
   warnEditing() {
     return (
       'NOTE: Do not edit this file generated by Looker SDK Codegen' +
-      (this.versions
-        ? ` for Looker ${this.versions?.lookerVersion} API ${this.apiVersion}`
-        : '')
+      (this.apiVersion ? ` for API ${this.apiVersion}` : '')
     )
   }
 
@@ -1007,6 +1128,7 @@ export abstract class CodeGen implements ICodeGen {
   }
 
   comment(indent: string, description: string) {
+    if (this.noComment) return ''
     return commentBlock(description, indent, this.commentStr)
   }
 
@@ -1015,6 +1137,7 @@ export abstract class CodeGen implements ICodeGen {
     text: string | undefined,
     _commentStr?: string
   ) {
+    if (this.noComment) return ''
     return text ? `${this.comment(indent, text)}\n` : ''
   }
 
@@ -1174,6 +1297,13 @@ export abstract class CodeGen implements ICodeGen {
     return items
   }
 
+  /**
+   * Gets the type mapping to use for generation
+   *
+   * Also tracks refCounts for the type for generators that need explicit type imports
+   *
+   * @param type to map for generation
+   */
   typeMap(type: IType): IMappedType {
     type.refCount++ // increment refcount
     return { default: this.nullStr || '', name: type.name || '' }

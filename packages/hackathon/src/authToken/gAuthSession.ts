@@ -24,16 +24,14 @@
 
  */
 
-import {
-  AuthSession,
-  AuthToken,
+import type {
   IAccessToken,
   IApiSettings,
   IRequestProps,
   ITransport,
-  sdkError,
 } from '@looker/sdk-rtl'
-import { ExtensionSDK } from '@looker/extension-sdk'
+import { AuthSession, AuthToken, sdkError } from '@looker/sdk-rtl'
+import type { ExtensionSDK } from '@looker/extension-sdk'
 import { defaultScopes } from '@looker/wholly-sheet'
 
 export class GAuthToken extends AuthToken {
@@ -110,7 +108,7 @@ export class GAuthSession extends AuthSession {
       )
       const { access_token, expiry_date } = response.body
       this.activeToken = new GAuthToken(access_token, expiry_date)
-    } catch (error) {
+    } catch (error: any) {
       throw sdkError({ message: error.message })
     }
   }

@@ -24,25 +24,22 @@
 
  */
 
-import {
+import type {
   IRequestProps,
   ITransport,
-  sdkError,
   HttpMethod,
-  encodeParams,
-  AuthToken,
   IApiSettings,
-  AuthSession,
   IAccessToken,
   IError,
 } from '@looker/sdk-rtl'
+import { sdkError, encodeParams, AuthToken, AuthSession } from '@looker/sdk-rtl'
 import { NodeTransport } from './nodeTransport'
 
 const strPost: HttpMethod = 'POST'
 const strDelete: HttpMethod = 'DELETE'
 
 export class NodeSession extends AuthSession {
-  private readonly apiPath: string = '/api/3.1'
+  private readonly apiPath: string = '/api/4.0'
   _authToken: AuthToken = new AuthToken()
   _sudoToken: AuthToken = new AuthToken()
 

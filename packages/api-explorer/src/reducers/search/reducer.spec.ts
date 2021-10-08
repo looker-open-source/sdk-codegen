@@ -23,11 +23,8 @@
  SOFTWARE.
 
  */
-import {
-  SearchCriterionTerm,
-  CriteriaToSet,
-  SearchAll,
-} from '@looker/sdk-codegen'
+import type { SearchCriterionTerm } from '@looker/sdk-codegen'
+import { CriteriaToSet, SearchAll } from '@looker/sdk-codegen'
 import { searchReducer, defaultSearchState } from './reducer'
 
 describe('Search reducer', () => {

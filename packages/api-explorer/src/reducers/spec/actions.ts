@@ -23,10 +23,40 @@
  SOFTWARE.
 
  */
-import { SpecItems } from '../../ApiExplorer'
 
-export const selectSpec = (specs: SpecItems, specKey: string) => ({
-  type: 'SELECT_SPEC',
-  key: specKey,
-  payload: specs,
+import type { ApiModel } from '@looker/sdk-codegen'
+
+export enum Actions {
+  SELECT_SPEC = 'SELECT_SPEC',
+  UPDATE_SPEC_API = 'UPDATE_SPEC_API',
+}
+
+export interface ApiUpdatePayload {
+  specKey: string
+  api: ApiModel
+}
+
+export interface UpdateSpecApiAction {
+  type: Actions.UPDATE_SPEC_API
+  payload: ApiUpdatePayload
+}
+
+export interface SelectSpecAction {
+  type: Actions.SELECT_SPEC
+  payload: string
+}
+
+export type SpecAction = SelectSpecAction | UpdateSpecApiAction
+
+export const selectSpec = (specKey: string): SelectSpecAction => ({
+  type: Actions.SELECT_SPEC,
+  payload: specKey,
+})
+
+export const updateSpecApi = (
+  specKey: string,
+  api: ApiModel
+): UpdateSpecApiAction => ({
+  type: Actions.UPDATE_SPEC_API,
+  payload: { specKey, api },
 })

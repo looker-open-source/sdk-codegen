@@ -25,7 +25,7 @@
  */
 
 import path from 'path'
-import { SDKCalls } from '@looker/sdk-codegen'
+import type { SDKCalls } from '@looker/sdk-codegen'
 import {
   CodeMiner,
   filterCodeFiles,
@@ -111,14 +111,14 @@ describe('example mining', () => {
         })
         it('processes multiple refs on the same line', () => {
           const md =
-            'generators like [Typescript](/packages/sdk-codegen/src/typescript.gen.ts) or [Python](/packages/sdk-codegen/src/python.gen.ts) are useful'
+            'generators like [TypeScript](/packages/sdk-codegen/src/typescript.gen.ts) or [Python](/packages/sdk-codegen/src/python.gen.ts) are useful'
           const actual = marker.mineContent(
             'packages/sdk-codegen/README.md',
             md
           )
           expect(actual.length).toEqual(2)
           const first = actual[0]
-          expect(first.summary).toEqual('Typescript')
+          expect(first.summary).toEqual('TypeScript')
           expect(first.sourceFile).toEqual(
             'packages/sdk-codegen/src/typescript.gen.ts'
           )
@@ -237,10 +237,10 @@ describe('example mining', () => {
 
     it('processes files', () => {
       const miner = new ExampleMiner(sourcePath)
-      const actual = miner.motherLode
+      const actual = miner.lode
       expect(actual).toBeDefined()
       expect(actual.commitHash).toBeDefined()
-      expect(Object.entries(actual.nuggets).length).toBeGreaterThan(50)
+      expect(Object.entries(actual.nuggets).length).toBeGreaterThan(40)
     })
   })
 })

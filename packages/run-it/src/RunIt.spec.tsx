@@ -28,15 +28,13 @@ import React from 'react'
 import { renderWithTheme } from '@looker/components-test-utils'
 import { screen, waitFor } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
-import { ApiModel, IMethod } from '@looker/sdk-codegen'
+import type { ApiModel, IMethod } from '@looker/sdk-codegen'
 
-import { RunIt, RunItInput } from './RunIt'
+import type { RunItInput } from './RunIt'
+import { RunIt } from './RunIt'
 import { api, testTextResponse } from './test-data'
-import { initRunItSdk, RunItSettings } from './utils'
-import {
-  defaultConfigurator,
-  StandaloneConfigurator,
-} from './components/ConfigForm/configUtils'
+import { initRunItSdk, runItNoSet, RunItSettings } from './utils'
+import { defaultConfigurator, StandaloneConfigurator } from './components'
 import { RunItProvider } from './RunItProvider'
 
 const sdk = initRunItSdk(new StandaloneConfigurator())
@@ -90,7 +88,12 @@ describe('RunIt', () => {
         configurator={defaultConfigurator}
         basePath="/api/4.0"
       >
-        <RunIt api={_api} inputs={inputs} method={method} />
+        <RunIt
+          api={_api}
+          inputs={inputs}
+          method={method}
+          setVersionsUrl={runItNoSet}
+        />
       </RunItProvider>
     )
   }
@@ -133,11 +136,13 @@ describe('RunIt', () => {
     })
 
     test('the form submit handler invokes the request callback on submit', async () => {
+      renderRunIt()
       const defaultRequestCallback = jest
         .spyOn(sdk.authSession.transport, 'rawRequest')
         .mockResolvedValueOnce(testTextResponse)
-      renderRunIt()
-      userEvent.click(screen.getByRole('button', { name: run }))
+      const button = screen.getByRole('button', { name: run })
+      expect(button).toBeInTheDocument()
+      userEvent.click(button)
       await waitFor(() => {
         expect(defaultRequestCallback).toHaveBeenCalled()
         expect(
@@ -156,9 +161,11 @@ describe('RunIt', () => {
       })
     })
 
-    test('it renders ConfigForm', () => {
+    test('it has Configure button', () => {
       renderRunIt()
-      expect(screen.getByRole('button', { name: 'Remove' })).toBeInTheDocument()
+      expect(
+        screen.getByRole('button', { name: 'Configure' })
+      ).toBeInTheDocument()
       expect(
         screen.queryByRole('button', { name: run })
       ).not.toBeInTheDocument()
@@ -177,7 +184,7 @@ describe('RunIt', () => {
       })
     })
 
-    test('it renders LoginForm', () => {
+    test('it has Login button', () => {
       renderRunIt()
       expect(screen.getByRole('button', { name: 'Login' })).toBeInTheDocument()
       expect(

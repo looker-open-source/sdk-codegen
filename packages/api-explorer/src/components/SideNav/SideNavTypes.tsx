@@ -24,62 +24,112 @@
 
  */
 
-import React, { FC, useContext } from 'react'
-import { Heading } from '@looker/components'
-import { TypeList, IntrinsicType } from '@looker/sdk-codegen'
+import React, { useContext, useEffect, useState } from 'react'
 import styled from 'styled-components'
-
-import { NavHashLink } from 'react-router-hash-link'
+import { Accordion2, Heading } from '@looker/components'
+import type { TypeList } from '@looker/sdk-codegen'
+import { useHistory, useRouteMatch } from 'react-router-dom'
+import { Link } from '../Link'
 import { buildTypePath, highlightHTML } from '../../utils'
 import { SearchContext } from '../../context'
 
-interface TypeProps {
-  specKey: string
+interface TypesProps {
   types: TypeList
+  tag: string
+  specKey: string
+  className?: string
+  defaultOpen?: boolean
 }
 
-export const SideNavTypes: FC<TypeProps> = ({ types, specKey }) => {
-  const {
-    searchSettings: { pattern },
-  } = useContext(SearchContext)
+export const SideNavTypes = styled(
+  ({ className, types, tag, specKey, defaultOpen = false }: TypesProps) => {
+    const {
+      searchSettings: { pattern },
+    } = useContext(SearchContext)
+    const match = useRouteMatch<{ typeTag: string }>(
+      `/:specKey/types/:typeTag/:typeName?`
+    )
+    const [isOpen, setIsOpen] = useState(defaultOpen)
+    const history = useHistory()
 
-  return (
-    <>
-      {Object.values(types)
-        .filter((type) => !(type instanceof IntrinsicType))
-        .map((type) => (
-          <SideNavLink
-            key={type.name}
-            to={`${buildTypePath(specKey, type.name)}#top`}
-          >
-            <Heading as="h5" truncate>
-              {highlightHTML(pattern, type.name)}
-            </Heading>
-          </SideNavLink>
-        ))}
-    </>
-  )
-}
+    const handleOpen = () => {
+      const _isOpen = !isOpen
+      setIsOpen(_isOpen)
+      if (_isOpen) history.push(`/${specKey}/types/${tag}`)
+    }
 
-const SideNavLink = styled(NavHashLink)`
-  display: block;
-  padding: ${({
-    theme: {
-      space: { xsmall, large },
-    },
-  }) => `${xsmall} ${large}`};
+    useEffect(() => {
+      const status = match
+        ? defaultOpen || match.params.typeTag === tag
+        : defaultOpen
+      setIsOpen(status)
+    }, [defaultOpen])
 
-  &:hover,
-  &:focus {
-    ${Heading} {
+    /* TODO: Fix highlighting. It is applied but it is somehow being overridden */
+    return (
+      <Accordion2
+        isOpen={isOpen}
+        toggleOpen={handleOpen}
+        className={className}
+        label={
+          <Heading as="h4" fontSize="small" py="xsmall">
+            {highlightHTML(pattern, tag)}
+          </Heading>
+        }
+      >
+        <ul>
+          {Object.values(types).map((type) => (
+            <li key={type.name}>
+              <Link to={`${buildTypePath(specKey, tag, type.name)}`}>
+                {highlightHTML(pattern, type.name)}
+              </Link>
+            </li>
+          ))}
+        </ul>
+      </Accordion2>
+    )
+  }
+)`
+  font-family: ${({ theme }) => theme.fonts.brand};
+
+  [aria-controls]:hover,
+  [aria-expanded='true'] {
+    h4,
+    svg {
       color: ${({ theme }) => theme.colors.key};
     }
   }
 
-  &.active {
-    ${Heading} {
-      color: ${({ theme }) => theme.colors.key};
-      font-weight: ${({ theme }) => theme.fontWeights.semiBold};
+  [aria-expanded='true'] h4 {
+    font-weight: ${({ theme }) => theme.fontWeights.semiBold};
+  }
+
+  ul {
+    border-left: dashed 1px ${({ theme }) => theme.colors.ui2};
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    padding-left: ${({ theme }) => theme.space.xxsmall};
+    padding-top: ${({ theme }) => theme.space.xxsmall};
+  }
+
+  [aria-current] {
+    background: ${({ theme }) => theme.colors.ui1};
+    font-weight: ${({ theme }) => theme.fontWeights.semiBold};
+  }
+
+  ${Link} {
+    border-radius: ${({ theme }) => theme.radii.medium};
+    display: block;
+    overflow: hidden;
+    padding: ${({ theme }) => theme.space.xsmall};
+    text-overflow: ellipsis;
+    white-space: nowrap;
+
+    &:hover,
+    &:focus,
+    &.active {
+      background: ${({ theme }) => theme.colors.ui1};
     }
   }
 `

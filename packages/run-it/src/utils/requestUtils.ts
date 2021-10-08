@@ -24,12 +24,20 @@
 
  */
 
-import { Looker31SDK, Looker40SDK } from '@looker/sdk'
-import { IRawResponse } from '@looker/sdk-rtl'
-import { cloneDeep } from 'lodash'
+import type { IAPIMethods, IRawResponse } from '@looker/sdk-rtl'
+import cloneDeep from 'lodash/cloneDeep'
 
-import { RunItHttpMethod, RunItInput, RunItValues } from '../RunIt'
+import type { RunItHttpMethod, RunItInput, RunItValues } from '../RunIt'
 import { runItSDK } from './RunItSDK'
+
+/** Hook to set a URL somewhere else in APIX */
+export type RunItSetter = (value: any) => any
+
+/**
+ * A "no-op" function
+ * @param value passed through
+ */
+export const runItNoSet: RunItSetter = (value: any) => value
 
 /**
  * Replaces {foo} with vars[foo] in provided path
@@ -63,7 +71,15 @@ export const prepareInputs = (
     const name = input.name
     if (input.location === 'body') {
       try {
-        result[name] = JSON.parse(result[name])
+        const parsed = JSON.parse(result[name])
+        // Keys call works for both objects and arrays if there are any values
+        const keys = Object.keys(parsed)
+        if (keys.length > 0) {
+          result[name] = parsed
+        } else {
+          // Remove body arg
+          delete result[name]
+        }
       } catch (e) {
         /** Treat as x-www-form-urlencoded */
         result[name] = requestContent[name]
@@ -108,6 +124,7 @@ export const createRequestParams = (
 
 /**
  * Makes an http request using the SDK browser transport rawRequest method
+ * @param sdk functional SDK that supports rawRequest via its transport
  * @param basePath base path for the URL. For standalone this includes the specKey. Empty for extension.
  * @param httpMethod Request operation
  * @param endpoint Request path with path params in curly braces e.g. /queries/{query_id}/run/{result_format}
@@ -116,7 +133,7 @@ export const createRequestParams = (
  * @param body Collection of body params
  */
 export const runRequest = async (
-  sdk: Looker31SDK | Looker40SDK,
+  sdk: IAPIMethods,
   basePath: string,
   httpMethod: RunItHttpMethod,
   endpoint: string,
@@ -128,11 +145,12 @@ export const runRequest = async (
     await sdk.ok(runItSDK.authSession.login())
   }
   const url = `${basePath}${pathify(endpoint, pathParams)}`
-  return await sdk.authSession.transport.rawRequest(
+  const raw = await sdk.authSession.transport.rawRequest(
     httpMethod,
     url,
     queryParams,
     body,
     (props) => runItSDK.authSession.authenticate(props)
   )
+  return raw
 }

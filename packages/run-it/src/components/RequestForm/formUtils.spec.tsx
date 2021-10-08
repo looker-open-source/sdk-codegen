@@ -23,17 +23,19 @@
  SOFTWARE.
 
  */
+
 import { screen, fireEvent, waitFor } from '@testing-library/react'
 import { renderWithTheme } from '@looker/components-test-utils'
 import userEvent from '@testing-library/user-event'
-import { BaseSyntheticEvent } from 'react'
+import type { BaseSyntheticEvent } from 'react'
 
-import { RunItInput } from '../../RunIt'
+import type { RunItInput } from '../../RunIt'
 import {
   createComplexItem,
   createSimpleItem,
   showDataChangeWarning,
   updateNullableProp,
+  validateBody,
 } from './formUtils'
 
 describe('Simple Items', () => {
@@ -207,9 +209,13 @@ describe('Simple Items', () => {
       description: 'A simple item of type datetime',
     })
 
-    test('it creates a datetime item', () => {
+    test('it creates a datetime item', async () => {
       renderWithTheme(DateItem)
-      expect(screen.getByTestId('text-input')).toBeInTheDocument()
+      const button = screen.getByRole('button', { name: 'Choose' })
+      userEvent.click(button)
+      await waitFor(() => {
+        expect(screen.getByTestId('text-input')).toBeInTheDocument()
+      })
     })
   })
 
@@ -253,6 +259,30 @@ describe('Complex Item', () => {
     )
     renderWithTheme(ComplexItem)
     expect(screen.getByText('A complex item')).toBeInTheDocument()
+  })
+
+  describe('validateBody', () => {
+    test.each`
+      value                                                      | error
+      ${{
+  model: 'thelook',
+  view: 'users',
+  fields: ['users.id', 'users.first_name'],
+}} | ${''}
+      ${'na.-_me=Vapor&age=3&luckyNumbers[]=5&luckyNumbers[]=7'} | ${''}
+      ${'name=Vapor&age=3&luckyNumbers[]=5&luckyNumbers[]7'}     | ${'luckyNumbers[]7'}
+      ${'{'}                                                     | ${'Unexpected end of JSON input'}
+      ${'}'}                                                     | ${'Unexpected token } in JSON at position 0'}
+      ${'['}                                                     | ${'Unexpected end of JSON input'}
+      ${'"'}                                                     | ${'Unexpected end of JSON input'}
+      ${'"foo"'}                                                 | ${''}
+      ${''}                                                      | ${''}
+      ${'{}'}                                                    | ${''}
+    `('it validates a body value of "$value"', ({ value, error }) => {
+      const actual = validateBody(value)
+      const expected = error ? `Syntax error in the body: ${error}` : error
+      expect(actual).toEqual(expected)
+    })
   })
 })
 

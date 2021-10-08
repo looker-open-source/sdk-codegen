@@ -2,7 +2,7 @@
 
  MIT License
 
- Copyright (c) 2020 Looker Data Sciences, Inc.
+ Copyright (c) 2021 Looker Data Sciences, Inc.
 
  Permission is hereby granted, free of charge, to any person obtaining a copy
  of this software and associated documentation files (the "Software"), to deal
@@ -24,7 +24,8 @@
 
  */
 
-import { DefaultSettings, IApiSection } from '@looker/sdk-rtl'
+import type { IApiSection } from '@looker/sdk-rtl'
+import { DefaultSettings } from '@looker/sdk-rtl'
 import { NodeSession } from '@looker/sdk-node'
 import { getSettings } from '../shared/settings'
 
@@ -38,6 +39,7 @@ export const validateLookerCredentials = async (
   client_secret: string
 ): Promise<boolean> => {
   const lookerSettings = DefaultSettings()
+  // eslint-disable-next-line no-console
   console.log({ client_id, client_secret })
   lookerSettings.readConfig = (): IApiSection => {
     return { client_id, client_secret }
@@ -49,9 +51,12 @@ export const validateLookerCredentials = async (
   try {
     const authToken = await session.login()
     return authToken.isActive()
-  } catch (err) {
+  } catch (err: any) {
+    // eslint-disable-next-line no-console
     console.error('looker credentials incorrect')
+    // eslint-disable-next-line no-console
     console.error(`server url ${session.settings.base_url}`)
+    // eslint-disable-next-line no-console
     console.error(err)
     return false
   }

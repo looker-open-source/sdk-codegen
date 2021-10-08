@@ -24,17 +24,14 @@
 
  */
 
-import { ICryptoHash } from './cryptoHash'
+import type { ICryptoHash } from './cryptoHash'
 import { OAuthSession } from './oauthSession'
-import {
-  ApiSettings,
-  DefaultSettings,
-  IApiSection,
-  IApiSettings,
-} from './apiSettings'
+import type { IApiSection, IApiSettings } from './apiSettings'
+import { ApiSettings, DefaultSettings } from './apiSettings'
 import { BrowserCryptoHash, BrowserTransport } from './browserTransport'
 // import { NodeCryptoHash, NodeTransport } from './nodeTransport'
-import { ExtensionTransport, IHostConnection } from './extensionTransport'
+import type { IHostConnection } from './extensionTransport'
+import { ExtensionTransport } from './extensionTransport'
 import { BrowserServices } from './browserServices'
 
 const allSettings = {
@@ -69,7 +66,52 @@ export class MockCrypto implements ICryptoHash {
   }
 }
 
+const mockStorage = (() => {
+  let store = {}
+
+  return {
+    getItem(key: string) {
+      return store[key] || undefined
+    },
+    setItem(key: string, value: any) {
+      store[key] = value.toString()
+    },
+    removeItem(key: string) {
+      delete store[key]
+    },
+    clear() {
+      store = {}
+    },
+  }
+})()
+
+let storageProp: any
+
 describe('oauthSession', () => {
+  beforeEach(() => {
+    sessionStorage.clear()
+    jest.restoreAllMocks()
+  })
+  beforeAll(() => {
+    storageProp = Object.getOwnPropertyDescriptor(window, 'sessionStorage')
+    Object.defineProperty(window, 'sessionStorage', {
+      value: mockStorage,
+    })
+  })
+  afterAll(() => {
+    Object.defineProperty(window, 'sessionStorage', storageProp)
+  })
+
+  it('mocked session storage works', () => {
+    const expected = 'feedface'
+    const key = 'key'
+    sessionStorage.setItem(key, expected)
+    const actual = sessionStorage.getItem(key)
+    expect(actual).toEqual(expected)
+    sessionStorage.removeItem(key)
+    expect(sessionStorage.getItem(key)).toBeUndefined()
+  })
+
   it('fails if missing settings', () => {
     for (const key of ['client_id', 'redirect_uri', 'looker_url']) {
       const dup: any = { ...allSettings }

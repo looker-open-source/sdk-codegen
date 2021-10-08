@@ -24,18 +24,23 @@
 
  */
 
-import React, { FC } from 'react'
+import type { FC } from 'react'
+import React from 'react'
+import type { IconType } from '@looker/components'
 import {
-  FlexItem,
-  IconNames,
+  Box,
   Icon,
   Tree,
   TreeItem,
   Tooltip,
   Space,
+  Paragraph,
 } from '@looker/components'
-import { IProperty } from '@looker/sdk-codegen'
-import ReactMarkdown from 'react-markdown'
+import { Done } from '@styled-icons/material/Done'
+import { Lock } from '@styled-icons/material/Lock'
+import { Remove } from '@styled-icons/material/Remove'
+import type { IProperty, ApiModel } from '@looker/sdk-codegen'
+import { Markdown } from '@looker/code-editor'
 import {
   expandable,
   ExploreTypeLink,
@@ -47,7 +52,7 @@ import {
 interface TipIconProps {
   show: boolean
   tip: string
-  icon: IconNames
+  icon: IconType
   title: string
 }
 
@@ -63,7 +68,7 @@ export const TipIcon: FC<TipIconProps> = ({ show, tip, icon, title }) => {
   if (!show) return <></>
   return (
     <Tooltip content={tip}>
-      <Icon name={icon} size="xsmall" content={tip} title={title} />
+      <Icon icon={icon} size="xsmall" content={tip} title={title} />
     </Tooltip>
   )
 }
@@ -94,7 +99,7 @@ export const ExplorePropertyRequired: FC<ExplorePropertyProps> = ({
   return (
     <TipIcon
       show={property.required}
-      icon="Check"
+      icon={<Done />}
       tip={tip}
       title="required property"
     />
@@ -113,7 +118,7 @@ export const ExplorePropertyDeprecated: FC<ExplorePropertyProps> = ({
   return (
     <TipIcon
       show={property.deprecated}
-      icon="Minus"
+      icon={<Remove />}
       tip={tip}
       title="deprecated property"
     />
@@ -132,7 +137,7 @@ export const ExplorePropertyReadOnly: FC<ExplorePropertyProps> = ({
   return (
     <TipIcon
       show={property.readOnly}
-      icon="LockClosed"
+      icon={<Lock />}
       tip={tip}
       title="read-only property"
     />
@@ -144,32 +149,44 @@ export const ExplorePropertyReadOnly: FC<ExplorePropertyProps> = ({
  * @param property to describe
  * @constructor
  */
-export const ExplorePropertyDescription: FC<ExplorePropertyProps> = ({
-  property,
-}) => (
-  <>{property.description && <ReactMarkdown source={property.description} />}</>
+const DescriptionParagraph: FC = (props) => (
+  <Paragraph fontSize="small" m="none" {...props} />
 )
+
+const ExplorePropertyDescription: FC<ExplorePropertyProps> = ({ property }) =>
+  property.description ? (
+    <Markdown
+      source={property.description}
+      paragraphOverride={DescriptionParagraph}
+    />
+  ) : null
+
+interface ExploreApiPropertyProps extends ExplorePropertyProps {
+  /** parsed api */
+  api: ApiModel
+}
 
 /**
  * Show the details of the property
  * @param property
  * @constructor
  */
-export const ExplorePropertyDetail: FC<ExplorePropertyProps> = ({
+export const ExplorePropertyDetail: FC<ExploreApiPropertyProps> = ({
   property,
+  api,
 }) => (
-  <Space>
-    <FlexItem width="10rem">
-      <ExploreTypeLink type={property.type} />
-    </FlexItem>
-    <FlexItem width="5rem">
+  <Space style={{ fontSize: 'small', marginLeft: '10rem' }}>
+    <Box width="10rem">
+      <ExploreTypeLink type={property.type} api={api} />
+    </Box>
+    <Box width="5rem">
       <ExplorePropertyRequired property={property} />
       <ExplorePropertyReadOnly property={property} />
       <ExplorePropertyDeprecated property={property} />
-    </FlexItem>
-    <FlexItem width="30rem">
+    </Box>
+    <Box width="30rem">
       <ExplorePropertyDescription property={property} />
-    </FlexItem>
+    </Box>
   </Space>
 )
 
@@ -178,12 +195,15 @@ export const ExplorePropertyDetail: FC<ExplorePropertyProps> = ({
  * @param property to display
  * @constructor
  */
-export const ExplorePropertyNode: FC<ExplorePropertyProps> = ({ property }) => {
+export const ExplorePropertyNode: FC<ExploreApiPropertyProps> = ({
+  property,
+  api,
+}) => {
   const legend = typeIcon(property.type)
   return (
     <TreeItem
       {...legend}
-      detail={<ExplorePropertyDetail property={property} />}
+      detail={<ExplorePropertyDetail api={api} property={property} />}
     >
       {property.jsonName}
     </TreeItem>
@@ -198,8 +218,9 @@ export const ExplorePropertyNode: FC<ExplorePropertyProps> = ({ property }) => {
  * @param openAll expands entire tree if true
  * @constructor
  */
-export const ExploreProperty: FC<ExplorePropertyProps> = ({
+export const ExploreProperty: FC<ExploreApiPropertyProps> = ({
   property,
+  api,
   level = 0,
   maxDepth = -1,
   openAll = false,
@@ -208,6 +229,7 @@ export const ExploreProperty: FC<ExplorePropertyProps> = ({
   if (!picked.intrinsic) {
     return (
       <ExplorePropertyType
+        api={api}
         property={property}
         open={false}
         level={level + 1}
@@ -216,16 +238,17 @@ export const ExploreProperty: FC<ExplorePropertyProps> = ({
       />
     )
   }
-  return <ExplorePropertyNode property={property} />
+  return <ExplorePropertyNode api={api} property={property} />
 }
 
-interface ExplorePropertyTypeProps extends ExplorePropertyProps {
+interface ExplorePropertyTypeProps extends ExploreApiPropertyProps {
   /** Open the node display immediately? */
   open?: boolean
 }
 
 export const ExplorePropertyType: FC<ExplorePropertyTypeProps> = ({
   property,
+  api,
   open = true,
   level = 0,
   maxDepth = -1,
@@ -236,7 +259,7 @@ export const ExplorePropertyType: FC<ExplorePropertyTypeProps> = ({
   const nest = expandable(level, maxDepth)
   const legend = typeIcon(type)
   if (!nest) {
-    return <ExplorePropertyNode property={property} />
+    return <ExplorePropertyNode api={api} property={property} />
   }
   return (
     <Tree
@@ -244,10 +267,12 @@ export const ExplorePropertyType: FC<ExplorePropertyTypeProps> = ({
       label={`${property.jsonName}`}
       icon={legend.icon}
       defaultOpen={open || openAll}
-      detail={<ExplorePropertyDetail property={property} />}
+      density={-3}
+      detail={<ExplorePropertyDetail api={api} property={property} />}
     >
       {Object.values(props).map((property) => (
         <ExploreProperty
+          api={api}
           key={property.fullName}
           property={property}
           level={level + 1}

@@ -24,16 +24,19 @@
 
  */
 
-import { IAuthSession } from '@looker/sdk-rtl'
-import { addMinutes, IRowModel, noDate, stringer } from './RowModel'
+import type { IAuthSession } from '@looker/sdk-rtl'
+import type { IRowModel } from './RowModel'
+import { addMinutes, noDate, stringer } from './RowModel'
 import { WhollySheet } from './WhollySheet'
-import { ITestRowProps, TestRow, testRowObject } from './RowModel.spec'
-import { ITabTable, SheetSDK } from './SheetSDK'
+import type { ITestRowProps } from './RowModel.spec'
+import { TestRow, testRowObject } from './RowModel.spec'
+import type { ITabTable } from './SheetSDK'
+import { SheetSDK } from './SheetSDK'
 import { initSheetSDK } from './testUtils/testUtils'
 
 export class TestSheet extends WhollySheet<TestRow, ITestRowProps> {
   typeRow<T extends IRowModel>(values?: any): T {
-    return (new TestRow(values) as unknown) as T
+    return new TestRow(values) as unknown as T
   }
 }
 
@@ -185,7 +188,7 @@ describe('WhollySheet', () => {
       try {
         await sheet.update(row)
         expect('whoops').toEqual('We should never get here')
-      } catch (e) {
+      } catch (e: any) {
         expect(e.message).toMatch(/Row 2 is outdated:/i)
       }
     })
@@ -199,7 +202,7 @@ describe('WhollySheet', () => {
         try {
           await sheet.update(row)
           expect('whoops').toEqual('We should never get here')
-        } catch (e) {
+        } catch (e: any) {
           expect(e.message).toMatch(/row must be > 0 to update/i)
         }
       })

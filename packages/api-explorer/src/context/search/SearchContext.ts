@@ -24,8 +24,10 @@
 
  */
 
-import { createContext, Dispatch } from 'react'
-import { SearchState, SearchAction, defaultSearchState } from '../../reducers'
+import type { Dispatch } from 'react'
+import { createContext } from 'react'
+import type { SearchState, SearchAction } from '../../reducers'
+import { defaultSearchState } from '../../reducers'
 
 interface SearchContextProps {
   searchSettings: SearchState

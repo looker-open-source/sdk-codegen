@@ -24,16 +24,15 @@
 
  */
 
+import type { IApiModel, IType, IMethod } from '@looker/sdk-codegen'
 import {
   ArrayType,
   DelimArrayType,
   HashType,
-  IApiModel,
   IntrinsicType,
-  IType,
-  IMethod,
+  EnumType,
 } from '@looker/sdk-codegen'
-import { RunItInput } from '@looker/run-it'
+import type { RunItInput, RunItValues } from '@looker/run-it'
 
 /**
  * Return a default value for a given type name
@@ -78,20 +77,22 @@ const createSampleBody = (spec: IApiModel, type: IType) => {
   /* eslint-disable @typescript-eslint/no-use-before-define */
   const getSampleValue = (type: IType) => {
     if (type instanceof IntrinsicType) return getTypeDefault(type.name)
+    if (type instanceof DelimArrayType)
+      return getTypeDefault(type.elementType.name)
+    if (type instanceof EnumType) return ''
     if (type instanceof ArrayType)
       return type.customType
         ? [recurse(spec.types[type.customType])]
         : getTypeDefault(type.name)
     if (type instanceof HashType)
       return type.customType ? recurse(spec.types[type.customType]) : {}
-    if (type instanceof DelimArrayType) return ''
 
     return recurse(type)
   }
   /* eslint-enable @typescript-eslint/no-use-before-define */
 
   const recurse = (type: IType) => {
-    const sampleBody: { [key: string]: any } = {}
+    const sampleBody: RunItValues = {}
     for (const prop of type.writeable) {
       const sampleValue = getSampleValue(prop.type)
       if (sampleValue !== undefined) {
@@ -104,6 +105,18 @@ const createSampleBody = (spec: IApiModel, type: IType) => {
 }
 
 /**
+ * Convert model type to an editable type
+ * @param spec API model for building input editor
+ * @param type to convert
+ */
+const editType = (spec: IApiModel, type: IType) => {
+  if (type instanceof IntrinsicType) return type.name
+  // TODO create a DelimArray editing component as part of the complex type editor
+  if (type instanceof DelimArrayType) return 'string'
+  return createSampleBody(spec, type)
+}
+
+/**
  * Given an SDK method create and return an array of inputs for the run-it form
  * @param spec Api spec
  * @param method A method object
@@ -112,10 +125,7 @@ export const createInputs = (spec: IApiModel, method: IMethod): RunItInput[] =>
   method.allParams.map((param) => ({
     name: param.name,
     location: param.location,
-    type:
-      param.type instanceof IntrinsicType
-        ? param.type.name
-        : createSampleBody(spec, param.type),
+    type: editType(spec, param.type),
     required: param.required,
     description: param.description,
   }))

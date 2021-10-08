@@ -24,7 +24,7 @@
 
  */
 
-import { ExtensionSDK } from '@looker/extension-sdk'
+import type { ExtensionSDK } from '@looker/extension-sdk'
 
 export const setupClosePopoversListener = (extensionSDK?: ExtensionSDK) => {
   const onBodyMousedown = () => {
@@ -32,9 +32,8 @@ export const setupClosePopoversListener = (extensionSDK?: ExtensionSDK) => {
       extensionSDK.closeHostPopovers()
     }
   }
-  const body: HTMLBodyElement | undefined | null = document.querySelector(
-    'body'
-  )
+  const body: HTMLBodyElement | undefined | null =
+    document.querySelector('body')
   if (body) {
     body.addEventListener('mousedown', onBodyMousedown)
   }

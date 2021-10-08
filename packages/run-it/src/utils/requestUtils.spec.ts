@@ -23,9 +23,9 @@
  SOFTWARE.
 
  */
-import { RunItInput } from '../RunIt'
+import type { RunItInput } from '../RunIt'
 import { testJsonResponse } from '../test-data'
-import { StandaloneConfigurator } from '../components/ConfigForm/configUtils'
+import { StandaloneConfigurator } from '../components'
 import { createRequestParams, pathify, runRequest } from './requestUtils'
 import { initRunItSdk } from './RunItSDK'
 
@@ -94,6 +94,26 @@ describe('requestUtils', () => {
         limit: '500',
       }),
     }
+
+    const noBody = {
+      result_format: 'json',
+      cache: true,
+      body: '{}',
+    }
+
+    test('empty json body is removed', () => {
+      const [pathParams, queryParams, body] = createRequestParams(
+        inputs,
+        noBody
+      )
+      expect(pathParams).toEqual({
+        result_format: noBody.result_format,
+      })
+      expect(queryParams).toEqual({
+        cache: noBody.cache,
+      })
+      expect(body).not.toBeDefined()
+    })
 
     test('it correctly identifies requestContent params location', () => {
       const [pathParams, queryParams, body] = createRequestParams(

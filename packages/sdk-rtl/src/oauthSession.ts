@@ -24,11 +24,13 @@
 
  */
 
-import { AuthSession, IAccessToken, IError } from './authSession'
-import { agentPrefix, IRequestProps, sdkError } from './transport'
+import type { IAccessToken, IError } from './authSession'
+import { AuthSession } from './authSession'
+import type { IRequestProps } from './transport'
+import { agentPrefix, sdkError } from './transport'
 import { AuthToken } from './authToken'
-import { ICryptoHash } from './cryptoHash'
-import { IPlatformServices } from './platformServices'
+import type { ICryptoHash } from './cryptoHash'
+import type { IPlatformServices } from './platformServices'
 
 interface IAuthCodeGrantTypeParams {
   grant_type: 'authorization_code'
@@ -49,7 +51,7 @@ export class OAuthSession extends AuthSession {
   activeToken = new AuthToken()
   crypto: ICryptoHash
   private static readonly codeVerifierKey = 'looker_oauth_code_verifier'
-  private static readonly returnUrlKey = 'looker_oauth_return_url'
+  public static readonly returnUrlKey = 'looker_oauth_return_url'
 
   constructor(services: IPlatformServices) {
     super(services.settings, services.transport)
@@ -149,12 +151,13 @@ export class OAuthSession extends AuthSession {
           'cors_api',
           agentPrefix
         )
-        this.returnUrl = window.location.pathname + window.location.search
+        const returnTo = window.location.pathname + window.location.search
+        this.returnUrl = returnTo
         // Save the current URL so redirected successful OAuth login can restore it
         window.location.href = authUrl
       } else {
         // If return URL is stored, we must be coming back from an OAuth request
-        // so catch and release the stored return url at the start of the redemption
+        // so release the stored return url at the start of the redemption
         this.returnUrl = null
         if (!this.code_verifier) {
           return Promise.reject(

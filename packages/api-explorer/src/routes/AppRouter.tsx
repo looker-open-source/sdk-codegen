@@ -23,22 +23,30 @@
  SOFTWARE.
 
  */
-import React, { FC, useContext } from 'react'
+import type { FC } from 'react'
+import React from 'react'
 import { Redirect, Route, Switch } from 'react-router-dom'
-import { ApiModel } from '@looker/sdk-codegen'
-import { OAuthScene, RunItContext } from '@looker/run-it'
+import type { ApiModel, SpecList } from '@looker/sdk-codegen'
+import type { RunItSetter } from '@looker/run-it'
 
-import { Looker40SDK } from '@looker/sdk'
-import { HomeScene, MethodScene, TagScene, TypeScene } from '../scenes'
+import {
+  HomeScene,
+  MethodScene,
+  MethodTagScene,
+  TypeScene,
+  TypeTagScene,
+} from '../scenes'
 import { DiffScene } from '../scenes/DiffScene'
-import { SpecItems } from '../ApiExplorer'
-import { diffPath, oAuthPath } from '../utils'
+import type { IApixEnvAdaptor } from '../utils'
+import { diffPath } from '../utils'
 
 interface AppRouterProps {
   api: ApiModel
   specKey: string
-  specs: SpecItems
+  specs: SpecList
   toggleNavigation: (target?: boolean) => void
+  envAdaptor: IApixEnvAdaptor
+  setVersionsUrl: RunItSetter
 }
 
 export const AppRouter: FC<AppRouterProps> = ({
@@ -46,17 +54,12 @@ export const AppRouter: FC<AppRouterProps> = ({
   api,
   specs,
   toggleNavigation,
+  envAdaptor,
+  setVersionsUrl,
 }) => {
-  const { sdk } = useContext(RunItContext)
-  const maybeOauth = sdk && sdk instanceof Looker40SDK
   return (
     <Switch>
       <Redirect from="/" to={`/${specKey}/`} exact />
-      {maybeOauth && (
-        <Route path={`/${oAuthPath}`}>
-          <OAuthScene />
-        </Route>
-      )}
       <Route path={`/${diffPath}/:l?/:r?`}>
         <DiffScene specs={specs} toggleNavigation={toggleNavigation} />
       </Route>
@@ -64,12 +67,19 @@ export const AppRouter: FC<AppRouterProps> = ({
         <HomeScene api={api} />
       </Route>
       <Route path="/:specKey/methods/:methodTag" exact>
-        <TagScene api={api} />
+        <MethodTagScene api={api} />
       </Route>
       <Route path="/:specKey/methods/:methodTag/:methodName">
-        <MethodScene api={api} />
+        <MethodScene
+          api={api}
+          envAdaptor={envAdaptor}
+          setVersionsUrl={setVersionsUrl}
+        />
       </Route>
-      <Route path="/:specKey/types/:typeName">
+      <Route path="/:specKey/types/:typeTag" exact>
+        <TypeTagScene api={api} />
+      </Route>
+      <Route path="/:specKey/types/:typeTag/:typeName">
         <TypeScene api={api} />
       </Route>
     </Switch>

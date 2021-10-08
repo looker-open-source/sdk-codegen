@@ -24,14 +24,11 @@
 
  */
 
-import {
-  IRowModelProps,
-  ITabTable,
-  SheetSDK,
-  WhollySheet,
-} from '@looker/wholly-sheet'
-import { ISheetRow, SheetRow } from './SheetRow'
-import { SheetData } from './SheetData'
+import type { IRowModelProps, ITabTable, SheetSDK } from '@looker/wholly-sheet'
+import { WhollySheet } from '@looker/wholly-sheet'
+import type { ISheetRow } from './SheetRow'
+import { SheetRow } from './SheetRow'
+import type { SheetData } from './SheetData'
 
 /** IMPORTANT: properties must be declared in the tab sheet's columnar order, not sorted order */
 export interface IUserProps extends IRowModelProps {
@@ -79,6 +76,6 @@ export class Users extends WhollySheet<User, IUserProps> {
   }
 
   typeRow<User>(values?: any) {
-    return (new User(values) as unknown) as User
+    return new User(values) as unknown as User
   }
 }

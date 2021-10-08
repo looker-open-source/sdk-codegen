@@ -24,7 +24,7 @@
 
  */
 
-import { ChattyHostConnection } from '@looker/chatty'
+import type { ChattyHostConnection } from '@looker/chatty'
 import {
   ExtensionHostApiImpl,
   EXTENSION_SDK_VERSION,
@@ -63,7 +63,7 @@ describe('extension_host_api tests', () => {
     console.error = originalConsoleError
   })
 
-  const createHostApi = (initMessage = {}) => {
+  const createHostApi = (initMessage = {}, lookerVersion = '6.25.0') => {
     const initializedCallback = jest.fn()
     const hostApi = new ExtensionHostApiImpl({
       chattyHost,
@@ -73,7 +73,7 @@ describe('extension_host_api tests', () => {
     const resp = hostApi.handleNotification({
       type: ExtensionNotificationType.INITIALIZE,
       payload: {
-        lookerVersion: '6.25.0',
+        lookerVersion,
         extensionId: 'ks::ks',
         route: '/sandbox',
         hostUrl: 'https://self-signed.looker.com:9999',
@@ -354,6 +354,16 @@ describe('extension_host_api tests', () => {
     done()
   })
 
+  it('writes to clipboard', async (done) => {
+    const hostApi = createHostApi({}, '21.7.0')
+    await hostApi.clipboardWrite('ABCD')
+    expect(sendAndReceiveSpy).toHaveBeenCalledWith('EXTENSION_API_REQUEST', {
+      payload: { type: 'write', value: 'ABCD' },
+      type: 'CLIPBOARD',
+    })
+    done()
+  })
+
   it('tracks an action', () => {
     const hostApi = createHostApi()
     hostApi.track('MY_TRACK_NAME', 'MY_TRACK_ACTION', { a: 'a', b: 'bb' })
@@ -410,7 +420,7 @@ describe('extension_host_api tests', () => {
         }),
       })
       throw new Error('Unexpected success')
-    } catch (error) {
+    } catch (error: any) {
       expect(error.message).toEqual(
         'Extension requires Looker version >=7.9, got 6.25.0'
       )
@@ -501,7 +511,7 @@ describe('extension_host_api tests', () => {
         }),
       })
       throw new Error('Unexpected success')
-    } catch (error) {
+    } catch (error: any) {
       expect(error.message).toEqual(
         'Extension requires Looker version >=7.11, got 6.25.0'
       )
@@ -552,7 +562,7 @@ describe('extension_host_api tests', () => {
       }
       await hostApi.oauth2Authenticate(authEndpoint, authParameters)
       throw new Error('Unexpected success')
-    } catch (error) {
+    } catch (error: any) {
       expect(error.message).toEqual(
         'Extension requires Looker version >=7.9, got 6.25.0'
       )
@@ -580,6 +590,49 @@ describe('extension_host_api tests', () => {
       },
       type: 'INVOKE_EXTERNAL_API',
     })
+    done()
+  })
+
+  it('sends oauth2 authenticate request with response_type id_token', async (done) => {
+    const hostApi = createHostApi({ lookerVersion: '7.9' })
+    const authEndpoint = 'https://accounts.google.com/o/oauth2/v2/auth'
+    const authParameters = {
+      client_id: 'CLIENT_ID',
+      scope: 'SCOPE',
+      response_type: 'id_token',
+    }
+    await hostApi.oauth2Authenticate(authEndpoint, authParameters)
+    expect(sendAndReceiveSpy).toHaveBeenCalledWith('EXTENSION_API_REQUEST', {
+      payload: {
+        payload: {
+          authEndpoint,
+          authParameters,
+          httpMethod: 'POST',
+        },
+        type: 'oauth2_authenticate',
+      },
+      type: 'INVOKE_EXTERNAL_API',
+    })
+    done()
+  })
+
+  it('rejects oauth2 authenticate request with invalid response_type', async (done) => {
+    const hostApi = createHostApi({ lookerVersion: '7.9' })
+    const authEndpoint = 'https://accounts.google.com/o/oauth2/v2/auth'
+    const authParameters = {
+      client_id: 'CLIENT_ID',
+      scope: 'SCOPE',
+      response_type: 'unknown_response_type',
+    }
+    try {
+      await hostApi.oauth2Authenticate(authEndpoint, authParameters)
+      throw new Error('How did I get here')
+    } catch (err: any) {
+      expect(err.message).toEqual(
+        'invalid response_type, must be token, id_token or code, unknown_response_type'
+      )
+    }
+    expect(sendAndReceiveSpy).not.toHaveBeenCalled()
     done()
   })
 
@@ -616,7 +669,7 @@ describe('extension_host_api tests', () => {
         exchangeParameters
       )
       throw new Error('Unexpected success')
-    } catch (error) {
+    } catch (error: any) {
       expect(error.message).toEqual(
         'Extension requires Looker version >=7.11, got 7.9'
       )
@@ -650,7 +703,7 @@ describe('extension_host_api tests', () => {
     try {
       hostApi.createSecretKeyTag('SECRET_KEY_NAME')
       throw new Error('Unexpected success')
-    } catch (error) {
+    } catch (error: any) {
       expect(error.message).toEqual(
         'Extension requires Looker version >=7.11, got 7.9'
       )
@@ -672,7 +725,7 @@ describe('extension_host_api tests', () => {
     try {
       hostApi.createSecretKeyTag('SECRET_KEY_NAME_@@')
       throw new Error('Unexpected success')
-    } catch (error) {
+    } catch (error: any) {
       expect(error.message).toEqual('Unsupported characters in key name')
     }
   })

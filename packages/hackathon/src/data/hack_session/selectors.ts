@@ -24,9 +24,17 @@
 
  */
 
-import { IHackathonProps, ITechnologyProps, IHackerProps } from '../../models'
-import { RootState } from '../root_reducer'
-import { ProjectsHeadings, HackersHeadings, JudgingsHeadings } from '../types'
+import type {
+  IHackathonProps,
+  ITechnologyProps,
+  IHackerProps,
+} from '../../models'
+import type { RootState } from '../root_reducer'
+import type {
+  ProjectsHeadings,
+  HackersHeadings,
+  JudgingsHeadings,
+} from '../types'
 
 export const getCurrentHackathonState = (
   state: RootState

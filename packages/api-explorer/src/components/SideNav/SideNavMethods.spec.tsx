@@ -24,7 +24,7 @@
 
  */
 import React from 'react'
-import { pick } from 'lodash'
+import pick from 'lodash/pick'
 import userEvent from '@testing-library/user-event'
 import { screen } from '@testing-library/react'
 
@@ -45,7 +45,7 @@ describe('SideNavMethods', () => {
     expect(sideNavItems).toHaveLength(Object.keys(methods).length)
     expect(sideNavItems[0]).toHaveAttribute(
       'href',
-      `/3.1/methods/${tag}/${Object.values(methods)[0].name}#top`
+      `/3.1/methods/${tag}/${Object.values(methods)[0].name}`
     )
   })
 

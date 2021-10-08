@@ -24,11 +24,12 @@
 
  */
 
-import React, { FC } from 'react'
+import type { FC } from 'react'
+import React from 'react'
 import { Chart } from 'react-google-charts'
 import { Heading, Space, Tooltip } from '@looker/components'
 import { Loading } from '../Loading'
-import { IResourceLoadTimes } from './perfUtils'
+import type { IResourceLoadTimes } from './perfUtils'
 
 interface PerfChartProps {
   /** Performance Resource timing data */
