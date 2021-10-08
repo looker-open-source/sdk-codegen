@@ -26,7 +26,13 @@
 import type { RunItInput } from '../RunIt'
 import { testJsonResponse } from '../test-data'
 import { StandaloneConfigurator } from '../components'
-import { createRequestParams, pathify, runRequest } from './requestUtils'
+import { api } from '../test-data/specs'
+import {
+  createRequestParams,
+  pathify,
+  runRequest,
+  createInputs,
+} from './requestUtils'
 import { initRunItSdk } from './RunItSDK'
 
 const sdk = initRunItSdk(new StandaloneConfigurator())
@@ -180,6 +186,104 @@ describe('requestUtils', () => {
         expect.any(Function)
       )
       expect(resp).toEqual(testJsonResponse)
+    })
+  })
+
+  describe('createInputs', () => {
+    test('converts delimarray to string', () => {
+      const method = api.methods.all_users
+      const actual = createInputs(api, method)
+      expect(actual).toHaveLength(method.allParams.length)
+      expect(actual[4]).toEqual({
+        name: 'ids',
+        location: 'query',
+        type: 'string',
+        required: false,
+        description: 'Optional list of ids to get specific users.',
+      })
+    })
+
+    test('converts enums in body to string', () => {
+      const method = api.methods.create_query_task
+      const actual = createInputs(api, method)
+      expect(actual).toHaveLength(method.allParams.length)
+      expect(actual[0]).toEqual({
+        name: 'body',
+        location: 'body',
+        type: {
+          query_id: 0,
+          result_format: '',
+          source: '',
+          deferred: false,
+          look_id: 0,
+          dashboard_id: '',
+        },
+        required: true,
+        description: '',
+      })
+    })
+
+    test('works with various param types', () => {
+      const method = api.methods.run_inline_query
+      const actual = createInputs(api, method)
+      expect(actual).toHaveLength(method.allParams.length)
+
+      expect(actual).toEqual(
+        expect.arrayContaining([
+          /** Boolean param */
+          {
+            name: 'cache',
+            location: 'query',
+            type: 'boolean',
+            required: false,
+            description: 'Get results from cache if available.',
+          },
+          /** Number param */
+          {
+            name: 'limit',
+            location: 'query',
+            type: 'int64',
+            required: false,
+            description: expect.any(String),
+          },
+          /** String param */
+          {
+            name: 'result_format',
+            location: 'path',
+            type: 'string',
+            required: true,
+            description: 'Format of result',
+          },
+          /** Body param */
+          {
+            name: 'body',
+            location: 'body',
+            type: expect.objectContaining({
+              model: '',
+              view: '',
+              fields: [],
+              pivots: [],
+              fill_fields: [],
+              filters: {},
+              filter_expression: '',
+              sorts: [],
+              limit: '',
+              column_limit: '',
+              total: false,
+              row_total: '',
+              subtotals: [],
+              vis_config: {},
+              filter_config: {},
+              visible_ui_sections: '',
+              dynamic_fields: '',
+              client_id: '',
+              query_timezone: '',
+            }),
+            required: true,
+            description: '',
+          },
+        ])
+      )
     })
   })
 })

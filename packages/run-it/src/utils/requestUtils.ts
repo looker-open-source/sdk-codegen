@@ -26,8 +26,18 @@
 
 import type { IAPIMethods, IRawResponse } from '@looker/sdk-rtl'
 import cloneDeep from 'lodash/cloneDeep'
+import type { IApiModel, IMethod, IType } from '@looker/sdk-codegen'
+import {
+  ArrayType,
+  DelimArrayType,
+  EnumType,
+  HashType,
+  IntrinsicType,
+} from '@looker/sdk-codegen'
 
 import type { RunItHttpMethod, RunItInput, RunItValues } from '../RunIt'
+import type { RunItConfigurator } from '../components'
+import { RunItFormKey } from '../components'
 import { runItSDK } from './RunItSDK'
 
 /** Hook to set a URL somewhere else in APIX */
@@ -86,6 +96,17 @@ export const prepareInputs = (
       }
     }
   }
+  return result
+}
+
+/**
+ * Load and clear any saved form values from the session
+ * @param configurator storage service
+ */
+export const formValues = (configurator: RunItConfigurator) => {
+  const storage = configurator.getStorage(RunItFormKey)
+  const result = storage.value ? JSON.parse(storage.value) : {}
+  configurator.removeStorage(RunItFormKey)
   return result
 }
 
@@ -154,3 +175,99 @@ export const runRequest = async (
   )
   return raw
 }
+
+/**
+ * Return a default value for a given type name
+ * @param type A type name
+ */
+const getTypeDefault = (type: string) => {
+  // TODO: use potential equivalent from sdk-codegen, confirm formats
+  switch (type) {
+    case 'boolean':
+      return false
+    case 'int64':
+    case 'integer':
+      return 0
+    case 'float':
+    case 'double':
+      return 0.0
+    case 'hostname':
+    case 'ipv4':
+    case 'ipv6':
+    case 'uuid':
+    case 'uri':
+    case 'string':
+    case 'email':
+      return ''
+    case 'string[]':
+      return []
+    case 'object':
+      return {}
+    case 'datetime':
+      return ''
+    default:
+      return ''
+  }
+}
+
+/**
+ * Given a type object reduce it to its writeable intrinsic and/or custom type properties and their default values
+ * @param spec Api spec
+ * @param type A type object
+ */
+const createSampleBody = (spec: IApiModel, type: IType) => {
+  /* eslint-disable @typescript-eslint/no-use-before-define */
+  const getSampleValue = (type: IType) => {
+    if (type instanceof IntrinsicType) return getTypeDefault(type.name)
+    if (type instanceof DelimArrayType)
+      return getTypeDefault(type.elementType.name)
+    if (type instanceof EnumType) return ''
+    if (type instanceof ArrayType)
+      return type.customType
+        ? [recurse(spec.types[type.customType])]
+        : getTypeDefault(type.name)
+    if (type instanceof HashType)
+      return type.customType ? recurse(spec.types[type.customType]) : {}
+
+    return recurse(type)
+  }
+  /* eslint-enable @typescript-eslint/no-use-before-define */
+
+  const recurse = (type: IType) => {
+    const sampleBody: RunItValues = {}
+    for (const prop of type.writeable) {
+      const sampleValue = getSampleValue(prop.type)
+      if (sampleValue !== undefined) {
+        sampleBody[prop.name] = sampleValue
+      }
+    }
+    return sampleBody
+  }
+  return recurse(type)
+}
+
+/**
+ * Convert model type to an editable type
+ * @param spec API model for building input editor
+ * @param type to convert
+ */
+const editType = (spec: IApiModel, type: IType) => {
+  if (type instanceof IntrinsicType) return type.name
+  // TODO create a DelimArray editing component as part of the complex type editor
+  if (type instanceof DelimArrayType) return 'string'
+  return createSampleBody(spec, type)
+}
+
+/**
+ * Given an SDK method create and return an array of inputs for the run-it form
+ * @param spec Api spec
+ * @param method A method object
+ */
+export const createInputs = (spec: IApiModel, method: IMethod): RunItInput[] =>
+  method.allParams.map((param) => ({
+    name: param.name,
+    location: param.location,
+    type: editType(spec, param.type),
+    required: param.required,
+    description: param.description,
+  }))
