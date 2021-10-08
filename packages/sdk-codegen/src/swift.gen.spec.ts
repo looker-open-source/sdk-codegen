@@ -115,7 +115,7 @@ public enum PermissionType: String, Codable {
       expect(actual).toEqual(expected)
     })
 
-    it('string ID properties use AnyString', () => {
+    it('optional string ID properties use map to AnyString', () => {
       const type = apiTestModel.types.GitConnectionTestResult
       const actual = gen.declareType(indent, type)
       const expected = `public struct GitConnectionTestResult: SDKModel {
@@ -148,6 +148,37 @@ public enum PermissionType: String, Codable {
         self._id = id.map(AnyString.init)
         self.message = message
         self.status = status
+    }
+
+}`
+      expect(actual).toEqual(expected)
+    })
+
+    it('required string ID properties use map to AnyString', () => {
+      const type = apiTestModel.types.CreateFolder
+      const actual = gen.declareType(indent, type)
+      const expected = `public struct CreateFolder: SDKModel {
+    /**
+     * Unique Name
+     */
+    public var name: String
+
+    private var _parent_id: AnyString
+    /**
+     * Id of Parent. If the parent id is null, this is a root-level entry
+     */
+    public var parent_id: String {
+        get { _parent_id.value }
+        set { _parent_id = AnyString.init(newValue) }
+    }
+
+    public init(name: String, parent_id: String) {
+        self.name = name
+        self._parent_id = AnyString.init(parent_id)
+    }
+
+    public init(_ name: String, _ parent_id: String) {
+        self.init(name: name, parent_id: parent_id)
     }
 
 }`

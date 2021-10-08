@@ -280,12 +280,15 @@ import Foundation
     if (useIt) {
       const privy = this.reserve('_' + property.name)
       const bump = this.bumper(indent)
+      const setter = property.required
+        ? 'AnyString.init(newValue)'
+        : 'newValue.map(AnyString.init)'
       munge = `${indent}private var ${privy}: AnyString${optional}\n`
       declaration = `${indent}public var ${this.reserve(property.name)}: ${
         type.name
       }${optional} {
 ${bump}get { ${privy}${optional}.value }
-${bump}set { ${privy} = newValue.map(AnyString.init) }
+${bump}set { ${privy} = ${setter} }
 ${indent}}\n`
     }
     return (
@@ -337,9 +340,13 @@ ${indent}}\n`
       posArgs.push(this.declarePositionalArg('', prop))
       if (this.useAnyString(prop)) {
         const varName = this.privy(propName)
-        inits.push(
-          `${bump}${this.it(varName)} = ${propName}.map(AnyString.init)`
-        )
+        if (prop.required) {
+          inits.push(`${bump}${this.it(varName)} = AnyString.init(${propName})`)
+        } else {
+          inits.push(
+            `${bump}${this.it(varName)} = ${propName}.map(AnyString.init)`
+          )
+        }
       } else {
         inits.push(`${bump}${this.it(propName)} = ${propName}`)
       }
