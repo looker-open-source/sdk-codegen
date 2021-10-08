@@ -28,6 +28,8 @@ import type { IAPIMethods, IRawResponse } from '@looker/sdk-rtl'
 import cloneDeep from 'lodash/cloneDeep'
 
 import type { RunItHttpMethod, RunItInput, RunItValues } from '../RunIt'
+import type { RunItConfigurator } from '../components'
+import { RunItFormKey } from '../components'
 import { runItSDK } from './RunItSDK'
 
 /** Hook to set a URL somewhere else in APIX */
@@ -86,6 +88,17 @@ export const prepareInputs = (
       }
     }
   }
+  return result
+}
+
+/**
+ * Load and clear any saved form values from the session
+ * @param configurator storage service
+ */
+export const formValues = (configurator: RunItConfigurator) => {
+  const storage = configurator.getStorage(RunItFormKey)
+  const result = storage.value ? JSON.parse(storage.value) : {}
+  configurator.removeStorage(RunItFormKey)
   return result
 }
 
