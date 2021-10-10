@@ -35,26 +35,28 @@ import {
   useTabs,
 } from '@looker/components'
 import type { ApiModel, IMethod } from '@looker/sdk-codegen'
-import type { IAPIMethods } from '@looker/sdk-rtl'
-import type { ResponseContent, RunItConfigurator } from './components'
+import type { ResponseContent } from './components'
 import {
   RequestForm,
   ResponseExplorer,
   Loading,
   DocSdkCalls,
-  RunItFormKey,
   ConfigForm,
   validateBody,
+  PerfTimings,
+  PerfTracker,
 } from './components'
 import type { RunItSettings } from './utils'
 import {
+  formValues,
   createRequestParams,
   runRequest,
   pathify,
   sdkNeedsConfig,
   prepareInputs,
+  sdkNeedsAuth,
+  createInputs,
 } from './utils'
-import { PerfTracker, PerfTimings } from './components/PerfTracker'
 import type { RunItSetter } from '.'
 import { runItNoSet, RunItContext } from '.'
 
@@ -95,28 +97,9 @@ export interface RunItInput {
   description: string
 }
 
-/**
- * Load and clear any saved form values from the session
- * @param configurator storage service
- */
-const formValues = (configurator: RunItConfigurator) => {
-  const storage = configurator.getStorage(RunItFormKey)
-  const result = storage.value ? JSON.parse(storage.value) : {}
-  configurator.removeStorage(RunItFormKey)
-  return result
-}
-
-const sdkNeedsAuth = (sdk: IAPIMethods | undefined) => {
-  if (!sdk) return false
-  const configIsNeeded = sdkNeedsConfig(sdk)
-  return configIsNeeded && !sdk.authSession.isAuthenticated()
-}
-
 interface RunItProps {
   /** spec model to use for sdk call generation */
   api: ApiModel
-  /** An array of parameters associated with a given endpoint */
-  inputs: RunItInput[]
   /** Method to test */
   method: IMethod
   /** Set versions Url callback */
@@ -131,7 +114,6 @@ interface RunItProps {
  */
 export const RunIt: FC<RunItProps> = ({
   api,
-  inputs,
   method,
   setVersionsUrl = runItNoSet,
   sdkLanguage = 'All',
@@ -150,6 +132,7 @@ export const RunIt: FC<RunItProps> = ({
   const [needsAuth, setNeedsAuth] = useState<boolean>(sdkNeedsAuth(sdk))
   const [validationMessage, setValidationMessage] = useState<string>('')
   const tabs = useTabs()
+  const inputs = createInputs(api, method)
 
   const perf = new PerfTimings()
 

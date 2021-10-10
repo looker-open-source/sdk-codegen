@@ -127,3 +127,13 @@ export const initRunItSdk = (configurator: RunItConfigurator) => {
  */
 export const sdkNeedsConfig = (sdk: IAPIMethods | undefined) =>
   sdk?.authSession.settings instanceof RunItSettings
+
+/**
+ * Determines if authentication is required
+ * @param sdk to check
+ */
+export const sdkNeedsAuth = (sdk: IAPIMethods | undefined) => {
+  if (!sdk) return false
+  const configIsNeeded = sdkNeedsConfig(sdk)
+  return configIsNeeded && !sdk.authSession.isAuthenticated()
+}

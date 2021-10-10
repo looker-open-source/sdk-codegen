@@ -245,7 +245,7 @@ describe('RequestForm', () => {
     })
   })
 
-  test('interactive with a number simple item changes the request content', async () => {
+  test('interacting with a number simple item changes the request content', async () => {
     const name = 'number_item'
     renderWithTheme(
       <RequestForm
