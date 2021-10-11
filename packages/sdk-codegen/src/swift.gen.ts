@@ -241,10 +241,9 @@ import Foundation
   useAnyString(property: IProperty) {
     const nameCheck = property.name.toLowerCase()
     return (
-      (this.anyString &&
-        property.type.name.toLowerCase() === 'string' &&
-        nameCheck === 'id') ||
-      nameCheck.endsWith('_id')
+      this.anyString &&
+      property.type.name.toLowerCase() === 'string' &&
+      (nameCheck === 'id' || nameCheck.endsWith('_id'))
     )
   }
 
