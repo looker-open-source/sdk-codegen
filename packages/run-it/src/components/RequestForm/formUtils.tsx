@@ -38,6 +38,7 @@ import {
   Icon,
   Space,
 } from '@looker/components'
+// eslint-disable-next-line no-restricted-imports
 import { Info } from '@styled-icons/material'
 import { DateFormat, InputDate } from '@looker/components-date'
 import { CodeEditor } from '@looker/code-editor'
