@@ -1,25 +1,27 @@
-/*
- * The MIT License (MIT)
- *
- * Copyright (c) 2019 Looker Data Sciences, Inc.
- *
- * Permission is hereby granted, free of charge, to any person obtaining a copy
- * of this software and associated documentation files (the "Software"), to deal
- * in the Software without restriction, including without limitation the rights
- * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
- * copies of the Software, and to permit persons to whom the Software is
- * furnished to do so, subject to the following conditions:
- *
- * The above copyright notice and this permission notice shall be included in
- * all copies or substantial portions of the Software.
- *
- * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
- * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
- * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
- * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
- * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
- * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
- * THE SOFTWARE.
+/**
+
+ MIT License
+
+ Copyright (c) 2021 Looker Data Sciences, Inc.
+
+ Permission is hereby granted, free of charge, to any person obtaining a copy
+ of this software and associated documentation files (the "Software"), to deal
+ in the Software without restriction, including without limitation the rights
+ to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+ copies of the Software, and to permit persons to whom the Software is
+ furnished to do so, subject to the following conditions:
+
+ The above copyright notice and this permission notice shall be included in all
+ copies or substantial portions of the Software.
+
+ THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+ FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+ AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+ LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+ SOFTWARE.
+
  */
 
 import Foundation
@@ -28,15 +30,15 @@ import Foundation
 open class APIMethods {
     public var authSession: IAuthorizer
     public var encoder = JSONEncoder()
-    
+
     public init(_ authSession: IAuthorizer) {
         self.authSession = authSession
     }
-    
+
     open func encode<T>(_ value: T) throws -> Data where T : Encodable {
         return try! encoder.encode(value)
     }
-    
+
     open func ok<TSuccess, TError>(_ response: SDKResponse<TSuccess, TError>) throws -> TSuccess {
         switch response {
         case .success(let response):
@@ -52,7 +54,7 @@ open class APIMethods {
             throw error
         }
     }
-    
+
     open func authRequest<TSuccess: Codable, TError: Codable>(
         _ method: HttpMethod,
         _ path: String,
@@ -77,7 +79,7 @@ open class APIMethods {
             options
         )
     }
-    
+
     /** Make a GET request */
     open func get<TSuccess: Codable, TError: Codable>(
         _ path: String,
@@ -93,7 +95,7 @@ open class APIMethods {
             options
         )
     }
-    
+
     /** Make a HEAD request */
     open func head<TSuccess: Codable, TError: Codable>(
         _ path: String,
@@ -109,7 +111,7 @@ open class APIMethods {
             options
         )
     }
-    
+
     /** Make a DELETE request */
     open func delete<TSuccess: Codable, TError: Codable>(
         _ path: String,
@@ -125,7 +127,7 @@ open class APIMethods {
             options
         )
     }
-    
+
     /** Make a POST request */
     open func post<TSuccess: Codable, TError: Codable>(
         _ path: String,
@@ -141,7 +143,7 @@ open class APIMethods {
             options
         )
     }
-    
+
     /** Make a PUT request */
     open func put<TSuccess: Codable, TError: Codable>(
         _ path: String,
@@ -157,7 +159,7 @@ open class APIMethods {
             options
         )
     }
-    
+
     /** Make a PATCH request */
     open func patch<TSuccess: Codable, TError: Codable>(
         _ path: String,

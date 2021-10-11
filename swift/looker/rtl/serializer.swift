@@ -1,25 +1,27 @@
-/*
- * The MIT License (MIT)
- *
- * Copyright (c) 2019 Looker Data Sciences, Inc.
- *
- * Permission is hereby granted, free of charge, to any person obtaining a copy
- * of this software and associated documentation files (the "Software"), to deal
- * in the Software without restriction, including without limitation the rights
- * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
- * copies of the Software, and to permit persons to whom the Software is
- * furnished to do so, subject to the following conditions:
- *
- * The above copyright notice and this permission notice shall be included in
- * all copies or substantial portions of the Software.
- *
- * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
- * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
- * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
- * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
- * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
- * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
- * THE SOFTWARE.
+/**
+
+ MIT License
+
+ Copyright (c) 2021 Looker Data Sciences, Inc.
+
+ Permission is hereby granted, free of charge, to any person obtaining a copy
+ of this software and associated documentation files (the "Software"), to deal
+ in the Software without restriction, including without limitation the rights
+ to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+ copies of the Software, and to permit persons to whom the Software is
+ furnished to do so, subject to the following conditions:
+
+ The above copyright notice and this permission notice shall be included in all
+ copies or substantial portions of the Software.
+
+ THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+ FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+ AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+ LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+ SOFTWARE.
+
  */
 
 import Foundation
@@ -52,7 +54,7 @@ public func deserialize<T>(_ data: Data) throws -> T where T : Codable {
     } catch {
         throw error
     }
-    
+
 }
 /// Convert a JSON string into the type `T`
 /// @throws errors if deserialization fails
@@ -79,7 +81,7 @@ public extension Encodable {
 /// handling date strings in JSON
 /// https://stackoverflow.com/questions/44682626/swifts-jsondecoder-with-multiple-date-formats-in-a-json-string
 public extension JSONDecoder {
-    
+
     /// Assign multiple DateFormatter to dateDecodingStrategy
     ///
     /// Usage :
@@ -95,16 +97,16 @@ public extension JSONDecoder {
         set {
             guard let formatters = newValue else { return }
             self.dateDecodingStrategy = .custom { decoder in
-                
+
                 let container = try decoder.singleValueContainer()
                 let dateString = try container.decode(String.self)
-                
+
                 for formatter in formatters {
                     if let date = formatter.date(from: dateString) {
                         return date
                     }
                 }
-                
+
                 throw DecodingError.dataCorruptedError(in: container, debugDescription: "Cannot decode date string \(dateString)")
             }
         }
@@ -120,26 +122,26 @@ public extension DateFormatter {
         formatter.locale = Foundation.Locale(identifier: "en_US_POSIX")
         return formatter
     }()
-    
+
     static let iso8601: DateFormatter = {
         var formatter = DateFormatter()
         formatter.locale = Foundation.Locale(identifier: "en_US_POSIX")
         formatter.dateFormat = "yyyy-MM-dd'T'HH:mm:ssXXXXX"
         return formatter
     }()
-    
+
     static let standardT: DateFormatter = {
         var formatter = DateFormatter()
         formatter.dateFormat = "yyyy-MM-dd'T'HH:mm:ss"
         return formatter
     }()
-    
+
     static let standard: DateFormatter = {
         var formatter = DateFormatter()
         formatter.dateFormat = "yyyy-MM-dd HH:mm:ss"
         return formatter
     }()
-    
+
     static let yearMonthDay: DateFormatter = {
         var formatter = DateFormatter()
         formatter.dateFormat = "yyyy-MM-dd"
@@ -157,7 +159,7 @@ enum Variant: Codable, Hashable {
     case bool(Bool)
     case double(Double)
     case date(Date)
-    
+
     func encode(to encoder: Encoder) throws {
         var container = encoder.singleValueContainer()
         switch self {
@@ -173,7 +175,7 @@ enum Variant: Codable, Hashable {
             try container.encode(date)
         }
     }
-    
+
     func get() -> Any {
         switch self {
         case .string(let string):
@@ -188,7 +190,7 @@ enum Variant: Codable, Hashable {
             return date
         }
     }
-    
+
     func getInt() -> Int64? {
         switch self {
         case .string(let string):
@@ -203,7 +205,7 @@ enum Variant: Codable, Hashable {
             return Int64((date.timeIntervalSince1970 * 1000.0).rounded())
         }
     }
-    
+
     func getString() -> String {
         switch self {
         case .string(let string):
@@ -218,7 +220,7 @@ enum Variant: Codable, Hashable {
             return DateFormatter.iso8601Full.string(from: date)
         }
     }
-    
+
     func getJson() -> String {
         switch self {
         case .string(let string):
@@ -234,7 +236,7 @@ enum Variant: Codable, Hashable {
         }
 
     }
-    
+
     func getBool() -> Bool? {
         switch self {
         case .string(let string):
@@ -250,7 +252,7 @@ enum Variant: Codable, Hashable {
             return date > Date.distantPast
         }
     }
-    
+
     func getDouble() -> Double? {
         switch self {
         case .string(let string):
@@ -265,7 +267,7 @@ enum Variant: Codable, Hashable {
             return Double(date.timeIntervalSince1970)
         }
     }
-    
+
     func getDate() -> Date? {
         switch self {
         case .string(let string):
@@ -283,7 +285,7 @@ enum Variant: Codable, Hashable {
         }
 
     }
-    
+
     init(from decoder: Decoder) throws {
         var str: String
         let container = try decoder.singleValueContainer()

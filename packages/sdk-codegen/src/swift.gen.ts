@@ -239,10 +239,12 @@ import Foundation
    * @param property to check
    */
   useAnyString(property: IProperty) {
+    const nameCheck = property.name.toLowerCase()
     return (
-      this.anyString &&
-      property.type.name.toLowerCase() === 'string' &&
-      property.name.toLowerCase().endsWith('id')
+      (this.anyString &&
+        property.type.name.toLowerCase() === 'string' &&
+        nameCheck === 'id') ||
+      nameCheck.endsWith('_id')
     )
   }
 
@@ -272,12 +274,12 @@ import Foundation
       )
     }
     const type = this.typeMap(property.type)
-    const useIt = this.useAnyString(property)
+    const specialHandling = this.useAnyString(property)
     let munge = ''
     let declaration = `${indent}public var ${this.reserve(property.name)}: ${
       type.name
     }${optional}\n`
-    if (useIt) {
+    if (specialHandling) {
       const privy = this.reserve('_' + property.name)
       const bump = this.bumper(indent)
       const setter = property.required
@@ -403,7 +405,7 @@ ${indent}}\n`
     let headComment =
       (head ? `${head}\n\n` : '') +
       `${method.httpMethod} ${method.endpoint} -> ${type.name}`
-    let fragment = ''
+    let fragment
     const requestType = this.requestTypeName(method)
     const bump = indent + this.indentStr
 
@@ -585,7 +587,7 @@ ${indent}}\n`
   }
 
   asAny(param: IParameter): Arg {
-    let castIt = false
+    let castIt
     if (param.type.elementType) {
       castIt = true
     } else {
