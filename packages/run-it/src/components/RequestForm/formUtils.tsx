@@ -34,7 +34,11 @@ import {
   Box,
   Popover,
   InputText,
+  Tooltip,
+  Icon,
+  Space,
 } from '@looker/components'
+import { QuestionCircleFill } from '@styled-icons/bootstrap'
 import { DateFormat, InputDate } from '@looker/components-date'
 import { CodeEditor } from '@looker/code-editor'
 
@@ -252,7 +256,23 @@ export const createComplexItem = (
     typeof content === 'string' ? content : JSON.stringify(content, null, 2)
 
   return (
-    <FormItem key={`${input.name}_fic`} id={input.name} label={input.name}>
+    <FormItem
+      key={`${input.name}_fic`}
+      id={input.name}
+      label={
+        <Space>
+          {input.name}
+          <Tooltip content="Empty values are automatically removed from the request.">
+            <Icon
+              data-testid="body-param-tooltip"
+              icon={<QuestionCircleFill />}
+              size="xxsmall"
+              ml="xsmall"
+            />
+          </Tooltip>
+        </Space>
+      }
+    >
       <CodeEditor
         key={`code_${input.name}`}
         language="json"

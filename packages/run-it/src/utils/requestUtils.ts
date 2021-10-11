@@ -290,7 +290,7 @@ const editType = (spec: IApiModel, type: IType) => {
 /**
  * Given an SDK method create and return an array of inputs for the run-it form
  * @param spec Api spec
- * @param method A method object
+ * @param method A method objectzz
  */
 export const createInputs = (spec: IApiModel, method: IMethod): RunItInput[] =>
   method.allParams.map((param) => ({

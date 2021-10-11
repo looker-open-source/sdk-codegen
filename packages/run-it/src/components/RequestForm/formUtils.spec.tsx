@@ -219,7 +219,7 @@ describe('Simple Items', () => {
     })
   })
 
-  describe('updateNullableProp', () => {
+  describe('updateNullableProp', async () => {
     test.each`
       label             | value
       ${'empty string'} | ${''}
@@ -239,16 +239,16 @@ describe('Simple Items', () => {
 describe('Complex Item', () => {
   const handleComplexChange = jest.fn()
 
-  test('it creates a complex item', () => {
+  test('it creates a complex item', async () => {
     const body = {
       query_id: 'string',
       fields: 'string[]',
       limit: 1,
     }
-    const requestContent = { body: {} }
+    const requestContent = { 'A complex item': {} }
     const ComplexItem = createComplexItem(
       {
-        name: 'body',
+        name: 'A complex item',
         location: 'body',
         type: body,
         required: true,
@@ -258,7 +258,15 @@ describe('Complex Item', () => {
       requestContent
     )
     renderWithTheme(ComplexItem)
-    expect(screen.getByText('body')).toBeInTheDocument()
+    expect(screen.getByText('A complex item')).toBeInTheDocument()
+    userEvent.hover(screen.getByTestId('body-param-tooltip'))
+    await waitFor(() => {
+      expect(
+        screen.getByText(
+          'Empty values are automatically removed from the request.'
+        )
+      ).toBeInTheDocument()
+    })
   })
 
   describe('validateBody', () => {
