@@ -63,7 +63,7 @@ export class ErrorBoundary extends Component<
       return (
         <SomethingWentWrong
           header="Uh oh! Something went wrong!"
-          actionMessage="Try refreshing the page the correct the problem."
+          actionMessage="Try refreshing the page to correct the problem."
         />
       )
     }
