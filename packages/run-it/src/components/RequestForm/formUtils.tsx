@@ -38,7 +38,7 @@ import {
   Icon,
   Space,
 } from '@looker/components'
-import { QuestionCircleFill } from '@styled-icons/bootstrap'
+import { Info } from '@styled-icons/material'
 import { DateFormat, InputDate } from '@looker/components-date'
 import { CodeEditor } from '@looker/code-editor'
 
@@ -265,8 +265,8 @@ export const createComplexItem = (
           <Tooltip content="Empty values are automatically removed from the request.">
             <Icon
               data-testid="body-param-tooltip"
-              icon={<QuestionCircleFill />}
-              size="xxsmall"
+              icon={<Info />}
+              size="xsmall"
               ml="xsmall"
             />
           </Tooltip>
