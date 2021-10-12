@@ -1,9 +1,28 @@
-//
-//  methodsTests.swift
-//  lookerTests
-//
-//  Created by John Kaster on 10/28/19.
-//
+/**
+
+ MIT License
+
+ Copyright (c) 2021 Looker Data Sciences, Inc.
+
+ Permission is hereby granted, free of charge, to any person obtaining a copy
+ of this software and associated documentation files (the "Software"), to deal
+ in the Software without restriction, including without limitation the rights
+ to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+ copies of the Software, and to permit persons to whom the Software is
+ furnished to do so, subject to the following conditions:
+
+ The above copyright notice and this permission notice shall be included in all
+ copies or substantial portions of the Software.
+
+ THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+ FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+ AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+ LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+ SOFTWARE.
+
+ */
 
 import XCTest
 @testable import looker
@@ -15,15 +34,15 @@ let sdk = config.sdk
 
 @available(OSX 10.15, *)
 class methodsTests: XCTestCase {
-    
+
     override func setUp() {
         // Put setup code here. This method is called before the invocation of each test method in the class.
     }
-    
+
     override func tearDown() {
         // Put teardown code here. This method is called after the invocation of each test method in the class.
     }
-    
+
     func testMe() {
         let me = try! sdk.ok(sdk.me())
         XCTAssertNotNil(me)
@@ -39,7 +58,7 @@ class methodsTests: XCTestCase {
         }
         _ = sdk.authSession.logout()
     }
-        
+
     func testUserSearch() {
         let list = try? sdk.ok(sdk.search_users(
             first_name:"%",
@@ -48,7 +67,7 @@ class methodsTests: XCTestCase {
         XCTAssertTrue(list!.count > 0, "\(list!.count) users found")
         _ = sdk.authSession.logout()
     }
-    
+
     /// generic list getter testing function
     func listGetter<TAll, TId, TEntity> (
         lister: () -> SDKResponse<[TAll], SDKError>,
@@ -85,7 +104,7 @@ class methodsTests: XCTestCase {
         }
         return errors
     }
-    
+
     func testGetAllUsers() {
         let result = listGetter(
             lister: { sdk.all_users() },
@@ -94,7 +113,7 @@ class methodsTests: XCTestCase {
         )
         XCTAssertEqual("", result, result)
     }
-    
+
     func testGetAllLooks() {
         let result = listGetter(
             lister: { sdk.all_looks() },
@@ -103,7 +122,7 @@ class methodsTests: XCTestCase {
         )
         XCTAssertEqual("", result, result)
     }
-    
+
     func testGetAllDashboards() {
         let result = listGetter(
             lister: { sdk.all_dashboards()},
@@ -112,7 +131,7 @@ class methodsTests: XCTestCase {
         )
         XCTAssertEqual("", result, result)
     }
-    
+
     func testGetAllFolders() {
         let result = listGetter(
             lister: { sdk.all_folders() },
@@ -121,24 +140,24 @@ class methodsTests: XCTestCase {
         )
         XCTAssertEqual("", result, result)
     }
-    
+
 }
 
 extension Data {
     enum ImageContentType: String {
         case jpg, png, gif, tiff, unknown
-        
+
         var fileExtension: String {
             return self.rawValue
         }
     }
-    
+
     var imageContentType: ImageContentType {
-        
+
         var values = [UInt8](repeating: 0, count: 1)
-        
+
         self.copyBytes(to: &values, count: 1)
-        
+
         switch (values[0]) {
         case 0xFF:
             return .jpg

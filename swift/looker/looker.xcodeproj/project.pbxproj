@@ -47,7 +47,6 @@
 		95ACE1E1234D930700235E02 /* apiSettingsTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 95ACE1E0234D930700235E02 /* apiSettingsTests.swift */; };
 		95E86572234DA4D8008FF9B4 /* apiConfig.swift in Sources */ = {isa = PBXBuildFile; fileRef = 95E86571234DA4D8008FF9B4 /* apiConfig.swift */; };
 		95F04F7B23FCA5CB006DF219 /* streams.swift in Sources */ = {isa = PBXBuildFile; fileRef = 95F04F7A23FCA5CB006DF219 /* streams.swift */; };
-		95FA444D234EB2AA0053027C /* partial.swift in Sources */ = {isa = PBXBuildFile; fileRef = 95FA444C234EB2A90053027C /* partial.swift */; };
 		A9D21A06256EF1B700734B50 /* smokeTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9D21A05256EF1B700734B50 /* smokeTests.swift */; };
 		OBJ_26 /* looker.swift in Sources */ = {isa = PBXBuildFile; fileRef = OBJ_12 /* looker.swift */; };
 		OBJ_33 /* Package.swift in Sources */ = {isa = PBXBuildFile; fileRef = OBJ_6 /* Package.swift */; };
@@ -107,7 +106,6 @@
 		95ACE1E0234D930700235E02 /* apiSettingsTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = apiSettingsTests.swift; sourceTree = "<group>"; };
 		95E86571234DA4D8008FF9B4 /* apiConfig.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = apiConfig.swift; sourceTree = "<group>"; };
 		95F04F7A23FCA5CB006DF219 /* streams.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = streams.swift; sourceTree = "<group>"; };
-		95FA444C234EB2A90053027C /* partial.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = partial.swift; sourceTree = "<group>"; };
 		A9D21A05256EF1B700734B50 /* smokeTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = smokeTests.swift; sourceTree = "<group>"; };
 		OBJ_10 /* README.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = "<group>"; };
 		OBJ_12 /* looker.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = looker.swift; sourceTree = "<group>"; };
@@ -169,7 +167,6 @@
 				9503C28C2355254400C10EEE /* baseTransport.swift */,
 				9578B261234D3A840048FD2A /* constants.swift */,
 				OBJ_12 /* looker.swift */,
-				95FA444C234EB2A90053027C /* partial.swift */,
 				95974CDB23694F9B0061F13F /* serializer.swift */,
 				9578B263234D3A8A0048FD2A /* transport.swift */,
 				951D365923F5FFBE007EBBC0 /* AnyCodable.swift */,
@@ -383,7 +380,6 @@
 				95ACE1DF234D5ECA00235E02 /* apiSettings.swift in Sources */,
 				9578B260234D07260048FD2A /* authToken.swift in Sources */,
 				95A775D32360E0BB00E388B8 /* apiMethods.swift in Sources */,
-				95FA444D234EB2AA0053027C /* partial.swift in Sources */,
 				95F04F7B23FCA5CB006DF219 /* streams.swift in Sources */,
 				951D365C23F60018007EBBC0 /* AnyDecodable.swift in Sources */,
 				956088462421A20E00C57969 /* oauthSession.swift in Sources */,
