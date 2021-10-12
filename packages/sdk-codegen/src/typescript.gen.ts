@@ -161,7 +161,7 @@ export interface I${this.packageName} extends IAPIMethods {
 
   streamsPrologue(_indent: string): string {
     return `
-import { Readable } from 'readable-stream'
+import type { Readable } from 'readable-stream'
 import type { ${this.rtlImports()}IAuthSession, ITransportSettings } from '@looker/sdk-rtl'
 import { APIMethods, encodeParam } from '@looker/sdk-rtl'
 
