@@ -24,6 +24,17 @@
 
  */
 
-export * from './permissions'
-export * from './tabs'
-export * from './csv_parse'
+import Papa from 'papaparse'
+
+// Wrap Papa.parse in promise for async use.
+// Assumes header row in csv
+export async function parseCsv<T>(csvFile: File): Promise<Array<T>> {
+  return new Promise((resolve, reject) => {
+    Papa.parse(csvFile, {
+      header: true,
+      skipEmptyLines: 'greedy',
+      complete: (output: any) => resolve(output.data),
+      error: (e: Papa.ParseError) => reject(e),
+    })
+  })
+}
