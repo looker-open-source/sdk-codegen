@@ -24,11 +24,14 @@ def looker_user_provision(email):
   if user_id is not None:
     sdk.send_user_credentials_email_password_reset(user_id=user_id)
     return 'A user with this email: {email} already existed; Password reset sent'.format(email=email)
-  elif user_id is None: 
+  else: 
     create_users(email=email)
     return 'New user created; Setup/Welcome email sent to {email}'.format(email=email)
 
 def search_users_by_email(email):
+  """An email can only be assigned to one user in a Looker instance. 
+  Therefore, search_user(email=test@test.com) will result in either
+  an empty dictionary, or a dictionary containing one user at index 0"""  
   users = sdk.search_users(email=email)
   if len(users) == 0:
     return None 
