@@ -26,7 +26,7 @@ def looker_user_provision(email):
     return f'A user with this email: {email} already existed; Password reset sent.'
   else: 
     create_users(email=email)
-    return 'New user created; Setup/Welcome email sent to {email}'.format(email=email)
+    return f'New user created; Setup/Welcome email sent to {email}.'
 
 def search_users_by_email(email):
   """An email can only be assigned to one user in a Looker instance. 
