@@ -30,7 +30,6 @@ import { screen, waitFor } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 import type { ApiModel, IMethod } from '@looker/sdk-codegen'
 
-import type { RunItInput } from './RunIt'
 import { RunIt } from './RunIt'
 import { api, testTextResponse } from './test-data'
 import { initRunItSdk, runItNoSet, RunItSettings } from './utils'
@@ -41,45 +40,9 @@ const sdk = initRunItSdk(new StandaloneConfigurator())
 
 describe('RunIt', () => {
   const run = 'Run'
-  const runItInputs: RunItInput[] = [
-    {
-      name: 'result_format',
-      location: 'path',
-      type: 'string',
-      required: true,
-      description: 'Format of result',
-    },
-    {
-      name: 'limit',
-      location: 'query',
-      type: 'integer',
-      required: true,
-      description: 'Row limit',
-    },
-    {
-      name: 'cache',
-      location: 'query',
-      type: 'boolean',
-      required: false,
-      description: 'Get results from cache if available',
-    },
-    {
-      name: 'body',
-      location: 'body',
-      type: {
-        model: 'string',
-        view: 'string',
-        fields: ['string'],
-        limit: 'string',
-      },
-      description: 'body',
-      required: true,
-    },
-  ]
 
   const renderRunIt = (
     _api: ApiModel = api,
-    inputs = runItInputs,
     method: IMethod = api.methods.run_inline_query
   ) => {
     renderWithTheme(
@@ -88,12 +51,7 @@ describe('RunIt', () => {
         configurator={defaultConfigurator}
         basePath="/api/4.0"
       >
-        <RunIt
-          api={_api}
-          inputs={inputs}
-          method={method}
-          setVersionsUrl={runItNoSet}
-        />
+        <RunIt api={_api} method={method} setVersionsUrl={runItNoSet} />
       </RunItProvider>
     )
   }

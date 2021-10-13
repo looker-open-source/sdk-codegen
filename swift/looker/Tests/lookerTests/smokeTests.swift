@@ -1,9 +1,28 @@
-//
-//  smokeTests.swift
-//  lookerTests
-//
-//  Created by John Kaster on 11/25/20.
-//
+/**
+
+ MIT License
+
+ Copyright (c) 2021 Looker Data Sciences, Inc.
+
+ Permission is hereby granted, free of charge, to any person obtaining a copy
+ of this software and associated documentation files (the "Software"), to deal
+ in the Software without restriction, including without limitation the rights
+ to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+ copies of the Software, and to permit persons to whom the Software is
+ furnished to do so, subject to the following conditions:
+
+ The above copyright notice and this permission notice shall be included in all
+ copies or substantial portions of the Software.
+
+ THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+ FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+ AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+ LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+ SOFTWARE.
+
+ */
 
 import XCTest
 @testable import looker
@@ -26,7 +45,7 @@ class smokeTests: XCTestCase {
             fields: ["dashboard.id", "dashboard.title", "dashboard.count"],
             limit: "100")
     }
-    
+
     func countQuery() -> WriteQuery {
         return WriteQuery(
             "system__activity",
@@ -35,9 +54,9 @@ class smokeTests: XCTestCase {
             limit: "100"
         )
     }
-    
+
     func mimeType(_ data: Data) -> String {
-        
+
         //        var sig = [UInt8](repeating: 0, count: 20)
         //        data.copyBytes(to: &sig, count: 20)
         //        print(sig)
@@ -77,7 +96,7 @@ class smokeTests: XCTestCase {
         XCTAssertNotNil(user)
         return user!
     }
-    
+
     /// Smoke: POST,  body param, int param, string param
     func testCreateQueryAndRun() {
         let body = simpleQuery()
@@ -108,7 +127,7 @@ class smokeTests: XCTestCase {
             } else {
                 XCTAssertTrue(false, "Couldn't cast data from jsonData")
             }
-            
+
             json = try sdk.ok(sdk.run_query(query.id!, "json_label"))
             XCTAssertNotNil(json)
             XCTAssertTrue(json.contains("Dashboard Count"), "json_label result")
@@ -123,13 +142,13 @@ class smokeTests: XCTestCase {
             } else {
                 XCTAssertTrue(false, "Couldn't cast data from jsonData")
             }
-            
+
         } catch {
             print(error)
         }
-        
+
     }
-    
+
     /// smoke: delimArray
     func testGetAllUsersWithIds() {
         let allUsers = try? sdk.ok(sdk.all_users())
@@ -138,7 +157,7 @@ class smokeTests: XCTestCase {
         XCTAssertEqual(users![0].id, searchIds[0])
         XCTAssertEqual(users![1].id, searchIds[1])
     }
-    
+
     /// smoke: GET, binary payload, string payload, int param, string param
     func testContentThumbnail() {
         var type = ""
@@ -157,7 +176,7 @@ class smokeTests: XCTestCase {
         let mime = mimeType(png!)
         XCTAssertEqual("image/png", mime)
     }
-    
+
     /// smoke: enum
     func testEnumSerialization() {
         var task = WriteCreateQueryTask(
@@ -183,7 +202,7 @@ class smokeTests: XCTestCase {
         XCTAssertEqual(task.source, actual.source)
         XCTAssertEqual(task.query_id, actual.query_id)
     }
-    
+
     /// smoke: error handling
     func testErrorsAreHandled() {
         do {
@@ -198,17 +217,17 @@ class smokeTests: XCTestCase {
         let missing2 = try? sdk.ok(sdk.folder("IDON'TEXIST"))
         XCTAssertNil(missing2, "Space should be nil")
     }
-    
+
     /// smoke: datetime payload
     func testSearchDashboards() {
         let dashboards = try? sdk.ok(sdk.search_dashboards(limit: 1))
         XCTAssertNotNil(dashboards)
         XCTAssertEqual(1, dashboards?.count)
-        
+
         let dash = dashboards![0]
         XCTAssertNotNil(dash.created_at)
     }
-    
+
     /// smoke: PUT w/ no body
     func testDefaultColorCollection() {
         let current = try? sdk.ok(sdk.default_color_collection())
@@ -225,7 +244,7 @@ class smokeTests: XCTestCase {
         XCTAssertEqual(other?.id, updated?.id)
         _ = try? sdk.ok(sdk.set_default_color_collection(current!.id!))
     }
-    
+
     /// smoke: PATCH, boolean parameter
     func testUserDisabling() {
         let me = try? sdk.ok(sdk.me())
@@ -242,7 +261,7 @@ class smokeTests: XCTestCase {
         XCTAssertNotNil(enabled)
         XCTAssertEqual(toggle, enabled?.is_disabled)
     }
-    
+
     /// smoke: DELETE
     func testDeleteUser() {
         let user = prepUsers()

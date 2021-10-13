@@ -139,6 +139,14 @@ func testBothPositionalAndNamed() {
 }
 ```
 
+### AnyString usage
+
+Some of the API model structures have a private variable of type `AnyString`. This special type was introduced to handle JSON values that can be either string or numeric.
+
+For Looker API 4.0, all entity ID references are being converted to string (some are currently integer) to prepare for potential scalability changes for entity references.
+
+This special `AnyString` wrapper supports an ID being either numeric or string, so it will work for older Looker releases that still have numeric IDs, and will also work for string IDs.
+
 ### More examples
 
 Additional Swift SDK usage examples may be found in the [SDK Examples repository](https://github.com/looker-open-source/sdk-examples/tree/main/swift).

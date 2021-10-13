@@ -171,6 +171,7 @@ export const MethodScene: FC<MethodSceneProps> = ({
             }}
           >
             <RunIt
+              key={method.operationId}
               sdkLanguage={sdkLanguage}
               api={api}
               method={method}

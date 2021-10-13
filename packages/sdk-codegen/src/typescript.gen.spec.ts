@@ -48,7 +48,7 @@ describe('typescript generator', () => {
         six: {},
         seven: [],
       }
-      const expected = { two: 'assigned', three: true, four: false }
+      const expected = { two: 'assigned', three: true, four: false, six: {} }
       const actual = trimInputs(inputs)
       expect(actual).toEqual(expected)
     })
@@ -80,7 +80,7 @@ describe('typescript generator', () => {
         three: true,
         four: false,
         five: '',
-        six: { a: true, b: 0, c: null },
+        six: { a: true, b: 0, c: null, d: {} },
       }
       const expected = {
         zero: [0, 1, 2, 3],
