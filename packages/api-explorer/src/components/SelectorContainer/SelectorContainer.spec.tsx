@@ -29,11 +29,7 @@ import { codeGenerators } from '@looker/sdk-codegen'
 import userEvent from '@testing-library/user-event'
 
 import { specs, specState } from '../../test-data'
-import {
-  registerTestEnvAdaptor,
-  renderWithRouter,
-  withReduxProvider,
-} from '../../test-utils'
+import { renderWithRouter, withReduxProvider } from '../../test-utils'
 import { defaultSettingsState } from '../../state'
 import { SelectorContainer } from './SelectorContainer'
 
@@ -42,7 +38,6 @@ describe('SelectorContainer', () => {
 
   beforeAll(() => {
     window.HTMLElement.prototype.scrollIntoView = jest.fn()
-    registerTestEnvAdaptor()
   })
 
   test('it renders a spec selector with the correct default value and options', async () => {

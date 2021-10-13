@@ -32,6 +32,7 @@ import type { RenderOptions } from '@testing-library/react'
 
 import type { RootState } from '../state'
 import { configureStore } from '../state'
+import { registerEnvAdaptor, StandaloneEnvAdaptor } from '../utils'
 import { renderWithRouter } from '.'
 
 const defaultStore = configureStore()
@@ -40,6 +41,7 @@ export const withReduxProvider = (
   consumers: ReactElement<any>,
   store: Store<RootState> = defaultStore
 ) => {
+  registerEnvAdaptor(new StandaloneEnvAdaptor())
   return <Provider store={store}>{consumers}</Provider>
 }
 

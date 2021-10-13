@@ -156,59 +156,57 @@ const ApiExplorer: FC<ApiExplorerProps> = ({
 
   return (
     <>
-      {initializing ? (
-        <Loader message="Initializing" themeOverrides={themeOverrides} />
-      ) : (
-        <>
-          <ComponentsProvider
-            loadGoogleFonts={themeOverrides.loadGoogleFonts}
-            themeCustomizations={themeOverrides.themeCustomizations}
-          >
-            <ErrorBoundary logError={envAdaptor.logError.bind(envAdaptor)}>
-              <LodeContext.Provider value={{ ...lode }}>
-                <SearchContext.Provider
-                  value={{ searchSettings, setSearchSettings }}
-                >
-                  <Page style={{ overflow: 'hidden' }}>
-                    {!headless && (
-                      <Header
+      <ComponentsProvider
+        loadGoogleFonts={themeOverrides.loadGoogleFonts}
+        themeCustomizations={themeOverrides.themeCustomizations}
+      >
+        {initializing ? (
+          <Loader message="Initializing" themeOverrides={themeOverrides} />
+        ) : (
+          <ErrorBoundary logError={envAdaptor.logError.bind(envAdaptor)}>
+            <LodeContext.Provider value={{ ...lode }}>
+              <SearchContext.Provider
+                value={{ searchSettings, setSearchSettings }}
+              >
+                <Page style={{ overflow: 'hidden' }}>
+                  {!headless && (
+                    <Header
+                      specs={specs}
+                      spec={spec}
+                      specDispatch={specDispatch}
+                      toggleNavigation={toggleNavigation}
+                    />
+                  )}
+                  <Layout hasAside height="100%">
+                    {hasNavigation && (
+                      <AsideBorder pt="large" width="20rem">
+                        <SideNav
+                          headless={headless}
+                          specs={specs}
+                          spec={spec}
+                          specDispatch={specDispatch}
+                        />
+                      </AsideBorder>
+                    )}
+                    {oauthReturn && <OAuthScene />}
+                    {!oauthReturn && spec.api && (
+                      <AppRouter
+                        api={spec.api}
+                        specKey={spec.key}
                         specs={specs}
-                        spec={spec}
-                        specDispatch={specDispatch}
                         toggleNavigation={toggleNavigation}
+                        envAdaptor={envAdaptor}
+                        setVersionsUrl={setVersionsUrl}
                       />
                     )}
-                    <Layout hasAside height="100%">
-                      {hasNavigation && (
-                        <AsideBorder pt="large" width="20rem">
-                          <SideNav
-                            headless={headless}
-                            specs={specs}
-                            spec={spec}
-                            specDispatch={specDispatch}
-                          />
-                        </AsideBorder>
-                      )}
-                      {oauthReturn && <OAuthScene />}
-                      {!oauthReturn && spec.api && (
-                        <AppRouter
-                          api={spec.api}
-                          specKey={spec.key}
-                          specs={specs}
-                          toggleNavigation={toggleNavigation}
-                          envAdaptor={envAdaptor}
-                          setVersionsUrl={setVersionsUrl}
-                        />
-                      )}
-                    </Layout>
-                  </Page>
-                </SearchContext.Provider>
-              </LodeContext.Provider>
-            </ErrorBoundary>
-          </ComponentsProvider>
-          {!headless && <BodyOverride />}
-        </>
-      )}
+                  </Layout>
+                </Page>
+              </SearchContext.Provider>
+            </LodeContext.Provider>
+          </ErrorBoundary>
+        )}
+      </ComponentsProvider>
+      {!headless && <BodyOverride />}
     </>
   )
 }

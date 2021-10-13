@@ -38,7 +38,6 @@ interface DocMarkdownProps {
 }
 
 export const DocMarkdown: FC<DocMarkdownProps> = ({ source, specKey }) => {
-  const envAdaptor = getEnvAdaptor()
   const {
     searchSettings: { pattern },
   } = useContext(SearchContext)
@@ -51,6 +50,7 @@ export const DocMarkdown: FC<DocMarkdownProps> = ({ source, specKey }) => {
     } else if (url.startsWith(`/${specKey}`)) {
       history.push(url)
     } else if (url.startsWith('https://')) {
+      const envAdaptor = getEnvAdaptor()
       envAdaptor.openBrowserWindow(url)
     }
   }

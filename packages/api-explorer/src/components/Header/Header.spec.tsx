@@ -29,11 +29,7 @@ import { codeGenerators } from '@looker/sdk-codegen'
 import userEvent from '@testing-library/user-event'
 
 import { specs, specState } from '../../test-data'
-import {
-  renderWithRouter,
-  withReduxProvider,
-  registerTestEnvAdaptor,
-} from '../../test-utils'
+import { renderWithRouter, withReduxProvider } from '../../test-utils'
 import { defaultSettingsState } from '../../state'
 import { Header } from './Header'
 
@@ -44,7 +40,6 @@ describe('Header', () => {
 
   beforeAll(() => {
     window.HTMLElement.prototype.scrollIntoView = jest.fn()
-    registerTestEnvAdaptor()
   })
 
   test('it renders a title', () => {

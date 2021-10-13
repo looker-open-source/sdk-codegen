@@ -40,7 +40,6 @@ import { EnvAdaptorConstants, getEnvAdaptor } from '../../utils'
 export const SdkLanguageSelector: FC = () => {
   const { setSdkLanguageAction } = useActions()
   const selectedSdkLanguage = useSelector(getSelectedSdkLanguage)
-  const envAdaptor = getEnvAdaptor()
 
   const allSdkLanguages: SelectOptionProps[] = codeGenerators.map((gen) => ({
     value: gen.language,
@@ -56,6 +55,7 @@ export const SdkLanguageSelector: FC = () => {
 
   const handleChange = (language: string) => {
     setSdkLanguageAction(language)
+    const envAdaptor = getEnvAdaptor()
     envAdaptor.localStorageSetItem(
       EnvAdaptorConstants.LOCALSTORAGE_SDK_LANGUAGE_KEY,
       language

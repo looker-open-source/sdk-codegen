@@ -29,10 +29,7 @@ import userEvent from '@testing-library/user-event'
 import { codeGenerators } from '@looker/sdk-codegen'
 
 import { defaultSettingsState } from '../../state'
-import {
-  registerTestEnvAdaptor,
-  renderWithReduxProvider,
-} from '../../test-utils'
+import { renderWithReduxProvider } from '../../test-utils'
 import { EnvAdaptorConstants } from '../../utils'
 import { SdkLanguageSelector } from './SdkLanguageSelector'
 
@@ -41,7 +38,6 @@ describe('SdkLanguageSelector', () => {
 
   beforeEach(() => {
     localStorage.clear()
-    registerTestEnvAdaptor()
   })
 
   test('it has the correct default language selected', () => {
