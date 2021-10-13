@@ -129,7 +129,7 @@ export const registerEnvAdaptor = (adaptor: IApixEnvAdaptor) => {
 }
 
 /**
- * Unregister the envAdaptor. The ApiExplorer will automatically call this when it is unmounted.
+ * Unregister the envAdaptor. The API Explorer will automatically call this when it is unmounted.
  */
 export const unregisterEnvAdaptor = () => {
   envAdaptor = undefined
