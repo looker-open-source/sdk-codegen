@@ -23,7 +23,7 @@ def looker_user_provision(email):
   user_id = search_users_by_email(email=email)
   if user_id is not None:
     sdk.send_user_credentials_email_password_reset(user_id=user_id)
-    return 'A user with this email: {email} already existed; Password reset sent'.format(email=email)
+    return f'A user with this email: {email} already existed; Password reset sent.'
   else: 
     create_users(email=email)
     return 'New user created; Setup/Welcome email sent to {email}'.format(email=email)
