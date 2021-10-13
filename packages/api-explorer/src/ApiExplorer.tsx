@@ -41,7 +41,7 @@ import {
   registerEnvAdaptor,
   unregisterEnvAdaptor,
 } from './utils'
-import { Header, SideNav, ErrorBoundary } from './components'
+import { Header, SideNav, ErrorBoundary, Loader } from './components'
 import {
   specReducer,
   initDefaultSpecState,
@@ -72,7 +72,7 @@ const ApiExplorer: FC<ApiExplorerProps> = ({
   declarationsLodeUrl = `${apixFilesHost}/declarationsIndex.json`,
   headless = false,
 }) => {
-  registerEnvAdaptor(envAdaptor)
+  const [initializing, setInitializing] = useState(true)
   const location = useLocation()
   const { setSdkLanguageAction } = useActions()
   const oauthReturn = location.pathname === `/${oAuthPath}`
@@ -99,6 +99,9 @@ const ApiExplorer: FC<ApiExplorerProps> = ({
   }, [])
 
   useEffect(() => {
+    registerEnvAdaptor(envAdaptor)
+    setInitializing(false)
+
     return () => unregisterEnvAdaptor()
   }, [])
 
@@ -149,57 +152,63 @@ const ApiExplorer: FC<ApiExplorerProps> = ({
     initSdkLanguage()
   }, [envAdaptor, setSdkLanguageAction])
 
-  const { loadGoogleFonts, themeCustomizations } = envAdaptor.themeOverrides()
+  const themeOverrides = envAdaptor.themeOverrides()
 
   return (
     <>
-      <ComponentsProvider
-        loadGoogleFonts={loadGoogleFonts}
-        themeCustomizations={themeCustomizations}
-      >
-        <ErrorBoundary logError={envAdaptor.logError.bind(envAdaptor)}>
-          <LodeContext.Provider value={{ ...lode }}>
-            <SearchContext.Provider
-              value={{ searchSettings, setSearchSettings }}
-            >
-              <Page style={{ overflow: 'hidden' }}>
-                {!headless && (
-                  <Header
-                    specs={specs}
-                    spec={spec}
-                    specDispatch={specDispatch}
-                    toggleNavigation={toggleNavigation}
-                  />
-                )}
-                <Layout hasAside height="100%">
-                  {hasNavigation && (
-                    <AsideBorder pt="large" width="20rem">
-                      <SideNav
-                        headless={headless}
+      {initializing ? (
+        <Loader message="Initializing" themeOverrides={themeOverrides} />
+      ) : (
+        <>
+          <ComponentsProvider
+            loadGoogleFonts={themeOverrides.loadGoogleFonts}
+            themeCustomizations={themeOverrides.themeCustomizations}
+          >
+            <ErrorBoundary logError={envAdaptor.logError.bind(envAdaptor)}>
+              <LodeContext.Provider value={{ ...lode }}>
+                <SearchContext.Provider
+                  value={{ searchSettings, setSearchSettings }}
+                >
+                  <Page style={{ overflow: 'hidden' }}>
+                    {!headless && (
+                      <Header
                         specs={specs}
                         spec={spec}
                         specDispatch={specDispatch}
+                        toggleNavigation={toggleNavigation}
                       />
-                    </AsideBorder>
-                  )}
-                  {oauthReturn && <OAuthScene />}
-                  {!oauthReturn && spec.api && (
-                    <AppRouter
-                      api={spec.api}
-                      specKey={spec.key}
-                      specs={specs}
-                      toggleNavigation={toggleNavigation}
-                      envAdaptor={envAdaptor}
-                      setVersionsUrl={setVersionsUrl}
-                    />
-                  )}
-                </Layout>
-              </Page>
-            </SearchContext.Provider>
-          </LodeContext.Provider>
-        </ErrorBoundary>
-      </ComponentsProvider>
-      {!headless && <BodyOverride />}
+                    )}
+                    <Layout hasAside height="100%">
+                      {hasNavigation && (
+                        <AsideBorder pt="large" width="20rem">
+                          <SideNav
+                            headless={headless}
+                            specs={specs}
+                            spec={spec}
+                            specDispatch={specDispatch}
+                          />
+                        </AsideBorder>
+                      )}
+                      {oauthReturn && <OAuthScene />}
+                      {!oauthReturn && spec.api && (
+                        <AppRouter
+                          api={spec.api}
+                          specKey={spec.key}
+                          specs={specs}
+                          toggleNavigation={toggleNavigation}
+                          envAdaptor={envAdaptor}
+                          setVersionsUrl={setVersionsUrl}
+                        />
+                      )}
+                    </Layout>
+                  </Page>
+                </SearchContext.Provider>
+              </LodeContext.Provider>
+            </ErrorBoundary>
+          </ComponentsProvider>
+          {!headless && <BodyOverride />}
+        </>
+      )}
     </>
   )
 }

@@ -33,7 +33,6 @@ import { renderWithTheme } from '@looker/components-test-utils'
 import type { IDeclarationMine, IExampleMine } from '@looker/sdk-codegen'
 import { LodeContext } from '../context'
 import type { RootState } from '../state'
-import type { IApixEnvAdaptor } from '../utils'
 import { withReduxProvider } from './redux'
 
 const withLode = (
@@ -62,14 +61,9 @@ export const renderWithReduxProviderAndLode = (
   examples: IExampleMine,
   declarations?: IDeclarationMine,
   store?: Store<RootState>,
-  envAdaptor?: IApixEnvAdaptor,
   options?: Omit<RenderOptions, 'queries'>
 ) =>
   renderWithTheme(
-    withReduxProvider(
-      withLode(component, examples, declarations),
-      store,
-      envAdaptor
-    ),
+    withReduxProvider(withLode(component, examples, declarations), store),
     options
   )
