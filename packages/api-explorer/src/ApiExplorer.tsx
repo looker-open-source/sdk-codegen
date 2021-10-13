@@ -32,14 +32,15 @@ import { Aside, ComponentsProvider, Layout, Page } from '@looker/components'
 import type { SpecList } from '@looker/sdk-codegen'
 import type { RunItSetter } from '@looker/run-it'
 import { funFetch, fallbackFetch, OAuthScene } from '@looker/run-it'
-import {
-  SearchContext,
-  LodeContext,
-  defaultLodeContextValue,
-  EnvAdaptorContext,
-} from './context'
+import { SearchContext, LodeContext, defaultLodeContextValue } from './context'
 import type { IApixEnvAdaptor } from './utils'
-import { EnvAdaptorConstants, getLoded, oAuthPath } from './utils'
+import {
+  EnvAdaptorConstants,
+  getLoded,
+  oAuthPath,
+  registerEnvAdaptor,
+  unregisterEnvAdaptor,
+} from './utils'
 import { Header, SideNav, ErrorBoundary } from './components'
 import {
   specReducer,
@@ -71,10 +72,10 @@ const ApiExplorer: FC<ApiExplorerProps> = ({
   declarationsLodeUrl = `${apixFilesHost}/declarationsIndex.json`,
   headless = false,
 }) => {
+  registerEnvAdaptor(envAdaptor)
   const location = useLocation()
   const { setSdkLanguageAction } = useActions()
   const oauthReturn = location.pathname === `/${oAuthPath}`
-
   const [specState, specDispatch] = useReducer(
     specReducer,
     initDefaultSpecState(specs, location)
@@ -95,6 +96,10 @@ const ApiExplorer: FC<ApiExplorerProps> = ({
     if (e.origin === window.origin && e.data.action === 'toggle_sidebar') {
       setHasNavigation((currentHasNavigation) => !currentHasNavigation)
     }
+  }, [])
+
+  useEffect(() => {
+    return () => unregisterEnvAdaptor()
   }, [])
 
   useEffect(() => {
@@ -153,47 +158,45 @@ const ApiExplorer: FC<ApiExplorerProps> = ({
         themeCustomizations={themeCustomizations}
       >
         <ErrorBoundary logError={envAdaptor.logError.bind(envAdaptor)}>
-          <EnvAdaptorContext.Provider value={{ envAdaptor }}>
-            <LodeContext.Provider value={{ ...lode }}>
-              <SearchContext.Provider
-                value={{ searchSettings, setSearchSettings }}
-              >
-                <Page style={{ overflow: 'hidden' }}>
-                  {!headless && (
-                    <Header
+          <LodeContext.Provider value={{ ...lode }}>
+            <SearchContext.Provider
+              value={{ searchSettings, setSearchSettings }}
+            >
+              <Page style={{ overflow: 'hidden' }}>
+                {!headless && (
+                  <Header
+                    specs={specs}
+                    spec={spec}
+                    specDispatch={specDispatch}
+                    toggleNavigation={toggleNavigation}
+                  />
+                )}
+                <Layout hasAside height="100%">
+                  {hasNavigation && (
+                    <AsideBorder pt="large" width="20rem">
+                      <SideNav
+                        headless={headless}
+                        specs={specs}
+                        spec={spec}
+                        specDispatch={specDispatch}
+                      />
+                    </AsideBorder>
+                  )}
+                  {oauthReturn && <OAuthScene />}
+                  {!oauthReturn && spec.api && (
+                    <AppRouter
+                      api={spec.api}
+                      specKey={spec.key}
                       specs={specs}
-                      spec={spec}
-                      specDispatch={specDispatch}
                       toggleNavigation={toggleNavigation}
+                      envAdaptor={envAdaptor}
+                      setVersionsUrl={setVersionsUrl}
                     />
                   )}
-                  <Layout hasAside height="100%">
-                    {hasNavigation && (
-                      <AsideBorder pt="large" width="20rem">
-                        <SideNav
-                          headless={headless}
-                          specs={specs}
-                          spec={spec}
-                          specDispatch={specDispatch}
-                        />
-                      </AsideBorder>
-                    )}
-                    {oauthReturn && <OAuthScene />}
-                    {!oauthReturn && spec.api && (
-                      <AppRouter
-                        api={spec.api}
-                        specKey={spec.key}
-                        specs={specs}
-                        toggleNavigation={toggleNavigation}
-                        envAdaptor={envAdaptor}
-                        setVersionsUrl={setVersionsUrl}
-                      />
-                    )}
-                  </Layout>
-                </Page>
-              </SearchContext.Provider>
-            </LodeContext.Provider>
-          </EnvAdaptorContext.Provider>
+                </Layout>
+              </Page>
+            </SearchContext.Provider>
+          </LodeContext.Provider>
         </ErrorBoundary>
       </ComponentsProvider>
       {!headless && <BodyOverride />}
