@@ -31,20 +31,24 @@ import { Paragraph, Table, Heading } from '@looker/components'
  * Common styled components used by DocMarkdown
  */
 
-export const MDHeading = styled(Heading)``
+export const MDHeading = Object.assign(styled(Heading)``, {
+  defaultProps: {
+    mb: 'xsmall',
+    pt: 'xsmall',
+  },
+})
 
-MDHeading.defaultProps = {
-  mb: 'xsmall',
-  pt: 'xsmall',
-}
-
-export const MDParagraph = styled(Paragraph)`
-  color: ${({ theme }) => theme.colors.text5};
-  max-width: 600px;
-`
-MDParagraph.defaultProps = {
-  mb: 'large',
-}
+export const MDParagraph = Object.assign(
+  styled(Paragraph)`
+    color: ${({ theme }) => theme.colors.text5};
+    max-width: 600px;
+  `,
+  {
+    defaultProps: {
+      mb: 'large',
+    },
+  }
+)
 
 const OListInternal = styled.ol`
   max-width: 600px;
@@ -65,5 +69,6 @@ export const MDListItem = styled.li`
   margin-bottom: 4px;
 `
 
-export const MDTable = styled(Table)``
-MDTable.defaultProps = { mb: 'large' }
+export const MDTable = Object.assign(styled(Table)``, {
+  defaultProps: { mb: 'large' },
+})
