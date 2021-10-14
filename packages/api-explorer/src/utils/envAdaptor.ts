@@ -118,3 +118,29 @@ export class StandaloneEnvAdaptor implements IApixEnvAdaptor {
 export enum EnvAdaptorConstants {
   LOCALSTORAGE_SDK_LANGUAGE_KEY = 'sdkLanguage',
 }
+
+let envAdaptor: IApixEnvAdaptor | undefined
+
+/**
+ * Register the environment adaptor. The API Explorer will automatically call this.
+ */
+export const registerEnvAdaptor = (adaptor: IApixEnvAdaptor) => {
+  envAdaptor = adaptor
+}
+
+/**
+ * Unregister the envAdaptor. The API Explorer will automatically call this when it is unmounted.
+ */
+export const unregisterEnvAdaptor = () => {
+  envAdaptor = undefined
+}
+
+/**
+ * Global access to the envAdaptor. An error will be thrown if accessed prematurely.
+ */
+export const getEnvAdaptor = () => {
+  if (!envAdaptor) {
+    throw new Error('Environment adaptor not initialized.')
+  }
+  return envAdaptor
+}

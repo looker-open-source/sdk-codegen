@@ -32,15 +32,16 @@ import { Aside, ComponentsProvider, Layout, Page } from '@looker/components'
 import type { SpecList } from '@looker/sdk-codegen'
 import type { RunItSetter } from '@looker/run-it'
 import { funFetch, fallbackFetch, OAuthScene } from '@looker/run-it'
-import {
-  SearchContext,
-  LodeContext,
-  defaultLodeContextValue,
-  EnvAdaptorContext,
-} from './context'
+import { SearchContext, LodeContext, defaultLodeContextValue } from './context'
 import type { IApixEnvAdaptor } from './utils'
-import { EnvAdaptorConstants, getLoded, oAuthPath } from './utils'
-import { Header, SideNav, ErrorBoundary } from './components'
+import {
+  EnvAdaptorConstants,
+  getLoded,
+  oAuthPath,
+  registerEnvAdaptor,
+  unregisterEnvAdaptor,
+} from './utils'
+import { Header, SideNav, ErrorBoundary, Loader } from './components'
 import {
   specReducer,
   initDefaultSpecState,
@@ -71,10 +72,10 @@ const ApiExplorer: FC<ApiExplorerProps> = ({
   declarationsLodeUrl = `${apixFilesHost}/declarationsIndex.json`,
   headless = false,
 }) => {
+  const [initializing, setInitializing] = useState(true)
   const location = useLocation()
   const { setSdkLanguageAction } = useActions()
   const oauthReturn = location.pathname === `/${oAuthPath}`
-
   const [specState, specDispatch] = useReducer(
     specReducer,
     initDefaultSpecState(specs, location)
@@ -95,6 +96,13 @@ const ApiExplorer: FC<ApiExplorerProps> = ({
     if (e.origin === window.origin && e.data.action === 'toggle_sidebar') {
       setHasNavigation((currentHasNavigation) => !currentHasNavigation)
     }
+  }, [])
+
+  useEffect(() => {
+    registerEnvAdaptor(envAdaptor)
+    setInitializing(false)
+
+    return () => unregisterEnvAdaptor()
   }, [])
 
   useEffect(() => {
@@ -144,16 +152,18 @@ const ApiExplorer: FC<ApiExplorerProps> = ({
     initSdkLanguage()
   }, [envAdaptor, setSdkLanguageAction])
 
-  const { loadGoogleFonts, themeCustomizations } = envAdaptor.themeOverrides()
+  const themeOverrides = envAdaptor.themeOverrides()
 
   return (
     <>
       <ComponentsProvider
-        loadGoogleFonts={loadGoogleFonts}
-        themeCustomizations={themeCustomizations}
+        loadGoogleFonts={themeOverrides.loadGoogleFonts}
+        themeCustomizations={themeOverrides.themeCustomizations}
       >
-        <ErrorBoundary logError={envAdaptor.logError.bind(envAdaptor)}>
-          <EnvAdaptorContext.Provider value={{ envAdaptor }}>
+        {initializing ? (
+          <Loader message="Initializing" themeOverrides={themeOverrides} />
+        ) : (
+          <ErrorBoundary logError={envAdaptor.logError.bind(envAdaptor)}>
             <LodeContext.Provider value={{ ...lode }}>
               <SearchContext.Provider
                 value={{ searchSettings, setSearchSettings }}
@@ -193,8 +203,8 @@ const ApiExplorer: FC<ApiExplorerProps> = ({
                 </Page>
               </SearchContext.Provider>
             </LodeContext.Provider>
-          </EnvAdaptorContext.Provider>
-        </ErrorBoundary>
+          </ErrorBoundary>
+        )}
       </ComponentsProvider>
       {!headless && <BodyOverride />}
     </>
