@@ -26,6 +26,7 @@
 
 import type { IAPIMethods, IRawResponse } from '@looker/sdk-rtl'
 import cloneDeep from 'lodash/cloneDeep'
+import { isEmpty } from 'lodash'
 import type { IApiModel, IMethod, IType } from '@looker/sdk-codegen'
 import {
   ArrayType,
@@ -33,6 +34,7 @@ import {
   EnumType,
   HashType,
   IntrinsicType,
+  trimInputs,
 } from '@looker/sdk-codegen'
 
 import type { RunItHttpMethod, RunItInput, RunItValues } from '../RunIt'
@@ -72,6 +74,11 @@ export const pathify = (path: string, pathParams?: RunItValues): string => {
   return result
 }
 
+/**
+ * Prepares the inputs for use with the SDK and other RunIt components
+ * @param inputs An array describing RunIt form inputs
+ * @param requestContent Current request parameters
+ */
 export const prepareInputs = (
   inputs: RunItInput[],
   requestContent: RunItValues
@@ -81,15 +88,18 @@ export const prepareInputs = (
     const name = input.name
     if (input.location === 'body') {
       try {
-        const parsed = JSON.parse(result[name])
-        // Keys call works for both objects and arrays if there are any values
-        const keys = Object.keys(parsed)
-        if (keys.length > 0) {
-          result[name] = parsed
+        let parsed
+        if (name in requestContent) {
+          const value = requestContent[name]
+          /** The value is not a string when the user has not interacted with this param and prepareInputs has been
+           * called (e.g. if user navigates to the Code tab).
+           */
+          parsed = typeof value === 'string' ? JSON.parse(value) : value
         } else {
-          // Remove body arg
-          delete result[name]
+          /** This scenario occurs when RunIt is about to be mounted for a new method */
+          parsed = input.type
         }
+        result[name] = parsed
       } catch (e) {
         /** Treat as x-www-form-urlencoded */
         result[name] = requestContent[name]
@@ -111,6 +121,24 @@ export const formValues = (configurator: RunItConfigurator) => {
 }
 
 /**
+ * Initializes the request content object from local storage or input definitions, in that order
+ * @param configurator storage service
+ * @param inputs
+ * @param requestContent the current request content
+ */
+export const initRequestContent = (
+  configurator: RunItConfigurator,
+  inputs: RunItInput[],
+  requestContent = {}
+) => {
+  let content = formValues(configurator)
+  if (isEmpty(content)) {
+    content = prepareInputs(inputs, requestContent)
+  }
+  return content
+}
+
+/**
  * Takes all form input values and categorizes them based on their request location
  * @param inputs RunIt form inputs
  * @param requestContent Form input values
@@ -123,18 +151,19 @@ export const createRequestParams = (
   const pathParams = {}
   const queryParams = {}
   const prepped = prepareInputs(inputs, requestContent)
+  const trimmed = trimInputs(prepped)
   let body
   for (const input of inputs) {
     const name = input.name
     switch (input.location) {
       case 'path':
-        pathParams[name] = prepped[name]
+        pathParams[name] = trimmed[name]
         break
       case 'query':
-        queryParams[name] = prepped[name]
+        queryParams[name] = trimmed[name]
         break
       case 'body':
-        body = prepped[name]
+        body = trimmed[name]
         break
       default:
         throw new Error(`Invalid input location: '${input.location}'`)

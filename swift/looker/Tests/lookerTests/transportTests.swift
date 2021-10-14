@@ -1,9 +1,28 @@
-//
-//  transportTests.swift
-//  lookerTests
-//
-//  Created by John Kaster on 10/14/19.
-//
+/**
+
+ MIT License
+
+ Copyright (c) 2021 Looker Data Sciences, Inc.
+
+ Permission is hereby granted, free of charge, to any person obtaining a copy
+ of this software and associated documentation files (the "Software"), to deal
+ in the Software without restriction, including without limitation the rights
+ to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+ copies of the Software, and to permit persons to whom the Software is
+ furnished to do so, subject to the following conditions:
+
+ The above copyright notice and this permission notice shall be included in all
+ copies or substantial portions of the Software.
+
+ THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+ FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+ AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+ LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+ SOFTWARE.
+
+ */
 
 import XCTest
 @testable import looker
@@ -13,6 +32,42 @@ struct SimpleUser : SDKModel {
     var last: String
     var email : String?
 }
+
+struct FreshLook : SDKModel {
+    private var _id: AnyString?
+    var id: String? {
+        get { _id?.value }
+        set { _id = newValue.map(AnyString.init) }
+    }
+
+    var title: String?
+
+    private var _query_id: AnyString?
+    var query_id: String? {
+        get { _query_id?.value }
+        set { _query_id = newValue.map(AnyString.init) }
+    }
+
+    private var _dashboard_id: AnyString
+    var dashboard_id: String {
+        get { _dashboard_id.value }
+        set { _dashboard_id = AnyString.init(newValue) }
+    }
+    private enum CodingKeys: String, CodingKey {
+        case title // = "title"
+        case _id = "id"
+        case _query_id = "query_id"
+        case _dashboard_id = "dashboard_id"
+    }
+
+    init(id: String? = nil, title: String? = nil, query_id: String? = nil, dashboard_id: String) {
+        self._id = id.map(AnyString.init)
+        self.title = title
+        self._query_id = query_id.map(AnyString.init)
+        self._dashboard_id = AnyString.init(dashboard_id)
+    }
+}
+
 
 @available(OSX 10.15, *)
 class transportTests: XCTestCase {
@@ -32,6 +87,37 @@ class transportTests: XCTestCase {
         } catch {
             print(error)
         }
+    }
+
+    func testAnyString() {
+        let jsonString = """
+        {
+            "id": 1,
+            "title": "Llookicorn",
+            "query_id": 1,
+            "dashboard_id": 1
+        }
+        """
+        var look: FreshLook = try! deserialize(jsonString)
+        XCTAssertNotNil(look, "Look 1 is assigned")
+        XCTAssertEqual(look.id, "1")
+        XCTAssertEqual(look.title, "Llookicorn")
+        XCTAssertEqual(look.query_id, "1")
+        XCTAssertEqual(look.dashboard_id, "1")
+        look = try! deserialize("""
+        {
+            "id": "2",
+            "title": "Zzeebra",
+            "email": "zz@foo.bar",
+            "query_id": "2",
+            "dashboard_id": "2"
+        }
+        """)
+        XCTAssertNotNil(look, "Look 2 is assigned")
+        XCTAssertEqual(look.id, "2")
+        XCTAssertEqual(look.title, "Zzeebra")
+        XCTAssertEqual(look.query_id, "2")
+        XCTAssertEqual(look.dashboard_id, "2")
     }
 
     func testRegexExtension() {
@@ -96,6 +182,7 @@ class transportTests: XCTestCase {
         XCTAssertEqual(user.last, "Zzeebra")
         XCTAssertEqual(user.email, "zz@foo.bar")
     }
+
 
     //    func dictToJson(dict: StringDictionary<Variant?>) -> String {
     //        var result = ""

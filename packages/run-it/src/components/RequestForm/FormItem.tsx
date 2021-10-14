@@ -31,7 +31,7 @@ interface FormItemProps {
   /** ID of input item for label */
   id: string
   /** Optional label. Defaults to an empty string so spacing is preserved */
-  label?: string
+  label?: string | ReactElement
   /** Nested react elements */
   children: ReactElement
 }
