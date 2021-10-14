@@ -28,7 +28,7 @@ import { act, screen, waitFor } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 import { codeGenerators } from '@looker/sdk-codegen'
 
-import { defaultSettingsState } from '../../state'
+import { defaultSettingsState } from '../../state/settings'
 import { renderWithReduxProvider } from '../../test-utils'
 import { EnvAdaptorConstants } from '../../utils'
 import { SdkLanguageSelector } from './SdkLanguageSelector'

@@ -30,7 +30,7 @@ import userEvent from '@testing-library/user-event'
 
 import { specs, specState } from '../../test-data'
 import { renderWithRouter, withReduxProvider } from '../../test-utils'
-import { defaultSettingsState } from '../../state'
+import { defaultSettingsState } from '../../state/settings'
 import { Header } from './Header'
 
 describe('Header', () => {

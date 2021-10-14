@@ -32,10 +32,11 @@ import { Aside, ComponentsProvider, Layout, Page } from '@looker/components'
 import type { SpecList } from '@looker/sdk-codegen'
 import type { RunItSetter } from '@looker/run-it'
 import { funFetch, fallbackFetch, OAuthScene } from '@looker/run-it'
+import { useSelector } from 'react-redux'
+
 import { SearchContext, LodeContext, defaultLodeContextValue } from './context'
 import type { IApixEnvAdaptor } from './utils'
 import {
-  EnvAdaptorConstants,
   getLoded,
   oAuthPath,
   registerEnvAdaptor,
@@ -51,7 +52,7 @@ import {
 } from './reducers'
 import { AppRouter } from './routes'
 import { apixFilesHost } from './utils/lodeUtils'
-import { useActions } from './hooks'
+import { useActions, useStoreState, isInitialized } from './state/settings'
 
 export interface ApiExplorerProps {
   specs: SpecList
@@ -72,9 +73,10 @@ const ApiExplorer: FC<ApiExplorerProps> = ({
   declarationsLodeUrl = `${apixFilesHost}/declarationsIndex.json`,
   headless = false,
 }) => {
-  const [initializing, setInitializing] = useState(true)
+  useStoreState()
+  const { init } = useActions()
+  const initialized = useSelector(isInitialized)
   const location = useLocation()
-  const { setSdkLanguageAction } = useActions()
   const oauthReturn = location.pathname === `/${oAuthPath}`
   const [specState, specDispatch] = useReducer(
     specReducer,
@@ -100,7 +102,7 @@ const ApiExplorer: FC<ApiExplorerProps> = ({
 
   useEffect(() => {
     registerEnvAdaptor(envAdaptor)
-    setInitializing(false)
+    init()
 
     return () => unregisterEnvAdaptor()
   }, [])
@@ -140,18 +142,6 @@ const ApiExplorer: FC<ApiExplorerProps> = ({
     getLoded(exampleLodeUrl, declarationsLodeUrl).then((resp) => setLode(resp))
   }, [exampleLodeUrl, declarationsLodeUrl])
 
-  useEffect(() => {
-    const initSdkLanguage = async () => {
-      const resp = await envAdaptor.localStorageGetItem(
-        EnvAdaptorConstants.LOCALSTORAGE_SDK_LANGUAGE_KEY
-      )
-      if (resp) {
-        setSdkLanguageAction(resp)
-      }
-    }
-    initSdkLanguage()
-  }, [envAdaptor, setSdkLanguageAction])
-
   const themeOverrides = envAdaptor.themeOverrides()
 
   return (
@@ -160,7 +150,7 @@ const ApiExplorer: FC<ApiExplorerProps> = ({
         loadGoogleFonts={themeOverrides.loadGoogleFonts}
         themeCustomizations={themeOverrides.themeCustomizations}
       >
-        {initializing ? (
+        {!initialized ? (
           <Loader message="Initializing" themeOverrides={themeOverrides} />
         ) : (
           <ErrorBoundary logError={envAdaptor.logError.bind(envAdaptor)}>

@@ -31,11 +31,9 @@ import { renderWithTheme } from '@looker/components-test-utils'
 import type { RenderOptions } from '@testing-library/react'
 
 import type { RootState } from '../state'
-import { configureStore } from '../state'
+import { store as defaultStore } from '../state'
 import { registerEnvAdaptor, StandaloneEnvAdaptor } from '../utils'
 import { renderWithRouter } from '.'
-
-const defaultStore = configureStore()
 
 export const withReduxProvider = (
   consumers: ReactElement<any>,

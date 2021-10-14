@@ -23,14 +23,29 @@
  SOFTWARE.
 
  */
-import { getSelectedSdkLanguage } from './selectors'
 
-describe('settings selectors', () => {
-  test('getSelectedSdkLanguages returns selected sdk languages', () => {
-    const sdkLanguage = 'Kotlin'
-    const state = {
-      settings: { sdkLanguage },
-    }
-    expect(getSelectedSdkLanguage(state)).toEqual(sdkLanguage)
+import { createStore } from '@looker/redux'
+
+import { getSdkLanguage, isInitialized } from './selectors'
+import { slice } from './slice'
+
+const preLoadedState = {
+  settings: { initialized: false, sdkLanguage: 'Python' },
+}
+
+const mockStore = createStore({
+  preloadedState: preLoadedState,
+  reducer: { settings: slice.reducer },
+})
+
+describe('Settings selectors', () => {
+  const state = mockStore.getState()
+
+  test('getSdkLanguage selects', () => {
+    expect(getSdkLanguage(state)).toEqual(preLoadedState.settings.sdkLanguage)
+  })
+
+  test('isInitialized selects', () => {
+    expect(isInitialized(state)).toEqual(preLoadedState.settings.initialized)
   })
 })
