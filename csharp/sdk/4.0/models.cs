@@ -21,7 +21,7 @@
 /// SOFTWARE.
 ///
 
-/// 296 API models: 219 Spec, 0 Request, 58 Write, 19 Enum
+/// 297 API models: 220 Spec, 0 Request, 57 Write, 20 Enum
 
 #nullable enable
 using System;
@@ -64,21 +64,36 @@ public class Alert : SdkModel
   public string? custom_title { get; set; } = null;
   /// <summary>ID of the dashboard element associated with the alert. Refer to [dashboard_element()](#!/Dashboard/DashboardElement)</summary>
   public long? dashboard_element_id { get; set; } = null;
+  /// <summary>An optional description for the alert. This supplements the title</summary>
+  public string? description { get; set; } = null;
   /// <summary>Array of destinations to send alerts to. Must be the same type of destination. Example `[{ "destination_type": "EMAIL", "email_address": "test@test.com" }]`</summary>
   public AlertDestination[]? destinations { get; set; } = null;
   public AlertField? field { get; set; }
+  /// <summary>Whether or not the user follows this alert. (read-only)</summary>
+  public bool? followed { get; set; } = null;
+  /// <summary>Whether or not the alert is followable (read-only)</summary>
+  public bool? followable { get; set; } = null;
   /// <summary>ID of the alert (read-only)</summary>
   public long? id { get; set; } = null;
   /// <summary>Whether or not the alert is disabled</summary>
   public bool? is_disabled { get; set; } = null;
   /// <summary>Whether or not the alert is public</summary>
   public bool? is_public { get; set; } = null;
+  /// <summary>The type of the investigative content Valid values are: "dashboard".</summary>
+  [JsonConverter(typeof(StringEnumConverter))]
+  public InvestigativeContentType? investigative_content_type { get; set; }
+  /// <summary>The ID of the investigative content. For dashboards, this will be the dashboard ID</summary>
+  public string? investigative_content_id { get; set; } = null;
+  /// <summary>The title of the investigative content. (read-only)</summary>
+  public string? investigative_content_title { get; set; } = null;
   /// <summary>ID of the LookML dashboard associated with the alert</summary>
   public string? lookml_dashboard_id { get; set; } = null;
   /// <summary>ID of the LookML dashboard element associated with the alert</summary>
   public string? lookml_link_id { get; set; } = null;
   /// <summary>User id of alert owner</summary>
   public long? owner_id { get; set; } = null;
+  /// <summary>Alert owner's display name (read-only)</summary>
+  public string? owner_display_name { get; set; } = null;
   /// <summary>Value of the alert threshold</summary>
   public double? threshold { get; set; } = null;
   public AlertConditionState? time_series_condition_state { get; set; }
@@ -239,10 +254,8 @@ public class BoardItem : SdkModel
   public long? content_metadata_id { get; set; } = null;
   /// <summary>Last time the content that this item is based on was updated (read-only)</summary>
   public string? content_updated_at { get; set; } = null;
-  /// <summary>(Write-Only) base64 encoded image data</summary>
-  public string? custom_image_data_base64 { get; set; } = null;
-  /// <summary>Custom image_url entered by the user, if present (read-only)</summary>
-  public string? custom_image_url { get; set; } = null;
+  /// <summary>Custom description entered by the user, if present</summary>
+  public string? custom_description { get; set; } = null;
   /// <summary>Custom title entered by the user, if present</summary>
   public string? custom_title { get; set; } = null;
   /// <summary>Custom url entered by the user, if present</summary>
@@ -1025,15 +1038,13 @@ public class CredentialsTotp : SdkModel
 
 public class CustomWelcomeEmail : SdkModel
 {
-  /// <summary>Operations the current user is able to perform on this object (read-only)</summary>
-  public StringDictionary<bool>? can { get; set; } = null;
   /// <summary>If true, custom email content will replace the default body of welcome emails</summary>
   public bool? enabled { get; set; } = null;
   /// <summary>The HTML to use as custom content for welcome emails. Script elements and other potentially dangerous markup will be removed.</summary>
   public string? content { get; set; } = null;
-  /// <summary>The text to appear in the email subject line.</summary>
+  /// <summary>The text to appear in the email subject line. Only available with a whitelabel license and whitelabel_configuration.advanced_custom_welcome_email enabled.</summary>
   public string? subject { get; set; } = null;
-  /// <summary>The text to appear in the header line of the email body.</summary>
+  /// <summary>The text to appear in the header line of the email body. Only available with a whitelabel license and whitelabel_configuration.advanced_custom_welcome_email enabled.</summary>
   public string? header { get; set; } = null;
 }
 
@@ -1093,6 +1104,8 @@ public class Dashboard : SdkModel
   public string? edit_uri { get; set; } = null;
   /// <summary>Number of times favorited (read-only)</summary>
   public long? favorite_count { get; set; } = null;
+  /// <summary>Sets the default state of the filters bar to collapsed or open</summary>
+  public bool? filters_bar_collapsed { get; set; } = null;
   /// <summary>Time the dashboard was last accessed (read-only)</summary>
   public DateTime? last_accessed_at { get; set; } = null;
   /// <summary>Time last viewed in the Looker web UI (read-only)</summary>
@@ -1507,6 +1520,8 @@ public class DBConnection : SdkModel
   public bool? disable_context_comment { get; set; } = null;
   /// <summary>An External OAuth Application to use for authenticating to the database</summary>
   public long? oauth_application_id { get; set; } = null;
+  /// <summary>When true, error PDTs will be retried every regenerator cycle</summary>
+  public bool? always_retry_failed_builds { get; set; } = null;
 }
 
 public class DBConnectionBase : SdkModel
@@ -2251,6 +2266,13 @@ public class InternalHelpResourcesContent : SdkModel
   public string? organization_name { get; set; } = null;
   /// <summary>Content to be displayed in the internal help resources page/modal</summary>
   public string? markdown_content { get; set; } = null;
+}
+
+/// The type of the investigative content Valid values are: "dashboard".
+public enum InvestigativeContentType
+{
+  [EnumMember(Value = "dashboard")]
+  dashboard
 }
 
 public class LDAPConfig : SdkModel
@@ -4312,6 +4334,7 @@ public class Setting : SdkModel
   /// <summary>Toggle marketplace on or off</summary>
   public bool? marketplace_enabled { get; set; } = null;
   public WhitelabelConfiguration? whitelabel_configuration { get; set; }
+  public CustomWelcomeEmail? custom_welcome_email { get; set; }
 }
 
 public class Snippet : SdkModel
@@ -4733,6 +4756,12 @@ public class UserAttributeWithValue : SdkModel
   public string? hidden_value_domain_whitelist { get; set; } = null;
 }
 
+public class UserEmailOnly : SdkModel
+{
+  /// <summary>Email Address</summary>
+  public string email { get; set; } = "";
+}
+
 public class UserLoginLockout : SdkModel
 {
   /// <summary>Operations the current user is able to perform on this object (read-only)</summary>
@@ -4873,7 +4902,7 @@ public class Workspace : SdkModel
 }
 
 /// Dynamic writeable type for Alert removes:
-/// id
+/// followed, followable, id, investigative_content_title, owner_display_name
 public class WriteAlert : SdkModel
 {
   /// <summary>Filters coming from the dashboard that are applied. Example `[{ "filter_title": "Name", "field_name": "distribution_centers.name", "filter_value": "Los Angeles CA" }]`</summary>
@@ -4887,6 +4916,8 @@ public class WriteAlert : SdkModel
   public string? custom_title { get; set; } = null;
   /// <summary>ID of the dashboard element associated with the alert. Refer to [dashboard_element()](#!/Dashboard/DashboardElement)</summary>
   public long? dashboard_element_id { get; set; } = null;
+  /// <summary>An optional description for the alert. This supplements the title</summary>
+  public string? description { get; set; } = null;
   /// <summary>Array of destinations to send alerts to. Must be the same type of destination. Example `[{ "destination_type": "EMAIL", "email_address": "test@test.com" }]`</summary>
   public AlertDestination[]? destinations { get; set; } = null;
   public AlertField? field { get; set; }
@@ -4894,6 +4925,11 @@ public class WriteAlert : SdkModel
   public bool? is_disabled { get; set; } = null;
   /// <summary>Whether or not the alert is public</summary>
   public bool? is_public { get; set; } = null;
+  /// <summary>The type of the investigative content Valid values are: "dashboard".</summary>
+  [JsonConverter(typeof(StringEnumConverter))]
+  public InvestigativeContentType? investigative_content_type { get; set; }
+  /// <summary>The ID of the investigative content. For dashboards, this will be the dashboard ID</summary>
+  public string? investigative_content_id { get; set; } = null;
   /// <summary>ID of the LookML dashboard associated with the alert</summary>
   public string? lookml_dashboard_id { get; set; } = null;
   /// <summary>ID of the LookML dashboard element associated with the alert</summary>
@@ -4944,11 +4980,11 @@ public class WriteBoard : SdkModel
 }
 
 /// Dynamic writeable type for BoardItem removes:
-/// can, content_created_by, content_favorite_id, content_metadata_id, content_updated_at, custom_image_url, description, favorite_count, id, image_url, location, title, url, view_count
+/// can, content_created_by, content_favorite_id, content_metadata_id, content_updated_at, description, favorite_count, id, image_url, location, title, url, view_count
 public class WriteBoardItem : SdkModel
 {
-  /// <summary>(Write-Only) base64 encoded image data</summary>
-  public string? custom_image_data_base64 { get; set; } = null;
+  /// <summary>Custom description entered by the user, if present</summary>
+  public string? custom_description { get; set; } = null;
   /// <summary>Custom title entered by the user, if present</summary>
   public string? custom_title { get; set; } = null;
   /// <summary>Custom url entered by the user, if present</summary>
@@ -5099,20 +5135,6 @@ public class WriteCredentialsEmail : SdkModel
   public bool? forced_password_reset_at_next_login { get; set; } = null;
 }
 
-/// Dynamic writeable type for CustomWelcomeEmail removes:
-/// can
-public class WriteCustomWelcomeEmail : SdkModel
-{
-  /// <summary>If true, custom email content will replace the default body of welcome emails</summary>
-  public bool? enabled { get; set; } = null;
-  /// <summary>The HTML to use as custom content for welcome emails. Script elements and other potentially dangerous markup will be removed.</summary>
-  public string? content { get; set; } = null;
-  /// <summary>The text to appear in the email subject line.</summary>
-  public string? subject { get; set; } = null;
-  /// <summary>The text to appear in the header line of the email body.</summary>
-  public string? header { get; set; } = null;
-}
-
 /// Dynamic writeable type for Dashboard removes:
 /// can, content_favorite_id, content_metadata_id, id, model, readonly, refresh_interval_to_i, user_id, created_at, dashboard_elements, dashboard_filters, dashboard_layouts, deleted_at, deleter_id, edit_uri, favorite_count, last_accessed_at, last_viewed_at, view_count, url
 public class WriteDashboard : SdkModel
@@ -5144,6 +5166,8 @@ public class WriteDashboard : SdkModel
   public bool? crossfilter_enabled { get; set; } = null;
   /// <summary>Whether or not a dashboard is 'soft' deleted.</summary>
   public bool? deleted { get; set; } = null;
+  /// <summary>Sets the default state of the filters bar to collapsed or open</summary>
+  public bool? filters_bar_collapsed { get; set; } = null;
   /// <summary>configuration option that governs how dashboard loading will happen.</summary>
   public string? load_configuration { get; set; } = null;
   /// <summary>Links this dashboard to a particular LookML dashboard such that calling a **sync** operation on that LookML dashboard will update this dashboard to match.</summary>
@@ -5368,6 +5392,8 @@ public class WriteDBConnection : SdkModel
   public bool? disable_context_comment { get; set; } = null;
   /// <summary>An External OAuth Application to use for authenticating to the database</summary>
   public long? oauth_application_id { get; set; } = null;
+  /// <summary>When true, error PDTs will be retried every regenerator cycle</summary>
+  public bool? always_retry_failed_builds { get; set; } = null;
 }
 
 /// Dynamic writeable type for DBConnectionOverride removes:
@@ -6014,6 +6040,7 @@ public class WriteSetting : SdkModel
   /// id, logo_url, favicon_url
   /// </summary>
   public WriteWhitelabelConfiguration? whitelabel_configuration { get; set; }
+  public CustomWelcomeEmail? custom_welcome_email { get; set; }
 }
 
 /// Dynamic writeable type for SshServer removes:

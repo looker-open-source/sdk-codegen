@@ -25,7 +25,7 @@
  */
 
 /**
- * 296 API models: 219 Spec, 0 Request, 58 Write, 19 Enum
+ * 297 API models: 220 Spec, 0 Request, 57 Write, 20 Enum
  */
 
 
@@ -56,14 +56,21 @@ data class AccessToken (
  * @property cron Vixie-Style crontab specification when to run. At minumum, it has to be longer than 15 minute intervals
  * @property custom_title An optional, user-defined title for the alert
  * @property dashboard_element_id ID of the dashboard element associated with the alert. Refer to [dashboard_element()](#!/Dashboard/DashboardElement)
+ * @property description An optional description for the alert. This supplements the title
  * @property destinations Array of destinations to send alerts to. Must be the same type of destination. Example `[{ "destination_type": "EMAIL", "email_address": "test@test.com" }]`
  * @property field
+ * @property followed Whether or not the user follows this alert. (read-only)
+ * @property followable Whether or not the alert is followable (read-only)
  * @property id ID of the alert (read-only)
  * @property is_disabled Whether or not the alert is disabled
  * @property is_public Whether or not the alert is public
+ * @property investigative_content_type The type of the investigative content Valid values are: "dashboard".
+ * @property investigative_content_id The ID of the investigative content. For dashboards, this will be the dashboard ID
+ * @property investigative_content_title The title of the investigative content. (read-only)
  * @property lookml_dashboard_id ID of the LookML dashboard associated with the alert
  * @property lookml_link_id ID of the LookML dashboard element associated with the alert
  * @property owner_id User id of alert owner
+ * @property owner_display_name Alert owner's display name (read-only)
  * @property threshold Value of the alert threshold
  * @property time_series_condition_state
  */
@@ -73,14 +80,21 @@ data class Alert (
     var cron: String? = null,
     var custom_title: String? = null,
     var dashboard_element_id: Long? = null,
+    var description: String? = null,
     var destinations: Array<AlertDestination>? = null,
     var field: AlertField? = null,
+    var followed: Boolean? = null,
+    var followable: Boolean? = null,
     var id: Long? = null,
     var is_disabled: Boolean? = null,
     var is_public: Boolean? = null,
+    var investigative_content_type: InvestigativeContentType? = null,
+    var investigative_content_id: String? = null,
+    var investigative_content_title: String? = null,
     var lookml_dashboard_id: String? = null,
     var lookml_link_id: String? = null,
     var owner_id: Long? = null,
+    var owner_display_name: String? = null,
     var threshold: Double? = null,
     var time_series_condition_state: AlertConditionState? = null
 ) : Serializable
@@ -243,8 +257,7 @@ data class Board (
  * @property content_favorite_id Content favorite id associated with the item this content is based on (read-only)
  * @property content_metadata_id Content metadata id associated with the item this content is based on (read-only)
  * @property content_updated_at Last time the content that this item is based on was updated (read-only)
- * @property custom_image_data_base64 (Write-Only) base64 encoded image data
- * @property custom_image_url Custom image_url entered by the user, if present (read-only)
+ * @property custom_description Custom description entered by the user, if present
  * @property custom_title Custom title entered by the user, if present
  * @property custom_url Custom url entered by the user, if present
  * @property dashboard_id Dashboard to base this item on
@@ -267,8 +280,7 @@ data class BoardItem (
     var content_favorite_id: Long? = null,
     var content_metadata_id: Long? = null,
     var content_updated_at: String? = null,
-    var custom_image_data_base64: String? = null,
-    var custom_image_url: String? = null,
+    var custom_description: String? = null,
     var custom_title: String? = null,
     var custom_url: String? = null,
     var dashboard_id: Long? = null,
@@ -1087,14 +1099,12 @@ data class CredentialsTotp (
 ) : Serializable
 
 /**
- * @property can Operations the current user is able to perform on this object (read-only)
  * @property enabled If true, custom email content will replace the default body of welcome emails
  * @property content The HTML to use as custom content for welcome emails. Script elements and other potentially dangerous markup will be removed.
- * @property subject The text to appear in the email subject line.
- * @property header The text to appear in the header line of the email body.
+ * @property subject The text to appear in the email subject line. Only available with a whitelabel license and whitelabel_configuration.advanced_custom_welcome_email enabled.
+ * @property header The text to appear in the header line of the email body. Only available with a whitelabel license and whitelabel_configuration.advanced_custom_welcome_email enabled.
  */
 data class CustomWelcomeEmail (
-    var can: Map<String,Boolean>? = null,
     var enabled: Boolean? = null,
     var content: String? = null,
     var subject: String? = null,
@@ -1130,6 +1140,7 @@ data class CustomWelcomeEmail (
  * @property deleter_id Id of User that 'soft' deleted the dashboard. (read-only)
  * @property edit_uri Relative path of URI of LookML file to edit the dashboard (LookML dashboard only). (read-only)
  * @property favorite_count Number of times favorited (read-only)
+ * @property filters_bar_collapsed Sets the default state of the filters bar to collapsed or open
  * @property last_accessed_at Time the dashboard was last accessed (read-only)
  * @property last_viewed_at Time last viewed in the Looker web UI (read-only)
  * @property load_configuration configuration option that governs how dashboard loading will happen.
@@ -1174,6 +1185,7 @@ data class Dashboard (
     var deleter_id: Long? = null,
     var edit_uri: String? = null,
     var favorite_count: Long? = null,
+    var filters_bar_collapsed: Boolean? = null,
     var last_accessed_at: Date? = null,
     var last_viewed_at: Date? = null,
     var load_configuration: String? = null,
@@ -1557,6 +1569,7 @@ data class Datagroup (
  * @property pdt_concurrency Maximum number of threads to use to build PDTs in parallel
  * @property disable_context_comment When disable_context_comment is true comment will not be added to SQL
  * @property oauth_application_id An External OAuth Application to use for authenticating to the database
+ * @property always_retry_failed_builds When true, error PDTs will be retried every regenerator cycle
  */
 data class DBConnection (
     var can: Map<String,Boolean>? = null,
@@ -1599,7 +1612,8 @@ data class DBConnection (
     var tunnel_id: String? = null,
     var pdt_concurrency: Long? = null,
     var disable_context_comment: Boolean? = null,
-    var oauth_application_id: Long? = null
+    var oauth_application_id: Long? = null,
+    var always_retry_failed_builds: Boolean? = null
 ) : Serializable
 
 /**
@@ -2380,6 +2394,13 @@ data class InternalHelpResourcesContent (
     var organization_name: String? = null,
     var markdown_content: String? = null
 ) : Serializable
+
+/**
+ * The type of the investigative content Valid values are: "dashboard".
+ */
+enum class InvestigativeContentType : Serializable {
+    dashboard
+}
 
 /**
  * @property can Operations the current user is able to perform on this object (read-only)
@@ -4518,12 +4539,14 @@ data class SessionConfig (
  * @property marketplace_auto_install_enabled Toggle marketplace auto install on or off. Note that auto install only runs if marketplace is enabled.
  * @property marketplace_enabled Toggle marketplace on or off
  * @property whitelabel_configuration
+ * @property custom_welcome_email
  */
 data class Setting (
     var extension_framework_enabled: Boolean? = null,
     var marketplace_auto_install_enabled: Boolean? = null,
     var marketplace_enabled: Boolean? = null,
-    var whitelabel_configuration: WhitelabelConfiguration? = null
+    var whitelabel_configuration: WhitelabelConfiguration? = null,
+    var custom_welcome_email: CustomWelcomeEmail? = null
 ) : Serializable
 
 /**
@@ -4947,6 +4970,13 @@ data class UserAttributeWithValue (
 ) : Serializable
 
 /**
+ * @property email Email Address
+ */
+data class UserEmailOnly (
+    var email: String
+) : Serializable
+
+/**
  * @property can Operations the current user is able to perform on this object (read-only)
  * @property key Hash of user's client id (read-only)
  * @property auth_type Authentication method for login failures (read-only)
@@ -5088,17 +5118,20 @@ data class Workspace (
 
 /**
  * Dynamic writeable type for Alert removes:
- * id
+ * followed, followable, id, investigative_content_title, owner_display_name
  *
  * @property applied_dashboard_filters Filters coming from the dashboard that are applied. Example `[{ "filter_title": "Name", "field_name": "distribution_centers.name", "filter_value": "Los Angeles CA" }]`
  * @property comparison_type This property informs the check what kind of comparison we are performing. Only certain condition types are valid for time series alerts. For details, refer to [Setting Alert Conditions](https://docs.looker.com/sharing-and-publishing/creating-alerts#setting_alert_conditions) Valid values are: "EQUAL_TO", "GREATER_THAN", "GREATER_THAN_OR_EQUAL_TO", "LESS_THAN", "LESS_THAN_OR_EQUAL_TO", "INCREASES_BY", "DECREASES_BY", "CHANGES_BY".
  * @property cron Vixie-Style crontab specification when to run. At minumum, it has to be longer than 15 minute intervals
  * @property custom_title An optional, user-defined title for the alert
  * @property dashboard_element_id ID of the dashboard element associated with the alert. Refer to [dashboard_element()](#!/Dashboard/DashboardElement)
+ * @property description An optional description for the alert. This supplements the title
  * @property destinations Array of destinations to send alerts to. Must be the same type of destination. Example `[{ "destination_type": "EMAIL", "email_address": "test@test.com" }]`
  * @property field
  * @property is_disabled Whether or not the alert is disabled
  * @property is_public Whether or not the alert is public
+ * @property investigative_content_type The type of the investigative content Valid values are: "dashboard".
+ * @property investigative_content_id The ID of the investigative content. For dashboards, this will be the dashboard ID
  * @property lookml_dashboard_id ID of the LookML dashboard associated with the alert
  * @property lookml_link_id ID of the LookML dashboard element associated with the alert
  * @property owner_id User id of alert owner
@@ -5111,10 +5144,13 @@ data class WriteAlert (
     var cron: String? = null,
     var custom_title: String? = null,
     var dashboard_element_id: Long? = null,
+    var description: String? = null,
     var destinations: Array<AlertDestination>? = null,
     var field: AlertField? = null,
     var is_disabled: Boolean? = null,
     var is_public: Boolean? = null,
+    var investigative_content_type: InvestigativeContentType? = null,
+    var investigative_content_id: String? = null,
     var lookml_dashboard_id: String? = null,
     var lookml_link_id: String? = null,
     var owner_id: Long? = null,
@@ -5168,9 +5204,9 @@ data class WriteBoard (
 
 /**
  * Dynamic writeable type for BoardItem removes:
- * can, content_created_by, content_favorite_id, content_metadata_id, content_updated_at, custom_image_url, description, favorite_count, id, image_url, location, title, url, view_count
+ * can, content_created_by, content_favorite_id, content_metadata_id, content_updated_at, description, favorite_count, id, image_url, location, title, url, view_count
  *
- * @property custom_image_data_base64 (Write-Only) base64 encoded image data
+ * @property custom_description Custom description entered by the user, if present
  * @property custom_title Custom title entered by the user, if present
  * @property custom_url Custom url entered by the user, if present
  * @property dashboard_id Dashboard to base this item on
@@ -5180,7 +5216,7 @@ data class WriteBoard (
  * @property order An arbitrary integer representing the sort order within the section
  */
 data class WriteBoardItem (
-    var custom_image_data_base64: String? = null,
+    var custom_description: String? = null,
     var custom_title: String? = null,
     var custom_url: String? = null,
     var dashboard_id: Long? = null,
@@ -5335,22 +5371,6 @@ data class WriteCredentialsEmail (
 ) : Serializable
 
 /**
- * Dynamic writeable type for CustomWelcomeEmail removes:
- * can
- *
- * @property enabled If true, custom email content will replace the default body of welcome emails
- * @property content The HTML to use as custom content for welcome emails. Script elements and other potentially dangerous markup will be removed.
- * @property subject The text to appear in the email subject line.
- * @property header The text to appear in the header line of the email body.
- */
-data class WriteCustomWelcomeEmail (
-    var enabled: Boolean? = null,
-    var content: String? = null,
-    var subject: String? = null,
-    var header: String? = null
-) : Serializable
-
-/**
  * Dynamic writeable type for Dashboard removes:
  * can, content_favorite_id, content_metadata_id, id, model, readonly, refresh_interval_to_i, user_id, created_at, dashboard_elements, dashboard_filters, dashboard_layouts, deleted_at, deleter_id, edit_uri, favorite_count, last_accessed_at, last_viewed_at, view_count, url
  *
@@ -5367,6 +5387,7 @@ data class WriteCustomWelcomeEmail (
  * @property background_color Background color
  * @property crossfilter_enabled Enables crossfiltering in dashboards - only available in dashboards-next (beta)
  * @property deleted Whether or not a dashboard is 'soft' deleted.
+ * @property filters_bar_collapsed Sets the default state of the filters bar to collapsed or open
  * @property load_configuration configuration option that governs how dashboard loading will happen.
  * @property lookml_link_id Links this dashboard to a particular LookML dashboard such that calling a **sync** operation on that LookML dashboard will update this dashboard to match.
  * @property show_filters_bar Show filters bar.  **Security Note:** This property only affects the *cosmetic* appearance of the dashboard, not a user's ability to access data. Hiding the filters bar does **NOT** prevent users from changing filters by other means. For information on how to set up secure data access control policies, see [Control User Access to Data](https://looker.com/docs/r/api/control-access)
@@ -5391,6 +5412,7 @@ data class WriteDashboard (
     var background_color: String? = null,
     var crossfilter_enabled: Boolean? = null,
     var deleted: Boolean? = null,
+    var filters_bar_collapsed: Boolean? = null,
     var load_configuration: String? = null,
     var lookml_link_id: String? = null,
     var show_filters_bar: Boolean? = null,
@@ -5578,6 +5600,7 @@ data class WriteDatagroup (
  * @property pdt_concurrency Maximum number of threads to use to build PDTs in parallel
  * @property disable_context_comment When disable_context_comment is true comment will not be added to SQL
  * @property oauth_application_id An External OAuth Application to use for authenticating to the database
+ * @property always_retry_failed_builds When true, error PDTs will be retried every regenerator cycle
  */
 data class WriteDBConnection (
     var name: String? = null,
@@ -5609,7 +5632,8 @@ data class WriteDBConnection (
     var tunnel_id: String? = null,
     var pdt_concurrency: Long? = null,
     var disable_context_comment: Boolean? = null,
-    var oauth_application_id: Long? = null
+    var oauth_application_id: Long? = null,
+    var always_retry_failed_builds: Boolean? = null
 ) : Serializable
 
 /**
@@ -6297,12 +6321,14 @@ data class WriteSessionConfig (
  * @property marketplace_enabled Toggle marketplace on or off
  * @property whitelabel_configuration Dynamic writeable type for WhitelabelConfiguration removes:
  * id, logo_url, favicon_url
+ * @property custom_welcome_email
  */
 data class WriteSetting (
     var extension_framework_enabled: Boolean? = null,
     var marketplace_auto_install_enabled: Boolean? = null,
     var marketplace_enabled: Boolean? = null,
-    var whitelabel_configuration: WriteWhitelabelConfiguration? = null
+    var whitelabel_configuration: WriteWhitelabelConfiguration? = null,
+    var custom_welcome_email: CustomWelcomeEmail? = null
 ) : Serializable
 
 /**
