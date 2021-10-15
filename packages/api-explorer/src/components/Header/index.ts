@@ -23,4 +23,4 @@
  SOFTWARE.
 
  */
-export { Header, HEADER_REM } from './Header'
+export { Header, HEADER_REM, TOGGLE_LABEL } from './Header'
