@@ -26,18 +26,25 @@
 import React from 'react'
 import styled from 'styled-components'
 import { Paragraph, Table, Heading } from '@looker/components'
+import type {
+  HeadingProps,
+  ParagraphProps,
+  TableProps,
+} from '@looker/components'
 
 /**
  * Common styled components used by DocMarkdown
  */
 
 export const MDHeading = styled(Heading).attrs(
-  ({ mb = 'xsmall', pt = 'xsmall' }) => ({ mb, pt })
-)``
+  ({ mb = 'xsmall', pt = 'xsmall' }: HeadingProps) => ({ mb, pt })
+)<HeadingProps>``
 
-export const MDParagraph = styled(Paragraph).attrs(({ mb = 'large' }) => ({
-  mb,
-}))`
+export const MDParagraph = styled(Paragraph).attrs(
+  ({ mb = 'large' }: ParagraphProps) => ({
+    mb,
+  })
+)`
   color: ${({ theme }) => theme.colors.text5};
   max-width: 600px;
 `
@@ -61,4 +68,6 @@ export const MDListItem = styled.li`
   margin-bottom: 4px;
 `
 
-export const MDTable = styled(Table).attrs(({ mb = 'large' }) => ({ mb }))``
+export const MDTable = styled(Table).attrs(({ mb = 'large' }: TableProps) => ({
+  mb,
+}))``
