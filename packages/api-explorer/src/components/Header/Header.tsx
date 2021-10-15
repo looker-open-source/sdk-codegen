@@ -56,7 +56,7 @@ interface HeaderProps {
 
 export const HEADER_REM = 4
 
-export const TOGGLE_LABEL = 'Toggle Navitagion'
+export const TOGGLE_LABEL = 'Toggle Navigation'
 
 /**
  * Renders the API Explorer header
