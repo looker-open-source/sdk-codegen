@@ -28,7 +28,8 @@ import type { FC } from 'react'
 import React, { useContext } from 'react'
 import { useHistory } from 'react-router-dom'
 import { Markdown } from '@looker/code-editor'
-import { EnvAdaptorContext, SearchContext } from '../../context'
+import { SearchContext } from '../../context'
+import { getEnvAdaptor } from '../../utils'
 import { transformURL } from './utils'
 
 interface DocMarkdownProps {
@@ -37,7 +38,6 @@ interface DocMarkdownProps {
 }
 
 export const DocMarkdown: FC<DocMarkdownProps> = ({ source, specKey }) => {
-  const { envAdaptor } = useContext(EnvAdaptorContext)
   const {
     searchSettings: { pattern },
   } = useContext(SearchContext)
@@ -50,6 +50,7 @@ export const DocMarkdown: FC<DocMarkdownProps> = ({ source, specKey }) => {
     } else if (url.startsWith(`/${specKey}`)) {
       history.push(url)
     } else if (url.startsWith('https://')) {
+      const envAdaptor = getEnvAdaptor()
       envAdaptor.openBrowserWindow(url)
     }
   }

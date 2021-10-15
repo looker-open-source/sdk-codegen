@@ -37,3 +37,4 @@ export {
   renderWithReduxProvider,
   withReduxProvider,
 } from './redux'
+export { registerTestEnvAdaptor } from './envAdaptor'

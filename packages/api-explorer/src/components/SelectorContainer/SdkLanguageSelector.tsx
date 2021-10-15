@@ -24,7 +24,7 @@
 
  */
 import type { FC } from 'react'
-import React, { useContext } from 'react'
+import React from 'react'
 import { codeGenerators } from '@looker/sdk-codegen'
 import { Select } from '@looker/components'
 import { useSelector } from 'react-redux'
@@ -32,8 +32,7 @@ import type { SelectOptionProps } from '@looker/components'
 
 import { useActions } from '../../hooks'
 import { getSelectedSdkLanguage } from '../../state'
-import { EnvAdaptorContext } from '../../context'
-import { EnvAdaptorConstants } from '../../utils'
+import { EnvAdaptorConstants, getEnvAdaptor } from '../../utils'
 
 /**
  * Allows the user to select their preferred SDK language
@@ -41,7 +40,6 @@ import { EnvAdaptorConstants } from '../../utils'
 export const SdkLanguageSelector: FC = () => {
   const { setSdkLanguageAction } = useActions()
   const selectedSdkLanguage = useSelector(getSelectedSdkLanguage)
-  const { envAdaptor } = useContext(EnvAdaptorContext)
 
   const allSdkLanguages: SelectOptionProps[] = codeGenerators.map((gen) => ({
     value: gen.language,
@@ -57,6 +55,7 @@ export const SdkLanguageSelector: FC = () => {
 
   const handleChange = (language: string) => {
     setSdkLanguageAction(language)
+    const envAdaptor = getEnvAdaptor()
     envAdaptor.localStorageSetItem(
       EnvAdaptorConstants.LOCALSTORAGE_SDK_LANGUAGE_KEY,
       language

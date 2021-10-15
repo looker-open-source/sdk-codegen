@@ -23,17 +23,9 @@
  SOFTWARE.
 
  */
-import { createContext } from 'react'
-import type { IApixEnvAdaptor } from '../../utils'
-import { StandaloneEnvAdaptor } from '../../utils'
+import type { IApixEnvAdaptor } from '../utils'
+import { registerEnvAdaptor, StandaloneEnvAdaptor } from '../utils'
 
-export interface EnvAdaptorContextProps {
-  envAdaptor: IApixEnvAdaptor
+export const registerTestEnvAdaptor = (envAdaptor?: IApixEnvAdaptor) => {
+  registerEnvAdaptor(envAdaptor || new StandaloneEnvAdaptor())
 }
-
-export const defaultEnvAdaptorContextValue: EnvAdaptorContextProps = {
-  envAdaptor: new StandaloneEnvAdaptor(),
-}
-export const EnvAdaptorContext = createContext<EnvAdaptorContextProps>(
-  defaultEnvAdaptorContextValue
-)
