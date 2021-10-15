@@ -98,29 +98,30 @@ export const cssForIntent = (intent: ApixIntentNames) =>
     color: ${({ theme }) => generatePressed(theme.colors[intent])};
   `
 
-export const MethodBadge = Object.assign(
-  styled.div<MethodBadgeProps>`
-    ${typography}
+export const MethodBadge = styled.div.attrs(
+  ({
+    fontSize = 'xsmall',
+    fontWeight = 'semiBold',
+    minWidth = '2.5rem',
+  }: MethodBadgeProps) => ({
+    fontSize,
+    fontWeight,
+    minWidth,
+  })
+)<MethodBadgeProps>`
+  ${typography}
 
-    ${({ type }) => cssForIntent(pickBadgeIntent(type))};
+  ${({ type }) => cssForIntent(pickBadgeIntent(type))};
 
-    background: ${({ type, titleStatus, theme: { colors } }) =>
-      titleStatus ? colors.ui1 : intentUIBlend(pickBadgeIntent(type), 1)};
-    border: 1px solid transparent;
-    border-radius: ${({ theme: { radii } }) => radii.medium};
+  background: ${({ type, titleStatus, theme: { colors } }) =>
+    titleStatus ? colors.ui1 : intentUIBlend(pickBadgeIntent(type), 1)};
+  border: 1px solid transparent;
+  border-radius: ${({ theme: { radii } }) => radii.medium};
 
-    /** NOTE: This is below minimum accessibility threshold font-size */
-    ${({ compact }) => compact && `font-size: 9px;`}
+  /** NOTE: This is below minimum accessibility threshold font-size */
+  ${({ compact }) => compact && `font-size: 9px;`}
 
-    min-width: ${({ minWidth }) => minWidth};
-    padding: ${({ compact, theme: { space } }) =>
-      `${space.xxsmall} ${compact ? space.none : space.xsmall}`};
-  `,
-  {
-    defaultProps: {
-      fontSize: 'xsmall',
-      fontWeight: 'semiBold',
-      minWidth: '2.5rem',
-    },
-  }
-)
+  min-width: ${({ minWidth }) => minWidth};
+  padding: ${({ compact, theme: { space } }) =>
+    `${space.xxsmall} ${compact ? space.none : space.xsmall}`};
+`
