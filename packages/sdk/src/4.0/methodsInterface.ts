@@ -8195,4 +8195,3 @@ export interface ILooker40SDK extends IAPIMethods {
 
   //#endregion Workspace: Manage Workspaces
 }
-

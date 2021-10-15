@@ -7265,4 +7265,3 @@ export interface ILooker31SDK extends IAPIMethods {
 
   //#endregion Workspace: Manage Workspaces
 }
-

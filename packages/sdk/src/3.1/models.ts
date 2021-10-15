@@ -10973,4 +10973,3 @@ export interface IWriteWhitelabelConfiguration {
    */
   folders_mentions?: boolean
 }
-
