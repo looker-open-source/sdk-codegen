@@ -26,10 +26,10 @@
 
 import React from 'react'
 import type { FC } from 'react'
-import { SpaceVertical } from '@looker/components'
+import { Table, TableBody } from '@looker/components'
 import type { IHackerProps } from '../../../models'
 import type { AgendaItems } from '.'
-import { calcAgenda, AgendaCard } from '.'
+import { calcAgenda, AgendaRow } from '.'
 
 interface AgendaProps {
   schedule: AgendaItems
@@ -39,11 +39,13 @@ interface AgendaProps {
 export const Agenda: FC<AgendaProps> = ({ schedule, hacker }) => {
   const agenda = calcAgenda(schedule, hacker.timezone)
   return (
-    <SpaceVertical>
-      {agenda &&
-        agenda.map((item, index) => (
-          <AgendaCard key={`agenda${index}`} item={item} hacker={hacker} />
-        ))}
-    </SpaceVertical>
+    <Table>
+      <TableBody>
+        {agenda &&
+          agenda.map((item, index) => (
+            <AgendaRow key={`agenda${index}`} item={item} hacker={hacker} />
+          ))}
+      </TableBody>
+    </Table>
   )
 }

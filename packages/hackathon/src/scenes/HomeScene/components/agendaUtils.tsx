@@ -40,10 +40,8 @@ export interface IAgendaItem {
   start: AgendaTime
   /** End of agenda item. If not specified, the next chronological event will be its end time */
   stop?: AgendaTime
-  /** Title of agenda item */
-  title: string
-  /** Markdown describing item */
-  description?: string
+  /** Markdown description of agenda item */
+  description: string
 }
 
 export type AgendaItems = Array<IAgendaItem>

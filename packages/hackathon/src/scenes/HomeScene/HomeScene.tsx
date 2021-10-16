@@ -27,7 +27,7 @@
 import type { FC } from 'react'
 import React from 'react'
 
-import { Heading, SpaceVertical, Span } from '@looker/components'
+import { Heading, SpaceVertical } from '@looker/components'
 import type { IHackerProps } from '../../models'
 import { agendaEn, agendaJa } from './agenda'
 import { Agenda } from './components'
@@ -46,9 +46,6 @@ export const HomeScene: FC<HomeSceneProps> = ({ hacker }) => {
           Agenda
         </Heading>
         <Agenda schedule={agenda} hacker={hacker} />
-        <Span>
-          timezone: {hacker.timezone} locale:{hacker.locale}
-        </Span>
       </SpaceVertical>
     </>
   )

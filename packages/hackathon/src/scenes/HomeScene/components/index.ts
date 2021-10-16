@@ -25,5 +25,5 @@
  */
 
 export * from './Agenda'
-export * from './AgendaCard'
+export * from './AgendaRow'
 export * from './agendaUtils'

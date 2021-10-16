@@ -26,14 +26,7 @@
 
 import type { FC } from 'react'
 import React from 'react'
-import {
-  Card,
-  CardContent,
-  Heading,
-  Space,
-  SpaceVertical,
-  Span,
-} from '@looker/components'
+import { TableRow, TableDataCell, Heading, Span } from '@looker/components'
 import { Markdown } from '@looker/code-editor'
 import type { IHackerProps } from '../../../models'
 import { spanDate, spanEta, spanTime, zoneDate } from './agendaUtils'
@@ -44,31 +37,31 @@ interface AgendaCardProps {
   hacker: IHackerProps
 }
 
-export const AgendaCard: FC<AgendaCardProps> = ({ item, hacker }) => {
+export const rowColor = (item: IAgendaItem) => {
+  if (item.description.startsWith('#')) return '#ccc'
+  if (item.description.startsWith('#')) return '#bbb'
+  if (item.description.startsWith('_')) return '#aaa'
+  return '#white'
+}
+
+export const AgendaRow: FC<AgendaCardProps> = ({ item, hacker }) => {
   const current: AgendaTime = zoneDate(new Date(), hacker.timezone)
   return (
-    <Card width="100%">
-      <CardContent>
-        <Space gap="u10">
-          <SpaceVertical gap="u1">
-            <Heading fontSize="small" color="text2" fontWeight="bold" as="h4">
-              {spanDate(item.start, item.stop!, hacker.locale)}
-            </Heading>
-            <Span fontSize="small" color="text2">
-              {spanTime(item.start, item.stop!, hacker.locale)}
-            </Span>
-          </SpaceVertical>
-          <SpaceVertical gap="u1">
-            <Heading as="h3" fontSize="xlarge">
-              {item.title}
-            </Heading>
-            {item.description && <Markdown source={item.description} />}
-          </SpaceVertical>
-          <SpaceVertical gap="u1" align="end">
-            {spanEta(current, item.start, item.stop!, hacker.locale)}
-          </SpaceVertical>
-        </Space>
-      </CardContent>
-    </Card>
+    <TableRow color={rowColor(item)}>
+      <TableDataCell>
+        <Heading fontSize="small" color="text2" fontWeight="bold" as="h5">
+          {spanDate(item.start, item.stop!, hacker.locale)}
+        </Heading>
+        <Span fontSize="small" color="text2">
+          {spanTime(item.start, item.stop!, hacker.locale)}
+        </Span>
+      </TableDataCell>
+      <TableDataCell>
+        <Markdown source={item.description} />
+      </TableDataCell>
+      <TableDataCell>
+        {spanEta(current, item.start, item.stop!, hacker.locale)}
+      </TableDataCell>
+    </TableRow>
   )
 }
