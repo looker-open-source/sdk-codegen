@@ -277,6 +277,6 @@ export const AsideBorder = styled(Aside)<{
   headless: boolean
 }>`
   width: ${({ isOpen, headless }) =>
-    isOpen ? '20rem' : headless ? '4rem' : '0rem'};
+    isOpen ? '20rem' : headless ? '2.75rem' : '0rem'};
 `
 export default ApiExplorer
