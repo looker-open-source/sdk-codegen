@@ -133,7 +133,8 @@ class Looker31SDK(api_methods.APIMethods):
     #
     # DELETE /logout -> str
     def logout(
-        self, transport_options: Optional[transport.TransportOptions] = None,
+        self,
+        transport_options: Optional[transport.TransportOptions] = None,
     ) -> str:
         """Logout"""
         response = cast(
@@ -220,7 +221,8 @@ class Looker31SDK(api_methods.APIMethods):
     #
     # GET /ldap_config -> models.LDAPConfig
     def ldap_config(
-        self, transport_options: Optional[transport.TransportOptions] = None,
+        self,
+        transport_options: Optional[transport.TransportOptions] = None,
     ) -> models.LDAPConfig:
         """Get LDAP Configuration"""
         response = cast(
@@ -410,7 +412,8 @@ class Looker31SDK(api_methods.APIMethods):
     #
     # GET /oidc_config -> models.OIDCConfig
     def oidc_config(
-        self, transport_options: Optional[transport.TransportOptions] = None,
+        self,
+        transport_options: Optional[transport.TransportOptions] = None,
     ) -> models.OIDCConfig:
         """Get OIDC Configuration"""
         response = cast(
@@ -517,7 +520,8 @@ class Looker31SDK(api_methods.APIMethods):
     #
     # GET /password_config -> models.PasswordConfig
     def password_config(
-        self, transport_options: Optional[transport.TransportOptions] = None,
+        self,
+        transport_options: Optional[transport.TransportOptions] = None,
     ) -> models.PasswordConfig:
         """Get Password Config"""
         response = cast(
@@ -554,7 +558,8 @@ class Looker31SDK(api_methods.APIMethods):
     #
     # PUT /password_config/force_password_reset_at_next_login_for_all_users -> str
     def force_password_reset_at_next_login_for_all_users(
-        self, transport_options: Optional[transport.TransportOptions] = None,
+        self,
+        transport_options: Optional[transport.TransportOptions] = None,
     ) -> str:
         """Force password reset"""
         response = cast(
@@ -582,7 +587,8 @@ class Looker31SDK(api_methods.APIMethods):
     #
     # GET /saml_config -> models.SamlConfig
     def saml_config(
-        self, transport_options: Optional[transport.TransportOptions] = None,
+        self,
+        transport_options: Optional[transport.TransportOptions] = None,
     ) -> models.SamlConfig:
         """Get SAML Configuration"""
         response = cast(
@@ -689,7 +695,9 @@ class Looker31SDK(api_methods.APIMethods):
     #
     # POST /parse_saml_idp_metadata -> models.SamlMetadataParseResult
     def parse_saml_idp_metadata(
-        self, body: str, transport_options: Optional[transport.TransportOptions] = None,
+        self,
+        body: str,
+        transport_options: Optional[transport.TransportOptions] = None,
     ) -> models.SamlMetadataParseResult:
         """Parse SAML IdP XML"""
         response = cast(
@@ -709,7 +717,9 @@ class Looker31SDK(api_methods.APIMethods):
     #
     # POST /fetch_and_parse_saml_idp_metadata -> models.SamlMetadataParseResult
     def fetch_and_parse_saml_idp_metadata(
-        self, body: str, transport_options: Optional[transport.TransportOptions] = None,
+        self,
+        body: str,
+        transport_options: Optional[transport.TransportOptions] = None,
     ) -> models.SamlMetadataParseResult:
         """Parse SAML IdP Url"""
         response = cast(
@@ -727,7 +737,8 @@ class Looker31SDK(api_methods.APIMethods):
     #
     # GET /session_config -> models.SessionConfig
     def session_config(
-        self, transport_options: Optional[transport.TransportOptions] = None,
+        self,
+        transport_options: Optional[transport.TransportOptions] = None,
     ) -> models.SessionConfig:
         """Get Session Config"""
         response = cast(
@@ -969,7 +980,8 @@ class Looker31SDK(api_methods.APIMethods):
     #
     # GET /color_collections/default -> models.ColorCollection
     def default_color_collection(
-        self, transport_options: Optional[transport.TransportOptions] = None,
+        self,
+        transport_options: Optional[transport.TransportOptions] = None,
     ) -> models.ColorCollection:
         """Get Default Color Collection"""
         response = cast(
@@ -1099,7 +1111,8 @@ class Looker31SDK(api_methods.APIMethods):
     #
     # GET /backup_configuration -> models.BackupConfiguration
     def backup_configuration(
-        self, transport_options: Optional[transport.TransportOptions] = None,
+        self,
+        transport_options: Optional[transport.TransportOptions] = None,
     ) -> models.BackupConfiguration:
         """Get Backup Configuration"""
         response = cast(
@@ -1136,7 +1149,8 @@ class Looker31SDK(api_methods.APIMethods):
     #
     # GET /cloud_storage -> models.BackupConfiguration
     def cloud_storage_configuration(
-        self, transport_options: Optional[transport.TransportOptions] = None,
+        self,
+        transport_options: Optional[transport.TransportOptions] = None,
     ) -> models.BackupConfiguration:
         """Get Cloud Storage"""
         response = cast(
@@ -1173,7 +1187,8 @@ class Looker31SDK(api_methods.APIMethods):
     #
     # GET /custom_welcome_email -> models.CustomWelcomeEmail
     def custom_welcome_email(
-        self, transport_options: Optional[transport.TransportOptions] = None,
+        self,
+        transport_options: Optional[transport.TransportOptions] = None,
     ) -> models.CustomWelcomeEmail:
         """Get Custom Welcome Email"""
         response = cast(
@@ -1217,7 +1232,7 @@ class Looker31SDK(api_methods.APIMethods):
         body: models.WelcomeEmailTest,
         transport_options: Optional[transport.TransportOptions] = None,
     ) -> models.WelcomeEmailTest:
-        """Send a test welcome email to the currently logged in user with the supplied content """
+        """Send a test welcome email to the currently logged in user with the supplied content"""
         response = cast(
             models.WelcomeEmailTest,
             self.put(
@@ -1233,7 +1248,8 @@ class Looker31SDK(api_methods.APIMethods):
     #
     # GET /digest_emails_enabled -> models.DigestEmails
     def digest_emails_enabled(
-        self, transport_options: Optional[transport.TransportOptions] = None,
+        self,
+        transport_options: Optional[transport.TransportOptions] = None,
     ) -> models.DigestEmails:
         """Get Digest_emails"""
         response = cast(
@@ -1272,7 +1288,8 @@ class Looker31SDK(api_methods.APIMethods):
     #
     # POST /digest_email_send -> models.DigestEmailSend
     def create_digest_email_send(
-        self, transport_options: Optional[transport.TransportOptions] = None,
+        self,
+        transport_options: Optional[transport.TransportOptions] = None,
     ) -> models.DigestEmailSend:
         """Deliver digest email contents"""
         response = cast(
@@ -1289,7 +1306,8 @@ class Looker31SDK(api_methods.APIMethods):
     #
     # GET /internal_help_resources_content -> models.InternalHelpResourcesContent
     def internal_help_resources_content(
-        self, transport_options: Optional[transport.TransportOptions] = None,
+        self,
+        transport_options: Optional[transport.TransportOptions] = None,
     ) -> models.InternalHelpResourcesContent:
         """Get Internal Help Resources Content"""
         response = cast(
@@ -1326,7 +1344,8 @@ class Looker31SDK(api_methods.APIMethods):
     #
     # GET /internal_help_resources_enabled -> models.InternalHelpResources
     def internal_help_resources(
-        self, transport_options: Optional[transport.TransportOptions] = None,
+        self,
+        transport_options: Optional[transport.TransportOptions] = None,
     ) -> models.InternalHelpResources:
         """Get Internal Help Resources"""
         response = cast(
@@ -1363,7 +1382,8 @@ class Looker31SDK(api_methods.APIMethods):
     #
     # GET /legacy_features -> Sequence[models.LegacyFeature]
     def all_legacy_features(
-        self, transport_options: Optional[transport.TransportOptions] = None,
+        self,
+        transport_options: Optional[transport.TransportOptions] = None,
     ) -> Sequence[models.LegacyFeature]:
         """Get All Legacy Features"""
         response = cast(
@@ -1422,7 +1442,8 @@ class Looker31SDK(api_methods.APIMethods):
     #
     # GET /locales -> Sequence[models.Locale]
     def all_locales(
-        self, transport_options: Optional[transport.TransportOptions] = None,
+        self,
+        transport_options: Optional[transport.TransportOptions] = None,
     ) -> Sequence[models.Locale]:
         """Get All Locales"""
         response = cast(
@@ -1439,7 +1460,8 @@ class Looker31SDK(api_methods.APIMethods):
     #
     # GET /timezones -> Sequence[models.Timezone]
     def all_timezones(
-        self, transport_options: Optional[transport.TransportOptions] = None,
+        self,
+        transport_options: Optional[transport.TransportOptions] = None,
     ) -> Sequence[models.Timezone]:
         """Get All Timezones"""
         response = cast(
@@ -3136,7 +3158,8 @@ class Looker31SDK(api_methods.APIMethods):
     #
     # GET /datagroups -> Sequence[models.Datagroup]
     def all_datagroups(
-        self, transport_options: Optional[transport.TransportOptions] = None,
+        self,
+        transport_options: Optional[transport.TransportOptions] = None,
     ) -> Sequence[models.Datagroup]:
         """Get All Datagroups"""
         response = cast(
@@ -6623,7 +6646,8 @@ class Looker31SDK(api_methods.APIMethods):
     #
     # GET /running_queries -> Sequence[models.RunningQueries]
     def all_running_queries(
-        self, transport_options: Optional[transport.TransportOptions] = None,
+        self,
+        transport_options: Optional[transport.TransportOptions] = None,
     ) -> Sequence[models.RunningQueries]:
         """Get All Running Queries"""
         response = cast(
@@ -7141,7 +7165,8 @@ class Looker31SDK(api_methods.APIMethods):
     #
     # GET /permissions -> Sequence[models.Permission]
     def all_permissions(
-        self, transport_options: Optional[transport.TransportOptions] = None,
+        self,
+        transport_options: Optional[transport.TransportOptions] = None,
     ) -> Sequence[models.Permission]:
         """Get All Permissions"""
         response = cast(
@@ -8110,7 +8135,8 @@ class Looker31SDK(api_methods.APIMethods):
     #
     # GET /session -> models.ApiSession
     def session(
-        self, transport_options: Optional[transport.TransportOptions] = None,
+        self,
+        transport_options: Optional[transport.TransportOptions] = None,
     ) -> models.ApiSession:
         """Get Session"""
         response = cast(
@@ -10269,7 +10295,8 @@ class Looker31SDK(api_methods.APIMethods):
     #
     # GET /workspaces -> Sequence[models.Workspace]
     def all_workspaces(
-        self, transport_options: Optional[transport.TransportOptions] = None,
+        self,
+        transport_options: Optional[transport.TransportOptions] = None,
     ) -> Sequence[models.Workspace]:
         """Get All Workspaces"""
         response = cast(

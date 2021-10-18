@@ -25,7 +25,7 @@
  */
 
 /**
- * 296 API models: 219 Spec, 0 Request, 58 Write, 19 Enum
+ * 297 API models: 220 Spec, 0 Request, 57 Write, 20 Enum
  */
 
 
@@ -71,14 +71,21 @@ public struct Alert: SDKModel {
         case cron
         case custom_title
         case dashboard_element_id
+        case description
         case destinations
         case field
+        case followed
+        case followable
         case id
         case is_disabled
         case is_public
+        case investigative_content_type
+        case _investigative_content_id = "investigative_content_id"
+        case investigative_content_title
         case _lookml_dashboard_id = "lookml_dashboard_id"
         case _lookml_link_id = "lookml_link_id"
         case owner_id
+        case owner_display_name
         case threshold
         case time_series_condition_state
     }
@@ -108,11 +115,26 @@ public struct Alert: SDKModel {
     public var dashboard_element_id: Int64?
 
     /**
+     * An optional description for the alert. This supplements the title
+     */
+    public var description: String?
+
+    /**
      * Array of destinations to send alerts to. Must be the same type of destination. Example `[{ "destination_type": "EMAIL", "email_address": "test@test.com" }]`
      */
     public var destinations: [AlertDestination]?
 
     public var field: AlertField?
+
+    /**
+     * Whether or not the user follows this alert. (read-only)
+     */
+    public var followed: Bool?
+
+    /**
+     * Whether or not the alert is followable (read-only)
+     */
+    public var followable: Bool?
 
     /**
      * ID of the alert (read-only)
@@ -128,6 +150,25 @@ public struct Alert: SDKModel {
      * Whether or not the alert is public
      */
     public var is_public: Bool?
+
+    /**
+     * The type of the investigative content Valid values are: "dashboard".
+     */
+    public var investigative_content_type: InvestigativeContentType?
+
+    private var _investigative_content_id: AnyString?
+    /**
+     * The ID of the investigative content. For dashboards, this will be the dashboard ID
+     */
+    public var investigative_content_id: String? {
+        get { _investigative_content_id?.value }
+        set { _investigative_content_id = newValue.map(AnyString.init) }
+    }
+
+    /**
+     * The title of the investigative content. (read-only)
+     */
+    public var investigative_content_title: String?
 
     private var _lookml_dashboard_id: AnyString?
     /**
@@ -153,26 +194,38 @@ public struct Alert: SDKModel {
     public var owner_id: Int64?
 
     /**
+     * Alert owner's display name (read-only)
+     */
+    public var owner_display_name: String?
+
+    /**
      * Value of the alert threshold
      */
     public var threshold: Double?
 
     public var time_series_condition_state: AlertConditionState?
 
-    public init(applied_dashboard_filters: [AlertAppliedDashboardFilter]? = nil, comparison_type: ComparisonType? = nil, cron: String? = nil, custom_title: String? = nil, dashboard_element_id: Int64? = nil, destinations: [AlertDestination]? = nil, field: AlertField? = nil, id: Int64? = nil, is_disabled: Bool? = nil, is_public: Bool? = nil, lookml_dashboard_id: String? = nil, lookml_link_id: String? = nil, owner_id: Int64? = nil, threshold: Double? = nil, time_series_condition_state: AlertConditionState? = nil) {
+    public init(applied_dashboard_filters: [AlertAppliedDashboardFilter]? = nil, comparison_type: ComparisonType? = nil, cron: String? = nil, custom_title: String? = nil, dashboard_element_id: Int64? = nil, description: String? = nil, destinations: [AlertDestination]? = nil, field: AlertField? = nil, followed: Bool? = nil, followable: Bool? = nil, id: Int64? = nil, is_disabled: Bool? = nil, is_public: Bool? = nil, investigative_content_type: InvestigativeContentType? = nil, investigative_content_id: String? = nil, investigative_content_title: String? = nil, lookml_dashboard_id: String? = nil, lookml_link_id: String? = nil, owner_id: Int64? = nil, owner_display_name: String? = nil, threshold: Double? = nil, time_series_condition_state: AlertConditionState? = nil) {
         self.applied_dashboard_filters = applied_dashboard_filters
         self.comparison_type = comparison_type
         self.cron = cron
         self.custom_title = custom_title
         self.dashboard_element_id = dashboard_element_id
+        self.description = description
         self.destinations = destinations
         self.field = field
+        self.followed = followed
+        self.followable = followable
         self.id = id
         self.is_disabled = is_disabled
         self.is_public = is_public
+        self.investigative_content_type = investigative_content_type
+        self._investigative_content_id = investigative_content_id.map(AnyString.init)
+        self.investigative_content_title = investigative_content_title
         self._lookml_dashboard_id = lookml_dashboard_id.map(AnyString.init)
         self._lookml_link_id = lookml_link_id.map(AnyString.init)
         self.owner_id = owner_id
+        self.owner_display_name = owner_display_name
         self.threshold = threshold
         self.time_series_condition_state = time_series_condition_state
     }
@@ -572,8 +625,7 @@ public struct BoardItem: SDKModel {
         case content_favorite_id
         case content_metadata_id
         case content_updated_at
-        case custom_image_data_base64
-        case custom_image_url
+        case custom_description
         case custom_title
         case custom_url
         case dashboard_id
@@ -616,14 +668,9 @@ public struct BoardItem: SDKModel {
     public var content_updated_at: String?
 
     /**
-     * (Write-Only) base64 encoded image data
+     * Custom description entered by the user, if present
      */
-    public var custom_image_data_base64: String?
-
-    /**
-     * Custom image_url entered by the user, if present (read-only)
-     */
-    public var custom_image_url: String?
+    public var custom_description: String?
 
     /**
      * Custom title entered by the user, if present
@@ -704,14 +751,13 @@ public struct BoardItem: SDKModel {
      */
     public var view_count: Int64?
 
-    public init(can: StringDictionary<Bool>? = nil, content_created_by: String? = nil, content_favorite_id: Int64? = nil, content_metadata_id: Int64? = nil, content_updated_at: String? = nil, custom_image_data_base64: String? = nil, custom_image_url: String? = nil, custom_title: String? = nil, custom_url: String? = nil, dashboard_id: Int64? = nil, description: String? = nil, favorite_count: Int64? = nil, board_section_id: Int64? = nil, id: Int64? = nil, image_url: String? = nil, location: String? = nil, look_id: Int64? = nil, lookml_dashboard_id: String? = nil, order: Int64? = nil, title: String? = nil, url: String? = nil, view_count: Int64? = nil) {
+    public init(can: StringDictionary<Bool>? = nil, content_created_by: String? = nil, content_favorite_id: Int64? = nil, content_metadata_id: Int64? = nil, content_updated_at: String? = nil, custom_description: String? = nil, custom_title: String? = nil, custom_url: String? = nil, dashboard_id: Int64? = nil, description: String? = nil, favorite_count: Int64? = nil, board_section_id: Int64? = nil, id: Int64? = nil, image_url: String? = nil, location: String? = nil, look_id: Int64? = nil, lookml_dashboard_id: String? = nil, order: Int64? = nil, title: String? = nil, url: String? = nil, view_count: Int64? = nil) {
         self.can = can
         self.content_created_by = content_created_by
         self.content_favorite_id = content_favorite_id
         self.content_metadata_id = content_metadata_id
         self.content_updated_at = content_updated_at
-        self.custom_image_data_base64 = custom_image_data_base64
-        self.custom_image_url = custom_image_url
+        self.custom_description = custom_description
         self.custom_title = custom_title
         self.custom_url = custom_url
         self.dashboard_id = dashboard_id
@@ -3036,11 +3082,6 @@ public struct CredentialsTotp: SDKModel {
 
 public struct CustomWelcomeEmail: SDKModel {
     /**
-     * Operations the current user is able to perform on this object (read-only)
-     */
-    public var can: StringDictionary<Bool>?
-
-    /**
      * If true, custom email content will replace the default body of welcome emails
      */
     public var enabled: Bool?
@@ -3051,17 +3092,16 @@ public struct CustomWelcomeEmail: SDKModel {
     public var content: String?
 
     /**
-     * The text to appear in the email subject line.
+     * The text to appear in the email subject line. Only available with a whitelabel license and whitelabel_configuration.advanced_custom_welcome_email enabled.
      */
     public var subject: String?
 
     /**
-     * The text to appear in the header line of the email body.
+     * The text to appear in the header line of the email body. Only available with a whitelabel license and whitelabel_configuration.advanced_custom_welcome_email enabled.
      */
     public var header: String?
 
-    public init(can: StringDictionary<Bool>? = nil, enabled: Bool? = nil, content: String? = nil, subject: String? = nil, header: String? = nil) {
-        self.can = can
+    public init(enabled: Bool? = nil, content: String? = nil, subject: String? = nil, header: String? = nil) {
         self.enabled = enabled
         self.content = content
         self.subject = subject
@@ -3101,6 +3141,7 @@ public struct Dashboard: SDKModel {
         case deleter_id
         case edit_uri
         case favorite_count
+        case filters_bar_collapsed
         case last_accessed_at
         case last_viewed_at
         case load_configuration
@@ -3255,6 +3296,11 @@ public struct Dashboard: SDKModel {
     public var favorite_count: Int64?
 
     /**
+     * Sets the default state of the filters bar to collapsed or open
+     */
+    public var filters_bar_collapsed: Bool?
+
+    /**
      * Time the dashboard was last accessed (read-only)
      */
     public var last_accessed_at: Date?
@@ -3329,7 +3375,7 @@ public struct Dashboard: SDKModel {
      */
     public var url: String?
 
-    public init(can: StringDictionary<Bool>? = nil, content_favorite_id: Int64? = nil, content_metadata_id: Int64? = nil, description: String? = nil, hidden: Bool? = nil, id: String? = nil, model: LookModel? = nil, query_timezone: String? = nil, readonly: Bool? = nil, refresh_interval: String? = nil, refresh_interval_to_i: Int64? = nil, folder: FolderBase? = nil, title: String? = nil, user_id: Int64? = nil, slug: String? = nil, preferred_viewer: String? = nil, alert_sync_with_dashboard_filter_enabled: Bool? = nil, background_color: String? = nil, created_at: Date? = nil, crossfilter_enabled: Bool? = nil, dashboard_elements: [DashboardElement]? = nil, dashboard_filters: [DashboardFilter]? = nil, dashboard_layouts: [DashboardLayout]? = nil, deleted: Bool? = nil, deleted_at: Date? = nil, deleter_id: Int64? = nil, edit_uri: String? = nil, favorite_count: Int64? = nil, last_accessed_at: Date? = nil, last_viewed_at: Date? = nil, load_configuration: String? = nil, lookml_link_id: String? = nil, show_filters_bar: Bool? = nil, show_title: Bool? = nil, folder_id: String? = nil, text_tile_text_color: String? = nil, tile_background_color: String? = nil, tile_text_color: String? = nil, title_color: String? = nil, view_count: Int64? = nil, appearance: DashboardAppearance? = nil, url: String? = nil) {
+    public init(can: StringDictionary<Bool>? = nil, content_favorite_id: Int64? = nil, content_metadata_id: Int64? = nil, description: String? = nil, hidden: Bool? = nil, id: String? = nil, model: LookModel? = nil, query_timezone: String? = nil, readonly: Bool? = nil, refresh_interval: String? = nil, refresh_interval_to_i: Int64? = nil, folder: FolderBase? = nil, title: String? = nil, user_id: Int64? = nil, slug: String? = nil, preferred_viewer: String? = nil, alert_sync_with_dashboard_filter_enabled: Bool? = nil, background_color: String? = nil, created_at: Date? = nil, crossfilter_enabled: Bool? = nil, dashboard_elements: [DashboardElement]? = nil, dashboard_filters: [DashboardFilter]? = nil, dashboard_layouts: [DashboardLayout]? = nil, deleted: Bool? = nil, deleted_at: Date? = nil, deleter_id: Int64? = nil, edit_uri: String? = nil, favorite_count: Int64? = nil, filters_bar_collapsed: Bool? = nil, last_accessed_at: Date? = nil, last_viewed_at: Date? = nil, load_configuration: String? = nil, lookml_link_id: String? = nil, show_filters_bar: Bool? = nil, show_title: Bool? = nil, folder_id: String? = nil, text_tile_text_color: String? = nil, tile_background_color: String? = nil, tile_text_color: String? = nil, title_color: String? = nil, view_count: Int64? = nil, appearance: DashboardAppearance? = nil, url: String? = nil) {
         self.can = can
         self.content_favorite_id = content_favorite_id
         self.content_metadata_id = content_metadata_id
@@ -3358,6 +3404,7 @@ public struct Dashboard: SDKModel {
         self.deleter_id = deleter_id
         self.edit_uri = edit_uri
         self.favorite_count = favorite_count
+        self.filters_bar_collapsed = filters_bar_collapsed
         self.last_accessed_at = last_accessed_at
         self.last_viewed_at = last_viewed_at
         self.load_configuration = load_configuration
@@ -4418,6 +4465,7 @@ public struct DBConnection: SDKModel {
         case pdt_concurrency
         case disable_context_comment
         case oauth_application_id
+        case always_retry_failed_builds
     }
     /**
      * Operations the current user is able to perform on this object (read-only)
@@ -4626,7 +4674,12 @@ public struct DBConnection: SDKModel {
      */
     public var oauth_application_id: Int64?
 
-    public init(can: StringDictionary<Bool>? = nil, name: String? = nil, dialect: Dialect? = nil, snippets: [Snippet]? = nil, pdts_enabled: Bool? = nil, host: String? = nil, port: Int64? = nil, username: String? = nil, password: String? = nil, uses_oauth: Bool? = nil, certificate: String? = nil, file_type: String? = nil, database: String? = nil, db_timezone: String? = nil, query_timezone: String? = nil, schema: String? = nil, max_connections: Int64? = nil, max_billing_gigabytes: String? = nil, ssl: Bool? = nil, verify_ssl: Bool? = nil, tmp_db_name: String? = nil, jdbc_additional_params: String? = nil, pool_timeout: Int64? = nil, dialect_name: String? = nil, created_at: String? = nil, user_id: String? = nil, example: Bool? = nil, user_db_credentials: Bool? = nil, user_attribute_fields: [String]? = nil, maintenance_cron: String? = nil, last_regen_at: String? = nil, last_reap_at: String? = nil, sql_runner_precache_tables: Bool? = nil, sql_writing_with_info_schema: Bool? = nil, after_connect_statements: String? = nil, pdt_context_override: DBConnectionOverride? = nil, managed: Bool? = nil, tunnel_id: String? = nil, pdt_concurrency: Int64? = nil, disable_context_comment: Bool? = nil, oauth_application_id: Int64? = nil) {
+    /**
+     * When true, error PDTs will be retried every regenerator cycle
+     */
+    public var always_retry_failed_builds: Bool?
+
+    public init(can: StringDictionary<Bool>? = nil, name: String? = nil, dialect: Dialect? = nil, snippets: [Snippet]? = nil, pdts_enabled: Bool? = nil, host: String? = nil, port: Int64? = nil, username: String? = nil, password: String? = nil, uses_oauth: Bool? = nil, certificate: String? = nil, file_type: String? = nil, database: String? = nil, db_timezone: String? = nil, query_timezone: String? = nil, schema: String? = nil, max_connections: Int64? = nil, max_billing_gigabytes: String? = nil, ssl: Bool? = nil, verify_ssl: Bool? = nil, tmp_db_name: String? = nil, jdbc_additional_params: String? = nil, pool_timeout: Int64? = nil, dialect_name: String? = nil, created_at: String? = nil, user_id: String? = nil, example: Bool? = nil, user_db_credentials: Bool? = nil, user_attribute_fields: [String]? = nil, maintenance_cron: String? = nil, last_regen_at: String? = nil, last_reap_at: String? = nil, sql_runner_precache_tables: Bool? = nil, sql_writing_with_info_schema: Bool? = nil, after_connect_statements: String? = nil, pdt_context_override: DBConnectionOverride? = nil, managed: Bool? = nil, tunnel_id: String? = nil, pdt_concurrency: Int64? = nil, disable_context_comment: Bool? = nil, oauth_application_id: Int64? = nil, always_retry_failed_builds: Bool? = nil) {
         self.can = can
         self.name = name
         self.dialect = dialect
@@ -4668,6 +4721,7 @@ public struct DBConnection: SDKModel {
         self.pdt_concurrency = pdt_concurrency
         self.disable_context_comment = disable_context_comment
         self.oauth_application_id = oauth_application_id
+        self.always_retry_failed_builds = always_retry_failed_builds
     }
 
 }
@@ -6869,6 +6923,13 @@ public struct InternalHelpResourcesContent: SDKModel {
         self.markdown_content = markdown_content
     }
 
+}
+
+/**
+ * The type of the investigative content Valid values are: "dashboard".
+ */
+public enum InvestigativeContentType: String, Codable {
+    case dashboard = "dashboard"
 }
 
 public struct LDAPConfig: SDKModel {
@@ -12900,11 +12961,14 @@ public struct Setting: SDKModel {
 
     public var whitelabel_configuration: WhitelabelConfiguration?
 
-    public init(extension_framework_enabled: Bool? = nil, marketplace_auto_install_enabled: Bool? = nil, marketplace_enabled: Bool? = nil, whitelabel_configuration: WhitelabelConfiguration? = nil) {
+    public var custom_welcome_email: CustomWelcomeEmail?
+
+    public init(extension_framework_enabled: Bool? = nil, marketplace_auto_install_enabled: Bool? = nil, marketplace_enabled: Bool? = nil, whitelabel_configuration: WhitelabelConfiguration? = nil, custom_welcome_email: CustomWelcomeEmail? = nil) {
         self.extension_framework_enabled = extension_framework_enabled
         self.marketplace_auto_install_enabled = marketplace_auto_install_enabled
         self.marketplace_enabled = marketplace_enabled
         self.whitelabel_configuration = whitelabel_configuration
+        self.custom_welcome_email = custom_welcome_email
     }
 
 }
@@ -13996,6 +14060,22 @@ public struct UserAttributeWithValue: SDKModel {
 
 }
 
+public struct UserEmailOnly: SDKModel {
+    /**
+     * Email Address
+     */
+    public var email: String
+
+    public init(email: String) {
+        self.email = email
+    }
+
+    public init(_ email: String) {
+        self.init(email: email)
+    }
+
+}
+
 public struct UserLoginLockout: SDKModel {
 
     private enum CodingKeys : String, CodingKey {
@@ -14364,7 +14444,7 @@ public struct Workspace: SDKModel {
 
 /**
  * Dynamic writeable type for Alert removes:
- * id
+ * followed, followable, id, investigative_content_title, owner_display_name
  */
 public struct WriteAlert: SDKModel {
 
@@ -14374,10 +14454,13 @@ public struct WriteAlert: SDKModel {
         case cron
         case custom_title
         case dashboard_element_id
+        case description
         case destinations
         case field
         case is_disabled
         case is_public
+        case investigative_content_type
+        case _investigative_content_id = "investigative_content_id"
         case _lookml_dashboard_id = "lookml_dashboard_id"
         case _lookml_link_id = "lookml_link_id"
         case owner_id
@@ -14410,6 +14493,11 @@ public struct WriteAlert: SDKModel {
     public var dashboard_element_id: Int64?
 
     /**
+     * An optional description for the alert. This supplements the title
+     */
+    public var description: String?
+
+    /**
      * Array of destinations to send alerts to. Must be the same type of destination. Example `[{ "destination_type": "EMAIL", "email_address": "test@test.com" }]`
      */
     public var destinations: [AlertDestination]?
@@ -14425,6 +14513,20 @@ public struct WriteAlert: SDKModel {
      * Whether or not the alert is public
      */
     public var is_public: Bool?
+
+    /**
+     * The type of the investigative content Valid values are: "dashboard".
+     */
+    public var investigative_content_type: InvestigativeContentType?
+
+    private var _investigative_content_id: AnyString?
+    /**
+     * The ID of the investigative content. For dashboards, this will be the dashboard ID
+     */
+    public var investigative_content_id: String? {
+        get { _investigative_content_id?.value }
+        set { _investigative_content_id = newValue.map(AnyString.init) }
+    }
 
     private var _lookml_dashboard_id: AnyString?
     /**
@@ -14456,16 +14558,19 @@ public struct WriteAlert: SDKModel {
 
     public var time_series_condition_state: AlertConditionState?
 
-    public init(applied_dashboard_filters: [AlertAppliedDashboardFilter]? = nil, comparison_type: ComparisonType? = nil, cron: String? = nil, custom_title: String? = nil, dashboard_element_id: Int64? = nil, destinations: [AlertDestination]? = nil, field: AlertField? = nil, is_disabled: Bool? = nil, is_public: Bool? = nil, lookml_dashboard_id: String? = nil, lookml_link_id: String? = nil, owner_id: Int64? = nil, threshold: Double? = nil, time_series_condition_state: AlertConditionState? = nil) {
+    public init(applied_dashboard_filters: [AlertAppliedDashboardFilter]? = nil, comparison_type: ComparisonType? = nil, cron: String? = nil, custom_title: String? = nil, dashboard_element_id: Int64? = nil, description: String? = nil, destinations: [AlertDestination]? = nil, field: AlertField? = nil, is_disabled: Bool? = nil, is_public: Bool? = nil, investigative_content_type: InvestigativeContentType? = nil, investigative_content_id: String? = nil, lookml_dashboard_id: String? = nil, lookml_link_id: String? = nil, owner_id: Int64? = nil, threshold: Double? = nil, time_series_condition_state: AlertConditionState? = nil) {
         self.applied_dashboard_filters = applied_dashboard_filters
         self.comparison_type = comparison_type
         self.cron = cron
         self.custom_title = custom_title
         self.dashboard_element_id = dashboard_element_id
+        self.description = description
         self.destinations = destinations
         self.field = field
         self.is_disabled = is_disabled
         self.is_public = is_public
+        self.investigative_content_type = investigative_content_type
+        self._investigative_content_id = investigative_content_id.map(AnyString.init)
         self._lookml_dashboard_id = lookml_dashboard_id.map(AnyString.init)
         self._lookml_link_id = lookml_link_id.map(AnyString.init)
         self.owner_id = owner_id
@@ -14575,12 +14680,12 @@ public struct WriteBoard: SDKModel {
 
 /**
  * Dynamic writeable type for BoardItem removes:
- * can, content_created_by, content_favorite_id, content_metadata_id, content_updated_at, custom_image_url, description, favorite_count, id, image_url, location, title, url, view_count
+ * can, content_created_by, content_favorite_id, content_metadata_id, content_updated_at, description, favorite_count, id, image_url, location, title, url, view_count
  */
 public struct WriteBoardItem: SDKModel {
 
     private enum CodingKeys : String, CodingKey {
-        case custom_image_data_base64
+        case custom_description
         case custom_title
         case custom_url
         case dashboard_id
@@ -14590,9 +14695,9 @@ public struct WriteBoardItem: SDKModel {
         case order
     }
     /**
-     * (Write-Only) base64 encoded image data
+     * Custom description entered by the user, if present
      */
-    public var custom_image_data_base64: String?
+    public var custom_description: String?
 
     /**
      * Custom title entered by the user, if present
@@ -14633,8 +14738,8 @@ public struct WriteBoardItem: SDKModel {
      */
     public var order: Int64?
 
-    public init(custom_image_data_base64: String? = nil, custom_title: String? = nil, custom_url: String? = nil, dashboard_id: Int64? = nil, board_section_id: Int64? = nil, look_id: Int64? = nil, lookml_dashboard_id: String? = nil, order: Int64? = nil) {
-        self.custom_image_data_base64 = custom_image_data_base64
+    public init(custom_description: String? = nil, custom_title: String? = nil, custom_url: String? = nil, dashboard_id: Int64? = nil, board_section_id: Int64? = nil, look_id: Int64? = nil, lookml_dashboard_id: String? = nil, order: Int64? = nil) {
+        self.custom_description = custom_description
         self.custom_title = custom_title
         self.custom_url = custom_url
         self.dashboard_id = dashboard_id
@@ -15015,40 +15120,6 @@ public struct WriteCredentialsEmail: SDKModel {
 }
 
 /**
- * Dynamic writeable type for CustomWelcomeEmail removes:
- * can
- */
-public struct WriteCustomWelcomeEmail: SDKModel {
-    /**
-     * If true, custom email content will replace the default body of welcome emails
-     */
-    public var enabled: Bool?
-
-    /**
-     * The HTML to use as custom content for welcome emails. Script elements and other potentially dangerous markup will be removed.
-     */
-    public var content: String?
-
-    /**
-     * The text to appear in the email subject line.
-     */
-    public var subject: String?
-
-    /**
-     * The text to appear in the header line of the email body.
-     */
-    public var header: String?
-
-    public init(enabled: Bool? = nil, content: String? = nil, subject: String? = nil, header: String? = nil) {
-        self.enabled = enabled
-        self.content = content
-        self.subject = subject
-        self.header = header
-    }
-
-}
-
-/**
  * Dynamic writeable type for Dashboard removes:
  * can, content_favorite_id, content_metadata_id, id, model, readonly, refresh_interval_to_i, user_id, created_at, dashboard_elements, dashboard_filters, dashboard_layouts, deleted_at, deleter_id, edit_uri, favorite_count, last_accessed_at, last_viewed_at, view_count, url
  */
@@ -15067,6 +15138,7 @@ public struct WriteDashboard: SDKModel {
         case background_color
         case crossfilter_enabled
         case deleted
+        case filters_bar_collapsed
         case load_configuration
         case _lookml_link_id = "lookml_link_id"
         case show_filters_bar
@@ -15140,6 +15212,11 @@ public struct WriteDashboard: SDKModel {
     public var deleted: Bool?
 
     /**
+     * Sets the default state of the filters bar to collapsed or open
+     */
+    public var filters_bar_collapsed: Bool?
+
+    /**
      * configuration option that governs how dashboard loading will happen.
      */
     public var load_configuration: String?
@@ -15194,7 +15271,7 @@ public struct WriteDashboard: SDKModel {
 
     public var appearance: DashboardAppearance?
 
-    public init(description: String? = nil, hidden: Bool? = nil, query_timezone: String? = nil, refresh_interval: String? = nil, folder: WriteFolderBase? = nil, title: String? = nil, slug: String? = nil, preferred_viewer: String? = nil, alert_sync_with_dashboard_filter_enabled: Bool? = nil, background_color: String? = nil, crossfilter_enabled: Bool? = nil, deleted: Bool? = nil, load_configuration: String? = nil, lookml_link_id: String? = nil, show_filters_bar: Bool? = nil, show_title: Bool? = nil, folder_id: String? = nil, text_tile_text_color: String? = nil, tile_background_color: String? = nil, tile_text_color: String? = nil, title_color: String? = nil, appearance: DashboardAppearance? = nil) {
+    public init(description: String? = nil, hidden: Bool? = nil, query_timezone: String? = nil, refresh_interval: String? = nil, folder: WriteFolderBase? = nil, title: String? = nil, slug: String? = nil, preferred_viewer: String? = nil, alert_sync_with_dashboard_filter_enabled: Bool? = nil, background_color: String? = nil, crossfilter_enabled: Bool? = nil, deleted: Bool? = nil, filters_bar_collapsed: Bool? = nil, load_configuration: String? = nil, lookml_link_id: String? = nil, show_filters_bar: Bool? = nil, show_title: Bool? = nil, folder_id: String? = nil, text_tile_text_color: String? = nil, tile_background_color: String? = nil, tile_text_color: String? = nil, title_color: String? = nil, appearance: DashboardAppearance? = nil) {
         self.description = description
         self.hidden = hidden
         self.query_timezone = query_timezone
@@ -15207,6 +15284,7 @@ public struct WriteDashboard: SDKModel {
         self.background_color = background_color
         self.crossfilter_enabled = crossfilter_enabled
         self.deleted = deleted
+        self.filters_bar_collapsed = filters_bar_collapsed
         self.load_configuration = load_configuration
         self._lookml_link_id = lookml_link_id.map(AnyString.init)
         self.show_filters_bar = show_filters_bar
@@ -15648,6 +15726,7 @@ public struct WriteDBConnection: SDKModel {
         case pdt_concurrency
         case disable_context_comment
         case oauth_application_id
+        case always_retry_failed_builds
     }
     /**
      * Name of the connection. Also used as the unique identifier
@@ -15804,7 +15883,12 @@ public struct WriteDBConnection: SDKModel {
      */
     public var oauth_application_id: Int64?
 
-    public init(name: String? = nil, host: String? = nil, port: Int64? = nil, username: String? = nil, password: String? = nil, certificate: String? = nil, file_type: String? = nil, database: String? = nil, db_timezone: String? = nil, query_timezone: String? = nil, schema: String? = nil, max_connections: Int64? = nil, max_billing_gigabytes: String? = nil, ssl: Bool? = nil, verify_ssl: Bool? = nil, tmp_db_name: String? = nil, jdbc_additional_params: String? = nil, pool_timeout: Int64? = nil, dialect_name: String? = nil, user_db_credentials: Bool? = nil, user_attribute_fields: [String]? = nil, maintenance_cron: String? = nil, sql_runner_precache_tables: Bool? = nil, sql_writing_with_info_schema: Bool? = nil, after_connect_statements: String? = nil, pdt_context_override: WriteDBConnectionOverride? = nil, tunnel_id: String? = nil, pdt_concurrency: Int64? = nil, disable_context_comment: Bool? = nil, oauth_application_id: Int64? = nil) {
+    /**
+     * When true, error PDTs will be retried every regenerator cycle
+     */
+    public var always_retry_failed_builds: Bool?
+
+    public init(name: String? = nil, host: String? = nil, port: Int64? = nil, username: String? = nil, password: String? = nil, certificate: String? = nil, file_type: String? = nil, database: String? = nil, db_timezone: String? = nil, query_timezone: String? = nil, schema: String? = nil, max_connections: Int64? = nil, max_billing_gigabytes: String? = nil, ssl: Bool? = nil, verify_ssl: Bool? = nil, tmp_db_name: String? = nil, jdbc_additional_params: String? = nil, pool_timeout: Int64? = nil, dialect_name: String? = nil, user_db_credentials: Bool? = nil, user_attribute_fields: [String]? = nil, maintenance_cron: String? = nil, sql_runner_precache_tables: Bool? = nil, sql_writing_with_info_schema: Bool? = nil, after_connect_statements: String? = nil, pdt_context_override: WriteDBConnectionOverride? = nil, tunnel_id: String? = nil, pdt_concurrency: Int64? = nil, disable_context_comment: Bool? = nil, oauth_application_id: Int64? = nil, always_retry_failed_builds: Bool? = nil) {
         self.name = name
         self.host = host
         self.port = port
@@ -15835,6 +15919,7 @@ public struct WriteDBConnection: SDKModel {
         self.pdt_concurrency = pdt_concurrency
         self.disable_context_comment = disable_context_comment
         self.oauth_application_id = oauth_application_id
+        self.always_retry_failed_builds = always_retry_failed_builds
     }
 
 }
@@ -17636,11 +17721,14 @@ public struct WriteSetting: SDKModel {
      */
     public var whitelabel_configuration: WriteWhitelabelConfiguration?
 
-    public init(extension_framework_enabled: Bool? = nil, marketplace_auto_install_enabled: Bool? = nil, marketplace_enabled: Bool? = nil, whitelabel_configuration: WriteWhitelabelConfiguration? = nil) {
+    public var custom_welcome_email: CustomWelcomeEmail?
+
+    public init(extension_framework_enabled: Bool? = nil, marketplace_auto_install_enabled: Bool? = nil, marketplace_enabled: Bool? = nil, whitelabel_configuration: WriteWhitelabelConfiguration? = nil, custom_welcome_email: CustomWelcomeEmail? = nil) {
         self.extension_framework_enabled = extension_framework_enabled
         self.marketplace_auto_install_enabled = marketplace_auto_install_enabled
         self.marketplace_enabled = marketplace_enabled
         self.whitelabel_configuration = whitelabel_configuration
+        self.custom_welcome_email = custom_welcome_email
     }
 
 }
