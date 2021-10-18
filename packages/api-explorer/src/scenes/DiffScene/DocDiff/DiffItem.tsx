@@ -32,7 +32,7 @@ import { Accordion2, Box, Card, Grid, Heading } from '@looker/components'
 import type { DiffRow } from '@looker/sdk-codegen/src'
 import type { ApiModel, IMethod } from '@looker/sdk-codegen'
 import { useSelector } from 'react-redux'
-import { getSdkLanguage } from '../../../state/settings'
+import { selectSdkLanguage } from '../../../state'
 import { buildMethodPath } from '../../../utils'
 import { DiffBanner } from './DiffBanner'
 import { differ } from './docDiffUtils'
@@ -93,7 +93,7 @@ export const DiffItem: FC<DiffItemProps> = ({
   rightKey,
   rightSpec,
 }) => {
-  const selectedSdkLanguage = useSelector(getSdkLanguage)
+  const selectedSdkLanguage = useSelector(selectSdkLanguage)
   const [leftMethod, setLeftMethod] = useState<IMethod | undefined>(
     leftSpec.methods[item.name]
   )

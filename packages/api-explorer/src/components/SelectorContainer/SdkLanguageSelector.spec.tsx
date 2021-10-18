@@ -27,10 +27,13 @@ import React from 'react'
 import { act, screen, waitFor } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 import { codeGenerators } from '@looker/sdk-codegen'
+import * as reactRedux from 'react-redux'
 
-import { defaultSettingsState } from '../../state/settings'
-import { renderWithReduxProvider } from '../../test-utils'
-import { EnvAdaptorConstants } from '../../utils'
+import { defaultSettingsState, slice as settingsSlice } from '../../state'
+import {
+  registerTestEnvAdaptor,
+  renderWithReduxProvider,
+} from '../../test-utils'
 import { SdkLanguageSelector } from './SdkLanguageSelector'
 
 describe('SdkLanguageSelector', () => {
@@ -60,18 +63,23 @@ describe('SdkLanguageSelector', () => {
   })
 
   test('it stores the selected language in localStorage', async () => {
+    registerTestEnvAdaptor()
+    const mockDispatch = jest.fn()
+    jest.spyOn(reactRedux, 'useDispatch').mockReturnValue(mockDispatch)
     renderWithReduxProvider(<SdkLanguageSelector />)
+
     const selector = screen.getByRole('textbox')
     expect(defaultSettingsState.sdkLanguage).toEqual('Python')
     expect(selector).toHaveValue('Python')
 
+    userEvent.click(selector)
     await act(async () => {
-      await userEvent.click(selector)
       await userEvent.click(screen.getByRole('option', { name: 'TypeScript' }))
-      await waitFor(() => {
-        expect(localStorage.setItem).toHaveBeenLastCalledWith(
-          EnvAdaptorConstants.LOCALSTORAGE_SDK_LANGUAGE_KEY,
-          'TypeScript'
+      await waitFor(async () => {
+        expect(mockDispatch).toHaveBeenLastCalledWith(
+          settingsSlice.actions.setSdkLanguageAction({
+            sdkLanguage: 'TypeScript',
+          })
         )
       })
     })

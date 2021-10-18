@@ -50,16 +50,16 @@ export const slice = createSlice({
   initialState: defaultSettingsState,
   reducers: {
     // eslint-disable-next-line @typescript-eslint/no-empty-function
-    init() {},
-    initSuccess(state, action: PayloadAction<InitSuccessPayload>) {
+    initAction() {},
+    initSuccessAction(state, action: PayloadAction<InitSuccessPayload>) {
       state.initialized = true
       state.sdkLanguage = action.payload.sdkLanguage
     },
-    initFailure(state, action: PayloadAction<Error>) {
+    initFailureAction(state, action: PayloadAction<Error>) {
       state.initialized = false
       state.error = action.payload
     },
-    setSdkLanguage(state, action: PayloadAction<SetSdkLanguageAction>) {
+    setSdkLanguageAction(state, action: PayloadAction<SetSdkLanguageAction>) {
       state.sdkLanguage = action.payload.sdkLanguage
     },
   },

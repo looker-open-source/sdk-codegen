@@ -24,19 +24,15 @@
 
  */
 import ReduxSagaTester from 'redux-saga-tester'
+import { registerTestEnvAdaptor } from '../../test-utils'
 
-import {
-  EnvAdaptorConstants,
-  getEnvAdaptor,
-  registerEnvAdaptor,
-  StandaloneEnvAdaptor,
-} from '../../utils'
+import { EnvAdaptorConstants, getEnvAdaptor } from '../../utils'
 import * as sagas from './sagas'
 import { actions, defaultSettingsState } from './slice'
 
 describe('Settings Sagas', () => {
   let sagaTester: ReduxSagaTester<any>
-  registerEnvAdaptor(new StandaloneEnvAdaptor())
+  registerTestEnvAdaptor()
 
   beforeEach(() => {
     jest.resetAllMocks()
@@ -46,13 +42,14 @@ describe('Settings Sagas', () => {
   })
 
   describe('setSdkLanguageSaga', () => {
+    const setSdkLanguageAction = actions.setSdkLanguageAction
     test('persists value sdkLanguage in localstorage', async () => {
-      sagaTester.dispatch(actions.setSdkLanguage({ sdkLanguage: 'Kotlin' }))
-      await sagaTester.waitFor('settings/setSdkLanguage')
+      sagaTester.dispatch(setSdkLanguageAction({ sdkLanguage: 'Kotlin' }))
+      await sagaTester.waitFor('settings/setSdkLanguageAction')
       const calledActions = sagaTester.getCalledActions()
       expect(calledActions).toHaveLength(1)
       expect(calledActions[0]).toEqual(
-        actions.setSdkLanguage({
+        setSdkLanguageAction({
           sdkLanguage: 'Kotlin',
         })
       )
@@ -64,14 +61,16 @@ describe('Settings Sagas', () => {
   })
 
   describe('initSaga', () => {
+    const { initAction, initSuccessAction, initFailureAction } = actions
+
     test('sends initSuccess action with default language on success if no persisted language is found', async () => {
-      sagaTester.dispatch(actions.init())
-      await sagaTester.waitFor('settings/initSuccess')
+      sagaTester.dispatch(initAction())
+      await sagaTester.waitFor('settings/initSuccessAction')
       const calledActions = sagaTester.getCalledActions()
       expect(calledActions).toHaveLength(2)
-      expect(calledActions[0]).toEqual(actions.init())
+      expect(calledActions[0]).toEqual(initAction())
       expect(calledActions[1]).toEqual(
-        actions.initSuccess({
+        initSuccessAction({
           sdkLanguage: defaultSettingsState.sdkLanguage,
         })
       )
@@ -82,13 +81,13 @@ describe('Settings Sagas', () => {
         .spyOn(getEnvAdaptor(), 'localStorageGetItem')
         .mockResolvedValueOnce('Go')
 
-      sagaTester.dispatch(actions.init())
-      await sagaTester.waitFor('settings/initSuccess')
+      sagaTester.dispatch(initAction())
+      await sagaTester.waitFor('settings/initSuccessAction')
       const calledActions = sagaTester.getCalledActions()
       expect(calledActions).toHaveLength(2)
-      expect(calledActions[0]).toEqual(actions.init())
+      expect(calledActions[0]).toEqual(initAction())
       expect(calledActions[1]).toEqual(
-        actions.initSuccess({
+        initSuccessAction({
           sdkLanguage: 'Go',
         })
       )
@@ -100,12 +99,12 @@ describe('Settings Sagas', () => {
         .spyOn(getEnvAdaptor(), 'localStorageGetItem')
         .mockRejectedValueOnce(error)
 
-      sagaTester.dispatch(actions.init())
-      await sagaTester.waitFor('settings/initFailure')
+      sagaTester.dispatch(initAction())
+      await sagaTester.waitFor('settings/initFailureAction')
       const calledActions = sagaTester.getCalledActions()
       expect(calledActions).toHaveLength(2)
-      expect(calledActions[0]).toEqual(actions.init())
-      expect(calledActions[1]).toEqual(actions.initFailure(error))
+      expect(calledActions[0]).toEqual(initAction())
+      expect(calledActions[1]).toEqual(initFailureAction(error))
     })
   })
 })

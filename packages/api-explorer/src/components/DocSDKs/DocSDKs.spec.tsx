@@ -28,25 +28,22 @@ import { screen } from '@testing-library/react'
 import { codeGenerators } from '@looker/sdk-codegen'
 import type { Store } from 'redux'
 
-import { createStore } from '@looker/redux'
 import { api } from '../../test-data'
-import { renderWithReduxProvider } from '../../test-utils'
+import { renderWithReduxProvider, createMockStore } from '../../test-utils'
 import type { RootState } from '../../state'
-import { slice } from '../../state/settings'
 import { DocSDKs } from './DocSDKs'
 
 describe('DocSDKs', () => {
   let store: Store<RootState>
   const supportedLanguages = codeGenerators.map((g) => g.language)
   const pattern = new RegExp(`${supportedLanguages.join('|')}`)
-  const preloadedState = {
-    settings: { initialized: false, sdkLanguage: 'All' },
-  }
 
   beforeAll(() => {
-    store = createStore({
-      preloadedState,
-      reducer: { settings: slice.reducer },
+    store = createMockStore({
+      settings: {
+        initialized: false,
+        sdkLanguage: 'All',
+      },
     })
   })
 
@@ -68,11 +65,8 @@ describe('DocSDKs', () => {
   test.each(supportedLanguages)(
     'it can render a %s method declaration',
     (sdkLanguage) => {
-      store = createStore({
-        preloadedState: {
-          settings: { ...preloadedState.settings, sdkLanguage },
-        },
-        reducer: { settings: slice.reducer },
+      store = createMockStore({
+        settings: { initialized: false, sdkLanguage },
       })
       renderWithReduxProvider(
         <DocSDKs api={api} method={api.methods.run_look} />,

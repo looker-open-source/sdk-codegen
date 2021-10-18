@@ -26,7 +26,7 @@
 
 import { createStore } from '@looker/redux'
 
-import { getSdkLanguage, isInitialized } from './selectors'
+import { selectSdkLanguage, isInitialized } from './selectors'
 import { slice } from './slice'
 
 const preLoadedState = {
@@ -41,8 +41,10 @@ const mockStore = createStore({
 describe('Settings selectors', () => {
   const state = mockStore.getState()
 
-  test('getSdkLanguage selects', () => {
-    expect(getSdkLanguage(state)).toEqual(preLoadedState.settings.sdkLanguage)
+  test('selectSdkLanguage selects', () => {
+    expect(selectSdkLanguage(state)).toEqual(
+      preLoadedState.settings.sdkLanguage
+    )
   })
 
   test('isInitialized selects', () => {

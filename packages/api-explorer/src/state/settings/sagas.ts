@@ -31,7 +31,7 @@ import type { SetSdkLanguageAction } from './slice'
 import { actions, defaultSettingsState } from './slice'
 
 export function* initSaga() {
-  const { initSuccess, initFailure } = actions
+  const { initSuccessAction, initFailureAction } = actions
   try {
     const envAdaptor = getEnvAdaptor()
     const sdkLanguage = yield* call(
@@ -40,12 +40,12 @@ export function* initSaga() {
     )
 
     yield* put(
-      initSuccess({
+      initSuccessAction({
         sdkLanguage: sdkLanguage || defaultSettingsState.sdkLanguage,
       })
     )
   } catch (error: any) {
-    yield* put(initFailure(error))
+    yield* put(initFailureAction(error))
   }
 }
 
@@ -62,8 +62,8 @@ export function* setSdkLanguageSaga(
 }
 
 export function* saga() {
-  const { init, setSdkLanguage } = actions
+  const { initAction, setSdkLanguageAction } = actions
 
-  yield* takeEvery(init, initSaga)
-  yield* takeEvery(setSdkLanguage, setSdkLanguageSaga)
+  yield* takeEvery(initAction, initSaga)
+  yield* takeEvery(setSdkLanguageAction, setSdkLanguageSaga)
 }
