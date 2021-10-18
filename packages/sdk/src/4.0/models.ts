@@ -25,7 +25,7 @@
  */
 
 /**
- * 350 API models: 219 Spec, 54 Request, 58 Write, 19 Enum
+ * 351 API models: 220 Spec, 54 Request, 57 Write, 20 Enum
  */
 
 import type { IDictionary, DelimArray } from '@looker/sdk-rtl'
@@ -75,10 +75,22 @@ export interface IAlert {
    */
   dashboard_element_id?: number
   /**
+   * An optional description for the alert. This supplements the title
+   */
+  description?: string
+  /**
    * Array of destinations to send alerts to. Must be the same type of destination. Example `[{ "destination_type": "EMAIL", "email_address": "test@test.com" }]`
    */
   destinations?: IAlertDestination[]
   field?: IAlertField
+  /**
+   * Whether or not the user follows this alert. (read-only)
+   */
+  followed?: boolean
+  /**
+   * Whether or not the alert is followable (read-only)
+   */
+  followable?: boolean
   /**
    * ID of the alert (read-only)
    */
@@ -92,6 +104,18 @@ export interface IAlert {
    */
   is_public?: boolean
   /**
+   * The type of the investigative content Valid values are: "dashboard".
+   */
+  investigative_content_type?: InvestigativeContentType
+  /**
+   * The ID of the investigative content. For dashboards, this will be the dashboard ID
+   */
+  investigative_content_id?: string
+  /**
+   * The title of the investigative content. (read-only)
+   */
+  investigative_content_title?: string
+  /**
    * ID of the LookML dashboard associated with the alert
    */
   lookml_dashboard_id?: string
@@ -103,6 +127,10 @@ export interface IAlert {
    * User id of alert owner
    */
   owner_id?: number
+  /**
+   * Alert owner's display name (read-only)
+   */
+  owner_display_name?: string
   /**
    * Value of the alert threshold
    */
@@ -355,13 +383,9 @@ export interface IBoardItem {
    */
   content_updated_at?: string
   /**
-   * (Write-Only) base64 encoded image data
+   * Custom description entered by the user, if present
    */
-  custom_image_data_base64?: string
-  /**
-   * Custom image_url entered by the user, if present (read-only)
-   */
-  custom_image_url?: string
+  custom_description?: string
   /**
    * Custom title entered by the user, if present
    */
@@ -1647,10 +1671,6 @@ export interface ICredentialsTotp {
 
 export interface ICustomWelcomeEmail {
   /**
-   * Operations the current user is able to perform on this object (read-only)
-   */
-  can?: IDictionary<boolean>
-  /**
    * If true, custom email content will replace the default body of welcome emails
    */
   enabled?: boolean
@@ -1659,11 +1679,11 @@ export interface ICustomWelcomeEmail {
    */
   content?: string
   /**
-   * The text to appear in the email subject line.
+   * The text to appear in the email subject line. Only available with a whitelabel license and whitelabel_configuration.advanced_custom_welcome_email enabled.
    */
   subject?: string
   /**
-   * The text to appear in the header line of the email body.
+   * The text to appear in the header line of the email body. Only available with a whitelabel license and whitelabel_configuration.advanced_custom_welcome_email enabled.
    */
   header?: string
 }
@@ -1775,6 +1795,10 @@ export interface IDashboard {
    * Number of times favorited (read-only)
    */
   favorite_count?: number
+  /**
+   * Sets the default state of the filters bar to collapsed or open
+   */
+  filters_bar_collapsed?: boolean
   /**
    * Time the dashboard was last accessed (read-only)
    */
@@ -2513,6 +2537,10 @@ export interface IDBConnection {
    * An External OAuth Application to use for authenticating to the database
    */
   oauth_application_id?: number
+  /**
+   * When true, error PDTs will be retried every regenerator cycle
+   */
+  always_retry_failed_builds?: boolean
 }
 
 export interface IDBConnectionBase {
@@ -3770,6 +3798,13 @@ export interface IInternalHelpResourcesContent {
    * Content to be displayed in the internal help resources page/modal
    */
   markdown_content?: string
+}
+
+/**
+ * The type of the investigative content Valid values are: "dashboard".
+ */
+export enum InvestigativeContentType {
+  dashboard = 'dashboard',
 }
 
 export interface ILDAPConfig {
@@ -7377,6 +7412,10 @@ export interface IRequestSearchAlerts {
    */
   offset?: number
   /**
+   * (Optional) Dimension by which to order the results(`dashboard` | `owner`)
+   */
+  group_by?: string
+  /**
    * (Optional) Requested fields.
    */
   fields?: string
@@ -9141,6 +9180,7 @@ export interface ISetting {
    */
   marketplace_enabled?: boolean
   whitelabel_configuration?: IWhitelabelConfiguration
+  custom_welcome_email?: ICustomWelcomeEmail
 }
 
 export interface ISnippet {
@@ -9780,6 +9820,13 @@ export interface IUserAttributeWithValue {
   hidden_value_domain_whitelist?: string
 }
 
+export interface IUserEmailOnly {
+  /**
+   * Email Address
+   */
+  email: string
+}
+
 export interface IUserLoginLockout {
   /**
    * Operations the current user is able to perform on this object (read-only)
@@ -10000,7 +10047,7 @@ export interface IWorkspace {
 
 /**
  * Dynamic writeable type for Alert removes:
- * id
+ * followed, followable, id, investigative_content_title, owner_display_name
  */
 export interface IWriteAlert {
   /**
@@ -10024,6 +10071,10 @@ export interface IWriteAlert {
    */
   dashboard_element_id?: number
   /**
+   * An optional description for the alert. This supplements the title
+   */
+  description?: string
+  /**
    * Array of destinations to send alerts to. Must be the same type of destination. Example `[{ "destination_type": "EMAIL", "email_address": "test@test.com" }]`
    */
   destinations?: IAlertDestination[]
@@ -10036,6 +10087,14 @@ export interface IWriteAlert {
    * Whether or not the alert is public
    */
   is_public?: boolean
+  /**
+   * The type of the investigative content Valid values are: "dashboard".
+   */
+  investigative_content_type?: InvestigativeContentType
+  /**
+   * The ID of the investigative content. For dashboards, this will be the dashboard ID
+   */
+  investigative_content_id?: string
   /**
    * ID of the LookML dashboard associated with the alert
    */
@@ -10118,13 +10177,13 @@ export interface IWriteBoard {
 
 /**
  * Dynamic writeable type for BoardItem removes:
- * can, content_created_by, content_favorite_id, content_metadata_id, content_updated_at, custom_image_url, description, favorite_count, id, image_url, location, title, url, view_count
+ * can, content_created_by, content_favorite_id, content_metadata_id, content_updated_at, description, favorite_count, id, image_url, location, title, url, view_count
  */
 export interface IWriteBoardItem {
   /**
-   * (Write-Only) base64 encoded image data
+   * Custom description entered by the user, if present
    */
-  custom_image_data_base64?: string
+  custom_description?: string
   /**
    * Custom title entered by the user, if present
    */
@@ -10370,29 +10429,6 @@ export interface IWriteCredentialsEmail {
 }
 
 /**
- * Dynamic writeable type for CustomWelcomeEmail removes:
- * can
- */
-export interface IWriteCustomWelcomeEmail {
-  /**
-   * If true, custom email content will replace the default body of welcome emails
-   */
-  enabled?: boolean
-  /**
-   * The HTML to use as custom content for welcome emails. Script elements and other potentially dangerous markup will be removed.
-   */
-  content?: string
-  /**
-   * The text to appear in the email subject line.
-   */
-  subject?: string
-  /**
-   * The text to appear in the header line of the email body.
-   */
-  header?: string
-}
-
-/**
  * Dynamic writeable type for Dashboard removes:
  * can, content_favorite_id, content_metadata_id, id, model, readonly, refresh_interval_to_i, user_id, created_at, dashboard_elements, dashboard_filters, dashboard_layouts, deleted_at, deleter_id, edit_uri, favorite_count, last_accessed_at, last_viewed_at, view_count, url
  */
@@ -10446,6 +10482,10 @@ export interface IWriteDashboard {
    * Whether or not a dashboard is 'soft' deleted.
    */
   deleted?: boolean
+  /**
+   * Sets the default state of the filters bar to collapsed or open
+   */
+  filters_bar_collapsed?: boolean
   /**
    * configuration option that governs how dashboard loading will happen.
    */
@@ -10833,6 +10873,10 @@ export interface IWriteDBConnection {
    * An External OAuth Application to use for authenticating to the database
    */
   oauth_application_id?: number
+  /**
+   * When true, error PDTs will be retried every regenerator cycle
+   */
+  always_retry_failed_builds?: boolean
 }
 
 /**
@@ -11947,6 +11991,7 @@ export interface IWriteSetting {
    * id, logo_url, favicon_url
    */
   whitelabel_configuration?: IWriteWhitelabelConfiguration
+  custom_welcome_email?: ICustomWelcomeEmail
 }
 
 /**

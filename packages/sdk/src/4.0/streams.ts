@@ -25,7 +25,7 @@
  */
 
 /**
- * 423 API methods
+ * 425 API methods
  */
 
 import type { Readable } from 'readable-stream'
@@ -223,6 +223,7 @@ import type {
   IUserAttribute,
   IUserAttributeGroupValue,
   IUserAttributeWithValue,
+  IUserEmailOnly,
   IUserLoginLockout,
   IUserPublic,
   IValidationError,
@@ -241,7 +242,6 @@ import type {
   IWriteContentMeta,
   IWriteCreateDashboardFilter,
   IWriteCredentialsEmail,
-  IWriteCustomWelcomeEmail,
   IWriteDashboard,
   IWriteDashboardElement,
   IWriteDashboardFilter,
@@ -318,6 +318,7 @@ export class Looker40SDKStream extends APIMethods {
       {
         limit: request.limit,
         offset: request.offset,
+        group_by: request.group_by,
         fields: request.fields,
         disabled: request.disabled,
         frequency: request.frequency,
@@ -494,6 +495,33 @@ export class Looker40SDKStream extends APIMethods {
       '/alerts',
       null,
       body,
+      options
+    )
+  }
+
+  /**
+   * ### Enqueue an Alert by ID
+   *
+   * POST /alerts/{alert_id}/enqueue -> void
+   *
+   * @param callback streaming output function
+   * @param alert_id ID of an alert
+   * @param force Whether to enqueue an alert again if its already running.
+   * @param options one-time API call overrides
+   *
+   */
+  async enqueue_alert(
+    callback: (readable: Readable) => Promise<void>,
+    alert_id: number,
+    force?: boolean,
+    options?: Partial<ITransportSettings>
+  ) {
+    return this.authStream<void>(
+      callback,
+      'POST',
+      `/alerts/${alert_id}/enqueue`,
+      { force },
+      null,
       options
     )
   }
@@ -2685,6 +2713,8 @@ export class Looker40SDKStream extends APIMethods {
    *
    * GET /custom_welcome_email -> ICustomWelcomeEmail
    *
+   * @deprecated
+   *
    * @param callback streaming output function
    * @param options one-time API call overrides
    *
@@ -2708,15 +2738,17 @@ export class Looker40SDKStream extends APIMethods {
    *
    * PATCH /custom_welcome_email -> ICustomWelcomeEmail
    *
+   * @deprecated
+   *
    * @param callback streaming output function
-   * @param body Partial<IWriteCustomWelcomeEmail>
+   * @param body Partial<ICustomWelcomeEmail>
    * @param send_test_welcome_email If true a test email with the content from the request will be sent to the current user after saving
    * @param options one-time API call overrides
    *
    */
   async update_custom_welcome_email(
     callback: (readable: Readable) => Promise<ICustomWelcomeEmail>,
-    body: Partial<IWriteCustomWelcomeEmail>,
+    body: Partial<ICustomWelcomeEmail>,
     send_test_welcome_email?: boolean,
     options?: Partial<ITransportSettings>
   ) {
@@ -3055,6 +3087,7 @@ export class Looker40SDKStream extends APIMethods {
    *  - marketplace_auto_install_enabled
    *  - marketplace_enabled
    *  - whitelabel_configuration
+   *  - custom_welcome_email
    *
    * GET /setting -> ISetting
    *
@@ -3086,6 +3119,7 @@ export class Looker40SDKStream extends APIMethods {
    *  - marketplace_auto_install_enabled
    *  - marketplace_enabled
    *  - whitelabel_configuration
+   *  - custom_welcome_email
    *
    * See the `Setting` type for more information on the specific values that can be configured.
    *
@@ -4803,6 +4837,39 @@ export class Looker40SDKStream extends APIMethods {
   }
 
   /**
+   * ### Move an existing dashboard
+   *
+   * Moves a dashboard to a specified folder, and returns the moved dashboard.
+   *
+   * `dashboard_id` and `folder_id` are required.
+   * `dashboard_id` and `folder_id` must already exist, and `folder_id` must be different from the current `folder_id` of the dashboard.
+   *
+   * PATCH /dashboards/{dashboard_id}/move -> IDashboard
+   *
+   * @param callback streaming output function
+   * @param dashboard_id Dashboard id to move.
+   * @param folder_id Folder id to move to.
+   * @param options one-time API call overrides
+   *
+   */
+  async move_dashboard(
+    callback: (readable: Readable) => Promise<IDashboard>,
+    dashboard_id: string,
+    folder_id: string,
+    options?: Partial<ITransportSettings>
+  ) {
+    dashboard_id = encodeParam(dashboard_id)
+    return this.authStream<IDashboard>(
+      callback,
+      'PATCH',
+      `/dashboards/${dashboard_id}/move`,
+      { folder_id },
+      null,
+      options
+    )
+  }
+
+  /**
    * ### Copy an existing dashboard
    *
    * Creates a copy of an existing dashboard, in a specified folder, and returns the copied dashboard.
@@ -4832,39 +4899,6 @@ export class Looker40SDKStream extends APIMethods {
       callback,
       'POST',
       `/dashboards/${dashboard_id}/copy`,
-      { folder_id },
-      null,
-      options
-    )
-  }
-
-  /**
-   * ### Move an existing dashboard
-   *
-   * Moves a dashboard to a specified folder, and returns the moved dashboard.
-   *
-   * `dashboard_id` and `folder_id` are required.
-   * `dashboard_id` and `folder_id` must already exist, and `folder_id` must be different from the current `folder_id` of the dashboard.
-   *
-   * PATCH /dashboards/{dashboard_id}/move -> IDashboard
-   *
-   * @param callback streaming output function
-   * @param dashboard_id Dashboard id to move.
-   * @param folder_id Folder id to move to.
-   * @param options one-time API call overrides
-   *
-   */
-  async move_dashboard(
-    callback: (readable: Readable) => Promise<IDashboard>,
-    dashboard_id: string,
-    folder_id: string,
-    options?: Partial<ITransportSettings>
-  ) {
-    dashboard_id = encodeParam(dashboard_id)
-    return this.authStream<IDashboard>(
-      callback,
-      'PATCH',
-      `/dashboards/${dashboard_id}/move`,
       { folder_id },
       null,
       options
@@ -12697,6 +12731,40 @@ export class Looker40SDKStream extends APIMethods {
       `/users/${user_id}/credentials_email/send_password_reset`,
       { fields },
       null,
+      options
+    )
+  }
+
+  /**
+   * ### Change a disabled user's email addresses
+   *
+   * Allows the admin to change the email addresses for all the user's
+   * associated credentials.  Will overwrite all associated email addresses with
+   * the value supplied in the 'email' body param.
+   * The user's 'is_disabled' status must be true.
+   *
+   * POST /users/{user_id}/update_emails -> IUser
+   *
+   * @param callback streaming output function
+   * @param user_id Id of user
+   * @param body Partial<IUserEmailOnly>
+   * @param fields Requested fields.
+   * @param options one-time API call overrides
+   *
+   */
+  async wipeout_user_emails(
+    callback: (readable: Readable) => Promise<IUser>,
+    user_id: number,
+    body: Partial<IUserEmailOnly>,
+    fields?: string,
+    options?: Partial<ITransportSettings>
+  ) {
+    return this.authStream<IUser>(
+      callback,
+      'POST',
+      `/users/${user_id}/update_emails`,
+      { fields },
+      body,
       options
     )
   }

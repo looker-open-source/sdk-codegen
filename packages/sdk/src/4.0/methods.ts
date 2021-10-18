@@ -25,7 +25,7 @@
  */
 
 /**
- * 423 API methods
+ * 425 API methods
  */
 
 import type {
@@ -224,6 +224,7 @@ import type {
   IUserAttribute,
   IUserAttributeGroupValue,
   IUserAttributeWithValue,
+  IUserEmailOnly,
   IUserLoginLockout,
   IUserPublic,
   IValidationError,
@@ -242,7 +243,6 @@ import type {
   IWriteContentMeta,
   IWriteCreateDashboardFilter,
   IWriteCredentialsEmail,
-  IWriteCustomWelcomeEmail,
   IWriteDashboard,
   IWriteDashboardElement,
   IWriteDashboardFilter,
@@ -315,6 +315,7 @@ export class Looker40SDK extends APIMethods implements ILooker40SDK {
       {
         limit: request.limit,
         offset: request.offset,
+        group_by: request.group_by,
         fields: request.fields,
         disabled: request.disabled,
         frequency: request.frequency,
@@ -461,6 +462,29 @@ export class Looker40SDK extends APIMethods implements ILooker40SDK {
       '/alerts',
       null,
       body,
+      options
+    )
+  }
+
+  /**
+   * ### Enqueue an Alert by ID
+   *
+   * POST /alerts/{alert_id}/enqueue -> void
+   *
+   * @param alert_id ID of an alert
+   * @param force Whether to enqueue an alert again if its already running.
+   * @param options one-time API call overrides
+   *
+   */
+  async enqueue_alert(
+    alert_id: number,
+    force?: boolean,
+    options?: Partial<ITransportSettings>
+  ): Promise<SDKResponse<void, IError>> {
+    return this.post<void, IError>(
+      `/alerts/${alert_id}/enqueue`,
+      { force },
+      null,
       options
     )
   }
@@ -2347,6 +2371,8 @@ export class Looker40SDK extends APIMethods implements ILooker40SDK {
    *
    * GET /custom_welcome_email -> ICustomWelcomeEmail
    *
+   * @deprecated
+   *
    * @param options one-time API call overrides
    *
    */
@@ -2366,13 +2392,15 @@ export class Looker40SDK extends APIMethods implements ILooker40SDK {
    *
    * PATCH /custom_welcome_email -> ICustomWelcomeEmail
    *
-   * @param body Partial<IWriteCustomWelcomeEmail>
+   * @deprecated
+   *
+   * @param body Partial<ICustomWelcomeEmail>
    * @param send_test_welcome_email If true a test email with the content from the request will be sent to the current user after saving
    * @param options one-time API call overrides
    *
    */
   async update_custom_welcome_email(
-    body: Partial<IWriteCustomWelcomeEmail>,
+    body: Partial<ICustomWelcomeEmail>,
     send_test_welcome_email?: boolean,
     options?: Partial<ITransportSettings>
   ): Promise<SDKResponse<ICustomWelcomeEmail, IError | IValidationError>> {
@@ -2654,6 +2682,7 @@ export class Looker40SDK extends APIMethods implements ILooker40SDK {
    *  - marketplace_auto_install_enabled
    *  - marketplace_enabled
    *  - whitelabel_configuration
+   *  - custom_welcome_email
    *
    * GET /setting -> ISetting
    *
@@ -2681,6 +2710,7 @@ export class Looker40SDK extends APIMethods implements ILooker40SDK {
    *  - marketplace_auto_install_enabled
    *  - marketplace_enabled
    *  - whitelabel_configuration
+   *  - custom_welcome_email
    *
    * See the `Setting` type for more information on the specific values that can be configured.
    *
@@ -4169,6 +4199,35 @@ export class Looker40SDK extends APIMethods implements ILooker40SDK {
   }
 
   /**
+   * ### Move an existing dashboard
+   *
+   * Moves a dashboard to a specified folder, and returns the moved dashboard.
+   *
+   * `dashboard_id` and `folder_id` are required.
+   * `dashboard_id` and `folder_id` must already exist, and `folder_id` must be different from the current `folder_id` of the dashboard.
+   *
+   * PATCH /dashboards/{dashboard_id}/move -> IDashboard
+   *
+   * @param dashboard_id Dashboard id to move.
+   * @param folder_id Folder id to move to.
+   * @param options one-time API call overrides
+   *
+   */
+  async move_dashboard(
+    dashboard_id: string,
+    folder_id: string,
+    options?: Partial<ITransportSettings>
+  ): Promise<SDKResponse<IDashboard, IError | IValidationError>> {
+    dashboard_id = encodeParam(dashboard_id)
+    return this.patch<IDashboard, IError | IValidationError>(
+      `/dashboards/${dashboard_id}/move`,
+      { folder_id },
+      null,
+      options
+    )
+  }
+
+  /**
    * ### Copy an existing dashboard
    *
    * Creates a copy of an existing dashboard, in a specified folder, and returns the copied dashboard.
@@ -4194,35 +4253,6 @@ export class Looker40SDK extends APIMethods implements ILooker40SDK {
     dashboard_id = encodeParam(dashboard_id)
     return this.post<IDashboard, IError | IValidationError>(
       `/dashboards/${dashboard_id}/copy`,
-      { folder_id },
-      null,
-      options
-    )
-  }
-
-  /**
-   * ### Move an existing dashboard
-   *
-   * Moves a dashboard to a specified folder, and returns the moved dashboard.
-   *
-   * `dashboard_id` and `folder_id` are required.
-   * `dashboard_id` and `folder_id` must already exist, and `folder_id` must be different from the current `folder_id` of the dashboard.
-   *
-   * PATCH /dashboards/{dashboard_id}/move -> IDashboard
-   *
-   * @param dashboard_id Dashboard id to move.
-   * @param folder_id Folder id to move to.
-   * @param options one-time API call overrides
-   *
-   */
-  async move_dashboard(
-    dashboard_id: string,
-    folder_id: string,
-    options?: Partial<ITransportSettings>
-  ): Promise<SDKResponse<IDashboard, IError | IValidationError>> {
-    dashboard_id = encodeParam(dashboard_id)
-    return this.patch<IDashboard, IError | IValidationError>(
-      `/dashboards/${dashboard_id}/move`,
       { folder_id },
       null,
       options
@@ -11056,6 +11086,36 @@ export class Looker40SDK extends APIMethods implements ILooker40SDK {
       `/users/${user_id}/credentials_email/send_password_reset`,
       { fields },
       null,
+      options
+    )
+  }
+
+  /**
+   * ### Change a disabled user's email addresses
+   *
+   * Allows the admin to change the email addresses for all the user's
+   * associated credentials.  Will overwrite all associated email addresses with
+   * the value supplied in the 'email' body param.
+   * The user's 'is_disabled' status must be true.
+   *
+   * POST /users/{user_id}/update_emails -> IUser
+   *
+   * @param user_id Id of user
+   * @param body Partial<IUserEmailOnly>
+   * @param fields Requested fields.
+   * @param options one-time API call overrides
+   *
+   */
+  async wipeout_user_emails(
+    user_id: number,
+    body: Partial<IUserEmailOnly>,
+    fields?: string,
+    options?: Partial<ITransportSettings>
+  ): Promise<SDKResponse<IUser, IError | IValidationError>> {
+    return this.post<IUser, IError | IValidationError>(
+      `/users/${user_id}/update_emails`,
+      { fields },
+      body,
       options
     )
   }
