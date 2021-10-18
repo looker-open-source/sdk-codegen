@@ -46,9 +46,6 @@ export interface IAgendaItem {
 
 export type AgendaItems = Array<IAgendaItem>
 
-export const English = 'English'
-export const Japanese = '日本'
-
 export const zoneDate = (time: AgendaTime, zone: string) => {
   return utcToZonedTime(time, zone)
 }
