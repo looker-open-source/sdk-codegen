@@ -200,11 +200,11 @@ const ApiExplorer: FC<ApiExplorerProps> = ({
                         <>
                           <Space
                             alignItems="center"
-                            between
-                            pt="u3"
-                            pr="u5"
-                            pb="u3"
-                            pl="u5"
+                            py="u3"
+                            px={hasNavigation ? 'u5' : '0'}
+                            justifyContent={
+                              hasNavigation ? 'space-between' : 'center'
+                            }
                           >
                             {hasNavigation && (
                               <Heading
