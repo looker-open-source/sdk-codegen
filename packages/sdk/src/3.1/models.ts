@@ -1128,11 +1128,11 @@ export interface ICustomWelcomeEmail {
    */
   content?: string
   /**
-   * The text to appear in the email subject line.
+   * The text to appear in the email subject line. Only available with a whitelabel license and whitelabel_configuration.advanced_custom_welcome_email enabled.
    */
   subject?: string
   /**
-   * The text to appear in the header line of the email body.
+   * The text to appear in the header line of the email body. Only available with a whitelabel license and whitelabel_configuration.advanced_custom_welcome_email enabled.
    */
   header?: string
 }
@@ -1245,6 +1245,10 @@ export interface IDashboard {
    * Number of times favorited (read-only)
    */
   favorite_count?: number
+  /**
+   * Sets the default state of the filters bar to collapsed or open
+   */
+  filters_bar_collapsed?: boolean
   /**
    * Time the dashboard was last accessed (read-only)
    */
@@ -9180,11 +9184,11 @@ export interface IWriteCustomWelcomeEmail {
    */
   content?: string
   /**
-   * The text to appear in the email subject line.
+   * The text to appear in the email subject line. Only available with a whitelabel license and whitelabel_configuration.advanced_custom_welcome_email enabled.
    */
   subject?: string
   /**
-   * The text to appear in the header line of the email body.
+   * The text to appear in the header line of the email body. Only available with a whitelabel license and whitelabel_configuration.advanced_custom_welcome_email enabled.
    */
   header?: string
 }
@@ -9248,6 +9252,10 @@ export interface IWriteDashboard {
    * Whether or not a dashboard is 'soft' deleted.
    */
   deleted?: boolean
+  /**
+   * Sets the default state of the filters bar to collapsed or open
+   */
+  filters_bar_collapsed?: boolean
   /**
    * configuration option that governs how dashboard loading will happen.
    */

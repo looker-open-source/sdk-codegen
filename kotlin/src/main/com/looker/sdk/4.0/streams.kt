@@ -25,7 +25,7 @@
  */
 
 /**
- * 423 API methods
+ * 425 API methods
  */
 
 
@@ -46,6 +46,7 @@ class LookerSDKStream(authSession: AuthSession) : APIMethods(authSession) {
      *
      * @param {Long} limit (Optional) Number of results to return (used with `offset`).
      * @param {Long} offset (Optional) Number of results to skip before returning any (used with `limit`).
+     * @param {String} group_by (Optional) Dimension by which to order the results(`dashboard` | `owner`)
      * @param {String} fields (Optional) Requested fields.
      * @param {Boolean} disabled (Optional) Filter on returning only enabled or disabled alerts.
      * @param {String} frequency (Optional) Filter on alert frequency, such as: monthly, weekly, daily, hourly, minutes
@@ -59,6 +60,7 @@ class LookerSDKStream(authSession: AuthSession) : APIMethods(authSession) {
     @JvmOverloads fun search_alerts(
         limit: Long? = null,
         offset: Long? = null,
+        group_by: String? = null,
         fields: String? = null,
         disabled: Boolean? = null,
         frequency: String? = null,
@@ -70,6 +72,7 @@ class LookerSDKStream(authSession: AuthSession) : APIMethods(authSession) {
             return this.get<ByteArray>("/alerts/search", 
                 mapOf("limit" to limit,
                      "offset" to offset,
+                     "group_by" to group_by,
                      "fields" to fields,
                      "disabled" to disabled,
                      "frequency" to frequency,
@@ -193,6 +196,24 @@ class LookerSDKStream(authSession: AuthSession) : APIMethods(authSession) {
         body: WriteAlert
     ) : SDKResponse {
             return this.post<ByteArray>("/alerts", mapOf(), body)
+    }
+
+
+    /**
+     * ### Enqueue an Alert by ID
+     *
+     * @param {Long} alert_id ID of an alert
+     * @param {Boolean} force Whether to enqueue an alert again if its already running.
+     *
+     * POST /alerts/{alert_id}/enqueue -> ByteArray
+     */
+    @JvmOverloads fun enqueue_alert(
+        alert_id: Long,
+        force: Boolean? = null
+    ) : SDKResponse {
+        val path_alert_id = encodeParam(alert_id)
+            return this.post<ByteArray>("/alerts/${path_alert_id}/enqueue", 
+                mapOf("force" to force))
     }
 
     //endregion Alert: Alert
@@ -1712,13 +1733,13 @@ class LookerSDKStream(authSession: AuthSession) : APIMethods(authSession) {
     /**
      * Update custom welcome email setting and values. Optionally send a test email with the new content to the currently logged in user.
      *
-     * @param {WriteCustomWelcomeEmail} body
+     * @param {CustomWelcomeEmail} body
      * @param {Boolean} send_test_welcome_email If true a test email with the content from the request will be sent to the current user after saving
      *
      * PATCH /custom_welcome_email -> ByteArray
      */
     @JvmOverloads fun update_custom_welcome_email(
-        body: WriteCustomWelcomeEmail,
+        body: CustomWelcomeEmail,
         send_test_welcome_email: Boolean? = null
     ) : SDKResponse {
             return this.patch<ByteArray>("/custom_welcome_email", 
@@ -1908,6 +1929,7 @@ class LookerSDKStream(authSession: AuthSession) : APIMethods(authSession) {
      *  - marketplace_auto_install_enabled
      *  - marketplace_enabled
      *  - whitelabel_configuration
+     *  - custom_welcome_email
      *
      * @param {String} fields Requested fields
      *
@@ -1929,6 +1951,7 @@ class LookerSDKStream(authSession: AuthSession) : APIMethods(authSession) {
      *  - marketplace_auto_install_enabled
      *  - marketplace_enabled
      *  - whitelabel_configuration
+     *  - custom_welcome_email
      *
      * See the `Setting` type for more information on the specific values that can be configured.
      *
@@ -3139,6 +3162,29 @@ class LookerSDKStream(authSession: AuthSession) : APIMethods(authSession) {
 
 
     /**
+     * ### Move an existing dashboard
+     *
+     * Moves a dashboard to a specified folder, and returns the moved dashboard.
+     *
+     * `dashboard_id` and `folder_id` are required.
+     * `dashboard_id` and `folder_id` must already exist, and `folder_id` must be different from the current `folder_id` of the dashboard.
+     *
+     * @param {String} dashboard_id Dashboard id to move.
+     * @param {String} folder_id Folder id to move to.
+     *
+     * PATCH /dashboards/{dashboard_id}/move -> ByteArray
+     */
+    fun move_dashboard(
+        dashboard_id: String,
+        folder_id: String
+    ) : SDKResponse {
+        val path_dashboard_id = encodeParam(dashboard_id)
+            return this.patch<ByteArray>("/dashboards/${path_dashboard_id}/move", 
+                mapOf("folder_id" to folder_id))
+    }
+
+
+    /**
      * ### Copy an existing dashboard
      *
      * Creates a copy of an existing dashboard, in a specified folder, and returns the copied dashboard.
@@ -3160,29 +3206,6 @@ class LookerSDKStream(authSession: AuthSession) : APIMethods(authSession) {
     ) : SDKResponse {
         val path_dashboard_id = encodeParam(dashboard_id)
             return this.post<ByteArray>("/dashboards/${path_dashboard_id}/copy", 
-                mapOf("folder_id" to folder_id))
-    }
-
-
-    /**
-     * ### Move an existing dashboard
-     *
-     * Moves a dashboard to a specified folder, and returns the moved dashboard.
-     *
-     * `dashboard_id` and `folder_id` are required.
-     * `dashboard_id` and `folder_id` must already exist, and `folder_id` must be different from the current `folder_id` of the dashboard.
-     *
-     * @param {String} dashboard_id Dashboard id to move.
-     * @param {String} folder_id Folder id to move to.
-     *
-     * PATCH /dashboards/{dashboard_id}/move -> ByteArray
-     */
-    fun move_dashboard(
-        dashboard_id: String,
-        folder_id: String
-    ) : SDKResponse {
-        val path_dashboard_id = encodeParam(dashboard_id)
-            return this.patch<ByteArray>("/dashboards/${path_dashboard_id}/move", 
                 mapOf("folder_id" to folder_id))
     }
 
@@ -9178,6 +9201,31 @@ class LookerSDKStream(authSession: AuthSession) : APIMethods(authSession) {
         val path_user_id = encodeParam(user_id)
             return this.post<ByteArray>("/users/${path_user_id}/credentials_email/send_password_reset", 
                 mapOf("fields" to fields))
+    }
+
+
+    /**
+     * ### Change a disabled user's email addresses
+     *
+     * Allows the admin to change the email addresses for all the user's
+     * associated credentials.  Will overwrite all associated email addresses with
+     * the value supplied in the 'email' body param.
+     * The user's 'is_disabled' status must be true.
+     *
+     * @param {Long} user_id Id of user
+     * @param {UserEmailOnly} body
+     * @param {String} fields Requested fields.
+     *
+     * POST /users/{user_id}/update_emails -> ByteArray
+     */
+    @JvmOverloads fun wipeout_user_emails(
+        user_id: Long,
+        body: UserEmailOnly,
+        fields: String? = null
+    ) : SDKResponse {
+        val path_user_id = encodeParam(user_id)
+            return this.post<ByteArray>("/users/${path_user_id}/update_emails", 
+                mapOf("fields" to fields), body)
     }
 
 
