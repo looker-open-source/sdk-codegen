@@ -138,7 +138,7 @@ export const calcAgenda = (swap: AgendaItems, timezone: string) => {
     item.start = zoneDate(item.start, timezone)
     // Fill in any missing stop values with the next item's start value
     if (!item.stop) {
-      if (index < agenda.length) {
+      if (index < agenda.length - 1) {
         item.stop = agenda[index + 1].start
       }
     }
