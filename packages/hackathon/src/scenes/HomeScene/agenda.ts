@@ -42,6 +42,7 @@ const later = (start: Date, hours: number) => {
 export const agenda = [
   {
     start: later(day1, -4), // Nov 9th
+    // NOTE: if stop values are not defined, they default to the start of the next agenda item
     stop: later(day1, -3.5), // Nov 9th
     description: { en: '## Welcome APAC', ja_JP: '## 日本 Welcome APAC' },
   },
@@ -176,6 +177,7 @@ Use [slack](https://looker.slack.com/hack) to ask Looker staff for assistance`,
       ja_JP: '## 日本 Winner announcements + Demos',
     },
   },
+  // NOTE: All other stop values can default. The final stop value is required.
   {
     start: later(day2, 15),
     stop: later(day2, 17),
