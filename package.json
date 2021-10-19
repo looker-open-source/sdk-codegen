@@ -1,7 +1,7 @@
 {
   "license": "MIT",
   "name": "sdk-codegen-all",
-  "version": "1.15.0",
+  "version": "1.16.0",
   "description": "All workspaces for SDK code generation",
   "author": "Looker",
   "private": true,
@@ -144,7 +144,9 @@
     "lint-staged"
   ],
   "eslintConfig": {
-    "extends": [ "@looker/eslint-config-oss" ],
+    "extends": [
+      "@looker/eslint-config-oss"
+    ],
     "rules": {
       "@typescript-eslint/no-explicit-any": "off",
       "camelcase": "off",
@@ -186,19 +188,29 @@
     },
     "overrides": [
       {
-        "files": ["packages/run-it/**/*.ts{,x}", "packages/api-explorer/**/*.ts{,x}", "packages/hackathon/**/*.ts{,x}"],
+        "files": [
+          "packages/run-it/**/*.ts{,x}",
+          "packages/api-explorer/**/*.ts{,x}",
+          "packages/hackathon/**/*.ts{,x}"
+        ],
         "rules": {
           "no-restricted-imports": "off"
         }
       },
       {
-        "files": [ "packages/sdk-codegen/**/*.ts",  "packages/sdk-codegen-scripts/**/*.ts"],
+        "files": [
+          "packages/sdk-codegen/**/*.ts",
+          "packages/sdk-codegen-scripts/**/*.ts"
+        ],
         "rules": {
           "testing-library/render-result-naming-convention": "off"
         }
       },
       {
-        "files":  ["packages/redux/**/*.ts?(x)", "packages/redux/**/*.spec.ts?(x)"],
+        "files": [
+          "packages/redux/**/*.ts?(x)",
+          "packages/redux/**/*.spec.ts?(x)"
+        ],
         "rules": {
           "testing-library/render-result-naming-convention": "off",
           "@typescript-eslint/no-empty-function": "off",
@@ -207,13 +219,17 @@
         }
       },
       {
-        "files": [  "packages/sdk-codegen-scripts/**/*.ts"],
+        "files": [
+          "packages/sdk-codegen-scripts/**/*.ts"
+        ],
         "rules": {
           "no-console": "off"
         }
       },
       {
-        "files": [ "**/*.spec.ts"],
+        "files": [
+          "**/*.spec.ts"
+        ],
         "rules": {
           "no-console": "off",
           "@typescript-eslint/no-non-null-assertion": "off"
