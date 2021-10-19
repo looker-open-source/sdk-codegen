@@ -28,10 +28,21 @@ import type { FC } from 'react'
 import React, { useReducer, useState, useEffect, useCallback } from 'react'
 import { useLocation } from 'react-router'
 import styled, { createGlobalStyle } from 'styled-components'
-import { Aside, ComponentsProvider, Layout, Page } from '@looker/components'
+import {
+  Aside,
+  ComponentsProvider,
+  Divider,
+  Heading,
+  IconButton,
+  Layout,
+  Page,
+  Space,
+} from '@looker/components'
 import type { SpecList } from '@looker/sdk-codegen'
 import type { RunItSetter } from '@looker/run-it'
 import { funFetch, fallbackFetch, OAuthScene } from '@looker/run-it'
+import { FirstPage } from '@styled-icons/material/FirstPage'
+import { LastPage } from '@styled-icons/material/LastPage'
 
 import { SearchContext, LodeContext, defaultLodeContextValue } from './context'
 import type { IApixEnvAdaptor } from './utils'
@@ -41,7 +52,14 @@ import {
   registerEnvAdaptor,
   unregisterEnvAdaptor,
 } from './utils'
-import { Header, SideNav, ErrorBoundary, Loader } from './components'
+import {
+  Header,
+  SideNav,
+  ErrorBoundary,
+  Loader,
+  SelectorContainer,
+  HEADER_TOGGLE_LABEL,
+} from './components'
 import {
   specReducer,
   initDefaultSpecState,
@@ -166,16 +184,64 @@ const ApiExplorer: FC<ApiExplorerProps> = ({
                     />
                   )}
                   <Layout hasAside height="100%">
-                    {hasNavigation && (
-                      <AsideBorder pt="large" width="20rem">
+                    <AsideBorder
+                      borderRight
+                      isOpen={hasNavigation}
+                      headless={headless}
+                    >
+                      {headless && (
+                        <>
+                          <Space
+                            alignItems="center"
+                            py="u3"
+                            px={hasNavigation ? 'u5' : '0'}
+                            justifyContent={
+                              hasNavigation ? 'space-between' : 'center'
+                            }
+                          >
+                            {hasNavigation && (
+                              <Heading
+                                as="h2"
+                                fontSize="xsmall"
+                                fontWeight="bold"
+                                color="text2"
+                              >
+                                API DOCUMENTATION
+                              </Heading>
+                            )}
+                            <IconButton
+                              size="xsmall"
+                              shape="round"
+                              icon={
+                                hasNavigation ? <FirstPage /> : <LastPage />
+                              }
+                              label={HEADER_TOGGLE_LABEL}
+                              onClick={() => toggleNavigation()}
+                            />
+                          </Space>
+                          {hasNavigation && (
+                            <>
+                              <Divider mb="u3" appearance="light" />
+                              <SelectorContainer
+                                ml="large"
+                                mr="large"
+                                specs={specs}
+                                spec={spec}
+                                specDispatch={specDispatch}
+                              />
+                            </>
+                          )}
+                        </>
+                      )}
+                      {hasNavigation && (
                         <SideNav
                           headless={headless}
                           specs={specs}
                           spec={spec}
                           specDispatch={specDispatch}
                         />
-                      </AsideBorder>
-                    )}
+                      )}
+                    </AsideBorder>
                     {oauthReturn && <OAuthScene />}
                     {!oauthReturn && spec.api && (
                       <AppRouter
@@ -199,9 +265,11 @@ const ApiExplorer: FC<ApiExplorerProps> = ({
   )
 }
 
-/* Border support for `Aside` coming in @looker/components very soon */
-export const AsideBorder = styled(Aside)`
-  border-right: 1px solid ${({ theme }) => theme.colors.ui2};
+export const AsideBorder = styled(Aside)<{
+  isOpen: boolean
+  headless: boolean
+}>`
+  width: ${({ isOpen, headless }) =>
+    isOpen ? '20rem' : headless ? '2.75rem' : '0rem'};
 `
-
 export default ApiExplorer

@@ -1562,8 +1562,8 @@ class CustomWelcomeEmail(model.Model):
         can: Operations the current user is able to perform on this object
         enabled: If true, custom email content will replace the default body of welcome emails
         content: The HTML to use as custom content for welcome emails. Script elements and other potentially dangerous markup will be removed.
-        subject: The text to appear in the email subject line.
-        header: The text to appear in the header line of the email body.
+        subject: The text to appear in the email subject line. Only available with a whitelabel license and whitelabel_configuration.advanced_custom_welcome_email enabled.
+        header: The text to appear in the header line of the email body. Only available with a whitelabel license and whitelabel_configuration.advanced_custom_welcome_email enabled.
     """
 
     can: Optional[MutableMapping[str, bool]] = None
@@ -1621,6 +1621,7 @@ class Dashboard(model.Model):
         deleter_id: Id of User that 'soft' deleted the dashboard.
         edit_uri: Relative path of URI of LookML file to edit the dashboard (LookML dashboard only).
         favorite_count: Number of times favorited
+        filters_bar_collapsed: Sets the default state of the filters bar to collapsed or open
         last_accessed_at: Time the dashboard was last accessed
         last_viewed_at: Time last viewed in the Looker web UI
         load_configuration: configuration option that governs how dashboard loading will happen.
@@ -1666,6 +1667,7 @@ class Dashboard(model.Model):
     deleter_id: Optional[int] = None
     edit_uri: Optional[str] = None
     favorite_count: Optional[int] = None
+    filters_bar_collapsed: Optional[bool] = None
     last_accessed_at: Optional[datetime.datetime] = None
     last_viewed_at: Optional[datetime.datetime] = None
     load_configuration: Optional[str] = None
@@ -1713,6 +1715,7 @@ class Dashboard(model.Model):
         deleter_id: Optional[int] = None,
         edit_uri: Optional[str] = None,
         favorite_count: Optional[int] = None,
+        filters_bar_collapsed: Optional[bool] = None,
         last_accessed_at: Optional[datetime.datetime] = None,
         last_viewed_at: Optional[datetime.datetime] = None,
         load_configuration: Optional[str] = None,
@@ -1759,6 +1762,7 @@ class Dashboard(model.Model):
         self.deleter_id = deleter_id
         self.edit_uri = edit_uri
         self.favorite_count = favorite_count
+        self.filters_bar_collapsed = filters_bar_collapsed
         self.last_accessed_at = last_accessed_at
         self.last_viewed_at = last_viewed_at
         self.load_configuration = load_configuration
@@ -8096,7 +8100,7 @@ class ScheduledPlanDestination(model.Model):
         format: The data format to send to the given destination. Supported formats vary by destination, but include: "txt", "csv", "inline_json", "json", "json_detail", "xlsx", "html", "wysiwyg_pdf", "assembled_pdf", "wysiwyg_png"
         apply_formatting: Are values formatted? (containing currency symbols, digit separators, etc.
         apply_vis: Whether visualization options are applied to the results.
-        address: Address for recipient. For email e.g. 'user@example.com'. For webhooks e.g. 'https://domain/path'. For Amazon S3 e.g. 's3://bucket-name/path/'. For SFTP e.g. 'sftp://host-name/path/'. 
+        address: Address for recipient. For email e.g. 'user@example.com'. For webhooks e.g. 'https://domain/path'. For Amazon S3 e.g. 's3://bucket-name/path/'. For SFTP e.g. 'sftp://host-name/path/'.
         looker_recipient: Whether the recipient is a Looker user on the current instance (only applicable for email recipients)
         type: Type of the address ('email', 'webhook', 's3', or 'sftp')
         parameters: JSON object containing parameters for external scheduling. For Amazon S3, this requires keys and values for access_key_id and region. For SFTP, this requires a key and value for username.
@@ -9464,11 +9468,11 @@ class Workspace(model.Model):
 @attr.s(auto_attribs=True, init=False)
 class WriteApiSession(model.Model):
     """
-    Dynamic writeable type for ApiSession removes:
-can, sudo_user_id
+        Dynamic writeable type for ApiSession removes:
+    can, sudo_user_id
 
-    Attributes:
-        workspace_id: The id of active workspace for this session
+        Attributes:
+            workspace_id: The id of active workspace for this session
     """
 
     workspace_id: Optional[str] = None
@@ -9480,15 +9484,15 @@ can, sudo_user_id
 @attr.s(auto_attribs=True, init=False)
 class WriteBackupConfiguration(model.Model):
     """
-    Dynamic writeable type for BackupConfiguration removes:
-can, url
+        Dynamic writeable type for BackupConfiguration removes:
+    can, url
 
-    Attributes:
-        type: Type of backup: looker-s3 or custom-s3
-        custom_s3_bucket: Name of bucket for custom-s3 backups
-        custom_s3_bucket_region: Name of region where the bucket is located
-        custom_s3_key: (Write-Only) AWS S3 key used for custom-s3 backups
-        custom_s3_secret: (Write-Only) AWS S3 secret used for custom-s3 backups
+        Attributes:
+            type: Type of backup: looker-s3 or custom-s3
+            custom_s3_bucket: Name of bucket for custom-s3 backups
+            custom_s3_bucket_region: Name of region where the bucket is located
+            custom_s3_key: (Write-Only) AWS S3 key used for custom-s3 backups
+            custom_s3_secret: (Write-Only) AWS S3 secret used for custom-s3 backups
     """
 
     type: Optional[str] = None
@@ -9516,14 +9520,14 @@ can, url
 @attr.s(auto_attribs=True, init=False)
 class WriteColorCollection(model.Model):
     """
-    Dynamic writeable type for ColorCollection removes:
-id
+        Dynamic writeable type for ColorCollection removes:
+    id
 
-    Attributes:
-        label: Label of color collection
-        categoricalPalettes: Array of categorical palette definitions
-        sequentialPalettes: Array of discrete palette definitions
-        divergingPalettes: Array of diverging palette definitions
+        Attributes:
+            label: Label of color collection
+            categoricalPalettes: Array of categorical palette definitions
+            sequentialPalettes: Array of discrete palette definitions
+            divergingPalettes: Array of diverging palette definitions
     """
 
     label: Optional[str] = None
@@ -9548,14 +9552,14 @@ id
 @attr.s(auto_attribs=True, init=False)
 class WriteContentFavorite(model.Model):
     """
-    Dynamic writeable type for ContentFavorite removes:
-id, look_id, dashboard_id, look
+        Dynamic writeable type for ContentFavorite removes:
+    id, look_id, dashboard_id, look
 
-    Attributes:
-        user_id: User Id which owns this ContentFavorite
-        content_metadata_id: Content Metadata Id associated with this ContentFavorite
-        dashboard: Dynamic writeable type for DashboardBase removes:
-can, content_favorite_id, content_metadata_id, description, hidden, id, model, query_timezone, readonly, refresh_interval, refresh_interval_to_i, title, user_id, slug, preferred_viewer
+        Attributes:
+            user_id: User Id which owns this ContentFavorite
+            content_metadata_id: Content Metadata Id associated with this ContentFavorite
+            dashboard: Dynamic writeable type for DashboardBase removes:
+    can, content_favorite_id, content_metadata_id, description, hidden, id, model, query_timezone, readonly, refresh_interval, refresh_interval_to_i, title, user_id, slug, preferred_viewer
     """
 
     user_id: Optional[int] = None
@@ -9577,11 +9581,11 @@ can, content_favorite_id, content_metadata_id, description, hidden, id, model, q
 @attr.s(auto_attribs=True, init=False)
 class WriteContentMeta(model.Model):
     """
-    Dynamic writeable type for ContentMeta removes:
-can, id, name, parent_id, dashboard_id, look_id, folder_id, content_type, inheriting_id, slug, space_id
+        Dynamic writeable type for ContentMeta removes:
+    can, id, name, parent_id, dashboard_id, look_id, folder_id, content_type, inheriting_id, slug, space_id
 
-    Attributes:
-        inherits: Whether content inherits its access levels from parent
+        Attributes:
+            inherits: Whether content inherits its access levels from parent
     """
 
     inherits: Optional[bool] = None
@@ -9593,23 +9597,23 @@ can, id, name, parent_id, dashboard_id, look_id, folder_id, content_type, inheri
 @attr.s(auto_attribs=True, init=False)
 class WriteCreateDashboardFilter(model.Model):
     """
-    Dynamic writeable type for CreateDashboardFilter removes:
-id, field
+        Dynamic writeable type for CreateDashboardFilter removes:
+    id, field
 
-    Attributes:
-        dashboard_id: Id of Dashboard
-        name: Name of filter
-        title: Title of filter
-        type: Type of filter: one of date, number, string, or field
-        default_value: Default value of filter
-        model: Model of filter (required if type = field)
-        explore: Explore of filter (required if type = field)
-        dimension: Dimension of filter (required if type = field)
-        row: Display order of this filter relative to other filters
-        listens_to_filters: Array of listeners for faceted filters
-        allow_multiple_values: Whether the filter allows multiple filter values (deprecated in the latest version of dashboards)
-        required: Whether the filter requires a value to run the dashboard
-        ui_config: The visual configuration for this filter. Used to set up how the UI for this filter should appear.
+        Attributes:
+            dashboard_id: Id of Dashboard
+            name: Name of filter
+            title: Title of filter
+            type: Type of filter: one of date, number, string, or field
+            default_value: Default value of filter
+            model: Model of filter (required if type = field)
+            explore: Explore of filter (required if type = field)
+            dimension: Dimension of filter (required if type = field)
+            row: Display order of this filter relative to other filters
+            listens_to_filters: Array of listeners for faceted filters
+            allow_multiple_values: Whether the filter allows multiple filter values (deprecated in the latest version of dashboards)
+            required: Whether the filter requires a value to run the dashboard
+            ui_config: The visual configuration for this filter. Used to set up how the UI for this filter should appear.
     """
 
     dashboard_id: str
@@ -9661,16 +9665,16 @@ id, field
 @attr.s(auto_attribs=True, init=False)
 class WriteCreateQueryTask(model.Model):
     """
-    Dynamic writeable type for CreateQueryTask removes:
-can
+        Dynamic writeable type for CreateQueryTask removes:
+    can
 
-    Attributes:
-        query_id: Id of query to run
-        result_format: Desired async query result format. Valid values are: "inline_json", "json", "json_detail", "json_fe", "csv", "html", "md", "txt", "xlsx", "gsxml".
-        source: Source of query task
-        deferred: Create the task but defer execution
-        look_id: Id of look associated with query.
-        dashboard_id: Id of dashboard associated with query.
+        Attributes:
+            query_id: Id of query to run
+            result_format: Desired async query result format. Valid values are: "inline_json", "json", "json_detail", "json_fe", "csv", "html", "md", "txt", "xlsx", "gsxml".
+            source: Source of query task
+            deferred: Create the task but defer execution
+            look_id: Id of look associated with query.
+            dashboard_id: Id of dashboard associated with query.
     """
 
     query_id: int
@@ -9709,12 +9713,12 @@ can
 @attr.s(auto_attribs=True, init=False)
 class WriteCredentialsEmail(model.Model):
     """
-    Dynamic writeable type for CredentialsEmail removes:
-can, created_at, is_disabled, logged_in_at, password_reset_url, type, url, user_url
+        Dynamic writeable type for CredentialsEmail removes:
+    can, created_at, is_disabled, logged_in_at, password_reset_url, type, url, user_url
 
-    Attributes:
-        email: EMail address used for user login
-        forced_password_reset_at_next_login: Force the user to change their password upon their next login
+        Attributes:
+            email: EMail address used for user login
+            forced_password_reset_at_next_login: Force the user to change their password upon their next login
     """
 
     email: Optional[str] = None
@@ -9733,14 +9737,14 @@ can, created_at, is_disabled, logged_in_at, password_reset_url, type, url, user_
 @attr.s(auto_attribs=True, init=False)
 class WriteCustomWelcomeEmail(model.Model):
     """
-    Dynamic writeable type for CustomWelcomeEmail removes:
-can
+        Dynamic writeable type for CustomWelcomeEmail removes:
+    can
 
-    Attributes:
-        enabled: If true, custom email content will replace the default body of welcome emails
-        content: The HTML to use as custom content for welcome emails. Script elements and other potentially dangerous markup will be removed.
-        subject: The text to appear in the email subject line.
-        header: The text to appear in the header line of the email body.
+        Attributes:
+            enabled: If true, custom email content will replace the default body of welcome emails
+            content: The HTML to use as custom content for welcome emails. Script elements and other potentially dangerous markup will be removed.
+            subject: The text to appear in the email subject line. Only available with a whitelabel license and whitelabel_configuration.advanced_custom_welcome_email enabled.
+            header: The text to appear in the header line of the email body. Only available with a whitelabel license and whitelabel_configuration.advanced_custom_welcome_email enabled.
     """
 
     enabled: Optional[bool] = None
@@ -9765,36 +9769,37 @@ can
 @attr.s(auto_attribs=True, init=False)
 class WriteDashboard(model.Model):
     """
-    Dynamic writeable type for Dashboard removes:
-can, content_favorite_id, content_metadata_id, id, model, readonly, refresh_interval_to_i, user_id, created_at, dashboard_elements, dashboard_filters, dashboard_layouts, deleted_at, deleter_id, edit_uri, favorite_count, last_accessed_at, last_viewed_at, view_count
+        Dynamic writeable type for Dashboard removes:
+    can, content_favorite_id, content_metadata_id, id, model, readonly, refresh_interval_to_i, user_id, created_at, dashboard_elements, dashboard_filters, dashboard_layouts, deleted_at, deleter_id, edit_uri, favorite_count, last_accessed_at, last_viewed_at, view_count
 
-    Attributes:
-        description: Description
-        hidden: Is Hidden
-        query_timezone: Timezone in which the Dashboard will run by default.
-        refresh_interval: Refresh Interval, as a time duration phrase like "2 hours 30 minutes". A number with no time units will be interpreted as whole seconds.
-        folder: Dynamic writeable type for FolderBase removes:
-id, content_metadata_id, created_at, creator_id, child_count, external_id, is_embed, is_embed_shared_root, is_embed_users_root, is_personal, is_personal_descendant, is_shared_root, is_users_root, can
-        title: Dashboard Title
-        slug: Content Metadata Slug
-        preferred_viewer: The preferred route for viewing this dashboard (ie: dashboards or dashboards-next)
-        space: Dynamic writeable type for SpaceBase removes:
-id, content_metadata_id, created_at, creator_id, child_count, external_id, is_embed, is_embed_shared_root, is_embed_users_root, is_personal, is_personal_descendant, is_shared_root, is_users_root, can
-        alert_sync_with_dashboard_filter_enabled: Enables alerts to keep in sync with dashboard filter changes - only available in Enhanced Alerts (beta)
-        background_color: Background color
-        crossfilter_enabled: Enables crossfiltering in dashboards - only available in dashboards-next (beta)
-        deleted: Whether or not a dashboard is 'soft' deleted.
-        load_configuration: configuration option that governs how dashboard loading will happen.
-        lookml_link_id: Links this dashboard to a particular LookML dashboard such that calling a **sync** operation on that LookML dashboard will update this dashboard to match.
-        show_filters_bar: Show filters bar.  **Security Note:** This property only affects the *cosmetic* appearance of the dashboard, not a user's ability to access data. Hiding the filters bar does **NOT** prevent users from changing filters by other means. For information on how to set up secure data access control policies, see [Control User Access to Data](https://looker.com/docs/r/api/control-access)
-        show_title: Show title
-        space_id: Id of Space
-        folder_id: Id of folder
-        text_tile_text_color: Color of text on text tiles
-        tile_background_color: Tile background color
-        tile_text_color: Tile text color
-        title_color: Title color
-        appearance:
+        Attributes:
+            description: Description
+            hidden: Is Hidden
+            query_timezone: Timezone in which the Dashboard will run by default.
+            refresh_interval: Refresh Interval, as a time duration phrase like "2 hours 30 minutes". A number with no time units will be interpreted as whole seconds.
+            folder: Dynamic writeable type for FolderBase removes:
+    id, content_metadata_id, created_at, creator_id, child_count, external_id, is_embed, is_embed_shared_root, is_embed_users_root, is_personal, is_personal_descendant, is_shared_root, is_users_root, can
+            title: Dashboard Title
+            slug: Content Metadata Slug
+            preferred_viewer: The preferred route for viewing this dashboard (ie: dashboards or dashboards-next)
+            space: Dynamic writeable type for SpaceBase removes:
+    id, content_metadata_id, created_at, creator_id, child_count, external_id, is_embed, is_embed_shared_root, is_embed_users_root, is_personal, is_personal_descendant, is_shared_root, is_users_root, can
+            alert_sync_with_dashboard_filter_enabled: Enables alerts to keep in sync with dashboard filter changes - only available in Enhanced Alerts (beta)
+            background_color: Background color
+            crossfilter_enabled: Enables crossfiltering in dashboards - only available in dashboards-next (beta)
+            deleted: Whether or not a dashboard is 'soft' deleted.
+            filters_bar_collapsed: Sets the default state of the filters bar to collapsed or open
+            load_configuration: configuration option that governs how dashboard loading will happen.
+            lookml_link_id: Links this dashboard to a particular LookML dashboard such that calling a **sync** operation on that LookML dashboard will update this dashboard to match.
+            show_filters_bar: Show filters bar.  **Security Note:** This property only affects the *cosmetic* appearance of the dashboard, not a user's ability to access data. Hiding the filters bar does **NOT** prevent users from changing filters by other means. For information on how to set up secure data access control policies, see [Control User Access to Data](https://looker.com/docs/r/api/control-access)
+            show_title: Show title
+            space_id: Id of Space
+            folder_id: Id of folder
+            text_tile_text_color: Color of text on text tiles
+            tile_background_color: Tile background color
+            tile_text_color: Tile text color
+            title_color: Title color
+            appearance:
     """
 
     description: Optional[str] = None
@@ -9810,6 +9815,7 @@ id, content_metadata_id, created_at, creator_id, child_count, external_id, is_em
     background_color: Optional[str] = None
     crossfilter_enabled: Optional[bool] = None
     deleted: Optional[bool] = None
+    filters_bar_collapsed: Optional[bool] = None
     load_configuration: Optional[str] = None
     lookml_link_id: Optional[str] = None
     show_filters_bar: Optional[bool] = None
@@ -9838,6 +9844,7 @@ id, content_metadata_id, created_at, creator_id, child_count, external_id, is_em
         background_color: Optional[str] = None,
         crossfilter_enabled: Optional[bool] = None,
         deleted: Optional[bool] = None,
+        filters_bar_collapsed: Optional[bool] = None,
         load_configuration: Optional[str] = None,
         lookml_link_id: Optional[str] = None,
         show_filters_bar: Optional[bool] = None,
@@ -9865,6 +9872,7 @@ id, content_metadata_id, created_at, creator_id, child_count, external_id, is_em
         self.background_color = background_color
         self.crossfilter_enabled = crossfilter_enabled
         self.deleted = deleted
+        self.filters_bar_collapsed = filters_bar_collapsed
         self.load_configuration = load_configuration
         self.lookml_link_id = lookml_link_id
         self.show_filters_bar = show_filters_bar
@@ -9881,14 +9889,14 @@ id, content_metadata_id, created_at, creator_id, child_count, external_id, is_em
 @attr.s(auto_attribs=True, init=False)
 class WriteDashboardBase(model.Model):
     """
-    Dynamic writeable type for DashboardBase removes:
-can, content_favorite_id, content_metadata_id, description, hidden, id, model, query_timezone, readonly, refresh_interval, refresh_interval_to_i, title, user_id, slug, preferred_viewer
+        Dynamic writeable type for DashboardBase removes:
+    can, content_favorite_id, content_metadata_id, description, hidden, id, model, query_timezone, readonly, refresh_interval, refresh_interval_to_i, title, user_id, slug, preferred_viewer
 
-    Attributes:
-        folder: Dynamic writeable type for FolderBase removes:
-id, content_metadata_id, created_at, creator_id, child_count, external_id, is_embed, is_embed_shared_root, is_embed_users_root, is_personal, is_personal_descendant, is_shared_root, is_users_root, can
-        space: Dynamic writeable type for SpaceBase removes:
-id, content_metadata_id, created_at, creator_id, child_count, external_id, is_embed, is_embed_shared_root, is_embed_users_root, is_personal, is_personal_descendant, is_shared_root, is_users_root, can
+        Attributes:
+            folder: Dynamic writeable type for FolderBase removes:
+    id, content_metadata_id, created_at, creator_id, child_count, external_id, is_embed, is_embed_shared_root, is_embed_users_root, is_personal, is_personal_descendant, is_shared_root, is_users_root, can
+            space: Dynamic writeable type for SpaceBase removes:
+    id, content_metadata_id, created_at, creator_id, child_count, external_id, is_embed, is_embed_shared_root, is_embed_users_root, is_personal, is_personal_descendant, is_shared_root, is_users_root, can
     """
 
     folder: Optional["WriteFolderBase"] = None
@@ -9907,31 +9915,31 @@ id, content_metadata_id, created_at, creator_id, child_count, external_id, is_em
 @attr.s(auto_attribs=True, init=False)
 class WriteDashboardElement(model.Model):
     """
-    Dynamic writeable type for DashboardElement removes:
-can, body_text_as_html, edit_uri, id, lookml_link_id, note_text_as_html, refresh_interval_to_i, alert_count, title_text_as_html, subtitle_text_as_html
+        Dynamic writeable type for DashboardElement removes:
+    can, body_text_as_html, edit_uri, id, lookml_link_id, note_text_as_html, refresh_interval_to_i, alert_count, title_text_as_html, subtitle_text_as_html
 
-    Attributes:
-        body_text: Text tile body text
-        dashboard_id: Id of Dashboard
-        look: Dynamic writeable type for LookWithQuery removes:
-can, content_metadata_id, id, content_favorite_id, created_at, deleted_at, deleter_id, embed_url, excel_file_url, favorite_count, google_spreadsheet_formula, image_embed_url, last_accessed_at, last_updater_id, last_viewed_at, model, public_slug, public_url, short_url, updated_at, view_count, user, url
-        look_id: Id Of Look
-        merge_result_id: ID of merge result
-        note_display: Note Display
-        note_state: Note State
-        note_text: Note Text
-        query: Dynamic writeable type for Query removes:
-can, id, slug, share_url, expanded_share_url, url, has_table_calculations
-        query_id: Id Of Query
-        refresh_interval: Refresh Interval
-        result_maker: Dynamic writeable type for ResultMakerWithIdVisConfigAndDynamicFields removes:
-id, dynamic_fields, filterables, sorts, merge_result_id, total, query_id, sql_query_id, vis_config
-        result_maker_id: ID of the ResultMakerLookup entry.
-        subtitle_text: Text tile subtitle text
-        title: Title of dashboard element
-        title_hidden: Whether title is hidden
-        title_text: Text tile title
-        type: Type
+        Attributes:
+            body_text: Text tile body text
+            dashboard_id: Id of Dashboard
+            look: Dynamic writeable type for LookWithQuery removes:
+    can, content_metadata_id, id, content_favorite_id, created_at, deleted_at, deleter_id, embed_url, excel_file_url, favorite_count, google_spreadsheet_formula, image_embed_url, last_accessed_at, last_updater_id, last_viewed_at, model, public_slug, public_url, short_url, updated_at, view_count, user, url
+            look_id: Id Of Look
+            merge_result_id: ID of merge result
+            note_display: Note Display
+            note_state: Note State
+            note_text: Note Text
+            query: Dynamic writeable type for Query removes:
+    can, id, slug, share_url, expanded_share_url, url, has_table_calculations
+            query_id: Id Of Query
+            refresh_interval: Refresh Interval
+            result_maker: Dynamic writeable type for ResultMakerWithIdVisConfigAndDynamicFields removes:
+    id, dynamic_fields, filterables, sorts, merge_result_id, total, query_id, sql_query_id, vis_config
+            result_maker_id: ID of the ResultMakerLookup entry.
+            subtitle_text: Text tile subtitle text
+            title: Title of dashboard element
+            title_hidden: Whether title is hidden
+            title_text: Text tile title
+            type: Type
     """
 
     body_text: Optional[str] = None
@@ -10000,22 +10008,22 @@ id, dynamic_fields, filterables, sorts, merge_result_id, total, query_id, sql_qu
 @attr.s(auto_attribs=True, init=False)
 class WriteDashboardFilter(model.Model):
     """
-    Dynamic writeable type for DashboardFilter removes:
-can, id, dashboard_id, field
+        Dynamic writeable type for DashboardFilter removes:
+    can, id, dashboard_id, field
 
-    Attributes:
-        name: Name of filter
-        title: Title of filter
-        type: Type of filter: one of date, number, string, or field
-        default_value: Default value of filter
-        model: Model of filter (required if type = field)
-        explore: Explore of filter (required if type = field)
-        dimension: Dimension of filter (required if type = field)
-        row: Display order of this filter relative to other filters
-        listens_to_filters: Array of listeners for faceted filters
-        allow_multiple_values: Whether the filter allows multiple filter values (deprecated in the latest version of dashboards)
-        required: Whether the filter requires a value to run the dashboard
-        ui_config: The visual configuration for this filter. Used to set up how the UI for this filter should appear.
+        Attributes:
+            name: Name of filter
+            title: Title of filter
+            type: Type of filter: one of date, number, string, or field
+            default_value: Default value of filter
+            model: Model of filter (required if type = field)
+            explore: Explore of filter (required if type = field)
+            dimension: Dimension of filter (required if type = field)
+            row: Display order of this filter relative to other filters
+            listens_to_filters: Array of listeners for faceted filters
+            allow_multiple_values: Whether the filter allows multiple filter values (deprecated in the latest version of dashboards)
+            required: Whether the filter requires a value to run the dashboard
+            ui_config: The visual configuration for this filter. Used to set up how the UI for this filter should appear.
     """
 
     name: Optional[str] = None
@@ -10064,15 +10072,15 @@ can, id, dashboard_id, field
 @attr.s(auto_attribs=True, init=False)
 class WriteDashboardLayout(model.Model):
     """
-    Dynamic writeable type for DashboardLayout removes:
-can, id, deleted, dashboard_title, dashboard_layout_components
+        Dynamic writeable type for DashboardLayout removes:
+    can, id, deleted, dashboard_title, dashboard_layout_components
 
-    Attributes:
-        dashboard_id: Id of Dashboard
-        type: Type
-        active: Is Active
-        column_width: Column Width
-        width: Width
+        Attributes:
+            dashboard_id: Id of Dashboard
+            type: Type
+            active: Is Active
+            column_width: Column Width
+            width: Width
     """
 
     dashboard_id: Optional[str] = None
@@ -10100,16 +10108,16 @@ can, id, deleted, dashboard_title, dashboard_layout_components
 @attr.s(auto_attribs=True, init=False)
 class WriteDashboardLayoutComponent(model.Model):
     """
-    Dynamic writeable type for DashboardLayoutComponent removes:
-can, id, deleted, element_title, element_title_hidden, vis_type
+        Dynamic writeable type for DashboardLayoutComponent removes:
+    can, id, deleted, element_title, element_title_hidden, vis_type
 
-    Attributes:
-        dashboard_layout_id: Id of Dashboard Layout
-        dashboard_element_id: Id Of Dashboard Element
-        row: Row
-        column: Column
-        width: Width
-        height: Height
+        Attributes:
+            dashboard_layout_id: Id of Dashboard Layout
+            dashboard_element_id: Id Of Dashboard Element
+            row: Row
+            column: Column
+            width: Width
+            height: Height
     """
 
     dashboard_layout_id: Optional[str] = None
@@ -10140,12 +10148,12 @@ can, id, deleted, element_title, element_title_hidden, vis_type
 @attr.s(auto_attribs=True, init=False)
 class WriteDatagroup(model.Model):
     """
-    Dynamic writeable type for Datagroup removes:
-can, created_at, id, model_name, name, trigger_check_at, trigger_error, trigger_value
+        Dynamic writeable type for Datagroup removes:
+    can, created_at, id, model_name, name, trigger_check_at, trigger_error, trigger_value
 
-    Attributes:
-        stale_before: UNIX timestamp before which cache entries are considered stale. Cannot be in the future.
-        triggered_at: UNIX timestamp at which this entry became triggered. Cannot be in the future.
+        Attributes:
+            stale_before: UNIX timestamp before which cache entries are considered stale. Cannot be in the future.
+            triggered_at: UNIX timestamp at which this entry became triggered. Cannot be in the future.
     """
 
     stale_before: Optional[int] = None
@@ -10161,37 +10169,37 @@ can, created_at, id, model_name, name, trigger_check_at, trigger_error, trigger_
 @attr.s(auto_attribs=True, init=False)
 class WriteDBConnection(model.Model):
     """
-    Dynamic writeable type for DBConnection removes:
-can, dialect, snippets, pdts_enabled, uses_oauth, created_at, user_id, example, last_regen_at, last_reap_at, managed
+        Dynamic writeable type for DBConnection removes:
+    can, dialect, snippets, pdts_enabled, uses_oauth, created_at, user_id, example, last_regen_at, last_reap_at, managed
 
-    Attributes:
-        name: Name of the connection. Also used as the unique identifier
-        host: Host name/address of server
-        port: Port number on server
-        username: Username for server authentication
-        password: (Write-Only) Password for server authentication
-        certificate: (Write-Only) Base64 encoded Certificate body for server authentication (when appropriate for dialect).
-        file_type: (Write-Only) Certificate keyfile type - .json or .p12
-        database: Database name
-        db_timezone: Time zone of database
-        query_timezone: Timezone to use in queries
-        schema: Scheme name
-        max_connections: Maximum number of concurrent connection to use
-        max_billing_gigabytes: Maximum size of query in GBs (BigQuery only, can be a user_attribute name)
-        ssl: Use SSL/TLS when connecting to server
-        verify_ssl: Verify the SSL
-        tmp_db_name: Name of temporary database (if used)
-        jdbc_additional_params: Additional params to add to JDBC connection string
-        pool_timeout: Connection Pool Timeout, in seconds
-        dialect_name: (Read/Write) SQL Dialect name
-        user_db_credentials: (Limited access feature) Are per user db credentials enabled. Enabling will remove previously set username and password
-        user_attribute_fields: Fields whose values map to user attribute names
-        maintenance_cron: Cron string specifying when maintenance such as PDT trigger checks and drops should be performed
-        sql_runner_precache_tables: Precache tables in the SQL Runner
-        sql_writing_with_info_schema: Fetch Information Schema For SQL Writing
-        after_connect_statements: SQL statements (semicolon separated) to issue after connecting to the database. Requires `custom_after_connect_statements` license feature
-        pdt_context_override: Dynamic writeable type for DBConnectionOverride removes:
-has_password
+        Attributes:
+            name: Name of the connection. Also used as the unique identifier
+            host: Host name/address of server
+            port: Port number on server
+            username: Username for server authentication
+            password: (Write-Only) Password for server authentication
+            certificate: (Write-Only) Base64 encoded Certificate body for server authentication (when appropriate for dialect).
+            file_type: (Write-Only) Certificate keyfile type - .json or .p12
+            database: Database name
+            db_timezone: Time zone of database
+            query_timezone: Timezone to use in queries
+            schema: Scheme name
+            max_connections: Maximum number of concurrent connection to use
+            max_billing_gigabytes: Maximum size of query in GBs (BigQuery only, can be a user_attribute name)
+            ssl: Use SSL/TLS when connecting to server
+            verify_ssl: Verify the SSL
+            tmp_db_name: Name of temporary database (if used)
+            jdbc_additional_params: Additional params to add to JDBC connection string
+            pool_timeout: Connection Pool Timeout, in seconds
+            dialect_name: (Read/Write) SQL Dialect name
+            user_db_credentials: (Limited access feature) Are per user db credentials enabled. Enabling will remove previously set username and password
+            user_attribute_fields: Fields whose values map to user attribute names
+            maintenance_cron: Cron string specifying when maintenance such as PDT trigger checks and drops should be performed
+            sql_runner_precache_tables: Precache tables in the SQL Runner
+            sql_writing_with_info_schema: Fetch Information Schema For SQL Writing
+            after_connect_statements: SQL statements (semicolon separated) to issue after connecting to the database. Requires `custom_after_connect_statements` license feature
+            pdt_context_override: Dynamic writeable type for DBConnectionOverride removes:
+    has_password
     """
 
     name: Optional[str] = None
@@ -10282,21 +10290,21 @@ has_password
 @attr.s(auto_attribs=True, init=False)
 class WriteDBConnectionOverride(model.Model):
     """
-    Dynamic writeable type for DBConnectionOverride removes:
-has_password
+        Dynamic writeable type for DBConnectionOverride removes:
+    has_password
 
-    Attributes:
-        context: Context in which to override (`pdt` is the only allowed value)
-        host: Host name/address of server
-        port: Port number on server
-        username: Username for server authentication
-        password: (Write-Only) Password for server authentication
-        certificate: (Write-Only) Base64 encoded Certificate body for server authentication (when appropriate for dialect).
-        file_type: (Write-Only) Certificate keyfile type - .json or .p12
-        database: Database name
-        schema: Scheme name
-        jdbc_additional_params: Additional params to add to JDBC connection string
-        after_connect_statements: SQL statements (semicolon separated) to issue after connecting to the database. Requires `custom_after_connect_statements` license feature
+        Attributes:
+            context: Context in which to override (`pdt` is the only allowed value)
+            host: Host name/address of server
+            port: Port number on server
+            username: Username for server authentication
+            password: (Write-Only) Password for server authentication
+            certificate: (Write-Only) Base64 encoded Certificate body for server authentication (when appropriate for dialect).
+            file_type: (Write-Only) Certificate keyfile type - .json or .p12
+            database: Database name
+            schema: Scheme name
+            jdbc_additional_params: Additional params to add to JDBC connection string
+            after_connect_statements: SQL statements (semicolon separated) to issue after connecting to the database. Requires `custom_after_connect_statements` license feature
     """
 
     context: Optional[str] = None
@@ -10342,12 +10350,12 @@ has_password
 @attr.s(auto_attribs=True, init=False)
 class WriteFolderBase(model.Model):
     """
-    Dynamic writeable type for FolderBase removes:
-id, content_metadata_id, created_at, creator_id, child_count, external_id, is_embed, is_embed_shared_root, is_embed_users_root, is_personal, is_personal_descendant, is_shared_root, is_users_root, can
+        Dynamic writeable type for FolderBase removes:
+    id, content_metadata_id, created_at, creator_id, child_count, external_id, is_embed, is_embed_shared_root, is_embed_users_root, is_personal, is_personal_descendant, is_shared_root, is_users_root, can
 
-    Attributes:
-        name: Unique Name
-        parent_id: Id of Parent. If the parent id is null, this is a root-level entry
+        Attributes:
+            name: Unique Name
+            parent_id: Id of Parent. If the parent id is null, this is a root-level entry
     """
 
     name: str
@@ -10361,12 +10369,12 @@ id, content_metadata_id, created_at, creator_id, child_count, external_id, is_em
 @attr.s(auto_attribs=True, init=False)
 class WriteGitBranch(model.Model):
     """
-    Dynamic writeable type for GitBranch removes:
-can, remote, remote_name, error, message, owner_name, readonly, personal, is_local, is_remote, is_production, ahead_count, behind_count, commit_at, remote_ref
+        Dynamic writeable type for GitBranch removes:
+    can, remote, remote_name, error, message, owner_name, readonly, personal, is_local, is_remote, is_production, ahead_count, behind_count, commit_at, remote_ref
 
-    Attributes:
-        name: The short name on the local. Updating `name` results in `git checkout <new_name>`
-        ref: The resolved ref of this branch. Updating `ref` results in `git reset --hard <new_ref>``.
+        Attributes:
+            name: The short name on the local. Updating `name` results in `git checkout <new_name>`
+            ref: The resolved ref of this branch. Updating `ref` results in `git reset --hard <new_ref>``.
     """
 
     name: Optional[str] = None
@@ -10380,12 +10388,12 @@ can, remote, remote_name, error, message, owner_name, readonly, personal, is_loc
 @attr.s(auto_attribs=True, init=False)
 class WriteGroup(model.Model):
     """
-    Dynamic writeable type for Group removes:
-can, contains_current_user, external_group_id, externally_managed, id, include_by_default, user_count
+        Dynamic writeable type for Group removes:
+    can, contains_current_user, external_group_id, externally_managed, id, include_by_default, user_count
 
-    Attributes:
-        can_add_to_content_metadata: Group can be used in content access controls
-        name: Name of group
+        Attributes:
+            can_add_to_content_metadata: Group can be used in content access controls
+            name: Name of group
     """
 
     can_add_to_content_metadata: Optional[bool] = None
@@ -10404,14 +10412,14 @@ can, contains_current_user, external_group_id, externally_managed, id, include_b
 @attr.s(auto_attribs=True, init=False)
 class WriteHomepage(model.Model):
     """
-    Dynamic writeable type for Homepage removes:
-can, content_metadata_id, created_at, homepage_sections, id, updated_at, user_id, primary_homepage
+        Dynamic writeable type for Homepage removes:
+    can, content_metadata_id, created_at, homepage_sections, id, updated_at, user_id, primary_homepage
 
-    Attributes:
-        deleted_at: Date of homepage deletion
-        description: Description of the homepage
-        section_order: ids of the homepage sections in the order they should be displayed
-        title: Title of the homepage
+        Attributes:
+            deleted_at: Date of homepage deletion
+            description: Description of the homepage
+            section_order: ids of the homepage sections in the order they should be displayed
+            title: Title of the homepage
     """
 
     deleted_at: Optional[datetime.datetime] = None
@@ -10436,23 +10444,23 @@ can, content_metadata_id, created_at, homepage_sections, id, updated_at, user_id
 @attr.s(auto_attribs=True, init=False)
 class WriteHomepageItem(model.Model):
     """
-    Dynamic writeable type for HomepageItem removes:
-can, content_created_by, content_favorite_id, content_metadata_id, content_updated_at, custom_image_url, description, favorite_count, id, image_url, location, section_fetch_time, title, url, view_count
+        Dynamic writeable type for HomepageItem removes:
+    can, content_created_by, content_favorite_id, content_metadata_id, content_updated_at, custom_image_url, description, favorite_count, id, image_url, location, section_fetch_time, title, url, view_count
 
-    Attributes:
-        custom_description: Custom description entered by the user, if present
-        custom_image_data_base64: (Write-Only) base64 encoded image data
-        custom_title: Custom title entered by the user, if present
-        custom_url: Custom url entered by the user, if present
-        dashboard_id: Dashboard to base this item on
-        homepage_section_id: Associated Homepage Section
-        look_id: Look to base this item on
-        lookml_dashboard_id: LookML Dashboard to base this item on
-        order: An arbitrary integer representing the sort order within the section
-        use_custom_description: Whether the custom description should be used instead of the content description, if the item is associated with content
-        use_custom_image: Whether the custom image should be used instead of the content image, if the item is associated with content
-        use_custom_title: Whether the custom title should be used instead of the content title, if the item is associated with content
-        use_custom_url: Whether the custom url should be used instead of the content url, if the item is associated with content
+        Attributes:
+            custom_description: Custom description entered by the user, if present
+            custom_image_data_base64: (Write-Only) base64 encoded image data
+            custom_title: Custom title entered by the user, if present
+            custom_url: Custom url entered by the user, if present
+            dashboard_id: Dashboard to base this item on
+            homepage_section_id: Associated Homepage Section
+            look_id: Look to base this item on
+            lookml_dashboard_id: LookML Dashboard to base this item on
+            order: An arbitrary integer representing the sort order within the section
+            use_custom_description: Whether the custom description should be used instead of the content description, if the item is associated with content
+            use_custom_image: Whether the custom image should be used instead of the content image, if the item is associated with content
+            use_custom_title: Whether the custom title should be used instead of the content title, if the item is associated with content
+            use_custom_url: Whether the custom url should be used instead of the content url, if the item is associated with content
     """
 
     custom_description: Optional[str] = None
@@ -10504,15 +10512,15 @@ can, content_created_by, content_favorite_id, content_metadata_id, content_updat
 @attr.s(auto_attribs=True, init=False)
 class WriteHomepageSection(model.Model):
     """
-    Dynamic writeable type for HomepageSection removes:
-can, created_at, detail_url, homepage_items, id, is_header, updated_at, visible_item_order
+        Dynamic writeable type for HomepageSection removes:
+    can, created_at, detail_url, homepage_items, id, is_header, updated_at, visible_item_order
 
-    Attributes:
-        deleted_at: Time at which this section was deleted.
-        homepage_id: Id reference to parent homepage
-        item_order: ids of the homepage items in the order they should be displayed
-        title: Name of row
-        description: Description of the content found in this section.
+        Attributes:
+            deleted_at: Time at which this section was deleted.
+            homepage_id: Id reference to parent homepage
+            item_order: ids of the homepage items in the order they should be displayed
+            title: Name of row
+            description: Description of the content found in this section.
     """
 
     deleted_at: Optional[datetime.datetime] = None
@@ -10540,13 +10548,13 @@ can, created_at, detail_url, homepage_items, id, is_header, updated_at, visible_
 @attr.s(auto_attribs=True, init=False)
 class WriteIntegration(model.Model):
     """
-    Dynamic writeable type for Integration removes:
-can, id, integration_hub_id, label, description, supported_formats, supported_action_types, supported_formattings, supported_visualization_formattings, supported_download_settings, icon_url, uses_oauth, required_fields, delegate_oauth
+        Dynamic writeable type for Integration removes:
+    can, id, integration_hub_id, label, description, supported_formats, supported_action_types, supported_formattings, supported_visualization_formattings, supported_download_settings, icon_url, uses_oauth, required_fields, delegate_oauth
 
-    Attributes:
-        enabled: Whether the integration is available to users.
-        params: Array of params for the integration.
-        installed_delegate_oauth_targets: Whether the integration is available to users.
+        Attributes:
+            enabled: Whether the integration is available to users.
+            params: Array of params for the integration.
+            installed_delegate_oauth_targets: Whether the integration is available to users.
     """
 
     enabled: Optional[bool] = None
@@ -10568,12 +10576,12 @@ can, id, integration_hub_id, label, description, supported_formats, supported_ac
 @attr.s(auto_attribs=True, init=False)
 class WriteIntegrationHub(model.Model):
     """
-    Dynamic writeable type for IntegrationHub removes:
-can, id, label, official, fetch_error_message, has_authorization_token, legal_agreement_signed, legal_agreement_required, legal_agreement_text
+        Dynamic writeable type for IntegrationHub removes:
+    can, id, label, official, fetch_error_message, has_authorization_token, legal_agreement_signed, legal_agreement_required, legal_agreement_text
 
-    Attributes:
-        url: URL of the hub.
-        authorization_token: (Write-Only) An authorization key that will be sent to the integration hub on every request.
+        Attributes:
+            url: URL of the hub.
+            authorization_token: (Write-Only) An authorization key that will be sent to the integration hub on every request.
     """
 
     url: Optional[str] = None
@@ -10589,11 +10597,11 @@ can, id, label, official, fetch_error_message, has_authorization_token, legal_ag
 @attr.s(auto_attribs=True, init=False)
 class WriteInternalHelpResources(model.Model):
     """
-    Dynamic writeable type for InternalHelpResources removes:
-can
+        Dynamic writeable type for InternalHelpResources removes:
+    can
 
-    Attributes:
-        enabled: If true and internal help resources content is not blank then the link for internal help resources will be shown in the help menu and the content displayed within Looker
+        Attributes:
+            enabled: If true and internal help resources content is not blank then the link for internal help resources will be shown in the help menu and the content displayed within Looker
     """
 
     enabled: Optional[bool] = None
@@ -10605,12 +10613,12 @@ can
 @attr.s(auto_attribs=True, init=False)
 class WriteInternalHelpResourcesContent(model.Model):
     """
-    Dynamic writeable type for InternalHelpResourcesContent removes:
-can
+        Dynamic writeable type for InternalHelpResourcesContent removes:
+    can
 
-    Attributes:
-        organization_name: Text to display in the help menu item which will display the internal help resources
-        markdown_content: Content to be displayed in the internal help resources page/modal
+        Attributes:
+            organization_name: Text to display in the help menu item which will display the internal help resources
+            markdown_content: Content to be displayed in the internal help resources page/modal
     """
 
     organization_name: Optional[str] = None
@@ -10629,44 +10637,44 @@ can
 @attr.s(auto_attribs=True, init=False)
 class WriteLDAPConfig(model.Model):
     """
-    Dynamic writeable type for LDAPConfig removes:
-can, default_new_user_groups, default_new_user_roles, groups, has_auth_password, modified_at, modified_by, user_attributes, url
+        Dynamic writeable type for LDAPConfig removes:
+    can, default_new_user_groups, default_new_user_roles, groups, has_auth_password, modified_at, modified_by, user_attributes, url
 
-    Attributes:
-        alternate_email_login_allowed: Allow alternate email-based login via '/login/email' for admins and for specified users with the 'login_special_email' permission. This option is useful as a fallback during ldap setup, if ldap config problems occur later, or if you need to support some users who are not in your ldap directory. Looker email/password logins are always disabled for regular users when ldap is enabled.
-        auth_password: (Write-Only)  Password for the LDAP account used to access the LDAP server
-        auth_requires_role: Users will not be allowed to login at all unless a role for them is found in LDAP if set to true
-        auth_username: Distinguished name of LDAP account used to access the LDAP server
-        connection_host: LDAP server hostname
-        connection_port: LDAP host port
-        connection_tls: Use Transport Layer Security
-        connection_tls_no_verify: Do not verify peer when using TLS
-        default_new_user_group_ids: (Write-Only)  Array of ids of groups that will be applied to new users the first time they login via LDAP
-        default_new_user_role_ids: (Write-Only)  Array of ids of roles that will be applied to new users the first time they login via LDAP
-        enabled: Enable/Disable LDAP authentication for the server
-        force_no_page: Don't attempt to do LDAP search result paging (RFC 2696) even if the LDAP server claims to support it.
-        groups_base_dn: Base dn for finding groups in LDAP searches
-        groups_finder_type: Identifier for a strategy for how Looker will search for groups in the LDAP server
-        groups_member_attribute: LDAP Group attribute that signifies the members of the groups. Most commonly 'member'
-        groups_objectclasses: Optional comma-separated list of supported LDAP objectclass for groups when doing groups searches
-        groups_user_attribute: LDAP Group attribute that signifies the user in a group. Most commonly 'dn'
-        groups_with_role_ids: (Read/Write) Array of mappings between LDAP Groups and arrays of Looker Role ids
-        merge_new_users_by_email: Merge first-time ldap login to existing user account by email addresses. When a user logs in for the first time via ldap this option will connect this user into their existing account by finding the account with a matching email address. Otherwise a new user account will be created for the user.
-        set_roles_from_groups: Set user roles in Looker based on groups from LDAP
-        test_ldap_password: (Write-Only)  Test LDAP user password. For ldap tests only.
-        test_ldap_user: (Write-Only)  Test LDAP user login id. For ldap tests only.
-        user_attribute_map_email: Name of user record attributes used to indicate email address field
-        user_attribute_map_first_name: Name of user record attributes used to indicate first name
-        user_attribute_map_last_name: Name of user record attributes used to indicate last name
-        user_attribute_map_ldap_id: Name of user record attributes used to indicate unique record id
-        user_attributes_with_ids: (Read/Write) Array of mappings between LDAP User Attributes and arrays of Looker User Attribute ids
-        user_bind_base_dn: Distinguished name of LDAP node used as the base for user searches
-        user_custom_filter: (Optional) Custom RFC-2254 filter clause for use in finding user during login. Combined via 'and' with the other generated filter clauses.
-        user_id_attribute_names: Name(s) of user record attributes used for matching user login id (comma separated list)
-        user_objectclass: (Optional) Name of user record objectclass used for finding user during login id
-        allow_normal_group_membership: Allow LDAP auth'd users to be members of non-reflected Looker groups. If 'false', user will be removed from non-reflected groups on login.
-        allow_roles_from_normal_groups: LDAP auth'd users will be able to inherit roles from non-reflected Looker groups.
-        allow_direct_roles: Allows roles to be directly assigned to LDAP auth'd users.
+        Attributes:
+            alternate_email_login_allowed: Allow alternate email-based login via '/login/email' for admins and for specified users with the 'login_special_email' permission. This option is useful as a fallback during ldap setup, if ldap config problems occur later, or if you need to support some users who are not in your ldap directory. Looker email/password logins are always disabled for regular users when ldap is enabled.
+            auth_password: (Write-Only)  Password for the LDAP account used to access the LDAP server
+            auth_requires_role: Users will not be allowed to login at all unless a role for them is found in LDAP if set to true
+            auth_username: Distinguished name of LDAP account used to access the LDAP server
+            connection_host: LDAP server hostname
+            connection_port: LDAP host port
+            connection_tls: Use Transport Layer Security
+            connection_tls_no_verify: Do not verify peer when using TLS
+            default_new_user_group_ids: (Write-Only)  Array of ids of groups that will be applied to new users the first time they login via LDAP
+            default_new_user_role_ids: (Write-Only)  Array of ids of roles that will be applied to new users the first time they login via LDAP
+            enabled: Enable/Disable LDAP authentication for the server
+            force_no_page: Don't attempt to do LDAP search result paging (RFC 2696) even if the LDAP server claims to support it.
+            groups_base_dn: Base dn for finding groups in LDAP searches
+            groups_finder_type: Identifier for a strategy for how Looker will search for groups in the LDAP server
+            groups_member_attribute: LDAP Group attribute that signifies the members of the groups. Most commonly 'member'
+            groups_objectclasses: Optional comma-separated list of supported LDAP objectclass for groups when doing groups searches
+            groups_user_attribute: LDAP Group attribute that signifies the user in a group. Most commonly 'dn'
+            groups_with_role_ids: (Read/Write) Array of mappings between LDAP Groups and arrays of Looker Role ids
+            merge_new_users_by_email: Merge first-time ldap login to existing user account by email addresses. When a user logs in for the first time via ldap this option will connect this user into their existing account by finding the account with a matching email address. Otherwise a new user account will be created for the user.
+            set_roles_from_groups: Set user roles in Looker based on groups from LDAP
+            test_ldap_password: (Write-Only)  Test LDAP user password. For ldap tests only.
+            test_ldap_user: (Write-Only)  Test LDAP user login id. For ldap tests only.
+            user_attribute_map_email: Name of user record attributes used to indicate email address field
+            user_attribute_map_first_name: Name of user record attributes used to indicate first name
+            user_attribute_map_last_name: Name of user record attributes used to indicate last name
+            user_attribute_map_ldap_id: Name of user record attributes used to indicate unique record id
+            user_attributes_with_ids: (Read/Write) Array of mappings between LDAP User Attributes and arrays of Looker User Attribute ids
+            user_bind_base_dn: Distinguished name of LDAP node used as the base for user searches
+            user_custom_filter: (Optional) Custom RFC-2254 filter clause for use in finding user during login. Combined via 'and' with the other generated filter clauses.
+            user_id_attribute_names: Name(s) of user record attributes used for matching user login id (comma separated list)
+            user_objectclass: (Optional) Name of user record objectclass used for finding user during login id
+            allow_normal_group_membership: Allow LDAP auth'd users to be members of non-reflected Looker groups. If 'false', user will be removed from non-reflected groups on login.
+            allow_roles_from_normal_groups: LDAP auth'd users will be able to inherit roles from non-reflected Looker groups.
+            allow_direct_roles: Allows roles to be directly assigned to LDAP auth'd users.
     """
 
     alternate_email_login_allowed: Optional[bool] = None
@@ -10781,11 +10789,11 @@ can, default_new_user_groups, default_new_user_roles, groups, has_auth_password,
 @attr.s(auto_attribs=True, init=False)
 class WriteLegacyFeature(model.Model):
     """
-    Dynamic writeable type for LegacyFeature removes:
-can, id, name, description, enabled, disallowed_as_of_version, disable_on_upgrade_to_version, end_of_life_version, documentation_url, approximate_disable_date, approximate_end_of_life_date, has_disabled_on_upgrade
+        Dynamic writeable type for LegacyFeature removes:
+    can, id, name, description, enabled, disallowed_as_of_version, disable_on_upgrade_to_version, end_of_life_version, documentation_url, approximate_disable_date, approximate_end_of_life_date, has_disabled_on_upgrade
 
-    Attributes:
-        enabled_locally: Whether this feature has been enabled by a user
+        Attributes:
+            enabled_locally: Whether this feature has been enabled by a user
     """
 
     enabled_locally: Optional[bool] = None
@@ -10797,14 +10805,14 @@ can, id, name, description, enabled, disallowed_as_of_version, disable_on_upgrad
 @attr.s(auto_attribs=True, init=False)
 class WriteLookmlModel(model.Model):
     """
-    Dynamic writeable type for LookmlModel removes:
-can, explores, has_content, label
+        Dynamic writeable type for LookmlModel removes:
+    can, explores, has_content, label
 
-    Attributes:
-        allowed_db_connection_names: Array of names of connections this model is allowed to use
-        name: Name of the model. Also used as the unique identifier
-        project_name: Name of project containing the model
-        unlimited_db_connections: Is this model allowed to use all current and future connections
+        Attributes:
+            allowed_db_connection_names: Array of names of connections this model is allowed to use
+            name: Name of the model. Also used as the unique identifier
+            project_name: Name of project containing the model
+            unlimited_db_connections: Is this model allowed to use all current and future connections
     """
 
     allowed_db_connection_names: Optional[Sequence[str]] = None
@@ -10829,25 +10837,25 @@ can, explores, has_content, label
 @attr.s(auto_attribs=True, init=False)
 class WriteLookWithQuery(model.Model):
     """
-    Dynamic writeable type for LookWithQuery removes:
-can, content_metadata_id, id, content_favorite_id, created_at, deleted_at, deleter_id, embed_url, excel_file_url, favorite_count, google_spreadsheet_formula, image_embed_url, last_accessed_at, last_updater_id, last_viewed_at, model, public_slug, public_url, short_url, updated_at, view_count, user, url
+        Dynamic writeable type for LookWithQuery removes:
+    can, content_metadata_id, id, content_favorite_id, created_at, deleted_at, deleter_id, embed_url, excel_file_url, favorite_count, google_spreadsheet_formula, image_embed_url, last_accessed_at, last_updater_id, last_viewed_at, model, public_slug, public_url, short_url, updated_at, view_count, user, url
 
-    Attributes:
-        title: Look Title
-        deleted: Whether or not a look is 'soft' deleted.
-        description: Description
-        is_run_on_load: auto-run query when Look viewed
-        public: Is Public
-        query_id: Query Id
-        folder: Dynamic writeable type for FolderBase removes:
-id, content_metadata_id, created_at, creator_id, child_count, external_id, is_embed, is_embed_shared_root, is_embed_users_root, is_personal, is_personal_descendant, is_shared_root, is_users_root, can
-        folder_id: Folder Id
-        user_id: User Id
-        space_id: Space Id
-        space: Dynamic writeable type for SpaceBase removes:
-id, content_metadata_id, created_at, creator_id, child_count, external_id, is_embed, is_embed_shared_root, is_embed_users_root, is_personal, is_personal_descendant, is_shared_root, is_users_root, can
-        query: Dynamic writeable type for Query removes:
-can, id, slug, share_url, expanded_share_url, url, has_table_calculations
+        Attributes:
+            title: Look Title
+            deleted: Whether or not a look is 'soft' deleted.
+            description: Description
+            is_run_on_load: auto-run query when Look viewed
+            public: Is Public
+            query_id: Query Id
+            folder: Dynamic writeable type for FolderBase removes:
+    id, content_metadata_id, created_at, creator_id, child_count, external_id, is_embed, is_embed_shared_root, is_embed_users_root, is_personal, is_personal_descendant, is_shared_root, is_users_root, can
+            folder_id: Folder Id
+            user_id: User Id
+            space_id: Space Id
+            space: Dynamic writeable type for SpaceBase removes:
+    id, content_metadata_id, created_at, creator_id, child_count, external_id, is_embed, is_embed_shared_root, is_embed_users_root, is_personal, is_personal_descendant, is_shared_root, is_users_root, can
+            query: Dynamic writeable type for Query removes:
+    can, id, slug, share_url, expanded_share_url, url, has_table_calculations
     """
 
     title: Optional[str] = None
@@ -10896,17 +10904,17 @@ can, id, slug, share_url, expanded_share_url, url, has_table_calculations
 @attr.s(auto_attribs=True, init=False)
 class WriteMergeQuery(model.Model):
     """
-    Dynamic writeable type for MergeQuery removes:
-can, id, result_maker_id
+        Dynamic writeable type for MergeQuery removes:
+    can, id, result_maker_id
 
-    Attributes:
-        column_limit: Column Limit
-        dynamic_fields: Dynamic Fields
-        pivots: Pivots
-        sorts: Sorts
-        source_queries: Source Queries defining the results to be merged.
-        total: Total
-        vis_config: Visualization Config
+        Attributes:
+            column_limit: Column Limit
+            dynamic_fields: Dynamic Fields
+            pivots: Pivots
+            sorts: Sorts
+            source_queries: Source Queries defining the results to be merged.
+            total: Total
+            vis_config: Visualization Config
     """
 
     column_limit: Optional[str] = None
@@ -10940,12 +10948,12 @@ can, id, result_maker_id
 @attr.s(auto_attribs=True, init=False)
 class WriteModelSet(model.Model):
     """
-    Dynamic writeable type for ModelSet removes:
-can, all_access, built_in, id, url
+        Dynamic writeable type for ModelSet removes:
+    can, all_access, built_in, id, url
 
-    Attributes:
-        models:
-        name: Name of ModelSet
+        Attributes:
+            models:
+            name: Name of ModelSet
     """
 
     models: Optional[Sequence[str]] = None
@@ -10961,34 +10969,34 @@ can, all_access, built_in, id, url
 @attr.s(auto_attribs=True, init=False)
 class WriteOIDCConfig(model.Model):
     """
-    Dynamic writeable type for OIDCConfig removes:
-can, default_new_user_groups, default_new_user_roles, groups, modified_at, modified_by, test_slug, user_attributes, url
+        Dynamic writeable type for OIDCConfig removes:
+    can, default_new_user_groups, default_new_user_roles, groups, modified_at, modified_by, test_slug, user_attributes, url
 
-    Attributes:
-        alternate_email_login_allowed: Allow alternate email-based login via '/login/email' for admins and for specified users with the 'login_special_email' permission. This option is useful as a fallback during ldap setup, if ldap config problems occur later, or if you need to support some users who are not in your ldap directory. Looker email/password logins are always disabled for regular users when ldap is enabled.
-        audience: OpenID Provider Audience
-        auth_requires_role: Users will not be allowed to login at all unless a role for them is found in OIDC if set to true
-        authorization_endpoint: OpenID Provider Authorization Url
-        default_new_user_group_ids: (Write-Only) Array of ids of groups that will be applied to new users the first time they login via OIDC
-        default_new_user_role_ids: (Write-Only) Array of ids of roles that will be applied to new users the first time they login via OIDC
-        enabled: Enable/Disable OIDC authentication for the server
-        groups_attribute: Name of user record attributes used to indicate groups. Used when 'groups_finder_type' is set to 'grouped_attribute_values'
-        groups_with_role_ids: (Read/Write) Array of mappings between OIDC Groups and arrays of Looker Role ids
-        identifier: Relying Party Identifier (provided by OpenID Provider)
-        issuer: OpenID Provider Issuer
-        new_user_migration_types: Merge first-time oidc login to existing user account by email addresses. When a user logs in for the first time via oidc this option will connect this user into their existing account by finding the account with a matching email address by testing the given types of credentials for existing users. Otherwise a new user account will be created for the user. This list (if provided) must be a comma separated list of string like 'email,ldap,google'
-        scopes: Array of scopes to request.
-        secret: (Write-Only) Relying Party Secret (provided by OpenID Provider)
-        set_roles_from_groups: Set user roles in Looker based on groups from OIDC
-        token_endpoint: OpenID Provider Token Url
-        user_attribute_map_email: Name of user record attributes used to indicate email address field
-        user_attribute_map_first_name: Name of user record attributes used to indicate first name
-        user_attribute_map_last_name: Name of user record attributes used to indicate last name
-        user_attributes_with_ids: (Read/Write) Array of mappings between OIDC User Attributes and arrays of Looker User Attribute ids
-        userinfo_endpoint: OpenID Provider User Information Url
-        allow_normal_group_membership: Allow OIDC auth'd users to be members of non-reflected Looker groups. If 'false', user will be removed from non-reflected groups on login.
-        allow_roles_from_normal_groups: OIDC auth'd users will inherit roles from non-reflected Looker groups.
-        allow_direct_roles: Allows roles to be directly assigned to OIDC auth'd users.
+        Attributes:
+            alternate_email_login_allowed: Allow alternate email-based login via '/login/email' for admins and for specified users with the 'login_special_email' permission. This option is useful as a fallback during ldap setup, if ldap config problems occur later, or if you need to support some users who are not in your ldap directory. Looker email/password logins are always disabled for regular users when ldap is enabled.
+            audience: OpenID Provider Audience
+            auth_requires_role: Users will not be allowed to login at all unless a role for them is found in OIDC if set to true
+            authorization_endpoint: OpenID Provider Authorization Url
+            default_new_user_group_ids: (Write-Only) Array of ids of groups that will be applied to new users the first time they login via OIDC
+            default_new_user_role_ids: (Write-Only) Array of ids of roles that will be applied to new users the first time they login via OIDC
+            enabled: Enable/Disable OIDC authentication for the server
+            groups_attribute: Name of user record attributes used to indicate groups. Used when 'groups_finder_type' is set to 'grouped_attribute_values'
+            groups_with_role_ids: (Read/Write) Array of mappings between OIDC Groups and arrays of Looker Role ids
+            identifier: Relying Party Identifier (provided by OpenID Provider)
+            issuer: OpenID Provider Issuer
+            new_user_migration_types: Merge first-time oidc login to existing user account by email addresses. When a user logs in for the first time via oidc this option will connect this user into their existing account by finding the account with a matching email address by testing the given types of credentials for existing users. Otherwise a new user account will be created for the user. This list (if provided) must be a comma separated list of string like 'email,ldap,google'
+            scopes: Array of scopes to request.
+            secret: (Write-Only) Relying Party Secret (provided by OpenID Provider)
+            set_roles_from_groups: Set user roles in Looker based on groups from OIDC
+            token_endpoint: OpenID Provider Token Url
+            user_attribute_map_email: Name of user record attributes used to indicate email address field
+            user_attribute_map_first_name: Name of user record attributes used to indicate first name
+            user_attribute_map_last_name: Name of user record attributes used to indicate last name
+            user_attributes_with_ids: (Read/Write) Array of mappings between OIDC User Attributes and arrays of Looker User Attribute ids
+            userinfo_endpoint: OpenID Provider User Information Url
+            allow_normal_group_membership: Allow OIDC auth'd users to be members of non-reflected Looker groups. If 'false', user will be removed from non-reflected groups on login.
+            allow_roles_from_normal_groups: OIDC auth'd users will inherit roles from non-reflected Looker groups.
+            allow_direct_roles: Allows roles to be directly assigned to OIDC auth'd users.
     """
 
     alternate_email_login_allowed: Optional[bool] = None
@@ -11073,14 +11081,14 @@ can, default_new_user_groups, default_new_user_roles, groups, modified_at, modif
 @attr.s(auto_attribs=True, init=False)
 class WritePasswordConfig(model.Model):
     """
-    Dynamic writeable type for PasswordConfig removes:
-can
+        Dynamic writeable type for PasswordConfig removes:
+    can
 
-    Attributes:
-        min_length: Minimum number of characters required for a new password.  Must be between 7 and 100
-        require_numeric: Require at least one numeric character
-        require_upperlower: Require at least one uppercase and one lowercase letter
-        require_special: Require at least one special character
+        Attributes:
+            min_length: Minimum number of characters required for a new password.  Must be between 7 and 100
+            require_numeric: Require at least one numeric character
+            require_upperlower: Require at least one uppercase and one lowercase letter
+            require_special: Require at least one special character
     """
 
     min_length: Optional[int] = None
@@ -11105,12 +11113,12 @@ can
 @attr.s(auto_attribs=True, init=False)
 class WritePermissionSet(model.Model):
     """
-    Dynamic writeable type for PermissionSet removes:
-can, all_access, built_in, id, url
+        Dynamic writeable type for PermissionSet removes:
+    can, all_access, built_in, id, url
 
-    Attributes:
-        name: Name of PermissionSet
-        permissions:
+        Attributes:
+            name: Name of PermissionSet
+            permissions:
     """
 
     name: Optional[str] = None
@@ -11126,27 +11134,27 @@ can, all_access, built_in, id, url
 @attr.s(auto_attribs=True, init=False)
 class WriteProject(model.Model):
     """
-    Dynamic writeable type for Project removes:
-can, id, uses_git, is_example
+        Dynamic writeable type for Project removes:
+    can, id, uses_git, is_example
 
-    Attributes:
-        name: Project display name
-        git_remote_url: Git remote repository url
-        git_username: Git username for HTTPS authentication. (For production only, if using user attributes.)
-        git_password: (Write-Only) Git password for HTTPS authentication. (For production only, if using user attributes.)
-        git_production_branch_name: Git production branch name. Defaults to master. Supported only in Looker 21.0 and higher.
-        use_git_cookie_auth: If true, the project uses a git cookie for authentication.
-        git_username_user_attribute: User attribute name for username in per-user HTTPS authentication.
-        git_password_user_attribute: User attribute name for password in per-user HTTPS authentication.
-        git_service_name: Name of the git service provider
-        git_application_server_http_port: Port that HTTP(S) application server is running on (for PRs, file browsing, etc.)
-        git_application_server_http_scheme: Scheme that is running on application server (for PRs, file browsing, etc.)
-        deploy_secret: (Write-Only) Optional secret token with which to authenticate requests to the webhook deploy endpoint. If not set, endpoint is unauthenticated.
-        unset_deploy_secret: (Write-Only) When true, unsets the deploy secret to allow unauthenticated access to the webhook deploy endpoint.
-        pull_request_mode: The git pull request policy for this project. Valid values are: "off", "links", "recommended", "required".
-        validation_required: Validation policy: If true, the project must pass validation checks before project changes can be committed to the git repository
-        git_release_mgmt_enabled: If true, advanced git release management is enabled for this project
-        allow_warnings: Validation policy: If true, the project can be committed with warnings when `validation_required` is true. (`allow_warnings` does nothing if `validation_required` is false).
+        Attributes:
+            name: Project display name
+            git_remote_url: Git remote repository url
+            git_username: Git username for HTTPS authentication. (For production only, if using user attributes.)
+            git_password: (Write-Only) Git password for HTTPS authentication. (For production only, if using user attributes.)
+            git_production_branch_name: Git production branch name. Defaults to master. Supported only in Looker 21.0 and higher.
+            use_git_cookie_auth: If true, the project uses a git cookie for authentication.
+            git_username_user_attribute: User attribute name for username in per-user HTTPS authentication.
+            git_password_user_attribute: User attribute name for password in per-user HTTPS authentication.
+            git_service_name: Name of the git service provider
+            git_application_server_http_port: Port that HTTP(S) application server is running on (for PRs, file browsing, etc.)
+            git_application_server_http_scheme: Scheme that is running on application server (for PRs, file browsing, etc.)
+            deploy_secret: (Write-Only) Optional secret token with which to authenticate requests to the webhook deploy endpoint. If not set, endpoint is unauthenticated.
+            unset_deploy_secret: (Write-Only) When true, unsets the deploy secret to allow unauthenticated access to the webhook deploy endpoint.
+            pull_request_mode: The git pull request policy for this project. Valid values are: "off", "links", "recommended", "required".
+            validation_required: Validation policy: If true, the project must pass validation checks before project changes can be committed to the git repository
+            git_release_mgmt_enabled: If true, advanced git release management is enabled for this project
+            allow_warnings: Validation policy: If true, the project can be committed with warnings when `validation_required` is true. (`allow_warnings` does nothing if `validation_required` is false).
     """
 
     name: Optional[str] = None
@@ -11210,30 +11218,30 @@ can, id, uses_git, is_example
 @attr.s(auto_attribs=True, init=False)
 class WriteQuery(model.Model):
     """
-    Dynamic writeable type for Query removes:
-can, id, slug, share_url, expanded_share_url, url, has_table_calculations
+        Dynamic writeable type for Query removes:
+    can, id, slug, share_url, expanded_share_url, url, has_table_calculations
 
-    Attributes:
-        model: Model
-        view: Explore Name
-        fields: Fields
-        pivots: Pivots
-        fill_fields: Fill Fields
-        filters: Filters
-        filter_expression: Filter Expression
-        sorts: Sorting for the query results. Use the format `["view.field", ...]` to sort on fields in ascending order. Use the format `["view.field desc", ...]` to sort on fields in descending order. Use `["__UNSORTED__"]` (2 underscores before and after) to disable sorting entirely. Empty sorts `[]` will trigger a default sort.
-        limit: Limit
-        column_limit: Column Limit
-        total: Total
-        row_total: Raw Total
-        subtotals: Fields on which to run subtotals
-        vis_config: Visualization configuration properties. These properties are typically opaque and differ based on the type of visualization used. There is no specified set of allowed keys. The values can be any type supported by JSON. A "type" key with a string value is often present, and is used by Looker to determine which visualization to present. Visualizations ignore unknown vis_config properties.
-        filter_config: The filter_config represents the state of the filter UI on the explore page for a given query. When running a query via the Looker UI, this parameter takes precedence over "filters". When creating a query or modifying an existing query, "filter_config" should be set to null. Setting it to any other value could cause unexpected filtering behavior. The format should be considered opaque.
-        visible_ui_sections: Visible UI Sections
-        dynamic_fields: Dynamic Fields
-        client_id: Client Id: used to generate shortened explore URLs. If set by client, must be a unique 22 character alphanumeric string. Otherwise one will be generated.
-        query_timezone: Query Timezone
-        runtime: (DEPRECATED) Runtime (Deprecated)
+        Attributes:
+            model: Model
+            view: Explore Name
+            fields: Fields
+            pivots: Pivots
+            fill_fields: Fill Fields
+            filters: Filters
+            filter_expression: Filter Expression
+            sorts: Sorting for the query results. Use the format `["view.field", ...]` to sort on fields in ascending order. Use the format `["view.field desc", ...]` to sort on fields in descending order. Use `["__UNSORTED__"]` (2 underscores before and after) to disable sorting entirely. Empty sorts `[]` will trigger a default sort.
+            limit: Limit
+            column_limit: Column Limit
+            total: Total
+            row_total: Raw Total
+            subtotals: Fields on which to run subtotals
+            vis_config: Visualization configuration properties. These properties are typically opaque and differ based on the type of visualization used. There is no specified set of allowed keys. The values can be any type supported by JSON. A "type" key with a string value is often present, and is used by Looker to determine which visualization to present. Visualizations ignore unknown vis_config properties.
+            filter_config: The filter_config represents the state of the filter UI on the explore page for a given query. When running a query via the Looker UI, this parameter takes precedence over "filters". When creating a query or modifying an existing query, "filter_config" should be set to null. Setting it to any other value could cause unexpected filtering behavior. The format should be considered opaque.
+            visible_ui_sections: Visible UI Sections
+            dynamic_fields: Dynamic Fields
+            client_id: Client Id: used to generate shortened explore URLs. If set by client, must be a unique 22 character alphanumeric string. Otherwise one will be generated.
+            query_timezone: Query Timezone
+            runtime: (DEPRECATED) Runtime (Deprecated)
     """
 
     model: str
@@ -11306,13 +11314,13 @@ can, id, slug, share_url, expanded_share_url, url, has_table_calculations
 @attr.s(auto_attribs=True, init=False)
 class WriteRepositoryCredential(model.Model):
     """
-    Dynamic writeable type for RepositoryCredential removes:
-can, id, root_project_id, remote_url, is_configured
+        Dynamic writeable type for RepositoryCredential removes:
+    can, id, root_project_id, remote_url, is_configured
 
-    Attributes:
-        git_username: Git username for HTTPS authentication.
-        git_password: (Write-Only) Git password for HTTPS authentication.
-        ssh_public_key: Public deploy key for SSH authentication.
+        Attributes:
+            git_username: Git username for HTTPS authentication.
+            git_password: (Write-Only) Git password for HTTPS authentication.
+            ssh_public_key: Public deploy key for SSH authentication.
     """
 
     git_username: Optional[str] = None
@@ -11334,12 +11342,12 @@ can, id, root_project_id, remote_url, is_configured
 @attr.s(auto_attribs=True, init=False)
 class WriteResultMakerWithIdVisConfigAndDynamicFields(model.Model):
     """
-    Dynamic writeable type for ResultMakerWithIdVisConfigAndDynamicFields removes:
-id, dynamic_fields, filterables, sorts, merge_result_id, total, query_id, sql_query_id, vis_config
+        Dynamic writeable type for ResultMakerWithIdVisConfigAndDynamicFields removes:
+    id, dynamic_fields, filterables, sorts, merge_result_id, total, query_id, sql_query_id, vis_config
 
-    Attributes:
-        query: Dynamic writeable type for Query removes:
-can, id, slug, share_url, expanded_share_url, url, has_table_calculations
+        Attributes:
+            query: Dynamic writeable type for Query removes:
+    can, id, slug, share_url, expanded_share_url, url, has_table_calculations
     """
 
     query: Optional["WriteQuery"] = None
@@ -11351,17 +11359,17 @@ can, id, slug, share_url, expanded_share_url, url, has_table_calculations
 @attr.s(auto_attribs=True, init=False)
 class WriteRole(model.Model):
     """
-    Dynamic writeable type for Role removes:
-can, id, url, users_url
+        Dynamic writeable type for Role removes:
+    can, id, url, users_url
 
-    Attributes:
-        name: Name of Role
-        permission_set: Dynamic writeable type for PermissionSet removes:
-can, all_access, built_in, id, url
-        permission_set_id: (Write-Only) Id of permission set
-        model_set: Dynamic writeable type for ModelSet removes:
-can, all_access, built_in, id, url
-        model_set_id: (Write-Only) Id of model set
+        Attributes:
+            name: Name of Role
+            permission_set: Dynamic writeable type for PermissionSet removes:
+    can, all_access, built_in, id, url
+            permission_set_id: (Write-Only) Id of permission set
+            model_set: Dynamic writeable type for ModelSet removes:
+    can, all_access, built_in, id, url
+            model_set_id: (Write-Only) Id of model set
     """
 
     name: Optional[str] = None
@@ -11389,34 +11397,34 @@ can, all_access, built_in, id, url
 @attr.s(auto_attribs=True, init=False)
 class WriteSamlConfig(model.Model):
     """
-    Dynamic writeable type for SamlConfig removes:
-can, test_slug, modified_at, modified_by, default_new_user_roles, default_new_user_groups, groups, user_attributes, url
+        Dynamic writeable type for SamlConfig removes:
+    can, test_slug, modified_at, modified_by, default_new_user_roles, default_new_user_groups, groups, user_attributes, url
 
-    Attributes:
-        enabled: Enable/Disable Saml authentication for the server
-        idp_cert: Identity Provider Certificate (provided by IdP)
-        idp_url: Identity Provider Url (provided by IdP)
-        idp_issuer: Identity Provider Issuer (provided by IdP)
-        idp_audience: Identity Provider Audience (set in IdP config). Optional in Looker. Set this only if you want Looker to validate the audience value returned by the IdP.
-        allowed_clock_drift: Count of seconds of clock drift to allow when validating timestamps of assertions.
-        user_attribute_map_email: Name of user record attributes used to indicate email address field
-        user_attribute_map_first_name: Name of user record attributes used to indicate first name
-        user_attribute_map_last_name: Name of user record attributes used to indicate last name
-        new_user_migration_types: Merge first-time saml login to existing user account by email addresses. When a user logs in for the first time via saml this option will connect this user into their existing account by finding the account with a matching email address by testing the given types of credentials for existing users. Otherwise a new user account will be created for the user. This list (if provided) must be a comma separated list of string like 'email,ldap,google'
-        alternate_email_login_allowed: Allow alternate email-based login via '/login/email' for admins and for specified users with the 'login_special_email' permission. This option is useful as a fallback during ldap setup, if ldap config problems occur later, or if you need to support some users who are not in your ldap directory. Looker email/password logins are always disabled for regular users when ldap is enabled.
-        default_new_user_role_ids: (Write-Only) Array of ids of roles that will be applied to new users the first time they login via Saml
-        default_new_user_group_ids: (Write-Only) Array of ids of groups that will be applied to new users the first time they login via Saml
-        set_roles_from_groups: Set user roles in Looker based on groups from Saml
-        groups_attribute: Name of user record attributes used to indicate groups. Used when 'groups_finder_type' is set to 'grouped_attribute_values'
-        groups_with_role_ids: (Read/Write) Array of mappings between Saml Groups and arrays of Looker Role ids
-        auth_requires_role: Users will not be allowed to login at all unless a role for them is found in Saml if set to true
-        user_attributes_with_ids: (Read/Write) Array of mappings between Saml User Attributes and arrays of Looker User Attribute ids
-        groups_finder_type: Identifier for a strategy for how Looker will find groups in the SAML response. One of ['grouped_attribute_values', 'individual_attributes']
-        groups_member_value: Value for group attribute used to indicate membership. Used when 'groups_finder_type' is set to 'individual_attributes'
-        bypass_login_page: Bypass the login page when user authentication is required. Redirect to IdP immediately instead.
-        allow_normal_group_membership: Allow SAML auth'd users to be members of non-reflected Looker groups. If 'false', user will be removed from non-reflected groups on login.
-        allow_roles_from_normal_groups: SAML auth'd users will inherit roles from non-reflected Looker groups.
-        allow_direct_roles: Allows roles to be directly assigned to SAML auth'd users.
+        Attributes:
+            enabled: Enable/Disable Saml authentication for the server
+            idp_cert: Identity Provider Certificate (provided by IdP)
+            idp_url: Identity Provider Url (provided by IdP)
+            idp_issuer: Identity Provider Issuer (provided by IdP)
+            idp_audience: Identity Provider Audience (set in IdP config). Optional in Looker. Set this only if you want Looker to validate the audience value returned by the IdP.
+            allowed_clock_drift: Count of seconds of clock drift to allow when validating timestamps of assertions.
+            user_attribute_map_email: Name of user record attributes used to indicate email address field
+            user_attribute_map_first_name: Name of user record attributes used to indicate first name
+            user_attribute_map_last_name: Name of user record attributes used to indicate last name
+            new_user_migration_types: Merge first-time saml login to existing user account by email addresses. When a user logs in for the first time via saml this option will connect this user into their existing account by finding the account with a matching email address by testing the given types of credentials for existing users. Otherwise a new user account will be created for the user. This list (if provided) must be a comma separated list of string like 'email,ldap,google'
+            alternate_email_login_allowed: Allow alternate email-based login via '/login/email' for admins and for specified users with the 'login_special_email' permission. This option is useful as a fallback during ldap setup, if ldap config problems occur later, or if you need to support some users who are not in your ldap directory. Looker email/password logins are always disabled for regular users when ldap is enabled.
+            default_new_user_role_ids: (Write-Only) Array of ids of roles that will be applied to new users the first time they login via Saml
+            default_new_user_group_ids: (Write-Only) Array of ids of groups that will be applied to new users the first time they login via Saml
+            set_roles_from_groups: Set user roles in Looker based on groups from Saml
+            groups_attribute: Name of user record attributes used to indicate groups. Used when 'groups_finder_type' is set to 'grouped_attribute_values'
+            groups_with_role_ids: (Read/Write) Array of mappings between Saml Groups and arrays of Looker Role ids
+            auth_requires_role: Users will not be allowed to login at all unless a role for them is found in Saml if set to true
+            user_attributes_with_ids: (Read/Write) Array of mappings between Saml User Attributes and arrays of Looker User Attribute ids
+            groups_finder_type: Identifier for a strategy for how Looker will find groups in the SAML response. One of ['grouped_attribute_values', 'individual_attributes']
+            groups_member_value: Value for group attribute used to indicate membership. Used when 'groups_finder_type' is set to 'individual_attributes'
+            bypass_login_page: Bypass the login page when user authentication is required. Redirect to IdP immediately instead.
+            allow_normal_group_membership: Allow SAML auth'd users to be members of non-reflected Looker groups. If 'false', user will be removed from non-reflected groups on login.
+            allow_roles_from_normal_groups: SAML auth'd users will inherit roles from non-reflected Looker groups.
+            allow_direct_roles: Allows roles to be directly assigned to SAML auth'd users.
     """
 
     enabled: Optional[bool] = None
@@ -11501,36 +11509,36 @@ can, test_slug, modified_at, modified_by, default_new_user_roles, default_new_us
 @attr.s(auto_attribs=True, init=False)
 class WriteScheduledPlan(model.Model):
     """
-    Dynamic writeable type for ScheduledPlan removes:
-id, created_at, updated_at, title, user, next_run_at, last_run_at, can
+        Dynamic writeable type for ScheduledPlan removes:
+    id, created_at, updated_at, title, user, next_run_at, last_run_at, can
 
-    Attributes:
-        name: Name of this scheduled plan
-        user_id: User Id which owns this scheduled plan
-        run_as_recipient: Whether schedule is run as recipient (only applicable for email recipients)
-        enabled: Whether the ScheduledPlan is enabled
-        look_id: Id of a look
-        dashboard_id: Id of a dashboard
-        lookml_dashboard_id: Id of a LookML dashboard
-        filters_string: Query string to run look or dashboard with
-        dashboard_filters: (DEPRECATED) Alias for filters_string field
-        require_results: Delivery should occur if running the dashboard or look returns results
-        require_no_results: Delivery should occur if the dashboard look does not return results
-        require_change: Delivery should occur if data have changed since the last run
-        send_all_results: Will run an unlimited query and send all results.
-        crontab: Vixie-Style crontab specification when to run
-        datagroup: Name of a datagroup; if specified will run when datagroup triggered (can't be used with cron string)
-        timezone: Timezone for interpreting the specified crontab (default is Looker instance timezone)
-        query_id: Query id
-        scheduled_plan_destination: Scheduled plan destinations
-        run_once: Whether the plan in question should only be run once (usually for testing)
-        include_links: Whether links back to Looker should be included in this ScheduledPlan
-        pdf_paper_size: The size of paper the PDF should be formatted to fit. Valid values are: "letter", "legal", "tabloid", "a0", "a1", "a2", "a3", "a4", "a5".
-        pdf_landscape: Whether the PDF should be formatted for landscape orientation
-        embed: Whether this schedule is in an embed context or not
-        color_theme: Color scheme of the dashboard if applicable
-        long_tables: Whether or not to expand table vis to full length
-        inline_table_width: The pixel width at which we render the inline table visualizations
+        Attributes:
+            name: Name of this scheduled plan
+            user_id: User Id which owns this scheduled plan
+            run_as_recipient: Whether schedule is run as recipient (only applicable for email recipients)
+            enabled: Whether the ScheduledPlan is enabled
+            look_id: Id of a look
+            dashboard_id: Id of a dashboard
+            lookml_dashboard_id: Id of a LookML dashboard
+            filters_string: Query string to run look or dashboard with
+            dashboard_filters: (DEPRECATED) Alias for filters_string field
+            require_results: Delivery should occur if running the dashboard or look returns results
+            require_no_results: Delivery should occur if the dashboard look does not return results
+            require_change: Delivery should occur if data have changed since the last run
+            send_all_results: Will run an unlimited query and send all results.
+            crontab: Vixie-Style crontab specification when to run
+            datagroup: Name of a datagroup; if specified will run when datagroup triggered (can't be used with cron string)
+            timezone: Timezone for interpreting the specified crontab (default is Looker instance timezone)
+            query_id: Query id
+            scheduled_plan_destination: Scheduled plan destinations
+            run_once: Whether the plan in question should only be run once (usually for testing)
+            include_links: Whether links back to Looker should be included in this ScheduledPlan
+            pdf_paper_size: The size of paper the PDF should be formatted to fit. Valid values are: "letter", "legal", "tabloid", "a0", "a1", "a2", "a3", "a4", "a5".
+            pdf_landscape: Whether the PDF should be formatted for landscape orientation
+            embed: Whether this schedule is in an embed context or not
+            color_theme: Color scheme of the dashboard if applicable
+            long_tables: Whether or not to expand table vis to full length
+            inline_table_width: The pixel width at which we render the inline table visualizations
     """
 
     name: Optional[str] = None
@@ -11623,15 +11631,15 @@ id, created_at, updated_at, title, user, next_run_at, last_run_at, can
 @attr.s(auto_attribs=True, init=False)
 class WriteSessionConfig(model.Model):
     """
-    Dynamic writeable type for SessionConfig removes:
-can
+        Dynamic writeable type for SessionConfig removes:
+    can
 
-    Attributes:
-        allow_persistent_sessions: Allow users to have persistent sessions when they login
-        session_minutes: Number of minutes for user sessions.  Must be between 5 and 43200
-        unlimited_sessions_per_user: Allow users to have an unbounded number of concurrent sessions (otherwise, users will be limited to only one session at a time).
-        use_inactivity_based_logout: Enforce session logout for sessions that are inactive for 15 minutes.
-        track_session_location: Track location of session when user logs in.
+        Attributes:
+            allow_persistent_sessions: Allow users to have persistent sessions when they login
+            session_minutes: Number of minutes for user sessions.  Must be between 5 and 43200
+            unlimited_sessions_per_user: Allow users to have an unbounded number of concurrent sessions (otherwise, users will be limited to only one session at a time).
+            use_inactivity_based_logout: Enforce session logout for sessions that are inactive for 15 minutes.
+            track_session_location: Track location of session when user logs in.
     """
 
     allow_persistent_sessions: Optional[bool] = None
@@ -11659,12 +11667,12 @@ can
 @attr.s(auto_attribs=True, init=False)
 class WriteSpaceBase(model.Model):
     """
-    Dynamic writeable type for SpaceBase removes:
-id, content_metadata_id, created_at, creator_id, child_count, external_id, is_embed, is_embed_shared_root, is_embed_users_root, is_personal, is_personal_descendant, is_shared_root, is_users_root, can
+        Dynamic writeable type for SpaceBase removes:
+    id, content_metadata_id, created_at, creator_id, child_count, external_id, is_embed, is_embed_shared_root, is_embed_users_root, is_personal, is_personal_descendant, is_shared_root, is_users_root, can
 
-    Attributes:
-        name: Unique Name
-        parent_id: Id of Parent. If the parent id is null, this is a root-level entry
+        Attributes:
+            name: Unique Name
+            parent_id: Id of Parent. If the parent id is null, this is a root-level entry
     """
 
     name: str
@@ -11678,14 +11686,14 @@ id, content_metadata_id, created_at, creator_id, child_count, external_id, is_em
 @attr.s(auto_attribs=True, init=False)
 class WriteTheme(model.Model):
     """
-    Dynamic writeable type for Theme removes:
-can, id
+        Dynamic writeable type for Theme removes:
+    can, id
 
-    Attributes:
-        begin_at: Timestamp for when this theme becomes active. Null=always
-        end_at: Timestamp for when this theme expires. Null=never
-        name: Name of theme. Can only be alphanumeric and underscores.
-        settings:
+        Attributes:
+            begin_at: Timestamp for when this theme becomes active. Null=always
+            end_at: Timestamp for when this theme expires. Null=never
+            name: Name of theme. Can only be alphanumeric and underscores.
+            settings:
     """
 
     begin_at: Optional[datetime.datetime] = None
@@ -11710,20 +11718,20 @@ can, id
 @attr.s(auto_attribs=True, init=False)
 class WriteUser(model.Model):
     """
-    Dynamic writeable type for User removes:
-can, avatar_url, avatar_url_without_sizing, credentials_api3, credentials_embed, credentials_google, credentials_ldap, credentials_looker_openid, credentials_oidc, credentials_saml, credentials_totp, display_name, email, embed_group_space_id, group_ids, id, looker_versions, personal_space_id, personal_folder_id, presumed_looker_employee, role_ids, sessions, verified_looker_employee, roles_externally_managed, allow_direct_roles, allow_normal_group_membership, allow_roles_from_normal_groups, url
+        Dynamic writeable type for User removes:
+    can, avatar_url, avatar_url_without_sizing, credentials_api3, credentials_embed, credentials_google, credentials_ldap, credentials_looker_openid, credentials_oidc, credentials_saml, credentials_totp, display_name, email, embed_group_space_id, group_ids, id, looker_versions, personal_space_id, personal_folder_id, presumed_looker_employee, role_ids, sessions, verified_looker_employee, roles_externally_managed, allow_direct_roles, allow_normal_group_membership, allow_roles_from_normal_groups, url
 
-    Attributes:
-        credentials_email: Dynamic writeable type for CredentialsEmail removes:
-can, created_at, is_disabled, logged_in_at, password_reset_url, type, url, user_url
-        first_name: First name
-        home_space_id: ID string for user's home space
-        home_folder_id: ID string for user's home folder
-        is_disabled: Account has been disabled
-        last_name: Last name
-        locale: User's preferred locale. User locale takes precedence over Looker's system-wide default locale. Locale determines language of display strings and date and numeric formatting in API responses. Locale string must be a 2 letter language code or a combination of language code and region code: 'en' or 'en-US', for example.
-        models_dir_validated: User's dev workspace has been checked for presence of applicable production projects
-        ui_state: Per user dictionary of undocumented state information owned by the Looker UI.
+        Attributes:
+            credentials_email: Dynamic writeable type for CredentialsEmail removes:
+    can, created_at, is_disabled, logged_in_at, password_reset_url, type, url, user_url
+            first_name: First name
+            home_space_id: ID string for user's home space
+            home_folder_id: ID string for user's home folder
+            is_disabled: Account has been disabled
+            last_name: Last name
+            locale: User's preferred locale. User locale takes precedence over Looker's system-wide default locale. Locale determines language of display strings and date and numeric formatting in API responses. Locale string must be a 2 letter language code or a combination of language code and region code: 'en' or 'en-US', for example.
+            models_dir_validated: User's dev workspace has been checked for presence of applicable production projects
+            ui_state: Per user dictionary of undocumented state information owned by the Looker UI.
     """
 
     credentials_email: Optional["WriteCredentialsEmail"] = None
@@ -11763,18 +11771,18 @@ can, created_at, is_disabled, logged_in_at, password_reset_url, type, url, user_
 @attr.s(auto_attribs=True, init=False)
 class WriteUserAttribute(model.Model):
     """
-    Dynamic writeable type for UserAttribute removes:
-can, id, is_system, is_permanent
+        Dynamic writeable type for UserAttribute removes:
+    can, id, is_system, is_permanent
 
-    Attributes:
-        name: Name of user attribute
-        label: Human-friendly label for user attribute
-        type: Type of user attribute ("string", "number", "datetime", "yesno", "zipcode")
-        default_value: Default value for when no value is set on the user
-        value_is_hidden: If true, users will not be able to view values of this attribute
-        user_can_view: Non-admin users can see the values of their attributes and use them in filters
-        user_can_edit: Users can change the value of this attribute for themselves
-        hidden_value_domain_whitelist: Destinations to which a hidden attribute may be sent. Once set, cannot be edited.
+        Attributes:
+            name: Name of user attribute
+            label: Human-friendly label for user attribute
+            type: Type of user attribute ("string", "number", "datetime", "yesno", "zipcode")
+            default_value: Default value for when no value is set on the user
+            value_is_hidden: If true, users will not be able to view values of this attribute
+            user_can_view: Non-admin users can see the values of their attributes and use them in filters
+            user_can_edit: Users can change the value of this attribute for themselves
+            hidden_value_domain_whitelist: Destinations to which a hidden attribute may be sent. Once set, cannot be edited.
     """
 
     name: Optional[str] = None
@@ -11811,11 +11819,11 @@ can, id, is_system, is_permanent
 @attr.s(auto_attribs=True, init=False)
 class WriteUserAttributeWithValue(model.Model):
     """
-    Dynamic writeable type for UserAttributeWithValue removes:
-can, name, label, rank, user_id, user_can_edit, value_is_hidden, user_attribute_id, source, hidden_value_domain_whitelist
+        Dynamic writeable type for UserAttributeWithValue removes:
+    can, name, label, rank, user_id, user_can_edit, value_is_hidden, user_attribute_id, source, hidden_value_domain_whitelist
 
-    Attributes:
-        value: Value of attribute for user
+        Attributes:
+            value: Value of attribute for user
     """
 
     value: Optional[str] = None
@@ -11827,23 +11835,23 @@ can, name, label, rank, user_id, user_can_edit, value_is_hidden, user_attribute_
 @attr.s(auto_attribs=True, init=False)
 class WriteWhitelabelConfiguration(model.Model):
     """
-    Dynamic writeable type for WhitelabelConfiguration removes:
-id, logo_url, favicon_url
+        Dynamic writeable type for WhitelabelConfiguration removes:
+    id, logo_url, favicon_url
 
-    Attributes:
-        logo_file: Customer logo image. Expected base64 encoded data (write-only)
-        favicon_file: Custom favicon image. Expected base64 encoded data (write-only)
-        default_title: Default page title
-        show_help_menu: Boolean to toggle showing help menus
-        show_docs: Boolean to toggle showing docs
-        show_email_sub_options: Boolean to toggle showing email subscription options.
-        allow_looker_mentions: Boolean to toggle mentions of Looker in emails
-        allow_looker_links: Boolean to toggle links to Looker in emails
-        custom_welcome_email_advanced: Allow subject line and email heading customization in customized emails”
-        setup_mentions: Remove the word Looker from appearing in the account setup page
-        alerts_logo: Remove Looker logo from Alerts
-        alerts_links: Remove Looker links from Alerts
-        folders_mentions: Remove Looker mentions in home folder page when you don’t have any items saved
+        Attributes:
+            logo_file: Customer logo image. Expected base64 encoded data (write-only)
+            favicon_file: Custom favicon image. Expected base64 encoded data (write-only)
+            default_title: Default page title
+            show_help_menu: Boolean to toggle showing help menus
+            show_docs: Boolean to toggle showing docs
+            show_email_sub_options: Boolean to toggle showing email subscription options.
+            allow_looker_mentions: Boolean to toggle mentions of Looker in emails
+            allow_looker_links: Boolean to toggle links to Looker in emails
+            custom_welcome_email_advanced: Allow subject line and email heading customization in customized emails”
+            setup_mentions: Remove the word Looker from appearing in the account setup page
+            alerts_logo: Remove Looker logo from Alerts
+            alerts_links: Remove Looker links from Alerts
+            folders_mentions: Remove Looker mentions in home folder page when you don’t have any items saved
     """
 
     logo_file: Optional[str] = None

@@ -706,9 +706,9 @@ public class CustomWelcomeEmail : SdkModel
   public bool? enabled { get; set; } = null;
   /// <summary>The HTML to use as custom content for welcome emails. Script elements and other potentially dangerous markup will be removed.</summary>
   public string? content { get; set; } = null;
-  /// <summary>The text to appear in the email subject line.</summary>
+  /// <summary>The text to appear in the email subject line. Only available with a whitelabel license and whitelabel_configuration.advanced_custom_welcome_email enabled.</summary>
   public string? subject { get; set; } = null;
-  /// <summary>The text to appear in the header line of the email body.</summary>
+  /// <summary>The text to appear in the header line of the email body. Only available with a whitelabel license and whitelabel_configuration.advanced_custom_welcome_email enabled.</summary>
   public string? header { get; set; } = null;
 }
 
@@ -769,6 +769,8 @@ public class Dashboard : SdkModel
   public Url? edit_uri { get; set; } = null;
   /// <summary>Number of times favorited (read-only)</summary>
   public long? favorite_count { get; set; } = null;
+  /// <summary>Sets the default state of the filters bar to collapsed or open</summary>
+  public bool? filters_bar_collapsed { get; set; } = null;
   /// <summary>Time the dashboard was last accessed (read-only)</summary>
   public DateTime? last_accessed_at { get; set; } = null;
   /// <summary>Time last viewed in the Looker web UI (read-only)</summary>
@@ -4486,9 +4488,9 @@ public class WriteCustomWelcomeEmail : SdkModel
   public bool? enabled { get; set; } = null;
   /// <summary>The HTML to use as custom content for welcome emails. Script elements and other potentially dangerous markup will be removed.</summary>
   public string? content { get; set; } = null;
-  /// <summary>The text to appear in the email subject line.</summary>
+  /// <summary>The text to appear in the email subject line. Only available with a whitelabel license and whitelabel_configuration.advanced_custom_welcome_email enabled.</summary>
   public string? subject { get; set; } = null;
-  /// <summary>The text to appear in the header line of the email body.</summary>
+  /// <summary>The text to appear in the header line of the email body. Only available with a whitelabel license and whitelabel_configuration.advanced_custom_welcome_email enabled.</summary>
   public string? header { get; set; } = null;
 }
 
@@ -4528,6 +4530,8 @@ public class WriteDashboard : SdkModel
   public bool? crossfilter_enabled { get; set; } = null;
   /// <summary>Whether or not a dashboard is 'soft' deleted.</summary>
   public bool? deleted { get; set; } = null;
+  /// <summary>Sets the default state of the filters bar to collapsed or open</summary>
+  public bool? filters_bar_collapsed { get; set; } = null;
   /// <summary>configuration option that governs how dashboard loading will happen.</summary>
   public string? load_configuration { get; set; } = null;
   /// <summary>Links this dashboard to a particular LookML dashboard such that calling a **sync** operation on that LookML dashboard will update this dashboard to match.</summary>

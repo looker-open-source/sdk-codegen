@@ -26,7 +26,7 @@ SOFTWARE.
 
 /*
 
-350 API models: 219 Spec, 54 Request, 58 Write, 19 Enum
+351 API models: 220 Spec, 54 Request, 57 Write, 20 Enum
 */
 
 
@@ -49,21 +49,28 @@ type AccessToken struct {
 
 
 type Alert struct {
-  AppliedDashboardFilters  *[]AlertAppliedDashboardFilter `json:"applied_dashboard_filters,omitempty"`    // Filters coming from the dashboard that are applied. Example `[{ "filter_title": "Name", "field_name": "distribution_centers.name", "filter_value": "Los Angeles CA" }]`
-  ComparisonType           *ComparisonType                `json:"comparison_type,omitempty"`              // This property informs the check what kind of comparison we are performing. Only certain condition types are valid for time series alerts. For details, refer to [Setting Alert Conditions](https://docs.looker.com/sharing-and-publishing/creating-alerts#setting_alert_conditions) Valid values are: "EQUAL_TO", "GREATER_THAN", "GREATER_THAN_OR_EQUAL_TO", "LESS_THAN", "LESS_THAN_OR_EQUAL_TO", "INCREASES_BY", "DECREASES_BY", "CHANGES_BY".
-  Cron                     *string                        `json:"cron,omitempty"`                         // Vixie-Style crontab specification when to run. At minumum, it has to be longer than 15 minute intervals
-  CustomTitle              *string                        `json:"custom_title,omitempty"`                 // An optional, user-defined title for the alert
-  DashboardElementId       *int64                         `json:"dashboard_element_id,omitempty"`         // ID of the dashboard element associated with the alert. Refer to [dashboard_element()](#!/Dashboard/DashboardElement)
-  Destinations             *[]AlertDestination            `json:"destinations,omitempty"`                 // Array of destinations to send alerts to. Must be the same type of destination. Example `[{ "destination_type": "EMAIL", "email_address": "test@test.com" }]`
-  Field                    *AlertField                    `json:"field,omitempty"`
-  Id                       *int64                         `json:"id,omitempty"`                           // ID of the alert
-  IsDisabled               *bool                          `json:"is_disabled,omitempty"`                  // Whether or not the alert is disabled
-  IsPublic                 *bool                          `json:"is_public,omitempty"`                    // Whether or not the alert is public
-  LookmlDashboardId        *string                        `json:"lookml_dashboard_id,omitempty"`          // ID of the LookML dashboard associated with the alert
-  LookmlLinkId             *string                        `json:"lookml_link_id,omitempty"`               // ID of the LookML dashboard element associated with the alert
-  OwnerId                  *int64                         `json:"owner_id,omitempty"`                     // User id of alert owner
-  Threshold                *float64                       `json:"threshold,omitempty"`                    // Value of the alert threshold
-  TimeSeriesConditionState *AlertConditionState           `json:"time_series_condition_state,omitempty"`
+  AppliedDashboardFilters   *[]AlertAppliedDashboardFilter `json:"applied_dashboard_filters,omitempty"`    // Filters coming from the dashboard that are applied. Example `[{ "filter_title": "Name", "field_name": "distribution_centers.name", "filter_value": "Los Angeles CA" }]`
+  ComparisonType            *ComparisonType                `json:"comparison_type,omitempty"`              // This property informs the check what kind of comparison we are performing. Only certain condition types are valid for time series alerts. For details, refer to [Setting Alert Conditions](https://docs.looker.com/sharing-and-publishing/creating-alerts#setting_alert_conditions) Valid values are: "EQUAL_TO", "GREATER_THAN", "GREATER_THAN_OR_EQUAL_TO", "LESS_THAN", "LESS_THAN_OR_EQUAL_TO", "INCREASES_BY", "DECREASES_BY", "CHANGES_BY".
+  Cron                      *string                        `json:"cron,omitempty"`                         // Vixie-Style crontab specification when to run. At minumum, it has to be longer than 15 minute intervals
+  CustomTitle               *string                        `json:"custom_title,omitempty"`                 // An optional, user-defined title for the alert
+  DashboardElementId        *int64                         `json:"dashboard_element_id,omitempty"`         // ID of the dashboard element associated with the alert. Refer to [dashboard_element()](#!/Dashboard/DashboardElement)
+  Description               *string                        `json:"description,omitempty"`                  // An optional description for the alert. This supplements the title
+  Destinations              *[]AlertDestination            `json:"destinations,omitempty"`                 // Array of destinations to send alerts to. Must be the same type of destination. Example `[{ "destination_type": "EMAIL", "email_address": "test@test.com" }]`
+  Field                     *AlertField                    `json:"field,omitempty"`
+  Followed                  *bool                          `json:"followed,omitempty"`                     // Whether or not the user follows this alert.
+  Followable                *bool                          `json:"followable,omitempty"`                   // Whether or not the alert is followable
+  Id                        *int64                         `json:"id,omitempty"`                           // ID of the alert
+  IsDisabled                *bool                          `json:"is_disabled,omitempty"`                  // Whether or not the alert is disabled
+  IsPublic                  *bool                          `json:"is_public,omitempty"`                    // Whether or not the alert is public
+  InvestigativeContentType  *InvestigativeContentType      `json:"investigative_content_type,omitempty"`   // The type of the investigative content Valid values are: "dashboard".
+  InvestigativeContentId    *string                        `json:"investigative_content_id,omitempty"`     // The ID of the investigative content. For dashboards, this will be the dashboard ID
+  InvestigativeContentTitle *string                        `json:"investigative_content_title,omitempty"`  // The title of the investigative content.
+  LookmlDashboardId         *string                        `json:"lookml_dashboard_id,omitempty"`          // ID of the LookML dashboard associated with the alert
+  LookmlLinkId              *string                        `json:"lookml_link_id,omitempty"`               // ID of the LookML dashboard element associated with the alert
+  OwnerId                   *int64                         `json:"owner_id,omitempty"`                     // User id of alert owner
+  OwnerDisplayName          *string                        `json:"owner_display_name,omitempty"`           // Alert owner's display name
+  Threshold                 *float64                       `json:"threshold,omitempty"`                    // Value of the alert threshold
+  TimeSeriesConditionState  *AlertConditionState           `json:"time_series_condition_state,omitempty"`
 }
 
 
@@ -160,28 +167,27 @@ type Board struct {
 
 
 type BoardItem struct {
-  Can                   *map[string]bool `json:"can,omitempty"`                       // Operations the current user is able to perform on this object
-  ContentCreatedBy      *string          `json:"content_created_by,omitempty"`        // Name of user who created the content this item is based on
-  ContentFavoriteId     *int64           `json:"content_favorite_id,omitempty"`       // Content favorite id associated with the item this content is based on
-  ContentMetadataId     *int64           `json:"content_metadata_id,omitempty"`       // Content metadata id associated with the item this content is based on
-  ContentUpdatedAt      *string          `json:"content_updated_at,omitempty"`        // Last time the content that this item is based on was updated
-  CustomImageDataBase64 *string          `json:"custom_image_data_base64,omitempty"`  // (Write-Only) base64 encoded image data
-  CustomImageUrl        *string          `json:"custom_image_url,omitempty"`          // Custom image_url entered by the user, if present
-  CustomTitle           *string          `json:"custom_title,omitempty"`              // Custom title entered by the user, if present
-  CustomUrl             *string          `json:"custom_url,omitempty"`                // Custom url entered by the user, if present
-  DashboardId           *int64           `json:"dashboard_id,omitempty"`              // Dashboard to base this item on
-  Description           *string          `json:"description,omitempty"`               // The actual description for display
-  FavoriteCount         *int64           `json:"favorite_count,omitempty"`            // Number of times content has been favorited, if present
-  BoardSectionId        *int64           `json:"board_section_id,omitempty"`          // Associated Board Section
-  Id                    *int64           `json:"id,omitempty"`                        // Unique Id
-  ImageUrl              *string          `json:"image_url,omitempty"`                 // The actual image_url for display
-  Location              *string          `json:"location,omitempty"`                  // The container folder name of the content
-  LookId                *int64           `json:"look_id,omitempty"`                   // Look to base this item on
-  LookmlDashboardId     *string          `json:"lookml_dashboard_id,omitempty"`       // LookML Dashboard to base this item on
-  Order                 *int64           `json:"order,omitempty"`                     // An arbitrary integer representing the sort order within the section
-  Title                 *string          `json:"title,omitempty"`                     // The actual title for display
-  Url                   *string          `json:"url,omitempty"`                       // Relative url for the associated content
-  ViewCount             *int64           `json:"view_count,omitempty"`                // Number of times content has been viewed, if present
+  Can               *map[string]bool `json:"can,omitempty"`                  // Operations the current user is able to perform on this object
+  ContentCreatedBy  *string          `json:"content_created_by,omitempty"`   // Name of user who created the content this item is based on
+  ContentFavoriteId *int64           `json:"content_favorite_id,omitempty"`  // Content favorite id associated with the item this content is based on
+  ContentMetadataId *int64           `json:"content_metadata_id,omitempty"`  // Content metadata id associated with the item this content is based on
+  ContentUpdatedAt  *string          `json:"content_updated_at,omitempty"`   // Last time the content that this item is based on was updated
+  CustomDescription *string          `json:"custom_description,omitempty"`   // Custom description entered by the user, if present
+  CustomTitle       *string          `json:"custom_title,omitempty"`         // Custom title entered by the user, if present
+  CustomUrl         *string          `json:"custom_url,omitempty"`           // Custom url entered by the user, if present
+  DashboardId       *int64           `json:"dashboard_id,omitempty"`         // Dashboard to base this item on
+  Description       *string          `json:"description,omitempty"`          // The actual description for display
+  FavoriteCount     *int64           `json:"favorite_count,omitempty"`       // Number of times content has been favorited, if present
+  BoardSectionId    *int64           `json:"board_section_id,omitempty"`     // Associated Board Section
+  Id                *int64           `json:"id,omitempty"`                   // Unique Id
+  ImageUrl          *string          `json:"image_url,omitempty"`            // The actual image_url for display
+  Location          *string          `json:"location,omitempty"`             // The container folder name of the content
+  LookId            *int64           `json:"look_id,omitempty"`              // Look to base this item on
+  LookmlDashboardId *string          `json:"lookml_dashboard_id,omitempty"`  // LookML Dashboard to base this item on
+  Order             *int64           `json:"order,omitempty"`                // An arbitrary integer representing the sort order within the section
+  Title             *string          `json:"title,omitempty"`                // The actual title for display
+  Url               *string          `json:"url,omitempty"`                  // Relative url for the associated content
+  ViewCount         *int64           `json:"view_count,omitempty"`           // Number of times content has been viewed, if present
 }
 
 
@@ -651,11 +657,10 @@ type CredentialsTotp struct {
 
 
 type CustomWelcomeEmail struct {
-  Can     *map[string]bool `json:"can,omitempty"`      // Operations the current user is able to perform on this object
-  Enabled *bool            `json:"enabled,omitempty"`  // If true, custom email content will replace the default body of welcome emails
-  Content *string          `json:"content,omitempty"`  // The HTML to use as custom content for welcome emails. Script elements and other potentially dangerous markup will be removed.
-  Subject *string          `json:"subject,omitempty"`  // The text to appear in the email subject line.
-  Header  *string          `json:"header,omitempty"`   // The text to appear in the header line of the email body.
+  Enabled *bool   `json:"enabled,omitempty"`  // If true, custom email content will replace the default body of welcome emails
+  Content *string `json:"content,omitempty"`  // The HTML to use as custom content for welcome emails. Script elements and other potentially dangerous markup will be removed.
+  Subject *string `json:"subject,omitempty"`  // The text to appear in the email subject line. Only available with a whitelabel license and whitelabel_configuration.advanced_custom_welcome_email enabled.
+  Header  *string `json:"header,omitempty"`   // The text to appear in the header line of the email body. Only available with a whitelabel license and whitelabel_configuration.advanced_custom_welcome_email enabled.
 }
 
 
@@ -688,6 +693,7 @@ type Dashboard struct {
   DeleterId                           *int64               `json:"deleter_id,omitempty"`                                // Id of User that 'soft' deleted the dashboard.
   EditUri                             *string              `json:"edit_uri,omitempty"`                                  // Relative path of URI of LookML file to edit the dashboard (LookML dashboard only).
   FavoriteCount                       *int64               `json:"favorite_count,omitempty"`                            // Number of times favorited
+  FiltersBarCollapsed                 *bool                `json:"filters_bar_collapsed,omitempty"`                     // Sets the default state of the filters bar to collapsed or open
   LastAccessedAt                      *time.Time           `json:"last_accessed_at,omitempty"`                          // Time the dashboard was last accessed
   LastViewedAt                        *time.Time           `json:"last_viewed_at,omitempty"`                            // Time last viewed in the Looker web UI
   LoadConfiguration                   *string              `json:"load_configuration,omitempty"`                        // configuration option that governs how dashboard loading will happen.
@@ -932,6 +938,7 @@ type DBConnection struct {
   PdtConcurrency           *int64                `json:"pdt_concurrency,omitempty"`               // Maximum number of threads to use to build PDTs in parallel
   DisableContextComment    *bool                 `json:"disable_context_comment,omitempty"`       // When disable_context_comment is true comment will not be added to SQL
   OauthApplicationId       *int64                `json:"oauth_application_id,omitempty"`          // An External OAuth Application to use for authenticating to the database
+  AlwaysRetryFailedBuilds  *bool                 `json:"always_retry_failed_builds,omitempty"`    // When true, error PDTs will be retried every regenerator cycle
 }
 
 
@@ -1381,6 +1388,10 @@ type InternalHelpResourcesContent struct {
   OrganizationName *string          `json:"organization_name,omitempty"`  // Text to display in the help menu item which will display the internal help resources
   MarkdownContent  *string          `json:"markdown_content,omitempty"`   // Content to be displayed in the internal help resources page/modal
 }
+
+type InvestigativeContentType string
+const InvestigativeContentType_Dashboard InvestigativeContentType = "dashboard"
+
 
 
 type LDAPConfig struct {
@@ -2615,6 +2626,7 @@ type RequestScheduledPlansForLookmlDashboard struct {
 type RequestSearchAlerts struct {
   Limit        *int64  `json:"limit,omitempty"`           // (Optional) Number of results to return (used with `offset`).
   Offset       *int64  `json:"offset,omitempty"`          // (Optional) Number of results to skip before returning any (used with `limit`).
+  GroupBy      *string `json:"group_by,omitempty"`        // (Optional) Dimension by which to order the results(`dashboard` | `owner`)
   Fields       *string `json:"fields,omitempty"`          // (Optional) Requested fields.
   Disabled     *bool   `json:"disabled,omitempty"`        // (Optional) Filter on returning only enabled or disabled alerts.
   Frequency    *string `json:"frequency,omitempty"`       // (Optional) Filter on alert frequency, such as: monthly, weekly, daily, hourly, minutes
@@ -3190,6 +3202,7 @@ type Setting struct {
   MarketplaceAutoInstallEnabled *bool                    `json:"marketplace_auto_install_enabled,omitempty"`  // Toggle marketplace auto install on or off. Note that auto install only runs if marketplace is enabled.
   MarketplaceEnabled            *bool                    `json:"marketplace_enabled,omitempty"`               // Toggle marketplace on or off
   WhitelabelConfiguration       *WhitelabelConfiguration `json:"whitelabel_configuration,omitempty"`
+  CustomWelcomeEmail            *CustomWelcomeEmail      `json:"custom_welcome_email,omitempty"`
 }
 
 
@@ -3440,6 +3453,11 @@ type UserAttributeWithValue struct {
 }
 
 
+type UserEmailOnly struct {
+  Email string `json:"email"`  // Email Address
+}
+
+
 type UserLoginLockout struct {
   Can       *map[string]bool `json:"can,omitempty"`         // Operations the current user is able to perform on this object
   Key       *string          `json:"key,omitempty"`         // Hash of user's client id
@@ -3524,17 +3542,20 @@ type Workspace struct {
 }
 
 // Dynamic writeable type for Alert removes:
-// id
+// followed, followable, id, investigative_content_title, owner_display_name
 type WriteAlert struct {
   AppliedDashboardFilters  *[]AlertAppliedDashboardFilter `json:"applied_dashboard_filters,omitempty"`    // Filters coming from the dashboard that are applied. Example `[{ "filter_title": "Name", "field_name": "distribution_centers.name", "filter_value": "Los Angeles CA" }]`
   ComparisonType           *ComparisonType                `json:"comparison_type,omitempty"`              // This property informs the check what kind of comparison we are performing. Only certain condition types are valid for time series alerts. For details, refer to [Setting Alert Conditions](https://docs.looker.com/sharing-and-publishing/creating-alerts#setting_alert_conditions) Valid values are: "EQUAL_TO", "GREATER_THAN", "GREATER_THAN_OR_EQUAL_TO", "LESS_THAN", "LESS_THAN_OR_EQUAL_TO", "INCREASES_BY", "DECREASES_BY", "CHANGES_BY".
   Cron                     *string                        `json:"cron,omitempty"`                         // Vixie-Style crontab specification when to run. At minumum, it has to be longer than 15 minute intervals
   CustomTitle              *string                        `json:"custom_title,omitempty"`                 // An optional, user-defined title for the alert
   DashboardElementId       *int64                         `json:"dashboard_element_id,omitempty"`         // ID of the dashboard element associated with the alert. Refer to [dashboard_element()](#!/Dashboard/DashboardElement)
+  Description              *string                        `json:"description,omitempty"`                  // An optional description for the alert. This supplements the title
   Destinations             *[]AlertDestination            `json:"destinations,omitempty"`                 // Array of destinations to send alerts to. Must be the same type of destination. Example `[{ "destination_type": "EMAIL", "email_address": "test@test.com" }]`
   Field                    *AlertField                    `json:"field,omitempty"`
   IsDisabled               *bool                          `json:"is_disabled,omitempty"`                  // Whether or not the alert is disabled
   IsPublic                 *bool                          `json:"is_public,omitempty"`                    // Whether or not the alert is public
+  InvestigativeContentType *InvestigativeContentType      `json:"investigative_content_type,omitempty"`   // The type of the investigative content Valid values are: "dashboard".
+  InvestigativeContentId   *string                        `json:"investigative_content_id,omitempty"`     // The ID of the investigative content. For dashboards, this will be the dashboard ID
   LookmlDashboardId        *string                        `json:"lookml_dashboard_id,omitempty"`          // ID of the LookML dashboard associated with the alert
   LookmlLinkId             *string                        `json:"lookml_link_id,omitempty"`               // ID of the LookML dashboard element associated with the alert
   OwnerId                  *int64                         `json:"owner_id,omitempty"`                     // User id of alert owner
@@ -3568,16 +3589,16 @@ type WriteBoard struct {
 }
 
 // Dynamic writeable type for BoardItem removes:
-// can, content_created_by, content_favorite_id, content_metadata_id, content_updated_at, custom_image_url, description, favorite_count, id, image_url, location, title, url, view_count
+// can, content_created_by, content_favorite_id, content_metadata_id, content_updated_at, description, favorite_count, id, image_url, location, title, url, view_count
 type WriteBoardItem struct {
-  CustomImageDataBase64 *string `json:"custom_image_data_base64,omitempty"`  // (Write-Only) base64 encoded image data
-  CustomTitle           *string `json:"custom_title,omitempty"`              // Custom title entered by the user, if present
-  CustomUrl             *string `json:"custom_url,omitempty"`                // Custom url entered by the user, if present
-  DashboardId           *int64  `json:"dashboard_id,omitempty"`              // Dashboard to base this item on
-  BoardSectionId        *int64  `json:"board_section_id,omitempty"`          // Associated Board Section
-  LookId                *int64  `json:"look_id,omitempty"`                   // Look to base this item on
-  LookmlDashboardId     *string `json:"lookml_dashboard_id,omitempty"`       // LookML Dashboard to base this item on
-  Order                 *int64  `json:"order,omitempty"`                     // An arbitrary integer representing the sort order within the section
+  CustomDescription *string `json:"custom_description,omitempty"`   // Custom description entered by the user, if present
+  CustomTitle       *string `json:"custom_title,omitempty"`         // Custom title entered by the user, if present
+  CustomUrl         *string `json:"custom_url,omitempty"`           // Custom url entered by the user, if present
+  DashboardId       *int64  `json:"dashboard_id,omitempty"`         // Dashboard to base this item on
+  BoardSectionId    *int64  `json:"board_section_id,omitempty"`     // Associated Board Section
+  LookId            *int64  `json:"look_id,omitempty"`              // Look to base this item on
+  LookmlDashboardId *string `json:"lookml_dashboard_id,omitempty"`  // LookML Dashboard to base this item on
+  Order             *int64  `json:"order,omitempty"`                // An arbitrary integer representing the sort order within the section
 }
 
 // Dynamic writeable type for BoardSection removes:
@@ -3661,15 +3682,6 @@ type WriteCredentialsEmail struct {
   ForcedPasswordResetAtNextLogin *bool   `json:"forced_password_reset_at_next_login,omitempty"`  // Force the user to change their password upon their next login
 }
 
-// Dynamic writeable type for CustomWelcomeEmail removes:
-// can
-type WriteCustomWelcomeEmail struct {
-  Enabled *bool   `json:"enabled,omitempty"`  // If true, custom email content will replace the default body of welcome emails
-  Content *string `json:"content,omitempty"`  // The HTML to use as custom content for welcome emails. Script elements and other potentially dangerous markup will be removed.
-  Subject *string `json:"subject,omitempty"`  // The text to appear in the email subject line.
-  Header  *string `json:"header,omitempty"`   // The text to appear in the header line of the email body.
-}
-
 // Dynamic writeable type for Dashboard removes:
 // can, content_favorite_id, content_metadata_id, id, model, readonly, refresh_interval_to_i, user_id, created_at, dashboard_elements, dashboard_filters, dashboard_layouts, deleted_at, deleter_id, edit_uri, favorite_count, last_accessed_at, last_viewed_at, view_count, url
 type WriteDashboard struct {
@@ -3686,6 +3698,7 @@ type WriteDashboard struct {
   BackgroundColor                     *string              `json:"background_color,omitempty"`                          // Background color
   CrossfilterEnabled                  *bool                `json:"crossfilter_enabled,omitempty"`                       // Enables crossfiltering in dashboards - only available in dashboards-next (beta)
   Deleted                             *bool                `json:"deleted,omitempty"`                                   // Whether or not a dashboard is 'soft' deleted.
+  FiltersBarCollapsed                 *bool                `json:"filters_bar_collapsed,omitempty"`                     // Sets the default state of the filters bar to collapsed or open
   LoadConfiguration                   *string              `json:"load_configuration,omitempty"`                        // configuration option that governs how dashboard loading will happen.
   LookmlLinkId                        *string              `json:"lookml_link_id,omitempty"`                            // Links this dashboard to a particular LookML dashboard such that calling a **sync** operation on that LookML dashboard will update this dashboard to match.
   ShowFiltersBar                      *bool                `json:"show_filters_bar,omitempty"`                          // Show filters bar.  **Security Note:** This property only affects the *cosmetic* appearance of the dashboard, not a user's ability to access data. Hiding the filters bar does **NOT** prevent users from changing filters by other means. For information on how to set up secure data access control policies, see [Control User Access to Data](https://looker.com/docs/r/api/control-access)
@@ -3810,6 +3823,7 @@ type WriteDBConnection struct {
   PdtConcurrency           *int64                     `json:"pdt_concurrency,omitempty"`               // Maximum number of threads to use to build PDTs in parallel
   DisableContextComment    *bool                      `json:"disable_context_comment,omitempty"`       // When disable_context_comment is true comment will not be added to SQL
   OauthApplicationId       *int64                     `json:"oauth_application_id,omitempty"`          // An External OAuth Application to use for authenticating to the database
+  AlwaysRetryFailedBuilds  *bool                      `json:"always_retry_failed_builds,omitempty"`    // When true, error PDTs will be retried every regenerator cycle
 }
 
 // Dynamic writeable type for DBConnectionOverride removes:
@@ -4188,6 +4202,7 @@ type WriteSetting struct {
   MarketplaceEnabled            *bool                         `json:"marketplace_enabled,omitempty"`               // Toggle marketplace on or off
   WhitelabelConfiguration       *WriteWhitelabelConfiguration `json:"whitelabel_configuration,omitempty"`          // Dynamic writeable type for WhitelabelConfiguration removes:
  // id, logo_url, favicon_url
+  CustomWelcomeEmail            *CustomWelcomeEmail           `json:"custom_welcome_email,omitempty"`
 }
 
 // Dynamic writeable type for SshServer removes:

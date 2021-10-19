@@ -71,7 +71,6 @@ export const StandaloneApiExplorer: FC<StandaloneApiExplorerProps> = ({
   versionsUrl = '',
 }) => {
   const [specs, setSpecs] = useState<SpecList | undefined>()
-  const [embedded, setEmbedded] = useState<boolean>(headless)
   const [currentVersionsUrl, setCurrentVersionsUrl] =
     useState<string>(versionsUrl)
 
@@ -81,9 +80,6 @@ export const StandaloneApiExplorer: FC<StandaloneApiExplorerProps> = ({
         setCurrentVersionsUrl(result.url)
         const response = result.response
         setSpecs(response.specs)
-        if ('headless' in response) {
-          setEmbedded(response.headless)
-        }
       })
     } else {
       setSpecs(undefined)
@@ -104,7 +100,7 @@ export const StandaloneApiExplorer: FC<StandaloneApiExplorerProps> = ({
             <ApiExplorer
               specs={specs}
               envAdaptor={standaloneEnvAdaptor}
-              headless={embedded}
+              headless={headless}
               setVersionsUrl={setCurrentVersionsUrl}
             />
           ) : (
