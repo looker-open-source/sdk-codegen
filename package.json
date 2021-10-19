@@ -185,6 +185,12 @@
     },
     "overrides": [
       {
+        "files": ["packages/run-it/**/*.ts{,x}", "packages/api-explorer/**/*.ts{,x}", "packages/hackathon/**/*.ts{,x}"],
+        "rules": {
+          "no-restricted-imports": "off"
+        }
+      },
+      {
         "files": [ "packages/sdk-codegen/**/*.ts",  "packages/sdk-codegen-scripts/**/*.ts"],
         "rules": {
           "testing-library/render-result-naming-convention": "off"
@@ -195,7 +201,8 @@
         "rules": {
           "testing-library/render-result-naming-convention": "off",
           "@typescript-eslint/no-empty-function": "off",
-          "@typescript-eslint/ban-ts-comment": "off"
+          "@typescript-eslint/ban-ts-comment": "off",
+          "testing-library/prefer-screen-queries": "off"
         }
       },
       {

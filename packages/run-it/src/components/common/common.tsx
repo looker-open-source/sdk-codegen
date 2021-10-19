@@ -25,20 +25,16 @@
  */
 import styled from 'styled-components'
 import { Heading, Span } from '@looker/components'
+import type { HeadingProps } from '@looker/components'
 
 /**
  * Common styled components to be used across the whole library
  */
 
-export const RunItHeading = styled(Heading)``
+export const RunItHeading = styled(Heading).attrs(
+  ({ mb = 'xsmall', pt = 'xsmall' }: HeadingProps) => ({ mb, pt })
+)``
 
-RunItHeading.defaultProps = {
-  mb: 'xsmall',
-  pt: 'xsmall',
-}
-
-export const DarkSpan = styled(Span)``
-
-DarkSpan.defaultProps = {
-  color: 'text3', // `${({ theme }) => theme.colors.text3}`,
-}
+export const DarkSpan = styled(Span).attrs(({ color = 'text3' }) => ({
+  color,
+}))``
