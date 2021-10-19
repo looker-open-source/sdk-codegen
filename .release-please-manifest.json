@@ -1,5 +1,5 @@
 {
-  ".": "1.16.0",
+  ".": "1.18.0",
   "packages/api-explorer": "0.9.20",
   "packages/code-editor": "0.1.11",
   "packages/extension-api-explorer": "21.16.0",

@@ -1258,6 +1258,22 @@ export interface IDashboard {
    */
   last_viewed_at?: Date
   /**
+   * Time that the Dashboard was most recently updated. (read-only)
+   */
+  updated_at?: Date
+  /**
+   * Id of User that most recently updated the dashboard. (read-only)
+   */
+  last_updater_id?: number
+  /**
+   * Name of User that most recently updated the dashboard. (read-only)
+   */
+  last_updater_name?: string
+  /**
+   * Name of User that created the dashboard. (read-only)
+   */
+  user_name?: string
+  /**
    * configuration option that governs how dashboard loading will happen.
    */
   load_configuration?: string
@@ -5643,6 +5659,10 @@ export interface IRenderTask {
    */
   query_id?: number
   /**
+   * Id of dashboard element to render: UDD dashboard element would be numeric and LookML dashboard element would be model_name::dashboard_title::lookml_link_id (read-only)
+   */
+  dashboard_element_id?: string
+  /**
    * Number of seconds elapsed running queries (read-only)
    */
   query_runtime?: number
@@ -9195,7 +9215,7 @@ export interface IWriteCustomWelcomeEmail {
 
 /**
  * Dynamic writeable type for Dashboard removes:
- * can, content_favorite_id, content_metadata_id, id, model, readonly, refresh_interval_to_i, user_id, created_at, dashboard_elements, dashboard_filters, dashboard_layouts, deleted_at, deleter_id, edit_uri, favorite_count, last_accessed_at, last_viewed_at, view_count
+ * can, content_favorite_id, content_metadata_id, id, model, readonly, refresh_interval_to_i, user_id, created_at, dashboard_elements, dashboard_filters, dashboard_layouts, deleted_at, deleter_id, edit_uri, favorite_count, last_accessed_at, last_viewed_at, updated_at, last_updater_id, last_updater_name, user_name, view_count
  */
 export interface IWriteDashboard {
   /**

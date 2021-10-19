@@ -25,7 +25,7 @@
  */
 
 /**
- * 297 API models: 220 Spec, 0 Request, 57 Write, 20 Enum
+ * 298 API models: 221 Spec, 0 Request, 57 Write, 20 Enum
  */
 
 
@@ -63,6 +63,7 @@ data class AccessToken (
  * @property followable Whether or not the alert is followable (read-only)
  * @property id ID of the alert (read-only)
  * @property is_disabled Whether or not the alert is disabled
+ * @property disabled_reason Reason for disabling alert
  * @property is_public Whether or not the alert is public
  * @property investigative_content_type The type of the investigative content Valid values are: "dashboard".
  * @property investigative_content_id The ID of the investigative content. For dashboards, this will be the dashboard ID
@@ -76,26 +77,27 @@ data class AccessToken (
  */
 data class Alert (
     var applied_dashboard_filters: Array<AlertAppliedDashboardFilter>? = null,
-    var comparison_type: ComparisonType? = null,
-    var cron: String? = null,
+    var comparison_type: ComparisonType,
+    var cron: String,
     var custom_title: String? = null,
     var dashboard_element_id: Long? = null,
     var description: String? = null,
-    var destinations: Array<AlertDestination>? = null,
-    var field: AlertField? = null,
+    var destinations: Array<AlertDestination>,
+    var field: AlertField,
     var followed: Boolean? = null,
     var followable: Boolean? = null,
     var id: Long? = null,
     var is_disabled: Boolean? = null,
+    var disabled_reason: String? = null,
     var is_public: Boolean? = null,
     var investigative_content_type: InvestigativeContentType? = null,
     var investigative_content_id: String? = null,
     var investigative_content_title: String? = null,
     var lookml_dashboard_id: String? = null,
     var lookml_link_id: String? = null,
-    var owner_id: Long? = null,
+    var owner_id: Long,
     var owner_display_name: String? = null,
-    var threshold: Double? = null,
+    var threshold: Double,
     var time_series_condition_state: AlertConditionState? = null
 ) : Serializable
 
@@ -106,9 +108,9 @@ data class Alert (
  * @property filter_description Human Readable Filter Description. This may be null or auto-generated. Example `is Los Angeles CA` (read-only)
  */
 data class AlertAppliedDashboardFilter (
-    var filter_title: String? = null,
-    var field_name: String? = null,
-    var filter_value: String? = null,
+    var filter_title: String,
+    var field_name: String,
+    var filter_value: String,
     var filter_description: String? = null
 ) : Serializable
 
@@ -140,8 +142,8 @@ data class AlertDestination (
  * @property filter (Optional / Advance Use) List of fields filter. This further restricts the alert to certain dashboard element's field values. This can be used on top of dashboard filters `applied_dashboard_filters`. To keep thing simple, it's suggested to just use dashboard filters. Example: `{ 'title': '12 Number on Hand', 'name': 'inventory_items.number_on_hand', 'filter': [{ 'field_name': 'inventory_items.id', 'field_value': 12, 'filter_value': null }] }`
  */
 data class AlertField (
-    var title: String? = null,
-    var name: String? = null,
+    var title: String,
+    var name: String,
     var filter: Array<AlertFieldFilter>? = null
 ) : Serializable
 
@@ -151,9 +153,24 @@ data class AlertField (
  * @property filter_value Filter Value. Usually null except for [location](https://docs.looker.com/reference/field-reference/dimension-type-reference#location) type. It'll be a string of lat,long ie `'1.0,56.0'`
  */
 data class AlertFieldFilter (
-    var field_name: String? = null,
-    var field_value: Any? = null,
+    var field_name: String,
+    var field_value: Any,
     var filter_value: String? = null
+) : Serializable
+
+/**
+ * @property owner_id New owner ID of the alert
+ * @property is_disabled Set alert enabled or disabled
+ * @property disabled_reason The reason this alert is disabled
+ * @property is_public Set alert public or private
+ * @property threshold New threshold value
+ */
+data class AlertPatch (
+    var owner_id: Long? = null,
+    var is_disabled: Boolean? = null,
+    var disabled_reason: String? = null,
+    var is_public: Boolean? = null,
+    var threshold: Double? = null
 ) : Serializable
 
 /**
@@ -1143,6 +1160,10 @@ data class CustomWelcomeEmail (
  * @property filters_bar_collapsed Sets the default state of the filters bar to collapsed or open
  * @property last_accessed_at Time the dashboard was last accessed (read-only)
  * @property last_viewed_at Time last viewed in the Looker web UI (read-only)
+ * @property updated_at Time that the Dashboard was most recently updated. (read-only)
+ * @property last_updater_id Id of User that most recently updated the dashboard. (read-only)
+ * @property last_updater_name Name of User that most recently updated the dashboard. (read-only)
+ * @property user_name Name of User that created the dashboard. (read-only)
  * @property load_configuration configuration option that governs how dashboard loading will happen.
  * @property lookml_link_id Links this dashboard to a particular LookML dashboard such that calling a **sync** operation on that LookML dashboard will update this dashboard to match.
  * @property show_filters_bar Show filters bar.  **Security Note:** This property only affects the *cosmetic* appearance of the dashboard, not a user's ability to access data. Hiding the filters bar does **NOT** prevent users from changing filters by other means. For information on how to set up secure data access control policies, see [Control User Access to Data](https://looker.com/docs/r/api/control-access)
@@ -1188,6 +1209,10 @@ data class Dashboard (
     var filters_bar_collapsed: Boolean? = null,
     var last_accessed_at: Date? = null,
     var last_viewed_at: Date? = null,
+    var updated_at: Date? = null,
+    var last_updater_id: Long? = null,
+    var last_updater_name: String? = null,
+    var user_name: String? = null,
     var load_configuration: String? = null,
     var lookml_link_id: String? = null,
     var show_filters_bar: Boolean? = null,
@@ -1578,7 +1603,7 @@ data class DBConnection (
     var snippets: Array<Snippet>? = null,
     var pdts_enabled: Boolean? = null,
     var host: String? = null,
-    var port: Long? = null,
+    var port: String? = null,
     var username: String? = null,
     var password: String? = null,
     var uses_oauth: Boolean? = null,
@@ -3955,6 +3980,7 @@ data class QueryTask (
  * @property look_id Id of look to render (read-only)
  * @property lookml_dashboard_id Id of lookml dashboard to render (read-only)
  * @property query_id Id of query to render (read-only)
+ * @property dashboard_element_id Id of dashboard element to render: UDD dashboard element would be numeric and LookML dashboard element would be model_name::dashboard_title::lookml_link_id (read-only)
  * @property query_runtime Number of seconds elapsed running queries (read-only)
  * @property render_runtime Number of seconds elapsed rendering data (read-only)
  * @property result_format Output format: pdf, png, or jpg (read-only)
@@ -3976,6 +4002,7 @@ data class RenderTask (
     var look_id: Long? = null,
     var lookml_dashboard_id: String? = null,
     var query_id: Long? = null,
+    var dashboard_element_id: String? = null,
     var query_runtime: Double? = null,
     var render_runtime: Double? = null,
     var result_format: String? = null,
@@ -5129,6 +5156,7 @@ data class Workspace (
  * @property destinations Array of destinations to send alerts to. Must be the same type of destination. Example `[{ "destination_type": "EMAIL", "email_address": "test@test.com" }]`
  * @property field
  * @property is_disabled Whether or not the alert is disabled
+ * @property disabled_reason Reason for disabling alert
  * @property is_public Whether or not the alert is public
  * @property investigative_content_type The type of the investigative content Valid values are: "dashboard".
  * @property investigative_content_id The ID of the investigative content. For dashboards, this will be the dashboard ID
@@ -5140,21 +5168,22 @@ data class Workspace (
  */
 data class WriteAlert (
     var applied_dashboard_filters: Array<AlertAppliedDashboardFilter>? = null,
-    var comparison_type: ComparisonType? = null,
-    var cron: String? = null,
+    var comparison_type: ComparisonType,
+    var cron: String,
     var custom_title: String? = null,
     var dashboard_element_id: Long? = null,
     var description: String? = null,
-    var destinations: Array<AlertDestination>? = null,
-    var field: AlertField? = null,
+    var destinations: Array<AlertDestination>,
+    var field: AlertField,
     var is_disabled: Boolean? = null,
+    var disabled_reason: String? = null,
     var is_public: Boolean? = null,
     var investigative_content_type: InvestigativeContentType? = null,
     var investigative_content_id: String? = null,
     var lookml_dashboard_id: String? = null,
     var lookml_link_id: String? = null,
-    var owner_id: Long? = null,
-    var threshold: Double? = null,
+    var owner_id: Long,
+    var threshold: Double,
     var time_series_condition_state: AlertConditionState? = null
 ) : Serializable
 
@@ -5372,7 +5401,7 @@ data class WriteCredentialsEmail (
 
 /**
  * Dynamic writeable type for Dashboard removes:
- * can, content_favorite_id, content_metadata_id, id, model, readonly, refresh_interval_to_i, user_id, created_at, dashboard_elements, dashboard_filters, dashboard_layouts, deleted_at, deleter_id, edit_uri, favorite_count, last_accessed_at, last_viewed_at, view_count, url
+ * can, content_favorite_id, content_metadata_id, id, model, readonly, refresh_interval_to_i, user_id, created_at, dashboard_elements, dashboard_filters, dashboard_layouts, deleted_at, deleter_id, edit_uri, favorite_count, last_accessed_at, last_viewed_at, updated_at, last_updater_id, last_updater_name, user_name, view_count, url
  *
  * @property description Description
  * @property hidden Is Hidden
@@ -5605,7 +5634,7 @@ data class WriteDatagroup (
 data class WriteDBConnection (
     var name: String? = null,
     var host: String? = null,
-    var port: Long? = null,
+    var port: String? = null,
     var username: String? = null,
     var password: String? = null,
     var certificate: String? = null,

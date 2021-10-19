@@ -100,8 +100,8 @@ jobs:
           - ubuntu
         looker:
           - '21_12'
-          - '21_14'
           - '21_16'
+          - '21_18'
 
     steps:
       - name: Repo Checkout

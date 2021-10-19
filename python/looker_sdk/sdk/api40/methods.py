@@ -133,7 +133,7 @@ class Looker40SDK(api_methods.APIMethods):
         return response
 
     # ### Update select alert fields
-    # # Available fields: `owner_id`, `is_disabled`, `is_public`, `threshold`
+    # # Available fields: `owner_id`, `is_disabled`, `disabled_reason`, `is_public`, `threshold`
     # #
     #
     # PATCH /alerts/{alert_id} -> models.Alert
@@ -141,7 +141,7 @@ class Looker40SDK(api_methods.APIMethods):
         self,
         # ID of an alert
         alert_id: int,
-        body: models.WriteAlert,
+        body: models.AlertPatch,
         transport_options: Optional[transport.TransportOptions] = None,
     ) -> models.Alert:
         """Update select fields on an alert"""
