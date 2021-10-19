@@ -47,7 +47,7 @@ const versionsUrl = new URL(
 
 ReactDOM.render(
   <Router basename={basename}>
-    <StandaloneApiExplorer versionsUrl={versionsUrl} headless={basename} />
+    <StandaloneApiExplorer versionsUrl={versionsUrl} headless={!!basename} />
     <BodyReset />
   </Router>,
   document.getElementById('container')
