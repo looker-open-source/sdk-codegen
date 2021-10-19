@@ -32,7 +32,6 @@ import { Aside, ComponentsProvider, Layout, Page } from '@looker/components'
 import type { SpecList } from '@looker/sdk-codegen'
 import type { RunItSetter } from '@looker/run-it'
 import { funFetch, fallbackFetch, OAuthScene } from '@looker/run-it'
-import { useSelector } from 'react-redux'
 
 import { SearchContext, LodeContext, defaultLodeContextValue } from './context'
 import type { IApixEnvAdaptor } from './utils'
@@ -52,7 +51,7 @@ import {
 } from './reducers'
 import { AppRouter } from './routes'
 import { apixFilesHost } from './utils/lodeUtils'
-import { useActions, useStoreState, isInitialized } from './state'
+import { useActions, useStoreState } from './state'
 
 export interface ApiExplorerProps {
   specs: SpecList
@@ -73,9 +72,8 @@ const ApiExplorer: FC<ApiExplorerProps> = ({
   declarationsLodeUrl = `${apixFilesHost}/declarationsIndex.json`,
   headless = false,
 }) => {
-  useStoreState()
+  const { initialized } = useStoreState()
   const { initAction } = useActions()
-  const initialized = useSelector(isInitialized)
   const location = useLocation()
   const oauthReturn = location.pathname === `/${oAuthPath}`
   const [specState, specDispatch] = useReducer(

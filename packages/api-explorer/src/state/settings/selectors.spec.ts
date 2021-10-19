@@ -23,23 +23,17 @@
  SOFTWARE.
 
  */
-
-import { createStore } from '@looker/redux'
-
+import { createTestStore } from '../../test-utils'
 import { selectSdkLanguage, isInitialized } from './selectors'
-import { slice } from './slice'
 
 const preloadedState = {
   settings: { initialized: false, sdkLanguage: 'Python' },
 }
 
-const mockStore = createStore({
-  preloadedState,
-  reducer: { settings: slice.reducer },
-})
+const testStore = createTestStore()
 
 describe('Settings selectors', () => {
-  const state = mockStore.getState()
+  const state = testStore.getState()
 
   test('selectSdkLanguage selects', () => {
     expect(selectSdkLanguage(state)).toEqual(

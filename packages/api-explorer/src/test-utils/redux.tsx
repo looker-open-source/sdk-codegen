@@ -63,7 +63,7 @@ const preloadedState: RootState = {
   settings: defaultSettingsState,
 }
 
-export const createMockStore = (overrides: Partial<RootState>) =>
+export const createTestStore = (overrides?: Partial<RootState>) =>
   createStore({
     preloadedState: {
       settings: { ...preloadedState.settings, ...overrides?.settings },
