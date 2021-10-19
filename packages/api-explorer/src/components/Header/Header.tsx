@@ -56,7 +56,7 @@ interface HeaderProps {
 
 export const HEADER_REM = 4
 
-export const TOGGLE_LABEL = 'Toggle Navigation'
+export const HEADER_TOGGLE_LABEL = 'Toggle Navigation'
 
 /**
  * Renders the API Explorer header
@@ -80,7 +80,7 @@ export const HeaderLayout: FC<HeaderProps> = ({
         onClick={() => toggleNavigation()}
         icon={<Menu />}
         aria-label="nav toggle"
-        label={TOGGLE_LABEL}
+        label={HEADER_TOGGLE_LABEL}
       />
 
       <Link to={`/${spec.key}`}>

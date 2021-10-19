@@ -43,6 +43,7 @@ import type { RunItSetter } from '@looker/run-it'
 import { funFetch, fallbackFetch, OAuthScene } from '@looker/run-it'
 import { FirstPage } from '@styled-icons/material/FirstPage'
 import { LastPage } from '@styled-icons/material/LastPage'
+
 import { SearchContext, LodeContext, defaultLodeContextValue } from './context'
 import type { IApixEnvAdaptor } from './utils'
 import {
@@ -52,7 +53,14 @@ import {
   registerEnvAdaptor,
   unregisterEnvAdaptor,
 } from './utils'
-import { Header, SideNav, ErrorBoundary, Loader } from './components'
+import {
+  Header,
+  SideNav,
+  ErrorBoundary,
+  Loader,
+  SelectorContainer,
+  HEADER_TOGGLE_LABEL,
+} from './components'
 import {
   specReducer,
   initDefaultSpecState,
@@ -63,8 +71,6 @@ import {
 import { AppRouter } from './routes'
 import { apixFilesHost } from './utils/lodeUtils'
 import { useActions } from './hooks'
-import { TOGGLE_LABEL } from './components/Header'
-import { SelectorContainer } from './components/SelectorContainer'
 
 export interface ApiExplorerProps {
   specs: SpecList
@@ -83,7 +89,7 @@ const ApiExplorer: FC<ApiExplorerProps> = ({
   setVersionsUrl,
   exampleLodeUrl = 'https://raw.githubusercontent.com/looker-open-source/sdk-codegen/main/examplesIndex.json',
   declarationsLodeUrl = `${apixFilesHost}/declarationsIndex.json`,
-  headless = true,
+  headless = false,
 }) => {
   const [initializing, setInitializing] = useState(true)
   const location = useLocation()
@@ -222,7 +228,7 @@ const ApiExplorer: FC<ApiExplorerProps> = ({
                               icon={
                                 hasNavigation ? <FirstPage /> : <LastPage />
                               }
-                              label={TOGGLE_LABEL}
+                              label={HEADER_TOGGLE_LABEL}
                               onClick={() => toggleNavigation()}
                             />
                           </Space>
