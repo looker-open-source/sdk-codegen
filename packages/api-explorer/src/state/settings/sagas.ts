@@ -23,47 +23,57 @@
  SOFTWARE.
 
  */
-import type { PayloadAction } from '@reduxjs/toolkit'
-import { takeEvery, call, put } from 'typed-redux-saga'
+import { takeEvery, call, put, select } from 'typed-redux-saga'
 
 import { EnvAdaptorConstants, getEnvAdaptor } from '../../utils'
-import type { SetSdkLanguageAction } from './slice'
-import { actions, defaultSettingsState } from './slice'
+import type { RootState } from '../store'
+import { actions, defaultSettings } from './slice'
 
+/**
+ * Serializes state to local storage
+ */
+export function* serializeToLocalStorageSaga() {
+  const envAdaptor = getEnvAdaptor()
+  const settings = yield* select((state: RootState) => ({
+    sdkLanguage: state.settings.sdkLanguage,
+  }))
+  yield* call(
+    envAdaptor.localStorageSetItem,
+    EnvAdaptorConstants.LOCALSTORAGE_SETTINGS_KEY,
+    JSON.stringify(settings)
+  )
+}
+
+/**
+ * Returns default settings overridden with any persisted state in local storage
+ */
+export function* deserializeLocalStorage() {
+  const envAdaptor = getEnvAdaptor()
+  const settings = yield* call(
+    envAdaptor.localStorageGetItem,
+    EnvAdaptorConstants.LOCALSTORAGE_SETTINGS_KEY
+  )
+  return settings
+    ? { ...defaultSettings, ...JSON.parse(settings) }
+    : defaultSettings
+}
+
+/**
+ * Initializes the store with default settings and existing persisted settings
+ */
 export function* initSaga() {
   const { initSuccessAction, initFailureAction } = actions
   try {
-    const envAdaptor = getEnvAdaptor()
-    const sdkLanguage = yield* call(
-      envAdaptor.localStorageGetItem,
-      EnvAdaptorConstants.LOCALSTORAGE_SDK_LANGUAGE_KEY
-    )
-
-    yield* put(
-      initSuccessAction({
-        sdkLanguage: sdkLanguage || defaultSettingsState.sdkLanguage,
-      })
-    )
+    const settings = yield* call(deserializeLocalStorage)
+    yield* put(initSuccessAction(settings))
   } catch (error: any) {
     yield* put(initFailureAction(error))
   }
-}
-
-export function* setSdkLanguageSaga(
-  action: PayloadAction<SetSdkLanguageAction>
-) {
-  const envAdaptor = getEnvAdaptor()
-
-  yield* call(
-    envAdaptor.localStorageSetItem,
-    EnvAdaptorConstants.LOCALSTORAGE_SDK_LANGUAGE_KEY,
-    action.payload.sdkLanguage
-  )
 }
 
 export function* saga() {
   const { initAction, setSdkLanguageAction } = actions
 
   yield* takeEvery(initAction, initSaga)
-  yield* takeEvery(setSdkLanguageAction, setSdkLanguageSaga)
+  yield* takeEvery(setSdkLanguageAction, serializeToLocalStorageSaga)
 }

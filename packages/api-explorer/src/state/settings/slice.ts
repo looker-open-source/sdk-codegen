@@ -28,22 +28,29 @@ import type { PayloadAction } from '@reduxjs/toolkit'
 import { createSliceHooks } from '@looker/redux'
 import { saga } from './sagas'
 
-export interface SettingState {
-  initialized: boolean
+export interface UserDefinedSettings {
   sdkLanguage: string
+}
+
+export interface SettingState extends UserDefinedSettings {
+  initialized: boolean
   error?: Error
 }
 
-export const defaultSettingsState: SettingState = {
-  initialized: false,
+export const defaultSettings = {
   sdkLanguage: 'Python',
+}
+
+export const defaultSettingsState: SettingState = {
+  ...defaultSettings,
+  initialized: false,
 }
 
 export interface SetSdkLanguageAction {
   sdkLanguage: string
 }
 
-export interface InitSuccessPayload extends SetSdkLanguageAction {}
+export type InitSuccessPayload = UserDefinedSettings
 
 export const slice = createSlice({
   name: 'settings',
@@ -52,12 +59,12 @@ export const slice = createSlice({
     // eslint-disable-next-line @typescript-eslint/no-empty-function
     initAction() {},
     initSuccessAction(state, action: PayloadAction<InitSuccessPayload>) {
-      state.initialized = true
       state.sdkLanguage = action.payload.sdkLanguage
+      state.initialized = true
     },
     initFailureAction(state, action: PayloadAction<Error>) {
-      state.initialized = false
       state.error = action.payload
+      state.initialized = false
     },
     setSdkLanguageAction(state, action: PayloadAction<SetSdkLanguageAction>) {
       state.sdkLanguage = action.payload.sdkLanguage
@@ -66,4 +73,5 @@ export const slice = createSlice({
 })
 
 export const actions = slice.actions
-export const { useActions, useStoreState } = createSliceHooks(slice, saga)
+export const { useActions, useStoreState: useSettingsStoreState } =
+  createSliceHooks(slice, saga)

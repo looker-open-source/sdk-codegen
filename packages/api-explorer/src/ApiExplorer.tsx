@@ -51,7 +51,7 @@ import {
 } from './reducers'
 import { AppRouter } from './routes'
 import { apixFilesHost } from './utils/lodeUtils'
-import { useActions, useStoreState } from './state'
+import { useActions, useSettingsStoreState } from './state'
 
 export interface ApiExplorerProps {
   specs: SpecList
@@ -72,7 +72,7 @@ const ApiExplorer: FC<ApiExplorerProps> = ({
   declarationsLodeUrl = `${apixFilesHost}/declarationsIndex.json`,
   headless = false,
 }) => {
-  const { initialized } = useStoreState()
+  const { initialized } = useSettingsStoreState()
   const { initAction } = useActions()
   const location = useLocation()
   const oauthReturn = location.pathname === `/${oAuthPath}`
