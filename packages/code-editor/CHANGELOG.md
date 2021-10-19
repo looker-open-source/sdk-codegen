@@ -1,5 +1,25 @@
 # Changelog
 
+### [0.1.11](https://www.github.com/looker-open-source/sdk-codegen/compare/code-editor-v0.1.10...code-editor-v0.1.11) (2021-10-19)
+
+
+### Features
+
+* lots of RunIt form cleanup ([#814](https://www.github.com/looker-open-source/sdk-codegen/issues/814)) ([e92eae8](https://www.github.com/looker-open-source/sdk-codegen/commit/e92eae8fc127a0aa99545ca9c577152c08d59000))
+* Use agenda data for the Hackathon home page ([#842](https://www.github.com/looker-open-source/sdk-codegen/issues/842)) ([0da2523](https://www.github.com/looker-open-source/sdk-codegen/commit/0da25239c3f108cb684309818c33c91c2a7c3278))
+
+
+### Bug Fixes
+
+* Extension Api Explorer markdown link clicks ([#830](https://www.github.com/looker-open-source/sdk-codegen/issues/830)) ([dd8a3f0](https://www.github.com/looker-open-source/sdk-codegen/commit/dd8a3f03b8ea03858271bf55307c7d359631455a))
+
+
+### Dependencies
+
+* The following workspace dependencies were updated
+  * devDependencies
+    * @looker/sdk-codegen bumped from ^21.0.25 to ^21.1.0
+
 ### [0.1.10](https://www.github.com/looker-open-source/sdk-codegen/compare/code-editor-v0.1.9...code-editor-v0.1.10) (2021-09-01)
 
 
