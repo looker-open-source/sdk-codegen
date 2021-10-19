@@ -134,15 +134,15 @@ export const calcAgenda = (swap: AgendaItems, timezone: string) => {
   const agenda = cloneDeep(swap).sort(
     (a, b) => a.start.getTime() - b.start.getTime()
   )
-  agenda.forEach((i, index) => {
-    i.start = zoneDate(i.start, timezone)
+  agenda.forEach((item, index) => {
+    item.start = zoneDate(item.start, timezone)
     // Fill in any missing stop values with the next item's start value
-    if (!i.stop) {
-      if (index <= agenda.length + 1) {
-        i.stop = agenda[index + 1].start
+    if (!item.stop) {
+      if (index < agenda.length) {
+        item.stop = agenda[index + 1].start
       }
     }
-    i.stop = zoneDate(i.stop!, timezone)
+    item.stop = zoneDate(item.stop!, timezone)
   })
   return agenda
 }
