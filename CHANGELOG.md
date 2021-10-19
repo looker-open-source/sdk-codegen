@@ -1,5 +1,36 @@
 # Changelog
 
+## [1.16.0](https://www.github.com/looker-open-source/sdk-codegen/compare/sdk-codegen-all-v1.15.0...sdk-codegen-all-v1.16.0) (2021-10-19)
+
+
+### Features
+
+* @looker/redux package ([#843](https://www.github.com/looker-open-source/sdk-codegen/issues/843)) ([b2267a0](https://www.github.com/looker-open-source/sdk-codegen/commit/b2267a0ee07bb5c10bd760cd25addeff74fd0a66))
+* 21.16 release ([#859](https://www.github.com/looker-open-source/sdk-codegen/issues/859)) ([0b4385c](https://www.github.com/looker-open-source/sdk-codegen/commit/0b4385c83c5225acf0a9b0c76f9e890600a449af))
+* closest path match for API Explorer ([#811](https://www.github.com/looker-open-source/sdk-codegen/issues/811)) ([45fd26f](https://www.github.com/looker-open-source/sdk-codegen/commit/45fd26fb0f325fa90edfec72f835ed3a79b9afeb))
+* headless nav toggle ([#860](https://www.github.com/looker-open-source/sdk-codegen/issues/860)) ([8e66d1b](https://www.github.com/looker-open-source/sdk-codegen/commit/8e66d1bed84cdcf91b92dccdb5cdbb87be5c3f4a))
+* lots of RunIt form cleanup ([#814](https://www.github.com/looker-open-source/sdk-codegen/issues/814)) ([e92eae8](https://www.github.com/looker-open-source/sdk-codegen/commit/e92eae8fc127a0aa99545ca9c577152c08d59000))
+* makeTheCall for Kotlin and type tagging ([#833](https://www.github.com/looker-open-source/sdk-codegen/issues/833)) ([2ca950e](https://www.github.com/looker-open-source/sdk-codegen/commit/2ca950e16c9c172d3e67de58261df16e424efaa3))
+* support either string or numeric JSON values with AnyString ([#848](https://www.github.com/looker-open-source/sdk-codegen/issues/848)) ([9b428f5](https://www.github.com/looker-open-source/sdk-codegen/commit/9b428f5dc871477402f1683cffaadfad55501878))
+* Update Kotlin SDK to use Gson instead of Jackson ([#836](https://www.github.com/looker-open-source/sdk-codegen/issues/836)) ([4d1f789](https://www.github.com/looker-open-source/sdk-codegen/commit/4d1f789fa3b97b0808f06d5d547c96de3ca890ff))
+* Use agenda data for the Hackathon home page ([#842](https://www.github.com/looker-open-source/sdk-codegen/issues/842)) ([0da2523](https://www.github.com/looker-open-source/sdk-codegen/commit/0da25239c3f108cb684309818c33c91c2a7c3278))
+
+
+### Bug Fixes
+
+* add support for okta oauth implicit flow in extension framework ([#847](https://www.github.com/looker-open-source/sdk-codegen/issues/847)) ([6aaa0e5](https://www.github.com/looker-open-source/sdk-codegen/commit/6aaa0e5b829403a6e003162edc72c3e63291c0e5))
+* Extension Api Explorer markdown link clicks ([#830](https://www.github.com/looker-open-source/sdk-codegen/issues/830)) ([dd8a3f0](https://www.github.com/looker-open-source/sdk-codegen/commit/dd8a3f03b8ea03858271bf55307c7d359631455a))
+* intrinsic type params are not Partial<T> ([#819](https://www.github.com/looker-open-source/sdk-codegen/issues/819)) ([4b31490](https://www.github.com/looker-open-source/sdk-codegen/commit/4b31490f7ce5c9593854e56518245c5399ea9548))
+* logic for 2D JSON data detection ([#840](https://www.github.com/looker-open-source/sdk-codegen/issues/840)) ([3d18b93](https://www.github.com/looker-open-source/sdk-codegen/commit/3d18b9359e16aa4923f825e748f82a6049f02062))
+* Property names with special characters in Kotlin SDK ([#838](https://www.github.com/looker-open-source/sdk-codegen/issues/838)) ([40b6b24](https://www.github.com/looker-open-source/sdk-codegen/commit/40b6b24bfedf8ba16b5dbae2abbbdce2f73c1ffd))
+* remove body from REST call if no body elements are defined ([#841](https://www.github.com/looker-open-source/sdk-codegen/issues/841)) ([eb1731f](https://www.github.com/looker-open-source/sdk-codegen/commit/eb1731f2e2d3911fe5044e06321eb9712ddfa419))
+* request content initialization and filtering for RunIt requests ([#852](https://www.github.com/looker-open-source/sdk-codegen/issues/852)) ([474ee93](https://www.github.com/looker-open-source/sdk-codegen/commit/474ee9365dafe6549826a9f627ac0a79dc0e9a56))
+* Sidenav selection ([#831](https://www.github.com/looker-open-source/sdk-codegen/issues/831)) ([52e3ef3](https://www.github.com/looker-open-source/sdk-codegen/commit/52e3ef31a6157a6a544bf712a73d118d22913583))
+* stack overflow for type tagging during codegen ([#845](https://www.github.com/looker-open-source/sdk-codegen/issues/845)) ([4ece1b3](https://www.github.com/looker-open-source/sdk-codegen/commit/4ece1b374d9d4b73c1f3fd0512ab54da209c6be6))
+* type issues, tests and bin/deploy ([#844](https://www.github.com/looker-open-source/sdk-codegen/issues/844)) ([9e4a141](https://www.github.com/looker-open-source/sdk-codegen/commit/9e4a1413d4b6267805c0514dac1def93f5a56cb6))
+* typo with error boundary ([#851](https://www.github.com/looker-open-source/sdk-codegen/issues/851)) ([bb08f25](https://www.github.com/looker-open-source/sdk-codegen/commit/bb08f258354bb6439f08d29f340b1f396841ab12))
+* validateBody for API Explorer ([#846](https://www.github.com/looker-open-source/sdk-codegen/issues/846)) ([d1f203c](https://www.github.com/looker-open-source/sdk-codegen/commit/d1f203c3d843adb76217a750c0f414c608ceab0f))
+
 ## [1.15.0](https://www.github.com/looker-open-source/sdk-codegen/compare/sdk-codegen-all-v1.14.0...sdk-codegen-all-v1.15.0) (2021-09-01)
 
 

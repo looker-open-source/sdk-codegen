@@ -5,6 +5,22 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [21.16.0](https://www.github.com/looker-open-source/sdk-codegen/compare/extension-sdk-v21.14.0...extension-sdk-v21.16.0) (2021-10-19)
+
+
+### Bug Fixes
+
+* add support for okta oauth implicit flow in extension framework ([#847](https://www.github.com/looker-open-source/sdk-codegen/issues/847)) ([6aaa0e5](https://www.github.com/looker-open-source/sdk-codegen/commit/6aaa0e5b829403a6e003162edc72c3e63291c0e5))
+* type issues, tests and bin/deploy ([#844](https://www.github.com/looker-open-source/sdk-codegen/issues/844)) ([9e4a141](https://www.github.com/looker-open-source/sdk-codegen/commit/9e4a1413d4b6267805c0514dac1def93f5a56cb6))
+
+
+### Dependencies
+
+* The following workspace dependencies were updated
+  * dependencies
+    * @looker/sdk bumped from ^21.14.0 to ^21.16.0
+    * @looker/sdk-rtl bumped from ^21.0.20 to ^21.1.0
+
 ## [21.14.0](https://www.github.com/looker-open-source/sdk-codegen/compare/extension-sdk-v21.12.0...extension-sdk-v21.14.0) (2021-09-01)
 
 
