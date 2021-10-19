@@ -2,8 +2,9 @@
   "plugins": ["node-workspace"],
   "bump-minor-pre-major": true,
   "bump-patch-for-minor-pre-major": true,
+  "release-as": "21.16.0",
   "packages": {
-    ".": { "release-as": "21.16.0" },
+    ".": { "release-as": "" },
     "packages/api-explorer": { "release-as": "" },
     "packages/code-editor": { "release-as": "" },
     "packages/extension-api-explorer": { },
