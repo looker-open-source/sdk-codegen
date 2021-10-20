@@ -27,11 +27,11 @@
 import { add } from 'date-fns'
 import { zonedTimeToUtc } from 'date-fns-tz'
 import type { AgendaItems } from './components'
-// const day1 = zonedTimeToUtc('2021-11-10 00:00:00', 'America/Los_Angeles')
-const day1 = zonedTimeToUtc(
-  add(new Date(), { hours: -10 }),
-  'America/Los_Angeles'
-)
+const day1 = zonedTimeToUtc('2021-11-10 00:00:00', 'America/Los_Angeles')
+// const day1 = zonedTimeToUtc(
+//   add(new Date(), { hours: -10 }),
+//   'America/Los_Angeles'
+// )
 const day2 = add(day1, { days: 1 })
 let current = day1
 
@@ -66,10 +66,12 @@ export const agenda = [
     description: {
       en: `_Supported hacking hours_
 
-Use [slack](https://looker.slack.com/hack) to ask Looker staff for assistance`,
+Use [slack](https://app.slack.com/client/T0A4R5X0F/C02ELGL644F) to ask Looker staff for assistance
+
+See [looker-open-source](https://github.com/looker-open-source) for cool stuff!`,
       ja_JP: `_日本 Supported hacking hours_
 
-Use [slack](https://looker.slack.com/hack) to ask Looker staff for assistance`,
+Use [slack](https://app.slack.com/client/T0A4R5X0F/C02ELGL644F) to ask Looker staff for assistance`,
     },
   },
   {

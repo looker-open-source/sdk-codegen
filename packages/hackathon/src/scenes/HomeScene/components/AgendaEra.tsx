@@ -26,40 +26,50 @@
 
 import type { FC } from 'react'
 import React from 'react'
-import { Table, TableBody, Heading, Accordion2, Box2 } from '@looker/components'
+import {
+  Table,
+  TableBody,
+  Heading,
+  Accordion2,
+  Box2,
+  useToggle,
+} from '@looker/components'
 import type { IHackerProps } from '../../../models'
 import type { AgendaItems } from './agendaUtils'
 import { AgendaRow } from './AgendaRow'
+import { eraColor } from './agendaUtils'
 
-interface AgendaProps {
-  era: string
-  agenda: AgendaItems
-  hacker: IHackerProps
-}
-
-const eraColor = (era: string) => {
-  switch (era) {
-    case 'present':
-      return 'calculation'
-    case 'future':
-      return 'dimension'
-    default:
-      return 'neutral'
-  }
-}
-
-const enTitled = (value: string) => {
+/**
+ * Capitalize first letter of each word
+ * @param value to capitalize
+ */
+const enTitle = (value: string) => {
   return value.replace(/\w\S*/g, function (txt) {
     return txt.charAt(0).toUpperCase() + txt.substr(1).toLowerCase()
   })
 }
 
-export const AgendaEra: FC<AgendaProps> = ({ era, agenda, hacker }) => {
+interface AgendaProps {
+  era: string
+  agenda: AgendaItems
+  hacker: IHackerProps
+  defaultOpen?: boolean
+}
+
+export const AgendaEra: FC<AgendaProps> = ({
+  era,
+  agenda,
+  hacker,
+  defaultOpen,
+}) => {
+  const { value, toggle } = useToggle(defaultOpen)
   if (agenda.length < 1) return null
   const color = eraColor(era)
   return (
     <Accordion2
       indicatorPosition="left"
+      isOpen={value}
+      toggleOpen={toggle}
       label={
         <Box2
           px="u4"
@@ -69,19 +79,21 @@ export const AgendaEra: FC<AgendaProps> = ({ era, agenda, hacker }) => {
           width="100%"
         >
           <Heading fontSize="xlarge" color={color} fontWeight="medium">
-            {enTitled(era)}
+            {enTitle(era)}
           </Heading>
         </Box2>
       }
     >
-      <Table>
-        <TableBody>
-          {agenda &&
-            agenda.map((item, index) => (
-              <AgendaRow key={`agenda${index}`} item={item} hacker={hacker} />
-            ))}
-        </TableBody>
-      </Table>
+      <Box2 pl="u6">
+        <Table>
+          <TableBody>
+            {agenda &&
+              agenda.map((item, index) => (
+                <AgendaRow key={`agenda${index}`} item={item} hacker={hacker} />
+              ))}
+          </TableBody>
+        </Table>
+      </Box2>
     </Accordion2>
   )
 }

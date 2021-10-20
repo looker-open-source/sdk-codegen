@@ -28,7 +28,7 @@ import React, { useEffect, useState } from 'react'
 import type { FC } from 'react'
 import type { IHackerProps } from '../../../models'
 import type { AgendaItems, IAgendaEras } from '.'
-import { AgendaEra, agendaEras } from '.'
+import { AgendaEra, agendaEras, Era } from '.'
 
 interface AgendaProps {
   schedule: AgendaItems
@@ -36,16 +36,31 @@ interface AgendaProps {
 }
 
 export const Agenda: FC<AgendaProps> = ({ schedule, hacker }) => {
-  const [eras, setEras] = useState<IAgendaEras>(
+  const [eras, setEras] = useState<IAgendaEras>(() =>
     agendaEras(schedule, hacker.timezone)
   )
+  const [defaultEra, setDefaultEra] = useState<string>(Era.present)
   useEffect(() => {
-    setEras(agendaEras(schedule, hacker.timezone))
+    const newEras = agendaEras(schedule, hacker.timezone)
+    setEras(newEras)
+    if (newEras.present.length > 0) {
+      setDefaultEra(Era.present)
+    } else if (newEras.future.length > 0) {
+      setDefaultEra(Era.future)
+    } else {
+      setDefaultEra(Era.past)
+    }
   }, [schedule, hacker])
   return (
     <>
-      {Object.keys(eras).map((k) => (
-        <AgendaEra era={k} key={k} agenda={eras[k]} hacker={hacker} />
+      {Object.keys(eras).map((era) => (
+        <AgendaEra
+          era={era}
+          key={era}
+          agenda={eras[era]}
+          hacker={hacker}
+          defaultOpen={era === defaultEra}
+        />
       ))}
     </>
   )

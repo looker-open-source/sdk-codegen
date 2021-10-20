@@ -30,13 +30,25 @@ application: hackathon_app {
     local_storage: no
     navigation: yes
     new_window: yes
-    new_window_external_urls: []
+    new_window_external_urls: [
+      "https://*.looker.com/*",
+      "https://*.google.com/*",
+      "https://*.bit.ly/*",
+      "https://*.imgur.com/*",
+      "https://*.slack.com/*",
+      "https://*.github.com/*",
+      "https://*.youtube.com/*",
+      "https://*.vimeo.com/*"
+      ]
     use_form_submit: yes
     use_embeds: no
     use_iframes: no
     use_clipboard: no
     external_api_urls: ["http://localhost:8081/*", "https://sheets.googleapis.com/*"]
-    core_api_methods: ["me", "all_roles", "all_user_attributes", "delete_user_attribute", "create_user_attribute", "search_groups", "search_users", "user_roles", "role_users", "user_attribute_user_values"]
+    core_api_methods: [
+      "me", "all_roles", "all_user_attributes", "delete_user_attribute", "create_user_attribute", "search_groups",
+      "search_users", "user_roles", "role_users", "user_attribute_user_values"
+      ]
     oauth2_urls: []
     scoped_user_attributes: ["sheet_id", "token_server_url"]
   }

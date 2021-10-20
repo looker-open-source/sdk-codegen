@@ -34,6 +34,11 @@ const before = add(now, { hours: -1 })
 const after = add(now, { hours: 1 })
 const english = 'en'
 const japanese = 'ja_JP'
+export const eraSchedule: AgendaItems = [
+  { start: before, stop: add(now, { minutes: -1 }), description: 'past' },
+  { start: now, stop: add(now, { minutes: 30 }), description: 'present' },
+  { start: add(now, { minutes: 30 }), stop: after, description: 'future' },
+]
 
 describe('agendaUtils', () => {
   describe('spanEta', () => {
@@ -74,20 +79,15 @@ describe('agendaUtils', () => {
   })
 
   test('agendaPeriods', () => {
-    const schedule: AgendaItems = [
-      { start: before, stop: add(now, { minutes: -1 }), description: 'past' },
-      { start: now, stop: add(now, { minutes: 30 }), description: 'present' },
-      { start: add(now, { minutes: 30 }), stop: after, description: 'future' },
-    ]
     const current = now.getTime()
-    expect(current).toBeGreaterThan(schedule[0].start.getTime())
-    expect(current).toBeGreaterThan(schedule[0].stop!.getTime())
-    expect(current).toBeGreaterThanOrEqual(schedule[1].start.getTime())
-    expect(current).toBeLessThan(schedule[1].stop!.getTime())
-    expect(current).toBeLessThan(schedule[2].start.getTime())
-    expect(current).toBeLessThan(schedule[2].stop!.getTime())
+    expect(current).toBeGreaterThan(eraSchedule[0].start.getTime())
+    expect(current).toBeGreaterThan(eraSchedule[0].stop!.getTime())
+    expect(current).toBeGreaterThanOrEqual(eraSchedule[1].start.getTime())
+    expect(current).toBeLessThan(eraSchedule[1].stop!.getTime())
+    expect(current).toBeLessThan(eraSchedule[2].start.getTime())
+    expect(current).toBeLessThan(eraSchedule[2].stop!.getTime())
 
-    const actual = agendaEras(schedule, pt, now)
+    const actual = agendaEras(eraSchedule, pt, now)
     expect(actual.past).toHaveLength(1)
     expect(actual.present).toHaveLength(1)
     expect(actual.future).toHaveLength(1)

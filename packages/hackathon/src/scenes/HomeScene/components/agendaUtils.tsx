@@ -73,7 +73,7 @@ export const monthDay = (value: AgendaTime, locale: string) => {
   return dateString(value, locale, 'MMM do')
 }
 
-export const spanDate = (
+export const gapDate = (
   start: AgendaTime,
   stop: AgendaTime,
   locale: string
@@ -85,7 +85,7 @@ export const spanDate = (
   return result
 }
 
-export const spanTime = (
+export const gapTime = (
   start: AgendaTime,
   stop: AgendaTime,
   locale: string
@@ -105,6 +105,23 @@ export const diff = (first: AgendaTime, second: AgendaTime, locale: string) => {
   })
 }
 
+export enum Era {
+  present = 'present',
+  future = 'future',
+  past = 'past',
+}
+
+export const eraColor = (era: string) => {
+  switch (era) {
+    case Era.present:
+      return 'calculation'
+    case Era.future:
+      return 'dimension'
+    default:
+      return 'neutral'
+  }
+}
+
 export const spanEta = (
   now: AgendaTime,
   start: AgendaTime,
@@ -114,13 +131,13 @@ export const spanEta = (
   let color = 'warn'
   let phrase = ''
   if (now < start) {
-    color = 'warn'
+    color = eraColor(Era.future)
     phrase = diff(now, start, locale)
   } else if (now < stop) {
-    color = 'positive'
+    color = eraColor(Era.present)
     phrase = diff(now, stop, locale)
   } else {
-    color = 'critical'
+    color = eraColor(Era.past)
     phrase = diff(now, stop, locale)
   }
   return (

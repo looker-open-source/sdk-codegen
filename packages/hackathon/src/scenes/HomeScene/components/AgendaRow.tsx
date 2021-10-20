@@ -27,9 +27,9 @@
 import type { FC } from 'react'
 import React from 'react'
 import { TableRow, TableDataCell, Heading, Span } from '@looker/components'
-import { Markdown } from '@looker/code-editor'
 import type { IHackerProps } from '../../../models'
-import { spanDate, spanEta, spanTime, zoneDate } from './agendaUtils'
+import { ExtMarkdown } from '../../../components'
+import { gapDate, spanEta, gapTime, zoneDate } from './agendaUtils'
 import type { AgendaTime, IAgendaItem } from './agendaUtils'
 
 interface AgendaCardProps {
@@ -37,27 +37,20 @@ interface AgendaCardProps {
   hacker: IHackerProps
 }
 
-export const rowColor = (item: IAgendaItem) => {
-  if (item.description.startsWith('#')) return '#ccc'
-  if (item.description.startsWith('#')) return '#bbb'
-  if (item.description.startsWith('_')) return '#aaa'
-  return '#white'
-}
-
 export const AgendaRow: FC<AgendaCardProps> = ({ item, hacker }) => {
   const current: AgendaTime = zoneDate(new Date(), hacker.timezone)
   return (
-    <TableRow color={rowColor(item)}>
+    <TableRow>
       <TableDataCell width="20%">
         <Heading fontSize="small" color="text2" fontWeight="bold" as="h5">
-          {spanDate(item.start, item.stop!, hacker.locale)}
+          {gapDate(item.start, item.stop!, hacker.locale)}
         </Heading>
         <Span fontSize="small" color="text2">
-          {spanTime(item.start, item.stop!, hacker.locale)}
+          {gapTime(item.start, item.stop!, hacker.locale)}
         </Span>
       </TableDataCell>
       <TableDataCell>
-        <Markdown source={item.description} />
+        <ExtMarkdown source={item.description} />
       </TableDataCell>
       <TableDataCell width="10%">
         {spanEta(current, item.start, item.stop!, hacker.locale)}

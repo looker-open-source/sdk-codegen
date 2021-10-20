@@ -37,6 +37,8 @@ import { qualifyMarkdownText, prepareCodeText } from './utils'
 import { TableCell } from './TableCell'
 import { MDHeading, MDList, MDListItem, MDParagraph, MDTable } from './common'
 
+type HeadingLevels = 'h1' | 'h2' | 'h3' | 'h4' | 'h5' | 'h6'
+
 interface MarkdownProps {
   source: string
   pattern?: string
@@ -44,8 +46,6 @@ interface MarkdownProps {
   linkClickHandler?: (pathname: string, href: string) => void
   paragraphOverride?: ({ children }: { children: ReactNode }) => ReactNode
 }
-
-type HeadingLevels = 'h1' | 'h2' | 'h3' | 'h4' | 'h5' | 'h6'
 
 export const Markdown: FC<MarkdownProps> = ({
   source,
