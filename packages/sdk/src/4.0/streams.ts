@@ -45,6 +45,7 @@ import { sdkVersion } from '../constants'
 import type {
   IAccessToken,
   IAlert,
+  IAlertPatch,
   IApiSession,
   IApiVersion,
   IBackupConfiguration,
@@ -388,21 +389,21 @@ export class Looker40SDKStream extends APIMethods {
 
   /**
    * ### Update select alert fields
-   * # Available fields: `owner_id`, `is_disabled`, `is_public`, `threshold`
+   * # Available fields: `owner_id`, `is_disabled`, `disabled_reason`, `is_public`, `threshold`
    * #
    *
    * PATCH /alerts/{alert_id} -> IAlert
    *
    * @param callback streaming output function
    * @param alert_id ID of an alert
-   * @param body Partial<IWriteAlert>
+   * @param body Partial<IAlertPatch>
    * @param options one-time API call overrides
    *
    */
   async update_alert_field(
     callback: (readable: Readable) => Promise<IAlert>,
     alert_id: number,
-    body: Partial<IWriteAlert>,
+    body: Partial<IAlertPatch>,
     options?: Partial<ITransportSettings>
   ) {
     return this.authStream<IAlert>(

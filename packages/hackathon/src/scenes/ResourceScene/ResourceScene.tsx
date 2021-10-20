@@ -37,6 +37,7 @@ import {
   CardContent,
   ButtonItem,
 } from '@looker/components'
+import { getExtensionSDK } from '@looker/extension-sdk'
 import { Routes } from '../../routes/AppRouter'
 import { resources } from './resource_data'
 
@@ -68,6 +69,11 @@ export const ResourceScene: FC<ResourceSceneProps> = () => {
     }
   }
 
+  const onClick = (e: React.MouseEvent<HTMLAnchorElement>) => {
+    e.preventDefault()
+    getExtensionSDK().openBrowserWindow(e.currentTarget.href)
+  }
+
   return (
     <>
       <Heading as="h4" fontWeight="bold" px="medium">
@@ -91,9 +97,9 @@ export const ResourceScene: FC<ResourceSceneProps> = () => {
       <Grid padding="medium" columns={3}>
         {selectedResources.map((_k, index) => (
           <Link
-            href={selectedResources[index].link}
-            target="_blank"
+            href={selectedResources[index].shortenedLink}
             key={index}
+            onClick={onClick}
           >
             <Card raised key={index} height="25vh">
               <CardContent>

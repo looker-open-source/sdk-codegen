@@ -47,6 +47,7 @@ import { sdkVersion } from '../constants'
 import type {
   IAccessToken,
   IAlert,
+  IAlertPatch,
   IApiSession,
   IApiVersion,
   IBackupConfiguration,
@@ -377,21 +378,21 @@ export const update_alert = async (
 
 /**
  * ### Update select alert fields
- * # Available fields: `owner_id`, `is_disabled`, `is_public`, `threshold`
+ * # Available fields: `owner_id`, `is_disabled`, `disabled_reason`, `is_public`, `threshold`
  * #
  *
  * PATCH /alerts/{alert_id} -> IAlert
  *
  * @param sdk IAPIMethods implementation
  * @param alert_id ID of an alert
- * @param body Partial<IWriteAlert>
+ * @param body Partial<IAlertPatch>
  * @param options one-time API call overrides
  *
  */
 export const update_alert_field = async (
   sdk: IAPIMethods,
   alert_id: number,
-  body: Partial<IWriteAlert>,
+  body: Partial<IAlertPatch>,
   options?: Partial<ITransportSettings>
 ): Promise<SDKResponse<IAlert, IError | IValidationError>> => {
   return sdk.patch<IAlert, IError | IValidationError>(
