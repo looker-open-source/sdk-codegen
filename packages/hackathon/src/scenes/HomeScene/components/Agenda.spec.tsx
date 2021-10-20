@@ -32,13 +32,6 @@ import type { IHacker } from '../../../models'
 import { Agenda } from './Agenda'
 import { eraSchedule } from './agendaUtils.spec'
 
-// test('DocTitle renders a heading with title prop content', () => {
-//   const title = 'An API Explorer by Looker'
-//   renderWithTheme(<DocTitle>{title}</DocTitle>)
-//   const heading = screen.getByRole('heading')
-//   expect(heading).toHaveTextContent(title)
-// })
-
 const hacker = {
   timezone: 'America/Los_Angeles',
   locale: 'en',
