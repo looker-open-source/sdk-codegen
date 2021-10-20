@@ -32,7 +32,8 @@ import userEvent from '@testing-library/user-event'
 import type { IAPIMethods } from '@looker/sdk-rtl'
 import { formatDateString } from '@looker/components-date'
 import { defaultConfigurator } from '..'
-import { runItNoSet } from '../..'
+import type { RunItInput } from '../..'
+import { initRequestContent, runItNoSet } from '../..'
 import { RequestForm } from './RequestForm'
 
 describe('RequestForm', () => {
@@ -314,26 +315,27 @@ describe('RequestForm', () => {
 
   test('interacting with a complex item changes the request content', async () => {
     const handleSubmit = jest.fn((e) => e.preventDefault())
+    const inputs: RunItInput[] = [
+      {
+        name: 'body',
+        location: 'body',
+        type: {
+          model: 'string',
+          view: 'string',
+          fields: ['string'],
+        },
+        required: true,
+        description: 'Request body',
+      },
+    ]
     renderWithTheme(
       <RequestForm
         configurator={defaultConfigurator}
         setVersionsUrl={runItNoSet}
-        inputs={[
-          {
-            name: 'body',
-            location: 'body',
-            type: {
-              model: 'string',
-              view: 'string',
-              fields: ['string'],
-            },
-            required: true,
-            description: 'Request body',
-          },
-        ]}
+        inputs={inputs}
         handleSubmit={handleSubmit}
         httpMethod={'POST'}
-        requestContent={requestContent}
+        requestContent={initRequestContent(defaultConfigurator, inputs)}
         setRequestContent={setRequestContent}
         needsAuth={false}
         hasConfig={true}

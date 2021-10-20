@@ -26,7 +26,7 @@ SOFTWARE.
 
 /*
 
-423 API methods
+425 API methods
 */
 
 
@@ -59,7 +59,7 @@ func NewLookerSDK(session *rtl.AuthSession) *LookerSDK {
 func (l *LookerSDK) SearchAlerts(request RequestSearchAlerts,
     options *rtl.ApiSettings) ([]Alert, error) {
     var result []Alert
-    err := l.session.Do(&result, "GET", "/4.0", "/alerts/search", map[string]interface{}{"limit": request.Limit, "offset": request.Offset, "fields": request.Fields, "disabled": request.Disabled, "frequency": request.Frequency, "condition_met": request.ConditionMet, "last_run_start": request.LastRunStart, "last_run_end": request.LastRunEnd, "all_owners": request.AllOwners}, nil, options)
+    err := l.session.Do(&result, "GET", "/4.0", "/alerts/search", map[string]interface{}{"limit": request.Limit, "offset": request.Offset, "group_by": request.GroupBy, "fields": request.Fields, "disabled": request.Disabled, "frequency": request.Frequency, "condition_met": request.ConditionMet, "last_run_start": request.LastRunStart, "last_run_end": request.LastRunEnd, "all_owners": request.AllOwners}, nil, options)
     return result, err
 
 }
@@ -92,13 +92,13 @@ func (l *LookerSDK) UpdateAlert(
 }
 
 // ### Update select alert fields
-// # Available fields: `owner_id`, `is_disabled`, `is_public`, `threshold`
+// # Available fields: `owner_id`, `is_disabled`, `disabled_reason`, `is_public`, `threshold`
 // #
 //
 // PATCH /alerts/{alert_id} -> Alert
 func (l *LookerSDK) UpdateAlertField(
     alertId int64,
-    body WriteAlert,
+    body AlertPatch,
     options *rtl.ApiSettings) (Alert, error) {
     var result Alert
     err := l.session.Do(&result, "PATCH", "/4.0", fmt.Sprintf("/alerts/%v", alertId), nil, body, options)
@@ -160,6 +160,18 @@ func (l *LookerSDK) CreateAlert(
     var result Alert
     err := l.session.Do(&result, "POST", "/4.0", "/alerts", nil, body, options)
     return result, err
+
+}
+
+// ### Enqueue an Alert by ID
+//
+// POST /alerts/{alert_id}/enqueue -> Void
+func (l *LookerSDK) EnqueueAlert(
+    alertId int64,
+    force bool,
+    options *rtl.ApiSettings) (error) {
+    err := l.session.Do(nil, "POST", "/4.0", fmt.Sprintf("/alerts/%v/enqueue", alertId), map[string]interface{}{"force": force}, nil, options)
+    return err
 
 }
 
@@ -1395,7 +1407,7 @@ func (l *LookerSDK) CustomWelcomeEmail(
 //
 // PATCH /custom_welcome_email -> CustomWelcomeEmail
 func (l *LookerSDK) UpdateCustomWelcomeEmail(
-    body WriteCustomWelcomeEmail,
+    body CustomWelcomeEmail,
     sendTestWelcomeEmail bool,
     options *rtl.ApiSettings) (CustomWelcomeEmail, error) {
     var result CustomWelcomeEmail
@@ -1565,6 +1577,7 @@ func (l *LookerSDK) MobileSettings(
 //  - marketplace_auto_install_enabled
 //  - marketplace_enabled
 //  - whitelabel_configuration
+//  - custom_welcome_email
 //
 // GET /setting -> Setting
 func (l *LookerSDK) GetSetting(
@@ -1583,6 +1596,7 @@ func (l *LookerSDK) GetSetting(
 //  - marketplace_auto_install_enabled
 //  - marketplace_enabled
 //  - whitelabel_configuration
+//  - custom_welcome_email
 //
 // See the `Setting` type for more information on the specific values that can be configured.
 //
@@ -2484,6 +2498,25 @@ func (l *LookerSDK) DashboardLookml(
 
 }
 
+// ### Move an existing dashboard
+//
+// Moves a dashboard to a specified folder, and returns the moved dashboard.
+//
+// `dashboard_id` and `folder_id` are required.
+// `dashboard_id` and `folder_id` must already exist, and `folder_id` must be different from the current `folder_id` of the dashboard.
+//
+// PATCH /dashboards/{dashboard_id}/move -> Dashboard
+func (l *LookerSDK) MoveDashboard(
+    dashboardId string,
+    folderId string,
+    options *rtl.ApiSettings) (Dashboard, error) {
+    dashboardId = url.PathEscape(dashboardId)
+    var result Dashboard
+    err := l.session.Do(&result, "PATCH", "/4.0", fmt.Sprintf("/dashboards/%v/move", dashboardId), map[string]interface{}{"folder_id": folderId}, nil, options)
+    return result, err
+
+}
+
 // ### Copy an existing dashboard
 //
 // Creates a copy of an existing dashboard, in a specified folder, and returns the copied dashboard.
@@ -2502,25 +2535,6 @@ func (l *LookerSDK) CopyDashboard(
     dashboardId = url.PathEscape(dashboardId)
     var result Dashboard
     err := l.session.Do(&result, "POST", "/4.0", fmt.Sprintf("/dashboards/%v/copy", dashboardId), map[string]interface{}{"folder_id": folderId}, nil, options)
-    return result, err
-
-}
-
-// ### Move an existing dashboard
-//
-// Moves a dashboard to a specified folder, and returns the moved dashboard.
-//
-// `dashboard_id` and `folder_id` are required.
-// `dashboard_id` and `folder_id` must already exist, and `folder_id` must be different from the current `folder_id` of the dashboard.
-//
-// PATCH /dashboards/{dashboard_id}/move -> Dashboard
-func (l *LookerSDK) MoveDashboard(
-    dashboardId string,
-    folderId string,
-    options *rtl.ApiSettings) (Dashboard, error) {
-    dashboardId = url.PathEscape(dashboardId)
-    var result Dashboard
-    err := l.session.Do(&result, "PATCH", "/4.0", fmt.Sprintf("/dashboards/%v/move", dashboardId), map[string]interface{}{"folder_id": folderId}, nil, options)
     return result, err
 
 }
@@ -6808,6 +6822,25 @@ func (l *LookerSDK) SendUserCredentialsEmailPasswordReset(
     options *rtl.ApiSettings) (CredentialsEmail, error) {
     var result CredentialsEmail
     err := l.session.Do(&result, "POST", "/4.0", fmt.Sprintf("/users/%v/credentials_email/send_password_reset", userId), map[string]interface{}{"fields": fields}, nil, options)
+    return result, err
+
+}
+
+// ### Change a disabled user's email addresses
+//
+// Allows the admin to change the email addresses for all the user's
+// associated credentials.  Will overwrite all associated email addresses with
+// the value supplied in the 'email' body param.
+// The user's 'is_disabled' status must be true.
+//
+// POST /users/{user_id}/update_emails -> User
+func (l *LookerSDK) WipeoutUserEmails(
+    userId int64,
+    body UserEmailOnly,
+    fields string,
+    options *rtl.ApiSettings) (User, error) {
+    var result User
+    err := l.session.Do(&result, "POST", "/4.0", fmt.Sprintf("/users/%v/update_emails", userId), map[string]interface{}{"fields": fields}, body, options)
     return result, err
 
 }

@@ -48,7 +48,7 @@ export const ApixSection: FC<SectionProps> = (props: any) => {
       {...props}
       id="top"
       p="xxlarge"
-      style={{ height: `${sectionH}px`, overflow: 'auto' }}
+      style={{ height: `${sectionH}px`, overflow: 'auto', borderTop: '0px' }}
     />
   )
 }

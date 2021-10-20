@@ -26,6 +26,7 @@
 
 import type { FC, Dispatch } from 'react'
 import React from 'react'
+import type { SpaceHelperProps } from '@looker/components'
 import { Space, IconButton } from '@looker/components'
 import { ChangeHistory } from '@styled-icons/material/ChangeHistory'
 import type { SpecList, SpecItem } from '@looker/sdk-codegen'
@@ -35,7 +36,7 @@ import { diffPath } from '../../utils'
 import { SdkLanguageSelector } from './SdkLanguageSelector'
 import { ApiSpecSelector } from './ApiSpecSelector'
 
-interface SelectorContainerProps {
+interface SelectorContainerProps extends SpaceHelperProps {
   /** Specs to choose from */
   specs: SpecList
   /** Current selected spec */
@@ -53,8 +54,9 @@ export const SelectorContainer: FC<SelectorContainerProps> = ({
   specs,
   spec,
   specDispatch,
+  ...spaceProps
 }) => (
-  <Space width="auto">
+  <Space width="auto" {...spaceProps}>
     <SdkLanguageSelector />
     <ApiSpecSelector specs={specs} spec={spec} specDispatch={specDispatch} />
     <Link to={`/${diffPath}/${spec.key}/`}>

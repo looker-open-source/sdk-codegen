@@ -1,5 +1,24 @@
 # Changelog
 
+## [21.16.0](https://www.github.com/looker-open-source/sdk-codegen/compare/hackathon-v21.14.0...hackathon-v21.16.0) (2021-10-19)
+
+
+### Features
+
+* Use agenda data for the Hackathon home page ([#842](https://www.github.com/looker-open-source/sdk-codegen/issues/842)) ([0da2523](https://www.github.com/looker-open-source/sdk-codegen/commit/0da25239c3f108cb684309818c33c91c2a7c3278))
+
+
+### Dependencies
+
+* The following workspace dependencies were updated
+  * dependencies
+    * @looker/sdk bumped from * to ^21.16.0
+    * @looker/sdk-rtl bumped from * to ^21.1.0
+    * @looker/code-editor bumped from * to ^0.1.11
+    * @looker/wholly-sheet bumped from * to ^0.5.17
+    * @looker/extension-sdk bumped from * to ^21.16.0
+    * @looker/extension-sdk-react bumped from * to ^21.16.0
+
 ## [21.14.0](https://www.github.com/looker-open-source/sdk-codegen/compare/hackathon-v21.12.0...hackathon-v21.14.0) (2021-09-01)
 
 

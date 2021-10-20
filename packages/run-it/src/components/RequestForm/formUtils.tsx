@@ -34,7 +34,12 @@ import {
   Box,
   Popover,
   InputText,
+  Tooltip,
+  Icon,
+  Space,
 } from '@looker/components'
+// eslint-disable-next-line no-restricted-imports
+import { Info } from '@styled-icons/material'
 import { DateFormat, InputDate } from '@looker/components-date'
 import { CodeEditor } from '@looker/code-editor'
 
@@ -246,22 +251,40 @@ export const createComplexItem = (
   input: RunItInput,
   handleComplexChange: (value: string, name: string) => void,
   requestContent: RunItValues
-) => (
-  <FormItem key={`${input.name}_fic`} id={input.name} label={input.name}>
-    <CodeEditor
-      key={`code_${input.name}`}
-      language="json"
-      code={
-        input.name in requestContent
-          ? requestContent[input.name]
-          : JSON.stringify(input.type, null, 2)
+) => {
+  const content = requestContent[input.name]
+  const code =
+    typeof content === 'string' ? content : JSON.stringify(content, null, 2)
+
+  return (
+    <FormItem
+      key={`${input.name}_fic`}
+      id={input.name}
+      label={
+        <Space>
+          {input.name}
+          <Tooltip content="Empty values are automatically removed from the request.">
+            <Icon
+              data-testid="body-param-tooltip"
+              icon={<Info />}
+              size="xsmall"
+              ml="xsmall"
+            />
+          </Tooltip>
+        </Space>
       }
-      lineNumbers={false}
-      onChange={handleComplexChange.bind(null, input.name)}
-      transparent={true}
-    />
-  </FormItem>
-)
+    >
+      <CodeEditor
+        key={`code_${input.name}`}
+        language="json"
+        code={code}
+        lineNumbers={false}
+        onChange={handleComplexChange.bind(null, input.name)}
+        transparent={true}
+      />
+    </FormItem>
+  )
+}
 
 /**
  * Creates a required checkbox form item
