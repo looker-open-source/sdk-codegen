@@ -33,8 +33,10 @@ import { enUS, ja } from 'date-fns/locale'
 import { utcToZonedTime } from 'date-fns-tz'
 import cloneDeep from 'lodash/cloneDeep'
 
+/** Alias for Date in case AgendaTime needs to be someting else in the future */
 export type AgendaTime = Date
 
+/** an agenda entry */
 export interface IAgendaItem {
   /** Markdown description of agenda item */
   description: string
@@ -46,10 +48,19 @@ export interface IAgendaItem {
 
 export type AgendaItems = Array<IAgendaItem>
 
-export const zoneDate = (time: AgendaTime, zone: string) => {
-  return utcToZonedTime(time, zone)
+/**
+ * Apply timezone to a date
+ * @param date to zone
+ * @param zone zone to apply
+ */
+export const zoneDate = (date: AgendaTime, zone: string) => {
+  return utcToZonedTime(date, zone)
 }
 
+/**
+ * Localization of date/time is not exhaustive. Currently, only Japanese and English are imported
+ * @param locale anything but `ja_JP` defaults to `en`
+ */
 export const dateLocale = (locale: string) => (locale === 'ja_JP' ? ja : enUS)
 
 /**
@@ -69,10 +80,24 @@ export const dateString = (
   return format(value, template, { locale: dateLocale(locale) })
 }
 
-export const monthDay = (value: AgendaTime, locale: string) => {
-  return dateString(value, locale, 'MMM do')
+/**
+ * Display the Month abbreviation and nth day
+ * @param date to display
+ * @param locale for display
+ */
+export const monthDay = (date: AgendaTime, locale: string) => {
+  return dateString(date, locale, 'MMM do')
 }
 
+/**
+ * String showing localized start and stop date
+ *
+ * If the start and stop are the same day, only one Mon Day is shown
+ *
+ * @param start time
+ * @param stop time
+ * @param locale for display
+ */
 export const gapDate = (
   start: AgendaTime,
   stop: AgendaTime,
@@ -85,6 +110,12 @@ export const gapDate = (
   return result
 }
 
+/**
+ * String showing localized start and stop time
+ * @param start time
+ * @param stop time
+ * @param locale for display
+ */
 export const gapTime = (
   start: AgendaTime,
   stop: AgendaTime,
@@ -98,6 +129,12 @@ export const gapTime = (
   )}`
 }
 
+/**
+ * the textual difference between two times
+ * @param first time to compare
+ * @param second time to compare
+ * @param locale for displaying difference
+ */
 export const diff = (first: AgendaTime, second: AgendaTime, locale: string) => {
   return formatDistance(second, first, {
     addSuffix: true,
@@ -111,6 +148,10 @@ export enum Era {
   past = 'past',
 }
 
+/**
+ * Base color for an era
+ * @param era to colorize
+ */
 export const eraColor = (era: string) => {
   switch (era) {
     case Era.present:
@@ -122,6 +163,13 @@ export const eraColor = (era: string) => {
   }
 }
 
+/**
+ * Colorized span describing time difference
+ * @param now diff comparison centerpoint
+ * @param start time of item
+ * @param stop time of item
+ * @param locale for displaying diff
+ */
 export const spanEta = (
   now: AgendaTime,
   start: AgendaTime,
@@ -147,8 +195,13 @@ export const spanEta = (
   )
 }
 
-export const calcAgenda = (swap: AgendaItems, timezone: string) => {
-  const agenda = cloneDeep(swap).sort(
+/**
+ * Sort chronologically, assign default stops, set to timezone
+ * @param schedule to zone
+ * @param timezone to assign
+ */
+export const calcAgenda = (schedule: AgendaItems, timezone: string) => {
+  const agenda = cloneDeep(schedule).sort(
     (a, b) => a.start.getTime() - b.start.getTime()
   )
   agenda.forEach((item, index) => {
@@ -164,12 +217,19 @@ export const calcAgenda = (swap: AgendaItems, timezone: string) => {
   return agenda
 }
 
+/** Era buckets for schedule */
 export interface IAgendaEras {
   past: AgendaItems
   present: AgendaItems
   future: AgendaItems
 }
 
+/**
+ * Default stops, set timezone, and put agenda items into era buckets
+ * @param schedule to process
+ * @param timezone to apply
+ * @param current time to use for bucketing
+ */
 export const agendaEras = (
   schedule: AgendaItems,
   timezone: string,

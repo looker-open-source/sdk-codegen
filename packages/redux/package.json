@@ -7,6 +7,7 @@
   "main": "src/index.ts",
   "devDependencies": {
     "@testing-library/react-hooks": "^7.0.2",
+    "@testing-library/react": "^12.1.2",
     "@types/lodash": "^4.14.175",
     "@types/react": "^17.0.27",
     "@types/react-redux": "^7.1.18",
@@ -19,7 +20,6 @@
   },
   "dependencies": {
     "@reduxjs/toolkit": "^1.6.2",
-    "@testing-library/react": "^12.1.2",
     "react": "^17.0.2",
     "redux": "^4.1.1"
   }
