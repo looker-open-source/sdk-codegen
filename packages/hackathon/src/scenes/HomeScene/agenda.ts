@@ -27,7 +27,11 @@
 import { add } from 'date-fns'
 import { zonedTimeToUtc } from 'date-fns-tz'
 import type { AgendaItems } from './components'
-const day1 = zonedTimeToUtc('2021-11-10 00:00:00', 'America/Los_Angeles')
+// const day1 = zonedTimeToUtc('2021-11-10 00:00:00', 'America/Los_Angeles')
+const day1 = zonedTimeToUtc(
+  add(new Date(), { hours: -10 }),
+  'America/Los_Angeles'
+)
 const day2 = add(day1, { days: 1 })
 let current = day1
 
@@ -185,7 +189,7 @@ Use [slack](https://looker.slack.com/hack) to ask Looker staff for assistance`,
   },
 ]
 
-const localAgenda = (loc: string): AgendaItems =>
+export const localAgenda = (loc: string): AgendaItems =>
   agenda.map((i) => {
     return {
       start: i.start,
@@ -193,6 +197,3 @@ const localAgenda = (loc: string): AgendaItems =>
       description: i.description[loc] ? i.description[loc] : i.description.en,
     }
   })
-
-export const agendaEn = localAgenda('en')
-export const agendaJa = localAgenda('ja_JP')

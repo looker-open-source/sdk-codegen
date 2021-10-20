@@ -24,12 +24,11 @@
 
  */
 
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import type { FC } from 'react'
-import { Table, TableBody } from '@looker/components'
 import type { IHackerProps } from '../../../models'
-import type { AgendaItems } from '.'
-import { calcAgenda, AgendaRow } from '.'
+import type { AgendaItems, IAgendaEras } from '.'
+import { AgendaEra, agendaEras } from '.'
 
 interface AgendaProps {
   schedule: AgendaItems
@@ -37,15 +36,17 @@ interface AgendaProps {
 }
 
 export const Agenda: FC<AgendaProps> = ({ schedule, hacker }) => {
-  const agenda = calcAgenda(schedule, hacker.timezone)
+  const [eras, setEras] = useState<IAgendaEras>(
+    agendaEras(schedule, hacker.timezone)
+  )
+  useEffect(() => {
+    setEras(agendaEras(schedule, hacker.timezone))
+  }, [schedule, hacker])
   return (
-    <Table>
-      <TableBody>
-        {agenda &&
-          agenda.map((item, index) => (
-            <AgendaRow key={`agenda${index}`} item={item} hacker={hacker} />
-          ))}
-      </TableBody>
-    </Table>
+    <>
+      {Object.keys(eras).map((k) => (
+        <AgendaEra era={k} key={k} agenda={eras[k]} hacker={hacker} />
+      ))}
+    </>
   )
 }

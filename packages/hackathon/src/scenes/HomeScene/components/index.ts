@@ -25,5 +25,6 @@
  */
 
 export * from './Agenda'
+export * from './AgendaEra'
 export * from './AgendaRow'
 export * from './agendaUtils'

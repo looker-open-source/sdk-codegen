@@ -29,15 +29,15 @@ import React from 'react'
 
 import { Heading, SpaceVertical } from '@looker/components'
 import type { IHackerProps } from '../../models'
-import { agendaEn, agendaJa } from './agenda'
 import { Agenda } from './components'
+import { localAgenda } from './agenda'
 
 interface HomeSceneProps {
   hacker: IHackerProps
 }
 
 export const HomeScene: FC<HomeSceneProps> = ({ hacker }) => {
-  const agenda = hacker.locale === 'ja_JP' ? agendaJa : agendaEn
+  const schedule = localAgenda(hacker.locale)
 
   return (
     <>
@@ -45,7 +45,7 @@ export const HomeScene: FC<HomeSceneProps> = ({ hacker }) => {
         <Heading as="h2" fontSize="xxxlarge" fontWeight="medium">
           Agenda
         </Heading>
-        <Agenda schedule={agenda} hacker={hacker} />
+        <Agenda schedule={schedule} hacker={hacker} />
       </SpaceVertical>
     </>
   )

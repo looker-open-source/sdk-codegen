@@ -25,16 +25,18 @@
  */
 
 import { add } from 'date-fns'
-import { spanEta } from './agendaUtils'
+import type { AgendaItems } from './agendaUtils'
+import { agendaEras, spanEta } from './agendaUtils'
+
+const pt = 'America/Los_Angeles'
+const now = new Date()
+const before = add(now, { hours: -1 })
+const after = add(now, { hours: 1 })
+const english = 'en'
+const japanese = 'ja_JP'
 
 describe('agendaUtils', () => {
   describe('spanEta', () => {
-    const now = new Date()
-    const before = add(now, { hours: -1 })
-    const after = add(now, { hours: 1 })
-    const english = 'en'
-    const japanese = 'ja_JP'
-
     describe('in English', () => {
       const locale = english
       test('it shows before', () => {
@@ -69,5 +71,25 @@ describe('agendaUtils', () => {
         expect(actual.props.children).toEqual('30分前')
       })
     })
+  })
+
+  test('agendaPeriods', () => {
+    const schedule: AgendaItems = [
+      { start: before, stop: add(now, { minutes: -1 }), description: 'past' },
+      { start: now, stop: add(now, { minutes: 30 }), description: 'present' },
+      { start: add(now, { minutes: 30 }), stop: after, description: 'future' },
+    ]
+    const current = now.getTime()
+    expect(current).toBeGreaterThan(schedule[0].start.getTime())
+    expect(current).toBeGreaterThan(schedule[0].stop!.getTime())
+    expect(current).toBeGreaterThanOrEqual(schedule[1].start.getTime())
+    expect(current).toBeLessThan(schedule[1].stop!.getTime())
+    expect(current).toBeLessThan(schedule[2].start.getTime())
+    expect(current).toBeLessThan(schedule[2].stop!.getTime())
+
+    const actual = agendaEras(schedule, pt, now)
+    expect(actual.past).toHaveLength(1)
+    expect(actual.present).toHaveLength(1)
+    expect(actual.future).toHaveLength(1)
   })
 })

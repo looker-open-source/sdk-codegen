@@ -48,7 +48,7 @@ export const AgendaRow: FC<AgendaCardProps> = ({ item, hacker }) => {
   const current: AgendaTime = zoneDate(new Date(), hacker.timezone)
   return (
     <TableRow color={rowColor(item)}>
-      <TableDataCell>
+      <TableDataCell width="20%">
         <Heading fontSize="small" color="text2" fontWeight="bold" as="h5">
           {spanDate(item.start, item.stop!, hacker.locale)}
         </Heading>
@@ -59,7 +59,7 @@ export const AgendaRow: FC<AgendaCardProps> = ({ item, hacker }) => {
       <TableDataCell>
         <Markdown source={item.description} />
       </TableDataCell>
-      <TableDataCell>
+      <TableDataCell width="10%">
         {spanEta(current, item.start, item.stop!, hacker.locale)}
       </TableDataCell>
     </TableRow>

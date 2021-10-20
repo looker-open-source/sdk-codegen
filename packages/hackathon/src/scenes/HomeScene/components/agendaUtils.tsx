@@ -36,12 +36,12 @@ import cloneDeep from 'lodash/cloneDeep'
 export type AgendaTime = Date
 
 export interface IAgendaItem {
+  /** Markdown description of agenda item */
+  description: string
   /** Start datetime of agenda item */
   start: AgendaTime
   /** End of agenda item. If not specified, the next chronological event will be its end time */
   stop?: AgendaTime
-  /** Markdown description of agenda item */
-  description: string
 }
 
 export type AgendaItems = Array<IAgendaItem>
@@ -85,6 +85,19 @@ export const spanDate = (
   return result
 }
 
+export const spanTime = (
+  start: AgendaTime,
+  stop: AgendaTime,
+  locale: string
+) => {
+  const template = 'K:mm b'
+  return `${dateString(start, locale, template)} - ${dateString(
+    stop,
+    locale,
+    template
+  )}`
+}
+
 export const diff = (first: AgendaTime, second: AgendaTime, locale: string) => {
   return formatDistance(second, first, {
     addSuffix: true,
@@ -117,19 +130,6 @@ export const spanEta = (
   )
 }
 
-export const spanTime = (
-  start: AgendaTime,
-  stop: AgendaTime,
-  locale: string
-) => {
-  const template = 'K:mm b'
-  return `${dateString(start, locale, template)} - ${dateString(
-    stop,
-    locale,
-    template
-  )}`
-}
-
 export const calcAgenda = (swap: AgendaItems, timezone: string) => {
   const agenda = cloneDeep(swap).sort(
     (a, b) => a.start.getTime() - b.start.getTime()
@@ -145,4 +145,36 @@ export const calcAgenda = (swap: AgendaItems, timezone: string) => {
     item.stop = zoneDate(item.stop!, timezone)
   })
   return agenda
+}
+
+export interface IAgendaEras {
+  past: AgendaItems
+  present: AgendaItems
+  future: AgendaItems
+}
+
+export const agendaEras = (
+  schedule: AgendaItems,
+  timezone: string,
+  current: Date = new Date()
+): IAgendaEras => {
+  const time = zoneDate(current, timezone).getTime()
+  const agenda = calcAgenda(schedule, timezone)
+  const result: IAgendaEras = {
+    past: [],
+    present: [],
+    future: [],
+  }
+  agenda.forEach((item) => {
+    const start = item.start.getTime()
+    const stop = item.stop!.getTime()
+    if (time < start) {
+      result.future.push(item)
+    } else if (time < stop) {
+      result.present.push(item)
+    } else {
+      result.past.push(item)
+    }
+  })
+  return result
 }
