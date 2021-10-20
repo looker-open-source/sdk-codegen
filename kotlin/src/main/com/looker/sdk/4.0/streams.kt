@@ -119,17 +119,17 @@ class LookerSDKStream(authSession: AuthSession) : APIMethods(authSession) {
 
     /**
      * ### Update select alert fields
-     * # Available fields: `owner_id`, `is_disabled`, `is_public`, `threshold`
+     * # Available fields: `owner_id`, `is_disabled`, `disabled_reason`, `is_public`, `threshold`
      * #
      *
      * @param {Long} alert_id ID of an alert
-     * @param {WriteAlert} body
+     * @param {AlertPatch} body
      *
      * PATCH /alerts/{alert_id} -> ByteArray
      */
     fun update_alert_field(
         alert_id: Long,
-        body: WriteAlert
+        body: AlertPatch
     ) : SDKResponse {
         val path_alert_id = encodeParam(alert_id)
             return this.patch<ByteArray>("/alerts/${path_alert_id}", mapOf(), body)

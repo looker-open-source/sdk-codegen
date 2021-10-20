@@ -135,7 +135,7 @@ open class LookerSDK: APIMethods {
 
     /**
      * ### Update select alert fields
-     * # Available fields: `owner_id`, `is_disabled`, `is_public`, `threshold`
+     * # Available fields: `owner_id`, `is_disabled`, `disabled_reason`, `is_public`, `threshold`
      * #
      *
      * PATCH /alerts/{alert_id} -> Alert
@@ -146,9 +146,9 @@ open class LookerSDK: APIMethods {
          */
         _ alert_id: Int64,
         /**
-         * @param {WriteAlert} body
+         * @param {AlertPatch} body
          */
-        _ body: WriteAlert,
+        _ body: AlertPatch,
         options: ITransportSettings? = nil
     ) -> SDKResponse<Alert, SDKError> {
         let path_alert_id = encodeParam(alert_id)

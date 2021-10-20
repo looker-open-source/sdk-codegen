@@ -92,13 +92,13 @@ func (l *LookerSDK) UpdateAlert(
 }
 
 // ### Update select alert fields
-// # Available fields: `owner_id`, `is_disabled`, `is_public`, `threshold`
+// # Available fields: `owner_id`, `is_disabled`, `disabled_reason`, `is_public`, `threshold`
 // #
 //
 // PATCH /alerts/{alert_id} -> Alert
 func (l *LookerSDK) UpdateAlertField(
     alertId int64,
-    body WriteAlert,
+    body AlertPatch,
     options *rtl.ApiSettings) (Alert, error) {
     var result Alert
     err := l.session.Do(&result, "PATCH", "/4.0", fmt.Sprintf("/alerts/%v", alertId), nil, body, options)

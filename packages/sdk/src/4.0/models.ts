@@ -25,7 +25,7 @@
  */
 
 /**
- * 351 API models: 220 Spec, 54 Request, 57 Write, 20 Enum
+ * 352 API models: 221 Spec, 54 Request, 57 Write, 20 Enum
  */
 
 import type { IDictionary, DelimArray } from '@looker/sdk-rtl'
@@ -61,11 +61,11 @@ export interface IAlert {
   /**
    * This property informs the check what kind of comparison we are performing. Only certain condition types are valid for time series alerts. For details, refer to [Setting Alert Conditions](https://docs.looker.com/sharing-and-publishing/creating-alerts#setting_alert_conditions) Valid values are: "EQUAL_TO", "GREATER_THAN", "GREATER_THAN_OR_EQUAL_TO", "LESS_THAN", "LESS_THAN_OR_EQUAL_TO", "INCREASES_BY", "DECREASES_BY", "CHANGES_BY".
    */
-  comparison_type?: ComparisonType
+  comparison_type: ComparisonType
   /**
    * Vixie-Style crontab specification when to run. At minumum, it has to be longer than 15 minute intervals
    */
-  cron?: string
+  cron: string
   /**
    * An optional, user-defined title for the alert
    */
@@ -81,8 +81,8 @@ export interface IAlert {
   /**
    * Array of destinations to send alerts to. Must be the same type of destination. Example `[{ "destination_type": "EMAIL", "email_address": "test@test.com" }]`
    */
-  destinations?: IAlertDestination[]
-  field?: IAlertField
+  destinations: IAlertDestination[]
+  field: IAlertField
   /**
    * Whether or not the user follows this alert. (read-only)
    */
@@ -99,6 +99,10 @@ export interface IAlert {
    * Whether or not the alert is disabled
    */
   is_disabled?: boolean
+  /**
+   * Reason for disabling alert
+   */
+  disabled_reason?: string
   /**
    * Whether or not the alert is public
    */
@@ -126,7 +130,7 @@ export interface IAlert {
   /**
    * User id of alert owner
    */
-  owner_id?: number
+  owner_id: number
   /**
    * Alert owner's display name (read-only)
    */
@@ -134,7 +138,7 @@ export interface IAlert {
   /**
    * Value of the alert threshold
    */
-  threshold?: number
+  threshold: number
   time_series_condition_state?: IAlertConditionState
 }
 
@@ -142,15 +146,15 @@ export interface IAlertAppliedDashboardFilter {
   /**
    * Field Title. Refer to `DashboardFilter.title` in [DashboardFilter](#!/types/DashboardFilter). Example `Name`
    */
-  filter_title?: string
+  filter_title: string
   /**
    * Field Name. Refer to `DashboardFilter.dimension` in [DashboardFilter](#!/types/DashboardFilter). Example `distribution_centers.name`
    */
-  field_name?: string
+  field_name: string
   /**
    * Field Value. [Filter Expressions](https://docs.looker.com/reference/filter-expressions). Example `Los Angeles CA`
    */
-  filter_value?: string
+  filter_value: string
   /**
    * Human Readable Filter Description. This may be null or auto-generated. Example `is Los Angeles CA` (read-only)
    */
@@ -191,11 +195,11 @@ export interface IAlertField {
   /**
    * Field's title. Usually auto-generated to reflect field name and its filters
    */
-  title?: string
+  title: string
   /**
    * Field's name. Has the format `<view>.<field>` Refer to [docs](https://docs.looker.com/sharing-and-publishing/creating-alerts) for more details
    */
-  name?: string
+  name: string
   /**
    * (Optional / Advance Use) List of fields filter. This further restricts the alert to certain dashboard element's field values. This can be used on top of dashboard filters `applied_dashboard_filters`. To keep thing simple, it's suggested to just use dashboard filters. Example: `{ 'title': '12 Number on Hand', 'name': 'inventory_items.number_on_hand', 'filter': [{ 'field_name': 'inventory_items.id', 'field_value': 12, 'filter_value': null }] }`
    */
@@ -206,15 +210,38 @@ export interface IAlertFieldFilter {
   /**
    * Field Name. Has format `<view>.<field>`
    */
-  field_name?: string
+  field_name: string
   /**
    * Field Value. Depends on the type of field - numeric or string. For [location](https://docs.looker.com/reference/field-reference/dimension-type-reference#location) type, it's a list of floats. Example `[1.0, 56.0]`
    */
-  field_value?: any
+  field_value: any
   /**
    * Filter Value. Usually null except for [location](https://docs.looker.com/reference/field-reference/dimension-type-reference#location) type. It'll be a string of lat,long ie `'1.0,56.0'`
    */
   filter_value?: string
+}
+
+export interface IAlertPatch {
+  /**
+   * New owner ID of the alert
+   */
+  owner_id?: number
+  /**
+   * Set alert enabled or disabled
+   */
+  is_disabled?: boolean
+  /**
+   * The reason this alert is disabled
+   */
+  disabled_reason?: string
+  /**
+   * Set alert public or private
+   */
+  is_public?: boolean
+  /**
+   * New threshold value
+   */
+  threshold?: number
 }
 
 /**
@@ -1808,6 +1835,22 @@ export interface IDashboard {
    */
   last_viewed_at?: Date
   /**
+   * Time that the Dashboard was most recently updated. (read-only)
+   */
+  updated_at?: Date
+  /**
+   * Id of User that most recently updated the dashboard. (read-only)
+   */
+  last_updater_id?: number
+  /**
+   * Name of User that most recently updated the dashboard. (read-only)
+   */
+  last_updater_name?: string
+  /**
+   * Name of User that created the dashboard. (read-only)
+   */
+  user_name?: string
+  /**
    * configuration option that governs how dashboard loading will happen.
    */
   load_configuration?: string
@@ -2403,7 +2446,7 @@ export interface IDBConnection {
   /**
    * Port number on server
    */
-  port?: number
+  port?: string
   /**
    * Username for server authentication
    */
@@ -6401,6 +6444,10 @@ export interface IRenderTask {
    */
   query_id?: number
   /**
+   * Id of dashboard element to render: UDD dashboard element would be numeric and LookML dashboard element would be model_name::dashboard_title::lookml_link_id (read-only)
+   */
+  dashboard_element_id?: string
+  /**
    * Number of seconds elapsed running queries (read-only)
    */
   query_runtime?: number
@@ -10057,11 +10104,11 @@ export interface IWriteAlert {
   /**
    * This property informs the check what kind of comparison we are performing. Only certain condition types are valid for time series alerts. For details, refer to [Setting Alert Conditions](https://docs.looker.com/sharing-and-publishing/creating-alerts#setting_alert_conditions) Valid values are: "EQUAL_TO", "GREATER_THAN", "GREATER_THAN_OR_EQUAL_TO", "LESS_THAN", "LESS_THAN_OR_EQUAL_TO", "INCREASES_BY", "DECREASES_BY", "CHANGES_BY".
    */
-  comparison_type?: ComparisonType
+  comparison_type: ComparisonType
   /**
    * Vixie-Style crontab specification when to run. At minumum, it has to be longer than 15 minute intervals
    */
-  cron?: string
+  cron: string
   /**
    * An optional, user-defined title for the alert
    */
@@ -10077,12 +10124,16 @@ export interface IWriteAlert {
   /**
    * Array of destinations to send alerts to. Must be the same type of destination. Example `[{ "destination_type": "EMAIL", "email_address": "test@test.com" }]`
    */
-  destinations?: IAlertDestination[]
-  field?: IAlertField
+  destinations: IAlertDestination[]
+  field: IAlertField
   /**
    * Whether or not the alert is disabled
    */
   is_disabled?: boolean
+  /**
+   * Reason for disabling alert
+   */
+  disabled_reason?: string
   /**
    * Whether or not the alert is public
    */
@@ -10106,11 +10157,11 @@ export interface IWriteAlert {
   /**
    * User id of alert owner
    */
-  owner_id?: number
+  owner_id: number
   /**
    * Value of the alert threshold
    */
-  threshold?: number
+  threshold: number
   time_series_condition_state?: IAlertConditionState
 }
 
@@ -10430,7 +10481,7 @@ export interface IWriteCredentialsEmail {
 
 /**
  * Dynamic writeable type for Dashboard removes:
- * can, content_favorite_id, content_metadata_id, id, model, readonly, refresh_interval_to_i, user_id, created_at, dashboard_elements, dashboard_filters, dashboard_layouts, deleted_at, deleter_id, edit_uri, favorite_count, last_accessed_at, last_viewed_at, view_count, url
+ * can, content_favorite_id, content_metadata_id, id, model, readonly, refresh_interval_to_i, user_id, created_at, dashboard_elements, dashboard_filters, dashboard_layouts, deleted_at, deleter_id, edit_uri, favorite_count, last_accessed_at, last_viewed_at, updated_at, last_updater_id, last_updater_name, user_name, view_count, url
  */
 export interface IWriteDashboard {
   /**
@@ -10763,7 +10814,7 @@ export interface IWriteDBConnection {
   /**
    * Port number on server
    */
-  port?: number
+  port?: string
   /**
    * Username for server authentication
    */
