@@ -32,7 +32,7 @@ import { actions, defaultSettings } from './slice'
 /**
  * Serializes state to local storage
  */
-export function* serializeToLocalStorageSaga() {
+function* serializeToLocalStorageSaga() {
   const envAdaptor = getEnvAdaptor()
   const settings = yield* select((state: RootState) => ({
     sdkLanguage: state.settings.sdkLanguage,
@@ -47,7 +47,7 @@ export function* serializeToLocalStorageSaga() {
 /**
  * Returns default settings overridden with any persisted state in local storage
  */
-export function* deserializeLocalStorage() {
+function* deserializeLocalStorage() {
   const envAdaptor = getEnvAdaptor()
   const settings = yield* call(
     envAdaptor.localStorageGetItem,
@@ -61,7 +61,7 @@ export function* deserializeLocalStorage() {
 /**
  * Initializes the store with default settings and existing persisted settings
  */
-export function* initSaga() {
+function* initSaga() {
   const { initSuccessAction, initFailureAction } = actions
   try {
     const settings = yield* call(deserializeLocalStorage)
