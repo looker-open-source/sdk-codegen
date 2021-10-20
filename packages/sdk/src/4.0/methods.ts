@@ -45,6 +45,7 @@ import type { ILooker40SDK } from './methodsInterface'
 import type {
   IAccessToken,
   IAlert,
+  IAlertPatch,
   IApiSession,
   IApiVersion,
   IBackupConfiguration,
@@ -372,19 +373,19 @@ export class Looker40SDK extends APIMethods implements ILooker40SDK {
 
   /**
    * ### Update select alert fields
-   * # Available fields: `owner_id`, `is_disabled`, `is_public`, `threshold`
+   * # Available fields: `owner_id`, `is_disabled`, `disabled_reason`, `is_public`, `threshold`
    * #
    *
    * PATCH /alerts/{alert_id} -> IAlert
    *
    * @param alert_id ID of an alert
-   * @param body Partial<IWriteAlert>
+   * @param body Partial<IAlertPatch>
    * @param options one-time API call overrides
    *
    */
   async update_alert_field(
     alert_id: number,
-    body: Partial<IWriteAlert>,
+    body: Partial<IAlertPatch>,
     options?: Partial<ITransportSettings>
   ): Promise<SDKResponse<IAlert, IError | IValidationError>> {
     return this.patch<IAlert, IError | IValidationError>(
