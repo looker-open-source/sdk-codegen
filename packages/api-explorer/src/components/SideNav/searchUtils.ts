@@ -27,8 +27,8 @@
 import { useState, useEffect } from 'react'
 import type { TagList, TypeList } from '@looker/sdk-codegen'
 
-export const useDebounce = (value: any, delay: number) => {
-  const [debouncedValue, setDebouncedValue] = useState()
+export const useDebounce = <T>(value: T, delay: number): T => {
+  const [debouncedValue, setDebouncedValue] = useState(value)
   useEffect(() => {
     // Update debounced value only once delay has been elapsed
     const handler = setTimeout(() => {

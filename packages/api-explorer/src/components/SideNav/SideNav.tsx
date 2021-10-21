@@ -142,7 +142,7 @@ export const SideNav: FC<SideNavProps> = ({ headless = false, spec }) => {
       methodCount: countMethods(newTags),
       searchResults: results,
     })
-    setSearchPatternAction({ searchPattern: debouncedPattern! })
+    setSearchPatternAction({ searchPattern: debouncedPattern })
   }, [
     debouncedPattern,
     specKey,
