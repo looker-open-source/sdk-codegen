@@ -25,18 +25,30 @@ project_name: "hackathon_app"
 application: hackathon_app {
   label: "Hackathon"
   url: "https://localhost:8080/dist/bundle.js"
-   # file: "bundle.js"
+  # file: "bundle.js"
   entitlements: {
     local_storage: no
     navigation: yes
     new_window: yes
-    new_window_external_urls: []
+    new_window_external_urls: [
+      "https://*.looker.com/*",
+      "https://*.google.com/*",
+      "https://*.bit.ly/*",
+      "https://*.imgur.com/*",
+      "https://*.slack.com/*",
+      "https://*.github.com/*",
+      "https://*.youtube.com/*",
+      "https://*.vimeo.com/*"
+      ]
     use_form_submit: yes
     use_embeds: no
     use_iframes: no
     use_clipboard: no
     external_api_urls: ["http://localhost:8081/*", "https://sheets.googleapis.com/*"]
-    core_api_methods: ["me", "all_roles", "all_user_attributes", "delete_user_attribute", "create_user_attribute", "search_groups", "search_users", "user_roles", "role_users", "search_roles", "create_group", "set_role_groups", "set_user_attribute_group_values", "set_user_attribute_user_value", "create_user_credentials_email", "send_user_credentials_email_password_reset", "create_user_credentials_api3", "add_group_user", "update_user", "create_user", "search_groups_with_roles", "role_groups"]
+    core_api_methods: [
+      "me", "all_roles", "all_user_attributes", "delete_user_attribute", "create_user_attribute", "search_groups",
+      "search_users", "user_roles", "role_users", "user_attribute_user_values"
+      ]
     oauth2_urls: []
     scoped_user_attributes: ["sheet_id", "token_server_url"]
   }
@@ -79,7 +91,7 @@ You need to be a Looker Admin to set up the Hackathon extension and add users.
 - Add a new row in the `hackathons` tab for your hackathon. To override which hackathon the extension views, set the `default` column of the desired hackathon row to `TRUE`.
 - Grant your service account access to the new GSheet
 - Open the Hackathon extension in Looker.
-- Configure Hackathon extension GSheet connection 
+- Configure Hackathon extension GSheet connection
   - Admin | Configuration
     - Provide the requested values
     - Submit
@@ -91,4 +103,4 @@ You need to be a Looker Admin to set up the Hackathon extension and add users.
     -  Add Users with CSV or individually
     -  Submit
   -  Reload the page
-- Create `Hackathon Staff` and `Hackathon Judge` roles, set up their permissions, and and assign them to users. 
+- Create `Hackathon Staff` and `Hackathon Judge` roles, set up their permissions, and and assign them to users.

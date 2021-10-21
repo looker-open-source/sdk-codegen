@@ -82,7 +82,7 @@ export const Hackathon: FC<HackathonProps> = () => {
             <SideNav authorizedRoutes={authorizedRoutes} />
           </Aside>
           <Section>
-            <AppRouter authorizedRoutes={authorizedRoutes} />
+            <AppRouter authorizedRoutes={authorizedRoutes} hacker={hacker} />
           </Section>
         </Layout>
       </Page>

@@ -24,29 +24,8 @@
 
  */
 
-import type { FC } from 'react'
-import React from 'react'
-
-import { Heading, SpaceVertical } from '@looker/components'
-import type { IHackerProps } from '../../models'
-import { Agenda } from './components'
-import { localAgenda } from './agenda'
-
-interface HomeSceneProps {
-  hacker: IHackerProps
-}
-
-export const HomeScene: FC<HomeSceneProps> = ({ hacker }) => {
-  const schedule = localAgenda(hacker.locale)
-
-  return (
-    <>
-      <SpaceVertical gap="u5">
-        <Heading as="h2" fontSize="xxxlarge" fontWeight="medium">
-          Agenda
-        </Heading>
-        <Agenda schedule={schedule} hacker={hacker} />
-      </SpaceVertical>
-    </>
-  )
-}
+export * from './ExtMarkdown'
+export * from './Header'
+export * from './Loading'
+export * from './Scroller'
+export * from './SideNav'

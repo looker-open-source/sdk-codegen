@@ -26,6 +26,7 @@
 
 import type { ISheet, SheetSDK } from '@looker/wholly-sheet'
 import { noDate } from '@looker/wholly-sheet'
+import { add } from 'date-fns'
 import { initSheetSDK } from '../../../wholly-sheet/src/testUtils/testUtils'
 import {
   mockAHacker,
@@ -64,13 +65,22 @@ describe('SheetData', () => {
       expect(actual.teamMembers.checkHeader()).toEqual(true)
       expect(actual.technologies.checkHeader()).toEqual(true)
     })
-    test('gets current hackathon', () => {
-      data.hackathons.rows.forEach((h) => (h.default = false))
-      const actual = data.hackathons.getCurrentHackathon()
-      expect(actual).toBeDefined()
-      expect(actual?.judging_stops.getTime()).toBeGreaterThan(
-        new Date().getTime()
-      )
+    describe('current hackathon detection', () => {
+      test('always gets a hackathon', () => {
+        data.hackathons.rows.forEach((h) => (h.default = false))
+        const actual = data.hackathons.getCurrentHackathon()
+        expect(actual).toBeDefined()
+      })
+      test('gets next hackathon as current', () => {
+        data.hackathons.rows.forEach((h) => (h.default = false))
+        data.hackathons.rows[data.hackathons.rows.length - 1].judging_stops =
+          add(new Date(), { hours: 8 })
+        const actual = data.hackathons.getCurrentHackathon()
+        expect(actual).toBeDefined()
+        expect(actual?.judging_stops.getTime()).toBeGreaterThan(
+          new Date().getTime()
+        )
+      })
     })
     test('registers a user', async () => {
       const hackathon = data.currentHackathon
