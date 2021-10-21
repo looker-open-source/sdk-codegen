@@ -24,6 +24,14 @@
 
  */
 
-export * from './permissions'
-export * from './tabs'
-export * from './csv_parse'
+import type { RootState } from '../root_reducer'
+import type { ADD_STAGES } from './reducer'
+
+export const getUsersAddedState = (state: RootState): number =>
+  state.addUserState.usersAdded
+
+export const getNumUsersToAddState = (state: RootState): number =>
+  state.addUserState.usersToAdd.length
+
+export const getStage = (state: RootState): ADD_STAGES =>
+  state.addUserState.stage
