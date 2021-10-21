@@ -162,23 +162,20 @@ export const gapDiff = (
 }
 
 /**
- * Sort chronologically, assign default stops, set to timezone
- * @param schedule to zone
- * @param timezone to assign
+ * Sort chronologically, assign default stops
+ * @param schedule to fill out
  */
-export const calcAgenda = (schedule: AgendaItems, timezone: string) => {
+export const calcAgenda = (schedule: AgendaItems) => {
   const agenda = cloneDeep(schedule).sort(
     (a, b) => a.start.getTime() - b.start.getTime()
   )
   agenda.forEach((item, index) => {
-    item.start = zoneDate(item.start, timezone)
     // Fill in any missing stop values with the next item's start value
     if (!item.stop) {
       if (index < agenda.length - 1) {
         item.stop = agenda[index + 1].start
       }
     }
-    item.stop = zoneDate(item.stop!, timezone)
   })
   return agenda
 }
@@ -215,16 +212,14 @@ export const eraColor = (era: string) => {
 /**
  * Default stops, set timezone, and put agenda items into era buckets
  * @param schedule to process
- * @param timezone to apply
  * @param current time to use for bucketing
  */
 export const agendaEras = (
   schedule: AgendaItems,
-  timezone: string,
   current: Date = new Date()
 ): IAgendaEras => {
-  const time = zoneDate(current, timezone).getTime()
-  const agenda = calcAgenda(schedule, timezone)
+  const time = current.getTime()
+  const agenda = calcAgenda(schedule)
   const result: IAgendaEras = {
     past: [],
     present: [],

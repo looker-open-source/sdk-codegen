@@ -40,14 +40,16 @@ interface AgendaCardProps {
 
 export const AgendaRow: FC<AgendaCardProps> = ({ item, hacker, color }) => {
   const current: AgendaTime = zoneDate(new Date(), hacker.timezone)
+  const start = zoneDate(item.start, hacker.timezone)
+  const stop = zoneDate(item.stop!, hacker.timezone)
   return (
     <TableRow>
       <TableDataCell width="20%">
         <Heading fontSize="small" color="text2" fontWeight="bold" as="h5">
-          {gapDate(item.start, item.stop!, hacker.locale)}
+          {gapDate(start, stop, hacker.locale)}
         </Heading>
         <Span fontSize="small" color="text2">
-          {gapTime(item.start, item.stop!, hacker.locale)}
+          {gapTime(start, stop, hacker.locale)}
         </Span>
       </TableDataCell>
       <TableDataCell>
@@ -55,7 +57,7 @@ export const AgendaRow: FC<AgendaCardProps> = ({ item, hacker, color }) => {
       </TableDataCell>
       <TableDataCell width="10%">
         <Span fontSize="small" color={color}>
-          {gapDiff(current, item.start, item.stop!, hacker.locale)}
+          {gapDiff(current, start, stop, hacker.locale)}
         </Span>
       </TableDataCell>
     </TableRow>

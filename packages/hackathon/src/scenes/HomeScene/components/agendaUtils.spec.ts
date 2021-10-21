@@ -28,7 +28,6 @@ import { add } from 'date-fns'
 import type { AgendaItems } from './agendaUtils'
 import { agendaEras, gapDiff } from './agendaUtils'
 
-const pt = 'America/Los_Angeles'
 const now = new Date()
 const before = add(now, { hours: -1 })
 const after = add(now, { hours: 1 })
@@ -87,7 +86,7 @@ describe('agendaUtils', () => {
     expect(current).toBeLessThan(eraSchedule[2].start.getTime())
     expect(current).toBeLessThan(eraSchedule[2].stop!.getTime())
 
-    const actual = agendaEras(eraSchedule, pt, now)
+    const actual = agendaEras(eraSchedule, now)
     expect(actual.past).toHaveLength(1)
     expect(actual.present).toHaveLength(1)
     expect(actual.future).toHaveLength(1)
