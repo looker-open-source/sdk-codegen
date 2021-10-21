@@ -23,12 +23,20 @@
  SOFTWARE.
 
  */
+import { createStore } from '@looker/redux'
 
-import type { Store } from 'redux'
-import { createStore } from 'redux'
-import { reducers } from './reducers'
+import type { SettingState } from './settings'
+import { defaultSettingsState, slice } from './settings'
 
-export type RootState = ReturnType<typeof reducers>
+export const store = createStore({
+  preloadedState: {
+    settings: defaultSettingsState,
+  },
+  reducer: {
+    settings: slice.reducer,
+  },
+})
 
-export const configureStore = (preloadedState?: RootState): Store<RootState> =>
-  createStore(reducers, preloadedState)
+export interface RootState {
+  settings: SettingState
+}
