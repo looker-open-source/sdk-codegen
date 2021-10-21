@@ -26,7 +26,7 @@
 
 import { add } from 'date-fns'
 import type { AgendaItems } from './agendaUtils'
-import { agendaEras, spanEta } from './agendaUtils'
+import { agendaEras, gapDiff } from './agendaUtils'
 
 const pt = 'America/Los_Angeles'
 const now = new Date()
@@ -45,35 +45,35 @@ describe('agendaUtils', () => {
     describe('in English', () => {
       const locale = english
       test('it shows before', () => {
-        const actual = spanEta(now, add(now, { minutes: 30 }), after, locale)
-        expect(actual.props.children).toEqual('in 30 minutes')
+        const actual = gapDiff(now, add(now, { minutes: 30 }), after, locale)
+        expect(actual).toEqual('in 30 minutes')
       })
 
       test('it shows during', () => {
-        const actual = spanEta(now, before, after, locale)
-        expect(actual.props.children).toEqual('in about 1 hour')
+        const actual = gapDiff(now, before, after, locale)
+        expect(actual).toEqual('in about 1 hour')
       })
 
       test('it shows after', () => {
-        const actual = spanEta(now, before, add(now, { minutes: -30 }), locale)
-        expect(actual.props.children).toEqual('30 minutes ago')
+        const actual = gapDiff(now, before, add(now, { minutes: -30 }), locale)
+        expect(actual).toEqual('30 minutes ago')
       })
     })
     describe('in Japanese', () => {
       const locale = japanese
       test('it shows before', () => {
-        const actual = spanEta(now, add(now, { minutes: 30 }), after, locale)
-        expect(actual.props.children).toEqual('30分後')
+        const actual = gapDiff(now, add(now, { minutes: 30 }), after, locale)
+        expect(actual).toEqual('30分後')
       })
 
       test('it shows during', () => {
-        const actual = spanEta(now, before, after, locale)
-        expect(actual.props.children).toEqual('約1時間後')
+        const actual = gapDiff(now, before, after, locale)
+        expect(actual).toEqual('約1時間後')
       })
 
       test('it shows after', () => {
-        const actual = spanEta(now, before, add(now, { minutes: -30 }), locale)
-        expect(actual.props.children).toEqual('30分前')
+        const actual = gapDiff(now, before, add(now, { minutes: -30 }), locale)
+        expect(actual).toEqual('30分前')
       })
     })
   })

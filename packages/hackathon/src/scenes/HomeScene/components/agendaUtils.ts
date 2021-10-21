@@ -24,8 +24,6 @@
 
  */
 
-import { Span } from '@looker/components'
-import React from 'react'
 // eslint-disable-next-line import/no-duplicates
 import { format, formatDistance } from 'date-fns'
 // eslint-disable-next-line import/no-duplicates
@@ -142,57 +140,25 @@ export const diff = (first: AgendaTime, second: AgendaTime, locale: string) => {
   })
 }
 
-export enum Era {
-  present = 'present',
-  future = 'future',
-  past = 'past',
-}
-
 /**
- * Base color for an era
- * @param era to colorize
- */
-export const eraColor = (era: string) => {
-  switch (era) {
-    case Era.present:
-      return 'calculation'
-    case Era.future:
-      return 'dimension'
-    default:
-      return 'neutral'
-  }
-}
-
-/**
- * Colorized span describing time difference
+ * text describing the time difference for a start/stop time period compared to "now"
  * @param now diff comparison centerpoint
  * @param start time of item
  * @param stop time of item
  * @param locale for displaying diff
  */
-export const spanEta = (
+export const gapDiff = (
   now: AgendaTime,
   start: AgendaTime,
   stop: AgendaTime,
   locale: string
 ) => {
-  let color = 'warn'
-  let phrase = ''
   if (now < start) {
-    color = eraColor(Era.future)
-    phrase = diff(now, start, locale)
+    return diff(now, start, locale)
   } else if (now < stop) {
-    color = eraColor(Era.present)
-    phrase = diff(now, stop, locale)
-  } else {
-    color = eraColor(Era.past)
-    phrase = diff(now, stop, locale)
+    return diff(now, stop, locale)
   }
-  return (
-    <Span fontSize="small" color={color}>
-      {phrase}
-    </Span>
-  )
+  return diff(now, stop, locale)
 }
 
 /**
@@ -217,11 +183,33 @@ export const calcAgenda = (schedule: AgendaItems, timezone: string) => {
   return agenda
 }
 
-/** Era buckets for schedule */
+/** Era buckets */
+export enum Era {
+  present = 'present',
+  future = 'future',
+  past = 'past',
+}
+
+/** Era buckets for a schedule */
 export interface IAgendaEras {
   past: AgendaItems
   present: AgendaItems
   future: AgendaItems
+}
+
+/**
+ * Base color for an era
+ * @param era to colorize
+ */
+export const eraColor = (era: string) => {
+  switch (era) {
+    case Era.present:
+      return 'calculation'
+    case Era.future:
+      return 'dimension'
+    default:
+      return 'neutral'
+  }
 }
 
 /**

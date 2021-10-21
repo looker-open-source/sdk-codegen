@@ -41,7 +41,7 @@ export const Agenda: FC<AgendaProps> = ({ schedule, hacker }) => {
   )
   const [defaultEra, setDefaultEra] = useState<string>(Era.present)
 
-  const calcDefaultEras = (newEras: IAgendaEras) => {
+  const calcDefaultEra = (newEras: IAgendaEras) => {
     setEras(newEras)
     if (newEras.present.length > 0) {
       setDefaultEra(Era.present)
@@ -53,7 +53,7 @@ export const Agenda: FC<AgendaProps> = ({ schedule, hacker }) => {
   }
 
   useEffect(() => {
-    calcDefaultEras(agendaEras(schedule, hacker.timezone))
+    calcDefaultEra(agendaEras(schedule, hacker.timezone))
   }, [schedule, hacker])
 
   // TODO resurrect this after figuring out EF issues

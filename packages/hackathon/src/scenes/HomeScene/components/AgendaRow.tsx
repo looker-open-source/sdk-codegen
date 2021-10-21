@@ -29,15 +29,16 @@ import React from 'react'
 import { TableRow, TableDataCell, Heading, Span } from '@looker/components'
 import type { IHackerProps } from '../../../models'
 import { ExtMarkdown } from '../../../components'
-import { gapDate, spanEta, gapTime, zoneDate } from './agendaUtils'
+import { gapDate, gapDiff, gapTime, zoneDate } from './agendaUtils'
 import type { AgendaTime, IAgendaItem } from './agendaUtils'
 
 interface AgendaCardProps {
   item: IAgendaItem
   hacker: IHackerProps
+  color: string
 }
 
-export const AgendaRow: FC<AgendaCardProps> = ({ item, hacker }) => {
+export const AgendaRow: FC<AgendaCardProps> = ({ item, hacker, color }) => {
   const current: AgendaTime = zoneDate(new Date(), hacker.timezone)
   return (
     <TableRow>
@@ -53,7 +54,9 @@ export const AgendaRow: FC<AgendaCardProps> = ({ item, hacker }) => {
         <ExtMarkdown source={item.description} />
       </TableDataCell>
       <TableDataCell width="10%">
-        {spanEta(current, item.start, item.stop!, hacker.locale)}
+        <Span fontSize="small" color={color}>
+          {gapDiff(current, item.start, item.stop!, hacker.locale)}
+        </Span>
       </TableDataCell>
     </TableRow>
   )

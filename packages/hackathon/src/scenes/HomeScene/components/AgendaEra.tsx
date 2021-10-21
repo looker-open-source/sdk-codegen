@@ -89,7 +89,12 @@ export const AgendaEra: FC<AgendaProps> = ({
           <TableBody>
             {agenda &&
               agenda.map((item, index) => (
-                <AgendaRow key={`agenda${index}`} item={item} hacker={hacker} />
+                <AgendaRow
+                  key={`agenda${index}`}
+                  item={item}
+                  hacker={hacker}
+                  color={color}
+                />
               ))}
           </TableBody>
         </Table>
