@@ -30,6 +30,7 @@ import { applyMiddleware, createStore } from 'redux'
 import { registerProjectsSagas } from './projects/sagas'
 import { registerHackSessionSagas } from './hack_session/sagas'
 import { registerAdminSagas } from './admin/sagas'
+import { registerAddUserSagas } from './add_user/sagas'
 import { rootReducer } from './root_reducer'
 import { registerHackersSagas } from './hackers/sagas'
 import { registerJudgingsSagas } from './judgings/sagas'
@@ -40,14 +41,14 @@ const registerSagas = (callbacks: any[]) => {
   callbacks.forEach((callback) => sagaMiddleware.run(callback))
 }
 
-export const configureStore = () => {
-  const store: any = createStore(rootReducer, applyMiddleware(sagaMiddleware))
-  registerSagas([
-    registerProjectsSagas,
-    registerHackSessionSagas,
-    registerAdminSagas,
-    registerHackersSagas,
-    registerJudgingsSagas,
-  ])
-  return store
-}
+const store = createStore(rootReducer, applyMiddleware(sagaMiddleware))
+registerSagas([
+  registerProjectsSagas,
+  registerHackSessionSagas,
+  registerAdminSagas,
+  registerAddUserSagas,
+  registerHackersSagas,
+  registerJudgingsSagas,
+])
+
+export default store
