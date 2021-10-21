@@ -44,7 +44,7 @@ import { funFetch, fallbackFetch, OAuthScene } from '@looker/run-it'
 import { FirstPage } from '@styled-icons/material/FirstPage'
 import { LastPage } from '@styled-icons/material/LastPage'
 
-import { SearchContext, LodeContext, defaultLodeContextValue } from './context'
+import { LodeContext, defaultLodeContextValue } from './context'
 import type { IApixEnvAdaptor } from './utils'
 import {
   getLoded,
@@ -60,13 +60,7 @@ import {
   SelectorContainer,
   HEADER_TOGGLE_LABEL,
 } from './components'
-import {
-  specReducer,
-  initDefaultSpecState,
-  searchReducer,
-  defaultSearchState,
-  updateSpecApi,
-} from './reducers'
+import { specReducer, initDefaultSpecState, updateSpecApi } from './reducers'
 import { AppRouter } from './routes'
 import { apixFilesHost } from './utils/lodeUtils'
 import { useActions, useSettingsStoreState } from './state'
@@ -99,10 +93,6 @@ const ApiExplorer: FC<ApiExplorerProps> = ({
     initDefaultSpecState(specs, location)
   )
   const { spec } = specState
-  const [searchSettings, setSearchSettings] = useReducer(
-    searchReducer,
-    defaultSearchState
-  )
 
   const [lode, setLode] = useState(defaultLodeContextValue)
 
@@ -171,91 +161,85 @@ const ApiExplorer: FC<ApiExplorerProps> = ({
         ) : (
           <ErrorBoundary logError={envAdaptor.logError.bind(envAdaptor)}>
             <LodeContext.Provider value={{ ...lode }}>
-              <SearchContext.Provider
-                value={{ searchSettings, setSearchSettings }}
-              >
-                <Page style={{ overflow: 'hidden' }}>
-                  {!headless && (
-                    <Header
-                      specs={specs}
-                      spec={spec}
-                      specDispatch={specDispatch}
-                      toggleNavigation={toggleNavigation}
-                    />
-                  )}
-                  <Layout hasAside height="100%">
-                    <AsideBorder
-                      borderRight
-                      isOpen={hasNavigation}
-                      headless={headless}
-                    >
-                      {headless && (
-                        <>
-                          <Space
-                            alignItems="center"
-                            py="u3"
-                            px={hasNavigation ? 'u5' : '0'}
-                            justifyContent={
-                              hasNavigation ? 'space-between' : 'center'
-                            }
-                          >
-                            {hasNavigation && (
-                              <Heading
-                                as="h2"
-                                fontSize="xsmall"
-                                fontWeight="bold"
-                                color="text2"
-                              >
-                                API DOCUMENTATION
-                              </Heading>
-                            )}
-                            <IconButton
-                              size="xsmall"
-                              shape="round"
-                              icon={
-                                hasNavigation ? <FirstPage /> : <LastPage />
-                              }
-                              label={HEADER_TOGGLE_LABEL}
-                              onClick={() => toggleNavigation()}
-                            />
-                          </Space>
+              <Page style={{ overflow: 'hidden' }}>
+                {!headless && (
+                  <Header
+                    specs={specs}
+                    spec={spec}
+                    specDispatch={specDispatch}
+                    toggleNavigation={toggleNavigation}
+                  />
+                )}
+                <Layout hasAside height="100%">
+                  <AsideBorder
+                    borderRight
+                    isOpen={hasNavigation}
+                    headless={headless}
+                  >
+                    {headless && (
+                      <>
+                        <Space
+                          alignItems="center"
+                          py="u3"
+                          px={hasNavigation ? 'u5' : '0'}
+                          justifyContent={
+                            hasNavigation ? 'space-between' : 'center'
+                          }
+                        >
                           {hasNavigation && (
-                            <>
-                              <Divider mb="u3" appearance="light" />
-                              <SelectorContainer
-                                ml="large"
-                                mr="large"
-                                specs={specs}
-                                spec={spec}
-                                specDispatch={specDispatch}
-                              />
-                            </>
+                            <Heading
+                              as="h2"
+                              fontSize="xsmall"
+                              fontWeight="bold"
+                              color="text2"
+                            >
+                              API DOCUMENTATION
+                            </Heading>
                           )}
-                        </>
-                      )}
-                      {hasNavigation && (
-                        <SideNav
-                          headless={headless}
-                          specs={specs}
-                          spec={spec}
-                          specDispatch={specDispatch}
-                        />
-                      )}
-                    </AsideBorder>
-                    {oauthReturn && <OAuthScene />}
-                    {!oauthReturn && spec.api && (
-                      <AppRouter
-                        api={spec.api}
-                        specKey={spec.key}
+                          <IconButton
+                            size="xsmall"
+                            shape="round"
+                            icon={hasNavigation ? <FirstPage /> : <LastPage />}
+                            label={HEADER_TOGGLE_LABEL}
+                            onClick={() => toggleNavigation()}
+                          />
+                        </Space>
+                        {hasNavigation && (
+                          <>
+                            <Divider mb="u3" appearance="light" />
+                            <SelectorContainer
+                              ml="large"
+                              mr="large"
+                              specs={specs}
+                              spec={spec}
+                              specDispatch={specDispatch}
+                            />
+                          </>
+                        )}
+                      </>
+                    )}
+                    {hasNavigation && (
+                      <SideNav
+                        headless={headless}
                         specs={specs}
-                        toggleNavigation={toggleNavigation}
-                        envAdaptor={envAdaptor}
-                        setVersionsUrl={setVersionsUrl}
+                        spec={spec}
+                        specDispatch={specDispatch}
                       />
                     )}
-                  </Layout>
-                </Page>
-              </SearchContext.Provider>
+                  </AsideBorder>
+                  {oauthReturn && <OAuthScene />}
+                  {!oauthReturn && spec.api && (
+                    <AppRouter
+                      api={spec.api}
+                      specKey={spec.key}
+                      specs={specs}
+                      toggleNavigation={toggleNavigation}
+                      envAdaptor={envAdaptor}
+                      setVersionsUrl={setVersionsUrl}
+                    />
+                  )}
+                </Layout>
+              </Page>
             </LodeContext.Provider>
           </ErrorBoundary>
         )}

@@ -24,14 +24,16 @@
 
  */
 
-import React, { useContext, useEffect, useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import styled from 'styled-components'
 import { Accordion2, Heading } from '@looker/components'
 import type { MethodList } from '@looker/sdk-codegen'
+import { useSelector } from 'react-redux'
 import { useHistory, useRouteMatch } from 'react-router-dom'
+
 import { Link } from '../Link'
 import { buildMethodPath, highlightHTML } from '../../utils'
-import { SearchContext } from '../../context'
+import { selectSearchPattern } from '../../state'
 
 interface MethodsProps {
   methods: MethodList
@@ -43,9 +45,7 @@ interface MethodsProps {
 
 export const SideNavMethods = styled(
   ({ className, methods, tag, specKey, defaultOpen = false }: MethodsProps) => {
-    const {
-      searchSettings: { pattern },
-    } = useContext(SearchContext)
+    const searchPattern = useSelector(selectSearchPattern)
     const match = useRouteMatch<{ methodTag: string }>(
       `/:specKey/methods/:methodTag/:methodName?`
     )
@@ -63,7 +63,7 @@ export const SideNavMethods = styled(
         ? defaultOpen || match.params.methodTag === tag
         : defaultOpen
       setIsOpen(status)
-    }, [defaultOpen, match])
+    }, [defaultOpen, match, tag])
 
     /* TODO: Fix highlighting. It is applied but it is somehow being overridden */
     return (
@@ -73,7 +73,7 @@ export const SideNavMethods = styled(
         className={className}
         label={
           <Heading as="h4" fontSize="small" py="xsmall">
-            {highlightHTML(pattern, tag)}
+            {highlightHTML(searchPattern, tag)}
           </Heading>
         }
       >
@@ -81,7 +81,7 @@ export const SideNavMethods = styled(
           {Object.values(methods).map((method) => (
             <li key={method.name}>
               <Link to={`${buildMethodPath(specKey, tag, method.name)}`}>
-                {highlightHTML(pattern, method.summary)}
+                {highlightHTML(searchPattern, method.summary)}
               </Link>
             </li>
           ))}

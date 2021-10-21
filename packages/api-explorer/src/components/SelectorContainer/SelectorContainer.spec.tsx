@@ -29,8 +29,8 @@ import { codeGenerators } from '@looker/sdk-codegen'
 import userEvent from '@testing-library/user-event'
 
 import { specs, specState } from '../../test-data'
-import { renderWithRouter, withReduxProvider } from '../../test-utils'
-import { defaultSettingsState } from '../../state/settings'
+import { renderWithRouterAndReduxProvider } from '../../test-utils'
+import { defaultSettingsState } from '../../state'
 import { SelectorContainer } from './SelectorContainer'
 
 describe('SelectorContainer', () => {
@@ -41,14 +41,12 @@ describe('SelectorContainer', () => {
   })
 
   test('it renders a spec selector with the correct default value and options', async () => {
-    renderWithRouter(
-      withReduxProvider(
-        <SelectorContainer
-          specs={specs}
-          spec={specState.spec}
-          specDispatch={specDispatch}
-        />
-      )
+    renderWithRouterAndReduxProvider(
+      <SelectorContainer
+        specs={specs}
+        spec={specState.spec}
+        specDispatch={specDispatch}
+      />
     )
     const selector = screen.getByLabelText('spec selector')
     expect(selector).toHaveValue(`${specState.spec.key}`)
@@ -63,14 +61,12 @@ describe('SelectorContainer', () => {
   })
 
   test('it renders an sdk language selector with the correct value and options', async () => {
-    renderWithRouter(
-      withReduxProvider(
-        <SelectorContainer
-          specs={specs}
-          spec={specState.spec}
-          specDispatch={specDispatch}
-        />
-      )
+    renderWithRouterAndReduxProvider(
+      <SelectorContainer
+        specs={specs}
+        spec={specState.spec}
+        specDispatch={specDispatch}
+      />
     )
     const selector = screen.getByLabelText('sdk language selector')
     expect(selector).toHaveValue(defaultSettingsState.sdkLanguage)
@@ -85,14 +81,12 @@ describe('SelectorContainer', () => {
   })
 
   test('it renders an icon button for the differ', () => {
-    renderWithRouter(
-      withReduxProvider(
-        <SelectorContainer
-          specs={specs}
-          spec={specState.spec}
-          specDispatch={specDispatch}
-        />
-      )
+    renderWithRouterAndReduxProvider(
+      <SelectorContainer
+        specs={specs}
+        spec={specState.spec}
+        specDispatch={specDispatch}
+      />
     )
     expect(
       screen

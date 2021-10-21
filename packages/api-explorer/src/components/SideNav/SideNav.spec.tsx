@@ -26,11 +26,11 @@
 import React from 'react'
 import { CriteriaToSet } from '@looker/sdk-codegen'
 import userEvent from '@testing-library/user-event'
-import { act, screen, waitFor } from '@testing-library/react'
+import { screen, waitFor } from '@testing-library/react'
 
 import { getLoadedSpecs, specState } from '../../test-data'
-import { renderWithRouter, renderWithSearchAndRouter } from '../../test-utils'
-import { defaultSearchState } from '../../reducers'
+import { renderWithRouterAndReduxProvider } from '../../test-utils'
+import { defaultSettingsState } from '../../state'
 import { SideNav } from './SideNav'
 import { countMethods, countTypes } from './searchUtils'
 
@@ -55,7 +55,7 @@ describe('SideNav', () => {
   })
 
   test('it renders search, methods tab and types tab', () => {
-    renderWithRouter(
+    renderWithRouterAndReduxProvider(
       <SideNav
         specs={specs}
         spec={specState.spec}
@@ -78,7 +78,7 @@ describe('SideNav', () => {
   })
 
   test('Methods tab is the default active tab', () => {
-    renderWithRouter(
+    renderWithRouterAndReduxProvider(
       <SideNav
         specs={specs}
         spec={specState.spec}
@@ -97,7 +97,7 @@ describe('SideNav', () => {
   })
 
   test('url determines active tab', () => {
-    renderWithRouter(
+    renderWithRouterAndReduxProvider(
       <SideNav
         specs={specs}
         spec={specState.spec}
@@ -115,7 +115,7 @@ describe('Search', () => {
   const specDispatch = jest.fn()
 
   test('it filters methods and types on input', async () => {
-    renderWithSearchAndRouter(
+    renderWithRouterAndReduxProvider(
       <SideNav
         specs={specs}
         spec={specState.spec}
@@ -125,28 +125,23 @@ describe('Search', () => {
     const searchPattern = 'embedsso'
     const input = screen.getByLabelText('Search')
     jest.spyOn(specState.spec.api!, 'search')
-    await act(async () => {
-      /** Pasting to avoid triggering search multiple times */
-      await userEvent.paste(input, searchPattern)
-      await waitFor(() => {
-        expect(specState.spec.api!.search).toHaveBeenCalledWith(
-          searchPattern,
-          CriteriaToSet(defaultSearchState.criteria)
+    /** Pasting to avoid triggering search multiple times */
+    await userEvent.paste(input, searchPattern)
+    await waitFor(() => {
+      expect(specState.spec.api!.search).toHaveBeenCalledWith(
+        searchPattern,
+        CriteriaToSet(defaultSettingsState.searchCriteria)
+      )
+      const methods = screen.getByRole('tab', { name: 'Methods (1)' })
+      userEvent.click(methods)
+      expect(
+        screen.getByText(
+          specState.spec.api!.tags.Auth.create_sso_embed_url.summary
         )
-        const methods = screen.getByRole('tab', { name: 'Methods (1)' })
-        const types = screen.getByRole('tab', { name: 'Types (1)' })
-        userEvent.click(methods)
-        expect(
-          screen.getByText(
-            specState.spec.api!.tags.Auth.create_sso_embed_url.summary
-          )
-        ).toBeInTheDocument()
-
-        userEvent.click(types)
-        expect(
-          screen.getByText(specState.spec.api!.types.EmbedSsoParams.name)
-        ).toBeInTheDocument()
-      })
+      ).toBeInTheDocument()
+      const types = screen.getByRole('tab', { name: 'Types (1)' })
+      userEvent.click(types)
+      expect(screen.getByText('EmbedSso')).toBeInTheDocument()
     })
   })
 })
