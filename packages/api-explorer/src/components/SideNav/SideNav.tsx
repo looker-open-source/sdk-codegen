@@ -76,7 +76,6 @@ interface SideNavProps {
 export const SideNav: FC<SideNavProps> = ({ headless = false, spec }) => {
   const history = useHistory()
   const location = useLocation()
-  const api = spec.api || ({} as ApiModel)
   const specKey = spec.key
   const tabNames = ['methods', 'types']
   const pathParts = location.pathname.split('/')
@@ -106,10 +105,10 @@ export const SideNav: FC<SideNavProps> = ({ headless = false, spec }) => {
   const [pattern, setSearchPattern] = useState('')
   const debouncedPattern = useDebounce(pattern, 250)
   const [sideNavState, setSideNavState] = useState<SideNavState>(() => ({
-    tags: api.tags || {},
-    typeTags: api.typeTags || {},
-    methodCount: countMethods(api.tags || {}),
-    typeCount: countTypes(api.types || {}),
+    tags: spec?.api?.tags || {},
+    typeTags: spec?.api?.typeTags || {},
+    methodCount: countMethods(spec?.api?.tags || {}),
+    typeCount: countTypes(spec?.api?.types || {}),
     searchResults: undefined,
   }))
   const { tags, typeTags, methodCount, typeCount, searchResults } = sideNavState
@@ -123,6 +122,7 @@ export const SideNav: FC<SideNavProps> = ({ headless = false, spec }) => {
     let newTags
     let newTypes
     let newTypeTags
+    const api = spec.api || ({} as ApiModel)
 
     if (debouncedPattern && api.search) {
       results = api.search(pattern, CriteriaToSet(searchCriteria))
@@ -147,7 +147,6 @@ export const SideNav: FC<SideNavProps> = ({ headless = false, spec }) => {
     debouncedPattern,
     specKey,
     spec,
-    api,
     setSearchPatternAction,
     pattern,
     searchCriteria,
