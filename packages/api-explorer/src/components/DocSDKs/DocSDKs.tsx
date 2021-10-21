@@ -38,7 +38,7 @@ import { Method } from '@looker/sdk-codegen'
 import { CollapserCard, getGenerators } from '@looker/run-it'
 
 import { DocCode } from '../DocCode'
-import { getSelectedSdkLanguage } from '../../state'
+import { selectSdkLanguage } from '../../state'
 import { noComment } from './utils'
 import { DocDeclarations } from './DocDeclarations'
 
@@ -73,7 +73,7 @@ const getDeclarations = (
  * Given a method or a type, it renders its SDK declaration in all supported languages.
  */
 export const DocSDKs: FC<LanguageSDKProps> = ({ api, method, type }) => {
-  const sdkLanguage = useSelector(getSelectedSdkLanguage)
+  const sdkLanguage = useSelector(selectSdkLanguage)
   const generators = getGenerators(api)
   const [item, setItem] = useState(method ? noComment(method) : type!)
   const [declarations, setDeclarations] = useState(

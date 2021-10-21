@@ -35,7 +35,7 @@ import { getSpecsFromVersions } from '@looker/sdk-codegen'
 import ApiExplorer from '@looker/api-explorer/src/ApiExplorer'
 import { Loader } from '@looker/api-explorer/src/components'
 import { getExtensionSDK } from '@looker/extension-sdk'
-import { configureStore } from '@looker/api-explorer/src/state'
+import { store } from '@looker/api-explorer/src/state'
 import { Provider } from 'react-redux'
 import { ExtensionEnvAdaptor } from './utils'
 
@@ -66,7 +66,6 @@ class ExtensionConfigurator implements RunItConfigurator {
 }
 
 const configurator = new ExtensionConfigurator()
-const store = configureStore()
 
 export const ExtensionApiExplorer: FC = () => {
   // const match = useRouteMatch<{ specKey: string }>(`/:specKey`)

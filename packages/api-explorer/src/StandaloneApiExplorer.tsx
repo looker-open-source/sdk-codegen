@@ -39,7 +39,7 @@ import type { SpecList } from '@looker/sdk-codegen'
 import { Provider } from 'react-redux'
 
 import ApiExplorer from './ApiExplorer'
-import { configureStore } from './state'
+import { store } from './state'
 import { StandaloneEnvAdaptor } from './utils'
 import { Loader } from './components'
 
@@ -49,7 +49,6 @@ export interface StandaloneApiExplorerProps {
 }
 
 const standaloneEnvAdaptor = new StandaloneEnvAdaptor()
-const store = configureStore()
 
 const loadVersions = async (current: string) => {
   const data = await standaloneEnvAdaptor.localStorageGetItem(RunItConfigKey)

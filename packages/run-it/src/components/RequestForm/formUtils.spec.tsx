@@ -219,7 +219,7 @@ describe('Simple Items', () => {
     })
   })
 
-  describe('updateNullableProp', async () => {
+  describe('updateNullableProp', () => {
     test.each`
       label             | value
       ${'empty string'} | ${''}

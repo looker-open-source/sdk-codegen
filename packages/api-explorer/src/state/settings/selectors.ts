@@ -25,5 +25,10 @@
  */
 import type { RootState } from '../store'
 
-export const getSelectedSdkLanguage = (state: RootState) =>
-  state.settings!.sdkLanguage
+const getSettingsState = (state: RootState) => state.settings
+
+export const selectSdkLanguage = (state: RootState) =>
+  getSettingsState(state).sdkLanguage
+
+export const isInitialized = (state: RootState) =>
+  getSettingsState(state).initialized
