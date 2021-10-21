@@ -23,8 +23,9 @@
  SOFTWARE.
 
  */
-import { renderWithTheme } from '@looker/components-test-utils'
 import React from 'react'
+import { renderWithTheme } from '@looker/components-test-utils'
+import { screen } from '@testing-library/react'
 import { SomethingWentWrong } from './SomethingWentWrong'
 
 const getMockedComponent = (propOverrides = {}) => {
@@ -43,7 +44,7 @@ describe('SomethingWentWrong', () => {
     const actionMessage = 'User please do this action. It might help'
     const altText = '500 error graphic'
 
-    const { getByText, getByAltText } = renderWithTheme(
+    renderWithTheme(
       getMockedComponent({
         header,
         actionMessage,
@@ -51,8 +52,8 @@ describe('SomethingWentWrong', () => {
       })
     )
 
-    expect(getByText(header)).toBeVisible()
-    expect(getByText(actionMessage)).toBeVisible()
-    expect(getByAltText(altText)).toBeVisible()
+    expect(screen.getByText(header)).toBeVisible()
+    expect(screen.getByText(actionMessage)).toBeVisible()
+    expect(screen.getByAltText(altText)).toBeVisible()
   })
 })

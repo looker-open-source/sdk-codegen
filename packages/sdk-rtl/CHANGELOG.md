@@ -5,6 +5,13 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [21.1.0](https://www.github.com/looker-open-source/sdk-codegen/compare/sdk-rtl-v21.0.20...sdk-rtl-v21.1.0) (2021-10-19)
+
+
+### Features
+
+* closest path match for API Explorer ([#811](https://www.github.com/looker-open-source/sdk-codegen/issues/811)) ([45fd26f](https://www.github.com/looker-open-source/sdk-codegen/commit/45fd26fb0f325fa90edfec72f835ed3a79b9afeb))
+
 ### [21.0.20](https://www.github.com/looker-open-source/sdk-codegen/compare/sdk-rtl-v21.0.19...sdk-rtl-v21.0.20) (2021-09-01)
 
 

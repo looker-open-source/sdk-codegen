@@ -23,4 +23,9 @@
  SOFTWARE.
 
  */
-export * from './settings/action_creators'
+import type { IApixEnvAdaptor } from '../utils'
+import { registerEnvAdaptor, StandaloneEnvAdaptor } from '../utils'
+
+export const registerTestEnvAdaptor = (envAdaptor?: IApixEnvAdaptor) => {
+  registerEnvAdaptor(envAdaptor || new StandaloneEnvAdaptor())
+}

@@ -56,7 +56,7 @@ import {
   DocTitle,
   DocSchema,
 } from '../../components'
-import { getSelectedSdkLanguage } from '../../state'
+import { selectSdkLanguage } from '../../state'
 import type { IApixEnvAdaptor } from '../../utils'
 import { DocOperation, DocRequestBody } from './components'
 
@@ -84,7 +84,7 @@ export const MethodScene: FC<MethodSceneProps> = ({
 }) => {
   const history = useHistory()
   const { sdk } = useContext(RunItContext)
-  const sdkLanguage = useSelector(getSelectedSdkLanguage)
+  const sdkLanguage = useSelector(selectSdkLanguage)
   const { specKey, methodTag, methodName } = useParams<MethodSceneParams>()
   const { value, toggle, setOn } = useToggle()
   const [method, setMethod] = useState(api.methods[methodName])
@@ -171,6 +171,7 @@ export const MethodScene: FC<MethodSceneProps> = ({
             }}
           >
             <RunIt
+              key={method.operationId}
               sdkLanguage={sdkLanguage}
               api={api}
               method={method}

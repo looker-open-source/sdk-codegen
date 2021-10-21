@@ -25,7 +25,7 @@
  */
 
 /**
- * 350 API models: 219 Spec, 54 Request, 58 Write, 19 Enum
+ * 352 API models: 221 Spec, 54 Request, 57 Write, 20 Enum
  */
 
 import type { IDictionary, DelimArray } from '@looker/sdk-rtl'
@@ -61,11 +61,11 @@ export interface IAlert {
   /**
    * This property informs the check what kind of comparison we are performing. Only certain condition types are valid for time series alerts. For details, refer to [Setting Alert Conditions](https://docs.looker.com/sharing-and-publishing/creating-alerts#setting_alert_conditions) Valid values are: "EQUAL_TO", "GREATER_THAN", "GREATER_THAN_OR_EQUAL_TO", "LESS_THAN", "LESS_THAN_OR_EQUAL_TO", "INCREASES_BY", "DECREASES_BY", "CHANGES_BY".
    */
-  comparison_type?: ComparisonType
+  comparison_type: ComparisonType
   /**
    * Vixie-Style crontab specification when to run. At minumum, it has to be longer than 15 minute intervals
    */
-  cron?: string
+  cron: string
   /**
    * An optional, user-defined title for the alert
    */
@@ -75,10 +75,22 @@ export interface IAlert {
    */
   dashboard_element_id?: number
   /**
+   * An optional description for the alert. This supplements the title
+   */
+  description?: string
+  /**
    * Array of destinations to send alerts to. Must be the same type of destination. Example `[{ "destination_type": "EMAIL", "email_address": "test@test.com" }]`
    */
-  destinations?: IAlertDestination[]
-  field?: IAlertField
+  destinations: IAlertDestination[]
+  field: IAlertField
+  /**
+   * Whether or not the user follows this alert. (read-only)
+   */
+  followed?: boolean
+  /**
+   * Whether or not the alert is followable (read-only)
+   */
+  followable?: boolean
   /**
    * ID of the alert (read-only)
    */
@@ -88,9 +100,25 @@ export interface IAlert {
    */
   is_disabled?: boolean
   /**
+   * Reason for disabling alert
+   */
+  disabled_reason?: string
+  /**
    * Whether or not the alert is public
    */
   is_public?: boolean
+  /**
+   * The type of the investigative content Valid values are: "dashboard".
+   */
+  investigative_content_type?: InvestigativeContentType
+  /**
+   * The ID of the investigative content. For dashboards, this will be the dashboard ID
+   */
+  investigative_content_id?: string
+  /**
+   * The title of the investigative content. (read-only)
+   */
+  investigative_content_title?: string
   /**
    * ID of the LookML dashboard associated with the alert
    */
@@ -102,11 +130,15 @@ export interface IAlert {
   /**
    * User id of alert owner
    */
-  owner_id?: number
+  owner_id: number
+  /**
+   * Alert owner's display name (read-only)
+   */
+  owner_display_name?: string
   /**
    * Value of the alert threshold
    */
-  threshold?: number
+  threshold: number
   time_series_condition_state?: IAlertConditionState
 }
 
@@ -114,15 +146,15 @@ export interface IAlertAppliedDashboardFilter {
   /**
    * Field Title. Refer to `DashboardFilter.title` in [DashboardFilter](#!/types/DashboardFilter). Example `Name`
    */
-  filter_title?: string
+  filter_title: string
   /**
    * Field Name. Refer to `DashboardFilter.dimension` in [DashboardFilter](#!/types/DashboardFilter). Example `distribution_centers.name`
    */
-  field_name?: string
+  field_name: string
   /**
    * Field Value. [Filter Expressions](https://docs.looker.com/reference/filter-expressions). Example `Los Angeles CA`
    */
-  filter_value?: string
+  filter_value: string
   /**
    * Human Readable Filter Description. This may be null or auto-generated. Example `is Los Angeles CA` (read-only)
    */
@@ -163,11 +195,11 @@ export interface IAlertField {
   /**
    * Field's title. Usually auto-generated to reflect field name and its filters
    */
-  title?: string
+  title: string
   /**
    * Field's name. Has the format `<view>.<field>` Refer to [docs](https://docs.looker.com/sharing-and-publishing/creating-alerts) for more details
    */
-  name?: string
+  name: string
   /**
    * (Optional / Advance Use) List of fields filter. This further restricts the alert to certain dashboard element's field values. This can be used on top of dashboard filters `applied_dashboard_filters`. To keep thing simple, it's suggested to just use dashboard filters. Example: `{ 'title': '12 Number on Hand', 'name': 'inventory_items.number_on_hand', 'filter': [{ 'field_name': 'inventory_items.id', 'field_value': 12, 'filter_value': null }] }`
    */
@@ -178,15 +210,38 @@ export interface IAlertFieldFilter {
   /**
    * Field Name. Has format `<view>.<field>`
    */
-  field_name?: string
+  field_name: string
   /**
    * Field Value. Depends on the type of field - numeric or string. For [location](https://docs.looker.com/reference/field-reference/dimension-type-reference#location) type, it's a list of floats. Example `[1.0, 56.0]`
    */
-  field_value?: any
+  field_value: any
   /**
    * Filter Value. Usually null except for [location](https://docs.looker.com/reference/field-reference/dimension-type-reference#location) type. It'll be a string of lat,long ie `'1.0,56.0'`
    */
   filter_value?: string
+}
+
+export interface IAlertPatch {
+  /**
+   * New owner ID of the alert
+   */
+  owner_id?: number
+  /**
+   * Set alert enabled or disabled
+   */
+  is_disabled?: boolean
+  /**
+   * The reason this alert is disabled
+   */
+  disabled_reason?: string
+  /**
+   * Set alert public or private
+   */
+  is_public?: boolean
+  /**
+   * New threshold value
+   */
+  threshold?: number
 }
 
 /**
@@ -355,13 +410,9 @@ export interface IBoardItem {
    */
   content_updated_at?: string
   /**
-   * (Write-Only) base64 encoded image data
+   * Custom description entered by the user, if present
    */
-  custom_image_data_base64?: string
-  /**
-   * Custom image_url entered by the user, if present (read-only)
-   */
-  custom_image_url?: string
+  custom_description?: string
   /**
    * Custom title entered by the user, if present
    */
@@ -1647,10 +1698,6 @@ export interface ICredentialsTotp {
 
 export interface ICustomWelcomeEmail {
   /**
-   * Operations the current user is able to perform on this object (read-only)
-   */
-  can?: IDictionary<boolean>
-  /**
    * If true, custom email content will replace the default body of welcome emails
    */
   enabled?: boolean
@@ -1659,11 +1706,11 @@ export interface ICustomWelcomeEmail {
    */
   content?: string
   /**
-   * The text to appear in the email subject line.
+   * The text to appear in the email subject line. Only available with a whitelabel license and whitelabel_configuration.advanced_custom_welcome_email enabled.
    */
   subject?: string
   /**
-   * The text to appear in the header line of the email body.
+   * The text to appear in the header line of the email body. Only available with a whitelabel license and whitelabel_configuration.advanced_custom_welcome_email enabled.
    */
   header?: string
 }
@@ -1776,6 +1823,10 @@ export interface IDashboard {
    */
   favorite_count?: number
   /**
+   * Sets the default state of the filters bar to collapsed or open
+   */
+  filters_bar_collapsed?: boolean
+  /**
    * Time the dashboard was last accessed (read-only)
    */
   last_accessed_at?: Date
@@ -1783,6 +1834,22 @@ export interface IDashboard {
    * Time last viewed in the Looker web UI (read-only)
    */
   last_viewed_at?: Date
+  /**
+   * Time that the Dashboard was most recently updated. (read-only)
+   */
+  updated_at?: Date
+  /**
+   * Id of User that most recently updated the dashboard. (read-only)
+   */
+  last_updater_id?: number
+  /**
+   * Name of User that most recently updated the dashboard. (read-only)
+   */
+  last_updater_name?: string
+  /**
+   * Name of User that created the dashboard. (read-only)
+   */
+  user_name?: string
   /**
    * configuration option that governs how dashboard loading will happen.
    */
@@ -2379,7 +2446,7 @@ export interface IDBConnection {
   /**
    * Port number on server
    */
-  port?: number
+  port?: string
   /**
    * Username for server authentication
    */
@@ -2513,6 +2580,10 @@ export interface IDBConnection {
    * An External OAuth Application to use for authenticating to the database
    */
   oauth_application_id?: number
+  /**
+   * When true, error PDTs will be retried every regenerator cycle
+   */
+  always_retry_failed_builds?: boolean
 }
 
 export interface IDBConnectionBase {
@@ -3770,6 +3841,13 @@ export interface IInternalHelpResourcesContent {
    * Content to be displayed in the internal help resources page/modal
    */
   markdown_content?: string
+}
+
+/**
+ * The type of the investigative content Valid values are: "dashboard".
+ */
+export enum InvestigativeContentType {
+  dashboard = 'dashboard',
 }
 
 export interface ILDAPConfig {
@@ -6366,6 +6444,10 @@ export interface IRenderTask {
    */
   query_id?: number
   /**
+   * Id of dashboard element to render: UDD dashboard element would be numeric and LookML dashboard element would be model_name::dashboard_title::lookml_link_id (read-only)
+   */
+  dashboard_element_id?: string
+  /**
    * Number of seconds elapsed running queries (read-only)
    */
   query_runtime?: number
@@ -7376,6 +7458,10 @@ export interface IRequestSearchAlerts {
    * (Optional) Number of results to skip before returning any (used with `limit`).
    */
   offset?: number
+  /**
+   * (Optional) Dimension by which to order the results(`dashboard` | `owner`)
+   */
+  group_by?: string
   /**
    * (Optional) Requested fields.
    */
@@ -9141,6 +9227,7 @@ export interface ISetting {
    */
   marketplace_enabled?: boolean
   whitelabel_configuration?: IWhitelabelConfiguration
+  custom_welcome_email?: ICustomWelcomeEmail
 }
 
 export interface ISnippet {
@@ -9780,6 +9867,13 @@ export interface IUserAttributeWithValue {
   hidden_value_domain_whitelist?: string
 }
 
+export interface IUserEmailOnly {
+  /**
+   * Email Address
+   */
+  email: string
+}
+
 export interface IUserLoginLockout {
   /**
    * Operations the current user is able to perform on this object (read-only)
@@ -10000,7 +10094,7 @@ export interface IWorkspace {
 
 /**
  * Dynamic writeable type for Alert removes:
- * id
+ * followed, followable, id, investigative_content_title, owner_display_name
  */
 export interface IWriteAlert {
   /**
@@ -10010,11 +10104,11 @@ export interface IWriteAlert {
   /**
    * This property informs the check what kind of comparison we are performing. Only certain condition types are valid for time series alerts. For details, refer to [Setting Alert Conditions](https://docs.looker.com/sharing-and-publishing/creating-alerts#setting_alert_conditions) Valid values are: "EQUAL_TO", "GREATER_THAN", "GREATER_THAN_OR_EQUAL_TO", "LESS_THAN", "LESS_THAN_OR_EQUAL_TO", "INCREASES_BY", "DECREASES_BY", "CHANGES_BY".
    */
-  comparison_type?: ComparisonType
+  comparison_type: ComparisonType
   /**
    * Vixie-Style crontab specification when to run. At minumum, it has to be longer than 15 minute intervals
    */
-  cron?: string
+  cron: string
   /**
    * An optional, user-defined title for the alert
    */
@@ -10024,18 +10118,34 @@ export interface IWriteAlert {
    */
   dashboard_element_id?: number
   /**
+   * An optional description for the alert. This supplements the title
+   */
+  description?: string
+  /**
    * Array of destinations to send alerts to. Must be the same type of destination. Example `[{ "destination_type": "EMAIL", "email_address": "test@test.com" }]`
    */
-  destinations?: IAlertDestination[]
-  field?: IAlertField
+  destinations: IAlertDestination[]
+  field: IAlertField
   /**
    * Whether or not the alert is disabled
    */
   is_disabled?: boolean
   /**
+   * Reason for disabling alert
+   */
+  disabled_reason?: string
+  /**
    * Whether or not the alert is public
    */
   is_public?: boolean
+  /**
+   * The type of the investigative content Valid values are: "dashboard".
+   */
+  investigative_content_type?: InvestigativeContentType
+  /**
+   * The ID of the investigative content. For dashboards, this will be the dashboard ID
+   */
+  investigative_content_id?: string
   /**
    * ID of the LookML dashboard associated with the alert
    */
@@ -10047,11 +10157,11 @@ export interface IWriteAlert {
   /**
    * User id of alert owner
    */
-  owner_id?: number
+  owner_id: number
   /**
    * Value of the alert threshold
    */
-  threshold?: number
+  threshold: number
   time_series_condition_state?: IAlertConditionState
 }
 
@@ -10118,13 +10228,13 @@ export interface IWriteBoard {
 
 /**
  * Dynamic writeable type for BoardItem removes:
- * can, content_created_by, content_favorite_id, content_metadata_id, content_updated_at, custom_image_url, description, favorite_count, id, image_url, location, title, url, view_count
+ * can, content_created_by, content_favorite_id, content_metadata_id, content_updated_at, description, favorite_count, id, image_url, location, title, url, view_count
  */
 export interface IWriteBoardItem {
   /**
-   * (Write-Only) base64 encoded image data
+   * Custom description entered by the user, if present
    */
-  custom_image_data_base64?: string
+  custom_description?: string
   /**
    * Custom title entered by the user, if present
    */
@@ -10370,31 +10480,8 @@ export interface IWriteCredentialsEmail {
 }
 
 /**
- * Dynamic writeable type for CustomWelcomeEmail removes:
- * can
- */
-export interface IWriteCustomWelcomeEmail {
-  /**
-   * If true, custom email content will replace the default body of welcome emails
-   */
-  enabled?: boolean
-  /**
-   * The HTML to use as custom content for welcome emails. Script elements and other potentially dangerous markup will be removed.
-   */
-  content?: string
-  /**
-   * The text to appear in the email subject line.
-   */
-  subject?: string
-  /**
-   * The text to appear in the header line of the email body.
-   */
-  header?: string
-}
-
-/**
  * Dynamic writeable type for Dashboard removes:
- * can, content_favorite_id, content_metadata_id, id, model, readonly, refresh_interval_to_i, user_id, created_at, dashboard_elements, dashboard_filters, dashboard_layouts, deleted_at, deleter_id, edit_uri, favorite_count, last_accessed_at, last_viewed_at, view_count, url
+ * can, content_favorite_id, content_metadata_id, id, model, readonly, refresh_interval_to_i, user_id, created_at, dashboard_elements, dashboard_filters, dashboard_layouts, deleted_at, deleter_id, edit_uri, favorite_count, last_accessed_at, last_viewed_at, updated_at, last_updater_id, last_updater_name, user_name, view_count, url
  */
 export interface IWriteDashboard {
   /**
@@ -10446,6 +10533,10 @@ export interface IWriteDashboard {
    * Whether or not a dashboard is 'soft' deleted.
    */
   deleted?: boolean
+  /**
+   * Sets the default state of the filters bar to collapsed or open
+   */
+  filters_bar_collapsed?: boolean
   /**
    * configuration option that governs how dashboard loading will happen.
    */
@@ -10723,7 +10814,7 @@ export interface IWriteDBConnection {
   /**
    * Port number on server
    */
-  port?: number
+  port?: string
   /**
    * Username for server authentication
    */
@@ -10833,6 +10924,10 @@ export interface IWriteDBConnection {
    * An External OAuth Application to use for authenticating to the database
    */
   oauth_application_id?: number
+  /**
+   * When true, error PDTs will be retried every regenerator cycle
+   */
+  always_retry_failed_builds?: boolean
 }
 
 /**
@@ -11947,6 +12042,7 @@ export interface IWriteSetting {
    * id, logo_url, favicon_url
    */
   whitelabel_configuration?: IWriteWhitelabelConfiguration
+  custom_welcome_email?: ICustomWelcomeEmail
 }
 
 /**
