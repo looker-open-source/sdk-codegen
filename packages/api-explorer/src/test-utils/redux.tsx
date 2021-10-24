@@ -29,13 +29,13 @@ import { Provider } from 'react-redux'
 import type { Store } from 'redux'
 import { renderWithTheme } from '@looker/components-test-utils'
 import type { RenderOptions } from '@testing-library/react'
+import { createStore } from '@looker/redux'
 
 import type { RootState } from '../state'
-import { configureStore } from '../state'
+import { defaultSettingsState, store as defaultStore } from '../state'
+import { slice as settingsSlice } from '../state/settings'
 import { registerEnvAdaptor, StandaloneEnvAdaptor } from '../utils'
 import { renderWithRouter } from '.'
-
-const defaultStore = configureStore()
 
 export const withReduxProvider = (
   consumers: ReactElement<any>,
@@ -58,3 +58,15 @@ export const renderWithRouterAndReduxProvider = (
   options?: Omit<RenderOptions, 'queries'>
 ) =>
   renderWithRouter(withReduxProvider(consumers, store), initialEntries, options)
+
+const preloadedState: RootState = {
+  settings: defaultSettingsState,
+}
+
+export const createTestStore = (overrides?: Partial<RootState>) =>
+  createStore({
+    preloadedState: {
+      settings: { ...preloadedState.settings, ...overrides?.settings },
+    },
+    reducer: { settings: settingsSlice.reducer },
+  })

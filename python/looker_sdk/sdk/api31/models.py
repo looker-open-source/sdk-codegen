@@ -1624,6 +1624,10 @@ class Dashboard(model.Model):
         filters_bar_collapsed: Sets the default state of the filters bar to collapsed or open
         last_accessed_at: Time the dashboard was last accessed
         last_viewed_at: Time last viewed in the Looker web UI
+        updated_at: Time that the Dashboard was most recently updated.
+        last_updater_id: Id of User that most recently updated the dashboard.
+        last_updater_name: Name of User that most recently updated the dashboard.
+        user_name: Name of User that created the dashboard.
         load_configuration: configuration option that governs how dashboard loading will happen.
         lookml_link_id: Links this dashboard to a particular LookML dashboard such that calling a **sync** operation on that LookML dashboard will update this dashboard to match.
         show_filters_bar: Show filters bar.  **Security Note:** This property only affects the *cosmetic* appearance of the dashboard, not a user's ability to access data. Hiding the filters bar does **NOT** prevent users from changing filters by other means. For information on how to set up secure data access control policies, see [Control User Access to Data](https://looker.com/docs/r/api/control-access)
@@ -1670,6 +1674,10 @@ class Dashboard(model.Model):
     filters_bar_collapsed: Optional[bool] = None
     last_accessed_at: Optional[datetime.datetime] = None
     last_viewed_at: Optional[datetime.datetime] = None
+    updated_at: Optional[datetime.datetime] = None
+    last_updater_id: Optional[int] = None
+    last_updater_name: Optional[str] = None
+    user_name: Optional[str] = None
     load_configuration: Optional[str] = None
     lookml_link_id: Optional[str] = None
     show_filters_bar: Optional[bool] = None
@@ -1718,6 +1726,10 @@ class Dashboard(model.Model):
         filters_bar_collapsed: Optional[bool] = None,
         last_accessed_at: Optional[datetime.datetime] = None,
         last_viewed_at: Optional[datetime.datetime] = None,
+        updated_at: Optional[datetime.datetime] = None,
+        last_updater_id: Optional[int] = None,
+        last_updater_name: Optional[str] = None,
+        user_name: Optional[str] = None,
         load_configuration: Optional[str] = None,
         lookml_link_id: Optional[str] = None,
         show_filters_bar: Optional[bool] = None,
@@ -1765,6 +1777,10 @@ class Dashboard(model.Model):
         self.filters_bar_collapsed = filters_bar_collapsed
         self.last_accessed_at = last_accessed_at
         self.last_viewed_at = last_viewed_at
+        self.updated_at = updated_at
+        self.last_updater_id = last_updater_id
+        self.last_updater_name = last_updater_name
+        self.user_name = user_name
         self.load_configuration = load_configuration
         self.lookml_link_id = lookml_link_id
         self.show_filters_bar = show_filters_bar
@@ -7243,6 +7259,7 @@ class RenderTask(model.Model):
         look_id: Id of look to render
         lookml_dashboard_id: Id of lookml dashboard to render
         query_id: Id of query to render
+        dashboard_element_id: Id of dashboard element to render: UDD dashboard element would be numeric and LookML dashboard element would be model_name::dashboard_title::lookml_link_id
         query_runtime: Number of seconds elapsed running queries
         render_runtime: Number of seconds elapsed rendering data
         result_format: Output format: pdf, png, or jpg
@@ -7264,6 +7281,7 @@ class RenderTask(model.Model):
     look_id: Optional[int] = None
     lookml_dashboard_id: Optional[str] = None
     query_id: Optional[int] = None
+    dashboard_element_id: Optional[str] = None
     query_runtime: Optional[float] = None
     render_runtime: Optional[float] = None
     result_format: Optional[str] = None
@@ -7287,6 +7305,7 @@ class RenderTask(model.Model):
         look_id: Optional[int] = None,
         lookml_dashboard_id: Optional[str] = None,
         query_id: Optional[int] = None,
+        dashboard_element_id: Optional[str] = None,
         query_runtime: Optional[float] = None,
         render_runtime: Optional[float] = None,
         result_format: Optional[str] = None,
@@ -7307,6 +7326,7 @@ class RenderTask(model.Model):
         self.look_id = look_id
         self.lookml_dashboard_id = lookml_dashboard_id
         self.query_id = query_id
+        self.dashboard_element_id = dashboard_element_id
         self.query_runtime = query_runtime
         self.render_runtime = render_runtime
         self.result_format = result_format
@@ -9770,7 +9790,7 @@ class WriteCustomWelcomeEmail(model.Model):
 class WriteDashboard(model.Model):
     """
         Dynamic writeable type for Dashboard removes:
-    can, content_favorite_id, content_metadata_id, id, model, readonly, refresh_interval_to_i, user_id, created_at, dashboard_elements, dashboard_filters, dashboard_layouts, deleted_at, deleter_id, edit_uri, favorite_count, last_accessed_at, last_viewed_at, view_count
+    can, content_favorite_id, content_metadata_id, id, model, readonly, refresh_interval_to_i, user_id, created_at, dashboard_elements, dashboard_filters, dashboard_layouts, deleted_at, deleter_id, edit_uri, favorite_count, last_accessed_at, last_viewed_at, updated_at, last_updater_id, last_updater_name, user_name, view_count
 
         Attributes:
             description: Description

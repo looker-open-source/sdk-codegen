@@ -21,8 +21,8 @@ jobs:
     env:
       LOOKERSDK_BASE_URL: https://localhost:20000
       LOOKERSDK_VERIFY_SSL: false
-      LOOKERSDK_CLIENT_ID: ${{ secrets.LOOKERSDK_CLIENT_ID__21_16 }}
-      LOOKERSDK_CLIENT_SECRET: ${{ secrets.LOOKERSDK_CLIENT_SECRET__21_16 }}
+      LOOKERSDK_CLIENT_ID: ${{ secrets.LOOKERSDK_CLIENT_ID__21_18 }}
+      LOOKERSDK_CLIENT_SECRET: ${{ secrets.LOOKERSDK_CLIENT_SECRET__21_18 }}
     steps:
       - name: Clone repository
         uses: actions/checkout@v2
@@ -70,8 +70,8 @@ jobs:
 
       - name: Pull and run Looker docker image
         run: |
-          docker pull --quiet us-west1-docker.pkg.dev/cloud-looker-sdk-codegen-cicd/looker/21_16
-          docker run --name looker-sdk-codegen-ci -d -p 10000:9999 -p 20000:19999 us-west1-docker.pkg.dev/cloud-looker-sdk-codegen-cicd/looker/21_16
+          docker pull --quiet us-west1-docker.pkg.dev/cloud-looker-sdk-codegen-cicd/looker/21_18
+          docker run --name looker-sdk-codegen-ci -d -p 10000:9999 -p 20000:19999 us-west1-docker.pkg.dev/cloud-looker-sdk-codegen-cicd/looker/21_18
           docker logs -f looker-sdk-codegen-ci --until=30s &
           python ${{ github.workspace }}/.github/scripts/wait_for_looker.py
 

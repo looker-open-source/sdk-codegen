@@ -24,25 +24,58 @@
 
  */
 
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import type { FC } from 'react'
-import { SpaceVertical } from '@looker/components'
-import type { AgendaItems } from '.'
-import { calcAgenda, AgendaCard } from '.'
+import type { IHackerProps } from '../../../models'
+import type { AgendaItems, IAgendaEras } from '.'
+import { AgendaEra, agendaEras, Era } from '.'
 
 interface AgendaProps {
   schedule: AgendaItems
-  language: string
+  hacker: IHackerProps
 }
 
-export const Agenda: FC<AgendaProps> = ({ schedule, language }) => {
-  const agenda = calcAgenda(schedule)
+export const Agenda: FC<AgendaProps> = ({ schedule, hacker }) => {
+  const [eras, setEras] = useState<IAgendaEras>(() => agendaEras(schedule))
+  const [defaultEra, setDefaultEra] = useState<string>(Era.present)
+
+  const calcDefaultEra = (newEras: IAgendaEras) => {
+    setEras(newEras)
+    if (newEras.present.length > 0) {
+      setDefaultEra(Era.present)
+    } else if (newEras.future.length > 0) {
+      setDefaultEra(Era.future)
+    } else {
+      setDefaultEra(Era.past)
+    }
+  }
+
+  useEffect(() => {
+    calcDefaultEra(agendaEras(schedule))
+  }, [schedule, hacker])
+
+  // TODO resurrect this after figuring out EF issues
+  // useEffect(() => {
+  //   const interval = setInterval(
+  //     () => calcDefaultEras(agendaEras(schedule, hacker.timezone)),
+  //     5 * 1000
+  //   )
+  //   return () => {
+  //     clearInterval(interval)
+  //   }
+  // }, [])
+
   return (
-    <SpaceVertical>
-      {agenda &&
-        agenda.map((item, index) => (
-          <AgendaCard key={`agenda${index}`} item={item} language={language} />
-        ))}
-    </SpaceVertical>
+    <>
+      {Object.keys(eras).map((era) => (
+        <AgendaEra
+          era={era}
+          key={era}
+          agenda={eras[era]}
+          hacker={hacker}
+          defaultOpen={era === defaultEra}
+        />
+      ))}
+    </>
   )
 }

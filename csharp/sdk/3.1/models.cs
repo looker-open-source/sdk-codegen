@@ -775,6 +775,14 @@ public class Dashboard : SdkModel
   public DateTime? last_accessed_at { get; set; } = null;
   /// <summary>Time last viewed in the Looker web UI (read-only)</summary>
   public DateTime? last_viewed_at { get; set; } = null;
+  /// <summary>Time that the Dashboard was most recently updated. (read-only)</summary>
+  public DateTime? updated_at { get; set; } = null;
+  /// <summary>Id of User that most recently updated the dashboard. (read-only)</summary>
+  public long? last_updater_id { get; set; } = null;
+  /// <summary>Name of User that most recently updated the dashboard. (read-only)</summary>
+  public string? last_updater_name { get; set; } = null;
+  /// <summary>Name of User that created the dashboard. (read-only)</summary>
+  public string? user_name { get; set; } = null;
   /// <summary>configuration option that governs how dashboard loading will happen.</summary>
   public string? load_configuration { get; set; } = null;
   /// <summary>Links this dashboard to a particular LookML dashboard such that calling a **sync** operation on that LookML dashboard will update this dashboard to match.</summary>
@@ -3313,6 +3321,8 @@ public class RenderTask : SdkModel
   public string? lookml_dashboard_id { get; set; } = null;
   /// <summary>Id of query to render (read-only)</summary>
   public long? query_id { get; set; } = null;
+  /// <summary>Id of dashboard element to render: UDD dashboard element would be numeric and LookML dashboard element would be model_name::dashboard_title::lookml_link_id (read-only)</summary>
+  public string? dashboard_element_id { get; set; } = null;
   /// <summary>Number of seconds elapsed running queries (read-only)</summary>
   public double? query_runtime { get; set; } = null;
   /// <summary>Number of seconds elapsed rendering data (read-only)</summary>
@@ -4495,7 +4505,7 @@ public class WriteCustomWelcomeEmail : SdkModel
 }
 
 /// Dynamic writeable type for Dashboard removes:
-/// can, content_favorite_id, content_metadata_id, id, model, readonly, refresh_interval_to_i, user_id, created_at, dashboard_elements, dashboard_filters, dashboard_layouts, deleted_at, deleter_id, edit_uri, favorite_count, last_accessed_at, last_viewed_at, view_count
+/// can, content_favorite_id, content_metadata_id, id, model, readonly, refresh_interval_to_i, user_id, created_at, dashboard_elements, dashboard_filters, dashboard_layouts, deleted_at, deleter_id, edit_uri, favorite_count, last_accessed_at, last_viewed_at, updated_at, last_updater_id, last_updater_name, user_name, view_count
 public class WriteDashboard : SdkModel
 {
   /// <summary>Description</summary>

@@ -117,6 +117,7 @@ export class StandaloneEnvAdaptor implements IApixEnvAdaptor {
 
 export enum EnvAdaptorConstants {
   LOCALSTORAGE_SDK_LANGUAGE_KEY = 'sdkLanguage',
+  LOCALSTORAGE_SETTINGS_KEY = 'settings',
 }
 
 let envAdaptor: IApixEnvAdaptor | undefined

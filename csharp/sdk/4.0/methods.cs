@@ -115,7 +115,7 @@ namespace Looker.SDK.API40
   }
 
   /// ### Update select alert fields
-  /// # Available fields: `owner_id`, `is_disabled`, `is_public`, `threshold`
+  /// # Available fields: `owner_id`, `is_disabled`, `disabled_reason`, `is_public`, `threshold`
   /// #
   ///
   /// PATCH /alerts/{alert_id} -> Alert
@@ -125,7 +125,7 @@ namespace Looker.SDK.API40
   /// <param name="alert_id">ID of an alert</param>
   public async Task<SdkResponse<Alert, Exception>> update_alert_field(
     long alert_id,
-    WriteAlert body,
+    AlertPatch body,
     ITransportSettings? options = null)
 {  
     return await AuthRequest<Alert, Exception>(HttpMethod.Patch, $"/alerts/{alert_id}", null,body,options);

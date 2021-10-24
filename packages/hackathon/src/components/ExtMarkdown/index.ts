@@ -23,12 +23,5 @@
  SOFTWARE.
 
  */
-import type { SetSdkLanguageAction } from './actions'
-import { SettingsActionTypes } from './actions'
 
-export const setSdkLanguageAction = (
-  sdkLanguage: string
-): SetSdkLanguageAction => ({
-  type: SettingsActionTypes.SET_SDK_LANGUAGE,
-  payload: sdkLanguage,
-})
+export * from './ExtMarkdown'
