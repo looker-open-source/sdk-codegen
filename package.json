@@ -51,7 +51,7 @@
     "lint-staged": "yarn exec lint-staged",
     "lint-changed": "eslint $(git diff --name-only --diff-filter=ACMRTUXB origin/main | grep  -E \"(.js$|.ts$|.tsx$)\") --quiet",
     "lint-changed-fix": "eslint $(git diff --name-only --diff-filter=ACMRTUXB origin/main | grep  -E \"(.js$|.ts$|.tsx$)\") --quiet --fix",
-    "lint:spec": "SUPPRESS_NO_CONFIG_WARNING=1 ts-node -O '{ \"module\": \"commonjs\", \"target\": \"es2019\" }' packages/sdk-codegen-scripts/scripts/specLinter.ts",
+    "spec:diff": "SUPPRESS_NO_CONFIG_WARNING=1 ts-node -O '{ \"module\": \"commonjs\", \"target\": \"es2019\" }' packages/sdk-codegen-scripts/scripts/specLinter.ts",
     "refresh": "SUPPRESS_NO_CONFIG_WARNING=1 ts-node -O '{ \"module\": \"commonjs\", \"target\": \"es2019\" }' packages/sdk-codegen-scripts/scripts/refresh_specs.ts",
     "register": "SUPPRESS_NO_CONFIG_WARNING=1 ts-node -O '{ \"module\": \"commonjs\", \"target\": \"es2019\" }' packages/sdk-codegen-scripts/scripts/register.ts",
     "test": "yarn jest",

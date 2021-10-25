@@ -309,7 +309,7 @@ export const mdHeaderRow = `
 | ------------ | -------- | --- | --- | ------------ | --------- | -------- | ------------ | --------- |`
 
 export const mdDiffRow = (diff: DiffRow) => `
-  | ${diff.name} | ${diff.id} | ${diff.lStatus} | ${diff.rStatus} | ${
+| ${diff.name} | ${diff.id} | ${diff.lStatus} | ${diff.rStatus} | ${
   diff.typeDiff
 } | ${diff.paramsDiff} | ${diff.bodyDiff} | ${
   diff.responseDiff
