@@ -1,5 +1,20 @@
 # Changelog
 
+## [1.17.0](https://www.github.com/looker-open-source/sdk-codegen/compare/sdk-codegen-all-v1.16.0...sdk-codegen-all-v1.17.0) (2021-10-24)
+
+
+### Features
+
+* Cloud Functions Examples (User Provisioner)  ([#849](https://www.github.com/looker-open-source/sdk-codegen/issues/849)) ([ec2e4d0](https://www.github.com/looker-open-source/sdk-codegen/commit/ec2e4d0ebc4c80dab4242a1e14a2ae6e0223c8c1))
+* Hackathon admin add users UI ([#854](https://www.github.com/looker-open-source/sdk-codegen/issues/854)) ([a6fe4fd](https://www.github.com/looker-open-source/sdk-codegen/commit/a6fe4fdb6c26c17be848196c68f3508205dbdc4c))
+* Looker 21.18 bindings ([#865](https://www.github.com/looker-open-source/sdk-codegen/issues/865)) ([fa98888](https://www.github.com/looker-open-source/sdk-codegen/commit/fa988886c2d88290044d2818de7f549ca28b49bc))
+* personalized Hackathon agenda ([#853](https://www.github.com/looker-open-source/sdk-codegen/issues/853)) ([a143225](https://www.github.com/looker-open-source/sdk-codegen/commit/a1432250bad0bd35d5d9c5044aced81cf2cc1346))
+
+
+### Bug Fixes
+
+* Update resources list and enable link opening  ([4f17aee](https://www.github.com/looker-open-source/sdk-codegen/commit/4f17aee91a0b0d7a133c1e77b3842b072e1a446e))
+
 ## [1.16.0](https://www.github.com/looker-open-source/sdk-codegen/compare/sdk-codegen-all-v1.15.0...sdk-codegen-all-v1.16.0) (2021-10-19)
 
 

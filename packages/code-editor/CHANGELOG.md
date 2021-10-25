@@ -1,5 +1,12 @@
 # Changelog
 
+### [0.1.12](https://www.github.com/looker-open-source/sdk-codegen/compare/code-editor-v0.1.11...code-editor-v0.1.12) (2021-10-24)
+
+
+### Features
+
+* personalized Hackathon agenda ([#853](https://www.github.com/looker-open-source/sdk-codegen/issues/853)) ([a143225](https://www.github.com/looker-open-source/sdk-codegen/commit/a1432250bad0bd35d5d9c5044aced81cf2cc1346))
+
 ### [0.1.11](https://www.github.com/looker-open-source/sdk-codegen/compare/code-editor-v0.1.10...code-editor-v0.1.11) (2021-10-19)
 
 
