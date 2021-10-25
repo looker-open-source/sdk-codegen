@@ -136,7 +136,7 @@ jobs:
       - name: Set up Python
         uses: actions/setup-python@v2
         with:
-          python-version: 3.x
+          python-version: 3.9
 
       - name: Pull and run Looker docker image
         # TODO: can we cache some layers of the image for faster download?
