@@ -100,6 +100,10 @@ export class Hackathons extends WhollySheet<Hackathon, IHackathonProps> {
     }
     const now = new Date().getTime()
     current = sorted.find((hack) => hack.judging_stops.getTime() >= now)
+    if (!current) {
+      // Finally, default to the last hackathon
+      current = sorted[sorted.length - 1]
+    }
     this._hackathon = current as Hackathon
     return this._hackathon
   }

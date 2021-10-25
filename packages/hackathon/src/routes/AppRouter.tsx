@@ -51,6 +51,7 @@ export enum Routes {
 }
 
 export interface AppRouterProps {
+  hacker: IHackerProps
   authorizedRoutes: Routes[]
 }
 
@@ -81,7 +82,7 @@ export const getAuthorizedRoutes = (
   return authorizedRoutes
 }
 
-export const AppRouter: FC<AppRouterProps> = ({ authorizedRoutes }) => (
+export const AppRouter: FC<AppRouterProps> = ({ authorizedRoutes, hacker }) => (
   <Switch>
     {authorizedRoutes.length > 0 && (
       <Redirect
@@ -92,7 +93,7 @@ export const AppRouter: FC<AppRouterProps> = ({ authorizedRoutes }) => (
     )}
     {authorizedRoutes.includes(Routes.HOME) && (
       <Route path={Routes.HOME} exact>
-        <HomeScene />
+        <HomeScene hacker={hacker} />
       </Route>
     )}
     {authorizedRoutes.includes(Routes.ADMIN) && (

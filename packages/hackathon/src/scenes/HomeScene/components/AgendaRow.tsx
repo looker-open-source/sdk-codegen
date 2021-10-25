@@ -26,48 +26,40 @@
 
 import type { FC } from 'react'
 import React from 'react'
-import {
-  Card,
-  CardContent,
-  Heading,
-  Space,
-  SpaceVertical,
-  Span,
-} from '@looker/components'
-import { Markdown } from '@looker/code-editor'
-import { spanDate, spanEta, spanTime } from './agendaUtils'
+import { TableRow, TableDataCell, Heading, Span } from '@looker/components'
+import type { IHackerProps } from '../../../models'
+import { ExtMarkdown } from '../../../components'
+import { gapDate, gapDiff, gapTime, zoneDate } from './agendaUtils'
 import type { AgendaTime, IAgendaItem } from './agendaUtils'
 
 interface AgendaCardProps {
   item: IAgendaItem
-  language: string
+  hacker: IHackerProps
+  color: string
 }
 
-export const AgendaCard: FC<AgendaCardProps> = ({ item, language }) => {
-  const current: AgendaTime = new Date()
+export const AgendaRow: FC<AgendaCardProps> = ({ item, hacker, color }) => {
+  const current: AgendaTime = zoneDate(new Date(), hacker.timezone)
+  const start = zoneDate(item.start, hacker.timezone)
+  const stop = zoneDate(item.stop!, hacker.timezone)
   return (
-    <Card width="100%">
-      <CardContent>
-        <Space gap="u10">
-          <SpaceVertical gap="u1">
-            <Heading fontSize="small" color="text2" fontWeight="bold" as="h4">
-              {spanDate(item.start, item.stop!, language)}
-            </Heading>
-            <Span fontSize="small" color="text2">
-              {spanTime(item.start, item.stop!, language)}
-            </Span>
-          </SpaceVertical>
-          <SpaceVertical gap="u1">
-            <Heading as="h3" fontSize="xlarge">
-              {item.title}
-            </Heading>
-            {item.description && <Markdown source={item.description} />}
-          </SpaceVertical>
-          <SpaceVertical gap="u1" align="end">
-            {spanEta(current, item.start, item.stop!, language)}
-          </SpaceVertical>
-        </Space>
-      </CardContent>
-    </Card>
+    <TableRow>
+      <TableDataCell width="20%">
+        <Heading fontSize="small" color="text2" fontWeight="bold" as="h5">
+          {gapDate(start, stop, hacker.locale)}
+        </Heading>
+        <Span fontSize="small" color="text2">
+          {gapTime(start, stop, hacker.locale)}
+        </Span>
+      </TableDataCell>
+      <TableDataCell>
+        <ExtMarkdown source={item.description} />
+      </TableDataCell>
+      <TableDataCell width="10%">
+        <Span fontSize="small" color={color}>
+          {gapDiff(current, start, stop, hacker.locale)}
+        </Span>
+      </TableDataCell>
+    </TableRow>
   )
 }

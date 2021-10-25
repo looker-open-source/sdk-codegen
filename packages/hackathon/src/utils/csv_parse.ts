@@ -24,29 +24,17 @@
 
  */
 
-import type { FC } from 'react'
-import React from 'react'
+import Papa from 'papaparse'
 
-import { Heading, SpaceVertical } from '@looker/components'
-import type { IHackerProps } from '../../models'
-import { Agenda } from './components'
-import { localAgenda } from './agenda'
-
-interface HomeSceneProps {
-  hacker: IHackerProps
-}
-
-export const HomeScene: FC<HomeSceneProps> = ({ hacker }) => {
-  const schedule = localAgenda(hacker.locale)
-
-  return (
-    <>
-      <SpaceVertical gap="u5">
-        <Heading as="h2" fontSize="xxxlarge" fontWeight="medium">
-          Agenda
-        </Heading>
-        <Agenda schedule={schedule} hacker={hacker} />
-      </SpaceVertical>
-    </>
-  )
+// Wrap Papa.parse in promise for async use.
+// Assumes header row in csv
+export async function parseCsv<T>(csvFile: File): Promise<Array<T>> {
+  return new Promise((resolve, reject) => {
+    Papa.parse(csvFile, {
+      header: true,
+      skipEmptyLines: 'greedy',
+      complete: (output: any) => resolve(output.data),
+      error: (e: Papa.ParseError) => reject(e),
+    })
+  })
 }
