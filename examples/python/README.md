@@ -4,6 +4,11 @@ You can find Python language examples in this folder.
 
 The full details of all Looker API endpoints are listed in Looker Docs: [Version 3.1](https://docs.looker.com/reference/api-and-integration/api-reference/v3.1), [Version 4.0](https://docs.looker.com/reference/api-and-integration/api-reference/v4.0)
 
+## Full Applications
+
+- [Flask full app demo](lookersdk-flask)
+- [Google Cloud Function: User Creation](cloud-function-user-provision)
+
 ## Connection : Manage Database Connections
 
 - [Test a specified connection](test_connection.py)
@@ -32,7 +37,7 @@ The full details of all Looker API endpoints are listed in Looker Docs: [Version
 - [Pause/Resume or Copy Schedules](manage_schedules.py)
 - [Create a Simple Schedule Plan](simple_schedule_plan.py)
 
-
 ## User : Manage Users
 
 - [Disable all active user sessions](logout_all_users.py)
+- [Google Cloud Function: User Creation](cloud-function-user-provision)
