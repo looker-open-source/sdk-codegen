@@ -28,7 +28,7 @@ import { registerTestEnvAdaptor } from '../../test-utils'
 
 import { EnvAdaptorConstants, getEnvAdaptor } from '../../utils'
 import * as sagas from './sagas'
-import { actions, defaultSettingsState, slice } from './slice'
+import { actions, defaultSettings, slice } from './slice'
 
 describe('Settings Sagas', () => {
   let sagaTester: ReduxSagaTester<any>
@@ -69,7 +69,7 @@ describe('Settings Sagas', () => {
   describe('initSaga', () => {
     const { initAction, initSuccessAction, initFailureAction } = actions
 
-    test('sends initSuccess action with default language on success if no persisted language is found', async () => {
+    test('sends initSuccess action with defaults on success if no persisted settings are found', async () => {
       sagaTester.dispatch(initAction())
       await sagaTester.waitFor('settings/initSuccessAction')
       const calledActions = sagaTester.getCalledActions()
@@ -77,7 +77,7 @@ describe('Settings Sagas', () => {
       expect(calledActions[0]).toEqual(initAction())
       expect(calledActions[1]).toEqual(
         initSuccessAction({
-          sdkLanguage: defaultSettingsState.sdkLanguage,
+          ...defaultSettings,
         })
       )
     })
@@ -94,6 +94,7 @@ describe('Settings Sagas', () => {
       expect(calledActions[0]).toEqual(initAction())
       expect(calledActions[1]).toEqual(
         initSuccessAction({
+          ...defaultSettings,
           sdkLanguage: 'Go',
         })
       )

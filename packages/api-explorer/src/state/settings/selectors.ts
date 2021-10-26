@@ -30,5 +30,11 @@ const getSettingsState = (state: RootState) => state.settings
 export const selectSdkLanguage = (state: RootState) =>
   getSettingsState(state).sdkLanguage
 
+export const selectSearchPattern = (state: RootState) =>
+  getSettingsState(state).searchPattern
+
+export const selectSearchCriteria = (state: RootState) =>
+  getSettingsState(state).searchCriteria
+
 export const isInitialized = (state: RootState) =>
   getSettingsState(state).initialized
