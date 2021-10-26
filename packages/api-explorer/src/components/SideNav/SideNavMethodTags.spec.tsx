@@ -29,13 +29,15 @@ import { screen } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 
 import { api } from '../../test-data'
-import { renderWithSearchAndRouter } from '../../test-utils'
+import { renderWithRouterAndReduxProvider } from '../../test-utils'
 import { SideNavMethodTags } from './SideNavMethodTags'
 
 describe('SideNavTags', () => {
   const tags = pick(api.tags, ['ApiAuth', 'Dashboard'])
   test('it renders a provided tag and its methods', () => {
-    renderWithSearchAndRouter(<SideNavMethodTags tags={tags} specKey={'3.1'} />)
+    renderWithRouterAndReduxProvider(
+      <SideNavMethodTags tags={tags} specKey={'3.1'} />
+    )
     const tag = screen.getByText('Dashboard')
     const tagContent = 'Create Dashboard'
     expect(screen.queryByText(tagContent)).not.toBeInTheDocument()
@@ -46,7 +48,9 @@ describe('SideNavTags', () => {
   })
 
   test('tags are rendered initially collapsed and expand when clicked', () => {
-    renderWithSearchAndRouter(<SideNavMethodTags tags={tags} specKey={'3.1'} />)
+    renderWithRouterAndReduxProvider(
+      <SideNavMethodTags tags={tags} specKey={'3.1'} />
+    )
 
     const allTags = screen.getAllByText(/ApiAuth|Dashboard/)
     expect(allTags).toHaveLength(2)
@@ -58,10 +62,8 @@ describe('SideNavTags', () => {
   })
 
   test('tag is expanded if specified in route', () => {
-    renderWithSearchAndRouter(
+    renderWithRouterAndReduxProvider(
       <SideNavMethodTags tags={tags} specKey={'3.1'} />,
-      undefined,
-      undefined,
       ['/3.1/methods/Dashboard']
     )
 
