@@ -27,7 +27,10 @@ import React from 'react'
 import { methodRefs, typeRefs } from '@looker/sdk-codegen'
 import { screen } from '@testing-library/react'
 
-import { renderWithSearchAndRouter } from '../../test-utils'
+import {
+  createTestStore,
+  renderWithRouterAndReduxProvider,
+} from '../../test-utils'
 import { api } from '../../test-data'
 import { buildPath } from '../../utils'
 import { DocReferences } from './DocReferences'
@@ -37,7 +40,7 @@ describe('DocReferences', () => {
     const typesUsed = typeRefs(api, api.types.DashboardElement.customTypes)
     const typesUsedBy = typeRefs(api, api.types.DashboardElement.parentTypes)
     const methodsUsedBy = methodRefs(api, api.types.DashboardElement.methodRefs)
-    renderWithSearchAndRouter(
+    renderWithRouterAndReduxProvider(
       <DocReferences
         typesUsed={typesUsed}
         typesUsedBy={typesUsedBy}
@@ -67,13 +70,17 @@ describe('DocReferences', () => {
 
   test('it highlights text matching search pattern', () => {
     const highlightPattern = 'dash'
-    renderWithSearchAndRouter(
+    const store = createTestStore({
+      settings: { searchPattern: highlightPattern },
+    })
+    renderWithRouterAndReduxProvider(
       <DocReferences
         typesUsed={[api.types.Dashboard]}
         specKey={'3.1'}
         api={api}
       />,
-      highlightPattern
+      undefined,
+      store
     )
     const foundRef = screen.getByRole('link')
     expect(foundRef).toContainHTML('<span class="hi">Dash</span>board')

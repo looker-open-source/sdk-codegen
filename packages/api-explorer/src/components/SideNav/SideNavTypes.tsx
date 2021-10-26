@@ -24,14 +24,16 @@
 
  */
 
-import React, { useContext, useEffect, useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import styled from 'styled-components'
 import { Accordion2, Heading } from '@looker/components'
 import type { TypeList } from '@looker/sdk-codegen'
 import { useHistory, useRouteMatch } from 'react-router-dom'
+import { useSelector } from 'react-redux'
+
 import { Link } from '../Link'
 import { buildTypePath, highlightHTML } from '../../utils'
-import { SearchContext } from '../../context'
+import { selectSearchPattern } from '../../state'
 
 interface TypesProps {
   types: TypeList
@@ -43,9 +45,7 @@ interface TypesProps {
 
 export const SideNavTypes = styled(
   ({ className, types, tag, specKey, defaultOpen = false }: TypesProps) => {
-    const {
-      searchSettings: { pattern },
-    } = useContext(SearchContext)
+    const searchPattern = useSelector(selectSearchPattern)
     const match = useRouteMatch<{ typeTag: string }>(
       `/:specKey/types/:typeTag/:typeName?`
     )
@@ -73,7 +73,7 @@ export const SideNavTypes = styled(
         className={className}
         label={
           <Heading as="h4" fontSize="small" py="xsmall">
-            {highlightHTML(pattern, tag)}
+            {highlightHTML(searchPattern, tag)}
           </Heading>
         }
       >
@@ -81,7 +81,7 @@ export const SideNavTypes = styled(
           {Object.values(types).map((type) => (
             <li key={type.name}>
               <Link to={`${buildTypePath(specKey, tag, type.name)}`}>
-                {highlightHTML(pattern, type.name)}
+                {highlightHTML(searchPattern, type.name)}
               </Link>
             </li>
           ))}

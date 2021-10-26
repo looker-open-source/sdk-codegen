@@ -26,6 +26,9 @@
 import { createSlice } from '@reduxjs/toolkit'
 import type { PayloadAction } from '@reduxjs/toolkit'
 import { createSliceHooks } from '@looker/redux'
+import type { SearchCriterionTerm } from '@looker/sdk-codegen'
+import { SearchAll, SetToCriteria } from '@looker/sdk-codegen'
+
 import { saga } from './sagas'
 
 export interface UserDefinedSettings {
@@ -33,12 +36,16 @@ export interface UserDefinedSettings {
 }
 
 export interface SettingState extends UserDefinedSettings {
+  searchPattern: string
+  searchCriteria: SearchCriterionTerm[]
   initialized: boolean
   error?: Error
 }
 
 export const defaultSettings = {
   sdkLanguage: 'Python',
+  searchPattern: '',
+  searchCriteria: SetToCriteria(SearchAll) as SearchCriterionTerm[],
 }
 
 export const defaultSettingsState: SettingState = {
@@ -46,9 +53,8 @@ export const defaultSettingsState: SettingState = {
   initialized: false,
 }
 
-export interface SetSdkLanguageAction {
-  sdkLanguage: string
-}
+type SetSearchPatternAction = Pick<SettingState, 'searchPattern'>
+type SetSdkLanguageAction = Pick<SettingState, 'sdkLanguage'>
 
 export type InitSuccessPayload = UserDefinedSettings
 
@@ -68,6 +74,12 @@ export const slice = createSlice({
     },
     setSdkLanguageAction(state, action: PayloadAction<SetSdkLanguageAction>) {
       state.sdkLanguage = action.payload.sdkLanguage
+    },
+    setSearchPatternAction(
+      state,
+      action: PayloadAction<SetSearchPatternAction>
+    ) {
+      state.searchPattern = action.payload.searchPattern
     },
   },
 })

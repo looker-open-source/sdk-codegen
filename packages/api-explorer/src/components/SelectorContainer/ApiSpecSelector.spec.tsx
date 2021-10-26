@@ -29,7 +29,7 @@ import { renderWithTheme } from '@looker/components-test-utils'
 import userEvent from '@testing-library/user-event'
 
 import { specs, getLoadedSpecState } from '../../test-data'
-import { renderWithRouter } from '../../test-utils'
+import { renderWithRouterAndReduxProvider } from '../../test-utils'
 import { ApiSpecSelector } from './ApiSpecSelector'
 
 const specState = getLoadedSpecState()
@@ -78,7 +78,7 @@ describe('ApiSpecSelector', () => {
   })
 
   test('it fires a SELECT_SPEC action when another spec is selected', async () => {
-    renderWithRouter(
+    renderWithRouterAndReduxProvider(
       <ApiSpecSelector
         specs={specs}
         spec={specState.spec}

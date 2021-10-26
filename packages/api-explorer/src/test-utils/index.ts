@@ -24,13 +24,9 @@
 
  */
 export {
-  renderWithSearch,
-  renderWithSearchAndRouter,
-} from './render_with_search'
-export {
   renderWithLode,
   renderWithReduxProviderAndLode,
 } from './render_with_lode'
-export { renderWithRouter, withRouter } from './router'
+export * from './router'
 export * from './redux'
 export { registerTestEnvAdaptor } from './envAdaptor'
