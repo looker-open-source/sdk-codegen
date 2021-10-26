@@ -28,14 +28,12 @@ import type { FC, Dispatch } from 'react'
 import React, { useContext, useEffect, useState } from 'react'
 import { useHistory, useLocation } from 'react-router-dom'
 import {
-  Heading,
   TabList,
   Tab,
   TabPanel,
   TabPanels,
   useTabs,
   InputSearch,
-  SpaceVertical,
 } from '@looker/components'
 import type {
   SpecItem,
@@ -50,7 +48,6 @@ import type { SpecAction } from '../../reducers'
 import { setPattern } from '../../reducers'
 import { useWindowSize } from '../../utils'
 import { HEADER_REM } from '../Header'
-import { SelectorContainer } from '../SelectorContainer'
 import { SideNavMethodTags } from './SideNavMethodTags'
 import { SideNavTypeTags } from './SideNavTypeTags'
 import { useDebounce, countMethods, countTypes } from './searchUtils'
@@ -66,12 +63,7 @@ interface SideNavProps {
   specDispatch: Dispatch<SpecAction>
 }
 
-export const SideNav: FC<SideNavProps> = ({
-  headless = false,
-  specs,
-  spec,
-  specDispatch,
-}) => {
+export const SideNav: FC<SideNavProps> = ({ headless = false, spec }) => {
   const history = useHistory()
   const location = useLocation()
   const api = spec.api || ({} as ApiModel)
@@ -151,28 +143,18 @@ export const SideNav: FC<SideNavProps> = ({
 
   return (
     <nav>
-      <SpaceVertical alignItems="center" p="large" gap="xsmall">
-        {headless && (
-          <SpaceVertical>
-            <Heading as="h5" color="key" fontWeight="bold">
-              API Documentation
-            </Heading>
-            <SelectorContainer
-              specs={specs}
-              spec={spec}
-              specDispatch={specDispatch}
-            />
-          </SpaceVertical>
-        )}
-        <InputSearch
-          aria-label="Search"
-          onChange={handleInputChange}
-          placeholder="Search"
-          value={pattern}
-          isClearable
-          changeOnSelect
-        />
-      </SpaceVertical>
+      <InputSearch
+        pl="large"
+        pr="large"
+        pb="large"
+        pt={headless ? 'u3' : 'large'}
+        aria-label="Search"
+        onChange={handleInputChange}
+        placeholder="Search"
+        value={pattern}
+        isClearable
+        changeOnSelect
+      />
       <SearchMessage search={searchResults} />
       <TabList {...tabs} distribute>
         <Tab>Methods ({methodCount})</Tab>

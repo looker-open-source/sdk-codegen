@@ -1,5 +1,43 @@
 # Changelog
 
+## [21.18.0](https://www.github.com/looker-open-source/sdk-codegen/compare/extension-api-explorer-v21.16.0...extension-api-explorer-v21.18.0) (2021-10-24)
+
+
+### Dependencies
+
+* The following workspace dependencies were updated
+  * dependencies
+    * @looker/api-explorer bumped from ^0.9.20 to ^0.9.21
+    * @looker/extension-sdk bumped from ^21.16.0 to ^21.18.0
+    * @looker/extension-sdk-react bumped from ^21.16.0 to ^21.18.0
+    * @looker/run-it bumped from ^0.9.20 to ^0.9.21
+    * @looker/sdk bumped from ^21.16.0 to ^21.18.0
+
+## [21.16.0](https://www.github.com/looker-open-source/sdk-codegen/compare/extension-api-explorer-v21.14.0...extension-api-explorer-v21.16.0) (2021-10-19)
+
+
+### Features
+
+* closest path match for API Explorer ([#811](https://www.github.com/looker-open-source/sdk-codegen/issues/811)) ([45fd26f](https://www.github.com/looker-open-source/sdk-codegen/commit/45fd26fb0f325fa90edfec72f835ed3a79b9afeb))
+* Use agenda data for the Hackathon home page ([#842](https://www.github.com/looker-open-source/sdk-codegen/issues/842)) ([0da2523](https://www.github.com/looker-open-source/sdk-codegen/commit/0da25239c3f108cb684309818c33c91c2a7c3278))
+
+
+### Bug Fixes
+
+* type issues, tests and bin/deploy ([#844](https://www.github.com/looker-open-source/sdk-codegen/issues/844)) ([9e4a141](https://www.github.com/looker-open-source/sdk-codegen/commit/9e4a1413d4b6267805c0514dac1def93f5a56cb6))
+
+
+### Dependencies
+
+* The following workspace dependencies were updated
+  * dependencies
+    * @looker/api-explorer bumped from ^0.9.19 to ^0.9.20
+    * @looker/extension-sdk bumped from ^21.14.0 to ^21.16.0
+    * @looker/extension-sdk-react bumped from ^21.14.0 to ^21.16.0
+    * @looker/run-it bumped from ^0.9.19 to ^0.9.20
+    * @looker/sdk bumped from ^21.14.0 to ^21.16.0
+    * @looker/sdk-codegen bumped from ^21.0.25 to ^21.1.0
+
 ## [21.14.0](https://www.github.com/looker-open-source/sdk-codegen/compare/extension-api-explorer-v21.12.1...extension-api-explorer-v21.14.0) (2021-09-01)
 
 

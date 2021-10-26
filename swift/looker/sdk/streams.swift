@@ -25,7 +25,7 @@
  */
 
 /**
- * 423 API methods
+ * 425 API methods
  */
 
 
@@ -52,6 +52,10 @@ open class LookerSDKStream: APIMethods {
          * @param {Int64} offset (Optional) Number of results to skip before returning any (used with `limit`).
          */
         offset: Int64? = nil,
+        /**
+         * @param {String} group_by (Optional) Dimension by which to order the results(`dashboard` | `owner`)
+         */
+        group_by: String? = nil,
         /**
          * @param {String} fields (Optional) Requested fields.
          */
@@ -83,7 +87,7 @@ open class LookerSDKStream: APIMethods {
         options: ITransportSettings? = nil
     ) -> SDKResponse<Data, SDKError> {
         let result: SDKResponse<Data, SDKError> = self.get("/alerts/search", 
-            ["limit": limit, "offset": offset, "fields": fields, "disabled": disabled as Any?, "frequency": frequency, "condition_met": condition_met as Any?, "last_run_start": last_run_start, "last_run_end": last_run_end, "all_owners": all_owners as Any?], nil, options)
+            ["limit": limit, "offset": offset, "group_by": group_by, "fields": fields, "disabled": disabled as Any?, "frequency": frequency, "condition_met": condition_met as Any?, "last_run_start": last_run_start, "last_run_end": last_run_end, "all_owners": all_owners as Any?], nil, options)
         return result
     }
 
@@ -129,7 +133,7 @@ open class LookerSDKStream: APIMethods {
 
     /**
      * ### Update select alert fields
-     * # Available fields: `owner_id`, `is_disabled`, `is_public`, `threshold`
+     * # Available fields: `owner_id`, `is_disabled`, `disabled_reason`, `is_public`, `threshold`
      * #
      *
      * PATCH /alerts/{alert_id} -> Alert
@@ -140,9 +144,9 @@ open class LookerSDKStream: APIMethods {
          */
         _ alert_id: Int64,
         /**
-         * @param {WriteAlert} body
+         * @param {AlertPatch} body
          */
-        _ body: WriteAlert,
+        _ body: AlertPatch,
         options: ITransportSettings? = nil
     ) -> SDKResponse<Data, SDKError> {
         let path_alert_id = encodeParam(alert_id)
@@ -214,6 +218,28 @@ open class LookerSDKStream: APIMethods {
         options: ITransportSettings? = nil
     ) -> SDKResponse<Data, SDKError> {
         let result: SDKResponse<Data, SDKError> = self.post("/alerts", nil, try! self.encode(body), options)
+        return result
+    }
+
+    /**
+     * ### Enqueue an Alert by ID
+     *
+     * POST /alerts/{alert_id}/enqueue -> Voidable
+     */
+    public func enqueue_alert(
+        /**
+         * @param {Int64} alert_id ID of an alert
+         */
+        _ alert_id: Int64,
+        /**
+         * @param {Bool} force Whether to enqueue an alert again if its already running.
+         */
+        force: Bool? = nil,
+        options: ITransportSettings? = nil
+    ) -> SDKResponse<Data, SDKError> {
+        let path_alert_id = encodeParam(alert_id)
+        let result: SDKResponse<Data, SDKError> = self.post("/alerts/\(path_alert_id)/enqueue", 
+            ["force": force as Any?], nil, options)
         return result
     }
 
@@ -1935,9 +1961,9 @@ open class LookerSDKStream: APIMethods {
      */
     public func update_custom_welcome_email(
         /**
-         * @param {WriteCustomWelcomeEmail} body
+         * @param {CustomWelcomeEmail} body
          */
-        _ body: WriteCustomWelcomeEmail,
+        _ body: CustomWelcomeEmail,
         /**
          * @param {Bool} send_test_welcome_email If true a test email with the content from the request will be sent to the current user after saving
          */
@@ -2145,6 +2171,7 @@ open class LookerSDKStream: APIMethods {
      *  - marketplace_auto_install_enabled
      *  - marketplace_enabled
      *  - whitelabel_configuration
+     *  - custom_welcome_email
      *
      * GET /setting -> Setting
      */
@@ -2168,6 +2195,7 @@ open class LookerSDKStream: APIMethods {
      *  - marketplace_auto_install_enabled
      *  - marketplace_enabled
      *  - whitelabel_configuration
+     *  - custom_welcome_email
      *
      * See the `Setting` type for more information on the specific values that can be configured.
      *
@@ -3582,6 +3610,33 @@ open class LookerSDKStream: APIMethods {
     }
 
     /**
+     * ### Move an existing dashboard
+     *
+     * Moves a dashboard to a specified folder, and returns the moved dashboard.
+     *
+     * `dashboard_id` and `folder_id` are required.
+     * `dashboard_id` and `folder_id` must already exist, and `folder_id` must be different from the current `folder_id` of the dashboard.
+     *
+     * PATCH /dashboards/{dashboard_id}/move -> Dashboard
+     */
+    public func move_dashboard(
+        /**
+         * @param {String} dashboard_id Dashboard id to move.
+         */
+        _ dashboard_id: String,
+        /**
+         * @param {String} folder_id Folder id to move to.
+         */
+        _ folder_id: String,
+        options: ITransportSettings? = nil
+    ) -> SDKResponse<Data, SDKError> {
+        let path_dashboard_id = encodeParam(dashboard_id)
+        let result: SDKResponse<Data, SDKError> = self.patch("/dashboards/\(path_dashboard_id)/move", 
+            ["folder_id": folder_id], nil, options)
+        return result
+    }
+
+    /**
      * ### Copy an existing dashboard
      *
      * Creates a copy of an existing dashboard, in a specified folder, and returns the copied dashboard.
@@ -3607,33 +3662,6 @@ open class LookerSDKStream: APIMethods {
     ) -> SDKResponse<Data, SDKError> {
         let path_dashboard_id = encodeParam(dashboard_id)
         let result: SDKResponse<Data, SDKError> = self.post("/dashboards/\(path_dashboard_id)/copy", 
-            ["folder_id": folder_id], nil, options)
-        return result
-    }
-
-    /**
-     * ### Move an existing dashboard
-     *
-     * Moves a dashboard to a specified folder, and returns the moved dashboard.
-     *
-     * `dashboard_id` and `folder_id` are required.
-     * `dashboard_id` and `folder_id` must already exist, and `folder_id` must be different from the current `folder_id` of the dashboard.
-     *
-     * PATCH /dashboards/{dashboard_id}/move -> Dashboard
-     */
-    public func move_dashboard(
-        /**
-         * @param {String} dashboard_id Dashboard id to move.
-         */
-        _ dashboard_id: String,
-        /**
-         * @param {String} folder_id Folder id to move to.
-         */
-        _ folder_id: String,
-        options: ITransportSettings? = nil
-    ) -> SDKResponse<Data, SDKError> {
-        let path_dashboard_id = encodeParam(dashboard_id)
-        let result: SDKResponse<Data, SDKError> = self.patch("/dashboards/\(path_dashboard_id)/move", 
             ["folder_id": folder_id], nil, options)
         return result
     }
@@ -10697,6 +10725,37 @@ open class LookerSDKStream: APIMethods {
         let path_user_id = encodeParam(user_id)
         let result: SDKResponse<Data, SDKError> = self.post("/users/\(path_user_id)/credentials_email/send_password_reset", 
             ["fields": fields], nil, options)
+        return result
+    }
+
+    /**
+     * ### Change a disabled user's email addresses
+     *
+     * Allows the admin to change the email addresses for all the user's
+     * associated credentials.  Will overwrite all associated email addresses with
+     * the value supplied in the 'email' body param.
+     * The user's 'is_disabled' status must be true.
+     *
+     * POST /users/{user_id}/update_emails -> User
+     */
+    public func wipeout_user_emails(
+        /**
+         * @param {Int64} user_id Id of user
+         */
+        _ user_id: Int64,
+        /**
+         * @param {UserEmailOnly} body
+         */
+        _ body: UserEmailOnly,
+        /**
+         * @param {String} fields Requested fields.
+         */
+        fields: String? = nil,
+        options: ITransportSettings? = nil
+    ) -> SDKResponse<Data, SDKError> {
+        let path_user_id = encodeParam(user_id)
+        let result: SDKResponse<Data, SDKError> = self.post("/users/\(path_user_id)/update_emails", 
+            ["fields": fields], try! self.encode(body), options)
         return result
     }
 

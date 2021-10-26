@@ -23,39 +23,115 @@
  SOFTWARE.
 
  */
+
 import * as path from 'path'
 import { writeFileSync } from 'fs'
 import type { DiffFilter, DiffRow, IMethod } from '@looker/sdk-codegen'
-import { ApiModel, csvHeaderRow, csvDiffRow } from '@looker/sdk-codegen'
+import {
+  ApiModel,
+  csvHeaderRow,
+  csvDiffRow,
+  includeDiffs,
+  mdDiffRow,
+  mdHeaderRow,
+} from '@looker/sdk-codegen'
 import { compareSpecs } from '@looker/sdk-codegen/src/specDiff'
 import { readFileSync } from '../src'
 
+interface IDiffer {
+  /** Name of spec file A */
+  fileA: string
+  /** Name of spec file B */
+  fileB: string
+  /** Output format */
+  format: string
+  /** Beta status check? */
+  status: string
+}
+
+const rootPath = path.join(__dirname, '../../../spec')
+
+const getOptions = () => {
+  const result: IDiffer = {
+    fileA: path.join(rootPath, 'Looker.3.1.oas.json'),
+    fileB: path.join(rootPath, 'Looker.4.0.oas.json'),
+    format: 'csv',
+    status: 'beta',
+  }
+  const args = process.argv.slice(1)
+  console.log(`${args[0]} [fileA] [fileB] [format] [status]\n
+format=csv|md
+status=beta|all
+`)
+  console.log(`defaults:\n${JSON.stringify(result, null, 2)}`)
+  if (args.length > 1) {
+    result.fileA = args[1]
+  }
+  if (args.length > 2) {
+    result.fileB = args[2]
+  }
+  if (args.length > 3) {
+    const val = args[3].toLowerCase()
+    if (!['csv', 'md'].includes(val)) {
+      throw new Error(`"${val}" is not a recognized format`)
+    }
+    result.format = val
+  }
+  if (args.length > 4) {
+    const val = args[4].toLowerCase()
+    if (!['all', 'beta'].includes(val)) {
+      throw new Error(`"${val}" is not a recognized diff check status`)
+    }
+    result.status = args[4].toLowerCase()
+  }
+
+  return result
+}
+
+function checkSpecs() {
+  const opt = getOptions()
+  const specA = ApiModel.fromString(readFileSync(opt.fileA))
+  const specB = ApiModel.fromString(readFileSync(opt.fileB))
+
+  const filter: DiffFilter =
+    opt.status === 'beta'
+      ? (_delta: DiffRow, lMethod?: IMethod, _?: IMethod) =>
+          lMethod?.status === 'beta'
+      : includeDiffs
+
+  const diff = compareSpecs(specA, specB, filter)
+
+  let result = ''
+  switch (opt.format) {
+    case 'csv':
+      result = csvHeaderRow
+      diff.forEach((diffRow) => {
+        result += csvDiffRow(diffRow)
+      })
+      break
+    case 'md':
+      result = mdHeaderRow
+      diff.forEach((diffRow) => {
+        result += mdDiffRow(diffRow)
+      })
+      break
+  }
+
+  const outFile = path.join(rootPath, `../results.${opt.format}`)
+  writeFileSync(outFile, result, {
+    encoding: 'utf-8',
+  })
+  console.log(`Wrote ${diff.length} method differences to ${outFile}`)
+}
+
 /**
- * Compares Looker API 3.1 beta endpoints with their 4.0 version and writes the
+ * By default, compares Looker API 3.1 beta endpoints with their 4.0 version and writes the
  * result to csv.
  */
 ;(async () => {
-  const rootPath = path.join(__dirname, '../../../spec')
-  const spec31Path = path.join(rootPath, 'Looker.3.1.oas.json')
-  const spec40Path = path.join(rootPath, 'Looker.4.0.oas.json')
-
-  const spec31 = ApiModel.fromString(readFileSync(spec31Path))
-  const spec40 = ApiModel.fromString(readFileSync(spec40Path))
-
-  const filter: DiffFilter = (
-    _delta: DiffRow,
-    lMethod?: IMethod,
-    _?: IMethod
-  ) => lMethod?.status === 'beta'
-
-  const diff = compareSpecs(spec31, spec40, filter)
-
-  let result = csvHeaderRow
-  diff.forEach((diffRow) => {
-    result += csvDiffRow(diffRow)
-  })
-
-  writeFileSync(path.join(rootPath, '../results.csv'), result, {
-    encoding: 'utf-8',
-  })
+  try {
+    checkSpecs()
+  } catch (err: unknown) {
+    console.error(err)
+  }
 })()

@@ -5,6 +5,33 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [21.18.0](https://www.github.com/looker-open-source/sdk-codegen/compare/sdk-v21.16.0...sdk-v21.18.0) (2021-10-24)
+
+
+### Features
+
+* Looker 21.18 bindings ([#865](https://www.github.com/looker-open-source/sdk-codegen/issues/865)) ([fa98888](https://www.github.com/looker-open-source/sdk-codegen/commit/fa988886c2d88290044d2818de7f549ca28b49bc))
+
+## [21.16.0](https://www.github.com/looker-open-source/sdk-codegen/compare/sdk-v21.14.0...sdk-v21.16.0) (2021-10-19)
+
+
+### Features
+
+* 21.16 release ([#859](https://www.github.com/looker-open-source/sdk-codegen/issues/859)) ([0b4385c](https://www.github.com/looker-open-source/sdk-codegen/commit/0b4385c83c5225acf0a9b0c76f9e890600a449af))
+* closest path match for API Explorer ([#811](https://www.github.com/looker-open-source/sdk-codegen/issues/811)) ([45fd26f](https://www.github.com/looker-open-source/sdk-codegen/commit/45fd26fb0f325fa90edfec72f835ed3a79b9afeb))
+
+
+### Bug Fixes
+
+* intrinsic type params are not Partial<T> ([#819](https://www.github.com/looker-open-source/sdk-codegen/issues/819)) ([4b31490](https://www.github.com/looker-open-source/sdk-codegen/commit/4b31490f7ce5c9593854e56518245c5399ea9548))
+
+
+### Dependencies
+
+* The following workspace dependencies were updated
+  * dependencies
+    * @looker/sdk-rtl bumped from ^21.0.20 to ^21.1.0
+
 ## [21.14.0](https://www.github.com/looker-open-source/sdk-codegen/compare/sdk-v21.12.0...sdk-v21.14.0) (2021-09-01)
 
 

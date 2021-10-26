@@ -34,7 +34,7 @@ jobs:
       - uses: actions/checkout@v2
       - uses: actions/setup-python@v2
         with:
-          python-version: 3.x
+          python-version: 3.9
       - run: pip install -e .
       - run: pip install mypy types-requests
       - run: mypy looker_sdk/
@@ -94,9 +94,9 @@ jobs:
         os:
           - ubuntu
         looker:
-          - '21_10'
           - '21_12'
-          - '21_14'
+          - '21_16'
+          - '21_18'
           # TODO uncomment `include:` when either macos or windows works to satisfaction.
           #include:
           # TODO: macos matrix leg is functional but it takes ~20 minutes (compared
@@ -109,13 +109,13 @@ jobs:
           # the final layer(s) with Looker IP. This would speed up docker pull on
           # all OSs.
           #- os: macos
-          #  python-version: '3.x'
+          #  python-version: 3.9
           #  looker: '7_20'
           # TODO: currently can't run linux containers on windows.
           # Pending new windows server version
           # https://github.com/actions/virtual-environments/issues/1143#issuecomment-698797524
           #- os: windows
-          #  python-version: '3.x'
+          #  python-version: 3.9
           #  looker: '7_20'
     steps:
       - name: Repo Checkout
@@ -123,7 +123,7 @@ jobs:
       - name: Set up Python
         uses: actions/setup-python@v2
         with:
-          python-version: 3.x
+          python-version: 3.9
       - name: Install Tox and any other packages
         run: |
           python -m pip install --upgrade pip
@@ -188,7 +188,7 @@ jobs:
       - uses: actions/checkout@v2
       - uses: actions/setup-python@v2
         with:
-          python-version: 3.x
+          python-version: 3.9
       - name: Twine upload check
         run: |
           pip install wheel twine

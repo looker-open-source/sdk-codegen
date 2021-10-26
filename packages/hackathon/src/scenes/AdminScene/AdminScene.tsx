@@ -30,8 +30,9 @@ import { useHistory, useRouteMatch } from 'react-router-dom'
 import { Routes } from '../../routes/AppRouter'
 import { getTabInfo } from '../../utils'
 import { UserAttributes } from './components/UserAttributes'
+import { AddUsers } from './components/AddUsers'
 
-const tabnames = ['general', 'config']
+const tabnames = ['general', 'config', 'addusers']
 
 export const AdminScene: FC = () => {
   const history = useHistory()
@@ -61,6 +62,7 @@ export const AdminScene: FC = () => {
       <TabList selectedIndex={tabIndex} onSelectTab={onSelectTab}>
         <Tab>General</Tab>
         <Tab>Configuration</Tab>
+        <Tab>Add Users</Tab>
       </TabList>
       <TabPanels selectedIndex={tabIndex}>
         <TabPanel>
@@ -68,6 +70,9 @@ export const AdminScene: FC = () => {
         </TabPanel>
         <TabPanel>
           <UserAttributes />
+        </TabPanel>
+        <TabPanel>
+          <AddUsers />
         </TabPanel>
       </TabPanels>
     </>

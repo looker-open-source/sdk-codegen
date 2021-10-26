@@ -99,9 +99,9 @@ jobs:
         os:
           - ubuntu
         looker:
-          - '21_10'
           - '21_12'
-          - '21_14'
+          - '21_16'
+          - '21_18'
 
     steps:
       - name: Repo Checkout
@@ -136,7 +136,7 @@ jobs:
       - name: Set up Python
         uses: actions/setup-python@v2
         with:
-          python-version: 3.x
+          python-version: 3.9
 
       - name: Pull and run Looker docker image
         # TODO: can we cache some layers of the image for faster download?

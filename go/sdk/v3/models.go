@@ -459,8 +459,8 @@ type CustomWelcomeEmail struct {
   Can     *map[string]bool `json:"can,omitempty"`      // Operations the current user is able to perform on this object
   Enabled *bool            `json:"enabled,omitempty"`  // If true, custom email content will replace the default body of welcome emails
   Content *string          `json:"content,omitempty"`  // The HTML to use as custom content for welcome emails. Script elements and other potentially dangerous markup will be removed.
-  Subject *string          `json:"subject,omitempty"`  // The text to appear in the email subject line.
-  Header  *string          `json:"header,omitempty"`   // The text to appear in the header line of the email body.
+  Subject *string          `json:"subject,omitempty"`  // The text to appear in the email subject line. Only available with a whitelabel license and whitelabel_configuration.advanced_custom_welcome_email enabled.
+  Header  *string          `json:"header,omitempty"`   // The text to appear in the header line of the email body. Only available with a whitelabel license and whitelabel_configuration.advanced_custom_welcome_email enabled.
 }
 
 
@@ -494,8 +494,13 @@ type Dashboard struct {
   DeleterId                           *int64               `json:"deleter_id,omitempty"`                                // Id of User that 'soft' deleted the dashboard.
   EditUri                             *url.URL             `json:"edit_uri,omitempty"`                                  // Relative path of URI of LookML file to edit the dashboard (LookML dashboard only).
   FavoriteCount                       *int64               `json:"favorite_count,omitempty"`                            // Number of times favorited
+  FiltersBarCollapsed                 *bool                `json:"filters_bar_collapsed,omitempty"`                     // Sets the default state of the filters bar to collapsed or open
   LastAccessedAt                      *time.Time           `json:"last_accessed_at,omitempty"`                          // Time the dashboard was last accessed
   LastViewedAt                        *time.Time           `json:"last_viewed_at,omitempty"`                            // Time last viewed in the Looker web UI
+  UpdatedAt                           *time.Time           `json:"updated_at,omitempty"`                                // Time that the Dashboard was most recently updated.
+  LastUpdaterId                       *int64               `json:"last_updater_id,omitempty"`                           // Id of User that most recently updated the dashboard.
+  LastUpdaterName                     *string              `json:"last_updater_name,omitempty"`                         // Name of User that most recently updated the dashboard.
+  UserName                            *string              `json:"user_name,omitempty"`                                 // Name of User that created the dashboard.
   LoadConfiguration                   *string              `json:"load_configuration,omitempty"`                        // configuration option that governs how dashboard loading will happen.
   LookmlLinkId                        *string              `json:"lookml_link_id,omitempty"`                            // Links this dashboard to a particular LookML dashboard such that calling a **sync** operation on that LookML dashboard will update this dashboard to match.
   ShowFiltersBar                      *bool                `json:"show_filters_bar,omitempty"`                          // Show filters bar.  **Security Note:** This property only affects the *cosmetic* appearance of the dashboard, not a user's ability to access data. Hiding the filters bar does **NOT** prevent users from changing filters by other means. For information on how to set up secure data access control policies, see [Control User Access to Data](https://looker.com/docs/r/api/control-access)
@@ -1988,25 +1993,26 @@ type QueryTask struct {
 
 
 type RenderTask struct {
-  Can               *map[string]bool `json:"can,omitempty"`                  // Operations the current user is able to perform on this object
-  CreatedAt         *string          `json:"created_at,omitempty"`           // Date/Time render task was created
-  DashboardFilters  *string          `json:"dashboard_filters,omitempty"`    // Filter values to apply to the dashboard queries, in URL query format
-  DashboardId       *int64           `json:"dashboard_id,omitempty"`         // Id of dashboard to render
-  DashboardStyle    *string          `json:"dashboard_style,omitempty"`      // Dashboard layout style: single_column or tiled
-  FinalizedAt       *string          `json:"finalized_at,omitempty"`         // Date/Time render task was completed
-  Height            *int64           `json:"height,omitempty"`               // Output height in pixels. Flowed layouts may ignore this value.
-  Id                *string          `json:"id,omitempty"`                   // Id of this render task
-  LookId            *int64           `json:"look_id,omitempty"`              // Id of look to render
-  LookmlDashboardId *string          `json:"lookml_dashboard_id,omitempty"`  // Id of lookml dashboard to render
-  QueryId           *int64           `json:"query_id,omitempty"`             // Id of query to render
-  QueryRuntime      *float64         `json:"query_runtime,omitempty"`        // Number of seconds elapsed running queries
-  RenderRuntime     *float64         `json:"render_runtime,omitempty"`       // Number of seconds elapsed rendering data
-  ResultFormat      *string          `json:"result_format,omitempty"`        // Output format: pdf, png, or jpg
-  Runtime           *float64         `json:"runtime,omitempty"`              // Total seconds elapsed for render task
-  Status            *string          `json:"status,omitempty"`               // Render task status: enqueued_for_query, querying, enqueued_for_render, rendering, success, failure
-  StatusDetail      *string          `json:"status_detail,omitempty"`        // Additional information about the current status
-  UserId            *int64           `json:"user_id,omitempty"`              // The user account permissions in which the render task will execute
-  Width             *int64           `json:"width,omitempty"`                // Output width in pixels
+  Can                *map[string]bool `json:"can,omitempty"`                   // Operations the current user is able to perform on this object
+  CreatedAt          *string          `json:"created_at,omitempty"`            // Date/Time render task was created
+  DashboardFilters   *string          `json:"dashboard_filters,omitempty"`     // Filter values to apply to the dashboard queries, in URL query format
+  DashboardId        *int64           `json:"dashboard_id,omitempty"`          // Id of dashboard to render
+  DashboardStyle     *string          `json:"dashboard_style,omitempty"`       // Dashboard layout style: single_column or tiled
+  FinalizedAt        *string          `json:"finalized_at,omitempty"`          // Date/Time render task was completed
+  Height             *int64           `json:"height,omitempty"`                // Output height in pixels. Flowed layouts may ignore this value.
+  Id                 *string          `json:"id,omitempty"`                    // Id of this render task
+  LookId             *int64           `json:"look_id,omitempty"`               // Id of look to render
+  LookmlDashboardId  *string          `json:"lookml_dashboard_id,omitempty"`   // Id of lookml dashboard to render
+  QueryId            *int64           `json:"query_id,omitempty"`              // Id of query to render
+  DashboardElementId *string          `json:"dashboard_element_id,omitempty"`  // Id of dashboard element to render: UDD dashboard element would be numeric and LookML dashboard element would be model_name::dashboard_title::lookml_link_id
+  QueryRuntime       *float64         `json:"query_runtime,omitempty"`         // Number of seconds elapsed running queries
+  RenderRuntime      *float64         `json:"render_runtime,omitempty"`        // Number of seconds elapsed rendering data
+  ResultFormat       *string          `json:"result_format,omitempty"`         // Output format: pdf, png, or jpg
+  Runtime            *float64         `json:"runtime,omitempty"`               // Total seconds elapsed for render task
+  Status             *string          `json:"status,omitempty"`                // Render task status: enqueued_for_query, querying, enqueued_for_render, rendering, success, failure
+  StatusDetail       *string          `json:"status_detail,omitempty"`         // Additional information about the current status
+  UserId             *int64           `json:"user_id,omitempty"`               // The user account permissions in which the render task will execute
+  Width              *int64           `json:"width,omitempty"`                 // Output width in pixels
 }
 
 
@@ -3216,12 +3222,12 @@ type WriteCredentialsEmail struct {
 type WriteCustomWelcomeEmail struct {
   Enabled *bool   `json:"enabled,omitempty"`  // If true, custom email content will replace the default body of welcome emails
   Content *string `json:"content,omitempty"`  // The HTML to use as custom content for welcome emails. Script elements and other potentially dangerous markup will be removed.
-  Subject *string `json:"subject,omitempty"`  // The text to appear in the email subject line.
-  Header  *string `json:"header,omitempty"`   // The text to appear in the header line of the email body.
+  Subject *string `json:"subject,omitempty"`  // The text to appear in the email subject line. Only available with a whitelabel license and whitelabel_configuration.advanced_custom_welcome_email enabled.
+  Header  *string `json:"header,omitempty"`   // The text to appear in the header line of the email body. Only available with a whitelabel license and whitelabel_configuration.advanced_custom_welcome_email enabled.
 }
 
 // Dynamic writeable type for Dashboard removes:
-// can, content_favorite_id, content_metadata_id, id, model, readonly, refresh_interval_to_i, user_id, created_at, dashboard_elements, dashboard_filters, dashboard_layouts, deleted_at, deleter_id, edit_uri, favorite_count, last_accessed_at, last_viewed_at, view_count
+// can, content_favorite_id, content_metadata_id, id, model, readonly, refresh_interval_to_i, user_id, created_at, dashboard_elements, dashboard_filters, dashboard_layouts, deleted_at, deleter_id, edit_uri, favorite_count, last_accessed_at, last_viewed_at, updated_at, last_updater_id, last_updater_name, user_name, view_count
 type WriteDashboard struct {
   Description                         *string              `json:"description,omitempty"`                               // Description
   Hidden                              *bool                `json:"hidden,omitempty"`                                    // Is Hidden
@@ -3238,6 +3244,7 @@ type WriteDashboard struct {
   BackgroundColor                     *string              `json:"background_color,omitempty"`                          // Background color
   CrossfilterEnabled                  *bool                `json:"crossfilter_enabled,omitempty"`                       // Enables crossfiltering in dashboards - only available in dashboards-next (beta)
   Deleted                             *bool                `json:"deleted,omitempty"`                                   // Whether or not a dashboard is 'soft' deleted.
+  FiltersBarCollapsed                 *bool                `json:"filters_bar_collapsed,omitempty"`                     // Sets the default state of the filters bar to collapsed or open
   LoadConfiguration                   *string              `json:"load_configuration,omitempty"`                        // configuration option that governs how dashboard loading will happen.
   LookmlLinkId                        *string              `json:"lookml_link_id,omitempty"`                            // Links this dashboard to a particular LookML dashboard such that calling a **sync** operation on that LookML dashboard will update this dashboard to match.
   ShowFiltersBar                      *bool                `json:"show_filters_bar,omitempty"`                          // Show filters bar.  **Security Note:** This property only affects the *cosmetic* appearance of the dashboard, not a user's ability to access data. Hiding the filters bar does **NOT** prevent users from changing filters by other means. For information on how to set up secure data access control policies, see [Control User Access to Data](https://looker.com/docs/r/api/control-access)

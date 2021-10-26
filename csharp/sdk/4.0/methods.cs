@@ -21,7 +21,7 @@
 /// SOFTWARE.
 ///
 
-/// 423 API methods
+/// 425 API methods
 
 #nullable enable
 using System;
@@ -49,6 +49,7 @@ namespace Looker.SDK.API40
   ///
   /// <param name="limit">(Optional) Number of results to return (used with `offset`).</param>
   /// <param name="offset">(Optional) Number of results to skip before returning any (used with `limit`).</param>
+  /// <param name="group_by">(Optional) Dimension by which to order the results(`dashboard` | `owner`)</param>
   /// <param name="fields">(Optional) Requested fields.</param>
   /// <param name="disabled">(Optional) Filter on returning only enabled or disabled alerts.</param>
   /// <param name="frequency">(Optional) Filter on alert frequency, such as: monthly, weekly, daily, hourly, minutes</param>
@@ -59,6 +60,7 @@ namespace Looker.SDK.API40
   public async Task<SdkResponse<Alert[], Exception>> search_alerts(
     long? limit = null,
     long? offset = null,
+    string? group_by = null,
     string? fields = null,
     bool? disabled = null,
     string? frequency = null,
@@ -71,6 +73,7 @@ namespace Looker.SDK.API40
     return await AuthRequest<Alert[], Exception>(HttpMethod.Get, "/alerts/search", new Values {
       { "limit", limit },
       { "offset", offset },
+      { "group_by", group_by },
       { "fields", fields },
       { "disabled", disabled },
       { "frequency", frequency },
@@ -112,7 +115,7 @@ namespace Looker.SDK.API40
   }
 
   /// ### Update select alert fields
-  /// # Available fields: `owner_id`, `is_disabled`, `is_public`, `threshold`
+  /// # Available fields: `owner_id`, `is_disabled`, `disabled_reason`, `is_public`, `threshold`
   /// #
   ///
   /// PATCH /alerts/{alert_id} -> Alert
@@ -122,7 +125,7 @@ namespace Looker.SDK.API40
   /// <param name="alert_id">ID of an alert</param>
   public async Task<SdkResponse<Alert, Exception>> update_alert_field(
     long alert_id,
-    WriteAlert body,
+    AlertPatch body,
     ITransportSettings? options = null)
 {  
     return await AuthRequest<Alert, Exception>(HttpMethod.Patch, $"/alerts/{alert_id}", null,body,options);
@@ -187,6 +190,23 @@ namespace Looker.SDK.API40
     ITransportSettings? options = null)
 {  
     return await AuthRequest<Alert, Exception>(HttpMethod.Post, "/alerts", null,body,options);
+  }
+
+  /// ### Enqueue an Alert by ID
+  ///
+  /// POST /alerts/{alert_id}/enqueue -> void
+  ///
+  /// <returns><c>void</c> Alert successfully added to the queue. Does not indicate it has been run ()</returns>
+  ///
+  /// <param name="alert_id">ID of an alert</param>
+  /// <param name="force">Whether to enqueue an alert again if its already running.</param>
+  public async Task<SdkResponse<string, Exception>> enqueue_alert(
+    long alert_id,
+    bool? force = null,
+    ITransportSettings? options = null)
+{  
+    return await AuthRequest<string, Exception>(HttpMethod.Post, $"/alerts/{alert_id}/enqueue", new Values {
+      { "force", force }},null,options);
   }
 
   #endregion Alert: Alert
@@ -1671,7 +1691,7 @@ namespace Looker.SDK.API40
   ///
   /// <param name="send_test_welcome_email">If true a test email with the content from the request will be sent to the current user after saving</param>
   public async Task<SdkResponse<CustomWelcomeEmail, Exception>> update_custom_welcome_email(
-    WriteCustomWelcomeEmail body,
+    CustomWelcomeEmail body,
     bool? send_test_welcome_email = null,
     ITransportSettings? options = null)
 {  
@@ -1855,6 +1875,7 @@ namespace Looker.SDK.API40
   ///  - marketplace_auto_install_enabled
   ///  - marketplace_enabled
   ///  - whitelabel_configuration
+  ///  - custom_welcome_email
   ///
   /// GET /setting -> Setting
   ///
@@ -1876,6 +1897,7 @@ namespace Looker.SDK.API40
   ///  - marketplace_auto_install_enabled
   ///  - marketplace_enabled
   ///  - whitelabel_configuration
+  ///  - custom_welcome_email
   ///
   /// See the `Setting` type for more information on the specific values that can be configured.
   ///
@@ -3065,6 +3087,29 @@ namespace Looker.SDK.API40
     return await AuthRequest<DashboardLookml, Exception>(HttpMethod.Get, $"/dashboards/lookml/{dashboard_id}", null,null,options);
   }
 
+  /// ### Move an existing dashboard
+  ///
+  /// Moves a dashboard to a specified folder, and returns the moved dashboard.
+  ///
+  /// `dashboard_id` and `folder_id` are required.
+  /// `dashboard_id` and `folder_id` must already exist, and `folder_id` must be different from the current `folder_id` of the dashboard.
+  ///
+  /// PATCH /dashboards/{dashboard_id}/move -> Dashboard
+  ///
+  /// <returns><c>Dashboard</c> Dashboard (application/json)</returns>
+  ///
+  /// <param name="dashboard_id">Dashboard id to move.</param>
+  /// <param name="folder_id">Folder id to move to.</param>
+  public async Task<SdkResponse<Dashboard, Exception>> move_dashboard(
+    string dashboard_id,
+    string folder_id,
+    ITransportSettings? options = null)
+{  
+      dashboard_id = SdkUtils.EncodeParam(dashboard_id);
+    return await AuthRequest<Dashboard, Exception>(HttpMethod.Patch, $"/dashboards/{dashboard_id}/move", new Values {
+      { "folder_id", folder_id }},null,options);
+  }
+
   /// ### Copy an existing dashboard
   ///
   /// Creates a copy of an existing dashboard, in a specified folder, and returns the copied dashboard.
@@ -3088,29 +3133,6 @@ namespace Looker.SDK.API40
 {  
       dashboard_id = SdkUtils.EncodeParam(dashboard_id);
     return await AuthRequest<Dashboard, Exception>(HttpMethod.Post, $"/dashboards/{dashboard_id}/copy", new Values {
-      { "folder_id", folder_id }},null,options);
-  }
-
-  /// ### Move an existing dashboard
-  ///
-  /// Moves a dashboard to a specified folder, and returns the moved dashboard.
-  ///
-  /// `dashboard_id` and `folder_id` are required.
-  /// `dashboard_id` and `folder_id` must already exist, and `folder_id` must be different from the current `folder_id` of the dashboard.
-  ///
-  /// PATCH /dashboards/{dashboard_id}/move -> Dashboard
-  ///
-  /// <returns><c>Dashboard</c> Dashboard (application/json)</returns>
-  ///
-  /// <param name="dashboard_id">Dashboard id to move.</param>
-  /// <param name="folder_id">Folder id to move to.</param>
-  public async Task<SdkResponse<Dashboard, Exception>> move_dashboard(
-    string dashboard_id,
-    string folder_id,
-    ITransportSettings? options = null)
-{  
-      dashboard_id = SdkUtils.EncodeParam(dashboard_id);
-    return await AuthRequest<Dashboard, Exception>(HttpMethod.Patch, $"/dashboards/{dashboard_id}/move", new Values {
       { "folder_id", folder_id }},null,options);
   }
 
@@ -9004,6 +9026,29 @@ namespace Looker.SDK.API40
 {  
     return await AuthRequest<CredentialsEmail, Exception>(HttpMethod.Post, $"/users/{user_id}/credentials_email/send_password_reset", new Values {
       { "fields", fields }},null,options);
+  }
+
+  /// ### Change a disabled user's email addresses
+  ///
+  /// Allows the admin to change the email addresses for all the user's
+  /// associated credentials.  Will overwrite all associated email addresses with
+  /// the value supplied in the 'email' body param.
+  /// The user's 'is_disabled' status must be true.
+  ///
+  /// POST /users/{user_id}/update_emails -> User
+  ///
+  /// <returns><c>User</c> New state for specified user. (application/json)</returns>
+  ///
+  /// <param name="user_id">Id of user</param>
+  /// <param name="fields">Requested fields.</param>
+  public async Task<SdkResponse<User, Exception>> wipeout_user_emails(
+    long user_id,
+    UserEmailOnly body,
+    string? fields = null,
+    ITransportSettings? options = null)
+{  
+    return await AuthRequest<User, Exception>(HttpMethod.Post, $"/users/{user_id}/update_emails", new Values {
+      { "fields", fields }},body,options);
   }
 
   /// Create an embed user from an external user ID

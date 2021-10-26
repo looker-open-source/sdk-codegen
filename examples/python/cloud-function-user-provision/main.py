@@ -52,7 +52,7 @@ def get_email_from_sheet():
   # `service_account.json` is in the same directory of this function
   gc = gspread.service_account(filename='service_account.json')
 
-  # Get the key of an existing Google Sheet, obtainabled in the URL of the sheet: 
+  # Get the key of an existing Google Sheet, obtainabled in the URL of the sheet. 
   # Example: https://docs.google.com/spreadsheets/d/[KEY HERE]/edit#gid=111
   sh = gc.open_by_key('foo')
 
@@ -67,12 +67,15 @@ def looker_user_provision(email):
   user_id = search_users_by_email(email=email)
   if user_id is not None:
     sdk.send_user_credentials_email_password_reset(user_id=user_id)
-    return 'A user with this email: {email} already existed; Password reset sent'.format(email=email)
-  elif user_id is None: 
+    return f'A user with this email: {email} already existed; Password reset sent.'
+  else: 
     create_users(email=email)
-    return 'New user created; Setup/Welcome email sent to {email}'.format(email=email)
+    return f'New user created; Setup/Welcome email sent to {email}.'
 
 def search_users_by_email(email):
+  """An email can only be assigned to one user in a Looker instance. 
+  Therefore, search_user(email=test@test.com) will result in either
+  an empty dictionary, or a dictionary containing one user at index 0"""  
   users = sdk.search_users(email=email)
   if len(users) == 0:
     return None 
@@ -90,7 +93,7 @@ def create_users(email):
                 models_dir_validated=False
             )
         )
-      
+
   # Create email credentials for the new user
   sdk.create_user_credentials_email(
                 user_id=new_user.id,
@@ -98,7 +101,7 @@ def create_users(email):
                     email=email,
                     forced_password_reset_at_next_login=False
                 ))
-   
+
   # Send a welcome/setup email
   sdk.send_user_credentials_email_password_reset(user_id=new_user["id"])
   

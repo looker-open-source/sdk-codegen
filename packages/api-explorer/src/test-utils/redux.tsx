@@ -29,46 +29,44 @@ import { Provider } from 'react-redux'
 import type { Store } from 'redux'
 import { renderWithTheme } from '@looker/components-test-utils'
 import type { RenderOptions } from '@testing-library/react'
+import { createStore } from '@looker/redux'
 
 import type { RootState } from '../state'
-import { configureStore } from '../state'
-import type { IApixEnvAdaptor } from '../utils'
-import { StandaloneEnvAdaptor } from '../utils'
-import { EnvAdaptorContext } from '../context'
+import { defaultSettingsState, store as defaultStore } from '../state'
+import { slice as settingsSlice } from '../state/settings'
+import { registerEnvAdaptor, StandaloneEnvAdaptor } from '../utils'
 import { renderWithRouter } from '.'
-
-const defaultStore = configureStore()
 
 export const withReduxProvider = (
   consumers: ReactElement<any>,
-  store: Store<RootState> = defaultStore,
-  envAdaptor: IApixEnvAdaptor = new StandaloneEnvAdaptor()
+  store: Store<RootState> = defaultStore
 ) => {
-  return (
-    <Provider store={store}>
-      <EnvAdaptorContext.Provider value={{ envAdaptor }}>
-        {consumers}
-      </EnvAdaptorContext.Provider>
-    </Provider>
-  )
+  registerEnvAdaptor(new StandaloneEnvAdaptor())
+  return <Provider store={store}>{consumers}</Provider>
 }
 
 export const renderWithReduxProvider = (
   consumers: ReactElement<any>,
   store?: Store<RootState>,
-  envAdaptor?: IApixEnvAdaptor,
   options?: Omit<RenderOptions, 'queries'>
-) => renderWithTheme(withReduxProvider(consumers, store, envAdaptor), options)
+) => renderWithTheme(withReduxProvider(consumers, store), options)
 
 export const renderWithRouterAndReduxProvider = (
   consumers: ReactElement<any>,
   initialEntries: string[] = ['/'],
   store?: Store<RootState>,
-  envAdaptor?: IApixEnvAdaptor,
   options?: Omit<RenderOptions, 'queries'>
 ) =>
-  renderWithRouter(
-    withReduxProvider(consumers, store, envAdaptor),
-    initialEntries,
-    options
-  )
+  renderWithRouter(withReduxProvider(consumers, store), initialEntries, options)
+
+const preloadedState: RootState = {
+  settings: defaultSettingsState,
+}
+
+export const createTestStore = (overrides?: Partial<RootState>) =>
+  createStore({
+    preloadedState: {
+      settings: { ...preloadedState.settings, ...overrides?.settings },
+    },
+    reducer: { settings: settingsSlice.reducer },
+  })

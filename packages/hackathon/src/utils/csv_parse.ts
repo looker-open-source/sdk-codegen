@@ -23,11 +23,18 @@
  SOFTWARE.
 
  */
-import { combineReducers } from 'redux'
-import { settingsReducer } from './settings'
 
-export const reducers = combineReducers({
-  settings: settingsReducer,
-})
+import Papa from 'papaparse'
 
-export type RootState = ReturnType<typeof reducers>
+// Wrap Papa.parse in promise for async use.
+// Assumes header row in csv
+export async function parseCsv<T>(csvFile: File): Promise<Array<T>> {
+  return new Promise((resolve, reject) => {
+    Papa.parse(csvFile, {
+      header: true,
+      skipEmptyLines: 'greedy',
+      complete: (output: any) => resolve(output.data),
+      error: (e: Papa.ParseError) => reject(e),
+    })
+  })
+}

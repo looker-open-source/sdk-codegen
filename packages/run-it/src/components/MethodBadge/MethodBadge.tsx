@@ -98,7 +98,17 @@ export const cssForIntent = (intent: ApixIntentNames) =>
     color: ${({ theme }) => generatePressed(theme.colors[intent])};
   `
 
-export const MethodBadge = styled.div<MethodBadgeProps>`
+export const MethodBadge = styled.div.attrs(
+  ({
+    fontSize = 'xsmall',
+    fontWeight = 'semiBold',
+    minWidth = '2.5rem',
+  }: MethodBadgeProps) => ({
+    fontSize,
+    fontWeight,
+    minWidth,
+  })
+)<MethodBadgeProps>`
   ${typography}
 
   ${({ type }) => cssForIntent(pickBadgeIntent(type))};
@@ -115,9 +125,3 @@ export const MethodBadge = styled.div<MethodBadgeProps>`
   padding: ${({ compact, theme: { space } }) =>
     `${space.xxsmall} ${compact ? space.none : space.xsmall}`};
 `
-
-MethodBadge.defaultProps = {
-  fontSize: 'xsmall',
-  fontWeight: 'semiBold',
-  minWidth: '2.5rem',
-}

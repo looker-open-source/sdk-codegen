@@ -32,8 +32,5 @@ export {
   renderWithReduxProviderAndLode,
 } from './render_with_lode'
 export { renderWithRouter, withRouter } from './router'
-export {
-  renderWithRouterAndReduxProvider,
-  renderWithReduxProvider,
-  withReduxProvider,
-} from './redux'
+export * from './redux'
+export { registerTestEnvAdaptor } from './envAdaptor'

@@ -1,7 +1,7 @@
 {
   "license": "MIT",
   "name": "sdk-codegen-all",
-  "version": "1.15.0",
+  "version": "1.17.0",
   "description": "All workspaces for SDK code generation",
   "author": "Looker",
   "private": true,
@@ -51,7 +51,7 @@
     "lint-staged": "yarn exec lint-staged",
     "lint-changed": "eslint $(git diff --name-only --diff-filter=ACMRTUXB origin/main | grep  -E \"(.js$|.ts$|.tsx$)\") --quiet",
     "lint-changed-fix": "eslint $(git diff --name-only --diff-filter=ACMRTUXB origin/main | grep  -E \"(.js$|.ts$|.tsx$)\") --quiet --fix",
-    "lint:spec": "SUPPRESS_NO_CONFIG_WARNING=1 ts-node -O '{ \"module\": \"commonjs\", \"target\": \"es2019\" }' packages/sdk-codegen-scripts/scripts/specLinter.ts",
+    "spec:diff": "SUPPRESS_NO_CONFIG_WARNING=1 ts-node -O '{ \"module\": \"commonjs\", \"target\": \"es2019\" }' packages/sdk-codegen-scripts/scripts/specLinter.ts",
     "refresh": "SUPPRESS_NO_CONFIG_WARNING=1 ts-node -O '{ \"module\": \"commonjs\", \"target\": \"es2019\" }' packages/sdk-codegen-scripts/scripts/refresh_specs.ts",
     "register": "SUPPRESS_NO_CONFIG_WARNING=1 ts-node -O '{ \"module\": \"commonjs\", \"target\": \"es2019\" }' packages/sdk-codegen-scripts/scripts/register.ts",
     "test": "yarn jest",
@@ -64,6 +64,7 @@
     "test:sdk": "yarn jest packages/sdk",
     "test:jest": "DOT_ENV_FILE=.env.test jest",
     "test:ext": "yarn jest packages/extension-sdk packages/extension-sdk-react",
+    "test:hack": "yarn jest packages/wholly-sheet packages/hackathon",
     "bootstrap": "lerna clean -y && lerna bootstrap",
     "watch": "lerna run --parallel watch",
     "watch:cjs": "lerna run --parallel watch:cjs"
@@ -89,7 +90,7 @@
     "@types/lodash": "^4.14.162",
     "@types/node": "^13.13.4",
     "@types/prettier": "^2.3.2",
-    "@types/readable-stream": "^2.3.5",
+    "@types/readable-stream": "2.3.9",
     "@types/request": "^2.48.3",
     "@types/request-promise-native": "^1.0.17",
     "babel-core": "^7.0.0-bridge",
@@ -143,7 +144,9 @@
     "lint-staged"
   ],
   "eslintConfig": {
-    "extends": [ "@looker/eslint-config-oss" ],
+    "extends": [
+      "@looker/eslint-config-oss"
+    ],
     "rules": {
       "@typescript-eslint/no-explicit-any": "off",
       "camelcase": "off",
@@ -185,27 +188,48 @@
     },
     "overrides": [
       {
-        "files": [ "packages/sdk-codegen/**/*.ts",  "packages/sdk-codegen-scripts/**/*.ts"],
+        "files": [
+          "packages/run-it/**/*.ts{,x}",
+          "packages/api-explorer/**/*.ts{,x}",
+          "packages/hackathon/**/*.ts{,x}"
+        ],
+        "rules": {
+          "no-restricted-imports": "off"
+        }
+      },
+      {
+        "files": [
+          "packages/sdk-codegen/**/*.ts",
+          "packages/sdk-codegen-scripts/**/*.ts"
+        ],
         "rules": {
           "testing-library/render-result-naming-convention": "off"
         }
       },
       {
-        "files":  ["packages/redux/**/*.ts?(x)", "packages/redux/**/*.spec.ts?(x)"],
+        "files": [
+          "packages/redux/**/*.ts?(x)",
+          "packages/redux/**/*.spec.ts?(x)"
+        ],
         "rules": {
           "testing-library/render-result-naming-convention": "off",
           "@typescript-eslint/no-empty-function": "off",
-          "@typescript-eslint/ban-ts-comment": "off"
+          "@typescript-eslint/ban-ts-comment": "off",
+          "testing-library/prefer-screen-queries": "off"
         }
       },
       {
-        "files": [  "packages/sdk-codegen-scripts/**/*.ts"],
+        "files": [
+          "packages/sdk-codegen-scripts/**/*.ts"
+        ],
         "rules": {
           "no-console": "off"
         }
       },
       {
-        "files": [ "**/*.spec.ts"],
+        "files": [
+          "**/*.spec.ts"
+        ],
         "rules": {
           "no-console": "off",
           "@typescript-eslint/no-non-null-assertion": "off"

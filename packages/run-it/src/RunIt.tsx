@@ -48,7 +48,7 @@ import {
 } from './components'
 import type { RunItSettings } from './utils'
 import {
-  formValues,
+  initRequestContent,
   createRequestParams,
   runRequest,
   pathify,
@@ -121,18 +121,19 @@ export const RunIt: FC<RunItProps> = ({
   const httpMethod = method.httpMethod as RunItHttpMethod
   const endpoint = method.endpoint
   const { sdk, configurator, basePath } = useContext(RunItContext)
-
-  const [requestContent, setRequestContent] = useState(formValues(configurator))
+  const [inputs] = useState(() => createInputs(api, method))
+  const [requestContent, setRequestContent] = useState(() =>
+    initRequestContent(configurator, inputs)
+  )
   const [activePathParams, setActivePathParams] = useState({})
   const [loading, setLoading] = useState(false)
   const [responseContent, setResponseContent] =
     useState<ResponseContent>(undefined)
   const [isExtension, setIsExtension] = useState<boolean>(false)
   const [hasConfig, setHasConfig] = useState<boolean>(true)
-  const [needsAuth, setNeedsAuth] = useState<boolean>(sdkNeedsAuth(sdk))
+  const [needsAuth, setNeedsAuth] = useState<boolean>(() => sdkNeedsAuth(sdk))
   const [validationMessage, setValidationMessage] = useState<string>('')
   const tabs = useTabs()
-  const inputs = createInputs(api, method)
 
   const perf = new PerfTimings()
 

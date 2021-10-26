@@ -1,9 +1,28 @@
-//
-//  modelsTests.swift
-//  lookerTests
-//
-//  Created by John Kaster on 10/29/19.
-//
+/**
+
+ MIT License
+
+ Copyright (c) 2021 Looker Data Sciences, Inc.
+
+ Permission is hereby granted, free of charge, to any person obtaining a copy
+ of this software and associated documentation files (the "Software"), to deal
+ in the Software without restriction, including without limitation the rights
+ to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+ copies of the Software, and to permit persons to whom the Software is
+ furnished to do so, subject to the following conditions:
+
+ The above copyright notice and this permission notice shall be included in all
+ copies or substantial portions of the Software.
+
+ THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+ FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+ AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+ LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+ SOFTWARE.
+
+ */
 
 import XCTest
 
@@ -34,19 +53,19 @@ class modelsTests: XCTestCase {
         print(dateString)
         XCTAssertNotNil(dateString)
     }
-    
+
     func testAllRequiredProperties() {
         let actual = CreateFolder("folder", "1")
         XCTAssertEqual(actual.name, "folder")
         XCTAssertEqual(actual.parent_id, "1")
     }
-    
+
     func testSomeOptionalProperties() {
         let actual = EmbedParams("http://foo", session_length: 20)
         XCTAssertEqual(actual.target_url, "http://foo")
         XCTAssertEqual(actual.session_length, 20)
     }
-    
+
     public class ClassInit: SDKModel {
         /// required property
         public var name: String
@@ -64,7 +83,7 @@ class modelsTests: XCTestCase {
             self.init(name: name, id: id)
         }
     }
-    
+
     public struct StructInit: SDKModel {
         /// required property
         public var name: String
@@ -82,7 +101,7 @@ class modelsTests: XCTestCase {
             self.init(name: name, id: id)
         }
     }
-    
+
     func testBothPositionalAndNamed() {
         let name = "one"
         let id = "id"

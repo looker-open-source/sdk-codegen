@@ -23,15 +23,9 @@
  SOFTWARE.
 
  */
-import { SettingsActionTypes } from './actions'
-import { setSdkLanguageAction } from './action_creators'
+import type { IApixEnvAdaptor } from '../utils'
+import { registerEnvAdaptor, StandaloneEnvAdaptor } from '../utils'
 
-describe('Settings reducer action creators', () => {
-  test('setSdkLanguageAction returns a SET_SDK_LANGUAGE action option with provided values', () => {
-    const action = setSdkLanguageAction('TypeScript')
-    expect(action).toEqual({
-      type: SettingsActionTypes.SET_SDK_LANGUAGE,
-      payload: 'TypeScript',
-    })
-  })
-})
+export const registerTestEnvAdaptor = (envAdaptor?: IApixEnvAdaptor) => {
+  registerEnvAdaptor(envAdaptor || new StandaloneEnvAdaptor())
+}

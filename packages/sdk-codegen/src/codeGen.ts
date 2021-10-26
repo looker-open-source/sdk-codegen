@@ -69,27 +69,34 @@ export interface IVersionInfo {
  * @param inputs current inputs
  * @returns inputs with all "empty" values removed so the key no longer exists
  */
-export const trimInputs = (inputs: any): any => {
-  function isEmpty(value: any) {
+export const trimInputs = (inputs: any, depth = 0): any => {
+  function isEmpty(value: any, depth: number): boolean {
     if (Array.isArray(value)) return value.length === 0
     if (value === undefined) return true
     if (value === null) return true
     if (value === '') return true
-    if (value instanceof Object) return Object.keys(value).length === 0
+    if (value instanceof Object) {
+      if (depth === 1) {
+        // Top level empty objects are kept. i.e { one: {} } is left unchanged.
+        return false
+      }
+      return Object.keys(value).length === 0
+    }
     return false
   }
 
   let result: any
-  if (isEmpty(inputs)) return {}
   if (inputs instanceof DelimArray) return inputs
   if (Array.isArray(inputs)) {
     result = []
-    Object.values(inputs).forEach((v: any) => result.push(trimInputs(v)))
+    Object.values(inputs).forEach((v: any) =>
+      result.push(trimInputs(v, depth + 1))
+    )
   } else if (inputs instanceof Object) {
     result = {}
     Object.entries(inputs).forEach(([key, value]) => {
-      const trimmed = trimInputs(value)
-      if (!isEmpty(trimmed)) {
+      const trimmed = trimInputs(value, depth + 1)
+      if (!isEmpty(trimmed, depth + 1)) {
         result[key] = trimmed
       }
     })
@@ -141,6 +148,9 @@ export interface ICodeGen {
    * e.g. 'sdk` for python
    */
   sdkPath: string
+
+  /** use special handling for a JSON value that can be a string or a number. Introduced for Swift. */
+  anyString: boolean
 
   /** current version of the Api being generated */
   apiVersion: string
@@ -717,6 +727,7 @@ export interface ICodeGen {
 
 export abstract class CodeGen implements ICodeGen {
   willItStream = false
+  anyString = false
   codePath = './'
   packagePath = 'looker'
   sdkPath = 'sdk'

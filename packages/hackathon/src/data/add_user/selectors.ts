@@ -23,14 +23,15 @@
  SOFTWARE.
 
  */
-import { useMemo } from 'react'
-import { useDispatch } from 'react-redux'
-import { bindActionCreators } from 'redux'
-import { actionCreators } from '../state/'
 
-export const useActions = () => {
-  const dispatch = useDispatch()
-  return useMemo(() => {
-    return bindActionCreators(actionCreators, dispatch)
-  }, [dispatch])
-}
+import type { RootState } from '../root_reducer'
+import type { ADD_STAGES } from './reducer'
+
+export const getUsersAddedState = (state: RootState): number =>
+  state.addUserState.usersAdded
+
+export const getNumUsersToAddState = (state: RootState): number =>
+  state.addUserState.usersToAdd.length
+
+export const getStage = (state: RootState): ADD_STAGES =>
+  state.addUserState.stage

@@ -25,7 +25,7 @@
  */
 
 /**
- * 423 API methods
+ * 425 API methods
  */
 
 import type {
@@ -47,6 +47,7 @@ import { sdkVersion } from '../constants'
 import type {
   IAccessToken,
   IAlert,
+  IAlertPatch,
   IApiSession,
   IApiVersion,
   IBackupConfiguration,
@@ -226,6 +227,7 @@ import type {
   IUserAttribute,
   IUserAttributeGroupValue,
   IUserAttributeWithValue,
+  IUserEmailOnly,
   IUserLoginLockout,
   IUserPublic,
   IValidationError,
@@ -244,7 +246,6 @@ import type {
   IWriteContentMeta,
   IWriteCreateDashboardFilter,
   IWriteCredentialsEmail,
-  IWriteCustomWelcomeEmail,
   IWriteDashboard,
   IWriteDashboardElement,
   IWriteDashboardFilter,
@@ -316,6 +317,7 @@ export const search_alerts = async (
     {
       limit: request.limit,
       offset: request.offset,
+      group_by: request.group_by,
       fields: request.fields,
       disabled: request.disabled,
       frequency: request.frequency,
@@ -376,21 +378,21 @@ export const update_alert = async (
 
 /**
  * ### Update select alert fields
- * # Available fields: `owner_id`, `is_disabled`, `is_public`, `threshold`
+ * # Available fields: `owner_id`, `is_disabled`, `disabled_reason`, `is_public`, `threshold`
  * #
  *
  * PATCH /alerts/{alert_id} -> IAlert
  *
  * @param sdk IAPIMethods implementation
  * @param alert_id ID of an alert
- * @param body Partial<IWriteAlert>
+ * @param body Partial<IAlertPatch>
  * @param options one-time API call overrides
  *
  */
 export const update_alert_field = async (
   sdk: IAPIMethods,
   alert_id: number,
-  body: Partial<IWriteAlert>,
+  body: Partial<IAlertPatch>,
   options?: Partial<ITransportSettings>
 ): Promise<SDKResponse<IAlert, IError | IValidationError>> => {
   return sdk.patch<IAlert, IError | IValidationError>(
@@ -472,6 +474,31 @@ export const create_alert = async (
     '/alerts',
     null,
     body,
+    options
+  )
+}
+
+/**
+ * ### Enqueue an Alert by ID
+ *
+ * POST /alerts/{alert_id}/enqueue -> void
+ *
+ * @param sdk IAPIMethods implementation
+ * @param alert_id ID of an alert
+ * @param force Whether to enqueue an alert again if its already running.
+ * @param options one-time API call overrides
+ *
+ */
+export const enqueue_alert = async (
+  sdk: IAPIMethods,
+  alert_id: number,
+  force?: boolean,
+  options?: Partial<ITransportSettings>
+): Promise<SDKResponse<void, IError>> => {
+  return sdk.post<void, IError>(
+    `/alerts/${alert_id}/enqueue`,
+    { force },
+    null,
     options
   )
 }
@@ -2488,6 +2515,8 @@ export const update_cloud_storage_configuration = async (
  *
  * GET /custom_welcome_email -> ICustomWelcomeEmail
  *
+ * @deprecated
+ *
  * @param sdk IAPIMethods implementation
  * @param options one-time API call overrides
  *
@@ -2509,15 +2538,17 @@ export const custom_welcome_email = async (
  *
  * PATCH /custom_welcome_email -> ICustomWelcomeEmail
  *
+ * @deprecated
+ *
  * @param sdk IAPIMethods implementation
- * @param body Partial<IWriteCustomWelcomeEmail>
+ * @param body Partial<ICustomWelcomeEmail>
  * @param send_test_welcome_email If true a test email with the content from the request will be sent to the current user after saving
  * @param options one-time API call overrides
  *
  */
 export const update_custom_welcome_email = async (
   sdk: IAPIMethods,
-  body: Partial<IWriteCustomWelcomeEmail>,
+  body: Partial<ICustomWelcomeEmail>,
   send_test_welcome_email?: boolean,
   options?: Partial<ITransportSettings>
 ): Promise<SDKResponse<ICustomWelcomeEmail, IError | IValidationError>> => {
@@ -2825,6 +2856,7 @@ export const mobile_settings = async (
  *  - marketplace_auto_install_enabled
  *  - marketplace_enabled
  *  - whitelabel_configuration
+ *  - custom_welcome_email
  *
  * GET /setting -> ISetting
  *
@@ -2854,6 +2886,7 @@ export const get_setting = async (
  *  - marketplace_auto_install_enabled
  *  - marketplace_enabled
  *  - whitelabel_configuration
+ *  - custom_welcome_email
  *
  * See the `Setting` type for more information on the specific values that can be configured.
  *
@@ -4451,6 +4484,37 @@ export const dashboard_lookml = async (
 }
 
 /**
+ * ### Move an existing dashboard
+ *
+ * Moves a dashboard to a specified folder, and returns the moved dashboard.
+ *
+ * `dashboard_id` and `folder_id` are required.
+ * `dashboard_id` and `folder_id` must already exist, and `folder_id` must be different from the current `folder_id` of the dashboard.
+ *
+ * PATCH /dashboards/{dashboard_id}/move -> IDashboard
+ *
+ * @param sdk IAPIMethods implementation
+ * @param dashboard_id Dashboard id to move.
+ * @param folder_id Folder id to move to.
+ * @param options one-time API call overrides
+ *
+ */
+export const move_dashboard = async (
+  sdk: IAPIMethods,
+  dashboard_id: string,
+  folder_id: string,
+  options?: Partial<ITransportSettings>
+): Promise<SDKResponse<IDashboard, IError | IValidationError>> => {
+  dashboard_id = encodeParam(dashboard_id)
+  return sdk.patch<IDashboard, IError | IValidationError>(
+    `/dashboards/${dashboard_id}/move`,
+    { folder_id },
+    null,
+    options
+  )
+}
+
+/**
  * ### Copy an existing dashboard
  *
  * Creates a copy of an existing dashboard, in a specified folder, and returns the copied dashboard.
@@ -4478,37 +4542,6 @@ export const copy_dashboard = async (
   dashboard_id = encodeParam(dashboard_id)
   return sdk.post<IDashboard, IError | IValidationError>(
     `/dashboards/${dashboard_id}/copy`,
-    { folder_id },
-    null,
-    options
-  )
-}
-
-/**
- * ### Move an existing dashboard
- *
- * Moves a dashboard to a specified folder, and returns the moved dashboard.
- *
- * `dashboard_id` and `folder_id` are required.
- * `dashboard_id` and `folder_id` must already exist, and `folder_id` must be different from the current `folder_id` of the dashboard.
- *
- * PATCH /dashboards/{dashboard_id}/move -> IDashboard
- *
- * @param sdk IAPIMethods implementation
- * @param dashboard_id Dashboard id to move.
- * @param folder_id Folder id to move to.
- * @param options one-time API call overrides
- *
- */
-export const move_dashboard = async (
-  sdk: IAPIMethods,
-  dashboard_id: string,
-  folder_id: string,
-  options?: Partial<ITransportSettings>
-): Promise<SDKResponse<IDashboard, IError | IValidationError>> => {
-  dashboard_id = encodeParam(dashboard_id)
-  return sdk.patch<IDashboard, IError | IValidationError>(
-    `/dashboards/${dashboard_id}/move`,
     { folder_id },
     null,
     options
@@ -11778,6 +11811,38 @@ export const send_user_credentials_email_password_reset = async (
     `/users/${user_id}/credentials_email/send_password_reset`,
     { fields },
     null,
+    options
+  )
+}
+
+/**
+ * ### Change a disabled user's email addresses
+ *
+ * Allows the admin to change the email addresses for all the user's
+ * associated credentials.  Will overwrite all associated email addresses with
+ * the value supplied in the 'email' body param.
+ * The user's 'is_disabled' status must be true.
+ *
+ * POST /users/{user_id}/update_emails -> IUser
+ *
+ * @param sdk IAPIMethods implementation
+ * @param user_id Id of user
+ * @param body Partial<IUserEmailOnly>
+ * @param fields Requested fields.
+ * @param options one-time API call overrides
+ *
+ */
+export const wipeout_user_emails = async (
+  sdk: IAPIMethods,
+  user_id: number,
+  body: Partial<IUserEmailOnly>,
+  fields?: string,
+  options?: Partial<ITransportSettings>
+): Promise<SDKResponse<IUser, IError | IValidationError>> => {
+  return sdk.post<IUser, IError | IValidationError>(
+    `/users/${user_id}/update_emails`,
+    { fields },
+    body,
     options
   )
 }

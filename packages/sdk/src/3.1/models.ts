@@ -1128,11 +1128,11 @@ export interface ICustomWelcomeEmail {
    */
   content?: string
   /**
-   * The text to appear in the email subject line.
+   * The text to appear in the email subject line. Only available with a whitelabel license and whitelabel_configuration.advanced_custom_welcome_email enabled.
    */
   subject?: string
   /**
-   * The text to appear in the header line of the email body.
+   * The text to appear in the header line of the email body. Only available with a whitelabel license and whitelabel_configuration.advanced_custom_welcome_email enabled.
    */
   header?: string
 }
@@ -1246,6 +1246,10 @@ export interface IDashboard {
    */
   favorite_count?: number
   /**
+   * Sets the default state of the filters bar to collapsed or open
+   */
+  filters_bar_collapsed?: boolean
+  /**
    * Time the dashboard was last accessed (read-only)
    */
   last_accessed_at?: Date
@@ -1253,6 +1257,22 @@ export interface IDashboard {
    * Time last viewed in the Looker web UI (read-only)
    */
   last_viewed_at?: Date
+  /**
+   * Time that the Dashboard was most recently updated. (read-only)
+   */
+  updated_at?: Date
+  /**
+   * Id of User that most recently updated the dashboard. (read-only)
+   */
+  last_updater_id?: number
+  /**
+   * Name of User that most recently updated the dashboard. (read-only)
+   */
+  last_updater_name?: string
+  /**
+   * Name of User that created the dashboard. (read-only)
+   */
+  user_name?: string
   /**
    * configuration option that governs how dashboard loading will happen.
    */
@@ -5639,6 +5659,10 @@ export interface IRenderTask {
    */
   query_id?: number
   /**
+   * Id of dashboard element to render: UDD dashboard element would be numeric and LookML dashboard element would be model_name::dashboard_title::lookml_link_id (read-only)
+   */
+  dashboard_element_id?: string
+  /**
    * Number of seconds elapsed running queries (read-only)
    */
   query_runtime?: number
@@ -9180,18 +9204,18 @@ export interface IWriteCustomWelcomeEmail {
    */
   content?: string
   /**
-   * The text to appear in the email subject line.
+   * The text to appear in the email subject line. Only available with a whitelabel license and whitelabel_configuration.advanced_custom_welcome_email enabled.
    */
   subject?: string
   /**
-   * The text to appear in the header line of the email body.
+   * The text to appear in the header line of the email body. Only available with a whitelabel license and whitelabel_configuration.advanced_custom_welcome_email enabled.
    */
   header?: string
 }
 
 /**
  * Dynamic writeable type for Dashboard removes:
- * can, content_favorite_id, content_metadata_id, id, model, readonly, refresh_interval_to_i, user_id, created_at, dashboard_elements, dashboard_filters, dashboard_layouts, deleted_at, deleter_id, edit_uri, favorite_count, last_accessed_at, last_viewed_at, view_count
+ * can, content_favorite_id, content_metadata_id, id, model, readonly, refresh_interval_to_i, user_id, created_at, dashboard_elements, dashboard_filters, dashboard_layouts, deleted_at, deleter_id, edit_uri, favorite_count, last_accessed_at, last_viewed_at, updated_at, last_updater_id, last_updater_name, user_name, view_count
  */
 export interface IWriteDashboard {
   /**
@@ -9248,6 +9272,10 @@ export interface IWriteDashboard {
    * Whether or not a dashboard is 'soft' deleted.
    */
   deleted?: boolean
+  /**
+   * Sets the default state of the filters bar to collapsed or open
+   */
+  filters_bar_collapsed?: boolean
   /**
    * configuration option that governs how dashboard loading will happen.
    */
