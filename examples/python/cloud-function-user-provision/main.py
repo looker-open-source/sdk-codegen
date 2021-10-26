@@ -52,7 +52,7 @@ def get_email_from_sheet():
   # `service_account.json` is in the same directory of this function
   gc = gspread.service_account(filename='service_account.json')
 
-  # Get the key of an existing Google Sheet, obtainabled in the URL of the sheet. 
+  # Get the key of an existing Google Sheet from the URL. 
   # Example: https://docs.google.com/spreadsheets/d/[KEY HERE]/edit#gid=111
   sh = gc.open_by_key('foo')
 
