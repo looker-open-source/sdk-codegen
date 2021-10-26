@@ -25,7 +25,7 @@
  */
 
 import type { SearchCriterionTerm } from '@looker/sdk-codegen'
-import { SearchAll, SetToCriteria } from '@looker/sdk-codegen'
+import { SearchAll, setToCriteria } from '@looker/sdk-codegen'
 
 export interface SearchState {
   pattern: string
@@ -38,7 +38,7 @@ export interface SearchAction {
 }
 
 export const defaultSearchState: SearchState = {
-  criteria: SetToCriteria(SearchAll) as SearchCriterionTerm[],
+  criteria: setToCriteria(SearchAll) as SearchCriterionTerm[],
   pattern: '',
 }
 

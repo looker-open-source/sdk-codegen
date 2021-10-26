@@ -386,7 +386,7 @@ export const SearchAll: SearchCriteria = new Set([
   SearchCriterion.response,
 ])
 
-export const CriteriaToSet = (criteria: string[]): SearchCriteria => {
+export const criteriaToSet = (criteria: string[]): SearchCriteria => {
   const result: SearchCriteria = new Set()
   criteria.forEach((name) => {
     const val = SearchCriterion[name as SearchCriterionTerm]
@@ -396,7 +396,7 @@ export const CriteriaToSet = (criteria: string[]): SearchCriteria => {
   return result
 }
 
-export const SetToCriteria = (criteria: SearchCriteria): string[] => {
+export const setToCriteria = (criteria: SearchCriteria): string[] => {
   const result: string[] = []
   criteria.forEach((value) => result.push(SearchCriterion[value]))
   return result

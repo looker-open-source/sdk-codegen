@@ -41,7 +41,7 @@ import type {
   ISearchResult,
   ApiModel,
 } from '@looker/sdk-codegen'
-import { CriteriaToSet, tagTypes } from '@looker/sdk-codegen'
+import { criteriaToSet, tagTypes } from '@looker/sdk-codegen'
 
 import { SearchContext } from '../../context'
 import type { SpecAction } from '../../reducers'
@@ -94,7 +94,7 @@ export const SideNav: FC<SideNavProps> = ({ headless = false, spec }) => {
   const [pattern, setSearchPattern] = useState(searchSettings.pattern)
   const debouncedPattern = useDebounce(pattern, 250)
   const [searchResults, setSearchResults] = useState<ISearchResult>()
-  const searchCriteria = CriteriaToSet(searchSettings.criteria)
+  const searchCriteria = criteriaToSet(searchSettings.criteria)
   const [tags, setTags] = useState(api.tags || {})
   const [typeTags, setTypeTags] = useState(api.typeTags || {})
   const [types, setTypes] = useState(api.types || {})

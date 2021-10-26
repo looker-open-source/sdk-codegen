@@ -24,7 +24,7 @@
 
  */
 import React from 'react'
-import { CriteriaToSet } from '@looker/sdk-codegen'
+import { criteriaToSet } from '@looker/sdk-codegen'
 import userEvent from '@testing-library/user-event'
 import { act, screen, waitFor } from '@testing-library/react'
 
@@ -131,7 +131,7 @@ describe('Search', () => {
       await waitFor(() => {
         expect(specState.spec.api!.search).toHaveBeenCalledWith(
           searchPattern,
-          CriteriaToSet(defaultSearchState.criteria)
+          criteriaToSet(defaultSearchState.criteria)
         )
         const methods = screen.getByRole('tab', { name: 'Methods (1)' })
         const types = screen.getByRole('tab', { name: 'Types (1)' })

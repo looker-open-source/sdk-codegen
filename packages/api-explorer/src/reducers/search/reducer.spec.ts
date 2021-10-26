@@ -24,7 +24,7 @@
 
  */
 import type { SearchCriterionTerm } from '@looker/sdk-codegen'
-import { CriteriaToSet, SearchAll } from '@looker/sdk-codegen'
+import { criteriaToSet, SearchAll } from '@looker/sdk-codegen'
 import { searchReducer, defaultSearchState } from './reducer'
 
 describe('Search reducer', () => {
@@ -63,7 +63,7 @@ describe('Search reducer', () => {
 
   test('default search state has all criteria', () => {
     const actual = defaultSearchState.criteria
-    const actualSet = CriteriaToSet(actual)
+    const actualSet = criteriaToSet(actual)
     expect(actualSet).toEqual(SearchAll)
   })
 })
