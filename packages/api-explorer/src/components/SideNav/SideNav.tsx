@@ -43,7 +43,7 @@ import type {
   TagList,
   TypeTagList,
 } from '@looker/sdk-codegen'
-import { CriteriaToSet, tagTypes } from '@looker/sdk-codegen'
+import { criteriaToSet, tagTypes } from '@looker/sdk-codegen'
 import { useSelector } from 'react-redux'
 
 import type { SpecAction } from '../../reducers'
@@ -125,7 +125,7 @@ export const SideNav: FC<SideNavProps> = ({ headless = false, spec }) => {
     const api = spec.api || ({} as ApiModel)
 
     if (debouncedPattern && api.search) {
-      results = api.search(pattern, CriteriaToSet(searchCriteria))
+      results = api.search(pattern, criteriaToSet(searchCriteria))
       newTags = results.tags
       newTypes = results.types
       newTypeTags = tagTypes(api, results.types)

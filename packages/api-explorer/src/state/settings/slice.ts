@@ -27,7 +27,7 @@ import { createSlice } from '@reduxjs/toolkit'
 import type { PayloadAction } from '@reduxjs/toolkit'
 import { createSliceHooks } from '@looker/redux'
 import type { SearchCriterionTerm } from '@looker/sdk-codegen'
-import { SearchAll, SetToCriteria } from '@looker/sdk-codegen'
+import { SearchAll, setToCriteria } from '@looker/sdk-codegen'
 
 import { saga } from './sagas'
 
@@ -45,7 +45,7 @@ export interface SettingState extends UserDefinedSettings {
 export const defaultSettings = {
   sdkLanguage: 'Python',
   searchPattern: '',
-  searchCriteria: SetToCriteria(SearchAll) as SearchCriterionTerm[],
+  searchCriteria: setToCriteria(SearchAll) as SearchCriterionTerm[],
 }
 
 export const defaultSettingsState: SettingState = {
