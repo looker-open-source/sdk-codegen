@@ -1,5 +1,29 @@
 # Changelog
 
+## [21.18.0](https://www.github.com/looker-open-source/sdk-codegen/compare/hackathon-v21.16.0...hackathon-v21.18.0) (2021-10-24)
+
+
+### Features
+
+* Hackathon admin add users UI ([#854](https://www.github.com/looker-open-source/sdk-codegen/issues/854)) ([a6fe4fd](https://www.github.com/looker-open-source/sdk-codegen/commit/a6fe4fdb6c26c17be848196c68f3508205dbdc4c))
+* personalized Hackathon agenda ([#853](https://www.github.com/looker-open-source/sdk-codegen/issues/853)) ([a143225](https://www.github.com/looker-open-source/sdk-codegen/commit/a1432250bad0bd35d5d9c5044aced81cf2cc1346))
+
+
+### Bug Fixes
+
+* Update resources list and enable link opening  ([4f17aee](https://www.github.com/looker-open-source/sdk-codegen/commit/4f17aee91a0b0d7a133c1e77b3842b072e1a446e))
+
+
+### Dependencies
+
+* The following workspace dependencies were updated
+  * dependencies
+    * @looker/sdk bumped from ^21.16.0 to ^21.18.0
+    * @looker/code-editor bumped from ^0.1.11 to ^0.1.12
+    * @looker/wholly-sheet bumped from ^0.5.17 to ^0.5.18
+    * @looker/extension-sdk bumped from ^21.16.0 to ^21.18.0
+    * @looker/extension-sdk-react bumped from ^21.16.0 to ^21.18.0
+
 ## [21.16.0](https://www.github.com/looker-open-source/sdk-codegen/compare/hackathon-v21.14.0...hackathon-v21.16.0) (2021-10-19)
 
 
