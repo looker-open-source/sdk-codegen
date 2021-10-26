@@ -439,9 +439,13 @@ function bufferString(val: any) {
   } catch (e: any) {
     // Supremely ugly hack. If we get here, we must be in Node (or IE 11, but who cares about that?)
     // Node requires an import from `util` for TextDecoder to be found BUT it "just has" Buffer unless WebPack messes us up
-    if (val instanceof Buffer) {
-      result = Buffer.from(val).toString(utf8)
-    } else {
+    try {
+      if (val instanceof Buffer) {
+        result = Buffer.from(val).toString(utf8)
+      } else {
+        result = JSON.stringify(val)
+      }
+    } catch (err: any) {
       // The fallback logic here will at least give us some information about the error being thrown
       result = JSON.stringify(val)
     }
