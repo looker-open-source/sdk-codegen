@@ -43,7 +43,6 @@ import type { ITeamMemberProps } from './TeamMembers'
 import { TeamMember } from './TeamMembers'
 import type { IJudgingProps } from './Judgings'
 import { Judging } from './Judgings'
-import type { IUserProps } from './Users'
 
 /** IMPORTANT: properties must be declared in the tab sheet's columnar order, not sorted order */
 export interface IProjectProps extends IRowModelProps {
@@ -57,7 +56,6 @@ export interface IProjectProps extends IRowModelProps {
   locked: boolean
   more_info: string
   technologies: string[]
-  $owner: IUserProps
   $team: ITeamMemberProps[]
   $judgings: IJudgingProps[]
   $hackathon: IHackathonProps
@@ -101,10 +99,6 @@ export class Project extends SheetRow<Project> {
 
   get $judge_count() {
     return this.$judgings.length
-  }
-
-  get $owner(): IUserProps {
-    return this.data().users.find(this._user_id)!
   }
 
   get $members(): string[] {

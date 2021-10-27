@@ -27,7 +27,11 @@
 import type { FC } from 'react'
 import React from 'react'
 import { useSelector } from 'react-redux'
-import type { IProjectProps } from '../../../models'
+import type {
+  IProjectProps,
+  ITeamMemberProps,
+  ITechnologyProps,
+} from '../../../models'
 import { ExtMarkdown } from '../../../components'
 import { getTechnologies } from '../../../data/hack_session/selectors'
 
@@ -35,18 +39,32 @@ interface ProjectViewProps {
   project: IProjectProps
 }
 
-export const ProjectView: FC<ProjectViewProps> = ({ project }) => {
-  const availableTechnologies = useSelector(getTechnologies)
-
-  const techDescriptions = (ids: string[]) => {
-    return availableTechnologies
+const techDescriptions = (ids: string[], technologies?: ITechnologyProps[]) => {
+  try {
+    return technologies
       ?.filter((t) => ids.includes(t._id))
       .map((t) => t.description)
       .join(', ')
+  } catch {
+    // avoid sheet data errors
+    return ids.join(', ')
   }
-  const tech = techDescriptions(project.technologies)
-  const members =
-    project.$team.map((t) => t.$name).join(', ') || project.$owner.$name
+}
+
+const getMembers = (team: ITeamMemberProps[]) => {
+  try {
+    return team.map((t) => t.$name).join(', ') || 'Nobody!'
+  } catch {
+    // avoid sheet data errors
+    return 'Error retrieving team members'
+  }
+}
+
+export const ProjectView: FC<ProjectViewProps> = ({ project }) => {
+  const availableTechnologies = useSelector(getTechnologies)
+
+  const tech = techDescriptions(project.technologies, availableTechnologies)
+  const members = getMembers(project.$team)
   const view = `# ${project.title}
 by ${members}
 
