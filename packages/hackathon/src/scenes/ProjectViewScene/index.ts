@@ -23,5 +23,4 @@
  SOFTWARE.
 
  */
-
-export { ProjectForm } from './ProjectForm'
+export { ProjectViewScene } from './ProjectViewScene'

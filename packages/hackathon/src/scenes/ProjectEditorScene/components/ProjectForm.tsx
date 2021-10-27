@@ -80,7 +80,7 @@ import { allHackersRequest } from '../../../data/hackers/actions'
 import { getJudgesState } from '../../../data/hackers/selectors'
 import { canUpdateProject, canLockProject } from '../../../utils'
 import { Routes } from '../../../routes/AppRouter'
-import { ProjectView } from './ProjectView'
+import { ProjectView } from '../../ProjectViewScene/components'
 
 interface ProjectFormProps {}
 
@@ -162,7 +162,7 @@ export const ProjectForm: FC<ProjectFormProps> = () => {
         <Tab2 id="form" label="Form">
           <Form
             onSubmit={handleSubmit}
-            width="50vw"
+            width="55vw"
             mt="large"
             validationMessages={validationMessages}
           >
@@ -249,17 +249,6 @@ export const ProjectForm: FC<ProjectFormProps> = () => {
                   )
                 }}
               />
-              <FieldText
-                disabled={!canUpdate}
-                name="more_info"
-                label="More information"
-                value={project.more_info}
-                onChange={(e: BaseSyntheticEvent) => {
-                  dispatch(
-                    updateProjectData({ ...project, more_info: e.target.value })
-                  )
-                }}
-              />
               {projectIdOrNew !== 'new' && (
                 <FieldSelectMulti
                   disabled={true}
@@ -290,43 +279,43 @@ export const ProjectForm: FC<ProjectFormProps> = () => {
                 }}
               />
             )}
-            <Space between width="100%">
-              <Space>
-                <ButtonOutline
-                  type="button"
-                  onClick={handleCancel}
-                  disabled={isLoading}
-                >
-                  Return to projects
-                </ButtonOutline>
-                <Button type="submit" disabled={!canUpdate || isLoading}>
-                  Save project
-                </Button>
-              </Space>
-              {(canLock || canUpdate) && project._id && (
-                <ButtonOutline
-                  onClick={updateMembershipClick}
-                  disabled={isLoading || !!validationMessages}
-                >
-                  {isProjectMember ? 'Leave project' : 'Join project'}
-                </ButtonOutline>
-              )}
-              {canLock && (
-                <ButtonOutline
-                  onClick={lockProjectClick}
-                  disabled={isLoading || !!validationMessages}
-                  ml="small"
-                >
-                  {project.locked ? 'Unlock project' : 'Lock project'}
-                </ButtonOutline>
-              )}
-            </Space>
           </Form>
         </Tab2>
-        <Tab2 id="preview" label="Preview">
+        <Tab2 id="preview" label="Preview" width="100%">
           <ProjectView project={project} />
         </Tab2>
       </Tabs2>
+      <Space between width="55vw">
+        <Space>
+          <ButtonOutline
+            type="button"
+            onClick={handleCancel}
+            disabled={isLoading}
+          >
+            Return to projects
+          </ButtonOutline>
+          <Button type="submit" disabled={!canUpdate || isLoading}>
+            Save project
+          </Button>
+        </Space>
+        {(canLock || canUpdate) && project._id && (
+          <ButtonOutline
+            onClick={updateMembershipClick}
+            disabled={isLoading || !!validationMessages}
+          >
+            {isProjectMember ? 'Leave project' : 'Join project'}
+          </ButtonOutline>
+        )}
+        {canLock && (
+          <ButtonOutline
+            onClick={lockProjectClick}
+            disabled={isLoading || !!validationMessages}
+            ml="small"
+          >
+            {project.locked ? 'Unlock project' : 'Lock project'}
+          </ButtonOutline>
+        )}
+      </Space>
     </SpaceVertical>
   )
 }

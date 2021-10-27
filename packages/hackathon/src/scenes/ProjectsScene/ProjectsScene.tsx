@@ -29,12 +29,12 @@ import React from 'react'
 import { useSelector, useDispatch } from 'react-redux'
 import { useHistory } from 'react-router-dom'
 import { Button, Space } from '@looker/components'
-import { AddCircle } from '@styled-icons/material/AddCircle'
-import { Create } from '@styled-icons/material/Create'
-import { Lock } from '@styled-icons/material/Lock'
+import { Add } from '@styled-icons/material-outlined/Add'
+import { Create } from '@styled-icons/material-outlined/Create'
+import { Lock } from '@styled-icons/material-outlined/Lock'
 import { lockProjects } from '../../data/projects/actions'
 import { isLoadingState } from '../../data/common/selectors'
-import { Loading } from '../../components/Loading'
+import { Loading } from '../../components'
 import { Routes } from '../../routes/AppRouter'
 import {
   getCurrentHackathonState,
@@ -68,11 +68,7 @@ export const ProjectsScene: FC<ProjectSceneProps> = () => {
       <Loading loading={isLoading} message={'Processing projects...'} />
       <ProjectList />
       <Space pt="xlarge">
-        <Button
-          iconBefore={<AddCircle />}
-          onClick={handleAdd}
-          disabled={isLoading}
-        >
+        <Button iconBefore={<Add />} onClick={handleAdd} disabled={isLoading}>
           Add Project
         </Button>
         <>
