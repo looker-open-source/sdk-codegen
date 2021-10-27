@@ -57,7 +57,7 @@ export const ProjectViewScene: FC = () => {
         history.push(`${Routes.PROJECTS}/${project._id}`)
       }
     } else {
-      if (!isProjectLoaded) {
+      if (isProjectLoaded) {
         dispatch(actionMessage('Invalid project', 'critical'))
       }
     }
@@ -80,7 +80,10 @@ export const ProjectViewScene: FC = () => {
         {project ? (
           <ProjectView project={project} />
         ) : (
-          <Loading loading={!project} message="Loading project ..." />
+          <Loading
+            loading={!project && !isProjectLoaded}
+            message="Loading project ..."
+          />
         )}
       </Space>
       <Space between>
