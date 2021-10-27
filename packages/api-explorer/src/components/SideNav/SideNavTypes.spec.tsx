@@ -27,12 +27,15 @@ import React from 'react'
 import { screen } from '@testing-library/react'
 
 import { api } from '../../test-data'
-import { renderWithSearchAndRouter } from '../../test-utils'
+import {
+  createTestStore,
+  renderWithRouterAndReduxProvider,
+} from '../../test-utils'
 import { SideNavTypes } from './SideNavTypes'
 
 describe('SideNavTypes', () => {
   test('it renders provided types', () => {
-    renderWithSearchAndRouter(
+    renderWithRouterAndReduxProvider(
       <SideNavTypes
         specKey={'3.1'}
         types={{
@@ -46,7 +49,8 @@ describe('SideNavTypes', () => {
   })
 
   test('it highlights text matching search pattern', () => {
-    renderWithSearchAndRouter(
+    const store = createTestStore({ settings: { searchPattern: 'dash' } })
+    renderWithRouterAndReduxProvider(
       <SideNavTypes
         specKey={'3.1'}
         types={{
@@ -54,7 +58,8 @@ describe('SideNavTypes', () => {
         }}
         tag="Dashboard"
       />,
-      'dash'
+      undefined,
+      store
     )
     const match = screen.getByText(/dash/i)
     expect(match).toContainHTML('<span class="hi">Dash</span>')

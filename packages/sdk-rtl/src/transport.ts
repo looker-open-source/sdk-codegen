@@ -425,9 +425,32 @@ export function addQueryParams(path: string, obj?: Values) {
   return `${path}${qp ? '?' + qp : ''}`
 }
 
+const utf8 = 'utf-8'
+
+/**
+ * Convert this value to a string representation however we can do it
+ * @param val
+ */
 function bufferString(val: any) {
-  const decoder = new TextDecoder('utf-8')
-  return decoder.decode(val)
+  let result = 'Unknown error'
+  try {
+    const decoder = new TextDecoder(utf8)
+    result = decoder.decode(val)
+  } catch (e: any) {
+    // Supremely ugly hack. If we get here, we must be in Node (or IE 11, but who cares about that?)
+    // Node requires an import from `util` for TextDecoder to be found BUT it "just has" Buffer unless WebPack messes us up
+    try {
+      if (val instanceof Buffer) {
+        result = Buffer.from(val).toString(utf8)
+      } else {
+        result = JSON.stringify(val)
+      }
+    } catch (err: any) {
+      // The fallback logic here will at least give us some information about the error being thrown
+      result = JSON.stringify(val)
+    }
+  }
+  return result
 }
 
 /**

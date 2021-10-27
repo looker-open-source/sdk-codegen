@@ -25,11 +25,12 @@
  */
 
 import type { FC } from 'react'
-import React, { useContext } from 'react'
+import React from 'react'
 import { useHistory } from 'react-router-dom'
 import { Markdown } from '@looker/code-editor'
-import { SearchContext } from '../../context'
+import { useSelector } from 'react-redux'
 import { getEnvAdaptor } from '../../utils'
+import { selectSearchPattern } from '../../state'
 import { transformURL } from './utils'
 
 interface DocMarkdownProps {
@@ -38,10 +39,7 @@ interface DocMarkdownProps {
 }
 
 export const DocMarkdown: FC<DocMarkdownProps> = ({ source, specKey }) => {
-  const {
-    searchSettings: { pattern },
-  } = useContext(SearchContext)
-
+  const searchPattern = useSelector(selectSearchPattern)
   const history = useHistory()
 
   const linkClickHandler = (pathname: string, url: string) => {
@@ -57,7 +55,7 @@ export const DocMarkdown: FC<DocMarkdownProps> = ({ source, specKey }) => {
   return (
     <Markdown
       source={source}
-      pattern={pattern}
+      pattern={searchPattern}
       linkClickHandler={linkClickHandler}
       transformLinkUri={transformURL.bind(null, specKey)}
     />

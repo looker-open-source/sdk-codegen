@@ -25,7 +25,7 @@
  */
 
 import type { FC, Dispatch } from 'react'
-import React, { useContext, useEffect, useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { useHistory, useLocation } from 'react-router-dom'
 import {
   TabList,
@@ -40,18 +40,28 @@ import type {
   SpecList,
   ISearchResult,
   ApiModel,
+  TagList,
+  TypeTagList,
 } from '@looker/sdk-codegen'
-import { CriteriaToSet, tagTypes } from '@looker/sdk-codegen'
+import { criteriaToSet, tagTypes } from '@looker/sdk-codegen'
+import { useSelector } from 'react-redux'
 
-import { SearchContext } from '../../context'
 import type { SpecAction } from '../../reducers'
-import { setPattern } from '../../reducers'
 import { useWindowSize } from '../../utils'
 import { HEADER_REM } from '../Header'
+import { selectSearchCriteria, useActions } from '../../state'
 import { SideNavMethodTags } from './SideNavMethodTags'
 import { SideNavTypeTags } from './SideNavTypeTags'
 import { useDebounce, countMethods, countTypes } from './searchUtils'
 import { SearchMessage } from './SearchMessage'
+
+interface SideNavState {
+  tags: TagList
+  typeTags: TypeTagList
+  methodCount: number
+  typeCount: number
+  searchResults?: ISearchResult
+}
 
 interface SideNavProps {
   headless?: boolean
@@ -66,7 +76,6 @@ interface SideNavProps {
 export const SideNav: FC<SideNavProps> = ({ headless = false, spec }) => {
   const history = useHistory()
   const location = useLocation()
-  const api = spec.api || ({} as ApiModel)
   const specKey = spec.key
   const tabNames = ['methods', 'types']
   const pathParts = location.pathname.split('/')
@@ -90,16 +99,19 @@ export const SideNav: FC<SideNavProps> = ({ headless = false, spec }) => {
     }
   }
   const tabs = useTabs({ defaultIndex, onChange: onTabChange })
-  const { searchSettings, setSearchSettings } = useContext(SearchContext)
-  const [pattern, setSearchPattern] = useState(searchSettings.pattern)
+  const searchCriteria = useSelector(selectSearchCriteria)
+  const { setSearchPatternAction } = useActions()
+
+  const [pattern, setSearchPattern] = useState('')
   const debouncedPattern = useDebounce(pattern, 250)
-  const [searchResults, setSearchResults] = useState<ISearchResult>()
-  const searchCriteria = CriteriaToSet(searchSettings.criteria)
-  const [tags, setTags] = useState(api.tags || {})
-  const [typeTags, setTypeTags] = useState(api.typeTags || {})
-  const [types, setTypes] = useState(api.types || {})
-  const [methodCount, setMethodCount] = useState(countMethods(tags))
-  const [typeCount, setTypeCount] = useState(countTypes(types))
+  const [sideNavState, setSideNavState] = useState<SideNavState>(() => ({
+    tags: spec?.api?.tags || {},
+    typeTags: spec?.api?.typeTags || {},
+    methodCount: countMethods(spec?.api?.tags || {}),
+    typeCount: countTypes(spec?.api?.types || {}),
+    searchResults: undefined,
+  }))
+  const { tags, typeTags, methodCount, typeCount, searchResults } = sideNavState
 
   const handleInputChange = (value: string) => {
     setSearchPattern(value)
@@ -110,8 +122,10 @@ export const SideNav: FC<SideNavProps> = ({ headless = false, spec }) => {
     let newTags
     let newTypes
     let newTypeTags
+    const api = spec.api || ({} as ApiModel)
+
     if (debouncedPattern && api.search) {
-      results = api.search(pattern, searchCriteria)
+      results = api.search(pattern, criteriaToSet(searchCriteria))
       newTags = results.tags
       newTypes = results.types
       newTypeTags = tagTypes(api, results.types)
@@ -121,14 +135,22 @@ export const SideNav: FC<SideNavProps> = ({ headless = false, spec }) => {
       newTypeTags = api.typeTags || {}
     }
 
-    setTags(newTags)
-    setTypes(newTypes)
-    setTypeTags(newTypeTags)
-    setMethodCount(countMethods(newTags))
-    setTypeCount(countTypes(newTypes))
-    setSearchResults(results)
-    setSearchSettings(setPattern(debouncedPattern!))
-  }, [debouncedPattern, specKey, spec])
+    setSideNavState({
+      tags: newTags,
+      typeTags: newTypeTags,
+      typeCount: countTypes(newTypes),
+      methodCount: countMethods(newTags),
+      searchResults: results,
+    })
+    setSearchPatternAction({ searchPattern: debouncedPattern })
+  }, [
+    debouncedPattern,
+    specKey,
+    spec,
+    setSearchPatternAction,
+    pattern,
+    searchCriteria,
+  ])
 
   useEffect(() => {
     const { selectedIndex, onSelectTab } = tabs
@@ -153,7 +175,6 @@ export const SideNav: FC<SideNavProps> = ({ headless = false, spec }) => {
         placeholder="Search"
         value={pattern}
         isClearable
-        changeOnSelect
       />
       <SearchMessage search={searchResults} />
       <TabList {...tabs} distribute>

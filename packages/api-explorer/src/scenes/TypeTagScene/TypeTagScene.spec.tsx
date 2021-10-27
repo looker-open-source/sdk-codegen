@@ -29,7 +29,7 @@ import { screen, waitFor } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 
 import { api } from '../../test-data'
-import { renderWithRouter } from '../../test-utils'
+import { renderWithRouterAndReduxProvider } from '../../test-utils'
 import { TypeTagScene } from './TypeTagScene'
 
 const opBtnNames = /ALL|SPECIFICATION|WRITE|REQUEST|ENUMERATED/
@@ -40,7 +40,7 @@ describe('TypeTagScene', () => {
   Element.prototype.scrollTo = jest.fn()
 
   test('it renders type buttons and all methods for a given type tag', () => {
-    renderWithRouter(
+    renderWithRouterAndReduxProvider(
       <Route path={path}>
         <TypeTagScene api={api} />
       </Route>,
@@ -61,7 +61,7 @@ describe('TypeTagScene', () => {
   })
 
   test('it only renders operation buttons for operations that exist under that tag', () => {
-    renderWithRouter(
+    renderWithRouterAndReduxProvider(
       <Route path={path}>
         <TypeTagScene api={api} />
       </Route>,
@@ -75,7 +75,7 @@ describe('TypeTagScene', () => {
   })
 
   test('it filters methods by operation type', async () => {
-    renderWithRouter(
+    renderWithRouterAndReduxProvider(
       <Route path={path}>
         <TypeTagScene api={api} />
       </Route>,

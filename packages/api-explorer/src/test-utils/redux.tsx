@@ -31,11 +31,11 @@ import { renderWithTheme } from '@looker/components-test-utils'
 import type { RenderOptions } from '@testing-library/react'
 import { createStore } from '@looker/redux'
 
-import type { RootState } from '../state'
+import type { RootState, SettingState } from '../state'
 import { defaultSettingsState, store as defaultStore } from '../state'
 import { slice as settingsSlice } from '../state/settings'
 import { registerEnvAdaptor, StandaloneEnvAdaptor } from '../utils'
-import { renderWithRouter } from '.'
+import { renderWithRouter } from './router'
 
 export const withReduxProvider = (
   consumers: ReactElement<any>,
@@ -63,10 +63,17 @@ const preloadedState: RootState = {
   settings: defaultSettingsState,
 }
 
-export const createTestStore = (overrides?: Partial<RootState>) =>
+type DeepPartial<T> = {
+  [P in keyof T]?: DeepPartial<T[P]>
+}
+
+export const createTestStore = (overrides?: DeepPartial<RootState>) =>
   createStore({
     preloadedState: {
-      settings: { ...preloadedState.settings, ...overrides?.settings },
+      settings: {
+        ...preloadedState.settings,
+        ...overrides?.settings,
+      } as SettingState,
     },
     reducer: { settings: settingsSlice.reducer },
   })
