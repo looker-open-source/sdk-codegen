@@ -980,6 +980,11 @@ body: ICreateDashboardRenderTask`)
         expect(actual['a-three']).toEqual(3)
       })
 
+      it('does not reserve body param array type names', () => {
+        const actual = gen.reserve('IProjectGeneratorTable[]')
+        expect(actual).toEqual('IProjectGeneratorTable[]')
+      })
+
       it('reserves special names in method parameters', () => {
         const method = apiTestModel.methods.me
         const save = method.params[0].name
