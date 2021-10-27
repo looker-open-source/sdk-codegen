@@ -48,6 +48,9 @@ import {
   Button,
   ButtonOutline,
   Space,
+  Tab2,
+  Tabs2,
+  SpaceVertical,
 } from '@looker/components'
 import { useDispatch, useSelector } from 'react-redux'
 import { useHistory, useRouteMatch } from 'react-router-dom'
@@ -77,6 +80,7 @@ import { allHackersRequest } from '../../../data/hackers/actions'
 import { getJudgesState } from '../../../data/hackers/selectors'
 import { canUpdateProject, canLockProject } from '../../../utils'
 import { Routes } from '../../../routes/AppRouter'
+import { ProjectView } from './ProjectView'
 
 interface ProjectFormProps {}
 
@@ -153,148 +157,176 @@ export const ProjectForm: FC<ProjectFormProps> = () => {
   const canLock = canLockProject(hacker) && projectIdOrNew !== 'new'
 
   return (
-    <Form
-      onSubmit={handleSubmit}
-      width="50vw"
-      mt="large"
-      validationMessages={validationMessages}
-    >
-      <Fieldset legend="Enter your project details">
-        <FieldText
-          disabled={!canUpdate}
-          required
-          name="title"
-          label="Title"
-          value={project.title}
-          onChange={(e: BaseSyntheticEvent) => {
-            dispatch(updateProjectData({ ...project, title: e.target.value }))
-          }}
-        />
-        <FieldTextArea
-          disabled={!canUpdate}
-          required
-          label="Description"
-          name="description"
-          value={project.description}
-          onChange={(e: BaseSyntheticEvent) => {
-            dispatch(
-              updateProjectData({ ...project, description: e.target.value })
-            )
-          }}
-        />
-        <FieldSelect
-          disabled={!canUpdate}
-          id="project_type"
-          label="Type"
-          required
-          value={project.project_type}
-          options={[
-            { value: 'Open' },
-            { value: 'Closed' },
-            { value: 'Invite Only' },
-          ]}
-          onChange={(value: string) => {
-            dispatch(updateProjectData({ ...project, project_type: value }))
-          }}
-        />
-        <FieldToggleSwitch
-          disabled={!canUpdate}
-          name="contestant"
-          label="Contestant"
-          onChange={(e: BaseSyntheticEvent) => {
-            dispatch(
-              updateProjectData({ ...project, contestant: e.target.checked })
-            )
-          }}
-          on={project.contestant}
-        />
-        <FieldSelectMulti
-          disabled={!canUpdate}
-          name="technologies"
-          label="Technologies"
-          required
-          options={availableTechnologies?.map((technology) => ({
-            value: technology._id,
-          }))}
-          isFilterable
-          placeholder="Type values or select from the list"
-          values={project.technologies}
-          onChange={(values: string[] = []) => {
-            dispatch(updateProjectData({ ...project, technologies: values }))
-          }}
-        />
-        <FieldText
-          disabled={!canUpdate}
-          name="more_info"
-          label="More information"
-          value={project.more_info}
-          onChange={(e: BaseSyntheticEvent) => {
-            dispatch(
-              updateProjectData({ ...project, more_info: e.target.value })
-            )
-          }}
-        />
-        {projectIdOrNew !== 'new' && (
-          <FieldSelectMulti
-            disabled={true}
-            id="members"
-            label="Members"
-            values={[...project.$members]}
-          />
-        )}
-      </Fieldset>
-      {projectIdOrNew !== 'new' && (
-        <FieldSelectMulti
-          disabled={!hacker.canAdmin}
-          id="judges"
-          label="Judges"
-          options={availableJudges.map((judge) => ({
-            value: judge.name,
-          }))}
-          isFilterable
-          placeholder="Type values or select from the list"
-          values={[...project.$judges]}
-          onChange={(values: string[] = []) => {
-            dispatch(
-              updateProjectData({
-                ...project,
-                $judges: values,
-              })
-            )
-          }}
-        />
-      )}
-      <Space between width="100%">
-        <Space>
-          <ButtonOutline
-            type="button"
-            onClick={handleCancel}
-            disabled={isLoading}
+    <SpaceVertical gap="u1">
+      <Tabs2>
+        <Tab2 id="form" label="Form">
+          <Form
+            onSubmit={handleSubmit}
+            width="50vw"
+            mt="large"
+            validationMessages={validationMessages}
           >
-            Return to projects
-          </ButtonOutline>
-          <Button type="submit" disabled={!canUpdate || isLoading}>
-            Save project
-          </Button>
-        </Space>
-        {(canLock || canUpdate) && project._id && (
-          <ButtonOutline
-            onClick={updateMembershipClick}
-            disabled={isLoading || !!validationMessages}
-          >
-            {isProjectMember ? 'Leave project' : 'Join project'}
-          </ButtonOutline>
-        )}
-        {canLock && (
-          <ButtonOutline
-            onClick={lockProjectClick}
-            disabled={isLoading || !!validationMessages}
-            ml="small"
-          >
-            {project.locked ? 'Unlock project' : 'Lock project'}
-          </ButtonOutline>
-        )}
-      </Space>
-    </Form>
+            <Fieldset legend="Enter your project details">
+              <FieldText
+                disabled={!canUpdate}
+                required
+                name="title"
+                label="Title"
+                value={project.title}
+                onChange={(e: BaseSyntheticEvent) => {
+                  dispatch(
+                    updateProjectData({ ...project, title: e.target.value })
+                  )
+                }}
+              />
+              <FieldTextArea
+                disabled={!canUpdate}
+                required
+                label="Description"
+                name="description"
+                value={project.description}
+                onChange={(e: BaseSyntheticEvent) => {
+                  dispatch(
+                    updateProjectData({
+                      ...project,
+                      description: e.target.value,
+                    })
+                  )
+                }}
+              />
+              <FieldSelect
+                disabled={!canUpdate}
+                id="project_type"
+                label="Type"
+                required
+                value={project.project_type}
+                options={[
+                  { value: 'Open', label: 'Open: anyone can join' },
+                  {
+                    value: 'Closed',
+                    label:
+                      'Closed: no one other than the project creator can join',
+                  },
+                  {
+                    value: 'Invite Only',
+                    label: 'Only joinable by invitation',
+                  },
+                ]}
+                onChange={(value: string) => {
+                  dispatch(
+                    updateProjectData({ ...project, project_type: value })
+                  )
+                }}
+              />
+              <FieldToggleSwitch
+                disabled={!canUpdate}
+                name="contestant"
+                label="Submit this project for judging?"
+                onChange={(e: BaseSyntheticEvent) => {
+                  dispatch(
+                    updateProjectData({
+                      ...project,
+                      contestant: e.target.checked,
+                    })
+                  )
+                }}
+                on={project.contestant}
+              />
+              <FieldSelectMulti
+                disabled={!canUpdate}
+                name="technologies"
+                label="Technologies"
+                required
+                options={availableTechnologies?.map((technology) => ({
+                  value: technology._id,
+                }))}
+                isFilterable
+                placeholder="Type values or select from the list"
+                values={project.technologies}
+                onChange={(values: string[] = []) => {
+                  dispatch(
+                    updateProjectData({ ...project, technologies: values })
+                  )
+                }}
+              />
+              <FieldText
+                disabled={!canUpdate}
+                name="more_info"
+                label="More information"
+                value={project.more_info}
+                onChange={(e: BaseSyntheticEvent) => {
+                  dispatch(
+                    updateProjectData({ ...project, more_info: e.target.value })
+                  )
+                }}
+              />
+              {projectIdOrNew !== 'new' && (
+                <FieldSelectMulti
+                  disabled={true}
+                  id="members"
+                  label="Members"
+                  values={[...project.$members]}
+                />
+              )}
+            </Fieldset>
+            {projectIdOrNew !== 'new' && (
+              <FieldSelectMulti
+                disabled={!hacker.canAdmin}
+                id="judges"
+                label="Judges"
+                options={availableJudges.map((judge) => ({
+                  value: judge.name,
+                }))}
+                isFilterable
+                placeholder="Type values or select from the list"
+                values={[...project.$judges]}
+                onChange={(values: string[] = []) => {
+                  dispatch(
+                    updateProjectData({
+                      ...project,
+                      $judges: values,
+                    })
+                  )
+                }}
+              />
+            )}
+            <Space between width="100%">
+              <Space>
+                <ButtonOutline
+                  type="button"
+                  onClick={handleCancel}
+                  disabled={isLoading}
+                >
+                  Return to projects
+                </ButtonOutline>
+                <Button type="submit" disabled={!canUpdate || isLoading}>
+                  Save project
+                </Button>
+              </Space>
+              {(canLock || canUpdate) && project._id && (
+                <ButtonOutline
+                  onClick={updateMembershipClick}
+                  disabled={isLoading || !!validationMessages}
+                >
+                  {isProjectMember ? 'Leave project' : 'Join project'}
+                </ButtonOutline>
+              )}
+              {canLock && (
+                <ButtonOutline
+                  onClick={lockProjectClick}
+                  disabled={isLoading || !!validationMessages}
+                  ml="small"
+                >
+                  {project.locked ? 'Unlock project' : 'Lock project'}
+                </ButtonOutline>
+              )}
+            </Space>
+          </Form>
+        </Tab2>
+        <Tab2 id="preview" label="Preview">
+          <ProjectView project={project} />
+        </Tab2>
+      </Tabs2>
+    </SpaceVertical>
   )
 }
