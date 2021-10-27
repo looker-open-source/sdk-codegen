@@ -1,5 +1,13 @@
 # Changelog
 
+### [1.17.1](https://www.github.com/looker-open-source/sdk-codegen/compare/sdk-codegen-all-v1.17.0...sdk-codegen-all-v1.17.1) (2021-10-27)
+
+
+### Bug Fixes
+
+* another TS SDK error handling tweak ([#873](https://www.github.com/looker-open-source/sdk-codegen/issues/873)) ([1c04952](https://www.github.com/looker-open-source/sdk-codegen/commit/1c049527e22926fa7fe0ae011ab4595520005e2f))
+* do not "reserve" type names ending in [] ([#876](https://www.github.com/looker-open-source/sdk-codegen/issues/876)) ([bab56ef](https://www.github.com/looker-open-source/sdk-codegen/commit/bab56ef1c60389d04e8a1e4973afde0d0b75d5ec))
+
 ## [1.17.0](https://www.github.com/looker-open-source/sdk-codegen/compare/sdk-codegen-all-v1.16.0...sdk-codegen-all-v1.17.0) (2021-10-24)
 
 
