@@ -27,12 +27,13 @@
 import type { FC } from 'react'
 import React, { useEffect, useState } from 'react'
 import type { ApiModel, IMethod } from '@looker/sdk-codegen'
-import { trimInputs } from '@looker/sdk-codegen'
+import { getCodeGenerator, trimInputs } from '@looker/sdk-codegen'
 import { Heading } from '@looker/components'
-
+import { CodeCopy } from '@looker/code-editor'
 import type { RunItValues } from '../../RunIt'
-import { DocSingleCall } from './DocSingleCall'
+import { DarkSpan } from '../common'
 import { DocMultiCall } from './DocMultiCall'
+import { getGenerators } from '@looker/run-it'
 
 export interface DocSdkCallsProps {
   /** API spec */
@@ -64,20 +65,36 @@ export const DocSdkCalls: FC<DocSdkCallsProps> = ({
         : `${sdkLanguage} SDK call syntax`
     setHeading(text)
   }, [sdkLanguage])
+
+  const calls = {}
+  try {
+    if (sdkLanguage === 'All') {
+      const generators = getGenerators(api)
+      Object.entries(generators).forEach(([language, gen]) => {
+        calls[language] = gen.makeTheCall(method, trimmedInputs)
+      })
+    } else {
+      const gen = getCodeGenerator(sdkLanguage, api)
+      calls[sdkLanguage] = gen!.makeTheCall(method, trimmedInputs)
+    }
+  } catch {
+    return (
+      <DarkSpan>
+        Cannot generate SDK call syntax. Ensure all complex structures in the
+        request form are valid.
+      </DarkSpan>
+    )
+  }
+
   return (
     <>
       <Heading as="h4" mb="medium">
         {heading}
       </Heading>
       {sdkLanguage === 'All' ? (
-        <DocMultiCall api={api} inputs={trimmedInputs} method={method} />
+        <DocMultiCall calls={calls} />
       ) : (
-        <DocSingleCall
-          api={api}
-          method={method}
-          inputs={trimmedInputs}
-          sdkLanguage={sdkLanguage}
-        />
+        <CodeCopy code={calls[sdkLanguage]} language={sdkLanguage} />
       )}
     </>
   )
