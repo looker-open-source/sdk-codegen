@@ -79,7 +79,7 @@ import {
 import { allHackersRequest } from '../../../data/hackers/actions'
 import { getJudgesState } from '../../../data/hackers/selectors'
 import { canUpdateProject, canLockProject } from '../../../utils'
-import { Routes } from '../../../routes/AppRouter'
+import { Routes } from '../../../routes'
 import { ProjectView } from '../../ProjectViewScene/components'
 
 interface ProjectFormProps {}
@@ -126,7 +126,14 @@ export const ProjectForm: FC<ProjectFormProps> = () => {
         dispatch(actionMessage('Invalid project', 'critical'))
       }
     }
-  }, [project, isProjectLoaded, hackerRegistrationId])
+  }, [
+    project,
+    isProjectLoaded,
+    hackerRegistrationId,
+    projectIdOrNew,
+    dispatch,
+    history,
+  ])
 
   const handleSubmit = (e: FormEvent) => {
     e.preventDefault()
@@ -160,12 +167,7 @@ export const ProjectForm: FC<ProjectFormProps> = () => {
     <SpaceVertical gap="u1">
       <Tabs2>
         <Tab2 id="form" label="Form">
-          <Form
-            onSubmit={handleSubmit}
-            width="55vw"
-            mt="large"
-            validationMessages={validationMessages}
-          >
+          <Form width="55vw" mt="large" validationMessages={validationMessages}>
             <Fieldset legend="Enter your project details">
               <FieldText
                 disabled={!canUpdate}
@@ -294,7 +296,11 @@ export const ProjectForm: FC<ProjectFormProps> = () => {
           >
             Return to projects
           </ButtonOutline>
-          <Button type="submit" disabled={!canUpdate || isLoading}>
+          <Button
+            type="submit"
+            disabled={!canUpdate || isLoading}
+            onClick={handleSubmit}
+          >
             Save project
           </Button>
         </Space>

@@ -25,42 +25,28 @@
  */
 import type { FC } from 'react'
 import React from 'react'
-import {
-  Dialog,
-  DialogHeader,
-  DialogContent,
-  Paragraph,
-  SpaceVertical,
-  TextArea,
-} from '@looker/components'
-import { useSelector, useDispatch } from 'react-redux'
-import { setMoreInfo } from '../../data/projects/actions'
-import { getMoreInfoState } from '../../data/projects/selectors'
+import { Dialog, DialogHeader, DialogContent } from '@looker/components'
+import { ProjectView } from '../../scenes/ProjectViewScene/components'
+import type { IProjectProps } from '../../models'
 
-interface MoreInfoDialogProps {}
+interface ProjectViewDialogProps {
+  project?: IProjectProps
+  closer: () => void
+}
 
-export const MoreInfoDialog: FC<MoreInfoDialogProps> = () => {
-  const dispatch = useDispatch()
-  const moreInfoProject = useSelector(getMoreInfoState)
-
-  const closeMoreInfo = () => {
-    dispatch(setMoreInfo())
+export const ProjectViewDialog: FC<ProjectViewDialogProps> = ({
+  project,
+  closer,
+}) => {
+  const closeDialog = () => {
+    closer()
   }
 
   return (
-    <Dialog isOpen={!!moreInfoProject} onClose={closeMoreInfo}>
-      <DialogHeader>{moreInfoProject?.title}</DialogHeader>
+    <Dialog isOpen={!!project} onClose={closeDialog}>
+      <DialogHeader>Judging {project?.title}</DialogHeader>
       <DialogContent>
-        <SpaceVertical>
-          <Paragraph>
-            Copy the link below and paste into a new browser window to see
-            additional information about the project
-          </Paragraph>
-          <TextArea
-            readOnly={true}
-            value={moreInfoProject?.moreInfo}
-          ></TextArea>
-        </SpaceVertical>
+        {!!project && <ProjectView project={project} />}
       </DialogContent>
     </Dialog>
   )

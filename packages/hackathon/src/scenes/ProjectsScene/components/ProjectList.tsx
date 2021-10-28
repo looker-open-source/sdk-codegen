@@ -41,7 +41,6 @@ import { Delete } from '@styled-icons/material-outlined/Delete'
 import { FactCheck } from '@styled-icons/material-outlined/FactCheck'
 import { useSelector, useDispatch } from 'react-redux'
 import { useHistory } from 'react-router-dom'
-import { MoreInfoDialog } from '../../../components/MoreInfoDialog'
 import type { IProjectProps } from '../../../models'
 import { sheetCell } from '../../../models'
 import {
@@ -199,7 +198,6 @@ export const ProjectList: FC<ProjectListProps> = () => {
         pages={totalPages}
         onChange={(pageNumber) => dispatch(updateProjectsPageNum(pageNumber))}
       />
-      <MoreInfoDialog />
     </>
   )
 }
