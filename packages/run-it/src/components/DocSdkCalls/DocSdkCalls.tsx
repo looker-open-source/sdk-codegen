@@ -30,10 +30,11 @@ import type { ApiModel, IMethod } from '@looker/sdk-codegen'
 import { getCodeGenerator, trimInputs } from '@looker/sdk-codegen'
 import { Heading } from '@looker/components'
 import { CodeCopy } from '@looker/code-editor'
+
 import type { RunItValues } from '../../RunIt'
 import { DarkSpan } from '../common'
 import { DocMultiCall } from './DocMultiCall'
-import { getGenerators } from '@looker/run-it'
+import { getGenerators } from './callUtils'
 
 export interface DocSdkCallsProps {
   /** API spec */
