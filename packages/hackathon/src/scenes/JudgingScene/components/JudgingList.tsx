@@ -32,7 +32,7 @@ import {
   DataTableCell,
   Pagination,
 } from '@looker/components'
-import { Info } from '@styled-icons/material-outlined/Info'
+import { TextSnippet } from '@styled-icons/material-outlined/TextSnippet'
 import { Create } from '@styled-icons/material-outlined/Create'
 import { useSelector, useDispatch } from 'react-redux'
 import { useHistory } from 'react-router-dom'
@@ -115,7 +115,7 @@ export const JudgingList: FC<JudgingListProps> = () => {
       <>
         <DataTableAction
           onClick={viewProject.bind(null, judging)}
-          icon={<Info />}
+          icon={<TextSnippet />}
         >
           View Project
         </DataTableAction>
