@@ -34,14 +34,12 @@ import {
   getProjectState,
 } from '../../data/projects/selectors'
 import { getProjectRequest } from '../../data/projects/actions'
-import { allHackersRequest } from '../../data/hackers/actions'
-import { Routes } from '../../routes/AppRouter'
+import { Routes } from '../../routes'
 import { Loading } from '../../components'
 import { actionMessage } from '../../data/common/actions'
 import { ProjectView } from './components'
 
 export const ProjectViewScene: FC = () => {
-  // TODO: add a not found error in case project is not found
   const dispatch = useDispatch()
   const history = useHistory()
   const match = useRouteMatch<{ projectId: string }>('/projectview/:projectId')
@@ -50,15 +48,17 @@ export const ProjectViewScene: FC = () => {
   const isProjectLoaded = useSelector(getProjectLoadedState)
   const project = useSelector(getProjectState)
 
+  const invalidProject = () =>
+    dispatch(actionMessage('Invalid project', 'critical'))
+
   useEffect(() => {
     if (project) {
-      // TODO Not sure this is needed here
-      if (projectId === 'new' && project._id) {
-        history.push(`${Routes.PROJECTS}/${project._id}`)
+      if (projectId === 'new') {
+        invalidProject()
       }
     } else {
       if (isProjectLoaded) {
-        dispatch(actionMessage('Invalid project', 'critical'))
+        invalidProject()
       }
     }
   }, [dispatch, history, projectId, project, isProjectLoaded])
@@ -69,8 +69,11 @@ export const ProjectViewScene: FC = () => {
 
   useEffect(() => {
     if (projectId && !project) {
-      dispatch(getProjectRequest(projectId === 'new' ? undefined : projectId))
-      dispatch(allHackersRequest())
+      if (projectId === 'new') {
+        invalidProject()
+      } else {
+        dispatch(getProjectRequest(projectId === 'new' ? undefined : projectId))
+      }
     }
   }, [dispatch, projectId, project])
 

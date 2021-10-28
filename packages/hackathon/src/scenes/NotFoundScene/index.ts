@@ -23,4 +23,4 @@
  SOFTWARE.
 
  */
-export { NotFoundScene } from './NotFoundScene'
+export * from './NotFoundScene'

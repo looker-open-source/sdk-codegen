@@ -24,4 +24,4 @@
 
  */
 
-export { ProjectView } from './ProjectView'
+export * from './ProjectView'

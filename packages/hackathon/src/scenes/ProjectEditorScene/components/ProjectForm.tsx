@@ -152,7 +152,7 @@ export const ProjectForm: FC<ProjectFormProps> = () => {
 
   if (!project) return <></>
 
-  // TODO move this to the sage and pull data out of redux
+  // TODO move this to the saga and pull data out of redux
   const canUpdate = canUpdateProject(hacker, project, projectIdOrNew === 'new')
   const canLock = canLockProject(hacker) && projectIdOrNew !== 'new'
 

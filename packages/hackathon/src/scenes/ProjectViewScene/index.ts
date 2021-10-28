@@ -23,4 +23,4 @@
  SOFTWARE.
 
  */
-export { ProjectViewScene } from './ProjectViewScene'
+export * from './ProjectViewScene'
