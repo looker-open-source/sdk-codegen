@@ -44,14 +44,8 @@ import { funFetch, fallbackFetch, OAuthScene } from '@looker/run-it'
 import { FirstPage } from '@styled-icons/material/FirstPage'
 import { LastPage } from '@styled-icons/material/LastPage'
 
-import { LodeContext, defaultLodeContextValue } from './context'
 import type { IApixEnvAdaptor } from './utils'
-import {
-  getLoded,
-  oAuthPath,
-  registerEnvAdaptor,
-  unregisterEnvAdaptor,
-} from './utils'
+import { oAuthPath, registerEnvAdaptor, unregisterEnvAdaptor } from './utils'
 import {
   Header,
   SideNav,
@@ -63,13 +57,17 @@ import {
 import { specReducer, initDefaultSpecState, updateSpecApi } from './reducers'
 import { AppRouter } from './routes'
 import { apixFilesHost } from './utils/lodeUtils'
-import { useActions, useSettingsStoreState } from './state'
-
+import {
+  useSettingActions,
+  useSettingStoreState,
+  useLodeActions,
+  useLodeState,
+} from './state'
 export interface ApiExplorerProps {
   specs: SpecList
   envAdaptor: IApixEnvAdaptor
   setVersionsUrl: RunItSetter
-  exampleLodeUrl?: string
+  examplesLodeUrl?: string
   declarationsLodeUrl?: string
   headless?: boolean
 }
@@ -80,12 +78,14 @@ const ApiExplorer: FC<ApiExplorerProps> = ({
   specs,
   envAdaptor,
   setVersionsUrl,
-  exampleLodeUrl = 'https://raw.githubusercontent.com/looker-open-source/sdk-codegen/main/examplesIndex.json',
+  examplesLodeUrl = 'https://raw.githubusercontent.com/looker-open-source/sdk-codegen/main/examplesIndex.json',
   declarationsLodeUrl = `${apixFilesHost}/declarationsIndex.json`,
   headless = false,
 }) => {
-  const { initialized } = useSettingsStoreState()
-  const { initAction } = useActions()
+  const { initialized } = useSettingStoreState()
+  useLodeState()
+  const { initLodeAction } = useLodeActions()
+  const { initSettingsAction } = useSettingActions()
   const location = useLocation()
   const oauthReturn = location.pathname === `/${oAuthPath}`
   const [specState, specDispatch] = useReducer(
@@ -93,8 +93,6 @@ const ApiExplorer: FC<ApiExplorerProps> = ({
     initDefaultSpecState(specs, location)
   )
   const { spec } = specState
-
-  const [lode, setLode] = useState(defaultLodeContextValue)
 
   const [hasNavigation, setHasNavigation] = useState(true)
   const toggleNavigation = (target?: boolean) =>
@@ -108,7 +106,7 @@ const ApiExplorer: FC<ApiExplorerProps> = ({
 
   useEffect(() => {
     registerEnvAdaptor(envAdaptor)
-    initAction()
+    initSettingsAction()
 
     return () => unregisterEnvAdaptor()
   }, [])
@@ -145,8 +143,9 @@ const ApiExplorer: FC<ApiExplorerProps> = ({
   }, [spec, location])
 
   useEffect(() => {
-    getLoded(exampleLodeUrl, declarationsLodeUrl).then((resp) => setLode(resp))
-  }, [exampleLodeUrl, declarationsLodeUrl])
+    console.log(examplesLodeUrl)
+    initLodeAction({ examplesLodeUrl, declarationsLodeUrl })
+  }, [examplesLodeUrl, declarationsLodeUrl])
 
   const themeOverrides = envAdaptor.themeOverrides()
 
@@ -160,87 +159,85 @@ const ApiExplorer: FC<ApiExplorerProps> = ({
           <Loader message="Initializing" themeOverrides={themeOverrides} />
         ) : (
           <ErrorBoundary logError={envAdaptor.logError.bind(envAdaptor)}>
-            <LodeContext.Provider value={{ ...lode }}>
-              <Page style={{ overflow: 'hidden' }}>
-                {!headless && (
-                  <Header
-                    specs={specs}
-                    spec={spec}
-                    specDispatch={specDispatch}
-                    toggleNavigation={toggleNavigation}
-                  />
-                )}
-                <Layout hasAside height="100%">
-                  <AsideBorder
-                    borderRight
-                    isOpen={hasNavigation}
-                    headless={headless}
-                  >
-                    {headless && (
-                      <>
-                        <Space
-                          alignItems="center"
-                          py="u3"
-                          px={hasNavigation ? 'u5' : '0'}
-                          justifyContent={
-                            hasNavigation ? 'space-between' : 'center'
-                          }
-                        >
-                          {hasNavigation && (
-                            <Heading
-                              as="h2"
-                              fontSize="xsmall"
-                              fontWeight="bold"
-                              color="text2"
-                            >
-                              API DOCUMENTATION
-                            </Heading>
-                          )}
-                          <IconButton
-                            size="xsmall"
-                            shape="round"
-                            icon={hasNavigation ? <FirstPage /> : <LastPage />}
-                            label={HEADER_TOGGLE_LABEL}
-                            onClick={() => toggleNavigation()}
-                          />
-                        </Space>
+            <Page style={{ overflow: 'hidden' }}>
+              {!headless && (
+                <Header
+                  specs={specs}
+                  spec={spec}
+                  specDispatch={specDispatch}
+                  toggleNavigation={toggleNavigation}
+                />
+              )}
+              <Layout hasAside height="100%">
+                <AsideBorder
+                  borderRight
+                  isOpen={hasNavigation}
+                  headless={headless}
+                >
+                  {headless && (
+                    <>
+                      <Space
+                        alignItems="center"
+                        py="u3"
+                        px={hasNavigation ? 'u5' : '0'}
+                        justifyContent={
+                          hasNavigation ? 'space-between' : 'center'
+                        }
+                      >
                         {hasNavigation && (
-                          <>
-                            <Divider mb="u3" appearance="light" />
-                            <SelectorContainer
-                              ml="large"
-                              mr="large"
-                              specs={specs}
-                              spec={spec}
-                              specDispatch={specDispatch}
-                            />
-                          </>
+                          <Heading
+                            as="h2"
+                            fontSize="xsmall"
+                            fontWeight="bold"
+                            color="text2"
+                          >
+                            API DOCUMENTATION
+                          </Heading>
                         )}
-                      </>
-                    )}
-                    {hasNavigation && (
-                      <SideNav
-                        headless={headless}
-                        specs={specs}
-                        spec={spec}
-                        specDispatch={specDispatch}
-                      />
-                    )}
-                  </AsideBorder>
-                  {oauthReturn && <OAuthScene />}
-                  {!oauthReturn && spec.api && (
-                    <AppRouter
-                      api={spec.api}
-                      specKey={spec.key}
+                        <IconButton
+                          size="xsmall"
+                          shape="round"
+                          icon={hasNavigation ? <FirstPage /> : <LastPage />}
+                          label={HEADER_TOGGLE_LABEL}
+                          onClick={() => toggleNavigation()}
+                        />
+                      </Space>
+                      {hasNavigation && (
+                        <>
+                          <Divider mb="u3" appearance="light" />
+                          <SelectorContainer
+                            ml="large"
+                            mr="large"
+                            specs={specs}
+                            spec={spec}
+                            specDispatch={specDispatch}
+                          />
+                        </>
+                      )}
+                    </>
+                  )}
+                  {hasNavigation && (
+                    <SideNav
+                      headless={headless}
                       specs={specs}
-                      toggleNavigation={toggleNavigation}
-                      envAdaptor={envAdaptor}
-                      setVersionsUrl={setVersionsUrl}
+                      spec={spec}
+                      specDispatch={specDispatch}
                     />
                   )}
-                </Layout>
-              </Page>
-            </LodeContext.Provider>
+                </AsideBorder>
+                {oauthReturn && <OAuthScene />}
+                {!oauthReturn && spec.api && (
+                  <AppRouter
+                    api={spec.api}
+                    specKey={spec.key}
+                    specs={specs}
+                    toggleNavigation={toggleNavigation}
+                    envAdaptor={envAdaptor}
+                    setVersionsUrl={setVersionsUrl}
+                  />
+                )}
+              </Layout>
+            </Page>
           </ErrorBoundary>
         )}
       </ComponentsProvider>

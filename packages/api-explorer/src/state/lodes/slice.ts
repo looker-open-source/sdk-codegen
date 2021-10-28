@@ -23,18 +23,47 @@
  SOFTWARE.
 
  */
-import { createContext } from 'react'
+import { createSliceHooks } from '@looker/redux'
 import type { IDeclarationMine, IExampleMine } from '@looker/sdk-codegen'
+import type { PayloadAction } from '@reduxjs/toolkit'
+import { createSlice } from '@reduxjs/toolkit'
 
-interface LodeContextProps {
-  examples: IExampleMine
+import { saga } from './sagas'
+
+export interface LodeState {
+  examples?: IExampleMine
   declarations?: IDeclarationMine
+  error?: Error
 }
 
-export const defaultLodeContextValue: LodeContextProps = {
-  examples: { commitHash: '', remoteOrigin: '', nuggets: {}, summaries: {} },
+export const defaultLodeState: LodeState = {
+  examples: undefined,
+  declarations: undefined,
 }
 
-export const LodeContext = createContext<LodeContextProps>(
-  defaultLodeContextValue
-)
+export interface InitPayload {
+  examplesLodeUrl?: string
+  declarationsLodeUrl?: string
+}
+
+interface InitSuccessAction extends LodeState {}
+
+export const lodeSlice = createSlice({
+  name: 'lode',
+  initialState: defaultLodeState,
+  reducers: {
+    // eslint-disable-next-line @typescript-eslint/no-empty-function
+    initLodeAction(_state, _action: PayloadAction<InitPayload>) {},
+    initLodeSuccessAction(state, action: PayloadAction<InitSuccessAction>) {
+      state.examples = action.payload.examples
+      state.declarations = action.payload.declarations
+    },
+    initLodeFailureAction(state, action: PayloadAction<Error>) {
+      state.error = action.payload
+    },
+  },
+})
+
+export const lodeActions = lodeSlice.actions
+export const { useActions: useLodeActions, useStoreState: useLodeState } =
+  createSliceHooks(lodeSlice, saga)

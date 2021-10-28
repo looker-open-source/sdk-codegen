@@ -58,17 +58,20 @@ type SetSdkLanguageAction = Pick<SettingState, 'sdkLanguage'>
 
 export type InitSuccessPayload = UserDefinedSettings
 
-export const slice = createSlice({
+export const settingSlice = createSlice({
   name: 'settings',
   initialState: defaultSettingsState,
   reducers: {
     // eslint-disable-next-line @typescript-eslint/no-empty-function
-    initAction() {},
-    initSuccessAction(state, action: PayloadAction<InitSuccessPayload>) {
+    initSettingsAction() {},
+    initSettingsSuccessAction(
+      state,
+      action: PayloadAction<InitSuccessPayload>
+    ) {
       state.sdkLanguage = action.payload.sdkLanguage
       state.initialized = true
     },
-    initFailureAction(state, action: PayloadAction<Error>) {
+    initSettingsFailureAction(state, action: PayloadAction<Error>) {
       state.error = action.payload
       state.initialized = false
     },
@@ -84,6 +87,8 @@ export const slice = createSlice({
   },
 })
 
-export const actions = slice.actions
-export const { useActions, useStoreState: useSettingsStoreState } =
-  createSliceHooks(slice, saga)
+export const settingActions = settingSlice.actions
+export const {
+  useActions: useSettingActions,
+  useStoreState: useSettingStoreState,
+} = createSliceHooks(settingSlice, saga)

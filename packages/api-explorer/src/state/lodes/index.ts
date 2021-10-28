@@ -23,4 +23,5 @@
  SOFTWARE.
 
  */
-export { LodeContext, defaultLodeContextValue } from './lode'
+export * from './selectors'
+export * from './slice'

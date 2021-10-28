@@ -23,46 +23,12 @@
  SOFTWARE.
 
  */
+import type { RootState } from '../store'
 
-import type { IDeclarationMine, IExampleMine } from '@looker/sdk-codegen'
+const selectLodeState = (state: RootState) => state.lode
 
-export const apixFilesHost = 'http://localhost:30000'
+export const selectExamplesLode = (state: RootState) =>
+  selectLodeState(state).examples
 
-const fetchLode = async (lodeUrl: string) => {
-  try {
-    const result = await fetch(lodeUrl, { mode: 'cors' })
-    return result.text()
-  } catch (error) {
-    return ''
-  }
-}
-
-interface FullLode {
-  examples?: IExampleMine
-  declarations?: IDeclarationMine
-}
-
-export const getLoded = async (
-  examplesLodeUrl?: string,
-  declarationsLodeUrl?: string
-): Promise<FullLode> => {
-  // First try to load from the apix-files server
-  let examples = await fetchLode(`${apixFilesHost}/examplesIndex.json`)
-  if (!examples && examplesLodeUrl) {
-    examples = await fetchLode(examplesLodeUrl)
-  }
-
-  let declarations
-  if (declarationsLodeUrl) {
-    declarations = await fetchLode(declarationsLodeUrl)
-  }
-
-  const lode: FullLode = { examples: undefined, declarations: undefined }
-  if (examples) {
-    lode.examples = JSON.parse(examples)
-  }
-  if (declarations) {
-    lode.declarations = JSON.parse(declarations)
-  }
-  return lode
-}
+export const selectDeclarationsLode = (state: RootState) =>
+  selectLodeState(state).declarations

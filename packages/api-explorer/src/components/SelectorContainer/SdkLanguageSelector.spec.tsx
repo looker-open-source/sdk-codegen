@@ -29,7 +29,7 @@ import userEvent from '@testing-library/user-event'
 import { codeGenerators } from '@looker/sdk-codegen'
 import * as reactRedux from 'react-redux'
 
-import { defaultSettingsState, slice as settingsSlice } from '../../state'
+import { defaultSettingsState, settingSlice } from '../../state'
 import {
   registerTestEnvAdaptor,
   renderWithReduxProvider,
@@ -77,7 +77,7 @@ describe('SdkLanguageSelector', () => {
       await userEvent.click(screen.getByRole('option', { name: 'TypeScript' }))
       await waitFor(async () => {
         expect(mockDispatch).toHaveBeenLastCalledWith(
-          settingsSlice.actions.setSdkLanguageAction({
+          settingSlice.actions.setSdkLanguageAction({
             sdkLanguage: 'TypeScript',
           })
         )
