@@ -26,7 +26,7 @@
 import type { FC } from 'react'
 import React from 'react'
 import styled from 'styled-components'
-import { Box, MenuList, MenuItem } from '@looker/components'
+import { Box2, MenuList, MenuItem } from '@looker/components'
 import { Beaker } from '@looker/icons'
 import { Map } from '@styled-icons/material/Map'
 import { Settings } from '@styled-icons/material/Settings'
@@ -41,7 +41,7 @@ export interface SideNavProps {
 }
 
 export const SideNav: FC<SideNavProps> = ({ authorizedRoutes }) => (
-  <Box fontSize="xxlarge" mt="40px">
+  <Box2 fontSize="xxlarge" mt="40px">
     <MenuList type="none">
       {authorizedRoutes.includes(Routes.HOME) && (
         <MenuItem icon={<Home />}>
@@ -74,7 +74,7 @@ export const SideNav: FC<SideNavProps> = ({ authorizedRoutes }) => (
         </MenuItem>
       )}
     </MenuList>
-  </Box>
+  </Box2>
 )
 
 const Link = styled(NavLink)`

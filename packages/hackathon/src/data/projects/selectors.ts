@@ -40,11 +40,6 @@ export const getProjectsLoadedState = (state: RootState): boolean =>
 export const getProjectsPageNumState = (state: RootState): number =>
   state.projectsState.currentPageNum
 
-export const getMoreInfoState = (
-  state: RootState
-): { title: string; moreInfo: string } | undefined =>
-  state.projectsState.moreInfo
-
 export const getProjectState = (state: RootState): IProjectProps | undefined =>
   state.projectsState.currentProject
 
