@@ -23,10 +23,7 @@
  SOFTWARE.
 
  */
-export {
-  renderWithLode,
-  renderWithReduxProviderAndLode,
-} from './render_with_lode'
+export * from './lodes'
 export * from './router'
 export * from './redux'
 export { registerTestEnvAdaptor } from './envAdaptor'

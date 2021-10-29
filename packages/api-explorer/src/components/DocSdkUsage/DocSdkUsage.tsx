@@ -24,7 +24,7 @@
 
  */
 import type { FC } from 'react'
-import React, { useContext, useState, useEffect } from 'react'
+import React, { useState, useEffect } from 'react'
 import {
   Box,
   Card,
@@ -41,8 +41,7 @@ import { CollapserCard } from '@looker/run-it'
 import { InsertDriveFile } from '@styled-icons/material-outlined/InsertDriveFile'
 import { useSelector } from 'react-redux'
 
-import { selectSdkLanguage } from '../../state'
-import { LodeContext } from '../../context'
+import { selectSdkLanguage, selectExamplesLode } from '../../state'
 import {
   exampleColumns,
   EMPTY_STRING,
@@ -61,15 +60,16 @@ interface DocSdkUsageProps {
  *  links to the source files
  */
 export const DocSdkUsage: FC<DocSdkUsageProps> = ({ method }) => {
-  const { examples } = useContext(LodeContext)
+  const examples = useSelector(selectExamplesLode)
   const sdkLanguage = useSelector(selectSdkLanguage)
-  let languages = findExampleLanguages(examples, method.name)
   const [page, setPage] = useState(1)
 
   useEffect(() => {
     setPage(1)
   }, [method])
 
+  if (!examples) return <></>
+  let languages = findExampleLanguages(examples, method.name)
   if (languages.length === 0) return <></>
 
   languages = sortLanguagesByPreference(languages, sdkLanguage)

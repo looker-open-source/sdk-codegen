@@ -23,47 +23,19 @@
  SOFTWARE.
 
  */
-
-import type { ReactElement } from 'react'
-import React from 'react'
-import type { RenderOptions } from '@testing-library/react'
-import type { Store } from 'redux'
-
-import { renderWithTheme } from '@looker/components-test-utils'
 import type { IDeclarationMine, IExampleMine } from '@looker/sdk-codegen'
-import { LodeContext } from '../context'
-import type { RootState } from '../state'
-import { withReduxProvider } from './redux'
+import type { ReactElement } from 'react'
+import type { RenderOptions } from '@testing-library/react'
+import { renderWithTheme } from '@looker/components-test-utils'
 
-const withLode = (
-  consumer: ReactElement<any>,
-  examples: IExampleMine,
-  declarations?: IDeclarationMine
-) => {
-  return (
-    <LodeContext.Provider value={{ examples, declarations }}>
-      {consumer}
-    </LodeContext.Provider>
-  )
-}
+import { createTestStore, withReduxProvider } from './redux'
 
 export const renderWithLode = (
-  component: ReactElement<any>,
+  consumers: ReactElement<any>,
   examples: IExampleMine,
   declarations?: IDeclarationMine,
   options?: Omit<RenderOptions, 'queries'>
 ) => {
-  return renderWithTheme(withLode(component, examples, declarations), options)
+  const store = createTestStore({ lodes: { examples, declarations } })
+  return renderWithTheme(withReduxProvider(consumers, store), options)
 }
-
-export const renderWithReduxProviderAndLode = (
-  component: ReactElement<any>,
-  examples: IExampleMine,
-  declarations?: IDeclarationMine,
-  store?: Store<RootState>,
-  options?: Omit<RenderOptions, 'queries'>
-) =>
-  renderWithTheme(
-    withReduxProvider(withLode(component, examples, declarations), store),
-    options
-  )

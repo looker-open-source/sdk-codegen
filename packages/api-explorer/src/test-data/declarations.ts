@@ -23,4 +23,21 @@
  SOFTWARE.
 
  */
-export { LodeContext, defaultLodeContextValue } from './lode'
+import type { IDeclarationMine } from '@looker/sdk-codegen'
+
+export const declarations: IDeclarationMine = {
+  commitHash: '1e9348b797c2f3760d03c1f94c60f18e534e8298',
+  remoteOrigin: 'https://github.com/looker-open-source/sdk-codegen',
+  types: {
+    FullLode: {
+      line: 40,
+      sourceFile: 'packages/api-explorer/src/utils/lodeUtils.ts',
+    },
+  },
+  methods: {
+    getLoded: {
+      line: 45,
+      sourceFile: 'packages/api-explorer/src/utils/lodeUtils.ts',
+    },
+  },
+}

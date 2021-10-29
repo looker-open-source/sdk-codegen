@@ -23,18 +23,12 @@
  SOFTWARE.
 
  */
-import { createContext } from 'react'
-import type { IDeclarationMine, IExampleMine } from '@looker/sdk-codegen'
+import type { RootState } from '../store'
 
-interface LodeContextProps {
-  examples: IExampleMine
-  declarations?: IDeclarationMine
-}
+const selectLodeState = (state: RootState) => state.lodes
 
-export const defaultLodeContextValue: LodeContextProps = {
-  examples: { commitHash: '', remoteOrigin: '', nuggets: {}, summaries: {} },
-}
+export const selectExamplesLode = (state: RootState) =>
+  selectLodeState(state).examples
 
-export const LodeContext = createContext<LodeContextProps>(
-  defaultLodeContextValue
-)
+export const selectDeclarationsLode = (state: RootState) =>
+  selectLodeState(state).declarations

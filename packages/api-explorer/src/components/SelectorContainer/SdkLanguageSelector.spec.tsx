@@ -29,7 +29,7 @@ import userEvent from '@testing-library/user-event'
 import { codeGenerators } from '@looker/sdk-codegen'
 import * as reactRedux from 'react-redux'
 
-import { defaultSettingsState, slice as settingsSlice } from '../../state'
+import { defaultSettingsState, settingsSlice } from '../../state'
 import {
   registerTestEnvAdaptor,
   renderWithReduxProvider,

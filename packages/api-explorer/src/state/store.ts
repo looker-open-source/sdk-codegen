@@ -26,17 +26,22 @@
 import { createStore } from '@looker/redux'
 
 import type { SettingState } from './settings'
-import { defaultSettingsState, slice } from './settings'
+import { defaultSettingsState, settingsSlice } from './settings'
+import type { LodesState } from './lodes'
+import { lodesSlice, defaultLodesState } from './lodes'
 
 export const store = createStore({
   preloadedState: {
     settings: defaultSettingsState,
+    lodes: defaultLodesState,
   },
   reducer: {
-    settings: slice.reducer,
+    settings: settingsSlice.reducer,
+    lodes: lodesSlice.reducer,
   },
 })
 
 export interface RootState {
   settings: SettingState
+  lodes: LodesState
 }
