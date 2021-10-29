@@ -276,7 +276,7 @@ describe('Complex Item', () => {
       ${{
   view: 'users',
   fields: ['users.id', 'users.first_name'],
-}} | ${'Error: Required properties "model" must be provided'} | ${requiredKeys}
+}} | ${'Error: Required properties "model" must be provided in the body'} | ${requiredKeys}
       ${{
   model: 'thelook',
   view: 'users',

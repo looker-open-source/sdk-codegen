@@ -380,7 +380,7 @@ export const validateBody = (
     if (missing.size > 0) {
       result = `Error: Required properties "${Array.from(missing).join(
         ', '
-      )}" must be provided`
+      )}" must be provided in the body`
     }
   }
   return result
