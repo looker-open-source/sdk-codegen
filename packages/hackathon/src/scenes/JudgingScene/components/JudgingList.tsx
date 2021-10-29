@@ -24,7 +24,7 @@
 
  */
 import type { FC } from 'react'
-import React, { useEffect } from 'react'
+import React, { useEffect, useState } from 'react'
 import {
   DataTable,
   DataTableItem,
@@ -32,12 +32,15 @@ import {
   DataTableCell,
   Pagination,
 } from '@looker/components'
-import { Info } from '@styled-icons/material/Info'
-import { Create } from '@styled-icons/material/Create'
+import { TextSnippet } from '@styled-icons/material-outlined/TextSnippet'
+import { Create } from '@styled-icons/material-outlined/Create'
 import { useSelector, useDispatch } from 'react-redux'
 import { useHistory } from 'react-router-dom'
-import { MoreInfoDialog } from '../../../components/MoreInfoDialog'
-import type { IJudgingProps } from '../../../models'
+import type {
+  IHackerProps,
+  IJudgingProps,
+  IProjectProps,
+} from '../../../models'
 import { sheetCell } from '../../../models'
 import {
   getHackerState,
@@ -51,9 +54,26 @@ import {
   getJudgingsState,
   getJudgingsPageNumState,
 } from '../../../data/judgings/selectors'
-import { setMoreInfo } from '../../../data/projects/actions'
 import { canDoJudgingAction } from '../../../utils'
 import { PAGE_SIZE } from '../../../constants'
+import { ProjectViewDialog } from '../../../components/ProjectViewDialog'
+
+const asProject = (
+  hacker: IHackerProps,
+  judging: IJudgingProps
+): IProjectProps => {
+  return {
+    _id: 'projectviewdialog',
+    _row: 0,
+    _user_id: hacker.id,
+    title: judging.$title,
+    project_type: judging.$project_type,
+    technologies: judging.$technologies,
+    $members: judging.$members,
+    description: judging.$description,
+    contestant: judging.$contestant,
+  } as IProjectProps
+}
 
 interface JudgingListProps {}
 
@@ -64,6 +84,9 @@ export const JudgingList: FC<JudgingListProps> = () => {
   const hacker = useSelector(getHackerState)
   const judgings = useSelector(getJudgingsState)
   const currentPage = useSelector(getJudgingsPageNumState)
+  const [currentProject, setCurrentProject] = useState<
+    IProjectProps | undefined
+  >(undefined)
 
   useEffect(() => {
     dispatch(getJudgingsRequest())
@@ -73,8 +96,12 @@ export const JudgingList: FC<JudgingListProps> = () => {
     dispatch(updateJudgingsPageNum(pageNum))
   }
 
-  const openMoreInfo = ({ $title, $more_info }: IJudgingProps) => {
-    dispatch(setMoreInfo($title, $more_info))
+  const viewProject = (judging: IJudgingProps) => {
+    setCurrentProject(asProject(hacker, judging))
+  }
+
+  const hideProject = () => {
+    setCurrentProject(undefined)
   }
 
   const showJudging = (judgingId: string) => {
@@ -86,14 +113,12 @@ export const JudgingList: FC<JudgingListProps> = () => {
   const actions = (judging: IJudgingProps) => {
     return (
       <>
-        {judging.$more_info && judging.$more_info !== '\0' && (
-          <DataTableAction
-            onClick={openMoreInfo.bind(null, judging)}
-            icon={<Info />}
-          >
-            More Information
-          </DataTableAction>
-        )}
+        <DataTableAction
+          onClick={viewProject.bind(null, judging)}
+          icon={<TextSnippet />}
+        >
+          View Project
+        </DataTableAction>
         <DataTableAction
           onClick={showJudging.bind(null, judging._id)}
           icon={<Create />}
@@ -101,7 +126,7 @@ export const JudgingList: FC<JudgingListProps> = () => {
         >
           {canDoJudgingAction(hacker, judging)
             ? 'Update Judging'
-            : 'View Juding'}
+            : 'View Judging'}
         </DataTableAction>
       </>
     )
@@ -132,7 +157,7 @@ export const JudgingList: FC<JudgingListProps> = () => {
         pages={totalPages}
         onChange={updatePage}
       />
-      <MoreInfoDialog />
+      <ProjectViewDialog project={currentProject} closer={hideProject} />
     </>
   )
 }
