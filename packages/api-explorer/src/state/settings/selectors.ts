@@ -25,16 +25,16 @@
  */
 import type { RootState } from '../store'
 
-const getSettingsState = (state: RootState) => state.settings
+const selectSettingsState = (state: RootState) => state.settings
 
 export const selectSdkLanguage = (state: RootState) =>
-  getSettingsState(state).sdkLanguage
+  selectSettingsState(state).sdkLanguage
 
 export const selectSearchPattern = (state: RootState) =>
-  getSettingsState(state).searchPattern
+  selectSettingsState(state).searchPattern
 
 export const selectSearchCriteria = (state: RootState) =>
-  getSettingsState(state).searchCriteria
+  selectSettingsState(state).searchCriteria
 
 export const isInitialized = (state: RootState) =>
-  getSettingsState(state).initialized
+  selectSettingsState(state).initialized
