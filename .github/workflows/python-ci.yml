@@ -129,6 +129,9 @@ jobs:
           service_account_key: ${{ secrets.GCP_AR_READER_SA_KEY }}
           export_default_credentials: true
 
+      - name: Authenticate Artifact Repository
+        run: gcloud auth configure-docker us-west1-docker.pkg.dev --quiet
+
       - name: Install docker on macos
         if: ${{ matrix.os == 'macos' }}
         uses: docker-practice/actions-setup-docker@v1
@@ -152,9 +155,6 @@ jobs:
           done
           (( i )) && printf '\n'
           echo "-- Docker is ready."
-
-      - name: Authenticate Artifact Repository
-        run: gcloud auth configure-docker us-west1-docker.pkg.dev --quiet
 
       - name: Pull and run Looker docker image
         # TODO: can we cache some layers of the image for faster download?
