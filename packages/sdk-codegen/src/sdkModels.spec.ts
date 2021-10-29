@@ -40,7 +40,7 @@ import {
   ApiModel,
   ArrayType,
   camelCase,
-  CriteriaToSet,
+  criteriaToSet,
   DelimArrayType,
   EnumType,
   firstCase,
@@ -54,7 +54,7 @@ import {
   safeName,
   SearchAll,
   SearchCriterion,
-  SetToCriteria,
+  setToCriteria,
   titleCase,
   typeRefs,
 } from './sdkModels'
@@ -1088,7 +1088,7 @@ describe('sdkModels', () => {
         ])
         // this declaration pattern assures correct enum names
         const names: SearchCriterionTerm[] = ['method', 'type', 'name']
-        const actual = CriteriaToSet(names)
+        const actual = criteriaToSet(names)
         expect(actual).toEqual(expected)
       })
 
@@ -1099,7 +1099,7 @@ describe('sdkModels', () => {
           SearchCriterion.name,
         ])
         const expected: SearchCriterionTerm[] = ['method', 'type', 'name']
-        const actual = SetToCriteria(criteria)
+        const actual = setToCriteria(criteria)
         expect(actual).toEqual(expected)
       })
 
@@ -1111,7 +1111,7 @@ describe('sdkModels', () => {
         ])
         const values = ['method', 'type', 'name']
         const names = values as SearchCriterionTerm[]
-        const actual = CriteriaToSet(names)
+        const actual = criteriaToSet(names)
         expect(actual).toEqual(expected)
       })
 
@@ -1119,7 +1119,7 @@ describe('sdkModels', () => {
         const expected = new Set([SearchCriterion.method, SearchCriterion.name])
         const values = ['method', 'Type', 'name']
         const names = values as SearchCriterionTerm[]
-        const actual = CriteriaToSet(names)
+        const actual = criteriaToSet(names)
         expect(actual).toEqual(expected)
       })
 
@@ -1130,7 +1130,7 @@ describe('sdkModels', () => {
           SearchCriterion.name,
         ])
         const expected = ['method', 'type', 'name']
-        const actual = SetToCriteria(criteria)
+        const actual = setToCriteria(criteria)
         expect(actual).toEqual(expected)
       })
     })

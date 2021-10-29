@@ -24,40 +24,4 @@
 
  */
 
-import type { SearchCriterionTerm } from '@looker/sdk-codegen'
-import { SearchAll, SetToCriteria } from '@looker/sdk-codegen'
-
-export interface SearchState {
-  pattern: string
-  criteria: SearchCriterionTerm[]
-}
-
-export interface SearchAction {
-  type: string
-  payload: Partial<SearchState>
-}
-
-export const defaultSearchState: SearchState = {
-  criteria: SetToCriteria(SearchAll) as SearchCriterionTerm[],
-  pattern: '',
-}
-
-export const searchReducer = (
-  state: SearchState = defaultSearchState,
-  action: SearchAction
-): SearchState => {
-  switch (action.type) {
-    case 'SET_PATTERN':
-      return {
-        ...state,
-        pattern: action.payload.pattern!,
-      }
-    case 'SET_CRITERIA':
-      return {
-        ...state,
-        criteria: action.payload.criteria!,
-      }
-    default:
-      return state
-  }
-}
+export * from './ProjectView'

@@ -24,4 +24,3 @@
 
  */
 export * from './spec'
-export * from './search'

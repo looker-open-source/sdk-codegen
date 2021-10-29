@@ -23,4 +23,4 @@
  SOFTWARE.
 
  */
-export { ProjectList } from './ProjectList'
+export * from './ProjectList'

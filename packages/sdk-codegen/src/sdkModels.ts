@@ -50,7 +50,7 @@ const lookerValuesTag = 'x-looker-values'
 const enumTag = 'enum'
 
 /** simple symbol name pattern */
-const simpleName = /^[a-z_][a-z_\d]*$/im
+const simpleName = /^[a-z_][a-z_\d]*(\[])?$/im
 
 /**
  * Convenience enum for exploring types
@@ -94,7 +94,7 @@ export const typeOfType = (type: IType): TypeOfType => {
 /**
  * Does this name have special characters?
  * @param name to name check
- * @returns true if the name isn't a standard variable name
+ * @returns true if the name isn't a standard variable name, optionally ending with []
  */
 export const isSpecialName = (name: string) => {
   if (!name) return false
@@ -386,7 +386,7 @@ export const SearchAll: SearchCriteria = new Set([
   SearchCriterion.response,
 ])
 
-export const CriteriaToSet = (criteria: string[]): SearchCriteria => {
+export const criteriaToSet = (criteria: string[]): SearchCriteria => {
   const result: SearchCriteria = new Set()
   criteria.forEach((name) => {
     const val = SearchCriterion[name as SearchCriterionTerm]
@@ -396,7 +396,7 @@ export const CriteriaToSet = (criteria: string[]): SearchCriteria => {
   return result
 }
 
-export const SetToCriteria = (criteria: SearchCriteria): string[] => {
+export const setToCriteria = (criteria: SearchCriteria): string[] => {
   const result: string[] = []
   criteria.forEach((value) => result.push(SearchCriterion[value]))
   return result
