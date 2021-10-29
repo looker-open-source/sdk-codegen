@@ -42,7 +42,6 @@ import {
 import { Info } from '@styled-icons/material'
 import { DateFormat, InputDate } from '@looker/components-date'
 import { CodeEditor } from '@looker/code-editor'
-
 import type { RunItInput, RunItValues } from '../../RunIt'
 import { FormItem } from './FormItem'
 
@@ -345,23 +344,44 @@ export const validateEncodedValues = (body: string) => {
  * Returns an error message if the body is not JSON or valid form url encoding
  *
  * @param body string to validate
+ * @param requiredKeys keys that are required in the body parameter
  */
-export const validateBody = (body: string | Record<string, any>) => {
+export const validateBody = (
+  body: string | Record<string, any>,
+  requiredKeys: string[]
+) => {
+  let parsed
+
   let result = ''
-  if (body && typeof body === 'string') {
-    if (/^[[{}"]/.test(body)) {
-      // most likely JSON
-      try {
-        JSON.parse(body)
-      } catch (e: any) {
-        result = e.message
+  if (body) {
+    if (typeof body === 'string') {
+      if (/^[[{}"]/.test(body)) {
+        // most likely JSON
+        try {
+          parsed = JSON.parse(body)
+        } catch (e: any) {
+          result = e.message
+        }
+      } else {
+        result = validateEncodedValues(body)
+      }
+      if (result) {
+        result = `Syntax error in the body: ${result}`
       }
     } else {
-      result = validateEncodedValues(body)
+      parsed = body
     }
   }
-  if (result) {
-    result = `Syntax error in the body: ${result}`
+
+  if (parsed && requiredKeys && requiredKeys.length > 0) {
+    const required = new Set<string>(requiredKeys)
+    const keys = new Set<string>(Object.keys(parsed))
+    const missing = new Set<string>([...required].filter((k) => !keys.has(k)))
+    if (missing.size > 0) {
+      result = `Error: Required properties "${Array.from(missing).join(
+        ', '
+      )}" must be provided`
+    }
   }
   return result
 }

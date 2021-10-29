@@ -270,27 +270,34 @@ describe('Complex Item', () => {
   })
 
   describe('validateBody', () => {
+    const requiredKeys = ['model', 'view']
     test.each`
-      value                                                      | error
+      value                                                      | expected                                                                | requiredKeys
+      ${{
+  view: 'users',
+  fields: ['users.id', 'users.first_name'],
+}} | ${'Error: Required properties "model" must be provided'} | ${requiredKeys}
       ${{
   model: 'thelook',
   view: 'users',
   fields: ['users.id', 'users.first_name'],
-}} | ${''}
-      ${'na.-_me=Vapor&age=3&luckyNumbers[]=5&luckyNumbers[]=7'} | ${''}
-      ${'name=Vapor&age=3&luckyNumbers[]=5&luckyNumbers[]7'}     | ${'luckyNumbers[]7'}
-      ${'{'}                                                     | ${'Unexpected end of JSON input'}
-      ${'}'}                                                     | ${'Unexpected token } in JSON at position 0'}
-      ${'['}                                                     | ${'Unexpected end of JSON input'}
-      ${'"'}                                                     | ${'Unexpected end of JSON input'}
-      ${'"foo"'}                                                 | ${''}
-      ${''}                                                      | ${''}
-      ${'{}'}                                                    | ${''}
-    `('it validates a body value of "$value"', ({ value, error }) => {
-      const actual = validateBody(value)
-      const expected = error ? `Syntax error in the body: ${error}` : error
-      expect(actual).toEqual(expected)
-    })
+}} | ${''} | ${requiredKeys}
+      ${'na.-_me=Vapor&age=3&luckyNumbers[]=5&luckyNumbers[]=7'} | ${''}                                                                   | ${[]}
+      ${'name=Vapor&age=3&luckyNumbers[]=5&luckyNumbers[]7'}     | ${'Syntax error in the body: luckyNumbers[]7'}                          | ${[]}
+      ${'{'}                                                     | ${'Syntax error in the body: Unexpected end of JSON input'}             | ${[]}
+      ${'}'}                                                     | ${'Syntax error in the body: Unexpected token } in JSON at position 0'} | ${[]}
+      ${'['}                                                     | ${'Syntax error in the body: Unexpected end of JSON input'}             | ${[]}
+      ${'"'}                                                     | ${'Syntax error in the body: Unexpected end of JSON input'}             | ${[]}
+      ${'"foo"'}                                                 | ${''}                                                                   | ${[]}
+      ${''}                                                      | ${''}                                                                   | ${[]}
+      ${'{}'}                                                    | ${''}                                                                   | ${[]}
+    `(
+      'it validates a body value of "$value"',
+      ({ value, expected, requiredKeys }) => {
+        const actual = validateBody(value, requiredKeys)
+        expect(actual).toEqual(expected)
+      }
+    )
   })
 })
 
