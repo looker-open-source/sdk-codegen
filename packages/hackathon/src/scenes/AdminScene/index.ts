@@ -23,4 +23,4 @@
  SOFTWARE.
 
  */
-export { AdminScene } from './AdminScene'
+export * from './AdminScene'

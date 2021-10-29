@@ -34,15 +34,13 @@ import {
   Tooltip,
   Icon,
 } from '@looker/components'
-import { ModelFile } from '@looker/icons'
-import { Lock } from '@styled-icons/material/Lock'
-import { Info } from '@styled-icons/material/Info'
-import { Create } from '@styled-icons/material/Create'
-import { Delete } from '@styled-icons/material/Delete'
+import { TextSnippet } from '@styled-icons/material-outlined/TextSnippet'
+import { Lock } from '@styled-icons/material-outlined/Lock'
+import { Create } from '@styled-icons/material-outlined/Create'
+import { Delete } from '@styled-icons/material-outlined/Delete'
 import { FactCheck } from '@styled-icons/material-outlined/FactCheck'
 import { useSelector, useDispatch } from 'react-redux'
 import { useHistory } from 'react-router-dom'
-import { MoreInfoDialog } from '../../../components/MoreInfoDialog'
 import type { IProjectProps } from '../../../models'
 import { sheetCell } from '../../../models'
 import {
@@ -55,7 +53,6 @@ import {
   deleteProject,
   currentProjectsRequest,
   updateProjectsPageNum,
-  setMoreInfo,
 } from '../../../data/projects/actions'
 import {
   getCurrentProjectsState,
@@ -76,10 +73,6 @@ export const ProjectList: FC<ProjectListProps> = () => {
 
   const handleDelete = (project: IProjectProps) => {
     dispatch(deleteProject(project._id))
-  }
-
-  const openMoreInfo = ({ title, more_info }: IProjectProps) => {
-    dispatch(setMoreInfo(title, more_info))
   }
 
   const lockCol = columns[0]
@@ -105,20 +98,18 @@ export const ProjectList: FC<ProjectListProps> = () => {
     })
   }
 
+  const handleView = (projectId: string) => {
+    setTimeout(() => {
+      history.push(`/projectview/${projectId}`)
+    })
+  }
+
   const actions = (project: IProjectProps) => {
     const isLocked = project.locked
 
     return (
       <>
-        {project.more_info && project.more_info !== '\0' && (
-          <DataTableAction
-            onClick={openMoreInfo.bind(null, project)}
-            icon={<Info />}
-          >
-            More Information
-          </DataTableAction>
-        )}
-        {canDoProjectAction(hacker, project, 'update') ? (
+        {canDoProjectAction(hacker, project, 'update') && (
           <DataTableAction
             onClick={handleEdit.bind(null, project._id)}
             icon={isLocked ? <Lock /> : <Create />}
@@ -126,15 +117,16 @@ export const ProjectList: FC<ProjectListProps> = () => {
           >
             Update project
           </DataTableAction>
-        ) : (
-          <DataTableAction
-            onClick={handleEdit.bind(null, project._id)}
-            icon={isLocked ? <Lock /> : <ModelFile />}
-            itemRole="link"
-          >
-            View project
-          </DataTableAction>
         )}
+
+        <DataTableAction
+          onClick={handleView.bind(null, project._id)}
+          icon={<TextSnippet />}
+          itemRole="link"
+        >
+          View project
+        </DataTableAction>
+
         {canDoProjectAction(hacker, project, 'delete') && (
           <DataTableAction
             onClick={handleDelete.bind(null, project)}
@@ -206,7 +198,6 @@ export const ProjectList: FC<ProjectListProps> = () => {
         pages={totalPages}
         onChange={(pageNumber) => dispatch(updateProjectsPageNum(pageNumber))}
       />
-      <MoreInfoDialog />
     </>
   )
 }

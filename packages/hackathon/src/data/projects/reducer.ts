@@ -38,10 +38,6 @@ export interface ProjectsState {
   validationMessages?: ValidationMessages
   projectUpdated?: boolean
   projectLoaded: boolean
-  moreInfo?: {
-    title: string
-    moreInfo: string
-  }
 }
 
 const defaultState: Readonly<ProjectsState> = Object.freeze({
@@ -122,11 +118,6 @@ export const projectsReducer = (
         validationMessages: action.payload.validationMessages,
         isProjectMember: action.payload.isProjectMember,
         projectUpdated: true,
-      }
-    case Actions.SET_MORE_INFO:
-      return {
-        ...state,
-        moreInfo: action.payload,
       }
     default:
       return state

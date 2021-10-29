@@ -23,24 +23,5 @@
  SOFTWARE.
 
  */
-import type { FC } from 'react'
-import React from 'react'
-import { getCodeGenerator } from '@looker/sdk-codegen'
 
-import { CodeCopy } from '@looker/code-editor'
-import type { DocSdkCallsProps } from './DocSdkCalls'
-
-/**
- * Generates the SDK call syntax for a given language
- */
-export const DocSingleCall: FC<DocSdkCallsProps> = ({
-  api,
-  method,
-  inputs,
-  sdkLanguage,
-}) => {
-  const generator = getCodeGenerator(sdkLanguage, api)
-  const code = generator!.makeTheCall(method, inputs)
-
-  return <CodeCopy code={code} language={sdkLanguage} />
-}
+export * from './ProjectView'

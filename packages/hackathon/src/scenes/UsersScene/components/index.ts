@@ -23,4 +23,4 @@
  SOFTWARE.
 
  */
-export { HackerList } from './HackerList'
+export * from './HackerList'
