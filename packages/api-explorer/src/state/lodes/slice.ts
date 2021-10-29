@@ -65,5 +65,5 @@ export const lodesSlice = createSlice({
 })
 
 export const lodeActions = lodesSlice.actions
-export const { useActions: useLodeActions, useStoreState: useLodeState } =
+export const { useActions: useLodeActions, useStoreState: useLodesStoreState } =
   createSliceHooks(lodesSlice, saga)

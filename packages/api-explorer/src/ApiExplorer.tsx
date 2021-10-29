@@ -61,7 +61,7 @@ import {
   useSettingActions,
   useSettingStoreState,
   useLodeActions,
-  useLodeState,
+  useLodesStoreState,
 } from './state'
 export interface ApiExplorerProps {
   specs: SpecList
@@ -83,7 +83,7 @@ const ApiExplorer: FC<ApiExplorerProps> = ({
   headless = false,
 }) => {
   const { initialized } = useSettingStoreState()
-  useLodeState()
+  useLodesStoreState()
   const { initLodesAction } = useLodeActions()
   const { initSettingsAction } = useSettingActions()
   const location = useLocation()
