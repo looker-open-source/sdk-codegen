@@ -3,7 +3,7 @@
 check_looker() {
   status=$(curl --silent --insecure --write "%{http_code}" \
     --data "client_id=$LOOKERSDK_CLIENT_ID&client_secret=$LOOKERSDK_CLIENT_SECRET"\
-    $LOOKERSDK_BASE_URL/api/$LOOKERSDK_API_VERSION/login\
+    $LOOKERSDK_BASE_URL/api/${LOOKERSDK_API_VERSION:-4.0}/login\
     -o /dev/null)
 }
 
