@@ -24,40 +24,22 @@
 
  */
 
-import type { FC } from 'react'
-import React from 'react'
-import { useHistory } from 'react-router-dom'
-import { Markdown } from '@looker/code-editor'
-import { useSelector } from 'react-redux'
-import { getExtAdaptor } from '@looker/extension-utils'
-import { selectSearchPattern } from '../../state'
-import { transformURL } from './utils'
+const { merge } = require('webpack-merge')
+const base = require('../../webpack.base.config')(__dirname)
+const browser = require('../../webpack.browser.config')()
 
-interface DocMarkdownProps {
-  source: string
-  specKey: string
-}
-
-export const DocMarkdown: FC<DocMarkdownProps> = ({ source, specKey }) => {
-  const searchPattern = useSelector(selectSearchPattern)
-  const history = useHistory()
-
-  const linkClickHandler = (pathname: string, url: string) => {
-    if (pathname.startsWith(`/${specKey}`)) {
-      history.push(pathname)
-    } else if (url.startsWith(`/${specKey}`)) {
-      history.push(url)
-    } else if (url.startsWith('https://')) {
-      const adaptor = getExtAdaptor()
-      adaptor.openBrowserWindow(url)
-    }
-  }
-  return (
-    <Markdown
-      source={source}
-      pattern={searchPattern}
-      linkClickHandler={linkClickHandler}
-      transformLinkUri={transformURL.bind(null, specKey)}
-    />
-  )
-}
+module.exports = merge(base, browser, {
+  mode: 'development',
+  devServer: {
+    historyApiFallback: {
+      disableDotRule: true,
+    },
+    publicPath: '/dist/',
+    headers: {
+      'Access-Control-Allow-Origin': '*',
+      'Access-Control-Allow-Methods': 'GET, POST, PUT, DELETE, PATCH, OPTIONS',
+      'Access-Control-Allow-Headers':
+        'X-Requested-With, content-type, Authorization',
+    },
+  },
+})

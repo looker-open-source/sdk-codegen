@@ -42,6 +42,7 @@ import type { ApiModel } from '@looker/sdk-codegen'
 import { typeRefs } from '@looker/sdk-codegen'
 import { useSelector } from 'react-redux'
 
+import type { IExtensionAdaptor } from '@looker/extension-utils'
 import {
   ApixSection,
   DocActivityType,
@@ -57,7 +58,6 @@ import {
   DocSchema,
 } from '../../components'
 import { selectSdkLanguage } from '../../state'
-import type { IExtensionAdaptor } from '../../utils'
 import { DocOperation, DocRequestBody } from './components'
 
 interface MethodSceneProps {

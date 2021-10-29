@@ -23,11 +23,13 @@
  SOFTWARE.
 
  */
+
 import type { FC } from 'react'
 import React from 'react'
 import { Redirect, Route, Switch } from 'react-router-dom'
 import type { ApiModel, SpecList } from '@looker/sdk-codegen'
 import type { RunItSetter } from '@looker/run-it'
+import type { IExtensionAdaptor } from '@looker/extension-utils'
 
 import {
   HomeScene,
@@ -37,7 +39,6 @@ import {
   TypeTagScene,
 } from '../scenes'
 import { DiffScene } from '../scenes/DiffScene'
-import type { IExtensionAdaptor } from '../utils'
 import { diffPath } from '../utils'
 
 interface AppRouterProps {

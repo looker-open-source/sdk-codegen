@@ -25,6 +25,7 @@
  */
 
 import type { ThemeCustomizations } from '@looker/design-tokens'
+import { BrowserAdaptor } from './browserAdaptor'
 
 /**
  * NOTE: This interface should describe all methods that require an adaptor when running in standalone vs extension mode
@@ -80,42 +81,7 @@ export const getThemeOverrides = (useGoogleFonts: boolean): ThemeOverrides =>
         },
       }
 
-/**
- * An adaptor class for interacting with browser APIs when not running in an extension
- */
-export class BrowserAdaptor implements IExtensionAdaptor {
-  private _themeOverrides: ThemeOverrides
-
-  constructor() {
-    const { hostname } = location
-    this._themeOverrides = getThemeOverrides(hostedByGoogle(hostname))
-  }
-
-  async localStorageGetItem(key: string) {
-    return localStorage.getItem(key)
-  }
-
-  async localStorageSetItem(key: string, value: string) {
-    await localStorage.setItem(key, value)
-  }
-
-  async localStorageRemoveItem(key: string) {
-    await localStorage.removeItem(key)
-  }
-
-  themeOverrides() {
-    return this._themeOverrides
-  }
-
-  openBrowserWindow(url: string, target?: string) {
-    window.open(url, target)
-  }
-
-  logError(_error: Error, _componentStack: string): void {
-    // noop - error logging for standalone APIX TBD
-  }
-}
-
+// TODO move this back into RunIt or API Explorer as StoreConstants?
 export enum ExtAdaptorConstants {
   // TODO I think this key can be removed now
   LOCALSTORAGE_SDK_LANGUAGE_KEY = 'sdkLanguage',
@@ -146,4 +112,8 @@ export const getExtAdaptor = () => {
     throw new Error('Environment adaptor not initialized.')
   }
   return extensionAdaptor
+}
+
+export const registerTestExtAdaptor = (adaptor?: IExtensionAdaptor) => {
+  registerExtAdaptor(adaptor || new BrowserAdaptor())
 }

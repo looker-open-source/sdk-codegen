@@ -23,26 +23,42 @@
  SOFTWARE.
 
  */
-import type { ThemeOverrides } from './extensionAdaptor'
-import { BrowserAdaptor, getThemeOverrides } from './extensionAdaptor'
 
-describe('BrowserAdaptor', () => {
-  test.each([
-    ['www.looker.com', getThemeOverrides(true)],
-    ['www.google.com', getThemeOverrides(true)],
-    ['localhost', getThemeOverrides(true)],
-    ['127.0.0.1', getThemeOverrides(false)],
-  ])(
-    'returns correct font overrides',
-    (hostname: string, expectedOverrides: ThemeOverrides) => {
-      const saveLoc = window.location
-      delete (window as any).location
-      window.location = {
-        ...saveLoc,
-        hostname,
-      }
-      expect(new BrowserAdaptor().themeOverrides()).toEqual(expectedOverrides)
-      window.location = saveLoc
-    }
-  )
-})
+import type { IExtensionAdaptor, ThemeOverrides } from './adaptorUtils'
+import { getThemeOverrides, hostedByGoogle } from './adaptorUtils'
+
+/**
+ * An adaptor class for interacting with browser APIs when not running in an extension
+ */
+export class BrowserAdaptor implements IExtensionAdaptor {
+  private _themeOverrides: ThemeOverrides
+
+  constructor() {
+    const { hostname } = location
+    this._themeOverrides = getThemeOverrides(hostedByGoogle(hostname))
+  }
+
+  async localStorageGetItem(key: string) {
+    return localStorage.getItem(key)
+  }
+
+  async localStorageSetItem(key: string, value: string) {
+    await localStorage.setItem(key, value)
+  }
+
+  async localStorageRemoveItem(key: string) {
+    await localStorage.removeItem(key)
+  }
+
+  themeOverrides() {
+    return this._themeOverrides
+  }
+
+  openBrowserWindow(url: string, target?: string) {
+    window.open(url, target)
+  }
+
+  logError(_error: Error, _componentStack: string): void {
+    // noop - error logging for standalone APIX TBD
+  }
+}

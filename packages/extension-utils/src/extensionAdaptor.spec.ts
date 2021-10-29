@@ -23,9 +23,27 @@
  SOFTWARE.
 
  */
-import type { IExtensionAdaptor } from '../utils'
-import { registerExtAdaptor, BrowserAdaptor } from '../utils'
+import type { ExtensionSDK, LookerHostData } from '@looker/extension-sdk'
+import { ExtensionAdaptor } from './extensionAdaptor'
+import type { ThemeOverrides } from '@looker/extension-utils'
+import { getThemeOverrides } from '@looker/extension-utils'
 
-export const registerTestExtAdaptor = (adaptor?: IExtensionAdaptor) => {
-  registerExtAdaptor(adaptor || new BrowserAdaptor())
-}
+describe('ExtensionAdaptor', () => {
+  test.each([
+    [undefined, getThemeOverrides(false)],
+    ['standard', getThemeOverrides(true)],
+    ['embed', getThemeOverrides(false)],
+    ['spartan', getThemeOverrides(false)],
+  ])(
+    'returns correct font overrides',
+    (hostType?: string, expectedOverrides?: ThemeOverrides) => {
+      expect(
+        new ExtensionAdaptor({
+          lookerHostData: {
+            hostType,
+          } as Readonly<LookerHostData>,
+        } as ExtensionSDK).themeOverrides()
+      ).toEqual(expectedOverrides)
+    }
+  )
+})

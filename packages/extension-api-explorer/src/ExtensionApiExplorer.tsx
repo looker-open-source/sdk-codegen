@@ -37,7 +37,7 @@ import { Loader } from '@looker/api-explorer/src/components'
 import { getExtensionSDK } from '@looker/extension-sdk'
 import { store } from '@looker/api-explorer/src/state'
 import { Provider } from 'react-redux'
-import { ExtensionAdaptor } from './utils'
+import { ExtensionAdaptor } from '@looker/extension-utils'
 
 class ExtensionConfigurator implements RunItConfigurator {
   storage: Record<string, string> = {}

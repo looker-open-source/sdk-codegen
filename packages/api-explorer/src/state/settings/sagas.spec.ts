@@ -24,9 +24,12 @@
 
  */
 import ReduxSagaTester from 'redux-saga-tester'
-import { registerTestExtAdaptor } from '../../test-utils'
 
-import { ExtAdaptorConstants, getExtAdaptor } from '../../utils'
+import {
+  ExtAdaptorConstants,
+  getExtAdaptor,
+  registerTestExtAdaptor,
+} from '@looker/extension-utils'
 import * as sagas from './sagas'
 import { settingActions, defaultSettings, settingsSlice } from './slice'
 

@@ -24,40 +24,6 @@
 
  */
 
-import type { FC } from 'react'
-import React from 'react'
-import { useHistory } from 'react-router-dom'
-import { Markdown } from '@looker/code-editor'
-import { useSelector } from 'react-redux'
-import { getExtAdaptor } from '@looker/extension-utils'
-import { selectSearchPattern } from '../../state'
-import { transformURL } from './utils'
-
-interface DocMarkdownProps {
-  source: string
-  specKey: string
-}
-
-export const DocMarkdown: FC<DocMarkdownProps> = ({ source, specKey }) => {
-  const searchPattern = useSelector(selectSearchPattern)
-  const history = useHistory()
-
-  const linkClickHandler = (pathname: string, url: string) => {
-    if (pathname.startsWith(`/${specKey}`)) {
-      history.push(pathname)
-    } else if (url.startsWith(`/${specKey}`)) {
-      history.push(url)
-    } else if (url.startsWith('https://')) {
-      const adaptor = getExtAdaptor()
-      adaptor.openBrowserWindow(url)
-    }
-  }
-  return (
-    <Markdown
-      source={source}
-      pattern={searchPattern}
-      linkClickHandler={linkClickHandler}
-      transformLinkUri={transformURL.bind(null, specKey)}
-    />
-  )
-}
+export * from './adaptorUtils'
+export * from './browserAdaptor'
+export * from './extensionAdaptor'

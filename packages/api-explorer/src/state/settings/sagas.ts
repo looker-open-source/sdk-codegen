@@ -25,7 +25,7 @@
  */
 import { takeEvery, call, put, select } from 'typed-redux-saga'
 
-import { ExtAdaptorConstants, getExtAdaptor } from '../../utils'
+import { ExtAdaptorConstants, getExtAdaptor } from '@looker/extension-utils'
 import type { RootState } from '../store'
 import { settingActions, defaultSettings } from './slice'
 

@@ -44,8 +44,12 @@ import { funFetch, fallbackFetch, OAuthScene } from '@looker/run-it'
 import { FirstPage } from '@styled-icons/material/FirstPage'
 import { LastPage } from '@styled-icons/material/LastPage'
 
-import type { IExtensionAdaptor } from './utils'
-import { oAuthPath, registerExtAdaptor, unregisterExtAdaptor } from './utils'
+import type { IExtensionAdaptor } from '@looker/extension-utils'
+import {
+  registerExtAdaptor,
+  unregisterExtAdaptor,
+} from '@looker/extension-utils'
+import { oAuthPath } from './utils'
 import {
   Header,
   SideNav,

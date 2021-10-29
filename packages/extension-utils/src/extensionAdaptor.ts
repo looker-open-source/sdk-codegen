@@ -23,12 +23,10 @@
  SOFTWARE.
 
  */
-import type {
-  IExtensionAdaptor,
-  ThemeOverrides,
-} from '@looker/api-explorer/src/utils'
-import { getThemeOverrides } from '@looker/api-explorer/src/utils'
+
 import type { ExtensionSDK } from '@looker/extension-sdk'
+import type { IExtensionAdaptor, ThemeOverrides } from './adaptorUtils'
+import { getThemeOverrides } from './adaptorUtils'
 
 /**
  * An adaptor class for interacting with browser APIs when running as an extension

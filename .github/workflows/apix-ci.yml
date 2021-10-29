@@ -6,6 +6,7 @@ on:
       - packages/run-it/**
       - packages/api-explorer/**
       - packages/extension-api-explorer/**
+      - packages/extension-utils/**
 
   push:
     branches:
@@ -15,6 +16,7 @@ on:
       - packages/run-it/**
       - packages/api-explorer/**
       - packages/extension-api-explorer/**
+      - packages/extension-utils/**
 
   workflow_dispatch:
 
