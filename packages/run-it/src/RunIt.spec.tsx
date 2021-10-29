@@ -94,7 +94,7 @@ describe('RunIt', () => {
     })
 
     test('the form submit handler invokes the request callback on submit', async () => {
-      renderRunIt()
+      renderRunIt(api, api.methods.me)
       const defaultRequestCallback = jest
         .spyOn(sdk.authSession.transport, 'rawRequest')
         .mockResolvedValueOnce(testTextResponse)
@@ -106,6 +106,22 @@ describe('RunIt', () => {
         expect(
           screen.queryByText(testTextResponse.body.toString())
         ).toBeInTheDocument()
+      })
+    })
+
+    test('run_inline_query has required body parameters', async () => {
+      renderRunIt()
+      const defaultRequestCallback = jest
+        .spyOn(sdk.authSession.transport, 'rawRequest')
+        .mockResolvedValueOnce(testTextResponse)
+      const button = screen.getByRole('button', { name: run })
+      expect(button).toBeInTheDocument()
+      userEvent.click(button)
+      await waitFor(() => {
+        expect(defaultRequestCallback).not.toHaveBeenCalled()
+        expect(screen.queryByRole('status')).toHaveTextContent(
+          'Error: Required properties "model, view" must be provided'
+        )
       })
     })
   })
