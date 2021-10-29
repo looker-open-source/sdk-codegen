@@ -23,12 +23,8 @@
  SOFTWARE.
 
  */
-import { createTestStore } from '../../test-utils'
+import { createTestStore, preloadedState } from '../../test-utils'
 import { selectSdkLanguage, isInitialized } from './selectors'
-
-const preloadedState = {
-  settings: { initialized: false, sdkLanguage: 'Python' },
-}
 
 const testStore = createTestStore()
 

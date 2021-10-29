@@ -30,13 +30,13 @@ import { Select } from '@looker/components'
 import { useSelector } from 'react-redux'
 import type { SelectOptionProps } from '@looker/components'
 
-import { useActions, selectSdkLanguage } from '../../state'
+import { useSettingActions, selectSdkLanguage } from '../../state'
 
 /**
  * Allows the user to select their preferred SDK language
  */
 export const SdkLanguageSelector: FC = () => {
-  const { setSdkLanguageAction } = useActions()
+  const { setSdkLanguageAction } = useSettingActions()
   const selectedSdkLanguage = useSelector(selectSdkLanguage)
 
   const allSdkLanguages: SelectOptionProps[] = codeGenerators.map((gen) => ({
