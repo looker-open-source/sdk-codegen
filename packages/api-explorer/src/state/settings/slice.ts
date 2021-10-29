@@ -58,7 +58,7 @@ type SetSdkLanguageAction = Pick<SettingState, 'sdkLanguage'>
 
 export type InitSuccessPayload = UserDefinedSettings
 
-export const settingSlice = createSlice({
+export const settingsSlice = createSlice({
   name: 'settings',
   initialState: defaultSettingsState,
   reducers: {
@@ -87,8 +87,8 @@ export const settingSlice = createSlice({
   },
 })
 
-export const settingActions = settingSlice.actions
+export const settingActions = settingsSlice.actions
 export const {
   useActions: useSettingActions,
   useStoreState: useSettingStoreState,
-} = createSliceHooks(settingSlice, saga)
+} = createSliceHooks(settingsSlice, saga)

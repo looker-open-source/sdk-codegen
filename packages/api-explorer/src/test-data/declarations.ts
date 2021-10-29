@@ -23,19 +23,21 @@
  SOFTWARE.
 
  */
-import type { IDeclarationMine, IExampleMine } from '@looker/sdk-codegen'
-import type { ReactElement } from 'react'
-import type { RenderOptions } from '@testing-library/react'
-import { renderWithTheme } from '@looker/components-test-utils'
+import type { IDeclarationMine } from '@looker/sdk-codegen'
 
-import { createTestStore, withReduxProvider } from './redux'
-
-export const renderWithLode = (
-  consumers: ReactElement<any>,
-  examples: IExampleMine,
-  declarations?: IDeclarationMine,
-  options?: Omit<RenderOptions, 'queries'>
-) => {
-  const store = createTestStore({ lode: { examples, declarations } })
-  return renderWithTheme(withReduxProvider(consumers, store), options)
+export const declarations: IDeclarationMine = {
+  commitHash: '1e9348b797c2f3760d03c1f94c60f18e534e8298',
+  remoteOrigin: 'https://github.com/looker-open-source/sdk-codegen',
+  types: {
+    FullLode: {
+      line: 40,
+      sourceFile: 'packages/api-explorer/src/utils/lodeUtils.ts',
+    },
+  },
+  methods: {
+    getLoded: {
+      line: 45,
+      sourceFile: 'packages/api-explorer/src/utils/lodeUtils.ts',
+    },
+  },
 }

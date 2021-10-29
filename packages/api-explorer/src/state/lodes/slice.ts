@@ -30,13 +30,13 @@ import { createSlice } from '@reduxjs/toolkit'
 
 import { saga } from './sagas'
 
-export interface LodeState {
+export interface LodesState {
   examples?: IExampleMine
   declarations?: IDeclarationMine
   error?: Error
 }
 
-export const defaultLodeState: LodeState = {
+export const defaultLodesState: LodesState = {
   examples: undefined,
   declarations: undefined,
 }
@@ -46,24 +46,24 @@ export interface InitPayload {
   declarationsLodeUrl?: string
 }
 
-interface InitSuccessAction extends LodeState {}
+type InitSuccessAction = LodesState
 
-export const lodeSlice = createSlice({
-  name: 'lode',
-  initialState: defaultLodeState,
+export const lodesSlice = createSlice({
+  name: 'lodes',
+  initialState: defaultLodesState,
   reducers: {
     // eslint-disable-next-line @typescript-eslint/no-empty-function
-    initLodeAction(_state, _action: PayloadAction<InitPayload>) {},
-    initLodeSuccessAction(state, action: PayloadAction<InitSuccessAction>) {
+    initLodesAction(_state, _action: PayloadAction<InitPayload>) {},
+    initLodesSuccessAction(state, action: PayloadAction<InitSuccessAction>) {
       state.examples = action.payload.examples
       state.declarations = action.payload.declarations
     },
-    initLodeFailureAction(state, action: PayloadAction<Error>) {
+    initLodesFailureAction(state, action: PayloadAction<Error>) {
       state.error = action.payload
     },
   },
 })
 
-export const lodeActions = lodeSlice.actions
+export const lodeActions = lodesSlice.actions
 export const { useActions: useLodeActions, useStoreState: useLodeState } =
-  createSliceHooks(lodeSlice, saga)
+  createSliceHooks(lodesSlice, saga)

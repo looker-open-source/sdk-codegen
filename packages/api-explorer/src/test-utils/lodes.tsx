@@ -23,13 +23,19 @@
  SOFTWARE.
 
  */
-export {
-  api,
-  api40,
-  specs,
-  specState,
-  getLoadedSpecs,
-  getLoadedSpecState,
-} from './specs'
-export { examples } from './examples'
-export * from './declarations'
+import type { IDeclarationMine, IExampleMine } from '@looker/sdk-codegen'
+import type { ReactElement } from 'react'
+import type { RenderOptions } from '@testing-library/react'
+import { renderWithTheme } from '@looker/components-test-utils'
+
+import { createTestStore, withReduxProvider } from './redux'
+
+export const renderWithLode = (
+  consumers: ReactElement<any>,
+  examples: IExampleMine,
+  declarations?: IDeclarationMine,
+  options?: Omit<RenderOptions, 'queries'>
+) => {
+  const store = createTestStore({ lodes: { examples, declarations } })
+  return renderWithTheme(withReduxProvider(consumers, store), options)
+}

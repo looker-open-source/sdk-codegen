@@ -84,7 +84,7 @@ const ApiExplorer: FC<ApiExplorerProps> = ({
 }) => {
   const { initialized } = useSettingStoreState()
   useLodeState()
-  const { initLodeAction } = useLodeActions()
+  const { initLodesAction } = useLodeActions()
   const { initSettingsAction } = useSettingActions()
   const location = useLocation()
   const oauthReturn = location.pathname === `/${oAuthPath}`
@@ -107,6 +107,7 @@ const ApiExplorer: FC<ApiExplorerProps> = ({
   useEffect(() => {
     registerEnvAdaptor(envAdaptor)
     initSettingsAction()
+    initLodesAction({ examplesLodeUrl, declarationsLodeUrl })
 
     return () => unregisterEnvAdaptor()
   }, [])
@@ -141,11 +142,6 @@ const ApiExplorer: FC<ApiExplorerProps> = ({
       loadSpec()
     }
   }, [spec, location])
-
-  useEffect(() => {
-    console.log(examplesLodeUrl)
-    initLodeAction({ examplesLodeUrl, declarationsLodeUrl })
-  }, [examplesLodeUrl, declarationsLodeUrl])
 
   const themeOverrides = envAdaptor.themeOverrides()
 

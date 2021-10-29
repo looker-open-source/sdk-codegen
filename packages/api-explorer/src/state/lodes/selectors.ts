@@ -25,7 +25,7 @@
  */
 import type { RootState } from '../store'
 
-const selectLodeState = (state: RootState) => state.lode
+const selectLodeState = (state: RootState) => state.lodes
 
 export const selectExamplesLode = (state: RootState) =>
   selectLodeState(state).examples

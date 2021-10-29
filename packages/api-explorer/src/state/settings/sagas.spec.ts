@@ -28,7 +28,7 @@ import { registerTestEnvAdaptor } from '../../test-utils'
 
 import { EnvAdaptorConstants, getEnvAdaptor } from '../../utils'
 import * as sagas from './sagas'
-import { settingActions, defaultSettings, settingSlice } from './slice'
+import { settingActions, defaultSettings, settingsSlice } from './slice'
 
 describe('Settings Sagas', () => {
   let sagaTester: ReduxSagaTester<any>
@@ -39,7 +39,7 @@ describe('Settings Sagas', () => {
     sagaTester = new ReduxSagaTester({
       initialState: { settings: { sdkLanguage: 'Go' } },
       reducers: {
-        settings: settingSlice.reducer,
+        settings: settingsSlice.reducer,
       },
     })
     localStorage.clear()
@@ -86,7 +86,7 @@ describe('Settings Sagas', () => {
       )
     })
 
-    test('sends initSuccess action with persisted language on success', async () => {
+    test('sends initSettingsSuccessAction with persisted language on success', async () => {
       jest
         .spyOn(getEnvAdaptor(), 'localStorageGetItem')
         .mockResolvedValueOnce(JSON.stringify({ sdkLanguage: 'Go' }))
@@ -104,7 +104,7 @@ describe('Settings Sagas', () => {
       )
     })
 
-    test('sends initFailure action on error', async () => {
+    test('sends initSettingsFailureAction on error', async () => {
       const error = new Error('boom')
       jest
         .spyOn(getEnvAdaptor(), 'localStorageGetItem')

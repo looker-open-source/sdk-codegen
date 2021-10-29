@@ -23,13 +23,20 @@
  SOFTWARE.
 
  */
-export {
-  api,
-  api40,
-  specs,
-  specState,
-  getLoadedSpecs,
-  getLoadedSpecState,
-} from './specs'
-export { examples } from './examples'
-export * from './declarations'
+import { createTestStore } from '../../test-utils'
+import { declarations, examples } from '../../test-data'
+import { selectDeclarationsLode, selectExamplesLode } from './selectors'
+
+const testStore = createTestStore({ lodes: { examples, declarations } })
+
+describe('Lode selectors', () => {
+  const state = testStore.getState()
+
+  test('selectExamplesLode selects', () => {
+    expect(selectExamplesLode(state)).toEqual(examples)
+  })
+
+  test('selectDeclarationsLode selects', () => {
+    expect(selectDeclarationsLode(state)).toEqual(declarations)
+  })
+})

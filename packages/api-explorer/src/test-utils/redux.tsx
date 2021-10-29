@@ -31,13 +31,13 @@ import { renderWithTheme } from '@looker/components-test-utils'
 import type { RenderOptions } from '@testing-library/react'
 import { createStore } from '@looker/redux'
 
-import type { LodeState, RootState, SettingState } from '../state'
+import type { LodesState, RootState, SettingState } from '../state'
 import {
-  settingSlice,
-  defaultLodeState,
+  settingsSlice,
+  defaultLodesState,
   defaultSettingsState,
   store as defaultStore,
-  lodeSlice,
+  lodesSlice,
 } from '../state'
 import { registerEnvAdaptor, StandaloneEnvAdaptor } from '../utils'
 import { renderWithRouter } from './router'
@@ -64,9 +64,9 @@ export const renderWithRouterAndReduxProvider = (
 ) =>
   renderWithRouter(withReduxProvider(consumers, store), initialEntries, options)
 
-const preloadedState: RootState = {
+export const preloadedState: RootState = {
   settings: defaultSettingsState,
-  lode: defaultLodeState,
+  lodes: defaultLodesState,
 }
 
 type DeepPartial<T> = {
@@ -80,10 +80,10 @@ export const createTestStore = (overrides?: DeepPartial<RootState>) =>
         ...preloadedState.settings,
         ...overrides?.settings,
       } as SettingState,
-      lode: {
-        ...defaultLodeState,
-        ...overrides?.lode,
-      } as LodeState,
+      lodes: {
+        ...defaultLodesState,
+        ...overrides?.lodes,
+      } as LodesState,
     },
-    reducer: { settings: settingSlice.reducer, lode: lodeSlice.reducer },
+    reducer: { settings: settingsSlice.reducer, lodes: lodesSlice.reducer },
   })

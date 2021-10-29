@@ -31,22 +31,21 @@ import type { InitPayload } from './slice'
 import { lodeActions } from './slice'
 
 function* initSaga(action: PayloadAction<InitPayload>) {
-  const { initLodeSuccessAction, initLodeFailureAction } = lodeActions
+  const { initLodesSuccessAction, initLodesFailureAction } = lodeActions
   try {
-    console.log('in lode saga')
     const lode = yield* call(
       getLoded,
       action.payload.examplesLodeUrl,
       action.payload.declarationsLodeUrl
     )
-    yield* put(initLodeSuccessAction(lode))
+    yield* put(initLodesSuccessAction(lode))
   } catch (error: any) {
-    yield* put(initLodeFailureAction(error))
+    yield* put(initLodesFailureAction(error))
   }
 }
 
 export function* saga() {
-  const { initLodeAction } = lodeActions
+  const { initLodesAction } = lodeActions
 
-  yield* takeEvery(initLodeAction, initSaga)
+  yield* takeEvery(initLodesAction, initSaga)
 }
