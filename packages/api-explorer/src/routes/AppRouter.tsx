@@ -37,7 +37,7 @@ import {
   TypeTagScene,
 } from '../scenes'
 import { DiffScene } from '../scenes/DiffScene'
-import type { IApixEnvAdaptor } from '../utils'
+import type { IExtensionAdaptor } from '../utils'
 import { diffPath } from '../utils'
 
 interface AppRouterProps {
@@ -45,7 +45,7 @@ interface AppRouterProps {
   specKey: string
   specs: SpecList
   toggleNavigation: (target?: boolean) => void
-  envAdaptor: IApixEnvAdaptor
+  adaptor: IExtensionAdaptor
   setVersionsUrl: RunItSetter
 }
 
@@ -54,7 +54,7 @@ export const AppRouter: FC<AppRouterProps> = ({
   api,
   specs,
   toggleNavigation,
-  envAdaptor,
+  adaptor,
   setVersionsUrl,
 }) => {
   return (
@@ -72,7 +72,7 @@ export const AppRouter: FC<AppRouterProps> = ({
       <Route path="/:specKey/methods/:methodTag/:methodName">
         <MethodScene
           api={api}
-          envAdaptor={envAdaptor}
+          adaptor={adaptor}
           setVersionsUrl={setVersionsUrl}
         />
       </Route>

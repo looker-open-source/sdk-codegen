@@ -23,8 +23,8 @@
  SOFTWARE.
 
  */
-import type { ThemeOverrides } from './envAdaptor'
-import { StandaloneEnvAdaptor, getThemeOverrides } from './envAdaptor'
+import type { ThemeOverrides } from './extensionAdaptor'
+import { BrowserAdaptor, getThemeOverrides } from './extensionAdaptor'
 
 describe('StandaloneEnvAdaptor', () => {
   test.each([
@@ -41,9 +41,7 @@ describe('StandaloneEnvAdaptor', () => {
         ...saveLoc,
         hostname,
       }
-      expect(new StandaloneEnvAdaptor().themeOverrides()).toEqual(
-        expectedOverrides
-      )
+      expect(new BrowserAdaptor().themeOverrides()).toEqual(expectedOverrides)
       window.location = saveLoc
     }
   )

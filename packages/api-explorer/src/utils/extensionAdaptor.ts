@@ -30,7 +30,7 @@ import type { ThemeCustomizations } from '@looker/design-tokens'
  * NOTE: This interface should describe all methods that require an adaptor when running in standalone vs extension mode
  * Examples include: local storage operations, writing to clipboard and various link navigation functions amongst others
  */
-export interface IApixEnvAdaptor {
+export interface IExtensionAdaptor {
   /** Method for retrieving a keyed value from local storage */
   localStorageGetItem(key: string): Promise<string | null>
   /** Method for setting a keyed value in local storage */
@@ -55,6 +55,16 @@ export interface ThemeOverrides {
   themeCustomizations?: ThemeCustomizations
 }
 
+export const hostedByGoogle = (hostname: string): boolean =>
+  hostname.endsWith('.looker.com') ||
+  hostname.endsWith('.google.com') ||
+  hostname === 'localhost' ||
+  // Include firebase staging dev portal for now. Can be removed
+  // when dev portal gets its own APIX project. Also includes
+  // PRs.
+  (hostname.startsWith('looker-developer-portal') &&
+    hostname.endsWith('.web.app'))
+
 export const getThemeOverrides = (useGoogleFonts: boolean): ThemeOverrides =>
   useGoogleFonts
     ? {
@@ -71,23 +81,14 @@ export const getThemeOverrides = (useGoogleFonts: boolean): ThemeOverrides =>
       }
 
 /**
- * An adaptor class for interacting with browser APIs when running in standalone mode
+ * An adaptor class for interacting with browser APIs when not running in an extension
  */
-export class StandaloneEnvAdaptor implements IApixEnvAdaptor {
+export class BrowserAdaptor implements IExtensionAdaptor {
   private _themeOverrides: ThemeOverrides
 
   constructor() {
     const { hostname } = location
-    this._themeOverrides = getThemeOverrides(
-      hostname.endsWith('.looker.com') ||
-        hostname.endsWith('.google.com') ||
-        hostname === 'localhost' ||
-        // Include firebase staging dev portal for now. Can be removed
-        // when dev portal gets its own APIX project. Also includes
-        // PRs.
-        (hostname.startsWith('looker-developer-portal') &&
-          hostname.endsWith('.web.app'))
-    )
+    this._themeOverrides = getThemeOverrides(hostedByGoogle(hostname))
   }
 
   async localStorageGetItem(key: string) {
@@ -120,28 +121,28 @@ export enum EnvAdaptorConstants {
   LOCALSTORAGE_SETTINGS_KEY = 'settings',
 }
 
-let envAdaptor: IApixEnvAdaptor | undefined
+let extensionAdaptor: IExtensionAdaptor | undefined
 
 /**
  * Register the environment adaptor. The API Explorer will automatically call this.
  */
-export const registerEnvAdaptor = (adaptor: IApixEnvAdaptor) => {
-  envAdaptor = adaptor
+export const registerExtAdaptor = (adaptor: IExtensionAdaptor) => {
+  extensionAdaptor = adaptor
 }
 
 /**
- * Unregister the envAdaptor. The API Explorer will automatically call this when it is unmounted.
+ * Unregister the extensionAdaptor. The API Explorer will automatically call this when it is unmounted.
  */
-export const unregisterEnvAdaptor = () => {
-  envAdaptor = undefined
+export const unregisterExtAdaptor = () => {
+  extensionAdaptor = undefined
 }
 
 /**
- * Global access to the envAdaptor. An error will be thrown if accessed prematurely.
+ * Global access to the extensionAdaptor. An error will be thrown if accessed prematurely.
  */
-export const getEnvAdaptor = () => {
-  if (!envAdaptor) {
+export const getExtAdaptor = () => {
+  if (!extensionAdaptor) {
     throw new Error('Environment adaptor not initialized.')
   }
-  return envAdaptor
+  return extensionAdaptor
 }

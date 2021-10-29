@@ -40,7 +40,7 @@ import { Provider } from 'react-redux'
 
 import ApiExplorer from './ApiExplorer'
 import { store } from './state'
-import { StandaloneEnvAdaptor } from './utils'
+import { BrowserAdaptor } from './utils'
 import { Loader } from './components'
 
 export interface StandaloneApiExplorerProps {
@@ -48,7 +48,7 @@ export interface StandaloneApiExplorerProps {
   versionsUrl: string
 }
 
-const standaloneEnvAdaptor = new StandaloneEnvAdaptor()
+const standaloneEnvAdaptor = new BrowserAdaptor()
 
 const loadVersions = async (current: string) => {
   const data = await standaloneEnvAdaptor.localStorageGetItem(RunItConfigKey)
@@ -99,7 +99,7 @@ export const StandaloneApiExplorer: FC<StandaloneApiExplorerProps> = ({
           {specs ? (
             <ApiExplorer
               specs={specs}
-              envAdaptor={standaloneEnvAdaptor}
+              adaptor={standaloneEnvAdaptor}
               headless={headless}
               setVersionsUrl={setCurrentVersionsUrl}
             />

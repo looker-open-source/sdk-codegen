@@ -37,7 +37,7 @@ import { Loader } from '@looker/api-explorer/src/components'
 import { getExtensionSDK } from '@looker/extension-sdk'
 import { store } from '@looker/api-explorer/src/state'
 import { Provider } from 'react-redux'
-import { ExtensionEnvAdaptor } from './utils'
+import { ExtensionAdaptor } from './utils'
 
 class ExtensionConfigurator implements RunItConfigurator {
   storage: Record<string, string> = {}
@@ -90,7 +90,7 @@ export const ExtensionApiExplorer: FC = () => {
     if (sdk && !specs) loadSpecs().catch((err) => console.error(err))
   }, [specs, sdk])
 
-  const extensionEnvAdaptor = new ExtensionEnvAdaptor(getExtensionSDK())
+  const extensionEnvAdaptor = new ExtensionAdaptor(getExtensionSDK())
 
   return (
     <Provider store={store}>
@@ -99,7 +99,7 @@ export const ExtensionApiExplorer: FC = () => {
           {specs ? (
             <ApiExplorer
               specs={specs}
-              envAdaptor={extensionEnvAdaptor}
+              adaptor={extensionEnvAdaptor}
               setVersionsUrl={runItNoSet}
               // TODO We need expand/collapse side nav for the headless extension before we enabled this
               headless={false}

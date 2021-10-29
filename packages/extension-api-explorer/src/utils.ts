@@ -24,7 +24,7 @@
 
  */
 import type {
-  IApixEnvAdaptor,
+  IExtensionAdaptor,
   ThemeOverrides,
 } from '@looker/api-explorer/src/utils'
 import { getThemeOverrides } from '@looker/api-explorer/src/utils'
@@ -33,7 +33,7 @@ import type { ExtensionSDK } from '@looker/extension-sdk'
 /**
  * An adaptor class for interacting with browser APIs when running as an extension
  */
-export class ExtensionEnvAdaptor implements IApixEnvAdaptor {
+export class ExtensionAdaptor implements IExtensionAdaptor {
   _themeOverrides: ThemeOverrides
   constructor(public extensionSdk: ExtensionSDK) {
     this._themeOverrides = getThemeOverrides(

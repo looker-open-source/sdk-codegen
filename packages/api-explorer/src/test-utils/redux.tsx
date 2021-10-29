@@ -39,14 +39,14 @@ import {
   store as defaultStore,
   lodesSlice,
 } from '../state'
-import { registerEnvAdaptor, StandaloneEnvAdaptor } from '../utils'
+import { registerExtAdaptor, BrowserAdaptor } from '../utils'
 import { renderWithRouter } from './router'
 
 export const withReduxProvider = (
   consumers: ReactElement<any>,
   store: Store<RootState> = defaultStore
 ) => {
-  registerEnvAdaptor(new StandaloneEnvAdaptor())
+  registerExtAdaptor(new BrowserAdaptor())
   return <Provider store={store}>{consumers}</Provider>
 }
 

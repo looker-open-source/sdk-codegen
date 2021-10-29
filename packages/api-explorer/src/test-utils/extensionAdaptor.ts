@@ -23,9 +23,9 @@
  SOFTWARE.
 
  */
-import type { IApixEnvAdaptor } from '../utils'
-import { registerEnvAdaptor, StandaloneEnvAdaptor } from '../utils'
+import type { IExtensionAdaptor } from '../utils'
+import { registerExtAdaptor, BrowserAdaptor } from '../utils'
 
-export const registerTestEnvAdaptor = (envAdaptor?: IApixEnvAdaptor) => {
-  registerEnvAdaptor(envAdaptor || new StandaloneEnvAdaptor())
+export const registerTestExtAdaptor = (adaptor?: IExtensionAdaptor) => {
+  registerExtAdaptor(adaptor || new BrowserAdaptor())
 }

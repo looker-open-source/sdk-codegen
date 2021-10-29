@@ -25,7 +25,7 @@
  */
 import { takeEvery, call, put, select } from 'typed-redux-saga'
 
-import { EnvAdaptorConstants, getEnvAdaptor } from '../../utils'
+import { EnvAdaptorConstants, getExtAdaptor } from '../../utils'
 import type { RootState } from '../store'
 import { settingActions, defaultSettings } from './slice'
 
@@ -33,12 +33,12 @@ import { settingActions, defaultSettings } from './slice'
  * Serializes state to local storage
  */
 function* serializeToLocalStorageSaga() {
-  const envAdaptor = getEnvAdaptor()
+  const adaptor = getExtAdaptor()
   const settings = yield* select((state: RootState) => ({
     sdkLanguage: state.settings.sdkLanguage,
   }))
   yield* call(
-    envAdaptor.localStorageSetItem,
+    adaptor.localStorageSetItem,
     EnvAdaptorConstants.LOCALSTORAGE_SETTINGS_KEY,
     JSON.stringify(settings)
   )
@@ -48,9 +48,9 @@ function* serializeToLocalStorageSaga() {
  * Returns default settings overridden with any persisted state in local storage
  */
 function* deserializeLocalStorage() {
-  const envAdaptor = getEnvAdaptor()
+  const adaptor = getExtAdaptor()
   const settings = yield* call(
-    envAdaptor.localStorageGetItem,
+    adaptor.localStorageGetItem,
     EnvAdaptorConstants.LOCALSTORAGE_SETTINGS_KEY
   )
   return settings

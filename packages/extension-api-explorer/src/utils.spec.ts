@@ -26,7 +26,7 @@
 import type { ThemeOverrides } from '@looker/api-explorer/src/utils'
 import { getThemeOverrides } from '@looker/api-explorer/src/utils'
 import type { ExtensionSDK, LookerHostData } from '@looker/extension-sdk'
-import { ExtensionEnvAdaptor } from './utils'
+import { ExtensionAdaptor } from './utils'
 
 describe('ExtensionEnvAdaptor', () => {
   test.each([
@@ -38,7 +38,7 @@ describe('ExtensionEnvAdaptor', () => {
     'returns correct font overrides',
     (hostType?: string, expectedOverrides?: ThemeOverrides) => {
       expect(
-        new ExtensionEnvAdaptor({
+        new ExtensionAdaptor({
           lookerHostData: {
             hostType,
           } as Readonly<LookerHostData>,

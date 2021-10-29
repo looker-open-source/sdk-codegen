@@ -31,7 +31,7 @@ import * as reactRedux from 'react-redux'
 
 import { defaultSettingsState, settingsSlice } from '../../state'
 import {
-  registerTestEnvAdaptor,
+  registerTestExtAdaptor,
   renderWithReduxProvider,
 } from '../../test-utils'
 import { SdkLanguageSelector } from './SdkLanguageSelector'
@@ -63,7 +63,7 @@ describe('SdkLanguageSelector', () => {
   })
 
   test('it stores the selected language in localStorage', async () => {
-    registerTestEnvAdaptor()
+    registerTestExtAdaptor()
     const mockDispatch = jest.fn()
     jest.spyOn(reactRedux, 'useDispatch').mockReturnValue(mockDispatch)
     renderWithReduxProvider(<SdkLanguageSelector />)
