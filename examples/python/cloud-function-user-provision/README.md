@@ -24,16 +24,16 @@ The following steps assume deployment using Google Cloud UI Console. Check out [
 
 2. Follow the steps [provided here](https://cloud.google.com/functions/docs/quickstart-python) to create a new Google Cloud Function
 
-3. Configure runtime environment variables using the Cloud Function UI: Edit > Configuration > Runtime, build, connections and security settings > Runtime environment variables. Alternatively, environment variables can be configured through the `os` module or a `.ini` file. Check [Configuring Looker Python SDK](https://github.com/looker-open-source/sdk-codegen/tree/main/python#configuring-the-sdk) for more information 
+3. If using Google Sheet: Grant "Viewer" permission to the email address associated with the "Runtime service account" in Cloud Functions. The recommendation is to use the [Default App Engine Service Account](https://cloud.google.com/appengine/docs/standard/python/service-account) and share its email (`YOUR_PROJECT_ID@appspot.gserviceaccount.com`) to the Google Sheet.
+
+4. Configure runtime environment variables using the Cloud Function UI: Edit > Configuration > Runtime, build, connections and security settings > Runtime environment variables. Alternatively, environment variables can be configured through the `os` module or a `.ini` file. Check [Configuring Looker Python SDK](https://github.com/looker-open-source/sdk-codegen/tree/main/python#configuring-the-sdk) for more information
 
 <p align="center">
   <img src="https://storage.googleapis.com/tutorials-img/Cloud%20Function_env%20-%20SD%20480p.gif" alt="Setting environmental variables in Cloud Function UI">
 </p>
 
-4. Copy and paste the contents of `main.py` in this repository into the `main.py` file once inside Cloud Function's inline editor. Change the "Entry point" in the top right to the main function.  `main.py` is executed once the function is triggered
+5. Copy and paste the contents of `main.py` in this repository into the `main.py` file once inside Cloud Function's inline editor. Change the "Entry point" in the top right to the main function.  `main.py` is executed once the function is triggered
 
-5. Copy and paste the contents of `requirements.txt` in this repository to the `requirements.txt` file once inside Cloud Function's inline editor. This file is used to install necessary libraries to execute the function
-
-6. If using Google Sheet: Make a service account, create a file called `service_account.json` inside the Cloud Function inline editor, grant "Viewer" permission of the sheet to the email address associated with this service account
+6. Copy and paste the contents of `requirements.txt` in this repository to the `requirements.txt` file once inside Cloud Function's inline editor. This file is used to install necessary libraries to execute the function
 
 7. Deploy and test the function. Check out [this article](https://cloud.google.com/functions/docs/quickstart-python#test_the_function) for instruction

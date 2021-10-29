@@ -13,8 +13,9 @@ are provided below:
 
 HTTP Cloud Functions: https://cloud.google.com/functions/docs/writing/http#sample_usage"""
 
-# If not using Google Sheet, removing `gspread` here and in `requirements.txt`
-import gspread
+# If not using Google Sheet, removing Google modules and in `requirements.txt`
+from googleapiclient.discovery import build
+import google.auth
 
 import looker_sdk
 sdk = looker_sdk.init40()
@@ -59,6 +60,26 @@ def get_email_from_sheet():
   # Get the email value. Set up additional logic here
   worksheet = sh.get_worksheet(0)
   email = worksheet.acell('A1').value
+  return email
+
+def get_email_from_sheet():
+  # Get the key of an existing Google Sheet from the URL. 
+  # Example: https://docs.google.com/spreadsheets/d/[KEY HERE]/edit#gid=111
+  SAMPLE_SPREADSHEET_ID = "foo"
+
+  # Google Sheet Range: https://developers.google.com/sheets/api/samples/reading
+  SAMPLE_RANGE_NAME = 'Sheet1!A:A'
+
+  creds, _proj_id = google.auth.default()
+  service = build("sheets", "v4", credentials=creds)
+  sheet = service.spreadsheets()
+  result = sheet.values().get(spreadsheetId=SAMPLE_SPREADSHEET_ID,
+                                range=SAMPLE_RANGE_NAME).execute()
+  values = result.get('values', [])
+  
+  # `values` will be an array of array,in form of [['email1'], ['email2']]
+  # so we access the value by using index
+  email = values[0][0]
   return email
 # [END main_gsheet(request)]
   
