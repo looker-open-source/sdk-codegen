@@ -137,14 +137,6 @@ export interface LockProjectAction {
   }
 }
 
-export interface SetMoreInfoAction {
-  type: Actions.SET_MORE_INFO
-  payload?: {
-    title: string
-    moreInfo: string
-  }
-}
-
 export type ProjectAction =
   | AllProjectsRequestAction
   | AllProjectsResponseAction
@@ -161,7 +153,6 @@ export type ProjectAction =
   | LockProjectAction
   | ChangeMembershipAction
   | UpdateProjectsPageNumAction
-  | SetMoreInfoAction
 
 export const allProjectsRequest = (): AllProjectsRequestAction => ({
   type: Actions.ALL_PROJECTS_REQUEST,
@@ -277,12 +268,4 @@ export const changeMembership = (
     hackerId,
     leave,
   },
-})
-
-export const setMoreInfo = (
-  title?: string,
-  moreInfo?: string
-): SetMoreInfoAction => ({
-  type: Actions.SET_MORE_INFO,
-  payload: moreInfo && title ? { title, moreInfo } : undefined,
 })

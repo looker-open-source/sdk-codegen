@@ -23,4 +23,4 @@
  SOFTWARE.
 
  */
-export { JudgingForm } from './JudgingForm'
+export * from './JudgingForm'

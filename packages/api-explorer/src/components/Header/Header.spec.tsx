@@ -29,8 +29,8 @@ import { codeGenerators } from '@looker/sdk-codegen'
 import userEvent from '@testing-library/user-event'
 
 import { specs, specState } from '../../test-data'
-import { renderWithRouter, withReduxProvider } from '../../test-utils'
-import { defaultSettingsState } from '../../state/settings'
+import { renderWithRouterAndReduxProvider } from '../../test-utils'
+import { defaultSettingsState } from '../../state'
 import { Header } from './Header'
 
 describe('Header', () => {
@@ -43,15 +43,13 @@ describe('Header', () => {
   })
 
   test('it renders a title', () => {
-    renderWithRouter(
-      withReduxProvider(
-        <Header
-          specs={specs}
-          spec={specState.spec}
-          specDispatch={specDispatch}
-          toggleNavigation={toggleNavigation}
-        />
-      )
+    renderWithRouterAndReduxProvider(
+      <Header
+        specs={specs}
+        spec={specState.spec}
+        specDispatch={specDispatch}
+        toggleNavigation={toggleNavigation}
+      />
     )
     expect(screen.getByText('API Explorer').closest('a')).toHaveAttribute(
       'href',
@@ -60,15 +58,13 @@ describe('Header', () => {
   })
 
   test('it renders a spec selector with the correct default value and options', async () => {
-    renderWithRouter(
-      withReduxProvider(
-        <Header
-          specs={specs}
-          spec={specState.spec}
-          specDispatch={specDispatch}
-          toggleNavigation={toggleNavigation}
-        />
-      )
+    renderWithRouterAndReduxProvider(
+      <Header
+        specs={specs}
+        spec={specState.spec}
+        specDispatch={specDispatch}
+        toggleNavigation={toggleNavigation}
+      />
     )
     const selector = screen.getByLabelText('spec selector')
     expect(selector).toHaveValue(`${specState.spec.key}`)
@@ -83,15 +79,13 @@ describe('Header', () => {
   })
 
   test('it renders an sdk language selector with the correct value and options', async () => {
-    renderWithRouter(
-      withReduxProvider(
-        <Header
-          specs={specs}
-          spec={specState.spec}
-          specDispatch={specDispatch}
-          toggleNavigation={toggleNavigation}
-        />
-      )
+    renderWithRouterAndReduxProvider(
+      <Header
+        specs={specs}
+        spec={specState.spec}
+        specDispatch={specDispatch}
+        toggleNavigation={toggleNavigation}
+      />
     )
     const selector = screen.getByLabelText('sdk language selector')
     expect(selector).toHaveValue(defaultSettingsState.sdkLanguage)
@@ -106,15 +100,13 @@ describe('Header', () => {
   })
 
   test('it renders an icon button for the differ', () => {
-    renderWithRouter(
-      withReduxProvider(
-        <Header
-          specs={specs}
-          spec={specState.spec}
-          specDispatch={specDispatch}
-          toggleNavigation={toggleNavigation}
-        />
-      )
+    renderWithRouterAndReduxProvider(
+      <Header
+        specs={specs}
+        spec={specState.spec}
+        specDispatch={specDispatch}
+        toggleNavigation={toggleNavigation}
+      />
     )
     expect(
       screen

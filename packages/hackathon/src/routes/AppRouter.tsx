@@ -38,12 +38,14 @@ import {
   ProjectEditorScene,
   ResourceScene,
 } from '../scenes'
+import { ProjectViewScene } from '../scenes/ProjectViewScene'
 export enum Routes {
   HOME = '/home',
   ADMIN = '/admin',
   JUDGING = '/judging',
   EDIT_JUDGING = '/judging/:id',
   PROJECTS = '/projects',
+  VIEW_PROJECT = '/projectview/:id',
   CREATE_PROJECT = '/projects/new',
   EDIT_PROJECT = '/projects/:id',
   USERS = '/users',
@@ -65,6 +67,7 @@ export const getAuthorizedRoutes = (
   if (hacker) {
     if (currentHackathon) {
       authorizedRoutes.push(Routes.PROJECTS)
+      authorizedRoutes.push(Routes.VIEW_PROJECT)
       authorizedRoutes.push(Routes.CREATE_PROJECT)
       authorizedRoutes.push(Routes.EDIT_PROJECT)
       if (hacker.canAdmin || hacker.canJudge || hacker.canStaff) {
@@ -130,6 +133,11 @@ export const AppRouter: FC<AppRouterProps> = ({ authorizedRoutes, hacker }) => (
     {authorizedRoutes.includes(Routes.EDIT_PROJECT) && (
       <Route path={Routes.EDIT_PROJECT} exact>
         <ProjectEditorScene />
+      </Route>
+    )}
+    {authorizedRoutes.includes(Routes.VIEW_PROJECT) && (
+      <Route path={Routes.VIEW_PROJECT} exact>
+        <ProjectViewScene />
       </Route>
     )}
     {authorizedRoutes.includes(Routes.USERS) && (

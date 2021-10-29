@@ -26,38 +26,51 @@
 
 import type { FC } from 'react'
 import React from 'react'
-import { useHistory } from 'react-router-dom'
-import { Markdown } from '@looker/code-editor'
 import { useSelector } from 'react-redux'
-import { getEnvAdaptor } from '../../utils'
-import { selectSearchPattern } from '../../state'
-import { transformURL } from './utils'
+import type { IProjectProps, ITechnologyProps } from '../../../models'
+import { ExtMarkdown } from '../../../components'
+import { getTechnologies } from '../../../data/hack_session/selectors'
 
-interface DocMarkdownProps {
-  source: string
-  specKey: string
+interface ProjectViewProps {
+  project: IProjectProps
 }
 
-export const DocMarkdown: FC<DocMarkdownProps> = ({ source, specKey }) => {
-  const searchPattern = useSelector(selectSearchPattern)
-  const history = useHistory()
-
-  const linkClickHandler = (pathname: string, url: string) => {
-    if (pathname.startsWith(`/${specKey}`)) {
-      history.push(pathname)
-    } else if (url.startsWith(`/${specKey}`)) {
-      history.push(url)
-    } else if (url.startsWith('https://')) {
-      const envAdaptor = getEnvAdaptor()
-      envAdaptor.openBrowserWindow(url)
-    }
+const techDescriptions = (ids: string[], technologies?: ITechnologyProps[]) => {
+  try {
+    return technologies
+      ?.filter((t) => ids.includes(t._id))
+      .map((t) => t.description)
+      .join(', ')
+  } catch {
+    // avoid sheet data errors
+    return ids.join(', ')
   }
-  return (
-    <Markdown
-      source={source}
-      pattern={searchPattern}
-      linkClickHandler={linkClickHandler}
-      transformLinkUri={transformURL.bind(null, specKey)}
-    />
-  )
+}
+
+const getMembers = (team: string[]) => {
+  try {
+    return team.join(', ') || 'Nobody!'
+  } catch {
+    // avoid sheet data errors
+    return 'Error retrieving team members'
+  }
+}
+
+export const ProjectView: FC<ProjectViewProps> = ({ project }) => {
+  const availableTechnologies = useSelector(getTechnologies)
+
+  const tech = techDescriptions(project.technologies, availableTechnologies)
+  const members = getMembers(project.$members)
+  const view = `# ${project.title}
+by ${members}
+
+${project.description}
+
+**Uses**: ${tech}
+
+**Project type**: ${project.project_type}
+
+**Contestant**: ${project.contestant ? 'Yes' : 'No'}
+`
+  return <ExtMarkdown source={view} />
 }

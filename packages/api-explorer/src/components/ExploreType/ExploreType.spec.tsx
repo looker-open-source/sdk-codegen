@@ -26,9 +26,9 @@
 
 import React from 'react'
 import { screen } from '@testing-library/react'
-import { MemoryRouter } from 'react-router-dom'
+
 import { api } from '../../test-data'
-import { renderWithRouter, renderWithSearchAndRouter } from '../../test-utils'
+import { renderWithRouter } from '../../test-utils'
 import { ExploreType, ExploreTypeLink } from '.'
 
 describe('ExploreType', () => {
@@ -41,9 +41,7 @@ describe('ExploreType', () => {
   const offsetExpected = 2
 
   test('expands all when openAll is true and expand defaults', () => {
-    renderWithSearchAndRouter(
-      <ExploreType api={api} type={targetType} openAll={true} />
-    )
+    renderWithRouter(<ExploreType api={api} type={targetType} openAll={true} />)
 
     expect(screen.getByText(targetType.jsonName)).toBeInTheDocument()
     expect(screen.queryAllByText(colors)).toHaveLength(colorsExpected)
@@ -52,7 +50,7 @@ describe('ExploreType', () => {
   })
 
   test('expands nothing if maxDepth is 0', () => {
-    renderWithSearchAndRouter(
+    renderWithRouter(
       <ExploreType api={api} type={targetType} openAll={true} maxDepth={0} />
     )
 
@@ -66,7 +64,7 @@ describe('ExploreType', () => {
   })
 
   test('expands 2 levels only', () => {
-    renderWithSearchAndRouter(
+    renderWithRouter(
       <ExploreType api={api} type={targetType} maxDepth={2} openAll={true} />
     )
 
@@ -81,11 +79,7 @@ describe('ExploreType', () => {
     test('recognizes 3.1', () => {
       const specKey = '3.1'
       const path = `/${specKey}/methods/foo`
-      renderWithRouter(
-        <MemoryRouter initialEntries={[path]}>
-          <ExploreTypeLink api={api} type={targetType} />
-        </MemoryRouter>
-      )
+      renderWithRouter(<ExploreTypeLink api={api} type={targetType} />, [path])
 
       const actual = screen.getByText(targetType.jsonName)
       expect(actual).toBeInTheDocument()
@@ -97,11 +91,7 @@ describe('ExploreType', () => {
     test('recognizes 4.0', () => {
       const specKey = '4.0'
       const path = `/${specKey}/methods/foo`
-      renderWithRouter(
-        <MemoryRouter initialEntries={[path]}>
-          <ExploreTypeLink api={api} type={targetType} />
-        </MemoryRouter>
-      )
+      renderWithRouter(<ExploreTypeLink api={api} type={targetType} />, [path])
 
       const actual = screen.getByText(targetType.jsonName)
       expect(actual).toBeInTheDocument()
@@ -113,11 +103,7 @@ describe('ExploreType', () => {
     test('recognizes anything', () => {
       const specKey = 'anything'
       const path = `/${specKey}/methods/foo`
-      renderWithRouter(
-        <MemoryRouter initialEntries={[path]}>
-          <ExploreTypeLink api={api} type={targetType} />
-        </MemoryRouter>
-      )
+      renderWithRouter(<ExploreTypeLink api={api} type={targetType} />, [path])
 
       const actual = screen.getByText(targetType.jsonName)
       expect(actual).toBeInTheDocument()
@@ -129,11 +115,7 @@ describe('ExploreType', () => {
     test('ignores oauth path', () => {
       const specKey = 'oauth'
       const path = `/${specKey}/methods/foo`
-      renderWithRouter(
-        <MemoryRouter initialEntries={[path]}>
-          <ExploreTypeLink api={api} type={targetType} />
-        </MemoryRouter>
-      )
+      renderWithRouter(<ExploreTypeLink api={api} type={targetType} />, [path])
       const actual = screen.getByText(targetType.jsonName)
       expect(actual).toBeInTheDocument()
       expect(actual).toHaveProperty(

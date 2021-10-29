@@ -47,7 +47,9 @@ export interface IJudgingProps extends IRowModelProps {
   notes: string
   $title: string
   $description: string
-  $more_info: string
+  $project_type: string
+  $contestant: boolean
+  $technologies: string[]
   $judge_name: string
   $members: string[]
 }
@@ -72,8 +74,10 @@ export class Judging extends SheetRow<IJudging> {
   notes = ''
   $title = ''
   $description = ''
-  $more_info = ''
   $judge_name = ''
+  $project_type = ''
+  $contestant = false
+  $technologies: string[] = []
   $members: string[] = []
 
   constructor(values?: any) {
@@ -95,10 +99,12 @@ export class Judging extends SheetRow<IJudging> {
     }
     const p = data.projects?.find(this.project_id) as Project
     if (p) {
+      this.$project_type = p.project_type
+      this.$contestant = p.contestant
+      this.$technologies = p.technologies
       this.$title = p.title
       this.$description = p.description
       this.$members = p.$members
-      this.$more_info = p.more_info
     }
   }
 

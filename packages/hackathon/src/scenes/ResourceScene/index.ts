@@ -23,4 +23,4 @@
  SOFTWARE.
 
  */
-export { ResourceScene } from './ResourceScene'
+export * from './ResourceScene'
