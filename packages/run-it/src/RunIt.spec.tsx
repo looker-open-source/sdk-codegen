@@ -120,7 +120,7 @@ describe('RunIt', () => {
       await waitFor(() => {
         expect(defaultRequestCallback).not.toHaveBeenCalled()
         expect(screen.queryByRole('status')).toHaveTextContent(
-          'Error: Required properties "model, view" must be provided'
+          'Error: Required properties "model, view" must be provided in the body'
         )
       })
     })
