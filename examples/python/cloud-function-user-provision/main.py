@@ -13,7 +13,7 @@ are provided below:
 
 HTTP Cloud Functions: https://cloud.google.com/functions/docs/writing/http#sample_usage"""
 
-# If not using Google Sheet, removing Google modules and in `requirements.txt`
+# If not using Google Sheet, removing Google modules here and in `requirements.txt`
 from googleapiclient.discovery import build
 import google.auth
 
@@ -35,8 +35,7 @@ def main(request):
 
 # [START main_gsheet(request)]
 def main_gsheet(request):
-  """Take email from a cell inside an existing Google Sheet, leveraging 
-  GCP's service accounts and gspread, Google Sheet's Python module"""
+  """Take email from a cell inside an existing Google Sheet"""
   try: 
     email = get_email_from_sheet()
     result = looker_user_provision(email=email)
@@ -45,40 +44,28 @@ def main_gsheet(request):
     return 'An error occurred.'
 
 def get_email_from_sheet():
-  """Authenticate to an existing Google Sheet using a service account. 
-  GCP's Cloud Function is often run unattended, so a service account 
-  (a machine-to-machine Google account) is preferred for authentication. 
-  Info: https://docs.gspread.org/en/v4.0.1/oauth2.html#for-bots-using-service-account
+  """ Authenticate to an existing Google Sheet using the default runtime 
+  service account and extract the email address from a cell inside the sheet. 
+  
+  Refer to Google Sheet API Python Quickstart for details: 
+  https://developers.google.com/sheets/api/quickstart/python
   """
-  # `service_account.json` is in the same directory of this function
-  gc = gspread.service_account(filename='service_account.json')
-
-  # Get the key of an existing Google Sheet from the URL. 
-  # Example: https://docs.google.com/spreadsheets/d/[KEY HERE]/edit#gid=111
-  sh = gc.open_by_key('foo')
-
-  # Get the email value. Set up additional logic here
-  worksheet = sh.get_worksheet(0)
-  email = worksheet.acell('A1').value
-  return email
-
-def get_email_from_sheet():
   # Get the key of an existing Google Sheet from the URL. 
   # Example: https://docs.google.com/spreadsheets/d/[KEY HERE]/edit#gid=111
   SAMPLE_SPREADSHEET_ID = "foo"
 
   # Google Sheet Range: https://developers.google.com/sheets/api/samples/reading
-  SAMPLE_RANGE_NAME = 'Sheet1!A:A'
+  SAMPLE_RANGE_NAME = "Sheet1!A:A"
 
   creds, _proj_id = google.auth.default()
   service = build("sheets", "v4", credentials=creds)
   sheet = service.spreadsheets()
   result = sheet.values().get(spreadsheetId=SAMPLE_SPREADSHEET_ID,
                                 range=SAMPLE_RANGE_NAME).execute()
-  values = result.get('values', [])
   
-  # `values` will be an array of array,in form of [['email1'], ['email2']]
-  # so we access the value by using index
+  # `values` will be a list of lists (i.e.: [['email1'], ['email2']])
+  # and we can access value 'email' using index
+  values = result.get('values', [])
   email = values[0][0]
   return email
 # [END main_gsheet(request)]
