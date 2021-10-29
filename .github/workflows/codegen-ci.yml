@@ -32,6 +32,9 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
+      - name: Repo Checkout
+        uses: actions/checkout@v2
+
       - name: Cancel Previous Runs
         uses: styfle/cancel-workflow-action@0.6.0
         with:
@@ -55,9 +58,6 @@ jobs:
           # set $LOOKER_OPTS to --no-ssl if we want to turn off ssl
           docker run --name looker-sdk-codegen-ci -d -p 10000:9999 -p 20000:19999 us-west1-docker.pkg.dev/cloud-looker-sdk-codegen-cicd/looker/21_18
           docker logs -f looker-sdk-codegen-ci --until=30s &
-
-      - name: Repo Checkout
-        uses: actions/checkout@v2
 
       - uses: actions/setup-node@v1
         with:
