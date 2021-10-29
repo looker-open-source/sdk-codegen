@@ -26,7 +26,7 @@
 import type { ThemeOverrides } from './extensionAdaptor'
 import { BrowserAdaptor, getThemeOverrides } from './extensionAdaptor'
 
-describe('StandaloneEnvAdaptor', () => {
+describe('BrowserAdaptor', () => {
   test.each([
     ['www.looker.com', getThemeOverrides(true)],
     ['www.google.com', getThemeOverrides(true)],

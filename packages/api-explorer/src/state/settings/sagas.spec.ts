@@ -26,7 +26,7 @@
 import ReduxSagaTester from 'redux-saga-tester'
 import { registerTestExtAdaptor } from '../../test-utils'
 
-import { EnvAdaptorConstants, getExtAdaptor } from '../../utils'
+import { ExtAdaptorConstants, getExtAdaptor } from '../../utils'
 import * as sagas from './sagas'
 import { settingActions, defaultSettings, settingsSlice } from './slice'
 
@@ -60,7 +60,7 @@ describe('Settings Sagas', () => {
         })
       )
       expect(localStorage.setItem).toHaveBeenLastCalledWith(
-        EnvAdaptorConstants.LOCALSTORAGE_SETTINGS_KEY,
+        ExtAdaptorConstants.LOCALSTORAGE_SETTINGS_KEY,
         JSON.stringify({ sdkLanguage: 'Kotlin' })
       )
     })

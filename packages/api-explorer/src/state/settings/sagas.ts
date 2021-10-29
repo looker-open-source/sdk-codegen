@@ -25,7 +25,7 @@
  */
 import { takeEvery, call, put, select } from 'typed-redux-saga'
 
-import { EnvAdaptorConstants, getExtAdaptor } from '../../utils'
+import { ExtAdaptorConstants, getExtAdaptor } from '../../utils'
 import type { RootState } from '../store'
 import { settingActions, defaultSettings } from './slice'
 
@@ -39,7 +39,7 @@ function* serializeToLocalStorageSaga() {
   }))
   yield* call(
     adaptor.localStorageSetItem,
-    EnvAdaptorConstants.LOCALSTORAGE_SETTINGS_KEY,
+    ExtAdaptorConstants.LOCALSTORAGE_SETTINGS_KEY,
     JSON.stringify(settings)
   )
 }
@@ -51,7 +51,7 @@ function* deserializeLocalStorage() {
   const adaptor = getExtAdaptor()
   const settings = yield* call(
     adaptor.localStorageGetItem,
-    EnvAdaptorConstants.LOCALSTORAGE_SETTINGS_KEY
+    ExtAdaptorConstants.LOCALSTORAGE_SETTINGS_KEY
   )
   return settings
     ? { ...defaultSettings, ...JSON.parse(settings) }

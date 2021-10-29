@@ -48,10 +48,10 @@ export interface StandaloneApiExplorerProps {
   versionsUrl: string
 }
 
-const standaloneEnvAdaptor = new BrowserAdaptor()
+const browserAdaptor = new BrowserAdaptor()
 
 const loadVersions = async (current: string) => {
-  const data = await standaloneEnvAdaptor.localStorageGetItem(RunItConfigKey)
+  const data = await browserAdaptor.localStorageGetItem(RunItConfigKey)
   const config = data ? JSON.parse(data) : RunItNoConfig
   let url = config.base_url ? `${config.base_url}/versions` : current
   let response = await loadSpecsFromVersions(url)
@@ -99,12 +99,12 @@ export const StandaloneApiExplorer: FC<StandaloneApiExplorerProps> = ({
           {specs ? (
             <ApiExplorer
               specs={specs}
-              adaptor={standaloneEnvAdaptor}
+              adaptor={browserAdaptor}
               headless={headless}
               setVersionsUrl={setCurrentVersionsUrl}
             />
           ) : (
-            <Loader themeOverrides={standaloneEnvAdaptor.themeOverrides()} />
+            <Loader themeOverrides={browserAdaptor.themeOverrides()} />
           )}
         </>
       </RunItProvider>

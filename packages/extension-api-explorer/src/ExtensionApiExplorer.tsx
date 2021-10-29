@@ -68,7 +68,6 @@ class ExtensionConfigurator implements RunItConfigurator {
 const configurator = new ExtensionConfigurator()
 
 export const ExtensionApiExplorer: FC = () => {
-  // const match = useRouteMatch<{ specKey: string }>(`/:specKey`)
   const extensionContext = useContext<ExtensionContextData>(ExtensionContext)
   const [specs, setSpecs] = useState<SpecList>()
 
@@ -90,7 +89,7 @@ export const ExtensionApiExplorer: FC = () => {
     if (sdk && !specs) loadSpecs().catch((err) => console.error(err))
   }, [specs, sdk])
 
-  const extensionEnvAdaptor = new ExtensionAdaptor(getExtensionSDK())
+  const extensionAdaptor = new ExtensionAdaptor(getExtensionSDK())
 
   return (
     <Provider store={store}>
@@ -99,13 +98,13 @@ export const ExtensionApiExplorer: FC = () => {
           {specs ? (
             <ApiExplorer
               specs={specs}
-              adaptor={extensionEnvAdaptor}
+              adaptor={extensionAdaptor}
               setVersionsUrl={runItNoSet}
               // TODO We need expand/collapse side nav for the headless extension before we enabled this
               headless={false}
             />
           ) : (
-            <Loader themeOverrides={extensionEnvAdaptor.themeOverrides()} />
+            <Loader themeOverrides={extensionAdaptor.themeOverrides()} />
           )}
         </>
       </RunItProvider>

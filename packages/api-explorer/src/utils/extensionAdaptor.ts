@@ -116,7 +116,8 @@ export class BrowserAdaptor implements IExtensionAdaptor {
   }
 }
 
-export enum EnvAdaptorConstants {
+export enum ExtAdaptorConstants {
+  // TODO I think this key can be removed now
   LOCALSTORAGE_SDK_LANGUAGE_KEY = 'sdkLanguage',
   LOCALSTORAGE_SETTINGS_KEY = 'settings',
 }

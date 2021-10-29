@@ -28,7 +28,7 @@ import { getThemeOverrides } from '@looker/api-explorer/src/utils'
 import type { ExtensionSDK, LookerHostData } from '@looker/extension-sdk'
 import { ExtensionAdaptor } from './utils'
 
-describe('ExtensionEnvAdaptor', () => {
+describe('ExtensionAdaptor', () => {
   test.each([
     [undefined, getThemeOverrides(false)],
     ['standard', getThemeOverrides(true)],
