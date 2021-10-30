@@ -3,7 +3,12 @@
   "version": "0.1.0",
   "description": "Looker Extension Utilities",
   "main": "dist/bundle.js",
+  "module": "lib/esm/index.js",
   "sideEffects": false,
+  "typings": "lib/index.d.ts",
+  "files": [
+    "lib"
+  ],
   "license": "MIT",
   "private": false,
   "homepage": "https://github.com/looker-open-source/sdk-codegen/tree/main/packages/extension-utils",

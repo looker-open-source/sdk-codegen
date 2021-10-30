@@ -4,7 +4,7 @@
   "description": "A dynamic REST request input form and response visualizer",
   "main": "lib/index.js",
   "module": "lib/esm/index.js",
-  "sideEffects": "false",
+  "sideEffects": false,
   "typings": "lib/index.d.ts",
   "files": [
     "lib"
