@@ -81,13 +81,6 @@ export const getThemeOverrides = (useGoogleFonts: boolean): ThemeOverrides =>
         },
       }
 
-// TODO move this back into RunIt or API Explorer as StoreConstants?
-export enum ExtAdaptorConstants {
-  // TODO I think this key can be removed now
-  LOCALSTORAGE_SDK_LANGUAGE_KEY = 'sdkLanguage',
-  LOCALSTORAGE_SETTINGS_KEY = 'settings',
-}
-
 let extensionAdaptor: IExtensionAdaptor | undefined
 
 /**

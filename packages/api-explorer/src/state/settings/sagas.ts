@@ -25,7 +25,8 @@
  */
 import { takeEvery, call, put, select } from 'typed-redux-saga'
 
-import { ExtAdaptorConstants, getExtAdaptor } from '@looker/extension-utils'
+import { getExtAdaptor } from '@looker/extension-utils'
+import { StoreConstants } from '@looker/run-it'
 import type { RootState } from '../store'
 import { settingActions, defaultSettings } from './slice'
 
@@ -39,7 +40,7 @@ function* serializeToLocalStorageSaga() {
   }))
   yield* call(
     adaptor.localStorageSetItem,
-    ExtAdaptorConstants.LOCALSTORAGE_SETTINGS_KEY,
+    StoreConstants.LOCALSTORAGE_SETTINGS_KEY,
     JSON.stringify(settings)
   )
 }
@@ -51,7 +52,7 @@ function* deserializeLocalStorage() {
   const adaptor = getExtAdaptor()
   const settings = yield* call(
     adaptor.localStorageGetItem,
-    ExtAdaptorConstants.LOCALSTORAGE_SETTINGS_KEY
+    StoreConstants.LOCALSTORAGE_SETTINGS_KEY
   )
   return settings
     ? { ...defaultSettings, ...JSON.parse(settings) }
