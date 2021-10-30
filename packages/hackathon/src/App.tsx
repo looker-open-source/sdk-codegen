@@ -30,14 +30,23 @@ import { Provider } from 'react-redux'
 import { ExtensionProvider } from '@looker/extension-sdk-react'
 import { ComponentsProvider } from '@looker/components'
 import { hot } from 'react-hot-loader/root'
+import { getExtensionSDK } from '@looker/extension-sdk'
+import { ExtensionAdaptor } from '@looker/extension-utils'
 import { Hackathon } from './Hackathon'
 import store from './data/store'
 
 export const App: FC = hot(() => {
+  const extSdk = getExtensionSDK()
+  const adaptor = new ExtensionAdaptor(extSdk)
+  const themeOverrides = adaptor.themeOverrides()
+
   return (
     <Provider store={store}>
       <ExtensionProvider>
-        <ComponentsProvider>
+        <ComponentsProvider
+          loadGoogleFonts={themeOverrides.loadGoogleFonts}
+          themeCustomizations={themeOverrides.themeCustomizations}
+        >
           <Hackathon />
         </ComponentsProvider>
       </ExtensionProvider>
