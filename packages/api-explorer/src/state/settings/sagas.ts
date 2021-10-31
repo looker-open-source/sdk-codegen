@@ -27,7 +27,7 @@ import { takeEvery, call, put, select } from 'typed-redux-saga'
 
 import { EnvAdaptorConstants, getEnvAdaptor } from '../../utils'
 import type { RootState } from '../store'
-import { actions, defaultSettings } from './slice'
+import { settingActions, defaultSettings } from './slice'
 
 /**
  * Serializes state to local storage
@@ -62,18 +62,19 @@ function* deserializeLocalStorage() {
  * Initializes the store with default settings and existing persisted settings
  */
 function* initSaga() {
-  const { initSuccessAction, initFailureAction } = actions
+  const { initSettingsSuccessAction, initSettingsFailureAction } =
+    settingActions
   try {
     const settings = yield* call(deserializeLocalStorage)
-    yield* put(initSuccessAction(settings))
+    yield* put(initSettingsSuccessAction(settings))
   } catch (error: any) {
-    yield* put(initFailureAction(error))
+    yield* put(initSettingsFailureAction(error))
   }
 }
 
 export function* saga() {
-  const { initAction, setSdkLanguageAction } = actions
+  const { initSettingsAction, setSdkLanguageAction } = settingActions
 
-  yield* takeEvery(initAction, initSaga)
+  yield* takeEvery(initSettingsAction, initSaga)
   yield* takeEvery(setSdkLanguageAction, serializeToLocalStorageSaga)
 }

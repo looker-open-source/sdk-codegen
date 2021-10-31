@@ -23,46 +23,47 @@
  SOFTWARE.
 
  */
-
+import { createSliceHooks } from '@looker/redux'
 import type { IDeclarationMine, IExampleMine } from '@looker/sdk-codegen'
+import type { PayloadAction } from '@reduxjs/toolkit'
+import { createSlice } from '@reduxjs/toolkit'
 
-export const apixFilesHost = 'http://localhost:30000'
+import { saga } from './sagas'
 
-const fetchLode = async (lodeUrl: string) => {
-  try {
-    const result = await fetch(lodeUrl, { mode: 'cors' })
-    return result.text()
-  } catch (error) {
-    return ''
-  }
-}
-
-interface FullLode {
+export interface LodesState {
   examples?: IExampleMine
   declarations?: IDeclarationMine
+  error?: Error
 }
 
-export const getLoded = async (
-  examplesLodeUrl?: string,
+export const defaultLodesState: LodesState = {
+  examples: undefined,
+  declarations: undefined,
+}
+
+export interface InitPayload {
+  examplesLodeUrl?: string
   declarationsLodeUrl?: string
-): Promise<FullLode> => {
-  // First try to load from the apix-files server
-  let examples = await fetchLode(`${apixFilesHost}/examplesIndex.json`)
-  if (!examples && examplesLodeUrl) {
-    examples = await fetchLode(examplesLodeUrl)
-  }
-
-  let declarations
-  if (declarationsLodeUrl) {
-    declarations = await fetchLode(declarationsLodeUrl)
-  }
-
-  const lode: FullLode = { examples: undefined, declarations: undefined }
-  if (examples) {
-    lode.examples = JSON.parse(examples)
-  }
-  if (declarations) {
-    lode.declarations = JSON.parse(declarations)
-  }
-  return lode
 }
+
+type InitSuccessAction = LodesState
+
+export const lodesSlice = createSlice({
+  name: 'lodes',
+  initialState: defaultLodesState,
+  reducers: {
+    // eslint-disable-next-line @typescript-eslint/no-empty-function
+    initLodesAction(_state, _action: PayloadAction<InitPayload>) {},
+    initLodesSuccessAction(state, action: PayloadAction<InitSuccessAction>) {
+      state.examples = action.payload.examples
+      state.declarations = action.payload.declarations
+    },
+    initLodesFailureAction(state, action: PayloadAction<Error>) {
+      state.error = action.payload
+    },
+  },
+})
+
+export const lodeActions = lodesSlice.actions
+export const { useActions: useLodeActions, useStoreState: useLodesStoreState } =
+  createSliceHooks(lodesSlice, saga)

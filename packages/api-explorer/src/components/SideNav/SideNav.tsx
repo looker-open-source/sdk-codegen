@@ -49,7 +49,7 @@ import { useSelector } from 'react-redux'
 import type { SpecAction } from '../../reducers'
 import { useWindowSize } from '../../utils'
 import { HEADER_REM } from '../Header'
-import { selectSearchCriteria, useActions } from '../../state'
+import { selectSearchCriteria, useSettingActions } from '../../state'
 import { SideNavMethodTags } from './SideNavMethodTags'
 import { SideNavTypeTags } from './SideNavTypeTags'
 import { useDebounce, countMethods, countTypes } from './searchUtils'
@@ -100,7 +100,7 @@ export const SideNav: FC<SideNavProps> = ({ headless = false, spec }) => {
   }
   const tabs = useTabs({ defaultIndex, onChange: onTabChange })
   const searchCriteria = useSelector(selectSearchCriteria)
-  const { setSearchPatternAction } = useActions()
+  const { setSearchPatternAction } = useSettingActions()
 
   const [pattern, setSearchPattern] = useState('')
   const debouncedPattern = useDebounce(pattern, 250)

@@ -163,10 +163,12 @@ export const RunIt: FC<RunItProps> = ({
       requestContent
     )
     if (body) {
-      const message = validateBody(body)
+      const [bodyParam] = method.bodyParams
+      const requiredKeys = Object.keys(bodyParam.type.requiredProperties)
+      const message = validateBody(body, requiredKeys)
       setValidationMessage(message)
       if (message) {
-        // syntax error, don't run
+        // body has an error, don't run
         return
       }
     }
