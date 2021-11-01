@@ -38,8 +38,7 @@ function* serializeToLocalStorageSaga() {
   const settings = yield* select((state: RootState) => ({
     sdkLanguage: state.settings.sdkLanguage,
   }))
-  yield* call(
-    adaptor.localStorageSetItem,
+  adaptor.localStorageSetItem(
     StoreConstants.LOCALSTORAGE_SETTINGS_KEY,
     JSON.stringify(settings)
   )
@@ -48,10 +47,9 @@ function* serializeToLocalStorageSaga() {
 /**
  * Returns default settings overridden with any persisted state in local storage
  */
-function* deserializeLocalStorage() {
+async function deserializeLocalStorage() {
   const adaptor = getExtAdaptor()
-  const settings = yield* call(
-    adaptor.localStorageGetItem,
+  const settings = await adaptor.localStorageGetItem(
     StoreConstants.LOCALSTORAGE_SETTINGS_KEY
   )
   return settings
