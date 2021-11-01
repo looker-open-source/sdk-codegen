@@ -81,7 +81,7 @@ export const resources: Array<Resource> = [
     content:
       'Looker Components are a collection of tools for building Looker data experiences.',
     type: 'Resource',
-    tag: 'other',
+    tag: 'component',
     link: 'https://components.looker.com/',
     shortenedLink: 'https://bit.ly/2Z2Q69C',
     title: 'Looker Components',
@@ -89,7 +89,7 @@ export const resources: Array<Resource> = [
   {
     content: 'Looker Components Storybook contains component examples',
     type: 'Resource',
-    tag: 'other',
+    tag: 'component',
     link: 'https://components.looker.com/storybook',
     shortenedLink: 'https://bit.ly/3pbpygP',
     title: 'Components Examples Storybook',
@@ -178,7 +178,7 @@ export const resources: Array<Resource> = [
     content:
       'Thinking of doing a data analysis project for your hack? Browse and explore BigQuery public datasets through the hackathon instance',
     type: 'resources',
-    tag: 'other',
+    tag: 'dataset',
     link: 'https://hack.looker.com/dashboards/16',
     shortenedLink: 'https://bit.ly/3FX72yF',
     title: 'Public Datasets',

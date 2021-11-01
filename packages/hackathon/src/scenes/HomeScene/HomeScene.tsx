@@ -27,8 +27,9 @@
 import type { FC } from 'react'
 import React from 'react'
 
-import { Heading, SpaceVertical } from '@looker/components'
+import { Heading, SpaceVertical, Paragraph, Span } from '@looker/components'
 import type { IHackerProps } from '../../models'
+import { ExtMarkdown } from '../../components'
 import { Agenda } from './components'
 import { localAgenda } from './agenda'
 
@@ -42,9 +43,18 @@ export const HomeScene: FC<HomeSceneProps> = ({ hacker }) => {
   return (
     <>
       <SpaceVertical gap="u5">
-        <Heading as="h2" fontSize="xxxlarge" fontWeight="medium">
-          Agenda
-        </Heading>
+        <Span>
+          <Heading as="h2" fontSize="xxxlarge" fontWeight="medium">
+            Agenda
+          </Heading>
+          <Paragraph>
+            <ExtMarkdown
+              source={
+                'Please read the [Hackathon FAQ](https://community.looker.com/hackathome-2021-1026/hackathome-2021-attendee-faq-28429)!'
+              }
+            />
+          </Paragraph>
+        </Span>
         <Agenda schedule={schedule} hacker={hacker} />
       </SpaceVertical>
     </>

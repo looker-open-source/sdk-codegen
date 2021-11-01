@@ -78,7 +78,7 @@ export const Hackathon: FC<HackathonProps> = () => {
           </MessageBar>
         )}
         <Layout hasAside>
-          <Aside>
+          <Aside width="200px">
             <SideNav authorizedRoutes={authorizedRoutes} />
           </Aside>
           <Section>

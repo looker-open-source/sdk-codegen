@@ -29,18 +29,18 @@ import React from 'react'
 import { Flex, ProgressCircular, Text } from '@looker/components'
 
 interface LoadingProps {
-  loading: boolean
+  loading?: boolean
   message?: string
 }
 
 export const Loading: FC<LoadingProps> = ({
-  loading,
+  loading = true,
   message = 'Loading ...',
 }) => (
-  <Flex height="40px" alignItems="center">
+  <Flex height="30px" alignItems="center">
     {loading && (
       <>
-        <ProgressCircular />
+        <ProgressCircular size="medium" />
         <Text ml="large">{message}</Text>
       </>
     )}

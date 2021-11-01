@@ -28,7 +28,7 @@ import type { FC } from 'react'
 import React from 'react'
 import { useSelector, useDispatch } from 'react-redux'
 import { useHistory } from 'react-router-dom'
-import { Button, Space } from '@looker/components'
+import { Button, Space, Heading } from '@looker/components'
 import { Add } from '@styled-icons/material-outlined/Add'
 import { Create } from '@styled-icons/material-outlined/Create'
 import { Lock } from '@styled-icons/material-outlined/Lock'
@@ -65,7 +65,12 @@ export const ProjectsScene: FC<ProjectSceneProps> = () => {
 
   return (
     <>
-      <Loading loading={isLoading} message={'Processing projects...'} />
+      <Space>
+        <Heading as="h2" fontSize="xxxlarge" fontWeight="medium">
+          Projects
+        </Heading>
+        {isLoading && <Loading message={'Processing projects...'} />}
+      </Space>
       <ProjectList />
       <Space pt="xlarge">
         <Button iconBefore={<Add />} onClick={handleAdd} disabled={isLoading}>
