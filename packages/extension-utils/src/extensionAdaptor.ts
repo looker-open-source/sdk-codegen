@@ -25,13 +25,13 @@
  */
 
 import type { ExtensionSDK } from '@looker/extension-sdk'
-import type { IExtensionAdaptor, ThemeOverrides } from './adaptorUtils'
+import type { IEnvironmentAdaptor, ThemeOverrides } from './adaptorUtils'
 import { getThemeOverrides } from './adaptorUtils'
 
 /**
  * An adaptor class for interacting with browser APIs when running as an extension
  */
-export class ExtensionAdaptor implements IExtensionAdaptor {
+export class ExtensionAdaptor implements IEnvironmentAdaptor {
   _themeOverrides: ThemeOverrides
   constructor(public extensionSdk: ExtensionSDK) {
     this._themeOverrides = getThemeOverrides(

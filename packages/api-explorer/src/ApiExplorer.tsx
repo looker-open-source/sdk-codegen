@@ -44,10 +44,10 @@ import { funFetch, fallbackFetch, OAuthScene } from '@looker/run-it'
 import { FirstPage } from '@styled-icons/material/FirstPage'
 import { LastPage } from '@styled-icons/material/LastPage'
 
-import type { IExtensionAdaptor } from '@looker/extension-utils'
+import type { IEnvironmentAdaptor } from '@looker/extension-utils'
 import {
-  registerExtAdaptor,
-  unregisterExtAdaptor,
+  registerEnvAdaptor,
+  unregisterEnvAdaptor,
 } from '@looker/extension-utils'
 import { oAuthPath } from './utils'
 import {
@@ -70,7 +70,7 @@ import {
 
 export interface ApiExplorerProps {
   specs: SpecList
-  adaptor: IExtensionAdaptor
+  adaptor: IEnvironmentAdaptor
   setVersionsUrl: RunItSetter
   examplesLodeUrl?: string
   declarationsLodeUrl?: string
@@ -110,11 +110,11 @@ const ApiExplorer: FC<ApiExplorerProps> = ({
   }, [])
 
   useEffect(() => {
-    registerExtAdaptor(adaptor)
+    registerEnvAdaptor(adaptor)
     initSettingsAction()
     initLodesAction({ examplesLodeUrl, declarationsLodeUrl })
 
-    return () => unregisterExtAdaptor()
+    return () => unregisterEnvAdaptor()
   }, [])
 
   useEffect(() => {

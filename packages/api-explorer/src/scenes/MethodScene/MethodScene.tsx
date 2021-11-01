@@ -42,7 +42,7 @@ import type { ApiModel } from '@looker/sdk-codegen'
 import { typeRefs } from '@looker/sdk-codegen'
 import { useSelector } from 'react-redux'
 
-import type { IExtensionAdaptor } from '@looker/extension-utils'
+import type { IEnvironmentAdaptor } from '@looker/extension-utils'
 import {
   ApixSection,
   DocActivityType,
@@ -62,7 +62,7 @@ import { DocOperation, DocRequestBody } from './components'
 
 interface MethodSceneProps {
   api: ApiModel
-  adaptor: IExtensionAdaptor
+  adaptor: IEnvironmentAdaptor
   setVersionsUrl: RunItSetter
 }
 
@@ -72,7 +72,7 @@ interface MethodSceneParams {
   specKey: string
 }
 
-const showRunIt = async (adaptor: IExtensionAdaptor) => {
+const showRunIt = async (adaptor: IEnvironmentAdaptor) => {
   const data = await adaptor.localStorageGetItem(RunItFormKey)
   return !!data
 }

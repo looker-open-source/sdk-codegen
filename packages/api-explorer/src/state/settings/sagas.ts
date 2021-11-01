@@ -25,7 +25,7 @@
  */
 import { takeEvery, call, put, select } from 'typed-redux-saga'
 
-import { getExtAdaptor } from '@looker/extension-utils'
+import { getEnvAdaptor } from '@looker/extension-utils'
 import { StoreConstants } from '@looker/run-it'
 import type { RootState } from '../store'
 import { settingActions, defaultSettings } from './slice'
@@ -34,7 +34,7 @@ import { settingActions, defaultSettings } from './slice'
  * Serializes state to local storage
  */
 function* serializeToLocalStorageSaga() {
-  const adaptor = getExtAdaptor()
+  const adaptor = getEnvAdaptor()
   const settings = yield* select((state: RootState) => ({
     sdkLanguage: state.settings.sdkLanguage,
   }))
@@ -48,7 +48,7 @@ function* serializeToLocalStorageSaga() {
  * Returns default settings overridden with any persisted state in local storage
  */
 async function deserializeLocalStorage() {
-  const adaptor = getExtAdaptor()
+  const adaptor = getEnvAdaptor()
   const settings = await adaptor.localStorageGetItem(
     StoreConstants.LOCALSTORAGE_SETTINGS_KEY
   )

@@ -25,14 +25,14 @@
  */
 import ReduxSagaTester from 'redux-saga-tester'
 
-import { getExtAdaptor, registerTestExtAdaptor } from '@looker/extension-utils'
+import { getEnvAdaptor, registerTestEnvAdaptor } from '@looker/extension-utils'
 import { StoreConstants } from '@looker/run-it'
 import * as sagas from './sagas'
 import { settingActions, defaultSettings, settingsSlice } from './slice'
 
 describe('Settings Sagas', () => {
   let sagaTester: ReduxSagaTester<any>
-  registerTestExtAdaptor()
+  registerTestEnvAdaptor()
 
   beforeEach(() => {
     jest.resetAllMocks()
@@ -88,7 +88,7 @@ describe('Settings Sagas', () => {
 
     test('sends initSettingsSuccessAction with persisted language on success', async () => {
       jest
-        .spyOn(getExtAdaptor(), 'localStorageGetItem')
+        .spyOn(getEnvAdaptor(), 'localStorageGetItem')
         .mockResolvedValueOnce(JSON.stringify({ sdkLanguage: 'Go' }))
 
       sagaTester.dispatch(initSettingsAction())
@@ -107,7 +107,7 @@ describe('Settings Sagas', () => {
     test('sends initSettingsFailureAction on error', async () => {
       const error = new Error('boom')
       jest
-        .spyOn(getExtAdaptor(), 'localStorageGetItem')
+        .spyOn(getEnvAdaptor(), 'localStorageGetItem')
         .mockRejectedValueOnce(error)
 
       sagaTester.dispatch(initSettingsAction())

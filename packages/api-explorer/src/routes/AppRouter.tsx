@@ -29,7 +29,7 @@ import React from 'react'
 import { Redirect, Route, Switch } from 'react-router-dom'
 import type { ApiModel, SpecList } from '@looker/sdk-codegen'
 import type { RunItSetter } from '@looker/run-it'
-import type { IExtensionAdaptor } from '@looker/extension-utils'
+import type { IEnvironmentAdaptor } from '@looker/extension-utils'
 
 import {
   HomeScene,
@@ -46,7 +46,7 @@ interface AppRouterProps {
   specKey: string
   specs: SpecList
   toggleNavigation: (target?: boolean) => void
-  adaptor: IExtensionAdaptor
+  adaptor: IEnvironmentAdaptor
   setVersionsUrl: RunItSetter
 }
 

@@ -24,13 +24,13 @@
 
  */
 
-import type { IExtensionAdaptor, ThemeOverrides } from './adaptorUtils'
+import type { IEnvironmentAdaptor, ThemeOverrides } from './adaptorUtils'
 import { getThemeOverrides, hostedInternally } from './adaptorUtils'
 
 /**
  * An adaptor class for interacting with browser APIs when not running in an extension
  */
-export class BrowserAdaptor implements IExtensionAdaptor {
+export class BrowserAdaptor implements IEnvironmentAdaptor {
   private _themeOverrides: ThemeOverrides
 
   constructor() {

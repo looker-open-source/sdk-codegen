@@ -31,7 +31,7 @@ import { BrowserAdaptor } from './browserAdaptor'
  * NOTE: This interface should describe all methods that require an adaptor when running in standalone vs extension mode
  * Examples include: local storage operations and various link navigation functions
  */
-export interface IExtensionAdaptor {
+export interface IEnvironmentAdaptor {
   /** Method for retrieving a keyed value from local storage */
   localStorageGetItem(key: string): Promise<string | null>
   /** Method for setting a keyed value in local storage */
@@ -91,27 +91,27 @@ export const getThemeOverrides = (internalTheming: boolean): ThemeOverrides =>
         },
       }
 
-let extensionAdaptor: IExtensionAdaptor | undefined
+let extensionAdaptor: IEnvironmentAdaptor | undefined
 
 /**
- * Register the extension adaptor. Used when initializing the extension
+ * Register the environment adaptor. Used when initializing the application
  * @param adaptor to register
  */
-export const registerExtAdaptor = (adaptor: IExtensionAdaptor) => {
+export const registerEnvAdaptor = (adaptor: IEnvironmentAdaptor) => {
   extensionAdaptor = adaptor
 }
 
 /**
- * Unregister the extensionAdaptor. Extensions should call this when unmounted
+ * Unregister the environment adaptor. Extensions should call this when unmounted
  */
-export const unregisterExtAdaptor = () => {
+export const unregisterEnvAdaptor = () => {
   extensionAdaptor = undefined
 }
 
 /**
- * Global access to the extensionAdaptor. An error will be thrown if accessed prematurely.
+ * Global access to the environment adaptor. An error will be thrown if accessed prematurely.
  */
-export const getExtAdaptor = () => {
+export const getEnvAdaptor = () => {
   if (!extensionAdaptor) {
     throw new Error('Environment adaptor not initialized.')
   }
@@ -122,6 +122,6 @@ export const getExtAdaptor = () => {
  * Used by some unit tests
  * @param adaptor to use for testing
  */
-export const registerTestExtAdaptor = (adaptor?: IExtensionAdaptor) => {
-  registerExtAdaptor(adaptor || new BrowserAdaptor())
+export const registerTestEnvAdaptor = (adaptor?: IEnvironmentAdaptor) => {
+  registerEnvAdaptor(adaptor || new BrowserAdaptor())
 }

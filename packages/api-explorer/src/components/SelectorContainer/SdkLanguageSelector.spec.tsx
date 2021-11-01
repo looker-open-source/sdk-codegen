@@ -29,7 +29,7 @@ import userEvent from '@testing-library/user-event'
 import { codeGenerators } from '@looker/sdk-codegen'
 import * as reactRedux from 'react-redux'
 
-import { registerTestExtAdaptor } from '@looker/extension-utils'
+import { registerTestEnvAdaptor } from '@looker/extension-utils'
 import { defaultSettingsState, settingsSlice } from '../../state'
 import { renderWithReduxProvider } from '../../test-utils'
 import { SdkLanguageSelector } from './SdkLanguageSelector'
@@ -61,7 +61,7 @@ describe('SdkLanguageSelector', () => {
   })
 
   test('it stores the selected language in localStorage', async () => {
-    registerTestExtAdaptor()
+    registerTestEnvAdaptor()
     const mockDispatch = jest.fn()
     jest.spyOn(reactRedux, 'useDispatch').mockReturnValue(mockDispatch)
     renderWithReduxProvider(<SdkLanguageSelector />)
