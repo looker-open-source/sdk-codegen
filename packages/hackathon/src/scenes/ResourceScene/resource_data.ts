@@ -35,6 +35,40 @@ export interface Resource {
 
 export const resources: Array<Resource> = [
   {
+    content:
+      'A JOIN 2021 intro and demo video of the new visualization components.',
+    type: 'resource',
+    tag: 'component',
+    link: 'https://www.youtube.com/watch?v=rSWX6oAOtMs',
+    shortenedLink: 'https://bit.ly/3nQxGkr',
+    title: 'Visualization Components Demo Video',
+  },
+  {
+    content:
+      'A JOIN 2021 tutorial video on developing with the Extension Framework.',
+    type: 'tutorial',
+    tag: 'extension',
+    link: 'https://www.youtube.com/watch?v=3lbq5w7kcLs',
+    shortenedLink: 'https://bit.ly/3jXck3Y',
+    title: 'Extension Framework Tutorial Video',
+  },
+  {
+    content: 'A JOIN 2021 tutorial video on using API Explorer and Looker API.',
+    type: 'tutorial',
+    tag: 'api',
+    link: 'https://www.youtube.com/watch?v=f1Wb4dYZxhM',
+    shortenedLink: 'https://bit.ly/2ZT71eS',
+    title: 'API Explorer & API Tutorial Video',
+  },
+  {
+    content: 'A JOIN 2021 tutorial video on Iframe and SSO Embedding.',
+    type: 'tutorial',
+    tag: 'embed',
+    link: 'https://www.youtube.com/watch?v=XTvJjCeAT74',
+    shortenedLink: 'https://bit.ly/3q1f0RR',
+    title: 'Embed Tutorial Video',
+  },
+  {
     content: 'The API Explorer lets you learn and interact with Looker API.',
     type: 'Resource',
     tag: 'api',
@@ -293,7 +327,7 @@ export const resources: Array<Resource> = [
     tag: 'viz',
     link: 'https://github.com/Headset/looker-environment',
     shortenedLink: 'https://bit.ly/30EsLLL',
-    title: 'Custom Vis Dev Envronment Example',
+    title: 'Custom Vis Dev Environment Example',
   },
   {
     content: 'An older demo of Lookers custom viz capabilities',
