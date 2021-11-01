@@ -20,7 +20,7 @@ or
 npm install @looker/extension-utils
 ```
 
-## Using extension adaptors
+## Using environment adaptors
 
 All source code for the application except for the launch page can be the same. For the launch page, either `ExtensionAdaptor` or `BrowserAdaptor` will be used.
 
