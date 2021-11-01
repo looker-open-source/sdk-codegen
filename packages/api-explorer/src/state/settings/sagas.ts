@@ -37,8 +37,7 @@ function* serializeToLocalStorageSaga() {
   const settings = yield* select((state: RootState) => ({
     sdkLanguage: state.settings.sdkLanguage,
   }))
-  yield* call(
-    envAdaptor.localStorageSetItem,
+  envAdaptor.localStorageSetItem(
     EnvAdaptorConstants.LOCALSTORAGE_SETTINGS_KEY,
     JSON.stringify(settings)
   )
@@ -47,10 +46,9 @@ function* serializeToLocalStorageSaga() {
 /**
  * Returns default settings overridden with any persisted state in local storage
  */
-function* deserializeLocalStorage() {
+async function deserializeLocalStorage() {
   const envAdaptor = getEnvAdaptor()
-  const settings = yield* call(
-    envAdaptor.localStorageGetItem,
+  const settings = await envAdaptor.localStorageGetItem(
     EnvAdaptorConstants.LOCALSTORAGE_SETTINGS_KEY
   )
   return settings
