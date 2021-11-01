@@ -26,11 +26,20 @@
 import type { FC } from 'react'
 import React, { useEffect } from 'react'
 import styled from 'styled-components'
-import { Page, Layout, Aside, Section, MessageBar } from '@looker/components'
+import {
+  Page,
+  Layout,
+  Aside,
+  Section,
+  MessageBar,
+  ComponentsProvider,
+} from '@looker/components'
+import { hot } from 'react-hot-loader/root'
 import { useSelector, useDispatch } from 'react-redux'
 
-import { SideNav } from './components/SideNav'
-import { Header } from './components/Header'
+import { getExtensionSDK } from '@looker/extension-sdk'
+import { ExtensionAdaptor } from '@looker/extension-utils'
+import { SideNav, Header } from './components'
 import { AppRouter, getAuthorizedRoutes } from './routes'
 import { getMessageState } from './data/common/selectors'
 import { actionClearMessage } from './data/common/actions'
@@ -53,7 +62,11 @@ const banner = (currentHackathon: any, hacker?: IHackerProps) => {
   return result
 }
 
-export const Hackathon: FC<HackathonProps> = () => {
+export const Hackathon: FC<HackathonProps> = hot(() => {
+  const extSdk = getExtensionSDK()
+  const adaptor = new ExtensionAdaptor(extSdk)
+  const themeOverrides = adaptor.themeOverrides()
+
   const dispatch = useDispatch()
   useEffect(() => {
     dispatch(initHackSessionRequest())
@@ -69,26 +82,31 @@ export const Hackathon: FC<HackathonProps> = () => {
   }
 
   return (
-    <Background>
-      <Page px="large">
-        <Header text={headerText} />
-        {message && (
-          <MessageBar intent={message.intent} onPrimaryClick={clearMessage}>
-            {message.messageText}
-          </MessageBar>
-        )}
-        <Layout hasAside>
-          <Aside width="200px">
-            <SideNav authorizedRoutes={authorizedRoutes} />
-          </Aside>
-          <Section>
-            <AppRouter authorizedRoutes={authorizedRoutes} hacker={hacker} />
-          </Section>
-        </Layout>
-      </Page>
-    </Background>
+    <ComponentsProvider
+      loadGoogleFonts={themeOverrides.loadGoogleFonts}
+      themeCustomizations={themeOverrides.themeCustomizations}
+    >
+      <Background>
+        <Page px="large">
+          <Header text={headerText} />
+          {message && (
+            <MessageBar intent={message.intent} onPrimaryClick={clearMessage}>
+              {message.messageText}
+            </MessageBar>
+          )}
+          <Layout hasAside>
+            <Aside width="200px">
+              <SideNav authorizedRoutes={authorizedRoutes} />
+            </Aside>
+            <Section>
+              <AppRouter authorizedRoutes={authorizedRoutes} hacker={hacker} />
+            </Section>
+          </Layout>
+        </Page>
+      </Background>
+    </ComponentsProvider>
   )
-}
+})
 
 const Background = styled.div`
   background-color: #ffffff;

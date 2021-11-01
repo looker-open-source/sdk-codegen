@@ -44,8 +44,12 @@ import { funFetch, fallbackFetch, OAuthScene } from '@looker/run-it'
 import { FirstPage } from '@styled-icons/material/FirstPage'
 import { LastPage } from '@styled-icons/material/LastPage'
 
-import type { IApixEnvAdaptor } from './utils'
-import { oAuthPath, registerEnvAdaptor, unregisterEnvAdaptor } from './utils'
+import type { IEnvironmentAdaptor } from '@looker/extension-utils'
+import {
+  registerEnvAdaptor,
+  unregisterEnvAdaptor,
+} from '@looker/extension-utils'
+import { oAuthPath } from './utils'
 import {
   Header,
   SideNav,
@@ -63,9 +67,10 @@ import {
   useLodeActions,
   useLodesStoreState,
 } from './state'
+
 export interface ApiExplorerProps {
   specs: SpecList
-  envAdaptor: IApixEnvAdaptor
+  adaptor: IEnvironmentAdaptor
   setVersionsUrl: RunItSetter
   examplesLodeUrl?: string
   declarationsLodeUrl?: string
@@ -76,7 +81,7 @@ export const BodyOverride = createGlobalStyle` html { height: 100%; overflow: hi
 
 const ApiExplorer: FC<ApiExplorerProps> = ({
   specs,
-  envAdaptor,
+  adaptor,
   setVersionsUrl,
   examplesLodeUrl = 'https://raw.githubusercontent.com/looker-open-source/sdk-codegen/main/examplesIndex.json',
   declarationsLodeUrl = `${apixFilesHost}/declarationsIndex.json`,
@@ -105,7 +110,7 @@ const ApiExplorer: FC<ApiExplorerProps> = ({
   }, [])
 
   useEffect(() => {
-    registerEnvAdaptor(envAdaptor)
+    registerEnvAdaptor(adaptor)
     initSettingsAction()
     initLodesAction({ examplesLodeUrl, declarationsLodeUrl })
 
@@ -143,7 +148,7 @@ const ApiExplorer: FC<ApiExplorerProps> = ({
     }
   }, [spec, location])
 
-  const themeOverrides = envAdaptor.themeOverrides()
+  const themeOverrides = adaptor.themeOverrides()
 
   return (
     <>
@@ -154,7 +159,7 @@ const ApiExplorer: FC<ApiExplorerProps> = ({
         {!initialized ? (
           <Loader message="Initializing" themeOverrides={themeOverrides} />
         ) : (
-          <ErrorBoundary logError={envAdaptor.logError.bind(envAdaptor)}>
+          <ErrorBoundary logError={adaptor.logError.bind(adaptor)}>
             <Page style={{ overflow: 'hidden' }}>
               {!headless && (
                 <Header
@@ -228,7 +233,7 @@ const ApiExplorer: FC<ApiExplorerProps> = ({
                     specKey={spec.key}
                     specs={specs}
                     toggleNavigation={toggleNavigation}
-                    envAdaptor={envAdaptor}
+                    adaptor={adaptor}
                     setVersionsUrl={setVersionsUrl}
                   />
                 )}
