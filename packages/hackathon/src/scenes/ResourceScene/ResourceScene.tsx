@@ -41,7 +41,7 @@ import {
 } from '@looker/components'
 import { getExtensionSDK } from '@looker/extension-sdk'
 import { Routes } from '../../routes/AppRouter'
-import { resources } from './resource_data'
+import { resources, ResourceTag } from './resource_data'
 
 interface ResourceSceneProps {}
 
@@ -90,16 +90,11 @@ export const ResourceScene: FC<ResourceSceneProps> = () => {
         description="Select 1 or more areas"
       >
         <ButtonGroup value={filterValues} onChange={updateFilterValue}>
-          <ButtonItem value="embed">Embed</ButtonItem>
-          <ButtonItem value="extension">Extensions</ButtonItem>
-          <ButtonItem value="lookml">LookML</ButtonItem>
-          <ButtonItem value="action">Actions</ButtonItem>
-          <ButtonItem value="api">API</ButtonItem>
-          <ButtonItem value="viz">Custom Viz</ButtonItem>
-          <ButtonItem value="devtool">Dev Tools</ButtonItem>
-          <ButtonItem value="component">Components</ButtonItem>
-          <ButtonItem value="dataset">Datasets</ButtonItem>
-          <ButtonItem value="other">Other</ButtonItem>
+          {Object.keys(ResourceTag).map((k) => (
+            <ButtonItem key={k} value={ResourceTag[k]}>
+              {ResourceTag[k]}
+            </ButtonItem>
+          ))}
         </ButtonGroup>
       </Field>
       <Grid pt="medium" columns={3}>
