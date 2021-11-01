@@ -29,7 +29,7 @@ import { BrowserAdaptor } from './browserAdaptor'
 
 /**
  * NOTE: This interface should describe all methods that require an adaptor when running in standalone vs extension mode
- * Examples include: local storage operations, writing to clipboard and various link navigation functions amongst others
+ * Examples include: local storage operations and various link navigation functions
  */
 export interface IExtensionAdaptor {
   /** Method for retrieving a keyed value from local storage */
@@ -52,11 +52,17 @@ export interface IExtensionAdaptor {
  * system is being used (for example an embedded extension).
  */
 export interface ThemeOverrides {
+  /** Should Google-specific fonts be used for the theme? */
   loadGoogleFonts?: boolean
+  /** Property bag overrides for Looker component theming */
   themeCustomizations?: ThemeCustomizations
 }
 
-export const hostedByGoogle = (hostname: string): boolean =>
+/**
+ * Is this an "internal" host that will use internal brancing?
+ * @param hostname to check
+ */
+export const hostedInternally = (hostname: string): boolean =>
   hostname.endsWith('.looker.com') ||
   hostname.endsWith('.google.com') ||
   hostname === 'localhost' ||
@@ -66,8 +72,12 @@ export const hostedByGoogle = (hostname: string): boolean =>
   (hostname.startsWith('looker-developer-portal') &&
     hostname.endsWith('.web.app'))
 
-export const getThemeOverrides = (useGoogleFonts: boolean): ThemeOverrides =>
-  useGoogleFonts
+/**
+ * Return theme overrides that make apply "internal" or external theming
+ * @param internalTheming true if "internal" theme should be used
+ */
+export const getThemeOverrides = (internalTheming: boolean): ThemeOverrides =>
+  internalTheming
     ? {
         loadGoogleFonts: true,
         themeCustomizations: {
@@ -84,14 +94,15 @@ export const getThemeOverrides = (useGoogleFonts: boolean): ThemeOverrides =>
 let extensionAdaptor: IExtensionAdaptor | undefined
 
 /**
- * Register the environment adaptor. The API Explorer will automatically call this.
+ * Register the extension adaptor. Used when initializing the extension
+ * @param adaptor to register
  */
 export const registerExtAdaptor = (adaptor: IExtensionAdaptor) => {
   extensionAdaptor = adaptor
 }
 
 /**
- * Unregister the extensionAdaptor. The API Explorer will automatically call this when it is unmounted.
+ * Unregister the extensionAdaptor. Extensions should call this when unmounted
  */
 export const unregisterExtAdaptor = () => {
   extensionAdaptor = undefined
@@ -107,6 +118,10 @@ export const getExtAdaptor = () => {
   return extensionAdaptor
 }
 
+/**
+ * Used by some unit tests
+ * @param adaptor to use for testing
+ */
 export const registerTestExtAdaptor = (adaptor?: IExtensionAdaptor) => {
   registerExtAdaptor(adaptor || new BrowserAdaptor())
 }

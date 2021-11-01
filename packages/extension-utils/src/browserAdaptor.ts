@@ -25,7 +25,7 @@
  */
 
 import type { IExtensionAdaptor, ThemeOverrides } from './adaptorUtils'
-import { getThemeOverrides, hostedByGoogle } from './adaptorUtils'
+import { getThemeOverrides, hostedInternally } from './adaptorUtils'
 
 /**
  * An adaptor class for interacting with browser APIs when not running in an extension
@@ -35,7 +35,7 @@ export class BrowserAdaptor implements IExtensionAdaptor {
 
   constructor() {
     const { hostname } = location
-    this._themeOverrides = getThemeOverrides(hostedByGoogle(hostname))
+    this._themeOverrides = getThemeOverrides(hostedInternally(hostname))
   }
 
   async localStorageGetItem(key: string) {
@@ -59,6 +59,6 @@ export class BrowserAdaptor implements IExtensionAdaptor {
   }
 
   logError(_error: Error, _componentStack: string): void {
-    // noop - error logging for standalone APIX TBD
+    // noop - error logging for standalone applications TBD
   }
 }
