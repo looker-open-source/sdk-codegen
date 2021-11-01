@@ -27,7 +27,6 @@
 import type { FC } from 'react'
 import React from 'react'
 import { Provider } from 'react-redux'
-import { ExtensionProvider } from '@looker/extension-sdk-react'
 import { ComponentsProvider } from '@looker/components'
 import { hot } from 'react-hot-loader/root'
 import { getExtensionSDK } from '@looker/extension-sdk'
@@ -42,14 +41,12 @@ export const App: FC = hot(() => {
 
   return (
     <Provider store={store}>
-      <ExtensionProvider>
-        <ComponentsProvider
-          loadGoogleFonts={themeOverrides.loadGoogleFonts}
-          themeCustomizations={themeOverrides.themeCustomizations}
-        >
-          <Hackathon />
-        </ComponentsProvider>
-      </ExtensionProvider>
+      <ComponentsProvider
+        loadGoogleFonts={themeOverrides.loadGoogleFonts}
+        themeCustomizations={themeOverrides.themeCustomizations}
+      >
+        <Hackathon />
+      </ComponentsProvider>
     </Provider>
   )
 })
