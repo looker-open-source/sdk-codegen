@@ -4,7 +4,7 @@
   "description": "A syntax highlighter Viewer and Editor for Looker SDK supported languages.",
   "main": "lib/index.js",
   "module": "lib/esm/index.js",
-  "sideEffects": "false",
+  "sideEffects": false,
   "typings": "lib/index.d.ts",
   "files": [
     "lib"

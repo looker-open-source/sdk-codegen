@@ -23,27 +23,28 @@
  SOFTWARE.
 
  */
-import type { ThemeOverrides } from '@looker/api-explorer/src/utils'
-import { getThemeOverrides } from '@looker/api-explorer/src/utils'
-import type { ExtensionSDK, LookerHostData } from '@looker/extension-sdk'
-import { ExtensionEnvAdaptor } from './utils'
 
-describe('ExtensionEnvAdaptor', () => {
+import type { ThemeOverrides } from './adaptorUtils'
+import { getThemeOverrides } from './adaptorUtils'
+import { BrowserAdaptor } from './browserAdaptor'
+
+describe('BrowserAdaptor', () => {
   test.each([
-    [undefined, getThemeOverrides(false)],
-    ['standard', getThemeOverrides(true)],
-    ['embed', getThemeOverrides(false)],
-    ['spartan', getThemeOverrides(false)],
+    ['www.looker.com', getThemeOverrides(true)],
+    ['www.google.com', getThemeOverrides(true)],
+    ['localhost', getThemeOverrides(true)],
+    ['127.0.0.1', getThemeOverrides(false)],
   ])(
     'returns correct font overrides',
-    (hostType?: string, expectedOverrides?: ThemeOverrides) => {
-      expect(
-        new ExtensionEnvAdaptor({
-          lookerHostData: {
-            hostType,
-          } as Readonly<LookerHostData>,
-        } as ExtensionSDK).themeOverrides()
-      ).toEqual(expectedOverrides)
+    (hostname: string, expectedOverrides: ThemeOverrides) => {
+      const saveLoc = window.location
+      delete (window as any).location
+      window.location = {
+        ...saveLoc,
+        hostname,
+      }
+      expect(new BrowserAdaptor().themeOverrides()).toEqual(expectedOverrides)
+      window.location = saveLoc
     }
   )
 })

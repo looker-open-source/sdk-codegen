@@ -29,7 +29,7 @@ import React from 'react'
 import { useHistory } from 'react-router-dom'
 import { Markdown } from '@looker/code-editor'
 import { useSelector } from 'react-redux'
-import { getEnvAdaptor } from '../../utils'
+import { getEnvAdaptor } from '@looker/extension-utils'
 import { selectSearchPattern } from '../../state'
 import { transformURL } from './utils'
 
@@ -48,8 +48,8 @@ export const DocMarkdown: FC<DocMarkdownProps> = ({ source, specKey }) => {
     } else if (url.startsWith(`/${specKey}`)) {
       history.push(url)
     } else if (url.startsWith('https://')) {
-      const envAdaptor = getEnvAdaptor()
-      envAdaptor.openBrowserWindow(url)
+      const adaptor = getEnvAdaptor()
+      adaptor.openBrowserWindow(url)
     }
   }
   return (

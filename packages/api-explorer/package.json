@@ -4,7 +4,7 @@
   "description": "Looker API Explorer",
   "main": "lib/index.js",
   "module": "lib/esm/index.js",
-  "sideEffects": "false",
+  "sideEffects": false,
   "typings": "lib/index.d.ts",
   "license": "MIT",
   "author": "Looker",
@@ -67,6 +67,7 @@
     "webpack-merge": "^5.7.3"
   },
   "dependencies": {
+    "@looker/extension-utils": "0.1.0",
     "@looker/code-editor": "^0.1.13",
     "@looker/components": "^2.8.1",
     "@looker/components-date": "^2.4.1",
