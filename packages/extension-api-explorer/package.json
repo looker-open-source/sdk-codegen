@@ -1,7 +1,7 @@
 {
   "name": "@looker/extension-api-explorer",
   "version": "21.18.1",
-  "description": "Looker API Explorer extension version  ",
+  "description": "Looker API Explorer extension",
   "main": "dist/bundle.js",
   "sideEffects": false,
   "license": "MIT",
@@ -16,6 +16,7 @@
   },
   "dependencies": {
     "@looker/api-explorer": "^0.9.22",
+    "@looker/extension-utils": "0.1.0",
     "@looker/components": "^2.8.1",
     "@looker/extension-sdk": "^21.18.1",
     "@looker/extension-sdk-react": "^21.18.1",

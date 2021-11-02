@@ -38,9 +38,9 @@ import type { IAPIMethods } from '@looker/sdk-rtl'
 import type { SpecList } from '@looker/sdk-codegen'
 import { Provider } from 'react-redux'
 
+import { BrowserAdaptor } from '@looker/extension-utils'
 import ApiExplorer from './ApiExplorer'
 import { store } from './state'
-import { StandaloneEnvAdaptor } from './utils'
 import { Loader } from './components'
 
 export interface StandaloneApiExplorerProps {
@@ -48,10 +48,10 @@ export interface StandaloneApiExplorerProps {
   versionsUrl: string
 }
 
-const standaloneEnvAdaptor = new StandaloneEnvAdaptor()
+const browserAdaptor = new BrowserAdaptor()
 
 const loadVersions = async (current: string) => {
-  const data = await standaloneEnvAdaptor.localStorageGetItem(RunItConfigKey)
+  const data = await browserAdaptor.localStorageGetItem(RunItConfigKey)
   const config = data ? JSON.parse(data) : RunItNoConfig
   let url = config.base_url ? `${config.base_url}/versions` : current
   let response = await loadSpecsFromVersions(url)
@@ -99,12 +99,12 @@ export const StandaloneApiExplorer: FC<StandaloneApiExplorerProps> = ({
           {specs ? (
             <ApiExplorer
               specs={specs}
-              envAdaptor={standaloneEnvAdaptor}
+              adaptor={browserAdaptor}
               headless={headless}
               setVersionsUrl={setCurrentVersionsUrl}
             />
           ) : (
-            <Loader themeOverrides={standaloneEnvAdaptor.themeOverrides()} />
+            <Loader themeOverrides={browserAdaptor.themeOverrides()} />
           )}
         </>
       </RunItProvider>

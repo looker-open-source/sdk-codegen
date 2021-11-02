@@ -29,11 +29,9 @@ import userEvent from '@testing-library/user-event'
 import { codeGenerators } from '@looker/sdk-codegen'
 import * as reactRedux from 'react-redux'
 
+import { registerTestEnvAdaptor } from '@looker/extension-utils'
 import { defaultSettingsState, settingsSlice } from '../../state'
-import {
-  registerTestEnvAdaptor,
-  renderWithReduxProvider,
-} from '../../test-utils'
+import { renderWithReduxProvider } from '../../test-utils'
 import { SdkLanguageSelector } from './SdkLanguageSelector'
 
 describe('SdkLanguageSelector', () => {
