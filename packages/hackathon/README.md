@@ -59,6 +59,12 @@ application: hackathon_app {
 
 Remember to add a model to the project that has a valid connection.
 
+## Specific steps to `yarn`
+1. run `yarn install` in sdk-codegen 
+2. run `yarn build` in sdk-codgen dir
+3. run `yarn start` in examples/access_token_server
+4. run `yarn dev:hack` in sdk-codegen to start the development server and connect to the extension
+
 ## Hackathon Personas
 
 The active user's persona determines the availability of navigation options and data actions.
