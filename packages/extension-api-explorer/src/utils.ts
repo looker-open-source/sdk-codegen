@@ -23,11 +23,8 @@
  SOFTWARE.
 
  */
-import type {
-  IApixEnvAdaptor,
-  ThemeOverrides,
-} from '@looker/api-explorer/src/utils'
-import { getThemeOverrides } from '@looker/api-explorer/src/utils'
+import type { IApixEnvAdaptor, ThemeOverrides } from '@looker/api-explorer'
+import { getThemeOverrides } from '@looker/api-explorer'
 import type { ExtensionSDK } from '@looker/extension-sdk'
 
 /**

@@ -72,9 +72,9 @@ export interface ApiExplorerProps {
   headless?: boolean
 }
 
-export const BodyOverride = createGlobalStyle` html { height: 100%; overflow: hidden; } `
+const BodyOverride = createGlobalStyle` html { height: 100%; overflow: hidden; } `
 
-const ApiExplorer: FC<ApiExplorerProps> = ({
+export const ApiExplorer: FC<ApiExplorerProps> = ({
   specs,
   envAdaptor,
   setVersionsUrl,
@@ -242,11 +242,10 @@ const ApiExplorer: FC<ApiExplorerProps> = ({
   )
 }
 
-export const AsideBorder = styled(Aside)<{
+const AsideBorder = styled(Aside)<{
   isOpen: boolean
   headless: boolean
 }>`
   width: ${({ isOpen, headless }) =>
     isOpen ? '20rem' : headless ? '2.75rem' : '0rem'};
 `
-export default ApiExplorer
